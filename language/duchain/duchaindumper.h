@@ -36,16 +36,17 @@ class DUContext;
 /**
  * @brief Debugging utility function to dump a DUContext including contained declarations.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT DumpChain
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainDumper
 {
 public:
   enum Feature {
     PrintProblems,
+    PrintDeclarations,
   };
   Q_DECLARE_FLAGS(Features, Feature);
 
-  DumpChain(Features features = Features());
-  ~DumpChain();
+  DUChainDumper(Features features = Features());
+  ~DUChainDumper();
 
   /**
    * Dump DUChain context to stdout

@@ -44,7 +44,6 @@
 #include <duchain/parsingenvironment.h>
 #include <backgroundparser/backgroundparser.h>
 #include <ktexteditor/movinginterface.h>
-#include <duchain/dumpchain.h>
 #include <backgroundparser/urlparselock.h>
 
 using namespace KTextEditor;

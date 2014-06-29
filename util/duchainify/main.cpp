@@ -26,7 +26,7 @@
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
-#include <language/duchain/dumpchain.h>
+#include <language/duchain/duchaindumper.h>
 #include <language/duchain/problem.h>
 
 #include <interfaces/ilanguage.h>
@@ -170,11 +170,11 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
         return;
 
     DUChainReadLocker lock;
-    DumpChain::Features features;
+    DUChainDumper::Features features;
     if (m_args->isSet("dump-errors")) {
-        features |= DumpChain::PrintProblems;
+        features |= DUChainDumper::PrintProblems;
     }
-    DumpChain dumpChain(features);
+    DUChainDumper dumpChain(features);
     dumpChain.dump(topContext);
 }
 

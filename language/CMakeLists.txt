@@ -60,7 +60,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/definitions.cpp
     duchain/uses.cpp
     duchain/importers.cpp
-    duchain/dumpchain.cpp
+    duchain/duchaindumper.cpp
     duchain/indexedstring.cpp
     duchain/duchainregister.cpp
     duchain/persistentsymboltable.cpp
@@ -263,7 +263,7 @@ install(FILES
     duchain/aliasdeclaration.h
     duchain/dumpdotgraph.h
     duchain/duchainutils.h
-    duchain/dumpchain.h
+    duchain/duchaindumper.h
     duchain/indexedstring.h
     duchain/declarationid.h
     duchain/appendedlist.h

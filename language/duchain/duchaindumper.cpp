@@ -19,7 +19,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "dumpchain.h"
+#include "duchaindumper.h"
 
 #include <QtCore/QString>
 #include <QTextStream>
@@ -60,7 +60,7 @@ QString typeToString(DUContext::ContextType type)
 
 }
 
-struct DumpChain::Private
+struct DUChainDumper::Private
 {
   Private()
     : m_indent(0)
@@ -74,13 +74,13 @@ struct DumpChain::Private
   QSet<DUContext*> m_had;
 };
 
-DumpChain::DumpChain(Features features)
+DUChainDumper::DUChainDumper(Features features)
   : d(new Private)
 {
   d->m_features = features;
 }
 
-DumpChain::~DumpChain( )
+DUChainDumper::~DUChainDumper( )
 {
 }
 
@@ -100,7 +100,7 @@ private:
   int m_level;
 };
 
-void DumpChain::Private::dumpProblems(TopDUContext* top)
+void DUChainDumper::Private::dumpProblems(TopDUContext* top)
 {
   QTextStream globalOut(stdout);
   QDebug qout(globalOut.device());
@@ -114,7 +114,7 @@ void DumpChain::Private::dumpProblems(TopDUContext* top)
   }
 }
 
-void DumpChain::Private::dump( DUContext * context, int allowedDepth )
+void DUChainDumper::Private::dump( DUContext * context, int allowedDepth )
 {
   QTextStream globalOut(stdout);
   QDebug qout(globalOut.device());
@@ -176,7 +176,7 @@ void DumpChain::Private::dump( DUContext * context, int allowedDepth )
   }
 }
 
-void DumpChain::dump(DUContext* context, int allowedDepth)
+void DUChainDumper::dump(DUContext* context, int allowedDepth)
 {
   auto top = context->topContext();
   if (d->m_features.testFlag(PrintProblems)) {
