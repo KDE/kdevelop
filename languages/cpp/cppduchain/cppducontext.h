@@ -144,7 +144,7 @@ extern QMutex cppDuContextInstantiationsMutex;
         ///Uses the instantiation-information from the context of decl as parent of templateArguments.
         Declaration* instantiateDeclaration( Declaration* decl, const InstantiationInformation& templateArguments ) const;
         
-        struct State : public KShared {
+        struct State : public QSharedData {
           State() {
           }
           QualifiedIdentifier identifier; //identifier including eventual namespace prefix
