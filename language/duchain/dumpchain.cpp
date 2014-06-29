@@ -41,22 +41,42 @@ using namespace KDevelop;
 
 //BEGIN: private
 
+namespace {
+
+QString typeToString(DUContext::ContextType type)
+{
+  switch(type) {
+    case DUContext::Global: return "Global";
+    case DUContext::Namespace: return "Namespace";
+    case DUContext::Class: return "Class";
+    case DUContext::Function: return "Function";
+    case DUContext::Template: return "Template";
+    case DUContext::Enum: return "Enum";
+    case DUContext::Helper: return "Helper";
+    case DUContext::Other: return "Other";
+  }
+  Q_ASSERT(false);
+  return QString();
+}
+
+}
+
 class DumpChain
 {
 public:
   DumpChain();
   ~DumpChain();
 
+  void dumpProblems(DUContext* context);
   void dump( DUContext * context, int allowedDepth );
 
 private:
   int indent;
-  TopDUContext* top;
   QSet<DUContext*> had;
 };
 
 DumpChain::DumpChain()
-  : indent(0), top(0)
+  : indent(0)
 {
 }
 
@@ -80,43 +100,31 @@ private:
   int m_level;
 };
 
+void DumpChain::dumpProblems(DUContext* context)
+{
+  QTextStream globalOut(stdout);
+  QDebug qout(globalOut.device());
+
+  auto top = context->topContext();
+  if (!top->problems().isEmpty()) {
+      qout << "Problems:" << endl;
+      foreach(const ProblemPointer& p, top->problems()) {
+          qout << Indent(indent * 2) << p->description() << p->explanation() << p->finalLocation().textRange() << endl;
+      }
+      qout << endl;
+  }
+}
+
 void DumpChain::dump( DUContext * context, int allowedDepth )
 {
   QTextStream globalOut(stdout);
-
-  // use a QDebug to utilize operator<<() overloads
-  // but don't use kDebug() to make sure we always print it, no matter what
-  // is set in kdebugdialog
   QDebug qout(globalOut.device());
 
-  if(!top || top != context->topContext()) {
-    top = context->topContext();
-    if (!top->problems().isEmpty()) {
-        qout << "PROBLEMS:" << endl;
-        foreach(const ProblemPointer& p, top->problems()) {
-            qout << p->description() << p->explanation() << p->finalLocation().textRange() << endl;
-        }
-    }
-  }
-
-  QString type;
-  switch(context->type()) {
-    case DUContext::Global: type = "Global"; break;
-    case DUContext::Namespace: type = "Namespace"; break;
-    case DUContext::Class: type = "Class"; break;
-    case DUContext::Function: type = "Function"; break;
-    case DUContext::Template: type = "Template"; break;
-    case DUContext::Enum: type = "Enum"; break;
-    case DUContext::Helper: type = "Helper"; break;
-    case DUContext::Other: type = "Other"; break;
-  }
-  qout << Indent(indent * 2) << (indent ? "==import==> Context " : "New Context ") << type << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]"
+  qout << Indent(indent * 2) << (indent ? "==import==> Context " : "New Context ") << typeToString(context->type()) << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]"
     << context->range().castToSimpleRange().textRange()
     << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "") << endl;
 
-
-  if( !context )
-    return;
+  auto top = context->topContext();
   if (allowedDepth >= 0) {
     foreach (Declaration* dec, context->localDeclarations(top)) {
 
@@ -177,5 +185,6 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
 void KDevelop::dumpDUContext(DUContext* context, int allowedDepth)
 {
   DumpChain dumper;
+  dumper.dumpProblems(context);
   dumper.dump(context, allowedDepth);
 }
