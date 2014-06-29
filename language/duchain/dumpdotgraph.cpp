@@ -77,7 +77,7 @@ void DumpDotGraphPrivate::addDeclaration(QTextStream& stream, Declaration* dec) 
   if(!declarationForDefinition) {
     //Declaration
     stream << shortLabel(dec) <<
-        "[shape=distortion,label=\"" <<
+        "[shape=box, label=\"" <<
         dec->toString() << " [" <<
         dec->qualifiedIdentifier().toString() << "]" << " " <<
         rangeToString(dec->range().castToSimpleRange().textRange()) << "\"];\n";
