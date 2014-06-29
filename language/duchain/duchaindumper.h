@@ -40,12 +40,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainDumper
 {
 public:
   enum Feature {
-    PrintProblems,
-    PrintDeclarations,
+    NoFeatures =        0,
+    DumpContext =       1 << 0,
+    DumpProblems =      1 << 1
   };
   Q_DECLARE_FLAGS(Features, Feature);
 
-  DUChainDumper(Features features = Features());
+  DUChainDumper(Features features = DumpContext);
   ~DUChainDumper();
 
   /**

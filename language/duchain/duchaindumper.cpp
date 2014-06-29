@@ -179,9 +179,10 @@ void DUChainDumper::Private::dump( DUContext * context, int allowedDepth )
 void DUChainDumper::dump(DUContext* context, int allowedDepth)
 {
   auto top = context->topContext();
-  if (d->m_features.testFlag(PrintProblems)) {
+  if (d->m_features.testFlag(DumpProblems)) {
     d->dumpProblems(top);
   }
-
-  d->dump(context, allowedDepth);
+  if (d->m_features.testFlag(DumpContext)) {
+    d->dump(context, allowedDepth);
+  }
 }

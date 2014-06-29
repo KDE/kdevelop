@@ -169,12 +169,15 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
     if (!topContext)
         return;
 
-    DUChainReadLocker lock;
     DUChainDumper::Features features;
+    if (m_args->isSet("dump-context")) {
+        features |= DUChainDumper::DumpContext;
+    }
     if (m_args->isSet("dump-errors")) {
-        features |= DUChainDumper::PrintProblems;
+        features |= DUChainDumper::DumpProblems;
     }
 
+    DUChainReadLocker lock;
     DUChainDumper dumpChain(features);
     dumpChain.dump(topContext, m_args->getOption("dump-depth").toInt());
 }
