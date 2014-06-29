@@ -28,7 +28,6 @@
 #include <tests/testfile.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
-#include <language/duchain/dumpchain.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/problem.h>
