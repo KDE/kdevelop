@@ -19,9 +19,6 @@
 
 #include "test_assistants.h"
 
-#include <language/assistant/staticassistant.h>
-#include <language/assistant/staticassistantsmanager.h>
-
 #include <QtTest/QtTest>
 #include <KTempDir>
 #include <qtest_kde.h>
@@ -35,6 +32,9 @@
 #include <interfaces/isourceformattercontroller.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <language/assistant/staticassistant.h>
+#include <language/assistant/staticassistantsmanager.h>
+#include <language/assistant/renameaction.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainutils.h>
@@ -180,6 +180,108 @@ struct StateChange
 
 Q_DECLARE_METATYPE(StateChange)
 Q_DECLARE_METATYPE(QList<StateChange>)
+
+
+void TestAssistants::testRenameAssistant_data()
+{
+    QTest::addColumn<QString>("fileContents");
+    QTest::addColumn<QString>("oldDeclarationName");
+    QTest::addColumn<QList<StateChange> >("stateChanges");
+    QTest::addColumn<QString>("finalFileContents");
+
+    QTest::newRow("Prepend Text")
+        << "int foo(int i)\n { i = 0; return i; }"
+        << "i"
+        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,12,0,12), "u", "ui"))
+        << "int foo(int ui)\n { ui = 0; return ui; }";
+
+    QTest::newRow("Append Text")
+        << "int foo(int i)\n { i = 0; return i; }"
+        << "i"
+        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,13,0,13), "d", "id"))
+        << "int foo(int id)\n { id = 0; return id; }";
+
+    QTest::newRow("Replace Text")
+        << "int foo(int i)\n { i = 0; return i; }"
+        << "i"
+        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,12,0,13), "u", "u"))
+        << "int foo(int u)\n { u = 0; return u; }";
+
+    QTest::newRow("Letter-by-Letter")
+        << "int foo(int i)\n { i = 0; return i; }"
+        << "i"
+        << (QList<StateChange>()
+            << StateChange(Testbed::CppDoc, Range(0,12,0,13), "", "")
+            << StateChange(Testbed::CppDoc, Range(0,12,0,12), "a", "a")
+            << StateChange(Testbed::CppDoc, Range(0,13,0,13), "b", "ab")
+            << StateChange(Testbed::CppDoc, Range(0,14,0,14), "c", "abc")
+        )
+        << "int foo(int abc)\n { abc = 0; return abc; }";
+
+    QTest::newRow("Paste Replace")
+        << "int foo(int abg)\n { abg = 0; return abg; }"
+        << "abg"
+        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,12,0,15), "abcdefg", "abcdefg"))
+        << "int foo(int abcdefg)\n { abcdefg = 0; return abcdefg; }";
+
+    QTest::newRow("Paste Insert")
+        << "int foo(int abg)\n { abg = 0; return abg; }"
+        << "abg"
+        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,14,0,14), "cdef", "abcdefg"))
+        << "int foo(int abcdefg)\n { abcdefg = 0; return abcdefg; }";
+
+    QTest::newRow("Letter-by-Letter Insert")
+        << "int foo(int abg)\n { abg = 0; return abg; }"
+        << "abg"
+        << (QList<StateChange>()
+            << StateChange(Testbed::CppDoc, Range(0,14,0,14), "c", "abcg")
+            << StateChange(Testbed::CppDoc, Range(0,15,0,15), "d", "abcdg")
+            << StateChange(Testbed::CppDoc, Range(0,16,0,16), "e", "abcdeg")
+            << StateChange(Testbed::CppDoc, Range(0,17,0,17), "f", "abcdefg")
+        )
+        << "int foo(int abcdefg)\n { abcdefg = 0; return abcdefg; }";
+}
+
+void TestAssistants::testRenameAssistant()
+{
+    QFETCH(QString, fileContents);
+    Testbed testbed("", fileContents);
+
+    QFETCH(QString, oldDeclarationName);
+    QFETCH(QList<StateChange>, stateChanges);
+    foreach(StateChange stateChange, stateChanges)
+    {
+        testbed.changeDocument(Testbed::CppDoc, stateChange.range, stateChange.newText);
+        if (stateChange.result.isEmpty()) {
+            QVERIFY(!staticAssistantsManager()->activeAssistant() || !staticAssistantsManager()->activeAssistant()->actions().size());
+        } else {
+            QVERIFY(staticAssistantsManager()->activeAssistant() && staticAssistantsManager()->activeAssistant()->actions().size());
+            RenameAction *r = qobject_cast<RenameAction*>(staticAssistantsManager()->activeAssistant()->actions().first().data());
+            QCOMPARE(r->oldDeclarationName(), oldDeclarationName);
+            QCOMPARE(r->newDeclarationName(), stateChange.result);
+        }
+    }
+    if (staticAssistantsManager()->activeAssistant() && staticAssistantsManager()->activeAssistant()->actions().size()) {
+            staticAssistantsManager()->activeAssistant()->actions().first()->execute();
+    }
+    QFETCH(QString, finalFileContents);
+    QCOMPARE(testbed.documentText(Testbed::CppDoc), finalFileContents);
+}
+
+void TestAssistants::testRenameAssistantUndoRename()
+{
+    Testbed testbed("", "int foo(int i)\n { i = 0; return i; }");
+    testbed.changeDocument(Testbed::CppDoc, Range(0,13,0,13), "d");
+    QVERIFY(staticAssistantsManager()->activeAssistant());
+    QVERIFY(staticAssistantsManager()->activeAssistant()->actions().size() > 0);
+    RenameAction *r = qobject_cast<RenameAction*>(staticAssistantsManager()->activeAssistant()->actions().first().data());
+    QVERIFY(r);
+
+    // now rename the variable back to its original identifier
+    testbed.changeDocument(Testbed::CppDoc, Range(0,13,0,14), "");
+    // there should be no assistant anymore
+    QVERIFY(!staticAssistantsManager()->activeAssistant());
+}
 
 const QString SHOULD_ASSIST = "SHOULD_ASSIST"; //An assistant will be visible
 const QString NO_ASSIST = "NO_ASSIST";               //No assistant visible

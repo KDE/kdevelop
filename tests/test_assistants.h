@@ -28,6 +28,10 @@ class TestAssistants : public QObject
 private slots:
     void initTestCase();
     void cleanupTestCase();
+
+    void testRenameAssistant_data();
+    void testRenameAssistant();
+    void testRenameAssistantUndoRename();
     void testSignatureAssistant_data();
     void testSignatureAssistant();
 };
