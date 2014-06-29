@@ -149,12 +149,12 @@ void Manager::init()
     m_allFilesAdded = 1;
 
     if ( m_total ) {
-        std::cout << "Added " << m_total << " files to the background parser" << std::endl;
+        std::cerr << "Added " << m_total << " files to the background parser" << std::endl;
         const int threads = ICore::self()->languageController()->backgroundParser()->threadCount();
-        std::cout << "parsing with " << threads << " threads" << std::endl;
+        std::cerr << "parsing with " << threads << " threads" << std::endl;
         ICore::self()->languageController()->backgroundParser()->parseDocuments();
     } else {
-        std::cout << "no files added to the background parser" << std::endl;
+        std::cerr << "no files added to the background parser" << std::endl;
         QCoreApplication::exit(0);
     }
 }
@@ -165,7 +165,7 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
     
     m_waiting.remove(url.toUrl());
     
-    std::cout << "processed " << (m_total - m_waiting.size()) << " out of " << m_total << std::endl;
+    std::cerr << "processed " << (m_total - m_waiting.size()) << " out of " << m_total << std::endl;
     if (!topContext)
         return;
 
@@ -214,7 +214,7 @@ QSet< KUrl > Manager::waiting()
 
 void Manager::finish()
 {
-    std::cout << "ready" << std::endl;
+    std::cerr << "ready" << std::endl;
     QApplication::quit();
 }
 
