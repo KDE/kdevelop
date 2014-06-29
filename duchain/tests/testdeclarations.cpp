@@ -134,6 +134,7 @@ void TestDeclarations::testQMLId()
         ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(top->localDeclarations().first());
         QVERIFY(classDecl);
         QCOMPARE(classDecl->abstractType()->toString(), QString("qmlId"));
+        QCOMPARE(classDecl->range(), RangeInRevision(5, 0, 5, 0));
         QVERIFY(classDecl->internalContext());
         QCOMPARE(classDecl->internalContext()->range(), RangeInRevision(5, 6, 5, 37));
 
@@ -171,6 +172,7 @@ void TestDeclarations::testQMLId()
         ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(top->localDeclarations().first());
         QVERIFY(classDecl);
         QCOMPARE(classDecl->abstractType()->toString(), QString("qmlId"));
+        QCOMPARE(classDecl->range(), RangeInRevision(5, 0, 5, 0));
         QVERIFY(classDecl->internalContext());
         QCOMPARE(classDecl->internalContext()->range(), RangeInRevision(5, 6, 6, 17));
 
