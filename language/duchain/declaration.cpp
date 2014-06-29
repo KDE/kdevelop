@@ -400,7 +400,7 @@ void Declaration::allocateOwnIndex() {
 const Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) const {
   ENSURE_CAN_READ
   if(isForwardDeclaration()) {
-    const ForwardDeclaration* dec = toForwardDeclaration();
+    const auto dec = static_cast<const ForwardDeclaration*>(this);
     Declaration* ret = dec->resolve(topContext);
     if(ret)
       return ret;
@@ -411,7 +411,7 @@ const Declaration* Declaration::logicalDeclaration(const TopDUContext* topContex
 Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) {
   ENSURE_CAN_READ
   if(isForwardDeclaration()) {
-    ForwardDeclaration* dec = toForwardDeclaration();
+    const auto dec = static_cast<const ForwardDeclaration*>(this);
     Declaration* ret = dec->resolve(topContext);
     if(ret)
       return ret;
@@ -647,16 +647,6 @@ void Declaration::setInSymbolTable(bool inSymbolTable)
     }
   }
   d->m_inSymbolTable = inSymbolTable;
-}
-
-ForwardDeclaration* Declaration::toForwardDeclaration()
-{
-  return static_cast<ForwardDeclaration*>(this);
-}
-
-const ForwardDeclaration* Declaration::toForwardDeclaration() const
-{
-  return static_cast<const ForwardDeclaration*>(this);
 }
 
 TopDUContext * Declaration::topContext() const
