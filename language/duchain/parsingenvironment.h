@@ -19,11 +19,9 @@
 #ifndef KDEVPLATFORM_PARSINGENVIRONMENT_H
 #define KDEVPLATFORM_PARSINGENVIRONMENT_H
 
-#include <QtCore/QDateTime>
 #include <QtCore/QString>
 
 #include <ksharedptr.h>
-#include <kurl.h>
 
 #include "indexedstring.h"
 
@@ -34,9 +32,7 @@
 
 namespace KDevelop
 {
-class ModificationRevisionSet;
-class ModificationRevision; //Can be found in  editorintegrator.h
-class IndexedTopDUContext;
+
 /**
  * Just an enumeration of a few parsing-environment types.
  * Enumerate a few possible future parsing-environment types.
