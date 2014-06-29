@@ -38,6 +38,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/localindexeddeclaration.cpp
     duchain/topducontext.cpp
     duchain/topducontextdynamicdata.cpp
+    duchain/topducontextutils.cpp
     duchain/functiondefinition.cpp
     duchain/declaration.cpp
     duchain/classmemberdeclaration.cpp
