@@ -3,6 +3,7 @@
     Copyright 2006 Hamish Rodda <rodda@kde.org>
     Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
     Copyright 2010 Milian Wolff <mail@milianw.de>
+    Copyright 2014 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,19 +25,42 @@
 
 #include "../languageexport.h"
 
+#include <QFlags>
+#include <QScopedPointer>
+
 namespace KDevelop
 {
 class DUContext;
 
+
 /**
- * Debugging utility function to dump a DUContext including contained declarations.
- *
- * NOTE: The DUChain must be readlocked when this is called.
- *
- * @param context The context to dump
- * @param allowedDepth How deep the dump will go into imported contexts, printing all the contents.
+ * @brief Debugging utility function to dump a DUContext including contained declarations.
  */
-KDEVPLATFORMLANGUAGE_EXPORT void dumpDUContext(DUContext* context, int allowedDepth = 0);
+class KDEVPLATFORMLANGUAGE_EXPORT DumpChain
+{
+public:
+  enum Feature {
+    PrintProblems,
+  };
+  Q_DECLARE_FLAGS(Features, Feature);
+
+  DumpChain(Features features = Features());
+  ~DumpChain();
+
+  /**
+   * Dump DUChain context to stdout
+   *
+   * NOTE: The DUChain must be readlocked when this is called.
+   *
+   * @param context The context to dump
+   * @param allowedDepth How deep the dump will go into imported contexts, printing all the contents.
+   */
+  void dump(DUContext* context, int allowedDepth = 0);
+
+private:
+  struct Private;
+  QScopedPointer<Private> d;
+};
 
 }
 #endif // KDEVPLATFORM_DUMPCHAIN_H

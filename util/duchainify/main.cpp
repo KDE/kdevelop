@@ -166,24 +166,17 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
     m_waiting.remove(url.toUrl());
     
     std::cout << "processed " << (m_total - m_waiting.size()) << " out of " << m_total << std::endl;
-    if (m_args->isSet("dump-errors") && topContext) {
-        DUChainReadLocker lock;
-        if (!topContext->problems().isEmpty()) {
-            std::cout << topContext->problems().size() << " problems encountered in " << qPrintable(topContext->url().str()) << std::endl;
-            foreach(const ProblemPointer& p, topContext->problems()) {
-                std::cout << "  " << qPrintable(p->description()) << "\n    range: "
-                        << "[(" << p->finalLocation().start.line << ", " << p->finalLocation().start.column << "),"
-                        << " (" << p->finalLocation().end.line << ", " << p->finalLocation().end.column << ")]" << std::endl;
-            }
-        }
-    }
+    if (!topContext)
+        return;
 
-    if (m_args->isSet("dump-context") && topContext) {
-        DUChainReadLocker lock;
-        dumpDUContext(topContext);
+    DUChainReadLocker lock;
+    DumpChain::Features features;
+    if (m_args->isSet("dump-errors")) {
+        features |= DumpChain::PrintProblems;
     }
+    DumpChain dumpChain(features);
+    dumpChain.dump(topContext);
 }
-
 
 void Manager::addToBackgroundParser(QString path, TopDUContext::Features features)
 {

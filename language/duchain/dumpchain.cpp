@@ -2,6 +2,7 @@
     Copyright 2002-2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2006 Hamish Rodda <rodda@kde.org>
     Copyright 2010 Milian Wolff <mail@milianw.de>
+    Copyright 2014 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,8 +40,6 @@
 
 using namespace KDevelop;
 
-//BEGIN: private
-
 namespace {
 
 QString typeToString(DUContext::ContextType type)
@@ -61,23 +60,24 @@ QString typeToString(DUContext::ContextType type)
 
 }
 
-class DumpChain
+struct DumpChain::Private
 {
-public:
-  DumpChain();
-  ~DumpChain();
+  Private()
+    : m_indent(0)
+  {}
 
-  void dumpProblems(DUContext* context);
-  void dump( DUContext * context, int allowedDepth );
+  void dumpProblems(TopDUContext* top);
+  void dump(DUContext* context, int allowedDepth);
 
-private:
-  int indent;
-  QSet<DUContext*> had;
+  int m_indent;
+  Features m_features;
+  QSet<DUContext*> m_had;
 };
 
-DumpChain::DumpChain()
-  : indent(0)
+DumpChain::DumpChain(Features features)
+  : d(new Private)
 {
+  d->m_features = features;
 }
 
 DumpChain::~DumpChain( )
@@ -100,27 +100,26 @@ private:
   int m_level;
 };
 
-void DumpChain::dumpProblems(DUContext* context)
+void DumpChain::Private::dumpProblems(TopDUContext* top)
 {
   QTextStream globalOut(stdout);
   QDebug qout(globalOut.device());
 
-  auto top = context->topContext();
   if (!top->problems().isEmpty()) {
-      qout << "Problems:" << endl;
+      qout << top->problems().size() << "problems encountered:" << endl;
       foreach(const ProblemPointer& p, top->problems()) {
-          qout << Indent(indent * 2) << p->description() << p->explanation() << p->finalLocation().textRange() << endl;
+          qout << Indent(m_indent * 2) << p->description() << p->explanation() << p->finalLocation().textRange() << endl;
       }
       qout << endl;
   }
 }
 
-void DumpChain::dump( DUContext * context, int allowedDepth )
+void DumpChain::Private::dump( DUContext * context, int allowedDepth )
 {
   QTextStream globalOut(stdout);
   QDebug qout(globalOut.device());
 
-  qout << Indent(indent * 2) << (indent ? "==import==> Context " : "New Context ") << typeToString(context->type()) << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]"
+  qout << Indent(m_indent * 2) << (m_indent ? "==import==> Context " : "New Context ") << typeToString(context->type()) << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]"
     << context->range().castToSimpleRange().textRange()
     << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "") << endl;
 
@@ -130,39 +129,39 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
 
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
       
-      qout << Indent((indent+1) * 2) << "Declaration:" << dec->toString() << "[" << dec->qualifiedIdentifier() << "]"
+      qout << Indent((m_indent+1) * 2) << "Declaration:" << dec->toString() << "[" << dec->qualifiedIdentifier() << "]"
         << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().castToSimpleRange().textRange() << ","
         << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, "))
         << dec->uses().count() << "use(s)." << endl;
       if (FunctionDefinition::definition(dec)) {
-        qout << Indent((indent+1) * 2 + 1) << "Definition:" << FunctionDefinition::definition(dec)->range().castToSimpleRange().textRange() << endl;
+        qout << Indent((m_indent+1) * 2 + 1) << "Definition:" << FunctionDefinition::definition(dec)->range().castToSimpleRange().textRange() << endl;
       }
       QMap<IndexedString, QList<RangeInRevision> > uses = dec->uses();
       for(QMap<IndexedString, QList<RangeInRevision> >::const_iterator it = uses.constBegin(); it != uses.constEnd(); ++it) {
-        qout << Indent((indent+2) * 2) << "File:" << it.key().str() << endl;
+        qout << Indent((m_indent+2) * 2) << "File:" << it.key().str() << endl;
         foreach (const RangeInRevision& range, *it)
-          qout << Indent((indent+2) * 2+1) << "Use:" << range.castToSimpleRange().textRange() << endl;
+          qout << Indent((m_indent+2) * 2+1) << "Use:" << range.castToSimpleRange().textRange() << endl;
       }
     }
   } else {
-    qout << Indent((indent+1) * 2) << context->localDeclarations(top).count()
+    qout << Indent((m_indent+1) * 2) << context->localDeclarations(top).count()
       << "Declarations, " << context->childContexts().size() << "child-contexts" << endl;
   }
 
-  ++indent;
+  ++m_indent;
   {
     foreach (const DUContext::Import &parent, context->importedParentContexts()) {
       DUContext* import = parent.context(top);
       if(!import) {
-          qout << Indent((indent+2) * 2+1) << "Could not get parent, is it registered in the DUChain?" << endl;
+          qout << Indent((m_indent+2) * 2+1) << "Could not get parent, is it registered in the DUChain?" << endl;
           continue;
       }
 
-      if(had.contains(import)) {
-        qout << Indent((indent+2) * 2+1) << "skipping" << import->scopeIdentifier(true) << "because it was already printed" << endl;
+      if(m_had.contains(import)) {
+        qout << Indent((m_indent+2) * 2+1) << "skipping" << import->scopeIdentifier(true) << "because it was already printed" << endl;
         continue;
       }
-      had.insert(import);
+      m_had.insert(import);
 
       dump(import, allowedDepth-1);
     }
@@ -170,21 +169,19 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
     foreach (DUContext* child, context->childContexts())
       dump(child, allowedDepth-1);
   }
-  --indent;
+  --m_indent;
 
-  if(indent == 0) {
-    top = 0;
-    had.clear();
+  if(m_indent == 0) {
+    m_had.clear();
   }
 }
 
-//END: private
-
-//BEGIN: public
-
-void KDevelop::dumpDUContext(DUContext* context, int allowedDepth)
+void DumpChain::dump(DUContext* context, int allowedDepth)
 {
-  DumpChain dumper;
-  dumper.dumpProblems(context);
-  dumper.dump(context, allowedDepth);
+  auto top = context->topContext();
+  if (d->m_features.testFlag(PrintProblems)) {
+    d->dumpProblems(top);
+  }
+
+  d->dump(context, allowedDepth);
 }
