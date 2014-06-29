@@ -83,6 +83,7 @@ protected:
     virtual void endVisit(QmlJS::AST::ObjectLiteral* node);
 
     // plugin.qmltypes
+    KDevelop::QualifiedIdentifier declareModule(const KDevelop::RangeInRevision &range);
     void declareComponent(QmlJS::AST::UiObjectInitializer* node,
                           const KDevelop::RangeInRevision &range,
                           const KDevelop::QualifiedIdentifier &name);

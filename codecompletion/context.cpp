@@ -129,6 +129,7 @@ QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompleti
             items << completionsInContext(m_duContext,
                                           CompletionOnlyLocal | CompletionHideWrappers,
                                           CompletionItem::Colon);
+            items << completionsFromImports(CompletionHideWrappers);
             items << completionsInContext(DUContextPointer(m_duContext->topContext()),
                                           CompletionHideWrappers,
                                           CompletionItem::NoDecoration);
@@ -136,6 +137,7 @@ QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompleti
             items << completionsInContext(m_duContext,
                                           0,
                                           CompletionItem::NoDecoration);
+            items << completionsFromImports(0);
         }
     }
 
@@ -165,6 +167,35 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::importCompletion()
     return items;
 }
 
+QList<CompletionTreeItemPointer> CodeCompletionContext::completionsFromImports(CompletionInContextFlags flags)
+{
+    QList<CompletionTreeItemPointer> items;
+
+    // Iterate over all the imported namespaces and add their definitions
+    DUChainReadLocker lock;
+    QList<Declaration*> imports = m_duContext->findDeclarations(globalImportIdentifier());
+    QList<Declaration*> realImports;
+
+    foreach (Declaration* import, imports) {
+        if (import->kind() != Declaration::NamespaceAlias) {
+            continue;
+        }
+
+        NamespaceAliasDeclaration* decl = static_cast<NamespaceAliasDeclaration *>(import);
+        realImports << m_duContext->findDeclarations(decl->importIdentifier());
+    }
+
+    foreach (Declaration* import, realImports) {
+        items << completionsInContext(
+            DUContextPointer(import->internalContext()),
+            flags,
+            CompletionItem::NoDecoration
+        );
+    }
+
+    return items;
+}
+
 QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(const DUContextPointer& context,
                                                                              CompletionInContextFlags flags,
                                                                              CompletionItem::Decoration decoration)
@@ -183,9 +214,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
             DeclarationPointer declaration(decl.first);
             CompletionItem::Decoration decorationOfThisItem = decoration;
 
-            if (declaration->kind() == Declaration::NamespaceAlias) {
+            if (declaration->identifier() == globalImportIdentifier()) {
                 continue;
-            } else if (declaration->qualifiedIdentifier().isEmpty()) {
+            } if (declaration->qualifiedIdentifier().isEmpty()) {
                 continue;
             } else if (decorationOfThisItem == CompletionItem::NoDecoration &&
                        declaration->abstractType() &&

@@ -49,6 +49,7 @@ private:
     QList<KDevelop::CompletionTreeItemPointer> commentCompletion();
     QList<KDevelop::CompletionTreeItemPointer> importCompletion();
 
+    QList<KDevelop::CompletionTreeItemPointer> completionsFromImports(CompletionInContextFlags flags);
     QList<KDevelop::CompletionTreeItemPointer> completionsInContext(const KDevelop::DUContextPointer& context,
                                                                     CompletionInContextFlags flags,
                                                                     CompletionItem::Decoration decoration);

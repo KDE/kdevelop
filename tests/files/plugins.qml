@@ -15,12 +15,12 @@ Module {
          ]
 
          /**
-          * "toString" : "QModelIndex rootItem"
+          * "toString" : "plugins1.0::QModelIndex rootItem"
           */
          Property { name: "rootItem"; type: "QModelIndex" }
 
          /**
-          * "type" : { "toString" : "QAbstractItemModel::LayoutChangeHint" },
+          * "type" : { "toString" : "plugins1.0::QAbstractItemModel::LayoutChangeHint" },
           * "kind" : "Type",
           * "internalContext" : { "type" : "Enum" }
           */
@@ -36,20 +36,20 @@ Module {
              }
          }
          /**
-          * "toString" : "void dataChanged (QModelIndex, QModelIndex, int)",
+          * "toString" : "void dataChanged (plugins1.0::QModelIndex, plugins1.0::QModelIndex, int)",
           * "useCount" : 2
           */
          Signal {
              name: "dataChanged"
 
              /**
-              * "toString" : "QModelIndex topLeft",
+              * "toString" : "plugins1.0::QModelIndex topLeft",
               * "useCount" : 1
               */
              Parameter /* */ { name: "topLeft"; type: "QModelIndex" }
 
              /**
-              * "toString" : "QModelIndex bottomRight"
+              * "toString" : "plugins1.0::QModelIndex bottomRight"
               */
              Parameter /* */ { name: "bottomRight"; type: "QModelIndex" }
 
@@ -60,7 +60,7 @@ Module {
          }
 
          /**
-          * "toString" : "bool isItemValid (QModelIndex)"
+          * "toString" : "bool isItemValid (plugins1.0::QModelIndex)"
           */
          Method {
              name: "isItemValid"

@@ -217,7 +217,7 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
     const QualifiedIdentifier name(declaration);
     DeclarationPointer dec = QmlJS::getDeclarationOrSignal(name, context ? context : m_context);
 
-    if (dec && dec->abstractType()) {
+    if (dec) {
         encounterLvalue(dec);
     } else {
         encounterNothing();

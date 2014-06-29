@@ -29,6 +29,7 @@
 #include <language/duchain/aliasdeclaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classdeclaration.h>
+#include <language/duchain/namespacealiasdeclaration.h>
 
 #include "expressionvisitor.h"
 #include "parsesession.h"
@@ -514,6 +515,24 @@ void DeclarationBuilder::endVisit(QmlJS::AST::ObjectLiteral* node)
 /*
  * plugin.qmltypes files
  */
+QualifiedIdentifier DeclarationBuilder::declareModule(const RangeInRevision& range)
+{
+    // Declare a namespace whose name is the base name of the current file
+    QualifiedIdentifier name(m_session->moduleName() + m_session->moduleVersion());
+    StructureType::Ptr type(new StructureType);
+
+    {
+        DUChainWriteLocker lock;
+        Declaration* decl = openDeclaration<Declaration>(name, range);
+
+        decl->setKind(Declaration::Namespace);
+        type->setDeclaration(decl);
+    }
+    openType(type);
+
+    return name;
+}
+
 void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectInitializer* node,
                                           const RangeInRevision &range,
                                           const QualifiedIdentifier &name)
@@ -645,6 +664,10 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         declareEnum(range, name);
         contextType = DUContext::Enum;
         name = QualifiedIdentifier();   // Enum contexts should have no name so that their members have the correct scope
+    } else if (baseclass == QLatin1String("Module")) {
+        // QML Module, that declares a namespace
+        name = declareModule(range);
+        contextType = DUContext::Namespace;
     } else {
         // Define an anonymous subclass of the baseclass. This subclass will
         // be instantiated when "id:" is encountered
@@ -695,7 +718,10 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
             decl->setInternalContext(ctx);
         }
 
-        if (contextType == DUContext::Enum) {
+        if (contextType == DUContext::Namespace) {
+            // If we opened a namespace, ensure that its internal context is of namespace type
+            ctx->setLocalScopeIdentifier(decl->qualifiedIdentifier());
+        } else if (contextType == DUContext::Enum) {
             ctx->setPropagateDeclarations(true);
         }
     }
@@ -845,11 +871,30 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiImport* node)
     ReferencedTopDUContext importedContext = m_session->contextOfModule(QString("%1_%2.qml").arg(uri, version));
 
     if (importedContext) {
+        // Create a namespace import statement
+        QualifiedIdentifier importedNamespaceName(uri + version);  // Modules contain namespaces like QtQuick1.0
+        NamespaceAliasDeclaration* decl;
         DUChainWriteLocker lock;
+
         currentContext()->addImportedParentContext(
             importedContext,
             m_session->locationToRange(node->importToken).start
         );
+
+        if (node->importId.isEmpty()) {
+            decl = openDeclaration<NamespaceAliasDeclaration>(
+                QualifiedIdentifier(globalImportIdentifier()),
+                m_session->locationToRange(node->importToken)
+            );
+        } else {
+            decl = openDeclaration<NamespaceAliasDeclaration>(
+                QualifiedIdentifier(node->importId.toString()),
+                m_session->locationToRange(node->importIdToken)
+            );
+        }
+
+        decl->setImportIdentifier(importedNamespaceName);
+        closeDeclaration();
     }
 
     return DeclarationBuilderBase::visit(node);
@@ -873,13 +918,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
     // be skipped because it is useless
     ExportLiteralsAndNames exports;
 
-    if (baseclass == QLatin1String("Module")) {
-        // Don't build any declaration or context for Modules, but explore them.
-        // This way, their declarations are in the global scope, ready to be
-        // imported by other files.
-        m_skipEndVisit.push(true);
-        return true;            // Don't declare anything for the module, but explore it
-    } else if (baseclass == QLatin1String("Component")) {
+    if (baseclass == QLatin1String("Component")) {
         QmlJS::AST::Statement* statement = QmlJS::getQMLAttribute(node->initializer->members, QLatin1String("exports"));
 
         exports = exportedNames(QmlJS::AST::cast<QmlJS::AST::ExpressionStatement *>(statement));

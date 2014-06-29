@@ -21,6 +21,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/types/unsuretype.h>
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/structuretype.h>
@@ -137,20 +138,32 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
         return nullptr;
     }
 
-    StructureType::Ptr type = StructureType::Ptr::dynamicCast(declaration->abstractType());
-
-    if (!type) {
-        return nullptr;
-    }
-
     // The declaration can either be a class definition (its internal context
     // can be used) or an instance (use the internal context of its type)
-    if (declaration->kind() == Declaration::Type) {
+    switch (declaration->kind()) {
+    case Declaration::Type:
+    case Declaration::Namespace:
         return declaration->internalContext();
-    } else {
+
+    case Declaration::NamespaceAlias:
+    {
+        auto alias = declaration.dynamicCast<NamespaceAliasDeclaration>();
+
+        return getInternalContext(getDeclaration(alias->importIdentifier(), alias->context()));
+    }
+
+    default:
+    {
+        StructureType::Ptr type = StructureType::Ptr::dynamicCast(declaration->abstractType());
+
+        if (!type) {
+            return nullptr;
+        }
+
         return getInternalContext(
             DeclarationPointer(type->declaration(declaration->topContext()))
         );
+    }
     }
 }
 

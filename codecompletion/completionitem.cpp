@@ -65,6 +65,14 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
             }
         }
 
+        if (decl && (
+                decl->kind() == Declaration::NamespaceAlias ||
+                decl->kind() == Declaration::Namespace
+           )) {
+            // Display namespaces and namespace aliases as modules
+            return QString("module");
+        }
+
         if (decl && decl->abstractType() &&
             decl->kind() == Declaration::Type &&
             decl->abstractType()->whichType() == AbstractType::TypeEnumeration) {
