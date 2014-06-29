@@ -41,7 +41,7 @@ class PersistentMovingRangePrivate;
  *            document is closed/reloaded/cleared.
  * */
 
-class KDEVPLATFORMLANGUAGE_EXPORT PersistentMovingRange : public KShared
+class KDEVPLATFORMLANGUAGE_EXPORT PersistentMovingRange : public QSharedData
 {
   public:
     typedef KSharedPtr<PersistentMovingRange> Ptr;

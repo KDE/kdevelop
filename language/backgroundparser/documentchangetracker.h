@@ -51,7 +51,7 @@ class RevisionLockerAndClearerPrivate;
  * Helper class that locks a revision, and clears it on its destruction within the foreground thread.
  * Just delete it using deleteLater().
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT RevisionLockerAndClearer : public KShared {
+class KDEVPLATFORMLANGUAGE_EXPORT RevisionLockerAndClearer : public QSharedData {
 public:
     typedef KSharedPtr<RevisionLockerAndClearer> Ptr;
 

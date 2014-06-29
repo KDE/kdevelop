@@ -46,7 +46,7 @@ namespace KDevelop {
   /**
    * This class is responsible for finding out what kind of completion is needed, what expression should be evaluated for the container-class of the completion, what conversion will be applied to the result of the completion, etc.
    * */
-  class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionContext : public KShared {
+  class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionContext : public QSharedData {
     public:
       typedef KSharedPtr<CodeCompletionContext> Ptr;
 

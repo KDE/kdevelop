@@ -661,7 +661,7 @@ public:
    *
    * The insertion order in the hierarchy determines the order of the represented list.
    */
-  struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared
+  struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public QSharedData
   {
     typedef KSharedPtr<SearchItem> Ptr;
     ///@todo find out why this KDevVarLengthArray crashes when it's resized!

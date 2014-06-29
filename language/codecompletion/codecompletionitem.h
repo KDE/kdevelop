@@ -45,7 +45,7 @@ struct CompletionTreeNode;
 class CompletionTreeItem;
 class IndexedType;
 
-class KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeElement : public KShared {
+class KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeElement : public QSharedData {
 public:
   CompletionTreeElement();
   

@@ -56,7 +56,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Colorizer::Formatting);
 class AbstractNavigationContext;
 typedef KSharedPtr<AbstractNavigationContext> NavigationContextPointer;
 
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, public KShared
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, public QSharedData
 {
   Q_OBJECT
   public:

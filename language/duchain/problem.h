@@ -144,7 +144,7 @@ public:
  *
  * @warning Access to problems must be serialized through DUChainLock.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT Problem : public DUChainBase, public KShared
+class KDEVPLATFORMLANGUAGE_EXPORT Problem : public DUChainBase, public QSharedData
 {
 public:
     using Ptr = KSharedPtr<Problem>;
