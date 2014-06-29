@@ -4,11 +4,8 @@ include_directories(
 )
 
 add_library(kdevclangcodegen OBJECT
-    adaptsignatureaction.cpp
-    adaptsignatureassistant.cpp
     simplerefactoring.cpp
     clangsignatureassistant.cpp
-    codegenhelper.cpp
 )
 set_target_properties(kdevclangcodegen PROPERTIES
     AUTOMOC TRUE

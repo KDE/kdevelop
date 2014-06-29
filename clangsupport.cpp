@@ -39,7 +39,6 @@
 
 #include "codegen/simplerefactoring.h"
 #include "codegen/clangsignatureassistant.h"
-#include "codegen/adaptsignatureassistant.h"
 
 #include <language/assistant/staticassistantsmanager.h>
 #include <language/assistant/renameassistant.h>
@@ -74,8 +73,7 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
 
     auto assistantsManager = core()->languageController()->staticAssistantsManager();
     assistantsManager->registerAssistant(StaticAssistant::Ptr(new RenameAssistant(this)));
-//     assistantsManager->registerAssistant(StaticAssistant::Ptr(new ClangSignatureAssistant(this)));
-    assistantsManager->registerAssistant(StaticAssistant::Ptr(new AdaptSignatureAssistant(this)));
+    assistantsManager->registerAssistant(StaticAssistant::Ptr(new ClangSignatureAssistant(this)));
 }
 
 ClangSupport::~ClangSupport()
