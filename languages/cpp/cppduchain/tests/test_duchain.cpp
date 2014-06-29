@@ -45,7 +45,6 @@
 #include <language/duchain/declarationid.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/dumpdotgraph.h>
-#include <language/duchain/dumpchain.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/types/alltypes.h>

@@ -18,7 +18,7 @@
 
 #include <qtest_kde.h>
 #include <language/duchain/duchain.h>
-#include <language/duchain/dumpchain.h>
+#include <language/duchain/duchaindumper.h>
 #include <language/codegen/coderepresentation.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <tests/testcore.h>
@@ -90,9 +90,12 @@ void TestCppFiles::testFiles()
   QVERIFY(top);
   DUChainReadLocker lock;
   CppDeclarationValidator validator;
+
   if (QProcessEnvironment::systemEnvironment().contains("DUMP_DUCONTEXTS")) {
-    dumpDUContext(top);
+    DUChainDumper dumper;
+    dumper.dump(top);
   }
+
   top->visit(validator);
   QVERIFY(validator.testsPassed());
 }

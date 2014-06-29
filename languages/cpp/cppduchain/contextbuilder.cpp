@@ -31,7 +31,6 @@
 
 #include "parsesession.h"
 #include "name_compiler.h"
-#include <language/duchain/dumpchain.h>
 #include "environmentmanager.h"
 #include "expressionvisitor.h"
 

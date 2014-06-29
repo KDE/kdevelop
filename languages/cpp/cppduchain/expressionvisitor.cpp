@@ -29,7 +29,6 @@
 #include "tokens.h"
 #include "typebuilder.h"
 #include "cpptypes.h"
-#include <language/duchain/dumpchain.h>
 #include "typeutils.h"
 #include "name_visitor.h"
 #include "type_visitor.h"

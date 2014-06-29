@@ -31,7 +31,6 @@
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/pointertype.h>
 #include <language/duchain/types/arraytype.h>
-#include <language/duchain/dumpchain.h>
 
 #include "typeutils.h"
 #include "templatedeclaration.h"
@@ -587,7 +586,6 @@ void TestDUChain::testLambda()
   QVERIFY(top);
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
-  dumpDUContext(top);
 
   DUContext* mainCtx = top->childContexts().last();
   QCOMPARE(mainCtx->childContexts().size(), 2);
@@ -631,7 +629,6 @@ void TestDUChain::testLambdaReturn()
   QVERIFY(top);
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
-  dumpDUContext(top);
 
   DUContext* mainCtx = top->childContexts().last();
   QCOMPARE(mainCtx->localDeclarations().size(), 1);
@@ -653,7 +650,6 @@ void TestDUChain::testLambdaCapture()
   QVERIFY(top);
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
-  dumpDUContext(top);
 
   DUContext* mainCtx = top->childContexts().last();
   QCOMPARE(mainCtx->childContexts().size(), 1);
