@@ -95,17 +95,6 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
     }
   }
 
-  enum ContextType {
-    Global    /**< A context that declares functions, namespaces or classes */,
-    Namespace /**< A context that declares namespace members */,
-    Class     /**< A context that declares class members */,
-    Function  /**< A context that declares function-arguments */,
-    Template  /**< A context that declares template-parameters */,
-    Enum      /**< A context that contains a list of enumerators */,
-    Helper    /**< A helper context, used for language-specific tweaks */,
-    Other     /**< Represents executable code, like for example within a compound-statement */
-  };
-
   QString type;
   switch(context->type()) {
     case DUContext::Global: type = "Global"; break;
