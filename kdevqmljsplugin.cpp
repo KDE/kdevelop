@@ -24,8 +24,6 @@
 #include "qmljshighlighting.h"
 #include "version.h"
 #include "codecompletion/model.h"
-
-#include "navigation/colorchooser.h"
 #include "navigation/propertypreviewwidget.h"
 
 #include <KPluginFactory>
@@ -97,30 +95,6 @@ ContextMenuExtension KDevQmlJsPlugin::contextMenuExtension(Context* context)
     return cm;
 }
 
-const QColor stringToColor(const QString& text) {
-    if ( text.size() < 20 ) {
-        QColor color;
-
-        if (text.startsWith(QLatin1Char('#')) && text.length() == 9) {
-            // #AARRGGBB color, not supported by QColor::setNamedColor
-            QByteArray values = QByteArray::fromHex(text.mid(1).toAscii());
-
-            if (values.length() == 4) {
-                color.setRgba(qRgba(values[1], values[2], values[3], values[0]));
-            }
-        } else {
-            // Named color, #RRGGBB or #RGB, supported by QColor::setNamedColor
-            color.setNamedColor(text);
-        }
-
-        if ( color.isValid() ) {
-            qDebug() << color;
-            return color;
-        }
-    }
-    return QColor();
-}
-
 const QString textFromDoc(const IDocument* doc, const SimpleRange& range) {
     return doc->textDocument()->line(range.start.line).mid(range.start.column, range.end.column-range.start.column);
 };
@@ -175,49 +149,11 @@ const QPair<SimpleRange, SimpleRange> parseProperty(const QString& line, const S
     return QPair<SimpleRange, SimpleRange>(keyRange, valueRange);
 };
 
-SimpleRange KDevQmlJsPlugin::specialLanguageObjectRange(const KUrl& url, const SimpleCursor& position)
-{
-    // The object range is only determined for colors. There is not really a point of doing this for
-    // the key/value stuff; it'll just highlight the whole line, which is more annoying
-    // than useful.
-    IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
-    if ( doc && doc->textDocument() ) {
-        const QString& line = doc->textDocument()->line(position.line);
-        int start = position.column, end = position.column;
-        // search for the " or ' delmiters of the color to the right and to the left
-        for ( QString::const_iterator it = line.begin() + position.column; it != line.end(); it++ ){
-            end += 1;
-            if ( *it == '"' || *it == '\'' ) break;
-        }
-        for ( QString::const_iterator it = line.begin() + position.column; it != line.end(); it-- ){
-            start -= 1;
-            if ( *it == '"' || *it == '\'' ) break;
-        }
-        SimpleRange range(position.line, start+2, position.line, end-1);
-        // check if the encompassed string is actually a valid color string (this also
-        // matches "red" or "blue") and if yes, return its range for highlighting.
-        if ( range.isValid() && start+2 > 0 && stringToColor(textFromDoc(doc, range)).isValid() ) {
-            return range;
-        }
-    }
-    // Otherwise, no special highlighting shall take place.
-    return KDevelop::ILanguageSupport::specialLanguageObjectRange(url, position);
-}
-
 QWidget* KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position)
 {
-    SimpleRange range = specialLanguageObjectRange(url, position);
     IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
     if ( doc && doc->textDocument() ) {
-        // use the above function to check if the requested range contains a color,
-        // and if yes, return a color picker widget to display.
-        QString text = textFromDoc(doc, range);
-        QColor color = stringToColor(text);
-        if ( color.isValid() ) {
-            return new ColorChooser(color, doc->textDocument(), range);
-        }
-
-        // If it's not a color, check for a QML property, and construct a property preview widget
+        // Check for a QML property, and construct a property preview widget
         // if the property key is listed in the supported properties.
         QPair<SimpleRange, SimpleRange> property = parseProperty(doc->textDocument()->line(position.line), position);
         if ( property.first.isValid() && property.second.isValid() ) {

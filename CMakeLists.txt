@@ -46,7 +46,6 @@ kde4_add_plugin(kdevqmljslanguagesupport
     qmljsparsejob.cpp
     qmljshighlighting.cpp
     kdevqmljsplugin.cpp
-    navigation/colorchooser.cpp
     navigation/propertypreviewwidget.cpp
 )
 target_link_libraries(kdevqmljslanguagesupport
