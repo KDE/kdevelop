@@ -73,6 +73,7 @@ namespace KDevelop {
         
         virtual void fetchThreads() = 0;
         virtual void fetchFrames(int threadNumber, int from, int to) = 0;
+        virtual void fetchMoreFrames() = 0;
 
     Q_SIGNALS:                            
         /* FIXME: It might make for a more conscise interface if those
@@ -81,10 +82,6 @@ namespace KDevelop {
            with the one they are displaying.  */
         void currentThreadChanged(int thread);
         void currentFrameChanged(int frame);
-
-    public Q_SLOTS:
-        // FIXME: why is this slot?
-        virtual void fetchMoreFrames() = 0;
         
     private:
 
