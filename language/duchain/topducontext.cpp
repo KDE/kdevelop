@@ -672,7 +672,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
       if(!check(decl))
         continue;
 
-      if( decl->kind() == Declaration::Alias ) {
+      if( ! (flags & DontResolveAliases) && decl->kind() == Declaration::Alias ) {
         //Apply alias declarations
         AliasDeclaration* alias = static_cast<AliasDeclaration*>(decl);
         if(alias->aliasedDeclaration().isValid()) {
@@ -712,7 +712,6 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
 
   ///The actual scopes are found within applyAliases, and each complete qualified identifier is given to FindDeclarationsAcceptor.
   ///That stores the found declaration to the output.
-
   applyAliases(identifiers, storer, position, false);
 
   return true;
