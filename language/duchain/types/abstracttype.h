@@ -289,14 +289,9 @@ private:
   AbstractType(const AbstractType& rhs);
 };
 
-template <class T>
-uint qHash(const TypePtr<T>& type) { return (uint)((size_t)type.data()); }
-
-
 /**
  * You can use these instead of dynamic_cast, for basic types it has better performance because it checks the whichType() member
 */
-
 template<class To>
 inline To fastCast(AbstractType* from) {
   return dynamic_cast<To>(from);

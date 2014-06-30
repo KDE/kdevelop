@@ -3,6 +3,7 @@
  *
  * Copyright 2005 Frerich Raabe <raabe@kde.org>
  * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
+ * Copyright 2014 Kevin Funk <kfunk@kde.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -84,5 +85,9 @@ public:
 };
 
 }
+
+// TODO: Remove once we depend on Qt 5.4, also see https://codereview.qt-project.org/#/c/88665/
+template <class T>
+constexpr uint qHash(const KDevelop::TypePtr<T>& type) { return qHash(type.data()); }
 
 #endif
