@@ -1,1 +1,0 @@
-QtQuick.Controls_1.0.qml

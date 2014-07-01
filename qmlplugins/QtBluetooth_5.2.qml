@@ -1,1 +1,0 @@
-QtBluetooth_5.0.qml

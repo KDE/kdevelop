@@ -1,1 +1,0 @@
-QtSensors_5.0.qml

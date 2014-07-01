@@ -1,1 +1,0 @@
-QtQuick.Dialogs_1.0.qml

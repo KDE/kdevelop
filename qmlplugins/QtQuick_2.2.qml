@@ -1,1 +1,0 @@
-QtQuick_2.0.qml
