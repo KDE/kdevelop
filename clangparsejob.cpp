@@ -55,7 +55,6 @@ using namespace KDevelop;
 
 namespace {
 
-static const QString customIncludePathsFilename = QString::fromLatin1(".kdev_include_paths");
 static const QString pchIncludeFilename = QString::fromLatin1(".kdev_pch_include");
 
 QString findConfigFile(const QString& forFile, const QString& configFileName)
@@ -93,11 +92,6 @@ Path::List readPathListFile(const QString& filepath)
     return paths;
 }
 
-Path::List userDefinedIncludePathsForFile(const QString& sourcefile)
-{
-    return readPathListFile(findConfigFile(sourcefile, customIncludePathsFilename));
-}
-
 /**
  * File should contain the header to precompile and use while parsing
  * @returns the first path in the file
@@ -117,8 +111,13 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
     auto item = ICore::self()->projectController()->projectModel()->itemForPath(url);
 
     auto idm = KDevelop::IDefinesAndIncludesManager::manager();
-    m_includes = idm->includes(item);
-    m_defines = idm->defines(item);
+    if (item) {
+        m_includes = idm->includes(item);
+        m_defines = idm->defines(item);
+    } else {
+        m_includes = idm->includes(url.str());
+        m_defines = idm->defines(url.str());
+    }
 }
 
 ClangSupport* ClangParseJob::clang() const
@@ -129,9 +128,6 @@ ClangSupport* ClangParseJob::clang() const
 void ClangParseJob::run()
 {
     QReadLocker parseLock(languageSupport()->language()->parseLock());
-
-    // get user defined and default include paths in background thread
-    m_includes += userDefinedIncludePathsForFile(document().str());
 
     if (abortRequested()) {
         return;
