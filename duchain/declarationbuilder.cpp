@@ -1183,6 +1183,11 @@ AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
             realName = QLatin1String("url");
         } else if (name == QLatin1String("QVector3D")) {
             realName = QLatin1String("vector3d");
+        } else if (name.endsWith(QLatin1String("ScriptString"))) {
+            // Q{Declarative,Qml}ScriptString represents a JS snippet
+            FunctionType* func = new FunctionType;
+            func->setReturnType(typeFromName(QLatin1String("void")));
+            return AbstractType::Ptr(func);
         }
     }
 

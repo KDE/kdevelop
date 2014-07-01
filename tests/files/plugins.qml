@@ -20,6 +20,11 @@ Module {
          Property { name: "rootItem"; type: "QModelIndex" }
 
          /**
+          * "type" : { "toString" : "function void ()" }
+          */
+         Property { name: "script"; type: "QQuickScriptString" }
+
+         /**
           * "type" : { "toString" : "plugins1.0::QAbstractItemModel::LayoutChangeHint" },
           * "kind" : "Type",
           * "internalContext" : { "type" : "Enum" }
