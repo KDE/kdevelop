@@ -1186,7 +1186,7 @@ AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
         } else if (name.endsWith(QLatin1String("ScriptString"))) {
             // Q{Declarative,Qml}ScriptString represents a JS snippet
             FunctionType* func = new FunctionType;
-            func->setReturnType(typeFromName(QLatin1String("void")));
+            func->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
             return AbstractType::Ptr(func);
         }
     }
