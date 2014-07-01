@@ -26,6 +26,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
+#include <util/path.h>
 
 #include <QDir>
 #include <QFile>
@@ -153,4 +154,20 @@ IProject* ProjectsGenerator::GenerateMultiPathProject()
         "VersionControlSupport=\n";
     }
     return loadProject( QDir::tempPath() + "/multipathproject/multipathproject.kdev4", "MultiPathProject" );
+}
+
+IProject* ProjectsGenerator::GenerateSimpleProjectWithOutOfProjectFiles()
+{
+    auto project = GenerateSimpleProject();
+    Q_ASSERT(project);
+
+    auto rootFolder = QDir(project->path().path());
+    const QString includePaths = ".kdev_include_paths";
+
+    QFile file(rootFolder.filePath(includePaths));
+    createFile(file);
+    QTextStream stream( &file );
+    stream << "." + QDir::separator() + "include1.h" << endl << rootFolder.canonicalPath() + QDir::separator() + "include2.h";
+
+    return project;
 }

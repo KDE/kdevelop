@@ -84,7 +84,7 @@ Path::List NoProjectIncludePathsManager::includes(const QString& path)
 
     QFile f(pathToFile);
     if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        auto lines = QString::fromLocal8Bit(f.readAll()).split(QChar(QChar::LineSeparator), QString::SkipEmptyParts);
+        auto lines = QString::fromLocal8Bit(f.readAll()).split('\n', QString::SkipEmptyParts);
         QFileInfo dir(pathToFile);
         for (const auto& line : lines) {
             auto textLine = line.trimmed();
@@ -110,8 +110,7 @@ bool NoProjectIncludePathsManager::writeIncludePaths(const QString& storageDirec
     if (f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
         QTextStream out(&f);
         for (const auto& customPath : includePaths) {
-            out << customPath.path();
-            out << QChar(QChar::LineSeparator);
+            out << customPath.path() << endl;
         }
         if (includePaths.isEmpty()) {
             removeSettings(storageDirectory);
