@@ -77,6 +77,8 @@ SourceFormatterSettings::SourceFormatterSettings(QWidget *parent, const QVariant
     m_document->setReadWrite(false);
 
     m_view = m_document->createView(textEditor);
+    m_view->setStatusBarEnabled(false);
+
     QVBoxLayout *layout2 = new QVBoxLayout(textEditor);
     layout2->addWidget(m_view);
     textEditor->setLayout(layout2);
