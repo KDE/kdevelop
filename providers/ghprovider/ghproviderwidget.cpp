@@ -17,6 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include <KMessageBox>
 
 #include <QtGui/QLabel>
 #include <QtGui/QListView>
@@ -90,6 +91,11 @@ KDevelop::VcsJob * ProviderWidget::createWorkingCopy(const KUrl &dest)
         return NULL;
 
     IPlugin *plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevgit");
+    if (!plugin) {
+        KMessageBox::error(0, i18n("The Git plugin could not be loaded which is required to import a Github project."), i18n("Github Provider Error"));
+        return nullptr;
+    }
+
     IBasicVersionControl *vc = plugin->extension<IBasicVersionControl>();
     QString url = pos.data(ProviderModel::VcsLocationRole).toString();
     if (m_account->validAccount())
