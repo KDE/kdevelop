@@ -43,24 +43,29 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc, 
             return 0;
         }
         QString base = bases.first();
+
+        // Positioning
         supportedProperties["width"] = SupportedProperty(QUrl(base + "Width.qml"));
         supportedProperties["height"] = SupportedProperty(QUrl(base + "Height.qml"));
         supportedProperties["spacing"] = SupportedProperty(QUrl(base + "Spacing.qml"));
-        supportedProperties["x"] = SupportedProperty(QUrl(base + "Distance.qml"));
-        supportedProperties["y"] = SupportedProperty(QUrl(base + "Distance.qml"));
 
-        supportedProperties["margins"] = SupportedProperty(QUrl(base + "Distance.qml"));    // matches anchors.margins and anchors { margins: }
-        supportedProperties["leftMargin"] = SupportedProperty(QUrl(base + "Distance.qml"));
-        supportedProperties["rightMargin"] = SupportedProperty(QUrl(base + "Distance.qml"));
-        supportedProperties["topMargin"] = SupportedProperty(QUrl(base + "Distance.qml"));
-        supportedProperties["bottomMargin"] = SupportedProperty(QUrl(base + "Distance.qml"));
+        // Margins
+        supportedProperties["margins"] = SupportedProperty(QUrl(base + "Spacing.qml"));    // matches anchors.margins and anchors { margins: }
+        supportedProperties["leftMargin"] = SupportedProperty(QUrl(base + "Spacing.qml"));
+        supportedProperties["rightMargin"] = SupportedProperty(QUrl(base + "Spacing.qml"));
+        supportedProperties["topMargin"] = SupportedProperty(QUrl(base + "Spacing.qml"));
+        supportedProperties["bottomMargin"] = SupportedProperty(QUrl(base + "Spacing.qml"));
 
-        supportedProperties["opacity"] = SupportedProperty(QUrl(base + "Opacity.qml"));
+        // Animations
         supportedProperties["duration"] = SupportedProperty(QUrl(base + "Duration.qml"));
-        supportedProperties["font.family"] = SupportedProperty(QUrl(base + "FontFamily.qml"));
-        supportedProperties["font.pointSize"] = SupportedProperty(QUrl(base + "FontSize.qml"));
-        supportedProperties["model"] = SupportedProperty(QUrl(base + "Repeat.qml"));
+
+        // Font
+        supportedProperties["family"] = SupportedProperty(QUrl(base + "FontFamily.qml"));
+        supportedProperties["pointSize"] = SupportedProperty(QUrl(base + "FontSize.qml"));
+
+        // Appearance
         supportedProperties["color"] = SupportedProperty(QUrl(base + "ColorPicker.qml"));
+        supportedProperties["opacity"] = SupportedProperty(QUrl(base + "Opacity.qml"));
     }
 
     QHash<QString, SupportedProperty>::iterator item = supportedProperties.find(key);
