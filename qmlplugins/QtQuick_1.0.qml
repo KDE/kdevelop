@@ -210,7 +210,19 @@ Module {
             name: "progressChanged"
             Parameter { type: "double" }
         }
+        Signal {
+            name: "completed"
+        }
+        Signal {
+            name: "destruction"
+        }
         Method { name: "errorString"; type: "string" }
+        Method {
+            name: "createObject"
+            type: "QtObject"
+            Parameter { name: "parent"; type: "Item" }
+            Parameter { name: "properties"; type: "QtObject" }
+        }
     }
     Component {
         name: "QDeclarativeComponentAttached"
