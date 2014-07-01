@@ -69,6 +69,9 @@ Module {
         Property { name: "anchors"; type: "QDeclarativeAnchorSet"; isReadonly: true; isPointer: true }
     }
     Component {
+        name: "QDeclarativeAnchorLine"
+    }
+    Component {
         name: "QDeclarativeAnchorSet"
         prototype: "QObject"
         Property { name: "left"; type: "QDeclarativeScriptString" }

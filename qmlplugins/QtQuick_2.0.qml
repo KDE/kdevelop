@@ -835,6 +835,9 @@ Module {
         Property { name: "anchors"; type: "QQuickAnchorSet"; isReadonly: true; isPointer: true }
     }
     Component {
+        name: "QQuickAnchorLine"
+    }
+    Component {
         name: "QQuickAnchorSet"
         prototype: "QObject"
         Property { name: "left"; type: "QQmlScriptString" }
