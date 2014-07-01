@@ -26,10 +26,10 @@ PropertyWidget {
     value: "10"
     color: "#00FFFFFF"
     function sliderToValue(slider) {
-        return Math.round(slider/7*20)/20.0;
+        return Math.round(slider/4) + 4;
     }
     function valueToSlider(value) {
-        return value*7;
+        return (value - 4)*4;
     }
     Text {
         anchors.bottom: parent.bottom

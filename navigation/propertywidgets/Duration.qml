@@ -24,10 +24,10 @@ PropertyWidget {
     height: 120
     value: "1"
     function sliderToValue(slider) {
-        return slider*8;
+        return slider*31;
     }
     function valueToSlider(value) {
-        return value/8;
+        return value/31;
     }
     Text {
         z: 20

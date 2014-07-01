@@ -23,10 +23,10 @@ PropertyWidget {
     height: 110
     value: "3"
     function sliderToValue(slider) {
-        return Math.round(slider/8.0)
+        return Math.round(slider/4.0)
     }
     function valueToSlider(value) {
-        return value*8;
+        return value*4;
     }
     Slider {
         initialValue: valueToSlider(parent.value)
