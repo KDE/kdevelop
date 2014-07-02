@@ -21,6 +21,7 @@
  */
 
 #include "completionitem.h"
+#include "context.h"
 
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/duchain/declaration.h>
@@ -29,6 +30,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/types/structuretype.h>
+#include <language/duchain/types/functiontype.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -37,7 +39,7 @@ using namespace QmlJS;
 using namespace KDevelop;
 
 CompletionItem::CompletionItem(DeclarationPointer decl, int inheritanceDepth, Decoration decoration)
-: NormalDeclarationCompletionItem(decl, KSharedPtr<CodeCompletionContext>(), inheritanceDepth),
+: NormalDeclarationCompletionItem(decl, KSharedPtr<KDevelop::CodeCompletionContext>(), inheritanceDepth),
   m_decoration(decoration)
 {
 }
@@ -54,7 +56,39 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
     ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(decl);
     StructureType::Ptr declType = StructureType::Ptr::dynamicCast(decl->abstractType());
 
-    if (role == Qt::DisplayRole && index.column() == CodeCompletionModel::Prefix) {
+    if (role == CodeCompletionModel::BestMatchesCount) {
+        return 5;
+    } else if (role == CodeCompletionModel::MatchQuality) {
+        DeclarationPointer reference =
+            static_cast<QmlJS::CodeCompletionContext*>(model->completionContext().data())->declarationForTypeMatch();
+
+        if (!reference || !reference->abstractType() || !decl->abstractType()) {
+            return QVariant();
+        }
+
+        AbstractType::Ptr referenceType = reference->abstractType();
+        AbstractType::Ptr declType = decl->abstractType();
+        FunctionType::Ptr declFunc = FunctionType::Ptr::dynamicCast(declType);
+
+        if (declType->equals(referenceType.constData())) {
+            // Perfect type match
+            return QVariant(10);
+        } else if (declFunc && declFunc->returnType() &&
+                   declFunc->returnType()->equals(referenceType.constData())) {
+            // Also very nice: a function returning the proper type
+            return QVariant(9);
+        } else if (decl->kind() == Declaration::Instance &&
+                   decl->abstractType() &&
+                   decl->abstractType()->whichType() == AbstractType::TypeStructure) {
+            // Not the same type, but the declaration is an instance of a class,
+            // and therefore may expose methods that will have the correct return
+            // type
+            return QVariant(5);
+        } else {
+            // Completely different types, no luck
+            return QVariant();
+        }
+    } else if (role == Qt::DisplayRole && index.column() == CodeCompletionModel::Prefix) {
         if (classDecl) {
             if (classDecl->classType() == ClassDeclarationData::Class) {
                 // QML component

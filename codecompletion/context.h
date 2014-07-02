@@ -38,6 +38,8 @@ public:
                           const KDevelop::CursorInRevision& position, int depth = 0);
     virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true);
 
+    KDevelop::DeclarationPointer declarationForTypeMatch() const;
+
     enum CompletionInContextFlag {
         CompletionOnlyLocal = 1,        /*!< @brief Don't list the items available in parent contexts */
         CompletionHideWrappers = 2,     /*!< @brief Filter out QML component wrappers (Q... C++ classes) */
@@ -45,6 +47,39 @@ public:
     Q_DECLARE_FLAGS(CompletionInContextFlags, CompletionInContextFlag)
 
 private:
+    /**
+     * @brief Entry in the expression stack returned by expressionStack()
+     *
+     * Code-completion usually happens in partial expressions that cannot be
+     * parsed using the QML/JS parser. expressionStack() can be used to build
+     * a stack of unterminated partial expressions. This structure represents
+     * an entry in this stack.
+     *
+     * Every expression stack entry contains information about where the
+     * expression started (at the beginning of the string or just after a brace),
+     * how many commas have been encountered in it (so that function call-tips
+     * can know which is the current argument being edited), and where is the last
+     * operator in the sub-expression. Normally, anything after the last operator
+     * should be a valid sub-expression identifying a declaration.
+     *
+     * @code
+     * foo(A, B, C
+     * [   [   se
+     * @endcode
+     *
+     * In the above snippet, the inner-most expression starts at A. However,
+     * "A, B, C" is not a valid JS expression (or one that should be used for
+     * code-completion). However, everything after the last comma, identified
+     * by operatorStart and operatorEnd, is valid ("C" is a identifier). "s" is
+     * operatorStart, and "e" is operatorEnd.
+     */
+    struct ExpressionStackEntry {
+        int startPosition;
+        int operatorStart;
+        int operatorEnd;
+        int commas;
+    };
+
     QList<KDevelop::CompletionTreeItemPointer> normalCompletion();
     QList<KDevelop::CompletionTreeItemPointer> commentCompletion();
     QList<KDevelop::CompletionTreeItemPointer> importCompletion();
@@ -56,6 +91,8 @@ private:
     QList<KDevelop::CompletionTreeItemPointer> fieldCompletions(const QString &expression,
                                                                 CompletionItem::Decoration decoration);
 
+    QStack<ExpressionStackEntry> expressionStack(const QString& expression);    /*!< @see ExpressionStackEntry */
+    KDevelop::DeclarationPointer declarationAtEndOfString(const QString& expression);
     bool containsOnlySpaces(const QString &str);
 
 private:
@@ -66,6 +103,7 @@ private:
     };
 
     CompletionKind m_completionKind;
+    KDevelop::DeclarationPointer m_declarationForTypeMatch;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CodeCompletionContext::CompletionInContextFlags)

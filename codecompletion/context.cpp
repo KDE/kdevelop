@@ -80,6 +80,22 @@ CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, co
             break;
         }
     }
+
+    // If text consists of an expression whose type can be inferred followed by
+    // an operator (assignation, ":" in QML, comparators, etc), then strip the
+    // operator, and use the expression to sort the completion items by type
+    QStack<CodeCompletionContext::ExpressionStackEntry> stack = expressionStack(m_text);
+
+    if (stack.top().operatorStart != 0) {
+        // Deduce the declaration for type matching using operatorStart:
+        //
+        // table[getInt() +
+        //      [         ^
+        //
+        // ^ = operatorStart. Just before operatorStart is a code snippet that ends
+        // with the declaration whose type should be used.
+        m_declarationForTypeMatch = declarationAtEndOfString(m_text.left(stack.top().operatorStart));
+    }
 }
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& abort, bool fullCompletion)
@@ -100,6 +116,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
     }
 
     return QList<CompletionTreeItemPointer>();
+}
+
+DeclarationPointer CodeCompletionContext::declarationForTypeMatch() const
+{
+    return m_declarationForTypeMatch;
 }
 
 QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompletion()
@@ -241,66 +262,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
 QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const QString& expression,
                                                                          CompletionItem::Decoration decoration)
 {
-    // expression is an incomplete expression. Try to parse as much as possible
-    // of it, in order to get the most complete AST possible.
-    // For instance, if expression is "test(foo.bar", test(foo.bar is invalid,
-    // but foo.bar is valid and should be used (bar is also valid, but too small
-    // to provide any useful context)
-    QStack<int> bracketPositions;
-    QmlJS::Lexer lexer(nullptr);
-    bool atEnd = false;
-
-    lexer.setCode(expression, 1, false);
-    bracketPositions.push(0);
-
-    while (!atEnd) {
-        switch (lexer.lex()) {
-        case QmlJSGrammar::EOF_SYMBOL:
-            atEnd = true;
-            break;
-        case QmlJSGrammar::T_LBRACE:
-        case QmlJSGrammar::T_LBRACKET:
-        case QmlJSGrammar::T_LPAREN:
-            bracketPositions.push(lexer.tokenStartColumn());
-            break;
-        case QmlJSGrammar::T_RBRACE:
-        case QmlJSGrammar::T_RBRACKET:
-        case QmlJSGrammar::T_RPAREN:
-            bracketPositions.pop();
-            break;
-        case QmlJSGrammar::T_IDENTIFIER:
-        case QmlJSGrammar::T_DOT:
-            break;
-        default:
-            // "a == b", "a + b", "a && b", "typeof b", etc are not expressions
-            // whose type is interesting for code-completion, but "b" is.
-            // "foo(a, b", is not a valid expression, "b" is. "var a = b" is not
-            // understood by ExpressionVisitor, b is.
-            // Shift the current position so that everything before the unwanted char is
-            // ignored. Because a stack is used, "foo(a, b)" will still correctly
-            // be identified a an expression if the closing brace in present
-            bracketPositions.top() = lexer.tokenStartColumn();
-        }
-    }
-
-    // The last un-matched paren/brace/bracket correspond to the start of something
-    // that should be a valid expression.
-    QmlJS::Document::MutablePtr doc = QmlJS::Document::create("inline", Language::JavaScript);
-
-    doc->setSource(expression.mid(bracketPositions.top()));
-    doc->parseExpression();
-
-    if (!doc || !doc->isParsedCorrectly()) {
-        return QList<CompletionTreeItemPointer>();
-    }
-
-    // Use ExpressionVisitor to find the type (and associated declaration) of
-    // the snippet that has been parsed. The inner context of the declaration
-    // can be used to get the list of completions
-    ExpressionVisitor visitor(m_duContext.data());
-    doc->ast()->accept(&visitor);
-
-    DUContext* context = getInternalContext(visitor.lastDeclaration());
+    // The statement given to this method ends with an expression that may identify
+    // a declaration ("foo" in "test(1, 2, foo"). List the declarations of this
+    // inner context
+    DUContext* context = getInternalContext(declarationAtEndOfString(expression));
 
     if (context) {
         return completionsInContext(DUContextPointer(context),
@@ -309,6 +274,86 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::fieldCompletions(const Q
     } else {
         return QList<CompletionTreeItemPointer>();
     }
+}
+
+QStack<CodeCompletionContext::ExpressionStackEntry> CodeCompletionContext::expressionStack(const QString& expression)
+{
+    QStack<CodeCompletionContext::ExpressionStackEntry> stack;
+    ExpressionStackEntry entry;
+    QmlJS::Lexer lexer(nullptr);
+    bool atEnd = false;
+
+    lexer.setCode(expression, 1, false);
+
+    entry.startPosition = 0;
+    entry.operatorStart = 0;
+    entry.operatorEnd = 0;
+    entry.commas = 0;
+
+    stack.push(entry);
+
+    // NOTE: KDevelop uses 0-indexed columns while QMLJS uses 1-indexed columns
+    while (!atEnd) {
+        switch (lexer.lex()) {
+        case QmlJSGrammar::EOF_SYMBOL:
+            atEnd = true;
+            break;
+        case QmlJSGrammar::T_LBRACE:
+        case QmlJSGrammar::T_LBRACKET:
+        case QmlJSGrammar::T_LPAREN:
+            entry.startPosition = lexer.tokenEndColumn();
+            entry.operatorStart = entry.startPosition;
+            entry.operatorEnd = entry.startPosition;
+            entry.commas = 0;
+
+            stack.push(entry);
+            break;
+        case QmlJSGrammar::T_RBRACE:
+        case QmlJSGrammar::T_RBRACKET:
+        case QmlJSGrammar::T_RPAREN:
+            if (stack.count() > 1) {
+                stack.pop();
+            }
+            break;
+        case QmlJSGrammar::T_IDENTIFIER:
+        case QmlJSGrammar::T_DOT:
+            break;
+        case QmlJSGrammar::T_COMMA:
+            stack.top().commas++;
+        default:
+            // The last operator of every sub-expression is stored on the stack
+            // so that "A = foo." can know that attributes of foo having the same
+            // type as A should be highlighted.
+            stack.top().operatorStart = lexer.tokenStartColumn() - 1;
+            stack.top().operatorEnd = lexer.tokenEndColumn();
+        }
+    }
+
+    return stack;
+}
+
+DeclarationPointer CodeCompletionContext::declarationAtEndOfString(const QString& expression)
+{
+    // Build the expression stack of expression and use the valid portion of the
+    // top sub-expression to find the right-most declaration that can be found
+    // in expression.
+    QmlJS::Document::MutablePtr doc = QmlJS::Document::create("inline", Language::JavaScript);
+    ExpressionStackEntry topEntry = expressionStack(expression).top();
+
+    doc->setSource(expression.mid(topEntry.operatorEnd));
+    doc->parseExpression();
+
+    if (!doc || !doc->isParsedCorrectly()) {
+        return DeclarationPointer();
+    }
+
+    // Use ExpressionVisitor to find the type (and associated declaration) of
+    // the snippet that has been parsed. The inner context of the declaration
+    // can be used to get the list of completions
+    ExpressionVisitor visitor(m_duContext.data());
+    doc->ast()->accept(&visitor);
+
+    return visitor.lastDeclaration();
 }
 
 bool CodeCompletionContext::containsOnlySpaces(const QString& str)
