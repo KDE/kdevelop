@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=system-run
 Exec=blubb
 Comment=Lets you view a plasmoid
 Comment[bs]=Omogućava da vidite plazmoid
