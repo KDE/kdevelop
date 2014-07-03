@@ -52,7 +52,7 @@ public:
     {
         if( job != m_job )
             return;
-        KDevelop::VcsDiff diff = qVariantValue<KDevelop::VcsDiff>( m_job->fetchResults() );
+        KDevelop::VcsDiff diff = m_job->fetchResults().value<KDevelop::VcsDiff>();
 
         // Try using the patch-review plugin if possible
         VCSDiffPatchSource* patch = new VCSDiffPatchSource(diff);

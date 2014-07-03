@@ -113,7 +113,7 @@ bool KDevSvnPlugin::isVersionControlled(const KUrl& localLocation)
         QVariant result = job->fetchResults();
 
         if (result.isValid()) {
-            SvnInfoHolder h = qVariantValue<SvnInfoHolder>(result);
+            SvnInfoHolder h = result.value<SvnInfoHolder>();
             return !h.name.isEmpty();
         }
     } else {

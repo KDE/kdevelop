@@ -136,7 +136,7 @@ public:
         if( currentTargetAction->currentAction() )
         {
             KConfigGroup grp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
-            LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qVariantValue<void*>( currentTargetAction->currentAction()->data() ) );
+            LaunchConfiguration* l = static_cast<LaunchConfiguration*>( currentTargetAction->currentAction()->data().value<void*>() );
             grp.writeEntry( CurrentLaunchConfigProjectEntry, l->project() ? l->project()->name() : "" );
             grp.writeEntry( CurrentLaunchConfigNameEntry, l->configGroupName() );
             grp.sync();
@@ -223,7 +223,7 @@ public:
         LaunchConfiguration* l = 0;
         if( currentTargetAction->currentAction() )
         {
-            l = static_cast<LaunchConfiguration*>( qVariantValue<void*>( currentTargetAction->currentAction()->data() ) );
+            l = static_cast<LaunchConfiguration*>( currentTargetAction->currentAction()->data().value<void*>() );
         } else if( !launchConfigurations.isEmpty() )
         {
             l = launchConfigurations.at( 0 );
@@ -324,7 +324,7 @@ void KDevelop::RunController::launchChanged( LaunchConfiguration* l )
 {
     foreach( QAction* a, d->currentTargetAction->actions() )
     {
-        if( static_cast<LaunchConfiguration*>( qVariantValue<void*>( a->data() ) ) == l )
+        if( static_cast<LaunchConfiguration*>( a->data().value<void*>() ) == l )
         {
             a->setText( d->launchActionText( l ) );
             break;
@@ -808,7 +808,7 @@ void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfigur
 
     foreach( QAction* a, d->currentTargetAction->actions() )
     {
-        if( static_cast<LaunchConfiguration*>( qVariantValue<void*>( a->data() ) ) == l )
+        if( static_cast<LaunchConfiguration*>( a->data().value<void*>() ) == l )
         {
             bool wasSelected = a->isChecked();
             d->currentTargetAction->removeAction( a );
@@ -839,7 +839,7 @@ void RunController::setDefaultLaunch(ILaunchConfiguration* l)
 {
     foreach( QAction* a, d->currentTargetAction->actions() )
     {
-        if( static_cast<ILaunchConfiguration*>( qVariantValue<void*>( a->data() ) ) == l )
+        if( static_cast<ILaunchConfiguration*>( a->data().value<void*>() ) == l )
         {
             a->setChecked(true);
             break;

@@ -131,7 +131,7 @@ void fetchStatus(int line, QList<VcsStatusInfo> & statuslist, IBasicVersionContr
     statuslist.clear();
     foreach(const QVariant & v, untypedList) {
         QVERIFY(v.canConvert<VcsStatusInfo>());
-        statuslist.push_back(qVariantValue<VcsStatusInfo>(v));
+        statuslist.push_back(v.value<VcsStatusInfo>());
     }
 }
 
