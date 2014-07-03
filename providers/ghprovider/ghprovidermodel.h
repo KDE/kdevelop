@@ -57,10 +57,10 @@ class ProviderItem : public QStandardItem
 {
 public:
     /// Constructor. \p r The response that this item stores.
-    ProviderItem(const Response &r);
+    explicit ProviderItem(const Response &r);
 
     /// Re-implemented from QStandardItem.
-    virtual QVariant data(int role = Qt::UserRole + 1) const;
+    virtual QVariant data(int role = Qt::UserRole + 1) const override;
 
 private:
     Response m_data;
@@ -78,7 +78,7 @@ public:
     enum Role { VcsLocationRole = Qt::UserRole + 1 };
 
     /// Constructor.
-    explicit ProviderModel(QObject *parent = NULL);
+    explicit ProviderModel(QObject *parent = nullptr);
 };
 
 } // End of namespace gh

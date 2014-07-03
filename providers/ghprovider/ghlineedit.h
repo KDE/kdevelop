@@ -43,13 +43,13 @@ class LineEdit : public KLineEdit
 
 public:
     /// Constructor.
-    LineEdit(QWidget *parent = NULL);
+    explicit LineEdit(QWidget *parent = nullptr);
 
     /// Destructor.
     virtual ~LineEdit();
 
     /// Overridden from KLineEdit.
-    void keyPressEvent(QKeyEvent *e);
+    void keyPressEvent(QKeyEvent *e) override;
 
 signals:
     /// Emitted when the return key has been pressed.

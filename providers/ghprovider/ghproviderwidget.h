@@ -50,13 +50,13 @@ class ProviderWidget : public KDevelop::IProjectProviderWidget
 
 public:
     /// Constructor.
-    ProviderWidget(QWidget *parent = NULL);
+    explicit ProviderWidget(QWidget *parent = nullptr);
 
     /// Re-implemented from KDevelop::IProjectProviderWidget.
-    virtual KDevelop::VcsJob * createWorkingCopy(const KUrl &dest);
+    virtual KDevelop::VcsJob * createWorkingCopy(const KUrl &dest) override;
 
     /// Re-implemented from KDevelop::IProjectProviderWidget.
-    virtual bool isCorrect() const;
+    virtual bool isCorrect() const override;
 
 private slots:
     /// Fill the m_combo member.

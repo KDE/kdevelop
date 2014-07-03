@@ -88,11 +88,13 @@ KDevelop::VcsJob * ProviderWidget::createWorkingCopy(const KUrl &dest)
 {
     QModelIndex pos = m_projects->currentIndex();
     if (!pos.isValid())
-        return NULL;
+        return nullptr;
 
     IPlugin *plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevgit");
     if (!plugin) {
-        KMessageBox::error(0, i18n("The Git plugin could not be loaded which is required to import a Github project."), i18n("Github Provider Error"));
+        KMessageBox::error(nullptr,
+                           i18n("The Git plugin could not be loaded which is required to import a Github project."),
+                           i18n("Github Provider Error"));
         return nullptr;
     }
 
@@ -141,9 +143,8 @@ void ProviderWidget::showSettings()
 
 void ProviderWidget::searchRepo()
 {
-    QString uri;
-    QString text = m_edit->text();
     bool enabled = true;
+    QString uri, text = m_edit->text();
     int idx = m_combo->itemData(m_combo->currentIndex()).toInt();
 
     switch (idx) {

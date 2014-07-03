@@ -42,7 +42,7 @@ public:
      *
      * @param resource The Github resource.
      */
-    Account(Resource *resource);
+    explicit Account(Resource *resource);
 
     /**
      * Invalidate the current account.

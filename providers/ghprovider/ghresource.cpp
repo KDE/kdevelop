@@ -90,16 +90,17 @@ void Resource::retrieveRepos(const QByteArray &data)
 
     if (ok) {
         m_model->clear();
-        foreach (QVariant it, map) {
-            QVariantMap map = it.toMap();
+        foreach (const QVariant &it, map) {
+            const QVariantMap &map = it.toMap();
             Response res;
             res.name = map.value("name").toString();
             res.url = map.value("clone_url").toUrl();
-            res.kind = Public;
             if (map.value("fork").toBool())
                 res.kind = Fork;
             else if (map.value("private").toBool())
                 res.kind = Private;
+            else
+                res.kind = Public;
             ProviderItem *item = new ProviderItem(res);
             m_model->appendRow(item);
         }
@@ -115,8 +116,8 @@ void Resource::retrieveOrgs(const QByteArray &data)
     QVariantList json = parser.parse(data, &ok).toList();
 
     if (ok) {
-        foreach (QVariant it, json) {
-            QVariantMap map = it.toMap();
+        foreach (const QVariant &it, json) {
+            const QVariantMap &map = it.toMap();
             res << map.value("login").toString();
         }
     }
@@ -132,9 +133,9 @@ void Resource::slotAuthenticate(KJob *job)
 
     bool ok;
     QJson::Parser p;
-    QVariant res = p.parse(qobject_cast<KIO::StoredTransferJob *>(job)->data(), &ok);
+    const QVariant &res = p.parse(qobject_cast<KIO::StoredTransferJob *>(job)->data(), &ok);
     if (ok) {
-        QVariantMap map = res.toMap();
+        const QVariantMap &map = res.toMap();
         emit authenticated(map.value("id").toByteArray(),
                            map.value("token").toByteArray());
     } else

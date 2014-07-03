@@ -47,7 +47,7 @@ public:
      * @param parent The QWidget this Dialog is parented to.
      * @param account The user's account.
      */
-    Dialog(QWidget *parent, Account *account);
+    explicit Dialog(QWidget *parent, Account *account);
 
 signals:
     /**
