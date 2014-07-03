@@ -67,8 +67,7 @@ namespace KDevelop
   template<>
   QString TestSuite<Declaration*>::objectInformation(Declaration *decl)
   {
-    if (!decl)
-        return "(null declaration)";
+    VERIFY_NOT_NULL(decl);
     return QString("(Declaration on line %1 in %2)")
         .arg(decl->range().start.line + 1)
         .arg(decl->topContext()->url().str());
@@ -107,18 +106,21 @@ DeclarationTest(useRanges)
 ///@returns whether the declaration's identifier matches the given value
 DeclarationTest(identifier)
 {
+  VERIFY_NOT_NULL(decl);
   return compareValues(decl->identifier().toString(), value, "Declaration's identifier");
 }
 ///JSON type: string
 ///@returns whether the declaration's qualified identifier matches the given value
 DeclarationTest(qualifiedIdentifier)
 {
+  VERIFY_NOT_NULL(decl);
   return compareValues(decl->qualifiedIdentifier().toString(), value, "Declaration's qualified identifier");
 }
 ///JSON type: CtxtTestObject
 ///@returns whether the tests for the declaration's internal context pass
 DeclarationTest(internalContext)
 {
+  VERIFY_NOT_NULL(decl);
   return testObject(decl->internalContext(), value, "Declaration's internal context");
 }
 ///JSON type: CtxtTestObject
@@ -141,18 +143,21 @@ DeclarationTest(internalFunctionContext)
 ///@returns whether the tests for the declaration's type pass
 DeclarationTest(type)
 {
+  VERIFY_NOT_NULL(decl);
   return testObject(decl->abstractType(), value, "Declaration's type");
 }
 ///JSON type: TypeTestObject
 ///@returns whether the tests for the declaration's unaliased type pass (TypeUtils::unaliasedType)
 DeclarationTest(unaliasedType)
 {
+  VERIFY_NOT_NULL(decl);
   return testObject(TypeUtils::unAliasedType(decl->abstractType()), value, "Declaration's unaliased type");
 }
 ///JSON type: TypeTestObject
 ///@returns whether the tests for the declaration's target type pass (TypeUtils::targetType)
 DeclarationTest(targetType)
 {
+  VERIFY_NOT_NULL(decl);
   return testObject(TypeUtils::targetType(decl->abstractType(), decl->topContext()), value, "Declaration's target type");
 }
 ///JSON type: TestTypeObject
@@ -248,9 +253,7 @@ DeclarationTest(defaultParameter)
 ///@returns stringified declaration
 DeclarationTest(toString)
 {
-  if (!decl) {
-    return "Invalid Declaration";
-  }
+  VERIFY_NOT_NULL(decl);
   return compareValues(decl->toString(), value, "Declaration's toString");
 }
 
@@ -258,9 +261,7 @@ DeclarationTest(toString)
 ///@returns stringified declaration range
 DeclarationTest(range)
 {
-  if (!decl) {
-    return "Invalid Declaration";
-  }
+  VERIFY_NOT_NULL(decl);
   return compareValues(rangeStr(decl->range()), value, "Declaration's range");
 }
 
@@ -268,9 +269,7 @@ DeclarationTest(range)
 ///@returns stringified declaration kind
 DeclarationTest(kind)
 {
-  if (!decl) {
-    return "Invalid Declaration";
-  }
+  VERIFY_NOT_NULL(decl);
   QString kind;
   switch (decl->kind()) {
     case KDevelop::Declaration::Alias:

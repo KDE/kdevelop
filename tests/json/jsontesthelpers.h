@@ -21,6 +21,10 @@
 
 #include "testsuite.h"
 
+#define VERIFY_NOT_NULL(ptr)\
+if (!ptr) \
+    return JsonTestHelpers::INVALID_POINTER
+
 #define VERIFY_TYPE(type)\
 if (!value.canConvert<type>())\
     return JsonTestHelpers::INVALID_JSON_TYPE
@@ -45,6 +49,7 @@ namespace JsonTestHelpers
 
 const QString SUCCESS = QString();
 const QString INVALID_JSON_TYPE = QString("Incorrect JSON type provided for test.");
+const QString INVALID_POINTER = QString("Null pointer passed to test.");
 
 template <class Type>
 inline QString compareValues(Type realValue, const QVariant &value, const QString &errorDesc)
