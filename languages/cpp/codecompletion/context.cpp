@@ -1114,6 +1114,7 @@ bool CodeCompletionContext::doIncludeCompletion()
   if(!line.startsWith('<') && !line.startsWith('"'))
     return true; //We are not behind the beginning of a path-specification
 
+  const bool local = line.startsWith('"');
   line = line.mid(1);
 
   kDebug(9007) << "extract prefix from " << line;
@@ -1128,8 +1129,9 @@ bool CodeCompletionContext::doIncludeCompletion()
   kDebug(9007) << "extracted prefix " << prefixPath;
 
 #ifndef TEST_COMPLETION
-  bool local = line.startsWith('"');
   m_includeItems = CppUtils::allFilesInIncludePath(m_duContext->url().str(), local, prefixPath);
+#else
+  Q_UNUSED(local);
 #endif
 
   return true;
