@@ -121,8 +121,10 @@ void DUChainDumper::Private::dump(DUContext * context, int allowedDepth, bool is
 
   qout << Indent(m_indent * 2) << (isFromImport ? " ==import==>" : "")
     << (dynamic_cast<TopDUContext*>(context) ? "Top-Context" : "Context") << typeToString(context->type())
-    << context << context->localScopeIdentifier() << "[" << context->scopeIdentifier() << "]"
+    << "(owner: " << context->owner() << ")"
+    << context << context->localScopeIdentifier() << "[" << context->scopeIdentifier(true) << "]"
     << context->range().castToSimpleRange().textRange()
+    << (dynamic_cast<TopDUContext*>(context) ? static_cast<TopDUContext*>(context)->url().byteArray(): "")
     << endl;
 
   if(m_visitedContexts.contains(context)) {
@@ -139,7 +141,7 @@ void DUChainDumper::Private::dump(DUContext * context, int allowedDepth, bool is
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
       
       qout << Indent((m_indent+2) * 2) << "Declaration:" << dec->toString() << "[" << dec->qualifiedIdentifier() << "]"
-        << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().castToSimpleRange().textRange() << ","
+        << dec << "(internal ctx:" << dec->internalContext() << ")" << dec->range().castToSimpleRange().textRange() << ","
         << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, "))
         << dec->uses().count() << "use(s)." << endl;
       if (FunctionDefinition::definition(dec)) {
