@@ -77,7 +77,16 @@ using namespace KDevelop;
     KDEVQMLJSDUCHAIN_EXPORT QMLAttributeValue getQMLAttributeValue(AST::UiObjectMemberList* members,
                                                                    const QString& attribute);
 
+    /**
+     * Get the internal context of a declaration
+     */
     KDEVQMLJSDUCHAIN_EXPORT DUContext* getInternalContext(const DeclarationPointer &declaration);
+
+    /**
+     * Get the internal function context of a function. This context contains
+     * the arguments of the function.
+     */
+    KDEVQMLJSDUCHAIN_EXPORT DUContext* getInternalFunctionContext(const DeclarationPointer &declaration);
 
     /**
      * Build a zero-length range on the line of the given SourceLocation

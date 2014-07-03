@@ -20,6 +20,7 @@
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/functiondeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/types/unsuretype.h>
@@ -164,6 +165,26 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
             DeclarationPointer(type->declaration(declaration->topContext()))
         );
     }
+    }
+}
+
+DUContext* getInternalFunctionContext(const DeclarationPointer& declaration)
+{
+    DUChainReadLocker lock;
+
+    if (!declaration) {
+        return nullptr;
+    }
+
+    auto classFuncDecl = dynamic_cast<ClassFunctionDeclaration*>(declaration.data());
+    auto funcDecl = dynamic_cast<FunctionDeclaration*>(declaration.data());
+
+    if (classFuncDecl) {
+        return classFuncDecl->internalFunctionContext();
+    } else if (funcDecl) {
+        return funcDecl->internalFunctionContext();
+    } else {
+        return nullptr;
     }
 }
 
