@@ -76,13 +76,6 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
                    declFunc->returnType()->equals(referenceType.constData())) {
             // Also very nice: a function returning the proper type
             return QVariant(9);
-        } else if (decl->kind() == Declaration::Instance &&
-                   decl->abstractType() &&
-                   decl->abstractType()->whichType() == AbstractType::TypeStructure) {
-            // Not the same type, but the declaration is an instance of a class,
-            // and therefore may expose methods that will have the correct return
-            // type
-            return QVariant(5);
         } else {
             // Completely different types, no luck
             return QVariant();
