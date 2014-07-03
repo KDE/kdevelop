@@ -26,7 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <ksharedconfig.h>
 #include <kurl.h>
 
-struct QUuid;
+class QUuid;
 class QString;
 class KUrl;
 
