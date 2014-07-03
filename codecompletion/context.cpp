@@ -23,6 +23,7 @@
 #include "context.h"
 #include "completionitem.h"
 #include "modulecompletionitem.h"
+#include "functioncalltipcompletionitem.h"
 
 #include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
@@ -80,22 +81,6 @@ CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, co
             break;
         }
     }
-
-    // If text consists of an expression whose type can be inferred followed by
-    // an operator (assignation, ":" in QML, comparators, etc), then strip the
-    // operator, and use the expression to sort the completion items by type
-    QStack<CodeCompletionContext::ExpressionStackEntry> stack = expressionStack(m_text);
-
-    if (stack.top().operatorStart != 0) {
-        // Deduce the declaration for type matching using operatorStart:
-        //
-        // table[getInt() +
-        //      [         ^
-        //
-        // ^ = operatorStart. Just before operatorStart is a code snippet that ends
-        // with the declaration whose type should be used.
-        m_declarationForTypeMatch = declarationAtEndOfString(m_text.left(stack.top().operatorStart));
-    }
 }
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& abort, bool fullCompletion)
@@ -118,15 +103,19 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
     return QList<CompletionTreeItemPointer>();
 }
 
-DeclarationPointer CodeCompletionContext::declarationForTypeMatch() const
+AbstractType::Ptr CodeCompletionContext::typeToMatch() const
 {
-    return m_declarationForTypeMatch;
+    return m_typeToMatch;
 }
 
 QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompletion()
 {
     QList<CompletionTreeItemPointer> items;
     QChar lastChar = m_text.size() > 0 ? m_text.at(m_text.size() - 1) : QLatin1Char('\0');
+
+    // Start with the function call-tips, because functionCallTips is also responsible
+    // for setting m_declarationForTypeMatch
+    items << functionCallTips();
 
     if (lastChar == QLatin1Char('.') || lastChar == QLatin1Char('[')) {
         // Offer completions for object members and array subscripts
@@ -183,6 +172,58 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::importCompletion()
 
     for (const QString &entry : dir.entryList(QDir::Files, QDir::Name)) {
         items.append(CompletionTreeItemPointer(new ModuleCompletionItem(entry)));
+    }
+
+    return items;
+}
+
+QList<CompletionTreeItemPointer> CodeCompletionContext::functionCallTips()
+{
+    QStack<ExpressionStackEntry> stack = expressionStack(m_text);
+    QList<CompletionTreeItemPointer> items;
+    int argumentHintDepth = 1;
+    bool isTopOfStack = true;
+    DUChainReadLocker lock;
+
+    while (!stack.isEmpty()) {
+        ExpressionStackEntry entry = stack.pop();
+
+        if (isTopOfStack && entry.operatorStart > entry.startPosition) {
+            // Deduce the declaration for type matching using operatorStart:
+            //
+            // table[document.base +
+            //       [             ^
+            //
+            // ^ = operatorStart. Just before operatorStart is a code snippet that ends
+            // with the declaration whose type should be used.
+            DeclarationPointer decl = declarationAtEndOfString(m_text.left(entry.operatorStart));
+
+            if (decl) {
+                m_typeToMatch = decl->abstractType();
+            }
+        }
+
+        if (entry.startPosition > 0 && m_text.at(entry.startPosition - 1) == QLatin1Char('(')) {
+            // The current entry represents a function call, create a call-tip for it
+            DeclarationPointer functionDecl = declarationAtEndOfString(m_text.left(entry.startPosition - 1));
+
+            if (functionDecl) {
+                FunctionCalltipCompletionItem* item = new FunctionCalltipCompletionItem(
+                    functionDecl,
+                    argumentHintDepth,
+                    entry.commas
+                );
+
+                items << CompletionTreeItemPointer(item);
+                argumentHintDepth++;
+
+                if (isTopOfStack && !m_typeToMatch) {
+                    m_typeToMatch = item->currentArgumentType();
+                }
+            }
+        }
+
+        isTopOfStack = false;
     }
 
     return items;
@@ -301,7 +342,7 @@ QStack<CodeCompletionContext::ExpressionStackEntry> CodeCompletionContext::expre
         case QmlJSGrammar::T_LBRACE:
         case QmlJSGrammar::T_LBRACKET:
         case QmlJSGrammar::T_LPAREN:
-            entry.startPosition = lexer.tokenEndColumn();
+            entry.startPosition = lexer.tokenEndColumn() - 1;
             entry.operatorStart = entry.startPosition;
             entry.operatorEnd = entry.startPosition;
             entry.commas = 0;
@@ -325,7 +366,7 @@ QStack<CodeCompletionContext::ExpressionStackEntry> CodeCompletionContext::expre
             // so that "A = foo." can know that attributes of foo having the same
             // type as A should be highlighted.
             stack.top().operatorStart = lexer.tokenStartColumn() - 1;
-            stack.top().operatorEnd = lexer.tokenEndColumn();
+            stack.top().operatorEnd = lexer.tokenEndColumn() - 1;
         }
     }
 

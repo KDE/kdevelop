@@ -38,7 +38,7 @@ public:
                           const KDevelop::CursorInRevision& position, int depth = 0);
     virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true);
 
-    KDevelop::DeclarationPointer declarationForTypeMatch() const;
+    KDevelop::AbstractType::Ptr typeToMatch() const;
 
     enum CompletionInContextFlag {
         CompletionOnlyLocal = 1,        /*!< @brief Don't list the items available in parent contexts */
@@ -84,6 +84,7 @@ private:
     QList<KDevelop::CompletionTreeItemPointer> commentCompletion();
     QList<KDevelop::CompletionTreeItemPointer> importCompletion();
 
+    QList<KDevelop::CompletionTreeItemPointer> functionCallTips();
     QList<KDevelop::CompletionTreeItemPointer> completionsFromImports(CompletionInContextFlags flags);
     QList<KDevelop::CompletionTreeItemPointer> completionsInContext(const KDevelop::DUContextPointer& context,
                                                                     CompletionInContextFlags flags,
@@ -103,7 +104,7 @@ private:
     };
 
     CompletionKind m_completionKind;
-    KDevelop::DeclarationPointer m_declarationForTypeMatch;
+    KDevelop::AbstractType::Ptr m_typeToMatch;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CodeCompletionContext::CompletionInContextFlags)

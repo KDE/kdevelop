@@ -59,14 +59,13 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
     if (role == CodeCompletionModel::BestMatchesCount) {
         return 5;
     } else if (role == CodeCompletionModel::MatchQuality) {
-        DeclarationPointer reference =
-            static_cast<QmlJS::CodeCompletionContext*>(model->completionContext().data())->declarationForTypeMatch();
+        AbstractType::Ptr referenceType =
+            static_cast<QmlJS::CodeCompletionContext*>(model->completionContext().data())->typeToMatch();
 
-        if (!reference || !reference->abstractType() || !decl->abstractType()) {
+        if (!referenceType) {
             return QVariant();
         }
 
-        AbstractType::Ptr referenceType = reference->abstractType();
         AbstractType::Ptr declType = decl->abstractType();
         FunctionType::Ptr declFunc = FunctionType::Ptr::dynamicCast(declType);
 
