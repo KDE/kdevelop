@@ -71,6 +71,7 @@ private:
 
   ItemTypes m_itemTypes;
   KDevelop::IQuickOpen* m_quickopen;
+  QSet<KDevelop::IndexedString> m_files;
   QVector<CodeModelViewItem> m_currentItems;
   QString m_currentFilter;
   QVector<CodeModelViewItem> m_filteredItems;
