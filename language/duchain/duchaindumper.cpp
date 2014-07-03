@@ -67,11 +67,11 @@ struct DUChainDumper::Private
   {}
 
   void dumpProblems(TopDUContext* top);
-  void dump(DUContext* context, int allowedDepth);
+  void dump(DUContext* context, int allowedDepth, bool isFromImport = false);
 
   int m_indent;
   Features m_features;
-  QSet<DUContext*> m_had;
+  QSet<DUContext*> m_visitedContexts;
 };
 
 DUChainDumper::DUChainDumper(Features features)
@@ -114,14 +114,21 @@ void DUChainDumper::Private::dumpProblems(TopDUContext* top)
   }
 }
 
-void DUChainDumper::Private::dump( DUContext * context, int allowedDepth )
+void DUChainDumper::Private::dump(DUContext * context, int allowedDepth, bool isFromImport)
 {
   QTextStream globalOut(stdout);
   QDebug qout(globalOut.device());
 
-  qout << Indent(m_indent * 2) << (m_indent ? "==import==> Context " : "New Context ") << typeToString(context->type()) << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]"
+  qout << Indent(m_indent * 2) << (isFromImport ? "==import==> Context" : "Context") << typeToString(context->type()) << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]"
     << context->range().castToSimpleRange().textRange()
     << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "") << endl;
+
+  if(m_visitedContexts.contains(context)) {
+    qout << Indent((m_indent+2) * 2) << "(Skipping" << context->scopeIdentifier(true) << "because it was already printed)" << endl;
+    return;
+  }
+
+  m_visitedContexts.insert(context);
 
   auto top = context->topContext();
   if (allowedDepth >= 0) {
@@ -157,27 +164,19 @@ void DUChainDumper::Private::dump( DUContext * context, int allowedDepth )
           continue;
       }
 
-      if(m_had.contains(import)) {
-        qout << Indent((m_indent+2) * 2+1) << "skipping" << import->scopeIdentifier(true) << "because it was already printed" << endl;
-        continue;
-      }
-      m_had.insert(import);
-
-      dump(import, allowedDepth-1);
+      dump(import, allowedDepth-1, true);
     }
 
     foreach (DUContext* child, context->childContexts())
       dump(child, allowedDepth-1);
   }
   --m_indent;
-
-  if(m_indent == 0) {
-    m_had.clear();
-  }
 }
 
 void DUChainDumper::dump(DUContext* context, int allowedDepth)
 {
+  d->m_visitedContexts.clear();
+
   auto top = context->topContext();
   if (d->m_features.testFlag(DumpProblems)) {
     d->dumpProblems(top);
