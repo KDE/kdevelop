@@ -62,19 +62,19 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
 
     ///When this is called, the result is shown in the completion-list.
     ///Call this from within your code
-    void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext> completionContext);
+    void foundDeclarations(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext);
     
   Q_SIGNALS:
 
     ///Internal connections into the foreground completion model
-    void foundDeclarationsReal(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext> completionContext);
+    void foundDeclarationsReal(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext);
     
   protected:
     
     virtual void computeCompletions(DUContextPointer context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& contextRange, const QString& contextText);
     ///This can be overridden to compute an own grouping in the completion-list.
     ///The default implementation groups items in a way that improves the efficiency of the completion-model, thus the default-implementation should be preferred.
-    virtual QList<KSharedPtr<CompletionTreeElement> > computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<CodeCompletionContext> completionContext);
+    virtual QList<QExplicitlySharedDataPointer<CompletionTreeElement> > computeGroups(QList<CompletionTreeItemPointer> items, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext);
     ///If you don't need to reimplement computeCompletions, you can implement only this.
     virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText, const CursorInRevision &position) const;
 

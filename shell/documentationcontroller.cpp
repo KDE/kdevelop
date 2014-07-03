@@ -136,20 +136,20 @@ void KDevelop::DocumentationController::doShowDocumentation()
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
     
     Declaration* decl = usefulDeclaration(DUChainUtils::itemUnderCursor(view->document()->url(), SimpleCursor(view->cursorPosition())));
-    KSharedPtr<IDocumentation> documentation = documentationForDeclaration(decl);
+    QExplicitlySharedDataPointer<IDocumentation> documentation = documentationForDeclaration(decl);
     if(documentation) {
         showDocumentation(documentation);
     }
 }
 
 
-Q_DECLARE_METATYPE(KSharedPtr<KDevelop::IDocumentation>)
+Q_DECLARE_METATYPE(QExplicitlySharedDataPointer<KDevelop::IDocumentation>)
 
 KDevelop::ContextMenuExtension KDevelop::DocumentationController::contextMenuExtension ( Context* context )
 {
     ContextMenuExtension menuExt;
     
-    qRegisterMetaType<KSharedPtr<KDevelop::IDocumentation> >("KSharedPtr<KDevelop::IDocumentation>");
+    qRegisterMetaType<QExplicitlySharedDataPointer<KDevelop::IDocumentation> >("QExplicitlySharedDataPointer<KDevelop::IDocumentation>");
     
     DeclarationContext* ctx = dynamic_cast<DeclarationContext*>(context);
     if(ctx) {
@@ -157,7 +157,7 @@ KDevelop::ContextMenuExtension KDevelop::DocumentationController::contextMenuExt
         if(!ctx->declaration().data())
             return menuExt;
         
-        KSharedPtr< IDocumentation > doc = documentationForDeclaration(ctx->declaration().data());
+        QExplicitlySharedDataPointer< IDocumentation > doc = documentationForDeclaration(ctx->declaration().data());
         if(doc) {
             menuExt.addAction(ContextMenuExtension::ExtensionGroup, m_showDocumentation);;
         }
@@ -166,18 +166,18 @@ KDevelop::ContextMenuExtension KDevelop::DocumentationController::contextMenuExt
     return menuExt;
 }
 
-KSharedPtr< KDevelop::IDocumentation > DocumentationController::documentationForDeclaration(Declaration* decl)
+QExplicitlySharedDataPointer< KDevelop::IDocumentation > DocumentationController::documentationForDeclaration(Declaration* decl)
 {
     if (!decl)
-        return KSharedPtr<IDocumentation>();
+        return QExplicitlySharedDataPointer<IDocumentation>();
 
-    KSharedPtr<KDevelop::IDocumentation> ret;
+    QExplicitlySharedDataPointer<KDevelop::IDocumentation> ret;
     foreach(IDocumentationProvider* doc, documentationProviders())
     {
         kDebug(9529) << "Documentation provider found:" << doc;
         ret=doc->documentationForDeclaration(decl);
         
-        kDebug(9529) << "Documentation proposed: " << ret;
+        kDebug(9529) << "Documentation proposed: " << ret.data();
         if(ret)
             break;
     }
@@ -214,7 +214,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
     return ret;
 }
 
-void KDevelop::DocumentationController::showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)
+void KDevelop::DocumentationController::showDocumentation(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc)
 {
     QWidget* w = ICore::self()->uiController()->findToolView(i18n("Documentation"), m_factory, KDevelop::IUiController::CreateAndRaise);
     if(!w) {

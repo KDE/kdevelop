@@ -44,7 +44,7 @@ struct CompletionTreeNode;
 class CompletionTreeItem;
 class IndexedType;
 
-class KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeElement : public KShared {
+class KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeElement : public QSharedData{
 public:
   CompletionTreeElement();
   
@@ -92,12 +92,12 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeNode : public CompletionTreeEle
   QVariant roleValue;
   
   ///Will append the child, and initialize it correctly to create a working tree-structure
-  void appendChild(KSharedPtr<CompletionTreeElement>);
-  void appendChildren(QList<KSharedPtr<CompletionTreeElement> >);
-  void appendChildren(QList<KSharedPtr<CompletionTreeItem> >);
+  void appendChild(QExplicitlySharedDataPointer<CompletionTreeElement>);
+  void appendChildren(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >);
+  void appendChildren(QList<QExplicitlySharedDataPointer<CompletionTreeItem> >);
   
   ///@warning Do not manipulate this directly, that's bad for consistency. Use appendChild instead.
-  QList<KSharedPtr<CompletionTreeElement> > children;
+  QList<QExplicitlySharedDataPointer<CompletionTreeElement> > children;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeItem : public CompletionTreeElement
@@ -143,8 +143,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionCustomGroupNode : public Completion
   int inheritanceDepth;
 };
 
-typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
-typedef KSharedPtr<CompletionTreeElement> CompletionTreeElementPointer;
+typedef QExplicitlySharedDataPointer<CompletionTreeItem> CompletionTreeItemPointer;
+typedef QExplicitlySharedDataPointer<CompletionTreeElement> CompletionTreeElementPointer;
 
 }
 

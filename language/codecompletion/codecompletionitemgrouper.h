@@ -32,11 +32,11 @@ namespace KDevelop {
 
 ///Always the last item of a grouping chain: Only inserts the items
 struct CodeCompletionItemLastGrouper {
-  CodeCompletionItemLastGrouper(QList<KSharedPtr<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CompletionTreeItemPointer> items)
+  CodeCompletionItemLastGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CompletionTreeItemPointer> items)
   {
     foreach( CompletionTreeItemPointer item, items ) {
       item->setParent(parent);
-      tree << KSharedPtr<CompletionTreeElement>( item.data() );
+      tree << QExplicitlySharedDataPointer<CompletionTreeElement>( item.data() );
     }
   }
 };
@@ -46,7 +46,7 @@ template<class KeyExtractor, class NextGrouper = CodeCompletionItemLastGrouper>
 struct CodeCompletionItemGrouper {
   typedef typename KeyExtractor::KeyType KeyType;
 
-  CodeCompletionItemGrouper(QList<KSharedPtr<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CompletionTreeItemPointer> items)
+  CodeCompletionItemGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CompletionTreeItemPointer> items)
   {
     typedef QMap<KeyType, QList<CompletionTreeItemPointer> > GroupMap;
     GroupMap groups;
@@ -61,12 +61,12 @@ struct CodeCompletionItemGrouper {
     }
 
     for( typename GroupMap::const_iterator it = groups.constBegin(); it != groups.constEnd(); ++it ) {
-      KSharedPtr<CompletionTreeNode> node(new CompletionTreeNode());
+      QExplicitlySharedDataPointer<CompletionTreeNode> node(new CompletionTreeNode());
       node->setParent(parent);
       node->role = (KTextEditor::CodeCompletionModel::ExtraItemDataRoles)KeyExtractor::Role;
       node->roleValue = QVariant(it.key());
 
-      tree << KSharedPtr<CompletionTreeElement>( node.data() );
+      tree << QExplicitlySharedDataPointer<CompletionTreeElement>( node.data() );
       
       NextGrouper nextGrouper(node->children, node.data(), *it);
     }

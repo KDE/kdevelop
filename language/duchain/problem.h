@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QStack>
 
-#include <ksharedptr.h>
+#include <QExplicitlySharedDataPointer>
 
 #include "../editor/documentrange.h"
 #include "../languageexport.h"
@@ -37,7 +37,7 @@ namespace KDevelop
 class IAssistant;
 class Problem;
 
-using ProblemPointer = KSharedPtr<Problem>;
+using ProblemPointer = QExplicitlySharedDataPointer<Problem>;
 
 /**
  * Represents a problem only by its index within the top-context
@@ -144,10 +144,10 @@ public:
  *
  * @warning Access to problems must be serialized through DUChainLock.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT Problem : public DUChainBase, public KShared
+class KDEVPLATFORMLANGUAGE_EXPORT Problem : public DUChainBase, public QSharedData
 {
 public:
-    using Ptr = KSharedPtr<Problem>;
+    using Ptr = QExplicitlySharedDataPointer<Problem>;
 
     Problem();
     Problem(ProblemData& data);
@@ -224,7 +224,7 @@ public:
      /**
      * If this problem can be solved, this may return an assistant for the solution.
      */
-    virtual KSharedPtr<IAssistant> solutionAssistant() const;
+    virtual QExplicitlySharedDataPointer<IAssistant> solutionAssistant() const;
 
     enum {
         Identity = 15

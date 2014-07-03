@@ -350,7 +350,7 @@ void SourceFormatterController::beautifySource()
 			
 		// We don't use KTextEditor::Document directly, because CodeRepresentation transparently works
 		// around a possible tab-replacement incompatibility between kate and kdevelop
-		DynamicCodeRepresentation::Ptr code = DynamicCodeRepresentation::Ptr::dynamicCast( KDevelop::createCodeRepresentation( IndexedString( doc->url() ) ) );
+		DynamicCodeRepresentation::Ptr code( dynamic_cast<DynamicCodeRepresentation*>( KDevelop::createCodeRepresentation( IndexedString( doc->url() ) ).data() ) );
 		Q_ASSERT( code );
 		code->replace( view->selectionRange(), original, output );
 	} else {
@@ -385,7 +385,7 @@ void SourceFormatterController::beautifyLine()
 	
 	// We don't use KTextEditor::Document directly, because CodeRepresentation transparently works
 	// around a possible tab-replacement incompatibility between kate and kdevelop
-	DynamicCodeRepresentation::Ptr code = DynamicCodeRepresentation::Ptr::dynamicCast( KDevelop::createCodeRepresentation( IndexedString( doc->url() ) ) );
+	DynamicCodeRepresentation::Ptr code(dynamic_cast<DynamicCodeRepresentation*>( KDevelop::createCodeRepresentation( IndexedString( doc->url() ) ).data() ) );
 	Q_ASSERT( code );
 	code->replace( KTextEditor::Range(cursor.line(), 0, cursor.line(), line.length()), line, formatted );
 	

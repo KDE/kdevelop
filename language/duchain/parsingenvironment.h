@@ -113,18 +113,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFileData : public DUChainBas
   TopDUContext::IndexedRecursiveImports m_importsCache;
 };
 
-typedef KSharedPtr<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;
+typedef QExplicitlySharedDataPointer<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;
 
 /**
  * This represents all information about a specific parsed file that is needed
  * to match the file to a parsing-environment.
  *
- * It is KShared because it is embedded into top-du-contexts and at the same time
+ * It is QSharedDatabecause it is embedded into top-du-contexts and at the same time
  * references may be held by ParsingEnvironmentManager.
  *
  * \warning Access to this class must be serialized through du-chain locking
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, public KShared
+class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, public QSharedData
 {
   public:
     virtual ~ParsingEnvironmentFile();
@@ -171,11 +171,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     
     ///Returns the parsing-environment information of all importers of the coupled TopDUContext. This is more efficient than
     ///loading the top-context and finding out, because when a top-context is loaded, also all its recursive imports are loaded
-    QList< KSharedPtr<ParsingEnvironmentFile> > importers() const;
+    QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > importers() const;
 
     ///Returns the parsing-environment information of all imports of the coupled TopDUContext. This is more efficient than
     ///loading the top-context and finding out
-    QList< KSharedPtr<ParsingEnvironmentFile> > imports() const;
+    QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > imports() const;
     
     ///Returns true if this top-context satisfies at least the given minimum features.
     ///If there is static minimum features set up in ParseJob, this also checks against those.
@@ -225,6 +225,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     bool featuresMatch(KDevelop::TopDUContext::Features minimumFeatures, QSet< const KDevelop::ParsingEnvironmentFile* >& checked) const;
     void setImportsCache(const TopDUContext::IndexedRecursiveImports&);
 };
+
+// TODO: why is this needed/what is it supposed to print? just the pointer value?
+inline QDebug operator<<(QDebug s, const QExplicitlySharedDataPointer<ParsingEnvironmentFile>& p)
+{
+    s.nospace() << p->url();
+    return s.space();
+}
 
 }
 

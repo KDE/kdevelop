@@ -184,7 +184,7 @@ struct PtrType<T*>
 };
 
 template<typename T>
-struct PtrType<KSharedPtr<T>>
+struct PtrType<QExplicitlySharedDataPointer<T>>
 {
   using value = T*;
 };

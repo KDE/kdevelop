@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_PERSISTENTMOVINGRANGE_H
 #define KDEVPLATFORM_PERSISTENTMOVINGRANGE_H
 
-#include <KSharedPtr>
+#include <QExplicitlySharedDataPointer>
 #include <ktexteditor/attribute.h>
 #include "simplerange.h"
 
@@ -41,10 +41,10 @@ class PersistentMovingRangePrivate;
  *            document is closed/reloaded/cleared.
  * */
 
-class KDEVPLATFORMLANGUAGE_EXPORT PersistentMovingRange : public KShared
+class KDEVPLATFORMLANGUAGE_EXPORT PersistentMovingRange : public QSharedData
 {
   public:
-    typedef KSharedPtr<PersistentMovingRange> Ptr;
+    typedef QExplicitlySharedDataPointer<PersistentMovingRange> Ptr;
     
     /**
      * Creates a new persistent moving range based on the current revision of the given document

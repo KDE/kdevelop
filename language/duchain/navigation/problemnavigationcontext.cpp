@@ -36,7 +36,7 @@ ProblemNavigationContext::ProblemNavigationContext(ProblemPointer problem): m_pr
 {
   m_widget = 0;
 
-  KSharedPtr< IAssistant > solution = problem->solutionAssistant();
+  QExplicitlySharedDataPointer< IAssistant > solution = problem->solutionAssistant();
   if(solution && !solution->actions().isEmpty()) {
     m_widget = new QWidget;
     QHBoxLayout* layout = new QHBoxLayout(m_widget);

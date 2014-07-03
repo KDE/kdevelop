@@ -229,7 +229,7 @@ void ProblemWidget::contextMenuEvent(QContextMenuEvent* event) {
     if(index.isValid()) {
         KDevelop::ProblemPointer problem = model()->problemForIndex(index);
         if(problem) {
-            KSharedPtr<KDevelop::IAssistant> solution = problem->solutionAssistant();
+            QExplicitlySharedDataPointer<KDevelop::IAssistant> solution = problem->solutionAssistant();
             if(solution) {
                 QList<QAction*> actions;
                 foreach(KDevelop::IAssistantAction::Ptr action, solution->actions()) {

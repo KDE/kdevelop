@@ -63,10 +63,10 @@ bool CodeCompletionWorker::fullCompletion() const {
 }
 
 void CodeCompletionWorker::failed() {
-    foundDeclarations( QList<KSharedPtr<CompletionTreeElement> >(), KSharedPtr<KDevelop::CodeCompletionContext>() );
+    foundDeclarations( QList<QExplicitlySharedDataPointer<CompletionTreeElement> >(), QExplicitlySharedDataPointer<KDevelop::CodeCompletionContext>() );
 }
 
-void KDevelop::CodeCompletionWorker::foundDeclarations(QList< KSharedPtr< KDevelop::CompletionTreeElement > >  items, KSharedPtr< KDevelop::CodeCompletionContext > completionContext)
+void KDevelop::CodeCompletionWorker::foundDeclarations(QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > >  items, QExplicitlySharedDataPointer< KDevelop::CodeCompletionContext > completionContext)
 {
     m_hasFoundDeclarations = true;
     emit foundDeclarationsReal(items, completionContext);
@@ -152,7 +152,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   
   CodeCompletionContext::Ptr completionContext( createCompletionContext( context, contextText, followingText, CursorInRevision::castFromSimpleCursor(SimpleCursor(position)) ) );
   if (KDevelop::CodeCompletionModel* m = model())
-    m->setCompletionContext(KDevelop::CodeCompletionContext::Ptr::staticCast(completionContext));
+    m->setCompletionContext(completionContext);
 
   if( completionContext && completionContext->isValid() ) {
     {
@@ -171,7 +171,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       return;
     }
     
-    QList<KSharedPtr<CompletionTreeElement> > tree = computeGroups( items, completionContext );
+    QList<QExplicitlySharedDataPointer<CompletionTreeElement> > tree = computeGroups( items, completionContext );
 
     if(aborting()) {
       failed();
@@ -180,17 +180,17 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     
     tree += completionContext->ungroupedElements();
 
-    foundDeclarations( tree, KSharedPtr<KDevelop::CodeCompletionContext>::staticCast(completionContext) );
+    foundDeclarations( tree, completionContext );
 
   } else {
     kDebug() << "setContext: Invalid code-completion context";
   }
 }
 
-QList<KSharedPtr<CompletionTreeElement> > CodeCompletionWorker::computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<CodeCompletionContext> completionContext)
+QList<QExplicitlySharedDataPointer<CompletionTreeElement> > CodeCompletionWorker::computeGroups(QList<CompletionTreeItemPointer> items, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext)
 {
   Q_UNUSED(completionContext);
-  QList<KSharedPtr<CompletionTreeElement> > tree;
+  QList<QExplicitlySharedDataPointer<CompletionTreeElement> > tree;
   /**
    * 1. Group by argument-hint depth
    * 2. Group by inheritance depth

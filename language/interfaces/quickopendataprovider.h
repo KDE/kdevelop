@@ -75,7 +75,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenEmbeddedWidgetInterface {
 /**
  * Reimplement this to represent single entries within the quickopen list.
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public KShared {
+class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public QSharedData{
   public:
     virtual ~QuickOpenDataBase();
 
@@ -129,7 +129,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public KShared {
     virtual QWidget* expandingWidget() const;
 };
 
-typedef KSharedPtr<QuickOpenDataBase> QuickOpenDataPointer;
+typedef QExplicitlySharedDataPointer<QuickOpenDataBase> QuickOpenDataPointer;
 
 /**
  * Use this interface to provide custom quickopen-data to the quickopen-widget.

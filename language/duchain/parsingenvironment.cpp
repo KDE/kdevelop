@@ -167,7 +167,7 @@ void ParsingEnvironmentFile::setIsProxyContext(bool is) {
   d_func_dynamic()->m_isProxyContext = is;
 }
 
-QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() const  {
+QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() const  {
   ENSURE_READ_LOCKED
 
   QList<IndexedDUContext> imp;
@@ -180,9 +180,9 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() co
     imp = TopDUContextDynamicData::loadImports(top.index());
   }
   
-  QList< KSharedPtr<ParsingEnvironmentFile> > ret;
+  QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ret;
   foreach(const IndexedDUContext &ctx, imp) {
-    KSharedPtr<ParsingEnvironmentFile> item = DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
+    QExplicitlySharedDataPointer<ParsingEnvironmentFile> item = DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
     if(item) {
       ret << item;
     }else{
@@ -192,7 +192,7 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() co
   return ret;
 }
 
-QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() const {
+QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() const {
   ENSURE_READ_LOCKED
   
   QList<IndexedDUContext> imp;
@@ -205,9 +205,9 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() 
     imp = TopDUContextDynamicData::loadImporters(top.index());
   }
   
-  QList< KSharedPtr<ParsingEnvironmentFile> > ret;
+  QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ret;
   foreach(const IndexedDUContext &ctx, imp) {
-    KSharedPtr<ParsingEnvironmentFile> f = DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
+    QExplicitlySharedDataPointer<ParsingEnvironmentFile> f = DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
     if(f)
       ret << f;
     else

@@ -78,7 +78,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     modifyHtml() += navigationHighlight(i18n("Back to %1<br />", link));
   }
   
-  KSharedPtr<IDocumentation> doc;
+  QExplicitlySharedDataPointer<IDocumentation> doc;
   
   if( !shorten ) {
     doc = ICore::self()->documentationController()->documentationForDeclaration(m_declaration.data());

@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_DOCUMENTCHANGETRACKER_H
 
 #include "../languageexport.h"
-#include <KSharedPtr>
+#include <QExplicitlySharedDataPointer>
 #include <QPointer>
 #include <QPair>
 #include <QPointer>
@@ -58,7 +58,7 @@ class RevisionLockerAndClearerPrivate;
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT RevisionLockerAndClearer : public QSharedData {
 public:
-    typedef KSharedPtr<RevisionLockerAndClearer> Ptr;
+    typedef QExplicitlySharedDataPointer<RevisionLockerAndClearer> Ptr;
 
     ~RevisionLockerAndClearer();
 

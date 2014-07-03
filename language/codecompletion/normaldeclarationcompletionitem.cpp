@@ -39,7 +39,7 @@ const bool NormalDeclarationCompletionItem::shortenArgumentHintReturnValues = tr
 const int NormalDeclarationCompletionItem::maximumArgumentHintReturnValueLength = 30;
 const int NormalDeclarationCompletionItem::desiredTypeLength = 20;
 
-NormalDeclarationCompletionItem::NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl, KSharedPtr<CodeCompletionContext> context, int inheritanceDepth)
+NormalDeclarationCompletionItem::NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl, QExplicitlySharedDataPointer<CodeCompletionContext> context, int inheritanceDepth)
   : m_completionContext(context), m_declaration(decl), m_inheritanceDepth(inheritanceDepth) {
 }
 
@@ -47,7 +47,7 @@ KDevelop::DeclarationPointer NormalDeclarationCompletionItem::declaration() cons
   return m_declaration;
 }
 
-KSharedPtr< KDevelop::CodeCompletionContext > NormalDeclarationCompletionItem::completionContext() const {
+QExplicitlySharedDataPointer< KDevelop::CodeCompletionContext > NormalDeclarationCompletionItem::completionContext() const {
   return m_completionContext;
 }
 

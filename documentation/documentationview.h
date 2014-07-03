@@ -42,12 +42,12 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationView : public QWidget
     public:
         DocumentationView(QWidget* parent, ProvidersModel* m);
         
-        void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
+        void showDocumentation(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc);
         
     public slots:
         void initialize();
         
-        void addHistory(KSharedPtr< KDevelop::IDocumentation > doc);
+        void addHistory(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc);
         void emptyHistory();
         
         void browseForward();
@@ -65,8 +65,8 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationView : public QWidget
         QAction* mBack;
         QAction* mFind;
         KLineEdit* mIdentifiers;
-        QList< KSharedPtr< KDevelop::IDocumentation > > mHistory;
-        QList< KSharedPtr< KDevelop::IDocumentation > >::iterator mCurrent;
+        QList< QExplicitlySharedDataPointer< KDevelop::IDocumentation > > mHistory;
+        QList< QExplicitlySharedDataPointer< KDevelop::IDocumentation > >::iterator mCurrent;
         QComboBox* mProviders;
         ProvidersModel* mProvidersModel;
         KDevelop::DocumentationFindWidget* mFindDoc;

@@ -56,7 +56,7 @@ public:
     StaticAssistantsManager(QObject* parent = 0);
     virtual ~StaticAssistantsManager();
 
-    KSharedPtr<KDevelop::IAssistant> activeAssistant();
+    QExplicitlySharedDataPointer<KDevelop::IAssistant> activeAssistant();
 
     void registerAssistant(const StaticAssistant::Ptr assistant);
     void unregisterAssistant(const StaticAssistant::Ptr assistant);

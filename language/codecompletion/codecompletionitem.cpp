@@ -65,17 +65,17 @@ void CompletionTreeElement::setParent(CompletionTreeElement* parent) {
     }
 }
 
-void CompletionTreeNode::appendChildren(QList< KSharedPtr< KDevelop::CompletionTreeElement > > children) {
-  for(QList< KSharedPtr< KDevelop::CompletionTreeElement > >::const_iterator it = children.constBegin(); it != children.constEnd(); ++it)
+void CompletionTreeNode::appendChildren(QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > > children) {
+  for(QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > >::const_iterator it = children.constBegin(); it != children.constEnd(); ++it)
     appendChild(*it);
 }
 
-void CompletionTreeNode::appendChildren(QList< KSharedPtr< KDevelop::CompletionTreeItem > > children) {
-  for(QList< KSharedPtr< KDevelop::CompletionTreeItem > >::iterator it = children.begin(); it != children.end(); ++it)
-    appendChild(KSharedPtr< KDevelop::CompletionTreeElement >((*it).data()));
+void CompletionTreeNode::appendChildren(QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeItem > > children) {
+  for(QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeItem > >::iterator it = children.begin(); it != children.end(); ++it)
+    appendChild(QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement >((*it).data()));
 }
 
-void CompletionTreeNode::appendChild(KSharedPtr< KDevelop::CompletionTreeElement > child) {
+void CompletionTreeNode::appendChild(QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > child) {
   child->setParent(this);
   children << child;
 }
@@ -111,7 +111,7 @@ int CompletionTreeElement::rowInParent() const {
     return 0;
   Q_ASSERT(m_parent->asNode());
 
-  return m_parent->asNode()->children.indexOf( KSharedPtr<CompletionTreeElement>(const_cast<CompletionTreeElement*>(this)) );*/
+  return m_parent->asNode()->children.indexOf( QExplicitlySharedDataPointer<CompletionTreeElement>(const_cast<CompletionTreeElement*>(this)) );*/
 }
 
 void CompletionTreeItem::execute(KTextEditor::View* view, const KTextEditor::Range& word) {

@@ -517,7 +517,7 @@ public:
       //Process the indices in a separate step after copying them from the array, so we don't need m_environmentListInfo.mutex locked,
       //and can call loadInformation(..) safely, which else might lead to a deadlock.
       FOREACH_ARRAY(uint topContextIndex, topContextIndices) {
-        KSharedPtr< ParsingEnvironmentFile > p = ParsingEnvironmentFilePointer(loadInformation(topContextIndex));
+        QExplicitlySharedDataPointer< ParsingEnvironmentFile > p = ParsingEnvironmentFilePointer(loadInformation(topContextIndex));
         if(p) {
          ret << p;
         }else{
@@ -994,7 +994,7 @@ private:
     if(topContexts.contains(top.index()))
       return;
     
-    KSharedPtr<ParsingEnvironmentFile> info( instance->environmentFileForDocument(top) );
+    QExplicitlySharedDataPointer<ParsingEnvironmentFile> info( instance->environmentFileForDocument(top) );
     ///@todo Also check if the context is "useful"(Not a duplicate context, imported by a useful one, ...)
     if(info && info->needsUpdate()) {
       //This context will be removed
@@ -1006,13 +1006,13 @@ private:
     
     if(info) {
       //Check whether importers need to be removed as well
-      QList< KSharedPtr<ParsingEnvironmentFile> > importers = info->importers();
+      QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > importers = info->importers();
 
-      QSet< KSharedPtr<ParsingEnvironmentFile> > checkNext;
+      QSet< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > checkNext;
       
       //Do breadth first search, so less imports/importers have to be loaded, and a lower depth is reached
       
-      for(QList< KSharedPtr<ParsingEnvironmentFile> >::iterator it = importers.begin(); it != importers.end(); ++it) {
+      for(QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> >::iterator it = importers.begin(); it != importers.end(); ++it) {
         IndexedTopDUContext c = (*it)->indexedTopContext();
         if(!topContexts.contains(c.index())) {
           topContexts.insert(c.index()); //Prevent useless recursion
@@ -1020,7 +1020,7 @@ private:
         }
       }
       
-      for(QSet< KSharedPtr<ParsingEnvironmentFile> >::const_iterator it = checkNext.begin(); it != checkNext.end(); ++it) {
+      for(QSet< QExplicitlySharedDataPointer<ParsingEnvironmentFile> >::const_iterator it = checkNext.begin(); it != checkNext.end(); ++it) {
         topContexts.remove((*it)->indexedTopContext().index()); //Enable full check again
         addContextsForRemoval(topContexts, (*it)->indexedTopContext());
       }

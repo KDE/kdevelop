@@ -120,7 +120,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData {
       */
     static QString artificialPath(const QString & name);
  
-    typedef KSharedPtr<CodeRepresentation> Ptr;
+    typedef QExplicitlySharedDataPointer<CodeRepresentation> Ptr;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeRepresentation {
@@ -131,7 +131,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeReprese
       virtual bool replace(const KTextEditor::Range& range, const QString& oldText,
                            const QString& newText, bool ignoreOldText = false) = 0;
     
-      typedef KSharedPtr<DynamicCodeRepresentation> Ptr;
+      typedef QExplicitlySharedDataPointer<DynamicCodeRepresentation> Ptr;
 };
 
 /**
@@ -173,7 +173,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT InsertArtificialCodeRepresentation : public QS
         IndexedString m_file;
 };
 
-typedef KSharedPtr<InsertArtificialCodeRepresentation> InsertArtificialCodeRepresentationPointer;
+typedef QExplicitlySharedDataPointer<InsertArtificialCodeRepresentation> InsertArtificialCodeRepresentationPointer;
 
 }
 

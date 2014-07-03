@@ -137,7 +137,7 @@ public:
    * Returns a special pointer that can be used to track the existence of a du-chain object across locking-cycles.
    * @see DUChainPointerData
    * */
-  const KSharedPtr<DUChainPointerData>& weakPointer() const;
+  const QExplicitlySharedDataPointer<DUChainPointerData>& weakPointer() const;
 
   virtual IndexedString url() const;
   
@@ -208,7 +208,7 @@ protected:
   DUChainBaseData* d_ptr;
 private:
   
-  mutable KSharedPtr<DUChainPointerData> m_ptr;
+  mutable QExplicitlySharedDataPointer<DUChainPointerData> m_ptr;
 public:
   DUCHAIN_DECLARE_DATA(DUChainBase)
 };

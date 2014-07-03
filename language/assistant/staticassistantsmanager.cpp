@@ -66,7 +66,7 @@ struct StaticAssistantsManager::Private
     QWeakPointer<KTextEditor::View> m_currentView;
     KTextEditor::Cursor m_assistantStartedAt;
     KDevelop::IndexedString m_currentDocument;
-    KSharedPtr<KDevelop::IAssistant> m_activeAssistant;
+    QExplicitlySharedDataPointer<KDevelop::IAssistant> m_activeAssistant;
     QList<StaticAssistant::Ptr> m_registeredAssistants;
     bool m_activeProblemAssistant = false;
     QTimer* m_timer;
@@ -101,7 +101,7 @@ StaticAssistantsManager::~StaticAssistantsManager()
 {
 }
 
-KSharedPtr<IAssistant> StaticAssistantsManager::activeAssistant()
+QExplicitlySharedDataPointer<IAssistant> StaticAssistantsManager::activeAssistant()
 {
     return d->m_activeAssistant;
 }
@@ -138,7 +138,7 @@ void StaticAssistantsManager::Private::documentLoaded(IDocument* document)
 
 void StaticAssistantsManager::hideAssistant()
 {
-    d->m_activeAssistant = KSharedPtr<KDevelop::IAssistant>();
+    d->m_activeAssistant = QExplicitlySharedDataPointer<KDevelop::IAssistant>();
     d->m_activeProblemAssistant = false;
 }
 

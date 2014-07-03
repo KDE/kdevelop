@@ -104,8 +104,8 @@ void DocumentationView::initialize()
     mProviders->setModel(mProvidersModel);
     connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
     foreach(KDevelop::IDocumentationProvider* p, mProvidersModel->providers()) {
-        connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(KSharedPtr<KDevelop::IDocumentation>)),
-                SLOT(addHistory(KSharedPtr<KDevelop::IDocumentation>)));
+        connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(QExplicitlySharedDataPointer<KDevelop::IDocumentation>)),
+                SLOT(addHistory(QExplicitlySharedDataPointer<KDevelop::IDocumentation>)));
     }
     connect(mProvidersModel, SIGNAL(providersChanged()), this, SLOT(emptyHistory()));
     
@@ -148,13 +148,13 @@ void DocumentationView::changeProvider(const QModelIndex& idx)
     if(idx.isValid())
     {
         KDevelop::IDocumentationProvider* prov=mProvidersModel->provider(mProviders->currentIndex());
-        KSharedPtr<KDevelop::IDocumentation> doc=prov->documentationForIndex(idx);
+        QExplicitlySharedDataPointer<KDevelop::IDocumentation> doc=prov->documentationForIndex(idx);
         if(doc)
             showDocumentation(doc);
     }
 }
 
-void DocumentationView::showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)
+void DocumentationView::showDocumentation(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc)
 {
     kDebug(9529) << "showing" << doc->name();
     
@@ -162,7 +162,7 @@ void DocumentationView::showDocumentation(KSharedPtr< KDevelop::IDocumentation >
     updateView();
 }
 
-void DocumentationView::addHistory(KSharedPtr< KDevelop::IDocumentation > doc)
+void DocumentationView::addHistory(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc)
 {
     mBack->setEnabled( !mHistory.isEmpty() );
     mForward->setEnabled(false);

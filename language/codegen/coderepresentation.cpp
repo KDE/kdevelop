@@ -240,7 +240,7 @@ class ArtificialStringData : public QSharedData {
 
 class StringCodeRepresentation : public CodeRepresentation {
   public:
-    StringCodeRepresentation(KSharedPtr<ArtificialStringData> _data) : data(_data) {
+    StringCodeRepresentation(QExplicitlySharedDataPointer<ArtificialStringData> _data) : data(_data) {
       Q_ASSERT(data);
     }
     
@@ -281,13 +281,13 @@ class StringCodeRepresentation : public CodeRepresentation {
     }
     
   private:
-    KSharedPtr<ArtificialStringData> data;
+    QExplicitlySharedDataPointer<ArtificialStringData> data;
 };
 
-static QHash<IndexedString, KSharedPtr<ArtificialStringData> > artificialStrings;
+static QHash<IndexedString, QExplicitlySharedDataPointer<ArtificialStringData> > artificialStrings;
 
 //Return the representation for the given URL if it exists, or an empty pointer otherwise
-static KSharedPtr<ArtificialStringData> representationForPath(const IndexedString& path)
+static QExplicitlySharedDataPointer<ArtificialStringData> representationForPath(const IndexedString& path)
 {
     if(artificialStrings.contains(path))
         return artificialStrings[path];
@@ -297,13 +297,13 @@ static KSharedPtr<ArtificialStringData> representationForPath(const IndexedStrin
         if(artificialStrings.contains(constructedPath))
             return artificialStrings[constructedPath];
         else
-            return KSharedPtr<ArtificialStringData>();
+            return QExplicitlySharedDataPointer<ArtificialStringData>();
     }
 }
 
 bool artificialCodeRepresentationExists(const IndexedString& path)
 {
-    return !representationForPath(path).isNull();
+    return representationForPath(path);
 }
 
 CodeRepresentation::Ptr createCodeRepresentation(const IndexedString& path) {
@@ -348,7 +348,7 @@ InsertArtificialCodeRepresentation::InsertArtificialCodeRepresentation(const Ind
     
     Q_ASSERT(!artificialStrings.contains(m_file));
 
-    artificialStrings.insert(m_file, KSharedPtr<ArtificialStringData>(new ArtificialStringData(text)));
+    artificialStrings.insert(m_file, QExplicitlySharedDataPointer<ArtificialStringData>(new ArtificialStringData(text)));
 }
 
 IndexedString InsertArtificialCodeRepresentation::file()

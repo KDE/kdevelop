@@ -26,7 +26,7 @@
 #include <QtCore/QPair>
 #include <QtCore/QMap>
 #include <QtCore/QPointer>
-#include <KDE/KSharedPtr>
+#include <QExplicitlySharedDataPointer>
 
 #include "../duchain/duchainpointer.h"
 #include "../languageexport.h"
@@ -82,8 +82,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     bool forceWaitForModel();
     
     ///Convenience-storage for use by the inherited completion model
-    void setCompletionContext(KSharedPtr<CodeCompletionContext> completionContext);
-    KSharedPtr<CodeCompletionContext> completionContext() const;
+    void setCompletionContext(QExplicitlySharedDataPointer<CodeCompletionContext> completionContext);
+    QExplicitlySharedDataPointer<CodeCompletionContext> completionContext() const;
 
     ///Convenience-storage for use by the inherited completion model
     KDevelop::TopDUContextPointer currentTopContext() const;
@@ -103,7 +103,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     void clear();
     
     ///Returns the tree-element that belogns to the index, or zero
-    KSharedPtr<CompletionTreeElement> itemForIndex(QModelIndex index) const;
+    QExplicitlySharedDataPointer<CompletionTreeElement> itemForIndex(QModelIndex index) const;
     
   Q_SIGNALS:
     ///Connection from this completion-model into the background worker thread. You should emit this from within completionInvokedInternal.
@@ -114,7 +114,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
 
   protected Q_SLOTS:
     ///Connection from the background-thread into the model: This is called when the background-thread is ready
-    virtual void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > item, KSharedPtr<CodeCompletionContext> completionContext);
+    virtual void foundDeclarations(QList<QExplicitlySharedDataPointer<CompletionTreeElement> > item, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext);
     
   protected:
     ///Eventually override this, determine the context or whatever, and then emit completionsNeeded(..) to continue processing in the background tread.
@@ -123,11 +123,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
 
     virtual void executeCompletionItem(KTextEditor::View* view, const KTextEditor::Range& word, const QModelIndex& index) const;
 
-    KSharedPtr<CodeCompletionContext> m_completionContext;
-    typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<CodeCompletionContext> > DeclarationContextPair;
+    QExplicitlySharedDataPointer<CodeCompletionContext> m_completionContext;
+    typedef QPair<KDevelop::DeclarationPointer, QExplicitlySharedDataPointer<CodeCompletionContext> > DeclarationContextPair;
 
     mutable QMap<const CompletionTreeElement*, QPointer<QWidget> > m_navigationWidgets;
-    QList< KSharedPtr<CompletionTreeElement> > m_completionItems;
+    QList< QExplicitlySharedDataPointer<CompletionTreeElement> > m_completionItems;
 
     /// Should create a completion-worker. The worker must have no parent object,
     /// because else its thread-affinity can not be changed.

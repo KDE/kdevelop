@@ -21,7 +21,7 @@
 
 #include <QtCore/QPointer>
 #include <QIcon>
-#include <KDE/KSharedPtr>
+#include <QExplicitlySharedDataPointer>
 #include "interfacesexport.h"
 #include <util/ksharedobject.h>
 
@@ -37,7 +37,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistantAction : public QObject, public KS
 public:
     IAssistantAction();
 
-    typedef KSharedPtr<IAssistantAction> Ptr;
+    typedef QExplicitlySharedDataPointer<IAssistantAction> Ptr;
 
     virtual ~IAssistantAction();
 
@@ -108,7 +108,7 @@ public:
     IAssistant();
     virtual ~IAssistant();
 
-    typedef KSharedPtr<IAssistant> Ptr;
+    typedef QExplicitlySharedDataPointer<IAssistant> Ptr;
 
     ///Returns the stored list of actions
     QList<IAssistantAction::Ptr> actions() const;

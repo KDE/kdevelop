@@ -39,15 +39,15 @@ namespace KDevelop {
 
   class CompletionTreeItem;
   class CompletionTreeElement;
-  typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
-  typedef KSharedPtr<CompletionTreeElement> CompletionTreeElementPointer;
+  typedef QExplicitlySharedDataPointer<CompletionTreeItem> CompletionTreeItemPointer;
+  typedef QExplicitlySharedDataPointer<CompletionTreeElement> CompletionTreeElementPointer;
 
   /**
    * This class is responsible for finding out what kind of completion is needed, what expression should be evaluated for the container-class of the completion, what conversion will be applied to the result of the completion, etc.
    * */
-  class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionContext : public KShared {
+  class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionContext : public QSharedData{
     public:
-      typedef KSharedPtr<CodeCompletionContext> Ptr;
+      typedef QExplicitlySharedDataPointer<CodeCompletionContext> Ptr;
 
       /**
        * @param firstContext should be true for a context that has no parent. Such a context will never be a function-call context.
@@ -80,7 +80,7 @@ namespace KDevelop {
       CodeCompletionContext* parentContext();
 
       ///Sets the new parent context, and also updates the depth
-      void setParentContext(KSharedPtr<CodeCompletionContext> newParent);
+      void setParentContext(QExplicitlySharedDataPointer<CodeCompletionContext> newParent);
       
       DUContext* duContext() const;
       
@@ -94,7 +94,7 @@ namespace KDevelop {
 
       KDevelop::DUContextPointer m_duContext;
 
-      KSharedPtr<CodeCompletionContext> m_parentContext;
+      QExplicitlySharedDataPointer<CodeCompletionContext> m_parentContext;
   };
 }
 

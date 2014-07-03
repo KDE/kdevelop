@@ -77,7 +77,7 @@ public:
    
    virtual void run () {
      //We connect directly, so we can do the pre-grouping within the background thread
-     connect(m_worker, SIGNAL(foundDeclarationsReal(QList<KSharedPtr<CompletionTreeElement> >,KSharedPtr<CodeCompletionContext>)), m_model, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >,KSharedPtr<CodeCompletionContext>)), Qt::QueuedConnection);
+     connect(m_worker, SIGNAL(foundDeclarationsReal(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >,QExplicitlySharedDataPointer<CodeCompletionContext>)), m_model, SLOT(foundDeclarations(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >,QExplicitlySharedDataPointer<CodeCompletionContext>)), Qt::QueuedConnection);
 
      connect(m_model, SIGNAL(completionsNeeded(KDevelop::DUContextPointer,KTextEditor::Cursor,KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer,KTextEditor::Cursor,KTextEditor::View*)), Qt::QueuedConnection);
      connect(m_model, SIGNAL(doSpecialProcessingInBackground(uint)), m_worker, SLOT(doSpecialProcessing(uint)));
@@ -106,8 +106,8 @@ CodeCompletionModel::CodeCompletionModel( QObject * parent )
   , m_mutex(new QMutex)
   , m_thread(0)
 {
-  qRegisterMetaType<QList<CompletionTreeElement> >("QList<KSharedPtr<CompletionTreeElement> >");
-  qRegisterMetaType<KSharedPtr<CodeCompletionContext> >("KSharedPtr<CodeCompletionContext>");
+  qRegisterMetaType<QList<CompletionTreeElement> >("QList<QExplicitlySharedDataPointer<CompletionTreeElement> >");
+  qRegisterMetaType<QExplicitlySharedDataPointer<CodeCompletionContext> >("QExplicitlySharedDataPointer<CodeCompletionContext>");
   qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
 }
 
@@ -151,7 +151,7 @@ KDevelop::CodeCompletionWorker* CodeCompletionModel::worker() const {
 void CodeCompletionModel::clear() {
   m_completionItems.clear();
   m_navigationWidgets.clear();
-  m_completionContext.clear();
+  m_completionContext.reset();
   reset();
 }
 
@@ -248,7 +248,7 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
   completionInvokedInternal(view, range, invocationType, url);
 }
 
-void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > items, KSharedPtr<CodeCompletionContext> completionContext)
+void CodeCompletionModel::foundDeclarations(QList<QExplicitlySharedDataPointer<CompletionTreeElement> > items, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext)
 {
   m_completionContext = completionContext;
   
@@ -282,7 +282,7 @@ KTextEditor::CodeCompletionModelControllerInterface::MatchReaction CodeCompletio
     return None;
 }
 
-void CodeCompletionModel::setCompletionContext(KSharedPtr<CodeCompletionContext> completionContext)
+void CodeCompletionModel::setCompletionContext(QExplicitlySharedDataPointer<CodeCompletionContext> completionContext)
 {
   QMutexLocker lock(m_mutex);
   m_completionContext = completionContext;
@@ -292,7 +292,7 @@ void CodeCompletionModel::setCompletionContext(KSharedPtr<CodeCompletionContext>
   }
 }
 
-KSharedPtr<CodeCompletionContext> CodeCompletionModel::completionContext() const
+QExplicitlySharedDataPointer<CodeCompletionContext> CodeCompletionModel::completionContext() const
 {
   QMutexLocker lock(m_mutex);
   return m_completionContext;
@@ -308,9 +308,9 @@ void CodeCompletionModel::executeCompletionItem(View* view, const KTextEditor::R
   element->asItem()->execute(view, word);
 }
 
-KSharedPtr< KDevelop::CompletionTreeElement > CodeCompletionModel::itemForIndex(QModelIndex index) const {
+QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > CodeCompletionModel::itemForIndex(QModelIndex index) const {
   CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
-  return KSharedPtr< KDevelop::CompletionTreeElement >(element);
+  return QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement >(element);
 }
 
 QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const

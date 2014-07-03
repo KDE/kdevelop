@@ -48,7 +48,7 @@ class AbstractFunctionDeclaration;
  * To make it even more convenient see DUChainPointer
  * */
 
-class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
+class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData{
   public:
     /**
      * Will return zero once the pointed-to object was deleted
@@ -91,7 +91,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
     friend class DUChainPointer;
 
     public:
-    DUChainPointer() : d(KSharedPtr<DUChainPointerData>(0)) {
+    DUChainPointer() : d(QExplicitlySharedDataPointer<DUChainPointerData>(0)) {
     }
 
     DUChainPointer(const DUChainPointer& rhs)
@@ -112,7 +112,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
         d = rhs.d;
     }
 
-    explicit DUChainPointer( KSharedPtr<DUChainPointerData> rhs ) {
+    explicit DUChainPointer( QExplicitlySharedDataPointer<DUChainPointerData> rhs ) {
       if( dynamic_cast<Type*>(rhs->base()) )
         d = rhs;
     }
@@ -173,7 +173,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public KShared {
     }
 
     private:
-      KSharedPtr<DUChainPointerData> d;
+      QExplicitlySharedDataPointer<DUChainPointerData> d;
   };
 
   typedef DUChainPointer<DUChainBase> DUChainBasePointer;

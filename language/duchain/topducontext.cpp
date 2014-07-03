@@ -153,7 +153,7 @@ public:
 
   ParsingEnvironmentFilePointer m_file;
 
-  KSharedPtr<IAstContainer> m_ast;
+  QExplicitlySharedDataPointer<IAstContainer> m_ast;
   
   uint m_ownIndex;
 
@@ -589,7 +589,7 @@ TopDUContext::TopDUContext(const IndexedString& url, const RangeInRevision& rang
   setInSymbolTable(true);
 }
 
-KSharedPtr<ParsingEnvironmentFile> TopDUContext::parsingEnvironmentFile() const {
+QExplicitlySharedDataPointer<ParsingEnvironmentFile> TopDUContext::parsingEnvironmentFile() const {
   return m_local->m_file;
 }
 
@@ -648,7 +648,7 @@ void TopDUContext::setFeatures(Features features)
     parsingEnvironmentFile()->setFeatures(this->features());
 }
 
-void TopDUContext::setAst(KSharedPtr<IAstContainer> ast)
+void TopDUContext::setAst(QExplicitlySharedDataPointer<IAstContainer> ast)
 {
   ENSURE_CAN_WRITE
   m_local->m_ast = ast;
@@ -663,7 +663,7 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file)
     m_local->m_file->setFeatures(Empty);
   
   //We do not enforce a duchain lock here, since this is also used while loading a top-context
-  m_local->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
+  m_local->m_file = QExplicitlySharedDataPointer<ParsingEnvironmentFile>(file);
 
   //Replicate features to ParsingEnvironmentFile
   if(file) {
@@ -1200,14 +1200,14 @@ QList<RangeInRevision> allUses(TopDUContext* context, Declaration* declaration, 
   return allUses(context, declarationIndex, noEmptyRanges);
 }
 
-KSharedPtr<IAstContainer> TopDUContext::ast() const
+QExplicitlySharedDataPointer<IAstContainer> TopDUContext::ast() const
 {
   return m_local->m_ast;
 }
 
 void TopDUContext::clearAst()
 {
-  setAst(KSharedPtr<IAstContainer>(0));
+  setAst(QExplicitlySharedDataPointer<IAstContainer>(0));
 }
 
 IndexedString TopDUContext::url() const {

@@ -114,7 +114,7 @@ namespace {
   QMutex weakPointerMutex;
 };
 
-const KSharedPtr<DUChainPointerData>& DUChainBase::weakPointer() const
+const QExplicitlySharedDataPointer<DUChainPointerData>& DUChainBase::weakPointer() const
 {
   if (!m_ptr) {
     QMutexLocker lock(&weakPointerMutex); // The mutex is used to make sure we don't create m_ptr twice at the same time

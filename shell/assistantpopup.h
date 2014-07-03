@@ -78,7 +78,7 @@ class AssistantPopup : public QDeclarativeView
     Q_OBJECT
 
 public:
-    typedef KSharedPtr<AssistantPopup> Ptr;
+    typedef QExplicitlySharedDataPointer<AssistantPopup> Ptr;
     /**
      * @p widget The widget below which the assistant should be shown.
      * The current main window will be used as parent widget for the popup.

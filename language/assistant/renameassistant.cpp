@@ -82,9 +82,8 @@ struct RenameAssistant::Private
     {
         q->doHide();
         q->clearActions();
-
         m_oldDeclarationName = Identifier();
-        m_newDeclarationRange.clear();
+        m_newDeclarationRange.reset();
         m_oldDeclarationUses.clear();
         m_isUseful = false;
         m_renameFile = false;
@@ -187,13 +186,13 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
             newRange = newRange.encompass(invocationRange); //if text was added to the ends, encompass it
         }
 
-        d->m_newDeclarationRange.attach(new PersistentMovingRange(newRange, indexedUrl, true));
+        d->m_newDeclarationRange = new PersistentMovingRange(newRange, indexedUrl, true);
     }
 
     //Unfortunately this happens when you make a selection including one end of the decl's range and replace it
     if (removedText.isEmpty() && d->m_newDeclarationRange->range().textRange().intersect(invocationRange).isEmpty()) {
-        d->m_newDeclarationRange.attach(new PersistentMovingRange(
-            d->m_newDeclarationRange->range().textRange().encompass(invocationRange), indexedUrl, true));
+        d->m_newDeclarationRange = new PersistentMovingRange(
+            d->m_newDeclarationRange->range().textRange().encompass(invocationRange), indexedUrl, true);
     }
 
     d->m_newDeclarationName = view->document()->text(d->m_newDeclarationRange->range().textRange());
@@ -211,10 +210,9 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
 
     IAssistantAction::Ptr action;
     if (d->m_renameFile) {
-        action.attach(new RenameFileAction(supportedLanguage()->refactoring(), url, d->m_newDeclarationName));
+        action = new RenameFileAction(supportedLanguage()->refactoring(), url, d->m_newDeclarationName);
     } else {
-        action.attach(new RenameAction(d->m_oldDeclarationName, d->m_newDeclarationName,
-                                       d->m_oldDeclarationUses));
+        action =new RenameAction(d->m_oldDeclarationName, d->m_newDeclarationName, d->m_oldDeclarationUses);
     }
     connect(action.data(), SIGNAL(executed(IAssistantAction*)), SLOT(reset()));
     addAction(action);

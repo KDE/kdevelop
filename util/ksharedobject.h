@@ -19,11 +19,11 @@
 #ifndef KDEVPLATFORM_KSHAREDOBJECT_H
 #define KDEVPLATFORM_KSHAREDOBJECT_H
 
-#include <KDE/KSharedPtr>
+#include <QExplicitlySharedDataPointer>
 #include <QtCore/QObject>
 
 /**
- * Wrapper around KShared for use with KSharedPtr when the object is based on QObject as well.
+ * Wrapper around QSharedDatafor use with QExplicitlySharedDataPointer when the object is based on QObject as well.
  * Instead of deleting the object once the reference-count reaches zero, QObject::deleteLater() is called.
  * This prevents a possible crash when the reference-count reaches zero during event-processing while the queue
  * contains events to be delivered to that object.
@@ -54,12 +54,16 @@ struct FakeAtomic {
 
       return true; //Always return true, because we handle the deleting by ourself
     }
+
+    inline int load() const {
+        return m_real.ref.load();
+    }
     
     QObject& m_object;
     QSharedData& m_real;
 };
 
-struct KSharedObject : public KShared {
+struct KSharedObject : public QSharedData {
   inline KSharedObject(QObject& object) : ref(object, *this) {
   }
   
