@@ -3,23 +3,27 @@
 
 #include <QStringList>
 #include "cmaketypes.h"
+#include <project/path.h>
+
+/**
+ * Represents any file in a cmake project that has been added
+ * to the project.
+ *
+ * Contains the required information to compile it properly
+ */
+struct CMakeFiles
+{
+    KDevelop::Path::List includes;
+    QHash<QString, QString> defines;
+};
 
 struct CMakeProjectData
 {
-    QString projectName;
-    QVector<Subdirectory> subdirectories;
-    QVector<Target> targets;
-    QVector<Test> testSuites;
-    
-    VariableMap vm;
-    MacroMap mm;
     CMakeProperties properties;
     CacheValues cache;
-    CMakeDefinitions definitions;
-    QStringList modulePath;
-    QHash<QString,QString> targetAlias;
+    QHash<KDevelop::Path, CMakeFiles> files;
     
-    void clear() { vm.clear(); mm.clear(); properties.clear(); cache.clear(); targetAlias.clear(); }
+    void clear() { properties.clear(); cache.clear(); }
 };
 
 #endif

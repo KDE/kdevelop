@@ -1688,7 +1688,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
 
 int CMakeProjectVisitor::visit(const MessageAst *msg)
 {
-    s_msgcallback(msg->message().join(QString()));
+    s_msgcallback(msg->content().at(msg->line()).filePath+":"+QString::number(msg->line())+" "+msg->message().join(QString()));
     return 1;
 }
 

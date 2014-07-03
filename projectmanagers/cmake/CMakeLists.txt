@@ -1,7 +1,7 @@
 project(cmakemanager)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/parser)
 
-add_subdirectory(tests)
+# add_subdirectory(tests)
 add_subdirectory(icons)
 
 # enable this if you want to have the cmake debug visitor run on each CMakeLists.txt
@@ -11,22 +11,22 @@ add_subdirectory(icons)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9042 -DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
 set( cmakecommon_SRCS
-  parser/cmListFileLexer.cpp
-  parser/astfactory.cpp
-  parser/cmakelistsparser.cpp
-  parser/cmakeast.cpp
-  parser/cmakecondition.cpp
-  parser/cmakeprojectvisitor.cpp 
-  parser/variablemap.cpp
+#   parser/cmListFileLexer.cpp
+#   parser/astfactory.cpp
+#   parser/cmakelistsparser.cpp
+#   parser/cmakeast.cpp
+#   parser/cmakecondition.cpp
+#   parser/cmakeprojectvisitor.cpp
+#   parser/variablemap.cpp
 #   parser/cmakedebugvisitor.cpp
   parser/cmakecachereader.cpp
-  parser/cmakeparserutils.cpp
-  parser/cmakeduchaintypes.cpp
-  parser/generationexpressionsolver.cpp
+#   parser/cmakeparserutils.cpp
+#   parser/cmakeduchaintypes.cpp
+#   parser/generationexpressionsolver.cpp
   settings/cmakecachemodel.cpp
   cmakeutils.cpp
   cmakebuilddirchooser.cpp
-  cmakemodelitems.cpp
+#   cmakemodelitems.cpp
  
  )
 
@@ -35,17 +35,17 @@ set( cmakecommon_UI
 )
 
 set( cmakemanager_SRCS
-  testing/ctestutils.cpp
-  testing/ctestfindjob.cpp
-  testing/ctestrunjob.cpp
-  testing/ctestsuite.cpp
-  testing/qttestdelegate.cpp
+#   testing/ctestutils.cpp
+#   testing/ctestfindjob.cpp
+#   testing/ctestrunjob.cpp
+#   testing/ctestsuite.cpp
+#   testing/qttestdelegate.cpp
   cmakenavigationwidget.cpp
   cmakemanager.cpp
-  cmakecodecompletionmodel.cpp
-  cmakecommitchangesjob.cpp
-  cmakeimportjob.cpp
-  cmakeedit.cpp
+#   cmakecodecompletionmodel.cpp
+#   cmakecommitchangesjob.cpp
+#   cmakeimportjob.cpp
+#   cmakeedit.cpp
 )
 
 set( cmakemanager_UI
