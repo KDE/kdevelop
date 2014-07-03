@@ -300,17 +300,6 @@ QualifiedIdentifier Declaration::qualifiedIdentifier() const
   return ret;
 }
 
-// QString Declaration::mangledIdentifier() const
-// {
-//   //GNU mangling specs from http://theory.uwinnipeg.ca/gnu/gcc/gxxint_15.html
-//
-//   if (abstractType())
-//     return abstractType()->mangled();
-//
-//   // Error...
-//   return qualifiedIdentifier().mangled();
-// }
-
 DUContext * Declaration::context() const
 {
   //ENSURE_CAN_READ Commented out for performance reasons
@@ -792,5 +781,3 @@ QMap<IndexedString, QList<SimpleRange> > ret;
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
-
-
