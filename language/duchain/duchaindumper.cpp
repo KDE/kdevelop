@@ -26,6 +26,7 @@
 
 #include <KDebug>
 
+#include "definitions.h"
 #include "ducontext.h"
 #include "topducontext.h"
 #include "declaration.h"
