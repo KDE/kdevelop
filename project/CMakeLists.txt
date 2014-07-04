@@ -22,6 +22,9 @@ set(kdevplatformproject_LIB_SRCS
 
 add_library(kdevplatformproject SHARED ${kdevplatformproject_LIB_SRCS})
 generate_export_header(kdevplatformproject EXPORT_FILE_NAME projectexport.h)
+# TODO: helper.cpp needs vcsexport.h and outputviewexport.h, but can't link to kdevplatformvcs
+target_include_directories(kdevplatformproject PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../vcs/")
+target_include_directories(kdevplatformproject PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../outputview/")
 target_link_libraries(kdevplatformproject LINK_PUBLIC
     kdevplatforminterfaces
     kdevplatformutil # util/path.h

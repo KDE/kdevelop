@@ -22,7 +22,7 @@
 #include "abstracttype.h"
 #include "identifiedtype.h"
 #include "typeregister.h"
-#include "../../languageexport.h"
+#include "languageexport.h"
 #include "typesystem.h"
 
 namespace KDevelop {

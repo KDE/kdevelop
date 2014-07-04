@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_INSTANTIATIONINFORMATION_H
 #define KDEVPLATFORM_INSTANTIATIONINFORMATION_H
 
-#include "../languageexport.h"
+#include "languageexport.h"
 #include "types/abstracttype.h"
 #include "types/indexedtype.h"
 #include "appendedlist.h"

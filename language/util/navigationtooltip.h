@@ -20,7 +20,7 @@
 #define KDEVPLATFORM_NAVIGATIONTOOLTIP_H
 
 #include "../../util/activetooltip.h"
-#include "../languageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop {
 

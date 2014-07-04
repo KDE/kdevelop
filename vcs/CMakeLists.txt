@@ -49,6 +49,7 @@ set(kdevplatformvcs_LIB_SRCS
 
 qt5_wrap_ui(kdevplatformvcs_LIB_SRCS ${kdevplatformvcs_UIS})
 add_library(kdevplatformvcs SHARED ${kdevplatformvcs_LIB_SRCS})
+generate_export_header(kdevplatformvcs EXPORT_FILE_NAME vcsexport.h)
 target_link_libraries(kdevplatformvcs LINK_PUBLIC
     kdevplatformoutputview
     kdevplatforminterfaces
@@ -64,7 +65,7 @@ set_target_properties(kdevplatformvcs PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERS
 install(TARGETS kdevplatformvcs EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
-    vcsexport.h
+    ${CMAKE_CURRENT_BINARY_DIR}/vcsexport.h
     vcsjob.h
     vcsrevision.h
     vcsannotation.h

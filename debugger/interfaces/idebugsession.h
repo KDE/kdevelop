@@ -23,7 +23,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QAbstractItemModel>
-#include "../debuggerexport.h"
+#include "debuggerexport.h"
 #include <KUrl>
 
 class KUrl;

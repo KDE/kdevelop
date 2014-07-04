@@ -23,7 +23,7 @@
 #include <QHash>
 #include <QVariantHash>
 
-#include "../languageexport.h"
+#include "languageexport.h"
 #include <language/duchain/duchainpointer.h>
 
 class KUrl;

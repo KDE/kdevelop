@@ -24,7 +24,7 @@ class KDevHash
 {
 public:
   KDevHash() : m_hash(2166136261u) {}
-  KDevHash(uint hash) : m_hash(hash) {}
+  KDevHash(unsigned int hash) : m_hash(hash) {}
   operator unsigned int()
   {
     return m_hash;

@@ -21,7 +21,7 @@
 
 #include <QExplicitlySharedDataPointer>
 
-#include "../../languageexport.h"
+#include "languageexport.h"
 #include "../indexeddeclaration.h"
 #include "navigationaction.h"
 

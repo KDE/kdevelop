@@ -22,7 +22,7 @@
 #define KDEVPLATFORM_VCSIMPORTMETADATAWIDGET_H
 
 #include <QWidget>
-#include "../vcsexport.h"
+#include "vcsexport.h"
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
 class KUrl;

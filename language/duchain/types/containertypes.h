@@ -24,7 +24,7 @@
 #include "typeutils.h"
 #include "../duchainlock.h"
 
-#include "../../languageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop {
 

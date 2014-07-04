@@ -28,7 +28,7 @@
 #include <KUrl>
 #include <KConfigGroup>
 
-#include "../debuggerexport.h"
+#include "debuggerexport.h"
 
 class QTableView;
 

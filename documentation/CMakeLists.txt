@@ -11,6 +11,7 @@ set(kdevplatformdocumentation_LIB_SRCS
 
 qt5_wrap_ui(kdevplatformdocumentation_LIB_SRCS documentationfindwidget.ui)
 add_library(kdevplatformdocumentation SHARED ${kdevplatformdocumentation_LIB_SRCS})
+generate_export_header(kdevplatformdocumentation EXPORT_FILE_NAME documentationexport.h)
 
 install(TARGETS kdevplatformdocumentation EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
@@ -20,7 +21,7 @@ target_link_libraries(kdevplatformdocumentation
 set_target_properties(kdevplatformdocumentation PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 
 install(FILES
-    documentationexport.h
+    ${CMAKE_CURRENT_BINARY_DIR}/documentationexport.h
     documentationfindwidget.h
     standarddocumentationview.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/documentation COMPONENT Devel

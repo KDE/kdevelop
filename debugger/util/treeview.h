@@ -24,7 +24,7 @@
 
 #include <QTreeView>
 
-#include "../debuggerexport.h"
+#include "debuggerexport.h"
 
 
 namespace KDevelop

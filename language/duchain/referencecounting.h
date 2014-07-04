@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_REFERENCECOUNTING_H
 #define KDEVPLATFORM_REFERENCECOUNTING_H
 
-#include "../languageexport.h"
+#include "languageexport.h"
 #include <QMap>
 #include <QPair>
 

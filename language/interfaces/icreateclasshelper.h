@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_ICREATECLASSHELPER_H
 #define KDEVPLATFORM_ICREATECLASSHELPER_H
 
-#include "../languageexport.h"
+#include "languageexport.h"
 #include <language/duchain/duchainpointer.h>
 
 class KUrl;

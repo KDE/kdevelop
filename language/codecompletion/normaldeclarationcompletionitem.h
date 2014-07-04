@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_NORMALDECLARATIONCOMPLETIONITEM_H
 
 #include "codecompletionitem.h"
-#include "../languageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop {
 

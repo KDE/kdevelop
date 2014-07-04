@@ -26,7 +26,7 @@
 
 #include <KDE/KUrl>
 
-#include "../debuggerexport.h"
+#include "debuggerexport.h"
 #include "../interfaces/idebugsession.h"
 #include "../interfaces/iframestackmodel.h"
 

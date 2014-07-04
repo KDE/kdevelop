@@ -24,7 +24,6 @@
 #include <QStringList>
 #include <QDebug>
 
-#include <language/duchain/indexedstring.h>
 #include <language/util/kdevhash.h>
 
 using namespace KDevelop;

@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_IPATCHDOCUMENT_H
 #define KDEVPLATFORM_IPATCHDOCUMENT_H
 
-#include "../vcsexport.h"
+#include "vcsexport.h"
 
 class KUrl;
 class QString;

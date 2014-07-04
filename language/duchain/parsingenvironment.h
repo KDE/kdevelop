@@ -27,7 +27,7 @@
 
 #include "indexedstring.h"
 
-#include "../languageexport.h"
+#include "languageexport.h"
 #include "duchainbase.h"
 #include "topducontext.h"
 #include <language/editor/modificationrevisionset.h>

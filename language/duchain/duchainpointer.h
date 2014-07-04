@@ -22,7 +22,7 @@
 #include <QtCore/QMetaType>
 #include <QtCore/QList>
 #include <ksharedptr.h>
-#include "../languageexport.h"
+#include "languageexport.h"
 
 //krazy:excludeall=dpointer
 

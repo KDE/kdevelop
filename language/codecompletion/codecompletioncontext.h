@@ -22,7 +22,7 @@
 #include <ksharedptr.h>
 
 #include "../duchain/duchainpointer.h"
-#include "../languageexport.h"
+#include "languageexport.h"
 #include "../editor/cursorinrevision.h"
 #include "codecompletionitem.h"
 

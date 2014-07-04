@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_ICODEHIGHLIGHTING_H
 #define KDEVPLATFORM_ICODEHIGHLIGHTING_H
 
-#include "../languageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop
 {

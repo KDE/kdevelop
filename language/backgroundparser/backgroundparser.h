@@ -29,7 +29,7 @@
 #include <QtCore/QMutex>
 #include <QtCore/QHash>
 
-#include "../languageexport.h"
+#include "languageexport.h"
 #include <interfaces/istatus.h>
 #include <language/duchain/topducontext.h>
 #include "parsejob.h"

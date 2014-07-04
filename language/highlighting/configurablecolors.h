@@ -27,7 +27,7 @@
 #include "codehighlighting.h"
 #include "colorcache.h"
 
-#include "../languageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop {
 class KDEVPLATFORMLANGUAGE_EXPORT ConfigurableHighlightingColors {

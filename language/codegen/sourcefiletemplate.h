@@ -25,7 +25,7 @@
 #include <QList>
 #include <QVariant>
 
-#include "../languageexport.h"
+#include "languageexport.h"
 
 class QStringList;
 class KArchiveDirectory;

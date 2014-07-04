@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_INDEXEDDUCONTEXT_H
 #define KDEVPLATFORM_INDEXEDDUCONTEXT_H
 
-#include "../languageexport.h"
+#include "languageexport.h"
 #include <language/util/kdevhash.h>
 
 #include <QPair>

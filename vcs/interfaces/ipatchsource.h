@@ -21,7 +21,7 @@
 
 #include <kurl.h>
 #include <qpointer.h>
-#include "../vcsexport.h"
+#include "vcsexport.h"
 #include <vcs/vcsstatusinfo.h>
 
 namespace KDevelop {

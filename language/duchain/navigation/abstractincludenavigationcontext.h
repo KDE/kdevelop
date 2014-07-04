@@ -22,7 +22,7 @@
 #include "abstractnavigationcontext.h"
 #include "../../util/includeitem.h"
 #include "../../duchain/parsingenvironment.h"
-#include "../../languageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop {
 

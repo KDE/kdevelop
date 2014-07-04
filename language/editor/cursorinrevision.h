@@ -18,7 +18,7 @@
 #ifndef KDEVPLATFORM_CURSORINREVISION_H
 #define KDEVPLATFORM_CURSORINREVISION_H
 
-#include "../languageexport.h"
+#include "languageexport.h"
 #include "simplecursor.h"
 
 namespace KDevelop {

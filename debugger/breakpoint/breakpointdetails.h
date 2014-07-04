@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_BREAKPOINTDETAILS_H
 
 #include <QWidget>
-#include "../debuggerexport.h"
+#include "debuggerexport.h"
 
 class QSpinBox;
 class QLabel;

@@ -27,7 +27,7 @@
 
 #include <vcs/vcsstatusinfo.h>
 
-#include "../vcsexport.h"
+#include "vcsexport.h"
 
 class KUrl;
 

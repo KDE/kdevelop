@@ -24,7 +24,7 @@
 #include <QtCore/QObject>
 class QString;
 
-#include "../debuggerexport.h"
+#include "debuggerexport.h"
 #include "idebugsession.h"
 
 namespace KTextEditor {

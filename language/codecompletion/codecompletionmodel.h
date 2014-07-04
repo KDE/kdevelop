@@ -29,7 +29,7 @@
 #include <QExplicitlySharedDataPointer>
 
 #include "../duchain/duchainpointer.h"
-#include "../languageexport.h"
+#include "languageexport.h"
 #include "codecompletioncontext.h"
 #include "codecompletionitem.h"
 #include <interfaces/icompletionsettings.h>

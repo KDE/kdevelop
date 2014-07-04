@@ -18,7 +18,7 @@
 
 #include <QtCore/QMetaType>
 
-#include "../languageexport.h"
+#include "languageexport.h"
 
 #include <language/duchain/referencecounting.h>
 

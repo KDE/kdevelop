@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_CLASSMEMBERDECLARATIONDATA_H
 
 #include "declarationdata.h"
-#include "../languageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop
 {

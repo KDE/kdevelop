@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_TYPEUTILS_H
 #define KDEVPLATFORM_TYPEUTILS_H
 
-#include "../../languageexport.h"
+#include "languageexport.h"
 #include "abstracttype.h"
 #include "unsuretype.h"
 #include "integraltype.h"

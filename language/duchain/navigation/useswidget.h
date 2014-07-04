@@ -25,7 +25,7 @@
 
 #include <language/duchain/indexeddeclaration.h>
 #include <language/duchain/indexedtopducontext.h>
-#include "../../languageexport.h"
+#include "languageexport.h"
 #include "usescollector.h"
 #include <language/editor/persistentmovingrange.h>
 

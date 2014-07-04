@@ -19,7 +19,8 @@
 #ifndef KDEVPLATFORM_LOCALINDEXEDDECLARATION_H
 #define KDEVPLATFORM_LOCALINDEXEDDECLARATION_H
 
-#include "../languageexport.h"
+#include "languageexport.h"
+#include <QtGlobal>
 
 namespace KDevelop {
 

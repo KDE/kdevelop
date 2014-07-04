@@ -21,7 +21,7 @@
 
 #include <ktexteditor/range.h>
 
-#include "../languageexport.h"
+#include "languageexport.h"
 #include "simplecursor.h"
 
 /**

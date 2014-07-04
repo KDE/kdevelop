@@ -21,7 +21,7 @@
 
 #include <QtCore/QDateTime>
 #include <kdebug.h>
-#include "../languageexport.h"
+#include "languageexport.h"
 #include "../backgroundparser/documentchangetracker.h"
 
 class QString;

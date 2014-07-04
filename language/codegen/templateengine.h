@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_TEMPLATEENGINE_H
 #define KDEVPLATFORM_TEMPLATEENGINE_H
 
-#include "../languageexport.h"
+#include "languageexport.h"
 
 #include <QScopedPointer>
 

@@ -17,7 +17,7 @@
 #include <QtCore/QMap>
 #include <QtCore/QString>
 #include <kurl.h>
-#include "../languageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop {
   class TopDUContext;

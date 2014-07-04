@@ -25,7 +25,7 @@
 #include <QStandardItemModel>
 #include <KUrl>
 
-#include "../vcsexport.h"
+#include "vcsexport.h"
 
 namespace KDevelop {
 class IBranchingVersionControl;

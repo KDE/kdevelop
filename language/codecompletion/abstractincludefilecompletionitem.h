@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_ABSTRACTINCLUDEFILECOMPLETIONITEM_H
 
 #include "codecompletionitem.h"
-#include "../languageexport.h"
+#include "languageexport.h"
 #include "../util/includeitem.h"
 #include "../duchain/duchain.h"
 #include "../duchain/duchainlock.h"

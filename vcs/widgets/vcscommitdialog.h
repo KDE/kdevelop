@@ -14,7 +14,7 @@
 
 #include <KDE/KDialog>
 #include <KDE/KUrl>
-#include "../vcsexport.h"
+#include "vcsexport.h"
 
 namespace KDevelop
 {

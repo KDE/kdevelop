@@ -18,7 +18,6 @@
 
 #include <QStringList>
 #include <KProcess>
-
 #include <vcs/dvcs/dvcsjob.h>
 
 /**
@@ -32,7 +31,7 @@ class CvsJob : public KDevelop::DVcsJob
 public:
     CvsJob(const QDir& workingDir, KDevelop::IPlugin* parent=0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
-    KDE_DEPRECATED CvsJob(KDevelop::IPlugin* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    KDEVPLATFORMVCS_DEPRECATED CvsJob(KDevelop::IPlugin* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
     /**
      * @return The command that is executed when calling start()
@@ -40,7 +39,7 @@ public:
     QString cvsCommand();
     void clear();
     void setDirectory(const QString& directory);
-    KDE_DEPRECATED QString getDirectory();
+    KDEVPLATFORMVCS_DEPRECATED QString getDirectory();
 
     void setRSH(const QString& rsh);
     void setServer(const QString& server);

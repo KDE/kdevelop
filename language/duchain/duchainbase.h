@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_DUCHAINBASE_H
 #define KDEVPLATFORM_DUCHAINBASE_H
 
-#include "../languageexport.h"
+#include "languageexport.h"
 #include "appendedlist.h"
 #include "duchainpointer.h"
 #include <language/editor/persistentmovingrange.h>

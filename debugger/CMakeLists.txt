@@ -23,13 +23,14 @@ set( kdevplatformdebugger_LIB_SRCS
     framestack/framestackwidget.cpp
 )
 add_library(kdevplatformdebugger SHARED ${kdevplatformdebugger_LIB_SRCS})
+generate_export_header(kdevplatformdebugger EXPORT_FILE_NAME debuggerexport.h)
 target_link_libraries(kdevplatformdebugger LINK_PUBLIC
     kdevplatforminterfaces
     kdevplatformutil
 LINK_PRIVATE
     Qt5::Core
-
     KF5::TextEditor
+    sublime
 )
 
 set_target_properties(kdevplatformdebugger PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
@@ -38,7 +39,7 @@ install(TARGETS kdevplatformdebugger EXPORT KDevPlatformTargets ${INSTALL_TARGET
 ########### install files ###############
 
 install(FILES
-    debuggerexport.h
+    ${CMAKE_CURRENT_BINARY_DIR}/debuggerexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger COMPONENT Devel
 )
 install(FILES

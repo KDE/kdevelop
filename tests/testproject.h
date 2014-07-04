@@ -46,7 +46,7 @@ public:
      * @p url Path to project directory.
      */
     TestProject(const Path& url = Path(), QObject* parent = 0);
-    KDE_DEPRECATED TestProject(const KUrl& url, QObject* parent = 0);
+    KDEVPLATFORMTESTS_DEPRECATED TestProject(const KUrl& url, QObject* parent = 0);
     virtual ~TestProject();
     IProjectFileManager* projectFileManager() const { return 0; }
     IBuildSystemManager* buildSystemManager() const { return 0; }
@@ -60,22 +60,22 @@ public:
     virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString&) const { return QList< ProjectBaseItem* >(); }
     virtual QList< ProjectBaseItem* > itemsForUrl(const KUrl&) const { return QList< ProjectBaseItem* >(); }
     virtual QList< ProjectFileItem* > filesForPath(const IndexedString&) const { return QList<ProjectFileItem*>(); }
-    KDE_DEPRECATED QList<ProjectFileItem*> filesForUrl( const KUrl& ) const { return QList<ProjectFileItem*>(); }
+    KDEVPLATFORMTESTS_DEPRECATED QList<ProjectFileItem*> filesForUrl( const KUrl& ) const { return QList<ProjectFileItem*>(); }
     virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString&) const { return QList<ProjectFolderItem*>(); }
-    KDE_DEPRECATED QList<ProjectFolderItem*> foldersForUrl( const KUrl& ) const { return QList<ProjectFolderItem*>(); }
+    KDEVPLATFORMTESTS_DEPRECATED QList<ProjectFolderItem*> foldersForUrl( const KUrl& ) const { return QList<ProjectFolderItem*>(); }
     void reloadModel() { }
     Path projectFile() const;
-    KDE_DEPRECATED KUrl projectFileUrl() const;
+    KDEVPLATFORMTESTS_DEPRECATED KUrl projectFileUrl() const;
     KSharedConfig::Ptr projectConfiguration() const { return m_projectConfiguration; }
     void addToFileSet( ProjectFileItem* file);
     void removeFromFileSet( ProjectFileItem* file);
     QSet<IndexedString> fileSet() const { return m_fileSet; }
     bool isReady() const { return true; }
 
-    KDE_DEPRECATED void setProjectUrl(const KUrl& url);
+    KDEVPLATFORMTESTS_DEPRECATED void setProjectUrl(const KUrl& url);
     void setPath(const Path& path);
 
-    KDE_DEPRECATED const KUrl folder() const;
+    KDEVPLATFORMTESTS_DEPRECATED const KUrl folder() const;
     Path path() const;
     QString name() const { return "Test Project"; }
     virtual bool inProject(const IndexedString& path) const;

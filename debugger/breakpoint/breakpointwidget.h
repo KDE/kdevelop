@@ -24,7 +24,7 @@
 #define KDEVPLATFORM_BREAKPOINTWIDGET_H
 
 #include <QWidget>
-#include "../debuggerexport.h"
+#include "debuggerexport.h"
 
 class QAbstractProxyModel;
 class QModelIndex;

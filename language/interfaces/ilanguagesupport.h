@@ -22,7 +22,7 @@
 #include <kurl.h>
 
 #include "../editor/simplerange.h"
-#include "../languageexport.h"
+#include "languageexport.h"
 
 #include "interfaces/isourceformatter.h"
 

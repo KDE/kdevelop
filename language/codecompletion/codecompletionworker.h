@@ -26,7 +26,7 @@
 #include <QtCore/QThread>
 #include <QtCore/QList>
 
-#include "../languageexport.h"
+#include "languageexport.h"
 #include "../duchain/duchainpointer.h"
 #include "../codecompletion/codecompletioncontext.h"
 

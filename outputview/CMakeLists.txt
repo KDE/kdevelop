@@ -13,6 +13,7 @@ set( outputviewinterfaces_LIB_SRCS
     outputexecutejob.cpp
 )
 add_library( kdevplatformoutputview SHARED ${outputviewinterfaces_LIB_SRCS} )
+generate_export_header(kdevplatformoutputview EXPORT_FILE_NAME outputviewexport.h)
 target_link_libraries(kdevplatformoutputview PRIVATE
     Qt5::Core
     kdevplatforminterfaces
@@ -29,7 +30,7 @@ install(TARGETS kdevplatformoutputview EXPORT KDevPlatformTargets ${INSTALL_TARG
           outputdelegate.h
           ioutputviewmodel.h
           ifilterstrategy.h
-          outputviewexport.h
+          ${CMAKE_CURRENT_BINARY_DIR}/outputviewexport.h
           outputjob.h
           outputexecutejob.h
           DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/outputview COMPONENT Devel)

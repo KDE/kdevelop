@@ -26,7 +26,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QMap>
 #include <QtCore/QSet>
-#include "../debuggerexport.h"
+#include "debuggerexport.h"
 #include "idebugsession.h"
 #include "../breakpoint/breakpoint.h"
 
