@@ -21,12 +21,13 @@ set(kdevplatformproject_LIB_SRCS
 
 
 add_library(kdevplatformproject SHARED ${kdevplatformproject_LIB_SRCS})
+generate_export_header(kdevplatformproject EXPORT_FILE_NAME projectexport.h)
 target_link_libraries(kdevplatformproject LINK_PUBLIC
     kdevplatforminterfaces
+    kdevplatformutil # util/path.h
 )
 target_link_libraries(kdevplatformproject LINK_PRIVATE
     kdevplatforminterfaces
-    kdevplatformutil
     kdevplatformlanguage
     KF5::KIOWidgets
     Qt5::Concurrent
@@ -53,12 +54,12 @@ install(FILES
     projectconfigskeleton.h
     projectmodel.h
     projectkcmodule.h
-    projectexport.h
     projectitemlineedit.h
     projectbuildsetmodel.h
     builderjob.h
     helper.h
     abstractfilemanagerplugin.h
     projectfiltermanager.h
+    ${CMAKE_CURRENT_BINARY_DIR}/projectexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project COMPONENT Devel
  )

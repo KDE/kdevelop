@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_IPROJECTFILTER_H
 #define KDEVPLATFORM_IPROJECTFILTER_H
 
-#include "../projectexport.h"
+#include "projectexport.h"
 
 #include <QObject>
 

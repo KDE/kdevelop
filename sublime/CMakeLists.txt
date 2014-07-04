@@ -28,6 +28,7 @@ set(sublime_LIB_SRCS
 )
 
 add_library(sublime SHARED ${sublime_LIB_SRCS})
+generate_export_header(sublime EXPORT_FILE_NAME sublimeexport.h)
 target_link_libraries(sublime
         LINK_PRIVATE KF5::KIOWidgets
         LINK_PUBLIC KF5::Parts KF5::KDELibs4Support)
@@ -48,7 +49,7 @@ install(FILES
     mainwindowoperator.h
     urldocument.h
     sublimedefs.h
-    sublimeexport.h
     tooldocument.h
     view.h
+    ${CMAKE_CURRENT_BINARY_DIR}/sublimeexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/sublime COMPONENT Devel)

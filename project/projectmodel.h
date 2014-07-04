@@ -197,7 +197,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         virtual QString iconName() const;
 
         /** Get the path of this item (if any) converted to a url */
-        KDE_DEPRECATED KUrl url() const;
+        KDEVPLATFORMPROJECT_DEPRECATED KUrl url() const;
 
         /**
          * Set the path of this item.

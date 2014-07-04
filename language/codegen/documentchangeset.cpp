@@ -42,6 +42,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 
+// FIXME: This should not be here since we don't link to kdevproject
 #include <project/projectmodel.h>
 
 namespace KDevelop {

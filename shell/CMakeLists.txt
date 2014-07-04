@@ -67,6 +67,7 @@ set(kdevplatformshell_UI
 
 qt5_wrap_ui( kdevplatformshell_LIB_SRCS ${kdevplatformshell_UI} )
 add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
+generate_export_header(kdevplatformshell EXPORT_FILE_NAME shellexport.h)
 target_link_libraries(kdevplatformshell LINK_PUBLIC
     KF5::XmlGui
 
@@ -117,10 +118,10 @@ install(FILES
     sessionlock.h
     sourceformattercontroller.h
     language.h
-    shellexport.h
     selectioncontroller.h
     runcontroller.h
     launchconfiguration.h
+    ${CMAKE_CURRENT_BINARY_DIR}/shellexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell COMPONENT Devel
 )
 

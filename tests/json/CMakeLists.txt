@@ -7,6 +7,7 @@ set(kdevplatformjsontests_LIB_SRCS
 )
 
 add_library(kdevplatformjsontests SHARED ${kdevplatformjsontests_LIB_SRCS})
+generate_export_header(kdevplatformjsontests EXPORT_FILE_NAME kdevplatformjsontestsexport.h)
 target_link_libraries(kdevplatformjsontests
   LINK_PUBLIC
     Qt5::Core
@@ -22,13 +23,13 @@ install(TARGETS kdevplatformjsontests EXPORT KDevPlatformTargets ${INSTALL_TARGE
 install(FILES
     declarationvalidator.h
     delayedoutput.h
-    kdevplatformjsontestsexport.h
     jsontesthelpers.h
     testsuite.h
     testsuite.cpp
     jsondeclarationtests.h
     jsonducontexttests.h
     jsontypetests.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kdevplatformjsontestsexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/tests/json/
     COMPONENT Devel
 )

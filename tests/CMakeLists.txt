@@ -16,6 +16,7 @@ set(kdevplatformtests_LIB_SRCS
 )
 
 add_library(kdevplatformtests SHARED ${kdevplatformtests_LIB_SRCS})
+generate_export_header(kdevplatformtests EXPORT_FILE_NAME kdevplatformtestsexport.h)
 target_link_libraries(kdevplatformtests LINK_PUBLIC
     kdevplatformshell
     kdevplatformlanguage
@@ -40,9 +41,9 @@ install(FILES
     testproject.h
     testfile.h
     testlanguagecontroller.h
-    kdevplatformtestsexport.h
     testhelpers.h
     testplugincontroller.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kdevplatformtestsexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/tests/
     COMPONENT Devel
 )

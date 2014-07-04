@@ -38,6 +38,7 @@ add_subdirectory(tests)
 
 qt5_wrap_ui(kdevplatformutil_LIB_SRCS ${kdevplatformutil_LIB_US})
 add_library(kdevplatformutil SHARED ${kdevplatformutil_LIB_SRCS})
+generate_export_header(kdevplatformutil EXPORT_FILE_NAME utilexport.h)
 target_link_libraries(kdevplatformutil
 LINK_PUBLIC
     KF5::ConfigWidgets
@@ -66,7 +67,6 @@ install( FILES
     activetooltip.h
     processlinemaker.h
     commandexecutor.h
-    utilexport.h
     environmentconfigurebutton.h
     environmentselectionwidget.h
     environmentgrouplist.h
@@ -81,4 +81,5 @@ install( FILES
     placeholderitemproxymodel.h
     projecttestjob.h
     path.h
+    ${CMAKE_CURRENT_BINARY_DIR}/utilexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)

@@ -2,6 +2,7 @@ add_definitions(-DKDEVPLATFORMINTERFACES_EXPORT=)
 
 set(foregroundlock_SRC test_foregroundlock.cpp ../foregroundlock.cpp)
 add_executable(foregroundlocktest ${foregroundlock_SRC})
+target_include_directories(foregroundlocktest PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/..) # for export header
 add_test(foregroundlocktest foregroundlocktest)
 ecm_mark_as_test(foregroundlocktest)
 target_link_libraries(foregroundlocktest  Qt5::Test KF5::KDELibs4Support)

@@ -47,7 +47,6 @@
 
 #include <sublime/mainwindow.h>
 
-#include "tests/modeltest.h"
 #include "projectmanagerviewplugin.h"
 #include "vcsoverlayproxymodel.h"
 #include "ui_projectmanagerview.h"

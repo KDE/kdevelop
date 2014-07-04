@@ -24,7 +24,7 @@
 
 #include "iprojectfilemanager.h"
 
-#include "../projectexport.h"
+#include "projectexport.h"
 
 namespace KDevelop
 {

@@ -30,8 +30,6 @@
 #include <klocale.h>
 #include <KMimeType>
 
-#include <tests/modeltest.h>
-
 #include "../vcsrevision.h"
 #include "../vcsevent.h"
 

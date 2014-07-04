@@ -75,16 +75,16 @@ public:
     virtual QList< ProjectFileItem* > filesForPath(const IndexedString& file) const;
     virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString& folder) const;
 
-    KDE_DEPRECATED virtual QList< ProjectBaseItem* > itemsForUrl(const KUrl& url) const;
-    KDE_DEPRECATED virtual QList<ProjectFileItem*> filesForUrl( const KUrl& ) const;
-    KDE_DEPRECATED virtual QList<ProjectFolderItem*> foldersForUrl(const KUrl& ) const;
+    KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectBaseItem*> itemsForUrl(const KUrl& url) const;
+    KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectFileItem*> filesForUrl( const KUrl& ) const;
+    KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectFolderItem*> foldersForUrl(const KUrl& ) const;
 
     QString projectTempFile() const;
     QString developerTempFile() const;
-    KDE_DEPRECATED KUrl developerFileUrl() const;
+    KDEVPLATFORMSHELL_DEPRECATED KUrl developerFileUrl() const;
     Path developerFile() const;
     virtual void reloadModel();
-    virtual KDE_DEPRECATED KUrl projectFileUrl() const;
+    virtual KDEVPLATFORMSHELL_DEPRECATED KUrl projectFileUrl() const;
     virtual Path projectFile() const;
     virtual KSharedConfig::Ptr projectConfiguration() const;
 
@@ -98,7 +98,7 @@ public:
      * @brief Get the project folder
      * @return The canonical absolute directory of the project.
      */
-    virtual KDE_DEPRECATED const KUrl folder() const;
+    virtual KDEVPLATFORMSHELL_DEPRECATED const KUrl folder() const;
 
     virtual Path path() const;
 

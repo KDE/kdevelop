@@ -153,6 +153,9 @@ qt5_wrap_ui(kdevplatformlanguage_LIB_SRCS
     codegen/progressdialogs/refactoringdialog.ui)
 
 add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
+# FIXME: This is needed for projectexport.h (used from documentchageset.cpp)
+target_include_directories(kdevplatformlanguage PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/../project)
+
 target_link_libraries(kdevplatformlanguage LINK_PUBLIC
         KF5::ThreadWeaver
         kdevplatforminterfaces
