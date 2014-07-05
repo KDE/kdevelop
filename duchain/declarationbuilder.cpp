@@ -414,6 +414,91 @@ bool DeclarationBuilder::visit(QmlJS::AST::CallExpression* node)
 /*
  * Arrays
  */
+void DeclarationBuilder::declareFieldMember(const KDevelop::DeclarationPointer& declaration,
+                                            const QString& member,
+                                            QmlJS::AST::Node* node,
+                                            const QmlJS::AST::SourceLocation& location)
+{
+    DUChainWriteLocker lock;
+    QualifiedIdentifier identifier(member);
+
+    // Declaration must have an internal context so that the member can be added
+    // into it.
+    DUContext* ctx = QmlJS::getInternalContext(declaration);
+
+    if (!ctx) {
+        return;
+    }
+
+    // No need to re-declare a field if it already exists
+    if (ctx->findDeclarations(identifier.last(),
+                              CursorInRevision::invalid(),
+                              nullptr,
+                              DUContext::DontSearchInParent).count() > 0) {
+        return;
+    }
+
+    // The internal context of declaration is already closed and does not contain
+    // location. This can be worked around by opening a new context, declaring the
+    // new field in it, and then adding the context as a parent of
+    // declaration->internalContext().
+    RangeInRevision range = m_session->locationToRange(location);
+    IntegralType::Ptr type = IntegralType::Ptr(new IntegralType(IntegralType::TypeMixed));
+    DUContext* importedContext = openContext(node, range, DUContext::Class);
+
+    openDeclaration<Declaration>(identifier, range);
+    openType(type);
+    closeAndAssignType();
+    closeContext();
+
+    ctx->addImportedParentContext(importedContext);
+}
+
+bool DeclarationBuilder::visit(QmlJS::AST::FieldMemberExpression* node)
+{
+    setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
+
+    ExpressionType type = findType(node->base);
+
+    if (type.declaration) {
+        declareFieldMember(
+            type.declaration,
+            node->name.toString(),
+            node,
+            node->identifierToken
+        );
+    }
+
+    return false;       // findType has already visited node->base
+}
+
+bool DeclarationBuilder::visit(QmlJS::AST::ArrayMemberExpression* node)
+{
+    setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
+
+    // When the user types array["new_key"], declare "new_key" as a new field of
+    // array.
+    auto stringLiteral = QmlJS::AST::cast<QmlJS::AST::StringLiteral*>(node->expression);
+
+    if (!stringLiteral) {
+        return DeclarationBuilderBase::visit(node);
+    }
+
+    ExpressionType type = findType(node->base);
+
+    if (type.declaration) {
+        declareFieldMember(
+            type.declaration,
+            stringLiteral->value.toString(),
+            node,
+            stringLiteral->literalToken
+        );
+    }
+
+    node->expression->accept(this);
+    return false;       // findType has already visited node->base, and we have just visited node->expression
+}
+
 bool DeclarationBuilder::visit(QmlJS::AST::ObjectLiteral* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
@@ -437,7 +522,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::ObjectLiteral* node)
         decl->setAlwaysForceDirect(true);   // This declaration has no name, so type->setDeclaration is obliged to store a direct pointer to the declaration.
         decl->setInternalContext(openContext(
             node,
-            m_session->locationsToInnerRange(node->lbraceToken, node->rbraceToken),
+            m_session->locationsToRange(node->lbraceToken, node->rbraceToken),
             DUContext::Class
         ));
 

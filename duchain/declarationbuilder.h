@@ -77,6 +77,13 @@ protected:
     virtual bool visit(QmlJS::AST::CallExpression* node);
 
     // Arrays
+    void declareFieldMember(const KDevelop::DeclarationPointer& declaration,
+                            const QString& member,
+                            QmlJS::AST::Node* node,
+                            const QmlJS::AST::SourceLocation& location);
+    virtual bool visit(QmlJS::AST::FieldMemberExpression* node);
+    virtual bool visit(QmlJS::AST::ArrayMemberExpression* node);
+
     virtual bool visit(QmlJS::AST::ObjectLiteral* node);
     virtual bool visit(QmlJS::AST::PropertyNameAndValue* node);
     virtual void endVisit(QmlJS::AST::PropertyNameAndValue* node);

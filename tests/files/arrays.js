@@ -20,3 +20,18 @@ var array = {
 
 array.key = "bar";
 array.key2 = "bar";
+
+/**
+ * "type" : { "toString" : "int" }
+ */
+array.new_key = 3;
+
+/**
+ * "type" : { "toString" : "<class>" }
+ */
+array.child = {};
+
+/**
+ * "type" : { "toString" : "string" }
+ */
+array["child"]["key"] = "value";
