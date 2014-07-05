@@ -202,14 +202,26 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
     if (declaration == QLatin1String("parent") &&
         ParseSession::guessLanguageFromSuffix(m_context->topContext()->url().str()) == QmlJS::Language::Qml) {
 
-        DUContext* parent = m_context->parentContext();
+        // Go up until we find a class context (the enclosing QML component)
+        const DUContext* parent = m_context;
 
+        while (parent && parent->type() != DUContext::Class) {
+            parent = parent->parentContext();
+        }
+
+        // Take the parent context of the current QML component, it is its parent
+        // component
+        if (parent) {
+            parent = parent->parentContext();
+        }
+
+        // Parent now points to the parent QML component. This is not always what
+        // the user wants when typing "parent", but already works well for
+        // "anchors.centerIn: parent" and things like that.
         if (parent &&
             parent->owner() &&
             parent->owner()->abstractType()) {
-            // Parent is difficult to resolve, but most of the time the enclosing QML
-            // component can be used as parent.
-            encounterLvalue(DeclarationPointer(m_context->parentContext()->owner()));
+            encounterLvalue(DeclarationPointer(parent->owner()));
             return;
         }
     }
