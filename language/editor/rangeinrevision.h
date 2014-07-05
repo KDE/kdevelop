@@ -63,7 +63,7 @@ public:
     }
 
     bool contains(const CursorInRevision& position) const {
-        return position >= start && position < end;
+        return position >= start && position <= end;
     }
 
     bool contains(const RangeInRevision& range) const {
