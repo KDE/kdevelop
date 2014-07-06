@@ -165,9 +165,9 @@ void VcsEventModel::jobReceivedResults(KJob* job)
     QList<KDevelop::VcsEvent> newevents;
     foreach( const QVariant &v, l )
     {
-        if( qVariantCanConvert<KDevelop::VcsEvent>( v ) )
+        if( v.canConvert<KDevelop::VcsEvent>() )
         {
-            newevents << qVariantValue<KDevelop::VcsEvent>( v );
+            newevents << v.value<KDevelop::VcsEvent>();
         }
     }
     d->m_rev = newevents.last().revision();

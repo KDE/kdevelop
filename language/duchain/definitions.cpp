@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
-    Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright 2014 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,11 +17,14 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "appendedlist.h"
 #include "definitions.h"
+#include "declaration.h"
 #include "declarationid.h"
 #include "duchainpointer.h"
-#include "appendedlist.h"
+#include "indexedstring.h"
 #include "repositories/itemrepository.h"
+
 #include <QHash>
 #include <QVector>
 
@@ -99,6 +103,35 @@ class DefinitionsRequestItem {
   const DefinitionsItem& m_item;
 };
 
+class DefinitionsVisitor
+{
+public:
+  DefinitionsVisitor(Definitions* _definitions, const QTextStream& _out)
+    : definitions(_definitions)
+    , out(_out)
+  {
+  }
+
+  bool operator()(const DefinitionsItem* item)
+  {
+    QDebug qout(out.device());
+    auto id = item->declaration;
+    auto allDefinitions = definitions->definitions(id);
+
+    qout << "Definitions for" << id.qualifiedIdentifier() << endl;
+    FOREACH_ARRAY(const IndexedDeclaration& decl, allDefinitions) {
+      if(decl.data()) {
+        qout << " " << decl.data()->qualifiedIdentifier() << "in" << decl.data()->url().byteArray() << "at" << decl.data()->rangeInCurrentRevision() << endl;
+      }
+    }
+
+    return true;
+  }
+
+private:
+  const Definitions* definitions;
+  const QTextStream& out;
+};
 
 class DefinitionsPrivate
 {
@@ -185,6 +218,13 @@ KDevVarLengthArray<IndexedDeclaration> Definitions::definitions(const Declaratio
   }
   
   return ret;
+}
+
+void Definitions::dump(const QTextStream& out)
+{
+  QMutexLocker lock(d->m_definitions.mutex());
+  DefinitionsVisitor v(this, out);
+  d->m_definitions.visitAllItems(v);
 }
 
 }

@@ -146,7 +146,7 @@ public Q_SLOTS:
     void reloadAllDocuments();
 
     // DBUS-compatible versions of openDocument
-    virtual Q_SCRIPTABLE bool openDocumentSimple( QString url );
+    virtual Q_SCRIPTABLE bool openDocumentSimple( QString url, int line = -1, int column = 0 );
     // Opens a list of documents, with optional split-view separators, like: "file1 / [ file2 - fil3 ]" (see kdevplatform_shell_environment.sh)
     virtual Q_SCRIPTABLE bool openDocumentsSimple( QStringList urls );
     virtual Q_SCRIPTABLE bool openDocumentFromTextSimple( QString text );

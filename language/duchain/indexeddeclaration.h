@@ -141,6 +141,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     uint m_declarationIndex;
 };
 
+inline uint qHash(const IndexedDeclaration& decl)
+{
+  return decl.hash();
+}
+
 }
 
 Q_DECLARE_METATYPE(KDevelop::IndexedDeclaration)

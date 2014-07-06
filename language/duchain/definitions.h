@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
-    Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright 2014 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +22,8 @@
 
 #ifndef KDEVPLATFORM_DEFINITIONS_H
 #define KDEVPLATFORM_DEFINITIONS_H
+
+class QTextStream;
 
 namespace KDevelop {
 
@@ -47,6 +50,9 @@ namespace KDevelop {
     
     ///Gets all the known definitions assigned to @param id.
     KDevVarLengthArray<IndexedDeclaration> definitions(const DeclarationId& id) const;
+
+    /// Dump contents of the definitions repository to stream @p out
+    void dump(const QTextStream& out);
 
     private:
       class DefinitionsPrivate* d;

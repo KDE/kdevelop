@@ -701,9 +701,9 @@ bool DocumentController::openDocumentFromTextSimple( QString text )
     return (bool)openDocumentFromText( text );
 }
 
-bool DocumentController::openDocumentSimple( QString url )
+bool DocumentController::openDocumentSimple( QString url, int line, int column )
 {
-    return (bool)openDocument( KUrl(url) );
+    return (bool)openDocument( KUrl(url), KTextEditor::Cursor( line, column ) );
 }
 
 IDocument* DocumentController::openDocument( const KUrl& inputUrl, const QString& prefName )

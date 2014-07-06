@@ -24,8 +24,6 @@
 
 #include <QtCore/QThread>
 
-#include <util/kdevvarlengtharray.h>
-
 #include "persistentsymboltable.h"
 #include "problem.h"
 #include "declaration.h"
@@ -36,7 +34,6 @@
 #include "declarationid.h"
 #include "namespacealiasdeclaration.h"
 #include "aliasdeclaration.h"
-#include "abstractfunctiondeclaration.h"
 #include "uses.h"
 #include "topducontextdata.h"
 #include "duchainregister.h"
@@ -374,48 +371,6 @@ public:
   }
 };
 
-///Takes a set of conditions in the constructors, and checks with each call to operator() whether these conditions are fulfilled on the given declaration.
-///The import-structure needs to be constructed and locked when this is used
-TopDUContext::DeclarationChecker::DeclarationChecker(const TopDUContext* _top, const CursorInRevision& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache)
-  : createVisibleCache(_createVisibleCache)
-  , top(_top)
-  , topDFunc(_top->d_func())
-  , position(_position)
-  , dataType(_dataType)
-  , flags(_flags)
-{
-}
-
-bool TopDUContext::DeclarationChecker::operator()(const Declaration* decl) const
-{
-  if(!decl)
-    return false;
-  
-  if (top != decl->topContext()) {
-
-    if((flags & DUContext::OnlyFunctions) && !dynamic_cast<const AbstractFunctionDeclaration*>(decl))
-      return false;
-
-    if (dataType && decl->abstractType()->indexed() != dataType->indexed())
-      // The declaration doesn't match the type filter we are applying
-      return false;
-
-  } else {
-    if((flags & DUContext::OnlyFunctions) && !dynamic_cast<const AbstractFunctionDeclaration*>(decl))
-      return false;
-
-    if (dataType && decl->abstractType() != dataType)
-      // The declaration doesn't match the type filter we are applying
-      return false;
-
-    if (decl->range().start >= position)
-      if(!decl->context() || decl->context()->type() != DUContext::Class)
-          return false; // The declaration is behind the position we're searching from, therefore not accessible
-  }
-  // Success, this declaration is accessible
-  return true;
-}
-
 const TopDUContext::IndexedRecursiveImports& TopDUContext::recursiveImportIndices() const
 {
 //   No lock-check for performance reasons
@@ -717,7 +672,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
       if(!check(decl))
         continue;
 
-      if( decl->kind() == Declaration::Alias ) {
+      if( ! (flags & DontResolveAliases) && decl->kind() == Declaration::Alias ) {
         //Apply alias declarations
         AliasDeclaration* alias = static_cast<AliasDeclaration*>(decl);
         if(alias->aliasedDeclaration().isValid()) {
@@ -757,7 +712,6 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
 
   ///The actual scopes are found within applyAliases, and each complete qualified identifier is given to FindDeclarationsAcceptor.
   ///That stores the found declaration to the output.
-
   applyAliases(identifiers, storer, position, false);
 
   return true;

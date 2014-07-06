@@ -33,11 +33,9 @@ class QByteArray;
 
 namespace KDevelop
 {
-
 class AbstractType;
 class DUContext;
 class IndexedString;
-class ForwardDeclaration;
 class DeclarationData;
 class DeclarationId;
 class Declaration;
@@ -98,14 +96,6 @@ public:
    * \returns true if this is a forward declaration, otherwise returns false.
    */
   virtual bool isForwardDeclaration() const;
-  /**
-   * \returns this declaration as a forward declaration if it is one, otherwise null.
-   */
-  ForwardDeclaration* toForwardDeclaration();
-  /**
-   * \returns this declaration as a forward declaration, if it is one, otherwise null.
-   */
-  const ForwardDeclaration* toForwardDeclaration() const;
 
   /**
    * Determine whether this declaration is a function declaration.
@@ -576,9 +566,6 @@ private:
   int m_indexInTopContext;
 };
 
-inline uint qHash(const IndexedDeclaration& decl) {
-  return decl.hash();
-}
 }
 
 #endif // KDEVPLATFORM_DECLARATION_H

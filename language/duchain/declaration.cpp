@@ -300,17 +300,6 @@ QualifiedIdentifier Declaration::qualifiedIdentifier() const
   return ret;
 }
 
-// QString Declaration::mangledIdentifier() const
-// {
-//   //GNU mangling specs from http://theory.uwinnipeg.ca/gnu/gcc/gxxint_15.html
-//
-//   if (abstractType())
-//     return abstractType()->mangled();
-//
-//   // Error...
-//   return qualifiedIdentifier().mangled();
-// }
-
 DUContext * Declaration::context() const
 {
   //ENSURE_CAN_READ Commented out for performance reasons
@@ -400,7 +389,7 @@ void Declaration::allocateOwnIndex() {
 const Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) const {
   ENSURE_CAN_READ
   if(isForwardDeclaration()) {
-    const ForwardDeclaration* dec = toForwardDeclaration();
+    const auto dec = static_cast<const ForwardDeclaration*>(this);
     Declaration* ret = dec->resolve(topContext);
     if(ret)
       return ret;
@@ -411,7 +400,7 @@ const Declaration* Declaration::logicalDeclaration(const TopDUContext* topContex
 Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) {
   ENSURE_CAN_READ
   if(isForwardDeclaration()) {
-    ForwardDeclaration* dec = toForwardDeclaration();
+    const auto dec = static_cast<const ForwardDeclaration*>(this);
     Declaration* ret = dec->resolve(topContext);
     if(ret)
       return ret;
@@ -649,16 +638,6 @@ void Declaration::setInSymbolTable(bool inSymbolTable)
   d->m_inSymbolTable = inSymbolTable;
 }
 
-ForwardDeclaration* Declaration::toForwardDeclaration()
-{
-  return static_cast<ForwardDeclaration*>(this);
-}
-
-const ForwardDeclaration* Declaration::toForwardDeclaration() const
-{
-  return static_cast<const ForwardDeclaration*>(this);
-}
-
 TopDUContext * Declaration::topContext() const
 {
   return m_topContext;
@@ -802,5 +781,3 @@ QMap<IndexedString, QList<SimpleRange> > ret;
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
-
-

@@ -129,7 +129,7 @@ VCSDiffPatchSource::VCSDiffPatchSource(VCSDiffUpdater* updater)
 
         foreach( const QVariant &var, varlist.toList() )
         {
-            VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
+            VcsStatusInfo info = var.value<KDevelop::VcsStatusInfo>();
             
             m_infos += info;
             if(info.state()!=VcsStatusInfo::ItemUpToDate)

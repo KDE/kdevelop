@@ -24,7 +24,6 @@
 #include "duchainlock.h"
 #include "topducontextdata.h"
 #include <language/backgroundparser/parsejob.h>
-#include <editor/modificationrevisionset.h>
 
 #define ENSURE_READ_LOCKED   if(indexedTopContext().isValid()) { ENSURE_CHAIN_READ_LOCKED }
 #define ENSURE_WRITE_LOCKED   if(indexedTopContext().isValid()) { ENSURE_CHAIN_READ_LOCKED }

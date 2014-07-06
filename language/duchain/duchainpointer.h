@@ -48,7 +48,7 @@ class AbstractFunctionDeclaration;
  * To make it even more convenient see DUChainPointer
  * */
 
-class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData{
+class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData {
   public:
     /**
      * Will return zero once the pointed-to object was deleted
