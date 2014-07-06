@@ -22,6 +22,7 @@
 #include "clangdiagnosticevaluator.h"
 #include "clangtypes.h"
 #include "unknowndeclarationproblem.h"
+#include "missingincludepathproblem.h"
 
 #include <QString>
 
@@ -55,6 +56,12 @@ bool isDeclarationProblem(CXDiagnostic diagnostic)
            || description.startsWith( "variable has incomplete type" );
 }
 
+/// @return true if @p diagnostic says that include file not found
+bool isIncludeFileNotFound(CXDiagnostic diagnostic)
+{
+    return ClangString(clang_getDiagnosticSpelling(diagnostic)).toString().endsWith("file not found");
+}
+
 }
 
 ClangDiagnosticEvaluator::ClangDiagnosticEvaluator()
@@ -65,6 +72,8 @@ ClangProblem* ClangDiagnosticEvaluator::createProblem(CXDiagnostic diagnostic) c
 {
     if (isDeclarationProblem(diagnostic)) {
         return new UnknownDeclarationProblem(diagnostic);
+    } else if(isIncludeFileNotFound(diagnostic)){
+        return new MissingIncludePathProblem(diagnostic);
     }
 
     return new ClangProblem(diagnostic);
