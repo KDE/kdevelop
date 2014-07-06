@@ -22,7 +22,7 @@
 #define KDEVPLATFORM_DYNAMICLANGUAGEEXPRESSIONVISITOR_H
 
 #include "language/duchain/ducontext.h"
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop {
 

@@ -22,8 +22,8 @@
 
 #include <KComboBox>
 
+#include <debugger/debuggerexport.h>
 #include "../util/treeview.h"
-#include "debuggerexport.h"
 #include "variablecollection.h"
 
 class KMenu;

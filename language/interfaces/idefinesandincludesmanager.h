@@ -30,7 +30,7 @@
 
 #include <util/path.h>
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop
 {

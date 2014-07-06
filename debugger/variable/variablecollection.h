@@ -30,10 +30,10 @@
 #include <KLocalizedString>
 #include <KTextEditor/TextHintInterface>
 
+#include <debugger/debuggerexport.h>
 #include "../util/treemodel.h"
 #include "../util/treeitem.h"
 #include "../../interfaces/idocument.h"
-#include "debuggerexport.h"
 #include "../interfaces/idebugsession.h"
 #include "../../interfaces/idebugcontroller.h"
 

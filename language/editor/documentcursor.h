@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_DOCUMENTCURSOR_H
 #define KDEVPLATFORM_DOCUMENTCURSOR_H
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 #include "simplecursor.h"
 #include <language/duchain/indexedstring.h>
 #include "cursorinrevision.h"

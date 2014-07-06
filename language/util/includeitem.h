@@ -21,7 +21,7 @@
 
 #include <kurl.h>
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 class QDebug;
 

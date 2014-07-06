@@ -28,7 +28,7 @@
 #include <QtCore/QVector>
 #include <QtCore/QString>
 
-#include "debuggerexport.h"
+#include <debugger/debuggerexport.h>
 
 namespace KDevelop {
 

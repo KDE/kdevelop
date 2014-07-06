@@ -23,7 +23,7 @@
 
 #include "../editor/rangeinrevision.h"
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop
 {

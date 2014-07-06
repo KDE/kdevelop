@@ -18,7 +18,7 @@
 #ifndef KDEVPLATFORM_CODECOMPLETIONHELPER_H
 #define KDEVPLATFORM_CODECOMPLETIONHELPER_H
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 #include "../duchain/duchainpointer.h"
 #include "../duchain/declaration.h"
 

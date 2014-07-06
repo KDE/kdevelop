@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_DUCHAINLOCK_H
 #define KDEVPLATFORM_DUCHAINLOCK_H
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop
 {

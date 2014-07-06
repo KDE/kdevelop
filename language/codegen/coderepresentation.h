@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_CODEREPRESENTATION_H
 #define KDEVPLATFORM_CODEREPRESENTATION_H
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 #include <language/duchain/indexedstring.h>
 
 #include <ktexteditor/configinterface.h>

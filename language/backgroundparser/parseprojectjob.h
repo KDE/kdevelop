@@ -22,7 +22,7 @@
 #include <kjob.h>
 #include <kurl.h>
 #include <language/duchain/indexedstring.h>
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop {
 class ReferencedTopDUContext;

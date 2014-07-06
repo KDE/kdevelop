@@ -27,7 +27,7 @@
 #include <QColor>
 #include <QtCore/QWeakPointer>
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 #include <kdeversion.h>
 

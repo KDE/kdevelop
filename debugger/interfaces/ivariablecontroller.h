@@ -22,10 +22,10 @@
 #define KDEVPLATFORM_IVARIABLECONTROLLER_H
 
 #include <QtCore/QObject>
-class QString;
 
-#include "debuggerexport.h"
 #include "idebugsession.h"
+
+class QString;
 
 namespace KTextEditor {
 class Document;

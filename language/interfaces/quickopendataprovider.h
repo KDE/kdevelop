@@ -27,7 +27,7 @@
 #include <KDE/KUrl>
 
 #include <ksharedptr.h>
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 class QString;
 class QStringList;

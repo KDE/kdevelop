@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_DUMPCHAIN_H
 #define KDEVPLATFORM_DUMPCHAIN_H
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop
 {

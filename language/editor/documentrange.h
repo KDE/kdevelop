@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_DOCUMENTRANGE_H
 #define KDEVPLATFORM_DOCUMENTRANGE_H
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 #include "simplerange.h"
 #include <language/duchain/indexedstring.h>
 #include "rangeinrevision.h"

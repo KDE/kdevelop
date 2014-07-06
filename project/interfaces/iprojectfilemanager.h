@@ -25,7 +25,7 @@
 
 #include <QtCore/QStringList>
 
-#include "projectexport.h"
+#include <project/projectexport.h>
 
 #include <util/path.h>
 

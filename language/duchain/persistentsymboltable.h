@@ -19,7 +19,7 @@
 #include <util/kdevvarlengtharray.h>
 #include <util/convenientfreelist.h>
 #include <language/util/setrepository.h>
-#include "languageexport.h"
+#include <language/languageexport.h>
 #include "declaration.h"
 #include "ducontext.h"
 #include "topducontext.h"

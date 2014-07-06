@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_RANGEINREVISION_H
 #define KDEVPLATFORM_RANGEINREVISION_H
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 #include "cursorinrevision.h"
 #include "simplerange.h"
 

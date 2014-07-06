@@ -21,10 +21,13 @@
 
 #include <kurl.h>
 
-#include "../editor/simplerange.h"
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 #include "interfaces/isourceformatter.h"
+
+namespace KTextEditor {
+class Document;
+}
 
 namespace KDevelop {
 

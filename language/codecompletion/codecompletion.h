@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_CODECOMPLETION_H
 
 #include <QtCore/QObject>
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 namespace KParts { class Part; }
 namespace KTextEditor { class Document; class View; class CodeCompletionModel; 

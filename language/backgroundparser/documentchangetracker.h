@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_DOCUMENTCHANGETRACKER_H
 #define KDEVPLATFORM_DOCUMENTCHANGETRACKER_H
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 #include <QExplicitlySharedDataPointer>
 #include <QPointer>
 #include <QPair>

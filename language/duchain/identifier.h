@@ -25,7 +25,7 @@
 #include <QtCore/QMetaType>
 #include <util/kdevvarlengtharray.h>
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 #include "referencecounting.h"
 
 //We use shared d-pointers, which is even better than a d-pointer, but krazy probably won't get it, so exclude the test.

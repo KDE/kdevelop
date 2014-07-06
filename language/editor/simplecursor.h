@@ -19,7 +19,7 @@
 #define KDEVPLATFORM_SIMPLECURSOR_H
 
 #include <ktexteditor/cursor.h>
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop {
 

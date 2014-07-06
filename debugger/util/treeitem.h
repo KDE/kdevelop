@@ -30,8 +30,7 @@
 
 #include <iostream>
 
-#include "debuggerexport.h"
-//#include <KDebug>
+#include <debugger/debuggerexport.h>
 
 namespace KDevelop {
 

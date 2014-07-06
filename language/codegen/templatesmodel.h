@@ -23,7 +23,7 @@
 
 #include <QStandardItemModel>
 
-#include "languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop
 {

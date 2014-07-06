@@ -16,7 +16,7 @@
 
 #include <set>
 #include <vector>
-#include "languageexport.h"
+#include <language/languageexport.h>
 #include <language/duchain/repositories/itemrepository.h>
 
 /**

@@ -21,7 +21,7 @@
 #define KDEVPLATFORM_ABSTRACTFUNCTIONDECLARATION_H
 
 #include <QtCore/QString>
-#include "languageexport.h"
+#include <language/languageexport.h>
 #include "indexedducontext.h"
 
 namespace KDevelop
