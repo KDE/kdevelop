@@ -44,12 +44,12 @@ public:
     ~SimplePThreadMutex() {
         pthread_mutex_destroy(&m_mutex);
     }
-    void lockInline() {
+    void lock() {
         int result = pthread_mutex_lock(&m_mutex);
         Q_ASSERT(result == 0);
         Q_UNUSED(result);
     }
-    void unlockInline() {
+    void unlock() {
         int result = pthread_mutex_unlock(&m_mutex);
         Q_ASSERT(result == 0);
         Q_UNUSED(result);
