@@ -101,7 +101,7 @@ void lockForegroundMutexInternal() {
         // We already have the mutex
         ++recursion;
     }else{
-        internalMutex.lockInline();
+        internalMutex.lock();
         Q_ASSERT(recursion == 0 && holderThread == 0);
         holderThread = QThread::currentThread();
         recursion = 1;
@@ -134,7 +134,7 @@ void unlockForegroundMutexInternal() {
     if(recursion == 0)
     {
         holderThread = 0;
-        internalMutex.unlockInline();
+        internalMutex.unlock();
     }
 }
 }
