@@ -1281,7 +1281,7 @@ CodeCompletionContext::AccessType CodeCompletionContext::accessType() const {
 }
 
 CodeCompletionContext* CodeCompletionContext::parentContext() const {
-  return KSharedPtr<CodeCompletionContext>::staticCast(m_parentContext).data();
+  return static_cast<CodeCompletionContext*>(m_parentContext.data());
 }
 
 void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer >& overridable, CodeCompletionContext::Ptr completionContext, int depth = 0) {
@@ -1310,7 +1310,7 @@ void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType
 
 // #ifndef TEST_COMPLETION
 
-QList< KSharedPtr< KDevelop::CompletionTreeElement > > CodeCompletionContext::ungroupedElements() {
+QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > > CodeCompletionContext::ungroupedElements() {
   return m_storedUngroupedItems;
 }
 
@@ -1409,7 +1409,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::returnAccessCompletionIt
 
   AbstractType::Ptr returnType = functionReturnType(m_duContext.data());
   if (returnType)
-    items << CompletionTreeItemPointer( new TypeConversionCompletionItem( "return " + returnType->toString(), returnType->indexed(), depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
+    items << CompletionTreeItemPointer( new TypeConversionCompletionItem( "return " + returnType->toString(), returnType->indexed(), depth(), Cpp::CodeCompletionContext::Ptr(this) ) );
   return items;
 }
 
@@ -1441,7 +1441,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::caseAccessCompletionItem
   LOCKDUCHAIN; if (!m_duContext) return items;
 
   if (switchExprType.abstractType())
-    items << CompletionTreeItemPointer( new TypeConversionCompletionItem( "case " + switchExprType.abstractType()->toString(), switchExprType, depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
+    items << CompletionTreeItemPointer( new TypeConversionCompletionItem( "case " + switchExprType.abstractType()->toString(), switchExprType, depth(), Cpp::CodeCompletionContext::Ptr(this) ) );
   return items;
 }
 
@@ -1525,7 +1525,7 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::binaryFunctionAccessCo
     IntegralType::Ptr t(new IntegralType(IntegralType::TypeInt));
     t->setModifiers(IntegralType::UnsignedModifier);
     QString showName = "operator []";
-    items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, t->indexed(), depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
+    items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, t->indexed(), depth(), Cpp::CodeCompletionContext::Ptr(this) ) );
   }
 
   if( m_operator == "=" || integral ) {
@@ -1540,7 +1540,7 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::binaryFunctionAccessCo
       if(decl)
         showName = decl->toString() + " " + m_operator;
     }
-    items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, useType, depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
+    items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, useType, depth(), Cpp::CodeCompletionContext::Ptr(this) ) );
   }
 
   return items;
@@ -1565,7 +1565,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::functionAccessCompletion
       m_knownArgumentExpressions.isEmpty())
   {
       QString showName = m_expressionResult.type.abstractType()->toString() + "(";
-      items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, m_expressionResult.type, depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
+      items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, m_expressionResult.type, depth(), Cpp::CodeCompletionContext::Ptr(this) ) );
   }
 
   return items;
@@ -1962,7 +1962,7 @@ void CodeCompletionContext::addCPPBuiltin()
     PointerType::Ptr thisPointer(new PointerType());
     thisPointer->setModifiers(AbstractType::ConstModifier);
     thisPointer->setBaseType(classType);
-    KSharedPtr<TypeConversionCompletionItem> item( new TypeConversionCompletionItem("this", thisPointer->indexed(), 0, KSharedPtr <Cpp::CodeCompletionContext >(this)) );
+    QExplicitlySharedDataPointer<TypeConversionCompletionItem> item( new TypeConversionCompletionItem("this", thisPointer->indexed(), 0, Cpp::CodeCompletionContext::Ptr(this)) );
     item->setPrefix(thisPointer->toString());
     QList<CompletionTreeItemPointer> lst;
     lst += CompletionTreeItemPointer(item.data());
@@ -2135,7 +2135,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
     ret << KDevelop::CompletionTreeItemPointer(
       new ImplementationHelperItem( ImplementationHelperItem::CreateDefinition,
                                     DeclarationPointer(decl),
-                                    KSharedPtr<CodeCompletionContext>(this)));
+                                    QExplicitlySharedDataPointer<CodeCompletionContext>(this)));
   }
 
   foreach(DUContext* child, context->childContexts()) {
@@ -2340,7 +2340,7 @@ int CodeCompletionContext::matchPosition() const {
   return m_knownArgumentExpressions.count();
 }
 
-void CodeCompletionContext::eventuallyAddGroup(QString name, int priority, QList< KSharedPtr< KDevelop::CompletionTreeItem > > items) {
+void CodeCompletionContext::eventuallyAddGroup(QString name, int priority, QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeItem > > items) {
   if(items.isEmpty())
     return;
   KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(name, priority);
@@ -2348,12 +2348,12 @@ void CodeCompletionContext::eventuallyAddGroup(QString name, int priority, QList
   m_storedUngroupedItems << CompletionTreeElementPointer(node);
 }
 
-QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywordCompletionItems() {
+QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywordCompletionItems() {
   QList<CompletionTreeItemPointer> ret;
   #ifdef TEST_COMPLETION
   return ret;
   #endif
-  #define ADD_TYPED_TOKEN_S(X, type) ret << CompletionTreeItemPointer( new TypeConversionCompletionItem(X, type, 0, KSharedPtr<Cpp::CodeCompletionContext>(this)) )
+  #define ADD_TYPED_TOKEN_S(X, type) ret << CompletionTreeItemPointer( new TypeConversionCompletionItem(X, type, 0, QExplicitlySharedDataPointer<Cpp::CodeCompletionContext>(this)) )
   #define ADD_TYPED_TOKEN(X, type) ADD_TYPED_TOKEN_S(#X, type)
   
   #define ADD_TOKEN(X) ADD_TYPED_TOKEN(X, KDevelop::IndexedType())

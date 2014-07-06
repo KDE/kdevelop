@@ -198,7 +198,7 @@ private:
     void mergeDefines(CppPreprocessEnvironment& env) const;
   
     bool m_needUpdateEverything;
-    KSharedPtr<Cpp::EnvironmentFile> m_proxyEnvironmentFile;
+    QExplicitlySharedDataPointer<Cpp::EnvironmentFile> m_proxyEnvironmentFile;
     PreprocessJob* m_parentPreprocessor;
     ParseSession::Ptr m_session;
     ThreadWeaver::JobPointer m_preprocessJob;
@@ -210,7 +210,7 @@ private:
     
     //The following two members are used when simplified-matching is used, which means that one content-context and one specialized context will be used.
     KDevelop::ReferencedTopDUContext m_updatingContentContext;
-    KSharedPtr<Cpp::EnvironmentFile> m_contentEnvironmentFile;
+    QExplicitlySharedDataPointer<Cpp::EnvironmentFile> m_contentEnvironmentFile;
 
     mutable QList<ProblemPointer> m_preprocessorProblems;
   

@@ -1264,13 +1264,13 @@ void TestCppCodeCompletion::testSignalSlotExecution()
         v->setCursorPosition( c );
 
         CompletionItemTester complCtx( context, "connect( this, SIGNAL(", "", CursorInRevision( c.line(), c.column() ) );
-        KSharedPtr<CompletionTreeItem> item;
+        QExplicitlySharedDataPointer<CompletionTreeItem> item;
         for( int i = 0; i < complCtx.items.length(); ++i ) {
             if( complCtx.itemData( i ).toString() == "signal1" ) {
                 item = complCtx.items.at( i );
             }
         }
-        QVERIFY( !item.isNull() );
+        QVERIFY( !item );
 
         item->execute( v, Range( c, 0 ) );
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT() ); } };") );
@@ -1283,13 +1283,13 @@ void TestCppCodeCompletion::testSignalSlotExecution()
         v->setCursorPosition( c );
 
         CompletionItemTester complCtx( context, "connect( this, SIGNAL(signal1(void*,char)), SLOT(", "", CursorInRevision( c.line(), c.column() ) );
-        KSharedPtr<CompletionTreeItem> item;
+        QExplicitlySharedDataPointer<CompletionTreeItem> item;
         for( int i = 0; i < complCtx.items.length(); ++i ) {
             if( complCtx.itemData( i ).toString() == "slot2" ) {
                 item = complCtx.items.at( i );
             }
         }
-        QVERIFY( !item.isNull() );
+        QVERIFY( !item );
 
         item->execute( v, Range( c, 0 ) );
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot2(void*)) ); } };") );
@@ -1303,13 +1303,13 @@ void TestCppCodeCompletion::testSignalSlotExecution()
         lock.unlock();
         CompletionItemTester complCtx( context, "connect( this, SIGNAL(signal1(void*,char)), SLOT(", "slot3", CursorInRevision( c.line(), c.column() ) );
         qDebug() << "TEST3 names: " << complCtx.names;
-        KSharedPtr<CompletionTreeItem> item;
+        QExplicitlySharedDataPointer<CompletionTreeItem> item;
         for( int i = 0; i < complCtx.items.length(); ++i ) {
             if( complCtx.itemData( i ).toString() == "slot3" ) {
                 item = complCtx.items.at( i );
             }
         }
-        QVERIFY( !item.isNull() );
+        QVERIFY( !item );
 
         item->execute( v, Range( c, 0 ) );
         lock.lock();
@@ -1339,7 +1339,7 @@ void TestCppCodeCompletion::testAssistant() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->problems().count(), 1);
     {
-      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
+      QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
       QVERIFY(mdp);
       kDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
@@ -1356,7 +1356,7 @@ void TestCppCodeCompletion::testAssistant() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->problems().count(), 3);
     {
-      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
+      QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
       QVERIFY(mdp);
       kDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
@@ -1367,7 +1367,7 @@ void TestCppCodeCompletion::testAssistant() {
     }
     {
       ///@todo Make this work as well
-/*      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[1].data()) );
+/*      QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[1].data()) );
       QVERIFY(mdp);
       kDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
@@ -1378,7 +1378,7 @@ void TestCppCodeCompletion::testAssistant() {
       QCOMPARE(context->childContexts().count(), 3);*/
     }
     {
-      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[2].data()) );
+      QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[2].data()) );
       QVERIFY(mdp);
       kDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
@@ -1397,7 +1397,7 @@ void TestCppCodeCompletion::testAssistant() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->problems().count(), 1);
     {
-      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
+      QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
       QVERIFY(mdp);
       kDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
@@ -2018,7 +2018,7 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
   {
     Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(top), "; ", QString(), top->range().end) );
     bool abort = false;
-    typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
+    typedef CompletionTreeItemPointer Item;
     
     QList <Item > items = cptr->completionItems(abort);
     foreach(Item i, items) {
@@ -2034,7 +2034,7 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
   {
     Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(top->childContexts()[3]), "; ", QString(), top->range().end) );
     bool abort = false;
-    typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
+    typedef KDevelop::CompletionTreeItemPointer Item;
     
     QList <Item > items = cptr->completionItems(abort);
     foreach(Item i, items) {
@@ -3212,7 +3212,7 @@ void TestCppCodeCompletion::testArgumentList()
     QCOMPARE(top->localDeclarations().size(), 1);
 
     CompletionItemTester complCtx(top, "");
-    Cpp::NormalDeclarationCompletionItem item(DeclarationPointer(top->localDeclarations().first()), KSharedPtr<KDevelop::CodeCompletionContext>(complCtx.completionContext.data()));
+    Cpp::NormalDeclarationCompletionItem item(DeclarationPointer(top->localDeclarations().first()), QExplicitlySharedDataPointer<KDevelop::CodeCompletionContext>(complCtx.completionContext.data()));
     QString ret;
     Cpp::createArgumentList(item, ret, 0);
     QCOMPARE(ret, it.value());
@@ -3441,14 +3441,14 @@ void TestCppCodeCompletion::testExecuteKeepWord()
   QVERIFY(top->problems().isEmpty());
 
   CompletionItemTester complCtx(top->childContexts().last(), "");
-  KSharedPtr<CompletionTreeItem> item;
+  QExplicitlySharedDataPointer<CompletionTreeItem> item;
   for(int i=0; i<complCtx.items.length(); ++i) {
     kDebug() << complCtx.itemData(i).toString();
     if (complCtx.itemData(i).toString()=="f") {
       item = complCtx.items.at(i);
     }
   }
-  QVERIFY(!item.isNull());
+  QVERIFY(!item);
   item->execute(v, KTextEditor::Range(3, 0, 3, 4));
 
   QFETCH(QString, expectedCode);
@@ -3504,14 +3504,14 @@ public:
   }
 };
 
-QString TestCppCodeCompletion::preprocess( const IndexedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent, bool stopAfterHeaders, KSharedPtr<Cpp::EnvironmentFile>* paramEnvironmentFile, rpp::LocationTable** returnLocationTable, PreprocessedContents* targetContents ) {
+QString TestCppCodeCompletion::preprocess( const IndexedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent, bool stopAfterHeaders, QExplicitlySharedDataPointer<Cpp::EnvironmentFile>* paramEnvironmentFile, rpp::LocationTable** returnLocationTable, PreprocessedContents* targetContents ) {
   TestPreprocessor ppc( this, included, stopAfterHeaders );
 
 
     rpp::pp preprocessor(&ppc);
     ppc.setPp( &preprocessor );
 
-    KSharedPtr<Cpp::EnvironmentFile> environmentFile;
+    QExplicitlySharedDataPointer<Cpp::EnvironmentFile> environmentFile;
     if( paramEnvironmentFile && *paramEnvironmentFile )
       environmentFile = *paramEnvironmentFile;
     else
@@ -3710,13 +3710,13 @@ void TestCppCodeCompletion::testNoQuadrupleColon()
   
   CompletionItemTester tester(top->childContexts().last());
   QVERIFY(tester.completionContext->isValid());
-  KSharedPtr<CompletionTreeItem> item;
+  QExplicitlySharedDataPointer<CompletionTreeItem> item;
   for( int i = 0; i < tester.items.length(); ++i ) {
       if( tester.itemData( i ).toString() == "Foobar" ) {
           item = tester.items.at( i );
       }
   }
-  QVERIFY( !item.isNull() );
+  QVERIFY( !item );
   
   KTextEditor::Editor* editor = KTextEditor::Editor::instance();
   QVERIFY(editor);

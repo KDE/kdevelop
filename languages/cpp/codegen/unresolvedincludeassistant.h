@@ -78,26 +78,26 @@ private:
 class MissingIncludePathProblem : public KDevelop::Problem
 {
 public:
-    using Ptr = KSharedPtr<MissingIncludePathProblem>;
+    using Ptr = QExplicitlySharedDataPointer<MissingIncludePathProblem>;
 
     MissingIncludePathProblem() = default;
     MissingIncludePathProblem(KDevelop::ProblemData& data)
       : KDevelop::Problem(data)
     {}
 
-    virtual KSharedPtr<KDevelop::IAssistant> solutionAssistant() const
+    virtual QExplicitlySharedDataPointer<KDevelop::IAssistant> solutionAssistant() const
     {
       return m_solution;
     }
 
-    void setSolutionAssistant(const KSharedPtr<KDevelop::IAssistant>& assistant)
+    void setSolutionAssistant(const QExplicitlySharedDataPointer<KDevelop::IAssistant>& assistant)
     {
       m_solution = assistant;
     }
 
 private:
     /// FIXME: persist the data for the MissingIncludePathAssistant!
-    KSharedPtr<KDevelop::IAssistant> m_solution;
+    QExplicitlySharedDataPointer<KDevelop::IAssistant> m_solution;
 };
 
 }

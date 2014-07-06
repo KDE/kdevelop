@@ -131,9 +131,9 @@ void fillEditIncludeDirectoriesContextMenu(ContextMenuExtension& extension, KDev
     if (ec && ec->currentLine().contains(QRegExp("^\\s*#include"))) {
         KDevelop::IAssistantAction::Ptr assistantAction;
         if (auto project = ICore::self()->projectController()->findProjectForUrl(ec->url())) {
-            assistantAction.attach(new Cpp::OpenProjectConfigurationAction(project));
+            assistantAction = new Cpp::OpenProjectConfigurationAction(project);
         } else {
-            assistantAction.attach(new Cpp::AddCustomIncludePathAction(IndexedString(ec->url()), QString()));
+            assistantAction = new Cpp::AddCustomIncludePathAction(IndexedString(ec->url()), QString());
         }
         auto action = assistantAction->toKAction();
         action->setText(i18n("Edit include directories"));

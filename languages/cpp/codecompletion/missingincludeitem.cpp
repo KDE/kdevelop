@@ -242,8 +242,8 @@ QStringList candidateIncludeFilesFromNameMatcher(const QList<IncludeItem>& inclu
   return result;
 }
 
-KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fromUrl, const IndexedDeclaration& decl) {
-  KSharedPtr<MissingIncludeCompletionItem> item;
+QExplicitlySharedDataPointer<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fromUrl, const IndexedDeclaration& decl) {
+  QExplicitlySharedDataPointer<MissingIncludeCompletionItem> item;
   if(decl.data()) {
     QSet<QString> temp;
     QStringList candidateFiles = candidateIncludeFiles(decl.data());
@@ -256,7 +256,7 @@ KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fro
 
     qSort<QList<KDevelop::CompletionTreeItemPointer>::iterator, DirectiveShorterThan>(items.begin(), items.end(), DirectiveShorterThan());
     if(!items.isEmpty()) {
-      item = KSharedPtr<MissingIncludeCompletionItem>(dynamic_cast<MissingIncludeCompletionItem*>(items.begin()->data()));
+      item = QExplicitlySharedDataPointer<MissingIncludeCompletionItem>(dynamic_cast<MissingIncludeCompletionItem*>(items.begin()->data()));
     }
   }
   return item;

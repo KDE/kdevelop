@@ -45,7 +45,7 @@ QtHelpProviderAbstract::QtHelpProviderAbstract(QObject *parent, const QString &c
     }
 }
 
-KSharedPtr< KDevelop::IDocumentation > QtHelpProviderAbstract::documentationForDeclaration(KDevelop::Declaration* dec) const
+QExplicitlySharedDataPointer< KDevelop::IDocumentation > QtHelpProviderAbstract::documentationForDeclaration(KDevelop::Declaration* dec) const
 {
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
     if(dec) {
@@ -80,7 +80,7 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpProviderAbstract::documentationForD
         }
     }
 
-    return KSharedPtr<KDevelop::IDocumentation>();
+    return QExplicitlySharedDataPointer<KDevelop::IDocumentation>();
 }
 
 QAbstractListModel* QtHelpProviderAbstract::indexModel() const
@@ -89,11 +89,11 @@ QAbstractListModel* QtHelpProviderAbstract::indexModel() const
     return m_engine.indexModel();
 }
 
-KSharedPtr< KDevelop::IDocumentation > QtHelpProviderAbstract::documentationForIndex(const QModelIndex& idx) const
+QExplicitlySharedDataPointer< KDevelop::IDocumentation > QtHelpProviderAbstract::documentationForIndex(const QModelIndex& idx) const
 {
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
     QString name=idx.data(Qt::DisplayRole).toString();
-    return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(name, m_engine.indexModel()->linksForKeyword(name)));
+    return QExplicitlySharedDataPointer<KDevelop::IDocumentation>(new QtHelpDocumentation(name, m_engine.indexModel()->linksForKeyword(name)));
 }
 
 void QtHelpProviderAbstract::jumpedTo(const QUrl& newUrl) const
@@ -101,14 +101,14 @@ void QtHelpProviderAbstract::jumpedTo(const QUrl& newUrl) const
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
     QMap<QString, QUrl> info;
     info.insert(newUrl.toString(), newUrl);
-    KSharedPtr<KDevelop::IDocumentation> doc(new QtHelpDocumentation(newUrl.toString(), info));
+    QExplicitlySharedDataPointer<KDevelop::IDocumentation> doc(new QtHelpDocumentation(newUrl.toString(), info));
     emit addHistory(doc);
 }
 
-KSharedPtr<KDevelop::IDocumentation> QtHelpProviderAbstract::homePage() const
+QExplicitlySharedDataPointer<KDevelop::IDocumentation> QtHelpProviderAbstract::homePage() const
 {
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
-    return KSharedPtr<KDevelop::IDocumentation>(new HomeDocumentation);
+    return QExplicitlySharedDataPointer<KDevelop::IDocumentation>(new HomeDocumentation);
 }
 
 bool QtHelpProviderAbstract::isValid() const

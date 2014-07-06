@@ -58,7 +58,7 @@ public:
   ~ParseSession();
 
   //Redefinitions from IAstContainer
-  typedef KSharedPtr<ParseSession> Ptr;
+  typedef QExplicitlySharedDataPointer<ParseSession> Ptr;
   typedef TranslationUnitAST TopAstNode;
 
   TopAstNode * topAstNode();

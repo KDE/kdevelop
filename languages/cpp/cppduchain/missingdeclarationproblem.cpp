@@ -28,8 +28,8 @@ MissingDeclarationProblem::MissingDeclarationProblem(Cpp::MissingDeclarationType
   setSeverity(ProblemData::Warning);
 }
 
-KSharedPtr< KDevelop::IAssistant > Cpp::MissingDeclarationProblem::solutionAssistant() const {
-  return KSharedPtr< KDevelop::IAssistant >(new MissingDeclarationAssistant(KSharedPtr<MissingDeclarationProblem>(const_cast<MissingDeclarationProblem*>(this))));
+QExplicitlySharedDataPointer< KDevelop::IAssistant > Cpp::MissingDeclarationProblem::solutionAssistant() const {
+  return QExplicitlySharedDataPointer< KDevelop::IAssistant >(new MissingDeclarationAssistant(QExplicitlySharedDataPointer<MissingDeclarationProblem>(const_cast<MissingDeclarationProblem*>(this))));
 }
 
 }

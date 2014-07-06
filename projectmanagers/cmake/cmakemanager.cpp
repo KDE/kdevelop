@@ -802,8 +802,8 @@ QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, co
         ICMakeDocumentation* docu=CMake::cmakeDocumentation();
         if( docu )
         {
-            KSharedPtr<IDocumentation> desc=docu->description(id, url);
-            if(!desc.isNull())
+            QExplicitlySharedDataPointer<IDocumentation> desc=docu->description(id, url);
+            if(!desc)
             {
                 doc=new CMakeNavigationWidget(top, desc);
             }

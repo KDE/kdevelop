@@ -67,7 +67,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
                                                                          bool needInstance = false);
 
 ///DUChain must be locked
-KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fromUrl, const KDevelop::IndexedDeclaration& decl);
+QExplicitlySharedDataPointer<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fromUrl, const KDevelop::IndexedDeclaration& decl);
 
 }
 

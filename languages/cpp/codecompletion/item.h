@@ -61,7 +61,7 @@ void executeSignalSlotCompletionItem( KTextEditor::View* view, const KTextEditor
 //A completion item used for completion of normal declarations while normal code-completion
 class NormalDeclarationCompletionItem : public KDevelop::NormalDeclarationCompletionItem {
 public:
-  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<KDevelop::CodeCompletionContext> context=KSharedPtr<KDevelop::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0)
+  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), QExplicitlySharedDataPointer<KDevelop::CodeCompletionContext> context=QExplicitlySharedDataPointer<KDevelop::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0)
     : KDevelop::NormalDeclarationCompletionItem(decl, context, _inheritanceDepth), useAlternativeText(false), prependScopePrefix(false), listOffset(_listOffset), m_isQtSignalSlotCompletion(false), m_isTemplateCompletion(false), m_fixedMatchQuality(-1) {
   }
   
@@ -95,7 +95,7 @@ public:
   
   virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
 
-  KSharedPtr<CodeCompletionContext> completionContext() const;
+  QExplicitlySharedDataPointer<CodeCompletionContext> completionContext() const;
 
 protected:
   virtual QWidget* createExpandingWidget(const KDevelop::CodeCompletionModel* model) const;
@@ -114,7 +114,7 @@ private:
   mutable QString m_cachedTypeString;
   mutable uint m_cachedTypeStringLength;
   
-  mutable KSharedPtr<CachedArgumentList> m_cachedArgumentList;
+  mutable QExplicitlySharedDataPointer<CachedArgumentList> m_cachedArgumentList;
 };
 
 // Helper-item that manages the number of shown argument-hints
@@ -122,7 +122,7 @@ private:
 // The number is reset after resetMaxArgumentHints() was called the next time.
 class MoreArgumentHintsCompletionItem : public NormalDeclarationCompletionItem {
 public:
-  MoreArgumentHintsCompletionItem(KSharedPtr<KDevelop::CodeCompletionContext> context, QString text, uint oldNumber);
+  MoreArgumentHintsCompletionItem(KDevelop::CodeCompletionContext::Ptr context, QString text, uint oldNumber);
   
   virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) override;
   
@@ -146,7 +146,7 @@ public:
 
 class TypeConversionCompletionItem : public KDevelop::CompletionTreeItem {
   public:
-    TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth, KSharedPtr<Cpp::CodeCompletionContext> completionContext);
+    TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth, QExplicitlySharedDataPointer<Cpp::CodeCompletionContext> completionContext);
     virtual int argumentHintDepth() const;
     virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
     QList<KDevelop::IndexedType> type() const;
@@ -157,7 +157,7 @@ class TypeConversionCompletionItem : public KDevelop::CompletionTreeItem {
     QString m_text;
     KDevelop::IndexedType m_type;
     int m_argumentHintDepth;
-    KSharedPtr<Cpp::CodeCompletionContext> completionContext;
+    QExplicitlySharedDataPointer<Cpp::CodeCompletionContext> completionContext;
 };
 
 }

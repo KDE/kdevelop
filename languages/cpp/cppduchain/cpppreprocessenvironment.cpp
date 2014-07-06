@@ -21,7 +21,7 @@ void CppPreprocessEnvironment::setRecordOnlyImportantString(bool onlyImportant) 
   onlyRecordImportantMacroUses = onlyImportant;
 }
 
-CppPreprocessEnvironment::CppPreprocessEnvironment( const KSharedPtr<Cpp::EnvironmentFile>& environmentFile )
+CppPreprocessEnvironment::CppPreprocessEnvironment( const QExplicitlySharedDataPointer<Cpp::EnvironmentFile>& environmentFile )
   : Environment()
   , m_identityOffsetRestriction(0)
   , m_identityOffsetRestrictionEnabled(false)
@@ -75,11 +75,11 @@ rpp::pp_macro* CppPreprocessEnvironment::retrieveMacro(const KDevelop::IndexedSt
     return ret;
 }
 
-KSharedPtr<Cpp::EnvironmentFile> CppPreprocessEnvironment::environmentFile() const {
+QExplicitlySharedDataPointer<Cpp::EnvironmentFile> CppPreprocessEnvironment::environmentFile() const {
   return m_environmentFile;
 }
 
-void CppPreprocessEnvironment::setEnvironmentFile( const KSharedPtr<Cpp::EnvironmentFile>& environmentFile ) {
+void CppPreprocessEnvironment::setEnvironmentFile( const QExplicitlySharedDataPointer<Cpp::EnvironmentFile>& environmentFile ) {
     m_environmentFile = environmentFile;
     m_finished = false;
 }

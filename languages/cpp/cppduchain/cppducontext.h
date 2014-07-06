@@ -155,7 +155,7 @@ extern QMutex cppDuContextInstantiationsMutex;
           ExpressionEvaluationResult expressionResult;
         };
         
-        typedef KSharedPtr<State> StatePtr;
+        typedef QExplicitlySharedDataPointer<State> StatePtr;
         
         QStack<StatePtr> m_states;
         const DUContext* m_context;

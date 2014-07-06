@@ -53,7 +53,7 @@ namespace KTextEditor { class Range; }
 
 namespace Cpp {
   class EnvironmentFile;
-  typedef KSharedPtr<EnvironmentFile> EnvironmentFilePointer;
+  typedef QExplicitlySharedDataPointer<EnvironmentFile> EnvironmentFilePointer;
 }
 
 struct KDEVCPPDUCHAIN_EXPORT LineContextPair {

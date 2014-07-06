@@ -37,7 +37,7 @@ namespace KDevelop {
   class AbstractType;
 
   class CompletionTreeItem;
-  typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
+  typedef QExplicitlySharedDataPointer<CompletionTreeItem> CompletionTreeItemPointer;
   typedef QPair<Declaration*, bool> DeclAccessPair;
 }
 
@@ -62,9 +62,9 @@ namespace Cpp {
       ///@param Abort is checked regularly, and if it is false, the computation is aborted.
       virtual QList< KDevelop::CompletionTreeItemPointer > completionItems(bool& abort, bool fullCompletion = true);
       
-      virtual QList< KSharedPtr< KDevelop::CompletionTreeElement > > ungroupedElements();
+      virtual QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > > ungroupedElements();
 
-      typedef KSharedPtr<CodeCompletionContext> Ptr;
+      typedef QExplicitlySharedDataPointer<CodeCompletionContext> Ptr;
 
       typedef OverloadResolutionFunction Function;
 
@@ -210,7 +210,7 @@ namespace Cpp {
       void findExpressionAndPrefix(QString &expression, QString &expressionPrefix, bool &isTypePrefix) const;
 
       ///Create and return a parent context for the given @param expressionPrefix
-      KSharedPtr<KDevelop::CodeCompletionContext> getParentContext(const QString &expressionPrefix) const;
+      QExplicitlySharedDataPointer<KDevelop::CodeCompletionContext> getParentContext(const QString &expressionPrefix) const;
 
       ///Evaluate m_expression
       ExpressionEvaluationResult evaluateExpression() const;
@@ -272,7 +272,7 @@ namespace Cpp {
       void replaceCurrentAccess(const QString& oldAccess, const QString& newAccess);
 
       ///Creates the group and adds it to m_storedUngroupedItems if items is not empty
-      void eventuallyAddGroup(QString name, int priority, QList< KSharedPtr< KDevelop::CompletionTreeItem > > items);
+      void eventuallyAddGroup(QString name, int priority, QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeItem > > items);
       
       ///@param type The type of the argument the items are matched to.
       ///*DUChain must be locked*

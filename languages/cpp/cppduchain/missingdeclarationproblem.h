@@ -29,12 +29,12 @@ namespace Cpp {
 class KDEVCPPDUCHAIN_EXPORT MissingDeclarationProblem : public KDevelop::Problem
 {
 public:
-  typedef KSharedPtr<MissingDeclarationProblem> Ptr;
+  typedef QExplicitlySharedDataPointer<MissingDeclarationProblem> Ptr;
 
   ///@param type Must not be zero!
   MissingDeclarationProblem(MissingDeclarationType::Ptr type);
 
-  virtual KSharedPtr< KDevelop::IAssistant > solutionAssistant() const;
+  virtual QExplicitlySharedDataPointer< KDevelop::IAssistant > solutionAssistant() const;
 
   MissingDeclarationType::Ptr type;
 };

@@ -740,7 +740,7 @@ void NormalDeclarationCompletionItem::needCachedArgumentList() const
 {
   if(!m_cachedArgumentList)
   {
-    m_cachedArgumentList = KSharedPtr<CachedArgumentList>(new CachedArgumentList);
+    m_cachedArgumentList = QExplicitlySharedDataPointer<CachedArgumentList>(new CachedArgumentList);
     
     if(!m_declaration)
       return;
@@ -764,8 +764,8 @@ bool NormalDeclarationCompletionItem::createsExpandingWidget() const
   return true;
 }
 
-KSharedPtr<CodeCompletionContext> NormalDeclarationCompletionItem::completionContext() const {
-  return KSharedPtr<CodeCompletionContext>::staticCast(m_completionContext);
+QExplicitlySharedDataPointer<CodeCompletionContext> NormalDeclarationCompletionItem::completionContext() const {
+  return CodeCompletionContext::Ptr(static_cast<CodeCompletionContext*>(m_completionContext.data()));
 }
 
 void IncludeFileCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& _word)
@@ -829,10 +829,10 @@ int TypeConversionCompletionItem::argumentHintDepth() const {
   return m_argumentHintDepth;
 }
 
-TypeConversionCompletionItem::TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth, KSharedPtr<Cpp::CodeCompletionContext> _completionContext) : m_text(text), m_type(type), m_argumentHintDepth(argumentHintDepth), completionContext(_completionContext) {
+TypeConversionCompletionItem::TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth, QExplicitlySharedDataPointer<Cpp::CodeCompletionContext> _completionContext) : m_text(text), m_type(type), m_argumentHintDepth(argumentHintDepth), completionContext(_completionContext) {
 }
 
-MoreArgumentHintsCompletionItem::MoreArgumentHintsCompletionItem(KSharedPtr< KDevelop::CodeCompletionContext > context, QString text, uint oldNumber) : NormalDeclarationCompletionItem(DeclarationPointer(), context) {
+MoreArgumentHintsCompletionItem::MoreArgumentHintsCompletionItem(KDevelop::CodeCompletionContext::Ptr context, QString text, uint oldNumber) : NormalDeclarationCompletionItem(DeclarationPointer(), context) {
   alternativeText = text;
   m_oldNumber = oldNumber;
 }

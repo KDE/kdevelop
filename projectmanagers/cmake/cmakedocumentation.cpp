@@ -112,11 +112,11 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
     return desc;
 }
 
-KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const KUrl& file) const
+QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const KUrl& file) const
 {
     initializeModel(); //make it not queued
     if(!KMimeType::findByUrl(file)->is("text/x-cmake"))
-        return KSharedPtr<KDevelop::IDocumentation>();
+        return QExplicitlySharedDataPointer<KDevelop::IDocumentation>();
     
     kDebug() << "seeking documentation for " << identifier;
     QString desc;
@@ -144,17 +144,17 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
     }
     
     if(desc.isEmpty())
-        return KSharedPtr<KDevelop::IDocumentation>();
+        return QExplicitlySharedDataPointer<KDevelop::IDocumentation>();
     else
-        return KSharedPtr<KDevelop::IDocumentation>(new CMakeDoc(identifier, desc));
+        return QExplicitlySharedDataPointer<KDevelop::IDocumentation>(new CMakeDoc(identifier, desc));
 }
 
-KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::documentationForDeclaration(KDevelop::Declaration* decl) const
+QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::documentationForDeclaration(KDevelop::Declaration* decl) const
 {
     return description(decl->identifier().toString(), decl->url().toUrl());
 }
 
-KSharedPtr<KDevelop::IDocumentation > CMakeDocumentation::documentationForIndex(const QModelIndex& idx) const
+QExplicitlySharedDataPointer<KDevelop::IDocumentation > CMakeDocumentation::documentationForIndex(const QModelIndex& idx) const
 {
     return description(idx.data().toString(), KUrl("CMakeLists.txt"));
 }
@@ -175,12 +175,12 @@ QString CMakeDocumentation::name() const
     return "CMake";
 }
 
-KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::homePage() const
+QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::homePage() const
 {
     if(!m_typeForName.isEmpty())
         const_cast<CMakeDocumentation*>(this)->delayedInitialization();
 //     initializeModel();
-    return KSharedPtr<KDevelop::IDocumentation>(new CMakeHomeDocumentation);
+    return QExplicitlySharedDataPointer<KDevelop::IDocumentation>(new CMakeHomeDocumentation);
 }
 
 void CMakeDocumentation::initializeModel() const

@@ -134,7 +134,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
     reportRealProblems(true);
   }
   ~UseExpressionVisitor() {
-    typedef KSharedPtr<KDevelop::Problem> P;
+    typedef QExplicitlySharedDataPointer<KDevelop::Problem> P;
     foreach(const P& problem, realProblems())
       m_builder->addProblem(problem);
   }
@@ -147,7 +147,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
       m_builder->newUse(node, range, decl);
 
       if (decl && decl->isExplicitlyDeleted()) {
-        KSharedPtr<KDevelop::Problem> problem(new Problem);
+        QExplicitlySharedDataPointer<KDevelop::Problem> problem(new Problem);
         problem->setDescription(i18n("Use of deleted function: %1", decl->identifier().toString()));
 
         problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
@@ -335,10 +335,10 @@ void UseBuilder::visitUsing(UsingAST *node)
   UseBuilderBase::visitUsing(node);
 }
 
-void UseBuilder::addProblem(KSharedPtr< KDevelop::Problem > problem) {
+void UseBuilder::addProblem(QExplicitlySharedDataPointer< KDevelop::Problem > problem) {
   m_problems << problem;
 }
 
-QList< KSharedPtr< KDevelop::Problem > > UseBuilder::problems() const {
+QList< QExplicitlySharedDataPointer< KDevelop::Problem > > UseBuilder::problems() const {
   return m_problems;
 }

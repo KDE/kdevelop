@@ -255,7 +255,7 @@ QtHelpAlternativeLink::QtHelpAlternativeLink(const QString& name, const QtHelpDo
 
 void QtHelpAlternativeLink::showUrl()
 {
-    KSharedPtr<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(mName, mDoc->info(), mName));
+    QExplicitlySharedDataPointer<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(mName, mDoc->info(), mName));
     KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
 }
 
@@ -280,7 +280,7 @@ void HomeDocumentation::clicked(const QModelIndex& idx)
     QMap<QString, QUrl> info;
     info.insert(it->title(), it->url());
 
-    KSharedPtr<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(it->title(), info));
+    QExplicitlySharedDataPointer<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(it->title(), info));
     KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
 }
 

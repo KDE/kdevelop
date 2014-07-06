@@ -324,7 +324,7 @@ void CPPParseJob::addIncludedFile(KDevelop::ReferencedTopDUContext duChain, int 
 }
 
 void CPPParseJob::setProxyEnvironmentFile( Cpp::EnvironmentFile* file ) {
-    m_proxyEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>(file);
+    m_proxyEnvironmentFile = QExplicitlySharedDataPointer<Cpp::EnvironmentFile>(file);
 }
 
 Cpp::EnvironmentFile* CPPParseJob::proxyEnvironmentFile() {
@@ -333,7 +333,7 @@ Cpp::EnvironmentFile* CPPParseJob::proxyEnvironmentFile() {
 
 void CPPParseJob::setContentEnvironmentFile( Cpp::EnvironmentFile* file ) {
     //Q_ASSERT(!file || file->identity().flags() & IdentifiedFile::Content);
-    m_contentEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>(file);
+    m_contentEnvironmentFile = QExplicitlySharedDataPointer<Cpp::EnvironmentFile>(file);
 }
 
 void CPPParseJob::addPreprocessorProblem(const ProblemPointer problem) {
