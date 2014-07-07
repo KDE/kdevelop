@@ -24,7 +24,7 @@
 #define QMLJS_CONTEXT_H
 
 #include "codecompletionexport.h"
-#include "completionitem.h"
+#include "items/completionitem.h"
 
 #include <language/codecompletion/codecompletioncontext.h>
 #include <language/duchain/ducontext.h>

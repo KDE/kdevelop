@@ -21,9 +21,9 @@
  */
 
 #include "context.h"
-#include "completionitem.h"
-#include "modulecompletionitem.h"
-#include "functioncalltipcompletionitem.h"
+
+#include "items/modulecompletionitem.h"
+#include "items/functioncalltipcompletionitem.h"
 
 #include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>

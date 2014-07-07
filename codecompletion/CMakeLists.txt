@@ -4,9 +4,10 @@ include_directories(
 )
 
 set(completion_SRCS
-    completionitem.cpp
-    modulecompletionitem.cpp
-    functioncalltipcompletionitem.cpp
+    items/completionitem.cpp
+    items/modulecompletionitem.cpp
+    items/functioncalltipcompletionitem.cpp
+
     context.cpp
     model.cpp
     worker.cpp
