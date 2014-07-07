@@ -50,28 +50,24 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpProviderAbstract::documentationForD
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
     if(dec) {
         static const KDevelop::IndexedString qmlJs("QML/JS");
-        bool isQML = dec->topContext()->parsingEnvironmentFile()->language() == qmlJs;
+        bool isQML;
+        QStringList idParts;
         QString id;
-        if(isQML) {
-            KDevelop::DUChainReadLocker lock;
-            QString ns;
-            bool isClass = dec->abstractType()->whichType() == KDevelop::AbstractType::TypeStructure;
-            if(!isClass && dec->context() && dec->context()->owner()) {
-                ns = dec->context()->owner()->abstractType()->toString();
-                ns += "::" + dec->identifier().toString();
-            } else {
-                ns = dec->abstractType()->toString();
-            }
 
-            id = "QML." + ns;
-        } else {
+        {
             KDevelop::DUChainReadLocker lock;
-            KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
-            lock.unlock();
-            id = qid.toStringList().join("::");
+            isQML = dec->topContext()->parsingEnvironmentFile()->language() == qmlJs;
+            idParts = dec->qualifiedIdentifier().toStringList();
         }
 
-        if(!id.isEmpty()) {
+        if(isQML && !idParts.isEmpty()) {
+            idParts.removeFirst(); // Skip the namespace (QtQuick2.0, etc)
+            id = QLatin1String("QML.");
+        }
+
+        id += idParts.join(QLatin1String("::"));
+
+        if(!idParts.isEmpty()) {
             QMap<QString, QUrl> links=m_engine.linksForIdentifier(id);
 
             kDebug() << "doc_found" << id << links;
