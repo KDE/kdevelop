@@ -159,7 +159,7 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
         QmlJS::FunctionDeclaration* d = reinterpret_cast<QmlJS::FunctionDeclaration*>(decl);
 
         d->setPrototypeContext(openContext(
-            node,
+            node + 2,       // Don't call setContextOnNode on node, only the body context can be associated with node
             nameRange,
             DUContext::Class,
             QualifiedIdentifier(name)
@@ -170,7 +170,7 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
     // Parameters, if any (a function must always have an interal function context,
     // so always open a context here even if there are no parameters)
     DUContext* parametersContext = openContext(
-        node,
+        node + 1,       // Don't call setContextOnNode on node, only the body context can be associated with node
         parametersRange,
         DUContext::Function,
         name

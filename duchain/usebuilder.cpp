@@ -28,6 +28,27 @@ UseBuilder::UseBuilder(ParseSession* session)
 : UseBuilderBase()
 {
     m_session = session;
+    m_nodesThatOpenedContexts.push(nullptr);    // One push here, a thousand isEmpty() calls avoided later
+}
+
+bool UseBuilder::preVisit(QmlJS::AST::Node* node)
+{
+    DUContext* ctx = contextFromNode(node);
+
+    if (ctx && currentContext() != ctx) {
+        openContext(ctx);
+        m_nodesThatOpenedContexts.push(node);
+    }
+
+    return true;
+}
+
+void UseBuilder::postVisit(QmlJS::AST::Node* node)
+{
+    if (m_nodesThatOpenedContexts.top() == node) {
+        closeContext();
+        m_nodesThatOpenedContexts.pop();
+    }
 }
 
 bool UseBuilder::visit(QmlJS::AST::FieldMemberExpression* node)
@@ -59,7 +80,7 @@ void UseBuilder::useForExpression(QmlJS::AST::Node* node, const KDevelop::RangeI
     // ExpressionVisitor can find the type and corresponding declaration of many
     // kinds of expressions (identifiers, field members, special identifiers like
     // this or parent, etc).
-    ExpressionVisitor visitor(contextOnNode(node));
+    ExpressionVisitor visitor(currentContext());
 
     node->accept(&visitor);
 
@@ -73,13 +94,4 @@ void UseBuilder::useForExpression(QmlJS::AST::Node* node, const KDevelop::RangeI
             visitor.lastDeclaration()
         );
     }
-}
-
-DUContext* UseBuilder::contextOnNode(QmlJS::AST::Node* node) const
-{
-    DUChainReadLocker lock;
-
-    return topContext()->findContextAt(
-        m_session->locationToRange(node->firstSourceLocation()).start
-    );
 }

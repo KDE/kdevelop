@@ -3,12 +3,12 @@
  */
 function Class(a, b) {
     /**
-     * "useCount" : 5
+     * "useCount" : 4
      */
     this.a = a;
 
     /**
-     * "useCount" : 2
+     * "useCount" : 1
      */
     this.b = b;
 }

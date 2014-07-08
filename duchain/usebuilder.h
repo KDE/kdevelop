@@ -20,6 +20,7 @@
 #define USEBUILDER_H
 
 #include <language/duchain/builders/abstractusebuilder.h>
+#include <QtCore/QStack>
 
 #include "contextbuilder.h"
 
@@ -32,6 +33,12 @@ public:
 
 protected:
     using Visitor::visit;
+    using Visitor::preVisit;
+    using Visitor::postVisit;
+
+    virtual bool preVisit(QmlJS::AST::Node* node);
+    virtual void postVisit(QmlJS::AST::Node* node);
+
     virtual bool visit(QmlJS::AST::FieldMemberExpression* node);
     virtual bool visit(QmlJS::AST::IdentifierExpression* node);
     virtual bool visit(QmlJS::AST::UiQualifiedId* node);
@@ -39,7 +46,9 @@ protected:
 
 private:
     void useForExpression(QmlJS::AST::Node* node, const KDevelop::RangeInRevision &range = KDevelop::RangeInRevision::invalid());
-    KDevelop::DUContext* contextOnNode(QmlJS::AST::Node* node) const;
+
+private:
+    QStack<QmlJS::AST::Node*> m_nodesThatOpenedContexts;
 };
 
 #endif // USEBUILDER_H

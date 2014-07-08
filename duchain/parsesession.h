@@ -178,7 +178,7 @@ private:
     QmlJS::Document::MutablePtr m_doc;
     int m_ownPriority;
 
-    typedef QHash<QmlJS::AST::Node*, KDevelop::DUContext*> NodeToContextHash;
+    typedef QHash<QmlJS::AST::Node*, KDevelop::DUContextPointer> NodeToContextHash;
     NodeToContextHash m_astToContext;
 
     typedef QHash<QString, KDevelop::ReferencedTopDUContext> ModuleToContextHash;

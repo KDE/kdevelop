@@ -196,12 +196,12 @@ RangeInRevision ParseSession::editorFindRange(QmlJS::AST::Node* fromNode, QmlJS:
 
 void ParseSession::setContextOnNode(QmlJS::AST::Node* node, DUContext* context)
 {
-    m_astToContext.insert(node, context);
+    m_astToContext.insert(node, DUContextPointer(context));
 }
 
 DUContext* ParseSession::contextFromNode(QmlJS::AST::Node* node) const
 {
-    return m_astToContext.value(node);
+    return m_astToContext.value(node, DUContextPointer()).data();
 }
 
 ReferencedTopDUContext ParseSession::contextOfModule(const QString& module)
