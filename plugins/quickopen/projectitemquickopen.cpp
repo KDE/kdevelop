@@ -223,10 +223,16 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const
     if(ctx) {
         QList<Declaration*> decls = ctx->findDeclarations(m_filteredItems[a].m_id, CursorInRevision::invalid(), AbstractType::Ptr(), 0, DUContext::DirectQualifiedLookup);
 
-        //Filter out forward-declarations
+        //Filter out forward-declarations or duplicate imported declarations
         foreach(Declaration* decl, decls) {
-            if(decl->isForwardDeclaration() && decls.size() > 1) {
-                decls.removeAll(decl);
+            bool filter = false;
+            if (decls.size() > 1 && decl->isForwardDeclaration()) {
+                filter = true;
+            } else if (decl->url() != m_filteredItems[a].m_file && m_files.contains(decl->url())) {
+                filter = true;
+            }
+            if (filter) {
+                decls.removeOne(decl);
             }
         }
 
@@ -235,7 +241,7 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const
             item.m_item = decl;
             item.m_text = decl->qualifiedIdentifier().toString();
             //item.m_project =  .. @todo fill
-            ret << QuickOpenDataPointer(new DUChainItemData(item, true));
+            ret << QuickOpenDataPointer(new DUChainItemData(item));
         }
         if(decls.isEmpty()) {
             DUChainItem item;
@@ -276,12 +282,12 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const
 
 void ProjectItemDataProvider::reset()
 {
-    const QSet<IndexedString> files = m_quickopen->fileSet();
+    m_files = m_quickopen->fileSet();
     m_currentItems.clear();
     m_addedItems.clear();
 
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
-    foreach( const IndexedString& u, files ) {
+    foreach( const IndexedString& u, m_files ) {
         uint count;
         const KDevelop::CodeModelItem* items;
         CodeModel::self().items( u, count, items );
@@ -341,6 +347,7 @@ QStringList ProjectItemDataProvider::supportedItemTypes()
 
 void ProjectItemDataProvider::enableData( const QStringList& items, const QStringList& scopes )
 {
+    //FIXME: property support different scopes
     if(scopes.contains(i18n("Project"))) {
         m_itemTypes = NoItems;
         if(items.contains(i18n("Classes"))) {

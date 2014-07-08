@@ -557,7 +557,7 @@ void OutputWidget::rowsInserted(const QModelIndex& parent, int from, int to) {
 
     foreach (QTreeView* view, views) {
         if (view->model() == model) {
-            auto data = m_scrollDelay[view];
+            auto& data = m_scrollDelay[view];
             if (data.from == -1) {
                 data.from = from;
             }
@@ -580,6 +580,7 @@ void OutputWidget::delayedScroll()
 
 void OutputWidget::delayedScroll(QTreeView* view)
 {
+    Q_ASSERT(m_scrollDelay.contains(view));
     auto& data = m_scrollDelay[view];
 
     QModelIndex pre = view->model()->index(data.from - 1, 0);

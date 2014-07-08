@@ -62,8 +62,16 @@ public:
         return start == end;
     }
 
-    bool contains(const CursorInRevision& position) const {
-        return position >= start && position < end;
+    enum ContainsBehavior {
+        Default = 0,
+        IncludeBackEdge = 1
+    };
+    /**
+     * Checks if @p position is contained within this range (i.e. >= start and < end)
+     * If @p cb is IncludeBackEdge, also checks that @p position == end
+     */
+    bool contains(const CursorInRevision& position, ContainsBehavior cb = Default) const {
+        return (position >= start && position < end) || (cb == IncludeBackEdge && position == end );
     }
 
     bool contains(const RangeInRevision& range) const {
