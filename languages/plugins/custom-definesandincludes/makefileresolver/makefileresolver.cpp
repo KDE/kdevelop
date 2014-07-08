@@ -60,7 +60,7 @@
 #include <language/duchain/indexedstring.h>
 #include <util/pushvalue.h>
 
-//#define VERBOSE
+#define VERBOSE
 
 #if defined(TEST) || defined(VERBOSE)
 #define ifTest(x) x
@@ -96,10 +96,6 @@ namespace {
   static Cache s_cache;
   static QMutex s_cacheMutex;
 }
-
-
-
-namespace CppTools {
 
   ///Helper-class used to fake file-modification times
   class FileModificationTimeWrapper
@@ -291,9 +287,6 @@ PathResolutionResult::operator bool() const
 {
     return success;
 }
-}
-
-using namespace CppTools;
 
 ModificationRevisionSet MakeFileResolver::findIncludePathDependency(const QString& file)
 {
@@ -375,7 +368,7 @@ KUrl MakeFileResolver::mapToBuild(const KUrl& url) const
   return KUrl(wd);
 }
 
-void CppTools::MakeFileResolver::clearCache()
+void MakeFileResolver::clearCache()
 {
   QMutexLocker l(&s_cacheMutex);
   s_cache.clear();

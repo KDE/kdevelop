@@ -33,6 +33,7 @@
 #include "settingsmanager.h"
 
 class NoProjectIncludePathsManager;
+class MakeFileResolver;
 
 namespace KDevelop
 {
@@ -57,11 +58,14 @@ public :
 
     virtual bool unregisterProvider( Provider* provider ) override;
 
-    virtual void openConfigurationDialog( const QString& pathToFile );
+    virtual void openConfigurationDialog( const QString& pathToFile ) override;
+
+    virtual Path::List includesInBackground( const QString& path ) const override;
 
 private:
     QVector<Provider*> m_providers;
     QScopedPointer<NoProjectIncludePathsManager> m_noProjectIPM;
+    QScopedPointer<MakeFileResolver> m_makeFileResolver;
 };
 }
 #endif // CUSTOMDEFINESANDINCLUDESMANAGER_H

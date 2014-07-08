@@ -23,7 +23,6 @@
 #include <interfaces/iuicontroller.h>
 #include <kparts/mainwindow.h>
 #include <kmessagebox.h>
-#include <makefileresolver.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <custom-definesandincludes/idefinesandincludesmanager.h>

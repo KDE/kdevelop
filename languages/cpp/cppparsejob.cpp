@@ -274,9 +274,6 @@ CPPParseJob::~CPPParseJob()
 }
 
 KDevelop::ModificationRevisionSet CPPParseJob::includePathDependencies() const {
-  if(m_includePathsComputed)
-    return m_includePathsComputed->m_includePathDependency;
-
   return KDevelop::ModificationRevisionSet();
 }
 

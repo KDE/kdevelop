@@ -98,6 +98,10 @@ public:
     ///NOTE: call it from the foreground thread only.
     virtual Path::List includes( const QString& path ) const = 0;
 
+    /// Computes include directories in background thread. This is especially useful for CustomMake projects. Also it could be used as the last resort method if project manager didn't return any include paths.
+    ///NOTE: call it from background thread only.
+    virtual Path::List includesInBackground( const QString& path ) const = 0;
+
     ///@return the instance of the plugin.
     inline static IDefinesAndIncludesManager* manager();
 
@@ -119,12 +123,13 @@ public:
 
 inline IDefinesAndIncludesManager* IDefinesAndIncludesManager::manager()
 {
-    auto manager = KDevelop::ICore::self()->pluginController()->pluginForExtension( "org.kdevelop.IDefinesAndIncludesManager" );
-    if ( !manager ) {
-        return nullptr;
-    }
+    static auto manager = KDevelop::ICore::self()->pluginController()->pluginForExtension( "org.kdevelop.IDefinesAndIncludesManager" );
 
-    return manager->extension<KDevelop::IDefinesAndIncludesManager>();
+    Q_ASSERT(manager);
+
+    static auto extension = manager->extension<KDevelop::IDefinesAndIncludesManager>();
+
+    return extension;
 }
 
 }

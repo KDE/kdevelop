@@ -24,6 +24,7 @@
 #include "settingsmanager.h"
 
 #include "noprojectincludesanddefines/noprojectincludepathsmanager.h"
+#include "makefileresolver/makefileresolver.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -92,6 +93,7 @@ KAboutData::License_GPL)))
 DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
     : IPlugin( DefinesAndIncludesManagerFactory::componentData(), parent )
     , m_noProjectIPM(new NoProjectIncludePathsManager())
+    , m_makeFileResolver(new MakeFileResolver())
 {
     KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
 }
@@ -215,6 +217,13 @@ void DefinesAndIncludesManager::openConfigurationDialog(const QString& pathToFil
     } else {
         m_noProjectIPM->openConfigurationDialog(pathToFile);
     }
+}
+
+Path::List DefinesAndIncludesManager::includesInBackground(const QString& path) const
+{
+    Q_ASSERT(QThread::currentThread() != qApp->thread());
+
+    return toPathList(m_makeFileResolver->resolveIncludePath(path).paths);
 }
 
 }
