@@ -51,9 +51,11 @@ protected:
     virtual bool visit(QmlJS::AST::BinaryExpression* node);
     virtual bool visit(QmlJS::AST::IdentifierExpression* node);
     virtual bool visit(QmlJS::AST::UiQualifiedId* node);
+    virtual bool visit(QmlJS::AST::ThisExpression* node);
 
     virtual bool visit(QmlJS::AST::FunctionExpression* node);
     virtual bool visit(QmlJS::AST::CallExpression* node);
+    virtual bool visit(QmlJS::AST::NewMemberExpression* node);
 
 private:
     using KDevelop::DynamicLanguageExpressionVisitor::encounter;
@@ -63,6 +65,7 @@ private:
     void encounter(const QString &declaration, KDevelop::DUContext* context = nullptr);
     void encounterFieldMember(const QString &name);
     void encounterObjectAtLocation(const QmlJS::AST::SourceLocation &location);
+    void instantiateCurrentDeclaration();   /*!< @brief Encounter a StructureType whose declaration is currentDeclaration() */
 
 };
 

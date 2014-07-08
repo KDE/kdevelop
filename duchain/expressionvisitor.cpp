@@ -159,6 +159,29 @@ bool ExpressionVisitor::visit(QmlJS::AST::UiQualifiedId* node)
     return false;
 }
 
+bool ExpressionVisitor::visit(QmlJS::AST::ThisExpression* node)
+{
+    Q_UNUSED(node)
+    DUChainReadLocker lock;
+    DUContext* internalContext;
+
+    // "this" points to the current function (not semantically valid in JS,
+    // but this allows ExpressionVisitor to see the declarations of the
+    // function's prototype)
+    if (m_context->type() == DUContext::Other &&
+        m_context->owner() &&
+        (internalContext = QmlJS::getInternalContext(DeclarationPointer(m_context->owner()))) &&
+        internalContext->owner() &&
+        internalContext->owner()->abstractType()) {
+        encounterLvalue(DeclarationPointer(internalContext->owner()));
+        instantiateCurrentDeclaration();
+    } else {
+        encounterNothing();
+    }
+
+    return false;
+}
+
 /*
  * Functions
  */
@@ -184,6 +207,21 @@ bool ExpressionVisitor::visit(QmlJS::AST::CallExpression* node)
     return false;
 }
 
+bool ExpressionVisitor::visit(QmlJS::AST::NewMemberExpression* node)
+{
+    // Find the type of the function used as constructor, and build a
+    // StructureType representing an instance of this function.
+    node->base->accept(this);
+
+    if (lastDeclaration()) {
+        instantiateCurrentDeclaration();
+    } else {
+        encounterNothing();
+    }
+
+    return false;
+}
+
 void ExpressionVisitor::encounterNothing()
 {
     encounter(AbstractType::Ptr(), DeclarationPointer());
@@ -198,7 +236,7 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
 {
     DUChainReadLocker lock;
 
-    // Special-case some special names (this, parent, etc)
+    // Special-case "parent". "this" is handled by visit(ThisExpression)
     if (declaration == QLatin1String("parent") &&
         ParseSession::guessLanguageFromSuffix(m_context->topContext()->url().str()) == QmlJS::Language::Qml) {
 
@@ -238,6 +276,12 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
 
 void ExpressionVisitor::encounterFieldMember(const QString& name)
 {
+    if (name == QLatin1String("prototype")) {
+        // "prototype" is transparent: "object.prototype.foo" = "object.foo", and
+        // "function.prototype" should point to "function".
+        return;
+    }
+
     DeclarationPointer declaration = lastDeclaration();
     DUContext* context = QmlJS::getInternalContext(declaration);
 
@@ -263,4 +307,16 @@ void ExpressionVisitor::encounterObjectAtLocation(const QmlJS::AST::SourceLocati
     } else {
         encounterNothing();
     }
+}
+
+void ExpressionVisitor::instantiateCurrentDeclaration()
+{
+    StructureType::Ptr type = StructureType::Ptr(new StructureType);
+
+    {
+        DUChainReadLocker lock;
+        type->setDeclaration(lastDeclaration().data());
+    }
+
+    encounter(AbstractType::Ptr::staticCast(type), lastDeclaration());
 }

@@ -459,6 +459,11 @@ void DeclarationBuilder::declareFieldMember(const KDevelop::DeclarationPointer& 
                                             QmlJS::AST::Node* node,
                                             const QmlJS::AST::SourceLocation& location)
 {
+    if (member == QLatin1String("prototype")) {
+        // Don't declare "prototype", this is a special member
+        return;
+    }
+
     DUChainWriteLocker lock;
     QualifiedIdentifier identifier(member);
 
