@@ -59,7 +59,6 @@ KDevelop::DUContext* FunctionDeclaration::prototypeContext() const
 void FunctionDeclaration::setPrototypeContext(KDevelop::DUContext* context, bool own)
 {
     DUCHAIN_D_DYNAMIC(FunctionDeclaration);
-    Q_ASSERT(!d->m_prototypeContext.isValid());
 
     d_func_dynamic()->m_prototypeContext = KDevelop::IndexedDUContext(context);
 
