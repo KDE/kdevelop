@@ -132,6 +132,9 @@ bool ExpressionVisitor::visit(QmlJS::AST::BinaryExpression* node)
     case QSOperator::StrictNotEqual:
         encounter(IntegralType::TypeBoolean);
         break;
+    case QSOperator::Assign:
+        node->right->accept(this);
+        break;
     default:
         encounterNothing();
         break;

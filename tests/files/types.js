@@ -23,6 +23,11 @@ var b = a;
 var d = 1.0;
 
 /**
+ * "type" : { "toString" : "int" }
+ */
+var e = a = 60;
+
+/**
  * "type" : { "toString" : "array" }
  */
 var array = [1, 2, 3];
