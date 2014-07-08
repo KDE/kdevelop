@@ -27,7 +27,6 @@
 #include <tests/testproject.h>
 
 #include <language/duchain/duchain.h>
-#include <language/duchain/dumpchain.h>
 #include <language/codegen/coderepresentation.h>
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <language/duchain/duchainutils.h>

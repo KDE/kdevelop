@@ -53,6 +53,7 @@ IProject* loadProject( const QString& projectFile, const QString& projectName )
 
 void createFile( QFile& file )
 {
+    file.remove();
     if ( !file.open( QIODevice::ReadWrite ) ) {
         kFatal() << "Cannot create the file " << file.fileName();
     }

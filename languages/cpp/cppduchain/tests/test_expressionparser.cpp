@@ -28,7 +28,7 @@
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include <language/duchain/declaration.h>
-#include <language/duchain/dumpchain.h>
+#include <language/duchain/duchaindumper.h>
 #include "environmentmanager.h"
 #include "templatedeclaration.h"
 #include <rpp/chartools.h>
@@ -1465,7 +1465,8 @@ TopDUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump
     kDebug(9007) << "===== DUChain:";
 
     DUChainWriteLocker lock(DUChain::lock());
-    dumpDUContext(top);
+    DUChainDumper dumper;
+    dumper.dump(top);
   }
 
   if (dump)

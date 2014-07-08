@@ -256,6 +256,10 @@ void ProjectPathsWidget::setCompilers(const QVector<CompilerPointer>& compilers)
 {
     ui->compiler->clear();
     for (int i = 0 ; i < compilers.count(); ++i) {
+        Q_ASSERT(compilers[i]);
+        if (!compilers[i]) {
+            continue;
+        }
         ui->compiler->addItem(compilers[i]->name());
         QVariant val; val.setValue(compilers[i]);
         ui->compiler->setItemData(i, val);

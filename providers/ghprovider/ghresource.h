@@ -51,7 +51,7 @@ public:
      * @param parent The QObject this Resource is parented to.
      * @param model The model to be used in the other methods.
      */
-    Resource(QObject *parent, ProviderModel *model);
+    explicit Resource(QObject *parent, ProviderModel *model);
 
     /**
      * Search repos by calling the Github API. When successful, it will re-fill

@@ -28,7 +28,7 @@ namespace KDevelop {
 
 //Through the whole lifetime of this object, the duchain must be locked
 //Note: _nothing_ will happen until you apply the resulting changes, that can be retrieved through changes()
-class KDEVCPPDUCHAIN_EXPORT SourceCodeInsertion : public KShared
+class KDEVCPPDUCHAIN_EXPORT SourceCodeInsertion : public QSharedData
 {
 public:
   SourceCodeInsertion(KDevelop::TopDUContext* topContext);

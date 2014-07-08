@@ -57,7 +57,6 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/dumpdotgraph.h>
-#include <language/duchain/dumpchain.h>
 #include <language/interfaces/iastcontainer.h>
 
 #include <language/backgroundparser/parsejob.h>

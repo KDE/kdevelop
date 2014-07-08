@@ -93,16 +93,17 @@ void Resource::retrieveRepos(const QByteArray &data)
     if (error.error == 0) {
         QVariantList map = doc.toVariant().toList();
         m_model->clear();
-        foreach (QVariant it, map) {
-            QVariantMap map = it.toMap();
+        foreach (const QVariant &it, map) {
+            const QVariantMap &map = it.toMap();
             Response res;
             res.name = map.value("name").toString();
             res.url = map.value("clone_url").toUrl();
-            res.kind = Public;
             if (map.value("fork").toBool())
                 res.kind = Fork;
             else if (map.value("private").toBool())
                 res.kind = Private;
+            else
+                res.kind = Public;
             ProviderItem *item = new ProviderItem(res);
             m_model->appendRow(item);
         }

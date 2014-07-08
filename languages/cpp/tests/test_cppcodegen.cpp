@@ -39,7 +39,6 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
-#include <language/duchain/dumpchain.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/codemodel.h>
 #include <language/duchain/classdeclaration.h>
@@ -88,14 +87,6 @@ void dumpAST(InsertIntoDUChain& code)
     Cpp::DumpChain dump;
     dump.dump(session->topAstNode(), session.data());
 }
-
-void dumpDUChain(InsertIntoDUChain& code)
-{
-    DUChainReadLocker lock;
-    
-    KDevelop::dumpDUContext(code.topContext());
-}
-
 
 void TestCppCodegen::testAssistants()
 {
@@ -364,7 +355,7 @@ void TestCppCodegen::testSimplifiedUpdating()
     DUChainReadLocker lock;
 
     dumpAST(code);
-    dumpDUChain(code);
+
     //The forward-declaration of 'D' is forwarded into the top-context
     QCOMPARE(code->localDeclarations().size(), 2);
     Declaration* classDecl = code->localDeclarations()[0];
@@ -377,8 +368,6 @@ void TestCppCodegen::testSimplifiedUpdating()
     
     code.parse(TopDUContext::AllDeclarationsContextsUsesAndAST | TopDUContext::ForceUpdate, true);
     lock.lock();
-    
-    dumpDUChain(code);
     
     QCOMPARE(code->localDeclarations().size(), 2);
     
@@ -401,7 +390,6 @@ void TestCppCodegen::testSimplifiedUpdating()
     DUChainReadLocker lock;
 
     dumpAST(code);
-    dumpDUChain(code);
     
     QCOMPARE(code->localDeclarations().size(), 3);
     QCOMPARE(code->childContexts().size(), 1);

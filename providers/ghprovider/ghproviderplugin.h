@@ -40,16 +40,16 @@ class ProviderPlugin : public KDevelop::IPlugin, KDevelop::IProjectProvider
 
 public:
     /// Constructor.
-    ProviderPlugin(QObject *parent, const QList<QVariant> &args);
+    explicit ProviderPlugin(QObject *parent, const QList<QVariant> &args);
 
     /// Destructor.
     virtual ~ProviderPlugin();
 
     /// @returns the name of this plugin.
-    virtual QString name() const;
+    virtual QString name() const override;
 
     /// @returns the main widget for this plugin.
-    virtual KDevelop::IProjectProviderWidget * providerWidget(QWidget *parent);
+    virtual KDevelop::IProjectProviderWidget * providerWidget(QWidget *parent) override;
 };
 
 } // End of namespace gh

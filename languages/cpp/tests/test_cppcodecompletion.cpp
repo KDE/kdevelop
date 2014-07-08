@@ -30,7 +30,6 @@
 #include <language/duchain/aliasdeclaration.h>
 #include <language/editor/documentrange.h>
 #include <language/duchain/classfunctiondeclaration.h>
-#include <language/duchain/dumpchain.h>
 #include "declarationbuilder.h"
 #include "usebuilder.h"
 #include "cppeditorintegrator.h"
@@ -58,6 +57,7 @@
 
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <language/duchain/persistentsymboltable.h>
+#include <language/duchain/duchaindumper.h>
 #include <cpputils.h>
 
 #include <tests/autotestshell.h>
@@ -3615,7 +3615,8 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
     kDebug(9007) << "===== DUChain:";
 
     DUChainWriteLocker lock(DUChain::lock());
-    KDevelop::dumpDUContext(top);
+    DUChainDumper dumper;
+    dumper.dump(top);
   }
 
   if( parent ) {

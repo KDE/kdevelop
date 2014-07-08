@@ -214,6 +214,10 @@ CompilerPointer CompilerProvider::currentCompiler(IProject* project) const
 
 bool CompilerProvider::registerCompiler(const CompilerPointer& compiler)
 {
+    if (!compiler) {
+        return false;
+    }
+
     for(auto c: m_compilers){
         if (c->name() == compiler->name()) {
             return false;

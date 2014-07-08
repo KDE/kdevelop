@@ -81,6 +81,7 @@ void TestCompilerProvider::testRegisterCompiler()
         QVERIFY(!cp->registerCompiler(compiler));
         QVERIFY(cp->compilers().contains(compiler));
     }
+    QVERIFY(!cp->registerCompiler({}));
 }
 
 void TestCompilerProvider::testSetCompiler()
@@ -88,6 +89,9 @@ void TestCompilerProvider::testSetCompiler()
     if (!compilerProvider()) {
         return;
     }
+
+    compilerProvider()->setCompiler(nullptr, {});
+    QVERIFY(compilerProvider()->currentCompiler(nullptr));
 
     for (auto c : compilerProvider()->compilers()) {
         compilerProvider()->setCompiler(nullptr, c);

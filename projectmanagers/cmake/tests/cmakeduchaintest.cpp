@@ -26,7 +26,6 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/editor/simplerange.h>
-#include <language/duchain/dumpchain.h>
 #include <language/duchain/use.h>
 #include <language/duchain/indexedstring.h>
 #include <tests/autotestshell.h>
