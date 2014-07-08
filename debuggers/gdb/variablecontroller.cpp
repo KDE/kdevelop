@@ -256,4 +256,3 @@ void VariableController::stateChanged(IDebugSession::DebuggerState state)
 
 
 
-#include "variablecontroller.moc"

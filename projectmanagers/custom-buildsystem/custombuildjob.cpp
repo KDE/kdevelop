@@ -181,4 +181,3 @@ void CustomBuildJob::procFinished(int code)
     emitResult();
 }
 
-#include "custombuildjob.moc"

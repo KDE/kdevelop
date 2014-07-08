@@ -104,4 +104,3 @@ KDevelop::IDocumentationProvider* ManPageHomeDocumentation::provider() const
     return ManPageDocumentation::s_provider;
 }
 
-#include "manpagedocumentation.moc"

@@ -79,4 +79,3 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
 
 }
 
-#include "worker.moc"

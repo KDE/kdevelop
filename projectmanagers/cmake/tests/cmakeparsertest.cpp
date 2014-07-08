@@ -128,5 +128,4 @@ void CMakeParserTest::testParserWithBadData_data()
 
 // }
 
-#include "cmakeparsertest.moc"
 

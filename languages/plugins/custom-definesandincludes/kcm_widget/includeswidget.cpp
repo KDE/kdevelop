@@ -161,4 +161,3 @@ void IncludesWidget::checkIfIncludePathExist()
     ui->errorLabel->clear();
 }
 
-#include "includeswidget.moc"

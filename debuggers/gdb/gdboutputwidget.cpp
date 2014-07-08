@@ -468,5 +468,4 @@ bool GDBOutputWidget::showInternalCommands() const
 }
 
 
-#include "gdboutputwidget.moc"
 

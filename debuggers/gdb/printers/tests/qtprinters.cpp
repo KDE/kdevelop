@@ -442,4 +442,3 @@ void QtPrintersTest::testKDevelopTypes()
 }
 QTEST_MAIN(GDBDebugger::QtPrintersTest)
 
-#include "qtprinters.moc"

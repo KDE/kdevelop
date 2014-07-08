@@ -190,4 +190,3 @@ void AdaptSignatureAction::execute() {
     renAct->execute();
 }
 
-#include "adaptsignatureaction.moc"

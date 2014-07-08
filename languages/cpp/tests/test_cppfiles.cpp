@@ -102,4 +102,3 @@ void TestCppFiles::testFiles()
   QVERIFY(validator.testsPassed());
 }
 
-#include "test_cppfiles.moc"

@@ -752,4 +752,3 @@ void TestCppCodegen::testMoveIntoSource_data()
                                 << aFooId;
 }
 
-#include "test_cppcodegen.moc"

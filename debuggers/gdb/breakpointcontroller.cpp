@@ -568,4 +568,3 @@ void BreakpointController::programStopped(const GDBMI::ResultRecord& r)
 
 }
 
-#include "breakpointcontroller.moc"

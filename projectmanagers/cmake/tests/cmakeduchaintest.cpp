@@ -294,5 +294,4 @@ void CMakeDUChainTest::testUses()
     file.remove();
 }
 
-#include "cmakeduchaintest.moc"
 

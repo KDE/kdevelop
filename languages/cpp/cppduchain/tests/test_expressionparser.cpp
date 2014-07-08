@@ -1477,4 +1477,3 @@ TopDUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump
   return top;
 }
 
-#include "test_expressionparser.moc"

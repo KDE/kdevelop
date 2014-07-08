@@ -137,4 +137,3 @@ void CMakeJob::setProject(KDevelop::IProject* project)
         setJobName( i18n("CMake: %1", m_project->name()) );
 }
 
-#include "cmakejob.moc"

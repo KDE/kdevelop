@@ -208,5 +208,4 @@ CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
     return data;
 }
 
-#include "cmakeloadprojecttest.moc"
 

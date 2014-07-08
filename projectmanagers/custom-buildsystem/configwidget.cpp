@@ -139,5 +139,4 @@ void ConfigWidget::clear()
     ui->buildDir->setText("");
 }
 
-#include "configwidget.moc"
 

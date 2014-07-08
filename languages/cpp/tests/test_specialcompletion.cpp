@@ -330,4 +330,3 @@ void TestSpecialCompletion::testIncludeComment()
                     "}"));
 }
 
-#include "test_specialcompletion.moc"

@@ -88,4 +88,3 @@ void TestEnvironment::benchMerge_data()
   QTest::newRow("5000") << 5000;
 }
 
-#include "testenvironment.moc"

@@ -177,4 +177,3 @@ CMakeCompliance::~CMakeCompliance() {
     KDevelop::TestCore::shutdown();
 }
 
-#include "cmakecompliance.moc"

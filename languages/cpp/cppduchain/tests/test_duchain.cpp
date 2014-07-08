@@ -6105,4 +6105,3 @@ void TestDUChain::testQProperty()
   QCOMPARE(decls.at(2)->uses().begin()->first(), RangeInRevision(2, 53, 2, 61));
 }
 
-#include "test_duchain.moc"

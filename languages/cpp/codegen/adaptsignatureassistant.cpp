@@ -292,4 +292,3 @@ void AdaptSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job)
   emit actionsChanged();
 }
 
-#include "adaptsignatureassistant.moc"

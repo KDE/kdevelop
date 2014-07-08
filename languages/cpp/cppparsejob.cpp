@@ -975,5 +975,4 @@ DataAccessRepository* CPPParseJob::dataAccessInformation()
   return ret;
 }
 
-#include "cppparsejob.moc"
 

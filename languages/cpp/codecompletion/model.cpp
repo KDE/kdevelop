@@ -249,4 +249,3 @@ void CodeCompletionModel::foundDeclarations(QList<CompletionTreeElementPointer> 
 
 }
 
-#include "model.moc"

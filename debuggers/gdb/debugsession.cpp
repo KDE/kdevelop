@@ -1485,4 +1485,3 @@ void DebugSession::lastInferiorHandler(const QStringList& l)
 }
 
 
-#include "debugsession.moc"

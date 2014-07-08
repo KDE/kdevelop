@@ -214,5 +214,4 @@ void CustomBuildSystemConfigWidget::renameCurrentConfig(const QString& name) {
 }
 
 
-#include "custombuildsystemconfigwidget.moc"
 

@@ -301,5 +301,4 @@ QVector< CompilerPointer > ProjectPathsWidget::compilers() const
     return m_compilers;
 }
 
-#include "projectpathswidget.moc"
 

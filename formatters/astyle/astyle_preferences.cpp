@@ -435,4 +435,3 @@ void AStylePreferences::pointerAlignChanged()
     updatePreviewText();
 }
 
-#include "astyle_preferences.moc"

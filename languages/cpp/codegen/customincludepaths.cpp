@@ -94,4 +94,3 @@ void CustomIncludePaths::openAddIncludeDirectoryDialog()
     appendCustomIncludePath(dirName);
 }
 
-#include "customincludepaths.moc"

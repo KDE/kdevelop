@@ -311,4 +311,3 @@ QStringList CMakeBuildDirChooser::extraArgumentsHistory() const
     return list;
 }
 
-#include "cmakebuilddirchooser.moc"

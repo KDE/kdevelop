@@ -166,4 +166,3 @@ bool DefinesModel::removeRows( int row, int count, const QModelIndex& parent )
     return false;
 }
 
-#include "definesmodel.moc"

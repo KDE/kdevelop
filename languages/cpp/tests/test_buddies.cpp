@@ -442,4 +442,3 @@ void TestBuddies::testsplitViewBuddies()
 
 QTEST_MAIN(TestBuddies)
 
-#include "test_buddies.moc"

@@ -225,4 +225,3 @@ bool ManPageModel::identifierInSection(const QString& identifier, const QString&
     return false;
 }
 
-#include "manpagemodel.moc"

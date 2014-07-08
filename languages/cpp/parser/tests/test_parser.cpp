@@ -1024,6 +1024,5 @@ AST* TestParser::getAST(AST* ast, AST::NODE_KIND kind, int num)
   return visitor.ast;
 }
 
-#include "test_parser.moc"
 
 QTEST_MAIN(TestParser)

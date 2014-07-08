@@ -178,4 +178,3 @@ KDevelop::LaunchConfigurationPage* GdbConfigPageFactory::createWidget( QWidget* 
 
 
 
-#include "gdblaunchconfig.moc"

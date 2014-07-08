@@ -440,4 +440,3 @@ void DisassembleWidget::update(const QString &address)
 
 }
 
-#include "disassemblewidget.moc"

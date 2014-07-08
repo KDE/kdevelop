@@ -3821,4 +3821,3 @@ void TestCppCodeCompletion::testDuplicatedNamespace()
   release(top);
 }
 
-#include "test_cppcodecompletion.moc"

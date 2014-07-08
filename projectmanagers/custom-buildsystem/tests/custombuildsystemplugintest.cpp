@@ -114,4 +114,3 @@ void CustomBuildSystemPluginTest::loadMultiPathProject()
               Path( "file:///home/andreas/projects/testcustom/build2/src" ) );
 }
 
-#include "custombuildsystemplugintest.moc"

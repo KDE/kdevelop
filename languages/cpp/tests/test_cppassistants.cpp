@@ -425,4 +425,3 @@ void TestCppAssistants::testMacroExpansion()
   Core::self()->documentController()->documentForUrl(url)->close(KDevelop::IDocument::Discard);
 }
 
-#include "test_cppassistants.moc"
