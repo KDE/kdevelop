@@ -361,14 +361,34 @@ void DeclarationBuilder::endVisit(QmlJS::AST::VariableDeclaration* node)
 bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
 {
     if (node->op == QSOperator::Assign) {
-        ContextBuilder::ExpressionType leftType = findType(node->left);
-        AbstractType::Ptr rightType = findType(node->right).type;
+        ExpressionType leftType = findType(node->left);
+        ExpressionType rightType = findType(node->right);
+        DUChainWriteLocker lock;
 
         if (leftType.declaration) {
-            // Merge the already-known type of the variable with the new one
-            DUChainWriteLocker lock;
+            DUContext* leftCtx = leftType.declaration->context();
 
-            leftType.declaration->setAbstractType(TypeUtils::mergeTypes(leftType.type, rightType));
+            // object.prototype.method = function(){} : when assigning a function
+            // to a variable living in a Class context, set the prototype
+            // context of the function to the context of the variable
+            if (rightType.declaration && leftCtx->type() == DUContext::Class) {
+                auto func = rightType.declaration.dynamicCast<QmlJS::FunctionDeclaration>();
+
+                if (!leftCtx->owner() && !leftCtx->importers().isEmpty()) {
+                    // MyClass.prototype.myfunc declares "myfunc" in a small context
+                    // that is imported by MyClass. The prototype of myfunc should
+                    // be the context of MyClass, not the small context in which
+                    // it has been declared
+                    leftCtx = leftCtx->importers().at(0);
+                }
+
+                if (func && !func->prototypeContext()) {
+                    func->setPrototypeContext(leftCtx, false);
+                }
+            }
+
+            // Merge the already-known type of the variable with the new one
+            leftType.declaration->setAbstractType(TypeUtils::mergeTypes(leftType.type, rightType.type));
         }
 
         return false;   // findType has already explored node
@@ -566,7 +586,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
 
     // The type of the declaration can either be an enumeration value or the type
     // of its expression
-    AbstractType::Ptr type;
+    ExpressionType type;
     bool inSymbolTable = false;
 
     if (currentContext()->type() == DUContext::Enum) {
@@ -580,11 +600,23 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
             enumerator->setValue((int)value->value);
         }
 
-        type = AbstractType::Ptr::staticCast(enumerator);
+        type.type = AbstractType::Ptr::staticCast(enumerator);
+        type.declaration = nullptr;
         inSymbolTable = true;
     } else {
         // Normal value
-        type = findType(node->value).type;
+        type = findType(node->value);
+    }
+
+    // If a function is assigned to an object member, set the prototype context
+    // of the function to the object containing the member
+    if (type.declaration) {
+        DUChainWriteLocker lock;
+        auto func = type.declaration.dynamicCast<QmlJS::FunctionDeclaration>();
+
+        if (func && !func->prototypeContext()) {
+            func->setPrototypeContext(currentContext(), false);
+        }
     }
 
     // Open the declaration
@@ -594,7 +626,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
 
         decl->setInSymbolTable(inSymbolTable);
     }
-    openType(type);
+    openType(type.type);
 
     return false;   // findType has already explored node->expression
 }
