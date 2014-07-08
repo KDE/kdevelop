@@ -345,14 +345,14 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(const MissingDeclaratio
       // place label between first action and the following actions
       const QString label = i18nc("assistant, declare member in class identified by %1",
                                   "member of <code>%1</code>:",
-                                  Qt::escape(publicAction->containerString()));
+                                  publicAction->containerString()).toHtmlEscaped();
       addAction(IAssistantAction::Ptr(new AssistantLabelAction(label)));
     } else {
       // set the title manually
       m_title = i18nc("assistant, declare %1 as member of class identified by %2",
                       "Declare <code>'%1'</code> as member of <code>%2</code>",
                       publicAction->declarationString(),
-                      Qt::escape(publicAction->containerString()));
+                      publicAction->containerString()).toHtmlEscaped();
     }
 
     if(localClass == targetClass) {

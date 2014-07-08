@@ -31,7 +31,7 @@ DefinesWidget::DefinesWidget( QWidget* parent )
 {
     ui->setupUi( this );
     ui->defines->setModel( definesModel );
-    ui->defines->horizontalHeader()->setResizeMode( QHeaderView::Stretch );
+    ui->defines->horizontalHeader()->setSectionResizeMode( QHeaderView::Stretch );
     connect( definesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(definesChanged()) );
     connect( definesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(definesChanged()) );
     connect( definesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(definesChanged()) );

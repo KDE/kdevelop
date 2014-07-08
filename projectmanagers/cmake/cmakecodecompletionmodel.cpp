@@ -62,6 +62,7 @@ bool isPathChar(const QChar& c)
 
 void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range, InvocationType invocationType)
 {
+    beginResetModel();
     if(s_commands.isEmpty()) {
         ICMakeDocumentation* cmakedoc=CMake::cmakeDocumentation();
         
@@ -145,7 +146,7 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
         numRows+=m_declarations.count();
     }
     setRowCount(numRows);
-    reset();
+    endResetModel();
 }
 
 CMakeCodeCompletionModel::Type CMakeCodeCompletionModel::indexType(int row) const

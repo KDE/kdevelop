@@ -57,7 +57,7 @@ CompilersWidget::CompilersWidget(QWidget* parent)
 {
     m_ui->setupUi(this);
     m_ui->compilers->setModel(m_compilersModel);
-    m_ui->compilers->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    m_ui->compilers->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     m_addMenu = new QMenu(m_ui->addButton);
     m_mapper = new QSignalMapper(m_addMenu);

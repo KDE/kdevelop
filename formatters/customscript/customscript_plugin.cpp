@@ -45,7 +45,7 @@
 
 using namespace KDevelop;
 
-static QWeakPointer<CustomScriptPlugin> indentPluginSingleton;
+static QPointer<CustomScriptPlugin> indentPluginSingleton;
 
 K_PLUGIN_FACTORY(CustomScriptFactory, registerPlugin<CustomScriptPlugin>();)
 // K_EXPORT_PLUGIN(CustomScriptFactory(KAboutData("kdevcustomscript","kdevformatters", ki18n("Custom Script Formatter"), "0.2", ki18n("A formatter using custom scripts"), KAboutData::License_GPL)))

@@ -89,7 +89,7 @@ void DeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, co
       if(params.templateParametersSize() == 0)
         return;
       
-      modifyHtml() += Qt::escape("  <");
+      modifyHtml() += QString("  <").toHtmlEscaped();
       bool first = true;
       
       uint showParameters = params.templateParametersSize();
@@ -121,7 +121,7 @@ void DeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, co
         }
       }
 
-      modifyHtml() += Qt::escape(" >");
+      modifyHtml() += QString(" >").toHtmlEscaped();
     }
   }
 }

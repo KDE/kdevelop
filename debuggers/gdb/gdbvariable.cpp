@@ -142,7 +142,7 @@ public:
     virtual bool handlesError() { return true; }
 
 private:
-    QWeakPointer<GdbVariable> m_variable;
+    QPointer<GdbVariable> m_variable;
     QObject *m_callback;
     const char *m_callbackMethod;
 };
@@ -240,7 +240,7 @@ public:
     }
 
 private:
-    QWeakPointer<GdbVariable> m_variable;
+    QPointer<GdbVariable> m_variable;
     DebugSession *m_session;
     int m_activeCommands;
 };
@@ -354,7 +354,7 @@ public:
             m_variable.data()->setValue(r["value"].literal());
     }
 private:
-    QWeakPointer<GdbVariable> m_variable;
+    QPointer<GdbVariable> m_variable;
 };
 
 void GdbVariable::formatChanged()

@@ -1832,7 +1832,7 @@ void GdbTest::testDebugInExternalTerminal()
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line, bool expectFail)
 {
-    QWeakPointer<GDBDebugger::DebugSession> s(session); //session can get deleted in DebugController
+    QPointer<GDBDebugger::DebugSession> s(session); //session can get deleted in DebugController
     kDebug() << "waiting for state" << state;
     QTime stopWatch;
     stopWatch.start();

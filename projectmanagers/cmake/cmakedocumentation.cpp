@@ -100,7 +100,7 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
 {
     QString desc;
     if(args[t]) {
-        desc = Qt::escape(CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(args[t]) << id.simplified()));
+        desc = CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(args[t]) << id.simplified()).toHtmlEscaped();
         int firstLine = desc.indexOf('\n');
         firstLine = desc.indexOf('\n', firstLine+1);
         if(firstLine>=0)

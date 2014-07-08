@@ -1065,7 +1065,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
         QProcess *proc = new QProcess;
         QStringList arguments;
         arguments << "-c" << KShell::quoteArg(config_runShellScript_.toLocalFile()) +
-            ' ' + KShell::quoteArg(executable) + QString::fromAscii( options );
+            ' ' + KShell::quoteArg(executable) + QString::fromLatin1( options );
 
         kDebug() << "starting sh" << arguments;
         proc->start("sh", arguments);

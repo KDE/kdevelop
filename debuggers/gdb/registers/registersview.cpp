@@ -150,7 +150,7 @@ QAction* RegistersView::findAction(const QString& name)
 
 void RegistersView::addView(QTableView* view, int idx)
 {
-    view->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    view->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     view->horizontalHeader()->hide();
     view->verticalHeader()->hide();
     view->setSelectionMode(QAbstractItemView::SingleSelection);
