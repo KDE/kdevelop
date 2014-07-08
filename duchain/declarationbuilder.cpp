@@ -564,7 +564,6 @@ bool DeclarationBuilder::visit(QmlJS::AST::ObjectLiteral* node)
         );
 
         decl->setKind(Declaration::Type);
-        decl->setAlwaysForceDirect(true);   // This declaration has no name, so type->setDeclaration is obliged to store a direct pointer to the declaration.
         decl->setInternalContext(openContext(
             node,
             m_session->locationsToRange(node->lbraceToken, node->rbraceToken),
@@ -830,7 +829,6 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
             );
 
             decl->clearBaseClasses();
-            decl->setAlwaysForceDirect(true);   // This declaration has no name, so type->setDeclaration is obliged to store a direct pointer to the declaration.
             decl->setKind(Declaration::Type);
             decl->setType(type);                // The class needs to know its type early because it contains definitions that depend on that type
             type->setDeclaration(decl);

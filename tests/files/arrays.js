@@ -35,3 +35,10 @@ array.child = {};
  * "type" : { "toString" : "string" }
  */
 array["child"]["key"] = "value";
+
+/**
+ * "useCount" : 0
+ */
+var dont_use_me;
+
+array.dont_use_me = "fail";

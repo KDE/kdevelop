@@ -131,6 +131,17 @@ protected:
     virtual bool visit(QmlJS::AST::UiPublicMember* node);
     virtual void endVisit(QmlJS::AST::UiPublicMember* node);
 
+protected:
+    template<class DeclarationT>
+    DeclarationT* openDeclaration(const KDevelop::QualifiedIdentifier& id,
+                                  const KDevelop::RangeInRevision& newRange,
+                                  DeclarationFlags flags = NoFlags)
+    {
+        DeclarationT* res = DeclarationBuilderBase::openDeclaration<DeclarationT>(id, newRange, flags);
+        res->setAlwaysForceDirect(true);
+        return res;
+    }
+
 private:
     void closeAndAssignType();
     void registerBaseClasses();              /*!< @brief Enumerates the base classes of the current class and import their inner contexts */
