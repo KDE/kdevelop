@@ -75,7 +75,7 @@ QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
             const KMimeType::Ptr ptr = KMimeType::findByUrl(path);
             if (!ptr->name().isEmpty()) {
                 hstr += "\r\nContent-Type: ";
-                hstr += ptr->name().toAscii().constData();
+                hstr += ptr->name().toLatin1().constData();
             }
         }
         //
@@ -115,7 +115,7 @@ void HttpCall::start()
     QNetworkRequest r(m_requrl);
 
     if(m_requrl.hasUser()) {
-        QByteArray head = "Basic " + m_requrl.userInfo().toAscii().toBase64();
+        QByteArray head = "Basic " + m_requrl.userInfo().toLatin1().toBase64();
         r.setRawHeader("Authorization", head);
     }
 

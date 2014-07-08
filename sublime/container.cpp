@@ -26,6 +26,7 @@
 #include <QStyleOptionTabBarBase>
 #include <QToolButton>
 #include <qstyle.h>
+#include <QPointer>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -97,7 +98,7 @@ struct ContainerPrivate {
     KSqueezedTextLabel *fileNameCorner;
     QLabel *fileStatus;
     KSqueezedTextLabel *statusCorner;
-    QWeakPointer<QWidget> leftCornerWidget;
+    QPointer<QWidget> leftCornerWidget;
     QToolButton* documentListButton;
     QMenu* documentListMenu;
     QMap<View*, QAction*> documentListActionForView;

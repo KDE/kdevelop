@@ -22,6 +22,7 @@
 #include <QList>
 #include <QStringList>
 #include <QAction>
+#include <QPointer>
 
 #include <kdebug.h>
 
@@ -94,7 +95,7 @@ struct AreaPrivate {
     QMap<Sublime::Position, int> thickness;
     QString iconName;
     QString workingSet;
-    QWeakPointer<View> activeView;
+    QPointer<View> activeView;
     QList<QAction*> m_actions;
 };
 
@@ -419,7 +420,7 @@ void Area::setWorkingSet(QString name)
 
 bool Area::closeView(View* view, bool silent)
 {
-    QWeakPointer<Document> doc = view->document();
+    QPointer<Document> doc = view->document();
 
     // We don't just delete the view, because if silent is false, we might need to ask the user.
     if(doc && !silent)

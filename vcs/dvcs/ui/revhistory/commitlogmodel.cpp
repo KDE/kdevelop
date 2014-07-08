@@ -35,11 +35,11 @@ CommitLogModel::CommitLogModel(KDevelop::DistributedVersionControlPlugin* plugin
 
 void CommitLogModel::initializeModel()
 {
+    beginResetModel();
     revs = m_plugin->getAllCommits(m_repo);
     if (!revs.isEmpty() )
         branchCnt = revs.last().getProperties().count(); //num of branch (size of properties of initial commit)
-    
-    reset();
+    endResetModel();
 }
 
 Qt::ItemFlags CommitLogModel::flags(const QModelIndex&) const 

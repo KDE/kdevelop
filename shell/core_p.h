@@ -23,7 +23,7 @@
 
 #include <kaboutdata.h>
 #include <core.h>
-#include <QWeakPointer>
+#include <QPointer>
 #include <KComponentData>
 
 namespace KDevelop
@@ -50,21 +50,21 @@ public:
     CorePrivate(Core *core);
     ~CorePrivate();
     bool initialize( Core::Setup mode, QString session );
-    QWeakPointer<PluginController> pluginController;
-    QWeakPointer<UiController> uiController;
-    QWeakPointer<ProjectController> projectController;
-    QWeakPointer<LanguageController> languageController;
-    QWeakPointer<PartController> partController;
-    QWeakPointer<DocumentController> documentController;
-    QWeakPointer<RunController> runController;
-    QWeakPointer<SessionController> sessionController;
-    QWeakPointer<SourceFormatterController> sourceFormatterController;
-    QWeakPointer<ProgressManager> progressController;
-    QWeakPointer<SelectionController> selectionController;
-    QWeakPointer<DocumentationController> documentationController;
-    QWeakPointer<DebugController> debugController;
-    QWeakPointer<WorkingSetController> workingSetController;
-    QWeakPointer<TestController> testController;
+    QPointer<PluginController> pluginController;
+    QPointer<UiController> uiController;
+    QPointer<ProjectController> projectController;
+    QPointer<LanguageController> languageController;
+    QPointer<PartController> partController;
+    QPointer<DocumentController> documentController;
+    QPointer<RunController> runController;
+    QPointer<SessionController> sessionController;
+    QPointer<SourceFormatterController> sourceFormatterController;
+    QPointer<ProgressManager> progressController;
+    QPointer<SelectionController> selectionController;
+    QPointer<DocumentationController> documentationController;
+    QPointer<DebugController> debugController;
+    QPointer<WorkingSetController> workingSetController;
+    QPointer<TestController> testController;
 
     KComponentData m_componentData;
     Core *m_core;

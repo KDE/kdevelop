@@ -59,7 +59,7 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     connect(topProxyModel, SIGNAL(dataInserted(int, QVariant)), SLOT(handleVariableInserted(int, QVariant)));
 
     ui.variableTable->setModel( topProxyModel );
-    ui.variableTable->horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch );
+    ui.variableTable->horizontalHeader()->setSectionResizeMode( 1, QHeaderView::Stretch );
     ui.addgrpBtn->setIcon(QIcon::fromTheme("list-add"));
     ui.removegrpBtn->setIcon(QIcon::fromTheme("list-remove"));
     ui.deleteButton->setIcon(QIcon::fromTheme("list-remove"));

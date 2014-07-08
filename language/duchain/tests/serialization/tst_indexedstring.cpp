@@ -168,7 +168,7 @@ void TestIndexedString::test_data()
   QTest::newRow("empty") << QString();
   QTest::newRow("char-ascii") << QString("a");
   QTest::newRow("char-utf8") << QString::fromUtf8("ä");
-  QTest::newRow("string-ascii") << QString::fromAscii("asdf()?=");
+  QTest::newRow("string-ascii") << QString::fromLatin1("asdf()?=");
   QTest::newRow("string-utf8") << QString::fromUtf8("æſðđäöü");
 }
 

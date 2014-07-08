@@ -81,7 +81,7 @@ QAction* IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *
     KConfigGroup config = KSharedConfig::openConfig()->group("UI");
     QList<QKeySequence> shortcuts;
     QStringList shortcutStrings = config.readEntry(QString("Shortcut for %1").arg(view->document()->title()), QStringList());
-    shortcuts << QKeySequence::fromString(shortcuts.value(0)) << QKeySequence::fromString(shortcuts.value(1));
+    shortcuts << QKeySequence::fromString(shortcutStrings.value(0)) << QKeySequence::fromString(shortcutStrings.value(1));
     action->setShortcuts(shortcuts);
 
     if (_area == Qt::BottomDockWidgetArea || _area == Qt::TopDockWidgetArea)

@@ -194,9 +194,9 @@ void StandardOutputViewTest::testSetModelAndDelegate()
     QVERIFY(outputWidget);
 
     QAbstractItemModel* model = new QStandardItemModel;
-    QWeakPointer<QAbstractItemModel> checkModel(model);
+    QPointer<QAbstractItemModel> checkModel(model);
     QAbstractItemDelegate* delegate = new QItemDelegate;
-    QWeakPointer<QAbstractItemDelegate> checkDelegate(delegate);
+    QPointer<QAbstractItemDelegate> checkDelegate(delegate);
 
     outputId[0] = m_stdOutputView->registerOutputInToolView(toolviewId, "output");
     m_stdOutputView->setModel(outputId[0], model);

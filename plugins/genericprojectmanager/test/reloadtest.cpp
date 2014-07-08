@@ -109,7 +109,7 @@ TestProject makeProject()
     KUrl projecturl( dir.absoluteFilePath() + "/simpleproject.kdev4" );
     QFile projectFile(projecturl.toLocalFile());
     projectFile.open(QIODevice::WriteOnly);
-    projectFile.write(projectFileContents.join("\n").toAscii());
+    projectFile.write(projectFileContents.join("\n").toLatin1());
     projectFile.close();
     ret.file = projecturl;
 

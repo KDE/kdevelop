@@ -63,7 +63,7 @@ struct StaticAssistantsManager::Private
 
     StaticAssistantsManager* q;
 
-    QWeakPointer<KTextEditor::View> m_currentView;
+    QPointer<KTextEditor::View> m_currentView;
     KTextEditor::Cursor m_assistantStartedAt;
     KDevelop::IndexedString m_currentDocument;
     QExplicitlySharedDataPointer<KDevelop::IAssistant> m_activeAssistant;

@@ -139,7 +139,7 @@ private:
     bool m_changingActiveView;
     /// the view of the tab that got it's context menu connected
     Sublime::View* m_tabView;
-    QPair<Sublime::View*, QWeakPointer<NavigationToolTip> > m_tabTooltip;
+    QPair<Sublime::View*, QPointer<NavigationToolTip> > m_tabTooltip;
 };
 
 }

@@ -267,16 +267,18 @@ void ProblemModel::getProblemsInternal(TopDUContext* context, bool showImports, 
 void ProblemModel::rebuildProblemList()
 {
     // No locking here, because it may be called from an already locked context
+    beginResetModel();
     m_problems = getProblems(m_documentSet->get(), m_showImports);
-    reset();
+    endResetModel();
 }
 
 void ProblemModel::setCurrentDocument(KDevelop::IDocument* document)
 {
     QWriteLocker locker(&m_lock);
+    beginResetModel();
     m_currentDocument = document->url();
     m_documentSet->setCurrentDocument(IndexedString(m_currentDocument));
-    reset();
+    endResetModel();
 }
 
 void ProblemModel::setShowImports(bool showImports)

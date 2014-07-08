@@ -21,6 +21,7 @@
 #define KDEVPLATFORM_STATICASSISTANTSMANAGER_H
 
 #include <QObject>
+#include <QPointer>
 
 #include "staticassistant.h"
 
@@ -32,7 +33,7 @@
 
 class QTimer;
 
-typedef QWeakPointer<KTextEditor::Document> SafeDocumentPointer;
+typedef QPointer<KTextEditor::Document> SafeDocumentPointer;
 
 namespace KDevelop {
 

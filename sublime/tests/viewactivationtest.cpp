@@ -149,7 +149,7 @@ void ViewActivationTest::viewActivation()
     qApp->sendEvent(view212->widget(), new QFocusEvent(QEvent::FocusIn));
     QString failMsg = QString("\nWas expecting %1 to be active but got %2").
                       arg(view212->objectName()).arg(mw->activeView()->objectName());
-    QVERIFY2(mw->activeView() == view212, failMsg.toAscii().data());
+    QVERIFY2(mw->activeView() == view212, failMsg.toLatin1().data());
 
     //activate toolview and check that both view and toolview are active
     qApp->sendEvent(viewT31->widget(), new QFocusEvent(QEvent::FocusIn));

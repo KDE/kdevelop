@@ -102,18 +102,18 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       
       eventuallyMakeTypeLinks( useType );
 
-      modifyHtml() += ' ' + nameHighlight(Qt::escape(declarationName(m_declaration))) + "<br>";
+      modifyHtml() += ' ' + nameHighlight(declarationName(m_declaration).toHtmlEscaped()) + "<br>";
     }else{
       if( m_declaration->kind() == Declaration::Type && m_declaration->abstractType().cast<StructureType>() ) {
         htmlClass();
       }
       if ( m_declaration->kind() == Declaration::Namespace ) {
-        modifyHtml() += i18n("namespace %1 ", nameHighlight(Qt::escape(m_declaration->qualifiedIdentifier().toString())));
+        modifyHtml() += i18n("namespace %1 ", nameHighlight(m_declaration->qualifiedIdentifier().toString()).toHtmlEscaped());
       }
 
       if(m_declaration->type<EnumerationType>()) {
         EnumerationType::Ptr enumeration = m_declaration->type<EnumerationType>();
-        modifyHtml() += i18n("enumeration %1 ", Qt::escape(m_declaration->identifier().toString()) );
+        modifyHtml() += i18n("enumeration %1 ", m_declaration->identifier().toString().toHtmlEscaped());
       }
 
       if(m_declaration->isForwardDeclaration()) {
@@ -176,7 +176,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     } else {
       QualifiedIdentifier parent = identifier;
       parent.pop();
-      modifyHtml() += labelHighlight(i18n("Scope: %1 ", typeHighlight(Qt::escape(parent.toString()))));
+      modifyHtml() += labelHighlight(i18n("Scope: %1 ", typeHighlight(parent.toString().toHtmlEscaped())));
     }
   }
   
@@ -189,13 +189,13 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     comment.replace('\n', " ");
     comment.replace("<br />", " ");
     comment.replace("<br/>", " ");
-    modifyHtml() += commentHighlight(Qt::escape(comment)) + "   ";
+    modifyHtml() += commentHighlight(comment.toHtmlEscaped()) + "   ";
   }
   
 
   QString access = stringFromAccess(m_declaration);
   if( !access.isEmpty() )
-    modifyHtml() += labelHighlight(i18n("Access: %1 ", propertyHighlight(Qt::escape(access))));
+    modifyHtml() += labelHighlight(i18n("Access: %1 ", propertyHighlight(access.toHtmlEscaped())));
 
 
   ///@todo Enumerations
@@ -215,11 +215,11 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   QString kind = declarationKind(m_declaration);
   if( !kind.isEmpty() ) {
     if( !detailsHtml.isEmpty() )
-      modifyHtml() += labelHighlight(i18n("Kind: %1 %2 ", importantHighlight(Qt::escape(kind)), detailsHtml));
+      modifyHtml() += labelHighlight(i18n("Kind: %1 %2 ", importantHighlight(kind.toHtmlEscaped()), detailsHtml));
     else
-      modifyHtml() += labelHighlight(i18n("Kind: %1 ", importantHighlight(Qt::escape(kind))));
+      modifyHtml() += labelHighlight(i18n("Kind: %1 ", importantHighlight(kind.toHtmlEscaped())));
   } else if( !detailsHtml.isEmpty() ) {
-    modifyHtml() += labelHighlight(i18n("Modifiers: %1 ",  importantHighlight(Qt::escape(kind))));
+    modifyHtml() += labelHighlight(i18n("Modifiers: %1 ",  importantHighlight(kind.toHtmlEscaped())));
   }
 
   modifyHtml() += "<br />";
@@ -265,7 +265,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       }
     } else if(!comment.isEmpty()) {
       comment.replace(QRegExp("<br */>"), "\n"); //do not escape html newlines within the comment
-      comment = Qt::escape(comment);
+      comment = comment.toHtmlEscaped();
       comment.replace('\n', "<br />"); //Replicate newlines in html
       modifyHtml() += commentHighlight(comment);
       modifyHtml() += "<br />";
@@ -308,7 +308,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
     eventuallyMakeTypeLinks( type->returnType() );
   }
 
-  modifyHtml() += ' ' + nameHighlight(Qt::escape(prettyIdentifier(m_declaration).toString()));
+  modifyHtml() += ' ' + nameHighlight(prettyIdentifier(m_declaration).toString().toHtmlEscaped());
 
   if( type->indexedArgumentsSize() == 0 )
   {
@@ -331,11 +331,11 @@ void AbstractDeclarationNavigationContext::htmlFunction()
 
       eventuallyMakeTypeLinks( argType );
       if (currentArgNum < decls.size()) {
-        modifyHtml() += ' ' + nameHighlight(Qt::escape(decls[currentArgNum]->identifier().toString()));
+        modifyHtml() += ' ' + nameHighlight(decls[currentArgNum]->identifier().toString().toHtmlEscaped());
       }
 
       if( currentArgNum >= firstDefaultParam )
-        modifyHtml() += " = " + Qt::escape(function->defaultParameters()[ currentArgNum - firstDefaultParam ].str());
+        modifyHtml() += " = " + function->defaultParameters()[ currentArgNum - firstDefaultParam ].str().toHtmlEscaped();
 
       ++currentArgNum;
     }
@@ -525,7 +525,7 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
         if(!id.isEmpty())
           id = id.mid(id.count()-1);
         htmlIdentifiedType(contextType, contextIdType);
-        modifyHtml() += Qt::escape("::");
+        modifyHtml() += QString("::").toHtmlEscaped();
       }
     }
 
@@ -533,7 +533,7 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
     makeLink(id.toString() , DeclarationPointer(idType->declaration(m_topContext.data())), NavigationAction::NavigateDeclaration );
   } else {
     kDebug() << "could not resolve declaration:" << idType->declarationId().isDirect() << idType->qualifiedIdentifier().toString() << "in top-context" << m_topContext->url().str();
-    modifyHtml() += typeHighlight(Qt::escape(type->toString()));
+    modifyHtml() += typeHighlight(type->toString().toHtmlEscaped());
   }
 }
 
@@ -542,7 +542,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
   type = typeToShow(type);
   
   if( !type ) {
-    modifyHtml() += typeHighlight(Qt::escape("<no type>"));
+    modifyHtml() += typeHighlight(QString("<no type>").toHtmlEscaped());
     return;
   }
 
@@ -576,7 +576,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
     if(idType) {
       kDebug() << "identified type could not be resolved:" << idType->qualifiedIdentifier() << idType->declarationId().isValid() << idType->declarationId().isDirect();
     }
-    modifyHtml() += typeHighlight(Qt::escape(type->toString()));
+    modifyHtml() += typeHighlight(type->toString().toHtmlEscaped());
   }
 }
 

@@ -177,7 +177,7 @@ void FramestackWidget::currentThreadChanged(int thread)
         m_threads->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
         m_threadsWidget->setVisible(model->rowCount() > 1);
         m_frames->setRootIndex(idx);
-        m_frames->header()->setResizeMode(0, QHeaderView::ResizeToContents);
+        m_frames->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     } else {
         m_threadsWidget->hide();
         m_threads->selectionModel()->clear();

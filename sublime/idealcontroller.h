@@ -28,6 +28,7 @@
 #include <QToolButton>
 #include <QDockWidget>
 #include <QStyleOption>
+#include <QPointer>
 
 #include "sublimedefs.h"
 
@@ -86,7 +87,7 @@ public:
     QWidget *bottomStatusBarLocation;
 
     IdealDockWidget* currentDockWidget();
-    QMap<Qt::DockWidgetArea, QWeakPointer<IdealDockWidget> > lastDockWidget;
+    QMap<Qt::DockWidgetArea, QPointer<IdealDockWidget> > lastDockWidget;
 
     void emitWidgetResized(Qt::DockWidgetArea dockArea, int thickness);
 

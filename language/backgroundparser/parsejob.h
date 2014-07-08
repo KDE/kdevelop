@@ -23,7 +23,8 @@
 #ifndef KDEVPLATFORM_PARSEJOB_H
 #define KDEVPLATFORM_PARSEJOB_H
 
-#include <QtCore/QWeakPointer>
+#include <QPointer>
+
 #include <KDE/KUrl>
 
 #include <ThreadWeaver/Sequence>
@@ -135,7 +136,7 @@ public:
     * The notification is guaranteed to be called once the parse-job finishes, from within its destructor.
     * The given top-context may be invalid if the update failed.
     */
-    Q_SCRIPTABLE void setNotifyWhenReady(const QList<QWeakPointer<QObject> >& notify);
+    Q_SCRIPTABLE void setNotifyWhenReady(const QList<QPointer<QObject> >& notify);
 
     /// Sets the du-context that was created by this parse-job
     Q_SCRIPTABLE virtual void setDuChain(ReferencedTopDUContext duChain);

@@ -117,8 +117,8 @@ Q_SIGNALS:
     void reviewFinished(QString message, QList<KUrl> selection);
     void reviewCancelled(QString message);
 public:
-    QWeakPointer<QWidget> m_commitMessageWidget;
-    QWeakPointer<KTextEdit> m_commitMessageEdit;
+    QPointer<QWidget> m_commitMessageWidget;
+    QPointer<KTextEdit> m_commitMessageEdit;
     KDevelop::IBasicVersionControl* m_vcs;
     KComboBox* m_oldMessages;
 public slots:

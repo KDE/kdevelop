@@ -54,7 +54,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
 
   // Set model in the tree view
   m_tree->setModel(m_model);
-  m_tree->header()->setResizeMode(0, QHeaderView::ResizeToContents);
+  m_tree->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
   m_tree->header()->setStretchLastSection(false);
 
   // We need notification in the model for the collapse/expansion of nodes.

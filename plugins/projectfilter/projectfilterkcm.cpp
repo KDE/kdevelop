@@ -58,9 +58,9 @@ ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
     m_ui->filters->setSelectionMode(QAbstractItemView::SingleSelection);
     m_ui->filters->setModel(m_model);
     m_ui->filters->setRootIsDecorated(false);
-    m_ui->filters->header()->setResizeMode(FilterModel::Pattern, QHeaderView::Stretch);
-    m_ui->filters->header()->setResizeMode(FilterModel::Targets, QHeaderView::ResizeToContents);
-    m_ui->filters->header()->setResizeMode(FilterModel::Inclusive, QHeaderView::ResizeToContents);
+    m_ui->filters->header()->setSectionResizeMode(FilterModel::Pattern, QHeaderView::Stretch);
+    m_ui->filters->header()->setSectionResizeMode(FilterModel::Targets, QHeaderView::ResizeToContents);
+    m_ui->filters->header()->setSectionResizeMode(FilterModel::Inclusive, QHeaderView::ResizeToContents);
     m_ui->filters->setItemDelegateForColumn(FilterModel::Targets,
         new ComboBoxDelegate(QVector<ComboBoxDelegate::Item>()
                 << ComboBoxDelegate::Item(i18n("Files"), static_cast<int>(Filter::Files))

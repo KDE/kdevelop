@@ -121,7 +121,7 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
         Diff2::MarkerList markers = line->markerList();
 
         for( int b = 0; b < markers.size(); ++b ) {
-            QString spanText = Qt::escape( string.mid( currentPos, markers[b]->offset() - currentPos ) );
+            QString spanText = string.mid( currentPos, markers[b]->offset() - currentPos ).toHtmlEscaped();
             if( markers[b]->type() == Diff2::Marker::End && ( currentPos != 0 || markers[b]->offset() != static_cast<uint>( string.size() ) ) )
             {
                 if( a == highlightMark.first && b == highlightMark.second )
@@ -134,7 +134,7 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
             currentPos = markers[b]->offset();
         }
 
-        html += Qt::escape( string.mid( currentPos, string.length()-currentPos ) );
+        html += string.mid( currentPos, string.length()-currentPos ).toHtmlEscaped();
         html += "<br/>";
     }
 

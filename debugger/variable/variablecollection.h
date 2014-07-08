@@ -26,6 +26,7 @@
 
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QMap>
+#include <QtCore/QPointer>
 
 #include <KLocalizedString>
 #include <KTextEditor/TextHintInterface>
@@ -237,7 +238,7 @@ private Q_SLOTS:
 
 private:
     VariablesRoot* universe_;
-    QWeakPointer<VariableToolTip> activeTooltip_;
+    QPointer<VariableToolTip> activeTooltip_;
     bool m_widgetVisible;
 
     friend class VariableProvider;

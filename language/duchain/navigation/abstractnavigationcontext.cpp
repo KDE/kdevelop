@@ -88,7 +88,7 @@ QString AbstractNavigationContext::createLink(const QString& name, QString targe
 {
   if(m_shorten) {
     //Do not create links in shortened mode, it's only for viewing
-    return typeHighlight(Qt::escape(name));
+    return typeHighlight(name.toHtmlEscaped());
   }
   
   m_links[ targetId ] = action;
@@ -99,7 +99,7 @@ QString AbstractNavigationContext::createLink(const QString& name, QString targe
     m_selectedLink = m_linkCount;
   }
   
-  QString str = Qt::escape(name);
+  QString str = name.toHtmlEscaped();
   if( m_linkCount == m_selectedLink )
     str = "<font style=\"background-color:#f1f1f1;\" color=\"#880088\">" + str + "</font>";
 
@@ -440,7 +440,7 @@ void AbstractNavigationContext::addHtml(QString html) {
     if(line.indexOf(newLineRegExp) != -1) {
       ++m_currentLine;
       if(m_currentLine == m_currentPositionLine) {
-        m_currentText += "<font color=\"#880088\"> <a name = \"currentPosition\" >" + Qt::escape("<->") + "</a> </font>";
+        m_currentText += "<font color=\"#880088\"> <a name = \"currentPosition\" >" + QString("<->").toHtmlEscaped() + "</a> </font>";
       }
     }
   }

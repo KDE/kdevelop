@@ -180,7 +180,7 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
         bar->showWidget(action, true);
 
         // the dock should now be the "last" opened in a new area, not in the old area
-        for (QMap<Qt::DockWidgetArea, QWeakPointer<IdealDockWidget> >::iterator it = lastDockWidget.begin(); it != lastDockWidget.end(); ++it) {
+        for (auto it = lastDockWidget.begin(); it != lastDockWidget.end(); ++it) {
             if (it->data() == dock)
                 it->clear();
         }

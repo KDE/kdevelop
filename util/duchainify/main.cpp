@@ -52,23 +52,24 @@ bool verbose=false, warnings=false;
 
 using namespace KDevelop;
 
-void messageOutput(QtMsgType type, const char *msg)
+void messageOutput(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
-    
+    Q_UNUSED(context);
+
     switch (type) {
         case QtDebugMsg:
             if(verbose)
-                std::cerr << msg << std::endl;
+                std::cerr << qPrintable(msg) << std::endl;
             break;
         case QtWarningMsg:
             if(warnings)
-                std::cerr << msg << std::endl;
+                std::cerr << qPrintable(msg) << std::endl;
             break;
         case QtCriticalMsg:
-            std::cerr << msg << std::endl;
+            std::cerr << qPrintable(msg) << std::endl;
             break;
         case QtFatalMsg:
-            std::cerr << msg << std::endl;
+            std::cerr << qPrintable(msg) << std::endl;
             abort();
     }
 }
@@ -251,7 +252,7 @@ int main(int argc, char** argv)
 
     verbose = args->isSet("verbose");
     warnings = args->isSet("warnings");
-    qInstallMsgHandler(messageOutput);
+    qInstallMessageHandler(messageOutput);
 
     KApplication app(false);
 

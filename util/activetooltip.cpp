@@ -25,6 +25,7 @@
 #include <QApplication>
 #include <QEvent>
 #include <QMouseEvent>
+#include <QPointer>
 #include <limits>
 #include <kdebug.h>
 #include <qdesktopwidget.h>
@@ -41,7 +42,7 @@ public:
     uint previousDistance_;
     QRect rect_;
     QRegion rectExtensions_;
-    QList<QWeakPointer<QObject> > friendWidgets_;
+    QList<QPointer<QObject> > friendWidgets_;
     int mouseOut_;
 };
 
@@ -231,7 +232,7 @@ void ActiveToolTip::setBoundingGeometry(const QRect& geometry) {
 }
 
 namespace {
-    typedef QMultiMap<float, QPair<QWeakPointer<ActiveToolTip>, QString> > ToolTipPriorityMap;
+    typedef QMultiMap<float, QPair<QPointer<ActiveToolTip>, QString> > ToolTipPriorityMap;
     static ToolTipPriorityMap registeredToolTips;
     ActiveToolTipManager manager;
     
@@ -249,7 +250,7 @@ void ActiveToolTipManager::doVisibility() {
     QRect fullGeometry; //Geometry of all visible tooltips together
     
     for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
-        QWeakPointer< ActiveToolTip > w = (*it).first;
+        QPointer< ActiveToolTip > w = (*it).first;
         if(w) {
             if(exclusive) {
                 (w.data())->hide();
@@ -331,13 +332,13 @@ void ActiveToolTipManager::doVisibility() {
 void ActiveToolTip::showToolTip(KDevelop::ActiveToolTip* tooltip, float priority, QString uniqueId) {
     
     if(!uniqueId.isEmpty()) {
-        for(QMap< float, QPair< QWeakPointer< ActiveToolTip >, QString > >::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
+        for(QMap< float, QPair< QPointer< ActiveToolTip >, QString > >::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
             if((*it).second == uniqueId)
                 delete (*it).first.data();
         }
     }
 
-    registeredToolTips.insert(priority, qMakePair(QWeakPointer<KDevelop::ActiveToolTip>(tooltip), uniqueId));
+    registeredToolTips.insert(priority, qMakePair(QPointer<KDevelop::ActiveToolTip>(tooltip), uniqueId));
 
     connect(tooltip, SIGNAL(resized()), &manager, SLOT(doVisibility()));
     QMetaObject::invokeMethod(&manager, "doVisibility", Qt::QueuedConnection);

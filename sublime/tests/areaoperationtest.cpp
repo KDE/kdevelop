@@ -335,7 +335,7 @@ struct AreaWidgetChecker {
         return Area::ContinueWalker;
     }
     char* message() {
-        return qstrdup(failureMessage.toAscii().data());
+        return qstrdup(failureMessage.toLatin1().data());
     }
     bool foundViewWithoutWidget;
     QString failureMessage;
@@ -693,7 +693,7 @@ void AreaOperationTest::checkAreaViewsDisplay(MainWindow *mw, Area *area,
     QString failMsg = QString("\nFailure while checking area contents @ %1\n"
                               "Expected %2 containers in central splitter but got %3 \n").
                       arg(location).arg(containerCount).arg(containers.count());
-    QVERIFY2(containers.count() == containerCount, failMsg.toAscii().data());
+    QVERIFY2(containers.count() == containerCount, failMsg.toLatin1().data());
 
     int widgetCount = 0;
     foreach (Container *c, containers)

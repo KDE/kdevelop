@@ -95,8 +95,8 @@ public:
     bool hasReadContents : 1;
     bool aborted : 1;
     TopDUContext::Features features;
-    QList<QWeakPointer<QObject> > notify;
-    QWeakPointer<DocumentChangeTracker> tracker;
+    QList<QPointer<QObject> > notify;
+    QPointer<DocumentChangeTracker> tracker;
     RevisionReference revision;
     RevisionReference previousRevision;
 
@@ -114,7 +114,7 @@ ParseJob::ParseJob( const IndexedString& url, KDevelop::ILanguageSupport* langua
 
 ParseJob::~ParseJob()
 {
-    typedef QWeakPointer<QObject> QObjectPointer;
+    typedef QPointer<QObject> QObjectPointer;
     foreach(const QObjectPointer &p, d->notify) {
         if(p) {
             QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, d->url), Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
@@ -218,7 +218,7 @@ void ParseJob::abortJob()
     setStatus(Status_Aborted);
 }
 
-void ParseJob::setNotifyWhenReady(const QList< QWeakPointer< QObject > >& notify
+void ParseJob::setNotifyWhenReady(const QList<QPointer< QObject > >& notify
 ) {
     d->notify = notify;
 }

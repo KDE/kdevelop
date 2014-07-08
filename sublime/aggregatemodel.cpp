@@ -61,16 +61,18 @@ AggregateModel::~AggregateModel()
 
 void AggregateModel::addModel(const QString &name, QStandardItemModel *model)
 {
+    beginResetModel();
     d->modelList << model;
     d->modelNames[model] = name;
-    reset();
+    endResetModel();
 }
 
 void AggregateModel::removeModel(QStandardItemModel *model)
 {
+    beginResetModel();
     d->modelList.removeAll(model);
     d->modelNames.remove(model);
-    reset();
+    endResetModel();
 }
 
 

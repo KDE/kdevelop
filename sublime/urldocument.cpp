@@ -57,7 +57,7 @@ KUrl UrlDocument::url() const
 void UrlDocument::setUrl(const KUrl& newUrl)
 {
     //deep copy
-    d->url.setEncodedUrl(newUrl.url().toAscii());
+    d->url = QUrl::fromEncoded(newUrl.url().toLatin1());
     setTitle(newUrl.fileName());
     setToolTip(newUrl.prettyUrl());
 }

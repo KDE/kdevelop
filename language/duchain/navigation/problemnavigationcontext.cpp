@@ -89,9 +89,9 @@ QString ProblemNavigationContext::html(bool shorten)
   modifyHtml() += "<html><body><p>";
 
   modifyHtml() += i18n("Problem in <b>%1</b>:<br/>", m_problem->sourceString());
-  modifyHtml() += Qt::escape(m_problem->description());
+  modifyHtml() += m_problem->description().toHtmlEscaped();
   modifyHtml() += "<br/>";
-  modifyHtml() += "<i style=\"white-space:pre-wrap\">" + Qt::escape(m_problem->explanation()) + "</i>";
+  modifyHtml() += "<i style=\"white-space:pre-wrap\">" + m_problem->explanation().toHtmlEscaped() + "</i>";
 
   const QList<ProblemPointer> diagnostics = m_problem->diagnostics();
   if (!diagnostics.isEmpty()) {

@@ -182,6 +182,7 @@ public:
 
     void loadFromConfiguration(const KConfigGroup &config)
     {
+        beginResetModel();
         m_paths.clear();
         KConfigGroup cfg = config.group(PathMappings::pathMappingsEntry);
         for (int i=0; i<cfg.readEntry("Count", 0); ++i) {
@@ -191,7 +192,7 @@ public:
             p.local = pCfg.readEntry(PathMappings::pathMappingLocalEntry, QUrl());
             m_paths << p;
         }
-        reset();
+        endResetModel();
     }
 
     void saveToConfiguration(KConfigGroup config)

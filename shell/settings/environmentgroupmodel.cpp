@@ -173,6 +173,8 @@ void EnvironmentGroupModel::setCurrentGroup( const QString& group )
 {
     if( group.isEmpty() )
         return;
+
+    beginResetModel();
     m_currentGroup = group;
     m_varsByIndex.clear();
 
@@ -180,7 +182,7 @@ void EnvironmentGroupModel::setCurrentGroup( const QString& group )
     {
         m_varsByIndex << var;
     }
-    reset();
+    endResetModel();
 }
 
 void EnvironmentGroupModel::changeDefaultGroup( const QString& grp )

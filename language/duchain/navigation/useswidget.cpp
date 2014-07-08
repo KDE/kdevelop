@@ -92,10 +92,10 @@ QString highlightAndEscapeUseText(QString line, uint cutOff, SimpleRange range) 
   const QColor background(251, 250, 150);
   const QColor foreground(0, 0, 0);
 
-  return "<span style=\"font-family:'monospace'\">" + Qt::escape(line.left(range.start.column))
+  return "<span style=\"font-family:'monospace'\">" + line.left(range.start.column).toHtmlEscaped()
                     + "<span style=\"background-color:" + background.name() + ";color:" + foreground.name() + ";\">"
-                    + Qt::escape(line.mid(range.start.column, range.end.column - range.start.column))
-                    + "</span>" + Qt::escape(line.mid(range.end.column, line.length() - range.end.column)) + "</span>";
+                    + line.mid(range.start.column, range.end.column - range.start.column).toHtmlEscaped()
+                    + "</span>" + line.mid(range.end.column, line.length() - range.end.column).toHtmlEscaped() + "</span>";
 }
 
 OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString document, SimpleRange range, const CodeRepresentation& code) : m_range(new PersistentMovingRange(range, document)), m_declaration(declaration), m_document(document) {
@@ -126,7 +126,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
 
     QString toolTipText;
     for(int a = start; a < end; ++a) {
-      QString lineText = Qt::escape(code.line(a));
+      QString lineText = code.line(a).toHtmlEscaped();
       if (m_range->range().start.line <= a && m_range->range().end.line >= a) {
         lineText = QString("<b>") + lineText + QString("</b>");
       }
@@ -359,7 +359,7 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<Index
     }
 
     QLabel* headerLabel = new QLabel(i18nc("%1: source file", "In %1", "<a href='navigateToFunction'>" 
-                                          + Qt::escape(headerText) + "</a>: "));
+                                          + headerText.toHtmlEscaped() + "</a>: "));
     addHeaderItem(headerLabel);
     setUpdatesEnabled(true);
     connect(headerLabel, SIGNAL(linkActivated(QString)), this, SLOT(linkWasActivated(QString)));

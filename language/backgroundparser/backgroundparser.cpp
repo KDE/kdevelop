@@ -30,7 +30,7 @@
 #include <QWaitCondition>
 #include <QMutexLocker>
 #include <QThread>
-#include <QtCore/QWeakPointer>
+#include <QPointer>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -266,7 +266,7 @@ public:
         }
     }
 
-    ThreadWeaver::QObjectDecorator* createParseJob(const IndexedString& url, TopDUContext::Features features, const QList<QWeakPointer<QObject> >& notifyWhenReady, int priority = 0)
+    ThreadWeaver::QObjectDecorator* createParseJob(const IndexedString& url, TopDUContext::Features features, const QList<QPointer<QObject> >& notifyWhenReady, int priority = 0)
     {
         ///FIXME: use IndexedString in the other APIs as well! Esp. for createParseJob!
         KUrl kUrl = url.toUrl();
@@ -312,7 +312,7 @@ public:
             kDebug() << "could not create parse-job for url" << kUrl;
 
         //Notify that we failed
-        typedef QWeakPointer<QObject> Notify;
+        typedef QPointer<QObject> Notify;
         foreach(const Notify& n, notifyWhenReady)
             if(n)
                 QMetaObject::invokeMethod(n.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, url), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext()));
@@ -376,7 +376,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     ILanguageController* m_languageController;
 
     //Current parse-job that is executed in the additional thread
-    QWeakPointer<ThreadWeaver::JobInterface> specialParseJob;
+    QPointer<QObject> specialParseJob;
 
     QTimer m_timer;
     int m_delay;
@@ -385,7 +385,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     bool m_shuttingDown;
     
     struct DocumentParseTarget {
-        QWeakPointer<QObject> notifyWhenReady;
+        QPointer<QObject> notifyWhenReady;
         int priority;
         TopDUContext::Features features;
         ParseJob::SequentialProcessingFlags sequentialProcessingFlags;
@@ -426,8 +426,8 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
             return ret;
         }
 
-        QList<QWeakPointer<QObject> > notifyWhenReady() const {
-            QList<QWeakPointer<QObject> > ret;
+        QList<QPointer<QObject> > notifyWhenReady() const {
+            QList<QPointer<QObject> > ret;
 
             foreach(const DocumentParseTarget &target, targets)
                 if(target.notifyWhenReady)
@@ -550,7 +550,7 @@ void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Featu
         target.priority = priority;
         target.features = features;
         target.sequentialProcessingFlags = flags;
-        target.notifyWhenReady = QWeakPointer<QObject>(notifyWhenReady);
+        target.notifyWhenReady = QPointer<QObject>(notifyWhenReady);
 
         QHash<IndexedString, BackgroundParserPrivate::DocumentParsePlan>::iterator it = d->m_documents.find(url);
 

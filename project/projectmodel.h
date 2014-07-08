@@ -433,8 +433,6 @@ public:
     ProjectModel( QObject *parent = 0 );
     virtual ~ProjectModel();
 
-    void resetModel();
-
     void clear();
 
     void appendRow( ProjectBaseItem* item );

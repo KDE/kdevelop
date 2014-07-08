@@ -148,11 +148,13 @@ KDevelop::CodeCompletionWorker* CodeCompletionModel::worker() const {
   return m_thread->m_worker;
 }
 
-void CodeCompletionModel::clear() {
+void CodeCompletionModel::clear()
+{
+  beginResetModel();
   m_completionItems.clear();
   m_navigationWidgets.clear();
   m_completionContext.reset();
-  reset();
+  endResetModel();
 }
 
 void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url)
@@ -196,9 +198,10 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
        kDebug() << "context is set to" << thisContext.data();
         if( !thisContext ) {
           kDebug() << "================== NO CONTEXT FOUND =======================";
+          beginResetModel();
           m_completionItems.clear();
           m_navigationWidgets.clear();
-          reset();
+          endResetModel();
           return;
         }
     }
@@ -235,10 +238,10 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
     kWarning() << "Completion invoked on a completion model which has no code completion worker assigned!";
   }
 
+  beginResetModel();
   m_navigationWidgets.clear();
   m_completionItems.clear();
-
-  reset();
+  endResetModel();
 
   worker()->abortCurrentCompletion();
   worker()->setFullCompletion(m_fullCompletion);
@@ -253,19 +256,22 @@ void CodeCompletionModel::foundDeclarations(QList<QExplicitlySharedDataPointer<C
   m_completionContext = completionContext;
   
   if(m_completionItems.isEmpty() && items.isEmpty()) {
-    if(m_forceWaitForModel)
-      reset(); //If we need to reset the model, reset it
+    if(m_forceWaitForModel) {
+      // TODO KF5: Check if this actually works
+      beginResetModel();
+      endResetModel(); //If we need to reset the model, reset it
+    }
     return; //We don't need to reset, which is bad for target model
   }
   
+  beginResetModel();
   m_completionItems = items;
-  
-  
+  endResetModel();
+
   if(m_completionContext) {
     kDebug() << "got completion-context with " << m_completionContext->ungroupedElements().size() << "ungrouped elements";
   }
 
-  reset();
 
 /*  if (completionContext == m_completionContext.data()) {
     if( !m_completionItems.isEmpty() ) {

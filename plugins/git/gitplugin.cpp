@@ -1037,7 +1037,7 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
                 item.setDate(QDateTime::fromTime_t(infoRegex.cap(2).trimmed().split(' ')[0].toUInt()));
             }
         } else if (modificationsRegex.exactMatch(line)) {
-            VcsItemEvent::Actions a = actionsFromString(modificationsRegex.cap(1)[0].toAscii());
+            VcsItemEvent::Actions a = actionsFromString(modificationsRegex.cap(1)[0].toLatin1());
             QString filenameA = modificationsRegex.cap(2);
             
             VcsItemEvent itemEvent;
@@ -1091,7 +1091,7 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
     KUrl d = job->directory().absolutePath();
     QMap<KUrl, VcsStatusInfo::State> allStatus;
     foreach(const QString& line, outputLines) {
-        VcsStatusInfo::State status = lsfilesToState(line[0].toAscii());
+        VcsStatusInfo::State status = lsfilesToState(line[0].toLatin1());
         
         KUrl url = d;
         url.addPath(line.right(line.size()-2));
@@ -1229,7 +1229,7 @@ VcsStatusInfo::State GitPlugin::messageToState(const QString& msg)
     
     if(msg.contains('U') || msg == "AA" || msg == "DD")
         ret = VcsStatusInfo::ItemHasConflicts;
-    else switch(msg[0].toAscii())
+    else switch(msg[0].toLatin1())
     {
         case 'M':
             ret = VcsStatusInfo::ItemModified;

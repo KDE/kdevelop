@@ -37,7 +37,7 @@ GitPluginCheckInRepositoryJob::GitPluginCheckInRepositoryJob(KTextEditor::Docume
 
 void GitPluginCheckInRepositoryJob::start()
 {
-    const QTextCodec* codec = QTextCodec::codecForName(document()->encoding().toAscii());
+    const QTextCodec* codec = QTextCodec::codecForName(document()->encoding().toLatin1());
 
     const QDir workingDirectory(m_rootDirectory);
     if ( !workingDirectory.exists() ) {

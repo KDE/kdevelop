@@ -180,7 +180,7 @@ KUrl DocumentControllerTest::createFile(const KTempDir& dir, const QString& file
     bool success = file.open(QIODevice::WriteOnly | QIODevice::Text);
     if(!success)
     {
-        QWARN(QString("Failed to create file: " + dir.name() + filename).toAscii().data());
+        QWARN(QString("Failed to create file: " + dir.name() + filename).toLatin1().data());
         return KUrl();
     }
     file.close();

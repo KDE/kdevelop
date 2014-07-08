@@ -26,6 +26,7 @@
 #include <QTabBar>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QPointer>
 
 #include "area.h"
 #include "sublimedefs.h"
@@ -160,7 +161,7 @@ private:
 
     QMap<Area*, QAction*> m_areaActions;
     QMap<QAction*, Area*> m_actionAreas;
-    QWeakPointer<QWidget> m_leftTabbarCornerWidget;
+    QPointer<QWidget> m_leftTabbarCornerWidget;
 };
 
 }

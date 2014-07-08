@@ -128,7 +128,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 
     // Need to set this to get horizontal scrollbar. Also needs to be done after
     // the setModel call
-    m_ui->projectTreeView->header()->setResizeMode( QHeaderView::ResizeToContents );
+    m_ui->projectTreeView->header()->setSectionResizeMode( QHeaderView::ResizeToContents );
 }
 
 bool ProjectManagerView::eventFilter(QObject* obj, QEvent* event)

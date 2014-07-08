@@ -153,11 +153,11 @@ void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUCo
       if(!addedDeclarations.contains(id) && filterDeclaration(*declarationIterator) ) {
         //Show the declaration
         if(!first)
-          modifyHtml() += Qt::escape(", ");
+          modifyHtml() += QString(", ").toHtmlEscaped();
         else
           first = false;
 
-        modifyHtml() += Qt::escape(indent + declarationKind(DeclarationPointer(*declarationIterator)) + " ");
+        modifyHtml() += QString(indent + declarationKind(DeclarationPointer(*declarationIterator)) + " ").toHtmlEscaped();
         makeLink((*declarationIterator)->qualifiedIdentifier().toString(), DeclarationPointer(*declarationIterator), NavigationAction::NavigateDeclaration);
 
         addedDeclarations << id;

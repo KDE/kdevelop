@@ -587,11 +587,6 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
     return lst;
 }
 
-void ProjectModel::resetModel()
-{
-    reset();
-}
-
 void ProjectModel::clear()
 {
     d->rootItem->removeRows(0, d->rootItem->rowCount());

@@ -145,7 +145,7 @@ public:
     QString developerTempFile;
     QString projectTempFile;
     IPlugin* manager;
-    QWeakPointer<IPlugin> vcsPlugin;
+    QPointer<IPlugin> vcsPlugin;
     ProjectFolderItem* topItem;
     QString name;
     KSharedConfig::Ptr m_cfg;

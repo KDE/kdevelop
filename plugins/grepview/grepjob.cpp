@@ -169,7 +169,7 @@ void GrepJob::slotFindFinished()
     emit showMessage(this, i18np("Searching for <b>%2</b> in one file",
                                  "Searching for <b>%2</b> in %1 files",
                                  m_fileList.length(),
-                                 Qt::escape(m_regExp.pattern())));
+                                 m_regExp.pattern().toHtmlEscaped()));
 
     m_workState = WorkGrep;
     QMetaObject::invokeMethod( this, "slotWork", Qt::QueuedConnection);

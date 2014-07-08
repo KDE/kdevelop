@@ -25,11 +25,9 @@
 #include <QtCore/QObject>
 #include <QtCore/QList>
 #include <QColor>
-#include <QtCore/QWeakPointer>
+#include <QtCore/QPointer>
 
 #include <language/languageexport.h>
-
-#include <kdeversion.h>
 
 namespace KTextEditor {
 class Document;
@@ -156,7 +154,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     uchar m_globalColorRatio;
 
     /// The view we are listening to for setting changes.
-    QWeakPointer<KTextEditor::View> m_view;
+    QPointer<KTextEditor::View> m_view;
 };
 
 }
