@@ -49,10 +49,6 @@ void FocusedTreeView::resizeColumnsToContents() {
         // might happen on shutdown
         return;
     }
-    const int columns = model()->columnCount();
-    if (columns < 2) {
-        return;
-    }
     for(int a = 0; a < model()->columnCount(); ++a)
         resizeColumnToContents(a);
 }

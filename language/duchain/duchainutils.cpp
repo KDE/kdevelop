@@ -290,7 +290,7 @@ TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url, bool preferPr
 Declaration* declarationUnderCursor(const CursorInRevision& c, DUContext* ctx)
 {
   foreach( Declaration* decl, ctx->localDeclarations() )
-    if( decl->range().contains(c) )
+    if( decl->range().contains(c, RangeInRevision::IncludeBackEdge) )
       return decl;
 
   //Search all collapsed sub-contexts. In C++, those can contain declarations that have ranges out of the context
@@ -322,7 +322,7 @@ Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const KDevelop::Simp
 
       //Try finding a use under the cursor
       for(int a = 0; a < ctx->usesCount(); ++a)
-        if( ctx->uses()[a].m_range.contains(c) )
+        if( ctx->uses()[a].m_range.contains(c, RangeInRevision::IncludeBackEdge) )
           return ctx->topContext()->usedDeclarationForIndex(ctx->uses()[a].m_declarationIndex);
 
       ctx = ctx->parentContext(); //It may happen, for example in the case of function-declarations, that the use is one context higher.
@@ -340,12 +340,12 @@ KTextEditor::Range DUChainUtils::itemRangeUnderCursor(const KUrl& url, const KDe
     DUContext* ctx = chosen->findContextAt(c);
     if (ctx) {
       Declaration* decl = declarationUnderCursor(c, ctx);
-      if (decl && decl->range().contains(c) ) {
+      if (decl && decl->range().contains(c, RangeInRevision::IncludeBackEdge) ) {
         return decl->rangeInCurrentRevision().textRange();
       }
 
       for(int a = 0; a < ctx->usesCount(); ++a) {
-        if( ctx->uses()[a].m_range.contains(c) ) {
+        if( ctx->uses()[a].m_range.contains(c, RangeInRevision::IncludeBackEdge) ) {
           return ctx->transformFromLocalRevision(ctx->uses()[a].m_range).textRange();
         }
       }
