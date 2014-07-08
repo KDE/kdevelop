@@ -73,7 +73,7 @@ void MainWindow::applyMainWindowSettings(const KConfigGroup& config)
         KXmlGuiWindow::applyMainWindowSettings(config);
 }
 
-MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
+MainWindow::MainWindow( Sublime::Controller *parent, Qt::WindowFlags flags )
         : Sublime::MainWindow( parent, flags )
 {
     QDBusConnection::sessionBus().registerObject( "/kdevelop/MainWindow",

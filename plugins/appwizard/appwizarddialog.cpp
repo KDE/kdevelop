@@ -21,7 +21,7 @@
 #include "projectselectionpage.h"
 #include "projectvcspage.h"
 
-AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, ProjectTemplatesModel* templatesModel, QWidget *parent, Qt::WFlags flags)
+AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, ProjectTemplatesModel* templatesModel, QWidget *parent, Qt::WindowFlags flags)
     :KAssistantDialog(parent, flags)
 {
     setWindowTitle(i18n("Create New Project"));

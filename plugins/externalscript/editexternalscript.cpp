@@ -29,7 +29,7 @@
 
 #include <QAction>
 
-EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* parent, Qt::WFlags flags )
+EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* parent, Qt::WindowFlags flags )
     : KDialog( parent, flags ), m_item( item )
 {
   setButtons( /*Reset | */Apply | Cancel | Ok );

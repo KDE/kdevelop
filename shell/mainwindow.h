@@ -45,7 +45,7 @@ class KDEVPLATFORMSHELL_EXPORT MainWindow: public Sublime::MainWindow {
     Q_OBJECT
     Q_CLASSINFO( "D-Bus Interface", "org.kdevelop.MainWindow" )
 public:
-    explicit MainWindow( Sublime::Controller *parent = 0, Qt::WFlags flags = KDE_DEFAULT_WINDOWFLAGS );
+    explicit MainWindow( Sublime::Controller *parent = 0, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS );
     virtual ~MainWindow();
 
     /*! @p status must implement KDevelop::IStatus */
