@@ -221,4 +221,3 @@ void TestItemRepository::lookupValue()
   }
 }
 
-#include "tst_itemrepository.moc"

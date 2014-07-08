@@ -346,4 +346,3 @@ bool BuilderJob::stopOnFail() const
     return d->failOnFirstError;
 }
 
-#include "builderjob.moc"

@@ -157,4 +157,3 @@ void QuickOpenBench::benchProjectFileFilter_providerDataIcon_data()
     getData();
 }
 
-#include "quickopenbench.moc"

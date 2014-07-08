@@ -62,4 +62,3 @@ void SelectionController::cleanup()
 
 }
 
-#include "selectioncontroller.moc"

@@ -500,5 +500,4 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     close();
 }
 
-#include "grepdialog.moc"
 

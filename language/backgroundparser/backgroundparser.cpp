@@ -840,5 +840,4 @@ void BackgroundParser::projectOpeningAborted(IProject* project)
 Q_DECLARE_TYPEINFO(KDevelop::BackgroundParserPrivate::DocumentParseTarget, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(KDevelop::BackgroundParserPrivate::DocumentParsePlan, Q_MOVABLE_TYPE);
 
-#include "backgroundparser.moc"
 

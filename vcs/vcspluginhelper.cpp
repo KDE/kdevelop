@@ -525,4 +525,3 @@ void VcsPluginHelper::pull()
 }
 
 
-#include "vcspluginhelper.moc"

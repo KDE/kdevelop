@@ -64,4 +64,3 @@ void UiControllerTest::showErrorMessage()
     QCOMPARE(c->activeMainWindow()->size().width(), initialWidth);
 }
 
-#include "uicontrollertest.moc"

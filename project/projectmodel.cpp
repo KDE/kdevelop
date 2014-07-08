@@ -1210,4 +1210,3 @@ ProjectVisitor::~ProjectVisitor()
 
 
 }
-#include "projectmodel.moc"

@@ -183,4 +183,3 @@ void TestProjectController::initialize()
 {
 }
 
-#include "testproject.moc"

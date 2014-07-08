@@ -410,4 +410,3 @@ void ProgressDialog::slotToggleVisibility()
 
 }
 
-#include "progressdialog.moc"

@@ -241,5 +241,4 @@ SessionInfo Session::parse( const QString& id, bool mkdir )
 }
 
 }
-#include "session.moc"
 

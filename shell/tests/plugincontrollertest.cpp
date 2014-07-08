@@ -136,4 +136,3 @@ void PluginControllerTest::benchPluginForExtension()
 }
 
 QTEST_MAIN( PluginControllerTest)
-#include "plugincontrollertest.moc"

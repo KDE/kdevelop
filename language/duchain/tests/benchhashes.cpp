@@ -315,4 +315,3 @@ void BenchHashes::typeRepo_data()
   QTest::newRow("nested-vector") << 6;
 }
 
-#include "benchhashes.moc"

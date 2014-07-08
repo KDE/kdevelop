@@ -99,4 +99,3 @@ bool DvcsImportMetadataWidget::hasValidData() const
     return !d->m_ui->sourceLoc->text().isEmpty();
 }
 
-#include "dvcsimportmetadatawidget.moc"

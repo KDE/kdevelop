@@ -108,4 +108,3 @@ KDevelop::VcsItemEvent VcsItemEventModel::itemEventForIndex( const QModelIndex& 
 
 }
 
-#include "vcsitemeventmodel.moc"

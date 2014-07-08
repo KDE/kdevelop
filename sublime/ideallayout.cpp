@@ -251,4 +251,3 @@ int IdealButtonBarLayout::doHorizontalLayout(const QRect &rect, bool updateGeome
     return y + currentLineHeight + b;
 }
 
-#include "ideallayout.moc"

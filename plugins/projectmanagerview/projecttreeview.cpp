@@ -447,5 +447,4 @@ void ProjectTreeView::keyPressEvent(QKeyEvent* event)
 }
 
 
-#include "projecttreeview.moc"
 

@@ -64,7 +64,6 @@ QStandardItemModel * AggregateModelTest::newModel()
     return model;
 }
 
-#include "aggregatemodeltest.moc"
 
 QTEST_MAIN(AggregateModelTest)
 

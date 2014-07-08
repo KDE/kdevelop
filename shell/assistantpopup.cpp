@@ -304,4 +304,3 @@ void AssistantPopup::updateActions()
 }
 
 
-#include "assistantpopup.moc"

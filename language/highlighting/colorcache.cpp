@@ -335,6 +335,5 @@ QColor ColorCache::foregroundColor() const
 
 }
 
-#include "colorcache.moc"
 
 // kate: space-indent on; indent-width 2; replace-trailing-space-save on; show-tabs on; tab-indents on; tab-width 2;

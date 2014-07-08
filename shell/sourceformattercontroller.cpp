@@ -653,7 +653,6 @@ QString SourceFormatterPlugin::addIndentation(QString input, const QString inden
 
 }
 
-#include "sourceformattercontroller.moc"
 
 // kate: indent-mode cstyle; space-indent off; tab-width 4;
 

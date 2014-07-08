@@ -71,4 +71,3 @@ void ComboBoxDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, 
     model->setData(index, m_items.at(box->currentIndex()).data);
 }
 
-#include "comboboxdelegate.moc"

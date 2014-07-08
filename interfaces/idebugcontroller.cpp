@@ -34,4 +34,3 @@ IDebugController::~IDebugController()
 
 }
 
-#include "idebugcontroller.moc"

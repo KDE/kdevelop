@@ -43,4 +43,3 @@ void AutoOrientedSplitter::resizeEvent(QResizeEvent* e)
     QSplitter::resizeEvent(e);
 }
 
-#include "autoorientedsplitter.moc"

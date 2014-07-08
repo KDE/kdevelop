@@ -246,4 +246,3 @@ void FramestackWidget::sessionStateChanged(KDevelop::IDebugSession::DebuggerStat
 
 }
 
-#include "framestackwidget.moc"

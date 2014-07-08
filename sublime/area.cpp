@@ -487,4 +487,3 @@ void Area::actionDestroyed(QObject* action)
 
 }
 
-#include "area.moc"

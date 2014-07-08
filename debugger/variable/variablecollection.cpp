@@ -522,4 +522,3 @@ QString VariableProvider::textHint(KTextEditor::View* view, const KTextEditor::C
 
 }
 
-#include "variablecollection.moc"

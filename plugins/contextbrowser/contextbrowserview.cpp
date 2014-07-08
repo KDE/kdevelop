@@ -322,4 +322,3 @@ void ContextBrowserView::setSpecialNavigationWidget(QWidget* widget) {
     }
 }
 
-#include "contextbrowserview.moc"

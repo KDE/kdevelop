@@ -313,4 +313,3 @@ VCSStandardDiffUpdater::~VCSStandardDiffUpdater() {
 VCSDiffUpdater::~VCSDiffUpdater() {
 }
 
-#include "vcsdiffpatchsources.moc"

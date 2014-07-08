@@ -290,4 +290,3 @@ void AbstractNavigationWidget::wheelEvent(QWheelEvent* event )
 
 }
 
-#include "abstractnavigationwidget.moc"

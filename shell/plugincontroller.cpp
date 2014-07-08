@@ -696,5 +696,4 @@ void PluginController::resetToDefaults()
 }
 
 }
-#include "plugincontroller.moc"
 

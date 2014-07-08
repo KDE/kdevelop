@@ -145,4 +145,3 @@ void CvsTest::testLogFolder()
 QTEST_KDEMAIN(CvsTest, GUI)
 
 
-#include "cvstest.moc"

@@ -550,4 +550,3 @@ Breakpoint* BreakpointModel::breakpoint(const KUrl& url, int line) {
     return 0;
 }
 
-#include "breakpointmodel.moc"

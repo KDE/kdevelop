@@ -648,4 +648,3 @@ QSize KDevelop::UsesWidget::sizeHint() const {
 }
 
 
-#include "useswidget.moc"

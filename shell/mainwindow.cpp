@@ -380,4 +380,3 @@ void MainWindow::dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoi
 
 }
 
-#include "mainwindow.moc"

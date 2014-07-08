@@ -203,4 +203,3 @@ void EnvironmentGroupModel::saveToConfig( KConfig* cfg )
 
 }
 
-#include "environmentgroupmodel.moc"

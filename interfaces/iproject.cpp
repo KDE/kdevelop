@@ -44,4 +44,3 @@ IProject::~IProject()
 
 }
 
-#include "iproject.moc"

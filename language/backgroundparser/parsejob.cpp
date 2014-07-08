@@ -529,4 +529,3 @@ ThreadWeaver::QObjectDecorator* ParseJob::decorator() const
 
 }
 
-#include "parsejob.moc"

@@ -96,5 +96,4 @@ KParts::Part* IPartController::createPart ( const QString& mimetype, const QStri
 
 }
 
-#include "ipartcontroller.moc"
 

@@ -158,7 +158,6 @@ void TestProjectFilter::match_data()
             {"foo.so.1", File, Invalid},
             {"foo.a", File, Invalid},
             {"moc_foo.cpp", File, Invalid},
-            {"foo.moc", File, Invalid},
             {"ui_foo.h", File, Invalid},
             {"qrc_foo.cpp", File, Invalid},
             {"foo.cpp~", File, Invalid},
@@ -396,4 +395,3 @@ void TestProjectFilter::bench_data()
     }
 }
 
-#include "test_projectfilter.moc"

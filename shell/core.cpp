@@ -575,4 +575,3 @@ QString Core::version()
 
 }
 
-#include "core.moc"

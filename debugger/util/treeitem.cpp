@@ -263,4 +263,3 @@ void KDevelop::TreeItem::setExpanded(bool b)
     }
 }
 
-#include "treeitem.moc"

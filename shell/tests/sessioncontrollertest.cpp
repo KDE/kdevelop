@@ -269,4 +269,3 @@ void SessionControllerTest::tryLockSession()
 
 QTEST_MAIN(SessionControllerTest)
 
-#include "sessioncontrollertest.moc"

@@ -119,4 +119,3 @@ void EditorsView::parseOutput(const QString& jobOutput, QMultiMap<QString,CvsLoc
     }
 }
 
-#include "editorsview.moc"

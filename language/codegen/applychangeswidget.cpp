@@ -201,4 +201,3 @@ void ApplyChangesWidget::updateDiffView(int index)
 
 }
 
-#include "applychangeswidget.moc"

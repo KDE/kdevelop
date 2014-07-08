@@ -63,4 +63,3 @@ void ProjectInfoPage::setProjectManager( const QString& name )
 
 }
 
-#include "projectinfopage.moc"

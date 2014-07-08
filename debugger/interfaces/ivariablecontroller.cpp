@@ -128,4 +128,3 @@ QFlags<IVariableController::UpdateType> IVariableController::autoUpdate()
 
 }
 
-#include "ivariablecontroller.moc"

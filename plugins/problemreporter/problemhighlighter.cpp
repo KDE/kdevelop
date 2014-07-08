@@ -247,4 +247,3 @@ void ProblemHighlighter::documentReloaded()
     setProblems(m_problems);
 }
 
-#include "problemhighlighter.moc"

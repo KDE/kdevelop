@@ -132,4 +132,3 @@ void TestCore::setUiController( UiController* ctrl )
 
 }
 
-#include "testcore.moc"

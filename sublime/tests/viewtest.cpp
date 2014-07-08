@@ -69,5 +69,4 @@ void ViewTest::viewReimplementation()
     QVERIFY(dynamic_cast<TestView*>(view) != 0);
 }
 
-#include "viewtest.moc"
 QTEST_MAIN(ViewTest)

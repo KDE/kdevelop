@@ -32,5 +32,4 @@ ISession::~ISession()
 }
 
 }
-#include "isession.moc"
 

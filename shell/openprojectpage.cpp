@@ -133,4 +133,3 @@ QMap<QString,QStringList> OpenProjectPage::projectFilters() const
 
 }
 
-#include "openprojectpage.moc"

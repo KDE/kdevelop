@@ -474,5 +474,4 @@ bool GrepOutputModel::hasResults()
 
 
 
-#include "grepoutputmodel.moc"
 

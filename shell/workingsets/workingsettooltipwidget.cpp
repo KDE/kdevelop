@@ -380,4 +380,3 @@ void WorkingSetToolTipWidget::labelClicked()
         updateFileButtons();
 }
 
-#include "workingsettooltipwidget.moc"

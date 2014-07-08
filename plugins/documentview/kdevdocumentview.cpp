@@ -348,4 +348,3 @@ void KDevDocumentView::documentUrlChanged( KDevelop::IDocument* document )
     opened(document);
 }
 
-#include "kdevdocumentview.moc"

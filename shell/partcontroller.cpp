@@ -266,5 +266,4 @@ bool PartController::closeView(KTextEditor::View *view)
 
 
 }
-#include "partcontroller.moc"
 

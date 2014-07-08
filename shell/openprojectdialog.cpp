@@ -251,5 +251,4 @@ void OpenProjectDialog::storeFileList(KIO::Job*, const KIO::UDSEntryList& list)
 
 }
 
-#include "openprojectdialog.moc"
 

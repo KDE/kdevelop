@@ -227,4 +227,3 @@ void ViewActivationTest::activationAfterRemovalSimplestCase()
 }
 
 QTEST_MAIN(ViewActivationTest)
-#include "viewactivationtest.moc"

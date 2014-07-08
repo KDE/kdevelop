@@ -581,5 +581,4 @@ void Container::documentListActionTriggered(QAction* action)
 
 }
 
-#include "container.moc"
 

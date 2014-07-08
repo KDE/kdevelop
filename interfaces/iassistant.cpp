@@ -154,4 +154,3 @@ void IAssistant::clearActions()
 
 //END IAssistant
 
-#include "iassistant.moc"

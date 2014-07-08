@@ -84,4 +84,3 @@ void CheckoutDialog::jobFinished(KJob * job)
     }
 }
 
-#include "checkoutdialog.moc"

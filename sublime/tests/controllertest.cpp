@@ -89,6 +89,5 @@ void ControllerTest::namedAreas()
     QCOMPARE(controller.defaultArea("2"), area2);
 }
 
-#include "controllertest.moc"
 QTEST_MAIN(ControllerTest)
 

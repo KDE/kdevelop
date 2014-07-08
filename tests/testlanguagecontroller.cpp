@@ -41,4 +41,3 @@ void TestLanguageController::addTestLanguage(ILanguageSupport* languageSupport, 
 }
 
 
-#include "testlanguagecontroller.moc"

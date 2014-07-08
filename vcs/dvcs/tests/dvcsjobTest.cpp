@@ -60,4 +60,3 @@ void DVcsJobTest::testJob()
 
 QTEST_MAIN(DVcsJobTest)
 
-#include "dvcsjobTest.moc"

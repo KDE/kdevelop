@@ -82,4 +82,3 @@ void CvsJob::start()
     DVcsJob::start();
 }
 
-#include "cvsjob.moc"

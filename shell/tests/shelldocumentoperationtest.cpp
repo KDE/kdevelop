@@ -140,4 +140,3 @@ void ShellDocumentOperationTest::testKateDocumentAndViewCreation()
 
 QTEST_MAIN(ShellDocumentOperationTest)
 
-#include "shelldocumentoperationtest.moc"

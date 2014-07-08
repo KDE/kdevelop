@@ -115,4 +115,3 @@ void OutputModelTest::bench_data()
 }
 
 }
-#include "outputmodeltest.moc"

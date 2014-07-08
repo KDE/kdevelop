@@ -352,4 +352,3 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
 
 //END: BasicRefactoring
 
-#include "basicrefactoring.moc"

@@ -74,4 +74,3 @@ uint IPatchSource::depth() const
 }
 
 
-#include "ipatchsource.moc"

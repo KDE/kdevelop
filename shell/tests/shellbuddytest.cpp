@@ -423,4 +423,3 @@ void ShellBuddyTest::testsplitViewBuddies()
 
 QTEST_MAIN(ShellBuddyTest)
 
-#include "shellbuddytest.moc"

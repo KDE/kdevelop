@@ -725,5 +725,4 @@ View *AreaOperationTest::findNamedView(Area *area, const QString &name)
 
 ///////////
 QTEST_MAIN(AreaOperationTest)
-#include "areaoperationtest.moc"
 

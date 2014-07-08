@@ -235,4 +235,3 @@ void DocumentationController::changedDocumentationProviders()
     emit providersChanged();
 }
 
-#include "documentationcontroller.moc"

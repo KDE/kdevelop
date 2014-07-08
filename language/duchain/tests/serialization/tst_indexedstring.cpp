@@ -172,4 +172,3 @@ void TestIndexedString::test_data()
   QTest::newRow("string-utf8") << QString::fromUtf8("æſðđäöü");
 }
 
-#include "tst_indexedstring.moc"
