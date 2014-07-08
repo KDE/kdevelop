@@ -117,11 +117,11 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
             return getDisplayUrl(p->finalLocation().document.str(), baseDirectory);
         case Line:
             if (p->finalLocation().isValid())
-                return QString::number(p->finalLocation().start.line + 1);
+                return QString::number(p->finalLocation().start().line() + 1);
             break;
         case Column:
             if (p->finalLocation().isValid())
-                return QString::number(p->finalLocation().start.column + 1);
+                return QString::number(p->finalLocation().start().column() + 1);
             break;
         }
         break;

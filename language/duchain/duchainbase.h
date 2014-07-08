@@ -26,11 +26,14 @@
 #include <language/editor/persistentmovingrange.h>
 #include <language/editor/rangeinrevision.h>
 
+namespace KTextEditor {
+class Cursor;
+class Range;
+}
+
 namespace KDevelop
 {
 class PersistentMovingRange;
-class SimpleCursor;
-class SimpleRange;
 class DUContext;
 class TopDUContext;
 class DUChainBase;
@@ -162,7 +165,7 @@ public:
   
   ///Returns the range assigned to this object, transformed into the current revision of the document.
   ///@warning This must only be called from the foreground thread, or with the foreground lock acquired.
-  SimpleRange rangeInCurrentRevision() const;
+  KTextEditor::Range rangeInCurrentRevision() const;
 
   ///Returns the range assigned to this object, transformed into the current revision of the document.
   ///The returned object is unique at each call, so you can use it and change it in whatever way you want.
@@ -173,17 +176,17 @@ public:
   ///in the parsed document containing this duchain object. The resulting cursor will be directly comparable to the non-translated
   ///range() members in the duchain, but only for one duchain locking cycle.
   ///@warning This must only be called from the foreground thread, or with the foreground lock acquired.
-  CursorInRevision transformToLocalRevision(const SimpleCursor& cursor) const;
+  CursorInRevision transformToLocalRevision(const KTextEditor::Cursor& cursor) const;
 
   ///Transforms the given range in the current document revision to its according position
   ///in the parsed document containing this duchain object. The resulting cursor will be directly comparable to the non-translated
   ///range() members in the duchain, but only for one duchain locking cycle.
   ///@warning This must only be called from the foreground thread, or with the foreground lock acquired.
-  RangeInRevision transformToLocalRevision(const SimpleRange& range) const;
+  RangeInRevision transformToLocalRevision(const KTextEditor::Range& range) const;
 
-  SimpleCursor transformFromLocalRevision(const CursorInRevision& cursor) const;
+  KTextEditor::Cursor transformFromLocalRevision(const CursorInRevision& cursor) const;
   
-  SimpleRange transformFromLocalRevision(const RangeInRevision& range) const;
+  KTextEditor::Range transformFromLocalRevision(const RangeInRevision& range) const;
 
 protected:
   /**

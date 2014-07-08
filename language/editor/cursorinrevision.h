@@ -19,7 +19,8 @@
 #define KDEVPLATFORM_CURSORINREVISION_H
 
 #include <language/languageexport.h>
-#include "simplecursor.h"
+
+#include <ktexteditor/cursor.h>
 
 namespace KDevelop {
   
@@ -83,16 +84,16 @@ public:
  ///  to transform this cursor to the current revision, you should do a proper
  ///  mapping instead through @ref KDevelop::DUChainBase or @ref KDevelop::RevisionReference
  ///  or @ref KDevelop::DocumentChangeTracker
- SimpleCursor castToSimpleCursor() const {
-   return SimpleCursor(line, column);
+ KTextEditor::Cursor castToSimpleCursor() const {
+   return KTextEditor::Cursor(line, column);
  }
  
  /// @warning Using this is wrong in most cases! If you want
  ///  to transform this cursor to the current revision, you should do a proper
  ///  mapping instead through @ref KDevelop::DUChainBase or @ref KDevelop::RevisionReference
  ///  or @ref KDevelop::DocumentChangeTracker
- static CursorInRevision castFromSimpleCursor(const SimpleCursor& cursor) {
-   return CursorInRevision(cursor.line, cursor.column);
+ static CursorInRevision castFromSimpleCursor(const KTextEditor::Cursor& cursor) {
+   return CursorInRevision(cursor.line(), cursor.column());
  }
 
  /// kDebug() stream operator.  Writes this cursor to the debug output in a nicely formatted way.

@@ -100,7 +100,7 @@ QString ProblemNavigationContext::html(bool shorten)
     DUChainReadLocker lock;
     for (auto diagnostic : diagnostics) {
       const DocumentRange range = diagnostic->finalLocation();
-      Declaration* declaration = DUChainUtils::itemUnderCursor(range.document.toUrl(), range.start);
+      Declaration* declaration = DUChainUtils::itemUnderCursor(range.document.toUrl(), range.start());
 
       modifyHtml() += labelHighlight(QString("%1: ").arg(diagnostic->severityString()));
       modifyHtml() += diagnostic->description();
@@ -109,7 +109,7 @@ QString ProblemNavigationContext::html(bool shorten)
         modifyHtml() += "<br/>";
         makeLink(declaration->toString(), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
         modifyHtml() += i18n(" in ");
-        makeLink(QString("%1 :%2").arg(declaration->url().toUrl().fileName()).arg(declaration->rangeInCurrentRevision().textRange().start().line()+1), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
+        makeLink(QString("%1 :%2").arg(declaration->url().toUrl().fileName()).arg(declaration->rangeInCurrentRevision().start().line()+1), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
       }
       modifyHtml() += "<br/>";
     }

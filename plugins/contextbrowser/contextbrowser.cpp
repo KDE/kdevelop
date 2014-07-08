@@ -94,7 +94,7 @@ const float highlightingZDepth = -5000;
 const int maxHistoryLength = 30;
 
 // Helper that determines the context to use for highlighting at a specific position
-DUContext* contextForHighlightingAt(const SimpleCursor& position, TopDUContext* topContext)
+DUContext* contextForHighlightingAt(const KTextEditor::Cursor& position, TopDUContext* topContext)
 {
   DUContext* ctx = topContext->findContextAt(topContext->transformToLocalRevision(position));
   while(ctx && ctx->parentContext()
@@ -111,7 +111,7 @@ DUContext* getContextAt(const KUrl& url, KTextEditor::Cursor cursor)
 {
   TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
   if (!topContext) return 0;
-  return contextForHighlightingAt(SimpleCursor(cursor), topContext);
+  return contextForHighlightingAt(KTextEditor::Cursor(cursor), topContext);
 }
 
 DeclarationPointer cursorDeclaration()
@@ -123,7 +123,7 @@ DeclarationPointer cursorDeclaration()
 
   DUChainReadLocker lock;
 
-  Declaration *decl = DUChainUtils::declarationForDefinition(DUChainUtils::itemUnderCursor(view->document()->url(), SimpleCursor(view->cursorPosition())));
+  Declaration *decl = DUChainUtils::declarationForDefinition(DUChainUtils::itemUnderCursor(view->document()->url(), KTextEditor::Cursor(view->cursorPosition())));
   return DeclarationPointer(decl);
 }
 
@@ -393,7 +393,7 @@ ContextBrowserHintProvider::ContextBrowserHintProvider(ContextBrowserPlugin* plu
 
 QString ContextBrowserHintProvider::textHint(View* view, const KTextEditor::Cursor& cursor)
 {
-  m_plugin->m_mouseHoverCursor = SimpleCursor(cursor);
+  m_plugin->m_mouseHoverCursor = KTextEditor::Cursor(cursor);
   if(!view) {
     kWarning() << "could not cast to view";
   }else{
@@ -443,7 +443,7 @@ static int getLineHeight(KTextEditor::View* view, int curLine)
 static QRect getItemBoundingRect(const KUrl& viewUrl, KTextEditor::View* view, KTextEditor::Cursor itemPosition)
 {
   DUChainReadLocker lock;
-  KTextEditor::Range itemRange = DUChainUtils::itemRangeUnderCursor(viewUrl, SimpleCursor(itemPosition));
+  KTextEditor::Range itemRange = DUChainUtils::itemRangeUnderCursor(viewUrl, KTextEditor::Cursor(itemPosition));
   QPoint startPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.start()));
   QPoint endPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.end()));
   endPoint.ry() += getLineHeight(view, itemPosition.line());
@@ -463,13 +463,13 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
   {
     DUChainReadLocker lock(DUChain::lock());
     foreach( ILanguage* language, languages) {
-      navigationWidget = language->languageSupport()->specialLanguageObjectNavigationWidget(viewUrl, SimpleCursor(position));
+      navigationWidget = language->languageSupport()->specialLanguageObjectNavigationWidget(viewUrl, KTextEditor::Cursor(position));
       if(navigationWidget)
         break;
     }
     
     if(!navigationWidget) {
-      Declaration* decl = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(viewUrl, SimpleCursor(position)) );
+      Declaration* decl = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(viewUrl, KTextEditor::Cursor(position)) );
       if (decl && decl->kind() == Declaration::Alias) {
         AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(decl);
         Q_ASSERT(alias);
@@ -518,7 +518,7 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
 }
 
 void ContextBrowserPlugin::clearMouseHover() {
-  m_mouseHoverCursor = SimpleCursor::invalid();
+  m_mouseHoverCursor = KTextEditor::Cursor::invalid();
   m_mouseHoverDocument.clear();
 }
 
@@ -569,10 +569,10 @@ void ContextBrowserPlugin::addHighlight( View* view, KDevelop::Declaration* decl
   
   // Highlight uses
   {
-    QMap< IndexedString, QList< SimpleRange > > currentRevisionUses = decl->usesCurrentRevision();
-    for(QMap< IndexedString, QList< SimpleRange > >::iterator fileIt = currentRevisionUses.begin(); fileIt != currentRevisionUses.end(); ++fileIt)
+    QMap< IndexedString, QList< KTextEditor::Range > > currentRevisionUses = decl->usesCurrentRevision();
+    for(QMap< IndexedString, QList< KTextEditor::Range > >::iterator fileIt = currentRevisionUses.begin(); fileIt != currentRevisionUses.end(); ++fileIt)
     {
-      for(QList< SimpleRange >::const_iterator useIt = (*fileIt).constBegin(); useIt != (*fileIt).constEnd(); ++useIt)
+      for(QList< KTextEditor::Range >::const_iterator useIt = (*fileIt).constBegin(); useIt != (*fileIt).constEnd(); ++useIt)
       {
         highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(*useIt, fileIt.key()));
         highlights.highlights.back()->setAttribute(highlightedUseAttribute());
@@ -589,7 +589,7 @@ void ContextBrowserPlugin::addHighlight( View* view, KDevelop::Declaration* decl
   }
 }
 
-Declaration* ContextBrowserPlugin::findDeclaration(View* view, const SimpleCursor& position, bool mouseHighlight)
+Declaration* ContextBrowserPlugin::findDeclaration(View* view, const KTextEditor::Cursor& position, bool mouseHighlight)
 {
       Q_UNUSED(mouseHighlight);
       Declaration* foundDeclaration = 0;
@@ -648,11 +648,11 @@ void ContextBrowserPlugin::updateForView(View* view)
     bool mouseHighlight = (url == m_mouseHoverDocument) && (m_mouseHoverCursor.isValid());
     bool shouldUpdateBrowser = (mouseHighlight || (view == ICore::self()->documentController()->activeTextDocumentView() && activeDoc && activeDoc->textDocument() == view->document()));
     
-    SimpleCursor highlightPosition;
+    KTextEditor::Cursor highlightPosition;
     if (mouseHighlight)
      highlightPosition = m_mouseHoverCursor;
     else
-     highlightPosition = SimpleCursor(view->cursorPosition());
+     highlightPosition = KTextEditor::Cursor(view->cursorPosition());
 
     ///Pick a language
     ILanguage* language = 0;
@@ -666,7 +666,7 @@ void ContextBrowserPlugin::updateForView(View* view)
     
     ///Check whether there is a special language object to highlight (for example a macro)
     
-    SimpleRange specialRange = language->languageSupport()->specialLanguageObjectRange(url, highlightPosition);
+    KTextEditor::Range specialRange = language->languageSupport()->specialLanguageObjectRange(url, highlightPosition);
     ContextBrowserView* updateBrowserView = shouldUpdateBrowser ?  browserViewForWidget(view) : 0;
     
     if(specialRange.isValid())
@@ -695,7 +695,7 @@ void ContextBrowserPlugin::updateForView(View* view)
         return;
       
       //Only update the history if this context is around the text cursor
-      if(core()->documentController()->activeDocument() && highlightPosition == SimpleCursor(view->cursorPosition()) && view->document() == core()->documentController()->activeDocument()->textDocument())
+      if(core()->documentController()->activeDocument() && highlightPosition == KTextEditor::Cursor(view->cursorPosition()) && view->document() == core()->documentController()->activeDocument()->textDocument())
       {
         updateHistory(ctx, highlightPosition);
       }
@@ -841,8 +841,8 @@ void ContextBrowserPlugin::nextUseShortcut()
   switchUse(true);
 }
 
-KTextEditor::Range cursorToRange(SimpleCursor cursor) {
-  return KTextEditor::Range(cursor.textCursor(), cursor.textCursor());
+KTextEditor::Range cursorToRange(KTextEditor::Cursor cursor) {
+  return KTextEditor::Range(cursor, cursor);
 }
 
 void ContextBrowserPlugin::switchUse(bool forward)
@@ -855,7 +855,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
 
     if( chosen )
     {
-      SimpleCursor cCurrent(view->cursorPosition());
+      KTextEditor::Cursor cCurrent(view->cursorPosition());
       KDevelop::CursorInRevision c = chosen->transformToLocalRevision(cCurrent);
       
       Declaration* decl = 0;
@@ -887,7 +887,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
           target = FunctionDefinition::definition(decl);
         
           if(target && target != decl) {
-            SimpleCursor jumpTo = target->rangeInCurrentRevision().start;
+            KTextEditor::Cursor jumpTo = target->rangeInCurrentRevision().start();
             KUrl document = target->url().toUrl();
             lock.unlock();
             core()->documentController()->openDocument( document, cursorToRange(jumpTo)  );
@@ -918,9 +918,9 @@ void ContextBrowserPlugin::switchUse(bool forward)
               qSort(useRanges);
               if(!useRanges.isEmpty()) {
                 KUrl url = top->url().toUrl();
-                SimpleRange selectUse = chosen->transformFromLocalRevision(forward ? useRanges.first() : useRanges.back());
+                KTextEditor::Range selectUse = chosen->transformFromLocalRevision(forward ? useRanges.first() : useRanges.back());
                 lock.unlock();
-                core()->documentController()->openDocument(url, cursorToRange(selectUse.start));
+                core()->documentController()->openDocument(url, cursorToRange(selectUse.start()));
               }
             }
           }
@@ -990,10 +990,10 @@ void ContextBrowserPlugin::switchUse(bool forward)
                     decl = definition;
                 }
                 KUrl u(decl->url().str());
-                SimpleRange range = decl->rangeInCurrentRevision();
-                range.end = range.start;
+                KTextEditor::Range range = decl->rangeInCurrentRevision();
+                range.end() = range.start();
                 lock.unlock();
-                core()->documentController()->openDocument(u, range.textRange());
+                core()->documentController()->openDocument(u, range);
                 return;
               }else{
                 TopDUContext* nextTop = usingFiles[nextFile].data();
@@ -1004,10 +1004,10 @@ void ContextBrowserPlugin::switchUse(bool forward)
                 qSort(nextTopUses);
                 
                 if(!nextTopUses.isEmpty()) {
-                  SimpleRange range =  chosen->transformFromLocalRevision(forward ? nextTopUses.front() : nextTopUses.back());
-                  range.end = range.start;
+                  KTextEditor::Range range =  chosen->transformFromLocalRevision(forward ? nextTopUses.front() : nextTopUses.back());
+                  range.end() = range.start();
                   lock.unlock();
-                  core()->documentController()->openDocument(u, range.textRange());
+                  core()->documentController()->openDocument(u, range);
                 }
                 return;
               }
@@ -1016,10 +1016,10 @@ void ContextBrowserPlugin::switchUse(bool forward)
             }
           }else{
               KUrl url(chosen->url().str());
-              SimpleRange range = chosen->transformFromLocalRevision(localUses[nextUse]);
-              range.end = range.start;
+              KTextEditor::Range range = chosen->transformFromLocalRevision(localUses[nextUse]);
+              range.end() = range.start();
               lock.unlock();
-              core()->documentController()->openDocument(url, range.textRange());
+              core()->documentController()->openDocument(url, range);
               return;
           }
         }
@@ -1061,11 +1061,11 @@ void ContextBrowserPlugin::documentJumpPerformed( KDevelop::IDocument* newDocume
         kDebug() << "updating jump source";
         DUContext* context = getContextAt(previousDocument->url(), previousCursor);
         if(context) {
-            updateHistory(context, SimpleCursor(previousCursor), true);
+            updateHistory(context, KTextEditor::Cursor(previousCursor), true);
         }else{
             //We just want this place in the history
             m_history.resize(m_nextHistoryIndex); // discard forward history
-            m_history.append(HistoryEntry(DocumentCursor(IndexedString(previousDocument->url()), SimpleCursor(previousCursor))));
+            m_history.append(HistoryEntry(DocumentCursor(IndexedString(previousDocument->url()), KTextEditor::Cursor(previousCursor))));
             ++m_nextHistoryIndex;
         }
     }
@@ -1074,11 +1074,11 @@ void ContextBrowserPlugin::documentJumpPerformed( KDevelop::IDocument* newDocume
         kDebug() << "updating jump target";
         DUContext* context = getContextAt(newDocument->url(), newCursor);
         if(context) {
-            updateHistory(context, SimpleCursor(newCursor), true);
+            updateHistory(context, KTextEditor::Cursor(newCursor), true);
         }else{
             //We just want this place in the history
             m_history.resize(m_nextHistoryIndex); // discard forward history
-            m_history.append(HistoryEntry(DocumentCursor(IndexedString(newDocument->url()), SimpleCursor(newCursor))));
+            m_history.append(HistoryEntry(DocumentCursor(IndexedString(newDocument->url()), KTextEditor::Cursor(newCursor))));
             ++m_nextHistoryIndex;
             m_outlineLine->clear();
         }
@@ -1109,7 +1109,7 @@ void ContextBrowserPlugin::openDocument(int historyIndex) {
         
         disconnect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)), this,      SLOT(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)));
         
-        ICore::self()->documentController()->openDocument(c.document.toUrl(), c.textCursor());
+        ICore::self()->documentController()->openDocument(c.document.toUrl(), c);
         
         connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)));
 
@@ -1138,7 +1138,7 @@ QString ContextBrowserPlugin::actionTextFor(int historyIndex) const
         actionText = "<unnamed>";
     actionText += " @ ";
     QString fileName = entry.absoluteCursorPosition.document.toUrl().fileName();
-    actionText += QString("%1:%2").arg(fileName).arg(entry.absoluteCursorPosition.line+1);
+    actionText += QString("%1:%2").arg(fileName).arg(entry.absoluteCursorPosition.line()+1);
     return actionText;
 }
 
@@ -1179,7 +1179,7 @@ void ContextBrowserPlugin::fillHistoryPopup(QMenu* menu, const QList<int>& histo
 }
 
 bool ContextBrowserPlugin::isPreviousEntry(KDevelop::DUContext* context,
-                                           const KDevelop::SimpleCursor& /*position*/) const
+                                           const KTextEditor::Cursor& /*position*/) const
 {
     if (m_nextHistoryIndex == 0) return false;
     Q_ASSERT(m_nextHistoryIndex <= m_history.count());
@@ -1189,7 +1189,7 @@ bool ContextBrowserPlugin::isPreviousEntry(KDevelop::DUContext* context,
     return IndexedDUContext(context) == he.context;
 }
 
-void ContextBrowserPlugin::updateHistory(KDevelop::DUContext* context, const KDevelop::SimpleCursor& position, bool force)
+void ContextBrowserPlugin::updateHistory(KDevelop::DUContext* context, const KTextEditor::Cursor& position, bool force)
 {
     kDebug() << "updating history";
     
@@ -1342,7 +1342,7 @@ void ContextBrowserPlugin::navigateUp() {
 ContextBrowserPlugin::HistoryEntry::HistoryEntry(KDevelop::DocumentCursor pos) : absoluteCursorPosition(pos) {
 }
 
-ContextBrowserPlugin::HistoryEntry::HistoryEntry(IndexedDUContext ctx, const KDevelop::SimpleCursor& cursorPosition) : context(ctx) {
+ContextBrowserPlugin::HistoryEntry::HistoryEntry(IndexedDUContext ctx, const KTextEditor::Cursor& cursorPosition) : context(ctx) {
         //Use a position relative to the context
         setCursorPosition(cursorPosition);
         if(ctx.data())
@@ -1356,19 +1356,19 @@ DocumentCursor ContextBrowserPlugin::HistoryEntry::computePosition() const {
     DocumentCursor ret;
     if(context.data()) {
         ret = DocumentCursor(context.data()->url(), relativeCursorPosition);
-        ret.line += context.data()->range().start.line;
+        ret.setLine(ret.line() + context.data()->range().start.line);
     }else{
         ret = absoluteCursorPosition;
     }
     return ret;
 }
 
-void ContextBrowserPlugin::HistoryEntry::setCursorPosition(const KDevelop::SimpleCursor& cursorPosition) {
+void ContextBrowserPlugin::HistoryEntry::setCursorPosition(const KTextEditor::Cursor& cursorPosition) {
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     if(context.data()) {
         absoluteCursorPosition =  DocumentCursor(context.data()->url(), cursorPosition);
         relativeCursorPosition = cursorPosition;
-        relativeCursorPosition.line -= context.data()->range().start.line;
+        relativeCursorPosition.setLine(relativeCursorPosition.line() - context.data()->range().start.line);
     }
 }
 

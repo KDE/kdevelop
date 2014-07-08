@@ -22,9 +22,6 @@
 #include <QWidget>
 #include <KUrl>
 
-
-#include <language/editor/simplecursor.h>
-
 class KUrl;
 namespace KDevelop {
 
@@ -70,7 +67,7 @@ public:
     /**
      * Returns the positions within files where code is to be generated.
      */
-    QHash<QString, SimpleCursor> filePositions() const;
+    QHash<QString, KTextEditor::Cursor> filePositions() const;
 
 Q_SIGNALS:
     /**

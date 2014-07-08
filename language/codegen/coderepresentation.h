@@ -38,7 +38,7 @@ namespace KDevelop {
 
 struct KDevEditingTransaction;
 
-class SimpleRange;
+class KTextEditor::Range;
 class IndexedString;
 
 //NOTE: this is ugly, but otherwise kate might remove tabs again :-/
@@ -98,7 +98,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData {
      *                             should be acceded. Everything except letters, numbers, and the _ character
      *                             counts as word boundary.
      * */
-    virtual QVector<SimpleRange> grep(const QString& identifier, bool surroundedByBoundary = true) const = 0;
+    virtual QVector<KTextEditor::Range> grep(const QString& identifier, bool surroundedByBoundary = true) const = 0;
     /**
       * Overwrites the text in the file with the new given one
       *

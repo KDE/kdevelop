@@ -536,7 +536,7 @@ void TemplateClassAssistant::accept()
 {
     // next() is not called for the last page (when the user clicks Finish), so we have to set output locations here
     QHash<QString, KUrl> fileUrls = d->outputPageWidget->fileUrls();
-    QHash<QString, SimpleCursor> filePositions = d->outputPageWidget->filePositions();
+    QHash<QString, KTextEditor::Cursor> filePositions = d->outputPageWidget->filePositions();
 
     DocumentChangeSet changes;
     if (d->generator)

@@ -32,7 +32,7 @@ namespace KDevelop
 {
 
 class TemplateEngine;
-class SimpleCursor;
+class KTextEditor::Cursor;
 struct ClassDescription;
 class TemplateRenderer;
 class SourceFileTemplate;
@@ -144,8 +144,8 @@ public:
     void setFileUrl(const QString& outputFile, const KUrl& url);
     KUrl fileUrl(const QString& outputFile) const;
 
-    void setFilePosition(const QString& outputFile, const SimpleCursor& position);
-    SimpleCursor filePosition(const QString& outputFile) const;
+    void setFilePosition(const QString& outputFile, const KTextEditor::Cursor& position);
+    KTextEditor::Cursor filePosition(const QString& outputFile) const;
 
     SourceFileTemplate sourceFileTemplate() const;
 

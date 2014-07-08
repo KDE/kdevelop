@@ -21,7 +21,8 @@
 
 #include <language/languageexport.h>
 #include "cursorinrevision.h"
-#include "simplerange.h"
+
+#include <ktexteditor/range.h>
 
 namespace KDevelop {
   /**
@@ -94,16 +95,16 @@ public:
     ///  to transform this range to the current revision, you should do a proper
     ///  mapping instead through @ref KDevelop::DUChainBase or @ref KDevelop::RevisionReference
     ///  or @ref KDevelop::DocumentChangeTracker
-    SimpleRange castToSimpleRange() const {
-      return SimpleRange(start.castToSimpleCursor(), end.castToSimpleCursor());
+    KTextEditor::Range castToSimpleRange() const {
+      return KTextEditor::Range(start.castToSimpleCursor(), end.castToSimpleCursor());
     }
 
     /// @warning Using this is wrong in most cases! If you want
     ///  to transform this range to the current revision, you should do a proper
     ///  mapping instead through @ref KDevelop::DUChainBase or @ref KDevelop::RevisionReference
     ///  or @ref KDevelop::DocumentChangeTracker
-    static RangeInRevision castFromSimpleRange(const SimpleRange& range) {
-      return RangeInRevision(range.start.line, range.start.column, range.end.line, range.end.column);
+    static RangeInRevision castFromSimpleRange(const KTextEditor::Range& range) {
+      return RangeInRevision(range.start().line(), range.start().column(), range.end().line(), range.end().column());
     }
     ///kDebug() stream operator.  Writes this range to the debug output in a nicely formatted way.
     inline friend QDebug operator<< (QDebug s, const RangeInRevision& range) {

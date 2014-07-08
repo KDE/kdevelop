@@ -33,7 +33,6 @@
 
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/ducontext.h>
-#include <language/editor/simplerange.h>
 #include <language/interfaces/icodehighlighting.h>
 #include <language/backgroundparser/documentchangetracker.h>
 

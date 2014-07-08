@@ -249,7 +249,7 @@ void UsesCollector::startCollecting() {
               CodeRepresentation::Ptr repr = KDevelop::createCodeRepresentation( url );
               if(repr)
               {
-                QVector<SimpleRange> found = repr->grep(decl->identifier().identifier().str());
+                QVector<KTextEditor::Range> found = repr->grep(decl->identifier().identifier().str());
                 grepCacheIt = grepCache.insert(url, !found.isEmpty());
               }
             }

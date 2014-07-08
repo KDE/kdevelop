@@ -33,18 +33,6 @@
 namespace QTest {
 
 template<>
-inline char* toString(const KDevelop::SimpleCursor& c)
-{
-    return qstrdup(qPrintable(QString("(%1, %2)").arg(c.line).arg(c.column)));
-}
-
-template<>
-inline char* toString(const KDevelop::SimpleRange& r)
-{
-    return qstrdup(qPrintable(QString("[%1, %2]").arg(toString(r.start)).arg(toString(r.end))));
-}
-
-template<>
 inline char* toString(const KDevelop::CursorInRevision& c)
 {
     return toString(c.castToSimpleCursor());

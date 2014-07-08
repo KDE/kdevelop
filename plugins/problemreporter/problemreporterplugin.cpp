@@ -162,7 +162,7 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
     TopDUContext* top = DUChainUtils::standardContextForUrl(editorContext->url());
     if(top) {
       foreach(KDevelop::ProblemPointer problem, top->problems()) {
-        if(problem->range().contains(top->transformToLocalRevision(KDevelop::SimpleCursor(editorContext->position())))) {
+        if(problem->range().contains(top->transformToLocalRevision(KTextEditor::Cursor(editorContext->position())))) {
           KDevelop::IAssistant::Ptr solution = problem ->solutionAssistant();
           if(solution) {
             title = solution->title();

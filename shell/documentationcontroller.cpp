@@ -135,7 +135,7 @@ void KDevelop::DocumentationController::doShowDocumentation()
     
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
     
-    Declaration* decl = usefulDeclaration(DUChainUtils::itemUnderCursor(view->document()->url(), SimpleCursor(view->cursorPosition())));
+    Declaration* decl = usefulDeclaration(DUChainUtils::itemUnderCursor(view->document()->url(), KTextEditor::Cursor(view->cursorPosition())));
     QExplicitlySharedDataPointer<IDocumentation> documentation = documentationForDeclaration(decl);
     if(documentation) {
         showDocumentation(documentation);

@@ -33,7 +33,6 @@
 #include <KTextEditor/TextHintInterface>
 #include <interfaces/iplugin.h>
 #include <language/duchain/duchainpointer.h>
-#include <language/editor/simplecursor.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/indexedducontext.h>
 #include <language/editor/persistentmovingrange.h>
@@ -102,7 +101,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
 
     ///duchain must be locked
     ///@param force When this is true, the history-entry is added, no matter whether the context is "interesting" or not
-    void updateHistory(KDevelop::DUContext* context, const KDevelop::SimpleCursor& cursorPosition,
+    void updateHistory(KDevelop::DUContext* context, const KTextEditor::Cursor& cursorPosition,
                        bool force = false);
 
     void updateDeclarationListBox(KDevelop::DUContext* context);
@@ -170,11 +169,11 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     /** helper for updateBrowserView().
      *  Tries to find a 'specialLanguageObject' (eg macro) in @p view under cursor @c.
      *  If found returns true and sets @p pickedLanguage to the language this object belongs to */
-    KDevelop::Declaration* findDeclaration(KTextEditor::View* view, const KDevelop::SimpleCursor&, bool mouseHighlight);
+    KDevelop::Declaration* findDeclaration(KTextEditor::View* view, const KTextEditor::Cursor&, bool mouseHighlight);
     void updateForView(KTextEditor::View* view);
 
     // history browsing
-    bool isPreviousEntry(KDevelop::DUContext*, const KDevelop::SimpleCursor& cursor) const;
+    bool isPreviousEntry(KDevelop::DUContext*, const KTextEditor::Cursor& cursor) const;
     QString actionTextFor(int historyIndex) const;
     void updateButtonState();
     void openDocument(int historyIndex);
@@ -211,7 +210,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     KDevelop::IndexedDeclaration m_lastHighlightedDeclaration;
 
     KUrl m_mouseHoverDocument;
-    KDevelop::SimpleCursor m_mouseHoverCursor;
+    KTextEditor::Cursor m_mouseHoverCursor;
     ContextBrowserViewFactory* m_viewFactory;
     QPointer<QWidget> m_currentToolTip;
     QPointer<QWidget> m_currentNavigationWidget;
@@ -229,17 +228,17 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     // history browsing
     struct HistoryEntry {
         //Duchain must be locked
-        HistoryEntry(KDevelop::IndexedDUContext ctx = KDevelop::IndexedDUContext(), const KDevelop::SimpleCursor& cursorPosition = KDevelop::SimpleCursor());
+        HistoryEntry(KDevelop::IndexedDUContext ctx = KDevelop::IndexedDUContext(), const KTextEditor::Cursor& cursorPosition = KTextEditor::Cursor());
         HistoryEntry(KDevelop::DocumentCursor pos);
         //Duchain must be locked
-        void setCursorPosition(const KDevelop::SimpleCursor& cursorPosition);
+        void setCursorPosition(const KTextEditor::Cursor& cursorPosition);
 
         //Duchain does not need to be locked
         KDevelop::DocumentCursor computePosition() const;
 
         KDevelop::IndexedDUContext context;
         KDevelop::DocumentCursor absoluteCursorPosition;
-        KDevelop::SimpleCursor relativeCursorPosition; //Cursor position relative to the start line of the context
+        KTextEditor::Cursor relativeCursorPosition; //Cursor position relative to the start line of the context
         QString alternativeString;
     };
 

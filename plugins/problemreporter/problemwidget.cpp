@@ -174,7 +174,7 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
         DUChainReadLocker lock(DUChain::lock());
         ProblemPointer problem = model()->problemForIndex(index);
         url = KUrl(problem->finalLocation().document.str());
-        start = problem->finalLocation().start.textCursor();
+        start = problem->finalLocation().start();
     }
 
     m_plugin->core()->documentController()->openDocument(url, start);

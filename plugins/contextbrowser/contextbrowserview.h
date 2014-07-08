@@ -27,7 +27,6 @@
 #include <QPointer>
 
 #include <language/duchain/topducontext.h>
-#include <language/editor/simplecursor.h>
 #include <language/editor/documentcursor.h>
 #include <language/duchain/indexedstring.h>
 

@@ -74,7 +74,7 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
             
             DocumentChangePointer change = DocumentChangePointer(new DocumentChange(
                 IndexedString(filename), 
-                SimpleRange(lineno, start, lineno, end),
+                KTextEditor::Range(lineno, start, lineno, end),
                 re.cap(0), QString()));
             
             res << GrepOutputItem(change, data, false);

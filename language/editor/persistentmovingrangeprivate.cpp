@@ -33,7 +33,7 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
   if(m_tracker)
   {
     // Create a moving range
-    m_movingRange = m_tracker->documentMovingInterface()->newMovingRange(m_range.textRange());
+    m_movingRange = m_tracker->documentMovingInterface()->newMovingRange(m_range);
     if (m_shouldExpand)
       m_movingRange->setInsertBehaviors(KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
     connect(m_tracker->document(), SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToDeleteMovingInterfaceContent()));
@@ -67,7 +67,7 @@ void KDevelop::PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceCon
                             ///            keeping the range alive. DocumentChangeTracker to the rescue.
     delete m_movingRange;
     m_movingRange = 0;
-    m_range = SimpleRange::invalid();
+    m_range = KTextEditor::Range::invalid();
   }
 }
 
@@ -81,7 +81,7 @@ void KDevelop::PersistentMovingRangePrivate::aboutToDeleteMovingInterfaceContent
       m_range = m_tracker->diskRevision()->transformFromCurrentRevision(m_range).castToSimpleRange();
   }else{
     m_valid = false;
-    m_range = SimpleRange::invalid();
+    m_range = KTextEditor::Range::invalid();
   }
   
   // No need to disconnect, as the document is being deleted. Simply set the referenes to zero.

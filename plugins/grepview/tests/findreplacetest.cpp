@@ -83,9 +83,9 @@ void FindReplaceTest::testFind()
     
     for(int i=0; i<matches.length(); i++)
     {
-        QCOMPARE(actualMatches[i].change()->m_range.start.line,   matches[i].line);
-        QCOMPARE(actualMatches[i].change()->m_range.start.column, matches[i].start);
-        QCOMPARE(actualMatches[i].change()->m_range.end.column,   matches[i].end);
+        QCOMPARE(actualMatches[i].change()->m_range.start().line(),   matches[i].line);
+        QCOMPARE(actualMatches[i].change()->m_range.start().column(), matches[i].start);
+        QCOMPARE(actualMatches[i].change()->m_range.end().column(),   matches[i].end);
     }
     
     // check that file has not been altered by grepFile

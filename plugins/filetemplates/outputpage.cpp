@@ -253,12 +253,12 @@ QHash< QString, KUrl > OutputPage::fileUrls() const
     return urls;
 }
 
-QHash< QString, SimpleCursor > OutputPage::filePositions() const
+QHash< QString, KTextEditor::Cursor > OutputPage::filePositions() const
 {
-    QHash<QString, SimpleCursor> positions;
+    QHash<QString, KTextEditor::Cursor> positions;
     foreach (const QString& identifier, d->fileIdentifiers)
     {
-        positions.insert(identifier, SimpleCursor(d->outputLines[identifier]->value(), d->outputColumns[identifier]->value()));
+        positions.insert(identifier, KTextEditor::Cursor(d->outputLines[identifier]->value(), d->outputColumns[identifier]->value()));
     }
     return positions;
 }

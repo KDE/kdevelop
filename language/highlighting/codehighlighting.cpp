@@ -510,24 +510,24 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
   while(rangeIt != highlighting->m_waiting.end())
   {
     // Translate the range into the current revision
-    SimpleRange transformedRange = tracker->transformToCurrentRevision(rangeIt->range, highlighting->m_waitingRevision);
+    KTextEditor::Range transformedRange = tracker->transformToCurrentRevision(rangeIt->range, highlighting->m_waitingRevision);
 
     while(movingIt != oldHighlightedRanges.end() &&
-      ((*movingIt)->start().line() < transformedRange.start.line ||
-      ((*movingIt)->start().line() == transformedRange.start.line && (*movingIt)->start().column() < transformedRange.start.column)))
+      ((*movingIt)->start().line() < transformedRange.start().line() ||
+      ((*movingIt)->start().line() == transformedRange.start().line() && (*movingIt)->start().column() < transformedRange.start().column())))
     {
       delete *movingIt; // Skip ranges that are in front of the current matched range
       ++movingIt;
     }
 
 
-    tempRange = transformedRange.textRange();
+    tempRange = transformedRange;
 
     if(movingIt == oldHighlightedRanges.end() ||
-      transformedRange.start.line != (*movingIt)->start().line() ||
-      transformedRange.start.column != (*movingIt)->start().column() ||
-      transformedRange.end.line != (*movingIt)->end().line() ||
-      transformedRange.end.column != (*movingIt)->end().column())
+      transformedRange.start().line() != (*movingIt)->start().line() ||
+      transformedRange.start().column() != (*movingIt)->start().column() ||
+      transformedRange.end().line() != (*movingIt)->end().line() ||
+      transformedRange.end().column() != (*movingIt)->end().column())
     {
       Q_ASSERT(rangeIt->attribute);
       // The moving range is behind or unequal, create a new range

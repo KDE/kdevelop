@@ -19,7 +19,6 @@
 
 #include "ilanguagesupport.h"
 #include "../duchain/duchain.h"
-#include "../editor/simplerange.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -32,19 +31,19 @@ TopDUContext* ILanguageSupport::standardContext(const KUrl& url, bool proxyConte
   return DUChain::self()->chainForDocument(url);
 }
 
-SimpleRange ILanguageSupport::specialLanguageObjectRange(const KUrl& url, const SimpleCursor& position) {
+KTextEditor::Range ILanguageSupport::specialLanguageObjectRange(const KUrl& url, const KTextEditor::Cursor& position) {
     Q_UNUSED(url)
     Q_UNUSED(position)
-    return SimpleRange::invalid();
+    return KTextEditor::Range::invalid();
 }
 
-QPair<KUrl, SimpleCursor> ILanguageSupport::specialLanguageObjectJumpCursor(const KUrl& url, const SimpleCursor& position) {
+QPair<KUrl, KTextEditor::Cursor> ILanguageSupport::specialLanguageObjectJumpCursor(const KUrl& url, const KTextEditor::Cursor& position) {
     Q_UNUSED(url)
     Q_UNUSED(position)
-    return QPair<KUrl, SimpleCursor>(KUrl(), SimpleCursor::invalid());
+    return QPair<KUrl, KTextEditor::Cursor>(KUrl(), KTextEditor::Cursor::invalid());
 }
 
-QWidget* ILanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position) {
+QWidget* ILanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position) {
     Q_UNUSED(url)
     Q_UNUSED(position)
     return 0;

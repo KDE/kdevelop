@@ -47,11 +47,11 @@ const int tooltipContextSize = 2; //How many lines around the use are shown in t
 ///The returned text is fully escaped
 ///@param cutOff The total count of characters that should be cut of, all in all on both sides together.
 ///@param range The range that is highlighted, and that will be preserved during cutting, given that there is enough room beside it.
-QString highlightAndEscapeUseText(QString line, uint cutOff, SimpleRange range) {
-  uint leftCutRoom = range.start.column;
-  uint rightCutRoom = line.length() - range.end.column;
+QString highlightAndEscapeUseText(QString line, uint cutOff, KTextEditor::Range range) {
+  uint leftCutRoom = range.start().column();
+  uint rightCutRoom = line.length() - range.end().column();
 
-  if(range.start.column < 0 || range.end.column > line.length() || cutOff > leftCutRoom + rightCutRoom)
+  if(range.start().column() < 0 || range.end().column() > line.length() || cutOff > leftCutRoom + rightCutRoom)
     return QString(); //Not enough room for cutting off on sides
 
   uint leftCut = 0;
@@ -82,28 +82,28 @@ QString highlightAndEscapeUseText(QString line, uint cutOff, SimpleRange range) 
 
   line = line.left(line.length() - rightCut);
   line = line.mid(leftCut);
-  range.start.column -= leftCut;
-  range.end.column -= leftCut;
+  range.start().setColumn(range.start().column() - leftCut);
+  range.end().setColumn(range.end().column() - leftCut);
 
-  Q_ASSERT(range.start.column >= 0 && range.end.column <= line.length());
+  Q_ASSERT(range.start().column() >= 0 && range.end().column() <= line.length());
 
   //TODO: share code with context browser
   // mixing (255, 255, 0, 100) with white yields this:
   const QColor background(251, 250, 150);
   const QColor foreground(0, 0, 0);
 
-  return "<span style=\"font-family:'monospace'\">" + line.left(range.start.column).toHtmlEscaped()
+  return "<span style=\"font-family:'monospace'\">" + line.left(range.start().column()).toHtmlEscaped()
                     + "<span style=\"background-color:" + background.name() + ";color:" + foreground.name() + ";\">"
-                    + line.mid(range.start.column, range.end.column - range.start.column).toHtmlEscaped()
-                    + "</span>" + line.mid(range.end.column, line.length() - range.end.column).toHtmlEscaped() + "</span>";
+                    + line.mid(range.start().column(), range.end().column() - range.start().column()).toHtmlEscaped()
+                    + "</span>" + line.mid(range.end().column(), line.length() - range.end().column()).toHtmlEscaped() + "</span>";
 }
 
-OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString document, SimpleRange range, const CodeRepresentation& code) : m_range(new PersistentMovingRange(range, document)), m_declaration(declaration), m_document(document) {
+OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString document, KTextEditor::Range range, const CodeRepresentation& code) : m_range(new PersistentMovingRange(range, document)), m_declaration(declaration), m_document(document) {
 
   //Make the sizing of this widget independent of the content, because we will adapt the content to the size
   setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
-  m_sourceLine = code.line(m_range->range().start.line);
+  m_sourceLine = code.line(m_range->range().start().line());
 
   m_layout = new QHBoxLayout(this);
   setLayout(m_layout);
@@ -115,19 +115,19 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
   connect(m_label, SIGNAL(linkActivated(QString)), this, SLOT(jumpTo()));
 
   DUChainReadLocker lock(DUChain::lock());
-  QString text = "<a href='open'>" + i18nc("refers to a line in source code", "Line <b>%1</b>:", range.start.line) + QString("</a>");
-  if(!m_sourceLine.isEmpty() && m_sourceLine.length() > m_range->range().end.column) {
+  QString text = "<a href='open'>" + i18nc("refers to a line in source code", "Line <b>%1</b>:", range.start().line()) + QString("</a>");
+  if(!m_sourceLine.isEmpty() && m_sourceLine.length() > m_range->range().end().column()) {
 
     text += "&nbsp;&nbsp;" + highlightAndEscapeUseText(m_sourceLine, 0, m_range->range());
 
     //Useful tooltip:
-    int start = m_range->range().start.line - tooltipContextSize;
-    int end = m_range->range().end.line + tooltipContextSize + 1;
+    int start = m_range->range().start().line() - tooltipContextSize;
+    int end = m_range->range().end().line() + tooltipContextSize + 1;
 
     QString toolTipText;
     for(int a = start; a < end; ++a) {
       QString lineText = code.line(a).toHtmlEscaped();
-      if (m_range->range().start.line <= a && m_range->range().end.line >= a) {
+      if (m_range->range().start().line() <= a && m_range->range().end().line() >= a) {
         lineText = QString("<b>") + lineText + QString("</b>");
       }
       if(!lineText.trimmed().isEmpty()) {
@@ -148,7 +148,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
 
 void OneUseWidget::jumpTo() {
         //This is used to execute the slot delayed in the event-loop, so crashes are avoided
-  ICore::self()->documentController()->openDocument(m_document.toUrl(), m_range->range().start.textCursor());
+  ICore::self()->documentController()->openDocument(m_document.toUrl(), m_range->range().start());
 }
 
 OneUseWidget::~OneUseWidget() {
@@ -158,18 +158,18 @@ void OneUseWidget::resizeEvent ( QResizeEvent * event ) {
   ///Adapt the content
   QSize size = event->size();
 
-  SimpleRange range = m_range->range();
+  KTextEditor::Range range = m_range->range();
   
   int cutOff = 0;
-  int maxCutOff = m_sourceLine.length() - (range.end.column - range.start.column);
+  int maxCutOff = m_sourceLine.length() - (range.end().column() - range.start().column());
 
   //Reset so we also get more context while up-sizing
-  m_label->setText(QString("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start.line+1)
+  m_label->setText(QString("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
                  + QString("</a> %2").arg(highlightAndEscapeUseText(m_sourceLine, cutOff, range)));
 
   while(sizeHint().width() > size.width() && cutOff < maxCutOff) {
     //We've got to save space
-    m_label->setText(QString("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start.line+1)
+    m_label->setText(QString("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
                    + QString("</a> %2").arg(highlightAndEscapeUseText(m_sourceLine, cutOff, range)));
     cutOff += 5;
   }

@@ -179,7 +179,7 @@ Declaration* cursorDeclaration() {
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
-  return DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( view->document()->url(), SimpleCursor(view->cursorPosition()) ) );
+  return DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( view->document()->url(), KTextEditor::Cursor(view->cursorPosition()) ) );
 }
 
 ///The first definition that belongs to a context that surrounds the current cursor
@@ -194,7 +194,7 @@ Declaration* cursorContextDeclaration() {
   if(!ctx)
     return 0;
 
-  SimpleCursor cursor(view->cursorPosition());
+  KTextEditor::Cursor cursor(view->cursorPosition());
 
   DUContext* subCtx = ctx->findContext(ctx->transformToLocalRevision(cursor));
 
@@ -1016,7 +1016,7 @@ void QuickOpenPlugin::quickOpenDeclaration()
   decl->activateSpecialization();
 
   IndexedString u = decl->url();
-  SimpleCursor c = decl->rangeInCurrentRevision().start;
+  KTextEditor::Cursor c = decl->rangeInCurrentRevision().start();
 
   if(u.str().isEmpty()) {
     kDebug() << "Got empty url for declaration" << decl->toString();
@@ -1024,7 +1024,7 @@ void QuickOpenPlugin::quickOpenDeclaration()
   }
 
   lock.unlock();
-  core()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
+  core()->documentController()->openDocument(KUrl(u.str()), c);
 }
 
 ///Returns all languages for that url that have a language support, and prints warnings for other ones.
@@ -1050,7 +1050,7 @@ QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
   KUrl url = ICore::self()->documentController()->activeDocument()->url();
 
   foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
-    QWidget* w = language->languageSupport()->specialLanguageObjectNavigationWidget(url, SimpleCursor(view->cursorPosition()) );
+    QWidget* w = language->languageSupport()->specialLanguageObjectNavigationWidget(url, KTextEditor::Cursor(view->cursorPosition()) );
     if(w)
       return w;
   }
@@ -1058,34 +1058,34 @@ QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
   return 0;
 }
 
-QPair<KUrl, SimpleCursor> QuickOpenPlugin::specialObjectJumpPosition() const
+QPair<KUrl, KTextEditor::Cursor> QuickOpenPlugin::specialObjectJumpPosition() const
 {
   KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
   if( !view )
-    return qMakePair(KUrl(), SimpleCursor());
+    return qMakePair(KUrl(), KTextEditor::Cursor());
 
   KUrl url = ICore::self()->documentController()->activeDocument()->url();
 
   foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
-    QPair<KUrl, SimpleCursor> pos = language->languageSupport()->specialLanguageObjectJumpCursor(url, SimpleCursor(view->cursorPosition()) );
+    QPair<KUrl, KTextEditor::Cursor> pos = language->languageSupport()->specialLanguageObjectJumpCursor(url, KTextEditor::Cursor(view->cursorPosition()) );
     if(pos.second.isValid()) {
       return pos;
     }
   }
 
-  return qMakePair(KUrl(), SimpleCursor::invalid());
+  return qMakePair(KUrl(), KTextEditor::Cursor::invalid());
 }
 
 bool QuickOpenPlugin::jumpToSpecialObject()
 {
-  QPair<KUrl, SimpleCursor> pos = specialObjectJumpPosition();
+  QPair<KUrl, KTextEditor::Cursor> pos = specialObjectJumpPosition();
   if(pos.second.isValid()) {
     if(pos.first.isEmpty()) {
       kDebug() << "Got empty url for special language object";
       return false;
     }
 
-    ICore::self()->documentController()->openDocument(pos.first, pos.second.textCursor());
+    ICore::self()->documentController()->openDocument(pos.first, pos.second);
     return true;
   }
   return false;
@@ -1105,11 +1105,11 @@ void QuickOpenPlugin::quickOpenDefinition()
   }
 
   IndexedString u = decl->url();
-  SimpleCursor c = decl->rangeInCurrentRevision().start;
+  KTextEditor::Cursor c = decl->rangeInCurrentRevision().start();
   if(FunctionDefinition* def = FunctionDefinition::definition(decl)) {
     def->activateSpecialization();
     u = def->url();
-    c = def->rangeInCurrentRevision().start;
+    c = def->rangeInCurrentRevision().start();
   }else{
     kDebug() << "Found no definition for declaration";
     decl->activateSpecialization();
@@ -1121,7 +1121,7 @@ void QuickOpenPlugin::quickOpenDefinition()
   }
 
   lock.unlock();
-  core()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
+  core()->documentController()->openDocument(KUrl(u.str()), c);
 }
 
 bool QuickOpenPlugin::freeModel()
@@ -1164,7 +1164,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
   OutlineFilter filter(items, OutlineFilter::Functions);
   DUChainUtils::collectItems( context, filter );
 
-  CursorInRevision cursor = context->transformToLocalRevision(SimpleCursor(doc->cursorPosition()));
+  CursorInRevision cursor = context->transformToLocalRevision(KTextEditor::Cursor(doc->cursorPosition()));
   if (!cursor.isValid())
     return;
 
@@ -1194,7 +1194,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
 
   KTextEditor::Cursor textCursor = KTextEditor::Cursor::invalid();
   if (c.isValid())
-    textCursor = context->transformFromLocalRevision(c).textCursor();
+    textCursor = context->transformFromLocalRevision(c);
 
   lock.unlock();
   if (textCursor.isValid())

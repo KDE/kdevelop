@@ -370,7 +370,7 @@ void TestView::showSource()
     }
 
     KUrl url = d->url().toUrl();
-    KTextEditor::Cursor cursor = d->rangeInCurrentRevision().textRange().start();
+    KTextEditor::Cursor cursor = d->rangeInCurrentRevision().start();
     locker.unlock();
 
     IDocumentController* dc = ICore::self()->documentController();

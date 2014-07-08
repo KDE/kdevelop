@@ -99,7 +99,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     
     if(context) {
       kDebug() << context->localScopeIdentifier().toString();
-      range = KTextEditor::Range(context->rangeInCurrentRevision().start.textCursor(), position);
+      range = KTextEditor::Range(context->rangeInCurrentRevision().start(), position);
     }
     
     else
@@ -150,7 +150,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   
   kDebug() << "added text:" << followingText;
   
-  CodeCompletionContext::Ptr completionContext( createCompletionContext( context, contextText, followingText, CursorInRevision::castFromSimpleCursor(SimpleCursor(position)) ) );
+  CodeCompletionContext::Ptr completionContext( createCompletionContext( context, contextText, followingText, CursorInRevision::castFromSimpleCursor(KTextEditor::Cursor(position)) ) );
   if (KDevelop::CodeCompletionModel* m = model())
     m->setCompletionContext(completionContext);
 

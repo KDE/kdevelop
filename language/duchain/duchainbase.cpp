@@ -27,7 +27,6 @@
 #include "indexedstring.h"
 #include "topducontext.h"
 #include "duchainregister.h"
-#include <editor/simplerange.h>
 #include <interfaces/foregroundlock.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -153,7 +152,7 @@ RangeInRevision DUChainBase::range() const
     return d_func()->m_range;
 }
 
-SimpleRange DUChainBase::rangeInCurrentRevision() const
+KTextEditor::Range DUChainBase::rangeInCurrentRevision() const
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     
@@ -173,7 +172,7 @@ PersistentMovingRange::Ptr DUChainBase::createRangeMoving() const
     return PersistentMovingRange::Ptr(new PersistentMovingRange(rangeInCurrentRevision(), url()));
 }
 
-CursorInRevision DUChainBase::transformToLocalRevision(const KDevelop::SimpleCursor& cursor) const
+CursorInRevision DUChainBase::transformToLocalRevision(const KTextEditor::Cursor& cursor) const
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     
@@ -186,7 +185,7 @@ CursorInRevision DUChainBase::transformToLocalRevision(const KDevelop::SimpleCur
     return CursorInRevision::castFromSimpleCursor(cursor);
 }
 
-RangeInRevision DUChainBase::transformToLocalRevision(const KDevelop::SimpleRange& range) const
+RangeInRevision DUChainBase::transformToLocalRevision(const KTextEditor::Range& range) const
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     
@@ -199,7 +198,7 @@ RangeInRevision DUChainBase::transformToLocalRevision(const KDevelop::SimpleRang
     return RangeInRevision::castFromSimpleRange(range);
 }
 
-SimpleRange DUChainBase::transformFromLocalRevision(const KDevelop::RangeInRevision& range) const
+KTextEditor::Range DUChainBase::transformFromLocalRevision(const KDevelop::RangeInRevision& range) const
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     
@@ -212,7 +211,7 @@ SimpleRange DUChainBase::transformFromLocalRevision(const KDevelop::RangeInRevis
     return range.castToSimpleRange();
 }
 
-SimpleCursor DUChainBase::transformFromLocalRevision(const KDevelop::CursorInRevision& cursor) const
+KTextEditor::Cursor DUChainBase::transformFromLocalRevision(const KDevelop::CursorInRevision& cursor) const
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     

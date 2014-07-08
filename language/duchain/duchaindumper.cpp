@@ -109,7 +109,7 @@ void DUChainDumper::Private::dumpProblems(TopDUContext* top)
   if (!top->problems().isEmpty()) {
       qout << top->problems().size() << "problems encountered:" << endl;
       foreach(const ProblemPointer& p, top->problems()) {
-          qout << Indent(m_indent * 2) << p->description() << p->explanation() << p->finalLocation().textRange() << endl;
+          qout << Indent(m_indent * 2) << p->description() << p->explanation() << p->finalLocation() << endl;
       }
       qout << endl;
   }
@@ -124,7 +124,7 @@ void DUChainDumper::Private::dump(DUContext * context, int allowedDepth, bool is
     << (dynamic_cast<TopDUContext*>(context) ? "Top-Context" : "Context") << typeToString(context->type())
     << "(owner: " << context->owner() << ")"
     << context << context->localScopeIdentifier() << "[" << context->scopeIdentifier(true) << "]"
-    << context->range().castToSimpleRange().textRange()
+    << context->range().castToSimpleRange()
     << (dynamic_cast<TopDUContext*>(context) ? static_cast<TopDUContext*>(context)->url().byteArray(): "")
     << endl;
 
@@ -142,17 +142,17 @@ void DUChainDumper::Private::dump(DUContext * context, int allowedDepth, bool is
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
       
       qout << Indent((m_indent+2) * 2) << "Declaration:" << dec->toString() << "[" << dec->qualifiedIdentifier() << "]"
-        << dec << "(internal ctx:" << dec->internalContext() << ")" << dec->range().castToSimpleRange().textRange() << ","
+        << dec << "(internal ctx:" << dec->internalContext() << ")" << dec->range().castToSimpleRange() << ","
         << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, "))
         << dec->uses().count() << "use(s)." << endl;
       if (FunctionDefinition::definition(dec)) {
-        qout << Indent((m_indent+2) * 2 + 1) << "Definition:" << FunctionDefinition::definition(dec)->range().castToSimpleRange().textRange() << endl;
+        qout << Indent((m_indent+2) * 2 + 1) << "Definition:" << FunctionDefinition::definition(dec)->range().castToSimpleRange() << endl;
       }
       QMap<IndexedString, QList<RangeInRevision> > uses = dec->uses();
       for(QMap<IndexedString, QList<RangeInRevision> >::const_iterator it = uses.constBegin(); it != uses.constEnd(); ++it) {
         qout << Indent((m_indent+3) * 2) << "File:" << it.key().str() << endl;
         foreach (const RangeInRevision& range, *it)
-          qout << Indent((m_indent+4) * 2) << "Use:" << range.castToSimpleRange().textRange() << endl;
+          qout << Indent((m_indent+4) * 2) << "Use:" << range.castToSimpleRange() << endl;
       }
     }
   } else {

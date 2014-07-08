@@ -21,9 +21,12 @@
 #ifndef KDEVPLATFORM_PERSISTENTMOVINGRANGE_H
 #define KDEVPLATFORM_PERSISTENTMOVINGRANGE_H
 
-#include <QExplicitlySharedDataPointer>
+#include <language/languageexport.h>
+
 #include <ktexteditor/attribute.h>
-#include "simplerange.h"
+#include <ktexteditor/range.h>
+
+#include <QExplicitlySharedDataPointer>
 
 namespace KDevelop {
 
@@ -49,7 +52,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT PersistentMovingRange : public QSharedData
     /**
      * Creates a new persistent moving range based on the current revision of the given document
      * */
-    PersistentMovingRange(const SimpleRange& range, const IndexedString& document, bool shouldExpand = false);
+    PersistentMovingRange(const KTextEditor::Range& range, const IndexedString& document, bool shouldExpand = false);
     ~PersistentMovingRange();
     
     IndexedString document() const;
@@ -58,7 +61,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT PersistentMovingRange : public QSharedData
      * Returns the range in the current revision of the document
      */
     
-    SimpleRange range() const;
+    KTextEditor::Range range() const;
     
     /**
      * Changes the z-depth for highlighting (see KTextEditor::MovingRange)

@@ -47,7 +47,7 @@ QString CodeRepresentation::rangeText(const KTextEditor::Range& range) const
     return rangedText;
 }
 
-static void grepLine(const QString& identifier, const QString& lineText, int lineNumber, QVector<SimpleRange>& ret, bool surroundedByBoundary)
+static void grepLine(const QString& identifier, const QString& lineText, int lineNumber, QVector<KTextEditor::Range>& ret, bool surroundedByBoundary)
 {
     if (identifier.isEmpty())
         return;
@@ -65,7 +65,7 @@ static void grepLine(const QString& identifier, const QString& lineText, int lin
         if(!surroundedByBoundary || ( (end == lineText.length() || !lineText[end].isLetterOrNumber() || lineText[end] != '_')
                                         && (start-1 < 0 || !lineText[start-1].isLetterOrNumber() || lineText[start-1] != '_')) )
         {
-            ret << SimpleRange(lineNumber, start, lineNumber, end);
+            ret << KTextEditor::Range(lineNumber, start, lineNumber, end);
         }
     }
 }
@@ -76,8 +76,8 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
       m_url = IndexedString(m_document->url());
   }
   
-  virtual QVector< SimpleRange > grep ( const QString& identifier, bool surroundedByBoundary ) const {
-      QVector< SimpleRange > ret;
+  virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const {
+      QVector< KTextEditor::Range > ret;
 
       if (identifier.isEmpty())
         return ret;
@@ -167,8 +167,8 @@ class FileCodeRepresentation : public CodeRepresentation {
       return lineData.at(line);
     }
     
-    virtual QVector< SimpleRange > grep ( const QString& identifier, bool surroundedByBoundary ) const {
-        QVector< SimpleRange > ret;
+    virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const {
+        QVector< KTextEditor::Range > ret;
 
         if (identifier.isEmpty())
             return ret;
@@ -268,8 +268,8 @@ class StringCodeRepresentation : public CodeRepresentation {
         return false;
     }
     
-    virtual QVector< SimpleRange > grep ( const QString& identifier, bool surroundedByBoundary ) const {
-        QVector< SimpleRange > ret;
+    virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const {
+        QVector< KTextEditor::Range > ret;
 
         if (identifier.isEmpty())
             return ret;

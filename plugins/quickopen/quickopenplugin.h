@@ -36,8 +36,8 @@
 
 class QAction;
 
-namespace KDevelop {
-  class SimpleCursor;
+namespace KTextEditor {
+class Cursor;
 }
 
 class QuickOpenModel;
@@ -115,7 +115,7 @@ private:
     enum FunctionJumpDirection { NextFunction, PreviousFunction };
     void jumpToNearestFunction(FunctionJumpDirection direction);
 
-    QPair<KUrl, KDevelop::SimpleCursor> specialObjectJumpPosition() const;
+    QPair<KUrl, KTextEditor::Cursor> specialObjectJumpPosition() const;
     QWidget* specialObjectNavigationWidget() const;
     bool jumpToSpecialObject();
     void showQuickOpenWidget(const QStringList &items, const QStringList &scopes, bool preselectText);

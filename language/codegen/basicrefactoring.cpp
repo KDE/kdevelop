@@ -212,9 +212,9 @@ KDevelop::IndexedDeclaration BasicRefactoring::declarationUnderCursor(bool allow
 
     DUChainReadLocker lock;
     if (allowUse)
-        return DUChainUtils::itemUnderCursor(doc->url(), SimpleCursor(view->cursorPosition()));
+        return DUChainUtils::itemUnderCursor(doc->url(), KTextEditor::Cursor(view->cursorPosition()));
     else
-        return DUChainUtils::declarationInLine(SimpleCursor(view->cursorPosition()), DUChainUtils::standardContextForUrl(doc->url()));
+        return DUChainUtils::declarationInLine(KTextEditor::Cursor(view->cursorPosition()), DUChainUtils::standardContextForUrl(doc->url()));
 }
 
 void BasicRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration &decl)

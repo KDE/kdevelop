@@ -286,7 +286,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
                                     "The file is %1 and exceeds the limit of %2.",
                                     KGlobal::locale()->formatByteSize(fileInfo.size()),
                                     KGlobal::locale()->formatByteSize(maximumFileSize)));
-            p->setFinalLocation(DocumentRange(document(), SimpleRange::invalid()));
+            p->setFinalLocation(DocumentRange(document(), KTextEditor::Range::invalid()));
             kWarning( 9007 ) << p->description() << p->explanation();
             return p;
         }
@@ -310,7 +310,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
               default:
                   break;
             }
-            p->setFinalLocation(DocumentRange(document(), SimpleRange::invalid()));
+            p->setFinalLocation(DocumentRange(document(), KTextEditor::Range::invalid()));
 
             kWarning( 9007 ) << "Could not open file" << document().str() << "(path" << localFile << ")" ;
 

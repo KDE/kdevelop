@@ -91,7 +91,7 @@ DeclarationContext::DeclarationContext( const IndexedDeclaration& declaration, c
 DeclarationContext::DeclarationContext(KTextEditor::View* view, KTextEditor::Cursor position) : DUContextContext(IndexedDUContext())
 {
     const KUrl& url = view->document()->url();
-    const SimpleCursor pos = SimpleCursor(position);
+    const KTextEditor::Cursor pos = KTextEditor::Cursor(position);
     DUChainReadLocker lock;
     DocumentRange useRange = DocumentRange(IndexedString(url), DUChainUtils::itemRangeUnderCursor(url, pos));
     Declaration* declaration = DUChainUtils::itemUnderCursor(url, pos);
@@ -102,7 +102,7 @@ DeclarationContext::DeclarationContext(KTextEditor::View* view, KTextEditor::Cur
     IndexedDUContext context;
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(view->document()->url());
     if(topContext) {
-        DUContext* specific = topContext->findContextAt(CursorInRevision(pos.line, pos.column));
+        DUContext* specific = topContext->findContextAt(CursorInRevision(pos.line(), pos.column()));
         if(specific)
             context = IndexedDUContext(specific);
     }

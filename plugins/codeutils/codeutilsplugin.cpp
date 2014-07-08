@@ -100,7 +100,7 @@ void CodeUtilsPlugin::documentDeclaration()
     if ( !topCtx ) {
         return;
     }
-    Declaration* dec = DUChainUtils::declarationInLine( SimpleCursor( view->cursorPosition() ),
+    Declaration* dec = DUChainUtils::declarationInLine( KTextEditor::Cursor( view->cursorPosition() ),
                                                         topCtx );
     if ( !dec || dec->isForwardDeclaration() ) {
         return;

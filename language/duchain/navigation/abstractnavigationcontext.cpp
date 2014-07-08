@@ -190,9 +190,9 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
             if(doc.isEmpty()) {
               doc = action.decl->url().toUrl();
     /*          if(action.decl->internalContext())
-                cursor = action.decl->internalContext()->range().textRange().start() + KTextEditor::Cursor(0, 1);
+                cursor = action.decl->internalContext()->range().start() + KTextEditor::Cursor(0, 1);
               else*/
-                cursor = action.decl->rangeInCurrentRevision().start.textCursor();
+                cursor = action.decl->rangeInCurrentRevision().start();
             }
 
             action.decl->activateSpecialization();

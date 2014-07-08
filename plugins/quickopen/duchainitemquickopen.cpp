@@ -170,7 +170,7 @@ bool DUChainItemData::execute( QString& /*filterText*/ )
   }
 
   KUrl url = KUrl(decl->url().str());
-  KTextEditor::Cursor cursor = decl->rangeInCurrentRevision().textRange().start();
+  KTextEditor::Cursor cursor = decl->rangeInCurrentRevision().start();
 
   DUContext* internal = decl->internalContext();
 

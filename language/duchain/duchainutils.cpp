@@ -305,7 +305,7 @@ Declaration* declarationUnderCursor(const CursorInRevision& c, DUContext* ctx)
   return 0;
 }
 
-Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const KDevelop::SimpleCursor& _c)
+Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const KTextEditor::Cursor& _c)
 {
   KDevelop::TopDUContext* chosen = standardContextForUrl(url);
 
@@ -331,7 +331,7 @@ Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const KDevelop::Simp
   return 0;
 }
 
-KTextEditor::Range DUChainUtils::itemRangeUnderCursor(const KUrl& url, const KDevelop::SimpleCursor& cursor)
+KTextEditor::Range DUChainUtils::itemRangeUnderCursor(const KUrl& url, const KTextEditor::Cursor& cursor)
 {
   KDevelop::TopDUContext* chosen = standardContextForUrl(url);
 
@@ -341,12 +341,12 @@ KTextEditor::Range DUChainUtils::itemRangeUnderCursor(const KUrl& url, const KDe
     if (ctx) {
       Declaration* decl = declarationUnderCursor(c, ctx);
       if (decl && decl->range().contains(c, RangeInRevision::IncludeBackEdge) ) {
-        return decl->rangeInCurrentRevision().textRange();
+        return decl->rangeInCurrentRevision();
       }
 
       for(int a = 0; a < ctx->usesCount(); ++a) {
         if( ctx->uses()[a].m_range.contains(c, RangeInRevision::IncludeBackEdge) ) {
-          return ctx->transformFromLocalRevision(ctx->uses()[a].m_range).textRange();
+          return ctx->transformFromLocalRevision(ctx->uses()[a].m_range);
         }
       }
     }
@@ -371,7 +371,7 @@ Declaration* DUChainUtils::declarationForDefinition(Declaration* definition, Top
   return definition;
 }
 
-Declaration* DUChainUtils::declarationInLine(const KDevelop::SimpleCursor& _cursor, DUContext* ctx) {
+Declaration* DUChainUtils::declarationInLine(const KTextEditor::Cursor& _cursor, DUContext* ctx) {
   if(!ctx)
     return 0;
   

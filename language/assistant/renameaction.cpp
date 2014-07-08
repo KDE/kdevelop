@@ -92,7 +92,7 @@ void RenameAction::execute()
 
     foreach(const RevisionedFileRanges& ranges, d->m_oldDeclarationUses) {
         foreach (const RangeInRevision &range, ranges.ranges) {
-            SimpleRange currentRange;
+            KTextEditor::Range currentRange;
             if (ranges.revision && ranges.revision->valid()) {
                 currentRange = ranges.revision->transformToCurrentRevision(range);
             } else {

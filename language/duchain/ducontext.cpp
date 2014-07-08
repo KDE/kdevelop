@@ -1252,7 +1252,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
             NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
             identifiers.append( SearchItem::Ptr( new SearchItem( alias->importIdentifier(), identifier ) ) ) ;
           }else{
-            kDebug() << "Declaration with namespace alias identifier has the wrong type" << importDecl->url().str() << importDecl->range().castToSimpleRange().textRange();
+            kDebug() << "Declaration with namespace alias identifier has the wrong type" << importDecl->url().str() << importDecl->range().castToSimpleRange();
           }
         }
       }
@@ -1383,7 +1383,7 @@ DUContext * DUContext::findContextAt(const CursorInRevision & position, bool inc
 {
   ENSURE_CAN_READ
   
-//   kDebug() << "searchign" << position.textCursor() << "in:" << scopeIdentifier(true).toString() << range().textRange() << includeRightBorder;
+//   kDebug() << "searchign" << position << "in:" << scopeIdentifier(true).toString() << range() << includeRightBorder;
 
   if (!range().contains(position) && (!includeRightBorder || range().end != position)) {
 //     kDebug() << "mismatch";

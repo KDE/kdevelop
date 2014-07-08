@@ -87,7 +87,7 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
     {
         // Use custom manual highlighting
 
-        const KDevelop::SimpleRange rng = item->change()->m_range;
+        const KTextEditor::Range rng = item->change()->m_range;
 
         // the line number appears grayed
         fmt.setForeground(options.palette.brush(QPalette::Disabled, cr));
@@ -95,18 +95,18 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
         
         // switch to normal color
         fmt.setForeground(options.palette.brush(cg, cr));
-        cur.insertText(item->text().left(rng.start.column).remove(leftspaces), fmt);
+        cur.insertText(item->text().left(rng.start().column()).remove(leftspaces), fmt);
         
         fmt.setFontWeight(QFont::Bold);
         // Blend the highlighted background color
         // For some reason, it is extremely slow to use alpha-blending directly here
         QColor bgHighlight = blendColor(option.palette.brush(QPalette::Highlight).color(), option.palette.brush(QPalette::Base).color(), 0.3);
         fmt.setBackground(bgHighlight);
-        cur.insertText(item->text().mid(rng.start.column, rng.end.column - rng.start.column), fmt);
+        cur.insertText(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column()), fmt);
         fmt.clearBackground();
         
         fmt.setFontWeight(QFont::Normal);
-        cur.insertText(item->text().right(item->text().length() - rng.end.column), fmt);
+        cur.insertText(item->text().right(item->text().length() - rng.end().column()), fmt);
     }else{
         QString text;
         if(item)
@@ -154,11 +154,11 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
         font.setBold(true);
         QFontMetrics bMetrics(font);
 
-        const KDevelop::SimpleRange rng = item->change()->m_range;
+        const KTextEditor::Range rng = item->change()->m_range;
 
-        int width = metrics.width(item->text().left(rng.start.column)) +
-                    metrics.width(item->text().right(item->text().length() - rng.end.column)) +
-                    bMetrics.width(item->text().mid(rng.start.column, rng.end.column - rng.start.column)) +
+        int width = metrics.width(item->text().left(rng.start().column())) +
+                    metrics.width(item->text().right(item->text().length() - rng.end().column())) +
+                    bMetrics.width(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column())) +
                     option.fontMetrics.width(i18n("Line %1: ",item->lineNumber())) +
                     std::max(option.decorationSize.width(), 0);
         ret.setWidth(width);

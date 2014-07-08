@@ -19,7 +19,6 @@
 #ifndef KDEVPLATFORM_DOCUMENTCHANGESET_H
 #define KDEVPLATFORM_DOCUMENTCHANGESET_H
 
-#include <language/editor/simplerange.h>
 #include <language/duchain/indexedstring.h>
 
 #include <QExplicitlySharedDataPointer>
@@ -35,7 +34,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChange : public QSharedData
 {
 public:
 
-    DocumentChange(const IndexedString& document, const SimpleRange& range, const QString& oldText, const QString& newText) :
+    DocumentChange(const IndexedString& document, const KTextEditor::Range& range, const QString& oldText, const QString& newText) :
                    m_document(document), m_range(range), m_oldText(oldText), m_newText(newText), m_ignoreOldText(false) {
         //Clean the URL, so we don't get the same file be stored as a different one
         KUrl url(m_document.toUrl());
@@ -44,7 +43,7 @@ public:
     }
 
     IndexedString m_document;
-    SimpleRange m_range;
+    KTextEditor::Range m_range;
     QString m_oldText;
     QString m_newText;
     bool m_ignoreOldText; //Set this to disable the verification of m_oldText. This can be used to overwrite arbitrary text, but is dangerous!

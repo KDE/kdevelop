@@ -177,19 +177,20 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         if (problem->finalLocation().document != url || !problem->finalLocation().isValid())
             continue;
 
-        SimpleRange range;
+        KTextEditor::Range range;
         if(top)
             range = top->transformFromLocalRevision(RangeInRevision::castFromSimpleRange(problem->finalLocation()));
         else
             range = problem->finalLocation();
 
-        if(range.end.line >= m_document->lines())
-            range.end = SimpleCursor(m_document->endOfLine(m_document->lines()-1));
+        if(range.end().line() >= m_document->lines())
+            range.end() = KTextEditor::Cursor(m_document->endOfLine(m_document->lines()-1));
 
-        if(range.isEmpty())
-            range.end.column += 1;
+        if(range.isEmpty()) {
+            range.end().setColumn(range.end().column() + 1);
+        }
 
-        KTextEditor::MovingRange* problemRange = iface->newMovingRange(range.textRange());
+        KTextEditor::MovingRange* problemRange = iface->newMovingRange(range);
 
         m_problemsForRanges.insert(problemRange, problem);
         m_topHLRanges.append(problemRange);
@@ -212,7 +213,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
             } else {
                 continue;
             }
-            markIface->addMark(problem->finalLocation().start.line, mark);
+            markIface->addMark(problem->finalLocation().start().line(), mark);
         }
     }
 }

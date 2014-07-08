@@ -175,7 +175,7 @@ void ClassBrowserPlugin::showDefinition(DeclarationPointer declaration)
   if (decl)
   {
     KUrl url(decl->url().str());
-    KTextEditor::Range range = decl->rangeInCurrentRevision().textRange();
+    KTextEditor::Range range = decl->rangeInCurrentRevision();
 
     readLock.unlock();
 

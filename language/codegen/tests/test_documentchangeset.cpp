@@ -51,19 +51,19 @@ void TestDocumentchangeset::testReplaceSameLine()
     changes.addChange(
         DocumentChange(
             file.url(),
-            SimpleRange(0, 0, 0, 3),
+            KTextEditor::Range(0, 0, 0, 3),
             "abc", "foobar"
     ));
     changes.addChange(
         DocumentChange(
             file.url(),
-            SimpleRange(0, 4, 0, 7),
+            KTextEditor::Range(0, 4, 0, 7),
             "def", "foobar"
     ));
     changes.addChange(
         DocumentChange(
             file.url(),
-            SimpleRange(0, 8, 0, 11),
+            KTextEditor::Range(0, 8, 0, 11),
             "ghi", "foobar"
     ));
 

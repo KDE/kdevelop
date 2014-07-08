@@ -209,8 +209,6 @@ install(FILES
     editor/persistentmovingrange.h
     editor/documentrange.h
     editor/documentcursor.h
-    editor/simplecursor.h
-    editor/simplerange.h
     editor/cursorinrevision.h
     editor/rangeinrevision.h
     editor/modificationrevision.h

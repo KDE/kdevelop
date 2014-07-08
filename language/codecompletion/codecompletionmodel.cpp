@@ -174,7 +174,7 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
   }
   setCurrentTopContext(TopDUContextPointer(top));
 
-  RangeInRevision rangeInRevision = top->transformToLocalRevision(SimpleRange(range));
+  RangeInRevision rangeInRevision = top->transformToLocalRevision(KTextEditor::Range(range));
   
   if (top) {
     kDebug() << "completion invoked for context" << (DUContext*)top;
@@ -189,7 +189,7 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
       thisContext = SpecializationStore::self().applySpecialization(top->findContextAt(rangeInRevision.start), top);
 
       if ( thisContext ) {
-        kDebug() << "after specialization:" << thisContext->localScopeIdentifier().toString() << thisContext->rangeInCurrentRevision().textRange();
+        kDebug() << "after specialization:" << thisContext->localScopeIdentifier().toString() << thisContext->rangeInCurrentRevision();
       }
 
       if(!thisContext)
