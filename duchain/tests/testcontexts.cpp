@@ -64,14 +64,14 @@ void TestContexts::testFunctionContext()
 
     QCOMPARE(top->type(), DUContext::Global);
 
-    // one context for (), one for {}
-    QCOMPARE(top->childContexts().count(), 2);
+    // one context for (), one for {}, and one for the prototype context
+    QCOMPARE(top->childContexts().count(), 3);
 
-    DUContext* argCtx = top->childContexts().first();
+    DUContext* argCtx = top->childContexts().at(1);     // The prototype context is at position 0
     QCOMPARE(argCtx->type(), DUContext::Function);
     QCOMPARE(argCtx->range(), argCtxRange);
 
-    DUContext* bodyCtx = top->childContexts().last();
+    DUContext* bodyCtx = top->childContexts().at(2);
     QCOMPARE(bodyCtx->type(), DUContext::Other);
     QCOMPARE(bodyCtx->range(), bodyCtxRange);
 

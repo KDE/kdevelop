@@ -17,6 +17,7 @@
  *************************************************************************************/
 
 #include "helper.h"
+#include "functiondeclaration.h"
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
@@ -144,7 +145,17 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
     switch (declaration->kind()) {
     case Declaration::Type:
     case Declaration::Namespace:
-        return declaration->internalContext();
+    {
+        auto func = declaration.dynamicCast<QmlJS::FunctionDeclaration>();
+
+        if (func) {
+            // func.foo identifies the attribute foo of the function prototype, not the
+            // variable foo of the function body.
+            return func->prototypeContext();
+        } else {
+            return declaration->internalContext();
+        }
+    }
 
     case Declaration::NamespaceAlias:
     {

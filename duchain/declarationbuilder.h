@@ -52,6 +52,7 @@ protected:
     // Functions
     template<typename Decl>
     void declareFunction(QmlJS::AST::Node* node,
+                         bool newPrototypeContext,
                          const KDevelop::QualifiedIdentifier& name,
                          const KDevelop::RangeInRevision& nameRange,
                          QmlJS::AST::Node* parameters,

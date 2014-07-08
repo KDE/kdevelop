@@ -33,6 +33,7 @@
 
 #include "expressionvisitor.h"
 #include "parsesession.h"
+#include "functiondeclaration.h"
 #include "helper.h"
 
 #include <QtCore/QDirIterator>
@@ -128,6 +129,7 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
  */
 template<typename Decl>
 void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
+                                         bool newPrototypeContext,
                                          const QualifiedIdentifier& name,
                                          const RangeInRevision& nameRange,
                                          QmlJS::AST::Node* parameters,
@@ -148,6 +150,22 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
         decl->setKind(Declaration::Type);
     }
     openType(func);
+
+    // Open the prototype context, if any. This has to be done before everything
+    // else because this context is needed for "this" to be properly resolved
+    // in the function body
+    if (newPrototypeContext) {
+        DUChainWriteLocker lock;
+        QmlJS::FunctionDeclaration* d = reinterpret_cast<QmlJS::FunctionDeclaration*>(decl);
+
+        d->setPrototypeContext(openContext(
+            node,
+            nameRange,
+            DUContext::Class,
+            QualifiedIdentifier(name)
+        ), true);
+        closeContext();
+    }
 
     // Parameters, if any (a function must always have an interal function context,
     // so always open a context here even if there are no parameters)
@@ -222,8 +240,9 @@ void DeclarationBuilder::declareParameters(Node* node, QStringRef Node::*typeAtt
 
 bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 {
-    declareFunction<FunctionDeclaration>(
+    declareFunction<QmlJS::FunctionDeclaration>(
         node,
+        true,   // A function declaration always has its own prototype context
         QualifiedIdentifier(node->name.toString()),
         m_session->locationToRange(node->identifierToken),
         node->formals,
@@ -237,8 +256,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
 
 bool DeclarationBuilder::visit(QmlJS::AST::FunctionExpression* node)
 {
-    declareFunction<FunctionDeclaration>(
+    declareFunction<QmlJS::FunctionDeclaration>(
         node,
+        false,
         QualifiedIdentifier(),
         QmlJS::emptyRangeOnLine(node->functionToken),
         node->formals,
@@ -1152,6 +1172,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
         // Open a function declaration corresponding to this signal
         declareFunction<ClassFunctionDeclaration>(
             node,
+            false,
             QualifiedIdentifier(node->name.toString()),
             m_session->locationToRange(node->identifierToken),
             node->parameters,
