@@ -38,7 +38,7 @@ void openConfigurationPage(const QString& path)
 }
 }
 
-Cpp::AddCustomIncludePathAction::AddCustomIncludePathAction(KDevelop::IndexedString url) {
+Cpp::AddCustomIncludePathAction::AddCustomIncludePathAction(const KDevelop::IndexedString& url) {
   m_url = url;
 }
 
@@ -53,7 +53,7 @@ QString Cpp::AddCustomIncludePathAction::description() const {
 }
 
 
-Cpp::OpenProjectForFileAssistant::OpenProjectForFileAssistant(KUrl url) : m_url(url) {
+Cpp::OpenProjectForFileAssistant::OpenProjectForFileAssistant(const KUrl& url) : m_url(url) {
 }
 
 void Cpp::OpenProjectForFileAssistant::execute() {
@@ -69,7 +69,7 @@ QString MissingIncludePathAssistant::title() const {
   return i18n("Include file \"%1\" not found", m_directive);
 }
 
-Cpp::MissingIncludePathAssistant::MissingIncludePathAssistant(KDevelop::IndexedString url, QString directive) {
+Cpp::MissingIncludePathAssistant::MissingIncludePathAssistant(const KDevelop::IndexedString& url, const QString& directive) {
   m_url = url;
   m_directive = directive;
 }
@@ -82,4 +82,14 @@ void MissingIncludePathAssistant::createActions()
         addAction(KDevelop::IAssistantAction::Ptr(new OpenProjectForFileAssistant(m_url.toUrl())));
     }
     addAction(KDevelop::IAssistantAction::Ptr(new AddCustomIncludePathAction(m_url)));
+}
+
+KSharedPtr< KDevelop::IAssistant > MissingIncludePathProblem::solutionAssistant() const
+{
+    return m_solution;
+}
+
+void MissingIncludePathProblem::setSolutionAssistant(const KSharedPtr< KDevelop::IAssistant >& assistant)
+{
+    m_solution = assistant;
 }

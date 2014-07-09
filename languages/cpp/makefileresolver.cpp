@@ -271,6 +271,26 @@ namespace CppTools {
       bool m_isUnsermake;
       bool m_shouldTouchFiles;
   };
+
+void PathResolutionResult::addPathsUnique(const PathResolutionResult& rhs)
+{
+    foreach(const QString& path, rhs.paths) {
+        if(!paths.contains(path))
+            paths.append(path);
+    }
+    includePathDependency += rhs.includePathDependency;
+}
+
+PathResolutionResult::PathResolutionResult(bool success, const QString& errorMessage, const QString& longErrorMessage)
+    : success(success)
+    , errorMessage(errorMessage)
+    , longErrorMessage(longErrorMessage)
+{}
+
+PathResolutionResult::operator bool() const
+{
+    return success;
+}
 }
 
 using namespace CppTools;
@@ -338,7 +358,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file)
   return resolveIncludePath(fi.fileName(), fi.absolutePath());
 }
 
-KUrl MakeFileResolver::mapToBuild(const KUrl& url)
+KUrl MakeFileResolver::mapToBuild(const KUrl& url) const
 {
   KUrl wdUrl = url;
   wdUrl.cleanPath();
@@ -532,7 +552,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 
 PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString& file, const QString& workingDirectory,
                                                                       const QString& makeParameters, const SourcePathInformation& source,
-                                                                      int maxDepth)
+                                                                      int maxDepth) const
 {
   --maxDepth;
   if (maxDepth < 0)

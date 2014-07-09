@@ -27,12 +27,8 @@ class FileModificationTimeWrapper;
 
 struct PathResolutionResult
 {
-  PathResolutionResult(bool success = false, const QString& errorMessage = QString(), const QString& longErrorMessage = QString())
-    : success(success)
-    , errorMessage(errorMessage)
-    , longErrorMessage(longErrorMessage)
-  {
-  }
+  PathResolutionResult(bool success = false, const QString& errorMessage = QString(), const QString& longErrorMessage = QString());
+
   bool success;
   QString errorMessage;
   QString longErrorMessage;
@@ -41,19 +37,9 @@ struct PathResolutionResult
 
   QStringList paths;
 
-  void addPathsUnique(const PathResolutionResult& rhs)
-  {
-    foreach(const QString& path, rhs.paths) {
-      if(!paths.contains(path))
-        paths.append(path);
-    }
-    includePathDependency += rhs.includePathDependency;
-  }
+  void addPathsUnique(const PathResolutionResult& rhs);
 
-  operator bool() const
-  {
-    return success;
-  }
+  operator bool() const;
 };
 
 class SourcePathInformation;
@@ -80,13 +66,13 @@ class MakeFileResolver
     bool m_isResolving;
     bool m_outOfSource;
 
-    KUrl mapToBuild(const KUrl& url);
+    KUrl mapToBuild(const KUrl& url) const;
 
     ///Executes the command using KProcess
     bool executeCommand( const QString& command, const QString& workingDirectory, QString& result ) const;
     ///file should be the name of the target, without extension(because that may be different)
     PathResolutionResult resolveIncludePathInternal( const QString& file, const QString& workingDirectory,
-                                                      const QString& makeParameters, const SourcePathInformation& source, int maxDepth );
+                                                      const QString& makeParameters, const SourcePathInformation& source, int maxDepth ) const;
     QString m_source;
     QString m_build;
 };
