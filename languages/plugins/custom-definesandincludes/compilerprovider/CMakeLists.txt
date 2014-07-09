@@ -7,7 +7,7 @@ set( compilerprovider_SRCS
         ../debugarea.cpp
     )
 
-kde4_add_plugin( kdevcompilerprovider
+add_library(kdevcompilerprovider MODULE
         ${compilerprovider_SRCS})
 
 target_link_libraries( kdevcompilerprovider LINK_PRIVATE
