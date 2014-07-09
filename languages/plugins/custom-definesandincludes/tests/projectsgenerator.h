@@ -33,6 +33,8 @@ class ProjectsGenerator
 public:
     static KDevelop::IProject* GenerateSimpleProject();
 
+    static KDevelop::IProject* GenerateSimpleProjectWithOutOfProjectFiles();
+
     static KDevelop::IProject* GenerateMultiPathProject();
 };
 

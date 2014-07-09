@@ -27,12 +27,8 @@ class FileModificationTimeWrapper;
 
 struct PathResolutionResult
 {
-  PathResolutionResult(bool success = false, const QString& errorMessage = QString(), const QString& longErrorMessage = QString())
-    : success(success)
-    , errorMessage(errorMessage)
-    , longErrorMessage(longErrorMessage)
-  {
-  }
+  PathResolutionResult(bool success = false, const QString& errorMessage = QString(), const QString& longErrorMessage = QString());
+
   bool success;
   QString errorMessage;
   QString longErrorMessage;
@@ -41,55 +37,18 @@ struct PathResolutionResult
 
   QStringList paths;
 
-  void addPathsUnique(const PathResolutionResult& rhs)
-  {
-    foreach(const QString& path, rhs.paths) {
-      if(!paths.contains(path))
-        paths.append(path);
-    }
-    includePathDependency += rhs.includePathDependency;
-  }
+  void addPathsUnique(const PathResolutionResult& rhs);
 
-  operator bool() const
-  {
-    return success;
-  }
-};
-
-struct CustomIncludePathsSettings
-{
-  QString storagePath; //Directory the custom file is in
-  QString sourceDir;
-  QString buildDir;
-  QStringList paths;
-
-  QString storageFile() const;
-  bool isValid() const ;
-
-  static CustomIncludePathsSettings read(const QString& storagePath);
-  ///Finds a valid storage file above the given start path that contains custom include paht settings
-  ///If no valid storage file is found, returns an empty string
-  static QString find(const QString& startPath);
-  ///Finds a storage-path for the given start path, and reads the custom include path settings
-  ///If none were found, returns an invalid item
-  static CustomIncludePathsSettings findAndRead(const QString& startPath);
-  ///Same as findAndRead, but also convert all relative paths into absolute ones from the
-  ///storage path.
-  static CustomIncludePathsSettings findAndReadAbsolute(const QString& startPath);
-
-  //Stores these settings exclusively, overwriting any old ones for the storage path
-  bool write();
-  //Deletes these settings
-  bool delete_();
+  operator bool() const;
 };
 
 class SourcePathInformation;
 
 ///One resolution-try can issue up to 4 make-calls in worst case
-class IncludePathResolver
+class MakeFileResolver
 {
   public:
-    IncludePathResolver();
+    MakeFileResolver();
     ///Same as below, but uses the directory of the file as working-directory. The argument must be absolute.
     PathResolutionResult resolveIncludePath( const QString& file );
     ///The include-path is only computed once for a whole directory, then it is cached using the modification-time of the Makefile.
@@ -103,20 +62,17 @@ class IncludePathResolver
 
     KDevelop::ModificationRevisionSet findIncludePathDependency(const QString& file);
 
-    void enableMakeResolution(bool enable);
-
   private:
     bool m_isResolving;
     bool m_outOfSource;
-    bool m_enableMakeResolution;
 
-    KUrl mapToBuild(const KUrl& url);
+    KUrl mapToBuild(const KUrl& url) const;
 
     ///Executes the command using KProcess
     bool executeCommand( const QString& command, const QString& workingDirectory, QString& result ) const;
     ///file should be the name of the target, without extension(because that may be different)
     PathResolutionResult resolveIncludePathInternal( const QString& file, const QString& workingDirectory,
-                                                      const QString& makeParameters, const SourcePathInformation& source, int maxDepth );
+                                                      const QString& makeParameters, const SourcePathInformation& source, int maxDepth ) const;
     QString m_source;
     QString m_build;
 };

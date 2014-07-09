@@ -35,6 +35,7 @@ private slots:
     void cleanup();
     void loadSimpleProject();
     void loadMultiPathProject();
+    void testNoProjectIncludeDirectories();
 };
 
 #endif
