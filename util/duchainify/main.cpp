@@ -83,7 +83,7 @@ void Manager::init()
     KUrl::List includes;
 
     if(m_args->count() == 0) {
-        std::cerr << "Need directory to duchainify" << std::endl;
+        std::cerr << "Need file or directory to duchainify" << std::endl;
         QCoreApplication::exit(1);
     }
 
@@ -229,11 +229,11 @@ using namespace KDevelop;
 int main(int argc, char** argv)
 {
     KAboutData aboutData( "duchainify", 0, ki18n( "duchainify" ),
-                          "1", ki18n("Duchain builder application"), KAboutData::License_GPL,
+                          "1", ki18n("DUChain builder application"), KAboutData::License_GPL,
                           ki18n( "(c) 2009 David Nolden" ), KLocalizedString(), "http://www.kdevelop.org" );
     KCmdLineArgs::init( argc, argv, &aboutData, KCmdLineArgs::CmdLineArgNone );
     KCmdLineOptions options;
-    options.add("+dir", ki18n("directory"));
+    options.add("+path", ki18n("file or directory"));
     
     options.add("w").add("warnings", ki18n("Show warnings"));
     options.add("V").add("verbose", ki18n("Show warnings and debug output"));
