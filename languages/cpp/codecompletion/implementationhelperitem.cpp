@@ -143,7 +143,7 @@ QString ImplementationHelperItem::signaturePart(bool includeDefaultParams) {
   return ret;
 }
 
-QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor position, QualifiedIdentifier forceParentScope) {
+QString ImplementationHelperItem::insertionText(KUrl url, KTextEditor::Cursor position, QualifiedIdentifier forceParentScope) {
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
   QString newText;
   if(!m_declaration)
@@ -451,7 +451,7 @@ void ImplementationHelperItem::execute(KTextEditor::View* view, const KTextEdito
     //this code assumes (safely for now) that the "word" range is on one line
     KTextEditor::Range rangeToReplace(word.start().line(), 0, word.end().line(), word.end().column());
     QString rangeToReplaceText = view->document()->text(rangeToReplace);
-    QString replacementText = insertionText(view->document()->url(), SimpleCursor(rangeToReplace.end()));
+    QString replacementText = insertionText(view->document()->url(), KTextEditor::Cursor(rangeToReplace.end()));
     //Don't replace anything before end of comment, open or closing bracket, or semicolon
     QRegExp replaceAfter = QRegExp("inline|[{}/;]");
     int noReplace = replaceAfter.lastIndexIn(rangeToReplaceText) + replaceAfter.matchedLength() - 1;

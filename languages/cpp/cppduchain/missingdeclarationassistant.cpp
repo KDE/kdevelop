@@ -98,8 +98,8 @@ public:
       DUChainReadLocker lock;
       if(targetContext()) {
         DocumentChangeSet changes;
-        SimpleCursor start = m_problem->rangeInCurrentRevision().start;
-        changes.addChange(DocumentChange(m_problem->url(), SimpleRange(start, start),
+        KTextEditor::Cursor start = m_problem->rangeInCurrentRevision().start();
+        changes.addChange(DocumentChange(m_problem->url(), KTextEditor::Range(start, start),
                                          QString(), typeString(assignedType()) + " "));
         lock.unlock();
 

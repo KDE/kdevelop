@@ -1202,7 +1202,7 @@ QSet<DUContext*> CodeCompletionContext::memberAccessContainers() const {
   }
   
 //   foreach(DUContext* context, ret) {
-//     kDebug() << "member-access container:" << context->url().str() << context->range().textRange() << context->scopeIdentifier(true).toString();
+//     kDebug() << "member-access container:" << context->url().str() << context->range() << context->scopeIdentifier(true).toString();
 //   }
 
   return ret;

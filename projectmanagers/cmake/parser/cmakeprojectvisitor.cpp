@@ -25,7 +25,6 @@
 #include "cmakeduchaintypes.h"
 #include "cmakeparserutils.h"
 
-#include <language/editor/simplerange.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>

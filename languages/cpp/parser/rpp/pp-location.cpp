@@ -183,7 +183,7 @@ void LocationTable::dump() const
   qDebug() << "Location Table:";
   while (it.hasNext()) {
     it.next();
-    qDebug() << it.key() << " => " << it.value().castToSimpleCursor().textCursor();
+    qDebug() << it.key() << " => " << it.value().castToSimpleCursor();
   }
 }
 

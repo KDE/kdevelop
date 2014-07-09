@@ -415,7 +415,7 @@ void Parser::reportError(const QString& msg, KDevelop::ProblemData::Severity sev
       KDevelop::CursorInRevision position = session->positionAt(session->token_stream->position(tok));
 
       KDevelop::ProblemPointer p(new KDevelop::Problem);
-      p->setFinalLocation(KDevelop::DocumentRange(session->url(), KDevelop::SimpleRange(position.castToSimpleCursor(), 0)));
+      p->setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(position.castToSimpleCursor(), 0)));
       p->setDescription(msg);
       p->setSource(KDevelop::ProblemData::Parser);
       p->setSeverity(severity);

@@ -44,7 +44,7 @@ class SimpleRefactoring;
 
 namespace KDevelop {
   class ICodeHighlighting;
-  class SimpleRange;
+  class KTextEditor::Range;
   class CodeCompletion;
 }
 namespace Cpp {
@@ -146,17 +146,17 @@ private:
 
     //Returns the identifier and its range under the cursor as first return-value, and the tail behind it as the second
     //If the given line is an include directive, the complete line is returned starting at the directive
-    QPair<QPair<QString, KDevelop::SimpleRange>, QString> cursorIdentifier(const KUrl& url, const KDevelop::SimpleCursor& position) const;
+    QPair<QPair<QString, KTextEditor::Range>, QString> cursorIdentifier(const KUrl& url, const KTextEditor::Cursor& position) const;
 
-    QPair<KDevelop::TopDUContextPointer, KDevelop::SimpleRange> importedContextForPosition(const KUrl& url, const KDevelop::SimpleCursor& position);
+    QPair<KDevelop::TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const KUrl& url, const KTextEditor::Cursor& position);
 
-    QPair<KDevelop::SimpleRange, const rpp::pp_macro*> usedMacroForPosition(const KUrl& url, const KDevelop::SimpleCursor& position);
+    QPair<KTextEditor::Range, const rpp::pp_macro*> usedMacroForPosition(const KUrl& url, const KTextEditor::Cursor& position);
 
-    virtual KDevelop::SimpleRange specialLanguageObjectRange(const KUrl& url, const KDevelop::SimpleCursor& position);
+    virtual KTextEditor::Range specialLanguageObjectRange(const KUrl& url, const KTextEditor::Cursor& position);
 
-    virtual QPair<KUrl, KDevelop::SimpleCursor> specialLanguageObjectJumpCursor(const KUrl& url, const KDevelop::SimpleCursor& position);
+    virtual QPair<KUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const KUrl& url, const KTextEditor::Cursor& position);
 
-    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
+    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position);
 
     static CppLanguageSupport* m_self;
 

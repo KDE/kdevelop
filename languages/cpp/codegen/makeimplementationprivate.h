@@ -37,7 +37,7 @@ class ClassMemberDeclaration;
  */
 class MakeImplementationPrivate : public CodeGenerator<ParseSession>
 {
-    typedef QMap<ClassMemberDeclaration *, QMap<IndexedString, QList<SimpleRange> > > UseList;
+    typedef QMap<ClassMemberDeclaration *, QMap<IndexedString, QList<KTextEditor::Range> > > UseList;
     
   public:
     

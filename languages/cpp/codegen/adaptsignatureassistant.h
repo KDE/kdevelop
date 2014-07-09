@@ -49,7 +49,7 @@ class AdaptSignatureAssistant : public StaticAssistant
     virtual bool isUseful() const;
 
   private:
-    DUContext* findFunctionContext(const KUrl& url, const SimpleRange& position) const;
+    DUContext* findFunctionContext(const KUrl& url, const KTextEditor::Range& position) const;
 
     ///Compare @param newSignature to m_oldSignature and put differences in oldPositions
     ///@returns whether or not there are any differences

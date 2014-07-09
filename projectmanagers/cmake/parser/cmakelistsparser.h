@@ -28,7 +28,6 @@
 #include <QStringList>
 #include <QString>
 
-#include <language/editor/simplerange.h>
 #include <KUrl>
 
 // #include "cmakemodelitems.h"

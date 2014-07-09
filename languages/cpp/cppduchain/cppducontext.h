@@ -387,7 +387,7 @@ class CppDUContext : public BaseContext {
       
         BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, ret, source, flags );
 
-        ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position.castToSimpleCursor().textCursor(); )
+        ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position.castToSimpleCursor(); )
 
         if( !(flags & DUContext::NoFiltering) ) {
           //Filter out constructors and if needed unresolved template-params

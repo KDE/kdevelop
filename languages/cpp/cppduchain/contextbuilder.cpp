@@ -653,7 +653,7 @@ void ContextBuilder::checkRanges()
 {
   for(QHash<KDevelop::DUContext*, KDevelop::RangeInRevision>::iterator it = m_contextRanges.begin(); it != m_contextRanges.end(); ) {
     if(it.key()->range() != *it) {
-      kDebug(9007) << "Range of" << it.key()->scopeIdentifier(true).toString() << "changed from" << (*it).textRange() << "to" << it.key()->range().textRange() << "at\n" << kBacktrace();
+      kDebug(9007) << "Range of" << it.key()->scopeIdentifier(true).toString() << "changed from" << (*it) << "to" << it.key()->range() << "at\n" << kBacktrace();
       it = m_contextRanges.erase(it); //Remove it so we see each change only once
     }else{
       ++it;

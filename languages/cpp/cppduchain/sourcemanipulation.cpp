@@ -115,7 +115,7 @@ KDevelop::DocumentChangeSet& KDevelop::SourceCodeInsertion::changes() {
   return m_changeSet;
 }
 
-void KDevelop::SourceCodeInsertion::setInsertBefore(KDevelop::SimpleCursor position) {
+void KDevelop::SourceCodeInsertion::setInsertBefore(KTextEditor::Cursor position) {
   m_insertBefore = position;
 }
 
@@ -141,7 +141,9 @@ void KDevelop::SourceCodeInsertion::setSubScope(KDevelop::QualifiedIdentifier sc
       
       foreach(DUContext* child, context->childContexts()) {
         kDebug() << "checking child" << child->localScopeIdentifier().toString() << "against" << needNamespace.first();
-        if(child->localScopeIdentifier().toString() == needNamespace.first() && child->type() == DUContext::Namespace && (child->rangeInCurrentRevision().start < m_insertBefore || !m_insertBefore.isValid())) {
+        if(child->localScopeIdentifier().toString() == needNamespace.first()
+            && child->type() == DUContext::Namespace
+            && (child->rangeInCurrentRevision().start() < m_insertBefore || !m_insertBefore.isValid())) {
           kDebug() << "taking";
           context = child;
           foundChild = true;
@@ -186,7 +188,7 @@ KDevelop::SourceCodeInsertion::SourceCodeInsertion(KDevelop::TopDUContext* topCo
   if(m_topContext->parsingEnvironmentFile() && m_topContext->parsingEnvironmentFile()->isProxyContext()) {
     kWarning() << "source-code manipulation on proxy-context is wrong!!!" << m_topContext->url().toUrl();
   }
-  m_insertBefore = SimpleCursor::invalid();
+  m_insertBefore = KTextEditor::Cursor::invalid();
 }
 
 KDevelop::SourceCodeInsertion::~SourceCodeInsertion() {
@@ -258,20 +260,20 @@ QString makeSignatureString(QList<SourceCodeInsertion::SignatureItem> signature,
   return ret;
 }
 
-SimpleRange SourceCodeInsertion::insertionRange(int line)
+KTextEditor::Range SourceCodeInsertion::insertionRange(int line)
 {
   if(line == 0 || !m_codeRepresentation)
-    return SimpleRange(line, 0, line, 0);
+    return KTextEditor::Range(line, 0, line, 0);
   else
   {
-    SimpleRange range(line-1, m_codeRepresentation->line(line-1).size(), line-1, m_codeRepresentation->line(line-1).size());
+    KTextEditor::Range range(line-1, m_codeRepresentation->line(line-1).size(), line-1, m_codeRepresentation->line(line-1).size());
     //If the context finishes on that line, then this will need adjusting
-    if(!m_context->rangeInCurrentRevision().textRange().contains(range.textRange()))
+    if(!m_context->rangeInCurrentRevision().contains(range))
     {
-      range.start = m_context->rangeInCurrentRevision().end;
-      if(range.start.column > 0)
-        range.start.column -= 1;
-      range.end = range.start;
+      range.start() = m_context->rangeInCurrentRevision().end();
+      if(range.start().column() > 0)
+        range.start().setColumn(range.start().column() - 1);
+      range.end() = range.start();
     }
     return range;
   }
@@ -322,12 +324,12 @@ bool KDevelop::SourceCodeInsertion::insertVariableDeclaration(KDevelop::Identifi
 
 
 
-SimpleCursor SourceCodeInsertion::end() const
+KTextEditor::Cursor SourceCodeInsertion::end() const
 {
-  SimpleCursor ret = m_context->rangeInCurrentRevision().end;
+  KTextEditor::Cursor ret = m_context->rangeInCurrentRevision().end();
   if(m_codeRepresentation && m_codeRepresentation->lines() && dynamic_cast<TopDUContext*>(m_context)) {
-    ret.line = m_codeRepresentation->lines()-1;
-    ret.column = m_codeRepresentation->line(ret.line).size();
+    ret.setLine(m_codeRepresentation->lines()-1);
+    ret.setColumn(m_codeRepresentation->line(ret.line()).size());
   }
   return ret;
   
@@ -336,7 +338,7 @@ SimpleCursor SourceCodeInsertion::end() const
 SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDevelop::Declaration::AccessPolicy policy, InsertionKind kind) const {
   Q_UNUSED(policy);
   InsertionPoint ret;
-  ret.line = end().line;
+  ret.line = end().line();
   
     bool behindExistingItem = false;
     
@@ -361,7 +363,7 @@ SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDev
         }
       }
     }
-    kDebug() << ret.line << m_context->scopeIdentifier(true) << m_context->rangeInCurrentRevision().textRange() << behindExistingItem << m_context->url().toUrl() << m_context->parentContext();
+    kDebug() << ret.line << m_context->scopeIdentifier(true) << m_context->rangeInCurrentRevision() << behindExistingItem << m_context->url().toUrl() << m_context->parentContext();
     kDebug() << "is proxy:" << m_context->topContext()->parsingEnvironmentFile()->isProxyContext() << "count of declarations:" << m_context->topContext()->localDeclarations().size();
     
     if(!behindExistingItem) {
@@ -465,9 +467,9 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
     
     bool needNewLine = true;
     
-    if(!m_scope.isEmpty() || (m_insertBefore.isValid() && m_context->rangeInCurrentRevision().end > m_insertBefore)) {
+    if(!m_scope.isEmpty() || (m_insertBefore.isValid() && m_context->rangeInCurrentRevision().end() > m_insertBefore)) {
       //To the begin
-      position = m_context->rangeInCurrentRevision().start.textCursor();
+      position = m_context->rangeInCurrentRevision().start();
       
       if(m_context->type() == DUContext::Namespace) {
           position += KTextEditor::Cursor(0, 1); //Skip over the opening '{' paren
@@ -480,15 +482,15 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
     } else{
       //To the end
       
-      position = end().textCursor();
+      position = end();
       if(position.column() != 0 && m_context->type() == DUContext::Namespace) {
         position -= KTextEditor::Cursor(0, 1);
         forwardDeclaration += "\n";
         needNewLine = false;
       }
     }
-    int firstValidLine = firstValidCodeLineBefore(m_insertBefore.line);
-    if(firstValidLine > position.line() && m_context == m_topContext && (!m_insertBefore.isValid() || firstValidLine < m_insertBefore.line)) {
+    int firstValidLine = firstValidCodeLineBefore(m_insertBefore.line());
+    if(firstValidLine > position.line() && m_context == m_topContext && (!m_insertBefore.isValid() || firstValidLine < m_insertBefore.line())) {
       position.setLine(firstValidLine);
       position.setColumn(0);
     }
@@ -499,7 +501,7 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
     
     kDebug() << "inserting at" << position << forwardDeclaration;
     
-    return m_changeSet.addChange(DocumentChange(m_context->url(), SimpleRange(position.line(), position.column(), position.line(), position.column()), QString(), forwardDeclaration));
+    return m_changeSet.addChange(DocumentChange(m_context->url(), KTextEditor::Range(position.line(), position.column(), position.line(), position.column()), QString(), forwardDeclaration));
 }
 
 Cpp::SourceCodeInsertion::SourceCodeInsertion(TopDUContext* topContext) : KDevelop::SourceCodeInsertion(topContext){

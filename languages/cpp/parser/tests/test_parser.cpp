@@ -389,38 +389,38 @@ void TestParser::testComments5()
   KDevelop::ProblemPointer problem = problem_list[initial_size];
   QCOMPARE(problem->description(), QString("FIXME comment"));
   QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
-  QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(1, 4));
-  QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(1, 17));
+  QCOMPARE(problem->finalLocation().start(), KTextEditor::Cursor(1, 4));
+  QCOMPARE(problem->finalLocation().end(), KTextEditor::Cursor(1, 17));
 
   problem = problem_list[initial_size + 1];
   QCOMPARE(problem->description(), QString("this is TODO"));
   QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
-  QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(2, 3));
-  QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(2, 15));
+  QCOMPARE(problem->finalLocation().start(), KTextEditor::Cursor(2, 3));
+  QCOMPARE(problem->finalLocation().end(), KTextEditor::Cursor(2, 15));
 
   problem = problem_list[initial_size + 2];
   QCOMPARE(problem->description(), QString("TODO: comment"));
   QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
-  QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(3, 4));
-  QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(3, 17));
+  QCOMPARE(problem->finalLocation().start(), KTextEditor::Cursor(3, 4));
+  QCOMPARE(problem->finalLocation().end(), KTextEditor::Cursor(3, 17));
 
   problem = problem_list[initial_size + 3];
   QCOMPARE(problem->description(), QString("another TODO"));
   QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
-  QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(4, 13));
-  QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(4, 25));
+  QCOMPARE(problem->finalLocation().start(), KTextEditor::Cursor(4, 13));
+  QCOMPARE(problem->finalLocation().end(), KTextEditor::Cursor(4, 25));
 
   problem = problem_list[initial_size + 4];
   QCOMPARE(problem->description(), QString("TODO COMMENT"));
   QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
-  QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(8, 4));
-  QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(8, 16));
+  QCOMPARE(problem->finalLocation().start(), KTextEditor::Cursor(8, 4));
+  QCOMPARE(problem->finalLocation().end(), KTextEditor::Cursor(8, 16));
 
   problem = problem_list[initial_size + 5];
   QCOMPARE(problem->description(), QString::fromUtf8("Non-ascii TODO 例えば"));
   QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
-  QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(10, 3));
-  QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(10, 27));
+  QCOMPARE(problem->finalLocation().start(), KTextEditor::Cursor(10, 3));
+  QCOMPARE(problem->finalLocation().end(), KTextEditor::Cursor(10, 27));
 }
 
 void TestParser::testComments6() {
@@ -570,8 +570,8 @@ void TestParser::testEmptyInclude()
   pp.processFile("anonymous", QByteArray("#include\n\nint main(){\n    ;\n}\n"));
   QCOMPARE(pp.problems().size(), 1);
   qDebug() << pp.problems().first()->description();
-  QCOMPARE(pp.problems().first()->finalLocation().start, KDevelop::SimpleCursor(0, 8));
-  QCOMPARE(pp.problems().first()->finalLocation().end, KDevelop::SimpleCursor(0, 8));
+  QCOMPARE(pp.problems().first()->finalLocation().start(), KTextEditor::Cursor(0, 8));
+  QCOMPARE(pp.problems().first()->finalLocation().end(), KTextEditor::Cursor(0, 8));
 }
 
 void TestParser::testCondition()
@@ -975,7 +975,7 @@ void TestParser::dump(AST* node)
   dumper.dump(node, lastSession->token_stream);
   if (!control.problems().isEmpty()) {
     foreach(const KDevelop::ProblemPointer&p, control.problems()) {
-      qDebug() << p->description() << p->explanation() << p->finalLocation().textRange();
+      qDebug() << p->description() << p->explanation() << p->finalLocation();
     }
   }
 }

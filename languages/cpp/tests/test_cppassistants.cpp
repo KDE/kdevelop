@@ -414,7 +414,7 @@ void TestCppAssistants::testMacroExpansion()
   ILanguage* language = ICore::self()->languageController()->languagesForUrl(url).at(0);
   QVERIFY(language);
 
-  QWidget *macroWidget = language->languageSupport()->specialLanguageObjectNavigationWidget(url, SimpleCursor(macroLine,0));
+  QWidget *macroWidget = language->languageSupport()->specialLanguageObjectNavigationWidget(url, KTextEditor::Cursor(macroLine,0));
   QVERIFY(macroWidget);
   Cpp::NavigationWidget *macroNavigationWidget = dynamic_cast<Cpp::NavigationWidget*>(macroWidget);
   QVERIFY(macroNavigationWidget);

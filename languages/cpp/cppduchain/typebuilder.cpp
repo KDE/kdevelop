@@ -257,7 +257,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
       ///If possible, find another fitting declaration/forward-declaration and re-use it's type
 
-      SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+      KTextEditor::Cursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
       QList<Declaration*> declarations = Cpp::findDeclarationsSameLevel(currentContext(), identifierForNode(node->name), pos);
       if( !declarations.isEmpty() && declarations.first()->abstractType()) {

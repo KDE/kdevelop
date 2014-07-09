@@ -589,7 +589,7 @@ void ForwardDeclarationItem::execute(KTextEditor::Document* document, const KTex
       return;
     Cpp::SourceCodeInsertion insertion(top);
     
-    insertion.setInsertBefore(KDevelop::SimpleCursor(word.start()));
+    insertion.setInsertBefore(KTextEditor::Cursor(word.start()));
     
     insertion.insertForwardDeclaration(m_declaration.data());
     

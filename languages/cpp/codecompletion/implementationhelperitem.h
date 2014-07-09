@@ -48,7 +48,7 @@ public:
   HelperType m_type;
   
   ///Returns the text that this item would yield if it was executed
-  QString insertionText(KUrl currentDocumentUrl = QUrl(), KDevelop::SimpleCursor currentDocumentCursor = KDevelop::SimpleCursor(), QualifiedIdentifier forceParentScope = QualifiedIdentifier());
+  QString insertionText(KUrl currentDocumentUrl = QUrl(), KTextEditor::Cursor currentDocumentCursor = KTextEditor::Cursor(), QualifiedIdentifier forceParentScope = QualifiedIdentifier());
   
   virtual bool dataChangedWithInput() const;
 

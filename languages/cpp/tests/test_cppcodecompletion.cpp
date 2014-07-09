@@ -2004,8 +2004,8 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 4);
   QCOMPARE(top->localDeclarations().count(), 3);
-  kDebug() << top->localDeclarations()[0]->range().castToSimpleRange().textRange();
-  QCOMPARE(top->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(0, 10, 0, 10));
+  kDebug() << top->localDeclarations()[0]->range().castToSimpleRange();
+  QCOMPARE(top->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(0, 10, 0, 10));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("a")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("b")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("a"))->uses().size());
@@ -2742,27 +2742,27 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
-  kDebug() << ctx->localDeclarations()[0]->range().castToSimpleRange().textRange();
-  //kDebug() << ctx->localDeclarations()[1]->range().castToSimpleRange().textRange();
-  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 7, 1, 7)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
-  //  QCOMPARE(ctx->localDeclarations()[1]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 10, 1, 11));
-  //kDebug() << "Range:" << ctx->localDeclarations()[0]->range().castToSimpleRange().textRange();
+  kDebug() << ctx->localDeclarations()[0]->range().castToSimpleRange();
+  //kDebug() << ctx->localDeclarations()[1]->range().castToSimpleRange();
+  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(1, 7, 1, 7)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
+  //  QCOMPARE(ctx->localDeclarations()[1]->range().castToSimpleRange(), KTextEditor::Range(1, 10, 1, 11));
+  //kDebug() << "Range:" << ctx->localDeclarations()[0]->range().castToSimpleRange();
 }
 {
   QString test("#define A(X) bbbbbb\nint A(0);\n");
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
-  kDebug() << ctx->localDeclarations()[0]->range().castToSimpleRange().textRange();
-  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 8, 1, 8)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
+  kDebug() << ctx->localDeclarations()[0]->range().castToSimpleRange();
+  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(1, 8, 1, 8)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
 }
 {
   QString test("#define TEST namespace NS{int a;int b;int c;int d;int q;} class A{}; \nTEST; int a; int b; int c; int d;int e;int f;int g;int h;\n");
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 10);
-  QCOMPARE(ctx->localDeclarations()[1]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 4, 1, 4)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
-  QCOMPARE(ctx->localDeclarations()[2]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 10, 1, 11));
+  QCOMPARE(ctx->localDeclarations()[1]->range().castToSimpleRange(), KTextEditor::Range(1, 4, 1, 4)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
+  QCOMPARE(ctx->localDeclarations()[2]->range().castToSimpleRange(), KTextEditor::Range(1, 10, 1, 11));
 }
 {
   //The range of the merged declaration name should be trimmed to the end of the macro invocation
@@ -2770,7 +2770,7 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
-  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 5, 1, 11));
+  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(1, 5, 1, 11));
 }
 {
   //The range of the merged declaration name should be within macro invocation even when the order of merging is different from the order of formal parameters
@@ -2778,7 +2778,7 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
-  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 12, 1, 18));
+  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(1, 12, 1, 18));
 }
 {
   //The range of the merged declaration name should be collapsed if it does not start with a macro parameter
@@ -2786,7 +2786,7 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
-  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 11, 1, 11));
+  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(1, 11, 1, 11));
 }
 }
 

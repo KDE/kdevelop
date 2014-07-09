@@ -479,7 +479,7 @@ void CMakeManager::jumpToDeclaration()
             Declaration* decl = du->declaration().data();
             if(!decl)
                 return;
-            c = decl->rangeInCurrentRevision().start.textCursor();
+            c = decl->rangeInCurrentRevision().start();
             url = decl->url().toUrl();
         }
 
@@ -767,7 +767,7 @@ bool CMakeManager::renameFolder(ProjectFolderItem* item, const Path &newPath)
     return renameFileOrFolder(item, newPath);
 }
 
-QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position)
+QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position)
 {
     KDevelop::TopDUContextPointer top= TopDUContextPointer(KDevelop::DUChain::self()->chainForDocument(url));
     Declaration *decl=0;
@@ -790,7 +790,7 @@ QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, co
     {
         const IDocument* d=ICore::self()->documentController()->documentForUrl(url);
         const KTextEditor::Document* e=d->textDocument();
-        KTextEditor::Cursor start=position.textCursor(), end=position.textCursor(), step(0,1);
+        KTextEditor::Cursor start=position, end=position, step(0,1);
         for(QChar i=e->characterAt(start); i.isLetter() || i=='_'; i=e->characterAt(start-=step))
         {}
         start+=step;
