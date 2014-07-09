@@ -76,42 +76,8 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
     QFileInfo file(m_session->url().str());
 
     if (file.exists() && !file.absolutePath().contains(QLatin1String("kdevqmljssupport"))) {
-        // Explore all the files in the same directory as the current file, parse
-        // them and import their context.
-        QDirIterator dir(file.absolutePath(), QStringList() << "*.qml" << "*.js", QDir::Files);
-        DUChainWriteLocker lock;
-
-        while (dir.hasNext()) {
-            if (dir.next() == file.absoluteFilePath()) {
-                continue;
-            }
-
-            ReferencedTopDUContext context = m_session->contextOfFile(dir.filePath());
-
-            if (!context) {
-                continue;
-            }
-
-            // Add in this context one alias declaration for each local declaration
-            // of context. This way, this context can see the declarations of
-            // the other one, but not its imported parent contexts. This keeps
-            // things simple and fast for the user.
-            for (Declaration* decl : context->localDeclarations(currentContext()->topContext())) {
-                if (decl->kind() != Declaration::Instance &&
-                    decl->kind() != Declaration::Type) {
-                    // Only import the top-level classes and instances, not the
-                    // import statements or namespace aliases
-                    continue;
-                }
-                AliasDeclaration* alias = openDeclaration<AliasDeclaration>(
-                    decl->qualifiedIdentifier(),
-                    RangeInRevision()
-                );
-
-                alias->setAliasedDeclaration(IndexedDeclaration(decl));
-                closeDeclaration();
-            }
-        }
+        // Import all the files of the current directory in this context
+        importDirectory(file.absolutePath(), nullptr);
     }
 
     // Remove all the imported parent contexts: imports may have been edited
@@ -993,7 +959,66 @@ void DeclarationBuilder::declareExports(const ExportLiteralsAndNames& exports,
 /*
  * UI
  */
-bool DeclarationBuilder::visit(QmlJS::AST::UiImport* node)
+void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::UiImport* node)
+{
+    DUChainWriteLocker lock;
+    QString currentFilePath = currentContext()->topContext()->url().str();
+    QDirIterator dir(
+        directory,
+        QStringList() << (QLatin1String("*.") + currentFilePath.section(QLatin1Char('.'), -1, -1)),
+        QDir::Files
+    );
+
+    if (node && !node->importId.isEmpty()) {
+        // Open a namespace that will contain the declarations
+        QualifiedIdentifier identifier(node->importId.toString());
+        RangeInRevision range = m_session->locationToRange(node->importIdToken);
+
+        Declaration* decl = openDeclaration<Declaration>(identifier, range);
+        decl->setKind(Declaration::Namespace);
+        decl->setInternalContext(openContext(node, range, DUContext::Namespace, identifier));
+    }
+
+    while (dir.hasNext()) {
+        if (dir.next() == currentFilePath) {
+            continue;
+        }
+
+        ReferencedTopDUContext context = m_session->contextOfFile(dir.filePath());
+
+        if (!context) {
+            continue;
+        }
+
+        // Add in this context one alias declaration for each local declaration
+        // of context. This way, this context can see the declarations of
+        // the other one, but not its imported parent contexts. This keeps
+        // things simple and fast for the user.
+        for (Declaration* decl : context->localDeclarations(currentContext()->topContext())) {
+            if (decl->kind() != Declaration::Instance &&
+                decl->kind() != Declaration::Type) {
+                // Only import the top-level classes and instances, not the
+                // import statements or namespace aliases
+                continue;
+            }
+            AliasDeclaration* alias = openDeclaration<AliasDeclaration>(
+                decl->qualifiedIdentifier(),
+                RangeInRevision()
+            );
+
+            alias->setAliasedDeclaration(IndexedDeclaration(decl));
+            closeDeclaration();
+        }
+    }
+
+    if (node && !node->importId.isEmpty()) {
+        // Close the namespace containing the declarations
+        closeDeclaration();
+        closeContext();
+    }
+}
+
+void DeclarationBuilder::importModule(QmlJS::AST::UiImport* node)
 {
     QmlJS::AST::UiQualifiedId *part = node->importUri;
     QString uri;
@@ -1038,6 +1063,18 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiImport* node)
 
         decl->setImportIdentifier(importedNamespaceName);
         closeDeclaration();
+    }
+}
+
+bool DeclarationBuilder::visit(QmlJS::AST::UiImport* node)
+{
+    if (node->importUri) {
+        importModule(node);
+    } else if (!node->fileName.isNull()) {
+        QUrl currentFileUrl = currentContext()->topContext()->url().toUrl();
+        QUrl importUrl = QUrl(node->fileName.toString());
+
+        importDirectory(currentFileUrl.resolved(importUrl).toLocalFile(), node);
     }
 
     return DeclarationBuilderBase::visit(node);

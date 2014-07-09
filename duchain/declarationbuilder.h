@@ -118,6 +118,8 @@ protected:
                         KDevelop::ClassDeclaration* classdecl);
 
     // UI
+    void importDirectory(const QString& directory, QmlJS::AST::UiImport* node);
+    void importModule(QmlJS::AST::UiImport* node);
     virtual bool visit(QmlJS::AST::UiImport* node);
 
     virtual bool visit(QmlJS::AST::UiObjectDefinition* node);
