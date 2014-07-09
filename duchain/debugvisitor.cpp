@@ -115,12 +115,15 @@ QString DebugVisitor::stringForAstKind(int kind)
         case QmlJS::AST::Node::Kind_UiObjectInitializer: return "UiObjectInitializer";
         case QmlJS::AST::Node::Kind_UiObjectMemberList: return "UiObjectMemberList";
         case QmlJS::AST::Node::Kind_UiArrayMemberList: return "UiArrayMemberList";
+        case QmlJS::AST::Node::Kind_UiPragma: return "UiPragma";
         case QmlJS::AST::Node::Kind_UiProgram: return "UiProgram";
         case QmlJS::AST::Node::Kind_UiParameterList: return "UiParameterList";
         case QmlJS::AST::Node::Kind_UiPublicMember: return "UiPublicMember";
         case QmlJS::AST::Node::Kind_UiQualifiedId: return "UiQualifiedId";
+        case QmlJS::AST::Node::Kind_UiQualifiedPragmaId: return "UiQualifiedPragmaId";
         case QmlJS::AST::Node::Kind_UiScriptBinding: return "UiScriptBinding";
         case QmlJS::AST::Node::Kind_UiSourceElement: return "UiSourceElement";
+        case QmlJS::AST::Node::Kind_UiHeaderItemList: return "UiHeaderItemList";
     }
     return "<unknown node kind>";
 }
