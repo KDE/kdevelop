@@ -24,6 +24,7 @@
 #include <ktexteditor/document.h>
 
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchaindumper.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/use.h>
@@ -425,12 +426,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
 
     kDebug(9007) << "built top-level context with" << topLevelContext->localDeclarations().size() << "declarations and" << topLevelContext->importedParentContexts().size() << "included files";
     //If we're debugging the current file, dump the du-chain and the smart ranges
-    ifDebugFile( IndexedString(file->identity().url().str()), { KDevelop::dumpDUContext(topLevelContext); } );
-
-/*     if( m_recompiling ) {
-      dumpDUContext(topLevelContext);
-      kDebug(9007) << dump.dotGraph(topLevelContext);
-     }*/
+    ifDebugFile( IndexedString(file->identity().url().str()), { DUChainDumper dumper; dumper.dump(topLevelContext); } );
   }
 
   setCompilingContexts(false);
@@ -438,8 +434,6 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
   if (!m_importedParentContexts.isEmpty()) {
     DUChainReadLocker lock(DUChain::lock());
     kWarning() << file->url().str() << "Previous parameter declaration context didn't get used??" ;
-//    KDevelop::DumpChain dump;
-//    dump.dump(topLevelContext);
     m_importedParentContexts.clear();
   }
 

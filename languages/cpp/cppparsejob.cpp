@@ -53,6 +53,7 @@
 
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchaindumper.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
@@ -863,7 +864,8 @@ void CPPInternalParseJob::run()
             DUChainReadLocker lock(DUChain::lock());
 #ifdef DUMP_DUCHAIN
         kDebug( 9007 ) << "================== duchain ==================";
-        KDevelop::dumpDUContext(contentContext);
+        DUChainDumper dumper;
+        dumper.dump(contentContext);
 #endif
 
         //KDevelop::DumpDotGraph dumpGraph;
