@@ -511,7 +511,11 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
     if ( ! navigationWidget->property("DoNotCloseOnCursorMove").toBool() ) {
       connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
               this, SLOT(hideToolTip()), Qt::UniqueConnection);
+    } else {
+      disconnect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
+                 this, SLOT(hideToolTip()));
     }
+
     connect(view, SIGNAL(focusOut(KTextEditor::View*)), this, SLOT(hideToolTip()), Qt::UniqueConnection);
     
   }else{
