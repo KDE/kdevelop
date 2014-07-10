@@ -72,10 +72,13 @@ protected:
     virtual void endVisit(QmlJS::AST::FunctionExpression* node);
 
     // Variables
+    bool inferArgumentsFromCall(QmlJS::AST::Node* base,
+                                QmlJS::AST::ArgumentList* arguments);
     virtual bool visit(QmlJS::AST::VariableDeclaration* node);
     virtual void endVisit(QmlJS::AST::VariableDeclaration* node);
     virtual bool visit(QmlJS::AST::BinaryExpression* node);
     virtual bool visit(QmlJS::AST::CallExpression* node);
+    virtual bool visit(QmlJS::AST::NewMemberExpression* node);
 
     // Arrays
     void declareFieldMember(const KDevelop::DeclarationPointer& declaration,

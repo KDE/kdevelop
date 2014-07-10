@@ -300,6 +300,60 @@ void DeclarationBuilder::endVisit(QmlJS::AST::FunctionExpression* node)
 /*
  * Variables
  */
+bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::AST::ArgumentList* arguments)
+{
+    ContextBuilder::ExpressionType expr = findType(base);
+    FunctionType::Ptr func_type = FunctionType::Ptr::dynamicCast(expr.type);
+    DUChainWriteLocker lock;
+
+    if (!expr.declaration || !func_type) {
+        return true;
+    }
+
+    auto func_declaration = expr.declaration.dynamicCast<FunctionDeclaration>();
+
+    if (!func_declaration) {
+        return true;
+    }
+
+    // Put the argument nodes in a list that has a definite size
+    QVector<Declaration *> arguments_decls = func_declaration->internalFunctionContext()->localDeclarations();
+    QVector<QmlJS::AST::ArgumentList *> args;
+
+    for (auto argument = arguments; argument; argument = argument->next) {
+        args.append(argument);
+    }
+
+    // Don't update a function when it is called with the wrong number
+    // of arguments
+    if (args.size() != arguments_decls.size()) {
+        return true;
+    }
+
+    // Update the types of the function arguments
+    FunctionType::Ptr new_func_type(new FunctionType);
+
+    for (int i=0; i<args.size(); ++i) {
+        QmlJS::AST::ArgumentList *argument = args.at(i);
+        Declaration *current_declaration = arguments_decls.at(i);
+        AbstractType::Ptr current_type = current_declaration->abstractType();
+
+        // Merge the current type of the argument with its type in the call expression
+        AbstractType::Ptr call_type = findType(argument->expression).type;
+        AbstractType::Ptr new_type = TypeUtils::mergeTypes(current_type, call_type);
+
+        // Update the declaration of the argument and its type in the function type
+        current_declaration->setAbstractType(new_type);
+        new_func_type->addArgument(new_type);
+    }
+
+    // Replace the function's type with the new type having updated arguments
+    new_func_type->setReturnType(func_type->returnType());
+    func_declaration->setAbstractType(new_func_type.cast<AbstractType>());
+
+    return false;   // The base and the arguments have already been explored
+}
+
 bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
 {
     setComment(m_session->commentForLocation(node->firstSourceLocation()).toUtf8());
@@ -365,56 +419,12 @@ bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
 
 bool DeclarationBuilder::visit(QmlJS::AST::CallExpression* node)
 {
-    ContextBuilder::ExpressionType expr = findType(node->base);
-    FunctionType::Ptr func_type = FunctionType::Ptr::dynamicCast(expr.type);
-    DUChainWriteLocker lock;
+    return inferArgumentsFromCall(node->base, node->arguments);
+}
 
-    if (!expr.declaration || !func_type) {
-        return DeclarationBuilderBase::visit(node);
-    }
-
-    auto func_declaration = expr.declaration.dynamicCast<FunctionDeclaration>();
-
-    if (!func_declaration) {
-        return DeclarationBuilderBase::visit(node);
-    }
-
-    // Put the argument nodes in a list that has a definite size
-    QVector<Declaration *> arguments_decls = func_declaration->internalFunctionContext()->localDeclarations();
-    QVector<QmlJS::AST::ArgumentList *> arguments;
-
-    for (auto argument = node->arguments; argument; argument = argument->next) {
-        arguments.append(argument);
-    }
-
-    // Don't update a function when it is called with the wrong number
-    // of arguments
-    if (arguments.size() != arguments_decls.size()) {
-        return DeclarationBuilderBase::visit(node);
-    }
-
-    // Update the types of the function arguments
-    FunctionType::Ptr new_func_type(new FunctionType);
-
-    for (int i=0; i<arguments.size(); ++i) {
-        QmlJS::AST::ArgumentList *argument = arguments.at(i);
-        Declaration *current_declaration = arguments_decls.at(i);
-        AbstractType::Ptr current_type = current_declaration->abstractType();
-
-        // Merge the current type of the argument with its type in the call expression
-        AbstractType::Ptr call_type = findType(argument->expression).type;
-        AbstractType::Ptr new_type = TypeUtils::mergeTypes(current_type, call_type);
-
-        // Update the declaration of the argument and its type in the function type
-        current_declaration->setAbstractType(new_type);
-        new_func_type->addArgument(new_type);
-    }
-
-    // Replace the function's type with the new type having updated arguments
-    new_func_type->setReturnType(func_type->returnType());
-    func_declaration->setAbstractType(new_func_type.cast<AbstractType>());
-
-    return false;   // findType has already explored node
+bool DeclarationBuilder::visit(QmlJS::AST::NewMemberExpression* node)
+{
+    return inferArgumentsFromCall(node->base, node->arguments);
 }
 
 /*

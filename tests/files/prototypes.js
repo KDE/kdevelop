@@ -1,5 +1,5 @@
 /**
- * "type" : { "toString" : "function void (mixed, mixed)" }
+ * "type" : { "toString" : "function void (int, int)" }
  */
 function Class(a, b) {
     /**
