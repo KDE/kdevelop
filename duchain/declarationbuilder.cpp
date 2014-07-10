@@ -963,11 +963,21 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
 {
     DUChainWriteLocker lock;
     QString currentFilePath = currentContext()->topContext()->url().str();
-    QDirIterator dir(
-        directory,
-        QStringList() << (QLatin1String("*.") + currentFilePath.section(QLatin1Char('.'), -1, -1)),
-        QDir::Files
-    );
+    QFileInfo dir(directory);
+    QFileInfoList entries;
+
+    if (dir.isDir()) {
+        // Import all the files in the given directory
+        entries = QDir(directory).entryInfoList(
+            QStringList() << (QLatin1String("*.") + currentFilePath.section(QLatin1Char('.'), -1, -1)),
+            QDir::Files
+        );
+    } else if (dir.isFile()) {
+        // Import the specific file given in the import statement
+        entries.append(dir);
+    } else {
+        return;
+    }
 
     if (node && !node->importId.isEmpty()) {
         // Open a namespace that will contain the declarations
@@ -979,12 +989,14 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
         decl->setInternalContext(openContext(node, range, DUContext::Class, identifier));
     }
 
-    while (dir.hasNext()) {
-        if (dir.next() == currentFilePath) {
+    for (const QFileInfo& file : entries) {
+        QString filePath = file.canonicalFilePath();
+
+        if (filePath == currentFilePath) {
             continue;
         }
 
-        ReferencedTopDUContext context = m_session->contextOfFile(dir.filePath());
+        ReferencedTopDUContext context = m_session->contextOfFile(filePath);
 
         if (!context) {
             continue;
