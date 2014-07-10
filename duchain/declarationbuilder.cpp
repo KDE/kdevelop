@@ -775,7 +775,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
     } else if (baseclass == QLatin1String("Module")) {
         // QML Module, that declares a namespace
         name = declareModule(range);
-        contextType = DUContext::Namespace;
+        contextType = DUContext::Class;
     } else {
         // Define an anonymous subclass of the baseclass. This subclass will
         // be instantiated when "id:" is encountered
@@ -829,8 +829,8 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
             decl->setInternalContext(ctx);
         }
 
-        if (contextType == DUContext::Namespace) {
-            // If we opened a namespace, ensure that its internal context is of namespace type
+        if (baseclass == QLatin1String("Module")) {
+            // If we opened a namespace, give it a proper scope
             ctx->setLocalScopeIdentifier(decl->qualifiedIdentifier());
         } else if (contextType == DUContext::Enum) {
             ctx->setPropagateDeclarations(true);
@@ -976,7 +976,7 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
 
         Declaration* decl = openDeclaration<Declaration>(identifier, range);
         decl->setKind(Declaration::Namespace);
-        decl->setInternalContext(openContext(node, range, DUContext::Namespace, identifier));
+        decl->setInternalContext(openContext(node, range, DUContext::Class, identifier));
     }
 
     while (dir.hasNext()) {
