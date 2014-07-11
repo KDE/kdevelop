@@ -1,7 +1,7 @@
 project(kdev-qml)
 
 set(VERSION_MAJOR 1)
-set(VERSION_MINOR 6)
+set(VERSION_MINOR 7)
 set(VERSION_PATCH 60)
 # KDevplatform dependency version
 set( KDEVPLATFORM_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}" )
