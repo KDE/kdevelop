@@ -672,7 +672,7 @@ bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
 
   uint start = session->token_stream->cursor();
   TranslationUnitAST *ast = CreateNode<TranslationUnitAST>(session->mempool);
-  session->topAstNode(ast);
+  session->setTopAstNode(ast);
 
   if( m_commentStore.hasComment() )
     addComment(ast, m_commentStore.takeFirstComment());

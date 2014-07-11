@@ -46,12 +46,12 @@ ParseSession::~ParseSession()
   delete m_locationTable;
 }
 
-TranslationUnitAST * ParseSession::topAstNode(void)
+TranslationUnitAST * ParseSession::topAstNode()
 {
   return m_topAstNode;
 }
 
-void ParseSession::topAstNode(TranslationUnitAST * node)
+void ParseSession::setTopAstNode(TranslationUnitAST * node)
 {
   Q_ASSERT(!m_topAstNode);
 

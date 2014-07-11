@@ -62,7 +62,7 @@ public:
   typedef TranslationUnitAST TopAstNode;
 
   TopAstNode * topAstNode();
-  void topAstNode(TopAstNode * node);
+  void setTopAstNode(TopAstNode * node);
 
   ///Create a mapping between an AST node, and its DUChain Declaration
   void mapAstDuChain(AST *, KDevelop::DeclarationPointer);
