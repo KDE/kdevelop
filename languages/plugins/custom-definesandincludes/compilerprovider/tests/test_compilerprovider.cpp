@@ -31,7 +31,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <language/interfaces/idefinesandincludesmanager.h>
+#include "idefinesandincludesmanager.h"
 #include "../icompilerprovider.h"
 
 using KDevelop::ICore;

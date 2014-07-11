@@ -32,7 +32,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <language/interfaces/idefinesandincludesmanager.h>
+#include "idefinesandincludesmanager.h"
 
 using KDevelop::ICore;
 using KDevelop::IDefinesAndIncludesManager;

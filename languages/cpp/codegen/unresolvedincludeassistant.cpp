@@ -26,7 +26,7 @@
 #include <makefileresolver.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <language/interfaces/idefinesandincludesmanager.h>
+#include <custom-definesandincludes/idefinesandincludesmanager.h>
 
 using namespace Cpp;
 

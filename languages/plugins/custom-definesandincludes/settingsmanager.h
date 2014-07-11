@@ -22,7 +22,7 @@
 #ifndef SETTINGSMANAGER_H
 #define SETTINGSMANAGER_H
 
-#include <language/interfaces/idefinesandincludesmanager.h>
+#include "idefinesandincludesmanager.h"
 
 #include "definesandincludesexport.h"
 

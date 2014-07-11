@@ -23,7 +23,7 @@
 
 #include <qabstractitemmodel.h>
 
-#include <language/interfaces/idefinesandincludesmanager.h>
+#include "idefinesandincludesmanager.h"
 #include "../compilerprovider/icompiler.h"
 
 using KDevelop::ConfigEntry;

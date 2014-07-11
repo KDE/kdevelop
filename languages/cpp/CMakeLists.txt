@@ -5,6 +5,7 @@ include(CppBuildConfig.cmake)
 include_directories(
     ${KDevelop_SOURCE_DIR}/languages/cpp/parser
     ${KDevelop_SOURCE_DIR}/languages/cpp/cppduchain
+    ${KDevelop_SOURCE_DIR}/languages/plugins
 )
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 )

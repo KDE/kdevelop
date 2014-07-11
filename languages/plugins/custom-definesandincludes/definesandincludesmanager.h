@@ -28,7 +28,7 @@
 
 #include <interfaces/iplugin.h>
 
-#include <language/interfaces/idefinesandincludesmanager.h>
+#include "idefinesandincludesmanager.h"
 
 #include "settingsmanager.h"
 
