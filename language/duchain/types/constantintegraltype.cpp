@@ -79,30 +79,28 @@ QString ConstantIntegralType::toString() const
       ret += "none";
       break;
     case TypeChar:
-      ret += QString("%1").arg((char)d_func()->m_value);
+      ret += QString("char(%1)").arg((char)d_func()->m_value);
       break;
     case TypeWchar_t:
-      ret += QString("%1").arg((wchar_t)d_func()->m_value);
+      ret += QString("wchar_t(%1)").arg((wchar_t)d_func()->m_value);
       break;
     case TypeChar16_t:
-      ///TODO: cast to char16_t once we can depend on c++0x
-      ret += QString("%1").arg((char)d_func()->m_value);
+      ret += QString("char16_t(%1)").arg((char16_t)d_func()->m_value);
       break;
     case TypeChar32_t:
-      ///TODO: cast to char32_t once we can depend on c++0x
-      ret += QString("%1").arg((char)d_func()->m_value);
+      ret += QString("char32_t(%1)").arg((char32_t)d_func()->m_value);
       break;
     case TypeBoolean:
       ret += d_func()->m_value ? "true" : "false";
       break;
     case TypeInt:
-      ret += (modifiers() & UnsignedModifier) ? QString("%1u").arg((uint)d_func()->m_value) : QString("%1").arg((int)d_func()->m_value);
+      ret += (modifiers() & UnsignedModifier) ? QString("unsigned(%1)").arg((uint)d_func()->m_value) : QString("int(%1)").arg((int)d_func()->m_value);
       break;
     case TypeFloat:
-      ret += QString("%1").arg( value<float>() );
+      ret += QString("float(%1)").arg( value<float>() );
       break;
     case TypeDouble:
-      ret += QString("%1").arg( value<double>() );
+      ret += QString("double(%1)").arg( value<double>() );
       break;
     case TypeVoid:
       ret += "void";
