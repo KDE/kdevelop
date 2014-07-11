@@ -24,7 +24,7 @@
 
 #include <KUrl>
 
-#include <language/interfaces/idefinesandincludesmanager.h>
+#include "idefinesandincludesmanager.h"
 
 using KDevelop::ConfigEntry;
 

@@ -80,6 +80,9 @@ namespace
 
 KConfigGroup baseGroup( KDevelop::IProject* project )
 {
+    if (!project)
+        return KConfigGroup();
+
     return project->projectConfiguration()->group( Config::groupName );
 }
 
@@ -238,6 +241,10 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
 
 KUrl projectRoot(KDevelop::IProject* project)
 {
+    if (!project) {
+        return KUrl();
+    }
+
     KUrl projectPath = project->folder();
 
     // We need this as its own variable as .cd mutates the object and would be

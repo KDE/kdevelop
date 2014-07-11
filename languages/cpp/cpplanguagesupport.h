@@ -50,7 +50,7 @@ namespace Cpp {
   class StaticCodeAssistant;
 }
 namespace CppTools {
-  class IncludePathResolver;
+  class MakeFileResolver;
 }
 
 ///A class that helps detecting what exactly makes the UI block. To use it, just place a breakpoint on UIBlockTester::lockup() and inspect the execution-position of the main thread

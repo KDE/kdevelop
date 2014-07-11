@@ -22,11 +22,10 @@ set(test_common_SRCS
   ../codecompletion/worker.cpp
   ../codegen/simplerefactoring.cpp
   ../codegen/unresolvedincludeassistant.cpp
-  ../codegen/customincludepaths.cpp
   ../cpphighlighting.cpp
   ../cpputils.cpp
   ../includepathcomputer.cpp
-  ../includepathresolver.cpp
+  ../makefileresolver.cpp
   ../quickopen.cpp
 
   ${setuphelpers_SRCS}
@@ -103,10 +102,9 @@ set(cppcodegentest_SRCS
 
   ../codegen/simplerefactoring.cpp
   ../codegen/unresolvedincludeassistant.cpp
-  ../codegen/customincludepaths.cpp
   ../cpputils.cpp
   ../includepathcomputer.cpp
-  ../includepathresolver.cpp
+  ../makefileresolver.cpp
   ${setuphelpers_SRCS}
 )
 

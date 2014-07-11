@@ -35,31 +35,19 @@ class AddCustomIncludePathAction : public KDevelop::IAssistantAction {
   Q_OBJECT
 
 public:
-  AddCustomIncludePathAction(KDevelop::IndexedString url, QString directive);
-  virtual QString description() const;
-  virtual void execute();
+  AddCustomIncludePathAction(const KDevelop::IndexedString& url);
+  virtual QString description() const override;
+  virtual void execute() override;
 
 private:
   KDevelop::IndexedString m_url;
-  QString m_directive;
-};
-
-class OpenProjectConfigurationAction : public KDevelop::IAssistantAction
-{
-public:
-  OpenProjectConfigurationAction( KDevelop::IProject* project );
-  virtual QString description() const;
-  virtual void execute();
-
-private:
-  KDevelop::IProject* m_project;
 };
 
 class OpenProjectForFileAssistant : public KDevelop::IAssistantAction {
 public:
-  OpenProjectForFileAssistant(KUrl);
-  virtual QString description() const;
-  virtual void execute();
+  OpenProjectForFileAssistant(const KUrl&);
+  virtual QString description() const override;
+  virtual void execute() override;
 
 private:
   KUrl m_url;
@@ -67,9 +55,9 @@ private:
 
 class MissingIncludePathAssistant : public KDevelop::IAssistant {
 public:
-  MissingIncludePathAssistant(KDevelop::IndexedString url, QString directive);
-  virtual QString title() const;
-  virtual void createActions();
+  MissingIncludePathAssistant(const KDevelop::IndexedString& url, const QString& directive);
+  virtual QString title() const override;
+  virtual void createActions() override;
 private:
   KDevelop::IndexedString m_url;
   QString m_directive;
@@ -85,15 +73,9 @@ public:
       : KDevelop::Problem(data)
     {}
 
-    virtual QExplicitlySharedDataPointer<KDevelop::IAssistant> solutionAssistant() const
-    {
-      return m_solution;
-    }
+    virtual QExplicitlySharedDataPointer<KDevelop::IAssistant> solutionAssistant() const;
 
-    void setSolutionAssistant(const QExplicitlySharedDataPointer<KDevelop::IAssistant>& assistant)
-    {
-      m_solution = assistant;
-    }
+    void setSolutionAssistant(const QExplicitlySharedDataPointer<KDevelop::IAssistant>& assistant);
 
 private:
     /// FIXME: persist the data for the MissingIncludePathAssistant!

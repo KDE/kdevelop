@@ -23,6 +23,8 @@
 
 #include "settingsmanager.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
@@ -87,6 +89,7 @@ K_PLUGIN_FACTORY(DefinesAndIncludesManagerFactory, registerPlugin<DefinesAndIncl
 
 DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
     : IPlugin("kdevdefinesandincludesmanager", parent )
+    , m_noProjectIPM(new NoProjectIncludePathsManager())
 {
     KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
 }
@@ -96,8 +99,7 @@ QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* ite
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
     if (!item) {
-        auto cp = compilerProvider(m_providers);
-        return cp ? cp->defines(nullptr) : QHash<QString, QString>();
+        return defines(QString());
     }
 
     QHash<QString, QString> defines;
@@ -139,8 +141,7 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
     if (!item) {
-        auto cp = compilerProvider(m_providers);
-        return cp ? cp->includes(nullptr) : Path::List();
+        return includes(QString());;
     }
 
     Path::List includes;
@@ -186,6 +187,32 @@ void DefinesAndIncludesManager::registerProvider(IDefinesAndIncludesManager::Pro
     }
 
     m_providers.push_back(provider);
+}
+
+QHash< QString, QString > DefinesAndIncludesManager::defines(const QString&) const
+{
+    auto cp = compilerProvider(m_providers);
+    return cp ? cp->defines(nullptr) : QHash<QString, QString>();
+}
+
+Path::List DefinesAndIncludesManager::includes(const QString& path) const
+{
+    Path::List includes;
+    auto cp = compilerProvider(m_providers);
+    if (cp) {
+        includes += cp->includes(nullptr);
+    }
+    includes += m_noProjectIPM->includes(path);
+    return includes;
+}
+
+void DefinesAndIncludesManager::openConfigurationDialog(const QString& pathToFile)
+{
+    if (auto project = KDevelop::ICore::self()->projectController()->findProjectForUrl(pathToFile)) {
+        KDevelop::ICore::self()->projectController()->configureProject(project);
+    } else {
+        m_noProjectIPM->openConfigurationDialog(pathToFile);
+    }
 }
 
 }

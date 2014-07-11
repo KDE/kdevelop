@@ -27,7 +27,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/topducontext.h>
-#include <language/interfaces/idefinesandincludesmanager.h>
+#include <custom-definesandincludes/idefinesandincludesmanager.h>
 
 #include "cppduchain/environmentmanager.h"
 
@@ -124,10 +124,10 @@ void IncludePathComputer::computeForeground()
   }
 
   if (noProject) {
-    for (const auto& dir : IDefinesAndIncludesManager::manager()->includes(nullptr)) {
+    for (const auto& dir : IDefinesAndIncludesManager::manager()->includes(m_source)) {
       addInclude( dir );
     }
-    m_defines = IDefinesAndIncludesManager::manager()->defines(nullptr);
+    m_defines = IDefinesAndIncludesManager::manager()->defines(m_source);
   } else if (!m_gotPathsFromManager) {
     kDebug(9007) << "Did not find any include paths from project manager for" << m_source;
   }
@@ -157,16 +157,16 @@ void IncludePathComputer::computeBackground()
   m_includePathDependency = m_includeResolver.findIncludePathDependency(m_source);
   kDebug() << "current include path dependency state:" << m_includePathDependency.toString();
 
-  // only look at make when we did not get any paths from the build manager
-  m_includeResolver.enableMakeResolution(!m_gotPathsFromManager);
-  CppTools::PathResolutionResult result = m_includeResolver.resolveIncludePath(m_source);
+    // only look at make when we did not get any paths from the build manager
+    if (!m_gotPathsFromManager) {
+        auto result = m_includeResolver.resolveIncludePath(m_source);
 
-  m_includePathDependency = result.includePathDependency;
-  kDebug() << "new include path dependency:" << m_includePathDependency.toString();
+        m_includePathDependency = result.includePathDependency;
+        kDebug() << "new include path dependency:" << m_includePathDependency.toString();
 
-  foreach (const QString &res, result.paths) {
-    addInclude(Path(res));
-  }
+        foreach (const QString& res, result.paths) {
+            addInclude(Path(res));
+        }
 
   if (!result) {
     kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":"
@@ -188,7 +188,7 @@ void IncludePathComputer::computeBackground()
       }
     }
   }
-
+}
   m_ready = true;
 }
 

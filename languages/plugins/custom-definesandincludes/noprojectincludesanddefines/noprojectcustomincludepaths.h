@@ -19,37 +19,33 @@
  *
  */
 
-#ifndef CUSTOMINCLUDEPATHS_H
-#define CUSTOMINCLUDEPATHS_H
+#ifndef NOPROJECTCUSTOMINCLUDEPATHS_H
+#define NOPROJECTCUSTOMINCLUDEPATHS_H
 
-#include "ui_custom_include_paths.h"
+#include <QDialog>
 
-#include <QWidget>
+namespace Ui
+{
+class CustomIncludePaths;
+}
 
-class KUrl;
+class NoProjectCustomIncludePaths : public QDialog
 
-class CustomIncludePaths : public QWidget
 {
     Q_OBJECT
 
 public:
-    CustomIncludePaths(QWidget* parent = 0);
+    NoProjectCustomIncludePaths( QWidget* parent = 0 );
 
-    void setStorageDirectoryUrl(const KUrl& url);
-    KUrl storageDirectoryUrl() const;
+    void setStorageDirectory( const QString& path );
+    QString storageDirectory() const;
 
-    void setSourceDirectoryUrl(const KUrl& url);
-    KUrl sourceDirectoryUrl() const;
-
-    void setBuildDirectoryUrl(const KUrl& url);
-    KUrl buildDirectoryUrl() const;
-
-    void appendCustomIncludePath(const QString& path);
+    void appendCustomIncludePath( const QString& path );
     QStringList customIncludePaths() const;
-    void setCustomIncludePaths(const QStringList& paths);
+    void setCustomIncludePaths( const QStringList& paths );
 
 private:
-    Ui::CustomIncludePaths ui;
+    Ui::CustomIncludePaths* m_ui;
 
 private Q_SLOTS:
     void openAddIncludeDirectoryDialog();

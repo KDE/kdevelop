@@ -32,7 +32,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <language/interfaces/idefinesandincludesmanager.h>
+#include "idefinesandincludesmanager.h"
 
 using KDevelop::ICore;
 using KDevelop::IDefinesAndIncludesManager;
@@ -106,7 +106,27 @@ void DefinesAndIncludesTest::loadMultiPathProject()
     QCOMPARE(defines, manager->defines( mainfile, IDefinesAndIncludesManager::UserDefined ));
 }
 
-QTEST_KDEMAIN(DefinesAndIncludesTest, GUI)
+void DefinesAndIncludesTest::testNoProjectIncludeDirectories()
+{
+    s_currentProject = ProjectsGenerator::GenerateSimpleProjectWithOutOfProjectFiles();
+    QVERIFY(s_currentProject);
 
+    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
+    QVERIFY(manager);
+
+    auto projectIncludes = manager->includes(s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined);
+
+    Path includePath1(s_currentProject->path().path() + QDir::separator() + "include1.h");
+    Path includePath2(s_currentProject->path().path() + QDir::separator() + "include2.h");
+
+    QVERIFY(!projectIncludes.contains(includePath1));
+    QVERIFY(!projectIncludes.contains(includePath2));
+
+    auto noProjectIncludes = manager->includes(s_currentProject->path().path() + "/src/main.cpp");
+    QVERIFY(noProjectIncludes.contains(includePath1));
+    QVERIFY(noProjectIncludes.contains(includePath2));
+}
+
+QTEST_KDEMAIN(DefinesAndIncludesTest, GUI)
 
 #include "definesandincludestest.moc"
