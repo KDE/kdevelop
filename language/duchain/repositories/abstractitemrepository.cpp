@@ -18,12 +18,13 @@
 
 #include "abstractitemrepository.h"
 
+#include "config-kdevplatform.h"
+
 namespace KDevelop {
 
 uint staticItemRepositoryVersion()
 {
-  //Increase this to reset incompatible item-repositories
-  return 77;
+  return KDEV_ITEMREPOSITORY_VERSION;
 }
 
 AbstractItemRepository::~AbstractItemRepository()
