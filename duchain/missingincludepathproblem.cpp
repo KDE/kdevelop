@@ -24,7 +24,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
-#include <language/interfaces/idefinesandincludesmanager.h>
+#include <custom-definesandincludes/idefinesandincludesmanager.h>
 
 #include <KLocalizedString>
 

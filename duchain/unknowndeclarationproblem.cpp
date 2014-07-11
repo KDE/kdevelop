@@ -38,7 +38,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/codegen/documentchangeset.h>
-#include <language/interfaces/idefinesandincludesmanager.h>
+#include <custom-definesandincludes/idefinesandincludesmanager.h>
 
 #include <project/projectmodel.h>
 #include <util/path.h>
