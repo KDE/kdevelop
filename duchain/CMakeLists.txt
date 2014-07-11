@@ -19,6 +19,7 @@ target_link_libraries(kdevqmljsduchain LINK_PRIVATE
 
 target_link_libraries(kdevqmljsduchain LINK_PUBLIC
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    ${KDEVPLATFORM_UTIL_LIBRARIES}
     kdevqtc-qmlsupport
 )
 

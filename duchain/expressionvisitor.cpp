@@ -24,6 +24,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/types/structuretype.h>
 #include <language/duchain/types/functiontype.h>
+#include <util/path.h>
 
 #include "helper.h"
 #include "parsesession.h"
@@ -275,16 +276,15 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
         encounterLvalue(dec);
         return;
     } else if (!context) {
-        // Use the persistent symbol table to find this declaration, even if it
-        // is in another file
-        uint count;
-        const IndexedDeclaration* declarations;
+        // Use the persistent symbol table to find this declaration, even if it is in another file
+        uint count = 0;
+        const IndexedDeclaration* declarations = nullptr;
 
         PersistentSymbolTable::self().declarations(IndexedQualifiedIdentifier(name), count, declarations);
 
         // Explore the declarations and filter-out those that come from a file
         // outside the current directory
-        QString currentDir = QDir::fromNativeSeparators(m_context->topContext()->url().str()).section(QLatin1Char('/'), 0, -2);
+        Path currentDir = Path(m_context->topContext()->url().str()).parent();
 
         for (uint i=0; i<count; ++i) {
             const IndexedDeclaration& decl = declarations[i];
@@ -294,7 +294,7 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
                 continue;
             }
 
-            if (currentDir == QDir::fromNativeSeparators(declTopContext.url().str()).section(QLatin1Char('/'), 0, -2)) {
+            if (currentDir.isDirectParentOf(Path(declTopContext.url().str()))) {
                 DUChainReadLocker lock;
                 encounterLvalue(DeclarationPointer(decl.declaration()));
                 return;
