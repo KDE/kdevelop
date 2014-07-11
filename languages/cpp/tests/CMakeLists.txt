@@ -52,6 +52,7 @@ LINK_LIBRARIES
     ${KDEVPLATFORM_TESTS_LIBRARIES}
     ${KDEVPLATFORM_JSONTESTS_LIBRARIES}
     kdev4cppduchain
+    kdev4cppparser
 )
 
 ecm_add_test(test_specialcompletion.cpp ${test_common_SRCS} TEST_NAME cppspecialcompletion
