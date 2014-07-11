@@ -163,6 +163,11 @@ bool NativeAppJob::doKill()
 
 void NativeAppJob::processFinished( int exitCode , QProcess::ExitStatus status ) 
 {
+    if (!model()) {
+        outputDone();
+        return;
+    }
+
     connect(model(), SIGNAL(allDone()), SLOT(outputDone()));
     lineMaker->flushBuffers();
 
