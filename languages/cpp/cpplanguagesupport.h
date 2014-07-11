@@ -44,7 +44,6 @@ class SimpleRefactoring;
 
 namespace KDevelop {
   class ICodeHighlighting;
-  class KTextEditor::Range;
   class CodeCompletion;
 }
 namespace Cpp {
