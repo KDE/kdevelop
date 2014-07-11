@@ -28,11 +28,14 @@
 
 class KUrl;
 
+namespace KTextEditor {
+class Cursor;
+}
+
 namespace KDevelop
 {
 
 class TemplateEngine;
-class KTextEditor::Cursor;
 struct ClassDescription;
 class TemplateRenderer;
 class SourceFileTemplate;

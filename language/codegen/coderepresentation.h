@@ -38,7 +38,6 @@ namespace KDevelop {
 
 struct KDevEditingTransaction;
 
-class KTextEditor::Range;
 class IndexedString;
 
 //NOTE: this is ugly, but otherwise kate might remove tabs again :-/
