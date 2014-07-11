@@ -34,7 +34,7 @@ private slots:
     void testFiles();
 
 private:
-    void parseAndCheck(const QString& fileName);
+    void parseAndCheck(const QString& fileName, bool check = true);
 };
 
 #endif // TEST_FILES_H

@@ -20,6 +20,7 @@
 
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/types/structuretype.h>
 #include <language/duchain/types/functiontype.h>
@@ -272,9 +273,36 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
 
     if (dec) {
         encounterLvalue(dec);
-    } else {
-        encounterNothing();
+        return;
+    } else if (!context) {
+        // Use the persistent symbol table to find this declaration, even if it
+        // is in another file
+        uint count;
+        const IndexedDeclaration* declarations;
+
+        PersistentSymbolTable::self().declarations(IndexedQualifiedIdentifier(name), count, declarations);
+
+        // Explore the declarations and filter-out those that come from a file
+        // outside the current directory
+        QString currentDir = QDir::fromNativeSeparators(m_context->topContext()->url().str()).section(QLatin1Char('/'), 0, -2);
+
+        for (uint i=0; i<count; ++i) {
+            const IndexedDeclaration& decl = declarations[i];
+            IndexedTopDUContext declTopContext = decl.indexedTopContext();
+
+            if (!declTopContext.isValid()) {
+                continue;
+            }
+
+            if (currentDir == QDir::fromNativeSeparators(declTopContext.url().str()).section(QLatin1Char('/'), 0, -2)) {
+                DUChainReadLocker lock;
+                encounterLvalue(DeclarationPointer(decl.declaration()));
+                return;
+            }
+        }
     }
+
+    encounterNothing();
 }
 
 void ExpressionVisitor::encounterFieldMember(const QString& name)

@@ -59,12 +59,17 @@ void TestFiles::cleanupTestCase()
 
 void TestFiles::testQMLCustomComponent()
 {
+    // First parse CustomComponent, so that it is visible and can be used
+    // by CustomComponentUser. Then re-parse CustomComponent and assert that
+    // it has been used.
+    parseAndCheck(TEST_FILES_DIR "/custom_component/CustomComponent.qml", false);
     parseAndCheck(TEST_FILES_DIR "/custom_component/CustomComponentUser.qml");
     parseAndCheck(TEST_FILES_DIR "/custom_component/CustomComponent.qml");
 }
 
 void TestFiles::testJSUsesBetweenFiles()
 {
+    parseAndCheck(TEST_FILES_DIR "/js_cross_file_uses/js_variable_definition.js", false);
     parseAndCheck(TEST_FILES_DIR "/js_cross_file_uses/js_variable_use.js");
     parseAndCheck(TEST_FILES_DIR "/js_cross_file_uses/js_variable_definition.js");
 }
@@ -85,7 +90,7 @@ void TestFiles::testFiles()
   parseAndCheck(fileName);
 }
 
-void TestFiles::parseAndCheck(const QString& fileName)
+void TestFiles::parseAndCheck(const QString& fileName, bool check)
 {
   const IndexedString indexedFileName(fileName);
   ReferencedTopDUContext top =
@@ -96,10 +101,13 @@ void TestFiles::parseAndCheck(const QString& fileName)
   }
 
   QVERIFY(top);
-  DUChainReadLocker lock;
-  DeclarationValidator validator;
-  top->visit(validator);
-  QVERIFY(validator.testsPassed());
+
+  if (check) {
+    DUChainReadLocker lock;
+    DeclarationValidator validator;
+    top->visit(validator);
+    QVERIFY(validator.testsPassed());
+  }
 }
 
 #include "test_files.moc"
