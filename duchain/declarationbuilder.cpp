@@ -73,13 +73,6 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
 
 void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
 {
-    QFileInfo file(m_session->url().str());
-
-    if (file.exists() && !file.absolutePath().contains(QLatin1String("kdevqmljssupport"))) {
-        // Import all the files of the current directory in this context
-        importDirectory(file.absolutePath(), nullptr);
-    }
-
     // Remove all the imported parent contexts: imports may have been edited
     // and there musn't be any leftover parent context
     {
@@ -1008,35 +1001,15 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
 
         ReferencedTopDUContext context = m_session->contextOfFile(filePath);
 
-        if (!context) {
-            continue;
-        }
-
-        // Add in this context one alias declaration for each local declaration
-        // of context. This way, this context can see the declarations of
-        // the other one, but not its imported parent contexts. This keeps
-        // things simple and fast for the user.
-        for (Declaration* decl : context->localDeclarations(currentContext()->topContext())) {
-            if (decl->kind() != Declaration::Instance &&
-                decl->kind() != Declaration::Type) {
-                // Only import the top-level classes and instances, not the
-                // import statements or namespace aliases
-                continue;
-            }
-            AliasDeclaration* alias = openDeclaration<AliasDeclaration>(
-                decl->qualifiedIdentifier(),
-                RangeInRevision()
-            );
-
-            alias->setAliasedDeclaration(IndexedDeclaration(decl));
-            closeDeclaration();
+        if (context) {
+            currentContext()->addImportedParentContext(context.data());
         }
     }
 
     if (node && !node->importId.isEmpty()) {
         // Close the namespace containing the declarations
-        closeDeclaration();
         closeContext();
+        closeDeclaration();
     }
 }
 
