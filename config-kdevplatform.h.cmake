@@ -9,3 +9,5 @@
 #define Q_DECL_NOEXCEPT noexcept
 #endif
 #endif
+
+#define KDEV_ITEMREPOSITORY_VERSION @KDEV_ITEMREPOSITORY_VERSION@
