@@ -675,7 +675,7 @@ void TestExpressionParser::testSimpleExpression() {
   result = parser.evaluateExpression( "5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type.abstractType()->toString(), QString("5"));
+  QCOMPARE(result.type.abstractType()->toString(), QString("int(5)"));
   QVERIFY(result.isInstance);
   QVERIFY(result.type.type<ConstantIntegralType>());
   lock.unlock();
@@ -684,7 +684,7 @@ void TestExpressionParser::testSimpleExpression() {
   result = parser.evaluateExpression( "5.5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type.abstractType()->toString(), QString("5.5"));
+  QCOMPARE(result.type.abstractType()->toString(), QString("double(5.5)"));
   QVERIFY(result.isInstance);
   QVERIFY(result.type.type<ConstantIntegralType>());
   lock.unlock();
@@ -693,7 +693,7 @@ void TestExpressionParser::testSimpleExpression() {
   result = parser.evaluateExpression( "5.5 + 1.5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type.abstractType()->toString(), QString("7"));
+  QCOMPARE(result.type.abstractType()->toString(), QString("double(7)"));
   QVERIFY(result.isInstance);
   QVERIFY(result.type.type<ConstantIntegralType>());
   lock.unlock();
@@ -702,7 +702,7 @@ void TestExpressionParser::testSimpleExpression() {
   result = parser.evaluateExpression( "3 + 0.5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type.abstractType()->toString(), QString("3.5"));
+  QCOMPARE(result.type.abstractType()->toString(), QString("double(3.5)"));
   QVERIFY(result.isInstance);
   QVERIFY(result.type.type<ConstantIntegralType>());
   lock.unlock();
@@ -711,7 +711,7 @@ void TestExpressionParser::testSimpleExpression() {
   result = parser.evaluateExpression( "3u + 0.5", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type.abstractType()->toString(), QString("3.5"));
+  QCOMPARE(result.type.abstractType()->toString(), QString("double(3.5)"));
   QVERIFY(result.isInstance);
   QVERIFY(result.type.type<ConstantIntegralType>());
   lock.unlock();
@@ -720,7 +720,7 @@ void TestExpressionParser::testSimpleExpression() {
   result = parser.evaluateExpression( "0", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type.abstractType()->toString(), QString("0"));
+  QCOMPARE(result.type.abstractType()->toString(), QString("int(0)"));
   QVERIFY(result.isInstance);
   QVERIFY(result.type.type<ConstantIntegralType>());
   lock.unlock();

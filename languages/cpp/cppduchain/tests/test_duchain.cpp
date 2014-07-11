@@ -3714,7 +3714,7 @@ void TestDUChain::testTemplateEnums()
 
     QCOMPARE(top->localDeclarations().count(), 2);
     QVERIFY(top->localDeclarations()[1]->abstractType());
-    QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("No< 5 >"));
+    QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("No< int(5) >"));
     QCOMPARE(top->childContexts().count(), 2);
     QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance);
@@ -3724,7 +3724,7 @@ void TestDUChain::testTemplateEnums()
     Declaration* used = top->usedDeclarationForIndex(top->uses()[0].m_declarationIndex);
     QVERIFY(used);
     QVERIFY(used->abstractType());
-    QCOMPARE(used->abstractType()->toString(), QString("No< 5 >"));
+    QCOMPARE(used->abstractType()->toString(), QString("No< int(5) >"));
   }
   {
     QByteArray text("template<int num> struct No {};  No<9> n;");
@@ -3732,13 +3732,13 @@ void TestDUChain::testTemplateEnums()
 
     QCOMPARE(top->localDeclarations().count(), 2);
     QVERIFY(top->localDeclarations()[1]->abstractType());
-    QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("No< 9 >"));
+    QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("No< int(9) >"));
 
     QCOMPARE(top->usesCount(), 1);
     Declaration* used = top->usedDeclarationForIndex(top->uses()[0].m_declarationIndex);
     QVERIFY(used);
     QVERIFY(used->abstractType());
-    QCOMPARE(used->abstractType()->toString(), QString("No< 9 >"));
+    QCOMPARE(used->abstractType()->toString(), QString("No< int(9) >"));
   }
   {
     QByteArray text("class A {enum { Val = 5}; }; class B { enum{ Val = 7 }; }; template<class C, int i> class Test { enum { TempVal = C::Val, Num = i, Sum = TempVal + i }; };");
