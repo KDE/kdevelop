@@ -279,6 +279,7 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
         // Use the persistent symbol table to find this declaration, even if it is in another file
         uint count = 0;
         const IndexedDeclaration* declarations = nullptr;
+        DUChainReadLocker lock;
 
         PersistentSymbolTable::self().declarations(IndexedQualifiedIdentifier(name), count, declarations);
 
@@ -295,7 +296,6 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
             }
 
             if (currentDir.isDirectParentOf(Path(declTopContext.url().str()))) {
-                DUChainReadLocker lock;
                 encounterLvalue(DeclarationPointer(decl.declaration()));
                 return;
             }
