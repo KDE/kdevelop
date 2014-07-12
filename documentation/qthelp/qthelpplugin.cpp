@@ -35,10 +35,10 @@
 QtHelpPlugin *QtHelpPlugin::s_plugin = 0;
 
 K_PLUGIN_FACTORY_DEFINITION(QtHelpFactory, registerPlugin<QtHelpPlugin>(); )
-K_EXPORT_PLUGIN(QtHelpFactory(KAboutData("kdevqthelp","kdevqthelp", ki18n("QtHelp"), "0.1", ki18n("Check Qt Help documentation"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(QtHelpFactory(KAboutData("kdevqthelp","kdevqthelp", ki18n("QtHelp"), "0.1", ki18n("Check Qt Help documentation"), KAboutData::License_GPL)))
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
-    : KDevelop::IPlugin(QtHelpFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevqthelp", parent)
     , m_qtHelpProviders()
     , m_qtDoc(0)
 {
@@ -46,7 +46,7 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
 
     Q_UNUSED(args);
     s_plugin = this;
-    KSettings::Dispatcher::registerComponent( KComponentData("kdevqthelp_config"),
+    KSettings::Dispatcher::registerComponent( "kdevqthelp_config",
                                                     this, "readConfig" );
     connect(this, SIGNAL(changedProvidersList()), KDevelop::ICore::self()->documentationController(), SLOT(changedDocumentationProviders()));
     QMetaObject::invokeMethod(this, "readConfig", Qt::QueuedConnection);

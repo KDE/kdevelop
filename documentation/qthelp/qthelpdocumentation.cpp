@@ -22,6 +22,7 @@
 #include "qthelpdocumentation.h"
 #include <QLabel>
 #include <KLocale>
+#include <KUrl>
 #include <QTreeView>
 #include <QHelpContentModel>
 #include <QHeaderView>

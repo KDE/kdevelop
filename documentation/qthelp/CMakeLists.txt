@@ -1,5 +1,6 @@
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9045 )
-add_subdirectory(tests)
+include_directories(${Qt5Help_INCLUDE_DIRS})
+
 set(kdevqthelp_SRCS
     qthelpplugin.cpp
     qthelpproviderabstract.cpp
@@ -11,8 +12,9 @@ set(kdevqthelp_SRCS
 
 add_library(kdevqthelp MODULE ${kdevqthelp_SRCS})
 target_link_libraries(kdevqthelp
-    ${KDE4_KCMUTILS_LIBS} KF5::KIOWidgets ${KDE4_KDEUI_LIBS} KF5::TextEditor ${QT_QTHELP_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_DOCUMENTATION_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES})
+    ${KDE4_KCMUTILS_LIBS} KF5::KIOWidgets ${KDE4_KDEUI_LIBS} KF5::TextEditor Qt5::Help ${QT_QTWEBKIT_LIBRARY}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_DOCUMENTATION_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES}
+    KF5::KCMUtils )
 
 install(TARGETS kdevqthelp DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -33,8 +35,11 @@ qt5_wrap_ui(kdevqthelp_config_SRCS
 
 add_library(kdevqthelp_config MODULE ${kdevqthelp_config_SRCS} )
 
-target_link_libraries( kdevqthelp_config ${KDE4_KUTILS_LIBS} KF5::KIOWidgets ${QT_QTHELP_LIBRARY} KF5::NewStuff)
+target_link_libraries( kdevqthelp_config ${KDE4_KUTILS_LIBS}
+${KDE4_KDEUI_LIBS} KF5::KIOWidgets Qt5::Help KF5::NewStuff KF5::KCMUtils)
 
 install( TARGETS kdevqthelp_config DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kdevqthelp_config.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevelop-qthelp.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+
+add_subdirectory(tests)

@@ -21,6 +21,8 @@
 
 #include "qthelpprovider.h"
 
+#include <QIcon>
+
 QtHelpProvider::QtHelpProvider(QObject *parent, const QString &fileName, const QString &name, const QString &iconName, const QVariantList &args)
     : QtHelpProviderAbstract(parent, QHelpEngineCore::namespaceName(fileName) + ".qhc", args)
     , m_fileName(fileName)

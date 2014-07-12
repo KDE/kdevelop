@@ -93,7 +93,7 @@
   <customwidget>
    <class>KIconButton</class>
    <extends>QPushButton</extends>
-   <header>kicondialog.h</header>
+   <header>KIconThemes/KIconButton</header>
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>

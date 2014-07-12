@@ -22,6 +22,7 @@
 #include "qthelpqtdoc.h"
 
 #include <QDir>
+#include <QIcon>
 
 #include <KLocale>
 #include <KStandardDirs>

@@ -22,6 +22,8 @@
 #include "../qthelpprovider.h"
 #include "../qthelp_config_shared.h"
 
+#include <QTest>
+
 #include <interfaces/idocumentation.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/declaration.h>

@@ -37,7 +37,7 @@
 #include "qthelp_config_shared.h"
 
 K_PLUGIN_FACTORY(QtHelpConfigFactory, registerPlugin<QtHelpConfig>();)
-K_EXPORT_PLUGIN(QtHelpConfigFactory("kdevqthelp_config"))
+//K_EXPORT_PLUGIN(QtHelpConfigFactory("kdevqthelp_config"))
 
 enum Column
 {
@@ -95,7 +95,7 @@ void QtHelpConfigEditDialog::accept()
 }
 
 QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
-    : KCModule(QtHelpConfigFactory::componentData(), parent, args)
+    : KCModule(parent, args)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
 
