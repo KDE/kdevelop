@@ -64,7 +64,7 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you want gdb to be executed by a special shell script, which for example properly sets the library path, insert it here e.g.: /path/to/script.sh --scriptArguments&lt;/p&gt;&lt;p&gt;Note: your script'll be invoked like this: /path/to/script.sh --scriptArguments debbuger --debuggerArguments. So script.sh &lt;span style=&quot; font-weight:600;&quot;&gt;must&lt;/span&gt; invoke &amp;quot;debugger&amp;quot; executable manually.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you want gdb to be executed by a special shell script, which for example properly sets the library path, insert it here e.g.: /path/to/script.sh --scriptArguments&lt;/p&gt;&lt;p&gt;Note: your script'll be invoked like this: /path/to/script.sh --scriptArguments debugger --debuggerArguments. So script.sh &lt;span style=&quot; font-weight:600;&quot;&gt;must&lt;/span&gt; invoke &amp;quot;debugger&amp;quot; executable manually.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="whatsThis">
          <string/>
@@ -83,7 +83,7 @@
       <item row="1" column="1">
        <widget class="KUrlRequester" name="kcfg_debuggingShell">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you want gdb to be executed by a special shell script, which for example properly sets the library path, insert it here e.g.: /path/to/script.sh --scriptArguments&lt;/p&gt;&lt;p&gt;Note: your script'll be invoked like this: /path/to/script.sh --scriptArguments debbuger --debuggerArguments. So script.sh &lt;span style=&quot; font-weight:600;&quot;&gt;must&lt;/span&gt; invoke &amp;quot;debugger&amp;quot; executable manually.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you want gdb to be executed by a special shell script, which for example properly sets the library path, insert it here e.g.: /path/to/script.sh --scriptArguments&lt;/p&gt;&lt;p&gt;Note: your script'll be invoked like this: /path/to/script.sh --scriptArguments debugger --debuggerArguments. So script.sh &lt;span style=&quot; font-weight:600;&quot;&gt;must&lt;/span&gt; invoke &amp;quot;debugger&amp;quot; executable manually.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="whatsThis">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
