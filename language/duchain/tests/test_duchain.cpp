@@ -364,7 +364,7 @@ void TestDUChain::testStringSets() {
 
 void TestDUChain::testSymbolTableValid() {
   DUChainReadLocker lock(DUChain::lock());
-  PersistentSymbolTable::self().selfAnalysis();
+  PersistentSymbolTable::self().dump(QTextStream(stdout));
 }
 
 void TestDUChain::testIndexedStrings() {

@@ -345,11 +345,18 @@ void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, u
   }
 }
 
-struct AnalisysVisitor {
+struct DebugVisitor
+{
+  DebugVisitor(const QTextStream& _out)
+    : out(_out)
+  {
+  }
+
   bool operator() (const PersistentSymbolTableItem* item) {
+    QDebug qout(out.device());
     QualifiedIdentifier id(item->id.identifier());
     if(identifiers.contains(id)) {
-      kDebug() << "identifier" << id.toString() << "appears for" << identifiers[id] << "th time";
+      qout << "identifier" << id.toString() << "appears for" << identifiers[id] << "th time";
     }
     
     ++identifiers[id];
@@ -358,33 +365,41 @@ struct AnalisysVisitor {
       IndexedDeclaration decl(item->declarations()[a]);
       if(!decl.isDummy()) {
         if(declarations.contains(decl)) {
-          kDebug() << "declaration found for multiple identifiers. Previous identifier:" << declarations[decl].toString() << "current identifier:" << id.toString();
+          qout << "declaration found for multiple identifiers. Previous identifier:" << declarations[decl].toString() << "current identifier:" << id.toString() << endl;
         }else{
           declarations.insert(decl, id);
         }
       }
       if(decl.data() && decl.data()->qualifiedIdentifier() != item->id.identifier()) {
-        kDebug() << decl.data()->url().str() << "declaration" << decl.data()->qualifiedIdentifier() << "is registered as" << item->id.identifier();
+        qout << decl.data()->url().str() << "declaration" << decl.data()->qualifiedIdentifier() << "is registered as" << item->id.identifier() << endl;
       }
       
+      const QString url = IndexedTopDUContext(item->declarations()[a].topContextIndex()).url().str();
       if(!decl.data() && !decl.isDummy()) {
-        kDebug() << "Item in symbol-table is invalid:" << id.toString() << item->declarations()[a].localIndex() << IndexedTopDUContext(item->declarations()[a].topContextIndex()).url().str();
+        qout << "Item in symbol-table is invalid:" << id.toString() << "- localIndex:" << item->declarations()[a].localIndex() << "- url:" << url << endl;
+      } else {
+        qout << "Item in symbol-table:" << id.toString() << "- localIndex:" << item->declarations()[a].localIndex() << "- url:" << url << endl;
       }
     }
     return true;
   }
+
+  const QTextStream& out;
   QHash<QualifiedIdentifier, uint> identifiers;
   QHash<IndexedDeclaration, QualifiedIdentifier> declarations;
 };
 
-void PersistentSymbolTable::selfAnalysis() {
+void PersistentSymbolTable::dump(const QTextStream& out)
+{
   {
     QMutexLocker lock(d->m_declarations.mutex());
     
-    AnalisysVisitor v;
-    kDebug() << d->m_declarations.statistics();
+    QDebug qout(out.device());
+    DebugVisitor v(out);
     d->m_declarations.visitAllItems(v);
-    kDebug() << "visited" << v.identifiers.size() << "identifiers";
+
+    qout << "Statistics:" << endl;
+    qout << d->m_declarations.statistics() << endl;
   }
 }
 

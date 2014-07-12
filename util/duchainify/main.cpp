@@ -30,6 +30,7 @@
 #include <language/duchain/duchaindumper.h>
 #include <language/duchain/dumpdotgraph.h>
 #include <language/duchain/problem.h>
+#include <language/duchain/persistentsymboltable.h>
 
 #include <interfaces/ilanguage.h>
 #include <interfaces/iplugincontroller.h>
@@ -173,9 +174,19 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
 
     std::cerr << std::endl;
 
+    QTextStream stream(stdout);
+
     if (m_args->isSet("dump-definitions")) {
         DUChainReadLocker lock;
-        DUChain::definitions()->dump(QTextStream(stdout));
+        std::cerr << "Definitions:" << std::endl;
+        DUChain::definitions()->dump(stream);
+        std::cerr << std::endl;
+    }
+
+    if (m_args->isSet("dump-symboltable")) {
+        DUChainReadLocker lock;
+        std::cerr << "PersistentSymbolTable:" << std::endl;
+        PersistentSymbolTable::self().dump(stream);
         std::cerr << std::endl;
     }
 
@@ -188,6 +199,7 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
     }
 
     DUChainReadLocker lock;
+    std::cerr << "Context:" << std::endl;
     DUChainDumper dumpChain(features);
     dumpChain.dump(topContext, m_args->getOption("dump-depth").toInt());
 
@@ -252,6 +264,7 @@ int main(int argc, char** argv)
     options.add("f").add("features <features>", ki18n("Features to build. Options: empty, simplified-visible-declarations, visible-declarations (default), all-declarations, all-declarations-and-uses, all-declarations-and-uses-and-AST"));
     options.add("dump-context", ki18n("Print complete Definition-Use Chain on successful parse"));
     options.add("dump-definitions", ki18n("Print complete DUChain Definitions repository on successful parse"));
+    options.add("dump-symboltable", ki18n("Print complete DUChain PersistentSymbolTable repository on successful parse"));
     options.add("dump-depth <depth>", ki18n("Number defining the maximum depth where declaration details are printed"));
     options.add("dump-graph", ki18n("Dump DUChain graph (in .dot format)"));
     options.add("d").add("dump-errors", ki18n("Print problems encountered during parsing"));
