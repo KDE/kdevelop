@@ -71,8 +71,6 @@ Object.prototype.keys(new Object());
 Object.prototype.preventExtensions = function (O) { return new Object(); };
 Object.prototype.preventExtensions(new Object());
 
-Object.prototype.prototype = new Object();
-
 Object.prototype.seal = function (O) { return new Object(); };
 Object.prototype.seal(new Object());
 

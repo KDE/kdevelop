@@ -86,7 +86,6 @@ Class('Object') \
     .member(Function(_bool, 'isSealed', ('O', _object))) \
     .member(Function(_array, 'keys', ('O', _object))) \
     .member(Function(_object, 'preventExtensions', ('O', _object))) \
-    .member(Variable(_object, 'prototype')) \
     .member(Function(_object, 'seal', ('O', _object))) \
     .member(Function(_object, 'setPrototypeOf', ('O', _object), ('proto', _object))) \
     \
@@ -104,7 +103,6 @@ Class('Function') \
     .member(Function(_mixed, 'apply', ('thisArg', _object), ('arguments', _array))) \
     .member(Function(_function, 'bind', ('thisArg', _object), ('arguments', _mixed))) \
     .member(Function(_mixed, 'call', ('thisArg', _object), ('arguments', _mixed))) \
-    .member(Variable(_function, 'constructor')) \
     .member(Function(_function, 'toMethod', ('newHome', _object), ('methodName', _string))) \
     .member(Variable(_string, 'name')) \
     .print()

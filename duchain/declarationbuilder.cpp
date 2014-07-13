@@ -83,7 +83,7 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
         currentContext()->topContext()->clearImportedParentContexts();
 
         // Import the built-in ECMAScript declarations
-        if (importedContext) {
+        if (importedContext && importedContext.data() != currentContext()) {
             currentContext()->addImportedParentContext(importedContext);
         }
     }
