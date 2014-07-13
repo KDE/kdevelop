@@ -36,8 +36,10 @@ DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContext
 {
     DUChainReadLocker lock;
     if (context) {
-        foreach (Declaration* dec, context->findDeclarations(id, CursorInRevision(INT_MAX, INT_MAX))) {
-            return DeclarationPointer(dec);
+        auto declarations = context->findDeclarations(id, CursorInRevision(INT_MAX, INT_MAX));
+
+        if (declarations.count() > 0) {
+            return DeclarationPointer(declarations.last());
         }
     }
     return DeclarationPointer();
