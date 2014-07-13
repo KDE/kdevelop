@@ -73,11 +73,19 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
 
 void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
 {
-    // Remove all the imported parent contexts: imports may have been edited
-    // and there musn't be any leftover parent context
+    ReferencedTopDUContext importedContext = m_session->contextOfModule(QLatin1String("ecmascript_1.0.js"));
+
     {
         DUChainWriteLocker lock;
+
+        // Remove all the imported parent contexts: imports may have been edited
+        // and there musn't be any leftover parent context
         currentContext()->topContext()->clearImportedParentContexts();
+
+        // Import the built-in ECMAScript declarations
+        if (importedContext) {
+            currentContext()->addImportedParentContext(importedContext);
+        }
     }
 
     DeclarationBuilderBase::startVisiting(node);

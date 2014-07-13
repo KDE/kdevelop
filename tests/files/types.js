@@ -46,3 +46,13 @@ var nested_conditions = (simple_compare && b < 3);
  * "type" : { "toString" : "int" }
  */
 var simple_shift = (a << 2);
+
+/**
+ * "type" : { "toString" : "double" }
+ */
+var result_of_sin = Math.sin(0);
+
+/**
+ * "type" : { "toString" : "RegExp" }
+ */
+var regexp = new RegExp(".*");

@@ -1,5 +1,8 @@
 file(GLOB qmlfiles RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.qml)
-install(FILES ${qmlfiles} DESTINATION ${DATA_INSTALL_DIR}/kdevqmljssupport/qmlplugins)
+file(GLOB jsfiles RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.js)
+
+install(FILES ${qmlfiles} ${jsfiles} DESTINATION ${DATA_INSTALL_DIR}/kdevqmljssupport/qmlplugins)
+
 install(FILES QtBluetooth_5.0.qml DESTINATION ${DATA_INSTALL_DIR}/kdevqmljssupport/qmlplugins RENAME QtBluetooth_5.2.qml)
 install(FILES QtNfc_5.0.qml DESTINATION ${DATA_INSTALL_DIR}/kdevqmljssupport/qmlplugins RENAME QtNfc_5.2.qml)
 install(FILES QtPositioning_5.0.qml DESTINATION ${DATA_INSTALL_DIR}/kdevqmljssupport/qmlplugins RENAME QtPositioning_5.2.qml)
