@@ -131,6 +131,9 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
             DUContext::Class,
             QualifiedIdentifier(name)
         ), true);
+
+        // Every class inherit from Object
+        QmlJS::importObjectContext(currentContext(), topContext());
         closeContext();
     }
 
@@ -159,7 +162,7 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
             name
         );
 
-        if (compilingContexts()) {
+        {
             DUChainWriteLocker lock;
             bodyContext->addImportedParentContext(parametersContext);
         }
@@ -548,6 +551,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::ObjectLiteral* node)
         ));
 
         type->setDeclaration(decl);
+
+        // Every object literal inherits from Object
+        QmlJS::importObjectContext(currentContext(), topContext());
     }
     openType(type);
 
@@ -1422,11 +1428,7 @@ void DeclarationBuilder::registerBaseClasses()
             TopDUContext* topctx = topContext();
 
             if (baseType && baseType->declaration(topctx)) {
-                ctx->addImportedParentContext(
-                    baseType->declaration(topctx)->logicalInternalContext(topctx),
-                    CursorInRevision::invalid(),
-                    ctx->localScopeIdentifier().isEmpty()   // Don't register anonymous classes to their base classes. This avoids "Inherited by , , , , ".
-                );
+                QmlJS::importDeclarationInContext(ctx, DeclarationPointer(baseType->declaration(topctx)));
             }
         }
     }

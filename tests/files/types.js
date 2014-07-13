@@ -56,3 +56,15 @@ var result_of_sin = Math.sin(0);
  * "type" : { "toString" : "RegExp" }
  */
 var regexp = new RegExp(".*");
+
+var o = {};
+/**
+ * "type" : { "toString" : "string" }
+ */
+var result_of_tostring = o.toString();
+
+var o2 = new Date();
+/*
+ * "type" : { "toString" : "string" }
+ */
+var result_of_date_tostring = o2.toString();

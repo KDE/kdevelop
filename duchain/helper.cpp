@@ -206,4 +206,37 @@ RangeInRevision emptyRangeOnLine(const AST::SourceLocation& location)
     return RangeInRevision(location.startLine - 1, 0, location.startLine - 1, 0);
 }
 
+void importDeclarationInContext(DUContext* context, const DeclarationPointer& declaration)
+{
+    DUContext* importedContext = QmlJS::getInternalContext(declaration);
+
+    if (!importedContext) {
+        return;
+    }
+
+    if (declaration->isFunctionDeclaration()) {
+        context->addIndirectImport(DUContext::Import(
+            importedContext,
+            nullptr,                                        // If this is not null, Import::Import will mess with context->owner()->internalFunctionContext...
+            CursorInRevision::invalid()
+        ));
+    } else {
+        context->addImportedParentContext(
+            importedContext,
+            CursorInRevision::invalid(),
+            context->localScopeIdentifier().isEmpty()
+        );
+    }
+}
+
+void importObjectContext(DUContext* context, TopDUContext* topContext)
+{
+    DeclarationPointer objectDeclaration =
+        getDeclaration(QualifiedIdentifier(QLatin1String("Object")), topContext);
+
+    if (objectDeclaration) {
+        importDeclarationInContext(context, objectDeclaration);
+    }
+}
+
 } // End of namespace QmlJS

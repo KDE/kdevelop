@@ -93,6 +93,27 @@ using namespace KDevelop;
      */
     KDEVQMLJSDUCHAIN_EXPORT RangeInRevision emptyRangeOnLine(const AST::SourceLocation& location);
 
+    /**
+     * Import the internal context of a declaration in a context.
+     *
+     * This function is mainly useful because it contains a workaround for a strange
+     * behavior of DUContext::Import (that stores the owner of the context being
+     * imported and indirectly re-resolves the context, instead of directly
+     * storing it)
+     *
+     * @note The DUChain write lock must be held
+     */
+    KDEVQMLJSDUCHAIN_EXPORT void importDeclarationInContext(DUContext* context,
+                                                            const DeclarationPointer& declaration);
+
+    /**
+     * Import the internal context of "Object" (the Javascript base type) in a context.
+     *
+     * @note The DUChain write lock must be held
+     */
+    KDEVQMLJSDUCHAIN_EXPORT void importObjectContext(DUContext* context,
+                                                     TopDUContext* topContext);
+
 
 } // End of namespace QmlJS
 
