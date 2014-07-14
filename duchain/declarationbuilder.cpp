@@ -313,13 +313,14 @@ bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
     }
 
     auto func_declaration = expr.declaration.dynamicCast<FunctionDeclaration>();
+    QList<AbstractType::Ptr> argumentTypes = func_type->arguments();
+    QVector<Declaration *> argumentsDecls;
 
-    if (!func_declaration) {
-        return true;
+    if (func_declaration) {
+        argumentsDecls = func_declaration->internalFunctionContext()->localDeclarations();
     }
 
     // Put the argument nodes in a list that has a definite size
-    QVector<Declaration *> arguments_decls = func_declaration->internalFunctionContext()->localDeclarations();
     QVector<QmlJS::AST::ArgumentList *> args;
 
     for (auto argument = arguments; argument; argument = argument->next) {
@@ -328,7 +329,7 @@ bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
 
     // Don't update a function when it is called with the wrong number
     // of arguments
-    if (args.size() != arguments_decls.size()) {
+    if (args.size() != argumentTypes.count()) {
         return true;
     }
 
@@ -337,21 +338,24 @@ bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
 
     for (int i=0; i<args.size(); ++i) {
         QmlJS::AST::ArgumentList *argument = args.at(i);
-        Declaration *current_declaration = arguments_decls.at(i);
-        AbstractType::Ptr current_type = current_declaration->abstractType();
+        AbstractType::Ptr current_type =
+            (i < argumentsDecls.count() ? argumentsDecls.at(i)->abstractType() : argumentTypes.at(i));
 
         // Merge the current type of the argument with its type in the call expression
         AbstractType::Ptr call_type = findType(argument->expression).type;
         AbstractType::Ptr new_type = TypeUtils::mergeTypes(current_type, call_type);
 
         // Update the declaration of the argument and its type in the function type
-        current_declaration->setAbstractType(new_type);
         new_func_type->addArgument(new_type);
+
+        if (i < argumentsDecls.count()) {
+            argumentsDecls.at(i)->setAbstractType(new_type);
+        }
     }
 
     // Replace the function's type with the new type having updated arguments
     new_func_type->setReturnType(func_type->returnType());
-    func_declaration->setAbstractType(new_func_type.cast<AbstractType>());
+    expr.declaration->setAbstractType(new_func_type.cast<AbstractType>());
 
     return false;   // The base and the arguments have already been explored
 }
