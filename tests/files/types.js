@@ -43,6 +43,11 @@ var f = function(){};
 var array = [1, 2, 3];
 
 /**
+ * "type" : { "toString" : "RegExp" }
+ */
+var regexp = /.*/;
+
+/**
  * "type" : { "toString" : "bool" }
  */
 var simple_compare = (a == 5.89);
@@ -114,3 +119,8 @@ var function_length = f.length;
  * "type" : { "toString" : "bool" }
  */
 var boolean_valueof = simple_compare.valueOf();
+
+/**
+ * "type" : { "toString" : "array" }
+ */
+var regexp_exec = regexp.exec();

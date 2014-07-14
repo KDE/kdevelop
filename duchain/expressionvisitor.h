@@ -40,6 +40,7 @@ public:
 protected:
     virtual bool visit(QmlJS::AST::NumericLiteral* node);
     virtual bool visit(QmlJS::AST::StringLiteral* node);
+    virtual bool visit(QmlJS::AST::RegExpLiteral* node);
     virtual bool visit(QmlJS::AST::TrueLiteral* node);
     virtual bool visit(QmlJS::AST::FalseLiteral* node);
 

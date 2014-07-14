@@ -57,6 +57,13 @@ bool ExpressionVisitor::visit(QmlJS::AST::StringLiteral*)
     return false;
 }
 
+bool ExpressionVisitor::visit(QmlJS::AST::RegExpLiteral*)
+{
+    encounter(QLatin1String("RegExp"));
+    instantiateCurrentDeclaration();
+    return false;
+}
+
 bool ExpressionVisitor::visit(QmlJS::AST::TrueLiteral*)
 {
     encounter(IntegralType::TypeBoolean);

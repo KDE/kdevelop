@@ -195,6 +195,7 @@ void QmlCompletionTest::testContainsDeclaration_data()
     QTest::newRow("js_builtin_boolean") << "var a = true;\n %INVOKE" << "a.%CURSOR" << "valueOf" << false;
     QTest::newRow("js_builtin_array") << "var a = [];\n %INVOKE" << "a.%CURSOR" << "slice" << false;
     QTest::newRow("js_builtin_function") << "var a = function(){};\n %INVOKE" << "a.%CURSOR" << "apply" << false;
+    QTest::newRow("js_builtin_regexp") << "var a = /.*/;\n %INVOKE" << "a.%CURSOR" << "exec" << false;
 
     // Basic QML tests
     QTest::newRow("qml_basic_property") << "Item { id: foo\n property int prop\n %INVOKE }" << "%CURSOR" << "prop" << true;
