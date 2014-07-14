@@ -40,7 +40,6 @@
 
 class WaitAllJobs;
 class CMakeCommitChangesJob;
-class QFileSystemWatcher;
 struct CMakeProjectData;
 class QStandardItem;
 class QDir;
@@ -145,6 +144,7 @@ private slots:
 //
 //     void jumpToDeclaration();
     void projectClosing(KDevelop::IProject*);
+    void dirtyFile();
 //
 //     void directoryChanged(const QString& dir);
 //     void filesystemBuffererTimeout();

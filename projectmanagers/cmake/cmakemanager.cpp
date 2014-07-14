@@ -121,7 +121,7 @@ Path CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 //     if(fi)
 //         ret.addPath(fi->buildDir());
 //     return ret;
-    return Path();
+    return Path(CMake::currentBuildDir(item->project()));
 }
 
 KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
@@ -726,7 +726,7 @@ ProjectFilterManager* CMakeManager::filterManager() const
 
 CMakeFile dataFromJson(const QVariantMap& entry)
 {
-    CppTools::IncludePathResolver resolver;
+    CppTools::MakeFileResolver resolver;
     CppTools::PathResolutionResult result = resolver.processOutput(entry["command"].toString(), entry["directory"].toString());
 
     CMakeFile ret;
@@ -734,22 +734,40 @@ CMakeFile dataFromJson(const QVariantMap& entry)
     return ret;
 }
 
+void CMakeManager::dirtyFile()
+{
+    //we initialize again hte project that sent the signal
+    for(QHash<IProject*, CMakeProjectData>::const_iterator it = m_projects.constBegin(), itEnd = m_projects.constEnd(); it!=itEnd; ++it) {
+        if(it->watcher == sender()) {
+            initializeProject(it.key());
+            break;
+        }
+    }
+}
+
 // NOTE: to get compile_commands.json, you need -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 void CMakeManager::initializeProject(IProject* project)
 {
+    CMakeProjectData data;
     Path commandsFile(CMake::currentBuildDir(project));
     commandsFile.addPath("compile_commands.json");
+    data.watcher->addPath(commandsFile.toLocalFile());
+    connect(data.watcher, SIGNAL(fileChanged(QString)), SLOT(dirtyFile()));
+
     QJson::Parser parser;
     QFile f(commandsFile.toLocalFile());
     bool r = f.open(QFile::ReadOnly);
+    if(!r)
+        return; //when it changes we'll have to try again
+
     Q_ASSERT(r);
     QVariantList values = parser.parse(&f, &r).toList();
     Q_ASSERT(r);
 
-    CMakeProjectData data;
     foreach(const QVariant& v, values) {
         QVariantMap entry = v.toMap();
         data.files[Path(entry["file"].toString())] = dataFromJson(entry);
+        qDebug() << "xxxxxxxxxx" << data.files;
     }
     m_projects[project] = data;
 }

@@ -2,6 +2,7 @@
 #define CMAKEPROJECTDATA_H
 
 #include <QStringList>
+#include <QFileSystemWatcher>
 #include "cmaketypes.h"
 #include <project/path.h>
 
@@ -16,12 +17,21 @@ struct CMakeFile
     KDevelop::Path::List includes;
     QHash<QString, QString> defines;
 };
+inline QDebug &operator<<(QDebug debug, const CMakeFile& file)
+{
+    debug << "CMakeFile(-I" << file.includes << ", -D" << file.defines << ")";
+    return debug.maybeSpace();
+}
 
 struct CMakeProjectData
 {
+    CMakeProjectData() : watcher(new QFileSystemWatcher) {}
+    ~CMakeProjectData() { delete watcher; }
+
     CMakeProperties properties;
     CacheValues cache;
     QHash<KDevelop::Path, CMakeFile> files;
+    QFileSystemWatcher* watcher;
     
     void clear() { properties.clear(); cache.clear(); files.clear(); }
 };
