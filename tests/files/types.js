@@ -68,3 +68,9 @@ var o2 = new Date();
  * "type" : { "toString" : "string" }
  */
 var result_of_date_tostring = o2.toString();
+
+var o3 = new RangeError();
+/**
+ * "type" : { "toString" : "string" }
+ */
+var range_error_inherits_from_error = o3.message;

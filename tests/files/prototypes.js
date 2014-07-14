@@ -8,7 +8,7 @@ function Class(a, b) {
     this.a = a;
 
     /**
-     * "useCount" : 1
+     * "useCount" : 2
      */
     this.b = b;
 }
@@ -44,3 +44,11 @@ var object = {
 };
 
 object.log = function() { console.log(this.a); }
+
+/**
+ * "toString" : "void Subclass ()"
+ */
+function Subclass() {
+}
+Subclass.prototype = Class;
+Subclass.b = 2;
