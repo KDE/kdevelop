@@ -210,7 +210,7 @@ void importDeclarationInContext(DUContext* context, const DeclarationPointer& de
 {
     DUContext* importedContext = QmlJS::getInternalContext(declaration);
 
-    if (!importedContext) {
+    if (!importedContext || importedContext == context) {
         return;
     }
 
