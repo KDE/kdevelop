@@ -27,6 +27,7 @@
 #include <language/duchain/types/unsuretype.h>
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/structuretype.h>
+#include <language/duchain/types/functiontype.h>
 
 namespace QmlJS
 {
@@ -168,15 +169,48 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
 
     default:
     {
-        StructureType::Ptr type = StructureType::Ptr::dynamicCast(declaration->abstractType());
+        StructureType::Ptr structureType = StructureType::Ptr::dynamicCast(declaration->abstractType());
+        IntegralType::Ptr integralType = IntegralType::Ptr::dynamicCast(declaration->abstractType());
+        FunctionType::Ptr functionType = FunctionType::Ptr::dynamicCast(declaration->abstractType());
 
-        if (!type) {
+        if (structureType) {
+            return getInternalContext(
+                DeclarationPointer(structureType->declaration(declaration->topContext()))
+            );
+        } else if (functionType) {
+            return getInternalContext(
+                getDeclaration(QualifiedIdentifier(QLatin1String("Function")), declaration->topContext())
+            );
+        } else if (integralType) {
+            QString baseClass;
+
+            // Compute from which base Javascript class a type inherits
+            switch (integralType->dataType()) {
+                case IntegralType::TypeBoolean:
+                    baseClass = QLatin1String("Boolean");
+                    break;
+                case IntegralType::TypeString:
+                    baseClass = QLatin1String("String");
+                    break;
+                case IntegralType::TypeInt:
+                case IntegralType::TypeFloat:
+                case IntegralType::TypeDouble:
+                    baseClass = QLatin1String("Number");
+                    break;
+                case IntegralType::TypeArray:
+                    baseClass = QLatin1String("Array");
+                    break;
+                default:
+                    baseClass = QLatin1String("Object");
+                    break;
+            }
+
+            return getInternalContext(
+                getDeclaration(QualifiedIdentifier(baseClass), declaration->topContext())
+            );
+        } else {
             return nullptr;
         }
-
-        return getInternalContext(
-            DeclarationPointer(type->declaration(declaration->topContext()))
-        );
     }
     }
 }

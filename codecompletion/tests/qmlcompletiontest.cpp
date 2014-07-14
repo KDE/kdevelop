@@ -187,6 +187,15 @@ void QmlCompletionTest::testContainsDeclaration_data()
     QTest::newRow("js_array_subscript") << "var a = {b: 0};\n %INVOKE" << "a[%CURSOR" << "b" << false;
     QTest::newRow("js_skip_separators") << "var a = {b: 0};\n %INVOKE" << "foo(false, a.%CURSOR" << "b" << false;
 
+    // Javascript classes
+    QTest::newRow("js_object") << "var o = {};\n %INVOKE" << "o.%CURSOR" << "toString" << false;
+    QTest::newRow("js_builtin_object") << "var a;\n %INVOKE" << "a.%CURSOR" << "toString" << false;
+    QTest::newRow("js_builtin_string") << "var a = '';\n %INVOKE" << "a.%CURSOR" << "split" << false;
+    QTest::newRow("js_builtin_number") << "var a = 2;\n %INVOKE" << "a.%CURSOR" << "toFixed" << false;
+    QTest::newRow("js_builtin_boolean") << "var a = true;\n %INVOKE" << "a.%CURSOR" << "valueOf" << false;
+    QTest::newRow("js_builtin_array") << "var a = [];\n %INVOKE" << "a.%CURSOR" << "slice" << false;
+    QTest::newRow("js_builtin_function") << "var a = function(){};\n %INVOKE" << "a.%CURSOR" << "apply" << false;
+
     // Basic QML tests
     QTest::newRow("qml_basic_property") << "Item { id: foo\n property int prop\n %INVOKE }" << "%CURSOR" << "prop" << true;
     QTest::newRow("qml_basic_instance") << "Item { id: foo\n %INVOKE }" << "onTest: %CURSOR" << "foo" << true;

@@ -18,6 +18,11 @@ var a = 50;
 var b = a;
 
 /**
+ * "type" : { "toString" : "string" }
+ */
+var c = "hello";
+
+/**
  * "type" : { "toString" : "double" }
  */
 var d = 1.0;
@@ -26,6 +31,11 @@ var d = 1.0;
  * "type" : { "toString" : "int" }
  */
 var e = a = 60;
+
+/**
+ * "type" : { "toString" : "function void ()" }
+ */
+var f = function(){};
 
 /**
  * "type" : { "toString" : "array" }
@@ -74,3 +84,33 @@ var o3 = new RangeError();
  * "type" : { "toString" : "string" }
  */
 var range_error_inherits_from_error = o3.message;
+
+/**
+ * "type" : { "toString" : "bool" }
+ */
+var number_is_finite = a.isFinite();
+
+/**
+ * "type" : { "toString" : "bool" }
+ */
+var number_is_finite2 = d.isFinite();
+
+/**
+ * "type" : { "toString" : "array" }
+ */
+var array_concat = array.concat();
+
+/**
+ * "type" : { "toString" : "string" }
+ */
+var string_charat = c.charAt(0);
+
+/**
+ * "type" : { "toString" : "int" }
+ */
+var function_length = f.length;
+
+/**
+ * "type" : { "toString" : "bool" }
+ */
+var boolean_valueof = simple_compare.valueOf();
