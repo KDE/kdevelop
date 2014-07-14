@@ -358,6 +358,7 @@ QStack<CodeCompletionContext::ExpressionStackEntry> CodeCompletionContext::expre
             break;
         case QmlJSGrammar::T_IDENTIFIER:
         case QmlJSGrammar::T_DOT:
+        case QmlJSGrammar::T_THIS:
             break;
         case QmlJSGrammar::T_COMMA:
             stack.top().commas++;
