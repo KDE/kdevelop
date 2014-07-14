@@ -62,7 +62,13 @@ private:
 
     void encounterNothing();
     void encounter(KDevelop::IntegralType::CommonIntegralTypes type);
+
     void encounter(const QString &declaration, KDevelop::DUContext* context = nullptr);
+    bool encounterParent(const QString& declaration);       // "parent" QML identifier
+    bool encounterDeclarationInContext(const KDevelop::QualifiedIdentifier& id,
+                                       KDevelop::DUContext* context);
+    bool encounterGlobalDeclaration(const KDevelop::QualifiedIdentifier& id);
+
     void encounterFieldMember(const QString &name);
     void encounterObjectAtLocation(const QmlJS::AST::SourceLocation &location);
     void instantiateCurrentDeclaration();   /*!< @brief Encounter a StructureType whose declaration is currentDeclaration() */

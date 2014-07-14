@@ -239,70 +239,90 @@ void ExpressionVisitor::encounter(IntegralType::CommonIntegralTypes type)
 
 void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContext* context)
 {
+    QualifiedIdentifier name(declaration);
     DUChainReadLocker lock;
 
-    // Special-case "parent". "this" is handled by visit(ThisExpression)
-    if (declaration == QLatin1String("parent") &&
-        ParseSession::guessLanguageFromSuffix(m_context->topContext()->url().str()) == QmlJS::Language::Qml) {
+    if (!(
+            encounterParent(declaration) ||
+            encounterDeclarationInContext(name, context) ||
+            (context == nullptr && encounterGlobalDeclaration(name))
+        )) {
+        encounterNothing();
+    }
+}
 
-        // Go up until we find a class context (the enclosing QML component)
-        const DUContext* parent = m_context;
-
-        while (parent && parent->type() != DUContext::Class) {
-            parent = parent->parentContext();
-        }
-
-        // Take the parent context of the current QML component, it is its parent
-        // component
-        if (parent) {
-            parent = parent->parentContext();
-        }
-
-        // Parent now points to the parent QML component. This is not always what
-        // the user wants when typing "parent", but already works well for
-        // "anchors.centerIn: parent" and things like that.
-        if (parent &&
-            parent->owner() &&
-            parent->owner()->abstractType()) {
-            encounterLvalue(DeclarationPointer(parent->owner()));
-            return;
-        }
+bool ExpressionVisitor::encounterParent(const QString& declaration)
+{
+    if (declaration != QLatin1String("parent") ||
+        ParseSession::guessLanguageFromSuffix(m_context->topContext()->url().str()) != QmlJS::Language::Qml) {
+        return false;
     }
 
-    const QualifiedIdentifier name(declaration);
-    DeclarationPointer dec = QmlJS::getDeclarationOrSignal(name, context ? context : m_context);
+    // Go up until we find a class context (the enclosing QML component)
+    const DUContext* parent = m_context;
+
+    while (parent && parent->type() != DUContext::Class) {
+        parent = parent->parentContext();
+    }
+
+    // Take the parent context of the current QML component, it is its parent
+    // component
+    if (parent) {
+        parent = parent->parentContext();
+    }
+
+    // Parent now points to the parent QML component. This is not always what
+    // the user wants when typing "parent", but already works well for
+    // "anchors.centerIn: parent" and things like that.
+    if (parent &&
+        parent->owner() &&
+        parent->owner()->abstractType()) {
+        encounterLvalue(DeclarationPointer(parent->owner()));
+        return true;
+    }
+
+    return false;
+}
+
+bool ExpressionVisitor::encounterDeclarationInContext(const QualifiedIdentifier& id, DUContext* context)
+{
+    DeclarationPointer dec = QmlJS::getDeclarationOrSignal(id, context ? context : m_context);
 
     if (dec) {
         encounterLvalue(dec);
-        return;
-    } else if (!context) {
-        // Use the persistent symbol table to find this declaration, even if it is in another file
-        uint count = 0;
-        const IndexedDeclaration* declarations = nullptr;
-        DUChainReadLocker lock;
+        return true;
+    }
 
-        PersistentSymbolTable::self().declarations(IndexedQualifiedIdentifier(name), count, declarations);
+    return false;
+}
 
-        // Explore the declarations and filter-out those that come from a file
-        // outside the current directory
-        Path currentDir = Path(m_context->topContext()->url().str()).parent();
+bool ExpressionVisitor::encounterGlobalDeclaration(const QualifiedIdentifier& id)
+{
+    // Use the persistent symbol table to find this declaration, even if it is in another file
+    uint count = 0;
+    const IndexedDeclaration* declarations = nullptr;
 
-        for (uint i=0; i<count; ++i) {
-            const IndexedDeclaration& decl = declarations[i];
-            IndexedTopDUContext declTopContext = decl.indexedTopContext();
+    PersistentSymbolTable::self().declarations(IndexedQualifiedIdentifier(id), count, declarations);
 
-            if (!declTopContext.isValid()) {
-                continue;
-            }
+    // Explore the declarations and filter-out those that come from a file
+    // outside the current directory
+    Path currentDir = Path(m_context->topContext()->url().str()).parent();
 
-            if (currentDir.isDirectParentOf(Path(declTopContext.url().str()))) {
-                encounterLvalue(DeclarationPointer(decl.declaration()));
-                return;
-            }
+    for (uint i=0; i<count; ++i) {
+        const IndexedDeclaration& decl = declarations[i];
+        IndexedTopDUContext declTopContext = decl.indexedTopContext();
+
+        if (!declTopContext.isValid()) {
+            continue;
+        }
+
+        if (currentDir.isDirectParentOf(Path(declTopContext.url().str()))) {
+            encounterLvalue(DeclarationPointer(decl.declaration()));
+            return true;
         }
     }
 
-    encounterNothing();
+    return false;
 }
 
 void ExpressionVisitor::encounterFieldMember(const QString& name)
