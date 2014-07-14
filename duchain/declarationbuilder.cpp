@@ -411,8 +411,10 @@ bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
                 }
             }
 
-            // Merge the already-known type of the variable with the new one
-            leftType.declaration->setAbstractType(TypeUtils::mergeTypes(leftType.type, rightType.type));
+            if (leftType.declaration->topContext() == topContext()) {
+                // Merge the already-known type of the variable with the new one
+                leftType.declaration->setAbstractType(TypeUtils::mergeTypes(leftType.type, rightType.type));
+            }
         }
 
         return false;   // findType has already explored node
