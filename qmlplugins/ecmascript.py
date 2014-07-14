@@ -95,7 +95,6 @@ Class('Object') \
     .member(Function(_bool, 'propertyIsEnumerable', ('property', _string))) \
     .member(Function(_string, 'toLocaleString')) \
     .member(Function(_string, 'toString')) \
-    .member(Function(_object, 'valueOf')) \
     .print()
 
 Class('Function') \
@@ -143,6 +142,7 @@ Class('Number', ('value', _float)) \
     .member(Function(_string, 'toFixed', ('fractionDigits', _int))) \
     .member(Function(_string, 'toPrecision', ('precision', _int))) \
     .member(Function(_float, 'valueOf')) \
+    .print()
 
 Struct('Math') \
     .member(Variable(_float, 'E')) \

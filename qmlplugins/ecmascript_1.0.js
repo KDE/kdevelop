@@ -94,9 +94,6 @@ Object.prototype.toLocaleString();
 Object.prototype.toString = function () { return ""; };
 Object.prototype.toString();
 
-Object.prototype.valueOf = function () { return new Object(); };
-Object.prototype.valueOf();
-
 /*
  * Function
  */
@@ -112,8 +109,6 @@ Function.prototype.bind(new Object(), _mixed);
 
 Function.prototype.call = function (thisArg, arguments) { return _mixed; };
 Function.prototype.call(new Object(), _mixed);
-
-Function.prototype.constructor = function(){};
 
 Function.prototype.toMethod = function (newHome, methodName) { return function(){}; };
 Function.prototype.toMethod(new Object(), "");
@@ -184,6 +179,57 @@ function URIError() { return ; }
 
 URIError.prototype = Error
 
+
+/*
+ * Number
+ */
+function Number(value) { return ; }
+
+Number.prototype.EPSILON = 1.0;
+
+Number.prototype.isFinite = function (number) { return true; };
+Number.prototype.isFinite(1.0);
+
+Number.prototype.isInteger = function (number) { return true; };
+Number.prototype.isInteger(1);
+
+Number.prototype.isNaN = function (number) { return true; };
+Number.prototype.isNaN(1.0);
+
+Number.prototype.isSafeInteger = function (number) { return true; };
+Number.prototype.isSafeInteger(1);
+
+Number.prototype.MAX_SAFE_INTEGER = 1;
+
+Number.prototype.MAX_VALUE = 1.0;
+
+Number.prototype.NaN = 1.0;
+
+Number.prototype.NEGATIVE_INFINITY = 1.0;
+
+Number.prototype.MIN_SAFE_INTEGER = 1;
+
+Number.prototype.MIN_VALUE = 1.0;
+
+Number.prototype.parseFloat = function (string) { return 1.0; };
+Number.prototype.parseFloat("");
+
+Number.prototype.parseInt = function (string, radix) { return 1; };
+Number.prototype.parseInt("", 1);
+
+Number.prototype.POSITIVE_INFINITY = 1.0;
+
+Number.prototype.toExponential = function (fractionDigits) { return ""; };
+Number.prototype.toExponential(1);
+
+Number.prototype.toFixed = function (fractionDigits) { return ""; };
+Number.prototype.toFixed(1);
+
+Number.prototype.toPrecision = function (precision) { return ""; };
+Number.prototype.toPrecision(1);
+
+Number.prototype.valueOf = function () { return 1.0; };
+Number.prototype.valueOf();
 
 /*
  * Math
