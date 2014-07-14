@@ -152,24 +152,22 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
     closeContext();
 
     // Body, if any
-    DUContext* bodyContext = nullptr;
+    DUContext* bodyContext =  openContext(
+        node,
+        bodyRange,
+        DUContext::Other,
+        name
+    );
+
+    {
+        DUChainWriteLocker lock;
+        bodyContext->addImportedParentContext(parametersContext);
+    }
 
     if (body) {
-        bodyContext = openContext(
-            node,
-            bodyRange,
-            DUContext::Other,
-            name
-        );
-
-        {
-            DUChainWriteLocker lock;
-            bodyContext->addImportedParentContext(parametersContext);
-        }
-
         QmlJS::AST::Node::accept(body, this);
-        closeContext();
     }
+    closeContext();
 
     // Set the inner contexts of the function
     {
@@ -216,9 +214,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionDeclaration* node)
         QualifiedIdentifier(node->name.toString()),
         m_session->locationToRange(node->identifierToken),
         node->formals,
-        m_session->locationsToInnerRange(node->lparenToken, node->rparenToken),
+        m_session->locationsToRange(node->lparenToken, node->rparenToken),
         node->body,
-        m_session->locationsToInnerRange(node->lbraceToken, node->rbraceToken)
+        m_session->locationsToRange(node->lbraceToken, node->rbraceToken)
     );
 
     return false;
@@ -232,9 +230,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionExpression* node)
         QualifiedIdentifier(),
         QmlJS::emptyRangeOnLine(node->functionToken),
         node->formals,
-        m_session->locationsToInnerRange(node->lparenToken, node->rparenToken),
+        m_session->locationsToRange(node->lparenToken, node->rparenToken),
         node->body,
-        m_session->locationsToInnerRange(node->lbraceToken, node->rbraceToken)
+        m_session->locationsToRange(node->lbraceToken, node->rbraceToken)
     );
 
     return false;
@@ -1261,7 +1259,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
             node->parameters,
             m_session->locationToRange(node->identifierToken),  // The AST does not provide the location of the parens
             nullptr,
-            RangeInRevision::invalid()
+            m_session->locationToRange(node->identifierToken)   // A body range must be provided
         );
 
         // This declaration is a signal and its return type is void

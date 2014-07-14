@@ -86,20 +86,20 @@ void TestContexts::testFunctionContext_data()
     //                         0         1
     //                         012345678901234567890
     QTest::newRow("empty") << "function foo() {;}"
-                           << RangeInRevision(0, 13, 0, 13)
-                           << RangeInRevision(0, 16, 0, 17);
+                           << RangeInRevision(0, 12, 0, 14)
+                           << RangeInRevision(0, 15, 0, 18);
 
     //                        0         1         2         3
     //                        01234567890123456789012345678901234567890
     QTest::newRow("args") << "function foo(arg1, arg2, arg3) {;}"
-                           << RangeInRevision(0, 13, 0, 29)
-                           << RangeInRevision(0, 32, 0, 33);
+                           << RangeInRevision(0, 12, 0, 30)
+                           << RangeInRevision(0, 31, 0, 34);
 
     //                           0         1         2
     //                           0123456789012345678901234567890
     QTest::newRow("newline") << "function foo() {;\n}"
-                           << RangeInRevision(0, 13, 0, 13)
-                           << RangeInRevision(0, 16, 1, 0);
+                           << RangeInRevision(0, 12, 0, 14)
+                           << RangeInRevision(0, 15, 1, 1);
 }
 
 void TestContexts::testQMLContext()
