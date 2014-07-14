@@ -23,6 +23,7 @@
 #include "cmakeedit.h"
 #include "cmakeutils.h"
 #include "cmakeprojectdata.h"
+#include <languages/cpp/makefileresolver.h>
 
 #include <QDir>
 #include <QThread>
@@ -723,6 +724,17 @@ ProjectFilterManager* CMakeManager::filterManager() const
     return m_filter;
 }
 
+CMakeFile dataFromJson(const QVariantMap& entry)
+{
+    CppTools::IncludePathResolver resolver;
+    CppTools::PathResolutionResult result = resolver.processOutput(entry["command"].toString(), entry["directory"].toString());
+
+    CMakeFile ret;
+    ret.includes = KDevelop::toPathList(result.paths);
+    return ret;
+}
+
+// NOTE: to get compile_commands.json, you need -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 void CMakeManager::initializeProject(IProject* project)
 {
     Path commandsFile(CMake::currentBuildDir(project));
@@ -734,13 +746,12 @@ void CMakeManager::initializeProject(IProject* project)
     QVariantList values = parser.parse(&f, &r).toList();
     Q_ASSERT(r);
 
+    CMakeProjectData data;
     foreach(const QVariant& v, values) {
         QVariantMap entry = v.toMap();
-        CMakeProjectData data;
-        //TODO fill the project data!
-
-        m_projects[project] = data;
+        data.files[Path(entry["file"].toString())] = dataFromJson(entry);
     }
+    m_projects[project] = data;
 }
 
 #include "cmakemanager.moc"

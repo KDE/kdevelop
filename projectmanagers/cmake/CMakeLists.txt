@@ -62,10 +62,10 @@ set( cmakesettings_UI
   settings/cmakebuildsettings.ui
 )
 
-set( cmakedoc_SRCS 
-  cmakedocumentation.cpp
-  cmakehelpdocumentation.cpp
-)
+# set( cmakedoc_SRCS
+#   cmakedocumentation.cpp
+#   cmakehelpdocumentation.cpp
+# )
 
 remove_definitions( -DQT_NO_STL )
 
@@ -81,7 +81,7 @@ target_link_libraries( kdev4cmakecommon LINK_PRIVATE ${KDE4_KDEUI_LIBS}
                         )
 
 qt5_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
-add_library(kdevcmakemanager MODULE ${cmakemanager_SRCS} )
+add_library(kdevcmakemanager MODULE ${cmakemanager_SRCS} ../../languages/cpp/makefileresolver.cpp)
 target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} KF5::KIOWidgets ${KDEVPLATFORM_UTIL_LIBRARIES}
                         ${KDEVPLATFORM_INTERFACES_LIBRARIES} kdev4cmakecommon
                         ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
@@ -101,11 +101,11 @@ target_link_libraries( kcm_kdevcmake_settings KF5::KIOWidgets
                        kdev4cmakecommon )
 
 install(TARGETS kdevcmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
-install(TARGETS kdevcmakedocumentation DESTINATION ${PLUGIN_INSTALL_DIR} )
+# install(TARGETS kdevcmakedocumentation DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kcm_kdevcmake_settings DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kdev4cmakecommon ${INSTALL_TARGETS_DEFAULT_ARGS} )
 configure_file(kdevcmakemanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakemanager.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-configure_file(kdevcmakedocumentation.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+# configure_file(kdevcmakedocumentation.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop)
+# install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES kcm_kdevcmake_settings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

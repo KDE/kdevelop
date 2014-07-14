@@ -59,6 +59,9 @@ class MakeFileResolver
 
     KDevelop::ModificationRevisionSet findIncludePathDependency(const QString& file);
 
+    void enableMakeResolution(bool enable);
+    PathResolutionResult processOutput(const QString& fullOutput, const QString& workingDirectory) const;
+
   private:
     PathResolutionResult resolveIncludePath( const QString& file, const QString& workingDirectory, int maxStepsUp = 20 );
 
@@ -71,7 +74,8 @@ class MakeFileResolver
     bool executeCommand( const QString& command, const QString& workingDirectory, QString& result ) const;
     ///file should be the name of the target, without extension(because that may be different)
     PathResolutionResult resolveIncludePathInternal( const QString& file, const QString& workingDirectory,
-                                                      const QString& makeParameters, const SourcePathInformation& source, int maxDepth ) const;
+                                                      const QString& makeParameters, const SourcePathInformation& source, int maxDepth );
+    PathResolutionResult processOutput(const QString& fullOutput, QRegExp& includeRx, const QString& workingDirectory) const;
     QString m_source;
     QString m_build;
 };

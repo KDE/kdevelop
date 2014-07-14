@@ -544,9 +544,27 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
   return res;
 }
 
+QRegExp includeRegularExpression()
+{
+  QString includeParameterRx("\\s(-I|--include-dir=|-I\\s)");
+  QString quotedRx("(\\').*(\\')|(\\\").*(\\\")"); //Matches "hello", 'hello', 'hello"hallo"', etc.
+  QString escapedPathRx("(([^)(\"'\\s]*)(\\\\\\s)?)*"); //Matches /usr/I\ am \ a\ strange\ path/include
+
+  QRegExp includeRx(QString("%1(%2|%3)(?=\\s)").arg(includeParameterRx).arg(quotedRx).arg(escapedPathRx));
+  includeRx.setMinimal(true);
+  includeRx.setCaseSensitivity(Qt::CaseSensitive);
+  return includeRx;
+}
+
+PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, const QString& workingDirectory) const
+{
+  QRegExp rx = includeRegularExpression();
+  return processOutput(fullOutput, rx, workingDirectory);
+}
+
 PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString& file, const QString& workingDirectory,
                                                                       const QString& makeParameters, const SourcePathInformation& source,
-                                                                      int maxDepth) const
+                                                                      int maxDepth)
 {
   --maxDepth;
   if (maxDepth < 0)
@@ -564,21 +582,17 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   QString fullOutput;
   executeCommand(source.getCommand(file, workingDirectory, makeParameters), workingDirectory, fullOutput);
 
-  QString includeParameterRx("\\s(-I|--include-dir=|-I\\s)");
-  QString quotedRx("(\\').*(\\')|(\\\").*(\\\")"); //Matches "hello", 'hello', 'hello"hallo"', etc.
-  QString escapedPathRx("(([^)(\"'\\s]*)(\\\\\\s)?)*"); //Matches /usr/I\ am \ a\ strange\ path/include
-
-  QRegExp includeRx(QString("%1(%2|%3)(?=\\s)").arg(includeParameterRx).arg(quotedRx).arg(escapedPathRx));
-  includeRx.setMinimal(true);
-  includeRx.setCaseSensitivity(Qt::CaseSensitive);
-
-  QRegExp newLineRx("\\\\\\n");
-  fullOutput.replace(newLineRx, "");
+  {
+    QRegExp newLineRx("\\\\\\n");
+    fullOutput.replace(newLineRx, "");
+  }
   ///@todo collect multiple outputs at the same time for performance-reasons
   QString firstLine = fullOutput;
   int lineEnd;
   if ((lineEnd = fullOutput.indexOf('\n')) != -1)
     firstLine.truncate(lineEnd); //Only look at the first line of output
+
+  QRegExp includeRx = includeRegularExpression();
 
   /**
    * There's two possible cases this can currently handle.
@@ -657,6 +671,16 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 
   ///STEP 2: Search the output for include-paths
 
+  PathResolutionResult ret = processOutput(fullOutput, includeRx, workingDirectory);
+  if (ret.paths.isEmpty())
+    return PathResolutionResult(false, i18n("Could not extract include paths from make output"),
+                                i18n("Folder: \"%1\"  Command: \"%2\"  Output: \"%3\"", workingDirectory,
+                                     source.getCommand(file, workingDirectory, makeParameters), fullOutput));
+  return ret;
+}
+
+PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, QRegExp& includeRx, const QString& workingDirectory) const
+{
   PathResolutionResult ret(true);
   ret.longErrorMessage = fullOutput;
   ifTest(cout << "full output" << fullOutput.toAscii().data() << endl);
@@ -697,11 +721,6 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 
     offset = end-1;
   }
-
-  if (ret.paths.isEmpty())
-    return PathResolutionResult(false, i18n("Could not extract include paths from make output"),
-                                 i18n("Folder: \"%1\"  Command: \"%2\"  Output: \"%3\"", workingDirectory,
-                                      source.getCommand(file, workingDirectory, makeParameters), fullOutput));
 
   return ret;
 }

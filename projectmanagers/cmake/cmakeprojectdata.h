@@ -11,7 +11,7 @@
  *
  * Contains the required information to compile it properly
  */
-struct CMakeFiles
+struct CMakeFile
 {
     KDevelop::Path::List includes;
     QHash<QString, QString> defines;
@@ -21,9 +21,9 @@ struct CMakeProjectData
 {
     CMakeProperties properties;
     CacheValues cache;
-    QHash<KDevelop::Path, CMakeFiles> files;
+    QHash<KDevelop::Path, CMakeFile> files;
     
-    void clear() { properties.clear(); cache.clear(); }
+    void clear() { properties.clear(); cache.clear(); files.clear(); }
 };
 
 #endif
