@@ -67,6 +67,10 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
         }
 
         AbstractType::Ptr declType = decl->abstractType();
+        if (!declType) {
+          return QVariant();
+        }
+
         FunctionType::Ptr declFunc = FunctionType::Ptr::dynamicCast(declType);
 
         if (declType->equals(referenceType.constData())) {
