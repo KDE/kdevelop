@@ -79,7 +79,7 @@ bool KDevKonsoleViewPlugin::hasError() const
 
 QString KDevKonsoleViewPlugin::errorDescription() const
 {
-    return !m_viewFactory ? i18n("Failed to 'konsolepart' plugin") : QString();
+    return !m_viewFactory ? i18n("Failed to load 'konsolepart' plugin") : QString();
 }
 
 KPluginFactory* KDevKonsoleViewPlugin::konsoleFactory() const
