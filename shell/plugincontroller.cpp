@@ -460,13 +460,10 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
 
         KPluginLoader loader(*info.service());
         auto factory = loader.factory();
-
-        if (!loader.errorString().isEmpty()) {
-            kWarning() << "Failed to load" << pluginId << "-" << loader.errorString();
-        }
-
         if (factory) {
             plugin = factory->create<IPlugin>(d->core);
+        } else {
+            kWarning() << "Failed to load" << pluginId << "-" << loader.errorString();
         }
     }
 
