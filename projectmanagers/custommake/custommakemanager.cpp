@@ -38,19 +38,9 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY(CustomMakeSupportFactory, registerPlugin<CustomMakeManager>(); )
 K_EXPORT_PLUGIN(CustomMakeSupportFactory(KAboutData("kdevcustommakemanager","kdevcustommake", ki18n("Custom Makefile Manager"), "0.1", ki18n("Support for managing custom makefile projects"), KAboutData::License_GPL)))
 
-class CustomMakeManager::Private
-{
-public:
-    Private() : m_builder(0) {}
-
-    IMakeBuilder *m_builder;
-
-//     QList< KDevelop::ProjectBaseItem* > m_testItems; // for debug
-};
-
 CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args )
     : KDevelop::AbstractFileManagerPlugin( CustomMakeSupportFactory::componentData(), parent )
-    , d( new Private )
+    , m_builder( nullptr )
 {
     Q_UNUSED(args)
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
@@ -60,8 +50,8 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args 
     // TODO use CustomMakeBuilder
     IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.IMakeBuilder" );
     Q_ASSERT(i);
-    d->m_builder = i->extension<IMakeBuilder>();
-    Q_ASSERT(d->m_builder);
+    m_builder = i->extension<IMakeBuilder>();
+    Q_ASSERT(m_builder);
 
     connect(this, SIGNAL(reloadedFileItem(KDevelop::ProjectFileItem*)),
             this, SLOT(reloadMakefile(KDevelop::ProjectFileItem*)));
@@ -69,13 +59,12 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args 
 
 CustomMakeManager::~CustomMakeManager()
 {
-    delete d;
 }
 
 IProjectBuilder* CustomMakeManager::builder() const
 {
-    Q_ASSERT(d->m_builder);
-    return d->m_builder;
+    Q_ASSERT(m_builder);
+    return m_builder;
 }
 
 Path::List CustomMakeManager::includeDirectories(KDevelop::ProjectBaseItem*) const
@@ -151,7 +140,6 @@ void CustomMakeManager::createTargetItems(IProject* project, const Path& path, P
             continue;
         }
         new CustomMakeTargetItem( project, target, parent );
-//         d->m_testItems.append( targetItem ); // debug
     }
 }
 
@@ -216,7 +204,7 @@ QStringList CustomMakeManager::parseCustomMakeFile( const Path &makefile )
         return ret;
     }
 
-    QRegExp targetRe( "^ *([^\\t$.#]\\S+) *:(?!=).*$" );
+    QRegExp targetRe( "^ *([^\\t$.#]\\S+) *:?:(?!=).*$" );
     targetRe.setMinimal( true );
 
     QString str;
@@ -228,21 +216,8 @@ QStringList CustomMakeManager::parseCustomMakeFile( const Path &makefile )
         if ( targetRe.indexIn( str ) != -1 )
         {
             QString tmpTarget = targetRe.cap( 1 ).simplified();
-//             if ( tmpTarget.endsWith( ".o" ) )
-//             {
-//                 if ( ! ret.contains(tmpTarget) )
-//                     ret.append( tmpTarget );
-//             }
-//             else if ( tmpTarget.contains( '.' ) )
-//             {
-//                 if ( ! ret.contains(tmpTarget) )
-//                     ret.append( tmpTarget );
-//             }
-//             else
-//             {
             if ( ! ret.contains( tmpTarget ) )
                 ret.append( tmpTarget );
-//             }
         }
     }
     f.close();

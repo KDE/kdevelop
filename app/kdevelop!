@@ -23,7 +23,7 @@ export APPLICATION=KDevelop
 
 if ! [ "$KDEV_ATTACHED_PID" ]; then
     ARGS=""
-    if ! [ "$@" ]; then
+    if [ $# -eq 0 ]; then
         ARGS="-pss"
     else
         ARGS="$@"

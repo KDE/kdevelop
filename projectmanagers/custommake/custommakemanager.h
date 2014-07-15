@@ -14,22 +14,8 @@
 
 #include <project/abstractfilemanagerplugin.h>
 #include <project/interfaces/ibuildsystemmanager.h>
-#include <interfaces/iplugin.h>
-#include <QtCore/QVariant>
 
-template <typename T> class QList;
-class QString;
-
-namespace KDevelop
-{
-    class IProject;
-    class ProjectItem;
-    class ProjectFolderItem;
-    class ProjectBaseItem;
-    class ProjectFileItem;
-    class ProjectTargetItem;
-    class IProjectBuilder;
-}
+class IMakeBuilder;
 
 class CustomMakeManager : public KDevelop::AbstractFileManagerPlugin,
                           public KDevelop::IBuildSystemManager
@@ -132,7 +118,6 @@ private:
     void createTargetItems(KDevelop::IProject* project, const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent);
 
 private:
-    class Private;
-    Private *d;
+    IMakeBuilder *m_builder;
 };
 #endif

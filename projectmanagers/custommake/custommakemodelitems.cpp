@@ -9,9 +9,8 @@
  */
 
 #include "custommakemodelitems.h"
-#include <QHash>
+
 #include <interfaces/iproject.h>
-#include "custommakemanager.h"
 
 CustomMakeTargetItem::CustomMakeTargetItem( KDevelop::IProject *project, const QString &name, ProjectBaseItem*parent )
     : KDevelop::ProjectTargetItem( project, name, parent )
