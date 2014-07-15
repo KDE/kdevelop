@@ -25,9 +25,11 @@ public:
     KDevKonsoleViewPlugin( KPluginFactory*, QObject *parent, const QVariantList & = QVariantList() );
     virtual ~KDevKonsoleViewPlugin();
     virtual void unload();
+    virtual bool hasError() const override;
+    virtual QString errorDescription() const override;
     KPluginFactory* konsoleFactory() const;
 private:
-    class KDevKonsoleViewFactory *m_factory;
+    class KDevKonsoleViewFactory *m_viewFactory;
     KPluginFactory* m_konsoleFactory;
 };
 
