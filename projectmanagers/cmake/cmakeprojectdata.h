@@ -26,14 +26,12 @@ inline QDebug &operator<<(QDebug debug, const CMakeFile& file)
 struct CMakeProjectData
 {
     CMakeProjectData() : watcher(new QFileSystemWatcher) {}
-    ~CMakeProjectData() { delete watcher; }
+    ~CMakeProjectData() {}
 
     CMakeProperties properties;
     CacheValues cache;
     QHash<KDevelop::Path, CMakeFile> files;
-    QFileSystemWatcher* watcher;
-    
-    void clear() { properties.clear(); cache.clear(); files.clear(); }
+    QSharedPointer<QFileSystemWatcher> watcher;
 };
 
 #endif

@@ -117,7 +117,7 @@ public:
 //     virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
 
 
-
+    virtual KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project, const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent = 0);
     virtual QPair<QString, QString> cacheValue(KDevelop::IProject* project, const QString& id) const;
     
     //LanguageSupport
@@ -144,7 +144,7 @@ private slots:
 //
 //     void jumpToDeclaration();
     void projectClosing(KDevelop::IProject*);
-    void dirtyFile();
+    void dirtyFile(const QString& file);
 //
 //     void directoryChanged(const QString& dir);
 //     void filesystemBuffererTimeout();

@@ -734,8 +734,10 @@ CMakeFile dataFromJson(const QVariantMap& entry)
     return ret;
 }
 
-void CMakeManager::dirtyFile()
+void CMakeManager::dirtyFile(const QString& path)
 {
+    qDebug() << "dirty!" << path;
+
     //we initialize again hte project that sent the signal
     for(QHash<IProject*, CMakeProjectData>::const_iterator it = m_projects.constBegin(), itEnd = m_projects.constEnd(); it!=itEnd; ++it) {
         if(it->watcher == sender()) {
@@ -749,18 +751,23 @@ void CMakeManager::dirtyFile()
 void CMakeManager::initializeProject(IProject* project)
 {
     CMakeProjectData data;
+    data.watcher->addPath(CMake::currentBuildDir(project).toLocalFile());
+    connect(data.watcher.data(), SIGNAL(fileChanged(QString)), SLOT(dirtyFile(QString)));
+    connect(data.watcher.data(), SIGNAL(directoryChanged(QString)), SLOT(dirtyFile(QString)));
+
     Path commandsFile(CMake::currentBuildDir(project));
     commandsFile.addPath("compile_commands.json");
-    data.watcher->addPath(commandsFile.toLocalFile());
-    connect(data.watcher, SIGNAL(fileChanged(QString)), SLOT(dirtyFile()));
-
     QJson::Parser parser;
     QFile f(commandsFile.toLocalFile());
-    bool r = f.open(QFile::ReadOnly);
-    if(!r)
-        return; //when it changes we'll have to try again
+    bool r = f.open(QFile::ReadOnly|QFile::Text);
+    if(!r) {
+        m_projects.remove(project);
+        ICore::self()->runController()->registerJob(builder()->configure(project));
+        qDebug() << "couldn't find commands file" << commandsFile;
+        return;
+    }
+    qDebug() << "found commands file" << commandsFile;
 
-    Q_ASSERT(r);
     QVariantList values = parser.parse(&f, &r).toList();
     Q_ASSERT(r);
 
@@ -770,6 +777,15 @@ void CMakeManager::initializeProject(IProject* project)
         qDebug() << "xxxxxxxxxx" << data.files;
     }
     m_projects[project] = data;
+}
+
+ProjectFolderItem* CMakeManager::createFolderItem(IProject* project, const Path& path, ProjectBaseItem* parent)
+{
+//     TODO: when we have data about targets, use folders with targets or similar
+    if (QFile::exists(path.toLocalFile()+"/CMakeLists.txt"))
+        return new KDevelop::ProjectBuildFolderItem( project, path, parent );
+    else
+        return KDevelop::AbstractFileManagerPlugin::createFolderItem(project, path, parent);
 }
 
 #include "cmakemanager.moc"
