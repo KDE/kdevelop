@@ -51,6 +51,7 @@
  *   targetType : TypeTestObject
  *   returnType : TypeTestObject
  *   identifiedTypeQid : string
+ *   isAbstract : bool
  *   isVirtual : bool
  *   isStatic : bool
  *   declaration : DeclTestObject
@@ -195,6 +196,18 @@ DeclarationTest(isVirtual)
       return NOT_A_FUNCTION;
 
   return compareValues(absFuncDecl->isVirtual(), value, "Declaration's isVirtual");
+}
+
+///JSON type: bool
+///@returns whether the (function) declaration's isAbstract matches the given value
+DeclarationTest(isAbstract)
+{
+  const QString NOT_A_FUNCTION = "Non-class-member declaration cannot be abstract.";
+  auto *absFuncDecl = dynamic_cast<ClassMemberDeclaration*>(decl);
+  if (!absFuncDecl)
+      return NOT_A_FUNCTION;
+
+  return compareValues(absFuncDecl->isAbstract(), value, "Declaration's isAbstract");
 }
 ///JSON type: bool
 ///@returns whether the (class-member) declaration's isStatic matches the given value
