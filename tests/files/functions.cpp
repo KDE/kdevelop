@@ -1,17 +1,26 @@
 class foo
 {
     /// "isStatic" : false,
-    /// "isVirtual" : true
+    /// "isVirtual" : true,
+    /// "isAbstract" : false
     virtual void bla() {}
     /// "isStatic" : false,
-    /// "isVirtual" : true
+    /// "isVirtual" : true,
+    /// "isAbstract" : false
     virtual void bar();
     /// "isStatic" : true,
-    /// "isVirtual" : false
+    /// "isVirtual" : false,
+    /// "isAbstract" : false
     static void bla2() {}
     /// "isStatic" : true,
-    /// "isVirtual" : false
+    /// "isVirtual" : false,
+    /// "isAbstract" : false
     static void bar2();
+
+    /// "isStatic" : false,
+    /// "isVirtual" : true,
+    /// "isAbstract" : true
+    virtual void bar3() = 0;
 };
 
 /// "isVirtual" : false
