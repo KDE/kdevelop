@@ -23,9 +23,9 @@
 
 #include <QtCore/QVector>
 
-#include <kcompositejob.h>
-
 #include "projectexport.h"
+
+#include <util/executecompositejob.h>
 
 class KConfigGroup;
 
@@ -38,7 +38,7 @@ class IProject;
  * Allows to build a list of project items or projects sequentially, where
  * failing to build one item in the list will fail the whole job.
  */
-class KDEVPLATFORMPROJECT_EXPORT BuilderJob : public KCompositeJob
+class KDEVPLATFORMPROJECT_EXPORT BuilderJob : public ExecuteCompositeJob
 {
     Q_OBJECT
 public:
@@ -107,34 +107,10 @@ public:
     void updateJobName();
 
     /**
-     * Allows to choose between stopping and failing the composite job
-     * when the first item could not be built, or building all items
-     * The default for this is true.
-     * @param stopOnFail if set to true this job will stop and fail when the first
-     *                   item in the list cannot be build
-     */
-    void setStopOnFail( bool stopOnFail );
-
-    /**
-     * Find out whether this builderjob stops building items on the first failed
-     * item.
-     * @returns true if this job stops and fails when the first subjob failed
-     */
-    bool stopOnFail() const;
-
-    /**
      * Starts this job
      */
     void start();
 
-protected:
-    virtual bool addSubjob(KJob* job);
-
-protected Q_SLOTS:
-    /**
-     * @internal slot to handle the result from subjobs
-     */
-    virtual void slotResult( KJob* );
 private:
     class BuilderJobPrivate* const d;
     friend class BuilderJobPrivate;
