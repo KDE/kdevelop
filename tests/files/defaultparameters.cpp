@@ -16,6 +16,12 @@
    Boston, MA 02110-1301, USA.
 */
 
+struct Foo
+{
+    /// "internalContext" : { "localDeclarationCount" : 1, "findDeclarations" : { "a" : { "defaultParameter" : "1" } } }
+    int foo(int a = 1);
+};
+
 /// "internalContext" : { "localDeclarationCount" : 1, "findDeclarations" : { "a" : { "defaultParameter" : "1" } } }
 int foo(int a = 1);
 
