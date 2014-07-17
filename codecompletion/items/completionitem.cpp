@@ -25,6 +25,7 @@
 
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/functiondeclaration.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/duchainlock.h>
@@ -140,6 +141,22 @@ QString CompletionItem::declarationName() const
     }
 
     return NormalDeclarationCompletionItem::declarationName();
+}
+
+CodeCompletionModel::CompletionProperties CompletionItem::completionProperties() const
+{
+    DUChainReadLocker lock;
+
+    // Variables having a function type should have a function icon. FunctionDeclarations
+    // are skipped here because they are already handled properly by completionProperties()
+    if (declaration() && declaration()->abstractType() &&
+        !declaration().dynamicCast<FunctionDeclaration>() &&
+        !declaration().dynamicCast<ClassFunctionDeclaration>() &&
+        declaration()->abstractType()->whichType() == AbstractType::TypeFunction) {
+        return CodeCompletionModel::Function;
+    }
+
+    return NormalDeclarationCompletionItem::completionProperties();
 }
 
 void CompletionItem::executed(KTextEditor::Document* document, const KTextEditor::Range& word)

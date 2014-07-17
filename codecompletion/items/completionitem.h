@@ -46,6 +46,7 @@ public:
 
     virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
     virtual QString declarationName() const;
+    virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
 
 protected:
     virtual void executed(KTextEditor::Document* document, const KTextEditor::Range& word);
