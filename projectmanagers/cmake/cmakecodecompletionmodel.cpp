@@ -256,8 +256,10 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
     return QVariant();
 }
 
-void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const Range& word, int row) const
+void CMakeCodeCompletionModel::executeCompletionItem(View* view, const Range& word, const QModelIndex& idx) const
 {
+    Document* document = view->document();
+    const int row = idx.row();
     switch(indexType(row))
     {
         case Path: {

@@ -36,7 +36,7 @@ class CMakeCodeCompletionModel : public KTextEditor::CodeCompletionModel
 
         void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
         QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
-        void executeCompletionItem(KTextEditor::Document* document, const KTextEditor::Range& word, int row) const;
+        void executeCompletionItem(KTextEditor::View* view, const KTextEditor::Range& word, const QModelIndex& index) const override;
     private:
         enum Type { Command, Variable, Macro, Path, Target };
         Type indexType(int row) const;

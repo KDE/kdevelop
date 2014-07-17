@@ -21,7 +21,8 @@
 
 #include <klocale.h>
 
-#include <ktexteditor/document.h>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/persistentsymboltable.h>
@@ -510,7 +511,8 @@ QString MissingIncludeCompletionItem::lineToInsert() const {
   return "#include " + m_addedInclude;
 }
 
-void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+void MissingIncludeCompletionItem::execute(View* view, const Range& word) {
+  Document* document = view->document();
   // first try to find a proper include position from the DUChain
   int line = findIncludeLineFromDUChain(document, word.start().line(), m_canonicalPath);
 
@@ -581,10 +583,10 @@ QVariant ForwardDeclarationItem::data(const QModelIndex& index, int role, const 
   return ret;
 }
 
-void ForwardDeclarationItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+void ForwardDeclarationItem::execute(KTextEditor::View* view, const KTextEditor::Range& word) {
   DUChainReadLocker lock(DUChain::lock());
   if(m_declaration) {
-    TopDUContext* top = DUChainUtils::standardContextForUrl(document->url());
+    TopDUContext* top = DUChainUtils::standardContextForUrl(view->document()->url());
     if(!top)
       return;
     Cpp::SourceCodeInsertion insertion(top);

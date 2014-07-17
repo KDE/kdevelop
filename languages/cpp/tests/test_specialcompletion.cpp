@@ -164,7 +164,8 @@ void TestSpecialCompletion::testIncludeDefine()
     QVERIFY(doc);
     QVERIFY(doc->openUrl(active.url().toUrl()));
 
-    item->execute(doc, KTextEditor::Range(3, 12, 3, 12));
+    QWidget parent;
+    item->execute(doc->createView(&parent), KTextEditor::Range(3, 12, 3, 12));
 
     QCOMPARE(doc->text(), QString(
                     "#if 0\n"
@@ -247,7 +248,8 @@ void TestSpecialCompletion::testIncludeGrouping()
     QVERIFY(doc);
     QVERIFY(doc->openUrl(active.url().toUrl()));
 
-    item->execute(doc, KTextEditor::Range(3, 0, 3, 3));
+    QWidget parent;
+    item->execute(doc->createView(&parent), KTextEditor::Range(3, 0, 3, 3));
 
     QCOMPARE(doc->text(), QString(
                     "#include \"" + dir1Name + includeA.url().toUrl().fileName() + "\"\n"
@@ -313,7 +315,8 @@ void TestSpecialCompletion::testIncludeComment()
     QVERIFY(doc);
     QVERIFY(doc->openUrl(active.url().toUrl()));
 
-    item->execute(doc, KTextEditor::Range(9, 0, 9, 3));
+    QWidget parent;
+    item->execute(doc->createView(&parent), KTextEditor::Range(9, 0, 9, 3));
 
     QCOMPARE(doc->text(), QString(
                     "/*\n"
