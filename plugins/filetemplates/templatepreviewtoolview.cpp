@@ -108,7 +108,7 @@ void TemplatePreviewToolView::documentChanged(KTextEditor::Document* document)
         case FileTemplatesPlugin::NoTemplate:
             ui->messageWidget->setMessageType(KMessageWidget::Information);
             if (m_original) {
-                ui->messageWidget->setText(i18n("The active text document is not a <application>KDevelop</application> template"));
+                ui->messageWidget->setText(xi18n("The active text document is not a <application>KDevelop</application> template"));
             } else {
                 ui->messageWidget->setText(i18n("No active text document."));
             }
