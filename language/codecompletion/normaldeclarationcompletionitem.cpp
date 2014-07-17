@@ -29,6 +29,7 @@
 #include "../duchain/duchainutils.h"
 
 #include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 
 namespace KDevelop {
@@ -73,11 +74,12 @@ QString NormalDeclarationCompletionItem::declarationName() const
     return ret;
 }
 
-void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& word) {
 
   if( m_completionContext && m_completionContext->depth() != 0 )
     return; //Do not replace any text when it is an argument-hint
 
+  KTextEditor::Document* document = view->document();
   QString newText;
 
   {
@@ -93,7 +95,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   document->replaceText(word, newText);
   KTextEditor::Range newRange = word;
   newRange.setEnd(KTextEditor::Cursor(newRange.end().line(), newRange.start().column() + newText.length()));
-  
+
   executed(document, newRange);
 }
 

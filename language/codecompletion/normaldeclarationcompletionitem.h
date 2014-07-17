@@ -37,7 +37,7 @@ public:
   virtual int argumentHintDepth() const;
   QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
 
-  void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+  void execute(KTextEditor::View* document, const KTextEditor::Range& word) override;
 
 protected:
   virtual QString declarationName() const;

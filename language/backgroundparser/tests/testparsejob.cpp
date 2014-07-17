@@ -28,7 +28,7 @@ TestParseJob::TestParseJob(const IndexedString& url, ILanguageSupport* languageS
 {
 }
 
-void TestParseJob::run()
+void TestParseJob::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
     kDebug() << "Running parse job for" << document().toUrl();
     if (duration_ms) {

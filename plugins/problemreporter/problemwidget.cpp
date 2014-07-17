@@ -207,9 +207,9 @@ void ProblemWidget::resizeColumns()
     }
 }
 
-void ProblemWidget::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void ProblemWidget::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles)
 {
-    QTreeView::dataChanged(topLeft, bottomRight);
+    QTreeView::dataChanged(topLeft, bottomRight, roles);
     resizeColumns();
 }
 

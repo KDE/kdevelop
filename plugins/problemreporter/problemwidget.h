@@ -43,7 +43,8 @@ public:
   class ProblemModel* model() const;
 
   virtual void contextMenuEvent(QContextMenuEvent* );
-  virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+  virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight,
+                           const QVector<int>& roles = QVector<int>()) override;
   virtual void reset();
   
 protected:
