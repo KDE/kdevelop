@@ -21,6 +21,7 @@
 #include "cmakecodecompletionmodel.h"
 #include <QVariant>
 #include <QModelIndex>
+#include <QMimeDatabase>
 #include <kurl.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
@@ -37,8 +38,6 @@
 #include <cmakeduchaintypes.h>
 #include "cmakeutils.h"
 #include "icmakedocumentation.h"
-
-#include <KMimeType>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -216,8 +215,17 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
             case Macro:     return QIcon::fromTheme("code-function");
             case Target:    return QIcon::fromTheme("system-run");
             case Path: {
-                QString url = m_paths[index.row()-m_declarations.size()];
-                return QIcon::fromTheme(KMimeType::findByUrl(url, 0, false, true)->iconName());
+                QUrl url = QUrl::fromUserInput(m_paths[index.row()-m_declarations.size()]);
+                QString iconName;
+                if (url.isLocalFile()) {
+                    // don't read contents even if it is a local file
+                    iconName = QMimeDatabase().mimeTypeForFile(url.toLocalFile(), QMimeDatabase::MatchExtension).iconName();
+                }
+                else {
+                    // remote always only looks at the extension
+                    iconName = QMimeDatabase().mimeTypeForUrl(url).iconName();
+                }
+                return QIcon::fromTheme(iconName);
             }
         }
     }

@@ -56,7 +56,7 @@ class OktetaDocument : public Sublime::UrlDocument, public IDocument
   public: // KDevelop::IDocument API
     virtual KTextEditor::Cursor cursorPosition() const;
     virtual bool isActive() const;
-    virtual KMimeType::Ptr mimeType() const;
+    virtual QMimeType mimeType() const;
     virtual KParts::Part* partForView( QWidget* widget ) const;
     virtual DocumentState state() const;
     virtual KTextEditor::Document* textDocument() const;

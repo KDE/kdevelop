@@ -74,6 +74,7 @@
 #include <KLocale>
 // Qt
 #include <QApplication>
+#include <QMimeDatabase>
 
 
 namespace KDevelop
@@ -89,7 +90,7 @@ OktetaDocument::OktetaDocument( const KUrl& url , ICore* core )
 KUrl OktetaDocument::url() const { return Sublime::UrlDocument::url(); }
 
 // TODO: use fromContentAndUrl(ByteArrayIODevice) if document loaded
-QExplicitlySharedDataPointer<KMimeType> OktetaDocument::mimeType() const { return KMimeType::findByUrl( url() ); }
+QMimeType OktetaDocument::mimeType() const { return QMimeDatabase().mimeTypeForUrl( url() ); }
 
 KParts::Part* OktetaDocument::partForView( QWidget* ) const { return 0; }
 KTextEditor::Document* OktetaDocument::textDocument() const { return 0; }

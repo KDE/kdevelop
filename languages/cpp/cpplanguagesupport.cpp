@@ -30,6 +30,7 @@
 #include <QApplication>
 #include <QAction>
 #include <QTimer>
+#include <QMimeDatabase>
 #include <QReadWriteLock>
 #include <kactioncollection.h>
 #include <kaction.h>
@@ -502,23 +503,19 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool proxyCon
 namespace {
 
 /**
- * @returns all extensions which match the given @p mimeType.
+ * @returns all extensions which match the given @p mimeTypeName.
  */
-QSet<QString> getExtensionsByMimeType(QString mimeType)
+QSet<QString> getExtensionsByMimeType(QString mimeTypeName)
 {
-    KMimeType::Ptr ptr = KMimeType::mimeType(mimeType);
-
-    if (!ptr) {
-      return QSet<QString>();
+    QMimeType mime = QMimeDatabase().mimeTypeForName(mimeTypeName);
+    if (!mime.isValid()) {
+        return QSet<QString>();
     }
 
     QSet<QString> extensions;
-    foreach(const QString& pattern, ptr->patterns()) {
-      if (pattern.startsWith("*.")) {
-        extensions << pattern.mid(2);
-      }
+    foreach(const QString& suffix, mime.suffixes()) {
+        extensions.insert(suffix);
     }
-
     return extensions;
 }
 

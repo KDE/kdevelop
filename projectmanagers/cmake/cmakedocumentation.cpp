@@ -24,10 +24,10 @@
 #include <QString>
 #include <QTextDocument>
 #include <QStringListModel>
+#include <QMimeDatabase>
 #include <interfaces/iproject.h>
 #include <KStandardDirs>
 #include <KGlobalSettings>
-#include <KMimeType>
 #include <documentation/standarddocumentationview.h>
 #include <language/duchain/declaration.h>
 #include <interfaces/iplugincontroller.h>
@@ -115,9 +115,10 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
 QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const KUrl& file) const
 {
     initializeModel(); //make it not queued
-    if(!KMimeType::findByUrl(file)->is("text/x-cmake"))
+    if (!QMimeDatabase().mimeTypeForUrl(file).inherits("text/x-cmake")) {
         return QExplicitlySharedDataPointer<KDevelop::IDocumentation>();
-    
+    }
+
     kDebug() << "seeking documentation for " << identifier;
     QString desc;
 

@@ -36,35 +36,35 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
         explicit AStylePlugin(QObject *parent, const QVariantList & = QVariantList());
         ~AStylePlugin();
 
-        virtual QString name();
-        virtual QString caption();
-        virtual QString description();
+        virtual QString name() override;
+        virtual QString caption() override;
+        virtual QString description() override;
 
         /** Formats using the current style.
         */
-        virtual QString formatSource(const QString &text, const KUrl& url, const KMimeType::Ptr &mime, const QString& leftContext, const QString& rightContext);
+        virtual QString formatSource(const QString& text, const KUrl& url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) override;
 
         /** \return A map of predefined styles (a key and a caption for each type)
         */
-        virtual QList<KDevelop::SourceFormatterStyle> predefinedStyles();
+        virtual QList<KDevelop::SourceFormatterStyle> predefinedStyles() override;
 
         /** \return The widget to edit a style.
         */
-        virtual KDevelop::SettingsWidget* editStyleWidget(const KMimeType::Ptr &mime);
+        virtual KDevelop::SettingsWidget* editStyleWidget(const QMimeType& mime) override;
 
         virtual QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
                                               const KUrl& url,
-                                              const KMimeType::Ptr &mime,
+                                              const QMimeType& mime,
                                               const QString& leftContext = QString(),
-                                              const QString& rightContext = QString() );
+                                              const QString& rightContext = QString()) override;
 
         /** \return The text used in the config dialog to preview the current style.
         */
-        virtual QString previewText(const KDevelop::SourceFormatterStyle& style, const KMimeType::Ptr &mime);
-        
+        virtual QString previewText(const KDevelop::SourceFormatterStyle& style, const QMimeType& mime) override;
+
         /** \return The indentation type of the currently selected style.
         */
-        virtual Indentation indentation(const KUrl& url);
+        virtual Indentation indentation(const KUrl& url) override;
 
         static QString formattingSample();
         static QString indentingSample();

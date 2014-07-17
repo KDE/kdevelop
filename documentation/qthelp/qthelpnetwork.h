@@ -22,7 +22,8 @@
 #include <QNetworkReply>
 #include <QTimer>
 #include <QHelpEngine>
-#include <kmimetype.h>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 class HelpNetworkReply : public QNetworkReply
 {
@@ -83,7 +84,7 @@ QNetworkReply *HelpNetworkAccessManager::createRequest(Operation op, const QNetw
 {
 	QString scheme = request.url().scheme();
 	if (scheme == QLatin1String("qthelp") || scheme == QLatin1String("about")) {
-		QString mimeType = KMimeType::findByUrl(request.url())->name();
+		QString mimeType = QMimeDatabase().mimeTypeForUrl(request.url()).name();
 		if (mimeType == "application/x-extension-html") {
 			// see also: https://bugs.kde.org/show_bug.cgi?id=288277
 			// firefox seems to add this bullshit mimetype above

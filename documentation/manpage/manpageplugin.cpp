@@ -19,7 +19,6 @@
 */
 
 #include <KPluginFactory>
-#include <KMimeType>
 
 #include <interfaces/idocumentation.h>
 
