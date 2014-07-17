@@ -21,6 +21,11 @@ class foo
     /// "isVirtual" : true,
     /// "isAbstract" : true
     virtual void bar3() = 0;
+
+    /// "type" : { "toString"  : "function void () const", "isConst" : true }
+    void constMethod() const;
+    /// "type" : { "toString"  : "function void ()", "isConst" : false }
+    void nonConstMethod();
 };
 
 /// "isVirtual" : false

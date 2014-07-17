@@ -453,6 +453,20 @@ void setDeclInCtxtData(CXCursor, Declaration*)
 {
     //No-op
 }
+template<CXCursorKind CK>
+void setDeclInCtxtData(CXCursor cursor, ClassFunctionDeclaration *decl)
+{
+    // HACK to retrieve function-constness
+    // This looks like a bug in Clang -- In theory setTypeModifiers should take care of setting the const modifier
+    // however, clang_isConstQualifiedType() for TK == CXType_FunctionProto always returns false
+    // TODO: Debug further
+    auto type = decl->abstractType();
+    Q_ASSERT(type);
+    if (ClangUtils::isConstMethod(cursor)) {
+        type->setModifiers(type->modifiers() | AbstractType::ConstModifier);
+        decl->setAbstractType(type);
+    }
+}
 
 template<CXCursorKind CK>
 void setDeclInCtxtData(CXCursor cursor, FunctionDefinition *def)
