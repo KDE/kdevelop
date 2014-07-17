@@ -150,8 +150,7 @@ CodeCompletionModel::CompletionProperties CompletionItem::completionProperties()
     // Variables having a function type should have a function icon. FunctionDeclarations
     // are skipped here because they are already handled properly by completionProperties()
     if (declaration() && declaration()->abstractType() &&
-        !declaration().dynamicCast<FunctionDeclaration>() &&
-        !declaration().dynamicCast<ClassFunctionDeclaration>() &&
+        !declaration()->isFunctionDeclaration() &&
         declaration()->abstractType()->whichType() == AbstractType::TypeFunction) {
         return CodeCompletionModel::Function;
     }
