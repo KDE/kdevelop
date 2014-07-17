@@ -34,6 +34,26 @@ class KDEVQMLJSDUCHAIN_EXPORT ExpressionVisitor : public KDevelop::DynamicLangua
 public:
     explicit ExpressionVisitor(KDevelop::DUContext* context);
 
+    /**
+     * Return whether the expression ends with a prototype member.
+     *
+     * Example of such expressions are:
+     *
+     * @code
+     * Class.prototype
+     * Module.Class.prototype
+     * object.__proto__
+     * @endcode
+     *
+     * These expressions don't point to a prototype:
+     *
+     * @code
+     * Class.prototype.method
+     * object.__proto__.member
+     * @endcode
+     */
+    bool isPrototype() const;
+
     using Visitor::visit;
     using Visitor::endVisit;
 
@@ -58,6 +78,8 @@ protected:
     virtual bool visit(QmlJS::AST::CallExpression* node);
     virtual bool visit(QmlJS::AST::NewMemberExpression* node);
 
+    virtual void postVisit(QmlJS::AST::Node* node);
+
 private:
     using KDevelop::DynamicLanguageExpressionVisitor::encounter;
 
@@ -74,6 +96,8 @@ private:
     void encounterObjectAtLocation(const QmlJS::AST::SourceLocation &location);
     void instantiateCurrentDeclaration();   /*!< @brief Encounter a StructureType whose declaration is currentDeclaration() */
 
+private:
+    int m_prototypeDepth;   // 2 = the current node is "prototype" or "__proto__". 1 = we have just closed this node. <= 0 : "__proto__" is not the last node (as in "foo.prototype.bar")
 };
 
 #endif // EXPRESSIONVISITOR_H

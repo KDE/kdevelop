@@ -8,7 +8,7 @@ function Class(a, b) {
     this.a = a;
 
     /**
-     * "useCount" : 2
+     * "useCount" : 3
      */
     this.b = b;
 }
@@ -52,3 +52,7 @@ function Subclass() {
 }
 Subclass.prototype = Class;
 Subclass.b = 2;
+
+var o = {};
+o.__proto__ = Subclass;
+o.b = 3;

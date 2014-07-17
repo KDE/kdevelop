@@ -56,6 +56,7 @@ public:
     {
         KDevelop::AbstractType::Ptr type;
         KDevelop::DeclarationPointer declaration;
+        bool isPrototype;
     };
 
 public:

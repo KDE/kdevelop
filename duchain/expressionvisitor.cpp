@@ -32,8 +32,25 @@
 using namespace KDevelop;
 
 ExpressionVisitor::ExpressionVisitor(DUContext* context)
-: DynamicLanguageExpressionVisitor(context)
+: DynamicLanguageExpressionVisitor(context),
+  m_prototypeDepth(0)
 {
+}
+
+void ExpressionVisitor::postVisit(QmlJS::AST::Node* node)
+{
+    // Each time a node is closed, decrement the prototype depth. This way,
+    // if a "prototype" node has been encountered, ExpressionVisitor can know
+    // whether it appeared at the top of the tree ("foo.bar.prototype") or
+    // somewhere else ("foo.prototype.bar").
+    --m_prototypeDepth;
+
+    QmlJS::AST::Visitor::postVisit(node);
+}
+
+bool ExpressionVisitor::isPrototype() const
+{
+    return m_prototypeDepth == 1;
 }
 
 /*
@@ -334,9 +351,10 @@ bool ExpressionVisitor::encounterGlobalDeclaration(const QualifiedIdentifier& id
 
 void ExpressionVisitor::encounterFieldMember(const QString& name)
 {
-    if (name == QLatin1String("prototype")) {
+    if (QmlJS::isPrototypeIdentifier(name)) {
         // "prototype" is transparent: "object.prototype.foo" = "object.foo", and
         // "function.prototype" should point to "function".
+        m_prototypeDepth = 2;
         return;
     }
 

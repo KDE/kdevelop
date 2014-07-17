@@ -114,6 +114,12 @@ using namespace KDevelop;
     KDEVQMLJSDUCHAIN_EXPORT void importObjectContext(DUContext* context,
                                                      TopDUContext* topContext);
 
+    /**
+     * Return whether an identifier is "prototype" or "__proto__" or any future
+     * identifier that should be considered to represent a prototype.
+     */
+    KDEVQMLJSDUCHAIN_EXPORT bool isPrototypeIdentifier(const QString& identifier);
+
 
 } // End of namespace QmlJS
 

@@ -393,7 +393,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
 
         if (leftType.declaration) {
             DUContext* leftCtx = leftType.declaration->context();
-            auto leftFunc = leftType.declaration.dynamicCast<QmlJS::FunctionDeclaration>();
+            DUContext* leftInternalCtx = QmlJS::getInternalContext(leftType.declaration);
 
             // object.prototype.method = function(){} : when assigning a function
             // to a variable living in a Class context, set the prototype
@@ -414,11 +414,13 @@ bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
                 }
             }
 
-            if (leftFunc && leftFunc->prototypeContext()) {
-                // Assigning something to a function is equivalent to making it
+            if (leftType.isPrototype && leftInternalCtx) {
+                // Assigning something to a prototype is equivalent to making it
                 // inherit from a class: "Class.prototype = ClassOrObject;"
+                leftInternalCtx->clearImportedParentContexts();
+
                 QmlJS::importDeclarationInContext(
-                    leftFunc->prototypeContext(),
+                    leftInternalCtx,
                     rightType.declaration
                 );
             } else if (leftType.declaration->topContext() == topContext()) {
@@ -451,7 +453,7 @@ void DeclarationBuilder::declareFieldMember(const KDevelop::DeclarationPointer& 
                                             QmlJS::AST::Node* node,
                                             const QmlJS::AST::SourceLocation& location)
 {
-    if (member == QLatin1String("prototype")) {
+    if (QmlJS::isPrototypeIdentifier(member)) {
         // Don't declare "prototype", this is a special member
         return;
     }

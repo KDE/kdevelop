@@ -48,6 +48,7 @@ ContextBuilder::ExpressionType ContextBuilder::findType(QmlJS::AST::Node* node)
 
     if (!node) {
         ret.type = AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed));
+        ret.isPrototype = false;
 
         return ret;
     }
@@ -60,6 +61,7 @@ ContextBuilder::ExpressionType ContextBuilder::findType(QmlJS::AST::Node* node)
 
     ret.type = visitor.lastType();
     ret.declaration = visitor.lastDeclaration();
+    ret.isPrototype = visitor.isPrototype();
 
     return ret;
 }

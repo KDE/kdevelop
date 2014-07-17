@@ -273,4 +273,10 @@ void importObjectContext(DUContext* context, TopDUContext* topContext)
     }
 }
 
+bool isPrototypeIdentifier(const QString& identifier)
+{
+    return (identifier == QLatin1String("prototype") ||
+            identifier == QLatin1String("__proto__"));
+}
+
 } // End of namespace QmlJS
