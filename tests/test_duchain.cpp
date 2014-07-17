@@ -413,7 +413,7 @@ void TestDUChain::testGlobalFunctionDeclaration()
 
 void TestDUChain::testFunctionDefinitionVsDeclaration()
 {
-    TestFile file("void funcDecl(); void funcDef() {}\n", "cpp");
+    TestFile file("void func(); void func() {}\n", "cpp");
     file.parse(TopDUContext::AllDeclarationsContextsAndUses);
     QVERIFY(file.waitForParsed());
 
