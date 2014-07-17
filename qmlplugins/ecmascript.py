@@ -84,7 +84,7 @@ Class('Object') \
     .member(Function(_bool, 'isExtensible', ('O', _object))) \
     .member(Function(_bool, 'isFrozen', ('O', _object))) \
     .member(Function(_bool, 'isSealed', ('O', _object))) \
-    .member(Function(_array, 'keys', ('O', _object))) \
+    .member(Function(_iterator, 'keys', ('O', _object))) \
     .member(Function(_object, 'preventExtensions', ('O', _object))) \
     .member(Function(_object, 'seal', ('O', _object))) \
     .member(Function(_object, 'setPrototypeOf', ('O', _object), ('proto', _object))) \
@@ -269,6 +269,7 @@ Class('String', ('value', _mixed)) \
     .print()
 
 Class('RegExp', ('pattern', _string), ('flags', _string)) \
+    .member(Function(_void, 'compile')) \
     .member(Function(_array, 'exec', ('string', _string))) \
     .member(Variable(_bool, 'ingoreCase')) \
     .member(Function(_regexp_match, 'match', ('string', _string))) \
@@ -281,6 +282,7 @@ Class('RegExp', ('pattern', _string), ('flags', _string)) \
     .member(Function(_bool, 'test', ('string', _string))) \
     .member(Variable(_bool, 'unicode')) \
     .member(Variable(_int, 'lastIndex')) \
+    .member(Variable(_string, 'lastMatch')) \
     .print()
 
 # Array Objects (section 22)
@@ -299,7 +301,6 @@ Class('Array', ('len', _int)) \
     .member(Function(_void, 'forEach', ('callbackfn', _function), ('thisArg', _object))) \
     .member(Function(_int, 'indexOf', ('searchElement', _mixed), ('fromIndex', _int))) \
     .member(Function(_string, 'join', ('separator', _string))) \
-    .member(Function(_iterator, 'keys')) \
     .member(Function(_int, 'lastIndexOf', ('searchElement', _mixed), ('fromIndex', _int))) \
     .member(Function(_array, 'map', ('callbackfn', _function), ('thisArg', _object))) \
     .member(Function(_mixed, 'pop')) \
@@ -312,6 +313,7 @@ Class('Array', ('len', _int)) \
     .member(Function(_bool, 'some', ('callbackfn', _function), ('thisArg', _object))) \
     .member(Function(_array, 'sort', ('comparefn', _function))) \
     .member(Function(_array, 'splice', ('start', _int), ('deleteCount', _int), ('items', _mixed))) \
+    .member(Function(_string, 'substr', ('start', _int), ('length', _int))) \
     .member(Function(_int, 'unshift', ('items', _mixed))) \
     .member(Function(_iterator, 'values')) \
     .member(Variable(_int, 'length')) \
@@ -336,7 +338,6 @@ Class('Map', ('iterable', _mixed)) \
     .member(Function(_void, 'forEach', ('callbackfn', _function), ('thisArg', _object))) \
     .member(Function(_mixed, 'get', ('key', _mixed))) \
     .member(Function(_bool, 'has', ('key', _mixed))) \
-    .member(Function(_iterator, 'keys')) \
     .member(Function(_map, 'set', ('key', _mixed), ('value', _mixed))) \
     .member(Variable(_int, 'size')) \
     .member(Function(_iterator, 'values')) \
@@ -349,7 +350,6 @@ Class('Set', ('iterable', _mixed)) \
     .member(Function(_iterator, 'entries')) \
     .member(Function(_void, 'forEach', ('callbackfn', _function), ('thisArg', _object))) \
     .member(Function(_bool, 'has', ('value', _mixed))) \
-    .member(Function(_iterator, 'keys')) \
     .member(Variable(_int, 'size')) \
     .member(Function(_iterator, 'values')) \
     .print()
@@ -415,18 +415,12 @@ Class('Promise', ('executor', _function)) \
 Struct('Reflect') \
     .member(Function(_mixed, 'apply', ('target', _function), ('thisArgument', _object), ('argumentList', _array))) \
     .member(Function(_object, 'construct', ('target', _function), ('argumentList', _array))) \
-    .member(Function(_void, 'defineProperty', ('target', _object), ('propertyKey', _string), ('attributes', _object))) \
     .member(Function(_void, 'deleteProperty', ('target', _object), ('propertyKey', _string))) \
     .member(Function(_iterator, 'enumerate', ('target', _object))) \
     .member(Function(_mixed, 'get', ('target', _object), ('propertyKey', _string), ('receiver', _object))) \
-    .member(Function(_object, 'getOwnPropertyDescriptor', ('target', _object), ('propertyKey', _string))) \
-    .member(Function(_object, 'getPrototypeOf', ('target', _object))) \
     .member(Function(_bool, 'has', ('target', _object), ('propertyKey', _string))) \
-    .member(Function(_bool, 'isExtensible', ('target', _object))) \
     .member(Function(_array, 'ownKeys', ('target', _object))) \
-    .member(Function(_void, 'preventExtensions', ('target', _object))) \
     .member(Function(_void, 'set', ('target', _object), ('propertyKey', _string), ('value', _mixed), ('receiver', _object))) \
-    .member(Function(_void, 'setPrototypeOf', ('target', _object), ('proto', _object))) \
     .print()
 
 # Realm, Loader and Proxy not decribed for now

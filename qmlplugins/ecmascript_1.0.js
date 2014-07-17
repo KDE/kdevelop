@@ -65,7 +65,7 @@ Object.prototype.isFrozen(new Object());
 Object.prototype.isSealed = function (O) { return true; };
 Object.prototype.isSealed(new Object());
 
-Object.prototype.keys = function (O) { return []; };
+Object.prototype.keys = function (O) { return {next: function() {}, done: true, value: _mixed}; };
 Object.prototype.keys(new Object());
 
 Object.prototype.preventExtensions = function (O) { return new Object(); };
@@ -585,6 +585,9 @@ String.prototype.length = 1;
  */
 function RegExp(pattern, flags) { return ; }
 
+RegExp.prototype.compile = function () { return ; };
+RegExp.prototype.compile();
+
 RegExp.prototype.exec = function (string) { return []; };
 RegExp.prototype.exec("");
 
@@ -614,6 +617,8 @@ RegExp.prototype.test("");
 RegExp.prototype.unicode = true;
 
 RegExp.prototype.lastIndex = 1;
+
+RegExp.prototype.lastMatch = "";
 
 /*
  * Array
@@ -662,9 +667,6 @@ Array.prototype.indexOf(_mixed, 1);
 Array.prototype.join = function (separator) { return ""; };
 Array.prototype.join("");
 
-Array.prototype.keys = function () { return {next: function() {}, done: true, value: _mixed}; };
-Array.prototype.keys();
-
 Array.prototype.lastIndexOf = function (searchElement, fromIndex) { return 1; };
 Array.prototype.lastIndexOf(_mixed, 1);
 
@@ -700,6 +702,9 @@ Array.prototype.sort(function(){});
 
 Array.prototype.splice = function (start, deleteCount, items) { return []; };
 Array.prototype.splice(1, 1, _mixed);
+
+Array.prototype.substr = function (start, length) { return ""; };
+Array.prototype.substr(1, 1);
 
 Array.prototype.unshift = function (items) { return 1; };
 Array.prototype.unshift(_mixed);
@@ -903,9 +908,6 @@ Map.prototype.get(_mixed);
 Map.prototype.has = function (key) { return true; };
 Map.prototype.has(_mixed);
 
-Map.prototype.keys = function () { return {next: function() {}, done: true, value: _mixed}; };
-Map.prototype.keys();
-
 Map.prototype.set = function (key, value) { return new Map(); };
 Map.prototype.set(_mixed, _mixed);
 
@@ -936,9 +938,6 @@ Set.prototype.forEach(function(){}, new Object());
 
 Set.prototype.has = function (value) { return true; };
 Set.prototype.has(_mixed);
-
-Set.prototype.keys = function () { return {next: function() {}, done: true, value: _mixed}; };
-Set.prototype.keys();
 
 Set.prototype.size = 1;
 
@@ -1096,9 +1095,6 @@ Reflect.apply(function(){}, new Object(), []);
 Reflect.construct = function (target, argumentList) { return new Object(); };
 Reflect.construct(function(){}, []);
 
-Reflect.defineProperty = function (target, propertyKey, attributes) { return ; };
-Reflect.defineProperty(new Object(), "", new Object());
-
 Reflect.deleteProperty = function (target, propertyKey) { return ; };
 Reflect.deleteProperty(new Object(), "");
 
@@ -1108,27 +1104,12 @@ Reflect.enumerate(new Object());
 Reflect.get = function (target, propertyKey, receiver) { return _mixed; };
 Reflect.get(new Object(), "", new Object());
 
-Reflect.getOwnPropertyDescriptor = function (target, propertyKey) { return new Object(); };
-Reflect.getOwnPropertyDescriptor(new Object(), "");
-
-Reflect.getPrototypeOf = function (target) { return new Object(); };
-Reflect.getPrototypeOf(new Object());
-
 Reflect.has = function (target, propertyKey) { return true; };
 Reflect.has(new Object(), "");
-
-Reflect.isExtensible = function (target) { return true; };
-Reflect.isExtensible(new Object());
 
 Reflect.ownKeys = function (target) { return []; };
 Reflect.ownKeys(new Object());
 
-Reflect.preventExtensions = function (target) { return ; };
-Reflect.preventExtensions(new Object());
-
 Reflect.set = function (target, propertyKey, value, receiver) { return ; };
 Reflect.set(new Object(), "", _mixed, new Object());
-
-Reflect.setPrototypeOf = function (target, proto) { return ; };
-Reflect.setPrototypeOf(new Object(), new Object());
 
