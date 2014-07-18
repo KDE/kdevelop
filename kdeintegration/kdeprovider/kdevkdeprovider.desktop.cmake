@@ -116,3 +116,4 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=Utilities
 X-KDevelop-Mode=GUI
 X-KDevelop-Interfaces=org.kdevelop.IProjectProvider
+X-KDevelop-IRequired=org.kdevelop.IBasicVersionControl@kdevgit
