@@ -90,18 +90,17 @@ KDevelop::VcsJob * ProviderWidget::createWorkingCopy(const KUrl &dest)
     if (!pos.isValid())
         return NULL;
 
-    IPlugin *plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevgit");
-    if (!plugin) {
-        KMessageBox::error(0, i18n("The Git plugin could not be loaded which is required to import a Github project."), i18n("Github Provider Error"));
-        return nullptr;
-    }
-
-    IBasicVersionControl *vc = plugin->extension<IBasicVersionControl>();
     QString url = pos.data(ProviderModel::VcsLocationRole).toString();
     if (m_account->validAccount())
       url = "https://" + m_account->token() + "@" + url.mid(8);
     QUrl real = QUrl(url);
     VcsLocation loc(real);
+
+    auto plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevgit");
+    Q_ASSERT(plugin);
+    auto vc = plugin->extension<IBasicVersionControl>();
+    Q_ASSERT(vc);
+
     return vc->createWorkingCopy(loc, dest);
 }
 

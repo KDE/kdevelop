@@ -25,6 +25,8 @@
 #include <ghproviderplugin.h>
 #include <ghproviderwidget.h>
 
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
 
 using namespace KDevelop;
 
@@ -40,6 +42,18 @@ ProviderPlugin::ProviderPlugin(QObject *parent, const QList<QVariant> &args)
 {
     Q_UNUSED(args);
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::IProjectProvider)
+}
+
+bool ProviderPlugin::hasError() const
+{
+    return !ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevgit");
+}
+
+QString ProviderPlugin::errorDescription() const
+{
+    return hasError()
+        ? i18n("The Git plugin could not be loaded which is required to import a Github project.")
+        : QString();
 }
 
 ProviderPlugin::~ProviderPlugin()

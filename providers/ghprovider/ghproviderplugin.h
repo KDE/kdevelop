@@ -42,6 +42,9 @@ public:
     /// Constructor.
     ProviderPlugin(QObject *parent, const QList<QVariant> &args);
 
+    virtual bool hasError() const;
+    virtual QString errorDescription() const;
+
     /// Destructor.
     virtual ~ProviderPlugin();
 
