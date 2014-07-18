@@ -140,13 +140,6 @@ public:
     KDevelop::DUContext* contextFromNode(QmlJS::AST::Node* node) const;
 
     /**
-     * Return the context containing the definitions of a QML module
-     *
-     * @return NULL if the specified module does not exist
-     */
-    KDevelop::ReferencedTopDUContext contextOfModule(const QString &module);
-
-    /**
      * Return the context of a given QML file, NULL if this file is not yet known
      * to the DUChain.
      *
@@ -180,9 +173,6 @@ private:
 
     typedef QHash<QmlJS::AST::Node*, KDevelop::DUContextPointer> NodeToContextHash;
     NodeToContextHash m_astToContext;
-
-    typedef QHash<QString, KDevelop::ReferencedTopDUContext> ModuleToContextHash;
-    ModuleToContextHash m_moduleToContext;
 };
 
 #endif // PARSESESSION_H

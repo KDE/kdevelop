@@ -35,6 +35,7 @@
 #include "parsesession.h"
 #include "functiondeclaration.h"
 #include "helper.h"
+#include "cache.h"
 
 #include <QtCore/QDirIterator>
 #include <QtCore/QFileInfo>
@@ -73,7 +74,8 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
 
 void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
 {
-    ReferencedTopDUContext importedContext = m_session->contextOfModule(QLatin1String("ecmascript_1.0.js"));
+    QString fileName = QmlJS::Cache::instance().modulePath(QLatin1String("ecmascript_1.0.js"));
+    ReferencedTopDUContext importedContext = m_session->contextOfFile(fileName);
 
     {
         DUChainWriteLocker lock;
@@ -1059,7 +1061,8 @@ void DeclarationBuilder::importModule(QmlJS::AST::UiImport* node)
     QString version = m_session->symbolAt(node->versionToken);
 
     // Import the file corresponding to the URI
-    ReferencedTopDUContext importedContext = m_session->contextOfModule(QString("%1_%2.qml").arg(uri, version));
+    QString moduleFile = QmlJS::Cache::instance().modulePath(uri, version);
+    ReferencedTopDUContext importedContext = m_session->contextOfFile(moduleFile);
 
     if (importedContext) {
         // Create a namespace import statement
