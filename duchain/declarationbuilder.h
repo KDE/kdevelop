@@ -122,6 +122,10 @@ protected:
 
     // UI
     void importDirectory(const QString& directory, QmlJS::AST::UiImport* node);
+    void importModuleFile(const QString& file,
+                          const QString& uri,
+                          const QString& version,
+                          QmlJS::AST::UiImport* node);
     void importModule(QmlJS::AST::UiImport* node);
     virtual bool visit(QmlJS::AST::UiImport* node);
 

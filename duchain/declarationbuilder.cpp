@@ -1043,26 +1043,13 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
     }
 }
 
-void DeclarationBuilder::importModule(QmlJS::AST::UiImport* node)
+void DeclarationBuilder::importModuleFile(const QString& file,
+                                          const QString& uri,
+                                          const QString& version,
+                                          QmlJS::AST::UiImport* node)
 {
-    QmlJS::AST::UiQualifiedId *part = node->importUri;
-    QString uri;
-
-    while (part) {
-        if (!uri.isEmpty()) {
-            uri.append('.');
-        }
-
-        uri.append(part->name.toString());
-        part = part->next;
-    }
-
-    // Version of the import
-    QString version = m_session->symbolAt(node->versionToken);
-
     // Import the file corresponding to the URI
-    QString moduleFile = QmlJS::Cache::instance().modulePath(uri, version);
-    ReferencedTopDUContext importedContext = m_session->contextOfFile(moduleFile);
+    ReferencedTopDUContext importedContext = m_session->contextOfFile(file);
 
     if (importedContext) {
         // Create a namespace import statement
@@ -1089,6 +1076,35 @@ void DeclarationBuilder::importModule(QmlJS::AST::UiImport* node)
 
         decl->setImportIdentifier(importedNamespaceName);
         closeDeclaration();
+    }
+}
+
+void DeclarationBuilder::importModule(QmlJS::AST::UiImport* node)
+{
+    QmlJS::AST::UiQualifiedId *part = node->importUri;
+    QString uri;
+
+    while (part) {
+        if (!uri.isEmpty()) {
+            uri.append('.');
+        }
+
+        uri.append(part->name.toString());
+        part = part->next;
+    }
+
+    // Version of the import
+    QString version = m_session->symbolAt(node->versionToken);
+
+    // Import the file corresponding to the URI
+    QString modulePath = QmlJS::Cache::instance().modulePath(uri, version);
+
+    if (modulePath.endsWith(QLatin1String(".qml"))) {
+        // Module file
+        importModuleFile(modulePath, uri, version, node);
+    } else {
+        // The module is a directory, import it directly
+        importDirectory(modulePath, node);
     }
 }
 
