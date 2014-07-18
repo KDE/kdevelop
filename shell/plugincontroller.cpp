@@ -119,6 +119,24 @@ bool constraintsMatch( const KPluginInfo& info, const QVariantMap& constraints)
     return true;
 }
 
+struct Dependency
+{
+    Dependency(const QString &dependency)
+        : interface(dependency)
+    {
+        if (dependency.contains('@')) {
+            const auto list = dependency.split('@', QString::SkipEmptyParts);
+            if (list.size() == 2) {
+                interface = list.at(0);
+                pluginName = list.at(1);
+            }
+        }
+    }
+
+    QString interface;
+    QString pluginName;
+};
+
 }
 
 namespace KDevelop {
@@ -161,8 +179,11 @@ public:
                 dependencies += info.property( KEY_Optional ).toStringList();
                 foreach( const QString& dep, dependencies )
                 {
-                    if( interfaces.contains( dep ) && !canUnload( info ) )
-                    {
+                    Dependency dependency(dep);
+                    if (!dependency.pluginName.isEmpty() && dependency.pluginName != plugin.pluginName()) {
+                        continue;
+                    }
+                    if (interfaces.contains(dependency.interface) && !canUnload(info)) {
                         return false;
                     }
                 }
@@ -514,6 +535,7 @@ bool PluginController::checkForDependencies( const KPluginInfo& info, QStringLis
             d->foreachEnabledPlugin([&required] (const KPluginInfo& plugin) -> bool {
                 foreach(const QString& iface, plugin.property( KEY_Interfaces ).toStringList()) {
                     required.remove(iface);
+                    required.remove(iface + '@' + plugin.pluginName());
                 }
                 return !required.isEmpty();
             });
@@ -530,9 +552,10 @@ void PluginController::loadOptionalDependencies( const KPluginInfo& info )
 {
     QVariant prop = info.property( KEY_Optional );
     if( prop.canConvert<QStringList>() ) {
-        foreach( const QString &iface, prop.toStringList() ) {
-            if (!pluginForExtension(iface)) {
-                kDebug() << "Couldn't load optional dependecy:" << iface << info.pluginName();
+        foreach( const QString &dep, prop.toStringList() ) {
+            Dependency dependency(dep);
+            if (!pluginForExtension(dependency.interface, dependency.pluginName)) {
+                kDebug() << "Couldn't load optional dependency:" << dep << info.pluginName();
             }
         }
     }
@@ -542,9 +565,10 @@ bool PluginController::loadDependencies( const KPluginInfo& info, QString& faile
 {
     QVariant prop = info.property( KEY_Required );
     if( prop.canConvert<QStringList>() ) {
-        foreach( const QString &iface, prop.toStringList() ) {
-            if (!pluginForExtension(iface)) {
-                failedDependency = iface;
+        foreach( const QString &value, prop.toStringList() ) {
+            Dependency dependency(value);
+            if (!pluginForExtension(dependency.interface, dependency.pluginName)) {
+                failedDependency = value;
                 return false;
             }
         }
