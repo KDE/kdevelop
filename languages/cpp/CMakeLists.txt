@@ -42,16 +42,6 @@ set(kdevcpplanguagesupport_PART_SRCS
 #     codegen/makeimplementationprivate.cpp
 )
 
-option(BUILD_kdev_includepathresolver "Build the includepath resolver debugging tool" OFF)
-if(BUILD_kdev_includepathresolver)
-  add_executable(kdev_includepathresolver includepathresolver.cpp)
-  set_target_properties( kdev_includepathresolver PROPERTIES COMPILE_FLAGS -DTEST )
-  target_link_libraries( kdev_includepathresolver
-  ${KDEVPLATFORM_INTERFACES_LIBRARIES}  ${KDEVPLATFORM_PROJECT_LIBRARIES}
-  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} )
-  install(TARGETS kdev_includepathresolver ${INSTALL_TARGETS_DEFAULT_ARGS} )
-endif(BUILD_kdev_includepathresolver)
-
 option(BUILD_uiblocktester "Build a debug thread into the plugin that checks for UI-thread lockups" OFF)
 if(BUILD_uiblocktester)
   add_definitions(-DDEBUG_UI_LOCKUP)
