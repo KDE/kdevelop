@@ -102,21 +102,44 @@ Path userDefinedPchIncludeForFile(const QString& sourcefile)
     return paths.isEmpty() ? Path() : paths.first();
 }
 
+ProjectFileItem* findProjectFileItem(const IndexedString& url)
+{
+    ProjectFileItem* file = nullptr;
+
+    for (auto project: ICore::self()->projectController()->projects()) {
+        auto files = project->filesForPath(url);
+        if (files.isEmpty()) {
+            continue;
+        }
+
+        file = files.last();
+
+        // A file might be defined in different targets.
+        // Prefer file items defined inside a target with non-empty includes.
+        for (auto f: files) {
+            if (!dynamic_cast<ProjectTargetItem*>(f->parent())) {
+                continue;
+            }
+            file = f;
+            if (!IDefinesAndIncludesManager::manager()->includes(f, IDefinesAndIncludesManager::ProjectSpecific).isEmpty()) {
+                break;
+            }
+        }
+    }
+    return file;
+}
+
 }
 
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
 : ParseJob(url, languageSupport)
 {
-    // get defines and include paths in foreground thread
-    auto item = ICore::self()->projectController()->projectModel()->itemForPath(url);
-
-    auto idm = KDevelop::IDefinesAndIncludesManager::manager();
-    if (item) {
-        m_includes = idm->includes(item);
-        m_defines = idm->defines(item);
+    if (auto file = findProjectFileItem(url)) {
+        m_includes = IDefinesAndIncludesManager::manager()->includes(file);
+        m_defines = IDefinesAndIncludesManager::manager()->defines(file);
     } else {
-        m_includes = idm->includes(url.str());
-        m_defines = idm->defines(url.str());
+        m_includes = IDefinesAndIncludesManager::manager()->includes(url.str());
+        m_defines = IDefinesAndIncludesManager::manager()->defines(url.str());
     }
 }
 
