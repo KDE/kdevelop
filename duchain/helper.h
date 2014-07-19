@@ -48,7 +48,8 @@ using namespace KDevelop;
      * @note This method already acquires a read lock for the DUChain.
      */
     KDEVQMLJSDUCHAIN_EXPORT DeclarationPointer getDeclaration(const QualifiedIdentifier& id,
-                                                              const DUContext* context);
+                                                              const DUContext* context,
+                                                              bool searchInParent = true);
 
     /**
      * Find the declaration for the specified identifier, with "onFoo" replaced
@@ -58,7 +59,8 @@ using namespace KDevelop;
      * QML slots to their corresponding signals.
      */
     KDEVQMLJSDUCHAIN_EXPORT DeclarationPointer getDeclarationOrSignal(const QualifiedIdentifier& id,
-                                                                      const DUContext* context);
+                                                                      const DUContext* context,
+                                                                      bool searchInParent = true);
 
     /**
      * Find an attribute of a QML object

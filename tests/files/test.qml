@@ -26,6 +26,8 @@ Text {
         * "toString" : "<class> behavior"
         */
         id: behavior
+
+        behavior.text: "I'm not an use of someId.text"
     }
 
     /**

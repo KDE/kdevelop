@@ -33,11 +33,16 @@ namespace QmlJS
 {
 using namespace KDevelop;
 
-DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContext* context)
+DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContext* context, bool searchInParent)
 {
     DUChainReadLocker lock;
     if (context) {
-        auto declarations = context->findDeclarations(id, CursorInRevision(INT_MAX, INT_MAX));
+        auto declarations = context->findDeclarations(
+            id.last(),
+            CursorInRevision(INT_MAX, INT_MAX),
+            nullptr,
+            searchInParent ? DUContext::NoSearchFlags : DUContext::DontSearchInParent
+        );
 
         if (declarations.count() > 0) {
             return DeclarationPointer(declarations.last());
@@ -46,7 +51,7 @@ DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContext
     return DeclarationPointer();
 }
 
-DeclarationPointer getDeclarationOrSignal(const QualifiedIdentifier& id, const DUContext* context)
+DeclarationPointer getDeclarationOrSignal(const QualifiedIdentifier& id, const DUContext* context, bool searchInParent)
 {
     QString identifier = id.last().toString();
 
@@ -54,7 +59,7 @@ DeclarationPointer getDeclarationOrSignal(const QualifiedIdentifier& id, const D
         // The use may have typed the name of a QML slot (onFoo), try to get
         // the declaration of its corresponding signal (foo)
         identifier = identifier.at(2).toLower() + identifier.mid(3);
-        DeclarationPointer decl = getDeclaration(QualifiedIdentifier(identifier), context);
+        DeclarationPointer decl = getDeclaration(QualifiedIdentifier(identifier), context, searchInParent);
 
         if (decl) {
             ClassFunctionDeclaration* classFuncDecl = dynamic_cast<ClassFunctionDeclaration *>(decl.data());
@@ -68,7 +73,7 @@ DeclarationPointer getDeclarationOrSignal(const QualifiedIdentifier& id, const D
     }
 
     // No signal found, fall back to normal behavior
-    return getDeclaration(id, context);
+    return getDeclaration(id, context, searchInParent);
 }
 
 QmlJS::AST::Statement* getQMLAttribute(QmlJS::AST::UiObjectMemberList* members, const QString& attribute)

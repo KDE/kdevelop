@@ -266,11 +266,9 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
     QualifiedIdentifier name(declaration);
     DUChainReadLocker lock;
 
-    if (!(
-            encounterParent(declaration) ||
-            encounterDeclarationInContext(name, context) ||
-            (context == nullptr && encounterGlobalDeclaration(name))
-        )) {
+    if (!encounterParent(declaration) &&
+        !encounterDeclarationInContext(name, context) &&
+        !(context == nullptr && encounterGlobalDeclaration(name))) {
         encounterNothing();
     }
 }
@@ -310,7 +308,9 @@ bool ExpressionVisitor::encounterParent(const QString& declaration)
 
 bool ExpressionVisitor::encounterDeclarationInContext(const QualifiedIdentifier& id, DUContext* context)
 {
-    DeclarationPointer dec = QmlJS::getDeclarationOrSignal(id, context ? context : m_context);
+    DeclarationPointer dec = QmlJS::getDeclarationOrSignal(id,
+                                                           context ? context : m_context,
+                                                           context == nullptr);
 
     if (dec) {
         encounterLvalue(dec);
