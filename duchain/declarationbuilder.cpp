@@ -472,10 +472,7 @@ void DeclarationBuilder::declareFieldMember(const KDevelop::DeclarationPointer& 
     }
 
     // No need to re-declare a field if it already exists
-    if (ctx->findDeclarations(identifier.last(),
-                              CursorInRevision::invalid(),
-                              nullptr,
-                              DUContext::DontSearchInParent).count() > 0) {
+    if (QmlJS::getDeclaration(identifier, ctx, false)) {
         return;
     }
 
