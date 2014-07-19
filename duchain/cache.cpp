@@ -125,7 +125,7 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
 
         // Create a dump of the file
         QStringList args;
-        args << QLatin1String("-path") << filePath;
+        args << QLatin1String("-noinstantiate") << QLatin1String("-path") << filePath;
 
         for (const PluginDumpExecutable& executable : m_pluginDumpExecutables) {
             QProcess qmlplugindump;
