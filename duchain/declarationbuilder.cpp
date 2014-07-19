@@ -1002,7 +1002,9 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
     if (dir.isDir()) {
         // Import all the files in the given directory
         entries = QDir(directory).entryInfoList(
-            QStringList() << (QLatin1String("*.") + currentFilePath.section(QLatin1Char('.'), -1, -1)),
+            QStringList()
+                << (QLatin1String("*.") + currentFilePath.section(QLatin1Char('.'), -1, -1))
+                << QLatin1String("*.so"),
             QDir::Files
         );
     } else if (dir.isFile()) {
@@ -1011,6 +1013,12 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
     } else {
         return;
     }
+
+    // Translate the QFileInfos into QStrings (and replace .so files with
+    // qmlplugindump dumps)
+    lock.unlock();
+    QStringList filePaths = QmlJS::Cache::instance().getFileNames(entries);
+    lock.lock();
 
     if (node && !node->importId.isEmpty()) {
         // Open a namespace that will contain the declarations
@@ -1022,9 +1030,7 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
         decl->setInternalContext(openContext(node, range, DUContext::Class, identifier));
     }
 
-    for (const QFileInfo& file : entries) {
-        QString filePath = file.canonicalFilePath();
-
+    for (const QString& filePath : filePaths) {
         if (filePath == currentFilePath) {
             continue;
         }
@@ -1112,7 +1118,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiImport* node)
 {
     if (node->importUri) {
         importModule(node);
-    } else if (!node->fileName.isNull()) {
+    } else if (!node->fileName.isNull() && node->fileName != QLatin1String(".")) {
         QUrl currentFileUrl = currentContext()->topContext()->url().toUrl();
         QUrl importUrl = QUrl(node->fileName.toString());
 
@@ -1154,6 +1160,12 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
             m_skipEndVisit.push(true);
             return false;
         }
+    } else if (baseclass == QLatin1String("Module") && m_session->moduleVersion() == QLatin1String("0.0")) {
+        // "Module" is disabled. This allows the declarations of a module
+        // dump to appear in the same namespace as the .qml files in the same
+        // directory.
+        m_skipEndVisit.push(true);
+        return true;
     }
 
     // Declare the component subclass

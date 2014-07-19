@@ -24,6 +24,8 @@
 #define __CACHE_H__
 
 #include <QHash>
+#include <QStringList>
+#include <QFileInfo>
 
 namespace QmlJS
 {
@@ -53,8 +55,26 @@ public:
      */
     QString modulePath(const QString& uri, const QString& version = QString());
 
+    /**
+     * Return the list of the paths of the given files.
+     *
+     * Files having a name ending in ".so" are replaced with the path of their
+     * qmlplugindump dump.
+     */
+    QStringList getFileNames(const QFileInfoList& fileInfos);
+
 private:
+    struct PluginDumpExecutable {
+        QString executable;
+        QString quickVersion;       // Version of QtQuick that should be imported when this qmlplugindump is used
+
+        PluginDumpExecutable(const QString& e, const QString &v)
+        : executable(e), quickVersion(v)
+        {}
+    };
+
     QHash<QString, QString> m_modulePaths;
+    QList<PluginDumpExecutable> m_pluginDumpExecutables;
 };
 
 }
