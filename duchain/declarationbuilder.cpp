@@ -939,7 +939,7 @@ DeclarationBuilder::ExportLiteralsAndNames DeclarationBuilder::exportedNames(Qml
             // Declare the components that appeared in a version lower or equal
             // to the version of this module. Lexicographic order can be used
             // because only the last digit of the version changes.
-            if (version <= m_session->moduleVersion()) {
+            if (version <= m_session->moduleVersion() || m_session->moduleVersion() == QLatin1String("0.0")) {
                 res.append(qMakePair(stringliteral, name));
             }
         }
