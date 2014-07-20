@@ -26,7 +26,7 @@
 
 #include <QAbstractItemModel>
 #include <QVector>
-#include <QDialog>
+#include <QWidget>
 
 #include "../compilerprovider/icompiler.h"
 
@@ -39,7 +39,7 @@ class CompilersModel;
 class QMenu;
 class QSignalMapper;
 
-class CompilersWidget : public QDialog
+class CompilersWidget : public QWidget
 {
     Q_OBJECT
 

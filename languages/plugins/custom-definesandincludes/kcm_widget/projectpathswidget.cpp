@@ -80,8 +80,6 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
 
     connect( ui->includesWidget, SIGNAL(includesChanged(QStringList)), SLOT(includesChanged(QStringList)) );
     connect( ui->definesWidget, SIGNAL(definesChanged(Defines)), SLOT(definesChanged(Defines)) );
-
-    connect(ui->configureCompilers, SIGNAL(clicked(bool)), SLOT(configureCompilers()));
 }
 
 QList<ConfigEntry> ProjectPathsWidget::paths() const
@@ -267,34 +265,33 @@ void ProjectPathsWidget::setCompilers(const QVector<CompilerPointer>& compilers)
     }
 
     m_compilers = compilers;
+
+    ui->compilersWidget->setCompilers(compilers);
+    //FIXME: react on change
 }
 
 void ProjectPathsWidget::configureCompilers()
 {
-    CompilersWidget cw;
-    cw.setCompilers(m_compilers);
-    if (cw.exec() != QDialog::Accepted) {
-        return;
-    }
+    //FIXME: use a tab for it
 
-    auto compilers = compilerProvider()->compilers();
-
-    for (auto c: cw.compilers()) {
-        if (!compilers.contains(c)) {
-            compilerProvider()->registerCompiler(c);
-        }
-    }
-
-    compilers = compilerProvider()->compilers();
-    for (auto c: compilers) {
-        if (!cw.compilers().contains(c)) {
-            compilerProvider()->unregisterCompiler(c);
-        }
-    }
-
-    setCompilers(compilerProvider()->compilers());
-    setCurrentCompiler(compilerProvider()->currentCompiler(m_project)->name());
-    emit changed();
+//     auto compilers = compilerProvider()->compilers();
+//
+//     for (auto c: cw.compilers()) {
+//         if (!compilers.contains(c)) {
+//             compilerProvider()->registerCompiler(c);
+//         }
+//     }
+//
+//     compilers = compilerProvider()->compilers();
+//     for (auto c: compilers) {
+//         if (!cw.compilers().contains(c)) {
+//             compilerProvider()->unregisterCompiler(c);
+//         }
+//     }
+//
+//     setCompilers(compilerProvider()->compilers());
+//     setCurrentCompiler(compilerProvider()->currentCompiler(m_project)->name());
+//     emit changed();
 }
 
 QVector< CompilerPointer > ProjectPathsWidget::compilers() const
