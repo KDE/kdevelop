@@ -23,6 +23,8 @@
 #ifndef __CACHE_H__
 #define __CACHE_H__
 
+#include "duchainexport.h"
+
 #include <QHash>
 #include <QStringList>
 #include <QFileInfo>
@@ -34,7 +36,7 @@ namespace QmlJS
  * Cache for values that may be slow to compute (search paths, things
  * involving KStandardDirs, etc)
  */
-class Cache
+class KDEVQMLJSDUCHAIN_EXPORT Cache
 {
 private:
     Cache();

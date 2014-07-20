@@ -38,6 +38,7 @@
 #include <qmljs/parser/qmljslexer_p.h>
 #include <duchain/expressionvisitor.h>
 #include <duchain/helper.h>
+#include <duchain/cache.h>
 
 #include <QtCore/QDir>
 
@@ -162,6 +163,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::commentCompletion()
 QList<CompletionTreeItemPointer> CodeCompletionContext::importCompletion()
 {
     QList<CompletionTreeItemPointer> items;
+    QString fragment = m_text.section(QLatin1Char(' '), -1, -1);
 
     // List $KDEDATA/kdevqmljssupport/qmlplugins/ and add one completion item
     // per file found there
@@ -171,7 +173,24 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::importCompletion()
     QDir dir(dataDir);
 
     for (const QString &entry : dir.entryList(QDir::Files, QDir::Name)) {
-        items.append(CompletionTreeItemPointer(new ModuleCompletionItem(entry)));
+        if (entry.startsWith(fragment)) {
+            items.append(CompletionTreeItemPointer(new ModuleCompletionItem(entry)));
+        }
+    }
+
+    // Use the cache to find the directory corresponding to the fragment
+    // (org.kde is, for instance, /usr/lib64/kde4/imports/org/kde), and list
+    // its subdirectories
+    dataDir = Cache::instance().modulePath(fragment);
+
+    if (!dataDir.isEmpty()) {
+        dir.setPath(dataDir);
+
+        for (const QString& entry : dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
+            items.append(CompletionTreeItemPointer(
+                new ModuleCompletionItem(QString("%1%2_.qml").arg(fragment, entry))
+            ));
+        }
     }
 
     return items;
