@@ -1,5 +1,6 @@
 import ".././files/directory_to_import/" as MyDir
 import "types.js" as MyTypes
+import org.kde.kdevplatform as KDevPlatform
 
 /**
  * "internalContext" : { "importedParents" : { "0" : {"type" : "Class" }}}
@@ -12,5 +13,10 @@ MyDir.MyComponent {
          * "type" : { "toString" : "bool" }
          */
         var from_types_js = MyTypes.simple_compare;
+
+        /**
+         * "type" : { "toString": "ICore" }
+         */
+        var icore = KDevPlatform.ICore;
     }
 }
