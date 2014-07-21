@@ -21,8 +21,12 @@
  */
 #include "declarationnavigationcontext.h"
 
+#include <QtGui/QTextDocument>  /* For Qt::escape */
+
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/types/structuretype.h>
+
+#include <duchain/functiontype.h>
 
 using namespace KDevelop;
 
@@ -55,5 +59,19 @@ void DeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, co
 
     KDevelop::AbstractDeclarationNavigationContext::htmlIdentifiedType(type, idType);
 }
+
+void DeclarationNavigationContext::eventuallyMakeTypeLinks(AbstractType::Ptr type)
+{
+    auto funcType = QmlJS::FunctionType::Ptr::dynamicCast(type);
+
+    if (type) {
+        // Don't let eventuallyMakeTypeLinks cast funcType to an identified type
+        // and try to print it! The function most of the time has no name.
+        modifyHtml() += typeHighlight(Qt::escape(type->toString()));
+    } else {
+        KDevelop::AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks(type);
+    }
+}
+
 
 }
