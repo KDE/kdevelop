@@ -321,9 +321,13 @@ bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
         return true;
     }
 
-    QVector<Declaration *> argumentDecls = func_declaration->internalFunctionContext()->localDeclarations();
+    // Don't touch functions declared outside this file
+    if (func_declaration->topContext() != topContext()) {
+        return true;
+    }
 
     // Put the argument nodes in a list that has a definite size
+    QVector<Declaration *> argumentDecls = func_declaration->internalFunctionContext()->localDeclarations();
     QVector<QmlJS::AST::ArgumentList *> args;
 
     for (auto argument = arguments; argument; argument = argument->next) {
