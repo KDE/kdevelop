@@ -23,10 +23,10 @@
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/types/structuretype.h>
-#include <language/duchain/types/functiontype.h>
 #include <util/path.h>
 
 #include "helper.h"
+#include "functiontype.h"
 #include "parsesession.h"
 
 using namespace KDevelop;
@@ -225,7 +225,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::CallExpression* node)
     // Find the type of the function called
     node->base->accept(this);
 
-    FunctionType::Ptr func = FunctionType::Ptr::dynamicCast(m_lastType);
+    QmlJS::FunctionType::Ptr func = QmlJS::FunctionType::Ptr::dynamicCast(m_lastType);
 
     if (func && func->returnType()) {
         encounter(func->returnType());

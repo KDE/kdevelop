@@ -31,10 +31,11 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/types/structuretype.h>
-#include <language/duchain/types/functiontype.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
+
+#include <duchain/functiontype.h>
 
 using namespace QmlJS;
 using namespace KDevelop;
@@ -72,7 +73,7 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
           return QVariant();
         }
 
-        FunctionType::Ptr declFunc = FunctionType::Ptr::dynamicCast(declType);
+        QmlJS::FunctionType::Ptr declFunc = QmlJS::FunctionType::Ptr::dynamicCast(declType);
 
         if (declType->equals(referenceType.constData())) {
             // Perfect type match

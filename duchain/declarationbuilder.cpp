@@ -19,7 +19,6 @@
 
 #include "declarationbuilder.h"
 
-#include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/enumerationtype.h>
 #include <language/duchain/types/enumeratortype.h>
@@ -34,6 +33,7 @@
 #include "expressionvisitor.h"
 #include "parsesession.h"
 #include "functiondeclaration.h"
+#include "functiontype.h"
 #include "helper.h"
 #include "cache.h"
 
@@ -109,7 +109,7 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
     setComment(node);
 
     // Declare the function
-    FunctionType::Ptr func(new FunctionType);
+    QmlJS::FunctionType::Ptr func(new QmlJS::FunctionType);
     Decl* decl;
 
     {
@@ -117,6 +117,7 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
 
         decl = openDeclaration<Decl>(name, nameRange);
         decl->setKind(Declaration::Type);
+        func->setDeclaration(decl);
     }
     openType(func);
 
@@ -202,7 +203,7 @@ void DeclarationBuilder::declareParameters(Node* node, QStringRef Node::*typeAtt
         openType(type);
         closeAndAssignType();
 
-        if (FunctionType::Ptr funType = currentType<FunctionType>()) {
+        if (QmlJS::FunctionType::Ptr funType = currentType<QmlJS::FunctionType>()) {
             funType->addArgument(type);
         }
     }
@@ -256,7 +257,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiParameterList* node)
 
 bool DeclarationBuilder::visit(QmlJS::AST::ReturnStatement* node)
 {
-    if (FunctionType::Ptr func = currentType<FunctionType>()) {
+    if (QmlJS::FunctionType::Ptr func = currentType<QmlJS::FunctionType>()) {
         AbstractType::Ptr returnType;
 
         if (node->expression) {
@@ -275,7 +276,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::ReturnStatement* node)
 
 void DeclarationBuilder::endVisitFunction()
 {
-    FunctionType::Ptr func = currentType<FunctionType>();
+    QmlJS::FunctionType::Ptr func = currentType<QmlJS::FunctionType>();
 
     if (func && !func->returnType()) {
         // A function that returns nothing returns void
@@ -307,20 +308,20 @@ void DeclarationBuilder::endVisit(QmlJS::AST::FunctionExpression* node)
 bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::AST::ArgumentList* arguments)
 {
     ContextBuilder::ExpressionType expr = findType(base);
-    FunctionType::Ptr func_type = FunctionType::Ptr::dynamicCast(expr.type);
+    QmlJS::FunctionType::Ptr func_type = QmlJS::FunctionType::Ptr::dynamicCast(expr.type);
     DUChainWriteLocker lock;
 
-    if (!expr.declaration || !func_type) {
+    if (!func_type) {
         return true;
     }
 
-    auto func_declaration = expr.declaration.dynamicCast<FunctionDeclaration>();
-    QList<AbstractType::Ptr> argumentTypes = func_type->arguments();
-    QVector<Declaration *> argumentsDecls;
+    auto func_declaration = dynamic_cast<FunctionDeclaration*>(func_type->declaration(topContext()));
 
-    if (func_declaration) {
-        argumentsDecls = func_declaration->internalFunctionContext()->localDeclarations();
+    if (!func_declaration) {
+        return true;
     }
+
+    QVector<Declaration *> argumentDecls = func_declaration->internalFunctionContext()->localDeclarations();
 
     // Put the argument nodes in a list that has a definite size
     QVector<QmlJS::AST::ArgumentList *> args;
@@ -331,17 +332,16 @@ bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
 
     // Don't update a function when it is called with the wrong number
     // of arguments
-    if (args.size() != argumentTypes.count()) {
+    if (args.size() != argumentDecls.count()) {
         return true;
     }
 
     // Update the types of the function arguments
-    FunctionType::Ptr new_func_type(new FunctionType);
+    QmlJS::FunctionType::Ptr new_func_type(new QmlJS::FunctionType);
 
     for (int i=0; i<args.size(); ++i) {
         QmlJS::AST::ArgumentList *argument = args.at(i);
-        AbstractType::Ptr current_type =
-            (i < argumentsDecls.count() ? argumentsDecls.at(i)->abstractType() : argumentTypes.at(i));
+        AbstractType::Ptr current_type = argumentDecls.at(i)->abstractType();
 
         // Merge the current type of the argument with its type in the call expression
         AbstractType::Ptr call_type = findType(argument->expression).type;
@@ -349,15 +349,20 @@ bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
 
         // Update the declaration of the argument and its type in the function type
         new_func_type->addArgument(new_type);
-
-        if (i < argumentsDecls.count()) {
-            argumentsDecls.at(i)->setAbstractType(new_type);
-        }
+        argumentDecls.at(i)->setAbstractType(new_type);
     }
 
     // Replace the function's type with the new type having updated arguments
     new_func_type->setReturnType(func_type->returnType());
-    expr.declaration->setAbstractType(new_func_type.cast<AbstractType>());
+    new_func_type->setDeclaration(func_declaration);
+    func_declaration->setAbstractType(new_func_type.cast<AbstractType>());
+
+    if (expr.declaration) {
+        // expr.declaration is the variable that contains the function, while
+        // func_declaration is the declaration of the function. They can be
+        // different and both need to be updated
+        expr.declaration->setAbstractType(new_func_type.cast<AbstractType>());
+    }
 
     return false;   // The base and the arguments have already been explored
 }
@@ -705,7 +710,7 @@ void DeclarationBuilder::declareMethod(QmlJS::AST::UiObjectInitializer* node,
                                        bool isSignal)
 {
     QString type_name = QmlJS::getQMLAttributeValue(node->members, "type").value;
-    FunctionType::Ptr type(new FunctionType);
+    QmlJS::FunctionType::Ptr type(new QmlJS::FunctionType);
 
     if (type_name.isNull()) {
         type->setReturnType(typeFromName("void"));
@@ -719,6 +724,7 @@ void DeclarationBuilder::declareMethod(QmlJS::AST::UiObjectInitializer* node,
 
         decl->setIsSlot(isSlot);
         decl->setIsSignal(isSignal);
+        type->setDeclaration(decl);
     }
     openType(type);
 }
@@ -742,9 +748,10 @@ void DeclarationBuilder::declareParameter(QmlJS::AST::UiObjectInitializer* node,
                                           const RangeInRevision &range,
                                           const QualifiedIdentifier &name)
 {
-    FunctionType::Ptr function = currentType<FunctionType>();
+    QmlJS::FunctionType::Ptr function = currentType<QmlJS::FunctionType>();
     AbstractType::Ptr type = typeFromName(QmlJS::getQMLAttributeValue(node->members, "type").value);
 
+    Q_ASSERT(function);
     function->addArgument(type);
 
     {
@@ -794,7 +801,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
     } else if (baseclass == QLatin1String("Property")) {
         // A property
         declareProperty(node, range, name);
-    } else if (baseclass == QLatin1String("Parameter") && currentType<FunctionType>()) {
+    } else if (baseclass == QLatin1String("Parameter") && currentType<QmlJS::FunctionType>()) {
         // One parameter of a signal/slot/method
         declareParameter(node, range, name);
     } else if (baseclass == QLatin1String("Enum")) {
@@ -1309,7 +1316,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
             DUChainWriteLocker lock;
 
             currentDeclaration<ClassFunctionDeclaration>()->setIsSignal(true);
-            currentType<FunctionType>()->setReturnType(typeFromName("void"));
+            currentType<QmlJS::FunctionType>()->setReturnType(typeFromName("void"));
         }
     } else {
         AbstractType::Ptr type;
@@ -1414,7 +1421,7 @@ AbstractType::Ptr DeclarationBuilder::typeFromName(const QString& name)
             realName = QLatin1String("vector3d");
         } else if (name.endsWith(QLatin1String("ScriptString"))) {
             // Q{Declarative,Qml}ScriptString represents a JS snippet
-            FunctionType* func = new FunctionType;
+            QmlJS::FunctionType* func = new QmlJS::FunctionType;
             func->setReturnType(AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)));
             return AbstractType::Ptr(func);
         }

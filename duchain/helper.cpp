@@ -174,9 +174,9 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
 
     default:
     {
-        StructureType::Ptr structureType = StructureType::Ptr::dynamicCast(declaration->abstractType());
-        IntegralType::Ptr integralType = IntegralType::Ptr::dynamicCast(declaration->abstractType());
-        FunctionType::Ptr functionType = FunctionType::Ptr::dynamicCast(declaration->abstractType());
+        auto structureType = StructureType::Ptr::dynamicCast(declaration->abstractType());
+        auto integralType = IntegralType::Ptr::dynamicCast(declaration->abstractType());
+        auto functionType = QmlJS::FunctionType::Ptr::dynamicCast(declaration->abstractType());
 
         if (structureType) {
             return getInternalContext(

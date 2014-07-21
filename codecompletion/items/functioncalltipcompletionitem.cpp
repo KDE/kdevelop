@@ -22,11 +22,11 @@
 #include "functioncalltipcompletionitem.h"
 
 #include <duchain/helper.h>
+#include <duchain/functiontype.h>
 
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/ducontext.h>
-#include <language/duchain/types/functiontype.h>
 
 #include <QtGui/QIcon>
 
@@ -44,7 +44,7 @@ FunctionCalltipCompletionItem::FunctionCalltipCompletionItem(const DeclarationPo
         return;
     }
 
-    FunctionType::Ptr func = FunctionType::Ptr::dynamicCast(decl->abstractType());
+    QmlJS::FunctionType::Ptr func = QmlJS::FunctionType::Ptr::dynamicCast(decl->abstractType());
 
     if (!func) {
         return;
@@ -52,7 +52,9 @@ FunctionCalltipCompletionItem::FunctionCalltipCompletionItem(const DeclarationPo
 
     // Arguments can be fetch from the function declaration (if available), or
     // from its function type
-    DUContext* internalFunctionContext = getInternalFunctionContext(decl);
+    Declaration* funcDecl = func->declaration(decl->topContext());
+    DUContext* internalFunctionContext =
+        getInternalFunctionContext(funcDecl ? DeclarationPointer(funcDecl) : decl);
     QStringList arguments;
 
     if (internalFunctionContext) {
