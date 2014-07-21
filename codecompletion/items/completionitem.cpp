@@ -57,6 +57,7 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
 
     ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(decl);
     StructureType::Ptr declType = StructureType::Ptr::dynamicCast(decl->abstractType());
+    auto funcType = QmlJS::FunctionType::Ptr::dynamicCast(decl->abstractType());
 
     if (role == CodeCompletionModel::BestMatchesCount) {
         return 5;
@@ -85,6 +86,32 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
         } else {
             // Completely different types, no luck
             return QVariant();
+        }
+    } else if (role == Qt::DisplayRole && funcType) {
+        // Functions are displayed using the "type funcName(arg, arg, arg...)" format
+        FunctionDeclaration* funcDecl =
+            dynamic_cast<FunctionDeclaration*>(funcType->declaration(decl->topContext()));
+
+        if (funcDecl) {
+            switch (index.column()) {
+            case CodeCompletionModel::Prefix:
+                return funcType->returnType()->toString();
+            case CodeCompletionModel::Name:
+                // Return the identifier of the declaration being listed, not of its
+                // function declaration (because the function may have been declared
+                // anonymously, even if it has been assigned to a variable)
+                return decl->qualifiedIdentifier().toString();
+            case CodeCompletionModel::Arguments:
+            {
+                QStringList args;
+
+                for (auto arg : funcDecl->internalFunctionContext()->localDeclarations()) {
+                    args.append(arg->toString());
+                }
+
+                return QLatin1Char('(') + args.join(QLatin1String(", ")) + QLatin1Char(')');
+            }
+            }
         }
     } else if (role == Qt::DisplayRole && index.column() == CodeCompletionModel::Prefix) {
         if (classDecl) {
