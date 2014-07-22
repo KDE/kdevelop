@@ -18,6 +18,9 @@
 */
 
 #include "dashboarddocument.h"
+
+#include <QMimeDatabase>
+
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iuicontroller.h>
@@ -74,9 +77,9 @@ KParts::Part* DashboardDocument::partForView(QWidget* /*view*/) const
     return 0;
 }
 
-KMimeType::Ptr DashboardDocument::mimeType() const
+QMimeType DashboardDocument::mimeType() const
 {
-    return KMimeType::mimeType("text/x-kdevelop");
+    return QMimeDatabase().mimeTypeForName("text/x-kdevelop");
 }
 
 Sublime::View* DashboardDocument::newView(Sublime::Document* doc)

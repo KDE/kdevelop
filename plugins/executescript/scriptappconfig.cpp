@@ -24,6 +24,8 @@
 #include <kicon.h>
 
 #include <QIcon>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -51,7 +53,7 @@
 #include <project/projectitemlineedit.h>
 
 static const QString interpreterForUrl(const KUrl& url) {
-    auto mimetype = KMimeType::findByUrl(url);
+    auto mimetype = QMimeDatabase().mimeTypeForUrl(url);
     static QHash<QString, QString> knownMimetypes;
     if ( knownMimetypes.isEmpty() ) {
         knownMimetypes["text/x-python"] = "python";
@@ -60,7 +62,7 @@ static const QString interpreterForUrl(const KUrl& url) {
         knownMimetypes["application/x-shellscript"] = "bash";
         knownMimetypes["application/x-perl"] = "perl -e";
     }
-    const QString& interp = knownMimetypes.value(mimetype->name());
+    const QString& interp = knownMimetypes.value(mimetype.name());
     return interp;
 }
 

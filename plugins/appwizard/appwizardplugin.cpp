@@ -424,6 +424,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
 bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QString &dest)
 {
     kDebug() << "copy:" << source << "to" << dest;
+    // TODO: KF5 replacement? it just checks if the first 32 bytes contain non-ascii data
     if( KMimeType::isBinaryData(source) )
     {
         KIO::CopyJob* job = KIO::copy( KUrl(source), KUrl(dest), KIO::HideProgressInfo );

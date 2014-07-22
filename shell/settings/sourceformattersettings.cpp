@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <QList>
 #include <QListWidgetItem>
 #include <QInputDialog>
+#include <QMimeDatabase>
 #include <KMessageBox>
 #include <KIconLoader>
 #include <KDebug>
@@ -119,14 +120,14 @@ void SourceFormatterSettings::load()
         }
         for( const SourceFormatterStyle* style: formatter->styles ) {
             for ( const SourceFormatterStyle::MimeHighlightPair& item: style->mimeTypes() ) {
-                KMimeType::Ptr mimePtr = KMimeType::mimeType(item.mimeType);
-                if (!mimePtr) {
+                QMimeType mime = QMimeDatabase().mimeTypeForName(item.mimeType);
+                if (!mime.isValid()) {
                     kWarning() << "plugin" << info.name() << "supports unknown mimetype entry" << item.mimeType;
                     continue;
                 }
                 QString languageName = item.highlightMode;
                 LanguageSettings& l = languages[languageName];
-                l.mimetypes.append( mimePtr );
+                l.mimetypes.append(mime);
                 l.formatters.insert( formatter );
             }
         }
@@ -153,8 +154,8 @@ void SourceFormatterSettings::load()
         // Pick the first appropriate mimetype for this language
         KConfigGroup grp = fmtctrl->configuration();
         LanguageSettings& l = languages[name];
-        foreach (const KMimeType::Ptr& mimetype, l.mimetypes) {
-            QStringList formatterAndStyleName = grp.readEntry( mimetype->name(), "" ).split( "||", QString::KeepEmptyParts );
+        foreach (const QMimeType& mimetype, l.mimetypes) {
+            QStringList formatterAndStyleName = grp.readEntry(mimetype.name(), "").split("||", QString::KeepEmptyParts);
             FormatterMap::const_iterator formatterIter = formatters.constFind(formatterAndStyleName.first());
             if (formatterIter == formatters.constEnd()) {
                 kDebug() << "Reference to unknown formatter" << formatterAndStyleName.first();
@@ -219,8 +220,8 @@ void SourceFormatterSettings::save()
     KConfigGroup grp = Core::self()->sourceFormatterControllerInternal()->configuration();
 
     for ( LanguageMap::const_iterator iter = languages.constBegin(); iter != languages.constEnd(); ++iter ) {
-        foreach( const KMimeType::Ptr& mime, iter.value().mimetypes ) {
-            grp.writeEntry( mime->name(), QString("%1||%2").arg(iter.value().selectedFormatter->formatter->name()).arg( iter.value().selectedStyle->name() ) );
+        foreach(const QMimeType& mime, iter.value().mimetypes) {
+            grp.writeEntry(mime.name(), QString("%1||%2").arg(iter.value().selectedFormatter->formatter->name()).arg(iter.value().selectedStyle->name()));
         }
     }
     foreach( SourceFormatter* fmt, formatters )
@@ -387,7 +388,7 @@ void SourceFormatterSettings::editStyle()
     LanguageSettings& l = languages[ language ];
     SourceFormatter* fmt = l.selectedFormatter;
 
-    KMimeType::Ptr mimetype = l.mimetypes.first();
+    QMimeType mimetype = l.mimetypes.first();
     if( fmt->formatter->editStyleWidget( mimetype ) != 0 ) {
         EditStyleDialog dlg( fmt->formatter, mimetype, *l.selectedStyle, this );
         if( dlg.exec() == QDialog::Accepted )
@@ -474,7 +475,7 @@ void SourceFormatterSettings::updatePreview()
         if( style->usePreview() )
         {
             ISourceFormatter* ifmt = fmt->formatter;
-            KMimeType::Ptr mime = l.mimetypes.first();
+            QMimeType mime = l.mimetypes.first();
             m_document->setHighlightingMode( style->modeForMimetype( mime ) );
 
             //NOTE: this is ugly, but otherwise kate might remove tabs again :-/

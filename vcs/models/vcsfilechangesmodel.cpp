@@ -25,7 +25,7 @@
 #include <QIcon>
 
 #include <KLocale>
-#include <KMimeType>
+#include <QMimeDatabase>
 #include <KDebug>
 
 #include <interfaces/icore.h>
@@ -106,7 +106,10 @@ int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsS
     } else {
         if(!it1) {
             QString path = ICore::self()->projectController()->prettyFileName(status.url(), KDevelop::IProjectController::FormatPlain);
-            QIcon icon = QIcon::fromTheme(KMimeType::findByUrl(status.url(), 0, false, true)->iconName());
+            QMimeType mime = status.url().isLocalFile()
+                ? QMimeDatabase().mimeTypeForFile(status.url().toLocalFile(), QMimeDatabase::MatchExtension)
+                : QMimeDatabase().mimeTypeForUrl(status.url());
+            QIcon icon = QIcon::fromTheme(mime.iconName());
             it1 = new QStandardItem(icon, path);
             itStatus = new QStandardItem;
 

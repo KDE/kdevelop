@@ -21,6 +21,8 @@
 #include "openwithplugin.h"
 
 #include <QVariantList>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -99,8 +101,8 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
 
     // Ok, lets fetch the mimetype for the !!first!! url and the relevant services
     // TODO: Think about possible alternatives to using the mimetype of the first url.
-    KMimeType::Ptr mimetype = KMimeType::findByUrl( m_urls.first() );
-    m_mimeType = mimetype->name();
+    QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(m_urls.first());
+    m_mimeType = mimetype.name();
 
     QList<QAction*> partActions = actionsForServiceType("KParts/ReadOnlyPart");
     QList<QAction*> appActions = actionsForServiceType("Application");
@@ -256,7 +258,7 @@ void OpenWithPlugin::openFilesInternal( const KUrl::List& files )
     }
 
     m_urls = files;
-    m_mimeType = KMimeType::findByUrl( m_urls.first() )->name();
+    m_mimeType = QMimeDatabase().mimeTypeForUrl(m_urls.first()).name();
     openDefault();
 }
 

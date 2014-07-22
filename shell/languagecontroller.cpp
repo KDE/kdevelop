@@ -21,8 +21,7 @@
 
 #include <QHash>
 #include <QMutexLocker>
-
-#include <kmimetype.h>
+#include <QMimeDatabase>
 
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
@@ -47,6 +46,11 @@ const int maximumCacheExtensionLength = 3;
 // TODO: kf5, use QStringLiteral
 const QString KEY_SupportedMimeTypes = "X-KDevelop-SupportedMimeTypes";
 const QString KEY_ILanguageSupport = "ILanguageSupport";
+}
+
+inline uint qHash(const QMimeType& mime, uint seed = 0)
+{
+    return qHash(mime.name(), seed);
 }
 
 namespace KDevelop {
@@ -90,7 +94,7 @@ struct LanguageControllerPrivate {
     
     LanguageHash languages; //Maps language-names to languages
     LanguageCache languageCache; //Maps mimetype-names to languages
-    typedef QMultiMap<KMimeType::Ptr, ILanguage*> MimeTypeCache;
+    typedef QMultiHash<QMimeType, ILanguage*> MimeTypeCache;
     MimeTypeCache mimeTypeCache; //Maps mimetypes to languages
     // fallback cache for file extensions not handled by any pattern
     typedef QMap<QString, QList<ILanguage*> > FileExtensionCache;
@@ -118,8 +122,8 @@ ILanguage* LanguageControllerPrivate::addLanguageForSupport(ILanguageSupport* la
     foreach(const QString& mimeTypeName, mimetypes) {
         kDebug(9505) << "adding supported mimetype:" << mimeTypeName << "language:" << languageSupport->name();
         languageCache[mimeTypeName] << ret;
-        KMimeType::Ptr mime = KMimeType::mimeType(mimeTypeName);
-        if(mime) {
+        QMimeType mime = QMimeDatabase().mimeTypeForName(mimeTypeName);
+        if (mime.isValid()) {
             mimeTypeCache.insert(mime, ret);
         } else {
             kWarning() << "could not create mime-type" << mimeTypeName;
@@ -250,7 +254,7 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
     for(LanguageControllerPrivate::MimeTypeCache::const_iterator it = d->mimeTypeCache.constBegin();
         it != d->mimeTypeCache.constEnd(); ++it)
     {
-        foreach(const QString& pattern, it.key()->patterns()) {
+        foreach(const QString& pattern, it.key().globPatterns()) {
             if(pattern.startsWith('*')) {
                 const QStringRef subPattern = pattern.midRef(1);
                 if (!subPattern.contains('*')) {
@@ -296,28 +300,33 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
     if(!languages.isEmpty() || QThread::currentThread() != thread())
         return languages;
 
-    KMimeType::Ptr mimeType;
-    
-    if(!extension.isEmpty()) {
+    QMimeType mimeType;
+
+    if (url.isLocalFile()) {
         // If we have recognized a file extension, allow using the file-contents
         // to look up the type. We will cache it after all.
-        mimeType = KMimeType::findByUrl(url);
-    } else {
         // If we have not recognized a file extension, do not allow using the file-contents
         // to look up the type. We cannot cache the result, and thus we might end up reading
         // the contents of every single file, which can make the application very unresponsive.
-        mimeType = KMimeType::findByUrl(url, 0, false, true);
-
-        if (mimeType->isDefault()) {
-            // ask the document controller about a more concrete mimetype
-            IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
-            if (doc) {
-                mimeType = doc->mimeType();
-            }
+        if (!extension.isEmpty()) {
+            mimeType = QMimeDatabase().mimeTypeForFile(url.toLocalFile());
+        } else {
+            // this will not be cached -> don't bother reading the contents
+            mimeType = QMimeDatabase().mimeTypeForFile(url.toLocalFile(), QMimeDatabase::MatchExtension);
+        }
+    } else {
+        // remote file, only look at the extension
+        mimeType = QMimeDatabase().mimeTypeForUrl(url);
+    }
+    if (mimeType.isDefault()) {
+        // ask the document controller about a more concrete mimetype
+        IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
+        if (doc) {
+            mimeType = doc->mimeType();
         }
     }
 
-    languages = languagesForMimetype(mimeType->name());
+    languages = languagesForMimetype(mimeType.name());
 
     if(!extension.isEmpty())
         d->fileExtensionCache.insert(extension, languages);

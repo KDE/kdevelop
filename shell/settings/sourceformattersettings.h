@@ -22,7 +22,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QHash>
 #include <KCModule>
-#include <KMimeType>
+#include <QMimeType>
 
 #include <shell/sourceformattercontroller.h>
 
@@ -44,7 +44,7 @@ class SourceFormatterStyle;
 
 struct LanguageSettings {
     LanguageSettings();
-    QList<KMimeType::Ptr> mimetypes;
+    QList<QMimeType> mimetypes;
     QSet<KDevelop::SourceFormatter*> formatters;
     // weak pointers to selected formatter and style, no ownership
     KDevelop::SourceFormatter* selectedFormatter;     // Should never be zero

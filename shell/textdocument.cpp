@@ -27,6 +27,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QLayout>
+#include <QMimeDatabase>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -752,8 +753,8 @@ QString KDevelop::TextDocument::documentType() const
 QIcon KDevelop::TextDocument::defaultIcon() const
 {
     if (d->document) {
-        KMimeType::Ptr mime = KMimeType::mimeType(d->document->mimeType());
-        QIcon icon = QIcon::fromTheme(mime->iconName());
+        QMimeType mime = QMimeDatabase().mimeTypeForName(d->document->mimeType());
+        QIcon icon = QIcon::fromTheme(mime.iconName());
         if (!icon.isNull()) {
             return icon;
         }

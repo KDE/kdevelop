@@ -77,7 +77,7 @@ public:
     /**
      * Returns the mimetype of the document.
      */
-    virtual KMimeType::Ptr mimeType() const = 0;
+    virtual QMimeType mimeType() const = 0;
 
     /**
      * Returns the part for given @p view if this document is a KPart document or 0 otherwise.

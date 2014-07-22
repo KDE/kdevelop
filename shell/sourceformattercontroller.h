@@ -27,9 +27,9 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QHash>
 #include <QtCore/QList>
 #include <QtCore/QSet>
+#include <QMimeType>
 
 #include <kxmlguiclient.h>
-#include <KDE/KMimeType>
 #include <KDE/KConfigGroup>
 #include <KDE/KPluginInfo>
 #include <KUrl>
@@ -103,10 +103,10 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		* The language is then activated and the style is loaded.
 		* The source formatter is then ready to use on a file.
 		*/
-		ISourceFormatter* formatterForMimeType(const KMimeType::Ptr &mime);
+		ISourceFormatter* formatterForMimeType(const QMimeType& mime) override;
 		/** \return Whether this mime type is supported by any plugin.
 		*/
-		bool isMimeTypeSupported(const KMimeType::Ptr &mime);
+		bool isMimeTypeSupported(const QMimeType& mime) override;
 
 		/**
 		 * @brief Instantiate a Formatter for the given plugin and load its configuration.
@@ -119,11 +119,11 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		/**
 		 * @brief Find the first formatter which supports a given mime type.
 		 */
-		ISourceFormatter* findFirstFormatterForMimeType( const KMimeType::Ptr& mime ) const;
+		ISourceFormatter* findFirstFormatterForMimeType(const QMimeType& mime) const;
 
 		KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
-		virtual KDevelop::SourceFormatterStyle styleForMimeType( const KMimeType::Ptr& mime );
+		KDevelop::SourceFormatterStyle styleForMimeType(const QMimeType& mime) override;
 		
 		KConfigGroup configuration() const;
 
@@ -142,12 +142,12 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		/** \return A modeline string (to add at the end or the beginning of a file)
 		* corresponding to the settings of the active language.
 		*/
-		QString addModelineForCurrentLang(QString input, const KUrl& url, const KMimeType::Ptr&);
+		QString addModelineForCurrentLang(QString input, const KUrl& url, const QMimeType&);
 		/** \return The name of kate indentation mode for the mime type.
 		* examples are cstyle, python, etc.
 		*/
-		QString indentationMode(const KMimeType::Ptr &mime);
-		void formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime);
+		QString indentationMode(const QMimeType& mime);
+		void formatDocument(KDevelop::IDocument* doc, ISourceFormatter* formatter, const QMimeType& mime);
 		// Adapts the mode of the editor regarding indentation-style
 		void adaptEditorIndentationMode(KTextEditor::Document* doc, KDevelop::ISourceFormatter* formatter, bool ignoreModeline = false);
 		void formatFiles(KUrl::List &list);

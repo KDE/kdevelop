@@ -141,10 +141,10 @@ bool SourceFormatterStyle::supportsLanguage(const QString &language) const
 	return false;
 }
 
-QString SourceFormatterStyle::modeForMimetype(const KMimeType::Ptr& mime) const
+QString SourceFormatterStyle::modeForMimetype(const QMimeType& mime) const
 {
-	for ( const auto& item: mimeTypes() ) {
-		if ( mime->is(item.mimeType) ) {
+	for (const auto& item : mimeTypes()) {
+		if (mime.inherits(item.mimeType)) {
 			return item.highlightMode;
 		}
 	}

@@ -21,6 +21,7 @@
 #include <QWhatsThis>
 #include <QDBusConnection>
 #include <QKeySequence>
+#include <QMimeDatabase>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -150,8 +151,10 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
 
     if(context->type() == KDevelop::Context::FileContext) {
         KDevelop::FileContext *fcontext = dynamic_cast<KDevelop::FileContext*>(context);
-        KMimeType::Ptr mimetype = KMimeType::findByUrl( fcontext->urls().first() );
-        if(mimetype->is("inode/directory")) {
+        // TODO: just stat() or QFileInfo().isDir() for local files? should be faster than mime type checking
+        QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(fcontext->urls().first());
+        static const QMimeType directoryMime = QMimeDatabase().mimeTypeForName("inode/directory");
+        if (mimetype == directoryMime) {
             QAction* action = new QAction( i18n( "Find/Replace in This Folder" ), this );
             action->setIcon(QIcon::fromTheme("edit-find"));
             m_contextMenuDirectory = fcontext->urls().first().toLocalFile();

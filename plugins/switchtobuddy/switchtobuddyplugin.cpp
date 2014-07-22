@@ -27,6 +27,7 @@
 #include <QAction>
 #include <QFile>
 #include <QSignalMapper>
+#include <QMimeDatabase>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -67,7 +68,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context)
     }
 
     KUrl currentUrl = ctx->url();
-    IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(currentUrl)->name());
+    IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(QMimeDatabase().mimeTypeForUrl(currentUrl).name());
     if (!buddyFinder)
         return ContextMenuExtension();
 

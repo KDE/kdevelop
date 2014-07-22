@@ -25,7 +25,8 @@
 #include <KLocalizedString>
 #include <KIO/Job>
 #include <KRandom>
-#include <KMimeType>
+#include <QMimeType>
+#include <QMimeDatabase>
 #include <QFile>
 #include <QDebug>
 #include <QNetworkAccessManager>
@@ -72,10 +73,10 @@ QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
         if (val.second.type()==QVariant::Url) {
             KUrl path=val.second.toUrl();
             hstr += "; filename=\"" + path.fileName().toLatin1() + "\"";
-            const KMimeType::Ptr ptr = KMimeType::findByUrl(path);
-            if (!ptr->name().isEmpty()) {
+            const QMimeType mime = QMimeDatabase().mimeTypeForUrl(path);
+            if (!mime.name().isEmpty()) {
                 hstr += "\r\nContent-Type: ";
-                hstr += ptr->name().toLatin1().constData();
+                hstr += mime.name().toLatin1().constData();
             }
         }
         //

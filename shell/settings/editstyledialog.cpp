@@ -34,8 +34,8 @@ using KDevelop::ISourceFormatter;
 using KDevelop::SettingsWidget;
 using KDevelop::SourceFormatterStyle;
 
-EditStyleDialog::EditStyleDialog(ISourceFormatter *formatter, const KMimeType::Ptr &mime,
-        const SourceFormatterStyle &style, QWidget *parent)
+EditStyleDialog::EditStyleDialog(ISourceFormatter* formatter, const QMimeType& mime,
+        const SourceFormatterStyle& style, QWidget* parent)
 		: KDialog(parent), m_sourceFormatter(formatter), m_mimeType(mime), m_style( style )
 {
 	m_content = new QWidget();

@@ -26,6 +26,8 @@
 #include <QFile>
 #include <QTimer>
 #include <QMutexLocker>
+#include <QMimeType>
+#include <QMimeDatabase>
 #include <QApplication>
 
 #include <kdebug.h>
@@ -86,19 +88,19 @@ PartController::~PartController()
 }
 
 //MOVE BACK TO DOCUMENTCONTROLLER OR MULTIBUFFER EVENTUALLY
-bool PartController::isTextType( KMimeType::Ptr mimeType )
+bool PartController::isTextType(const QMimeType& mimeType)
 {
     bool isTextType = false;
-    if ( d->m_textTypes.contains( mimeType->name() ) )
+    if (d->m_textTypes.contains(mimeType.name()))
     {
         isTextType = true;
     }
 
     // is this regular text - open in editor
     return ( isTextType
-             || mimeType->is( "text/plain" )
-             || mimeType->is( "text/html" )
-             || mimeType->is( "application/x-zerosize" ) );
+             || mimeType.inherits("text/plain")
+             || mimeType.inherits("text/html")
+             || mimeType.inherits("application/x-zerosize"));
 }
 
 KTextEditor::Editor* PartController::editorPart() const
@@ -149,7 +151,7 @@ bool PartController::canCreatePart(const KUrl& url)
     if ( url.isEmpty() )
         mimeType = QString::fromLatin1("text/plain");
     else
-        mimeType = KMimeType::findByUrl( url )->name();
+        mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
 
     KService::List offers = KMimeTypeTrader::self()->query(
                                 mimeType,
@@ -168,7 +170,7 @@ KParts::Part* PartController::createPart( const KUrl & url, const QString& prefe
     else if ( !url.isValid() )
         return 0;
     else
-        mimeType = KMimeType::findByUrl( url )->name();
+        mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
 
     KParts::Part* part = createPart( mimeType, preferredPart );
     if( part )

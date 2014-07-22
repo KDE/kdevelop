@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include <QStringList>
+#include <QMimeDatabase>
 
 #include <KLocalizedString>
 
@@ -364,7 +365,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
 
     KUrl url = file.toUrl();
 
-    KMimeType::Ptr mime = KMimeType::findByUrl(url);
+    QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
     QVector<int> removedLines;
 
     for(int pos = sortedChanges.size()-1; pos >= 0; --pos) {

@@ -80,7 +80,7 @@ public:
     KParts::ReadOnlyPart* readOnly( KParts::Part *part ) const;
     KParts::ReadWritePart* readWrite( KParts::Part *part ) const;
 
-    bool isTextType( KMimeType::Ptr mimeType );
+    bool isTextType(const QMimeType& mimeType);
 
 
     virtual void setActiveView( KTextEditor::View * view );

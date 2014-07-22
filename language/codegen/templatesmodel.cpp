@@ -28,7 +28,8 @@
 #include <KDebug>
 #include <KConfigGroup>
 #include <KLocale>
-#include <KMimeType>
+#include <QMimeType>
+#include <QMimeDatabase>
 #include <KUrl>
 
 #include <QFileInfo>
@@ -352,10 +353,10 @@ QString TemplatesModel::loadTemplateFile(const QString& fileName)
     QFileInfo info(fileName);
     QString destination = saveLocation + info.baseName();
 
-    KMimeType::Ptr mimeType = KMimeType::findByUrl(KUrl(fileName));
-    kDebug() << "Loaded file" << fileName << "with type" << mimeType->name();
+    QMimeType mimeType = QMimeDatabase().mimeTypeForFile(fileName);
+    kDebug() << "Loaded file" << fileName << "with type" << mimeType.name();
 
-    if (mimeType->name() == "application/x-desktop")
+    if (mimeType.name() == "application/x-desktop")
     {
         kDebug() << "Loaded desktop file" << info.absoluteFilePath() << ", compressing";
 #ifdef Q_WS_WIN

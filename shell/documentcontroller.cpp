@@ -242,11 +242,11 @@ struct DocumentControllerPrivate {
             doc=documents.value(url);
         else
         {
-            KMimeType::Ptr mimeType;
+            QMimeType mimeType;
 
             if (DocumentController::isEmptyDocumentUrl(url))
             {
-                mimeType = KMimeType::mimeType("text/plain");
+                mimeType = QMimeDatabase().mimeTypeForName("text/plain");
             }
             else if (!url.isValid())
             {
@@ -264,25 +264,25 @@ struct DocumentControllerPrivate {
                 }
                 // enfore text mime type in order to create a kate part editor which then can be used to create the file
                 // otherwise we could end up opening e.g. okteta which then crashes, see: https://bugs.kde.org/id=326434
-                mimeType = KMimeType::mimeType("text/plain");
+                mimeType = QMimeDatabase().mimeTypeForName("text/plain");
             }
             else
             {
-                mimeType = KMimeType::findByUrl( url );
-                
-                if( !url.isLocalFile() && mimeType->isDefault() )
+                mimeType = QMimeDatabase().mimeTypeForUrl(url);
+
+                if(!url.isLocalFile() && mimeType.isDefault())
                 {
                     // fall back to text/plain, for remote files without extension, i.e. COPYING, LICENSE, ...
                     // using a synchronous KIO::MimetypeJob is hazardous and may lead to repeated calls to
                     // this function without it having returned in the first place
                     // and this function is *not* reentrant, see assert below:
                     // Q_ASSERT(!documents.contains(url) || documents[url]==doc);
-                    mimeType = KMimeType::mimeType("text/plain");
+                    mimeType = QMimeDatabase().mimeTypeForName("text/plain");
                 }
             }
 
             // is the URL pointing to a directory?
-            if ( mimeType->is( "inode/directory" ) )
+            if (mimeType.inherits(QStringLiteral("inode/directory")))
             {
                 kDebug() << "cannot open directory:" << url.url();
                 return 0;
@@ -292,13 +292,13 @@ struct DocumentControllerPrivate {
             {
                 // Try to find a plugin that handles this mimetype
                 QVariantMap constraints;
-                constraints.insert("X-KDevelop-SupportedMimeTypes", mimeType->name());
+                constraints.insert("X-KDevelop-SupportedMimeTypes", mimeType.name());
                 Core::self()->pluginController()->pluginForExtension(QString(), QString(), constraints);
             }
             
-            if( factories.contains( mimeType->name() ) )
+            if( factories.contains(mimeType.name()))
             {
-                doc = factories[mimeType->name()]->create(url, Core::self());
+                doc = factories[mimeType.name()]->create(url, Core::self());
             }
             
             if(!doc) {
@@ -313,7 +313,7 @@ struct DocumentControllerPrivate {
                     doc = new PartDocument(url, Core::self());
                 } else
                 {
-                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType->name()), i18nc("@title:window", "Could Not Find Editor"),
+                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType.name()), i18nc("@title:window", "Could Not Find Editor"),
                                                                 KStandardGuiItem::yes(), KStandardGuiItem::no(), "AskOpenWithTextEditor");
                     if (openAsText == KMessageBox::Yes)
                         doc = new TextDocument(url, Core::self(), _encoding);
@@ -405,8 +405,8 @@ struct DocumentControllerPrivate {
                 if(Core::self()->uiControllerInternal()->arrangeBuddies()) {
                     // If buddy is not set, look for a (usually) plugin which handles this URL's mimetype
                     // and use its IBuddyDocumentFinder, if available, to find a buddy document
-                    if(!buddy && doc->mimeType()) {
-                        QString mime = doc->mimeType()->name();
+                    if(!buddy && doc->mimeType().isValid()) {
+                        QString mime = doc->mimeType().name();
                         IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(mime);
                         if(buddyFinder) {
                             buddy = findBuddyDocument(url, buddyFinder);
@@ -456,7 +456,7 @@ struct DocumentControllerPrivate {
                     if(activeView)
                         activeDoc = dynamic_cast<Sublime::UrlDocument *>(activeView->document());
                     if(activeDoc && Core::self()->uiControllerInternal()->arrangeBuddies()) {
-                        QString mime = KMimeType::findByUrl(activeDoc->url())->name();
+                        QString mime = QMimeDatabase().mimeTypeForUrl(activeDoc->url()).name();
                         buddyFinder = IBuddyDocumentFinder::finderForMimeType(mime);
                     }
 

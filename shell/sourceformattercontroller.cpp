@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <QVariant>
 #include <QStringList>
 #include <QRegExp>
+#include <QMimeDatabase>
 #include <KPluginInfo>
 #include <KDebug>
 
@@ -112,7 +113,7 @@ void SourceFormatterController::documentLoaded( IDocument* doc )
 	if (!doc->textDocument()) {
 		return;
 	}
-	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
+	QMimeType mime = QMimeDatabase().mimeTypeForUrl(doc->url());
 	adaptEditorIndentationMode( doc->textDocument(), formatterForMimeType(mime) );
 }
 
@@ -126,7 +127,7 @@ SourceFormatterController::~SourceFormatterController()
 
 ISourceFormatter* SourceFormatterController::formatterForUrl(const KUrl &url)
 {
-	KMimeType::Ptr mime = KMimeType::findByUrl(url);
+	QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
 	return formatterForMimeType(mime);
 }
 KConfigGroup SourceFormatterController::configuration() const
@@ -134,22 +135,22 @@ KConfigGroup SourceFormatterController::configuration() const
 	return Core::self()->activeSession()->config()->group( "SourceFormatter" );
 }
 
-ISourceFormatter* SourceFormatterController::findFirstFormatterForMimeType( const KMimeType::Ptr& mime ) const
+ISourceFormatter* SourceFormatterController::findFirstFormatterForMimeType(const QMimeType& mime ) const
 {
 	static QHash<QString, ISourceFormatter*> knownFormatters;
-	if (knownFormatters.contains(mime->name()))
-		return knownFormatters[mime->name()];
+	if (knownFormatters.contains(mime.name()))
+		return knownFormatters[mime.name()];
 	
 	foreach( IPlugin* p, Core::self()->pluginController()->allPluginsForExtension( "org.kdevelop.ISourceFormatter" ) ) {
 		KPluginInfo info = Core::self()->pluginController()->pluginInfo( p );
 		ISourceFormatter *iformatter = p->extension<ISourceFormatter>();
 		QSharedPointer<SourceFormatter> formatter(createFormatterForPlugin(iformatter));
-		if( formatter->supportedMimeTypes().contains(mime->name()) ) {
-			knownFormatters[mime->name()] = iformatter;
+		if( formatter->supportedMimeTypes().contains(mime.name()) ) {
+			knownFormatters[mime.name()] = iformatter;
 			return iformatter;
 		}
 	}
-	knownFormatters[mime->name()] = 0;
+	knownFormatters[mime.name()] = 0;
 	return 0;
 }
 
@@ -183,12 +184,12 @@ SourceFormatter* SourceFormatterController::createFormatterForPlugin(ISourceForm
 	return formatter;
 }
 
-ISourceFormatter* SourceFormatterController::formatterForMimeType(const KMimeType::Ptr &mime)
+ISourceFormatter* SourceFormatterController::formatterForMimeType(const QMimeType& mime)
 {
 	if( !m_enabled || !isMimeTypeSupported( mime ) ) {
 		return 0;
 	}
-	QString formatter = configuration().readEntry( mime->name(), "" );
+	QString formatter = configuration().readEntry( mime.name(), "" );
 
 	if( formatter.isEmpty() )
 	{
@@ -198,14 +199,14 @@ ISourceFormatter* SourceFormatterController::formatterForMimeType(const KMimeTyp
 	QStringList formatterinfo = formatter.split( "||", QString::SkipEmptyParts );
 
 	if( formatterinfo.size() != 2 ) {
-		kDebug() << "Broken formatting entry for mime:" << mime << "current value:" << formatter;
+		kDebug() << "Broken formatting entry for mime:" << mime.name() << "current value:" << formatter;
 		return 0;
 	}
 
 	return Core::self()->pluginControllerInternal()->extensionForPlugin<ISourceFormatter>( "org.kdevelop.ISourceFormatter", formatterinfo.at(0) );
 }
 
-bool SourceFormatterController::isMimeTypeSupported(const KMimeType::Ptr &mime)
+bool SourceFormatterController::isMimeTypeSupported(const QMimeType& mime)
 {
 	if( findFirstFormatterForMimeType( mime ) ) {
 		return true;
@@ -213,16 +214,17 @@ bool SourceFormatterController::isMimeTypeSupported(const KMimeType::Ptr &mime)
 	return false;
 }
 
-QString SourceFormatterController::indentationMode(const KMimeType::Ptr &mime)
+QString SourceFormatterController::indentationMode(const QMimeType& mime)
 {
-	if (mime->is("text/x-c++src") || mime->is("text/x-chdr") ||
-	        mime->is("text/x-c++hdr") || mime->is("text/x-csrc") ||
-	        mime->is("text/x-java") || mime->is("text/x-csharp"))
+	if (mime.inherits("text/x-c++src") || mime.inherits("text/x-chdr") ||
+		mime.inherits("text/x-c++hdr") || mime.inherits("text/x-csrc") ||
+		mime.inherits("text/x-java") || mime.inherits("text/x-csharp")) {
 		return "cstyle";
+	}
 	return "none";
 }
 
-QString SourceFormatterController::addModelineForCurrentLang(QString input, const KUrl& url, const KMimeType::Ptr& mime)
+QString SourceFormatterController::addModelineForCurrentLang(QString input, const KUrl& url, const QMimeType& mime)
 {
 	if( !isMimeTypeSupported(mime) )
 		return input;
@@ -308,7 +310,7 @@ void SourceFormatterController::activeDocumentChanged(IDocument* doc)
 	bool enabled = false;
 
 	if (doc) {
-		KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
+		QMimeType mime = QMimeDatabase().mimeTypeForUrl(doc->url());
 		if (isMimeTypeSupported(mime))
 			enabled = true;
 	}
@@ -324,10 +326,10 @@ void SourceFormatterController::beautifySource()
 		return;
 	KTextEditor::Document* doc = view->document();
 	// load the appropriate formatter
-	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
+	QMimeType mime = QMimeDatabase().mimeTypeForUrl(doc->url());
 	ISourceFormatter *formatter = formatterForMimeType(mime);
         if( !formatter ) {
-            kDebug() << "no formatter available for" << mime;
+            kDebug() << "no formatter available for" << mime.name();
             return;
         }
 
@@ -369,10 +371,10 @@ void SourceFormatterController::beautifyLine()
 	if (!view)
 		return;
 	// load the appropriate formatter
-	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
+	QMimeType mime = QMimeDatabase().mimeTypeForUrl(doc->url());
 	ISourceFormatter *formatter = formatterForMimeType(mime);
 	if( !formatter ) {
-		kDebug() << "no formatter available for" << mime;
+		kDebug() << "no formatter available for" << mime.name();
 		return;
 	}
 
@@ -393,7 +395,7 @@ void SourceFormatterController::beautifyLine()
 	view->setCursorPosition(KTextEditor::Cursor(cursor.line() + 1, 0));
 }
 
-void SourceFormatterController::formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime)
+void SourceFormatterController::formatDocument(KDevelop::IDocument* doc, ISourceFormatter* formatter, const QMimeType& mime)
 {
 	// We don't use KTextEditor::Document directly, because CodeRepresentation transparently works
 	// around a possible tab-replacement incompatibility between kate and kdevelop
@@ -517,8 +519,8 @@ void SourceFormatterController::formatFiles(KUrl::List &list)
 	//! \todo IStatus
 	for (int fileCount = 0; fileCount < list.size(); fileCount++) {
 		// check mimetype
-		KMimeType::Ptr mime = KMimeType::findByUrl(list[fileCount]);
-		kDebug() << "Checking file " << list[fileCount].pathOrUrl() << " of mime type " << mime->name() << endl;
+		QMimeType mime = QMimeDatabase().mimeTypeForUrl(list[fileCount]);
+		kDebug() << "Checking file " << list[fileCount].pathOrUrl() << " of mime type " << mime.name() << endl;
 		ISourceFormatter *formatter = formatterForMimeType(mime);
 		if (!formatter) // unsupported mime type
 			continue;
@@ -586,9 +588,9 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
 	return ext;
 }
 
-SourceFormatterStyle SourceFormatterController::styleForMimeType( const KMimeType::Ptr& mime )
+SourceFormatterStyle SourceFormatterController::styleForMimeType(const QMimeType& mime)
 {
-	QStringList formatter = configuration().readEntry( mime->name(), "" ).split( "||", QString::SkipEmptyParts );
+	QStringList formatter = configuration().readEntry( mime.name(), "" ).split( "||", QString::SkipEmptyParts );
 	if( formatter.count() == 2 )
 	{
 		SourceFormatterStyle s( formatter.at( 1 ) );

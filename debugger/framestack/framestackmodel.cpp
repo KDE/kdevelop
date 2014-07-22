@@ -21,10 +21,11 @@
 #include "framestackmodel.h"
 
 #include <QIcon>
+#include <QMimeType>
+#include <QMimeDatabase>
 
 #include <KDebug>
 #include <KLocalizedString>
-#include <KMimeType>
 
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idebugcontroller.h"
@@ -169,8 +170,8 @@ QVariant FrameStackModel::data(const QModelIndex& index, int role) const
                 }
                 return ret;
             } else if (role == Qt::DecorationRole) {
-                KMimeType::Ptr p = KMimeType::findByUrl(frame.file);
-                return QIcon::fromTheme(p->iconName());
+                QMimeType mime = QMimeDatabase().mimeTypeForUrl(frame.file);
+                return QIcon::fromTheme(mime.iconName());
             }
         }
     }

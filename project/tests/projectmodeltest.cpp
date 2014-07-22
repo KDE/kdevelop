@@ -23,7 +23,6 @@
 #include <QtCore/QThread>
 #include <QMimeType>
 #include <QMimeDatabase>
-#include <KMimeType>
 #include <QtTest/QTest>
 #include <QSignalSpy>
 

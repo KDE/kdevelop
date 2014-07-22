@@ -18,6 +18,8 @@
  ***************************************************************************/
 #include "partdocument.h"
 
+#include <QMimeDatabase>
+
 #include <KMessageBox>
 #include <KLocale>
 
@@ -73,9 +75,9 @@ KParts::Part *PartDocument::partForView(QWidget *view) const
 //KDevelop::IDocument implementation
 
 
-KMimeType::Ptr PartDocument::mimeType() const
+QMimeType PartDocument::mimeType() const
 {
-    return KMimeType::findByUrl(url());
+    return QMimeDatabase().mimeTypeForUrl(url());
 }
 
 KTextEditor::Document *PartDocument::textDocument() const
