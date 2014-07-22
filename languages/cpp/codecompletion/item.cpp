@@ -179,10 +179,9 @@ void executeSignalSlotCompletionItem( KTextEditor::View* view, const KTextEditor
     int nesting = 0, position = 0;
     for( ; position < suffixText.size(); ++position ) {
       QChar c = suffixText.at( position );
-      char ascii = c.toAscii();
       bool isDelimiter = false;
 
-      switch( ascii ) {
+      switch( c.unicode() ) {
       case '(' : ++nesting; break;
       case ')' : --nesting; break;
       case ',' :

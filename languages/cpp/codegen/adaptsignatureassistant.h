@@ -26,6 +26,7 @@
 #include <language/duchain/topducontext.h>
 
 #include <KUrl>
+#include <QPointer>
 
 namespace KTextEditor {
 class View;
@@ -69,7 +70,7 @@ class AdaptSignatureAssistant : public StaticAssistant
     //old signature of the _other_side
     Signature m_oldSignature;
     KUrl m_document;
-    QWeakPointer<KTextEditor::View> m_view;
+    QPointer<KTextEditor::View> m_view;
 
   private slots:
     void parseJobFinished(KDevelop::ParseJob*);

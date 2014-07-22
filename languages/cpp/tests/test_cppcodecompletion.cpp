@@ -1077,7 +1077,7 @@ void TestCppCodeCompletion::testConstructorUsageCompletion()
   QFETCH(QStringList, args);
   QFETCH(QStringList, not_args);
 
-  TopDUContext* context = parse( code.toAscii(), DumpNone /*DumpDUChain | DumpAST */);
+  TopDUContext* context = parse( code.toLatin1(), DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
 
   CompletionItemTester tester(context, "void k() { A *a = new A(");
@@ -1130,7 +1130,7 @@ void TestCppCodeCompletion::testParentConstructor()
 {
   QFETCH(QString, code);
   QFETCH(QString, completion);
-  TopDUContext* context = parse(code.toAscii(), DumpNone);
+  TopDUContext* context = parse(code.toLatin1(), DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
   CompletionItemTester tester(context, "void");  // Force a function context
   Cpp::ImplementationHelperItem* constructorItem = dynamic_cast<Cpp::ImplementationHelperItem*>(tester.items[0].data());
@@ -3424,7 +3424,7 @@ void TestCppCodeCompletion::testExecuteKeepWord_data()
 void TestCppCodeCompletion::testExecuteKeepWord()
 {
   QFETCH(QString, code);
-  TopDUContext* top = parse(code.toAscii(), DumpAll);
+  TopDUContext* top = parse(code.toLatin1(), DumpAll);
 
   KTextEditor::Editor* editor = KTextEditor::Editor::instance();
   QVERIFY(editor);

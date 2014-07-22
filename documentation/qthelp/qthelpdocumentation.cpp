@@ -180,7 +180,7 @@ void QtHelpDocumentation::setUserStyleSheet(QWebView* view, const QUrl& url)
           << "#qtdocheader .qtref { position: absolute !important; top: 5px !important; right: 0 !important; }\n";
     }
     file->close();
-    view->settings()->setUserStyleSheetUrl(KUrl(file->fileName()));
+    view->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(file->fileName()));
 
     delete m_lastStyleSheet.data();
     m_lastStyleSheet = file;

@@ -2422,7 +2422,7 @@ void TestDUChain::testAssignmentOperators()
   }
   operators.append("}\n");
 
-  LockedTopDUContext top( parse(operators.toAscii(), DumpAll) );
+  LockedTopDUContext top( parse(operators.toLatin1(), DumpAll) );
 
   QCOMPARE(top->childContexts().count(), 3);
 

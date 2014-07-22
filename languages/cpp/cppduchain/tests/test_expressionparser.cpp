@@ -71,7 +71,7 @@ QTEST_MAIN(TestExpressionParser)
 
 char* debugString( const QString& str ) {
   char* ret = new char[str.length()+1];
-  QByteArray b = str.toAscii();
+  QByteArray b = str.toLatin1();
   strcpy( ret, b.data() );
   return ret;
 }

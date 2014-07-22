@@ -24,6 +24,7 @@
 
 #include <QtCore/QMap>
 #include <QtCore/QUrl>
+#include <QPointer>
 #include <QAction>
 #include <interfaces/idocumentation.h>
 
@@ -66,7 +67,7 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
         const QMap<QString, QUrl> m_info;
         const QMap<QString, QUrl>::const_iterator m_current;
         QWebView* lastView;
-        QWeakPointer<QTemporaryFile> m_lastStyleSheet;
+        QPointer<QTemporaryFile> m_lastStyleSheet;
 };
 
 class HomeDocumentation : public KDevelop::IDocumentation
