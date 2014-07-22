@@ -23,16 +23,6 @@
 #include <language/duchain/indexedstring.h>
 #include <util/path.h>
 
-namespace{
-//TODO: Port the model to the Path api.
-KUrl projectFolder( KDevelop::IProject* project )
-{
-    auto url = project->path().toUrl();
-    url.adjustPath( KUrl::AddTrailingSlash );
-    return url;
-}
-}
-
 ProjectPathsModel::ProjectPathsModel( QObject* parent )
     : QAbstractListModel( parent ), project( 0 )
 {
@@ -180,7 +170,7 @@ bool ProjectPathsModel::removeRows( int row, int count, const QModelIndex& paren
 
 void ProjectPathsModel::addPath( const KUrl& url )
 {
-    if( !projectFolder(project).isParentOf(url) ) {
+    if( !project->path().isParentOf(KDevelop::Path(url)) ) {
         return;
     }
 
@@ -208,9 +198,9 @@ QString ProjectPathsModel::sanitizeUrl( KUrl url, bool needRelative ) const
 {
     Q_ASSERT( project );
 
-    url.cleanPath();
     if( needRelative )
-        url = KUrl::relativeUrl( projectFolder(project), url );
+        return project->path().relativePath( KDevelop::Path( url ) );
+    url.cleanPath();
     return url.pathOrUrl( KUrl::RemoveTrailingSlash );
 }
 
@@ -221,7 +211,7 @@ QString ProjectPathsModel::sanitizePath( const QString& path, bool expectRelativ
 
     KUrl url;
     if( expectRelative ) {
-        url = projectFolder(project);
+        url = project->path().toUrl();
         url.addPath(path);
     } else {
         url = path;

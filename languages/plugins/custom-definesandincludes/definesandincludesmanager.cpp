@@ -148,8 +148,9 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
 
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
-
-        includes += KDevelop::toPathList(findConfigForItem(readPaths(cfg), item).includes);
+        foreach (const QString& inc, findConfigForItem(readPaths(cfg), item).includes) {
+            includes += Path(inc);
+        }
     }
 
     if ( type & ProjectSpecific ) {

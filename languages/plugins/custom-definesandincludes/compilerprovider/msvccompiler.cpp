@@ -116,11 +116,11 @@ QHash<QString, QString> MsvcCompiler::defines() const
 Path::List MsvcCompiler::includes() const
 {
     QStringList _includePaths = QProcessEnvironment::systemEnvironment().value( "INCLUDE" ).split( ";", QString::SkipEmptyParts );
-    QStringList includePaths;
+    Path::List includePaths;
     foreach( const QString &include, _includePaths ) {
-        includePaths.append( QDir::fromNativeSeparators( include ) );
+        includePaths.append( Path( QDir::fromNativeSeparators( include ) ) );
     }
-    return KDevelop::toPathList( includePaths );
+    return includePaths;
 }
 
 MsvcCompiler::MsvcCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName):
