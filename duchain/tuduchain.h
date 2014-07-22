@@ -44,6 +44,9 @@
 
 #include <unordered_map>
 
+/// Turn on for debugging the declaration building
+#define IF_DEBUG(x)
+
 template<CXCursorKind CK, bool isDefinition, bool isClassMember, class Enable = void>
 struct DeclType;
 template<CXCursorKind CK, class Enable = void>
@@ -105,8 +108,10 @@ private:
         EnableIf<IsDefinition == Decision::Maybe && IsInClass != Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor parent)
     {
-        const bool decision = clang_isCursorDefinition(cursor);
-        return decision ?
+        IF_DEBUG(kDebug() << "IsInClass:" << IsInClass << "- isDefinition:" << IsDefinition;)
+
+        const bool isDefinition = clang_isCursorDefinition(cursor);
+        return isDefinition ?
           dispatchCursor<CK, IsInClass, Decision::True>(cursor, parent) :
           dispatchCursor<CK, IsInClass, Decision::False>(cursor, parent);
     }
@@ -118,6 +123,8 @@ private:
         EnableIf<IsInClass != Decision::Maybe && IsDefinition != Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor /*parent*/)
     {
+        IF_DEBUG(kDebug() << "IsInClass:" << IsInClass << "- isDefinition:" << IsDefinition;)
+
         constexpr bool isClassMember = IsInClass == Decision::True;
         constexpr bool isDefinition = IsDefinition == Decision::True;
         constexpr bool hasContext = CursorKindTraits::isFunction(CK) || (IsDefinition == Decision::True);
@@ -138,6 +145,8 @@ private:
     CXChildVisitResult buildDeclaration(CXCursor cursor)
     {
         auto id = makeId(cursor);
+        IF_DEBUG(kDebug() << "id:" << id << "- CK:" << CK << "- DeclType:" << typeid(DeclType).name() << "- hasContext:" << hasContext;)
+
         if (hasContext) {
             auto context = createContext<CK, CursorKindTraits::contextType(CK)>(cursor, id);
             createDeclaration<CK, DeclType>(cursor, id, context);

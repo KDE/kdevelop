@@ -22,6 +22,8 @@
 #ifndef TEMPLATEHELPERS_H
 #define TEMPLATEHELPERS_H
 
+#include <QDebug>
+
 enum class Decision
 {
     True,
@@ -34,5 +36,15 @@ namespace detail { enum class enabler {}; }
 constexpr detail::enabler dummy = {};
 template <bool Condition>
 using EnableIf = typename std::enable_if<Condition, detail::enabler>::type;
+
+inline QDebug operator<<(QDebug dbg, Decision decision)
+{
+    switch (decision) {
+    case Decision::True:  dbg << "true"; break;
+    case Decision::False: dbg << "false"; break;
+    default:              dbg << "maybe"; break;
+    }
+    return dbg;
+}
 
 #endif //TEMPLATEHELPERS_H
