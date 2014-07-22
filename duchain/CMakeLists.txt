@@ -4,6 +4,7 @@ kde4_add_library(kdevclangduchain SHARED
     clangproblem.cpp
     clangtypes.cpp
     debugvisitor.cpp
+    duchainutils.cpp
     tuduchain.cpp
     clangpch.cpp
     clanghelpers.cpp

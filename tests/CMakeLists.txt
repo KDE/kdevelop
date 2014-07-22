@@ -56,6 +56,16 @@ target_link_libraries(test_duchain
     kdevclangduchain
 )
 
+kde4_add_unit_test(test_duchainutils
+    test_duchainutils.cpp
+)
+
+target_link_libraries(test_duchainutils
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    ${QT_QTTEST_LIBRARY}
+    kdevclangduchain
+)
+
 kde4_add_unit_test(test_problems
     test_problems.cpp
 )
