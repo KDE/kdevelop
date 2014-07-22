@@ -240,8 +240,23 @@ void TUDUChain::contextImportDecl(DUContext* context, const DeclarationPointer& 
         context->addImportedParentContext(import);
 }
 
-KDevelop::Identifier TUDUChain::makeId(CXCursor cursor) const
+Identifier TUDUChain::makeId(CXCursor cursor) const
 {
+    CXCursorKind kind = clang_getCursorKind(cursor);
+    if (kind == CXCursor_CXXMethod) {
+        // we need to special-case on out-of-line definitions of functions
+        // we need to find the fully-qualified name of that declaration right away,
+        // because out-of-line definitions are not within a context that qualifies them further
+        const bool isDefinition = clang_isCursorDefinition(cursor);
+        const auto lexicalParentCursor = clang_getCursorLexicalParent(cursor);
+        const auto semanticalParentCursor = clang_getCursorSemanticParent(cursor);
+        const bool isOutOfLine = !clang_equalCursors(lexicalParentCursor, semanticalParentCursor);
+        if (isDefinition && isOutOfLine) {
+            const QString scope(ClangString(clang_getCursorSpelling(semanticalParentCursor)));
+            return Identifier(IndexedString(scope + "::" + ClangString(clang_getCursorSpelling(cursor))));
+        }
+    }
+
     return Identifier(IndexedString(ClangString(clang_getCursorSpelling(cursor))));
 }
 
