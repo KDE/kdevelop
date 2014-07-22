@@ -25,7 +25,6 @@
 #include <ghproviderplugin.h>
 #include <ghproviderwidget.h>
 
-
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(KDevGHProviderFactory, registerPlugin<gh::ProviderPlugin>();)
