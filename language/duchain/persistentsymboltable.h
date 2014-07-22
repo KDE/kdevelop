@@ -162,7 +162,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
     static PersistentSymbolTable& self();
 
     //Very expensive: Checks for problems in the symbol table
-    void selfAnalysis();
+    void dump(const QTextStream& out);
     
     //Clears the internal cache. Should be called regularly to save memory
     //The duchain must be read-locked

@@ -572,8 +572,7 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
         
         QString name = it->left(it->indexOf(' '));
         QString value = it->right(it->size()-name.size()-1);
-        
-        kDebug() << "last line" << *it;
+
         if(name=="author")
             annotation->setAuthor(value);
         else if(name=="author-mail") {} //TODO: do smth with the e-mail?

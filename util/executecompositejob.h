@@ -31,9 +31,12 @@ class KDEVPLATFORMUTIL_EXPORT ExecuteCompositeJob : public KCompositeJob
 {
 Q_OBJECT
 public:
-    ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jobs);
+    ExecuteCompositeJob(QObject* parent = 0, const QList<KJob*>& jobs = {});
     ~ExecuteCompositeJob();
+
     virtual void start();
+
+    virtual bool addSubjob(KJob* job) override;
 
     const QList<KJob*> &subjobs() const;
 public Q_SLOTS:

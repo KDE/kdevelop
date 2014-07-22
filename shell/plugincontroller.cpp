@@ -462,6 +462,8 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         auto factory = loader.factory();
         if (factory) {
             plugin = factory->create<IPlugin>(d->core);
+        } else {
+            kWarning() << "Failed to load" << pluginId << "-" << loader.errorString();
         }
     }
 

@@ -22,11 +22,6 @@
 
 #include "parsejob.h"
 
-#include <cassert>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
-
 #include <QFile>
 #include <QByteArray>
 #include <QMutex>

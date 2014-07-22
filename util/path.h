@@ -31,8 +31,6 @@
 
 namespace KDevelop {
 
-class IndexedString;
-
 /**
  * @brief Path data type optimized for memory consumption.
  *

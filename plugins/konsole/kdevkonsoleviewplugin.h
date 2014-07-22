@@ -13,6 +13,7 @@
 #define KDEVPLATFORM_PLUGIN_KDEVKONSOLEVIEWPLUGIN_H
 
 #include <interfaces/iplugin.h>
+
 #include <QtCore/QVariant>
 
 class KDevKonsoleViewFactory;
@@ -21,14 +22,20 @@ class KPluginFactory;
 class KDevKonsoleViewPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
+
 public:
     KDevKonsoleViewPlugin( KPluginFactory*, QObject *parent, const QVariantList & = QVariantList() );
     virtual ~KDevKonsoleViewPlugin();
-    virtual void unload();
+
+    virtual void unload() override;
+    virtual bool hasError() const override;
+    virtual QString errorDescription() const override;
+
     KPluginFactory* konsoleFactory() const;
+
 private:
-    class KDevKonsoleViewFactory *m_factory;
     KPluginFactory* m_konsoleFactory;
+    KDevKonsoleViewFactory *m_viewFactory;
 };
 
 #endif

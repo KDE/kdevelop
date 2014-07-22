@@ -27,7 +27,6 @@
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
-#include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/idocument.h>
 #include <project/projectmodel.h>
@@ -257,92 +256,14 @@ void BuilderJob::updateJobName()
 
 void BuilderJob::start()
 {
-    #if 0
-    ///Running the same builder twice may result in serious problems, so kill jobs already running on the same project
-    QList<QPointer<KJob> > jobs;
-    foreach(KJob* job, ICore::self()->runController()->currentJobs()) {
-        kDebug() << "running" << job;
-        jobs << job;
-    }
-    
-    for(QList< QPointer< KJob > >::iterator it = jobs.begin(); it != jobs.end(); ++it)
-    {
-        QPointer< KJob > job = *it;
-        if(!job)
-            continue;
-        
-        BuilderJob* bJob = dynamic_cast<BuilderJob*>(job.data());
-        if( bJob && bJob != this )
-        {
-            kDebug() << "killing running builder job, due to new started build";
-
-            //Copy the subjobs into QPointers first, as we never know what is deleted when
-            QList<QPointer<KJob> > subJobs;
-            foreach(KJob* subJob, bJob->subjobs())
-                subJobs << subJob;
-            
-//             while(!subJobs.empty()) {
-//                 if(subJobs.back() && subJobs.back()->capabilities() & KJob::Killable)
-//                     subJobs.back()->kill(EmitResult);
-//                 subJobs.pop_front();
-//             }
-            if(job && job->capabilities() & KJob::Killable)
-                job->kill(EmitResult);
-        }
-    }
-    #endif
-    
     // Automatically save all documents before starting to build
     // might need an option to turn off at some point
     // Also should be moved into the builder and there try to find target(s) for the given item and then just save the documents of that target -> list??
-    if( ICore::self()->activeSession()->config()->group("Project Manager").readEntry( "Save All Documents Before Building", true ) ) 
+    if( ICore::self()->activeSession()->config()->group("Project Manager").readEntry( "Save All Documents Before Building", true ) )
     {
         ICore::self()->documentController()->saveAllDocuments( IDocument::Silent );
     }
 
-    if(hasSubjobs())
-        ICore::self()->runController()->registerJob( subjobs().first() );
-    else
-        emitResult();
-}
-
-void BuilderJob::slotResult( KJob* job )
-{
-    //call parent implementation for default behaviour
-    KCompositeJob::slotResult( job );
-    if( ( !error() || !d->failOnFirstError ) && hasSubjobs() ) 
-    {
-        // start next build;
-        ICore::self()->runController()->registerJob( subjobs().first() );
-    } else 
-    {
-        emitResult();
-    }
-}
-
-bool BuilderJob::addSubjob(KJob* job)
-{
-    // work-around for kdelibs bug: https://bugs.kde.org/show_bug.cgi?id=230692
-    // (fixed in 4.11)
-    // TODO: remove this method overwrite as soon as we depend on kdelibs 4.11
-    bool success = KCompositeJob::addSubjob(job);
-    // if job's parent != this => we're using kdelibs <= 4.10
-    if (job->parent() != this) {
-        // set the parent to 0, so the original parent won't delete this job
-        // KCompositeJob takes care of deletion
-        job->setParent(0);
-    }
-    return success;
-}
-
-
-void BuilderJob::setStopOnFail( bool stopOnFail )
-{
-    d->failOnFirstError = stopOnFail;
-}
-
-bool BuilderJob::stopOnFail() const
-{
-    return d->failOnFirstError;
+    ExecuteCompositeJob::start();
 }
 

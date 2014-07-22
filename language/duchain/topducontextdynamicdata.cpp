@@ -585,13 +585,9 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     QByteArray topContextData = file.read(readValue);
 
     DUChainBaseData* topData = reinterpret_cast<DUChainBaseData*>(topContextData.data());
-/*    IndexedString language = static_cast<TopDUContextData*>(topData)->m_language;
-    if(!language.isEmpty()) {*/
-      ///@todo Load the language if it isn't loaded yet, problem: We're possibly not in the foreground thread!
-//     }
     TopDUContext* ret = dynamic_cast<TopDUContext*>(DUChainItemSystem::self().create(topData));
     if(!ret) {
-      kWarning() << "Cannot load a top-context, the requered language-support is probably not loaded";
+      kWarning() << "Cannot load a top-context from file" << file.fileName() << "- the required language-support for handling ID" << topData->classId << "is probably not loaded";
       return 0;
     }
 
@@ -600,15 +596,11 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
 
     TopDUContextDynamicData& target(*ret->m_dynamicData);
 
-//     kDebug() << "loaded" << ret->url().str() << ret->ownIndex() << "import-count:" << ret->importedParentContexts().size() << ret->d_func()->m_importedContextsSize();
-
     target.m_data.clear();
     target.m_dataLoaded = false;
     target.m_onDisk = true;
     ret->rebuildDynamicData(0, topContextIndex);
     target.m_topContextData.append(qMakePair(topContextData, (uint)0));
-//     kDebug() << "loaded" << ret->url().str() << ret->ownIndex() << "import-count:" << ret->importedParentContexts().size() << ret->d_func()->m_importedContextsSize();
-
     return ret;
   }else{
     return 0;

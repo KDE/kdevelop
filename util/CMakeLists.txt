@@ -19,6 +19,7 @@ set(kdevplatformutil_LIB_SRCS
     fileutils.cpp
     shellutils.cpp
     multilevellistview.cpp
+    objectlist.cpp
     placeholderitemproxymodel.cpp
     projecttestjob.cpp
     path.cpp
@@ -78,6 +79,7 @@ install( FILES
     spinlock.h
     fileutils.h
     multilevellistview.h
+    objectlist.h
     placeholderitemproxymodel.h
     projecttestjob.h
     path.h
