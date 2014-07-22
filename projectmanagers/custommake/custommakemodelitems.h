@@ -12,19 +12,6 @@
 #define CUSTOMMAKEMODELITEMS_H
 
 #include <project/projectmodel.h>
-namespace KDevelop
-{
-class IProject;
-}
-
-template<typename T1,typename T2> struct QPair;
-// template<typename T1,typename T2> class QHash;
-#include <QHash>
-#include <KUrl>
-template<typename T1> class QList;
-class QString;
-class CustomMakeTreeSynchronizer;
-class CustomMakeManager;
 
 class CustomMakeTargetItem : public KDevelop::ProjectTargetItem
 {

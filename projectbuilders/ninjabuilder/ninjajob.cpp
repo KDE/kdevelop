@@ -17,6 +17,8 @@
 */
 
 #include "ninjajob.h"
+#include "kdevninjabuilderplugin.h"
+
 #include <KProcess>
 #include <KUrl>
 #include <KDebug>
@@ -32,11 +34,12 @@
 #include <interfaces/iprojectcontroller.h>
 #include <QFile>
 
-NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, QObject* parent)
+NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, KDevNinjaBuilderPlugin* parent)
     : OutputExecuteJob(parent)
     , m_isInstalling(false)
     , m_idx(item->index())
     , m_signal(signal)
+    , m_plugin(parent)
 {
     setToolTitle(i18n("Ninja"));
     setCapabilities(Killable);
@@ -126,14 +129,18 @@ QStringList NinjaJob::privilegedExecutionCommand() const
 void NinjaJob::emitProjectBuilderSignal(KJob* job)
 {
     Q_ASSERT(!m_signal.isEmpty());
-    
+
+    if (!m_plugin)
+        return;
+
     KDevelop::ProjectBaseItem* it = item();
     if(!it)
         return;
+
     if(job->error()==0)
-        QMetaObject::invokeMethod(parent(), m_signal, Q_ARG(KDevelop::ProjectBaseItem*, it));
+        QMetaObject::invokeMethod(m_plugin, m_signal, Q_ARG(KDevelop::ProjectBaseItem*, it));
     else
-        QMetaObject::invokeMethod(parent(), "failed", Q_ARG(KDevelop::ProjectBaseItem*, it));
+        QMetaObject::invokeMethod(m_plugin, "failed", Q_ARG(KDevelop::ProjectBaseItem*, it));
 }
 
 void NinjaJob::postProcessStderr( const QStringList& lines )

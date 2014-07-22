@@ -21,10 +21,14 @@
 
 #include <outputview/outputexecutejob.h>
 
+#include <QPointer>
+
 namespace KDevelop {
     class OutputModel;
     class ProjectBaseItem;
 }
+
+class KDevNinjaBuilderPlugin;
 
 class KProcess;
 class KUrl;
@@ -37,9 +41,12 @@ class NinjaJob : public KDevelop::OutputExecuteJob
         Failed
     };
     public:
-        NinjaJob( KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, QObject* parent );
+        NinjaJob( KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, KDevNinjaBuilderPlugin* parent );
+
         void setIsInstalling( bool isInstalling );
         static QString ninjaBinary();
+
+        KDevelop::ProjectBaseItem* item() const;
 
         virtual KUrl workingDirectory() const;
         virtual QStringList privilegedExecutionCommand() const;
@@ -52,10 +59,10 @@ class NinjaJob : public KDevelop::OutputExecuteJob
         void emitProjectBuilderSignal(KJob* job);
 
     private:
-        KDevelop::ProjectBaseItem* item() const;
         bool m_isInstalling;
         QPersistentModelIndex m_idx;
         QByteArray m_signal;
+        QPointer<KDevNinjaBuilderPlugin> m_plugin;
 
         void appendLines( const QStringList& lines );
 };
