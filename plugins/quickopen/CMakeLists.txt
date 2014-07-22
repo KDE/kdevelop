@@ -34,4 +34,4 @@ install(TARGETS kdevquickopen DESTINATION ${PLUGIN_INSTALL_DIR})
 
 configure_file(kdevquickopen.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevquickopen.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevquickopen.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES kdevquickopen.rc DESTINATION ${DATA_INSTALL_DIR}/kdevquickopen)
+install(FILES kdevquickopen.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevquickopen)

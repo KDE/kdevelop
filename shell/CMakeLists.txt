@@ -127,7 +127,7 @@ install(FILES
 
 install(TARGETS kdevplatformshell EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevdebugger )
-install( FILES kdevsessionui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsession )
-install( FILES kdevsourceformatter.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsourceformatter )
+install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevdebugger )
+install( FILES kdevsessionui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevsession )
+install( FILES kdevsourceformatter.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevsourceformatter )
 install( FILES AssistantButton.qml assistantpopup.qml DESTINATION ${DATA_INSTALL_DIR}/kdevelop )

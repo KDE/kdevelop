@@ -26,6 +26,6 @@ install(TARGETS kdevprojectmanagerview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 configure_file(kdevprojectmanagerview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectmanagerview.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectmanagerview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevprojectmanagerview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevprojectmanagerview )
+install( FILES kdevprojectmanagerview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevprojectmanagerview )
 
 

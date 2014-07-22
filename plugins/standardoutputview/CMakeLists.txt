@@ -19,5 +19,5 @@ install(TARGETS kdevstandardoutputview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 configure_file(kdevstandardoutputview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevstandardoutputview.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevstandardoutputview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevstandardoutputview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevstandardoutputview )
+install( FILES kdevstandardoutputview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevstandardoutputview )
 

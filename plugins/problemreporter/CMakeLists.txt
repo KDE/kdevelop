@@ -23,4 +23,4 @@ install(TARGETS kdevproblemreporter DESTINATION ${PLUGIN_INSTALL_DIR})
 
 configure_file(kdevproblemreporter.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevproblemreporter.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevproblemreporter.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES kdevproblemreporter.rc DESTINATION ${DATA_INSTALL_DIR}/kdevproblemreporter)
+install(FILES kdevproblemreporter.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevproblemreporter)
