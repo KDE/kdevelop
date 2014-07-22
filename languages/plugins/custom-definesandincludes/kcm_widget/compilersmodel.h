@@ -24,31 +24,46 @@
 #ifndef COMPILERMODEL_H
 #define COMPILERMODEL_H
 
-#include <QAbstractTableModel>
+#include <QAbstractItemModel>
+#include <QItemSelection>
 #include <QHash>
 
 #include "../compilerprovider/icompiler.h"
 
-class CompilersModel : public QAbstractTableModel
+class TreeItem;
+
+class CompilersModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
+    enum SpecialRole {
+        CompilerDataRole = Qt::UserRole + 1
+    };
+
     CompilersModel( QObject* parent = 0 );
+
     void setCompilers( const QVector<CompilerPointer>& compilers );
     QVector<CompilerPointer> compilers() const;
-    void addCompiler(const CompilerPointer& compiler);
+    QModelIndex addCompiler(const CompilerPointer& compiler);
+    void updateCompiler(const QItemSelection& compiler);
 
+signals:
+    /// emitted whenever new compiler added or existing one modified/deleted.
+    void compilerChanged();
+
+public:
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const override;
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const override;
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const override;
-    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole ) override;
-    virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() ) override;
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+    virtual QModelIndex parent(const QModelIndex& child) const override;
+    virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
 private:
-    QVector<CompilerPointer> m_compilers;
+    TreeItem* m_rootItem;
 };
 
 #endif // COMPILERMODEL_H

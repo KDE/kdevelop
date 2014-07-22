@@ -24,159 +24,288 @@
 #include "compilersmodel.h"
 
 #include <KLocale>
+#include <QVariant>
 
 #include "../compilerprovider/icompilerprovider.h"
 
-namespace
+
+//Represents a single row in the table
+class TreeItem
 {
-enum Columns {
-    NameColumn,
-    PathColumn,
-    NUM_COLUMNS
+public:
+    TreeItem(const QList<QVariant> &data, TreeItem *parent = nullptr)
+        :m_itemData(data)
+        ,m_parentItem(parent)
+    {}
+
+    virtual ~TreeItem()
+    {
+        removeChilds();
+    }
+
+    void appendChild(TreeItem *item)
+    {
+        m_childItems.append(item);
+    }
+
+    void removeChild(int row)
+    {
+        m_childItems.removeAt(row);
+    }
+
+    TreeItem *child(int row)
+    {
+        return m_childItems.value(row);
+    }
+
+    int childCount() const
+    {
+        return m_childItems.count();
+    }
+
+    int columnCount() const
+    {
+        return m_itemData.count();
+    }
+
+    virtual QVariant data(int column) const
+    {
+        return m_itemData.value(column);
+    }
+
+    TreeItem *parent()
+    {
+        return m_parentItem;
+    }
+
+    int row() const
+    {
+        if (m_parentItem) {
+            return m_parentItem->m_childItems.indexOf(const_cast<TreeItem*>(this));
+        }
+
+        return 0;
+    }
+
+    void removeChilds()
+    {
+        qDeleteAll(m_childItems);
+        m_childItems.clear();
+    }
+
+private:
+    QList<TreeItem*> m_childItems;
+    QList<QVariant> m_itemData;
+    TreeItem *m_parentItem;
 };
+
+class CompilerItem : public TreeItem {
+public:
+    CompilerItem(const CompilerPointer& compiler, TreeItem* parent)
+        : TreeItem( {compiler->name(), compiler->factoryName()}, parent)
+    , m_compiler(compiler)
+    {}
+
+    CompilerPointer compiler()
+    {
+        return m_compiler;
+    }
+
+    virtual QVariant data(int column) const override
+    {
+        return !column ? m_compiler->name() : m_compiler->factoryName();
+    }
+
+private:
+    CompilerPointer m_compiler;
+};
+
+namespace {
+TreeItem* autoDetectedRootItem(TreeItem* root)
+{
+    return root->child(0);
+}
+
+TreeItem* manualRootItem(TreeItem* root)
+{
+    return root->child(1);
+}
 }
 
 CompilersModel::CompilersModel(QObject* parent)
-    : QAbstractTableModel(parent)
+    : QAbstractItemModel(parent)
+    , m_rootItem(new TreeItem( {i18n("Name"), i18n("Type")}))
 {
+    m_rootItem->appendChild(new TreeItem( {i18n("Auto-detected"), QString()}, m_rootItem));
+    m_rootItem->appendChild(new TreeItem( {i18n("Manual"), QString()}, m_rootItem));
 }
 
 QVariant CompilersModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid() || (role != Qt::DisplayRole && role != Qt::EditRole)) {
+    if (!index.isValid() || (role != Qt::DisplayRole && role != CompilerDataRole)) {
         return QVariant();
     }
 
-    if (index.row() < 0 || index.row() >= rowCount() || index.column() < 0 || index.column() >= columnCount()) {
-        return QVariant();
-    }
+    TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
 
-    if (index.row() < m_compilers.count()) {
-        switch (index.column()) {
-        case NameColumn:
-            return m_compilers.at(index.row())->name();
-        case PathColumn:
-            return m_compilers.at(index.row())->path();
-        default:
-            Q_ASSERT(0);
-            break;
+    if (role == CompilerDataRole) {
+        QVariant v;
+        if (auto c = dynamic_cast<CompilerItem*>(item)) {
+            if (item->parent() == manualRootItem(m_rootItem)) {
+                v.setValue<CompilerPointer>(c->compiler());
+            }
         }
+        return v;
     }
-    return QVariant();
+
+    return item->data(index.column());
 }
 
 int CompilersModel::rowCount(const QModelIndex& parent) const
 {
-    if (parent.isValid()) {
+    TreeItem *parentItem;
+    if (parent.column() > 0) {
         return 0;
     }
-    return m_compilers.count();
+
+    if (!parent.isValid()) {
+        parentItem = m_rootItem;
+    } else {
+        parentItem = static_cast<TreeItem*>(parent.internalPointer());
+    }
+
+    return parentItem->childCount();
 }
 
 int CompilersModel::columnCount(const QModelIndex& parent) const
 {
     if (parent.isValid()) {
-        return 0;
+        return static_cast<TreeItem*>(parent.internalPointer())->columnCount();
+    } else {
+        return m_rootItem->columnCount();
     }
-    return 2;
 }
 
 QVariant CompilersModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-        switch (section) {
-        case NameColumn:
-            return i18n("Name");
-        case PathColumn:
-            return i18n("Path");
-        default:
-            Q_ASSERT(0);
-            break;
-        }
+        return m_rootItem->data(section);
     }
     return QVariant();
 }
 
 Qt::ItemFlags CompilersModel::flags(const QModelIndex& index) const
 {
-    if (!index.isValid() || index.row() >= rowCount()) {
+    if (!index.isValid()) {
         return 0;
     }
 
-    if (index.row() == m_compilers.count() && index.column() == 1) {
-        return 0;
-    }
-    auto flgs = Qt::ItemIsSelectable;
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+}
 
-    return m_compilers[index.row()]->editable() ? Qt::ItemFlags(flgs | Qt::ItemIsEditable | Qt::ItemIsEnabled) : flgs;
+QModelIndex CompilersModel::index(int row, int column, const QModelIndex& parent) const
+{
+    if (!hasIndex(row, column, parent)) {
+        return QModelIndex();
+    }
+
+    TreeItem *parentItem;
+
+    if (!parent.isValid()) {
+        parentItem = m_rootItem;
+    } else {
+        parentItem = static_cast<TreeItem*>(parent.internalPointer());
+    }
+
+    TreeItem* childItem = parentItem->child(row);
+    if (childItem) {
+        return createIndex(row, column, childItem);
+    } else {
+        return QModelIndex();
+    }
+}
+
+QModelIndex CompilersModel::parent(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
+        return QModelIndex();
+    }
+
+    TreeItem *childItem = static_cast<TreeItem*>(index.internalPointer());
+    TreeItem *parentItem = childItem->parent();
+
+    if (parentItem == m_rootItem) {
+        return QModelIndex();
+    }
+
+    return createIndex(parentItem->row(), 0, parentItem);
 }
 
 QVector< CompilerPointer > CompilersModel::compilers() const
 {
     QVector<CompilerPointer> compilers;
-    for (auto c: m_compilers) {
-        if (!c->name().isEmpty() && !c->path().isEmpty()) {
-            compilers.append(c);
+    for (int idx = 0; idx < 2; idx++) {
+        for (int i = 0; i< m_rootItem->child(idx)->childCount(); i++) {
+            auto compiler = static_cast<CompilerItem*>(m_rootItem->child(idx)->child(i))->compiler();
+            if (!compiler->name().isEmpty() && !compiler->path().isEmpty()) {
+                compilers.append(compiler);
+            }
         }
     }
+
     return compilers;
 }
 
 void CompilersModel::setCompilers(const QVector< CompilerPointer >& compilers)
 {
     beginResetModel();
-    m_compilers.clear();
-    for (auto c: compilers) {
-        if (c->factoryName().isEmpty()) {
+    autoDetectedRootItem(m_rootItem)->removeChilds();
+    manualRootItem(m_rootItem)->removeChilds();
+
+    for (auto compiler: compilers) {
+        if (compiler->factoryName().isEmpty()) {
             continue;
         }
-        m_compilers.append(c);
+        TreeItem* parent = autoDetectedRootItem(m_rootItem);
+        if (compiler->editable()) {
+            parent = manualRootItem(m_rootItem);
+        }
+        parent->appendChild(new CompilerItem(compiler, parent));
     }
+
     endResetModel();
+}
+
+QModelIndex CompilersModel::addCompiler(const CompilerPointer& compiler)
+{
+    beginInsertRows(index(1, 0), manualRootItem(m_rootItem)->childCount(), manualRootItem(m_rootItem)->childCount());
+    Q_ASSERT(!compiler->factoryName().isEmpty());
+    manualRootItem(m_rootItem)->appendChild(new CompilerItem(compiler, manualRootItem(m_rootItem)));
+    endInsertRows();
+
+    emit compilerChanged();
+    return index(manualRootItem(m_rootItem)->childCount()-1, 0, index(1, 0));
 }
 
 bool CompilersModel::removeRows(int row, int count, const QModelIndex& parent)
 {
-    if (row >= 0 && count > 0 && row < m_compilers.count()) {
+    if (row >= 0 && count > 0 &&  parent.isValid() && static_cast<TreeItem*>(parent.internalPointer()) == manualRootItem(m_rootItem)) {
         beginRemoveRows(parent, row, row + count - 1);
         for (int i = 0; i < count; ++i) {
-            m_compilers.remove(row);
+            manualRootItem(m_rootItem)->removeChild(row);
         }
         endRemoveRows();
+
+        emit compilerChanged();
         return true;
     }
     return false;
 }
 
-bool CompilersModel::setData(const QModelIndex& index, const QVariant& value, int role)
+void CompilersModel::updateCompiler(const QItemSelection& compiler)
 {
-    if (!index.isValid() || role != Qt::EditRole) {
-        return false;
+    for (const auto& idx: compiler.indexes()) {
+        emit dataChanged(idx, idx);
     }
-    if (index.row() < 0 || index.row() >= rowCount() || index.column() < 0 || index.column() >= columnCount()) {
-        return false;
-    }
-
-    switch (index.column()) {
-    case NameColumn:
-        m_compilers[index.row()]->setName(value.toString());
-        break;
-    case PathColumn:
-        m_compilers[index.row()]->setPath(value.toString());
-        break;
-    default:
-        Q_ASSERT(0);
-        return false;
-    }
-
-    emit dataChanged(index, index);
-    return true;
-}
-
-void CompilersModel::addCompiler(const CompilerPointer& compiler)
-{
-    beginInsertRows({}, m_compilers.size(), m_compilers.size());
-    Q_ASSERT(!compiler->factoryName().isEmpty());
-    m_compilers.append(compiler);
-    endInsertRows();
+    emit compilerChanged();
 }

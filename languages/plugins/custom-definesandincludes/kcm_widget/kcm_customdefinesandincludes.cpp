@@ -92,11 +92,26 @@ void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
     settings->writePaths( cfg, configWidget->paths() );
 
     if (auto cp = compilerProvider()) {
-        settings->writeCurrentCompiler(cfg ,configWidget->currentCompiler());
+        settings->writeUserDefinedCompilers(configWidget->compilers());
+
+        settings->writeCurrentCompiler(cfg, configWidget->currentCompiler());
 
         cp->setCompiler(project(), settings->currentCompiler(cfg));
 
-        settings->writeUserDefinedCompilers(configWidget->compilers());
+        auto compilers = compilerProvider()->compilers();
+
+        for (auto c: configWidget->compilers()) {
+            if (!compilers.contains(c)) {
+                compilerProvider()->registerCompiler(c);
+            }
+        }
+
+        compilers = compilerProvider()->compilers();
+        for (auto compiler: compilers) {
+            if (!configWidget->compilers().contains(compiler)) {
+                compilerProvider()->unregisterCompiler(compiler);
+            }
+        }
     }
 
     if ( settings->needToReparseCurrentProject( cfg ) ) {
