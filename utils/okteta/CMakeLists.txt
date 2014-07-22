@@ -40,4 +40,4 @@ install(TARGETS kdevokteta DESTINATION ${PLUGIN_INSTALL_DIR})
 
 configure_file(kdevokteta.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevokteta.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevokteta.desktop DESTINATION  ${SERVICES_INSTALL_DIR} )
-install(FILES kdevokteta.rc DESTINATION  ${DATA_INSTALL_DIR}/kdevokteta )
+install(FILES kdevokteta.rc DESTINATION  ${KXMLGUI_INSTALL_DIR}/kdevokteta )
