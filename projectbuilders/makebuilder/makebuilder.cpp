@@ -24,15 +24,12 @@
 #include <project/projectmodel.h>
 #include <project/builderjob.h>
 
-#include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
-#include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
 
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KDebug>
-#include <KCompositeJob>
+#include <KConfigGroup>
 
 K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
 K_EXPORT_PLUGIN(MakeBuilderFactory(KAboutData("kdevmakebuilder","kdevmakebuilder", ki18n("Make Builder"), "0.1", ki18n("Support for building Make projects"), KAboutData::License_GPL)))
@@ -125,16 +122,16 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
 {
     ///Running the same builder twice may result in serious problems,
     ///so kill jobs already running on the same project
-    foreach(KJob* job, KDevelop::ICore::self()->runController()->currentJobs())
+    foreach (MakeJob* makeJob, m_activeMakeJobs.data())
     {
-        MakeJob* makeJob = dynamic_cast<MakeJob*>(job);
-        if( makeJob && item && makeJob->item() && makeJob->item()->project() == item->project() ) {
-            kDebug() << "killing running make job, due to new started build on same project";
-            job->kill(KJob::EmitResult);
+        if(item && makeJob->item() && makeJob->item()->project() == item->project()) {
+            kDebug() << "killing running ninja job, due to new started build on same project:" << makeJob;
+            makeJob->kill(KJob::EmitResult);
         }
     }
 
     MakeJob* job = new MakeJob(this, item, c, overrideTargets, variables);
+    m_activeMakeJobs.append(job);
 
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
     return job;

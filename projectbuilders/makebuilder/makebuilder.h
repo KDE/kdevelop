@@ -30,6 +30,8 @@
 #include "imakebuilder.h"
 #include "makejob.h"
 
+#include <util/objectlist.h>
+
 namespace KDevelop {
 class ProjectBaseItem;
 }
@@ -82,6 +84,9 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void jobFinished(KJob* job);
+
+private:
+    KDevelop::ObjectList<MakeJob> m_activeMakeJobs;
 };
 
 #endif // KDEVMAKEBUILDER_H
