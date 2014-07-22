@@ -41,6 +41,8 @@ class NinjaJob : public KDevelop::OutputExecuteJob
         void setIsInstalling( bool isInstalling );
         static QString ninjaBinary();
 
+        KDevelop::ProjectBaseItem* item() const;
+
         virtual KUrl workingDirectory() const;
         virtual QStringList privilegedExecutionCommand() const;
 
@@ -52,7 +54,6 @@ class NinjaJob : public KDevelop::OutputExecuteJob
         void emitProjectBuilderSignal(KJob* job);
 
     private:
-        KDevelop::ProjectBaseItem* item() const;
         bool m_isInstalling;
         QPersistentModelIndex m_idx;
         QByteArray m_signal;

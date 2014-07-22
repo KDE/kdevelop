@@ -93,6 +93,16 @@ static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
 
 NinjaJob* KDevNinjaBuilderPlugin::runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal)
 {
+    ///Running the same builder twice may result in serious problems,
+    ///so kill jobs already running on the same project
+    foreach (NinjaJob* ninjaJob, m_activeNinjaJobs.data())
+    {
+        if(item && ninjaJob->item() && ninjaJob->item()->project() == item->project() ) {
+            kDebug() << "killing running ninja job, due to new started build on same project:" << ninjaJob;
+            ninjaJob->kill(KJob::EmitResult);
+        }
+    }
+
     // Build arguments using data from KCM
     QStringList jobArguments;
     KSharedConfig::Ptr config = item->project()->projectConfiguration();
@@ -122,7 +132,9 @@ NinjaJob* KDevNinjaBuilderPlugin::runNinja(KDevelop::ProjectBaseItem* item, cons
     }
     jobArguments << args;
 
-    return new NinjaJob(item, jobArguments, signal, this);
+    NinjaJob* job = new NinjaJob(item, jobArguments, signal, this);
+    m_activeNinjaJobs.append(job);
+    return job;
 }
 
 KJob* KDevNinjaBuilderPlugin::build(KDevelop::ProjectBaseItem* item)

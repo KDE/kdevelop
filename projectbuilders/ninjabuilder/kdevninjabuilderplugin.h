@@ -21,6 +21,7 @@
 
 #include <interfaces/iplugin.h>
 #include <project/interfaces/iprojectbuilder.h>
+#include <util/objectlist.h>
 #include <KUrl>
 #include <QVariantList>
 
@@ -45,6 +46,9 @@ class KDevNinjaBuilderPlugin : public KDevelop::IPlugin, KDevelop::IProjectBuild
         void failed( KDevelop::ProjectBaseItem* item);
         void installed(KDevelop::ProjectBaseItem* item);
         void cleaned(KDevelop::ProjectBaseItem* item);
+
+    private:
+        KDevelop::ObjectList<NinjaJob> m_activeNinjaJobs;
 };
 
 #endif // KDEVNINJABUILDERPLUGIN_H
