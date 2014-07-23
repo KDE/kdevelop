@@ -247,6 +247,24 @@ void FilteringStrategyTest::testNativeAppErrorFilterStrategy_data()
     QTest::addColumn<int>("column");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("itemtype");
 
+    // TODO: qt-connect-* and friends shouldn't be error items but warnings items instead
+    // this needs refactoring in outputfilteringstrategies, though...
+    QTest::newRow("qt-connect-nosuch-slot")
+        << "QObject::connect: No such slot Foo::bar() in /foo/bar.cpp:313"
+        << "/foo/bar.cpp"
+        << 312 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qt-connect-nosuch-signal")
+        << "QObject::connect: No such signal Foo::bar() in /foo/bar.cpp:313"
+        << "/foo/bar.cpp"
+        << 312 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qt-connect-parentheses-slot")
+        << "QObject::connect: Parentheses expected, slot Foo::bar() in /foo/bar.cpp:313"
+        << "/foo/bar.cpp"
+        << 312 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("qt-connect-parentheses-signal")
+        << "QObject::connect: Parentheses expected, signal Foo::bar() in /foo/bar.cpp:313"
+        << "/foo/bar.cpp"
+        << 312 << 0 << FilteredItem::ErrorItem;
     QTest::newRow("qt-assert")
         << "ASSERT: \"errors().isEmpty()\" in file /tmp/foo/bar.cpp, line 49"
         << "/tmp/foo/bar.cpp"
