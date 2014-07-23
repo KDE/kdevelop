@@ -55,6 +55,53 @@ void TestDUChain::cleanupTestCase()
     TestCore::shutdown();
 }
 
+struct ExpectedComment
+{
+    QString identifier;
+    QString comment;
+};
+Q_DECLARE_METATYPE(ExpectedComment)
+
+void TestDUChain::testComments()
+{
+    QFETCH(QString, code);
+    QFETCH(ExpectedComment, expectedComment);
+
+    TestFile file(code, "cpp");
+    QVERIFY(file.parseAndWait());
+
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+    auto candidates = top->findDeclarations(QualifiedIdentifier(expectedComment.identifier));
+    QVERIFY(!candidates.isEmpty());
+    auto decl = candidates.first();
+    QCOMPARE(QString::fromLocal8Bit(decl->comment()), expectedComment.comment);
+}
+
+void TestDUChain::testComments_data()
+{
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<ExpectedComment>("expectedComment");
+
+    // note: Clang only retrieves the comments when in doxygen-style format (i.e. '///', '/**', '///<')
+    QTest::newRow("invalid1")
+        << "//this is foo\nint foo;"
+        << ExpectedComment{"foo", QString()};
+    QTest::newRow("invalid2")
+        << "/*this is foo*/\nint foo;"
+        << ExpectedComment{"foo", QString()};
+    QTest::newRow("basic1")
+        << "///this is foo\nint foo;"
+        << ExpectedComment{"foo", "this is foo"};
+    QTest::newRow("basic2")
+        << "/**this is foo*/\nint foo;"
+        << ExpectedComment{"foo", "this is foo"};
+    QTest::newRow("enumerator")
+        << "enum Foo { bar1, ///<this is bar1\nbar2 ///<this is bar2\n };"
+        << ExpectedComment{"Foo::bar1", "this is bar1"};
+}
+
 void TestDUChain::testInclude()
 {
     TestFile header("int foo() { return 42; }\n", "h");

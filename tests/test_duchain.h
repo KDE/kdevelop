@@ -31,6 +31,8 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
+    void testComments();
+    void testComments_data();
     void testInclude();
     void testIncludeLocking();
     void testReparse();
