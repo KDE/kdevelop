@@ -113,6 +113,7 @@ QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompleti
 {
     QList<CompletionTreeItemPointer> items;
     QChar lastChar = m_text.size() > 0 ? m_text.at(m_text.size() - 1) : QLatin1Char('\0');
+    bool inQmlObjectScope = (m_duContext->type() == DUContext::Class);
 
     // Start with the function call-tips, because functionCallTips is also responsible
     // for setting m_declarationForTypeMatch
@@ -122,15 +123,14 @@ QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompleti
         // Offer completions for object members and array subscripts
         items << fieldCompletions(
             m_text.left(m_text.size() - 1),
-            lastChar == QLatin1Char('[') ? CompletionItem::QuotesAndBracket : CompletionItem::NoDecoration
+            lastChar == QLatin1Char('[') ? CompletionItem::QuotesAndBracket :
+            inQmlObjectScope ? CompletionItem::Colon : CompletionItem::NoDecoration
         );
     }
 
     // "object." must only display the members of object, the declarations
     // available in the current context.
     if (lastChar != QLatin1Char('.')) {
-        bool inQmlObjectScope = (m_duContext->type() == DUContext::Class && containsOnlySpaces(m_text));
-
         if (inQmlObjectScope) {
             DUChainReadLocker lock;
 
