@@ -33,7 +33,8 @@ struct ObjectListTracker::Private
 };
 
 ObjectListTracker::ObjectListTracker(CleanupBehavior behavior, QObject* parent)
-    : d(new Private{{}, behavior})
+    : QObject(parent)
+    , d(new Private{{}, behavior})
 {
 }
 

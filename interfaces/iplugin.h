@@ -109,7 +109,8 @@ class ContextMenuExtension;
  * - <i>X-KDevelop-Interfaces</i> is a list of extension interfaces that this
  * plugin implements (optional);
  * - <i>X-KDevelop-IRequired</i> is a list of extension interfaces that this
- * plugin depends on (optional);
+ * plugin depends on (optional); A list entry can also be of the form @c interface@pluginname,
+ * in which case a plugin of the given name is required which implements the interface.
  * - <i>X-KDevelop-IOptional</i> is a list of extension interfaces that this
  * plugin will use if they are available (optional);
  * - <i>X-KDevelop-Language</i> is the name of the language the plugin provides 

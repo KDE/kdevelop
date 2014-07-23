@@ -75,15 +75,7 @@ OutputExecuteJobPrivate::OutputExecuteJobPrivate( OutputExecuteJob* owner ) :
     m_status( OutputExecuteJob::JobNotStarted ),
     m_properties( OutputExecuteJob::DisplayStdout ),
     m_filteringStrategy( OutputModel::NoFilter ),
-    m_arguments(),
-    m_privilegedExecutionCommand(),
-    m_workingDirectory(),
-    m_environmentProfile(),
-    m_environmentOverrides(),
-    m_jobName(),
-    m_outputStarted( false ),
-    m_processStdout(),
-    m_processStderr()
+    m_outputStarted( false )
 {
 }
 

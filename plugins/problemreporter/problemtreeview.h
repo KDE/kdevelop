@@ -30,17 +30,19 @@ namespace KDevelop {
   class IDocument;
 }
 
+class ProblemModel;
 class ProblemReporterPlugin;
 
-class ProblemWidget : public QTreeView
+class ProblemTreeView : public QTreeView
 {
   Q_OBJECT
 
 public:
-  ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin);
-  virtual ~ProblemWidget();
+  ProblemTreeView(QWidget* parent, ProblemReporterPlugin* plugin);
+  virtual ~ProblemTreeView();
 
-  class ProblemModel* model() const;
+  ProblemModel* model() const;
+  virtual void setModel(QAbstractItemModel* model) override;
 
   virtual void contextMenuEvent(QContextMenuEvent* );
   virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight,

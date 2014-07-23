@@ -113,7 +113,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
       if(m_declaration->type<EnumerationType>()) {
         EnumerationType::Ptr enumeration = m_declaration->type<EnumerationType>();
-        modifyHtml() += i18n("enumeration %1 ", m_declaration->identifier().toString().toHtmlEscaped());
+        modifyHtml() += i18n("enumeration %1 ", nameHighlight(m_declaration->identifier().toString().toHtmlEscaped()));
       }
 
       if(m_declaration->isForwardDeclaration()) {

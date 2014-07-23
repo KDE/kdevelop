@@ -20,7 +20,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "problemwidget.h"
+#include "problemtreeview.h"
 
 #include <QMenu>
 #include <QCursor>
@@ -47,14 +47,14 @@
 
 using namespace KDevelop;
 
-ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
+ProblemTreeView::ProblemTreeView(QWidget* parent, ProblemReporterPlugin* plugin)
     : QTreeView(parent)
     , m_plugin(plugin)
 {
     setObjectName("Problem Reporter Tree");
     setWindowTitle(i18n("Problems"));
     setWindowIcon( QIcon::fromTheme("dialog-information") ); ///@todo Use a proper icon
-    setRootIsDecorated(true);
+    setRootIsDecorated(false);
     setWhatsThis( i18n( "Problems" ) );
 
     setModel(m_plugin->getModel());
@@ -157,11 +157,11 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     connect(this, SIGNAL(activated(QModelIndex)), SLOT(itemActivated(QModelIndex)));
 }
 
-ProblemWidget::~ProblemWidget()
+ProblemTreeView::~ProblemTreeView()
 {
 }
 
-void ProblemWidget::itemActivated(const QModelIndex& index)
+void ProblemTreeView::itemActivated(const QModelIndex& index)
 {
     if (!index.isValid())
         return;
@@ -180,7 +180,7 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
     m_plugin->core()->documentController()->openDocument(url, start);
 }
 
-void ProblemWidget::resizeColumns()
+void ProblemTreeView::resizeColumns()
 {
     // Do actual resizing only if the widget is visible and there are not too many items
     const int ResizeRowLimit = 15;
@@ -207,24 +207,30 @@ void ProblemWidget::resizeColumns()
     }
 }
 
-void ProblemWidget::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles)
+void ProblemTreeView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles)
 {
     QTreeView::dataChanged(topLeft, bottomRight, roles);
     resizeColumns();
 }
 
-void ProblemWidget::reset()
+void ProblemTreeView::reset()
 {
     QTreeView::reset();
     resizeColumns();
 }
 
-ProblemModel * ProblemWidget::model() const
+ProblemModel * ProblemTreeView::model() const
 {
     return static_cast<ProblemModel*>(QTreeView::model());
 }
 
-void ProblemWidget::contextMenuEvent(QContextMenuEvent* event) {
+void ProblemTreeView::setModel(QAbstractItemModel* model)
+{
+    Q_ASSERT(qobject_cast<ProblemModel*>(model));
+    QTreeView::setModel(model);
+}
+
+void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event) {
     QModelIndex index = indexAt(event->pos());
     if(index.isValid()) {
         KDevelop::ProblemPointer problem = model()->problemForIndex(index);
@@ -251,7 +257,7 @@ void ProblemWidget::contextMenuEvent(QContextMenuEvent* event) {
     }
 }
 
-void ProblemWidget::showEvent(QShowEvent * event)
+void ProblemTreeView::showEvent(QShowEvent * event)
 {
     Q_UNUSED(event)
 

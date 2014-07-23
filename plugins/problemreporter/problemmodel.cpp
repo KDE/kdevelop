@@ -40,7 +40,25 @@
 #include "problemreporterplugin.h"
 #include "watcheddocumentset.h"
 
+#include <KIcon>
+
 using namespace KDevelop;
+
+namespace {
+KIcon iconForSeverity(ProblemData::Severity severity)
+{
+    switch (severity) {
+    case ProblemData::Hint:
+        return KIcon("dialog-information");
+    case ProblemData::Warning:
+        return KIcon("dialog-warning");
+    case ProblemData::Error:
+        return KIcon("dialog-error");
+    }
+    return KIcon();
+}
+
+}
 
 ProblemModel::ProblemModel(ProblemReporterPlugin * parent)
   : QAbstractItemModel(parent), m_plugin(parent), m_lock(QReadWriteLock::Recursive), m_showImports(false), m_severity(ProblemData::Hint), m_documentSet(0)
@@ -126,6 +144,11 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
         }
         break;
 
+    case Qt::DecorationRole:
+        if (index.column() == 0) {
+            return iconForSeverity(p->severity());
+        }
+        break;
     case Qt::ToolTipRole:
         return p->explanation();
 
