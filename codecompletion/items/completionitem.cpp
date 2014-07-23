@@ -159,7 +159,7 @@ QString CompletionItem::declarationName() const
 {
     ClassFunctionDeclaration* classFuncDecl = dynamic_cast<ClassFunctionDeclaration *>(declaration().data());
 
-    if (classFuncDecl && classFuncDecl->isSignal() && m_decoration == QmlJS::CompletionItem::Colon) {
+    if (classFuncDecl && classFuncDecl->isSignal() && m_decoration == QmlJS::CompletionItem::ColonOrBracket) {
         // Signals, when completed in a QML component context, are transformed into slots
         QString signal = classFuncDecl->identifier().toString();
 
@@ -203,8 +203,17 @@ void CompletionItem::executed(KTextEditor::Document* document, const KTextEditor
         document->replaceText(word, "\"" + base + "\"]");
         break;
 
-    case QmlJS::CompletionItem::Colon:
-        document->replaceText(word, base + ": ");
+    case QmlJS::CompletionItem::ColonOrBracket:
+        if (declaration() && declaration()->abstractType() &&
+            declaration()->abstractType()->whichType() == AbstractType::TypeStructure) {
+            document->replaceText(word, base + " {}");
+
+            if (document->activeView()) {
+                document->activeView()->setCursorPosition(word.end() + KTextEditor::Cursor(0, 2));
+            }
+        } else {
+            document->replaceText(word, base + ": ");
+        }
         break;
 
     case QmlJS::CompletionItem::Brackets:

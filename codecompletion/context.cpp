@@ -124,7 +124,7 @@ QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompleti
         items << fieldCompletions(
             m_text.left(m_text.size() - 1),
             lastChar == QLatin1Char('[') ? CompletionItem::QuotesAndBracket :
-            inQmlObjectScope ? CompletionItem::Colon : CompletionItem::NoDecoration
+            inQmlObjectScope ? CompletionItem::ColonOrBracket : CompletionItem::NoDecoration
         );
     }
 
@@ -139,7 +139,7 @@ QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompleti
             // Note that the properties/signals of parent QML objects are not displayed here
             items << completionsInContext(m_duContext,
                                           CompletionOnlyLocal | CompletionHideWrappers,
-                                          CompletionItem::Colon);
+                                          CompletionItem::ColonOrBracket);
             items << completionsFromImports(CompletionHideWrappers);
             items << completionsInContext(DUContextPointer(m_duContext->topContext()),
                                           CompletionHideWrappers,
