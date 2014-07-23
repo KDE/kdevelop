@@ -30,6 +30,7 @@ private slots:
     void cleanupTestCase();
     void testQMLCustomComponent();
     void testJSUsesBetweenFiles();
+    void testNodeJS();
     void testFiles_data();
     void testFiles();
 

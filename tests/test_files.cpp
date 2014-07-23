@@ -74,6 +74,13 @@ void TestFiles::testJSUsesBetweenFiles()
     parseAndCheck(TEST_FILES_DIR "/js_cross_file_uses/js_variable_definition.js");
 }
 
+void TestFiles::testNodeJS()
+{
+    parseAndCheck(TEST_FILES_DIR "/node_modules/module.js", false); // Ensure that module.js is in the DUChain
+    parseAndCheck(TEST_FILES_DIR "/node.js/module2.js", false);
+    parseAndCheck(TEST_FILES_DIR "/node.js/main.js");
+}
+
 void TestFiles::testFiles_data()
 {
   QTest::addColumn<QString>("fileName");

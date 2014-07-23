@@ -36,6 +36,7 @@
 #include "functiontype.h"
 #include "helper.h"
 #include "cache.h"
+#include "frameworks/nodejs.h"
 
 #include <QtCore/QDirIterator>
 #include <QtCore/QFileInfo>
@@ -87,6 +88,11 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
         // Import the built-in ECMAScript declarations
         if (importedContext && importedContext.data() != currentContext()) {
             currentContext()->addImportedParentContext(importedContext);
+
+            // Initialize Node.js (this initialization is done in this if in order
+            // to avoid having "module" and "exports" declared in ecmascript.js
+            // and imported everywhere, thus appearing multiple times.
+            QmlJS::NodeJS::instance().initialize(this);
         }
     }
 

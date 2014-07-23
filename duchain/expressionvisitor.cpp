@@ -28,6 +28,7 @@
 #include "helper.h"
 #include "functiontype.h"
 #include "parsesession.h"
+#include "frameworks/nodejs.h"
 
 using namespace KDevelop;
 
@@ -222,6 +223,27 @@ bool ExpressionVisitor::visit(QmlJS::AST::FunctionExpression* node)
 
 bool ExpressionVisitor::visit(QmlJS::AST::CallExpression* node)
 {
+    // Special-case functions that have a specific meaning in some frameworks
+    auto functionIdentifier = QmlJS::AST::cast<QmlJS::AST::IdentifierExpression*>(node->base);
+
+    if (functionIdentifier &&
+        node->arguments &&          // One argument
+        !node->arguments->next &&   // But not two
+        functionIdentifier->name.toString() == QLatin1String("require")) {
+        auto moduleName = QmlJS::AST::cast<QmlJS::AST::StringLiteral*>(node->arguments->expression);
+
+        if (moduleName) {
+            encounterLvalue(QmlJS::NodeJS::instance().moduleExports(
+                moduleName->value.toString(),
+                m_context->topContext()->url().str()
+            ));
+        } else {
+            encounterNothing();
+        }
+
+        return false;
+    }
+
     // Find the type of the function called
     node->base->accept(this);
 

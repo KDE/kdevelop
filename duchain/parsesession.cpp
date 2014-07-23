@@ -206,6 +206,13 @@ DUContext* ParseSession::contextFromNode(QmlJS::AST::Node* node) const
 
 ReferencedTopDUContext ParseSession::contextOfFile(const QString& fileName)
 {
+    return contextOfFile(fileName, m_url, m_ownPriority);
+}
+
+ReferencedTopDUContext ParseSession::contextOfFile(const QString& fileName,
+                                                   const KDevelop::IndexedString& url,
+                                                   int ownPriority)
+{
     if (fileName.isEmpty()) {
         return ReferencedTopDUContext();
     }
@@ -219,10 +226,10 @@ ReferencedTopDUContext ParseSession::contextOfFile(const QString& fileName)
 
     if (!moduleContext) {
         // Ask KDevelop to parse the file
-        scheduleForParsing(moduleFileString, m_ownPriority - 1);
+        scheduleForParsing(moduleFileString, ownPriority - 1);
 
         // Then reparse this file, the import will exist
-        scheduleForParsing(m_url, m_ownPriority);
+        scheduleForParsing(url, ownPriority);
 
         return ReferencedTopDUContext();
     } else {

@@ -13,6 +13,8 @@ kde4_add_library(kdevqmljsduchain SHARED
 
     navigation/declarationnavigationcontext.cpp
     navigation/navigationwidget.cpp
+
+    frameworks/nodejs.cpp
 )
 
 target_link_libraries(kdevqmljsduchain LINK_PRIVATE

@@ -150,6 +150,14 @@ public:
     KDevelop::ReferencedTopDUContext contextOfFile(const QString &fileName);
 
     /**
+     * Static version of contextOfFile. The @p url parameter is used to trigger
+     * a reparse of @p url if @p fileName was not yet in the DUChain
+     */
+    static KDevelop::ReferencedTopDUContext contextOfFile(const QString& fileName,
+                                                          const KDevelop::IndexedString& url,
+                                                          int ownPriority);
+
+    /**
      * Schedule for update all the files importing @p context
      */
     void reparseImporters(KDevelop::DUContext* context);
@@ -157,7 +165,7 @@ public:
     /**
      * Schedule a document for update using the default flags of QML/JS
      */
-    void scheduleForParsing(const KDevelop::IndexedString& url, int priority);
+    static void scheduleForParsing(const KDevelop::IndexedString& url, int priority);
 
     /**
      * Dump AST tree to stdout.

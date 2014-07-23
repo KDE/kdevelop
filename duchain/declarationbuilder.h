@@ -30,11 +30,18 @@ namespace KDevelop
     class ClassDeclaration;
 }
 
+namespace QmlJS
+{
+    class NodeJS;
+}
+
 typedef KDevelop::AbstractTypeBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, ContextBuilder> TypeBuilder;
 typedef KDevelop::AbstractDeclarationBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, TypeBuilder> DeclarationBuilderBase;
 
 class KDEVQMLJSDUCHAIN_EXPORT DeclarationBuilder : public DeclarationBuilderBase
 {
+    friend class QmlJS::NodeJS;
+
 public:
     DeclarationBuilder(ParseSession* session);
 
