@@ -258,13 +258,14 @@ bool VCSCommitDiffPatchSource::finishReview(QList< KUrl > selection) {
 
     emit reviewFinished(message, selection);
 
-    VcsJob* job=m_vcs->commit(message, selection, KDevelop::IBasicVersionControl::NonRecursive);
+    VcsJob* job = m_vcs->commit(message, selection, KDevelop::IBasicVersionControl::NonRecursive);
+    if (!job) {
+        return false;
+    }
 
     connect (job, SIGNAL(finished(KJob*)),
              this, SLOT(jobFinished(KJob*)));
     ICore::self()->runController()->registerJob(job);
-
-
     return true;
 }
 
@@ -288,20 +289,18 @@ bool showVcsDiff(IPatchSource* vcsDiff)
     }
 }
 
-VcsDiff VCSStandardDiffUpdater::update() const {
+VcsDiff VCSStandardDiffUpdater::update() const
+{
     QScopedPointer<VcsJob> diffJob(m_vcs->diff(m_url,
                                    KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
                                    KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working)));
-
-    VcsDiff diff;
-    bool correctDiff = diffJob->exec();
-    if (correctDiff)
-        diff = diffJob->fetchResults().value<VcsDiff>();
-
-    if (!correctDiff)
+    const bool success = diffJob ? diffJob->exec() : false;
+    if (!success) {
         KMessageBox::error(0, i18n("Could not create a patch for the current version."));
+        return {};
+    }
 
-    return diff;
+    return diffJob->fetchResults().value<VcsDiff>();
 }
 
 VCSStandardDiffUpdater::VCSStandardDiffUpdater(IBasicVersionControl* vcs, KUrl url) : m_vcs(vcs), m_url(url) {
