@@ -6,7 +6,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9519 )
 
 set(kdevproblemreporter_PART_SRCS
     problemreporterplugin.cpp
-    problemwidget.cpp
+    problemtreeview.cpp
     problemmodel.cpp
     problemhighlighter.cpp
     watcheddocumentset.cpp

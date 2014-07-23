@@ -23,7 +23,6 @@
 
 #include "problemreporterplugin.h"
 
-#include <QTreeWidget>
 #include <QMenu>
 
 #include <klocale.h>
@@ -44,7 +43,7 @@
 #include <language/duchain/duchain.h>
 
 #include "problemhighlighter.h"
-#include "problemwidget.h"
+#include "problemtreeview.h"
 #include "problemmodel.h"
 #include <interfaces/context.h>
 #include <language/interfaces/editorcontext.h>
@@ -65,10 +64,10 @@ public:
 
   virtual QWidget* create(QWidget *parent = 0)
   {
-    ProblemWidget* widget = new ProblemWidget(parent, m_plugin);
+    ProblemTreeView* treeView = new ProblemTreeView(parent, m_plugin);
     ProblemModel* model = m_plugin->getModel();
-    widget->setModel(model);
-    return widget;
+    treeView->setModel(model);
+    return treeView;
   }
 
   virtual Qt::DockWidgetArea defaultPosition()

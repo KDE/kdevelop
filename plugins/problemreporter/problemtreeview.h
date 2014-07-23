@@ -32,13 +32,13 @@ namespace KDevelop {
 
 class ProblemReporterPlugin;
 
-class ProblemWidget : public QTreeView
+class ProblemTreeView : public QTreeView
 {
   Q_OBJECT
 
 public:
-  ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin);
-  virtual ~ProblemWidget();
+  ProblemTreeView(QWidget* parent, ProblemReporterPlugin* plugin);
+  virtual ~ProblemTreeView();
 
   class ProblemModel* model() const;
 
