@@ -224,6 +224,12 @@ ProblemModel * ProblemTreeView::model() const
     return static_cast<ProblemModel*>(QTreeView::model());
 }
 
+void ProblemTreeView::setModel(QAbstractItemModel* model)
+{
+    Q_ASSERT(qobject_cast<ProblemModel*>(model));
+    QTreeView::setModel(model);
+}
+
 void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event) {
     QModelIndex index = indexAt(event->pos());
     if(index.isValid()) {
