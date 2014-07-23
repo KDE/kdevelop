@@ -57,6 +57,7 @@ public:
 private:
     void createObject(const QString& name, int index, DeclarationBuilder* builder);
     QString moduleFileName(const QString& moduleName, const QString& url);
+    QString fileOrDirectoryPath(const QString& baseName);
 
 private:
     typedef QHash<QPair<QString, QString>, QString> CachedModuleFileNamesHash;

@@ -1,5 +1,5 @@
 var m = require("module");
-var m2 = require("./module2.js");
+var m2 = require("./module2");
 var not_found = require("this_module_doesn_exist"); // Don't loop forever in BackgroundParser
 
 /**

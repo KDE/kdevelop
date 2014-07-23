@@ -132,7 +132,7 @@ QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
     if (moduleName.startsWith(QLatin1Char('/')) || moduleName.startsWith(QLatin1Char('.'))) {
         // NOTE: This is not portable to Windows, but the Node.js documentation
         // only talks about module names that start with /, ./ and ../ .
-        fileName = Path(url).cd(QLatin1String("..")).cd(moduleName).toLocalFile();
+        fileName = fileOrDirectoryPath(Path(url).cd(QLatin1String("..")).cd(moduleName).toLocalFile());
         return fileName;
     }
 
@@ -152,18 +152,9 @@ QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
     path.addPath(QLatin1String("../.."));
 
     while (path.segments().size() > 1) {
-        Path basePath = path.cd(QLatin1String("node_modules"));
-        QString jsFile = basePath.cd(moduleName + QLatin1String(".js")).toLocalFile();
-        QString indexFile = basePath.cd(moduleName).cd(QLatin1String("index.js")).toLocalFile();
+        fileName = fileOrDirectoryPath(path.cd(QLatin1String("node_modules")).cd(moduleName).toLocalFile());
 
-        if (QFile::exists(jsFile)) {
-            // /path/node_modules/moduleName.js exists
-            fileName = jsFile;
-            break;
-        } else if (QFile::exists(indexFile)) {
-            // /path/node_modules/moduleName/index.js exists
-            // TODO: package.json files currently not supported
-            fileName = indexFile;
+        if (!fileName.isNull()) {
             break;
         }
 
@@ -172,6 +163,20 @@ QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
     }
 
     return fileName;
+}
+
+QString NodeJS::fileOrDirectoryPath(const QString& baseName)
+{
+    if (QFile::exists(baseName)) {
+        return baseName;
+    } else if (QFile::exists(baseName + QLatin1String(".js"))) {
+        return baseName + QLatin1String(".js");
+    } else if (QFile::exists(baseName + QLatin1String("/index.js"))) {
+        // TODO: package.json files currently not supported
+        return baseName + QLatin1String("/index.js");
+    }
+
+    return QString();
 }
 
 }
