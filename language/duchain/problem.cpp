@@ -201,9 +201,9 @@ QString Problem::sourceString() const
         case ProblemData::DUChainBuilder:
             return i18n("Definition-Use Chain");
         case ProblemData::SemanticAnalysis:
-            return i18n("Semantic Analysis");
+            return i18n("Semantic analysis");
         case ProblemData::ToDo:
-            return i18n("TODO");
+            return i18n("To-do");
         case ProblemData::Unknown:
         default:
             return i18n("Unknown");
