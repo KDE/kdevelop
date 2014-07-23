@@ -34,6 +34,7 @@
 #include <language/assistant/staticassistantsmanager.h>
 #include <language/codegen/basicrefactoring.h>
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchainutils.h>
 #include <language/interfaces/editorcontext.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -131,7 +132,7 @@ const QPair<SimpleRange, SimpleRange> parseProperty(const QString& line, const S
     QStringList split = matchingItem.split(':');
     if ( split.size() != 2 ) {
         // The expression is not of the form foo:bar, thus invalid.
-        return QPair<SimpleRange, SimpleRange>();
+        return qMakePair(SimpleRange::invalid(), SimpleRange::invalid());
     }
     QString key = split.at(0);
     QString value = split.at(1);
@@ -157,8 +158,16 @@ QWidget* KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const KUrl& url,
         // if the property key is listed in the supported properties.
         QPair<SimpleRange, SimpleRange> property = parseProperty(doc->textDocument()->line(position.line), position);
         if ( property.first.isValid() && property.second.isValid() ) {
-            return PropertyPreviewWidget::constructIfPossible(doc->textDocument(), property.first, property.second,
-                                                              textFromDoc(doc, property.first), textFromDoc(doc, property.second));
+            Declaration* decl = DUChainUtils::itemUnderCursor(url, property.first.start);
+
+            return PropertyPreviewWidget::constructIfPossible(
+                doc->textDocument(),
+                property.first,
+                property.second,
+                decl,
+                textFromDoc(doc, property.first),
+                textFromDoc(doc, property.second)
+            );
         }
     }
     // Otherwise, display no special "navigation" widget.

@@ -23,26 +23,31 @@
 #include <QDeclarativeView>
 
 #include <language/editor/documentrange.h>
+#include <language/duchain/declaration.h>
 #include <interfaces/idocument.h>
 
 using namespace KDevelop;
 
 // Describes one supported property, such as "width"
 struct SupportedProperty {
-    SupportedProperty() { };
-    SupportedProperty(const QUrl& qmlfile, const QStringList fixedValues = QStringList())
-        : qmlfile(qmlfile)
-        , possibleFixedValues(fixedValues)
-    { };
+    SupportedProperty(const QUrl& qmlfile,
+                      const QString &typeContains = QString(),
+                      const QString &classContains = QString())
+    : qmlfile(qmlfile),
+      typeContains(typeContains),
+      classContains(classContains)
+    {
+    }
 
     // the absolute (!) URL to the qml file to load when creating a widget
     // for this property
     QUrl qmlfile;
-    // a list of possible values, which is passed to the QML widget. Leave
-    // empty when not needed.
-    // Example use for property "horizontalAlignment", put "Text.AlignHCenter", ... here.
-    // TODO not implemented yet.
-    QStringList possibleFixedValues;
+    // A string that must be contained into the string representation of the
+    // type of the key being matched.
+    QString typeContains;
+    // A string that must be contained into the name of the class in which the
+    // key is declared
+    QString classContains;
 };
 
 // This class is responsible for creating the property widgets for editing QML properties
@@ -60,8 +65,12 @@ public:
     // selected by the user.
     // Returns 0 when the property is not supported, which tells kdevplatform not to
     // display any widget when returned from e.g. specialLanguageObjectNavigationWidget.
-    static QWidget* constructIfPossible(KTextEditor::Document* doc, SimpleRange keyRange, SimpleRange valueRange,
-                                        const QString& key, const QString& value);
+    static QWidget* constructIfPossible(KTextEditor::Document* doc,
+                                        SimpleRange keyRange,
+                                        SimpleRange valueRange,
+                                        Declaration* decl,
+                                        const QString& key,
+                                        const QString& value);
     virtual ~PropertyPreviewWidget();
 
 private:

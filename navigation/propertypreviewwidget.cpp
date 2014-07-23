@@ -29,13 +29,23 @@
 #include <KLocalizedString>
 #include <kdeclarative.h>
 
+#include <language/duchain/ducontext.h>
+#include <language/duchain/duchainlock.h>
+
 // List of supported properties. The string must be the name of the property,
 // which can contain dots if necessary
 QHash<QString, SupportedProperty> PropertyPreviewWidget::supportedProperties;
 
-QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc, SimpleRange keyRange,
-                                                    SimpleRange valueRange, const QString& key, const QString& value)
+QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
+                                                    SimpleRange keyRange,
+                                                    SimpleRange valueRange,
+                                                    Declaration* decl,
+                                                    const QString& key,
+                                                    const QString& value)
 {
+#define PROP(key, filename, type, class) \
+    supportedProperties.insertMulti(key, SupportedProperty(QUrl(base + filename), type, class));
+
     if ( supportedProperties.isEmpty() ) {
         KStandardDirs d;
         QStringList bases = d.findDirs("data", "propertywidgets");
@@ -45,41 +55,63 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc, 
         QString base = bases.first();
 
         // Positioning
-        supportedProperties["width"] = SupportedProperty(QUrl(base + "Width.qml"));
-        supportedProperties["height"] = SupportedProperty(QUrl(base + "Height.qml"));
-        supportedProperties["spacing"] = SupportedProperty(QUrl(base + "Spacing.qml"));
+        PROP("width", "Width.qml", QString(), QString())
+        PROP("height", "Height.qml", QString(), QString())
+        PROP("spacing", "Spacing.qml", QString(), QString())
 
         // Margins
-        supportedProperties["margins"] = SupportedProperty(QUrl(base + "Spacing.qml"));    // matches anchors.margins and anchors { margins: }
-        supportedProperties["leftMargin"] = SupportedProperty(QUrl(base + "Spacing.qml"));
-        supportedProperties["rightMargin"] = SupportedProperty(QUrl(base + "Spacing.qml"));
-        supportedProperties["topMargin"] = SupportedProperty(QUrl(base + "Spacing.qml"));
-        supportedProperties["bottomMargin"] = SupportedProperty(QUrl(base + "Spacing.qml"));
+        PROP("margins", "Spacing.qml", QString(), "QQuickAnchors");         // matches anchors.margins and anchors { margins: }
+        PROP("margins", "Spacing.qml", QString(), "QDeclarativeAnchors");
+        PROP("leftMargin", "Spacing.qml", QString(), "QQuickAnchors");
+        PROP("leftMargin", "Spacing.qml", QString(), "QDeclarativeAnchors");
+        PROP("rightMargin", "Spacing.qml", QString(), "QQuickAnchors");
+        PROP("rightMargin", "Spacing.qml", QString(), "QDeclarativeAnchors");
+        PROP("topMargin", "Spacing.qml", QString(), "QQuickAnchors");
+        PROP("topMargin", "Spacing.qml", QString(), "QDeclarativeAnchors");
+        PROP("bottomMargin", "Spacing.qml", QString(), "QQuickAnchors");
+        PROP("bottomMargin", "Spacing.qml", QString(), "QDeclarativeAnchors");
 
         // Animations
-        supportedProperties["duration"] = SupportedProperty(QUrl(base + "Duration.qml"));
+        PROP("duration", "Duration.qml", QString(), QString())
 
-        // Font
-        supportedProperties["family"] = SupportedProperty(QUrl(base + "FontFamily.qml"));
-        supportedProperties["pointSize"] = SupportedProperty(QUrl(base + "FontSize.qml"));
+        // Font QDeclarativeFontValueType, QQuickFontValueType
+        PROP("family", "FontFamily.qml", QString(), "QDeclarativeFontValueType")
+        PROP("family", "FontFamily.qml", QString(), "QQuickFontValueType")
+        PROP("pointSize", "FontSize.qml", QString(), "QDeclarativeFontValueType")
+        PROP("pointSize", "FontSize.qml", QString(), "QQuickFontValueType")
 
         // Appearance
-        supportedProperties["color"] = SupportedProperty(QUrl(base + "ColorPicker.qml"));
-        supportedProperties["opacity"] = SupportedProperty(QUrl(base + "Opacity.qml"));
+        PROP("opacity", "Opacity.qml", QString(), QString())
+
+        // Type-dependend widgets
+        PROP(QString(), "ColorPicker.qml", "color", QString())
+    }
+#undef PROP
+
+    QList<SupportedProperty> properties;
+
+    properties << supportedProperties.values(key.section(QLatin1Char('.'), -1, -1));
+    properties << supportedProperties.values(QString());
+
+    // Explore each possible supported property and return the first supported widget
+    DUChainReadLocker lock;
+
+    for (const SupportedProperty& property : properties) {
+        if (!decl || !decl->abstractType() || !decl->context() || !decl->context()->owner()) {
+            continue;
+        }
+
+        if (!decl->abstractType()->toString().contains(property.typeContains)) {
+            continue;
+        }
+
+        if (!decl->context()->owner()->toString().contains(property.classContains)) {
+            continue;
+        }
+
+        return new PropertyPreviewWidget(doc, keyRange, valueRange, property, value);
     }
 
-    QHash<QString, SupportedProperty>::iterator item = supportedProperties.find(key);
-
-    if ( item == supportedProperties.end() && key.contains(QLatin1Char('.')) ) {
-        // When a property name is explicit enough (like "margins"), the name itself
-        // is put in supportedProperties, so that the user can enter "anchors.margins"
-        // or "anchors { margins }". Change "anchors.margins" to "margins"
-        item = supportedProperties.find(key.section(QLatin1Char('.'), -1, -1));
-    }
-
-    if ( item != supportedProperties.end() ) {
-        return new PropertyPreviewWidget(doc, keyRange, valueRange, *item, value);
-    }
     return 0;
 }
 
