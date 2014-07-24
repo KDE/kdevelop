@@ -264,9 +264,14 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         modifyHtml() += "<br />" + commentHighlight(comment);
       }
     } else if(!comment.isEmpty()) {
-      comment.replace(QRegExp("<br */>"), "\n"); //do not escape html newlines within the comment
-      comment = Qt::escape(comment);
-      comment.replace('\n', "<br />"); //Replicate newlines in html
+      // if the first paragraph does not contain a tag, we assume that this is a plain-text comment
+      if (!Qt::mightBeRichText(comment)) {
+        // still might contain extra html tags for line breaks (this is the case for doxygen-style comments sometimes)
+        // let's protect them from being removed completely
+        comment.replace(QRegExp("<br */>"), "\n");
+        comment = Qt::escape(comment);
+        comment.replace('\n', "<br />"); //Replicate newlines in html
+      }
       modifyHtml() += commentHighlight(comment);
       modifyHtml() += "<br />";
     }
