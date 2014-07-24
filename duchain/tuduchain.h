@@ -60,6 +60,10 @@ public:
 private:
     static CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData data);
 
+    // Uh oh, this isn't nice. Can we make this better?
+    friend class TestFiles;
+    static bool s_jsonTestRun;
+
     void setIdTypeDecl(CXCursor typeCursor, IdentifiedType *idType) const;
     void contextImportDecl(DUContext *context, const DeclarationPointer &decl) const;
 

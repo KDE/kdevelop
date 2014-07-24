@@ -24,6 +24,8 @@
 
 #include <language/duchain/types/indexedtype.h>
 
+bool TUDUChain::s_jsonTestRun = false;
+
 //BEGIN IdType
 
 template<CXCursorKind CK>
@@ -262,6 +264,18 @@ Identifier TUDUChain::makeId(CXCursor cursor) const
 
 QByteArray TUDUChain::makeComment(CXComment comment) const
 {
+    if (Q_UNLIKELY(s_jsonTestRun)) {
+        auto kind = clang_Comment_getKind(comment);
+        if (kind == CXComment_Text)
+            return {ClangString(clang_TextComment_getText(comment))};
+
+        QByteArray text;
+        int numChildren = clang_Comment_getNumChildren(comment);
+        for (int i = 0; i < numChildren; ++i)
+            text += makeComment(clang_Comment_getChild(comment, i));
+        return text;
+    }
+
     return {ClangString(clang_FullComment_getAsHTML(comment))};
 }
 

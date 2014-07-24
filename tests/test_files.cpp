@@ -19,6 +19,8 @@
 
 #include "test_files.h"
 
+#include "duchain/tuduchain.h"
+
 #include <qtest_kde.h>
 
 #include <language/duchain/duchain.h>
@@ -43,6 +45,8 @@ QTEST_KDEMAIN(TestFiles, GUI)
 
 void TestFiles::initTestCase()
 {
+    TUDUChain::s_jsonTestRun = true;
+
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
