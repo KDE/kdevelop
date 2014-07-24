@@ -208,7 +208,6 @@ void ClangParseJob::run()
         session.setData(createSessionData(pchInclude));
     } else {
         Q_ASSERT(session.url() == document());
-        Q_ASSERT(session.unit());
     }
 
     if (abortRequested() || !session.unit()) {
