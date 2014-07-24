@@ -103,6 +103,11 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
         // also see http://lists.cs.uiuc.edu/pipermail/cfe-commits/Week-of-Mon-20100705/032025.html
         args << "-fspell-checking"; // note: disabled by default in CIndex
     }
+    if (!options.testFlag(DisableDocumentationWarnings)) {
+        // TODO: Check whether this slows down parsing noticably
+        // according to llvm.org/devmtg/2012-11/Gribenko_CommentParsing.pdf this is about 5% with lots (> 10000) of documentation comments
+        args << "-Wdocumentation";
+    }
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> otherArgs;
     otherArgs.reserve(includes.size() + defines.size() + pchInclude.isValid());

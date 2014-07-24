@@ -44,10 +44,11 @@ public:
     using Ptr = KSharedPtr<ParseSessionData>;
 
     enum Option {
-        NoOption,
-        DisableSpellChecking,
-        SkipFunctionBodies,
-        PrecompiledHeader
+        NoOption,                     ///< No special options
+        DisableSpellChecking,         ///< Disable -fspell-checking
+        DisableDocumentationWarnings, ///< Disable -Wdocumentation
+        SkipFunctionBodies,           ///< Pass CXTranslationUnit_SkipFunctionBodies (likely unwanted)
+        PrecompiledHeader             ///< Pass CXTranslationUnit_PrecompiledPreamble and others to cache precompiled headers
     };
     Q_DECLARE_FLAGS(Options, Option)
 
