@@ -63,7 +63,7 @@ class Member(object):
         """
         return '';
 
-class Function(Member):
+class F(Member):
     def __init__(self, returnValue, name, *args):
         """
             A function has a name, a return value, and arguments. Each argument,
@@ -101,7 +101,7 @@ class Function(Member):
             ', '.join([arg[1] for arg in self._args])
         )
 
-class Variable(Member):
+class Var(Member):
     def __init__(self, type, name):
         """
             A variable has a name and a type
@@ -121,19 +121,25 @@ class Variable(Member):
         return self._type
 
 
-class Class(Function):
+class Class(F):
     def __init__(self, name, *args):
-        Function.__init__(self, '', name, *args)
+        F.__init__(self, '', name, *args)
         self._members = []
 
     def member(self, member):
         self._members.append(member)
         return self
 
+    def members(self, *args):
+        for arg in args:
+            self.member(arg)
+
+        return self
+
     def print(self):
         # Declare the constructor (a function)
         print('/*\n * %s\n */' % self.fullName())
-        Function.print(self)
+        F.print(self)
         print('')
 
         # Declare the members
@@ -143,19 +149,25 @@ class Class(Function):
             member.print()
             print('')
 
-class Struct(Variable):
+class Struct(Var):
     def __init__(self, name):
-        Variable.__init__(self, '{}', name)
+        Var.__init__(self, '{}', name)
         self._members = []
 
     def member(self, member):
         self._members.append(member)
         return self
 
+    def members(self, *args):
+        for arg in args:
+            self.member(arg)
+
+        return self
+
     def print(self):
         # Declare the object
         print('/*\n * %s\n */' % self.fullName())
-        Variable.print(self)
+        Var.print(self)
         print('')
 
         # Declare the members
