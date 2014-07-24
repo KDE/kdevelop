@@ -38,6 +38,7 @@
 #include <language/duchain/functiondefinition.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <util/kdevstringhandler.h>
 
 QTEST_KDEMAIN(TestDUChain, NoGUI);
 
@@ -76,7 +77,9 @@ void TestDUChain::testComments()
     auto candidates = top->findDeclarations(QualifiedIdentifier(expectedComment.identifier));
     QVERIFY(!candidates.isEmpty());
     auto decl = candidates.first();
-    QCOMPARE(QString::fromLocal8Bit(decl->comment()), expectedComment.comment);
+    QString comment = QString::fromLocal8Bit(decl->comment());
+    comment = KDevelop::htmlToPlainText(comment, KDevelop::CompleteMode);
+    QCOMPARE(comment, expectedComment.comment);
 }
 
 void TestDUChain::testComments_data()
@@ -100,6 +103,12 @@ void TestDUChain::testComments_data()
     QTest::newRow("enumerator")
         << "enum Foo { bar1, ///<this is bar1\nbar2 ///<this is bar2\n };"
         << ExpectedComment{"Foo::bar1", "this is bar1"};
+    QTest::newRow("comment-formatting")
+        << "/** a\n * multiline\n *\n * comment\n */ int foo;"
+        << ExpectedComment{"foo", "a multiline\ncomment"};
+    QTest::newRow("comment-doxygen-tags")
+        << "/** @see bar()\n@param a foo\n*/\nvoid foo(int a);\nvoid bar();"
+        << ExpectedComment{"foo", "bar()\na\nfoo"};
 }
 
 void TestDUChain::testInclude()
