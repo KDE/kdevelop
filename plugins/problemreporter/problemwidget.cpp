@@ -39,6 +39,7 @@
 #include <interfaces/iassistant.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <util/kdevstringhandler.h>
 
 #include "problemreporterplugin.h"
 #include "problemmodel.h"
@@ -237,7 +238,7 @@ void ProblemWidget::contextMenuEvent(QContextMenuEvent* event) {
                 }
                 if(!actions.isEmpty()) {
                     QString title = solution->title();
-                    title.remove(QRegExp("<[^>]+>"));
+                    title = KDevelop::htmlToPlainText(title);
                     title.replace("&apos;", "\'");
 
                     QPointer<KMenu> m = new KMenu(this);

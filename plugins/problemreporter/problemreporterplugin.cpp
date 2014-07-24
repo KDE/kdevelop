@@ -42,6 +42,7 @@
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
+#include <util/kdevstringhandler.h>
 
 #include "problemhighlighter.h"
 #include "problemwidget.h"
@@ -178,8 +179,7 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
       if(title.isEmpty())
         text = i18n("Solve Problem");
       else {
-        title.remove(QRegExp("<[^>]+>"));
-        text = i18n("Solve: %1", title);
+        text = i18n("Solve: %1", KDevelop::htmlToPlainText(title));
       }
       
       QAction* menuAction = new QAction(text, 0);
