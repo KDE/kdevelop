@@ -9,6 +9,9 @@ set(kdevvarlengtharray_SRC test_kdevvarlengtharray.cpp)
 kde4_add_unit_test(kdevvarlengtharraytest ${kdevvarlengtharray_SRC})
 target_link_libraries(kdevvarlengtharraytest ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 
+kde4_add_unit_test(test_stringhandler test_stringhandler.cpp)
+target_link_libraries(test_stringhandler ${QT_QTTEST_LIBRARY} kdevplatformutil)
+
 kde4_add_unit_test(pathtest test_path.cpp)
 target_link_libraries(pathtest
     ${QT_QTTEST_LIBRARY}
