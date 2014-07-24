@@ -21,9 +21,6 @@
 
 #include <QString>
 #include <QStringList>
-#include <interfaces/icore.h>
-#include <interfaces/ilanguagecontroller.h>
-#include <interfaces/icompletionsettings.h>
 
 namespace KDevelop
 {
