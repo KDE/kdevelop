@@ -141,12 +141,25 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
     //For PrecompiledHeader, we don't want unsaved contents (and contents.isEmpty())
     const auto fileCount = options.testFlag(PrecompiledHeader) ? 0 : 1;
 
+#if CINDEX_VERSION_MINOR >= 23
+    const CXErrorCode code = clang_parseTranslationUnit2(
+        index->index(), file.Filename,
+        args.constData(), args.size(),
+        &file, fileCount,
+        flags,
+        &m_unit
+    );
+    if (code != CXError_Success) {
+        kDebug() << "clang_parseTranslationUnit2 return with error code" << code;
+    }
+#else
     m_unit = clang_parseTranslationUnit(
         index->index(), file.Filename,
         args.constData(), args.size(),
         &file, fileCount,
         flags
     );
+#endif
 
     if (m_unit) {
         setUnit(m_unit, file.Filename);
@@ -156,6 +169,8 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
         if (options.testFlag(PrecompiledHeader)) {
             clang_saveTranslationUnit(m_unit, path + ".pch", CXSaveTranslationUnit_None);
         }
+    } else {
+        kDebug() << "Failed to parse file:" << file.Filename;
     }
 }
 
