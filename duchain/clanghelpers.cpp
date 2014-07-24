@@ -84,6 +84,8 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
     UrlParseLock urlLock(path);
     ReferencedTopDUContext context;
     {
+        const auto problems = session.problemsForFile(file);
+
         DUChainWriteLocker lock;
         context = DUChain::self()->chainForDocument(path);
         if (!context) {
@@ -93,7 +95,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         }
 
         context->setFeatures(features);
-        context->setProblems(session.problemsForFile(file));
+        context->setProblems(problems);
 
         includedFiles.insert(file, context);
         if (update) {

@@ -25,9 +25,11 @@
 #include "clangproblem.h"
 #include "clangtypes.h"
 #include "clangdiagnosticevaluator.h"
+#include "todoextractor.h"
 #include "debug.h"
 
 #include <KMimeType>
+#include <QDir>
 #include <QFileInfo>
 
 using namespace KDevelop;
@@ -241,9 +243,10 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         return {};
     }
 
-    const ClangDiagnosticEvaluator evaluator;
-
     QList<ProblemPointer> problems;
+
+    // extra clang diagnostics
+    static const ClangDiagnosticEvaluator evaluator;
     const uint numDiagnostics = clang_getNumDiagnostics(d->m_unit);
     problems.reserve(numDiagnostics);
     for (uint i = 0; i < numDiagnostics; ++i) {
@@ -261,6 +264,12 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
 
         clang_disposeDiagnostic(diagnostic);
     }
+
+    // extract to-do problems
+    const IndexedString path(QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file)))));
+    TodoExtractor extractor(unit(), path);
+    problems << extractor.problems();
+
     return problems;
 }
 

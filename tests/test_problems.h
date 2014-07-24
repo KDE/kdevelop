@@ -37,6 +37,8 @@ private slots:
     void testChildDiagnostics();
     void testFixits();
     void testFixits_data();
+    void testTodoProblems();
+    void testTodoProblems_data();
 
     void testMissingInclude();
 

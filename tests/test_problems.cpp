@@ -238,4 +238,52 @@ void TestProblems::testMissingInclude()
     QCOMPARE(fixits[2].replacementText, QString("#include \"%1\"\n").arg(include.url().toUrl().fileName()));
 }
 
+struct ExpectedTodo
+{
+    QString description;
+    SimpleCursor start;
+    SimpleCursor end;
+};
+Q_DECLARE_METATYPE(ExpectedTodo)
+
+void TestProblems::testTodoProblems()
+{
+    QFETCH(QString, code);
+    QFETCH(ExpectedTodo, expectedTodo);
+
+    TestFile file(code, "cpp");
+    QVERIFY(file.parseAndWait());
+
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+    auto problems = top->problems();
+    QCOMPARE(problems.size(), 1);
+    auto p1 = problems.first();
+    QCOMPARE(p1->description(), expectedTodo.description);
+    QCOMPARE(p1->finalLocation().start, expectedTodo.start);
+    QCOMPARE(p1->finalLocation().end, expectedTodo.end);
+}
+
+void TestProblems::testTodoProblems_data()
+{
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<ExpectedTodo>("expectedTodo");
+
+    // we have two problems here:
+    // - we cannot search for comments without declarations,
+    //   that means: we can only search inside doxygen-style comments
+    //   possible fix: -fparse-all-comments -- however: libclang API is lacking here again.
+    //   Can only search through comments attached to a valid entity in the AST
+    // - we cannot detect the correct location of the comment yet
+    // see more comments inside TodoExtractor
+    QTest::newRow("simple")
+        << "/** TODO: Something */\nint foo;\n/** notodo */\nint bar;"
+        << ExpectedTodo{"TODO: Something", {1, 4}, {1, 7}};
+    QTest::newRow("simple")
+        << "/// FIXME: Something\nint foo;"
+        << ExpectedTodo{"FIXME: Something", {1, 4}, {1, 7}};
+}
+
+
 #include "test_problems.moc"
