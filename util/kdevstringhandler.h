@@ -47,6 +47,19 @@ namespace KDevelop
     * @returns a QVariant created from the bytearray
     */
     KDEVPLATFORMUTIL_EXPORT QVariant stringToQVariant( const QString& s );
+
+    enum HtmlToPlainTextMode {
+        FastMode,     /**< Fast (conversion via regular expression) */
+        CompleteMode, /**< Slower, but with expected behavior (conversion via QTextDocument::toPlainText).
+            This also replaces <br/> with newline chars, for example. */
+    };
+
+    /**
+     * Strip HTML tags from string @p s
+     *
+     * @return String no longer containing any HTML tags
+     */
+    KDEVPLATFORMUTIL_EXPORT QString htmlToPlainText(const QString& s, HtmlToPlainTextMode mode = FastMode);
 }
 
 #endif // KDEVPLATFORM_KDEVSTRINGHANDLER_H

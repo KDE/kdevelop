@@ -69,6 +69,8 @@
 #include <QChar>
 #include <QDataStream>
 #include <QVariant>
+#include <QRegExp>
+#include <QTextDocument>
 
 namespace KDevelop
 {
@@ -144,6 +146,23 @@ namespace KDevelop
         result += QLatin1Char(')');
         return result;
         
+    }
+
+    QString htmlToPlainText(const QString& s, HtmlToPlainTextMode mode)
+    {
+        switch (mode) {
+        case FastMode: {
+            QString result(s);
+            result.remove(QRegExp("<[^>]+>"));
+            return result;
+        }
+        case CompleteMode: {
+            QTextDocument doc;
+            doc.setHtml(s);
+            return doc.toPlainText();
+        }
+        }
+        return QString(); // never reached
     }
 }
 
