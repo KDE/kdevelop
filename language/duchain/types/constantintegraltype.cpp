@@ -110,15 +110,10 @@ QString ConstantIntegralType::toString() const
       break;
   }
 
-  const QString valueAsString = plainValueAsString();
-  if (!valueAsString.isEmpty()) {
-    ret += QString("(%1)").arg(valueAsString);
-  }
-
   return ret;
 }
 
-QString ConstantIntegralType::plainValueAsString() const
+QString ConstantIntegralType::valueAsString() const
 {
   switch(dataType()) {
     case TypeNone:

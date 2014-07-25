@@ -105,7 +105,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       modifyHtml() += ' ' + nameHighlight(Qt::escape(declarationName(m_declaration)));
 
       if(auto integralType = m_declaration->type<ConstantIntegralType>()) {
-        const QString plainValue = integralType->plainValueAsString();
+        const QString plainValue = integralType->valueAsString();
         if (!plainValue.isEmpty()) {
           modifyHtml() += QString(" = %1").arg(plainValue);
         }

@@ -84,7 +84,7 @@ public:
 
   virtual QString toString() const;
 
-  QString plainValueAsString() const;
+  QString valueAsString() const;
 
   virtual bool equals(const KDevelop::AbstractType* rhs) const;
 
