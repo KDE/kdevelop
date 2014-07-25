@@ -9,8 +9,10 @@ union myUnion {};
 
 /// "type" : { "toString" : "myEnum" }
 enum myEnum {
-    /// "type" : { "toString" : "myEnum" }
-    myEnumerator
+    /// "type" : { "toString" : "myEnum::myEnumerator0", "plainValue" : "0" }
+    myEnumerator0,
+    /// "type" : { "toString" : "myEnum::myEnumerator1", "plainValue" : "1" }
+    myEnumerator1
 };
 
 /// "type" : { "toString" : "myTypedef" }

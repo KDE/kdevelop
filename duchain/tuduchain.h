@@ -40,6 +40,7 @@
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/structuretype.h>
 #include <language/duchain/types/enumerationtype.h>
+#include <language/duchain/types/enumeratortype.h>
 #include <language/duchain/types/typealiastype.h>
 
 #include <unordered_map>
@@ -348,10 +349,18 @@ private:
         return t;
     }
 
-    template<CXCursorKind CK, EnableIf<CursorKindTraits::isIdentifiedType(CK) && CK != CXCursor_TypedefDecl> = dummy>
+    template<CXCursorKind CK, EnableIf<CursorKindTraits::isIdentifiedType(CK) && CK != CXCursor_TypedefDecl && CK != CXCursor_EnumConstantDecl> = dummy>
     typename IdType<CK>::Type *createType(CXCursor) const
     {
         return new typename IdType<CK>::Type;
+    }
+
+    template<CXCursorKind CK, EnableIf<CK == CXCursor_EnumConstantDecl> = dummy>
+    EnumeratorType *createType(CXCursor cursor) const
+    {
+        auto type = new EnumeratorType;
+        type->setValue<quint64>(clang_getEnumConstantDeclValue(cursor));
+        return type;
     }
 
     template<CXCursorKind CK, EnableIf<CK == CXCursor_TypedefDecl> = dummy>

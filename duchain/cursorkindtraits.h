@@ -222,7 +222,7 @@ constexpr IntegralType::CommonIntegralTypes integralType(CXTypeKind TK)
 
 constexpr bool isIdentifiedType(CXCursorKind CK)
 {
-    return isClass(CK) || CK == CXCursor_TypedefDecl || CK == CXCursor_EnumDecl;
+    return isClass(CK) || CK == CXCursor_TypedefDecl || CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl;
 }
 
 }

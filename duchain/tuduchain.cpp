@@ -46,6 +46,12 @@ struct IdType<CK, typename std::enable_if<CK == CXCursor_EnumDecl>::type>
     typedef EnumerationType Type;
 };
 
+template<CXCursorKind CK>
+struct IdType<CK, typename std::enable_if<CK == CXCursor_EnumConstantDecl>::type>
+{
+    typedef EnumeratorType Type;
+};
+
 //END IdType
 
 //BEGIN DeclType
