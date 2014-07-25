@@ -39,33 +39,22 @@ using namespace KDevelop;
 
 namespace {
 
-inline int findEndOfLine(const QString& str, int from = 0)
+inline int findEndOfLineOrEnd(const QString& str, int from = 0)
 {
     const int index = str.indexOf('\n', from);
     return (index == -1 ? str.length() : index);
 }
 
-inline int findBeginningOfLine(const QString& str, int from = 0)
+inline int findBeginningOfLineOrStart(const QString& str, int from = 0)
 {
     const int index = str.lastIndexOf('\n', from);
     return (index == -1 ? 0 : index+1);
 }
 
-/**
- * Chop everything after characters in string @p str that match the regular expression @p regexp
- *
- * @return Number of chars trimmed
- */
-int rtrim(QString& str, const QRegExp regexp = QRegExp("[^ \t\r\n\v\f]"))
+inline int findEndOfCommentOrEnd(const QString& str, int from = 0)
 {
-    const int last = str.lastIndexOf(regexp);
-    if (last == -1 || last == (str.size() - 1)) {
-        return 0;
-    }
-
-    const int trim = (str.size() - 1) - last;
-    str.chop(trim);
-    return trim;
+    const int index = str.indexOf("*/", from);
+    return (index == -1 ? str.length() : index);
 }
 
 /**
@@ -116,15 +105,15 @@ private:
 
     void skipUntilNewline()
     {
-        m_offset = findEndOfLine(m_str, m_offset);
+        m_offset = findEndOfLineOrEnd(m_str, m_offset);
     }
 
     void parseTodoMarker()
     {
         // okay, we've found something
-        // m_offset points to the start of a "FIXME" or "TODO"
-        const int lineStart = findBeginningOfLine(m_str, m_offset);
-        const int lineEnd = findEndOfLine(m_str, m_offset);
+        // m_offset points to the start of the to-do item
+        const int lineStart = findBeginningOfLineOrStart(m_str, m_offset);
+        const int lineEnd = findEndOfLineOrEnd(m_str, m_offset);
         Q_ASSERT(lineStart <= m_offset);
         Q_ASSERT(lineEnd > m_offset);
 
@@ -132,10 +121,8 @@ private:
         Q_ASSERT(!text.contains('\n'));
 
         // there's nothing to be stripped on the left side, hence ignore that
-        int stripped_right;
-        text = KDevelop::extractComment(text, nullptr, &stripped_right);
-        // remove additional whitespace
-        stripped_right += rtrim(text);
+        text.chop(text.length() - findEndOfCommentOrEnd(text));
+        text = text.trimmed(); // remove additional whitespace from the end
 
         // check at what line within the comment we are by just counting the newlines until now
         const int line = std::count(m_str.constBegin(), m_str.constBegin() + m_offset, '\n');
