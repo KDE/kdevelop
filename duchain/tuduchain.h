@@ -362,7 +362,7 @@ private:
     EnumeratorType *createType(CXCursor cursor) const
     {
         auto type = new EnumeratorType;
-        type->setValue<quint64>(clang_getEnumConstantDeclValue(cursor));
+        type->setValue<quint64>(clang_getEnumConstantDeclUnsignedValue(cursor));
         return type;
     }
 
