@@ -227,8 +227,6 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       modifyHtml() += labelHighlight(i18n("Kind: %1 %2 ", importantHighlight(Qt::escape(kind)), detailsHtml));
     else
       modifyHtml() += labelHighlight(i18n("Kind: %1 ", importantHighlight(Qt::escape(kind))));
-  } else if( !detailsHtml.isEmpty() ) {
-    modifyHtml() += labelHighlight(i18n("Modifiers: %1 ",  importantHighlight(Qt::escape(kind))));
   }
 
   modifyHtml() += "<br />";
