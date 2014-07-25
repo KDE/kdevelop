@@ -78,7 +78,11 @@ bool ExpressionVisitor::visit(QmlJS::AST::StringLiteral*)
 bool ExpressionVisitor::visit(QmlJS::AST::RegExpLiteral*)
 {
     encounter(QLatin1String("RegExp"));
-    instantiateCurrentDeclaration();
+
+    if (lastDeclaration()) {
+        instantiateCurrentDeclaration();
+    }
+
     return false;
 }
 
@@ -410,11 +414,18 @@ void ExpressionVisitor::encounterObjectAtLocation(const QmlJS::AST::SourceLocati
 void ExpressionVisitor::instantiateCurrentDeclaration()
 {
     StructureType::Ptr type = StructureType::Ptr(new StructureType);
+    DeclarationPointer decl = lastDeclaration();
 
     {
         DUChainReadLocker lock;
-        type->setDeclaration(lastDeclaration().data());
+        auto funcType = QmlJS::FunctionType::Ptr::dynamicCast(decl->abstractType());
+
+        if (funcType) {
+            decl = funcType->declaration(topContext());
+        }
+
+        type->setDeclaration(decl.data());
     }
 
-    encounter(AbstractType::Ptr::staticCast(type), lastDeclaration());
+    encounter(AbstractType::Ptr::staticCast(type), decl);
 }

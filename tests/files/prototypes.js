@@ -8,7 +8,7 @@ function Class(a, b) {
     this.a = a;
 
     /**
-     * "useCount" : 3
+     * "useCount" : 4
      */
     this.b = b;
 }
@@ -56,3 +56,13 @@ Subclass.b = 2;
 var o = {};
 o.__proto__ = Subclass;
 o.b = 3;
+
+var mod = {};
+mod.Subclass = Subclass;
+
+var modInstance = new mod.Subclass();
+
+/**
+ * "type" : { "toString" : "int" }
+ */
+var modInstanceValue = modInstance.b;
