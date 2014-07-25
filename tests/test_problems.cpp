@@ -32,6 +32,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/testfile.h>
+#include <tests/testhelpers.h>
 #include <tests/testproject.h>
 #include <interfaces/ilanguagecontroller.h>
 
@@ -244,12 +245,13 @@ struct ExpectedTodo
     SimpleCursor start;
     SimpleCursor end;
 };
-Q_DECLARE_METATYPE(ExpectedTodo)
+typedef QVector<ExpectedTodo> ExpectedTodos;
+Q_DECLARE_METATYPE(ExpectedTodos)
 
 void TestProblems::testTodoProblems()
 {
     QFETCH(QString, code);
-    QFETCH(ExpectedTodo, expectedTodo);
+    QFETCH(ExpectedTodos, expectedTodos);
 
     TestFile file(code, "cpp");
     QVERIFY(file.parseAndWait());
@@ -258,17 +260,21 @@ void TestProblems::testTodoProblems()
     auto top = file.topContext();
     QVERIFY(top);
     auto problems = top->problems();
-    QCOMPARE(problems.size(), 1);
-    auto p1 = problems.first();
-    QCOMPARE(p1->description(), expectedTodo.description);
-    QCOMPARE(p1->finalLocation().start, expectedTodo.start);
-    QCOMPARE(p1->finalLocation().end, expectedTodo.end);
+    QCOMPARE(problems.size(), expectedTodos.size());
+
+    for (int i = 0; i < problems.size(); ++i) {
+        auto problem = problems[i];
+        auto expectedTodo = expectedTodos[i];
+        QCOMPARE(problem->description(), expectedTodo.description);
+        QCOMPARE(problem->finalLocation().start, expectedTodo.start);
+        QCOMPARE(problem->finalLocation().end, expectedTodo.end);
+    }
 }
 
 void TestProblems::testTodoProblems_data()
 {
     QTest::addColumn<QString>("code");
-    QTest::addColumn<ExpectedTodo>("expectedTodo");
+    QTest::addColumn<ExpectedTodos>("expectedTodos");
 
     // we have two problems here:
     // - we cannot search for comments without declarations,
@@ -277,12 +283,30 @@ void TestProblems::testTodoProblems_data()
     //   Can only search through comments attached to a valid entity in the AST
     // - we cannot detect the correct location of the comment yet
     // see more comments inside TodoExtractor
-    QTest::newRow("simple")
-        << "/** TODO: Something */\nint foo;\n/** notodo */\nint bar;"
-        << ExpectedTodo{"TODO: Something", {1, 4}, {1, 7}};
-    QTest::newRow("simple")
-        << "/// FIXME: Something\nint foo;"
-        << ExpectedTodo{"FIXME: Something", {1, 4}, {1, 7}};
+    QTest::newRow("simple1")
+        << "/** TODO: Something */\n/** notodo */\n"
+        << ExpectedTodos{{"TODO: Something", {0, 4}, {0, 19}}};
+    QTest::newRow("simple2")
+        << "/// FIXME: Something\n"
+        << ExpectedTodos{{"FIXME: Something", {0, 4}, {0, 20}}};
+    QTest::newRow("mixed-content")
+        << "/// FIXME: Something\n///Uninteresting content\n"
+        << ExpectedTodos{{"FIXME: Something", {0, 4}, {0, 20}}};
+    QTest::newRow("multi-line1")
+        << "/**\n* foo\n*\n* FIXME: Something\n*/\n"
+        << ExpectedTodos{{"FIXME: Something", {3, 2}, {3, 18}}};
+    QTest::newRow("multi-line2")
+        << "/// FIXME: Something\n///Uninteresting content\n"
+        << ExpectedTodos{{"FIXME: Something", {0, 4}, {0, 20}}};
+    QTest::newRow("multiple-todos-line2")
+        << "/**\n* FIXME: one\n*foo bar\n* FIXME: two */\n"
+        << ExpectedTodos{
+            {"FIXME: one", {1, 2}, {1, 12}},
+            {"FIXME: two", {3, 2}, {3, 12}}
+        };
+    QTest::newRow("todo-later-in-the-document")
+        << "///foo\n\n///FIXME: bar\n"
+        << ExpectedTodos{{"FIXME: bar", {2, 3}, {2, 13}}};
 }
 
 

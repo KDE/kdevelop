@@ -39,10 +39,7 @@ public:
     QList<KDevelop::ProblemPointer> problems() const;
 
 private:
-    static CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientData data);
-
-    bool containsTodo(const QString& text) const;
-    void extractTodos(CXComment comment, CXCursor cursor);
+    void extractTodos();
 
     CXTranslationUnit m_unit;
     KDevelop::IndexedString m_file;
