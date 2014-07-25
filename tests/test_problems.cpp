@@ -307,6 +307,9 @@ void TestProblems::testTodoProblems_data()
     QTest::newRow("todo-later-in-the-document")
         << "///foo\n\n///FIXME: bar\n"
         << ExpectedTodos{{"FIXME: bar", {2, 3}, {2, 13}}};
+    QTest::newRow("non-ascii-todo")
+        << "/* TODO: 例えば */"
+        << ExpectedTodos{{"TODO: 例えば", {0, 3}, {0, 18}}};
 }
 
 
