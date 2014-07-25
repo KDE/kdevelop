@@ -25,6 +25,8 @@
 
 #include <vcs/vcsjob.h>
 
+#include <time.h>
+
 namespace KIO
 {
 class Job;
