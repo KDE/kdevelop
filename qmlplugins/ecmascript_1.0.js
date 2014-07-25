@@ -136,49 +136,37 @@ Error.prototype.name = "";
  * EvalError
  */
 function EvalError() { return ; }
-
-EvalError.prototype = Error
-
+EvalError.prototype = Error;
 
 /*
  * RangeError
  */
 function RangeError() { return ; }
-
-RangeError.prototype = Error
-
+RangeError.prototype = Error;
 
 /*
  * ReferenceError
  */
 function ReferenceError() { return ; }
-
-ReferenceError.prototype = Error
-
+ReferenceError.prototype = Error;
 
 /*
  * SyntaxError
  */
 function SyntaxError() { return ; }
-
-SyntaxError.prototype = Error
-
+SyntaxError.prototype = Error;
 
 /*
  * TypeError
  */
 function TypeError() { return ; }
-
-TypeError.prototype = Error
-
+TypeError.prototype = Error;
 
 /*
  * URIError
  */
 function URIError() { return ; }
-
-URIError.prototype = Error
-
+URIError.prototype = Error;
 
 /*
  * Number
@@ -718,6 +706,7 @@ Array.prototype.length = 1;
  * Int8Array
  */
 function Int8Array(length) { return ; }
+Int8Array.prototype = Array;
 
 Int8Array.prototype.buffer = _mixed;
 
@@ -730,13 +719,11 @@ Int8Array.prototype.subarray(1, 1);
 
 Int8Array.prototype.BYTES_PER_ELEMENT = 1;
 
-Int8Array.prototype = Array
-
-
 /*
  * Uint8Array
  */
 function Uint8Array(length) { return ; }
+Uint8Array.prototype = Array;
 
 Uint8Array.prototype.buffer = _mixed;
 
@@ -749,13 +736,11 @@ Uint8Array.prototype.subarray(1, 1);
 
 Uint8Array.prototype.BYTES_PER_ELEMENT = 1;
 
-Uint8Array.prototype = Array
-
-
 /*
  * Uint8ClampedArray
  */
 function Uint8ClampedArray(length) { return ; }
+Uint8ClampedArray.prototype = Array;
 
 Uint8ClampedArray.prototype.buffer = _mixed;
 
@@ -768,13 +753,11 @@ Uint8ClampedArray.prototype.subarray(1, 1);
 
 Uint8ClampedArray.prototype.BYTES_PER_ELEMENT = 1;
 
-Uint8ClampedArray.prototype = Array
-
-
 /*
  * Int16Array
  */
 function Int16Array(length) { return ; }
+Int16Array.prototype = Array;
 
 Int16Array.prototype.buffer = _mixed;
 
@@ -787,13 +770,11 @@ Int16Array.prototype.subarray(1, 1);
 
 Int16Array.prototype.BYTES_PER_ELEMENT = 1;
 
-Int16Array.prototype = Array
-
-
 /*
  * Uint16Array
  */
 function Uint16Array(length) { return ; }
+Uint16Array.prototype = Array;
 
 Uint16Array.prototype.buffer = _mixed;
 
@@ -806,13 +787,11 @@ Uint16Array.prototype.subarray(1, 1);
 
 Uint16Array.prototype.BYTES_PER_ELEMENT = 1;
 
-Uint16Array.prototype = Array
-
-
 /*
  * Int32Array
  */
 function Int32Array(length) { return ; }
+Int32Array.prototype = Array;
 
 Int32Array.prototype.buffer = _mixed;
 
@@ -825,13 +804,11 @@ Int32Array.prototype.subarray(1, 1);
 
 Int32Array.prototype.BYTES_PER_ELEMENT = 1;
 
-Int32Array.prototype = Array
-
-
 /*
  * Uint32Array
  */
 function Uint32Array(length) { return ; }
+Uint32Array.prototype = Array;
 
 Uint32Array.prototype.buffer = _mixed;
 
@@ -844,13 +821,11 @@ Uint32Array.prototype.subarray(1, 1);
 
 Uint32Array.prototype.BYTES_PER_ELEMENT = 1;
 
-Uint32Array.prototype = Array
-
-
 /*
  * Float32Array
  */
 function Float32Array(length) { return ; }
+Float32Array.prototype = Array;
 
 Float32Array.prototype.buffer = _mixed;
 
@@ -863,13 +838,11 @@ Float32Array.prototype.subarray(1, 1);
 
 Float32Array.prototype.BYTES_PER_ELEMENT = 1;
 
-Float32Array.prototype = Array
-
-
 /*
  * Float64Array
  */
 function Float64Array(length) { return ; }
+Float64Array.prototype = Array;
 
 Float64Array.prototype.buffer = _mixed;
 
@@ -881,9 +854,6 @@ Float64Array.prototype.subarray = function (begin, end) { return []; };
 Float64Array.prototype.subarray(1, 1);
 
 Float64Array.prototype.BYTES_PER_ELEMENT = 1;
-
-Float64Array.prototype = Array
-
 
 /*
  * Map

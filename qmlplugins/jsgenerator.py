@@ -125,6 +125,11 @@ class Class(F):
     def __init__(self, name, *args):
         F.__init__(self, '', name, *args)
         self._members = []
+        self._prototype = None
+
+    def prototype(self, proto):
+        self._prototype = proto
+        return self
 
     def member(self, member):
         self._members.append(member)
@@ -140,6 +145,10 @@ class Class(F):
         # Declare the constructor (a function)
         print('/*\n * %s\n */' % self.fullName())
         F.print(self)
+
+        if self._prototype is not None:
+            print('%s.prototype = %s;' % (self.fullName(), self._prototype))
+
         print('')
 
         # Declare the members
@@ -173,6 +182,28 @@ class Struct(Var):
         # Declare the members
         for member in self._members:
             member.setParentName(self.fullName(), False)
+            member.setName('')
+            member.print()
+            print('')
+
+class Module(object):
+    def __init__(self):
+        self._members = []
+
+    def member(self, member):
+        self._members.append(member)
+        return self
+
+    def members(self, *args):
+        for arg in args:
+            self.member(arg)
+
+        return self
+
+    def print(self):
+        # Declare the members in "exports"
+        for member in self._members:
+            member.setParentName('exports', False)
             member.setName('')
             member.print()
             print('')

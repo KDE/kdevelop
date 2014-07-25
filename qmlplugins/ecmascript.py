@@ -54,9 +54,6 @@ _float = '1.0'
 _array = '[]'
 _void = ''
 
-def setBaseClass(c, baseClass):
-    print('%s.prototype = %s\n\n' % (c, baseClass))
-
 # Fundamental objects (section 19)
 _object = 'new Object()'
 _function = 'function(){}'
@@ -117,8 +114,7 @@ Class('Error', ('message', _string)).members(
 ).print()
 
 for e in ['Eval', 'Range', 'Reference', 'Syntax', 'Type', 'URI']:
-    Class(e + 'Error').print()
-    setBaseClass(e + 'Error', 'Error')
+    Class(e + 'Error').prototype('Error').print()
 
 # 19.5.6 (NativeError) skipped because it seems too internal
 
@@ -320,15 +316,13 @@ Class('Array', ('len', _int)).members(
 ).print()
 
 for a in ['Int8', 'Uint8', 'Uint8Clamped', 'Int16', 'Uint16', 'Int32', 'Uint32', 'Float32', 'Float64']:
-    Class(a + 'Array', ('length', _int)).members(
+    Class(a + 'Array', ('length', _int)).prototype('Array').members(
         Var(_mixed, 'buffer'),
         Var(_int, 'byteLength'),
         Var(_int, 'byteOffset'),
         F(_array, 'subarray', ('begin', _int), ('end', _int)),
         Var(_int, 'BYTES_PER_ELEMENT'),
     ).print()
-
-    setBaseClass(a + 'Array', 'Array')
 
 # Keyed Collection (section 23)
 Class('Map', ('iterable', _mixed)).members(
