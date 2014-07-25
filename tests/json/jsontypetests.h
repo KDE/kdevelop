@@ -27,8 +27,9 @@
 
 /**
  * Quick Reference:
- *   findDeclarations : FindDeclObject
- *   childCount : int
+ *   toString : string
+ *   isConst : bool
+ *   plainValue : qint64
  */
 
 namespace KDevelop
@@ -64,6 +65,8 @@ TypeTest(isConst)
   return SUCCESS;
 }
 
+///JSON type: qint64
+///@returns Whether ConstantIntegralType's plainValue matches the given value
 TypeTest(plainValue)
 {
     VERIFY_TYPE(qint64);
