@@ -86,7 +86,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(m_declaration.data());
     if( function ) {
       htmlFunction();
-    } else if( m_declaration->isTypeAlias() || m_declaration->kind() == Declaration::Instance ) {
+    } else if( m_declaration->isTypeAlias() || m_declaration->type<EnumeratorType>() || m_declaration->kind() == Declaration::Instance ) {
       if( m_declaration->isTypeAlias() )
         modifyHtml() += importantHighlight("typedef ");
 
