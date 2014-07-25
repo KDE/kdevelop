@@ -98,11 +98,20 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         //Do not show the own name as type of typedefs
         if(useType.cast<TypeAliasType>())
           useType = useType.cast<TypeAliasType>()->type();
-      } 
-      
+      }
+
       eventuallyMakeTypeLinks( useType );
 
-      modifyHtml() += ' ' + nameHighlight(Qt::escape(declarationName(m_declaration))) + "<br>";
+      modifyHtml() += ' ' + nameHighlight(Qt::escape(declarationName(m_declaration)));
+
+      if(auto integralType = m_declaration->type<ConstantIntegralType>()) {
+        const QString plainValue = integralType->plainValueAsString();
+        if (!plainValue.isEmpty()) {
+          modifyHtml() += QString(" = %1").arg(plainValue);
+        }
+      }
+
+      modifyHtml() += "<br>";
     }else{
       if( m_declaration->kind() == Declaration::Type && m_declaration->abstractType().cast<StructureType>() ) {
         htmlClass();

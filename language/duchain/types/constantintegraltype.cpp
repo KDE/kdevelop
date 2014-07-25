@@ -79,28 +79,28 @@ QString ConstantIntegralType::toString() const
       ret += "none";
       break;
     case TypeChar:
-      ret += QString("char(%1)").arg((char)d_func()->m_value);
+      ret += QString("char");
       break;
     case TypeWchar_t:
-      ret += QString("wchar_t(%1)").arg((wchar_t)d_func()->m_value);
+      ret += QString("wchar_t");
       break;
     case TypeChar16_t:
-      ret += QString("char16_t(%1)").arg((char16_t)d_func()->m_value);
+      ret += QString("char16_t");
       break;
     case TypeChar32_t:
-      ret += QString("char32_t(%1)").arg((char32_t)d_func()->m_value);
+      ret += QString("char32_t");
       break;
     case TypeBoolean:
       ret += d_func()->m_value ? "true" : "false";
       break;
     case TypeInt:
-      ret += (modifiers() & UnsignedModifier) ? QString("unsigned(%1)").arg((uint)d_func()->m_value) : QString("int(%1)").arg((int)d_func()->m_value);
+      ret += (modifiers() & UnsignedModifier) ? QString("unsigned") : QString("int");
       break;
     case TypeFloat:
-      ret += QString("float(%1)").arg( value<float>() );
+      ret += QString("float");
       break;
     case TypeDouble:
-      ret += QString("double(%1)").arg( value<double>() );
+      ret += QString("double");
       break;
     case TypeVoid:
       ret += "void";
@@ -110,7 +110,40 @@ QString ConstantIntegralType::toString() const
       break;
   }
 
+  const QString valueAsString = plainValueAsString();
+  if (!valueAsString.isEmpty()) {
+    ret += QString("(%1)").arg(valueAsString);
+  }
+
   return ret;
+}
+
+QString ConstantIntegralType::plainValueAsString() const
+{
+  switch(dataType()) {
+    case TypeNone:
+      return "none";
+    case TypeChar:
+      return QString::number((char)d_func()->m_value);
+    case TypeWchar_t:
+      return QString::number((wchar_t)d_func()->m_value);
+    case TypeChar16_t:
+      return QString::number((char16_t)d_func()->m_value);
+    case TypeChar32_t:
+      return QString::number((char32_t)d_func()->m_value);
+    case TypeBoolean:
+      return d_func()->m_value ? "true" : "false";
+    case TypeInt:
+      return (modifiers() & UnsignedModifier) ?
+        QString::number((uint)d_func()->m_value) :
+        QString::number((int)d_func()->m_value);
+    case TypeFloat:
+      return QString::number(value<float>());
+    case TypeDouble:
+      return QString::number(value<double>());
+    default:
+      return QString();
+  }
 }
 
 uint ConstantIntegralType::hash() const
