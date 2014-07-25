@@ -27,7 +27,7 @@
 #include <QMetaType>
 #include <QString>
 #include <QVector>
-#include <KUrl>
+#include <QUrl>
 
 namespace KDevelop {
 
@@ -89,7 +89,7 @@ public:
     explicit Path(const QString& pathOrUrl);
 
     /**
-     * Convert a KUrl to a Path.
+     * Convert a QUrl to a Path.
      *
      * @note Not every kind of remote URL is supported, rather only path-like
      * URLs without fragments, queries, sub-Paths and the like are supported.
@@ -101,7 +101,7 @@ public:
      *
      * @sa isValid()
      */
-    explicit Path(const KUrl& url);
+    explicit Path(const QUrl& url);
 
     /**
      * Create a copy of @p base and optionally append a path segment @p subPath.
@@ -261,9 +261,9 @@ public:
     }
 
     /**
-     * @return the Path converted to a KUrl.
+     * @return the Path converted to a QUrl.
      */
-    KUrl toUrl() const;
+    QUrl toUrl() const;
 
     /**
      * @return true when this Path points to a local file, false otherwise.
@@ -307,7 +307,7 @@ public:
     /**
      * @return the path pointing to the parent folder of this path.
      *
-     * @sa KUrl::upUrl()
+     * @sa KIO::upUrl()
      */
     Path parent() const;
 
@@ -329,7 +329,7 @@ private:
     /**
      * Initialize this Path from the data of @p url.
      */
-    void init(KUrl url);
+    void init(QUrl url);
 
     // for remote urls the first element contains the a Path prefix
     // containing the protocol, user, port etc. pp.
@@ -339,9 +339,9 @@ private:
 KDEVPLATFORMUTIL_EXPORT uint qHash(const Path& path);
 
 /**
- * Convert the @p list of KUrls to a list of Paths.
+ * Convert the @p list of QUrls to a list of Paths.
  */
-KDEVPLATFORMUTIL_EXPORT Path::List toPathList(const KUrl::List& list);
+KDEVPLATFORMUTIL_EXPORT Path::List toPathList(const QList<QUrl>& list);
 }
 
 /**
