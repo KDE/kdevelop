@@ -255,6 +255,9 @@ private:
     template<CXTypeKind TK, EnableIf<CursorKindTraits::integralType(TK) != -1> = dummy>
     AbstractType *createType(CXType) const
     {
+        // TODO: would be nice to instantiate a ConstantIntegralType here and set a value if possible
+        // but unfortunately libclang doesn't offer API to that
+        // also see http://marc.info/?l=cfe-commits&m=131609142917881&w=2
         return new IntegralType(CursorKindTraits::integralType(TK));
     }
 
