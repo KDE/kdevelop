@@ -498,8 +498,9 @@ void DeclarationBuilder::declareFieldMember(const KDevelop::DeclarationPointer& 
     RangeInRevision range = m_session->locationToRange(location);
     IntegralType::Ptr type = IntegralType::Ptr(new IntegralType(IntegralType::TypeMixed));
     DUContext* importedContext = openContext(node, range, DUContext::Class);
+    Declaration* decl = openDeclaration<Declaration>(identifier, range);
 
-    openDeclaration<Declaration>(identifier, range);
+    decl->setInSymbolTable(false);  // This declaration is in an anonymous context, and the symbol table acts as if the declaration was in the global context
     openType(type);
     closeAndAssignType();
     closeContext();
