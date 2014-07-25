@@ -16,10 +16,8 @@ target_link_libraries(test_objectlist ${QT_QTTEST_LIBRARY} kdevplatformutil)
 
 kde4_add_unit_test(pathtest test_path.cpp)
 target_link_libraries(pathtest
-    ${QT_QTTEST_LIBRARY}
-    ${QT_QTCORE_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
+    Qt5::Test
+    KF5::KIOCore
     kdevplatformtests
-    kdevplatformlanguage
-    kdevplatformproject
+    kdevplatformutil
 )

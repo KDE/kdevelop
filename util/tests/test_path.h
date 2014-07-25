@@ -31,7 +31,6 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    void bench_kurl();
     void bench_qurl();
     void bench_qstringlist();
     void bench_path();
