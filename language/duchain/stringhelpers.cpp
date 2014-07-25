@@ -22,6 +22,100 @@
 #include <QString>
 #include <QStringList>
 
+namespace {
+
+template<typename T>
+int strip_impl(const T& str, T& from)
+{
+  if( str.isEmpty() )
+    return 0;
+
+  int i = 0;
+  int ip = 0;
+  int s = from.length();
+
+  for( int a = 0; a < s; a++ ) {
+      if( QChar(from[a]).isSpace() ) {
+          continue;
+      } else {
+          if( from[a] == str[i] ) {
+              i++;
+              ip = a+1;
+              if( i == (int)str.length() ) break;
+          } else {
+              break;
+          }
+      }
+  }
+
+  if( ip ) {
+    from = from.mid( ip );
+  }
+  return s - from.length();
+}
+
+template<typename T>
+int rStrip_impl(const T& str, T& from)
+{
+  if( str.isEmpty() )
+    return 0;
+
+  int i = 0;
+  int ip = from.length();
+  int s = from.length();
+
+  for( int a = s-1; a >= 0; a-- ) {
+      if( QChar( from[a] ).isSpace() ) { ///@todo Check whether this can cause problems in utf-8, as only one real character is treated!
+          continue;
+      } else {
+          if( from[a] == str[i] ) {
+              i++;
+              ip = a;
+              if( i == (int)str.length() ) break;
+          } else {
+              break;
+          }
+      }
+  }
+
+  if( ip != (int)from.length() ) {
+    from = from.left( ip );
+  }
+  return s - from.length();
+}
+
+template<typename T>
+T formatComment_impl(const T& comment)
+{
+  T ret;
+
+  QList<T> lines = comment.split( '\n' );
+
+  if ( !lines.isEmpty() ) {
+
+    auto it = lines.begin();
+    auto eit = lines.end();
+
+    // remove common leading chars from the beginning of lines
+    for( ; it != eit; ++it ) {
+        strip_impl<T>( "///", *it );
+        strip_impl<T>( "//", *it );
+        strip_impl<T>( "**", *it );
+        rStrip_impl<T>( "/**", *it );
+    }
+
+    foreach(const T& line, lines) {
+      if(!ret.isEmpty())
+        ret += '\n';
+      ret += line;
+    }
+  }
+
+  return ret.trimmed();
+}
+
+}
+
 namespace KDevelop
 {
 
@@ -383,163 +477,26 @@ QString clearStrings( QString str, QChar replacement ) {
   return str;
 }
 
-
-static inline bool isWhite( QChar c ) {
-  return c.isSpace();
+int strip(const QByteArray& str, QByteArray& from)
+{
+  return strip_impl<QByteArray>(str, from);
 }
 
-static inline bool isWhite( char c ) {
-  return QChar(c).isSpace();
+int rStrip(const QByteArray& str, QByteArray& from)
+{
+  return rStrip_impl<QByteArray>(str, from);
 }
 
-void rStrip( const QString& str, QString& from ) {
-  if( str.isEmpty() ) return;
-
-  int i = 0;
-  int ip = from.length();
-  int s = from.length();
-
-  for( int a = s-1; a >= 0; a-- ) {
-      if( isWhite( from[a] ) ) {
-          continue;
-      } else {
-          if( from[a] == str[i] ) {
-              i++;
-              ip = a;
-              if( i == (int)str.length() ) break;
-          } else {
-              break;
-          }
-      }
-  }
-
-  if( ip != (int)from.length() ) from = from.left( ip );
+QByteArray formatComment(const QByteArray& comment)
+{
+  return formatComment_impl<QByteArray>(comment);
 }
 
-void strip( const QString& str, QString& from ) {
-  if( str.isEmpty() ) return;
-
-  int i = 0;
-  int ip = 0;
-  int s = from.length();
-
-  for( int a = 0; a < s; a++ ) {
-      if( isWhite( from[a] ) ) {
-          continue;
-      } else {
-          if( from[a] == str[i] ) {
-              i++;
-              ip = a+1;
-              if( i == (int)str.length() ) break;
-          } else {
-              break;
-          }
-      }
-  }
-
-  if( ip ) from = from.mid( ip );
+QString formatComment(const QString& comment)
+{
+  return formatComment_impl<QString>(comment);
 }
 
-int rStrip( const QByteArray& str, QByteArray& from ) {
-  if( str.isEmpty() ) return 0;
-
-  int i = 0;
-  int ip = from.length();
-  int s = from.length();
-
-  for( int a = s-1; a >= 0; a-- ) {
-      if( isWhite( from[a] ) ) { ///@todo Check whether this can cause problems in utf-8, as only one real character is treated!
-          continue;
-      } else {
-          if( from[a] == str[i] ) {
-              i++;
-              ip = a;
-              if( i == (int)str.length() ) break;
-          } else {
-              break;
-          }
-      }
-  }
-
-  if( ip != (int)from.length() ) from = from.left( ip );
-  return s - from.length();
-}
-
-int strip( const QByteArray& str, QByteArray& from ) {
-  if( str.isEmpty() ) return 0;
-
-  int i = 0;
-  int ip = 0;
-  int s = from.length();
-
-  for( int a = 0; a < s; a++ ) {
-      if( isWhite( from[a] ) ) { ///@todo Check whether this can cause problems in utf-8, as only one real character is treated!
-          continue;
-      } else {
-          if( from[a] == str[i] ) {
-              i++;
-              ip = a+1;
-              if( i == (int)str.length() ) break;
-          } else {
-              break;
-          }
-      }
-  }
-
-  if( ip ) from = from.mid( ip );
-  return s - from.length();
-}
-QString formatComment( const QString& comment ) {
-  QString ret;
-
-  QStringList lines = comment.split( '\n', QString::KeepEmptyParts );
-
-  if ( !lines.isEmpty() ) {
-
-    QStringList::iterator it = lines.begin();
-    QStringList::iterator eit = lines.end();
-
-    // remove common leading chars from the beginning of lines
-    for( ; it != eit; ++it ) {
-        strip( "///", *it );
-        strip( "//", *it );
-        strip( "**", *it );
-        rStrip( "/**", *it );
-    }
-
-    ret = lines.join( "\n" );
-  }
-
-  return ret.trimmed();
-}
-
-QByteArray formatComment( const QByteArray& comment ) {
-  QByteArray ret;
-
-  QList<QByteArray> lines = comment.split( '\n' );
-
-  if ( !lines.isEmpty() ) {
-
-    QList<QByteArray>::iterator it = lines.begin();
-    QList<QByteArray>::iterator eit = lines.end();
-
-    // remove common leading chars from the beginning of lines
-    for( ; it != eit; ++it ) {
-        strip( "///", *it );
-        strip( "//", *it );
-        strip( "**", *it );
-        rStrip( "/**", *it );
-    }
-
-    foreach(const QByteArray& line, lines) {
-      if(!ret.isEmpty())
-        ret += '\n';
-      ret += line;
-    }
-  }
-
-  return ret.trimmed();
-}
 
 ParamIterator::~ParamIterator()
 {
