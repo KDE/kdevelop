@@ -257,19 +257,11 @@ void importDeclarationInContext(DUContext* context, const DeclarationPointer& de
         return;
     }
 
-    if (declaration->isFunctionDeclaration()) {
-        context->addIndirectImport(DUContext::Import(
-            importedContext,
-            nullptr,                                        // If this is not null, Import::Import will mess with context->owner()->internalFunctionContext...
-            CursorInRevision::invalid()
-        ));
-    } else {
-        context->addImportedParentContext(
-            importedContext,
-            CursorInRevision::invalid(),
-            context->localScopeIdentifier().isEmpty()
-        );
-    }
+    context->addIndirectImport(DUContext::Import(
+        importedContext,
+        nullptr,                                        // If this is not null, Import::Import will mess with context->owner()->internalFunctionContext...
+        CursorInRevision::invalid()
+    ));
 }
 
 void importObjectContext(DUContext* context, TopDUContext* topContext)
