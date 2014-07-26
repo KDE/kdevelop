@@ -66,7 +66,7 @@ public:
   void initShell();
 
   KDevelop::TopDUContext* parse(const QByteArray& unit,
-                                DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType),
+                                DumpAreas dump = DumpAreas(DumpType),
                                 KDevelop::TopDUContext* update = 0, bool keepAst = false);
 protected:
   KDevelop::DataAccessRepository m_modifications;
