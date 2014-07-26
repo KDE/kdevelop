@@ -39,6 +39,7 @@ endif()
 add_subdirectory(libs)
 add_subdirectory(duchain)
 add_subdirectory(qmlplugins)
+add_subdirectory(nodejsmodules)
 add_subdirectory(tests)
 add_subdirectory(codecompletion)
 

@@ -144,8 +144,23 @@ class Class(F):
     def print(self):
         # Declare the constructor (a function)
         print('/*\n * %s\n */' % self.fullName())
+
+        # Always declare a function using the function keyword
+        old_full_name = self._full_name
+        old_name = self._name
+
+        self._full_name = self._full_name.split('.')[-1]
+        self._name = self._full_name
+
         F.print(self)
 
+        if old_full_name != self._name:
+            print('%s = %s;' % (old_full_name, self._name))
+
+        self._full_name = old_full_name
+        self._name = old_name
+
+        # Print the prototype
         if self._prototype is not None:
             print('%s.prototype = %s;' % (self.fullName(), self._prototype))
 
