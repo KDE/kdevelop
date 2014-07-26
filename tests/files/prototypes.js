@@ -59,10 +59,16 @@ o.b = 3;
 
 var mod = {};
 mod.Subclass = Subclass;
+mod.Subclass.c = 3.14;
 
 var modInstance = new mod.Subclass();
 
 /**
  * "type" : { "toString" : "int" }
  */
-var modInstanceValue = modInstance.b;
+var modInstanceValueInt = modInstance.b;
+
+/**
+ * "type" : { "toString" : "double" }
+ */
+var modInstanceValueFloat = modInstance.c;

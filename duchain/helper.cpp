@@ -18,6 +18,7 @@
 
 #include "helper.h"
 #include "functiondeclaration.h"
+#include "functiontype.h"
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
@@ -148,22 +149,30 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
         return nullptr;
     }
 
+    // The internal context of declarations having a function type is the prototype
+    // context of the function (if any), or the internal context of Function
+    auto functionType = QmlJS::FunctionType::Ptr::dynamicCast(declaration->abstractType());
+
+    if (functionType) {
+        Declaration* decl = functionType->declaration(declaration->topContext());
+        QmlJS::FunctionDeclaration* funcDecl;
+
+        if (decl && (funcDecl = dynamic_cast<QmlJS::FunctionDeclaration*>(decl)) &&
+            funcDecl->prototypeContext()) {
+            return funcDecl->prototypeContext();
+        } else {
+            return getInternalContext(
+                getDeclaration(QualifiedIdentifier(QLatin1String("Function")), declaration->topContext())
+            );
+        }
+    }
+
     // The declaration can either be a class definition (its internal context
     // can be used) or an instance (use the internal context of its type)
     switch (declaration->kind()) {
     case Declaration::Type:
     case Declaration::Namespace:
-    {
-        auto func = declaration.dynamicCast<QmlJS::FunctionDeclaration>();
-
-        if (func) {
-            // func.foo identifies the attribute foo of the function prototype, not the
-            // variable foo of the function body.
-            return func->prototypeContext();
-        } else {
-            return declaration->internalContext();
-        }
-    }
+        return declaration->internalContext();
 
     case Declaration::NamespaceAlias:
     {
@@ -176,15 +185,10 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
     {
         auto structureType = StructureType::Ptr::dynamicCast(declaration->abstractType());
         auto integralType = IntegralType::Ptr::dynamicCast(declaration->abstractType());
-        auto functionType = QmlJS::FunctionType::Ptr::dynamicCast(declaration->abstractType());
 
         if (structureType) {
             return getInternalContext(
                 DeclarationPointer(structureType->declaration(declaration->topContext()))
-            );
-        } else if (functionType) {
-            return getInternalContext(
-                getDeclaration(QualifiedIdentifier(QLatin1String("Function")), declaration->topContext())
             );
         } else if (integralType) {
             QString baseClass;
