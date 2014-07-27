@@ -268,8 +268,11 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
 									"This will reformat all files in subdirectory <b>subdir</b> using the <b>uncrustify</b> "
 									"tool with the config-file <b>uncrustify.config</b>." ));
 	}
-	using P = SourceFormatterStyle::MimeHighlightPair;
-	result.setMimeTypes(SourceFormatterStyle::MimeList() << P{"text/x-c++src", "C++"} << P{"text/x-c++hdr", "C++"});
+	result.setMimeTypes({
+		{"text/x-c++src", "C++"}, {"text/x-chdr", "C"},
+		{"text/x-c++hdr", "C++"}, {"text/x-csrc", "C"},
+		{"text/x-java", "Java"}, {"text/x-csharp", "C#"}
+	});
 	return result;
 }
 
