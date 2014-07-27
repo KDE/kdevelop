@@ -233,36 +233,40 @@ bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
 
 void AssistantPopup::updatePosition(KTextEditor::View* view, const KTextEditor::Cursor& newPos)
 {
-    if ( newPos.isValid() && newPos.line() != 0 && ! m_shownAtBottom ) {
+    static const int MARGIN = 12;
+
+    if (newPos.isValid() && newPos.line() == 0 && !m_shownAtBottom) {
         // the position is not going to change; don't waste time
         return;
     }
+
     auto editorGeometry = textWidgetGeometry(view);
-    auto cursor = view->cursorToCoordinate(KTextEditor::Cursor(0, 0));
-    const int margin = 12;
-    QPoint targetLocation;
-    if ( cursor.y() < 0 ) {
-        // Only when the view is not scrolled to the top, place the widget there; otherwise it easily gets
-        // in the way.
-        targetLocation = parentWidget()->mapFromGlobal(view->mapToGlobal(editorGeometry.topRight()
-                         + QPoint(-width() - margin, margin)));
-        m_shownAtBottom = false;
+    const auto startCursorCoordinate = view->cursorToCoordinate(KTextEditor::Cursor(0, 0));
+
+    // algorithm for popup positioning:
+    // if we are scrolled to the top: show at bottom
+    // else:
+    //   if: current cursor position is in upper half => show at bottom
+    //   else: show at top
+    const bool showAtBottom = startCursorCoordinate.y() == 0 ? true :
+        view->cursorPositionCoordinates().y() < view->height()/2;
+    const QPoint targetLocation = showAtBottom ?
+        parentWidget()->mapFromGlobal(view->mapToGlobal(editorGeometry.bottomRight()
+                                      + QPoint(-width() - MARGIN, -MARGIN - height()))) :
+        parentWidget()->mapFromGlobal(view->mapToGlobal(editorGeometry.topRight()
+                                      + QPoint(-width() - MARGIN, MARGIN)));
+    if (pos() == targetLocation) {
+        return;
+    }
+
+    if ( m_reopening ) {
+        // When the assistant is already visible, close to no flickering will occur anyways,
+        // so we can avoid the full repaint of the window.
+        move(targetLocation);
     }
     else {
-        targetLocation = parentWidget()->mapFromGlobal(view->mapToGlobal(editorGeometry.bottomRight()
-                         + QPoint(-width() - margin, -margin - height())));
-        m_shownAtBottom = true;
-    }
-    if ( pos() != targetLocation ) {
-        if ( m_reopening ) {
-            // When the assistant is already visible, close to no flickering will occur anyways,
-            // so we can avoid the full repaint of the window.
-            move(targetLocation);
-        }
-        else {
-            Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
-            move(targetLocation);
-        }
+        Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
+        move(targetLocation);
     }
 }
 
