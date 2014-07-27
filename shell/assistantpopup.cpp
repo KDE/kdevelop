@@ -57,7 +57,7 @@ QWidget* findByClassname(const KTextEditor::View* view, const QString& klass)
             return child;
         }
     }
-    return static_cast<QWidget*>(nullptr);
+    return nullptr;
 };
 
 /**
