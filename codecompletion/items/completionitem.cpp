@@ -183,7 +183,18 @@ CodeCompletionModel::CompletionProperties CompletionItem::completionProperties()
         return CodeCompletionModel::Function;
     }
 
-    return NormalDeclarationCompletionItem::completionProperties();
+    // Put declarations in a context owned by a namespace in the namespace scope
+    auto properties = NormalDeclarationCompletionItem::completionProperties();
+
+    if (declaration() && declaration()->context() && declaration()->context()->owner() && (
+            declaration()->context()->owner()->kind() == Declaration::Namespace ||
+            declaration()->context()->type() == DUContext::Enum
+        )) {
+        properties &= ~(CodeCompletionModel::LocalScope | CodeCompletionModel::GlobalScope | CodeCompletionModel::Public);
+        properties |= CodeCompletionModel::NamespaceScope;
+    }
+
+    return properties;
 }
 
 void CompletionItem::executed(KTextEditor::Document* document, const KTextEditor::Range& word)
