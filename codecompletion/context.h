@@ -100,6 +100,7 @@ private:
     enum CompletionKind {
         NormalCompletion,   /*!< @brief Completion in a code context */
         CommentCompletion,  /*!< @brief Completion in comments */
+        StringCompletion,   /*!< @brief Completion in strings */
         ImportCompletion,   /*!< @brief Completion for import statements */
     };
 

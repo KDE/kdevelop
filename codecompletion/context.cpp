@@ -60,6 +60,7 @@ CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, co
 
     // Detect whether the cursor is in a comment
     bool isLastLine = true;
+    bool inString = false;
 
     for (int index = text.size()-1; index > 0; --index) {
         const QChar c = text.at(index);
@@ -80,7 +81,14 @@ CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, co
             // encountering a */ is enough to know that the cursor is outside a
             // comment
             break;
+        } else if (prev != QLatin1Char('\\') && (c == QLatin1Char('"') || c == QLatin1Char('\''))) {
+            // Toggle whether we are in a string or not
+            inString = !inString;
         }
+    }
+
+    if (inString) {
+        m_completionKind = StringCompletion;
     }
 }
 
@@ -99,6 +107,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
         return commentCompletion();
     case ImportCompletion:
         return importCompletion();
+    case StringCompletion:
+        break;
     }
 
     return QList<CompletionTreeItemPointer>();
