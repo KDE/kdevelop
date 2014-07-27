@@ -124,11 +124,6 @@ private:
     /// Return focus back to the editor view
     void ungrabFocus();
 
-    /**
-     * @brief Get the geometry of the inner part (with the text) of the KTextEditor::View being used.
-     */
-    QRect textWidgetGeometry(KTextEditor::View *view) const;
-
     KDevelop::IAssistant::Ptr m_assistant;
     QPointer<KTextEditor::View> m_view;
     AssistantPopupConfig* m_config;

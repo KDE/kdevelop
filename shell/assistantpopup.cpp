@@ -49,6 +49,64 @@ namespace {
 /// Used to avoid flickering caused when user is quickly inserting code
 const int UPDATE_STATE_INTERVAL = 300; // ms
 
+QWidget* findByClassname(const KTextEditor::View* view, const QString& klass)
+{
+    auto children = view->findChildren<QWidget*>();
+    for ( auto child: children ) {
+        if ( child->metaObject()->className() == klass ) {
+            return child;
+        }
+    }
+    return static_cast<QWidget*>(nullptr);
+};
+
+/**
+ * @brief Get the geometry of the inner part (with the text) of the KTextEditor::View being used.
+ */
+QRect textWidgetGeometry(const KTextEditor::View *view)
+{
+    // Subtract the width of the right scrollbar
+    int scrollbarWidth = 0;
+    if ( auto scrollbar = findByClassname(view, "KateScrollBar") ) {
+        scrollbarWidth = scrollbar->width();
+    }
+    // Subtract the width of the bottom scrollbar
+    int bottomScrollbarWidth = 0;
+    if ( auto bottom = findByClassname(view, "QScrollBar") ) {
+        bottomScrollbarWidth = bottom->height();
+    }
+    auto geom = view->geometry();
+
+    geom.adjust(0, 0, -scrollbarWidth, -bottomScrollbarWidth);
+    return geom;
+}
+
+}
+
+AssistantPopupConfig::AssistantPopupConfig(QObject *parent)
+    : QObject(parent)
+    , m_active(false)
+{
+}
+
+void AssistantPopupConfig::setColorsFromView(QObject *view)
+{
+    auto iface = dynamic_cast<KTextEditor::ConfigInterface*>(view);
+    Q_ASSERT(iface);
+    m_foreground = iface->configValue("line-number-color").value<QColor>();
+    m_background = iface->configValue("icon-border-color").value<QColor>();
+    m_highlight = iface->configValue("folding-marker-color").value<QColor>();
+    if ( KColorUtils::luma(m_background) < 0.3 ) {
+        m_foreground = KColorUtils::lighten(m_foreground, 0.7);
+    }
+    const float lumaDiff = KColorUtils::luma(m_highlight) - KColorUtils::luma(m_background);
+    if ( qAbs(lumaDiff) < 0.5 ) {
+        m_highlight = QColor::fromHsv(m_highlight.hue(),
+                                    qMin(255, m_highlight.saturation() + 80),
+                                    lumaDiff > 0 ? qMin(255, m_highlight.value() + 120)
+                                                 : qMax(80, m_highlight.value() - 40));
+    }
+    emit colorsChanged();
 }
 
 bool AssistantPopupConfig::isActive() const
@@ -189,60 +247,6 @@ bool AssistantPopup::viewportEvent(QEvent *event)
     return QGraphicsView::viewportEvent(event);
 }
 
-AssistantPopupConfig::AssistantPopupConfig(QObject *parent)
-    : QObject(parent)
-    , m_active(false)
-{
-}
-
-void AssistantPopupConfig::setColorsFromView(QObject *view)
-{
-    auto iface = dynamic_cast<KTextEditor::ConfigInterface*>(view);
-    Q_ASSERT(iface);
-    m_foreground = iface->configValue("line-number-color").value<QColor>();
-    m_background = iface->configValue("icon-border-color").value<QColor>();
-    m_highlight = iface->configValue("folding-marker-color").value<QColor>();
-    if ( KColorUtils::luma(m_background) < 0.3 ) {
-        m_foreground = KColorUtils::lighten(m_foreground, 0.7);
-    }
-    const float lumaDiff = KColorUtils::luma(m_highlight) - KColorUtils::luma(m_background);
-    if ( qAbs(lumaDiff) < 0.5 ) {
-        m_highlight = QColor::fromHsv(m_highlight.hue(),
-                                    qMin(255, m_highlight.saturation() + 80),
-                                    lumaDiff > 0 ? qMin(255, m_highlight.value() + 120)
-                                                 : qMax(80, m_highlight.value() - 40));
-    }
-    emit colorsChanged();
-}
-
-static QWidget* findByClassname(KTextEditor::View* view, const QString& klass) {
-    auto children = view->findChildren<QWidget*>();
-    for ( auto child: children ) {
-        if ( child->metaObject()->className() == klass ) {
-            return child;
-        }
-    }
-    return static_cast<QWidget*>(nullptr);
-};
-
-QRect AssistantPopup::textWidgetGeometry(KTextEditor::View *view) const
-{
-    // Subtract the width of the right scrollbar
-    int scrollbarWidth = 0;
-    if ( auto scrollbar = findByClassname(view, "KateScrollBar") ) {
-        scrollbarWidth = scrollbar->width();
-    }
-    // Subtract the width of the bottom scrollbar
-    int bottomScrollbarWidth = 0;
-    if ( auto bottom = findByClassname(view, "QScrollBar") ) {
-        bottomScrollbarWidth = bottom->height();
-    }
-    auto geom = view->geometry();
-
-    geom.adjust(0, 0, -scrollbarWidth, -bottomScrollbarWidth);
-    return geom;
-}
-
 void AssistantPopup::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() >= Qt::Key_0 && event->key() <= Qt::Key_9) {
@@ -381,6 +385,5 @@ void AssistantPopup::updateState()
 
     show();
 }
-
 
 #include "assistantpopup.moc"
