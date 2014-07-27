@@ -5633,6 +5633,243 @@ Module {
                 "ScrollEnd": 3
             }
         }
+        Method {
+            name: "atob"
+            type: "string"
+            Parameter  { name: "data"; type: "string" }
+        }
+        Method {
+            name: "binding"
+            type: "QQmlScriptString"
+            Parameter { name: "binding"; type: "QQmlScriptString" }
+        }
+        Method {
+            name: "btoa"
+            type: "string"
+            Parameter  { name: "data"; type: "string" }
+        }
+        Method {
+            name: "colorEqual"
+            type: "color"
+            Parameter { name: "lhs"; type: "color" }
+            Parameter { name: "rhs"; type: "color" }
+        }
+        Method {
+            name: "createComponent"
+            type: "Component"
+            Parameter { name: "url"; type: "string" }
+        }
+        Method {
+            name: "createQmlObject"
+            type: "Component"
+            Parameter { name: "qml"; type: "string" }
+            Parameter { name: "parent"; type: "QObject" }
+            Parameter { name: "filePath"; type: "string" }
+        }
+        Method {
+            name: "darker"
+            type: "color"
+            Parameter { name: "baseColor"; type: "color" }
+            Parameter { name: "factor"; type: "real" }
+        }
+        Method {
+            name: "font"
+            type: "Font"
+            Parameter { name: "fontSpecified"; type: "QObject" }
+        }
+        Method {
+            name: "fontFamilies"
+            type: "variant"
+        }
+        Method {
+            name: "formatDate"
+            type: "string"
+            Parameter { name: "date"; type: "date" }
+            Parameter { name: "format"; type: "variant" }
+        }
+        Method {
+            name: "formatDateTime"
+            type: "string"
+            Parameter { name: "datetime"; type: "date" }
+            Parameter { name: "format"; type: "variant" }
+        }
+        Method {
+            name: "formatTime"
+            type: "string"
+            Parameter { name: "time"; type: "time" }
+            Parameter { name: "format"; type: "variant" }
+        }
+        Method {
+            name: "hsla"
+            type: "color"
+            Parameter { name: "hue"; type: "real" }
+            Parameter { name: "saturation"; type: "real" }
+            Parameter { name: "lightness"; type: "real" }
+            Parameter { name: "alpha"; type: "real" }
+        }
+        Method {
+            name: "include"
+            type: "Component"
+            Parameter { name: "url"; type: "string" }
+            Parameter { name: "callback"; type: "ScriptAction" }
+        }
+        Method {
+            name: "isQtObject"
+            type: "bool"
+            Parameter { name: "object"; type: "variant" }
+        }
+        Method {
+            name: "lighter"
+            type: "color"
+            Parameter { name: "baseColor"; type: "color" }
+            Parameter { name: "factor"; type: "real" }
+        }
+        Method {
+            name: "locale"
+            type: "Locale"
+            Parameter { name: "name"; type: "string" }
+        }
+        Method {
+            name: "md5"
+            type: "string"
+            Parameter { name: "data"; type: "variant" }
+        }
+        Method {
+            name: "matrix4x4"
+            type: "QObject"
+            Parameter { name: "m11"; type: "real" }
+            Parameter { name: "m12"; type: "real" }
+            Parameter { name: "m13"; type: "real" }
+            Parameter { name: "m14"; type: "real" }
+            Parameter { name: "m21"; type: "real" }
+            Parameter { name: "m22"; type: "real" }
+            Parameter { name: "m23"; type: "real" }
+            Parameter { name: "m24"; type: "real" }
+            Parameter { name: "m31"; type: "real" }
+            Parameter { name: "m32"; type: "real" }
+            Parameter { name: "m33"; type: "real" }
+            Parameter { name: "m34"; type: "real" }
+            Parameter { name: "m41"; type: "real" }
+            Parameter { name: "m42"; type: "real" }
+            Parameter { name: "m43"; type: "real" }
+            Parameter { name: "m44"; type: "real" }
+        }
+        Method {
+            name: "openUrlExternally"
+            type: "bool"
+            Parameter { name: "target"; type: "url" }
+        }
+        Method {
+            name: "point"
+            type: "builtins1.0::point"
+            Parameter { name: "x"; type: "int" }
+            Parameter { name: "y"; type: "int" }
+        }
+        Method {
+            name: "qsTr"
+            type: "string"
+            Parameter { name: "sourceText"; type: "string" }
+            Parameter { name: "disambiguation"; type: "string" }
+            Parameter { name: "n"; type: "int" }
+        }
+        Method {
+            name: "qsTrId"
+            type: "string"
+            Parameter { name: "id"; type: "string" }
+            Parameter { name: "n"; type: "int" }
+        }
+        Method {
+            name: "qsTrIdNoOp"
+            type: "string"
+            Parameter { name: "id"; type: "string" }
+        }
+        Method {
+            name: "qsTrNoOp"
+            type: "string"
+            Parameter { name: "sourceText"; type: "string" }
+            Parameter { name: "disambiguation"; type: "string" }
+        }
+        Method {
+            name: "qsTranslate"
+            type: "string"
+            Parameter { name: "context"; type: "string" }
+            Parameter { name: "sourceText"; type: "string" }
+            Parameter { name: "disambiguation"; type: "string" }
+            Parameter { name: "n"; type: "int" }
+        }
+        Method {
+            name: "qsTranslateNoOp"
+            type: "string"
+            Parameter { name: "context"; type: "string" }
+            Parameter { name: "sourceText"; type: "string" }
+            Parameter { name: "disambiguation"; type: "string" }
+        }
+        Method {
+            name: "quaternion"
+            type: "builtins1.0::quaternion"
+            Parameter { name: "scalar"; type: "real" }
+            Parameter { name: "x"; type: "real" }
+            Parameter { name: "y"; type: "real" }
+            Parameter { name: "z"; type: "real" }
+        }
+        Method {
+            name: "quit"
+            type: "void"
+        }
+        Method {
+            name: "rect"
+            type: "builtins1.0::rect"
+            Parameter { name: "x"; type: "int" }
+            Parameter { name: "y"; type: "int" }
+            Parameter { name: "width"; type: "int" }
+            Parameter { name: "height"; type: "int" }
+        }
+        Method {
+            name: "resolvedUrl"
+            type: "url"
+            Parameter { name: "url"; type: "url" }
+        }
+        Method {
+            name: "rgba"
+            type: "color"
+            Parameter { name: "red"; type: "real" }
+            Parameter { name: "green"; type: "real" }
+            Parameter { name: "blue"; type: "real" }
+            Parameter { name: "alpha"; type: "real" }
+        }
+        Method {
+            name: "size"
+            type: "builtins1.0::size"
+            Parameter { name: "width"; type: "int" }
+            Parameter { name: "height"; type: "int" }
+        }
+        Method {
+            name: "tint"
+            type: "color"
+            Parameter { name: "baseColor"; type: "color" }
+            Parameter { name: "tintColor"; type: "color" }
+        }
+        Method {
+            name: "vector2d"
+            type: "builtins1.0::vector2d"
+            Parameter { name: "x"; type: "int" }
+            Parameter { name: "y"; type: "int" }
+        }
+        Method {
+            name: "vector3d"
+            type: "builtins1.0::vector3d"
+            Parameter { name: "x"; type: "int" }
+            Parameter { name: "y"; type: "int" }
+            Parameter { name: "z"; type: "int" }
+        }
+        Method {
+            name: "vector4d"
+            type: "builtins1.0::vector3d"
+            Parameter { name: "x"; type: "int" }
+            Parameter { name: "y"; type: "int" }
+            Parameter { name: "z"; type: "int" }
+            Parameter { name: "w"; type: "int" }
+        }
     }
     Component { name: "QEasingCurve"; prototype: "QQmlEasingValueType" }
 }

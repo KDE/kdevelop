@@ -3995,6 +3995,141 @@ Module {
                 "VeryCoarseTimer": 2
             }
         }
+        Method {
+            name: "atob"
+            type: "string"
+            Parameter  { name: "data"; type: "string" }
+        }
+        Method {
+            name: "btoa"
+            type: "string"
+            Parameter  { name: "data"; type: "string" }
+        }
+        Method {
+            name: "createComponent"
+            type: "Component"
+            Parameter { name: "url"; type: "string" }
+        }
+        Method {
+            name: "createQmlObject"
+            type: "Component"
+            Parameter { name: "qml"; type: "string" }
+            Parameter { name: "parent"; type: "QObject" }
+            Parameter { name: "filePath"; type: "string" }
+        }
+        Method {
+            name: "darker"
+            type: "color"
+            Parameter { name: "baseColor"; type: "color" }
+            Parameter { name: "factor"; type: "real" }
+        }
+        Method {
+            name: "fontFamilies"
+            type: "variant"
+        }
+        Method {
+            name: "formatDate"
+            type: "string"
+            Parameter { name: "date"; type: "date" }
+            Parameter { name: "format"; type: "variant" }
+        }
+        Method {
+            name: "formatDateTime"
+            type: "string"
+            Parameter { name: "datetime"; type: "date" }
+            Parameter { name: "format"; type: "variant" }
+        }
+        Method {
+            name: "formatTime"
+            type: "string"
+            Parameter { name: "time"; type: "time" }
+            Parameter { name: "format"; type: "variant" }
+        }
+        Method {
+            name: "hsla"
+            type: "color"
+            Parameter { name: "hue"; type: "real" }
+            Parameter { name: "saturation"; type: "real" }
+            Parameter { name: "lightness"; type: "real" }
+            Parameter { name: "alpha"; type: "real" }
+        }
+        Method {
+            name: "include"
+            type: "Component"
+            Parameter { name: "url"; type: "string" }
+            Parameter { name: "callback"; type: "QDeclarativeScriptString" }
+        }
+        Method {
+            name: "isQtObject"
+            type: "bool"
+            Parameter { name: "object"; type: "variant" }
+        }
+        Method {
+            name: "lighter"
+            type: "color"
+            Parameter { name: "baseColor"; type: "color" }
+            Parameter { name: "factor"; type: "real" }
+        }
+        Method {
+            name: "md5"
+            type: "string"
+            Parameter { name: "data"; type: "variant" }
+        }
+        Method {
+            name: "openUrlExternally"
+            type: "bool"
+            Parameter { name: "target"; type: "url" }
+        }
+        Method {
+            name: "point"
+            type: "builtins1.0::point"
+            Parameter { name: "x"; type: "int" }
+            Parameter { name: "y"; type: "int" }
+        }
+        Method {
+            name: "quit"
+            type: "void"
+        }
+        Method {
+            name: "rect"
+            type: "builtins1.0::rect"
+            Parameter { name: "x"; type: "int" }
+            Parameter { name: "y"; type: "int" }
+            Parameter { name: "width"; type: "int" }
+            Parameter { name: "height"; type: "int" }
+        }
+        Method {
+            name: "resolvedUrl"
+            type: "url"
+            Parameter { name: "url"; type: "url" }
+        }
+        Method {
+            name: "rgba"
+            type: "color"
+            Parameter { name: "red"; type: "real" }
+            Parameter { name: "green"; type: "real" }
+            Parameter { name: "blue"; type: "real" }
+            Parameter { name: "alpha"; type: "real" }
+        }
+        Method {
+            name: "size"
+            type: "builtins1.0::size"
+            Parameter { name: "width"; type: "int" }
+            Parameter { name: "height"; type: "int" }
+        }
+        Method {
+            name: "tint"
+            type: "color"
+            Parameter { name: "baseColor"; type: "color" }
+            Parameter { name: "tintColor"; type: "color" }
+        }
+        Method {
+            name: "vector3d"
+            type: "builtins1.0::vector3d"
+            Parameter { name: "x"; type: "int" }
+            Parameter { name: "y"; type: "int" }
+            Parameter { name: "z"; type: "int" }
+        }
     }
     Component { name: "QEasingCurve"; prototype: "QDeclarativeEasingValueType" }
 }
