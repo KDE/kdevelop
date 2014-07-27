@@ -35,22 +35,25 @@ class Cursor;
 class AssistantPopupConfig : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QColor foreground READ foreground CONSTANT)
-    Q_PROPERTY(QColor background READ background CONSTANT)
-    Q_PROPERTY(QColor highlight READ highlight CONSTANT)
-    Q_PROPERTY(QString title READ title CONSTANT)
-    Q_PROPERTY(QList<QObject*> model READ model CONSTANT)
+    Q_PROPERTY(QColor foreground READ foreground NOTIFY colorsChanged)
+    Q_PROPERTY(QColor background READ background NOTIFY colorsChanged)
+    Q_PROPERTY(QColor highlight READ highlight NOTIFY colorsChanged)
+
+    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
+    Q_PROPERTY(QList<QObject*> model READ model NOTIFY modelChanged)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
 
 public:
     explicit AssistantPopupConfig(QObject *parent = 0);
+
     QColor foreground() const { return m_foreground; }
     QColor background() const { return m_background; }
     QColor highlight() const { return m_highlight; }
+
     QString title() const { return m_title; }
+    void setTitle(const QString& title);
     QList<QObject*> model() const { return m_model; }
-    void setTitle(const QString& text) { m_title = text; }
-    void setModel(const QList<QObject*>& model) { m_model = model; }
+    void setModel(const QList<QObject*>& model);
 
     void setColorsFromView(QObject *view);
 
@@ -58,17 +61,20 @@ public:
     void setActive(bool active);
 
 signals:
+    void colorsChanged();
+
+    void titleChanged(const QString& title);
+    void modelChanged(const QList<QObject*>& model);
     void activeChanged(bool active);
 
 private:
     QColor m_foreground;
     QColor m_background;
     QColor m_highlight;
+
     QString m_title;
     QList<QObject*> m_model;
     bool m_active;
-
-    friend class AssistantPopup;
 };
 
 Q_DECLARE_METATYPE(AssistantPopupConfig*)
@@ -79,25 +85,29 @@ class AssistantPopup : public QDeclarativeView
 
 public:
     typedef KSharedPtr<AssistantPopup> Ptr;
+
     /**
-     * @p widget The widget below which the assistant should be shown.
      * The current main window will be used as parent widget for the popup.
      * This is to make use of the maximal space available and prevent any lines
      * in e.g. the editor to be hidden by the popup.
      */
-    AssistantPopup(KTextEditor::View *widget, const KDevelop::IAssistant::Ptr &assistant);
-    /**
-     * @brief Like creating a new assistant, but faster.
-     */
-    void reset(KTextEditor::View *widget, const KDevelop::IAssistant::Ptr &assistant);
-    KDevelop::IAssistant::Ptr assistant() const;
+    AssistantPopup();
 
-public slots:
-    void executeHideAction();
-    void notifyReopened(bool reopened=true);
+    /**
+     * Reset this popup for view @p view and show assistant @p assistant
+     *
+     * @p view The widget below which the assistant should be shown.
+     */
+    void reset(KTextEditor::View *view, const KDevelop::IAssistant::Ptr &assistant);
+
+    KDevelop::IAssistant::Ptr assistant() const;
 
 private slots:
     void updatePosition(KTextEditor::View* view, const KTextEditor::Cursor& newPos);
+    void updateState();
+
+    void executeHideAction();
+    void hideAssistant();
 
 protected:
     virtual bool eventFilter(QObject* object, QEvent* event);
@@ -106,7 +116,13 @@ protected:
     virtual bool viewportEvent(QEvent *event);
 
 private:
-    void updateActions();
+    void setView(KTextEditor::View* view);
+    void setAssistant(const KDevelop::IAssistant::Ptr& assistant);
+
+    /// Give the AssistantPopup instance widget focus
+    void grabFocus();
+    /// Return focus back to the editor view
+    void ungrabFocus();
 
     /**
      * @brief Get the geometry of the inner part (with the text) of the KTextEditor::View being used.
@@ -114,11 +130,11 @@ private:
     QRect textWidgetGeometry(KTextEditor::View *view) const;
 
     KDevelop::IAssistant::Ptr m_assistant;
-    QList<KDevelop::IAssistantAction::Ptr> m_assistantActions;
     QPointer<KTextEditor::View> m_view;
-    QScopedPointer<AssistantPopupConfig> m_config;
+    AssistantPopupConfig* m_config;
     bool m_shownAtBottom;
     bool m_reopening;
+    QTimer* m_updateTimer;
 };
 
 #endif // KDEVPLATFORM_ASSISTANTPOPUP_H

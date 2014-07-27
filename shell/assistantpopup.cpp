@@ -24,6 +24,7 @@
 
 #include <QKeyEvent>
 #include <QDebug>
+#include <QTimer>
 #include <QDeclarativeContext>
 
 #include <KLocalizedString>
@@ -42,6 +43,14 @@
 
 using namespace KDevelop;
 
+namespace {
+
+/// Interval after which the state of the popup is re-evaluated
+/// Used to avoid flickering caused when user is quickly inserting code
+const int UPDATE_STATE_INTERVAL = 300; // ms
+
+}
+
 bool AssistantPopupConfig::isActive() const
 {
     return m_active;
@@ -57,15 +66,34 @@ void AssistantPopupConfig::setActive(bool active)
     emit activeChanged(m_active);
 }
 
-AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr& assistant)
+void AssistantPopupConfig::setTitle(const QString& title)
+{
+    if (m_title == title) {
+        return;
+    }
+
+    m_title = title;
+    emit titleChanged(m_title);
+}
+
+void AssistantPopupConfig::setModel(const QList<QObject*>& model)
+{
+    if (m_model == model) {
+        return;
+    }
+
+    m_model = model;
+    emit modelChanged(model);
+}
+
+AssistantPopup::AssistantPopup()
 // main window as parent to use maximal space available in worst case
     : QDeclarativeView(ICore::self()->uiController()->activeMainWindow())
-    , m_view()
+    , m_config(new AssistantPopupConfig(this))
     , m_shownAtBottom(false)
     , m_reopening(false)
+    , m_updateTimer(new QTimer(this))
 {
-    Q_ASSERT(assistant);
-
     QPalette p = palette();
     p.setColor(QPalette::Window, Qt::transparent);
     setPalette(p);
@@ -74,41 +102,80 @@ AssistantPopup::AssistantPopup(KTextEditor::View* parent, const IAssistant::Ptr&
     setResizeMode(QDeclarativeView::SizeViewToRootObject);
     setAttribute(Qt::WA_ShowWithoutActivating);
 
-    reset(parent, assistant);
+    rootContext()->setContextProperty("config", m_config);
+
+    setSource(QUrl::fromLocalFile(KStandardDirs::locate("data", "kdevelop/assistantpopup.qml")));
+    if (!rootObject()) {
+        kWarning() << "Failed to load assistant markup! The assistant will not work.";
+    }
+
+    m_updateTimer->setInterval(UPDATE_STATE_INTERVAL);
+    m_updateTimer->setSingleShot(true);
+    connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateState()));
 }
 
-void AssistantPopup::reset(KTextEditor::View* widget, const IAssistant::Ptr& assistant)
+void AssistantPopup::grabFocus()
 {
-    disconnect(this);
-    if ( m_view ) {
-        m_view->removeEventFilter(this);
+    m_config->setActive(true);
+    if (m_view) {
+        setFocus();
     }
-    m_view = widget;
-    widget->installEventFilter(this);
-    m_assistant = assistant;
-
-    m_config.reset(new AssistantPopupConfig);
-    auto doc = ICore::self()->documentController()->activeDocument();
-    m_config->setColorsFromView(doc->textDocument()->activeView());
-    updateActions();
-
-    rootContext()->setContextProperty("config", m_config.data());
-
-    if ( source() == QUrl() ) {
-        setSource(QUrl(KStandardDirs::locate("data", "kdevelop/assistantpopup.qml")));
-        if ( ! rootObject() ) {
-            kWarning() << "Failed to load assistant markup! The assistant will not work.";
-            return;
-        }
-    }
-
-    connect(widget, SIGNAL(verticalScrollPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
-            this, SLOT(updatePosition(KTextEditor::View*,KTextEditor::Cursor)));
-
-    // force recomputing the size hint
-    resize(sizeHint());
-    updatePosition(widget, KTextEditor::Cursor::invalid());
 }
+
+void AssistantPopup::ungrabFocus()
+{
+    m_config->setActive(false);
+    if (m_view && hasFocus()) {
+        m_view->setFocus();
+    }
+}
+
+void AssistantPopup::reset(KTextEditor::View* view, const IAssistant::Ptr& assistant)
+{
+    setView(view);
+    setAssistant(assistant);
+
+    m_updateTimer->start();
+}
+
+void AssistantPopup::setView(KTextEditor::View* view)
+{
+    if (m_view == view) {
+        return;
+    }
+
+    ungrabFocus();
+
+    if (m_view) {
+        m_view->removeEventFilter(this);
+        disconnect(m_view, SIGNAL(verticalScrollPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
+                  this, SLOT(updatePosition(KTextEditor::View*,KTextEditor::Cursor)));
+    }
+    m_view = view;
+    if (m_view) {
+        m_view->installEventFilter(this);
+        connect(m_view, SIGNAL(verticalScrollPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
+                this, SLOT(updatePosition(KTextEditor::View*,KTextEditor::Cursor)));
+    }
+}
+
+void AssistantPopup::setAssistant(const IAssistant::Ptr& assistant)
+{
+    if (m_assistant == assistant) {
+        return;
+    }
+
+    if (m_assistant) {
+        disconnect(m_assistant.data(), SIGNAL(actionsChanged()), m_updateTimer, SLOT(start()));
+        disconnect(m_assistant.data(), SIGNAL(hide()), this, SLOT(hideAssistant()));
+    }
+    m_assistant = assistant;
+    if (m_assistant) {
+        connect(m_assistant.data(), SIGNAL(actionsChanged()), m_updateTimer, SLOT(start()));
+        connect(m_assistant.data(), SIGNAL(hide()), this, SLOT(hideAssistant()));
+    }
+}
+
 
 bool AssistantPopup::viewportEvent(QEvent *event)
 {
@@ -145,6 +212,7 @@ void AssistantPopupConfig::setColorsFromView(QObject *view)
                                     lumaDiff > 0 ? qMin(255, m_highlight.value() + 120)
                                                  : qMax(80, m_highlight.value() - 40));
     }
+    emit colorsChanged();
 }
 
 static QWidget* findByClassname(KTextEditor::View* view, const QString& klass) {
@@ -183,7 +251,7 @@ void AssistantPopup::keyPressEvent(QKeyEvent* event)
         if (field == 0) {
             executeHideAction();
         } else {
-            auto action = m_assistantActions.value(field - 1);
+            auto action = m_assistant->actions().value(field - 1);
             if (action) {
                 action->execute();
             }
@@ -197,10 +265,7 @@ void AssistantPopup::keyPressEvent(QKeyEvent* event)
 void AssistantPopup::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Alt || event->modifiers() == Qt::AltModifier) {
-        m_config->setActive(false);
-        if (m_view) {
-            m_view->setFocus();
-        }
+        ungrabFocus();
     } else {
         QDeclarativeView::keyReleaseEvent(event);
     }
@@ -208,21 +273,22 @@ void AssistantPopup::keyReleaseEvent(QKeyEvent *event)
 
 bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
 {
-    if ( ! m_view ) {
-        // should never happen
+    if (!m_view)
         return false;
-    }
+
     Q_ASSERT(object == m_view.data());
     Q_UNUSED(object);
+
     if (event->type() == QEvent::Resize) {
         updatePosition(m_view.data(), KTextEditor::Cursor::invalid());
     } else if (event->type() == QEvent::Hide) {
         executeHideAction();
+    } else if (event->type() == QEvent::WindowDeactivate) {
+        ungrabFocus();
     } else if (event->type() == QEvent::KeyPress) {
         auto keyEvent = static_cast<QKeyEvent*>(event);
         if (keyEvent->modifiers() == Qt::AltModifier) {
-            setFocus();
-            m_config->setActive(true);
+            grabFocus();
         }
         if (static_cast<QKeyEvent*>(event)->key() == Qt::Key_Escape) {
             executeHideAction();
@@ -279,31 +345,41 @@ void AssistantPopup::executeHideAction()
 {
     if ( isVisible() ) {
         m_assistant->doHide();
-        if (m_view) {
-            m_view->setFocus();
-        }
     }
 }
 
-void AssistantPopup::notifyReopened(bool reopened)
+void AssistantPopup::hideAssistant()
 {
-    m_reopening = reopened;
+    reset(nullptr, {}); // indirectly calls hide()
 }
 
-void AssistantPopup::updateActions()
+void AssistantPopup::updateState()
 {
-    m_assistantActions = m_assistant->actions();
+    if (!m_assistant || m_assistant->actions().isEmpty()) {
+        hide();
+        return;
+    }
 
     QList<QObject*> items;
-    foreach (IAssistantAction::Ptr action, m_assistantActions) {
+    foreach (IAssistantAction::Ptr action, m_assistant->actions()) {
         items << action->toKAction();
     }
     auto hideAction = new KAction(i18n("Hide"), m_assistant.data());
     connect(hideAction, SIGNAL(triggered()), this, SLOT(executeHideAction()));
     items << hideAction;
 
+    auto doc = ICore::self()->documentController()->activeDocument();
+    m_config->setColorsFromView(doc->textDocument()->activeView());
     m_config->setModel(items);
     m_config->setTitle(m_assistant->title());
+    m_config->setActive(false);
+
+    // both changed title or actions may change the appearance of the popup
+    // force recomputing the size hint
+    resize(sizeHint());
+    updatePosition(m_view, KTextEditor::Cursor::invalid());
+
+    show();
 }
 
 
