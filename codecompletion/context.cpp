@@ -41,6 +41,7 @@
 #include <duchain/cache.h>
 
 #include <QtCore/QDir>
+#include <QtCore/QRegExp>
 
 using namespace KDevelop;
 
@@ -90,6 +91,16 @@ CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, co
     if (inString) {
         m_completionKind = StringCompletion;
     }
+
+    // Some specific constructs don't need any code-completion at all (mainly
+    // because the user will declare new things, not use ones)
+    if (m_text.contains(QRegExp(QLatin1String("(var|function)\\s+$"))) ||                   // "var |" or "function |"
+        m_text.contains(QRegExp(QLatin1String("property\\s+[a-zA-Z0-9_]+\\s+$"))) ||        // "property <type> |"
+        m_text.contains(QRegExp(QLatin1String("function(\\s+[a-zA-Z0-9_]+)?\\s*\\($"))) ||  // "function (|" or "function <name> (|"
+        m_text.contains(QRegExp(QLatin1String("id:\\s*")))                                  // "id: |"
+    ) {
+        m_completionKind = NoCompletion;
+    }
 }
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& abort, bool fullCompletion)
@@ -108,6 +119,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
     case ImportCompletion:
         return importCompletion();
     case StringCompletion:
+    case NoCompletion:
         break;
     }
 

@@ -98,6 +98,7 @@ private:
 
 private:
     enum CompletionKind {
+        NoCompletion,       /*!< @brief No code-completion at all */
         NormalCompletion,   /*!< @brief Completion in a code context */
         CommentCompletion,  /*!< @brief Completion in comments */
         StringCompletion,   /*!< @brief Completion in strings */

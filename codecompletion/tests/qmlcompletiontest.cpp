@@ -265,6 +265,10 @@ void QmlCompletionTest::testDoesNotContainDeclaration_data()
     QTest::newRow("js_in_single_line_comment") << "var a;\n%INVOKE" << "// %CURSOR" << "a" << false;
     QTest::newRow("js_in_multi_line_comment") << "var a;\n%INVOKE" << "/* %CURSOR" << "a" << false;
     QTest::newRow("js_in_string") << "var a;\n%INVOKE" << "var b = 'hello \\'%CURSOR" << "a" << false;
+    QTest::newRow("js_useless_completions") << "var a;\n%INVOKE" << "var %CURSOR" << "a" << false;
+    QTest::newRow("js_useless_completions") << "var a;\n%INVOKE" << "function %CURSOR" << "a" << false;
+    QTest::newRow("js_useless_completions") << "var a;\n%INVOKE" << "function f(%CURSOR" << "a" << false;
+    QTest::newRow("js_useless_completions") << "var a;\n%INVOKE" << "var o = {id: %CURSOR" << "a" << false;
 
     // Don't show unreachable declarations when providing code-completions for object members
     QTest::newRow("js_object_member_not_surrounding") << "var a; var b = {c: 0};%INVOKE" << "b.%CURSOR" << "a" << false;
