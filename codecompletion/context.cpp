@@ -256,8 +256,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
                                                                              const CursorInRevision& position)
 {
     QList<CompletionTreeItemPointer> items;
-    QList<CompletionTreeItemPointer> overrides;
-    QList<CompletionTreeItemPointer> implements;
     QList<CompletionTreeItemPointer> macros;
     QList<CompletionTreeItemPointer> builtin;
 
@@ -387,32 +385,8 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
         }
     }
 
-    auto overrideList = m_completionHelper.overrides();
-    auto implementsList = m_completionHelper.implements();
-
-    if (!overrideList.isEmpty()) {
-        for (int i = 0; i < overrideList.count(); i++) {
-            FuncOverrideInfo info = overrideList.at(i);
-            QString nameAndParams = info.name + '(' + info.params.join(", ") + ')';
-            if(info.isConst)
-                nameAndParams = nameAndParams + " const";
-            if(info.isVirtual)
-                nameAndParams = nameAndParams + " = 0";
-            overrides << CompletionTreeItemPointer(new OverrideItem(nameAndParams, info.returnType));
-        }
-        KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Virtual Override"), 600);
-        node->appendChildren(overrides);
-        m_ungrouped << CompletionTreeElementPointer(node);
-    }
-
-    if (!implementsList.isEmpty()) {
-        foreach(FuncImplementInfo info, implementsList) {
-            implements << CompletionTreeItemPointer(new ImplementsItem(info));
-        }
-        KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Implement Function"), 600);
-        node->appendChildren(implements);
-        m_ungrouped << CompletionTreeElementPointer(node);
-    }
+    addOverwritableItems();
+    addImplementationHelperItems();
 
     if (!macros.isEmpty()) {
         KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Macros"), 900);
@@ -426,6 +400,45 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
     }
     return items;
 }
+
+void ClangCodeCompletionContext::addOverwritableItems()
+{
+    auto overrideList = m_completionHelper.overrides();
+    if (overrideList.isEmpty()) {
+        return;
+    }
+
+    QList<CompletionTreeItemPointer> overrides;
+    for (int i = 0; i < overrideList.count(); i++) {
+        FuncOverrideInfo info = overrideList.at(i);
+        QString nameAndParams = info.name + '(' + info.params.join(", ") + ')';
+        if(info.isConst)
+            nameAndParams = nameAndParams + " const";
+        if(info.isVirtual)
+            nameAndParams = nameAndParams + " = 0";
+        overrides << CompletionTreeItemPointer(new OverrideItem(nameAndParams, info.returnType));
+    }
+    KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Virtual Override"), 600);
+    node->appendChildren(overrides);
+    m_ungrouped << CompletionTreeElementPointer(node);
+}
+
+void ClangCodeCompletionContext::addImplementationHelperItems()
+{
+    auto implementsList = m_completionHelper.implements();
+    if (implementsList.isEmpty()) {
+        return;
+    }
+
+    QList<CompletionTreeItemPointer> implements;
+    foreach(FuncImplementInfo info, implementsList) {
+        implements << CompletionTreeItemPointer(new ImplementsItem(info));
+    }
+    KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Implement Function"), 600);
+    node->appendChildren(implements);
+    m_ungrouped << CompletionTreeElementPointer(node);
+}
+
 
 QList<CompletionTreeElementPointer> ClangCodeCompletionContext::ungroupedElements()
 {

@@ -49,7 +49,11 @@ public:
     }
 
     QList<KDevelop::CompletionTreeElementPointer> ungroupedElements() override;
+
 private:
+    void addOverwritableItems();
+    void addImplementationHelperItems();
+
     std::unique_ptr<CXCodeCompleteResults, void(*)(CXCodeCompleteResults*)> m_results;
     QList<KDevelop::CompletionTreeElementPointer> m_ungrouped;
     CompletionHelper m_completionHelper;
