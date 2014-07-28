@@ -108,40 +108,40 @@ void TestCodeCompletion::testVirtualOverride_data()
     QTest::newRow("basic")
         <<  "class Foo { virtual void foo(); virtual char foo(char c, int i, double d); };\n"
             "class Bar : Foo \n{\n}"
-        << CompletionItemsList{{SimpleCursor(3, 1), {QString("void foo()"), QString("char foo(char c, int i, double d)")}}};
+        << CompletionItemsList{{{3, 1}, {QString("void foo()"), QString("char foo(char c, int i, double d)")}}};
 
     QTest::newRow("template")
         << "template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
            "class Bar : Foo<char, double> \n{\n}"
-        << CompletionItemsList{{SimpleCursor(3, 1), {"double foo(char a, double b, int i)"}}};
+        << CompletionItemsList{{{3, 1}, {"double foo(char a, double b, int i)"}}};
 
     QTest::newRow("nested-template")
         << "template<class T1, class T2> class Foo { virtual T2 foo(T1 a, T2 b, int i); } ;\n"
            "template<class T1, class T2> class Baz { };\n"
            "class Bar : Foo<char, Baz<char, double>> \n{\n}"
-        << CompletionItemsList{{SimpleCursor(4, 1), {"Baz<char, double> foo(char a, Baz<char, double> b, int i)"}}};
+        << CompletionItemsList{{{4, 1}, {"Baz<char, double> foo(char a, Baz<char, double> b, int i)"}}};
 
     QTest::newRow("multi")
         << "class Foo { virtual int foo(int i); };\n"
            "class Baz { virtual char baz(char c); };\n"
            "class Bar : Foo, Baz \n{\n}"
-        << CompletionItemsList{{SimpleCursor(4, 1), {"int foo(int i)", "char baz(char c)"}}};
+        << CompletionItemsList{{{4, 1}, {"int foo(int i)", "char baz(char c)"}}};
 
     QTest::newRow("deep")
         << "class Foo { virtual int foo(int i); };\n"
            "class Baz : Foo { };\n"
            "class Bar : Baz \n{\n}"
-        << CompletionItemsList{{SimpleCursor(4, 1), {"int foo(int i)"}}};
+        << CompletionItemsList{{{4, 1}, {"int foo(int i)"}}};
 
     QTest::newRow("pure")
         << "class Foo { virtual void foo() = 0; foo() {} };\n"
            "class Bar : Foo \n{\n}"
-        << CompletionItemsList{{SimpleCursor(3, 1), {"void foo() = 0"}}};
+        << CompletionItemsList{{{3, 1}, {"void foo() = 0"}}};
 
     QTest::newRow("const")
         << "class Foo { virtual void foo(const int b) const; }\n;"
            "class Bar : Foo \n{\n}"
-        << CompletionItemsList{{SimpleCursor(3, 1), {"void foo(const int b) const"}}};
+        << CompletionItemsList{{{3, 1}, {"void foo(const int b) const"}}};
 }
 
 void TestCodeCompletion::testImplement()
@@ -176,15 +176,15 @@ void TestCodeCompletion::testImplement_data()
 
     QTest::newRow("basic")
         << "int foo(char c, int i); \n"
-        << CompletionItemsList{{SimpleCursor(1, 0), {"int foo(char c, int i)"}}};
+        << CompletionItemsList{{{1, 0}, {"int foo(char c, int i)"}}};
 
     QTest::newRow("class")
         << "class Foo { \n"
            "int bar(char c, int i); \n\n"
            "}; \n"
         << CompletionItemsList{
-                {SimpleCursor(2, 0), {}},
-                {SimpleCursor(4, 0), {"int Foo::bar(char c, int i)"}}
+                {{2, 0}, {}},
+                {{4, 0}, {"int Foo::bar(char c, int i)"}}
         };
 
     QTest::newRow("namespace")
@@ -192,29 +192,29 @@ void TestCodeCompletion::testImplement_data()
            "int bar(char c, int i); \n\n"
            "}; \n"
         << CompletionItemsList{
-                {SimpleCursor(2, 0), {"int bar(char c, int i)"}},
-                {SimpleCursor(4, 0), {"int Foo::bar(char c, int i)"}}
+                {{2, 0}, {"int bar(char c, int i)"}},
+                {{4, 0}, {"int Foo::bar(char c, int i)"}}
         };
 
     QTest::newRow("two-namespace")
         << "namespace Foo { int bar(char c, int i); };\n"
            "namespace Foo {\n"
            "};\n"
-        << CompletionItemsList{{SimpleCursor(2, 0), {"int bar(char c, int i)"}}};
+        << CompletionItemsList{{{2, 0}, {"int bar(char c, int i)"}}};
 
     QTest::newRow("destructor")
         << "class Foo { ~Foo(); }\n"
-        << CompletionItemsList{{SimpleCursor(1, 0), {"Foo::~Foo()"}}};
+        << CompletionItemsList{{{1, 0}, {"Foo::~Foo()"}}};
 
     QTest::newRow("constructor")
         << "class Foo { \n"
                  "Foo(int i); \n"
                  "}; \n"
-        << CompletionItemsList{{SimpleCursor(3, 1), {"Foo::Foo(int i)"}}};
+        << CompletionItemsList{{{3, 1}, {"Foo::Foo(int i)"}}};
 
     QTest::newRow("template")
         << "template<typename T> class Foo { T bar(T t); };\n"
-        << CompletionItemsList{{SimpleCursor(1, 1), {"template<typename T> T Foo<T>::bar(T t)"}}};
+        << CompletionItemsList{{{1, 1}, {"template<typename T> T Foo<T>::bar(T t)"}}};
 
     QTest::newRow("specialized-template")
         << "template<typename T> class Foo { \n"
@@ -224,7 +224,7 @@ void TestCodeCompletion::testImplement_data()
            "template<> class Foo<int> { \n"
            "int bar(int t); \n"
            "}\n"
-        << CompletionItemsList{{SimpleCursor(6, 1), {"int Foo<int>::bar(int t)"}}};
+        << CompletionItemsList{{{6, 1}, {"int Foo<int>::bar(int t)"}}};
 
     QTest::newRow("nested-class")
         << "class Foo { \n"
@@ -233,9 +233,9 @@ void TestCodeCompletion::testImplement_data()
            "}; \n\n"
            "}; \n\n"
         << CompletionItemsList{
-            {SimpleCursor(3, 1), {}},
-            {SimpleCursor(5, 1), {}},
-            {SimpleCursor(7, 1), {"int Foo::Bar::baz(char c, int i)"}}
+            {{3, 1}, {}},
+            {{5, 1}, {}},
+            {{7, 1}, {"int Foo::Bar::baz(char c, int i)"}}
         };
 
     QTest::newRow("nested-namespace")
@@ -245,9 +245,9 @@ void TestCodeCompletion::testImplement_data()
            "}; \n\n"
            "}; \n\n"
         << CompletionItemsList{
-            {SimpleCursor(3, 1), {"int baz(char c, int i)"}},
-            {SimpleCursor(5, 1), {"int Bar::baz(char c, int i)"}},
-            {SimpleCursor(7, 1), {"int Foo::Bar::baz(char c, int i)"}}
+            {{3, 1}, {"int baz(char c, int i)"}},
+            {{5, 1}, {"int Bar::baz(char c, int i)"}},
+            {{7, 1}, {"int Foo::Bar::baz(char c, int i)"}}
         };
 
     QTest::newRow("partial-template")
@@ -255,15 +255,15 @@ void TestCodeCompletion::testImplement_data()
            "template<typename U> class Bar;\n"
            "template<typename U> class Bar<U*> { void baz(T t, U u); }\n"
            "}\n"
-        << CompletionItemsList{{SimpleCursor(5,1), {"template<typename T> template<typename U> void Foo<T>::Bar<U *>::baz(T t, U u)"}}};
+        << CompletionItemsList{{{5,1}, {"template<typename T> template<typename U> void Foo<T>::Bar<U *>::baz(T t, U u)"}}};
 
     QTest::newRow("variadic")
         << "int foo(...); int bar(int i, ...); \n"
-        << CompletionItemsList{{SimpleCursor(1, 1), {"int foo(...)", "int bar(int i, ...)"}}};
+        << CompletionItemsList{{{1, 1}, {"int foo(...)", "int bar(int i, ...)"}}};
 
     QTest::newRow("const")
         << "class Foo { int bar() const; };"
-        << CompletionItemsList{{SimpleCursor(3, 1), {"int Foo::bar() const"}}};
+        << CompletionItemsList{{{3, 1}, {"int Foo::bar() const"}}};
 }
 
 #include "test_codecompletion.moc"
