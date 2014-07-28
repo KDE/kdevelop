@@ -97,6 +97,30 @@ void executeCompletionTest(const QString& code, const CompletionItemsList& expec
 
 }
 
+void TestCodeCompletion::testClangCodeCompletion()
+{
+    QFETCH(QString, code);
+    QFETCH(CompletionItemsList, expectedItems);
+
+    executeCompletionTest(code, expectedItems);
+}
+
+void TestCodeCompletion::testClangCodeCompletion_data()
+{
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<CompletionItemsList>("expectedItems");
+
+    QTest::newRow("basic")
+        << "class Foo { public: void foo() {} }; int main() { Foo f; \nf. }"
+        << CompletionItemsList{{{1, 2}, {
+            "foo()",
+            "~Foo()",
+            "Foo",
+            "operator=(const Foo &)",
+            "operator=(Foo &&)"
+        }}};
+}
+
 void TestCodeCompletion::testVirtualOverride()
 {
     QFETCH(QString, code);
