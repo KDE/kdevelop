@@ -482,4 +482,31 @@ void TestDUChain::testFunctionDefinitionVsDeclaration()
     QVERIFY(dynamic_cast<FunctionDefinition*>(funcDef));
 }
 
+void TestDUChain::testEnsureNoDoubleVisit()
+{
+    // On some language construct, we may up visiting the same cursor multiple times
+    // Example: "struct SomeStruct {} s;"
+    // decl: "SomeStruct SomeStruct " of kind StructDecl (2) in main.cpp@[(1,1),(1,17)]
+    // decl: "struct SomeStruct s " of kind VarDecl (9) in main.cpp@[(1,1),(1,19)]
+    // decl: "SomeStruct SomeStruct " of kind StructDecl (2) in main.cpp@[(1,1),(1,17)]
+    //
+    // => We end up visiting the StructDecl twice (or more)
+    //    That's because we use clang_visitChildren not just on the translation unit cursor.
+    //    Apparently just "recursing" vs. "visiting children explicitly"
+    //    results in a different AST traversal
+
+    TestFile file("struct SomeStruct {} s;\n", "cpp");
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(file.waitForParsed());
+
+    DUChainReadLocker lock;
+    auto top = file.topContext();
+    QVERIFY(top);
+
+    // there should only be one declaration for "SomeStruct"
+    auto candidates = top->findDeclarations(QualifiedIdentifier("SomeStruct"));
+    QCOMPARE(candidates.size(), 1);
+}
+
+
 #include "test_duchain.moc"

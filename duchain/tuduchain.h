@@ -126,9 +126,17 @@ private:
         Decision IsInClass = CursorKindTraits::isInClass(CK),
         Decision IsDefinition = CursorKindTraits::isDefinition(CK),
         EnableIf<IsInClass != Decision::Maybe && IsDefinition != Decision::Maybe> = dummy>
-    CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor /*parent*/)
+    CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor parent)
     {
         IF_DEBUG(kDebug() << "IsInClass:" << IsInClass << "- isDefinition:" << IsDefinition;)
+
+        // We may end up visiting the same cursor twice in some cases
+        // see discussion on https://git.reviewboard.kde.org/r/119526/
+        // TODO: Investigate why this is happening in libclang
+        if ((CursorKindTraits::isClass(CK) || CK == CXCursor_EnumDecl) &&
+                clang_getCursorKind(parent) == CXCursor_VarDecl) {
+            return CXChildVisit_Continue;
+        }
 
         constexpr bool isClassMember = IsInClass == Decision::True;
         constexpr bool isDefinition = IsDefinition == Decision::True;

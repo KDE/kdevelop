@@ -47,6 +47,7 @@ private slots:
     void testReparseBaseClassesTemplates();
     void testGlobalFunctionDeclaration();
     void testFunctionDefinitionVsDeclaration();
+    void testEnsureNoDoubleVisit();
 };
 
 #endif // DUCHAINTEST_H
