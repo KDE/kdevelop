@@ -124,26 +124,35 @@ void TestCodeCompletion::testClangCodeCompletion_data()
     QTest::newRow("dotmemberaccess")
         << "class Foo { public: void foo() {} }; int main() { Foo f; \nf. "
         << CompletionItemsList{{{1, 2}, {
-            "Foo",
             "foo()",
-            "operator=(Foo &&)",
-            "operator=(const Foo &)",
-            "~Foo()",
         }}};
     QTest::newRow("arrowmemberaccess")
         << "class Foo { public: void foo() {} }; int main() { Foo* f = new Foo; \nf-> }"
         << CompletionItemsList{{{1, 3}, {
-            "Foo",
             "foo()",
-            "operator=(Foo &&)",
-            "operator=(const Foo &)",
-            "~Foo()",
         }}};
     QTest::newRow("enum-case")
         << "enum Foo { foo, bar }; int main() { Foo f; switch (f) {\ncase "
         << CompletionItemsList{{{1,4}, {
             "bar",
             "foo",
+        }}};
+    QTest::newRow("only-private")
+        << "class SomeStruct { private: void priv() {} };\n"
+           "int main() { SomeStruct s;\ns. "
+        << CompletionItemsList{{{2, 2}, {
+        }}};
+    QTest::newRow("private-public")
+        << "class SomeStruct { public: void pub() {} private: void priv() {} };\n"
+           "int main() { SomeStruct s;\ns. "
+        << CompletionItemsList{{{2, 2}, {
+            "pub()",
+        }}};
+    QTest::newRow("protected-public")
+        << "class SomeStruct { public: void pub() {} protected: void prot() {} };\n"
+           "int main() { SomeStruct s;\ns. "
+        << CompletionItemsList{{{2, 2}, {
+            "pub()",
         }}};
 }
 

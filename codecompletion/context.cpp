@@ -272,6 +272,33 @@ int codeCompletionPriorityToMatchQuality(unsigned int completionPriority)
     return qBound(0u, completionPriority, 80u) / 8;
 }
 
+/**
+ * @return Whether the declaration represented by identifier @p identifier qualifies as completion result
+ *
+ * For example, we don't want to offer SomeClass::operator= as completion item to the user
+ */
+bool isValidCompletionIdentifier(const QualifiedIdentifier& identifier)
+{
+    const int count = identifier.count();
+    if (identifier.count() < 2) {
+        return true;
+    }
+
+    const Identifier scope = identifier.at(count-2);
+    const Identifier id = identifier.last();
+    if (scope == id) {
+        return false; // is constructor
+    }
+    const QString idString = id.toString();
+    if (idString.startsWith("~") && scope.toString() == idString.mid(1)) {
+        return false; // is destructor
+    }
+    if (idString.startsWith("operator")) {
+        return false; // is operator
+    }
+    return true;
+}
+
 }
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
@@ -351,6 +378,12 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
     for (uint i = 0; i < m_results->NumResults; ++i) {
         auto result = m_results->Results[i];
+
+        const auto availability = clang_getCompletionAvailability(result.CompletionString);
+        if (availability == CXAvailability_NotAvailable || availability == CXAvailability_NotAccessible) {
+            continue;
+        }
+
         const bool isMacroDefinition = result.CursorKind == CXCursor_MacroDefinition;
         if (isMacroDefinition && m_filters & NoMacros) {
             continue;
@@ -449,6 +482,10 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 qid = QualifiedIdentifier(parent.toString());
             }
             qid.push(id);
+
+            if (!isValidCompletionIdentifier(qid)) {
+                continue;
+            }
 
             Declaration* found = 0;
             foreach(Declaration* dec, ctx->findDeclarations(qid, m_position)) {
