@@ -22,10 +22,11 @@
 #ifndef COMPLETIONHELPER_H
 #define COMPLETIONHELPER_H
 
-#include <clang-c/Index.h>
 #include <QStringList>
 #include <QVector>
 #include "codecompletionexport.h"
+
+#include <language/duchain/duchainpointer.h>
 
 struct FuncOverrideInfo
 {
@@ -49,6 +50,8 @@ namespace KDevelop {
     class SimpleCursor;
 }
 
+class ParseSession;
+
 Q_DECLARE_TYPEINFO(FuncOverrideInfo, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(FuncImplementInfo, Q_MOVABLE_TYPE);
 using FunctionOverrideList = QVector<FuncOverrideInfo>;
@@ -57,9 +60,10 @@ using FunctionImplementsList = QVector<FuncImplementInfo>;
 class KDEVCLANGCODECOMPLETION_EXPORT CompletionHelper
 {
 public:
-    CompletionHelper(const CXTranslationUnit& unit,
-                     const KDevelop::SimpleCursor& position,
-                     const char *filename);
+    CompletionHelper();
+
+    void computeCompletions(const ParseSession& session,
+                            const KDevelop::SimpleCursor& position);
 
     FunctionOverrideList overrides() const;
     FunctionImplementsList implements() const;

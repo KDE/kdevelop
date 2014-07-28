@@ -253,7 +253,6 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
                                                       )
     : CodeCompletionContext(context, text, CursorInRevision::castFromSimpleCursor(position), 0)
     , m_results(nullptr, clang_disposeCodeCompleteResults)
-    , m_completionHelper(session.unit(), position, ClangString(clang_getFileName(session.file())).c_str())
     , m_parseSession(session)
 {
     ClangString file(clang_getFileName(session.file()));
@@ -274,6 +273,8 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         m_valid = false;
         return;
     }
+
+    m_completionHelper.computeCompletions(session, position);
 }
 
 ClangCodeCompletionContext::~ClangCodeCompletionContext()

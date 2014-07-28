@@ -23,6 +23,7 @@
 
 #include "../duchain/clangtypes.h"
 #include "../duchain/cursorkindtraits.h"
+#include "../duchain/parsesession.h"
 
 #include <language/duchain/stringhelpers.h>
 #include <language/editor/simplecursor.h>
@@ -30,6 +31,8 @@
 #include <QLinkedList>
 
 #include "../util/clangutils.h"
+
+#include <clang-c/Index.h>
 
 namespace {
 
@@ -255,19 +258,19 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
 
 }
 
-CompletionHelper::CompletionHelper(const CXTranslationUnit& unit, const KDevelop::SimpleCursor& position, const char *file)
+CompletionHelper::CompletionHelper()
 {
-    CXFile clangFile = clang_getFile(unit, file);
-    if (!clangFile) {
-        kDebug() << "Completion helper couldn't find file: " << file;
-        return;
-    }
+}
 
-    CXSourceLocation location = clang_getLocation(unit, clangFile, position.line + 1, position.column + 1);
+void CompletionHelper::computeCompletions(const ParseSession& session, const SimpleCursor& position)
+{
+    const auto unit = session.unit();
+
+    CXSourceLocation location = clang_getLocation(unit, session.file(), position.line + 1, position.column + 1);
 
     if (clang_equalLocations(clang_getNullLocation(), location)) {
         kDebug() << "Completion helper given invalid position " << position
-                 << " in file " << file;
+                 << " in file " << session.file();
         return;
     }
 
