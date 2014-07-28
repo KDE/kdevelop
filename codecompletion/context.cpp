@@ -257,16 +257,29 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
 {
     ClangString file(clang_getFileName(session.file()));
 
-    CXUnsavedFile unsaved;
-    const QByteArray content = m_text.toUtf8();
-    unsaved.Contents = content.constData();
-    unsaved.Length = content.size();
-    unsaved.Filename = file;
+    if (!m_text.isEmpty()) {
+        kDebug() << "Unsaved contents found for file" << file << "- creating CXUnsavedFile";
 
-    m_results.reset( clang_codeCompleteAt(session.unit(), file,
+        CXUnsavedFile unsaved;
+        const QByteArray content = m_text.toUtf8();
+        unsaved.Contents = content.constData();
+        unsaved.Length = content.size();
+        unsaved.Filename = file.c_str();
+
+        m_results.reset(clang_codeCompleteAt(session.unit(), file.c_str(),
                         position.line + 1, position.column + 1,
-                        &unsaved, 1,
-                        clang_defaultCodeCompleteOptions()) );
+                        &unsaved, 1u,
+                        clang_defaultCodeCompleteOptions()));
+    } else {
+        m_results.reset(clang_codeCompleteAt(session.unit(), file.c_str(),
+                        position.line + 1, position.column + 1,
+                        nullptr, 0u,
+                        clang_defaultCodeCompleteOptions()));
+    }
+
+    if (!m_results) {
+        kWarning() << "Something went wrong during 'clang_codeCompleteAt' for file" << file.toString();
+    }
 
     // check 'isValidPosition' after parsing the new content
     if (!isValidPosition()) {
@@ -283,7 +296,11 @@ ClangCodeCompletionContext::~ClangCodeCompletionContext()
 
 bool ClangCodeCompletionContext::isValidPosition() const
 {
-    return !isInsideComment(m_parseSession.unit(), m_parseSession.file(), m_position.castToSimpleCursor());
+    if (isInsideComment(m_parseSession.unit(), m_parseSession.file(), m_position.castToSimpleCursor())) {
+        kDebug() << "Invalid completion context: Inside comment";
+        return false;
+    }
+    return true;
 }
 
 QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(bool& abort, bool fullCompletion)
@@ -299,6 +316,8 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
     QSet<Declaration*> handled;
 
     DUContext* ctx = m_duContext->findContextAt(m_position);
+
+    kDebug() << "Clang found" << m_results->NumResults << "completion results";
 
     for (uint i = 0; i < m_results->NumResults; ++i) {
         auto result = m_results->Results[i];
