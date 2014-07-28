@@ -420,7 +420,7 @@ void ClangCodeCompletionContext::addOverwritableItems()
             nameAndParams = nameAndParams + " = 0";
         overrides << CompletionTreeItemPointer(new OverrideItem(nameAndParams, info.returnType));
     }
-    eventuallyAddGroup(i18n("Virtual Override"), 600, overrides);
+    eventuallyAddGroup(i18n("Virtual Override"), 0, overrides);
 }
 
 void ClangCodeCompletionContext::addImplementationHelperItems()
@@ -434,7 +434,7 @@ void ClangCodeCompletionContext::addImplementationHelperItems()
     foreach(FuncImplementInfo info, implementsList) {
         implements << CompletionTreeItemPointer(new ImplementsItem(info));
     }
-    eventuallyAddGroup(i18n("Implement Function"), 600, implements);
+    eventuallyAddGroup(i18n("Implement Function"), 0, implements);
 }
 
 
