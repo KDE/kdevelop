@@ -210,6 +210,40 @@ private:
  */
 using SimpleItem = CompletionItem<CompletionTreeItem>;
 
+/**
+ * Return true in case position @p position represents a cursor inside a comment
+ */
+bool isInsideComment(CXTranslationUnit unit, CXFile file, const KDevelop::SimpleCursor& position)
+{
+    if (!position.isValid()) {
+        return false;
+    }
+
+    // TODO: This may get very slow for a large TU, investigate if we can improve this function
+    auto begin = clang_getLocation(unit, file, 1, 1);
+    auto end = clang_getLocation(unit, file, position.line + 1, position.column + 1);
+    CXSourceRange range = clang_getRange(begin, end);
+
+    // tokenize the whole range from the start until 'position'
+    // if we detect a comment token at this position, return true
+    CXToken* tokens = nullptr;
+    unsigned int nTokens = 0;
+    clang_tokenize(unit, range, &tokens, &nTokens);
+    for (unsigned int i = 0; i < nTokens; ++i) {
+        CXToken token = tokens[i];
+        CXTokenKind tokenKind = clang_getTokenKind(token);
+        if (tokenKind != CXToken_Comment) {
+            continue;
+        }
+
+        auto range = ClangRange(clang_getTokenExtent(unit, token));
+        if (range.toSimpleRange().contains(position)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 }
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
@@ -220,6 +254,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
     : CodeCompletionContext(context, text, CursorInRevision::castFromSimpleCursor(position), 0)
     , m_results(nullptr, clang_disposeCodeCompleteResults)
     , m_completionHelper(session.unit(), position, ClangString(clang_getFileName(session.file())).c_str())
+    , m_parseSession(session)
 {
     ClangString file(clang_getFileName(session.file()));
 
@@ -233,14 +268,29 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
                         position.line + 1, position.column + 1,
                         &unsaved, 1,
                         clang_defaultCodeCompleteOptions()) );
+
+    // check 'isValidPosition' after parsing the new content
+    if (!isValidPosition()) {
+        m_valid = false;
+        return;
+    }
 }
 
 ClangCodeCompletionContext::~ClangCodeCompletionContext()
 {
 }
 
+bool ClangCodeCompletionContext::isValidPosition() const
+{
+    return !isInsideComment(m_parseSession.unit(), m_parseSession.file(), m_position.castToSimpleCursor());
+}
+
 QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(bool& abort, bool fullCompletion)
 {
+    if (!m_valid || !m_duContext || !m_results) {
+        return {};
+    }
+
     QList<CompletionTreeItemPointer> items;
     QList<CompletionTreeItemPointer> macros;
     QList<CompletionTreeItemPointer> builtin;

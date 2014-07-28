@@ -22,6 +22,8 @@
 #ifndef CLANGCODECOMPLETIONCONTEXT_H
 #define CLANGCODECOMPLETIONCONTEXT_H
 
+#include <duchain/parsesession.h>
+
 #include <language/codecompletion/codecompletioncontext.h>
 
 #include <clang-c/Index.h>
@@ -30,7 +32,6 @@
 
 #include "completionhelper.h"
 
-class ParseSession;
 class ClangCodeCompletionContext : public KDevelop::CodeCompletionContext
 {
 public:
@@ -51,9 +52,13 @@ private:
     /// Creates the group named @p name and adds it to m_ungrouped if items @p items is not empty
     void eventuallyAddGroup(const QString& name, int priority, const QList<KDevelop::CompletionTreeItemPointer>& items);
 
+    /// Returns whether the we are at a valid completion-position
+    bool isValidPosition() const;
+
     std::unique_ptr<CXCodeCompleteResults, void(*)(CXCodeCompleteResults*)> m_results;
     QList<KDevelop::CompletionTreeElementPointer> m_ungrouped;
     CompletionHelper m_completionHelper;
+    ParseSession m_parseSession;
 };
 
 #endif // CLANGCODECOMPLETIONCONTEXT_H

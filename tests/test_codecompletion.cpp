@@ -252,6 +252,29 @@ void TestCodeCompletion::testImplement_data()
     QTest::newRow("const")
         << "class Foo { int bar() const; };"
         << CompletionItemsList{{{3, 1}, {"Foo::bar() const"}}};
+
 }
+
+void TestCodeCompletion::testInvalidCompletions()
+{
+    QFETCH(QString, code);
+    QFETCH(CompletionItemsList, expectedItems);
+
+    executeCompletionTest(code, expectedItems);
+}
+
+void TestCodeCompletion::testInvalidCompletions_data()
+{
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<CompletionItemsList>("expectedItems");
+
+    QTest::newRow("invalid-context-infunction")
+        << "class Foo { int bar() const; };\nint somefunc() {\n}"
+        << CompletionItemsList{{{2, 0}, {}}};
+    QTest::newRow("invalid-context-incomment")
+        << "class Foo { int bar() const; };\n/*\n*/"
+        << CompletionItemsList{{{2, 0}, {}}};
+}
+
 
 #include "test_codecompletion.moc"

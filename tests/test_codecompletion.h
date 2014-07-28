@@ -36,6 +36,8 @@ private slots:
     void testVirtualOverride_data();
     void testImplement();
     void testImplement_data();
+    void testInvalidCompletions();
+    void testInvalidCompletions_data();
 };
 
 #endif // TESTCODECOMPLETION_H
