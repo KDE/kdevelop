@@ -47,8 +47,10 @@
 using namespace KDevelop;
 
 namespace {
-///Completion results with priority below this value will be shown in "Best Matches" group
+/// Completion results with priority below this value will be shown in "Best Matches" group
 const int MAX_PRIORITY_FOR_BEST_MATCHES = 15;
+/// Maximum return-type string length in completion items
+const int MAX_RETURN_TYPE_STRING_LENGTH = 20;
 
 /**
  * Common base class for Clang code completion items.
@@ -244,6 +246,14 @@ bool isInsideComment(CXTranslationUnit unit, CXFile file, const KDevelop::Simple
     return false;
 }
 
+QString& elideStringRight(QString& str, int length)
+{
+    if (str.size() > length + 3) {
+        return str.replace(length, str.size() - length, "...");
+    }
+    return str;
+}
+
 }
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
@@ -392,10 +402,8 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             }
         }
 
-        if (resultType.size() > 23) {
-            // ellide text to the right for overly long result types (templates especially)
-            resultType.replace(20, resultType.size() - 20, "...");
-        }
+        // ellide text to the right for overly long result types (templates especially)
+        elideStringRight(resultType, MAX_RETURN_TYPE_STRING_LENGTH);
 
         if (result.CursorKind != CXCursor_MacroDefinition && result.CursorKind != CXCursor_NotImplemented) {
             const Identifier id(typed);
