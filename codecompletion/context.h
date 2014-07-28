@@ -34,19 +34,13 @@ class ParseSession;
 class ClangCodeCompletionContext : public KDevelop::CodeCompletionContext
 {
 public:
-    ClangCodeCompletionContext(const ParseSession& session,
+    ClangCodeCompletionContext(const KDevelop::DUContextPointer& context,
+                               const ParseSession& session,
                                const KDevelop::SimpleCursor& position,
                                const QStringList& contents);
     ~ClangCodeCompletionContext();
 
-    QList<KDevelop::CompletionTreeItemPointer> completionItems(const KDevelop::TopDUContext* const top,
-                                                               const KDevelop::CursorInRevision& position);
-
-    QList< KDevelop::CompletionTreeItemPointer > completionItems(bool& /*abort*/, bool /*fullCompletion*/ = true) override
-    {
-        // not used, see above
-        return {};
-    }
+    virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) override;
 
     QList<KDevelop::CompletionTreeElementPointer> ungroupedElements() override;
 

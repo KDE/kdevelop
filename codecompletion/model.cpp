@@ -70,17 +70,18 @@ public slots:
             return;
         }
 
-        ClangCodeCompletionContext completionContext( session, position, contents );
+        ClangCodeCompletionContext completionContext(DUContextPointer(top), session, position, contents);
 
         if (aborting()) {
             failed();
             return;
         }
 
+        bool abort = false;
         // NOTE: cursor might be wrong here, but shouldn't matter much I hope...
         //       when the document changed significantly, then the cache is off anyways and we don't get anything sensible
         //       the position here is just a "optimization" to only search up to that position
-        const auto& items = completionContext.completionItems(top, CursorInRevision::castFromSimpleCursor(position));
+        const auto& items = completionContext.completionItems(abort);
 
         if (aborting()) {
             failed();

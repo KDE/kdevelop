@@ -226,11 +226,12 @@ QByteArray concatenate(const QStringList& contents)
 
 }
 
-ClangCodeCompletionContext::ClangCodeCompletionContext(const ParseSession& session,
+ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
+                                                       const ParseSession& session,
                                                        const SimpleCursor& position,
                                                        const QStringList& contents
                                                       )
-    : CodeCompletionContext({}, QString(), {}, 0)
+    : CodeCompletionContext(context, QString(), CursorInRevision::castFromSimpleCursor(position), 0)
     , m_results(nullptr, clang_disposeCodeCompleteResults)
     , m_completionHelper(session.unit(), position, ClangString(clang_getFileName(session.file())).c_str())
 {
@@ -252,8 +253,7 @@ ClangCodeCompletionContext::~ClangCodeCompletionContext()
 {
 }
 
-QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(const TopDUContext* const top,
-                                                                             const CursorInRevision& position)
+QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(bool& abort, bool fullCompletion)
 {
     QList<CompletionTreeItemPointer> items;
     QList<CompletionTreeItemPointer> macros;
@@ -261,7 +261,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
 
     QSet<Declaration*> handled;
 
-    DUContext* ctx = top->findContextAt(position);
+    DUContext* ctx = m_duContext->findContextAt(m_position);
 
     for (uint i = 0; i < m_results->NumResults; ++i) {
         auto result = m_results->Results[i];
@@ -351,7 +351,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
             qid.push(id);
 
             Declaration* found = 0;
-            foreach(Declaration* dec, ctx->findDeclarations(qid, position)) {
+            foreach(Declaration* dec, ctx->findDeclarations(qid, m_position)) {
                 if (!handled.contains(dec)) {
                     found = dec;
                     handled.insert(dec);
