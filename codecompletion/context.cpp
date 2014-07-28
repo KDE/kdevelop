@@ -263,7 +263,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         CXUnsavedFile unsaved;
         const QByteArray content = m_text.toUtf8();
         unsaved.Contents = content.constData();
-        unsaved.Length = content.size();
+        unsaved.Length = content.size() + 1; // + \0-byte
         unsaved.Filename = file.c_str();
 
         m_results.reset(clang_codeCompleteAt(session.unit(), file.c_str(),
