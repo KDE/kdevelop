@@ -88,7 +88,7 @@ void executeCompletionTest(const QString& code, const CompletionItemsList& expec
 
     foreach(CompletionItems items, expectedCompletionItems) {
         // TODO: We should not need to pass 'session' to the context, should just use the base class ctor
-        auto context = new ClangCodeCompletionContext(DUContextPointer(top), session, items.position, QStringList());
+        auto context = new ClangCodeCompletionContext(DUContextPointer(top), session, items.position, QString());
         auto tester = ClangCodeCompletionItemTester(KSharedPtr<ClangCodeCompletionContext>(context));
 
         QCOMPARE(tester.names, items.completions);

@@ -210,37 +210,23 @@ private:
  */
 using SimpleItem = CompletionItem<CompletionTreeItem>;
 
-QByteArray concatenate(const QStringList& contents)
-{
-    QByteArray ret;
-    int sizeGuess = 0;
-    foreach(const QString& line, contents) {
-        sizeGuess += line.size() + 1;
-    }
-    ret.reserve(sizeGuess);
-    foreach(const QString& line, contents) {
-        ret += line.toUtf8() + '\n';
-    }
-    return ret;
-}
-
 }
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
                                                        const ParseSession& session,
                                                        const SimpleCursor& position,
-                                                       const QStringList& contents
+                                                       const QString& text
                                                       )
-    : CodeCompletionContext(context, QString(), CursorInRevision::castFromSimpleCursor(position), 0)
+    : CodeCompletionContext(context, text, CursorInRevision::castFromSimpleCursor(position), 0)
     , m_results(nullptr, clang_disposeCodeCompleteResults)
     , m_completionHelper(session.unit(), position, ClangString(clang_getFileName(session.file())).c_str())
 {
     ClangString file(clang_getFileName(session.file()));
 
     CXUnsavedFile unsaved;
-    const QByteArray fileContents = concatenate(contents);
-    unsaved.Contents = fileContents.constData();
-    unsaved.Length = fileContents.size();
+    const QByteArray content = m_text.toUtf8();
+    unsaved.Contents = content.constData();
+    unsaved.Length = content.size();
     unsaved.Filename = file;
 
     m_results.reset( clang_codeCompleteAt(session.unit(), file,

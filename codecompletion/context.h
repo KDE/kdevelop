@@ -37,7 +37,7 @@ public:
     ClangCodeCompletionContext(const KDevelop::DUContextPointer& context,
                                const ParseSession& session,
                                const KDevelop::SimpleCursor& position,
-                               const QStringList& contents);
+                               const QString& text);
     ~ClangCodeCompletionContext();
 
     virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) override;

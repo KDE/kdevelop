@@ -35,7 +35,7 @@ public:
     virtual ~ClangCodeCompletionModel();
 
 signals:
-    void requestCompletion(const KUrl& url, const KDevelop::SimpleCursor& cursor, const QStringList& contents);
+    void requestCompletion(const KUrl& url, const KDevelop::SimpleCursor& cursor, const QString& text);
 
 protected:
     KDevelop::CodeCompletionWorker* createCompletionWorker() override;

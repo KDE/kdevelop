@@ -43,7 +43,7 @@ public:
     virtual ~ClangCodeCompletionWorker() = default;
 
 public slots:
-    void completionRequested(const KUrl& url, const KDevelop::SimpleCursor& position, const QStringList& contents)
+    void completionRequested(const KUrl& url, const KDevelop::SimpleCursor& position, const QString& text)
     {
         aborting() = false;
 
@@ -70,7 +70,7 @@ public slots:
             return;
         }
 
-        ClangCodeCompletionContext completionContext(DUContextPointer(top), session, position, contents);
+        ClangCodeCompletionContext completionContext(DUContextPointer(top), session, position, text);
 
         if (aborting()) {
             failed();
@@ -116,8 +116,8 @@ ClangCodeCompletionModel::~ClangCodeCompletionModel()
 CodeCompletionWorker* ClangCodeCompletionModel::createCompletionWorker()
 {
     auto worker = new ClangCodeCompletionWorker(this);
-    connect(this, SIGNAL(requestCompletion(KUrl,KDevelop::SimpleCursor,QStringList)),
-            worker, SLOT(completionRequested(KUrl,KDevelop::SimpleCursor,QStringList)));
+    connect(this, SIGNAL(requestCompletion(KUrl,KDevelop::SimpleCursor,QString)),
+            worker, SLOT(completionRequested(KUrl,KDevelop::SimpleCursor,QString)));
     return worker;
 }
 
@@ -125,9 +125,8 @@ void ClangCodeCompletionModel::completionInvokedInternal(KTextEditor::View* view
                                                          CodeCompletionModel::InvocationType /*invocationType*/, const KUrl& url)
 {
     // get text before this range so we can parse this version with clang
-    const QStringList lines = view->document()->textLines({0, 0, range.start().line(), range.start().column()});
-
-    emit requestCompletion(url, SimpleCursor(range.start()), lines);
+    auto text = view->document()->text({0, 0, range.start().line(), range.start().column()});
+    emit requestCompletion(url, SimpleCursor(range.start()), text);
 }
 
 #include "model.moc"
