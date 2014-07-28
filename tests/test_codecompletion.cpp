@@ -140,7 +140,7 @@ void TestCodeCompletion::testClangCodeCompletion_data()
             "~Foo()",
         }}};
     QTest::newRow("enum-case")
-        << "int main() { enum Foo { foo, bar } e; switch (e) {\ncase "
+        << "enum Foo { foo, bar }; int main() { Foo f; switch (f) {\ncase "
         << CompletionItemsList{{{1,4}, {
             "bar",
             "foo",
