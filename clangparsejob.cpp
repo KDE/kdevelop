@@ -237,7 +237,7 @@ void ClangParseJob::run()
 
     {
         DUChainWriteLocker lock;
-        if (hasTracker()) {
+        if (hasTracker() || minimumFeatures() & TopDUContext::AST) {
             // cache the parse session and the contained translation unit for this chain
             // this then allows us to quickly reparse the document if it is changed by
             // the user
