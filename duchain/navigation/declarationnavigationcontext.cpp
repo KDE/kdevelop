@@ -64,7 +64,7 @@ void DeclarationNavigationContext::eventuallyMakeTypeLinks(AbstractType::Ptr typ
 {
     auto funcType = QmlJS::FunctionType::Ptr::dynamicCast(type);
 
-    if (type) {
+    if (funcType) {
         // Don't let eventuallyMakeTypeLinks cast funcType to an identified type
         // and try to print it! The function most of the time has no name.
         modifyHtml() += typeHighlight(Qt::escape(type->toString()));
