@@ -48,7 +48,9 @@ using namespace KDevelop;
 
 namespace {
 /// Completion results with priority below this value will be shown in "Best Matches" group
-const int MAX_PRIORITY_FOR_BEST_MATCHES = 15;
+/// See http://clang.llvm.org/doxygen/CodeCompleteConsumer_8h_source.html
+/// We currently treat CCP_SuperCompletion = 20 as the highest priority that still gives a "Best Match"
+const unsigned int MAX_PRIORITY_FOR_BEST_MATCHES = 20;
 /// Maximum return-type string length in completion items
 const int MAX_RETURN_TYPE_STRING_LENGTH = 20;
 
@@ -155,8 +157,8 @@ public:
 
     QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override
     {
-        if (role == CodeCompletionModel::MatchQuality && m_bestMatchQuality) {
-            return m_bestMatchQuality;
+        if (role == CodeCompletionModel::MatchQuality && m_matchQuality) {
+            return m_matchQuality;
         }
 
         auto ret = CompletionItem<NormalDeclarationCompletionItem>::data(index, role, model);
@@ -197,14 +199,19 @@ public:
         return new ClangNavigationWidget(m_declaration);
     }
 
-    ///Sets match quality from 0 to 10. 10 is the best fit.
-    void setBestMatchQuality(int value)
+    int matchQuality() const
     {
-        m_bestMatchQuality = value;
+        return m_matchQuality;
+    }
+
+    ///Sets match quality from 0 to 10. 10 is the best fit.
+    void setMatchQuality(int value)
+    {
+        m_matchQuality = value;
     }
 
 private:
-    int m_bestMatchQuality = 0;
+    int m_matchQuality = 0;
 };
 
 /**
@@ -254,6 +261,17 @@ QString& elideStringRight(QString& str, int length)
     return str;
 }
 
+/**
+ * @return Value suited for @ref CodeCompletionModel::MatchQuality in the range [0.0, 10.0]
+ *
+ * See http://clang.llvm.org/doxygen/CodeCompleteConsumer_8h_source.html for list of priorities
+ * They (currently) have a range from [-3, 80] (the lower, the better)
+ */
+int codeCompletionPriorityToMatchQuality(unsigned int completionPriority)
+{
+    return qBound(0u, completionPriority, 80u) / 8;
+}
+
 }
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
@@ -267,6 +285,8 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
 {
     ClangString file(clang_getFileName(session.file()));
 
+    const unsigned int completeOptions = clang_defaultCodeCompleteOptions();
+
     if (!m_text.isEmpty()) {
         kDebug() << "Unsaved contents found for file" << file << "- creating CXUnsavedFile";
 
@@ -279,12 +299,12 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         m_results.reset(clang_codeCompleteAt(session.unit(), file.c_str(),
                         position.line + 1, position.column + 1,
                         &unsaved, 1u,
-                        clang_defaultCodeCompleteOptions()));
+                        completeOptions));
     } else {
         m_results.reset(clang_codeCompleteAt(session.unit(), file.c_str(),
                         position.line + 1, position.column + 1,
                         nullptr, 0u,
-                        clang_defaultCodeCompleteOptions()));
+                        completeOptions));
     }
 
     if (!m_results) {
@@ -331,6 +351,11 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
     for (uint i = 0; i < m_results->NumResults; ++i) {
         auto result = m_results->Results[i];
+        const bool isMacroDefinition = result.CursorKind == CXCursor_MacroDefinition;
+        if (isMacroDefinition && m_filters & NoMacros) {
+            continue;
+        }
+
         const uint chunks = clang_getNumCompletionChunks(result.CompletionString);
 
         // the string that would be neede to type, usually the identifier of something
@@ -360,6 +385,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             if (kind == CXCompletionChunk_CurrentParameter || kind == CXCompletionChunk_Optional) {
                 continue;
             }
+
             const QString string = ClangString(clang_getCompletionChunkText(result.CompletionString, j)).toString();
             switch (kind) {
                 case CXCompletionChunk_Informative:
@@ -402,10 +428,20 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             }
         }
 
+        const bool isBuiltin = (result.CursorKind == CXCursor_NotImplemented);
+        if (isBuiltin && m_filters & NoBuiltins) {
+            continue;
+        }
+
         // ellide text to the right for overly long result types (templates especially)
         elideStringRight(resultType, MAX_RETURN_TYPE_STRING_LENGTH);
 
-        if (result.CursorKind != CXCursor_MacroDefinition && result.CursorKind != CXCursor_NotImplemented) {
+        const bool isDeclaration = !isMacroDefinition && !isBuiltin;
+        if (isDeclaration && m_filters & NoDeclarations) {
+            continue;
+        }
+
+        if (isDeclaration) {
             const Identifier id(typed);
             QualifiedIdentifier qid;
             ClangString parent(clang_getCompletionParent(result.CompletionString, nullptr));
@@ -426,11 +462,13 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             if (found) {
                 auto item = new DeclarationItem(found, display, resultType, replacement);
 
-                bool bestMatch = clang_getCompletionPriority(result.CompletionString) < MAX_PRIORITY_FOR_BEST_MATCHES;
+                const unsigned int completionPriority = clang_getCompletionPriority(result.CompletionString);
+                const bool bestMatch = completionPriority <= MAX_PRIORITY_FOR_BEST_MATCHES;
 
                 //don't set best match property for internal identifiers, also prefer declarations from current file
                 if (bestMatch && !found->indexedIdentifier().identifier().toString().startsWith("__") ) {
-                    item->setBestMatchQuality(found->context()->url() == ctx->url() ? 10 : 9 );
+                    const int matchQuality = codeCompletionPriorityToMatchQuality(completionPriority);
+                    item->setMatchQuality(matchQuality);
                 }
 
                 items << CompletionTreeItemPointer(item);
@@ -505,4 +543,14 @@ void ClangCodeCompletionContext::addImplementationHelperItems()
 QList<CompletionTreeElementPointer> ClangCodeCompletionContext::ungroupedElements()
 {
     return m_ungrouped;
+}
+
+ClangCodeCompletionContext::ContextFilters ClangCodeCompletionContext::filters() const
+{
+    return m_filters;
+}
+
+void ClangCodeCompletionContext::setFilters(const ClangCodeCompletionContext::ContextFilters& filters)
+{
+    m_filters = filters;
 }

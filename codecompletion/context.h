@@ -35,6 +35,16 @@
 class ClangCodeCompletionContext : public KDevelop::CodeCompletionContext
 {
 public:
+    enum ContextFilter
+    {
+        NoFilter        = 0,        ///< Show everything
+        NoBuiltins      = 1 << 0,   ///< Hide builtin completion items
+        NoMacros        = 1 << 1,   ///< Hide macro completion items
+        NoDeclarations  = 1 << 2,   ///< Hide declaration completion items
+        NoClangCompletion = NoBuiltins | NoMacros | NoDeclarations
+    };
+    Q_DECLARE_FLAGS(ContextFilters, ContextFilter)
+
     ClangCodeCompletionContext(const KDevelop::DUContextPointer& context,
                                const ParseSession& session,
                                const KDevelop::SimpleCursor& position,
@@ -44,6 +54,9 @@ public:
     virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) override;
 
     QList<KDevelop::CompletionTreeElementPointer> ungroupedElements() override;
+
+    ContextFilters filters() const;
+    void setFilters(const ContextFilters& filters);
 
 private:
     void addOverwritableItems();
@@ -59,6 +72,7 @@ private:
     QList<KDevelop::CompletionTreeElementPointer> m_ungrouped;
     CompletionHelper m_completionHelper;
     ParseSession m_parseSession;
+    ContextFilters m_filters = NoFilter;
 };
 
 #endif // CLANGCODECOMPLETIONCONTEXT_H

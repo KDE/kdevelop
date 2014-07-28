@@ -76,7 +76,10 @@ ParseSessionData::Ptr sessionData(const TestFile& file, ClangIndex* index)
     return ParseSessionData::Ptr(new ParseSessionData(file.url(), file.fileContents().toUtf8(), index));
 }
 
-void executeCompletionTest(const QString& code, const CompletionItemsList& expectedCompletionItems)
+void executeCompletionTest(const QString& code, const CompletionItemsList& expectedCompletionItems,
+                           const ClangCodeCompletionContext::ContextFilters& filters = ClangCodeCompletionContext::ContextFilters(
+                                ClangCodeCompletionContext::NoBuiltins |
+                                ClangCodeCompletionContext::NoMacros))
 {
     TestFile file(code, "cpp");
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
@@ -89,8 +92,10 @@ void executeCompletionTest(const QString& code, const CompletionItemsList& expec
     foreach(CompletionItems items, expectedCompletionItems) {
         // TODO: We should not need to pass 'session' to the context, should just use the base class ctor
         auto context = new ClangCodeCompletionContext(DUContextPointer(top), session, items.position, QString());
+        context->setFilters(filters);
         auto tester = ClangCodeCompletionItemTester(KSharedPtr<ClangCodeCompletionContext>(context));
 
+        tester.names.sort();
         QCOMPARE(tester.names, items.completions);
     }
 }
@@ -110,14 +115,35 @@ void TestCodeCompletion::testClangCodeCompletion_data()
     QTest::addColumn<QString>("code");
     QTest::addColumn<CompletionItemsList>("expectedItems");
 
-    QTest::newRow("basic")
-        << "class Foo { public: void foo() {} }; int main() { Foo f; \nf. }"
+    QTest::newRow("assignment")
+        << "int foo = 5; \nint bar = "
+        << CompletionItemsList{{{1,9}, {
+            "bar",
+            "foo",
+        }}};
+    QTest::newRow("dotmemberaccess")
+        << "class Foo { public: void foo() {} }; int main() { Foo f; \nf. "
         << CompletionItemsList{{{1, 2}, {
-            "foo()",
-            "~Foo()",
             "Foo",
+            "foo()",
+            "operator=(Foo &&)",
             "operator=(const Foo &)",
-            "operator=(Foo &&)"
+            "~Foo()",
+        }}};
+    QTest::newRow("arrowmemberaccess")
+        << "class Foo { public: void foo() {} }; int main() { Foo* f = new Foo; \nf-> }"
+        << CompletionItemsList{{{1, 3}, {
+            "Foo",
+            "foo()",
+            "operator=(Foo &&)",
+            "operator=(const Foo &)",
+            "~Foo()",
+        }}};
+    QTest::newRow("enum-case")
+        << "int main() { enum Foo { foo, bar } e; switch (e) {\ncase "
+        << CompletionItemsList{{{1,4}, {
+            "bar",
+            "foo",
         }}};
 }
 
@@ -126,7 +152,7 @@ void TestCodeCompletion::testVirtualOverride()
     QFETCH(QString, code);
     QFETCH(CompletionItemsList, expectedItems);
 
-    executeCompletionTest(code, expectedItems);
+    executeCompletionTest(code, expectedItems, ClangCodeCompletionContext::NoClangCompletion);
 }
 
 void TestCodeCompletion::testVirtualOverride_data()
@@ -154,7 +180,7 @@ void TestCodeCompletion::testVirtualOverride_data()
         << "class Foo { virtual int foo(int i); };\n"
            "class Baz { virtual char baz(char c); };\n"
            "class Bar : Foo, Baz \n{\n}"
-        << CompletionItemsList{{{4, 1}, {"foo(int i)", "baz(char c)"}}};
+        << CompletionItemsList{{{4, 1}, {"baz(char c)", "foo(int i)"}}};
 
     QTest::newRow("deep")
         << "class Foo { virtual int foo(int i); };\n"
@@ -178,7 +204,7 @@ void TestCodeCompletion::testImplement()
     QFETCH(QString, code);
     QFETCH(CompletionItemsList, expectedItems);
 
-    executeCompletionTest(code, expectedItems);
+    executeCompletionTest(code, expectedItems, ClangCodeCompletionContext::NoClangCompletion);
 }
 
 void TestCodeCompletion::testImplement_data()
@@ -271,7 +297,7 @@ void TestCodeCompletion::testImplement_data()
 
     QTest::newRow("variadic")
         << "int foo(...); int bar(int i, ...); \n"
-        << CompletionItemsList{{{1, 1}, {"foo(...)", "bar(int i, ...)"}}};
+        << CompletionItemsList{{{1, 1}, {"bar(int i, ...)", "foo(...)"}}};
 
     QTest::newRow("const")
         << "class Foo { int bar() const; };"
@@ -292,9 +318,6 @@ void TestCodeCompletion::testInvalidCompletions_data()
     QTest::addColumn<QString>("code");
     QTest::addColumn<CompletionItemsList>("expectedItems");
 
-    QTest::newRow("invalid-context-infunction")
-        << "class Foo { int bar() const; };\nint somefunc() {\n}"
-        << CompletionItemsList{{{2, 0}, {}}};
     QTest::newRow("invalid-context-incomment")
         << "class Foo { int bar() const; };\n/*\n*/"
         << CompletionItemsList{{{2, 0}, {}}};
