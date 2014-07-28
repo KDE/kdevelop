@@ -387,18 +387,20 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(con
 
     addOverwritableItems();
     addImplementationHelperItems();
-
-    if (!macros.isEmpty()) {
-        KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Macros"), 900);
-        node->appendChildren(macros);
-        m_ungrouped << CompletionTreeElementPointer(node);
-    }
-    if (!builtin.isEmpty()) {
-        KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Builtin"), 800);
-        node->appendChildren(builtin);
-        m_ungrouped << CompletionTreeElementPointer(node);
-    }
+    eventuallyAddGroup(i18n("Macros"), 900, macros);
+    eventuallyAddGroup(i18n("Builtin"), 800, builtin);
     return items;
+}
+
+void ClangCodeCompletionContext::eventuallyAddGroup(const QString& name, int priority, const QList<CompletionTreeItemPointer>& items)
+{
+    if (items.isEmpty()) {
+        return;
+    }
+
+    KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(name, priority);
+    node->appendChildren(items);
+    m_ungrouped << CompletionTreeElementPointer(node);
 }
 
 void ClangCodeCompletionContext::addOverwritableItems()
@@ -418,9 +420,7 @@ void ClangCodeCompletionContext::addOverwritableItems()
             nameAndParams = nameAndParams + " = 0";
         overrides << CompletionTreeItemPointer(new OverrideItem(nameAndParams, info.returnType));
     }
-    KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Virtual Override"), 600);
-    node->appendChildren(overrides);
-    m_ungrouped << CompletionTreeElementPointer(node);
+    eventuallyAddGroup(i18n("Virtual Override"), 600, overrides);
 }
 
 void ClangCodeCompletionContext::addImplementationHelperItems()
@@ -434,9 +434,7 @@ void ClangCodeCompletionContext::addImplementationHelperItems()
     foreach(FuncImplementInfo info, implementsList) {
         implements << CompletionTreeItemPointer(new ImplementsItem(info));
     }
-    KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Implement Function"), 600);
-    node->appendChildren(implements);
-    m_ungrouped << CompletionTreeElementPointer(node);
+    eventuallyAddGroup(i18n("Implement Function"), 600, implements);
 }
 
 

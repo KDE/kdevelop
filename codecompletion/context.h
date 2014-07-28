@@ -54,6 +54,9 @@ private:
     void addOverwritableItems();
     void addImplementationHelperItems();
 
+    /// Creates the group named @p name and adds it to m_ungrouped if items @p items is not empty
+    void eventuallyAddGroup(const QString& name, int priority, const QList<KDevelop::CompletionTreeItemPointer>& items);
+
     std::unique_ptr<CXCodeCompleteResults, void(*)(CXCodeCompleteResults*)> m_results;
     QList<KDevelop::CompletionTreeElementPointer> m_ungrouped;
     CompletionHelper m_completionHelper;
