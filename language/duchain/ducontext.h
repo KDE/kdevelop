@@ -664,7 +664,6 @@ public:
   struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public QSharedData
   {
     typedef KSharedPtr<SearchItem> Ptr;
-    ///@todo find out why this KDevVarLengthArray crashes when it's resized!
     typedef KDevVarLengthArray<Ptr, 256> PtrList;
 
     /**
