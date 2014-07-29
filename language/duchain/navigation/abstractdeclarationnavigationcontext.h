@@ -56,7 +56,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     /**
      * Return a rich-text version of the identifier @p identifier representing the declaration @p decl
      *
-     * @note In case @p declaration is deprecated, the resulting string will be striked through
+     * @note In case @p declaration is deprecated, the resulting string will get a special formatting
      */
     QString identifierHighlight(const QString& identifier, const DeclarationPointer& decl) const;
     

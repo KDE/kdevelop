@@ -609,7 +609,7 @@ QString AbstractDeclarationNavigationContext::identifierHighlight(const QString&
   }
 
   if (decl->isDeprecated()) {
-    ret = QString("<s>%1</s>").arg(ret);
+    ret = QString("<i>%1</i>").arg(ret);
   }
   return ret;
 }
