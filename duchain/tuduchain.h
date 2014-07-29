@@ -27,6 +27,7 @@
 #include "cursorkindtraits.h"
 #include "clanghelpers.h"
 #include "clangtypes.h"
+#include "clangducontext.h"
 #include "util/clangutils.h"
 
 #include <util/pushvalue.h>
@@ -243,7 +244,7 @@ private:
             }
         }
         //TODO: (..type, id..) constructor for DUContext?
-        auto context = new KDevelop::DUContext(range, m_parentContext->context);
+        auto context = new ClangNormalDUContext(range, m_parentContext->context);
         context->setType(Type);
         context->setLocalScopeIdentifier(scopeId);
         if (Type == KDevelop::DUContext::Other || Type == KDevelop::DUContext::Function)

@@ -49,7 +49,7 @@ ReferencedTopDUContext createTopContext(const IndexedString& path)
 {
     ParsingEnvironmentFile* file = new ParsingEnvironmentFile(path);
     file->setLanguage(ParseSession::languageString());
-    ReferencedTopDUContext context = new TopDUContext(path, RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
+    ReferencedTopDUContext context = new ClangTopDUContext(path, RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
     DUChain::self()->addDocumentChain(context);
     return context;
 }

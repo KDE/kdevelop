@@ -1,6 +1,7 @@
 kde4_add_library(kdevclangduchain SHARED
     parsesession.cpp
     clangdiagnosticevaluator.cpp
+    clangducontext.cpp
     clangproblem.cpp
     clangtypes.cpp
     debugvisitor.cpp
