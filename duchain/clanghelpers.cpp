@@ -41,7 +41,7 @@ void visitInclusions(CXFile file, CXSourceLocation* stack, unsigned stackDepth, 
         CXFile parentFile;
         uint line, column;
         clang_getFileLocation(stack[0], &parentFile, &line, &column, nullptr);
-        imports->insert(parentFile, {file, CursorInRevision(line, column)});
+        imports->insert(parentFile, {file, CursorInRevision(line-1, column-1)});
     }
 }
 
