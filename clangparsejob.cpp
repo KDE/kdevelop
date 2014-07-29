@@ -156,6 +156,8 @@ void ClangParseJob::run()
         return;
     }
 
+    m_includes += IDefinesAndIncludesManager::manager()->includesInBackground(document().str());
+
     auto pchInclude = userDefinedPchIncludeForFile(document().str());
     auto pch = clang()->index()->pch(pchInclude, m_includes, m_defines);
 
