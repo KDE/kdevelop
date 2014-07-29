@@ -61,6 +61,7 @@
  *   toString : string
  *   range : string
  *   kind : string
+ *   isDeprecated : bool
  */
 
 namespace KDevelop
@@ -305,6 +306,14 @@ DeclarationTest(kind)
       break;
   }
   return compareValues(kind, value, "Declaration's kind");
+}
+
+///JSON type: bool
+///@returns whether the declaration's isDeprecated matches the given value
+DeclarationTest(isDeprecated)
+{
+  VERIFY_NOT_NULL(decl);
+  return compareValues(decl->isDeprecated(), value, "Declaration's isDeprecated");
 }
 
 }
