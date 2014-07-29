@@ -508,5 +508,27 @@ void TestDUChain::testEnsureNoDoubleVisit()
     QCOMPARE(candidates.size(), 1);
 }
 
+void TestDUChain::benchDUChainBuilder()
+{
+    QBENCHMARK_ONCE {
+        TestFile file(
+            "#include <vector>\n"
+            "#include <map>\n"
+            "#include <set>\n"
+            "#include <algorithm>\n"
+            "#include <functional>\n"
+            "#include <limits>\n"
+            "#include <bitset>\n"
+            "#include <iostream>\n"
+            "#include <string>\n"
+            "#include <mutex>\n", "cpp");
+        file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+        QVERIFY(file.waitForParsed(60000));
+
+        DUChainReadLocker lock;
+        auto top = file.topContext();
+        QVERIFY(top);
+    }
+}
 
 #include "test_duchain.moc"

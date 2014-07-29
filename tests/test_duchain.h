@@ -48,6 +48,8 @@ private slots:
     void testGlobalFunctionDeclaration();
     void testFunctionDefinitionVsDeclaration();
     void testEnsureNoDoubleVisit();
+
+    void benchDUChainBuilder();
 };
 
 #endif // DUCHAINTEST_H
