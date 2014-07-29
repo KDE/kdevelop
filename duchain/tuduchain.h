@@ -402,6 +402,10 @@ void setDeclData(CXCursor cursor, Declaration *decl, bool setComment = true) con
         decl->setKind(Declaration::Namespace);
     if (CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl || CursorKindTraits::isClass(CK))
         decl->setKind(Declaration::Type);
+
+    int isAlwaysDeprecated;
+    clang_getCursorPlatformAvailability(cursor, &isAlwaysDeprecated, nullptr, nullptr, nullptr, nullptr, 0);
+    decl->setDeprecated(isAlwaysDeprecated);
 }
 
 template<CXCursorKind CK>
