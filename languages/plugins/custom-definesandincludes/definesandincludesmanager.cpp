@@ -221,8 +221,6 @@ void DefinesAndIncludesManager::openConfigurationDialog(const QString& pathToFil
 
 Path::List DefinesAndIncludesManager::includesInBackground(const QString& path) const
 {
-    Q_ASSERT(QThread::currentThread() != qApp->thread());
-
     return toPathList(m_makeFileResolver->resolveIncludePath(path).paths);
 }
 

@@ -99,7 +99,7 @@ public:
     virtual Path::List includes( const QString& path ) const = 0;
 
     /// Computes include directories in background thread. This is especially useful for CustomMake projects. Also it could be used as the last resort method if project manager didn't return any include paths.
-    ///NOTE: call it from background thread only.
+    /// Call it from background thread if possible.
     virtual Path::List includesInBackground( const QString& path ) const = 0;
 
     ///@return the instance of the plugin.
