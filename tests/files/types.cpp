@@ -15,8 +15,13 @@ enum myEnum {
     myEnumerator1
 };
 
-/// "type" : { "toString" : "myTypedef" }
+/// "type" : { "toString" : "myTypedef" },
+/// "unaliasedType" : { "toString" : "int"}
 typedef int myTypedef;
+
+/// "type" : { "toString" : "myTypeAlias" },
+/// "unaliasedType" : { "toString" : "int"}
+using myTypeAlias = int;
 
 /// "toString" : "int main (int, char**)"
 int main(int argc, char** argv)

@@ -360,7 +360,7 @@ private:
         return t;
     }
 
-    template<CXCursorKind CK, EnableIf<CursorKindTraits::isIdentifiedType(CK) && CK != CXCursor_TypedefDecl && CK != CXCursor_EnumConstantDecl> = dummy>
+    template<CXCursorKind CK, EnableIf<CursorKindTraits::isIdentifiedType(CK) && !CursorKindTraits::isAliasType(CK) && CK != CXCursor_EnumConstantDecl> = dummy>
     typename IdType<CK>::Type *createType(CXCursor) const
     {
         return new typename IdType<CK>::Type;
@@ -374,7 +374,7 @@ private:
         return type;
     }
 
-    template<CXCursorKind CK, EnableIf<CK == CXCursor_TypedefDecl> = dummy>
+    template<CXCursorKind CK, EnableIf<CursorKindTraits::isAliasType(CK)> = dummy>
     TypeAliasType *createType(CXCursor cursor) const
     {
         auto type = new TypeAliasType;
@@ -396,8 +396,9 @@ void setDeclData(CXCursor cursor, Declaration *decl, bool setComment = true) con
 {
     if (setComment)
         decl->setComment(makeComment(clang_Cursor_getParsedComment(cursor)));
-    if (CK == CXCursor_TypeAliasDecl || CK == CXCursor_TypedefDecl)
+    if (CursorKindTraits::isAliasType(CK)) {
         decl->setIsTypeAlias(true);
+    }
     if (CK == CXCursor_Namespace)
         decl->setKind(Declaration::Namespace);
     if (CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl || CursorKindTraits::isClass(CK))

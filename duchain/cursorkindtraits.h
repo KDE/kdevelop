@@ -220,9 +220,14 @@ constexpr IntegralType::CommonIntegralTypes integralType(CXTypeKind TK)
     : static_cast<IntegralType::CommonIntegralTypes>(-1);
 }
 
+constexpr bool isAliasType(CXCursorKind CK)
+{
+    return CK == CXCursor_TypedefDecl || CK == CXCursor_TypeAliasDecl;
+}
+
 constexpr bool isIdentifiedType(CXCursorKind CK)
 {
-    return isClass(CK) || CK == CXCursor_TypedefDecl || CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl;
+    return isClass(CK) || isAliasType(CK) || CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl;
 }
 
 }

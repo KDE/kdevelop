@@ -41,6 +41,12 @@ struct IdType<CK, typename std::enable_if<CK == CXCursor_TypedefDecl>::type>
 };
 
 template<CXCursorKind CK>
+struct IdType<CK, typename std::enable_if<CK == CXCursor_TypeAliasDecl>::type>
+{
+    typedef TypeAliasType Type;
+};
+
+template<CXCursorKind CK>
 struct IdType<CK, typename std::enable_if<CK == CXCursor_EnumDecl>::type>
 {
     typedef EnumerationType Type;
@@ -205,6 +211,7 @@ CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXCl
     UseCursorKind(CXCursor_FunctionDecl, cursor, parent);
     UseCursorKind(CXCursor_VarDecl, cursor, parent);
     UseCursorKind(CXCursor_ParmDecl, cursor, parent);
+    UseCursorKind(CXCursor_TypeAliasDecl, cursor, parent);
     UseCursorKind(CXCursor_TypedefDecl, cursor, parent);
     UseCursorKind(CXCursor_CXXMethod, cursor, parent);
     UseCursorKind(CXCursor_Namespace, cursor, parent);
