@@ -28,7 +28,9 @@
 #include "todoextractor.h"
 #include "debug.h"
 
+#include <KLocale>
 #include <KMimeType>
+
 #include <QDir>
 #include <QFileInfo>
 
@@ -269,6 +271,20 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
     const IndexedString path(QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file)))));
     TodoExtractor extractor(unit(), path);
     problems << extractor.problems();
+
+    // other problem sources
+    const bool hasMultipleIncludeGuard = clang_isFileMultipleIncludeGuarded(unit(), file);
+    if (!hasMultipleIncludeGuard) {
+        ProblemPointer problem(new Problem);
+        problem->setSeverity(ProblemData::Warning);
+        problem->setDescription(i18n("Header is not guarded against multiple inclusions"));
+        problem->setExplanation(i18n("The given header is not guarded against multiple inclusions, "
+            "either with the conventional #ifndef/#define/#endif macro guards or with #pragma once."));
+        problem->setFinalLocation({url(), SimpleRange()});
+        problem->setSource(ProblemData::Preprocessor);
+        problems << problem;
+        // TODO: Easy to add an assistant here that adds the guards -- any takers?
+    }
 
     return problems;
 }
