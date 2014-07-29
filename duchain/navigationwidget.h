@@ -1,6 +1,7 @@
 /*
  * This file is part of KDevelop
  * Copyright 2014 Milian Wolff <mail@milianw.de>
+ * Copyright 2014 Kevin Funk <kfunk@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -22,12 +23,21 @@
 #ifndef NAVIGATIONWIDGET_H
 #define NAVIGATIONWIDGET_H
 
+#include "duchainexport.h"
+
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 
-class ClangNavigationWidget : public KDevelop::AbstractNavigationWidget
+namespace KDevelop
+{
+class IncludeItem;
+}
+
+class KDEVCLANGDUCHAIN_EXPORT ClangNavigationWidget : public KDevelop::AbstractNavigationWidget
 {
 public:
     ClangNavigationWidget(const KDevelop::DeclarationPointer& declaration);
+    ClangNavigationWidget(const KDevelop::IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext,
+                          const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
     virtual ~ClangNavigationWidget() = default;
 };
 

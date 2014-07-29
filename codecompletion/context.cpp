@@ -21,8 +21,6 @@
 
 #include "context.h"
 
-#include "navigationwidget.h"
-
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/topducontext.h>
@@ -37,6 +35,7 @@
 #include "../duchain/parsesession.h"
 #include "../duchain/clangtypes.h"
 #include "../duchain/cursorkindtraits.h"
+#include "../duchain/navigationwidget.h"
 
 #include "../debug.h"
 

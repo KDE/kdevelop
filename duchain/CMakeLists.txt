@@ -10,6 +10,7 @@ kde4_add_library(kdevclangduchain SHARED
     clanghelpers.cpp
     unknowndeclarationproblem.cpp
     missingincludepathproblem.cpp
+    navigationwidget.cpp
     todoextractor.cpp
 
     $<TARGET_OBJECTS:kdevclangutil>
