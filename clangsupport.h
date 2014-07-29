@@ -54,6 +54,13 @@ public:
     virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions);
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
+    virtual KDevelop::SimpleRange specialLanguageObjectRange(const KUrl& url,
+                                                             const KDevelop::SimpleCursor& position) override;
+    virtual QPair<KUrl, KDevelop::SimpleCursor> specialLanguageObjectJumpCursor(const KUrl& url,
+                                                                                const KDevelop::SimpleCursor& position) override;
+    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url,
+                                                           const KDevelop::SimpleCursor& position) override;
+
     ClangIndex* index();
 
     //BEGIN IBuddyDocumentFinder
