@@ -102,7 +102,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
       eventuallyMakeTypeLinks( useType );
 
-      modifyHtml() += ' ' + nameHighlight(Qt::escape(declarationName(m_declaration)));
+      modifyHtml() += ' ' + identifierHighlight(Qt::escape(declarationName(m_declaration)), m_declaration);
 
       if(auto integralType = m_declaration->type<ConstantIntegralType>()) {
         const QString plainValue = integralType->valueAsString();
@@ -117,12 +117,12 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         htmlClass();
       }
       if ( m_declaration->kind() == Declaration::Namespace ) {
-        modifyHtml() += i18n("namespace %1 ", nameHighlight(Qt::escape(m_declaration->qualifiedIdentifier().toString())));
+        modifyHtml() += i18n("namespace %1 ", identifierHighlight(Qt::escape(m_declaration->qualifiedIdentifier().toString()), m_declaration));
       }
 
       if(m_declaration->type<EnumerationType>()) {
         EnumerationType::Ptr enumeration = m_declaration->type<EnumerationType>();
-        modifyHtml() += i18n("enumeration %1 ", nameHighlight(Qt::escape(m_declaration->identifier().toString())));
+        modifyHtml() += i18n("enumeration %1 ", identifierHighlight(Qt::escape(m_declaration->identifier().toString()), m_declaration));
       }
 
       if(m_declaration->isForwardDeclaration()) {
@@ -229,6 +229,10 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       modifyHtml() += labelHighlight(i18n("Kind: %1 ", importantHighlight(Qt::escape(kind))));
   }
 
+  if (m_declaration->isDeprecated()) {
+    modifyHtml() += labelHighlight(i18n("Status: %1 ", propertyHighlight(i18n("Deprecated"))));
+  }
+
   modifyHtml() += "<br />";
 
   if(!shorten)
@@ -320,7 +324,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
     eventuallyMakeTypeLinks( type->returnType() );
   }
 
-  modifyHtml() += ' ' + nameHighlight(Qt::escape(prettyIdentifier(m_declaration).toString()));
+  modifyHtml() += ' ' + identifierHighlight(Qt::escape(prettyIdentifier(m_declaration).toString()), m_declaration);
 
   if( type->indexedArgumentsSize() == 0 )
   {
@@ -343,7 +347,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
 
       eventuallyMakeTypeLinks( argType );
       if (currentArgNum < decls.size()) {
-        modifyHtml() += ' ' + nameHighlight(Qt::escape(decls[currentArgNum]->identifier().toString()));
+        modifyHtml() += ' ' + identifierHighlight(Qt::escape(decls[currentArgNum]->identifier().toString()), m_declaration);
       }
 
       if( currentArgNum >= firstDefaultParam )
@@ -595,6 +599,19 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
 DeclarationPointer AbstractDeclarationNavigationContext::declaration() const
 {
   return m_declaration;
+}
+
+QString AbstractDeclarationNavigationContext::identifierHighlight(const QString& identifier, const DeclarationPointer& decl) const
+{
+  QString ret = nameHighlight(identifier);
+  if (!decl) {
+    return ret;
+  }
+
+  if (decl->isDeprecated()) {
+    ret = QString("<s>%1</s>").arg(ret);
+  }
+  return ret;
 }
 
 QString AbstractDeclarationNavigationContext::stringFromAccess(Declaration::AccessPolicy access)
