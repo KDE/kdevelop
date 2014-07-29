@@ -127,6 +127,12 @@ void TestCodeCompletion::testClangCodeCompletion_data()
            "int main() { SomeStruct s;\ns. "
         << CompletionItemsList{{{2, 2}, {
         }}};
+    QTest::newRow("private-friend")
+        << "class SomeStruct { private: void priv() {} friend int main(); };\n"
+           "int main() { SomeStruct s;\ns. "
+        << CompletionItemsList{{{2, 2}, {
+            "priv()",
+        }}};
     QTest::newRow("private-public")
         << "class SomeStruct { public: void pub() {} private: void priv() {} };\n"
            "int main() { SomeStruct s;\ns. "
