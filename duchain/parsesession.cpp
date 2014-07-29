@@ -26,6 +26,7 @@
 #include "clangtypes.h"
 #include "clangdiagnosticevaluator.h"
 #include "todoextractor.h"
+#include "clanghelpers.h"
 #include "debug.h"
 
 #include <KLocale>
@@ -267,14 +268,15 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         clang_disposeDiagnostic(diagnostic);
     }
 
+    const QString path = QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file))));
+    const IndexedString indexedPath(path);
+
     // extract to-do problems
-    const IndexedString path(QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file)))));
-    TodoExtractor extractor(unit(), path);
+    TodoExtractor extractor(unit(), indexedPath);
     problems << extractor.problems();
 
     // other problem sources
-    const bool hasMultipleIncludeGuard = clang_isFileMultipleIncludeGuarded(unit(), file);
-    if (!hasMultipleIncludeGuard) {
+    if (!ClangHelpers::isSource(path) && !clang_isFileMultipleIncludeGuarded(unit(), file)) {
         ProblemPointer problem(new Problem);
         problem->setSeverity(ProblemData::Warning);
         problem->setDescription(i18n("Header is not guarded against multiple inclusions"));
