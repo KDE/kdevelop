@@ -235,7 +235,9 @@ CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXCl
     UseCursorKind(CXCursor_DeclRefExpr, cursor);
     UseCursorKind(CXCursor_MemberRefExpr, cursor);
     UseCursorKind(CXCursor_CompoundStmt, cursor);
-    default: return CXChildVisit_Recurse;
+    default:
+        kWarning() << "Unhandled cursor:" << cursor.kind << ClangString(clang_getCursorSpelling(cursor));
+        return CXChildVisit_Recurse;
     }
 }
 
@@ -333,7 +335,7 @@ AbstractType *TUDUChain::makeType(CXType type) const
     case CXType_Invalid:
         return nullptr;
     default:
-        debug() << "Unhandled type: " << type.kind << ClangString(clang_getTypeSpelling(type));
+        kWarning() << "Unhandled type:" << type.kind << ClangString(clang_getTypeSpelling(type));
         return nullptr;
     }
 }
