@@ -1390,8 +1390,9 @@ DUContext * DUContext::findContextAt(const CursorInRevision & position, bool inc
     return 0;
   }
 
+  const auto childContexts = d_func()->m_childContexts();
   for(int a = int(d_func()->m_childContextsSize())-1; a >= 0; --a)
-    if (DUContext* specific = d_func()->m_childContexts()[a].data(topContext())->findContextAt(position, includeRightBorder))
+    if (DUContext* specific = childContexts[a].data(topContext())->findContextAt(position, includeRightBorder))
       return specific;
 
   return const_cast<DUContext*>(this);
