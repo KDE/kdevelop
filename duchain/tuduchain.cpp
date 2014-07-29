@@ -24,6 +24,33 @@
 
 #include <language/duchain/types/indexedtype.h>
 
+namespace {
+/**
+ * Find the cursor that cursor @p cursor references
+ *
+ * First tries to get the referenced cursor via clang_getCursorReferenced,
+ * and if that fails, tries to get them via clang_getOverloadedDecl
+ * (which returns the referenced cursor for CXCursor_OverloadedDeclRef, for example)
+ *
+ * @return Valid cursor on success, else null cursor
+ */
+CXCursor referencedCursor(CXCursor cursor)
+{
+    auto referenced = clang_getCursorReferenced(cursor);
+    if (!clang_equalCursors(cursor, referenced)) {
+        return referenced;
+    }
+
+    // get the first result for now
+    referenced = clang_getOverloadedDecl(cursor, 0);
+    if (!clang_Cursor_isNull(referenced)) {
+        return referenced;
+    }
+    return clang_getNullCursor();
+}
+
+}
+
 bool TUDUChain::s_jsonTestRun = false;
 
 //BEGIN IdType
@@ -170,11 +197,16 @@ TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContext
     }
     for (const auto &contextUses : m_uses) {
         for (const auto &cursor : contextUses.second) {
-            auto referenced = clang_getCursorReferenced(cursor);
+            auto referenced = referencedCursor(cursor);
+            if (clang_Cursor_isNull(referenced)) {
+                continue;
+            }
+
             auto used = ClangHelpers::findDeclaration(referenced, includes);
             if (!used) {
                 continue;
             }
+
             auto useRange = ClangRange(clang_getCursorReferenceNameRange(cursor, CXNameRange_WantSinglePiece, 0)).toRangeInRevision();
             //TODO: Fix in clang, happens for operator<<, operator<, probably more
             if (!useRange.isValid()) {

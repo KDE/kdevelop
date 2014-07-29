@@ -73,3 +73,12 @@ void operators()
    r << t << r;
    r < t < r;
 }
+
+/// "useCount" : 1
+namespace UsingTest
+{
+    /// "useCount" : 1
+    void usingtest() {}
+}
+
+using UsingTest::usingtest;
