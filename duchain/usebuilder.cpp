@@ -75,6 +75,23 @@ bool UseBuilder::visit(QmlJS::AST::UiImport* node)
     return false;   // Don't highlight the identifiers that appear in import statements
 }
 
+bool UseBuilder::visit(QmlJS::AST::UiPublicMember* node)
+{
+    // node->memberType can contain a type name (if node is a property), use it
+    DeclarationPointer decl = QmlJS::getDeclaration(
+        QualifiedIdentifier(node->memberType.toString()),
+        currentContext()
+    );
+
+    newUse(
+        node,
+        m_session->locationToRange(node->typeToken),
+        decl
+    );
+
+    return true;
+}
+
 void UseBuilder::useForExpression(QmlJS::AST::Node* node, const KDevelop::RangeInRevision &range)
 {
     // ExpressionVisitor can find the type and corresponding declaration of many

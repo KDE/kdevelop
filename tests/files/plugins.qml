@@ -85,6 +85,13 @@ Module {
      }
 
      /**
+      * "useCount" : 1
+      */
+     Component {
+         name: "ComponentOfAProperty"
+     }
+
+     /**
       * "kind" : "Type"
       */
      QAbstractItemModel
@@ -94,6 +101,7 @@ Module {
           */
          id: foo
 
+         property ComponentOfAProperty my_prop;
          onDataChanged: console.log(topLeft);
 
          rootItem {
