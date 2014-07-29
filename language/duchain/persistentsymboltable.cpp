@@ -409,4 +409,3 @@ PersistentSymbolTable& PersistentSymbolTable::self() {
 }
 
 }
-

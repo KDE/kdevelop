@@ -453,4 +453,3 @@ CodeModel& CodeModel::self() {
 }
 
 }
-

@@ -399,4 +399,3 @@ void ItemRepositoryRegistry::shutdown()
 }
 
 }
-

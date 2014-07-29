@@ -228,4 +228,3 @@ void Definitions::dump(const QTextStream& out)
 }
 
 }
-

@@ -33,4 +33,3 @@ void WaitForUpdate::updateReady(KDevelop::IndexedString /*url*/, KDevelop::Refer
 }
 
 #include "waitforupdate.moc"
-

@@ -60,4 +60,3 @@ QString UsesNavigationContext::html(bool shorten) {
 QWidget* UsesNavigationContext::widget() const {
   return m_widget;
 }
-

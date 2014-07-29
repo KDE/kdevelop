@@ -484,7 +484,6 @@ QString Declaration::toString() const
   return QString("%3 %4").arg(abstractType() ? abstractType()->toString() : QString("<notype>")).arg(identifier().toString());
 }
 
-// kate: indent-width 2;
 
 bool Declaration::isDefinition() const
 {
@@ -779,5 +778,3 @@ QMap<IndexedString, QList<SimpleRange> > ret;
 }
 
 }
-
-// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
