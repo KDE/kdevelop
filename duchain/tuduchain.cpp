@@ -236,7 +236,6 @@ CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXCl
     UseCursorKind(CXCursor_MemberRefExpr, cursor);
     UseCursorKind(CXCursor_CompoundStmt, cursor);
     default:
-        kWarning() << "Unhandled cursor:" << cursor.kind << ClangString(clang_getCursorSpelling(cursor));
         return CXChildVisit_Recurse;
     }
 }
