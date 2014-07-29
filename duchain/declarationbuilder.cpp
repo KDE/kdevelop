@@ -1166,12 +1166,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
 
         exports = exportedNames(QmlJS::AST::cast<QmlJS::AST::ExpressionStatement *>(statement));
 
-        if (exports.count() == 0 &&
-            (statement || !m_session->moduleVersion().endsWith(QLatin1String(".0")))) {
-            // No exported version of this component. The second part of the
-            // condition allows non-exported components to still be processed
-            // in the .0 revision of the module (so that QObject, not exported
-            // in QML, is still accessible and declared in QtQuick 1.0 and 2.0)
+        if (statement && exports.count() == 0) {
+            // This component has an "exports:" member but no export matched
+            // the version of this module. Skip the component
             m_skipEndVisit.push(true);
             return false;
         }
