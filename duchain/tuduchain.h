@@ -67,7 +67,7 @@ private:
     static bool s_jsonTestRun;
 
     void setIdTypeDecl(CXCursor typeCursor, IdentifiedType *idType) const;
-    void contextImportDecl(DUContext *context, const DeclarationPointer &decl) const;
+    void contextImportDecl(DUContext *context, const DeclarationPointer& decl) const;
 
     KDevelop::Identifier makeId(CXCursor cursor) const;
     QByteArray makeComment(CXComment comment) const;
@@ -204,6 +204,7 @@ private:
         }
         auto decl = new DeclType(range, nullptr);
         decl->setIdentifier(id);
+        m_cursorToDeclarationCache[clang_hashCursor(cursor)] = decl;
         setDeclData<CK>(cursor, decl);
         return decl;
     }
@@ -252,7 +253,7 @@ private:
         if (CK == CXCursor_CXXMethod) {
             CXCursor semParent = clang_getCursorSemanticParent(cursor);
             if (!clang_Cursor_isNull(semParent)) {
-                DeclarationPointer semParentDecl = ClangHelpers::findDeclaration(semParent, m_includes);
+                auto semParentDecl = findDeclaration(semParent);
                 if (semParentDecl) {
                     contextImportDecl(context, semParentDecl);
                 }
@@ -515,8 +516,7 @@ void setDeclInCtxtData(CXCursor cursor, FunctionDefinition *def)
     CXCursor canon = clang_getCanonicalCursor(cursor);
     if (clang_equalCursors(canon, cursor)) {
         def->setDeclarationIsDefinition(true);
-    }
-    else if (auto decl = ClangHelpers::findDeclaration(canon, m_includes)) {
+    } else if (auto decl = findDeclaration(canon)) {
         def->setDeclaration(decl.data());
     }
 }
@@ -574,7 +574,10 @@ private:
     const CXFile m_file;
     const IncludeFileContexts &m_includes;
 
+    DeclarationPointer findDeclaration(CXCursor cursor);
+
     std::unordered_map<DUContext*, std::vector<CXCursor>> m_uses;
+    QHash<unsigned int, DeclarationPointer> m_cursorToDeclarationCache;
     CurrentContext *m_parentContext;
 
     const bool m_update;

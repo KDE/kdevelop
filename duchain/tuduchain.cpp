@@ -202,7 +202,7 @@ TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContext
                 continue;
             }
 
-            auto used = ClangHelpers::findDeclaration(referenced, includes);
+            auto used = findDeclaration(referenced);
             if (!used) {
                 continue;
             }
@@ -218,6 +218,21 @@ TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContext
         }
     }
 }
+
+DeclarationPointer TUDUChain::findDeclaration(CXCursor cursor)
+{
+    const auto cursorHash = clang_hashCursor(cursor);
+    const auto it = m_cursorToDeclarationCache.constFind(cursorHash);
+    if (it != m_cursorToDeclarationCache.constEnd()) {
+        return *it;
+    }
+
+    // fallback, and cache result
+    auto decl = ClangHelpers::findDeclaration(cursor, m_includes);
+    m_cursorToDeclarationCache.insert(cursorHash, decl);
+    return decl;
+}
+
 
 CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXClientData data)
 {
@@ -380,7 +395,8 @@ CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor curso
     bool virtualInherited = clang_isVirtualBase(cursor);
     Declaration::AccessPolicy access = CursorKindTraits::kdevAccessPolicy(clang_getCXXAccessSpecifier(cursor));
 
-    auto decl = ClangHelpers::findDeclaration(clang_getCursorType(cursor), m_includes);
+    auto classDeclCursor = clang_getCursorReferenced(cursor);
+    auto decl = findDeclaration(classDeclCursor);
     if (!decl) {
         // this happens for templates with template-dependent base classes e.g. - dunno whether we can/should do more here
         debug() << "failed to find declaration for base specifier:" << ClangString(clang_getCursorDisplayName(cursor));
