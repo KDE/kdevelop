@@ -69,6 +69,11 @@ QStringList headerExtensions();
  */
 QStringList sourceExtensions();
 
+/**
+ * @return True if the given file @p path has the extension of a C++ source file, not of a header.
+ */
+bool isSource(const QString& path);
+
 }
 
 #endif //CLANGHELPERS_H

@@ -167,3 +167,13 @@ QStringList ClangHelpers::sourceExtensions()
     static const QStringList sourceExtensions = QString("c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h").split(',');
     return sourceExtensions;
 }
+
+bool ClangHelpers::isSource(const QString& path)
+{
+    foreach(const QString& ext, sourceExtensions()) {
+        if (path.endsWith(ext)) {
+            return true;
+        }
+    }
+    return false;
+}

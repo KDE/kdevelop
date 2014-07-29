@@ -63,23 +63,13 @@ namespace {
  */
 const int maxSuggestions = 5;
 
-bool isSource(const QString& path)
-{
-    foreach(const QString& ext, ClangHelpers::sourceExtensions()) {
-        if (path.endsWith(ext)) {
-            return true;
-        }
-    }
-    return false;
-}
-
 /**
  * We don't want anything from the bits directory -
  * we'd rather prefer forwarding includes, such as <vector>
  */
 bool isBlacklisted(const QString& path)
 {
-    if (isSource(path))
+    if (ClangHelpers::isSource(path))
         return true;
 
     // Do not allow including directly from the bits directory.
