@@ -97,7 +97,7 @@ protected:
 class OverrideItem : public CompletionItem<CompletionTreeItem>
 {
 public:
-    OverrideItem(QString& nameAndParams, QString& returnType)
+    OverrideItem(const QString& nameAndParams, const QString& returnType)
         : CompletionItem<KDevelop::CompletionTreeItem>(
               nameAndParams,
               i18n("Override %1", returnType),
@@ -121,7 +121,7 @@ public:
 class ImplementsItem : public CompletionItem<CompletionTreeItem>
 {
 public:
-    ImplementsItem(FuncImplementInfo& item)
+    ImplementsItem(const FuncImplementInfo& item)
         : CompletionItem<KDevelop::CompletionTreeItem>(
               item.prototype,
               i18n("Implement %1", item.isConstructor ? "<constructor>" :
@@ -531,7 +531,8 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
     return items;
 }
 
-void ClangCodeCompletionContext::eventuallyAddGroup(const QString& name, int priority, const QList<CompletionTreeItemPointer>& items)
+void ClangCodeCompletionContext::eventuallyAddGroup(const QString& name, int priority,
+                                                    const QList<CompletionTreeItemPointer>& items)
 {
     if (items.isEmpty()) {
         return;

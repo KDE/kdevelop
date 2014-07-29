@@ -60,21 +60,6 @@ void TestCodeCompletion::cleanupTestCase()
 }
 
 namespace {
-QString formatFuncOverrideInfo(const FuncOverrideInfo& info)
-{
-    return QString(info.returnType + ' ' + info.name + '(' + info.params.join(", ") +
-                    ')' + (info.isConst ? " const" : "") + (info.isVirtual ? " = 0" : ""));
-}
-
-QString formatFuncImplementInfo(const FuncImplementInfo& info)
-{
-    return QString(info.templatePrefix + (!info.isDestructor && !info.isConstructor ? info.returnType + ' ' : "") + info.prototype);
-}
-
-ParseSessionData::Ptr sessionData(const TestFile& file, ClangIndex* index)
-{
-    return ParseSessionData::Ptr(new ParseSessionData(file.url(), file.fileContents().toUtf8(), index));
-}
 
 void executeCompletionTest(const QString& code, const CompletionItemsList& expectedCompletionItems,
                            const ClangCodeCompletionContext::ContextFilters& filters = ClangCodeCompletionContext::ContextFilters(
