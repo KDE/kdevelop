@@ -174,4 +174,3 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
 }
 
 #endif
-

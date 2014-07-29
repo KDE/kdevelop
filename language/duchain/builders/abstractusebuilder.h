@@ -216,4 +216,3 @@ private:
 }
 
 #endif // KDEVPLATFORM_ABSTRACTUSEBUILDER_H
-

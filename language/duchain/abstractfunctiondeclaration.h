@@ -125,5 +125,3 @@ class MergeAbstractFunctionDeclaration : public Base, public AbstractFunctionDec
 }
 
 #endif // KDEVPLATFORM_ABSTRACTFUNCTIONDECLARATION_H
-
-// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

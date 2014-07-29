@@ -225,4 +225,3 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
 }
 
 #endif
-

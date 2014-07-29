@@ -466,5 +466,3 @@ KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::Identifi
 KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::QualifiedIdentifier& identifier);
 
 #endif // KDEVPLATFORM_IDENTIFIER_H
-
-// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

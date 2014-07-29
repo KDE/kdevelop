@@ -226,4 +226,3 @@ Q_INLINE_TEMPLATE void TypePtr<T>::clear()
 }
 
 #endif
-

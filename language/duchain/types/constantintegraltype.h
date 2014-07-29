@@ -119,4 +119,3 @@ inline ConstantIntegralType* fastCast<ConstantIntegralType*>(AbstractType* from)
 
 
 #endif // KDEVPLATFORM_CONSTANTINTEGRALTYPE_H
-

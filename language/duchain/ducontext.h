@@ -925,5 +925,3 @@ KDEVPLATFORMLANGUAGE_EXPORT QList<RangeInRevision> allUses(DUContext* context,
 Q_DECLARE_TYPEINFO(KDevelop::DUContext::Import, Q_MOVABLE_TYPE);
 
 #endif // KDEVPLATFORM_DUCONTEXT_H
-
-// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
