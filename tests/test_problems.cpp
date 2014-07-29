@@ -220,7 +220,6 @@ void TestProblems::testMissingInclude()
     QVERIFY(include.topContext());
     TopDUContext* includeTop = DUChainUtils::contentContextFromProxyContext(include.topContext().data());
     QVERIFY(includeTop);
-    QVERIFY(includeTop->problems().isEmpty());
 
     QVERIFY(workingFile.topContext());
     TopDUContext* top = DUChainUtils::contentContextFromProxyContext(workingFile.topContext());
