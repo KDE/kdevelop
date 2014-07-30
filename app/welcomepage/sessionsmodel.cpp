@@ -24,14 +24,17 @@ SessionsModel::SessionsModel(QObject* parent)
     : QAbstractListModel(parent)
     , m_sessions(KDevelop::SessionController::availableSessionInfo())
 {
-    QHash< int, QByteArray > roles = roleNames();
+    connect(KDevelop::Core::self()->sessionController(), SIGNAL(sessionDeleted(QString)), SLOT(sessionDeleted(QString)));
+}
+
+QHash< int, QByteArray > SessionsModel::roleNames() const
+{
+    QHash< int, QByteArray > roles = QAbstractListModel::roleNames();
     roles.insert(Uuid, "uuid");
     roles.insert(Projects, "projects");
     roles.insert(ProjectNames, "projectNames");
     roles.insert(VisibleIdentifier, "identifier");
-    setRoleNames(roles);
-    
-    connect(KDevelop::Core::self()->sessionController(), SIGNAL(sessionDeleted(QString)), SLOT(sessionDeleted(QString)));
+    return roles;
 }
 
 QVariant SessionsModel::data(const QModelIndex& index, int role) const

@@ -8,14 +8,14 @@ if(KF5Plasma_FOUND)
 endif()
 
 find_package(SharedMimeInfo REQUIRED)
-#     find_package(KF5Declarative)
-#
-    set(kdevelop_SRCS  main.cpp kdevideextension.cpp splash.cpp)
-#     set(kdevelop_SRCS ${kdevelop_SRCS}
-#                     welcomepage/sessionsmodel.cpp welcomepage/welcomepageview.cpp welcomepage/uihelper.cpp)
-#     add_definitions(-DWITH_WELCOMEPAGE)
-#     qt5_add_resources(kdevelop_SRCS welcomepage/welcomepage.qrc)
-#     # kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
+find_package(KF5Declarative)
+
+set(kdevelop_SRCS  main.cpp kdevideextension.cpp splash.cpp)
+set(kdevelop_SRCS ${kdevelop_SRCS}
+                welcomepage/sessionsmodel.cpp welcomepage/welcomepageview.cpp welcomepage/uihelper.cpp)
+add_definitions(-DWITH_WELCOMEPAGE)
+qt5_add_resources(kdevelop_SRCS welcomepage/welcomepage.qrc)
+# kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
 
 add_executable(kdevelop ${kdevelop_SRCS} )
 
@@ -25,10 +25,10 @@ target_link_libraries(kdevelop
     ${KDEVPLATFORM_SHELL_LIBRARIES}
 
     KF5::KDELibs4Support
+    KF5::Declarative
 
-    Qt5::Declarative
+    Qt5::QuickWidgets
 )
-target_link_libraries(kdevelop ${KDECLARATIVE_LIBRARY})
 
 install(TARGETS kdevelop ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

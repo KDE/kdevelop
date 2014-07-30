@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-import org.kde.plasma.components 0.1
+import org.kde.plasma.components 2.0
 
 Label {
     font.pointSize: theme.defaultFont.pointSize*1.5

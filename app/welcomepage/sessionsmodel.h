@@ -20,6 +20,7 @@
 #define SESSIONSMODEL_H
 
 #include <QModelIndex>
+#include <shell/session.h>
 
 class SessionsModel : public QAbstractListModel
 {
@@ -29,6 +30,8 @@ class SessionsModel : public QAbstractListModel
         explicit SessionsModel(QObject* parent = 0);
         virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
         virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+        virtual QHash< int, QByteArray > roleNames() const;
+
         Q_SCRIPTABLE void loadSession(const QString& nameOrId) const;
     private:
         QList<KDevelop::SessionInfo> m_sessions;

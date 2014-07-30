@@ -18,16 +18,15 @@
  * 02110-1301, USA.
  */
 
-import QtQuick 1.1
-import org.kde.qtextracomponents 0.1
-import org.kde.plasma.core 0.1 as PlasmaCore
+import QtQuick 2.1
+import org.kde.plasma.core 2.0 as PlasmaCore
 
 PlasmaCore.FrameSvgItem {
     imagePath: "widgets/tooltip"
     prefix: "base"
     clip: true
     
-    QIconItem {
+    PlasmaCore.IconItem {
         anchors {
             bottom: parent.bottom
             right: parent.right
@@ -36,6 +35,6 @@ PlasmaCore.FrameSvgItem {
         opacity: 0.3
         width: 128
         height: width
-        icon: "kdevelop"
+        source: "kdevelop"
     }
 }

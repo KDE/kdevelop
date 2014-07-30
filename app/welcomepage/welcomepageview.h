@@ -19,14 +19,14 @@
 #ifndef WELCOMEPAGEVIEW_H
 #define WELCOMEPAGEVIEW_H
 
-#include <QDeclarativeView>
+#include <QQuickWidget>
 
 namespace Sublime
 {
 class Area;
 }
 
-class WelcomePageView : public QDeclarativeView
+class WelcomePageView : public QQuickWidget
 {
     Q_OBJECT
 public:

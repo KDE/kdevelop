@@ -55,7 +55,7 @@ QAction* findActionRec(const QStringList& path, const QList<QAction*>& actions)
 
 QAction* UiHelper::retrieveMenuAction(const QString& menuPath)
 {
-    KMenuBar* m = ICore::self()->uiController()->activeMainWindow()->menuBar();
+    QMenuBar* m = ICore::self()->uiController()->activeMainWindow()->menuBar();
     
     QAction* a=findActionRec(menuPath.split('/'), m->actions());
     return a;

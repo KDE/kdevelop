@@ -18,14 +18,13 @@
  * 02110-1301, USA.
  */
 
-import QtQuick 1.0
-import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.qtextracomponents 0.1
+import QtQuick 2.0
+import org.kde.plasma.core 2.0 as PlasmaCore
 
 Rectangle
 {
     property Component tools: null
-    property alias pageIcon: theIcon.icon
+    property alias pageIcon: theIcon.source
     property real marginLeft: toolbar.x+toolbar.width
     property real margins: 5
     
@@ -54,7 +53,7 @@ Rectangle
         }
     }
     
-    QIconItem {
+    PlasmaCore.IconItem {
         id: theIcon
         anchors {
             bottom: parent.bottom

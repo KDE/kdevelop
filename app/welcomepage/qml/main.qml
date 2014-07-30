@@ -18,9 +18,10 @@
  * 02110-1301, USA.
  */
 
-import QtQuick 1.0
+import QtQuick 2.0
 
 Loader {
     source: "qrc:/qml/area_"+area+".qml"
     anchors.fill: parent
 }
+

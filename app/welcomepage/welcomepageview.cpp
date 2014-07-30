@@ -21,9 +21,9 @@
 #include "uihelper.h"
 #include "sessionsmodel.h"
 
-#include <QDeclarativeContext>
-#include <QDeclarativeComponent>
-#include <QDeclarativeError>
+#include <QQmlContext>
+#include <QQmlComponent>
+#include <QQmlError>
 #include <QDebug>
 
 #include <shell/core.h>
@@ -31,34 +31,25 @@
 
 #include <sublime/area.h>
 #include <sublime/mainwindow.h>
-
-#include <kdeclarative.h>
-#include <KDebug>
 #include <Plasma/Theme>
-#include <qdeclarative.h>
+#include <KDeclarative/KDeclarative>
 
 using namespace KDevelop;
 
 WelcomePageView::WelcomePageView(QWidget* parent)
-    : QDeclarativeView(parent)
+    : QQuickWidget(parent)
 {
     qRegisterMetaType<QObject*>("KDevelop::IProjectController*");
     qRegisterMetaType<QObject*>("KDevelop::IPluginController*");
     qRegisterMetaType<QObject*>("PatchReviewPlugin*");
     qmlRegisterType<SessionsModel>("org.kdevelop.welcomepage", 4, 3, "SessionsModel");
-    
-    QPalette p = palette();
-    p.setColor(QPalette::Active, QPalette::Text, QColor(Qt::black));
-    setPalette(p);
 
     //setup kdeclarative library
-    KDeclarative kdeclarative;
+    KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(engine());
-    kdeclarative.initialize();
-    //binds things like kconfig and icons
     kdeclarative.setupBindings();
 
-    setResizeMode(QDeclarativeView::SizeRootObjectToView);
+    setResizeMode(QQuickWidget::SizeRootObjectToView);
 
     UiHelper* helper = new UiHelper(this);
     rootContext()->setContextProperty("kdev", helper);
@@ -67,9 +58,8 @@ WelcomePageView::WelcomePageView(QWidget* parent)
 
     setSource(QUrl("qrc:/qml/main.qml"));
     if(!errors().isEmpty()) {
-        kWarning() << "welcomepage errors:" << errors();
+        qWarning() << "welcomepage errors:" << errors();
     }
-    areaChanged(Core::self()->uiControllerInternal()->activeSublimeWindow()->area());
     connect(Core::self()->uiControllerInternal()->activeSublimeWindow(), SIGNAL(areaChanged(Sublime::Area*)),
         this, SLOT(areaChanged(Sublime::Area*)));
 }
@@ -81,16 +71,6 @@ void WelcomePageView::areaChanged(Sublime::Area* area)
 
 void trySetupWelcomePageView()
 {
-    WelcomePageView* v = new WelcomePageView;
-
-    // make sure plasma component is available
-    QDeclarativeComponent component(v->engine());
-    component.setData("import org.kde.plasma.components 0.1\nimport QtQuick 1.0\nText { text: \"Hello world!\" }", QUrl());
-
-    if (component.isError()) {
-        kWarning() << "Welcome Page not supported. errors: " << component.errors();
-        delete v;
-    } else {
-        Core::self()->uiControllerInternal()->activeSublimeWindow()->setBackgroundCentralWidget(v);
-    }
+    //TODO: error checking?
+    Core::self()->uiControllerInternal()->activeSublimeWindow()->setBackgroundCentralWidget(new WelcomePageView);
 }

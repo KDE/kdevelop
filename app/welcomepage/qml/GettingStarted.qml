@@ -18,9 +18,9 @@
  * 02110-1301, USA.
  */
 
-import QtQuick 1.0
+import QtQuick 2.0
 import QtWebKit 1.0
-import org.kde.plasma.components 0.1
+import org.kde.plasma.components 2.0
 
 StandardPage {
     Column {
