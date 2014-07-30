@@ -220,6 +220,14 @@ constexpr IntegralType::CommonIntegralTypes integralType(CXTypeKind TK)
     : static_cast<IntegralType::CommonIntegralTypes>(-1);
 }
 
+constexpr bool isPointerType(CXTypeKind CK)
+{
+    return CK == CXType_Pointer
+        || CK == CXType_BlockPointer
+        || CK == CXType_ObjCObjectPointer
+        || CK == CXType_MemberPointer;
+}
+
 constexpr bool isAliasType(CXCursorKind CK)
 {
     return CK == CXCursor_TypedefDecl || CK == CXCursor_TypeAliasDecl;

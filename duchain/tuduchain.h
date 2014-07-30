@@ -271,7 +271,7 @@ private:
         return new IntegralType(CursorKindTraits::integralType(TK));
     }
 
-    template<CXTypeKind TK, EnableIf<TK == CXType_Pointer> = dummy>
+    template<CXTypeKind TK, EnableIf<CursorKindTraits::isPointerType(TK)> = dummy>
     AbstractType *createType(CXType type) const
     {
         auto ptr = new PointerType;

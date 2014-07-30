@@ -39,3 +39,9 @@ void someFunc(int a);
 void someFunc(int a, int f) { }
 /// "declaration" : { "internalContext" : { "type" : "Function", "localDeclarationCount" : 1 } }
 void someFunc(int a) { }
+
+// Pointer-to-member functions
+/// "type" : { "toString"  : "void ()*" }
+void (foo::*f1)();
+/// "type" : { "toString"  : "void (int, int)*" }
+void (foo::*f2)(int a, int b);
