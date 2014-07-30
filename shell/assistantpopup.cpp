@@ -21,6 +21,7 @@
 
 #include "assistantpopup.h"
 #include "sublime/holdupdates.h"
+#include "util/kdevstringhandler.h"
 
 #include <QKeyEvent>
 #include <QDebug>
@@ -86,6 +87,7 @@ QRect textWidgetGeometry(const KTextEditor::View *view)
 AssistantPopupConfig::AssistantPopupConfig(QObject *parent)
     : QObject(parent)
     , m_active(false)
+    , m_useVerticalLayout(false)
 {
 }
 
@@ -122,6 +124,16 @@ void AssistantPopupConfig::setActive(bool active)
 
     m_active = active;
     emit activeChanged(m_active);
+}
+
+void AssistantPopupConfig::setUseVerticalLayout(bool vertical)
+{
+    if (m_useVerticalLayout == vertical) {
+        return;
+    }
+
+    m_useVerticalLayout = vertical;
+    emit useVerticalLayoutChanged(m_useVerticalLayout);
 }
 
 void AssistantPopupConfig::setTitle(const QString& title)
@@ -192,6 +204,7 @@ void AssistantPopup::reset(KTextEditor::View* view, const IAssistant::Ptr& assis
 {
     setView(view);
     setAssistant(assistant);
+    updateLayoutType();
 
     m_updateTimer->start();
 }
@@ -284,6 +297,7 @@ bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
     Q_UNUSED(object);
 
     if (event->type() == QEvent::Resize) {
+        updateLayoutType();
         updatePosition(m_view.data(), KTextEditor::Cursor::invalid());
     } else if (event->type() == QEvent::Hide) {
         executeHideAction();
@@ -355,6 +369,25 @@ void AssistantPopup::executeHideAction()
 void AssistantPopup::hideAssistant()
 {
     reset(nullptr, {}); // indirectly calls hide()
+}
+
+void AssistantPopup::updateLayoutType()
+{
+    if ( ! assistant() ) {
+        return;
+    }
+    // Make a rough estimate of the width the assistant will need
+    // and decide on whether to use vertical layout or not.
+    const auto& metrics = fontMetrics();
+    auto textWidth = 0;
+
+    textWidth += metrics.boundingRect(KDevelop::htmlToPlainText(assistant()->title())).width();
+    for ( const auto& action: assistant()->actions() ) {
+        textWidth += metrics.boundingRect(KDevelop::htmlToPlainText(action->description())).width();
+        textWidth += 10;
+    }
+    m_config->setUseVerticalLayout(textWidth > textWidgetGeometry(m_view).width()*0.75);
+    updateState();
 }
 
 void AssistantPopup::updateState()

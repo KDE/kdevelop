@@ -42,6 +42,7 @@ class AssistantPopupConfig : public QObject
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QList<QObject*> model READ model NOTIFY modelChanged)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
+    Q_PROPERTY(bool useVerticalLayout READ useVerticalLayout WRITE setUseVerticalLayout NOTIFY useVerticalLayoutChanged)
 
 public:
     explicit AssistantPopupConfig(QObject *parent = 0);
@@ -49,6 +50,9 @@ public:
     QColor foreground() const { return m_foreground; }
     QColor background() const { return m_background; }
     QColor highlight() const { return m_highlight; }
+
+    bool useVerticalLayout() const { return m_useVerticalLayout; }
+    void setUseVerticalLayout(bool vertical);
 
     QString title() const { return m_title; }
     void setTitle(const QString& title);
@@ -66,6 +70,7 @@ signals:
     void titleChanged(const QString& title);
     void modelChanged(const QList<QObject*>& model);
     void activeChanged(bool active);
+    void useVerticalLayoutChanged(bool useVerticalLayout);
 
 private:
     QColor m_foreground;
@@ -75,6 +80,7 @@ private:
     QString m_title;
     QList<QObject*> m_model;
     bool m_active;
+    bool m_useVerticalLayout;
 };
 
 Q_DECLARE_METATYPE(AssistantPopupConfig*)
@@ -105,6 +111,7 @@ public:
 private slots:
     void updatePosition(KTextEditor::View* view, const KTextEditor::Cursor& newPos);
     void updateState();
+    void updateLayoutType();
 
     void executeHideAction();
     void hideAssistant();
