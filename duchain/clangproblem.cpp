@@ -52,9 +52,9 @@ ProblemData::Severity diagnosticSeverityToSeverity(CXDiagnosticSeverity severity
  *
  * @return Prettified version, starting with uppercase character
  */
-inline QString prettyDiagnosticSpelling(const ClangString& str)
+inline QString prettyDiagnosticSpelling(const QString& str)
 {
-    auto ret = str.toString();
+    QString ret = str;
     if (ret.isEmpty()) {
       return {};
     }
@@ -69,6 +69,8 @@ ClangFixits fixitsForDiagnostic(CXDiagnostic diagnostic)
     for (uint i = 0; i < numFixits; ++i) {
         CXSourceRange range;
         const QString replacementText = ClangString(clang_getDiagnosticFixIt(diagnostic, i, &range)).toString();
+
+
         // TODO: Apparently there's no way to find out the raw text via the C API given a source range
         // Could be useful to pass that into ClangFixit to be sure to replace the correct text
         // cf. DocumentChangeSet.m_oldText
@@ -94,7 +96,11 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic)
     auto severity = diagnosticSeverityToSeverity(clang_getDiagnosticSeverity(diagnostic));
     setSeverity(severity);
 
-    ClangString description(clang_getDiagnosticSpelling(diagnostic));
+    QString description(ClangString(clang_getDiagnosticSpelling(diagnostic)));
+    const QString diagnosticOption(ClangString(clang_getDiagnosticOption(diagnostic, nullptr)));
+    if (!diagnosticOption.isEmpty()) {
+        description.append(QString(" [%1]").arg(diagnosticOption));
+    }
     setDescription(prettyDiagnosticSpelling(description));
 
     ClangLocation location(clang_getDiagnosticLocation(diagnostic));
