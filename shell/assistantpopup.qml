@@ -38,7 +38,7 @@ Rectangle {
     Flow {
         id: flow
         anchors.centerIn: parent
-        flow: items.count >= 3 ? Flow.TopToBottom : Flow.LeftToRight
+        flow: config.useVerticalLayout ? Flow.TopToBottom : Flow.LeftToRight
         spacing: 8
 
         Text {
