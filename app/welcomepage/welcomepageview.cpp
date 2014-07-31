@@ -72,5 +72,13 @@ void WelcomePageView::areaChanged(Sublime::Area* area)
 void trySetupWelcomePageView()
 {
     //TODO: error checking?
-    Core::self()->uiControllerInternal()->activeSublimeWindow()->setBackgroundCentralWidget(new WelcomePageView);
+//     FIXME disabling, because it causes a crash, I think it's because QQuickWidget doesn't deal well with QLayout.
+//     Bug reported here: https://bugreports.qt-project.org/browse/QTBUG-40517
+//
+//     In case it doesn't get fixed and we need to re-enable this, I suggest to look into setBackgroundCentralWidget, finding
+//     a different strategy to show/hide documents or the background might fix this issue too.
+//
+//     When re-enabling, we might need this: QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
+//
+//     Core::self()->uiControllerInternal()->activeSublimeWindow()->setBackgroundCentralWidget(new WelcomePageView);
 }
