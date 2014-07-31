@@ -460,8 +460,6 @@ int main( int argc, char *argv[] )
     if ( !QProcessEnvironment::systemEnvironment().contains("KDEV_DISABLE_SPLASH") ) {
         splash = new KDevSplashScreen;
         splash->show();
-        splash->repaint();
-        app.processEvents();
     }
 
     if(!Core::initialize(splash, Core::Default, session))

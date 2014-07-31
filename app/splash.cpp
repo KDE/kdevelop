@@ -24,28 +24,34 @@
 #include <KIconLoader>
 
 #include <KStandardDirs>
-#include <QDeclarativeView>
-#include <QDeclarativeEngine>
-#include <QDeclarativeContext>
-#include <QGraphicsItem>
+#include <QQuickView>
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QQuickItem>
+#include <qscreen.h>
 
 #include "config.h"
 
 KDevSplashScreen::KDevSplashScreen()
-    : KSplashScreen(QPixmap(), Qt::Popup | Qt::FramelessWindowHint)
-    , m_view(new QDeclarativeView)
+    : QQuickView()
 {
-    setFixedSize(QSize(475, 301));
-    m_view->resize(size());
-    m_view->engine()->rootContext()->setContextProperty("appIcon", KIconLoader().iconPath("kdevelop", -48));
-    m_view->engine()->rootContext()->setContextProperty("appVersionMajor", VERSION_MAJOR);
-    m_view->engine()->rootContext()->setContextProperty("appVersionMinor", VERSION_MINOR);
-    m_view->engine()->rootContext()->setContextProperty("appVersionPatch", VERSION_PATCH);
+    setFlags(Qt::FramelessWindowHint | Qt::Tool);
+
+    QRect geo(0,0, 475, 301);
+    geo.moveCenter(screen()->geometry().center());
+    setMaximumSize(geo.size());
+    setMinimumSize(geo.size());
+    setGeometry(geo);
+
+    engine()->rootContext()->setContextProperty("appIcon", KIconLoader().iconPath("kdevelop", -48));
+    engine()->rootContext()->setContextProperty("appVersionMajor", VERSION_MAJOR);
+    engine()->rootContext()->setContextProperty("appVersionMinor", VERSION_MINOR);
+    engine()->rootContext()->setContextProperty("appVersionPatch", VERSION_PATCH);
 
     QString splashScript = KStandardDirs::locate("data", "kdevelop/splash.qml");
-    m_view->setSource(QUrl::fromLocalFile(splashScript));
-    if ( ! m_view->rootObject() ) {
-        kWarning() << "Could not find KDevelop splash screen: kdevelop/splash.qml";
+    setSource(QUrl::fromLocalFile(splashScript));
+    if ( !rootObject() ) {
+        kWarning() << "Could not find KDevelop splash screen: kdevelop/splash.qml" << splashScript;
     }
 }
 
@@ -53,18 +59,11 @@ KDevSplashScreen::~KDevSplashScreen()
 {
 }
 
-void KDevSplashScreen::drawContents(QPainter* painter)
-{
-    m_view->render(painter);
-}
-
 void KDevSplashScreen::progress(int progress)
 {
-    if ( ! m_view->rootObject() ) {
-        return;
-    }
+    Q_ASSERT(rootObject());
 
     // notify the QML script of the progress change
-    m_view->rootObject()->setProperty("progress", progress);
-    repaint();
+    rootObject()->setProperty("progress", progress);
+    qApp->processEvents();
 }

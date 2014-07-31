@@ -21,28 +21,22 @@
 #ifndef KDEVSPLASH_H
 #define KDEVSPLASH_H
 
-#include <ksplashscreen.h>
-
-class QDeclarativeView;
+#include <QQuickView>
 
 /**
  * This class is draws the KDevelop splashscreen.
  *
  * The actualy splash design can be adapted via splash.qml
  */
-class KDevSplashScreen : public KSplashScreen
+class KDevSplashScreen : public QQuickView
 {
     Q_OBJECT
 public:
     explicit KDevSplashScreen();
     virtual ~KDevSplashScreen();
-    virtual void drawContents(QPainter* painter);
 
 public slots:
     void progress(int progress);
-
-private:
-    QScopedPointer<QDeclarativeView> m_view;
 };
 
 #endif
