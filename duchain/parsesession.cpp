@@ -225,11 +225,11 @@ ReferencedTopDUContext ParseSession::contextOfFile(const QString& fileName,
     lock.unlock();
 
     if (!moduleContext) {
-        // Ask KDevelop to parse the file
-        scheduleForParsing(moduleFileString, ownPriority - 1);
+        // Queue this file for reparse
+        ownPriority = scheduleForParsing(url, ownPriority);
 
-        // Then reparse this file, the import will exist
-        scheduleForParsing(url, ownPriority);
+        // Queue the file on which we depend with a lower priority than the one of this file
+        scheduleForParsing(moduleFileString, ownPriority - 1);
 
         return ReferencedTopDUContext();
     } else {
@@ -246,23 +246,26 @@ void ParseSession::reparseImporters(DUContext* context)
     }
 }
 
-void ParseSession::scheduleForParsing(const IndexedString& url, int priority)
+int ParseSession::scheduleForParsing(const IndexedString& url, int priority)
 {
     BackgroundParser* bgparser = KDevelop::ICore::self()->languageController()->backgroundParser();
     TopDUContext::Features features = (TopDUContext::Features)
         (TopDUContext::ForceUpdate | TopDUContext::AllDeclarationsContextsAndUses);
 
     if (bgparser->isQueued(url)) {
-        if (bgparser->priorityForDocument(url) > priority) {
-            // Remove the document and re-queue it with a greater priority
+        int p = bgparser->priorityForDocument(url);
+
+        if (p > priority) {
+            // Remove the document and re-queue it with a lower priority
             bgparser->removeDocument(url);
         } else {
             // Document already queued, do nothing
-            return;
+            return p;
         }
     }
 
     bgparser->addDocument(url, features, priority, 0, ParseJob::FullSequentialProcessing);
+    return priority;
 }
 
 void ParseSession::dumpNode(QmlJS::AST::Node* node) const
