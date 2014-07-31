@@ -63,7 +63,7 @@ public:
       * @param session the name or uuid of the session to be loaded
       *
       */
-    static bool initialize(KSplashScreen* splash = 0, Setup mode=Default, const QString& session = "" );
+    static bool initialize(QObject* splash = 0, Setup mode=Default, const QString& session = "" );
 
     /**
      * \brief Provide access an instance of Core

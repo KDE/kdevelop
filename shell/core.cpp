@@ -321,7 +321,7 @@ CorePrivate::~CorePrivate()
     testController.clear();
 }
 
-bool Core::initialize(KSplashScreen* splash, Setup mode, const QString& session )
+bool Core::initialize(QObject* splash, Setup mode, const QString& session )
 {
     if (m_self)
         return true;
