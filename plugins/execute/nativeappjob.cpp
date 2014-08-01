@@ -47,7 +47,6 @@ using namespace KDevelop;
 NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg) 
     : KDevelop::OutputJob( parent ), proc(0)
 {
-    kDebug() << "creating native app job";
     setCapabilities(Killable);
     
     IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin", "kdevexecute")->extension<IExecutePlugin>();
@@ -196,7 +195,7 @@ void NativeAppJob::processError( QProcess::ProcessError error )
 {
     if( error == QProcess::FailedToStart )
     {
-        setError( -1 );
+        setError( FailedShownError );
         QString errmsg =  i18n("*** Could not start program '%1'. Make sure that the "
                            "path is specified correctly ***", proc->program().join(" ") );
         appendLine( errmsg );

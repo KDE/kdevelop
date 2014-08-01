@@ -120,6 +120,7 @@ void Manager::init()
         else{
             std::cerr << "Wrong feature-string given\n";
             QCoreApplication::exit(2);
+            return;
         }
     }
     if(m_args->isSet("force-update"))
@@ -135,6 +136,7 @@ void Manager::init()
         if(!ok) {
             std::cerr << "bad thread count\n";
             QCoreApplication::exit(3);
+            return;
         }
     }
 
@@ -159,6 +161,7 @@ void Manager::init()
     } else {
         std::cerr << "no files added to the background parser" << std::endl;
         QCoreApplication::exit(0);
+        return;
     }
 }
 
