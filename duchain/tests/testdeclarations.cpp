@@ -73,8 +73,8 @@ void TestDeclarations::testFunction()
     QCOMPARE(fooDec->range(), RangeInRevision(3, 9, 3, 12));
     QCOMPARE(QString::fromUtf8(fooDec->comment()), QString("some comment"));
 
-    QVERIFY(fooDec->internalFunctionContext());
-    DUContext* argCtx = fooDec->internalFunctionContext();
+    QVERIFY(fooDec->internalContext());
+    DUContext* argCtx = fooDec->internalContext();
     QCOMPARE(argCtx->localDeclarations().size(), 3);
 
     Declaration* arg1 = argCtx->localDeclarations().at(0);
@@ -94,8 +94,8 @@ void TestDeclarations::testFunction()
     QVERIFY(funType->returnType().cast<IntegralType>());
     QCOMPARE(funType->returnType().cast<IntegralType>()->dataType(), (uint) IntegralType::TypeVoid);
 
-    QVERIFY(fooDec->internalContext());
-    DUContext* bodyCtx = fooDec->internalContext();
+    QCOMPARE(argCtx->childContexts().size(), 2);
+    DUContext* bodyCtx = argCtx->childContexts().at(1);
     QVERIFY(bodyCtx);
     QVERIFY(bodyCtx->findDeclarations(arg1->identifier()).contains(arg1));
     QVERIFY(bodyCtx->findDeclarations(arg2->identifier()).contains(arg2));

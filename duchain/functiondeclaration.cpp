@@ -56,18 +56,21 @@ KDevelop::DUContext* FunctionDeclaration::prototypeContext() const
     return d_func()->m_prototypeContext.context();
 }
 
-void FunctionDeclaration::setPrototypeContext(KDevelop::DUContext* context, bool own)
+void FunctionDeclaration::setPrototypeContext(KDevelop::DUContext* context)
 {
     DUCHAIN_D_DYNAMIC(FunctionDeclaration);
 
-    d_func_dynamic()->m_prototypeContext = KDevelop::IndexedDUContext(context);
+    d->m_prototypeContext = KDevelop::IndexedDUContext(context);
 
-    if (own) {
-        // DUContext::setOwner(decl) calls decl->setInternalContext, which is not
-        // wanted here. Save and restore m_internalContext
-        KDevelop::IndexedDUContext saveInternalContext = d->m_internalContext;
-        context->setOwner(this);
-        d->m_internalContext = saveInternalContext;
+    // HACK: Also set the internal function context of this function to "context",
+    //       so that importing functions work (DUContext::Import::context(), when
+    //       given a FunctionDeclaration, returns its internalFunctionContext)
+    if (context->type() == KDevelop::DUContext::Function) {
+        // NOTE: type != Function when the internal context of an object is assigned
+        //       to one of its members. Skipping this hack is not a problem in that
+        //       case because one never writes:
+        //          o.member = function(){}; var v = new o.member();
+        setInternalFunctionContext(context);
     }
 }
 

@@ -92,10 +92,12 @@ using namespace KDevelop;
     KDEVQMLJSDUCHAIN_EXPORT DUContext* getInternalContext(const DeclarationPointer &declaration);
 
     /**
-     * Get the internal function context of a function. This context contains
-     * the arguments of the function.
+     * Get the owner of a context
+     *
+     * If the context is of type Function and has no owner, then its parent context
+     * is used to find the owner.
      */
-    KDEVQMLJSDUCHAIN_EXPORT DUContext* getInternalFunctionContext(const DeclarationPointer &declaration);
+    KDEVQMLJSDUCHAIN_EXPORT Declaration* getOwnerOfContext(const DUContext* context);
 
     /**
      * Build a zero-length range on the line of the given SourceLocation
@@ -104,11 +106,6 @@ using namespace KDevelop;
 
     /**
      * Import the internal context of a declaration in a context.
-     *
-     * This function is mainly useful because it contains a workaround for a strange
-     * behavior of DUContext::Import (that stores the owner of the context being
-     * imported and indirectly re-resolves the context, instead of directly
-     * storing it)
      *
      * @note The DUChain write lock must be held
      */

@@ -129,22 +129,42 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
         decl = openDeclaration<Decl>(name, nameRange);
         decl->setKind(Declaration::Type);
         func->setDeclaration(decl);
+        decl->setType(func);
     }
     openType(func);
 
-    // Open the prototype context, if any. This has to be done before everything
-    // else because this context is needed for "this" to be properly resolved
-    // in the function body
+    // Parameters, if any (a function must always have an interal function context,
+    // so always open a context here even if there are no parameters)
+    DUContext* parametersContext = openContext(
+        node + 1,                                               // Don't call setContextOnNode on node, only the body context can be associated with node
+        RangeInRevision(parametersRange.start, bodyRange.end),  // Ensure that this context contains both the parameters and the body
+        DUContext::Function,
+        name
+    );
+
+    if (parameters) {
+        QmlJS::AST::Node::accept(parameters, this);
+    }
+
+    // The internal context of the function is its parameter context
+    {
+        DUChainWriteLocker lock;
+        decl->setInternalContext(parametersContext);
+    }
+
+    // Open the prototype context, if any. This has to be done before the body
+    // because this context is needed for "this" to be properly resolved
+    // in it.
     if (newPrototypeContext) {
         DUChainWriteLocker lock;
         QmlJS::FunctionDeclaration* d = reinterpret_cast<QmlJS::FunctionDeclaration*>(decl);
 
         d->setPrototypeContext(openContext(
-            node + 2,       // Don't call setContextOnNode on node, only the body context can be associated with node
-            nameRange,
-            DUContext::Class,
+            node + 2,                   // Don't call setContextOnNode on node, only the body context can be associated with node
+            RangeInRevision(parametersRange.start, parametersRange.start),
+            DUContext::Function,        // This allows QmlJS::getOwnerOfContext to know that the parent of this context is the function declaration
             QualifiedIdentifier(name)
-        ), true);
+        ));
 
         if (name.last() != Identifier(QLatin1String("Object"))) {
             // Every class inherit from Object
@@ -154,48 +174,21 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
         closeContext();
     }
 
-    // Parameters, if any (a function must always have an interal function context,
-    // so always open a context here even if there are no parameters)
-    DUContext* parametersContext = openContext(
-        node + 1,       // Don't call setContextOnNode on node, only the body context can be associated with node
-        parametersRange,
-        DUContext::Function,
-        name
-    );
-
-    if (parameters) {
-        QmlJS::AST::Node::accept(parameters, this);
-    }
-    closeContext();
-
-    // Body, if any
-    DUContext* bodyContext =  openContext(
+    // Body, if any (it is a child context of the parameters)
+    openContext(
         node,
         bodyRange,
         DUContext::Other,
         name
     );
 
-    {
-        DUChainWriteLocker lock;
-        bodyContext->addImportedParentContext(parametersContext);
-    }
-
     if (body) {
         QmlJS::AST::Node::accept(body, this);
     }
+
+    // Close the body context and then the parameters context
     closeContext();
-
-    // Set the inner contexts of the function
-    {
-        DUChainWriteLocker lock;
-
-        decl->setInternalFunctionContext(parametersContext);
-
-        if (bodyContext) {
-            decl->setInternalContext(bodyContext);
-        }
-    }
+    closeContext();
 }
 
 template<typename Node>
@@ -341,7 +334,7 @@ bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
     }
 
     // Put the argument nodes in a list that has a definite size
-    QVector<Declaration *> argumentDecls = func_declaration->internalFunctionContext()->localDeclarations();
+    QVector<Declaration *> argumentDecls = func_declaration->internalContext()->localDeclarations();
     QVector<QmlJS::AST::ArgumentList *> args;
 
     for (auto argument = arguments; argument; argument = argument->next) {
@@ -426,7 +419,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
             if (rightType.declaration && leftCtx->type() == DUContext::Class) {
                 auto func = rightType.declaration.dynamicCast<QmlJS::FunctionDeclaration>();
 
-                if (!leftCtx->owner() && !leftCtx->importers().isEmpty()) {
+                if (!QmlJS::getOwnerOfContext(leftCtx) && !leftCtx->importers().isEmpty()) {
                     // MyClass.prototype.myfunc declares "myfunc" in a small context
                     // that is imported by MyClass. The prototype of myfunc should
                     // be the context of MyClass, not the small context in which
@@ -435,7 +428,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
                 }
 
                 if (func && !func->prototypeContext()) {
-                    func->setPrototypeContext(leftCtx, false);
+                    func->setPrototypeContext(leftCtx);
                 }
             }
 
@@ -646,7 +639,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
         auto func = type.declaration.dynamicCast<QmlJS::FunctionDeclaration>();
 
         if (func && !func->prototypeContext()) {
-            func->setPrototypeContext(currentContext(), false);
+            func->setPrototypeContext(currentContext());
         }
     }
 
@@ -879,18 +872,13 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
 
     DUContext* ctx = currentContext();
     Declaration* decl = currentDeclaration();
-    ClassFunctionDeclaration* classDecl = dynamic_cast<ClassFunctionDeclaration*>(decl);
 
     {
         // Set the inner context of the current declaration, because nested classes
         // need to know the inner context of their parents
         DUChainWriteLocker lock;
 
-        if (classDecl) {
-            classDecl->setInternalFunctionContext(ctx);
-        } else {
-            decl->setInternalContext(ctx);
-        }
+        decl->setInternalContext(ctx);
 
         if (baseclass == QLatin1String("Module")) {
             // If we opened a namespace, give it a proper scope
@@ -1263,10 +1251,13 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
         );
 
         // If this script binding is a slot, import the parameters of its signal
-        if (signal && signal->isSignal() && signal->internalFunctionContext()) {
+        if (signal && signal->isSignal() && signal->internalContext()) {
             DUChainWriteLocker lock;
 
-            currentContext()->addImportedParentContext(signal->internalFunctionContext());
+            currentContext()->addIndirectImport(DUContext::Import(
+                signal->internalContext(),
+                nullptr
+            ));
         }
     }
 

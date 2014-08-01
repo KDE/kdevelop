@@ -197,17 +197,20 @@ bool ExpressionVisitor::visit(QmlJS::AST::ThisExpression* node)
 {
     Q_UNUSED(node)
     DUChainReadLocker lock;
+    DUContext* paramsContext;
     DUContext* internalContext;
+    Declaration* owner;
 
     // "this" points to the current function (not semantically valid in JS,
     // but this allows ExpressionVisitor to see the declarations of the
     // function's prototype)
-    if (m_context->type() == DUContext::Other &&
-        m_context->owner() &&
-        (internalContext = QmlJS::getInternalContext(DeclarationPointer(m_context->owner()))) &&
-        internalContext->owner() &&
-        internalContext->owner()->abstractType()) {
-        encounterLvalue(DeclarationPointer(internalContext->owner()));
+    if (m_context->type() == DUContext::Other &&                // Code of the function
+        (paramsContext = m_context->parentContext()) &&         // Parameters of the function (this context has the function as owner)
+        (owner = QmlJS::getOwnerOfContext(paramsContext)) &&    // The function itself (owner of its parameters)
+        (internalContext = QmlJS::getInternalContext(DeclarationPointer(owner))) && // The prototype context of the function
+        (owner = QmlJS::getOwnerOfContext(internalContext)) &&  // The function that declared the prototype context (paramsContext may belong to a method of a class)
+        owner->abstractType()) {
+        encounterLvalue(DeclarationPointer(owner));
         instantiateCurrentDeclaration();
     } else {
         encounterNothing();
@@ -221,7 +224,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::ThisExpression* node)
  */
 bool ExpressionVisitor::visit(QmlJS::AST::FunctionExpression* node)
 {
-    encounterObjectAtLocation(node->lbraceToken);
+    encounterObjectAtLocation(node->lparenToken);
     return false;
 }
 
@@ -309,6 +312,7 @@ bool ExpressionVisitor::encounterParent(const QString& declaration)
 
     // Go up until we find a class context (the enclosing QML component)
     const DUContext* parent = m_context;
+    Declaration* owner;
 
     while (parent && parent->type() != DUContext::Class) {
         parent = parent->parentContext();
@@ -324,9 +328,9 @@ bool ExpressionVisitor::encounterParent(const QString& declaration)
     // the user wants when typing "parent", but already works well for
     // "anchors.centerIn: parent" and things like that.
     if (parent &&
-        parent->owner() &&
-        parent->owner()->abstractType()) {
-        encounterLvalue(DeclarationPointer(parent->owner()));
+        (owner = QmlJS::getOwnerOfContext(parent)) &&
+        owner->abstractType()) {
+        encounterLvalue(DeclarationPointer(owner));
         return true;
     }
 
@@ -411,9 +415,9 @@ void ExpressionVisitor::encounterObjectAtLocation(const QmlJS::AST::SourceLocati
 
     // Find the anonymous declaration corresponding to the function. This is
     // the owner of the current context (function expressions create new contexts)
-    Declaration* dec = m_context->topContext()->findContextAt(
+    Declaration* dec = QmlJS::getOwnerOfContext(m_context->topContext()->findContextAt(
         CursorInRevision(location.startLine-1, location.startColumn)
-    )->owner();
+    ));
 
     if (dec && dec->abstractType()) {
         encounterLvalue(DeclarationPointer(dec));

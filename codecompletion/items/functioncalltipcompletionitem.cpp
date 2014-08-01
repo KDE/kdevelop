@@ -53,12 +53,11 @@ FunctionCalltipCompletionItem::FunctionCalltipCompletionItem(const DeclarationPo
     // Arguments can be fetch from the function declaration (if available), or
     // from its function type
     Declaration* funcDecl = func->declaration(decl->topContext());
-    DUContext* internalFunctionContext =
-        getInternalFunctionContext(funcDecl ? DeclarationPointer(funcDecl) : decl);
+    DUContext* argsContext = (funcDecl ? funcDecl->internalContext() : nullptr);
     QStringList arguments;
 
-    if (internalFunctionContext) {
-        auto args = internalFunctionContext->allDeclarations(CursorInRevision::invalid(), decl->topContext(), false);
+    if (argsContext) {
+        auto args = argsContext->allDeclarations(CursorInRevision::invalid(), decl->topContext(), false);
 
         for (auto pair : args) {
             arguments.append(pair.first->toString());
@@ -82,7 +81,7 @@ FunctionCalltipCompletionItem::FunctionCalltipCompletionItem(const DeclarationPo
         m_prefix = func->returnType()->toString() + QLatin1String(" ");
     }
 
-    m_prefix += decl->qualifiedIdentifier().toString();
+    m_prefix += decl->identifier().toString();
 
     // (arg1, arg2, [currentArgument in m_currentArgument], arg4, arg5)
     m_arguments = QLatin1String("(");

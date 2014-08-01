@@ -89,8 +89,7 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
         }
     } else if (role == Qt::DisplayRole && funcType) {
         // Functions are displayed using the "type funcName(arg, arg, arg...)" format
-        FunctionDeclaration* funcDecl =
-            dynamic_cast<FunctionDeclaration*>(funcType->declaration(decl->topContext()));
+        Declaration* funcDecl = funcType->declaration(decl->topContext());
 
         if (funcDecl) {
             switch (index.column()) {
@@ -100,12 +99,12 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
                 // Return the identifier of the declaration being listed, not of its
                 // function declaration (because the function may have been declared
                 // anonymously, even if it has been assigned to a variable)
-                return decl->qualifiedIdentifier().toString();
+                return decl->identifier().toString();
             case CodeCompletionModel::Arguments:
             {
                 QStringList args;
 
-                for (auto arg : funcDecl->internalFunctionContext()->localDeclarations()) {
+                for (auto arg : funcDecl->internalContext()->localDeclarations()) {
                     args.append(arg->toString());
                 }
 

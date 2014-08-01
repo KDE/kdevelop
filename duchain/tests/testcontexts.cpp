@@ -64,18 +64,18 @@ void TestContexts::testFunctionContext()
 
     QCOMPARE(top->type(), DUContext::Global);
 
-    // one context for (), one for {}, and one for the prototype context
-    QCOMPARE(top->childContexts().count(), 3);
+    // the function arguments (containing the prototype context and the function body)
+    QCOMPARE(top->childContexts().count(), 1);
 
-    DUContext* argCtx = top->childContexts().at(1);     // The prototype context is at position 0
+    DUContext* argCtx = top->childContexts().at(0);
     QCOMPARE(argCtx->type(), DUContext::Function);
     QCOMPARE(argCtx->range(), argCtxRange);
+    QCOMPARE(argCtx->childContexts().size(), 2);    // The prototype context then the body context
 
-    DUContext* bodyCtx = top->childContexts().at(2);
+    DUContext* bodyCtx = argCtx->childContexts().at(1);
+    QVERIFY(bodyCtx);
     QCOMPARE(bodyCtx->type(), DUContext::Other);
     QCOMPARE(bodyCtx->range(), bodyCtxRange);
-
-    QVERIFY(bodyCtx->imports(argCtx));
 }
 
 void TestContexts::testFunctionContext_data()
@@ -86,19 +86,19 @@ void TestContexts::testFunctionContext_data()
     //                         0         1
     //                         012345678901234567890
     QTest::newRow("empty") << "function foo() {;}"
-                           << RangeInRevision(0, 12, 0, 14)
+                           << RangeInRevision(0, 12, 0, 18)
                            << RangeInRevision(0, 15, 0, 18);
 
     //                        0         1         2         3
     //                        01234567890123456789012345678901234567890
     QTest::newRow("args") << "function foo(arg1, arg2, arg3) {;}"
-                           << RangeInRevision(0, 12, 0, 30)
+                           << RangeInRevision(0, 12, 0, 34)
                            << RangeInRevision(0, 31, 0, 34);
 
     //                           0         1         2
     //                           0123456789012345678901234567890
     QTest::newRow("newline") << "function foo() {;\n}"
-                           << RangeInRevision(0, 12, 0, 14)
+                           << RangeInRevision(0, 12, 1, 1)
                            << RangeInRevision(0, 15, 1, 1);
 }
 

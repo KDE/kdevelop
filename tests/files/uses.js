@@ -5,7 +5,7 @@ var global = 1;
 
 /**
  * "useCount" : 2,
- * "internalFunctionContext" : { "declarations" : { "0" : { "useCount" : 1 } } }
+ * "internalContext" : { "declarations" : { "0" : { "useCount" : 1 } } }
  */
 function func(arg) {
     func(arg, global);

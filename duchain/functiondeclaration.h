@@ -75,7 +75,7 @@ public:
      *
      * @note The DUChain must be write-locked
      */
-    void setPrototypeContext(KDevelop::DUContext* context, bool own);
+    void setPrototypeContext(KDevelop::DUContext* context);
 
     enum {
         Identity = 112

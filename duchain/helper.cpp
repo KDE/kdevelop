@@ -235,21 +235,12 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
     }
 }
 
-DUContext* getInternalFunctionContext(const DeclarationPointer& declaration)
+Declaration* getOwnerOfContext(const DUContext* context)
 {
-    DUChainReadLocker lock;
-
-    if (!declaration) {
-        return nullptr;
-    }
-
-    auto classFuncDecl = dynamic_cast<ClassFunctionDeclaration*>(declaration.data());
-    auto funcDecl = dynamic_cast<FunctionDeclaration*>(declaration.data());
-
-    if (classFuncDecl) {
-        return classFuncDecl->internalFunctionContext();
-    } else if (funcDecl) {
-        return funcDecl->internalFunctionContext();
+    if (context->owner()) {
+        return context->owner();
+    } else if (context->type() == DUContext::Function && context->parentContext()) {
+        return context->parentContext()->owner();
     } else {
         return nullptr;
     }
@@ -268,11 +259,10 @@ void importDeclarationInContext(DUContext* context, const DeclarationPointer& de
         return;
     }
 
-    context->addIndirectImport(DUContext::Import(
-        importedContext,
-        nullptr,                                        // If this is not null, Import::Import will mess with context->owner()->internalFunctionContext...
-        CursorInRevision::invalid()
-    ));
+    {
+        DUChainWriteLocker lock;
+        context->addImportedParentContext(importedContext);
+    }
 }
 
 void importObjectContext(DUContext* context, TopDUContext* topContext)
