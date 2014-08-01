@@ -47,7 +47,6 @@ using namespace KDevelop;
 NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg) 
     : KDevelop::OutputJob( parent ), proc(0)
 {
-    kDebug() << "creating native app job";
     setCapabilities(Killable);
     
     IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin", "kdevexecute")->extension<IExecutePlugin>();
