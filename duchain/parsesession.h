@@ -164,9 +164,9 @@ public:
                                                           int ownPriority);
 
     /**
-     * Schedule for update all the files importing @p context
+     * Schedule for update all the files that depend on this file
      */
-    void reparseImporters(KDevelop::DUContext* context);
+    void reparseImporters();
 
     /**
      * Schedule a document for update using the default flags of QML/JS
@@ -174,7 +174,7 @@ public:
      * @return The actual priority of the file being queued (this priority can
      *         only be lower then @p priority)
      */
-    static int scheduleForParsing(const KDevelop::IndexedString& url, int priority);
+    static void scheduleForParsing(const KDevelop::IndexedString& url, int priority);
 
     /**
      * Dump AST tree to stdout.

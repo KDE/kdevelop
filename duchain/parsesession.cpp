@@ -18,6 +18,8 @@
 
 #include "parsesession.h"
 #include "debugvisitor.h"
+#include "cache.h"
+
 #include <qmljs/parser/qmljsast_p.h>
 
 #include <language/editor/simplerange.h>
@@ -240,47 +242,33 @@ ReferencedTopDUContext ParseSession::contextOfFile(const QString& fileName,
     lock.unlock();
 
     if (!moduleContext) {
-        // Queue this file for reparse
-        ownPriority = scheduleForParsing(url, ownPriority);
-
         // Queue the file on which we depend with a lower priority than the one of this file
         scheduleForParsing(moduleFileString, ownPriority - 1);
 
+        // Register a dependency between this file and the imported one
+        QmlJS::Cache::instance().addDependency(url, moduleFileString);
         return ReferencedTopDUContext();
     } else {
         return moduleContext;
     }
 }
 
-void ParseSession::reparseImporters(DUContext* context)
+void ParseSession::reparseImporters()
 {
-    DUChainReadLocker lock;
-
-    for (DUContext* importer : context->importers()) {
-        scheduleForParsing(importer->url(), m_ownPriority);
+    for (const KDevelop::IndexedString& file : QmlJS::Cache::instance().filesThatDependOn(m_url)) {
+        scheduleForParsing(file, m_ownPriority);
     }
 }
 
-int ParseSession::scheduleForParsing(const IndexedString& url, int priority)
+void ParseSession::scheduleForParsing(const IndexedString& url, int priority)
 {
     BackgroundParser* bgparser = KDevelop::ICore::self()->languageController()->backgroundParser();
     TopDUContext::Features features = (TopDUContext::Features)
         (TopDUContext::ForceUpdate | TopDUContext::AllDeclarationsContextsAndUses);
 
-    if (bgparser->isQueued(url)) {
-        int p = bgparser->priorityForDocument(url);
-
-        if (p > priority) {
-            // Remove the document and re-queue it with a lower priority
-            bgparser->removeDocument(url);
-        } else {
-            // Document already queued, do nothing
-            return p;
-        }
+    if (!bgparser->isQueued(url)) {
+        bgparser->addDocument(url, features, priority, 0, ParseJob::FullSequentialProcessing);
     }
-
-    bgparser->addDocument(url, features, priority, 0, ParseJob::FullSequentialProcessing);
-    return priority;
 }
 
 void ParseSession::dumpNode(QmlJS::AST::Node* node) const

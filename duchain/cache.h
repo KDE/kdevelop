@@ -24,10 +24,12 @@
 #define __CACHE_H__
 
 #include "duchainexport.h"
+#include <language/duchain/indexedstring.h>
 
 #include <QHash>
 #include <QStringList>
 #include <QFileInfo>
+#include <QSet>
 
 namespace QmlJS
 {
@@ -65,6 +67,16 @@ public:
      */
     QStringList getFileNames(const QFileInfoList& fileInfos);
 
+    /**
+     * Add a dependency between two URLs
+     */
+    void addDependency(const KDevelop::IndexedString& file, const KDevelop::IndexedString& dependency);
+
+    /**
+     * List of the files that depend on a given URL
+     */
+    QList<KDevelop::IndexedString> filesThatDependOn(const KDevelop::IndexedString& file);
+
 private:
     struct PluginDumpExecutable {
         QString executable;
@@ -77,6 +89,7 @@ private:
 
     QHash<QString, QString> m_modulePaths;
     QList<PluginDumpExecutable> m_pluginDumpExecutables;
+    QHash<KDevelop::IndexedString, QSet<KDevelop::IndexedString>> m_dependees;
 };
 
 }

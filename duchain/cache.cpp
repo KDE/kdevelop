@@ -162,3 +162,18 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
 
     return result;
 }
+
+void QmlJS::Cache::addDependency(const KDevelop::IndexedString& file, const KDevelop::IndexedString& dependency)
+{
+    // Avoid cyclic dependencies
+    if (m_dependees[file].contains(dependency)) {
+        return;
+    }
+
+    m_dependees[dependency].insert(file);
+}
+
+QList<KDevelop::IndexedString> QmlJS::Cache::filesThatDependOn(const KDevelop::IndexedString& file)
+{
+    return m_dependees[file].toList();
+}
