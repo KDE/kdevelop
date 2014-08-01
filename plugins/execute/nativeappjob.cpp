@@ -195,7 +195,7 @@ void NativeAppJob::processError( QProcess::ProcessError error )
 {
     if( error == QProcess::FailedToStart )
     {
-        setError( -1 );
+        setError( FailedShownError );
         QString errmsg =  i18n("*** Could not start program '%1'. Make sure that the "
                            "path is specified correctly ***", proc->program().join(" ") );
         appendLine( errmsg );
