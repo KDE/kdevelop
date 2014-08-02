@@ -66,6 +66,11 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
 
         kDebug() << "pre-builder finished";
         delete prebuilder;
+
+        if (!m_session->allDependenciesSatisfied()) {
+            kDebug() << "dependencies were missing, don't perform the second parsing pass";
+            return updateContext;
+        }
     } else {
         kDebug() << "prebuilding";
     }

@@ -140,6 +140,12 @@ public:
     KDevelop::DUContext* contextFromNode(QmlJS::AST::Node* node) const;
 
     /**
+     * Return whether all the files included by this file were already present in
+     * the DUChain.
+     */
+    bool allDependenciesSatisfied() const;
+
+    /**
      * Return the context of a given QML file, NULL if this file is not yet known
      * to the DUChain.
      *
@@ -181,6 +187,7 @@ private:
     QString m_version;
     QmlJS::Document::MutablePtr m_doc;
     int m_ownPriority;
+    bool m_allDependenciesSatisfied;
 
     typedef QHash<QmlJS::AST::Node*, KDevelop::DUContextPointer> NodeToContextHash;
     NodeToContextHash m_astToContext;

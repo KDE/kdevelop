@@ -65,7 +65,8 @@ QmlJS::Language::Enum ParseSession::guessLanguageFromSuffix(const QString& path)
 
 ParseSession::ParseSession(const IndexedString& url, const QString& contents, int priority)
 : m_url(url),
-  m_ownPriority(priority)
+  m_ownPriority(priority),
+  m_allDependenciesSatisfied(true)
 {
     const QString path = m_url.str();
     m_doc = QmlJS::Document::create(path, guessLanguageFromSuffix(path));
@@ -204,9 +205,23 @@ DUContext* ParseSession::contextFromNode(QmlJS::AST::Node* node) const
     return m_astToContext.value(node, DUContextPointer()).data();
 }
 
+bool ParseSession::allDependenciesSatisfied() const
+{
+    return m_allDependenciesSatisfied;
+}
+
 ReferencedTopDUContext ParseSession::contextOfFile(const QString& fileName)
 {
-    return contextOfFile(fileName, m_url, m_ownPriority);
+    ReferencedTopDUContext res = contextOfFile(fileName, m_url, m_ownPriority);
+
+    if (!res) {
+        // The file was not yet present in the DUChain, store this information.
+        // This will prevent the second parsing pass from running (it would be
+        // useless as the file will be re-parsed when res will become available)
+        m_allDependenciesSatisfied = false;
+    }
+
+    return res;
 }
 
 ReferencedTopDUContext ParseSession::contextOfFile(const QString& fileName,
