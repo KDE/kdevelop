@@ -28,12 +28,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
-#include "../duchain/duchain.h"
-#include "../duchain/duchainlock.h"
-#include "codecompletionmodel.h"
 #include "../duchain/declaration.h"
-#include "../duchain/classfunctiondeclaration.h"
-#include "../duchain/namespacealiasdeclaration.h"
 #include "../duchain/duchainutils.h"
 
 
@@ -66,13 +61,15 @@ void CompletionTreeElement::setParent(CompletionTreeElement* parent) {
 }
 
 void CompletionTreeNode::appendChildren(QList< KSharedPtr< KDevelop::CompletionTreeElement > > children) {
-  for(QList< KSharedPtr< KDevelop::CompletionTreeElement > >::const_iterator it = children.constBegin(); it != children.constEnd(); ++it)
-    appendChild(*it);
+  foreach (const auto& child, children) {
+    appendChild(child);
+  }
 }
 
 void CompletionTreeNode::appendChildren(QList< KSharedPtr< KDevelop::CompletionTreeItem > > children) {
-  for(QList< KSharedPtr< KDevelop::CompletionTreeItem > >::iterator it = children.begin(); it != children.end(); ++it)
-    appendChild(KSharedPtr< KDevelop::CompletionTreeElement >((*it).data()));
+  foreach (auto child, children) {
+    appendChild(CompletionTreeElementPointer(child.data()));
+  }
 }
 
 void CompletionTreeNode::appendChild(KSharedPtr< KDevelop::CompletionTreeElement > child) {
@@ -107,11 +104,6 @@ const CompletionTreeItem* CompletionTreeElement::asItem() const {
 
 int CompletionTreeElement::rowInParent() const {
   return m_rowInParent;
-/*  if( !m_parent )
-    return 0;
-  Q_ASSERT(m_parent->asNode());
-
-  return m_parent->asNode()->children.indexOf( KSharedPtr<CompletionTreeElement>(const_cast<CompletionTreeElement*>(this)) );*/
 }
 
 void CompletionTreeItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
@@ -140,8 +132,9 @@ int CompletionTreeItem::argumentHintDepth() const
 
 KTextEditor::CodeCompletionModel::CompletionProperties CompletionTreeItem::completionProperties() const {
   Declaration* dec = declaration().data();
-  if(!dec)
-    return (KTextEditor::CodeCompletionModel::CompletionProperties)0;
+  if(!dec) {
+    return {};
+  }
 
   return DUChainUtils::completionProperties(dec);
 }
