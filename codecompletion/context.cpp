@@ -274,7 +274,8 @@ int codeCompletionPriorityToMatchQuality(unsigned int completionPriority)
 /**
  * @return Whether the declaration represented by identifier @p identifier qualifies as completion result
  *
- * For example, we don't want to offer SomeClass::operator= as completion item to the user
+ * For example, we don't want to offer SomeClass::SomeClass as completion item to the user
+ * (otherwise we'd end up generating code such as 's.SomeClass();')
  */
 bool isValidCompletionIdentifier(const QualifiedIdentifier& identifier)
 {
@@ -291,9 +292,6 @@ bool isValidCompletionIdentifier(const QualifiedIdentifier& identifier)
     const QString idString = id.toString();
     if (idString.startsWith("~") && scope.toString() == idString.midRef(1)) {
         return false; // is destructor
-    }
-    if (idString.startsWith("operator")) {
-        return false; // is operator
     }
     return true;
 }
@@ -365,8 +363,13 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         return {};
     }
 
+    /// Normal completion items, such as 'void Foo::foo()'
     QList<CompletionTreeItemPointer> items;
+    /// Stuff like 'Foo& Foo::operator=(const Foo&)', etc. Not regularly used by our users.
+    QList<CompletionTreeItemPointer> specialItems;
+    /// Macros from the current context
     QList<CompletionTreeItemPointer> macros;
+    /// Builtins reported by Clang
     QList<CompletionTreeItemPointer> builtin;
 
     QSet<Declaration*> handled;
@@ -518,13 +521,16 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         if (result.CursorKind == CXCursor_MacroDefinition) {
             // TODO: grouping of macros and built-in stuff
             macros.append(item);
-        } else {
+        } else if (result.CursorKind == CXCursor_NotImplemented) {
             builtin.append(item);
+        } else {
+            specialItems.append(item);
         }
     }
 
     addOverwritableItems();
     addImplementationHelperItems();
+    eventuallyAddGroup(i18n("Special"), 700, specialItems);
     eventuallyAddGroup(i18n("Macros"), 900, macros);
     eventuallyAddGroup(i18n("Builtin"), 800, builtin);
     return items;

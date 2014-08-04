@@ -110,11 +110,16 @@ void TestCodeCompletion::testClangCodeCompletion_data()
         << "class Foo { public: void foo() {} }; int main() { Foo f; \nf. "
         << CompletionItemsList{{{1, 2}, {
             "foo()",
+            "operator=(Foo &&)",
+            "operator=(const Foo &)",
+
         }}};
     QTest::newRow("arrowmemberaccess")
         << "class Foo { public: void foo() {} }; int main() { Foo* f = new Foo; \nf-> }"
         << CompletionItemsList{{{1, 3}, {
             "foo()",
+            "operator=(Foo &&)",
+            "operator=(const Foo &)",
         }}};
     QTest::newRow("enum-case")
         << "enum Foo { foo, bar }; int main() { Foo f; switch (f) {\ncase "
@@ -126,23 +131,31 @@ void TestCodeCompletion::testClangCodeCompletion_data()
         << "class SomeStruct { private: void priv() {} };\n"
            "int main() { SomeStruct s;\ns. "
         << CompletionItemsList{{{2, 2}, {
+            "operator=(SomeStruct &&)",
+            "operator=(const SomeStruct &)",
         }}};
     QTest::newRow("private-friend")
         << "class SomeStruct { private: void priv() {} friend int main(); };\n"
            "int main() { SomeStruct s;\ns. "
         << CompletionItemsList{{{2, 2}, {
+            "operator=(SomeStruct &&)",
+            "operator=(const SomeStruct &)",
             "priv()",
         }}};
     QTest::newRow("private-public")
         << "class SomeStruct { public: void pub() {} private: void priv() {} };\n"
            "int main() { SomeStruct s;\ns. "
         << CompletionItemsList{{{2, 2}, {
+            "operator=(SomeStruct &&)",
+            "operator=(const SomeStruct &)",
             "pub()",
         }}};
     QTest::newRow("protected-public")
         << "class SomeStruct { public: void pub() {} protected: void prot() {} };\n"
            "int main() { SomeStruct s;\ns. "
         << CompletionItemsList{{{2, 2}, {
+            "operator=(SomeStruct &&)",
+            "operator=(const SomeStruct &)",
             "pub()",
         }}};
 }
