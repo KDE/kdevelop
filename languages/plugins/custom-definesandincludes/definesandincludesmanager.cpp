@@ -188,4 +188,7 @@ void DefinesAndIncludesManager::registerProvider(IDefinesAndIncludesManager::Pro
     m_providers.push_back(provider);
 }
 
+// NOTE: Part of a fix for build failures on <GCC-4.7
+DefinesAndIncludesManager::~DefinesAndIncludesManager() noexcept = default;
+
 }
