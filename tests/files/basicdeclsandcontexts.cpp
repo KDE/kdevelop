@@ -10,7 +10,7 @@ int main()
 
 /**
  * "identifier" : "bar",
- * "internalContext" : { "type" : "Namespace", "range" : "[(15, 0), (85, 1)]" },
+ * "internalContext" : { "type" : "Namespace", "range" : "[(15, 0), (93, 1)]" },
  * "kind" : "Namespace"
  */
 namespace bar
@@ -23,7 +23,7 @@ namespace bar
 
     /**
      * "identifier" : "foostruct",
-     * "internalContext" : { "type" : "Class", "range" : "[(27, 4), (84, 5)]" }
+     * "internalContext" : { "type" : "Class", "range" : "[(27, 4), (92, 5)]" }
      */
     struct foostruct
     {
@@ -82,8 +82,13 @@ namespace bar
         void deffoomethod()
         {
         }
+
+        /**
+         * "identifier" : "operator=", "range" : "[(89, 19), (89, 28)]",
+         * "internalContext" : { "type" : "Function", "range" : "[(89, 8), (91, 9)]" }
+         */
+        foostruct& operator=(const foostruct& other)
+        {
+        }
     };
 }
-
-
-

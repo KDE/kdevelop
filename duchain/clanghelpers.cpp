@@ -156,6 +156,20 @@ DeclarationPointer ClangHelpers::findDeclaration(CXType type, const IncludeFileC
     return findDeclaration(cursor, includes);
 }
 
+RangeInRevision ClangHelpers::cursorSpellingNameRange(CXCursor cursor, const Identifier& id)
+{
+    auto range = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRangeInRevision();
+    auto kind = clang_getCursorKind(cursor);
+    // TODO: Upstream issue: Check why clang reports invalid ranges for destructors and methods like 'operator='
+    // Current issues:
+    // - CXCursor_Destructor: Only returns the range of '~'
+    // - CXCursor_CXXMethod: For operator overloads, only returns the range of 'operator'
+    if (kind == CXCursor_Destructor || kind == CXCursor_CXXMethod) {
+        range.end.column = range.start.column + id.toString().length();
+    }
+    return range;
+}
+
 QStringList ClangHelpers::headerExtensions()
 {
     static const QStringList headerExtensions = {"h", "H", "hh", "hxx", "hpp", "tlh", "h++"};

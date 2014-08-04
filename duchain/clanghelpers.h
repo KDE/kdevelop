@@ -45,6 +45,11 @@ KDevelop::DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileC
 KDevelop::DeclarationPointer findDeclaration(CXType type, const IncludeFileContexts& includes);
 
 /**
+ * Wrapper for @ref clang_Cursor_getSpellingNameRange which sometimes reports invalid ranges
+ */
+KDevelop::RangeInRevision cursorSpellingNameRange(CXCursor cursor, const KDevelop::Identifier& id);
+
+/**
  * @returns all the Imports for each file in the @param tu
  */
 KDEVCLANGDUCHAIN_EXPORT Imports tuImports(CXTranslationUnit tu);
