@@ -36,7 +36,7 @@ namespace bar
         }
 
         /**
-         * "identifier" : "~foostruct",
+         * "identifier" : "~foostruct", "range" : "[(41, 8), (41, 18)]",
          * "internalContext" : { "type" : "Function", "range" : "[(41, 8), (43, 9)]" }
          */
         ~foostruct()

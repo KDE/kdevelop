@@ -187,6 +187,11 @@ private:
     DeclType* createDeclarationCommon(CXCursor cursor, const Identifier& id)
     {
         auto range = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRangeInRevision();
+        if (CK == CXCursor_Destructor) {
+            // HACK: ensure the dtor declaration range encompasses the full identifier,
+            // not only the tilde
+            range.end.column = range.start.column + id.toString().length();
+        }
         if (m_update) {
             const IndexedIdentifier indexedId(id);
             DUChainWriteLocker lock;
