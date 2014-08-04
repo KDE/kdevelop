@@ -47,17 +47,17 @@ static ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const KDev
 {
     ConfigEntry ret;
 
-    auto itemPath = item->path().toUrl();
-    KUrl rootDirectory = item->project()->folder();
+    const Path itemPath = item->path();
+    const Path rootDirectory = item->project()->path();
 
     for (const ConfigEntry & entry : paths) {
-        KUrl targetDirectory = rootDirectory;
+        Path targetDirectory = rootDirectory;
         // note: a dot represents the project root
         if (entry.path != ".") {
             targetDirectory.addPath(entry.path);
         }
 
-        if (targetDirectory.isParentOf(itemPath)) {
+        if (targetDirectory == itemPath || targetDirectory.isParentOf(itemPath)) {
             ret.includes += entry.includes;
 
             for (auto it = entry.defines.constBegin(); it != entry.defines.constEnd(); it++) {
