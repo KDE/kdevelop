@@ -289,7 +289,7 @@ bool isValidCompletionIdentifier(const QualifiedIdentifier& identifier)
         return false; // is constructor
     }
     const QString idString = id.toString();
-    if (idString.startsWith("~") && scope.toString() == idString.mid(1)) {
+    if (idString.startsWith("~") && scope.toString() == idString.midRef(1)) {
         return false; // is destructor
     }
     if (idString.startsWith("operator")) {
