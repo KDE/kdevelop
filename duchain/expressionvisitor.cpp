@@ -239,7 +239,7 @@ bool ExpressionVisitor::visit(QmlJS::AST::CallExpression* node)
         if (moduleName) {
             encounterLvalue(QmlJS::NodeJS::instance().moduleExports(
                 moduleName->value.toString(),
-                m_context->topContext()->url().str()
+                m_context->topContext()->url()
             ));
         } else {
             encounterNothing();

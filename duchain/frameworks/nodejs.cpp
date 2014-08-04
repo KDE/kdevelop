@@ -24,6 +24,7 @@
 #include "../parsesession.h"
 
 #include <kstandarddirs.h>
+#include <language/duchain/indexedstring.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
@@ -71,6 +72,7 @@ void NodeJS::createObject(const QString& name, int index, DeclarationBuilder* bu
     Declaration* decl = builder->openDeclaration<Declaration>(identifier, RangeInRevision());
 
     type->setDeclaration(decl);
+    decl->setAlwaysForceDirect(true);
     decl->setKind(Declaration::Type);   // Not exactly what the user would expect, but this ensures that QmlJS::getInternalContext does not recurse infinitely
     decl->setInternalContext(builder->openContext(
         (QmlJS::AST::Node*)nullptr + index,                // Index is used to disambiguate the contexts. "node" is never dereferenced and is only stored in a hash table
@@ -84,16 +86,16 @@ void NodeJS::createObject(const QString& name, int index, DeclarationBuilder* bu
     builder->closeAndAssignType();
 }
 
-DeclarationPointer NodeJS::moduleExports(const QString& moduleName, const QString& url)
+DeclarationPointer NodeJS::moduleExports(const QString& moduleName, const IndexedString& url)
 {
-    QString fileName = moduleFileName(moduleName, url);
+    QString fileName = moduleFileName(moduleName, url.str());
     DeclarationPointer exports;
 
     if (fileName.isEmpty()) {
         return exports;
     }
 
-    ReferencedTopDUContext topContext = ParseSession::contextOfFile(fileName, IndexedString(KUrl(url)), 0);
+    ReferencedTopDUContext topContext = ParseSession::contextOfFile(fileName, url, 0);
     DUChainReadLocker lock;
 
     if (topContext) {
@@ -105,7 +107,7 @@ DeclarationPointer NodeJS::moduleExports(const QString& moduleName, const QStrin
         exports = getDeclaration(idModule, topContext.data());
 
         if (exports && exports->internalContext()) {
-            exports = getDeclaration(idExports, exports->internalContext());
+            exports = getDeclaration(idExports, exports->internalContext(), false);
         }
 
         // Try "exports", that always exist, has a structure type, and contains
@@ -126,7 +128,7 @@ QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
         return m_cachedModuleFileNames.value(pair);
     }
 
-    QString& fileName = m_cachedModuleFileNames[qMakePair(moduleName, url)];
+    QString& fileName = m_cachedModuleFileNames[pair];
 
     // Absolue and relative URLs
     if (moduleName.startsWith(QLatin1Char('/')) || moduleName.startsWith(QLatin1Char('.'))) {
