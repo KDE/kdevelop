@@ -62,6 +62,9 @@ public :
 
     virtual Path::List includesInBackground( const QString& path ) const override;
 
+    // NOTE: Part of a fix for build failures on <GCC-4.7
+    virtual ~DefinesAndIncludesManager() noexcept;
+
 private:
     QVector<Provider*> m_providers;
     QScopedPointer<NoProjectIncludePathsManager> m_noProjectIPM;

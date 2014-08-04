@@ -224,6 +224,9 @@ Path::List DefinesAndIncludesManager::includesInBackground(const QString& path) 
     return toPathList(m_makeFileResolver->resolveIncludePath(path).paths);
 }
 
+// NOTE: Part of a fix for build failures on <GCC-4.7
+DefinesAndIncludesManager::~DefinesAndIncludesManager() noexcept = default;
+
 }
 
 #include "definesandincludesmanager.moc"
