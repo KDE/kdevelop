@@ -294,6 +294,7 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
 
     if (!encounterParent(declaration) &&
         !encounterDeclarationInContext(name, context) &&
+        !encounterDeclarationInWindow(name) &&
         !(context == nullptr && encounterGlobalDeclaration(name))) {
         encounterNothing();
     }
@@ -302,7 +303,7 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
 bool ExpressionVisitor::encounterParent(const QString& declaration)
 {
     if (declaration != QLatin1String("parent") ||
-        ParseSession::guessLanguageFromSuffix(m_context->topContext()->url().str()) != QmlJS::Language::Qml) {
+        !QmlJS::isQmlFile(m_context)) {
         return false;
     }
 
@@ -344,6 +345,16 @@ bool ExpressionVisitor::encounterDeclarationInContext(const QualifiedIdentifier&
     }
 
     return false;
+}
+
+bool ExpressionVisitor::encounterDeclarationInWindow(const QualifiedIdentifier& id)
+{
+    return encounterDeclarationInContext(
+        id,
+        QmlJS::getInternalContext(
+            QmlJS::NodeJS::instance().moduleExports(QLatin1String("__builtin_dom"), m_context->url())
+        )
+    );
 }
 
 bool ExpressionVisitor::encounterGlobalDeclaration(const QualifiedIdentifier& id)

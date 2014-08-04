@@ -39,6 +39,7 @@
 #include <duchain/expressionvisitor.h>
 #include <duchain/helper.h>
 #include <duchain/cache.h>
+#include <duchain/frameworks/nodejs.h>
 
 #include <QtCore/QDir>
 #include <QtCore/QRegExp>
@@ -171,6 +172,10 @@ QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompleti
                                           0,
                                           CompletionItem::NoDecoration);
             items << completionsFromImports(0);
+
+            if (!QmlJS::isQmlFile(m_duContext.data())) {
+                items << completionsFromWindow(0);
+            }
         }
     }
 
@@ -297,6 +302,17 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsFromImports(C
     }
 
     return items;
+}
+
+QList<CompletionTreeItemPointer> CodeCompletionContext::completionsFromWindow(CompletionInContextFlags flags)
+{
+    return completionsInContext(
+        DUContextPointer(QmlJS::getInternalContext(
+            QmlJS::NodeJS::instance().moduleExports(QLatin1String("__builtin_dom"), m_duContext->url())
+        )),
+        flags | CompletionOnlyLocal,
+        CompletionItem::NoDecoration
+    );
 }
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(const DUContextPointer& context,

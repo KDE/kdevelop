@@ -23,6 +23,7 @@
 #define __FRAMEWORK_NODEJS_H__
 
 #include "../declarationbuilder.h"
+#include "../duchainexport.h"
 #include <language/duchain/duchainpointer.h>
 
 namespace QmlJS {
@@ -30,7 +31,7 @@ namespace QmlJS {
 /**
  * Singleton implementing support for the Node.js Javascript framework
  */
-class NodeJS {
+class KDEVQMLJSDUCHAIN_EXPORT NodeJS {
 private:
     NodeJS();
 

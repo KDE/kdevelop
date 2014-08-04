@@ -19,6 +19,7 @@
 #include "helper.h"
 #include "functiondeclaration.h"
 #include "functiontype.h"
+#include "parsesession.h"
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
@@ -278,6 +279,12 @@ bool isPrototypeIdentifier(const QString& identifier)
 {
     return (identifier == QLatin1String("prototype") ||
             identifier == QLatin1String("__proto__"));
+}
+
+bool isQmlFile(const DUContext* context)
+{
+    DUChainReadLocker lock;
+    return ParseSession::guessLanguageFromSuffix(context->topContext()->url().str()) == Language::Qml;
 }
 
 } // End of namespace QmlJS

@@ -122,6 +122,11 @@ using namespace KDevelop;
      */
     KDEVQMLJSDUCHAIN_EXPORT bool isPrototypeIdentifier(const QString& identifier);
 
+    /**
+     * Return whether a context belongs to a QML file (not a JS one)
+     */
+    KDEVQMLJSDUCHAIN_EXPORT bool isQmlFile(const DUContext* context);
+
 
 } // End of namespace QmlJS
 
