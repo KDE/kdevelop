@@ -158,13 +158,13 @@ DeclarationPointer ClangHelpers::findDeclaration(CXType type, const IncludeFileC
 
 QStringList ClangHelpers::headerExtensions()
 {
-    static const QStringList headerExtensions = QString("h,H,hh,hxx,hpp,tlh,h++").split(',');
+    static const QStringList headerExtensions = {"h", "H", "hh", "hxx", "hpp", "tlh", "h++"};
     return headerExtensions;
 }
 
 QStringList ClangHelpers::sourceExtensions()
 {
-    static const QStringList sourceExtensions = QString("c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h").split(',');
+    static const QStringList sourceExtensions = {"c", "cc", "cpp", "c++", "cxx", "C", "m", "mm", "M", "inl", "_impl.h"};
     return sourceExtensions;
 }
 
