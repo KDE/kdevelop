@@ -60,7 +60,7 @@
 #include <language/duchain/indexedstring.h>
 #include <util/pushvalue.h>
 
-#define VERBOSE
+// #define VERBOSE
 
 #if defined(TEST) || defined(VERBOSE)
 #define ifTest(x) x
