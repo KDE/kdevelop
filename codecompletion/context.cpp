@@ -296,6 +296,29 @@ bool isValidCompletionIdentifier(const QualifiedIdentifier& identifier)
     return true;
 }
 
+/**
+ * @return Whether the declaration represented by identifier @p identifier qualifies as "special" completion result
+ *
+ * "Special" completion results are items that are likely not regularly used.
+ *
+ * Examples:
+ * - 'SomeClass::operator=(const SomeClass&)'
+ */
+bool isValidSpecialCompletionIdentifier(const QualifiedIdentifier& identifier)
+{
+    const int count = identifier.count();
+    if (identifier.count() < 2) {
+        return false;
+    }
+
+    const Identifier id = identifier.last();
+    const QString idString = id.toString();
+    if (idString.startsWith("operator=")) {
+        return true; // is assignment operator
+    }
+    return false;
+}
+
 }
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
@@ -498,8 +521,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 }
             }
 
+            CompletionTreeItemPointer item;
             if (found) {
-                auto item = new DeclarationItem(found, display, resultType, replacement);
+                auto declarationItem = new DeclarationItem(found, display, resultType, replacement);
 
                 const unsigned int completionPriority = clang_getCompletionPriority(result.CompletionString);
                 const bool bestMatch = completionPriority <= MAX_PRIORITY_FOR_BEST_MATCHES;
@@ -507,14 +531,22 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 //don't set best match property for internal identifiers, also prefer declarations from current file
                 if (bestMatch && !found->indexedIdentifier().identifier().toString().startsWith("__") ) {
                     const int matchQuality = codeCompletionPriorityToMatchQuality(completionPriority);
-                    item->setMatchQuality(matchQuality);
+                    declarationItem->setMatchQuality(matchQuality);
                 }
 
-                items << CompletionTreeItemPointer(item);
-                continue;
+                item = declarationItem;
             } else {
+                // still, let's trust that Clang found something useful and put it into the completion result list
                 debug() << "Could not find declaration for" << qid;
+                item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement));
             }
+
+            if (isValidSpecialCompletionIdentifier(qid)) {
+                specialItems.append(item);
+            } else {
+                items.append(item);
+            }
+            continue;
         }
 
         auto item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement));
@@ -523,8 +555,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             macros.append(item);
         } else if (result.CursorKind == CXCursor_NotImplemented) {
             builtin.append(item);
-        } else {
-            specialItems.append(item);
         }
     }
 
