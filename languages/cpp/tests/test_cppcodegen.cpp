@@ -674,6 +674,9 @@ void TestCppCodegen::testMoveIntoSource()
 
   header.parse(KDevelop::TopDUContext::AllDeclarationsContextsAndUses);
   QVERIFY(header.waitForParsed());
+  impl.parse(KDevelop::TopDUContext::AllDeclarationsContextsAndUses);
+  QVERIFY(impl.waitForParsed());
+
   ReferencedTopDUContext refTop = header.topContext();
   QVERIFY(refTop);
 
