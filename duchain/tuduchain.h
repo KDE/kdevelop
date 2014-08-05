@@ -73,6 +73,7 @@ private:
     QByteArray makeComment(CXComment comment) const;
     AbstractType *makeType(CXType type) const;
     AbstractType::Ptr makeAbsType(CXType type) const { return AbstractType::Ptr(makeType(type)); }
+    AbstractType* createDelayedType(CXType type) const;
 
 //BEGIN dispatch*
     template<CXCursorKind CK, EnableIf<CursorKindTraits::isUse(CK)> = dummy>
@@ -86,7 +87,7 @@ private:
     {
         if (m_parentContext->context->type() == DUContext::Function)
         {
-            auto context = createContext<CK, DUContext::Other>(cursor, Identifier());
+            auto context = createContext<CK, DUContext::Other>(cursor);
             CurrentContext newParent(context);
             PushValue<CurrentContext*> pushCurrent(m_parentContext, &newParent);
             clang_visitChildren(cursor, &visitCursor, this);
@@ -161,8 +162,25 @@ private:
         auto id = makeId(cursor);
         IF_DEBUG(kDebug() << "id:" << id << "- CK:" << CK << "- DeclType:" << typeid(DeclType).name() << "- hasContext:" << hasContext;)
 
+        // Code path for class declarations that may be defined "out-of-line", e.g.
+        // "SomeNameSpace::SomeClass {};"
+        QScopedPointer<CurrentContext> helperContext;
+        if (CursorKindTraits::isClass(CK)) {
+            const auto lexicalParent = clang_getCursorLexicalParent(cursor);
+            const auto semanticParent = clang_getCursorSemanticParent(cursor);
+            const bool isOutOfLine = !clang_equalCursors(lexicalParent, semanticParent);
+            if (isOutOfLine) {
+                const QString scope = ClangUtils::getScope(cursor);
+                auto context = createContext<CK, DUContext::Helper>(cursor, QualifiedIdentifier(scope));
+                helperContext.reset(new CurrentContext(context));
+            }
+        }
+
+        // if helperContext is null, this is a no-op
+        PushValue<CurrentContext*> pushCurrent(m_parentContext, helperContext.isNull() ? m_parentContext : helperContext.data());
+
         if (hasContext) {
-            auto context = createContext<CK, CursorKindTraits::contextType(CK)>(cursor, id);
+            auto context = createContext<CK, CursorKindTraits::contextType(CK)>(cursor, QualifiedIdentifier(id));
             createDeclaration<CK, DeclType>(cursor, id, context);
             CurrentContext newParent(context);
             PushValue<CurrentContext*> pushCurrent(m_parentContext, &newParent);
@@ -215,6 +233,7 @@ private:
     {
         auto decl = createDeclarationCommon<CK, DeclType>(cursor, id);
         auto type = createType<CK>(cursor);
+
         DUChainWriteLocker lock;
         decl->setContext(m_parentContext->context);
         if (context)
@@ -225,11 +244,10 @@ private:
     }
 
     template<CXCursorKind CK, KDevelop::DUContext::ContextType Type>
-    KDevelop::DUContext* createContext(CXCursor cursor, const KDevelop::Identifier& id)
+    KDevelop::DUContext* createContext(CXCursor cursor, const KDevelop::QualifiedIdentifier& scopeId = {})
     {
         // wtf: why is the DUContext API requesting a QID when it needs a plain Id?!
         // see: testNamespace
-        const QualifiedIdentifier scopeId(id);
         auto range = ClangRange(clang_getCursorExtent(cursor)).toRangeInRevision();
         DUChainWriteLocker lock;
         if (m_update) {
@@ -251,7 +269,8 @@ private:
         context->setLocalScopeIdentifier(scopeId);
         if (Type == KDevelop::DUContext::Other || Type == KDevelop::DUContext::Function)
             context->setInSymbolTable(false);
-        if (CK == CXCursor_CXXMethod) {
+
+        if (CK == CXCursor_CXXMethod || CursorKindTraits::isClass(CK)) {
             CXCursor semParent = clang_getCursorSemanticParent(cursor);
             if (!clang_Cursor_isNull(semParent)) {
                 auto semParentDecl = findDeclaration(semParent);
@@ -314,8 +333,15 @@ private:
     template<CXTypeKind TK, EnableIf<TK == CXType_Record> = dummy>
     AbstractType *createType(CXType type) const
     {
+        DeclarationPointer decl = ClangHelpers::findDeclaration(clang_getTypeDeclaration(type), m_includes);
+        DUChainReadLocker lock;
+        if (!decl) {
+            // probably a forward-declared type
+            return createDelayedType(type);
+        }
+
         auto t = new StructureType;
-        setIdTypeDecl(clang_getTypeDeclaration(type), t);
+        t->setDeclaration(decl.data());
         return t;
     }
 
@@ -358,9 +384,7 @@ private:
     template<CXTypeKind TK, EnableIf<TK == CXType_Vector || TK == CXType_Unexposed> = dummy>
     AbstractType *createType(CXType type) const
     {
-        auto t = new DelayedType;
-        t->setIdentifier(IndexedTypeIdentifier(QString::fromUtf8(ClangString(clang_getTypeSpelling(type)))));
-        return t;
+        return createDelayedType(type);
     }
 
     template<CXCursorKind CK, EnableIf<CursorKindTraits::isIdentifiedType(CK) && !CursorKindTraits::isAliasType(CK) && CK != CXCursor_EnumConstantDecl> = dummy>

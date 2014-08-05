@@ -287,6 +287,13 @@ CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXCl
     }
 }
 
+AbstractType* TUDUChain::createDelayedType(CXType type) const
+{
+    auto t = new DelayedType;
+    t->setIdentifier(IndexedTypeIdentifier(QString::fromUtf8(ClangString(clang_getTypeSpelling(type)))));
+    return t;
+}
+
 void TUDUChain::setIdTypeDecl(CXCursor typeCursor, IdentifiedType* idType) const
 {
     DeclarationPointer decl = ClangHelpers::findDeclaration(typeCursor, m_includes);
