@@ -175,18 +175,19 @@ constexpr bool isScopeKind(CXCursorKind kind)
            kind == CXCursor_ClassTemplate || kind == CXCursor_ClassTemplatePartialSpecialization;
 }
 
-QString ClangUtils::getScope(CXCursor cursor) {
+QString ClangUtils::getScope(CXCursor cursor)
+{
     QStringList scope;
-    CXCursor destContext = clang_getCursorLexicalParent(cursor);
+    CXCursor destContext = clang_getCanonicalCursor(clang_getCursorLexicalParent(cursor));
     CXCursor search = clang_getCursorSemanticParent(cursor);
     while (isScopeKind(clang_getCursorKind(search)) && !clang_equalCursors(search, destContext)) {
-        scope.prepend(ClangString(clang_getCursorSpelling(search)).toString() + QString("::"));
+        scope.prepend(ClangString(clang_getCursorSpelling(search)).toString());
         search = clang_getCursorSemanticParent(search);
     }
-    return scope.join(QString());
+    return scope.join("::");
 }
 
-QString ClangUtils::getCursorSignature(CXCursor cursor, QString& prefix, QVector<QString> defaultArgs)
+QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, QVector<QString> defaultArgs)
 {
     CXCursorKind kind = clang_getCursorKind(cursor);
     //Get the return type
@@ -197,7 +198,11 @@ QString ClangUtils::getCursorSignature(CXCursor cursor, QString& prefix, QVector
     }
 
     //Build the function name, with scope and parameters
-    parts.append(prefix);
+    if (!scope.isEmpty()) {
+        parts.append(scope);
+        parts.append("::");
+    }
+
     QString functionName = ClangString(clang_getCursorSpelling(cursor)).toString();
     if (functionName.contains('<')) {
         functionName = functionName.left(functionName.indexOf('<'));

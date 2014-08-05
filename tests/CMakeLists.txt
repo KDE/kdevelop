@@ -44,6 +44,17 @@ target_link_libraries(test_assistants
     kdevclangduchain
 )
 
+kde4_add_unit_test(test_clangutils
+    test_clangutils.cpp
+    $<TARGET_OBJECTS:kdevclangutil>
+)
+
+target_link_libraries(test_clangutils
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    ${QT_QTTEST_LIBRARY}
+    kdevclangduchain
+)
+
 ########### next target ###############
 
 kde4_add_unit_test(test_duchain
