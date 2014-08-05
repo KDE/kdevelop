@@ -318,30 +318,24 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 CHECK_PREV(it2);
                 CHECK_NEXT(it2);
                 bool ok;
-                QList<int> versionA(CMakeParserUtils::parseVersion(*(it2-1), &ok));
-                QList<int> versionB(CMakeParserUtils::parseVersion(*(it2+1), &ok));
-//                 kDebug(9042) << "newer" << strA << strB;
-                last= ok && compareVersions(versionA, versionB)==0;
+                int cmp = compareVersion(it2-1, it2+1, &ok);
+                last = ok && cmp == 0;
                 itEnd=it2-1;
             }   break;
             case VERSION_LESS: {
                 CHECK_PREV(it2);
                 CHECK_NEXT(it2);
                 bool ok;
-                QList<int> versionA(CMakeParserUtils::parseVersion(*(it2-1), &ok));
-                QList<int> versionB(CMakeParserUtils::parseVersion(*(it2+1), &ok));
-//                 kDebug(9042) << "newer" << strA << strB;
-                last= ok && compareVersions(versionA, versionB)<0;
+                int cmp = compareVersion(it2-1, it2+1, &ok);
+                last = ok && cmp < 0;
                 itEnd=it2-1;
             }   break;
             case VERSION_GREATER: {
                 CHECK_PREV(it2);
                 CHECK_NEXT(it2);
                 bool ok;
-                QList<int> versionA(CMakeParserUtils::parseVersion(*(it2-1), &ok));
-                QList<int> versionB(CMakeParserUtils::parseVersion(*(it2+1), &ok));
-//                 kDebug(9042) << "newer" << strA << strB;
-                last= ok && compareVersions(versionA, versionB)>0;
+                int cmp = compareVersion(it2-1, it2+1, &ok);
+                last = ok && cmp > 0;
                 itEnd=it2-1;
             }   break;
             case LPR: {
@@ -394,4 +388,34 @@ bool CMakeCondition::condition(const QStringList &expression)
     
 //     kDebug(9042) << "condition" << expression << "=>" << ret;
     return ret;
+}
+
+int CMakeCondition::compareVersion(QStringList::const_iterator left,
+                                   QStringList::const_iterator right,
+                                   bool* ok)
+{
+    QString version = *left;
+    if (m_vars->contains(version)) {
+        QStringList val = m_vars->value(version);
+        version = val.isEmpty() ? QString() : val.first();
+        m_varUses.append(left);
+    }
+
+    QList<int> versionA(CMakeParserUtils::parseVersion(version, ok));
+    if (!ok) {
+        return 0;
+    }
+
+    version = *right;
+    if (m_vars->contains(version)) {
+        QStringList val = m_vars->value(version);
+        version = val.isEmpty() ? QString() : val.first();
+        m_varUses.append(right);
+    }
+
+    QList<int> versionB(CMakeParserUtils::parseVersion(version, ok));
+    if (!ok) {
+        return 0;
+    }
+    return compareVersions(versionA, versionB);
 }

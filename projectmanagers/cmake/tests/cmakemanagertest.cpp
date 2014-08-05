@@ -201,7 +201,6 @@ void CMakeManagerTest::testQt5AppOld()
             foundWidgets |= filename == "QtWidgets";
         }
     }
-    QEXPECT_FAIL("", "CMAKE_VERSION not expanded in conditionals, then qt5_use_modules macro not found", Abort);
     QVERIFY(foundCore);
     QVERIFY(foundGui);
     QVERIFY(foundWidgets);

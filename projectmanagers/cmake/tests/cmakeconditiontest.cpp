@@ -62,8 +62,6 @@ void CMakeConditionTest::testGoodParse()
     v.setCacheValues( &m_cache );
     
     CMakeCondition cond(&v);
-    QEXPECT_FAIL("version_greater3", "variable is not expanded", Abort);
-    QEXPECT_FAIL("version_greater4", "variable is not expanded", Abort);
     QCOMPARE( cond.condition(expression), result );
 }
 
