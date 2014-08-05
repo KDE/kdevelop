@@ -347,6 +347,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file)
     // for unit tests with temporary files
     return PathResolutionResult();
   }
+
   QFileInfo fi(file);
   return resolveIncludePath(fi.fileName(), fi.absolutePath());
 }

@@ -33,7 +33,6 @@
 #include "settingsmanager.h"
 
 class NoProjectIncludePathsManager;
-class MakeFileResolver;
 
 namespace KDevelop
 {
@@ -62,13 +61,19 @@ public :
 
     virtual Path::List includesInBackground( const QString& path ) const override;
 
+    virtual QHash< QString, QString > definesInBackground(const QString& path) const override;
+
+    virtual void registerBackgroundProvider(BackgroundProvider* provider) override;
+
+    virtual bool unregisterBackgroundProvider(BackgroundProvider* provider) override;
+
     // NOTE: Part of a fix for build failures on <GCC-4.7
     virtual ~DefinesAndIncludesManager() noexcept;
 
 private:
     QVector<Provider*> m_providers;
+    QVector<BackgroundProvider*> m_backgroundProviders;
     QScopedPointer<NoProjectIncludePathsManager> m_noProjectIPM;
-    QScopedPointer<MakeFileResolver> m_makeFileResolver;
 };
 }
 #endif // CUSTOMDEFINESANDINCLUDESMANAGER_H

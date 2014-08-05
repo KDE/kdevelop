@@ -40,7 +40,6 @@ using namespace KDevelop;
 IncludePathComputer::IncludePathComputer(const QString& file)
   : m_source(file)
   , m_ready(false)
-  , m_gotPathsFromManager(false)
 {
 }
 
@@ -106,7 +105,6 @@ void IncludePathComputer::computeForeground()
       }
       m_defines = idm->defines(file);
 
-    m_gotPathsFromManager = !dirs.isEmpty();
     kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
     foreach (const Path& dir, dirs) {
       addInclude(dir);
@@ -118,8 +116,6 @@ void IncludePathComputer::computeForeground()
       addInclude( dir );
     }
     m_defines = IDefinesAndIncludesManager::manager()->defines(m_source);
-  } else if (!m_gotPathsFromManager) {
-    kDebug(9007) << "Did not find any include paths from project manager for" << m_source;
   }
 }
 
@@ -129,14 +125,11 @@ void IncludePathComputer::computeBackground()
     return;
   }
 
-  // only look at make when we did not get any paths from the build manager
-  if (!m_gotPathsFromManager) {
-      auto result = IDefinesAndIncludesManager::manager()->includesInBackground(m_source);
+    auto result = IDefinesAndIncludesManager::manager()->includesInBackground(m_source);
 
-      foreach (const auto& res, result) {
-          addInclude(res);
-      }
-  }
+    foreach (const auto& res, result) {
+        addInclude(res);
+    }
 
   if (m_ret.isEmpty()) {
     kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":";

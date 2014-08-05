@@ -1,6 +1,6 @@
 project(custommakemanager)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9025 )
-# add_subdirectory(tests)
+add_subdirectory(makefileresolver)
 
 include_directories(
     ${makebuilder_SOURCE_DIR}
@@ -18,6 +18,7 @@ set(kdevcustommakemanager_PART_SRCS
 kde4_add_plugin(kdevcustommakemanager ${kdevcustommakemanager_PART_SRCS})
 target_link_libraries( kdevcustommakemanager
                     ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+                    kdev4makefileresolver
 )
 
 install(TARGETS kdevcustommakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )

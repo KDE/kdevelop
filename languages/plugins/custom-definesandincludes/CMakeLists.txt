@@ -9,7 +9,6 @@ add_subdirectory(kcm_widget)
 add_subdirectory(tests)
 add_subdirectory(compilerprovider)
 add_subdirectory(noprojectincludesanddefines)
-add_subdirectory(makefileresolver)
 
 add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
@@ -29,8 +28,7 @@ target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
         ${KDEVPLATFORM_UTIL_LIBRARIES}
         ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
         kdev4includesdefinessettings
-        kdev4noprojectincludesanddefines
-        kdev4makefileresolver )
+        kdev4noprojectincludesanddefines )
 
 install( TARGETS kdevdefinesandincludesmanager
          DESTINATION ${PLUGIN_INSTALL_DIR} )

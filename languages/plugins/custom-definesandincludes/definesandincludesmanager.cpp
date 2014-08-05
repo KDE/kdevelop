@@ -24,7 +24,6 @@
 #include "settingsmanager.h"
 
 #include "noprojectincludesanddefines/noprojectincludepathsmanager.h"
-#include "makefileresolver/makefileresolver.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -93,7 +92,6 @@ KAboutData::License_GPL)))
 DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
     : IPlugin( DefinesAndIncludesManagerFactory::componentData(), parent )
     , m_noProjectIPM(new NoProjectIncludePathsManager())
-    , m_makeFileResolver(new MakeFileResolver())
 {
     KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
 }
@@ -221,11 +219,52 @@ void DefinesAndIncludesManager::openConfigurationDialog(const QString& pathToFil
 
 Path::List DefinesAndIncludesManager::includesInBackground(const QString& path) const
 {
-    return toPathList(m_makeFileResolver->resolveIncludePath(path).paths);
+    Path::List includes;
+
+    for (auto provider: m_backgroundProviders) {
+        includes += provider->includesInBackground(path);
+    }
+
+    return includes;
 }
 
 // NOTE: Part of a fix for build failures on <GCC-4.7
 DefinesAndIncludesManager::~DefinesAndIncludesManager() noexcept = default;
+
+QHash< QString, QString > DefinesAndIncludesManager::definesInBackground(const QString& path) const
+{
+    QHash<QString, QString> defines;
+
+    for (auto provider: m_backgroundProviders) {
+        auto result = provider->definesInBackground(path);
+        for (auto it = result.constBegin(); it != result.constEnd(); it++) {
+            defines[it.key()] = it.value();
+        }
+    }
+
+    return defines;
+}
+
+bool DefinesAndIncludesManager::unregisterBackgroundProvider(IDefinesAndIncludesManager::BackgroundProvider* provider)
+{
+    int idx = m_backgroundProviders.indexOf(provider);
+    if (idx != -1) {
+        m_backgroundProviders.remove(idx);
+        return true;
+    }
+
+    return false;
+}
+
+void DefinesAndIncludesManager::registerBackgroundProvider(IDefinesAndIncludesManager::BackgroundProvider* provider)
+{
+    Q_ASSERT(provider);
+    if (m_backgroundProviders.contains(provider)) {
+        return;
+    }
+
+    m_backgroundProviders.push_back(provider);
+}
 
 }
 

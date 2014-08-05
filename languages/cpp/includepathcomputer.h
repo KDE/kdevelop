@@ -49,6 +49,5 @@ private:
   bool m_ready;
 
   QString m_projectName;
-  bool m_gotPathsFromManager;
 };
 #endif // INCLUDEPATHCOMPUTER_H
