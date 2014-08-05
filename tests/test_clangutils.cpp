@@ -67,18 +67,12 @@ void runVisitor(const QByteArray& code, CXCursorVisitor visitor, CXClientData da
 
     std::unique_ptr<void, void(*)(CXIndex)> index(clang_createIndex(1, 1), clang_disposeIndex);
     const QVector<const char*> args = {"-std=c++11", "-xc++", "-Wall", "-nostdinc", "-nostdinc++"};
-    CXTranslationUnit unit;
-    const CXErrorCode errorCode = clang_parseTranslationUnit2(
+    CXTranslationUnit unit = clang_parseTranslationUnit(
         index.get(), qPrintable(tempFile.fileName()),
         args.data(), args.size(),
         nullptr, 0,
-        CXTranslationUnit_None,
-        &unit
+        CXTranslationUnit_None
     );
-
-    if (errorCode != CXError_Success) {
-        kDebug() << "clang_parseTranslationUnit2 return with error code" << errorCode;
-    }
 
     const auto startCursor = clang_getTranslationUnitCursor(unit);
     QVERIFY(!clang_Cursor_isNull(startCursor));
