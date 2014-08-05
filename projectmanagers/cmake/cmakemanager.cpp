@@ -23,12 +23,13 @@
 #include "cmakeedit.h"
 #include "cmakeutils.h"
 #include "cmakeprojectdata.h"
-#include <languages/cpp/makefileresolver.h>
+#include <projectmanagers/custommake/makefileresolver/makefileresolver.h>
 
 #include <QDir>
 #include <QThread>
 #include <QFileSystemWatcher>
 #include <QTimer>
+#include <qjsondocument.h>
 #include <qjson/parser.h>
 
 #include <KPluginFactory>
@@ -71,7 +72,7 @@ K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
 const QString DIALOG_CAPTION = i18n("KDevelop - CMake Support");
 
 CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
-    : KDevelop::AbstractFileManagerPlugin( CMakeSupportFactory::componentData(), parent )
+    : KDevelop::AbstractFileManagerPlugin( "cmakemanager", parent )
     , m_filter( new ProjectFilterManager( this ) )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
@@ -726,11 +727,11 @@ ProjectFilterManager* CMakeManager::filterManager() const
 
 CMakeFile dataFromJson(const QVariantMap& entry)
 {
-    CppTools::MakeFileResolver resolver;
-    CppTools::PathResolutionResult result = resolver.processOutput(entry["command"].toString(), entry["directory"].toString());
+    MakeFileResolver resolver;
+    PathResolutionResult result = resolver.processOutput(entry["command"].toString(), entry["directory"].toString());
 
     CMakeFile ret;
-    ret.includes = KDevelop::toPathList(result.paths);
+    ret.includes = KDevelop::toPathList(QUrl::fromStringList(result.paths));
     return ret;
 }
 
@@ -757,7 +758,7 @@ void CMakeManager::initializeProject(IProject* project)
 
     Path commandsFile(CMake::currentBuildDir(project));
     commandsFile.addPath("compile_commands.json");
-    QJson::Parser parser;
+
     QFile f(commandsFile.toLocalFile());
     bool r = f.open(QFile::ReadOnly|QFile::Text);
     if(!r) {
@@ -768,8 +769,10 @@ void CMakeManager::initializeProject(IProject* project)
     }
     qDebug() << "found commands file" << commandsFile;
 
-    QVariantList values = parser.parse(&f, &r).toList();
-    Q_ASSERT(r);
+    QJsonDocument parser;
+    QJsonParseError error;
+    QVariantList values = parser.fromJson(f.readAll(), &error).toVariant().toList();
+    Q_ASSERT(error.error == QJsonParseError::NoError);
 
     foreach(const QVariant& v, values) {
         QVariantMap entry = v.toMap();

@@ -4,7 +4,7 @@
 #include <QStringList>
 #include <QFileSystemWatcher>
 #include "cmaketypes.h"
-#include <project/path.h>
+#include <util/path.h>
 
 /**
  * Represents any file in a cmake project that has been added
