@@ -178,6 +178,34 @@ void CMakeManagerTest::testQt5App()
     QVERIFY(foundWidgets);
 }
 
+void CMakeManagerTest::testQt5AppOld()
+{
+    if (!qgetenv("KDEV_CMAKE_TEST_QT5").toInt()) {
+        QSKIP("Test only passes if Qt5 is available, define KDEV_CMAKE_TEST_QT5 to enable this test.", SkipAll);
+    }
+
+    IProject* project = loadProject("qt5_app_old");
+
+    Path mainCpp(project->path(), "main.cpp");
+    QVERIFY(QFile::exists(mainCpp.toLocalFile()));
+    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
+    QCOMPARE(items.size(), 2); // once the plain file, once the target
+
+    bool foundCore = false, foundGui = false, foundWidgets = false;
+    foreach(ProjectBaseItem* mainCppItem, items) {
+        Path::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
+        foreach(const Path& include, includeDirs) {
+            QString filename = include.lastPathSegment();
+            foundCore |= filename == "QtCore";
+            foundGui |= filename == "QtGui";
+            foundWidgets |= filename == "QtWidgets";
+        }
+    }
+    QVERIFY(foundCore);
+    QVERIFY(foundGui);
+    QVERIFY(foundWidgets);
+}
+
 void CMakeManagerTest::testKF5App()
 {
     if (!qgetenv("KDEV_CMAKE_TEST_QT5").toInt()) {
