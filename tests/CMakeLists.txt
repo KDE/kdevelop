@@ -52,7 +52,7 @@ kde4_add_unit_test(test_clangutils
 target_link_libraries(test_clangutils
     ${KDEVPLATFORM_TESTS_LIBRARIES}
     ${QT_QTTEST_LIBRARY}
-    kdevclangduchain
+    ${CLANG_CLANG_LIB}
 )
 
 ########### next target ###############

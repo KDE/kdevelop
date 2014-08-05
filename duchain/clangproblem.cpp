@@ -21,7 +21,7 @@
 
 #include "clangproblem.h"
 
-#include "clangtypes.h"
+#include "util/clangtypes.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/codegen/documentchangeset.h>

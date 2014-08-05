@@ -33,7 +33,7 @@
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
 
 #include "../duchain/parsesession.h"
-#include "../duchain/clangtypes.h"
+#include "../util/clangtypes.h"
 #include "../duchain/cursorkindtraits.h"
 #include "../duchain/navigationwidget.h"
 

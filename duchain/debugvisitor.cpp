@@ -20,7 +20,7 @@
 */
 
 #include "debugvisitor.h"
-#include "clangtypes.h"
+#include "util/clangtypes.h"
 
 namespace {
 

@@ -21,7 +21,7 @@
 #include "test_clangutils.h"
 
 #include "../util/clangutils.h"
-#include "../duchain/clangtypes.h" // TODO: Move this to util/
+#include "../util/clangtypes.h"
 
 #include <language/editor/simplerange.h>
 
@@ -32,6 +32,8 @@
 
 #include <qtest_kde.h>
 #include <QtTest>
+
+#include <memory>
 
 QTEST_KDEMAIN(TestClangUtils, GUI)
 
@@ -63,11 +65,11 @@ void runVisitor(const QByteArray& code, CXCursorVisitor visitor, CXClientData da
     tempFile.write(code);
     tempFile.flush();
 
-    ClangIndex index;
+    std::unique_ptr<void, void(*)(CXIndex)> index(clang_createIndex(1, 1), clang_disposeIndex);
     const QVector<const char*> args = {"-std=c++11", "-xc++", "-Wall", "-nostdinc", "-nostdinc++"};
     CXTranslationUnit unit;
     const CXErrorCode errorCode = clang_parseTranslationUnit2(
-        index.index(), qPrintable(tempFile.fileName()),
+        index.get(), qPrintable(tempFile.fileName()),
         args.data(), args.size(),
         nullptr, 0,
         CXTranslationUnit_None,

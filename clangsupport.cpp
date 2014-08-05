@@ -25,7 +25,7 @@
 #include "clangparsejob.h"
 #include "version.h"
 
-#include "duchain/clangtypes.h"
+#include "util/clangtypes.h"
 
 #include "codecompletion/model.h"
 
@@ -40,6 +40,7 @@
 
 #include "codegen/simplerefactoring.h"
 #include "codegen/adaptsignatureassistant.h"
+#include "duchain/clangindex.h"
 
 #include <language/assistant/staticassistantsmanager.h>
 #include <language/assistant/renameassistant.h>

@@ -24,8 +24,9 @@
 #include <language/util/debuglanguageparserhelper.h>
 
 #include "../duchain/parsesession.h"
-#include "../duchain/clangtypes.h"
 #include "../duchain/debugvisitor.h"
+#include "../duchain/clangindex.h"
+#include "../util/clangtypes.h"
 
 using namespace KDevelop;
 using namespace KDevelopUtils;

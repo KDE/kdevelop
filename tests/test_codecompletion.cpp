@@ -28,7 +28,7 @@
 #include <tests/testfile.h>
 
 #include <duchain/parsesession.h>
-#include <duchain/clangtypes.h>
+#include <util/clangtypes.h>
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <codecompletion/completionhelper.h>
 #include <codecompletion/context.h>

@@ -20,9 +20,9 @@
  */
 
 #include "clangdiagnosticevaluator.h"
-#include "clangtypes.h"
 #include "unknowndeclarationproblem.h"
 #include "missingincludepathproblem.h"
+#include "util/clangtypes.h"
 
 #include <QString>
 

@@ -26,9 +26,10 @@
 #include <language/duchain/parsingenvironment.h>
 #include <language/backgroundparser/urlparselock.h>
 
-#include "clangtypes.h"
 #include "tuduchain.h"
 #include "parsesession.h"
+
+#include "util/clangtypes.h"
 
 using namespace KDevelop;
 

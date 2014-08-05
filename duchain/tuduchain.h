@@ -26,9 +26,9 @@
 #include "templatehelpers.h"
 #include "cursorkindtraits.h"
 #include "clanghelpers.h"
-#include "clangtypes.h"
 #include "clangducontext.h"
 #include "util/clangutils.h"
+#include "util/clangtypes.h"
 
 #include <util/pushvalue.h>
 

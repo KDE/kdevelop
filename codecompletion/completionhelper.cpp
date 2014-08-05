@@ -21,9 +21,9 @@
 
 #include "completionhelper.h"
 
-#include "../duchain/clangtypes.h"
 #include "../duchain/cursorkindtraits.h"
 #include "../duchain/parsesession.h"
+#include "../util/clangtypes.h"
 
 #include <language/duchain/stringhelpers.h>
 #include <language/editor/simplecursor.h>

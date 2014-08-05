@@ -21,7 +21,7 @@
 
 #include "clangutils.h"
 
-#include "../duchain/clangtypes.h"
+#include "../util/clangtypes.h"
 #include "../duchain/cursorkindtraits.h"
 
 #include <language/duchain/indexedstring.h>

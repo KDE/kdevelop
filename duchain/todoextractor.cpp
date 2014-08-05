@@ -21,7 +21,7 @@
 
 #include "todoextractor.h"
 
-#include "clangtypes.h"
+#include "../util/clangtypes.h"
 
 #include <language/duchain/problem.h>
 #include <language/duchain/stringhelpers.h>

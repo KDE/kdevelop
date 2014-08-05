@@ -37,9 +37,10 @@
 
 #include "duchain/clanghelpers.h"
 #include "duchain/clangpch.h"
-#include "duchain/clangtypes.h"
 #include "duchain/tuduchain.h"
 #include "duchain/parsesession.h"
+#include "duchain/clangindex.h"
+#include "util/clangtypes.h"
 
 #include "debug.h"
 #include "clangsupport.h"

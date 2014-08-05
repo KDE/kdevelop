@@ -23,9 +23,9 @@
 #include "unknowndeclarationproblem.h"
 
 #include "clanghelpers.h"
-#include "clangtypes.h"
 #include "../debug.h"
 #include "../util/clangutils.h"
+#include "../util/clangtypes.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>

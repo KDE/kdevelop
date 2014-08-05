@@ -38,10 +38,10 @@
 #include <interfaces/icore.h>
 
 #include "../duchain/parsesession.h"
-#include "../duchain/clangtypes.h"
 #include "../duchain/cursorkindtraits.h"
 
 #include "../util/clangutils.h"
+#include "../util/clangtypes.h"
 
 using namespace KDevelop;
 

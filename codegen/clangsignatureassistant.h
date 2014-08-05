@@ -32,7 +32,7 @@
 #include <language/editor/documentcursor.h>
 
 #include "../duchain/parsesession.h"
-#include "../duchain/clangtypes.h"
+#include "../util/clangtypes.h"
 
 #include <interfaces/iassistant.h>
 

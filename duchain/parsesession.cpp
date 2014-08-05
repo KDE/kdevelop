@@ -23,11 +23,12 @@
 
 #include "parsesession.h"
 #include "clangproblem.h"
-#include "clangtypes.h"
 #include "clangdiagnosticevaluator.h"
 #include "todoextractor.h"
 #include "clanghelpers.h"
+#include "clangindex.h"
 #include "debug.h"
+#include "util/clangtypes.h"
 
 #include <KLocale>
 #include <KMimeType>

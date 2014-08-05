@@ -22,8 +22,8 @@
 
 #include <language/duchain/duchain.h>
 
-#include "clangtypes.h"
 #include "clanghelpers.h"
+#include "util/clangtypes.h"
 
 using namespace KDevelop;
 

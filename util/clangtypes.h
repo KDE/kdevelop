@@ -24,13 +24,8 @@
 #define CLANGTYPES_H
 
 #include <clang-c/Index.h>
-#include <QHash>
-#include <QSharedPointer>
-#include <QReadWriteLock>
 
 #include <util/path.h>
-
-#include "duchainexport.h"
 
 namespace KDevelop {
 class DocumentCursor;
@@ -41,33 +36,7 @@ class CursorInRevision;
 class RangeInRevision;
 }
 
-class ClangPCH;
-
-class KDEVCLANGDUCHAIN_EXPORT ClangIndex
-{
-public:
-    ClangIndex();
-    ~ClangIndex();
-
-    CXIndex index() const;
-
-    /**
-     * @returns the existing ClangPCH for the @param pchInclude
-     * The PCH is created using @param includePaths and @param defines if it doesn't exist
-     * This function is thread safe.
-     */
-    QSharedPointer<const ClangPCH> pch(const KDevelop::Path& pchInclude,
-                                       const KDevelop::Path::List& includePaths,
-                                       const QHash<QString, QString>& defines);
-
-private:
-    CXIndex m_index;
-
-    QReadWriteLock m_pchLock;
-    QHash<KDevelop::Path, QSharedPointer<const ClangPCH>> m_pch;
-};
-
-class KDEVCLANGDUCHAIN_EXPORT ClangString
+class ClangString
 {
 public:
     ClangString(CXString string);
@@ -89,7 +58,7 @@ private:
     CXString string;
 };
 
-class KDEVCLANGDUCHAIN_EXPORT ClangLocation
+class ClangLocation
 {
 public:
     ClangLocation(CXSourceLocation cursor);
@@ -107,7 +76,7 @@ private:
     CXSourceLocation location;
 };
 
-class KDEVCLANGDUCHAIN_EXPORT ClangRange
+class ClangRange
 {
 public:
     ClangRange(CXSourceRange range);

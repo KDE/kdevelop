@@ -18,10 +18,11 @@
 
 #include "test_problems.h"
 
+#include "../duchain/clangindex.h"
 #include "../duchain/clangproblem.h"
-#include "../duchain/clangtypes.h"
 #include "../duchain/parsesession.h"
 #include "../duchain/unknowndeclarationproblem.h"
+#include "../util/clangtypes.h"
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainutils.h>
