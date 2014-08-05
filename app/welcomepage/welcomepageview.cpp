@@ -31,7 +31,6 @@
 
 #include <sublime/area.h>
 #include <sublime/mainwindow.h>
-#include <Plasma/Theme>
 #include <KDeclarative/KDeclarative>
 
 using namespace KDevelop;
