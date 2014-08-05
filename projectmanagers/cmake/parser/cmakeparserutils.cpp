@@ -89,6 +89,7 @@ namespace CMakeParserUtils
         varsDef.insertGlobal("CMAKE_MAJOR_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_MAJOR_VERSION", systeminfo)));
         varsDef.insertGlobal("CMAKE_MINOR_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_MINOR_VERSION", systeminfo)));
         varsDef.insertGlobal("CMAKE_PATCH_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_PATCH_VERSION", systeminfo)));
+        varsDef.insertGlobal("CMAKE_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_VERSION", systeminfo)));
         varsDef.insertGlobal("CMAKE_INCLUDE_CURRENT_DIR", QStringList("OFF"));
         
         QStringList cmakeInitScripts;
