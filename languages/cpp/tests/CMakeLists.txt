@@ -25,7 +25,6 @@ set(test_common_SRCS
   ../cpphighlighting.cpp
   ../cpputils.cpp
   ../includepathcomputer.cpp
-  ../makefileresolver.cpp
   ../quickopen.cpp
 
   ${setuphelpers_SRCS}
@@ -104,7 +103,6 @@ set(cppcodegentest_SRCS
   ../codegen/unresolvedincludeassistant.cpp
   ../cpputils.cpp
   ../includepathcomputer.cpp
-  ../makefileresolver.cpp
   ${setuphelpers_SRCS}
 )
 

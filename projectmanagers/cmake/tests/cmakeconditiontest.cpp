@@ -28,6 +28,7 @@ CMakeConditionTest::CMakeConditionTest()
 {
     m_vars.insert("TRUE", QStringList("TRUE"));
     m_vars.insert("FALSE", QStringList("FALSE"));
+    m_vars.insert("CMAKE_VERSION", QStringList("4.5.6"));
     
     m_vars.insert("EMPTY", QStringList());
     m_vars.insert("ZERO", QStringList("0"));
@@ -41,6 +42,9 @@ CMakeConditionTest::CMakeConditionTest()
     m_vars.insert("UNFOUNDVAR", QStringList("UNFOUNDVAR-NOTFOUND"));
     m_vars.insert("BLEP2", QStringList("TRUE"));
     
+    m_vars.insert("FOO", QStringList("asdf"));
+    m_vars.insert("BAR", QStringList("asdf"));
+
     Macro m;
     m.name = "testmacro";
     m.isFunction=false;
@@ -90,6 +94,10 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "false+or" ) << QString("ZERO;OR;ONE").split(";") << true;
     QTest::newRow( "false+or+false" ) << QString("ZERO;OR;ZERO").split(";") << false;
     QTest::newRow( "strequal" ) << QString("HOLA;STREQUAL;HOLA").split(";") << true;
+    QTest::newRow( "strequal2" ) << QString("FOO;STREQUAL;asdf").split(";") << true;
+    QTest::newRow( "strequal3" ) << QString("BAR;STREQUAL;asdf").split(";") << true;
+    QTest::newRow( "strequal4" ) << QString("asdf;STREQUAL;FOO").split(";") << true;
+    QTest::newRow( "strequal5" ) << QString("FOO;STREQUAL;BAR").split(";") << true;
     QTest::newRow( "not+streq" ) << QString("NOT;HOLA;STREQUAL;HOLA").split(";") << false;
     QTest::newRow( "not+or" ) << QString("NOT;ZERO;OR;ZERO").split(";") << true;
     QTest::newRow( "matches" ) << QString("-lapr-1;MATCHES;^-l").split(";") << true;
@@ -105,7 +113,9 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "version_less" ) << QString("1.1 VERSION_LESS 1.3.1").split(" ") << true;
     QTest::newRow( "version_equal" ) << QString("1.3.1 VERSION_EQUAL 1.3.1").split(" ") << true;
     QTest::newRow( "version_greater" ) << QString("1.4 VERSION_GREATER 1.3.1").split(" ") << true;
-    QTest::newRow( "version_greater" ) << QString("4.6.80 VERSION_GREATER 4.6").split(" ") << true;
+    QTest::newRow( "version_greater2" ) << QString("4.6.80 VERSION_GREATER 4.6").split(" ") << true;
+    QTest::newRow( "version_greater3" ) << QString("CMAKE_VERSION VERSION_GREATER 1.2.3").split(" ") << true;
+    QTest::newRow( "version_greater4" ) << QString("4.5.7 VERSION_GREATER CMAKE_VERSION").split(" ") << true;
     QTest::newRow( "detect_number" ) << QString("BLEP2").split(" ") << true;
 
     //parentheses: 2.6.3

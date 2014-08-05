@@ -27,13 +27,62 @@
 #include <QFileInfoList>
 #include <QFile>
 #include <QApplication>
+#include <QReadWriteLock>
+#include <QReadLocker>
+#include <QWriteLocker>
 
 #include <kurl.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <KDirWatch>
 
+#include <algorithm>
+
+#include "../../languages/plugins/custom-definesandincludes/idefinesandincludesmanager.h"
+#include "makefileresolver/makefileresolver.h"
+
 using namespace KDevelop;
+
+class CustomMakeProvider : public IDefinesAndIncludesManager::BackgroundProvider
+{
+public:
+    CustomMakeProvider(CustomMakeManager* manager)
+        : m_customMakeManager(manager)
+        , m_resolver(new MakeFileResolver())
+    {}
+
+    virtual QHash< QString, QString > definesInBackground(const QString&) const
+    {
+        return {};
+    }
+
+    virtual Path::List includesInBackground(const QString& path) const
+    {
+        {
+            QReadLocker lock(&m_lock);
+
+            bool inProject = std::any_of(m_customMakeManager->m_projectPaths.constBegin(), m_customMakeManager->m_projectPaths.constEnd(), [&path](const QString& projectPath)
+            {
+                return path.startsWith(projectPath);
+            } );
+
+            if (!inProject) {
+                return {};
+            }
+        }
+
+        return toPathList(m_resolver->resolveIncludePath(path).paths);
+    }
+
+    virtual IDefinesAndIncludesManager::Type type() const
+    {
+        return IDefinesAndIncludesManager::ProjectSpecific;
+    }
+
+    CustomMakeManager* m_customMakeManager;
+    QScopedPointer<MakeFileResolver> m_resolver;
+    mutable QReadWriteLock m_lock;
+};
 
 K_PLUGIN_FACTORY(CustomMakeSupportFactory, registerPlugin<CustomMakeManager>(); )
 // K_EXPORT_PLUGIN(CustomMakeSupportFactory(KAboutData("kdevcustommakemanager","kdevcustommake", ki18n("Custom Makefile Manager"), "0.1", ki18n("Support for managing custom makefile projects"), KAboutData::License_GPL)))
@@ -41,6 +90,7 @@ K_PLUGIN_FACTORY(CustomMakeSupportFactory, registerPlugin<CustomMakeManager>(); 
 CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args )
 : KDevelop::AbstractFileManagerPlugin( "kdevcustommakemanager", parent )
     , m_builder( nullptr )
+    , m_provider(new CustomMakeProvider(this))
 {
     Q_UNUSED(args)
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
@@ -55,6 +105,12 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args 
 
     connect(this, SIGNAL(reloadedFileItem(KDevelop::ProjectFileItem*)),
             this, SLOT(reloadMakefile(KDevelop::ProjectFileItem*)));
+
+    connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
+            this, SLOT(projectClosing(KDevelop::IProject*)));
+
+
+    IDefinesAndIncludesManager::manager()->registerBackgroundProvider(m_provider.data());
 }
 
 CustomMakeManager::~CustomMakeManager()
@@ -184,6 +240,11 @@ KDevelop::ProjectFolderItem* CustomMakeManager::import(KDevelop::IProject *proje
         return 0;
     }
 
+    {
+        QWriteLocker lock(&m_provider->m_lock);
+        m_projectPaths.insert(project->path().path());
+    }
+
     return AbstractFileManagerPlugin::import( project );
 }
 
@@ -222,6 +283,17 @@ QStringList CustomMakeManager::parseCustomMakeFile( const Path &makefile )
     }
     f.close();
     return ret;
+}
+
+void CustomMakeManager::projectClosing(IProject* project)
+{
+    QWriteLocker lock(&m_provider->m_lock);
+    m_projectPaths.remove(project->path().path());
+}
+
+void CustomMakeManager::unload()
+{
+  IDefinesAndIncludesManager::manager()->unregisterBackgroundProvider(m_provider.data());
 }
 
 #include "custommakemanager.moc"

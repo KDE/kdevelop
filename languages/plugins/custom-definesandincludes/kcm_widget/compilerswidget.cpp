@@ -25,6 +25,7 @@
 
 #include <KAction>
 #include <KLocalizedString>
+#include <QFileDialog>
 #include <KShortcut>
 #include <QMenu>
 #include <QSignalMapper>
@@ -52,12 +53,12 @@ ICompilerProvider* compilerProvider()
 }
 
 CompilersWidget::CompilersWidget(QWidget* parent)
-    : QDialog(parent), m_ui(new Ui::CompilersWidget)
+    : QWidget(parent), m_ui(new Ui::CompilersWidget)
     , m_compilersModel(new CompilersModel(this))
 {
     m_ui->setupUi(this);
     m_ui->compilers->setModel(m_compilersModel);
-    m_ui->compilers->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    m_ui->compilers->header()->setSectionResizeMode(QHeaderView::Stretch);
 
     m_addMenu = new QMenu(m_ui->addButton);
     m_mapper = new QSignalMapper(m_addMenu);
@@ -83,6 +84,17 @@ CompilersWidget::CompilersWidget(QWidget* parent)
     delAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
     m_ui->compilers->addAction( delAction );
     connect( delAction, SIGNAL(triggered()), SLOT(deleteCompiler()) );
+
+    connect(m_ui->compilers->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(compilerSelected(QModelIndex)));
+
+    connect(m_ui->compilerName, SIGNAL(editingFinished()), SLOT(compilerEdited()));
+    connect(m_ui->compilerPath, SIGNAL(editingFinished()), SLOT(compilerEdited()));
+
+    connect(m_ui->compilerSelector, SIGNAL(clicked()), this, SLOT(selectCompilerPathDialog()));
+
+    connect(m_compilersModel, SIGNAL(compilerChanged()), SIGNAL(compilerChanged()));
+
+    enableItems(false);
 }
 
 void CompilersWidget::setCompilers(const QVector< CompilerPointer >& compilers)
@@ -100,7 +112,11 @@ void CompilersWidget::deleteCompiler()
     definesAndIncludesDebug() << "Deleting compiler";
     QModelIndexList selection = m_ui->compilers->selectionModel()->selectedIndexes();
     foreach (const QModelIndex& row, selection) {
-        m_compilersModel->removeRows(row.row(), 1);
+        if (row.column() == 1) {
+            //Don't remove the same compiler twice
+            continue;
+        }
+        m_compilersModel->removeRows(row.row(), 1, row.parent());
     }
 }
 
@@ -109,7 +125,10 @@ void CompilersWidget::addCompiler(const QString& factoryName)
    foreach (const auto& factory, compilerProvider()->compilerFactories()) {
         if (factoryName == factory->name()) {
             //add compiler without any information, the user will fill the data in later
-            m_compilersModel->addCompiler(factory->createCompiler(QString(), QString()));
+            auto compilerIndex = m_compilersModel->addCompiler(factory->createCompiler(QString(), QString()));
+
+            m_ui->compilers->selectionModel()->select(compilerIndex, QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+            compilerSelected(compilerIndex);
             break;
         }
     }
@@ -118,4 +137,54 @@ void CompilersWidget::addCompiler(const QString& factoryName)
 QVector< CompilerPointer > CompilersWidget::compilers() const
 {
     return m_compilersModel->compilers();
+}
+
+void CompilersWidget::compilerSelected(const QModelIndex& index)
+{
+    auto compiler = index.data(CompilersModel::CompilerDataRole);
+    if (compiler.value<CompilerPointer>()) {
+        m_ui->compilerName->setText(compiler.value<CompilerPointer>()->name());
+        m_ui->compilerPath->setText(compiler.value<CompilerPointer>()->path());
+        enableItems(true);
+    } else {
+        enableItems(false);
+    }
+}
+
+void CompilersWidget::compilerEdited()
+{
+    auto indexes = m_ui->compilers->selectionModel()->selectedIndexes();
+    Q_ASSERT(!indexes.isEmpty());
+
+    auto compiler = indexes.first().data(CompilersModel::CompilerDataRole);
+    if (!compiler.value<CompilerPointer>()) {
+        return;
+    }
+
+    compiler.value<CompilerPointer>()->setName(m_ui->compilerName->text());
+    compiler.value<CompilerPointer>()->setPath(m_ui->compilerPath->text());
+
+    m_compilersModel->updateCompiler(m_ui->compilers->selectionModel()->selection());
+}
+
+void CompilersWidget::selectCompilerPathDialog()
+{
+    const QString compilerPath = QFileDialog::getOpenFileName(this, tr("Select path to compiler"));
+    if (compilerPath.isEmpty())
+        return;
+
+    m_ui->compilerPath->setText(compilerPath);
+    compilerEdited();
+}
+
+void CompilersWidget::enableItems(bool enable)
+{
+    m_ui->compilerName->setEnabled(enable);
+    m_ui->compilerPath->setEnabled(enable);
+    m_ui->compilerSelector->setEnabled(enable);
+
+    if(!enable) {
+        m_ui->compilerName->clear();
+        m_ui->compilerPath->clear();
+    }
 }

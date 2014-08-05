@@ -40,6 +40,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeCondition
         QStringList::const_iterator prevOperator(QStringList::const_iterator it, QStringList::const_iterator itStop) const;
         bool evaluateCondition(QStringList::const_iterator it, QStringList::const_iterator itEnd);
         bool isTrue(const QStringList::const_iterator& var);
+        int compareVersion(QStringList::const_iterator left, QStringList::const_iterator right, bool* ok);
+        QString value(QStringList::const_iterator it);
         const VariableMap* m_vars;
         const CacheValues* m_cache;
         const CMakeProjectVisitor *m_visitor;

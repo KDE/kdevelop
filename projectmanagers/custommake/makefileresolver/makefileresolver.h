@@ -21,8 +21,6 @@ class KUrl;
 class QDir;
 class QFile;
 
-namespace CppTools {
-
 class FileModificationTimeWrapper;
 
 struct PathResolutionResult
@@ -52,7 +50,6 @@ class MakeFileResolver
     ///Same as below, but uses the directory of the file as working-directory. The argument must be absolute.
     PathResolutionResult resolveIncludePath( const QString& file );
     ///The include-path is only computed once for a whole directory, then it is cached using the modification-time of the Makefile.
-    PathResolutionResult resolveIncludePath( const QString& file, const QString& workingDirectory, int maxStepsUp = 20 );
     ///source and build must be absolute paths
     void setOutOfSourceBuildSystem( const QString& source, const QString& build );
     ///resets to in-source build system
@@ -63,6 +60,8 @@ class MakeFileResolver
     KDevelop::ModificationRevisionSet findIncludePathDependency(const QString& file);
 
   private:
+    PathResolutionResult resolveIncludePath( const QString& file, const QString& workingDirectory, int maxStepsUp = 20 );
+
     bool m_isResolving;
     bool m_outOfSource;
 
@@ -76,7 +75,5 @@ class MakeFileResolver
     QString m_source;
     QString m_build;
 };
-
-}
 
 #endif

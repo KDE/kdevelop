@@ -26,7 +26,7 @@
 
 #include <QAbstractItemModel>
 #include <QVector>
-#include <QDialog>
+#include <QWidget>
 
 #include "../compilerprovider/icompiler.h"
 
@@ -39,7 +39,7 @@ class CompilersModel;
 class QMenu;
 class QSignalMapper;
 
-class CompilersWidget : public QDialog
+class CompilersWidget : public QWidget
 {
     Q_OBJECT
 
@@ -52,8 +52,16 @@ public:
 private slots:
     void deleteCompiler();
     void addCompiler(const QString& factoryName);
+    void compilerSelected(const QModelIndex& index);
+    void compilerEdited();
+    void selectCompilerPathDialog();
+
+signals:
+    void compilerChanged();
 
 private:
+    void enableItems(bool enable);
+
     Ui::CompilersWidget* m_ui;
     CompilersModel* m_compilersModel;
     QMenu *m_addMenu;

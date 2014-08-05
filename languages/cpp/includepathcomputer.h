@@ -18,8 +18,7 @@
 #define INCLUDEPATHCOMPUTER_H
 
 #include <util/path.h>
-
-#include "makefileresolver.h"
+#include <QSet>
 
 class IncludePathComputer
 {
@@ -40,8 +39,6 @@ public:
     return m_defines;
   }
 
-  KDevelop::ModificationRevisionSet m_includePathDependency;
-
 private:
   void addInclude(const KDevelop::Path& path);
 
@@ -51,11 +48,6 @@ private:
   QSet<KDevelop::Path> m_hasPath;
   bool m_ready;
 
-  KDevelop::Path m_effectiveBuildDirectory;
-  KDevelop::Path m_buildDirectory;
-  KDevelop::Path m_projectDirectory;
   QString m_projectName;
-  bool m_gotPathsFromManager;
-  CppTools::MakeFileResolver m_includeResolver;
 };
 #endif // INCLUDEPATHCOMPUTER_H

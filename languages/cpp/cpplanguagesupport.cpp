@@ -90,7 +90,6 @@
 #include "codegen/adaptsignatureassistant.h"
 #include "codegen/unresolvedincludeassistant.h"
 
-#include "makefileresolver.h"
 #include "setuphelpers.h"
 #include "quickopen.h"
 #include "cppdebughelper.h"

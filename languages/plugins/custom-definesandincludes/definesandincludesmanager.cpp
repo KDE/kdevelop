@@ -44,17 +44,17 @@ static ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const KDev
 {
     ConfigEntry ret;
 
-    auto itemPath = item->path().toUrl();
-    KUrl rootDirectory = item->project()->folder();
+    const Path itemPath = item->path();
+    const Path rootDirectory = item->project()->path();
 
     for (const ConfigEntry & entry : paths) {
-        KUrl targetDirectory = rootDirectory;
+        Path targetDirectory = rootDirectory;
         // note: a dot represents the project root
         if (entry.path != ".") {
             targetDirectory.addPath(entry.path);
         }
 
-        if (targetDirectory.isParentOf(itemPath)) {
+        if (targetDirectory == itemPath || targetDirectory.isParentOf(itemPath)) {
             ret.includes += entry.includes;
 
             for (auto it = entry.defines.constBegin(); it != entry.defines.constEnd(); it++) {
@@ -214,6 +214,55 @@ void DefinesAndIncludesManager::openConfigurationDialog(const QString& pathToFil
     } else {
         m_noProjectIPM->openConfigurationDialog(pathToFile);
     }
+}
+
+Path::List DefinesAndIncludesManager::includesInBackground(const QString& path) const
+{
+    Path::List includes;
+
+    for (auto provider: m_backgroundProviders) {
+        includes += provider->includesInBackground(path);
+    }
+
+    return includes;
+}
+
+// NOTE: Part of a fix for build failures on <GCC-4.7
+DefinesAndIncludesManager::~DefinesAndIncludesManager() noexcept = default;
+
+QHash< QString, QString > DefinesAndIncludesManager::definesInBackground(const QString& path) const
+{
+    QHash<QString, QString> defines;
+
+    for (auto provider: m_backgroundProviders) {
+        auto result = provider->definesInBackground(path);
+        for (auto it = result.constBegin(); it != result.constEnd(); it++) {
+            defines[it.key()] = it.value();
+        }
+    }
+
+    return defines;
+}
+
+bool DefinesAndIncludesManager::unregisterBackgroundProvider(IDefinesAndIncludesManager::BackgroundProvider* provider)
+{
+    int idx = m_backgroundProviders.indexOf(provider);
+    if (idx != -1) {
+        m_backgroundProviders.remove(idx);
+        return true;
+    }
+
+    return false;
+}
+
+void DefinesAndIncludesManager::registerBackgroundProvider(IDefinesAndIncludesManager::BackgroundProvider* provider)
+{
+    Q_ASSERT(provider);
+    if (m_backgroundProviders.contains(provider)) {
+        return;
+    }
+
+    m_backgroundProviders.push_back(provider);
 }
 
 }

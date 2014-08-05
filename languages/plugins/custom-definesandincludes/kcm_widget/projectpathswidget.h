@@ -53,7 +53,7 @@ public:
     QList<ConfigEntry> paths() const;
     void clear();
 
-    void setCompilers(const QVector<CompilerPointer>& compilers);
+    void setCompilers(const QVector<CompilerPointer>& compilers, bool updateCompilersModel = true);
 
     void setCurrentCompiler(const QString& name);
 
@@ -69,17 +69,18 @@ private slots:
     void addProjectPath();
     void deleteProjectPath();
     void batchEdit();
-    void configureCompilers();
+    void tabChanged(int);
 
     // Forward includes model changes into the pathsModel
     void includesChanged( const QStringList& includes );
 
     // Forward defines model changes into the pathsModel
     void definesChanged( const Defines& defines );
+
+    void compilersChanged();
 private:
     Ui::ProjectPathsWidget* ui;
     ProjectPathsModel* pathsModel;
-    QVector<CompilerPointer> m_compilers;
     KDevelop::IProject* m_project;
     // Enables/Disables widgets based on UI state/selection
     void updateEnablements();

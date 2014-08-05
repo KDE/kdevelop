@@ -15,7 +15,11 @@
 #include <project/abstractfilemanagerplugin.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
+#include <QScopedPointer>
+#include <QSet>
+
 class IMakeBuilder;
+class CustomMakeProvider;
 
 class CustomMakeManager : public KDevelop::AbstractFileManagerPlugin,
                           public KDevelop::IBuildSystemManager
@@ -105,8 +109,12 @@ protected:
                                                           const KDevelop::Path& path,
                                                           KDevelop::ProjectBaseItem* parent = 0);
 
+    virtual void unload() override;
+
 private slots:
     void reloadMakefile(KDevelop::ProjectFileItem *item);
+
+    void projectClosing(KDevelop::IProject*);
 
 private:
     /**
@@ -119,5 +127,8 @@ private:
 
 private:
     IMakeBuilder *m_builder;
+    QScopedPointer<CustomMakeProvider> m_provider;
+    QSet<QString> m_projectPaths;
+    friend class CustomMakeProvider;
 };
 #endif

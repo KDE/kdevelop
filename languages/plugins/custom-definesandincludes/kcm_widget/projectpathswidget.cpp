@@ -30,7 +30,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 
-#include "../compilerprovider/icompilerprovider.h"
+#include "../compilerprovider/icompiler.h"
 
 #include "compilerswidget.h"
 
@@ -38,19 +38,6 @@
 #include "ui_batchedit.h"
 #include "projectpathsmodel.h"
 #include "debugarea.h"
-
-namespace
-{
-ICompilerProvider* compilerProvider()
-{
-    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
-    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
-        return {};
-    }
-
-    return compilerProvider->extension<ICompilerProvider>();
-}
-}
 
 ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     : QWidget(parent),
@@ -77,10 +64,14 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     connect( pathsModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
     connect( ui->compiler, SIGNAL(activated(QString)), SIGNAL(changed()) );
 
+    connect(ui->compilersWidget, SIGNAL(compilerChanged()), SIGNAL(changed()));
+
     connect( ui->includesWidget, SIGNAL(includesChanged(QStringList)), SLOT(includesChanged(QStringList)) );
     connect( ui->definesWidget, SIGNAL(definesChanged(Defines)), SLOT(definesChanged(Defines)) );
 
-    connect(ui->configureCompilers, SIGNAL(clicked(bool)), SLOT(configureCompilers()));
+    connect(ui->compilersWidget, SIGNAL(compilerChanged()), SLOT(compilersChanged()));
+
+    connect(ui->languageParameters, SIGNAL(currentChanged(int)), SLOT(tabChanged(int)));
 }
 
 QList<ConfigEntry> ProjectPathsWidget::paths() const
@@ -252,7 +243,7 @@ CompilerPointer ProjectPathsWidget::currentCompiler() const
     return ui->compiler->itemData(ui->compiler->currentIndex()).value<CompilerPointer>();
 }
 
-void ProjectPathsWidget::setCompilers(const QVector<CompilerPointer>& compilers)
+void ProjectPathsWidget::setCompilers(const QVector< CompilerPointer >& compilers, bool updateCompilersModel)
 {
     ui->compiler->clear();
     for (int i = 0 ; i < compilers.count(); ++i) {
@@ -265,40 +256,31 @@ void ProjectPathsWidget::setCompilers(const QVector<CompilerPointer>& compilers)
         ui->compiler->setItemData(i, val);
     }
 
-    m_compilers = compilers;
-}
-
-void ProjectPathsWidget::configureCompilers()
-{
-    CompilersWidget cw;
-    cw.setCompilers(m_compilers);
-    if (cw.exec() != QDialog::Accepted) {
-        return;
+    if (updateCompilersModel) {
+        ui->compilersWidget->setCompilers(compilers);
     }
-
-    auto compilers = compilerProvider()->compilers();
-
-    for (auto c: cw.compilers()) {
-        if (!compilers.contains(c)) {
-            compilerProvider()->registerCompiler(c);
-        }
-    }
-
-    compilers = compilerProvider()->compilers();
-    for (auto c: compilers) {
-        if (!cw.compilers().contains(c)) {
-            compilerProvider()->unregisterCompiler(c);
-        }
-    }
-
-    setCompilers(compilerProvider()->compilers());
-    setCurrentCompiler(compilerProvider()->currentCompiler(m_project)->name());
-    emit changed();
 }
 
 QVector< CompilerPointer > ProjectPathsWidget::compilers() const
 {
-    return m_compilers;
+    return ui->compilersWidget->compilers();
+}
+
+void ProjectPathsWidget::compilersChanged() {
+    auto current = currentCompiler()->name();
+    setCompilers(ui->compilersWidget->compilers(), false);
+    setCurrentCompiler(current);
+}
+
+void ProjectPathsWidget::tabChanged(int idx)
+{
+    if (idx==2) {
+        ui->batchEdit->setVisible(false);
+        ui->compilerBox->setVisible(true);
+    } else {
+        ui->batchEdit->setVisible(true);
+        ui->compilerBox->setVisible(false);
+    }
 }
 
 

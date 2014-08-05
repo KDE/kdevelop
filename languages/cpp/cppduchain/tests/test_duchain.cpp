@@ -484,7 +484,7 @@ void TestDUChain::testProblematicUses()
   {
     QByteArray method("struct A { A() : a( 0 ) { } int a; };");
 
-    LockedTopDUContext top = parse(method, DumpAll);
+    LockedTopDUContext top = parse(method);
 
     QCOMPARE(top->childContexts().count(), 1);
     QCOMPARE(top->localDeclarations().count(), 1);
@@ -496,7 +496,7 @@ void TestDUChain::testProblematicUses()
   {
     QByteArray method("struct A { A() : a( 0 ) { } int a; } r;");
 
-    LockedTopDUContext top = parse(method, DumpAll);
+    LockedTopDUContext top = parse(method);
 
     QCOMPARE(top->childContexts().count(), 1);
     QCOMPARE(top->localDeclarations().count(), 2);
@@ -907,7 +907,7 @@ void TestDUChain::testVirtualMemberFunction()
 {
   {
     QByteArray text("class Foo { public: virtual void bar(const float i, const int i) = 0; }; \n");
-    LockedTopDUContext top = parse(text, DumpAll);
+    LockedTopDUContext top = parse(text);
 
     ClassFunctionDeclaration* memberFun; // filled by assert macro below
     ASSERT_SINGLE_MEMBER_FUNCTION_IN(top, memberFun);
@@ -1347,7 +1347,7 @@ void TestDUChain::testDeclareStructInNamespace()
   {
     QByteArray method("namespace A { class B { class C; } ; } namespace A { class A::B::C { }; }");
 
-    LockedTopDUContext top = parse(method, DumpAll);
+    LockedTopDUContext top = parse(method);
 
     QCOMPARE(top->childContexts().count(), 2);
     QCOMPARE(top->childContexts()[0]->childContexts().size(), 1);
@@ -1501,7 +1501,7 @@ void TestDUChain::testVariableDeclaration()
                       "A instance1(c); A instance2(2, 3); A instance3(q);\n"
                       "void bla() {int* i = new A(c); }\n");
 
-  LockedTopDUContext top = parse(method, DumpAll);
+  LockedTopDUContext top = parse(method);
 
   QVERIFY(!top->parentContext());
   QVERIFY(top->localScopeIdentifier().isEmpty());
@@ -2067,7 +2067,7 @@ void TestDUChain::testADLFunctionByName()
     QByteArray adlCall("namespace foo { struct A {}; int bar(void *a) {} void f(int a) {}}"
                        "int test() { bar(&foo::f); }"); // calls foo::bar
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall) );
 
     QCOMPARE(top->childContexts().count(), 3);
 
@@ -2117,7 +2117,7 @@ void TestDUChain::testADLClassMembers()
     QByteArray adlCall("namespace foo { struct A { int member; }; void bar(int A::*p) {} }"
                        "int test() { bar(&foo::A::member); }"); // calls foo::bar
     
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall) );
     
     QCOMPARE(top->childContexts().count(), 3);
     
@@ -2135,7 +2135,7 @@ void TestDUChain::testADLMemberFunction()
     QByteArray adlCall("namespace foo { struct A { void mem_fun() {} }; void bar(void (A::*p)()) {} }"
     "int test() { void (foo::A::*p)() = &foo::A::mem_fun; bar(p); }"); // calls foo::bar (avoid testADLMemberFunctionByName)
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall) );
 
     QCOMPARE(top->childContexts().count(), 3);
 
@@ -2154,7 +2154,7 @@ void TestDUChain::testADLMemberFunctionByName()
     QByteArray adlCall("namespace foo { struct A { void f(int a) {} }; int bar(void *a) {} }"
                        "int test() { bar(&foo::A::f); }"); // calls foo::bar
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall) );
 
     QCOMPARE(top->childContexts().count(), 3);
 
@@ -2201,7 +2201,7 @@ void TestDUChain::testADLOperators()
     QByteArray adlCall("namespace foo { struct A { }; A& operator+(const A&, int) {} }"
                        "int test() { foo::A a, b;  b = a + 1; }"); // calls foo::operator+
     
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall) );
     
     QCOMPARE(top->childContexts().count(), 3);
     
@@ -2218,7 +2218,7 @@ void TestDUChain::testADLOperators()
     QByteArray adlCall("namespace foo { struct A { }; A& operator-(const A&) {} }"
                        "int test() { foo::A a, b;  b = -a; }"); // calls foo::operator-
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall) );
 
     QCOMPARE(top->childContexts().count(), 3);
 
@@ -2422,7 +2422,7 @@ void TestDUChain::testAssignmentOperators()
   }
   operators.append("}\n");
 
-  LockedTopDUContext top( parse(operators.toLatin1(), DumpAll) );
+  LockedTopDUContext top( parse(operators.toLatin1() ) );
 
   QCOMPARE(top->childContexts().count(), 3);
 
@@ -2572,7 +2572,7 @@ void TestDUChain::testExternalMemberDeclaration()
   QByteArray method("struct A { static int m; };\n"
                                       "int A::m = 3;");
   
-  LockedTopDUContext top( parse(method, DumpAll) );
+  LockedTopDUContext top( parse(method) );
   
   // The declaration of "A::m" is put into a helper-context that makes the scope "A::"
   QCOMPARE(top->localDeclarations().size(), 1);
@@ -2663,7 +2663,7 @@ void TestDUChain::testLocalNamespaceAlias()
 {
   QByteArray method("namespace foo { int bar(); } int test() { namespace afoo = foo; afoo::bar(); }");
 
-  LockedTopDUContext top( parse(method, DumpAll) );
+  LockedTopDUContext top( parse(method) );
 
   QCOMPARE(top->childContexts().count(), 3);
   QCOMPARE(top->childContexts()[2]->localDeclarations().size(), 1);
@@ -3153,7 +3153,7 @@ void TestDUChain::testConstructorUses()
 {
   {
     QByteArray text = "struct A { A(A); A(A,A); }; void test() { A w; A a(A(w), A(w, w), w); }";
-    LockedTopDUContext top = parse(text, DumpAll);
+    LockedTopDUContext top = parse(text);
     QCOMPARE(top->childContexts().size(), 3);
     QCOMPARE(top->childContexts()[2]->localDeclarations().size(), 2);
     QCOMPARE(top->childContexts()[2]->localDeclarations()[0]->uses().size(), 1);
@@ -3168,7 +3168,7 @@ void TestDUChain::testConstructorUses()
   {
     // also see https://bugs.kde.org/show_bug.cgi?id=300347
     const QByteArray text = "struct B { B(); }; void test() { B a; B b(); }";
-    LockedTopDUContext top = parse(text, DumpAll);
+    LockedTopDUContext top = parse(text);
     QCOMPARE(top->childContexts().size(), 3);
     QCOMPARE(top->childContexts()[2]->localDeclarations().size(), 2);
 
@@ -3495,7 +3495,7 @@ void TestDUChain::testTypedefFuncptr()
 {
   QByteArray method("typedef int (*func)(char c); func f('c');");
 
-  LockedTopDUContext top = parse(method, DumpAll);
+  LockedTopDUContext top = parse(method);
 
   QCOMPARE(top->localDeclarations().count(), 2);
   QVERIFY(top->localDeclarations()[0]->abstractType());
@@ -3713,7 +3713,7 @@ void TestDUChain::testTemplateEnums()
 
     QCOMPARE(top->localDeclarations().count(), 2);
     QVERIFY(top->localDeclarations()[1]->abstractType());
-    QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("No< int(5) >"));
+    QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("No< int >"));
     QCOMPARE(top->childContexts().count(), 2);
     QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance);
@@ -3723,7 +3723,7 @@ void TestDUChain::testTemplateEnums()
     Declaration* used = top->usedDeclarationForIndex(top->uses()[0].m_declarationIndex);
     QVERIFY(used);
     QVERIFY(used->abstractType());
-    QCOMPARE(used->abstractType()->toString(), QString("No< int(5) >"));
+    QCOMPARE(used->abstractType()->toString(), QString("No< int >"));
   }
   {
     QByteArray text("template<int num> struct No {};  No<9> n;");
@@ -3731,13 +3731,13 @@ void TestDUChain::testTemplateEnums()
 
     QCOMPARE(top->localDeclarations().count(), 2);
     QVERIFY(top->localDeclarations()[1]->abstractType());
-    QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("No< int(9) >"));
+    QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("No< int >"));
 
     QCOMPARE(top->usesCount(), 1);
     Declaration* used = top->usedDeclarationForIndex(top->uses()[0].m_declarationIndex);
     QVERIFY(used);
     QVERIFY(used->abstractType());
-    QCOMPARE(used->abstractType()->toString(), QString("No< int(9) >"));
+    QCOMPARE(used->abstractType()->toString(), QString("No< int >"));
   }
   {
     QByteArray text("class A {enum { Val = 5}; }; class B { enum{ Val = 7 }; }; template<class C, int i> class Test { enum { TempVal = C::Val, Num = i, Sum = TempVal + i }; };");
@@ -5200,7 +5200,7 @@ void TestDUChain::testOperatorUses()
   {
     QByteArray method("template<class T> struct Fruk { Fruk<T>& operator[](int); }; Fruk<int> f; void test(){ const int mog; Fruk q (f[mog]); }");
 
-    LockedTopDUContext top = parse(method, DumpAll);
+    LockedTopDUContext top = parse(method);
 
     QCOMPARE(top->childContexts().count(), 4);
     QCOMPARE(top->childContexts()[3]->localDeclarations().size(), 2);
@@ -5248,7 +5248,7 @@ void TestDUChain::testOperatorUses()
                       "bool b1 = t1 == t2;\n"
                       "bool b2 = t1.operator==(t2); }");
 
-    LockedTopDUContext top = parse(method, DumpAll);
+    LockedTopDUContext top = parse(method);
     QCOMPARE(top->localDeclarations().count(), 2);
     QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
     QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().count(), 1);
@@ -5549,7 +5549,7 @@ void TestDUChain::testUses()
     "};\n"
   );
 
-  LockedTopDUContext top = parse(method, DumpAll);
+  LockedTopDUContext top = parse(method);
 
   QCOMPARE(top->childContexts().size(), 4);
   QCOMPARE(top->childContexts().at(0)->type(), DUContext::Class);
@@ -5578,7 +5578,7 @@ void TestDUChain::testCtorTypes()
     "    A( int, int ) {}\n"
     "};\n"
   );
-  LockedTopDUContext top = parse(method, DumpAll);
+  LockedTopDUContext top = parse(method);
 
   QVector< Declaration* > ctors = top->childContexts().first()->localDeclarations();
 
@@ -5768,7 +5768,7 @@ void TestDUChain::testAutoTypeIntegral()
   QFETCH(bool, constness);
   QFETCH(QString, string);
 
-  LockedTopDUContext top = parse(code.toLocal8Bit(), DumpAll);
+  LockedTopDUContext top = parse(code.toLocal8Bit());
   QVERIFY(top);
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
@@ -5792,7 +5792,7 @@ void TestDUChain::testAutoTypes()
 // TODO: support this, when including <initializer_list>
 //                                  "  auto v4 = {1,2};"
 //                                  "  auto v5 = {1.0,2.0};"
-                                 "}\n", DumpAll);
+                                 "}\n");
   QVERIFY(top);
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
@@ -5831,7 +5831,7 @@ void TestDUChain::testCommentAfterFunctionCall()
                                  "void setView(View* m_view) {\n"
                                  "  setView(0);\n"
                                  "  setView(m_view); //\n"
-                                 "}\n", DumpAll);
+                                 "}\n");
   QVERIFY(top);
   DUChainReadLocker lock;
   QVERIFY(top->problems().isEmpty());
@@ -5982,7 +5982,7 @@ void TestDUChain::testDeclarationHasUses()
     "  }"
     "}"
   );
-  LockedTopDUContext top = parse(method, DumpAll);
+  LockedTopDUContext top = parse(method);
 
   QCOMPARE(top->childContexts().first()->findDeclarations(KDevelop::QualifiedIdentifier("a")).first()->hasUses(), true);
   QCOMPARE(top->childContexts().first()->findDeclarations(KDevelop::QualifiedIdentifier("b")).first()->hasUses(), true);
@@ -6000,7 +6000,7 @@ void TestDUChain::testInitListRegressions()
       "enum { _S_word_bit = int(__CHAR_BIT__ * sizeof(_Bit_type)) };\n"
     );
 
-    LockedTopDUContext top = parse(code, DumpAll);
+    LockedTopDUContext top = parse(code);
     QVERIFY(top);
     QVERIFY(top->problems().isEmpty());
   }

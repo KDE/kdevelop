@@ -60,7 +60,7 @@
 #include <language/duchain/indexedstring.h>
 #include <util/pushvalue.h>
 
-//#define VERBOSE
+// #define VERBOSE
 
 #if defined(TEST) || defined(VERBOSE)
 #define ifTest(x) x
@@ -96,10 +96,6 @@ namespace {
   static Cache s_cache;
   static QMutex s_cacheMutex;
 }
-
-
-
-namespace CppTools {
 
   ///Helper-class used to fake file-modification times
   class FileModificationTimeWrapper
@@ -291,9 +287,6 @@ PathResolutionResult::operator bool() const
 {
     return success;
 }
-}
-
-using namespace CppTools;
 
 ModificationRevisionSet MakeFileResolver::findIncludePathDependency(const QString& file)
 {
@@ -354,6 +347,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file)
     // for unit tests with temporary files
     return PathResolutionResult();
   }
+
   QFileInfo fi(file);
   return resolveIncludePath(fi.fileName(), fi.absolutePath());
 }
@@ -375,7 +369,7 @@ KUrl MakeFileResolver::mapToBuild(const KUrl& url) const
   return KUrl(wd);
 }
 
-void CppTools::MakeFileResolver::clearCache()
+void MakeFileResolver::clearCache()
 {
   QMutexLocker l(&s_cacheMutex);
   s_cache.clear();
@@ -734,29 +728,38 @@ void MakeFileResolver::setOutOfSourceBuildSystem(const QString& source, const QS
 
 #ifdef TEST
 
-/** This can be used for testing and debugging the system. To compile it use
- * gcc includepathresolver.cpp -I /usr/share/qt3/include -I /usr/include/kde -I ../../lib/util -DTEST -lkdecore -g -o includepathresolver
+/** This can be used for testing and debugging the system. To compile it
+ * enable BUILD_kdev_makefileresolver in the CMakeLists.txt file
  * */
+
+#include <tests/testcore.h>
+#include <tests/autotestshell.h>
 
 int main(int argc, char **argv)
 {
-  QApplication app(argc,argv);
-  IncludePathResolver resolver;
-  if (argc < 3) {
-    cout << "params: 1. file-name, 2. working-directory [3. source-directory 4. build-directory]" << endl;
-    return 1;
-  }
-  if (argc >= 5) {
-    cout << "mapping" << argv[3] << "->" << argv[4] << endl;
-    resolver.setOutOfSourceBuildSystem(argv[3], argv[4]);
-  }
-  PathResolutionResult res = resolver.resolveIncludePath(argv[1], argv[2]);
-  cout << "success:" << res.success << "\n";
-  if (!res.success) {
-    cout << "error-message: \n" << res.errorMessage.toLocal8Bit().data() << "\n";
-    cout << "long error-message: \n" << res.longErrorMessage.toLocal8Bit().data() << "\n";
-  }
-  cout << "path: \n" << res.paths.join("\n").toLocal8Bit().data() << "\n";
-  return res.success;
+    QApplication app(argc,argv);
+
+    AutoTestShell::init();
+    KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
+
+    MakeFileResolver resolver;
+    if (argc < 2) {
+        cout << "params: 1. file-name, [2. source-directory 3. build-directory]" << endl;
+        return 1;
+    }
+    if (argc >= 4) {
+        cout << "mapping" << argv[2] << "->" << argv[3] << endl;
+        resolver.setOutOfSourceBuildSystem(argv[2], argv[3]);
+    }
+    PathResolutionResult res = resolver.resolveIncludePath(argv[1]);
+    cout << "success:" << res.success << "\n";
+    if (!res.success) {
+        cout << "error-message: \n" << res.errorMessage.toLocal8Bit().data() << "\n";
+        cout << "long error-message: \n" << res.longErrorMessage.toLocal8Bit().data() << "\n";
+    }
+    cout << "path: \n" << res.paths.join("\n").toLocal8Bit().data() << "\n";
+    TestCore::shutdown();
+
+    return res.success;
 }
 #endif

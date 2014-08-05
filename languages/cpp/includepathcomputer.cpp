@@ -37,12 +37,9 @@
 
 using namespace KDevelop;
 
-const bool enableIncludePathResolution = true;
-
 IncludePathComputer::IncludePathComputer(const QString& file)
   : m_source(file)
   , m_ready(false)
-  , m_gotPathsFromManager(false)
 {
 }
 
@@ -102,21 +99,12 @@ void IncludePathComputer::computeForeground()
     }
 
     m_projectName = project->name();
-    m_projectDirectory = project->path();
-    m_effectiveBuildDirectory = m_buildDirectory = buildManager->buildDirectory(project->projectItem());
-    kDebug(9007) << "Got build-directory from project manager:" << m_effectiveBuildDirectory;
-
-    if (m_projectDirectory == m_effectiveBuildDirectory) {
-      m_projectDirectory.clear();
-      m_effectiveBuildDirectory.clear();
-    }
 
       for (const auto& dir : idm->includes(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined | IDefinesAndIncludesManager::CompilerSpecific))){
         addInclude(dir);
       }
       m_defines = idm->defines(file);
 
-    m_gotPathsFromManager = !dirs.isEmpty();
     kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
     foreach (const Path& dir, dirs) {
       addInclude(dir);
@@ -128,8 +116,6 @@ void IncludePathComputer::computeForeground()
       addInclude( dir );
     }
     m_defines = IDefinesAndIncludesManager::manager()->defines(m_source);
-  } else if (!m_gotPathsFromManager) {
-    kDebug(9007) << "Did not find any include paths from project manager for" << m_source;
   }
 }
 
@@ -139,38 +125,14 @@ void IncludePathComputer::computeBackground()
     return;
   }
 
-  if (!enableIncludePathResolution) {
-    m_ready = true;
-    return;
-  }
+    auto result = IDefinesAndIncludesManager::manager()->includesInBackground(m_source);
 
-  if (m_effectiveBuildDirectory.isValid()) {
-    m_includeResolver.setOutOfSourceBuildSystem(m_projectDirectory.toLocalFile(), m_effectiveBuildDirectory.toLocalFile());
-  } else {
-    if (m_projectDirectory.isValid()) {
-      //Report that the build-manager did not return the build-directory, for debugging
-      kDebug(9007) << "Build manager for project %1 did not return a build directory" << m_projectName;
+    foreach (const auto& res, result) {
+        addInclude(res);
     }
-    m_includeResolver.resetOutOfSourceBuild();
-  }
 
-  m_includePathDependency = m_includeResolver.findIncludePathDependency(m_source);
-  kDebug() << "current include path dependency state:" << m_includePathDependency.toString();
-
-    // only look at make when we did not get any paths from the build manager
-    if (!m_gotPathsFromManager) {
-        auto result = m_includeResolver.resolveIncludePath(m_source);
-
-        m_includePathDependency = result.includePathDependency;
-        kDebug() << "new include path dependency:" << m_includePathDependency.toString();
-
-        foreach (const QString& res, result.paths) {
-            addInclude(Path(res));
-        }
-
-  if (!result) {
-    kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":"
-                  << result.errorMessage << "\n" << result.longErrorMessage << "\n";
+  if (m_ret.isEmpty()) {
+    kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":";
 
     // Last chance: Take a parsed version of the file from the du-chain, and get its include-paths
     // We will then get the include-path that some time was used to parse the file
@@ -188,7 +150,6 @@ void IncludePathComputer::computeBackground()
       }
     }
   }
-}
   m_ready = true;
 }
 
