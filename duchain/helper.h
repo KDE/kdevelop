@@ -29,6 +29,13 @@ namespace QmlJS
 using namespace KDevelop;
 
     /**
+     * Act like TypeUtils::mergeTypes except that functions take precedence over
+     * everything else (mergeTypes(a, function) returns function).
+     */
+    KDEVQMLJSDUCHAIN_EXPORT AbstractType::Ptr mergeTypes(AbstractType::Ptr type,
+                                                         const AbstractType::Ptr newType);
+
+    /**
      * QML attribute value, with its source location
      */
     struct QMLAttributeValue

@@ -36,3 +36,11 @@ func1(1, unknown_declaration);
  */
 var func2 = func1;
 func2(1, "now I know my type");
+
+/**
+ * "type" : { "toString" : "function bool ()" }
+ */
+var two_funcs;
+
+two_funcs = function() { return "hello"; }
+two_funcs = function() { return true; }

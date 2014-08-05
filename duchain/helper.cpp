@@ -30,10 +30,20 @@
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/structuretype.h>
 #include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/typeutils.h>
 
 namespace QmlJS
 {
 using namespace KDevelop;
+
+AbstractType::Ptr mergeTypes(AbstractType::Ptr type, const AbstractType::Ptr newType)
+{
+    if (newType && newType->whichType() == AbstractType::TypeFunction) {
+        return newType;
+    } else {
+        return TypeUtils::mergeTypes(type, newType);
+    }
+}
 
 DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContext* context, bool searchInParent)
 {

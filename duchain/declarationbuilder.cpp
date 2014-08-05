@@ -279,7 +279,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::ReturnStatement* node)
 
         DUChainWriteLocker lock;
 
-        func->setReturnType(TypeUtils::mergeTypes(func->returnType(), returnType));
+        func->setReturnType(QmlJS::mergeTypes(func->returnType(), returnType));
     }
 
     return false;   // findType has already explored node
@@ -360,7 +360,7 @@ bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
 
         // Merge the current type of the argument with its type in the call expression
         AbstractType::Ptr call_type = findType(argument->expression).type;
-        AbstractType::Ptr new_type = TypeUtils::mergeTypes(current_type, call_type);
+        AbstractType::Ptr new_type = QmlJS::mergeTypes(current_type, call_type);
 
         // Update the declaration of the argument and its type in the function type
         new_func_type->addArgument(new_type);
@@ -447,7 +447,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
                 );
             } else if (leftType.declaration->topContext() == topContext()) {
                 // Merge the already-known type of the variable with the new one
-                leftType.declaration->setAbstractType(TypeUtils::mergeTypes(leftType.type, rightType.type));
+                leftType.declaration->setAbstractType(QmlJS::mergeTypes(leftType.type, rightType.type));
             }
         }
 
