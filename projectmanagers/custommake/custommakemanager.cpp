@@ -71,7 +71,7 @@ public:
             }
         }
 
-        return toPathList(m_resolver->resolveIncludePath(path).paths);
+        return toPathList(KUrl::List(m_resolver->resolveIncludePath(path).paths));
     }
 
     virtual IDefinesAndIncludesManager::Type type() const
