@@ -188,7 +188,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case EXISTS:
             {
                 last=false;
-                QString v=*(it2+1);
+                QString v=value(it2+1);
                 
                 if(v.isEmpty())
                     kDebug(9042) << "error: no parameter to exist";
@@ -205,13 +205,13 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             }   break;
             case IS_DIRECTORY: {
                 CHECK_NEXT(it2);
-                QFileInfo f(*(it2+1));
+                QFileInfo f(value(it2+1));
                 last = f.isDir();
                 itEnd=it2;
             }   break;
             case IS_ABSOLUTE: {
                 CHECK_NEXT(it2);
-                QFileInfo f(*(it2+1));
+                QFileInfo f(value(it2+1));
                 last = f.isAbsolute();
                 itEnd=it2;
             }   break;
@@ -231,11 +231,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case MATCHES: {
                 CHECK_PREV(it2);
                 CHECK_NEXT(it2);
-                QRegExp rx(*(it2+1));
-                if(m_vars->contains(*(it2-1)))
-                    rx.indexIn(m_vars->value(*(it2-1)).join(QString()));
-                else
-                    rx.indexIn(*(it2-1));
+                QRegExp rx(value(it2+1));
+                rx.indexIn(value(it2-1));
                 last=rx.matchedLength()>0;
                 m_matches = rx.capturedTexts();
                 itEnd=it2-1;
@@ -243,10 +240,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case LESS: {
                 CHECK_PREV(it2);
                 CHECK_NEXT(it2);
-                QString strA=*(it2-1);
-                QString strB=*(it2+1);
-                if(m_vars->contains(strA))
-                    strA=m_vars->value(strA).join(";");
+                QString strA=value(it2-1);
+                QString strB=value(it2+1);
                 int a=strA.toInt(), b=strB.toInt();
                 last= (a<b);
                 itEnd=it2-1;
@@ -254,10 +249,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case GREATER: {
                 CHECK_PREV(it2);
                 CHECK_NEXT(it2);
-                QString strA=*(it2-1);
-                QString strB=*(it2+1);
-                if(m_vars->contains(strA))
-                    strA=m_vars->value(strA).join(";");
+                QString strA=value(it2-1);
+                QString strB=value(it2+1);
                 int a=strA.toInt(), b=strB.toInt();
                 last= (a>b);
                 itEnd=it2-1;
@@ -265,10 +258,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case EQUAL: {
                 CHECK_PREV(it2);
                 CHECK_NEXT(it2);
-                QString strA=*(it2-1);
-                QString strB=*(it2+1);
-                if(m_vars->contains(strA))
-                    strA=m_vars->value(strA).join(";");
+                QString strA=value(it2-1);
+                QString strB=value(it2+1);
                 int a=strA.toInt(), b=strB.toInt();
                 last= (a==b);
                 itEnd=it2-1;
@@ -276,31 +267,25 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case STRLESS: {
                 CHECK_PREV(it2);
                 CHECK_NEXT(it2);
-                QString strA=*(it2-1);
-                QString strB=*(it2+1);
-                if(m_vars->contains(strA))
-                    strA=m_vars->value(strA).join(";");
+                QString strA=value(it2-1);
+                QString strB=value(it2+1);
                 last= (strA<strB);
                 itEnd=it2-1;
             }   break;
             case STRGREATER: {
                 CHECK_PREV(it2);
                 CHECK_NEXT(it2);
-                QString strA=*(it2-1);
-                QString strB=*(it2+1);
-                if(m_vars->contains(strA))
-                    strA=m_vars->value(strA).join(";");
+                QString strA=value(it2-1);
+                QString strB=value(it2+1);
                 last= (strA>strB);
                 itEnd=it2-1;
             }   break;
             case STREQUAL: {
                 CHECK_PREV(it2);
                 CHECK_NEXT(it2);
-                QString strA=*(it2-1);
-                QString strB=*(it2+1);
+                QString strA=value(it2-1);
+                QString strB=value(it2+1);
                 
-                if(strA!=strB && m_vars->contains(strA))
-                    strA=m_vars->value(strA).join(";");
                 last= (strA==strB);
                 
                 itEnd=it2-1;
@@ -394,28 +379,24 @@ int CMakeCondition::compareVersion(QStringList::const_iterator left,
                                    QStringList::const_iterator right,
                                    bool* ok)
 {
-    QString version = *left;
-    if (m_vars->contains(version)) {
-        QStringList val = m_vars->value(version);
-        version = val.isEmpty() ? QString() : val.first();
-        m_varUses.append(left);
-    }
-
-    QList<int> versionA(CMakeParserUtils::parseVersion(version, ok));
+    QList<int> versionA(CMakeParserUtils::parseVersion(value(left), ok));
     if (!ok) {
         return 0;
     }
 
-    version = *right;
-    if (m_vars->contains(version)) {
-        QStringList val = m_vars->value(version);
-        version = val.isEmpty() ? QString() : val.first();
-        m_varUses.append(right);
-    }
-
-    QList<int> versionB(CMakeParserUtils::parseVersion(version, ok));
+    QList<int> versionB(CMakeParserUtils::parseVersion(value(right), ok));
     if (!ok) {
         return 0;
     }
     return compareVersions(versionA, versionB);
+}
+
+QString CMakeCondition::value(QList< QString >::const_iterator it)
+{
+    QString value = *it;
+    if (m_vars->contains(value)) {
+        value = m_vars->value(value).join(";");
+        m_varUses.append(it);
+    }
+    return value;
 }
