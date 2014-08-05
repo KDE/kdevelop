@@ -654,11 +654,7 @@ void UiController::showErrorMessage(const QString& message, int timeout)
 
 void UiController::hideAssistant()
 {
-    if(d->currentShownAssistant) {
-        disconnect(d->currentShownAssistant->assistant().data(), SIGNAL(hide()), this, SLOT(assistantHide()));
-        disconnect(d->currentShownAssistant->assistant().data(), SIGNAL(actionsChanged()), this, SLOT(assistantActionsChanged()));
-        
-        Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
+    if (d->currentShownAssistant) {
         d->currentShownAssistant->hide();
     }
 }
@@ -677,46 +673,17 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
 
     auto editorView = qobject_cast<KTextEditor::View*>(view->widget());
     Q_ASSERT(editorView);
-    bool wasVisible = d->currentShownAssistant && d->currentShownAssistant->isVisible();
     if (editorView) {
-        if ( ! d->currentShownAssistant ) {
-            d->currentShownAssistant = new AssistantPopup(editorView, assistant);
-        } else {
-            d->currentShownAssistant->reset(editorView, assistant);
+        if ( !d->currentShownAssistant ) {
+            d->currentShownAssistant = new AssistantPopup;
         }
-        if(assistant->actions().count() && !wasVisible) {
-            Sublime::HoldUpdates hold(ICore::self()->uiController()->activeMainWindow());
-            // stop any pending hide actions
-            d->m_assistantTimer.stop();
-            d->currentShownAssistant->show();
-        }
-
-        connect(assistant.data(), SIGNAL(hide()), SLOT(assistantHide()), Qt::UniqueConnection);
-        connect(assistant.data(), SIGNAL(actionsChanged()), SLOT(assistantActionsChanged()), Qt::UniqueConnection);
-    }
-    if( d->currentShownAssistant ) {
-        // when the assistant was still open, avoid flickering
-        d->currentShownAssistant->notifyReopened(wasVisible);
-        d->m_assistantTimer.stop();
+        d->currentShownAssistant->reset(editorView, assistant);
     }
 }
 
 const QMap< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDocuments() const
 {
     return d->factoryDocuments;
-}
-
-void UiController::assistantHide() {
-    if(d->currentShownAssistant) {
-        connect(&d->m_assistantTimer, SIGNAL(timeout()), SLOT(hideAssistant()), Qt::UniqueConnection);
-        d->m_assistantTimer.start();
-    }
-}
-
-void UiController::assistantActionsChanged() {
-    if(d->currentShownAssistant) {
-        popUpAssistant(d->currentShownAssistant->assistant());
-    }
 }
 
 }

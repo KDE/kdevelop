@@ -45,12 +45,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
 
   protected:
     virtual QString html(bool shorten = false);
+
     DeclarationPointer m_declaration;
 
     ///Should returns a stripped version of the declarations qualified identifier, with all implicit/redundant parts removed
     virtual QualifiedIdentifier prettyQualifiedIdentifier(DeclarationPointer decl) const;
     ///Returns a stripped version of the declarations identifier, using prettyQualifiedIdentifier
     Identifier prettyIdentifier(DeclarationPointer decl) const;
+
+    /**
+     * Return a rich-text version of the identifier @p identifier representing the declaration @p decl
+     *
+     * @note In case @p declaration is deprecated, the resulting string will get a special formatting
+     */
+    QString identifierHighlight(const QString& identifier, const DeclarationPointer& decl) const;
     
     static QString stringFromAccess(Declaration::AccessPolicy access);
     static QString stringFromAccess(DeclarationPointer decl);

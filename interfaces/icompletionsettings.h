@@ -24,38 +24,41 @@
 #include "interfacesexport.h"
 
 namespace KDevelop {
-    class KDEVPLATFORMINTERFACES_EXPORT ICompletionSettings : public QObject {
-        Q_OBJECT
-        public:
-            virtual ~ICompletionSettings();
-            enum CompletionLevel {
-                Minimal,
-                MinimalWhenAutomatic,
-                AlwaysFull,
-                LAST_LEVEL
-            };
 
-            Q_SCRIPTABLE virtual int minFilesForSimplifiedParsing() const = 0;
-            
-            Q_SCRIPTABLE virtual CompletionLevel completionLevel() const = 0;
-            
-            Q_SCRIPTABLE virtual bool automaticCompletionEnabled() const = 0;
-            
-            Q_SCRIPTABLE virtual int localColorizationLevel() const = 0;
-            
-            Q_SCRIPTABLE virtual int globalColorizationLevel() const = 0;
-            
-            Q_SCRIPTABLE virtual bool highlightSemanticProblems() const = 0;
-            
-            Q_SCRIPTABLE virtual bool highlightProblematicLines() const = 0;
-            
-            Q_SCRIPTABLE virtual bool showMultiLineSelectionInformation() const = 0;
-            
-            Q_SCRIPTABLE virtual QStringList todoMarkerWords() const = 0;
-            
-        Q_SIGNALS:
-            void settingsChanged(ICompletionSettings*);
+class KDEVPLATFORMINTERFACES_EXPORT ICompletionSettings : public QObject
+{
+    Q_OBJECT
+
+public:
+    virtual ~ICompletionSettings();
+
+    enum CompletionLevel {
+        Minimal,
+        MinimalWhenAutomatic,
+        AlwaysFull,
+        LAST_LEVEL
     };
+
+    Q_SCRIPTABLE virtual int minFilesForSimplifiedParsing() const = 0;
+
+    Q_SCRIPTABLE virtual CompletionLevel completionLevel() const = 0;
+
+    Q_SCRIPTABLE virtual bool automaticCompletionEnabled() const = 0;
+
+    Q_SCRIPTABLE virtual int localColorizationLevel() const = 0;
+    Q_SCRIPTABLE virtual int globalColorizationLevel() const = 0;
+
+    Q_SCRIPTABLE virtual bool highlightSemanticProblems() const = 0;
+    Q_SCRIPTABLE virtual bool highlightProblematicLines() const = 0;
+
+    Q_SCRIPTABLE virtual bool showMultiLineSelectionInformation() const = 0;
+
+    Q_SCRIPTABLE virtual QStringList todoMarkerWords() const = 0;
+
+Q_SIGNALS:
+    void settingsChanged(ICompletionSettings*);
+};
+
 }
 
 #endif

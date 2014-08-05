@@ -388,5 +388,3 @@ inline uint qHash(const ReferencedTopDUContext& ctx) {
 Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext);
 
 #endif // KDEVPLATFORM_TOPDUCONTEXT_H
-
-// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

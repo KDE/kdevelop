@@ -118,5 +118,3 @@ QString ProblemNavigationContext::html(bool shorten)
   modifyHtml() += "</p></body></html>";
   return currentHtml();
 }
-
-

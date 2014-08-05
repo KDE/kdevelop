@@ -232,4 +232,3 @@ inline QDebug operator<<(QDebug s, const QExplicitlySharedDataPointer<ParsingEnv
 }
 
 #endif
-

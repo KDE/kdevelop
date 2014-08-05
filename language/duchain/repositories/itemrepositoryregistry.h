@@ -112,4 +112,3 @@ KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry& globalItemRepositoryRegistry
 }
 
 #endif // ITEMREPOSITORYREGISTRY_H
-

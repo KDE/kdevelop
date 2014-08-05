@@ -84,6 +84,8 @@ public:
 
   virtual QString toString() const;
 
+  QString valueAsString() const;
+
   virtual bool equals(const KDevelop::AbstractType* rhs) const;
 
   virtual KDevelop::AbstractType* clone() const;
@@ -117,4 +119,3 @@ inline ConstantIntegralType* fastCast<ConstantIntegralType*>(AbstractType* from)
 
 
 #endif // KDEVPLATFORM_CONSTANTINTEGRALTYPE_H
-

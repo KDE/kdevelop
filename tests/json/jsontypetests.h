@@ -20,14 +20,16 @@
 #define KDEVPLATFORM_JSONTYPETESTS_H
 
 #include "language/duchain/types/abstracttype.h"
+#include "language/duchain/types/constantintegraltype.h"
 #include "language/duchain/types/delayedtype.h"
 #include "language/duchain/types/functiontype.h"
 #include "jsontesthelpers.h"
 
 /**
  * Quick Reference:
- *   findDeclarations : FindDeclObject
- *   childCount : int
+ *   toString : string
+ *   isConst : bool
+ *   plainValue : qint64
  */
 
 namespace KDevelop
@@ -61,6 +63,16 @@ TypeTest(isConst)
                          "Type is non-const, but test data expects constant.";
 
   return SUCCESS;
+}
+
+///JSON type: qint64
+///@returns Whether ConstantIntegralType's plainValue matches the given value
+TypeTest(plainValue)
+{
+    VERIFY_TYPE(qint64);
+    auto constantIntegralType = type.cast<ConstantIntegralType>();
+    VERIFY_NOT_NULL(constantIntegralType);
+    return compareValues(constantIntegralType->plainValue(), value, "ConstantIntegralType's plainValue");
 }
 
 }

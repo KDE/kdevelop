@@ -23,6 +23,7 @@
 
 #include <QtCore/QChar>
 
+class QByteArray;
 class QString;
 class QStringList;
 

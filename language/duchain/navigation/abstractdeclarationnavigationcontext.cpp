@@ -86,7 +86,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(m_declaration.data());
     if( function ) {
       htmlFunction();
-    } else if( m_declaration->isTypeAlias() || m_declaration->kind() == Declaration::Instance ) {
+    } else if( m_declaration->isTypeAlias() || m_declaration->type<EnumeratorType>() || m_declaration->kind() == Declaration::Instance ) {
       if( m_declaration->isTypeAlias() )
         modifyHtml() += importantHighlight("typedef ");
 
@@ -98,22 +98,31 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         //Do not show the own name as type of typedefs
         if(useType.cast<TypeAliasType>())
           useType = useType.cast<TypeAliasType>()->type();
-      } 
-      
+      }
+
       eventuallyMakeTypeLinks( useType );
 
-      modifyHtml() += ' ' + nameHighlight(declarationName(m_declaration).toHtmlEscaped()) + "<br>";
+      modifyHtml() += ' ' + identifierHighlight(declarationName(m_declaration).toHtmlEscaped(), m_declaration);
+
+      if(auto integralType = m_declaration->type<ConstantIntegralType>()) {
+        const QString plainValue = integralType->valueAsString();
+        if (!plainValue.isEmpty()) {
+          modifyHtml() += QString(" = %1").arg(plainValue);
+        }
+      }
+
+      modifyHtml() += "<br>";
     }else{
       if( m_declaration->kind() == Declaration::Type && m_declaration->abstractType().cast<StructureType>() ) {
         htmlClass();
       }
       if ( m_declaration->kind() == Declaration::Namespace ) {
-        modifyHtml() += i18n("namespace %1 ", nameHighlight(m_declaration->qualifiedIdentifier().toString()).toHtmlEscaped());
+        modifyHtml() += i18n("namespace %1 ", identifierHighlight(m_declaration->qualifiedIdentifier().toString().toHtmlEscaped(), m_declaration));
       }
 
       if(m_declaration->type<EnumerationType>()) {
         EnumerationType::Ptr enumeration = m_declaration->type<EnumerationType>();
-        modifyHtml() += i18n("enumeration %1 ", nameHighlight(m_declaration->identifier().toString().toHtmlEscaped()));
+        modifyHtml() += i18n("enumeration %1 ", identifierHighlight(m_declaration->identifier().toString().toHtmlEscaped(), m_declaration));
       }
 
       if(m_declaration->isForwardDeclaration()) {
@@ -218,8 +227,10 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       modifyHtml() += labelHighlight(i18n("Kind: %1 %2 ", importantHighlight(kind.toHtmlEscaped()), detailsHtml));
     else
       modifyHtml() += labelHighlight(i18n("Kind: %1 ", importantHighlight(kind.toHtmlEscaped())));
-  } else if( !detailsHtml.isEmpty() ) {
-    modifyHtml() += labelHighlight(i18n("Modifiers: %1 ",  importantHighlight(kind.toHtmlEscaped())));
+  }
+
+  if (m_declaration->isDeprecated()) {
+    modifyHtml() += labelHighlight(i18n("Status: %1 ", propertyHighlight(i18n("Deprecated"))));
   }
 
   modifyHtml() += "<br />";
@@ -264,9 +275,14 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         modifyHtml() += "<br />" + commentHighlight(comment);
       }
     } else if(!comment.isEmpty()) {
-      comment.replace(QRegExp("<br */>"), "\n"); //do not escape html newlines within the comment
-      comment = comment.toHtmlEscaped();
-      comment.replace('\n', "<br />"); //Replicate newlines in html
+      // if the first paragraph does not contain a tag, we assume that this is a plain-text comment
+      if (!Qt::mightBeRichText(comment)) {
+        // still might contain extra html tags for line breaks (this is the case for doxygen-style comments sometimes)
+        // let's protect them from being removed completely
+        comment.replace(QRegExp("<br */>"), "\n");
+        comment = comment.toHtmlEscaped();
+        comment.replace('\n', "<br />"); //Replicate newlines in html
+      }
       modifyHtml() += commentHighlight(comment);
       modifyHtml() += "<br />";
     }
@@ -308,7 +324,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
     eventuallyMakeTypeLinks( type->returnType() );
   }
 
-  modifyHtml() += ' ' + nameHighlight(prettyIdentifier(m_declaration).toString().toHtmlEscaped());
+  modifyHtml() += ' ' + identifierHighlight(prettyIdentifier(m_declaration).toString().toHtmlEscaped(), m_declaration);
 
   if( type->indexedArgumentsSize() == 0 )
   {
@@ -331,7 +347,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
 
       eventuallyMakeTypeLinks( argType );
       if (currentArgNum < decls.size()) {
-        modifyHtml() += ' ' + nameHighlight(decls[currentArgNum]->identifier().toString().toHtmlEscaped());
+        modifyHtml() += ' ' + identifierHighlight(decls[currentArgNum]->identifier().toString().toHtmlEscaped(), m_declaration);
       }
 
       if( currentArgNum >= firstDefaultParam )
@@ -583,6 +599,19 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
 DeclarationPointer AbstractDeclarationNavigationContext::declaration() const
 {
   return m_declaration;
+}
+
+QString AbstractDeclarationNavigationContext::identifierHighlight(const QString& identifier, const DeclarationPointer& decl) const
+{
+  QString ret = nameHighlight(identifier);
+  if (!decl) {
+    return ret;
+  }
+
+  if (decl->isDeprecated()) {
+    ret = QString("<i>%1</i>").arg(ret);
+  }
+  return ret;
 }
 
 QString AbstractDeclarationNavigationContext::stringFromAccess(Declaration::AccessPolicy access)

@@ -32,10 +32,7 @@ namespace KTextEditor {
 }
 
 namespace KDevelop {
-  class DUContext;
-  class AbstractType;
   class CursorInRevision;
-
 
   class CompletionTreeItem;
   class CompletionTreeElement;
@@ -50,33 +47,46 @@ namespace KDevelop {
       typedef QExplicitlySharedDataPointer<CodeCompletionContext> Ptr;
 
       /**
-       * @param firstContext should be true for a context that has no parent. Such a context will never be a function-call context.
-       * @param text the text to analyze. It usually is the text in the range starting at the beginning of the context, and ending at the position where completion should start
+       * @param text the text to analyze. It usually is the text in the range starting at the beginning of the context,
+       *    and ending at the position where completion should start
+       *
        * @warning The du-chain must be unlocked when this is called
-       * @param knownArgumentExpressions has no effect when firstContext is set
-       * @param line Optional line that will be used to filter the macros
        * */
       CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, const KDevelop::CursorInRevision& position, int depth = 0);
       virtual ~CodeCompletionContext();
 
-      ///@return whether this context is valid for code-completion
+      /**
+       * @return Whether this context is valid for code-completion
+       */
       bool isValid() const;
 
-      ///@return depth of the context. The basic completion-context has depth 0, its parent 1, and so on..
+      /**
+       * @return Depth of the context. The basic completion-context has depth 0, its parent 1, and so on..
+       */
       int depth() const;
 
-      ///Computes the full set of completion items, using the information retrieved earlier.
-      ///Should only be called on the first context, parent contexts are included in the computations.
-      ///@param Abort is checked regularly, and if it is false, the computation is aborted.
+      /**
+       * Computes the full set of completion items, using the information retrieved earlier.
+       * Should only be called on the first context, parent contexts are included in the computations.
+       *
+       * @param abort Checked regularly, and if false, the computation is aborted.
+       *
+       * @warning Please check @p abort and @p isValid when reimplementing this method
+       */
       virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) = 0;
 
-      ///After completionItems(..) has been called, this may return completion-elements that are already grouped, for example using custom grouping(@see CompletionCustomGroupNode
+      /**
+       * After completionItems(..) has been called, this may return completion-elements that are already grouped,
+       * for example using custom grouping(@see CompletionCustomGroupNode
+       */
       virtual QList<KDevelop::CompletionTreeElementPointer> ungroupedElements();
       
-      /**In the case of recursive argument-hints, there may be a chain of parent-contexts, each for the higher argument-matching
+      /**
+       * In the case of recursive argument-hints, there may be a chain of parent-contexts, each for the higher argument-matching
        * The parentContext() should always have the access-operation FunctionCallAccess.
-       * When a completion-list is computed, the members of the list can be highlighted that match the corresponding parentContext()->functions() function-argument, or parentContext()->additionalMatchTypes()
-       * */
+       * When a completion-list is computed, the members of the list can be highlighted that match
+       * the corresponding parentContext()->functions() function-argument, or parentContext()->additionalMatchTypes()
+       */
       CodeCompletionContext* parentContext();
 
       ///Sets the new parent context, and also updates the depth

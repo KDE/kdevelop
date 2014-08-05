@@ -1390,8 +1390,9 @@ DUContext * DUContext::findContextAt(const CursorInRevision & position, bool inc
     return 0;
   }
 
+  const auto childContexts = d_func()->m_childContexts();
   for(int a = int(d_func()->m_childContextsSize())-1; a >= 0; --a)
-    if (DUContext* specific = d_func()->m_childContexts()[a].data(topContext())->findContextAt(position, includeRightBorder))
+    if (DUContext* specific = childContexts[a].data(topContext())->findContextAt(position, includeRightBorder))
       return specific;
 
   return const_cast<DUContext*>(this);
@@ -1449,7 +1450,6 @@ void DUContext::setInSymbolTable(bool inSymbolTable)
   d_func_dynamic()->m_inSymbolTable = inSymbolTable;
 }
 
-// kate: indent-width 2;
 
 void DUContext::clearImportedParentContexts()
 {
@@ -1715,5 +1715,3 @@ void DUContext::visit(DUChainVisitor& visitor)
 }
 
 }
-
-// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

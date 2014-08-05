@@ -270,4 +270,3 @@ private:
 }
 
 #endif // KDEVPLATFORM_ABSTRACTTYPEBUILDER_H
-

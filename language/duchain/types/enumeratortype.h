@@ -76,4 +76,3 @@ inline EnumeratorType* fastCast<EnumeratorType*>(AbstractType* from) {
 
 
 #endif // KDEVPLATFORM_ENUMERATORTYPE_H
-

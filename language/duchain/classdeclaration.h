@@ -134,4 +134,3 @@ private:
 Q_DECLARE_TYPEINFO(KDevelop::BaseClassInstance, Q_MOVABLE_TYPE);
 
 #endif // KDEVPLATFORM_CLASSDECLARATION_H
-

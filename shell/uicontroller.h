@@ -105,8 +105,6 @@ public Q_SLOTS:
     void raiseToolView(Sublime::View * view);
 
 private Q_SLOTS:
-    void assistantHide();
-    void assistantActionsChanged();
     void addNewToolView(MainWindow* mw, QListWidgetItem* item);
     void hideAssistant();
 

@@ -187,25 +187,4 @@ void ClassDeclaration::setClassModifier(ClassDeclarationData::ClassModifier modi
   d_func_dynamic()->m_classModifier = modifier;
 }
 
-
-/*
-class TBase
-{
-  public:
-    void DoSomething();
-};
-
-template<class T>
-class Deriv : public T
-{
-  public:
-    void DoSomethingElse();
-};
-
-void F()
-{
-  Deriv<TBase> g;
-  g.DoSomethingElse();
-}
-*/
 }

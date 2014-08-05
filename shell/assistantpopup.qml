@@ -34,22 +34,11 @@ Rectangle {
         GradientStop { position: 1.0; color: config.background }
     }
 
-    // start values for the popup animation; change y to 0 to disable the slight move animation
-    opacity: 0.2
-    y: -2
-
-    ParallelAnimation {
-        id: popupAnimation
-        running: true
-        NumberAnimation { target: root; properties: "opacity"; to: 1; duration: 250 }
-        NumberAnimation { target: root; properties: "y"; to: 0; duration: 100 }
-    }
-
     // Layout for the buttons and the title
     Flow {
         id: flow
         anchors.centerIn: parent
-        flow: items.count >= 3 ? Flow.TopToBottom : Flow.LeftToRight
+        flow: config.useVerticalLayout ? Flow.TopToBottom : Flow.LeftToRight
         spacing: 8
 
         Text {
@@ -67,11 +56,6 @@ Rectangle {
 
             y: 5
             model: config.model
-            onModelChanged: {
-                root.opacity = 0.2
-                root.y = -2
-                popupAnimation.start();
-            }
 
             AssistantButton {
                 text: modelData.text
