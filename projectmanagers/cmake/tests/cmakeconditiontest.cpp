@@ -42,6 +42,9 @@ CMakeConditionTest::CMakeConditionTest()
     m_vars.insert("UNFOUNDVAR", QStringList("UNFOUNDVAR-NOTFOUND"));
     m_vars.insert("BLEP2", QStringList("TRUE"));
     
+    m_vars.insert("FOO", QStringList("asdf"));
+    m_vars.insert("BAR", QStringList("asdf"));
+
     Macro m;
     m.name = "testmacro";
     m.isFunction=false;
@@ -91,6 +94,10 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "false+or" ) << QString("ZERO;OR;ONE").split(";") << true;
     QTest::newRow( "false+or+false" ) << QString("ZERO;OR;ZERO").split(";") << false;
     QTest::newRow( "strequal" ) << QString("HOLA;STREQUAL;HOLA").split(";") << true;
+    QTest::newRow( "strequal2" ) << QString("FOO;STREQUAL;asdf").split(";") << true;
+    QTest::newRow( "strequal3" ) << QString("BAR;STREQUAL;asdf").split(";") << true;
+    QTest::newRow( "strequal4" ) << QString("asdf;STREQUAL;FOO").split(";") << true;
+    QTest::newRow( "strequal5" ) << QString("FOO;STREQUAL;BAR").split(";") << true;
     QTest::newRow( "not+streq" ) << QString("NOT;HOLA;STREQUAL;HOLA").split(";") << false;
     QTest::newRow( "not+or" ) << QString("NOT;ZERO;OR;ZERO").split(";") << true;
     QTest::newRow( "matches" ) << QString("-lapr-1;MATCHES;^-l").split(";") << true;
