@@ -20,6 +20,7 @@
 
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/typealiastype.h>
+#include <language/duchain/types/typesystem.h>
 #include <language/duchain/types/referencetype.h>
 #include <language/duchain/types/pointertype.h>
 #include <language/duchain/ducontext.h>
