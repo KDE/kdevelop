@@ -112,8 +112,9 @@ KDevFileItem::KDevFileItem( const KUrl &url )
 {
     setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
     setUrl( url );
-    KFileItem fi = KFileItem( url, QString(), 0 );
-    m_fileIcon = fi.iconName();
+    if (!url.isEmpty()) {
+        m_fileIcon = KFileItem(url, QString(), 0).iconName();
+    }
     setIcon( KIcon( m_fileIcon ) );
 }
 
