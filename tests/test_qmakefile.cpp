@@ -324,7 +324,12 @@ void TestQMakeFile::qtIncludeDirs_data()
             << "uitools" << "help" << "assistant" << "qtestlib" << "testlib" << "qaxcontainer"
             << "qaxserver" << "dbus" << "declarative";
     foreach(const QString& module, modules) {
-        QTest::newRow(qPrintable(module)) << ("QT = " + module) << (QStringList() << module);
+        QStringList expected;
+        expected << module;
+        if (module != "core") {
+            expected << "core";
+        }
+        QTest::newRow(qPrintable(module)) << ("QT = " + module) << expected;
     }
     }
 }

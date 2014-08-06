@@ -194,7 +194,13 @@ QStringList QMakeProjectFile::includeDirectories() const
             list << m_qtIncludeDir;
 
         QDir incDir(m_qtIncludeDir);
-        foreach( const QString& module, variableValues("QT") )
+        auto modules = variableValues("QT");
+        if (!modules.isEmpty() && !modules.contains("core")) {
+            // TODO: proper dependency tracking of modules
+            // for now, at least include core if we include any other module
+            modules << "core";
+        }
+        foreach( const QString& module, modules )
         {
             QString pattern = module;
             const bool isPrivate = module.endsWith("-private");
