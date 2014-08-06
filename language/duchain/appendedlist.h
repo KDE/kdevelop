@@ -39,16 +39,21 @@ class AbstractItemRepository;
  * version to the other.
  *
  * @warning Always follow these rules:
- * You must call initializeAppendedLists(bool) on construction, also in any copy-constructor, but before calling copyFrom(..).
- * The parameter to that function should be whether the lists in the items should be dynamic, and thus most times "true".
- * You must call freeAppendedLists() on destruction, our you will be leaking memory(only when dynamic)
+ * \li You must call initializeAppendedLists(bool) on construction, also in any copy-constructor, but before calling copyFrom(..).
+ * \li The parameter to that function should be whether the lists in the items should be dynamic, and thus most times "true".
+ * \li You must call freeAppendedLists() on destruction, our you will be leaking memory(only when dynamic)
  *
- * For each embedded list, you must use macros to define a global hash that will be used to allocate the temporary lists, example fir identifier.cpp:
+ * For each embedded list, you must use macros to define a global hash that will be used to allocate the temporary lists.
+ * For example in @c identifier.cpp we have:
+ *
+ * @code
  * DEFINE_LIST_MEMBER_HASH(IdentifierPrivate, templateIdentifiers, uint);
+ * @endcode
  *
- * See identifier.cpp for an example how to use these classes. @todo Document this a bit more
+ * In general, see @c identifier.cpp for an example on how to use these macros.
+ *
+ * @todo Document this a bit more
  * */
-
 
 enum {
   DynamicAppendedListMask = 1 << 31
