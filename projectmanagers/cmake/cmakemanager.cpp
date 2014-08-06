@@ -23,6 +23,7 @@
 #include "cmakeedit.h"
 #include "cmakeutils.h"
 #include "cmakeprojectdata.h"
+#include "cmakeparsejob.h"
 #include <projectmanagers/custommake/makefileresolver/makefileresolver.h>
 
 #include <QDir>
@@ -725,13 +726,23 @@ ProjectFilterManager* CMakeManager::filterManager() const
     return m_filter;
 }
 
+static QList<QUrl> fromLocalPaths(const QStringList &urls)
+{
+    QList<QUrl> lst;
+    lst.reserve(urls.size());
+    foreach (const QString &str, urls) {
+        lst.append(QUrl::fromLocalFile(str));
+    }
+    return lst;
+}
+
 CMakeFile dataFromJson(const QVariantMap& entry)
 {
     MakeFileResolver resolver;
     PathResolutionResult result = resolver.processOutput(entry["command"].toString(), entry["directory"].toString());
 
     CMakeFile ret;
-    ret.includes = KDevelop::toPathList(QUrl::fromStringList(result.paths));
+    ret.includes = KDevelop::toPathList(fromLocalPaths(result.paths));
     return ret;
 }
 
