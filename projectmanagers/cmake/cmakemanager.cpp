@@ -31,7 +31,6 @@
 #include <QFileSystemWatcher>
 #include <QTimer>
 #include <qjsondocument.h>
-#include <qjson/parser.h>
 
 #include <KPluginFactory>
 #include <KPluginLoader>
