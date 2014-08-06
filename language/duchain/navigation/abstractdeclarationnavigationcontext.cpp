@@ -34,6 +34,7 @@
 #include "../types/pointertype.h"
 #include "../types/referencetype.h"
 #include "../types/typeutils.h"
+#include "../types/typesystem.h"
 #include "../persistentsymboltable.h"
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
