@@ -56,6 +56,8 @@ NodeJS& NodeJS::instance()
 
 void NodeJS::initialize(DeclarationBuilder* builder)
 {
+    QMutexLocker lock(&m_mutex);
+
     // Create "module", a structure that may contain "exports" if the module
     // refers to module.exports
     createObject(QLatin1String("module"), 1, builder);
@@ -122,6 +124,7 @@ DeclarationPointer NodeJS::moduleExports(const QString& moduleName, const Indexe
 
 QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
 {
+    QMutexLocker lock(&m_mutex);
     auto pair = qMakePair(moduleName, url);
 
     if (m_cachedModuleFileNames.contains(pair)) {

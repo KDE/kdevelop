@@ -26,6 +26,8 @@
 #include "../duchainexport.h"
 #include <language/duchain/duchainpointer.h>
 
+#include <QMutex>
+
 namespace QmlJS {
 
 /**
@@ -63,6 +65,7 @@ private:
 private:
     typedef QHash<QPair<QString, QString>, QString> CachedModuleFileNamesHash;
     CachedModuleFileNamesHash m_cachedModuleFileNames;
+    QMutex m_mutex;
 };
 
 }

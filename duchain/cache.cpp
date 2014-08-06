@@ -53,6 +53,7 @@ QmlJS::Cache& QmlJS::Cache::instance()
 
 QString QmlJS::Cache::modulePath(const QString& uri, const QString& version)
 {
+    QMutexLocker lock(&m_mutex);
     QString cacheKey = uri + version;
     QString path = m_modulePaths.value(cacheKey, QString());
 
@@ -87,6 +88,7 @@ QString QmlJS::Cache::modulePath(const QString& uri, const QString& version)
 
 QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
 {
+    QMutexLocker lock(&m_mutex);
     QStringList result;
     KStandardDirs d;
 
@@ -165,15 +167,36 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
 
 void QmlJS::Cache::addDependency(const KDevelop::IndexedString& file, const KDevelop::IndexedString& dependency)
 {
-    // Avoid cyclic dependencies
-    if (m_dependees[file].contains(dependency)) {
-        return;
-    }
+    QMutexLocker lock(&m_mutex);
 
-    m_dependees[dependency].insert(file);
+    m_dependees[dependency].append(file);
+    m_dependencies[file].append(dependency);
 }
 
 QList<KDevelop::IndexedString> QmlJS::Cache::filesThatDependOn(const KDevelop::IndexedString& file)
 {
-    return m_dependees[file].toList();
+    QMutexLocker lock(&m_mutex);
+
+    return m_dependees[file];
+}
+
+QList<KDevelop::IndexedString> QmlJS::Cache::dependencies(const KDevelop::IndexedString& file)
+{
+    QMutexLocker lock(&m_mutex);
+
+    return m_dependencies[file];
+}
+
+bool QmlJS::Cache::isUpToDate(const KDevelop::IndexedString& file)
+{
+    QMutexLocker lock(&m_mutex);
+
+    return m_isUpToDate.value(file, false);
+}
+
+void QmlJS::Cache::setUpToDate(const KDevelop::IndexedString& file, bool upToDate)
+{
+    QMutexLocker lock(&m_mutex);
+
+    m_isUpToDate[file] = upToDate;
 }

@@ -27,6 +27,7 @@
 #include <language/duchain/parsingenvironment.h>
 #include <interfaces/ilanguage.h>
 
+#include "duchain/cache.h"
 #include "duchain/declarationbuilder.h"
 #include "duchain/parsesession.h"
 #include "duchain/usebuilder.h"
@@ -46,6 +47,14 @@ void QmlJsParseJob::run()
     UrlParseLock urlLock(document());
     if (abortRequested() || !isUpdateRequired(ParseSession::languageString())) {
         return;
+    }
+
+    // Don't parse this file if one of its dependencies is not up to date
+    for (auto dependency : QmlJS::Cache::instance().dependencies(document())) {
+        if (!QmlJS::Cache::instance().isUpToDate(dependency)) {
+            QmlJS::Cache::instance().setUpToDate(document(), false);
+            return;
+        }
     }
 
     debug() << "parsing" << document().str();
@@ -106,7 +115,15 @@ void QmlJsParseJob::run()
     }
 
     setDuChain(context);
-    session.reparseImporters();
+
+    // If the file has become up to date, reparse its importers
+    bool dependenciesOk = session.allDependenciesSatisfied();
+
+    QmlJS::Cache::instance().setUpToDate(document(), dependenciesOk);
+
+    if (dependenciesOk) {
+        session.reparseImporters();
+    }
 
     {
         DUChainWriteLocker lock;

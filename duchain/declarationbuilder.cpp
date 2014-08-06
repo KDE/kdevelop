@@ -146,8 +146,11 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
             QualifiedIdentifier(name)
         ), true);
 
-        // Every class inherit from Object
-        QmlJS::importObjectContext(currentContext(), topContext());
+        if (name.last() != Identifier(QLatin1String("Object"))) {
+            // Every class inherit from Object
+            QmlJS::importObjectContext(currentContext(), topContext());
+        }
+
         closeContext();
     }
 
@@ -477,6 +480,13 @@ void DeclarationBuilder::declareFieldMember(const KDevelop::DeclarationPointer& 
 {
     if (QmlJS::isPrototypeIdentifier(member)) {
         // Don't declare "prototype", this is a special member
+        return;
+    }
+
+    if (!m_session->allDependenciesSatisfied()) {
+        // Don't declare anything automatically if dependencies are missing: the
+        // checks hereafter may pass now but fail later, thus causing disappearing
+        // declarations
         return;
     }
 

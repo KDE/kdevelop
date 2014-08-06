@@ -29,7 +29,8 @@
 #include <QHash>
 #include <QStringList>
 #include <QFileInfo>
-#include <QSet>
+#include <QList>
+#include <QMutex>
 
 namespace QmlJS
 {
@@ -77,6 +78,18 @@ public:
      */
     QList<KDevelop::IndexedString> filesThatDependOn(const KDevelop::IndexedString& file);
 
+    /**
+     * List of the dependencies of a file
+     */
+    QList<KDevelop::IndexedString> dependencies(const KDevelop::IndexedString& file);
+
+    /**
+     * Return whether a file is up to date (all its dependencies are up to date
+     * and the file has been freshly parsed)
+     */
+    bool isUpToDate(const KDevelop::IndexedString& file);
+    void setUpToDate(const KDevelop::IndexedString& file, bool upToDate);
+
 private:
     struct PluginDumpExecutable {
         QString executable;
@@ -87,9 +100,12 @@ private:
         {}
     };
 
+    QMutex m_mutex;
     QHash<QString, QString> m_modulePaths;
     QList<PluginDumpExecutable> m_pluginDumpExecutables;
-    QHash<KDevelop::IndexedString, QSet<KDevelop::IndexedString>> m_dependees;
+    QHash<KDevelop::IndexedString, QList<KDevelop::IndexedString>> m_dependees;
+    QHash<KDevelop::IndexedString, QList<KDevelop::IndexedString>> m_dependencies;
+    QHash<KDevelop::IndexedString, bool> m_isUpToDate;
 };
 
 }

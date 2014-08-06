@@ -76,13 +76,13 @@ var o = {};
 /**
  * "type" : { "toString" : "string" }
  */
-var result_of_tostring = o.toString();
+var result_of_tostring = /* */ o.toString();
 
 var o2 = new Date();
 /*
  * "type" : { "toString" : "string" }
  */
-var result_of_date_tostring = o2.toString();
+var result_of_date_tostring = /* */ o2.toString();
 
 var o3 = new RangeError();
 /**
