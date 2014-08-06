@@ -42,6 +42,7 @@ set( cmakemanager_SRCS
 #   testing/qttestdelegate.cpp
   cmakenavigationwidget.cpp
   cmakemanager.cpp
+  cmakeparsejob.cpp
 #   cmakecodecompletionmodel.cpp
 #   cmakecommitchangesjob.cpp
 #   cmakeimportjob.cpp
