@@ -40,6 +40,7 @@
 #include "../duchain/parsesession.h"
 #include "../duchain/cursorkindtraits.h"
 
+#include "../util/clangdebug.h"
 #include "../util/clangutils.h"
 #include "../util/clangtypes.h"
 
@@ -363,7 +364,7 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
 
             m_targetUnit = KUrl(ClangString(clang_getFileName(otherFile)).toString());
             if (m_targetUnit.isEmpty()) {
-                kDebug() << "Could not access file " << ClangString(clang_getFileName(otherFile));
+                kDebug() << "Could not access file " << clang_getFileName(otherFile);
                 return;
             }
         }
@@ -448,13 +449,13 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
     CXCursor cursor = getFunctionCursor(c, sourceSession.unit(), sourceSession.file());
     CXCursor otherCursor = getFunctionCursor(m_otherLoc, targetUnit, otherFile);
     if (clang_Cursor_isNull(cursor)) {
-        kDebug() << "Couldn't get source cursor " << ClangString(clang_getFileName(sourceSession.file())) << ":" << c;
+        kDebug() << "Couldn't get source cursor " << clang_getFileName(sourceSession.file()) << ":" << c;
         reset();
         return;
     }
 
     if (clang_Cursor_isNull(otherCursor)) {
-        kDebug() << "Couldn't get target cursor " << ClangString(clang_getFileName(otherFile)) << ":" << m_otherLoc;
+        kDebug() << "Couldn't get target cursor " << clang_getFileName(otherFile) << ":" << m_otherLoc;
         reset();
         return;
     }

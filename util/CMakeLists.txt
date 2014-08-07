@@ -4,6 +4,7 @@ include_directories(
 )
 
 add_library(kdevclangutil OBJECT
+    clangdebug.cpp
     clangutils.cpp
     clangtypes.cpp
 )

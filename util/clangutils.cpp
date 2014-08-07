@@ -21,6 +21,7 @@
 
 #include "clangutils.h"
 
+#include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
 #include "../duchain/cursorkindtraits.h"
 
@@ -38,7 +39,7 @@ using namespace KDevelop;
 CXCursor ClangUtils::getCXCursor(int line, int column, const CXTranslationUnit& unit, const CXFile& file)
 {
     if (!file) {
-        kDebug() << "getCXCursor couldn't find file: " << ClangString(clang_getFileName(file));
+        kDebug() << "getCXCursor couldn't find file: " << clang_getFileName(file);
         return clang_getNullCursor();
     }
 
@@ -46,7 +47,7 @@ CXCursor ClangUtils::getCXCursor(int line, int column, const CXTranslationUnit& 
 
     if (clang_equalLocations(clang_getNullLocation(), location)) {
         kDebug() << "getCXCursor given invalid position " << line << ", " << column
-                 << " for file " << ClangString(clang_getFileName(file));
+                 << " for file " << clang_getFileName(file);
         return clang_getNullCursor();
     }
 
