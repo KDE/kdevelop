@@ -25,9 +25,9 @@
 if (!ptr) \
     return JsonTestHelpers::INVALID_POINTER
 
-#define VERIFY_TYPE(type)\
-if (!value.canConvert<type>())\
-    return JsonTestHelpers::INVALID_JSON_TYPE
+#define VERIFY_TYPE(qvariantType)\
+if (!value.canConvert<qvariantType>())\
+    return JsonTestHelpers::INVALID_JSON_TYPE.arg(#qvariantType, QVariant::typeToName(value.type()))
 
 #define __AddTest(testName, objType)\
 bool testName##Added = KDevelop::TestSuite<objType>::get().addTest(#testName, &testName)
@@ -48,7 +48,7 @@ namespace JsonTestHelpers
 {
 
 const QString SUCCESS = QString();
-const QString INVALID_JSON_TYPE = QString("Incorrect JSON type provided for test.");
+const QString INVALID_JSON_TYPE = QString("Incorrect JSON type provided for test. Actual: %1, Expected: %2");
 const QString INVALID_POINTER = QString("Null pointer passed to test.");
 
 template <class Type>
