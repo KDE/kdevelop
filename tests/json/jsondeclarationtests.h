@@ -62,6 +62,7 @@
  *   range : string
  *   kind : string
  *   isDeprecated : bool
+ *   isDefinition : bool
  */
 
 namespace KDevelop
@@ -313,6 +314,14 @@ DeclarationTest(isDeprecated)
 {
   VERIFY_NOT_NULL(decl);
   return compareValues(decl->isDeprecated(), value, "Declaration's isDeprecated");
+}
+
+///JSON type: bool
+///@returns whether the declaration's isDefinition matches the given value
+DeclarationTest(isDefinition)
+{
+  VERIFY_NOT_NULL(decl);
+  return compareValues(decl->isDefinition(), value, "Declaration's isDefinition");
 }
 
 }
