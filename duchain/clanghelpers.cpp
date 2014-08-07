@@ -95,7 +95,6 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
             update = true;
         }
 
-        context->setFeatures(features);
         context->setProblems(problems);
 
         includedFiles.insert(file, context);
@@ -108,6 +107,8 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
 
             context->clearImportedParentContexts();
         }
+        context->setFeatures(features);
+
         foreach(const auto& import, imports.values(file)) {
             Q_ASSERT(includedFiles.contains(import.file));
             auto ctx = includedFiles.value(import.file);

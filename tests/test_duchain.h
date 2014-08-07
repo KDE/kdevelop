@@ -48,6 +48,7 @@ private slots:
     void testGlobalFunctionDeclaration();
     void testFunctionDefinitionVsDeclaration();
     void testEnsureNoDoubleVisit();
+    void testReparseWithAllDeclarationsContextsAndUses();
 
     void benchDUChainBuilder();
 };

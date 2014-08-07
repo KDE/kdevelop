@@ -531,4 +531,28 @@ void TestDUChain::benchDUChainBuilder()
     }
 }
 
+void TestDUChain::testReparseWithAllDeclarationsContextsAndUses()
+{
+    TestFile file("int foo() { return 0; } int main() { return foo(); }", "cpp");
+    file.parse(TopDUContext::VisibleDeclarationsAndContexts);
+
+    QVERIFY(file.waitForParsed(1000));
+
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+
+    QVERIFY(file.waitForParsed(500));
+
+    DUChainReadLocker lock;
+    QVERIFY(file.topContext());
+    QCOMPARE(file.topContext()->childContexts().size(), 2);
+    QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+
+    DeclarationPointer mainDecl;
+    mainDecl = file.topContext()->localDeclarations()[1];
+    DeclarationPointer foo;
+    foo = file.topContext()->localDeclarations().first();
+    QVERIFY(mainDecl->uses().isEmpty());
+    QCOMPARE(foo->uses().size(), 1);
+}
+
 #include "test_duchain.moc"
