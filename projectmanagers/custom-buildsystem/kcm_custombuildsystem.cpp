@@ -24,8 +24,6 @@
 
 #include "custombuildsystemconfigwidget.h"
 #include "kcfg_custombuildsystemconfig.h"
-#include <language/backgroundparser/parseprojectjob.h>
-#include <interfaces/iruncontroller.h>
 
 K_PLUGIN_FACTORY(CustomBuildSystemKCModuleFactory, registerPlugin<CustomBuildSystemKCModule>(); )
 K_EXPORT_PLUGIN(CustomBuildSystemKCModuleFactory("kcm_kdevcustombuildsystem", "kdevcustombuildsystem"))
@@ -62,10 +60,8 @@ void CustomBuildSystemKCModule::save()
     configWidget->saveTo( CustomBuildSystemSettings::self()->config(), project() );
     KCModule::save();
 
-    // Do this once all saving is done. This makes the widget itself usable with very little from KDevPlatform
     if ( KDevelop::IProjectController::parseAllProjectSources()) {
-        KJob* parseProjectJob = new KDevelop::ParseProjectJob(project());
-        KDevelop::ICore::self()->runController()->registerJob(parseProjectJob);
+        KDevelop::ICore::self()->projectController()->reparseProject(project());
     }
 }
 
