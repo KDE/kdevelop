@@ -51,7 +51,9 @@ QmlJS::Cache& QmlJS::Cache::instance()
     return *c;
 }
 
-QString QmlJS::Cache::modulePath(const QString& uri, const QString& version)
+QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
+                                 const QString& uri,
+                                 const QString& version)
 {
     QMutexLocker lock(&m_mutex);
     QString cacheKey = uri + version;
@@ -74,12 +76,24 @@ QString QmlJS::Cache::modulePath(const QString& uri, const QString& version)
 
     // Look for <uri> (with the dots replaced with slashes) in the standard KDE
     // QML imports dir.
+    QString fragment = QString(uri).replace(QLatin1Char('.'), QDir::separator());
     QStringList dirs = KGlobal::dirs()->findDirs("module",
-        QString("imports/%1").arg(QString(uri).replace(QLatin1Char('.'), QDir::separator()))
+        QString("imports/%1").arg(fragment)
     );
 
     if (dirs.count() != 0) {
-        path = dirs.first();
+        m_modulePaths.insert(cacheKey, dirs.first());
+        return dirs.first();
+    }
+
+    // Look into the custom include dirs of this file
+    for (KDevelop::Path dir : m_includeDirs[baseFile]) {
+        dir.addPath(fragment);
+
+        if (QFile::exists(dir.path())) {
+            path = dir.path();
+            break;
+        }
     }
 
     m_modulePaths.insert(cacheKey, path);
@@ -163,6 +177,13 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
     }
 
     return result;
+}
+
+void QmlJS::Cache::setFileCustomIncludes(const KDevelop::IndexedString& file, const KDevelop::Path::List& dirs)
+{
+    QMutexLocker lock(&m_mutex);
+
+    m_includeDirs[file] = dirs;
 }
 
 void QmlJS::Cache::addDependency(const KDevelop::IndexedString& file, const KDevelop::IndexedString& dependency)

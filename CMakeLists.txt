@@ -10,6 +10,7 @@ cmake_minimum_required(VERSION 2.8.9)
 
 find_package(KDE4 REQUIRED)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
+find_package(KDevelop REQUIRED)
 find_package(KDeclarative REQUIRED)
 
 
@@ -24,6 +25,7 @@ enable_testing()
 include_directories(
     ${KDE4_INCLUDES}
     ${KDEVPLATFORM_INCLUDE_DIR}
+    ${KDEVELOP_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/libs

@@ -25,6 +25,7 @@
 
 #include "duchainexport.h"
 #include <language/duchain/indexedstring.h>
+#include <util/path.h>
 
 #include <QHash>
 #include <QStringList>
@@ -58,7 +59,9 @@ public:
      * @param version If not null, the file being looked for is "uri_version.qml".
      *                If null, then the untouched uri is used for searching.
      */
-    QString modulePath(const QString& uri, const QString& version = QString());
+    QString modulePath(const KDevelop::IndexedString& baseFile,
+                       const QString& uri,
+                       const QString& version = QString());
 
     /**
      * Return the list of the paths of the given files.
@@ -67,6 +70,12 @@ public:
      * qmlplugindump dump.
      */
     QStringList getFileNames(const QFileInfoList& fileInfos);
+
+    /**
+     * Set the custom include directories list of a file
+     */
+    void setFileCustomIncludes(const KDevelop::IndexedString& file,
+                               const KDevelop::Path::List& dirs);
 
     /**
      * Add a dependency between two URLs
@@ -106,6 +115,7 @@ private:
     QHash<KDevelop::IndexedString, QList<KDevelop::IndexedString>> m_dependees;
     QHash<KDevelop::IndexedString, QList<KDevelop::IndexedString>> m_dependencies;
     QHash<KDevelop::IndexedString, bool> m_isUpToDate;
+    QHash<KDevelop::IndexedString, KDevelop::Path::List> m_includeDirs;
 };
 
 }

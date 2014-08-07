@@ -208,7 +208,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::importCompletion()
     // Use the cache to find the directory corresponding to the fragment
     // (org.kde is, for instance, /usr/lib64/kde4/imports/org/kde), and list
     // its subdirectories
-    dataDir = Cache::instance().modulePath(fragment);
+    dataDir = Cache::instance().modulePath(m_duContext->url(), fragment);
 
     if (!dataDir.isEmpty()) {
         dir.setPath(dataDir);

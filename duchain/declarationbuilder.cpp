@@ -80,7 +80,7 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
 
 void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
 {
-    QString fileName = QmlJS::Cache::instance().modulePath(QLatin1String("ecmascript_1.0.js"));
+    QString fileName = QmlJS::Cache::instance().modulePath(m_session->url(), QLatin1String("ecmascript_1.0.js"));
     ReferencedTopDUContext importedContext = m_session->contextOfFile(fileName);
 
     {
@@ -1121,7 +1121,7 @@ void DeclarationBuilder::importModule(QmlJS::AST::UiImport* node)
     QString version = m_session->symbolAt(node->versionToken);
 
     // Import the file corresponding to the URI
-    QString modulePath = QmlJS::Cache::instance().modulePath(uri, version);
+    QString modulePath = QmlJS::Cache::instance().modulePath(m_session->url(), uri, version);
 
     if (modulePath.endsWith(QLatin1String(".qml"))) {
         // Module file
