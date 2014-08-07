@@ -100,7 +100,7 @@ typedef constint* constintptr;
 int main()
 {
     //"type" : { "toString" : "TestEverything< int >", "isConst" : false },
-    //"identifiedTypeQid" : "TestEverything< int >"
+    //"identifiedTypeDeclaration" : { "qualifiedIdentifier" : "TestEverything< int >" }
     TestEverything<int> mytest;
     mytest.member;
     mytest.memberFunc();
