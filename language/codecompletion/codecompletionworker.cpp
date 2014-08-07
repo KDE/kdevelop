@@ -35,7 +35,7 @@
 #include "codecompletionitem.h"
 #include "codecompletionmodel.h"
 #include "codecompletionitemgrouper.h"
-#include <interfaces/foregroundlock.h>
+#include <util/foregroundlock.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;

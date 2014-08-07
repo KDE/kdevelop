@@ -4,6 +4,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9508 )
 
 set(kdevplatformutil_LIB_SRCS
     autoorientedsplitter.cpp
+    foregroundlock.cpp
     formattinghelpers.cpp
     richtextpushbutton.cpp
     kdevstringhandler.cpp
@@ -57,6 +58,7 @@ install( FILES kdev_format_source DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNE
 
 install( FILES
     autoorientedsplitter.h
+    foregroundlock.h
     formattinghelpers.h
     richtextpushbutton.h
     kdevstringhandler.h

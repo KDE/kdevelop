@@ -1,6 +1,6 @@
 /*
     Copyright 2010 David Nolden <david.nolden.kdevelop@art-master.de>
- 
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -68,12 +68,12 @@ public:
                 abs_time.tv_nsec -= 1000000000;
                 abs_time.tv_sec += 1;
             }
-            
+
             int result = pthread_mutex_timedlock(&m_mutex, &abs_time);
             return result == 0;
         }
     }
-    
+
 private:
     pthread_mutex_t m_mutex;
 };
@@ -148,7 +148,7 @@ ForegroundLock::ForegroundLock(bool lock) : m_locked(false)
 void KDevelop::ForegroundLock::relock()
 {
     Q_ASSERT(!m_locked);
-    
+
     if(!QApplication::instance() || // Initialization isn't complete yet
         QThread::currentThread() == QApplication::instance()->thread() || // We're the main thread (deadlock might happen if we'd enter the trylock loop)
         holderThread == QThread::currentThread())  // We already have the foreground lock (deadlock might happen if we'd enter the trylock loop)
@@ -156,12 +156,12 @@ void KDevelop::ForegroundLock::relock()
         lockForegroundMutexInternal();
     }else{
         QMutexLocker lock(&tryLockMutex);
-        
+
         while(!tryLockForegroundMutexInternal(10))
         {
             // In case an additional event-loop was started from within the foreground, we send
             // events to the foreground to temporarily release the lock.
-            
+
             class ForegroundReleaser : public DoInForeground {
                 public:
                 virtual void doInternal() {
@@ -177,17 +177,17 @@ void KDevelop::ForegroundLock::relock()
                     QMutexLocker lock(&finishMutex);
                 }
             };
-            
+
             static ForegroundReleaser releaser;
-            
+
             QMutexLocker lockWait(&waitMutex);
             QMutexLocker lockFinish(&finishMutex);
-            
+
             QMetaObject::invokeMethod(&releaser, "doInternalSlot", Qt::QueuedConnection);
             // We limit the waiting time here, because sometimes it may happen that the foreground-lock is released,
             // and the foreground is waiting without an event-loop running. (For example through TemporarilyReleaseForegroundLock)
             condition.wait(&waitMutex, 30);
-            
+
             if(tryLockForegroundMutexInternal())
             {
                 //success
@@ -228,9 +228,9 @@ void KDevelop::ForegroundLock::unlock()
 TemporarilyReleaseForegroundLock::TemporarilyReleaseForegroundLock()
 {
     Q_ASSERT(holderThread == QThread::currentThread());
-    
+
     m_recursion = 0;
-    
+
     while(holderThread == QThread::currentThread())
     {
         unlockForegroundMutexInternal();
@@ -293,3 +293,5 @@ static struct StaticLock {
         lockForegroundMutexInternal();
     }
 } staticLock;
+
+#include "foregroundlock.moc"

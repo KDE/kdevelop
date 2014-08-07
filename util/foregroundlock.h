@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_FOREGROUNDLOCK_H
 #define KDEVPLATFORM_FOREGROUNDLOCK_H
 
-#include "interfacesexport.h"
+#include "utilexport.h"
 #include <QObject>
 #include <QMutex>
 #include <QWaitCondition>
@@ -38,14 +38,14 @@ namespace KDevelop {
  * @warning There is one simple rule you must always follow to prevent deadlocks:
  *                  @em Never lock anything before locking the foreground mutex!!
  *                   That also means that you must not take this lock in contexts where
- *                   you don't know what other mutexes might be locked. 
+ *                   you don't know what other mutexes might be locked.
  *
  * @warning Objects that have QObject as base always get the thread they were created in assigned (see thread affinity, QObject::moveToThread),
  *                  which seriously affects the objects functionality regarding signals/slots.
  *                 The foreground lock does not change the thread affinity, so holding the foreground lock does not fully equal being in the foreground.
  *                 It may generally be unsafe to call foreground functions that create QObjects from within the background.
  */
-class KDEVPLATFORMINTERFACES_EXPORT ForegroundLock
+class KDEVPLATFORMUTIL_EXPORT ForegroundLock
 {
     public:
         ForegroundLock(bool lock = true);
@@ -53,12 +53,12 @@ class KDEVPLATFORMINTERFACES_EXPORT ForegroundLock
         void unlock();
         void relock();
         bool tryLock();
-        
+
         /// Returns whether the current thread holds the foreground lock
         static bool isLockedForThread();
-        
+
         bool isLocked() const;
-        
+
     private:
         ForegroundLock(const ForegroundLock& rhs);
         ForegroundLock& operator=(const ForegroundLock& rhs);
@@ -69,11 +69,11 @@ class KDEVPLATFORMINTERFACES_EXPORT ForegroundLock
  * Use this object if you want to temporarily release the foreground lock,
  * for example when sleeping in the foreground thread, or when waiting in the foreground
  * thread for a background thread which should get the chance to lock the foreground.
- * 
+ *
  * While this object is alive, you _must not_ access any non-threadsafe resources
  * that belong to the foreground, and you must not start an event-loop.
  */
-class KDEVPLATFORMINTERFACES_EXPORT TemporarilyReleaseForegroundLock {
+class KDEVPLATFORMUTIL_EXPORT TemporarilyReleaseForegroundLock {
 public:
     TemporarilyReleaseForegroundLock();
     ~TemporarilyReleaseForegroundLock();
@@ -85,18 +85,18 @@ private:
 
 #define VERIFY_FOREGROUND_LOCKED Q_ASSERT(KDevelop::ForegroundLock::isLockedForThread());
 
-class KDEVPLATFORMINTERFACES_EXPORT DoInForeground : public QObject
+class KDEVPLATFORMUTIL_EXPORT DoInForeground : public QObject
 {
 Q_OBJECT
 public:
     DoInForeground() ;
     virtual ~DoInForeground() ;
-    
+
     void doIt() ;
 
 private Q_SLOTS:
     void doInternalSlot();
-    
+
 private:
     virtual void doInternal() = 0;
     QMutex m_mutex;

@@ -28,7 +28,7 @@
 #include "topducontext.h"
 #include "duchainregister.h"
 #include <editor/simplerange.h>
-#include <interfaces/foregroundlock.h>
+#include <util/foregroundlock.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <backgroundparser/backgroundparser.h>

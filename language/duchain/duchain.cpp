@@ -39,7 +39,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <interfaces/foregroundlock.h>
 #include <interfaces/isession.h>
 
 #include "../interfaces/ilanguagesupport.h"

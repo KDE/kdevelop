@@ -39,7 +39,7 @@
 #include "duchain/duchain.h"
 #include "duchain/parsingenvironment.h"
 
-#include <interfaces/foregroundlock.h>
+#include <util/foregroundlock.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <codegen/coderepresentation.h>

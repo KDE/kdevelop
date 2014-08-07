@@ -19,11 +19,11 @@
 */
 
 #include "persistentmovingrange.h"
-#include <interfaces/foregroundlock.h>
 #include "simplerange.h"
 #include "persistentmovingrangeprivate.h"
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <util/foregroundlock.h>
 
 KDevelop::PersistentMovingRange::PersistentMovingRange(const SimpleRange& range, const IndexedString& document, bool shouldExpand)
 : m_p(new PersistentMovingRangePrivate)
