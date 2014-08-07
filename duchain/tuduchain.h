@@ -71,8 +71,8 @@ private:
 
     KDevelop::Identifier makeId(CXCursor cursor) const;
     QByteArray makeComment(CXComment comment) const;
-    AbstractType *makeType(CXType type) const;
-    AbstractType::Ptr makeAbsType(CXType type) const { return AbstractType::Ptr(makeType(type)); }
+    AbstractType *makeType(CXType type, CXCursor parent);
+    AbstractType::Ptr makeAbsType(CXType type, CXCursor parent) { return AbstractType::Ptr(makeType(type, parent)); }
     AbstractType* createDelayedType(CXType type) const;
 
 //BEGIN dispatch*
@@ -147,9 +147,11 @@ private:
     }
 
     template<CXTypeKind TK>
-    AbstractType *dispatchType(CXType type)  const
+    AbstractType *dispatchType(CXType type, CXCursor cursor)
     {
-        auto kdevType = createType<TK>(type);
+        IF_DEBUG(kDebug() << "TK:" << type.kind;)
+
+        auto kdevType = createType<TK>(type, cursor);
         setTypeModifiers<TK>(type, kdevType);
         return kdevType;
     }
@@ -283,7 +285,7 @@ private:
     }
 
     template<CXTypeKind TK, EnableIf<CursorKindTraits::integralType(TK) != -1> = dummy>
-    AbstractType *createType(CXType) const
+    AbstractType *createType(CXType, CXCursor)
     {
         // TODO: would be nice to instantiate a ConstantIntegralType here and set a value if possible
         // but unfortunately libclang doesn't offer API to that
@@ -292,52 +294,53 @@ private:
     }
 
     template<CXTypeKind TK, EnableIf<CursorKindTraits::isPointerType(TK)> = dummy>
-    AbstractType *createType(CXType type) const
+    AbstractType *createType(CXType type, CXCursor parent)
     {
         auto ptr = new PointerType;
-        ptr->setBaseType(makeAbsType(clang_getPointeeType(type)));
+        ptr->setBaseType(makeAbsType(clang_getPointeeType(type), parent));
         return ptr;
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_ConstantArray || TK == CXType_IncompleteArray || TK == CXType_VariableArray> = dummy>
-    AbstractType *createType(CXType type) const
+    AbstractType *createType(CXType type, CXCursor parent)
     {
         auto arr = new ArrayType;
         arr->setDimension((TK == CXType_IncompleteArray || TK == CXType_VariableArray) ? 0 : clang_getArraySize(type));
-        arr->setElementType(makeAbsType(clang_getArrayElementType(type)));
+        arr->setElementType(makeAbsType(clang_getArrayElementType(type), parent));
         return arr;
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_RValueReference || TK == CXType_LValueReference> = dummy>
-    AbstractType *createType(CXType type) const
+    AbstractType *createType(CXType type, CXCursor parent)
     {
         auto ref = new ReferenceType;
         ref->setIsRValue(type.kind == CXType_RValueReference);
-        ref->setBaseType(makeAbsType(clang_getPointeeType(type)));
+        ref->setBaseType(makeAbsType(clang_getPointeeType(type), parent));
         return ref;
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_FunctionProto> = dummy>
-    AbstractType *createType(CXType type) const
+    AbstractType *createType(CXType type, CXCursor parent)
     {
         auto func = new FunctionType;
-        func->setReturnType(makeAbsType(clang_getResultType(type)));
+        func->setReturnType(makeAbsType(clang_getResultType(type), parent));
         const int numArgs = clang_getNumArgTypes(type);
         for (int i = 0; i < numArgs; ++i) {
-            func->addArgument(makeAbsType(clang_getArgType(type, i)));
+            func->addArgument(makeAbsType(clang_getArgType(type, i), parent));
         }
         /// TODO: variadic functions
         return func;
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_Record> = dummy>
-    AbstractType *createType(CXType type) const
+    AbstractType *createType(CXType type, CXCursor parent)
     {
-        DeclarationPointer decl = ClangHelpers::findDeclaration(clang_getTypeDeclaration(type), m_includes);
+        DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(type));
         DUChainReadLocker lock;
+
         if (!decl) {
             // probably a forward-declared type
-            return createDelayedType(type);
+            decl = ClangHelpers::findForwardDeclaration(type, m_parentContext->context, parent);
         }
 
         auto t = new StructureType;
@@ -346,7 +349,7 @@ private:
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_Enum> = dummy>
-    AbstractType *createType(CXType type) const
+    AbstractType *createType(CXType type, CXCursor)
     {
         auto t = new EnumerationType;
         setIdTypeDecl(clang_getTypeDeclaration(type), t);
@@ -354,17 +357,17 @@ private:
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_Typedef> = dummy>
-    AbstractType *createType(CXType type) const
+    AbstractType *createType(CXType type, CXCursor parent)
     {
         auto t = new TypeAliasType;
         CXCursor location = clang_getTypeDeclaration(type);
-        t->setType(makeAbsType(clang_getTypedefDeclUnderlyingType(location)));
+        t->setType(makeAbsType(clang_getTypedefDeclUnderlyingType(location), parent));
         setIdTypeDecl(location, t);
         return t;
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_Int128> = dummy>
-    AbstractType *createType(CXType) const
+    AbstractType *createType(CXType, CXCursor)
     {
         auto t = new DelayedType;
         static const IndexedTypeIdentifier id("__int128");
@@ -373,7 +376,7 @@ private:
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_UInt128> = dummy>
-    AbstractType *createType(CXType) const
+    AbstractType *createType(CXType, CXCursor)
     {
         auto t = new DelayedType;
         static const IndexedTypeIdentifier id("unsigned __int128");
@@ -382,19 +385,20 @@ private:
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_Vector || TK == CXType_Unexposed> = dummy>
-    AbstractType *createType(CXType type) const
+    AbstractType *createType(CXType type, CXCursor parent)
     {
+        ClangHelpers::findForwardDeclaration(type, m_parentContext->context, parent);
         return createDelayedType(type);
     }
 
     template<CXCursorKind CK, EnableIf<CursorKindTraits::isIdentifiedType(CK) && !CursorKindTraits::isAliasType(CK) && CK != CXCursor_EnumConstantDecl> = dummy>
-    typename IdType<CK>::Type *createType(CXCursor) const
+    typename IdType<CK>::Type *createType(CXCursor)
     {
         return new typename IdType<CK>::Type;
     }
 
     template<CXCursorKind CK, EnableIf<CK == CXCursor_EnumConstantDecl> = dummy>
-    EnumeratorType *createType(CXCursor cursor) const
+    EnumeratorType *createType(CXCursor cursor)
     {
         auto type = new EnumeratorType;
         type->setValue<quint64>(clang_getEnumConstantDeclUnsignedValue(cursor));
@@ -402,18 +406,18 @@ private:
     }
 
     template<CXCursorKind CK, EnableIf<CursorKindTraits::isAliasType(CK)> = dummy>
-    TypeAliasType *createType(CXCursor cursor) const
+    TypeAliasType *createType(CXCursor cursor)
     {
         auto type = new TypeAliasType;
-        type->setType(makeAbsType(clang_getTypedefDeclUnderlyingType(cursor)));
+        type->setType(makeAbsType(clang_getTypedefDeclUnderlyingType(cursor), cursor));
         return type;
     }
 
     template<CXCursorKind CK, EnableIf<!CursorKindTraits::isIdentifiedType(CK)> = dummy>
-    AbstractType *createType(CXCursor cursor) const
+    AbstractType *createType(CXCursor cursor)
     {
         auto clangType = clang_getCursorType(cursor);
-        return makeType(clangType);
+        return makeType(clangType, cursor);
     }
 //END create*
 
@@ -469,6 +473,9 @@ void setDeclData(CXCursor cursor, ClassDeclaration* decl) const
         decl->setClassType(ClassDeclarationData::Union);
     if (CK == CXCursor_StructDecl)
         decl->setClassType(ClassDeclarationData::Struct);
+    if (clang_isCursorDefinition(cursor)) {
+        decl->setDeclarationIsDefinition(true);
+    }
 }
 
 template<CXCursorKind CK>

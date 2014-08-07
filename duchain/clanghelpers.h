@@ -45,6 +45,14 @@ KDevelop::DeclarationPointer findDeclaration(CXCursor cursor, const IncludeFileC
 KDevelop::DeclarationPointer findDeclaration(CXType type, const IncludeFileContexts& includes);
 
 /**
+ * Try to look up the first reachable forward declaration for type @p type
+ *
+ * @param context The context where this search is happening
+ * @param cursor The location from which we're searching
+ */
+KDevelop::DeclarationPointer findForwardDeclaration(CXType type, KDevelop::DUContext* context, CXCursor cursor);
+
+/**
  * Wrapper for @ref clang_Cursor_getSpellingNameRange which sometimes reports invalid ranges
  */
 KDevelop::RangeInRevision cursorSpellingNameRange(CXCursor cursor, const KDevelop::Identifier& id);

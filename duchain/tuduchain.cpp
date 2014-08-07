@@ -204,7 +204,12 @@ TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContext
 
             auto used = findDeclaration(referenced);
             if (!used) {
-                continue;
+                DUChainReadLocker lock;
+                DeclarationPointer decl = ClangHelpers::findForwardDeclaration(clang_getCursorType(referenced), contextUses.first, referenced);
+                used = decl;
+                if (!used) {
+                    continue;
+                }
             }
 
             auto useRange = ClangRange(clang_getCursorReferenceNameRange(cursor, CXNameRange_WantSinglePiece, 0)).toRangeInRevision();
@@ -229,10 +234,10 @@ DeclarationPointer TUDUChain::findDeclaration(CXCursor cursor)
 
     // fallback, and cache result
     auto decl = ClangHelpers::findDeclaration(cursor, m_includes);
+
     m_cursorToDeclarationCache.insert(cursorHash, decl);
     return decl;
 }
-
 
 CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXClientData data)
 {
@@ -347,9 +352,9 @@ QByteArray TUDUChain::makeComment(CXComment comment) const
     return {ClangString(clang_FullComment_getAsHTML(comment))};
 }
 
-AbstractType *TUDUChain::makeType(CXType type) const
+AbstractType *TUDUChain::makeType(CXType type, CXCursor parent)
 {
-    #define UseKind(TypeKind) case TypeKind: return dispatchType<TypeKind>(type)
+    #define UseKind(TypeKind) case TypeKind: return dispatchType<TypeKind>(type, parent)
     switch (type.kind) {
     UseKind(CXType_Void);
     UseKind(CXType_Bool);

@@ -1,16 +1,26 @@
-class Base
+struct Base
 {
-    /// "type" : { "toString" : "Base::Private" }
-    class Private;
-    /// "toString" : "Base::Private* d"
-    Private *d;
+    /// "type" : { "toString" : "Base::Class" },
+    /// "useCount" : 1
+    class Class;
+    /// "identifiedTypeDeclaration" : { "isDefinition" : true }
+    Class *d1;
 
-    /// "type" : { "toString" : "Base::Private" }
-    struct Private;
-    /// "toString" : "Base::Private* d"
-    Private *d;
+    /// "type" : { "toString" : "Base::Struct" },
+    /// "useCount" : 1
+    struct Struct;
+    /// "identifiedTypeDeclaration" : { "isDefinition" : true }
+    Struct *d2;
 };
 
-class Base::Private {};
+class Base::Class {};
 
-struct Base::Private {};
+struct Base::Struct {};
+
+/// "type" : { "toString" : "Foo" },
+/// "useCount" : 1
+class Foo;
+/// "identifiedTypeDeclaration" : { "isDefinition" : true }
+Foo* f;
+
+class Foo {};

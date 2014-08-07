@@ -157,6 +157,23 @@ DeclarationPointer ClangHelpers::findDeclaration(CXType type, const IncludeFileC
     return findDeclaration(cursor, includes);
 }
 
+DeclarationPointer ClangHelpers::findForwardDeclaration(CXType type, DUContext* context, CXCursor cursor)
+{
+    auto qualifiedIdentifier = QualifiedIdentifier(QString::fromUtf8(ClangString(clang_getTypeSpelling(type))));
+
+    DUChainReadLocker lock;
+    auto decls = context->findDeclarations(qualifiedIdentifier,
+        CursorInRevision(ClangLocation(clang_getCursorLocation(cursor)))
+    );
+
+    foreach (auto decl, decls) {
+        if (decl->isForwardDeclaration()) {
+            return DeclarationPointer(decl);
+        }
+    }
+    return {};
+}
+
 RangeInRevision ClangHelpers::cursorSpellingNameRange(CXCursor cursor, const Identifier& id)
 {
     auto range = ClangRange(clang_Cursor_getSpellingNameRange(cursor, 0, 0)).toRangeInRevision();
