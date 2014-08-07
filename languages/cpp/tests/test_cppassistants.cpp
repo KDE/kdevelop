@@ -24,7 +24,7 @@
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
-#include <interfaces/foregroundlock.h>
+#include <util/foregroundlock.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iplugincontroller.h>

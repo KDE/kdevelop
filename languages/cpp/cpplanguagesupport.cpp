@@ -71,6 +71,7 @@
 #include <language/codegen/coderepresentation.h>
 
 #include <interfaces/contextmenuextension.h>
+#include <util/foregroundlock.h>
 
 #include "preprocessjob.h"
 #include "rpp/preprocessor.h"
@@ -84,7 +85,6 @@
 #include "environmentmanager.h"
 #include "cppduchain/navigation/navigationwidget.h"
 #include "cppduchain/cppduchain.h"
-#include <interfaces/foregroundlock.h>
 //#include "codegen/makeimplementationprivate.h"
 #include "codegen/adaptsignatureassistant.h"
 #include "codegen/unresolvedincludeassistant.h"

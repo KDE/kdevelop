@@ -45,7 +45,7 @@
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/types/structuretype.h>
 #include <interfaces/iassistant.h>
-#include <interfaces/foregroundlock.h>
+#include <util/foregroundlock.h>
 #include <interfaces/isourceformattercontroller.h>
 
 #include "codegen/simplerefactoring.h"
