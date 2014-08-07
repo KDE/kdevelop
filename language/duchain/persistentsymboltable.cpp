@@ -21,6 +21,7 @@
 #include <QHash>
 #include <QVector>
 
+#include "declaration.h"
 #include "declarationid.h"
 #include "appendedlist.h"
 #include "repositories/itemrepository.h"
