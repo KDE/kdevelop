@@ -39,6 +39,7 @@ struct TestFile::TestFilePrivate
 {
     TestFilePrivate()
     : ready(false)
+    , keepDUChainData(false)
     {
     }
 
@@ -84,6 +85,7 @@ struct TestFile::TestFilePrivate
     IndexedString url;
     TestProject* project;
     QScopedPointer<ProjectFileItem> fileItem;
+    bool keepDUChainData;
 };
 
 TestFile::TestFile(const QString& contents, const QString& fileExtension,
@@ -112,7 +114,7 @@ TestFile::TestFile(const QString& contents, const QString& fileExtension, const 
 
 TestFile::~TestFile()
 {
-    if (d->topContext) {
+    if (d->topContext && !d->keepDUChainData) {
         DUChainWriteLocker lock;
         DUChain::self()->removeDocumentChain(d->topContext.data());
     }
@@ -174,6 +176,16 @@ QString TestFile::fileContents() const
     Q_ASSERT(file.isOpen());
     Q_ASSERT(file.isReadable());
     return QString::fromUtf8(file.readAll());
+}
+
+void TestFile::setKeepDUChainData(bool keep)
+{
+    d->keepDUChainData = keep;
+}
+
+bool TestFile::keepDUChainData()
+{
+    return d->keepDUChainData;
 }
 
 #include "testfile.moc"
