@@ -1,5 +1,8 @@
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9508 )
 
+find_package(Threads)
+find_library(RT_LIBRARY rt)
+
 ########### next target ###############
 
 set(kdevplatformutil_LIB_SRCS
@@ -47,6 +50,15 @@ target_link_libraries(kdevplatformutil LINK_PRIVATE
     ${KDE4_KCMUTILS_LIBRARY}
     kdevplatforminterfaces
 )
+
+if( RT_LIBRARY )
+    target_link_libraries( kdevplatformutil LINK_PRIVATE ${RT_LIBRARY} )
+endif( RT_LIBRARY )
+
+if( Threads_FOUND )
+    target_link_libraries( kdevplatformutil LINK_PRIVATE ${CMAKE_THREAD_LIBS_INIT} )
+endif( Threads_FOUND )
+
 set_target_properties(kdevplatformutil PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformutil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
