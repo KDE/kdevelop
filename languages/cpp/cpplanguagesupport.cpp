@@ -20,14 +20,10 @@
 * Free Software Foundation, Inc.,
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
-#include "cpplanguagesupport.h"
-#include <config.h>
 
-#include <QDir>
-#include <QDirIterator>
-#include <QFileInfo>
+#include "cpplanguagesupport.h"
+
 #include <QSet>
-#include <QApplication>
 #include <QAction>
 #include <QTimer>
 #include <QReadWriteLock>
@@ -36,18 +32,14 @@
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
-#include <kstandarddirs.h>
 #include <kpluginfactory.h>
 #include <kaboutdata.h>
-#include <kpluginloader.h>
-#include <kio/netaccess.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <KDesktopFile>
 #include <language/codecompletion/codecompletion.h>
 
 #include <interfaces/icore.h>
-#include <language/duchain/problem.h>
 #include <interfaces/iproject.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
@@ -68,7 +60,6 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/functiondefinition.h>
-#include <language/codegen/coderepresentation.h>
 
 #include <interfaces/contextmenuextension.h>
 #include <util/foregroundlock.h>
@@ -80,8 +71,6 @@
 #include "cpphighlighting.h"
 #include "cppparsejob.h"
 #include "codecompletion/model.h"
-#include "cppeditorintegrator.h"
-#include "usebuilder.h"
 #include "environmentmanager.h"
 #include "cppduchain/navigation/navigationwidget.h"
 #include "cppduchain/cppduchain.h"
@@ -89,7 +78,6 @@
 #include "codegen/adaptsignatureassistant.h"
 #include "codegen/unresolvedincludeassistant.h"
 
-#include "setuphelpers.h"
 #include "quickopen.h"
 #include "cppdebughelper.h"
 #include "codegen/simplerefactoring.h"
