@@ -483,6 +483,11 @@ bool ParseJob::isUpdateRequired(const IndexedString& languageString)
     return !abortRequested();
 }
 
+const ParsingEnvironment* ParseJob::environment() const
+{
+    return nullptr;
+}
+
 void ParseJob::highlightDUChain()
 {
     ENSURE_CHAIN_NOT_LOCKED
@@ -500,12 +505,12 @@ void ParseJob::highlightDUChain()
 
 ControlFlowGraph* ParseJob::controlFlowGraph()
 {
-    return 0;
+    return nullptr;
 }
 
 DataAccessRepository* ParseJob::dataAccessInformation()
 {
-    return 0;
+    return nullptr;
 }
 
 bool ParseJob::hasTracker() const
