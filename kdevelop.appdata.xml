@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>kdevelop.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>KDevelop</name>
+  <summary>It is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.</summary>
+  <description>
+  <p>Free and Open Source Integrated Development Environment for your different software projects.</p>
+  </description>
+  <url type="homepage">http://kdevelop.org</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kdevelop</url>
+  <url type="help">http://docs.kde.org/stable/en/kdeedu/kdevelop/index.html</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://kde.org/images/screenshots/kdevelop.png</image>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>kdevelop</binary>
+  </provides>
+</component>
