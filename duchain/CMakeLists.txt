@@ -3,6 +3,8 @@ kde4_add_library(kdevclangduchain SHARED
     clangdiagnosticevaluator.cpp
     clangducontext.cpp
     clangindex.cpp
+    clangparsingenvironmentfile.cpp
+    clangparsingenvironment.cpp
     clangproblem.cpp
     debugvisitor.cpp
     duchainutils.cpp
