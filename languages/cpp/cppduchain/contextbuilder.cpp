@@ -561,6 +561,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
         
         QualifiedIdentifier newFunctionName(className);
         newFunctionName.push(functionName.last());
+        newFunctionName.setExplicitlyGlobal(false);
         if(newFunctionName.count() > currentScope.count())
           functionName = newFunctionName.mid(currentScope.count());
       }
