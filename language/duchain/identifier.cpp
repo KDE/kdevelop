@@ -253,14 +253,17 @@ public:
 
   uint hash() const
   {
-    if( m_hash == 0 )
-    {
-      uint mhash = 0;
-      FOREACH_FUNCTION_STATIC( const IndexedIdentifier& identifier, identifiers )
-        mhash = 11*mhash + Identifier(identifier).hash();
+    if( m_hash == 0 ) {
+      KDevHash hash;
 
-      if(mhash != m_hash)
-        m_hash = mhash;//The local class may be in read-only memory, so only  change m_hash if it's actually a change
+      quint32 bitfields = m_explicitlyGlobal
+        | (m_isExpression << 1);
+      hash << bitfields << identifiersSize();
+      FOREACH_FUNCTION_STATIC( const IndexedIdentifier& identifier, identifiers ) {
+        hash << identifier.getIndex();
+      }
+
+      m_hash = hash;
     }
     return m_hash;
   }
