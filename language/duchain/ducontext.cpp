@@ -1512,12 +1512,6 @@ QWidget* DUContext::createNavigationWidget(Declaration* decl, TopDUContext* topC
   }
 }
 
-void DUContext::squeeze()
-{
-  FOREACH_FUNCTION(const LocalIndexedDUContext& child, d_func()->m_childContexts)
-    child.data(topContext())->squeeze();
-}
-
 QList<RangeInRevision> allUses(DUContext* context, int declarationIndex, bool noEmptyUses)
 {
   QList<RangeInRevision> ret;
