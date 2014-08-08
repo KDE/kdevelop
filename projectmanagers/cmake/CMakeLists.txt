@@ -11,7 +11,7 @@ add_subdirectory(icons)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9042 -DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
 set( cmakecommon_SRCS
-#   parser/cmListFileLexer.cpp
+  parser/cmListFileLexer.cpp
 #   parser/astfactory.cpp
 #   parser/cmakelistsparser.cpp
 #   parser/cmakeast.cpp
@@ -20,7 +20,7 @@ set( cmakecommon_SRCS
 #   parser/variablemap.cpp
 #   parser/cmakedebugvisitor.cpp
   parser/cmakecachereader.cpp
-#   parser/cmakeparserutils.cpp
+  parser/cmakelistsparser.cpp
 #   parser/cmakeduchaintypes.cpp
 #   parser/generationexpressionsolver.cpp
   settings/cmakecachemodel.cpp
@@ -42,7 +42,9 @@ set( cmakemanager_SRCS
 #   testing/qttestdelegate.cpp
   cmakenavigationwidget.cpp
   cmakemanager.cpp
-  cmakeparsejob.cpp
+  duchain/cmakeparsejob.cpp
+  duchain/declarationbuilder.cpp
+  duchain/contextbuilder.cpp
 #   cmakecodecompletionmodel.cpp
 #   cmakecommitchangesjob.cpp
 #   cmakeimportjob.cpp

@@ -135,6 +135,8 @@ public:
 
     KDevelop::ProjectFilterManager* filterManager() const;
 
+    static KDevelop::IndexedString languageName();
+
 signals:
     void folderRenamed(const KDevelop::Path& oldFolder, KDevelop::ProjectFolderItem* newFolder);
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);

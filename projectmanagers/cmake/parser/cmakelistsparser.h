@@ -28,8 +28,6 @@
 #include <QStringList>
 #include <QString>
 
-#include <KUrl>
-
 // #include "cmakemodelitems.h"
 #include "cmListFileLexer.h"
 #include <cmakeexport.h>
@@ -124,17 +122,9 @@ Q_DECLARE_METATYPE( CMakeFunctionDesc )
 
 typedef QList<CMakeFunctionDesc> CMakeFileContent;
 
-class KDEVCMAKECOMMON_EXPORT CMakeListsParser : public QObject
+namespace CMakeListsParser
 {
-public:
-    CMakeListsParser(QObject *parent = 0) : QObject(parent) {}
-    ~CMakeListsParser() {}
-    
-    static CMakeFileContent readCMakeFile(const QString& fileName);
-    
-private:
-    static bool readCMakeFunction( cmListFileLexer* lexer, CMakeFunctionDesc& func);
-
-};
+    KDEVCMAKECOMMON_EXPORT CMakeFileContent readCMakeFile(const QString& fileName);
+}
 
 #endif

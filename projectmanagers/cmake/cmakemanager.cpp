@@ -23,7 +23,7 @@
 #include "cmakeedit.h"
 #include "cmakeutils.h"
 #include "cmakeprojectdata.h"
-#include "cmakeparsejob.h"
+#include "duchain/cmakeparsejob.h"
 #include <projectmanagers/custommake/makefileresolver/makefileresolver.h>
 
 #include <QDir>
@@ -254,7 +254,13 @@ QList< KDevelop::ProjectTargetItem * > CMakeManager::targets(KDevelop::ProjectFo
 
 QString CMakeManager::name() const
 {
-    return "CMake";
+    return languageName().str();
+}
+
+IndexedString CMakeManager::languageName()
+{
+    static IndexedString name("CMake");
+    return name;
 }
 
 KDevelop::ParseJob * CMakeManager::createParseJob(const IndexedString &url)
