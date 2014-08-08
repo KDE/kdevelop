@@ -36,6 +36,7 @@ QmlJS::Cache::Cache()
     // a binary QML file.
     m_pluginDumpExecutables
         << PluginDumpExecutable("qmlplugindump", "1.0")
+        << PluginDumpExecutable("qmlplugindump-qt4", "1.0")
         << PluginDumpExecutable("qmlplugindump-qt5", "2.0")
         << PluginDumpExecutable("qml1plugindump-qt5", "1.0");
 }
