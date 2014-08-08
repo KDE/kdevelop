@@ -83,9 +83,14 @@ QStringList headerExtensions();
 QStringList sourceExtensions();
 
 /**
- * @return True if the given file @p path has the extension of a C++ source file, not of a header.
+ * @return True if the given file @p path has the extension of a C++ source file
  */
 bool isSource(const QString& path);
+
+/**
+ * @return True if the given file @p path has the extension of a C++ header file
+ */
+bool isHeader(const QString& path);
 
 }
 

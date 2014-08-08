@@ -285,7 +285,7 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
     problems << extractor.problems();
 
     // other problem sources
-    if (!ClangHelpers::isSource(path) && !clang_isFileMultipleIncludeGuarded(unit(), file)) {
+    if (ClangHelpers::isHeader(path) && !clang_isFileMultipleIncludeGuarded(unit(), file)) {
         ProblemPointer problem(new Problem);
         problem->setSeverity(ProblemData::Warning);
         problem->setDescription(i18n("Header is not guarded against multiple inclusions"));
