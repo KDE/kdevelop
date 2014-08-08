@@ -75,6 +75,11 @@ public:
     bool isFunctionLike() const;
     void setFunctionLike(bool isFunctionLike);
 
+    const KDevelop::IndexedString* parameters() const;
+    unsigned int parametersSize() const;
+    void addParameter(const KDevelop::IndexedString& str);
+    void clearParameters();
+
     enum {
         Identity = 143
     };

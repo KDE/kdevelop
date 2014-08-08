@@ -448,6 +448,10 @@ void setDeclData(CXCursor cursor, MacroDefinition* decl)
 {
     setDeclData<CK>(cursor, static_cast<Declaration*>(decl));
 
+    if (m_update) {
+        decl->clearParameters();
+    }
+
     auto unit = clang_Cursor_getTranslationUnit(cursor);
     auto range = clang_getCursorExtent(cursor);
 
@@ -469,6 +473,14 @@ void setDeclData(CXCursor cursor, MacroDefinition* decl)
         const int closingParen = KDevelop::findClose(contents, firstOpeningParen);
         if (closingParen != -1) {
             start = closingParen + 2; // + ')' + ' '
+
+            // extract macro function parameters
+            const QString parameters = QString::fromUtf8(contents.mid(firstOpeningParen, closingParen - firstOpeningParen + 1));
+            ParamIterator paramIt("():", parameters, 0);
+            while (paramIt) {
+                decl->addParameter(IndexedString(*paramIt));
+                ++paramIt;
+            }
         }
     } else {
         start = firstWhitespace + 1; // + ' '

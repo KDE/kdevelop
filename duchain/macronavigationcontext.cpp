@@ -115,24 +115,13 @@ QString MacroNavigationContext::html(bool shorten)
     modifyHtml() += "<html><body><p>" + fontSizePrefix(shorten);
     addExternalHtml(m_prefix);
 
-    QString args;
-
-#if 0
-    // TODO: Show macro arguments in name
-    if(m_macro->formalsSize()) {
-        args = "(";
-
-        bool first = true;
-        FOREACH_CUSTOM(const IndexedString& b, m_macro->formals(), m_macro->formalsSize()) {
-        if(!first)
-            args += ", ";
-        first = false;
-        args += b.str();
-        }
-
-        args += ')';
+    QStringList parameterList;
+    FOREACH_FUNCTION(const auto& parameter, m_macro->parameters) {
+        parameterList << parameter.str();
     }
-#endif
+    const QString parameters = (!parameterList.isEmpty() ?
+        QString("(%1)").arg(parameterList.join(", ")) :
+        QString());
 
     const KUrl url = m_macro->url().toUrl();
     const QString path = url.pathOrUrl();
@@ -143,7 +132,7 @@ QString MacroNavigationContext::html(bool shorten)
                           "%3 the link to the definition",
                           "%1: %2, defined in %3",
                           (m_macro->isFunctionLike() ? i18n("Function macro") : i18n("Macro")),
-                          importantHighlight(name()) + args,
+                          importantHighlight(name()) + parameters,
                           createLink(QString("%1 :%2").arg(path).arg(cursor.line()+1), path, action));
 
     modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";

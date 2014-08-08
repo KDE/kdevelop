@@ -20,21 +20,40 @@
 
 #include "macrodefinition.h"
 
+#include <language/duchain/appendedlist.h>
 #include <language/duchain/declarationdata.h>
 #include <language/duchain/duchainregister.h>
 
 using namespace KDevelop;
 
-class KDEVPLATFORMLANGUAGE_EXPORT MacroDefinitionData : public DeclarationData
+DEFINE_LIST_MEMBER_HASH(MacroDefinitionData, parameters, IndexedString)
+
+class MacroDefinitionData : public DeclarationData
 {
 public:
     MacroDefinitionData()
         : isFunctionLike(false)
-    {}
-    MacroDefinitionData(const MacroDefinitionData& rhs) = default;
+    {
+        initializeAppendedLists();
+    }
+    MacroDefinitionData(const MacroDefinitionData& rhs)
+        : DeclarationData(rhs)
+        , isFunctionLike(rhs.isFunctionLike)
+    {
+        initializeAppendedLists();
+        copyListsFrom(rhs);
+    }
+    ~MacroDefinitionData()
+    {
+        freeAppendedLists();
+    }
 
     IndexedString definition;
     bool isFunctionLike : 1;
+
+    START_APPENDED_LISTS_BASE(MacroDefinitionData, DeclarationData);
+    APPENDED_LIST_FIRST(MacroDefinitionData, IndexedString, parameters);
+    END_APPENDED_LISTS(MacroDefinitionData, parameters);
 };
 
 namespace KDevelop {
@@ -81,4 +100,24 @@ bool MacroDefinition::isFunctionLike() const
 void MacroDefinition::setFunctionLike(bool isFunctionLike)
 {
     d_func_dynamic()->isFunctionLike = isFunctionLike;
+}
+
+const IndexedString* MacroDefinition::parameters() const
+{
+    return d_func()->parameters();
+}
+
+unsigned int MacroDefinition::parametersSize() const
+{
+    return d_func()->parametersSize();
+}
+
+void MacroDefinition::addParameter(const IndexedString& str)
+{
+    d_func_dynamic()->parametersList().append(str);
+}
+
+void MacroDefinition::clearParameters()
+{
+    d_func_dynamic()->parametersList().clear();
 }
