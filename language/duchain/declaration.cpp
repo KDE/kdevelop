@@ -170,17 +170,12 @@ Declaration::~Declaration()
   //Only perform the actions when the top-context isn't being deleted, or when it hasn't been stored to disk
   if(persistentlyDestroying()) {
     DUCHAIN_D_DYNAMIC(Declaration);
+
     // Inserted by the builder after construction has finished.
     if( d->m_internalContext.context() )
       d->m_internalContext.context()->setOwner(0);
 
-    if (d->m_inSymbolTable && !d->m_identifier.isEmpty()) {
-      QualifiedIdentifier id = qualifiedIdentifier();
-      PersistentSymbolTable::self().removeDeclaration(id, this);
-      CodeModel::self().removeItem(url(), id);
-    }
-
-    d->m_inSymbolTable = false;
+    setInSymbolTable(false);
   }
 
   // If the parent-context already has dynamic data, like for example any temporary context,
