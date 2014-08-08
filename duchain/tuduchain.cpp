@@ -220,14 +220,31 @@ TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContext
                 }
             }
 
-            auto useRange = ClangRange(clang_getCursorReferenceNameRange(cursor, CXNameRange_WantSinglePiece, 0)).toRangeInRevision();
+            auto useRange = clang_getCursorReferenceNameRange(cursor, CXNameRange_WantSinglePiece, 0);
+
             //TODO: Fix in clang, happens for operator<<, operator<, probably more
-            if (!useRange.isValid()) {
-               useRange = ClangRange(clang_getCursorExtent(cursor)).toRangeInRevision();
+            if (clang_Range_isNull(useRange)) {
+               useRange = clang_getCursorExtent(cursor);
             }
+
+            // For uses inside macro expansions, create an empty use range at the spelling location
+            // the empty range is required in order to not "overlap" the macro expansion range
+            // and to allow proper navigation for the macro expansion
+            // also see JSON test 'macros.cpp'
+            unsigned int expansionLocOffset;
+            const auto spellingLocation = clang_getRangeStart(useRange);
+            clang_getExpansionLocation(spellingLocation, nullptr, nullptr, nullptr, &expansionLocOffset);
+            if (m_macroExpansionLocations.contains(expansionLocOffset)) {
+                unsigned int spellingLocOffset;
+                clang_getSpellingLocation(spellingLocation, nullptr, nullptr, nullptr, &spellingLocOffset);
+                if (spellingLocOffset == expansionLocOffset) {
+                    useRange = clang_getRange(spellingLocation, spellingLocation);
+                }
+            }
+
             DUChainWriteLocker lock;
             auto usedIndex = top->indexForUsedDeclaration(used.data());
-            contextUses.first->createUse(usedIndex, useRange);
+            contextUses.first->createUse(usedIndex, ClangRange(useRange).toRangeInRevision());
         }
     }
 }
@@ -433,4 +450,18 @@ CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor curso
 
     classDecl->addBaseClass({decl->indexedType(), access, virtualInherited});
     return CXChildVisit_Continue;
+}
+
+template<>
+CXChildVisitResult TUDUChain::buildUse<CXCursor_MacroExpansion>(CXCursor cursor)
+{
+    auto currentContext = m_parentContext->context;
+    m_uses[currentContext].push_back(cursor);
+
+    // cache that we encountered a macro expansion at this location
+    unsigned int offset;
+    clang_getSpellingLocation(clang_getCursorLocation(cursor), nullptr, nullptr, nullptr, &offset);
+    m_macroExpansionLocations << offset;
+
+    return CXChildVisit_Recurse;
 }

@@ -650,6 +650,8 @@ private:
     DeclarationPointer findDeclaration(CXCursor cursor);
 
     std::unordered_map<DUContext*, std::vector<CXCursor>> m_uses;
+    /// At these location offsets (cf. @ref clang_getExpansionLocation) we encountered macro expansions
+    QSet<unsigned int> m_macroExpansionLocations;
     QHash<unsigned int, DeclarationPointer> m_cursorToDeclarationCache;
     CurrentContext *m_parentContext;
 
@@ -658,5 +660,7 @@ private:
 
 template<>
 CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor cursor);
+template<>
+CXChildVisitResult TUDUChain::buildUse<CXCursor_MacroExpansion>(CXCursor cursor);
 
 #endif //TUDUCHAIN_H
