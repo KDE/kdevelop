@@ -2955,12 +2955,28 @@ void CMakeAstTest::testSetPropertyGoodParse()
 
 void CMakeAstTest::testSetPropertyGoodParse_data()
 {
-    CMakeFunctionDesc func;
-    func.name = "set_property";
-    func.addArguments( QString("GLOBAL PROPERTY SIMPLE_PROPERTY_NOVALUE").split(" ") );
-
     QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "no value" ) << func;
+
+    {
+        CMakeFunctionDesc func;
+        func.name = "set_property";
+        func.addArguments( QString("GLOBAL PROPERTY SIMPLE_PROPERTY_NOVALUE").split(" ") );
+        QTest::newRow( "no value" ) << func;
+    }
+
+    {
+        CMakeFunctionDesc func;
+        func.name = "set_property";
+        func.addArguments( QString("GLOBAL APPEND foo bar").split(" ") );
+        QTest::newRow( "append" ) << func;
+    }
+
+    {
+        CMakeFunctionDesc func;
+        func.name = "set_property";
+        func.addArguments( QString("GLOBAL APPEND_STRING foo bar").split(" ") );
+        QTest::newRow( "append_string" ) << func;
+    }
 }
 
 void CMakeAstTest::testSetPropertyBadParse()
