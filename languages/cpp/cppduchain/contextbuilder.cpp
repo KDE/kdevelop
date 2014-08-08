@@ -437,9 +437,6 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
     m_importedParentContexts.clear();
   }
 
-
-  DUChainWriteLocker lock(DUChain::lock());
-  topLevelContext->squeeze();
   return topLevelContext;
 }
 
