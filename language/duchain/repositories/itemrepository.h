@@ -1159,7 +1159,9 @@ class ItemRepository : public AbstractItemRepository {
       unsigned short indexInBucket = bucketPtr->findIndex(request);
       if(indexInBucket) {
         //We've found the item, it's already there
-        return (previousBucketNumber << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
+        uint index = (previousBucketNumber << 16) + indexInBucket;
+        verifyIndex(index);
+        return index; //Combine the index in the bucket, and the bucker number into one index
       } else {
 #ifdef DEBUG_HASH_SEQUENCES
         if(previousBucketNumber==*bucketHashPosition)
@@ -1363,7 +1365,10 @@ class ItemRepository : public AbstractItemRepository {
         if(reOrderFreeSpaceBucketIndex != -1)
           updateFreeSpaceOrder(reOrderFreeSpaceBucketIndex);
 
-        return (useBucket << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
+        //Combine the index in the bucket, and the bucker number into one index
+        uint index = (useBucket << 16) + indexInBucket;
+        verifyIndex(index);
+        return index;
       }else{
         //This should never happen when we picked a bucket for re-use
         Q_ASSERT(!pickedBucketInChain);
@@ -1405,7 +1410,9 @@ class ItemRepository : public AbstractItemRepository {
       unsigned short indexInBucket = bucketPtr->findIndex(request);
       if(indexInBucket) {
         //We've found the item, it's already there
-        return (previousBucketNumber << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
+        uint index = (previousBucketNumber << 16) + indexInBucket; //Combine the index in the bucket, and the bucker number into one index
+        verifyIndex(index);
+        return index;
       } else {
         //The item isn't in bucket previousBucketNumber, but maybe the bucket has a pointer to the next bucket that might contain the item
         //Should happen rarely
@@ -1422,12 +1429,12 @@ class ItemRepository : public AbstractItemRepository {
 
   ///Deletes the item from the repository.
   void deleteItem(unsigned int index) {
+    verifyIndex(index);
     ThisLocker lock(m_mutex);
 
     m_metaDataChanged = true;
 
     unsigned short bucket = (index >> 16);
-    Q_ASSERT(bucket); //We don't use zero buckets
 
     unsigned int hash = itemFromIndex(index)->hash();
 
@@ -1569,15 +1576,13 @@ class ItemRepository : public AbstractItemRepository {
   typedef DynamicItem<Item, markForReferenceCounting> MyDynamicItem;
   
   MyDynamicItem dynamicItemFromIndex(unsigned int index) {
-    Q_ASSERT(index);
+    verifyIndex(index);
 
     ThisLocker lock(m_mutex);
 
     unsigned short bucket = (index >> 16);
-    Q_ASSERT(bucket); //We don't use zero buckets
 
     MyBucket* bucketPtr = m_fastBuckets[bucket];
-    Q_ASSERT(bucket < m_bucketCount);
     if(!bucketPtr) {
       initializeBucket(bucket);
       bucketPtr = m_fastBuckets[bucket];
@@ -1595,15 +1600,13 @@ class ItemRepository : public AbstractItemRepository {
   ///@warning If you change contained complex items that depend on reference-counting, you
   ///         must use dynamicItemFromIndex(..) instead of dynamicItemFromIndexSimple(..)
   Item* dynamicItemFromIndexSimple(unsigned int index) {
-    Q_ASSERT(index);
+    verifyIndex(index);
 
     ThisLocker lock(m_mutex);
 
     unsigned short bucket = (index >> 16);
-    Q_ASSERT(bucket); //We don't use zero buckets
 
     MyBucket* bucketPtr = m_fastBuckets[bucket];
-    Q_ASSERT(bucket < m_bucketCount);
     if(!bucketPtr) {
       initializeBucket(bucket);
       bucketPtr = m_fastBuckets[bucket];
@@ -1617,15 +1620,13 @@ class ItemRepository : public AbstractItemRepository {
   ///changes its identity/hash-value
   template<class Action>
   void dynamicAction(unsigned int index, Action& action) {
-    Q_ASSERT(index);
+    verifyIndex(index);
 
     ThisLocker lock(m_mutex);
 
     unsigned short bucket = (index >> 16);
-    Q_ASSERT(bucket); //We don't use zero buckets
 
     MyBucket* bucketPtr = m_fastBuckets[bucket];
-    Q_ASSERT(bucket < m_bucketCount);
     if(!bucketPtr) {
       initializeBucket(bucket);
       bucketPtr = m_fastBuckets[bucket];
@@ -1645,15 +1646,13 @@ class ItemRepository : public AbstractItemRepository {
   ///@param index The index. It must be valid(match an existing item), and nonzero.
   ///@param dynamic will be applied to the item.
   const Item* itemFromIndex(unsigned int index) const {
-    Q_ASSERT(index);
+    verifyIndex(index);
 
     ThisLocker lock(m_mutex);
 
     unsigned short bucket = (index >> 16);
-    Q_ASSERT(bucket); //We don't use zero buckets
 
     const MyBucket* bucketPtr = m_fastBuckets[bucket];
-    Q_ASSERT(bucket < m_bucketCount);
     if(!bucketPtr) {
       initializeBucket(bucket);
       bucketPtr = m_fastBuckets[bucket];
@@ -2423,6 +2422,24 @@ class ItemRepository : public AbstractItemRepository {
       Q_ASSERT(m_freeSpaceBuckets.contains(bucket));
     }
 #endif
+  }
+
+  void verifyIndex(uint index) const
+  {
+    // We don't use zero indices
+    Q_ASSERT(index);
+    uint bucket = (index >> 16);
+    // nor zero buckets
+    Q_ASSERT(bucket);
+    Q_ASSERT_X(bucket < m_bucketCount, Q_FUNC_INFO,
+               qPrintable(QString("index %1 gives invalid bucket number %2, current count is: %3")
+                  .arg(index)
+                  .arg(bucket)
+                  .arg(m_bucketCount)));
+
+    // don't trigger compile warnings in release mode
+    Q_UNUSED(bucket);
+    Q_UNUSED(index);
   }
 
   bool m_metaDataChanged;
