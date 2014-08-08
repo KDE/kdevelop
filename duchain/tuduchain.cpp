@@ -101,7 +101,7 @@ template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CK == CXCursor_MacroDefinition>::type>
 {
-    typedef Declaration Type;
+    typedef MacroDefinition Type;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>

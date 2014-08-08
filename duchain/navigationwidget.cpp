@@ -22,6 +22,8 @@
 
 #include "navigationwidget.h"
 
+#include "macronavigationcontext.h"
+
 #include <language/duchain/navigation/abstractdeclarationnavigationcontext.h>
 #include <language/duchain/navigation/abstractincludenavigationcontext.h>
 #include <language/util/includeitem.h>
@@ -62,11 +64,19 @@ bool IncludeNavigationContext::filterDeclaration(Declaration* decl)
 ClangNavigationWidget::ClangNavigationWidget(const DeclarationPointer& declaration)
     : AbstractNavigationWidget()
 {
-    initBrowser(400);
+    if (auto macro = declaration.dynamicCast<MacroDefinition>()) {
+        initBrowser(200);
 
-    //The first context is registered so it is kept alive by the shared-pointer mechanism
-    m_startContext = NavigationContextPointer(new DeclarationNavigationContext(declaration));
-    setContext( m_startContext );
+        //The first context is registered so it is kept alive by the shared-pointer mechanism
+        m_startContext = NavigationContextPointer(new MacroNavigationContext(macro));
+        setContext( m_startContext );
+    } else {
+        initBrowser(400);
+
+        //The first context is registered so it is kept alive by the shared-pointer mechanism
+        m_startContext = NavigationContextPointer(new DeclarationNavigationContext(declaration));
+        setContext( m_startContext );
+    }
 }
 
 ClangNavigationWidget::ClangNavigationWidget(const IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext,

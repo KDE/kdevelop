@@ -27,6 +27,7 @@
 #include "cursorkindtraits.h"
 #include "clanghelpers.h"
 #include "clangducontext.h"
+#include "macrodefinition.h"
 #include "util/clangdebug.h"
 #include "util/clangutils.h"
 #include "util/clangtypes.h"
@@ -35,6 +36,7 @@
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classdeclaration.h>
+#include <language/duchain/stringhelpers.h>
 
 #include <language/duchain/types/pointertype.h>
 #include <language/duchain/types/arraytype.h>
@@ -439,6 +441,44 @@ void setDeclData(CXCursor cursor, Declaration *decl, bool setComment = true) con
     int isAlwaysDeprecated;
     clang_getCursorPlatformAvailability(cursor, &isAlwaysDeprecated, nullptr, nullptr, nullptr, nullptr, 0);
     decl->setDeprecated(isAlwaysDeprecated);
+}
+
+template<CXCursorKind CK>
+void setDeclData(CXCursor cursor, MacroDefinition* decl)
+{
+    setDeclData<CK>(cursor, static_cast<Declaration*>(decl));
+
+    auto unit = clang_Cursor_getTranslationUnit(cursor);
+    auto range = clang_getCursorExtent(cursor);
+
+    // TODO: Quite lacking API in libclang here.
+    // No way to find out if this macro is function-like or not
+    // cf. http://clang.llvm.org/doxygen/classclang_1_1MacroInfo.html
+    // And no way to get the actual definition text range
+    // Should be quite easy to expose that in libclang, though
+    // Let' still get some basic support for this and parse on our own, it's not that difficult
+    const QByteArray contents = ClangUtils::getRawContents(unit, range);
+    const int firstOpeningParen = contents.indexOf('(');
+    const int firstWhitespace = contents.indexOf(' ');
+    const bool isFunctionLike = (firstOpeningParen != -1) && (firstOpeningParen < firstWhitespace);
+    decl->setFunctionLike(isFunctionLike);
+
+    // now extract the actual definition text
+    int start = -1;
+    if (isFunctionLike) {
+        const int closingParen = KDevelop::findClose(contents, firstOpeningParen);
+        if (closingParen != -1) {
+            start = closingParen + 2; // + ')' + ' '
+        }
+    } else {
+        start = firstWhitespace + 1; // + ' '
+    }
+    if (start == -1) {
+        // unlikely: invalid macro definition, insert the complete #define statement
+        decl->setDefinition(IndexedString("#define " + contents));
+    } else if (start < contents.size()) {
+        decl->setDefinition(IndexedString(contents.constData() + start));
+    } // else: macro has no body => leave the definition text empty
 }
 
 template<CXCursorKind CK>

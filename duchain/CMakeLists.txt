@@ -12,7 +12,9 @@ kde4_add_library(kdevclangduchain SHARED
     clangpch.cpp
     clanghelpers.cpp
     unknowndeclarationproblem.cpp
+    macrodefinition.cpp
     missingincludepathproblem.cpp
+    macronavigationcontext.cpp
     navigationwidget.cpp
     todoextractor.cpp
 
