@@ -24,21 +24,23 @@
 
 #include "macrodefinition.h"
 
+#include <language/editor/documentcursor.h>
 #include <language/duchain/navigation/abstractnavigationcontext.h>
 
 class KDEVCLANGDUCHAIN_EXPORT MacroNavigationContext : public KDevelop::AbstractNavigationContext
 {
 public:
-    MacroNavigationContext(const MacroDefinition::Ptr& macro);
+    MacroNavigationContext(const MacroDefinition::Ptr& macro,
+                           const KDevelop::DocumentCursor& expansionLocation = KDevelop::DocumentCursor::invalid());
     ~MacroNavigationContext();
-
-    QString body() const;
 
     virtual QWidget* widget() const override;
     virtual QString html(bool shorten) override;
     virtual QString name() const override;
 
 private:
+    QString retrievePreprocessedBody(const KDevelop::DocumentCursor& expansionLocation) const;
+
     const MacroDefinition::Ptr m_macro;
     QString m_body;
     KTextEditor::Document* m_preprocessed;

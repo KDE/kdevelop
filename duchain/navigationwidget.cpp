@@ -79,6 +79,15 @@ ClangNavigationWidget::ClangNavigationWidget(const DeclarationPointer& declarati
     }
 }
 
+ClangNavigationWidget::ClangNavigationWidget(const MacroDefinition::Ptr& macro, const KDevelop::DocumentCursor& expansionLocation)
+{
+    initBrowser(400);
+
+    //The first context is registered so it is kept alive by the shared-pointer mechanism
+    m_startContext = NavigationContextPointer(new MacroNavigationContext(macro, expansionLocation));
+    setContext(m_startContext);
+}
+
 ClangNavigationWidget::ClangNavigationWidget(const IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext,
                                              const QString& htmlPrefix, const QString& htmlSuffix)
 {

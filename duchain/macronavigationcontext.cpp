@@ -19,6 +19,9 @@
 
 #include "macronavigationcontext.h"
 
+#include "util/clangdebug.h"
+#include "util/clangutils.h"
+
 #include <KLocale>
 
 #include <KTextEditor/Editor>
@@ -63,23 +66,24 @@ KTextEditor::View* createDocAndView(const QString& data, KTextEditor::Document**
 
 }
 
-MacroNavigationContext::MacroNavigationContext(const MacroDefinition::Ptr& macro)
+MacroNavigationContext::MacroNavigationContext(const MacroDefinition::Ptr& macro, const KDevelop::DocumentCursor& expansionLocation)
     : m_macro(macro)
     , m_preprocessed(nullptr)
     , m_definition(nullptr)
     , m_widget(new QWidget)
 {
     QVBoxLayout* layout = new QVBoxLayout(m_widget.data());
-    // TODO: Fill in preprocessed body contents
-#if 0
-    KTextEditor::View* preprocessedView = createDocAndView("", &m_preprocessed);
-    if (m_preprocessed) {
-        layout->addWidget(new QLabel(i18n("Preprocessed Body:")));
-        layout->addWidget(preprocessedView);
-    } else {
-        layout->addWidget(new QLabel(i18n("Preprocessed Body: (empty)")));
+
+    if (expansionLocation.isValid()) {
+        const QString preprocessedBody = retrievePreprocessedBody(expansionLocation);
+        KTextEditor::View* preprocessedView = createDocAndView(preprocessedBody, &m_preprocessed);
+        if (m_preprocessed) {
+            layout->addWidget(new QLabel(i18n("Preprocessed Body:")));
+            layout->addWidget(preprocessedView);
+        } else {
+            layout->addWidget(new QLabel(i18n("Preprocessed Body: (empty)")));
+        }
     }
-#endif
 
     const QString definitionText = m_macro->definition().str();
     KTextEditor::View* definitionView = createDocAndView(definitionText, &m_definition);
@@ -139,7 +143,13 @@ QString MacroNavigationContext::html(bool shorten)
     return currentHtml();
 }
 
-QString MacroNavigationContext::body() const
+QString MacroNavigationContext::retrievePreprocessedBody(const DocumentCursor& expansionLocation) const
 {
-  return m_body;
+    const TopDUContext* topContext = m_macro->topContext();
+    if (!topContext) {
+        return QString();
+    }
+
+    // TODO: Implement me. Still not exactly sure what do to here...
+    return QString();
 }

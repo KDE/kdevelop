@@ -25,10 +25,13 @@
 
 #include "duchainexport.h"
 
+#include "macrodefinition.h"
+
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 
 namespace KDevelop
 {
+class DocumentCursor;
 class IncludeItem;
 }
 
@@ -36,6 +39,7 @@ class KDEVCLANGDUCHAIN_EXPORT ClangNavigationWidget : public KDevelop::AbstractN
 {
 public:
     ClangNavigationWidget(const KDevelop::DeclarationPointer& declaration);
+    ClangNavigationWidget(const MacroDefinition::Ptr& macro, const KDevelop::DocumentCursor& expansionLocation);
     ClangNavigationWidget(const KDevelop::IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext,
                           const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
     virtual ~ClangNavigationWidget() = default;

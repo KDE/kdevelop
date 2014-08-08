@@ -42,6 +42,8 @@
 #include "codegen/simplerefactoring.h"
 #include "codegen/adaptsignatureassistant.h"
 #include "duchain/clangindex.h"
+#include "duchain/navigationwidget.h"
+#include "duchain/macrodefinition.h"
 
 #include <language/assistant/staticassistantsmanager.h>
 #include <language/assistant/renameassistant.h>
@@ -51,6 +53,8 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/parsingenvironment.h>
+#include <language/duchain/use.h>
+#include <language/editor/documentcursor.h>
 
 #include <KAction>
 #include <KActionCollection>
@@ -151,6 +155,20 @@ QPair<TopDUContextPointer, SimpleRange> importedContextForPosition(const KUrl& u
     return {{}, SimpleRange::invalid()};
 }
 
+QPair<TopDUContextPointer, Use> macroExpansionForPosition(const KUrl& url, const SimpleCursor& position)
+{
+    TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
+    if (topContext) {
+        int useAt = topContext->findUseAt(topContext->transformToLocalRevision(position));
+        if (useAt >= 0) {
+            Use use = topContext->uses()[useAt];
+            if (dynamic_cast<MacroDefinition*>(use.usedDeclaration(topContext))) {
+                return {TopDUContextPointer(topContext), use};
+            }
+        }
+    }
+    return {{}, {}};
+}
 
 }
 
@@ -246,6 +264,12 @@ KDevelop::ContextMenuExtension ClangSupport::contextMenuExtension(KDevelop::Cont
 
 SimpleRange ClangSupport::specialLanguageObjectRange(const KUrl& url, const SimpleCursor& position)
 {
+    DUChainReadLocker lock;
+    const QPair<TopDUContextPointer, Use> macroExpansion = macroExpansionForPosition(url, position);
+    if (macroExpansion.first) {
+        return macroExpansion.first->transformFromLocalRevision(macroExpansion.second.m_range);
+    }
+
     const QPair<TopDUContextPointer, SimpleRange> import = importedContextForPosition(url, position);
     if(import.first) {
         return import.second;
@@ -267,21 +291,29 @@ QPair<KUrl, KDevelop::SimpleCursor> ClangSupport::specialLanguageObjectJumpCurso
 
 QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position)
 {
+    DUChainReadLocker lock;
+    const QPair<TopDUContextPointer, Use> macroExpansion = macroExpansionForPosition(url, position);
+    if (macroExpansion.first) {
+        Declaration* declaration = macroExpansion.second.usedDeclaration(macroExpansion.first.data());
+        const MacroDefinition::Ptr macroDefinition(dynamic_cast<MacroDefinition*>(declaration));
+        Q_ASSERT(macroDefinition);
+        auto rangeInRevision = macroExpansion.first->transformFromLocalRevision(macroExpansion.second.m_range.start);
+        return new ClangNavigationWidget(macroDefinition, DocumentCursor(IndexedString(url), rangeInRevision));
+    }
+
     const QPair<TopDUContextPointer, SimpleRange> import = importedContextForPosition(url, position);
 
-    DUChainReadLocker lock;
-    if (!import.first) {
-        return nullptr;
-    }
-
-    // Prefer a standardContext, because the included one may have become empty due to
-    if (import.first->localDeclarations().count() == 0 && import.first->childContexts().count() == 0) {
-        KDevelop::TopDUContext* betterCtx = standardContext(KUrl(import.first->url().str()));
-        if (betterCtx && (betterCtx->localDeclarations().count() != 0 || betterCtx->childContexts().count() != 0)) {
-            return betterCtx->createNavigationWidget(0, 0, i18n("Emptied by preprocessor<br />"));
+    if (import.first) {
+        // Prefer a standardContext, because the included one may have become empty due to
+        if (import.first->localDeclarations().count() == 0 && import.first->childContexts().count() == 0) {
+            KDevelop::TopDUContext* betterCtx = standardContext(KUrl(import.first->url().str()));
+            if (betterCtx && (betterCtx->localDeclarations().count() != 0 || betterCtx->childContexts().count() != 0)) {
+                return betterCtx->createNavigationWidget(0, 0, i18n("Emptied by preprocessor<br />"));
+            }
         }
+        return import.first->createNavigationWidget();
     }
-    return import.first->createNavigationWidget();
+    return nullptr;
 }
 
 #include "clangsupport.moc"
