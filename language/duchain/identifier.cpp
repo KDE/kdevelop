@@ -823,16 +823,7 @@ QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
 QualifiedIdentifier QualifiedIdentifier::merge(const QualifiedIdentifier& base) const
 {
   QualifiedIdentifier ret(base);
-  ret.prepareWrite();
-
-  if(m_index)
-    ret.dd->identifiersList.append(cd->identifiers(), cd->identifiersSize());
-  else
-    ret.dd->identifiersList.append(dd->identifiers(), dd->identifiersSize());
-
-  if( explicitlyGlobal() )
-    ret.setExplicitlyGlobal(true);
-
+  ret.push(*this);
   return ret;
 }
 
@@ -1019,13 +1010,21 @@ void QualifiedIdentifier::push(const IndexedIdentifier& id)
 
 void QualifiedIdentifier::push(const QualifiedIdentifier& id)
 {
-  if(id.isEmpty())
+  if (id.isEmpty()) {
     return;
+  }
 
   prepareWrite();
-  id.makeConstant();
 
-  dd->identifiersList.append(id.cd->identifiers(), id.cd->identifiersSize());
+  if (id.m_index) {
+    dd->identifiersList.append(id.cd->identifiers(), id.cd->identifiersSize());
+  } else {
+    dd->identifiersList.append(id.dd->identifiers(), id.dd->identifiersSize());
+  }
+
+  if (id.explicitlyGlobal()) {
+    setExplicitlyGlobal(true);
+  }
 }
 
 void QualifiedIdentifier::pop()

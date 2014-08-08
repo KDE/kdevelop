@@ -836,6 +836,22 @@ void TestDUChain::testIdentifiers()
   QCOMPARE(op6.toString(), QString("operator( )"));
   QCOMPARE(QualifiedIdentifier("Area<A,B>::jump <F> ::tes<C>").index(), t.index());
   QCOMPARE(op4.index(), QualifiedIdentifier("operator>=").index());
+
+  QualifiedIdentifier pushTest("foo");
+  QCOMPARE(pushTest.count(), 1);
+  QCOMPARE(pushTest.toString(), QString("foo"));
+  pushTest.push(Identifier("bar"));
+  QCOMPARE(pushTest.count(), 2);
+  QCOMPARE(pushTest.toString(), QString("foo::bar"));
+  pushTest.push(QualifiedIdentifier("baz::asdf"));
+  QCOMPARE(pushTest.count(), 4);
+  QCOMPARE(pushTest.toString(), QString("foo::bar::baz::asdf"));
+  QualifiedIdentifier mergeTest = pushTest.merge(QualifiedIdentifier("meh::muh"));
+  QCOMPARE(mergeTest.count(), 6);
+  QCOMPARE(mergeTest.toString(), QString("meh::muh::foo::bar::baz::asdf"));
+  QualifiedIdentifier plusTest = QualifiedIdentifier("la::lu") + QualifiedIdentifier("ba::bu");
+  QCOMPARE(plusTest.count(), 4);
+  QCOMPARE(plusTest.toString(), QString("la::lu::ba::bu"));
   ///@todo create a big randomized test for the identifier repository(check that indices are the same)
 }
 
