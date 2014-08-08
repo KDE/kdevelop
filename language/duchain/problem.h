@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPLATFORM_I_PROBLEM_H
-#define KDEVPLATFORM_I_PROBLEM_H
+#ifndef KDEVPLATFORM_PROBLEM_H
+#define KDEVPLATFORM_PROBLEM_H
 
 
 #include <QtCore/QStack>
@@ -259,4 +259,4 @@ Q_DECLARE_TYPEINFO(KDevelop::LocalIndexedProblem, Q_MOVABLE_TYPE);
 KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::Problem& problem);
 KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::ProblemPointer& problem);
 
-#endif // KDEVPLATFORM_I_PROBLEM_H
+#endif // KDEVPLATFORM_PROBLEM_H
