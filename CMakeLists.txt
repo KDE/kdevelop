@@ -46,11 +46,11 @@ find_package(KF5 REQUIRED COMPONENTS
   TextEditor
   ThreadWeaver
   WindowSystem
-  XmlGui
 
   # TODO KF5: Port away from this
   KDELibs4Support
 )
+find_package(KF5XmlGui 5.1 REQUIRED)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
