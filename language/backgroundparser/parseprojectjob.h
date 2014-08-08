@@ -20,9 +20,10 @@
 #define KDEVPLATFORM_PARSEPROJECTJOB_H
 
 #include <kjob.h>
-#include <kurl.h>
 #include <language/duchain/indexedstring.h>
 #include "../languageexport.h"
+
+#include <QSet>
 
 namespace KDevelop {
 class ReferencedTopDUContext;
@@ -45,9 +46,9 @@ private Q_SLOTS:
 
 private:
     int m_updated;
-    int m_totalFiles;
     bool m_forceUpdate;
     KDevelop::IProject* m_project;
+    QSet<IndexedString> m_filesToParse;
     void updateProgress();
 };
 

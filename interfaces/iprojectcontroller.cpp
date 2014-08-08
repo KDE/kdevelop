@@ -19,9 +19,11 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "iprojectcontroller.h"
-#include <kconfiggroup.h>
 #include "icore.h"
 #include "isession.h"
+
+#include <KConfigGroup>
+#include <KGlobal>
 
 namespace KDevelop
 {
@@ -37,7 +39,7 @@ IProjectController::~IProjectController()
 
 bool IProjectController::parseAllProjectSources()
 {
-    KConfigGroup group = ICore::self()->activeSession()->config()->group( "Project Manager" );
+    KConfigGroup group = KGlobal::config()->group( "Project Manager" );
     return group.readEntry( "Parse All Project Sources", true );    
 }
 

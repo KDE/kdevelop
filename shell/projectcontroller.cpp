@@ -819,20 +819,7 @@ void ProjectController::projectImportingFinished( IProject* project )
     d->m_currentlyOpening.removeAll(project->projectFileUrl());
     emit projectOpened( project );
 
-    if (parseAllProjectSources())
-    {
-        reparseProject(project);
-    }
-
-    // Add all currently open files that belong to the project to the background-parser,
-    // since more information may be available for parsing them now(Like include-paths).
-    foreach(IDocument* document, Core::self()->documentController()->openDocuments())
-    {
-        if(!project->filesForUrl(document->url()).isEmpty())
-        {
-            Core::self()->languageController()->backgroundParser()->addDocument( IndexedString(document->url()), TopDUContext::AllDeclarationsContextsAndUses, 10 );
-        }
-    }
+    reparseProject(project);
 }
 
 // helper method for closeProject()
