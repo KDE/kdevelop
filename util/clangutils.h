@@ -84,6 +84,20 @@ namespace ClangUtils
     QString getCursorSignature(CXCursor cursor, const QString& scope, QVector<QString> defaultArgs = QVector<QString>());
 
     /**
+     * Extract the raw contents of the range @p range
+     *
+     * @note This will return the exact textual representation of the code,
+     *   no whitespace stripped, etc.
+     *
+     * TODO: It would better if we'd be able to just memcpy parts of the file buffer
+     * that's stored inside Clang (cf. llvm::MemoryBuffer for files), but libclang
+     * doesn't offer API for that. This implementation here is a lot more expensive.
+     *
+     * @param unit Translation unit this range is part of
+     */
+    QByteArray getRawContents(CXTranslationUnit unit, CXSourceRange range);
+
+    /**
      * TODO remove once we depend on Clang 3.5
      * Given a cursor, returns true if and only if the function is a
      * const qualified class method.

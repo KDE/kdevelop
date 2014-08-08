@@ -23,7 +23,11 @@
 #include "../util/clangutils.h"
 #include "../util/clangtypes.h"
 
+#include <language/editor/documentrange.h>
 #include <language/editor/simplerange.h>
+#include <tests/testcore.h>
+#include <tests/testhelpers.h>
+#include <tests/autotestshell.h>
 
 #include <clang-c/Index.h>
 
@@ -36,6 +40,8 @@
 #include <memory>
 
 QTEST_KDEMAIN(TestClangUtils, GUI)
+
+using namespace KDevelop;
 
 namespace {
 
@@ -52,6 +58,38 @@ struct CursorCollectorVisitor
     };
 };
 
+CXSourceRange toCXRange(CXTranslationUnit unit, const DocumentRange& range)
+{
+    auto file = clang_getFile(unit, range.document.c_str());
+    auto begin = clang_getLocation(unit, file, range.start.line+1, range.start.column+1);
+    auto end = clang_getLocation(unit, file, range.end.line+1, range.end.column+1);
+    return clang_getRange(begin, end);
+}
+
+void parse(const QByteArray& code, CXTranslationUnit* unit, QString* fileName = nullptr)
+{
+    Q_ASSERT(unit);
+
+    KTemporaryFile tempFile;
+    QVERIFY(tempFile.open());
+    tempFile.write(code);
+    tempFile.flush();
+
+    if (fileName) {
+        *fileName = tempFile.fileName();
+    }
+
+    std::unique_ptr<void, void(*)(CXIndex)> index(clang_createIndex(1, 1), clang_disposeIndex);
+    const QVector<const char*> args = {"-std=c++11", "-xc++", "-Wall", "-nostdinc", "-nostdinc++"};
+    *unit = clang_parseTranslationUnit(
+        index.get(), qPrintable(tempFile.fileName()),
+        args.data(), args.size(),
+        nullptr, 0,
+        CXTranslationUnit_None
+    );
+    QVERIFY(*unit);
+}
+
 template<typename Visitor>
 void runVisitor(const QByteArray& code, Visitor& visitor)
 {
@@ -60,25 +98,27 @@ void runVisitor(const QByteArray& code, Visitor& visitor)
 
 void runVisitor(const QByteArray& code, CXCursorVisitor visitor, CXClientData data)
 {
-    KTemporaryFile tempFile;
-    QVERIFY(tempFile.open());
-    tempFile.write(code);
-    tempFile.flush();
-
-    std::unique_ptr<void, void(*)(CXIndex)> index(clang_createIndex(1, 1), clang_disposeIndex);
-    const QVector<const char*> args = {"-std=c++11", "-xc++", "-Wall", "-nostdinc", "-nostdinc++"};
-    CXTranslationUnit unit = clang_parseTranslationUnit(
-        index.get(), qPrintable(tempFile.fileName()),
-        args.data(), args.size(),
-        nullptr, 0,
-        CXTranslationUnit_None
-    );
-
+    CXTranslationUnit unit;
+    parse(code, &unit);
     const auto startCursor = clang_getTranslationUnitCursor(unit);
     QVERIFY(!clang_Cursor_isNull(startCursor));
     QVERIFY(clang_visitChildren(startCursor, visitor, data) == 0);
 }
 
+}
+
+Q_DECLARE_METATYPE(KDevelop::SimpleRange);
+
+void TestClangUtils::initTestCase()
+{
+    QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
+    AutoTestShell::init();
+    TestCore::initialize(Core::NoUi);
+}
+
+void TestClangUtils::cleanupTestCase()
+{
+    TestCore::shutdown();
 }
 
 void TestClangUtils::testGetScope()
@@ -130,5 +170,46 @@ void TestClangUtils::testGetScope_data()
         << 4
         << "klass";
 }
+
+void TestClangUtils::testGetRawContents()
+{
+    QFETCH(QByteArray, code);
+    QFETCH(SimpleRange, range);
+    QFETCH(QString, expectedContents);
+
+    CXTranslationUnit unit;
+    QString fileName;
+    parse(code, &unit, &fileName);
+
+    DocumentRange documentRange{IndexedString(fileName), range};
+    auto cxRange = toCXRange(unit, documentRange);
+    const QString contents = QString::fromLatin1(ClangUtils::getRawContents(unit, cxRange));
+    QCOMPARE(contents, expectedContents);
+}
+
+void TestClangUtils::testGetRawContents_data()
+{
+    QTest::addColumn<QByteArray>("code");
+    QTest::addColumn<SimpleRange>("range");
+    QTest::addColumn<QString>("expectedContents");
+
+    QTest::newRow("complete")
+        << QByteArray("void; int foo = 42; void;")
+        << SimpleRange(0, 6, 0, 18)
+        << "int foo = 42;";
+    QTest::newRow("cut-off-at-start")
+        << QByteArray("void; int foo = 42; void;")
+        << SimpleRange(0, 7, 0, 18)
+        << "nt foo = 42;";
+    QTest::newRow("cut-off-at-end")
+        << QByteArray("void; int foo = 42; void;")
+        << SimpleRange(0, 6, 0, 16)
+        << "int foo = 4";
+    QTest::newRow("whitespace")
+        << QByteArray("void; int         ; void;")
+        << SimpleRange(0, 5, 0, 17)
+        << " int         ";
+}
+
 
 #include "test_clangutils.moc"

@@ -26,6 +26,7 @@
 #include "../duchain/cursorkindtraits.h"
 
 #include <language/duchain/indexedstring.h>
+#include <language/editor/documentrange.h>
 
 #include <clang-c/Index.h>
 #include <kdebug.h>
@@ -240,4 +241,37 @@ QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, QV
     }
 
     return parts.join(QString());
+}
+
+QByteArray ClangUtils::getRawContents(CXTranslationUnit unit, CXSourceRange range)
+{
+    const auto rangeStart = clang_getRangeStart(range);
+    const auto rangeEnd = clang_getRangeEnd(range);
+    unsigned int start, end;
+    clang_getFileLocation(rangeStart, nullptr, nullptr, nullptr, &start);
+    clang_getFileLocation(rangeEnd, nullptr, nullptr, nullptr, &end);
+
+    QByteArray result;
+    CXToken *tokens = 0;
+    unsigned int nTokens = 0;
+    clang_tokenize(unit, range, &tokens, &nTokens);
+    for (unsigned int i = 0; i < nTokens; i++) {
+        const auto location = ClangLocation(clang_getTokenLocation(unit, tokens[i]));
+        unsigned int offset;
+        clang_getFileLocation(location, nullptr, nullptr, nullptr, &offset);
+        Q_ASSERT(offset >= start);
+        const int fillCharacters = offset - start - result.size();
+        Q_ASSERT(fillCharacters >= 0);
+        result.append(QByteArray(fillCharacters, ' '));
+        const auto spelling = clang_getTokenSpelling(unit, tokens[i]);
+        result.append(clang_getCString(spelling));
+        clang_disposeString(spelling);
+    }
+    clang_disposeTokens(unit, tokens, nTokens);
+
+    // Clang always appends the full range of the last token, even if this exceeds the end of the requested range.
+    // Fix this.
+    result.chop((result.size() - 1) - (end - start));
+
+    return result;
 }

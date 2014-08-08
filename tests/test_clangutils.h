@@ -28,8 +28,13 @@ class TestClangUtils : public QObject
     Q_OBJECT
 
 private slots:
+    void initTestCase();
+    void cleanupTestCase();
+
     void testGetScope();
     void testGetScope_data();
+    void testGetRawContents();
+    void testGetRawContents_data();
 };
 
 #endif // TESTCLANGUTILS_H
