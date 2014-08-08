@@ -65,6 +65,8 @@ def get_type(decl):
         typename = 'true'
     elif typename == 'DOMString':
         typename = "''"
+    elif typename == 'DOMObject':
+        typename = 'new Object()'
     elif typename == 'DOMTimeStamp':
         typename = 'new Date()'
     elif 'unsigned' in typename or ' short' in typename or ' int' in typename or ' long' in typename or typename in ['short', 'int', 'long']:

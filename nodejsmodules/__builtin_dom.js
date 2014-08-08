@@ -615,10 +615,10 @@ CompositionEvent.prototype.initCompositionEvent('', true, true, new DOMWindow(),
 function CustomEvent() { return ; }
 CustomEvent.prototype = Event;
 
-CustomEvent.prototype.detail = new DOMObject();
+CustomEvent.prototype.detail = new Object();
 
 CustomEvent.prototype.initCustomEvent = function (typeArg, canBubbleArg, cancelableArg, detailArg) { return ; };
-CustomEvent.prototype.initCustomEvent('', true, true, new DOMObject());
+CustomEvent.prototype.initCustomEvent('', true, true, new Object());
 
 /*
  * DataTransferItem
@@ -880,7 +880,7 @@ Document.prototype.getMatchedCSSRules(new Element(), '');
 Document.prototype.getMatchedCSSRules = function (element, pseudoElement, authorOnly) { return new CSSRuleList(); };
 Document.prototype.getMatchedCSSRules(new Element(), '', true);
 
-Document.prototype.getCSSCanvasContext = function (contextId, name, width, height) { return new DOMObject(); };
+Document.prototype.getCSSCanvasContext = function (contextId, name, width, height) { return new Object(); };
 Document.prototype.getCSSCanvasContext('', '', 1, 1);
 
 Document.prototype.getElementsByClassName = function (tagname) { return new NodeList(); };
@@ -1758,7 +1758,7 @@ Node.prototype.lookupNamespaceURI('');
 Node.prototype.compareDocumentPosition = function (other) { return 1; };
 Node.prototype.compareDocumentPosition(new Node());
 
-Node.prototype.getFeature = function (feature, version) { return new DOMObject(); };
+Node.prototype.getFeature = function (feature, version) { return new Object(); };
 Node.prototype.getFeature('', '');
 
 Node.prototype.setUserData = function (key, data, handler) { return new DOMUserData(); };
@@ -2417,7 +2417,6 @@ DOMSelection.prototype.empty = function () { return ; };
 DOMSelection.prototype.empty();
 
 module.exports = DOMWindow;
-
 /*
  * DOMWindow
  */
@@ -2472,8 +2471,8 @@ DOMWindow.prototype.stop();
 DOMWindow.prototype.open = function (url, name, options) { return new DOMWindow(); };
 DOMWindow.prototype.open('', '', '');
 
-DOMWindow.prototype.showModalDialog = function (url, dialogArgs, featureArgs) { return new DOMObject(); };
-DOMWindow.prototype.showModalDialog('', new DOMObject(), '');
+DOMWindow.prototype.showModalDialog = function (url, dialogArgs, featureArgs) { return new Object(); };
+DOMWindow.prototype.showModalDialog('', new Object(), '');
 
 DOMWindow.prototype.alert = function (message) { return ; };
 DOMWindow.prototype.alert('');
@@ -2905,11 +2904,9 @@ DOMWindow.prototype.EntityReference = EntityReference;
 
 DOMWindow.prototype.ProcessingInstruction = ProcessingInstruction;
 
+DOMWindow.prototype.DOMStringMap = DOMStringMap;
+
 DOMWindow.prototype.DataView = DataView;
-
-DOMWindow.prototype.webkitAudioContext = AudioContext;
-
-DOMWindow.prototype.webkitAudioPannerNode = AudioPannerNode;
 
 DOMWindow.prototype.Event = Event;
 
@@ -2986,8 +2983,6 @@ DOMWindow.prototype.TouchEvent = TouchEvent;
 DOMWindow.prototype.FormData = DOMFormData;
 
 DOMWindow.prototype.webkitURL = new DOMURL();
-
-DOMWindow.prototype.webkitStorageInfo = new StorageInfo();
 
 DOMWindow.prototype.toString = function () { return ''; };
 DOMWindow.prototype.toString();
@@ -3102,7 +3097,7 @@ Location.prototype.getParameter('');
 Location.prototype.toString = function () { return ''; };
 Location.prototype.toString();
 
-Location.prototype.valueOf = function () { return new DOMObject(); };
+Location.prototype.valueOf = function () { return new Object(); };
 Location.prototype.valueOf();
 
 /*
