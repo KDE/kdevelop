@@ -57,11 +57,12 @@ find_package(KF5 REQUIRED COMPONENTS
   TextEditor
   ThreadWeaver
   WindowSystem
-  XmlGui
 
   # TODO KF5: Port away from this
   KDELibs4Support
 )
+
+find_package(KF5XmlGui 5.1 REQUIRED)
 
 #TODO KF5: Re-enable Grantlee (currently GrantleeConfig.cmake calls find_package(Qt4) internall
 #find_package(Grantlee 0.1.7)
