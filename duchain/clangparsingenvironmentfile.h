@@ -46,6 +46,7 @@ public:
         Identity = 142
     };
 
+private:
     DUCHAIN_DECLARE_DATA(ClangParsingEnvironmentFile)
 };
 
