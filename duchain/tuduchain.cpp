@@ -231,14 +231,16 @@ TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContext
             // the empty range is required in order to not "overlap" the macro expansion range
             // and to allow proper navigation for the macro expansion
             // also see JSON test 'macros.cpp'
-            unsigned int expansionLocOffset;
-            const auto spellingLocation = clang_getRangeStart(useRange);
-            clang_getExpansionLocation(spellingLocation, nullptr, nullptr, nullptr, &expansionLocOffset);
-            if (m_macroExpansionLocations.contains(expansionLocOffset)) {
-                unsigned int spellingLocOffset;
-                clang_getSpellingLocation(spellingLocation, nullptr, nullptr, nullptr, &spellingLocOffset);
-                if (spellingLocOffset == expansionLocOffset) {
-                    useRange = clang_getRange(spellingLocation, spellingLocation);
+            if (clang_getCursorKind(cursor) != CXCursor_MacroExpansion) {
+                unsigned int expansionLocOffset;
+                const auto spellingLocation = clang_getRangeStart(useRange);
+                clang_getExpansionLocation(spellingLocation, nullptr, nullptr, nullptr, &expansionLocOffset);
+                if (m_macroExpansionLocations.contains(expansionLocOffset)) {
+                    unsigned int spellingLocOffset;
+                    clang_getSpellingLocation(spellingLocation, nullptr, nullptr, nullptr, &spellingLocOffset);
+                    if (spellingLocOffset == expansionLocOffset) {
+                        useRange = clang_getRange(spellingLocation, spellingLocation);
+                    }
                 }
             }
 
