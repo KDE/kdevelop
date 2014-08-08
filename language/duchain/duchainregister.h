@@ -104,7 +104,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemSystem {
         m_dataClassSizes.resize(T::Identity+1);
       }
 
-      Q_ASSERT(!m_factories[T::Identity]);
+      Q_ASSERT_X(!m_factories[T::Identity], Q_FUNC_INFO, "This identity is already registered");
       m_factories[T::Identity] = new DUChainItemFactory<T, Data>();
       m_dataClassSizes[T::Identity] = sizeof(Data);
     }
