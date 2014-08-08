@@ -432,7 +432,9 @@ bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
                 }
             }
 
-            if (leftType.isPrototype && leftInternalCtx) {
+            if (leftType.declaration->topContext() != topContext()) {
+                // Do not modify a declaration of another file
+            } else if (leftType.isPrototype && leftInternalCtx) {
                 // Assigning something to a prototype is equivalent to making it
                 // inherit from a class: "Class.prototype = ClassOrObject;"
                 leftInternalCtx->clearImportedParentContexts();
@@ -441,7 +443,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
                     leftInternalCtx,
                     rightType.declaration
                 );
-            } else if (leftType.declaration->topContext() == topContext()) {
+            } else {
                 // Merge the already-known type of the variable with the new one
                 leftType.declaration->setAbstractType(QmlJS::mergeTypes(leftType.type, rightType.type));
             }
@@ -490,7 +492,7 @@ void DeclarationBuilder::declareFieldMember(const KDevelop::DeclarationPointer& 
     // into it.
     DUContext* ctx = QmlJS::getInternalContext(declaration);
 
-    if (!ctx) {
+    if (!ctx || ctx->topContext() != topContext()) {
         return;
     }
 
