@@ -39,6 +39,10 @@ public:
     DocumentCursor(const IndexedString& document, const SimpleCursor& cursor) : SimpleCursor(cursor), document(document) {
     }
 
+    static DocumentCursor invalid() {
+      return DocumentCursor({}, SimpleCursor::invalid());
+    }
+
     inline bool operator==(const DocumentCursor& rhs) const {
       return document == rhs.document && SimpleCursor::operator==(rhs);
     }
