@@ -24,6 +24,7 @@
 
 #include "clanghelpers.h"
 #include "util/clangtypes.h"
+#include "clangparsingenvironment.h"
 
 using namespace KDevelop;
 
@@ -37,16 +38,16 @@ inline CXFile mapFile(CXFile file, CXTranslationUnit tu)
 
 }
 
-ClangPCH::ClangPCH(const Path& pchInclude, const Path::List& includePaths, const QHash<QString, QString>& defines, ClangIndex* index)
+ClangPCH::ClangPCH(const ClangParsingEnvironment& environment, ClangIndex* index)
     : m_session({})
 {
+    const auto& pchInclude = environment.pchInclude();
     Q_ASSERT(pchInclude.isValid());
 
     const TopDUContext::Features pchFeatures = TopDUContext::AllDeclarationsContextsUsesAndAST;
     const IndexedString doc(pchInclude.pathOrUrl());
 
-    m_session.setData(ParseSessionData::Ptr(new ParseSessionData(doc, QByteArray(), index, includePaths, Path(),
-                                            defines, ParseSessionData::PrecompiledHeader)));
+    m_session.setData(ParseSessionData::Ptr(new ParseSessionData(doc, QByteArray(), index, environment, ParseSessionData::PrecompiledHeader)));
 
     if (!m_session.unit()) {
         return;

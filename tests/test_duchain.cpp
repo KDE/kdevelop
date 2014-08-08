@@ -40,6 +40,10 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <util/kdevstringhandler.h>
 
+#include <duchain/clangparsingenvironmentfile.h>
+#include <duchain/clangparsingenvironment.h>
+#include <duchain/parsesession.h>
+
 QTEST_KDEMAIN(TestDUChain, NoGUI);
 
 using namespace KDevelop;
@@ -506,6 +510,92 @@ void TestDUChain::testEnsureNoDoubleVisit()
     // there should only be one declaration for "SomeStruct"
     auto candidates = top->findDeclarations(QualifiedIdentifier("SomeStruct"));
     QCOMPARE(candidates.size(), 1);
+}
+
+void TestDUChain::testParsingEnvironment()
+{
+    const TopDUContext::Features features = TopDUContext::AllDeclarationsContextsAndUses;
+
+    IndexedTopDUContext indexed;
+    ClangParsingEnvironment lastEnv;
+    {
+        TestFile file("int main() {}\n", "cpp");
+        auto astFeatures = static_cast<TopDUContext::Features>(features | TopDUContext::AST);
+        file.parse(astFeatures);
+        file.setKeepDUChainData(true);
+        QVERIFY(file.waitForParsed());
+
+        DUChainWriteLocker lock;
+        auto top = file.topContext();
+        QVERIFY(top);
+
+        auto sessionData = ParseSessionData::Ptr::dynamicCast(top->ast());
+        QVERIFY(sessionData);
+
+        auto envFile = KSharedPtr<ClangParsingEnvironmentFile>::dynamicCast(file.topContext()->parsingEnvironmentFile());
+
+        QCOMPARE(envFile->features(), astFeatures);
+        QVERIFY(envFile->featuresSatisfied(astFeatures));
+
+        // if no environment is given, no update should be triggered
+        QVERIFY(!envFile->needsUpdate());
+
+        // same env should also not trigger a reparse
+        ClangParsingEnvironment env = sessionData->environment();
+        QCOMPARE(env.projectKnown(), false);
+        QVERIFY(!envFile->needsUpdate(&env));
+
+        // but changing the environment should trigger an update
+        env.addIncludes(Path::List() << Path("/foo/bar/baz"));
+        QVERIFY(envFile->needsUpdate(&env));
+
+        // now "update" the environment and ensure no update is required thereafter
+        envFile->setEnvironment(env);
+        QVERIFY(!envFile->needsUpdate(&env));
+
+        // just setting the project to known shouldn't require an update
+        env.setProjectKnown(true);
+        QVERIFY(!envFile->needsUpdate(&env));
+
+        // changing it requires an update
+        env.addIncludes(Path::List() << Path("/foo/bar/baz/blub"));
+        QVERIFY(envFile->needsUpdate(&env));
+
+        // update it again
+        envFile->setEnvironment(env);
+        QVERIFY(!envFile->needsUpdate(&env));
+
+        // now compare against an environment where the project is was not known
+        // in such a case, we do not want to trigger an update
+        env.setProjectKnown(false);
+        QVERIFY(!envFile->needsUpdate(&env));
+
+        // even when the environment changes
+        env.addIncludes(Path::List() << Path("/lalalala"));
+        QVERIFY(!envFile->needsUpdate(&env));
+
+        indexed = top->indexed();
+        lastEnv = sessionData->environment();
+        qDebug() << top->url();
+    }
+
+    DUChain::self()->storeToDisk();
+
+    {
+        DUChainWriteLocker lock;
+        QVERIFY(!DUChain::self()->isInMemory(indexed.index()));
+        QVERIFY(indexed.data());
+        QVERIFY(DUChain::self()->environmentFileForDocument(indexed));
+        auto envFile = KSharedPtr<ClangParsingEnvironmentFile>::dynamicCast(DUChain::self()->environmentFileForDocument(indexed));
+        QVERIFY(envFile);
+
+        qDebug() << envFile->features() << features;
+        QCOMPARE(envFile->features(), features);
+        QVERIFY(envFile->featuresSatisfied(features));
+        QVERIFY(!envFile->needsUpdate(&lastEnv));
+
+        DUChain::self()->removeDocumentChain(indexed.data());
+    }
 }
 
 void TestDUChain::benchDUChainBuilder()

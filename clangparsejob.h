@@ -24,8 +24,7 @@
 #define CLANGPARSEJOB_H
 
 #include <language/backgroundparser/parsejob.h>
-#include <util/path.h>
-#include <clang-c/Index.h>
+#include "duchain/clangparsingenvironment.h"
 
 class ClangSupport;
 class ParseSessionData;
@@ -41,11 +40,12 @@ public:
 protected:
     virtual void run();
 
-private:
-    KSharedPtr<ParseSessionData> createSessionData(const KDevelop::Path& pchInclude);
+    virtual const KDevelop::ParsingEnvironment* environment() const override;
 
-    KDevelop::Path::List m_includes;
-    QHash<QString, QString> m_defines;
+private:
+    KSharedPtr<ParseSessionData> createSessionData() const;
+
+    ClangParsingEnvironment m_environment;
 };
 
 #endif // CLANGPARSEJOB_H
