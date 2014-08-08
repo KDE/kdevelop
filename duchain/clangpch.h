@@ -27,12 +27,11 @@
 #include "parsesession.h"
 #include "clanghelpers.h"
 
-class ClangParsingEnvironment;
-
 class KDEVCLANGDUCHAIN_EXPORT ClangPCH
 {
 public:
-    ClangPCH(const ClangParsingEnvironment& environment, ClangIndex* index);
+    ClangPCH(const KDevelop::Path& pchInclude, const KDevelop::Path::List& includePaths,
+             const QHash<QString, QString>& defines, ClangIndex* index);
 
     IncludeFileContexts mapIncludes(CXTranslationUnit tu) const;
 

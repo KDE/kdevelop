@@ -40,7 +40,6 @@
 #include "duchain/tuduchain.h"
 #include "duchain/parsesession.h"
 #include "duchain/clangindex.h"
-#include "duchain/clangparsingenvironmentfile.h"
 #include "util/clangtypes.h"
 
 #include "debug.h"
@@ -137,13 +136,11 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
 : ParseJob(url, languageSupport)
 {
     if (auto file = findProjectFileItem(url)) {
-        m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(file));
-        m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(file));
-        m_environment.setProjectKnown(true);
+        m_includes = IDefinesAndIncludesManager::manager()->includes(file);
+        m_defines = IDefinesAndIncludesManager::manager()->defines(file);
     } else {
-        m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(url.str()));
-        m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(url.str()));
-        m_environment.setProjectKnown(false);
+        m_includes = IDefinesAndIncludesManager::manager()->includes(url.str());
+        m_defines = IDefinesAndIncludesManager::manager()->defines(url.str());
     }
 }
 
@@ -160,12 +157,10 @@ void ClangParseJob::run()
         return;
     }
 
-    m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includesInBackground(document().str()));
-    m_environment.addDefines(IDefinesAndIncludesManager::manager()->definesInBackground(document().str()));
+    m_includes += IDefinesAndIncludesManager::manager()->includesInBackground(document().str());
 
     auto pchInclude = userDefinedPchIncludeForFile(document().str());
-    m_environment.setPchInclude(pchInclude);
-    auto pch = clang()->index()->pch(m_environment);
+    auto pch = clang()->index()->pch(pchInclude, m_includes, m_defines);
 
     if (abortRequested()) {
         return;
@@ -202,7 +197,7 @@ void ClangParseJob::run()
 
     bool needsUpdate = true;
     if (!sessionData) {
-        sessionData = createSessionData();
+        sessionData = createSessionData(pchInclude);
         needsUpdate = false;
     }
 
@@ -212,8 +207,8 @@ void ClangParseJob::run()
         return;
     }
 
-    if (needsUpdate && !session.reparse(contents().contents, m_environment)) {
-        session.setData(createSessionData());
+    if (needsUpdate && !session.reparse(contents().contents)) {
+        session.setData(createSessionData(pchInclude));
     } else {
         Q_ASSERT(session.url() == document());
     }
@@ -254,10 +249,9 @@ void ClangParseJob::run()
             context->setAst(KSharedPtr<IAstContainer>::staticCast(session.data()));
         }
         context->setFeatures(minimumFeatures());
-        auto file = KSharedPtr<ClangParsingEnvironmentFile>::dynamicCast(context->parsingEnvironmentFile());
+        ParsingEnvironmentFilePointer file = context->parsingEnvironmentFile();
         Q_ASSERT(file);
         file->setModificationRevision(contents().modification);
-        file->setEnvironment(m_environment);
     }
 
     // release the data here, so we don't lock it while highlighting
@@ -266,14 +260,9 @@ void ClangParseJob::run()
     highlightDUChain();
 }
 
-ParseSessionData::Ptr ClangParseJob::createSessionData() const
+ParseSessionData::Ptr ClangParseJob::createSessionData(const Path& pchInclude)
 {
     const bool skipFunctionBodies = (minimumFeatures() <= TopDUContext::VisibleDeclarationsAndContexts);
-    return ParseSessionData::Ptr(new ParseSessionData(document(), contents().contents, clang()->index(), m_environment,
+    return ParseSessionData::Ptr(new ParseSessionData(document(), contents().contents, clang()->index(), m_includes, pchInclude, m_defines,
                                  (skipFunctionBodies ? ParseSessionData::SkipFunctionBodies : ParseSessionData::NoOption)));
-}
-
-const ParsingEnvironment* ClangParseJob::environment() const
-{
-    return &m_environment;
 }

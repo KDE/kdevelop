@@ -22,7 +22,6 @@
 #include "clangindex.h"
 
 #include "clangpch.h"
-#include "clangparsingenvironment.h"
 
 #include <util/path.h>
 #include <language/backgroundparser/urlparselock.h>
@@ -41,9 +40,8 @@ CXIndex ClangIndex::index() const
     return m_index;
 }
 
-QSharedPointer<const ClangPCH> ClangIndex::pch(const ClangParsingEnvironment& environment)
+QSharedPointer<const ClangPCH> ClangIndex::pch(const Path& pchInclude, const Path::List& includePaths, const QHash<QString, QString>& defines)
 {
-    const auto& pchInclude = environment.pchInclude();
     if (!pchInclude.isValid()) {
         return {};
     }
@@ -60,7 +58,7 @@ QSharedPointer<const ClangPCH> ClangIndex::pch(const ClangParsingEnvironment& en
         }
     }
 
-    QSharedPointer<const ClangPCH> pch(new ClangPCH(environment, this));
+    QSharedPointer<const ClangPCH> pch(new ClangPCH(pchInclude, includePaths, defines, this));
     QWriteLocker lock(&m_pchLock);
     m_pch.insert(pchInclude, pch);
     return pch;

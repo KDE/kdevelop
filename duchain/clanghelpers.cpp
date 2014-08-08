@@ -28,7 +28,6 @@
 
 #include "tuduchain.h"
 #include "parsesession.h"
-#include "clangparsingenvironmentfile.h"
 
 #include "util/clangtypes.h"
 
@@ -47,9 +46,10 @@ void visitInclusions(CXFile file, CXSourceLocation* stack, unsigned stackDepth, 
     }
 }
 
-ReferencedTopDUContext createTopContext(const IndexedString& path, const ClangParsingEnvironment& environment)
+ReferencedTopDUContext createTopContext(const IndexedString& path)
 {
-    ClangParsingEnvironmentFile* file = new ClangParsingEnvironmentFile(path, environment);
+    ParsingEnvironmentFile* file = new ParsingEnvironmentFile(path);
+    file->setLanguage(ParseSession::languageString());
     ReferencedTopDUContext context = new ClangTopDUContext(path, RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
     DUChain::self()->addDocumentChain(context);
     return context;
@@ -81,8 +81,6 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
 
     const IndexedString path(QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file)))));
 
-    const auto& environment = session.data()->environment();
-
     bool update = false;
     UrlParseLock urlLock(path);
     ReferencedTopDUContext context;
@@ -92,7 +90,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         DUChainWriteLocker lock;
         context = DUChain::self()->chainForDocument(path);
         if (!context) {
-            context = ::createTopContext(path, environment);
+            context = ::createTopContext(path);
         } else {
             update = true;
         }
@@ -101,7 +99,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
 
         includedFiles.insert(file, context);
         if (update) {
-            if (!context->parsingEnvironmentFile()->needsUpdate(&environment)
+            if (!context->parsingEnvironmentFile()->needsUpdate()
                 && context->parsingEnvironmentFile()->featuresSatisfied(features))
             {
                 return context;

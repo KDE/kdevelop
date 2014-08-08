@@ -31,7 +31,6 @@
 
 #include <clang-c/Index.h>
 
-class ClangParsingEnvironment;
 class ClangPCH;
 
 class KDEVCLANGDUCHAIN_EXPORT ClangIndex
@@ -47,7 +46,9 @@ public:
      * The PCH is created using @param includePaths and @param defines if it doesn't exist
      * This function is thread safe.
      */
-    QSharedPointer<const ClangPCH> pch(const ClangParsingEnvironment& defines);
+    QSharedPointer<const ClangPCH> pch(const KDevelop::Path& pchInclude,
+                                       const KDevelop::Path::List& includePaths,
+                                       const QHash<QString, QString>& defines);
 
 private:
     CXIndex m_index;

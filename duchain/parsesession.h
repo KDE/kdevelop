@@ -35,7 +35,6 @@
 #include <util/path.h>
 
 #include "duchainexport.h"
-#include "clangparsingenvironment.h"
 
 class ClangIndex;
 
@@ -60,11 +59,10 @@ public:
      * @param contents The contents of the document you want to parse.
      */
     ParseSessionData(const KDevelop::IndexedString& url, const QByteArray& contents, ClangIndex* index,
-                     const ClangParsingEnvironment& environment = ClangParsingEnvironment(), Options options = Options());
+                     const KDevelop::Path::List& includes = {}, const KDevelop::Path& pchInclude = {},
+                     const QHash<QString, QString>& defines = {}, Options options = Options());
 
     ~ParseSessionData();
-
-    ClangParsingEnvironment environment() const;
 
 private:
     friend class ParseSession;
@@ -76,7 +74,9 @@ private:
     KDevelop::IndexedString m_url;
     CXTranslationUnit m_unit;
     CXFile m_file;
-    ClangParsingEnvironment m_environment;
+
+    KDevelop::Path::List m_includes;
+    QHash<QString, QString> m_defines;
 };
 
 /**
@@ -119,7 +119,8 @@ public:
 
     CXFile file() const;
 
-    bool reparse(const QByteArray& contents, const ClangParsingEnvironment& environment);
+    bool reparse(const QByteArray& contents,
+                 const KDevelop::Path::List& includes = {}, const QHash<QString, QString>& defines = {});
 
     using TopAstNode = CXTranslationUnit;
 

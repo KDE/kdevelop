@@ -27,7 +27,6 @@
 #include "todoextractor.h"
 #include "clanghelpers.h"
 #include "clangindex.h"
-#include "clangparsingenvironment.h"
 #include "debug.h"
 #include "util/clangtypes.h"
 
@@ -86,7 +85,8 @@ CXUnsavedFile fileForContents(const QByteArray& path, const QByteArray& contents
 }
 
 ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& contents, ClangIndex* index,
-                                   const ClangParsingEnvironment& environment, Options options)
+                           const Path::List& includes, const Path& pchInclude,
+                           const QHash<QString, QString>& defines, Options options)
     : m_url(url)
     , m_unit(nullptr)
     , m_file(nullptr)
@@ -115,9 +115,6 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
         // according to llvm.org/devmtg/2012-11/Gribenko_CommentParsing.pdf this is about 5% with lots (> 10000) of documentation comments
         args << "-Wdocumentation";
     }
-    const auto& includes = environment.includes();
-    const auto& pchInclude = environment.pchInclude();
-    const auto& defines = environment.defines();
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> otherArgs;
     otherArgs.reserve(includes.size() + defines.size() + pchInclude.isValid());
@@ -173,7 +170,8 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
 
     if (m_unit) {
         setUnit(m_unit, file.Filename);
-        m_environment = environment;
+        m_includes = includes;
+        m_defines = defines;
 
         if (options.testFlag(PrecompiledHeader)) {
             clang_saveTranslationUnit(m_unit, path + ".pch", CXSaveTranslationUnit_None);
@@ -194,11 +192,6 @@ void ParseSessionData::setUnit(CXTranslationUnit unit, const char* fileName)
 
     m_unit = unit;
     m_file = clang_getFile(m_unit, fileName);
-}
-
-ClangParsingEnvironment ParseSessionData::environment() const
-{
-    return m_environment;
 }
 
 ParseSession::ParseSession(ParseSessionData::Ptr data)
@@ -310,9 +303,9 @@ CXFile ParseSession::file() const
     return d ? d->m_file : nullptr;
 }
 
-bool ParseSession::reparse(const QByteArray& contents, const ClangParsingEnvironment& environment)
+bool ParseSession::reparse(const QByteArray& contents, const Path::List& includes, const QHash<QString, QString>& defines)
 {
-    if (!d || environment != d->m_environment) {
+    if (!d || includes != d->m_includes || defines != d->m_defines) {
         return false;
     }
 
