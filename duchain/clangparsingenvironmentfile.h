@@ -28,7 +28,7 @@
 #include "duchainexport.h"
 
 class ClangParsingEnvironment;
-struct ClangParsingEnvironmentFileData;
+class ClangParsingEnvironmentFileData;
 
 class KDEVCLANGDUCHAIN_EXPORT ClangParsingEnvironmentFile : public KDevelop::ParsingEnvironmentFile
 {

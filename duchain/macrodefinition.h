@@ -26,7 +26,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/indexedstring.h>
 
-struct MacroDefinitionData;
+class MacroDefinitionData;
 
 /**
  * @brief Represents a single C/C++ macro definition in the DUCHain

@@ -3,6 +3,7 @@
 
     Copyright 2013 Olivier de Gaalon <olivier.jg@gmail.com>
     Copyright 2013 Milian Wolff <mail@milianw.de>
+    Copyright 2014 Kevin Funk <kfunk@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public

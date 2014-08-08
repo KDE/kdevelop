@@ -3,6 +3,7 @@
 
     Copyright 2013 Olivier de Gaalon <olivier.jg@gmail.com>
     Copyright 2013 Milian Wolff <mail@milianw.de>
+    Copyright 2014 Kevin Funk <kfunk@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -112,7 +113,7 @@ QPair<QString, SimpleRange> lineInDocument(const KUrl& url, const SimpleCursor& 
 
 QPair<TopDUContextPointer, SimpleRange> importedContextForPosition(const KUrl& url, const SimpleCursor& position)
 {
-  auto pair = lineInDocument(url, position);
+    auto pair = lineInDocument(url, position);
 
     const QString line = pair.first;
     if (line.isEmpty())
@@ -154,11 +155,11 @@ QPair<TopDUContextPointer, SimpleRange> importedContextForPosition(const KUrl& u
 }
 
 ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
-: IPlugin( KDevClangSupportFactory::componentData(), parent )
-, ILanguageSupport()
-, m_highlighting(new KDevelop::CodeHighlighting(this))
-, m_refactoring(new SimpleRefactoring(this))
-, m_index(new ClangIndex)
+    : IPlugin( KDevClangSupportFactory::componentData(), parent )
+    , ILanguageSupport()
+    , m_highlighting(new KDevelop::CodeHighlighting(this))
+    , m_refactoring(new SimpleRefactoring(this))
+    , m_index(new ClangIndex)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
     setXMLFile( "kdevclangsupport.rc" );
@@ -233,14 +234,14 @@ void ClangSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, 
 
 KDevelop::ContextMenuExtension ClangSupport::contextMenuExtension(KDevelop::Context* context)
 {
-  ContextMenuExtension cm;
-  EditorContext *ec = dynamic_cast<KDevelop::EditorContext *>(context);
+    ContextMenuExtension cm;
+    EditorContext *ec = dynamic_cast<KDevelop::EditorContext *>(context);
 
-  if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(language())) {
-    // It's a C++ file, let's add our context menu.
-    m_refactoring->fillContextMenu(cm, context);
-  }
-  return cm;
+    if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(language())) {
+        // It's a C++ file, let's add our context menu.
+        m_refactoring->fillContextMenu(cm, context);
+    }
+    return cm;
 }
 
 SimpleRange ClangSupport::specialLanguageObjectRange(const KUrl& url, const SimpleCursor& position)

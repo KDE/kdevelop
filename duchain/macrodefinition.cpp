@@ -25,8 +25,9 @@
 
 using namespace KDevelop;
 
-struct KDEVPLATFORMLANGUAGE_EXPORT MacroDefinitionData : public DeclarationData
+class KDEVPLATFORMLANGUAGE_EXPORT MacroDefinitionData : public DeclarationData
 {
+public:
     MacroDefinitionData()
         : isFunctionLike(false)
     {}

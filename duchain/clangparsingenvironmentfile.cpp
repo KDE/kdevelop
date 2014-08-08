@@ -31,8 +31,9 @@ using namespace KDevelop;
 
 REGISTER_DUCHAIN_ITEM(ClangParsingEnvironmentFile);
 
-struct ClangParsingEnvironmentFileData : public ParsingEnvironmentFileData
+class ClangParsingEnvironmentFileData : public ParsingEnvironmentFileData
 {
+public:
     ClangParsingEnvironmentFileData()
         : ParsingEnvironmentFileData()
         , environmentHash(0)
