@@ -104,7 +104,6 @@ void TestDUChain::cleanupTestCase()
   DelayedType::Ptr delayed(new DelayedType);
   delayed->setIdentifier(IndexedTypeIdentifier("frokkoflasdasotest_bla12310915205342"));
   IndexedType indexed = delayed->indexed();
-  DUChain::self()->finalCleanup();
 
   {
   DUChainWriteLocker lock(DUChain::lock());
