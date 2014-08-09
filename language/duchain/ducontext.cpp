@@ -560,43 +560,42 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
                                                DeclarationList& ret, const TopDUContext* /*source*/,
                                                SearchFlags flags ) const
 {
-  {
-     Checker checker(flags, dataType, position, type());
+  Checker checker(flags, dataType, position, type());
 
-     if(d_func()->m_inSymbolTable && !indexedLocalScopeIdentifier().isEmpty() && !identifier.isEmpty()) {
-       //This context is in the symbol table, use the symbol-table to speed up the search
-       QualifiedIdentifier id(scopeIdentifier(true) + identifier);
+  if (d_func()->m_inSymbolTable && !indexedLocalScopeIdentifier().isEmpty() && !identifier.isEmpty()) {
+    //This context is in the symbol table, use the symbol-table to speed up the search
+    QualifiedIdentifier id(scopeIdentifier(true) + identifier);
 
-       TopDUContext* top = topContext();
+    TopDUContext* top = topContext();
 
-       uint count;
-       const IndexedDeclaration* declarations;
-       PersistentSymbolTable::self().declarations(id, count, declarations);
-       for(uint a = 0; a < count; ++a) {
-         ///@todo Eventually do efficient iteration-free filtering
-         if(declarations[a].topContextIndex() == top->ownIndex()) {
-           Declaration* decl = LocalIndexedDeclaration(declarations[a].localIndex()).data(top);
-           if(decl && contextIsChildOrEqual(decl->context(), this)) {
-             Declaration* checked = checker.check(decl);
-             if(checked)
-               ret.append(checked);
-           }
-         }
-       }
-     }else {
-       //Iterate through all declarations
-      DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
-      IndexedIdentifier indexedIdentifier(identifier);
-      while(it) {
-        Declaration* declaration = *it;
-        if(declaration && declaration->indexedIdentifier() == indexedIdentifier) {
-          Declaration* checked = checker.check(declaration);
-          if(checked)
-              ret.append(checked);
+    uint count;
+    const IndexedDeclaration* declarations;
+    PersistentSymbolTable::self().declarations(id, count, declarations);
+    for (uint a = 0; a < count; ++a) {
+      ///@todo Eventually do efficient iteration-free filtering
+      if (declarations[a].topContextIndex() == top->ownIndex()) {
+        Declaration* decl = declarations[a].declaration();
+        if (decl && contextIsChildOrEqual(decl->context(), this)) {
+          Declaration* checked = checker.check(decl);
+          if (checked) {
+            ret.append(checked);
+          }
         }
-        ++it;
       }
-     }
+    }
+  } else {
+    //Iterate through all declarations
+    DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
+    IndexedIdentifier indexedIdentifier(identifier);
+    while (it) {
+      Declaration* declaration = *it;
+      if (declaration && declaration->indexedIdentifier() == indexedIdentifier) {
+        Declaration* checked = checker.check(declaration);
+        if (checked)
+            ret.append(checked);
+      }
+      ++it;
+    }
   }
 }
 
