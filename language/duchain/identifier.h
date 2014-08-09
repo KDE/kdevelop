@@ -263,6 +263,7 @@ public:
   Identifier last() const;
   Identifier top() const;
   Identifier at(int i) const;
+  IndexedIdentifier indexedAt(int i) const;
   /**
    * @param pos Position where to start the copy.
    * @param len If this is -1, the whole following part will be returned.
