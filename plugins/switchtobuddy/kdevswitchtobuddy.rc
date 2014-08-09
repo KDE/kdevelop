@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevSwitchToBuddy" version="6">
+<MenuBar>
+  <Menu name="navigation">
+    <text context="@title:menu">Navigation</text>
+    <Action name="switch_definition_declaration" group="navigation_jmp"/>
+  </Menu>
+</MenuBar>
+</kpartgui>
