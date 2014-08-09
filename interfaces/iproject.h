@@ -32,10 +32,6 @@
 #include <kurl.h>
 #include <ksharedconfig.h>
 
-// we have to include this otherwise moc breaks
-// this means the copy/move constructor must be inline otherwise we need to link
-#include <util/path.h>
-
 #include "interfacesexport.h"
 
 class KJob;
@@ -50,6 +46,7 @@ namespace KDevelop
 class IPlugin;
 class IProjectFileManager;
 class IBuildSystemManager;
+class Path;
 class ProjectBaseItem;
 class ProjectFileItem;
 class ProjectFolderItem;
@@ -138,7 +135,7 @@ public:
     /**
      * @return the path to the project file
      */
-    Q_SCRIPTABLE virtual Path projectFile() const = 0;
+    virtual Path projectFile() const = 0;
     /** Get the url of the project file.*/
     KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual KUrl projectFileUrl() const = 0;
     virtual KSharedConfig::Ptr projectConfiguration() const = 0;
@@ -162,7 +159,7 @@ public:
      * @brief Get the project path
      * @return The canonical absolute directory of the project.
      */
-    virtual Q_SCRIPTABLE Path path() const = 0;
+    virtual Path path() const = 0;
 
     /** Returns the name of the project. */
     virtual Q_SCRIPTABLE QString name() const = 0;
