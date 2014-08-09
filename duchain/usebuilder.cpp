@@ -75,6 +75,22 @@ bool UseBuilder::visit(QmlJS::AST::UiImport* node)
     return false;   // Don't highlight the identifiers that appear in import statements
 }
 
+bool UseBuilder::visit(QmlJS::AST::UiScriptBinding* node)
+{
+    QString propertyName = node->qualifiedId->name.toString();
+
+    if (propertyName == QLatin1String("name") ||
+        propertyName == QLatin1String("type") ||
+        propertyName == QLatin1String("exports") ||
+        propertyName == QLatin1String("prototype")) {
+        // Ignore plugin.qmltypes-specific property names. They appear a huge
+        // number of time and are never declared anywhere.
+        return false;
+    }
+
+    return true;
+}
+
 bool UseBuilder::visit(QmlJS::AST::UiPublicMember* node)
 {
     // node->memberType can contain a type name (if node is a property), use it

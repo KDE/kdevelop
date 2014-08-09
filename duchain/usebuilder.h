@@ -44,6 +44,7 @@ protected:
     virtual bool visit(QmlJS::AST::UiQualifiedId* node);
     virtual bool visit(QmlJS::AST::UiImport* node);
     virtual bool visit(QmlJS::AST::UiPublicMember* node);
+    virtual bool visit(QmlJS::AST::UiScriptBinding* node);
 
 private:
     void useForExpression(QmlJS::AST::Node* node, const KDevelop::RangeInRevision &range = KDevelop::RangeInRevision::invalid());
