@@ -4,9 +4,33 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>KDevelop</name>
+  <name xml:lang="ca">KDevelop</name>
+  <name xml:lang="en-GB">KDevelop</name>
+  <name xml:lang="nl">KDevelop</name>
+  <name xml:lang="pl">KDevelop</name>
+  <name xml:lang="pt">KDevelop</name>
+  <name xml:lang="sv">KDevelop</name>
+  <name xml:lang="uk">KDevelop</name>
+  <name xml:lang="x-test">xxKDevelopxx</name>
   <summary>It is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.</summary>
+  <summary xml:lang="ca">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
+  <summary xml:lang="en-GB">It is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.</summary>
+  <summary xml:lang="nl">Het is een IDE, vol functies en uit te breiden met plug-ins voor C/C++ en andere programmeertalen.</summary>
+  <summary xml:lang="pl">Jest to w pełni funkcjonalne, z możliwością rozszerzenia przy użyciu wtyczek, zintegrowane środowisko programistyczne dla C/C++ i innych języków programowania.</summary>
+  <summary xml:lang="pt">É um IDE pleno de funcionalidades e modular para o C/C++ e outras linguagens de programação.</summary>
+  <summary xml:lang="sv">Det är en funktionsrik, integrerad utvecklingsmiljö för C/C++ och andra programspråk, med utökningsmöjligheter via insticksmoduler.</summary>
+  <summary xml:lang="uk">Це повноцінне, розширюване за допомогою додатків комплексне середовище розробки мовами C/C++ та іншими мовами програмування.</summary>
+  <summary xml:lang="x-test">xxIt is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.xx</summary>
   <description>
-  <p>Free and Open Source Integrated Development Environment for your different software projects.</p>
+    <p>Free and Open Source Integrated Development Environment for your different software projects.</p>
+    <p xml:lang="ca">És un entorn de desenvolupament integrat lliure i de codi obert per als vostres diferents projectes de programari.</p>
+    <p xml:lang="en-GB">Free and Open Source Integrated Development Environment for your different software projects.</p>
+    <p xml:lang="nl">Geïntegreerde vrije en open source ontwikkelomgeving voor uw verschillende software projecten.</p>
+    <p xml:lang="pl">Darmowe i o otwartym źródle zintegrowane środowisko programistyczne dla różnych projektów oprogramowania.</p>
+    <p xml:lang="pt">Um ambiente de desenvolvimento integrado em código aberto para os seus diferentes projectos aplicacionais.</p>
+    <p xml:lang="sv">Fri integrerad utvecklingsmiljö med öppen källkod för olika programvaruprojekt.</p>
+    <p xml:lang="uk">Вільне комплексне середовище розробки з відкритим кодом, призначене для ваших різноманітних проектів з розробки програмного коду.</p>
+    <p xml:lang="x-test">xxFree and Open Source Integrated Development Environment for your different software projects.xx</p>
   </description>
   <url type="homepage">http://kdevelop.org</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kdevelop</url>
