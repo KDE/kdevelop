@@ -80,6 +80,10 @@ void FunctionDefinition::setDeclaration(Declaration* declaration)
 FunctionDefinition* FunctionDefinition::definition(const Declaration* decl)
 {
   ENSURE_CHAIN_READ_LOCKED
+  if (!decl) {
+    return nullptr;
+  }
+
   KDevVarLengthArray<IndexedDeclaration> allDefinitions = DUChain::definitions()->definitions(decl->id());
   FOREACH_ARRAY(const IndexedDeclaration& decl, allDefinitions) {
     if(decl.data()) ///@todo Find better ways of deciding which definition to use
