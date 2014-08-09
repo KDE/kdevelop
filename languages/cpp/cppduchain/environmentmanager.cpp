@@ -18,14 +18,13 @@
 #include "rpp/pp-environment.h"
 #include <language/duchain/problem.h>
 #include "cpppreprocessenvironment.h"
-#include <language/duchain/repositories/itemrepository.h>
+#include <serialization/itemrepository.h>
 #include <language/editor/modificationrevision.h>
 #include "parser/rpp/macrorepository.h"
 #include "cppdebughelper.h"
 #include <language/duchain/duchainregister.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
-#include <language/duchain/referencecounting.h>
 #include "cpppreprocessenvironment.h"
 
 using namespace KDevelop;

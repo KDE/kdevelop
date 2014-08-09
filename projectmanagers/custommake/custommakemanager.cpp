@@ -21,7 +21,7 @@
 #include <kpluginloader.h>
 #include <project/projectmodel.h>
 #include <project/helper.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <QDir>
 #include <QFileInfoList>

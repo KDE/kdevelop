@@ -27,7 +27,7 @@
 #include <QtCore/QIODevice>
 
 #include <language/editor/cursorinrevision.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include "anchor.h"
 #include "chartools.h"
 

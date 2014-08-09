@@ -26,7 +26,7 @@
 #include <language/codecompletion/codecompletionmodel.h>
 #include <ksharedptr.h>
 #include <language/duchain/duchainpointer.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/codecompletion/codecompletioncontext.h>
 
 namespace KDevelop {

@@ -29,7 +29,7 @@
 #include <interfaces/iuicontroller.h>
 #include <project/projectmodel.h>
 #include <project/builderjob.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <util/kdevstringhandler.h>
 #include <util/executecompositejob.h>
 #include <KMessageBox>

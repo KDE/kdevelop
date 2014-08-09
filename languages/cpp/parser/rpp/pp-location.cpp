@@ -22,7 +22,7 @@
 #include <pp-location.h>
 #include <QStringList>
 #include <kdebug.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include "chartools.h"
 
 using namespace rpp;

@@ -22,7 +22,7 @@
 #include <QString>
 #include <QVector>
 #include <util/kdevvarlengtharray.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <kdebug.h>
 
 QByteArray stringFromContents(const PreprocessedContents& contents, int offset, int count) {

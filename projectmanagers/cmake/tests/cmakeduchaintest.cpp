@@ -26,7 +26,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/use.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <language/duchain/parsingenvironment.h>

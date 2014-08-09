@@ -26,7 +26,7 @@
 #include <language/interfaces/quickopenfilter.h>
 #include <kurl.h>
 #include <language/duchain/duchainpointer.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/util/includeitem.h>
 
 class IncludeFileData : public KDevelop::QuickOpenDataBase {

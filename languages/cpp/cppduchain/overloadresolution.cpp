@@ -20,7 +20,7 @@
 #include "cppduchain/typeutils.h"
 #include <language/duchain/ducontext.h>
 #include <language/duchain/declaration.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include "cppduchain/cpptypes.h"
 #include "viablefunctions.h"

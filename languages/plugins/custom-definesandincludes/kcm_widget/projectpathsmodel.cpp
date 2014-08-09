@@ -20,7 +20,7 @@
 
 #include <klocale.h>
 #include <interfaces/iproject.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <util/path.h>
 
 ProjectPathsModel::ProjectPathsModel( QObject* parent )

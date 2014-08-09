@@ -20,7 +20,7 @@
 #include <language/duchain/identifier.h>
 #include <QString>
 #include <language/duchain/duchainlock.h>
-#include <language/duchain/repositories/itemrepository.h>
+#include <serialization/itemrepository.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/types/identifiedtype.h>
 #include <language/duchain/types/delayedtype.h>

@@ -24,7 +24,7 @@
 #include "lexer.h"
 #include "memorypool.h"
 #include <language/duchain/problem.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/declaration.h>
 
 #include "ast.h"

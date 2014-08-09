@@ -25,7 +25,7 @@
 #include "cmakeprojectvisitor.h"
 #include "cmakelistsparser.h"
 #include <QString>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <cmakecondition.h>

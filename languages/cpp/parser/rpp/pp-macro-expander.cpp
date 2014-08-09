@@ -29,7 +29,7 @@
 #include <klocale.h> 
 
 #include <language/duchain/problem.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include "pp-internal.h"
 #include "pp-engine.h"

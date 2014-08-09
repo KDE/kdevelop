@@ -19,7 +19,7 @@
 #ifndef MACROREPOSITORY_H
 #define MACROREPOSITORY_H
 
-#include <language/duchain/repositories/itemrepository.h>
+#include <serialization/itemrepository.h>
 #include <cppparserexport.h>
 #include "pp-macro.h"
 

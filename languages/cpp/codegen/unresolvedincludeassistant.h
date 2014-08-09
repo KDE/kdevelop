@@ -20,7 +20,7 @@
 #define CPP_MISSINGINCLUDEASSISTANT_H
 
 #include <interfaces/iassistant.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/problem.h>
 #include <kurl.h>
 

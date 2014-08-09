@@ -57,7 +57,7 @@
 #include <kprocess.h>
 #include <klocale.h>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <util/pushvalue.h>
 
 // #define VERBOSE

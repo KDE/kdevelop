@@ -21,7 +21,7 @@
 
 #include "pp-scanner.h"
 #include "chartools.h"
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <util/kdevvarlengtharray.h>
 
 using namespace rpp;
