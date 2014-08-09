@@ -488,7 +488,10 @@ QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifi
   return ret.toList();
 }
 
-bool contextIsChildOrEqual(const DUContext* childContext, const DUContext* context) {
+namespace {
+
+bool contextIsChildOrEqual(const DUContext* childContext, const DUContext* context)
+{
   if(childContext == context)
     return true;
 
@@ -498,6 +501,59 @@ bool contextIsChildOrEqual(const DUContext* childContext, const DUContext* conte
     return false;
 }
 
+struct Checker
+{
+  Checker(DUContext::SearchFlags flags, const AbstractType::Ptr& dataType,
+          const CursorInRevision & position, DUContext::ContextType ownType)
+  : m_flags(flags)
+  , m_dataType(dataType)
+  , m_position(position)
+  , m_ownType(ownType)
+  {
+  }
+
+  Declaration* check(Declaration* declaration) const
+  {
+    ///@todo This is C++-specific
+    if (m_ownType != DUContext::Class && m_ownType != DUContext::Template
+        && m_position.isValid() && m_position <= declaration->range().start)
+    {
+      return nullptr;
+    }
+
+    if (declaration->kind() == Declaration::Alias && !(m_flags & DUContext::DontResolveAliases)) {
+      //Apply alias declarations
+      AliasDeclaration* alias = static_cast<AliasDeclaration*>(declaration);
+      if (alias->aliasedDeclaration().isValid()) {
+        declaration = alias->aliasedDeclaration().declaration();
+      } else {
+        kDebug() << "lost aliased declaration";
+      }
+    }
+
+    if (declaration->kind() == Declaration::NamespaceAlias && !(m_flags & DUContext::NoFiltering)) {
+      return nullptr;
+    }
+
+    if ((m_flags & DUContext::OnlyFunctions) && !declaration->isFunctionDeclaration()) {
+      return nullptr;
+    }
+
+    if (m_dataType && m_dataType->indexed() != declaration->indexedType()) {
+      return nullptr;
+    }
+
+    return declaration;
+  }
+
+  DUContext::SearchFlags m_flags;
+  const AbstractType::Ptr m_dataType;
+  const CursorInRevision m_position;
+  DUContext::ContextType m_ownType;
+};
+
+}
+
 void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
                                                const CursorInRevision & position,
                                                const AbstractType::Ptr& dataType,
@@ -505,47 +561,6 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
                                                SearchFlags flags ) const
 {
   {
-     struct Checker {
-       Checker(SearchFlags flags, const AbstractType::Ptr& dataType, const CursorInRevision & position, DUContext::ContextType ownType) : m_flags(flags), m_dataType(dataType), m_position(position), m_ownType(ownType) {
-       }
-
-       Declaration* check(Declaration* declaration) {
-          ///@todo This is C++-specific
-          if (m_ownType != Class && m_ownType != Template
-            && m_position.isValid() && m_position <= declaration->range().start)
-          {
-            return 0;
-          }
-          if( declaration->kind() == Declaration::Alias && !(m_flags & DontResolveAliases) ) {
-            //Apply alias declarations
-            AliasDeclaration* alias = static_cast<AliasDeclaration*>(declaration);
-            if(alias->aliasedDeclaration().isValid()) {
-              declaration = alias->aliasedDeclaration().declaration();
-            } else {
-#ifndef Q_CC_MSVC
-              kDebug() << "lost aliased declaration";
-#endif
-            }
-          }
-
-          if( declaration->kind() == Declaration::NamespaceAlias && !(m_flags & NoFiltering) )
-            return 0;
-
-          if((m_flags & OnlyFunctions) && !declaration->isFunctionDeclaration())
-            return 0;
-
-          if (m_dataType && m_dataType->indexed() != declaration->indexedType()) {
-            return 0;
-          }
-          return declaration;
-       }
-
-       SearchFlags m_flags;
-       const AbstractType::Ptr m_dataType;
-       const CursorInRevision& m_position;
-       DUContext::ContextType m_ownType;
-     };
-
      Checker checker(flags, dataType, position, type());
 
      if(d_func()->m_inSymbolTable && !indexedLocalScopeIdentifier().isEmpty() && !identifier.isEmpty()) {
