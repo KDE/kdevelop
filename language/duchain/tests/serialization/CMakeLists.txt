@@ -37,3 +37,15 @@ target_link_libraries(tst_identifier
   ${KDEVPLATFORM_TESTS_LIBRARIES}
   ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
 )
+
+########### next target ###############
+
+set(tst_duchainshutdown_SRCS tst_duchainshutdown.cpp)
+
+kde4_add_unit_test(tst_duchainshutdown ${tst_duchainshutdown_SRCS})
+target_link_libraries(tst_duchainshutdown
+  ${KDE4_KDECORE_LIBS}
+  ${QT_QTTEST_LIBRARY}
+  ${KDEVPLATFORM_TESTS_LIBRARIES}
+  ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+)

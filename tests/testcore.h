@@ -103,6 +103,11 @@ public:
      */
     static void shutdown();
 
+    /**
+     * Fakes a shutdown without actually doing the shutdown.
+     */
+    void setShuttingDown(bool shuttingDown);
+
     void setSessionController( SessionController* );
     void setPluginController( PluginController* );
     void setRunController( RunController* );
