@@ -55,6 +55,7 @@
 #include <language/interfaces/editorcontext.h>
 
 #include <project/projectutils.h>
+#include <project/projectmodel.h>
 
 #include "core.h"
 #include "mainwindow.h"
@@ -62,6 +63,7 @@
 #include "partcontroller.h"
 #include "plugincontroller.h"
 #include "documentcontroller.h"
+#include <path.h>
 
 namespace KDevelop {
 
@@ -136,12 +138,9 @@ struct TextDocumentPrivate {
         
         {
             KUrl url = v->document()->url();
-            IProject* project = Core::self()->projectController()->findProjectForUrl( url );
-            if(project)
-            {
-                QList< ProjectBaseItem* > items = project->itemsForUrl( url );
-                if(!items.isEmpty())
-                    populateParentItemsMenu( items.front(), m_addedContextMenu );
+            QList< ProjectBaseItem* > items = Core::self()->projectController()->projectModel()->itemsForPath( IndexedString(url) );
+            if (!items.isEmpty()) {
+                populateParentItemsMenu( items.front(), m_addedContextMenu );
             }
         }
         
@@ -181,8 +180,9 @@ struct TextDocumentPrivate {
         // Find projects by checking which one contains the file's parent directory,
         // to avoid issues with the cmake manager temporarily removing files from a project
         // during reloading.
+        KDevelop::Path path(document->url());
         foreach ( KDevelop::IProject* current, Core::self()->projectController()->projects() ) {
-            if ( current->folder().isParentOf(document->url()) ) {
+            if ( current->path().isParentOf(path) ) {
                 project = current;
                 break;
             }
