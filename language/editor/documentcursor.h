@@ -41,7 +41,7 @@ public:
     }
 
     static DocumentCursor invalid() {
-      return DocumentCursor({}, SimpleCursor::invalid());
+      return DocumentCursor({}, KTextEditor::Cursor::invalid());
     }
 
     inline bool operator==(const DocumentCursor& rhs) const {
