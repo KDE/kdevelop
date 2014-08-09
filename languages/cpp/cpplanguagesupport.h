@@ -30,7 +30,6 @@
 
 #include <QDateTime>
 #include <QThread>
-#include <QTimer>
 #include <QMutex>
 
 namespace rpp {
@@ -45,12 +44,6 @@ class SimpleRefactoring;
 namespace KDevelop {
   class ICodeHighlighting;
   class CodeCompletion;
-}
-namespace Cpp {
-  class StaticCodeAssistant;
-}
-namespace CppTools {
-  class MakeFileResolver;
 }
 
 ///A class that helps detecting what exactly makes the UI block. To use it, just place a breakpoint on UIBlockTester::lockup() and inspect the execution-position of the main thread

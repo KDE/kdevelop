@@ -67,7 +67,7 @@
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 #include <cpputils.h>
 #include <interfaces/ilanguage.h>
-#include <interfaces/foregroundlock.h>
+#include <util/foregroundlock.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 

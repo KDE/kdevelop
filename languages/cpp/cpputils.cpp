@@ -32,7 +32,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/util/includeitem.h>
 
-#include "interfaces/foregroundlock.h"
+#include <util/foregroundlock.h>
 
 #include <project/projectmodel.h>
 

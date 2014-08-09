@@ -95,4 +95,6 @@ include(CTest)
 # in the KDE build system, this is the same as CMAKE_BINARY_DIR.
 configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCustom.cmake)
 
+install(FILES kdevelop.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
+
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

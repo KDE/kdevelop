@@ -437,9 +437,6 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
     m_importedParentContexts.clear();
   }
 
-
-  DUChainWriteLocker lock(DUChain::lock());
-  topLevelContext->squeeze();
   return topLevelContext;
 }
 
@@ -561,6 +558,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
         
         QualifiedIdentifier newFunctionName(className);
         newFunctionName.push(functionName.last());
+        newFunctionName.setExplicitlyGlobal(false);
         if(newFunctionName.count() > currentScope.count())
           functionName = newFunctionName.mid(currentScope.count());
       }
