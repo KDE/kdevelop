@@ -137,7 +137,10 @@ QString MacroNavigationContext::html(bool shorten)
                           "%1: %2, defined in %3",
                           (m_macro->isFunctionLike() ? i18n("Function macro") : i18n("Macro")),
                           importantHighlight(name()) + parameters,
-                          createLink(QString("%1 :%2").arg(path).arg(cursor.line()+1), path, action));
+                          createLink(QString("%1 :%2").arg(url.fileName()).arg(cursor.line()+1), path, action));
+
+    modifyHtml() += " "; //The action name _must_ stay "show_uses", since that is also used from outside
+    makeLink(i18n("Show uses"), "show_uses", NavigationAction(m_macro.dynamicCast<Declaration>(), NavigationAction::NavigateUses));
 
     modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
     return currentHtml();
