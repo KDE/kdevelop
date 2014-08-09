@@ -92,7 +92,7 @@ class KDEVPLATFORMSERIALIZATION_EXPORT IndexedString {
    * Returns a not reference-counted IndexedString that represents the given index.
    *
    * @warning It is dangerous dealing with indices directly, because it may break
-   *          the reference counting logic never stay pure indices to disk
+   *          the reference counting logic. Never store pure indices to disk.
    */
   static IndexedString fromIndex( unsigned int index ) {
     IndexedString ret;
