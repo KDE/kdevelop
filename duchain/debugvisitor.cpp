@@ -47,39 +47,35 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
     (*data->out) << QByteArray(data->depth * 2, ' ');
 
     const auto kind = clang_getCursorKind(cursor);
-    if (clang_isDeclaration(kind)) {
-        (*data->out) << "decl: ";
-    } else {
-        auto referenced = clang_getCursorReferenced(cursor);
-        if (kind != CXCursor_UnexposedExpr && !clang_equalCursors(clang_getNullCursor(), referenced)) {
-            (*data->out) << "use: ";
-        }
-    }
-
-    (*data->out) << '"';
+    ClangString kindName(clang_getCursorKindSpelling(kind));
+    (*data->out) << kindName << " (" << kind << ") ";
 
     auto type = clang_getCursorType(cursor);
-    if (type.kind != CXType_Invalid) {
+    if (type.kind != CXType_Unexposed) {
         ClangString typeName(clang_getTypeSpelling(type));
-        (*data->out) << typeName << ' ';
+        (*data->out) << "| type: \"" << typeName << "\"" << " (" << type.kind << ") ";
     }
 
     ClangString displayName(clang_getCursorDisplayName(cursor));
     if (strlen(displayName)) {
-        (*data->out) << displayName << ' ';
+        (*data->out) << "| display: \"" << displayName << "\" ";
     }
-
-    (*data->out) << '"';
-
-    ClangString kindName(clang_getCursorKindSpelling(kind));
-    (*data->out) << " of kind "  << kindName << " (" << kind << ")";
 
     ClangRange range(clang_getCursorExtent(cursor));
     KDevelop::SimpleRange simpleRange = range.toSimpleRange();
     ClangString fileName(clang_getFileName(file));
-    (*data->out) << " in " << fileName << '@' << '['
+    (*data->out) << "| loc: " << fileName << '@' << '['
         << '(' << simpleRange.start.line+1 << ',' << simpleRange.start.column+1 << "),"
-        << '(' << simpleRange.end.line+1 << ',' << simpleRange.end.column+1 << ")]";
+        << '(' << simpleRange.end.line+1 << ',' << simpleRange.end.column+1 << ")] ";
+
+    if (clang_isDeclaration(kind)) {
+        (*data->out) << "| isDecl";
+    } else {
+        auto referenced = clang_getCursorReferenced(cursor);
+        if (kind != CXCursor_UnexposedExpr && !clang_equalCursors(clang_getNullCursor(), referenced)) {
+            (*data->out) << "| isUse";
+        }
+    }
 
     (*data->out) << endl;
 
