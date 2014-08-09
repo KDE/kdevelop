@@ -131,7 +131,7 @@ void ProjectLoadTest::addRemoveFiles()
     QVERIFY(QTest::kWaitForSignal(ICore::self()->projectController(),
                                   SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
     IProject* project = ICore::self()->projectController()->projects().first();
-    QCOMPARE(project->projectFileUrl(), p.file);
+    QCOMPARE(project->projectFile().toUrl(), p.file);
 
     //KDirWatch adds/removes the file automatically
     for (int i=0; i<100; ++i) {
@@ -148,8 +148,8 @@ void ProjectLoadTest::addRemoveFiles()
 
     KUrl url(p.dir->name()+"/blub"+QString::number(50));
     url.cleanPath();
-    QCOMPARE(project->filesForUrl(url).count(), 1);
-    ProjectFileItem* file = project->filesForUrl(url).first();
+    QCOMPARE(project->filesForPath(IndexedString(url)).count(), 1);
+    ProjectFileItem* file = project->filesForPath(IndexedString(url)).first();
     project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file ); //message box has to be accepted manually :(
     for (int i=51; i<100; ++i) {
         QFile f2(p.dir->name()+"/blub"+QString::number(i));
@@ -190,14 +190,14 @@ void ProjectLoadTest::removeDirRecursive()
     QVERIFY(QTest::kWaitForSignal(ICore::self()->projectController(),
                                   SIGNAL(projectOpened(KDevelop::IProject*)), 20000));
     IProject* project = ICore::self()->projectController()->projects().first();
-    QCOMPARE(project->projectFileUrl(), p.file);
+    QCOMPARE(project->projectFile().toUrl(), p.file);
 
     for (int i=0; i<1; ++i) {
         KUrl url(p.dir->name()+"/blub");
         url.cleanPath();
-        QCOMPARE(project->foldersForUrl(url).count(), 1);
+        QCOMPARE(project->foldersForPath(IndexedString(url)).count(), 1);
 
-        ProjectFolderItem* file = project->foldersForUrl(url).first();
+        ProjectFolderItem* file = project->foldersForPath(IndexedString(url)).first();
         project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file );
     }
 
@@ -255,7 +255,7 @@ void ProjectLoadTest::addLotsOfFiles()
                                   SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
     QCOMPARE(ICore::self()->projectController()->projects().size(), 1);
     IProject* project = ICore::self()->projectController()->projects().first();
-    QCOMPARE(project->projectFileUrl(), p.file);
+    QCOMPARE(project->projectFile().toUrl(), p.file);
 
     fillProject(50, 25, p, true);
 
@@ -305,7 +305,7 @@ void ProjectLoadTest::raceJob()
 
     QCOMPARE(ICore::self()->projectController()->projectCount(), 1);
     IProject *project = ICore::self()->projectController()->projectAt(0);
-    QCOMPARE(project->projectFileUrl(), p.file);
+    QCOMPARE(project->projectFile().toUrl(), p.file);
     ProjectFolderItem* root = project->projectItem();
     QCOMPARE(root->rowCount(), 1);
     ProjectBaseItem* testItem = root->child(0);
@@ -329,9 +329,9 @@ void ProjectLoadTest::raceJob()
 
 void ProjectLoadTest::addDuringImport()
 {
-    // our goal here is to try to reproduce an issue in the optimized filesForUrl implementation
+    // our goal here is to try to reproduce an issue in the optimized filesForPath implementation
     // which requires the project to be associated to the model to function properly
-    // to trigger this we create a big project, import it and then call filesForUrl during
+    // to trigger this we create a big project, import it and then call filesForPath during
     // the import action
     TestProject p = makeProject();
     QDir dir(p.dir->name());
@@ -355,7 +355,7 @@ void ProjectLoadTest::addDuringImport()
     QVERIFY(QFile::exists(file.toLocalFile()));
     // this most probably is not yet loaded
     // and this should not crash
-    QCOMPARE(project->itemsForUrl(file).size(), 0);
+    QCOMPARE(project->itemsForPath(IndexedString(file)).size(), 0);
     // now delete that file and don't crash
     QFile::remove(file.toLocalFile());
     // now create another file
@@ -368,8 +368,8 @@ void ProjectLoadTest::addDuringImport()
                                   SIGNAL(projectOpened(KDevelop::IProject*)), 2000));
     QVERIFY(project->isReady());
     // make sure our file removal + addition was properly tracked
-    QCOMPARE(project->filesForUrl(file).size(), 0);
-    QCOMPARE(project->filesForUrl(file2).size(), 1);
+    QCOMPARE(project->filesForPath(IndexedString(file)).size(), 0);
+    QCOMPARE(project->filesForPath(IndexedString(file2)).size(), 1);
 
     //NOTE: this test is probabably incomplete, I bet there are some race conditions left,
     //      esp. when adding a file at a point where the parent folder was already imported
