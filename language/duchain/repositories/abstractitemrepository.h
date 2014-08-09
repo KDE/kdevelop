@@ -58,9 +58,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractRepositoryManager
 
     virtual QMutex* repositoryMutex() const = 0;
 
-    /// Called when the repository is deleted (via @ref deleteRepository()).
-    virtual void repositoryDeleted();
-
   protected:
     mutable AbstractItemRepository* m_repository;
 };
