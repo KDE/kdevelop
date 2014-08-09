@@ -1553,11 +1553,29 @@ Definitions* DUChain::definitions()
   return &sdDUChainPrivate->m_definitions;
 }
 
+static void finalCleanup()
+{
+  DUChainWriteLocker writeLock(DUChain::lock());
+  kDebug() << "doing final cleanup";
+
+  int cleaned = 0;
+  while((cleaned = globalItemRepositoryRegistry().finalCleanup())) {
+    kDebug() << "cleaned" << cleaned << "B";
+    if(cleaned < 1000) {
+      kDebug() << "cleaned enough";
+      break;
+    }
+  }
+  kDebug() << "final cleanup ready";
+}
+
 void DUChain::shutdown()
 {
   // if core is not shutting down, we can end up in deadlocks or crashes
   // since language plugins might still try to access static duchain stuff
   Q_ASSERT(!ICore::self() || ICore::self()->shuttingDown());
+
+  kDebug() << "Cleaning up and shutting down DUChain";
 
   QMutexLocker lock(&sdDUChainPrivate->cleanupMutex());
 
@@ -1687,21 +1705,6 @@ void DUChain::storeToDisk() {
   sdDUChainPrivate->doMoreCleanup();
   
   sdDUChainPrivate->m_cleanupDisabled = wasDisabled;
-}
-
-void DUChain::finalCleanup() {
-  DUChainWriteLocker writeLock(DUChain::lock());
-  kDebug() << "doing final cleanup";
-  
-  int cleaned = 0;
-  while((cleaned = globalItemRepositoryRegistry().finalCleanup())) {
-    kDebug() << "cleaned" << cleaned << "B";
-    if(cleaned < 1000) {
-      kDebug() << "cleaned enough";
-      break;
-    }
-  }
-  kDebug() << "final cleanup ready";
 }
 
 bool DUChain::compareToDisk() {
