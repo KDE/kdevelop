@@ -147,6 +147,14 @@ public:
      */
     QString fileContents() const;
 
+    /**
+     * Set to true when you want to keep the DUChain data.
+     *
+     * By default the DUChain data is removed on destruction of the TestFile.
+     */
+    void setKeepDUChainData(bool keep);
+    bool keepDUChainData();
+
 private:
     struct TestFilePrivate;
     TestFilePrivate* d;

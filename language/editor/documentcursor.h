@@ -40,6 +40,10 @@ public:
     DocumentCursor(const IndexedString& document, const KTextEditor::Cursor& cursor) : KTextEditor::Cursor(cursor), document(document) {
     }
 
+    static DocumentCursor invalid() {
+      return DocumentCursor({}, SimpleCursor::invalid());
+    }
+
     inline bool operator==(const DocumentCursor& rhs) const {
       return document == rhs.document && *static_cast<const KTextEditor::Cursor*>(this) == rhs;
     }

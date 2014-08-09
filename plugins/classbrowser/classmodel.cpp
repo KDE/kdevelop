@@ -24,7 +24,7 @@
 #include "classmodelnode.h"
 #include "allclassesfolder.h"
 #include "projectfolder.h"
-#include <language/duchain/persistentsymboltable.h>
+#include <language/duchain/declaration.h>
 #include <typeinfo>
 
 #include <interfaces/icore.h>

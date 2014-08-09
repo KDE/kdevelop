@@ -28,7 +28,7 @@
 #include "../../interfaces/icore.h"
 #include "../../interfaces/ilanguagecontroller.h"
 #include "../../interfaces/icompletionsettings.h"
-#include "../../interfaces/foregroundlock.h"
+#include "../../util/foregroundlock.h"
 
 #include "../duchain/declaration.h"
 #include "../duchain/types/functiontype.h"

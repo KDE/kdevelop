@@ -21,6 +21,7 @@
 #include <QHash>
 #include <QVector>
 
+#include "declaration.h"
 #include "declarationid.h"
 #include "appendedlist.h"
 #include "repositories/itemrepository.h"
@@ -374,11 +375,11 @@ struct DebugVisitor
         qout << decl.data()->url().str() << "declaration" << decl.data()->qualifiedIdentifier() << "is registered as" << item->id.identifier() << endl;
       }
       
-      const QString url = IndexedTopDUContext(item->declarations()[a].topContextIndex()).url().str();
+      const QString url = IndexedTopDUContext(decl.topContextIndex()).url().str();
       if(!decl.data() && !decl.isDummy()) {
-        qout << "Item in symbol-table is invalid:" << id.toString() << "- localIndex:" << item->declarations()[a].localIndex() << "- url:" << url << endl;
+        qout << "Item in symbol-table is invalid:" << id.toString() << "- localIndex:" << decl.localIndex() << "- url:" << url << endl;
       } else {
-        qout << "Item in symbol-table:" << id.toString() << "- localIndex:" << item->declarations()[a].localIndex() << "- url:" << url << endl;
+        qout << "Item in symbol-table:" << id.toString() << "- localIndex:" << decl.localIndex() << "- url:" << url << "- range:" << decl.data()->range() << endl;
       }
     }
     return true;

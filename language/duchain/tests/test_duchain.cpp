@@ -785,6 +785,76 @@ void TestDUChain::testProblemSerialization()
   QVERIFY(parent->diagnostics().isEmpty());
 }
 
+void TestDUChain::testIdentifiers()
+{
+  QualifiedIdentifier aj("::Area::jump");
+  QCOMPARE(aj.count(), 2);
+  QCOMPARE(aj.explicitlyGlobal(), true);
+  QCOMPARE(aj.at(0), Identifier("Area"));
+  QCOMPARE(aj.at(1), Identifier("jump"));
+
+  QualifiedIdentifier aj2 = QualifiedIdentifier("Area::jump");
+  QCOMPARE(aj2.count(), 2);
+  QCOMPARE(aj2.explicitlyGlobal(), false);
+  QCOMPARE(aj2.at(0), Identifier("Area"));
+  QCOMPARE(aj2.at(1), Identifier("jump"));
+  QVERIFY(aj != aj2);
+
+  QVERIFY(QualifiedIdentifier("") == QualifiedIdentifier());
+  QVERIFY(QualifiedIdentifier("").index() == QualifiedIdentifier().index());
+
+  QualifiedIdentifier ajt("Area::jump::test");
+  QualifiedIdentifier jt("jump::test");
+  QualifiedIdentifier ajt2("Area::jump::tes");
+
+  QualifiedIdentifier t(" Area<A,B>::jump <F> ::tes<C>");
+  QCOMPARE(t.count(), 3);
+  QCOMPARE(t.at(0).templateIdentifiersCount(), 2u);
+  QCOMPARE(t.at(1).templateIdentifiersCount(), 1u);
+  QCOMPARE(t.at(2).templateIdentifiersCount(), 1u);
+  QCOMPARE(t.at(0).identifier().str(), QString("Area"));
+  QCOMPARE(t.at(1).identifier().str(), QString("jump"));
+  QCOMPARE(t.at(2).identifier().str(), QString("tes"));
+
+  QualifiedIdentifier op1("operator<");
+  QualifiedIdentifier op2("operator<=");
+  QualifiedIdentifier op3("operator>");
+  QualifiedIdentifier op4("operator>=");
+  QualifiedIdentifier op5("operator()");
+  QualifiedIdentifier op6("operator( )");
+  QCOMPARE(op1.count(), 1);
+  QCOMPARE(op2.count(), 1);
+  QCOMPARE(op3.count(), 1);
+  QCOMPARE(op4.count(), 1);
+  QCOMPARE(op5.count(), 1);
+  QCOMPARE(op6.count(), 1);
+  QCOMPARE(op4.toString(), QString("operator>="));
+  QCOMPARE(op3.toString(), QString("operator>"));
+  QCOMPARE(op1.toString(), QString("operator<"));
+  QCOMPARE(op2.toString(), QString("operator<="));
+  QCOMPARE(op5.toString(), QString("operator()"));
+  QCOMPARE(op6.toString(), QString("operator( )"));
+  QCOMPARE(QualifiedIdentifier("Area<A,B>::jump <F> ::tes<C>").index(), t.index());
+  QCOMPARE(op4.index(), QualifiedIdentifier("operator>=").index());
+
+  QualifiedIdentifier pushTest("foo");
+  QCOMPARE(pushTest.count(), 1);
+  QCOMPARE(pushTest.toString(), QString("foo"));
+  pushTest.push(Identifier("bar"));
+  QCOMPARE(pushTest.count(), 2);
+  QCOMPARE(pushTest.toString(), QString("foo::bar"));
+  pushTest.push(QualifiedIdentifier("baz::asdf"));
+  QCOMPARE(pushTest.count(), 4);
+  QCOMPARE(pushTest.toString(), QString("foo::bar::baz::asdf"));
+  QualifiedIdentifier mergeTest = pushTest.merge(QualifiedIdentifier("meh::muh"));
+  QCOMPARE(mergeTest.count(), 6);
+  QCOMPARE(mergeTest.toString(), QString("meh::muh::foo::bar::baz::asdf"));
+  QualifiedIdentifier plusTest = QualifiedIdentifier("la::lu") + QualifiedIdentifier("ba::bu");
+  QCOMPARE(plusTest.count(), 4);
+  QCOMPARE(plusTest.toString(), QString("la::lu::ba::bu"));
+  ///@todo create a big randomized test for the identifier repository(check that indices are the same)
+}
+
 #if 0
 
 ///NOTE: the "unit tests" below are not automated, they - so far - require

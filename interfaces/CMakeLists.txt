@@ -1,11 +1,5 @@
-find_package(Threads)
-find_library(RT_LIBRARY rt)
-
-add_subdirectory(tests)
-
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9502 )
 set(kdevplatforminterfaces_LIB_SRCS
-    foregroundlock.cpp
     iassistant.cpp
     context.cpp
     iplugin.cpp
@@ -62,13 +56,6 @@ LINK_PRIVATE
     KF5::KCMUtils
     KF5::ThreadWeaver
 )
-if( RT_LIBRARY )
-    target_link_libraries( kdevplatforminterfaces LINK_PRIVATE ${RT_LIBRARY} )
-endif()
-
-if( Threads_FOUND )
-    target_link_libraries(kdevplatforminterfaces LINK_PRIVATE ${CMAKE_THREAD_LIBS_INIT} )
-endif()
 target_include_directories(kdevplatforminterfaces INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kdevplatform>")
 # TODO: this is ugly (sort-of cyclic dependecy):
 target_include_directories(kdevplatforminterfaces PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../util") # for utilexport.h
@@ -77,7 +64,6 @@ set_target_properties(kdevplatforminterfaces PROPERTIES VERSION ${KDEVPLATFORM_L
 install(TARGETS kdevplatforminterfaces EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
-    foregroundlock.h
     iassistant.h
     context.h
     contextmenuextension.h

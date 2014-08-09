@@ -24,3 +24,6 @@ target_link_libraries(pathtest
     kdevplatformtests
     kdevplatformutil
 )
+
+kde4_add_unit_test(test_foregroundlock test_foregroundlock.cpp)
+target_link_libraries(test_foregroundlock ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kdevplatformutil)

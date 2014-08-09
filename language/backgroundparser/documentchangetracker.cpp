@@ -28,7 +28,7 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/movinginterface.h>
 
-#include <interfaces/foregroundlock.h>
+#include <util/foregroundlock.h>
 #include <editor/modificationrevisionset.h>
 #include <duchain/indexedstring.h>
 #include <interfaces/icore.h>

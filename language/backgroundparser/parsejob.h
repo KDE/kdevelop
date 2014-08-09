@@ -39,6 +39,8 @@ class QObjectDecorator;
 
 namespace KDevelop
 {
+
+class ParsingEnvironment;
 class ControlFlowGraph;
 class DataAccessRepository;
 class BackgroundParser;
@@ -192,6 +194,14 @@ Q_SIGNALS:
     void progress(KDevelop::ParseJob*, float value, const QString& text);
 
 protected:
+    /**
+     * Should return an environment for this parse job.
+     *
+     * This is then used to check whether existing cached data of previous parse jobs need an update.
+     * The default implementation returns a nullptr.
+     */
+    virtual const ParsingEnvironment* environment() const;
+
     /**
      * Checks whether there is already an up to date context available for the
      * current document. If so, it returns true and ensures that the document

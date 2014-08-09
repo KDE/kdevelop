@@ -253,14 +253,17 @@ public:
 
   uint hash() const
   {
-    if( m_hash == 0 )
-    {
-      uint mhash = 0;
-      FOREACH_FUNCTION_STATIC( const IndexedIdentifier& identifier, identifiers )
-        mhash = 11*mhash + Identifier(identifier).hash();
+    if( m_hash == 0 ) {
+      KDevHash hash;
 
-      if(mhash != m_hash)
-        m_hash = mhash;//The local class may be in read-only memory, so only  change m_hash if it's actually a change
+      quint32 bitfields = m_explicitlyGlobal
+        | (m_isExpression << 1);
+      hash << bitfields << identifiersSize();
+      FOREACH_FUNCTION_STATIC( const IndexedIdentifier& identifier, identifiers ) {
+        hash << identifier.getIndex();
+      }
+
+      m_hash = hash;
     }
     return m_hash;
   }
@@ -820,16 +823,7 @@ QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
 QualifiedIdentifier QualifiedIdentifier::merge(const QualifiedIdentifier& base) const
 {
   QualifiedIdentifier ret(base);
-  ret.prepareWrite();
-
-  if(m_index)
-    ret.dd->identifiersList.append(cd->identifiers(), cd->identifiersSize());
-  else
-    ret.dd->identifiersList.append(dd->identifiers(), dd->identifiersSize());
-
-  if( explicitlyGlobal() )
-    ret.setExplicitlyGlobal(true);
-
+  ret.push(*this);
   return ret;
 }
 
@@ -1016,13 +1010,21 @@ void QualifiedIdentifier::push(const IndexedIdentifier& id)
 
 void QualifiedIdentifier::push(const QualifiedIdentifier& id)
 {
-  if(id.isEmpty())
+  if (id.isEmpty()) {
     return;
+  }
 
   prepareWrite();
-  id.makeConstant();
 
-  dd->identifiersList.append(id.cd->identifiers(), id.cd->identifiersSize());
+  if (id.m_index) {
+    dd->identifiersList.append(id.cd->identifiers(), id.cd->identifiersSize());
+  } else {
+    dd->identifiersList.append(id.dd->identifiers(), id.dd->identifiersSize());
+  }
+
+  if (id.explicitlyGlobal()) {
+    setExplicitlyGlobal(true);
+  }
 }
 
 void QualifiedIdentifier::pop()

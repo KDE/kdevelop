@@ -819,20 +819,7 @@ void ProjectController::projectImportingFinished( IProject* project )
     d->m_currentlyOpening.removeAll(project->projectFileUrl());
     emit projectOpened( project );
 
-    if (parseAllProjectSources())
-    {
-        reparseProject(project);
-    }
-
-    // Add all currently open files that belong to the project to the background-parser,
-    // since more information may be available for parsing them now(Like include-paths).
-    foreach(IDocument* document, Core::self()->documentController()->openDocuments())
-    {
-        if(!project->filesForUrl(document->url()).isEmpty())
-        {
-            Core::self()->languageController()->backgroundParser()->addDocument( IndexedString(document->url()), TopDUContext::AllDeclarationsContextsAndUses, 10 );
-        }
-    }
+    reparseProject(project);
 }
 
 // helper method for closeProject()
@@ -985,7 +972,7 @@ bool ProjectController::isProjectNameUsed( const QString& name ) const
 
 KUrl ProjectController::projectsBaseDirectory() const
 {
-    KConfigGroup group = KSharedConfig::openConfig()->group( "Project Manager" );
+    KConfigGroup group = ICore::self()->activeSession()->config()->group( "Project Manager" );
     return group.readEntry( "Projects Base Directory",
                                      QUrl( QDir::homePath()+"/projects" ) );
 }

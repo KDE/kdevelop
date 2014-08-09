@@ -37,7 +37,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/codegen/coderepresentation.h>
 #include <interfaces/iproject.h>
-#include <interfaces/foregroundlock.h>
+#include <util/foregroundlock.h>
 
 using namespace KDevelop;
 

@@ -757,11 +757,6 @@ public:
                                         uint depth ) const;
 
   /**
-   * Call this after parsing is finished. It will optimize the internal vectors to reduce memory-usage.
-   */
-  void squeeze();
-
-  /**
    * Returns the qualified identifier @p id with all aliases (for example namespace imports) applied
    *
    * @example: If the namespace 'Foo' is imported, and id is 'Bar',

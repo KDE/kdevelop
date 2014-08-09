@@ -28,6 +28,7 @@
 #include "templaterenderer.h"
 #include "sourcefiletemplate.h"
 #include "templateengine.h"
+#include <duchain/declaration.h>
 #include <duchain/duchainlock.h>
 #include <duchain/persistentsymboltable.h>
 #include <duchain/types/structuretype.h>

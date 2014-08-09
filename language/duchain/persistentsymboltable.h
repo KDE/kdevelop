@@ -16,16 +16,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <util/kdevvarlengtharray.h>
+#ifndef KDEVPLATFORM_PERSISTENTSYMBOLTABLE_H
+#define KDEVPLATFORM_PERSISTENTSYMBOLTABLE_H
+
 #include <util/convenientfreelist.h>
 #include <language/util/setrepository.h>
 #include <language/languageexport.h>
-#include "declaration.h"
+#include "indexeddeclaration.h"
 #include "ducontext.h"
 #include "topducontext.h"
-
-#ifndef KDEVPLATFORM_PERSISTENTSYMBOLTABLE_H
-#define KDEVPLATFORM_PERSISTENTSYMBOLTABLE_H
 
 namespace KDevelop {
 

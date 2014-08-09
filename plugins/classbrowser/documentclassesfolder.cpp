@@ -22,6 +22,7 @@
 #include "documentclassesfolder.h"
 
 #include <typeinfo>
+#include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/persistentsymboltable.h>

@@ -50,18 +50,19 @@
  *   unaliasedType : TypeTestObject
  *   targetType : TypeTestObject
  *   returnType : TypeTestObject
- *   identifiedTypeQid : string
  *   isAbstract : bool
  *   isVirtual : bool
  *   isStatic : bool
  *   declaration : DeclTestObject
  *   definition : DeclTestObject
+ *   identifiedTypeDeclaration : DeclTestObject
  *   null : bool
  *   defaultParameter : string
  *   toString : string
  *   range : string
  *   kind : string
  *   isDeprecated : bool
+ *   isDefinition : bool
  */
 
 namespace KDevelop
@@ -173,19 +174,18 @@ DeclarationTest(returnType)
   }
   return testObject(returnType, value, "Declaration's return type");
 }
-///JSON type: string
-///@returns whether the declaration's type's declaration can be identified and if it's qualified identifier matches the given value
-DeclarationTest(identifiedTypeQid)
+///JSON type: DeclTestObject
+///@returns The IdentifiedType's declaration
+DeclarationTest(identifiedTypeDeclaration)
 {
-  VERIFY_TYPE(QString);
   const QString UN_ID_ERROR = "Unable to identify declaration of type \"%1\".";
-  AbstractType::Ptr type = decl->abstractType();
+  AbstractType::Ptr type = TypeUtils::targetType(decl->abstractType(), decl->topContext());
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
   Declaration* idDecl = idType ? idType->declaration(decl->topContext()) : 0;
   if (!idDecl)
     return UN_ID_ERROR.arg(type->toString());
 
-  return compareValues(idDecl->qualifiedIdentifier().toString(), value, "Declaration's identified type");
+  return testObject(idDecl, value, "IdentifiedType's declaration");
 }
 ///JSON type: bool
 ///@returns whether the (function) declaration's isVirtual matches the given value
@@ -314,6 +314,14 @@ DeclarationTest(isDeprecated)
 {
   VERIFY_NOT_NULL(decl);
   return compareValues(decl->isDeprecated(), value, "Declaration's isDeprecated");
+}
+
+///JSON type: bool
+///@returns whether the declaration's isDefinition matches the given value
+DeclarationTest(isDefinition)
+{
+  VERIFY_NOT_NULL(decl);
+  return compareValues(decl->isDefinition(), value, "Declaration's isDefinition");
 }
 
 }

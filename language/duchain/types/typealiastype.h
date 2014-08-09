@@ -23,7 +23,6 @@
 #include "identifiedtype.h"
 #include "typeregister.h"
 #include <language/languageexport.h>
-#include "typesystem.h"
 
 namespace KDevelop {
 

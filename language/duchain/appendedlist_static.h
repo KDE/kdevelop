@@ -128,7 +128,7 @@ class AppendedList<false, T> {
     const T* data(const char* position) const {
       return reinterpret_cast<const T*>(position);
     }
-    //Count of bytes that were appeendd
+    //Count of bytes that were appended
     unsigned int dynamicDataSize() const {
       return listSize * sizeof(T);
     }
