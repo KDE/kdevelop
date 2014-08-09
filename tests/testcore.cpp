@@ -90,6 +90,11 @@ void TestCore::shutdown()
     }
 }
 
+void TestCore::setShuttingDown(bool shuttingDown)
+{
+    d->m_shuttingDown = shuttingDown;
+}
+
 void TestCore::setSessionController( SessionController* ctrl )
 {
     d->sessionController = ctrl;

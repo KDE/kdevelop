@@ -1552,11 +1552,29 @@ Definitions* DUChain::definitions()
   return &sdDUChainPrivate->m_definitions;
 }
 
+static void finalCleanup()
+{
+  DUChainWriteLocker writeLock(DUChain::lock());
+  kDebug() << "doing final cleanup";
+
+  int cleaned = 0;
+  while((cleaned = globalItemRepositoryRegistry().finalCleanup())) {
+    kDebug() << "cleaned" << cleaned << "B";
+    if(cleaned < 1000) {
+      kDebug() << "cleaned enough";
+      break;
+    }
+  }
+  kDebug() << "final cleanup ready";
+}
+
 void DUChain::shutdown()
 {
   // if core is not shutting down, we can end up in deadlocks or crashes
   // since language plugins might still try to access static duchain stuff
   Q_ASSERT(!ICore::self() || ICore::self()->shuttingDown());
+
+  kDebug() << "Cleaning up and shutting down DUChain";
 
   QMutexLocker lock(&sdDUChainPrivate->cleanupMutex());
 
@@ -1570,6 +1588,10 @@ void DUChain::shutdown()
 
   sdDUChainPrivate->doMoreCleanup(); //Must be done _before_ finalCleanup, else we may be deleting yet needed data
 
+  sdDUChainPrivate->m_openDocumentContexts.clear();
+  sdDUChainPrivate->m_destroyed = true;
+  sdDUChainPrivate->clear();
+
   {
     //Acquire write-lock of the repository, so when kdevelop crashes in that process, the repository is discarded
     //Crashes here may happen in an inconsistent state, thus this makes sense, to protect the user from more crashes
@@ -1577,12 +1599,7 @@ void DUChain::shutdown()
     finalCleanup();
     globalItemRepositoryRegistry().unlockForWriting();
   }
-  
-  sdDUChainPrivate->doMoreCleanup();
-  sdDUChainPrivate->m_openDocumentContexts.clear();
-  sdDUChainPrivate->m_destroyed = true;
-  sdDUChainPrivate->clear();
-  
+
   globalItemRepositoryRegistry().shutdown();
 }
 
@@ -1687,21 +1704,6 @@ void DUChain::storeToDisk() {
   sdDUChainPrivate->doMoreCleanup();
   
   sdDUChainPrivate->m_cleanupDisabled = wasDisabled;
-}
-
-void DUChain::finalCleanup() {
-  DUChainWriteLocker writeLock(DUChain::lock());
-  kDebug() << "doing final cleanup";
-  
-  int cleaned = 0;
-  while((cleaned = globalItemRepositoryRegistry().finalCleanup())) {
-    kDebug() << "cleaned" << cleaned << "B";
-    if(cleaned < 1000) {
-      kDebug() << "cleaned enough";
-      break;
-    }
-  }
-  kDebug() << "final cleanup ready";
 }
 
 bool DUChain::compareToDisk() {

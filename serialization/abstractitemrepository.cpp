@@ -43,12 +43,6 @@ void AbstractRepositoryManager::deleteRepository()
 {
   delete m_repository;
   m_repository = 0;
-
-  repositoryDeleted();
-}
-
-void AbstractRepositoryManager::repositoryDeleted()
-{
 }
 
 }
