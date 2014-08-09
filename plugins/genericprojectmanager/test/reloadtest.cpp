@@ -350,7 +350,7 @@ void ProjectLoadTest::addDuringImport()
     QCOMPARE(spy.count(), 1);
     IProject* project = spy.value(0).first().value<IProject*>();
     QVERIFY(project);
-    QCOMPARE(project->folder(), p.file.upUrl());
+    QCOMPARE(project->path(), Path(p.file.upUrl()));
     KUrl file(p.file, "test/zzzzz/999");
     QVERIFY(QFile::exists(file.toLocalFile()));
     // this most probably is not yet loaded
