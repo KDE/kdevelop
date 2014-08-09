@@ -140,7 +140,6 @@ DUContextData::DUContextData(const DUContextData& rhs)
 
 DUContextDynamicData::DUContextDynamicData(DUContext* d)
   : m_topContext(0)
-  , m_hasLocalDeclarationsHash(false)
   , m_indexInTopContext(0)
   , m_context(d)
   , m_rangesChanged(true)
@@ -173,81 +172,6 @@ bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext*
   }
 
   return false;
-}
-
-void DUContextDynamicData::enableLocalDeclarationsHash(DUContext* ctx, const Identifier& currentIdentifier,
-                                                       Declaration* currentDecl)
-{
-  m_hasLocalDeclarationsHash = true;
-
-  FOREACH_FUNCTION(const LocalIndexedDeclaration& indexedDecl, ctx->d_func()->m_localDeclarations) {
-    Declaration* decl = indexedDecl.data(m_topContext);
-    Q_ASSERT(decl);
-    if(currentDecl != decl)
-      m_localDeclarationsHash.insert( decl->identifier(), DeclarationPointer(decl) );
-    else
-      m_localDeclarationsHash.insert( currentIdentifier, DeclarationPointer(decl) );
-  }
-
-  FOREACH_FUNCTION(const LocalIndexedDUContext& child, ctx->d_func()->m_childContexts) {
-    DUContext* childCtx = child.data(m_topContext);
-    Q_ASSERT(childCtx);
-    if(childCtx->d_func()->m_propagateDeclarations)
-      enableLocalDeclarationsHash(childCtx, currentIdentifier, currentDecl);
-  }
-}
-
-void DUContextDynamicData::disableLocalDeclarationsHash()
-{
-  m_hasLocalDeclarationsHash = false;
-  m_localDeclarationsHash.clear();
-}
-
-bool DUContextDynamicData::needsLocalDeclarationsHash()
-{
-  ///@todo Do this again, it brings a large performance boost
-  //For now disable the hash, until we make sure that all declarations needed for the hash are loaded first
-  //including those in propagating sub-contexts.
-  //Then, also make sure that we create the declaration hash after loading if needed
-  return false;
-
-  if(m_context->d_func()->m_localDeclarationsSize() > 15)
-    return true;
-
-  uint propagatingChildContexts = 0;
-
-  FOREACH_FUNCTION(const LocalIndexedDUContext& child, m_context->d_func()->m_childContexts) {
-    DUContext* childCtx = child.data(m_topContext);
-    Q_ASSERT(childCtx);
-    if(childCtx->d_func()->m_propagateDeclarations)
-      ++propagatingChildContexts;
-  }
-
-  return propagatingChildContexts > 4;
-}
-
-void DUContextDynamicData::addDeclarationToHash(const Identifier& identifier, Declaration* declaration)
-{
-  if(m_hasLocalDeclarationsHash)
-    m_localDeclarationsHash.insert( identifier, DeclarationPointer(declaration) );
-
-  if( m_context->d_func()->m_propagateDeclarations && m_parentContext )
-    m_parentContext->m_dynamicData->addDeclarationToHash(identifier, declaration);
-
-  if(!m_hasLocalDeclarationsHash && needsLocalDeclarationsHash())
-    enableLocalDeclarationsHash(m_context, identifier, declaration);
-}
-
-void DUContextDynamicData::removeDeclarationFromHash(const Identifier& identifier, Declaration* declaration)
-{
-  if(m_hasLocalDeclarationsHash)
-    m_localDeclarationsHash.remove( identifier, DeclarationPointer(declaration) );
-
-  if( m_context->d_func()->m_propagateDeclarations && m_parentContext )
-    m_parentContext->m_dynamicData->removeDeclarationFromHash(identifier,  declaration);
-
-  if(m_hasLocalDeclarationsHash && !needsLocalDeclarationsHash())
-      disableLocalDeclarationsHash();
 }
 
 inline bool isContextTemporary(uint index) {
@@ -287,26 +211,15 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
 
   if( !inserted ) //We haven't found any child that is before this one, so prepend it
     m_context->d_func_dynamic()->m_localDeclarationsList().insert(0, newDeclaration);
-
-  addDeclarationToHash(newDeclaration->identifier(), newDeclaration);
 }
 
 bool DUContextDynamicData::removeDeclaration(Declaration* declaration)
 {
-  if(!m_topContext->deleting()) //We can save a lot of time by just not caring about the hash while deleting
-    removeDeclarationFromHash(declaration->identifier(), declaration);
-
   if( m_context->d_func_dynamic()->m_localDeclarationsList().removeOne(LocalIndexedDeclaration(declaration)) ) {
     return true;
   }else {
     return false;
   }
-}
-
-void DUContext::changingIdentifier( Declaration* decl, const Identifier& from, const Identifier& to ) {
-  ENSURE_CAN_WRITE
-  m_dynamicData->removeDeclarationFromHash(from, decl);
-  m_dynamicData->addDeclarationToHash(to, decl);
 }
 
 void DUContextDynamicData::addChildContext( DUContext * context )
@@ -339,12 +252,6 @@ void DUContextDynamicData::addChildContext( DUContext * context )
   if( !inserted ) {
     m_context->d_func_dynamic()->m_childContextsList().insert(0, indexed);
     context->m_dynamicData->m_parentContext = m_context;
-  }
-
-  if(context->d_func()->m_propagateDeclarations) {
-    disableLocalDeclarationsHash();
-    if(needsLocalDeclarationsHash())
-      enableLocalDeclarationsHash(m_context);
   }
 }
 
@@ -556,16 +463,11 @@ void DUContext::setPropagateDeclarations(bool propagate)
 {
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
-  
+
   if(propagate == d->m_propagateDeclarations)
     return;
 
-  m_dynamicData->m_parentContext->m_dynamicData->disableLocalDeclarationsHash();
-
   d->m_propagateDeclarations = propagate;
-
-  if(m_dynamicData->m_parentContext->m_dynamicData->needsLocalDeclarationsHash())
-    m_dynamicData->m_parentContext->m_dynamicData->enableLocalDeclarationsHash(m_dynamicData->m_parentContext.data());
 }
 
 bool DUContext::isPropagateDeclarations() const
@@ -646,25 +548,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
 
      Checker checker(flags, dataType, position, type());
 
-     if(m_dynamicData->m_hasLocalDeclarationsHash) {
-       //Use a special hash that contains all declarations visible in this context
-      QHash<Identifier, DeclarationPointer>::const_iterator it = m_dynamicData->m_localDeclarationsHash.constFind(identifier);
-      QHash<Identifier, DeclarationPointer>::const_iterator end = m_dynamicData->m_localDeclarationsHash.constEnd();
-
-      for( ; it != end && it.key() == identifier; ++it ) {
-        Declaration* declaration = (*it).data();
-
-        if( !declaration ) {
-          //This should never happen, but let's see
-          kDebug(9505) << "DUContext::findLocalDeclarationsInternal: Invalid declaration in local-declaration-hash";
-          continue;
-        }
-
-        Declaration* checked = checker.check(declaration);
-        if(checked)
-            ret.append(checked);
-      }
-    }else if(d_func()->m_inSymbolTable && !indexedLocalScopeIdentifier().isEmpty() && !identifier.isEmpty()) {
+     if(d_func()->m_inSymbolTable && !indexedLocalScopeIdentifier().isEmpty() && !identifier.isEmpty()) {
        //This context is in the symbol table, use the symbol-table to speed up the search
        QualifiedIdentifier id(scopeIdentifier(true) + identifier);
 
