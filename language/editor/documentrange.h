@@ -20,7 +20,7 @@
 #define KDEVPLATFORM_DOCUMENTRANGE_H
 
 #include <language/languageexport.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include "rangeinrevision.h"
 
 namespace KDevelop

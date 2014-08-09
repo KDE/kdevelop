@@ -34,7 +34,7 @@
 #include "identifier.h"
 #include "use.h"
 #include "problem.h"
-#include "indexedstring.h"
+#include <serialization/indexedstring.h>
 #include "functiondefinition.h"
 
 #include <editor/rangeinrevision.h>

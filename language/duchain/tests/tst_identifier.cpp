@@ -21,7 +21,7 @@
 #include "tst_identifier.h"
 
 #include <language/duchain/identifier.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>

@@ -16,6 +16,7 @@
 # KDEVPLATFORM_UTIL_LIBRARIES            - the util library
 # KDEVPLATFORM_VCS_LIBRARIES             - the vcs library
 # KDEVPLATFORM_DEBUGGER_LIBRARIES        - debugger module library
+# KDEVPLATFORM_SERIALIZATION_LIBRARIES   - serialization module library
 #
 # Copyright 2008  Andreas Pakulat <apaku@gmx.de>
 # Redistribution and use is allowed according to the terms of the BSD license.
@@ -54,6 +55,7 @@ _kdevplatform_set_lib_vars( DEBUGGER kdevplatformdebugger )
 _kdevplatform_set_lib_vars( DOCUMENTATION kdevplatformdocumentation )
 _kdevplatform_set_lib_vars( TESTS kdevplatformtests )
 _kdevplatform_set_lib_vars( JSONTESTS kdevplatformjsontests )
+_kdevplatform_set_lib_vars( SERIALIZATION kdevplatformserialization )
 
 include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
 
@@ -70,4 +72,5 @@ mark_as_advanced(
     KDEVPLATFORM_DOCUMENTATION_LIBRARIES
     KDEVPLATFORM_TESTS_LIBRARIES
     KDEVPLATFORM_JSONTESTS_LIBRARIES
+    KDEVPLATFORM_SERIALIZATION_LIBRARIES
 )

@@ -25,8 +25,8 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
-#include <language/duchain/repositories/itemrepository.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/itemrepository.h>
+#include <serialization/indexedstring.h>
 
 #include <algorithm>
 #include <QtTest/QTest>

@@ -21,7 +21,7 @@
 
 #include "appendedlist.h"
 #include "../../util/embeddedfreetree.h"
-#include "repositories/itemrepository.h"
+#include "serialization/itemrepository.h"
 
 namespace KDevelop {
 

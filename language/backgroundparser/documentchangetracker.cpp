@@ -30,7 +30,7 @@
 
 #include <util/foregroundlock.h>
 #include <editor/modificationrevisionset.h>
-#include <duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguage.h>

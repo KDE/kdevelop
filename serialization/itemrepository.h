@@ -21,12 +21,12 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QFile>
+
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KDebug>
 
-#include <language/duchain/referencecounting.h>
-
+#include "referencecounting.h"
 #include "abstractitemrepository.h"
 #include "repositorymanager.h"
 #include "itemrepositoryregistry.h"

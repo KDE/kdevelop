@@ -23,9 +23,10 @@
 
 #include "ducontextdata.h"
 #include "topducontext.h"
-#include "indexedstring.h"
 #include "declarationid.h"
 #include "problem.h"
+
+#include <serialization/indexedstring.h>
 
 namespace KDevelop {
 

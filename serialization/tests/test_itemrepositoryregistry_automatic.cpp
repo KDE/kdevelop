@@ -1,5 +1,5 @@
 #include <QtTest/QtTest>
-#include <language/duchain/repositories/itemrepositoryregistry.h>
+#include <serialization/itemrepositoryregistry.h>
 #include <shell/sessioncontroller.h>
 
 #include <tests/testcore.h>

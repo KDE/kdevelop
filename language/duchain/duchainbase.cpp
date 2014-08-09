@@ -24,7 +24,7 @@
 
 #include "duchainpointer.h"
 #include "parsingenvironment.h"
-#include "indexedstring.h"
+#include <serialization/indexedstring.h>
 #include "topducontext.h"
 #include "duchainregister.h"
 #include <util/foregroundlock.h>

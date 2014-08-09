@@ -17,7 +17,7 @@
 #include "projectfolder.h"
 
 #include <interfaces/iproject.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <KLocalizedString>
 
 using namespace KDevelop;

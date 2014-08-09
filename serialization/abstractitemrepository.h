@@ -22,15 +22,15 @@
 #include <QtCore/QString>
 #include <QtCore/QMutex>
 
-#include <language/languageexport.h>
+#include "serializationexport.h"
 
 namespace KDevelop {
 
 /// Returns a version-number that is used to reset the item-repository after incompatible layout changes.
-KDEVPLATFORMLANGUAGE_EXPORT uint staticItemRepositoryVersion();
+KDEVPLATFORMSERIALIZATION_EXPORT uint staticItemRepositoryVersion();
 
 /// The interface class for an item-repository object.
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractItemRepository
+class KDEVPLATFORMSERIALIZATION_EXPORT AbstractItemRepository
 {
   public:
     virtual ~AbstractItemRepository();
@@ -48,7 +48,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractItemRepository
 };
 
 /// Internal helper class that wraps around a repository object and manages its lifetime.
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractRepositoryManager
+class KDEVPLATFORMSERIALIZATION_EXPORT AbstractRepositoryManager
 {
   public:
     AbstractRepositoryManager();

@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_PLUGIN_CLASSMODELNODESCONTROLLER_H
 
 #include <QObject>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/ducontext.h>
 
 class QTimer;

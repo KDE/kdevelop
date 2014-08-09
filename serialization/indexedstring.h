@@ -18,9 +18,9 @@
 
 #include <QtCore/QMetaType>
 
-#include <language/languageexport.h>
+#include "referencecounting.h"
 
-#include <language/duchain/referencecounting.h>
+#include "serializationexport.h"
 
 class KUrl;
 
@@ -46,7 +46,7 @@ namespace KDevelop {
  * @note Strings of length one are not put into the repository, but are encoded directly within
  * the index: They are encoded like @c 0xffff00bb where @c bb is the byte of the character.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
+class KDEVPLATFORMSERIALIZATION_EXPORT IndexedString {
  public:
   IndexedString();
   /**
@@ -242,7 +242,7 @@ inline uint qHash( const KDevelop::IndexedString& str ) {
 /**
  * kDebug() stream operator.  Writes the string to the debug output.
  */
-KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug s, const KDevelop::IndexedString& string);
+KDEVPLATFORMSERIALIZATION_EXPORT QDebug operator<<(QDebug s, const KDevelop::IndexedString& string);
 
 Q_DECLARE_METATYPE(KDevelop::IndexedString);
 Q_DECLARE_TYPEINFO(KDevelop::IndexedString, Q_MOVABLE_TYPE);

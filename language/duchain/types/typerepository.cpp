@@ -24,8 +24,8 @@
 
 #include "../types/typesystemdata.h"
 #include "../types/typeregister.h"
-#include "../referencecounting.h"
-#include "itemrepository.h"
+#include <serialization/referencecounting.h>
+#include <serialization/itemrepository.h>
 
 #define DEBUG_TYPE_REPOSITORY
 #define ASSERT_ON_PROBLEM

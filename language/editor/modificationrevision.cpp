@@ -23,7 +23,7 @@
 
 #include <ktexteditor/document.h>
 
-#include "../duchain/indexedstring.h"
+#include <serialization/indexedstring.h>
 #include "modificationrevisionset.h"
 #include <sys/time.h>
 

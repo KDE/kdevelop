@@ -20,7 +20,7 @@
 
 #include "duchainitemquickopen.h"
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/identifier.h>
 
 struct CodeModelViewItem

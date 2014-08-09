@@ -32,7 +32,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/parsingenvironment.h>
 
 #include <project/projectmodel.h>

@@ -22,7 +22,7 @@
 
 #include <language/assistant/staticassistant.h>
 #include <language/duchain/identifier.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/editor/persistentmovingrange.h>
 #include "renameaction.h"
 

@@ -33,7 +33,7 @@
 #include "ducontextdata.h"
 #include "ducontextdynamicdata.h"
 #include "duchainregister.h"
-#include "repositories/itemrepository.h"
+#include "serialization/itemrepository.h"
 #include "problem.h"
 
 //#define DEBUG_DATA_INFO

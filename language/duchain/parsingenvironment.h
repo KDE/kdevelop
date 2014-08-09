@@ -23,7 +23,7 @@
 
 #include <ksharedptr.h>
 
-#include "indexedstring.h"
+#include <serialization/indexedstring.h>
 
 #include <language/languageexport.h>
 #include "duchainbase.h"

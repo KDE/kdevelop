@@ -37,7 +37,6 @@
 #include "aliasdeclaration.h"
 #include "namespacealiasdeclaration.h"
 #include "abstractfunctiondeclaration.h"
-#include "indexedstring.h"
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
 #include "importers.h"

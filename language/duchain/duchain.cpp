@@ -57,9 +57,8 @@
 #include "abstractfunctiondeclaration.h"
 #include "duchainregister.h"
 #include "persistentsymboltable.h"
-#include "repositories/itemrepository.h"
+#include "serialization/itemrepository.h"
 #include "waitforupdate.h"
-#include "referencecounting.h"
 #include "importers.h"
 
 namespace {

@@ -51,7 +51,7 @@
 #include <interfaces/isession.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
 #include "core.h"

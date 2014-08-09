@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 #include <language/languageexport.h>
 
 #include "duchainbase.h"
-#include "indexedstring.h"
+#include <serialization/indexedstring.h>
 #include "indexedtopducontext.h"
 
 namespace KDevelop

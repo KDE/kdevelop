@@ -35,8 +35,9 @@
 #include "../duchain.h"
 #include "../ducontext.h"
 #include "../identifier.h"
-#include "../indexedstring.h"
 #include "../parsingenvironment.h"
+
+#include <serialization/indexedstring.h>
 
 namespace KDevelop
 {

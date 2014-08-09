@@ -29,7 +29,7 @@
 #include <QPointer>
 #include <ktexteditor/movingrange.h>
 #include <language/editor/rangeinrevision.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/interfaces/ilanguagesupport.h>
 
 #include <ksharedptr.h>

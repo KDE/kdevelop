@@ -22,11 +22,11 @@
 #include <QVector>
 
 #include "appendedlist.h"
-#include "repositories/itemrepository.h"
+#include <serialization/itemrepository.h>
 #include "identifier.h"
-#include "indexedstring.h"
+#include <serialization/indexedstring.h>
+#include <serialization/referencecounting.h>
 #include <util/embeddedfreetree.h>
-#include "referencecounting.h"
 
 #define ifDebug(x)
 

@@ -25,7 +25,7 @@
 
 #include <QObject>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/topducontext.h>
 
 #include <language/backgroundparser/parsejob.h>

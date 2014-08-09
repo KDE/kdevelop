@@ -23,7 +23,6 @@ set(kdevplatformlanguage_LIB_SRCS
     backgroundparser/parseprojectjob.cpp
     backgroundparser/urlparselock.cpp
 
-    duchain/referencecounting.cpp
     duchain/specializationstore.cpp
     duchain/codemodel.cpp
     duchain/duchain.cpp
@@ -61,7 +60,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/uses.cpp
     duchain/importers.cpp
     duchain/duchaindumper.cpp
-    duchain/indexedstring.cpp
     duchain/duchainregister.cpp
     duchain/persistentsymboltable.cpp
     duchain/instantiationinformation.cpp
@@ -69,6 +67,7 @@ set(kdevplatformlanguage_LIB_SRCS
 
     duchain/types/typesystem.cpp
     duchain/types/typeregister.cpp
+    duchain/types/typerepository.cpp
     duchain/types/identifiedtype.cpp
     duchain/types/abstracttype.cpp
     duchain/types/integraltype.cpp
@@ -88,10 +87,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/types/containertypes.cpp
 
     duchain/builders/dynamiclanguageexpressionvisitor.cpp
-
-    duchain/repositories/abstractitemrepository.cpp
-    duchain/repositories/itemrepositoryregistry.cpp
-    duchain/repositories/typerepository.cpp
 
     duchain/navigation/problemnavigationcontext.cpp
     duchain/navigation/abstractnavigationwidget.cpp
@@ -160,6 +155,7 @@ target_include_directories(kdevplatformlanguage PRIVATE ${CMAKE_CURRENT_BINARY_D
 target_link_libraries(kdevplatformlanguage LINK_PUBLIC
         KF5::ThreadWeaver
         kdevplatforminterfaces
+        kdevplatformserialization
 LINK_PRIVATE
         KF5::TextEditor
         KF5::Parts
@@ -234,7 +230,6 @@ install(FILES
 )
 
 install(FILES
-    duchain/referencecounting.h
     duchain/parsingenvironment.h
     duchain/duchain.h
     duchain/codemodel.h
@@ -265,7 +260,6 @@ install(FILES
     duchain/dumpdotgraph.h
     duchain/duchainutils.h
     duchain/duchaindumper.h
-    duchain/indexedstring.h
     duchain/declarationid.h
     duchain/appendedlist.h
     duchain/duchainregister.h
@@ -288,6 +282,7 @@ install(FILES
     duchain/types/identifiedtype.h
     duchain/types/typesystem.h
     duchain/types/typeregister.h
+    duchain/types/typerepository.h
     duchain/types/typepointer.h
     duchain/types/typesystemdata.h
     duchain/types/abstracttype.h
@@ -316,16 +311,6 @@ install(FILES
     duchain/builders/abstractusebuilder.h
     duchain/builders/dynamiclanguageexpressionvisitor.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/builders COMPONENT Devel
-)
-
-install(FILES
-    duchain/repositories/itemrepositoryexampleitem.h
-    duchain/repositories/abstractitemrepository.h
-    duchain/repositories/itemrepositoryregistry.h
-    duchain/repositories/repositorymanager.h
-    duchain/repositories/itemrepository.h
-    duchain/repositories/typerepository.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/repositories COMPONENT Devel
 )
 
 install(FILES

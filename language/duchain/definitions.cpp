@@ -22,8 +22,8 @@
 #include "declaration.h"
 #include "declarationid.h"
 #include "duchainpointer.h"
-#include "indexedstring.h"
-#include "repositories/itemrepository.h"
+#include <serialization/indexedstring.h>
+#include "serialization/itemrepository.h"
 
 #include <QHash>
 #include <QVector>

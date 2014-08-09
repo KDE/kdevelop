@@ -23,7 +23,8 @@
 #include "types/abstracttype.h"
 #include "types/indexedtype.h"
 #include "appendedlist.h"
-#include "referencecounting.h"
+
+#include <serialization/referencecounting.h>
 
 namespace KDevelop {
   class IndexedInstantiationInformation;

@@ -18,15 +18,14 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #include "typesystem.h"
-#include "../indexedstring.h"
-#include "../repositories/typerepository.h"
+#include "typerepository.h"
 #include "typesystemdata.h"
 #include "typeregister.h"
-
 #include "integraltype.h"
 #include "structuretype.h"
+
+#include <serialization/indexedstring.h>
 
 namespace KDevelop
 {

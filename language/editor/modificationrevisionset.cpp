@@ -17,8 +17,9 @@
 */
 
 #include "./modificationrevisionset.h"
-#include "../duchain/repositories/itemrepository.h"
-#include <duchain/indexedstring.h>
+
+#include <serialization/itemrepository.h>
+#include <serialization/indexedstring.h>
 #include <util/setrepository.h>
 #include <time.h>
 

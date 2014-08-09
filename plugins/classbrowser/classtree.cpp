@@ -39,7 +39,7 @@
 #include "language/duchain/duchain.h"
 #include "language/duchain/duchainlock.h"
 #include "language/duchain/declaration.h"
-#include "language/duchain/indexedstring.h"
+#include <serialization/indexedstring.h>
 
 #include "classmodel.h"
 #include "classbrowserplugin.h"

@@ -20,7 +20,7 @@
 #define KDEVPLATFORM_DOCUMENTCURSOR_H
 
 #include <language/languageexport.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include "cursorinrevision.h"
 
 #include <ktexteditor/cursor.h>

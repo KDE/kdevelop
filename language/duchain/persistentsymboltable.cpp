@@ -24,7 +24,7 @@
 #include "declaration.h"
 #include "declarationid.h"
 #include "appendedlist.h"
-#include "repositories/itemrepository.h"
+#include "serialization/itemrepository.h"
 #include "identifier.h"
 #include "ducontext.h"
 #include "topducontext.h"

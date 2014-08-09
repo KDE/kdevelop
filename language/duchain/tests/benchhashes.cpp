@@ -20,7 +20,7 @@
 
 #include "benchhashes.h"
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>

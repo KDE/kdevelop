@@ -20,7 +20,7 @@
 #define KDEVPLATFORM_CODEREPRESENTATION_H
 
 #include <language/languageexport.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <ktexteditor/configinterface.h>
 #include <ktexteditor/document.h>

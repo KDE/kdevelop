@@ -28,7 +28,7 @@
 
 #include <language/duchain/topducontext.h>
 #include <language/editor/documentcursor.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 class ContextBrowserPlugin;
 class QVBoxLayout;

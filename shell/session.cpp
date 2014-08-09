@@ -36,7 +36,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <util/fileutils.h>
-#include <language/duchain/repositories/itemrepository.h>
+#include <serialization/itemrepository.h>
 
 namespace KDevelop
 {

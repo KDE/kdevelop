@@ -12,7 +12,7 @@
  ***************************************************************************/
 
 #include "indexedstring.h"
-#include "repositories/stringrepository.h"
+#include "serialization/stringrepository.h"
 
 #include <kurl.h>
 #include "referencecounting.h"

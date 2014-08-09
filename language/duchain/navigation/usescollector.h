@@ -22,7 +22,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QSet>
 #include <language/duchain/topducontext.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 namespace KDevelop {
     class IndexedDeclaration;

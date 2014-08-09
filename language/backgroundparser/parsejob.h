@@ -29,7 +29,7 @@
 
 #include <ThreadWeaver/Sequence>
 
-#include "../duchain/indexedstring.h"
+#include <serialization/indexedstring.h>
 #include <language/duchain/topducontext.h>
 #include <language/editor/modificationrevision.h>
 

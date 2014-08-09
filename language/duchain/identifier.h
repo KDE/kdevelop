@@ -26,7 +26,7 @@
 #include <util/kdevvarlengtharray.h>
 
 #include <language/languageexport.h>
-#include "referencecounting.h"
+#include <serialization/referencecounting.h>
 
 //We use shared d-pointers, which is even better than a d-pointer, but krazy probably won't get it, so exclude the test.
 //krazy:excludeall=dpointer

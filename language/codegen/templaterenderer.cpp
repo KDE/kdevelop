@@ -26,7 +26,7 @@
 #include "templateengine_p.h"
 #include "archivetemplateloader.h"
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <grantlee/context.h>
 

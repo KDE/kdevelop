@@ -26,7 +26,7 @@
 #include <klocale.h>
 #include <kencodingprober.h>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <language/codegen/documentchangeset.h>

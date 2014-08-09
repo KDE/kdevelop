@@ -24,7 +24,7 @@
 #include <QtCore/QAtomicInt>
 #include <QtCore/QMap>
 
-#include <language/languageexport.h>
+#include "serializationexport.h"
 
 #include <interfaces/isessionlock.h>
 
@@ -41,7 +41,7 @@ struct ItemRepositoryRegistryPrivate;
  * Does not automatically store contained repositories on destruction.
  * For the global registry, the storing is triggered from within duchain, so you don't need to care about it.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
+class KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry {
   public:
     ~ItemRepositoryRegistry();
 
@@ -107,7 +107,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
 };
 
 /// @returns The global item-repository registry (now it is @ref ItemRepositoryRegistry::self()).
-KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry& globalItemRepositoryRegistry();
+KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry& globalItemRepositoryRegistry();
 
 }
 

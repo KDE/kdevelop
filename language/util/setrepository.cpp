@@ -17,7 +17,7 @@
 #include <util/kdevvarlengtharray.h>
 #include <iostream>
 #include <limits>
-#include <language/duchain/repositories/itemrepository.h>
+#include <serialization/itemrepository.h>
 #include <QtCore/QMutex>
 #include <QtCore/QStack>
 #include <algorithm>

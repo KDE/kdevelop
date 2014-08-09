@@ -38,7 +38,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iprojectcontroller.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include "projectfiltermanager.h"
 

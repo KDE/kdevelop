@@ -33,7 +33,7 @@
 #include "ducontextdata.h"
 #include "declarationid.h"
 #include "uses.h"
-#include "indexedstring.h"
+#include <serialization/indexedstring.h>
 #include "duchainregister.h"
 #include "persistentsymboltable.h"
 #include "types/identifiedtype.h"
@@ -44,7 +44,7 @@
 #include "types/typeutils.h"
 #include "types/typealiastype.h"
 #include "classdeclaration.h"
-#include "repositories/stringrepository.h"
+#include "serialization/stringrepository.h"
 #include "ducontextdynamicdata.h"
 
 namespace KDevelop

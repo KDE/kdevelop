@@ -24,7 +24,7 @@
 #include <QMap>
 #include <QAtomicInt>
 #include <kdebug.h>
-#include "repositories/itemrepository.h"
+#include "serialization/itemrepository.h"
 #include <util/spinlock.h>
 
 namespace KDevelop {
@@ -205,11 +205,9 @@ static RepositoryManager< ItemRepository<ReferenceCountItem, ReferenceCountItem,
   return oldReferencesObject;
 }
 
-namespace KDevelop {
-void initReferenceCounting() {
+void KDevelop::initReferenceCounting() {
   references();
   oldReferences();
-}
 }
 
 ReferenceCountManager::~ReferenceCountManager() {

@@ -21,7 +21,7 @@
 
 #include <language/interfaces/quickopendataprovider.h>
 #include <language/interfaces/quickopenfilter.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <util/path.h>
 

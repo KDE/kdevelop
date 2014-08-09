@@ -1,7 +1,7 @@
 #include <QObject>
 #include <QtTest/QtTest>
-#include <language/duchain/repositories/itemrepository.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/itemrepository.h>
+#include <serialization/indexedstring.h>
 #include <stdlib.h>
 #include <time.h>
 

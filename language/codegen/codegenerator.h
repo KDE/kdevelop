@@ -18,7 +18,7 @@
 #define KDEVPLATFORM_CODEGENERATOR_H
 
 #include "language/editor/documentrange.h"
-#include "../duchain/indexedstring.h"
+#include <serialization/indexedstring.h>
 #include "../duchain/topducontext.h"
 #include "../duchain/duchain.h"
 

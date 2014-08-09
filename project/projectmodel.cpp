@@ -35,7 +35,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include "interfaces/iprojectfilemanager.h"
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <kio/udsentry.h>

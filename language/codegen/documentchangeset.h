@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_DOCUMENTCHANGESET_H
 #define KDEVPLATFORM_DOCUMENTCHANGESET_H
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <QExplicitlySharedDataPointer>
 #include <KUrl>

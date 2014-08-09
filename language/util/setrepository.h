@@ -17,7 +17,7 @@
 #include "basicsetrepository.h"
 #include <QtCore/QMutex>
 #include <list>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 /**
  * This header defines convenience-class that allow handling set-repositories using the represented higher-level objects instead

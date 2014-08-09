@@ -28,7 +28,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/movinginterface.h>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <language/duchain/navigation/problemnavigationcontext.h>
 #include <language/util/navigationtooltip.h>

@@ -31,7 +31,7 @@
 #include <ktexteditor/attribute.h>
 #include <ktexteditor/movingrange.h>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/ducontext.h>
 #include <language/interfaces/icodehighlighting.h>
 #include <language/backgroundparser/documentchangetracker.h>

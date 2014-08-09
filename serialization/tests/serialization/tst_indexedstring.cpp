@@ -24,7 +24,7 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <QtTest/QTest>
 #include <kurl.h>
 

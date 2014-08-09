@@ -26,7 +26,7 @@
 #include "staticassistant.h"
 
 #include <language/languageexport.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <ktexteditor/range.h>
 #include <ktexteditor/cursor.h>

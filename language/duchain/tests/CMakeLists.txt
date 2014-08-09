@@ -1,7 +1,5 @@
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_subdirectory(serialization)
-
 ########### next target ###############
 
 set(duchaintest_SRCS test_duchain.cpp)
@@ -14,32 +12,6 @@ target_link_libraries(duchaintest KF5::TextEditor
 
 ########### next target ###############
 
-set(itemrepositorytest_SRCS test_itemrepository.cpp)
-
-add_executable(itemrepositorytest ${itemrepositorytest_SRCS})
-add_test(itemrepositorytest itemrepositorytest)
-ecm_mark_as_test(itemrepositorytest)
-target_link_libraries(itemrepositorytest KF5::TextEditor
-    Qt5::Test kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
-
-########### next target ###############
-
-set(itemrepositoryregistry_automatic_test_SRCS test_itemrepositoryregistry_automatic.cpp)
-add_executable(itemrepositoryregistry_automatic_test ${itemrepositoryregistry_automatic_test_SRCS})
-ecm_mark_as_test(itemrepositoryregistry_automatic_test)
-target_link_libraries(itemrepositoryregistry_automatic_test ${QT_QTTEST_LIBRARY}
-    kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
-
-########### next target ###############
-
-set(itemrepositoryregistry_deferred_test_SRCS test_itemrepositoryregistry_deferred.cpp)
-add_executable(itemrepositoryregistry_deferred_test ${itemrepositoryregistry_deferred_test_SRCS})
-ecm_mark_as_test(itemrepositoryregistry_deferred_test)
-target_link_libraries(itemrepositoryregistry_deferred_test Qt5::Test
-    kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
-
-########### next target ###############
-
 add_executable(benchhashes benchhashes.cpp)
 add_test(benchhashes benchhashes)
 ecm_mark_as_test(benchhashes)
@@ -48,4 +20,17 @@ target_link_libraries(benchhashes
   Qt5::Test
   ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
   ${KDEVPLATFORM_TESTS_LIBRARIES}
+)
+
+########### next target ###############
+
+set(tst_identifier_SRCS tst_identifier.cpp)
+
+add_executable(tst_identifier ${tst_identifier_SRCS})
+ecm_mark_as_test(tst_identifier)
+target_link_libraries(tst_identifier
+
+  Qt5::Test
+  ${KDEVPLATFORM_TESTS_LIBRARIES}
+  ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
 )

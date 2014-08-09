@@ -52,7 +52,7 @@
 #include <vcs/vcsdiff.h>
 #include <vcs/widgets/vcseventwidget.h>
 #include <language/duchain/duchainbase.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/interfaces/editorcontext.h>

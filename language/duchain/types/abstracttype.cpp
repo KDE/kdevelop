@@ -20,11 +20,10 @@
 
 #include "abstracttype.h"
 
-#include "../indexedstring.h"
 #include "typesystemdata.h"
 #include "typeregister.h"
 #include "typesystem.h"
-#include "../repositories/typerepository.h"
+#include "typerepository.h"
 
 namespace KDevelop
 {

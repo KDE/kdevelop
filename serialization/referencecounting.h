@@ -21,7 +21,8 @@
 #ifndef KDEVPLATFORM_REFERENCECOUNTING_H
 #define KDEVPLATFORM_REFERENCECOUNTING_H
 
-#include <language/languageexport.h>
+#include "serializationexport.h"
+
 #include <QMap>
 #include <QPair>
 
@@ -35,12 +36,14 @@ namespace KDevelop {
   ///Since shouldDoDUChainReferenceCounting is called extremely often, we export some internals into the header here,
   ///so the reference-counting code can be inlined.
   
-  KDEVPLATFORMLANGUAGE_EXPORT extern bool doReferenceCounting;
-  KDEVPLATFORMLANGUAGE_EXPORT  extern SpinLockData refCountingLock;
-  KDEVPLATFORMLANGUAGE_EXPORT  extern QMap<void*, QPair<uint, uint> >* refCountingRanges;
-  KDEVPLATFORMLANGUAGE_EXPORT  extern bool refCountingHasAdditionalRanges;
-  KDEVPLATFORMLANGUAGE_EXPORT  extern void* refCountingFirstRangeStart;
-  KDEVPLATFORMLANGUAGE_EXPORT  extern QPair<uint, uint> refCountingFirstRangeExtent;
+  KDEVPLATFORMSERIALIZATION_EXPORT extern bool doReferenceCounting;
+  KDEVPLATFORMSERIALIZATION_EXPORT  extern SpinLockData refCountingLock;
+  KDEVPLATFORMSERIALIZATION_EXPORT  extern QMap<void*, QPair<uint, uint> >* refCountingRanges;
+  KDEVPLATFORMSERIALIZATION_EXPORT  extern bool refCountingHasAdditionalRanges;
+  KDEVPLATFORMSERIALIZATION_EXPORT  extern void* refCountingFirstRangeStart;
+  KDEVPLATFORMSERIALIZATION_EXPORT  extern QPair<uint, uint> refCountingFirstRangeExtent;
+
+  KDEVPLATFORMSERIALIZATION_EXPORT void initReferenceCounting();
 
   ///@internal The spin-lock ,must already be locked
   inline bool shouldDoDUChainReferenceCountingInternal(void* item)
@@ -81,12 +84,12 @@ namespace KDevelop {
   ///not care about this stuff at all.
   ///@param start Position where to start the reference-counting
   ///@param size Size of the area in bytes
-  KDEVPLATFORMLANGUAGE_EXPORT void enableDUChainReferenceCounting(void* start, unsigned int size);
+  KDEVPLATFORMSERIALIZATION_EXPORT void enableDUChainReferenceCounting(void* start, unsigned int size);
   ///Must be called as often as enableDUChainReferenceCounting, with the same ranges
   ///Must never be called for the same range twice, and not for overlapping ranges
   ///@param start Position where to start the reference-counting
   ///@param size Size of the area in bytes
-  KDEVPLATFORMLANGUAGE_EXPORT void disableDUChainReferenceCounting(void* start);
+  KDEVPLATFORMSERIALIZATION_EXPORT void disableDUChainReferenceCounting(void* start);
   
   ///Use this as local variable within the object that maintains the reference-count,
   ///and use
