@@ -149,7 +149,6 @@ qt5_wrap_ui(kdevplatformlanguage_LIB_SRCS
 
 add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
 generate_export_header(kdevplatformlanguage EXPORT_FILE_NAME languageexport.h)
-# FIXME: This is needed for projectexport.h (used from documentchageset.cpp)
 target_include_directories(kdevplatformlanguage PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/../project)
 
 target_link_libraries(kdevplatformlanguage LINK_PUBLIC
@@ -163,6 +162,7 @@ LINK_PRIVATE
         KF5::Archive
         KF5::KDELibs4Support
         kdevplatformutil
+        kdevplatformproject
 #         ${Grantlee_CORE_LIBRARIES}
 )
 set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})

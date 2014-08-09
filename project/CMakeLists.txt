@@ -31,7 +31,7 @@ target_link_libraries(kdevplatformproject LINK_PUBLIC
 )
 target_link_libraries(kdevplatformproject LINK_PRIVATE
     kdevplatforminterfaces
-    kdevplatformlanguage
+    kdevplatformserialization
     KF5::KIOWidgets
     Qt5::Concurrent
 )
