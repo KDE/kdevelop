@@ -56,8 +56,7 @@ void PluginControllerTest::initTestCase()
     {
         if( env[i].startsWith("XDG_DATA_DIRS=") )
         {
-            kdedirs = env[i].mid(13);
-            kDebug() << kdedirs;
+            kdedirs = env[i].mid(14);
             break;
         }
     }
