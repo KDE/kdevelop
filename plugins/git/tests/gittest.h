@@ -43,9 +43,6 @@ private:
     void repoInit();
     void addFiles();
     void commitFiles();
-//     void cloneRepository();
-//     void importTestData();
-//     void checkoutTestData();
 
 private slots:
     void initTestCase();

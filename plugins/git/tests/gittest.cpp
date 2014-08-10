@@ -240,20 +240,6 @@ void GitInitTest::commitFiles()
 
 }
 
-// void GitInitTest::cloneRepository()
-// {
-//     kDebug() << "Do not clone people, clone Git repos!";
-//     // make job that clones the local repository, created in the previous test
-//     DVcsJob* j = m_proxy->createWorkingCopy(KUrl(gitTest_BaseDir), KUrl(gitTest_BaseDir2));
-//     QVERIFY( j );
-//
-//     // try to start the job
-//     QVERIFY( j->exec() );
-//
-//     //check if the .git directory in the new local repository exists now
-//     QVERIFY( QFileInfo(QString(gitTest_BaseDir2"kdevGit_testdir/.git/")).exists() );
-// }
-
 void GitInitTest::testInit()
 {
     repoInit();
