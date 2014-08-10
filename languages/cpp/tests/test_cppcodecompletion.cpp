@@ -1270,7 +1270,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
                 item = complCtx.items.at( i );
             }
         }
-        QVERIFY( !item );
+        QVERIFY( item );
 
         item->execute( v, Range( c, 0 ) );
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT() ); } };") );
@@ -1289,7 +1289,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
                 item = complCtx.items.at( i );
             }
         }
-        QVERIFY( !item );
+        QVERIFY( item );
 
         item->execute( v, Range( c, 0 ) );
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot2(void*)) ); } };") );
@@ -1309,7 +1309,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
                 item = complCtx.items.at( i );
             }
         }
-        QVERIFY( !item );
+        QVERIFY( item );
 
         item->execute( v, Range( c, 0 ) );
         lock.lock();
@@ -3429,12 +3429,12 @@ void TestCppCodeCompletion::testExecuteKeepWord()
   KTextEditor::Editor* editor = KTextEditor::Editor::instance();
   QVERIFY(editor);
 
-  KTextEditor::Document* doc = editor->createDocument(this);
+  QScopedPointer<KTextEditor::Document> doc(editor->createDocument(this));
   QVERIFY(doc);
   doc->setText(code);
-  KTextEditor::Document::EditingTransaction t(doc);
 
-  KTextEditor::View *v = doc->createView(0);
+  KTextEditor::Document::EditingTransaction t(doc.data());
+  QScopedPointer<KTextEditor::View> v(doc->createView(0));
   v->setCursorPosition(KTextEditor::Cursor(3, 1));
 
   DUChainWriteLocker lock;
@@ -3442,22 +3442,20 @@ void TestCppCodeCompletion::testExecuteKeepWord()
 
   CompletionItemTester complCtx(top->childContexts().last(), "");
   QExplicitlySharedDataPointer<CompletionTreeItem> item;
+  qDebug() << "FOO" << top->childContexts().last() << complCtx.items.length();
   for(int i=0; i<complCtx.items.length(); ++i) {
     kDebug() << complCtx.itemData(i).toString();
     if (complCtx.itemData(i).toString()=="f") {
       item = complCtx.items.at(i);
     }
   }
-  QVERIFY(!item);
-  item->execute(v, KTextEditor::Range(3, 0, 3, 4));
+  QVERIFY(item);
+  item->execute(v.data(), KTextEditor::Range(3, 0, 3, 4));
 
   QFETCH(QString, expectedCode);
   QCOMPARE(doc->line(3), expectedCode);
 
   release(top);
-
-  delete v;
-  delete doc;
 }
 
 
@@ -3717,7 +3715,7 @@ void TestCppCodeCompletion::testNoQuadrupleColon()
           item = tester.items.at( i );
       }
   }
-  QVERIFY( !item );
+  QVERIFY( item );
   
   KTextEditor::Editor* editor = KTextEditor::Editor::instance();
   QVERIFY(editor);
