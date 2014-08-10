@@ -18,15 +18,16 @@
 
 #ifndef PROPERTYPREVIEWWIDGET_H
 #define PROPERTYPREVIEWWIDGET_H
+
 #include <QWidget>
-#include <QSlider>
-#include <QDeclarativeView>
+
 
 #include <ktexteditor/range.h>
 #include <language/duchain/declaration.h>
 #include <interfaces/idocument.h>
 
 using namespace KDevelop;
+class QQuickWidget;
 
 // Describes one supported property, such as "width"
 struct SupportedProperty {
@@ -80,7 +81,7 @@ private:
                                    const SupportedProperty& property, const QString& value);
     static QHash<QString, SupportedProperty> supportedProperties;
 
-    QDeclarativeView* view;
+    QQuickWidget* view;
 
     // the document the widget replaces text in
     KTextEditor::Document* document;

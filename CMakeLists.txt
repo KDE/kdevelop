@@ -14,7 +14,7 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 
-find_package(Qt5 REQUIRED Core Declarative Widgets Test)
+find_package(Qt5 REQUIRED Core Declarative Widgets Test Qml QuickWidgets)
 find_package(KF5 REQUIRED COMPONENTS KDELibs4Support ThreadWeaver TextEditor Declarative)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 find_package(KDevelop REQUIRED)
@@ -60,6 +60,7 @@ target_link_libraries(kdevqmljslanguagesupport
     kdevqmljscompletion
     Qt5::Widgets
     Qt5::Declarative
+    Qt5::QuickWidgets
     KF5::Declarative
     KF5::KDELibs4Support
 )

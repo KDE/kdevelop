@@ -21,7 +21,7 @@
 
 #include <qmljs/qmljsdocument.h>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/problem.h>
 #include <language/duchain/topducontext.h>
 

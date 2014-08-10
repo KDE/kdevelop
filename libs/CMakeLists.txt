@@ -23,7 +23,6 @@ add_library(kdevqtc-qmlsupport SHARED
 	qmljs/qmljsutils.cpp
 	utils/changeset.cpp
 	utils/fileutils.cpp
-	utils/json.cpp
 	utils/qtcassert.cpp
 	utils/savefile.cpp
 )

@@ -24,7 +24,6 @@
 #include "../parsesession.h"
 
 #include <kstandarddirs.h>
-#include <language/duchain/indexedstring.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>

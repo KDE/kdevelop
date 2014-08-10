@@ -24,7 +24,7 @@
 #define __CACHE_H__
 
 #include "duchainexport.h"
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <util/path.h>
 
 #include <QHash>

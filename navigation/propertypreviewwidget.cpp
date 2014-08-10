@@ -19,14 +19,14 @@
 
 #include "propertypreviewwidget.h"
 
-#include <QDeclarativeView>
+#include <QQuickWidget>
+#include <QQuickItem>
 #include <QLayout>
-#include <qgraphicsitem.h>
 #include <QLabel>
 #include <KStandardDirs>
+#include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
-#include <KLocalizedString>
 #include <KDeclarative/KDeclarative>
 
 #include <language/duchain/ducontext.h>
@@ -140,7 +140,7 @@ PropertyPreviewWidget::~PropertyPreviewWidget()
 PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, KTextEditor::Range keyRange, KTextEditor::Range valueRange,
                                              const SupportedProperty& property, const QString& value)
     : QWidget()
-    , view(new QDeclarativeView)
+    , view(new QQuickWidget)
     , document(doc)
     , keyRange(keyRange)
     , valueRange(valueRange)
