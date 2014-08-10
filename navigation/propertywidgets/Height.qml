@@ -16,17 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 import QtQuick 2.2
+import QtQuick.Controls 1.2 as QtControls
 
 PropertyWidget {
     width: 150
     height: 220
-    value: "10"
+    value: sliderToValue(slider.value)
+
     function sliderToValue(slider) {
         return Math.round(slider*slider/30);
     }
-    function valueToSlider(value) {
-        return Math.sqrt(value*30);
-    }
+
     Text {
         z: 20
         anchors.bottom: parent.bottom
@@ -35,11 +35,12 @@ PropertyWidget {
         color: "white"
         opacity: 0.8
     }
-    Slider {
-        z: 20
-        initialValue: valueToSlider(parent.value)
+    QtControls.Slider {
+        id: slider
+        anchors.top: parent.top
+        anchors.left: parent.left
+        maximumValue: 100.0
         width: 100
-        height: 12
     }
     Rectangle {
         anchors.centerIn: parent

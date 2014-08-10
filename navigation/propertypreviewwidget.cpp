@@ -35,6 +35,7 @@
 // List of supported properties. The string must be the name of the property,
 // which can contain dots if necessary
 QHash<QString, SupportedProperty> PropertyPreviewWidget::supportedProperties;
+QFontDatabase PropertyPreviewWidget::fontDatabase;
 
 QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
                                                     KTextEditor::Range keyRange,
@@ -171,6 +172,7 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, KTextEd
 
     // set the initial value read from the document
     view->rootObject()->setProperty("value", value);
+    view->rootObject()->setProperty("systemFonts", fontDatabase.families());
 
     // connect to the slot which has to be emitted from QML when the value changes
     QObject::connect(view->rootObject(), SIGNAL(valueChanged(QString)),

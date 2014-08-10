@@ -16,16 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 import QtQuick 2.2
+import QtQuick.Controls 1.2 as QtControls
 
 PropertyWidget {
     width: 220
-    height: 70
-    property string value: "monospace"
+    height: 120
+    property string value: '"' + combo.currentText + '"'
+
+    QtControls.ComboBox {
+        id: combo
+        anchors.top: parent.top
+        anchors.left: parent.left
+        model: parent.systemFonts        // Set in C++
+    }
     Text {
         color: "white"
         anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
         font.pointSize: 9
-        font.family: parent.value.replace('"', '').replace('"', '')
+        font.family: combo.currentText
         text: i18nc("example text to test a font", "The lazy dog jumps over<br>the quick brown fox.")
         horizontalAlignment: TextInput.AlignHCenter
     }
