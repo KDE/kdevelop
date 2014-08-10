@@ -50,13 +50,23 @@ const QString gitTest_FileName3("bar");
 
 using namespace KDevelop;
 
-void GitInitTest::init()
+void GitInitTest::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
-    m_plugin = new GitPlugin(TestCore::self());
-    removeTempDirs();
 
+    m_plugin = new GitPlugin(TestCore::self());
+}
+
+void GitInitTest::cleanupTestCase()
+{
+    delete m_plugin;
+
+    TestCore::shutdown();
+}
+
+void GitInitTest::init()
+{
     // Now create the basic directory structure
     QDir tmpdir(tempDir);
     tmpdir.mkdir(gitTest_BaseDir);
@@ -66,13 +76,7 @@ void GitInitTest::init()
 
 void GitInitTest::cleanup()
 {
-    delete m_plugin;
-    TestCore::shutdown();
-    if (QFileInfo(gitTest_BaseDir).exists())
-        KIO::NetAccess::del(KUrl(gitTest_BaseDir), 0);
-
-    if (QFileInfo(gitTest_BaseDir2).exists())
-        KIO::NetAccess::del(KUrl(gitTest_BaseDir2), 0);
+    removeTempDirs();
 }
 
 

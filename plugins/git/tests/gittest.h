@@ -48,8 +48,11 @@ private:
 //     void checkoutTestData();
 
 private slots:
+    void initTestCase();
+    void cleanupTestCase();
     void init();
     void cleanup();
+
     void testInit();
     void testAdd();
     void testCommit();
