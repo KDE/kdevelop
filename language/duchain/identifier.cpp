@@ -1062,19 +1062,29 @@ int QualifiedIdentifier::count() const
 
 Identifier QualifiedIdentifier::first() const
 {
+  return indexedFirst().identifier();
+}
+
+IndexedIdentifier QualifiedIdentifier::indexedFirst() const
+{
   if( (m_index && cd->identifiersSize() == 0) || (!m_index && dd->identifiersSize() == 0) )
-    return Identifier();
+    return IndexedIdentifier();
   else
-    return at(0);
+    return indexedAt(0);
 }
 
 Identifier QualifiedIdentifier::last() const
 {
+  return indexedLast().identifier();
+}
+
+IndexedIdentifier QualifiedIdentifier::indexedLast() const
+{
   uint c = count();
   if(c)
-    return at(c-1);
+    return indexedAt(c-1);
   else
-    return Identifier();
+    return IndexedIdentifier();
 }
 
 Identifier QualifiedIdentifier::top() const

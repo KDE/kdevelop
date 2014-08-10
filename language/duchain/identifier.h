@@ -260,7 +260,9 @@ public:
   bool isEmpty() const;
   int count() const;
   Identifier first() const;
+  IndexedIdentifier indexedFirst() const;
   Identifier last() const;
+  IndexedIdentifier indexedLast() const;
   Identifier top() const;
   Identifier at(int i) const;
   IndexedIdentifier indexedAt(int i) const;
