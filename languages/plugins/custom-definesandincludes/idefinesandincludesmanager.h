@@ -176,12 +176,10 @@ public:
 
 inline IDefinesAndIncludesManager* IDefinesAndIncludesManager::manager()
 {
-    static auto manager = KDevelop::ICore::self()->pluginController()->pluginForExtension( "org.kdevelop.IDefinesAndIncludesManager" );
-
+    auto manager = KDevelop::ICore::self()->pluginController()->pluginForExtension( "org.kdevelop.IDefinesAndIncludesManager" );
     Q_ASSERT(manager);
 
-    static auto extension = manager->extension<KDevelop::IDefinesAndIncludesManager>();
-
+    auto extension = manager->extension<KDevelop::IDefinesAndIncludesManager>();
     return extension;
 }
 
