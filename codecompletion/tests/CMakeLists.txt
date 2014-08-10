@@ -1,4 +1,5 @@
-kde4_add_unit_test(qmlcompletiontest qmlcompletiontest.cpp)
+add_executable(qmlcompletiontest qmlcompletiontest.cpp)
+add_test(qmlcompletiontest qmlcompletiontest)
 
 target_link_libraries(qmlcompletiontest
     ${QT_QTTEST_LIBRARY}

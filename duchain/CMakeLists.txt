@@ -1,4 +1,4 @@
-kde4_add_library(kdevqmljsduchain SHARED
+add_library(kdevqmljsduchain SHARED
     cache.cpp
     helper.cpp
     parsesession.cpp

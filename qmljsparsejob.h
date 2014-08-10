@@ -29,7 +29,7 @@ public:
                   KDevelop::ILanguageSupport* languageSupport);
 
 protected:
-    virtual void run();
+    virtual void run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* thread);
 };
 
 #endif // PARSEQMLJSJOB_H

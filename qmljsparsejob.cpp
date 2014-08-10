@@ -93,8 +93,11 @@ QmlJsParseJob::QmlJsParseJob(const IndexedString& url, ILanguageSupport* languag
     }
 }
 
-void QmlJsParseJob::run()
+void QmlJsParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* thread)
 {
+    Q_UNUSED(pointer)
+    Q_UNUSED(thread)
+
     UrlParseLock urlLock(document());
     if (abortRequested() || !isUpdateRequired(ParseSession::languageString())) {
         return;

@@ -37,8 +37,8 @@
 QHash<QString, SupportedProperty> PropertyPreviewWidget::supportedProperties;
 
 QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
-                                                    SimpleRange keyRange,
-                                                    SimpleRange valueRange,
+                                                    KTextEditor::Range keyRange,
+                                                    KTextEditor::Range valueRange,
                                                     Declaration* decl,
                                                     const QString& key,
                                                     const QString& value)
@@ -117,36 +117,27 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
 
 void PropertyPreviewWidget::updateValue(const QString& newValue)
 {
-    if ( ! wasChanged ) {
-        document->startEditing();
-        wasChanged = true;
-    }
     // communicate the changed value to the QML view
     view->rootObject()->setProperty("value", newValue);
     // set the cursor to the edited range, otherwise the view will jump if we call doc->endEditing()
-    document->activeView()->setCursorPosition(KTextEditor::Cursor(valueRange.start.line, valueRange.start.column));
-    if ( valueRange.end.column - valueRange.start.column == newValue.size() ) {
-        document->replaceText(valueRange.textRange(), newValue);
+    //document->activeView()->setCursorPosition(KTextEditor::Cursor(valueRange.start.line, valueRange.start.column));
+    if (valueRange.end().column() - valueRange.start().column() == newValue.size()) {
+        document->replaceText(valueRange, newValue);
     }
     else {
         // the length of the text changed so don't replace it but remove the old
         // and insert the new text.
-        document->removeText(valueRange.textRange());
-        document->insertText(valueRange.textRange().start(), newValue);
-        valueRange.end.column = valueRange.start.column + newValue.size();
-        document->endEditing();
-        document->startEditing();
+        document->removeText(valueRange);
+        document->insertText(valueRange.start(), newValue);
+        valueRange.end().setColumn(valueRange.start().column() + newValue.size());
     }
 }
 
 PropertyPreviewWidget::~PropertyPreviewWidget()
 {
-    if ( wasChanged ) {
-        document->endEditing();
-    }
 }
 
-PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, SimpleRange keyRange, SimpleRange valueRange,
+PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, KTextEditor::Range keyRange, KTextEditor::Range valueRange,
                                              const SupportedProperty& property, const QString& value)
     : QWidget()
     , view(new QDeclarativeView)
@@ -154,7 +145,6 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, SimpleR
     , keyRange(keyRange)
     , valueRange(valueRange)
     , property(property)
-    , wasChanged(false)
 {
     //setup kdeclarative library
     KDeclarative kdeclarative;

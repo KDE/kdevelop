@@ -37,7 +37,7 @@ public:
     virtual int argumentHintDepth() const;
     virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
 
-    virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+    virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word);
 
 private:
     QString m_name;

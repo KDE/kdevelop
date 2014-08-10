@@ -22,7 +22,7 @@
 #include <QSlider>
 #include <QDeclarativeView>
 
-#include <language/editor/documentrange.h>
+#include <ktexteditor/range.h>
 #include <language/duchain/declaration.h>
 #include <interfaces/idocument.h>
 
@@ -66,8 +66,8 @@ public:
     // Returns 0 when the property is not supported, which tells kdevplatform not to
     // display any widget when returned from e.g. specialLanguageObjectNavigationWidget.
     static QWidget* constructIfPossible(KTextEditor::Document* doc,
-                                        SimpleRange keyRange,
-                                        SimpleRange valueRange,
+                                        KTextEditor::Range keyRange,
+                                        KTextEditor::Range valueRange,
                                         Declaration* decl,
                                         const QString& key,
                                         const QString& value);
@@ -76,7 +76,7 @@ public:
 private:
     // private because you should use the static constructIfPossible function to create instances,
     // to make sure you don't have widgets which operate on unsupported properties.
-    explicit PropertyPreviewWidget(KTextEditor::Document* doc, SimpleRange keyRange, SimpleRange valueRange,
+    explicit PropertyPreviewWidget(KTextEditor::Document* doc, KTextEditor::Range keyRange, KTextEditor::Range valueRange,
                                    const SupportedProperty& property, const QString& value);
     static QHash<QString, SupportedProperty> supportedProperties;
 
@@ -85,15 +85,13 @@ private:
     // the document the widget replaces text in
     KTextEditor::Document* document;
     // the range of the key
-    SimpleRange const keyRange;
+    KTextEditor::Range const keyRange;
     // the range of the value to be modified. Not const because the range might change
     // if the newly inserted text is smaller or larger than what was there before
     // (e.g. 9 -> 10)
-    SimpleRange valueRange;
+    KTextEditor::Range valueRange;
     // the SupportedProperty instance for this widget
     SupportedProperty const property;
-    // true if the property was changed in the widget since it was opened
-    bool wasChanged;
 
 private slots:
     // updates the text in the document to contain the new value in valueRange

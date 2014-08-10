@@ -41,7 +41,7 @@ using namespace QmlJS;
 using namespace KDevelop;
 
 CompletionItem::CompletionItem(DeclarationPointer decl, int inheritanceDepth, Decoration decoration)
-: NormalDeclarationCompletionItem(decl, KSharedPtr<KDevelop::CodeCompletionContext>(), inheritanceDepth),
+: NormalDeclarationCompletionItem(decl, QExplicitlySharedDataPointer<KDevelop::CodeCompletionContext>(), inheritanceDepth),
   m_decoration(decoration)
 {
 }
@@ -196,13 +196,15 @@ CodeCompletionModel::CompletionProperties CompletionItem::completionProperties()
     return properties;
 }
 
-void CompletionItem::executed(KTextEditor::Document* document, const KTextEditor::Range& word)
+void CompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& word)
 {
-    QString base = document->text(word);
+    KTextEditor::Document* document = view->document();
+    QString base = declarationName();
 
     switch (m_decoration)
     {
     case QmlJS::CompletionItem::NoDecoration:
+        document->replaceText(word, base);
         break;
 
     case QmlJS::CompletionItem::Quotes:
@@ -217,10 +219,7 @@ void CompletionItem::executed(KTextEditor::Document* document, const KTextEditor
         if (declaration() && declaration()->abstractType() &&
             declaration()->abstractType()->whichType() == AbstractType::TypeStructure) {
             document->replaceText(word, base + " {}");
-
-            if (document->activeView()) {
-                document->activeView()->setCursorPosition(word.end() + KTextEditor::Cursor(0, 2));
-            }
+            view->setCursorPosition(word.end() + KTextEditor::Cursor(0, 2));
         } else {
             document->replaceText(word, base + ": ");
         }
@@ -228,9 +227,6 @@ void CompletionItem::executed(KTextEditor::Document* document, const KTextEditor
 
     case QmlJS::CompletionItem::Brackets:
         document->replaceText(word, base + "()");
-
-        if (document->activeView()) {
-            document->activeView()->setCursorPosition(word.end() + KTextEditor::Cursor(0, 1));
-        }
+        view->setCursorPosition(word.end() + KTextEditor::Cursor(0, 1));
     }
 }

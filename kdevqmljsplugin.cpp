@@ -42,14 +42,14 @@
 #include <interfaces/contextmenuextension.h>
 
 K_PLUGIN_FACTORY(KDevQmlJsSupportFactory, registerPlugin<KDevQmlJsPlugin>(); )
-K_EXPORT_PLUGIN(KDevQmlJsSupportFactory(
-    KAboutData("kdevqmljssupport", 0, ki18n("QML/JS Support"), VERSION_STR,
-    ki18n("Support for QML and JS Languages"), KAboutData::License_GPL)))
+//K_EXPORT_PLUGIN(KDevQmlJsSupportFactory(
+//    KAboutData("kdevqmljssupport", 0, ki18n("QML/JS Support"), VERSION_STR,
+//    ki18n("Support for QML and JS Languages"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
 KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
-: IPlugin( KDevQmlJsSupportFactory::componentData(), parent )
+: IPlugin(QLatin1String("kdevqmljssupport"), parent )
 , ILanguageSupport()
 , m_highlighting(new QmlJsHighlighting(this))
 , m_refactoring(new BasicRefactoring(this))
@@ -61,6 +61,10 @@ KDevQmlJsPlugin::KDevQmlJsPlugin(QObject* parent, const QVariantList& )
 
     auto assistantsManager = core()->languageController()->staticAssistantsManager();
     assistantsManager->registerAssistant(StaticAssistant::Ptr(new RenameAssistant(this)));
+}
+
+KDevQmlJsPlugin::~KDevQmlJsPlugin()
+{
 }
 
 ParseJob* KDevQmlJsPlugin::createParseJob(const IndexedString& url)
@@ -96,8 +100,8 @@ ContextMenuExtension KDevQmlJsPlugin::contextMenuExtension(Context* context)
     return cm;
 }
 
-const QString textFromDoc(const IDocument* doc, const SimpleRange& range) {
-    return doc->textDocument()->line(range.start.line).mid(range.start.column, range.end.column-range.start.column);
+const QString textFromDoc(const IDocument* doc, const KTextEditor::Range& range) {
+    return doc->textDocument()->line(range.start().line()).mid(range.start().column(), range.end().column()-range.start().column());
 };
 
 // Finds how many spaces the given string has at one end.
@@ -114,9 +118,9 @@ int spacesAtCorner(const QString& string, int direction = +1) {
 
 // Take the given QML line and check if it's a line of the form foo.bar: value.
 // Return ranges for the key and the value.
-const QPair<SimpleRange, SimpleRange> parseProperty(const QString& line, const SimpleCursor& position) {
-    SimpleRange keyRange = SimpleRange(position, position);
-    SimpleRange valueRange = SimpleRange(position, position);
+const QPair<KTextEditor::Range, KTextEditor::Range> parseProperty(const QString& line, const KTextEditor::Cursor& position) {
+    KTextEditor::Range keyRange = KTextEditor::Range(position, position);
+    KTextEditor::Range valueRange = KTextEditor::Range(position, position);
     QStringList items = line.split(';');
     QString matchingItem;
     int col_offset = -1;
@@ -124,7 +128,7 @@ const QPair<SimpleRange, SimpleRange> parseProperty(const QString& line, const S
     // or similar
     foreach ( const QString& item, items ) {
         col_offset += item.size() + 1;
-        if ( position.column < col_offset ) {
+        if ( position.column() < col_offset ) {
             matchingItem = item;
             break;
         }
@@ -132,7 +136,7 @@ const QPair<SimpleRange, SimpleRange> parseProperty(const QString& line, const S
     QStringList split = matchingItem.split(':');
     if ( split.size() != 2 ) {
         // The expression is not of the form foo:bar, thus invalid.
-        return qMakePair(SimpleRange::invalid(), SimpleRange::invalid());
+        return qMakePair(KTextEditor::Range::invalid(), KTextEditor::Range::invalid());
     }
     QString key = split.at(0);
     QString value = split.at(1);
@@ -143,22 +147,22 @@ const QPair<SimpleRange, SimpleRange> parseProperty(const QString& line, const S
         value = value.left(value.lastIndexOf('}')-1);
     }
 
-    keyRange.start.column = col_offset - value.size() - key.size() + spacesAtCorner(key, +1) - 1;
-    keyRange.end.column = col_offset - value.size() - 1 + spacesAtCorner(key, -1);
-    valueRange.start.column = col_offset - value.size() + spacesAtCorner(value, +1);
-    valueRange.end.column = col_offset + spacesAtCorner(value, -1);
-    return QPair<SimpleRange, SimpleRange>(keyRange, valueRange);
+    keyRange.start().setColumn(col_offset - value.size() - key.size() + spacesAtCorner(key, +1) - 1);
+    keyRange.end().setColumn(col_offset - value.size() - 1 + spacesAtCorner(key, -1));
+    valueRange.start().setColumn(col_offset - value.size() + spacesAtCorner(value, +1));
+    valueRange.end().setColumn(col_offset + spacesAtCorner(value, -1));
+    return QPair<KTextEditor::Range, KTextEditor::Range>(keyRange, valueRange);
 };
 
-QWidget* KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position)
+QWidget* KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position)
 {
     IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
     if ( doc && doc->textDocument() ) {
         // Check for a QML property, and construct a property preview widget
         // if the property key is listed in the supported properties.
-        QPair<SimpleRange, SimpleRange> property = parseProperty(doc->textDocument()->line(position.line), position);
+        QPair<KTextEditor::Range, KTextEditor::Range> property = parseProperty(doc->textDocument()->line(position.line()), position);
         if ( property.first.isValid() && property.second.isValid() ) {
-            Declaration* decl = DUChainUtils::itemUnderCursor(url, property.first.start);
+            Declaration* decl = DUChainUtils::itemUnderCursor(url, property.first.start());
 
             return PropertyPreviewWidget::constructIfPossible(
                 doc->textDocument(),
@@ -174,4 +178,4 @@ QWidget* KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const KUrl& url,
     return KDevelop::ILanguageSupport::specialLanguageObjectNavigationWidget(url, position);
 }
 
-
+#include "kdevqmljsplugin.moc"

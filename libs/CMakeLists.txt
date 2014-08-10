@@ -1,13 +1,13 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
-kde4_add_ui_files(uifiles_SRCS
+qt5_wrap_ui(uifiles_SRCS
 	utils/projectintropage.ui
 	utils/filewizardpage.ui
 	utils/submiteditorwidget.ui
 	utils/newclasswidget.ui
 )
 
-kde4_add_library(kdevqtc-qmlsupport SHARED
+add_library(kdevqtc-qmlsupport SHARED
 	${uifiles_SRCS}
 	languageutils/componentversion.cpp
 	languageutils/fakemetaobject.cpp
@@ -34,4 +34,4 @@ target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
     ${QT_QTNETWORK_LIBRARY}
 )
 
-install(TARGETS kdevqtc-qmlsupport ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kdevqtc-qmlsupport ${INSTALL_TARGETS_DEFAULT_ARGS})

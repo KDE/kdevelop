@@ -24,6 +24,7 @@
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/duchain/duchainutils.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 
 #include <QIcon>
 
@@ -87,10 +88,10 @@ QVariant QmlJS::ModuleCompletionItem::data(const QModelIndex& index, int role, c
     return QVariant();
 }
 
-void QmlJS::ModuleCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word)
+void QmlJS::ModuleCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& word)
 {
     // Replace the whole line with an import statement
-    document->replaceText(
+    view->document()->replaceText(
         KTextEditor::Range(word.start().line(), 0, word.start().line(), INT_MAX),
         QString("import %1 %2").arg(m_name, m_version)
     );

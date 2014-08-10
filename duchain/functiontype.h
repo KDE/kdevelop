@@ -40,14 +40,14 @@ typedef KDevelop::MergeIdentifiedType<KDevelop::FunctionType> FunctionTypeBase;
 class KDEVQMLJSDUCHAIN_EXPORT FunctionType : public FunctionTypeBase
 {
 public:
-    typedef TypePtr<FunctionType> Ptr;
+    typedef KDevelop::TypePtr<FunctionType> Ptr;
 
     FunctionType();
     FunctionType(const FunctionType& rhs);
     FunctionType(Data& data);
     virtual ~FunctionType();
 
-    virtual AbstractType* clone() const;
+    virtual KDevelop::AbstractType* clone() const;
     virtual QString toString() const;
     virtual uint hash() const;
 

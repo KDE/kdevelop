@@ -1,18 +1,24 @@
 project(kdev-qml)
 
 set(VERSION_MAJOR 1)
-set(VERSION_MINOR 7)
-set(VERSION_PATCH 60)
+set(VERSION_MINOR 90)
+set(VERSION_PATCH 90)
 # KDevplatform dependency version
 set( KDEVPLATFORM_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}" )
 
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 2.8.12)
+find_package (ECM 0.0.9 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
-find_package(KDE4 REQUIRED)
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings)
+
+find_package(Qt5 REQUIRED Core Declarative Widgets Test)
+find_package(KF5 REQUIRED COMPONENTS KDELibs4Support ThreadWeaver TextEditor)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 find_package(KDevelop REQUIRED)
 find_package(KDeclarative REQUIRED)
-
 
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake"
@@ -23,7 +29,6 @@ configure_file(
 enable_testing()
 
 include_directories(
-    ${KDE4_INCLUDES}
     ${KDEVPLATFORM_INCLUDE_DIR}
     ${KDEVELOP_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -45,7 +50,7 @@ add_subdirectory(nodejsmodules)
 add_subdirectory(tests)
 add_subdirectory(codecompletion)
 
-kde4_add_plugin(kdevqmljslanguagesupport
+add_library(kdevqmljslanguagesupport MODULE
     qmljsparsejob.cpp
     qmljshighlighting.cpp
     kdevqmljsplugin.cpp
@@ -54,7 +59,7 @@ kde4_add_plugin(kdevqmljslanguagesupport
 target_link_libraries(kdevqmljslanguagesupport
     kdevqmljsduchain
     kdevqmljscompletion
-    ${KDE4_THREADWEAVER_LIBS}
+    ${QT_QTWIDGETS_LIBRARIES}
     ${QT_QTDECLARATIVE_LIBRARIES}
     ${KDECLARATIVE_LIBRARIES}
 )
