@@ -14,6 +14,8 @@
 # Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 # Redistribution and use is allowed according to the terms of the BSD license.
 
+include(CMakeParseArguments)
+
 # creates a template archive from the given directory
 macro(kdevplatform_create_template_archive _templateName)
     get_filename_component(_tmp_file ${_templateName} ABSOLUTE)
@@ -89,8 +91,13 @@ macro(kdevplatform_add_file_templates _templateNames)
     endforeach(_templateName ${ARGV})
 endmacro(kdevplatform_add_file_templates _templateNames)
 
-macro(kdevplatform_add_test testName testSources)
-    add_executable(${testName} ${testSources})
+function(kdevplatform_add_test testName)
+    cmake_parse_arguments(args "" "" "SOURCES" ${ARGN})
+
+    if (NOT args_SOURCES)
+        message(FATAL_ERROR "Missing SOURCES argument")
+    endif()
+    add_executable(${testName} ${args_SOURCES})
     add_test(${testName} ${testName})
     ecm_mark_as_test(${testName})
-endmacro()
+endfunction()

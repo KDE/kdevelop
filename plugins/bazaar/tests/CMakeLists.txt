@@ -13,7 +13,7 @@ if (BZR_FOUND)
         ../copyjob.cpp
     )
 
-    kdevplatform_add_test(kdevbazaar-test ${bazaartest_SRCS})
+    kdevplatform_add_test(kdevbazaar-test SOURCES ${bazaartest_SRCS})
     target_link_libraries(kdevbazaar-test
         ${QT_QTTEST_LIBRARY}
         ${KDE4_KDECORE_LIBS}

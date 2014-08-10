@@ -24,9 +24,7 @@ target_link_libraries(benchhashes
 
 ########### next target ###############
 
-set(tst_duchainshutdown_SRCS tst_duchainshutdown.cpp)
-
-kdevplatform_add_test(tst_duchainshutdown ${tst_duchainshutdown_SRCS})
+kdevplatform_add_test(tst_duchainshutdown SOURCES tst_duchainshutdown.cpp)
 target_link_libraries(tst_duchainshutdown
   ${KDE4_KDECORE_LIBS}
   ${QT_QTTEST_LIBRARY}
