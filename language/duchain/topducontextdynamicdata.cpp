@@ -190,13 +190,13 @@ struct PtrType<QExplicitlySharedDataPointer<T>>
 };
 
 template<typename T>
-constexpr bool isSharedDataItem()
+Q_DECL_CONSTEXPR bool isSharedDataItem()
 {
   return false;
 }
 
 template<>
-constexpr bool isSharedDataItem<ProblemPointer>()
+Q_DECL_CONSTEXPR bool isSharedDataItem<ProblemPointer>()
 {
   return true;
 }

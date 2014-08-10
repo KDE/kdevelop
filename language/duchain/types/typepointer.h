@@ -88,6 +88,6 @@ public:
 
 // TODO: Remove once we depend on Qt 5.4, also see https://codereview.qt-project.org/#/c/88665/
 template <class T>
-constexpr uint qHash(const KDevelop::TypePtr<T>& type) { return qHash(type.data()); }
+Q_DECL_CONSTEXPR uint qHash(const KDevelop::TypePtr<T>& type) { return qHash(type.data()); }
 
 #endif
