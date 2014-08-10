@@ -15,10 +15,9 @@ include(KDECMakeSettings)
 include(KDECompilerSettings)
 
 find_package(Qt5 REQUIRED Core Declarative Widgets Test)
-find_package(KF5 REQUIRED COMPONENTS KDELibs4Support ThreadWeaver TextEditor)
+find_package(KF5 REQUIRED COMPONENTS KDELibs4Support ThreadWeaver TextEditor Declarative)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 find_package(KDevelop REQUIRED)
-find_package(KDeclarative REQUIRED)
 
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake"
@@ -59,9 +58,10 @@ add_library(kdevqmljslanguagesupport MODULE
 target_link_libraries(kdevqmljslanguagesupport
     kdevqmljsduchain
     kdevqmljscompletion
-    ${QT_QTWIDGETS_LIBRARIES}
-    ${QT_QTDECLARATIVE_LIBRARIES}
-    ${KDECLARATIVE_LIBRARIES}
+    Qt5::Widgets
+    Qt5::Declarative
+    KF5::Declarative
+    KF5::KDELibs4Support
 )
 
 install(TARGETS kdevqmljslanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR})

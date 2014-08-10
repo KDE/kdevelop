@@ -22,7 +22,6 @@
 
 #include <qmljs/parser/qmljsast_p.h>
 
-#include <language/editor/simplerange.h>
 #include <language/duchain/stringhelpers.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>

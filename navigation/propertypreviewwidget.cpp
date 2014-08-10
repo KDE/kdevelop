@@ -27,7 +27,7 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KLocalizedString>
-#include <kdeclarative.h>
+#include <KDeclarative/KDeclarative>
 
 #include <language/duchain/ducontext.h>
 #include <language/duchain/duchainlock.h>
@@ -147,7 +147,7 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, KTextEd
     , property(property)
 {
     //setup kdeclarative library
-    KDeclarative kdeclarative;
+    KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(view->engine());
     kdeclarative.initialize();
     //binds things like kconfig and icons
