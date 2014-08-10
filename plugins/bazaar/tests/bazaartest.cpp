@@ -53,13 +53,23 @@ const QString bazaarTest_FileName3("bar");
 
 using namespace KDevelop;
 
-void BazaarTest::init()
+void BazaarTest::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
-    m_plugin = new BazaarPlugin(TestCore::self());
-    removeTempDirs();
 
+    m_plugin = new BazaarPlugin(TestCore::self());
+}
+
+void BazaarTest::cleanupTestCase()
+{
+    delete m_plugin;
+
+    TestCore::shutdown();
+}
+
+void BazaarTest::init()
+{
     // Now create the basic directory structure
     QDir tmpdir(tempDir);
     tmpdir.mkdir(bazaarTest_BaseDir);
@@ -69,15 +79,8 @@ void BazaarTest::init()
 
 void BazaarTest::cleanup()
 {
-    delete m_plugin;
-    TestCore::shutdown();
-    if (QFileInfo(bazaarTest_BaseDir).exists())
-        KIO::NetAccess::del(KUrl(bazaarTest_BaseDir), 0);
-
-    if (QFileInfo(bazaarTest_BaseDir2).exists())
-        KIO::NetAccess::del(KUrl(bazaarTest_BaseDir2), 0);
+    removeTempDirs();
 }
-
 
 void BazaarTest::repoInit()
 {
