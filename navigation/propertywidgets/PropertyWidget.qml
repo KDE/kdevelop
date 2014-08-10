@@ -20,5 +20,5 @@ import QtQuick 2.2
 
 Rectangle {
     property string value
-    color: "#00FFFFFF"
+    color: "#000000"
 }

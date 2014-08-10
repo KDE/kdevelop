@@ -119,8 +119,6 @@ int spacesAtCorner(const QString& string, int direction = +1) {
 // Take the given QML line and check if it's a line of the form foo.bar: value.
 // Return ranges for the key and the value.
 const QPair<KTextEditor::Range, KTextEditor::Range> parseProperty(const QString& line, const KTextEditor::Cursor& position) {
-    KTextEditor::Range keyRange = KTextEditor::Range(position, position);
-    KTextEditor::Range valueRange = KTextEditor::Range(position, position);
     QStringList items = line.split(';');
     QString matchingItem;
     int col_offset = -1;
@@ -147,11 +145,15 @@ const QPair<KTextEditor::Range, KTextEditor::Range> parseProperty(const QString&
         value = value.left(value.lastIndexOf('}')-1);
     }
 
-    keyRange.start().setColumn(col_offset - value.size() - key.size() + spacesAtCorner(key, +1) - 1);
-    keyRange.end().setColumn(col_offset - value.size() - 1 + spacesAtCorner(key, -1));
-    valueRange.start().setColumn(col_offset - value.size() + spacesAtCorner(value, +1));
-    valueRange.end().setColumn(col_offset + spacesAtCorner(value, -1));
-    return QPair<KTextEditor::Range, KTextEditor::Range>(keyRange, valueRange);
+    return qMakePair(
+    KTextEditor::Range(
+        KTextEditor::Cursor(position.line(), col_offset - value.size() - key.size() + spacesAtCorner(key, +1) - 1),
+        KTextEditor::Cursor(position.line(), col_offset - value.size() - 1 + spacesAtCorner(key, -1))
+    ),
+    KTextEditor::Range(
+        KTextEditor::Cursor(position.line(), col_offset - value.size() + spacesAtCorner(value, +1)),
+        KTextEditor::Cursor(position.line(), col_offset + spacesAtCorner(value, -1))
+    ));
 };
 
 QWidget* KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position)

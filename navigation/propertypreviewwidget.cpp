@@ -150,23 +150,30 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, KTextEd
     KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(view->engine());
     kdeclarative.initialize();
-    //binds things like kconfig and icons
-    kdeclarative.setupBindings();
+    kdeclarative.setupBindings();        //binds things like kconfig and icons
+
+    // Configure layout
+    QHBoxLayout*l = new QHBoxLayout;
+
+    l->setContentsMargins(0, 0, 0, 0);
+    setLayout(l);
 
     // see docstring for ILanguageSupport::specialLanguageObjectNavigationWidget
     setProperty("DoNotCloseOnCursorMove", true);
+
     view->setSource(property.qmlfile);
-    setLayout(new QHBoxLayout);
-    // don't crash because of a syntax error or missing QML file
-    if ( ! view->rootObject() ) {
-        layout()->addWidget(new QLabel(i18n("Error loading QML file: %1", property.qmlfile.path())));
+    if (!view->rootObject()) {
+        // don't crash because of a syntax error or missing QML file
+        l->addWidget(new QLabel(i18n("Error loading QML file: %1", property.qmlfile.path())));
         delete view;
         return;
     }
+
     // set the initial value read from the document
     view->rootObject()->setProperty("value", value);
+
     // connect to the slot which has to be emitted from QML when the value changes
     QObject::connect(view->rootObject(), SIGNAL(valueChanged(QString)),
                      this, SLOT(updateValue(QString)));
-    layout()->addWidget(view);
+    l->addWidget(view);
 }
