@@ -62,7 +62,7 @@ QUrl findExecutable(const QString& name)
     QFileInfo info(qApp->applicationDirPath()  + "/unittests/" + name);
     Q_ASSERT(info.exists());
     Q_ASSERT(info.isExecutable());
-    return info.canonicalFilePath();
+    return QUrl::fromLocalFile(info.canonicalFilePath());
 }
 
 QString findSourceFile(const QString& name)
@@ -107,6 +107,7 @@ class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
 {
 public:
     TestLaunchConfiguration(QUrl executable = findExecutable("debugee") ) {
+        qDebug() << "FIND" << executable;
         c = new KConfig();
         c->deleteGroup("launch");
         cfg = c->group("launch");
