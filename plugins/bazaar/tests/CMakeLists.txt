@@ -13,7 +13,7 @@ if (BZR_FOUND)
         ../copyjob.cpp
     )
 
-    kde4_add_unit_test(kdevbazaar-test ${bazaartest_SRCS})
+    kdevplatform_add_test(kdevbazaar-test ${bazaartest_SRCS})
     target_link_libraries(kdevbazaar-test
         ${QT_QTTEST_LIBRARY}
         ${KDE4_KDECORE_LIBS}
@@ -21,4 +21,4 @@ if (BZR_FOUND)
         ${KDEVPLATFORM_UTIL_LIBRARIES}
         ${KDEVPLATFORM_TESTS_LIBRARIES}
     )
-endif (BZR_FOUND)
+endif()
