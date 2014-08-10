@@ -277,7 +277,7 @@ void BreakpointModel::markChanged(
         if (moving) {
             KTextEditor::MovingCursor* cursor = moving->newMovingCursor(KTextEditor::Cursor(mark.line, 0));
             connect(document, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)),
-                    this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
+                    this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), Qt::UniqueConnection);
             breakpoint->setMovingCursor(cursor);
         }
     } else {
