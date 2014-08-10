@@ -37,7 +37,7 @@ Path::Path()
 Path::Path(const QString& pathOrUrl)
 {
 #if QT_VERSION >= 0x050400
-    init(QUrl::fromUserInput(pathOrUrl, QDir::currentPath(), QUrl::AssumeLocalFile));
+    init(QUrl::fromUserInput(pathOrUrl, QDir::currentPath(), QUrl::DefaultResolution));
 #else
     init(QUrl::fromUserInput(pathOrUrl));
 #endif
