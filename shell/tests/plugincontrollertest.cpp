@@ -54,17 +54,17 @@ void PluginControllerTest::initTestCase()
     QStringList env = QProcess::systemEnvironment();
     for( int i = 0; i < env.count(); i++ )
     {
-        if( env[i].startsWith("KDEDIRS=") )
+        if( env[i].startsWith("XDG_DATA_DIRS=") )
         {
-            kdedirs = env[i].mid(8);
+            kdedirs = env[i].mid(13);
             kDebug() << kdedirs;
             break;
         }
     }
     kdedirs = QString(TEST_BIN_DIR":")+kdedirs;
     KProcess p;
-    p.setEnv( "KDEDIRS", kdedirs, true );
-    p.setProgram( "kbuildsycoca4" );
+    p.setEnv( "XDG_DATA_DIRS", kdedirs, true );
+    p.setProgram( "kbuildsycoca5" );
     p.execute();
 
     AutoTestShell::init();

@@ -44,7 +44,7 @@ ecm_mark_as_test(shell-sessioncontrollertest)
 target_link_libraries(shell-sessioncontrollertest Qt5::Test KF5::KDELibs4Support KF5::KIOWidgets kdevplatformtests kdevplatformshell kdevplatforminterfaces sublime )
 
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
-configure_file(share/kde4/services/kdevnonguiinterfaceplugin.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/share/kde4/services/kdevnonguiinterfaceplugin.desktop)
+configure_file(share/kde4/services/kdevnonguiinterfaceplugin.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kservices5/kdevnonguiinterfaceplugin.desktop)
 set( plugincontrollertest_plugin_SRCS nonguiinterfaceplugin.cpp )
 add_library( kdevnonguiinterfaceplugin MODULE ${plugincontrollertest_plugin_SRCS} )
 target_link_libraries( kdevnonguiinterfaceplugin ${QT_QTCORE_LIBRARY} ${KDE4_KDECORE_LIBRARY}  kdevplatforminterfaces )
