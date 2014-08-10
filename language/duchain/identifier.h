@@ -259,9 +259,12 @@ public:
   bool isEmpty() const;
   int count() const;
   Identifier first() const;
+  IndexedIdentifier indexedFirst() const;
   Identifier last() const;
+  IndexedIdentifier indexedLast() const;
   Identifier top() const;
   Identifier at(int i) const;
+  IndexedIdentifier indexedAt(int i) const;
   /**
    * @param pos Position where to start the copy.
    * @param len If this is -1, the whole following part will be returned.

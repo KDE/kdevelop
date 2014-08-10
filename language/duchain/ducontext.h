@@ -539,11 +539,6 @@ public:
    */
   void cleanIfNotEncountered(const QSet<DUChainBase*>& encountered);
 
-  /**
-   * Used exclusively by Declaration, do not use this.
-   */
-  void changingIdentifier( Declaration* decl, const Identifier& from, const Identifier& to );
-
    /**
     * Uses:
     * A "Use" represents any position in a document where a Declaration is used literally.

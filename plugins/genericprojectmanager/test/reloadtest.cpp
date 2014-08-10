@@ -41,6 +41,8 @@ QTEST_MAIN(ProjectLoadTest)
 
 Q_DECLARE_METATYPE(KDevelop::IProject*);
 
+using namespace KDevelop;
+
 ///FIXME: get rid of this, use temporary dir+file classes!
 void exec(const QString &cmd)
 {
@@ -54,25 +56,25 @@ void exec(const QString &cmd)
 
 void ProjectLoadTest::initTestCase()
 {
-    KDevelop::AutoTestShell::init();
-    KDevelop::TestCore::initialize();
-    KDevelop::ICore::self()->languageController()->backgroundParser()->disableProcessing();
+    AutoTestShell::init();
+    TestCore::initialize();
+    ICore::self()->languageController()->backgroundParser()->disableProcessing();
 
-    qRegisterMetaType<KDevelop::IProject*>("KDevelop::IProject*");
+    qRegisterMetaType<IProject*>();
 
-    foreach(KDevelop::IProject* p, KDevelop::ICore::self()->projectController()->projects()) {
-        KDevelop::ICore::self()->projectController()->closeProject(p);
+    foreach(IProject* p, ICore::self()->projectController()->projects()) {
+        ICore::self()->projectController()->closeProject(p);
     }
 }
 
 void ProjectLoadTest::cleanupTestCase()
 {
-    KDevelop::TestCore::shutdown();
+    TestCore::shutdown();
 }
 
 void ProjectLoadTest::init()
 {
-    Q_ASSERT(KDevelop::ICore::self()->projectController()->projects().isEmpty());
+    Q_ASSERT(ICore::self()->projectController()->projects().isEmpty());
 }
 
 struct TestProject
@@ -84,9 +86,9 @@ struct TestProject
     // project file (*.kdev4)
     KUrl file;
     ~TestProject() {
-        KDevelop::IProject* p = KDevelop::ICore::self()->projectController()->findProjectByName(name);
+        IProject* p = ICore::self()->projectController()->findProjectByName(name);
         if (p) {
-            KDevelop::ICore::self()->projectController()->closeProject(p);
+            ICore::self()->projectController()->closeProject(p);
         }
         delete dir;
     }
@@ -127,11 +129,11 @@ void ProjectLoadTest::addRemoveFiles()
     f.open(QIODevice::WriteOnly);
     f.close();
 
-    KDevelop::ICore::self()->projectController()->openProject(p.file);
+    ICore::self()->projectController()->openProject(p.file);
     QSignalSpy spy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
     QVERIFY(spy.wait(2000));
-    KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
-    QCOMPARE(project->projectFileUrl(), p.file);
+    IProject* project = ICore::self()->projectController()->projects().first();
+    QCOMPARE(project->projectFile().toUrl(), p.file);
 
     //KDirWatch adds/removes the file automatically
     for (int i=0; i<100; ++i) {
@@ -148,9 +150,9 @@ void ProjectLoadTest::addRemoveFiles()
 
     KUrl url(p.dir->name()+"/blub"+QString::number(50));
     url.cleanPath();
-    QCOMPARE(project->filesForUrl(url).count(), 1);
-    KDevelop::ProjectFileItem* file = project->filesForUrl(url).first();
-    project->projectFileManager()->removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*>() << file ); //message box has to be accepted manually :(
+    QCOMPARE(project->filesForPath(IndexedString(url)).count(), 1);
+    ProjectFileItem* file = project->filesForPath(IndexedString(url)).first();
+    project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file ); //message box has to be accepted manually :(
     for (int i=51; i<100; ++i) {
         QFile f2(p.dir->name()+"/blub"+QString::number(i));
         f2.remove();
@@ -180,25 +182,25 @@ void ProjectLoadTest::removeDirRecursive()
 
     //close previously opened projects
     QTest::qWait(1000); //wait for projects to load
-    foreach ( KDevelop::IProject* p, KDevelop::ICore::self()->projectController()->projects()) {
-        KDevelop::ICore::self()->projectController()->closeProject(p);
+    foreach ( IProject* p, ICore::self()->projectController()->projects()) {
+        ICore::self()->projectController()->closeProject(p);
         QTest::qWait(100);
     }
-    QVERIFY(KDevelop::ICore::self()->projectController()->projects().isEmpty());
+    QVERIFY(ICore::self()->projectController()->projects().isEmpty());
 
-    KDevelop::ICore::self()->projectController()->openProject(p.file);
+    ICore::self()->projectController()->openProject(p.file);
     QSignalSpy spy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
     QVERIFY(spy.wait(20000));
-    KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
-    QCOMPARE(project->projectFileUrl(), p.file);
+    IProject* project = ICore::self()->projectController()->projects().first();
+    QCOMPARE(project->projectFile().toUrl(), p.file);
 
     for (int i=0; i<1; ++i) {
         KUrl url(p.dir->name()+"/blub");
         url.cleanPath();
-        QCOMPARE(project->foldersForUrl(url).count(), 1);
+        QCOMPARE(project->foldersForPath(IndexedString(url)).count(), 1);
 
-        KDevelop::ProjectFolderItem* file = project->foldersForUrl(url).first();
-        project->projectFileManager()->removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*>() << file );
+        ProjectFolderItem* file = project->foldersForPath(IndexedString(url)).first();
+        project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file );
     }
 
     QTest::qWait(2000);
@@ -250,11 +252,12 @@ void ProjectLoadTest::addLotsOfFiles()
 {
     TestProject p = makeProject();
 
-    KDevelop::ICore::self()->projectController()->openProject(p.file);
-    QVERIFY(QSignalSpy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*))).wait(2000));
-    QCOMPARE(KDevelop::ICore::self()->projectController()->projects().size(), 1);
-    KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
-    QCOMPARE(project->projectFileUrl(), p.file);
+    ICore::self()->projectController()->openProject(p.file);
+    QVERIFY(QSignalSpy(KDevelop::ICore::self()->projectController(),
+                       SIGNAL(projectOpened(KDevelop::IProject*))).wait(2000));
+    QCOMPARE(ICore::self()->projectController()->projects().size(), 1);
+    IProject* project = ICore::self()->projectController()->projects().first();
+    QCOMPARE(project->projectFile().toUrl(), p.file);
 
     fillProject(50, 25, p, true);
 
@@ -268,9 +271,10 @@ void ProjectLoadTest::addMultipleJobs()
     const TestProject p2 = makeProject();
     fillProject(10, 25, p2, false);
 
-    QSignalSpy spy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
-    KDevelop::ICore::self()->projectController()->openProject(p1.file);
-    KDevelop::ICore::self()->projectController()->openProject(p2.file);
+    QSignalSpy spy(ICore::self()->projectController(),
+                   SIGNAL(projectOpened(KDevelop::IProject*)));
+    ICore::self()->projectController()->openProject(p1.file);
+    ICore::self()->projectController()->openProject(p2.file);
 
     const int wait = 25;
     const int maxWait = 2000;
@@ -280,7 +284,7 @@ void ProjectLoadTest::addMultipleJobs()
         waited += wait;
     }
 
-    QCOMPARE(KDevelop::ICore::self()->projectController()->projects().size(), 2);
+    QCOMPARE(ICore::self()->projectController()->projects().size(), 2);
 }
 
 void ProjectLoadTest::raceJob()
@@ -297,19 +301,20 @@ void ProjectLoadTest::raceJob()
         createFile(QString(p.dir->name() + "/test/%1").arg(i));
     }
 
-    KDevelop::ICore::self()->projectController()->openProject(p.file);
-    QVERIFY(QSignalSpy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*))).wait(2000));
+    ICore::self()->projectController()->openProject(p.file);
+    QVERIFY(QSignalSpy(KDevelop::ICore::self()->projectController(),
+                       SIGNAL(projectOpened(KDevelop::IProject*))).wait(2000));
 
-    QCOMPARE(KDevelop::ICore::self()->projectController()->projectCount(), 1);
-    KDevelop::IProject *project = KDevelop::ICore::self()->projectController()->projectAt(0);
-    QCOMPARE(project->projectFileUrl(), p.file);
-    KDevelop::ProjectFolderItem* root = project->projectItem();
+    QCOMPARE(ICore::self()->projectController()->projectCount(), 1);
+    IProject *project = ICore::self()->projectController()->projectAt(0);
+    QCOMPARE(project->projectFile().toUrl(), p.file);
+    ProjectFolderItem* root = project->projectItem();
     QCOMPARE(root->rowCount(), 1);
-    KDevelop::ProjectBaseItem* testItem = root->child(0);
+    ProjectBaseItem* testItem = root->child(0);
     QVERIFY(testItem->folder());
     QCOMPARE(testItem->baseName(), QString("test"));
     QCOMPARE(testItem->rowCount(), 1001);
-    KDevelop::ProjectBaseItem* asdfItem = testItem->children().last();
+    ProjectBaseItem* asdfItem = testItem->children().last();
     QVERIFY(asdfItem->folder());
 
     // move dir
@@ -326,9 +331,9 @@ void ProjectLoadTest::raceJob()
 
 void ProjectLoadTest::addDuringImport()
 {
-    // our goal here is to try to reproduce an issue in the optimized filesForUrl implementation
+    // our goal here is to try to reproduce an issue in the optimized filesForPath implementation
     // which requires the project to be associated to the model to function properly
-    // to trigger this we create a big project, import it and then call filesForUrl during
+    // to trigger this we create a big project, import it and then call filesForPath during
     // the import action
     TestProject p = makeProject();
     QDir dir(p.dir->name());
@@ -338,20 +343,21 @@ void ProjectLoadTest::addDuringImport()
         createFile(QString(p.dir->name() + "/test/%1").arg(i));
     }
 
-    QSignalSpy spy(KDevelop::ICore::self()->projectController(), SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)));
-    KDevelop::ICore::self()->projectController()->openProject(p.file);
+    QSignalSpy spy(ICore::self()->projectController(),
+                   SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)));
+    ICore::self()->projectController()->openProject(p.file);
     // not yet ready
-    QCOMPARE(KDevelop::ICore::self()->projectController()->projectCount(), 0);
+    QCOMPARE(ICore::self()->projectController()->projectCount(), 0);
     // but about to be opened
     QCOMPARE(spy.count(), 1);
-    KDevelop::IProject* project = spy.value(0).first().value<KDevelop::IProject*>();
+    IProject* project = spy.value(0).first().value<IProject*>();
     QVERIFY(project);
-    QCOMPARE(project->folder(), p.file.upUrl());
+    QCOMPARE(project->path(), Path(p.file.upUrl()));
     KUrl file(p.file, "test/zzzzz/999");
     QVERIFY(QFile::exists(file.toLocalFile()));
     // this most probably is not yet loaded
     // and this should not crash
-    QCOMPARE(project->itemsForUrl(file).size(), 0);
+    QCOMPARE(project->itemsForPath(IndexedString(file)).size(), 0);
     // now delete that file and don't crash
     QFile::remove(file.toLocalFile());
     // now create another file
@@ -360,11 +366,12 @@ void ProjectLoadTest::addDuringImport()
     createFile(file2.toLocalFile());
     QVERIFY(!project->isReady());
     // now wait for finish
-    QVERIFY(QSignalSpy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*))).wait(2000));
+    QVERIFY(QSignalSpy(KDevelop::ICore::self()->projectController(),\
+                       SIGNAL(projectOpened(KDevelop::IProject*))).wait(2000));
     QVERIFY(project->isReady());
     // make sure our file removal + addition was properly tracked
-    QCOMPARE(project->filesForUrl(file).size(), 0);
-    QCOMPARE(project->filesForUrl(file2).size(), 1);
+    QCOMPARE(project->filesForPath(IndexedString(file)).size(), 0);
+    QCOMPARE(project->filesForPath(IndexedString(file2)).size(), 1);
 
     //NOTE: this test is probabably incomplete, I bet there are some race conditions left,
     //      esp. when adding a file at a point where the parent folder was already imported

@@ -235,8 +235,6 @@ void Declaration::rebuildDynamicData(DUContext* parent, uint ownIndex)
   m_context = parent;
   m_topContext = parent->topContext();
   m_indexInTopContext = ownIndex;
-
-  parent->m_dynamicData->addDeclarationToHash(d_func()->m_identifier.identifier(), this);
 }
 
 void Declaration::setIdentifier(const Identifier& identifier)
@@ -246,9 +244,6 @@ void Declaration::setIdentifier(const Identifier& identifier)
   bool wasInSymbolTable = d->m_inSymbolTable;
 
   setInSymbolTable(false);
-
-  if( m_context && !d->m_anonymousInContext )
-    m_context->changingIdentifier( this, d->m_identifier, identifier );
 
   d->m_identifier = identifier;
 
