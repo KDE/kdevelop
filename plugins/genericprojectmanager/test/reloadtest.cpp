@@ -37,6 +37,8 @@
 #include <project/projectmodel.h>
 #include <language/backgroundparser/backgroundparser.h>
 
+#include <KIO/Global>
+
 QTEST_MAIN(ProjectLoadTest)
 
 Q_DECLARE_METATYPE(KDevelop::IProject*);
@@ -84,7 +86,7 @@ struct TestProject
     // name of the project (random)
     QString name;
     // project file (*.kdev4)
-    KUrl file;
+    QUrl file;
     ~TestProject() {
         IProject* p = ICore::self()->projectController()->findProjectByName(name);
         if (p) {
@@ -352,7 +354,7 @@ void ProjectLoadTest::addDuringImport()
     QCOMPARE(spy.count(), 1);
     IProject* project = spy.value(0).first().value<IProject*>();
     QVERIFY(project);
-    QCOMPARE(project->path(), Path(p.file.upUrl()));
+    QCOMPARE(project->path(), Path(KIO::upUrl(p.file)));
     KUrl file(p.file, "test/zzzzz/999");
     QVERIFY(QFile::exists(file.toLocalFile()));
     // this most probably is not yet loaded
