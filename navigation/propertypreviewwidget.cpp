@@ -116,10 +116,10 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
     return 0;
 }
 
-void PropertyPreviewWidget::updateValue(const QString& newValue)
+void PropertyPreviewWidget::updateValue()
 {
-    // communicate the changed value to the QML view
-    view->rootObject()->setProperty("value", newValue);
+    QString newValue = view->rootObject()->property("value").toString();
+
     // set the cursor to the edited range, otherwise the view will jump if we call doc->endEditing()
     //document->activeView()->setCursorPosition(KTextEditor::Cursor(valueRange.start.line, valueRange.start.column));
     if (valueRange.end().column() - valueRange.start().column() == newValue.size()) {
@@ -128,9 +128,14 @@ void PropertyPreviewWidget::updateValue(const QString& newValue)
     else {
         // the length of the text changed so don't replace it but remove the old
         // and insert the new text.
+        KTextEditor::Document::EditingTransaction transaction(document);
         document->removeText(valueRange);
         document->insertText(valueRange.start(), newValue);
-        valueRange.end().setColumn(valueRange.start().column() + newValue.size());
+
+        valueRange.setRange(
+            valueRange.start(),
+            KTextEditor::Cursor(valueRange.start().line(), valueRange.start().column() + newValue.size())
+        );
     }
 }
 
@@ -163,6 +168,7 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, KTextEd
     setProperty("DoNotCloseOnCursorMove", true);
 
     view->setSource(property.qmlfile);
+
     if (!view->rootObject()) {
         // don't crash because of a syntax error or missing QML file
         l->addWidget(new QLabel(i18n("Error loading QML file: %1", property.qmlfile.path())));
@@ -175,7 +181,7 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, KTextEd
     view->rootObject()->setProperty("systemFonts", fontDatabase.families());
 
     // connect to the slot which has to be emitted from QML when the value changes
-    QObject::connect(view->rootObject(), SIGNAL(valueChanged(QString)),
-                     this, SLOT(updateValue(QString)));
+    QObject::connect(view->rootObject(), SIGNAL(valueChanged()),
+                     this, SLOT(updateValue()));
     l->addWidget(view);
 }

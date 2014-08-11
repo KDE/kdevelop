@@ -20,8 +20,8 @@ import QtQuick.Controls 1.2 as QtControls
 
 PropertyWidget {
     id: root
-    width: 150
-    height: 120
+    width: 220
+    height: 110
     value: slider.value
 
     Text {

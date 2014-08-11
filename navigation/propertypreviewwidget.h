@@ -97,7 +97,7 @@ private:
 
 private slots:
     // updates the text in the document to contain the new value in valueRange
-    void updateValue(const QString&);
+    void updateValue();
 };
 
 #endif
