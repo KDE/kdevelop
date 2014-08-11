@@ -65,9 +65,9 @@ void TestContexts::testFunctionContext()
     QCOMPARE(top->type(), DUContext::Global);
 
     // the function arguments (containing the prototype context and the function body)
-    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->childContexts().count(), 3);        // module, exports, the function
 
-    DUContext* argCtx = top->childContexts().at(0);
+    DUContext* argCtx = top->childContexts().at(2);
     QCOMPARE(argCtx->type(), DUContext::Function);
     QCOMPARE(argCtx->range(), argCtxRange);
     QCOMPARE(argCtx->childContexts().size(), 2);    // The prototype context then the body context
@@ -125,8 +125,8 @@ void TestContexts::testQMLContext()
 
     QCOMPARE(top->type(), DUContext::Global);
 
-    QCOMPARE(top->childContexts().count(), 1);
-    DUContext* mainCtx = top->childContexts().first();
+    QCOMPARE(top->childContexts().count(), 3);        // module, exports, Text
+    DUContext* mainCtx = top->childContexts().at(2);
     QCOMPARE(mainCtx->type(), DUContext::Class);
     QCOMPARE(mainCtx->range(), RangeInRevision(0, 6, 8, 0));
     QCOMPARE(mainCtx->childContexts().size(), 2);

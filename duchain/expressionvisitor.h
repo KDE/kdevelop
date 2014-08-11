@@ -90,7 +90,8 @@ private:
     bool encounterParent(const QString& declaration);       // "parent" QML identifier
     bool encounterDeclarationInContext(const KDevelop::QualifiedIdentifier& id,
                                        KDevelop::DUContext* context);
-    bool encounterDeclarationInWindow(const KDevelop::QualifiedIdentifier& id);
+    bool encounterDeclarationInNodeModule(const KDevelop::QualifiedIdentifier& id,
+                                          const QString& module);
     bool encounterGlobalDeclaration(const KDevelop::QualifiedIdentifier& id);
 
     void encounterFieldMember(const QString &name);

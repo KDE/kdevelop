@@ -86,7 +86,8 @@ private:
 
     QList<KDevelop::CompletionTreeItemPointer> functionCallTips();
     QList<KDevelop::CompletionTreeItemPointer> completionsFromImports(CompletionInContextFlags flags);
-    QList<KDevelop::CompletionTreeItemPointer> completionsFromWindow(CompletionInContextFlags flags);
+    QList<KDevelop::CompletionTreeItemPointer> completionsFromNodeModule(CompletionInContextFlags flags,
+                                                                         const QString& module);
     QList<KDevelop::CompletionTreeItemPointer> completionsInContext(const KDevelop::DUContextPointer& context,
                                                                     CompletionInContextFlags flags,
                                                                     CompletionItem::Decoration decoration);

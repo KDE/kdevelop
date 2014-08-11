@@ -121,6 +121,24 @@ DeclarationPointer NodeJS::moduleExports(const QString& moduleName, const Indexe
     return exports;
 }
 
+DeclarationPointer NodeJS::moduleMember(const QString& moduleName,
+                                        const QString& memberName,
+                                        const IndexedString& url)
+{
+    DeclarationPointer module = moduleExports(moduleName, url);
+    DeclarationPointer member;
+
+    if (module) {
+        member = QmlJS::getDeclaration(
+            QualifiedIdentifier(memberName),
+            QmlJS::getInternalContext(module),
+            false
+        );
+    }
+
+    return member;
+}
+
 QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
 {
     QMutexLocker lock(&m_mutex);

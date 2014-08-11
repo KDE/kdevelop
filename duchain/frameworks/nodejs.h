@@ -55,7 +55,15 @@ public:
      * @param moduleName Name of the module to import ("http", "../module.js", etc)
      * @param url Url of the document that imports the module
      */
-    KDevelop::DeclarationPointer moduleExports(const QString& moduleName, const KDevelop::IndexedString& url);
+    KDevelop::DeclarationPointer moduleExports(const QString& moduleName,
+                                               const KDevelop::IndexedString& url);
+
+    /**
+     * Declaration of a member of a module
+     */
+    KDevelop::DeclarationPointer moduleMember(const QString& moduleName,
+                                              const QString& memberName,
+                                              const KDevelop::IndexedString& url);
 
 private:
     void createObject(const QString& name, int index, DeclarationBuilder* builder);

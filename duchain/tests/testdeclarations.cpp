@@ -66,9 +66,9 @@ void TestDeclarations::testFunction()
 
     DUChainReadLocker lock;
 
-    QCOMPARE(top->localDeclarations().size(), 1);
+    QCOMPARE(top->localDeclarations().size(), 3); // module, exports and foo
 
-    FunctionDeclaration* fooDec = dynamic_cast<FunctionDeclaration*>(top->localDeclarations().at(0));
+    FunctionDeclaration* fooDec = dynamic_cast<FunctionDeclaration*>(top->localDeclarations().at(2));
     QVERIFY(fooDec);
     QCOMPARE(fooDec->range(), RangeInRevision(3, 9, 3, 12));
     QCOMPARE(QString::fromUtf8(fooDec->comment()), QString("some comment"));
@@ -128,10 +128,10 @@ void TestDeclarations::testQMLId()
 
         DUChainReadLocker lock;
 
-        QCOMPARE(top->localDeclarations().size(), 3);       // Text, test and child are all in the global scope
+        QCOMPARE(top->localDeclarations().size(), 5);       // module, exports, Text, test and child are all in the global scope
 
         // First declaration, the anonymous class
-        ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(top->localDeclarations().first());
+        ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(top->localDeclarations().at(2));
         QVERIFY(classDecl);
         QCOMPARE(classDecl->abstractType()->toString(), QString("qmlId"));
         QCOMPARE(classDecl->range(), RangeInRevision(5, 0, 5, 0));
@@ -139,7 +139,7 @@ void TestDeclarations::testQMLId()
         QCOMPARE(classDecl->internalContext()->range(), RangeInRevision(5, 6, 5, 37));
 
         // Second declaration: test
-        Declaration* dec = top->localDeclarations().at(1);
+        Declaration* dec = top->localDeclarations().at(3);
         QVERIFY(dec);
         QCOMPARE(dec->identifier().toString(), QString("test"));
         QCOMPARE(dec->abstractType()->toString(), QString("qmlId"));
@@ -167,9 +167,9 @@ void TestDeclarations::testQMLId()
 
         DUChainReadLocker lock;
 
-        QCOMPARE(top->localDeclarations().size(), 4); // Text, test, child and foo
+        QCOMPARE(top->localDeclarations().size(), 6); // module, exports, Text, test, child and foo
         // First declaration, the anonymous class
-        ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(top->localDeclarations().first());
+        ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(top->localDeclarations().at(2));
         QVERIFY(classDecl);
         QCOMPARE(classDecl->abstractType()->toString(), QString("qmlId"));
         QCOMPARE(classDecl->range(), RangeInRevision(5, 0, 5, 0));
@@ -177,7 +177,7 @@ void TestDeclarations::testQMLId()
         QCOMPARE(classDecl->internalContext()->range(), RangeInRevision(5, 6, 6, 17));
 
         // Second declaration: test
-        Declaration* dec = top->localDeclarations().at(1);
+        Declaration* dec = top->localDeclarations().at(3);
         QVERIFY(dec);
         QCOMPARE(dec->identifier().toString(), QString("test"));
         QCOMPARE(dec->abstractType()->toString(), QString("qmlId"));
@@ -203,8 +203,8 @@ void TestDeclarations::testProperty()
 
     DUChainReadLocker lock;
 
-    QCOMPARE(top->localDeclarations().size(), 1);
-    ClassDeclaration* text = dynamic_cast<ClassDeclaration*>(top->localDeclarations().first());
+    QCOMPARE(top->localDeclarations().size(), 3);        // module, exports, Text
+    ClassDeclaration* text = dynamic_cast<ClassDeclaration*>(top->localDeclarations().at(2));
     QVERIFY(text);
     QVERIFY(text->internalContext());
     QCOMPARE(text->internalContext()->type(), DUContext::Class);

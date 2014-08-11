@@ -77,13 +77,9 @@ ParseSession::ParseSession(const IndexedString& url, const QString& contents, in
 
     // Parse the module name and the version of url (this is used only when the file
     // is a QML module, but doesn't break for JavaScript files)
-    QString baseName = QString::fromUtf8(m_url.byteArray())
+    m_baseName = QString::fromUtf8(m_url.byteArray())
         .section('/', -1, -1)                   // Base name
         .section('.', 0, -2);                   // Without extension
-    QStringList nameAndVersion = baseName.split('_');
-
-    m_baseNameWithoutVersion = nameAndVersion.at(0);
-    m_version = (nameAndVersion.count() > 1 ? nameAndVersion.at(1) : QLatin1String("1.0"));
 }
 
 bool ParseSession::isParsedCorrectly() const
@@ -103,12 +99,7 @@ IndexedString ParseSession::url() const
 
 QString ParseSession::moduleName() const
 {
-    return m_baseNameWithoutVersion;
-}
-
-QString ParseSession::moduleVersion() const
-{
-    return m_version;
+    return m_baseName;
 }
 
 QList<ProblemPointer> ParseSession::problems() const

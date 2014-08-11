@@ -279,9 +279,6 @@ void QmlCompletionTest::testDoesNotContainDeclaration_data()
     // for properties/signals of the surrounding components
     QTest::newRow("qml_script_binding_not_surrounding") << "Item { property int foo; Item { %INVOKE } }" << "%CURSOR" << "foo" << false;
 
-    // Some QML components are only available in specific versions of their module
-    QTest::newRow("qml_module_version_2.0") << "import QtQuick 2.0\n Item { id: a\n %INVOKE }" << "%CURSOR" << "OpacityAnimator" << true;
-
     // Don't list the declarations that are not in a namespace but are imported from it
     QTest::newRow("qml_namespace_js_builtins") << "import org.kde.kdevplatform 1.0 as KDev\n Item { id: a\n %INVOKE }" << "KDev.%CURSOR" << "String" << true;
 }

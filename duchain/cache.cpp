@@ -26,6 +26,7 @@
 #include <QProcess>
 #include <QDir>
 #include <QCryptographicHash>
+#include <QCoreApplication>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -64,35 +65,31 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
         return path;
     }
 
-    // Look for <uri>_<version>.qml in the shipped files
-    QString fileName = (version.isNull() ? uri : QString("%1_%2.qml").arg(uri, version));
-    path = KGlobal::dirs()->findResource("data",
-        QString("kdevqmljssupport/qmlplugins/%1").arg(fileName)
-    );
+    // List of the paths in which the modules will be looked for
+    KDevelop::Path::List paths = m_includeDirs[baseFile];
 
-    if (!path.isNull()) {
-        m_modulePaths.insert(cacheKey, path);
-        return path;
+    for (auto path : QCoreApplication::instance()->libraryPaths()) {
+        KDevelop::Path p(path);
+
+        // Change /path/to/qt5/plugins to /path/to/qt5/{qml,imports}
+        paths << p.cd(QLatin1String("../qml"));
+        paths << p.cd(QLatin1String("../imports"));
     }
 
-    // Look for <uri> (with the dots replaced with slashes) in the standard KDE
-    // QML imports dir.
+    // Find the path for which <path>/u/r/i exists
     QString fragment = QString(uri).replace(QLatin1Char('.'), QDir::separator());
-    QStringList dirs = KGlobal::dirs()->findDirs("module",
-        QString("imports/%1").arg(fragment)
-    );
 
-    if (dirs.count() != 0) {
-        m_modulePaths.insert(cacheKey, dirs.first());
-        return dirs.first();
+    if (!version.startsWith(QLatin1String("1."))) {
+        // Modules having a version greater or equal to 2 are stored in a directory
+        // name like QtQuick.2
+        fragment += QLatin1Char('.') + version.section(QLatin1Char('.'), 0, 0);
     }
 
-    // Look into the custom include dirs of this file
-    for (KDevelop::Path dir : m_includeDirs[baseFile]) {
-        dir.addPath(fragment);
+    for (auto p : paths) {
+        QString pathString = p.cd(fragment).path();
 
-        if (QFile::exists(dir.path())) {
-            path = dir.path();
+        if (QFile::exists(pathString)) {
+            path = pathString;
             break;
         }
     }
@@ -110,6 +107,13 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
     for (const QFileInfo& fileInfo : fileInfos) {
         QString filePath = fileInfo.canonicalFilePath();
 
+        // If the module directory contains a plugins.qmltypes files, use it
+        // and skip everything else
+        if (filePath.endsWith(QLatin1String("plugins.qmltypes"))) {
+            return QStringList() << filePath;
+        }
+
+        // Non-so files don't need any treatment
         if (!filePath.endsWith(QLatin1String(".so"))) {
             result.append(filePath);
             continue;

@@ -66,14 +66,9 @@ public:
     KDevelop::IndexedString url() const;
 
     /**
-     * @return The module name of this file ("/foo/QtQuick_1.0.qml" yields "QtQuick")
+     * @return The module name of this file ("/foo/QtQuick.qml" yields "QtQuick")
      */
     QString moduleName() const;
-
-    /**
-     * @return The version of this file, or QString if none ("QtQuick_1.0.qml" yields "1.0")
-     */
-    QString moduleVersion() const;
 
     /**
      * @return true if the document was properly parsed, false otherwise.
@@ -183,8 +178,7 @@ public:
 
 private:
     KDevelop::IndexedString m_url;
-    QString m_baseNameWithoutVersion;
-    QString m_version;
+    QString m_baseName;
     QmlJS::Document::MutablePtr m_doc;
     int m_ownPriority;
     bool m_allDependenciesSatisfied;

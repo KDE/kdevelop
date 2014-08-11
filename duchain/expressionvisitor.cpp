@@ -297,7 +297,8 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
 
     if (!encounterParent(declaration) &&
         !encounterDeclarationInContext(name, context) &&
-        !encounterDeclarationInWindow(name) &&
+        !encounterDeclarationInNodeModule(name, QLatin1String("__builtin_dom")) &&
+        !encounterDeclarationInNodeModule(name, QLatin1String("__builtin_ecmascript")) &&
         !(context == nullptr && encounterGlobalDeclaration(name))) {
         encounterNothing();
     }
@@ -351,12 +352,13 @@ bool ExpressionVisitor::encounterDeclarationInContext(const QualifiedIdentifier&
     return false;
 }
 
-bool ExpressionVisitor::encounterDeclarationInWindow(const QualifiedIdentifier& id)
+bool ExpressionVisitor::encounterDeclarationInNodeModule(const QualifiedIdentifier& id,
+                                                         const QString& module)
 {
     return encounterDeclarationInContext(
         id,
         QmlJS::getInternalContext(
-            QmlJS::NodeJS::instance().moduleExports(QLatin1String("__builtin_dom"), m_context->url())
+            QmlJS::NodeJS::instance().moduleExports(module, m_context->url())
         )
     );
 }

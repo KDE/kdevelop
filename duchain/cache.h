@@ -61,7 +61,7 @@ public:
      */
     QString modulePath(const KDevelop::IndexedString& baseFile,
                        const QString& uri,
-                       const QString& version = QString());
+                       const QString& version = QLatin1String("1.0"));
 
     /**
      * Return the list of the paths of the given files.

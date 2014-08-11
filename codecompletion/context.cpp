@@ -172,9 +172,10 @@ QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompleti
                                           0,
                                           CompletionItem::NoDecoration);
             items << completionsFromImports(0);
+            items << completionsFromNodeModule(0, QLatin1String("__builtin_ecmascript"));
 
             if (!QmlJS::isQmlFile(m_duContext.data())) {
-                items << completionsFromWindow(0);
+                items << completionsFromNodeModule(0, QLatin1String("__builtin_dom"));
             }
         }
     }
@@ -304,11 +305,12 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsFromImports(C
     return items;
 }
 
-QList<CompletionTreeItemPointer> CodeCompletionContext::completionsFromWindow(CompletionInContextFlags flags)
+QList<CompletionTreeItemPointer> CodeCompletionContext::completionsFromNodeModule(CompletionInContextFlags flags,
+                                                                                  const QString& module)
 {
     return completionsInContext(
         DUContextPointer(QmlJS::getInternalContext(
-            QmlJS::NodeJS::instance().moduleExports(QLatin1String("__builtin_dom"), m_duContext->url())
+            QmlJS::NodeJS::instance().moduleExports(module, m_duContext->url())
         )),
         flags | CompletionOnlyLocal,
         CompletionItem::NoDecoration

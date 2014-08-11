@@ -15,7 +15,7 @@ MyDir.MyComponent {
         var from_types_js = MyTypes.simple_compare;
 
         /**
-         * "type" : { "toString": "ICore" }
+         * "EXPECT_FAIL" : {"type" : { "toString": "ICore" }}
          */
         var icore = KDevPlatform.ICore;
     }
