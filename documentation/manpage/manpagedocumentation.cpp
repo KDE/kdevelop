@@ -53,7 +53,7 @@ void ManPageDocumentation::finished(KJob* j)
     if(job && job->error()==0) {
         m_description = QString::fromUtf8(job->data());
     } else {
-        m_description = i18n("Could not find any documentation for '%1'", m_name);
+        m_description.clear();
     }
     emit descriptionChanged();
 }
