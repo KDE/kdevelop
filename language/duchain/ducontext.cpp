@@ -1607,7 +1607,7 @@ void DUContext::visit(DUChainVisitor& visitor)
   }
     
   FOREACH_FUNCTION(const LocalIndexedDUContext& ctx, d_func()->m_childContexts)
-  ctx.data(top)->visit(visitor);
+    ctx.data(top)->visit(visitor);
 }
 
 }
