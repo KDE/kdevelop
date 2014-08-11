@@ -81,7 +81,6 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
     switch (e->type()) {
 
     case QEvent::WindowActivate:
-    case QEvent::WindowDeactivate:
     {
         if(insideThis(object))
             return false;
@@ -160,13 +159,18 @@ bool ActiveToolTip::insideThis(QObject* object)
     {
         if(dynamic_cast<QMenu*>(object))
             return true;
-        if (object == this || d->friendWidgets_.contains(object))
+
+        if (object == this || object == (QObject*)this->windowHandle() || d->friendWidgets_.contains(object))
         {
             return true;
         }
         object = object->parent();
     }
-    return false;
+
+    // If the object clicked is inside a QQuickWidget, its parent is null even
+    // if it is part of a tool-tip. This check ensures that a tool-tip is never
+    // closed while the mouse is in it
+    return underMouse();
 }
 
 void ActiveToolTip::showEvent(QShowEvent*)

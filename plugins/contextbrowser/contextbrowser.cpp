@@ -407,11 +407,7 @@ QString ContextBrowserHintProvider::textHint(View* view, const KTextEditor::Curs
 }
 
 void ContextBrowserPlugin::stopDelayedBrowsing() {
-  if(m_currentToolTip) {
-    m_currentToolTip->deleteLater();
-    m_currentToolTip = 0;
-    m_currentNavigationWidget = 0;
-  }
+  hideToolTip();
 }
 
 void ContextBrowserPlugin::startDelayedBrowsing(KTextEditor::View* view) {
@@ -513,9 +509,6 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
       disconnect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
                  this, SLOT(hideToolTip()));
     }
-
-    connect(view, SIGNAL(focusOut(KTextEditor::View*)), this, SLOT(hideToolTip()), Qt::UniqueConnection);
-    
   }else{
     kDebug() << "not showing tooltip, no navigation-widget";
   }
