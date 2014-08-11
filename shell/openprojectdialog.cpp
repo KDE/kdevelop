@@ -41,6 +41,9 @@ namespace KDevelop
 
 OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget* parent )
     : KAssistantDialog( parent )
+    , sourcePage(nullptr)
+    , openPage(nullptr)
+    , projectInfoPage(nullptr)
 {
     resize(QSize(700, 500));
     
