@@ -291,11 +291,10 @@ void AssistantPopup::keyReleaseEvent(QKeyEvent *event)
 
 bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
 {
-    if (!m_view)
-        return false;
-
-    Q_ASSERT(object == m_view.data());
     Q_UNUSED(object);
+
+    if (!m_view || (object != m_view.data()))
+        return false;
 
     if (event->type() == QEvent::Resize) {
         updateLayoutType();
