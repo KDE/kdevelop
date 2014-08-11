@@ -33,8 +33,8 @@
 using namespace KDevelop;
 
 ExpressionVisitor::ExpressionVisitor(DUContext* context)
-: DynamicLanguageExpressionVisitor(context),
-  m_prototypeDepth(0)
+    : DynamicLanguageExpressionVisitor(context)
+    , m_prototypeDepth(0)
 {
 }
 
