@@ -422,6 +422,7 @@ QVector< DUContext * > DUContext::childContexts( ) const
   ENSURE_CAN_READ
 
   QVector< DUContext * > ret;
+  ret.reserve(d_func()->m_childContextsSize());
   FOREACH_FUNCTION(const LocalIndexedDUContext& ctx, d_func()->m_childContexts)
     ret << ctx.data(topContext());
   return ret;
@@ -874,6 +875,7 @@ QVector<Declaration*> DUContext::localDeclarations(const TopDUContext* source) c
   ENSURE_CAN_READ
 
   QVector<Declaration*> ret;
+  ret.reserve(d_func()->m_localDeclarationsSize());
   FOREACH_FUNCTION(const LocalIndexedDeclaration& decl, d_func()->m_localDeclarations) {
     ret << decl.data(topContext());
   }
@@ -968,6 +970,7 @@ void DUContext::deleteChildContextsRecursively()
   TopDUContext* top = topContext();
 
   QVector<LocalIndexedDUContext> children;
+  children.reserve(d_func()->m_childContextsSize());
   FOREACH_FUNCTION(const LocalIndexedDUContext& ctx, d_func()->m_childContexts)
     children << ctx;
 
@@ -1118,6 +1121,7 @@ QVector<DUContext::Import> DUContext::importedParentContexts() const
 {
   ENSURE_CAN_READ
   QVector<DUContext::Import> ret;
+  ret.reserve(d_func()->m_importedContextsSize());
   FOREACH_FUNCTION(const DUContext::Import& import, d_func()->m_importedContexts)
     ret << import;
   return ret;
