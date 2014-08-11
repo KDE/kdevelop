@@ -191,7 +191,7 @@ void TestQtHelpPlugin::testDeclarationLookup_Class()
 
     auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
     QVERIFY(provider);
-    if (!provider->isValid()) {
+    if (!provider->isValid() || provider->engine()->linksForIdentifier("QObject").isEmpty()) {
         QSKIP("Qt help not available", SkipSingle);
     }
 
@@ -215,7 +215,7 @@ void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
 
     auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
     QVERIFY(provider);
-    if (!provider->isValid()) {
+    if (!provider->isValid() || provider->engine()->linksForIdentifier("QObject").isEmpty()) {
         QSKIP("Qt help not available", SkipSingle);
     }
 
