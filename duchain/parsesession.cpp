@@ -46,6 +46,9 @@ static std::map<QString, QVector<const char*>> mimeToArgs = {
     },
     {
         "text/x-c++src", { "-std=c++11", "-xc++", "-Wall", "-nostdinc", "-nostdinc++" }
+    },
+    {
+        "text/x-objcsrc", {"-xobjective-c++"}
     }
 };
 

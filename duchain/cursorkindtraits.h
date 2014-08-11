@@ -50,7 +50,8 @@ constexpr bool isUse(CXCursorKind CK)
     || CK == CXCursor_VariableRef
     || CK == CXCursor_DeclRefExpr
     || CK == CXCursor_MemberRefExpr
-    || CK == CXCursor_MacroExpansion;
+    || CK == CXCursor_MacroExpansion
+    || CK == CXCursor_ObjCClassRef;
 }
 
 constexpr bool isClassTemplate(CXCursorKind CK)
@@ -63,7 +64,11 @@ constexpr bool isClass(CXCursorKind CK)
     return isClassTemplate(CK)
     || CK == CXCursor_StructDecl
     || CK == CXCursor_ClassDecl
-    || CK == CXCursor_UnionDecl;
+    || CK == CXCursor_UnionDecl
+    || CK == CXCursor_ObjCInterfaceDecl
+    || CK == CXCursor_ObjCCategoryDecl
+    || CK == CXCursor_ObjCImplementationDecl
+    || CK == CXCursor_ObjCCategoryImplDecl;
 }
 
 constexpr bool isFunction(CXCursorKind CK)
@@ -73,7 +78,9 @@ constexpr bool isFunction(CXCursorKind CK)
     || CK == CXCursor_Constructor
     || CK == CXCursor_Destructor
     || CK == CXCursor_ConversionFunction
-    || CK == CXCursor_FunctionTemplate;
+    || CK == CXCursor_FunctionTemplate
+    || CK == CXCursor_ObjCInstanceMethodDecl
+    || CK == CXCursor_ObjCClassMethodDecl;
 }
 
 constexpr bool isDeclaration(CXCursorKind CK)
@@ -81,6 +88,9 @@ constexpr bool isDeclaration(CXCursorKind CK)
     return isClass(CK) || isFunction(CK)
     || CK == CXCursor_UnexposedDecl
     || CK == CXCursor_FieldDecl
+    || CK == CXCursor_ObjCProtocolDecl
+    || CK == CXCursor_ObjCPropertyDecl
+    || CK == CXCursor_ObjCIvarDecl
     || CK == CXCursor_EnumConstantDecl
     || CK == CXCursor_VarDecl
     || CK == CXCursor_ParmDecl
@@ -105,7 +115,11 @@ constexpr Decision isDefinition(CXCursorKind CK)
 
 constexpr Decision isInClass(CXCursorKind CK)
 {
-    return CK == CXCursor_FieldDecl ?
+    return CK == CXCursor_FieldDecl
+        || CK == CXCursor_ObjCPropertyDecl
+        || CK == CXCursor_ObjCIvarDecl
+        || CK == CXCursor_ObjCInstanceMethodDecl
+        || CK == CXCursor_ObjCClassMethodDecl ?
         Decision::True :
            CK == CXCursor_Namespace
         || CK == CXCursor_TemplateTypeParameter
@@ -142,6 +156,9 @@ constexpr bool isKDevDeclaration(CXCursorKind CK, bool isClassMember)
     return !isClassMember &&
     (CK == CXCursor_UnexposedDecl
     || CK == CXCursor_FieldDecl
+    || CK == CXCursor_ObjCProtocolDecl
+    || CK == CXCursor_ObjCPropertyDecl
+    || CK == CXCursor_ObjCIvarDecl
     || CK == CXCursor_EnumConstantDecl
     || CK == CXCursor_VarDecl
     || CK == CXCursor_ParmDecl
@@ -229,7 +246,8 @@ constexpr bool isPointerType(CXTypeKind CK)
     return CK == CXType_Pointer
         || CK == CXType_BlockPointer
         || CK == CXType_ObjCObjectPointer
-        || CK == CXType_MemberPointer;
+        || CK == CXType_MemberPointer
+        || CK == CXType_ObjCObjectPointer;
 }
 
 constexpr bool isAliasType(CXCursorKind CK)

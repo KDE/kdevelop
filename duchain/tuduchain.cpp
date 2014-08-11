@@ -303,6 +303,15 @@ CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXCl
     UseCursorKind(CXCursor_FunctionTemplate, cursor, parent);
     UseCursorKind(CXCursor_ClassTemplate, cursor, parent);
     UseCursorKind(CXCursor_ClassTemplatePartialSpecialization, cursor, parent);
+    UseCursorKind(CXCursor_ObjCInterfaceDecl, cursor, parent);
+    UseCursorKind(CXCursor_ObjCCategoryDecl, cursor, parent);
+    UseCursorKind(CXCursor_ObjCProtocolDecl, cursor, parent);
+    UseCursorKind(CXCursor_ObjCPropertyDecl, cursor, parent);
+    UseCursorKind(CXCursor_ObjCIvarDecl, cursor, parent);
+    UseCursorKind(CXCursor_ObjCInstanceMethodDecl, cursor, parent);
+    UseCursorKind(CXCursor_ObjCClassMethodDecl, cursor, parent);
+    UseCursorKind(CXCursor_ObjCImplementationDecl, cursor, parent);
+    UseCursorKind(CXCursor_ObjCCategoryImplDecl, cursor, parent);
     UseCursorKind(CXCursor_MacroDefinition, cursor, parent);
     UseCursorKind(CXCursor_MacroExpansion, cursor);
     UseCursorKind(CXCursor_TypeRef, cursor);
@@ -316,6 +325,7 @@ CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXCl
     UseCursorKind(CXCursor_DeclRefExpr, cursor);
     UseCursorKind(CXCursor_MemberRefExpr, cursor);
     UseCursorKind(CXCursor_CompoundStmt, cursor);
+    UseCursorKind(CXCursor_ObjCClassRef, cursor);
     default:
         return CXChildVisit_Recurse;
     }
@@ -406,6 +416,7 @@ AbstractType *TUDUChain::makeType(CXType type, CXCursor parent)
     UseKind(CXType_Char32);
     UseKind(CXType_Pointer);
     UseKind(CXType_MemberPointer);
+    UseKind(CXType_ObjCObjectPointer);
     UseKind(CXType_ConstantArray);
     UseKind(CXType_VariableArray);
     UseKind(CXType_IncompleteArray);
@@ -420,6 +431,8 @@ AbstractType *TUDUChain::makeType(CXType type, CXCursor parent)
     UseKind(CXType_Vector);
     UseKind(CXType_Unexposed);
     UseKind(CXType_WChar);
+    UseKind(CXType_ObjCInterface);
+    UseKind(CXType_ObjCClass);
     case CXType_Invalid:
         return nullptr;
     default:

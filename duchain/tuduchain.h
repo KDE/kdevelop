@@ -335,7 +335,7 @@ private:
         return func;
     }
 
-    template<CXTypeKind TK, EnableIf<TK == CXType_Record> = dummy>
+    template<CXTypeKind TK, EnableIf<TK == CXType_Record || TK == CXType_ObjCInterface || TK == CXType_ObjCClass> = dummy>
     AbstractType *createType(CXType type, CXCursor parent)
     {
         DeclarationPointer decl = findDeclaration(clang_getTypeDeclaration(type));
@@ -586,10 +586,11 @@ void setDeclInCtxtData(CXCursor cursor, ClassFunctionDeclaration *decl)
     // however, clang_isConstQualifiedType() for TK == CXType_FunctionProto always returns false
     // TODO: Debug further
     auto type = decl->abstractType();
-    Q_ASSERT(type);
-    if (ClangUtils::isConstMethod(cursor)) {
-        type->setModifiers(type->modifiers() | AbstractType::ConstModifier);
-        decl->setAbstractType(type);
+    if (type) {
+        if (ClangUtils::isConstMethod(cursor)) {
+            type->setModifiers(type->modifiers() | AbstractType::ConstModifier);
+            decl->setAbstractType(type);
+        }
     }
 }
 
