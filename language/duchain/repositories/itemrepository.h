@@ -2177,8 +2177,8 @@ class ItemRepository : public AbstractItemRepository {
 
     delete[] m_firstBucketForHash;
 
-    ///We intentionally don't delete the buckets here, as their contained memory may be referenced
-    ///still from different places.
+    // FIXME: We don't delete the buckets here, as their contained memory may be referenced
+    // in static variables e.g.
 //  qDeleteAll(m_buckets);
 
     m_buckets.clear();
