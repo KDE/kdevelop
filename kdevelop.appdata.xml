@@ -11,6 +11,7 @@
   <name xml:lang="pl">KDevelop</name>
   <name xml:lang="pt">KDevelop</name>
   <name xml:lang="pt-BR">KDevelop</name>
+  <name xml:lang="sk">KDevelop</name>
   <name xml:lang="sv">KDevelop</name>
   <name xml:lang="uk">KDevelop</name>
   <name xml:lang="x-test">xxKDevelopxx</name>
@@ -22,6 +23,7 @@
   <summary xml:lang="pl">Jest to w pełni funkcjonalne, z możliwością rozszerzenia przy użyciu wtyczek, zintegrowane środowisko programistyczne dla C/C++ i innych języków programowania.</summary>
   <summary xml:lang="pt">É um IDE pleno de funcionalidades e modular para o C/C++ e outras linguagens de programação.</summary>
   <summary xml:lang="pt-BR">É um IDE repleto de funcionalidades e expansível através de plugins, para C/C++ e outras linguagens de programação.</summary>
+  <summary xml:lang="sk">Je to plne funkčne, pluginmi rozšíriteľné IDE pre C/C++ a iné programovacie jazyky.</summary>
   <summary xml:lang="sv">Det är en funktionsrik, integrerad utvecklingsmiljö för C/C++ och andra programspråk, med utökningsmöjligheter via insticksmoduler.</summary>
   <summary xml:lang="uk">Це повноцінне, розширюване за допомогою додатків комплексне середовище розробки мовами C/C++ та іншими мовами програмування.</summary>
   <summary xml:lang="x-test">xxIt is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.xx</summary>
@@ -34,6 +36,7 @@
     <p xml:lang="pl">Darmowe i o otwartym źródle zintegrowane środowisko programistyczne dla różnych projektów oprogramowania.</p>
     <p xml:lang="pt">Um ambiente de desenvolvimento integrado em código aberto para os seus diferentes projectos aplicacionais.</p>
     <p xml:lang="pt-BR">Um Ambiente de Desenvolvimento Integrado (IDE) de código aberto para seus diferentes projetos de software.</p>
+    <p xml:lang="sk">Integrované vývojové prostredie pre slobodný a otvorený softvér pre vaše rôzne softvérové projekty.</p>
     <p xml:lang="sv">Fri integrerad utvecklingsmiljö med öppen källkod för olika programvaruprojekt.</p>
     <p xml:lang="uk">Вільне комплексне середовище розробки з відкритим кодом, призначене для ваших різноманітних проектів з розробки програмного коду.</p>
     <p xml:lang="x-test">xxFree and Open Source Integrated Development Environment for your different software projects.xx</p>
