@@ -793,7 +793,6 @@ void CMakeManager::initializeProject(IProject* project)
     foreach(const QVariant& v, values) {
         QVariantMap entry = v.toMap();
         data.files[Path(entry["file"].toString())] = dataFromJson(entry);
-        qDebug() << "xxxxxxxxxx" << data.files;
     }
     m_projects[project] = data;
 }
