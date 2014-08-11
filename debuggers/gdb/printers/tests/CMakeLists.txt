@@ -71,8 +71,9 @@ target_link_libraries(ktexteditortypes Qt5::Core KF5::TextEditor ${KDEVPLATFORM_
 add_debuggable_executable(kdeveloptypes SRCS kdeveloptypes.cpp)
 target_link_libraries(kdeveloptypes Qt5::Core KF5::TextEditor ${KDEVPLATFORM_UTIL_LIBRARIES})
 
-ecm_add_test(qtprinters
-LINK_LIBRARIES
-    Qt5::Core
-    Qt5::Test
-)
+# TODO: Port pretty-printers to Qt5
+# kdevplatform_add_test(qtprinters SOURCES qtprinters.cpp)
+# target_link_libraries(qtprinters
+#     Qt5::Core
+#     Qt5::Test
+# )
