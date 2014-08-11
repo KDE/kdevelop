@@ -27,7 +27,8 @@ PropertyWidget {
         id: combo
         anchors.top: parent.top
         anchors.left: parent.left
-        model: parent.systemFonts        // Set in C++
+        editable: true
+        model: Qt.fontFamilies()
     }
     Text {
         color: "white"

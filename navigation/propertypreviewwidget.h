@@ -20,7 +20,6 @@
 #define PROPERTYPREVIEWWIDGET_H
 
 #include <QWidget>
-#include <QFontDatabase>
 
 #include <ktexteditor/range.h>
 #include <language/duchain/declaration.h>
@@ -80,7 +79,6 @@ private:
     explicit PropertyPreviewWidget(KTextEditor::Document* doc, KTextEditor::Range keyRange, KTextEditor::Range valueRange,
                                    const SupportedProperty& property, const QString& value);
     static QHash<QString, SupportedProperty> supportedProperties;
-    static QFontDatabase fontDatabase;
 
     QQuickWidget* view;
 
