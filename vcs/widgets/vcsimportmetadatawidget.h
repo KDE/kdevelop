@@ -38,7 +38,7 @@ Q_OBJECT
 public:
     VcsImportMetadataWidget( QWidget* parent );
     virtual ~VcsImportMetadataWidget();
-    virtual KUrl source() const = 0;
+    virtual QUrl source() const = 0;
     virtual VcsLocation destination() const = 0;
     virtual QString message() const = 0;
 

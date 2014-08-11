@@ -35,7 +35,7 @@ public:
     ImportMetadataWidget(QWidget* parent=0);
     virtual ~ImportMetadataWidget();
 
-    virtual KUrl source() const;
+    virtual QUrl source() const;
     virtual KDevelop::VcsLocation destination() const;
     virtual QString message() const;
     virtual void setSourceLocation( const KDevelop::VcsLocation& );

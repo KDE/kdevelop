@@ -49,7 +49,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     
     connect( ui->locationUrl->lineEdit(), SIGNAL(textEdited(QString)),
              this, SLOT(urlEdited()));
-    connect( ui->locationUrl, SIGNAL(urlSelected(KUrl)),
+    connect( ui->locationUrl, SIGNAL(urlSelected(QUrl)),
              this, SLOT(urlEdited()));
     connect( ui->appNameEdit, SIGNAL(textEdited(QString)),
              this, SLOT(nameChanged()) );
@@ -151,11 +151,11 @@ QString ProjectSelectionPage::selectedTemplate()
         return "";
 }
 
-KUrl ProjectSelectionPage::location()
+QUrl ProjectSelectionPage::location()
 {
-    KUrl tUrl = ui->locationUrl->url();
-    tUrl.addPath( encodedAppName() );
-    return tUrl;
+    QUrl url = ui->locationUrl->url().adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + '/' + encodedAppName());
+    return url;
 }
 
 QString ProjectSelectionPage::appName()

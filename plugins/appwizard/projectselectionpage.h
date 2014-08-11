@@ -39,9 +39,9 @@ public:
 
     QString selectedTemplate();
     QString appName();
-    KUrl location();
+    QUrl location();
 signals:
-    void locationChanged( const KUrl& );
+    void locationChanged( const QUrl& );
     void valid();
     void invalid();
 private slots:

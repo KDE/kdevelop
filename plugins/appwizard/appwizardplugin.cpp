@@ -101,7 +101,7 @@ void AppWizardPlugin::slotNewProject()
         QString project = createProject( dlg.appInfo() );
         if (!project.isEmpty())
         {
-            core()->projectController()->openProject(KUrl::fromPath(project));
+            core()->projectController()->openProject(QUrl::fromLocalFile(project));
 
             KConfig templateConfig(dlg.appInfo().appTemplate);
             KConfigGroup general(&templateConfig, "General");
@@ -133,7 +133,7 @@ ICentralizedVersionControl* toCVCS(IPlugin* plugin)
 }
 
 /*! Trouble while initializing version control. Show failure message to user. */
-void vcsError(const QString &errorMsg, KTempDir &tmpdir, const KUrl &dest, const QString &details = QString())
+void vcsError(const QString &errorMsg, KTempDir &tmpdir, const QUrl &dest, const QString &details = QString())
 {
     QString displayDetails = details;
     if (displayDetails.isEmpty())
@@ -151,7 +151,7 @@ bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& inf
     Q_ASSERT(dvcs);
     kDebug() << "DVCS system is used, just initializing DVCS";
 
-    KUrl dest = info.location;
+    QUrl dest = info.location;
     //TODO: check if we want to handle KDevelop project files (like now) or only SRC dir
     VcsJob* job = dvcs->init(dest.toLocalFile());
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
@@ -161,13 +161,13 @@ bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& inf
     }
     kDebug() << "Initializing DVCS repository:" << dest.toLocalFile();
 
-    job = dvcs->add(KUrl::List(dest), KDevelop::IBasicVersionControl::Recursive);
+    job = dvcs->add(QUrl::List(dest), KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
         vcsError(i18n("Could not add files to the DVCS repository"), scratchArea, dest);
         return false;
     }
-    job = dvcs->commit(QString("initial project import from KDevelop"), KUrl::List(dest),
+    job = dvcs->commit(QString("initial project import from KDevelop"), QUrl::List(dest),
                             KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
@@ -238,7 +238,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     }
     QString templateArchive = matches.first();
 
-    KUrl dest = info.location;
+    QUrl dest = info.location;
 
     //prepare variable substitution hash
     m_variables.clear();
@@ -276,7 +276,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         }
         else
         {
-            KUrl parentdir = dest;
+            QUrl parentdir = dest;
             parentdir.cd( ".." );
             if( !QFileInfo( parentdir.toLocalFile() ).exists() )
             {
@@ -287,7 +287,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         if ( !unpackArchive( arch->directory(), unpackDir ) )
         {
             QString errorMsg = i18n("Could not create new project");
-            vcsError(errorMsg, tmpdir, KUrl(unpackDir));
+            vcsError(errorMsg, tmpdir, QUrl(unpackDir));
             return QString();
         }
 
@@ -427,7 +427,7 @@ bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QStri
     // TODO: KF5 replacement? it just checks if the first 32 bytes contain non-ascii data
     if( KMimeType::isBinaryData(source) )
     {
-        KIO::CopyJob* job = KIO::copy( KUrl(source), KUrl(dest), KIO::HideProgressInfo );
+        KIO::CopyJob* job = KIO::copy( QUrl(source), QUrl(dest), KIO::HideProgressInfo );
         if( !job->exec() )
         {
             return false;
