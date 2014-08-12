@@ -249,13 +249,13 @@ constexpr bool isArrayType(CXTypeKind TK)
         || TK == CXType_DependentSizedArray;
 }
 
-constexpr bool isPointerType(CXTypeKind CK)
+constexpr bool isPointerType(CXTypeKind TK)
 {
-    return CK == CXType_Pointer
-        || CK == CXType_BlockPointer
-        || CK == CXType_ObjCObjectPointer
-        || CK == CXType_MemberPointer
-        || CK == CXType_ObjCObjectPointer;
+    return TK == CXType_Pointer
+        || TK == CXType_BlockPointer
+        || TK == CXType_ObjCObjectPointer
+        || TK == CXType_MemberPointer
+        || TK == CXType_ObjCObjectPointer;
 }
 
 constexpr bool isAliasType(CXCursorKind CK)
