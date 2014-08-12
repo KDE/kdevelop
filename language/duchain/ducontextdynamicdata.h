@@ -44,6 +44,9 @@ public:
   
   DUContext* m_context;
 
+  // cache of unserialized child contexts
+  QVector<DUContext*> m_childContexts;
+
   mutable bool m_rangesChanged : 1;
    /**
    * Adds a child context.
@@ -110,14 +113,10 @@ public:
     void toValidPosition() {
       if(current.item == current.endItem) {
         {
-          const DUContextData* data = current.data->d_func();
-          
           //Check if we can proceed into a propagating child-context
-          uint childContextCount = data->m_childContextsSize();
-          const LocalIndexedDUContext* childContexts = data->m_childContexts();
-          
-          for(unsigned int a = 0; a < childContextCount; ++a) {
-            DUContext* child = childContexts[a].data(current.data->m_topContext);
+          const auto childContexts = current.data->m_childContexts;
+          for (int a = 0; a < childContexts.size(); ++a) {
+            DUContext* child = childContexts[a];
             if(ctx_d_func(child)->m_propagateDeclarations) {
               current.nextChild = a+1;
               stack.append(current);
@@ -140,13 +139,10 @@ public:
         current = stack.back();
         stack.pop_back();
 
-        const DUContextData* data = current.data->d_func();
-        uint childContextCount = data->m_childContextsSize();
-        const LocalIndexedDUContext* childContexts = data->m_childContexts();
+        const auto childContexts = current.data->m_childContexts;
+        for (int a = current.nextChild; a < childContexts.size(); ++a) {
+          DUContext* child = childContexts[a];
 
-        for(unsigned int a = current.nextChild; a < childContextCount; ++a) {
-          DUContext* child = childContexts[a].data(current.data->m_topContext);
-          
           if(ctx_d_func(child)->m_propagateDeclarations) {
 
             current.nextChild = a+1;
