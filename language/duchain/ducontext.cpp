@@ -692,6 +692,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
     }
 
     if (!nonGlobalIdentifiers.isEmpty()) {
+      const auto& url = this->url();
       for(int import = d->m_importedContextsSize()-1; import >= 0; --import ) {
         if (position.isValid() && d->m_importedContexts()[import].position.isValid() && position < d->m_importedContexts()[import].position) {
           continue;
@@ -706,7 +707,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
           continue;
         }
 
-        if (!context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->range().end,
+        if (!context->findDeclarationsInternal(nonGlobalIdentifiers, url == context->url() ? position : context->range().end,
                                                dataType, ret, source, flags | InImportedParentContext, depth+1))
         {
           return false;
