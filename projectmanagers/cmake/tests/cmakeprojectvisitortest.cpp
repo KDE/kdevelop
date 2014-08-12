@@ -1085,3 +1085,52 @@ void CMakeProjectVisitorTest::testBug335803()
     targetNames.sort();
     QCOMPARE(foundTargets, targetNames);
 }
+
+void CMakeProjectVisitorTest::testSetProperty_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<PropertyType>("type");
+    QTest::addColumn<QString>("category");
+    QTest::addColumn<QString>("name");
+    QTest::addColumn<QStringList>("value");
+
+    PropertyType type = GlobalProperty;
+    QString category = QString();
+    QString name = "foo";
+
+    QTest::newRow("global") << "set_property(GLOBAL PROPERTY foo bar)"
+                            << type << category << name << QStringList{"bar"};
+    QTest::newRow("global-append") << "set_property(GLOBAL PROPERTY foo bar)\nset_property(GLOBAL APPEND PROPERTY foo baz)"
+                                   << type << category << name << QStringList{"bar", "baz"};
+    QTest::newRow("global-append_string") << "set_property(GLOBAL PROPERTY foo bar)\nset_property(GLOBAL APPEND_STRING PROPERTY foo baz)"
+                                   << type << category << name << QStringList{"barbaz"};
+}
+
+void CMakeProjectVisitorTest::testSetProperty()
+{
+    QFETCH(QString, input);
+    QFETCH(PropertyType, type);
+    QFETCH(QString, category);
+    QFETCH(QString, name);
+    QFETCH(QStringList, value);
+
+    QSharedPointer<KTemporaryFile> file = prepareVisitoTestScript(input);
+    QVERIFY(!file.isNull());
+    CMakeFileContent code = CMakeListsParser::readCMakeFile(file->fileName());
+    QVERIFY(code.count() != 0);
+
+    MacroMap mm;
+    VariableMap vm;
+    CacheValues val;
+
+    CMakeProjectVisitor v(file->fileName(), fakeContext);
+    v.setVariableMap(&vm);
+    v.setMacroMap(&mm);
+    v.setCacheValues(&val);
+    v.walk(code, 0);
+
+    QVERIFY(v.properties().contains(type));
+    QVERIFY(v.properties().value(type).contains(category));
+    QVERIFY(v.properties().value(type).value(category).contains(name));
+    QCOMPARE(v.properties().value(type).value(category).value(name), value);
+}

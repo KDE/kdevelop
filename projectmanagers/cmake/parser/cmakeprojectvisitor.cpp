@@ -2171,6 +2171,16 @@ int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
         foreach(const QString &it, args) {
             cm[it][setp->name()].append(setp->values());
         }
+    } else if (setp->appendString()) {
+        const QString toAppend = setp->values().join(QString());
+        foreach(const QString &it, args) {
+            QStringList& values = cm[it][setp->name()];
+            if (values.isEmpty()) {
+                values.append(toAppend);
+            } else {
+                values.last().append(toAppend);
+            }
+        }
     } else {
         foreach(const QString &it, args)
             cm[it].insert(setp->name(), setp->values());
