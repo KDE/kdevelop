@@ -127,7 +127,18 @@ class Bucket {
       CheckStart = 0xff00ff1,
       CheckEnd = 0xfafcfb
     };
-    Bucket() : m_monsterBucketExtent(0), m_available(0), m_data(0), m_mappedData(0), m_objectMap(0), m_objectMapSize(0), m_largestFreeItem(0), m_freeItemCount(0), m_nextBucketHash(0), m_dirty(false) {
+    Bucket()
+      : m_monsterBucketExtent(0)
+      , m_available(0)
+      , m_data(0)
+      , m_mappedData(0)
+      , m_objectMap(0)
+      , m_objectMapSize(0)
+      , m_largestFreeItem(0)
+      , m_freeItemCount(0)
+      , m_nextBucketHash(0)
+      , m_dirty(false)
+    {
     }
     ~Bucket() {
       if(m_data != m_mappedData) {
@@ -137,7 +148,7 @@ class Bucket {
       }
     }
 
-    void initialize(uint monsterBucketExtent) {
+    void initialize(int monsterBucketExtent) {
       if(!m_data) {
         m_monsterBucketExtent = monsterBucketExtent;
         m_available = ItemRepositoryBucketSize;
@@ -795,7 +806,7 @@ class Bucket {
     }
     
     ///Returns the count of following buckets that were merged onto this buckets data array
-    uint monsterBucketExtent() const {
+    int monsterBucketExtent() const {
       return m_monsterBucketExtent;
     }
 
@@ -999,7 +1010,7 @@ class Bucket {
       *reinterpret_cast<unsigned short*>(m_data+index) = size;
     }
 
-    uint m_monsterBucketExtent; //If this is a monster-bucket, this contains the count of follower-buckets that belong to this one
+    int m_monsterBucketExtent; //If this is a monster-bucket, this contains the count of follower-buckets that belong to this one
     unsigned int m_available;
     char* m_data; //Structure of the data: <Position of next item with same hash modulo ItemRepositoryBucketSize>(2 byte), <Item>(item.size() byte)
     char* m_mappedData; //Read-only memory-mapped data. If this equals m_data, m_data must not be written
@@ -1100,14 +1111,22 @@ class ItemRepository : public AbstractItemRepository {
   ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will register itself to that registry.
   ///                If this is zero, you have to care about storing the data using store() and/or close() by yourself. It does not happen automatically.
   ///                For the global standard registry, the storing/loading is triggered from within duchain, so you don't need to care about it.
-  ItemRepository(QString repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(), uint repositoryVersion = 1, AbstractRepositoryManager* manager = 0) : m_ownMutex(QMutex::Recursive), m_mutex(&m_ownMutex), m_repositoryName(repositoryName), m_registry(registry), m_file(0), m_dynamicFile(0), m_repositoryVersion(repositoryVersion), m_manager(manager) {
+  ItemRepository(const QString& repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(),
+                 uint repositoryVersion = 1, AbstractRepositoryManager* manager = 0)
+    : m_ownMutex(QMutex::Recursive)
+    , m_mutex(&m_ownMutex)
+    , m_repositoryName(repositoryName)
+    , m_registry(registry)
+    , m_file(0)
+    , m_dynamicFile(0)
+    , m_repositoryVersion(repositoryVersion)
+    , m_manager(manager)
+  {
     m_unloadingEnabled = true;
     m_metaDataChanged = true;
     m_buckets.resize(10);
     m_buckets.fill(0);
-    m_bucketHashSize = bucketHashSize;
 
-    m_firstBucketForHash = new short unsigned int[bucketHashSize];
     memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
 
     m_statBucketHashClashes = m_statItemCount = 0;
@@ -1266,7 +1285,7 @@ class ItemRepository : public AbstractItemRepository {
         }
         if(!useBucket) {
           //Create a new monster-bucket at the end of the data
-          uint needMonsterExtent = (totalSize - ItemRepositoryBucketSize) / MyBucket::DataSize + 1;
+          int needMonsterExtent = (totalSize - ItemRepositoryBucketSize) / MyBucket::DataSize + 1;
           Q_ASSERT(needMonsterExtent);
           if(m_currentBucket + needMonsterExtent + 1 > m_buckets.size()) {
             m_buckets.resize(m_buckets.size() + 10 + needMonsterExtent + 1);
@@ -1716,7 +1735,7 @@ class ItemRepository : public AbstractItemRepository {
 #endif
     ret.hashSize = bucketHashSize;
     ret.hashUse = 0;
-    for(uint a = 0; a < m_bucketHashSize; ++a)
+    for(uint a = 0; a < bucketHashSize; ++a)
       if(m_firstBucketForHash[a])
         ++ret.hashUse;
 
@@ -1985,7 +2004,7 @@ class ItemRepository : public AbstractItemRepository {
   ///@warning During conversion, all the touched buckets are deleted and re-created
   ///@param extent When this is zero, the bucket is converted from monster-bucket to normal bucket.
   ///              When it is nonzero, it is converted to a monster-bucket.
-  MyBucket* convertMonsterBucket(int bucketNumber, unsigned int extent) {
+  MyBucket* convertMonsterBucket(int bucketNumber, int extent) {
     Q_ASSERT(bucketNumber);
     MyBucket* bucketPtr = m_buckets[bucketNumber];
     if(!bucketPtr) {
@@ -2019,7 +2038,7 @@ class ItemRepository : public AbstractItemRepository {
     }else{
       Q_ASSERT(bucketPtr->monsterBucketExtent());
       Q_ASSERT(bucketPtr->isEmpty());
-      uint oldExtent = bucketPtr->monsterBucketExtent();
+      const int oldExtent = bucketPtr->monsterBucketExtent();
       deleteBucket(bucketNumber); //Delete the monster-bucket
 
       for(int index = bucketNumber; index < bucketNumber + 1 + oldExtent; ++index) {
@@ -2079,7 +2098,6 @@ class ItemRepository : public AbstractItemRepository {
       uint bucketCount = m_buckets.size();
       m_file->write((char*)&bucketCount, sizeof(uint));
 
-      m_firstBucketForHash = new short unsigned int[bucketHashSize];
       memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
 
       m_currentBucket = 1; //Skip the first bucket, we won't use it so we have the zero indices for special purposes
@@ -2123,7 +2141,6 @@ class ItemRepository : public AbstractItemRepository {
       m_buckets.resize(bucketCount);
       m_file->read((char*)&m_currentBucket, sizeof(uint));
 
-      m_firstBucketForHash = new short unsigned int[bucketHashSize];
       m_file->read((char*)m_firstBucketForHash, sizeof(short unsigned int) * bucketHashSize);
 
       Q_ASSERT(m_file->pos() == BucketStartOffset);
@@ -2175,14 +2192,13 @@ class ItemRepository : public AbstractItemRepository {
     delete m_dynamicFile;
     m_dynamicFile = 0;
 
-    delete[] m_firstBucketForHash;
 
     // FIXME: We don't delete the buckets here, as their contained memory may be referenced
     // in static variables e.g.
 //  qDeleteAll(m_buckets);
-
     m_buckets.clear();
-    m_firstBucketForHash = 0;
+
+    memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
   }
 
   struct AllItemsReachableVisitor {
@@ -2405,9 +2421,8 @@ class ItemRepository : public AbstractItemRepository {
   QVector<uint> m_freeSpaceBuckets;
   mutable QVector<MyBucket* > m_buckets;
   uint m_statBucketHashClashes, m_statItemCount;
-  unsigned int m_bucketHashSize;
   //Maps hash-values modulo 1<<bucketHashSizeBits to the first bucket such a hash-value appears in
-  short unsigned int* m_firstBucketForHash;
+  short unsigned int m_firstBucketForHash[bucketHashSize];
 
   QString m_currentOpenPath;
   ItemRepositoryRegistry* m_registry;
