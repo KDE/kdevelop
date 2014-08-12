@@ -632,10 +632,9 @@ void DUContext::findLocalDeclarationsInternal( const IndexedIdentifier& identifi
   } else {
     //Iterate through all declarations
     DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
-    IndexedIdentifier indexedIdentifier(identifier);
     while (it) {
       Declaration* declaration = *it;
-      if (declaration && declaration->indexedIdentifier() == indexedIdentifier) {
+      if (declaration && declaration->indexedIdentifier() == identifier) {
         Declaration* checked = checker.check(declaration);
         if (checked)
             ret.append(checked);
