@@ -52,6 +52,16 @@
 /// Turn on for debugging the declaration building
 #define IF_DEBUG(x)
 
+#define DECLARE_DELAYED_TYPE(tokenKind, identifier) \
+    template<CXTypeKind TK, EnableIf<TK == tokenKind> = dummy> \
+    AbstractType *createType(CXType, CXCursor) \
+    { \
+        auto t = new DelayedType; \
+        static const IndexedTypeIdentifier id(identifier); \
+        t->setIdentifier(id); \
+        return t; \
+    } \
+
 template<CXCursorKind CK, bool isDefinition, bool isClassMember, class Enable = void>
 struct DeclType;
 template<CXCursorKind CK, class Enable = void>
@@ -369,23 +379,10 @@ private:
         return t;
     }
 
-    template<CXTypeKind TK, EnableIf<TK == CXType_Int128> = dummy>
-    AbstractType *createType(CXType, CXCursor)
-    {
-        auto t = new DelayedType;
-        static const IndexedTypeIdentifier id("__int128");
-        t->setIdentifier(id);
-        return t;
-    }
-
-    template<CXTypeKind TK, EnableIf<TK == CXType_UInt128> = dummy>
-    AbstractType *createType(CXType, CXCursor)
-    {
-        auto t = new DelayedType;
-        static const IndexedTypeIdentifier id("unsigned __int128");
-        t->setIdentifier(id);
-        return t;
-    }
+    DECLARE_DELAYED_TYPE(CXType_Int128, "__int128")
+    DECLARE_DELAYED_TYPE(CXType_UInt128, "unsigned __int128")
+    DECLARE_DELAYED_TYPE(CXType_ObjCId, "id")
+    DECLARE_DELAYED_TYPE(CXType_ObjCSel, "SEL")
 
     template<CXTypeKind TK, EnableIf<TK == CXType_Vector || TK == CXType_Unexposed> = dummy>
     AbstractType *createType(CXType type, CXCursor parent)

@@ -432,7 +432,9 @@ AbstractType *TUDUChain::makeType(CXType type, CXCursor parent)
     UseKind(CXType_Unexposed);
     UseKind(CXType_WChar);
     UseKind(CXType_ObjCInterface);
+    UseKind(CXType_ObjCId);
     UseKind(CXType_ObjCClass);
+    UseKind(CXType_ObjCSel);
     case CXType_Invalid:
         return nullptr;
     default:
