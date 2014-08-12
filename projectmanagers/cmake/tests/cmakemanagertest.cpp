@@ -117,7 +117,7 @@ void CMakeManagerTest::testTargetIncludePaths()
 
         Path::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
 
-        if (dynamic_cast<CMakeExecutableTargetItem*>( mainContainer )) {
+        if (mainContainer->target()) {
             foundInTarget = true;
             Path targetIncludesDir(project->path(), "includes/");
             QVERIFY(includeDirs.contains(targetIncludesDir));
@@ -141,7 +141,7 @@ void CMakeManagerTest::testTargetIncludeDirectories()
 
         Path::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
 
-        if (dynamic_cast<CMakeExecutableTargetItem*>( mainContainer )) {
+        if (mainContainer->target()) {
             foundInTarget = true;
             QVERIFY(includeDirs.contains(Path(project->path(), "includes/")));
             QVERIFY(includeDirs.contains(Path(project->path(), "libincludes/")));
@@ -252,7 +252,7 @@ void CMakeManagerTest::testDefines()
 
         QHash<QString, QString> defines = project->buildSystemManager()->defines(mainCppItem);
 
-        if (dynamic_cast<CMakeExecutableTargetItem*>( mainContainer )) {
+        if (mainContainer->target()) {
             QEXPECT_FAIL("", "SOURCE definitions are not implemented yet", Continue);
             QCOMPARE(defines.size(), 14);
             QCOMPARE(defines.size(), 11);

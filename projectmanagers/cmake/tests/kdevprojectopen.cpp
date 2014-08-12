@@ -17,10 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <KApplication>
+#include <QApplication>
 #include <KLocalizedString>
-#include <KCmdLineArgs>
-#include <KUrl>
 #include <KAboutData>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -28,7 +26,7 @@
 #include "kdevprojectopen.h"
 #include "testhelpers.h"
 #include <QDebug>
-#include <k4aboutdata.h>
+#include <QCommandLineParser>
 
 using namespace KDevelop;
 
@@ -51,7 +49,7 @@ void KDevProjectOpen::cleanup()
     Q_ASSERT(ICore::self()->projectController()->projects().isEmpty());
 }
 
-void KDevProjectOpen::openProject(const KUrl& path)
+void KDevProjectOpen::openProject(const QUrl& path)
 {
     const TestProjectPaths paths = projectPaths(path.toLocalFile());
     defaultConfigure(paths);
@@ -71,24 +69,28 @@ void KDevProjectOpen::projectDone(IProject* )
 
 int main(int argc, char** argv)
 {
-    K4AboutData aboutData( "kdevprojectopen", 0, ki18n( "KDevelop" ), "0.99", ki18n("opens a project then closes it, debugging tool"), K4AboutData::License_GPL,
-                          ki18n( "Copyright 1999-2012, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org/" );
-    aboutData.addAuthor( ki18n("Aleix Pol Gonzalez"), ki18n( "" ), "aleixpol@kde.org" );
-    KCmdLineArgs::init( argc, argv, &aboutData );
-    KCmdLineOptions options;
-    options.add("+projects", ki18n( "Projects to load" ));
-    KCmdLineArgs::addCmdLineOptions( options );
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-    KApplication app;
-    if(args->count()==0) {
-        args->usageError("Didn't provide a project to open");
-        return 0;
+    QApplication app(argc, argv);
+
+    KAboutData aboutData( "kdevprojectopen", i18n( "KDevelop" ), "0.99", i18n("opens a project then closes it, debugging tool"), KAboutLicense::GPL,
+                          i18n( "Copyright 1999-2012, The KDevelop developers" ), QString(), "http://www.kdevelop.org/" );
+    aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "" ), "aleixpol@kde.org" );
+
+    KAboutData::setApplicationData(aboutData);
+
+    QCommandLineParser parser;
+    parser.addPositionalArgument("projects", i18n("Projects to load"));
+
+    aboutData.setupCommandLine(&parser);
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
+
+    if(parser.positionalArguments().isEmpty()) {
+        parser.showHelp(1);
     }
 
     KDevProjectOpen opener;
-    for(int i=0; i<args->count(); ++i) {
-        opener.openProject(args->url(i));
+    foreach(const QString& arg, parser.positionalArguments()) {
+        opener.openProject(QUrl::fromUserInput(arg));
     }
-    args->clear();
     return app.exec();
 }

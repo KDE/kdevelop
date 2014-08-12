@@ -258,7 +258,7 @@ KUrl projectRoot(KDevelop::IProject* project)
 
 KUrl currentBuildDir( KDevelop::IProject* project )
 {
-    return readProjectParameter( project, Config::Specific::buildDirPathKey, QString() );
+    return baseGroup(project).readEntry(Config::Specific::buildDirPathKey);
 }
 
 QString currentBuildType( KDevelop::IProject* project )

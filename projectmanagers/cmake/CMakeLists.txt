@@ -1,7 +1,7 @@
 project(cmakemanager)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/parser)
 
-# add_subdirectory(tests)
+add_subdirectory(tests)
 add_subdirectory(icons)
 
 # enable this if you want to have the cmake debug visitor run on each CMakeLists.txt

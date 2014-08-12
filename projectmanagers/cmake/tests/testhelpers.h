@@ -31,10 +31,10 @@
 #include <interfaces/iprojectcontroller.h>
 #include <QSignalSpy>
 
-static QString currentBuildDirKey = "CurrentBuildDir";
-static QString currentCMakeBinaryKey = "Current CMake Binary";
-static QString currentBuildTypeKey = "CurrentBuildType";
-static QString currentInstallDirKey = "CurrentInstallDir";
+static QString currentBuildDirKey = "Build Directory Path";
+static QString currentCMakeBinaryKey = "CMake Binary";
+static QString currentBuildTypeKey = "Build Type";
+static QString currentInstallDirKey = "Install Directory";
 static QString currentExtraArgumentsKey = "Extra Arguments";
 static QString projectRootRelativeKey = "ProjectRootRelative";
 static QString projectBuildDirs = "BuildDirs";
@@ -121,6 +121,7 @@ KDevelop::IProject* loadProject(const QString& name, const QString& relative = Q
 
     KDevelop::ICore::self()->projectController()->openProject(paths.projectFile);
 
+    qRegisterMetaType<KDevelop::IProject*>();
     const bool gotSignal = QSignalSpy(
             KDevelop::ICore::self()->projectController(),
             SIGNAL(projectOpened(KDevelop::IProject*))).wait(30000);

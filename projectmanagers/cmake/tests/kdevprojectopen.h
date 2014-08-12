@@ -22,7 +22,7 @@
 #define KDEVPROJECTOPEN_H
 
 #include <QObject>
-#include <KUrl>
+#include <QUrl>
 
 namespace KDevelop { class IProject; }
 
@@ -32,7 +32,7 @@ class KDevProjectOpen : public QObject
 
 public:
     explicit KDevProjectOpen(QObject* parent = 0);
-    void openProject(const KUrl& path);
+    void openProject(const QUrl& path);
     void cleanup();
 private slots:
     void projectDone(KDevelop::IProject*);
