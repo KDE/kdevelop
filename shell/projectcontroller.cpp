@@ -600,6 +600,7 @@ void ProjectController::initialize()
     KConfigGroup group = config->group( "General Options" );
     KUrl::List openProjects = group.readEntry( "Open Projects", QStringList() );
 
+    qRegisterMetaType<KUrl::List>();
     QMetaObject::invokeMethod(this, "openProjects", Qt::QueuedConnection, Q_ARG(KUrl::List, openProjects));
     
     connect( Core::self()->selectionController(), SIGNAL(selectionChanged(KDevelop::Context*)),
