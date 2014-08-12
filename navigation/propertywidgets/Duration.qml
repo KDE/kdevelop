@@ -22,7 +22,8 @@ PropertyWidget {
     id: root
     width: 220
     height: 110
-    value: slider.value
+    value: spin.value
+    onInitialValueChanged: spin.value = root.initialValue
 
     Text {
         z: 20
@@ -32,12 +33,14 @@ PropertyWidget {
         color: "white"
         opacity: 0.8
     }
-    QtControls.Slider {
-        id: slider
+    QtControls.SpinBox {
+        id: spin
         anchors.top: parent.top
         anchors.left: parent.left
         maximumValue: 5000
         minimumValue: 200
+        stepSize: 100
+        decimals: 0
         width: 100
     }
     Rectangle {
@@ -49,14 +52,14 @@ PropertyWidget {
         SequentialAnimation {
             ColorAnimation { target: sample; property: "color"; to: "white"; duration: 0 }
             ParallelAnimation {
-                ColorAnimation { target: sample; property: "color"; to: "#8aca00"; duration: slider.value }
-                NumberAnimation { target: sample; property: "anchors.horizontalCenterOffset"; to: 20; duration: slider.value }
+                ColorAnimation { target: sample; property: "color"; to: "#8aca00"; duration: spin.value }
+                NumberAnimation { target: sample; property: "anchors.horizontalCenterOffset"; to: 20; duration: spin.value }
             }
             PauseAnimation { duration: 500 }
             ColorAnimation { target: sample; property: "color"; to: "white"; duration: 0 }
             ParallelAnimation {
-                ColorAnimation { target: sample; property: "color"; to: "#8aca00"; duration: slider.value }
-                NumberAnimation { target: sample; property: "anchors.horizontalCenterOffset"; to: -20; duration: slider.value }
+                ColorAnimation { target: sample; property: "color"; to: "#8aca00"; duration: spin.value }
+                NumberAnimation { target: sample; property: "anchors.horizontalCenterOffset"; to: -20; duration: spin.value }
             }
             PauseAnimation { duration: 500 }
             running: true

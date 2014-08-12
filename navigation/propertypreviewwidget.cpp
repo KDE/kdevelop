@@ -176,7 +176,7 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, KTextEd
     }
 
     // set the initial value read from the document
-    view->rootObject()->setProperty("value", value);
+    view->rootObject()->setProperty("initialValue", value);
 
     // connect to the slot which has to be emitted from QML when the value changes
     QObject::connect(view->rootObject(), SIGNAL(valueChanged()),

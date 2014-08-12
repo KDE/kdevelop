@@ -19,9 +19,11 @@ import QtQuick 2.2
 import QtQuick.Controls 1.2 as QtControls
 
 PropertyWidget {
+    id: root
     width: 220
     height: 120
     property string value: '"' + combo.currentText + '"'
+    onInitialValueChanged: combo.currentText = root.initialValue.slice(1, 3)
 
     QtControls.ComboBox {
         id: combo

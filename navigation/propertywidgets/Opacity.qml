@@ -19,13 +19,11 @@ import QtQuick 2.2
 import QtQuick.Controls 1.2 as QtControls
 
 PropertyWidget {
+    id: root
     width: 120
     height: 120
-    value: sliderToValue(slider.value)
-
-    function sliderToValue(slider) {
-        return Math.round(slider/96*20)/20.0;
-    }
+    value: (slider.value / 100).toFixed(2)
+    onInitialValueChanged: slider.value = parseFloat(root.initialValue) * 100.0
 
     Text {
         z: 20
@@ -39,7 +37,7 @@ PropertyWidget {
         id: slider
         anchors.top: parent.top
         anchors.left: parent.left
-        maximumValue: 100.0
+        maximumValue: 100
         width: 100
     }
     Rectangle {

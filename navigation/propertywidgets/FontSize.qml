@@ -21,9 +21,11 @@ import QtQuick.Controls 1.2 as QtControls
 // TODO support other size types than PointSize
 
 PropertyWidget {
+    id: root
     width: 220
     height: 120
-    value: slider.value
+    value: slider.value.toFixed(1)
+    onInitialValueChanged: slider.value = root.initialValue
 
     Text {
         anchors.bottom: parent.bottom
@@ -36,8 +38,8 @@ PropertyWidget {
         id: slider
         anchors.top: parent.top
         anchors.left: parent.left
-        minimumValue: 4.0
-        maximumValue: 50.0
+        minimumValue: 4
+        maximumValue: 50
         width: 100
     }
     Text {

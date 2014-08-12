@@ -22,6 +22,7 @@ PropertyWidget {
     width: 150
     height: 220
     value: sliderToValue(slider.value)
+    onInitialValueChanged: slider.value = Math.sqrt(root.initialValue * 30.0)
 
     function sliderToValue(slider) {
         return Math.round(slider*slider/30);
