@@ -30,7 +30,8 @@ namespace KDevelop {
 class DUContextDynamicData
 {
 private:
-    inline const DUContextData* d_func() { return m_context->d_func(); }
+    inline const DUContextData* d_func() const { return m_context->d_func(); }
+    inline DUContextData* d_func_dynamic() { return m_context->d_func_dynamic(); }
     static inline const DUContextData* ctx_d_func(DUContext* ctx) { return ctx->d_func(); }
     static inline DUContextDynamicData* ctx_dynamicData(DUContext* ctx) { return ctx->m_dynamicData; }
 

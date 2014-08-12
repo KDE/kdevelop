@@ -156,8 +156,8 @@ void DUContextDynamicData::scopeIdentifier(bool includeClasses, QualifiedIdentif
   if (m_parentContext)
     m_parentContext->m_dynamicData->scopeIdentifier(includeClasses, target);
 
-  if (includeClasses || m_context->d_func()->m_contextType != DUContext::Class)
-    target += m_context->d_func()->m_scopeIdentifier;
+  if (includeClasses || d_func()->m_contextType != DUContext::Class)
+    target += d_func()->m_scopeIdentifier;
 }
 
 bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext* source,
@@ -171,7 +171,7 @@ bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext*
   }
   recursionGuard->insert(this);
 
-  FOREACH_FUNCTION( const DUContext::Import& ctx, m_context->d_func()->m_importedContexts ) {
+  FOREACH_FUNCTION( const DUContext::Import& ctx, d_func()->m_importedContexts ) {
     DUContext* import = ctx.context(source);
     if(import == context || (import && import->m_dynamicData->imports(context, source, recursionGuard)))
       return true;
@@ -195,10 +195,10 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
   CursorInRevision start = newDeclaration->range().start;
 ///@todo Do binary search to find the position
   bool inserted = false;
-  for (int i = m_context->d_func_dynamic()->m_localDeclarationsSize()-1; i >= 0; --i) {
-    Declaration* child = m_context->d_func_dynamic()->m_localDeclarations()[i].data(m_topContext);
+  for (int i = d_func_dynamic()->m_localDeclarationsSize()-1; i >= 0; --i) {
+    Declaration* child = d_func_dynamic()->m_localDeclarations()[i].data(m_topContext);
     if(!child) {
-      kWarning() << "child declaration number" << i << "of" << m_context->d_func_dynamic()->m_localDeclarationsSize() << "is invalid";
+      kWarning() << "child declaration number" << i << "of" << d_func_dynamic()->m_localDeclarationsSize() << "is invalid";
       continue;
     }
     if(child == newDeclaration)
@@ -206,8 +206,8 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
     //TODO: All declarations in a macro will have the same empty range, and just get appended
     //that may not be Good Enough in complex cases.
     if (start >= child->range().start) {
-      m_context->d_func_dynamic()->m_localDeclarationsList().insert(i+1, newDeclaration);
-      if(!m_context->d_func()->m_localDeclarations()[i+1].data(m_topContext))
+      d_func_dynamic()->m_localDeclarationsList().insert(i+1, newDeclaration);
+      if(!d_func()->m_localDeclarations()[i+1].data(m_topContext))
         kFatal() << "Inserted a not addressable declaration";
 
       inserted = true;
@@ -216,12 +216,12 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
   }
 
   if( !inserted ) //We haven't found any child that is before this one, so prepend it
-    m_context->d_func_dynamic()->m_localDeclarationsList().insert(0, newDeclaration);
+    d_func_dynamic()->m_localDeclarationsList().insert(0, newDeclaration);
 }
 
 bool DUContextDynamicData::removeDeclaration(Declaration* declaration)
 {
-  if( m_context->d_func_dynamic()->m_localDeclarationsList().removeOne(LocalIndexedDeclaration(declaration)) ) {
+  if( d_func_dynamic()->m_localDeclarationsList().removeOne(LocalIndexedDeclaration(declaration)) ) {
     return true;
   }else {
     return false;
@@ -245,12 +245,12 @@ void DUContextDynamicData::addChildContext( DUContext * context )
 
   for (int i = childCount-1; i >= 0; --i) {///@todo Do binary search to find the position
     DUContext* child = m_childContexts[i];
-    Q_ASSERT(m_context->d_func_dynamic()->m_childContexts()[i] == LocalIndexedDUContext(child));
+    Q_ASSERT(d_func_dynamic()->m_childContexts()[i] == LocalIndexedDUContext(child));
     if (context == child)
       return;
     if (context->range().start >= child->range().start) {
       m_childContexts.insert(i+1, context);
-      m_context->d_func_dynamic()->m_childContextsList().insert(i+1, indexed);
+      d_func_dynamic()->m_childContextsList().insert(i+1, indexed);
       context->m_dynamicData->m_parentContext = m_context;
       inserted = true;
       break;
@@ -259,7 +259,7 @@ void DUContextDynamicData::addChildContext( DUContext * context )
 
   if( !inserted ) {
     m_childContexts.insert(0, context);
-    m_context->d_func_dynamic()->m_childContextsList().insert(0, indexed);
+    d_func_dynamic()->m_childContextsList().insert(0, indexed);
     context->m_dynamicData->m_parentContext = m_context;
   }
 }
@@ -270,8 +270,8 @@ bool DUContextDynamicData::removeChildContext( DUContext* context ) {
   const int idx = m_childContexts.indexOf(context);
   if (idx != -1) {
     m_childContexts.remove(idx);
-    Q_ASSERT(m_context->d_func_dynamic()->m_childContexts()[idx] == LocalIndexedDUContext(context));
-    m_context->d_func_dynamic()->m_childContextsList().remove(idx);
+    Q_ASSERT(d_func()->m_childContexts()[idx] == LocalIndexedDUContext(context));
+    d_func_dynamic()->m_childContextsList().remove(idx);
     return true;
   } else {
     return false;
@@ -285,12 +285,12 @@ void DUContextDynamicData::addImportedChildContext( DUContext * context )
   
   if(import.isDirect()) {
     //Direct importers are registered directly within the data
-    if(m_context->d_func_dynamic()->m_importersList().contains(IndexedDUContext(context))) {
+    if(d_func_dynamic()->m_importersList().contains(IndexedDUContext(context))) {
       kDebug(9505) << m_context->scopeIdentifier(true).toString() << "importer added multiple times:" << context->scopeIdentifier(true).toString();
       return;
     }
 
-    m_context->d_func_dynamic()->m_importersList().append(context);
+    d_func_dynamic()->m_importersList().append(context);
   }else{
     //Indirect importers are registered separately
     Importers::self().addImporter(import.indirectDeclarationId(), IndexedDUContext(context));
@@ -304,7 +304,7 @@ void DUContextDynamicData::removeImportedChildContext( DUContext * context )
   DUContext::Import import(m_context, context);
   
   if(import.isDirect()) {
-    m_context->d_func_dynamic()->m_importersList().removeOne(IndexedDUContext(context));
+    d_func_dynamic()->m_importersList().removeOne(IndexedDUContext(context));
   }else{
     //Indirect importers are registered separately
     Importers::self().removeImporter(import.indirectDeclarationId(), IndexedDUContext(context));
