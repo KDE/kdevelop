@@ -297,7 +297,7 @@ void ExpressionVisitor::encounter(const QString& declaration, KDevelop::DUContex
 
     if (!encounterParent(declaration) &&
         !encounterDeclarationInContext(name, context) &&
-        !encounterDeclarationInNodeModule(name, QLatin1String("__builtin_dom")) &&
+        !(!QmlJS::isQmlFile(m_context) && encounterDeclarationInNodeModule(name, QLatin1String("__builtin_dom"))) &&
         !encounterDeclarationInNodeModule(name, QLatin1String("__builtin_ecmascript")) &&
         !(context == nullptr && encounterGlobalDeclaration(name))) {
         encounterNothing();
