@@ -51,6 +51,10 @@ public:
         , m_resolver(new MakeFileResolver())
     {}
 
+    // NOTE: Fixes build failures for GCC versions <4.8.
+    // cf. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53613
+    virtual ~CustomMakeProvider() noexcept;
+
     virtual QHash< QString, QString > definesInBackground(const QString&) const
     {
         return {};
@@ -83,6 +87,10 @@ public:
     QScopedPointer<MakeFileResolver> m_resolver;
     mutable QReadWriteLock m_lock;
 };
+
+// NOTE: Fixes build failures for GCC versions <4.8.
+// See above.
+CustomMakeProvider::~CustomMakeProvider() noexcept = default;
 
 K_PLUGIN_FACTORY(CustomMakeSupportFactory, registerPlugin<CustomMakeManager>(); )
 // K_EXPORT_PLUGIN(CustomMakeSupportFactory(KAboutData("kdevcustommakemanager","kdevcustommake", ki18n("Custom Makefile Manager"), "0.1", ki18n("Support for managing custom makefile projects"), KAboutData::License_GPL)))
