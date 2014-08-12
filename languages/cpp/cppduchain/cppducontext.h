@@ -402,11 +402,8 @@ class CppDUContext : public BaseContext {
             AbstractType::Ptr retAbstractTypePtr = ret[a]->abstractType();
             if( ( (flags & KDevelop::DUContext::NoUndefinedTemplateParams) && retAbstractTypePtr.cast<CppTemplateParameterType>() )
                 || ( (!(flags & BaseContext::OnlyFunctions)) &&  (dynamic_cast<ClassFunctionDeclaration*>(ret[a]) && static_cast<ClassFunctionDeclaration*>(ret[a])->isConstructor() ) ) ) { //Maybe this filtering should be done in the du-chain?
-                
-              //Erase the item
-              for(int b = a+1; b < ret.size(); ++b)
-                ret[b-1] = ret[b];
-              ret.resize(ret.size()-1);
+
+              ret.removeAt(a);
               //kDebug(9007) << "filtered out 1 declaration";
             } else {
               ++a;
@@ -700,8 +697,6 @@ class CppDUContext : public BaseContext {
             tempDecl->instantiate(inf, source);
           }else{
             kDebug() << "Strange: non-template within template context";
-            KDevVarLengthArray<Declaration*, 40> temp;
-            this->findLocalDeclarationsInternal( baseDecl->indexedIdentifier(), CursorInRevision::invalid(), AbstractType::Ptr(), temp, source, DUContext::NoFiltering );
           }
         }
       }
