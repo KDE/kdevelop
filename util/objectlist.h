@@ -30,10 +30,10 @@
 namespace KDevelop {
 
 /**
- * @brief Class for tracking a set of alive objects inheriting from QObject
+ * @brief Class for tracking a set of alive objects inheriting from QObject.
  *
  * Add individual objects via the append() method to have their lifetime being monitored by this class.
- * In case one of the tracked objects is destroyed, it is removed from the list
+ * In case one of the tracked objects is destroyed, it is removed from the list.
  *
  * This means this class always contains a set of valid pointers to QObject instances.
  * The up-to-date list can be access via the data() method.
