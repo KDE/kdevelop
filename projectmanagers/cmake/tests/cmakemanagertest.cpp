@@ -33,7 +33,7 @@
 #include <tests/testproject.h>
 #include <tests/testcore.h>
 
-QTEST_KDEMAIN(CMakeManagerTest, GUI )
+QTEST_MAIN(CMakeManagerTest)
 
 using namespace KDevelop;
 
