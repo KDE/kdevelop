@@ -785,11 +785,6 @@ protected:
                                          const TopDUContext* source,
                                          bool searchInParents = true, int currentDepth = 0) const;
 
-  /**
-   * Logic for calculating the fully qualified scope name
-   */
-  QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
-
   virtual void findLocalDeclarationsInternal(const Identifier& identifier,
                                              const CursorInRevision & position,
                                              const AbstractType::Ptr& dataType,
@@ -854,9 +849,6 @@ private:
   friend class IndexedDUContext;
   friend class LocalIndexedDUContext;
   friend class TopDUContextDynamicData;
-
-  void clearDeclarationIndices();
-  void updateDeclarationIndices();
 
   DUCHAIN_DECLARE_DATA(DUContext)
   class DUContextDynamicData* m_dynamicData;
