@@ -14,7 +14,8 @@
 #ifndef KDEVPLATFORM_PLUGIN_GREPDIALOG_H
 #define KDEVPLATFORM_PLUGIN_GREPDIALOG_H
 
-#include <kdialog.h>
+#include <QDialog>
+
 #include "ui_grepwidget.h"
 
 class KUrl;
@@ -24,13 +25,11 @@ class QPushButton;
 class GrepViewPlugin;
 class KLineEdit;
 
-class GrepDialog : public KDialog, private Ui::GrepWidget
+class GrepDialog : public QDialog, private Ui::GrepWidget
 {
     Q_OBJECT
 
 public:
-    static const KDialog::ButtonCode SearchButton;
-    
     explicit GrepDialog( GrepViewPlugin * plugin, QWidget *parent=0 );
     ~GrepDialog();
 
@@ -49,15 +48,13 @@ public:
 
     int depthValue() const;
 
-    void start();
-    
 public Q_SLOTS:
+    void startSearch();
+
     ///Sets directory(ies)/files to search in. Also it can be semicolon separated list of directories/files or one of special strings: allOpenFilesString, allOpenProjectsString
     void setSearchLocations(const QString &dir);
 
 private Q_SLOTS:
-
-    void performAction(KDialog::ButtonCode button);
     void templateTypeComboActivated(int);
     void patternComboEditTextChanged( const QString& );
     void directoryChanged(const QString &dir);

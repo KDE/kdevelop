@@ -13,6 +13,7 @@
 
 #include "grepdialog.h"
 
+#include <QDialogButtonBox>
 #include <QDir>
 #include <QLabel>
 #include <QRegExp>
@@ -20,6 +21,7 @@
 #include <QStringList>
 #include <QMenu>
 
+#include <kconfiggroup.h>-
 #include <kfiledialog.h>
 #include <kpushbutton.h>
 #include <kglobal.h>
@@ -110,20 +112,20 @@ const QString pathsSeparator(";");
 const int pathsMaxCount = 25;
 }
 
-const KDialog::ButtonCode GrepDialog::SearchButton  = KDialog::User1;
-
 GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
-    : KDialog(parent), Ui::GrepWidget(), m_plugin( plugin )
+    : QDialog(parent), Ui::GrepWidget(), m_plugin( plugin )
 {
     setAttribute(Qt::WA_DeleteOnClose);
+    setWindowTitle( i18n("Find/Replace in Files") );
 
-    setButtons( SearchButton | KDialog::Cancel );
-    setButtonText( SearchButton, i18n("Search...") );
-    setButtonIcon( SearchButton, QIcon::fromTheme("edit-find") );
-    setCaption( i18n("Find/Replace in Files") );
-    setDefaultButton( SearchButton );
+    setupUi(this);
 
-    setupUi(mainWidget());
+    auto searchButton = buttonBox->button(QDialogButtonBox::Ok);
+    Q_ASSERT(searchButton);
+    searchButton->setText(tr("Search..."));
+    searchButton->setIcon(QIcon::fromTheme("edit-find"));
+    connect(searchButton, &QPushButton::clicked, this, &GrepDialog::startSearch);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &GrepDialog::reject);
 
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
 
@@ -168,7 +170,6 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     filesCombo->addItems(cg.readEntry("file_patterns", filepatterns));
     excludeCombo->addItems(cg.readEntry("exclude_patterns", excludepatterns) );
 
-    connect(this, SIGNAL(buttonClicked(KDialog::ButtonCode)), this, SLOT(performAction(KDialog::ButtonCode)));
     connect(templateTypeCombo, SIGNAL(activated(int)),
             this, SLOT(templateTypeComboActivated(int)));
     connect(patternCombo, SIGNAL(editTextChanged(QString)),
@@ -312,6 +313,7 @@ void GrepDialog::setEnableProjectBox(bool enable)
 void GrepDialog::setPattern(const QString &pattern)
 {
     patternCombo->setEditText(pattern);
+    patternComboEditTextChanged(pattern);
 }
 
 void GrepDialog::setSearchLocations(const QString &dir)
@@ -384,7 +386,7 @@ bool GrepDialog::caseSensitiveFlag() const
 
 void GrepDialog::patternComboEditTextChanged( const QString& text)
 {
-    enableButton( SearchButton,  !text.isEmpty() );
+    buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!text.isEmpty());
 }
 
 QList< KUrl > GrepDialog::getDirectoryChoice() const
@@ -422,16 +424,8 @@ bool GrepDialog::isPartOfChoice(KUrl url) const
     return false;
 }
 
-void GrepDialog::start()
+void GrepDialog::startSearch()
 {
-    performAction(SearchButton);
-}
-
-void GrepDialog::performAction(KDialog::ButtonCode button)
-{
-    // a click on cancel trigger this signal too
-    if( button != SearchButton ) return;
-    
     // search for unsaved documents
     QList<IDocument*> unsavedFiles;
     QStringList include = GrepFindFilesThread::parseInclude(filesString());

@@ -180,8 +180,6 @@ void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOpti
         if (!pattern.isEmpty()) {
             dlg->setPattern( pattern );
         }
-
-        dlg->enableButtonOk( !pattern.isEmpty() );
     }
 
     //if directory is empty then use a default value from the config file.
@@ -192,7 +190,7 @@ void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOpti
     if(showOptions)
         dlg->show();
     else{
-        dlg->start();
+        dlg->startSearch();
         dlg->deleteLater();
     }
 }
