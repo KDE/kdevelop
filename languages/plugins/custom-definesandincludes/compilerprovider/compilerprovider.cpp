@@ -64,20 +64,20 @@ public:
 CompilerPointer CompilerProvider::compilerForItem(ProjectBaseItem* item) const
 {
     auto project = item ? item->project() : nullptr;
-    Q_ASSERT(m_projects.contains(project));
-    auto compiler = m_projects[project];
-    Q_ASSERT(compiler);
+    auto compiler = m_projects.value(project);
     return compiler;
 }
 
 QHash<QString, QString> CompilerProvider::defines( ProjectBaseItem* item ) const
 {
-    return compilerForItem(item)->defines();
+    auto compiler = compilerForItem(item);
+    return compiler ? compiler->defines() : QHash<QString, QString>();
 }
 
 Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
 {
-    return compilerForItem(item)->includes();
+    auto compiler = compilerForItem(item);
+    return compiler ? compiler->includes() : Path::List();
 }
 
 IDefinesAndIncludesManager::Type CompilerProvider::type() const
@@ -194,8 +194,12 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
 
     IDefinesAndIncludesManager::manager()->registerProvider( this );
 
-    connect( ICore::self()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ), SLOT( projectOpened( KDevelop::IProject* ) ) );
+    connect( ICore::self()->projectController(), SIGNAL( projectOpened(KDevelop::IProject*)), SLOT( projectOpened( KDevelop::IProject* ) ) );
     connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( KDevelop::IProject* ) ) );
+    auto projects = ICore::self()->projectController()->projects();
+    foreach (auto project, projects) {
+        projectOpened(project);
+    }
 
     //Add a provider for files without project
     addPoject( nullptr, checkCompilerExists({}));
@@ -208,8 +212,7 @@ QVector< CompilerPointer > CompilerProvider::compilers() const
 
 CompilerPointer CompilerProvider::currentCompiler(IProject* project) const
 {
-    Q_ASSERT(m_projects.contains(project));
-    return m_projects[project];
+    return m_projects.value(project);
 }
 
 bool CompilerProvider::registerCompiler(const CompilerPointer& compiler)
