@@ -116,6 +116,7 @@ uint indexForParentContext(const ProblemPointer& /*problem*/)
   return 0;
 }
 
+#ifndef QT_NO_DEBUG
 void validateItem(const DUChainBaseData* const data, const uchar* const mappedData, const size_t mappedDataSize)
 {
   Q_ASSERT(!data->isDynamic());
@@ -124,10 +125,10 @@ void validateItem(const DUChainBaseData* const data, const uchar* const mappedDa
           || ((size_t)data) > ((size_t)mappedData) + mappedDataSize);
   }
 }
+#endif
 
 const char* pointerInData(const QList<ArrayWithPosition>& data, uint totalOffset)
 {
-
   for(int a = 0; a < data.size(); ++a) {
     if(totalOffset < data[a].second)
       return data[a].first.constData() + totalOffset;
@@ -264,6 +265,8 @@ void TopDUContextDynamicData::DUChainItemStorage<Item>::clearItemIndex(const Ite
       temporaryItems[realIndex-1] = nullptr;
     }
   }
+
+  Q_UNUSED(item);
 }
 
 template<class Item>
