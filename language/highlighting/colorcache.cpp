@@ -154,8 +154,7 @@ void ColorCache::generateColors()
 void ColorCache::slotDocumentActivated(IDocument* doc)
 {
   KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
-  Q_ASSERT(doc && view && doc->textDocument() == view->document());
-  ifDebug(kDebug() << "doc activated:" << doc << doc->textDocument();)
+  ifDebug(kDebug() << "doc activated:" << doc;)
   if ( view ) {
     updateColorsFromView(view);
   }
