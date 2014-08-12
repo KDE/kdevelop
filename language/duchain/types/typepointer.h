@@ -44,7 +44,8 @@ class TypePtr : public QExplicitlySharedDataPointer<T>
     using Base = QExplicitlySharedDataPointer<T>;
 
 public:
-    using Base::QExplicitlySharedDataPointer;
+    TypePtr(): QExplicitlySharedDataPointer<T>() {}
+    TypePtr(T* data): QExplicitlySharedDataPointer<T>(data) {}
     using Base::operator=;
 
     ///Uses dynamic_cast to cast this pointer to the given type
