@@ -132,9 +132,6 @@ public:
 public slots:
     void findIncludePathsForJob(CPPParseJob* job);
 
-    ///UI:
-    void switchDefinitionDeclaration();
-
 private:
 
     //Returns the identifier and its range under the cursor as first return-value, and the tail behind it as the second

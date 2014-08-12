@@ -100,12 +100,6 @@
 #endif
 #include "cpputils.h"
 
-KTextEditor::Cursor normalizeCursor(KTextEditor::Cursor c) {
-  c.setColumn(0);
-  return c;
-}
-
-
 using namespace KDevelop;
 
 CppLanguageSupport* CppLanguageSupport::m_self = 0;
@@ -216,11 +210,6 @@ void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*wind
 {
     _xmlFile = xmlFile();
 
-    KAction* switchDefinitionDeclaration = actions.addAction("switch_definition_declaration");
-    switchDefinitionDeclaration->setText( i18n("&Switch Definition/Declaration") );
-    switchDefinitionDeclaration->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_C );
-    connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
-
 //    KAction* pimplAction = actions->addAction("code_private_implementation");
 //    pimplAction->setText( i18n("Make Class Implementation Private") );
 //    pimplAction->setShortcut(Qt::ALT | Qt::META | Qt::Key_P);
@@ -236,160 +225,6 @@ void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*wind
     moveIntoSourceAction->setText( i18n("Move into Source") );
     moveIntoSourceAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_S);
     connect(moveIntoSourceAction, SIGNAL(triggered(bool)), m_refactoring, SLOT(executeMoveIntoSourceAction()));
-}
-
-void CppLanguageSupport::switchDefinitionDeclaration()
-{
-  kDebug(9007) << "switching definition/declaration";
-
-  KUrl docUrl;
-  SimpleCursor cursor;
-  
-  ///Step 1: Find the current top-level context of type DUContext::Other(the highest code-context).
-  ///-- If it belongs to a function-declaration or definition, it can be retrieved through owner(), and we are in a definition.
-  ///-- If no such context could be found, search for a declaration on the same line as the cursor, and switch to the according definition
-  
-  {
-    KDevelop::IDocument* doc = core()->documentController()->activeDocument();
-    if(!doc || !doc->textDocument() || !doc->textDocument()->activeView()) {
-      kDebug(9007) << "No active document";
-      return;
-    }
-    
-    docUrl = doc->textDocument()->url();
-    cursor = SimpleCursor(doc->textDocument()->activeView()->cursorPosition()); 
-  }
-  
-  const QString switchCandidate = CppUtils::sourceOrHeaderCandidate(docUrl.toLocalFile());
-  
-  if(!switchCandidate.isEmpty())
-  {
-    
-    DUChainReadLocker lock;
-
-    //If the file has not been parsed yet, update it
-    TopDUContext* ctx = standardContext(docUrl);
-    //At least 'VisibleDeclarationsAndContexts' is required so we can do a switch
-    if(!ctx || (ctx->parsingEnvironmentFile() && !ctx->parsingEnvironmentFile()->featuresSatisfied(TopDUContext::VisibleDeclarationsAndContexts)))
-    {
-      lock.unlock();
-      kDebug(9007) << "Parsing switch-candidate before switching" << switchCandidate;
-      ReferencedTopDUContext updatedContext = DUChain::self()->waitForUpdate(IndexedString(switchCandidate), TopDUContext::VisibleDeclarationsAndContexts);
-      if (!updatedContext) {
-        kDebug(9007) << "Failed to update document:" << switchCandidate;
-        return;
-      }
-    }
-  }
-  
-  kDebug(9007) << "Document:" << docUrl;
-
-  DUChainReadLocker lock(DUChain::lock());
-
-  TopDUContext* standardCtx = standardContext(docUrl);
-
-  bool wasSignal = false;
-  if(standardCtx) {
-    Declaration* definition = 0;
-
-    DUContext* ctx = standardCtx->findContext(standardCtx->transformToLocalRevision(cursor));
-    if(!ctx)
-      ctx = standardCtx;
-
-    if(ctx)
-      kDebug() << "found context" << ctx->scopeIdentifier();
-    else
-      kDebug() << "found no context";
-
-    while(ctx && ctx->parentContext() && ctx->parentContext()->type() == DUContext::Other)
-      ctx = ctx->parentContext();
-
-    if(ctx && ctx->owner() && ctx->type() == DUContext::Other && ctx->owner()->isDefinition()) {
-      definition = ctx->owner();
-      kDebug() << "found definition while traversing:" << definition->toString();
-    }
-
-    if(!definition && ctx) {
-      definition = DUChainUtils::declarationInLine(cursor, ctx);
-      if(definition)
-        kDebug() << "found definition using declarationInLine:" << definition->toString();
-      else
-        kDebug() << "not found definition using declarationInLine";
-    }
-
-    if(ClassFunctionDeclaration* cDef = dynamic_cast<ClassFunctionDeclaration*>(definition)) {
-      if (cDef->isSignal()) {
-        kDebug() << "found definition is a signal, not switching to .moc implementation";
-        definition = 0;
-        wasSignal = true;
-      }
-    }
-
-    FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(definition);
-    if(def && def->declaration()) {
-      Declaration* declaration = def->declaration();
-      KTextEditor::Range targetRange = declaration->rangeInCurrentRevision().textRange();
-      KUrl url(declaration->url().str());
-      kDebug() << "found definition that has declaration: " << definition->toString() << "range" << targetRange << "url" << url;
-      lock.unlock();
-
-      KDevelop::IDocument* document = core()->documentController()->documentForUrl(url);
-      
-      if(!document || 
-          (document && document->textDocument() && document->textDocument()->activeView() && !targetRange.contains(document->textDocument()->activeView()->cursorPosition()))) {
-        KTextEditor::Cursor pos(normalizeCursor(targetRange.start()));
-        core()->documentController()->openDocument(url, KTextEditor::Range(pos, pos));
-      }else if(document)
-        core()->documentController()->openDocument(url);
-      return;
-    }else{
-      kDebug(9007) << "Definition has no assigned declaration";
-    }
-
-    kDebug(9007) << "Could not get definition/declaration from context";
-  }else{
-    kDebug(9007) << "Got no context for the current document";
-  }
-
-  Declaration* def = 0;
-  if (!wasSignal) {
-     def = definitionForCursorDeclaration(cursor, docUrl);
-  }
-
-  if(def) {
-    KUrl url(def->url().str());
-    KTextEditor::Range targetRange = def->rangeInCurrentRevision().textRange();
-
-    if(def->internalContext()) {
-      targetRange.end() = def->internalContext()->rangeInCurrentRevision().end.textCursor();
-    }else{
-      kDebug(9007) << "Declaration does not have internal context";
-    }
-    lock.unlock();
-
-    KDevelop::IDocument* document = core()->documentController()->documentForUrl(url);
-    
-    if(!document || 
-        (document && document->textDocument() && (!document->textDocument()->activeView() || !targetRange.contains(document->textDocument()->activeView()->cursorPosition())))) {
-      KTextEditor::Cursor pos(normalizeCursor(targetRange.start()));
-      core()->documentController()->openDocument(url, KTextEditor::Range(pos, pos));
-    }else if(document) {
-      //The cursor is already in the target range, only open the document
-      core()->documentController()->openDocument(url);
-    }
-    return;
-  }else if (!wasSignal) {
-    kWarning(9007) << "Found no definition assigned to cursor position";
-  }
-
-  lock.unlock();
-  ///- If no definition/declaration could be found to switch to, just switch the document using normal header/source heuristic by file-extension
-
-  if(!switchCandidate.isEmpty()) {
-    core()->documentController()->openDocument(KUrl(switchCandidate));
-  }else{
-    kDebug(9007) << "Found no source/header candidate to switch";
-  }
 }
 
 CppLanguageSupport::~CppLanguageSupport()
