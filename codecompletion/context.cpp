@@ -147,7 +147,7 @@ QList<KDevelop::CompletionTreeItemPointer> CodeCompletionContext::normalCompleti
         items << fieldCompletions(
             m_text.left(m_text.size() - 1),
             lastChar == QLatin1Char('[') ? CompletionItem::QuotesAndBracket :
-            inQmlObjectScope ? CompletionItem::ColonOrBracket : CompletionItem::NoDecoration
+            CompletionItem::NoDecoration
         );
     }
 

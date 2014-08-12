@@ -219,7 +219,6 @@ void CompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& 
         if (declaration() && declaration()->abstractType() &&
             declaration()->abstractType()->whichType() == AbstractType::TypeStructure) {
             document->replaceText(word, base + " {}");
-            view->setCursorPosition(word.end() + KTextEditor::Cursor(0, 2));
         } else {
             document->replaceText(word, base + ": ");
         }
@@ -227,6 +226,5 @@ void CompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& 
 
     case QmlJS::CompletionItem::Brackets:
         document->replaceText(word, base + "()");
-        view->setCursorPosition(word.end() + KTextEditor::Cursor(0, 1));
     }
 }
