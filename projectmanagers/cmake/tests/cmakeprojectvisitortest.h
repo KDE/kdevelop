@@ -59,6 +59,9 @@ private slots:
     void testTargetProperties();
     void testTargetProperties_data();
 
+    void testSetProperty();
+    void testSetProperty_data();
+
     // function scope variables not being unset at exit
     void testBug335803_data();
     void testBug335803();

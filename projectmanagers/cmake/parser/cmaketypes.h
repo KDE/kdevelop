@@ -82,5 +82,6 @@ typedef QHash<QString, QString> CMakeDefinitions;
 typedef QHash<QString, CacheEntry> CacheValues;
 
 Q_DECLARE_METATYPE(QList<Test>)
+Q_DECLARE_METATYPE(PropertyType);
 
 #endif

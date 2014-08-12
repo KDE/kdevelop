@@ -3895,14 +3895,19 @@ bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd=func.arguments.constEnd();
-    for(; it!=itEnd && it->value!="PROPERTY" && it->value!="APPEND"; ++it)
+    for(; it!=itEnd && it->value!="PROPERTY" && it->value!="APPEND" && it->value!="APPEND_STRING"; ++it)
     {
         m_args.append(it->value);
     }
+
     m_append=it!=itEnd && it->value=="APPEND";
-    
     if(m_append)
         ++it;
+
+    m_appendString=it!=itEnd && it->value=="APPEND_STRING";
+    if(m_appendString)
+        ++it;
+
     if(it!=itEnd)
         ++it; //PROPERTY
     else
