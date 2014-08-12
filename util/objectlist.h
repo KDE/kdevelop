@@ -96,7 +96,7 @@ private:
  * @sa KDevelop::ObjectListTracker
  */
 template<class T>
-class KDEVPLATFORMUTIL_EXPORT ObjectList
+class ObjectList
 {
 public:
     ObjectList(ObjectListTracker::CleanupBehavior behavior = ObjectListTracker::NoCleanupWhenDone)
