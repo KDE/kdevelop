@@ -761,7 +761,7 @@ public:
    * @return whether the search was successful. If it is false, it had to be stopped
    *         for special reasons (like some flags)
    */
-  typedef KDevVarLengthArray<Declaration*, 40> DeclarationList;
+  typedef QList<Declaration*> DeclarationList;
 
   virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers,
                                         const CursorInRevision& position, const AbstractType::Ptr& dataType,

@@ -515,7 +515,7 @@ QList<Declaration*> DUContext::findLocalDeclarations( const IndexedIdentifier& i
 
   DeclarationList ret;
   findLocalDeclarationsInternal(identifier, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext : this->topContext(), flags);
-  return ret.toList();
+  return ret;
 }
 
 QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifier,
@@ -763,7 +763,7 @@ QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & ide
 
   findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext : this->topContext(), flags, 0);
 
-  return ret.toList();
+  return ret;
 }
 
 bool DUContext::imports(const DUContext* origin, const CursorInRevision& /*position*/ ) const
@@ -1105,7 +1105,7 @@ QList<Declaration*> DUContext::findDeclarations(const IndexedIdentifier& identif
   SearchItem::PtrList identifiers;
   identifiers << SearchItem::Ptr(new SearchItem(false, identifier, SearchItem::PtrList()));
   findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, AbstractType::Ptr(), ret, topContext ? topContext : this->topContext(), flags, 0);
-  return ret.toList();
+  return ret;
 }
 
 void DUContext::deleteUse(int index)
