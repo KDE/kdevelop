@@ -505,8 +505,8 @@ bool DUContext::isPropagateDeclarations() const
   return d_func()->m_propagateDeclarations;
 }
 
-QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifier,
-                                                      const CursorInRevision & position,
+QList<Declaration*> DUContext::findLocalDeclarations( const IndexedIdentifier& identifier,
+                                                      const CursorInRevision& position,
                                                       const TopDUContext* topContext,
                                                       const AbstractType::Ptr& dataType,
                                                       SearchFlags flags ) const
@@ -516,6 +516,15 @@ QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifi
   DeclarationList ret;
   findLocalDeclarationsInternal(identifier, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext : this->topContext(), flags);
   return ret.toList();
+}
+
+QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifier,
+                                                      const CursorInRevision& position,
+                                                      const TopDUContext* topContext,
+                                                      const AbstractType::Ptr& dataType,
+                                                      SearchFlags flags ) const
+{
+  return findLocalDeclarations(IndexedIdentifier(identifier), position, topContext, dataType, flags);
 }
 
 namespace {
@@ -584,7 +593,14 @@ struct Checker
 
 }
 
-void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
+void DUContext::findLocalDeclarationsInternal(const Identifier& identifier, const CursorInRevision& position,
+                                              const AbstractType::Ptr& dataType, DeclarationList& ret,
+                                              const TopDUContext* source, SearchFlags flags) const
+{
+  return findLocalDeclarationsInternal(IndexedIdentifier(identifier), position, dataType, ret, source, flags);
+}
+
+void DUContext::findLocalDeclarationsInternal( const IndexedIdentifier& identifier,
                                                const CursorInRevision & position,
                                                const AbstractType::Ptr& dataType,
                                                DeclarationList& ret, const TopDUContext* /*source*/,
@@ -592,7 +608,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
 {
   Checker checker(flags, dataType, position, type());
 
-  if (d_func()->m_inSymbolTable && !indexedLocalScopeIdentifier().isEmpty() && !identifier.isEmpty()) {
+  if (d_func()->m_inSymbolTable && !d_func()->m_scopeIdentifier.isEmpty() && !identifier.isEmpty()) {
     //This context is in the symbol table, use the symbol-table to speed up the search
     QualifiedIdentifier id(scopeIdentifier(true) + identifier);
 
@@ -1077,11 +1093,17 @@ void DUContext::setType(ContextType type)
 QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const CursorInRevision& position,
                                                 const TopDUContext* topContext, SearchFlags flags) const
 {
+  return findDeclarations(IndexedIdentifier(identifier), position, topContext, flags);
+}
+
+QList<Declaration*> DUContext::findDeclarations(const IndexedIdentifier& identifier, const CursorInRevision& position,
+                                                const TopDUContext* topContext, SearchFlags flags) const
+{
   ENSURE_CAN_READ
 
   DeclarationList ret;
   SearchItem::PtrList identifiers;
-  identifiers << SearchItem::Ptr(new SearchItem(QualifiedIdentifier(identifier)));
+  identifiers << SearchItem::Ptr(new SearchItem(false, identifier, SearchItem::PtrList()));
   findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, AbstractType::Ptr(), ret, topContext ? topContext : this->topContext(), flags, 0);
   return ret.toList();
 }
@@ -1151,7 +1173,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
                              const CursorInRevision& position, bool canBeNamespace, bool onlyImports) const {
 
   DeclarationList imports;
-  findLocalDeclarationsInternal(globalImportIdentifier(), position, AbstractType::Ptr(), imports, topContext(), DUContext::NoFiltering);
+  findLocalDeclarationsInternal(globalIndexedImportIdentifier(), position, AbstractType::Ptr(), imports, topContext(), DUContext::NoFiltering);
   
   if(imports.isEmpty() && onlyImports) {
     identifiers = baseIdentifiers;
@@ -1457,7 +1479,7 @@ DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, const Ptr& next
 {
   if(!id.isEmpty()) {
     if(id.count() > start)
-      identifier = id.at(start);
+      identifier = id.indexedAt(start);
 
     if(id.count() > start+1)
       addNext(Ptr( new SearchItem(id, nextItem, start+1) ));
@@ -1475,7 +1497,7 @@ DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, const PtrList& 
 : isExplicitlyGlobal(start == 0 ? id.explicitlyGlobal() : false)
 {
   if(id.count() > start)
-    identifier = id.at(start);
+    identifier = id.indexedAt(start);
 
   if(id.count() > start+1)
     addNext(Ptr( new SearchItem(id, nextItems, start+1) ));
@@ -1483,14 +1505,14 @@ DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, const PtrList& 
     next = nextItems;
 }
 
-DUContext::SearchItem::SearchItem(bool explicitlyGlobal, const Identifier& id, const PtrList& nextItems)
+DUContext::SearchItem::SearchItem(bool explicitlyGlobal, const IndexedIdentifier& id, const PtrList& nextItems)
   : isExplicitlyGlobal(explicitlyGlobal)
   , identifier(id)
   , next(nextItems)
 {
 }
 
-DUContext::SearchItem::SearchItem(bool explicitlyGlobal, const Identifier& id, const Ptr& nextItem)
+DUContext::SearchItem::SearchItem(bool explicitlyGlobal, const IndexedIdentifier& id, const Ptr& nextItem)
   : isExplicitlyGlobal(explicitlyGlobal)
   , identifier(id)
 {

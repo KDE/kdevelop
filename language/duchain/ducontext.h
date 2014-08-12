@@ -453,6 +453,14 @@ public:
    *
    * @overload
    */
+  QList<Declaration*> findDeclarations(const IndexedIdentifier& identifier,
+                                       const CursorInRevision& position = CursorInRevision::invalid(),
+                                       const TopDUContext* topContext = 0,
+                                       SearchFlags flags = NoSearchFlags) const;
+
+  /**
+   * Prefer the version above for speed reasons.
+   */
   QList<Declaration*> findDeclarations(const Identifier& identifier,
                                        const CursorInRevision& position = CursorInRevision::invalid(),
                                        const TopDUContext* topContext = 0,
@@ -463,6 +471,15 @@ public:
    * null if one is not found.
    *
    * Does not search imported parent-contexts(like base-classes).
+   */
+  QList<Declaration*> findLocalDeclarations(const IndexedIdentifier& identifier,
+                                            const CursorInRevision& position = CursorInRevision::invalid(),
+                                            const TopDUContext* topContext = 0,
+                                            const AbstractType::Ptr& dataType = AbstractType::Ptr(),
+                                            SearchFlags flags = NoSearchFlags) const;
+
+  /**
+   * Prefer the version above for speed reasons.
    */
   QList<Declaration*> findLocalDeclarations(const Identifier& identifier,
                                             const CursorInRevision& position = CursorInRevision::invalid(),
@@ -677,8 +694,8 @@ public:
      */
     SearchItem(const QualifiedIdentifier& id, const PtrList& nextItems, int start = 0);
 
-    SearchItem(bool explicitlyGlobal, const Identifier& id, const PtrList& nextItems);
-    SearchItem(bool explicitlyGlobal, const Identifier& id, const Ptr& nextItem);
+    SearchItem(bool explicitlyGlobal, const IndexedIdentifier& id, const PtrList& nextItems);
+    SearchItem(bool explicitlyGlobal, const IndexedIdentifier& id, const Ptr& nextItem);
 
     bool isEmpty() const;
     bool hasNext() const;
@@ -713,7 +730,7 @@ public:
     void addNext(const Ptr& other);
 
     bool isExplicitlyGlobal;
-    Identifier identifier;
+    IndexedIdentifier identifier;
     PtrList next;
   };
 
@@ -785,7 +802,14 @@ protected:
                                          const TopDUContext* source,
                                          bool searchInParents = true, int currentDepth = 0) const;
 
-  virtual void findLocalDeclarationsInternal(const Identifier& identifier,
+  void findLocalDeclarationsInternal(const Identifier& identifier,
+                                     const CursorInRevision & position,
+                                     const AbstractType::Ptr& dataType,
+                                     DeclarationList& ret,
+                                     const TopDUContext* source,
+                                     SearchFlags flags ) const;
+
+  virtual void findLocalDeclarationsInternal(const IndexedIdentifier& identifier,
                                              const CursorInRevision & position,
                                              const AbstractType::Ptr& dataType,
                                              DeclarationList& ret,
