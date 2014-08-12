@@ -230,7 +230,7 @@ KDevelop::AbstractType::Ptr matchingClassPointer(const KDevelop::AbstractType::P
   if(actualStructure) {
     DUContext* internal = actualStructure->internalContext(topContext);
     if(internal) {
-      foreach(Declaration* decl, internal->findDeclarations(Cpp::castIdentifier().identifier(), CursorInRevision::invalid(), topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {
+      foreach(Declaration* decl, internal->findDeclarations(Cpp::castIdentifier(), CursorInRevision::invalid(), topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {
         FunctionType::Ptr funType = decl->type<FunctionType>();
         if(funType && funType->returnType()) {
           if(conversion.implicitConversion(funType->returnType()->indexed(), matchTo->indexed(), true)) {
@@ -268,7 +268,8 @@ AbstractType::Ptr decreasePointerDepth(AbstractType::Ptr type, TopDUContext* top
     if(useOperator) {
       Declaration* decl = getDeclaration(type, top);
       if(decl && decl->internalContext()) {
-        QList<Declaration*> decls = decl->internalContext()->findDeclarations(Identifier("operator*"), CursorInRevision::invalid(), top, DUContext::DontSearchInParent);
+        static const IndexedIdentifier identifier(Identifier("operator*"));
+        QList<Declaration*> decls = decl->internalContext()->findDeclarations(identifier, CursorInRevision::invalid(), top, DUContext::DontSearchInParent);
         if(!decls.isEmpty()) {
           FunctionType::Ptr fun = decls.first()->type<FunctionType>();
           if(fun)
