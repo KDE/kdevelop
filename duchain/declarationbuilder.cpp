@@ -40,6 +40,7 @@
 
 #include <QtCore/QDirIterator>
 #include <QtCore/QFileInfo>
+#include <QtCore/QStandardPaths>
 
 using namespace KDevelop;
 
@@ -80,6 +81,14 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
 
 void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
 {
+    DUContext* builtinQmlContext = nullptr;
+
+    if (QmlJS::isQmlFile(currentContext())) {
+        builtinQmlContext = m_session->contextOfFile(
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("kdevqmljssupport/nodejsmodules/__builtin_qml.qml"))
+        );
+    }
+
     {
         DUChainWriteLocker lock;
 
@@ -89,6 +98,11 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
 
         // Initialize Node.js
         QmlJS::NodeJS::instance().initialize(this);
+
+        // Built-in QML types (color, rect, etc)
+        if (builtinQmlContext) {
+            topContext()->addImportedParentContext(builtinQmlContext);
+        }
     }
 
     DeclarationBuilderBase::startVisiting(node);
