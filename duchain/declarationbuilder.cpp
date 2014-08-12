@@ -312,25 +312,25 @@ void DeclarationBuilder::endVisit(QmlJS::AST::FunctionExpression* node)
 /*
  * Variables
  */
-bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::AST::ArgumentList* arguments)
+void DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::AST::ArgumentList* arguments)
 {
     ContextBuilder::ExpressionType expr = findType(base);
     QmlJS::FunctionType::Ptr func_type = QmlJS::FunctionType::Ptr::dynamicCast(expr.type);
     DUChainWriteLocker lock;
 
     if (!func_type) {
-        return true;
+        return;
     }
 
     auto func_declaration = dynamic_cast<FunctionDeclaration*>(func_type->declaration(topContext()));
 
     if (!func_declaration) {
-        return true;
+        return;
     }
 
     // Don't touch functions declared outside this file
     if (func_declaration->topContext() != topContext()) {
-        return true;
+        return;
     }
 
     // Put the argument nodes in a list that has a definite size
@@ -344,7 +344,7 @@ bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
     // Don't update a function when it is called with the wrong number
     // of arguments
     if (args.size() != argumentDecls.count()) {
-        return true;
+        return;
     }
 
     // Update the types of the function arguments
@@ -375,7 +375,7 @@ bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
         expr.declaration->setAbstractType(new_func_type.cast<AbstractType>());
     }
 
-    return false;   // The base and the arguments have already been explored
+    return;
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::VariableDeclaration* node)
@@ -457,12 +457,14 @@ bool DeclarationBuilder::visit(QmlJS::AST::BinaryExpression* node)
 
 bool DeclarationBuilder::visit(QmlJS::AST::CallExpression* node)
 {
-    return inferArgumentsFromCall(node->base, node->arguments);
+    inferArgumentsFromCall(node->base, node->arguments);
+    return false;
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::NewMemberExpression* node)
 {
-    return inferArgumentsFromCall(node->base, node->arguments);
+    inferArgumentsFromCall(node->base, node->arguments);
+    return false;
 }
 
 /*
