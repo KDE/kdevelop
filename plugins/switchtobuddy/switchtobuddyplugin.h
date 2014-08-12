@@ -1,6 +1,7 @@
 /*
  * This file is part of KDevelop
  * Copyright 2012 André Stein <andre.stein@rwth-aachen.de>
+ * Copyright 2014 Kevin Funk <kfunk@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -50,12 +51,26 @@ public:
     ~SwitchToBuddyPlugin();
 
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+    virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;
+
 private slots:
     /**
      * Context menu slot which switches to the KUrl provided
      * in the data part of the sending QAction.
      */
     void switchToBuddy(const QString& url);
+
+    /**
+     * @brief Switch between definitions and declarations
+     *
+     * E.g. if the cursor in the currently active view points to an implementation file
+     * this shortcut will open the header document (or any buddy file).
+     *
+     * Furthermore, if the cursor points to a definition, and the buddy document contains its declaration,
+     * the cursor will be also set to the declaration's position when the buddy document is opened
+     */
+    void switchDefinitionDeclaration();
+
 private:
     class QSignalMapper* m_signalMapper;
 };

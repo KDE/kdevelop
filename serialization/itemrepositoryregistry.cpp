@@ -132,7 +132,7 @@ struct ItemRepositoryRegistryPrivate {
 
   void lockForWriting();
   void unlockForWriting();
-  void deleteDataDirectory(bool recreate = true);
+  void deleteDataDirectory(const QString& path, bool recreate = true);
 
   /// @param path  A shared directory-path that the item-repositories are to be loaded from.
   /// @returns     Whether the repository registry has been opened successfully.
@@ -210,7 +210,7 @@ void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* reposito
   d->m_repositories.insert(repository, manager);
   if(!d->m_path.isEmpty()) {
     if(!repository->open(d->m_path)) {
-      d->deleteDataDirectory();
+      d->deleteDataDirectory(d->m_path);
       kError() << "failed to open a repository";
       abort();
     }
@@ -259,7 +259,7 @@ void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* reposi
 }
 
 //After calling this, the data-directory may be a new one
-void ItemRepositoryRegistryPrivate::deleteDataDirectory(bool recreate)
+void ItemRepositoryRegistryPrivate::deleteDataDirectory(const QString& path, bool recreate)
 {
   QMutexLocker lock(&m_mutex);
 
@@ -267,12 +267,12 @@ void ItemRepositoryRegistryPrivate::deleteDataDirectory(bool recreate)
   //Instead, the other instance will try to delete the directory as well.
   lockForWriting();
 
-  bool result = removeDirectory(m_path);
+  bool result = removeDirectory(path);
   Q_ASSERT(result);
   Q_UNUSED(result);
   // Just recreate the directory then; leave old path (as it is dependent on appname and session only).
   if(recreate) {
-    KStandardDirs::makeDir(m_path);
+    KStandardDirs::makeDir(path);
   }
 }
 
@@ -282,19 +282,18 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
   if(m_path == path) {
     return true;
   }
-  m_path = path;
 
   // Check if the repository shall be cleared
   if (shouldClear(path)) {
     kWarning() << QString("The data-repository at %1 has to be cleared.").arg(m_path);
-    deleteDataDirectory();
+    deleteDataDirectory(path);
   }
 
   KStandardDirs::makeDir(path);
 
   foreach(AbstractItemRepository* repository, m_repositories.keys()) {
     if(!repository->open(path)) {
-      deleteDataDirectory();
+      deleteDataDirectory(path);
       kError() << "failed to open a repository";
       abort();
     }
@@ -313,6 +312,8 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
       m_owner->getCustomCounter(counterName, 0) = counterValue;
     }
   }
+
+  m_path = path;
 
   return true;
 }
@@ -391,10 +392,17 @@ ItemRepositoryRegistry::~ItemRepositoryRegistry()
 
 void ItemRepositoryRegistry::shutdown()
 {
+  QMutexLocker lock(&d->m_mutex);
+  QString path = d->m_path;
+
+  // FIXME: we don't close since this can trigger crashes at shutdown
+  //        since some items are still referenced, e.g. in static variables
+//   d->close();
+
   if(d->m_shallDelete) {
-    d->deleteDataDirectory(false);
+    d->deleteDataDirectory(path, false);
   } else {
-    QFile::remove(d->m_path + QString("/crash_counter"));
+    QFile::remove(path + QLatin1String("/crash_counter"));
   }
 }
 

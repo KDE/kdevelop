@@ -774,6 +774,7 @@ QualifiedIdentifier::~QualifiedIdentifier()
 QStringList QualifiedIdentifier::toStringList() const
 {
   QStringList ret;
+  ret.reserve(explicitlyGlobal() + count());
   if (explicitlyGlobal())
     ret.append(QString());
 

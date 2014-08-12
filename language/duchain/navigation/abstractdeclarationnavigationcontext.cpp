@@ -130,7 +130,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         ForwardDeclaration* forwardDec = static_cast<ForwardDeclaration*>(m_declaration.data());
         Declaration* resolved = forwardDec->resolve(m_topContext.data());
         if(resolved) {
-          modifyHtml() += i18n("( resolved forward-declaration: ");
+          modifyHtml() += i18n("(resolved forward-declaration: ");
           makeLink(resolved->identifier().toString(), KDevelop::DeclarationPointer(resolved), NavigationAction::NavigateDeclaration );
           modifyHtml() += i18n(") ");
         }else{
