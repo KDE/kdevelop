@@ -21,7 +21,7 @@
 #include <QStringList>
 #include <QMenu>
 
-#include <kconfiggroup.h>-
+#include <kconfiggroup.h>
 #include <kfiledialog.h>
 #include <kpushbutton.h>
 #include <kglobal.h>
