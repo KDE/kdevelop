@@ -766,7 +766,11 @@ QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & ide
 
   DeclarationList ret;
   SearchItem::PtrList identifiers;
-  identifiers << SearchItem::Ptr(new SearchItem(identifier));
+  // optimize: we don't want to allocate the top node always
+  // so create it on stack but ref it so its not deleted by the smart pointer
+  SearchItem item(identifier);
+  item.ref.ref();
+  identifiers << SearchItem::Ptr(&item);
 
   findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext : this->topContext(), flags, 0);
 
