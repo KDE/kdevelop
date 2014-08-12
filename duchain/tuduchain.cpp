@@ -420,6 +420,7 @@ AbstractType *TUDUChain::makeType(CXType type, CXCursor parent)
     UseKind(CXType_ConstantArray);
     UseKind(CXType_VariableArray);
     UseKind(CXType_IncompleteArray);
+    UseKind(CXType_DependentSizedArray);
     UseKind(CXType_LValueReference);
     UseKind(CXType_RValueReference);
     UseKind(CXType_FunctionProto);

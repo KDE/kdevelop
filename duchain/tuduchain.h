@@ -314,11 +314,11 @@ private:
         return ptr;
     }
 
-    template<CXTypeKind TK, EnableIf<TK == CXType_ConstantArray || TK == CXType_IncompleteArray || TK == CXType_VariableArray> = dummy>
+    template<CXTypeKind TK, EnableIf<CursorKindTraits::isArrayType(TK)> = dummy>
     AbstractType *createType(CXType type, CXCursor parent)
     {
         auto arr = new ArrayType;
-        arr->setDimension((TK == CXType_IncompleteArray || TK == CXType_VariableArray) ? 0 : clang_getArraySize(type));
+        arr->setDimension((TK == CXType_IncompleteArray || TK == CXType_VariableArray || TK == CXType_DependentSizedArray) ? 0 : clang_getArraySize(type));
         arr->setElementType(makeAbsType(clang_getArrayElementType(type), parent));
         return arr;
     }

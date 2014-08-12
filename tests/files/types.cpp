@@ -23,6 +23,14 @@ typedef int myTypedef;
 /// "unaliasedType" : { "toString" : "int"}
 using myTypeAlias = int;
 
+// Test for CXType_DependentSizedArray
+template<typename T>
+struct Class
+{
+    /// "toString" : "char[] data"
+    char data[10 * sizeof(T)];
+};
+
 /// "toString" : "int main (int, char**)"
 int main(int argc, char** argv)
 {
@@ -43,7 +51,10 @@ int main(int argc, char** argv)
     /// "toString" : "int[] arr2"
     int arr2[argc];
     /// "toString" : "int[] arr3"
-    int arr3[];
+    int arr3[] = {};
+    enum { Arr4Size = 5 };
+    /// "toString" : "int[5] arr4"
+    int arr4[Arr4Size];
     /// "toString" : "unsigned int uint"
     unsigned int uint;
     /// "toString" : "long unsigned int ulong"
