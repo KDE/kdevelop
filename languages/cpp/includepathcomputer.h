@@ -47,6 +47,7 @@ private:
   KDevelop::Path::List m_ret;
   QSet<KDevelop::Path> m_hasPath;
   bool m_ready;
+  bool m_noProject;
 
   QString m_projectName;
 };

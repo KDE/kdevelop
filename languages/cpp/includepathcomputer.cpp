@@ -40,6 +40,7 @@ using namespace KDevelop;
 IncludePathComputer::IncludePathComputer(const QString& file)
   : m_source(file)
   , m_ready(false)
+  , m_noProject(true)
 {
 }
 
@@ -62,14 +63,13 @@ void IncludePathComputer::computeForeground()
   }
 
   const IndexedString indexedSource(m_source);
-  bool noProject = true;
   foreach (IProject *project, ICore::self()->projectController()->projects()) {
     QList<ProjectFileItem*> files = project->filesForPath(indexedSource);
     if (files.isEmpty()) {
       continue;
     }
 
-    noProject = false;
+    m_noProject = false;
     IBuildSystemManager* buildManager = project->buildSystemManager();
     if (!buildManager) {
       // We found the project, but no build manager!!
@@ -111,7 +111,7 @@ void IncludePathComputer::computeForeground()
     }
   }
 
-  if (noProject) {
+  if (m_noProject) {
     for (const auto& dir : IDefinesAndIncludesManager::manager()->includes(m_source)) {
       addInclude( dir );
     }
@@ -131,9 +131,7 @@ void IncludePathComputer::computeBackground()
         addInclude(res);
     }
 
-  if (m_ret.isEmpty()) {
-    kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":";
-
+  if (m_noProject) {
     // Last chance: Take a parsed version of the file from the du-chain, and get its include-paths
     // We will then get the include-path that some time was used to parse the file
     // NOTE: this is important for library headers, as when we open them they are not opened in any project
