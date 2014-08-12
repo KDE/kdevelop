@@ -29,6 +29,22 @@
 #include <KProcess>
 #include <KDebug>
 
+#include <algorithm>
+
+namespace {
+
+QString qmakeCandidate()
+{
+    // return the first qmake executable we can find
+    const QStringList candidates = {"qmake", "qmake-qt4", "qmake-qt5"};
+    auto it = std::find_if(candidates.constBegin(), candidates.constEnd(), [](const QString& candidate) {
+        return !KStandardDirs::findExe(candidate).isEmpty();
+    });
+    return it != candidates.constEnd() ? *it : QString();
+}
+
+}
+
 QtHelpQtDoc::QtHelpQtDoc(QObject *parent, const QVariantList &args)
     : QtHelpProviderAbstract(parent, "qthelpcollection.qhc", args)
 {
@@ -38,14 +54,11 @@ QtHelpQtDoc::QtHelpQtDoc(QObject *parent, const QVariantList &args)
 
 void QtHelpQtDoc::registerDocumentations()
 {
-    QStringList qmakes;
-    qmakes << KStandardDirs::findExe("qmake")
-           << KStandardDirs::findExe("qmake-qt4")
-           << KStandardDirs::findExe("qmake-qt5");
-    if(!qmakes.isEmpty()) {
+    const QString qmake = qmakeCandidate();
+    if (!qmake.isEmpty()) {
         KProcess *p = new KProcess;
         p->setOutputChannelMode(KProcess::MergedChannels);
-        p->setProgram(qmakes.first(), QStringList("-query") << "QT_INSTALL_DOCS");
+        p->setProgram(qmake, QStringList("-query") << "QT_INSTALL_DOCS");
         p->start();
         connect(p, SIGNAL(finished(int)), SLOT(lookupDone(int)));
     }
@@ -57,8 +70,12 @@ void QtHelpQtDoc::lookupDone(int code)
         KProcess* p = qobject_cast<KProcess*>(sender());
         
         QString path = QDir::fromNativeSeparators(QString::fromLatin1(p->readAllStandardOutput().trimmed()));
-        loadDirectory(path);
-        loadDirectory(path+"/qch/");
+        kDebug() << "Detected doc path:" << path;
+
+        if (!path.isEmpty()) {
+            loadDirectory(path);
+            loadDirectory(path+"/qch/");
+        }
     }
     sender()->deleteLater();
 }
