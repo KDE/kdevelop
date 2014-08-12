@@ -525,10 +525,7 @@ IPlugin* PluginController::plugin( const QString& pluginId )
     if ( !info.isValid() )
         return 0L;
 
-    if ( d->loadedPlugins.contains( info ) )
-        return d->loadedPlugins[ info ];
-    else
-        return 0L;
+    return d->loadedPlugins.value( info );
 }
 
 bool PluginController::checkForDependencies( const KPluginInfo& info, QStringList& missing ) const
