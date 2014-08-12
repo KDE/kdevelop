@@ -131,7 +131,7 @@ public Q_SLOTS:
      * @param url a kdev4 project file top open
      * @returns true if the given project could be opened, false otherwise
      */
-    virtual void openProject( const KUrl & url = KUrl() ) = 0;
+    virtual void openProject( const QUrl & url = QUrl() ) = 0;
     /**
      * close the given project. Closing the project is done in steps and
      * the @ref projectClosing and @ref projectClosed signals are emitted. Only when

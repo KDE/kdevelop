@@ -539,7 +539,7 @@ void ProjectController::setupActions()
     KSharedConfig * config = KSharedConfig::openConfig().data();
 //     KConfigGroup group = config->group( "General Options" );
 
-    d->m_recentAction = KStandardAction::openRecent(this, SLOT(openProject(KUrl)), this);
+    d->m_recentAction = KStandardAction::openRecent(this, SLOT(openProject(QUrl)), this);
     ac->addAction( "project_open_recent", d->m_recentAction );
     d->m_recentAction->setText( i18n( "Open Recent Project" ) );
     d->m_recentAction->setWhatsThis( i18nc( "@info:whatsthis", "Opens recently opened project." ) );
@@ -706,7 +706,7 @@ void ProjectController::openProjectForUrl(const KUrl& sourceUrl) {
         openProject(askForOpen);
 }
 
-void ProjectController::openProject( const KUrl &projectFile )
+void ProjectController::openProject( const QUrl &projectFile )
 {
     KUrl url = projectFile;
     QList<const Session*> existingSessions;

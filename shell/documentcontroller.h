@@ -165,7 +165,7 @@ public Q_SLOTS:
     void reloaded(KTextEditor::Document* doc);
     
 private Q_SLOTS:
-    virtual void slotOpenDocument(const KUrl &url);
+    virtual void slotOpenDocument(const QUrl &url);
     void notifyDocumentClosed(Sublime::Document* doc);
 
 private:

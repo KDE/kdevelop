@@ -619,7 +619,7 @@ void DocumentController::setupActions()
     action->setWhatsThis( i18n( "Opens a file for editing." ) );
 
     d->fileOpenRecent = KStandardAction::openRecent(this,
-                    SLOT(slotOpenDocument(KUrl)), ac);
+                    SLOT(slotOpenDocument(QUrl)), ac);
     d->fileOpenRecent->setWhatsThis(i18n("This lists files which you have opened recently, and allows you to easily open them again."));
     d->fileOpenRecent->loadEntries( KConfigGroup(KSharedConfig::openConfig(), "Recent Files" ) );
 
@@ -683,7 +683,7 @@ QString KDevelop::DocumentController::encoding() const
     return d->presetEncoding;
 }
 
-void DocumentController::slotOpenDocument(const KUrl &url)
+void DocumentController::slotOpenDocument(const QUrl &url)
 {
     openDocument(url);
 }
