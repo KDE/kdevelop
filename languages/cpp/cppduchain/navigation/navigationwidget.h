@@ -22,7 +22,7 @@
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <language/util/includeitem.h>
 #include "../../parser/rpp/pp-macro.h"
-#include "../cppduchainexport.h"
+#include "cppduchainexport.h"
 
 namespace Cpp {
 

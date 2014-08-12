@@ -30,7 +30,7 @@ target_link_libraries( kcm_kdevcustomdefinesandincludes LINK_PRIVATE
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
         ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-        kdev4includesdefinessettings )
+        kdevdefinesandincludessettings )
 
 install( TARGETS kcm_kdevcustomdefinesandincludes
          DESTINATION ${PLUGIN_INSTALL_DIR} )

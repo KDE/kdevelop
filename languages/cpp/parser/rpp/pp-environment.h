@@ -26,7 +26,7 @@
 #include <QMap>
 
 #include <QStack>
-#include <cppparserexport.h>
+#include "cpprppexport.h"
 // #include "pp-macro.h"
 
 namespace KDevelop {

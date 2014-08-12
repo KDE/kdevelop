@@ -27,7 +27,7 @@
 #include <QtCore/QHash>
 
 #include <QtCore/QStack>
-#include <cppparserexport.h>
+#include "cpprppexport.h"
 
 #include <language/duchain/problem.h>
 

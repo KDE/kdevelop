@@ -22,8 +22,11 @@
 #define CHARTOOLS
 
 #include <cctype>
+#include <string>
 
-#include "cppparserexport.h"
+#include <QtGlobal> // uchar define
+
+#include "cpprppexport.h"
 
 template<class T>
 class QVector;

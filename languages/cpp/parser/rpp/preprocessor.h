@@ -23,7 +23,7 @@
 #define PREPROCESSOR_H
 
 #include <QtCore/QString>
-#include <cppparserexport.h>
+#include "cpprppexport.h"
 
 namespace KDevelop {
   class IndexedString;

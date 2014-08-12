@@ -60,15 +60,16 @@ set(kdevcppduchain_LIB_SRCS
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
 
-add_library(kdev4cppduchain SHARED ${kdevcppduchain_LIB_SRCS})
-target_link_libraries(kdev4cppduchain LINK_PRIVATE
+add_library(kdevcppduchain SHARED ${kdevcppduchain_LIB_SRCS})
+target_link_libraries(kdevcppduchain LINK_PRIVATE
 		${KDEVPLATFORM_LANGUAGE_LIBRARIES} 
 		${KDEVPLATFORM_INTERFACES_LIBRARIES} 
 		${KDEVPLATFORM_UTIL_LIBRARIES} 
-		kdev4cppparser 
+		kdevcppparser
 		KF5::TextEditor 
-		kdev4cpprpp)
-install(TARGETS kdev4cppduchain ${INSTALL_TARGETS_DEFAULT_ARGS})
+		kdevcpprpp)
+generate_export_header(kdevcppduchain EXPORT_FILE_NAME cppduchainexport.h)
+install(TARGETS kdevcppduchain ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

@@ -22,7 +22,7 @@
 #ifndef STREAM_H
 #define STREAM_H
 
-#include <cppparserexport.h>
+#include "cpprppexport.h"
 
 #include <QtCore/QIODevice>
 

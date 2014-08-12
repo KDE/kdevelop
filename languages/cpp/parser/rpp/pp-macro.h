@@ -26,7 +26,7 @@
 
 #include <QtCore/QStringList>
 #include <QVector>
-#include <cppparserexport.h>
+#include "cpprppexport.h"
 #include <serialization/indexedstring.h>
 #include <language/duchain/appendedlist.h>
 

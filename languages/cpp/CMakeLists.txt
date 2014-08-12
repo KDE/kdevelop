@@ -48,9 +48,9 @@ endif(BUILD_uiblocktester)
 
 add_library(kdevcpplanguagesupport MODULE ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport
-    kdev4cpprpp
-    kdev4cppduchain
-    kdev4cppparser
+    kdevcpprpp
+    kdevcppduchain
+    kdevcppparser
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}

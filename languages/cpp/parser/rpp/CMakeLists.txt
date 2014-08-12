@@ -20,13 +20,14 @@ set(kdevcpprpp_LIB_SRCS
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
-add_library(kdev4cpprpp SHARED ${kdevcpprpp_LIB_SRCS})
-target_link_libraries(kdev4cpprpp LINK_PRIVATE
+add_library(kdevcpprpp SHARED ${kdevcpprpp_LIB_SRCS})
+target_link_libraries(kdevcpprpp LINK_PRIVATE
   
   ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
   KF5::TextEditor
 )
-install(TARGETS kdev4cpprpp ${INSTALL_TARGETS_DEFAULT_ARGS} )
+generate_export_header(kdevcpprpp EXPORT_FILE_NAME cpprppexport.h)
+install(TARGETS kdevcpprpp ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 

@@ -20,7 +20,7 @@
 #define MACROREPOSITORY_H
 
 #include <serialization/itemrepository.h>
-#include <cppparserexport.h>
+#include "cpprppexport.h"
 #include "pp-macro.h"
 
 struct KDEVCPPRPP_EXPORT MacroRepositoryItemRequest {

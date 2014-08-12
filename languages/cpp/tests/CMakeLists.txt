@@ -49,15 +49,15 @@ LINK_LIBRARIES
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_TESTS_LIBRARIES}
     ${KDEVPLATFORM_JSONTESTS_LIBRARIES}
-    kdev4cppduchain
-    kdev4cppparser
+    kdevcppduchain
+    kdevcppparser
 )
 
 ecm_add_test(test_specialcompletion.cpp ${test_common_SRCS} TEST_NAME cppspecialcompletion
 LINK_LIBRARIES
-    kdev4cppduchain
-    kdev4cpprpp
-    kdev4cppparser
+    kdevcppduchain
+    kdevcpprpp
+    kdevcppparser
     Qt5::Test
     Qt5::Core
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
@@ -78,9 +78,9 @@ set(cppassistantstest_SRCS
 ecm_add_test(${cppassistantstest_SRCS} TEST_NAME cppassistantstest
 LINK_LIBRARIES
     Qt5::Test
-    kdev4cppduchain
-    kdev4cpprpp
-    kdev4cppparser
+    kdevcppduchain
+    kdevcpprpp
+    kdevcppparser
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
@@ -112,9 +112,9 @@ ecm_add_test(${cppcodecompletiontest_SRCS} TEST_NAME cppcodecompletiontest
 TEST_NAME cppcodecompletiontest
 LINK_LIBRARIES
     Qt5::Test
-    kdev4cppduchain
-    kdev4cpprpp
-    kdev4cppparser
+    kdevcppduchain
+    kdevcpprpp
+    kdevcppparser
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
@@ -126,9 +126,9 @@ LINK_LIBRARIES
 
 ecm_add_test(${cppcodegentest_SRCS} TEST_NAME cppcodegentest
 LINK_LIBRARIES
-    kdev4cppduchain
-    kdev4cpprpp
-    kdev4cppparser
+    kdevcppduchain
+    kdevcpprpp
+    kdevcppparser
     Qt5::Test
     Qt5::Core
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
@@ -140,4 +140,4 @@ add_executable( cpp-parser cpp-parser.cpp )
 ecm_mark_as_test(cpp-parser)
 target_link_libraries(cpp-parser
     Qt5::Core ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    kdev4cppparser kdev4cppduchain kdev4cpprpp KF5::KDELibs4Support)
+    kdevcppparser kdevcppduchain kdevcpprpp KF5::KDELibs4Support)

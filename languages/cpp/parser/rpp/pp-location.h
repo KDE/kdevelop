@@ -24,7 +24,7 @@
 
 #include <QMap>
 
-#include <cppparserexport.h>
+#include "cpprppexport.h"
 #include "anchor.h"
 
 typedef QVector<unsigned int> PreprocessedContents;

@@ -30,7 +30,7 @@
 
 // #include "cmakemodelitems.h"
 #include "cmListFileLexer.h"
-#include <cmakeexport.h>
+#include <cmakecommonexport.h>
 #include <language/editor/rangeinrevision.h>
 
 struct CMakeFunctionArgument

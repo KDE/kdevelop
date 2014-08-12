@@ -18,7 +18,7 @@ kconfig_add_kcfg_files( cmakebuilder_LIB_SRCS cmakebuilderconfig.kcfgc )
 add_library(kdevcmakebuilder MODULE ${cmakebuilder_LIB_SRCS})
 target_link_libraries(
     kdevcmakebuilder
-    kdev4cmakecommon
+    kdevcmakecommon
         KF5::KIOWidgets
         ${KDE4_KDEUI_LIBS}
         ${KDEVPLATFORM_INTERFACES_LIBRARIES}

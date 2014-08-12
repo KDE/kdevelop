@@ -8,7 +8,7 @@ configure_file("paths.h.cmake" "cmake-test-paths.h" ESCAPE_QUOTES)
 
 macro(kdevcmake_add_test testname)
     ecm_add_test(${testname}.cpp
-        LINK_LIBRARIES Qt5::Test Qt5::Core ${KDEVPLATFORM_INTERFACES_LIBRARIES} kdev4cmakecommon ${ARGN})
+        LINK_LIBRARIES Qt5::Test Qt5::Core ${KDEVPLATFORM_INTERFACES_LIBRARIES} kdevcmakecommon ${ARGN})
 endmacro(kdevcmake_add_test)
 
 kdevcmake_add_test(cmakeparsertest)
@@ -26,4 +26,4 @@ kdevcmake_add_test(cmakemanagertest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLA
 
 # this is not a unit test but a testing tool, kept here for convenience
 add_executable(kdevprojectopen kdevprojectopen.cpp)
-target_link_libraries(kdevprojectopen Qt5::Test ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES} kdev4cmakecommon)
+target_link_libraries(kdevprojectopen Qt5::Test ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES} kdevcmakecommon)
