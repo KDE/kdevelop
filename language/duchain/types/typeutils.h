@@ -82,7 +82,7 @@ namespace TypeUtils {
   * as a template parameter.
   **/
   template <typename LanguageUnsureType=KDevelop::UnsureType>
-  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr mergeTypes(KDevelop::AbstractType::Ptr type, const KDevelop::AbstractType::Ptr newType) {
+  KDevelop::AbstractType::Ptr mergeTypes(KDevelop::AbstractType::Ptr type, const KDevelop::AbstractType::Ptr newType) {
     static_assert(std::is_base_of<KDevelop::UnsureType, LanguageUnsureType>::value,
                   "LanguageUnsureType must inherit from KDevelop::UnsureType");
 
