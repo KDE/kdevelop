@@ -89,6 +89,9 @@ void CompilerProvider::addPoject( IProject* project, const CompilerPointer& comp
 {
     Q_ASSERT(compiler);
     //cache includes/defines
+//  FIXME: this is a hack, we have this only to get the compiler to initialize the values
+//     this should be dealt with by the class itself.
+
     compiler->includes();
     compiler->defines();
     m_projects[project] = compiler;
@@ -115,7 +118,7 @@ CompilerPointer CompilerProvider::checkCompilerExists( const CompilerPointer& co
             definesAndIncludesDebug() << "Selected compiler: " << compiler->name();
             return compiler;
         }
-        kWarning() << "No compiler found. Standard includes/defines won't be provided to the project parser!";
+        qWarning() << "No compiler found. Standard includes/defines won't be provided to the project parser!";
     }else{
         for ( auto it = m_compilers.constBegin(); it != m_compilers.constEnd(); it++ ) {
             if ( (*it)->name() == compiler->name() ) {
@@ -194,8 +197,8 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
 
     IDefinesAndIncludesManager::manager()->registerProvider( this );
 
-    connect( ICore::self()->projectController(), SIGNAL( projectOpened(KDevelop::IProject*)), SLOT( projectOpened( KDevelop::IProject* ) ) );
-    connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( KDevelop::IProject* ) ) );
+    connect( ICore::self()->projectController(), &IProjectController::projectAboutToBeOpened, this, &CompilerProvider::projectOpened );
+    connect( ICore::self()->projectController(), &IProjectController::projectClosed, this, &CompilerProvider::projectClosed);
     auto projects = ICore::self()->projectController()->projects();
     foreach (auto project, projects) {
         projectOpened(project);

@@ -22,14 +22,9 @@
 #ifndef DEBUGAREA_H
 #define DEBUGAREA_H
 
-#include <KDebug>
+#include <QDebug>
+#include <QLoggingCategory>
 
-namespace KDevelop {
-
-int definesAndIncludesDebugArea();
-
-}
-
-#define definesAndIncludesDebug() kDebug(KDevelop::definesAndIncludesDebugArea())
+#define definesAndIncludesDebug() qCDebug(QLoggingCategory("kdevdefinesandincludes"))
 
 #endif // DEBUGAREA_H
