@@ -372,6 +372,7 @@ public:
                             i18n( "Could not load project management plugin %1.",
                                   managerSetting ) );
             manager = 0;
+            return 0;
         }
         if (iface == 0)
         {
