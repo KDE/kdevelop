@@ -44,8 +44,15 @@ class TypePtr : public QExplicitlySharedDataPointer<T>
     using Base = QExplicitlySharedDataPointer<T>;
 
 public:
-    TypePtr(): QExplicitlySharedDataPointer<T>() {}
-    TypePtr(T* data): QExplicitlySharedDataPointer<T>(data) {}
+    // Note: No inheriting ctors for MSVC => We cannot use them here
+    TypePtr()
+      : QExplicitlySharedDataPointer<T>() {}
+    explicit TypePtr(T* data)
+      : QExplicitlySharedDataPointer<T>(data) {}
+    template<class X>
+    inline TypePtr(const TypePtr<X> &o)
+      : QExplicitlySharedDataPointer<T>(o) {}
+
     using Base::operator=;
 
     ///Uses dynamic_cast to cast this pointer to the given type
