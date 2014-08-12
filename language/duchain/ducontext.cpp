@@ -109,6 +109,23 @@ void DUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
   m_dynamicData->m_parentContext = DUContextPointer(parent);
   m_dynamicData->m_context = this;
 
+  m_dynamicData->m_childContexts.clear();
+  m_dynamicData->m_childContexts.reserve(d_func()->m_childContextsSize());
+  FOREACH_FUNCTION(const LocalIndexedDUContext& ctx, d_func()->m_childContexts) {
+    m_dynamicData->m_childContexts << ctx.data(m_dynamicData->m_topContext);
+  }
+
+  m_dynamicData->m_localDeclarations.clear();
+  m_dynamicData->m_localDeclarations.reserve(d_func()->m_localDeclarationsSize());
+  FOREACH_FUNCTION(const LocalIndexedDeclaration& idx, d_func()->m_localDeclarations) {
+    auto declaration = idx.data(m_dynamicData->m_topContext);
+    if (!declaration) {
+      kWarning() << "child declaration number" << idx.localIndex() << "of" << d_func_dynamic()->m_localDeclarationsSize() << "is invalid";
+      continue;
+    }
+    m_dynamicData->m_localDeclarations << declaration;
+  }
+
   DUChainBase::rebuildDynamicData(parent, ownIndex);
 }
 
@@ -149,8 +166,8 @@ void DUContextDynamicData::scopeIdentifier(bool includeClasses, QualifiedIdentif
   if (m_parentContext)
     m_parentContext->m_dynamicData->scopeIdentifier(includeClasses, target);
 
-  if (includeClasses || m_context->d_func()->m_contextType != DUContext::Class)
-    target += m_context->d_func()->m_scopeIdentifier;
+  if (includeClasses || d_func()->m_contextType != DUContext::Class)
+    target += d_func()->m_scopeIdentifier;
 }
 
 bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext* source,
@@ -164,7 +181,7 @@ bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext*
   }
   recursionGuard->insert(this);
 
-  FOREACH_FUNCTION( const DUContext::Import& ctx, m_context->d_func()->m_importedContexts ) {
+  FOREACH_FUNCTION( const DUContext::Import& ctx, d_func()->m_importedContexts ) {
     DUContext* import = ctx.context(source);
     if(import == context || (import && import->m_dynamicData->imports(context, source, recursionGuard)))
       return true;
@@ -186,37 +203,44 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
   Q_ASSERT(isContextTemporary(m_indexInTopContext) == isContextTemporary(newDeclaration->ownIndex()));
 
   CursorInRevision start = newDeclaration->range().start;
-///@todo Do binary search to find the position
+
   bool inserted = false;
-  for (int i = m_context->d_func_dynamic()->m_localDeclarationsSize()-1; i >= 0; --i) {
-    Declaration* child = m_context->d_func_dynamic()->m_localDeclarations()[i].data(m_topContext);
-    if(!child) {
-      kWarning() << "child declaration number" << i << "of" << m_context->d_func_dynamic()->m_localDeclarationsSize() << "is invalid";
-      continue;
-    }
+  ///@todo Do binary search to find the position
+  for (int i = m_localDeclarations.size() - 1; i >= 0; --i) {
+    Declaration* child = m_localDeclarations[i];
+    Q_ASSERT(d_func()->m_localDeclarations()[i].data(m_topContext) == child);
     if(child == newDeclaration)
       return;
     //TODO: All declarations in a macro will have the same empty range, and just get appended
     //that may not be Good Enough in complex cases.
     if (start >= child->range().start) {
-      m_context->d_func_dynamic()->m_localDeclarationsList().insert(i+1, newDeclaration);
-      if(!m_context->d_func()->m_localDeclarations()[i+1].data(m_topContext))
-        kFatal() << "Inserted a not addressable declaration";
+      m_localDeclarations.insert(i + 1, newDeclaration);
+      d_func_dynamic()->m_localDeclarationsList().insert(i+1, newDeclaration);
+      Q_ASSERT(d_func()->m_localDeclarations()[i+1].data(m_topContext) == newDeclaration);
 
       inserted = true;
       break;
     }
   }
 
-  if( !inserted ) //We haven't found any child that is before this one, so prepend it
-    m_context->d_func_dynamic()->m_localDeclarationsList().insert(0, newDeclaration);
+  if (!inserted) {
+    // We haven't found any child that is before this one, so prepend it
+    m_localDeclarations.insert(0, newDeclaration);
+    d_func_dynamic()->m_localDeclarationsList().insert(0, newDeclaration);
+    Q_ASSERT(d_func()->m_localDeclarations()[0].data(m_topContext) == newDeclaration);
+  }
 }
 
 bool DUContextDynamicData::removeDeclaration(Declaration* declaration)
 {
-  if( m_context->d_func_dynamic()->m_localDeclarationsList().removeOne(LocalIndexedDeclaration(declaration)) ) {
+  const int idx = m_localDeclarations.indexOf(declaration);
+  if (idx != -1) {
+    Q_ASSERT(d_func()->m_localDeclarations()[idx].data(m_topContext) == declaration);
+    m_localDeclarations.remove(idx);
+    d_func_dynamic()->m_localDeclarationsList().remove(idx);
     return true;
-  }else {
+  } else {
+    Q_ASSERT(d_func_dynamic()->m_localDeclarationsList().indexOf(LocalIndexedDeclaration(declaration)) == -1);
     return false;
   }
 }
@@ -234,14 +258,16 @@ void DUContextDynamicData::addChildContext( DUContext * context )
 
   bool inserted = false;
 
-  int childCount = m_context->d_func()->m_childContextsSize();
+  int childCount = m_childContexts.size();
 
   for (int i = childCount-1; i >= 0; --i) {///@todo Do binary search to find the position
-    DUContext* child = m_context->d_func()->m_childContexts()[i].data(m_topContext);
+    DUContext* child = m_childContexts[i];
+    Q_ASSERT(d_func_dynamic()->m_childContexts()[i] == LocalIndexedDUContext(child));
     if (context == child)
       return;
     if (context->range().start >= child->range().start) {
-      m_context->d_func_dynamic()->m_childContextsList().insert(i+1, indexed);
+      m_childContexts.insert(i+1, context);
+      d_func_dynamic()->m_childContextsList().insert(i+1, indexed);
       context->m_dynamicData->m_parentContext = m_context;
       inserted = true;
       break;
@@ -249,7 +275,8 @@ void DUContextDynamicData::addChildContext( DUContext * context )
   }
 
   if( !inserted ) {
-    m_context->d_func_dynamic()->m_childContextsList().insert(0, indexed);
+    m_childContexts.insert(0, context);
+    d_func_dynamic()->m_childContextsList().insert(0, indexed);
     context->m_dynamicData->m_parentContext = m_context;
   }
 }
@@ -257,10 +284,16 @@ void DUContextDynamicData::addChildContext( DUContext * context )
 bool DUContextDynamicData::removeChildContext( DUContext* context ) {
 //   ENSURE_CAN_WRITE
 
-  if( m_context->d_func_dynamic()->m_childContextsList().removeOne(LocalIndexedDUContext(context)) )
+  const int idx = m_childContexts.indexOf(context);
+  if (idx != -1) {
+    m_childContexts.remove(idx);
+    Q_ASSERT(d_func()->m_childContexts()[idx] == LocalIndexedDUContext(context));
+    d_func_dynamic()->m_childContextsList().remove(idx);
     return true;
-  else
+  } else {
+    Q_ASSERT(d_func_dynamic()->m_childContextsList().indexOf(LocalIndexedDUContext(context)) == -1);
     return false;
+  }
 }
 
 void DUContextDynamicData::addImportedChildContext( DUContext * context )
@@ -270,12 +303,12 @@ void DUContextDynamicData::addImportedChildContext( DUContext * context )
   
   if(import.isDirect()) {
     //Direct importers are registered directly within the data
-    if(m_context->d_func_dynamic()->m_importersList().contains(IndexedDUContext(context))) {
+    if(d_func_dynamic()->m_importersList().contains(IndexedDUContext(context))) {
       kDebug(9505) << m_context->scopeIdentifier(true).toString() << "importer added multiple times:" << context->scopeIdentifier(true).toString();
       return;
     }
 
-    m_context->d_func_dynamic()->m_importersList().append(context);
+    d_func_dynamic()->m_importersList().append(context);
   }else{
     //Indirect importers are registered separately
     Importers::self().addImporter(import.indirectDeclarationId(), IndexedDUContext(context));
@@ -289,7 +322,7 @@ void DUContextDynamicData::removeImportedChildContext( DUContext * context )
   DUContext::Import import(m_context, context);
   
   if(import.isDirect()) {
-    m_context->d_func_dynamic()->m_importersList().removeOne(IndexedDUContext(context));
+    d_func_dynamic()->m_importersList().removeOne(IndexedDUContext(context));
   }else{
     //Indirect importers are registered separately
     Importers::self().removeImporter(import.indirectDeclarationId(), IndexedDUContext(context));
@@ -420,11 +453,7 @@ QVector< DUContext * > DUContext::childContexts( ) const
 {
   ENSURE_CAN_READ
 
-  QVector< DUContext * > ret;
-  ret.reserve(d_func()->m_childContextsSize());
-  FOREACH_FUNCTION(const LocalIndexedDUContext& ctx, d_func()->m_childContexts)
-    ret << ctx.data(topContext());
-  return ret;
+  return m_dynamicData->m_childContexts;
 }
 
 Declaration* DUContext::owner() const {
@@ -475,8 +504,8 @@ bool DUContext::isPropagateDeclarations() const
   return d_func()->m_propagateDeclarations;
 }
 
-QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifier,
-                                                      const CursorInRevision & position,
+QList<Declaration*> DUContext::findLocalDeclarations( const IndexedIdentifier& identifier,
+                                                      const CursorInRevision& position,
                                                       const TopDUContext* topContext,
                                                       const AbstractType::Ptr& dataType,
                                                       SearchFlags flags ) const
@@ -485,7 +514,16 @@ QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifi
 
   DeclarationList ret;
   findLocalDeclarationsInternal(identifier, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext : this->topContext(), flags);
-  return ret.toList();
+  return ret;
+}
+
+QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifier,
+                                                      const CursorInRevision& position,
+                                                      const TopDUContext* topContext,
+                                                      const AbstractType::Ptr& dataType,
+                                                      SearchFlags flags ) const
+{
+  return findLocalDeclarations(IndexedIdentifier(identifier), position, topContext, dataType, flags);
 }
 
 namespace {
@@ -554,7 +592,14 @@ struct Checker
 
 }
 
-void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
+void DUContext::findLocalDeclarationsInternal(const Identifier& identifier, const CursorInRevision& position,
+                                              const AbstractType::Ptr& dataType, DeclarationList& ret,
+                                              const TopDUContext* source, SearchFlags flags) const
+{
+  return findLocalDeclarationsInternal(IndexedIdentifier(identifier), position, dataType, ret, source, flags);
+}
+
+void DUContext::findLocalDeclarationsInternal( const IndexedIdentifier& identifier,
                                                const CursorInRevision & position,
                                                const AbstractType::Ptr& dataType,
                                                DeclarationList& ret, const TopDUContext* /*source*/,
@@ -562,7 +607,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
 {
   Checker checker(flags, dataType, position, type());
 
-  if (d_func()->m_inSymbolTable && !indexedLocalScopeIdentifier().isEmpty() && !identifier.isEmpty()) {
+  if (d_func()->m_inSymbolTable && !d_func()->m_scopeIdentifier.isEmpty() && !identifier.isEmpty()) {
     //This context is in the symbol table, use the symbol-table to speed up the search
     QualifiedIdentifier id(scopeIdentifier(true) + identifier);
 
@@ -586,10 +631,9 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier,
   } else {
     //Iterate through all declarations
     DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
-    IndexedIdentifier indexedIdentifier(identifier);
     while (it) {
       Declaration* declaration = *it;
-      if (declaration && declaration->indexedIdentifier() == indexedIdentifier) {
+      if (declaration && declaration->indexedIdentifier() == identifier) {
         Declaration* checked = checker.check(declaration);
         if (checked)
             ret.append(checked);
@@ -612,19 +656,24 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
                                           DeclarationList& ret, const TopDUContext* source,
                                           SearchFlags flags, uint depth ) const
 {
-  if(depth > maxParentDepth) {
+  if (depth > maxParentDepth) {
     kDebug() << "maximum depth reached in" << scopeIdentifier(true);
     return false;
   }
   
   DUCHAIN_D(DUContext);
-  if( d_func()->m_contextType != Namespace ) { //If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
-    for(int a = 0; a < baseIdentifiers.size(); ++a)
-      if(!baseIdentifiers[a]->isExplicitlyGlobal && baseIdentifiers[a]->next.isEmpty()) //It makes no sense searching locally for qualified identifiers
+  if (d_func()->m_contextType != Namespace) {
+    // If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
+    for (int a = 0; a < baseIdentifiers.size(); ++a) {
+      if (!baseIdentifiers[a]->isExplicitlyGlobal && baseIdentifiers[a]->next.isEmpty()) {
+        // It makes no sense searching locally for qualified identifiers
         findLocalDeclarationsInternal(baseIdentifiers[a]->identifier, position, dataType, ret, source, flags);
+      }
+    }
 
-    if( foundEnough(ret, flags) )
+    if (foundEnough(ret, flags)) {
       return true;
+    }
   }
 
   ///Step 1: Apply namespace-aliases and -imports
@@ -632,47 +681,50 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
   //Because of namespace-imports and aliases, this identifier may need to be searched under multiple names
   applyAliases(baseIdentifiers, aliasedIdentifiers, position, false,  type() != DUContext::Namespace && type() != DUContext::Global);
 
-
-  if( d->m_importedContextsSize() != 0 ) {
+  if (d->m_importedContextsSize() != 0) {
     ///Step 2: Give identifiers that are not marked as explicitly-global to imported contexts(explicitly global ones are treatead in TopDUContext)
     SearchItem::PtrList nonGlobalIdentifiers;
-    FOREACH_ARRAY( const SearchItem::Ptr& identifier, aliasedIdentifiers )
-      if( !identifier->isExplicitlyGlobal )
+    foreach (const SearchItem::Ptr& identifier, aliasedIdentifiers) {
+      if (!identifier->isExplicitlyGlobal) {
         nonGlobalIdentifiers << identifier;
+      }
+    }
 
-    if( !nonGlobalIdentifiers.isEmpty() ) {
+    if (!nonGlobalIdentifiers.isEmpty()) {
+      const auto& url = this->url();
       for(int import = d->m_importedContextsSize()-1; import >= 0; --import ) {
-        DUContext* context = d->m_importedContexts()[import].context(source);
-
-        while( !context && import > 0 ) {
-          --import;
-          context = d->m_importedContexts()[import].context(source);
+        if (position.isValid() && d->m_importedContexts()[import].position.isValid() && position < d->m_importedContexts()[import].position) {
+          continue;
         }
 
-        if(context == this) {
+        DUContext* context = d->m_importedContexts()[import].context(source);
+
+        if (!context) {
+          continue;
+        } else if (context == this) {
           kDebug() << "resolved self as import:" << scopeIdentifier(true);
           continue;
         }
 
-        if( !context )
-          break;
-
-        if( position.isValid() && d->m_importedContexts()[import].position.isValid() && position < d->m_importedContexts()[import].position )
-          continue;
-
-        if( !context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->range().end, dataType, ret, source, flags | InImportedParentContext, depth+1) )
+        if (!context->findDeclarationsInternal(nonGlobalIdentifiers, url == context->url() ? position : context->range().end,
+                                               dataType, ret, source, flags | InImportedParentContext, depth+1))
+        {
           return false;
+        }
       }
     }
   }
 
-  if( foundEnough(ret, flags) )
+  if (foundEnough(ret, flags)) {
     return true;
+  }
 
   ///Step 3: Continue search in parent-context
   if (!(flags & DontSearchInParent) && shouldSearchInParent(flags) && m_dynamicData->m_parentContext) {
     applyUpwardsAliases(aliasedIdentifiers, source);
-    return m_dynamicData->m_parentContext->findDeclarationsInternal(aliasedIdentifiers, url() == m_dynamicData->m_parentContext->url() ? position : m_dynamicData->m_parentContext->range().end, dataType, ret, source, flags, depth);
+    return m_dynamicData->m_parentContext->findDeclarationsInternal(aliasedIdentifiers,
+                                                                    url() == m_dynamicData->m_parentContext->url() ? position : m_dynamicData->m_parentContext->range().end,
+                                                                    dataType, ret, source, flags, depth);
   }
   return true;
 }
@@ -713,11 +765,15 @@ QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & ide
 
   DeclarationList ret;
   SearchItem::PtrList identifiers;
-  identifiers << SearchItem::Ptr(new SearchItem(identifier));
+  // optimize: we don't want to allocate the top node always
+  // so create it on stack but ref it so its not deleted by the smart pointer
+  SearchItem item(identifier);
+  item.ref.ref();
+  identifiers << SearchItem::Ptr(&item);
 
   findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext : this->topContext(), flags, 0);
 
-  return ret.toList();
+  return ret;
 }
 
 bool DUContext::imports(const DUContext* origin, const CursorInRevision& /*position*/ ) const
@@ -828,14 +884,16 @@ DUContext * DUContext::findContext( const CursorInRevision& position, DUContext*
   if (!parent)
     parent = const_cast<DUContext*>(this);
 
-  FOREACH_FUNCTION(const LocalIndexedDUContext& context, parent->d_func()->m_childContexts)
-    if (context.data(topContext())->range().contains(position)) {
-      DUContext* ret = findContext(position, context.data(topContext()));
-      if (!ret)
-        ret = context.data(topContext());
+  foreach (DUContext* context, parent->m_dynamicData->m_childContexts) {
+    if (context->range().contains(position)) {
+      DUContext* ret = findContext(position, context);
+      if (!ret) {
+        ret = context;
+      }
 
       return ret;
     }
+  }
 
   return 0;
 }
@@ -845,9 +903,10 @@ bool DUContext::parentContextOf(DUContext* context) const
   if (this == context)
     return true;
 
-  FOREACH_FUNCTION(const LocalIndexedDUContext& child, d_func()->m_childContexts) {
-    if (child.data(topContext())->parentContextOf(context))
+  foreach (DUContext* child, m_dynamicData->m_childContexts) {
+    if (child->parentContextOf(context)) {
       return true;
+    }
   }
 
   return false;
@@ -870,16 +929,10 @@ QList< QPair<Declaration*, int> > DUContext::allDeclarations(const CursorInRevis
 
 QVector<Declaration*> DUContext::localDeclarations(const TopDUContext* source) const
 {
-  Q_UNUSED(source);
   ENSURE_CAN_READ
-
-  QVector<Declaration*> ret;
-  ret.reserve(d_func()->m_localDeclarationsSize());
-  FOREACH_FUNCTION(const LocalIndexedDeclaration& decl, d_func()->m_localDeclarations) {
-    ret << decl.data(topContext());
-  }
-
-  return ret;
+  // TODO: remove this parameter once we kill old-cpp
+  Q_UNUSED(source);
+  return m_dynamicData->m_localDeclarations;
 }
 
 void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions,
@@ -948,44 +1001,38 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
 void DUContext::deleteLocalDeclarations()
 {
   ENSURE_CAN_WRITE
-  KDevVarLengthArray<LocalIndexedDeclaration> declarations;
-  {
-    FOREACH_FUNCTION(const LocalIndexedDeclaration& decl, d_func()->m_localDeclarations)
-      declarations.append(decl);
+  // It may happen that the deletion of one declaration triggers the deletion of another one
+  // Therefore we copy the list of indexed declarations and work on those. Indexed declarations
+  // will return zero for already deleted declarations.
+  KDevVarLengthArray<LocalIndexedDeclaration> indexedLocal;
+  if (d_func()->m_localDeclarations()) {
+    indexedLocal.append(d_func()->m_localDeclarations(), d_func()->m_localDeclarationsSize());
   }
-
-  TopDUContext* top = topContext();
-  //If we are deleting something that is not stored to disk, we need to create + delete the declarations,
-  //so their destructor unregisters from the persistent symbol table and from TopDUContextDynamicData
-  FOREACH_ARRAY(const LocalIndexedDeclaration& decl, declarations)
-    if(decl.isLoaded(top) || !top->deleting() || !top->isOnDisk())
-      delete decl.data(top);
+  foreach (const LocalIndexedDeclaration& indexed, m_dynamicData->m_localDeclarations) {
+    delete indexed.data(topContext());
+  }
+  m_dynamicData->m_localDeclarations.clear();
 }
 
 void DUContext::deleteChildContextsRecursively()
 {
   ENSURE_CAN_WRITE
 
-  TopDUContext* top = topContext();
-
-  QVector<LocalIndexedDUContext> children;
-  children.reserve(d_func()->m_childContextsSize());
-  FOREACH_FUNCTION(const LocalIndexedDUContext& ctx, d_func()->m_childContexts)
-    children << ctx;
-
-  //If we are deleting a context that is already stored to disk, we don't need to load not yet loaded child-contexts.
-  //Else we need to, so the declarations are unregistered from symbol-table and from TopDUContextDynamicData in their destructor
-  foreach(const LocalIndexedDUContext &ctx, children)
-    if(ctx.isLoaded(top) || !top->deleting() || !top->isOnDisk())
-      delete ctx.data(top);
+  // note: don't use qDeleteAll here because child ctx deletion changes m_dynamicData->m_childContexts
+  // also note: foreach iterates on a copy, so this is safe
+  foreach (DUContext* ctx, m_dynamicData->m_childContexts) {
+    delete ctx;
+  }
+  m_dynamicData->m_childContexts.clear();
 }
 
-QVector< Declaration * > DUContext::clearLocalDeclarations( )
+QVector<Declaration *> DUContext::clearLocalDeclarations( )
 {
-  QVector< Declaration * > ret = localDeclarations();
-  foreach (Declaration* dec, ret)
+  auto copy = m_dynamicData->m_localDeclarations;
+  foreach (Declaration* dec, copy) {
     dec->setContext(0);
-  return ret;
+  }
+  return copy;
 }
 
 QualifiedIdentifier DUContext::scopeIdentifier(bool includeClasses) const
@@ -1022,7 +1069,6 @@ bool DUContext::equalScopeIdentifier(const DUContext* rhs) const
 void DUContext::setLocalScopeIdentifier(const QualifiedIdentifier & identifier)
 {
   ENSURE_CAN_WRITE
-  //Q_ASSERT(d_func()->m_childContexts.isEmpty() && d_func()->m_localDeclarations.isEmpty());
   bool wasInSymbolTable = inSymbolTable();
   setInSymbolTable(false);
   d_func_dynamic()->m_scopeIdentifier = identifier;
@@ -1057,13 +1103,19 @@ void DUContext::setType(ContextType type)
 QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const CursorInRevision& position,
                                                 const TopDUContext* topContext, SearchFlags flags) const
 {
+  return findDeclarations(IndexedIdentifier(identifier), position, topContext, flags);
+}
+
+QList<Declaration*> DUContext::findDeclarations(const IndexedIdentifier& identifier, const CursorInRevision& position,
+                                                const TopDUContext* topContext, SearchFlags flags) const
+{
   ENSURE_CAN_READ
 
   DeclarationList ret;
   SearchItem::PtrList identifiers;
-  identifiers << SearchItem::Ptr(new SearchItem(QualifiedIdentifier(identifier)));
+  identifiers << SearchItem::Ptr(new SearchItem(false, identifier, SearchItem::PtrList()));
   findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, AbstractType::Ptr(), ret, topContext ? topContext : this->topContext(), flags, 0);
-  return ret.toList();
+  return ret;
 }
 
 void DUContext::deleteUse(int index)
@@ -1084,9 +1136,10 @@ void DUContext::deleteUses()
 void DUContext::deleteUsesRecursively()
 {
   deleteUses();
-  
-  FOREACH_FUNCTION(const LocalIndexedDUContext& childContext, d_func()->m_childContexts)
-    childContext.data(topContext())->deleteUsesRecursively();
+
+  foreach (DUContext* childContext, m_dynamicData->m_childContexts) {
+    childContext->deleteUsesRecursively();
+  }
 }
 
 bool DUContext::inDUChain() const {
@@ -1130,7 +1183,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
                              const CursorInRevision& position, bool canBeNamespace, bool onlyImports) const {
 
   DeclarationList imports;
-  findLocalDeclarationsInternal(globalImportIdentifier(), position, AbstractType::Ptr(), imports, topContext(), DUContext::NoFiltering);
+  findLocalDeclarationsInternal(globalIndexedImportIdentifier(), position, AbstractType::Ptr(), imports, topContext(), DUContext::NoFiltering);
   
   if(imports.isEmpty() && onlyImports) {
     identifiers = baseIdentifiers;
@@ -1291,10 +1344,12 @@ DUContext * DUContext::findContextAt(const CursorInRevision & position, bool inc
     return 0;
   }
 
-  const auto childContexts = d_func()->m_childContexts();
-  for(int a = int(d_func()->m_childContextsSize())-1; a >= 0; --a)
-    if (DUContext* specific = childContexts[a].data(topContext())->findContextAt(position, includeRightBorder))
+  const auto childContexts = m_dynamicData->m_childContexts;
+  for(int a = childContexts.size() - 1; a >= 0; --a) {
+    if (DUContext* specific = childContexts[a]->findContextAt(position, includeRightBorder)) {
       return specific;
+    }
+  }
 
   return const_cast<DUContext*>(this);
 }
@@ -1306,9 +1361,11 @@ Declaration * DUContext::findDeclarationAt(const CursorInRevision & position) co
   if (!range().contains(position))
     return 0;
 
-  FOREACH_FUNCTION(const LocalIndexedDeclaration& child, d_func()->m_localDeclarations)
-    if (child.data(topContext())->range().contains(position))
-      return child.data(topContext());
+  foreach (Declaration* child, m_dynamicData->m_localDeclarations) {
+    if (child->range().contains(position)) {
+      return child;
+    }
+  }
 
   return 0;
 }
@@ -1320,9 +1377,11 @@ DUContext* DUContext::findContextIncluding(const RangeInRevision& range) const
   if (!this->range().contains(range))
     return 0;
 
-  FOREACH_FUNCTION(const LocalIndexedDUContext& child, d_func()->m_childContexts)
-    if (DUContext* specific = child.data(topContext())->findContextIncluding(range))
+  foreach (DUContext* child, m_dynamicData->m_childContexts) {
+    if (DUContext* specific = child->findContextIncluding(range)) {
       return specific;
+    }
+  }
 
   return const_cast<DUContext*>(this);
 }
@@ -1373,24 +1432,22 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
   // It may happen that the deletion of one declaration triggers the deletion of another one
   // Therefore we copy the list of indexed declarations and work on those. Indexed declarations
   // will return zero for already deleted declarations.
-  KDevVarLengthArray<LocalIndexedDeclaration, 10> declarationsCopy; 
-  {
-    declarationsCopy = d_func_dynamic()->m_localDeclarationsList();
+  KDevVarLengthArray<LocalIndexedDeclaration> indexedLocal;
+  if (d_func()->m_localDeclarations()) {
+    indexedLocal.append(d_func()->m_localDeclarations(), d_func()->m_localDeclarationsSize());
+  }
+  foreach (const LocalIndexedDeclaration& indexed, m_dynamicData->m_localDeclarations) {
+    auto dec = indexed.data(topContext());
+    if (dec && !encountered.contains(dec) && (!dec->isAutoDeclaration() || !dec->hasUses())) {
+      delete dec;
+    }
   }
 
-  FOREACH_ARRAY(const LocalIndexedDeclaration& indexedDec, declarationsCopy)
-  {
-    Declaration* dec = indexedDec.data(topContext());
-    if (dec && !encountered.contains(dec) && (!dec->isAutoDeclaration() || !dec->hasUses()))
-      delete dec;
+  foreach (DUContext* childContext, m_dynamicData->m_childContexts) {
+    if (!encountered.contains(childContext)) {
+      delete childContext;
+    }
   }
-    
-  //Copy since the array may change during the iteration
-  KDevVarLengthArray<LocalIndexedDUContext, 10> childrenCopy = d_func_dynamic()->m_childContextsList();
-  
-  FOREACH_ARRAY(const LocalIndexedDUContext& childContext, childrenCopy)
-    if (!encountered.contains(childContext.data(topContext())))
-      delete childContext.data(topContext());
 }
 
 TopDUContext* DUContext::topContext() const
@@ -1432,7 +1489,7 @@ DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, const Ptr& next
 {
   if(!id.isEmpty()) {
     if(id.count() > start)
-      identifier = id.at(start);
+      identifier = id.indexedAt(start);
 
     if(id.count() > start+1)
       addNext(Ptr( new SearchItem(id, nextItem, start+1) ));
@@ -1450,7 +1507,7 @@ DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, const PtrList& 
 : isExplicitlyGlobal(start == 0 ? id.explicitlyGlobal() : false)
 {
   if(id.count() > start)
-    identifier = id.at(start);
+    identifier = id.indexedAt(start);
 
   if(id.count() > start+1)
     addNext(Ptr( new SearchItem(id, nextItems, start+1) ));
@@ -1458,14 +1515,14 @@ DUContext::SearchItem::SearchItem(const QualifiedIdentifier& id, const PtrList& 
     next = nextItems;
 }
 
-DUContext::SearchItem::SearchItem(bool explicitlyGlobal, const Identifier& id, const PtrList& nextItems)
+DUContext::SearchItem::SearchItem(bool explicitlyGlobal, const IndexedIdentifier& id, const PtrList& nextItems)
   : isExplicitlyGlobal(explicitlyGlobal)
   , identifier(id)
   , next(nextItems)
 {
 }
 
-DUContext::SearchItem::SearchItem(bool explicitlyGlobal, const Identifier& id, const Ptr& nextItem)
+DUContext::SearchItem::SearchItem(bool explicitlyGlobal, const IndexedIdentifier& id, const Ptr& nextItem)
   : isExplicitlyGlobal(explicitlyGlobal)
   , identifier(id)
 {
@@ -1597,16 +1654,14 @@ void DUContext::visit(DUChainVisitor& visitor)
   ENSURE_CAN_READ
 
   visitor.visit(this);
-  
-  TopDUContext* top = topContext();
-  
-  {
-    FOREACH_FUNCTION(const LocalIndexedDeclaration& decl, d_func()->m_localDeclarations)
-      visitor.visit(decl.data(top));
+
+  foreach (Declaration* decl, m_dynamicData->m_localDeclarations) {
+    visitor.visit(decl);
   }
-    
-  FOREACH_FUNCTION(const LocalIndexedDUContext& ctx, d_func()->m_childContexts)
-    ctx.data(top)->visit(visitor);
+
+  foreach (DUContext* childContext, m_dynamicData->m_childContexts) {
+    childContext->visit(visitor);
+  }
 }
 
 }
