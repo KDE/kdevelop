@@ -657,19 +657,24 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
                                           DeclarationList& ret, const TopDUContext* source,
                                           SearchFlags flags, uint depth ) const
 {
-  if(depth > maxParentDepth) {
+  if (depth > maxParentDepth) {
     kDebug() << "maximum depth reached in" << scopeIdentifier(true);
     return false;
   }
   
   DUCHAIN_D(DUContext);
-  if( d_func()->m_contextType != Namespace ) { //If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
-    for(int a = 0; a < baseIdentifiers.size(); ++a)
-      if(!baseIdentifiers[a]->isExplicitlyGlobal && baseIdentifiers[a]->next.isEmpty()) //It makes no sense searching locally for qualified identifiers
+  if (d_func()->m_contextType != Namespace) {
+    // If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
+    for (int a = 0; a < baseIdentifiers.size(); ++a) {
+      if (!baseIdentifiers[a]->isExplicitlyGlobal && baseIdentifiers[a]->next.isEmpty()) {
+        // It makes no sense searching locally for qualified identifiers
         findLocalDeclarationsInternal(baseIdentifiers[a]->identifier, position, dataType, ret, source, flags);
+      }
+    }
 
-    if( foundEnough(ret, flags) )
+    if (foundEnough(ret, flags)) {
       return true;
+    }
   }
 
   ///Step 1: Apply namespace-aliases and -imports
@@ -677,47 +682,49 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
   //Because of namespace-imports and aliases, this identifier may need to be searched under multiple names
   applyAliases(baseIdentifiers, aliasedIdentifiers, position, false,  type() != DUContext::Namespace && type() != DUContext::Global);
 
-
-  if( d->m_importedContextsSize() != 0 ) {
+  if (d->m_importedContextsSize() != 0) {
     ///Step 2: Give identifiers that are not marked as explicitly-global to imported contexts(explicitly global ones are treatead in TopDUContext)
     SearchItem::PtrList nonGlobalIdentifiers;
-    FOREACH_ARRAY( const SearchItem::Ptr& identifier, aliasedIdentifiers )
-      if( !identifier->isExplicitlyGlobal )
+    foreach (const SearchItem::Ptr& identifier, aliasedIdentifiers) {
+      if (!identifier->isExplicitlyGlobal) {
         nonGlobalIdentifiers << identifier;
+      }
+    }
 
-    if( !nonGlobalIdentifiers.isEmpty() ) {
+    if (!nonGlobalIdentifiers.isEmpty()) {
       for(int import = d->m_importedContextsSize()-1; import >= 0; --import ) {
-        DUContext* context = d->m_importedContexts()[import].context(source);
-
-        while( !context && import > 0 ) {
-          --import;
-          context = d->m_importedContexts()[import].context(source);
+        if (position.isValid() && d->m_importedContexts()[import].position.isValid() && position < d->m_importedContexts()[import].position) {
+          continue;
         }
 
-        if(context == this) {
+        DUContext* context = d->m_importedContexts()[import].context(source);
+
+        if (!context) {
+          continue;
+        } else if (context == this) {
           kDebug() << "resolved self as import:" << scopeIdentifier(true);
           continue;
         }
 
-        if( !context )
-          break;
-
-        if( position.isValid() && d->m_importedContexts()[import].position.isValid() && position < d->m_importedContexts()[import].position )
-          continue;
-
-        if( !context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->range().end, dataType, ret, source, flags | InImportedParentContext, depth+1) )
+        if (!context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->range().end,
+                                               dataType, ret, source, flags | InImportedParentContext, depth+1))
+        {
           return false;
+        }
       }
     }
   }
 
-  if( foundEnough(ret, flags) )
+  if (foundEnough(ret, flags)) {
     return true;
+  }
 
   ///Step 3: Continue search in parent-context
   if (!(flags & DontSearchInParent) && shouldSearchInParent(flags) && m_dynamicData->m_parentContext) {
     applyUpwardsAliases(aliasedIdentifiers, source);
-    return m_dynamicData->m_parentContext->findDeclarationsInternal(aliasedIdentifiers, url() == m_dynamicData->m_parentContext->url() ? position : m_dynamicData->m_parentContext->range().end, dataType, ret, source, flags, depth);
+    return m_dynamicData->m_parentContext->findDeclarationsInternal(aliasedIdentifiers,
+                                                                    url() == m_dynamicData->m_parentContext->url() ? position : m_dynamicData->m_parentContext->range().end,
+                                                                    dataType, ret, source, flags, depth);
   }
   return true;
 }
