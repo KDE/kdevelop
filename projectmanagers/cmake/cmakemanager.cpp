@@ -154,12 +154,12 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 
 Path::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
-    return Path::List();
+    return m_projects[item->project()].files[item->path()].includes;
 }
 
 QHash<QString, QString> CMakeManager::defines(KDevelop::ProjectBaseItem *item ) const
 {
-    return QHash<QString, QString>();
+    return m_projects[item->project()].files[item->path()].defines;
 }
 
 KDevelop::IProjectBuilder * CMakeManager::builder() const
