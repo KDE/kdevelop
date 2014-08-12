@@ -201,12 +201,15 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
         features |= DUChainDumper::DumpProblems;
     }
 
-    DUChainReadLocker lock;
-    std::cerr << "Context:" << std::endl;
-    DUChainDumper dumpChain(features);
-    dumpChain.dump(topContext, m_args->getOption("dump-depth").toInt());
+    if (auto depth = m_args->getOption("dump-depth").toInt()) {
+        DUChainReadLocker lock;
+        std::cerr << "Context:" << std::endl;
+        DUChainDumper dumpChain(features);
+        dumpChain.dump(topContext, depth);
+    }
 
     if (m_args->isSet("dump-graph")) {
+        DUChainReadLocker lock;
         DumpDotGraph dumpGraph;
         const QString dotOutput = dumpGraph.dotGraph(topContext);
         std::cout << qPrintable(dotOutput) << std::endl;
