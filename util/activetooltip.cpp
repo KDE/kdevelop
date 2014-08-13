@@ -43,14 +43,12 @@ public:
     QRect rect_;
     QRegion rectExtensions_;
     QList<QPointer<QObject> > friendWidgets_;
-    int mouseOut_;
 };
 
 ActiveToolTip::ActiveToolTip(QWidget *parent, const QPoint& position)
     : QWidget(parent, Qt::ToolTip), d(new ActiveToolTipPrivate)
 {
     Q_ASSERT(parent);
-    d->mouseOut_ = 0;
     d->previousDistance_ = std::numeric_limits<uint>::max();
     setMouseTracking(true);
     d->rect_ = QRect(position, position);
@@ -79,69 +77,29 @@ ActiveToolTip::~ActiveToolTip()
 bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
 {
     switch (e->type()) {
-
-    case QEvent::WindowActivate:
-    {
-        if(insideThis(object))
+    case QEvent::MouseMove:
+        if (underMouse() || insideThis(object)) {
             return false;
-        if(isVisible())
-            kDebug() << "closing because of window activation";
-        close();
-    }
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseButtonRelease:
-    case QEvent::MouseButtonDblClick:
-    case QEvent::Wheel:
-        /* If the click is within tooltip, it's fine.
-           Clicks outside close it.  */
-        {
-            //Do not close the widget when NoFocus widgets are used
-            QWidget* widget = dynamic_cast<QWidget*>(object);
-            if(widget && widget->focusPolicy() == Qt::NoFocus)
-                return false;
-        }
-        if (!insideThis(object)) {
-            if(isVisible())
-                kDebug() << "closing because of click into" << object;
-            close();
-        }
+        } else {
+            QPoint globalPos = static_cast<QMouseEvent*>(e)->globalPos();
+            int distance = (d->rect_.center() - globalPos).manhattanLength();
 
-    // FIXME: revisit this code later.
-#if 0
-    case QEvent::FocusIn:
-    case QEvent::FocusOut:
+            if(distance > (int)d->previousDistance_) {
+                // Close if the widget under the mouse is not a child widget of the tool-tip
+                kDebug() << "closing because of mouse move outside the widget";
+                close();
+            } else {
+                d->previousDistance_ = distance;
+            }
+        }
+        break;
+
+    case QEvent::WindowBlocked:
+        // Modal dialog activated somewhere, it is the only case where a cursor
+        // move may be missed and the popup has to be force-closed
         close();
         break;
-#endif
-    case QEvent::MouseMove:
-        {
-            QPoint globalPos = static_cast<QMouseEvent*>(e)->globalPos();
-            if (!d->rect_.isNull() 
-                && !d->rect_.contains(globalPos) && !d->rectExtensions_.contains(globalPos) && !insideThis(object)) {
-                
-                int distance = (d->rect_.center() - static_cast<QMouseEvent*>(e)->globalPos()).manhattanLength();
-                
-                // On X, when the cursor leaves the tooltip and enters
-                // the parent, we sometimes get some wrong Y coordinate.
-                // Don't know why, so wait for two out-of-range mouse
-                // positions before closing.
-                
-                //Additional test: When the cursor has been moved towards the tooltip, don't close it.
-                if(distance > (int)d->previousDistance_)
-                {
-                    ++d->mouseOut_;
-                    emit mouseOut();
-                }else
-                    d->previousDistance_ = distance;
-            } else{
-                d->mouseOut_ = 0;
-                emit mouseIn();
-            }
-            if (d->mouseOut_ == 2) {
-                kDebug() << "closing because of mouse move";
-                close();
-            }
-        }
+
     default:
         break;
     }
