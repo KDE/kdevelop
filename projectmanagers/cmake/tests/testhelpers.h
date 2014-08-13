@@ -36,6 +36,8 @@ static QString currentCMakeBinaryKey = "CMake Binary";
 static QString currentBuildTypeKey = "Build Type";
 static QString currentInstallDirKey = "Install Directory";
 static QString currentExtraArgumentsKey = "Extra Arguments";
+static QString currentBuildDirectoryIndexKey = "Current Build Directory Index";
+static QString projectBuildDirectoryCount = "ProjectRootRelative";
 static QString projectRootRelativeKey = "ProjectRootRelative";
 static QString projectBuildDirs = "BuildDirs";
 
@@ -104,12 +106,16 @@ void defaultConfigure(const TestProjectPaths& paths)
         }
     }
 
-    cmakeGrp.writeEntry<QUrl>( currentBuildDirKey, bd.buildFolder() );
-    cmakeGrp.writeEntry<QUrl>( currentCMakeBinaryKey, bd.cmakeBinary() );
-    cmakeGrp.writeEntry<QUrl>( currentInstallDirKey, bd.installPrefix() );
-    cmakeGrp.writeEntry( currentExtraArgumentsKey, bd.extraArguments() );
-    cmakeGrp.writeEntry( currentBuildTypeKey, bd.buildType() );
-    cmakeGrp.writeEntry( projectBuildDirs, QStringList() << bd.buildFolder().toLocalFile());
+    cmakeGrp.writeEntry( projectBuildDirectoryCount, 1);
+    cmakeGrp.writeEntry( currentBuildDirectoryIndexKey, 0);
+
+    KConfigGroup buildDirGrp = cmakeGrp.group(QStringLiteral("CMake Build Directory 0"));
+    buildDirGrp.writeEntry<QUrl>( currentBuildDirKey, bd.buildFolder() );
+    buildDirGrp.writeEntry<QUrl>( currentCMakeBinaryKey, bd.cmakeBinary() );
+    buildDirGrp.writeEntry<QUrl>( currentInstallDirKey, bd.installPrefix() );
+    buildDirGrp.writeEntry( currentExtraArgumentsKey, bd.extraArguments() );
+    buildDirGrp.writeEntry( currentBuildTypeKey, bd.buildType() );
+    buildDirGrp.writeEntry( projectBuildDirs, QStringList() << bd.buildFolder().toLocalFile());
 
     config.sync();
 }
