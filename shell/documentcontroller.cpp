@@ -229,7 +229,7 @@ struct DocumentControllerPrivate {
 
         // clean it and resolve possible symlink
         url.cleanPath( KUrl::SimplifyDirSeparators );
-        if ( url.QUrl::isLocalFile() )
+        if ( url.isLocalFile() )
         {
             QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
             if ( !path.isEmpty() )
@@ -254,7 +254,7 @@ struct DocumentControllerPrivate {
                 kDebug() << "invalid URL:" << url.url();
                 return 0;
             }
-            else if (!KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, ICore::self()->uiController()->activeMainWindow() ))
+            else if (url.scheme() != "kdev" && !KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, ICore::self()->uiController()->activeMainWindow() ))
             {
                 //Don't create a new file if we are not in the code mode.
                 if (static_cast<KDevelop::MainWindow*>(ICore::self()->uiController()->activeMainWindow())->area()->objectName() != "code") {
