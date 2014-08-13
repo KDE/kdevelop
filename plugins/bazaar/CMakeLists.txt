@@ -10,7 +10,7 @@ set(kdevbazaar_SRCS
     copyjob.cpp
 )
 
-kde4_add_plugin(kdevbazaar ${kdevbazaar_SRCS})
+add_library(kdevbazaar MODULE ${kdevbazaar_SRCS})
 target_link_libraries(kdevbazaar
     ${KDEVPLATFORM_VCS_LIBRARIES}
 )
