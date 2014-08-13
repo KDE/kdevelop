@@ -13,7 +13,7 @@ set(standardoutputview_LIB_SRCS
 
 add_library(kdevstandardoutputview MODULE ${standardoutputview_LIB_SRCS})
 target_link_libraries(kdevstandardoutputview
-    kdevplatforminterfaces sublime kdevplatformutil kdevplatformoutputview)
+    KDev::Interfaces KDev::Sublime KDev::Util KDev::OutputView)
 
 install(TARGETS kdevstandardoutputview DESTINATION ${PLUGIN_INSTALL_DIR} )
 

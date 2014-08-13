@@ -3,22 +3,23 @@ set_package_properties(Qt5WebKitWidgets PROPERTIES
     URL "http://qt-project.org/"
     TYPE REQUIRED)
 
-set(kdevplatformdocumentation_LIB_SRCS
+set(KDevPlatformDocumentation_LIB_SRCS
     standarddocumentationview.cpp
     documentationfindwidget.cpp
     documentationview.cpp
 )
 
-qt5_wrap_ui(kdevplatformdocumentation_LIB_SRCS documentationfindwidget.ui)
-add_library(kdevplatformdocumentation SHARED ${kdevplatformdocumentation_LIB_SRCS})
-generate_export_header(kdevplatformdocumentation EXPORT_FILE_NAME documentationexport.h)
+qt5_wrap_ui(KDevPlatformDocumentation_LIB_SRCS documentationfindwidget.ui)
+add_library(KDevPlatformDocumentation ${KDevPlatformDocumentation_LIB_SRCS})
+add_library(KDev::Documentation ALIAS KDevPlatformDocumentation)
+generate_export_header(KDevPlatformDocumentation EXPORT_FILE_NAME documentationexport.h)
 
-install(TARGETS kdevplatformdocumentation EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformDocumentation EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-target_link_libraries(kdevplatformdocumentation
-        LINK_PUBLIC kdevplatforminterfaces Qt5::WebKitWidgets)
+target_link_libraries(KDevPlatformDocumentation
+        LINK_PUBLIC KDev::Interfaces Qt5::WebKitWidgets)
 
-set_target_properties(kdevplatformdocumentation PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
+set_target_properties(KDevPlatformDocumentation PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Documentation)
 
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/documentationexport.h

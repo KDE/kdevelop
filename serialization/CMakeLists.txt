@@ -1,23 +1,25 @@
-set(kdevplatformserialization_LIB_SRCS
+set(KDevPlatformSerialization_LIB_SRCS
     abstractitemrepository.cpp
     indexedstring.cpp
     itemrepositoryregistry.cpp
     referencecounting.cpp
 )
 
-add_library(kdevplatformserialization SHARED ${kdevplatformserialization_LIB_SRCS})
-generate_export_header(kdevplatformserialization EXPORT_FILE_NAME serializationexport.h)
+add_library(KDevPlatformSerialization SHARED ${KDevPlatformSerialization_LIB_SRCS})
+add_library(KDev::Serialization ALIAS KDevPlatformSerialization)
 
-target_link_libraries(kdevplatformserialization
+generate_export_header(KDevPlatformSerialization EXPORT_FILE_NAME serializationexport.h)
+
+target_link_libraries(KDevPlatformSerialization
 LINK_PUBLIC
-    kdevplatforminterfaces
+    KDev::Interfaces
 LINK_PRIVATE
     KF5::KDELibs4Support
-    kdevplatformutil
+    KDev::Util
 )
 
-set_target_properties(kdevplatformserialization PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatformserialization EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+set_target_properties(KDevPlatformSerialization PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
+install(TARGETS KDevPlatformSerialization EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/serializationexport.h

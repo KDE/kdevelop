@@ -25,7 +25,7 @@ set(kdevsnippet_PART_UI
 qt5_wrap_ui(kdevsnippet_PART_SRCS ${kdevsnippet_PART_UI})
 add_library(kdevsnippet MODULE ${kdevsnippet_PART_SRCS})
 target_link_libraries(kdevsnippet KF5::TextEditor KF5::TextEditor KF5::KIOWidgets KF5::Parts KF5::NewStuff
-kdevplatformlanguage kdevplatforminterfaces)
+KDev::Language KDev::Interfaces)
 install( TARGETS kdevsnippet DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############

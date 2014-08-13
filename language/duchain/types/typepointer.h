@@ -29,7 +29,6 @@
 #ifndef KDEVPLATFORM_TYPEPOINTER_H
 #define KDEVPLATFORM_TYPEPOINTER_H
 
-#include <kdemacros.h>
 
 #include <QtCore/QExplicitlySharedDataPointer>
 

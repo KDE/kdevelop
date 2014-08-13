@@ -8,7 +8,7 @@ target_link_libraries(tst_itemrepository
 
   Qt5::Test
   ${KDEVPLATFORM_TESTS_LIBRARIES}
-  kdevplatformserialization
+  KDev::Serialization
 )
 
 ########### next target ###############
@@ -21,6 +21,6 @@ target_link_libraries(tst_indexedstring
 
   Qt5::Test
   ${KDEVPLATFORM_TESTS_LIBRARIES}
-  kdevplatformserialization
+  KDev::Serialization
 )
 

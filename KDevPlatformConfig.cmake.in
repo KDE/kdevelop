@@ -39,38 +39,24 @@ if( NOT TARGET KDevPlatformImport__kdevplatforminterfaces )
     include("${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformTargets.cmake")
 endif( NOT TARGET KDevPlatformImport__kdevplatforminterfaces )
 
-macro( _kdevplatform_set_lib_vars _prefix _lib )
-  set( KDEVPLATFORM_${_prefix}_LIBRARIES KDevPlatformImport__${_lib} )
+macro( _kdevplatform_set_lib_vars _lib )
+  string(TOUPPER ${_lib} upperLib )
+  set( KDEVPLATFORM_${upperLib}_LIBRARIES KDev::${_lib} )
+  mark_as_advanced(KDEVPLATFORM_${upperLib}_LIBRARIES)
 endmacro( _kdevplatform_set_lib_vars )
 
-_kdevplatform_set_lib_vars( INTERFACES kdevplatforminterfaces )
-_kdevplatform_set_lib_vars( PROJECT kdevplatformproject )
-_kdevplatform_set_lib_vars( LANGUAGE kdevplatformlanguage )
-_kdevplatform_set_lib_vars( UTIL kdevplatformutil ) 
-_kdevplatform_set_lib_vars( SHELL kdevplatformshell )
-_kdevplatform_set_lib_vars( SUBLIME sublime )
-_kdevplatform_set_lib_vars( VCS kdevplatformvcs )
-_kdevplatform_set_lib_vars( OUTPUTVIEW kdevplatformoutputview )
-_kdevplatform_set_lib_vars( DEBUGGER kdevplatformdebugger )
-_kdevplatform_set_lib_vars( DOCUMENTATION kdevplatformdocumentation )
-_kdevplatform_set_lib_vars( TESTS kdevplatformtests )
-_kdevplatform_set_lib_vars( JSONTESTS kdevplatformjsontests )
-_kdevplatform_set_lib_vars( SERIALIZATION kdevplatformserialization )
+_kdevplatform_set_lib_vars( Interfaces )
+_kdevplatform_set_lib_vars( Project )
+_kdevplatform_set_lib_vars( Language )
+_kdevplatform_set_lib_vars( Util )
+_kdevplatform_set_lib_vars( Shell )
+_kdevplatform_set_lib_vars( Sublime )
+_kdevplatform_set_lib_vars( Vcs )
+_kdevplatform_set_lib_vars( OutputView )
+_kdevplatform_set_lib_vars( Debugger )
+_kdevplatform_set_lib_vars( Documentation)
+_kdevplatform_set_lib_vars( Tests )
+_kdevplatform_set_lib_vars( JsonTests )
+_kdevplatform_set_lib_vars( Serialization )
 
 include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
-
-mark_as_advanced(
-    KDEVPLATFORM_INTERFACES_LIBRARIES
-    KDEVPLATFORM_LANGUAGE_LIBRARIES
-    KDEVPLATFORM_OUTPUTVIEW_LIBRARIES
-    KDEVPLATFORM_PROJECT_LIBRARIES
-    KDEVPLATFORM_SUBLIME_LIBRARIES
-    KDEVPLATFORM_SHELL_LIBRARIES
-    KDEVPLATFORM_UTIL_LIBRARIES
-    KDEVPLATFORM_VCS_LIBRARIES
-    KDEVPLATFORM_DEBUGGER_LIBRARIES
-    KDEVPLATFORM_DOCUMENTATION_LIBRARIES
-    KDEVPLATFORM_TESTS_LIBRARIES
-    KDEVPLATFORM_JSONTESTS_LIBRARIES
-    KDEVPLATFORM_SERIALIZATION_LIBRARIES
-)

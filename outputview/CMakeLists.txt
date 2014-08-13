@@ -12,15 +12,16 @@ set( outputviewinterfaces_LIB_SRCS
     outputjob.cpp
     outputexecutejob.cpp
 )
-add_library( kdevplatformoutputview SHARED ${outputviewinterfaces_LIB_SRCS} )
-generate_export_header(kdevplatformoutputview EXPORT_FILE_NAME outputviewexport.h)
-target_link_libraries(kdevplatformoutputview PRIVATE
+add_library( KDevPlatformOutputView ${outputviewinterfaces_LIB_SRCS} )
+add_library( KDev::OutputView ALIAS KDevPlatformOutputView )
+generate_export_header(KDevPlatformOutputView EXPORT_FILE_NAME outputviewexport.h)
+target_link_libraries(KDevPlatformOutputView PRIVATE
     Qt5::Core
-    kdevplatforminterfaces
-    kdevplatformutil
+    KDev::Interfaces
+    KDev::Util
 )
-set_target_properties(kdevplatformoutputview PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatformoutputview EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+set_target_properties(KDevPlatformOutputView PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME OutputView)
+install(TARGETS KDevPlatformOutputView EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
  ########### install files ###############
  install( FILES

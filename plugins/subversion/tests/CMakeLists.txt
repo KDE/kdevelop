@@ -4,9 +4,9 @@ macro(SVN_CREATE_TEST name)
     target_link_libraries(${name}
                               Qt5::Test
                               Qt5::Gui
-                              kdevplatformtests
-                              kdevplatformutil
-                              kdevplatformvcs
+                              KDev::Tests
+                              KDev::Util
+                              KDev::Vcs
                          )
 endmacro(SVN_CREATE_TEST)
 

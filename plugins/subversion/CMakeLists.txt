@@ -87,11 +87,11 @@ target_link_libraries(kdevsubversion
                     KF5::TextEditor
                     KF5::ThreadWeaver
                     KF5::Parts
-                    kdevplatforminterfaces
-                    kdevplatformvcs
-                    kdevplatformoutputview
-                    kdevplatformproject
-                    kdevplatformlanguage
+                    KDev::Interfaces
+                    KDev::Vcs
+                    KDev::OutputView
+                    KDev::Project
+                    KDev::Language
                     )
 
 install(TARGETS kdevsubversion DESTINATION ${PLUGIN_INSTALL_DIR} )

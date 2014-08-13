@@ -2,7 +2,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9508 )
 
 ########### next target ###############
 
-set(kdevplatformutil_LIB_SRCS
+set(KDevPlatformUtil_LIB_SRCS
     autoorientedsplitter.cpp
     foregroundlock.cpp
     formattinghelpers.cpp
@@ -26,7 +26,7 @@ set(kdevplatformutil_LIB_SRCS
     path.cpp
 )
 
-set (kdevplatformutil_LIB_UI
+set (KDevPlatformUtil_LIB_UI
     runoptions.ui
 )
 
@@ -38,20 +38,22 @@ add_subdirectory(duchainify)
 
 add_subdirectory(tests)
 
-qt5_wrap_ui(kdevplatformutil_LIB_SRCS ${kdevplatformutil_LIB_US})
-add_library(kdevplatformutil SHARED ${kdevplatformutil_LIB_SRCS})
-generate_export_header(kdevplatformutil EXPORT_FILE_NAME utilexport.h)
-target_link_libraries(kdevplatformutil
+qt5_wrap_ui(KDevPlatformUtil_LIB_SRCS ${KDevPlatformUtil_LIB_US})
+add_library(KDevPlatformUtil ${KDevPlatformUtil_LIB_SRCS})
+add_library(KDev::Util ALIAS KDevPlatformUtil)
+
+generate_export_header(KDevPlatformUtil EXPORT_FILE_NAME utilexport.h)
+target_link_libraries(KDevPlatformUtil
 LINK_PUBLIC
     KF5::ConfigWidgets
     KF5::ItemModels
 LINK_PRIVATE
     KF5::KCMUtils
-    kdevplatforminterfaces
+    KDev::Interfaces
 )
-target_include_directories(kdevplatformutil INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kdevplatform>")
-set_target_properties(kdevplatformutil PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatformutil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+target_include_directories(KDevPlatformUtil INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kdevplatform>")
+set_target_properties(KDevPlatformUtil PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Util)
+install(TARGETS KDevPlatformUtil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES kdevplatform_shell_environment.sh DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
 install( FILES kdev_format_source DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)

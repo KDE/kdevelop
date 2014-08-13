@@ -94,19 +94,19 @@ endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/)
 
 # Now set the usual KDEVPLATFORM_XXX_LIBRARIES variable so we can more easily move plugins around
-set(KDEVPLATFORM_SUBLIME_LIBRARIES sublime)
-set(KDEVPLATFORM_INTERFACES_LIBRARIES kdevplatforminterfaces)
-set(KDEVPLATFORM_LANGUAGE_LIBRARIES kdevplatformlanguage)
-set(KDEVPLATFORM_PROJECT_LIBRARIES kdevplatformproject)
-set(KDEVPLATFORM_UTIL_LIBRARIES kdevplatformutil)
-set(KDEVPLATFORM_OUTPUTVIEW_LIBRARIES kdevplatformoutputview)
-set(KDEVPLATFORM_VCS_LIBRARIES kdevplatformvcs)
-set(KDEVPLATFORM_SHELL_LIBRARIES kdevplatformshell)
-set(KDEVPLATFORM_TESTS_LIBRARIES kdevplatformtests)
-set(KDEVPLATFORM_JSONTESTS_LIBRARIES kdevplatformjsontests)
-set(KDEVPLATFORM_DEBUGGER_LIBRARIES kdevplatformdebugger)
-set(KDEVPLATFORM_DOCUMENTATION_LIBRARIES kdevplatformdocumentation)
-set(KDEVPLATFORM_SERIALIZATION_LIBRARIES kdevplatformserialization)
+set(KDEVPLATFORM_SUBLIME_LIBRARIES KDev::Sublime)
+set(KDEVPLATFORM_INTERFACES_LIBRARIES KDev::Interfaces)
+set(KDEVPLATFORM_LANGUAGE_LIBRARIES KDev::Language)
+set(KDEVPLATFORM_PROJECT_LIBRARIES KDev::Project)
+set(KDEVPLATFORM_UTIL_LIBRARIES KDev::Util)
+set(KDEVPLATFORM_OUTPUTVIEW_LIBRARIES KDev::OutputView)
+set(KDEVPLATFORM_VCS_LIBRARIES KDev::Vcs)
+set(KDEVPLATFORM_SHELL_LIBRARIES KDev::Shell)
+set(KDEVPLATFORM_TESTS_LIBRARIES KDev::Tests)
+set(KDEVPLATFORM_JSONTESTS_LIBRARIES KDev::JsonTests)
+set(KDEVPLATFORM_DEBUGGER_LIBRARIES KDev::Debugger)
+set(KDEVPLATFORM_DOCUMENTATION_LIBRARIES KDev::Documentation)
+set(KDEVPLATFORM_SERIALIZATION_LIBRARIES KDev::Serialization)
 
 add_subdirectory(sublime)
 add_subdirectory(interfaces)
@@ -155,7 +155,7 @@ install( FILES
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}" )
 install( EXPORT KDevPlatformTargets
          DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-         NAMESPACE KDevPlatformImport__
+         NAMESPACE KDev::
          FILE KDevPlatformTargets.cmake )
 
 include(CTest)

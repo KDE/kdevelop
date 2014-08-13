@@ -38,11 +38,11 @@ add_library(kdevcvs MODULE ${kdevcvs_PART_SRCS})
 target_link_libraries(kdevcvs
     KF5::KIOWidgets
     KF5::Parts
-    kdevplatformutil
-    kdevplatforminterfaces
-    kdevplatformvcs
-    kdevplatformproject
-    kdevplatformlanguage
+    KDev::Util
+    KDev::Interfaces
+    KDev::Vcs
+    KDev::Project
+    KDev::Language
 )
 
 install(TARGETS kdevcvs DESTINATION ${PLUGIN_INSTALL_DIR} )

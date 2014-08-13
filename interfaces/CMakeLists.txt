@@ -1,5 +1,5 @@
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9502 )
-set(kdevplatforminterfaces_LIB_SRCS
+set(KDevPlatformInterfaces_LIB_SRCS
     iassistant.cpp
     context.cpp
     iplugin.cpp
@@ -42,9 +42,10 @@ set(kdevplatforminterfaces_LIB_SRCS
 )
 configure_file(ipluginversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h)
 
-add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
-generate_export_header(kdevplatforminterfaces EXPORT_FILE_NAME interfacesexport.h)
-target_link_libraries(kdevplatforminterfaces
+add_library(KDevPlatformInterfaces ${KDevPlatformInterfaces_LIB_SRCS})
+add_library(KDev::Interfaces ALIAS KDevPlatformInterfaces)
+generate_export_header(KDevPlatformInterfaces EXPORT_FILE_NAME interfacesexport.h)
+target_link_libraries(KDevPlatformInterfaces
 LINK_PUBLIC
     KF5::Parts
     KF5::TextEditor
@@ -56,12 +57,12 @@ LINK_PRIVATE
     KF5::KCMUtils
     KF5::ThreadWeaver
 )
-target_include_directories(kdevplatforminterfaces INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kdevplatform>")
+target_include_directories(KDevPlatformInterfaces INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kdevplatform>")
 # TODO: this is ugly (sort-of cyclic dependecy):
-target_include_directories(kdevplatforminterfaces PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../util") # for utilexport.h
+target_include_directories(KDevPlatformInterfaces PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../util") # for utilexport.h
 
-set_target_properties(kdevplatforminterfaces PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatforminterfaces EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+set_target_properties(KDevPlatformInterfaces PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Interfaces)
+install(TARGETS KDevPlatformInterfaces EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
     iassistant.h

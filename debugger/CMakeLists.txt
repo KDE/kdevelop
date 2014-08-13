@@ -3,7 +3,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9531 )
 
 ########### next target ###############
 
-set( kdevplatformdebugger_LIB_SRCS
+set( KDevPlatformDebugger_LIB_SRCS
     interfaces/idebugsession.cpp
     interfaces/iframestackmodel.cpp
     interfaces/ibreakpointcontroller.cpp
@@ -22,19 +22,23 @@ set( kdevplatformdebugger_LIB_SRCS
     framestack/framestackmodel.cpp
     framestack/framestackwidget.cpp
 )
-add_library(kdevplatformdebugger SHARED ${kdevplatformdebugger_LIB_SRCS})
-generate_export_header(kdevplatformdebugger EXPORT_FILE_NAME debuggerexport.h)
-target_link_libraries(kdevplatformdebugger LINK_PUBLIC
-    kdevplatforminterfaces
-    kdevplatformutil
+add_library(KDevPlatformDebugger ${KDevPlatformDebugger_LIB_SRCS})
+generate_export_header(KDevPlatformDebugger EXPORT_FILE_NAME debuggerexport.h)
+target_link_libraries(KDevPlatformDebugger LINK_PUBLIC
+    KDev::Interfaces
+    KDev::Util
 LINK_PRIVATE
     Qt5::Core
     KF5::TextEditor
-    sublime
+    KDev::Sublime
 )
+add_library(KDev::Debugger ALIAS KDevPlatformDebugger)
 
-set_target_properties(kdevplatformdebugger PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatformdebugger EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+set_target_properties(KDevPlatformDebugger PROPERTIES
+    VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION}
+    EXPORT_NAME Debugger
+)
+install(TARGETS KDevPlatformDebugger EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 

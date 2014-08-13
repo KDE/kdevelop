@@ -5,7 +5,7 @@ set(kdevopenwith_PART_SRCS
 )
 
 add_library(kdevopenwith MODULE ${kdevopenwith_PART_SRCS})
-target_link_libraries(kdevopenwith kdevplatforminterfaces kdevplatformproject kdevplatformutil)
+target_link_libraries(kdevopenwith KDev::Interfaces KDev::Project KDev::Util)
 
 install(TARGETS kdevopenwith DESTINATION ${PLUGIN_INSTALL_DIR})
 

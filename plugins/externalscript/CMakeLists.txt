@@ -20,8 +20,8 @@ add_library(kdevexternalscript MODULE ${kdevexternalscript_PART_SRCS})
 
 target_link_libraries(kdevexternalscript
     KF5::TextEditor KF5::KIOWidgets KF5::Parts KF5::NewStuff
-    kdevplatformlanguage kdevplatforminterfaces kdevplatformproject
-    kdevplatformutil kdevplatformoutputview
+    KDev::Language KDev::Interfaces KDev::Project
+    KDev::Util KDev::OutputView
 )
 
 install( TARGETS kdevexternalscript DESTINATION ${PLUGIN_INSTALL_DIR} )

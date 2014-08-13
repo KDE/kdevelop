@@ -3,7 +3,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9501 )
 add_subdirectory(settings)
 add_subdirectory(tests)
 
-set(kdevplatformshell_LIB_SRCS
+set(KDevPlatformShell_LIB_SRCS
     workingsetcontroller.cpp
     workingsets/workingset.cpp
     workingsets/workingsetfilelabel.cpp
@@ -58,24 +58,27 @@ set(kdevplatformshell_LIB_SRCS
     areadisplay.cpp
 )
 
-set(kdevplatformshell_UI
+set(KDevPlatformShell_UI
     sessiondialog.ui
     projectinfopage.ui
     launchconfigurationdialog.ui
     projectsourcepage.ui
 )
 
-qt5_wrap_ui( kdevplatformshell_LIB_SRCS ${kdevplatformshell_UI} )
-add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
-generate_export_header(kdevplatformshell EXPORT_FILE_NAME shellexport.h)
-target_link_libraries(kdevplatformshell LINK_PUBLIC
+qt5_wrap_ui( KDevPlatformShell_LIB_SRCS ${KDevPlatformShell_UI} )
+add_library(KDevPlatformShell ${KDevPlatformShell_LIB_SRCS})
+add_library(KDev::Shell ALIAS KDevPlatformShell)
+
+generate_export_header(KDevPlatformShell EXPORT_FILE_NAME shellexport.h)
+target_link_libraries(KDevPlatformShell
+LINK_PUBLIC
     KF5::XmlGui
 
-    sublime
-    kdevplatformoutputview
-    kdevplatformdebugger
-)
-target_link_libraries(kdevplatformshell
+    KDev::Sublime
+    KDev::OutputView
+    KDev::Debugger
+    KDev::Interfaces
+    KF5::KDELibs4Support
 LINK_PRIVATE
     Qt5::Declarative
 
@@ -88,17 +91,13 @@ LINK_PRIVATE
     KF5::JobWidgets
     KF5::ItemViews
 
-    kdevplatformproject
-    kdevplatformvcs
-    kdevplatformlanguage
-    kdevplatformutil
-    kdevplatformdocumentation
-
-LINK_PUBLIC
-    kdevplatforminterfaces
-    KF5::KDELibs4Support
+    KDev::Project
+    KDev::Vcs
+    KDev::Language
+    KDev::Util
+    KDev::Documentation
 )
-set_target_properties(kdevplatformshell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
+set_target_properties(KDevPlatformShell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Shell)
 
 install(FILES
     mainwindow.h
@@ -125,7 +124,7 @@ install(FILES
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell COMPONENT Devel
 )
 
-install(TARGETS kdevplatformshell EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformShell EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevdebugger )
 install( FILES kdevsessionui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevsession )

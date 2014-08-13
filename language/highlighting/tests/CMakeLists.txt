@@ -7,4 +7,4 @@ add_test(highlightingtest highlightingtest)
 ecm_mark_as_test(highlightingtest)
 target_link_libraries(highlightingtest KF5::TextEditor
     Qt5::Test 
-    ${KDEVPLATFORM_TESTS_LIBRARIES} kdevplatformlanguage)
+    ${KDEVPLATFORM_TESTS_LIBRARIES} KDev::Language)

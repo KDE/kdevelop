@@ -12,7 +12,7 @@ set( projectfilter_SRCS
 add_library( kdevprojectfilter MODULE ${projectfilter_SRCS} )
 target_link_libraries( kdevprojectfilter
     KF5::KCMUtils
-    kdevplatformproject kdevplatformutil kdevplatforminterfaces)
+    KDev::Project KDev::Util KDev::Interfaces)
 
 install( TARGETS kdevprojectfilter DESTINATION ${PLUGIN_INSTALL_DIR} )
 
@@ -40,7 +40,7 @@ kconfig_add_kcfg_files( projectfilterkcm_SRCS projectfiltersettings.kcfgc )
 add_library( kcm_kdevprojectfilter MODULE ${projectfilterkcm_SRCS} )
 target_link_libraries( kcm_kdevprojectfilter
     KF5::KCMUtils
-    kdevplatformproject kdevplatformutil kdevplatforminterfaces)
+    KDev::Project KDev::Util KDev::Interfaces)
 
 install( TARGETS kcm_kdevprojectfilter DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kcm_kdevprojectfilter.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

@@ -5,7 +5,7 @@ add_subdirectory(duchain/tests)
 add_subdirectory(backgroundparser/tests)
 add_subdirectory(codegen/tests)
 
-set(kdevplatformlanguage_LIB_SRCS
+set(KDevPlatformLanguage_LIB_SRCS
     assistant/staticassistantsmanager.cpp
     assistant/renameaction.cpp
     assistant/renameassistant.cpp
@@ -151,30 +151,32 @@ if (Grantlee_FOUND)
     list(APPEND kdevplatformlanguage_LIB_SRCS ${grantlee_LIB_SRCS})
 endif()
 
-qt5_wrap_ui(kdevplatformlanguage_LIB_SRCS
+qt5_wrap_ui(KDevPlatformLanguage_LIB_SRCS
     codegen/basicrefactoring.ui
     codegen/progressdialogs/refactoringdialog.ui)
 
-add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
-generate_export_header(kdevplatformlanguage EXPORT_FILE_NAME languageexport.h)
-target_include_directories(kdevplatformlanguage PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/../project)
+add_library(KDevPlatformLanguage ${KDevPlatformLanguage_LIB_SRCS})
+add_library(KDev::Language ALIAS KDevPlatformLanguage)
 
-target_link_libraries(kdevplatformlanguage LINK_PUBLIC
+generate_export_header(KDevPlatformLanguage EXPORT_FILE_NAME languageexport.h)
+target_include_directories(KDevPlatformLanguage PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/../project)
+
+target_link_libraries(KDevPlatformLanguage LINK_PUBLIC
         KF5::ThreadWeaver
-        kdevplatforminterfaces
-        kdevplatformserialization
+        KDev::Interfaces
+        KDev::Serialization
 LINK_PRIVATE
         KF5::TextEditor
         KF5::Parts
         KF5::NewStuff
         KF5::Archive
         KF5::KDELibs4Support
-        kdevplatformutil
-        kdevplatformproject
+        KDev::Util
+        KDev::Project
         ${Grantlee_TEMPLATES_LIBRARIES}
 )
-set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatformlanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+set_target_properties(KDevPlatformLanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Language)
+install(TARGETS KDevPlatformLanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 

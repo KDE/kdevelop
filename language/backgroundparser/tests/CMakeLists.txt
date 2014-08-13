@@ -6,4 +6,4 @@ add_executable(backgroundparsertest ${backgroundparsertest_SRCS})
 add_test(backgroundparsertest backgroundparsertest)
 ecm_mark_as_test(backgroundparsertest)
 target_link_libraries(backgroundparsertest KF5::TextEditor
-    Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES} KF5::ThreadWeaver kdevplatformlanguage)
+    Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES} KF5::ThreadWeaver KDev::Language)

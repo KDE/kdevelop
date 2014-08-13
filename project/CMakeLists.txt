@@ -1,5 +1,5 @@
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9503 )
-set(kdevplatformproject_LIB_SRCS
+set(KDevPlatformProject_LIB_SRCS
     projectutils.cpp
     projectmodel.cpp
     projectconfigskeleton.cpp
@@ -20,23 +20,25 @@ set(kdevplatformproject_LIB_SRCS
 )
 
 
-add_library(kdevplatformproject SHARED ${kdevplatformproject_LIB_SRCS})
-generate_export_header(kdevplatformproject EXPORT_FILE_NAME projectexport.h)
-# TODO: helper.cpp needs vcsexport.h and outputviewexport.h, but can't link to kdevplatformvcs
-target_include_directories(kdevplatformproject PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../vcs/")
-target_include_directories(kdevplatformproject PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../outputview/")
-target_link_libraries(kdevplatformproject LINK_PUBLIC
-    kdevplatforminterfaces
-    kdevplatformutil # util/path.h
+add_library(KDevPlatformProject ${KDevPlatformProject_LIB_SRCS})
+add_library(KDev::Project ALIAS KDevPlatformProject)
+
+generate_export_header(KDevPlatformProject EXPORT_FILE_NAME projectexport.h)
+# TODO: helper.cpp needs vcsexport.h and outputviewexport.h, but can't link to KDev::Vcs
+target_include_directories(KDevPlatformProject PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../vcs/")
+target_include_directories(KDevPlatformProject PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../outputview/")
+target_link_libraries(KDevPlatformProject LINK_PUBLIC
+    KDev::Interfaces
+    KDev::Util # util/path.h
 )
-target_link_libraries(kdevplatformproject LINK_PRIVATE
-    kdevplatforminterfaces
-    kdevplatformserialization
+target_link_libraries(KDevPlatformProject LINK_PRIVATE
+    KDev::Interfaces
+    KDev::Serialization
     KF5::KIOWidgets
     Qt5::Concurrent
 )
-set_target_properties(kdevplatformproject PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatformproject EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+set_target_properties(KDevPlatformProject PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Project)
+install(TARGETS KDevPlatformProject EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 add_subdirectory(tests)
 

@@ -25,7 +25,7 @@ target_link_libraries(kdevappwizard
     KF5::KIOWidgets
     KF5::NewStuff
     KF5::Archive
-    kdevplatforminterfaces kdevplatformvcs kdevplatformlanguage kdevplatformutil)
+    KDev::Interfaces KDev::Vcs KDev::Language KDev::Util)
 
 install(TARGETS kdevappwizard DESTINATION ${PLUGIN_INSTALL_DIR} )
 

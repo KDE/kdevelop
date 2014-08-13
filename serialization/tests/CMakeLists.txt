@@ -8,7 +8,7 @@ add_executable(itemrepositorytest ${itemrepositorytest_SRCS})
 add_test(itemrepositorytest itemrepositorytest)
 ecm_mark_as_test(itemrepositorytest)
 target_link_libraries(itemrepositorytest KF5::TextEditor
-    Qt5::Test kdevplatformserialization ${KDEVPLATFORM_TESTS_LIBRARIES})
+    Qt5::Test KDev::Serialization ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 ########### next target ###############
 
@@ -16,7 +16,7 @@ set(itemrepositoryregistry_automatic_test_SRCS test_itemrepositoryregistry_autom
 add_executable(itemrepositoryregistry_automatic_test ${itemrepositoryregistry_automatic_test_SRCS})
 ecm_mark_as_test(itemrepositoryregistry_automatic_test)
 target_link_libraries(itemrepositoryregistry_automatic_test Qt5::Test
-    kdevplatformserialization ${KDEVPLATFORM_TESTS_LIBRARIES})
+    KDev::Serialization ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 ########### next target ###############
 
@@ -24,6 +24,6 @@ set(itemrepositoryregistry_deferred_test_SRCS test_itemrepositoryregistry_deferr
 add_executable(itemrepositoryregistry_deferred_test ${itemrepositoryregistry_deferred_test_SRCS})
 ecm_mark_as_test(itemrepositoryregistry_deferred_test)
 target_link_libraries(itemrepositoryregistry_deferred_test Qt5::Test
-    kdevplatformserialization ${KDEVPLATFORM_TESTS_LIBRARIES})
+    KDev::Serialization ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 add_subdirectory(serialization)

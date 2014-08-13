@@ -12,7 +12,7 @@ set(kdevgenericmanager_PART_SRCS
 add_library(kdevgenericmanager MODULE ${kdevgenericmanager_PART_SRCS})
 target_link_libraries(kdevgenericmanager
     KF5::KIOWidgets
-    kdevplatformproject
+    KDev::Project
 )
 
 install(TARGETS kdevgenericmanager DESTINATION ${PLUGIN_INSTALL_DIR} )

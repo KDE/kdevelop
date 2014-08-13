@@ -9,7 +9,7 @@ set(kdevkonsoleview_PART_SRCS
 )
 
 add_library(kdevkonsoleview MODULE ${kdevkonsoleview_PART_SRCS})
-target_link_libraries(kdevkonsoleview KF5::Parts kdevplatforminterfaces)
+target_link_libraries(kdevkonsoleview KF5::Parts KDev::Interfaces)
 
 install(TARGETS kdevkonsoleview DESTINATION ${PLUGIN_INSTALL_DIR} )
 

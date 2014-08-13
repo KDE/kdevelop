@@ -9,7 +9,7 @@ target_link_libraries(quickopentestbase
     Qt5::Test
     ${KDEVPLATFORM_TESTS_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    kdevplatformlanguage
+    KDev::Language
 )
 
 set(quickopentest_SRCS
@@ -26,7 +26,7 @@ target_link_libraries(quickopentest
     Qt5::Test
     ${KDEVPLATFORM_TESTS_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    kdevplatformlanguage
+    KDev::Language
 )
 
 # darn, cannot set per-target so useless :(
@@ -45,7 +45,7 @@ target_link_libraries(quickopenbench
     Qt5::Test
     ${KDEVPLATFORM_TESTS_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    kdevplatformlanguage
+    KDev::Language
 )
 # TODO KF5: Port?
 #set_tests_properties(quickopenbench PROPERTIES TIMEOUT 240)

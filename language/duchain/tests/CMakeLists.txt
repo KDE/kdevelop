@@ -8,7 +8,7 @@ add_executable(duchaintest ${duchaintest_SRCS})
 add_test(duchaintest duchaintest)
 ecm_mark_as_test(duchaintest)
 target_link_libraries(duchaintest KF5::TextEditor
-    Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES} kdevplatformlanguage)
+    Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES} KDev::Language)
 
 ########### next target ###############
 

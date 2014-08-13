@@ -4,7 +4,7 @@ macro(OUTPUTVIEW_CREATE_TEST name)
     target_link_libraries(${name}
                           Qt5::Test
                           ${KDEVPLATFORM_TESTS_LIBRARIES}
-                          kdevplatformoutputview
+                          KDev::OutputView
                          )
 endmacro(OUTPUTVIEW_CREATE_TEST)
 

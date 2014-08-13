@@ -10,7 +10,7 @@ set(kdevtestview_PLUGIN_SRCS
 )
 
 add_library(kdevtestview MODULE ${kdevtestview_PLUGIN_SRCS})
-target_link_libraries(kdevtestview KF5::ItemModels kdevplatforminterfaces kdevplatformproject kdevplatformutil kdevplatformlanguage)
+target_link_libraries(kdevtestview KF5::ItemModels KDev::Interfaces KDev::Project KDev::Util KDev::Language)
 
 install(TARGETS kdevtestview DESTINATION ${PLUGIN_INSTALL_DIR} )
 

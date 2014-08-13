@@ -7,6 +7,6 @@ target_link_libraries(dvcsTest
                       Qt5::Gui
 
                       ${KDEVPLATFORM_TESTS_LIBRARIES}
-                      kdevplatformutil
-                      kdevplatformvcs
+                      KDev::Util
+                      KDev::Vcs
 )
