@@ -269,7 +269,7 @@ BasicRefactoring* CppLanguageSupport::refactoring() const
 
 ICreateClassHelper* CppLanguageSupport::createClassHelper() const
 {
-#warning waiting for Grantlee port
+#pragma message("waiting for Grantlee port")
 //     return new CppClassHelper;
     return 0;
 }
