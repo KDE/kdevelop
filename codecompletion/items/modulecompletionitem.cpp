@@ -31,13 +31,8 @@
 using namespace KDevelop;
 
 QmlJS::ModuleCompletionItem::ModuleCompletionItem(const QString& name)
+: m_name(name)
 {
-    QStringList nameAndVersion = name
-        .section(QLatin1Char('.'), 0, -2)
-        .split(QLatin1Char('_'));
-
-    m_name = nameAndVersion.at(0);
-    m_version = (nameAndVersion.count() > 1 ? nameAndVersion.at(1) : QLatin1String("1.0"));
 }
 
 int QmlJS::ModuleCompletionItem::argumentHintDepth() const
@@ -69,8 +64,6 @@ QVariant QmlJS::ModuleCompletionItem::data(const QModelIndex& index, int role, c
             return QLatin1String("module");
         case CodeCompletionModel::Name:
             return m_name;
-        case CodeCompletionModel::Postfix:
-            return m_version;
         }
         break;
 
@@ -93,6 +86,6 @@ void QmlJS::ModuleCompletionItem::execute(KTextEditor::View* view, const KTextEd
     // Replace the whole line with an import statement
     view->document()->replaceText(
         KTextEditor::Range(word.start().line(), 0, word.start().line(), INT_MAX),
-        QString("import %1 %2").arg(m_name, m_version)
+        QString("import %1").arg(m_name)
     );
 }

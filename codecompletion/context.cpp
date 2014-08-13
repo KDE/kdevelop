@@ -32,7 +32,6 @@
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/codemodel.h>
-#include <kstandarddirs.h>
 
 #include <qmljs/qmljsdocument.h>
 #include <qmljs/parser/qmljslexer_p.h>
@@ -43,6 +42,7 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QRegExp>
+#include <QtCore/QStandardPaths>
 
 using namespace KDevelop;
 
@@ -193,30 +193,18 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::importCompletion()
     QList<CompletionTreeItemPointer> items;
     QString fragment = m_text.section(QLatin1Char(' '), -1, -1);
 
-    // List $KDEDATA/kdevqmljssupport/qmlplugins/ and add one completion item
-    // per file found there
-    QString dataDir = KGlobal::dirs()->findDirs("data",
-        QLatin1String("kdevqmljssupport/qmlplugins")
-    ).at(0);
-    QDir dir(dataDir);
-
-    for (const QString &entry : dir.entryList(QDir::Files, QDir::Name)) {
-        if (entry.startsWith(fragment)) {
-            items.append(CompletionTreeItemPointer(new ModuleCompletionItem(entry)));
-        }
-    }
-
     // Use the cache to find the directory corresponding to the fragment
     // (org.kde is, for instance, /usr/lib64/kde4/imports/org/kde), and list
     // its subdirectories
-    dataDir = Cache::instance().modulePath(m_duContext->url(), fragment);
+    QString dataDir = Cache::instance().modulePath(m_duContext->url(), fragment);
+    QDir dir;
 
     if (!dataDir.isEmpty()) {
         dir.setPath(dataDir);
 
         for (const QString& entry : dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
             items.append(CompletionTreeItemPointer(
-                new ModuleCompletionItem(QString("%1%2_.qml").arg(fragment, entry))
+                new ModuleCompletionItem(fragment + entry)
             ));
         }
     }

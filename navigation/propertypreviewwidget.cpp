@@ -23,7 +23,7 @@
 #include <QQuickItem>
 #include <QLayout>
 #include <QLabel>
-#include <KStandardDirs>
+#include <QStandardPaths>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
@@ -47,12 +47,10 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
     supportedProperties.insertMulti(key, SupportedProperty(QUrl(base + filename), type, class));
 
     if ( supportedProperties.isEmpty() ) {
-        KStandardDirs d;
-        QStringList bases = d.findDirs("data", "propertywidgets");
-        if ( bases.isEmpty() ) {
-            return 0;
-        }
-        QString base = bases.first();
+        QString base = QStandardPaths::locate(
+            QStandardPaths::GenericDataLocation,
+            QLatin1String("propertywidgets")
+        );
 
         // Positioning
         PROP("width", "Width.qml", QString(), QString())

@@ -25,11 +25,9 @@
 #include <QString>
 #include <QProcess>
 #include <QDir>
+#include <QStandardPaths>
 #include <QCryptographicHash>
 #include <QCoreApplication>
-
-#include <kglobal.h>
-#include <kstandarddirs.h>
 
 QmlJS::Cache::Cache()
 {
@@ -102,7 +100,6 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
 {
     QMutexLocker lock(&m_mutex);
     QStringList result;
-    KStandardDirs d;
 
     for (const QFileInfo& fileInfo : fileInfos) {
         QString filePath = fileInfo.canonicalFilePath();
@@ -131,11 +128,11 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
         }
 
         // Locate an existing dump of the file
-        QString dumpHash = QString::fromUtf8(
-            QCryptographicHash::hash(filePath.toUtf8(), QCryptographicHash::Md5).toHex()
-        ) + QLatin1String("_0.0.qml");
-        QString dumpPath = d.findResource("data",
-            QString("kdevqmljssupport/%1").arg(dumpHash)
+        QString dumpFile = QString("kdevqmljssupport/%1.qml").arg(
+            QString::fromAscii(QCryptographicHash::hash(filePath.toUtf8(), QCryptographicHash::Md5).toHex())
+        );
+        QString dumpPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+            dumpFile
         );
 
         if (!dumpPath.isNull()) {
@@ -162,8 +159,8 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
 
             // Open a file in which the dump can be written
             QFile dumpFile(
-                d.saveLocation("data", QLatin1String("kdevqmljssupport")) +
-                dumpHash
+                QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
+                + dumpPath
             );
 
             if (dumpFile.open(QIODevice::WriteOnly)) {

@@ -38,7 +38,7 @@ namespace QmlJS
 
 /**
  * Cache for values that may be slow to compute (search paths, things
- * involving KStandardDirs, etc)
+ * involving QStandardPaths, etc)
  */
 class KDEVQMLJSDUCHAIN_EXPORT Cache
 {
