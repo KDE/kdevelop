@@ -768,6 +768,8 @@ void CMakeManager::dirtyFile(const QString& path)
 void CMakeManager::initializeProject(IProject* project)
 {
     CMakeProjectData data;
+    CMake::checkForNeedingConfigure(project);
+
     data.watcher->addPath(CMake::currentBuildDir(project).toLocalFile());
     connect(data.watcher.data(), SIGNAL(fileChanged(QString)), SLOT(dirtyFile(QString)));
     connect(data.watcher.data(), SIGNAL(directoryChanged(QString)), SLOT(dirtyFile(QString)));
