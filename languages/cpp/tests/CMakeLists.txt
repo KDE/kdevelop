@@ -7,9 +7,6 @@ set(setuphelpers_SRCS
 
   ../setuphelpers.cpp
 )
-if(MSVC)
-    list(APPEND setuphelpers_SRCS ../setuphelpers_msvc.cpp)
-endif(MSVC)
 
 set(test_common_SRCS
 
