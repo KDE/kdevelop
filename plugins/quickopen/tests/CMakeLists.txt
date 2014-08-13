@@ -3,7 +3,7 @@ set(quickopentestbase_SRCS
     ../projectfilequickopen.cpp
 )
 
-add_library(quickopentestbase ${quickopentestbase_SRCS})
+add_library(quickopentestbase STATIC ${quickopentestbase_SRCS})
 target_link_libraries(quickopentestbase
     
     Qt5::Test
