@@ -54,7 +54,7 @@ set( plugincontrollertest_SRCS plugincontrollertest.cpp )
 add_executable(shell-plugincontrollertest ${plugincontrollertest_SRCS})
 add_test(shell-plugincontrollertest shell-plugincontrollertest)
 ecm_mark_as_test(shell-plugincontrollertest)
-target_link_libraries(shell-plugincontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformtests kdevplatformshell kdevplatforminterfaces sublime )
+target_link_libraries(shell-plugincontrollertest Qt5::Test kdevplatformtests kdevplatformshell kdevplatforminterfaces sublime )
 
 set( testcontrollertest_SRCS testcontrollertest.cpp )
 add_executable(shell-testcontrollertest ${testcontrollertest_SRCS})

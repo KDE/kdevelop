@@ -12,10 +12,10 @@ ecm_mark_as_test(kdevvarlengtharraytest)
 target_link_libraries(kdevvarlengtharraytest  Qt5::Test)
 
 kdevplatform_add_test(test_objectlist SOURCES test_objectlist.cpp)
-target_link_libraries(test_objectlist ${QT_QTTEST_LIBRARY} kdevplatformutil)
+target_link_libraries(test_objectlist Qt5::Test kdevplatformutil)
 
 kdevplatform_add_test(test_stringhandler SOURCES test_stringhandler.cpp)
-target_link_libraries(test_stringhandler ${QT_QTTEST_LIBRARY} kdevplatformutil)
+target_link_libraries(test_stringhandler Qt5::Test kdevplatformutil)
 
 kdevplatform_add_test(pathtest SOURCES test_path.cpp)
 target_link_libraries(pathtest
@@ -26,4 +26,4 @@ target_link_libraries(pathtest
 )
 
 kdevplatform_add_test(test_foregroundlock SOURCES test_foregroundlock.cpp)
-target_link_libraries(test_foregroundlock ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kdevplatformutil)
+target_link_libraries(test_foregroundlock Qt5::Test kdevplatformutil)

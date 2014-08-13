@@ -15,7 +15,7 @@ target_link_libraries(itemrepositorytest KF5::TextEditor
 set(itemrepositoryregistry_automatic_test_SRCS test_itemrepositoryregistry_automatic.cpp)
 add_executable(itemrepositoryregistry_automatic_test ${itemrepositoryregistry_automatic_test_SRCS})
 ecm_mark_as_test(itemrepositoryregistry_automatic_test)
-target_link_libraries(itemrepositoryregistry_automatic_test ${QT_QTTEST_LIBRARY}
+target_link_libraries(itemrepositoryregistry_automatic_test Qt5::Test
     kdevplatformserialization ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 ########### next target ###############

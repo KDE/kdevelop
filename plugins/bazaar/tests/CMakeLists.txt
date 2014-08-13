@@ -15,8 +15,7 @@ if (BZR_FOUND)
 
     kdevplatform_add_test(kdevbazaar-test SOURCES ${bazaartest_SRCS})
     target_link_libraries(kdevbazaar-test
-        ${QT_QTTEST_LIBRARY}
-        ${KDE4_KDECORE_LIBS}
+        Qt5::Test
         ${KDEVPLATFORM_VCS_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
         ${KDEVPLATFORM_TESTS_LIBRARIES}

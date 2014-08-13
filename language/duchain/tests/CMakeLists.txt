@@ -26,8 +26,7 @@ target_link_libraries(benchhashes
 
 kdevplatform_add_test(tst_duchainshutdown SOURCES tst_duchainshutdown.cpp)
 target_link_libraries(tst_duchainshutdown
-  ${KDE4_KDECORE_LIBS}
-  ${QT_QTTEST_LIBRARY}
+  Qt5::Test
   ${KDEVPLATFORM_TESTS_LIBRARIES}
   ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
 )
