@@ -102,7 +102,7 @@ private:
 class CompilerItem : public TreeItem {
 public:
     CompilerItem(const CompilerPointer& compiler, TreeItem* parent)
-        : TreeItem( {compiler->name(), compiler->factoryName()}, parent)
+        : TreeItem(QList<QVariant>{compiler->name(), compiler->factoryName()}, parent)
     , m_compiler(compiler)
     {}
 
@@ -134,10 +134,10 @@ TreeItem* manualRootItem(TreeItem* root)
 
 CompilersModel::CompilersModel(QObject* parent)
     : QAbstractItemModel(parent)
-    , m_rootItem(new TreeItem( {i18n("Name"), i18n("Type")}))
+    , m_rootItem(new TreeItem( QList<QVariant>{i18n("Name"), i18n("Type")}))
 {
-    m_rootItem->appendChild(new TreeItem( {i18n("Auto-detected"), QString()}, m_rootItem));
-    m_rootItem->appendChild(new TreeItem( {i18n("Manual"), QString()}, m_rootItem));
+    m_rootItem->appendChild(new TreeItem( QList<QVariant>{i18n("Auto-detected"), QString()}, m_rootItem));
+    m_rootItem->appendChild(new TreeItem( QList<QVariant>{i18n("Manual"), QString()}, m_rootItem));
 }
 
 QVariant CompilersModel::data(const QModelIndex& index, int role) const
