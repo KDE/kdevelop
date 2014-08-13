@@ -34,6 +34,7 @@ add_subdirectory(testview)
 add_subdirectory(switchtobuddy)
 add_subdirectory(projectfilter)
 add_subdirectory(dashboard)
+add_subdirectory(welcomepage)
 
 set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
 find_package(Boost 1.35.0)

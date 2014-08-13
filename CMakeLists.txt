@@ -37,7 +37,7 @@ include(KDECompilerSettings)
 include(KDevPlatformMacros)
 
 set(QT_MIN_VERSION "5.2.0")
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Declarative DBus Widgets Script WebKitWidgets Concurrent Test)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Declarative DBus Widgets Script WebKitWidgets QuickWidgets Concurrent Test)
 
 find_package(KF5 REQUIRED COMPONENTS
   Archive
@@ -57,6 +57,7 @@ find_package(KF5 REQUIRED COMPONENTS
   TextEditor
   ThreadWeaver
   WindowSystem
+  Declarative
 
   # TODO KF5: Port away from this
   KDELibs4Support
