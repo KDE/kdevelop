@@ -464,8 +464,6 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return 0;
     }
 
-    kDebug() << "Attempting to load" << pluginId << "- name:" << info.name();
-
     emit loadingPlugin( info.pluginName() );
     IPlugin *plugin = 0;
     QStringList missingInterfaces;
@@ -590,7 +588,6 @@ IPlugin *PluginController::pluginForExtension(const QString &extension, const QS
         return !plugin;
     }, extension, constraints, pluginName);
 
-    kDebug() << "Plugin for extension:" << extension << "| constraints:" << constraints << "=>" << plugin;
     return plugin;
 }
 
