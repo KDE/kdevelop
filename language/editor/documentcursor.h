@@ -31,7 +31,7 @@ namespace KDevelop
  * Lightweight object that extends a cursor with information about the document URL to which the range
  * refers.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT DocumentCursor : public KTextEditor::Cursor
+class DocumentCursor : public KTextEditor::Cursor
 {
 public:
     DocumentCursor() {
