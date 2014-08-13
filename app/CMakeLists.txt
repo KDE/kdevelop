@@ -1,6 +1,6 @@
 find_package(KF5Plasma)
 set_package_properties(KF5Plasma PROPERTIES
-    PURPOSE "Plasma libraries for enabling the welcome page"
+    PURPOSE "Plasma libraries for enabling the plasma addons"
     URL "http://www.kde.org"
     TYPE OPTIONAL)
 if(KF5Plasma_FOUND)
@@ -14,8 +14,6 @@ set(kdevelop_SRCS  main.cpp kdevideextension.cpp splash.cpp)
 # kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
 
 add_executable(kdevelop ${kdevelop_SRCS} )
-
-add_subdirectory(welcomepage)
 
 target_link_libraries(kdevelop
     

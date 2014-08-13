@@ -63,7 +63,6 @@
 
 #include <iostream>
 
-#include "welcomepage/welcomepageview.h"
 #include "splash.h"
 
 using KDevelop::Core;
