@@ -105,6 +105,14 @@ public:
      **/
     QString typePrefix() const;
 
+    /**
+     * The model will include @p path during the search for template archives
+     *
+     * @param path Path to a directory that contains normal user data. The template model will search for a kdevappwizard/templates (or your model name prefix) directory
+     * inside @p path and will use them. Please note that the path has to end with a '/'.
+     */
+    void addDataPath(const QString &path);
+
 private:
     TemplatesModelPrivate* const d;
 };

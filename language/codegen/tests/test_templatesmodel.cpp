@@ -25,20 +25,15 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
-#include <KComponentData>
-#include <KStandardDirs>
-
 using namespace KDevelop;
 
 void TestTemplatesModel::initTestCase()
 {
     AutoTestShell::init();
-    TestCore* core = TestCore::initialize(Core::NoUi);
-
-    bool addedDir = core->componentData().dirs()->addResourceDir("data", CODEGEN_TESTS_DATA_DIR, true);
-    QVERIFY(addedDir);
+    TestCore::initialize(Core::NoUi);
 
     model = new TemplatesModel("kdevcodegentest", this);
+    model->addDataPath(QString(CODEGEN_TESTS_DATA_DIR) + "/");
     model->refresh();
 }
 
@@ -72,7 +67,8 @@ void TestTemplatesModel::descriptionParsing()
     QCOMPARE(item->data(TemplatesModel::CommentRole).toString(), QString("Describes a class using YAML syntax"));
     QVERIFY(item->data(TemplatesModel::IconNameRole).toString().isEmpty());
 
-    QString descriptionFile = ICore::self()->componentData().dirs()->findResource("data", "kdevcodegentest/template_descriptions/test_yaml.desktop");
+    QString descriptionFile = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/kdevcodegentest/template_descriptions/test_yaml.desktop";
+
     QVERIFY(QFile::exists(descriptionFile));
     QCOMPARE(item->data(TemplatesModel::DescriptionFileRole).toString(), descriptionFile);
 }

@@ -94,6 +94,7 @@ AppWizardPlugin::~AppWizardPlugin()
 void AppWizardPlugin::slotNewProject()
 {
     model()->refresh();
+
     AppWizardDialog dlg(core()->pluginController(), m_templatesModel);
 
     if (dlg.exec() == QDialog::Accepted)
@@ -161,13 +162,13 @@ bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& inf
     }
     kDebug() << "Initializing DVCS repository:" << dest.toLocalFile();
 
-    job = dvcs->add(QUrl::List(dest), KDevelop::IBasicVersionControl::Recursive);
+    job = dvcs->add(KUrl::List(dest), KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
         vcsError(i18n("Could not add files to the DVCS repository"), scratchArea, dest);
         return false;
     }
-    job = dvcs->commit(QString("initial project import from KDevelop"), QUrl::List(dest),
+    job = dvcs->commit(QString("initial project import from KDevelop"), KUrl::List(dest),
                             KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
@@ -221,22 +222,20 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     }
 
     QString templateName = templateInfo.baseName();
-    kDebug() << "creating project for template:" << templateName << " with VCS:" << info.vcsPluginName;
-
-    QStringList entries;
-    QStringList matches = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevappwizard/templates/"));
-    foreach(const QString& match, matches) {
-        QDir d(match);
-        QStringList foundEntries = d.entryList(QStringList(templateName+'*'));
-        foreach(const QString& entry, foundEntries) {
-            entries += d.absoluteFilePath(entry);
+    QString templateArchive;
+    const QStringList filters = {templateName + QStringLiteral(".*")};
+    const QStringList matchesPaths = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevappwizard/templates/"), QStandardPaths::LocateDirectory);
+    foreach(const QString& matchesPath, matchesPaths) {
+        const QStringList files = QDir(matchesPath).entryList(filters);
+        if(!files.isEmpty()) {
+            templateArchive = matchesPath + files.first();
         }
     }
-    if (entries.isEmpty()) {
-        kWarning() << "Could not find project template" << templateName;
+
+    if(templateArchive.isEmpty()) {
+        qWarning() << "Template name does not exist in the template list";
         return QString();
     }
-    QString templateArchive = matches.first();
 
     QUrl dest = info.location;
 
@@ -276,11 +275,9 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         }
         else
         {
-            QUrl parentdir = dest;
-            parentdir.cd( ".." );
-            if( !QFileInfo( parentdir.toLocalFile() ).exists() )
-            {
-                QDir::root().mkpath( parentdir.toLocalFile() );
+            QUrl url = KIO::upUrl(dest);
+            if(!QFileInfo(url.toLocalFile()).exists()) {
+                QDir::root().mkpath(url.toLocalFile());
             }
         }
 

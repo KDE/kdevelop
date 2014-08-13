@@ -46,14 +46,14 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     ui->locationUrl->setUrl(KDevelop::ICore::self()->projectController()->projectsBaseDirectory());
 
     ui->locationValidLabel->setText(QString(" "));
-    
+
     connect( ui->locationUrl->lineEdit(), SIGNAL(textEdited(QString)),
              this, SLOT(urlEdited()));
     connect( ui->locationUrl, SIGNAL(urlSelected(QUrl)),
              this, SLOT(urlEdited()));
     connect( ui->appNameEdit, SIGNAL(textEdited(QString)),
              this, SLOT(nameChanged()) );
-    
+
     m_listView = new KDevelop::MultiLevelListView(this);
     m_listView->setLevels(2);
     m_listView->setHeaderLabels(QStringList() << i18n("Category") << i18n("Project Type"));
@@ -63,15 +63,15 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     connect (m_listView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)), SLOT(typeChanged(QModelIndex)));
     ui->gridLayout->addWidget(m_listView, 0, 0, 1, 1);
     typeChanged(m_listView->currentIndex());
-    
+
     connect( ui->templateType, SIGNAL(currentIndexChanged(int)),
              this, SLOT(templateChanged(int)) );
-    
+
     KNS3::Button* knsButton = new KNS3::Button(i18n("Get More Templates"), "kdevappwizard.knsrc", m_listView);
     connect (knsButton, SIGNAL(dialogFinished(KNS3::Entry::List)), 
              this, SLOT(templatesDownloaded(KNS3::Entry::List)));
     m_listView->addWidget(0, knsButton);
-    
+
     KPushButton* loadButton = new KPushButton(m_listView);
     loadButton->setText(i18n("Load Template From File"));
     loadButton->setIcon(QIcon::fromTheme("application-x-archive"));
@@ -297,7 +297,7 @@ QStandardItem* ProjectSelectionPage::getCurrentItem() const
 
 bool ProjectSelectionPage::shouldContinue()
 {
-    QFileInfo fi(location().toLocalFile(KUrl::RemoveTrailingSlash));
+    QFileInfo fi(location().toLocalFile());
     if (fi.exists() && fi.isDir())
     {
         if (!QDir(fi.absoluteFilePath()).entryList(QDir::NoDotAndDotDot | QDir::AllEntries).isEmpty())

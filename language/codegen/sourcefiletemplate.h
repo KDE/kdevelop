@@ -300,6 +300,13 @@ public:
      */
     QStringList defaultBaseClasses() const;
 
+    /**
+     * Add an additional search location where the code will look for archives
+     *
+     * @param location Absolute path to a directory with archives. Has to end with a '/'
+     */
+    void addAdditionalSearchLocation(const QString& location);
+
 private:
     class SourceFileTemplatePrivate* const d;
 };

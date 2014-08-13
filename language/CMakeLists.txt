@@ -121,13 +121,8 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/documentchangeset.cpp
     codegen/duchainchangeset.cpp
     codegen/utilities.cpp
-#     codegen/templatesmodel.cpp
-#     codegen/templateclassgenerator.cpp
     codegen/codedescription.cpp
-#     codegen/sourcefiletemplate.cpp
-#     codegen/templaterenderer.cpp
-#     codegen/templateengine.cpp
-#     codegen/archivetemplateloader.cpp
+
     codegen/basicrefactoring.cpp
     codegen/progressdialogs/refactoringdialog.cpp
 
@@ -142,6 +137,19 @@ set(kdevplatformlanguage_LIB_SRCS
     checks/dataaccessrepository.cpp checks/dataaccess.cpp
     checks/controlflowgraph.cpp checks/controlflownode.cpp
 )
+
+set(grantlee_LIB_SRCS
+    codegen/templatesmodel.cpp
+    codegen/templateclassgenerator.cpp
+    codegen/sourcefiletemplate.cpp
+    codegen/templaterenderer.cpp
+    codegen/templateengine.cpp
+    codegen/archivetemplateloader.cpp
+)
+
+if (Grantlee_FOUND)
+    list(APPEND kdevplatformlanguage_LIB_SRCS ${grantlee_LIB_SRCS})
+endif()
 
 qt5_wrap_ui(kdevplatformlanguage_LIB_SRCS
     codegen/basicrefactoring.ui
@@ -163,7 +171,7 @@ LINK_PRIVATE
         KF5::KDELibs4Support
         kdevplatformutil
         kdevplatformproject
-#         ${Grantlee_CORE_LIBRARIES}
+        ${Grantlee_TEMPLATES_LIBRARIES}
 )
 set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformlanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )

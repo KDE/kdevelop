@@ -45,6 +45,7 @@ class KDevelop::SourceFileTemplatePrivate
 public:
     KArchive* archive;
     QString descriptionFileName;
+    QStringList searchLocations;
 
     ConfigOption readEntry(const QDomElement& element, TemplateRenderer* renderer);
 };
@@ -146,10 +147,15 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
     d->descriptionFileName = templateDescription;
     QString archiveFileName;
 
-    const QString templateBaseName = QFileInfo(templateDescription).baseName();
     QStringList templateFiles;
-    foreach(const QString& dir, QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, resourcePrefix + "/templates/")) {
-        templateFiles += QDir(dir).entryList(QDir::Files);
+    const QString templateBaseName = QFileInfo(templateDescription).baseName();
+
+    d->searchLocations.append(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "/kdevfiletemplates/templates/", QStandardPaths::LocateDirectory));
+
+    foreach(const QString& dir, d->searchLocations) {
+        foreach(const QString& file, QDir(dir).entryList(QDir::Files)) {
+            templateFiles += dir + file;
+        }
     }
 
     foreach (const QString& file, templateFiles)
@@ -316,4 +322,10 @@ QHash< QString, QList<ConfigOption> > SourceFileTemplate::customOptions(Template
         options.insert(groupName, optionGroup);
     }
     return options;
+}
+
+void SourceFileTemplate::addAdditionalSearchLocation(const QString& location)
+{
+    if(!d->searchLocations.contains(location))
+        d->searchLocations.append(location);
 }

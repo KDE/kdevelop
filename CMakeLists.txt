@@ -64,12 +64,11 @@ find_package(KF5 REQUIRED COMPONENTS
 
 find_package(KF5XmlGui 5.1 REQUIRED)
 
-#TODO KF5: Re-enable Grantlee (currently GrantleeConfig.cmake calls find_package(Qt4) internall
-#find_package(Grantlee 0.1.7)
-# set_package_properties(Grantlee PROPERTIES
-#     PURPOSE "Grantlee templating library, needed for file templates"
-#     URL "http://www.grantlee.org/"
-#     TYPE REQUIRED)
+# TODO KF5: Remove Grantlee found check as soon there is an official version of Grantlee for Qt5
+find_package(Grantlee 1.0.0)
+set_package_properties(Grantlee PROPERTIES
+    PURPOSE "Grantlee templating library, needed for file templates"
+    URL "http://www.grantlee.org/")
 
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQURL_NO_CAST_FROM_QSTRING)
 remove_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0) # comes from KDELibs4Support
@@ -89,7 +88,9 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
 include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR})
-# include_directories(${Grantlee_INCLUDE_DIRS})
+if (Grantlee_FOUND)
+    include_directories(${Grantlee_INCLUDE_DIRS})
+endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/)
 
 # Now set the usual KDEVPLATFORM_XXX_LIBRARIES variable so we can more easily move plugins around
@@ -121,9 +122,9 @@ add_subdirectory(debugger)
 add_subdirectory(documentation)
 add_subdirectory(serialization)
 
-# if (Grantlee_FOUND)
-#     add_subdirectory(template)
-# endif()
+if (Grantlee_FOUND)
+    add_subdirectory(template)
+endif()
 add_subdirectory(tests)
 
 add_subdirectory(plugins)

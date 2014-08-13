@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <KUrl>
+#include <ktexteditor/cursor.h>
 
 class KUrl;
 namespace KDevelop {
