@@ -116,7 +116,7 @@ static QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<
     totalLength += size;
 
     // skip Path segment if we only want the path
-    const int start = (onlyPath && !isLocalFile) ? 1 : 0;
+    int start = (onlyPath && !isLocalFile) ? 1 : 0;
 
     // path and url prefix
     for (int i = start; i < size; ++i) {
@@ -126,6 +126,14 @@ static QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<
     // build string representation
     QString res;
     res.reserve(totalLength);
+
+#ifdef Q_OS_WIN
+    if (start == 0 && isLocalFile) {
+        Q_ASSERT(data.at(0).endsWith(':')); // assume something along "C:"
+        res += data.at(0);
+        start++;
+    }
+#endif
 
     for (int i = start; i < size; ++i) {
         if (i || isLocalFile) {
