@@ -79,7 +79,7 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
         context = DUChainUtils::standardContextForUrl(document().toUrl());
     }
     if (context) {
-//         translateDUChainToRevision(context);
+        translateDUChainToRevision(context);
         context->setRange(RangeInRevision(0, 0, INT_MAX, INT_MAX));
         context->addImportedParentContext(parentCtx);
     }
