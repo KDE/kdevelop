@@ -83,6 +83,10 @@ void QtHelpPlugin::loadQtDocumentation(bool loadQtDoc)
 
 void QtHelpPlugin::searchHelpDirectory(QStringList& pathList, QStringList& nameList, QStringList& iconList, const QString& searchDir)
 {
+    if (searchDir.isEmpty()) {
+        return;
+    }
+
     kDebug() << "Searching qch files in: " << searchDir;
     QDirIterator dirIt(searchDir, QStringList() << "*.qch", QDir::Files, QDirIterator::Subdirectories);
     const QString logo("qtlogo");
