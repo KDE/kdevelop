@@ -179,6 +179,7 @@ static int getRunningSessionPid()
 
 int main( int argc, char *argv[] )
 {
+    QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     K4AboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ), QByteArray(VERSION), ki18n(description), K4AboutData::License_GPL,
                           ki18n( "Copyright 1999-2014, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org/" );

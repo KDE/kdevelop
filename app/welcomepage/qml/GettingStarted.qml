@@ -19,7 +19,7 @@
  */
 
 import QtQuick 2.0
-import QtWebKit 1.0
+import QtWebKit 2.0
 import org.kde.plasma.components 2.0
 
 StandardPage {

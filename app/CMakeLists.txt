@@ -11,13 +11,11 @@ find_package(SharedMimeInfo REQUIRED)
 find_package(KF5Declarative)
 
 set(kdevelop_SRCS  main.cpp kdevideextension.cpp splash.cpp)
-set(kdevelop_SRCS ${kdevelop_SRCS}
-                welcomepage/sessionsmodel.cpp welcomepage/welcomepageview.cpp welcomepage/uihelper.cpp)
-add_definitions(-DWITH_WELCOMEPAGE)
-qt5_add_resources(kdevelop_SRCS welcomepage/welcomepage.qrc)
 # kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
 
 add_executable(kdevelop ${kdevelop_SRCS} )
+
+add_subdirectory(welcomepage)
 
 target_link_libraries(kdevelop
     
@@ -52,6 +50,6 @@ install( PROGRAMS kdevelop_ps.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR} )
 install( FILES kdeveloprc DESTINATION ${CONFIG_INSTALL_DIR} )
 install( FILES kdevelopui.rc katepartui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevelop )
 install( FILES kdevelop.notifyrc DESTINATION ${KNOTIFYRC_INSTALL_DIR} )
-install( FILES kdevelop.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
+install( FILES kdevelop.xml kdevelopinternal.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 install( FILES splash.qml DESTINATION ${DATA_INSTALL_DIR}/kdevelop )
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )
