@@ -220,16 +220,16 @@ struct DocumentControllerPrivate {
             if( !res.URLs.isEmpty() )
                 url = res.URLs.first();
             _encoding = res.encoding;
+            if ( url.isEmpty() )
+                //still no url
+                return 0;
         }
-        if ( url.isEmpty() )
-            //still no url
-            return 0;
 
         KSharedConfig::openConfig()->group("Open File").writeEntry( "Last Open File Directory", QUrl(url.upUrl()) );
 
         // clean it and resolve possible symlink
         url.cleanPath( KUrl::SimplifyDirSeparators );
-        if ( url.isLocalFile() )
+        if ( url.QUrl::isLocalFile() )
         {
             QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
             if ( !path.isEmpty() )
@@ -237,10 +237,8 @@ struct DocumentControllerPrivate {
         }
         
         //get a part document
-        IDocument* doc=0;
-        if (documents.contains(url))
-            doc=documents.value(url);
-        else
+        IDocument* doc = documents.value(url);
+        if (!doc)
         {
             QMimeType mimeType;
 
@@ -296,9 +294,9 @@ struct DocumentControllerPrivate {
                 Core::self()->pluginController()->pluginForExtension(QString(), QString(), constraints);
             }
             
-            if( factories.contains(mimeType.name()))
+            if( IDocumentFactory* factory = factories.value(mimeType.name()))
             {
-                doc = factories[mimeType.name()]->create(url, Core::self());
+                doc = factory->create(url, Core::self());
             }
             
             if(!doc) {
