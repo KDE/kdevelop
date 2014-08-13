@@ -53,7 +53,7 @@ public:
 
     // NOTE: Fixes build failures for GCC versions <4.8.
     // cf. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53613
-    virtual ~CustomMakeProvider() noexcept;
+    virtual ~CustomMakeProvider() Q_DECL_NOEXCEPT;
 
     virtual QHash< QString, QString > definesInBackground(const QString&) const
     {
@@ -90,7 +90,7 @@ public:
 
 // NOTE: Fixes build failures for GCC versions <4.8.
 // See above.
-CustomMakeProvider::~CustomMakeProvider() noexcept = default;
+CustomMakeProvider::~CustomMakeProvider() Q_DECL_NOEXCEPT = default;
 
 K_PLUGIN_FACTORY(CustomMakeSupportFactory, registerPlugin<CustomMakeManager>(); )
 // K_EXPORT_PLUGIN(CustomMakeSupportFactory(KAboutData("kdevcustommakemanager","kdevcustommake", ki18n("Custom Makefile Manager"), "0.1", ki18n("Support for managing custom makefile projects"), KAboutData::License_GPL)))

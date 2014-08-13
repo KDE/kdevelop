@@ -228,7 +228,7 @@ Path::List DefinesAndIncludesManager::includesInBackground(const QString& path) 
 }
 
 // NOTE: Part of a fix for build failures on <GCC-4.7
-DefinesAndIncludesManager::~DefinesAndIncludesManager() noexcept = default;
+DefinesAndIncludesManager::~DefinesAndIncludesManager() Q_DECL_NOEXCEPT = default;
 
 QHash< QString, QString > DefinesAndIncludesManager::definesInBackground(const QString& path) const
 {

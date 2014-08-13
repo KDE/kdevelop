@@ -102,7 +102,7 @@ void CompilerProvider::removePoject( IProject* project )
     m_projects.remove( project );
 }
 
-CompilerProvider::~CompilerProvider() noexcept
+CompilerProvider::~CompilerProvider() Q_DECL_NOEXCEPT
 {
     IDefinesAndIncludesManager::manager()->unregisterProvider( this );
 }
