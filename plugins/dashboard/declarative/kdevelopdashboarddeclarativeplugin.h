@@ -23,9 +23,10 @@
 
 class KDevplatformDeclarativePlugin : public QDeclarativeExtensionPlugin
 {
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
+public:
     virtual void registerTypes(const char* uri);
 };
-
-Q_EXPORT_PLUGIN2(kdevelopdashboarddeclarativeplugin, KDevplatformDeclarativePlugin);
 
 #endif // KDEVPLATFORM_PLUGIN_PLUGIN_KDEVELOPDASBOARDDECLARATIVE_H

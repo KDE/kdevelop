@@ -33,15 +33,7 @@ endif()
 add_subdirectory(testview)
 add_subdirectory(switchtobuddy)
 add_subdirectory(projectfilter)
-
-find_package(KF5Plasma)
-set_package_properties(KF5Plasma PROPERTIES
-    PURPOSE "Plasma libraries for enabling the dashboard"
-    URL "http://www.kde.org"
-    TYPE OPTIONAL)
-if(KF5Plasma_FOUND)
-#     ecm_optional_add_subdirectory(dashboard)
-endif()
+add_subdirectory(dashboard)
 
 set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
 find_package(Boost 1.35.0)

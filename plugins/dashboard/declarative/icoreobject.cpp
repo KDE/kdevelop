@@ -19,7 +19,6 @@
 #include "icoreobject.h"
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
-#include <plasma/dataengine.h>
 
 ICoreObject::ICoreObject(QObject* parent)
     : QObject(parent)
