@@ -42,7 +42,7 @@ namespace
 IProject* loadProject( const QString& projectFile, const QString& projectName )
 {
     KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
-    ICore::self()->projectController()->openProject( projectFile );
+    ICore::self()->projectController()->openProject( QUrl::fromLocalFile(projectFile) );
 
     if( !projectSpy->wait( 5000 ) ) {
         kFatal() << "Expected project to be loaded within 5 seconds, but this didn't happen";
