@@ -78,8 +78,10 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
 
     // Find the path for which <path>/u/r/i exists
     QString fragment = QString(uri).replace(QLatin1Char('.'), QDir::separator());
+    bool isVersion1 = version.startsWith(QLatin1String("1."));
+    bool isQtQuick = (uri == QLatin1String("QtQuick"));
 
-    if (!version.isEmpty() && !version.startsWith(QLatin1String("1."))) {
+    if (!version.isEmpty() && !isVersion1) {
         // Modules having a version greater or equal to 2 are stored in a directory
         // name like QtQuick.2
         fragment += QLatin1Char('.') + version.section(QLatin1Char('.'), 0, 0);
@@ -88,7 +90,14 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
     for (auto p : paths) {
         QString pathString = p.cd(fragment).path();
 
-        if (QFile::exists(pathString)) {
+        // HACK: QtQuick 1.0 is put in $LIB/qt5/imports/builtins.qmltypes. The "QtQuick"
+        //       identifier appears nowhere.
+        if (isQtQuick && isVersion1) {
+            if (QFile::exists(p.cd(QLatin1String("builtins.qmltypes")).path())) {
+                path = p.path();
+                break;
+            }
+        } else if (QFile::exists(pathString)) {
             path = pathString;
             break;
         }

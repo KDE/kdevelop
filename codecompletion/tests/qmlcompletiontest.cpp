@@ -266,7 +266,7 @@ void QmlCompletionTest::testContainsDeclaration_data()
 
     // Built-in QML types
     QTest::newRow("qml_builtin_types") <<
-        "import QtQuick 2.0\n"
+        "import QtQuick 1.0\n"    // Test QtQuick 1.0, not always 2.0, so that we ensure that both versions work
         "\n"
         "Text {\n"
         " id: foo\n"

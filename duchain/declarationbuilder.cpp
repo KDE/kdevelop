@@ -1006,7 +1006,7 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
         entries = QDir(directory).entryInfoList(
             QStringList()
                 << (QLatin1String("*.") + currentFilePath.section(QLatin1Char('.'), -1, -1))
-                << QLatin1String("plugins.qmltypes")
+                << QLatin1String("*.qmltypes")
                 << QLatin1String("*.so"),
             QDir::Files
         );
