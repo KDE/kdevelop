@@ -23,7 +23,6 @@
 #include "../helper.h"
 #include "../parsesession.h"
 
-#include <kstandarddirs.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
@@ -33,6 +32,7 @@
 
 #include <QFile>
 #include <QDir>
+#include <QStandardPaths>
 
 using namespace KDevelop;
 
@@ -160,7 +160,7 @@ QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
 
     // Try the standard modules (that exist only in binary form in Node.js, but
     // for which QML/JS ships module files)
-    fileName = KGlobal::dirs()->findResource("data",
+    fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
         QString("kdevqmljssupport/nodejsmodules/%1.js").arg(moduleName)
     );
 

@@ -30,8 +30,6 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icore.h>
 
-#include <kstandarddirs.h>
-
 using namespace KDevelop;
 
 IndexedString ParseSession::languageString()
