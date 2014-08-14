@@ -31,9 +31,9 @@ class GccLikeCompiler : public ICompiler
 public:
     GccLikeCompiler( const QString& name, const QString& path, bool editable, const QString& factoryName );
 
-    virtual QHash<QString, QString> defines() const override;
+    virtual QHash<QString, QString> defines() const override final;
 
-    virtual Path::List includes() const override;
+    virtual Path::List includes() const override final;
 };
 
 #endif // GCCLIKECOMPILER_H

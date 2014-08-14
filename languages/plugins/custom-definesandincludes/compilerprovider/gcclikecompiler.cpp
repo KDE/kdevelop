@@ -136,4 +136,10 @@ Path::List GccLikeCompiler::includes() const
 
 GccLikeCompiler::GccLikeCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName):
     ICompiler(name, path, factoryName, editable)
-{}
+{
+    if (!path.isEmpty()) {
+        //cache includes/defines
+        includes();
+        defines();
+    }
+}

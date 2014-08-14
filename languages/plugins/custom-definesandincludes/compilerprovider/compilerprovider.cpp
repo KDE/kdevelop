@@ -88,12 +88,6 @@ IDefinesAndIncludesManager::Type CompilerProvider::type() const
 void CompilerProvider::addPoject( IProject* project, const CompilerPointer& compiler )
 {
     Q_ASSERT(compiler);
-    //cache includes/defines
-//  FIXME: this is a hack, we have this only to get the compiler to initialize the values
-//     this should be dealt with by the class itself.
-
-    compiler->includes();
-    compiler->defines();
     m_projects[project] = compiler;
 }
 
