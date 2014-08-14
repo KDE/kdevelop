@@ -51,15 +51,6 @@ StandardBackground {
         }
     }
 
-    Rectangle {
-        color: "blue"
-        anchors {
-            fill: parent
-            leftMargin: root.marginLeft+root.margins
-            margins: root.margins
-        }
-    }
-
     Loader {
         id: codeContents
         anchors {
