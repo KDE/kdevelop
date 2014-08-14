@@ -47,7 +47,7 @@ public:
     IProjectController( QObject *parent = 0 );
     virtual ~IProjectController();
 
-    Q_SCRIPTABLE virtual IProject* projectAt( int ) const = 0;
+    Q_SCRIPTABLE virtual KDevelop::IProject* projectAt( int ) const = 0;
     Q_SCRIPTABLE virtual int projectCount() const = 0;
     Q_SCRIPTABLE virtual QList<IProject*> projects() const = 0;
 

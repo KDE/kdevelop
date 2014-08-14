@@ -21,20 +21,33 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import org.kde.plasma.components 2.0
+import org.kde.plasma.extras 2.0
+
+import "plugins"
 
 StandardPage {
-    GridLayout {
-        columns: 2
-        anchors {
-            fill: parent
-            margins: 20
-        }
+    ScrollArea {
+        id: area
 
-        Repeater {
-            model: 20
-            delegate: Rectangle {
-                Layout.fillWidth: true
-                color: "red"
+        anchors.fill: parent
+        GridLayout {
+            id: grid
+            columns: 2
+            x: 50
+            width: area.width-100
+
+            Repeater {
+                model: 15
+                delegate: Item {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: grid.width/grid.columns
+                    Layout.preferredHeight: childrenRect.height
+
+//                     TODO: make this the plugin
+                    Branches {
+                        width: parent.width
+                    }
+                }
             }
         }
     }

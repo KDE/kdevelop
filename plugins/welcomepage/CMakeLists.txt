@@ -1,3 +1,5 @@
+add_subdirectory(declarative)
+
 set(welcomepage_SRCS
     welcomepageplugin.cpp
     welcomepagedocument.cpp sessionsmodel.cpp welcomepageview.cpp uihelper.cpp)

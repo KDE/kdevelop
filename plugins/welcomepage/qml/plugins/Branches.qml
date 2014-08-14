@@ -1,5 +1,5 @@
 /*************************************************************************************
- *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
+ *  Copyright (C) 2012 by Aleix Pol Gonzalez <aleixpol@kde.org>                      *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -16,17 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#include "kdevelopdashboarddeclarativeplugin.h"
-#include "icoreobject.h"
-#include <QtDeclarative/QDeclarativeItem>
-#include <vcs/models/brancheslistmodel.h>
-#include <interfaces/iproject.h>
+import QtQuick 2.1
+import org.kde.kdevplatform 1.0
+import org.kde.plasma.components 2.0
 
-void KDevplatformDeclarativePlugin::registerTypes(const char* uri)
+Column
 {
-    Q_UNUSED(uri);
+    Repeater
+    {
+        width: parent.width
+        model: ICore.projectController().projectCount()
 
-    qmlRegisterType<KDevelop::BranchesListModel>("org.kde.kdevplatform", 1, 0, "BranchesListModel");
-    qmlRegisterType<ICoreObject>("org.kde.kdevplatform", 1, 0, "ICore");
-    qmlRegisterType<KDevelop::IProject>();
+        delegate: Column {
+            id: del
+            property variant project: ICore.projectController().projectAt(index)
+            width: parent.width
+
+            Label { text: project.name() }
+
+            Repeater {
+                delegate: Button {
+                    text: display
+                    width: parent.width
+                    enabled: !isCurrent
+                    onClicked: branchesModel.currentBranch=display
+                }
+
+                model: BranchesListModel {
+                    id: branchesModel
+                    project: del.project
+                }
+            }
+        }
+    }
 }

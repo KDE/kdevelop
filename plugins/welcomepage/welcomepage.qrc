@@ -1,5 +1,8 @@
 <!DOCTYPE RCC><RCC version="1.0">
  <qresource>
+     <!-- project dashboard plugins -->
+     <file>qml/plugins/Branches.qml</file>
+
     <!-- components  -->
     <file>qml/Develop.qml</file>
     <file>qml/GettingStarted.qml</file>
