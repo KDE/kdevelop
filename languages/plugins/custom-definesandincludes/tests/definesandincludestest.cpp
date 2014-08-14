@@ -22,8 +22,6 @@
 
 #include <QtTest/QtTest>
 
-#include <qtest_kde.h>
-
 #include <KDebug>
 
 #include <interfaces/iproject.h>
@@ -127,6 +125,6 @@ void DefinesAndIncludesTest::testNoProjectIncludeDirectories()
     QVERIFY(noProjectIncludes.contains(includePath2));
 }
 
-QTEST_KDEMAIN(DefinesAndIncludesTest, GUI)
+QTEST_MAIN(DefinesAndIncludesTest)
 
 #include "definesandincludestest.moc"
