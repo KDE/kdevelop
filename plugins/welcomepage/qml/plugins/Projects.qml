@@ -25,7 +25,7 @@ Column
 {
     Heading {
         anchors.horizontalCenter: parent.horizontalCenter
-        text: i18n("Branches")
+        text: i18n("Projects")
         level: 2
     }
 
@@ -42,20 +42,6 @@ Column
             Heading {
                 text: project.name()
                 level: 3
-            }
-
-            Repeater {
-                delegate: Button {
-                    text: display
-                    width: parent.width
-                    enabled: !isCurrent
-                    onClicked: branchesModel.currentBranch=display
-                }
-
-                model: BranchesListModel {
-                    id: branchesModel
-                    project: del.project
-                }
             }
         }
     }

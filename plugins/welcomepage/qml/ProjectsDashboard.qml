@@ -27,25 +27,35 @@ import "plugins"
 
 StandardPage {
     ScrollArea {
-        id: area
 
         anchors.fill: parent
-        GridLayout {
-            id: grid
-            columns: 2
-            x: 50
-            width: area.width-100
+        Flickable {
+            id: area
+            anchors {
+                fill: parent
+                topMargin: 10
+            }
+            contentWidth: parent.width
+            contentHeight: grid.height
 
-            Repeater {
-                model: 15
-                delegate: Item {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: grid.width/grid.columns
-                    Layout.preferredHeight: childrenRect.height
+            GridLayout {
+                id: grid
+                columns: 2
+                x: 50
+                width: parent.width-100
 
-//                     TODO: make this the plugin
-                    Branches {
-                        width: parent.width
+                Repeater {
+                    model: [ "qrc:/qml/plugins/Branches.qml", "qrc:/qml/plugins/Projects.qml" ]
+                    delegate: Item {
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: grid.width/grid.columns
+                        Layout.preferredHeight: childrenRect.height
+
+    //                     TODO: make this the plugin
+                        Loader {
+                            width: parent.width
+                            source: modelData
+                        }
                     }
                 }
             }

@@ -2,6 +2,7 @@
  <qresource>
      <!-- project dashboard plugins -->
      <file>qml/plugins/Branches.qml</file>
+     <file>qml/plugins/Projects.qml</file>
 
     <!-- components  -->
     <file>qml/Develop.qml</file>
