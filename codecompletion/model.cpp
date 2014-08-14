@@ -58,6 +58,10 @@ public slots:
             kWarning() << "No context found for" << url;
             return;
         }
+
+        // We hold DUChain lock, and ask for ParseSession, but TUDUChain indirectly holds ParseSession lock.
+        lock.unlock();
+
         const ParseSession session(ParseSessionData::Ptr::dynamicCast(top->ast()));
         if (!session.data()) {
             // TODO: trigger reparse and re-request code completion
@@ -70,6 +74,7 @@ public slots:
             return;
         }
 
+        lock.lock();
         ClangCodeCompletionContext completionContext(DUContextPointer(top), session, position, text);
 
         if (aborting()) {
