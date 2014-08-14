@@ -191,7 +191,8 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
 
     IDefinesAndIncludesManager::manager()->registerProvider( this );
 
-    connect( ICore::self()->projectController(), &IProjectController::projectAboutToBeOpened, this, &CompilerProvider::projectOpened );
+    // FIXME: This should be connected to projectAboutToBeOpened, but somehow it won't connect to it (there are no connection errors in console and the same connection works for ProjectFilterProvider, also works with Qt 4.8). Tested with Qt 5.3.1.
+    connect( ICore::self()->projectController(), &IProjectController::projectOpened, this, &CompilerProvider::projectOpened );
     connect( ICore::self()->projectController(), &IProjectController::projectClosed, this, &CompilerProvider::projectClosed);
 
     //Add a provider for files without project
