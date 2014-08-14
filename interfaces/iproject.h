@@ -105,8 +105,6 @@ public:
      */
     Q_SCRIPTABLE virtual ProjectFolderItem* projectItem() const = 0;
 
-    Q_SCRIPTABLE virtual QList<ProjectFileItem*> files() const = 0;
-
     /**
      * @return all items with the corresponding @p path
      */
