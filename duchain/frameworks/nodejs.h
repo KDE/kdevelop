@@ -25,6 +25,7 @@
 #include "../declarationbuilder.h"
 #include "../duchainexport.h"
 #include <language/duchain/duchainpointer.h>
+#include <util/path.h>
 
 #include <QMutex>
 
@@ -64,6 +65,11 @@ public:
     KDevelop::DeclarationPointer moduleMember(const QString& moduleName,
                                               const QString& memberName,
                                               const KDevelop::IndexedString& url);
+
+    /**
+     * List of directories where Node.js modules visible from @p url may exist
+     */
+    KDevelop::Path::List moduleDirectories(const QString& url);
 
 private:
     void createObject(const QString& name, int index, DeclarationBuilder* builder);

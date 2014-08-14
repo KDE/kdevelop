@@ -139,6 +139,33 @@ DeclarationPointer NodeJS::moduleMember(const QString& moduleName,
     return member;
 }
 
+Path::List NodeJS::moduleDirectories(const QString& url)
+{
+    Path::List paths;
+
+    // QML/JS ships several modules that exist only in binary form in Node.js
+    QStringList dirs = QStandardPaths::locateAll(
+        QStandardPaths::GenericDataLocation,
+        QLatin1String("kdevqmljssupport/nodejsmodules"),
+        QStandardPaths::LocateDirectory
+    );
+
+    for (auto dir : dirs) {
+        paths.append(Path(dir));
+    }
+
+    // url/../node_modules, then url/../../node_modules, etc
+    Path path(url);
+    path.addPath(QLatin1String(".."));
+
+    while (path.segments().size() > 1) {
+        paths.append(path.cd(QLatin1String("node_modules")));
+        path.addPath(QLatin1String(".."));
+    }
+
+    return paths;
+}
+
 QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
 {
     QMutexLocker lock(&m_mutex);
@@ -158,30 +185,13 @@ QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
         return fileName;
     }
 
-    // Try the standard modules (that exist only in binary form in Node.js, but
-    // for which QML/JS ships module files)
-    fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-        QString("kdevqmljssupport/nodejsmodules/%1.js").arg(moduleName)
-    );
-
-    if (!fileName.isNull()) {
-        return fileName;
-    }
-
-    // Try url/../node_modules, then url/../../node_modules, etc
-    Path path(url);
-
-    path.addPath(QLatin1String("../.."));
-
-    while (path.segments().size() > 1) {
-        fileName = fileOrDirectoryPath(path.cd(QLatin1String("node_modules")).cd(moduleName).toLocalFile());
+    // Try all the paths that might contain modules
+    for (auto path : moduleDirectories(url)) {
+        fileName = fileOrDirectoryPath(path.cd(moduleName).toLocalFile());
 
         if (!fileName.isNull()) {
             break;
         }
-
-        // Move one level up
-        path.addPath(QLatin1String(".."));
     }
 
     return fileName;
