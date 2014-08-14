@@ -19,6 +19,7 @@ add_library(kdevqmljsduchain SHARED
 
 target_link_libraries(kdevqmljsduchain LINK_PRIVATE
     ${QT_QTCORE_LIBRARY}
+    KF5::I18n
 )
 
 target_link_libraries(kdevqmljsduchain LINK_PUBLIC

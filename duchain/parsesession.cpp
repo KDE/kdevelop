@@ -100,9 +100,23 @@ QString ParseSession::moduleName() const
     return m_baseName;
 }
 
+void ParseSession::addProblem(QmlJS::AST::Node* node,
+                              const QString& message,
+                              ProblemData::Severity severity)
+{
+    ProblemPointer p(new Problem);
+
+    p->setDescription(message);
+    p->setSeverity(severity);
+    p->setSource(ProblemData::SemanticAnalysis);
+    p->setFinalLocation(DocumentRange(m_url, editorFindRange(node, node).castToSimpleRange()));
+
+    m_problems << p;
+}
+
 QList<ProblemPointer> ParseSession::problems() const
 {
-    QList<ProblemPointer> problems;
+    QList<ProblemPointer> problems = m_problems;
 
     foreach (const QmlJS::DiagnosticMessage& msg, m_doc->diagnosticMessages()) {
         ProblemPointer p(new Problem);

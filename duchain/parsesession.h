@@ -81,6 +81,13 @@ public:
     QmlJS::AST::Node* ast() const;
 
     /**
+     * Add a problem concerning the given range
+     */
+    void addProblem(QmlJS::AST::Node* node,
+                    const QString& message,
+                    KDevelop::ProblemData::Severity severity = KDevelop::ProblemData::Warning);
+
+    /**
      * @return the problems encountered during parsing.
      */
     QList<KDevelop::ProblemPointer> problems() const;
@@ -183,6 +190,7 @@ private:
     int m_ownPriority;
     bool m_allDependenciesSatisfied;
 
+    QList<KDevelop::ProblemPointer> m_problems;
     typedef QHash<QmlJS::AST::Node*, KDevelop::DUContextPointer> NodeToContextHash;
     NodeToContextHash m_astToContext;
 };

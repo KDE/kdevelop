@@ -41,6 +41,7 @@
 #include <QtCore/QDirIterator>
 #include <QtCore/QFileInfo>
 #include <QtCore/QStandardPaths>
+#include <KLocalizedString>
 
 using namespace KDevelop;
 
@@ -332,11 +333,6 @@ bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
         return true;
     }
 
-    // Don't touch functions declared outside this file
-    if (func_declaration->topContext() != topContext()) {
-        return true;
-    }
-
     // Put the argument nodes in a list that has a definite size
     QVector<Declaration *> argumentDecls = func_declaration->internalContext()->localDeclarations();
     QVector<QmlJS::AST::ArgumentList *> args;
@@ -363,20 +359,33 @@ bool DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
         AbstractType::Ptr new_type = QmlJS::mergeTypes(current_type, call_type);
 
         // Update the declaration of the argument and its type in the function type
-        new_func_type->addArgument(new_type);
-        argumentDecls.at(i)->setAbstractType(new_type);
+        if (func_declaration->topContext() == topContext()) {
+            new_func_type->addArgument(new_type);
+            argumentDecls.at(i)->setAbstractType(new_type);
+        }
+
+        // Add a warning if it is possible that the argument types don't match
+        if (!m_prebuilding && !areTypesEqual(current_type, call_type)) {
+            m_session->addProblem(argument, i18n(
+                "Possible type mismatch between the argument type (%1) and the value passed as argument (%2)",
+                current_type->toString(),
+                call_type->toString()
+            ), ProblemData::Hint);
+        }
     }
 
     // Replace the function's type with the new type having updated arguments
-    new_func_type->setReturnType(func_type->returnType());
-    new_func_type->setDeclaration(func_declaration);
-    func_declaration->setAbstractType(new_func_type.cast<AbstractType>());
+    if (func_declaration->topContext() == topContext()) {
+        new_func_type->setReturnType(func_type->returnType());
+        new_func_type->setDeclaration(func_declaration);
+        func_declaration->setAbstractType(new_func_type.cast<AbstractType>());
 
-    if (expr.declaration) {
-        // expr.declaration is the variable that contains the function, while
-        // func_declaration is the declaration of the function. They can be
-        // different and both need to be updated
-        expr.declaration->setAbstractType(new_func_type.cast<AbstractType>());
+        if (expr.declaration) {
+            // expr.declaration is the variable that contains the function, while
+            // func_declaration is the declaration of the function. They can be
+            // different and both need to be updated
+            expr.declaration->setAbstractType(new_func_type.cast<AbstractType>());
+        }
     }
 
     return false;   // The base and the arguments have already been explored
@@ -1004,7 +1013,8 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
     } else if (dir.isFile()) {
         // Import the specific file given in the import statement
         entries.append(dir);
-    } else {
+    } else if (!m_prebuilding) {
+        m_session->addProblem(node, i18n("Module not found, some types or properties may not be recognized"));
         return;
     }
 
@@ -1191,6 +1201,19 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
                 signal->internalContext(),
                 nullptr
             ));
+        }
+    } else {
+        // Check that the type of the value matches the type of the property
+        AbstractType::Ptr expressionType = findType(node->statement).type;
+        auto expressionIntegralType = IntegralType::Ptr::dynamicCast(expressionType);
+        DUChainReadLocker lock;
+
+        if (!m_prebuilding && bindingDecl && !areTypesEqual(bindingDecl->abstractType(), expressionType)) {
+            m_session->addProblem(node->qualifiedId, i18n(
+                "Mismatch between the value type (%1) and the property type (%2)",
+                expressionType->toString(),
+                bindingDecl->abstractType()->toString()
+            ), ProblemData::Error);
         }
     }
 
@@ -1428,4 +1451,38 @@ void DeclarationBuilder::registerBaseClasses()
             }
         }
     }
+}
+
+bool DeclarationBuilder::areTypesEqual(const AbstractType::Ptr& a, const AbstractType::Ptr& b)
+{
+    if (!a || !b) {
+        return true;
+    }
+
+    if (a->whichType() == AbstractType::TypeUnsure || b->whichType() == AbstractType::TypeUnsure) {
+        // Don't try to guess something if one of the types is unsure
+        return true;
+    }
+
+    auto aIntegral = IntegralType::Ptr::dynamicCast(a);
+    auto bIntegral = IntegralType::Ptr::dynamicCast(b);
+
+    if ((aIntegral && aIntegral->dataType() == IntegralType::TypeMixed) ||
+        (bIntegral && bIntegral->dataType() == IntegralType::TypeMixed)) {
+        // Mixed types, don't try to be clever
+        return true;
+    }
+
+    if (bIntegral && bIntegral->dataType() == IntegralType::TypeString) {
+        // In QML/JS, a string can be converted to nearly everything else
+        return true;
+    }
+
+    if (aIntegral && bIntegral && bIntegral->dataType() == IntegralType::TypeInt &&
+        (aIntegral->dataType() == IntegralType::TypeDouble || aIntegral->dataType() == IntegralType::TypeFloat)) {
+        // Cast from int to float possible
+        return true;
+    }
+
+    return a->equals(b.constData());
 }
