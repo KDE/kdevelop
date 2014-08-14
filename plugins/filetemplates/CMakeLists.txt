@@ -28,11 +28,10 @@ qt5_wrap_ui(kdevfiletemplates_PART_SRCS
 add_library(kdevfiletemplates MODULE ${kdevfiletemplates_PART_SRCS})
 
 target_link_libraries(kdevfiletemplates
-    
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
+    KDev::Interfaces
+    KDev::Language
+    KDev::Project
+    KDev::Util
     KF5::NewStuff
     KF5::TextEditor
     KF5::ItemModels

@@ -21,7 +21,6 @@ qt5_wrap_ui(kdevappwizard_PART_SRCS ${kdevappwizard_PART_UI})
 
 add_library(kdevappwizard MODULE ${kdevappwizard_PART_SRCS})
 target_link_libraries(kdevappwizard
-    
     KF5::KIOWidgets
     KF5::NewStuff
     KF5::Archive

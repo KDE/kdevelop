@@ -148,7 +148,7 @@ set(grantlee_LIB_SRCS
 )
 
 if (Grantlee_FOUND)
-    list(APPEND kdevplatformlanguage_LIB_SRCS ${grantlee_LIB_SRCS})
+    list(APPEND KDevPlatformLanguage_LIB_SRCS ${grantlee_LIB_SRCS})
 endif()
 
 qt5_wrap_ui(KDevPlatformLanguage_LIB_SRCS
