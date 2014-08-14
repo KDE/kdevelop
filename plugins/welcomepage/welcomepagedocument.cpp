@@ -37,7 +37,7 @@ WelcomePageDocument::WelcomePageDocument(const QList<KDevelop::IProject*>& proje
     : Sublime::UrlDocument(ICore::self()->uiController()->controller(), *s_welcomePageUrl), IDocument(ICore::self())
     , m_projects(projects)
 {
-    setPrettyName(i18n("Dashboard"));
+    setTitle(i18n("Dashboard"));
 }
 
 void WelcomePageDocument::activate(Sublime::View* /*activeView*/, KParts::MainWindow* /*mainWindow*/)
