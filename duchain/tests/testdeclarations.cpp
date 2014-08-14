@@ -32,6 +32,7 @@
 
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/integraltype.h>
+#include <language/duchain/problem.h>
 #include <language/duchain/classdeclaration.h>
 
 QTEST_KDEMAIN(TestDeclarations, NoGUI);
@@ -47,6 +48,25 @@ void TestDeclarations::initTestCase()
 void TestDeclarations::cleanupTestCase()
 {
     TestCore::shutdown();
+}
+
+void TestDeclarations::testJSProblems()
+{
+    const IndexedString file("jsproblems.js");
+    ParseSession session(file,
+        "function f(a) {}\n"
+        "f(2);\n"
+        "f(true);\n",
+    0);
+
+    QVERIFY(session.ast());
+    DeclarationBuilder builder(&session);
+
+    builder.build(file, session.ast());
+    auto problems = session.problems();
+
+    QCOMPARE(problems.count(), 1);
+    QCOMPARE((KTextEditor::Range)problems.at(0)->finalLocation(), KTextEditor::Range(2, 2, 2, 6));
 }
 
 void TestDeclarations::testFunction()
