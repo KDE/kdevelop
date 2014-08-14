@@ -64,20 +64,20 @@ public:
 CompilerPointer CompilerProvider::compilerForItem(ProjectBaseItem* item) const
 {
     auto project = item ? item->project() : nullptr;
-    auto compiler = m_projects.value(project);
+    Q_ASSERT(m_projects.contains(project));
+    auto compiler = m_projects[project];
+    Q_ASSERT(compiler);
     return compiler;
 }
 
 QHash<QString, QString> CompilerProvider::defines( ProjectBaseItem* item ) const
 {
-    auto compiler = compilerForItem(item);
-    return compiler ? compiler->defines() : QHash<QString, QString>();
+    return compilerForItem(item)->defines();
 }
 
 Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
 {
-    auto compiler = compilerForItem(item);
-    return compiler ? compiler->includes() : Path::List();
+    return compilerForItem(item)->includes();
 }
 
 IDefinesAndIncludesManager::Type CompilerProvider::type() const
@@ -193,10 +193,6 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
 
     connect( ICore::self()->projectController(), &IProjectController::projectAboutToBeOpened, this, &CompilerProvider::projectOpened );
     connect( ICore::self()->projectController(), &IProjectController::projectClosed, this, &CompilerProvider::projectClosed);
-    auto projects = ICore::self()->projectController()->projects();
-    foreach (auto project, projects) {
-        projectOpened(project);
-    }
 
     //Add a provider for files without project
     addPoject( nullptr, checkCompilerExists({}));
@@ -209,7 +205,8 @@ QVector< CompilerPointer > CompilerProvider::compilers() const
 
 CompilerPointer CompilerProvider::currentCompiler(IProject* project) const
 {
-    return m_projects.value(project);
+    Q_ASSERT(m_projects.contains(project));
+    return m_projects[project];
 }
 
 bool CompilerProvider::registerCompiler(const CompilerPointer& compiler)
