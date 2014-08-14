@@ -210,9 +210,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::importCompletion()
         dir.setPath(dataDir);
 
         for (const QString& entry : dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
-            items.append(CompletionTreeItemPointer(
-                new ModuleCompletionItem(fragment + entry, ModuleCompletionItem::Import)
-            ));
+            items.append(CompletionTreeItemPointer(new ModuleCompletionItem(
+                fragment + entry.section(QLatin1Char('.'), 0, 0),
+                ModuleCompletionItem::Import
+            )));
         }
     }
 

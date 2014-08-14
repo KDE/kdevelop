@@ -64,7 +64,7 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
     }
 
     // List of the paths in which the modules will be looked for
-    KDevelop::Path::List paths = m_includeDirs[baseFile];
+    KDevelop::Path::List paths;
 
     for (auto path : QCoreApplication::instance()->libraryPaths()) {
         KDevelop::Path p(path);
@@ -74,10 +74,12 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
         paths << p.cd(QLatin1String("../imports"));
     }
 
+    paths << m_includeDirs[baseFile];
+
     // Find the path for which <path>/u/r/i exists
     QString fragment = QString(uri).replace(QLatin1Char('.'), QDir::separator());
 
-    if (!version.startsWith(QLatin1String("1."))) {
+    if (!version.isEmpty() && !version.startsWith(QLatin1String("1."))) {
         // Modules having a version greater or equal to 2 are stored in a directory
         // name like QtQuick.2
         fragment += QLatin1Char('.') + version.section(QLatin1Char('.'), 0, 0);
