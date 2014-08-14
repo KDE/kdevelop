@@ -21,8 +21,9 @@
 #define KDEVELOP_SHELL_PROJECTCONTROLLERTEST_INCLUDED
 
 #include <QtCore/QObject>
-#include <KUrl>
-#include <QDir>
+#include <QtCore/QDir>
+
+#include "util/path.h"
 
 class QSignalSpy;
 namespace KDevelop
@@ -56,7 +57,7 @@ private slots:
     void fileInSubdirectory();
 
 private:
-    KUrl writeProjectConfig(const QString& name);
+    KDevelop::Path writeProjectConfig(const QString& name);
 
     QSignalSpy* createOpenedSpy();
     QSignalSpy* createClosedSpy();
@@ -70,13 +71,13 @@ private:
     FakeFileManager* createFileManager();
 
 private:
-    KUrl m_projFileUrl;
+    KDevelop::Path m_projFilePath;
     KDevelop::Core* m_core;
     KDevelop::ProjectController* m_projCtrl;
     QString m_projName;
-    QList<KUrl> m_tmpConfigs;
+    QList<KDevelop::Path> m_tmpConfigs;
     QDir m_scratchDir;
-    KUrl m_projFolder;
+    KDevelop::Path m_projFolder;
 
     QList<FakeFileManager*> m_fileManagerGarbage;
 };

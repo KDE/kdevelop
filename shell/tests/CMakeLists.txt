@@ -33,9 +33,11 @@ target_link_libraries(shell-documentoperationtest Qt5::Test KDev::Tests KDev::Sh
 ## This test needs fixing:
 # creating a factory is not enough to inject a new project plugin, we also need a KPluginInfo
 set( projectcontrollertest_SRCS projectcontrollertest.cpp )
-#add_executable(shell-projectcontrollertest ${projectcontrollertest_SRCS})\nadd_test(shell-projectcontrollertest shell-projectcontrollertest)
-#ecm_mark_as_test(shell-projectcontrollertest)
-#target_link_libraries(shell-projectcontrollertest Qt5::Test KDev::Shell KDev::Sublime KDev::Project KDev::Interfaces )
+add_executable(shell-projectcontrollertest ${projectcontrollertest_SRCS})
+add_test(shell-projectcontrollertest shell-projectcontrollertest)
+ecm_mark_as_test(shell-projectcontrollertest)
+target_link_libraries(shell-projectcontrollertest Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES} KDev::Shell KDev::Sublime KDev::Project KDev::Interfaces )
+
 
 set( sessioncontrollertest_SRCS sessioncontrollertest.cpp )
 add_executable(shell-sessioncontrollertest ${sessioncontrollertest_SRCS})

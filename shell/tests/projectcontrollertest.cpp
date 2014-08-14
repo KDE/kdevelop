@@ -23,7 +23,10 @@
 #include <QSignalSpy>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kcomponentdata.h>
+#include <KUrl>
 #include <kdebug.h>
+#include <QtTest/QTest>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -36,8 +39,6 @@
 #include "../project/projectmodel.h"
 
 using namespace KDevelop;
-
-using QTest::kWaitForSignal;
 
 Q_DECLARE_METATYPE(KDevelop::IProject*)
 
@@ -52,7 +53,7 @@ public:
     bool m_reopen;
 
 public slots:
-    virtual KUrl askProjectConfigLocation(const KUrl& startUrl) { return KUrl(); }
+    virtual KUrl askProjectConfigLocation(bool fetch, const KUrl& startUrl = KUrl()) { return KUrl(); }
     virtual bool userWantsReopen() { return m_reopen; }
 };
 
@@ -65,11 +66,11 @@ class FakeFileManager : public IPlugin, public IProjectFileManager
     Q_INTERFACES(KDevelop::IProjectFileManager)
 
 public:
-    FakeFileManager(QObject*, const QVariantList&) : IPlugin(KGlobal::mainComponent(), Core::self()) {
+    FakeFileManager(QObject*, const QVariantList&) : IPlugin(ICore::self()->componentData().componentName(), Core::self()) {
         KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     }
 
-    FakeFileManager() : IPlugin(KGlobal::mainComponent(), Core::self()) {
+    FakeFileManager() : IPlugin(ICore::self()->componentData().componentName(), Core::self()) {
         KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     }
 
@@ -79,54 +80,52 @@ public:
         return IProjectFileManager::Files | IProjectFileManager::Folders;
     }
 
-    QMap<KUrl, KUrl::List> m_filesInFolder; // initialize 
-    QMap<KUrl, KUrl::List> m_subFoldersInFolder;
+    QMap<Path, Path::List> m_filesInFolder; // initialize
+    QMap<Path, Path::List> m_subFoldersInFolder;
 
     /*! Setup this manager such that @p folder contains @p file */
-    void addFileToFolder(KUrl folder, KUrl file) {
+    void addFileToFolder(Path folder, Path file) {
         if (!m_filesInFolder.contains(folder)) {
-            m_filesInFolder[folder] = KUrl::List();
+            m_filesInFolder[folder] = Path::List();
         }
         m_filesInFolder[folder] << file;
     }
 
     /*! Setup this manager such that @p folder has @p subFolder */
-    void addSubFolderTo(KUrl folder, KUrl subFolder) {
+    void addSubFolderTo(Path folder, Path subFolder) {
         if (!m_subFoldersInFolder.contains(folder)) {
-            m_subFoldersInFolder[folder] = KUrl::List();
+            m_subFoldersInFolder[folder] = Path::List();
         }
         m_subFoldersInFolder[folder] << subFolder;
     }
 
     virtual QList<ProjectFolderItem*> parse(ProjectFolderItem *dom) {
-        KUrl::List files = m_filesInFolder[dom->url()];
-        foreach (const KUrl& file, files) {
+        Path::List files = m_filesInFolder[dom->path()];
+        foreach (const Path& file, files) {
             new ProjectFileItem(dom->project(), file, dom);
         }
-        KUrl::List folderUrls = m_subFoldersInFolder[dom->url()];
+        Path::List folderPaths = m_subFoldersInFolder[dom->path()];
         QList<ProjectFolderItem*> folders;
-        foreach (const KUrl& folderUrl, folderUrls) {
-            folders << new ProjectFolderItem(dom->project(), folderUrl, dom);
+        foreach (const Path& folderPath, folderPaths) {
+            folders << new ProjectFolderItem(dom->project(), folderPath, dom);
         }
         return folders;
     }
 
     virtual ProjectFolderItem *import(IProject *project) {
-        ProjectFolderItem* it = new ProjectFolderItem(project, project->folder());
-        it->setProjectRoot(true);
+        ProjectFolderItem* it = new ProjectFolderItem(project, project->path());
         return it;
     }
 
-    virtual ProjectFolderItem* addFolder(const KUrl& folder, ProjectFolderItem *parent) { return 0; }
-    virtual ProjectFileItem* addFile(const KUrl& folder, ProjectFolderItem *parent) { return 0; }
-    virtual bool removeFolder(ProjectFolderItem *folder) { return false; }
-    virtual bool removeFile(ProjectFileItem *file) { return false; }
-    virtual bool renameFile(ProjectFileItem* oldFile,
-                            const KUrl& newFile) { return false; }
+    virtual ProjectFolderItem* addFolder(const Path& folder, ProjectFolderItem *parent) { return 0; }
+    virtual ProjectFileItem* addFile(const Path& file, ProjectFolderItem *parent) { return 0; }
+    virtual bool removeFilesAndFolders(const QList<ProjectBaseItem*> &items) { return false; }
+    virtual bool moveFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem* newParent) { return false; }
+    virtual bool copyFilesAndFolders(const Path::List &items, KDevelop::ProjectFolderItem* newParent) { return false; }
+    virtual bool renameFile(ProjectFileItem* file, const Path& newPath) { return false; }
     virtual bool renameFolder(ProjectFolderItem* oldFolder,
-                              const KUrl& newFolder ) { return false; }
-    virtual bool reload(ProjectBaseItem* item) { return false; }
-
+                              const Path& newPath ) { return false; }
+    virtual bool reload(ProjectFolderItem* item) { return false; }
 };
 
 K_PLUGIN_FACTORY(FakeFileManagerFactory, registerPlugin<FakeFileManager>(); )
@@ -154,10 +153,10 @@ void ProjectControllerTest::cleanupTestCase()
 void ProjectControllerTest::init()
 {
     m_projName = "foo";
-    m_projFileUrl = writeProjectConfig(m_projName);
+    m_projFilePath = writeProjectConfig(m_projName);
     m_projCtrl = m_core->projectControllerInternal();
-    m_tmpConfigs << m_projFileUrl;
-    m_projFolder = KUrl(m_scratchDir.absolutePath() + '/');
+    m_tmpConfigs << m_projFilePath;
+    m_projFolder = Path(m_scratchDir.absolutePath() + '/');
 }
 
 void ProjectControllerTest::cleanup()
@@ -167,7 +166,7 @@ void ProjectControllerTest::cleanup()
     foreach(IProject* p, m_projCtrl->projects()) {
         m_projCtrl->closeProject(p);
     }
-    foreach(const KUrl &cfg, m_tmpConfigs) {
+    foreach(const Path &cfg, m_tmpConfigs) {
         QFile::remove(cfg.pathOrUrl());
     }
     qDeleteAll(m_fileManagerGarbage);
@@ -178,28 +177,28 @@ void ProjectControllerTest::cleanup()
 
 #define WAIT_FOR_OPEN_SIGNAL \
 {\
-    bool gotSignal = kWaitForSignal(m_projCtrl, SIGNAL(projectOpened(KDevelop::IProject*)), 30000);\
-    QVERIFY2(gotSignal, "Timeout while waiting for opened signal");\
+    QSignalSpy signal(m_projCtrl, SIGNAL(projectOpened(KDevelop::IProject*)));\
+    QVERIFY2(signal.wait(30000), "Timeout while waiting for opened signal");\
 } void(0)
 
 void ProjectControllerTest::openProject()
 {
     QSignalSpy* spy = createOpenedSpy();
     QVERIFY(!m_projCtrl->isProjectNameUsed(m_projName));
-    QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
     QCOMPARE(m_projCtrl->projectCount(), 1);
     IProject* proj;
     assertProjectOpened(m_projName, proj);QVERIFY(proj);
     assertSpyCaughtProject(spy, proj);
-    QCOMPARE(proj->projectFileUrl(), m_projFileUrl);
-    QCOMPARE(proj->folder(), KUrl(m_scratchDir.absolutePath()+'/'));
+    QCOMPARE(proj->projectFile(), m_projFilePath);
+    QCOMPARE(proj->path(), Path(m_scratchDir.absolutePath()+'/'));
     QVERIFY(m_projCtrl->isProjectNameUsed(m_projName));
 }
 
 void ProjectControllerTest::closeProject()
 {
-    QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
     IProject* proj = m_projCtrl->findProjectByName(m_projName);
     Q_ASSERT(proj);
@@ -217,13 +216,13 @@ void ProjectControllerTest::closeProject()
 
 void ProjectControllerTest::openCloseOpen()
 {
-    QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
     IProject* proj;
     assertProjectOpened(m_projName, proj);
-    QVERIFY(m_projCtrl->closeProject(proj));
+    m_projCtrl->closeProject(proj);
     QSignalSpy* spy = createOpenedSpy();
-    QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
     QVERIFY(m_projCtrl->isProjectNameUsed(m_projName));
     QCOMPARE(m_projCtrl->projectCount(), 1);
@@ -234,10 +233,10 @@ void ProjectControllerTest::openCloseOpen()
 void ProjectControllerTest::reopen()
 {
     m_projCtrl->setDialogProvider(new DialogProviderFake);
-    QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
     QSignalSpy* spy = createOpenedSpy();
-    QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
     QCOMPARE(m_projCtrl->projectCount(), 1);
     QVERIFY(m_projCtrl->isProjectNameUsed(m_projName));
@@ -252,13 +251,12 @@ void ProjectControllerTest::reopenWhileLoading()
     // loading. The second open request should be blocked.
     m_projCtrl->setDialogProvider(new DialogProviderFake);
     QSignalSpy* spy = createOpenedSpy();
-    QVERIFY(m_projCtrl->openProject(m_projFileUrl));
-    QVERIFY(!m_projCtrl->openProject(m_projFileUrl));
+    m_projCtrl->openProject(m_projFilePath.toUrl());
+    //m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
     // wait a bit for a second signal, this should timeout
-    QVERIFY2(!kWaitForSignal(m_projCtrl,
-        SIGNAL(projectOpened(KDevelop::IProject*)), 100),
-        "Received 2 projectOpened signals.");
+    QSignalSpy signal(m_projCtrl, SIGNAL(projectOpened(KDevelop::IProject*)));
+    QVERIFY2(!signal.wait(100), "Received 2 projectOpened signals.");
     QCOMPARE(m_projCtrl->projectCount(), 1);
     IProject* proj;
     assertProjectOpened(m_projName, proj);
@@ -268,11 +266,11 @@ void ProjectControllerTest::reopenWhileLoading()
 void ProjectControllerTest::openMultiple()
 {
     QString secondProj("bar");
-    KUrl secondCfgUrl = writeProjectConfig(secondProj);
+    Path secondCfgUrl = writeProjectConfig(secondProj);
     QSignalSpy* spy = createOpenedSpy();
-    QVERIFY(m_projCtrl->openProject(m_projFileUrl));
+    m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
-    QVERIFY(m_projCtrl->openProject(secondCfgUrl));
+    m_projCtrl->openProject(secondCfgUrl.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
 
     QCOMPARE(m_projCtrl->projectCount(), 2);
@@ -299,7 +297,7 @@ void ProjectControllerTest::openMultiple()
     QCOMPARE(1,m_projCtrl->projectModel()->rowCount()); \
     QModelIndex projIndex = m_projCtrl->projectModel()->index(0,0); \
     QVERIFY(projIndex.isValid()); \
-    ProjectBaseItem* i = m_projCtrl->projectModel()->item( projIndex ); \
+    ProjectBaseItem* i = m_projCtrl->projectModel()->itemFromIndex( projIndex ); \
     QVERIFY(i); \
     QVERIFY(i->folder()); \
     rootItem = i->folder();\
@@ -308,25 +306,25 @@ void ProjectControllerTest::openMultiple()
 /*! Verify that the projectitem @p item has a single child item
  *  named @p name with url @p url. @p subFolder is an output parameter
  *  that contains the sub-folder projectitem. */
-#define ASSERT_SINGLE_SUBFOLDER_IN(item, name, url__, subFolder) \
+#define ASSERT_SINGLE_SUBFOLDER_IN(item, name, path__, subFolder) \
 {\
     QCOMPARE(1,item->rowCount());\
     QCOMPARE(1, item->folderList().size());\
     ProjectFolderItem* fo = item->folderList()[0];\
     QVERIFY(fo);\
-    QCOMPARE(url__, fo->url());\
-    QCOMPARE(QString(name), fo->data(Qt::DisplayRole).toString());\
+    QCOMPARE(path__, fo->path());\
+    QCOMPARE(QString(name), fo->folderName());\
     subFolder = fo;\
 } void(0)
 
-#define ASSERT_SINGLE_FILE_IN(rootFolder, name, url__, fileItem)\
+#define ASSERT_SINGLE_FILE_IN(rootFolder, name, path__, fileItem)\
 {\
     QCOMPARE(1,rootFolder->rowCount());\
     QCOMPARE(1, rootFolder->fileList().size());\
     ProjectFileItem* fi__ = rootFolder->fileList()[0];\
     QVERIFY(fi__);\
-    QCOMPARE(url__, fi__->url());\
-    QCOMPARE(QString(name), fi__->data(Qt::DisplayRole).toString());\
+    QCOMPARE(path__, fi__->path());\
+    QCOMPARE(QString(name), fi__->fileName());\
     fileItem = fi__;\
 } void(0)
 
@@ -342,15 +340,15 @@ void ProjectControllerTest::emptyProject()
     Q_ASSERT(fileMng);
 
     proj->setManagerPlugin(fileMng);
-    proj->open(m_projFileUrl);
+    proj->open(m_projFilePath);
     WAIT_FOR_OPEN_SIGNAL;
     ProjectFolderItem* rootFolder;
     ASSERT_SINGLE_PROJECT_IN_MODEL(rootFolder);
 
     // check that the project is empty
     QCOMPARE(0,rootFolder->rowCount());
-    QCOMPARE(m_projName, rootFolder->data(Qt::DisplayRole).toString());
-    QCOMPARE(m_projFolder, rootFolder->url());
+    QCOMPARE(m_projName, rootFolder->project()->name());
+    QCOMPARE(m_projFolder, rootFolder->path());
 }
 
 // command
@@ -363,22 +361,22 @@ void ProjectControllerTest::singleFile()
     FakeFileManager* fileMng = createFileManager();
     proj->setManagerPlugin(fileMng);
 
-    KUrl fileUrl = KUrl(m_projFolder, "foobar");
-    fileMng->addFileToFolder(m_projFolder, fileUrl);
+    Path filePath = Path(m_projFolder, QString::fromLatin1("foobar"));
+    fileMng->addFileToFolder(m_projFolder, filePath);
 
-    proj->open(m_projFileUrl);
+    proj->open(m_projFilePath);
     WAIT_FOR_OPEN_SIGNAL;
     ProjectFolderItem* rootFolder;
     ASSERT_SINGLE_PROJECT_IN_MODEL(rootFolder);
     ProjectFileItem* fi;
-    ASSERT_SINGLE_FILE_IN(rootFolder, "foobar", fileUrl, fi);
+    ASSERT_SINGLE_FILE_IN(rootFolder, "foobar", filePath, fi);
     QCOMPARE(0,fi->rowCount());
 
     proj->reloadModel();
     QTest::qWait(100); // NO signals for reload ...
 
     ASSERT_SINGLE_PROJECT_IN_MODEL(rootFolder);
-    ASSERT_SINGLE_FILE_IN(rootFolder, "foobar", fileUrl, fi);    
+    ASSERT_SINGLE_FILE_IN(rootFolder, "foobar", filePath, fi);
 }
 
 // command
@@ -388,19 +386,19 @@ void ProjectControllerTest::singleDirectory()
     // top folder. First setup a FakeFileManager with this folder
 
     Project* proj = new Project();
-    KUrl folderUrl = KUrl(m_projFolder, "foobar/");
+    Path folderPath = Path(m_projFolder, QString::fromLatin1("foobar/"));
     FakeFileManager* fileMng = createFileManager();
-    fileMng->addSubFolderTo(m_projFolder, folderUrl);
- 
+    fileMng->addSubFolderTo(m_projFolder, folderPath);
+
     proj->setManagerPlugin(fileMng);
-    proj->open(m_projFileUrl);
+    proj->open(m_projFilePath);
     WAIT_FOR_OPEN_SIGNAL;
     ProjectFolderItem* rootFolder;
     ASSERT_SINGLE_PROJECT_IN_MODEL(rootFolder);
 
     // check that the project contains a single subfolder
     ProjectFolderItem* sub;
-    ASSERT_SINGLE_SUBFOLDER_IN(rootFolder, "foobar", folderUrl, sub);
+    ASSERT_SINGLE_SUBFOLDER_IN(rootFolder, "foobar", folderPath, sub);
     QCOMPARE(0,sub->rowCount());
 }
 
@@ -411,43 +409,43 @@ void ProjectControllerTest::fileInSubdirectory()
     // First setup a FakeFileManager with this folder + file
 
     Project* proj = new Project();
-    KUrl folderUrl = KUrl(m_projFolder, "foobar/");
+    Path folderPath = Path(m_projFolder, QString::fromLatin1("foobar/"));
     FakeFileManager* fileMng = createFileManager();
-    fileMng->addSubFolderTo(m_projFolder, folderUrl);
-    KUrl fileUrl = KUrl(folderUrl, "zoo");
-    fileMng->addFileToFolder(folderUrl, fileUrl);
- 
+    fileMng->addSubFolderTo(m_projFolder, folderPath);
+    Path filePath = Path(folderPath, "zoo");
+    fileMng->addFileToFolder(folderPath, filePath);
+
     proj->setManagerPlugin(fileMng);
-    proj->open(m_projFileUrl);
+    proj->open(m_projFilePath);
     WAIT_FOR_OPEN_SIGNAL;
     ProjectFolderItem* rootFolder;
     ProjectFolderItem* sub;
     ProjectFileItem* file;
 
     ASSERT_SINGLE_PROJECT_IN_MODEL(rootFolder);
-    ASSERT_SINGLE_SUBFOLDER_IN(rootFolder, "foobar", folderUrl, sub);
-    ASSERT_SINGLE_FILE_IN(sub,"zoo",fileUrl,file);
+    ASSERT_SINGLE_SUBFOLDER_IN(rootFolder, "foobar", folderPath, sub);
+    ASSERT_SINGLE_FILE_IN(sub,"zoo",filePath,file);
 
     proj->reloadModel();
     QTest::qWait(100); // NO signals for reload ...
 
     ASSERT_SINGLE_PROJECT_IN_MODEL(rootFolder);
-    ASSERT_SINGLE_SUBFOLDER_IN(rootFolder, "foobar", folderUrl, sub);
-    ASSERT_SINGLE_FILE_IN(sub,"zoo",fileUrl,file);
+    ASSERT_SINGLE_SUBFOLDER_IN(rootFolder, "foobar", folderPath, sub);
+    ASSERT_SINGLE_FILE_IN(sub,"zoo",filePath,file);
 }
 
 ////////////////////// Helpers ///////////////////////////////////////////////
 
-KUrl ProjectControllerTest::writeProjectConfig(const QString& name)
+Path ProjectControllerTest::writeProjectConfig(const QString& name)
 {
-    KUrl configUrl = KUrl(m_scratchDir.absolutePath() + '/' + name + ".kdev4");
-    QFile f(configUrl.pathOrUrl());
+    Path configPath = Path(m_scratchDir.absolutePath() + '/' + name + ".kdev4");
+    QFile f(configPath.pathOrUrl());
     f.open(QIODevice::WriteOnly);
     QTextStream str(&f);
     str << "[Project]\n"
         << "Name=" << name << "\n";
     f.close();
-    return configUrl;
+    return configPath;
 }
 
 ////////////////// Custom assertions /////////////////////////////////////////
