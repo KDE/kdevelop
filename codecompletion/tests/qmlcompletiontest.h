@@ -33,6 +33,8 @@ private slots:
     void testContainsDeclaration_data();
     void testDoesNotContainDeclaration();
     void testDoesNotContainDeclaration_data();
+    void testContainsText();
+    void testContainsText_data();
 };
 
 }
