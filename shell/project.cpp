@@ -485,7 +485,6 @@ Path Project::path() const
 
 void Project::reloadModel()
 {
-    qDebug() << "reload!!!!!!!" << d->loading;
     if (d->loading) {
         d->scheduleReload = true;
         return;
@@ -580,25 +579,6 @@ bool Project::inProject( const IndexedString& path ) const
     return !d->itemsForPath( path ).isEmpty();
 }
 
-ProjectFileItem* Project::fileAt( int num ) const
-{
-    QList<ProjectFileItem*> files;
-    if ( d->topItem )
-        files = d->recurseFiles( d->topItem );
-
-    if( !files.isEmpty() && num >= 0 && num < files.count() )
-        return files.at( num );
-    return 0;
-}
-
-QList<ProjectFileItem *> Project::files() const
-{
-    QList<ProjectFileItem *> files;
-    if ( d->topItem )
-        files = d->recurseFiles( d->topItem );
-    return files;
-}
-
 QList< ProjectBaseItem* > Project::itemsForUrl(const KUrl& url) const
 {
     return d->itemsForPath(IndexedString(url));
@@ -639,14 +619,6 @@ QList<ProjectFolderItem*> Project::foldersForPath(const IndexedString& folder) c
             items << dynamic_cast<ProjectFolderItem*>( item );
     }
     return items;
-}
-
-int Project::fileCount() const
-{
-    QList<ProjectFileItem*> files;
-    if ( d->topItem )
-        files = d->recurseFiles( d->topItem );
-    return files.count();
 }
 
 IProjectFileManager* Project::projectFileManager() const

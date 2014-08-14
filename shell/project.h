@@ -65,12 +65,6 @@ public:
     /// Destructor.
     virtual ~Project();
 
-    /** Get a list of all files in the project */
-    virtual int fileCount() const;
-    virtual ProjectFileItem* fileAt( int i ) const;
-
-    virtual QList<ProjectFileItem*> files() const;
-
     virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString& path) const;
     virtual QList< ProjectFileItem* > filesForPath(const IndexedString& file) const;
     virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString& folder) const;

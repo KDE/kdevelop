@@ -105,13 +105,6 @@ public:
      */
     Q_SCRIPTABLE virtual ProjectFolderItem* projectItem() const = 0;
 
-    /** Get how much files are there in the project */
-    Q_SCRIPTABLE virtual int fileCount() const = 0;
-
-    /** Get the item corresponding to the @p pos file */
-    Q_SCRIPTABLE virtual ProjectFileItem* fileAt( int pos) const = 0;
-
-    /** Get a list of all files in the project */
     Q_SCRIPTABLE virtual QList<ProjectFileItem*> files() const = 0;
 
     /**

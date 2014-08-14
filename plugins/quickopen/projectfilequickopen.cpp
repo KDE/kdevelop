@@ -240,7 +240,7 @@ ProjectFileDataProvider::ProjectFileDataProvider()
 
 void ProjectFileDataProvider::projectClosing( IProject* project )
 {
-    foreach(ProjectFileItem* file, project->files()) {
+    foreach(ProjectFileItem* file, project->projectItem()->fileList()) {
         fileRemovedFromSet(file);
     }
 }
@@ -249,7 +249,7 @@ void ProjectFileDataProvider::projectOpened( IProject* project )
 {
     const int processAfter = 1000;
     int processed = 0;
-    foreach(ProjectFileItem* file, project->files()) {
+    foreach(ProjectFileItem* file, project->projectItem()->fileList()) {
         fileAddedToSet(file);
         if (++processed == processAfter) {
             // prevent UI-lockup when a huge project was imported

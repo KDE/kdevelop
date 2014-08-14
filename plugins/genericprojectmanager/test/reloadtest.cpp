@@ -161,7 +161,7 @@ void ProjectLoadTest::addRemoveFiles()
     }
 
     QTest::qWait(2000);
-    QCOMPARE(project->fileCount(), 1);
+    QCOMPARE(project->projectItem()->fileList().count(), 1);
 }
 
 void ProjectLoadTest::removeDirRecursive()
@@ -206,7 +206,7 @@ void ProjectLoadTest::removeDirRecursive()
     }
 
     QTest::qWait(2000);
-    QCOMPARE(project->fileCount(), 1);
+    QCOMPARE(project->projectItem()->fileList().count(), 1);
 }
 
 void createFile(const QString& path)
