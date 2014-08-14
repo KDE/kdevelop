@@ -60,6 +60,11 @@ CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, co
         m_completionKind = ImportCompletion;
     }
 
+    // Node.js module completions
+    if (m_text.endsWith(QLatin1String("require("))) {
+        m_completionKind = NodeModulesCompletion;
+    }
+
     // Detect whether the cursor is in a comment
     bool isLastLine = true;
     bool inString = false;
@@ -119,6 +124,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& ab
         return commentCompletion();
     case ImportCompletion:
         return importCompletion();
+    case NodeModulesCompletion:
+        return nodeModuleCompletions();
     case StringCompletion:
     case NoCompletion:
         break;
@@ -204,7 +211,32 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::importCompletion()
 
         for (const QString& entry : dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
             items.append(CompletionTreeItemPointer(
-                new ModuleCompletionItem(fragment + entry)
+                new ModuleCompletionItem(fragment + entry, ModuleCompletionItem::Import)
+            ));
+        }
+    }
+
+    return items;
+}
+
+QList<CompletionTreeItemPointer> CodeCompletionContext::nodeModuleCompletions()
+{
+    QList<CompletionTreeItemPointer> items;
+    QDir dir;
+
+    for (auto path : NodeJS::instance().moduleDirectories(m_duContext->url().str())) {
+        dir.setPath(path.toLocalFile());
+
+        for (QString entry : dir.entryList(QDir::Files, QDir::Name)) {
+            entry.replace(QLatin1String(".js"), QString());
+
+            if (entry.startsWith(QLatin1String("__"))) {
+                // Internal module, don't show
+                continue;
+            }
+
+            items.append(CompletionTreeItemPointer(
+                new ModuleCompletionItem(entry, ModuleCompletionItem::Quotes)
             ));
         }
     }

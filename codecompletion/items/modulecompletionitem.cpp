@@ -30,8 +30,9 @@
 
 using namespace KDevelop;
 
-QmlJS::ModuleCompletionItem::ModuleCompletionItem(const QString& name)
-: m_name(name)
+QmlJS::ModuleCompletionItem::ModuleCompletionItem(const QString& name, Decoration decoration)
+: m_name(name),
+  m_decoration(decoration)
 {
 }
 
@@ -83,9 +84,16 @@ QVariant QmlJS::ModuleCompletionItem::data(const QModelIndex& index, int role, c
 
 void QmlJS::ModuleCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& word)
 {
-    // Replace the whole line with an import statement
-    view->document()->replaceText(
-        KTextEditor::Range(word.start().line(), 0, word.start().line(), INT_MAX),
-        QString("import %1").arg(m_name)
-    );
+    switch (m_decoration) {
+    case Import:
+        // Replace the whole line with an import statement
+        view->document()->replaceText(
+            KTextEditor::Range(word.start().line(), 0, word.start().line(), INT_MAX),
+            QString("import %1").arg(m_name)
+        );
+        break;
+    case Quotes:
+        view->document()->replaceText(word, QString("\"%1\"").arg(m_name));
+        break;
+    }
 }

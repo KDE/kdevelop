@@ -30,7 +30,12 @@ namespace QmlJS {
 class ModuleCompletionItem : public KDevelop::CompletionTreeItem
 {
 public:
-    ModuleCompletionItem(const QString &name);
+    enum Decoration {
+        Import,        /*!< "import module", used for QML module imports */
+        Quotes         /*!< Put quotes around the module name */
+    };
+
+    ModuleCompletionItem(const QString &name, Decoration decoration);
 
     virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
     virtual int inheritanceDepth() const;
@@ -41,6 +46,7 @@ public:
 
 private:
     QString m_name;
+    Decoration m_decoration;
 };
 
 }

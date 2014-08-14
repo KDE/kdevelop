@@ -83,6 +83,7 @@ private:
     QList<KDevelop::CompletionTreeItemPointer> normalCompletion();
     QList<KDevelop::CompletionTreeItemPointer> commentCompletion();
     QList<KDevelop::CompletionTreeItemPointer> importCompletion();
+    QList<KDevelop::CompletionTreeItemPointer> nodeModuleCompletions();
 
     QList<KDevelop::CompletionTreeItemPointer> functionCallTips();
     QList<KDevelop::CompletionTreeItemPointer> completionsFromImports(CompletionInContextFlags flags);
@@ -100,11 +101,12 @@ private:
 
 private:
     enum CompletionKind {
-        NoCompletion,       /*!< @brief No code-completion at all */
-        NormalCompletion,   /*!< @brief Completion in a code context */
-        CommentCompletion,  /*!< @brief Completion in comments */
-        StringCompletion,   /*!< @brief Completion in strings */
-        ImportCompletion,   /*!< @brief Completion for import statements */
+        NoCompletion,           /*!< @brief No code-completion at all */
+        NormalCompletion,       /*!< @brief Completion in a code context */
+        CommentCompletion,      /*!< @brief Completion in comments */
+        StringCompletion,       /*!< @brief Completion in strings */
+        ImportCompletion,       /*!< @brief Completion for import statements */
+        NodeModulesCompletion   /*!< @brief Completion for node.js module names */
     };
 
     CompletionKind m_completionKind;
