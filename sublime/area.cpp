@@ -453,13 +453,7 @@ bool Area::closeView(View* view, bool silent)
 
     // otherwise we can silently close the view,
     // the document will still have an opened view somewhere
-    AreaIndex *index = indexOf(view);
-    Q_ASSERT(index);
-
-    emit aboutToRemoveView(index, view);
-    index->remove(view);
-    emit viewRemoved(index, view);
-    delete view;
+    delete removeView(view);
 
     return true;
 }
