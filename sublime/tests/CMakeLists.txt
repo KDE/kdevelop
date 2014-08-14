@@ -14,7 +14,7 @@ target_link_libraries(sublime-areawalkertest Qt5::Test KF5::Parts KDev::Sublime 
 
 set( viewtest_SRCS viewtest.cpp )
 add_executable(sublime-viewtest ${viewtest_SRCS})
-add_test(sublime-viewtest KDev::Sublime-viewtest)
+add_test(sublime-viewtest sublime-viewtest)
 ecm_mark_as_test(sublime-viewtest)
 target_link_libraries(sublime-viewtest Qt5::Test KF5::Parts KDev::Sublime )
 

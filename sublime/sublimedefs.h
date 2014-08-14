@@ -43,7 +43,7 @@ namespace Sublime {
     };
     Q_DECLARE_FLAGS(Positions, Position)
 
-    SUBLIME_EXPORT Position dockAreaToPosition(Qt::DockWidgetArea dockArea);
+    KDEVPLATFORMSUBLIME_EXPORT Position dockAreaToPosition(Qt::DockWidgetArea dockArea);
 
 }
 

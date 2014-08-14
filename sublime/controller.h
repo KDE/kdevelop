@@ -86,7 +86,7 @@ Controller has to exist before any area, document or mainwindow can be created.
 There's no point in having two controllers for one application unless they
 need to show completely different sets of areas.
 */
-class SUBLIME_EXPORT Controller: public QObject, public MainWindowOperator {
+class KDEVPLATFORMSUBLIME_EXPORT Controller: public QObject, public MainWindowOperator {
     Q_OBJECT
 public:
     Controller(QObject *parent = 0);

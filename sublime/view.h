@@ -43,7 +43,7 @@ If you create a subclass of View you need to override Sublime::View::createWidge
 provide a custom widget for your view.
 
 */
-class SUBLIME_EXPORT View: public QObject {
+class KDEVPLATFORMSUBLIME_EXPORT View: public QObject {
     Q_OBJECT
 public:
     enum WidgetOwnership {

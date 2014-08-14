@@ -56,7 +56,7 @@ MainWindow *mw = new MainWindow(controller);
 controller->show(area, mw);
 @endcode
 */
-class SUBLIME_EXPORT Area: public QObject {
+class KDEVPLATFORMSUBLIME_EXPORT Area: public QObject {
     Q_OBJECT
 public:
     /**Creates and area with given @p name and adds it to the @p controller.

@@ -30,7 +30,7 @@ set(sublime_LIB_SRCS
 add_library(KDevPlatformSublime ${sublime_LIB_SRCS})
 add_library(KDev::Sublime ALIAS KDevPlatformSublime)
 
-generate_export_header(KDevPlatformSublime EXPORT_FILE_NAME KDev::Sublimeexport.h)
+generate_export_header(KDevPlatformSublime EXPORT_FILE_NAME sublimeexport.h)
 target_link_libraries(KDevPlatformSublime
         LINK_PRIVATE KF5::KIOWidgets
         LINK_PUBLIC KF5::Parts KF5::KDELibs4Support)

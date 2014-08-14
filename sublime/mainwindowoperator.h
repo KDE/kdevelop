@@ -33,7 +33,7 @@ class MainWindow;
 
 /**Proxy class to give descendants access to MainWindow::setArea
 and MainWindow::hideArea methods. Just inherit it and use the methods.*/
-class SUBLIME_EXPORT MainWindowOperator {
+class KDEVPLATFORMSUBLIME_EXPORT MainWindowOperator {
 protected:
     /**Sets the area of main window and fills it with views.*/
     void setArea(MainWindow *w, Area *area);

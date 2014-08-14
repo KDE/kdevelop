@@ -45,7 +45,7 @@ MainWindow w(controller);
 controller->showArea(area, &w);
 @endcode
 */
-class SUBLIME_EXPORT MainWindow: public KParts::MainWindow {
+class KDEVPLATFORMSUBLIME_EXPORT MainWindow: public KParts::MainWindow {
 Q_OBJECT
 public:
     /**Creates a mainwindow and adds it to the controller.*/

@@ -18,7 +18,7 @@ set(kdevtests_LIB_SRCS
 add_library(KDevPlatformTests ${kdevtests_LIB_SRCS})
 add_library(KDev::Tests ALIAS KDevPlatformTests)
 
-generate_export_header(KDevPlatformTests EXPORT_FILE_NAME KDev::Testsexport.h)
+generate_export_header(KDevPlatformTests EXPORT_FILE_NAME kdevplatformtestsexport.h)
 target_link_libraries(KDevPlatformTests LINK_PUBLIC
     KDev::Shell
     KDev::Language
@@ -46,7 +46,7 @@ install(FILES
     testlanguagecontroller.h
     testhelpers.h
     testplugincontroller.h
-    ${CMAKE_CURRENT_BINARY_DIR}/KDev::Testsexport.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kdevplatformtestsexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/tests/
     COMPONENT Devel
 )

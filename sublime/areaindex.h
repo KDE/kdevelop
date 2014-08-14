@@ -103,7 +103,7 @@ is visible at the time.
         root_index (view1, view2, view3, view4)
 @endcode
 */
-class SUBLIME_EXPORT AreaIndex {
+class KDEVPLATFORMSUBLIME_EXPORT AreaIndex {
 public:
     ~AreaIndex();
     AreaIndex(const AreaIndex &index);
@@ -183,7 +183,7 @@ private:
 This is the special index class returned by @ref Area::rootIndex().
 Doesn't provide any additional functionality beyond AreaIndex.
 */
-class SUBLIME_EXPORT RootAreaIndex: public AreaIndex {
+class KDEVPLATFORMSUBLIME_EXPORT RootAreaIndex: public AreaIndex {
 public:
     RootAreaIndex();
 private:
