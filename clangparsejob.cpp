@@ -212,7 +212,7 @@ void ClangParseJob::run()
         return;
     }
 
-    if (needsUpdate && !session.reparse(contents().contents, m_environment)) {
+    if (minimumFeatures() & TopDUContext::ForceUpdate || (needsUpdate && !session.reparse(contents().contents, m_environment))) {
         session.setData(createSessionData());
     } else {
         Q_ASSERT(session.url() == document());
