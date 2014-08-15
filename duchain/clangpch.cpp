@@ -54,7 +54,7 @@ ClangPCH::ClangPCH(const ClangParsingEnvironment& environment, ClangIndex* index
     }
 
     auto imports = ClangHelpers::tuImports(m_session.unit());
-    m_context = ClangHelpers::buildDUChain(m_session.file(), imports, m_session.data(), pchFeatures, m_includes);
+    m_context = ClangHelpers::buildDUChain(m_session.file(), imports, m_session, pchFeatures, m_includes);
 }
 
 IncludeFileContexts ClangPCH::mapIncludes(CXTranslationUnit tu) const
