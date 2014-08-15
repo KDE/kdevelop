@@ -34,6 +34,8 @@
 #include <project/projectmodel.h>
 #include <kconfiggroup.h>
 
+#include <language/duchain/indexedstring.h>
+
 #include "testconfig.h"
 
 using KDevelop::Core;
@@ -102,10 +104,12 @@ void CustomBuildSystemPluginTest::loadMultiPathProject()
     IProject* project = ICore::self()->projectController()->findProjectByName( "MultiPathProject" );
     QVERIFY( project );
     KDevelop::ProjectBaseItem* mainfile = 0;
-    foreach( KDevelop::ProjectBaseItem* i, project->files() ) {
-        if( i->text() == "main.cpp" ) {
-            mainfile = i;
-            break;
+    for (const auto& file: project->fileSet() ) {
+        for (auto i: project->filesForPath(file)) {
+            if( i->text() == "main.cpp" ) {
+                mainfile = i;
+                break;
+            }
         }
     }
     QVERIFY(mainfile);

@@ -30,6 +30,8 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
+#include <language/duchain/indexedstring.h>
+
 #include "idefinesandincludesmanager.h"
 
 using KDevelop::ICore;
@@ -90,10 +92,12 @@ void DefinesAndIncludesTest::loadMultiPathProject()
     QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
 
     KDevelop::ProjectBaseItem* mainfile = 0;
-    foreach( KDevelop::ProjectBaseItem* i, s_currentProject->files() ) {
-        if( i->text() == "main.cpp" ) {
-            mainfile = i;
-            break;
+    for (const auto& file: s_currentProject->fileSet() ) {
+        for (auto i: s_currentProject->filesForPath(file)) {
+            if( i->text() == "main.cpp" ) {
+                mainfile = i;
+                break;
+            }
         }
     }
     QVERIFY(mainfile);
