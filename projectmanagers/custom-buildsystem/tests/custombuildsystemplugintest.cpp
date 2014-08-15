@@ -34,7 +34,7 @@
 #include <project/projectmodel.h>
 #include <kconfiggroup.h>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include "testconfig.h"
 

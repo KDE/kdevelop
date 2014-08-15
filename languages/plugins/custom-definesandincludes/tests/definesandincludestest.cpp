@@ -30,7 +30,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include "idefinesandincludesmanager.h"
 
