@@ -90,7 +90,7 @@ void DefinesAndIncludesTest::loadMultiPathProject()
     QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
 
     KDevelop::ProjectBaseItem* mainfile = 0;
-    foreach( KDevelop::ProjectBaseItem* i, s_currentProject->projectItem()->fileList() ) {
+    foreach( KDevelop::ProjectBaseItem* i, s_currentProject->files() ) {
         if( i->text() == "main.cpp" ) {
             mainfile = i;
             break;
