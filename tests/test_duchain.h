@@ -50,6 +50,7 @@ private slots:
     void testEnsureNoDoubleVisit();
     void testReparseWithAllDeclarationsContextsAndUses();
     void testParsingEnvironment();
+    void testReparseInclude();
 
     void benchDUChainBuilder();
 };

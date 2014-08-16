@@ -645,4 +645,44 @@ void TestDUChain::testReparseWithAllDeclarationsContextsAndUses()
     QCOMPARE(foo->uses().size(), 1);
 }
 
+void TestDUChain::testReparseInclude()
+{
+    TestFile header("int foo() { return 42; }\n", "h");
+    TestFile impl("#include \"" + header.url().byteArray() + "\"\n"
+                  "int main() { return foo(); }", "cpp", &header);
+
+    // Use TopDUContext::AST to imitate that document is opened in the editor, so that ClangParseJob can store translation unit, that'll be used for reparsing.
+    impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsAndContexts|TopDUContext::AST));
+    QVERIFY(impl.waitForParsed(5000));
+    {
+        DUChainReadLocker lock;
+        auto implCtx = impl.topContext();
+        QVERIFY(implCtx);
+        QCOMPARE(implCtx->importedParentContexts().size(), 1);
+    }
+
+    impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST));
+    QVERIFY(impl.waitForParsed(5000));
+
+    DUChainReadLocker lock;
+    auto implCtx = impl.topContext();
+    QVERIFY(implCtx);
+    QCOMPARE(implCtx->localDeclarations().size(), 1);
+
+    QCOMPARE(implCtx->importedParentContexts().size(), 1);
+
+    auto headerCtx = DUChain::self()->chainForDocument(header.url());
+    QVERIFY(headerCtx);
+    QVERIFY(!headerCtx->parsingEnvironmentFile()->needsUpdate());
+    QCOMPARE(headerCtx->localDeclarations().size(), 1);
+
+    QVERIFY(implCtx->imports(headerCtx, CursorInRevision(0, 10)));
+
+    Declaration* foo = headerCtx->localDeclarations().first();
+    QCOMPARE(foo->uses().size(), 1);
+    QCOMPARE(foo->uses().begin().key(), impl.url());
+    QCOMPARE(foo->uses().begin()->size(), 1);
+    QCOMPARE(foo->uses().begin()->first(), RangeInRevision(1, 20, 1, 23));
+}
+
 #include "test_duchain.moc"

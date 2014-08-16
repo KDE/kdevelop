@@ -49,6 +49,32 @@ void visitInclusions(CXFile file, CXSourceLocation* stack, unsigned stackDepth, 
     }
 }
 
+CXChildVisitResult visitCursor(CXCursor cursor, CXCursor, CXClientData data)
+{
+    if (cursor.kind != CXCursor_InclusionDirective) {
+        return CXChildVisit_Continue;
+    }
+
+    auto imports = static_cast<Imports*>(data);
+    CXFile file = clang_getIncludedFile(cursor);
+
+    CXSourceLocation location = clang_getCursorLocation(cursor);
+    CXFile parentFile;
+    uint line, column;
+    clang_getFileLocation(location, &parentFile, &line, &column, nullptr);
+
+    foreach (auto import, *imports) {
+        // clang_getInclusions doesn't include the same import twice, so we shouldn't do it too.
+        if (import.file == file) {
+            return CXChildVisit_Continue;
+        }
+    }
+
+    imports->insert(parentFile, {file, CursorInRevision(line-1, column-1)});
+
+    return CXChildVisit_Recurse;
+}
+
 ReferencedTopDUContext createTopContext(const IndexedString& path, const ClangParsingEnvironment& environment)
 {
     ClangParsingEnvironmentFile* file = new ClangParsingEnvironmentFile(path, environment);
@@ -63,6 +89,13 @@ Imports ClangHelpers::tuImports(CXTranslationUnit tu)
 {
     Imports imports;
     clang_getInclusions(tu, &::visitInclusions, &imports);
+
+    if (imports.isEmpty()) {
+        //It happens on reparse when clang doesn't return anything on clang_getInclusions, because of CXTranslationUnit_PrecompiledPreamble flag.
+        CXCursor tuCursor = clang_getTranslationUnitCursor(tu);
+        clang_visitChildren(tuCursor, &visitCursor, &imports);
+    }
+
     return imports;
 }
 
