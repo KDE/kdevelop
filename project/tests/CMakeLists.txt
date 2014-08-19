@@ -6,20 +6,8 @@ include_directories(
     ${KDevPlatform_SOURCE_DIR}/project
 )
 
-set( test_projectmodel_SRCS
-    test_projectmodel.cpp
-)
-
-add_executable(test_projectmodel ${test_projectmodel_SRCS})
-add_test(test_projectmodel test_projectmodel)
-ecm_mark_as_test(test_projectmodel)
-target_link_libraries(test_projectmodel
-    Qt5::Test
-    KDev::Interfaces
-    KDev::Project
-    KDev::Language
-    KDev::Tests
-)
+ecm_add_test(test_projectmodel.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Interfaces KDev::Project KDev::Language KDev::Tests)
 
 set( projectmodelperformancetest_SRCS
     projectmodelperformancetest.cpp

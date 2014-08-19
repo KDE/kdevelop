@@ -20,6 +20,7 @@ project(KDevPlatform)
 # we need some parts of the ECM CMake helpers
 find_package (ECM 0.0.9 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
+include(ECMAddTests)
 include(ECMOptionalAddSubdirectory)
 include(ECMInstallIcons)
 include(ECMSetupVersion)

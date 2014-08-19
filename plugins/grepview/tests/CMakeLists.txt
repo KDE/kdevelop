@@ -14,15 +14,7 @@ set(kdevgrepview_PART_UI
     ../grepoutputview.ui
 )
 
-qt5_wrap_ui(findReplaceTest_SRCS ${kdevgrepview_PART_UI})
-add_executable(test_findreplace ${findReplaceTest_SRCS})
-add_test(test_findreplace test_findreplace)
-ecm_mark_as_test(test_findreplace)
-target_link_libraries(test_findreplace
-    Qt5::Test
-    
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-)
+ecm_add_test(${findReplaceTest_SRCS}
+    TEST_NAME test_findreplace
+    LINK_LIBRARIES Qt5::Test ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES}
+    GUI)

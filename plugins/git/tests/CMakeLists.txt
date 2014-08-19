@@ -14,15 +14,8 @@ if (GIT_FOUND)
         ../gitmessagehighlighter.cpp
         ../gitplugincheckinrepositoryjob.cpp
     )
-    qt5_wrap_ui(gittest_SRCS ../stashmanagerdialog.ui)
-    add_executable(test_kdevgit ${gittest_SRCS})
-    add_test(test_kdevgit test_kdevgit)
-    ecm_mark_as_test(test_kdevgit)
-    target_link_libraries(test_kdevgit
-        Qt5::Test
-        
-        ${KDEVPLATFORM_VCS_LIBRARIES}
-        ${KDEVPLATFORM_UTIL_LIBRARIES}
-        ${KDEVPLATFORM_TESTS_LIBRARIES}
-    )
+    ecm_add_test(${gittest_SRCS}
+        TEST_NAME test_kdevgit
+        LINK_LIBRARIES Qt5::Test ${KDEVPLATFORM_VCS_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES}
+        GUI)
 endif ()

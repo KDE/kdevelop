@@ -13,11 +13,7 @@ if (BZR_FOUND)
         ../copyjob.cpp
     )
 
-    kdevplatform_add_test(kdevbazaar-test SOURCES ${bazaartest_SRCS})
-    target_link_libraries(kdevbazaar-test
-        Qt5::Test
-        ${KDEVPLATFORM_VCS_LIBRARIES}
-        ${KDEVPLATFORM_UTIL_LIBRARIES}
-        ${KDEVPLATFORM_TESTS_LIBRARIES}
-    )
+    ecm_add_test(${bazaartest_SRCS}
+        TEST_NAME test_kdevbazaar
+        LINK_LIBRARIES Qt5::Test ${KDEVPLATFORM_VCS_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
 endif()

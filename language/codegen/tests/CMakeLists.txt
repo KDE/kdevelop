@@ -1,31 +1,15 @@
-set(test_documentchangeset_SRCS test_documentchangeset.cpp)
-
-add_executable(test_documentchangeset ${test_documentchangeset_SRCS})
-add_test(test_documentchangeset test_documentchangeset)
-ecm_mark_as_test(test_documentchangeset)
-target_link_libraries(test_documentchangeset Qt5::Test KDev::Tests KDev::Language)
-
-set(templaterenderertest_SRCS test_templaterenderer.cpp)
+ecm_add_test(test_documentchangeset.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
 
 if (Grantlee_FOUND)
-add_executable(templaterenderertest ${templaterenderertest_SRCS})
-add_test(templaterenderertest templaterenderertest)
-ecm_mark_as_test(templaterenderertest)
-target_link_libraries(templaterenderertest Qt5::Test KDev::Tests KDev::Language)
+    ecm_add_test(test_templaterenderer.cpp
+        LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
 
-set(templateclassgeneratortest_SRCS test_templateclassgenerator.cpp)
+    ecm_add_test(test_templateclassgenerator.cpp
+        LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
 
-add_executable(templateclassgeneratortest ${templateclassgeneratortest_SRCS})
-add_test(templateclassgeneratortest templateclassgeneratortest)
-ecm_mark_as_test(templateclassgeneratortest)
-target_link_libraries(templateclassgeneratortest Qt5::Test KDev::Tests KDev::Language)
-
-set(templatesmodeltest_SRCS test_templatesmodel.cpp)
-
-add_executable(templatesmodeltest ${templatesmodeltest_SRCS})
-add_test(templatesmodeltest templatesmodeltest)
-ecm_mark_as_test(templatesmodeltest)
-target_link_libraries(templatesmodeltest Qt5::Test KDev::Tests KDev::Language)
+    ecm_add_test(test_templatemodel.cpp
+        LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
 endif()
 
 configure_file(codegen_tests_config.h.cmake codegen_tests_config.h)
