@@ -65,5 +65,10 @@ void KDevSplashScreen::progress(int progress)
 
     // notify the QML script of the progress change
     rootObject()->setProperty("progress", progress);
-    qApp->processEvents();
+
+    // note: We don't have an eventloop running, hence we need to call both processEvents and sendPostedEvents here
+    // DeferredDelete events alone won't be processed until sendPostedEvents is called
+    // also see: http://osxr.org/qt/source/qtbase/tests/auto/widgets/kernel/qapplication/tst_qapplication.cpp#1401
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+    qApp->sendPostedEvents(0, QEvent::DeferredDelete);
 }
