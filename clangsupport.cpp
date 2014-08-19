@@ -59,6 +59,8 @@
 #include <KAction>
 #include <KActionCollection>
 
+#include <QRegExp>
+
 K_PLUGIN_FACTORY(KDevClangSupportFactory, registerPlugin<ClangSupport>(); )
 K_EXPORT_PLUGIN(KDevClangSupportFactory(
     KAboutData("kdevclangsupport", 0, ki18n("Clang Plugin"), "0.1",
@@ -75,10 +77,14 @@ namespace {
  *
  * @param originalRange This is the range that the resulting range will be based on
  *
- * @return Range pointing to the path-spec of the include.)
+ * @return Range pointing to the path-spec of the include or invalid range if there is no #include directive on the line.
  */
 SimpleRange rangeForIncludePathSpec(const QString& line, const SimpleRange& originalRange = SimpleRange())
 {
+    if (!line.contains(QRegExp("^\\s*#include"))) {
+        return SimpleRange::invalid();
+    }
+
     SimpleRange range = originalRange;
     int pos = 0;
     for (; pos < line.size(); ++pos) {
@@ -124,6 +130,9 @@ QPair<TopDUContextPointer, SimpleRange> importedContextForPosition(const KUrl& u
         return {{}, SimpleRange::invalid()};
 
     SimpleRange wordRange = rangeForIncludePathSpec(line, pair.second);
+    if (!wordRange.isValid()) {
+        return {{}, SimpleRange::invalid()};
+    }
 
     // Since this is called by the editor while editing, use a fast timeout so the editor stays responsive
     DUChainReadLocker lock(nullptr, 100);
@@ -152,6 +161,31 @@ QPair<TopDUContextPointer, SimpleRange> importedContextForPosition(const KUrl& u
             }
         }
     }
+
+    // The last resort. Check if the file is already included (maybe recursively from another files).
+    // This is needed as clang doesn't visit (clang_getInclusions) those inclusions.
+    // TODO: Maybe create an assistant that'll report whether the file is already included?
+    auto includeName = line.mid(wordRange.start.column, wordRange.end.column - wordRange.start.column);
+
+    if (!includeName.isEmpty()) {
+        if (includeName.startsWith(".")) {
+            KUrl dir(url.directory());
+            dir.addPath(includeName);
+            dir.cleanPath();
+            includeName = dir.pathOrUrl();
+        }
+
+        const auto recursiveImports = topContext->recursiveImportIndices();
+        auto iterator = recursiveImports.iterator();
+        while (iterator) {
+            const auto str = (*iterator).url().str();
+            if (str == includeName || (str.endsWith(includeName) && str[str.size()-includeName.size()-1]=='/')) {
+                return {TopDUContextPointer((*iterator).data()), wordRange};
+            }
+            ++iterator;
+        }
+    }
+
     return {{}, SimpleRange::invalid()};
 }
 
