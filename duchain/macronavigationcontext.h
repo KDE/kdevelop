@@ -27,6 +27,8 @@
 #include <language/editor/documentcursor.h>
 #include <language/duchain/navigation/abstractnavigationcontext.h>
 
+#include <QPointer>
+
 class KDEVCLANGDUCHAIN_EXPORT MacroNavigationContext : public KDevelop::AbstractNavigationContext
 {
 public:
@@ -45,7 +47,7 @@ private:
     QString m_body;
     KTextEditor::Document* m_preprocessed;
     KTextEditor::Document* m_definition;
-    QScopedPointer<QWidget> m_widget;
+    QPointer<QWidget> m_widget;
 };
 
 #endif

@@ -74,6 +74,7 @@ MacroDefinition::MacroDefinition(const RangeInRevision& range, DUContext* contex
   : Declaration(*new MacroDefinitionData, range)
 {
     d_func_dynamic()->setClassId(this);
+    setKind(Declaration::Type);
     if(context)
         setContext(context);
 }

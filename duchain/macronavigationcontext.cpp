@@ -100,6 +100,7 @@ MacroNavigationContext::~MacroNavigationContext()
 {
     delete m_preprocessed;
     delete m_definition;
+    delete m_widget;
 }
 
 QString MacroNavigationContext::name() const
