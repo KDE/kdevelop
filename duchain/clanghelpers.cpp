@@ -38,16 +38,16 @@ using namespace KDevelop;
 
 namespace {
 
-void visitInclusions(CXFile file, CXSourceLocation* stack, unsigned stackDepth, CXClientData d)
-{
-    if (stackDepth) {
-        auto imports = static_cast<Imports*>(d);
-        CXFile parentFile;
-        uint line, column;
-        clang_getFileLocation(stack[0], &parentFile, &line, &column, nullptr);
-        imports->insert(parentFile, {file, CursorInRevision(line-1, column-1)});
-    }
-}
+// void visitInclusions(CXFile file, CXSourceLocation* stack, unsigned stackDepth, CXClientData d)
+// {
+//     if (stackDepth) {
+//         auto imports = static_cast<Imports*>(d);
+//         CXFile parentFile;
+//         uint line, column;
+//         clang_getFileLocation(stack[0], &parentFile, &line, &column, nullptr);
+//         imports->insert(parentFile, {file, CursorInRevision(line-1, column-1)});
+//     }
+// }
 
 CXChildVisitResult visitCursor(CXCursor cursor, CXCursor, CXClientData data)
 {
@@ -88,13 +88,11 @@ ReferencedTopDUContext createTopContext(const IndexedString& path, const ClangPa
 Imports ClangHelpers::tuImports(CXTranslationUnit tu)
 {
     Imports imports;
-    clang_getInclusions(tu, &::visitInclusions, &imports);
+    // TODO: Use it once clang_getInclusions _does_ returns imports on reparse with CXTranslationUnit_PrecompiledPreamble flag.
+    //clang_getInclusions(tu, &::visitInclusions, &imports);
 
-    if (imports.isEmpty()) {
-        //It happens on reparse when clang doesn't return anything on clang_getInclusions, because of CXTranslationUnit_PrecompiledPreamble flag.
-        CXCursor tuCursor = clang_getTranslationUnitCursor(tu);
-        clang_visitChildren(tuCursor, &visitCursor, &imports);
-    }
+    CXCursor tuCursor = clang_getTranslationUnitCursor(tu);
+    clang_visitChildren(tuCursor, &visitCursor, &imports);
 
     return imports;
 }
