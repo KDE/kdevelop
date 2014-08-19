@@ -40,6 +40,8 @@ public:
     virtual bool needsUpdate(const KDevelop::ParsingEnvironment* environment = 0) const;
     virtual int type() const;
 
+    virtual bool matchEnvironment(const KDevelop::ParsingEnvironment* environment) const override;
+
     void setEnvironment(const ClangParsingEnvironment& environment);
 
     enum {

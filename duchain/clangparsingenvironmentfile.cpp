@@ -80,20 +80,17 @@ bool ClangParsingEnvironmentFile::needsUpdate(const ParsingEnvironment* environm
         Q_ASSERT(dynamic_cast<const ClangParsingEnvironment*>(environment));
         auto env = static_cast<const ClangParsingEnvironment*>(environment);
         if ((env->projectKnown() || env->projectKnown() == d_func()->projectWasKnown) && env->hash() != d_func()->environmentHash) {
-            if (url().str().contains("vector3d.h")) {
-                qDebug() << "environment differs, require update:" << url() << env->projectKnown() << d_func()->projectWasKnown << env->hash() << d_func()->environmentHash;
-            }
+            //qDebug() << "environment differs, require update:" << url() << env->projectKnown() << d_func()->projectWasKnown << " new: " << env->hash() << " old: " << d_func()->environmentHash;
+
             return true;
         } else {
-            if (url().str().contains("vector3d.h")) {
-                qDebug() << "environment matches:" << url() << env->projectKnown() << d_func()->projectWasKnown << env->hash() << d_func()->environmentHash;
-            }
+            //qDebug() << "environment matches:" << url() << env->projectKnown() << d_func()->projectWasKnown << env->hash() << d_func()->environmentHash;
         }
     }
     bool ret = KDevelop::ParsingEnvironmentFile::needsUpdate(environment);
-    if (url().str().contains("vector3d.h")) {
-        qDebug() << "FALLBACK:" << url() << ret;
-    }
+
+    //qDebug() << "FALLBACK update:" << url() << ret;
+
     return ret;
 }
 
@@ -101,4 +98,12 @@ void ClangParsingEnvironmentFile::setEnvironment(const ClangParsingEnvironment& 
 {
     d_func_dynamic()->environmentHash = environment.hash();
     d_func_dynamic()->projectWasKnown = environment.projectKnown();
+}
+
+bool ClangParsingEnvironmentFile::matchEnvironment(const ParsingEnvironment* environment) const
+{
+    if (auto clangEnv = dynamic_cast<const ClangParsingEnvironment*>(environment)) {
+        return clangEnv->projectKnown() == d_func()->projectWasKnown && clangEnv->hash() == d_func()->environmentHash;
+    }
+    return false;
 }

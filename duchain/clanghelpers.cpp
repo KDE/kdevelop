@@ -125,7 +125,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         const auto problems = session.problemsForFile(file);
 
         DUChainWriteLocker lock;
-        context = DUChain::self()->chainForDocument(path);
+        context = DUChain::self()->chainForDocument(path, &environment);
         if (!context) {
             context = ::createTopContext(path, environment);
         } else {
