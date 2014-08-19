@@ -55,6 +55,7 @@ private slots:
     void singleFile();
     void singleDirectory();
     void fileInSubdirectory();
+    void prettyFileName();
 
 private:
     KDevelop::Path writeProjectConfig(const QString& name);

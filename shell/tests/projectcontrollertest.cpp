@@ -290,11 +290,11 @@ void ProjectControllerTest::openMultiple()
     m_tmpConfigs << secondCfgUrl;
 }
 
-/*! Verify that the projectmodel contains a single project. Put this project's 
+/*! Verify that the projectmodel contains a single project. Put this project's
  *  ProjectFolderItem in the output parameter @p RootItem */
 #define ASSERT_SINGLE_PROJECT_IN_MODEL(rootItem) \
 {\
-    QCOMPARE(1,m_projCtrl->projectModel()->rowCount()); \
+    QCOMPARE(m_projCtrl->projectModel()->rowCount(), 1); \
     QModelIndex projIndex = m_projCtrl->projectModel()->index(0,0); \
     QVERIFY(projIndex.isValid()); \
     ProjectBaseItem* i = m_projCtrl->projectModel()->itemFromIndex( projIndex ); \
@@ -308,23 +308,23 @@ void ProjectControllerTest::openMultiple()
  *  that contains the sub-folder projectitem. */
 #define ASSERT_SINGLE_SUBFOLDER_IN(item, name, path__, subFolder) \
 {\
-    QCOMPARE(1,item->rowCount());\
-    QCOMPARE(1, item->folderList().size());\
+    QCOMPARE(item->rowCount(), 1);\
+    QCOMPARE(item->folderList().size(), 1);\
     ProjectFolderItem* fo = item->folderList()[0];\
     QVERIFY(fo);\
-    QCOMPARE(path__, fo->path());\
-    QCOMPARE(QString(name), fo->folderName());\
+    QCOMPARE(fo->path(), path__);\
+    QCOMPARE(fo->folderName(), QString(name));\
     subFolder = fo;\
 } void(0)
 
 #define ASSERT_SINGLE_FILE_IN(rootFolder, name, path__, fileItem)\
 {\
-    QCOMPARE(1,rootFolder->rowCount());\
-    QCOMPARE(1, rootFolder->fileList().size());\
+    QCOMPARE(rootFolder->rowCount(), 1);\
+    QCOMPARE(rootFolder->fileList().size(), 1);\
     ProjectFileItem* fi__ = rootFolder->fileList()[0];\
     QVERIFY(fi__);\
-    QCOMPARE(path__, fi__->path());\
-    QCOMPARE(QString(name), fi__->fileName());\
+    QCOMPARE(fi__->path(), path__);\
+    QCOMPARE(fi__->fileName(), QString(name));\
     fileItem = fi__;\
 } void(0)
 
@@ -335,20 +335,26 @@ void ProjectControllerTest::emptyProject()
     // an empty project
 
     assertEmptyProjectModel();
-    Project* proj = new Project();
+
+    m_projCtrl->openProject(m_projFilePath.toUrl());
+    WAIT_FOR_OPEN_SIGNAL;
+    Project* proj;
+    assertProjectOpened(m_projName, (KDevelop::IProject*&)proj);
+
     FakeFileManager* fileMng = createFileManager();
     Q_ASSERT(fileMng);
 
     proj->setManagerPlugin(fileMng);
-    proj->open(m_projFilePath);
-    WAIT_FOR_OPEN_SIGNAL;
+    proj->reloadModel();
+    QTest::qWait(100);
+
     ProjectFolderItem* rootFolder;
     ASSERT_SINGLE_PROJECT_IN_MODEL(rootFolder);
 
     // check that the project is empty
-    QCOMPARE(0,rootFolder->rowCount());
-    QCOMPARE(m_projName, rootFolder->project()->name());
-    QCOMPARE(m_projFolder, rootFolder->path());
+    QCOMPARE(rootFolder->rowCount(), 0);
+    QCOMPARE(rootFolder->project()->name(), m_projName);
+    QCOMPARE(rootFolder->path(), m_projFolder);
 }
 
 // command
@@ -357,23 +363,25 @@ void ProjectControllerTest::singleFile()
     // verify that the project model contains a single file in the
     // top folder. First setup a FakeFileManager with this file
 
-    Project* proj = new Project();
+    m_projCtrl->openProject(m_projFilePath.toUrl());
+    WAIT_FOR_OPEN_SIGNAL;
+    Project* proj;
+    assertProjectOpened(m_projName, (KDevelop::IProject*&)proj);
+
     FakeFileManager* fileMng = createFileManager();
     proj->setManagerPlugin(fileMng);
 
     Path filePath = Path(m_projFolder, QString::fromLatin1("foobar"));
     fileMng->addFileToFolder(m_projFolder, filePath);
 
-    proj->open(m_projFilePath);
-    WAIT_FOR_OPEN_SIGNAL;
+    proj->reloadModel();
+    QTest::qWait(100); // NO signals for reload ...
+
     ProjectFolderItem* rootFolder;
     ASSERT_SINGLE_PROJECT_IN_MODEL(rootFolder);
     ProjectFileItem* fi;
     ASSERT_SINGLE_FILE_IN(rootFolder, "foobar", filePath, fi);
-    QCOMPARE(0,fi->rowCount());
-
-    proj->reloadModel();
-    QTest::qWait(100); // NO signals for reload ...
+    QCOMPARE(fi->rowCount(), 0);
 
     ASSERT_SINGLE_PROJECT_IN_MODEL(rootFolder);
     ASSERT_SINGLE_FILE_IN(rootFolder, "foobar", filePath, fi);
@@ -385,21 +393,26 @@ void ProjectControllerTest::singleDirectory()
     // verify that the project model contains a single folder in the
     // top folder. First setup a FakeFileManager with this folder
 
-    Project* proj = new Project();
+    m_projCtrl->openProject(m_projFilePath.toUrl());
+    WAIT_FOR_OPEN_SIGNAL;
+    Project* proj;
+    assertProjectOpened(m_projName, (KDevelop::IProject*&)proj);
+
     Path folderPath = Path(m_projFolder, QString::fromLatin1("foobar/"));
     FakeFileManager* fileMng = createFileManager();
     fileMng->addSubFolderTo(m_projFolder, folderPath);
 
     proj->setManagerPlugin(fileMng);
-    proj->open(m_projFilePath);
-    WAIT_FOR_OPEN_SIGNAL;
+    proj->reloadModel();
+    QTest::qWait(100);
+
     ProjectFolderItem* rootFolder;
     ASSERT_SINGLE_PROJECT_IN_MODEL(rootFolder);
 
     // check that the project contains a single subfolder
     ProjectFolderItem* sub;
     ASSERT_SINGLE_SUBFOLDER_IN(rootFolder, "foobar", folderPath, sub);
-    QCOMPARE(0,sub->rowCount());
+    QCOMPARE(sub->rowCount(), 0);
 }
 
 // command
@@ -408,7 +421,11 @@ void ProjectControllerTest::fileInSubdirectory()
     // verify that the project model contains a single file in a subfolder
     // First setup a FakeFileManager with this folder + file
 
-    Project* proj = new Project();
+    m_projCtrl->openProject(m_projFilePath.toUrl());
+    WAIT_FOR_OPEN_SIGNAL;
+    Project* proj;
+    assertProjectOpened(m_projName, (KDevelop::IProject*&)proj);
+
     Path folderPath = Path(m_projFolder, QString::fromLatin1("foobar/"));
     FakeFileManager* fileMng = createFileManager();
     fileMng->addSubFolderTo(m_projFolder, folderPath);
@@ -416,22 +433,39 @@ void ProjectControllerTest::fileInSubdirectory()
     fileMng->addFileToFolder(folderPath, filePath);
 
     proj->setManagerPlugin(fileMng);
-    proj->open(m_projFilePath);
-    WAIT_FOR_OPEN_SIGNAL;
     ProjectFolderItem* rootFolder;
     ProjectFolderItem* sub;
     ProjectFileItem* file;
 
-    ASSERT_SINGLE_PROJECT_IN_MODEL(rootFolder);
-    ASSERT_SINGLE_SUBFOLDER_IN(rootFolder, "foobar", folderPath, sub);
-    ASSERT_SINGLE_FILE_IN(sub,"zoo",filePath,file);
-
     proj->reloadModel();
-    QTest::qWait(100); // NO signals for reload ...
+    QTest::qWait(100);
 
     ASSERT_SINGLE_PROJECT_IN_MODEL(rootFolder);
     ASSERT_SINGLE_SUBFOLDER_IN(rootFolder, "foobar", folderPath, sub);
     ASSERT_SINGLE_FILE_IN(sub,"zoo",filePath,file);
+
+    ASSERT_SINGLE_PROJECT_IN_MODEL(rootFolder);
+    ASSERT_SINGLE_SUBFOLDER_IN(rootFolder, "foobar", folderPath, sub);
+    ASSERT_SINGLE_FILE_IN(sub,"zoo",filePath,file);
+}
+
+void ProjectControllerTest::prettyFileName()
+{
+    m_projCtrl->openProject(m_projFilePath.toUrl());
+    WAIT_FOR_OPEN_SIGNAL;
+    Project* proj;
+    assertProjectOpened(m_projName, (KDevelop::IProject*&)proj);
+
+    FakeFileManager* fileMng = createFileManager();
+    proj->setManagerPlugin(fileMng);
+
+    Path filePath = Path(m_projFolder, QString::fromLatin1("foobar.txt"));
+    fileMng->addFileToFolder(m_projFolder, filePath);
+
+    QCOMPARE(m_projCtrl->prettyFileName(filePath.toUrl(), ProjectController::FormattingOptions::FormatPlain), QString(m_projName + '/' + filePath.toUrl().fileName()));
+
+    QUrl url("scheme:///whatever.file");
+    QCOMPARE(m_projCtrl->prettyFileName(url, ProjectController::FormattingOptions::FormatPlain), url.toString());
 }
 
 ////////////////////// Helpers ///////////////////////////////////////////////
