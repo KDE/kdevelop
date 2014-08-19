@@ -1,9 +1,9 @@
-set(documentchangesettest_SRCS test_documentchangeset.cpp)
+set(test_documentchangeset_SRCS test_documentchangeset.cpp)
 
-add_executable(documentchangesettest ${documentchangesettest_SRCS})
-add_test(documentchangesettest documentchangesettest)
-ecm_mark_as_test(documentchangesettest)
-target_link_libraries(documentchangesettest Qt5::Test KDev::Tests KDev::Language)
+add_executable(test_documentchangeset ${test_documentchangeset_SRCS})
+add_test(test_documentchangeset test_documentchangeset)
+ecm_mark_as_test(test_documentchangeset)
+target_link_libraries(test_documentchangeset Qt5::Test KDev::Tests KDev::Language)
 
 set(templaterenderertest_SRCS test_templaterenderer.cpp)
 

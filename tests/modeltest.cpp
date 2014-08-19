@@ -24,7 +24,7 @@
 #include "modeltest.h"
 
 #include <QtGui>
-#include <project/tests/projectmodeltest.h>
+#include <project/tests/test_projectmodel.h>
 
 // always enable assertions here
 #undef Q_ASSERT

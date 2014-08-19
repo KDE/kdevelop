@@ -6,14 +6,14 @@ include_directories(
     ${KDevPlatform_SOURCE_DIR}/project
 )
 
-set( projectmodeltest_SRCS
-    projectmodeltest.cpp
+set( test_projectmodel_SRCS
+    test_projectmodel.cpp
 )
 
-add_executable(projectmodeltest ${projectmodeltest_SRCS})
-add_test(projectmodeltest projectmodeltest)
-ecm_mark_as_test(projectmodeltest)
-target_link_libraries(projectmodeltest
+add_executable(test_projectmodel ${test_projectmodel_SRCS})
+add_test(test_projectmodel test_projectmodel)
+ecm_mark_as_test(test_projectmodel)
+target_link_libraries(test_projectmodel
     Qt5::Test
     KDev::Interfaces
     KDev::Project

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2011 Martin Heide <martin.heide@gmx.net>                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,41 +16,41 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEVPLATFORM_AREAPRINTER_H
-#define KDEVPLATFORM_AREAPRINTER_H
+#ifndef KDEVPLATFORM_TEST_SHELLBUDDY_H
+#define KDEVPLATFORM_TEST_SHELLBUDDY_H
 
+#include <QObject>
+#include <KTempDir>
+#include <sublime/view.h>
+#include "../documentcontroller.h"
+#include "../uicontroller.h"
 
-#include <sublime/area.h>
-#include <sublime/sublimedefs.h>
+class TestBuddyFinder;
 
-namespace Sublime {
-    class AreaIndex;
-    class View;
-}
+using namespace KDevelop;
 
-//those two classes will pretty-print area views and toolviews
-//make sure you provided object names for your views (with setObjectName())
+class TestShellBuddy: public QObject {
+    Q_OBJECT
+private slots:
+    void initTestCase();
+    void cleanupTestCase();
 
-class AreaViewsPrinter {
-public:
-    AreaViewsPrinter();
-    Sublime::Area::WalkerMode operator()(Sublime::AreaIndex *index);
-    QString result;
+    void testDeclarationDefinitionOrder();
+    void testActivation();
+    void testDisableBuddies();
+    void testDisableOpenAfterCurrent();
+    void testDisableAll();
 
-private:
-    QString printIndentation(Sublime::AreaIndex *index) const;
-    QString printOrientation(Qt::Orientation o) const;
-};
-
-class AreaToolViewsPrinter {
-public:
-    AreaToolViewsPrinter();
-    Sublime::Area::WalkerMode operator()(Sublime::View *view, Sublime::Position position);
-    QString result;
+    void testsplitViewBuddies();
 
 private:
-    QString printPosition(Sublime::Position position);
+    void createFile(const KTempDir& dir, const QString& filename);
+    void enableBuddies(bool enable = true);
+    void enableOpenAfterCurrent(bool enable = true);
+
+    IDocumentController *m_documentController;
+    UiController *m_uiController;
+    TestBuddyFinder* m_finder;
 };
 
 #endif
-

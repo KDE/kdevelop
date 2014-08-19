@@ -1,5 +1,5 @@
 set(findReplaceTest_SRCS 
-    findreplacetest.cpp 
+    test_findreplace.cpp
     ../grepviewplugin.cpp
     ../grepdialog.cpp
     ../grepoutputmodel.cpp
@@ -15,10 +15,10 @@ set(kdevgrepview_PART_UI
 )
 
 qt5_wrap_ui(findReplaceTest_SRCS ${kdevgrepview_PART_UI})
-add_executable(findreplace-test ${findReplaceTest_SRCS})
-add_test(findreplace-test findreplace-test)
-ecm_mark_as_test(findreplace-test)
-target_link_libraries(findreplace-test
+add_executable(test_findreplace ${findReplaceTest_SRCS})
+add_test(test_findreplace test_findreplace)
+ecm_mark_as_test(test_findreplace)
+target_link_libraries(test_findreplace
     Qt5::Test
     
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}

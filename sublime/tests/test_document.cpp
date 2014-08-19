@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,41 +16,30 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEVPLATFORM_AREAPRINTER_H
-#define KDEVPLATFORM_AREAPRINTER_H
+#include "test_document.h"
 
+#include <QTextEdit>
+#include <QtTest/QtTest>
 
-#include <sublime/area.h>
-#include <sublime/sublimedefs.h>
+#include <kurl.h>
 
-namespace Sublime {
-    class AreaIndex;
-    class View;
+#include <sublime/controller.h>
+#include <sublime/tooldocument.h>
+#include <sublime/view.h>
+
+using namespace Sublime;
+
+void TestDocument::viewDeletion()
+{
+    Controller controller;
+    Document *doc = new ToolDocument("tool", &controller, new SimpleToolWidgetFactory<QTextEdit>("tool"));
+
+    View *view = doc->createView();
+    view->widget();
+    QCOMPARE(doc->views().count(), 1);
+
+    delete view;
+    QCOMPARE(doc->views().count(), 0);
 }
 
-//those two classes will pretty-print area views and toolviews
-//make sure you provided object names for your views (with setObjectName())
-
-class AreaViewsPrinter {
-public:
-    AreaViewsPrinter();
-    Sublime::Area::WalkerMode operator()(Sublime::AreaIndex *index);
-    QString result;
-
-private:
-    QString printIndentation(Sublime::AreaIndex *index) const;
-    QString printOrientation(Qt::Orientation o) const;
-};
-
-class AreaToolViewsPrinter {
-public:
-    AreaToolViewsPrinter();
-    Sublime::Area::WalkerMode operator()(Sublime::View *view, Sublime::Position position);
-    QString result;
-
-private:
-    QString printPosition(Sublime::Position position);
-};
-
-#endif
-
+QTEST_MAIN(TestDocument)

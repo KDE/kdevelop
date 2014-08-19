@@ -2,12 +2,12 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 ########### next target ###############
 
-set(itemrepositorytest_SRCS test_itemrepository.cpp)
+set(test_itemrepository_SRCS test_itemrepository.cpp)
 
-add_executable(itemrepositorytest ${itemrepositorytest_SRCS})
-add_test(itemrepositorytest itemrepositorytest)
-ecm_mark_as_test(itemrepositorytest)
-target_link_libraries(itemrepositorytest KF5::TextEditor
+add_executable(test_itemrepository ${test_itemrepository_SRCS})
+add_test(test_itemrepository test_itemrepository)
+ecm_mark_as_test(test_itemrepository)
+target_link_libraries(test_itemrepository KF5::TextEditor
     Qt5::Test KDev::Serialization ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 ########### next target ###############

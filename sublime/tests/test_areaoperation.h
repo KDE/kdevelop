@@ -16,41 +16,53 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEVPLATFORM_AREAPRINTER_H
-#define KDEVPLATFORM_AREAPRINTER_H
+#ifndef KDEVPLATFORM_TEST_AREAOPERATION_H
+#define KDEVPLATFORM_TEST_AREAOPERATION_H
 
-
-#include <sublime/area.h>
-#include <sublime/sublimedefs.h>
+#include <QObject>
 
 namespace Sublime {
-    class AreaIndex;
+    class Area;
     class View;
+    class Controller;
+    class MainWindow;
 }
 
-//those two classes will pretty-print area views and toolviews
-//make sure you provided object names for your views (with setObjectName())
+class TestAreaOperation: public QObject {
+    Q_OBJECT
+private slots:
+    void init();
+    void cleanup();
 
-class AreaViewsPrinter {
-public:
-    AreaViewsPrinter();
-    Sublime::Area::WalkerMode operator()(Sublime::AreaIndex *index);
-    QString result;
-
-private:
-    QString printIndentation(Sublime::AreaIndex *index) const;
-    QString printOrientation(Qt::Orientation o) const;
-};
-
-class AreaToolViewsPrinter {
-public:
-    AreaToolViewsPrinter();
-    Sublime::Area::WalkerMode operator()(Sublime::View *view, Sublime::Position position);
-    QString result;
+    void areaConstruction();
+    void mainWindowConstruction();
+    void areaCloning();
+    void areaSwitchingInSameMainwindow();
+    void simpleViewAdditionAndDeletion();
+    void complexViewAdditionAndDeletion();
+    void toolViewAdditionAndDeletion();
+    void testAddingViewAfter();
+    void splitViewActiveTabsTest();
 
 private:
-    QString printPosition(Sublime::Position position);
+    void checkArea1(Sublime::MainWindow *mw);
+    void checkArea2(Sublime::MainWindow *mw);
+    /*! @param location short descriptive message printed on failure. */
+    void checkAreaViewsDisplay(Sublime::MainWindow *mw, Sublime::Area *area,
+        const QString &areas, int containers, int splitters, QString location=QString());
+
+    Sublime::View *findNamedView(Sublime::Area *area, const QString &name);
+
+    Sublime::Controller *m_controller;
+
+    Sublime::Area *m_area1;
+    Sublime::Area *m_area2;
+    Sublime::Area *m_area3;
+
+    Sublime::View *m_pView111;
+    Sublime::View *m_pView121;
+    Sublime::View *m_pView122;
+    Sublime::View *m_pView131;
 };
 
 #endif
-

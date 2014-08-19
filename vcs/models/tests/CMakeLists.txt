@@ -1,8 +1,8 @@
-set(modelsTest_SRCS modelstest.cpp)
-add_executable(modelsTest ${modelsTest_SRCS})
-add_test(modelsTest modelsTest)
-ecm_mark_as_test(modelsTest)
-target_link_libraries(modelsTest
+set(test_models_SRCS test_models.cpp)
+add_executable(test_models ${test_models_SRCS})
+add_test(test_models test_models)
+ecm_mark_as_test(test_models)
+target_link_libraries(test_models
                       Qt5::Test
                       Qt5::Gui
 

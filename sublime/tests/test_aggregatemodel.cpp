@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,41 +16,53 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEVPLATFORM_AREAPRINTER_H
-#define KDEVPLATFORM_AREAPRINTER_H
+#include "test_aggregatemodel.h"
 
+#include <QtTest/QtTest>
+#include <QStandardItem>
+#include <QStandardItemModel>
 
-#include <sublime/area.h>
-#include <sublime/sublimedefs.h>
+#include <sublime/aggregatemodel.h>
+#include <tests/modeltest.h>
 
-namespace Sublime {
-    class AreaIndex;
-    class View;
+using namespace Sublime;
+
+void TestAggregateModel::modelAggregationInASingleView()
+{
+    AggregateModel *model = new AggregateModel(this);
+    model->addModel("First Model", newModel());
+    model->addModel("Second Model", newModel());
+
+    //this will assert in case of model problems and the test will fail
+    //for detailed explanation why the test failed refer to test/modeltest.cpp
+    new ModelTest(model, this);
 }
 
-//those two classes will pretty-print area views and toolviews
-//make sure you provided object names for your views (with setObjectName())
+QStandardItemModel * TestAggregateModel::newModel()
+{
+    /*
+    construct the simple model like:
+    cool item
+    item 0
+        item 1
+            item 2
+                item 3
+    */
 
-class AreaViewsPrinter {
-public:
-    AreaViewsPrinter();
-    Sublime::Area::WalkerMode operator()(Sublime::AreaIndex *index);
-    QString result;
+    QStandardItemModel *model = new QStandardItemModel(this);
+    QStandardItem *parentItem = model->invisibleRootItem();
 
-private:
-    QString printIndentation(Sublime::AreaIndex *index) const;
-    QString printOrientation(Qt::Orientation o) const;
-};
+    QStandardItem *item = new QStandardItem(QString("cool item"));
+    parentItem->appendRow(item);
 
-class AreaToolViewsPrinter {
-public:
-    AreaToolViewsPrinter();
-    Sublime::Area::WalkerMode operator()(Sublime::View *view, Sublime::Position position);
-    QString result;
+    for (int i = 0; i < 4; ++i) {
+        QStandardItem *item = new QStandardItem(QString("item %0").arg(i));
+        parentItem->appendRow(item);
+        parentItem = item;
+    }
 
-private:
-    QString printPosition(Sublime::Position position);
-};
+    return model;
+}
 
-#endif
 
+QTEST_MAIN(TestAggregateModel)

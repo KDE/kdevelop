@@ -12,15 +12,15 @@ target_link_libraries(quickopentestbase
     KDev::Language
 )
 
-set(quickopentest_SRCS
-    quickopentest.cpp
+set(test_quickopen_SRCS
+    test_quickopen.cpp
     ${quickopentestbase_SRCS}
 )
 
-add_executable(quickopentest ${quickopentest_SRCS})
-add_test(quickopentest quickopentest)
-ecm_mark_as_test(quickopentest)
-target_link_libraries(quickopentest
+add_executable(test_quickopen ${test_quickopen_SRCS})
+add_test(test_quickopen test_quickopen)
+ecm_mark_as_test(test_quickopen)
+target_link_libraries(test_quickopen
     quickopentestbase
     
     Qt5::Test
@@ -32,14 +32,14 @@ target_link_libraries(quickopentest
 # darn, cannot set per-target so useless :(
 # set(CMAKE_BUILD_TYPE Release)
 
-set(quickopenbench_SRCS
-    quickopenbench.cpp
+set(test_quickopenbench_SRCS
+    test_quickopenbench.cpp
     ${quickopentestbase_SRCS}
 )
-add_executable(quickopenbench ${quickopenbench_SRCS})
-add_test(quickopenbench quickopenbench)
-ecm_mark_as_test(quickopenbench)
-target_link_libraries(quickopenbench
+add_executable(test_quickopenbench ${test_quickopenbench_SRCS})
+add_test(test_quickopenbench test_quickopenbench)
+ecm_mark_as_test(test_quickopenbench)
+target_link_libraries(test_quickopenbench
     quickopentestbase
     
     Qt5::Test

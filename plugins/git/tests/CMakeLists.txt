@@ -5,7 +5,7 @@ find_program(GIT_FOUND NAMES git)
 if (GIT_FOUND)
 
     set(gittest_SRCS
-        gittest.cpp
+        test_git.cpp
         ../gitplugin.cpp
         ../gitclonejob.cpp
         ../stashmanagerdialog.cpp
@@ -15,10 +15,10 @@ if (GIT_FOUND)
         ../gitplugincheckinrepositoryjob.cpp
     )
     qt5_wrap_ui(gittest_SRCS ../stashmanagerdialog.ui)
-    add_executable(kdevgit-test ${gittest_SRCS})
-    add_test(kdevgit-test kdevgit-test)
-ecm_mark_as_test(kdevgit-test)
-    target_link_libraries(kdevgit-test
+    add_executable(test_kdevgit ${gittest_SRCS})
+    add_test(test_kdevgit test_kdevgit)
+    ecm_mark_as_test(test_kdevgit)
+    target_link_libraries(test_kdevgit
         Qt5::Test
         
         ${KDEVPLATFORM_VCS_LIBRARIES}

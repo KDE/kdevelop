@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2010 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,41 +16,49 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEVPLATFORM_AREAPRINTER_H
-#define KDEVPLATFORM_AREAPRINTER_H
 
+#ifndef KDEVELOP_PROJECT_TEST_PROJECTMODEL
+#define KDEVELOP_PROJECT_TEST_PROJECTMODEL
 
-#include <sublime/area.h>
-#include <sublime/sublimedefs.h>
+#include <QtCore/QObject>
+#include <QtCore/QModelIndex>
 
-namespace Sublime {
-    class AreaIndex;
-    class View;
+class ProjectProxyModel;
+namespace KDevelop
+{
+class ProjectModel;
 }
 
-//those two classes will pretty-print area views and toolviews
-//make sure you provided object names for your views (with setObjectName())
+class ModelTest;
 
-class AreaViewsPrinter {
-public:
-    AreaViewsPrinter();
-    Sublime::Area::WalkerMode operator()(Sublime::AreaIndex *index);
-    QString result;
-
+class TestProjectModel : public QObject
+{
+Q_OBJECT
+private slots:
+    void initTestCase();
+    void init();
+    void cleanupTestCase();
+    void testCreateFileSystemItems();
+    void testCreateFileSystemItems_data();
+    void testCreateTargetItems();
+    void testCreateTargetItems_data();
+    void testCreateSimpleHierarchy();
+    void testItemSanity();
+    void testRename();
+    void testRename_data();
+    void testChangeWithProxyModel();
+    void testWithProject();
+    void testTakeRow();
+    void testItemsForPath();
+    void testItemsForPath_data();
+    void testProjectProxyModel();
+    void testProjectFileSet();
+    void testProjectFileIcon();
 private:
-    QString printIndentation(Sublime::AreaIndex *index) const;
-    QString printOrientation(Qt::Orientation o) const;
+    KDevelop::ProjectModel* model;
+    ProjectProxyModel* proxy;
 };
 
-class AreaToolViewsPrinter {
-public:
-    AreaToolViewsPrinter();
-    Sublime::Area::WalkerMode operator()(Sublime::View *view, Sublime::Position position);
-    QString result;
-
-private:
-    QString printPosition(Sublime::Position position);
-};
+Q_DECLARE_METATYPE( QModelIndex )
 
 #endif
-

@@ -1,13 +1,13 @@
-set(standardOutputViewTest_SRCS
-    standardoutputviewtest.cpp
+set(test_standardOutputView_SRCS
+    test_standardoutputview.cpp
     ../outputwidget.cpp
     ../toolviewdata.cpp
 )
 
-add_executable(standardoutputview-test ${standardOutputViewTest_SRCS})
-add_test(standardoutputview-test standardoutputview-test)
-ecm_mark_as_test(standardoutputview-test)
-target_link_libraries(standardoutputview-test
+add_executable(test_standardoutputview ${test_standardOutputView_SRCS})
+add_test(test_standardoutputview test_standardoutputview)
+ecm_mark_as_test(test_standardoutputview)
+target_link_libraries(test_standardoutputview
     Qt5::Test
     ${KDEVPLATFORM_TESTS_LIBRARIES}
 )
