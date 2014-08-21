@@ -297,7 +297,7 @@ class DUChainPrivate
       DUChainPrivate* m_data;
   };
 public:
-  DUChainPrivate() : m_chainsMutex(QMutex::Recursive), instance(0), m_cleanupDisabled(false), m_destroyed(false), m_environmentListInfo("Environment Lists"), m_environmentInfo("Environment Information")
+  DUChainPrivate() : m_chainsMutex(QMutex::Recursive), m_cleanupMutex(QMutex::Recursive), instance(0), m_cleanupDisabled(false), m_destroyed(false), m_environmentListInfo("Environment Lists"), m_environmentInfo("Environment Information")
   {
 #if defined(TEST_NO_CLEANUP)
     m_cleanupDisabled = true;
@@ -416,6 +416,8 @@ public:
   ///Must be locked before accessing content of this class.
   ///Should be released during expensive disk-operations and such.
   QMutex m_chainsMutex;
+
+  QMutex m_cleanupMutex;
 
   CleanupThread* m_cleanup;
 
@@ -673,10 +675,9 @@ public:
       }
     }
   }
-  
+
   QMutex& cleanupMutex() {
-    static QMutex mutex(QMutex::Recursive);
-    return mutex;
+    return m_cleanupMutex;
   }
 
   ///@param retries When this is nonzero, then doMoreCleanup will do the specified amount of cycles
