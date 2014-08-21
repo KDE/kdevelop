@@ -57,6 +57,9 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor, CXClientData data)
 
     auto imports = static_cast<Imports*>(data);
     CXFile file = clang_getIncludedFile(cursor);
+    if(!file){
+        return CXChildVisit_Continue;
+    }
 
     CXSourceLocation location = clang_getCursorLocation(cursor);
     CXFile parentFile;
