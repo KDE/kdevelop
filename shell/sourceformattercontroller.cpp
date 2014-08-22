@@ -37,7 +37,6 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/view.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
-#include <kio/netaccess.h>
 #include <kmessagebox.h>
 #include <qfile.h>
 #include <interfaces/context.h>
@@ -46,6 +45,7 @@ Boston, MA 02110-1301, USA.
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <KLocalizedString>
+#include <KIOCore/KIO/StoredTransferJob>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/command.h>
@@ -535,31 +535,16 @@ void SourceFormatterController::formatFiles(KUrl::List &list)
 		}
 
 		kDebug() << "Processing file " << list[fileCount].pathOrUrl() << endl;
-		QString tmpFile, output;
-		if (KIO::NetAccess::download(list[fileCount], tmpFile, 0)) {
-			QFile file(tmpFile);
-			// read file
-			if (file.open(QFile::ReadOnly)) {
-				QTextStream is(&file);
-				output = formatter->formatSource(is.readAll(), list[fileCount], mime);
-				file.close();
-			} else
-				KMessageBox::error(0, i18n("Unable to read %1", list[fileCount].prettyUrl()));
-
-			//write new content
-			if (file.open(QFile::WriteOnly | QIODevice::Truncate)) {
-				QTextStream os(&file);
-				os << addModelineForCurrentLang(output, list[fileCount], mime);
-				file.close();
-			} else
-				KMessageBox::error(0, i18n("Unable to write to %1", list[fileCount].prettyUrl()));
-
-			if (!KIO::NetAccess::upload(tmpFile, list[fileCount], 0))
-				KMessageBox::error(0, KIO::NetAccess::lastErrorString());
-
-			KIO::NetAccess::removeTempFile(tmpFile);
+		KIO::StoredTransferJob *job = KIO::storedGet(list[fileCount]);
+		if (job->exec()) {
+			QByteArray data = job->data();
+			QString output = formatter->formatSource(data, list[fileCount], mime);
+			data += addModelineForCurrentLang(output, list[fileCount], mime).toUtf8();
+			job = KIO::storedPut(data, list[fileCount], -1);
+			if (!job->exec())
+				KMessageBox::error(0, job->errorString());
 		} else
-			KMessageBox::error(0, KIO::NetAccess::lastErrorString());
+			KMessageBox::error(0, job->errorString());
 	}
 }
 
