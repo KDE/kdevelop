@@ -63,7 +63,6 @@ QSize IdealToolButton::sizeHint() const
         textSize.rwidth() += 2 * charWidth;
     }
 
-    const int spacing = 2; // ### FIXME
     int iconwidth = 0, iconheight = 0;
     // No icon size if we're drawing text only
     if (toolButtonStyle() != Qt::ToolButtonTextOnly) {
@@ -75,13 +74,16 @@ QSize IdealToolButton::sizeHint() const
             iconheight = opt.iconSize.width();
         }
     }
-    int width = 4 + textSize.width() + iconwidth + spacing;
-    int height = 4 + qMax(textSize.height(), iconheight) + spacing;
+    // adding +4 to be consistent with qtoolbutton
+    int width = textSize.width() + iconwidth + 4;
+    int height = qMax(textSize.height(), iconheight);
+    QSize size = style()->sizeFromContents(QStyle::CT_ToolButton, &opt, QSize(width, height), this);
 
-    if (orientation() == Qt::Vertical)
-        return QSize(height, width);
-
-    return QSize(width, height);
+    if (orientation() == Qt::Vertical) {
+        return QSize(size.height(), size.width()); // transposed
+    } else {
+        return size;
+    }
 }
 
 void IdealToolButton::paintEvent(QPaintEvent *event)
