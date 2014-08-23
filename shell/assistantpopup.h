@@ -23,6 +23,7 @@
 #define KDEVPLATFORM_ASSISTANTPOPUP_H
 
 #include <QDeclarativeView>
+#include <QShortcut>
 #include <interfaces/iassistant.h>
 #include <ksharedptr.h>
 
@@ -111,18 +112,11 @@ private slots:
 
 protected:
     virtual bool eventFilter(QObject* object, QEvent* event);
-    virtual void keyPressEvent(QKeyEvent* event);
-    virtual void keyReleaseEvent(QKeyEvent* event);
     virtual bool viewportEvent(QEvent *event);
 
 private:
     void setView(KTextEditor::View* view);
     void setAssistant(const KDevelop::IAssistant::Ptr& assistant);
-
-    /// Give the AssistantPopup instance widget focus
-    void grabFocus();
-    /// Return focus back to the editor view
-    void ungrabFocus();
 
     KDevelop::IAssistant::Ptr m_assistant;
     QPointer<KTextEditor::View> m_view;
@@ -130,6 +124,7 @@ private:
     bool m_shownAtBottom;
     bool m_reopening;
     QTimer* m_updateTimer;
+    QList<QShortcut*> m_shortcuts;
 };
 
 #endif // KDEVPLATFORM_ASSISTANTPOPUP_H
