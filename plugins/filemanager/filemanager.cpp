@@ -23,25 +23,17 @@
 #include <QMenu>
 #include <QLayout>
 #include <QAbstractItemView>
+#include <QtCore/QUrl>
+#include <QtWidgets/QFileDialog>
 
-#include <kdebug.h>
-#include <kurl.h>
-#include <kurlnavigator.h>
-#include <kfileplacesmodel.h>
-#include <klocale.h>
-#include <kaction.h>
-#include <kactioncollection.h>
-#include <kdiroperator.h>
-#include <kiconloader.h>
-#include <kfileitem.h>
-#include <klineedit.h>
-#include <kinputdialog.h>
-#include <ktemporaryfile.h>
-#include <kio/netaccess.h>
-#include <kparts/mainwindow.h>
-#include <kmessagebox.h>
-#include <KActionMenu>
-#include <KDebug>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/StoredTransferJob>
+#include <KIOFileWidgets/KFilePlacesModel>
+#include <KParts/MainWindow>
+#include <KXmlGui/KActionCollection>
+#include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KActionMenu>
+
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
@@ -156,27 +148,23 @@ void FileManager::setupActions()
 
 void FileManager::createNewFile()
 {
-    KParts::MainWindow *activeMainWindow = KDevelop::ICore::self()->uiController()->activeMainWindow();
-
-    //TODO: adymo: use KNameAndUrlInputDialog here once we depend on KDE 4.5
-    bool ok = false;
-    QString fileName = KInputDialog::getText(i18n("Create New File"),
-        i18n("Filename:"), "", &ok, activeMainWindow);
-    if (!ok) return;
-
-    KTemporaryFile tmpFile;
-    if (!tmpFile.open()) {
-        kError() << "Couldn't create temp file!";
+    QUrl destUrl = QFileDialog::getSaveFileUrl(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("Create New File"));
+    if (destUrl.isEmpty()) {
         return;
     }
 
-    KUrl destUrl = dirop->url();
-    destUrl.addPath(fileName);
+    KJob* job = KIO::storedPut(QByteArray(), destUrl, -1);
+    connect(job, &KJob::result, this, &FileManager::fileCreated);
+}
 
-    if (KIO::NetAccess::file_copy(KUrl(tmpFile.fileName()), destUrl))
-        KDevelop::ICore::self()->documentController()->openDocument( destUrl );
-    else
-        KMessageBox::error(activeMainWindow, i18n("Unable to create file '%1'", fileName));
+void FileManager::fileCreated(KJob* job)
+{
+    auto transferJob = qobject_cast<KIO::StoredTransferJob*>(job); Q_ASSERT(transferJob);
+    if (!transferJob->error()) {
+        KDevelop::ICore::self()->documentController()->openDocument( transferJob->url() );
+    } else {
+        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("Unable to create file '%1'", transferJob->url().toDisplayString(QUrl::PreferLocalFile)));
+    }
 }
 
 void FileManager::syncCurrentDocumentDirectory()

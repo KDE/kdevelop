@@ -20,12 +20,13 @@
 #ifndef KDEVPLATFORM_PLUGIN_FILEMANAGER_H
 #define KDEVPLATFORM_PLUGIN_FILEMANAGER_H
 
-#include <QWidget>
-#include <KFileItem>
+#include <QtWidgets/QWidget>
+
+#include <KIOCore/KFileItem>
+#include <KIOFileWidgets/KDirOperator>
+#include <KIOFileWidgets/KUrlNavigator>
 
 class KActionCollection;
-class KDirOperator;
-class KUrlNavigator;
 class QAction;
 class QString;
 class QMenu;
@@ -42,6 +43,7 @@ public:
     KDevFileManagerPlugin* plugin() const;
 
 private slots:
+    void fileCreated(KJob *job);
     void openFile(const KFileItem&);
     void gotoUrl(const QUrl&);
     void updateNav( const QUrl& url );
