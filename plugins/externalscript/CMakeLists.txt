@@ -24,7 +24,7 @@ target_link_libraries(kdevexternalscript
     KDev::Util KDev::OutputView
 )
 
-install( TARGETS kdevexternalscript DESTINATION ${PLUGIN_INSTALL_DIR} )
+install( TARGETS kdevexternalscript DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 ########### install files ###############
 configure_file(kdevexternalscript.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevexternalscript.desktop)

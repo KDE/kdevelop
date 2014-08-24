@@ -11,7 +11,7 @@ set(kdevfilemanager_PART_SRCS
 add_library(kdevfilemanager MODULE ${kdevfilemanager_PART_SRCS})
 target_link_libraries(kdevfilemanager KF5::KIOWidgets KF5::TextEditor KF5::TextEditor KDev::Interfaces)
 
-install(TARGETS kdevfilemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevfilemanager DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

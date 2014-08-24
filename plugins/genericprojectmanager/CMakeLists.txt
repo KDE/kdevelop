@@ -15,7 +15,7 @@ target_link_libraries(kdevgenericmanager
     KDev::Project
 )
 
-install(TARGETS kdevgenericmanager DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevgenericmanager DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

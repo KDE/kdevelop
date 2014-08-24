@@ -18,7 +18,7 @@ target_include_directories(kdevdocumentview PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/
 target_link_libraries(kdevdocumentview ${KDEVPLATFORM_INTERFACES_LIBRARIES} KF5::TextEditor)
 
 
-install(TARGETS kdevdocumentview DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevdocumentview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

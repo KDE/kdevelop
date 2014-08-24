@@ -28,7 +28,7 @@ target_link_libraries(kdevgit
     KF5::SonnetUi
 )
 
-install(TARGETS kdevgit DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevgit DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

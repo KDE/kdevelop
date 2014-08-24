@@ -6,7 +6,7 @@ Comment=Configure which macros and include directories/files will be added to th
 
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
-X-KDE-Library=kdevwelcomepage
+X-KDE-Library=kdevplatform/@KDEV_PLUGIN_VERSION@/kdevwelcomepage
 X-KDE-PluginInfo-Name=KDevWelcomePage
 X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Category=Global

@@ -34,7 +34,7 @@ target_link_libraries(kdevgrepview
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
 )
 
-install(TARGETS kdevgrepview DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevgrepview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

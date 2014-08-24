@@ -45,7 +45,7 @@ target_link_libraries(kdevcvs
     KDev::Language
 )
 
-install(TARGETS kdevcvs DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevcvs DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

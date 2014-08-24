@@ -37,7 +37,7 @@ target_link_libraries(kdevfiletemplates
     KF5::ItemModels
 )
 
-install(TARGETS kdevfiletemplates DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevfiletemplates DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

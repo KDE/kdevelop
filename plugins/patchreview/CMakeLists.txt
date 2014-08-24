@@ -17,7 +17,7 @@ qt5_wrap_ui(patchreview_PART_SRCS patchreview.ui localpatchwidget.ui)
 add_library(kdevpatchreview MODULE ${patchreview_PART_SRCS})
 target_link_libraries(kdevpatchreview KF5::TextEditor KF5::Parts KDev::Interfaces KDev::Util KDev::Language KDev::Vcs KDev::Sublime ${LIBKOMPAREDIFF2_LIBRARIES})
 
-install(TARGETS kdevpatchreview DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevpatchreview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 
 ########### install files ###############

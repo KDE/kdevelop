@@ -11,7 +11,7 @@ set(kdevdocumentswitcher_PART_SRCS
 add_library(kdevdocumentswitcher MODULE ${kdevdocumentswitcher_PART_SRCS})
 target_link_libraries(kdevdocumentswitcher KDev::Interfaces KDev::Sublime KDev::Interfaces )
 
-install(TARGETS kdevdocumentswitcher DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevdocumentswitcher DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

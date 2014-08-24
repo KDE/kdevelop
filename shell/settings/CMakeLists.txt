@@ -103,9 +103,6 @@ target_link_libraries(kcm_kdevsourceformattersettings
     KF5::TextEditor KF5::Parts
     KDev::Shell KDev::Util KDev::Language)
 
-install(TARGETS  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
 ########## Install TARGETS/Files
 
 install( TARGETS 
@@ -116,14 +113,22 @@ install( TARGETS
         kcm_kdev_envsettings 
         kcm_kdev_uisettings 
         kcm_kdevsourceformattersettings
-        DESTINATION ${PLUGIN_INSTALL_DIR} )
+        DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
+
+configure_file(kcm_kdev_uisettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_uisettings.desktop)
+configure_file(kcm_kdev_envsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop)
+configure_file(kcm_kdev_pluginsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_pluginsettings.desktop)
+configure_file(kcm_kdev_projectsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_projectsettings.desktop)
+configure_file(kcm_kdev_bgsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_bgsettings.desktop)
+configure_file(kcm_kdev_ccsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_ccsettings.desktop)
+configure_file(kcm_kdevsourceformattersettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevsourceformattersettings.desktop)
 
 install( FILES 
-        kcm_kdev_uisettings.desktop 
-        kcm_kdev_envsettings.desktop
-        kcm_kdev_pluginsettings.desktop
-        kcm_kdev_projectsettings.desktop
-        kcm_kdev_bgsettings.desktop
-        kcm_kdev_ccsettings.desktop 
-        kcm_kdevsourceformattersettings.desktop
+        ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_uisettings.desktop
+        ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop
+        ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_pluginsettings.desktop
+        ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_projectsettings.desktop
+        ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_bgsettings.desktop
+        ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_ccsettings.desktop
+        ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevsourceformattersettings.desktop
         DESTINATION ${SERVICES_INSTALL_DIR} )

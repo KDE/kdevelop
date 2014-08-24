@@ -94,7 +94,7 @@ target_link_libraries(kdevsubversion
                     KDev::Language
                     )
 
-install(TARGETS kdevsubversion DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevsubversion DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

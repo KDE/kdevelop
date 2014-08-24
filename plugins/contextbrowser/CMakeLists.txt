@@ -13,7 +13,7 @@ set(kdevcontextbrowser_PART_SRCS
 add_library(kdevcontextbrowser MODULE ${kdevcontextbrowser_PART_SRCS})
 target_link_libraries(kdevcontextbrowser KDev::Interfaces KDev::Util KDev::Language KDev::Sublime KF5::TextEditor KF5::Parts)
 
-install(TARGETS kdevcontextbrowser DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevcontextbrowser DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 install(FILES kdevcontextbrowser.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcontextbrowser)
 
 ########### install files ###############

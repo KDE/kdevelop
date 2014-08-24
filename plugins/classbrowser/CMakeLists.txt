@@ -30,7 +30,7 @@ set(kdevclassbrowser_PART_SRCS
 add_library(kdevclassbrowser MODULE ${kdevclassbrowser_PART_SRCS})
 target_link_libraries(kdevclassbrowser KF5::TextEditor KDev::Util KDev::Language KDev::Interfaces KDev::Project)
 
-install(TARGETS kdevclassbrowser DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevclassbrowser DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 
 ########### install files ###############

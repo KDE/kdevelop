@@ -19,7 +19,7 @@ add_library(kdevprojectmanagerview MODULE ${kdevprojectmanagerview_PLUGIN_SRCS})
 target_link_libraries(kdevprojectmanagerview KF5::TextEditor
                       KDev::Interfaces KDev::Project KDev::Language KDev::Util KDev::Vcs KDev::Sublime KF5::ThreadWeaver)
 
-install(TARGETS kdevprojectmanagerview DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevprojectmanagerview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

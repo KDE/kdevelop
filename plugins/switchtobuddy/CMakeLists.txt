@@ -15,7 +15,7 @@ target_link_libraries(kdevswitchtobuddy
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
 )
 
-install(TARGETS kdevswitchtobuddy DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevswitchtobuddy DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

@@ -39,7 +39,7 @@
 
 #include <QAction>
 
-K_PLUGIN_FACTORY(TestViewFactory, registerPlugin<TestViewPlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(TestViewFactory, "kdevtestview.json", registerPlugin<TestViewPlugin>(); )
 // K_EXPORT_PLUGIN(TestViewFactory(KAboutData("kdevtestview","kdevtestview", ki18n("Unit Test View"), "0.1", ki18n("Lets you see and run unit tests"), KAboutData::License_GPL)))
 
 using namespace KDevelop;

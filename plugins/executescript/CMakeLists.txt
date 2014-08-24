@@ -28,7 +28,7 @@ target_link_libraries(kdevexecutescript
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES})
 
-install(TARGETS kdevexecutescript DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevexecutescript DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 
 ########### install files ###############

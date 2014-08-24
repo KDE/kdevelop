@@ -18,7 +18,7 @@ target_link_libraries(kdevwelcomepage
     KF5::KDELibs4Support
 )
 
-install(TARGETS kdevwelcomepage DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevwelcomepage DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 configure_file(kdevwelcomepageplugin.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevwelcomepage.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevwelcomepage.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

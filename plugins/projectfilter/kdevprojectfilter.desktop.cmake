@@ -4,7 +4,7 @@ ServiceTypes=KDevelop/Plugin
 
 Icon=view-filter
 
-X-KDE-Library=kdevprojectfilter
+X-KDE-Library=kdevplatform/@KDEV_PLUGIN_VERSION@/kdevprojectfilter
 X-KDE-PluginInfo-Name=KDevProjectFilter
 X-KDE-PluginInfo-Author=Milian Wolff
 X-KDE-PluginInfo-Category=Project Management
