@@ -78,6 +78,37 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor, CXClientData data)
     return CXChildVisit_Recurse;
 }
 
+struct ImportsForFile {
+    CXFile file;
+    QVector<CXFile> imports;
+};
+
+CXChildVisitResult visitImportsInFile(CXCursor cursor, CXCursor, CXClientData data)
+{
+    if (cursor.kind != CXCursor_InclusionDirective) {
+        return CXChildVisit_Continue;
+    }
+
+    auto imports = static_cast<ImportsForFile*>(data);
+    {
+        auto location = clang_getCursorLocation(cursor);
+        CXFile file;
+        clang_getFileLocation(location, &file, nullptr, nullptr, nullptr);
+        if (file != imports->file) {
+            return CXChildVisit_Continue;
+        }
+    }
+
+    CXFile file = clang_getIncludedFile(cursor);
+    if(!file){
+        return CXChildVisit_Break;
+    }
+
+    imports->imports.append(file);
+
+    return CXChildVisit_Recurse;
+}
+
 ReferencedTopDUContext createTopContext(const IndexedString& path, const ClangParsingEnvironment& environment)
 {
     ClangParsingEnvironmentFile* file = new ClangParsingEnvironmentFile(path, environment);
@@ -117,7 +148,29 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
 
     const IndexedString path(QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file)))));
 
-    const auto& environment = session.data()->environment();
+    auto environment = session.data()->environment();
+
+    ImportsForFile importsForFile;
+    importsForFile.file = file;
+
+    if (!clang_visitChildren(clang_getTranslationUnitCursor(session.unit()), &visitImportsInFile, &importsForFile)) {
+        // Add only used include directories into the environment.
+        KDevelop::Path::List includes;
+        for (const auto& includePath: environment.includes()) {
+            for (const auto& import: importsForFile.imports) {
+                if (QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(import)))).startsWith(includePath.toLocalFile())) {
+                    includes.append(includePath);
+                    break;
+                }
+            }
+        }
+        ClangParsingEnvironment env;
+        env.addDefines(environment.defines());
+        env.addIncludes(includes);
+        env.setProjectKnown(environment.projectKnown());
+        //kDebug() << "Reduced includes from: " << environment.includes() <<  "\nto: " << env.includes() << "\nfor: " << path.str() << " project: " << env.projectKnown();
+        environment = env;
+    }
 
     bool update = false;
     UrlParseLock urlLock(path);
