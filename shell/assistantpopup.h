@@ -117,6 +117,7 @@ protected:
 private:
     void setView(KTextEditor::View* view);
     void setAssistant(const KDevelop::IAssistant::Ptr& assistant);
+    void setActive( bool active );
 
     KDevelop::IAssistant::Ptr m_assistant;
     QPointer<KTextEditor::View> m_view;
