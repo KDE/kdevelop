@@ -35,7 +35,7 @@ TARGET_LINK_LIBRARIES( kdevokteta
     KF5::WidgetsAddons
 )
 
-install(TARGETS kdevokteta DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevokteta DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 
 configure_file(kdevokteta.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevokteta.desktop)

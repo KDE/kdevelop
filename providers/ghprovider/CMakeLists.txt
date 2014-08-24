@@ -24,6 +24,6 @@ target_link_libraries(kdevghprovider
   ${KDEVPLATFORM_UTIL_LIBRARIES}
 )
 
-install(TARGETS kdevghprovider DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevghprovider DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 configure_file(kdevghprovider.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevghprovider.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevghprovider.desktop DESTINATION ${SERVICES_INSTALL_DIR})

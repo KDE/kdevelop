@@ -96,7 +96,7 @@ target_link_libraries(kdevgdb
     ${KDE4WORKSPACE_PROCESSUI_LIBS}
 )
 
-install(TARGETS kdevgdb DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevgdb DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 add_executable(gdbtest unittests/gdbtest.cpp ${kdevgdb_SRCS})
 ecm_mark_as_test(gdbtest)

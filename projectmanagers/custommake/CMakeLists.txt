@@ -21,7 +21,7 @@ target_link_libraries( kdevcustommakemanager
                     kdev4makefileresolver
 )
 
-install(TARGETS kdevcustommakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevcustommakemanager DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

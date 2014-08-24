@@ -104,12 +104,13 @@ target_link_libraries( kcm_kdevcmake_settings KF5::KIOWidgets
                        ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES}
                        kdevcmakecommon )
 
-install(TARGETS kdevcmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
-# install(TARGETS kdevcmakedocumentation DESTINATION ${PLUGIN_INSTALL_DIR} )
-install(TARGETS kcm_kdevcmake_settings DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevcmakemanager DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
+# install(TARGETS kdevcmakedocumentation DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
+install(TARGETS kcm_kdevcmake_settings DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm )
 install(TARGETS kdevcmakecommon ${INSTALL_TARGETS_DEFAULT_ARGS} )
 configure_file(kdevcmakemanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakemanager.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 # configure_file(kdevcmakedocumentation.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop)
 # install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install(FILES kcm_kdevcmake_settings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kcm_kdevcmake_settings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevcmake_settings.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevcmake_settings.desktop DESTINATION ${SERVICES_INSTALL_DIR})

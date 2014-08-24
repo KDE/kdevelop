@@ -60,7 +60,7 @@ target_link_libraries(kdevcpplanguagesupport
     KF5::TextEditor
 )
 
-install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 
 ########### install files ###############

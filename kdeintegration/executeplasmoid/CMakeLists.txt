@@ -31,7 +31,7 @@ target_link_libraries(kdevexecuteplasmoid
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES})
 
-install(TARGETS kdevexecuteplasmoid DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevexecuteplasmoid DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 
 ########### install files ###############

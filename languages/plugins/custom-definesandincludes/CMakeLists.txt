@@ -34,7 +34,7 @@ target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
 generate_export_header(kdevdefinesandincludesmanager EXPORT_FILE_NAME definesandincludesmanagerexport.h)
 
 install( TARGETS kdevdefinesandincludesmanager
-         DESTINATION ${PLUGIN_INSTALL_DIR} )
+         DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 install( TARGETS kdevdefinesandincludessettings ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 configure_file(kdevdefinesandincludesmanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevdefinesandincludesmanager.desktop)

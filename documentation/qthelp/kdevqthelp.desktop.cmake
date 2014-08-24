@@ -109,7 +109,7 @@ GenericName[zh_CN]=文档支持
 GenericName[zh_TW]=文件支援
 ServiceTypes=KDevelop/Plugin
 
-X-KDE-Library=kdevqthelp
+X-KDE-Library=kdevplatform/@KDEV_PLUGIN_VERSION@/kdevqthelp
 X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=kdevqthelp

@@ -16,7 +16,7 @@ target_link_libraries(kdevqthelp
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_DOCUMENTATION_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     KF5::KCMUtils )
 
-install(TARGETS kdevqthelp DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevqthelp DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 configure_file(kdevqthelp.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp.desktop DESTINATION ${SERVICES_INSTALL_DIR})
@@ -38,8 +38,9 @@ add_library(kdevqthelp_config MODULE ${kdevqthelp_config_SRCS} )
 target_link_libraries( kdevqthelp_config ${KDE4_KUTILS_LIBS}
 ${KDE4_KDEUI_LIBS} KF5::KIOWidgets Qt5::Help KF5::NewStuff KF5::KCMUtils)
 
-install( TARGETS kdevqthelp_config DESTINATION ${PLUGIN_INSTALL_DIR} )
-install( FILES kdevqthelp_config.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevelop-qthelp.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+install(TARGETS kdevqthelp_config DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
+configure_file(kdevqthelp_config.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp_config.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp_config.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kdevelop-qthelp.knsrc DESTINATION ${CONFIG_INSTALL_DIR})
 
 add_subdirectory(tests)

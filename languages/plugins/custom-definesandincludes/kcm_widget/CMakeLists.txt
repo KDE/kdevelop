@@ -32,8 +32,6 @@ target_link_libraries( kcm_kdevcustomdefinesandincludes LINK_PRIVATE
         ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
         kdevdefinesandincludessettings )
 
-install( TARGETS kcm_kdevcustomdefinesandincludes
-         DESTINATION ${PLUGIN_INSTALL_DIR} )
-
-install( FILES kcm_kdevcustomdefinesandincludes.desktop
-         DESTINATION ${SERVICES_INSTALL_DIR} )
+install(TARGETS kcm_kdevcustomdefinesandincludes DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
+configure_file(kcm_kdevcustomdefinesandincludes.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevcustomdefinesandincludes.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevcustomdefinesandincludes.desktop DESTINATION ${SERVICES_INSTALL_DIR})

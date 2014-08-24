@@ -9,7 +9,7 @@ target_link_libraries(kdevninja
     ${KDEVPLATFORM_UTIL_LIBRARIES}
 )
 
-install(TARGETS kdevninja DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevninja DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 
 ########### configurator ##############
@@ -23,9 +23,10 @@ target_link_libraries(kcm_kdev_ninjabuilder
 	${KDEVPLATFORM_PROJECT_LIBRARIES}
 	${KDEVPLATFORM_UTIL_LIBRARIES})
 
-install(TARGETS kcm_kdev_ninjabuilder DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kcm_kdev_ninjabuilder DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
 
-install(FILES kcm_kdev_ninjabuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+configure_file(kcm_kdev_ninjabuilder.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_ninjabuilder.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_ninjabuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 configure_file(kdevninja.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevninja.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevninja.desktop DESTINATION ${SERVICES_INSTALL_DIR})

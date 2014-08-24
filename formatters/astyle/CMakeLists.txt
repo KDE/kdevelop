@@ -27,7 +27,7 @@ target_link_libraries(kdevastyle
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_UTIL_LIBRARIES})
 
-install(TARGETS kdevastyle DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevastyle DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 configure_file(kdevastyle.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevastyle.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevastyle.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

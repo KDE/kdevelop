@@ -21,7 +21,7 @@ target_link_libraries(kdevmakebuilder
         ${KDEVPLATFORM_UTIL_LIBRARIES}
 )
 
-install(TARGETS kdevmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 set( makebuilder_cfg_SRCS
@@ -38,11 +38,12 @@ kconfig_add_kcfg_files( makebuilder_cfg_SRCS makebuilderconfig.kcfgc )
 add_library(kcm_kdev_makebuilder MODULE ${makebuilder_cfg_SRCS} )
 target_link_libraries( kcm_kdev_makebuilder KF5::KIOWidgets ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
 
-install( TARGETS kcm_kdev_makebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kcm_kdev_makebuilder DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
 
 ########### install files ###############
 install( FILES imakebuilder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/make COMPONENT Devel)
-install( FILES kcm_kdev_makebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kcm_kdev_makebuilder.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_makebuilder.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_makebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 configure_file(kdevmakebuilder.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevmakebuilder.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 # install( FILES kdevmakebuilder.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevmakebuilder )

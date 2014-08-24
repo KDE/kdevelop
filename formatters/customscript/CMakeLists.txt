@@ -10,7 +10,7 @@ target_link_libraries(kdevcustomscript
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_UTIL_LIBRARIES})
 
-install(TARGETS kdevcustomscript DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevcustomscript DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 ########### install files ###############
 

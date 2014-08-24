@@ -29,11 +29,11 @@ add_library(kcm_kdevcustombuildsystem MODULE ${custom_kcm_SRCS} )
 target_link_libraries( kcm_kdevcustombuildsystem KF5::KIOWidgets ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
 
 ## Installation
-install( TARGETS kcm_kdevcustombuildsystem
-                 kdevcustombuildsystem
-         DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kcm_kdevcustombuildsystem DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
+install(TARGETS kdevcustombuildsystem DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 configure_file(kdevcustombuildsystem.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcustombuildsystem.desktop)
+configure_file(kcm_kdevcustombuildsystem.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevcustombuildsystem.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcustombuildsystem.desktop
-               kcm_kdevcustombuildsystem.desktop
-         DESTINATION ${SERVICES_INSTALL_DIR} )
+              ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevcustombuildsystem.desktop
+        DESTINATION ${SERVICES_INSTALL_DIR})

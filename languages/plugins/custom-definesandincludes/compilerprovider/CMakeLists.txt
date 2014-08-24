@@ -17,7 +17,7 @@ target_link_libraries( kdevcompilerprovider LINK_PRIVATE
         kdevdefinesandincludessettings )
 
 install( TARGETS kdevcompilerprovider
-         DESTINATION ${PLUGIN_INSTALL_DIR} )
+         DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 configure_file(kdevcompilerprovider.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcompilerprovider.desktop)
 
