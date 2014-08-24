@@ -34,6 +34,9 @@ signals:
     void urlSelected( const KUrl& );
     void accepted();
 
+protected:
+    virtual void showEvent(QShowEvent*);
+
 private slots:
     void highlightFile(const QString&);
     void opsEntered(const KUrl& item );

@@ -111,6 +111,12 @@ void OpenProjectPage::dirChanged(const KUrl& /*url*/)
     }
 }
 
+void OpenProjectPage::showEvent(QShowEvent* ev)
+{
+    fileWidget->locationEdit()->setFocus();
+    QWidget::showEvent(ev);
+}
+
 void OpenProjectPage::highlightFile( const QString& file )
 {
     emit urlSelected( getAbsoluteUrl( file ) );
