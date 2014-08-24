@@ -50,6 +50,20 @@ namespace {
 /// Used to avoid flickering caused when user is quickly inserting code
 const int UPDATE_STATE_INTERVAL = 300; // ms
 
+const int ASSISTANT_MODIFIER =
+#ifdef Q_OS_MAC
+Qt::CTRL;
+#else
+Qt::ALT;
+#endif
+
+const int ASSISTANT_MOD_KEY =
+#ifdef Q_OS_MAC
+Qt::Key_Control;
+#else
+Qt::Key_Alt;
+#endif
+
 QWidget* findByClassname(const KTextEditor::View* view, const QString& klass)
 {
     auto children = view->findChildren<QWidget*>();
@@ -185,8 +199,9 @@ AssistantPopup::AssistantPopup()
     connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateState()));
 
     for (int i = Qt::Key_0; i <= Qt::Key_9; ++i) {
-        m_shortcuts.append(new QShortcut(Qt::ALT + i, this));
+        m_shortcuts.append(new QShortcut(ASSISTANT_MODIFIER + i, this));
     }
+    setActive(false);
 }
 
 void AssistantPopup::reset(KTextEditor::View* view, const IAssistant::Ptr& assistant)
@@ -204,7 +219,7 @@ void AssistantPopup::setView(KTextEditor::View* view)
         return;
     }
 
-    m_config->setActive(false);
+    setActive(false);
 
     if (m_view) {
         m_view->removeEventFilter(this);
@@ -236,6 +251,13 @@ void AssistantPopup::setAssistant(const IAssistant::Ptr& assistant)
     }
 }
 
+void AssistantPopup::setActive(bool active)
+{
+    m_config->setActive(active);
+    for (auto shortcut : m_shortcuts) {
+        shortcut->setEnabled(active);
+    }
+}
 
 bool AssistantPopup::viewportEvent(QEvent *event)
 {
@@ -264,16 +286,16 @@ bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
         executeHideAction();
     } else if (event->type() == QEvent::KeyPress) {
         auto keyEvent = static_cast<QKeyEvent*>(event);
-        if (keyEvent->modifiers() == Qt::AltModifier) {
-            m_config->setActive(true);
+        if (keyEvent->modifiers() == ASSISTANT_MODIFIER) {
+            setActive(true);
         }
         if (keyEvent->key() == Qt::Key_Escape) {
             executeHideAction();
         }
     } else if (event->type() == QEvent::KeyRelease) {
         auto keyEvent = static_cast<QKeyEvent*>(event);
-        if (keyEvent->modifiers() == Qt::AltModifier || keyEvent->key() == Qt::Key_Alt) {
-            m_config->setActive(false);
+        if (keyEvent->modifiers() == ASSISTANT_MODIFIER || keyEvent->key() == ASSISTANT_MOD_KEY) {
+            setActive(false);
         }
     }
     return false;
@@ -381,7 +403,7 @@ void AssistantPopup::updateState()
     m_config->setColorsFromView(doc->textDocument()->activeView());
     m_config->setModel(items);
     m_config->setTitle(m_assistant->title());
-    m_config->setActive(false);
+    setActive(false);
 
     // both changed title or actions may change the appearance of the popup
     // force recomputing the size hint
