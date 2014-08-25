@@ -257,7 +257,6 @@ void ClangParseJob::run()
         auto file = KSharedPtr<ClangParsingEnvironmentFile>::dynamicCast(context->parsingEnvironmentFile());
         Q_ASSERT(file);
         file->setModificationRevision(contents().modification);
-        file->setEnvironment(m_environment);
     }
 
     // release the data here, so we don't lock it while highlighting
