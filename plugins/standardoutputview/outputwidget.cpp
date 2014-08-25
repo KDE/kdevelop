@@ -370,43 +370,60 @@ void OutputWidget::activateIndex(const QModelIndex &index, QAbstractItemView *vi
 {
     if( ! index.isValid() )
         return;
-    view->setCurrentIndex( index );
-    view->scrollTo( index );
     int tabIndex = currentOutputIndex();
-    QModelIndex mapped = index;
+    QModelIndex sourceIndex = index;
+    QModelIndex viewIndex = index;
     if( QAbstractProxyModel* proxy = proxyModels.value(tabIndex) ) {
         if ( index.model() == proxy ) {
-            mapped = proxy->mapToSource(index);
+            // index is from the proxy, map it to the source
+            sourceIndex = proxy->mapToSource(index);
+        } else if (proxy == view->model()) {
+            // index is from the source, map it to the proxy
+            viewIndex = proxy->mapFromSource(index);
         }
     }
-    if( activateOnSelect->isChecked() )
-    {
-        iface->activate( mapped );
+
+    view->setCurrentIndex( viewIndex );
+    view->scrollTo( viewIndex );
+
+    if( activateOnSelect->isChecked() ) {
+        iface->activate( sourceIndex );
     }
 }
 
 void OutputWidget::selectNextItem()
 {
-    auto view = outputView();
-    auto iface = outputViewModel();
-    if ( ! view || ! iface )
-        return;
-    eventuallyDoFocus();
-    kDebug() << "selecting next item";
-    QModelIndex index = iface->nextHighlightIndex( view->currentIndex() );
-    activateIndex(index, view, iface);
+    selectItem(Previous);
 }
 
 void OutputWidget::selectPrevItem()
+{
+    selectItem(Previous);
+}
+
+void OutputWidget::selectItem(Direction direction)
 {
     auto view = outputView();
     auto iface = outputViewModel();
     if ( ! view || ! iface )
         return;
     eventuallyDoFocus();
-    kDebug() << "activating previous item";
-    QModelIndex index = iface->previousHighlightIndex( view->currentIndex() );
-    activateIndex(index, view, iface);
+
+    auto index = view->currentIndex();
+
+    if (QAbstractProxyModel* proxy = proxyModels.value(currentOutputIndex())) {
+        if ( index.model() == proxy ) {
+            // index is from the proxy, map it to the source
+            index = proxy->mapToSource(index);
+        }
+    }
+
+    const auto newIndex = direction == Previous
+        ? iface->previousHighlightIndex( index )
+        : iface->nextHighlightIndex( index );
+
+    kDebug() << "selecting item" << select << index << newIndex;
+    activateIndex(newIndex, view, iface);
 }
 
 void OutputWidget::activate(const QModelIndex& index)
@@ -618,7 +635,7 @@ void OutputWidget::copySelection()
     QModelIndexList indexes = view->selectionModel()->selectedRows();
     QString content;
     Q_FOREACH( const QModelIndex& index, indexes) {
-      content += view->model()->data(index).toString() + '\n';
+      content += index.data().toString() + '\n';
     }
     cb->setText(content);
 }

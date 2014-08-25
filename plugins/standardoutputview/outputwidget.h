@@ -81,6 +81,12 @@ private slots:
     void delayedScroll();
 
 private:
+    enum Direction {
+        Next,
+        Previous
+    };
+    void selectItem(Direction direction);
+
     QTreeView* createListView(int id);
     void setCurrentWidget( QTreeView* view );
     QWidget* currentWidget() const;
