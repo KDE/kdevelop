@@ -965,6 +965,16 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
     KConfigGroup grp = cfg->config();
     KDevelop::EnvironmentGroupList l(KGlobal::config());
 
+    QString envgrp = iface->environmentGroup( cfg );
+    if( envgrp.isEmpty() )
+    {
+        kWarning() << i18n("No environment group specified, looks like a broken "
+            "configuration, please check run configuration '%1'. "
+            "Using default environment group.", cfg->name() );
+        envgrp = l.defaultGroup();
+    }
+
+
     if (grp.readEntry("Break on Start", false)) {
         BreakpointModel* m = KDevelop::ICore::self()->debugController()->breakpointModel();
         bool found = false;
@@ -1017,7 +1027,6 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
     // Only dummy err here, actual erros have been checked already in the job and we don't get here if there were any
     QString err;
     QString executable = iface->executable(cfg, err).toLocalFile();
-    QString envgrp = iface->environmentGroup(cfg);
 
     QStringList arguments = iface->arguments(cfg, err);
     // Change the "Working directory" to the correct one

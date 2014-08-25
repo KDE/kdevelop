@@ -58,7 +58,6 @@ void DebugJob::start()
     Q_ASSERT(m_execute);
     QString err;
     QString executable = m_execute->executable( m_launchcfg, err ).toLocalFile();
-    QString envgrp = m_execute->environmentGroup( m_launchcfg );
     
     if( !err.isEmpty() )
     {
@@ -75,14 +74,6 @@ void DebugJob::start()
         return;
     }
 
-    if( envgrp.isEmpty() )
-    {
-        kWarning() << i18n("No environment group specified, looks like a broken "
-        "configuration, please check run configuration '%1'. "
-        "Using default environment group.", m_launchcfg->name() );
-        envgrp = l.defaultGroup();
-    }
-    
     QStringList arguments = m_execute->arguments( m_launchcfg, err );
     if( !err.isEmpty() )
     {
@@ -94,7 +85,7 @@ void DebugJob::start()
         emitResult();
         return;
     }
-    
+
     setStandardToolView(KDevelop::IOutputView::DebugView);
     setBehaviours(KDevelop::IOutputView::Behaviours(KDevelop::IOutputView::AllowUserClose) | KDevelop::IOutputView::AutoScroll);
     setModel( new KDevelop::OutputModel );
