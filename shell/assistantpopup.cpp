@@ -384,7 +384,7 @@ void AssistantPopup::updateState()
     }
 
     auto curShortcut = m_shortcuts.constBegin();
-    auto hideAction = new KAction(i18n("Hide"), this);
+    auto hideAction = new QAction(i18n("Hide"), this);
     connect(*curShortcut, SIGNAL(activated()), hideAction, SLOT(trigger()));
     connect(hideAction, SIGNAL(triggered()), this, SLOT(executeHideAction()));
 
