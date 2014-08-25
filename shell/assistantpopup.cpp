@@ -51,6 +51,20 @@ namespace {
 /// Used to avoid flickering caused when user is quickly inserting code
 const int UPDATE_STATE_INTERVAL = 300; // ms
 
+const int ASSISTANT_MODIFIER =
+#ifdef Q_OS_MAC
+Qt::CTRL;
+#else
+Qt::ALT;
+#endif
+
+const int ASSISTANT_MOD_KEY =
+#ifdef Q_OS_MAC
+Qt::Key_Control;
+#else
+Qt::Key_Alt;
+#endif
+
 QWidget* findByClassname(const KTextEditor::View* view, const QString& klass)
 {
     auto children = view->findChildren<QWidget*>();
@@ -153,6 +167,7 @@ void AssistantPopupConfig::setModel(const QList<QObject*>& model)
         return;
     }
 
+    qDeleteAll( m_model );
     m_model = model;
     emit modelChanged(model);
 }
@@ -183,22 +198,11 @@ AssistantPopup::AssistantPopup()
     m_updateTimer->setInterval(UPDATE_STATE_INTERVAL);
     m_updateTimer->setSingleShot(true);
     connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateState()));
-}
 
-void AssistantPopup::grabFocus()
-{
-    m_config->setActive(true);
-    if (m_view) {
-        setFocus();
+    for (int i = Qt::Key_0; i <= Qt::Key_9; ++i) {
+        m_shortcuts.append(new QShortcut(ASSISTANT_MODIFIER + i, this));
     }
-}
-
-void AssistantPopup::ungrabFocus()
-{
-    m_config->setActive(false);
-    if (m_view && hasFocus()) {
-        m_view->setFocus();
-    }
+    setActive(false);
 }
 
 void AssistantPopup::reset(KTextEditor::View* view, const IAssistant::Ptr& assistant)
@@ -216,7 +220,7 @@ void AssistantPopup::setView(KTextEditor::View* view)
         return;
     }
 
-    ungrabFocus();
+    setActive(false);
 
     if (m_view) {
         m_view->removeEventFilter(this);
@@ -248,6 +252,13 @@ void AssistantPopup::setAssistant(const IAssistant::Ptr& assistant)
     }
 }
 
+void AssistantPopup::setActive(bool active)
+{
+    m_config->setActive(active);
+    for (auto shortcut : m_shortcuts) {
+        shortcut->setEnabled(active);
+    }
+}
 
 bool AssistantPopup::viewportEvent(QEvent *event)
 {
@@ -259,34 +270,6 @@ bool AssistantPopup::viewportEvent(QEvent *event)
         return true;
     }
     return QGraphicsView::viewportEvent(event);
-}
-
-void AssistantPopup::keyPressEvent(QKeyEvent* event)
-{
-    if (event->key() >= Qt::Key_0 && event->key() <= Qt::Key_9) {
-        auto actions = m_config->model();
-        const int field = event->key() - Qt::Key_0;
-        if (field == 0) {
-            executeHideAction();
-        } else {
-            auto action = m_assistant->actions().value(field - 1);
-            if (action) {
-                action->execute();
-            }
-        }
-    } else {
-        QDeclarativeView::keyPressEvent(event);
-    }
-}
-
-
-void AssistantPopup::keyReleaseEvent(QKeyEvent *event)
-{
-    if (event->key() == Qt::Key_Alt || event->modifiers() == Qt::AltModifier) {
-        ungrabFocus();
-    } else {
-        QDeclarativeView::keyReleaseEvent(event);
-    }
 }
 
 bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
@@ -301,15 +284,18 @@ bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
         updatePosition(m_view.data(), KTextEditor::Cursor::invalid());
     } else if (event->type() == QEvent::Hide) {
         executeHideAction();
-    } else if (event->type() == QEvent::WindowDeactivate) {
-        ungrabFocus();
     } else if (event->type() == QEvent::KeyPress) {
         auto keyEvent = static_cast<QKeyEvent*>(event);
-        if (keyEvent->modifiers() == Qt::AltModifier) {
-            grabFocus();
+        if (keyEvent->modifiers() == ASSISTANT_MODIFIER) {
+            setActive(true);
         }
-        if (static_cast<QKeyEvent*>(event)->key() == Qt::Key_Escape) {
+        if (keyEvent->key() == Qt::Key_Escape) {
             executeHideAction();
+        }
+    } else if (event->type() == QEvent::KeyRelease) {
+        auto keyEvent = static_cast<QKeyEvent*>(event);
+        if (keyEvent->modifiers() == ASSISTANT_MODIFIER || keyEvent->key() == ASSISTANT_MOD_KEY) {
+            setActive(false);
         }
     }
     return false;
@@ -397,19 +383,27 @@ void AssistantPopup::updateState()
         return;
     }
 
+    auto curShortcut = m_shortcuts.constBegin();
+    auto hideAction = new KAction(i18n("Hide"), this);
+    connect(*curShortcut, SIGNAL(activated()), hideAction, SLOT(trigger()));
+    connect(hideAction, SIGNAL(triggered()), this, SLOT(executeHideAction()));
+
     QList<QObject*> items;
     foreach (IAssistantAction::Ptr action, m_assistant->actions()) {
         items << action->toKAction();
+        items.last()->setParent(this);
+        //For some reason, KAction's setShortcut does nothing, so we manage with QShortcut
+        if (++curShortcut != m_shortcuts.constEnd()) {
+            connect(*curShortcut, SIGNAL(activated()), items.last(), SLOT(trigger()));
+        }
     }
-    auto hideAction = new QAction(i18n("Hide"), m_assistant.data());
-    connect(hideAction, SIGNAL(triggered()), this, SLOT(executeHideAction()));
     items << hideAction;
 
     auto view = ICore::self()->documentController()->activeTextDocumentView();
     m_config->setColorsFromView(view);
     m_config->setModel(items);
     m_config->setTitle(m_assistant->title());
-    m_config->setActive(false);
+    setActive(false);
 
     // both changed title or actions may change the appearance of the popup
     // force recomputing the size hint
