@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include "projectcontrollertest.h"
+#include "test_projectcontroller.h"
 
 #include <QFile>
 #include <QSignalSpy>
@@ -134,7 +134,7 @@ K_EXPORT_PLUGIN(FakeFileManager())
 
 ////////////////////// Fixture ///////////////////////////////////////////////
 
-void ProjectControllerTest::initTestCase()
+void TestProjectController::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize();
@@ -145,12 +145,12 @@ void ProjectControllerTest::initTestCase()
     m_scratchDir.cd("prjctrltest");
 }
 
-void ProjectControllerTest::cleanupTestCase()
+void TestProjectController::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void ProjectControllerTest::init()
+void TestProjectController::init()
 {
     m_projName = "foo";
     m_projFilePath = writeProjectConfig(m_projName);
@@ -159,7 +159,7 @@ void ProjectControllerTest::init()
     m_projFolder = Path(m_scratchDir.absolutePath() + '/');
 }
 
-void ProjectControllerTest::cleanup()
+void TestProjectController::cleanup()
 {
     // also close any opened projects as we do not get a clean fixture,
     // following tests should start off clean.
@@ -181,7 +181,7 @@ void ProjectControllerTest::cleanup()
     QVERIFY2(signal.wait(30000), "Timeout while waiting for opened signal");\
 } void(0)
 
-void ProjectControllerTest::openProject()
+void TestProjectController::openProject()
 {
     QSignalSpy* spy = createOpenedSpy();
     QVERIFY(!m_projCtrl->isProjectNameUsed(m_projName));
@@ -196,7 +196,7 @@ void ProjectControllerTest::openProject()
     QVERIFY(m_projCtrl->isProjectNameUsed(m_projName));
 }
 
-void ProjectControllerTest::closeProject()
+void TestProjectController::closeProject()
 {
     m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
@@ -214,7 +214,7 @@ void ProjectControllerTest::closeProject()
     assertSpyCaughtProject(spy2, proj);
 }
 
-void ProjectControllerTest::openCloseOpen()
+void TestProjectController::openCloseOpen()
 {
     m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
@@ -230,7 +230,7 @@ void ProjectControllerTest::openCloseOpen()
     assertSpyCaughtProject(spy, proj);
 }
 
-void ProjectControllerTest::reopen()
+void TestProjectController::reopen()
 {
     m_projCtrl->setDialogProvider(new DialogProviderFake);
     m_projCtrl->openProject(m_projFilePath.toUrl());
@@ -245,7 +245,7 @@ void ProjectControllerTest::reopen()
     assertSpyCaughtProject(spy, proj);
 }
 
-void ProjectControllerTest::reopenWhileLoading()
+void TestProjectController::reopenWhileLoading()
 {
     // Open the same project again while the first is still
     // loading. The second open request should be blocked.
@@ -263,7 +263,7 @@ void ProjectControllerTest::reopenWhileLoading()
     assertSpyCaughtProject(spy, proj);
 }
 
-void ProjectControllerTest::openMultiple()
+void TestProjectController::openMultiple()
 {
     QString secondProj("bar");
     Path secondCfgUrl = writeProjectConfig(secondProj);
@@ -329,7 +329,7 @@ void ProjectControllerTest::openMultiple()
 } void(0)
 
 // command
-void ProjectControllerTest::emptyProject()
+void TestProjectController::emptyProject()
 {
     // verify that the project model contains a single top-level folder after loading
     // an empty project
@@ -358,7 +358,7 @@ void ProjectControllerTest::emptyProject()
 }
 
 // command
-void ProjectControllerTest::singleFile()
+void TestProjectController::singleFile()
 {
     // verify that the project model contains a single file in the
     // top folder. First setup a FakeFileManager with this file
@@ -388,7 +388,7 @@ void ProjectControllerTest::singleFile()
 }
 
 // command
-void ProjectControllerTest::singleDirectory()
+void TestProjectController::singleDirectory()
 {
     // verify that the project model contains a single folder in the
     // top folder. First setup a FakeFileManager with this folder
@@ -416,7 +416,7 @@ void ProjectControllerTest::singleDirectory()
 }
 
 // command
-void ProjectControllerTest::fileInSubdirectory()
+void TestProjectController::fileInSubdirectory()
 {
     // verify that the project model contains a single file in a subfolder
     // First setup a FakeFileManager with this folder + file
@@ -449,7 +449,7 @@ void ProjectControllerTest::fileInSubdirectory()
     ASSERT_SINGLE_FILE_IN(sub,"zoo",filePath,file);
 }
 
-void ProjectControllerTest::prettyFileName()
+void TestProjectController::prettyFileName()
 {
     m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
@@ -470,7 +470,7 @@ void ProjectControllerTest::prettyFileName()
 
 ////////////////////// Helpers ///////////////////////////////////////////////
 
-Path ProjectControllerTest::writeProjectConfig(const QString& name)
+Path TestProjectController::writeProjectConfig(const QString& name)
 {
     Path configPath = Path(m_scratchDir.absolutePath() + '/' + name + ".kdev4");
     QFile f(configPath.pathOrUrl());
@@ -484,27 +484,27 @@ Path ProjectControllerTest::writeProjectConfig(const QString& name)
 
 ////////////////// Custom assertions /////////////////////////////////////////
 
-void ProjectControllerTest::assertProjectOpened(const QString& name, IProject*& proj)
+void TestProjectController::assertProjectOpened(const QString& name, IProject*& proj)
 {
     QVERIFY(proj = m_projCtrl->findProjectByName(name));
     QVERIFY(m_projCtrl->projects().contains(proj));
 }
 
-void ProjectControllerTest::assertSpyCaughtProject(QSignalSpy* spy, IProject* proj)
+void TestProjectController::assertSpyCaughtProject(QSignalSpy* spy, IProject* proj)
 {
     QCOMPARE(spy->size(), 1);
     IProject* emittedProj = (*spy)[0][0].value<IProject*>();
     QCOMPARE(proj, emittedProj);
 }
 
-void ProjectControllerTest::assertProjectClosed(IProject* proj)
+void TestProjectController::assertProjectClosed(IProject* proj)
 {
     IProject* p = m_projCtrl->findProjectByName(proj->name());
     QVERIFY(p == 0);
     QVERIFY(!m_projCtrl->projects().contains(proj));
 }
 
-void ProjectControllerTest::assertEmptyProjectModel()
+void TestProjectController::assertEmptyProjectModel()
 {
     ProjectModel* m = m_projCtrl->projectModel();
     Q_ASSERT(m);
@@ -513,22 +513,22 @@ void ProjectControllerTest::assertEmptyProjectModel()
 
 ///////////////////// Creation stuff /////////////////////////////////////////
 
-QSignalSpy* ProjectControllerTest::createOpenedSpy()
+QSignalSpy* TestProjectController::createOpenedSpy()
 {
     return new QSignalSpy(m_projCtrl, SIGNAL(projectOpened(KDevelop::IProject*)));
 }
 
-QSignalSpy* ProjectControllerTest::createClosedSpy()
+QSignalSpy* TestProjectController::createClosedSpy()
 {
     return new QSignalSpy(m_projCtrl, SIGNAL(projectClosed(KDevelop::IProject*)));
 }
 
-QSignalSpy* ProjectControllerTest::createClosingSpy()
+QSignalSpy* TestProjectController::createClosingSpy()
 {
     return new QSignalSpy(m_projCtrl, SIGNAL(projectClosing(KDevelop::IProject*)));
 }
 
-FakeFileManager* ProjectControllerTest::createFileManager()
+FakeFileManager* TestProjectController::createFileManager()
 {
     FakeFileManagerFactory* f = new FakeFileManagerFactory();
     FakeFileManager* fileMng = qobject_cast<FakeFileManager*>(f->create());
@@ -536,6 +536,6 @@ FakeFileManager* ProjectControllerTest::createFileManager()
     return fileMng;
 }
 
-QTEST_MAIN( ProjectControllerTest)
-#include "moc_projectcontrollertest.cpp"
-#include "projectcontrollertest.moc"
+QTEST_MAIN(TestProjectController)
+#include "moc_test_projectcontroller.cpp"
+#include "test_projectcontroller.moc"

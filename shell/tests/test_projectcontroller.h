@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEVELOP_SHELL_PROJECTCONTROLLERTEST_INCLUDED
-#define KDEVELOP_SHELL_PROJECTCONTROLLERTEST_INCLUDED
+#ifndef KDEVELOP_SHELL_TEST_PROJECTCONTROLLER_H
+#define KDEVELOP_SHELL_TEST_PROJECTCONTROLLER_H
 
 #include <QtCore/QObject>
 #include <QtCore/QDir>
@@ -35,7 +35,7 @@ class ProjectController;
 
 class FakeFileManager;
 
-class ProjectControllerTest : public QObject
+class TestProjectController : public QObject
 {
 Q_OBJECT
 private slots:
@@ -83,4 +83,4 @@ private:
     QList<FakeFileManager*> m_fileManagerGarbage;
 };
 
-#endif // KDEVELOP_SHELL_PROJECTCONTROLLERTEST_INCLUDED
+#endif // KDEVELOP_SHELL_TEST_PROJECTCONTROLLER_H
