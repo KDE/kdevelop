@@ -25,8 +25,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef KDEVPLATFORM_PLUGIN_BAZAAR_TEST_BAZAARTEST_H
-#define KDEVPLATFORM_PLUGIN_BAZAAR_TEST_BAZAARTEST_H
+#ifndef KDEVPLATFORM_PLUGIN_TEST_BAZAAR_H
+#define KDEVPLATFORM_PLUGIN_TEST_BAZAAR_H
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -38,7 +38,7 @@ namespace KDevelop
     class TestCore;
 }
 
-class BazaarTest: public QObject
+class TestBazaar: public QObject
 {
     Q_OBJECT
 
@@ -68,4 +68,4 @@ private:
     void removeTempDirs();
 };
 
-#endif // KDEVPLATFORM_PLUGIN_BAZAAR_TEST_BAZAARTEST_H
+#endif // KDEVPLATFORM_PLUGIN_TEST_BAZAAR_H

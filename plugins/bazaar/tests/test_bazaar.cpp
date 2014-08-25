@@ -25,7 +25,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#include "bazaartest.h"
+#include "test_bazaar.h"
 
 #include <qtest_kde.h>
 #include <QtTest/QtTest>
@@ -53,7 +53,7 @@ const QString bazaarTest_FileName3("bar");
 
 using namespace KDevelop;
 
-void BazaarTest::initTestCase()
+void TestBazaar::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
@@ -61,14 +61,14 @@ void BazaarTest::initTestCase()
     m_plugin = new BazaarPlugin(TestCore::self());
 }
 
-void BazaarTest::cleanupTestCase()
+void TestBazaar::cleanupTestCase()
 {
     delete m_plugin;
 
     TestCore::shutdown();
 }
 
-void BazaarTest::init()
+void TestBazaar::init()
 {
     // Now create the basic directory structure
     QDir tmpdir(tempDir);
@@ -77,12 +77,12 @@ void BazaarTest::init()
     tmpdir.mkdir(bazaarTest_BaseDir2);
 }
 
-void BazaarTest::cleanup()
+void TestBazaar::cleanup()
 {
     removeTempDirs();
 }
 
-void BazaarTest::repoInit()
+void TestBazaar::repoInit()
 {
     kDebug() << "Trying to init repo";
     // make job that creates the local repository
@@ -93,7 +93,7 @@ void BazaarTest::repoInit()
     QVERIFY(QFileInfo(bazaarRepo).exists());
 }
 
-void BazaarTest::addFiles()
+void TestBazaar::addFiles()
 {
     kDebug() << "Adding files to the repo";
 
@@ -160,14 +160,14 @@ void BazaarTest::addFiles()
     VERIFYJOB(j);
 }
 
-void BazaarTest::prepareWhoamiInformations()
+void TestBazaar::prepareWhoamiInformations()
 {
     DVcsJob *whoamiJob = new DVcsJob(bazaarTest_BaseDir, m_plugin);
     *whoamiJob<<"bzr"<<"whoami"<<"--branch"<<"kdevbazaar-test identity <>";
     VERIFYJOB(whoamiJob);
 }
 
-void BazaarTest::commitFiles()
+void TestBazaar::commitFiles()
 {
     prepareWhoamiInformations();
     kDebug() << "Committing...";
@@ -214,25 +214,25 @@ void BazaarTest::commitFiles()
     VERIFYJOB(j);
 }
 
-void BazaarTest::testInit()
+void TestBazaar::testInit()
 {
     repoInit();
 }
 
-void BazaarTest::testAdd()
+void TestBazaar::testAdd()
 {
     repoInit();
     addFiles();
 }
 
-void BazaarTest::testCommit()
+void TestBazaar::testCommit()
 {
     repoInit();
     addFiles();
     commitFiles();
 }
 
-void BazaarTest::testAnnotation()
+void TestBazaar::testAnnotation()
 {
     repoInit();
     addFiles();
@@ -264,7 +264,7 @@ void BazaarTest::testAnnotation()
     QCOMPARE(annotation.commitMessage(), QString("KDevelop's Test commit3"));
 }
 
-void BazaarTest::testRemoveEmptyFolder()
+void TestBazaar::testRemoveEmptyFolder()
 {
     repoInit();
 
@@ -277,7 +277,7 @@ void BazaarTest::testRemoveEmptyFolder()
     QVERIFY(!d.exists("emptydir"));
 }
 
-void BazaarTest::testRemoveEmptyFolderInFolder()
+void TestBazaar::testRemoveEmptyFolderInFolder()
 {
     repoInit();
 
@@ -293,7 +293,7 @@ void BazaarTest::testRemoveEmptyFolderInFolder()
     QVERIFY(!d.exists("dir"));
 }
 
-void BazaarTest::testRemoveUnindexedFile()
+void TestBazaar::testRemoveUnindexedFile()
 {
     repoInit();
 
@@ -309,7 +309,7 @@ void BazaarTest::testRemoveUnindexedFile()
     QVERIFY(!QFile::exists(bazaarTest_BaseDir + bazaarTest_FileName));
 }
 
-void BazaarTest::testRemoveFolderContainingUnversionedFiles()
+void TestBazaar::testRemoveFolderContainingUnversionedFiles()
 {
     repoInit();
 
@@ -345,7 +345,7 @@ void BazaarTest::testRemoveFolderContainingUnversionedFiles()
 }
 
 
-void BazaarTest::removeTempDirs()
+void TestBazaar::removeTempDirs()
 {
     if (QFileInfo(bazaarTest_BaseDir).exists())
         if (!KIO::NetAccess::del(KUrl(bazaarTest_BaseDir), 0))
@@ -356,6 +356,6 @@ void BazaarTest::removeTempDirs()
             qDebug() << "KIO::NetAccess::del(" << bazaarTest_BaseDir2 << ") returned false";
 }
 
-QTEST_KDEMAIN(BazaarTest, GUI)
+QTEST_KDEMAIN(TestBazaar, GUI)
 
-#include "bazaartest.moc"
+#include "test_bazaar.moc"
