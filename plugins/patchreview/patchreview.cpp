@@ -517,7 +517,6 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     actionCollection()->addAction("commit_or_finish_review", m_finishReview);
     ICore::self()->uiController()->activeArea()->addAction(m_finishReview);
 
-    setPatch( IPatchSource::Ptr( new LocalPatchSource ) );
     areaChanged(ICore::self()->uiController()->activeArea());
 }
 
