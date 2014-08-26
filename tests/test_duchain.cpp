@@ -523,7 +523,7 @@ void TestDUChain::testParsingEnvironment()
         auto astFeatures = static_cast<TopDUContext::Features>(features | TopDUContext::AST);
         file.parse(astFeatures);
         file.setKeepDUChainData(true);
-        QVERIFY(file.waitForParsed());
+        QVERIFY(file.waitForParsed(5000));
 
         DUChainWriteLocker lock;
         auto top = file.topContext();
@@ -540,9 +540,15 @@ void TestDUChain::testParsingEnvironment()
         // if no environment is given, no update should be triggered
         QVERIFY(!envFile->needsUpdate());
 
-        // same env should also not trigger a reparse
-        ClangParsingEnvironment env = sessionData->environment();
-        QCOMPARE(env.projectKnown(), false);
+        ClangParsingEnvironment env;
+        {
+            ClangParsingEnvironment environment = sessionData->environment();
+            QCOMPARE(env.projectKnown(), false);
+            // We don't need system include directories as our test file doesn't use it.
+            env.addDefines(environment.defines());
+            env.setProjectKnown(false);
+        }
+
         QVERIFY(!envFile->needsUpdate(&env));
 
         // but changing the environment should trigger an update
