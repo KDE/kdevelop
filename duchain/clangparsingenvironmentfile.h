@@ -44,6 +44,8 @@ public:
 
     void setEnvironment(const ClangParsingEnvironment& environment);
 
+    bool inProject();
+
     enum {
         Identity = 142
     };

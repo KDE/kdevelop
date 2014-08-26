@@ -45,6 +45,7 @@
 #include "duchain/clangindex.h"
 #include "duchain/navigationwidget.h"
 #include "duchain/macrodefinition.h"
+#include "duchain/clangparsingenvironmentfile.h"
 
 #include <language/assistant/staticassistantsmanager.h>
 #include <language/assistant/renameassistant.h>
@@ -356,10 +357,28 @@ TopDUContext* ClangSupport::standardContext(const KUrl& url, bool proxyContext)
 {
     //Prefer context that the user currently working with. This is important for e.g. code-completion.
     auto topChains = DUChain::self()->chainsForDocument(url);
+    TopDUContext* context = nullptr;
     for (auto chain: topChains) {
         if (chain->ast()) {
-            return chain;
+            context = chain;
+            if (auto file = dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data())) {
+                if (file->inProject()) {
+                    return context;
+                }
+            }
         }
+    }
+
+    for (auto chain: topChains) {
+        if (auto file = dynamic_cast<ClangParsingEnvironmentFile*>(chain->parsingEnvironmentFile().data())) {
+            if (file->inProject()) {
+                return chain;
+            }
+        }
+    }
+
+    if (context) {
+        return context;
     }
 
     return ILanguageSupport::standardContext(url, proxyContext);
