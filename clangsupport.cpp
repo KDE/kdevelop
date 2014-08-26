@@ -38,6 +38,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/idocumentcontroller.h>
+#include <language/interfaces/iastcontainer.h>
 
 #include "codegen/simplerefactoring.h"
 #include "codegen/adaptsignatureassistant.h"
@@ -51,6 +52,7 @@
 #include <language/highlighting/codehighlighting.h>
 #include <language/interfaces/editorcontext.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/use.h>
@@ -348,6 +350,19 @@ QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const KUrl& url, co
         return import.first->createNavigationWidget();
     }
     return nullptr;
+}
+
+TopDUContext* ClangSupport::standardContext(const KUrl& url, bool proxyContext)
+{
+    //Prefer context that the user currently working with. This is important for e.g. code-completion.
+    auto topChains = DUChain::self()->chainsForDocument(url);
+    for (auto chain: topChains) {
+        if (chain->ast()) {
+            return chain;
+        }
+    }
+
+    return ILanguageSupport::standardContext(url, proxyContext);
 }
 
 #include "clangsupport.moc"

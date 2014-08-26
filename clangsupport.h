@@ -64,6 +64,8 @@ public:
 
     ClangIndex* index();
 
+    virtual KDevelop::TopDUContext* standardContext(const KUrl& url, bool proxyContext = false) override;
+
     //BEGIN IBuddyDocumentFinder
 
     virtual bool areBuddies(const KUrl& url1, const KUrl& url2);
