@@ -354,7 +354,7 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
     
     DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this, KDevelop::OutputJob::Silent);
     job->setType(VcsJob::Diff);
-    *job << "git" << "diff" << "--no-prefix" << "--no-color" << "--no-ext-diff";
+    *job << "git" << "diff" << "--no-color" << "--no-ext-diff";
     if(srcRevision.revisionType()==VcsRevision::Special
         && dstRevision.revisionType()==VcsRevision::Special
         && srcRevision.specialType()==VcsRevision::Base
