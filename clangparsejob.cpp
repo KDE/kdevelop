@@ -32,6 +32,7 @@
 #include <interfaces/ilanguage.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
 
@@ -145,6 +146,14 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(url.str()));
         m_environment.setProjectKnown(false);
     }
+
+    auto openDocuments = ICore::self()->documentController()->openDocuments();
+    for(auto document: openDocuments) {
+        if (document->isTextDocument() && IndexedString(document->url()) == url) {
+            m_documentOpenedInEditor = true;
+            break;
+        }
+    }
 }
 
 ClangSupport* ClangParseJob::clang() const
@@ -174,7 +183,7 @@ void ClangParseJob::run()
     ParseSessionData::Ptr sessionData;
     {
         UrlParseLock urlLock(document());
-        if (abortRequested() || !isUpdateRequired(ParseSession::languageString())) {
+        if (!m_documentOpenedInEditor && !isUpdateRequired(ParseSession::languageString())) {
             return;
         }
         {
