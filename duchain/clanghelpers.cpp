@@ -78,7 +78,8 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor, CXClientData data)
     return CXChildVisit_Recurse;
 }
 
-struct ImportsForFile {
+struct ImportsForFile
+{
     CXFile file;
     QVector<CXFile> imports;
 };
@@ -95,18 +96,48 @@ CXChildVisitResult visitImportsInFile(CXCursor cursor, CXCursor, CXClientData da
         CXFile file;
         clang_getFileLocation(location, &file, nullptr, nullptr, nullptr);
         if (file != imports->file) {
+            // skip includes in other files
             return CXChildVisit_Continue;
         }
     }
 
     CXFile file = clang_getIncludedFile(cursor);
     if(!file){
-        return CXChildVisit_Break;
+        // invalid import, maybe not all include directories provided...
+        return CXChildVisit_Continue;
     }
 
     imports->imports.append(file);
 
     return CXChildVisit_Recurse;
+}
+
+/// @return environment for given @p file i.e. the same environment, but only with include directories used by this file.
+ClangParsingEnvironment environmentForFile(CXFile file, ParseSession session)
+{
+    ImportsForFile importsForFile;
+    importsForFile.file = file;
+    auto sessionEnvironment = session.data()->environment();
+
+    if (!clang_visitChildren(clang_getTranslationUnitCursor(session.unit()), &visitImportsInFile, &importsForFile)) {
+        // Add only used include directories into the environment.
+        KDevelop::Path::List includes;
+        for (const auto& includePath: sessionEnvironment.includes()) {
+            for (const auto& import: importsForFile.imports) {
+                if (QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(import)))).startsWith(includePath.toLocalFile())) {
+                    includes.append(includePath);
+                    break;
+                }
+            }
+        }
+        ClangParsingEnvironment env;
+        env.addDefines(sessionEnvironment.defines());
+        env.addIncludes(includes);
+        env.setProjectKnown(sessionEnvironment.projectKnown());
+        return env;
+    } else {
+        return sessionEnvironment;
+    }
 }
 
 ReferencedTopDUContext createTopContext(const IndexedString& path, const ClangParsingEnvironment& environment)
@@ -148,29 +179,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
 
     const IndexedString path(QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file)))));
 
-    auto environment = session.data()->environment();
-
-    ImportsForFile importsForFile;
-    importsForFile.file = file;
-
-    if (!clang_visitChildren(clang_getTranslationUnitCursor(session.unit()), &visitImportsInFile, &importsForFile)) {
-        // Add only used include directories into the environment.
-        KDevelop::Path::List includes;
-        for (const auto& includePath: environment.includes()) {
-            for (const auto& import: importsForFile.imports) {
-                if (QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(import)))).startsWith(includePath.toLocalFile())) {
-                    includes.append(includePath);
-                    break;
-                }
-            }
-        }
-        ClangParsingEnvironment env;
-        env.addDefines(environment.defines());
-        env.addIncludes(includes);
-        env.setProjectKnown(environment.projectKnown());
-        //kDebug() << "Reduced includes from: " << environment.includes() <<  "\nto: " << env.includes() << "\nfor: " << path.str() << " project: " << env.projectKnown();
-        environment = env;
-    }
+    auto environment = environmentForFile(file, session);
 
     bool update = false;
     UrlParseLock urlLock(path);
