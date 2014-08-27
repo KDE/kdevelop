@@ -23,10 +23,13 @@
 #include <cmakelistsparser.h>
 #include <cmakemanager.h>
 #include <language/backgroundparser/urlparselock.h>
+#include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <interfaces/ilanguage.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 #include <language/duchain/problem.h>
 #include <kio/global.h>
 #include <QReadWriteLock>
@@ -45,7 +48,7 @@ IndexedString parentCMakeFile(const IndexedString& doc)
 
 void CMakeParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
-    IndexedString languageName(CMakeManager::languageName());
+    const IndexedString languageName(CMakeManager::languageName());
 
     UrlParseLock urlLock(document());
     if (abortRequested() || !isUpdateRequired(languageName)) {
@@ -61,16 +64,21 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
     ReferencedTopDUContext parentCtx;
     if (document().str().endsWith(QStringLiteral("CMakeLists.txt"))) {
         IndexedString parentFile = parentCMakeFile(document());
+        if (QFile::exists(parentFile.toUrl().toLocalFile())) {
 
-//         TODO: figure out imported files
-//         DUChainReadLocker lock;
-//         parentCtx = DUChain::self()->chainForDocument(parentFile);
-//         lock.unlock();
-//
-//         if (!parentCtx) {
-//             qDebug() << "waiting for..." << parentFile << document();
-//             parentCtx = DUChain::self()->waitForUpdate(parentFile, TopDUContext::AllDeclarationsAndContexts);
-//         }
+//         TODO: figure out includes import
+            {
+                DUChainReadLocker lock;
+                parentCtx = DUChain::self()->chainForDocument(parentFile);
+            }
+
+            if (!parentCtx && ICore::self()->languageController()->backgroundParser()->parseJobForDocument(parentFile)) {
+                qDebug() << "waiting for..." << parentFile << document();
+                parentCtx = DUChain::self()->waitForUpdate(parentFile, TopDUContext::AllDeclarationsAndContexts);
+            } else if(!parentCtx) {
+                qDebug() << "required..." << parentFile;
+            }
+        }
     }
 
     ReferencedTopDUContext context;
