@@ -546,13 +546,15 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 
 QRegExp includeRegularExpression()
 {
-  QString includeParameterRx("\\s(-I|--include-dir=|-I\\s)");
-  QString quotedRx("(\\').*(\\')|(\\\").*(\\\")"); //Matches "hello", 'hello', 'hello"hallo"', etc.
-  QString escapedPathRx("(([^)(\"'\\s]*)(\\\\\\s)?)*"); //Matches /usr/I\ am \ a\ strange\ path/include
+  //when updating this, please also run and update the test_custommake.cpp
+  QString includeParameterRx("\\s(?:--include-dir=|-I\\s*|-isystem\\s+)");
+  QString quotedRx("\\'.*\\'|\\\".*\\\""); //Matches "hello", 'hello', 'hello"hallo"', etc.
+  QString escapedPathRx("((?:\\\\.)?([\\S^\\\\]?))+"); //Matches /usr/I\ am\ a\ strange\ path/include
 
-  QRegExp includeRx(QString("%1(%2|%3)(?=\\s)").arg(includeParameterRx).arg(quotedRx).arg(escapedPathRx));
-  includeRx.setMinimal(true);
-  includeRx.setCaseSensitivity(Qt::CaseSensitive);
+  QRegExp includeRx(QString("%1(%2|%3)(?=\\s)").arg(includeParameterRx).arg(quotedRx).arg(escapedPathRx), Qt::CaseSensitive, QRegExp::RegExp2);
+//   includeRx.setMinimal(true);
+  if(!includeRx.isValid())
+      qCritical() << "error" << includeRx.errorString();
   return includeRx;
 }
 
@@ -689,21 +691,8 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
 
   while ((offset = includeRx.indexIn(fullOutput, offset)) != -1) {
     offset += 1; ///The previous white space
-    int pathOffset = 2;
-    if (fullOutput[offset+1] == '-') {
-      ///Must be --include-dir=, with a length of 14 characters
-      pathOffset = 14;
-    }
-    if (fullOutput.length() <= offset + pathOffset)
-      break;
 
-    if (fullOutput[offset+pathOffset].isSpace())
-      pathOffset++;
-
-    int start = offset + pathOffset;
-    int end = offset + includeRx.matchedLength();
-
-    QString path = fullOutput.mid(start, end-start).trimmed();
+    QString path = includeRx.cap(1);
     if (path.startsWith('"') || (path.startsWith('\'') && path.length() > 2)) {
       //probable a quoted path
       if (path.endsWith(path.left(1))) {
@@ -719,7 +708,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
 
     ret.paths << u.toLocalFile();
 
-    offset = end-1;
+    offset += includeRx.matchedLength()-1;
   }
 
   return ret;

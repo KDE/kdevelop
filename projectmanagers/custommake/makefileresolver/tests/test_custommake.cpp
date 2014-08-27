@@ -62,14 +62,16 @@ void TestCustomMake::testIncludeDirectories() {
         QFile testfile( tempDir.name() + "testfile.cpp" );
         createFile(testfile);
         QTextStream stream1( &file );
-        stream1 << "testfile.o:\n\t g++ testfile.cpp -I/testFile1 -I/testFile2 -o testfile";
+        stream1 << "testfile.o:\n\t g++ testfile.cpp -I/testFile1 -I /testFile2 -isystem /testFile3 --include-dir=/testFile4 -o testfile";
     }
 
     MakeFileResolver mf;
     auto result = mf.resolveIncludePath(tempDir.name() + "testfile.cpp");
     QVERIFY(result.paths.contains("/testFile1"));
     QVERIFY(result.paths.contains("/testFile2"));
-    QCOMPARE(result.paths.size(), 2);
+    QVERIFY(result.paths.contains("/testFile3"));
+    QVERIFY(result.paths.contains("/testFile4"));
+    QCOMPARE(result.paths.size(), 4);
 }
 
 QTEST_KDEMAIN(TestCustomMake, NoGUI)
