@@ -468,6 +468,9 @@ int main( int argc, char *argv[] )
 //     TODO: port to kf5
 //     KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
     Core* core = Core::self();
+    QByteArray disable = qgetenv("KDEV_DISABLE_WELCOMEPAGE");
+    if (disable.isEmpty())
+        core->pluginController()->loadPlugin("KDevWelcomePage");
 
     QStringList projectNames = args->getOptionList("project");
     if(!projectNames.isEmpty())
