@@ -257,7 +257,7 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
     // Answer: Its notifying the mainwindow to reload its settings when one of
     // the KCM's changes its settings and it works
     KSettings::Dispatcher::registerComponent( KComponentData::mainComponent().componentName(), main, "loadSettings" );
-    KSettings::Dispatcher::registerComponent( Core::self()->componentData().componentName(), main, "loadSettings" );
+    KSettings::Dispatcher::registerComponent( Core::self()->aboutData().componentName(), main, "loadSettings" );
 
     addMainWindow(main);
     showArea(areaName, main);

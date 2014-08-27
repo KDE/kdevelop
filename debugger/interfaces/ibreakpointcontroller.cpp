@@ -195,7 +195,7 @@ void IBreakpointController::hit(KDevelop::Breakpoint* breakpoint, const QString 
     }
     if (ev) {
         ev->setPixmap(QIcon::fromTheme("script-error").pixmap(QSize(22,22)));
-        ev->setComponentName(ICore::self()->componentData().componentName());
+        ev->setComponentName(ICore::self()->aboutData().componentName());
         ev->sendEvent();
     }
 }

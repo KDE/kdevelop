@@ -33,7 +33,6 @@ void TestGenerationTest::initTestCase()
     AutoTestShell::init();
     TestCore::initialize (Core::NoUi);
 
-//     bool addedDir = ICore::self()->componentData().dirs()->addResourceDir("data", CODEUTILS_TESTS_DATA_DIR, true);
 //     From KF5 port, unsure if that makes sense
     QByteArray xdgData = qgetenv("XDG_DATA_DIRS");
     bool addedDir = qputenv("XDG_DATA_DIRS", CODEUTILS_TESTS_DATA_DIR+':'+xdgData);

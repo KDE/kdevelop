@@ -66,11 +66,11 @@ class FakeFileManager : public IPlugin, public IProjectFileManager
     Q_INTERFACES(KDevelop::IProjectFileManager)
 
 public:
-    FakeFileManager(QObject*, const QVariantList&) : IPlugin(ICore::self()->componentData().componentName(), Core::self()) {
+    FakeFileManager(QObject*, const QVariantList&) : IPlugin(ICore::self()->aboutData().componentName(), Core::self()) {
         KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     }
 
-    FakeFileManager() : IPlugin(ICore::self()->componentData().componentName(), Core::self()) {
+    FakeFileManager() : IPlugin(ICore::self()->aboutData().componentName(), Core::self()) {
         KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     }
 

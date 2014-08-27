@@ -24,6 +24,7 @@
 #include "shellexport.h"
 #include <interfaces/icore.h>
 
+class KAboutData;
 class KSplashScreen;
 
 namespace KDevelop {
@@ -114,7 +115,7 @@ public:
     /** @copydoc ICore::activeSessionLock() */
     virtual ISessionLock::Ptr activeSessionLock();
 
-    virtual KComponentData componentData() const;
+    virtual KAboutData aboutData() const;
 
     /// The following methods may only be used within the shell.
 

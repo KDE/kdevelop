@@ -21,10 +21,11 @@
 #ifndef KDEVPLATFORM_PLATFORM_CORE_P_H
 #define KDEVPLATFORM_PLATFORM_CORE_P_H
 
-#include <kaboutdata.h>
 #include <core.h>
+
+#include <KAboutData>
+
 #include <QPointer>
-#include <KComponentData>
 
 namespace KDevelop
 {
@@ -66,7 +67,7 @@ public:
     QPointer<WorkingSetController> workingSetController;
     QPointer<TestController> testController;
 
-    KComponentData m_componentData;
+    KAboutData m_aboutData;
     Core *m_core;
     bool m_cleanedUp;
     bool m_shuttingDown;

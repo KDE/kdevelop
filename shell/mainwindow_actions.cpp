@@ -42,6 +42,8 @@ Boston, MA 02110-1301, USA.
 #include "loadedpluginsdialog.h"
 #include <interfaces/ipartcontroller.h>
 
+#include <KAboutApplicationDialog>
+
 namespace KDevelop {
 
 // merge the gotoNext and gotoPrev code, to prevent copy/paste errors
@@ -196,9 +198,8 @@ void MainWindowPrivate::configureNotifications()
 
 void MainWindowPrivate::showAboutPlatform()
 {
-    //TODO: port
-//     KAboutApplicationDialog dlg(Core::self()->componentData().aboutData(), m_mainWindow );
-//     dlg.exec();
+    KAboutApplicationDialog dlg(Core::self()->aboutData(), m_mainWindow );
+    dlg.exec();
 }
 
 void MainWindowPrivate::showLoadedPlugins()

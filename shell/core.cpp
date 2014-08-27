@@ -93,7 +93,8 @@ void installSignalHandler()
 namespace KDevelop {
 
 Core *Core::m_self = 0;
-KAboutData aboutData()
+
+KAboutData createAboutData()
 {
     KAboutData aboutData( "kdevplatform", 
                           i18n("KDevelop Platform"), KDEVPLATFORM_VERSION_STR,
@@ -122,7 +123,7 @@ KAboutData aboutData()
 }
 
 CorePrivate::CorePrivate(Core *core):
-    m_componentData( aboutData().componentName().toLatin1() ), m_core(core), m_cleanedUp(false), m_shuttingDown(false)
+    m_aboutData( createAboutData() ), m_core(core), m_cleanedUp(false), m_shuttingDown(false)
 {
 }
 
@@ -422,9 +423,9 @@ void Core::cleanup()
     emit shutdownCompleted();
 }
 
-KComponentData Core::componentData() const
+KAboutData Core::aboutData() const
 {
-    return d->m_componentData;
+    return d->m_aboutData;
 }
 
 IUiController *Core::uiController()
