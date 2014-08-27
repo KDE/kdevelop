@@ -732,7 +732,6 @@ void CPPInternalParseJob::run()
         contentContext->setFeatures(newFeatures);
         if(proxyContext)
           proxyContext->setFeatures(newFeatures);
-        contentContext->setFlags( (TopDUContext::Flags)(contentContext->flags() & (~TopDUContext::UpdatingContext)) );
 
         //Now that the Ast is fully built, add it to the TopDUContext if requested
         if(keepAST)
