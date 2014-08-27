@@ -433,7 +433,7 @@ uint OverloadResolver::matchParameterTypes( const AbstractType::Ptr& argumentTyp
     if ( decl )
     {
       IndexedString id = decl->identifier().identifier();
-      if ( instantiatedTypes[id] )
+      if ( !instantiatedTypes[id] )
       {
         instantiatedTypes[id] = argumentType;
         return 1;
