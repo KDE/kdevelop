@@ -124,6 +124,12 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> otherArgs;
     otherArgs.reserve(includes.size() + defines.size() + pchInclude.isValid());
+    if (pchInclude.isValid()) {
+        args << "-include";
+        QByteArray pchFile = pchInclude.toLocalFile().toUtf8();
+        otherArgs << pchFile;
+        args << pchFile.constData();
+    }
     foreach (const Path& url, includes) {
         QFileInfo info(url.toLocalFile());
         QByteArray path = url.toLocalFile().toUtf8();
@@ -140,12 +146,6 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
         QByteArray define = QString("-D" + it.key() + '=' + it.value()).toUtf8();
         otherArgs << define;
         args << define.constData();
-    }
-    if (pchInclude.isValid()) {
-        args << "-include";
-        QByteArray pchFile = pchInclude.toLocalFile().toUtf8();
-        otherArgs << pchFile;
-        args << pchFile.constData();
     }
 
     // TODO: track other open unsaved files and add them here
