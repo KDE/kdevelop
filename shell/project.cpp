@@ -626,11 +626,6 @@ Path Project::developerFile() const
     return d->developerFile;
 }
 
-KUrl Project::developerFileUrl() const
-{
-    return d->developerFile.toUrl();
-}
-
 ProjectFolderItem* Project::projectItem() const
 {
     return d->topItem;

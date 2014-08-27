@@ -75,7 +75,6 @@ public:
 
     QString projectTempFile() const;
     QString developerTempFile() const;
-    KDEVPLATFORMSHELL_DEPRECATED KUrl developerFileUrl() const;
     Path developerFile() const;
     virtual void reloadModel();
     virtual KDEVPLATFORMSHELL_DEPRECATED KUrl projectFileUrl() const;
