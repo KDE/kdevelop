@@ -25,6 +25,7 @@
 
 #include "clangparsejob.h"
 #include "version.h"
+#include "debug.h"
 
 #include "util/clangtypes.h"
 
@@ -140,7 +141,7 @@ QPair<TopDUContextPointer, SimpleRange> importedContextForPosition(const KUrl& u
     // Since this is called by the editor while editing, use a fast timeout so the editor stays responsive
     DUChainReadLocker lock(nullptr, 100);
     if (!lock.locked()) {
-        kDebug() << "Failed to lock the du-chain in time";
+        debug() << "Failed to lock the du-chain in time";
         return {TopDUContextPointer(), SimpleRange::invalid()};
     }
 
@@ -150,7 +151,7 @@ QPair<TopDUContextPointer, SimpleRange> importedContextForPosition(const KUrl& u
     }
 
     if ((topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext())) {
-        kDebug() << "Strange: standard-context for" << topContext->url().str() << "is a proxy-context";
+        debug() << "Strange: standard-context for" << topContext->url().str() << "is a proxy-context";
         return {TopDUContextPointer(), SimpleRange::invalid()};
     }
 

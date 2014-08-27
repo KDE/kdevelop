@@ -20,12 +20,13 @@
 
 #include "test_buddies.h"
 
+#include "../debug.h"
+
 #include <qtest_kde.h>
 
 #include <QtGui/QSplitter>
 #include <QtTest/QtTest>
 
-#include <KDebug>
 #include <KTempDir>
 #include <KParts/MainWindow>
 #include <KTextEditor/View>

@@ -24,13 +24,13 @@
 #include "../duchain/cursorkindtraits.h"
 #include "../duchain/parsesession.h"
 #include "../util/clangtypes.h"
+#include "../util/clangutils.h"
+#include "../debug.h"
 
 #include <language/duchain/stringhelpers.h>
 #include <language/editor/simplecursor.h>
 
 #include <QLinkedList>
-
-#include "../util/clangutils.h"
 
 #include <clang-c/Index.h>
 
@@ -270,7 +270,7 @@ void CompletionHelper::computeCompletions(const ParseSession& session, const Sim
     CXSourceLocation location = clang_getLocation(unit, session.file(), position.line + 1, position.column + 1);
 
     if (clang_equalLocations(clang_getNullLocation(), location)) {
-        kDebug() << "Completion helper given invalid position " << position
+        debug() << "Completion helper given invalid position " << position
                  << " in file " << session.file();
         return;
     }

@@ -24,12 +24,12 @@
 #include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
 #include "../duchain/cursorkindtraits.h"
+#include "../debug.h"
 
 #include <language/duchain/indexedstring.h>
 #include <language/editor/documentrange.h>
 
 #include <clang-c/Index.h>
-#include <kdebug.h>
 
 #include <QDir>
 #include <QProcess>
@@ -40,15 +40,15 @@ using namespace KDevelop;
 CXCursor ClangUtils::getCXCursor(int line, int column, const CXTranslationUnit& unit, const CXFile& file)
 {
     if (!file) {
-        kDebug() << "getCXCursor couldn't find file: " << clang_getFileName(file);
+        debug() << "getCXCursor couldn't find file: " << clang_getFileName(file);
         return clang_getNullCursor();
     }
 
     CXSourceLocation location = clang_getLocation(unit, file, line + 1, column + 1);
 
     if (clang_equalLocations(clang_getNullLocation(), location)) {
-        kDebug() << "getCXCursor given invalid position " << line << ", " << column
-                 << " for file " << clang_getFileName(file);
+        debug() << "getCXCursor given invalid position " << line << ", " << column
+                << " for file " << clang_getFileName(file);
         return clang_getNullCursor();
     }
 
@@ -80,7 +80,7 @@ CXChildVisitResult paramVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientDa
     CXFile file;
     clang_getFileLocation(clang_getCursorLocation(cursor),&file,nullptr,nullptr,nullptr);
     if (!file) {
-        kDebug() << "Couldn't find file associated with default parameter cursor!";
+        debug() << "Couldn't find file associated with default parameter cursor!";
         //We keep going, because getting an error because we accidentally duplicated
         //a default parameter is better than deleting a default parameter
     }
@@ -114,7 +114,7 @@ QVector<QString> ClangUtils::getDefaultArguments(CXCursor cursor, DefaultArgumen
     CXFile file;
     clang_getFileLocation(clang_getCursorLocation(cursor),&file,nullptr,nullptr,nullptr);
     if (!file) {
-        kDebug() << "Couldn't find file associated with default parameter cursor!";
+        debug() << "Couldn't find file associated with default parameter cursor!";
         //The empty string serves as a wildcard string, because it's better to
         //duplicate a default parameter than delete one
     } else {

@@ -334,7 +334,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
     const unsigned int completeOptions = clang_defaultCodeCompleteOptions();
 
     if (!m_text.isEmpty()) {
-        kDebug() << "Unsaved contents found for file" << file << "- creating CXUnsavedFile";
+        debug() << "Unsaved contents found for file" << file << "- creating CXUnsavedFile";
 
         CXUnsavedFile unsaved;
         const QByteArray content = m_text.toUtf8();
@@ -373,7 +373,7 @@ ClangCodeCompletionContext::~ClangCodeCompletionContext()
 bool ClangCodeCompletionContext::isValidPosition() const
 {
     if (isInsideComment(m_parseSession.unit(), m_parseSession.file(), m_position.castToSimpleCursor())) {
-        kDebug() << "Invalid completion context: Inside comment";
+        debug() << "Invalid completion context: Inside comment";
         return false;
     }
     return true;
@@ -398,7 +398,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
     DUContext* ctx = m_duContext->findContextAt(m_position);
 
-    kDebug() << "Clang found" << m_results->NumResults << "completion results";
+    debug() << "Clang found" << m_results->NumResults << "completion results";
 
     for (uint i = 0; i < m_results->NumResults; ++i) {
         if (abort) {

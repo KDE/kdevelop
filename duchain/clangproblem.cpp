@@ -22,11 +22,11 @@
 #include "clangproblem.h"
 
 #include "util/clangtypes.h"
+#include "../debug.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/codegen/documentchangeset.h>
 
-#include <KDebug>
 #include <KLocale>
 
 using namespace KDevelop;

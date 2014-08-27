@@ -22,14 +22,13 @@
 #include "todoextractor.h"
 
 #include "../util/clangtypes.h"
+#include "../debug.h"
 
 #include <language/duchain/problem.h>
 #include <language/duchain/stringhelpers.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icompletionsettings.h>
-
-#include <KDebug>
 
 #include <QStringList>
 

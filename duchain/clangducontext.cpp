@@ -21,12 +21,11 @@
 #include "clangducontext.h"
 
 #include "duchain/navigationwidget.h"
+#include "../debug.h"
 
 #include <language/duchain/duchainregister.h>
 #include <language/duchain/topducontextdata.h>
 #include <language/util/includeitem.h>
-
-#include <KDebug>
 
 using namespace KDevelop;
 
@@ -56,7 +55,7 @@ QWidget* ClangNormalDUContext::createNavigationWidget(Declaration* decl, TopDUCo
 {
 
     if (!decl) {
-        kDebug() << "no declaration, not returning navigationwidget";
+        debug() << "no declaration, not returning navigationwidget";
         return 0;
     }
     return new ClangNavigationWidget(DeclarationPointer(decl));

@@ -30,6 +30,7 @@
 #include "clangparsingenvironment.h"
 #include "debug.h"
 #include "util/clangtypes.h"
+#include "../debug.h"
 
 #include <KLocale>
 #include <KMimeType>
@@ -164,7 +165,7 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
         &m_unit
     );
     if (code != CXError_Success) {
-        kDebug() << "clang_parseTranslationUnit2 return with error code" << code;
+        debug() << "clang_parseTranslationUnit2 return with error code" << code;
     }
 #else
     m_unit = clang_parseTranslationUnit(
@@ -183,7 +184,7 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
             clang_saveTranslationUnit(m_unit, path + ".pch", CXSaveTranslationUnit_None);
         }
     } else {
-        kDebug() << "Failed to parse file:" << file.Filename;
+        debug() << "Failed to parse file:" << file.Filename;
     }
 }
 

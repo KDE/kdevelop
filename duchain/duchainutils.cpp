@@ -27,7 +27,7 @@
 #include <language/editor/simplerange.h>
 #include <language/codegen/coderepresentation.h>
 
-#include <KDebug>
+#include "../debug.h"
 
 using namespace KDevelop;
 

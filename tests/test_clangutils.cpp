@@ -22,6 +22,7 @@
 
 #include "../util/clangutils.h"
 #include "../util/clangtypes.h"
+#include "../debug.h"
 
 #include <language/editor/documentrange.h>
 #include <language/editor/simplerange.h>
@@ -31,7 +32,6 @@
 
 #include <clang-c/Index.h>
 
-#include <KDebug>
 #include <KTemporaryFile>
 
 #include <qtest_kde.h>

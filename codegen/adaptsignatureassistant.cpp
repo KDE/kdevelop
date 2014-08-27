@@ -31,6 +31,8 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
+#include "../debug.h"
+
 using namespace KDevelop;
 
 namespace {
@@ -108,7 +110,7 @@ void AdaptSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
 
     DUChainReadLocker lock(DUChain::lock(), 300);
     if (!lock.locked()) {
-        kDebug() << "failed to lock duchain in time";
+        debug() << "failed to lock duchain in time";
         return;
     }
     SimpleRange simpleInvocationRange = SimpleRange(sigAssistRange);

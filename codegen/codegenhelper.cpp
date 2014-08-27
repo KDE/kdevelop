@@ -274,11 +274,11 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx)
                         AbstractType::Ptr niceParam = stripType(instantiationInfo.templateParameters()[neededParameters].abstractType(), ctx);
                         if (niceParam) {
                             currentId.appendTemplateIdentifier(IndexedTypeIdentifier(niceParam->toString(), true));
-//               kDebug() << "testing param" << niceParam->toString();
+//               debug() << "testing param" << niceParam->toString();
                         }
 
                         if (tempDecl->instantiate(newInformation, ctx->topContext()) == decl) {
-//               kDebug() << "got full instantiation";
+//               debug() << "got full instantiation";
                             break;
                         }
                     }
