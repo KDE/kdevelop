@@ -30,9 +30,9 @@
 #include <language/duchain/stringhelpers.h>
 #include <language/editor/simplecursor.h>
 
-#include <QLinkedList>
-
 #include <clang-c/Index.h>
+
+#include <algorithm>
 
 namespace {
 
@@ -287,20 +287,17 @@ void CompletionHelper::computeCompletions(const ParseSession& session, const Sim
     if (clang_getCursorKind(currentCursor) == CXCursor_Namespace ||
        clang_equalCursors(topCursor,currentCursor)) {
 
-        QLinkedList<CXCursor> scopeList;
-        QVector<CXCursor> scopeVec;
+        QVector<CXCursor> scopes;
         if (!clang_equalCursors(topCursor,currentCursor)) {
             CXCursor search = currentCursor;
             while (!clang_equalCursors(search,topCursor)) {
-                scopeList.prepend(clang_getCanonicalCursor(search));
+                scopes.append(clang_getCanonicalCursor(search));
                 search = clang_getCursorSemanticParent(search);
             }
-            for (auto it = scopeList.begin(); it != scopeList.end(); ++it) {
-                scopeVec.append(*it);
-            }
+            std::reverse(scopes.begin(), scopes.end());
         }
 
-        ImplementsInfo info{currentCursor, topCursor, &m_implements, scopeVec, 0, QString(), QString()};
+        ImplementsInfo info{currentCursor, topCursor, &m_implements, scopes, 0, QString(), QString()};
         clang_visitChildren(topCursor, declVisitor, &info);
     }
 }
