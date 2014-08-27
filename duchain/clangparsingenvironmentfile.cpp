@@ -86,15 +86,13 @@ bool ClangParsingEnvironmentFile::needsUpdate(const ParsingEnvironment* environm
                     << "new hash:" << env->hash() << "new project known:" << env->projectKnown()
                     << "old hash:" << d_func()->environmentHash << "old project known:" << d_func()->projectWasKnown;
             return true;
-        } else {
-            debug() << "environment matches:" << url()
-                    << "new hash:" << env->hash() << "new project known:" << env->projectKnown()
-                    << "old hash:" << d_func()->environmentHash << "old project known:" << d_func()->projectWasKnown;
         }
     }
 
     bool ret = KDevelop::ParsingEnvironmentFile::needsUpdate(environment);
-    debug() << "FALLBACK update:" << url() << ret;
+    if (ret) {
+        debug() << "modification revision requires update:" << url();
+    }
     return ret;
 }
 

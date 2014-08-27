@@ -236,7 +236,8 @@ void ClangParseJob::run()
         return;
     }
 
-    auto context = ClangHelpers::buildDUChain(session.file(), imports, session, minimumFeatures(), includedFiles);
+    auto context = ClangHelpers::buildDUChain(session.file(), imports, session, minimumFeatures(),
+                                              includedFiles);
     setDuChain(context);
 
     if (abortRequested()) {
@@ -253,9 +254,12 @@ void ClangParseJob::run()
             // the TU to save memory
             context->setAst(KSharedPtr<IAstContainer>::staticCast(session.data()));
         }
-        context->setFeatures(minimumFeatures());
         auto file = KSharedPtr<ClangParsingEnvironmentFile>::dynamicCast(context->parsingEnvironmentFile());
         Q_ASSERT(file);
+        // verify that features and environment where properly set in ClangHelpers::buildDUChain
+        Q_ASSERT(file->featuresSatisfied(TopDUContext::Features(minimumFeatures() & ~TopDUContext::ForceUpdateRecursive)));
+        Q_ASSERT(file->environmentHash() == m_environment.hash());
+        // prefer the editor modification revision, instead of the on-disk revision
         file->setModificationRevision(contents().modification);
     }
 
