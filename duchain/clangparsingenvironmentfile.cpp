@@ -27,6 +27,8 @@
 #include "parsesession.h"
 #include "clangparsingenvironment.h"
 
+#include "../debug.h"
+
 using namespace KDevelop;
 
 REGISTER_DUCHAIN_ITEM(ClangParsingEnvironmentFile);
@@ -80,17 +82,19 @@ bool ClangParsingEnvironmentFile::needsUpdate(const ParsingEnvironment* environm
         Q_ASSERT(dynamic_cast<const ClangParsingEnvironment*>(environment));
         auto env = static_cast<const ClangParsingEnvironment*>(environment);
         if ((env->projectKnown() || env->projectKnown() == d_func()->projectWasKnown) && env->hash() != d_func()->environmentHash) {
-            //qDebug() << "environment differs, require update:" << url() << env->projectKnown() << d_func()->projectWasKnown << " new: " << env->hash() << " old: " << d_func()->environmentHash;
-
+            debug() << "environment differs, require update:" << url()
+                    << "new hash:" << env->hash() << "new project known:" << env->projectKnown()
+                    << "old hash:" << d_func()->environmentHash << "old project known:" << d_func()->projectWasKnown;
             return true;
         } else {
-            //qDebug() << "environment matches:" << url() << env->projectKnown() << d_func()->projectWasKnown << env->hash() << d_func()->environmentHash;
+            debug() << "environment matches:" << url()
+                    << "new hash:" << env->hash() << "new project known:" << env->projectKnown()
+                    << "old hash:" << d_func()->environmentHash << "old project known:" << d_func()->projectWasKnown;
         }
     }
+
     bool ret = KDevelop::ParsingEnvironmentFile::needsUpdate(environment);
-
-    //qDebug() << "FALLBACK update:" << url() << ret;
-
+    debug() << "FALLBACK update:" << url() << ret;
     return ret;
 }
 
