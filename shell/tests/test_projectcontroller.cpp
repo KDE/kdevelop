@@ -463,9 +463,6 @@ void TestProjectController::prettyFileName()
     fileMng->addFileToFolder(m_projFolder, filePath);
 
     QCOMPARE(m_projCtrl->prettyFileName(filePath.toUrl(), ProjectController::FormattingOptions::FormatPlain), QString(m_projName + '/' + filePath.toUrl().fileName()));
-
-    QUrl url("scheme:///whatever.file");
-    QCOMPARE(m_projCtrl->prettyFileName(url, ProjectController::FormattingOptions::FormatPlain), url.toString());
 }
 
 ////////////////////// Helpers ///////////////////////////////////////////////
