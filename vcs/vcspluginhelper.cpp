@@ -361,7 +361,7 @@ void VcsPluginHelper::diffForRevGlobal()
         KUrl& url(d->ctxUrls[a]);
         IProject* project = ICore::self()->projectController()->findProjectForUrl( url );
         if( project )
-            d->url = project->folder();
+            url = project->folder();
     }
     diffForRev();
 }
