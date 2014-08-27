@@ -8,7 +8,7 @@ if (Grantlee_FOUND)
     ecm_add_test(test_templateclassgenerator.cpp
         LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
 
-    ecm_add_test(test_templatemodel.cpp
+    ecm_add_test(test_templatesmodel.cpp
         LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
 endif()
 
