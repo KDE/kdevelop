@@ -353,7 +353,7 @@ QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const KUrl& url, co
     return nullptr;
 }
 
-TopDUContext* ClangSupport::standardContext(const KUrl& url, bool proxyContext)
+TopDUContext* ClangSupport::standardContext(const KUrl& url, bool /*proxyContext*/)
 {
     //Prefer context that the user currently working with. This is important for e.g. code-completion.
     auto topChains = DUChain::self()->chainsForDocument(url);
@@ -367,7 +367,7 @@ TopDUContext* ClangSupport::standardContext(const KUrl& url, bool proxyContext)
 
     // first, try to find a context that is in a project and has the AST attached
     for (auto chain: topChains) {
-        if (auto file = dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data())) {
+        if (auto file = dynamic_cast<ClangParsingEnvironmentFile*>(chain->parsingEnvironmentFile().data())) {
             if (file->inProject()) {
                 if (chain->ast()) {
                     // best possible match: has project information and an attached AST
