@@ -36,6 +36,7 @@
 #include <language/duchain/parsingenvironment.h>
 
 #include <project/projectmodel.h>
+#include <project/projectutils.h>
 
 #include "../openwith/iopenwith.h"
 #include <KIconThemes/KIconLoader>
@@ -240,7 +241,7 @@ ProjectFileDataProvider::ProjectFileDataProvider()
 
 void ProjectFileDataProvider::projectClosing( IProject* project )
 {
-    foreach(ProjectFileItem* file, project->projectItem()->fileList()) {
+    foreach(ProjectFileItem* file, KDevelop::allFiles(project->projectItem())) {
         fileRemovedFromSet(file);
     }
 }
@@ -249,7 +250,7 @@ void ProjectFileDataProvider::projectOpened( IProject* project )
 {
     const int processAfter = 1000;
     int processed = 0;
-    foreach(ProjectFileItem* file, project->projectItem()->fileList()) {
+    foreach(ProjectFileItem* file, KDevelop::allFiles(project->projectItem())) {
         fileAddedToSet(file);
         if (++processed == processAfter) {
             // prevent UI-lockup when a huge project was imported

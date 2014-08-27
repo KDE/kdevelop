@@ -175,36 +175,6 @@ public:
         }
     }
 
-    QList<ProjectFileItem*> recurseFiles( ProjectBaseItem * projectItem )
-    {
-        QList<ProjectFileItem*> files;
-        if ( ProjectFolderItem * folder = projectItem->folder() )
-        {
-            QList<ProjectFolderItem*> folder_list = folder->folderList();
-            for ( QList<ProjectFolderItem*>::Iterator it = folder_list.begin(); it != folder_list.end(); ++it )
-            {
-                files += recurseFiles( ( *it ) );
-            }
-
-            QList<ProjectTargetItem*> target_list = folder->targetList();
-            for ( QList<ProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it )
-            {
-                files += recurseFiles( ( *it ) );
-            }
-
-            files += folder->fileList();
-        }
-        else if ( ProjectTargetItem * target = projectItem->target() )
-        {
-            files += target->fileList();
-        }
-        else if ( ProjectFileItem * file = projectItem->file() )
-        {
-            files.append( file );
-        }
-        return files;
-    }
-
     QList<ProjectBaseItem*> itemsForPath( const IndexedString& path ) const
     {
         if ( path.isEmpty() ) {
