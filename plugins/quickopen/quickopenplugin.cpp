@@ -1457,14 +1457,14 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
         break;
     // handle bug 260657 - "Outline menu doesn't follow main window on its move"
     case QEvent::Move: {
-            QWidget* widget = qobject_cast<QWidget*>(obj);
-            Q_ASSERT(widget);
+          if (QWidget* widget = qobject_cast<QWidget*>(obj)) {
             // close the outline menu in case a parent widget moved
             if (widget->isAncestorOf(this)) {
               kDebug() << "closing because of parent widget move";
               deactivate();
             }
             break;
+          }
         }
     case QEvent::FocusIn:
         if (dynamic_cast<QWidget*>(obj)) {
