@@ -9,7 +9,8 @@ ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevplatform/@KDEV_PLUGIN_VERSION@/kdevwelcomepage
 X-KDE-PluginInfo-Name=KDevWelcomePage
 X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
-X-KDevelop-Category=Global
 X-KDevelop-Interfaces=
 X-KDevelop-Mode=GUI
-X-KDevelop-LoadMode=AlwaysOn
+
+#Don't set a category, we want to explicitly invoke it
+# X-KDevelop-Category=

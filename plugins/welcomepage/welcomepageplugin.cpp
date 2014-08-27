@@ -53,9 +53,6 @@ public:
 KDevWelcomePagePlugin::KDevWelcomePagePlugin( QObject* parent, const QVariantList& )
     : IPlugin("welcomepageplugin", parent )
 {
-    QByteArray disable = qgetenv("KDEV_DISABLE_WELCOMEPAGE");
-    if (!disable.isEmpty())
-        return;
     ICore::self()->documentController()->registerDocumentForMimetype("text/x-kdevelop-internal", new WelcomePageFactory);
 
     QTimer::singleShot(500, this, SLOT(openWelcomePage()));
