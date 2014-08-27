@@ -29,7 +29,7 @@ class PtrToMemberTypeData;
 class KDEVCPPDUCHAIN_EXPORT PtrToMemberType : public KDevelop::PointerType
 {
   public:
-    typedef TypePtr<PtrToMemberType> Ptr;
+    typedef KDevelop::TypePtr<PtrToMemberType> Ptr;
     typedef PointerType BaseType;
 
     /// Default constructor

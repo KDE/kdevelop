@@ -184,7 +184,7 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
 
       if( !scopeContext || scopeContext->type() == DUContext::Template ) {
         AbstractType::Ptr t = decl->abstractType();
-        if( IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData()) ) //Try to get the context from the type, maybe it is a typedef.
+        if( IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.data()) ) //Try to get the context from the type, maybe it is a typedef.
         {
           Declaration* idDecl = idType->declaration(topContext());
           if( idDecl )

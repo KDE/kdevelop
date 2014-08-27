@@ -256,5 +256,4 @@ KUrl CMakeCacheModel::filePath() const
     return m_filePath;
 }
 
-#include "cmakecachemodel.moc"
 

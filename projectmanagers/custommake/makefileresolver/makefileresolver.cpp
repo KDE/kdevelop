@@ -57,7 +57,7 @@
 #include <kprocess.h>
 #include <klocale.h>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <util/pushvalue.h>
 
 // #define VERBOSE
@@ -544,9 +544,29 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
   return res;
 }
 
+QRegExp includeRegularExpression()
+{
+  //when updating this, please also run and update the test_custommake.cpp
+  QString includeParameterRx("\\s(?:--include-dir=|-I\\s*|-isystem\\s+)");
+  QString quotedRx("\\'.*\\'|\\\".*\\\""); //Matches "hello", 'hello', 'hello"hallo"', etc.
+  QString escapedPathRx("((?:\\\\.)?([\\S^\\\\]?))+"); //Matches /usr/I\ am\ a\ strange\ path/include
+
+  QRegExp includeRx(QString("%1(%2|%3)(?=\\s)").arg(includeParameterRx).arg(quotedRx).arg(escapedPathRx), Qt::CaseSensitive, QRegExp::RegExp2);
+//   includeRx.setMinimal(true);
+  if(!includeRx.isValid())
+      qCritical() << "error" << includeRx.errorString();
+  return includeRx;
+}
+
+PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, const QString& workingDirectory) const
+{
+  QRegExp rx = includeRegularExpression();
+  return processOutput(fullOutput, rx, workingDirectory);
+}
+
 PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString& file, const QString& workingDirectory,
                                                                       const QString& makeParameters, const SourcePathInformation& source,
-                                                                      int maxDepth) const
+                                                                      int maxDepth)
 {
   --maxDepth;
   if (maxDepth < 0)
@@ -564,21 +584,17 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   QString fullOutput;
   executeCommand(source.getCommand(file, workingDirectory, makeParameters), workingDirectory, fullOutput);
 
-  QString includeParameterRx("\\s(-I|--include-dir=|-I\\s)");
-  QString quotedRx("(\\').*(\\')|(\\\").*(\\\")"); //Matches "hello", 'hello', 'hello"hallo"', etc.
-  QString escapedPathRx("(([^)(\"'\\s]*)(\\\\\\s)?)*"); //Matches /usr/I\ am \ a\ strange\ path/include
-
-  QRegExp includeRx(QString("%1(%2|%3)(?=\\s)").arg(includeParameterRx).arg(quotedRx).arg(escapedPathRx));
-  includeRx.setMinimal(true);
-  includeRx.setCaseSensitivity(Qt::CaseSensitive);
-
-  QRegExp newLineRx("\\\\\\n");
-  fullOutput.replace(newLineRx, "");
+  {
+    QRegExp newLineRx("\\\\\\n");
+    fullOutput.replace(newLineRx, "");
+  }
   ///@todo collect multiple outputs at the same time for performance-reasons
   QString firstLine = fullOutput;
   int lineEnd;
   if ((lineEnd = fullOutput.indexOf('\n')) != -1)
     firstLine.truncate(lineEnd); //Only look at the first line of output
+
+  QRegExp includeRx = includeRegularExpression();
 
   /**
    * There's two possible cases this can currently handle.
@@ -657,6 +673,16 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 
   ///STEP 2: Search the output for include-paths
 
+  PathResolutionResult ret = processOutput(fullOutput, includeRx, workingDirectory);
+  if (ret.paths.isEmpty())
+    return PathResolutionResult(false, i18n("Could not extract include paths from make output"),
+                                i18n("Folder: \"%1\"  Command: \"%2\"  Output: \"%3\"", workingDirectory,
+                                     source.getCommand(file, workingDirectory, makeParameters), fullOutput));
+  return ret;
+}
+
+PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, QRegExp& includeRx, const QString& workingDirectory) const
+{
   PathResolutionResult ret(true);
   ret.longErrorMessage = fullOutput;
   ifTest(cout << "full output" << fullOutput.toAscii().data() << endl);
@@ -665,21 +691,8 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 
   while ((offset = includeRx.indexIn(fullOutput, offset)) != -1) {
     offset += 1; ///The previous white space
-    int pathOffset = 2;
-    if (fullOutput[offset+1] == '-') {
-      ///Must be --include-dir=, with a length of 14 characters
-      pathOffset = 14;
-    }
-    if (fullOutput.length() <= offset + pathOffset)
-      break;
 
-    if (fullOutput[offset+pathOffset].isSpace())
-      pathOffset++;
-
-    int start = offset + pathOffset;
-    int end = offset + includeRx.matchedLength();
-
-    QString path = fullOutput.mid(start, end-start).trimmed();
+    QString path = includeRx.cap(1);
     if (path.startsWith('"') || (path.startsWith('\'') && path.length() > 2)) {
       //probable a quoted path
       if (path.endsWith(path.left(1))) {
@@ -695,13 +708,8 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 
     ret.paths << u.toLocalFile();
 
-    offset = end-1;
+    offset += includeRx.matchedLength()-1;
   }
-
-  if (ret.paths.isEmpty())
-    return PathResolutionResult(false, i18n("Could not extract include paths from make output"),
-                                 i18n("Folder: \"%1\"  Command: \"%2\"  Output: \"%3\"", workingDirectory,
-                                      source.getCommand(file, workingDirectory, makeParameters), fullOutput));
 
   return ret;
 }

@@ -31,8 +31,6 @@
 
 class ManPageDocumentation;
 
-class KUrl;
-
 class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationProvider
 {
     Q_OBJECT
@@ -40,19 +38,19 @@ class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationP
     public:
         ManPagePlugin(QObject *parent, const QVariantList & args= QVariantList());
         virtual ~ManPagePlugin();
-        virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration* dec) const;
+        virtual QExplicitlySharedDataPointer< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration* dec) const;
         virtual QAbstractListModel* indexModel() const;
-        virtual KSharedPtr< KDevelop::IDocumentation > documentationForIndex(const QModelIndex& index) const;
+        virtual QExplicitlySharedDataPointer< KDevelop::IDocumentation > documentationForIndex(const QModelIndex& index) const;
         virtual QIcon icon() const;
         virtual QString name() const;
-        virtual KSharedPtr< KDevelop::IDocumentation > homePage() const;
+        virtual QExplicitlySharedDataPointer< KDevelop::IDocumentation > homePage() const;
         void deleteProgressBar();
 
         ManPageModel* model() const;
         QProgressBar* progressBar() const;
 
     signals:
-        void addHistory( const KSharedPtr< KDevelop::IDocumentation >& doc ) const;
+        void addHistory( const QExplicitlySharedDataPointer< KDevelop::IDocumentation >& doc ) const;
 
     private:
         ManPageModel *m_model;

@@ -19,8 +19,8 @@
 #ifndef MACROREPOSITORY_H
 #define MACROREPOSITORY_H
 
-#include <language/duchain/repositories/itemrepository.h>
-#include <cppparserexport.h>
+#include <serialization/itemrepository.h>
+#include "cpprppexport.h"
 #include "pp-macro.h"
 
 struct KDEVCPPRPP_EXPORT MacroRepositoryItemRequest {

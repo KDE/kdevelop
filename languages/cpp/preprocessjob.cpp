@@ -39,7 +39,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/problem.h>
 
-#include <threadweaver/Thread.h>
+#include <threadweaver/thread.h>
 
 #include <interfaces/ilanguage.h>
 #include <interfaces/icore.h>
@@ -74,7 +74,7 @@ static QString pathsToString(const Path::List& paths)
 }
 
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
-    : ThreadWeaver::Job(parent)
+    : m_parentJob(parent)
     , m_currentEnvironment(0)
     , m_firstEnvironmentFile( new Cpp::EnvironmentFile( parent->document(), 0 ) )
     , m_success(true)
@@ -96,7 +96,7 @@ KDevelop::ParsingEnvironment* PreprocessJob::createStandardEnvironment() {
 
 CPPParseJob * PreprocessJob::parentJob() const
 {
-    return static_cast<CPPParseJob*>(const_cast<QObject*>(parent()));
+    return m_parentJob;
 }
 
 void PreprocessJob::foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedString guardName)
@@ -112,7 +112,7 @@ void PreprocessJob::foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedStrin
     m_currentEnvironment->removeString(guardName);
 }
 
-void PreprocessJob::run()
+void PreprocessJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     if(!ICore::self()->languageController()->language("C++")->languageSupport())
       return;
@@ -227,7 +227,7 @@ void PreprocessJob::run()
       
         if( updating ) {
           //We don't need to change anything, because the EnvironmentFile will be replaced with a new one
-          m_updatingEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>( dynamic_cast<Cpp::EnvironmentFile*>(updating->parsingEnvironmentFile().data()) );
+          m_updatingEnvironmentFile = QExplicitlySharedDataPointer<Cpp::EnvironmentFile>( dynamic_cast<Cpp::EnvironmentFile*>(updating->parsingEnvironmentFile().data()) );
         }
         if( m_secondEnvironmentFile && parentJob()->updatingProxyContext() ) {
             // Must be true, because we explicitly passed the flag to chainForDocument
@@ -390,7 +390,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
                 Q_ASSERT(m_secondEnvironmentFile);
             } else {
                 ifDebug( kDebug(9007) << "updating content-context"; )
-                m_updatingEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>(dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data()));
+                m_updatingEnvironmentFile = QExplicitlySharedDataPointer<Cpp::EnvironmentFile>(dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data()));
                 //We will re-use the specialized context, but it needs updating. So we keep processing here.
                 //We don't need to change m_updatingEnvironmentFile, because we will create a new one.
             }
@@ -462,7 +462,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
               KDevelop::ProblemPointer p(new Problem()); ///@todo create special include-problem
               p->setSource(KDevelop::ProblemData::Preprocessor);
               p->setDescription(i18n("File was included recursively from within itself: %1", fileName ));
-              p->setFinalLocation(DocumentRange(parentJob()->document(), SimpleRange(sourceLine,0, sourceLine+1,0)));
+              p->setFinalLocation(DocumentRange(parentJob()->document(), KTextEditor::Range(sourceLine,0, sourceLine+1,0)));
               parentJob()->addPreprocessorProblem(p);
               return 0;
             }
@@ -605,9 +605,9 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
         p->setSource(KDevelop::ProblemData::Preprocessor);
         p->setDescription(i18n("Included file was not found: %1", fileName ));
         p->setExplanation(i18n("Searched include path:\n%1", pathsToString(parentJob()->includePathUrls())));
-        p->setFinalLocation(DocumentRange(parentJob()->document(), SimpleRange(sourceLine,0, sourceLine+1,0)));
-        p->setSolutionAssistant(KSharedPtr<KDevelop::IAssistant>(new Cpp::MissingIncludePathAssistant(parentJob()->masterJob()->document(), _fileName)));
-        parentJob()->addPreprocessorProblem(KSharedPtr<Problem>::staticCast(p));
+        p->setFinalLocation(DocumentRange(parentJob()->document(), KTextEditor::Range(sourceLine,0, sourceLine+1,0)));
+        p->setSolutionAssistant(IAssistant::Ptr(new Cpp::MissingIncludePathAssistant(parentJob()->masterJob()->document(), _fileName)));
+        parentJob()->addPreprocessorProblem(Problem::Ptr(p));
 
         ///@todo respect all the specialties like starting search at a specific path
         ///Before doing that, model findInclude(..) exactly after the standard
@@ -632,7 +632,7 @@ bool PreprocessJob::checkAbort()
         if (parent->abortRequested()) {
             parent->abortJob();
             m_success = false;
-            setFinished(true);
+            setStatus(Status_Failed);
             return true;
         }
 
@@ -640,7 +640,7 @@ bool PreprocessJob::checkAbort()
         // What... the parent job got deleted??
         kWarning(9007) << "Parent job disappeared!!" ;
         m_success = false;
-        setFinished(true);
+        setStatus(Status_Success);
         return true;
     }
 
@@ -680,6 +680,3 @@ const KDevelop::ParsingEnvironment * PreprocessJob::standardEnvironment()
 
   return m_standardEnvironment;
 }
-
-#include "preprocessjob.moc"
-

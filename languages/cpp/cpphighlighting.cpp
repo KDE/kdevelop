@@ -28,4 +28,3 @@ CppHighlighting::CppHighlighting(QObject* parent)
 }
 
 
-#include "cpphighlighting.moc"

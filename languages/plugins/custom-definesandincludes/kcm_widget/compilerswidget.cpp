@@ -24,7 +24,9 @@
 #include "compilerswidget.h"
 
 #include <KAction>
+#include <KLocalizedString>
 #include <QFileDialog>
+#include <KShortcut>
 #include <QMenu>
 #include <QSignalMapper>
 
@@ -56,7 +58,7 @@ CompilersWidget::CompilersWidget(QWidget* parent)
 {
     m_ui->setupUi(this);
     m_ui->compilers->setModel(m_compilersModel);
-    m_ui->compilers->header()->setResizeMode(QHeaderView::Stretch);
+    m_ui->compilers->header()->setSectionResizeMode(QHeaderView::Stretch);
 
     m_addMenu = new QMenu(m_ui->addButton);
     m_mapper = new QSignalMapper(m_addMenu);

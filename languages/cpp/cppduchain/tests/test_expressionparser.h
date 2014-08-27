@@ -24,8 +24,6 @@
 
 #include <kurl.h>
 
-#include <language/editor/simplecursor.h>
-
 #include "parser.h"
 #include "control.h"
 #include "dumpchain.h"

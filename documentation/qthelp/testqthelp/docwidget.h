@@ -20,7 +20,7 @@
 #ifndef DOCWIDGET_H
 #define DOCWIDGET_H
 
-#include <QtGui/qwidget.h>
+#include <Qwidget.h>
 
 
 namespace Ui

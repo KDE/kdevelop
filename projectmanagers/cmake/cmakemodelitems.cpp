@@ -155,7 +155,7 @@ DUChainAttatched::~DUChainAttatched() {}
 CompilationDataAttached::~CompilationDataAttached() {}
 
 KUrl CMakeExecutableTargetItem::installedUrl() const {
-    return KUrl();
+    return QUrl();
 }
 void CompilationDataAttached::setIncludeDirectories(const QStringList& l)
 {

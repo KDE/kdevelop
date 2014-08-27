@@ -22,8 +22,6 @@
 
 #include <QtTest/QtTest>
 
-#include <qtest_kde.h>
-
 #include <KDebug>
 
 #include <interfaces/iproject.h>
@@ -31,6 +29,8 @@
 #include <project/projectmodel.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+
+#include <serialization/indexedstring.h>
 
 #include "idefinesandincludesmanager.h"
 
@@ -92,10 +92,12 @@ void DefinesAndIncludesTest::loadMultiPathProject()
     QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
 
     KDevelop::ProjectBaseItem* mainfile = 0;
-    foreach( KDevelop::ProjectBaseItem* i, s_currentProject->files() ) {
-        if( i->text() == "main.cpp" ) {
-            mainfile = i;
-            break;
+    for (const auto& file: s_currentProject->fileSet() ) {
+        for (auto i: s_currentProject->filesForPath(file)) {
+            if( i->text() == "main.cpp" ) {
+                mainfile = i;
+                break;
+            }
         }
     }
     QVERIFY(mainfile);
@@ -127,6 +129,6 @@ void DefinesAndIncludesTest::testNoProjectIncludeDirectories()
     QVERIFY(noProjectIncludes.contains(includePath2));
 }
 
-QTEST_KDEMAIN(DefinesAndIncludesTest, GUI)
+QTEST_MAIN(DefinesAndIncludesTest)
 
 #include "definesandincludestest.moc"

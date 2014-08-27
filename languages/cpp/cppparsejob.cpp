@@ -71,6 +71,7 @@
 #include <cpppreprocessenvironment.h>
 #include <language/checks/dataaccessrepository.h>
 #include <language/checks/controlflowgraph.h>
+#include <threadweaver/queue.h>
 #include <controlflowgraphbuilder.h>
 #include <usedecoratorvisitor.h>
 
@@ -131,11 +132,11 @@ CPPParseJob::CPPParseJob( const IndexedString& url, ILanguageSupport* languageSu
         m_needsUpdate( true )
 {
     if( !m_parentPreprocessor ) {
-        addJob(m_preprocessJob = new PreprocessJob(this));
-        addJob(m_parseJob = new CPPInternalParseJob(this));
+        addJob(m_preprocessJob = ThreadWeaver::JobPointer(new PreprocessJob(this)));
+        addJob(m_parseJob = ThreadWeaver::JobPointer(new CPPInternalParseJob(this)));
     } else {
-        m_preprocessJob = 0;
-        m_parseJob = 0;
+        m_preprocessJob.clear();
+        m_parseJob.clear();
         //The preprocessor will call parseForeground() to preprocess & parse instantly
     }
 }
@@ -174,10 +175,10 @@ void CPPParseJob::parseForeground() {
     //Create the sub-jobs and directly execute them.
     Q_ASSERT( !m_preprocessJob && !m_parseJob );
 
-    m_preprocessJob = new PreprocessJob(this);
-    m_parseJob = new CPPInternalParseJob(this);
-    m_preprocessJob->run();
-    m_parseJob->run();
+    m_preprocessJob = ThreadWeaver::JobPointer(new PreprocessJob(this));
+    m_parseJob = ThreadWeaver::JobPointer(new CPPInternalParseJob(this));
+    m_preprocessJob->blockingExecute();
+    m_parseJob->blockingExecute();
 }
 
 Path CPPParseJob::includedFromPath() const {
@@ -279,14 +280,14 @@ KDevelop::ModificationRevisionSet CPPParseJob::includePathDependencies() const {
 
 CPPParseJob* CPPParseJob::masterJob() {
     if( parentPreprocessor() )
-        return static_cast<CPPParseJob*>(parentPreprocessor()->parent())->masterJob();
+        return parentPreprocessor()->parentJob()->masterJob();
     else
         return this;
 }
 
 const CPPParseJob* CPPParseJob::masterJob() const {
     if( parentPreprocessor() )
-        return static_cast<CPPParseJob*>(parentPreprocessor()->parent())->masterJob();
+        return parentPreprocessor()->parentJob()->masterJob();
     else
         return this;
 }
@@ -320,7 +321,7 @@ void CPPParseJob::addIncludedFile(KDevelop::ReferencedTopDUContext duChain, int 
 }
 
 void CPPParseJob::setProxyEnvironmentFile( Cpp::EnvironmentFile* file ) {
-    m_proxyEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>(file);
+    m_proxyEnvironmentFile = QExplicitlySharedDataPointer<Cpp::EnvironmentFile>(file);
 }
 
 Cpp::EnvironmentFile* CPPParseJob::proxyEnvironmentFile() {
@@ -329,7 +330,7 @@ Cpp::EnvironmentFile* CPPParseJob::proxyEnvironmentFile() {
 
 void CPPParseJob::setContentEnvironmentFile( Cpp::EnvironmentFile* file ) {
     //Q_ASSERT(!file || file->identity().flags() & IdentifiedFile::Content);
-    m_contentEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>(file);
+    m_contentEnvironmentFile = QExplicitlySharedDataPointer<Cpp::EnvironmentFile>(file);
 }
 
 void CPPParseJob::addPreprocessorProblem(const ProblemPointer problem) {
@@ -354,8 +355,7 @@ const IncludeFileList& CPPParseJob::includedFiles() const {
 
 CPPParseJob * CPPInternalParseJob::parentJob() const
 {
-    Q_ASSERT(parent());
-    return static_cast<CPPParseJob*>(const_cast<QObject*>(parent()));
+    return m_parentJob;
 }
 
 const KTextEditor::Range& CPPParseJob::textRangeToParse() const
@@ -364,7 +364,7 @@ const KTextEditor::Range& CPPParseJob::textRangeToParse() const
 }
 
 CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
-    : ThreadWeaver::Job(parent)
+    : m_parentJob(parent)
     , m_initialized(false)
     , m_priority(0)
 {
@@ -422,7 +422,7 @@ void CPPInternalParseJob::highlightIfNeeded()
       parentJob()->cpp()->codeHighlighting()->highlightDUChain( standardContext.data() );
 }
 
-void CPPInternalParseJob::run()
+void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* thread)
 {
     //Happens during shutdown
     if(ICore::self()->shuttingDown() || !ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
@@ -874,9 +874,10 @@ void CPPInternalParseJob::run()
 }
 
 void CPPParseJob::processDelayedImports() {
+  QSharedPointer<CPPInternalParseJob> parseJob = this->parseJob();
   if(!m_delayedImports.isEmpty()) {
     foreach(const LineJobPair& job, m_delayedImports)
-      job.first->addDelayedImporter(LineContextPair(m_parseJob->proxyContext ? m_parseJob->proxyContext : m_parseJob->contentContext, job.second));
+      job.first->addDelayedImporter(LineContextPair(parseJob->proxyContext ? parseJob->proxyContext : parseJob->contentContext, job.second));
     m_delayedImports.clear();
   }
   if(!m_delayedImporters.isEmpty()) {
@@ -884,23 +885,23 @@ void CPPParseJob::processDelayedImports() {
     foreach(const LineContextPair& context, m_delayedImporters) {
       Q_ASSERT(context.context->parsingEnvironmentFile());
       if(context.context->parsingEnvironmentFile()->isProxyContext()) {
-        Q_ASSERT(m_parseJob->proxyContext);
-        context.context->addImportedParentContext(m_parseJob->proxyContext.data(), CursorInRevision(context.sourceLine, 0));
+        Q_ASSERT(parseJob->proxyContext);
+        context.context->addImportedParentContext(parseJob->proxyContext.data(), CursorInRevision(context.sourceLine, 0));
         Cpp::EnvironmentFile* cppEnvFile = dynamic_cast<Cpp::EnvironmentFile*>(context.context->parsingEnvironmentFile().data());
         Q_ASSERT(cppEnvFile);
-        cppEnvFile->merge(dynamic_cast<Cpp::EnvironmentFile&>(*m_parseJob->proxyContext->parsingEnvironmentFile().data()));
+        cppEnvFile->merge(dynamic_cast<Cpp::EnvironmentFile&>(*parseJob->proxyContext->parsingEnvironmentFile().data()));
         context.context->updateImportsCache();
       }
-      Q_ASSERT(m_parseJob->contentContext);
+      Q_ASSERT(parseJob->contentContext);
       LineContextPair content = contentFromProxy(context);
       if(!content.context)
         continue;
       Q_ASSERT(content.context);
-      content.context->addImportedParentContext(m_parseJob->proxyContext.data(), CursorInRevision(content.sourceLine, 0));
+      content.context->addImportedParentContext(parseJob->proxyContext.data(), CursorInRevision(content.sourceLine, 0));
       content.context->updateImportsCache();
       Cpp::EnvironmentFile* cppEnvFile = dynamic_cast<Cpp::EnvironmentFile*>(content.context->parsingEnvironmentFile().data());
       Q_ASSERT(cppEnvFile);
-      cppEnvFile->merge(dynamic_cast<Cpp::EnvironmentFile&>(*m_parseJob->contentContext->parsingEnvironmentFile().data()));
+      cppEnvFile->merge(dynamic_cast<Cpp::EnvironmentFile&>(*parseJob->contentContext->parsingEnvironmentFile().data()));
     }
   }
 }
@@ -922,9 +923,9 @@ ParseSession::Ptr CPPParseJob::parseSession() const
     return m_session;
 }
 
-CPPInternalParseJob * CPPParseJob::parseJob() const
+QSharedPointer<CPPInternalParseJob> CPPParseJob::parseJob() const
 {
-    return m_parseJob;
+    return m_parseJob.dynamicCast<CPPInternalParseJob>();
 }
 
 int CPPInternalParseJob::priority() const
@@ -972,5 +973,4 @@ DataAccessRepository* CPPParseJob::dataAccessInformation()
   return ret;
 }
 
-#include "cppparsejob.moc"
 

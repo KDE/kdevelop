@@ -30,6 +30,7 @@
 
 #include <KConfigGroup>
 #include <KTextEditor/Cursor>
+#include <kurl.h>
 
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>

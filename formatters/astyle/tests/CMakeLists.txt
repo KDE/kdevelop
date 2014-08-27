@@ -7,10 +7,12 @@ set(astyletest_SRCS astyletest.cpp
   ../lib/ASBeautifier.cpp
 )
 
-kde4_add_unit_test(astyletest ${astyletest_SRCS})
+add_executable(astyletest ${astyletest_SRCS})
+ecm_mark_as_test(astyletest)
+add_test(astyletest astyletest)
 target_link_libraries(astyletest
-  ${KDE4_KDECORE_LIBS}
-  ${QT_QTTEST_LIBRARY}
+  
+  Qt5::Test
   ${KDEVPLATFORM_INTERFACES_LIBRARIES}
   ${KDEVPLATFORM_UTIL_LIBRARIES}
 )

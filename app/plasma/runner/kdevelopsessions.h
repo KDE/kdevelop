@@ -22,7 +22,7 @@
 
 #include <plasma/abstractrunner.h>
 
-#include <KIcon>
+#include <QIcon>
 
 struct Session
 {
@@ -46,7 +46,7 @@ class KDevelopSessions : public Plasma::AbstractRunner {
         void loadSessions();
 
     private:
-        KIcon m_icon;
+        QIcon m_icon;
         QVector<Session> m_sessions;
 };
 

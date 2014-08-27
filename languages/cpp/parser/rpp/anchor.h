@@ -23,7 +23,7 @@
 
 #include <language/editor/cursorinrevision.h>
 
-#include <cppparserexport.h>
+#include "cpprppexport.h"
 
 namespace rpp {
 /**

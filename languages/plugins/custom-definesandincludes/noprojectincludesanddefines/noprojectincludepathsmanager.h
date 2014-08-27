@@ -37,7 +37,7 @@ public:
     /// Opens the configuration page for file with the @p path
     void openConfigurationDialog( const QString& path );
 private:
-    bool writeIncludePaths( const QString& storageDirectory, const Path::List& includePaths );
+    bool writeIncludePaths( const QString& storageDirectory, const QStringList& includePaths );
 
 private:
     ///Finds the configuration file starting with the directory @p path

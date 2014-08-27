@@ -29,7 +29,6 @@
 #include <QTreeWidget>
 
 #include <KUrl>
-#include <KIcon>
 #include <KDialog>
 
 #include <KConfigGroup>
@@ -155,7 +154,7 @@ private:
 
     DisassembleWindow * m_disassembleWindow;
     
-    static const KIcon icon_;
+    static const QIcon icon_;
     SelectAddrDialog* m_dlg;
 
     KConfigGroup m_config;

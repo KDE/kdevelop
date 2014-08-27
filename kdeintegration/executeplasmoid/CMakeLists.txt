@@ -21,8 +21,8 @@ set(kdevexecuteplasmoid_PART_SRCS
     plasmoidexecutionjob.cpp
 )
 
-kde4_add_ui_files( kdevexecuteplasmoid_PART_SRCS ${kdevexecuteplasmoid_PART_UIS} )
-kde4_add_plugin(kdevexecuteplasmoid ${kdevexecuteplasmoid_PART_SRCS}  )
+qt5_wrap_ui( kdevexecuteplasmoid_PART_SRCS ${kdevexecuteplasmoid_PART_UIS} )
+add_library(kdevexecuteplasmoid MODULE ${kdevexecuteplasmoid_PART_SRCS}  )
 target_link_libraries(kdevexecuteplasmoid 
     ${KDE4_KDEUI_LIBS}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES} 
@@ -31,7 +31,7 @@ target_link_libraries(kdevexecuteplasmoid
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES})
 
-install(TARGETS kdevexecuteplasmoid DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevexecuteplasmoid DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 
 ########### install files ###############

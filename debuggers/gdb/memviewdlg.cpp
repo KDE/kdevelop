@@ -21,7 +21,6 @@
 #include <klineedit.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <kstdguiitem.h>
 #include <kdeversion.h>
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -313,7 +312,7 @@ namespace GDBDebugger
         bool app_running = !(debuggerState_ & s_appNotStarted);
 
         QAction* reload = menu.addAction(i18n("&Reload"));
-        reload->setIcon(KIcon("view-refresh"));
+        reload->setIcon(QIcon::fromTheme("view-refresh"));
         reload->setEnabled(app_running && amount_ != 0);
 
         QActionGroup *formatGroup = NULL;
@@ -399,15 +398,15 @@ namespace GDBDebugger
         }
 
         QAction* write = menu.addAction(i18n("Write changes"));
-        write->setIcon(KIcon("document-save"));
+        write->setIcon(QIcon::fromTheme("document-save"));
         write->setEnabled(app_running && bytesEdit && bytesEdit->isModified());
 
         QAction* range = menu.addAction(i18n("Change memory range"));
         range->setEnabled(app_running && !rangeSelector_->isVisible());
-        range->setIcon(KIcon("document-edit"));
+        range->setIcon(QIcon::fromTheme("document-edit"));
 
         QAction* close = menu.addAction(i18n("Close this view"));
-        close->setIcon(KIcon("window-close"));
+        close->setIcon(QIcon::fromTheme("window-close"));
 
 
         QAction* result = menu.exec(e->globalPos());
@@ -474,14 +473,14 @@ namespace GDBDebugger
     MemoryViewerWidget::MemoryViewerWidget(CppDebuggerPlugin* /*plugin*/, QWidget* parent)
     : QWidget(parent)
     {
-        setWindowIcon(KIcon("debugger"));
+        setWindowIcon(QIcon::fromTheme("debugger"));
         setWindowTitle(i18n("Memory viewer"));
 
         KAction* newMemoryViewerAction = new KAction(this);
         newMemoryViewerAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         newMemoryViewerAction->setText(i18n("New memory viewer"));
         newMemoryViewerAction->setToolTip(i18nc("@info:tooltip", "Open a new memory viewer."));
-        newMemoryViewerAction->setIcon(KIcon("window-new"));
+        newMemoryViewerAction->setIcon(QIcon::fromTheme("window-new"));
         connect(newMemoryViewerAction, SIGNAL(triggered(bool)), this, SLOT(slotAddMemoryView()));
         addAction(newMemoryViewerAction);
 

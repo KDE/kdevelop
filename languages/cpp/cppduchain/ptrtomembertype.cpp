@@ -20,8 +20,8 @@
  */
 #include "ptrtomembertype.h"
 
-#include <language/duchain/indexedstring.h>
-#include <language/duchain/repositories/typerepository.h>
+#include <serialization/indexedstring.h>
+#include <language/duchain/types/typerepository.h>
 #include <language/duchain/types/typesystemdata.h>
 #include <language/duchain/types/typeregister.h>
 #include <language/duchain/types/typesystem.h>

@@ -34,6 +34,9 @@
 #include "stringhelpers.h"
 #include "gdbvariable.h"
 
+#include <KDebug>
+#include <KTextEditor/Document>
+
 using namespace GDBDebugger;
 using namespace KDevelop;
 
@@ -253,4 +256,3 @@ void VariableController::stateChanged(IDebugSession::DebuggerState state)
 
 
 
-#include "variablecontroller.moc"

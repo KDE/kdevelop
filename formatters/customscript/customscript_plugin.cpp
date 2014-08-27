@@ -25,6 +25,7 @@
 #include <KAboutData>
 #include <QTextStream>
 #include <QTemporaryFile>
+#include <QMimeDatabase>
 #include <KDebug>
 #include <KProcess>
 #include <interfaces/icore.h>
@@ -38,16 +39,17 @@
 #include <KMessageBox>
 #include <interfaces/iuicontroller.h>
 #include <KParts/MainWindow>
+#include <KLocalizedString>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguage.h>
 #include <language/interfaces/ilanguagesupport.h>
 
 using namespace KDevelop;
 
-static QWeakPointer<CustomScriptPlugin> indentPluginSingleton;
+static QPointer<CustomScriptPlugin> indentPluginSingleton;
 
 K_PLUGIN_FACTORY(CustomScriptFactory, registerPlugin<CustomScriptPlugin>();)
-K_EXPORT_PLUGIN(CustomScriptFactory(KAboutData("kdevcustomscript","kdevformatters", ki18n("Custom Script Formatter"), "0.2", ki18n("A formatter using custom scripts"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(CustomScriptFactory(KAboutData("kdevcustomscript","kdevformatters", ki18n("Custom Script Formatter"), "0.2", ki18n("A formatter using custom scripts"), KAboutData::License_GPL)))
 
 // Replaces ${KEY} in command with variables[KEY]
 static QString replaceVariables( QString command, QMap<QString, QString> variables )
@@ -72,7 +74,7 @@ static QString replaceVariables( QString command, QMap<QString, QString> variabl
 }
 
 CustomScriptPlugin::CustomScriptPlugin(QObject *parent, const QVariantList&)
-		: IPlugin(CustomScriptFactory::componentData(), parent)
+	: IPlugin("kdevcustomscript", parent)
 {
 	KDEV_USE_EXTENSION_INTERFACE(ISourceFormatter)
         m_currentStyle = predefinedStyles().at(0);
@@ -105,7 +107,7 @@ QString CustomScriptPlugin::description()
 				"can be easily shared by all team members, independent of their preferred IDE.");
 }
 
-QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const KUrl& url, const KMimeType::Ptr& /*mime*/, const QString& leftContext, const QString& rightContext)
+QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const KUrl& url, const QMimeType& /*mime*/, const QString& leftContext, const QString& rightContext)
 {
 	KProcess proc;
 	QTextStream ios(&proc);
@@ -210,7 +212,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
     return KDevelop::extractFormattedTextFromContext(output, text, leftContext, rightContext, tabWidth);
 }
 
-QString CustomScriptPlugin::formatSource(const QString& text, const KUrl& url, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
+QString CustomScriptPlugin::formatSource(const QString& text, const KUrl& url, const QMimeType& mime, const QString& leftContext, const QString& rightContext)
 {
 	return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, url, mime, leftContext, rightContext );
 }
@@ -286,7 +288,7 @@ QList<KDevelop::SourceFormatterStyle> CustomScriptPlugin::predefinedStyles()
 	return styles;
 }
 
-KDevelop::SettingsWidget* CustomScriptPlugin::editStyleWidget(const KMimeType::Ptr &mime)
+KDevelop::SettingsWidget* CustomScriptPlugin::editStyleWidget(const QMimeType& mime)
 {
 	Q_UNUSED(mime);
 	return new CustomScriptPreferences();
@@ -382,7 +384,7 @@ static QString indentingSample()
     "\tbarArg3);\n";
 }
 
-QString CustomScriptPlugin::previewText(const SourceFormatterStyle& style, const KMimeType::Ptr& mime)
+QString CustomScriptPlugin::previewText(const SourceFormatterStyle& style, const QMimeType& mime)
 {
 	if ( ! style.overrideSample().isEmpty() ) {
 		return style.overrideSample();
@@ -400,7 +402,7 @@ QStringList CustomScriptPlugin::computeIndentationFromSample( const KUrl& url )
         return ret;
 
     QString sample = lang[0]->languageSupport()->indentationSample();
-    QString formattedSample = formatSource( sample, url, KMimeType::findByUrl( url ), QString(), QString() );
+    QString formattedSample = formatSource(sample, url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString());
 
     QStringList lines = formattedSample.split( "\n" );
     foreach( QString line, lines )
@@ -481,8 +483,8 @@ CustomScriptPlugin::Indentation CustomScriptPlugin::indentation( const KUrl& url
 
 void CustomScriptPreferences::updateTimeout()
 {
-	const QString& text = indentPluginSingleton.data()->previewText ( m_style, KMimeType::Ptr() );
-    QString formatted = indentPluginSingleton.data()->formatSourceWithStyle ( m_style, text, KUrl(), KMimeType::Ptr() );
+	const QString& text = indentPluginSingleton.data()->previewText(m_style, QMimeType());
+    QString formatted = indentPluginSingleton.data()->formatSourceWithStyle(m_style, text, KUrl(), QMimeType());
     emit previewTextChanged ( formatted );
 }
 

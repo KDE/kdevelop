@@ -21,7 +21,7 @@
 #include <ktexteditor/document.h>
 
 #include <language/editor/documentrange.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include "ast.h"
 #include "parsesession.h"

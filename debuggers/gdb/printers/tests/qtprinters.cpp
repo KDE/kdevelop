@@ -55,7 +55,7 @@ public:
         printersDir.cdUp(); // go up to get to the main printers directory
         p << "python"
           << "import sys"
-          << "sys.path.insert(0, '"+printersDir.path().toAscii()+"')"
+          << "sys.path.insert(0, '"+printersDir.path().toLatin1()+"')"
           << "from qt4 import register_qt4_printers"
           << "register_qt4_printers (None)"
           << "from kde4 import register_kde4_printers"
@@ -442,4 +442,3 @@ void QtPrintersTest::testKDevelopTypes()
 }
 QTEST_MAIN(GDBDebugger::QtPrintersTest)
 
-#include "qtprinters.moc"

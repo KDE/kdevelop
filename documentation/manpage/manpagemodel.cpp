@@ -27,6 +27,14 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 
+#include <limits>
+
+namespace {
+
+const int INVALID_ID = std::numeric_limits<quintptr>::max();
+
+}
+
 using namespace KDevelop;
 
 ManPageModel::ManPageModel(QObject* parent)
@@ -45,8 +53,8 @@ ManPageModel::~ManPageModel()
 
 QModelIndex ManPageModel::parent(const QModelIndex& child) const
 {
-    if (child.isValid() && child.column() == 0 && child.internalId() >= 0) {
-        return createIndex(child.internalId(), 0, -1);
+    if (child.isValid() && child.column() == 0 && child.internalId() != INVALID_ID) {
+        return createIndex(child.internalId(), 0, INVALID_ID);
     }
     return QModelIndex();
 }
@@ -59,7 +67,7 @@ QModelIndex ManPageModel::index(int row, int column, const QModelIndex& parent) 
         return QModelIndex();
     }
 
-    return createIndex(row, column, parent.isValid() ? parent.row() : -1);
+    return createIndex(row, column, parent.isValid() ? parent.row() : INVALID_ID);
 }
 
 QVariant ManPageModel::data(const QModelIndex& index, int role) const
@@ -83,7 +91,7 @@ int ManPageModel::rowCount(const QModelIndex& parent) const
 {
     if (!parent.isValid()) {
         return m_sectionList.count();
-    } else if (parent.internalId() < 0) {
+    } else if (parent.internalId() == INVALID_ID) {
         const QString sectionUrl = m_sectionList.at(parent.row()).first;
         return m_manMap.value(sectionUrl).count();
     }
@@ -99,7 +107,7 @@ void ManPageModel::initModel()
 {
     m_sectionList.clear();
     m_manMap.clear();
-    auto list = KIO::listDir(KUrl("man://"), KIO::HideProgressInfo);
+    auto list = KIO::listDir(QUrl("man://"), KIO::HideProgressInfo);
     connect(list, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)), SLOT(indexEntries(KIO::Job*, KIO::UDSEntryList)));
     connect(list, SIGNAL(result(KJob*)), this, SLOT(indexLoaded()));
 }
@@ -166,10 +174,10 @@ void ManPageModel::sectionLoaded()
 
 void ManPageModel::showItem(const QModelIndex& idx)
 {
-    if (idx.isValid() && idx.internalId() >= 0) {
+    if (idx.isValid() && idx.internalId() != INVALID_ID) {
         QString sectionUrl = m_sectionList.at(idx.internalId()).first;
         QString page = manPage(sectionUrl, idx.row());
-        KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(page, KUrl(sectionUrl + '/' + page)));
+        QExplicitlySharedDataPointer<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(page, QUrl(sectionUrl + '/' + page)));
         KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
     }
 }
@@ -177,7 +185,7 @@ void ManPageModel::showItem(const QModelIndex& idx)
 void ManPageModel::showItemFromUrl(const QUrl& url)
 {
     if (url.toString().startsWith("man")) {
-        KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(url.path(), KUrl(url)));
+        QExplicitlySharedDataPointer<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(url.path(), QUrl(url)));
         KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
     }
 }
@@ -217,4 +225,3 @@ bool ManPageModel::identifierInSection(const QString& identifier, const QString&
     return false;
 }
 
-#include "manpagemodel.moc"

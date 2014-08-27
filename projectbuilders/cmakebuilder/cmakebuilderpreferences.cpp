@@ -26,14 +26,15 @@
 #include <kpluginloader.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
+#include <KAboutData>
 #include "ui_cmakebuildersettings.h"
 #include "cmakebuilderconfig.h"
 
 K_PLUGIN_FACTORY(CMakeBuilderPreferencesFactory, registerPlugin<CMakeBuilderPreferences>(); )
-K_EXPORT_PLUGIN(CMakeBuilderPreferencesFactory("kcm_kdev_cmakebuilder"))
+// K_EXPORT_PLUGIN(CMakeBuilderPreferencesFactory("kcm_kdev_cmakebuilder"))
 
 CMakeBuilderPreferences::CMakeBuilderPreferences(QWidget* parent, const QVariantList& args)
-    : KCModule( CMakeBuilderPreferencesFactory::componentData(), parent, args)
+    : KCModule( KAboutData::pluginData("kcm_kdev_ninjabuilder"), parent, args)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
@@ -83,3 +84,5 @@ void CMakeBuilderPreferences::generatorChanged(const QString& generator)
 {
     emit changed(CMakeBuilderSettings::self()->generator()!=generator);
 }
+
+#include "cmakebuilderpreferences.moc"

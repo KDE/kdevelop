@@ -21,7 +21,7 @@
 #ifndef GENERATIONEXPRESSIONSOLVER_H
 #define GENERATIONEXPRESSIONSOLVER_H
 
-#include "cmakeexport.h"
+#include "cmakecommonexport.h"
 #include "cmaketypes.h"
 
 class KDEVCMAKECOMMON_EXPORT GenerationExpressionSolver

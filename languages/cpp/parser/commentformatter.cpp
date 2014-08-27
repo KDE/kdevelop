@@ -23,7 +23,6 @@
 #include "lexer.h"
 #include "rpp/chartools.h"
 #include <language/duchain/stringhelpers.h>
-#include <language/editor/simplerange.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icompletionsettings.h>
@@ -80,7 +79,7 @@ void CommentFormatter::extractToDos( uint token, const ParseSession* session, Co
     QList<QByteArray>::iterator eit = lines.end();
 
     KDevelop::IndexedString document = session->url();
-    KDevelop::SimpleCursor comment_start = session->positionAt(commentToken.position).castToSimpleCursor();
+    KTextEditor::Cursor comment_start = session->positionAt(commentToken.position).castToSimpleCursor();
 
     for( ; it != eit; ++it ) {
       // remove common leading chars from the beginning of line
@@ -115,9 +114,9 @@ void CommentFormatter::extractToDos( uint token, const ParseSession* session, Co
         p->setSource(KDevelop::ProblemData::ToDo);
         p->setDescription(QString::fromUtf8(*it));
         p->setSeverity(KDevelop::ProblemData::Hint);
-        int start_line = comment_start.line + (it - bit);
-        int start_column = (it == bit) ? comment_start.column + stripped_left : stripped_left;
-        p->setFinalLocation(KDevelop::DocumentRange(session->url(), KDevelop::SimpleRange(start_line, start_column, start_line, it->size() + start_column)));
+        int start_line = comment_start.line() + (it - bit);
+        int start_column = (it == bit) ? comment_start.column() + stripped_left : stripped_left;
+        p->setFinalLocation(KDevelop::DocumentRange(session->url(), KTextEditor::Range(start_line, start_column, start_line, it->size() + start_column)));
         control->reportProblem(p);
       }
     }

@@ -28,7 +28,7 @@
 
 #include <config.h>
 
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -63,7 +63,6 @@
 
 #include <iostream>
 
-#include "welcomepage/welcomepageview.h"
 #include "splash.h"
 
 using KDevelop::Core;
@@ -179,8 +178,9 @@ static int getRunningSessionPid()
 
 int main( int argc, char *argv[] )
 {
+    QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
-    KAboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ), QByteArray(VERSION), ki18n(description), KAboutData::License_GPL,
+    K4AboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ), QByteArray(VERSION), ki18n(description), K4AboutData::License_GPL,
                           ki18n( "Copyright 1999-2014, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org/" );
     aboutData.addAuthor( ki18n("Andreas Pakulat"), ki18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
     aboutData.addAuthor( ki18n("Alexander Dymo"), ki18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
@@ -419,7 +419,7 @@ int main( int argc, char *argv[] )
                     QString fn(k.fileName());
                     fn = fn.left(fn.indexOf('.'));
                     if ( session == fn )
-                        projectAsSession = si.uuid;
+                        projectAsSession = si.uuid.toString();
                 }
             }
         }
@@ -460,15 +460,17 @@ int main( int argc, char *argv[] )
     if ( !QProcessEnvironment::systemEnvironment().contains("KDEV_DISABLE_SPLASH") ) {
         splash = new KDevSplashScreen;
         splash->show();
-        splash->repaint();
-        app.processEvents();
     }
 
     if(!Core::initialize(splash, Core::Default, session))
         return 5;
 
-    KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
+//     TODO: port to kf5
+//     KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
     Core* core = Core::self();
+    QByteArray disable = qgetenv("KDEV_DISABLE_WELCOMEPAGE");
+    if (disable.isEmpty())
+        core->pluginController()->loadPlugin("KDevWelcomePage");
 
     QStringList projectNames = args->getOptionList("project");
     if(!projectNames.isEmpty())

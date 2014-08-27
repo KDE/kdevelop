@@ -17,6 +17,7 @@
  ************************************************************************/
 
 #include <KPluginFactory>
+#include <KAboutData>
 #include <QVBoxLayout>
 
 #include "projectpathswidget.h"
@@ -31,7 +32,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/idocument.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include "kcm_customdefinesandincludes.h"
 
@@ -49,10 +50,10 @@ ICompilerProvider* compilerProvider()
 }
 
 K_PLUGIN_FACTORY(DefinesAndIncludesFactory, registerPlugin<DefinesAndIncludes>(); )
-K_EXPORT_PLUGIN(DefinesAndIncludesFactory("kcm_kdevcustomdefinesandincludes", "kdevcustomdefinesandincludes"))
+//K_EXPORT_PLUGIN(DefinesAndIncludesFactory("kcm_kdevcustomdefinesandincludes", "kdevcustomdefinesandincludes"))
 
 DefinesAndIncludes::DefinesAndIncludes( QWidget* parent, const QVariantList& args )
-    : ProjectKCModule<CustomDefinesAndIncludes>( DefinesAndIncludesFactory::componentData(), parent, args )
+    : ProjectKCModule<CustomDefinesAndIncludes>(KAboutData::pluginData("kcm_kdevcustomdefinesandincludes"), parent, args)
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
     configWidget = new ProjectPathsWidget( this );

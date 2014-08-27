@@ -172,7 +172,7 @@ void AdaptSignatureAction::execute() {
     int pos = exe.indexIn(line);
     if (pos != -1) {
       QString oldText = exe.cap(2);
-      SimpleRange range = SimpleRange(l, exe.cap(1).length(), l, exe.cap(1).length() + oldText.length());
+      KTextEditor::Range range = KTextEditor::Range(l, exe.cap(1).length(), l, exe.cap(1).length() + oldText.length());
       QString newText = Cpp::simplifiedTypeString(m_newSignature.returnType.abstractType(), functionContext->parentContext());
       DocumentChange changeRetType(functionContext->url(), range, oldText, newText);
       changes.addChange(changeRetType);
@@ -190,4 +190,3 @@ void AdaptSignatureAction::execute() {
     renAct->execute();
 }
 
-#include "adaptsignatureaction.moc"

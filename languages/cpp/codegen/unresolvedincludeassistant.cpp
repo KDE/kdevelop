@@ -83,12 +83,12 @@ void MissingIncludePathAssistant::createActions()
     addAction(KDevelop::IAssistantAction::Ptr(new AddCustomIncludePathAction(m_url)));
 }
 
-KSharedPtr< KDevelop::IAssistant > MissingIncludePathProblem::solutionAssistant() const
+QExplicitlySharedDataPointer< KDevelop::IAssistant > MissingIncludePathProblem::solutionAssistant() const
 {
     return m_solution;
 }
 
-void MissingIncludePathProblem::setSolutionAssistant(const KSharedPtr< KDevelop::IAssistant >& assistant)
+void MissingIncludePathProblem::setSolutionAssistant(const QExplicitlySharedDataPointer< KDevelop::IAssistant >& assistant)
 {
     m_solution = assistant;
 }

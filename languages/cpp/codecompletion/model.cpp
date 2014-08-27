@@ -85,11 +85,11 @@ void CodeCompletionModel::parseJobFinished(ParseJob* job)
   IDocument* doc = ICore::self()->documentController()->documentForUrl(m_awaitDocument.toUrl());
   m_awaitDocument = {};
 
-  if (!doc || !doc->textDocument()) {
+  if (!doc) {
     return;
   }
 
-  auto view = doc->textDocument()->activeView();
+  auto view = doc->activeTextView();
   if (!view || !view->hasFocus()) {
     return;
   }
@@ -184,7 +184,9 @@ Range CodeCompletionModel::updateCompletionRange(View* view, const KTextEditor::
             if(item->asItem() && item->asItem()->dataChangedWithInput()) {
 //               dataChanged(index(subRow, Name, parent), index(subRow, Name, parent));
               kDebug() << "doing dataChanged";
-              reset(); ///@todo This is very expensive, but kate doesn't listen for dataChanged(..). Find a cheaper way to achieve this.
+              ///@todo This is very expensive, but kate doesn't listen for dataChanged(..). Find a cheaper way to achieve this.
+              beginResetModel();
+              endResetModel();
               didReset = true;
               break;
             }
@@ -196,7 +198,8 @@ Range CodeCompletionModel::updateCompletionRange(View* view, const KTextEditor::
           break;
         
         if(item->asItem() && item->asItem()->dataChangedWithInput()) {
-          reset();
+          beginResetModel();
+          endResetModel();
           didReset = true;
           break;
         }
@@ -213,9 +216,9 @@ Range CodeCompletionModel::updateCompletionRange(View* view, const KTextEditor::
     while(newRange.start().column() > 0) {
       KTextEditor::Cursor newStart = newRange.start();
       newStart.setColumn(newStart.column()-1);
-      QChar character = view->document()->character(newStart);
+      QChar character = view->document()->characterAt(newStart);
       if(isValidIncludeDirectiveCharacter(character)) {
-        newRange.start() = newStart; //Skip
+        newRange.setStart(newStart); //Skip
       }else{
         break;
       }
@@ -249,4 +252,3 @@ void CodeCompletionModel::foundDeclarations(QList<CompletionTreeElementPointer> 
 
 }
 
-#include "model.moc"

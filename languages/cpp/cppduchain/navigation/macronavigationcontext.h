@@ -22,7 +22,7 @@
 #include <language/duchain/navigation/abstractnavigationcontext.h>
 #include "../../parser/rpp/pp-macro.h"
 
-#include "../cppduchainexport.h"
+#include "cppduchainexport.h"
 
 namespace KTextEditor {
 class View;

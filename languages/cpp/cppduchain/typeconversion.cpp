@@ -524,7 +524,7 @@ bool TypeConversion::identityConversion( AbstractType::Ptr from, AbstractType::P
   if(from.cast<ConstantIntegralType>() && typeid(*to) == typeid(IntegralType))
     return true;
 
-  return from->equals(to.unsafeData());
+  return from->equals(to.data());
 }
 
 void TypeConversion::problem( AbstractType::Ptr from, AbstractType::Ptr to, const QString& desc ) {

@@ -100,7 +100,7 @@ uint buildIdentifierForType(AbstractType::Ptr type, IndexedTypeIdentifier& id, u
     return maxPointerLevel;
   }
   
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
   if(idType) {
     Declaration* decl = idType->declaration(top);
     if(decl) {
@@ -331,7 +331,7 @@ ClassMemberDeclaration::AccessPolicy mostRestrictiveInheritanceAccessPolicy(DUCo
     if(classDecl) {
       FOREACH_FUNCTION(const BaseClassInstance& import, classDecl->baseClasses) {
         AbstractType::Ptr type = import.baseClass.abstractType();
-        IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+        IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.data());
         if(identified) {
           Declaration* decl = identified->declaration(top);
           ///@todo This is not very efficient
@@ -625,7 +625,7 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
       
       KDevelop::AbstractType::Ptr newType( type->clone() );
       
-      if(const KDevelop::IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(type.unsafeData())) {
+      if(const KDevelop::IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(type.data())) {
         KDevelop::Declaration* decl = idType->declaration(ctx->topContext());
         if(!decl)
           return type;

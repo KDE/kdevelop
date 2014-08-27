@@ -25,13 +25,13 @@
 #include <QApplication>
 #include <QFileInfo>
 #include <QDir>
+#include <QTemporaryFile>
 
 #include <KGlobal>
 #include <KSharedConfig>
 #include <KDebug>
 #include <KProcess>
 #include <KStandardDirs>
-#include <qtest_kde.h>
 
 #include <tests/testcore.h>
 #include <shell/shellextension.h>
@@ -57,12 +57,12 @@ using KDevelop::AutoTestShell;
 
 namespace GDBDebugger {
 
-KUrl findExecutable(const QString& name)
+QUrl findExecutable(const QString& name)
 {
     QFileInfo info(qApp->applicationDirPath()  + "/unittests/" + name);
     Q_ASSERT(info.exists());
     Q_ASSERT(info.isExecutable());
-    return info.canonicalFilePath();
+    return QUrl::fromLocalFile(info.canonicalFilePath());
 }
 
 QString findSourceFile(const QString& name)
@@ -89,7 +89,7 @@ void GdbTest::cleanupTestCase()
 void GdbTest::init()
 {
     //remove all breakpoints - so we can set our own in the test
-    KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
+    KConfigGroup breakpoints = KSharedConfig::openConfig()->group("breakpoints");
     breakpoints.writeEntry("number", 0);
     breakpoints.sync();
 
@@ -106,7 +106,8 @@ void GdbTest::init()
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
 {
 public:
-    TestLaunchConfiguration(KUrl executable = findExecutable("debugee") ) {
+    TestLaunchConfiguration(QUrl executable = findExecutable("debugee") ) {
+        qDebug() << "FIND" << executable;
         c = new KConfig();
         c->deleteGroup("launch");
         cfg = c->group("launch");
@@ -1375,7 +1376,7 @@ void GdbTest::testRunGdbScript()
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();
-    grp.writeEntry(GDBDebugger::remoteGdbRunEntry, KUrl(runScript.fileName()));
+    grp.writeEntry(GDBDebugger::remoteGdbRunEntry, QUrl(runScript.fileName()));
 
     QVERIFY(session->startProgram(&cfg, m_iface));
 
@@ -1413,8 +1414,8 @@ void GdbTest::testRemoteDebug()
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();
-    grp.writeEntry(GDBDebugger::remoteGdbShellEntry, KUrl(shellScript.fileName()+"-copy"));
-    grp.writeEntry(GDBDebugger::remoteGdbRunEntry, KUrl(runScript.fileName()));
+    grp.writeEntry(GDBDebugger::remoteGdbShellEntry, QUrl::fromLocalFile((shellScript.fileName()+"-copy")));
+    grp.writeEntry(GDBDebugger::remoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
 
     QVERIFY(session->startProgram(&cfg, m_iface));
 
@@ -1449,7 +1450,7 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
 
     QTemporaryFile runScript(QDir::currentPath()+"/runscript");
     runScript.open();
-    runScript.write("file " + findExecutable("debugee").toLocalFile().toUtf8() + "\n");
+    runScript.write("file " + findExecutable("debugee").toLocalFile().toUtf8() + '\n');
     runScript.write("target remote localhost:2345\n");
     runScript.write("break debugee.cpp:30\n");
     runScript.write("continue\n");
@@ -1457,8 +1458,8 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();
-    grp.writeEntry(GDBDebugger::remoteGdbShellEntry, KUrl(shellScript.fileName()+"-copy"));
-    grp.writeEntry(GDBDebugger::remoteGdbRunEntry, KUrl(runScript.fileName()));
+    grp.writeEntry(GDBDebugger::remoteGdbShellEntry, QUrl(shellScript.fileName()+"-copy"));
+    grp.writeEntry(GDBDebugger::remoteGdbRunEntry, QUrl(runScript.fileName()));
 
     QVERIFY(session->startProgram(&cfg, m_iface));
 
@@ -1508,8 +1509,8 @@ void GdbTest::testRemoteDebugInsertBreakpointPickupOnlyOnce()
 
     TestLaunchConfiguration cfg;
     KConfigGroup grp = cfg.config();
-    grp.writeEntry(GDBDebugger::remoteGdbShellEntry, KUrl(shellScript.fileName()+"-copy"));
-    grp.writeEntry(GDBDebugger::remoteGdbRunEntry, KUrl(runScript.fileName()));
+    grp.writeEntry(GDBDebugger::remoteGdbShellEntry, QUrl::fromLocalFile((shellScript.fileName()+"-copy")));
+    grp.writeEntry(GDBDebugger::remoteGdbRunEntry, QUrl::fromLocalFile(runScript.fileName()));
 
     QVERIFY(session->startProgram(&cfg, m_iface));
 
@@ -1832,7 +1833,7 @@ void GdbTest::testDebugInExternalTerminal()
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line, bool expectFail)
 {
-    QWeakPointer<GDBDebugger::DebugSession> s(session); //session can get deleted in DebugController
+    QPointer<GDBDebugger::DebugSession> s(session); //session can get deleted in DebugController
     kDebug() << "waiting for state" << state;
     QTime stopWatch;
     stopWatch.start();
@@ -1860,7 +1861,7 @@ void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::Deb
 
 }
 
-QTEST_KDEMAIN(GDBDebugger::GdbTest, GUI)
+QTEST_MAIN(GDBDebugger::GdbTest)
 
 
 #include "gdbtest.moc"

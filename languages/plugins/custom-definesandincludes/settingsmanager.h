@@ -24,7 +24,7 @@
 
 #include "idefinesandincludesmanager.h"
 
-#include "definesandincludesexport.h"
+#include "definesandincludessettingsexport.h"
 
 #include "compilerprovider/icompiler.h"
 
@@ -34,7 +34,7 @@ namespace KDevelop
 class IProject;
 }
 
-class KDEVDEFINESANDINCLUDESMANAGER_EXPORT SettingsManager
+class KDEVDEFINESANDINCLUDESSETTINGS_EXPORT SettingsManager
 {
 public:
     SettingsManager();

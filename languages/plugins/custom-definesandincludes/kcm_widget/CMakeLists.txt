@@ -14,15 +14,15 @@ set( kcm_customdefinesandincludes_SRCS
         compilerswidget.cpp
    )
 
-kde4_add_ui_files( kcm_customdefinesandincludes_SRCS
+qt5_wrap_ui( kcm_customdefinesandincludes_SRCS
         batchedit.ui
         includeswidget.ui
         defineswidget.ui
         projectpathswidget.ui
         compilerswidget.ui )
-kde4_add_kcfg_files( kcm_customdefinesandincludes_SRCS
+kconfig_add_kcfg_files( kcm_customdefinesandincludes_SRCS
         customdefinesandincludes.kcfgc )
-kde4_add_plugin( kcm_kdevcustomdefinesandincludes
+add_library( kcm_kdevcustomdefinesandincludes MODULE
         ${kcm_customdefinesandincludes_SRCS} )
 
 target_link_libraries( kcm_kdevcustomdefinesandincludes LINK_PRIVATE
@@ -30,10 +30,8 @@ target_link_libraries( kcm_kdevcustomdefinesandincludes LINK_PRIVATE
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
         ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-        kdev4includesdefinessettings )
+        kdevdefinesandincludessettings )
 
-install( TARGETS kcm_kdevcustomdefinesandincludes
-         DESTINATION ${PLUGIN_INSTALL_DIR} )
-
-install( FILES kcm_kdevcustomdefinesandincludes.desktop
-         DESTINATION ${SERVICES_INSTALL_DIR} )
+install(TARGETS kcm_kdevcustomdefinesandincludes DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
+configure_file(kcm_kdevcustomdefinesandincludes.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevcustomdefinesandincludes.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevcustomdefinesandincludes.desktop DESTINATION ${SERVICES_INSTALL_DIR})

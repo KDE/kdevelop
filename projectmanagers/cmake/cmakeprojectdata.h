@@ -2,24 +2,36 @@
 #define CMAKEPROJECTDATA_H
 
 #include <QStringList>
+#include <QFileSystemWatcher>
 #include "cmaketypes.h"
+#include <util/path.h>
+
+/**
+ * Represents any file in a cmake project that has been added
+ * to the project.
+ *
+ * Contains the required information to compile it properly
+ */
+struct CMakeFile
+{
+    KDevelop::Path::List includes;
+    QHash<QString, QString> defines;
+};
+inline QDebug &operator<<(QDebug debug, const CMakeFile& file)
+{
+    debug << "CMakeFile(-I" << file.includes << ", -D" << file.defines << ")";
+    return debug.maybeSpace();
+}
 
 struct CMakeProjectData
 {
-    QString projectName;
-    QVector<Subdirectory> subdirectories;
-    QVector<Target> targets;
-    QVector<Test> testSuites;
-    
-    VariableMap vm;
-    MacroMap mm;
+    CMakeProjectData() : watcher(new QFileSystemWatcher) {}
+    ~CMakeProjectData() {}
+
     CMakeProperties properties;
     CacheValues cache;
-    CMakeDefinitions definitions;
-    QStringList modulePath;
-    QHash<QString,QString> targetAlias;
-    
-    void clear() { vm.clear(); mm.clear(); properties.clear(); cache.clear(); targetAlias.clear(); }
+    QHash<KDevelop::Path, CMakeFile> files;
+    QSharedPointer<QFileSystemWatcher> watcher;
 };
 
 #endif

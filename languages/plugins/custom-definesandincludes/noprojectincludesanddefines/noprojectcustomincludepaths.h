@@ -30,6 +30,7 @@ class CustomIncludePaths;
 }
 
 class NoProjectCustomIncludePaths : public QDialog
+
 {
     Q_OBJECT
 

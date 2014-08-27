@@ -20,8 +20,8 @@
 
 #include "generationexpressionsolver.h"
 #include <QString>
-#include <QDebug>
 #include <QStringList>
+#include <KDebug>
 
 QHash<QString, QString> GenerationExpressionSolver::s_vars;
 QSet<QString> GenerationExpressionSolver::s_neededValues;

@@ -25,8 +25,6 @@
 
 #include <QtTest/QtTest>
 
-#include <qtest_kde.h>
-
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -116,4 +114,4 @@ void TestCompilerProvider::testCompilerIncludesAndDefines()
     }
 }
 
-QTEST_KDEMAIN(TestCompilerProvider, NoGUI)
+QTEST_GUILESS_MAIN(TestCompilerProvider)

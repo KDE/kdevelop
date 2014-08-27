@@ -21,7 +21,7 @@ SET( kdevokteta_PART_SRCS
     oktetawidget.cpp
 )
 
-kde4_add_plugin( kdevokteta ${kdevokteta_PART_SRCS} )
+add_library(kdevokteta MODULE ${kdevokteta_PART_SRCS} )
 
 TARGET_LINK_LIBRARIES( kdevokteta
     ${LIBOKTETAKASTEN_LIBRARIES}
@@ -31,12 +31,13 @@ TARGET_LINK_LIBRARIES( kdevokteta
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_SUBLIME_LIBRARIES}
     ${KDEVPLATFORM_SHELL_LIBRARIES}
-    ${KDE4_KDEUI_LIBS}
+    KF5::KDELibs4Support
+    KF5::WidgetsAddons
 )
 
-install(TARGETS kdevokteta DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevokteta DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 
 configure_file(kdevokteta.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevokteta.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevokteta.desktop DESTINATION  ${SERVICES_INSTALL_DIR} )
-install(FILES kdevokteta.rc DESTINATION  ${DATA_INSTALL_DIR}/kdevokteta )
+install(FILES kdevokteta.rc DESTINATION  ${KXMLGUI_INSTALL_DIR}/kdevokteta )

@@ -106,5 +106,4 @@ void TestPool::benchManyPools()
   }
 }
 
-#include "test_pool.moc"
 

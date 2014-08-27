@@ -11,10 +11,10 @@ add_executable(debugeecrash debugeecrash.cpp)
 add_executable(debugeerecursion debugeerecursion.cpp)
 
 add_executable(debugeethreads debugeethreads.cpp)
-target_link_libraries(debugeethreads ${QT_QTCORE_LIBRARY})
+target_link_libraries(debugeethreads Qt5::Core)
 
 add_executable(debugeeqt debugeeqt.cpp)
-target_link_libraries(debugeeqt ${QT_QTCORE_LIBRARY})
+target_link_libraries(debugeeqt Qt5::Core)
 
 add_executable("debugeespace" "debugee space.cpp")
 

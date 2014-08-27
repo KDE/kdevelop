@@ -48,9 +48,9 @@ public:
    */
   void buildUses(AST *node);
 
-  QList<KSharedPtr<KDevelop::Problem> > problems() const;
+  QList<QExplicitlySharedDataPointer<KDevelop::Problem> > problems() const;
 
-  void addProblem(KSharedPtr<KDevelop::Problem> problem);
+  void addProblem(QExplicitlySharedDataPointer<KDevelop::Problem> problem);
   
   using UseBuilderBase::newUse;
 
@@ -100,7 +100,7 @@ private:
   QStack<QVector<int> > m_skippedUses;
   QStack<DUContext*> m_contexts;
 
-  QList< KSharedPtr< KDevelop::Problem > > m_problems;
+  QList< QExplicitlySharedDataPointer< KDevelop::Problem > > m_problems;
 };
 
 #endif // USEBUILDER_H

@@ -313,7 +313,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     */
 };
 
-typedef KSharedPtr<EnvironmentFile>  EnvironmentFilePointer;
+typedef QExplicitlySharedDataPointer<EnvironmentFile>  EnvironmentFilePointer;
 
 class KDEVCPPDUCHAIN_EXPORT EnvironmentManager {
   public:

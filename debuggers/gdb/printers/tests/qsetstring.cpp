@@ -1,4 +1,5 @@
 #include <QSet>
+#include <QString>
 int main()
 {
     QSet<QString> s;

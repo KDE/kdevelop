@@ -25,7 +25,7 @@
 #include <QFlags>
 #include <kurl.h>
 
-#include "cmakeexport.h"
+#include "cmakecommonexport.h"
 
 namespace Ui {
     class CMakeBuildDirChooser;

@@ -20,7 +20,7 @@
 #include <language/duchain/identifier.h>
 #include <QString>
 #include <language/duchain/duchainlock.h>
-#include <language/duchain/repositories/itemrepository.h>
+#include <serialization/itemrepository.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/types/identifiedtype.h>
 #include <language/duchain/types/delayedtype.h>
@@ -31,11 +31,11 @@ IndexedTypeIdentifier ExpressionEvaluationResult::identifier() const {
   static IndexedTypeIdentifier noIdentifier("(no type)");
 
   AbstractType::Ptr t(type.abstractType());
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.data());
   if( idType )
     return IndexedTypeIdentifier(idType->qualifiedIdentifier());
 
-  DelayedType* delayedType = dynamic_cast<DelayedType*>(t.unsafeData());
+  DelayedType* delayedType = dynamic_cast<DelayedType*>(t.data());
   if( delayedType )
     return delayedType->identifier();
 

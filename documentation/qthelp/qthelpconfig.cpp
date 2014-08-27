@@ -37,7 +37,7 @@
 #include "qthelp_config_shared.h"
 
 K_PLUGIN_FACTORY(QtHelpConfigFactory, registerPlugin<QtHelpConfig>();)
-K_EXPORT_PLUGIN(QtHelpConfigFactory("kdevqthelp_config"))
+//K_EXPORT_PLUGIN(QtHelpConfigFactory("kdevqthelp_config"))
 
 enum Column
 {
@@ -95,22 +95,22 @@ void QtHelpConfigEditDialog::accept()
 }
 
 QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
-    : KCModule(QtHelpConfigFactory::componentData(), parent, args)
+    : KCModule(parent, args)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
 
     QWidget* w = new QWidget;
     m_configWidget = new Ui::QtHelpConfigUI;
     m_configWidget->setupUi( w );
-    m_configWidget->addButton->setIcon(KIcon("list-add"));
+    m_configWidget->addButton->setIcon(QIcon::fromTheme("list-add"));
     connect(m_configWidget->addButton, SIGNAL(clicked(bool)), this, SLOT(add()));
-    m_configWidget->editButton->setIcon(KIcon("document-edit"));
+    m_configWidget->editButton->setIcon(QIcon::fromTheme("document-edit"));
     connect(m_configWidget->editButton, SIGNAL(clicked(bool)), this, SLOT(modify()));
-    m_configWidget->removeButton->setIcon(KIcon("list-remove"));
+    m_configWidget->removeButton->setIcon(QIcon::fromTheme("list-remove"));
     connect(m_configWidget->removeButton, SIGNAL(clicked(bool)), this, SLOT(remove()));
-    m_configWidget->upButton->setIcon(KIcon("arrow-up"));
+    m_configWidget->upButton->setIcon(QIcon::fromTheme("arrow-up"));
     connect(m_configWidget->upButton, SIGNAL(clicked(bool)), this, SLOT(up()));
-    m_configWidget->downButton->setIcon(KIcon("arrow-down"));
+    m_configWidget->downButton->setIcon(QIcon::fromTheme("arrow-down"));
     connect(m_configWidget->downButton, SIGNAL(clicked(bool)), this, SLOT(down()));
     // Table
     connect(m_configWidget->qchTable, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
@@ -167,7 +167,7 @@ void QtHelpConfig::load()
     const int size = qMin(qMin(iconList.size(), nameList.size()), pathList.size());
     for(int i = 0; i < size; ++i) {
         QTreeWidgetItem* item = new QTreeWidgetItem(m_configWidget->qchTable);
-        item->setIcon(NameColumn, KIcon(iconList.at(i)));
+        item->setIcon(NameColumn, QIcon(iconList.at(i)));
         item->setText(NameColumn, nameList.at(i));
         item->setText(PathColumn, pathList.at(i));
         item->setText(IconColumn, iconList.at(i));
@@ -233,7 +233,7 @@ void QtHelpConfig::add()
         return;
 
     QTreeWidgetItem* item = new QTreeWidgetItem(m_configWidget->qchTable);
-    item->setIcon(NameColumn, KIcon(dialog.qchIcon->icon()));
+    item->setIcon(NameColumn, QIcon(dialog.qchIcon->icon()));
     item->setText(NameColumn, dialog.qchName->text());
     item->setText(PathColumn, dialog.qchRequester->text());
     item->setText(IconColumn, dialog.qchIcon->icon());
@@ -262,7 +262,7 @@ void QtHelpConfig::modify()
         return;
     }
 
-    item->setIcon(NameColumn, KIcon(dialog.qchIcon->icon()));
+    item->setIcon(NameColumn, QIcon(dialog.qchIcon->icon()));
     item->setText(NameColumn, dialog.qchName->text());
     item->setText(IconColumn, dialog.qchIcon->icon());
     if(item->text(GhnsColumn) == "0") {
@@ -344,7 +344,7 @@ void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
                 QString filename = e.installedFiles().at(0);
                 if(checkNamespace(filename, nullptr)){
                     QTreeWidgetItem* item = new QTreeWidgetItem(m_configWidget->qchTable);
-                    item->setIcon(NameColumn, KIcon("documentation"));
+                    item->setIcon(NameColumn, QIcon("documentation"));
                     item->setText(NameColumn, e.name());
                     item->setText(PathColumn, filename);
                     item->setText(IconColumn, "documentation");

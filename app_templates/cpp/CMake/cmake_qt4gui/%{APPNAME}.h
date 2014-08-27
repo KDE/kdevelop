@@ -1,7 +1,7 @@
 #ifndef %{APPNAMEID}_H
 #define %{APPNAMEID}_H
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 
 class %{APPNAMEID} : public QMainWindow
 {

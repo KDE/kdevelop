@@ -21,8 +21,6 @@
 
 #include <QtTest/QtTest>
 
-#include <qtest_kde.h>
-
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/kdevsignalspy.h>
@@ -36,6 +34,8 @@
 #include <project/projectmodel.h>
 #include <kconfiggroup.h>
 
+#include <serialization/indexedstring.h>
+
 #include "testconfig.h"
 
 using KDevelop::Core;
@@ -45,6 +45,8 @@ using KDevelop::TestCore;
 using KDevelop::AutoTestShell;
 using KDevelop::KDevSignalSpy;
 using KDevelop::Path;
+
+QTEST_MAIN(CustomBuildSystemPluginTest)
 
 void CustomBuildSystemPluginTest::cleanupTestCase()
 {
@@ -102,10 +104,12 @@ void CustomBuildSystemPluginTest::loadMultiPathProject()
     IProject* project = ICore::self()->projectController()->findProjectByName( "MultiPathProject" );
     QVERIFY( project );
     KDevelop::ProjectBaseItem* mainfile = 0;
-    foreach( KDevelop::ProjectBaseItem* i, project->files() ) {
-        if( i->text() == "main.cpp" ) {
-            mainfile = i;
-            break;
+    for (const auto& file: project->fileSet() ) {
+        for (auto i: project->filesForPath(file)) {
+            if( i->text() == "main.cpp" ) {
+                mainfile = i;
+                break;
+            }
         }
     }
     QVERIFY(mainfile);
@@ -114,6 +118,3 @@ void CustomBuildSystemPluginTest::loadMultiPathProject()
               Path( "file:///home/andreas/projects/testcustom/build2/src" ) );
 }
 
-QTEST_KDEMAIN(CustomBuildSystemPluginTest, GUI)
-
-#include "custombuildsystemplugintest.moc"

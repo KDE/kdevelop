@@ -23,6 +23,7 @@
 #include <QStringList>
 #include <qfileinfo.h>
 #include <qdir.h>
+#include <qtemporarydir.h>
 #include <kdebug.h>
 #include "variablemap.h"
 #include <kprocess.h>
@@ -134,8 +135,8 @@ namespace CMakeParserUtils
         KProcess p;
         p.setOutputChannelMode(KProcess::MergedChannels);
         p.setProgram(execName, args);
-        KTempDir tmp(KStandardDirs::locateLocal("tmp", "kdevcmakemanager"));
-        p.setWorkingDirectory( tmp.name() );
+        QTemporaryDir tmp("kdevcmakemanager");
+        p.setWorkingDirectory( tmp.path() );
         p.start();
         
         if(!p.waitForFinished())
@@ -146,7 +147,6 @@ namespace CMakeParserUtils
         QByteArray b = p.readAllStandardOutput();
         QString t;
         t.prepend(b.trimmed());
-        tmp.unlink();
         return t;
     }
 

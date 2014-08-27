@@ -65,15 +65,13 @@
 
 #include <KTempDir>
 #include <KTextEditor/Editor>
-#include <KTextEditor/EditorChooser>
 #include <KTextEditor/View>
-#include <qtest_kde.h>
 
 using namespace KTextEditor;
 
 using namespace KDevelop;
 
-QTEST_KDEMAIN(TestCppCodeCompletion, GUI)
+QTEST_MAIN(TestCppCodeCompletion)
 
 QString testFile1 = "class Erna; struct Honk { int a,b; enum Enum { Number1, Number2 }; Erna& erna; operator int() {}; }; struct Pointer { Honk* operator ->() const {}; Honk& operator * () {}; }; Honk globalHonk; Honk honky; \n#define HONK Honk\n";
 
@@ -1079,7 +1077,7 @@ void TestCppCodeCompletion::testConstructorUsageCompletion()
   QFETCH(QStringList, args);
   QFETCH(QStringList, not_args);
 
-  TopDUContext* context = parse( code.toAscii(), DumpNone /*DumpDUChain | DumpAST */);
+  TopDUContext* context = parse( code.toLatin1(), DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
 
   CompletionItemTester tester(context, "void k() { A *a = new A(");
@@ -1132,7 +1130,7 @@ void TestCppCodeCompletion::testParentConstructor()
 {
   QFETCH(QString, code);
   QFETCH(QString, completion);
-  TopDUContext* context = parse(code.toAscii(), DumpNone);
+  TopDUContext* context = parse(code.toLatin1(), DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
   CompletionItemTester tester(context, "void");  // Force a function context
   Cpp::ImplementationHelperItem* constructorItem = dynamic_cast<Cpp::ImplementationHelperItem*>(tester.items[0].data());
@@ -1251,7 +1249,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
 
     DUContext* context = top->childContexts()[0]->childContexts()[5];
 
-    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
     QVERIFY(editor);
     KTextEditor::Document* doc = editor->createDocument(this);
     QVERIFY(doc);
@@ -1261,68 +1259,62 @@ void TestCppCodeCompletion::testSignalSlotExecution()
 
     // Test 1: SIGNAL(<here>signal2(void*)) parens balancing
     {
-        doc->startEditing();
+        KTextEditor::Document::EditingTransaction t(doc);
         KTextEditor::Cursor c( 2, 36 );
         v->setCursorPosition( c );
 
         CompletionItemTester complCtx( context, "connect( this, SIGNAL(", "", CursorInRevision( c.line(), c.column() ) );
-        KSharedPtr<CompletionTreeItem> item;
+        QExplicitlySharedDataPointer<CompletionTreeItem> item;
         for( int i = 0; i < complCtx.items.length(); ++i ) {
             if( complCtx.itemData( i ).toString() == "signal1" ) {
                 item = complCtx.items.at( i );
             }
         }
-        QVERIFY( !item.isNull() );
+        QVERIFY( item );
 
-        item->execute( doc, Range( c, 0 ) );
+        item->execute( v, Range( c, 0 ) );
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT() ); } };") );
-
-        doc->endEditing();
     }
 
     // Test 2: SLOT(<here>) parens balancing
     {
-        doc->startEditing();
+      KTextEditor::Document::EditingTransaction t(doc);
         KTextEditor::Cursor c( 2, 58 );
         v->setCursorPosition( c );
 
         CompletionItemTester complCtx( context, "connect( this, SIGNAL(signal1(void*,char)), SLOT(", "", CursorInRevision( c.line(), c.column() ) );
-        KSharedPtr<CompletionTreeItem> item;
+        QExplicitlySharedDataPointer<CompletionTreeItem> item;
         for( int i = 0; i < complCtx.items.length(); ++i ) {
             if( complCtx.itemData( i ).toString() == "slot2" ) {
                 item = complCtx.items.at( i );
             }
         }
-        QVERIFY( !item.isNull() );
+        QVERIFY( item );
 
-        item->execute( doc, Range( c, 0 ) );
+        item->execute( v, Range( c, 0 ) );
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot2(void*)) ); } };") );
-
-        doc->endEditing();
     }
     // Test 3: Slot implementation helper: SLOT(<here>) parens balancing
     {
-        doc->startEditing();
+      KTextEditor::Document::EditingTransaction t(doc);
         KTextEditor::Cursor c( 2, 58 );
         v->setCursorPosition( c );
 
         lock.unlock();
         CompletionItemTester complCtx( context, "connect( this, SIGNAL(signal1(void*,char)), SLOT(", "slot3", CursorInRevision( c.line(), c.column() ) );
         qDebug() << "TEST3 names: " << complCtx.names;
-        KSharedPtr<CompletionTreeItem> item;
+        QExplicitlySharedDataPointer<CompletionTreeItem> item;
         for( int i = 0; i < complCtx.items.length(); ++i ) {
             if( complCtx.itemData( i ).toString() == "slot3" ) {
                 item = complCtx.items.at( i );
             }
         }
-        QVERIFY( !item.isNull() );
+        QVERIFY( item );
 
-        item->execute( doc, Range( c, 0 ) );
+        item->execute( v, Range( c, 0 ) );
         lock.lock();
         QEXPECT_FAIL("", "Slot is not replaced because the engine fails to create the declaration.", Continue);
         QCOMPARE( doc->line( 2 ), QString("void test() { connect( this, SIGNAL(signal1(void*,char)), SLOT(slot3(void*)) ); } };") );
-
-        doc->endEditing();
     }
 
     release(top);
@@ -1347,7 +1339,7 @@ void TestCppCodeCompletion::testAssistant() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->problems().count(), 1);
     {
-      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
+      QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
       QVERIFY(mdp);
       kDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
@@ -1364,7 +1356,7 @@ void TestCppCodeCompletion::testAssistant() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->problems().count(), 3);
     {
-      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
+      QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
       QVERIFY(mdp);
       kDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
@@ -1375,7 +1367,7 @@ void TestCppCodeCompletion::testAssistant() {
     }
     {
       ///@todo Make this work as well
-/*      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[1].data()) );
+/*      QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[1].data()) );
       QVERIFY(mdp);
       kDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
@@ -1386,7 +1378,7 @@ void TestCppCodeCompletion::testAssistant() {
       QCOMPARE(context->childContexts().count(), 3);*/
     }
     {
-      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[2].data()) );
+      QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[2].data()) );
       QVERIFY(mdp);
       kDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
@@ -1405,7 +1397,7 @@ void TestCppCodeCompletion::testAssistant() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->problems().count(), 1);
     {
-      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
+      QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
       QVERIFY(mdp);
       kDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
@@ -1775,7 +1767,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
     QCOMPARE(top->localDeclarations().count(), 4);
     AbstractType::Ptr type = TypeUtils::unAliasedType(top->localDeclarations()[3]->abstractType());
     QVERIFY(type);
-    IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+    IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.data());
     QVERIFY(identified);
     QVERIFY(!identified->declarationId().isDirect());
     QString specializationString = IndexedInstantiationInformation(identified->declarationId().specialization()).information().toString();
@@ -1784,7 +1776,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
     QCOMPARE(TypeUtils::unAliasedType(top->localDeclarations()[3]->abstractType())->toString().remove(' '), QString("I<int>"));
     
     lock.unlock();
-    parse(method, DumpNone, 0, KUrl(), top);
+    parse(method, DumpNone, 0, QUrl(), top);
     lock.lock();
 
     QCOMPARE(top->localDeclarations().count(), 4);
@@ -1801,7 +1793,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
     QCOMPARE(CompletionItemTester(top->childContexts()[3], "Test<int>::").names.toSet(), QSet<QString>() << "Data" << "Value" << "member");
 
     lock.unlock();
-    parse(method, DumpNone, 0, KUrl(), top);
+    parse(method, DumpNone, 0, QUrl(), top);
     lock.lock();
 
     QCOMPARE(top->childContexts().count(), 4);
@@ -2012,8 +2004,8 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 4);
   QCOMPARE(top->localDeclarations().count(), 3);
-  kDebug() << top->localDeclarations()[0]->range().castToSimpleRange().textRange();
-  QCOMPARE(top->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(0, 10, 0, 10));
+  kDebug() << top->localDeclarations()[0]->range().castToSimpleRange();
+  QCOMPARE(top->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(0, 10, 0, 10));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("a")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("b")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("a"))->uses().size());
@@ -2026,7 +2018,7 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
   {
     Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(top), "; ", QString(), top->range().end) );
     bool abort = false;
-    typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
+    typedef CompletionTreeItemPointer Item;
     
     QList <Item > items = cptr->completionItems(abort);
     foreach(Item i, items) {
@@ -2042,7 +2034,7 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
   {
     Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(top->childContexts()[3]), "; ", QString(), top->range().end) );
     bool abort = false;
-    typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
+    typedef KDevelop::CompletionTreeItemPointer Item;
     
     QList <Item > items = cptr->completionItems(abort);
     foreach(Item i, items) {
@@ -2430,7 +2422,7 @@ void TestCppCodeCompletion::testUpdateChain() {
     QVERIFY(decl.data());
     QCOMPARE(decl.data()->identifier().toString(), QString("i"));
     
-    parse(text, DumpNone, 0, KUrl(), top);
+    parse(text, DumpNone, 0, QUrl(), top);
     QVERIFY(decl.data()); //Make sure the declaration has been updated, and not deleted
     
     release(top);
@@ -2489,7 +2481,7 @@ void TestCppCodeCompletion::testForwardDeclaration()
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
   AbstractType::Ptr t(decl->abstractType());
-  QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
+  QVERIFY(dynamic_cast<const IdentifiedType*>(t.data()));
   QVERIFY(!decl->isForwardDeclaration());
 
   release(top);
@@ -2611,7 +2603,7 @@ void TestCppCodeCompletion::testAcrossHeaderReferences()
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
   AbstractType::Ptr t(decl->abstractType());
-  QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
+  QVERIFY(dynamic_cast<const IdentifiedType*>(t.data()));
 
   release(top);
 }
@@ -2650,7 +2642,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     AbstractType::Ptr t(decl->abstractType());
-    QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
+    QVERIFY(dynamic_cast<const IdentifiedType*>(t.data()));
     QCOMPARE(decl->abstractType()->toString(), QString("Dummy"));
   }
   {
@@ -2658,7 +2650,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     AbstractType::Ptr t(decl->abstractType());
-    QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
+    QVERIFY(dynamic_cast<const IdentifiedType*>(t.data()));
     QCOMPARE(decl->abstractType()->toString(), QString("Test< Dummy >"));
   }
   {
@@ -2666,7 +2658,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     AbstractType::Ptr t(decl->abstractType());
-    QVERIFY(dynamic_cast<const IdentifiedType*>(t.unsafeData()));
+    QVERIFY(dynamic_cast<const IdentifiedType*>(t.data()));
     QCOMPARE(decl->abstractType()->toString(), QString("Test< Dummy >"));
   }
   {
@@ -2750,27 +2742,27 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
-  kDebug() << ctx->localDeclarations()[0]->range().castToSimpleRange().textRange();
-  //kDebug() << ctx->localDeclarations()[1]->range().castToSimpleRange().textRange();
-  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 7, 1, 7)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
-  //  QCOMPARE(ctx->localDeclarations()[1]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 10, 1, 11));
-  //kDebug() << "Range:" << ctx->localDeclarations()[0]->range().castToSimpleRange().textRange();
+  kDebug() << ctx->localDeclarations()[0]->range().castToSimpleRange();
+  //kDebug() << ctx->localDeclarations()[1]->range().castToSimpleRange();
+  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(1, 7, 1, 7)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
+  //  QCOMPARE(ctx->localDeclarations()[1]->range().castToSimpleRange(), KTextEditor::Range(1, 10, 1, 11));
+  //kDebug() << "Range:" << ctx->localDeclarations()[0]->range().castToSimpleRange();
 }
 {
   QString test("#define A(X) bbbbbb\nint A(0);\n");
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
-  kDebug() << ctx->localDeclarations()[0]->range().castToSimpleRange().textRange();
-  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 8, 1, 8)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
+  kDebug() << ctx->localDeclarations()[0]->range().castToSimpleRange();
+  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(1, 8, 1, 8)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
 }
 {
   QString test("#define TEST namespace NS{int a;int b;int c;int d;int q;} class A{}; \nTEST; int a; int b; int c; int d;int e;int f;int g;int h;\n");
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 10);
-  QCOMPARE(ctx->localDeclarations()[1]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 4, 1, 4)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
-  QCOMPARE(ctx->localDeclarations()[2]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 10, 1, 11));
+  QCOMPARE(ctx->localDeclarations()[1]->range().castToSimpleRange(), KTextEditor::Range(1, 4, 1, 4)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
+  QCOMPARE(ctx->localDeclarations()[2]->range().castToSimpleRange(), KTextEditor::Range(1, 10, 1, 11));
 }
 {
   //The range of the merged declaration name should be trimmed to the end of the macro invocation
@@ -2778,7 +2770,7 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
-  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 5, 1, 11));
+  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(1, 5, 1, 11));
 }
 {
   //The range of the merged declaration name should be within macro invocation even when the order of merging is different from the order of formal parameters
@@ -2786,7 +2778,7 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
-  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 12, 1, 18));
+  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(1, 12, 1, 18));
 }
 {
   //The range of the merged declaration name should be collapsed if it does not start with a macro parameter
@@ -2794,7 +2786,7 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
-  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 11, 1, 11));
+  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(1, 11, 1, 11));
 }
 }
 
@@ -3220,7 +3212,7 @@ void TestCppCodeCompletion::testArgumentList()
     QCOMPARE(top->localDeclarations().size(), 1);
 
     CompletionItemTester complCtx(top, "");
-    Cpp::NormalDeclarationCompletionItem item(DeclarationPointer(top->localDeclarations().first()), KSharedPtr<KDevelop::CodeCompletionContext>(complCtx.completionContext.data()));
+    Cpp::NormalDeclarationCompletionItem item(DeclarationPointer(top->localDeclarations().first()), QExplicitlySharedDataPointer<KDevelop::CodeCompletionContext>(complCtx.completionContext.data()));
     QString ret;
     Cpp::createArgumentList(item, ret, 0);
     QCOMPARE(ret, it.value());
@@ -3432,42 +3424,38 @@ void TestCppCodeCompletion::testExecuteKeepWord_data()
 void TestCppCodeCompletion::testExecuteKeepWord()
 {
   QFETCH(QString, code);
-  TopDUContext* top = parse(code.toAscii(), DumpAll);
+  TopDUContext* top = parse(code.toLatin1(), DumpAll);
 
-  KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+  KTextEditor::Editor* editor = KTextEditor::Editor::instance();
   QVERIFY(editor);
 
-  KTextEditor::Document* doc = editor->createDocument(this);
+  QScopedPointer<KTextEditor::Document> doc(editor->createDocument(this));
   QVERIFY(doc);
   doc->setText(code);
-  doc->startEditing();
 
-  KTextEditor::View *v = doc->createView(0);
+  KTextEditor::Document::EditingTransaction t(doc.data());
+  QScopedPointer<KTextEditor::View> v(doc->createView(0));
   v->setCursorPosition(KTextEditor::Cursor(3, 1));
 
   DUChainWriteLocker lock;
   QVERIFY(top->problems().isEmpty());
 
   CompletionItemTester complCtx(top->childContexts().last(), "");
-  KSharedPtr<CompletionTreeItem> item;
+  QExplicitlySharedDataPointer<CompletionTreeItem> item;
+  qDebug() << "FOO" << top->childContexts().last() << complCtx.items.length();
   for(int i=0; i<complCtx.items.length(); ++i) {
     kDebug() << complCtx.itemData(i).toString();
     if (complCtx.itemData(i).toString()=="f") {
       item = complCtx.items.at(i);
     }
   }
-  QVERIFY(!item.isNull());
-  item->execute(doc, KTextEditor::Range(3, 0, 3, 4));
+  QVERIFY(item);
+  item->execute(v.data(), KTextEditor::Range(3, 0, 3, 4));
 
   QFETCH(QString, expectedCode);
   QCOMPARE(doc->line(3), expectedCode);
 
-  doc->endEditing();
-
   release(top);
-
-  delete v;
-  delete doc;
 }
 
 
@@ -3514,14 +3502,14 @@ public:
   }
 };
 
-QString TestCppCodeCompletion::preprocess( const IndexedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent, bool stopAfterHeaders, KSharedPtr<Cpp::EnvironmentFile>* paramEnvironmentFile, rpp::LocationTable** returnLocationTable, PreprocessedContents* targetContents ) {
+QString TestCppCodeCompletion::preprocess( const IndexedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent, bool stopAfterHeaders, QExplicitlySharedDataPointer<Cpp::EnvironmentFile>* paramEnvironmentFile, rpp::LocationTable** returnLocationTable, PreprocessedContents* targetContents ) {
   TestPreprocessor ppc( this, included, stopAfterHeaders );
 
 
     rpp::pp preprocessor(&ppc);
     ppc.setPp( &preprocessor );
 
-    KSharedPtr<Cpp::EnvironmentFile> environmentFile;
+    QExplicitlySharedDataPointer<Cpp::EnvironmentFile> environmentFile;
     if( paramEnvironmentFile && *paramEnvironmentFile )
       environmentFile = *paramEnvironmentFile;
     else
@@ -3721,15 +3709,15 @@ void TestCppCodeCompletion::testNoQuadrupleColon()
   
   CompletionItemTester tester(top->childContexts().last());
   QVERIFY(tester.completionContext->isValid());
-  KSharedPtr<CompletionTreeItem> item;
+  QExplicitlySharedDataPointer<CompletionTreeItem> item;
   for( int i = 0; i < tester.items.length(); ++i ) {
       if( tester.itemData( i ).toString() == "Foobar" ) {
           item = tester.items.at( i );
       }
   }
-  QVERIFY( !item.isNull() );
+  QVERIFY( item );
   
-  KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+  KTextEditor::Editor* editor = KTextEditor::Editor::instance();
   QVERIFY(editor);
   KTextEditor::Document* doc = editor->createDocument(this);
   QVERIFY(doc);
@@ -3738,21 +3726,19 @@ void TestCppCodeCompletion::testNoQuadrupleColon()
   doc->setText("");
   KTextEditor::View* v = doc->createView(0);
   
-  doc->startEditing();
+  KTextEditor::Document::EditingTransaction t(doc);
   KTextEditor::Cursor c( 0, 0 );
   v->setCursorPosition( c );
 
-  item->execute( doc, Range( c, 0 ) );
+  item->execute( v, Range( c, 0 ) );
   QCOMPARE( doc->line( 0 ), QString("Foobar::") );
 
   // verify it doesn't when there's already a "::"
   doc->setText("::var;");
   v->setCursorPosition( c );
 
-  item->execute( doc, Range( c, 0 ) );
+  item->execute( v, Range( c, 0 ) );
   QCOMPARE( doc->line( 0 ), QString("Foobar::var;") );
-
-  doc->endEditing();
 }
 
 void TestCppCodeCompletion::testLookaheadMatches_data()
@@ -3833,4 +3819,3 @@ void TestCppCodeCompletion::testDuplicatedNamespace()
   release(top);
 }
 
-#include "test_cppcodecompletion.moc"

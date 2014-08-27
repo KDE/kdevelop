@@ -22,6 +22,8 @@
 #include "../qthelpprovider.h"
 #include "../qthelp_config_shared.h"
 
+#include <QTest>
+
 #include <interfaces/idocumentation.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/declaration.h>
@@ -38,9 +40,8 @@ const QString VALID1 = QTHELP_FILES + QString("/valid1.qch");
 const QString VALID2 = QTHELP_FILES + QString("/valid2.qch");
 const QString INVALID = QTHELP_FILES + QString("/invalid.qch");
 
+QTEST_MAIN(TestQtHelpPlugin)
 using namespace KDevelop;
-
-QTEST_KDEMAIN_CORE(TestQtHelpPlugin)
 
 TestQtHelpPlugin::TestQtHelpPlugin()
 {
@@ -185,12 +186,12 @@ void TestQtHelpPlugin::testDeclarationLookup_Class()
     auto ctx = file.topContext();
     auto decl = ctx->findDeclarations(QualifiedIdentifier("o")).first();
     QVERIFY(decl);
-    auto typeDecl = dynamic_cast<const IdentifiedType*>(decl->type<PointerType>()->baseType().unsafeData())->declaration(0);
+    auto typeDecl = dynamic_cast<const IdentifiedType*>(decl->type<PointerType>()->baseType().data())->declaration(0);
     QVERIFY(typeDecl);
 
     auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
     QVERIFY(provider);
-    if (!provider->isValid()) {
+    if (!provider->isValid() || provider->engine()->linksForIdentifier("QObject").isEmpty()) {
         QSKIP("Qt help not available", SkipSingle);
     }
 
@@ -214,7 +215,7 @@ void TestQtHelpPlugin::testDeclarationLookup_OperatorFunction()
 
     auto provider = dynamic_cast<QtHelpProviderAbstract*>(m_plugin->providers().at(0));
     QVERIFY(provider);
-    if (!provider->isValid()) {
+    if (!provider->isValid() || provider->engine()->linksForIdentifier("QObject").isEmpty()) {
         QSKIP("Qt help not available", SkipSingle);
     }
 

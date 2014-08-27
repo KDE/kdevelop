@@ -100,7 +100,7 @@ public:
     
     void requestDependancies();
 
-    CPPInternalParseJob* parseJob() const;
+    QSharedPointer<CPPInternalParseJob> parseJob() const;
 
     const KTextEditor::Range& textRangeToParse() const;
 
@@ -198,11 +198,11 @@ private:
     void mergeDefines(CppPreprocessEnvironment& env) const;
   
     bool m_needUpdateEverything;
-    KSharedPtr<Cpp::EnvironmentFile> m_proxyEnvironmentFile;
+    QExplicitlySharedDataPointer<Cpp::EnvironmentFile> m_proxyEnvironmentFile;
     PreprocessJob* m_parentPreprocessor;
     ParseSession::Ptr m_session;
-    PreprocessJob* m_preprocessJob;
-    CPPInternalParseJob* m_parseJob;
+    ThreadWeaver::JobPointer m_preprocessJob;
+    ThreadWeaver::JobPointer m_parseJob;
     KTextEditor::Range m_textRangeToParse;
     IncludeFileList m_includedFiles;
 
@@ -210,7 +210,7 @@ private:
     
     //The following two members are used when simplified-matching is used, which means that one content-context and one specialized context will be used.
     KDevelop::ReferencedTopDUContext m_updatingContentContext;
-    KSharedPtr<Cpp::EnvironmentFile> m_contentEnvironmentFile;
+    QExplicitlySharedDataPointer<Cpp::EnvironmentFile> m_contentEnvironmentFile;
 
     mutable QList<ProblemPointer> m_preprocessorProblems;
   
@@ -229,7 +229,6 @@ private:
 
 class CPPInternalParseJob : public ThreadWeaver::Job
 {
-    Q_OBJECT
 public:
     CPPInternalParseJob(CPPParseJob* parent);
 
@@ -239,7 +238,7 @@ public:
     void setPriority(int priority);
 
     //Must only be called for direct parsing when the job is not queued
-    virtual void run();
+    virtual void run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* thread);
 
     //Called as soon as the first updated context has been set
     void initialize();
@@ -253,6 +252,7 @@ private:
     ReferencedTopDUContext updatingProxyContext;
     ReferencedTopDUContext updatingContentContext;
 
+    CPPParseJob* m_parentJob;
     bool m_initialized;
     int m_priority;
 };

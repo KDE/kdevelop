@@ -10,6 +10,9 @@ set(qthelpplugintest_SRCS
     ../qthelp_config_shared.cpp
 )
 
-kde4_add_unit_test(qthelpplugintest ${qthelpplugintest_SRCS} )
-target_link_libraries( qthelpplugintest ${QT_QTTEST_LIBRARY}     ${KDE4_KCMUTILS_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTHELP_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
+add_executable(qthelpplugintest ${qthelpplugintest_SRCS} )
+target_link_libraries( qthelpplugintest Qt5::Test KF5::KCMUtils KF5::KIOWidgets ${KDE4_KDEUI_LIBS} KF5::TextEditor Qt5::Help ${QT_QTWEBKIT_LIBRARY}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_DOCUMENTATION_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
+
+ecm_mark_as_test(qthelpplugintest)
+add_test(qthelpplugintest qthelpplugintest)

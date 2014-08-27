@@ -39,7 +39,6 @@
 #include <QFocusEvent>
 #include <QMenu>
 #include <khistorycombobox.h>
-#include <KIcon>
 #include <QScrollBar>
 #include <QScopedPointer>
 
@@ -63,8 +62,8 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     showInternalCommands_(false),
     maxLines_(5000)
 {
-//     setWindowIcon(KIcon("inline_image"));
-    setWindowIcon(KIcon("debugger"));
+//     setWindowIcon(QIcon::fromTheme("inline_image"));
+    setWindowIcon(QIcon::fromTheme("debugger"));
     setWindowTitle(i18n("GDB Output"));
     setWhatsThis(i18n("<b>GDB output</b><p>"
                     "Shows all gdb commands being executed. "
@@ -79,7 +78,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     label->setBuddy(m_userGDBCmdEditor);
 
     m_Interrupt = new QToolButton( this );
-    m_Interrupt->setIcon ( KIcon ( "media-playback-pause" ) );
+    m_Interrupt->setIcon ( QIcon::fromTheme( "media-playback-pause" ) );
     m_Interrupt->setToolTip( i18n ( "Pause execution of the app to enter gdb commands" ) );
 
     QVBoxLayout *topLayout = new QVBoxLayout(this);
@@ -114,8 +113,9 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
 
     currentSessionChanged(KDevelop::ICore::self()->debugController()->currentSession());
 
-    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-            this, SLOT(updateColors()));
+//     TODO Port to KF5
+//     connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+//             this, SLOT(updateColors()));
     updateColors();
 
 }
@@ -375,14 +375,14 @@ QString GDBOutputWidget::html_escape(const QString& s)
 
 void GDBOutputWidget::savePartialProjectSession()
 {
-    KConfigGroup config(KGlobal::config(), "GDB Debugger");
+    KConfigGroup config(KSharedConfig::openConfig(), "GDB Debugger");
 
     config.writeEntry("showInternalCommands", showInternalCommands_);
 }
 
 void GDBOutputWidget::restorePartialProjectSession()
 {
-    KConfigGroup config(KGlobal::config(), "GDB Debugger");
+    KConfigGroup config(KSharedConfig::openConfig(), "GDB Debugger");
 
     showInternalCommands_ = config.readEntry("showInternalCommands", false);
 }
@@ -468,5 +468,4 @@ bool GDBOutputWidget::showInternalCommands() const
 }
 
 
-#include "gdboutputwidget.moc"
 

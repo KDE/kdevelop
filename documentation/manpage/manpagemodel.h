@@ -23,7 +23,7 @@
 #ifndef MANPAGEMODEL_H
 #define MANPAGEMODEL_H
 
-#include <QtGui/QStringListModel>
+#include <QStringListModel>
 
 #include <KIO/Job>
 
@@ -39,15 +39,17 @@ class ManPageModel : public QAbstractItemModel
 public:
     ManPageModel(QObject* parent = 0);
     virtual ~ManPageModel();
+
     /**
      * You can use @p DeclarationRole to get the Declaration for a given index.
      * NOTE: If you use that, don't forget to lock the DUChain if you access the declaration!
      */
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex&) const { return 1; }
-    virtual QModelIndex parent(const QModelIndex& child) const;
-    QModelIndex index(int row, int column, const QModelIndex& parent) const;
+    virtual int columnCount(const QModelIndex& = QModelIndex()) const { return 1; }
+    virtual QModelIndex parent(const QModelIndex& child = QModelIndex()) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+
     QStringListModel* indexList();
     bool containsIdentifier(QString identifier);
     int sectionCount() const;

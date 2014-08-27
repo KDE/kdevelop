@@ -62,4 +62,3 @@ void CMakeParserUtilsTest::invalidVersionsTest_data()
 }
 
 
-#include "cmakeparserutilstest.moc"

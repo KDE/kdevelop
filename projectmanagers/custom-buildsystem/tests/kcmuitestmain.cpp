@@ -18,7 +18,7 @@
  ************************************************************************/
 
 #include <kapplication.h>
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kdialog.h>
@@ -76,8 +76,8 @@ extern int cbsDebugArea(); // from debugarea.cpp
 
 int main(int argc, char **argv)
 {
-    KAboutData about("kcm_uitest", 0, ki18n("kcm_uitest"), version, ki18n(description),
-                     KAboutData::License_GPL, ki18n("(C) 2012 Andreas Pakulat"), KLocalizedString(), 0, "apaku@gmx.de");
+    K4AboutData about("kcm_uitest", 0, ki18n("kcm_uitest"), version, ki18n(description),
+                     K4AboutData::License_GPL, ki18n("(C) 2012 Andreas Pakulat"), KLocalizedString(), 0, "apaku@gmx.de");
     about.addAuthor( ki18n("Andreas Pakulat"), KLocalizedString(), "apaku@gmx.de" );
     KCmdLineArgs::init(argc, argv, &about);
 
@@ -125,4 +125,4 @@ int main(int argc, char **argv)
 
 }
 
-#include "main.moc"
+#include "kcmuitestmain.moc"

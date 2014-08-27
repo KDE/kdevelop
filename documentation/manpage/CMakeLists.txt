@@ -6,11 +6,11 @@ set(kdevmanpage_SRCS
     manpagedocumentationwidget.cpp
 )
 
-kde4_add_plugin(kdevmanpage ${kdevmanpage_SRCS})
-target_link_libraries(kdevmanpage ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-${KDEVPLATFORM_DOCUMENTATION_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${QT_QTWEBKIT_LIBRARY} ${QT_QTGUI_LIBRARY})
+add_library(kdevmanpage MODULE ${kdevmanpage_SRCS})
+target_link_libraries(kdevmanpage KF5::TextEditor ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+${KDEVPLATFORM_DOCUMENTATION_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES} KF5::KCMUtils Qt5::WebKitWidgets)
 
-install(TARGETS kdevmanpage DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevmanpage DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 configure_file(kdevmanpage.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevmanpage.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevmanpage.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
@@ -18,3 +18,5 @@ install(FILES
     manpagedocumentation.css
     DESTINATION ${DATA_INSTALL_DIR}/kdevmanpage
 )
+
+add_subdirectory(tests)

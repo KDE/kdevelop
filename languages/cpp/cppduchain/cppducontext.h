@@ -155,7 +155,7 @@ extern QMutex cppDuContextInstantiationsMutex;
           ExpressionEvaluationResult expressionResult;
         };
         
-        typedef KSharedPtr<State> StatePtr;
+        typedef QExplicitlySharedDataPointer<State> StatePtr;
         
         QStack<StatePtr> m_states;
         const DUContext* m_context;
@@ -393,7 +393,7 @@ class CppDUContext : public BaseContext {
       
         BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, ret, source, flags );
 
-        ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position.castToSimpleCursor().textCursor(); )
+        ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position.castToSimpleCursor(); )
 
         if( !(flags & DUContext::NoFiltering) ) {
           //Filter out constructors and if needed unresolved template-params
@@ -517,7 +517,7 @@ class CppDUContext : public BaseContext {
         id.clearTemplateIdentifiers();
         FOREACH_FUNCTION(const IndexedType& arg, templateArguments.templateParameters) {
           AbstractType::Ptr type(arg.abstractType());
-          IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+          IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.data());
           if(identified)
             id.appendTemplateIdentifier( IndexedTypeIdentifier(identified->qualifiedIdentifier()) );
           else if(type)

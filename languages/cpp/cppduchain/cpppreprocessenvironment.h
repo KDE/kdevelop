@@ -30,7 +30,7 @@ class IndexedString;
 
 class KDEVCPPDUCHAIN_EXPORT CppPreprocessEnvironment : public rpp::Environment, public KDevelop::ParsingEnvironment {
 public:
-  CppPreprocessEnvironment( const KSharedPtr<Cpp::EnvironmentFile>& environmentFile );
+  CppPreprocessEnvironment( const QExplicitlySharedDataPointer<Cpp::EnvironmentFile>& environmentFile );
 
   ~CppPreprocessEnvironment();
 
@@ -39,8 +39,8 @@ public:
 
   virtual rpp::pp_macro* retrieveMacro( const KDevelop::IndexedString& name, bool isImportant ) const;
 
-  void setEnvironmentFile( const KSharedPtr<Cpp::EnvironmentFile>& environmentFile );
-  KSharedPtr<Cpp::EnvironmentFile> environmentFile() const;
+  void setEnvironmentFile( const QExplicitlySharedDataPointer<Cpp::EnvironmentFile>& environmentFile );
+  QExplicitlySharedDataPointer<Cpp::EnvironmentFile> environmentFile() const;
 
   void swapMacros( rpp::Environment* parentEnvironment );
 
@@ -88,7 +88,7 @@ private:
     bool m_finished;
     QSet<KDevelop::IndexedString> m_macroNameSet;
     mutable std::set<Utils::BasicSetRepository::Index> m_strings;
-    mutable KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
+    mutable QExplicitlySharedDataPointer<Cpp::EnvironmentFile> m_environmentFile;
 };
 
 #endif

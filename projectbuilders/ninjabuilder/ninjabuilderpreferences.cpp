@@ -25,6 +25,7 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <util/environmentgrouplist.h>
+#include <KAboutData>
 
 #include "ui_ninjaconfig.h"
 #include "ninjabuilderconfig.h"
@@ -33,7 +34,7 @@ K_PLUGIN_FACTORY(NinjaBuilderPreferencesFactory, registerPlugin<NinjaBuilderPref
 K_EXPORT_PLUGIN(NinjaBuilderPreferencesFactory("kcm_kdev_ninjabuilder"))
 
 NinjaBuilderPreferences::NinjaBuilderPreferences(QWidget* parent, const QVariantList& args)
-    : ProjectKCModule<NinjaBuilderSettings>( NinjaBuilderPreferencesFactory::componentData(),
+    : ProjectKCModule<NinjaBuilderSettings>( KAboutData::pluginData("kcm_kdev_ninjabuilder"),
                 parent, args)
 {
     QVBoxLayout* l = new QVBoxLayout( this );

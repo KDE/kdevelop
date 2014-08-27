@@ -120,4 +120,3 @@ void IncludesModel::addIncludeInternal( const QString& includePath )
 }
 
 
-#include "includesmodel.moc"

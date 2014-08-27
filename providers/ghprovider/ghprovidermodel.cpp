@@ -18,7 +18,6 @@
  */
 
 
-#include <KIcon>
 #include <ghprovidermodel.h>
 
 
@@ -29,11 +28,11 @@ ProviderItem::ProviderItem(const Response &r)
     : QStandardItem(r.name), m_data(r)
 {
     if (r.kind == Private)
-        setIcon(KIcon("github-private"));
+        setIcon(QIcon::fromTheme("github-private"));
     else if (r.kind == Fork)
-        setIcon(KIcon("github-forked"));
+        setIcon(QIcon::fromTheme("github-forked"));
     else
-        setIcon(KIcon("github-repo"));
+        setIcon(QIcon::fromTheme("github-repo"));
 }
 
 QVariant ProviderItem::data(int role) const

@@ -19,16 +19,17 @@
 
 #include <KMessageBox>
 
-#include <QtGui/QLabel>
-#include <QtGui/QListView>
-#include <QtGui/QComboBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QPushButton>
+#include <QLabel>
+#include <QListView>
+#include <QComboBox>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
+#include <KLocalizedString>
 
 #include <ghaccount.h>
 #include <ghdialog.h>
@@ -73,7 +74,7 @@ ProviderWidget::ProviderWidget(QWidget *parent)
     fillCombo();
     topLayout->addWidget(m_combo);
 
-    QPushButton *settings = new QPushButton(KIcon("configure"), "", this);
+    QPushButton *settings = new QPushButton(QIcon::fromTheme("configure"), "", this);
     settings->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     settings->setToolTip(i18n("Click this button to configure your Github account"));
     connect(settings, SIGNAL(clicked()), SLOT(showSettings()));

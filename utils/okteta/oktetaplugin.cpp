@@ -59,13 +59,13 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 // KDE
-#include <KAction>
 #include <KAboutData>
 #include <KPluginFactory>
 
+#include <QAction>
 
 K_PLUGIN_FACTORY(OktetaPluginFactory, registerPlugin<KDevelop::OktetaPlugin>(); )
-K_EXPORT_PLUGIN( OktetaPluginFactory( KAboutData( "kdevokteta","kdevokteta", ki18n("Okteta Plugin for KDevelop"), "0.1", ki18n("Provides simple Hex Editing"), KAboutData::License_GPL).setProgramIconName("okteta")))
+//K_EXPORT_PLUGIN( OktetaPluginFactory( KAboutData( "kdevokteta","kdevokteta", ki18n("Okteta Plugin for KDevelop"), "0.1", ki18n("Provides simple Hex Editing"), KAboutData::License_GPL).setProgramIconName("okteta")))
 
 namespace KDevelop
 {
@@ -83,7 +83,7 @@ void addTool( IUiController* uiController,
 
 
 OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
-  : IPlugin( OktetaPluginFactory::componentData(), parent )
+  : IPlugin( "kdevokteta", parent )
   , mDocumentFactory( new OktetaDocumentFactory(this) )
 #if KASTEN_VERSION == 2
   , mViewProfileManager( new Kasten::ByteArrayViewProfileManager() )
@@ -121,8 +121,8 @@ ContextMenuExtension OktetaPlugin::contextMenuExtension( Context* context )
 
     if( openWithContext && !openWithContext->mimeType()->is("inode/directory"))
     {
-        KAction* openAction = new KAction( i18n("Hex Editor"), this );
-        openAction->setIcon( KIcon("document-open") );
+        QAction* openAction = new QAction( i18n("Hex Editor"), this );
+        openAction->setIcon( QIcon::fromTheme("document-open") );
         openAction->setData( openWithContext->urls() );
         connect( openAction, SIGNAL(triggered()), SLOT(onOpenTriggered()) );
 
@@ -136,7 +136,7 @@ ContextMenuExtension OktetaPlugin::contextMenuExtension( Context* context )
 
 void OktetaPlugin::onOpenTriggered()
 {
-    KAction* action = qobject_cast<KAction*>(sender());
+    QAction* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
 
     KDevelop::ICore* core = KDevelop::ICore::self();

@@ -49,8 +49,7 @@ void CodeCompletionWorker::updateContextRange(KTextEditor::Range& contextRange, 
   if(context && context->owner() && context->owner()->type<FunctionType>()) {
     if(!context->owner()->type<FunctionType>()->returnType()) {
       //For constructor completion, we need some more context
-      contextRange.start().setLine(contextRange.start().line() > 30 ? contextRange.start().line()-30 : 0);
-      contextRange.start().setColumn(0);
+      contextRange.setStart(KTextEditor::Cursor(0, contextRange.start().line() > 30 ? contextRange.start().line()-30 : 0));
     }
   }
 }
@@ -80,4 +79,3 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
 
 }
 
-#include "worker.moc"

@@ -1,5 +1,4 @@
 project(cpp)
-kde4_no_enable_final(cpp)
 include(CppBuildConfig.cmake)
 
 include_directories(
@@ -38,7 +37,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/adaptsignatureassistant.cpp
     codegen/adaptsignatureaction.cpp
     codegen/unresolvedincludeassistant.cpp
-    codegen/cppclasshelper.cpp
+#     codegen/cppclasshelper.cpp #TODO reenable when grantlee is ported
 #     codegen/makeimplementationprivate.cpp
 )
 
@@ -47,25 +46,25 @@ if(BUILD_uiblocktester)
   add_definitions(-DDEBUG_UI_LOCKUP)
 endif(BUILD_uiblocktester)
 
-kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
+add_library(kdevcpplanguagesupport MODULE ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport
-    kdev4cpprpp
-    kdev4cppduchain
-    kdev4cppparser
+    kdevcpprpp
+    kdevcppduchain
+    kdevcppparser
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_UTIL_LIBRARIES}
     ${KDE4_THREADWEAVER_LIBRARIES}
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    
+    KF5::TextEditor
 )
 
-install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 
 ########### install files ###############
 
 configure_file(kdevcppsupport.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcppsupport.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcppsupport.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES kdevcppsupport.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcppsupport)
+install(FILES kdevcppsupport.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcppsupport)

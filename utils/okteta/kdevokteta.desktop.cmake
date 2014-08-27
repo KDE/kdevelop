@@ -104,7 +104,7 @@ Comment[zh_TW]=以 Okteta 為基礎的 KDevelop 十六進位資料編輯器
 Icon=okteta
 ServiceTypes=KDevelop/Plugin
 
-X-KDE-Library=kdevokteta
+X-KDE-Library=kdevplatform/@KDEV_PLUGIN_VERSION@/kdevokteta
 X-KDE-PluginInfo-Name=kdevokteta
 X-KDE-PluginInfo-Author=Friedrich W. H. Kossebau
 X-KDE-PluginInfo-Email=kossebau@kde.org

@@ -20,6 +20,7 @@
  */
 
 #include "selectcoredialog.h"
+#include <KLocalizedString>
 
 namespace GDBDebugger {
 

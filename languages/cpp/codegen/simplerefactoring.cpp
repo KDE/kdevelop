@@ -75,7 +75,7 @@ void SimpleRefactoring::fillContextMenu(KDevelop::ContextMenuExtension& extensio
       if (finfo.isWritable()) {
         QAction* action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
         action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
-        action->setIcon(KIcon("edit-rename"));
+        action->setIcon(QIcon::fromTheme("edit-rename"));
         connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
 
         extension.addAction(ContextMenuExtension::RefactorGroup, action);
@@ -87,7 +87,7 @@ void SimpleRefactoring::fillContextMenu(KDevelop::ContextMenuExtension& extensio
             //Is a candidate for moving into source
             QAction* action = new QAction(i18n("Create separate definition for %1", declaration->qualifiedIdentifier().toString()), this);
             action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
-//           action->setIcon(KIcon("arrow-right"));
+//           action->setIcon(QIcon::fromTheme("arrow-right"));
             connect(action, SIGNAL(triggered(bool)), this, SLOT(executeMoveIntoSourceAction()));
             extension.addAction(ContextMenuExtension::RefactorGroup, action);
           }
@@ -146,27 +146,27 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
     return i18n("No document for %1", decl->url().toUrl().prettyUrl());
   }
 
-  SimpleRange headerRange = decl->internalContext()->rangeInCurrentRevision();
+  KTextEditor::Range headerRange = decl->internalContext()->rangeInCurrentRevision();
   // remove whitespace in front of the header range
-  KTextEditor::Range prefixRange(funDecl->internalFunctionContext()->range().end.castToSimpleCursor().textCursor()
+  KTextEditor::Range prefixRange(funDecl->internalFunctionContext()->range().end.castToSimpleCursor()
                                   + KTextEditor::Cursor(0, 1) /* skip ) of function context */,
-                                 headerRange.start.textCursor());
+                                 headerRange.start());
   const QString prefixText = code->rangeText(prefixRange);
   for (int i = prefixText.length() - 1; i >= 0 && prefixText.at(i).isSpace(); --i) {
-    if (headerRange.start.column == 0) {
-      headerRange.start.line--;
-      if (headerRange.start.line == prefixRange.start().line()) {
-        headerRange.start.column = prefixRange.start().column() + i;
+    if (headerRange.start().column() == 0) {
+      headerRange.start().setLine(headerRange.start().line() - 1);
+      if (headerRange.start().line() == prefixRange.start().line()) {
+        headerRange.start().setColumn(prefixRange.start().column() + i);
       } else {
         int lastNewline = prefixText.lastIndexOf('\n', i - 1);
-        headerRange.start.column = i - lastNewline - 1;
-        kWarning() << "UNSUPPORTED" << headerRange.start.column << lastNewline << i << prefixText;
+        headerRange.start().setColumn(i - lastNewline - 1);
+        kWarning() << "UNSUPPORTED" << headerRange.start().column() << lastNewline << i << prefixText;
       }
     } else {
-      headerRange.start.column--;
+      headerRange.start().setColumn(headerRange.start().column() - 1);
     }
   }
-  const QString body = code->rangeText(headerRange.textRange());
+  const QString body = code->rangeText(headerRange);
   SourceCodeInsertion ins(targetTopContext);
   QualifiedIdentifier namespaceIdentifier = decl->internalContext()->parentContext()->scopeIdentifier(false);
 

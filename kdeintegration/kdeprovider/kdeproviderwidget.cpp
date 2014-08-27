@@ -21,7 +21,6 @@
 #include "kdeproviderwidget.h"
 #include <QVBoxLayout>
 #include <QListView>
-#include <KIcon>
 #include <KPushButton>
 #include <KConfigDialog>
 #include <interfaces/icore.h>
@@ -35,6 +34,8 @@
 #include <QSortFilterProxyModel>
 #include <KFilterProxySearchLine>
 #include <KMessageBox>
+#include <KDialog>
+#include <KLocalizedString>
 
 using namespace KDevelop;
 
@@ -53,7 +54,7 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     topLayout->addWidget(filterLine);
 
     
-    QPushButton* settings=new QPushButton(KIcon("configure"), i18n("Settings"), this);
+    QPushButton* settings=new QPushButton(QIcon::fromTheme("configure"), i18n("Settings"), this);
     settings->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     connect(settings, SIGNAL(clicked()), SLOT(showSettings()));
 
@@ -119,7 +120,8 @@ void KDEProviderWidget::showSettings()
         configUi.kcfg_gitProtocol->setCurrentIndex(idx);
     }
     
-    dialog->button(KDialog::Default)->setVisible(false);
+//     TODO port to KF5
+//     dialog->button(KDialog::Default)->setVisible(false);
     dialog->addPage(page, i18n("General") );
     dialog->show();
 }

@@ -23,8 +23,6 @@
 
 #include "settingsmanager.h"
 
-#include "noprojectincludesanddefines/noprojectincludepathsmanager.h"
-
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
@@ -85,12 +83,12 @@ namespace KDevelop
 {
 
 K_PLUGIN_FACTORY(DefinesAndIncludesManagerFactory, registerPlugin<DefinesAndIncludesManager>(); )
-K_EXPORT_PLUGIN(DefinesAndIncludesManagerFactory(KAboutData("kdevdefinesandincludesmanager",
-"kdevdefinesandincludesmanager", ki18n("Custom Defines and Includes Manager"), "0.1", ki18n(""),
-KAboutData::License_GPL)))
+//K_EXPORT_PLUGIN(DefinesAndIncludesManagerFactory(KAboutData("kdevdefinesandincludesmanager",
+//"kdevdefinesandincludesmanager", ki18n("Custom Defines and Includes Manager"), "0.1", ki18n(""),
+//KAboutData::License_GPL)))
 
 DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
-    : IPlugin( DefinesAndIncludesManagerFactory::componentData(), parent )
+    : IPlugin("kdevdefinesandincludesmanager", parent )
     , m_noProjectIPM(new NoProjectIncludePathsManager())
 {
     KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
@@ -150,8 +148,9 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
 
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
-
-        includes += KDevelop::toPathList(findConfigForItem(readPaths(cfg), item).includes);
+        foreach (const QString& inc, findConfigForItem(readPaths(cfg), item).includes) {
+            includes += Path(inc);
+        }
     }
 
     if ( type & ProjectSpecific ) {
@@ -229,7 +228,7 @@ Path::List DefinesAndIncludesManager::includesInBackground(const QString& path) 
 }
 
 // NOTE: Part of a fix for build failures on <GCC-4.7
-DefinesAndIncludesManager::~DefinesAndIncludesManager() noexcept = default;
+DefinesAndIncludesManager::~DefinesAndIncludesManager() Q_DECL_NOEXCEPT = default;
 
 QHash< QString, QString > DefinesAndIncludesManager::definesInBackground(const QString& path) const
 {

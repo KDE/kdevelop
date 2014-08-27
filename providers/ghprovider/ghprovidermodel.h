@@ -23,8 +23,7 @@
 
 
 #include <QtCore/QUrl>
-#include <QtGui/QStandardItemModel>
-
+#include <QStandardItemModel>
 
 namespace gh
 {

@@ -28,7 +28,7 @@
 // KDE
 #include <KXMLGUIClient>
 // Qt
-#include <QtGui/QWidget>
+#include <QWidget>
 
 namespace KASTEN_NAMESPACE {
 class ByteArrayView;

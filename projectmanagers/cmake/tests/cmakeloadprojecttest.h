@@ -42,11 +42,16 @@ private slots:
     //Note: These could be done as data-driven tests, but they are separate so that one can
     // more easily profile a plain-cmake vs. qt4-only vs. kde4 project
     void testTinyCMakeProject();
+    void testSmallProjectWithTests();
+
+#if QT_VERSION <= 0x050000
+//  TODO KF5: Port me?
     void testSmallQt4Project();
     void testSmallKDE4Project();
-    void testSmallProjectWithTests();
     void testKDE4ProjectWithTests();
     void testBug335803();
+#endif
+
 private:
     CMakeProjectData parseProject( const QString& sourcedir );
 };

@@ -38,7 +38,7 @@ using namespace Cpp;
 
 namespace {
 
-Declaration *getDeclarationAtCursor(const SimpleCursor &cursor, const KUrl &documentUrl)
+Declaration *getDeclarationAtCursor(const KTextEditor::Cursor &cursor, const KUrl &documentUrl)
 {
   ENSURE_CHAIN_READ_LOCKED
   ReferencedTopDUContext top(DUChainUtils::standardContextForUrl(documentUrl));
@@ -119,8 +119,8 @@ void AdaptSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
     return;
   }
 
-  SimpleRange simpleInvocationRange = SimpleRange(sigAssistRange);
-  Declaration* funDecl = getDeclarationAtCursor(simpleInvocationRange.start, m_document);
+  KTextEditor::Range simpleInvocationRange = KTextEditor::Range(sigAssistRange);
+  Declaration* funDecl = getDeclarationAtCursor(simpleInvocationRange.start(), m_document);
   if(!funDecl || !funDecl->type<FunctionType>())
     return;
 
@@ -256,7 +256,7 @@ void AdaptSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job)
 
   DUChainReadLocker lock;
 
-  Declaration *functionDecl = getDeclarationAtCursor(SimpleCursor(m_view.data()->cursorPosition()), m_document);
+  Declaration *functionDecl = getDeclarationAtCursor(KTextEditor::Cursor(m_view.data()->cursorPosition()), m_document);
   if (!functionDecl || functionDecl->identifier() != m_declarationName)
     return;
   DUContext *functionCtxt = DUChainUtils::getFunctionContext(functionDecl);
@@ -292,4 +292,3 @@ void AdaptSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job)
   emit actionsChanged();
 }
 
-#include "adaptsignatureassistant.moc"

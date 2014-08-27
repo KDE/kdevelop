@@ -23,6 +23,8 @@
 
 #include "ui_noprojectcustomincludepaths.h"
 
+#include <QUrl>
+
 #include <kfiledialog.h>
 #include <klocalizedstring.h>
 
@@ -67,7 +69,7 @@ void NoProjectCustomIncludePaths::setCustomIncludePaths(const QStringList& paths
 
 void NoProjectCustomIncludePaths::openAddIncludeDirectoryDialog()
 {
-    const QString dirName = KFileDialog::getExistingDirectory(KUrl(), this, tr("Select directory to include"));
+    const QString dirName = KFileDialog::getExistingDirectory(QUrl(), this, tr("Select directory to include"));
     if (dirName.isEmpty())
         return;
 

@@ -111,7 +111,7 @@ KUrl MakeJob::workingDirectory() const
 {
     ProjectBaseItem* it = item();
     if(!it)
-        return KUrl();
+        return QUrl();
 
     KDevelop::IBuildSystemManager *bldMan = it->project()->buildSystemManager();
     if( bldMan )
@@ -130,7 +130,7 @@ KUrl MakeJob::workingDirectory() const
                 break;
             }
         }
-        return KUrl();
+        return QUrl();
     }
 }
 

@@ -24,13 +24,13 @@
 #define PREPROCESSJOB_H
 
 #include <ksharedptr.h>
-#include <threadweaver/Job.h>
+#include <threadweaver/job.h>
 
 #include "parser/rpp/preprocessor.h"
 
 namespace Cpp {
     class EnvironmentFile;
-    typedef KSharedPtr<EnvironmentFile> EnvironmentFilePointer;
+    typedef QExplicitlySharedDataPointer<EnvironmentFile> EnvironmentFilePointer;
 }
 
 namespace KDevelop {
@@ -55,7 +55,6 @@ class CppPreprocessEnvironment;
 
 class PreprocessJob : public ThreadWeaver::Job, public rpp::Preprocessor
 {
-    Q_OBJECT
 public:
     PreprocessJob(CPPParseJob* parent);
     ~PreprocessJob();
@@ -67,7 +66,7 @@ public:
     virtual bool success() const;
 
     //Must only be called for direct parsing when the job is not queued
-    virtual void run();
+    virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread);
 
     virtual void headerSectionEnded(rpp::Stream& stream);
     
@@ -89,12 +88,13 @@ private:
     bool checkAbort();
     bool readContents();
 
+    CPPParseJob* m_parentJob;
     CppPreprocessEnvironment* m_currentEnvironment;
-    KSharedPtr<Cpp::EnvironmentFile> m_firstEnvironmentFile; //First environment-file. If simplified matching is used, this is the proxy.
+    QExplicitlySharedDataPointer<Cpp::EnvironmentFile> m_firstEnvironmentFile; //First environment-file. If simplified matching is used, this is the proxy.
     //If simplified matching is used, a separate EnvironmentFile is used for the content, as opposed to the #include statements.
-    KSharedPtr<Cpp::EnvironmentFile> m_secondEnvironmentFile;
+    QExplicitlySharedDataPointer<Cpp::EnvironmentFile> m_secondEnvironmentFile;
     //This is the environment-file that is currently updated. May be the proxy in the beginning, and context later after header-section ended.
-    KSharedPtr<Cpp::EnvironmentFile> m_updatingEnvironmentFile;
+    QExplicitlySharedDataPointer<Cpp::EnvironmentFile> m_updatingEnvironmentFile;
     bool m_success;
     bool m_headerSectionEnded;
     rpp::pp* m_pp;

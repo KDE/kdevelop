@@ -31,7 +31,6 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/testfile.h>
-#include <qtest_kde.h>
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <dumpchain.h>
 #include <templatedeclaration.h>
@@ -50,7 +49,7 @@
 
 #include "codegen/simplerefactoring.h"
 
-QTEST_KDEMAIN(TestCppCodegen, NoGUI )
+QTEST_GUILESS_MAIN(TestCppCodegen)
 
 using namespace KDevelop;
 
@@ -83,7 +82,7 @@ void dumpAST(InsertIntoDUChain& code)
     
     Q_ASSERT(!code->parsingEnvironmentFile()->isProxyContext());
     
-    ParseSession::Ptr session = ParseSession::Ptr::dynamicCast<IAstContainer>(code->ast());
+    ParseSession::Ptr session(dynamic_cast<ParseSession*>(code->ast().data()));
     Q_ASSERT(session);
     Cpp::DumpChain dump;
     dump.dump(session->topAstNode(), session.data());
@@ -496,7 +495,7 @@ void TestCppCodegen::testAstDuChainMapping()
     DUChainReadLocker lock;
     
     //----ClassA.h----
-    ParseSession::Ptr session = ParseSession::Ptr::dynamicCast<IAstContainer>(code->ast());
+    ParseSession::Ptr session(dynamic_cast<ParseSession*>(code->ast().data()));
     QVERIFY(session);
     TranslationUnitAST * ast = session->topAstNode();
     QVERIFY(ast);
@@ -549,7 +548,7 @@ void TestCppCodegen::testAstDuChainMapping()
 
     DUChainReadLocker lock;
     
-    ParseSession::Ptr session = ParseSession::Ptr::dynamicCast<IAstContainer>(code->ast());
+    ParseSession::Ptr session(dynamic_cast<ParseSession*>(code->ast().data()));
     QVERIFY(session);
     TranslationUnitAST * ast = session->topAstNode();
     QVERIFY(ast);
@@ -572,7 +571,7 @@ void TestCppCodegen::testAstDuChainMapping()
 
     DUChainReadLocker lock;
     //----AbstractClass.h----
-    ParseSession::Ptr session = ParseSession::Ptr::dynamicCast<IAstContainer>(code->ast());
+    ParseSession::Ptr session(dynamic_cast<ParseSession*>(code->ast().data()));
     QVERIFY(session);
     TranslationUnitAST * ast = session->topAstNode();
     QVERIFY(ast);
@@ -756,4 +755,3 @@ void TestCppCodegen::testMoveIntoSource_data()
                                 << aFooId;
 }
 
-#include "test_cppcodegen.moc"

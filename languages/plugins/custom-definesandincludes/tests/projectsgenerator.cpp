@@ -42,7 +42,7 @@ namespace
 IProject* loadProject( const QString& projectFile, const QString& projectName )
 {
     KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
-    ICore::self()->projectController()->openProject( projectFile );
+    ICore::self()->projectController()->openProject( QUrl::fromLocalFile(projectFile) );
 
     if( !projectSpy->wait( 5000 ) ) {
         kFatal() << "Expected project to be loaded within 5 seconds, but this didn't happen";
@@ -70,6 +70,7 @@ IProject* ProjectsGenerator::GenerateSimpleProject()
 
     const QString sp = QLatin1String( "simpleproject" );
     auto rootFolder = QDir::temp();
+    QDir(rootFolder.absolutePath() + "/" + sp).removeRecursively();
     rootFolder.mkdir( sp );
     rootFolder.cd( sp );
     rootFolder.mkdir( "src" );
@@ -112,6 +113,7 @@ IProject* ProjectsGenerator::GenerateMultiPathProject()
 
     const QString mp = QLatin1String( "multipathproject" );
     auto rootFolder = QDir::temp();
+    QDir(rootFolder.absolutePath() + "/" + mp).removeRecursively();
     rootFolder.mkdir( mp );
     rootFolder.cd( mp );
     rootFolder.mkdir( "src" );

@@ -14,12 +14,12 @@ set(cmakebuilder_LIB_SRCS
     prunejob.cpp
 )
 
-kde4_add_kcfg_files( cmakebuilder_LIB_SRCS cmakebuilderconfig.kcfgc )
-kde4_add_plugin(kdevcmakebuilder ${cmakebuilder_LIB_SRCS})
+kconfig_add_kcfg_files( cmakebuilder_LIB_SRCS cmakebuilderconfig.kcfgc )
+add_library(kdevcmakebuilder MODULE ${cmakebuilder_LIB_SRCS})
 target_link_libraries(
     kdevcmakebuilder
-    kdev4cmakecommon
-        ${KDE4_KIO_LIBS}
+    kdevcmakecommon
+        KF5::KIOWidgets
         ${KDE4_KDEUI_LIBS}
         ${KDEVPLATFORM_INTERFACES_LIBRARIES}
         ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
@@ -27,7 +27,7 @@ target_link_libraries(
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
 )
 
-install(TARGETS kdevcmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevcmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 configure_file(kdevcmakebuilder.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakebuilder.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 ########### next target ###############
@@ -41,12 +41,13 @@ set( cmakebuilder_cfg_UI
 )
 
 
-kde4_add_ui_files( cmakebuilder_cfg_SRCS ${cmakebuilder_cfg_UI} )
-kde4_add_kcfg_files( cmakebuilder_cfg_SRCS cmakebuilderconfig.kcfgc )
+qt5_wrap_ui( cmakebuilder_cfg_SRCS ${cmakebuilder_cfg_UI} )
+kconfig_add_kcfg_files( cmakebuilder_cfg_SRCS cmakebuilderconfig.kcfgc )
 
-kde4_add_plugin( kcm_kdev_cmakebuilder ${cmakebuilder_cfg_SRCS} )
-target_link_libraries( kcm_kdev_cmakebuilder ${KDE4_KIO_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
-install( TARGETS kcm_kdev_cmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
-install( FILES kcm_kdev_cmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+add_library(kcm_kdev_cmakebuilder MODULE ${cmakebuilder_cfg_SRCS} )
+target_link_libraries(kcm_kdev_cmakebuilder KF5::KIOWidgets ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
+configure_file(kcm_kdev_cmakebuilder.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_cmakebuilder.desktop)
+install(TARGETS kcm_kdev_cmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_cmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 

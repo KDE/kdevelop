@@ -17,7 +17,7 @@
 #ifndef cmListFileLexer_h
 #define cmListFileLexer_h
 
-#include "../cmakeexport.h"
+#include "cmakecommonexport.h"
 
 typedef enum cmListFileLexer_Type_e
 {

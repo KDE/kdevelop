@@ -34,6 +34,7 @@
 
 #include <KPluginFactory>
 #include <KAboutData>
+#include <KLocalizedString>
 #include <KStandardDirs>
 
 using namespace KDevelop;
@@ -87,9 +88,6 @@ IDefinesAndIncludesManager::Type CompilerProvider::type() const
 void CompilerProvider::addPoject( IProject* project, const CompilerPointer& compiler )
 {
     Q_ASSERT(compiler);
-    //cache includes/defines
-    compiler->includes();
-    compiler->defines();
     m_projects[project] = compiler;
 }
 
@@ -98,7 +96,7 @@ void CompilerProvider::removePoject( IProject* project )
     m_projects.remove( project );
 }
 
-CompilerProvider::~CompilerProvider() noexcept
+CompilerProvider::~CompilerProvider() Q_DECL_NOEXCEPT
 {
     IDefinesAndIncludesManager::manager()->unregisterProvider( this );
 }
@@ -114,7 +112,7 @@ CompilerPointer CompilerProvider::checkCompilerExists( const CompilerPointer& co
             definesAndIncludesDebug() << "Selected compiler: " << compiler->name();
             return compiler;
         }
-        kWarning() << "No compiler found. Standard includes/defines won't be provided to the project parser!";
+        qWarning() << "No compiler found. Standard includes/defines won't be provided to the project parser!";
     }else{
         for ( auto it = m_compilers.constBegin(); it != m_compilers.constEnd(); it++ ) {
             if ( (*it)->name() == compiler->name() ) {
@@ -164,7 +162,7 @@ K_EXPORT_PLUGIN( CompilerProviderFactory( KAboutData( "kdevcompilerprovider",
             KAboutData::License_GPL ) ) )
 
 CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
-    : IPlugin( CompilerProviderFactory::componentData(), parent )
+    : IPlugin( "kdevcompilerprovider", parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( ICompilerProvider );
 
@@ -193,8 +191,9 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
 
     IDefinesAndIncludesManager::manager()->registerProvider( this );
 
-    connect( ICore::self()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ), SLOT( projectOpened( KDevelop::IProject* ) ) );
-    connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( KDevelop::IProject* ) ) );
+    // FIXME: This should be connected to projectAboutToBeOpened, but somehow it won't connect to it (there are no connection errors in console and the same connection works for ProjectFilterProvider, also works with Qt 4.8). Tested with Qt 5.3.1.
+    connect( ICore::self()->projectController(), &IProjectController::projectOpened, this, &CompilerProvider::projectOpened );
+    connect( ICore::self()->projectController(), &IProjectController::projectClosed, this, &CompilerProvider::projectClosed);
 
     //Add a provider for files without project
     addPoject( nullptr, checkCompilerExists({}));

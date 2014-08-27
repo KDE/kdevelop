@@ -1,2 +1,2 @@
-macro_optional_add_subdirectory(kdeprovider)
-macro_optional_add_subdirectory(executeplasmoid)
+ecm_optional_add_subdirectory(kdeprovider)
+ecm_optional_add_subdirectory(executeplasmoid)

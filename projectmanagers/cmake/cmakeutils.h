@@ -21,7 +21,7 @@
 #ifndef CMAKEUTILS_H
 #define CMAKEUTILS_H
 
-#include "cmakeexport.h"
+#include "cmakecommonexport.h"
 #include <KUrl>
 #include <QStringList>
 #include <util/path.h>

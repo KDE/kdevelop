@@ -57,7 +57,7 @@ Q_OBJECT
 public:
     GdbConfigPage( QWidget* parent = 0 );
     virtual ~GdbConfigPage();
-    virtual KIcon icon() const;
+    virtual QIcon icon() const;
     virtual void loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* = 0);
     virtual void saveToConfiguration(KConfigGroup, KDevelop::IProject* = 0 ) const;
     virtual QString title() const;

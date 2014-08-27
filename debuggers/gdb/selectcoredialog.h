@@ -24,6 +24,7 @@
 
 #include <KDialog>
 #include "ui_selectcore.h"
+#include <kurl.h>
 
 namespace GDBDebugger {
 

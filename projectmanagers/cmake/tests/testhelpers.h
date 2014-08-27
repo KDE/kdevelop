@@ -26,16 +26,18 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDebug>
-#include <qtest_kde.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+#include <QSignalSpy>
 
-static QString currentBuildDirKey = "CurrentBuildDir";
-static QString currentCMakeBinaryKey = "Current CMake Binary";
-static QString currentBuildTypeKey = "CurrentBuildType";
-static QString currentInstallDirKey = "CurrentInstallDir";
+static QString currentBuildDirKey = "Build Directory Path";
+static QString currentCMakeBinaryKey = "CMake Binary";
+static QString currentBuildTypeKey = "Build Type";
+static QString currentInstallDirKey = "Install Directory";
 static QString currentExtraArgumentsKey = "Extra Arguments";
+static QString currentBuildDirectoryIndexKey = "Current Build Directory Index";
+static QString projectBuildDirectoryCount = "ProjectRootRelative";
 static QString projectRootRelativeKey = "ProjectRootRelative";
 static QString projectBuildDirs = "BuildDirs";
 
@@ -104,12 +106,16 @@ void defaultConfigure(const TestProjectPaths& paths)
         }
     }
 
-    cmakeGrp.writeEntry( currentBuildDirKey, bd.buildFolder() );
-    cmakeGrp.writeEntry( currentCMakeBinaryKey, bd.cmakeBinary() );
-    cmakeGrp.writeEntry( currentInstallDirKey, bd.installPrefix() );
-    cmakeGrp.writeEntry( currentExtraArgumentsKey, bd.extraArguments() );
-    cmakeGrp.writeEntry( currentBuildTypeKey, bd.buildType() );
-    cmakeGrp.writeEntry( projectBuildDirs, QStringList() << bd.buildFolder().toLocalFile());
+    cmakeGrp.writeEntry( projectBuildDirectoryCount, 1);
+    cmakeGrp.writeEntry( currentBuildDirectoryIndexKey, 0);
+
+    KConfigGroup buildDirGrp = cmakeGrp.group(QStringLiteral("CMake Build Directory 0"));
+    buildDirGrp.writeEntry<QUrl>( currentBuildDirKey, bd.buildFolder() );
+    buildDirGrp.writeEntry<QUrl>( currentCMakeBinaryKey, bd.cmakeBinary() );
+    buildDirGrp.writeEntry<QUrl>( currentInstallDirKey, bd.installPrefix() );
+    buildDirGrp.writeEntry( currentExtraArgumentsKey, bd.extraArguments() );
+    buildDirGrp.writeEntry( currentBuildTypeKey, bd.buildType() );
+    buildDirGrp.writeEntry( projectBuildDirs, QStringList() << bd.buildFolder().toLocalFile());
 
     config.sync();
 }
@@ -121,11 +127,12 @@ KDevelop::IProject* loadProject(const QString& name, const QString& relative = Q
 
     KDevelop::ICore::self()->projectController()->openProject(paths.projectFile);
 
-    const bool gotSignal = QTest::kWaitForSignal(
+    qRegisterMetaType<KDevelop::IProject*>();
+    const bool gotSignal = QSignalSpy(
             KDevelop::ICore::self()->projectController(),
-            SIGNAL(projectOpened(KDevelop::IProject*)),
-            30000);
-    if( !gotSignal ) qFatal( "Timeout while waiting for opened signal" );
+            SIGNAL(projectOpened(KDevelop::IProject*))).wait(30000);
+    if( !gotSignal )
+        qFatal( "Timeout while waiting for opened signal" );
 
 
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectByName(name);

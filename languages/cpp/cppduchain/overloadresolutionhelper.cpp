@@ -84,9 +84,9 @@ void OverloadResolutionHelper::initializeResolver(OverloadResolver& resolv)
     Q_ASSERT(!m_identifierForADL.isEmpty());
     ///Search for member operators
     AbstractType::Ptr real( TypeUtils::realType(m_baseType.type, m_context->topContext()) );
-    if( dynamic_cast<CppClassType*>( real.unsafeData() ) )
+    if( dynamic_cast<CppClassType*>( real.data() ) )
     {
-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.unsafeData() );
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>( real.data() );
       if( idType && idType->declaration(m_context->topContext()) ) {
         DUContext* ctx = idType->declaration(m_context->topContext())->logicalInternalContext(m_context->topContext());
         if( ctx ) {

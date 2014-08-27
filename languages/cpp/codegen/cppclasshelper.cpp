@@ -184,7 +184,7 @@ QVariantHash CppTemplateNewClass::extraVariables()
             continue;
         }
         kDebug() << "Looking for includes for class" << base->identifier().toString();
-        KSharedPtr<Cpp::MissingIncludeCompletionItem> item = Cpp::includeDirectiveFromUrl(sourceUrl, IndexedDeclaration(base.data()));
+        QExplicitlySharedDataPointer<Cpp::MissingIncludeCompletionItem> item = Cpp::includeDirectiveFromUrl(sourceUrl, IndexedDeclaration(base.data()));
         if(item)
         {
             kDebug() << "Found one in" << item->m_canonicalPath;

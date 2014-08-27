@@ -16,6 +16,7 @@
 
 #include "implementationhelperitem.h"
 #include <ktexteditor/document.h>
+#include <KTextEditor/View>
 #include <klocalizedstring.h>
 #include <language/duchain/duchainutils.h>
 #include "context.h"
@@ -33,10 +34,10 @@
 
 namespace Cpp {
 
-ImplementationHelperItem::ImplementationHelperItem(HelperType type, KDevelop::DeclarationPointer decl, KSharedPtr<Cpp::CodeCompletionContext> context, int _inheritanceDepth, int _listOffset) : NormalDeclarationCompletionItem(decl, KSharedPtr<KDevelop::CodeCompletionContext>::staticCast(context), _inheritanceDepth, _listOffset), m_type(type) {
+ImplementationHelperItem::ImplementationHelperItem(HelperType type, KDevelop::DeclarationPointer decl, QExplicitlySharedDataPointer<Cpp::CodeCompletionContext> context, int _inheritanceDepth, int _listOffset) : NormalDeclarationCompletionItem(decl, context, _inheritanceDepth, _listOffset), m_type(type) {
 }
 
-#define RETURN_CACHED_ICON(name) {static QIcon icon(KIcon(name).pixmap(QSize(16, 16))); return icon;}
+#define RETURN_CACHED_ICON(name) {static QIcon icon(QIcon::fromTheme(name).pixmap(QSize(16, 16))); return icon;}
 
 QString ImplementationHelperItem::getOverrideName(const KDevelop::QualifiedIdentifier& forcedParentIdentifier) const {
   QString ret;
@@ -142,7 +143,7 @@ QString ImplementationHelperItem::signaturePart(bool includeDefaultParams) {
   return ret;
 }
 
-QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor position, QualifiedIdentifier forceParentScope) {
+QString ImplementationHelperItem::insertionText(KUrl url, KTextEditor::Cursor position, QualifiedIdentifier forceParentScope) {
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
   QString newText;
   if(!m_declaration)
@@ -389,7 +390,7 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
   return newText;
 }
 
-void ImplementationHelperItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+void ImplementationHelperItem::execute(KTextEditor::View* view, const KTextEditor::Range& word) {
 
   if(m_type == CreateSignalSlot) {
     //Step 1: Decide where to put the declaration
@@ -445,12 +446,12 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     }
 
     ICore::self()->languageController()->backgroundParser()->addDocument(doc);
-    executeSignalSlotCompletionItem( document, word, false, slotName, slotSignature );
+    executeSignalSlotCompletionItem( view, word, false, slotName, slotSignature );
   }else{
     //this code assumes (safely for now) that the "word" range is on one line
     KTextEditor::Range rangeToReplace(word.start().line(), 0, word.end().line(), word.end().column());
-    QString rangeToReplaceText = document->text(rangeToReplace);
-    QString replacementText = insertionText(document->url(), SimpleCursor(rangeToReplace.end()));
+    QString rangeToReplaceText = view->document()->text(rangeToReplace);
+    QString replacementText = insertionText(view->document()->url(), KTextEditor::Cursor(rangeToReplace.end()));
     //Don't replace anything before end of comment, open or closing bracket, or semicolon
     QRegExp replaceAfter = QRegExp("inline|[{}/;]");
     int noReplace = replaceAfter.lastIndexIn(rangeToReplaceText) + replaceAfter.matchedLength() - 1;
@@ -460,7 +461,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
       replacementText.prepend(" ");
     }
     DocumentChangeSet changes;
-    changes.addChange(DocumentChange(IndexedString(document->url()), rangeToReplace, document->text(rangeToReplace), replacementText));
+    changes.addChange(DocumentChange(IndexedString(view->document()->url()), rangeToReplace, view->document()->text(rangeToReplace), replacementText));
     changes.applyAllChanges();
    }
 }

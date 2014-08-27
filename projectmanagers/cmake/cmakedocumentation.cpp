@@ -24,11 +24,10 @@
 #include <QString>
 #include <QTextDocument>
 #include <QStringListModel>
+#include <QMimeDatabase>
 #include <interfaces/iproject.h>
 #include <KStandardDirs>
-#include <KIcon>
 #include <KGlobalSettings>
-#include <KMimeType>
 #include <documentation/standarddocumentationview.h>
 #include <language/duchain/declaration.h>
 #include <interfaces/iplugincontroller.h>
@@ -40,13 +39,13 @@
 #include "cmakedoc.h"
 
 K_PLUGIN_FACTORY(CMakeSupportDocFactory, registerPlugin<CMakeDocumentation>(); )
-K_EXPORT_PLUGIN(CMakeSupportDocFactory(KAboutData("kdevcmakedocumentation","kdevcmake", ki18n("CMake Documentation"), "1.0", ki18n("Support for CMake documentation"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(CMakeSupportDocFactory(KAboutData("kdevcmakedocumentation","kdevcmake", ki18n("CMake Documentation"), "1.0", ki18n("Support for CMake documentation"), KAboutData::License_GPL)))
 
 CMakeDocumentation* CMakeDoc::s_provider=0;
 KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider; }
 
 CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin( CMakeSupportDocFactory::componentData(), parent )
+    : KDevelop::IPlugin( "kdevcmakedocumentation", parent )
     , mCMakeCmd(KStandardDirs::findExe("cmake"))
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
@@ -101,7 +100,7 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
 {
     QString desc;
     if(args[t]) {
-        desc = Qt::escape(CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(args[t]) << id.simplified()));
+        desc = CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(args[t]) << id.simplified()).toHtmlEscaped();
         int firstLine = desc.indexOf('\n');
         firstLine = desc.indexOf('\n', firstLine+1);
         if(firstLine>=0)
@@ -113,12 +112,13 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
     return desc;
 }
 
-KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const KUrl& file) const
+QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const KUrl& file) const
 {
     initializeModel(); //make it not queued
-    if(!KMimeType::findByUrl(file)->is("text/x-cmake"))
-        return KSharedPtr<KDevelop::IDocumentation>();
-    
+    if (!QMimeDatabase().mimeTypeForUrl(file).inherits("text/x-cmake")) {
+        return QExplicitlySharedDataPointer<KDevelop::IDocumentation>();
+    }
+
     kDebug() << "seeking documentation for " << identifier;
     QString desc;
 
@@ -145,17 +145,17 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
     }
     
     if(desc.isEmpty())
-        return KSharedPtr<KDevelop::IDocumentation>();
+        return QExplicitlySharedDataPointer<KDevelop::IDocumentation>();
     else
-        return KSharedPtr<KDevelop::IDocumentation>(new CMakeDoc(identifier, desc));
+        return QExplicitlySharedDataPointer<KDevelop::IDocumentation>(new CMakeDoc(identifier, desc));
 }
 
-KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::documentationForDeclaration(KDevelop::Declaration* decl) const
+QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::documentationForDeclaration(KDevelop::Declaration* decl) const
 {
     return description(decl->identifier().toString(), decl->url().toUrl());
 }
 
-KSharedPtr<KDevelop::IDocumentation > CMakeDocumentation::documentationForIndex(const QModelIndex& idx) const
+QExplicitlySharedDataPointer<KDevelop::IDocumentation > CMakeDocumentation::documentationForIndex(const QModelIndex& idx) const
 {
     return description(idx.data().toString(), KUrl("CMakeLists.txt"));
 }
@@ -168,7 +168,7 @@ QAbstractListModel* CMakeDocumentation::indexModel() const
 
 QIcon CMakeDocumentation::icon() const
 {
-    return KIcon("cmake");
+    return QIcon::fromTheme("cmake");
 }
 
 QString CMakeDocumentation::name() const
@@ -176,12 +176,12 @@ QString CMakeDocumentation::name() const
     return "CMake";
 }
 
-KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::homePage() const
+QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::homePage() const
 {
     if(!m_typeForName.isEmpty())
         const_cast<CMakeDocumentation*>(this)->delayedInitialization();
 //     initializeModel();
-    return KSharedPtr<KDevelop::IDocumentation>(new CMakeHomeDocumentation);
+    return QExplicitlySharedDataPointer<KDevelop::IDocumentation>(new CMakeHomeDocumentation);
 }
 
 void CMakeDocumentation::initializeModel() const
@@ -201,3 +201,5 @@ QWidget* CMakeDoc::documentationWidget(KDevelop::DocumentationFindWidget* findWi
     view->setHtml("<html><body style='background:#fff'><code>"+description()+"</code></body></html>");
     return view;
 }
+
+#include "cmakedocumentation.moc"

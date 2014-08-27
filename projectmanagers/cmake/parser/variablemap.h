@@ -23,7 +23,7 @@
 
 #include <QHash>
 #include <QStringList>
-#include "cmakeexport.h"
+#include "cmakecommonexport.h"
 #include <QSet>
 #include <QStack>
 

@@ -27,6 +27,6 @@ kde4_add_unit_test(testkde4app kde4app.cpp)
 
 install( PROGRAMS kde4app.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES kde4app.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} )
-install( FILES kde4appui.rc  DESTINATION  ${DATA_INSTALL_DIR}/kde4app )
+install( FILES kde4appui.rc  DESTINATION  ${KXMLGUI_INSTALL_DIR}/kde4app )
 
 add_subdirectory(tests)

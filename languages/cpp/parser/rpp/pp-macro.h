@@ -26,8 +26,8 @@
 
 #include <QtCore/QStringList>
 #include <QVector>
-#include <cppparserexport.h>
-#include <language/duchain/indexedstring.h>
+#include "cpprppexport.h"
+#include <serialization/indexedstring.h>
 #include <language/duchain/appendedlist.h>
 
 #define FOREACH_CUSTOM(item, container, size) for(int a = 0, mustDo = 1; a < (int)size; ++a) if((mustDo = 1)) for(item(container[a]); mustDo; mustDo = 0)

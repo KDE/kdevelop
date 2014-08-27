@@ -20,7 +20,7 @@
 #ifndef CMAKEPARSERUTILS_H
 #define CMAKEPARSERUTILS_H
 
-#include "cmakeexport.h"
+#include "cmakecommonexport.h"
 
 #include <QList>
 #include <QString>

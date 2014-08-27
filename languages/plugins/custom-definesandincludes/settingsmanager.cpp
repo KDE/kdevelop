@@ -224,7 +224,7 @@ void SettingsManager::writeUserDefinedCompilers(const QVector< CompilerPointer >
         editableCompilers.append(compiler);
     }
 
-    KConfigGroup config = KGlobal::config()->group(ConfigConstants::compilersGroup);
+    KConfigGroup config = KSharedConfig::openConfig()->group(ConfigConstants::compilersGroup);
     config.deleteGroup();
     config.writeEntry("number", editableCompilers.count());
     int i = 0;
@@ -243,7 +243,7 @@ QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
 {
     QVector< CompilerPointer > compilers;
 
-    KConfigGroup config = KGlobal::config()->group(ConfigConstants::compilersGroup);
+    KConfigGroup config = KSharedConfig::openConfig()->group(ConfigConstants::compilersGroup);
     int count = config.readEntry("number", 0);
     for (int i = 0; i < count; i++) {
         KConfigGroup grp = config.group(QString::number(i));

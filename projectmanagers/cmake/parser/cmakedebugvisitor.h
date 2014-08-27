@@ -23,7 +23,7 @@
 
 #include "cmakeastvisitor.h"
 #include "cmakeast.h"
-#include "cmakeexport.h"
+#include "cmakecommonexport.h"
 
 class KDEVCMAKECOMMON_EXPORT CMakeAstDebugVisitor : public CMakeAstVisitor{
     public: 

@@ -16,7 +16,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <qtest_kde.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchaindumper.h>
 #include <language/codegen/coderepresentation.h>
@@ -34,10 +33,13 @@
 #include <interfaces/ilanguagecontroller.h>
 #include "cppjsontests.h"
 
+#include <QtTest/QTest>
+#include <QProcessEnvironment>
+
 using namespace KDevelop;
 using namespace Cpp;
 
-QTEST_KDEMAIN(TestCppFiles, GUI)
+QTEST_MAIN(TestCppFiles)
 
 ///Need to override visit(Declaration*) so that instantiated declarations
 ///Don't get tested with the data used by the uninstantiated declaration
@@ -100,4 +102,3 @@ void TestCppFiles::testFiles()
   QVERIFY(validator.testsPassed());
 }
 
-#include "test_cppfiles.moc"

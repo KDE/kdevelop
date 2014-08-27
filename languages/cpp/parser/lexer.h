@@ -24,7 +24,7 @@
 #include <cppparserexport.h>
 #include <QtCore/QString>
 #include <cstdlib>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <language/duchain/problem.h>
 

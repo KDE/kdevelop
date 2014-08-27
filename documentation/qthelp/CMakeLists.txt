@@ -1,5 +1,6 @@
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9045 )
-add_subdirectory(tests)
+include_directories(${Qt5Help_INCLUDE_DIRS})
+
 set(kdevqthelp_SRCS
     qthelpplugin.cpp
     qthelpproviderabstract.cpp
@@ -9,12 +10,13 @@ set(kdevqthelp_SRCS
     qthelp_config_shared.cpp
 )
 
-kde4_add_plugin(kdevqthelp ${kdevqthelp_SRCS})
+add_library(kdevqthelp MODULE ${kdevqthelp_SRCS})
 target_link_libraries(kdevqthelp
-    ${KDE4_KCMUTILS_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTHELP_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_DOCUMENTATION_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES})
+    ${KDE4_KCMUTILS_LIBS} KF5::KIOWidgets ${KDE4_KDEUI_LIBS} KF5::TextEditor Qt5::Help ${QT_QTWEBKIT_LIBRARY}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_DOCUMENTATION_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES}
+    KF5::KCMUtils )
 
-install(TARGETS kdevqthelp DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevqthelp DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 configure_file(kdevqthelp.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp.desktop DESTINATION ${SERVICES_INSTALL_DIR})
@@ -26,15 +28,19 @@ set(kdevqthelp_config_SRCS
     qthelp_config_shared.cpp
 )
 
-kde4_add_ui_files(kdevqthelp_config_SRCS
+qt5_wrap_ui(kdevqthelp_config_SRCS
     qthelpconfig.ui
     qthelpconfigeditdialog.ui
 )
 
-kde4_add_plugin( kdevqthelp_config ${kdevqthelp_config_SRCS} )
+add_library(kdevqthelp_config MODULE ${kdevqthelp_config_SRCS} )
 
-target_link_libraries( kdevqthelp_config ${KDE4_KUTILS_LIBS} ${KDE4_KIO_LIBS} ${QT_QTHELP_LIBRARY} ${KDE4_KNEWSTUFF3_LIBS})
+target_link_libraries( kdevqthelp_config ${KDE4_KUTILS_LIBS}
+${KDE4_KDEUI_LIBS} KF5::KIOWidgets Qt5::Help KF5::NewStuff KF5::KCMUtils)
 
-install( TARGETS kdevqthelp_config DESTINATION ${PLUGIN_INSTALL_DIR} )
-install( FILES kdevqthelp_config.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevelop-qthelp.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+install(TARGETS kdevqthelp_config DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
+configure_file(kdevqthelp_config.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp_config.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp_config.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kdevelop-qthelp.knsrc DESTINATION ${CONFIG_INSTALL_DIR})
+
+add_subdirectory(tests)

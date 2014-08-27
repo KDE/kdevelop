@@ -24,7 +24,7 @@
 #include "lexer.h"
 #include "memorypool.h"
 #include <language/duchain/problem.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/declaration.h>
 
 #include "ast.h"
@@ -46,12 +46,12 @@ ParseSession::~ParseSession()
   delete m_locationTable;
 }
 
-TranslationUnitAST * ParseSession::topAstNode(void)
+TranslationUnitAST * ParseSession::topAstNode()
 {
   return m_topAstNode;
 }
 
-void ParseSession::topAstNode(TranslationUnitAST * node)
+void ParseSession::setTopAstNode(TranslationUnitAST * node)
 {
   Q_ASSERT(!m_topAstNode);
 

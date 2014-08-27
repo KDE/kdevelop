@@ -5,14 +5,11 @@
 #include "{{ output_file_header }}"
 
 
-#include <qtest_kde.h>
-
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
 
-QTEST_KDEMAIN({{ name }}, NoGUI);
+QTEST_GUILESS_MAIN({{ name }});
 
 
 using namespace KDevelop;

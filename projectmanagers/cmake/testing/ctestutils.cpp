@@ -34,6 +34,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 #include <QFileInfo>
+#include <KDebug>
 
 using namespace KDevelop;
 

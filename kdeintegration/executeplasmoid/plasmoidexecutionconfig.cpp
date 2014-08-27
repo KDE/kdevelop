@@ -22,7 +22,6 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kicon.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -30,19 +29,20 @@
 #include <interfaces/iuicontroller.h>
 #include <project/projectmodel.h>
 #include <project/builderjob.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <util/kdevstringhandler.h>
 #include <util/executecompositejob.h>
 #include <KMessageBox>
 #include <KParts/MainWindow>
+#include <KConfigGroup>
 #include <QMenu>
 #include <QLineEdit>
 
 Q_DECLARE_METATYPE(KDevelop::IProject*);
 
-KIcon PlasmoidExecutionConfig::icon() const
+QIcon PlasmoidExecutionConfig::icon() const
 {
-    return KIcon("system-run");
+    return QIcon::fromTheme("system-run");
 }
 
 QStringList readProcess(QProcess* p)
@@ -81,11 +81,11 @@ PlasmoidExecutionConfig::PlasmoidExecutionConfig( QWidget* parent )
         themes->addItem(theme);
     }
     
-    addDependency->setIcon( KIcon("list-add") );
-    removeDependency->setIcon( KIcon("list-remove") );
-    moveDepUp->setIcon( KIcon("go-up") );
-    moveDepDown->setIcon( KIcon("go-down") );
-    browseProject->setIcon(KIcon("folder-document"));
+    addDependency->setIcon( QIcon::fromTheme("list-add") );
+    removeDependency->setIcon( QIcon::fromTheme("list-remove") );
+    moveDepUp->setIcon( QIcon::fromTheme("go-up") );
+    moveDepDown->setIcon( QIcon::fromTheme("go-down") );
+    browseProject->setIcon(QIcon::fromTheme("folder-document"));
     
     connect( addDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );
     connect( removeDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );
@@ -142,9 +142,9 @@ void PlasmoidExecutionConfig::loadFromConfiguration(const KConfigGroup& cfg, KDe
         QStringList deplist = dep.toStringList();
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
         KDevelop::ProjectBaseItem* pitem=model->itemFromIndex(model->pathToIndex(deplist));
-        KIcon icon;
+        QIcon icon;
         if(pitem)
-            icon=KIcon(pitem->iconName());
+            icon=QIcon(pitem->iconName());
         
         QListWidgetItem* item = new QListWidgetItem(icon, KDevelop::joinWithEscaping( deplist, '/', '\\' ), dependencies );
         item->setData( Qt::UserRole, dep );
@@ -276,9 +276,9 @@ QString PlasmoidExecutionConfigType::typeId()
     return "PlasmoidLauncherType";
 }
 
-KIcon PlasmoidExecutionConfigType::icon() const
+QIcon PlasmoidExecutionConfigType::icon() const
 {
-    return KIcon("plasma");
+    return QIcon::fromTheme("plasma");
 }
 
 bool canLaunchMetadataFile(const KUrl& url)
@@ -368,10 +368,10 @@ void PlasmoidExecutionConfig::depEdited(const QString& str)
 
 void PlasmoidExecutionConfig::addDep()
 {
-    KIcon icon;
+    QIcon icon;
     KDevelop::ProjectBaseItem* pitem = targetDependency->currentItem();
     if(pitem)
-        icon= KIcon(pitem->iconName());
+        icon= QIcon(pitem->iconName());
 
     QListWidgetItem* item = new QListWidgetItem(icon, targetDependency->text(), dependencies);
     item->setData( Qt::UserRole, targetDependency->itemPath() );

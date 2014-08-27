@@ -23,7 +23,7 @@
 
 #include <QString>
 
-#include "cmakeexport.h"
+#include "cmakecommonexport.h"
 
 class KDEVCMAKECOMMON_EXPORT CacheLine
 {

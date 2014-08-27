@@ -99,7 +99,7 @@ GenericName[zh_CN]=格式化器后端
 GenericName[zh_TW]=格式器後端介面
 
 ServiceTypes=KDevelop/Plugin
-X-KDE-Library=kdevcustomscript
+X-KDE-Library=kdevplatform/@KDEV_PLUGIN_VERSION@/kdevcustomscript
 X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDE-PluginInfo-Name=kdevcustomscript
 X-KDE-PluginInfo-Author=David Nolden

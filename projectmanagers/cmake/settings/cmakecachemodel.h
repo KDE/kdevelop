@@ -21,7 +21,7 @@
 #ifndef CMAKECACHEMODEL_H
 #define CMAKECACHEMODEL_H
 
-#include <cmakeexport.h>
+#include <cmakecommonexport.h>
 #include <QStandardItemModel>
 #include <QHash>
 #include <QSet>

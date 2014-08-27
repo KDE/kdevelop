@@ -22,7 +22,7 @@
 #include <pp-location.h>
 #include <QStringList>
 #include <kdebug.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include "chartools.h"
 
 using namespace rpp;
@@ -183,7 +183,7 @@ void LocationTable::dump() const
   qDebug() << "Location Table:";
   while (it.hasNext()) {
     it.next();
-    qDebug() << it.key() << " => " << it.value().castToSimpleCursor().textCursor();
+    qDebug() << it.key() << " => " << it.value().castToSimpleCursor();
   }
 }
 

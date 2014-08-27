@@ -71,7 +71,7 @@ QTEST_MAIN(TestExpressionParser)
 
 char* debugString( const QString& str ) {
   char* ret = new char[str.length()+1];
-  QByteArray b = str.toAscii();
+  QByteArray b = str.toLatin1();
   strcpy( ret, b.data() );
   return ret;
 }
@@ -301,8 +301,8 @@ void TestExpressionParser::testTemplates() {
 
     QVERIFY(result.allDeclarationsSize());
     AbstractType::Ptr t(result.type.abstractType());
-    QVERIFY(dynamic_cast<IdentifiedType*>(t.unsafeData()));
-    QCOMPARE(dynamic_cast<IdentifiedType*>(t.unsafeData())->declaration(0), defClassA);
+    QVERIFY(dynamic_cast<IdentifiedType*>(t.data()));
+    QCOMPARE(dynamic_cast<IdentifiedType*>(t.data())->declaration(0), defClassA);
   }
 
   {
@@ -313,8 +313,8 @@ void TestExpressionParser::testTemplates() {
 
     QVERIFY(result.allDeclarationsSize());
     AbstractType::Ptr t(result.type.abstractType());
-    QVERIFY(dynamic_cast<IdentifiedType*>(t.unsafeData()));
-    QCOMPARE(dynamic_cast<IdentifiedType*>(t.unsafeData())->declaration(0), defClassA);
+    QVERIFY(dynamic_cast<IdentifiedType*>(t.data()));
+    QCOMPARE(dynamic_cast<IdentifiedType*>(t.data())->declaration(0), defClassA);
   }
 
   release(top);
@@ -353,7 +353,7 @@ void TestExpressionParser::testArray() {
 
     QVERIFY(result.isValid());
     AbstractType::Ptr t(result.type.abstractType());
-    QVERIFY(dynamic_cast<KDevelop::IntegralType*>(t.unsafeData()));
+    QVERIFY(dynamic_cast<KDevelop::IntegralType*>(t.data()));
   }
 
   release(top);
@@ -431,7 +431,7 @@ void TestExpressionParser::testSmartPointer() {
   QVERIFY(top->localDeclarations()[0]->internalContext());
 
   AbstractType::Ptr t(top->localDeclarations()[3]->abstractType());
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.data());
   QVERIFY(idType);
   QCOMPARE(idType->declaration(0)->context(), KDevelop::DUContextPointer(top).data());
   QVERIFY(idType->declaration(0)->internalContext() != top->localDeclarations()[0]->internalContext());
@@ -519,8 +519,8 @@ void TestExpressionParser::testSimpleExpression() {
   Declaration* d = findDeclaration( testContext, QualifiedIdentifier("c") );
   QVERIFY(d);
   AbstractType::Ptr t(d->abstractType());
-  QVERIFY( dynamic_cast<IdentifiedType*>( t.unsafeData() ) );
-  QVERIFY( dynamic_cast<IdentifiedType*>( t.unsafeData() )->qualifiedIdentifier().toString() == "Cont" );
+  QVERIFY( dynamic_cast<IdentifiedType*>( t.data() ) );
+  QVERIFY( dynamic_cast<IdentifiedType*>( t.data() )->qualifiedIdentifier().toString() == "Cont" );
 
   kDebug(9007) << "test-Context:" << testContext;
   lock.unlock();
@@ -903,8 +903,8 @@ void TestExpressionParser::testCasts() {
   Declaration* d = findDeclaration( testContext, QualifiedIdentifier("c") );
   QVERIFY(d);
   AbstractType::Ptr t(d->abstractType());
-  QVERIFY( dynamic_cast<IdentifiedType*>( t.unsafeData() ) );
-  QVERIFY( dynamic_cast<IdentifiedType*>( t.unsafeData() )->qualifiedIdentifier().toString() == "Cont" );
+  QVERIFY( dynamic_cast<IdentifiedType*>( t.data() ) );
+  QVERIFY( dynamic_cast<IdentifiedType*>( t.data() )->qualifiedIdentifier().toString() == "Cont" );
 
   lock.unlock();
 
@@ -1483,4 +1483,3 @@ TopDUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump
   return top;
 }
 
-#include "test_expressionparser.moc"

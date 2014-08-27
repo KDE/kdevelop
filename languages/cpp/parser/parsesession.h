@@ -27,7 +27,7 @@
 #include <ksharedptr.h>
 #include "rpp/anchor.h"
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/interfaces/iastcontainer.h>
 #include <language/editor/rangeinrevision.h>
@@ -58,11 +58,11 @@ public:
   ~ParseSession();
 
   //Redefinitions from IAstContainer
-  typedef KSharedPtr<ParseSession> Ptr;
+  typedef QExplicitlySharedDataPointer<ParseSession> Ptr;
   typedef TranslationUnitAST TopAstNode;
 
   TopAstNode * topAstNode();
-  void topAstNode(TopAstNode * node);
+  void setTopAstNode(TopAstNode * node);
 
   ///Create a mapping between an AST node, and its DUChain Declaration
   void mapAstDuChain(AST *, KDevelop::DeclarationPointer);

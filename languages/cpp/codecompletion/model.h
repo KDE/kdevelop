@@ -26,7 +26,7 @@
 #include <language/codecompletion/codecompletionmodel.h>
 #include <ksharedptr.h>
 #include <language/duchain/duchainpointer.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/codecompletion/codecompletioncontext.h>
 
 namespace KDevelop {
@@ -63,7 +63,7 @@ class CodeCompletionModel : public KDevelop::CodeCompletionModel
     virtual bool shouldStartCompletion (KTextEditor::View*, const QString&, bool userInsertion, const KTextEditor::Cursor&);
     virtual KDevelop::CodeCompletionWorker* createCompletionWorker();
 
-    virtual void foundDeclarations(QList< KSharedPtr< KDevelop::CompletionTreeElement > > item, KSharedPtr< KDevelop::CodeCompletionContext > completionContext);
+    virtual void foundDeclarations(QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > > item, QExplicitlySharedDataPointer< KDevelop::CodeCompletionContext > completionContext);
 
   private slots:
     void parseJobFinished(KDevelop::ParseJob* job);

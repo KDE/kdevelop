@@ -18,36 +18,40 @@
  */
 
 #include "kdevelopsessions.h"
+#include <QtCore/QCollator>
+#include <QtCore/QStandardPaths>
+#include <QtCore/QDir>
+#include <KI18n/KLocalizedString>
 
 
-#include <KDebug>
+#include <QDebug>
+#include <QIcon>
+#include <QFile>
 #include <KDirWatch>
 #include <KStandardDirs>
 #include <KToolInvocation>
-#include <KIcon>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KUrl>
 #include <KStringHandler>
-#include <QFile>
 
 bool kdevelopsessions_runner_compare_sessions(const Session &s1, const Session &s2) {
-    return KStringHandler::naturalCompare(s1.name, s2.name) == -1;
+    QCollator c;
+    return c.compare(s1.name, s2.name) < 0;
 }
 
 KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     : Plasma::AbstractRunner(parent, args)
 {
-    kWarning() << "INIT KDEV";
     setObjectName(QLatin1String("KDevelop Sessions"));
     setIgnoredTypes(Plasma::RunnerContext::File | Plasma::RunnerContext::Directory | Plasma::RunnerContext::NetworkLocation);
-    m_icon = KIcon(QLatin1String("kdevelop"));
+    m_icon = QIcon::fromTheme("kdevelop");
 
     loadSessions();
 
     // listen for changes to the list of kdevelop sessions
     KDirWatch *historyWatch = new KDirWatch(this);
-    const QStringList sessiondirs = KGlobal::dirs()->findDirs("data", QLatin1String("kdevelop/sessions/"));
+    const QStringList sessiondirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QLatin1String("kdevelop/sessions"));
     foreach (const QString &dir, sessiondirs) {
         historyWatch->addDir(dir);
     }
@@ -66,15 +70,31 @@ KDevelopSessions::~KDevelopSessions()
 {
 }
 
+QStringList findSessions()
+{
+    QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevelop/sessions", QStandardPaths::LocateDirectory);
+    QStringList sessionrcs;
+    Q_FOREACH(const QString& dir, sessionDirs) {
+        QDir d(dir);
+        Q_FOREACH(const QString& sessionDir, d.entryList(QDir::Dirs)) {
+            QDir sd(d.absoluteFilePath(sessionDir));
+            QString path(sd.filePath("sessionrc"));
+            if(QFile::exists(path)) {
+                sessionrcs += path;
+            }
+        }
+    }
+    return sessionrcs;
+}
+
 void KDevelopSessions::loadSessions()
 {
     m_sessions.clear();
     // Switch kdevelop session: -u
     // Should we add a match for this option or would that clutter the matches too much?
-    const QStringList list = KGlobal::dirs()->findAllResources( "data", QLatin1String("kdevelop/sessions/*/sessionrc"), KStandardDirs::Recursive );
+    const QStringList list = findSessions();
     foreach (const QString &sessionfile, list)
     {
-        kWarning() << "NEW SESSION:" << sessionfile;
         Session session;
         session.id = sessionfile.section('/', -2, -2);
         KConfig cfg(sessionfile, KConfig::SimpleConfig);
@@ -150,7 +170,7 @@ void KDevelopSessions::run(const Plasma::RunnerContext &context, const Plasma::Q
     Q_UNUSED(context)
     QString sessionId = match.data().toString();
     if (sessionId.isEmpty()) {
-        kWarning() << "No KDevelop session id in match!";
+        qWarning() << "No KDevelop session id in match!";
         return;
     }
     kDebug() << "Open KDevelop session" << sessionId;

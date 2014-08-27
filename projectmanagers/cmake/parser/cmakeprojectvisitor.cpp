@@ -25,7 +25,6 @@
 #include "cmakeduchaintypes.h"
 #include "cmakeparserutils.h"
 
-#include <language/editor/simplerange.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
@@ -1689,7 +1688,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
 
 int CMakeProjectVisitor::visit(const MessageAst *msg)
 {
-    s_msgcallback(msg->message().join(QString()));
+    s_msgcallback(msg->content().at(msg->line()).filePath+":"+QString::number(msg->line())+" "+msg->message().join(QString()));
     return 1;
 }
 
@@ -2371,7 +2370,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
         if(element->isDeprecated()) {
             kDebug(9032) << "Warning: Using the function: " << func.name << " which is deprecated by cmake.";
             DUChainWriteLocker lock(DUChain::lock());
-            KSharedPtr<Problem> p(new Problem);
+            Problem::Ptr p(new Problem);
             p->setDescription(i18n("%1 is a deprecated command and should not be used", func.name));
             p->setRange(it->nameRange());
             p->setFinalLocation(DocumentRange(url, it->nameRange().castToSimpleRange()));
@@ -2389,7 +2388,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
         delete element;
         
         if(line>fc.count()) {
-            KSharedPtr<Problem> p(new Problem);
+            Problem::Ptr p(new Problem);
             p->setDescription(i18n("Unfinished function. "));
             p->setRange(it->nameRange());
             p->setFinalLocation(DocumentRange(url, KDevelop::RangeInRevision(fc.first().range().start, fc.last().range().end).castToSimpleRange()));

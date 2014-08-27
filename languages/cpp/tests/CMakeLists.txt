@@ -1,5 +1,3 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 include_directories(
     ${KDevelop_SOURCE_DIR}/languages/cpp
     ${KDevelop_BINARY_DIR}/languages/cpp
@@ -9,9 +7,6 @@ set(setuphelpers_SRCS
 
   ../setuphelpers.cpp
 )
-if(MSVC)
-    list(APPEND setuphelpers_SRCS ../setuphelpers_msvc.cpp)
-endif(MSVC)
 
 set(test_common_SRCS
 
@@ -32,55 +27,36 @@ set(test_common_SRCS
   ${setuphelpers_SRCS}
 )
 
-########### next target ###############
-
-set(buddiestest_SRCS
-  test_buddies.cpp
-)
-
-kde4_add_unit_test(buddiestest ${buddiestest_SRCS})
-target_link_libraries(buddiestest
-    ${QT_QTTEST_LIBRARY}
-    ${QT_QTCORE_LIBRARY}
+ecm_add_test(test_buddies.cpp TEST_NAME buddiestest
+LINK_LIBRARIES
+    Qt5::Test
+    Qt5::Widgets
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_TESTS_LIBRARIES}
     ${KDEVPLATFORM_SUBLIME_LIBRARIES}
 )
 
-########### next target ###############
-
-# Also check that kdevplatform is built with JSON support
-# see: https://bugs.kde.org/show_bug.cgi?id=327095
-if(QJSON_FOUND AND KDEVPLATFORM_JSONTESTS_LIBRARIES)
-  set(cppfilestest_SRCS test_cppfiles.cpp)
-  kde4_add_unit_test(cppfilestest ${cppfilestest_SRCS})
-  configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
-  target_link_libraries(cppfilestest
-      ${QT_QTTEST_LIBRARY}
-      ${QT_QTCORE_LIBRARY}
-      ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-      ${KDEVPLATFORM_TESTS_LIBRARIES}
-      ${KDEVPLATFORM_JSONTESTS_LIBRARIES}
-      kdev4cppduchain
-  )
-endif()
-
-########### next target ###############
-
-set(specialcompletiontest_SRCS
-  test_specialcompletion.cpp
-
-  ${test_common_SRCS}
+configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
+ecm_add_test(test_cppfiles.cpp
+TEST_NAME cppfilestest
+LINK_LIBRARIES
+    Qt5::Test
+    Qt5::Core
+    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    ${KDEVPLATFORM_JSONTESTS_LIBRARIES}
+    kdevcppduchain
+    kdevcppparser
 )
 
-kde4_add_unit_test(cppspecialcompletion ${specialcompletiontest_SRCS})
-target_link_libraries(cppspecialcompletion
-    kdev4cppduchain
-    kdev4cpprpp
-    kdev4cppparser
-    ${QT_QTTEST_LIBRARY}
-    ${QT_QTCORE_LIBRARY}
+ecm_add_test(test_specialcompletion.cpp ${test_common_SRCS} TEST_NAME cppspecialcompletion
+LINK_LIBRARIES
+    kdevcppduchain
+    kdevcpprpp
+    kdevcppparser
+    Qt5::Test
+    Qt5::Core
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_TESTS_LIBRARIES}
@@ -96,26 +72,25 @@ set(cppassistantstest_SRCS
   ../codegen/adaptsignatureaction.cpp
 )
 
-kde4_add_unit_test(cppassistantstest ${cppassistantstest_SRCS})
-target_link_libraries(cppassistantstest ${QT_QTTEST_LIBRARY}
-    kdev4cppduchain
-    kdev4cpprpp
-    kdev4cppparser
+ecm_add_test(${cppassistantstest_SRCS} TEST_NAME cppassistantstest
+LINK_LIBRARIES
+    Qt5::Test
+    kdevcppduchain
+    kdevcpprpp
+    kdevcppparser
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDE4_THREADWEAVER_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+
+    KF5::ThreadWeaver
+    KF5::TextEditor
 )
 
 add_definitions(-DTEST_COMPLETION)
 
 set(cppcodecompletiontest_SRCS
-  test_cppcodecompletion.cpp
-
-  ${test_common_SRCS}
+  test_cppcodecompletion.cpp ${test_common_SRCS}
 )
 
 set(cppcodegentest_SRCS
@@ -130,33 +105,36 @@ set(cppcodegentest_SRCS
 
 add_definitions(-DBUILD_TESTS)
 
-kde4_add_unit_test(cppcodecompletiontest ${cppcodecompletiontest_SRCS})
-target_link_libraries(cppcodecompletiontest ${QT_QTTEST_LIBRARY}
-    kdev4cppduchain
-    kdev4cpprpp
-    kdev4cppparser
+ecm_add_test(${cppcodecompletiontest_SRCS} TEST_NAME cppcodecompletiontest
+TEST_NAME cppcodecompletiontest
+LINK_LIBRARIES
+    Qt5::Test
+    kdevcppduchain
+    kdevcpprpp
+    kdevcppparser
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDE4_THREADWEAVER_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+
+    KF5::ThreadWeaver
+    KF5::TextEditor
 )
 
-kde4_add_unit_test(cppcodegentest ${cppcodegentest_SRCS})
-target_link_libraries(cppcodegentest
-    kdev4cppduchain
-    kdev4cpprpp
-    kdev4cppparser
-    ${QT_QTTEST_LIBRARY}
-    ${QT_QTCORE_LIBRARY}
+ecm_add_test(${cppcodegentest_SRCS} TEST_NAME cppcodegentest
+LINK_LIBRARIES
+    kdevcppduchain
+    kdevcpprpp
+    kdevcppparser
+    Qt5::Test
+    Qt5::Core
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_TESTS_LIBRARIES}
 )
 
-kde4_add_executable( cpp-parser cpp-parser.cpp )
+add_executable( cpp-parser cpp-parser.cpp )
+ecm_mark_as_test(cpp-parser)
 target_link_libraries(cpp-parser
-${QT_QTCORE_LIBRARY} ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-kdev4cppparser kdev4cppduchain kdev4cpprpp)
+    Qt5::Core ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    kdevcppparser kdevcppduchain kdevcpprpp KF5::KDELibs4Support)

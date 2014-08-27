@@ -23,6 +23,7 @@
 #include <QLayout>
 
 #include <KDebug>
+#include <KLocalizedString>
 #include <KLineEdit>
 #include <KAction>
 
@@ -138,5 +139,4 @@ void ConfigWidget::clear()
     ui->buildDir->setText("");
 }
 
-#include "configwidget.moc"
 

@@ -25,6 +25,7 @@
 #include <QEvent>
 #include <KDebug>
 #include <KUrlRequester>
+#include <QtCore/QUrl>
 
 CMakeCacheDelegate::CMakeCacheDelegate(QObject * parent)
     : QItemDelegate(parent)
@@ -86,7 +87,7 @@ void CMakeCacheDelegate::setEditorData(QWidget * editor, const QModelIndex & ind
         else if(type=="PATH" || type=="FILEPATH")
         {
             KUrlRequester *url=qobject_cast<KUrlRequester*>(editor);
-            url->setUrl(KUrl(value));
+            url->setUrl(QUrl(value));
         }
         else
         {
@@ -112,7 +113,7 @@ void CMakeCacheDelegate::setModelData(QWidget * editor, QAbstractItemModel * mod
         else if(type=="PATH" || type=="FILEPATH")
         {
             KUrlRequester *urlreq=qobject_cast<KUrlRequester*>(editor);
-            value = urlreq->url().toLocalFile(KUrl::RemoveTrailingSlash); //CMake usually don't put it
+            value = urlreq->url().url(QUrl::StripTrailingSlash); //CMake usually don't put it
         }
         else
         {
@@ -188,4 +189,3 @@ void CMakeCacheDelegate::closingEditor(QWidget * editor, QAbstractItemDelegate::
 //     QItemDelegate::updateEditorGeometry( editor, option, index );
 // }
 
-#include "cmakecachedelegate.moc"

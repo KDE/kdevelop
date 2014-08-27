@@ -1,1 +1,1 @@
-macro_optional_add_subdirectory(custom-definesandincludes)
+ecm_optional_add_subdirectory(custom-definesandincludes)

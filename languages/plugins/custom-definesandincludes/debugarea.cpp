@@ -20,13 +20,8 @@
  */
 
 #include "debugarea.h"
+#include <QLoggingCategory>
 
 namespace KDevelop {
-
-int definesAndIncludesDebugArea()
-{
-    static int area = KDebug::registerArea("kdevdefinesandincludes");
-    return area;
-}
 
 }

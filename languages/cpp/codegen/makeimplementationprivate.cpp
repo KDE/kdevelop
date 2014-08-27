@@ -320,7 +320,7 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
             
             // Create a "new" version of the previous constructor so that the private one can be called
             //ParseSession::Ptr astPtr = astContainer(constructor->internalFunctionContext()->url());
-            //documentChangeSet().addChange(DocumentChange(constructor->internalFunctionContext()->url(), SimpleRange(constructor->internalFunctionContext()->range().start, 0),
+            //documentChangeSet().addChange(DocumentChange(constructor->internalFunctionContext()->url(), KTextEditor::Range(constructor->internalFunctionContext()->range().start, 0),
                                                         // QString(), constructor->toString() + "\n{\n}\n\n"));
         }
     }
@@ -353,7 +353,7 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
                 //Send the parameters this constructor takes into the new one
             }
             CppEditorIntegrator integrator(astPtr.data());
-            SimpleCursor insertionPoint;
+            KTextEditor::Cursor insertionPoint;
             
             //Check for constructors without initializer list
             if(!construct->constructor_initializers)
@@ -367,13 +367,13 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
               insertionPoint = integrator.findPosition(construct->constructor_initializers->colon);
             insertedText += " " + m_privatePointerName + "(" + insertMemoryAllocation(privateStruct) + ") ";
             
-            DocumentChange constructorChange(constructor->url(), SimpleRange(insertionPoint, 0), QString(), insertedText);
+            DocumentChange constructorChange(constructor->url(), KTextEditor::Range(insertionPoint, 0), QString(), insertedText);
             documentChangeSet().addChange(constructorChange);
             
             //Remove the old initializers
             if(construct->constructor_initializers && construct->constructor_initializers->member_initializers->count())
             {
-                SimpleRange oldInitializers (integrator.findRange(construct->constructor_initializers->member_initializers->toFront()->element->start_token,
+                KTextEditor::Range oldInitializers (integrator.findRange(construct->constructor_initializers->member_initializers->toFront()->element->start_token,
                                                                   construct->constructor_initializers->member_initializers->toBack()->element->end_token));
                 DocumentChange initializersChange(constructor->url(), oldInitializers, QString(), QString());
                 initializersChange.m_ignoreOldText = true;
@@ -428,10 +428,10 @@ void MakeImplementationPrivate::updateDestructor()
     else
     {
         DUContext * internal = destructor->logicalInternalContext(destructor->topContext());
-        SimpleCursor inside(internal->range().end);
+        KTextEditor::Cursor inside(internal->range().end);
         if(inside.column > 0)
             inside.column = inside.column - 1;
-        DocumentChange destructorChange(internal->url(), SimpleRange(inside, 0),
+        DocumentChange destructorChange(internal->url(), KTextEditor::Range(inside, 0),
                                         QString(), "delete this->" + m_privatePointerName + ";\n");
     
         documentChangeSet().addChange(destructorChange);
@@ -447,17 +447,17 @@ void MakeImplementationPrivate::updateAllUses(UseList & allUses)
         //! @todo check properly if the pointer is being hidden, and add this-> only if necessary
         QString accessString = it.key()->kind() == Declaration::Instance ? m_privatePointerName + "->" : m_structureName + "::";
         
-        for(QMap<IndexedString, QList<SimpleRange> >::iterator mapIt = it->begin();
+        for(QMap<IndexedString, QList<KTextEditor::Range> >::iterator mapIt = it->begin();
             mapIt != it->end(); ++mapIt)
         {
             kDebug() << "In file: " << mapIt.key().str();
             //If there is a temporary of this file, then ignore this file, and update the temporary uses
             if(documentChangeSet().tempNameForFile(mapIt.key()) == mapIt.key())
-                foreach(SimpleRange range, *mapIt)
+                foreach(KTextEditor::Range range, *mapIt)
                 {
                     CodeRepresentation::Ptr rangeRepresentation = representationFor(mapIt.key());
-                    QString use = rangeRepresentation->rangeText(range.textRange());
-                    kDebug() << "Found use: " << use << "at: " << range.textRange();
+                    QString use = rangeRepresentation->rangeText(range);
+                    kDebug() << "Found use: " << use << "at: " << range;
                     DocumentChange useChange(mapIt.key(), range, use, accessString + use);
                     
                     Q_ASSERT(documentChangeSet().addChange(useChange));
@@ -486,8 +486,8 @@ void MakeImplementationPrivate::addDeclarationsToPrivate(CppNewClass & classGene
         AST * node = ast->astNodeFromDeclaration(decl);
         if(node)
         {
-            SimpleRange declarationRange = integrator.findRange(node).castToSimpleRange();
-            kDebug() << "Found AST node for declaration: " << decl->toString() << ". With range: " << declarationRange.textRange();
+            KTextEditor::Range declarationRange = integrator.findRange(node).castToSimpleRange();
+            kDebug() << "Found AST node for declaration: " << decl->toString() << ". With range: " << declarationRange;
             
             DocumentChange removeDeclarations(decl->url(), declarationRange, decl->toString(), QString());
             //Verifying the old text might cause conflicts with variables defined after structure declarations

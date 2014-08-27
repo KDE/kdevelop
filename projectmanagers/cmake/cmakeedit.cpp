@@ -52,8 +52,7 @@ void eatLeadingWhitespace(KTextEditor::Document* doc, KTextEditor::Range& eater,
     int lastNewLinePos = text.lastIndexOf('\n', pos - 1);
     int newStartCol = lastNewLinePos == -1 ? eater.start().column() + pos :
     pos - lastNewLinePos - 1;
-    eater.start().setLine(newStartLine);
-    eater.start().setColumn(newStartCol);
+    eater.setStart(KTextEditor::Cursor(newStartLine, newStartCol));
 }
 
 KTextEditor::Range rangeForText(KTextEditor::Document* doc, const KTextEditor::Range& r, const QString& name)
@@ -88,13 +87,13 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
     bool ret=false;
     KTextEditor::Range rx;
     if(!add)
-        rx=rangeForText(doc, r.castToSimpleRange().textRange(), name);
+        rx=rangeForText(doc, r.castToSimpleRange(), name);
     
     if(!add && rx.isValid())
     {
         if(replace.isEmpty())
         {
-            eatLeadingWhitespace(doc, rx, r.castToSimpleRange().textRange());
+            eatLeadingWhitespace(doc, rx, r.castToSimpleRange());
             doc->removeText(rx);
         }
         else
@@ -123,7 +122,7 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
         
         if(add && decls.isEmpty())
         {
-            doc->insertText(r.castToSimpleRange().textRange().start(), ' '+name);
+            doc->insertText(r.castToSimpleRange().start(), ' '+name);
             ret=true;
         }
         else foreach(Declaration* d, decls)
@@ -227,14 +226,14 @@ bool changesWidgetRenameFolder(const CMakeFolderItem *folder, const KUrl &newUrl
     QString lists = folder->descriptor().filePath;
     widget->addDocuments(IndexedString(lists));
     QString relative(relativeToLists(lists, newUrl));
-    KTextEditor::Range range = folder->descriptor().argRange().castToSimpleRange().textRange();
+    KTextEditor::Range range = folder->descriptor().argRange().castToSimpleRange();
     return widget->document()->replaceText(range, relative);
 }
 
 bool changesWidgetRemoveCMakeFolder(const CMakeFolderItem *folder, ApplyChangesWidget *widget)
 {
     widget->addDocuments(IndexedString(folder->descriptor().filePath));
-    KTextEditor::Range range = folder->descriptor().range().castToSimpleRange().textRange();
+    KTextEditor::Range range = folder->descriptor().range().castToSimpleRange();
     return widget->document()->removeText(range);
 }
 

@@ -31,7 +31,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include "noprojectcustomincludepaths.h"
 
@@ -102,7 +102,7 @@ Path::List NoProjectIncludePathsManager::includes(const QString& path)
     return ret;
 }
 
-bool NoProjectIncludePathsManager::writeIncludePaths(const QString& storageDirectory, const Path::List& includePaths)
+bool NoProjectIncludePathsManager::writeIncludePaths(const QString& storageDirectory, const QStringList& includePaths)
 {
     QDir dir(storageDirectory);
     QFileInfo customIncludePaths(dir, includePathsFile);
@@ -110,7 +110,7 @@ bool NoProjectIncludePathsManager::writeIncludePaths(const QString& storageDirec
     if (f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
         QTextStream out(&f);
         for (const auto& customPath : includePaths) {
-            out << customPath.path() << endl;
+            out << customPath << endl;
         }
         if (includePaths.isEmpty()) {
             removeSettings(storageDirectory);
@@ -134,7 +134,7 @@ void NoProjectIncludePathsManager::openConfigurationDialog(const QString& path)
     cip.setCustomIncludePaths(pathListToStringList(paths));
 
     if (cip.exec() == QDialog::Accepted) {
-        if (!writeIncludePaths(cip.storageDirectory(), KDevelop::toPathList(cip.customIncludePaths()))) {
+        if (!writeIncludePaths(cip.storageDirectory(), cip.customIncludePaths())) {
             kWarning() << i18n("Failed to save custom include paths in directory: %1", cip.storageDirectory());
         }
         KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument(KDevelop::IndexedString(path));

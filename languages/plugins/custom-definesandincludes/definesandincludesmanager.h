@@ -29,10 +29,8 @@
 #include <interfaces/iplugin.h>
 
 #include "idefinesandincludesmanager.h"
-
+#include "noprojectincludesanddefines/noprojectincludepathsmanager.h"
 #include "settingsmanager.h"
-
-class NoProjectIncludePathsManager;
 
 namespace KDevelop
 {
@@ -68,7 +66,7 @@ public :
     virtual bool unregisterBackgroundProvider(BackgroundProvider* provider) override;
 
     // NOTE: Part of a fix for build failures on <GCC-4.7
-    virtual ~DefinesAndIncludesManager() noexcept;
+    virtual ~DefinesAndIncludesManager() Q_DECL_NOEXCEPT;
 
 private:
     QVector<Provider*> m_providers;

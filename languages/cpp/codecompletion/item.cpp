@@ -41,6 +41,7 @@
 #include <language/codecompletion/codecompletionhelper.h>
 #include "context.h"
 #include <ktexteditor/codecompletioninterface.h>
+#include <ktexteditor/document.h>
 #include <ktexteditor/movingrange.h>
 #include <ktexteditor/movinginterface.h>
 #include <memory>
@@ -79,7 +80,7 @@ namespace Cpp {
 
 AbstractType::Ptr applyPointerConversions(AbstractType::Ptr type, int pointerConversions, TopDUContext *top)
 {
-  if(pointerConversions == 0 || type.isNull())
+  if(pointerConversions == 0 || type)
     return type;
 
   if(pointerConversions > 0) {
@@ -131,7 +132,7 @@ int getMatchQuality(CodeCompletionContext *context, const Declaration* decl, Top
   return bestQuality;
 }
 
-void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTextEditor::Range& enteredWord,
+void executeSignalSlotCompletionItem( KTextEditor::View* view, const KTextEditor::Range& enteredWord,
                                       bool isSignal, const QString& name, const QString& signature )
 {
   QString newText;
@@ -143,14 +144,14 @@ void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTe
   // NOTE: we do not scan for Q_SIGNAL or Q_SLOT, as these words (with "Q_" in beginning)
   // also match ones without "Q_"; thus we keep the user's preference of typing "Q_" or not.
   {
-    QString prefixText = linePrefix( document, word );
+    QString prefixText = linePrefix( view->document(), word );
     // We match SIGNAL or SLOT, followed by spaces, then (maybe) an opening bracket and spaces, then EOL.
     // Thus we ensure that cursor is positioned like "SIGNAL( <here>", not "SIGNAL( something <here>".
     // That is, we match only those SIGNAL/SLOT statements, for which we shall suggest a complete method signature.
     QRegExp signalSlotRegExp( "(SIGNAL|SLOT)\\s*(\\(\\s*)$" );
     int signalSlotAt = signalSlotRegExp.lastIndexIn( prefixText );
     if( signalSlotAt >= 0 ) {
-      word.start().setColumn( signalSlotAt );
+      word.setStart(KTextEditor::Cursor(word.start().line(), signalSlotAt));
     }
   }
 
@@ -174,14 +175,13 @@ void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTe
   // skip all characters when "nesting > 0" (they are arguments) and stop when "nesting < 0"
   // (i. e., when we encounter connect()'s closing bracket).
   {
-    QString suffixText = lineSuffixAndWord( document, word );
+    QString suffixText = lineSuffixAndWord( view->document(), word );
     int nesting = 0, position = 0;
     for( ; position < suffixText.size(); ++position ) {
       QChar c = suffixText.at( position );
-      char ascii = c.toAscii();
       bool isDelimiter = false;
 
-      switch( ascii ) {
+      switch( c.unicode() ) {
       case '(' : ++nesting; break;
       case ')' : --nesting; break;
       case ',' :
@@ -207,17 +207,17 @@ void executeSignalSlotCompletionItem( KTextEditor::Document* document, const KTe
     // NOTE: a word can span multiple lines. As the suffix text is by definition at the last line of word,
     // the found char is at the last line of the range.
     // Now translate position to column, but using distance from position to suffix text end (rather than to its beginning).
-    int lastLineLength = document->lineLength( word.end().line() );
+    int lastLineLength = view->document()->lineLength( word.end().line() );
     int distanceToTextEnd = suffixText.length() - position;
     int characterColumn = lastLineLength - distanceToTextEnd;
-    word.end().setColumn( characterColumn );
+    word.setEnd(KTextEditor::Cursor(word.end().line(), characterColumn ));
   }
 
-  document->replaceText( word, newText );
+  view->document()->replaceText( word, newText );
   return;
 }
 
-void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& _word) {
+void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& _word) {
   if( completionContext() && completionContext()->depth() != 0 )
     return; //Do not replace any text when it is an argument-hint
 
@@ -228,7 +228,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       kWarning() << "Signal/slot completion declaration is not a QtFunctionDeclaration";
       return;
     }
-    executeSignalSlotCompletionItem( document, _word, classFun->isSignal(),
+    executeSignalSlotCompletionItem( view, _word, classFun->isSignal(),
                                      classFun->identifier().toString(), classFun->normalizedSignature().str() );
     return;
   }
@@ -260,13 +260,14 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   // Text that will be removed in a separate editing step (so the user can undo it)
   QScopedPointer<KTextEditor::MovingRange> removeInSecondStep;
   
-  KTextEditor::Cursor cursor = document->activeView()->cursorPosition();
+  KTextEditor::Cursor cursor = view->cursorPosition();
+  KTextEditor::Document* document = view->document();
   if(cursor != word.end())
   {
     KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(document);
     Q_ASSERT(moving);
     removeInSecondStep.reset(moving->newMovingRange(KTextEditor::Range(cursor, word.end()), KTextEditor::MovingRange::DoNotExpand));
-    word.end() = cursor;
+    word.setEnd(cursor);
   }
   
   KTextEditor::Range nextToken = KTextEditor::Range(_word.end(), KTextEditor::Cursor(_word.end().line(), _word.end().column() + 2));
@@ -288,7 +289,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       lock.unlock();
       document->insertText( end, "<>" );
       end.setColumn(end.column() + 2);
-      document->activeView()->setCursorPosition( end - KTextEditor::Cursor(0, 1) );
+      view->setCursorPosition( end - KTextEditor::Cursor(0, 1) );
       lock.lock();
     }
     
@@ -317,7 +318,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
         KTextEditor::Range removeRange = removeInSecondStep->toRange();
         insertionPosition += removeRange.end() - removeRange.start();
       }
-      insertFunctionParenText(document, insertionPosition, m_declaration, jumpForbidden);
+      insertFunctionParenText(view, insertionPosition, m_declaration, jumpForbidden);
     }
     
     if (removeInSecondStep) {
@@ -338,11 +339,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
     if(!removeRange.isEmpty() && removeRange.end() > end && removeRange.end().line() == end.line() && removeRange.end().column() <= document->lineLength(removeRange.end().line()))
     {
       // We stop the editing sequence, which was initiated by kate, so the user can manually undo the removal
-      bool wasEditing = document->endEditing();
-      if(wasEditing)
-        document->startEditing();
-      else
-        kWarning() << "Was not editing";
+      // -- I removed this feature, it's unclear how/if it works with the new transactions and not worth porting
       document->removeText(removeRange);
     }
   }
@@ -493,7 +490,7 @@ KDevelop::QualifiedIdentifier NormalDeclarationCompletionItem::stripPrefix() con
     if(completionContext()->memberAccessContainer().allDeclarations.size())
       if( Declaration * const decl = completionContext()->memberAccessContainer().allDeclarations[0].getDeclaration(top) ) {
         AbstractType::Ptr t = decl->abstractType();
-        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
+        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.data());
         if(idType)
           return idType->qualifiedIdentifier();
       }
@@ -742,7 +739,7 @@ void NormalDeclarationCompletionItem::needCachedArgumentList() const
 {
   if(!m_cachedArgumentList)
   {
-    m_cachedArgumentList = KSharedPtr<CachedArgumentList>(new CachedArgumentList);
+    m_cachedArgumentList = QExplicitlySharedDataPointer<CachedArgumentList>(new CachedArgumentList);
     
     if(!m_declaration)
       return;
@@ -766,11 +763,13 @@ bool NormalDeclarationCompletionItem::createsExpandingWidget() const
   return true;
 }
 
-KSharedPtr<CodeCompletionContext> NormalDeclarationCompletionItem::completionContext() const {
-  return KSharedPtr<CodeCompletionContext>::staticCast(m_completionContext);
+QExplicitlySharedDataPointer<CodeCompletionContext> NormalDeclarationCompletionItem::completionContext() const {
+  return CodeCompletionContext::Ptr(static_cast<CodeCompletionContext*>(m_completionContext.data()));
 }
 
-void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& _word) {
+void IncludeFileCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& _word)
+{
+  KTextEditor::Document* document = view->document();
 
   KTextEditor::Range word(_word);
 
@@ -787,7 +786,7 @@ void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const K
        newText += '>';
     }
 
-    word.end().setColumn( document->lineLength(word.end().line()) );
+    word.setEnd(KTextEditor::Cursor(word.end().line(), document->lineLength(word.end().line()) ));
   }
 
   document->replaceText(word, newText);
@@ -801,9 +800,9 @@ QList<KDevelop::IndexedType> TypeConversionCompletionItem::type() const {
   return QList<KDevelop::IndexedType>() << m_type;
 }
 
-void TypeConversionCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+void TypeConversionCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& word) {
   if(argumentHintDepth() == 0)
-    document->replaceText( word, m_text );
+    view->document()->replaceText( word, m_text );
 }
 
 QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* /*model*/) const
@@ -829,10 +828,10 @@ int TypeConversionCompletionItem::argumentHintDepth() const {
   return m_argumentHintDepth;
 }
 
-TypeConversionCompletionItem::TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth, KSharedPtr<Cpp::CodeCompletionContext> _completionContext) : m_text(text), m_type(type), m_argumentHintDepth(argumentHintDepth), completionContext(_completionContext) {
+TypeConversionCompletionItem::TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth, QExplicitlySharedDataPointer<Cpp::CodeCompletionContext> _completionContext) : m_text(text), m_type(type), m_argumentHintDepth(argumentHintDepth), completionContext(_completionContext) {
 }
 
-MoreArgumentHintsCompletionItem::MoreArgumentHintsCompletionItem(KSharedPtr< KDevelop::CodeCompletionContext > context, QString text, uint oldNumber) : NormalDeclarationCompletionItem(DeclarationPointer(), context) {
+MoreArgumentHintsCompletionItem::MoreArgumentHintsCompletionItem(KDevelop::CodeCompletionContext::Ptr context, QString text, uint oldNumber) : NormalDeclarationCompletionItem(DeclarationPointer(), context) {
   alternativeText = text;
   m_oldNumber = oldNumber;
 }
@@ -854,16 +853,16 @@ uint MoreArgumentHintsCompletionItem::resetMaxArgumentHints(bool isAutomaticComp
   return ret;
 }
 
-void MoreArgumentHintsCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& /*word*/)
+void MoreArgumentHintsCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& word)
 {
   currentMaxArgumentHints = m_oldNumber + maxArgumentHintsExtensionSteps;
   
   // Restart code-completion
-  KTextEditor::CodeCompletionInterface* iface = dynamic_cast<KTextEditor::CodeCompletionInterface*>(document->activeView());
+  KTextEditor::CodeCompletionInterface* iface = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view);
   Q_ASSERT(iface);
   iface->abortCompletion();
     ///@todo 1. This is a non-public interface, and 2. Completion should be started in "automatic invocation" mode
-  QMetaObject::invokeMethod(document->activeView(), "userInvokedCompletion", Qt::QueuedConnection);
+  QMetaObject::invokeMethod(view, "userInvokedCompletion", Qt::QueuedConnection);
 }
 
 }

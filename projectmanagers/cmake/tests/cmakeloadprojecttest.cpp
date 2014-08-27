@@ -21,7 +21,6 @@
 #include "cmakeloadprojecttest.h"
 #include "cmake-test-paths.h"
 
-#include <qtest_kde.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/topducontext.h>
@@ -40,7 +39,7 @@
 inline QDebug &operator<<(QDebug debug, const Target &target)
 { debug << target.name; return debug.maybeSpace(); }
 
-QTEST_KDEMAIN( CMakeLoadProjectTest, GUI )
+QTEST_MAIN( CMakeLoadProjectTest )
 
 using namespace KDevelop;
 
@@ -64,6 +63,7 @@ void CMakeLoadProjectTest::testTinyCMakeProject()
     QCOMPARE(v.vm.value("CMAKE_INCLUDE_CURRENT_DIR"), QStringList("OFF"));
 }
 
+#if QT_VERSION <= 0x050000
 void CMakeLoadProjectTest::testBug335803()
 {
     CMakeProjectData v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/bug335803");
@@ -126,6 +126,7 @@ void CMakeLoadProjectTest::testSmallKDE4Project()
     QCOMPARE(v.targets.at( uninstallIdx ).name, QString("uninstall") );
     QCOMPARE(v.vm.value("CMAKE_INCLUDE_CURRENT_DIR"), QStringList("ON"));
 }
+#endif
 
 void CMakeLoadProjectTest::testSmallProjectWithTests()
 {
@@ -141,6 +142,7 @@ void CMakeLoadProjectTest::testSmallProjectWithTests()
     QCOMPARE(v.testSuites.at(3).arguments.at(0), QString("4"));
 }
 
+#if QT_VERSION <= 0x050000
 void CMakeLoadProjectTest::testKDE4ProjectWithTests()
 {
     CMakeProjectData v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/unit_tests_kde");
@@ -150,6 +152,7 @@ void CMakeLoadProjectTest::testKDE4ProjectWithTests()
     QCOMPARE(v.testSuites.at(0).name, QString("cmake-test-unittestskde"));
     QCOMPARE(v.testSuites.at(0).arguments.count(), 0);
 }
+#endif
 
 CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
 {
@@ -205,5 +208,4 @@ CMakeProjectData CMakeLoadProjectTest::parseProject( const QString& sourcedir )
     return data;
 }
 
-#include "cmakeloadprojecttest.moc"
 

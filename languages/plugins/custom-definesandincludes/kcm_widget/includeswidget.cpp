@@ -19,6 +19,7 @@
 #include "includeswidget.h"
 
 #include <KAction>
+#include <KLocalizedString>
 #include <kfiledialog.h>
 
 #include <QFileInfo>
@@ -28,6 +29,7 @@
 #include "ui_includeswidget.h"
 #include "includesmodel.h"
 #include "debugarea.h"
+#include <QtWidgets/QShortcut>
 
 
 IncludesWidget::IncludesWidget( QWidget* parent )
@@ -37,9 +39,9 @@ IncludesWidget::IncludesWidget( QWidget* parent )
     ui->setupUi( this );
 
     // Hack to workaround broken setIcon(QIcon) overload in KPushButton, the function does not set the icon at all
-    // So need to explicitly use the KIcon overload
-    ui->addIncludePath->setIcon(KIcon("list-add"));
-    ui->removeIncludePath->setIcon(KIcon("list-remove"));
+    // So need to explicitly use the QIcon overload
+    ui->addIncludePath->setIcon(QIcon::fromTheme("list-add"));
+    ui->removeIncludePath->setIcon(QIcon::fromTheme("list-remove"));
 
     // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
     ui->addIncludePath->setFixedHeight( ui->includePathRequester->sizeHint().height() );
@@ -61,8 +63,8 @@ IncludesWidget::IncludesWidget( QWidget* parent )
     connect( includesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(includesChanged())  );
     connect( includesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(includesChanged())  );
 
-    KAction* delIncAction = new KAction( i18n("Delete Include Path"), this );
-    delIncAction->setShortcut( KShortcut( "Del" ) );
+    QAction* delIncAction = new QAction( i18n("Delete Include Path"), this );
+    delIncAction->setShortcut( QKeySequence( Qt::Key_Delete ) );
     delIncAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
     ui->includePaths->addAction( delIncAction );
     connect( delIncAction, SIGNAL(triggered()), SLOT(deleteIncludePath()) );
@@ -139,7 +141,7 @@ QString IncludesWidget::makeIncludeDirAbsolute(const KUrl& url) const
     QString localFile = url.toLocalFile();
     if( url.isRelative() ) {
         // Relative, make absolute based on startDir of the requester
-        localFile = ui->includePathRequester->startDir().toLocalFile( KUrl::AddTrailingSlash ) + url.path();
+        localFile = ui->includePathRequester->startDir().toLocalFile() + '/' + url.path();
     }
     return localFile;
 }
@@ -159,4 +161,3 @@ void IncludesWidget::checkIfIncludePathExist()
     ui->errorLabel->clear();
 }
 
-#include "includeswidget.moc"

@@ -4,7 +4,7 @@ Type=Service
 ServiceTypes=KCModule
 
 X-KDE-ModuleType=Library
-X-KDE-Library=kcm_kdev_ninjabuilder
+X-KDE-Library=kdevplatform/@KDEV_PLUGIN_VERSION@/kcm/kcm_kdev_ninjabuilder
 X-KDE-FactoryName=kcm_kdev_ninjabuilder
 X-KDE-ParentApp=kdevplatformproject
 X-KDE-ParentComponents=KDevNinjaBuilder

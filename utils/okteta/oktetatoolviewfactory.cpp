@@ -38,9 +38,8 @@
 #include <Kasten/AbstractToolFactory>
 #include <Kasten/AbstractToolView>
 #endif
-// KDE
-#include <KIcon>
 
+#include <QIcon>
 
 namespace KDevelop
 {
@@ -68,7 +67,7 @@ QWidget* OktetaToolViewFactory::create( QWidget* parent )
     Kasten::AbstractToolView* toolView = mToolViewFactory->create( tool );
 
     QWidget* widget = new KastenToolViewWidget( toolView, parent );
-    widget->setWindowIcon( KIcon(mToolViewFactory->iconName()) );
+    widget->setWindowIcon( QIcon::fromTheme(mToolViewFactory->iconName()) );
     return widget;
 }
 

@@ -1,4 +1,5 @@
 #include <QHash>
+#include <QString>
 int main()
 {
     QHash<QString, QString> h;

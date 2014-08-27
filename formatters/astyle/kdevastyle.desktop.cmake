@@ -107,7 +107,7 @@ GenericName[zh_CN]=格式化器后端
 GenericName[zh_TW]=格式器後端介面
 
 ServiceTypes=KDevelop/Plugin
-X-KDE-Library=kdevastyle
+X-KDE-Library=kdevplatform/@KDEV_PLUGIN_VERSION@/kdevastyle
 X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDE-PluginInfo-Name=kdevastyle
 X-KDE-PluginInfo-Author=Cedric Pasteur, Matthias Hölzer-Klüpfel

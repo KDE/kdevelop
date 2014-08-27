@@ -31,7 +31,9 @@
 #include <execute/iexecuteplugin.h>
 #include "debugsession.h"
 
+#include <KDebug>
 #include <QFileInfo>
+#include <KI18n/KLocalizedString>
 
 using namespace GDBDebugger;
 using namespace KDevelop;
@@ -54,7 +56,7 @@ DebugJob::DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfigur
 void DebugJob::start()
 {
     KConfigGroup grp = m_launchcfg->config();
-    KDevelop::EnvironmentGroupList l(KGlobal::config());
+    KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());
     Q_ASSERT(m_execute);
     QString err;
     QString executable = m_execute->executable( m_launchcfg, err ).toLocalFile();

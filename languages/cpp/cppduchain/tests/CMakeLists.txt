@@ -1,18 +1,12 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
     ${KDevelop_SOURCE_DIR}/languages/cpp
     ${KDevelop_SOURCE_DIR}/languages/cpp/parser
     ${KDevelop_BINARY_DIR}/languages/cpp
 )
 
-########### next target ###############
-
-set(expressionparsertest_SRCS test_expressionparser.cpp testhelper.cpp)
-
-
-kde4_add_unit_test(cppexpressionparsertest ${expressionparsertest_SRCS})
-target_link_libraries(cppexpressionparsertest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY}
-    kdev4cppparser kdev4cpprpp ${KDEVPLATFORM_LANGUAGE_LIBRARIES} kdev4cppduchain ${KDEVPLATFORM_TESTS_LIBRARIES}  )
+ecm_add_test(test_expressionparser.cpp testhelper.cpp TEST_NAME cppexpressionparsertest
+LINK_LIBRARIES
+    kdevcppparser kdevcpprpp Qt5::Test ${KDEVPLATFORM_LANGUAGE_LIBRARIES} kdevcppduchain ${KDEVPLATFORM_TESTS_LIBRARIES}  )
 
 
 include_directories(
@@ -20,32 +14,22 @@ include_directories(
     ${KDevelop_SOURCE_DIR}/languages/cpp
 )
 
-########### next target ###############
+ecm_add_test(test_duchain.cpp test_duchain_cpp2011.cpp testhelper.cpp TEST_NAME duchaintest
+LINK_LIBRARIES
+    KF5::TextEditor Qt5::Test
+    kdevcppparser kdevcpprpp kdevcppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
 
-set(duchaintest_SRCS test_duchain.cpp test_duchain_cpp2011.cpp testhelper.cpp)
+ecm_add_test(test_sourcemanipulation.cpp testhelper.cpp TEST_NAME sourcemanipulationtest
+LINK_LIBRARIES
+    KF5::TextEditor Qt5::Test
+    kdevcppparser kdevcpprpp kdevcppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
 
+ecm_add_test(codeanalysistest.cpp testhelper.cpp TEST_NAME codeanalysistest
+LINK_LIBRARIES
+    KF5::TextEditor Qt5::Test
+    kdevcppparser kdevcpprpp kdevcppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
 
-kde4_add_unit_test(duchaintest ${duchaintest_SRCS})
-target_link_libraries(duchaintest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY}
-    kdev4cppparser kdev4cpprpp kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
-
-########### next target ###############
-
-set(sourcemanipulationtest_SRCS test_sourcemanipulation.cpp testhelper.cpp)
-
-
-kde4_add_unit_test(sourcemanipulationtest ${sourcemanipulationtest_SRCS})
-target_link_libraries(sourcemanipulationtest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY}
-    kdev4cppparser kdev4cpprpp kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
-
-########## next target ################
-
-kde4_add_unit_test(codeanalysistest codeanalysistest.cpp testhelper.cpp)
-target_link_libraries(codeanalysistest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY}
-    kdev4cppparser kdev4cpprpp kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
-
-########## next target ################
-
-kde4_add_unit_test(environmenttest testenvironment.cpp testhelper.cpp)
-target_link_libraries(environmenttest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY}
-    kdev4cppparser kdev4cpprpp kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
+ecm_add_test(testenvironment.cpp testhelper.cpp TEST_NAME environmenttest
+LINK_LIBRARIES
+    KF5::TextEditor Qt5::Test
+    kdevcppparser kdevcpprpp kdevcppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})

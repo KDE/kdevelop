@@ -25,8 +25,7 @@
 #include "cmakeprojectvisitor.h"
 #include "cmakelistsparser.h"
 #include <QString>
-#include <qtest_kde.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <cmakecondition.h>
@@ -38,7 +37,7 @@
 #include <KTempDir>
 #include <KTemporaryFile>
 
-QTEST_KDEMAIN_CORE(CMakeProjectVisitorTest)
+QTEST_GUILESS_MAIN(CMakeProjectVisitorTest)
 
 using namespace KDevelop;
 
@@ -564,14 +563,22 @@ void CMakeProjectVisitorTest::testFinder_data()
 {
     QTest::addColumn<QString>("module");
     QTest::addColumn<QString>("args");
-    
-    QTest::newRow("ZLIB") << "ZLIB" << QString();
-    QTest::newRow("PNG") << "PNG" << QString();
+
+#if QT_VERSION >= 0x050000
+    QTest::newRow("Qt5") << "Qt5" << QString();
+    QTest::newRow("Qt5comp") << "Qt5" << QString("COMPONENTS Core Gui");
+    // TODO: Fails?
+    //QTest::newRow("KF5Parts") << "KF5Parts" << QString();
+#else
+    // most likely not installed when Qt5 is used
     QTest::newRow("Qt4") << "Qt4" << QString();
     QTest::newRow("Qt4comp") << "Qt4" << QString("COMPONENTS QtCore QtGui");
     QTest::newRow("KDE4") << "KDE4" << QString();
     QTest::newRow("Phonon") << "Phonon" << QString();
     QTest::newRow("Automoc4") << "Automoc4" << QString();
+#endif
+    QTest::newRow("ZLIB") << "ZLIB" << QString();
+    QTest::newRow("PNG") << "PNG" << QString();
     QTest::newRow("Boost") << "Boost" << QString("1.39");
     QTest::newRow("TestLib") << "TestLib" << QString();
     QTest::newRow("TestLib64") << "TestLib64" << QString();

@@ -7,17 +7,17 @@ set( compilerprovider_SRCS
         ../debugarea.cpp
     )
 
-kde4_add_plugin( kdevcompilerprovider
+add_library(kdevcompilerprovider MODULE
         ${compilerprovider_SRCS})
 
 target_link_libraries( kdevcompilerprovider LINK_PRIVATE
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
         ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-        kdev4includesdefinessettings )
+        kdevdefinesandincludessettings )
 
 install( TARGETS kdevcompilerprovider
-         DESTINATION ${PLUGIN_INSTALL_DIR} )
+         DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 configure_file(kdevcompilerprovider.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcompilerprovider.desktop)
 

@@ -138,7 +138,7 @@ void ContextBuilder::addBaseType( KDevelop::BaseClassInstance base, BaseSpecifie
 
   Q_ASSERT(currentContext()->type() == DUContext::Class);
   AbstractType::Ptr baseClass = base.baseClass.abstractType();
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(baseClass.unsafeData());
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(baseClass.data());
   Declaration* idDecl = 0;
   if( idType && (idDecl = idType->declaration(currentContext()->topContext())) ) {
     DUContext* ctx = idDecl->logicalInternalContext(currentContext()->topContext());
@@ -644,7 +644,7 @@ void ContextBuilder::checkRanges()
 {
   for(QHash<KDevelop::DUContext*, KDevelop::RangeInRevision>::iterator it = m_contextRanges.begin(); it != m_contextRanges.end(); ) {
     if(it.key()->range() != *it) {
-      kDebug(9007) << "Range of" << it.key()->scopeIdentifier(true).toString() << "changed from" << (*it).textRange() << "to" << it.key()->range().textRange() << "at\n" << kBacktrace();
+      kDebug(9007) << "Range of" << it.key()->scopeIdentifier(true).toString() << "changed from" << (*it) << "to" << it.key()->range() << "at\n" << kBacktrace();
       it = m_contextRanges.erase(it); //Remove it so we see each change only once
     }else{
       ++it;

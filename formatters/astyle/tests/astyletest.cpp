@@ -322,4 +322,3 @@ void AstyleTest::testForeach()
     QCOMPARE(formatted, expected);
 }
 
-#include "astyletest.moc"

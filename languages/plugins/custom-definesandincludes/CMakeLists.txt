@@ -16,23 +16,26 @@ set( kdevdefinesandincludesmanager_SRCS
         definesandincludesmanager.cpp
         debugarea.cpp
     )
-kde4_add_library(kdev4includesdefinessettings SHARED settingsmanager.cpp compilerprovider/icompiler.cpp)
-target_link_libraries( kdev4includesdefinessettings LINK_PRIVATE
+
+add_library(kdevdefinesandincludessettings settingsmanager.cpp compilerprovider/icompiler.cpp)
+target_link_libraries( kdevdefinesandincludessettings LINK_PRIVATE
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES} )
+generate_export_header(kdevdefinesandincludessettings EXPORT_FILE_NAME definesandincludessettingsexport.h)
 
-kde4_add_plugin( kdevdefinesandincludesmanager
+add_library(kdevdefinesandincludesmanager MODULE
         ${kdevdefinesandincludesmanager_SRCS} )
 target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
         ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-        kdev4includesdefinessettings
+        kdevdefinesandincludessettings
         kdev4noprojectincludesanddefines )
+generate_export_header(kdevdefinesandincludesmanager EXPORT_FILE_NAME definesandincludesmanagerexport.h)
 
 install( TARGETS kdevdefinesandincludesmanager
-         DESTINATION ${PLUGIN_INSTALL_DIR} )
-install( TARGETS kdev4includesdefinessettings ${INSTALL_TARGETS_DEFAULT_ARGS} )
+         DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
+install( TARGETS kdevdefinesandincludessettings ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 configure_file(kdevdefinesandincludesmanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevdefinesandincludesmanager.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevdefinesandincludesmanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

@@ -22,12 +22,12 @@
 #ifndef STREAM_H
 #define STREAM_H
 
-#include <cppparserexport.h>
+#include "cpprppexport.h"
 
 #include <QtCore/QIODevice>
 
 #include <language/editor/cursorinrevision.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include "anchor.h"
 #include "chartools.h"
 

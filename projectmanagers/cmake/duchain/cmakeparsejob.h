@@ -1,6 +1,6 @@
-/* KDevelop
+/* KDevelop CMake Support
  *
- * Copyright 2011 Aleix Pol <aleixpol@kde.org>
+ * Copyright 2014 Aleix Pol <aleixpol@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,8 +18,18 @@
  * 02110-1301, USA.
  */
 
-import QtQuick 1.1
-import org.kde.plasma.components 0.1
+#ifndef CMAKEPARSEJOB_H
+#define CMAKEPARSEJOB_H
 
-ToolButton {
-}
+#include <language/backgroundparser/parsejob.h>
+
+class CMakeParseJob : public KDevelop::ParseJob
+{
+    Q_OBJECT
+    public:
+        explicit CMakeParseJob(const KDevelop::IndexedString& url, KDevelop::ILanguageSupport* languageSupport);
+
+        virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread);
+};
+
+#endif // CMAKEPARSEJOB_H

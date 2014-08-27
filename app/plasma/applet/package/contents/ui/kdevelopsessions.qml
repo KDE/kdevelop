@@ -16,11 +16,10 @@
 *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
 *****************************************************************************/
 
-import QtQuick 1.1
-import org.kde.qtextracomponents 0.1
+import QtQuick 2.1
 
-import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.plasma.components 0.1 as PlasmaComponents
+import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 2.0 as PlasmaComponents
 
 Item {
    id: kdevelopSessions
@@ -62,9 +61,9 @@ Item {
         id: headerRow
         anchors { left: parent.left; right: parent.right }
 
-        QIconItem {
+        IconItem {
             id: appIcon
-            icon: QIcon("kdevelop")
+            source: "kdevelop"
             width: 32
             height: 32
         }

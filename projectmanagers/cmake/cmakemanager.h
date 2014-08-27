@@ -28,6 +28,7 @@
 
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <project/abstractfilemanagerplugin.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/codegen/applychangeswidget.h>
 #include <interfaces/iplugin.h>
@@ -39,7 +40,6 @@
 
 class WaitAllJobs;
 class CMakeCommitChangesJob;
-class QFileSystemWatcher;
 struct CMakeProjectData;
 class QStandardItem;
 class QDir;
@@ -67,7 +67,7 @@ namespace KDevelop
 class CMakeFolderItem;
 
 class CMakeManager
-    : public KDevelop::IPlugin
+    : public KDevelop::AbstractFileManagerPlugin
     , public KDevelop::IBuildSystemManager
     , public KDevelop::ILanguageSupport
     , public ICMakeManager
@@ -86,37 +86,38 @@ public:
     virtual QString errorDescription() const;
 
     virtual Features features() const { return Features(Folders | Targets | Files ); }
-//     virtual KDevelop::IProject* project() const;
     virtual KDevelop::IProjectBuilder* builder() const;
     virtual KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const;
     virtual KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem *) const;
     virtual QHash<QString, QString> defines(KDevelop::ProjectBaseItem *) const;
 
-    virtual KDevelop::ProjectFolderItem* addFolder( const KDevelop::Path& folder, KDevelop::ProjectFolderItem* parent );
-    virtual KDevelop::ProjectFileItem* addFile( const KDevelop::Path&, KDevelop::ProjectFolderItem* );
     virtual KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) { return 0; }
+
+    virtual QList<KDevelop::ProjectTargetItem*> targets() const;
+    virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const;
+//     virtual KDevelop::ProjectFolderItem* addFolder( const KDevelop::Path& folder, KDevelop::ProjectFolderItem* parent );
+//     virtual KDevelop::ProjectFileItem* addFile( const KDevelop::Path&, KDevelop::ProjectFolderItem* );
     virtual bool addFilesToTarget( const QList<KDevelop::ProjectFileItem*> &files, KDevelop::ProjectTargetItem* target);
 
     virtual bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
     virtual bool removeFilesFromTargets( const QList<KDevelop::ProjectFileItem*> &files );
-    virtual bool removeFilesAndFolders( const QList<KDevelop::ProjectBaseItem*> &items);
-
-    virtual bool renameFile(KDevelop::ProjectFileItem*, const KDevelop::Path&);
-    virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KDevelop::Path&);
-    virtual bool moveFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem *newParent);
-    virtual bool copyFilesAndFolders(const KDevelop::Path::List &items, KDevelop::ProjectFolderItem* newParent);
-
-    QList<KDevelop::ProjectTargetItem*> targets() const;
-    QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const;
-
-    virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
+//     virtual bool removeFilesAndFolders( const QList<KDevelop::ProjectBaseItem*> &items);
+//
+//     virtual bool renameFile(KDevelop::ProjectFileItem*, const KDevelop::Path&);
+//     virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KDevelop::Path&);
+//     virtual bool moveFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem *newParent);
+//     virtual bool copyFilesAndFolders(const KDevelop::Path::List &items, KDevelop::ProjectFolderItem* newParent);
+//
+//     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
-    virtual KJob* createImportJob(KDevelop::ProjectFolderItem* item);
-    
-    virtual bool reload(KDevelop::ProjectFolderItem*);
+//     virtual KJob* createImportJob(KDevelop::ProjectFolderItem* item);
+//
+//     virtual bool reload(KDevelop::ProjectFolderItem*);
+//
+//     virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
 
-    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
-    
+
+    virtual KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project, const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent = 0);
     virtual QPair<QString, QString> cacheValue(KDevelop::IProject* project, const QString& id) const;
     
     //LanguageSupport
@@ -124,49 +125,39 @@ public:
     virtual KDevelop::ParseJob *createParseJob(const KDevelop::IndexedString &url);
     virtual KDevelop::ILanguage *language();
     virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
-    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
+    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position);
     
-    void addPending(const KDevelop::Path& path, CMakeFolderItem* folder);
-    CMakeFolderItem* takePending(const KDevelop::Path& path);
-    void addWatcher(KDevelop::IProject* p, const QString& path);
+//     void addPending(const KDevelop::Path& path, CMakeFolderItem* folder);
+//     CMakeFolderItem* takePending(const KDevelop::Path& path);
+//     void addWatcher(KDevelop::IProject* p, const QString& path);
     
-    CMakeProjectData projectData(KDevelop::IProject* project);
+//     CMakeProjectData projectData(KDevelop::IProject* project);
 
     KDevelop::ProjectFilterManager* filterManager() const;
+
+    static KDevelop::IndexedString languageName();
 
 signals:
     void folderRenamed(const KDevelop::Path& oldFolder, KDevelop::ProjectFolderItem* newFolder);
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
 
 private slots:
-    void dirtyFile(const QString& file);
-
-    void jumpToDeclaration();
+//     void dirtyFile(const QString& file);
+//
+//     void jumpToDeclaration();
     void projectClosing(KDevelop::IProject*);
-    
-    void directoryChanged(const QString& dir);
-    void filesystemBuffererTimeout();
-    void importFinished(KJob* job);
+    void dirtyFile(const QString& file);
+//
+//     void directoryChanged(const QString& dir);
+//     void filesystemBuffererTimeout();
+//     void importFinished(KJob* job);
 
 private:
-    QStringList processGeneratorExpression(const QStringList& expr, KDevelop::IProject* project, KDevelop::ProjectTargetItem* target) const;
+    void initializeProject(KDevelop::IProject* project);
 
-    bool renameFileOrFolder(KDevelop::ProjectBaseItem *item, const KDevelop::Path &newUrl);
-    void realDirectoryChanged(const QString& dir);
-    void deletedWatchedDirectory(KDevelop::IProject* p, const KUrl& dir);
-    
-    QHash<KDevelop::IProject*, CMakeProjectData*> m_projectsData;
-    QHash<KDevelop::IProject*, QFileSystemWatcher*> m_watchers;
-    QHash<KDevelop::Path, CMakeFolderItem*> m_pending;
-    
-    KDevelop::ICodeHighlighting *m_highlight;
-    
-    QList<KDevelop::ProjectBaseItem*> m_clickedItems;
-    QSet<KDevelop::ProjectBaseItem*> m_cleanupItems;
-
-    QTimer* m_fileSystemChangeTimer;
-    QSet<QString> m_fileSystemChangedBuffer;
-    KDevelop::ProjectFilterManager* const m_filter;
+    QHash<KDevelop::IProject*, CMakeProjectData> m_projects;
+    KDevelop::ProjectFilterManager* m_filter;
+    KDevelop::ICodeHighlighting* m_highlight;
 };
 
 #endif

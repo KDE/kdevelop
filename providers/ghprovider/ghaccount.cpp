@@ -31,7 +31,7 @@ namespace gh
 
 Account::Account(Resource *resource)
 {
-    m_group = KConfigGroup(KGlobal::config(), "ghprovider");
+    m_group = KConfigGroup(KSharedConfig::openConfig(), "ghprovider");
     m_resource = resource;
 }
 

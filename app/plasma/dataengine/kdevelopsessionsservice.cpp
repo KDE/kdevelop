@@ -50,4 +50,3 @@ void SessionJob::start()
     }
 }
 
-#include "kdevelopsessionsservice.moc"

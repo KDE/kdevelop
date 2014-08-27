@@ -23,7 +23,7 @@
 
 #include <QtCore/QMap>
 #include <QtCore/QStringList>
-#include "cmakeexport.h"
+#include "cmakecommonexport.h"
 
 class CMakeAst;
 

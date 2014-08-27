@@ -28,14 +28,14 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(KDevGHProviderFactory, registerPlugin<gh::ProviderPlugin>();)
-K_EXPORT_PLUGIN(KDevGHProviderFactory(KAboutData("kdevghprovider","kdevghprovider", ki18n("Github Provider"), "0.1", ki18n("Import projects from Github"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevGHProviderFactory(KAboutData("kdevghprovider","kdevghprovider", ki18n("Github Provider"), "0.1", ki18n("Import projects from Github"), KAboutData::License_GPL)))
 
 
 namespace gh
 {
 
 ProviderPlugin::ProviderPlugin(QObject *parent, const QList<QVariant> &args)
-    : IPlugin(KDevGHProviderFactory::componentData(), parent)
+    : IPlugin("kdevghprovider", parent)
 {
     Q_UNUSED(args);
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::IProjectProvider)
@@ -58,3 +58,4 @@ IProjectProviderWidget * ProviderPlugin::providerWidget(QWidget *parent)
 
 } // End of namespace gh
 
+#include "ghproviderplugin.moc"

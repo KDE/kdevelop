@@ -76,7 +76,7 @@ CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBase
     if(g.isValid()) {
         KConfigGroup grp = g.group( subgrpname );
         enabled = grp.readEntry( ConfigConstants::toolEnabled, false );
-        cmd = grp.readEntry( ConfigConstants::toolExecutable, KUrl() ).toLocalFile();
+        cmd = grp.readEntry( ConfigConstants::toolExecutable, QUrl() ).toLocalFile();
         environment = grp.readEntry( ConfigConstants::toolEnvironment, "" );
         arguments = grp.readEntry( ConfigConstants::toolArguments, "" );
     }
@@ -124,7 +124,7 @@ void CustomBuildJob::start()
         exec = new KDevelop::CommandExecutor( cmd, this );
 
         exec->setArguments( strargs );
-        exec->setEnvironment( KDevelop::EnvironmentGroupList( KGlobal::config() ).createEnvironment( environment, KProcess::systemEnvironment() ) );
+        exec->setEnvironment( KDevelop::EnvironmentGroupList( KSharedConfig::openConfig() ).createEnvironment( environment, KProcess::systemEnvironment() ) );
         exec->setWorkingDirectory( builddir );
 
         
@@ -181,4 +181,3 @@ void CustomBuildJob::procFinished(int code)
     emitResult();
 }
 
-#include "custombuildjob.moc"

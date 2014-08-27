@@ -50,11 +50,11 @@ using KDevelop::IProject;
 using KDevelop::Path;
 
 K_PLUGIN_FACTORY(CustomBuildSystemFactory, registerPlugin<CustomBuildSystem>(); )
-K_EXPORT_PLUGIN(CustomBuildSystemFactory(KAboutData("kdevcustombuildsystem","kdevcustombuildsystem", ki18n("Custom Build System"), VERSION, ki18n("Support for building and managing custom build systems"), KAboutData::License_GPL, ki18n("Copyright 2010 Andreas Pakulat <apaku@gmx.de>"), KLocalizedString(), "", "apaku@gmx.de" )))
+// K_EXPORT_PLUGIN(CustomBuildSystemFactory(KAboutData("kdevcustombuildsystem","kdevcustombuildsystem", ki18n("Custom Build System"), VERSION, ki18n("Support for building and managing custom build systems"), KAboutData::License_GPL, ki18n("Copyright 2010 Andreas Pakulat <apaku@gmx.de>"), KLocalizedString(), "", "apaku@gmx.de" )))
 
 
 CustomBuildSystem::CustomBuildSystem( QObject *parent, const QVariantList & )
-    : AbstractFileManagerPlugin( CustomBuildSystemFactory::componentData(), parent )
+    : AbstractFileManagerPlugin( "kdevcustombuildsystem", parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
@@ -93,7 +93,7 @@ Path CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
         return Path();
     }
 
-    Path builddir(grp.readEntry( ConfigConstants::buildDirKey, KUrl() ));
+    Path builddir(grp.readEntry( ConfigConstants::buildDirKey, QUrl() ));
     if(!builddir.isValid() )  // set builddir to default if project contains a buildDirKey that does not have a value
     {
         builddir = item->project()->path();

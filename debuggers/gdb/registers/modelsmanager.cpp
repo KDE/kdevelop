@@ -65,7 +65,7 @@ private:
     QVector<Model> m_models;
 };
 
-ModelsManager::ModelsManager(QObject* parent) : QObject(parent), m_models(new Models), m_controller(0), m_config(KGlobal::config()->group("Register models")) {}
+ModelsManager::ModelsManager(QObject* parent) : QObject(parent), m_models(new Models), m_controller(0), m_config(KSharedConfig::openConfig()->group("Register models")) {}
 
 ModelsManager::~ModelsManager() {}
 

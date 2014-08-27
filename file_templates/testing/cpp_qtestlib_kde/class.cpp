@@ -5,10 +5,7 @@
 #include "{{ output_file_header }}"
 
 
-#include <qtest_kde.h>
-
-
-QTEST_KDEMAIN({{ name }}, NoGUI);
+QTEST_GUILESS_MAIN({{ name }});
 
 
 void {{ name }}::initTestCase()

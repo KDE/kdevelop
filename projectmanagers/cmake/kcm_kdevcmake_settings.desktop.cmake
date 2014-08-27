@@ -4,7 +4,7 @@ Type=Service
 ServiceTypes=KCModule
 
 X-KDE-ModuleType=Library
-X-KDE-Library=kcm_kdevcmake_settings
+X-KDE-Library=kdevplatform/@KDEV_PLUGIN_VERSION@/kcm/kcm_kdevcmake_settings
 X-KDE-FactoryName=kcm_kdevcmake_settings
 X-KDE-ParentApp=kdevplatformproject
 X-KDE-ParentComponents=KDevCMakeManager

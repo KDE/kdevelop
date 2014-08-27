@@ -20,12 +20,12 @@
  */
 
 #include "cmakelistsparser.h"
-#include "cmakeast.h"
 // #include "cmakeprojectvisitor.h"
 #include "astfactory.h"
 
 #include <QStack>
 #include <KDebug>
+#include <KUrl>
 
 QMap<QChar, QChar> whatToScape()
 {
@@ -94,7 +94,12 @@ QString CMakeFunctionDesc::writeBack() const
     return output;
 }
 
-CMakeFileContent CMakeListsParser::readCMakeFile(const QString & _fileName)
+namespace CMakeListsParser
+{
+
+static bool readCMakeFunction( cmListFileLexer* lexer, CMakeFunctionDesc& func);
+
+CMakeFileContent readCMakeFile(const QString & _fileName)
 {
     cmListFileLexer* lexer = cmListFileLexer_New();
     if ( !lexer )
@@ -145,6 +150,8 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & _fileName)
     cmListFileLexer_Delete(lexer);
 
     return ret;
+}
+
 }
 
 bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDesc &func)

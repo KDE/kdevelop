@@ -1,6 +1,11 @@
-macro_log_feature(QT_QTHELP_FOUND "QtHelp" "The Help module for the Qt toolkit, needed for the qthelp plugin" "http://qt-project.org/" FALSE)
+find_package(Qt5Help)
 
-if(QT_QTHELP_FOUND)
- macro_optional_add_subdirectory(qthelp)
+set_package_properties(Qt5Help PROPERTIES
+    PURPOSE "The Help module for the Qt toolkit, needed for the qthelp plugin"
+    URL "http://qt-project.org/"
+    TYPE OPTIONAL)
+if(Qt5Help_FOUND)
+    ecm_optional_add_subdirectory(qthelp)
 endif()
-macro_optional_add_subdirectory(manpage)
+
+ecm_optional_add_subdirectory(manpage)

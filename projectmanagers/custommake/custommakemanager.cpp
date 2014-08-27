@@ -21,7 +21,7 @@
 #include <kpluginloader.h>
 #include <project/projectmodel.h>
 #include <project/helper.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <QDir>
 #include <QFileInfoList>
@@ -53,7 +53,7 @@ public:
 
     // NOTE: Fixes build failures for GCC versions <4.8.
     // cf. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53613
-    virtual ~CustomMakeProvider() noexcept;
+    virtual ~CustomMakeProvider() Q_DECL_NOEXCEPT;
 
     virtual QHash< QString, QString > definesInBackground(const QString&) const
     {
@@ -75,7 +75,7 @@ public:
             }
         }
 
-        return toPathList(m_resolver->resolveIncludePath(path).paths);
+        return toPathList(KUrl::List(m_resolver->resolveIncludePath(path).paths));
     }
 
     virtual IDefinesAndIncludesManager::Type type() const
@@ -90,13 +90,13 @@ public:
 
 // NOTE: Fixes build failures for GCC versions <4.8.
 // See above.
-CustomMakeProvider::~CustomMakeProvider() noexcept = default;
+CustomMakeProvider::~CustomMakeProvider() Q_DECL_NOEXCEPT = default;
 
 K_PLUGIN_FACTORY(CustomMakeSupportFactory, registerPlugin<CustomMakeManager>(); )
-K_EXPORT_PLUGIN(CustomMakeSupportFactory(KAboutData("kdevcustommakemanager","kdevcustommake", ki18n("Custom Makefile Manager"), "0.1", ki18n("Support for managing custom makefile projects"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(CustomMakeSupportFactory(KAboutData("kdevcustommakemanager","kdevcustommake", ki18n("Custom Makefile Manager"), "0.1", ki18n("Support for managing custom makefile projects"), KAboutData::License_GPL)))
 
 CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args )
-    : KDevelop::AbstractFileManagerPlugin( CustomMakeSupportFactory::componentData(), parent )
+: KDevelop::AbstractFileManagerPlugin( "kdevcustommakemanager", parent )
     , m_builder( nullptr )
     , m_provider(new CustomMakeProvider(this))
 {

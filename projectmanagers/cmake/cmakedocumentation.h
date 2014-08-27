@@ -44,24 +44,24 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
         virtual bool hasError() const;
         virtual QString errorDescription() const;
 
-        KSharedPtr<KDevelop::IDocumentation> description(const QString& identifier, const KUrl& file) const;
-        KSharedPtr<KDevelop::IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration) const;
+        QExplicitlySharedDataPointer<KDevelop::IDocumentation> description(const QString& identifier, const KUrl& file) const;
+        QExplicitlySharedDataPointer<KDevelop::IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration) const;
         
         QStringList names(Type t) const;
         
         QAbstractListModel* indexModel() const;
-        KSharedPtr<KDevelop::IDocumentation> documentationForIndex(const QModelIndex& idx) const;
+        QExplicitlySharedDataPointer<KDevelop::IDocumentation> documentationForIndex(const QModelIndex& idx) const;
         
         virtual QIcon icon() const;
         virtual QString name() const;
-        virtual KSharedPtr<KDevelop::IDocumentation> homePage() const;
+        virtual QExplicitlySharedDataPointer<KDevelop::IDocumentation> homePage() const;
         
         QString descriptionForIdentifier(const QString& identifier, Type t) const;
     public slots:
         void delayedInitialization();
         
     Q_SIGNALS:
-        void addHistory(const KSharedPtr< KDevelop::IDocumentation >& doc) const;
+        void addHistory(const QExplicitlySharedDataPointer< KDevelop::IDocumentation >& doc) const;
     
     private:
         void initializeModel() const;

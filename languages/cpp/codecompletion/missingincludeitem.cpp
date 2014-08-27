@@ -21,7 +21,8 @@
 
 #include <klocale.h>
 
-#include <ktexteditor/document.h>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/persistentsymboltable.h>
@@ -242,8 +243,8 @@ QStringList candidateIncludeFilesFromNameMatcher(const QList<IncludeItem>& inclu
   return result;
 }
 
-KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fromUrl, const IndexedDeclaration& decl) {
-  KSharedPtr<MissingIncludeCompletionItem> item;
+QExplicitlySharedDataPointer<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fromUrl, const IndexedDeclaration& decl) {
+  QExplicitlySharedDataPointer<MissingIncludeCompletionItem> item;
   if(decl.data()) {
     QSet<QString> temp;
     QStringList candidateFiles = candidateIncludeFiles(decl.data());
@@ -256,7 +257,7 @@ KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fro
 
     qSort<QList<KDevelop::CompletionTreeItemPointer>::iterator, DirectiveShorterThan>(items.begin(), items.end(), DirectiveShorterThan());
     if(!items.isEmpty()) {
-      item = KSharedPtr<MissingIncludeCompletionItem>(dynamic_cast<MissingIncludeCompletionItem*>(items.begin()->data()));
+      item = QExplicitlySharedDataPointer<MissingIncludeCompletionItem>(dynamic_cast<MissingIncludeCompletionItem*>(items.begin()->data()));
     }
   }
   return item;
@@ -301,7 +302,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
     if(delayed)
       //Remove all template parameters, because the symbol-table doesn't know about those
       identifier = removeTemplateParameters(delayed->identifier().identifier().identifier());
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
     if(idType) {
       identifier = removeTemplateParameters(idType->qualifiedIdentifier());
     }
@@ -452,7 +453,7 @@ MissingIncludeCompletionItem::MissingIncludeCompletionItem(const QString& addedI
 {
 }
 
-#define RETURN_CACHED_ICON(name) {static QIcon icon(KIcon(name).pixmap(QSize(16, 16))); return icon;}
+#define RETURN_CACHED_ICON(name) {static QIcon icon(QIcon::fromTheme(name).pixmap(QSize(16, 16))); return icon;}
 
 QVariant MissingIncludeCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
   DUChainReadLocker lock(DUChain::lock(), 500);
@@ -510,7 +511,8 @@ QString MissingIncludeCompletionItem::lineToInsert() const {
   return "#include " + m_addedInclude;
 }
 
-void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+void MissingIncludeCompletionItem::execute(View* view, const Range& word) {
+  Document* document = view->document();
   // first try to find a proper include position from the DUChain
   int line = findIncludeLineFromDUChain(document, word.start().line(), m_canonicalPath);
 
@@ -581,15 +583,15 @@ QVariant ForwardDeclarationItem::data(const QModelIndex& index, int role, const 
   return ret;
 }
 
-void ForwardDeclarationItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+void ForwardDeclarationItem::execute(KTextEditor::View* view, const KTextEditor::Range& word) {
   DUChainReadLocker lock(DUChain::lock());
   if(m_declaration) {
-    TopDUContext* top = DUChainUtils::standardContextForUrl(document->url());
+    TopDUContext* top = DUChainUtils::standardContextForUrl(view->document()->url());
     if(!top)
       return;
     Cpp::SourceCodeInsertion insertion(top);
     
-    insertion.setInsertBefore(KDevelop::SimpleCursor(word.start()));
+    insertion.setInsertBefore(KTextEditor::Cursor(word.start()));
     
     insertion.insertForwardDeclaration(m_declaration.data());
     

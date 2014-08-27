@@ -50,9 +50,9 @@ class AStyleFormatter : public astyle::ASFormatter
         bool predefinedStyle(const QString &name);
         void loadStyle(const QString &content);
         QString saveStyle();
-//         void loadConfig(const KSharedPtr<KSharedConfig> &config);
-//         void loadStyle(const KSharedPtr<KSharedConfig> &config, const QString &name = "Custom");
-//         void saveStyle(const KSharedPtr<KSharedConfig> &config, const QString &name = "Custom");
+//         void loadConfig(const QExplicitlySharedDataPointer<KSharedConfig> &config);
+//         void loadStyle(const QExplicitlySharedDataPointer<KSharedConfig> &config, const QString &name = "Custom");
+//         void saveStyle(const QExplicitlySharedDataPointer<KSharedConfig> &config, const QString &name = "Custom");
         
         // indent
         void setTabIndentation(int length, bool forceTabs);

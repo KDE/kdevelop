@@ -677,7 +677,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
           
           ///Resolve all involved delayed types
           AbstractType::Ptr t(instantiatedDeclaration->abstractType());
-          IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
+          IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.data());
 
           ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
           AbstractType::Ptr changedType = resolveDelayedTypes( instantiatedDeclaration->abstractType(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, source );
@@ -686,7 +686,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
             if( changedType == instantiatedDeclaration->abstractType() )
                 changedType = instantiatedDeclaration->abstractType()->clone();
 
-            IdentifiedType* changedIdType = dynamic_cast<IdentifiedType*>(changedType.unsafeData());
+            IdentifiedType* changedIdType = dynamic_cast<IdentifiedType*>(changedType.data());
             if( changedIdType ) {
               
               DeclarationId base = instantiatedFrom->id();

@@ -37,20 +37,23 @@
 #include "codecompletion/helpers.h"
 
 #include <QTest>
-#include <qtest_kde.h>
+#include <KComponentData>
+#include <k4aboutdata.h>
 #include <KTextEditor/Editor>
-#include <KTextEditor/EditorChooser>
 #include <KTempDir>
 
 using namespace KDevelop;
 using namespace Cpp;
 
-QTEST_KDEMAIN_WITH_COMPONENTNAME(TestSpecialCompletion, GUI, "test_specialcompletion")
+QTEST_MAIN(TestSpecialCompletion)
 
 typedef CodeCompletionItemTester<Cpp::CodeCompletionContext> CompletionItemTester;
 
 void TestSpecialCompletion::initTestCase()
 {
+    K4AboutData aboutData( QByteArray("test_specialcompletion"), QByteArray(), ki18n("KDE Test Program"), QByteArray("version") );
+    KComponentData cData(&aboutData);
+
     AutoTestShell::init(QStringList() << "kdevcppsupport");
     TestCore::initialize(Core::NoUi);
     TestCore* core = dynamic_cast<TestCore*>(TestCore::self());
@@ -154,14 +157,15 @@ void TestSpecialCompletion::testIncludeDefine()
 
     QCOMPARE(item->lineToInsert(), QString("#include \"" + include.url().toUrl().fileName() + "\""));
 
-    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
     QVERIFY(editor);
 
     KTextEditor::Document* doc = editor->createDocument(this);
     QVERIFY(doc);
     QVERIFY(doc->openUrl(active.url().toUrl()));
 
-    item->execute(doc, KTextEditor::Range(3, 12, 3, 12));
+    QWidget parent;
+    item->execute(doc->createView(&parent), KTextEditor::Range(3, 12, 3, 12));
 
     QCOMPARE(doc->text(), QString(
                     "#if 0\n"
@@ -237,14 +241,15 @@ void TestSpecialCompletion::testIncludeGrouping()
 
     QCOMPARE(item->lineToInsert(), QString("#include \"" + dir1Name + includeC.url().toUrl().fileName() + "\""));
 
-    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
     QVERIFY(editor);
 
     KTextEditor::Document* doc = editor->createDocument(this);
     QVERIFY(doc);
     QVERIFY(doc->openUrl(active.url().toUrl()));
 
-    item->execute(doc, KTextEditor::Range(3, 0, 3, 3));
+    QWidget parent;
+    item->execute(doc->createView(&parent), KTextEditor::Range(3, 0, 3, 3));
 
     QCOMPARE(doc->text(), QString(
                     "#include \"" + dir1Name + includeA.url().toUrl().fileName() + "\"\n"
@@ -303,14 +308,15 @@ void TestSpecialCompletion::testIncludeComment()
 
     QCOMPARE(item->lineToInsert(), QString("#include \"" + include.url().toUrl().fileName() + "\""));
 
-    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
+    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
     QVERIFY(editor);
 
     KTextEditor::Document* doc = editor->createDocument(this);
     QVERIFY(doc);
     QVERIFY(doc->openUrl(active.url().toUrl()));
 
-    item->execute(doc, KTextEditor::Range(9, 0, 9, 3));
+    QWidget parent;
+    item->execute(doc->createView(&parent), KTextEditor::Range(9, 0, 9, 3));
 
     QCOMPARE(doc->text(), QString(
                     "/*\n"
@@ -327,4 +333,3 @@ void TestSpecialCompletion::testIncludeComment()
                     "}"));
 }
 
-#include "test_specialcompletion.moc"

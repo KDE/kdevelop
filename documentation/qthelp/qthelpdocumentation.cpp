@@ -22,7 +22,7 @@
 #include "qthelpdocumentation.h"
 #include <QLabel>
 #include <KLocale>
-#include <KIcon>
+#include <KUrl>
 #include <QTreeView>
 #include <QHelpContentModel>
 #include <QHeaderView>
@@ -180,7 +180,7 @@ void QtHelpDocumentation::setUserStyleSheet(QWebView* view, const QUrl& url)
           << "#qtdocheader .qtref { position: absolute !important; top: 5px !important; right: 0 !important; }\n";
     }
     file->close();
-    view->settings()->setUserStyleSheetUrl(KUrl(file->fileName()));
+    view->settings()->setUserStyleSheetUrl(QUrl::fromLocalFile(file->fileName()));
 
     delete m_lastStyleSheet.data();
     m_lastStyleSheet = file;
@@ -216,7 +216,7 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
 
     QMenu menu;
     QAction* copyAction = view->pageAction(QWebPage::Copy);
-    copyAction->setIcon(KIcon("edit-copy"));
+    copyAction->setIcon(QIcon::fromTheme("edit-copy"));
     menu.addAction(copyAction);
 
     if (m_info.count() > 1) {
@@ -256,7 +256,7 @@ QtHelpAlternativeLink::QtHelpAlternativeLink(const QString& name, const QtHelpDo
 
 void QtHelpAlternativeLink::showUrl()
 {
-    KSharedPtr<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(mName, mDoc->info(), mName));
+    QExplicitlySharedDataPointer<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(mName, mDoc->info(), mName));
     KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
 }
 
@@ -281,7 +281,7 @@ void HomeDocumentation::clicked(const QModelIndex& idx)
     QMap<QString, QUrl> info;
     info.insert(it->title(), it->url());
 
-    KSharedPtr<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(it->title(), info));
+    QExplicitlySharedDataPointer<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(it->title(), info));
     KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
 }
 
