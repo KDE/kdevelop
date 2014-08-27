@@ -23,13 +23,20 @@
 
 #include <QObject>
 
+class TestEnvironmentProvider;
+
 class TestDUChain : public QObject
 {
     Q_OBJECT
+public:
+    ~TestDUChain();
 
 private slots:
     void initTestCase();
     void cleanupTestCase();
+
+    void init();
+    void cleanup();
 
     void testComments();
     void testComments_data();
@@ -51,8 +58,12 @@ private slots:
     void testReparseWithAllDeclarationsContextsAndUses();
     void testParsingEnvironment();
     void testReparseInclude();
+    void testReparseChangeEnvironment();
 
     void benchDUChainBuilder();
+
+private:
+    QScopedPointer<TestEnvironmentProvider> m_provider;
 };
 
 #endif // DUCHAINTEST_H

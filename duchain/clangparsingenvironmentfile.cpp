@@ -112,7 +112,12 @@ bool ClangParsingEnvironmentFile::matchEnvironment(const ParsingEnvironment* env
     return false;
 }
 
-bool ClangParsingEnvironmentFile::inProject()
+uint ClangParsingEnvironmentFile::environmentHash() const
+{
+    return d_func()->environmentHash;
+}
+
+bool ClangParsingEnvironmentFile::inProject() const
 {
     return d_func()->projectWasKnown;
 }

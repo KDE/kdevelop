@@ -44,20 +44,61 @@
 #include <duchain/clangparsingenvironment.h>
 #include <duchain/parsesession.h>
 
+#include <custom-definesandincludes/idefinesandincludesmanager.h>
+
 QTEST_KDEMAIN(TestDUChain, NoGUI);
 
 using namespace KDevelop;
+
+class TestEnvironmentProvider final : public IDefinesAndIncludesManager::BackgroundProvider
+{
+public:
+    virtual ~TestEnvironmentProvider() = default;
+    virtual QHash< QString, QString > definesInBackground(const QString& path) const
+    {
+        return defines;
+    }
+
+    virtual Path::List includesInBackground(const QString& path) const
+    {
+        return includes;
+    }
+
+    virtual IDefinesAndIncludesManager::Type type() const
+    {
+        return IDefinesAndIncludesManager::All;
+    }
+
+    QHash<QString, QString> defines;
+    Path::List includes;
+};
+
+TestDUChain::~TestDUChain() = default;
 
 void TestDUChain::initTestCase()
 {
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
+
 }
 
 void TestDUChain::cleanupTestCase()
 {
     TestCore::shutdown();
+}
+
+void TestDUChain::cleanup()
+{
+    if (m_provider) {
+        IDefinesAndIncludesManager::manager()->unregisterBackgroundProvider(m_provider.data());
+    }
+}
+
+void TestDUChain::init()
+{
+    m_provider.reset(new TestEnvironmentProvider);
+    IDefinesAndIncludesManager::manager()->registerBackgroundProvider(m_provider.data());
 }
 
 struct ExpectedComment
@@ -683,6 +724,55 @@ void TestDUChain::testReparseInclude()
     QCOMPARE(foo->uses().begin().key(), impl.url());
     QCOMPARE(foo->uses().begin()->size(), 1);
     QCOMPARE(foo->uses().begin()->first(), RangeInRevision(1, 20, 1, 23));
+
+    QCOMPARE(DUChain::self()->allEnvironmentFiles(header.url()).size(), 1);
+    QCOMPARE(DUChain::self()->allEnvironmentFiles(impl.url()).size(), 1);
+    QCOMPARE(DUChain::self()->chainsForDocument(header.url()).size(), 1);
+    QCOMPARE(DUChain::self()->chainsForDocument(impl.url()).size(), 1);
+}
+
+void TestDUChain::testReparseChangeEnvironment()
+{
+    TestFile header("int foo() { return 42; }\n", "h");
+    TestFile impl("#include \"" + header.url().byteArray() + "\"\n"
+                  "int main() { return foo(); }", "cpp", &header);
+
+    uint hashes[3] = {0, 0, 0};
+
+    for (int i = 0; i < 3; ++i) {
+        impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+        QVERIFY(impl.waitForParsed(5000));
+
+        {
+            DUChainReadLocker lock;
+            QVERIFY(impl.topContext());
+            auto env = dynamic_cast<ClangParsingEnvironmentFile*>(impl.topContext()->parsingEnvironmentFile().data());
+            QVERIFY(env);
+            QVERIFY(!env->inProject());
+            hashes[i] = env->environmentHash();
+            QVERIFY(hashes[i]);
+
+            if (i) {
+                QEXPECT_FAIL("", "Somewhere, multiple environment files are generated", Abort);
+            }
+            QCOMPARE(DUChain::self()->allEnvironmentFiles(impl.url()).size(), 1);
+            QCOMPARE(DUChain::self()->chainsForDocument(impl.url()).size(), 1);
+            QCOMPARE(DUChain::self()->allEnvironmentFiles(header.url()).size(), 1);
+            QCOMPARE(DUChain::self()->chainsForDocument(header.url()).size(), 1);
+        }
+
+        for (int j = 0; j < i; ++j) {
+            QVERIFY(hashes[i] != hashes[j]);
+        }
+
+        if (i == 0) {
+            // change defines
+            m_provider->defines.insert("foooooooo", "baaar!");
+        } else if (i == 1) {
+            // change includes
+            m_provider->includes.append(Path("/foo/bar/asdf/lalala"));
+        }
+    }
 }
 
 #include "test_duchain.moc"
