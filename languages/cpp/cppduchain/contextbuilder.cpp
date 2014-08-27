@@ -374,7 +374,6 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
       topLevelContext = new CppDUContext<TopDUContext>(file->url(), topRange, const_cast<Cpp::EnvironmentFile*>(file.data()));
 
       topLevelContext->setType(DUContext::Global);
-      topLevelContext->setFlags((TopDUContext::Flags)(TopDUContext::UpdatingContext | topLevelContext->flags()));
       DUChain::self()->addDocumentChain(topLevelContext);
     
       topLevelContext->updateImportsCache(); //Mark that we will use a cached import-structure
