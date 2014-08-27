@@ -124,6 +124,7 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> otherArgs;
     otherArgs.reserve(includes.size() + defines.size() + pchInclude.isValid());
+    // NOTE: the PCH include must come before all other includes!
     if (pchInclude.isValid()) {
         args << "-include";
         QByteArray pchFile = pchInclude.toLocalFile().toUtf8();
