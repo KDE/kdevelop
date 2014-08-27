@@ -145,10 +145,12 @@ void TestSessionController::deleteSession()
 {
     const QString sessionName = "TestSession3";
     int sessionCount = m_sessionCtrl->sessionNames().count();
-    Session* s = m_sessionCtrl->createSession( sessionName );
+    QPointer<Session> s = m_sessionCtrl->createSession( sessionName );
     QString sessionId = s->id().toString();
     QCOMPARE( sessionCount+1, m_sessionCtrl->sessionNames().count() );
-    verifySessionDir( s );
+    verifySessionDir( s.data() );
+    const QString sessionDir = ::sessionDir(s);
+
     QSignalSpy spy(m_sessionCtrl, SIGNAL(sessionDeleted(QString)));
     {
         TryLockSessionResult lock = m_sessionCtrl->tryLockSession(sessionId);
@@ -164,7 +166,7 @@ void TestSessionController::deleteSession()
     QString emittedSession = arguments.at(0).toString();
     QCOMPARE( sessionId, emittedSession );
 
-    verifySessionDir( s, false );
+    verifySessionDir( sessionDir, sessionName, false );
 }
 
 void TestSessionController::cloneSession()

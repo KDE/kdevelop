@@ -582,13 +582,15 @@ void SessionController::cleanup()
 {
     d->recoveryTimer.stop();
 
-    Q_ASSERT(d->activeSession->id().toString() == d->sessionLock->id());
+    if (d->activeSession) {
+        Q_ASSERT(d->activeSession->id().toString() == d->sessionLock->id());
 
-    ISession* active = d->activeSession;
-    d->activeSession = 0;
-    if (active->isTemporary()) {
-        deleteSessionFromDisk(d->sessionLock);
+        if (d->activeSession->isTemporary()) {
+            deleteSessionFromDisk(d->sessionLock);
+        }
+        d->activeSession = 0;
     }
+
     d->sessionLock.clear();
     qDeleteAll(d->sessionActions);
     d->sessionActions.clear();
@@ -687,11 +689,14 @@ void SessionController::deleteSession( const ISessionLock::Ptr& lock )
         plugActionList( "available_sessions", d->grp->actions() );
     }
 
+    if (s == d->activeSession) {
+        d->activeSession = nullptr;
+    }
     deleteSessionFromDisk(lock);
 
     emit sessionDeleted( s->id().toString() );
     d->sessionActions.remove(s);
-    s->deleteLater();
+    delete s;
 }
 
 void SessionController::deleteSessionFromDisk( const ISessionLock::Ptr& lock )

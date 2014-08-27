@@ -156,6 +156,11 @@ public:
 
     void saveListOfOpenedProjects()
     {
+        auto activeSession = Core::self()->activeSession();
+        if (!activeSession) {
+            return;
+        }
+
         KUrl::List openProjects;
         openProjects.reserve( m_projects.size() );
 
@@ -163,7 +168,7 @@ public:
             openProjects.append(project->projectFile().toUrl());
         }
 
-        Core::self()->activeSession()->setContainedProjects( openProjects );
+        activeSession->setContainedProjects( openProjects );
     }
 
     // Recursively collects builder dependencies for a project.
