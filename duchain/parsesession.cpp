@@ -199,11 +199,6 @@ void ParseSessionData::setUnit(CXTranslationUnit unit, const char* fileName)
     m_file = clang_getFile(m_unit, fileName);
 }
 
-ClangParsingEnvironment ParseSessionData::environment() const
-{
-    return m_environment;
-}
-
 ParseSession::ParseSession(ParseSessionData::Ptr data)
     : d(data)
 {
@@ -329,4 +324,9 @@ bool ParseSession::reparse(const QByteArray& contents, const ClangParsingEnviron
     } else {
         return false;
     }
+}
+
+ClangParsingEnvironment ParseSession::environment() const
+{
+    return d->m_environment;
 }

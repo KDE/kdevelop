@@ -529,8 +529,8 @@ void TestDUChain::testParsingEnvironment()
         auto top = file.topContext();
         QVERIFY(top);
 
-        auto sessionData = ParseSessionData::Ptr::dynamicCast(top->ast());
-        QVERIFY(sessionData);
+        auto session = ParseSession(ParseSessionData::Ptr::dynamicCast(top->ast()));
+        QVERIFY(session.data());
 
         auto envFile = KSharedPtr<ClangParsingEnvironmentFile>::dynamicCast(file.topContext()->parsingEnvironmentFile());
 
@@ -542,7 +542,7 @@ void TestDUChain::testParsingEnvironment()
 
         ClangParsingEnvironment env;
         {
-            ClangParsingEnvironment environment = sessionData->environment();
+            ClangParsingEnvironment environment = session.environment();
             QCOMPARE(env.projectKnown(), false);
             // We don't need system include directories as our test file doesn't use it.
             env.addDefines(environment.defines());
@@ -581,7 +581,7 @@ void TestDUChain::testParsingEnvironment()
         QVERIFY(!envFile->needsUpdate(&env));
 
         indexed = top->indexed();
-        lastEnv = sessionData->environment();
+        lastEnv = session.environment();
         qDebug() << top->url();
     }
 

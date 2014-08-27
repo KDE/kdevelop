@@ -306,7 +306,6 @@ bool isValidCompletionIdentifier(const QualifiedIdentifier& identifier)
  */
 bool isValidSpecialCompletionIdentifier(const QualifiedIdentifier& identifier)
 {
-    const int count = identifier.count();
     if (identifier.count() < 2) {
         return false;
     }
@@ -380,7 +379,7 @@ bool ClangCodeCompletionContext::isValidPosition() const
     return true;
 }
 
-QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(bool& abort, bool fullCompletion)
+QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(bool& abort, bool /*fullCompletion*/)
 {
     if (!m_valid || !m_duContext || !m_results) {
         return {};
@@ -402,6 +401,10 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
     kDebug() << "Clang found" << m_results->NumResults << "completion results";
 
     for (uint i = 0; i < m_results->NumResults; ++i) {
+        if (abort) {
+            return {};
+        }
+
         auto result = m_results->Results[i];
 
         const auto availability = clang_getCompletionAvailability(result.CompletionString);
@@ -558,6 +561,10 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         } else if (result.CursorKind == CXCursor_NotImplemented) {
             builtin.append(item);
         }
+    }
+
+    if (abort) {
+        return {};
     }
 
     addOverwritableItems();

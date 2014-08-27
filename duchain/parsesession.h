@@ -64,8 +64,6 @@ public:
 
     ~ParseSessionData();
 
-    ClangParsingEnvironment environment() const;
-
 private:
     friend class ParseSession;
 
@@ -121,7 +119,7 @@ public:
 
     bool reparse(const QByteArray& contents, const ClangParsingEnvironment& environment);
 
-    using TopAstNode = CXTranslationUnit;
+    ClangParsingEnvironment environment() const;
 
 private:
     ParseSessionData::Ptr d;

@@ -38,6 +38,7 @@ using namespace KDevelop;
 
 namespace {
 
+// TODO: Use it once clang_getInclusions _does_ returns imports on reparse with CXTranslationUnit_PrecompiledPreamble flag.
 // void visitInclusions(CXFile file, CXSourceLocation* stack, unsigned stackDepth, CXClientData d)
 // {
 //     if (stackDepth) {
@@ -113,11 +114,11 @@ CXChildVisitResult visitImportsInFile(CXCursor cursor, CXCursor, CXClientData da
 }
 
 /// @return environment for given @p file i.e. the same environment, but only with include directories used by this file.
-ClangParsingEnvironment environmentForFile(CXFile file, ParseSession session)
+ClangParsingEnvironment environmentForFile(CXFile file, const ParseSession& session)
 {
     ImportsForFile importsForFile;
     importsForFile.file = file;
-    auto sessionEnvironment = session.data()->environment();
+    auto sessionEnvironment = session.environment();
 
     if (!clang_visitChildren(clang_getTranslationUnitCursor(session.unit()), &visitImportsInFile, &importsForFile)) {
         // Add only used include directories into the environment.
