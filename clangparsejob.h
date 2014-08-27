@@ -46,8 +46,6 @@ private:
     KSharedPtr<ParseSessionData> createSessionData() const;
 
     ClangParsingEnvironment m_environment;
-
-    bool m_documentOpenedInEditor = false;
 };
 
 #endif // CLANGPARSEJOB_H
