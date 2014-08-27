@@ -4,10 +4,10 @@ set(kdevopenwith_PART_SRCS
     openwithplugin.cpp
 )
 
-kde4_add_plugin(kdevopenwith ${kdevopenwith_PART_SRCS})
-target_link_libraries(kdevopenwith kdevplatforminterfaces kdevplatformproject kdevplatformutil ${KDE4_KDEUI_LIBS})
+add_library(kdevopenwith MODULE ${kdevopenwith_PART_SRCS})
+target_link_libraries(kdevopenwith KDev::Interfaces KDev::Project KDev::Util)
 
-install(TARGETS kdevopenwith DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevopenwith DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 ########### install files ###############
 

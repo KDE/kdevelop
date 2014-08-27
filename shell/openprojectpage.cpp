@@ -12,8 +12,8 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QModelIndex>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QHeaderView>
+#include <QVBoxLayout>
+#include <QHeaderView>
 
 #include <kconfiggroup.h>
 #include <kurlcompletion.h>
@@ -139,4 +139,3 @@ QMap<QString,QStringList> OpenProjectPage::projectFilters() const
 
 }
 
-#include "openprojectpage.moc"

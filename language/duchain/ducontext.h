@@ -675,7 +675,7 @@ public:
    */
   struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public QSharedData
   {
-    typedef KSharedPtr<SearchItem> Ptr;
+    typedef QExplicitlySharedDataPointer<SearchItem> Ptr;
     typedef KDevVarLengthArray<Ptr, 256> PtrList;
 
     /**

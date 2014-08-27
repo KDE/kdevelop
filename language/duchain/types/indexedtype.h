@@ -20,7 +20,8 @@
 #define KDEVPLATFORM_INDEXEDTYPE_H
 
 #include "abstracttype.h"
-#include <language/duchain/referencecounting.h>
+
+#include <serialization/referencecounting.h>
 
 namespace KDevelop
 {

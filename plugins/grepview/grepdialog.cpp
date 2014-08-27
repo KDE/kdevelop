@@ -13,6 +13,7 @@
 
 #include "grepdialog.h"
 
+#include <QDialogButtonBox>
 #include <QDir>
 #include <QLabel>
 #include <QRegExp>
@@ -20,6 +21,7 @@
 #include <QStringList>
 #include <QMenu>
 
+#include <kconfiggroup.h>
 #include <kfiledialog.h>
 #include <kpushbutton.h>
 #include <kglobal.h>
@@ -30,8 +32,10 @@
 #include <kdebug.h>
 #include <kcombobox.h>
 #include <kurlcompletion.h>
+#include <kurlcompletion.h>
 #include <kstandarddirs.h>
 #include <klineedit.h>
+#include <KCompletion/kcompletion.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
@@ -108,20 +112,20 @@ const QString pathsSeparator(";");
 const int pathsMaxCount = 25;
 }
 
-const KDialog::ButtonCode GrepDialog::SearchButton  = KDialog::User1;
-
 GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
-    : KDialog(parent), Ui::GrepWidget(), m_plugin( plugin )
+    : QDialog(parent), Ui::GrepWidget(), m_plugin( plugin )
 {
     setAttribute(Qt::WA_DeleteOnClose);
+    setWindowTitle( i18n("Find/Replace in Files") );
 
-    setButtons( SearchButton | KDialog::Cancel );
-    setButtonText( SearchButton, i18n("Search...") );
-    setButtonIcon( SearchButton, KIcon("edit-find") );
-    setCaption( i18n("Find/Replace in Files") );
-    setDefaultButton( SearchButton );
+    setupUi(this);
 
-    setupUi(mainWidget());
+    auto searchButton = buttonBox->button(QDialogButtonBox::Ok);
+    Q_ASSERT(searchButton);
+    searchButton->setText(tr("Search..."));
+    searchButton->setIcon(QIcon::fromTheme("edit-find"));
+    connect(searchButton, &QPushButton::clicked, this, &GrepDialog::startSearch);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &GrepDialog::reject);
 
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
 
@@ -132,14 +136,14 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     templateTypeCombo->setCurrentIndex( cg.readEntry("LastUsedTemplateIndex", 0) );
     templateEdit->addItems( cg.readEntry("LastUsedTemplateString", template_str) );
     templateEdit->setEditable(true);
-    templateEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+    templateEdit->setCompletionMode(KCompletion::CompletionPopup);
     KCompletion* comp = templateEdit->completionObject();
     connect(templateEdit, SIGNAL(returnPressed(QString)), comp, SLOT(addItem(QString)));
     for(int i=0; i<templateEdit->count(); i++)
         comp->addItem(templateEdit->itemText(i));
     replacementTemplateEdit->addItems( cg.readEntry("LastUsedReplacementTemplateString", repl_template) );
     replacementTemplateEdit->setEditable(true);
-    replacementTemplateEdit->setCompletionMode(KGlobalSettings::CompletionPopup);
+    replacementTemplateEdit->setCompletionMode(KCompletion::CompletionPopup);
     comp = replacementTemplateEdit->completionObject();
     connect(replacementTemplateEdit, SIGNAL(returnPressed(QString)), comp, SLOT(addItem(QString)));
     for(int i=0; i<replacementTemplateEdit->count(); i++)
@@ -157,7 +161,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     searchPaths->addItems(cg.readEntry("SearchPaths", QStringList(!projects.isEmpty() ? allOpenProjectsString : QDir::homePath() ) ));
     searchPaths->setInsertPolicy(QComboBox::InsertAtTop);
 
-    syncButton->setIcon(KIcon("dirsync"));
+    syncButton->setIcon(QIcon::fromTheme("dirsync"));
     syncButton->setMenu(createSyncButtonMenu());
 
     depthSpin->setValue(cg.readEntry("depth", -1));
@@ -166,7 +170,6 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     filesCombo->addItems(cg.readEntry("file_patterns", filepatterns));
     excludeCombo->addItems(cg.readEntry("exclude_patterns", excludepatterns) );
 
-    connect(this, SIGNAL(buttonClicked(KDialog::ButtonCode)), this, SLOT(performAction(KDialog::ButtonCode)));
     connect(templateTypeCombo, SIGNAL(activated(int)),
             this, SLOT(templateTypeComboActivated(int)));
     connect(patternCombo, SIGNAL(editTextChanged(QString)),
@@ -176,7 +179,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     
     connect(searchPaths, SIGNAL(activated(QString)), this, SLOT(setSearchLocations(QString)));
 
-    directorySelector->setIcon(KIcon("document-open"));
+    directorySelector->setIcon(QIcon::fromTheme("document-open"));
     connect(directorySelector, SIGNAL(clicked(bool)), this, SLOT(selectDirectoryDialog()) );
     directoryChanged(directorySelector->text());
 }
@@ -190,7 +193,7 @@ void GrepDialog::selectDirectoryDialog()
     }
 }
 
-void GrepDialog::addUrlToMenu(QMenu* menu, KUrl url)
+void GrepDialog::addUrlToMenu(QMenu* menu, const KUrl& url)
 {
     QAction* action = menu->addAction(m_plugin->core()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain));
     action->setData(QVariant(url.pathOrUrl()));
@@ -310,6 +313,7 @@ void GrepDialog::setEnableProjectBox(bool enable)
 void GrepDialog::setPattern(const QString &pattern)
 {
     patternCombo->setEditText(pattern);
+    patternComboEditTextChanged(pattern);
 }
 
 void GrepDialog::setSearchLocations(const QString &dir)
@@ -382,7 +386,7 @@ bool GrepDialog::caseSensitiveFlag() const
 
 void GrepDialog::patternComboEditTextChanged( const QString& text)
 {
-    enableButton( SearchButton,  !text.isEmpty() );
+    buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!text.isEmpty());
 }
 
 QList< KUrl > GrepDialog::getDirectoryChoice() const
@@ -420,16 +424,8 @@ bool GrepDialog::isPartOfChoice(KUrl url) const
     return false;
 }
 
-void GrepDialog::start()
+void GrepDialog::startSearch()
 {
-    performAction(SearchButton);
-}
-
-void GrepDialog::performAction(KDialog::ButtonCode button)
-{
-    // a click on cancel trigger this signal too
-    if( button != SearchButton ) return;
-    
     // search for unsaved documents
     QList<IDocument*> unsavedFiles;
     QStringList include = GrepFindFilesThread::parseInclude(filesString());
@@ -498,5 +494,4 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     close();
 }
 
-#include "grepdialog.moc"
 

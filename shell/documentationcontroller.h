@@ -24,7 +24,7 @@
 
 class DocumentationViewFactory;
 
-class KAction;
+class QAction;
 
 namespace KDevelop
 {
@@ -43,8 +43,8 @@ class DocumentationController : public KDevelop::IDocumentationController
         void initialize();
         
         virtual QList<IDocumentationProvider*> documentationProviders() const;
-        virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
-        virtual void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
+        virtual QExplicitlySharedDataPointer< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
+        virtual void showDocumentation(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc);
         ContextMenuExtension contextMenuExtension( Context* context );
         
     public slots:
@@ -54,7 +54,7 @@ class DocumentationController : public KDevelop::IDocumentationController
     private:
         DocumentationViewFactory* m_factory;
 
-        KAction* m_showDocumentation;
+        QAction* m_showDocumentation;
 };
 
 }

@@ -21,7 +21,7 @@
 #define KDEVPLATFORM_IDOCUMENTATION_H
 
 #include <QtCore/QString>
-#include <KDE/KSharedPtr>
+#include <QExplicitlySharedDataPointer>
 #include "interfacesexport.h"
 #include <util/ksharedobject.h>
 
@@ -40,7 +40,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentation : public QObject, public KSha
     Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
     Q_PROPERTY(IDocumentationProvider* provider READ provider CONSTANT)
     public:
-        typedef KSharedPtr<IDocumentation> Ptr;
+        typedef QExplicitlySharedDataPointer<IDocumentation> Ptr;
         IDocumentation();
 
         virtual ~IDocumentation();

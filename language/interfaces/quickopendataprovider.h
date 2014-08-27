@@ -27,7 +27,7 @@
 #include <KDE/KUrl>
 
 #include <ksharedptr.h>
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 class QString;
 class QStringList;
@@ -129,7 +129,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public QSharedData {
     virtual QWidget* expandingWidget() const;
 };
 
-typedef KSharedPtr<QuickOpenDataBase> QuickOpenDataPointer;
+typedef QExplicitlySharedDataPointer<QuickOpenDataBase> QuickOpenDataPointer;
 
 /**
  * Use this interface to provide custom quickopen-data to the quickopen-widget.

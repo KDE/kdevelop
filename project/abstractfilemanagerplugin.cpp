@@ -38,7 +38,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iprojectcontroller.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include "projectfiltermanager.h"
 
@@ -426,11 +426,11 @@ void AbstractFileManagerPlugin::Private::removeFolder(ProjectFolderItem* folder)
 
 //BEGIN Plugin
 
-AbstractFileManagerPlugin::AbstractFileManagerPlugin( const KComponentData& instance,
+AbstractFileManagerPlugin::AbstractFileManagerPlugin( const QString& componentName,
                                                       QObject *parent,
                                                       const QVariantList & /*args*/ )
     : IProjectFileManager(),
-      IPlugin( instance, parent ),
+      IPlugin( componentName, parent ),
       d(new Private(this))
 {
     KDEV_USE_EXTENSION_INTERFACE( IProjectFileManager )
@@ -650,4 +650,4 @@ KDirWatch* AbstractFileManagerPlugin::projectWatcher( IProject* project ) const
 
 //END Plugin
 
-#include "abstractfilemanagerplugin.moc"
+#include "moc_abstractfilemanagerplugin.cpp"

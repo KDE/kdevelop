@@ -49,18 +49,18 @@ bool rangesConnect(const KTextEditor::Range& firstRange, const KTextEditor::Rang
 
 Declaration* getDeclarationForChangedRange(KTextEditor::View* view, const KTextEditor::Range& changed)
 {
-    SimpleCursor cursor(changed.start());
+    const KTextEditor::Cursor cursor(changed.start());
     Declaration* declaration = DUChainUtils::itemUnderCursor(view->document()->url(), cursor);
 
     //If it's null we could be appending, but there's a case where appending gives a wrong decl
     //and not a null declaration ... "type var(init)", so check for that too
-    if (!declaration || !rangesConnect(declaration->rangeInCurrentRevision().textRange(), changed)) {
-        declaration = DUChainUtils::itemUnderCursor(view->document()->url(), SimpleCursor(cursor.line, --cursor.column));
+    if (!declaration || !rangesConnect(declaration->rangeInCurrentRevision(), changed)) {
+        declaration = DUChainUtils::itemUnderCursor(view->document()->url(), KTextEditor::Cursor(cursor.line(), cursor.column()-1));
     }
 
     //In this case, we may either not have a decl at the cursor, or we got a decl, but are editing its use.
     //In either of those cases, give up and return 0
-    if (!declaration || !rangesConnect(declaration->rangeInCurrentRevision().textRange(), changed)) {
+    if (!declaration || !rangesConnect(declaration->rangeInCurrentRevision(), changed)) {
         return 0;
     }
 
@@ -82,9 +82,8 @@ struct RenameAssistant::Private
     {
         q->doHide();
         q->clearActions();
-
         m_oldDeclarationName = Identifier();
-        m_newDeclarationRange.clear();
+        m_newDeclarationRange.reset();
         m_oldDeclarationUses.clear();
         m_isUseful = false;
         m_renameFile = false;
@@ -104,6 +103,10 @@ struct RenameAssistant::Private
 RenameAssistant::RenameAssistant(ILanguageSupport* supportedLanguage)
     : StaticAssistant(supportedLanguage)
     , d(new Private(this))
+{
+}
+
+RenameAssistant::~RenameAssistant()
 {
 }
 
@@ -142,7 +145,7 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
 
     //If we've stopped editing m_newDeclarationRange or switched the view,
     // reset and see if there's another declaration being edited
-    if (!d->m_newDeclarationRange.data() || !rangesConnect(d->m_newDeclarationRange->range().textRange(), invocationRange)
+    if (!d->m_newDeclarationRange.data() || !rangesConnect(d->m_newDeclarationRange->range(), invocationRange)
             || d->m_newDeclarationRange->document() != indexedUrl) {
         d->reset();
 
@@ -164,8 +167,8 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
             {
                 foreach(const RangeInRevision& range, it.value())
                 {
-                SimpleRange currentRange = declAtCursor->transformFromLocalRevision(range);
-                if(currentRange.isEmpty() || view->document()->text(currentRange.textRange()) != declAtCursor->identifier().identifier().str())
+                KTextEditor::Range currentRange = declAtCursor->transformFromLocalRevision(range);
+                if(currentRange.isEmpty() || view->document()->text(currentRange) != declAtCursor->identifier().identifier().str())
                     return; // One of the uses is invalid. Maybe the replacement has already been performed.
                 }
             }
@@ -178,21 +181,21 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
         }
 
         d->m_oldDeclarationName = declAtCursor->identifier();
-        KTextEditor::Range newRange = declAtCursor->rangeInCurrentRevision().textRange();
+        KTextEditor::Range newRange = declAtCursor->rangeInCurrentRevision();
         if (removedText.isEmpty() && newRange.intersect(invocationRange).isEmpty()) {
             newRange = newRange.encompass(invocationRange); //if text was added to the ends, encompass it
         }
 
-        d->m_newDeclarationRange.attach(new PersistentMovingRange(newRange, indexedUrl, true));
+        d->m_newDeclarationRange = new PersistentMovingRange(newRange, indexedUrl, true);
     }
 
     //Unfortunately this happens when you make a selection including one end of the decl's range and replace it
-    if (removedText.isEmpty() && d->m_newDeclarationRange->range().textRange().intersect(invocationRange).isEmpty()) {
-        d->m_newDeclarationRange.attach(new PersistentMovingRange(
-            d->m_newDeclarationRange->range().textRange().encompass(invocationRange), indexedUrl, true));
+    if (removedText.isEmpty() && d->m_newDeclarationRange->range().intersect(invocationRange).isEmpty()) {
+        d->m_newDeclarationRange = new PersistentMovingRange(
+            d->m_newDeclarationRange->range().encompass(invocationRange), indexedUrl, true);
     }
 
-    d->m_newDeclarationName = view->document()->text(d->m_newDeclarationRange->range().textRange());
+    d->m_newDeclarationName = view->document()->text(d->m_newDeclarationRange->range());
     if (d->m_newDeclarationName == d->m_oldDeclarationName.toString()) {
         d->reset();
         return;
@@ -207,14 +210,13 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
 
     IAssistantAction::Ptr action;
     if (d->m_renameFile) {
-        action.attach(new RenameFileAction(supportedLanguage()->refactoring(), url, d->m_newDeclarationName));
+        action = new RenameFileAction(supportedLanguage()->refactoring(), url, d->m_newDeclarationName);
     } else {
-        action.attach(new RenameAction(d->m_oldDeclarationName, d->m_newDeclarationName,
-                                       d->m_oldDeclarationUses));
+        action =new RenameAction(d->m_oldDeclarationName, d->m_newDeclarationName, d->m_oldDeclarationUses);
     }
     connect(action.data(), SIGNAL(executed(IAssistantAction*)), SLOT(reset()));
     addAction(action);
     emit actionsChanged();
 }
 
-#include "renameassistant.moc"
+#include "moc_renameassistant.cpp"

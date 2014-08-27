@@ -1,10 +1,10 @@
 # kdevplatform version
 set(KDEVPLATFORM_VERSION_MAJOR 1)
-set(KDEVPLATFORM_VERSION_MINOR 7)
-set(KDEVPLATFORM_VERSION_PATCH 60)
+set(KDEVPLATFORM_VERSION_MINOR 90)
+set(KDEVPLATFORM_VERSION_PATCH 90)
 
 # plugin versions listed in the .desktop files
-set(KDEV_PLUGIN_VERSION 18)
+set(KDEV_PLUGIN_VERSION 19)
 # Increase this to reset incompatible item-repositories
 set(KDEV_ITEMREPOSITORY_VERSION 80)
 
@@ -14,42 +14,67 @@ set(KDEVPLATFORM_LIB_SOVERSION 9)
 
 ################################################################################
 
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 2.8.12)
 project(KDevPlatform)
 
-set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules)
+# we need some parts of the ECM CMake helpers
+find_package (ECM 0.0.9 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
+include(ECMAddTests)
+include(ECMOptionalAddSubdirectory)
+include(ECMInstallIcons)
+include(ECMSetupVersion)
+include(ECMMarkAsTest)
+include(ECMMarkNonGuiExecutable)
+include(ECMGenerateHeaders)
+include(ECMPackageConfigHelpers)
+include(FeatureSummary)
+include(WriteBasicConfigVersionFile)
+include(CheckFunctionExists)
 
-set(KDE_MIN_VERSION "4.7.0")
-find_package(KDE4 4.7.0 REQUIRED)
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings)
+include(KDevPlatformMacros)
 
-find_package(Grantlee 0.1.7)
-find_package(QJSON)
-macro_log_feature( Grantlee_FOUND "Grantlee" "Grantlee templating library, needed for file templates" "http://www.grantlee.org/" TRUE "0.1.7")
-macro_log_feature( QJSON_FOUND "QJson" "QJson support for Uploading Patches to reviewboard" "http://qjson.sourceforge.net/" FALSE "0.7.0" "The qjson library is needed to enable uploading patches to reviewboard" )
+set(QT_MIN_VERSION "5.2.0")
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Declarative DBus Widgets Script WebKitWidgets QuickWidgets Concurrent Test)
 
-# QJSON <=0.7.1 provides variables with lower case prefix, see bug 331426
-if (QJSON_VERSION VERSION_LESS "0.7.2")
-    set(QJSON_LIBRARIES   ${qjson_LIBRARIES})
-    set(QJSON_INCLUDE_DIR ${qjson_INCLUDE_DIR})
-endif()
+find_package(KF5 REQUIRED COMPONENTS
+  Archive
+  Config
+  GuiAddons
+  I18n
+  ItemModels
+  ItemViews
+  JobWidgets
+  KCMUtils
+  KIO
+  NewStuff
+  NotifyConfig
+  Parts
+  Service
+  Sonnet
+  TextEditor
+  ThreadWeaver
+  WindowSystem
+  Declarative
 
-include (KDE4Defaults)
-include (MacroWriteBasicCMakeVersionFile)
-include (MacroLibrary)
+  # TODO KF5: Port away from this
+  KDELibs4Support
+)
 
-# Make sure that we're having RPATH on our installed libs, else using kdevelop
-# from prefixes like $HOME/kdevelop breaks
-# Code taken from FindKDE4Internal.cmake for KDE 4.5
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}"
-  _isSystemLibDir)
-if("${_isSystemLibDir}" STREQUAL "-1")
-  set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
-endif("${_isSystemLibDir}" STREQUAL "-1")
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+find_package(KF5XmlGui 5.1 REQUIRED)
 
-add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+# TODO KF5: Remove Grantlee found check as soon there is an official version of Grantlee for Qt5
+find_package(Grantlee 1.0.0)
+set_package_properties(Grantlee PROPERTIES
+    PURPOSE "Grantlee templating library, needed for file templates"
+    URL "http://www.grantlee.org/")
+
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQURL_NO_CAST_FROM_QSTRING)
-add_definitions(-DQT_DEPRECATED_WARNINGS -DQT_DISABLE_DEPRECATED_BEFORE=0x040800)
+remove_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0) # comes from KDELibs4Support
+add_definitions(-DQT_DEPRECATED_WARNINGS -DQT_DISABLE_DEPRECATED_BEFORE=0x050000)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -61,32 +86,29 @@ if (CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-field-initializers")
 endif()
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    # TODO: kf5 remove
-    # in Qt 4, clang support is lacking...
-    add_definitions("-DQ_COMPILER_INITIALIZER_LISTS=1")
-endif()
-
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
-include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR} ${KDE4_INCLUDES})
-include_directories(${Grantlee_INCLUDE_DIRS})
+include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR})
+if (Grantlee_FOUND)
+    include_directories(${Grantlee_INCLUDE_DIRS})
+endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/)
 
 # Now set the usual KDEVPLATFORM_XXX_LIBRARIES variable so we can more easily move plugins around
-set(KDEVPLATFORM_SUBLIME_LIBRARIES sublime)
-set(KDEVPLATFORM_INTERFACES_LIBRARIES kdevplatforminterfaces)
-set(KDEVPLATFORM_LANGUAGE_LIBRARIES kdevplatformlanguage)
-set(KDEVPLATFORM_PROJECT_LIBRARIES kdevplatformproject)
-set(KDEVPLATFORM_UTIL_LIBRARIES kdevplatformutil)
-set(KDEVPLATFORM_OUTPUTVIEW_LIBRARIES kdevplatformoutputview)
-set(KDEVPLATFORM_VCS_LIBRARIES kdevplatformvcs)
-set(KDEVPLATFORM_SHELL_LIBRARIES kdevplatformshell)
-set(KDEVPLATFORM_TESTS_LIBRARIES kdevplatformtests)
-set(KDEVPLATFORM_JSONTESTS_LIBRARIES kdevplatformjsontests)
-set(KDEVPLATFORM_DEBUGGER_LIBRARIES kdevplatformdebugger)
-set(KDEVPLATFORM_DOCUMENTATION_LIBRARIES kdevplatformdocumentation)
+set(KDEVPLATFORM_SUBLIME_LIBRARIES KDev::Sublime)
+set(KDEVPLATFORM_INTERFACES_LIBRARIES KDev::Interfaces)
+set(KDEVPLATFORM_LANGUAGE_LIBRARIES KDev::Language)
+set(KDEVPLATFORM_PROJECT_LIBRARIES KDev::Project)
+set(KDEVPLATFORM_UTIL_LIBRARIES KDev::Util)
+set(KDEVPLATFORM_OUTPUTVIEW_LIBRARIES KDev::OutputView)
+set(KDEVPLATFORM_VCS_LIBRARIES KDev::Vcs)
+set(KDEVPLATFORM_SHELL_LIBRARIES KDev::Shell)
+set(KDEVPLATFORM_TESTS_LIBRARIES KDev::Tests)
+set(KDEVPLATFORM_JSONTESTS_LIBRARIES KDev::JsonTests)
+set(KDEVPLATFORM_DEBUGGER_LIBRARIES KDev::Debugger)
+set(KDEVPLATFORM_DOCUMENTATION_LIBRARIES KDev::Documentation)
+set(KDEVPLATFORM_SERIALIZATION_LIBRARIES KDev::Serialization)
 
 add_subdirectory(sublime)
 add_subdirectory(interfaces)
@@ -97,25 +119,30 @@ add_subdirectory(util)
 add_subdirectory(outputview)
 add_subdirectory(vcs)
 add_subdirectory(pics)
-#macro_optional_add_subdirectory(doc)
+#ecm_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
 add_subdirectory(documentation)
+add_subdirectory(serialization)
+
 if (Grantlee_FOUND)
-add_subdirectory(template)
+    add_subdirectory(template)
 endif()
 add_subdirectory(tests)
 
 add_subdirectory(plugins)
 
-macro_write_basic_cmake_version_file( ${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake ${KDEVPLATFORM_VERSION_MAJOR} ${KDEVPLATFORM_VERSION_MINOR} ${KDEVPLATFORM_VERSION_PATCH} )
+write_basic_config_version_file(${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake
+    VERSION ${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_MINOR}.${KDEVPLATFORM_VERSION_PATCH}
+    COMPATIBILITY AnyNewerVersion)
 configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfig.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake" @ONLY )
 configure_file( "${KDevPlatform_SOURCE_DIR}/kdevplatformversion.h.cmake" "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h" @ONLY )
 
-if(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
-    set(_kdevplatform_CONFIG_DEST "${LIB_INSTALL_DIR}/cmake/kdevplatform")
-else(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
-    set(_kdevplatform_CONFIG_DEST "${LIB_INSTALL_DIR}/kdevplatform")
-endif(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KDevPlatform")
+
+ecm_configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfig.cmake.in"
+                              "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfig.cmake"
+                              INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
+)
 
 install( FILES
         "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h"
@@ -126,17 +153,17 @@ install( FILES
 install( FILES
         "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake"
         "${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake"
-        DESTINATION "${_kdevplatform_CONFIG_DEST}" )
+        cmake/modules/KDevPlatformMacros.cmake
+        DESTINATION "${CMAKECONFIG_INSTALL_DIR}" )
 install( EXPORT KDevPlatformTargets
-         DESTINATION "${_kdevplatform_CONFIG_DEST}"
-         NAMESPACE KDevPlatformImport__
+         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+         NAMESPACE KDev::
          FILE KDevPlatformTargets.cmake )
-
-# Put this last, so it can use _kdevplatform_CONFIG_DEST
-add_subdirectory(cmake)
 
 include(CTest)
 
 # CTestCustom.cmake has to be in the CTEST_BINARY_DIR.
 # in the KDE build system, this is the same as CMAKE_BINARY_DIR.
 configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCustom.cmake)
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

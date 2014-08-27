@@ -66,7 +66,7 @@ bool CodeCompletionContext::isValid() const {
   return m_valid;
 }
 
-void KDevelop::CodeCompletionContext::setParentContext(KSharedPtr< KDevelop::CodeCompletionContext > newParent) {
+void KDevelop::CodeCompletionContext::setParentContext(QExplicitlySharedDataPointer< KDevelop::CodeCompletionContext > newParent) {
   m_parentContext = newParent;
   int newDepth = m_depth+1;
   while(newParent) {
@@ -81,8 +81,8 @@ CodeCompletionContext* CodeCompletionContext::parentContext()
   return m_parentContext.data();
 }
 
-QList< KSharedPtr< KDevelop::CompletionTreeElement > > KDevelop::CodeCompletionContext::ungroupedElements() {
-  return QList< KSharedPtr< KDevelop::CompletionTreeElement > >();
+QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > > KDevelop::CodeCompletionContext::ungroupedElements() {
+  return QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > >();
 }
 
 KDevelop::DUContext* KDevelop::CodeCompletionContext::duContext() const {

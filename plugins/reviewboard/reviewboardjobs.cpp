@@ -19,13 +19,14 @@
  */
 
 #include "reviewboardjobs.h"
-#include <qjson/parser.h>
+#include <QJsonDocument>
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <KLocalizedString>
 #include <KIO/Job>
 #include <KRandom>
-#include <KMimeType>
+#include <QMimeType>
+#include <QMimeDatabase>
 #include <QFile>
 #include <QDebug>
 #include <QNetworkAccessManager>
@@ -72,10 +73,10 @@ QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
         if (val.second.type()==QVariant::Url) {
             KUrl path=val.second.toUrl();
             hstr += "; filename=\"" + path.fileName().toLatin1() + "\"";
-            const KMimeType::Ptr ptr = KMimeType::findByUrl(path);
-            if (!ptr->name().isEmpty()) {
+            const QMimeType mime = QMimeDatabase().mimeTypeForUrl(path);
+            if (!mime.name().isEmpty()) {
                 hstr += "\r\nContent-Type: ";
-                hstr += ptr->name().toAscii().constData();
+                hstr += mime.name().toLatin1().constData();
             }
         }
         //
@@ -115,7 +116,7 @@ void HttpCall::start()
     QNetworkRequest r(m_requrl);
 
     if(m_requrl.hasUser()) {
-        QByteArray head = "Basic " + m_requrl.userInfo().toAscii().toBase64();
+        QByteArray head = "Basic " + m_requrl.userInfo().toLatin1().toBase64();
         r.setRawHeader("Authorization", head);
     }
 
@@ -143,15 +144,16 @@ QVariant HttpCall::result() const
 
 void HttpCall::finished()
 {
-    QJson::Parser parser;
     QByteArray receivedData = m_reply->readAll();
+    QJsonParseError error;
+    QJsonDocument parser = QJsonDocument::fromJson(receivedData, &error);
 
 //     qDebug() << "parsing..." << receivedData;
-    bool ok;
-    m_result = parser.parse(receivedData, &ok);
-    if (!ok) {
+    if (error.error == 0) {
+        m_result = parser.toVariant();
+    } else {
         setError(1);
-        setErrorText(i18n("JSON error: %1: %2", parser.errorLine(), parser.errorString()));
+        setErrorText(i18n("JSON error: %1: %2", error.errorString()));
     }
 
     if (m_result.toMap().value("stat").toString()!="ok") {

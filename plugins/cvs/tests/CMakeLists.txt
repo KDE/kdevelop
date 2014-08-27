@@ -8,7 +8,7 @@ if (UNIX)
 
 # Running the test only makes sense if the cvs command line client
 # is present. So check for it before adding the test ...
-FIND_PROGRAM(CVS NAMES cvs
+find_program(CVS NAMES cvs
 	PATHS
 	/bin
 	/usr/bin
@@ -33,16 +33,18 @@ if (CVS)
         ../cvsstatusjob.cpp
         ../cvsdiffjob.cpp
     )
-	kde4_add_unit_test(kdevcvs-test ${cvstest_SRCS})
+	add_executable(kdevcvs-test ${cvstest_SRCS})
+	add_test(kdevcvs-test kdevcvs-test)
+    ecm_mark_as_test(kdevcvs-test)
 	target_link_libraries(kdevcvs-test
-		${QT_QTTEST_LIBRARY}
-		${KDE4_KDECORE_LIBS}
-        kdevplatformutil
-        kdevplatformvcs
-        kdevplatformtests
+		Qt5::Test
+		
+        KDev::Util
+        KDev::Vcs
+        KDev::Tests
 	)
 
-endif (CVS)
+endif ()
 
-endif (UNIX)
+endif ()
 

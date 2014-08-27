@@ -33,18 +33,6 @@
 namespace QTest {
 
 template<>
-inline char* toString(const KDevelop::SimpleCursor& c)
-{
-    return qstrdup(qPrintable(QString("(%1, %2)").arg(c.line).arg(c.column)));
-}
-
-template<>
-inline char* toString(const KDevelop::SimpleRange& r)
-{
-    return qstrdup(qPrintable(QString("[%1, %2]").arg(toString(r.start)).arg(toString(r.end))));
-}
-
-template<>
 inline char* toString(const KDevelop::CursorInRevision& c)
 {
     return toString(c.castToSimpleCursor());
@@ -54,18 +42,6 @@ template<>
 inline char* toString(const KDevelop::RangeInRevision& r)
 {
     return toString(r.castToSimpleRange());
-}
-
-template<>
-inline char* toString(const KTextEditor::Cursor& c)
-{
-    return qstrdup(qPrintable(QString("(%1, %2)").arg(c.line()).arg(c.column())));
-}
-
-template<>
-inline char* toString(const KTextEditor::Range& r)
-{
-    return qstrdup(qPrintable(QString("[%1, %2]").arg(toString(r.start())).arg(toString(r.end()))));
 }
 
 template<>
@@ -91,7 +67,7 @@ inline char* toString(const KDevelop::Declaration& dec)
 }
 
 template<>
-inline char* toString(const TypePtr<KDevelop::AbstractType>& type)
+inline char* toString(const KDevelop::AbstractType::Ptr& type)
 {
     QString s = QString("Type: %1")
         .arg(type ? type->toString() : QString("<null>"));

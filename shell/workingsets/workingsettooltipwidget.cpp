@@ -19,6 +19,7 @@
 #include "workingsettooltipwidget.h"
 
 #include <KLocalizedString>
+#include <KDebug>
 
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -91,7 +92,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         topLayout->addWidget(m_openButton);
 
         m_deleteButton = new QPushButton;
-        m_deleteButton->setIcon(KIcon("edit-delete"));
+        m_deleteButton->setIcon(QIcon::fromTheme("edit-delete"));
         m_deleteButton->setText(i18n("Delete"));
         m_deleteButton->setToolTip(i18n("Remove this working set. The contained documents are not affected."));
         m_deleteButton->setFlat(true);
@@ -126,7 +127,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         actionsLayout->addStretch();
 
         m_mergeButton = new QPushButton;
-        m_mergeButton->setIcon(KIcon("list-add"));
+        m_mergeButton->setIcon(QIcon::fromTheme("list-add"));
         m_mergeButton->setText(i18n("Add All"));
         m_mergeButton->setToolTip(i18n("Add all documents that are part of this working set to the currently active working set."));
         m_mergeButton->setFlat(true);
@@ -134,7 +135,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         actionsLayout->addWidget(m_mergeButton);
 
         m_subtractButton = new QPushButton;
-        m_subtractButton->setIcon(KIcon("list-remove"));
+        m_subtractButton->setIcon(QIcon::fromTheme("list-remove"));
         m_subtractButton->setText(i18n("Remove All"));
         m_subtractButton->setToolTip(i18n("Remove all documents that are part of this working set from the currently active working set."));
         m_subtractButton->setFlat(true);
@@ -280,12 +281,12 @@ void WorkingSetToolTipWidget::updateFileButtons()
         if(openFiles.contains(it.key())) {
             noneOpen = false;
             (*it)->m_button->setToolTip(i18n("Remove this file from the current working set"));
-            (*it)->m_button->setIcon(KIcon("list-remove"));
+            (*it)->m_button->setIcon(QIcon::fromTheme("list-remove"));
             (*it)->show();
         }else{
             allOpen = false;
             (*it)->m_button->setToolTip(i18n("Add this file to the current working set"));
-            (*it)->m_button->setIcon(KIcon("list-add"));
+            (*it)->m_button->setIcon(QIcon::fromTheme("list-add"));
             if(currentWorkingSet == m_set)
             {
                 (*it)->hide();
@@ -312,13 +313,13 @@ void WorkingSetToolTipWidget::updateFileButtons()
         disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
         connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
         connect(m_openButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
-        m_openButton->setIcon(KIcon("project-development-close"));
+        m_openButton->setIcon(QIcon::fromTheme("project-development-close"));
         m_openButton->setText(i18n("Stash"));
     }else{
         disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
         connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
         disconnect(m_openButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
-        m_openButton->setIcon(KIcon("project-open"));
+        m_openButton->setIcon(QIcon::fromTheme("project-open"));
         m_openButton->setText(i18n("Load"));
     }
 
@@ -379,4 +380,3 @@ void WorkingSetToolTipWidget::labelClicked()
         updateFileButtons();
 }
 
-#include "workingsettooltipwidget.moc"

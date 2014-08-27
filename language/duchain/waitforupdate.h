@@ -19,12 +19,13 @@
 #ifndef KDEVPLATFORM_WAITFORUPDATE_H
 #define KDEVPLATFORM_WAITFORUPDATE_H
 
+#include "duchain/topducontext.h"
+
+#include <serialization/indexedstring.h>
+
 #include <QtCore/QObject>
 #include <QMutex>
 #include <QWaitCondition>
-#include "duchain/indexedstring.h"
-#include "duchain/topducontext.h"
-
 
 namespace KDevelop {
 

@@ -25,6 +25,7 @@
 // KDE / KDevelop
 #include <KParts/MainWindow>
 #include <KTextEditor/Document>
+#include <KTextEditor/View>
 #include <kmessagebox.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
@@ -104,7 +105,7 @@ void BasicRefactoring::fillContextMenu(ContextMenuExtension &extension, Context 
         if (finfo.isWritable()) {
             QAction *action = new QAction(i18n("Rename \"%1\"...", declaration->qualifiedIdentifier().toString()), 0);
             action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
-            action->setIcon(KIcon("edit-rename"));
+            action->setIcon(QIcon::fromTheme("edit-rename"));
             connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
             extension.addAction(ContextMenuExtension::RefactorGroup, action);
         }
@@ -205,16 +206,15 @@ DocumentChangeSet::ChangeResult BasicRefactoring::applyChangesToDeclarations(con
 
 KDevelop::IndexedDeclaration BasicRefactoring::declarationUnderCursor(bool allowUse)
 {
-    KDevelop::IDocument *doc = ICore::self()->documentController()->activeDocument();
-    if (doc && doc->textDocument() && doc->textDocument()->activeView()) {
-        DUChainReadLocker lock;
-        if (allowUse)
-            return DUChainUtils::itemUnderCursor(doc->url(), SimpleCursor(doc->textDocument()->activeView()->cursorPosition()));
-        else
-            return DUChainUtils::declarationInLine(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()), DUChainUtils::standardContextForUrl(doc->url()));
-    }
+    KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
+    Q_ASSERT(view);
+    KTextEditor::Document* doc = view->document();
 
-    return KDevelop::IndexedDeclaration();
+    DUChainReadLocker lock;
+    if (allowUse)
+        return DUChainUtils::itemUnderCursor(doc->url(), KTextEditor::Cursor(view->cursorPosition()));
+    else
+        return DUChainUtils::declarationInLine(KTextEditor::Cursor(view->cursorPosition()), DUChainUtils::standardContextForUrl(doc->url()));
 }
 
 void BasicRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration &decl)
@@ -352,4 +352,3 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
 
 //END: BasicRefactoring
 
-#include "basicrefactoring.moc"

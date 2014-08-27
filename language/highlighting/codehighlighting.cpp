@@ -510,24 +510,24 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
   while(rangeIt != highlighting->m_waiting.end())
   {
     // Translate the range into the current revision
-    SimpleRange transformedRange = tracker->transformToCurrentRevision(rangeIt->range, highlighting->m_waitingRevision);
+    KTextEditor::Range transformedRange = tracker->transformToCurrentRevision(rangeIt->range, highlighting->m_waitingRevision);
 
     while(movingIt != oldHighlightedRanges.end() &&
-      ((*movingIt)->start().line() < transformedRange.start.line ||
-      ((*movingIt)->start().line() == transformedRange.start.line && (*movingIt)->start().column() < transformedRange.start.column)))
+      ((*movingIt)->start().line() < transformedRange.start().line() ||
+      ((*movingIt)->start().line() == transformedRange.start().line() && (*movingIt)->start().column() < transformedRange.start().column())))
     {
       delete *movingIt; // Skip ranges that are in front of the current matched range
       ++movingIt;
     }
 
-    tempRange.start().setPosition(transformedRange.start.line, transformedRange.start.column);
-    tempRange.end().setPosition(transformedRange.end.line, transformedRange.end.column);
+
+    tempRange = transformedRange;
 
     if(movingIt == oldHighlightedRanges.end() ||
-      transformedRange.start.line != (*movingIt)->start().line() ||
-      transformedRange.start.column != (*movingIt)->start().column() ||
-      transformedRange.end.line != (*movingIt)->end().line() ||
-      transformedRange.end.column != (*movingIt)->end().column())
+      transformedRange.start().line() != (*movingIt)->start().line() ||
+      transformedRange.start().column() != (*movingIt)->start().column() ||
+      transformedRange.end().line() != (*movingIt)->end().line() ||
+      transformedRange.end().column() != (*movingIt)->end().column())
     {
       Q_ASSERT(rangeIt->attribute);
       // The moving range is behind or unequal, create a new range
@@ -595,6 +595,5 @@ void CodeHighlighting::aboutToRemoveText( const KTextEditor::Range& range )
 
 }
 
-#include "codehighlighting.moc"
 
 // kate: space-indent on; indent-width 2; replace-trailing-space-save on; show-tabs on; tab-indents on; tab-width 2;

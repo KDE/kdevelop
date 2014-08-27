@@ -40,8 +40,8 @@
 
 #include <KDE/KApplication>
 #include <KDE/KCmdLineArgs>
-#include <KDE/KAboutData>
 #include <KDE/KDebug>
+#include <k4aboutdata.h>
 
 #include <QtCore/QStringList>
 #include <QtCore/QFile>
@@ -54,23 +54,24 @@ bool verbose=false, warnings=false;
 
 using namespace KDevelop;
 
-void messageOutput(QtMsgType type, const char *msg)
+void messageOutput(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
-    
+    Q_UNUSED(context);
+
     switch (type) {
         case QtDebugMsg:
             if(verbose)
-                std::cerr << msg << std::endl;
+                std::cerr << qPrintable(msg) << std::endl;
             break;
         case QtWarningMsg:
             if(warnings)
-                std::cerr << msg << std::endl;
+                std::cerr << qPrintable(msg) << std::endl;
             break;
         case QtCriticalMsg:
-            std::cerr << msg << std::endl;
+            std::cerr << qPrintable(msg) << std::endl;
             break;
         case QtFatalMsg:
-            std::cerr << msg << std::endl;
+            std::cerr << qPrintable(msg) << std::endl;
             abort();
     }
 }
@@ -255,8 +256,8 @@ void Manager::finish()
 using namespace KDevelop;
 int main(int argc, char** argv)
 {
-    KAboutData aboutData( "duchainify", 0, ki18n( "duchainify" ),
-                          "1", ki18n("DUChain builder application"), KAboutData::License_GPL,
+    K4AboutData aboutData( "duchainify", 0, ki18n( "duchainify" ),
+                          "1", ki18n("DUChain builder application"), K4AboutData::License_GPL,
                           ki18n( "(c) 2009 David Nolden" ), KLocalizedString(), "http://www.kdevelop.org" );
     KCmdLineArgs::init( argc, argv, &aboutData, KCmdLineArgs::CmdLineArgNone );
     KCmdLineOptions options;
@@ -280,7 +281,7 @@ int main(int argc, char** argv)
 
     verbose = args->isSet("verbose");
     warnings = args->isSet("warnings");
-    qInstallMsgHandler(messageOutput);
+    qInstallMessageHandler(messageOutput);
 
     KApplication app(false);
 
@@ -295,5 +296,3 @@ int main(int argc, char** argv)
 
     return ret;
 }
-
-#include "main.moc"

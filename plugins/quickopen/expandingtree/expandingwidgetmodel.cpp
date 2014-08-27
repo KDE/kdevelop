@@ -28,6 +28,7 @@
 #include <kiconloader.h>
 #include <ktextedit.h>
 #include "kcolorutils.h"
+#include "kdebug.h"
 
 #include "expandingdelegate.h"
 #include <qapplication.h>
@@ -524,5 +525,4 @@ QList<QVariant> mergeCustomHighlighting( QStringList strings, QList<QVariantList
     //Combine the custom-highlightings
     return totalHighlighting;
 }
-#include "expandingwidgetmodel.moc"
 

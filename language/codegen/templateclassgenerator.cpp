@@ -69,7 +69,7 @@ public:
     QString license;
 
     QHash<QString, KUrl> fileUrls;
-    QHash<QString, SimpleCursor> filePositions;
+    QHash<QString, KTextEditor::Cursor> filePositions;
     ClassDescription description;
     
     QList<DeclarationPointer> directBaseClasses;
@@ -172,12 +172,12 @@ void TemplateClassGenerator::setFileUrl(const QString& outputFile, const KUrl& u
     d->renderer.addVariable("output_file_" + outputFile.toLower() + "_absolute", url.toLocalFile());
 }
 
-SimpleCursor TemplateClassGenerator::filePosition(const QString& outputFile) const
+KTextEditor::Cursor TemplateClassGenerator::filePosition(const QString& outputFile) const
 {
     return d->filePositions.value(outputFile);
 }
 
-void TemplateClassGenerator::setFilePosition(const QString& outputFile, const SimpleCursor& position)
+void TemplateClassGenerator::setFilePosition(const QString& outputFile, const KTextEditor::Cursor& position)
 {
     d->filePositions.insert(outputFile, position);
 }

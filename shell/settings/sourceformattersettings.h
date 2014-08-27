@@ -22,7 +22,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QHash>
 #include <KCModule>
-#include <KMimeType>
+#include <QMimeType>
 
 #include <shell/sourceformattercontroller.h>
 
@@ -33,6 +33,7 @@ class QListWidgetItem;
 namespace KTextEditor
 {
 class Document;
+class View;
 }
 
 namespace KDevelop
@@ -43,7 +44,7 @@ class SourceFormatterStyle;
 
 struct LanguageSettings {
     LanguageSettings();
-    QList<KMimeType::Ptr> mimetypes;
+    QList<QMimeType> mimetypes;
     QSet<KDevelop::SourceFormatter*> formatters;
     // weak pointers to selected formatter and style, no ownership
     KDevelop::SourceFormatter* selectedFormatter;     // Should never be zero
@@ -86,6 +87,7 @@ private:
     typedef QMap<QString, KDevelop::SourceFormatter*> FormatterMap;
     FormatterMap formatters;
     KTextEditor::Document* m_document;
+    KTextEditor::View* m_view;
 };
 
 #endif // KDEVPLATFORM_SOURCEFORMATTERSETTINGS_H

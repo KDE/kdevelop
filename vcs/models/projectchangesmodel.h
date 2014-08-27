@@ -23,7 +23,7 @@
 #include <vcs/models/vcsfilechangesmodel.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
-#include "../vcsexport.h"
+#include "vcsexport.h"
 
 class KJob;
 namespace KDevelop {

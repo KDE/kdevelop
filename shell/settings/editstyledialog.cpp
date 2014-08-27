@@ -24,8 +24,9 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
-#include <ktexteditor/editorchooser.h>
 #include <ktexteditor/configinterface.h>
+#include <KI18n/KLocalizedString>
+#include <KUrl>
 
 #include <interfaces/isourceformatter.h>
 
@@ -33,8 +34,8 @@ using KDevelop::ISourceFormatter;
 using KDevelop::SettingsWidget;
 using KDevelop::SourceFormatterStyle;
 
-EditStyleDialog::EditStyleDialog(ISourceFormatter *formatter, const KMimeType::Ptr &mime,
-        const SourceFormatterStyle &style, QWidget *parent)
+EditStyleDialog::EditStyleDialog(ISourceFormatter* formatter, const QMimeType& mime,
+        const SourceFormatterStyle& style, QWidget* parent)
 		: KDialog(parent), m_sourceFormatter(formatter), m_mimeType(mime), m_style( style )
 {
 	m_content = new QWidget();
@@ -63,18 +64,11 @@ void EditStyleDialog::init()
 			this, SLOT(updatePreviewText(QString)));
 	}
 
-	// add texteditor preview
-	KTextEditor::Editor *editor = KTextEditor::EditorChooser::editor();
-	if (!editor)
-		KMessageBox::error(this, i18n("A KDE text-editor component could not be found.\n"
-		        "Please check your KDE installation."));
-
-	m_document = editor->createDocument(this);
+	m_document = KTextEditor::Editor::instance()->createDocument(this);
 	m_document->setReadWrite(false);
 	m_document->setHighlightingMode(m_style.modeForMimetype(m_mimeType));
 
-	m_view = qobject_cast<KTextEditor::View*>(
-	            m_document->createView(m_ui.textEditor));
+	m_view = m_document->createView(m_ui.textEditor);
 	QVBoxLayout *layout2 = new QVBoxLayout(m_ui.textEditor);
 	layout2->addWidget(m_view);
 	m_ui.textEditor->setLayout(layout2);
@@ -103,7 +97,7 @@ void EditStyleDialog::updatePreviewText(const QString &text)
 		m_document->setText( i18n( "No Source Formatter available" ) );
 	}
 
-	m_document->activeView()->setCursorPosition( KTextEditor::Cursor( 0, 0 ) );
+	m_view->setCursorPosition( KTextEditor::Cursor( 0, 0 ) );
 	m_document->setReadWrite(false);
 }
 
@@ -114,5 +108,4 @@ QString EditStyleDialog::content()
 	return QString();
 }
 
-#include "editstyledialog.moc"
 // kate: indent-mode cstyle; space-indent off; tab-width 4;

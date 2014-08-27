@@ -85,12 +85,12 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const KUrl& url,
     m_errorMode = ExternalScriptItem::ErrorMergeOutput;
   }
 
-  KDevelop::IDocument* active = KDevelop::ICore::self()->documentController()->activeDocument();
+  KTextEditor::View* view = KDevelop::ICore::self()->documentController()->activeTextDocumentView();
 
   if ( m_outputMode != ExternalScriptItem::OutputNone || m_inputMode != ExternalScriptItem::InputNone
        || m_errorMode != ExternalScriptItem::ErrorNone )
   {
-    if ( !active || !active->isTextDocument() || !active->textDocument()->activeView() ) {
+    if ( !view ) {
       KMessageBox::error( QApplication::activeWindow(),
                           i18n( "Cannot run script '%1' since it tries to access "
                                 "the editor contents but no document is open.", item->text() ),
@@ -99,17 +99,17 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const KUrl& url,
       return;
     }
 
-    m_document = active->textDocument();
+    m_document = view->document();
 
     connect( m_document, SIGNAL(aboutToClose(KTextEditor::Document*)),
              this, SLOT(kill()) );
 
-    m_selectionRange = m_document->activeView()->selectionRange();
-    m_cursorPosition = m_document->activeView()->cursorPosition();
+    m_selectionRange = view->selectionRange();
+    m_cursorPosition = view->cursorPosition();
   }
 
-  if ( item->saveMode() == ExternalScriptItem::SaveCurrentDocument && active ) {
-    active->save();
+  if ( item->saveMode() == ExternalScriptItem::SaveCurrentDocument && view ) {
+        view->document()->save();
   } else if ( item->saveMode() == ExternalScriptItem::SaveAllDocuments ) {
     foreach ( KDevelop::IDocument* doc, KDevelop::ICore::self()->documentController()->openDocuments() ) {
       doc->save();
@@ -151,7 +151,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const KUrl& url,
     } else {
       if ( m_url.isLocalFile() && workingDir.isEmpty() ) {
         ///TODO: make configurable, use fallback to project dir
-        workingDir = active->url().directory();
+        workingDir = view->document()->url().adjusted(QUrl::RemoveFilename).toLocalFile();
       }
 
       ///TODO: make those placeholders escapeable
@@ -167,8 +167,8 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const KUrl& url,
         command.replace( "%n", KShell::quoteArg( info.fileName() ) );
         command.replace( "%d", KShell::quoteArg( info.path() ) );
 
-        if ( active->textDocument() && active->textDocument()->activeView() && active->textDocument()->activeView()->selection() ) {
-          command.replace( "%s", KShell::quoteArg( active->textDocument()->activeView()->selectionText() ) );
+        if ( view->document() && view->selection() ) {
+          command.replace( "%s", KShell::quoteArg( view->selectionText() ) );
         }
 
         if ( KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl( m_url ) ) {
@@ -393,6 +393,5 @@ void ExternalScriptJob::receivedStdoutLines(const QStringList& lines)
   m_stdout += lines;
 }
 
-#include "externalscriptjob.moc"
 
 // kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on;

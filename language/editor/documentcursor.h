@@ -19,10 +19,11 @@
 #ifndef KDEVPLATFORM_DOCUMENTCURSOR_H
 #define KDEVPLATFORM_DOCUMENTCURSOR_H
 
-#include "../languageexport.h"
-#include "simplecursor.h"
-#include <language/duchain/indexedstring.h>
+#include <language/languageexport.h>
+#include <serialization/indexedstring.h>
 #include "cursorinrevision.h"
+
+#include <ktexteditor/cursor.h>
 
 namespace KDevelop
 {
@@ -30,21 +31,21 @@ namespace KDevelop
  * Lightweight object that extends a cursor with information about the document URL to which the range
  * refers.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT DocumentCursor : public SimpleCursor
+class DocumentCursor : public KTextEditor::Cursor
 {
 public:
     DocumentCursor() {
     }
     
-    DocumentCursor(const IndexedString& document, const SimpleCursor& cursor) : SimpleCursor(cursor), document(document) {
+    DocumentCursor(const IndexedString& document, const KTextEditor::Cursor& cursor) : KTextEditor::Cursor(cursor), document(document) {
     }
 
     static DocumentCursor invalid() {
-      return DocumentCursor({}, SimpleCursor::invalid());
+      return DocumentCursor({}, KTextEditor::Cursor::invalid());
     }
 
     inline bool operator==(const DocumentCursor& rhs) const {
-      return document == rhs.document && SimpleCursor::operator==(rhs);
+      return document == rhs.document && *static_cast<const KTextEditor::Cursor*>(this) == rhs;
     }
 
     IndexedString document;

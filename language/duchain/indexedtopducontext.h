@@ -22,7 +22,7 @@
 #include <QMetaType>
 #include <QPair>
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop {
 

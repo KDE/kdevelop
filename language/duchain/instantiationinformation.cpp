@@ -18,12 +18,11 @@
 
 #include "./instantiationinformation.h"
 #include "identifier.h"
-#include "repositories/itemrepository.h"
+#include "serialization/itemrepository.h"
 #include "types/typeutils.h"
 #include <typeinfo>
 #include "types/typealiastype.h"
-#include "repositories/typerepository.h"
-
+#include "types/typerepository.h"
 
 namespace KDevelop {
 

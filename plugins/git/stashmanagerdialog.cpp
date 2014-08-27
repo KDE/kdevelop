@@ -28,7 +28,7 @@
 #include <KMessageBox>
 #include <QInputDialog>
 #include <vcs/dvcs/dvcsjob.h>
-#include <shell/core.h>
+#include <KLocalizedString>
 
 StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, QWidget* parent)
     : KDialog(parent), m_plugin(plugin), m_dir(stashed)

@@ -9,7 +9,7 @@ include_directories(
 # see https://svn.boost.org/trac/boost/ticket/2947 for details
 if( ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_PATCH_VERSION} VERSION_GREATER 1.36.1 )
     add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
-endif( ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_PATCH_VERSION} VERSION_GREATER 1.36.1 )
+endif()
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9512 )
 
@@ -27,14 +27,14 @@ set(kdevclassbrowser_PART_SRCS
     allclassesfolder.cpp
 )
 
-kde4_add_plugin(kdevclassbrowser ${kdevclassbrowser_PART_SRCS})
-target_link_libraries(kdevclassbrowser ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} kdevplatformutil kdevplatformlanguage kdevplatforminterfaces kdevplatformproject)
+add_library(kdevclassbrowser MODULE ${kdevclassbrowser_PART_SRCS})
+target_link_libraries(kdevclassbrowser KF5::TextEditor KDev::Util KDev::Language KDev::Interfaces KDev::Project)
 
-install(TARGETS kdevclassbrowser DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevclassbrowser DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 
 ########### install files ###############
 
 configure_file(kdevclassbrowser.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevclassbrowser.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevclassbrowser.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES kdevclassbrowser.rc DESTINATION ${DATA_INSTALL_DIR}/kdevclassbrowser)
+install(FILES kdevclassbrowser.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclassbrowser)

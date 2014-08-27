@@ -24,6 +24,7 @@
 #include <kparts/factory.h>
 #include <kmimetype.h>
 #include <kparts/part.h>
+#include <kparts/readonlypart.h>
 #include <kdebug.h>
 
 namespace KDevelop {
@@ -95,5 +96,4 @@ KParts::Part* IPartController::createPart ( const QString& mimetype, const QStri
 
 }
 
-#include "ipartcontroller.moc"
 

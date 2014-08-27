@@ -33,13 +33,13 @@
 #include <QMenu>
 #include <QApplication>
 #include <QClipboard>
+#include <QIcon>
 #include <QResizeEvent>
+#include <QAction>
 
-#include <KAction>
 #include <KStandardAction>
 #include <KDebug>
 #include <KLocalizedString>
-#include <KIcon>
 #include <KTextEditor/Cursor>
 
 #include <interfaces/icore.h>
@@ -65,7 +65,7 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
                       "program. By clicking on an item you "
                       "can see the values in any of the "
                       "previous calling functions."));
-    setWindowIcon(KIcon("view-list-text"));
+    setWindowIcon(QIcon::fromTheme("view-list-text"));
     m_threadsWidget = new QWidget(this);
     m_threads = new QListView(m_threadsWidget);
     m_frames = new QTreeView(this);
@@ -77,13 +77,13 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
 
     m_framesContextMenu = new QMenu(m_frames);
 
-    KAction *selectAllAction = KStandardAction::selectAll(m_frames);
-    selectAllAction->setShortcut(KShortcut()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
+    QAction* selectAllAction = KStandardAction::selectAll(m_frames);
+    selectAllAction->setShortcut(QKeySequence()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
     selectAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(selectAllAction, SIGNAL(triggered()), SLOT(selectAll()));
     m_framesContextMenu->addAction(selectAllAction);
 
-    KAction *copyAction = KStandardAction::copy(m_frames);
+    QAction* copyAction = KStandardAction::copy(m_frames);
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(copyAction, SIGNAL(triggered()), SLOT(copySelection()));
     m_framesContextMenu->addAction(copyAction);
@@ -177,7 +177,7 @@ void FramestackWidget::currentThreadChanged(int thread)
         m_threads->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
         m_threadsWidget->setVisible(model->rowCount() > 1);
         m_frames->setRootIndex(idx);
-        m_frames->header()->setResizeMode(0, QHeaderView::ResizeToContents);
+        m_frames->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     } else {
         m_threadsWidget->hide();
         m_threads->selectionModel()->clear();
@@ -246,4 +246,3 @@ void FramestackWidget::sessionStateChanged(KDevelop::IDebugSession::DebuggerStat
 
 }
 
-#include "framestackwidget.moc"

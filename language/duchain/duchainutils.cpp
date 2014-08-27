@@ -150,7 +150,7 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(con
  * and for some reason will be loaded every time it's used(this function returns a QIcon marked "load on demand"
  * each time this is called). And the loading is very slow. Seems like a bug somewhere, it cannot be ment to be that slow.
  */
-#define RETURN_CACHED_ICON(name) {static QIcon icon(KIcon(name).pixmap(QSize(16, 16))); return icon;}
+#define RETURN_CACHED_ICON(name) {static QIcon icon(QIcon::fromTheme(name).pixmap(QSize(16, 16))); return icon;}
 
 QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p)
 {
@@ -230,7 +230,7 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
   else
     RETURN_CACHED_ICON("field")
 
-  return KIcon();
+  return QIcon();
 }
 
 QIcon DUChainUtils::iconForDeclaration(const Declaration* dec)
@@ -305,7 +305,7 @@ Declaration* declarationUnderCursor(const CursorInRevision& c, DUContext* ctx)
   return 0;
 }
 
-Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const KDevelop::SimpleCursor& _c)
+Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const KTextEditor::Cursor& _c)
 {
   KDevelop::TopDUContext* chosen = standardContextForUrl(url);
 
@@ -331,7 +331,7 @@ Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const KDevelop::Simp
   return 0;
 }
 
-KTextEditor::Range DUChainUtils::itemRangeUnderCursor(const KUrl& url, const KDevelop::SimpleCursor& cursor)
+KTextEditor::Range DUChainUtils::itemRangeUnderCursor(const KUrl& url, const KTextEditor::Cursor& cursor)
 {
   KDevelop::TopDUContext* chosen = standardContextForUrl(url);
 
@@ -341,12 +341,12 @@ KTextEditor::Range DUChainUtils::itemRangeUnderCursor(const KUrl& url, const KDe
     if (ctx) {
       Declaration* decl = declarationUnderCursor(c, ctx);
       if (decl && decl->range().contains(c, RangeInRevision::IncludeBackEdge) ) {
-        return decl->rangeInCurrentRevision().textRange();
+        return decl->rangeInCurrentRevision();
       }
 
       for(int a = 0; a < ctx->usesCount(); ++a) {
         if( ctx->uses()[a].m_range.contains(c, RangeInRevision::IncludeBackEdge) ) {
-          return ctx->transformFromLocalRevision(ctx->uses()[a].m_range).textRange();
+          return ctx->transformFromLocalRevision(ctx->uses()[a].m_range);
         }
       }
     }
@@ -371,7 +371,7 @@ Declaration* DUChainUtils::declarationForDefinition(Declaration* definition, Top
   return definition;
 }
 
-Declaration* DUChainUtils::declarationInLine(const KDevelop::SimpleCursor& _cursor, DUContext* ctx) {
+Declaration* DUChainUtils::declarationInLine(const KTextEditor::Cursor& _cursor, DUContext* ctx) {
   if(!ctx)
     return 0;
   

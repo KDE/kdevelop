@@ -23,16 +23,19 @@
 #include <QHash>
 #include <QVariantHash>
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 #include <language/duchain/duchainpointer.h>
 
 class KUrl;
+
+namespace KTextEditor {
+class Cursor;
+}
 
 namespace KDevelop
 {
 
 class TemplateEngine;
-class SimpleCursor;
 struct ClassDescription;
 class TemplateRenderer;
 class SourceFileTemplate;
@@ -144,8 +147,8 @@ public:
     void setFileUrl(const QString& outputFile, const KUrl& url);
     KUrl fileUrl(const QString& outputFile) const;
 
-    void setFilePosition(const QString& outputFile, const SimpleCursor& position);
-    SimpleCursor filePosition(const QString& outputFile) const;
+    void setFilePosition(const QString& outputFile, const KTextEditor::Cursor& position);
+    KTextEditor::Cursor filePosition(const QString& outputFile) const;
 
     SourceFileTemplate sourceFileTemplate() const;
 

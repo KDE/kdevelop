@@ -26,7 +26,7 @@ Boston, MA 02110-1301, USA.
 
 #include "isessionlock.h"
 
-class KComponentData;
+class KAboutData;
 
 namespace KParts
 {
@@ -125,8 +125,8 @@ public:
     /** @return the test controller */
     Q_SCRIPTABLE virtual KDevelop::ITestController* testController() = 0;
 
-    /** @return the component data of the framework, different from the main component which is created by the application */
-    virtual KComponentData componentData() const = 0;
+    /** @return the about data of the framework, different from the main about data which is created by the application */
+    virtual KAboutData aboutData() const = 0;
 
     /** @return true if the application is currently being shut down */
     virtual bool shuttingDown() const = 0;

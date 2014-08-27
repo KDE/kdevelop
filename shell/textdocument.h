@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>            *
  *                                                                         *
@@ -19,7 +20,7 @@
 #ifndef KDEVPLATFORM_TEXTDOCUMENT_H
 #define KDEVPLATFORM_TEXTDOCUMENT_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <KDE/KXMLGUIClient>
 
 #include <sublime/view.h>
@@ -53,7 +54,7 @@ public:
     virtual bool save(DocumentSaveMode mode = Default);
     virtual DocumentState state() const;
 
-    virtual KTextEditor::Cursor cursorPosition() const;
+    virtual KTextEditor::Cursor cursorPosition() const override;
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor);
 
     virtual KTextEditor::Range textSelection() const;
@@ -68,6 +69,8 @@ public:
     virtual QString documentType() const;
 
     virtual QIcon defaultIcon() const;
+
+    virtual KTextEditor::View* activeTextView() const override;
 
 public Q_SLOTS:
     virtual void reload();
@@ -102,47 +105,16 @@ public:
     KTextEditor::View *textView() const;
 
     virtual QString viewStatus() const;
-
     virtual QString viewState() const;
     virtual void setState(const QString& state);
 
     void setInitialRange(const KTextEditor::Range& range);
     KTextEditor::Range initialRange() const;
 
-private Q_SLOTS:
-    void sendStatusChanged();
-    void editorDestroyed(QObject* obj);
-
 private:
     class TextViewPrivate* const d;
-};
 
-class KDEVPLATFORMSHELL_EXPORT TextEditorWidget : public QWidget, public KXMLGUIClient
-{
-    Q_OBJECT
-public:
-    TextEditorWidget(const KDevelop::TextView* view, QWidget* parent = 0);
-    virtual ~TextEditorWidget();
-
-    KTextEditor::View* editorView();
-
-    QString status() const;
-    bool isInitialized() const;
-    virtual void showEvent(QShowEvent* event);
-
-Q_SIGNALS:
-    void statusChanged();
-
-public Q_SLOTS:
-    void initialize();
-    void viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor& newPosition);
-
-private:
-    void setEditorView(KTextEditor::View* view);
-    class TextEditorWidgetPrivate* const d;
-
-    Q_PRIVATE_SLOT(d, void viewEditModeChanged(KTextEditor::View*, KTextEditor::View::EditMode));
-
+    Q_PRIVATE_SLOT(d, void sendStatusChanged());
 };
 
 }

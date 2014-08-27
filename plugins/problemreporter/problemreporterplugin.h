@@ -27,7 +27,7 @@
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/topducontext.h>
 
 namespace KTextEditor { class Document; }

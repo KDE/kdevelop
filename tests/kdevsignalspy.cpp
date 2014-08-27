@@ -59,5 +59,4 @@ void KDevSignalSpy::signalEmitted()
 
 } // KDevelop
 
-#include "kdevsignalspy.moc"
 

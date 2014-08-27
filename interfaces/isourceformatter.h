@@ -19,11 +19,13 @@
 #ifndef KDEVPLATFORM_ISOURCEFORMATTER_H
 #define KDEVPLATFORM_ISOURCEFORMATTER_H
 
-#include <QtGui/QWidget>
-#include <QtCore/QStringList>
-#include <KDE/KMimeType>
+#include <QWidget>
+#include <QStringList>
+#include <QMimeType>
 
 #include "interfacesexport.h"
+
+class KUrl;
 
 namespace KDevelop
 {
@@ -63,7 +65,7 @@ public:
 	bool supportsLanguage(const QString& language) const;
 
 	/// get the language / highlight mode for a given @p mime
-	QString modeForMimetype(const KMimeType::Ptr& mime) const;
+	QString modeForMimetype(const QMimeType& mime) const;
 
 	/// Copy content, mime types and code sample from @p other.
     void copyDataFrom(SourceFormatterStyle *other);
@@ -157,7 +159,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		 *
 		 * If the source-formatter cannot work correctly with the context, it will just return the input text.
 		*/
-		virtual QString formatSource(const QString &text, const KUrl& url, const KMimeType::Ptr &mime, const QString& leftContext = QString(), const QString& rightContext = QString()) = 0;
+		virtual QString formatSource(const QString &text, const KUrl& url, const QMimeType &mime, const QString& leftContext = QString(), const QString& rightContext = QString()) = 0;
 
 		/**
 		 * Format with the given style, this is mostly for the kcm to format the preview text
@@ -167,7 +169,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		virtual QString formatSourceWithStyle( SourceFormatterStyle,
 											   const QString& text,
 											   const KUrl& url,
-											   const KMimeType::Ptr &mime,
+											   const QMimeType &mime,
 											   const QString& leftContext = QString(),
 											   const QString& rightContext = QString() ) = 0;
 
@@ -177,11 +179,11 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 
 		/** \return The widget to edit a style.
 		*/
-		virtual SettingsWidget* editStyleWidget(const KMimeType::Ptr &mime) = 0;
+		virtual SettingsWidget* editStyleWidget(const QMimeType &mime) = 0;
 
 		/** \return The text used in the config dialog to preview the current style.
 		*/
-		virtual QString previewText(const SourceFormatterStyle& style, const KMimeType::Ptr &mime) = 0;
+		virtual QString previewText(const SourceFormatterStyle& style, const QMimeType &mime) = 0;
 
 		struct Indentation {
 			Indentation() : indentationTabWidth(0), indentWidth(0) {

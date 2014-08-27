@@ -23,8 +23,6 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
-#include <KTextEditor/HighlightInterface>
-
 #include "snippetstore.h"
 #include "snippetrepository.h"
 #include "snippet.h"
@@ -33,7 +31,7 @@
 #include <KLocalizedString>
 
 SnippetCompletionModel::SnippetCompletionModel()
-    : KTextEditor::CodeCompletionModel2(0)
+    : KTextEditor::CodeCompletionModel(0)
 {
     setHasGroups(false);
 }
@@ -67,11 +65,11 @@ QVariant SnippetCompletionModel::data( const QModelIndex& idx, int role ) const
     }
 }
 
-void SnippetCompletionModel::executeCompletionItem2(KTextEditor::Document* document, const KTextEditor::Range& word,
+void SnippetCompletionModel::executeCompletionItem(KTextEditor::View* view, const KTextEditor::Range& word,
                                                     const QModelIndex& index) const
 {
     if ( index.parent().isValid() ) {
-        m_snippets[index.row()]->execute(document, word);
+        m_snippets[index.row()]->execute(view, word);
     }
 }
 
@@ -84,10 +82,7 @@ void SnippetCompletionModel::completionInvoked(KTextEditor::View *view, const KT
 
 void SnippetCompletionModel::initData(KTextEditor::View* view)
 {
-    QString mode;
-    if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
-            mode = iface->highlightingModeAt(view->cursorPosition());
-    }
+    QString mode = view->document()->highlightingModeAt(view->cursorPosition());
 
     if ( mode.isEmpty() ) {
         mode = view->document()->highlightingMode();
@@ -116,7 +111,7 @@ void SnippetCompletionModel::initData(KTextEditor::View* view)
 
 QModelIndex SnippetCompletionModel::parent(const QModelIndex& index) const {
     if (index.internalId()) {
-        return createIndex(0, 0, 0);
+        return createIndex(0, 0);
     } else {
         return QModelIndex();
     }
@@ -125,7 +120,7 @@ QModelIndex SnippetCompletionModel::parent(const QModelIndex& index) const {
 QModelIndex SnippetCompletionModel::index(int row, int column, const QModelIndex& parent) const {
     if (!parent.isValid()) {
         if (row == 0) {
-            return createIndex(row, column, 0); //header  index
+            return createIndex(row, column); //header  index
         } else {
             return QModelIndex();
         }
@@ -158,7 +153,7 @@ KTextEditor::Range SnippetCompletionModel::completionRange(KTextEditor::View* vi
         if ( line.at(i).isSpace() ) {
             break;
         } else {
-            range.start().setColumn(i);
+            range.setStart(KTextEditor::Cursor(range.start().line(), i));
         }
     }
     // include everything non-space after
@@ -166,7 +161,7 @@ KTextEditor::Range SnippetCompletionModel::completionRange(KTextEditor::View* vi
         if ( line.at(i).isSpace() ) {
             break;
         } else {
-            range.end().setColumn(i);
+            range.setEnd(KTextEditor::Cursor(range.end().line(), i));
         }
     }
     return range;

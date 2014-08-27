@@ -22,9 +22,13 @@
 #ifndef KDEVPLATFORM_PLUGIN_SVNINTERNALJOBBASE_H
 #define KDEVPLATFORM_PLUGIN_SVNINTERNALJOBBASE_H
 
-#include <Job.h>
+#include <ThreadWeaver/Job>
 #include <QEvent>
 #include <QSemaphore>
+
+namespace ThreadWeaver {
+class QObjectDecorator;
+}
 
 extern "C" {
 #include <svn_wc.h>
@@ -108,6 +112,7 @@ private:
     bool sendFirstDelta;
     bool killed;
     QString m_errorMessage;
+    ThreadWeaver::QObjectDecorator* m_decorator;
 };
 
 

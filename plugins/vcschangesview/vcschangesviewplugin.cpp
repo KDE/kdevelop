@@ -35,17 +35,18 @@
 #include <vcs/vcsstatusinfo.h>
 #include <vcs/vcsjob.h>
 #include <project/projectmodel.h>
+#include <QAction>
 #include <QTreeView>
 #include <interfaces/iplugincontroller.h>
 #include "vcschangesview.h"
 #include <KActionCollection>
-#include <KAction>
+#include <KLocalizedString>
 #include <vcs/models/projectchangesmodel.h>
 
 K_PLUGIN_FACTORY(VcsProjectIntegrationFactory, registerPlugin<VcsProjectIntegrationPlugin>(); )
-K_EXPORT_PLUGIN(VcsProjectIntegrationFactory(
-    KAboutData("kdevvcsprojectintegration","kdevvcsprojectintegration",
-               ki18n("VCS Project Integration"), "0.1", ki18n("This plugin provides integration between the projects and their VCS infrastructure"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(VcsProjectIntegrationFactory(
+//     KAboutData("kdevvcsprojectintegration","kdevvcsprojectintegration",
+//                ki18n("VCS Project Integration"), "0.1", ki18n("This plugin provides integration between the projects and their VCS infrastructure"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
@@ -79,19 +80,19 @@ private:
 };
 
 VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const QVariantList&)
-    : KDevelop::IPlugin(VcsProjectIntegrationFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevvcsprojectintegration", parent)
     , m_model(0)
 {
     ICore::self()->uiController()->addToolView(i18n("VCS Changes"), new VCSProjectToolViewFactory(this));
     
     QAction* synaction = actionCollection()->addAction( "locate_document" );
     synaction->setText(i18n("Locate Current Document"));
-    synaction->setIcon(KIcon("dirsync"));
+    synaction->setIcon(QIcon::fromTheme("dirsync"));
     synaction->setToolTip(i18n("Locates the current document and selects it."));
     
     QAction* reloadaction = actionCollection()->addAction( "reload_view" );
     reloadaction->setText(i18n("Reload View"));
-    reloadaction->setIcon(KIcon("view-refresh"));
+    reloadaction->setIcon(QIcon::fromTheme("view-refresh"));
     reloadaction->setToolTip(i18n("Refreshes the view for all projects, in case anything changed."));
 }
 
@@ -109,3 +110,5 @@ ProjectChangesModel* VcsProjectIntegrationPlugin::model()
     
     return m_model;
 }
+
+#include "vcschangesviewplugin.moc"

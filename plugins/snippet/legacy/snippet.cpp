@@ -11,22 +11,22 @@
 
 #include "snippet.h"
 
-#include <KLocalizedString>
-#include <KIcon>
+#include <QAction>
+#include <QIcon>
 
+#include <KLocalizedString>
 #include <KColorScheme>
+#include <KActionCollection>
+#include <KParts/MainWindow>
 
 #include "snippetplugin.h"
-#include <KActionCollection>
-#include <KAction>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
-#include <KParts/MainWindow>
 
 Snippet::Snippet()
     : QStandardItem(i18n("<empty snippet>")), m_action(0)
 {
-    setIcon(KIcon("text-plain"));
+    setIcon(QIcon::fromTheme("text-plain"));
 }
 
 Snippet::~Snippet()
@@ -74,12 +74,12 @@ void Snippet::setArguments(const QString& arguments)
     m_arguments = arguments;
 }
 
-KAction* Snippet::action()
+QAction* Snippet::action()
 {
     ///TODO: this is quite ugly, or is it? if someone knows how to do it better, please refactor
     if ( !m_action ) {
         static int actionCount = 0;
-        m_action = new KAction(QString("insertSnippet%1").arg(actionCount), SnippetPlugin::self());
+        m_action = new QAction(QString("insertSnippet%1").arg(actionCount), SnippetPlugin::self());
         m_action->setData(QVariant::fromValue<Snippet*>(this));
         SnippetPlugin::self()->connect(m_action, SIGNAL(triggered()),
                                        SnippetPlugin::self(), SLOT(insertSnippetFromActionData()));

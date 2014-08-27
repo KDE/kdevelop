@@ -33,4 +33,3 @@ ISelectionController::~ISelectionController()
 
 }
 
-#include "iselectioncontroller.moc"

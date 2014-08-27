@@ -50,7 +50,7 @@ public:
     DvcsImportMetadataWidget(QWidget* parent=0);
     virtual ~DvcsImportMetadataWidget();
 
-    virtual KUrl source() const;
+    virtual QUrl source() const;
     virtual KDevelop::VcsLocation destination() const;
     virtual QString message() const; //Is not used, it returns QString("")
     virtual void setSourceLocation( const KDevelop::VcsLocation& );

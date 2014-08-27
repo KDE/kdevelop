@@ -15,8 +15,8 @@
 #include "localpatchsource.h"
 #include "patchreview.h"
 #include "standardpatchexport.h"
-#include "libdiff2/diffmodellist.h"
-#include "libdiff2/komparemodellist.h"
+#include <libkomparediff2/diffmodellist.h>
+#include <libkomparediff2/komparemodellist.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <vcs/models/vcsfilechangesmodel.h>
@@ -35,8 +35,11 @@
 #include <sublime/mainwindow.h>
 #include <KLineEdit>
 #include <KTextEditor/Document>
-#include <QMenu>
+#include <KTextEditor/View>
 #include <QFileInfo>
+#include <QMenu>
+#include <KLocalizedString>
+#include <KDebug>
 
 using namespace KDevelop;
 
@@ -186,13 +189,13 @@ void PatchReviewToolView::showEditDialog() {
     connect(m_editPatch.filesList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(customContextMenuRequested(QPoint)));
     connect(m_fileModel, SIGNAL(itemChanged(QStandardItem*)), SLOT(fileItemChanged(QStandardItem*)));
 
-    m_editPatch.previousFile->setIcon( KIcon( "arrow-left" ) );
-    m_editPatch.previousHunk->setIcon( KIcon( "arrow-up" ) );
-    m_editPatch.nextHunk->setIcon( KIcon( "arrow-down" ) );
-    m_editPatch.nextFile->setIcon( KIcon( "arrow-right" ) );
-    m_editPatch.cancelReview->setIcon( KIcon( "dialog-cancel" ) );
-    m_editPatch.updateButton->setIcon( KIcon( "view-refresh" ) );
-    m_editPatch.testsButton->setIcon( KIcon( "preflight-verifier" ) );
+    m_editPatch.previousFile->setIcon( QIcon::fromTheme( "arrow-left" ) );
+    m_editPatch.previousHunk->setIcon( QIcon::fromTheme( "arrow-up" ) );
+    m_editPatch.nextHunk->setIcon( QIcon::fromTheme( "arrow-down" ) );
+    m_editPatch.nextFile->setIcon( QIcon::fromTheme( "arrow-right" ) );
+    m_editPatch.cancelReview->setIcon( QIcon::fromTheme( "dialog-cancel" ) );
+    m_editPatch.updateButton->setIcon( QIcon::fromTheme( "view-refresh" ) );
+    m_editPatch.testsButton->setIcon( QIcon::fromTheme( "preflight-verifier" ) );
     m_editPatch.finishReview->setDefaultAction(m_plugin->finishReviewAction());
 
     QMenu* exportMenu = new QMenu( m_editPatch.exportReview );
@@ -204,7 +207,7 @@ void PatchReviewToolView::showEditDialog() {
     foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IPatchExporter" ) )
     {
         KPluginInfo info = pluginManager->pluginInfo( p );
-        QAction* action = exportMenu->addAction( KIcon( info.icon() ), info.name() );
+        QAction* action = exportMenu->addAction( QIcon::fromTheme( info.icon() ), info.name() );
         action->setData( qVariantFromValue<QObject*>( p ) );
     }
 
@@ -225,7 +228,7 @@ void PatchReviewToolView::showEditDialog() {
 
     connect( m_editPatch.testsButton, SIGNAL( clicked( bool ) ), this, SLOT( runTests() ) );
     
-    m_selectAllAction = new QAction(KIcon("edit-select-all"), i18n("Select All"), this );
+    m_selectAllAction = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this );
     connect( m_selectAllAction, SIGNAL(triggered(bool)), SLOT(selectAll()) );
     m_deselectAllAction = new QAction( i18n("Deselect All"), this );
     connect( m_deselectAllAction, SIGNAL(triggered(bool)), SLOT(deselectAll()) );
@@ -348,7 +351,11 @@ void PatchReviewToolView::activate( const KUrl& url, IDocument* buddy ) const
     
     // If the document is not open yet, open it in the correct order
     IDocument* newDoc = ICore::self()->documentController()->openDocument(url, KTextEditor::Range(), IDocumentController::DefaultMode, "", buddy);
-    if(newDoc && newDoc->textDocument() && newDoc->textDocument()->activeView() && newDoc->textDocument()->activeView()->cursorPosition().line() == 0)
+    KTextEditor::View* view = 0;
+    if(newDoc)
+        view= newDoc->activeTextView();
+
+    if(view && view->cursorPosition().line() == 0)
         m_plugin->seekHunk( true, url );
 }
 

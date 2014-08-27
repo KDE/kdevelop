@@ -60,19 +60,19 @@ void CompletionTreeElement::setParent(CompletionTreeElement* parent) {
     }
 }
 
-void CompletionTreeNode::appendChildren(QList< KSharedPtr< KDevelop::CompletionTreeElement > > children) {
+void CompletionTreeNode::appendChildren(QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > > children) {
   foreach (const auto& child, children) {
     appendChild(child);
   }
 }
 
-void CompletionTreeNode::appendChildren(QList< KSharedPtr< KDevelop::CompletionTreeItem > > children) {
+void CompletionTreeNode::appendChildren(QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeItem > > children) {
   foreach (auto child, children) {
     appendChild(CompletionTreeElementPointer(child.data()));
   }
 }
 
-void CompletionTreeNode::appendChild(KSharedPtr< KDevelop::CompletionTreeElement > child) {
+void CompletionTreeNode::appendChild(QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > child) {
   child->setParent(this);
   children << child;
 }
@@ -106,8 +106,8 @@ int CompletionTreeElement::rowInParent() const {
   return m_rowInParent;
 }
 
-void CompletionTreeItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
-  Q_UNUSED(document)
+void CompletionTreeItem::execute(KTextEditor::View* view, const KTextEditor::Range& word) {
+  Q_UNUSED(view)
   Q_UNUSED(word)
   kDebug(9700) << "doing nothing";
 }

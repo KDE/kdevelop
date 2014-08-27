@@ -26,12 +26,12 @@
 
 #include "iproject.h"
 
-#include <util/path.h>
-
 #include <QtDBus/QtDBus>
 
 namespace KDevelop
 {
+
+class Path;
 
 IProject::IProject(QObject *parent)
     : QObject(parent)
@@ -44,4 +44,3 @@ IProject::~IProject()
 
 }
 
-#include "iproject.moc"

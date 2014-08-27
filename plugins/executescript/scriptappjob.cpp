@@ -28,6 +28,7 @@
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
+#include <ksharedconfig.h>
 #include <kparts/mainwindow.h>
 
 #include <interfaces/ilaunchconfiguration.h>
@@ -54,7 +55,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     IExecuteScriptPlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecuteScriptPlugin")->extension<IExecuteScriptPlugin>();
     Q_ASSERT(iface);
         
-    KDevelop::EnvironmentGroupList l(KGlobal::config());
+    KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());
     QString envgrp = iface->environmentGroup(cfg);
     
     QString err;
@@ -253,4 +254,3 @@ KDevelop::OutputModel* ScriptAppJob::model()
 }
 
 
-#include "scriptappjob.moc"

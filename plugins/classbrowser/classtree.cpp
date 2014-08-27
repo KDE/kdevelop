@@ -23,9 +23,9 @@
 
 #include "classtree.h"
 
-#include <QtGui/QMenu>
-#include <QtGui/QHeaderView>
-#include <QtGui/QContextMenuEvent>
+#include <QMenu>
+#include <QHeaderView>
+#include <QContextMenuEvent>
 
 #include "interfaces/contextmenuextension.h"
 #include "interfaces/icore.h"
@@ -39,7 +39,7 @@
 #include "language/duchain/duchain.h"
 #include "language/duchain/duchainlock.h"
 #include "language/duchain/declaration.h"
-#include "language/duchain/indexedstring.h"
+#include <serialization/indexedstring.h>
 
 #include "classmodel.h"
 #include "classbrowserplugin.h"
@@ -159,4 +159,3 @@ void ClassTree::highlightIdentifier( KDevelop::IndexedQualifiedIdentifier a_id )
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on
 
-#include "classtree.moc"

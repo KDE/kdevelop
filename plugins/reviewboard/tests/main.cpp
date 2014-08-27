@@ -17,7 +17,7 @@
  *************************************************************************************/
 
 #include <KApplication>
-#include <KAboutData>
+#include <k4aboutdata.h>
 #include <KCmdLineArgs>
 #include <KMessageBox>
 #include <QDebug>
@@ -27,8 +27,8 @@
 
 int main(int argc, char *argv[])
 {
-    KAboutData about("reviewboardtest", 0, ki18n(("ReviewBoard Test")), "0.10", ki18n("Test ReviewBoard support"),
-            KAboutData::License_GPL, ki18n("(C) 2010 Aleix Pol Gonzalez"));
+    K4AboutData about("reviewboardtest", 0, ki18n(("ReviewBoard Test")), "0.10", ki18n("Test ReviewBoard support"),
+            K4AboutData::License_GPL, ki18n("(C) 2010 Aleix Pol Gonzalez"));
     about.addAuthor( ki18n("Aleix Pol Gonzalez"), KLocalizedString(), "aleixpol@kde.org" );
 
     KCmdLineArgs::init( argc, argv, &about );

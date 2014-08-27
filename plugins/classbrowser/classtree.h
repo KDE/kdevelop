@@ -23,7 +23,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_CLASSTREE_H
 #define KDEVPLATFORM_PLUGIN_CLASSTREE_H
 
-#include <QtGui/QTreeView>
+#include <QTreeView>
 #include <QtCore/QPointer>
 
 #include <language/duchain/identifier.h>

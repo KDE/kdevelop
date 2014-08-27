@@ -61,6 +61,7 @@ Boston, MA 02110-1301, USA.
 #include "savedialog.h"
 #include <kmessagebox.h>
 #include <KIO/Job>
+#include <KProtocolInfo>
 #include "workingsetcontroller.h"
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/models/vcsannotationmodel.h>
@@ -127,7 +128,7 @@ struct DocumentControllerPrivate {
             dir.setFileName(QString());
         }else
         {
-            dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
+            dir = KSharedConfig::openConfig()->group("Open File").readEntry( "Last Open File Directory", QUrl(Core::self()->projectController()->projectsBaseDirectory()) );
         }
 
         KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlsAndEncoding( controller->encoding(), dir.url(), i18n( "*|Text File\n" ),
@@ -193,9 +194,10 @@ struct DocumentControllerPrivate {
         IDocument* buddy = 0)
     {
         IDocument* previousActiveDocument = controller->activeDocument();
+        KTextEditor::View* previousActiveTextView = controller->activeTextDocumentView();
         KTextEditor::Cursor previousActivePosition;
-        if(previousActiveDocument && previousActiveDocument->textDocument() && previousActiveDocument->textDocument()->activeView())
-            previousActivePosition = previousActiveDocument->textDocument()->activeView()->cursorPosition();
+        if(previousActiveTextView)
+            previousActivePosition = previousActiveTextView->cursorPosition();
         
 
         QString _encoding = encoding;
@@ -210,21 +212,21 @@ struct DocumentControllerPrivate {
                 dir = controller->activeDocument()->url().upUrl();
             }else
             {
-                dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
+                dir = KSharedConfig::openConfig()->group("Open File").readEntry( "Last Open File Directory", QUrl(Core::self()->projectController()->projectsBaseDirectory()) );
             }
 
-            KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlAndEncoding( "", dir.url(), i18n( "*|Text File\n" ),
+            KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlAndEncoding( QString(), dir.url(), i18n( "*|Text File\n" ),
                                         Core::self()->uiControllerInternal()->defaultMainWindow(),
                                         i18n( "Open File" ) );
             if( !res.URLs.isEmpty() )
                 url = res.URLs.first();
             _encoding = res.encoding;
+            if ( url.isEmpty() )
+                //still no url
+                return 0;
         }
-        if ( url.isEmpty() )
-            //still no url
-            return 0;
 
-        KGlobal::config()->group("Open File").writeEntry( "Last Open File Directory", url.upUrl() );
+        KSharedConfig::openConfig()->group("Open File").writeEntry( "Last Open File Directory", QUrl(url.upUrl()) );
 
         // clean it and resolve possible symlink
         url.cleanPath( KUrl::SimplifyDirSeparators );
@@ -236,16 +238,14 @@ struct DocumentControllerPrivate {
         }
         
         //get a part document
-        IDocument* doc=0;
-        if (documents.contains(url))
-            doc=documents.value(url);
-        else
+        IDocument* doc = documents.value(url);
+        if (!doc)
         {
-            KMimeType::Ptr mimeType;
+            QMimeType mimeType;
 
             if (DocumentController::isEmptyDocumentUrl(url))
             {
-                mimeType = KMimeType::mimeType("text/plain");
+                mimeType = QMimeDatabase().mimeTypeForName("text/plain");
             }
             else if (!url.isValid())
             {
@@ -255,7 +255,7 @@ struct DocumentControllerPrivate {
                 kDebug() << "invalid URL:" << url.url();
                 return 0;
             }
-            else if (!KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, ICore::self()->uiController()->activeMainWindow() ))
+            else if (KProtocolInfo::isKnownProtocol(url.scheme()) && !KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, ICore::self()->uiController()->activeMainWindow() ))
             {
                 //Don't create a new file if we are not in the code mode.
                 if (static_cast<KDevelop::MainWindow*>(ICore::self()->uiController()->activeMainWindow())->area()->objectName() != "code") {
@@ -263,25 +263,24 @@ struct DocumentControllerPrivate {
                 }
                 // enfore text mime type in order to create a kate part editor which then can be used to create the file
                 // otherwise we could end up opening e.g. okteta which then crashes, see: https://bugs.kde.org/id=326434
-                mimeType = KMimeType::mimeType("text/plain");
+                mimeType = QMimeDatabase().mimeTypeForName("text/plain");
+            }
+            else if(!url.isLocalFile() && mimeType.isDefault())
+            {
+                // fall back to text/plain, for remote files without extension, i.e. COPYING, LICENSE, ...
+                // using a synchronous KIO::MimetypeJob is hazardous and may lead to repeated calls to
+                // this function without it having returned in the first place
+                // and this function is *not* reentrant, see assert below:
+                // Q_ASSERT(!documents.contains(url) || documents[url]==doc);
+                mimeType = QMimeDatabase().mimeTypeForName("text/plain");
             }
             else
             {
-                mimeType = KMimeType::findByUrl( url );
-                
-                if( !url.isLocalFile() && mimeType->isDefault() )
-                {
-                    // fall back to text/plain, for remote files without extension, i.e. COPYING, LICENSE, ...
-                    // using a synchronous KIO::MimetypeJob is hazardous and may lead to repeated calls to
-                    // this function without it having returned in the first place
-                    // and this function is *not* reentrant, see assert below:
-                    // Q_ASSERT(!documents.contains(url) || documents[url]==doc);
-                    mimeType = KMimeType::mimeType("text/plain");
-                }
+                mimeType = QMimeDatabase().mimeTypeForUrl(url);
             }
 
             // is the URL pointing to a directory?
-            if ( mimeType->is( "inode/directory" ) )
+            if (mimeType.inherits(QStringLiteral("inode/directory")))
             {
                 kDebug() << "cannot open directory:" << url.url();
                 return 0;
@@ -291,13 +290,13 @@ struct DocumentControllerPrivate {
             {
                 // Try to find a plugin that handles this mimetype
                 QVariantMap constraints;
-                constraints.insert("X-KDevelop-SupportedMimeTypes", mimeType->name());
+                constraints.insert("X-KDevelop-SupportedMimeTypes", mimeType.name());
                 Core::self()->pluginController()->pluginForExtension(QString(), QString(), constraints);
             }
             
-            if( factories.contains( mimeType->name() ) )
+            if( IDocumentFactory* factory = factories.value(mimeType.name()))
             {
-                doc = factories[mimeType->name()]->create(url, Core::self());
+                doc = factory->create(url, Core::self());
             }
             
             if(!doc) {
@@ -312,7 +311,7 @@ struct DocumentControllerPrivate {
                     doc = new PartDocument(url, Core::self());
                 } else
                 {
-                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType->name()), i18nc("@title:window", "Could Not Find Editor"),
+                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType.name()), i18nc("@title:window", "Could Not Find Editor"),
                                                                 KStandardGuiItem::yes(), KStandardGuiItem::no(), "AskOpenWithTextEditor");
                     if (openAsText == KMessageBox::Yes)
                         doc = new TextDocument(url, Core::self(), _encoding);
@@ -338,9 +337,10 @@ struct DocumentControllerPrivate {
                                 IDocument* buddy = 0)
     {
         IDocument* previousActiveDocument = controller->activeDocument();
+        KTextEditor::View* previousActiveTextView = ICore::self()->documentController()->activeTextDocumentView();
         KTextEditor::Cursor previousActivePosition;
-        if(previousActiveDocument && previousActiveDocument->textDocument() && previousActiveDocument->textDocument()->activeView())
-            previousActivePosition = previousActiveDocument->textDocument()->activeView()->cursorPosition();
+        if(previousActiveTextView)
+            previousActivePosition = previousActiveTextView->cursorPosition();
         
         KUrl url=doc->url();
         UiController *uiController = Core::self()->uiControllerInternal();
@@ -403,8 +403,8 @@ struct DocumentControllerPrivate {
                 if(Core::self()->uiControllerInternal()->arrangeBuddies()) {
                     // If buddy is not set, look for a (usually) plugin which handles this URL's mimetype
                     // and use its IBuddyDocumentFinder, if available, to find a buddy document
-                    if(!buddy && doc->mimeType()) {
-                        QString mime = doc->mimeType()->name();
+                    if(!buddy && doc->mimeType().isValid()) {
+                        QString mime = doc->mimeType().name();
                         IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(mime);
                         if(buddyFinder) {
                             buddy = findBuddyDocument(url, buddyFinder);
@@ -454,7 +454,7 @@ struct DocumentControllerPrivate {
                     if(activeView)
                         activeDoc = dynamic_cast<Sublime::UrlDocument *>(activeView->document());
                     if(activeDoc && Core::self()->uiControllerInternal()->arrangeBuddies()) {
-                        QString mime = KMimeType::findByUrl(activeDoc->url())->name();
+                        QString mime = QMimeDatabase().mimeTypeForUrl(activeDoc->url()).name();
                         buddyFinder = IBuddyDocumentFinder::finderForMimeType(mime);
                     }
 
@@ -530,16 +530,14 @@ struct DocumentControllerPrivate {
         closeAll->setEnabled(true);
         closeAllOthers->setEnabled(true);
 
-        if(doc) {
-            KTextEditor::Cursor activePosition;
-            if(range.isValid())
-                activePosition = range.start();
-            else if(doc->textDocument() && doc->textDocument()->activeView())
-                activePosition = doc->textDocument()->activeView()->cursorPosition();
+        KTextEditor::Cursor activePosition;
+        if(range.isValid())
+            activePosition = range.start();
+        else if(KTextEditor::View* v = doc->activeTextView())
+            activePosition = v->cursorPosition();
 
-            if (doc != previousActiveDocument || activePosition != previousActivePosition)
-                emit controller->documentJumpPerformed(doc, activePosition, previousActiveDocument, previousActivePosition);
-        }
+        if (doc != previousActiveDocument || activePosition != previousActivePosition)
+            emit controller->documentJumpPerformed(doc, activePosition, previousActiveDocument, previousActivePosition);
 
         if ( doc->textDocument() ) {
             QObject::connect(doc->textDocument(), SIGNAL(reloaded(KTextEditor::Document*)), controller,
@@ -555,11 +553,11 @@ struct DocumentControllerPrivate {
     QList<HistoryEntry> forwardHistory;
     bool isJumping;
 
-    QPointer<KAction> saveAll;
-    QPointer<KAction> revertAll;
-    QPointer<KAction> close;
-    QPointer<KAction> closeAll;
-    QPointer<KAction> closeAllOthers;
+    QPointer<QAction> saveAll;
+    QPointer<QAction> revertAll;
+    QPointer<QAction> close;
+    QPointer<QAction> closeAll;
+    QPointer<QAction> closeAllOthers;
     KRecentFilesAction* fileOpenRecent;
     KTextEditor::Document* globalTextEditorInstance;
 };
@@ -591,7 +589,7 @@ void DocumentController::initialize()
 void DocumentController::cleanup()
 {
     if (d->fileOpenRecent)
-        d->fileOpenRecent->saveEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
+        d->fileOpenRecent->saveEntries( KConfigGroup(KSharedConfig::openConfig(), "Recent Files" ) );
 
     // Close all documents without checking if they should be saved.
     // This is because the user gets a chance to save them during MainWindow::queryClose.
@@ -606,13 +604,12 @@ DocumentController::~DocumentController()
 
 void DocumentController::setupActions()
 {
-    KActionCollection * ac =
-        Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
+    KActionCollection* ac = Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
-    KAction *action;
+    QAction* action;
 
     action = ac->addAction( "file_open" );
-    action->setIcon(KIcon("document-open"));
+    action->setIcon(QIcon::fromTheme("document-open"));
     action->setShortcut( Qt::CTRL + Qt::Key_O );
     action->setText(i18n( "&Open..." ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(chooseDocument()) );
@@ -620,12 +617,12 @@ void DocumentController::setupActions()
     action->setWhatsThis( i18n( "Opens a file for editing." ) );
 
     d->fileOpenRecent = KStandardAction::openRecent(this,
-                    SLOT(slotOpenDocument(KUrl)), ac);
+                    SLOT(slotOpenDocument(QUrl)), ac);
     d->fileOpenRecent->setWhatsThis(i18n("This lists files which you have opened recently, and allows you to easily open them again."));
-    d->fileOpenRecent->loadEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
+    d->fileOpenRecent->loadEntries( KConfigGroup(KSharedConfig::openConfig(), "Recent Files" ) );
 
     action = d->saveAll = ac->addAction( "file_save_all" );
-    action->setIcon(KIcon("document-save"));
+    action->setIcon(QIcon::fromTheme("document-save"));
     action->setText(i18n( "Save Al&l" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(slotSaveAllDocuments()) );
     action->setToolTip( i18n( "Save all open documents" ) );
@@ -634,7 +631,7 @@ void DocumentController::setupActions()
     action->setEnabled(false);
 
     action = d->revertAll = ac->addAction( "file_revert_all" );
-    action->setIcon(KIcon("document-revert"));
+    action->setIcon(QIcon::fromTheme("document-revert"));
     action->setText(i18n( "Reload All" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(reloadAllDocuments()) );
     action->setToolTip( i18n( "Revert all open documents" ) );
@@ -642,7 +639,7 @@ void DocumentController::setupActions()
     action->setEnabled(false);
 
     action = d->close = ac->addAction( "file_close" );
-    action->setIcon(KIcon("window-close"));
+    action->setIcon(QIcon::fromTheme("window-close"));
     action->setShortcut( Qt::CTRL + Qt::Key_W );
     action->setText( i18n( "&Close" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(fileClose()) );
@@ -651,7 +648,7 @@ void DocumentController::setupActions()
     action->setEnabled(false);
 
     action = d->closeAll = ac->addAction( "file_close_all" );
-    action->setIcon(KIcon("window-close"));
+    action->setIcon(QIcon::fromTheme("window-close"));
     action->setText(i18n( "Clos&e All" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(closeAllDocuments()) );
     action->setToolTip( i18n( "Close all open documents" ) );
@@ -659,7 +656,7 @@ void DocumentController::setupActions()
     action->setEnabled(false);
 
     action = d->closeAllOthers = ac->addAction( "file_closeother" );
-    action->setIcon(KIcon("window-close"));
+    action->setIcon(QIcon::fromTheme("window-close"));
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_W );
     action->setText(i18n( "Close All Ot&hers" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(closeAllOtherDocuments()) );
@@ -671,7 +668,7 @@ void DocumentController::setupActions()
     connect( action, SIGNAL(triggered(bool)), SLOT(vcsAnnotateCurrentDocument()) );
     action->setText( i18n( "Show Annotate on current document") );
     action->setIconText( i18n( "Annotate" ) );
-    action->setIcon( KIcon("user-properties") );
+    action->setIcon( QIcon::fromTheme("user-properties") );
 }
 
 void DocumentController::setEncoding( const QString &encoding )
@@ -684,7 +681,7 @@ QString KDevelop::DocumentController::encoding() const
     return d->presetEncoding;
 }
 
-void DocumentController::slotOpenDocument(const KUrl &url)
+void DocumentController::slotOpenDocument(const QUrl &url)
 {
     openDocument(url);
 }
@@ -959,8 +956,22 @@ void DocumentController::closeAllOtherDocuments()
 IDocument* DocumentController::activeDocument() const
 {
     UiController *uiController = Core::self()->uiControllerInternal();
-    if( !uiController->activeSublimeWindow() || !uiController->activeSublimeWindow()->activeView() ) return 0;
-    return dynamic_cast<IDocument*>(uiController->activeSublimeWindow()->activeView()->document());
+    Sublime::MainWindow* mw = uiController->activeSublimeWindow();
+    if( !mw || !mw->activeView() ) return 0;
+    return dynamic_cast<IDocument*>(mw->activeView()->document());
+}
+
+KTextEditor::View* DocumentController::activeTextDocumentView() const
+{
+    UiController *uiController = Core::self()->uiControllerInternal();
+    Sublime::MainWindow* mw = uiController->activeSublimeWindow();
+    if( !mw || !mw->activeView() )
+        return 0;
+
+    TextView* view = qobject_cast<TextView*>(mw->activeView());
+    if(!view)
+        return 0;
+    return view->textView();
 }
 
 QString DocumentController::activeDocumentPath( QString target ) const
@@ -1219,7 +1230,7 @@ void DocumentController::vcsAnnotateCurrentDocument()
         auto helper = new VcsPluginHelper(project->versionControlPlugin(), iface);
         connect(doc->textDocument(), SIGNAL(aboutToClose(KTextEditor::Document*)),
                 helper, SLOT(disposeEventually(KTextEditor::Document*)));
-        connect(doc->textDocument()->activeView(), SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
+        connect(doc->activeTextView(), SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
                 helper, SLOT(disposeEventually(View*, bool)));
         helper->addContextDocument(url);
         helper->annotation();
@@ -1232,4 +1243,4 @@ void DocumentController::vcsAnnotateCurrentDocument()
 
 }
 
-#include "documentcontroller.moc"
+#include "moc_documentcontroller.cpp"

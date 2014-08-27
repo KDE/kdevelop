@@ -55,7 +55,7 @@ Would be equivalent to
 if someCall was using HoldUpdates too, it will make sure to only call setUpdatesEnabled(true) in case it's needed.
 
  */
-class SUBLIME_EXPORT HoldUpdates {
+class KDEVPLATFORMSUBLIME_EXPORT HoldUpdates {
     public:
         HoldUpdates(QWidget* w);
         ~HoldUpdates();

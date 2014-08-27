@@ -23,11 +23,11 @@
 #include <interfaces/iproject.h>
 #include "dashboarddataengine.h"
 #include "dashboardpluginloader.h"
+#include <QAction>
 #include <QFile>
 #include <QDir>
 #include <project/projectmodel.h>
 #include <util/path.h>
-#include <KAction>
 
 DashboardCorona::DashboardCorona(KDevelop::IProject *project, QObject* parent)
 	: Plasma::Corona(parent), m_project(project)
@@ -72,7 +72,7 @@ void DashboardCorona::loadDefaultLayout()
 
 void DashboardCorona::containmentAddedToCorona(Plasma::Containment* c)
 {
-    QAction* shareAction =  new QAction(KIcon("document-export"), i18nc("@action", "Share"), this);
+    QAction* shareAction =  new QAction(QIcon::fromTheme("document-export"), i18nc("@action", "Share"), this);
     connect(shareAction, SIGNAL(triggered(bool)), SLOT(saveToProject()));
     c->addToolBoxAction(shareAction);
     c->removeToolBoxAction(c->action("expand widgets"));

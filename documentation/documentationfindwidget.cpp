@@ -30,9 +30,9 @@ DocumentationFindWidget::DocumentationFindWidget(QWidget* parent)
     m_ui = new Ui::FindWidget;
     m_ui->setupUi(this);
     
-    m_ui->hideButton->setIcon(KIcon("dialog-close"));
-    m_ui->nextButton->setIcon(KIcon("go-down-search"));
-    m_ui->previousButton->setIcon(KIcon("go-up-search"));
+    m_ui->hideButton->setIcon(QIcon::fromTheme("dialog-close"));
+    m_ui->nextButton->setIcon(QIcon::fromTheme("go-down-search"));
+    m_ui->previousButton->setIcon(QIcon::fromTheme("go-up-search"));
     
     connect(m_ui->findText, SIGNAL(returnPressed(QString)), SLOT(searchNext()));
     connect(m_ui->nextButton, SIGNAL(clicked(bool)), SLOT(searchNext()));

@@ -26,7 +26,7 @@
 #include "ui_externalscriptview.h"
 
 class ExternalScriptItem;
-class KAction;
+class QAction;
 
 class QSortFilterProxyModel;
 
@@ -62,9 +62,9 @@ protected:
 private:
   ExternalScriptPlugin* m_plugin;
   QSortFilterProxyModel* m_model;
-  KAction* m_addScriptAction;
-  KAction* m_editScriptAction;
-  KAction* m_removeScriptAction;
+  QAction* m_addScriptAction;
+  QAction* m_editScriptAction;
+  QAction* m_removeScriptAction;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTVIEW_H

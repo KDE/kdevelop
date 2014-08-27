@@ -21,6 +21,9 @@
 
 #include <language/codegen/sourcefiletemplate.h>
 #include <language/codegen/templaterenderer.h>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/ksharedconfig.h>
+#include <KI18n/KLocalizedString>
 
 #include <KUrlRequester>
 #include <KIntNumInput>
@@ -94,8 +97,7 @@ void OutputPagePrivate::updateFileNames()
     }
 
     //Save the setting for next time
-    KSharedConfigPtr config = KGlobal::config();
-    KConfigGroup codegenGroup( config, "CodeGeneration" );
+    KConfigGroup codegenGroup( KSharedConfig::openConfig(), "CodeGeneration" );
     codegenGroup.writeEntry( "LowerCaseFilenames", output->lowerFilenameCheckBox->isChecked() );
 
     validate();
@@ -109,7 +111,7 @@ void OutputPagePrivate::validate()
     {
         if (!it.value()->url().isValid()) {
             invalidFiles << it.key();
-        } else if (it.value()->url().isLocalFile() && !QFileInfo(it.value()->url().upUrl().toLocalFile()).isWritable()) {
+        } else if (it.value()->url().isLocalFile() && !QFileInfo(KUrl(it.value()->url()).upUrl().toLocalFile()).isWritable()) {
             invalidFiles << it.key();
         }
     }
@@ -187,7 +189,6 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
         d->labels << label;
         KUrlRequester* requester = new KUrlRequester(this);
         requester->setMode( KFile::File | KFile::LocalOnly );
-        requester->fileDialog()->setOperationMode( KFileDialog::Saving );
 
         d->urlChangedMapper.setMapping(requester, file.identifier);
         connect(requester, SIGNAL(textChanged(QString)), &d->urlChangedMapper, SLOT(map()));
@@ -221,8 +222,7 @@ void OutputPage::loadFileTemplate(const SourceFileTemplate& fileTemplate,
                                    const KUrl& baseUrl,
                                    TemplateRenderer* renderer)
 {
-    KSharedConfigPtr config = KGlobal::config();
-    KConfigGroup codegenGroup( config, "CodeGeneration" );
+    KConfigGroup codegenGroup( KSharedConfig::openConfig(), "CodeGeneration" );
     bool lower = codegenGroup.readEntry( "LowerCaseFilenames", true );
     d->output->lowerFilenameCheckBox->setChecked(lower);
 
@@ -252,16 +252,16 @@ QHash< QString, KUrl > OutputPage::fileUrls() const
     return urls;
 }
 
-QHash< QString, SimpleCursor > OutputPage::filePositions() const
+QHash< QString, KTextEditor::Cursor > OutputPage::filePositions() const
 {
-    QHash<QString, SimpleCursor> positions;
+    QHash<QString, KTextEditor::Cursor> positions;
     foreach (const QString& identifier, d->fileIdentifiers)
     {
-        positions.insert(identifier, SimpleCursor(d->outputLines[identifier]->value(), d->outputColumns[identifier]->value()));
+        positions.insert(identifier, KTextEditor::Cursor(d->outputLines[identifier]->value(), d->outputColumns[identifier]->value()));
     }
     return positions;
 }
 
 }
 
-#include "outputpage.moc"
+#include "moc_outputpage.cpp"

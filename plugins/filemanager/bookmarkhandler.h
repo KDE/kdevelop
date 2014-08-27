@@ -26,32 +26,36 @@
 #include <kbookmarkmanager.h>
 #include <kbookmarkmenu.h>
 
+#include <QObject>
+
 class FileManager;
+class KMenu;
+class KUrl;
 
 class BookmarkHandler : public QObject, public KBookmarkOwner
 {
 Q_OBJECT
 
 public:
-    explicit BookmarkHandler( FileManager *parent, KMenu *kpopupmenu = 0 );
+    explicit BookmarkHandler( FileManager *parent, QMenu *kpopupmenu = 0 );
     ~BookmarkHandler();
 
     // KBookmarkOwner interface:
-    virtual QString currentUrl() const;
+    virtual QUrl currentUrl() const;
     virtual QString currentTitle() const;
 
-    KMenu *menu() const
+    QMenu *menu() const
     {
       return m_menu;
     }
     virtual void openBookmark( const KBookmark &, Qt::MouseButtons, Qt::KeyboardModifiers );
 
 Q_SIGNALS:
-    void openUrl( const KUrl& url );
+    void openUrl( const QUrl& url );
 
 private:
     FileManager *m_parent;
-    KMenu *m_menu;
+    QMenu *m_menu;
     KBookmarkMenu *m_bookmarkMenu;
 };
 

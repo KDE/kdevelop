@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_GREPOUTPUTDELEGATE_H
 #define KDEVPLATFORM_PLUGIN_GREPOUTPUTDELEGATE_H
 
-#include <QtGui/QStyledItemDelegate>
+#include <QStyledItemDelegate>
 
 class GrepOutputDelegate : public QStyledItemDelegate
 {

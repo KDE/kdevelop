@@ -20,16 +20,16 @@
 #ifndef KDEVPLATFORM_PLUGIN_FILEMANAGER_H
 #define KDEVPLATFORM_PLUGIN_FILEMANAGER_H
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
+
+#include <KIOCore/KFileItem>
+#include <KIOFileWidgets/KDirOperator>
+#include <KIOFileWidgets/KUrlNavigator>
 
 class KActionCollection;
-class KDirOperator;
-class KUrlNavigator;
-class KFileItem;
-class KAction;
+class QAction;
 class QString;
 class QMenu;
-class KUrl;
 class KDevFileManagerPlugin;
 class BookmarkHandler;
 
@@ -43,9 +43,10 @@ public:
     KDevFileManagerPlugin* plugin() const;
 
 private slots:
+    void fileCreated(KJob *job);
     void openFile(const KFileItem&);
-    void gotoUrl(const KUrl&);
-    void updateNav( const KUrl& url );
+    void gotoUrl(const QUrl&);
+    void updateNav( const QUrl& url );
     void syncCurrentDocumentDirectory();
     void fillContextMenu(KFileItem item, QMenu *menu);
     void createNewFile();
@@ -53,7 +54,7 @@ private slots:
 private:
     void setupActions();
     QList<QAction*> tbActions;
-    KAction *newFileAction;
+    QAction* newFileAction;
     QList<QAction*> contextActions;
     KDirOperator* dirop;
     KUrlNavigator* urlnav;

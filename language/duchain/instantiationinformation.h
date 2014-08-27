@@ -19,11 +19,12 @@
 #ifndef KDEVPLATFORM_INSTANTIATIONINFORMATION_H
 #define KDEVPLATFORM_INSTANTIATIONINFORMATION_H
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 #include "types/abstracttype.h"
 #include "types/indexedtype.h"
 #include "appendedlist.h"
-#include "referencecounting.h"
+
+#include <serialization/referencecounting.h>
 
 namespace KDevelop {
   class IndexedInstantiationInformation;

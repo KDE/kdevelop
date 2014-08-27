@@ -33,7 +33,7 @@
 #include "ducontextdata.h"
 #include "declarationid.h"
 #include "uses.h"
-#include "indexedstring.h"
+#include <serialization/indexedstring.h>
 #include "duchainregister.h"
 #include "persistentsymboltable.h"
 #include "types/identifiedtype.h"
@@ -44,7 +44,7 @@
 #include "types/typeutils.h"
 #include "types/typealiastype.h"
 #include "classdeclaration.h"
-#include "repositories/stringrepository.h"
+#include "serialization/stringrepository.h"
 #include "ducontextdynamicdata.h"
 
 namespace KDevelop
@@ -413,7 +413,7 @@ DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) 
     if(t) {
       AbstractType::Ptr target = t->type();
       
-      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(target.unsafeData());
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(target.data());
       if( idType ) {
         Declaration* decl = idType->declaration(topContext);
         if(decl && decl != this) {
@@ -730,14 +730,14 @@ bool Declaration::hasUses() const
   return ret;
 }
 
-QMap<IndexedString, QList<SimpleRange> > Declaration::usesCurrentRevision() const
+QMap<IndexedString, QList<KTextEditor::Range> > Declaration::usesCurrentRevision() const
 {
   ENSURE_CAN_READ
-  QMap<IndexedString, QMap<SimpleRange, bool> > tempUses;
+  QMap<IndexedString, QMap<KTextEditor::Range, bool> > tempUses;
 
   //First, search for uses within the own context
   {
-    QMap<SimpleRange, bool>& ranges(tempUses[topContext()->url()]);
+    QMap<KTextEditor::Range, bool>& ranges(tempUses[topContext()->url()]);
     foreach(const RangeInRevision& range, allUses(topContext(), const_cast<Declaration*>(this)))
     {
       ranges[topContext()->transformFromLocalRevision(range)] = true;
@@ -749,18 +749,18 @@ QMap<IndexedString, QList<SimpleRange> > Declaration::usesCurrentRevision() cons
   FOREACH_ARRAY(const IndexedTopDUContext& indexedContext, useContexts) {
     TopDUContext* context = indexedContext.data();
     if(context) {
-      QMap<SimpleRange, bool>& ranges(tempUses[context->url()]);
+      QMap<KTextEditor::Range, bool>& ranges(tempUses[context->url()]);
       foreach(const RangeInRevision& range, allUses(context, const_cast<Declaration*>(this)))
         ranges[context->transformFromLocalRevision(range)] = true;
     }
   }
 
-QMap<IndexedString, QList<SimpleRange> > ret;
+QMap<IndexedString, QList<KTextEditor::Range> > ret;
 
-  for(QMap<IndexedString, QMap<SimpleRange, bool> >::const_iterator it = tempUses.constBegin(); it != tempUses.constEnd(); ++it) {
+  for(QMap<IndexedString, QMap<KTextEditor::Range, bool> >::const_iterator it = tempUses.constBegin(); it != tempUses.constEnd(); ++it) {
     if(!(*it).isEmpty()) {
-      QList<SimpleRange>& list(ret[it.key()]);
-      for(QMap<SimpleRange, bool>::const_iterator it2 = (*it).constBegin(); it2 != (*it).constEnd(); ++it2)
+      QList<KTextEditor::Range>& list(ret[it.key()]);
+      for(QMap<KTextEditor::Range, bool>::const_iterator it2 = (*it).constBegin(); it2 != (*it).constEnd(); ++it2)
         list << it2.key();
     }
   }

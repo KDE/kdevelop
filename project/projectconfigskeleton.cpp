@@ -145,7 +145,7 @@ bool ProjectConfigSkeleton::useDefaults( bool b )
     return !d->mUseDefaults;
 }
 
-void ProjectConfigSkeleton::writeConfig()
+bool ProjectConfigSkeleton::writeConfig()
 {
     KConfigSkeletonItem::List myitems = items();
     KConfigSkeletonItem::List::ConstIterator it;
@@ -161,6 +161,7 @@ void ProjectConfigSkeleton::writeConfig()
     KIO::NetAccess::upload( d->m_developerTempFile, d->m_developerFile.toUrl(), 0 );
 
     emit configChanged();
+    return true;
 }
 
 ProjectConfigSkeleton::~ProjectConfigSkeleton()
@@ -169,5 +170,4 @@ ProjectConfigSkeleton::~ProjectConfigSkeleton()
 }
 
 }
-#include "projectconfigskeleton.moc"
 

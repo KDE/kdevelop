@@ -21,8 +21,6 @@
 #define KALGEBRAPLASMA_HEADER
 
 #include <Plasma/Applet>
-#include <Plasma/TextBrowser>
-#include <ui_config.h>
 
 class QSizeF;
 class QLabel;

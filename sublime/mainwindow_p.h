@@ -21,10 +21,12 @@
 
 #include <QMap>
 #include <QObject>
+#include <QPointer>
 #include <QSet>
 #include <QTabBar>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QPointer>
 
 #include "area.h"
 #include "sublimedefs.h"
@@ -118,7 +120,7 @@ public:
 
     IdealController *idealController;
     int ignoreDockShown;
-    bool autoAreaSettingsSave;                       
+    bool autoAreaSettingsSave;
 
 public slots:
     void toggleDocksShown();
@@ -159,7 +161,7 @@ private:
 
     QMap<Area*, QAction*> m_areaActions;
     QMap<QAction*, Area*> m_actionAreas;
-    QWeakPointer<QWidget> m_leftTabbarCornerWidget;
+    QPointer<QWidget> m_leftTabbarCornerWidget;
 };
 
 }

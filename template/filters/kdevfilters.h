@@ -80,9 +80,10 @@ class KDevFilters : public QObject, public Grantlee::TagLibraryInterface
 {
     Q_OBJECT
     Q_INTERFACES(Grantlee::TagLibraryInterface)
+    Q_PLUGIN_METADATA(IID "org.grantlee.TagLibraryInterface")
 
 public:
-    explicit KDevFilters(QObject* parent = 0);
+    explicit KDevFilters(QObject* parent = 0, const QVariantList &args = QVariantList());
     virtual ~KDevFilters();
 
     virtual QHash< QString, Grantlee::Filter* > filters(const QString& name = QString());

@@ -38,7 +38,7 @@ public:
     void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = 0 );
     void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const;
     QString title() const;
-    KIcon icon() const;
+    QIcon icon() const;
 };
 
 class ScriptAppLauncher : public KDevelop::ILauncher
@@ -75,8 +75,8 @@ public:
 
     QString id() const;
     QString name() const;
-    QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const;  
-    KIcon icon() const;
+    QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const;
+    QIcon icon() const;
     virtual bool canLaunch( const KUrl& file ) const;
     virtual bool canLaunch(KDevelop::ProjectBaseItem* item) const;
     virtual void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const;

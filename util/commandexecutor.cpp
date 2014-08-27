@@ -164,4 +164,4 @@ QString CommandExecutor::workingDirectory() const
 
 }
 
-#include "commandexecutor.moc"
+#include "moc_commandexecutor.cpp"

@@ -18,8 +18,8 @@
 
 #include "indexedtype.h"
 
-#include "../repositories/typerepository.h"
-#include "../referencecounting.h"
+#include "typerepository.h"
+#include <serialization/referencecounting.h>
 
 namespace KDevelop
 {

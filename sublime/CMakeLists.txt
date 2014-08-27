@@ -27,12 +27,15 @@ set(sublime_LIB_SRCS
     idealbuttonbarwidget.cpp
 )
 
-kde4_add_library(sublime SHARED ${sublime_LIB_SRCS})
-target_link_libraries(sublime
-        LINK_PRIVATE ${KDE4_KDEUI_LIBS}
-        LINK_PUBLIC ${KDE4_KPARTS_LIBS})
-set_target_properties(sublime PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS sublime EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+add_library(KDevPlatformSublime ${sublime_LIB_SRCS})
+add_library(KDev::Sublime ALIAS KDevPlatformSublime)
+
+generate_export_header(KDevPlatformSublime EXPORT_FILE_NAME sublimeexport.h)
+target_link_libraries(KDevPlatformSublime
+        LINK_PRIVATE KF5::KIOWidgets
+        LINK_PUBLIC KF5::Parts KF5::KDELibs4Support)
+set_target_properties(KDevPlatformSublime PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Sublime)
+install(TARGETS KDevPlatformSublime EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 ########### install files ###############
@@ -48,7 +51,7 @@ install(FILES
     mainwindowoperator.h
     urldocument.h
     sublimedefs.h
-    sublimeexport.h
     tooldocument.h
     view.h
+    ${CMAKE_CURRENT_BINARY_DIR}/sublimeexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/sublime COMPONENT Devel)

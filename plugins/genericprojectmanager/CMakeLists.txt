@@ -9,13 +9,13 @@ set(kdevgenericmanager_PART_SRCS
     genericmanager.cpp
 )
 
-kde4_add_plugin(kdevgenericmanager ${kdevgenericmanager_PART_SRCS})
+add_library(kdevgenericmanager MODULE ${kdevgenericmanager_PART_SRCS})
 target_link_libraries(kdevgenericmanager
-    ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
-    kdevplatforminterfaces kdevplatformproject
+    KF5::KIOWidgets
+    KDev::Project
 )
 
-install(TARGETS kdevgenericmanager DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevgenericmanager DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

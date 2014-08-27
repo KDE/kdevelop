@@ -188,4 +188,4 @@ bool TestFile::keepDUChainData()
     return d->keepDUChainData;
 }
 
-#include "testfile.moc"
+#include "moc_testfile.cpp"

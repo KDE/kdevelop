@@ -30,6 +30,7 @@
 #include <QtCore/QPair>
 #include "interfacesexport.h"
 
+class KComponentData;
 class KIconLoader;
 class QAction;
 
@@ -146,10 +147,10 @@ class KDEVPLATFORMINTERFACES_EXPORT IPlugin: public QObject, public KXMLGUIClien
 
 public:
     /**Constructs a plugin.
-     * @param instance The instance for this plugin.
+     * @param componentName The component name for this plugin.
      * @param parent The parent object for the plugin.
      */
-    IPlugin(const KComponentData &instance, QObject *parent);
+    IPlugin(const QString &componentName, QObject *parent);
 
     /**Destructs a plugin.*/
     virtual ~IPlugin();
@@ -179,6 +180,8 @@ public:
         }
         return 0;
     }
+
+    KComponentData componentData() const;
     
     /**
      * Ask the plugin for a ContextActionContainer, which contains actions

@@ -21,6 +21,7 @@
 #include <QWhatsThis>
 #include <QDBusConnection>
 #include <QKeySequence>
+#include <QMimeDatabase>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -47,7 +48,7 @@
 #include <outputview/ioutputview.h>
 
 K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
-K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find/Replace in Files"), "0.1", ki18n("Allows fast searching of multiple files using patterns or regular expressions. And allow to replace it too."), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find/Replace in Files"), "0.1", ki18n("Allows fast searching of multiple files using patterns or regular expressions. And allow to replace it too."), KAboutData::License_GPL)))
 
 static QString patternFromSelection(const KDevelop::IDocument* doc)
 {
@@ -79,14 +80,14 @@ static QString patternFromSelection(const KDevelop::IDocument* doc)
 }
 
 GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin( GrepViewFactory::componentData(), parent ), m_currentJob(0)
+    : KDevelop::IPlugin( "kdevgrepview", parent ), m_currentJob(0)
 {
     setXMLFile("kdevgrepview.rc");
 
     QDBusConnection::sessionBus().registerObject( "/org/kdevelop/GrepViewPlugin",
         this, QDBusConnection::ExportScriptableSlots );
 
-    KAction *action = actionCollection()->addAction("edit_grep");
+    QAction*action = actionCollection()->addAction("edit_grep");
     action->setText(i18n("Find/Replace in Fi&les..."));
     action->setShortcut( QKeySequence("Ctrl+Alt+F") );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialogFromMenu()));
@@ -96,7 +97,7 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
                                "searched for within all files in the directories "
                                "you specify. Matches will be displayed, you "
                                "can switch to a match directly. You can also do replacement.") );
-    action->setIcon(KIcon("edit-find"));
+    action->setIcon(QIcon::fromTheme("edit-find"));
 
     // instantiate delegate, it's supposed to be deleted via QObject inheritance
     new GrepOutputDelegate(this);
@@ -131,8 +132,8 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         QList<KDevelop::ProjectBaseItem*> items = ctx->items();
         // verify if there is only one folder selected
         if ((items.count() == 1) && (items.first()->folder())) {
-            KAction* action = new KAction( i18n( "Find/Replace in This Folder" ), this );
-            action->setIcon(KIcon("edit-find"));
+            QAction* action = new QAction( i18n( "Find/Replace in This Folder" ), this );
+            action->setIcon(QIcon::fromTheme("edit-find"));
             m_contextMenuDirectory = items.at(0)->folder()->path().toLocalFile();
             connect( action, SIGNAL(triggered()), this, SLOT(showDialogFromProject()));
             extension.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, action );
@@ -142,7 +143,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
     if ( context->type() == KDevelop::Context::EditorContext ) {
         KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
         if ( econtext->view()->selection() ) {
-            QAction* action = new QAction(KIcon("edit-find"), i18n("&Find/Replace in Files"), this);
+            QAction* action = new QAction(QIcon::fromTheme("edit-find"), i18n("&Find/Replace in Files"), this);
             connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialogFromMenu()));
             extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
         }
@@ -150,10 +151,12 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
 
     if(context->type() == KDevelop::Context::FileContext) {
         KDevelop::FileContext *fcontext = dynamic_cast<KDevelop::FileContext*>(context);
-        KMimeType::Ptr mimetype = KMimeType::findByUrl( fcontext->urls().first() );
-        if(mimetype->is("inode/directory")) {
-            KAction* action = new KAction( i18n( "Find/Replace in This Folder" ), this );
-            action->setIcon(KIcon("edit-find"));
+        // TODO: just stat() or QFileInfo().isDir() for local files? should be faster than mime type checking
+        QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(fcontext->urls().first());
+        static const QMimeType directoryMime = QMimeDatabase().mimeTypeForName("inode/directory");
+        if (mimetype == directoryMime) {
+            QAction* action = new QAction( i18n( "Find/Replace in This Folder" ), this );
+            action->setIcon(QIcon::fromTheme("edit-find"));
             m_contextMenuDirectory = fcontext->urls().first().toLocalFile();
             connect( action, SIGNAL(triggered()), this, SLOT(showDialogFromProject()));
             extension.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, action );
@@ -177,8 +180,6 @@ void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOpti
         if (!pattern.isEmpty()) {
             dlg->setPattern( pattern );
         }
-
-        dlg->enableButtonOk( !pattern.isEmpty() );
     }
 
     //if directory is empty then use a default value from the config file.
@@ -189,7 +190,7 @@ void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOpti
     if(showOptions)
         dlg->show();
     else{
-        dlg->start();
+        dlg->startSearch();
         dlg->deleteLater();
     }
 }

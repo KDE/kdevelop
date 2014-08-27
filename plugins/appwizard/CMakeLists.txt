@@ -17,22 +17,21 @@ set(kdevappwizard_PART_UI
     projectvcspage.ui
 )
 
-kde4_add_ui_files(kdevappwizard_PART_SRCS ${kdevappwizard_PART_UI})
+qt5_wrap_ui(kdevappwizard_PART_SRCS ${kdevappwizard_PART_UI})
 
-kde4_add_plugin(kdevappwizard ${kdevappwizard_PART_SRCS})
+add_library(kdevappwizard MODULE ${kdevappwizard_PART_SRCS})
 target_link_libraries(kdevappwizard
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KNEWSTUFF3_LIBS}
-    kdevplatforminterfaces kdevplatformvcs kdevplatformlanguage kdevplatformutil)
+    KF5::KIOWidgets
+    KF5::NewStuff
+    KF5::Archive
+    KDev::Interfaces KDev::Vcs KDev::Language KDev::Util)
 
-install(TARGETS kdevappwizard DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevappwizard DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############
 
 configure_file(kdevappwizard.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevappwizard.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevappwizard.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevappwizard.rc DESTINATION ${DATA_INSTALL_DIR}/kdevappwizard )
+install( FILES kdevappwizard.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevappwizard )
 install( FILES kdevappwizard.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )

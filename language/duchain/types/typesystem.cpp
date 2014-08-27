@@ -18,15 +18,14 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #include "typesystem.h"
-#include "../indexedstring.h"
-#include "../repositories/typerepository.h"
+#include "typerepository.h"
 #include "typesystemdata.h"
 #include "typeregister.h"
-
 #include "integraltype.h"
 #include "structuretype.h"
+
+#include <serialization/indexedstring.h>
 
 namespace KDevelop
 {
@@ -209,12 +208,12 @@ TypeVisitor::~TypeVisitor()
 }
 
 TypePtr< KDevelop::AbstractType > TypeExchanger::exchange(const TypePtr< KDevelop::AbstractType >& type) {
-  const_cast<AbstractType*>(type.unsafeData())->exchangeTypes(this);
+  const_cast<AbstractType*>(type.data())->exchangeTypes(this);
   return type;
 }
 
 TypePtr< KDevelop::AbstractType > SimpleTypeExchanger::exchange(const TypePtr< KDevelop::AbstractType >& type) {
-  if(type && type->equals(m_replace.unsafeData()))
+  if(type && type->equals(m_replace.data()))
     return m_replaceWith;
   else
     return TypeExchanger::exchange(type);

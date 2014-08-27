@@ -23,6 +23,10 @@
 #include <kdebug.h>
 #include <kicon.h>
 
+#include <QIcon>
+#include <QMimeDatabase>
+#include <QMimeType>
+
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
@@ -49,7 +53,7 @@
 #include <project/projectitemlineedit.h>
 
 static const QString interpreterForUrl(const KUrl& url) {
-    auto mimetype = KMimeType::findByUrl(url);
+    auto mimetype = QMimeDatabase().mimeTypeForUrl(url);
     static QHash<QString, QString> knownMimetypes;
     if ( knownMimetypes.isEmpty() ) {
         knownMimetypes["text/x-python"] = "python";
@@ -58,13 +62,13 @@ static const QString interpreterForUrl(const KUrl& url) {
         knownMimetypes["application/x-shellscript"] = "bash";
         knownMimetypes["application/x-perl"] = "perl -e";
     }
-    const QString& interp = knownMimetypes.value(mimetype->name());
+    const QString& interp = knownMimetypes.value(mimetype.name());
     return interp;
 }
 
-KIcon ScriptAppConfigPage::icon() const
+QIcon ScriptAppConfigPage::icon() const
 {
-    return KIcon("system-run");
+    return QIcon::fromTheme("system-run");
 }
 
 void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* project )
@@ -88,7 +92,7 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
         runFixedFile->setChecked( true );
     }
     arguments->setText( cfg.readEntry( ExecuteScriptPlugin::argumentsEntry, "" ) );
-    workingDirectory->setUrl( cfg.readEntry( ExecuteScriptPlugin::workingDirEntry, KUrl() ) );
+    workingDirectory->setUrl( cfg.readEntry( ExecuteScriptPlugin::workingDirEntry, QUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecuteScriptPlugin::environmentGroupEntry, QString() ) );
     outputFilteringMode->setCurrentIndex( cfg.readEntry( ExecuteScriptPlugin::outputFilteringEntry, 2u ));
     //runInTerminal->setChecked( cfg.readEntry( ExecuteScriptPlugin::useTerminalEntry, false ) );
@@ -216,9 +220,9 @@ QString ScriptAppConfigType::id() const
     return ExecuteScriptPlugin::_scriptAppConfigTypeId;
 }
 
-KIcon ScriptAppConfigType::icon() const
+QIcon ScriptAppConfigType::icon() const
 {
-    return KIcon("preferences-plugin-script");
+    return QIcon::fromTheme("preferences-plugin-script");
 }
 
 bool ScriptAppConfigType::canLaunch(const KUrl& file) const
@@ -233,7 +237,7 @@ bool ScriptAppConfigType::canLaunch(KDevelop::ProjectBaseItem* item) const
 
 void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const
 {
-    config.writeEntry(ExecuteScriptPlugin::executableEntry, item->path().toUrl());
+    config.writeEntry(ExecuteScriptPlugin::executableEntry, QUrl(item->path().toUrl()));
     config.writeEntry(ExecuteScriptPlugin::interpreterEntry, interpreterForUrl(item->path().toUrl()));
     config.writeEntry(ExecuteScriptPlugin::outputFilteringEntry, 2u);
     config.writeEntry(ExecuteScriptPlugin::runCurrentFileEntry, false);
@@ -250,4 +254,3 @@ void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup cfg, 
     cfg.sync();
 }
 
-#include "scriptappconfig.moc"

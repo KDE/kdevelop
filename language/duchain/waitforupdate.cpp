@@ -32,4 +32,3 @@ void WaitForUpdate::updateReady(KDevelop::IndexedString /*url*/, KDevelop::Refer
   m_wait.wakeAll();
 }
 
-#include "waitforupdate.moc"

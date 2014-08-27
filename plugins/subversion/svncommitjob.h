@@ -25,7 +25,7 @@
 #include "svnjobbase.h"
 #include <kurl.h>
 #include <QString>
-#include <Job.h>
+#include <ThreadWeaver/Job>
 
 class SvnInternalCommitJob;
 class SvnCommitDialog;

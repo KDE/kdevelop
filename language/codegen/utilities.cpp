@@ -18,7 +18,7 @@
 
 #include "utilities.h"
 
-#include <duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <duchain/identifier.h>
 #include <duchain/duchainlock.h>
 #include <duchain/duchain.h>

@@ -51,7 +51,7 @@ public:
     virtual QWidget *createViewWidget(QWidget *parent = 0);
     virtual KParts::Part *partForView(QWidget *view) const;
 
-    virtual KMimeType::Ptr mimeType() const;
+    virtual QMimeType mimeType() const override;
     virtual KTextEditor::Document* textDocument() const;
     virtual bool save(DocumentSaveMode mode = Default);
     virtual void reload();

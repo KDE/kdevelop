@@ -32,7 +32,7 @@ using namespace KDevelop;
 TestProject::TestProject(const Path& path, QObject* parent)
 : IProject(parent)
 , m_root(0)
-, m_projectConfiguration(KGlobal::config())
+, m_projectConfiguration(KSharedConfig::openConfig())
 {
     m_path = path.isValid() ? path : Path("/tmp/kdev-testproject/");
     m_root = new ProjectFolderItem(this, m_path);
@@ -42,7 +42,7 @@ TestProject::TestProject(const Path& path, QObject* parent)
 TestProject::TestProject(const KUrl& url, QObject* parent)
 : IProject(parent)
 , m_root(0)
-, m_projectConfiguration(KGlobal::config())
+, m_projectConfiguration(KSharedConfig::openConfig())
 {
     m_path = url.isValid() ? Path(url) : Path("/tmp/kdev-testproject/");
     m_root = new ProjectFolderItem(this, m_path);
@@ -183,4 +183,3 @@ void TestProjectController::initialize()
 {
 }
 
-#include "testproject.moc"

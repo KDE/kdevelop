@@ -99,5 +99,5 @@ CompletionSettings::CompletionSettings()
       m_highlightSemanticProblems(true), m_highlightProblematicLines(false), m_showMultiLineInformation(false),
       m_localColorizationLevel(170), m_globalColorizationLevel(255), m_minFilesForSimplifiedParsing(100000),
       m_todoMarkerWords("TODO FIXME"),
-      m_languageGroup(KGlobal::config(), "Language Support"){}
+      m_languageGroup(KSharedConfig::openConfig(), "Language Support"){}
 }

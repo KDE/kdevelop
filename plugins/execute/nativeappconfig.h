@@ -37,7 +37,7 @@ public:
     void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = 0 );
     void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const;
     QString title() const;
-    KIcon icon() const;
+    QIcon icon() const;
 private slots:
     void addDep();
     void removeDep();
@@ -83,7 +83,7 @@ public:
     QString id() const;
     QString name() const;
     QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const;  
-    KIcon icon() const;
+    QIcon icon() const;
     bool canLaunch( KDevelop::ProjectBaseItem* item ) const;
     bool canLaunch( const KUrl& file ) const;
     void configureLaunchFromItem ( KConfigGroup cfg, 

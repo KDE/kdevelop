@@ -37,7 +37,7 @@ K_PLUGIN_FACTORY(ProjectPreferencesFactory, registerPlugin<ProjectPreferences>()
 K_EXPORT_PLUGIN(ProjectPreferencesFactory(KAboutData("kcm_kdev_projectsettings", "kdevplatform", ki18n("Projects Settings"), "0.1")))
 
 ProjectPreferences::ProjectPreferences( QWidget *parent, const QVariantList &args )
-        : KCModule( ProjectPreferencesFactory::componentData(), parent, args )
+    : KCModule( KAboutData::pluginData("kcm_kdev_projectsettings"), parent, args )
 {
 
     QVBoxLayout * l = new QVBoxLayout( this );

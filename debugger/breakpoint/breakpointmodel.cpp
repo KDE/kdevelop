@@ -22,8 +22,9 @@
 
 #include "breakpointmodel.h"
 
+#include <QIcon>
 #include <QPixmap>
-#include <KIcon>
+
 #include <KParts/PartManager>
 #include <KDebug>
 #include <KLocale>
@@ -35,6 +36,7 @@
 #include "../interfaces/idocument.h"
 #include "../interfaces/ipartcontroller.h"
 #include "breakpoint.h"
+#include <KConfigCore/KSharedConfig>
 #include <KConfigGroup>
 #include <QAction>
 #include <QMenu>
@@ -128,9 +130,9 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
     if (!b) return;
 
     QMenu menu;
-    QAction deleteAction(KIcon("edit-delete"), i18n("&Delete Breakpoint"), 0);
-    QAction disableAction(KIcon("dialog-cancel"), i18n("&Disable Breakpoint"), 0);
-    QAction enableAction(KIcon("dialog-ok-apply"), i18n("&Enable Breakpoint"), 0);
+    QAction deleteAction(QIcon::fromTheme("edit-delete"), i18n("&Delete Breakpoint"), 0);
+    QAction disableAction(QIcon::fromTheme("dialog-cancel"), i18n("&Disable Breakpoint"), 0);
+    QAction enableAction(QIcon::fromTheme("dialog-ok-apply"), i18n("&Enable Breakpoint"), 0);
     menu.addAction(&deleteAction);
     if (b->enabled()) {
         menu.addAction(&disableAction);
@@ -159,9 +161,9 @@ BreakpointModel::headerData(int section, Qt::Orientation orientation,
     
     if (role == Qt::DecorationRole ) {
         if (section == 0)
-            return KIcon("dialog-ok-apply");
+            return QIcon::fromTheme("dialog-ok-apply");
         else if (section == 1)
-            return KIcon("system-switch-user");
+            return QIcon::fromTheme("system-switch-user");
     }
 
     if (role == Qt::DisplayRole) {
@@ -275,7 +277,7 @@ void BreakpointModel::markChanged(
         if (moving) {
             KTextEditor::MovingCursor* cursor = moving->newMovingCursor(KTextEditor::Cursor(mark.line, 0));
             connect(document, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)),
-                    this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
+                    this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), Qt::UniqueConnection);
             breakpoint->setMovingCursor(cursor);
         }
     } else {
@@ -298,25 +300,25 @@ void BreakpointModel::markChanged(
 
 const QPixmap* BreakpointModel::breakpointPixmap()
 {
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Active, QIcon::Off);
+  static QPixmap pixmap=QIcon::fromTheme("script-error").pixmap(QSize(22,22), QIcon::Active, QIcon::Off);
   return &pixmap;
 }
 
 const QPixmap* BreakpointModel::pendingBreakpointPixmap()
 {
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Normal, QIcon::Off);
+  static QPixmap pixmap=QIcon::fromTheme("script-error").pixmap(QSize(22,22), QIcon::Normal, QIcon::Off);
   return &pixmap;
 }
 
 const QPixmap* BreakpointModel::reachedBreakpointPixmap()
 {
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Selected, QIcon::Off);
+  static QPixmap pixmap=QIcon::fromTheme("script-error").pixmap(QSize(22,22), QIcon::Selected, QIcon::Off);
   return &pixmap;
 }
 
 const QPixmap* BreakpointModel::disabledBreakpointPixmap()
 {
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Disabled, QIcon::Off);
+  static QPixmap pixmap=QIcon::fromTheme("script-error").pixmap(QSize(22,22), QIcon::Disabled, QIcon::Off);
   return &pixmap;
 }
 
@@ -427,7 +429,7 @@ void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document*
 
 void BreakpointModel::load()
 {
-    KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
+    KConfigGroup breakpoints = KSharedConfig::openConfig()->group("breakpoints");
     int count = breakpoints.readEntry("number", 0);
     if (count == 0)
         return;
@@ -443,7 +445,7 @@ void BreakpointModel::load()
 
 void BreakpointModel::save()
 {
-    KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
+    KConfigGroup breakpoints = KSharedConfig::openConfig()->group("breakpoints");
     breakpoints.writeEntry("number", m_breakpoints.count());
     int i = 0;
     foreach (Breakpoint *b, m_breakpoints) {
@@ -548,4 +550,3 @@ Breakpoint* BreakpointModel::breakpoint(const KUrl& url, int line) {
     return 0;
 }
 
-#include "breakpointmodel.moc"

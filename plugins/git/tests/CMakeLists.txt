@@ -1,12 +1,11 @@
 # Running the test only makes sense if the git command line client
 # is present. So check for it before adding the test...
-FIND_PROGRAM(GIT_FOUND NAMES git)
+find_program(GIT_FOUND NAMES git)
 
 if (GIT_FOUND)
 
-    set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
     set(gittest_SRCS
-        gittest.cpp
+        test_git.cpp
         ../gitplugin.cpp
         ../gitclonejob.cpp
         ../stashmanagerdialog.cpp
@@ -15,13 +14,9 @@ if (GIT_FOUND)
         ../gitmessagehighlighter.cpp
         ../gitplugincheckinrepositoryjob.cpp
     )
-    kde4_add_ui_files(gittest_SRCS ../stashmanagerdialog.ui)
-    kde4_add_unit_test(kdevgit-test ${gittest_SRCS})
-    target_link_libraries(kdevgit-test
-        ${QT_QTTEST_LIBRARY}
-        ${KDE4_KDECORE_LIBS}
-        ${KDEVPLATFORM_VCS_LIBRARIES}
-        ${KDEVPLATFORM_UTIL_LIBRARIES}
-        ${KDEVPLATFORM_TESTS_LIBRARIES}
-    )
-endif (GIT_FOUND)
+    qt5_wrap_ui(gittest_SRCS ../stashmanagerdialog.ui)
+    ecm_add_test(${gittest_SRCS}
+        TEST_NAME test_kdevgit
+        LINK_LIBRARIES Qt5::Test ${KDEVPLATFORM_VCS_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES}
+        GUI)
+endif ()

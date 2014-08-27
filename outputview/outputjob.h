@@ -20,6 +20,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_OUTPUTJOB_H
 #define KDEVPLATFORM_OUTPUTJOB_H
 
+#include <QIcon>
 #include <QtCore/QPointer>
 
 #include <kjob.h>
@@ -60,7 +61,7 @@ public:
 protected:
     void setStandardToolView(IOutputView::StandardToolView standard);
     void setToolTitle(const QString& title);
-    void setToolIcon(const KIcon& icon);
+    void setToolIcon(const QIcon& icon);
     void setViewType(IOutputView::ViewType type);
     void setBehaviours(IOutputView::Behaviours behaviours);
     void setKillJobOnOutputClose(bool killJobOnOutputClose);
@@ -93,7 +94,7 @@ private Q_SLOTS:
 private:
     int m_standardToolView;
     QString m_title, m_toolTitle;
-    KIcon m_toolIcon;
+    QIcon m_toolIcon;
     IOutputView::ViewType m_type;
     IOutputView::Behaviours m_behaviours;
     bool m_killJobOnOutputClose;

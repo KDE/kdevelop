@@ -22,7 +22,6 @@
 #include "breakpoint.h"
 
 #include <KDE/KLocale>
-#include <KDE/KIcon>
 #include <KDE/KConfigGroup>
 #include <KDE/KDebug>
 
@@ -74,7 +73,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
 
     m_kind = stringToKind(config.readEntry("kind", ""));
     m_enabled = config.readEntry("enabled", false);
-    m_url = config.readEntry("url", KUrl());
+    m_url = config.readEntry("url", QUrl());
     m_line = config.readEntry("line", -1);
     m_expression = config.readEntry("expression", QString());
     setCondition(config.readEntry("condition", ""));
@@ -101,7 +100,7 @@ bool Breakpoint::setData(int index, const QVariant& value)
             QRegExp rx("^(.+):([0-9]+)$");
             int idx = rx.indexIn(s);
             if (m_kind == CodeBreakpoint && idx != -1) {
-                m_url = KUrl(rx.cap(1));
+                m_url = QUrl(rx.cap(1));
                 m_line = rx.cap(2).toInt() - 1;
                 m_expression.clear();
             } else {
@@ -135,17 +134,17 @@ QVariant Breakpoint::data(int column, int role) const
     {
         if (role == Qt::DecorationRole) {
             if (!errors().isEmpty()) {
-                return KIcon("dialog-warning");
+                return QIcon::fromTheme("dialog-warning");
             }
             switch (state()) {
                 case NotStartedState:
                     return QVariant();
                 case DirtyState:
-                    return KIcon("system-switch-user");
+                    return QIcon::fromTheme("system-switch-user");
                 case PendingState:
-                    return KIcon("help-contents");
+                    return QIcon::fromTheme("help-contents");
                 case CleanState:
-                    return KIcon("dialog-ok-apply");
+                    return QIcon::fromTheme("dialog-ok-apply");
             }
         } else if (role == Qt::ToolTipRole) {
             if (!errors().isEmpty()) {
@@ -178,7 +177,7 @@ QVariant Breakpoint::data(int column, int role) const
             || (column == ConditionColumn && errors().contains(ConditionColumn)))
         {
             /* FIXME: does this leak? Is this efficient? */
-            return KIcon("dialog-warning");
+            return QIcon::fromTheme("dialog-warning");
         }
         return QVariant();
     }
@@ -194,7 +193,7 @@ QVariant Breakpoint::data(int column, int role) const
                 if (role == Qt::DisplayRole) {
                     ret = m_url.fileName();
                 } else {
-                    ret = m_url.pathOrUrl(KUrl::RemoveTrailingSlash);
+                    ret = m_url.toDisplayString(QUrl::PreferLocalFile | QUrl::StripTrailingSlash);
                 }
                 ret += ':' + QString::number(m_line+1);
             } else {

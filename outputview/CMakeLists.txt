@@ -12,17 +12,16 @@ set( outputviewinterfaces_LIB_SRCS
     outputjob.cpp
     outputexecutejob.cpp
 )
-kde4_add_library( kdevplatformoutputview SHARED ${outputviewinterfaces_LIB_SRCS} )
-target_link_libraries(kdevplatformoutputview LINK_PUBLIC
-    ${KDE4_KDEUI_LIBS}
+add_library( KDevPlatformOutputView ${outputviewinterfaces_LIB_SRCS} )
+add_library( KDev::OutputView ALIAS KDevPlatformOutputView )
+generate_export_header(KDevPlatformOutputView EXPORT_FILE_NAME outputviewexport.h)
+target_link_libraries(KDevPlatformOutputView PRIVATE
+    Qt5::Core
+    KDev::Interfaces
+    KDev::Util
 )
-target_link_libraries(kdevplatformoutputview LINK_PRIVATE
-    ${QT_QTCORE_LIBRARY}
-    kdevplatforminterfaces
-    kdevplatformutil
-)
-set_target_properties(kdevplatformoutputview PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatformoutputview EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+set_target_properties(KDevPlatformOutputView PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME OutputView)
+install(TARGETS KDevPlatformOutputView EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
  ########### install files ###############
  install( FILES
@@ -32,7 +31,7 @@ install(TARGETS kdevplatformoutputview EXPORT KDevPlatformTargets ${INSTALL_TARG
           outputdelegate.h
           ioutputviewmodel.h
           ifilterstrategy.h
-          outputviewexport.h
+          ${CMAKE_CURRENT_BINARY_DIR}/outputviewexport.h
           outputjob.h
           outputexecutejob.h
           DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/outputview COMPONENT Devel)

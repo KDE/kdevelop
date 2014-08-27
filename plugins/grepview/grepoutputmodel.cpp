@@ -42,7 +42,7 @@ GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text
 }
 
 GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text, bool checkable)
-    : QStandardItem(), m_change(new DocumentChange(IndexedString(filename), SimpleRange::invalid(), QString(), QString()))
+    : QStandardItem(), m_change(new DocumentChange(IndexedString(filename), KTextEditor::Range::invalid(), QString(), QString()))
 {
     setText(text);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -57,7 +57,7 @@ GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text, boo
 int GrepOutputItem::lineNumber() const 
 {
     // line starts at 0 for cursor but we want to start at 1
-    return m_change->m_range.start.line + 1;
+    return m_change->m_range.start().line() + 1;
 }
 
 QString GrepOutputItem::filename() const 
@@ -144,9 +144,9 @@ QVariant GrepOutputItem::data ( int role ) const {
     GrepOutputModel *grepModel = static_cast<GrepOutputModel *>(model());
     if(role == Qt::ToolTipRole && grepModel && isText())
     {
-        QString start = Qt::escape(text().left(m_change->m_range.start.column));
-        QString repl  = "<b>" + Qt::escape(grepModel->replacementFor(m_change->m_oldText)) + "</b>";
-        QString end   = Qt::escape(text().right(text().length() - m_change->m_range.end.column));
+        QString start = text().left(m_change->m_range.start().column()).toHtmlEscaped();
+        QString repl  = "<b>" + grepModel->replacementFor(m_change->m_oldText).toHtmlEscaped() + "</b>";
+        QString end   = text().right(text().length() - m_change->m_range.end().column()).toHtmlEscaped();
         return QVariant(QString(start + repl + end).trimmed());
     } else if (role == Qt::FontRole) {
         return KGlobalSettings::fixedFont();
@@ -228,7 +228,7 @@ void GrepOutputModel::activate( const QModelIndex &idx )
     if(!doc)
         return;
     if (KTextEditor::Document* tdoc = doc->textDocument()) {
-        KTextEditor::Range matchRange = grepitem->change()->m_range.textRange();
+        KTextEditor::Range matchRange = grepitem->change()->m_range;
         QString actualText = tdoc->text(matchRange);
         QString expectedText = grepitem->change()->m_oldText;
         if (actualText == expectedText) {
@@ -451,7 +451,10 @@ void GrepOutputModel::doReplacements()
     {
         DocumentChangePointer ch = result.m_reasonChange;
         if(ch)
-            emit showErrorMessage(i18nc("%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are its row and column", "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5", Qt::escape(ch->m_oldText), Qt::escape(ch->m_newText), ch->m_document.toUrl().toLocalFile(), ch->m_range.start.line + 1, ch->m_range.start.column + 1));
+            emit showErrorMessage(i18nc("%1 is the old text, %2 is the new text, %3 is the file path, %4 and %5 are its row and column",
+                                        "Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5",
+                                        ch->m_oldText.toHtmlEscaped(), ch->m_newText.toHtmlEscaped(), ch->m_document.toUrl().toLocalFile(),
+                                        ch->m_range.start().line() + 1, ch->m_range.start().column() + 1));
     }
 }
 
@@ -474,5 +477,4 @@ bool GrepOutputModel::hasResults()
 
 
 
-#include "grepoutputmodel.moc"
 

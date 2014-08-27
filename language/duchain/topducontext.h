@@ -25,7 +25,7 @@
 #include <QMetaType>
 
 template< class T >
-class KSharedPtr;
+class QExplicitlySharedDataPointer;
 
 namespace KDevelop
 {
@@ -52,7 +52,7 @@ namespace KDevelop
   
   typedef DUChainPointer<TopDUContext> TopDUContextPointer;
 
-  typedef KSharedPtr<Problem> ProblemPointer;
+  typedef QExplicitlySharedDataPointer<Problem> ProblemPointer;
 
 ///KDevelop can unload unused top-context at any time. To prevent unloading,
 ///keep a ReferencedTopDUContext.
@@ -123,7 +123,7 @@ public:
    * @see ParsingEnvironmentFile
    * May return zero if no file was set.
    * */
-  KSharedPtr<ParsingEnvironmentFile> parsingEnvironmentFile() const;
+  QExplicitlySharedDataPointer<ParsingEnvironmentFile> parsingEnvironmentFile() const;
 
   /// Returns true if this object is being deleted, otherwise false.
   bool deleting() const;
@@ -242,12 +242,12 @@ public:
    *
    * @todo Figure out logic to get rid of AST when it is not needed/useful
    */
-  KSharedPtr<IAstContainer> ast() const;
+  QExplicitlySharedDataPointer<IAstContainer> ast() const;
   
   /**
    * Sets the AST Container.
   */
-  void setAst(KSharedPtr<IAstContainer> ast);
+  void setAst(QExplicitlySharedDataPointer<IAstContainer> ast);
   
   /**
    * Utility function to clear the AST Container

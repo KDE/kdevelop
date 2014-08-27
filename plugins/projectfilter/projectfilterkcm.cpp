@@ -25,6 +25,7 @@
 #include <kgenericfactory.h>
 #include <KConfigDialogManager>
 #include <KSettings/Dispatcher>
+#include <KCoreAddons/KAboutData>
 #include <KMessageWidget>
 
 #include <interfaces/icore.h>
@@ -43,10 +44,10 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(ProjectFilterKCMFactory, registerPlugin<ProjectFilterKCM>();)
-K_EXPORT_PLUGIN(ProjectFilterKCMFactory("kcm_kdevprojectfilter"))
+// K_EXPORT_PLUGIN(ProjectFilterKCMFactory("kcm_kdevprojectfilter"))
 
 ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
-    : ProjectKCModule<ProjectFilterSettings>(ProjectFilterKCMFactory::componentData(), parent, args)
+    : ProjectKCModule<ProjectFilterSettings>(KAboutData::pluginData("kcm_kdevprojectfilter"), parent, args)
     , m_model(new FilterModel(this))
     , m_ui(new Ui::ProjectFilterSettings)
 {
@@ -57,9 +58,9 @@ ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
     m_ui->filters->setSelectionMode(QAbstractItemView::SingleSelection);
     m_ui->filters->setModel(m_model);
     m_ui->filters->setRootIsDecorated(false);
-    m_ui->filters->header()->setResizeMode(FilterModel::Pattern, QHeaderView::Stretch);
-    m_ui->filters->header()->setResizeMode(FilterModel::Targets, QHeaderView::ResizeToContents);
-    m_ui->filters->header()->setResizeMode(FilterModel::Inclusive, QHeaderView::ResizeToContents);
+    m_ui->filters->header()->setSectionResizeMode(FilterModel::Pattern, QHeaderView::Stretch);
+    m_ui->filters->header()->setSectionResizeMode(FilterModel::Targets, QHeaderView::ResizeToContents);
+    m_ui->filters->header()->setSectionResizeMode(FilterModel::Inclusive, QHeaderView::ResizeToContents);
     m_ui->filters->setItemDelegateForColumn(FilterModel::Targets,
         new ComboBoxDelegate(QVector<ComboBoxDelegate::Item>()
                 << ComboBoxDelegate::Item(i18n("Files"), static_cast<int>(Filter::Files))

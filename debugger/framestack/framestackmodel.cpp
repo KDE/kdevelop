@@ -20,10 +20,12 @@
 
 #include "framestackmodel.h"
 
+#include <QIcon>
+#include <QMimeType>
+#include <QMimeDatabase>
+
 #include <KDebug>
 #include <KLocalizedString>
-#include <KMimeType>
-#include <KIcon>
 
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idebugcontroller.h"
@@ -168,8 +170,8 @@ QVariant FrameStackModel::data(const QModelIndex& index, int role) const
                 }
                 return ret;
             } else if (role == Qt::DecorationRole) {
-                KMimeType::Ptr p = KMimeType::findByUrl(frame.file);
-                return KIcon(p->iconName());
+                QMimeType mime = QMimeDatabase().mimeTypeForUrl(frame.file);
+                return QIcon::fromTheme(mime.iconName());
             }
         }
     }
@@ -211,7 +213,7 @@ QModelIndex FrameStackModel::index(int row, int column, const QModelIndex& paren
         Q_ASSERT(parent.row() < m_threads.count());
         return createIndex(row, column, parent.row()+1);
     } else {
-        return createIndex(row, column, 0);
+        return createIndex(row, column);
     }
 }
 
@@ -349,4 +351,3 @@ void FrameStackModel::fetchMoreFrames()
 
 }
 
-#include "framestackmodel.moc"

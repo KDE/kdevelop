@@ -145,4 +145,4 @@ VcsRevision VcsAnnotationModel::revisionForLine( int line ) const
 
 }
 
-#include "vcsannotationmodel.moc"
+#include "moc_vcsannotationmodel.cpp"

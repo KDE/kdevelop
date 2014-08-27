@@ -32,7 +32,7 @@
 #include <QtCore/QVariant>
 #include <KDE/KProcess>
 
-#include "../vcsexport.h"
+#include <vcs/vcsexport.h>
 #include "../vcsjob.h"
 
 class QDir;

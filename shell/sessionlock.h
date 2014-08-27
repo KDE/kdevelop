@@ -53,9 +53,9 @@ public:
     virtual ~SessionLock();
 
 private:
-    SessionLock(const QString& sessionId, const KLockFile::Ptr& lockFile);
+    SessionLock(const QString& sessionId, const QSharedPointer<KLockFile>& lockFile);
     QString m_sessionId;
-    KLockFile::Ptr m_lockFile;
+    QSharedPointer<KLockFile> m_lockFile;
 };
 
 }

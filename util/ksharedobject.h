@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_KSHAREDOBJECT_H
 #define KDEVPLATFORM_KSHAREDOBJECT_H
 
-#include <KDE/KSharedPtr>
+#include <QExplicitlySharedDataPointer>
 #include <QtCore/QObject>
 
 /**
@@ -37,9 +37,10 @@ struct FakeAtomic {
     inline FakeAtomic(QObject& object, QSharedData& real) : m_object(object), m_real(real) {
     }
     inline operator int() const {
-      if(!m_real.ref)
+      const int value = m_real.ref.loadAcquire();
+      if(value == 0)
           return 1; //Always return true, because we handle the deleting by ourself using deleteLater
-      return m_real.ref;
+      return value;
     }
     
     inline bool ref() {
@@ -52,6 +53,10 @@ struct FakeAtomic {
         m_object.deleteLater();
 
       return true; //Always return true, because we handle the deleting by ourself
+    }
+
+    inline int load() const {
+        return m_real.ref.load();
     }
     
     QObject& m_object;

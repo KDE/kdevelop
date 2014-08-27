@@ -21,9 +21,12 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_ISOURCEFORMATTERCONTROLLER_H
 #define KDEVPLATFORM_ISOURCEFORMATTERCONTROLLER_H
 
-#include <KDE/KMimeType>
+#include <QMimeType>
+#include <QObject>
 
 #include "interfacesexport.h"
+
+class KUrl;
 
 namespace KDevelop
 {
@@ -48,12 +51,12 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatterController : public QObject
 		* The language is then activated and the style is loaded.
 		* The source formatter is then ready to use on a file.
 		*/
-		virtual ISourceFormatter* formatterForMimeType(const KMimeType::Ptr &mime) = 0;
+		virtual ISourceFormatter* formatterForMimeType(const QMimeType &mime) = 0;
 		/** \return Whether this mime type is supported by any plugin.
 		*/
-		virtual bool isMimeTypeSupported(const KMimeType::Ptr &mime) = 0;
+		virtual bool isMimeTypeSupported(const QMimeType &mime) = 0;
 
-		virtual KDevelop::SourceFormatterStyle styleForMimeType( const KMimeType::Ptr& mime ) = 0;
+		virtual KDevelop::SourceFormatterStyle styleForMimeType( const QMimeType& mime ) = 0;
 
 		///Set whether or not source formatting is disabled with \arg disable
 		virtual void disableSourceFormatting(bool disable) = 0;

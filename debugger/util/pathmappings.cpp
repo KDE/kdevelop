@@ -28,11 +28,11 @@
 #include <QHeaderView>
 #include <QAction>
 #include <QFile>
+#include <QIcon>
 
 #include <KLocalizedString>
 #include <KDebug>
 #include <KConfigGroup>
-#include <KIcon>
 
 namespace KDevelop {
 
@@ -51,8 +51,8 @@ KUrl PathMappings::convertToLocalUrl(const KConfigGroup& config, const KUrl& rem
     KConfigGroup cfg = config.group(pathMappingsEntry);
     foreach (const QString &group, cfg.groupList()) {
         KConfigGroup pCfg = cfg.group(group);
-        KUrl remote = pCfg.readEntry(pathMappingRemoteEntry, KUrl());
-        KUrl local = pCfg.readEntry(pathMappingLocalEntry, KUrl());
+        KUrl remote = pCfg.readEntry(pathMappingRemoteEntry, QUrl());
+        KUrl local = pCfg.readEntry(pathMappingLocalEntry, QUrl());
         kDebug() << remote << local;
         kDebug() << remoteUrl.pathOrUrl() << remote.pathOrUrl();
         if (remoteUrl.pathOrUrl().startsWith(remote.pathOrUrl())) {
@@ -73,8 +73,8 @@ KUrl PathMappings::convertToRemoteUrl(const KConfigGroup& config, const KUrl& lo
     KConfigGroup cfg = config.group(pathMappingsEntry);
     foreach (const QString &group, cfg.groupList()) {
         KConfigGroup pCfg = cfg.group(group);
-        KUrl remote = pCfg.readEntry(pathMappingRemoteEntry, KUrl());
-        KUrl local = pCfg.readEntry(pathMappingLocalEntry, KUrl());
+        KUrl remote = pCfg.readEntry(pathMappingRemoteEntry, QUrl());
+        KUrl local = pCfg.readEntry(pathMappingLocalEntry, QUrl());
         kDebug() << remote << local;
         kDebug() << localUrl.pathOrUrl() << local.pathOrUrl();
         if (localUrl.pathOrUrl().startsWith(local.pathOrUrl())) {
@@ -126,9 +126,9 @@ public:
         if (role == Qt::DisplayRole || role == Qt::EditRole) {
             if (index.row() == m_paths.count()) return QString();
             if (index.column() == 0) {
-                return m_paths[index.row()].remote.pathOrUrl();
+                return m_paths[index.row()].remote.toDisplayString(QUrl::PreferLocalFile);
             } else if (index.column() == 1) {
-                return m_paths[index.row()].local.pathOrUrl();
+                return m_paths[index.row()].local.toDisplayString(QUrl::PreferLocalFile);
             }
         }
         return QVariant();
@@ -182,16 +182,17 @@ public:
 
     void loadFromConfiguration(const KConfigGroup &config)
     {
+        beginResetModel();
         m_paths.clear();
         KConfigGroup cfg = config.group(PathMappings::pathMappingsEntry);
         for (int i=0; i<cfg.readEntry("Count", 0); ++i) {
             KConfigGroup pCfg = cfg.group(QString::number(i+1));
             Path p;
-            p.remote = pCfg.readEntry(PathMappings::pathMappingRemoteEntry, KUrl());
-            p.local = pCfg.readEntry(PathMappings::pathMappingLocalEntry, KUrl());
+            p.remote = pCfg.readEntry(PathMappings::pathMappingRemoteEntry, QUrl());
+            p.local = pCfg.readEntry(PathMappings::pathMappingLocalEntry, QUrl());
             m_paths << p;
         }
-        reset();
+        endResetModel();
     }
 
     void saveToConfiguration(KConfigGroup config)
@@ -212,8 +213,8 @@ public:
 
 private:
     struct Path {
-        KUrl remote;
-        KUrl local;
+        QUrl remote;
+        QUrl local;
     };
     QList<Path> m_paths;
 };
@@ -236,7 +237,7 @@ PathMappingsWidget::PathMappingsWidget(QWidget* parent): QWidget(parent)
     connect(m_pathMappingTable->model(), SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()));
 
     QAction* deletePath = new QAction(
-        KIcon("edit-delete"),
+        QIcon::fromTheme("edit-delete"),
         i18n( "Delete" ),
         this
     );

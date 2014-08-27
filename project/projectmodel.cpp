@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QPalette>
 #include <QBrush>
+#include <QMimeDatabase>
 #include <QColor>
 #include <QFileInfo>
 #include <kdebug.h>
@@ -34,7 +35,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include "interfaces/iprojectfilemanager.h"
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <kio/udsentry.h>
@@ -587,11 +588,6 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
     return lst;
 }
 
-void ProjectModel::resetModel()
-{
-    reset();
-}
-
 void ProjectModel::clear()
 {
     d->rootItem->removeRows(0, d->rootItem->rowCount());
@@ -784,13 +780,13 @@ public:
             }
         }
 
-        KMimeType::Ptr mime = KMimeType::findByUrl( KUrl::fromPath(path.lastPathSegment()), 0, false, true );
+        QMimeType mime = QMimeDatabase().mimeTypeForFile(path.lastPathSegment(), QMimeDatabase::MatchExtension); // no I/O
         QMutexLocker lock(&mutex);
-        QHash< QString, QString >::const_iterator it = mimeToIcon.constFind( mime->name() );
+        QHash< QString, QString >::const_iterator it = mimeToIcon.constFind(mime.name());
         QString iconName;
         if ( it == mimeToIcon.constEnd() ) {
-            iconName = mime->iconName();
-            mimeToIcon.insert(mime->name(), iconName);
+            iconName = mime.iconName();
+            mimeToIcon.insert(mime.name(), iconName);
         } else {
             iconName = *it;
         }
@@ -804,7 +800,7 @@ public:
     QHash<QString, QString> fileExtensionToIcon;
 };
 
-K_GLOBAL_STATIC(IconNameCache, s_cache);
+Q_GLOBAL_STATIC(IconNameCache, s_cache);
 
 QString ProjectFileItem::iconName() const
 {
@@ -1011,7 +1007,7 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
         if( item ) {
             switch(role) {
                 case Qt::DecorationRole:
-                    return KIcon(item->iconName());
+                    return QIcon::fromTheme(item->iconName());
                 case Qt::ToolTipRole:
                     return item->path().pathOrUrl();
                 case Qt::DisplayRole:
@@ -1210,4 +1206,3 @@ ProjectVisitor::~ProjectVisitor()
 
 
 }
-#include "projectmodel.moc"

@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_OUTPUTWIDGET_H
 #define KDEVPLATFORM_PLUGIN_OUTPUTWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QtCore/QMap>
 #include <outputview/ioutputviewmodel.h>
 #include <outputview/ioutputview.h>
@@ -41,6 +41,7 @@ class QModelIndex;
 class ToolViewData;
 class KTabWidget;
 class KToggleAction;
+class QAction;
 class KAction;
 class KLineEdit;
 class StandardOutputViewTest;
@@ -113,8 +114,8 @@ private:
     const ToolViewData* data;
     QToolButton* m_closeButton;
     QAction* m_closeOthersAction;
-    KAction* nextAction;
-    KAction* previousAction;
+    QAction* nextAction;
+    QAction* previousAction;
     KToggleAction* activateOnSelect;
     KToggleAction* focusOnSelect;
     KLineEdit *filterInput;

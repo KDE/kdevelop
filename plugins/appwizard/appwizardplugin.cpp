@@ -19,6 +19,7 @@
 #include <QTextCodec>
 #include <QTextStream>
 #include <QDirIterator>
+#include <QStandardPaths>
 
 #include <ktar.h>
 #include <kzip.h>
@@ -67,17 +68,17 @@ using KDevelop::VcsLocation;
 using KDevelop::ICore;
 
 K_PLUGIN_FACTORY(AppWizardFactory, registerPlugin<AppWizardPlugin>();)
-K_EXPORT_PLUGIN(AppWizardFactory(KAboutData("kdevappwizard","kdevappwizard", ki18n("Project Wizard"), "0.1", ki18n("Support for creating and importing projects"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(AppWizardFactory(KAboutData("kdevappwizard","kdevappwizard", ki18n("Project Wizard"), "0.1", ki18n("Support for creating and importing projects"), KAboutData::License_GPL)))
 
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin(AppWizardFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevappwizard", parent)
     , m_templatesModel(0)
 {
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::ITemplateProvider);
     setXMLFile("kdevappwizard.rc");
 
     m_newFromTemplate = actionCollection()->addAction("project_new");
-    m_newFromTemplate->setIcon(KIcon("project-development-new-template"));
+    m_newFromTemplate->setIcon(QIcon::fromTheme("project-development-new-template"));
     m_newFromTemplate->setText(i18n("New From Template..."));
     connect(m_newFromTemplate, SIGNAL(triggered(bool)), this, SLOT(slotNewProject()));
     m_newFromTemplate->setToolTip( i18n("Generate a new project from a template") );
@@ -93,6 +94,7 @@ AppWizardPlugin::~AppWizardPlugin()
 void AppWizardPlugin::slotNewProject()
 {
     model()->refresh();
+
     AppWizardDialog dlg(core()->pluginController(), m_templatesModel);
 
     if (dlg.exec() == QDialog::Accepted)
@@ -100,7 +102,7 @@ void AppWizardPlugin::slotNewProject()
         QString project = createProject( dlg.appInfo() );
         if (!project.isEmpty())
         {
-            core()->projectController()->openProject(KUrl::fromPath(project));
+            core()->projectController()->openProject(QUrl::fromLocalFile(project));
 
             KConfig templateConfig(dlg.appInfo().appTemplate);
             KConfigGroup general(&templateConfig, "General");
@@ -132,7 +134,7 @@ ICentralizedVersionControl* toCVCS(IPlugin* plugin)
 }
 
 /*! Trouble while initializing version control. Show failure message to user. */
-void vcsError(const QString &errorMsg, KTempDir &tmpdir, const KUrl &dest, const QString &details = QString())
+void vcsError(const QString &errorMsg, KTempDir &tmpdir, const QUrl &dest, const QString &details = QString())
 {
     QString displayDetails = details;
     if (displayDetails.isEmpty())
@@ -150,7 +152,7 @@ bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& inf
     Q_ASSERT(dvcs);
     kDebug() << "DVCS system is used, just initializing DVCS";
 
-    KUrl dest = info.location;
+    QUrl dest = info.location;
     //TODO: check if we want to handle KDevelop project files (like now) or only SRC dir
     VcsJob* job = dvcs->init(dest.toLocalFile());
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
@@ -220,16 +222,22 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     }
 
     QString templateName = templateInfo.baseName();
-    kDebug() << "creating project for template:" << templateName << " with VCS:" << info.vcsPluginName;
-
-    QStringList matches = ICore::self()->componentData().dirs()->findAllResources("data", QString("kdevappwizard/templates/%1*").arg(templateName));
-    if (matches.isEmpty()) {
-        kWarning() << "Could not find project template" << templateName;
-        return QString();;
+    QString templateArchive;
+    const QStringList filters = {templateName + QStringLiteral(".*")};
+    const QStringList matchesPaths = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevappwizard/templates/"), QStandardPaths::LocateDirectory);
+    foreach(const QString& matchesPath, matchesPaths) {
+        const QStringList files = QDir(matchesPath).entryList(filters);
+        if(!files.isEmpty()) {
+            templateArchive = matchesPath + files.first();
+        }
     }
-    QString templateArchive = matches.first();
 
-    KUrl dest = info.location;
+    if(templateArchive.isEmpty()) {
+        qWarning() << "Template name does not exist in the template list";
+        return QString();
+    }
+
+    QUrl dest = info.location;
 
     //prepare variable substitution hash
     m_variables.clear();
@@ -267,18 +275,16 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         }
         else
         {
-            KUrl parentdir = dest;
-            parentdir.cd( ".." );
-            if( !QFileInfo( parentdir.toLocalFile() ).exists() )
-            {
-                QDir::root().mkpath( parentdir.toLocalFile() );
+            QUrl url = KIO::upUrl(dest);
+            if(!QFileInfo(url.toLocalFile()).exists()) {
+                QDir::root().mkpath(url.toLocalFile());
             }
         }
 
         if ( !unpackArchive( arch->directory(), unpackDir ) )
         {
             QString errorMsg = i18n("Could not create new project");
-            vcsError(errorMsg, tmpdir, KUrl(unpackDir));
+            vcsError(errorMsg, tmpdir, QUrl(unpackDir));
             return QString();
         }
 
@@ -415,9 +421,10 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
 bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QString &dest)
 {
     kDebug() << "copy:" << source << "to" << dest;
+    // TODO: KF5 replacement? it just checks if the first 32 bytes contain non-ascii data
     if( KMimeType::isBinaryData(source) )
     {
-        KIO::CopyJob* job = KIO::copy( KUrl(source), KUrl(dest), KIO::HideProgressInfo );
+        KIO::CopyJob* job = KIO::copy( QUrl(source), QUrl(dest), KIO::HideProgressInfo );
         if( !job->exec() )
         {
             return false;
@@ -492,7 +499,7 @@ QStringList AppWizardPlugin::supportedMimeTypes() const
 
 QIcon AppWizardPlugin::icon() const
 {
-    return KIcon("project-development-new-template");
+    return QIcon::fromTheme("project-development-new-template");
 }
 
 QString AppWizardPlugin::name() const

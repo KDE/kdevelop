@@ -35,7 +35,7 @@ namespace KDevelop
 
 EnvironmentSelectionModel::EnvironmentSelectionModel( QObject* parent ) :
     QStringListModel( parent ),
-    m_env( KGlobal::config() )
+    m_env( KSharedConfig::openConfig() )
 {
     setStringList( entriesFromEnv( m_env ) );
     m_groupsLookupTable = stringList().toSet();
@@ -93,7 +93,7 @@ EnvironmentGroupList EnvironmentSelectionModel::environment() const
 
 void EnvironmentSelectionModel::reload()
 {
-    m_env = EnvironmentGroupList( KGlobal::config() );
+    m_env = EnvironmentGroupList( KSharedConfig::openConfig() );
 
     setStringList( entriesFromEnv( m_env ) );
     m_groupsLookupTable = stringList().toSet();
@@ -110,4 +110,3 @@ QString EnvironmentSelectionModel::reloadSelectedItem( const QString& currentPro
 
 } // namespace KDevelop
 
-#include "environmentselectionmodel.moc"

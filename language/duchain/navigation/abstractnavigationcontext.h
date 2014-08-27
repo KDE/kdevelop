@@ -19,9 +19,9 @@
 #ifndef KDEVPLATFORM_ABSTRACTNAVIGATIONCONTEXT_H
 #define KDEVPLATFORM_ABSTRACTNAVIGATIONCONTEXT_H
 
-#include <KDE/KSharedPtr>
+#include <QExplicitlySharedDataPointer>
 
-#include "../../languageexport.h"
+#include <language/languageexport.h>
 #include "../indexeddeclaration.h"
 #include "navigationaction.h"
 
@@ -54,7 +54,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT Colorizer
 Q_DECLARE_OPERATORS_FOR_FLAGS(Colorizer::Formatting);
 
 class AbstractNavigationContext;
-typedef KSharedPtr<AbstractNavigationContext> NavigationContextPointer;
+typedef QExplicitlySharedDataPointer<AbstractNavigationContext> NavigationContextPointer;
 
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, public QSharedData
 {

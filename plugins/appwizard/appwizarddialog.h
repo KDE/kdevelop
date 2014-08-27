@@ -43,7 +43,7 @@ class AppWizardDialog: public KAssistantDialog {
 Q_OBJECT
 public:
     AppWizardDialog( KDevelop::IPluginController*, ProjectTemplatesModel*,
-                     QWidget *parent = 0, Qt::WFlags flags = 0);
+                     QWidget *parent = 0, Qt::WindowFlags flags = 0);
 
     ApplicationInfo appInfo() const;
 

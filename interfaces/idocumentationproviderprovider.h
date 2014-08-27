@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_IDOCUMENTATIONPROVIDERPROVIDER_H
 #define KDEVPLATFORM_IDOCUMENTATIONPROVIDERPROVIDER_H
 
-#include <KDE/KSharedPtr>
+#include <QExplicitlySharedDataPointer>
 #include <QtCore/QObject>
 #include "interfacesexport.h"
 

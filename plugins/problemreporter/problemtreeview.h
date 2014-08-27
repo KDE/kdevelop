@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_PROBLEMWIDGET_H
 #define KDEVPLATFORM_PLUGIN_PROBLEMWIDGET_H
 
-#include <QtGui/QTreeView>
+#include <QTreeView>
 
 namespace KDevelop {
   class ParseJob;
@@ -45,7 +45,8 @@ public:
   virtual void setModel(QAbstractItemModel* model) override;
 
   virtual void contextMenuEvent(QContextMenuEvent* );
-  virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+  virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight,
+                           const QVector<int>& roles = QVector<int>()) override;
   virtual void reset();
   
 protected:

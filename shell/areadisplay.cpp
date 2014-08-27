@@ -33,6 +33,7 @@
 #include <QToolButton>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QEvent>
 
 using namespace KDevelop;
 
@@ -70,14 +71,14 @@ void AreaDisplay::newArea(Sublime::Area* area)
     Sublime::Area* currentArea = m_mainWindow->area();
 
     m_button->setText(currentArea->title());
-    m_button->setIcon(KIcon(currentArea->iconName()));
+    m_button->setIcon(QIcon::fromTheme(currentArea->iconName()));
 
     QMenu* m = new QMenu(m_button);
     m->addActions(area->actions());
     if(currentArea->objectName() != "code") {
         if(!m->actions().isEmpty())
             m->addSeparator();
-        m->addAction(KIcon("document-edit"), i18n("Back to code"), this, SLOT(backToCode()), QKeySequence(Qt::AltModifier | Qt::Key_Backspace));
+        m->addAction(QIcon::fromTheme("document-edit"), i18n("Back to code"), this, SLOT(backToCode()), QKeySequence(Qt::AltModifier | Qt::Key_Backspace));
     }
     m_button->setMenu(m);
 

@@ -21,7 +21,7 @@
 
 #include <util/convenientfreelist.h>
 #include <language/util/setrepository.h>
-#include "../languageexport.h"
+#include <language/languageexport.h>
 #include "indexeddeclaration.h"
 #include "ducontext.h"
 #include "topducontext.h"

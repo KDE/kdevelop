@@ -1,47 +1,29 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_subdirectory(serialization)
+########### next target ###############
+
+ecm_add_test(test_duchain.cpp
+    LINK_LIBRARIES KF5::TextEditor Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES} KDev::Language)
 
 ########### next target ###############
 
-set(duchaintest_SRCS test_duchain.cpp)
-
-kde4_add_unit_test(duchaintest ${duchaintest_SRCS})
-target_link_libraries(duchaintest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITOR_LIBS}
-    ${QT_QTTEST_LIBRARY} ${KDEVPLATFORM_TESTS_LIBRARIES} kdevplatformlanguage)
+ecm_add_test(test_duchainshutdown.cpp
+    LINK_LIBRARIES Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES})
 
 ########### next target ###############
 
-set(itemrepositorytest_SRCS test_itemrepository.cpp)
+set(tst_identifier_SRCS tst_identifier.cpp)
 
-kde4_add_unit_test(itemrepositorytest ${itemrepositorytest_SRCS})
-target_link_libraries(itemrepositorytest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY}
-    ${QT_QTTEST_LIBRARY} kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
+add_executable(tst_identifier ${tst_identifier_SRCS})
+ecm_mark_as_test(tst_identifier)
+target_link_libraries(tst_identifier
 
-########### next target ###############
-
-set(itemrepositoryregistry_automatic_test_SRCS test_itemrepositoryregistry_automatic.cpp)
-kde4_add_unit_test(itemrepositoryregistry_automatic_test ${itemrepositoryregistry_automatic_test_SRCS})
-target_link_libraries(itemrepositoryregistry_automatic_test ${QT_QTTEST_LIBRARY}
-    kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
-
-########### next target ###############
-
-set(itemrepositoryregistry_deferred_test_SRCS test_itemrepositoryregistry_deferred.cpp)
-kde4_add_unit_test(itemrepositoryregistry_deferred_test ${itemrepositoryregistry_deferred_test_SRCS})
-target_link_libraries(itemrepositoryregistry_deferred_test ${QT_QTTEST_LIBRARY}
-    kdevplatformlanguage ${KDEVPLATFORM_TESTS_LIBRARIES})
-
-########### next target ###############
-
-set(benchhashes_SRCS benchhashes.cpp)
-
-kde4_add_unit_test(benchhashes ${benchhashes_SRCS})
-target_link_libraries(benchhashes
-  ${KDE4_KDECORE_LIBS}
-  ${QT_QTTEST_LIBRARY}
-  ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-  ${KDEVPLATFORM_TESTS_LIBRARIES}
+    Qt5::Test
+    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
 )
+
+########### next target ###############
+
+ecm_add_test(test_benchhashes.cpp
+    LINK_LIBRARIES Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES}  ${KDEVPLATFORM_LANGUAGE_LIBRARIES})

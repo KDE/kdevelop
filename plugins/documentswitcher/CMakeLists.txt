@@ -8,16 +8,16 @@ set(kdevdocumentswitcher_PART_SRCS
     documentswitchertreeview.cpp
 )
 
-kde4_add_plugin(kdevdocumentswitcher ${kdevdocumentswitcher_PART_SRCS})
-target_link_libraries(kdevdocumentswitcher kdevplatforminterfaces sublime kdevplatforminterfaces )
+add_library(kdevdocumentswitcher MODULE ${kdevdocumentswitcher_PART_SRCS})
+target_link_libraries(kdevdocumentswitcher KDev::Interfaces KDev::Sublime KDev::Interfaces )
 
-install(TARGETS kdevdocumentswitcher DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevdocumentswitcher DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############
 
 configure_file(kdevdocumentswitcher.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevdocumentswitcher.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevdocumentswitcher.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevdocumentswitcher.rc DESTINATION ${DATA_INSTALL_DIR}/kdevdocumentswitcher )
+install( FILES kdevdocumentswitcher.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevdocumentswitcher )
 
 

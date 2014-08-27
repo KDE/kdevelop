@@ -25,8 +25,8 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
-#include <QtGui/QApplication>
-#include <QtGui/QAction>
+#include <QApplication>
+#include <QAction>
 
 #include <kcmdlineargs.h>
 #include <klibloader.h>
@@ -460,17 +460,20 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     if( info.property(KEY_Mode) == KEY_Gui
         && Core::self()->setupFlags() == Core::NoUi )
     {
-        kDebug() << "Not loading plugin named" << pluginId << ". Running in No-Ui mode, but the plugin says it needs a GUI";
+        kDebug() << "Not loading plugin named" << pluginId << "- Running in No-Ui mode, but the plugin says it needs a GUI";
         return 0;
     }
 
-    kDebug() << "Attempting to load '" << pluginId << "'";
+    kDebug() << "Attempting to load" << pluginId << "- name:" << info.name();
+
     emit loadingPlugin( info.pluginName() );
     IPlugin *plugin = 0;
     QStringList missingInterfaces;
-    kDebug() << "Checking... " << info.name();
     if ( checkForDependencies( info, missingInterfaces ) ) {
-        kDebug() << "Checked... starting to load:" << info.name();
+
+        if (!missingInterfaces.isEmpty()) {
+            kDebug() << "Missing dependencies:" << missingInterfaces;
+        }
 
         QString failedDependency;
         if( !loadDependencies( info, failedDependency ) ) {
@@ -522,10 +525,7 @@ IPlugin* PluginController::plugin( const QString& pluginId )
     if ( !info.isValid() )
         return 0L;
 
-    if ( d->loadedPlugins.contains( info ) )
-        return d->loadedPlugins[ info ];
-    else
-        return 0L;
+    return d->loadedPlugins.value( info );
 }
 
 bool PluginController::checkForDependencies( const KPluginInfo& info, QStringList& missing ) const
@@ -580,7 +580,6 @@ bool PluginController::loadDependencies( const KPluginInfo& info, QString& faile
 
 IPlugin *PluginController::pluginForExtension(const QString &extension, const QString &pluginName, const QVariantMap& constraints)
 {
-    //kDebug() << "Finding Plugin for Extension:" << extension << "|" << constraints;
     IPlugin* plugin = nullptr;
     d->foreachEnabledPlugin([this, &plugin] (const KPluginInfo& info) -> bool {
         if( d->loadedPlugins.contains( info ) ) {
@@ -590,6 +589,7 @@ IPlugin *PluginController::pluginForExtension(const QString &extension, const QS
         }
         return !plugin;
     }, extension, constraints, pluginName);
+
     return plugin;
 }
 
@@ -722,5 +722,4 @@ void PluginController::resetToDefaults()
 }
 
 }
-#include "plugincontroller.moc"
 

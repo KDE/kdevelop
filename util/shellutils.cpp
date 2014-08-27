@@ -20,7 +20,7 @@
  */
 
 #include "shellutils.h"
-#include <QtGui/QApplication>
+#include <QGuiApplication>
 #include <QtCore/QTextStream>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -33,7 +33,7 @@ bool askUser( const QString& mainText,
               const QString& mboxAdditionalText,
               bool ttyDefaultToYes )
 {
-    if( QApplication::type() == QApplication::Tty ) {
+    if( !qobject_cast<QGuiApplication*>(qApp) ) {
         // no ui-mode e.g. for duchainify and other tools
         QTextStream out( stdout );
         out << mainText << endl;

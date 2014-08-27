@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <KMessageBox>
 #include <KColorScheme>
+#include <KLocalizedString>
 #include <interfaces/iprojectprovider.h>
 
 using namespace KDevelop;
@@ -37,20 +38,20 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     m_ui->workingDir->setMode(KFile::Directory);
     m_ui->remoteWidget->setLayout(new QVBoxLayout(m_ui->remoteWidget));
     
-    m_ui->sources->addItem(KIcon("folder"), i18n("From File System"));
+    m_ui->sources->addItem(QIcon::fromTheme("folder"), i18n("From File System"));
     m_plugins.append(0);
     
     IPluginController* pluginManager = ICore::self()->pluginController();
     foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IBasicVersionControl" ) )
     {
         m_plugins.append(p);
-        m_ui->sources->addItem(KIcon(pluginManager->pluginInfo(p).icon()), p->extension<IBasicVersionControl>()->name());
+        m_ui->sources->addItem(QIcon::fromTheme(pluginManager->pluginInfo(p).icon()), p->extension<IBasicVersionControl>()->name());
     }
     
     foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IProjectProvider" ) )
     {
         m_plugins.append(p);
-        m_ui->sources->addItem(KIcon(pluginManager->pluginInfo(p).icon()), p->extension<IProjectProvider>()->name());
+        m_ui->sources->addItem(QIcon::fromTheme(pluginManager->pluginInfo(p).icon()), p->extension<IProjectProvider>()->name());
     }
     
     connect(m_ui->workingDir, SIGNAL(textChanged(QString)), SLOT(reevaluateCorrection()));

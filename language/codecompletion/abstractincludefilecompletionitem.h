@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_ABSTRACTINCLUDEFILECOMPLETIONITEM_H
 
 #include "codecompletionitem.h"
-#include "../languageexport.h"
+#include <language/languageexport.h>
 #include "../util/includeitem.h"
 #include "../duchain/duchain.h"
 #include "../duchain/duchainlock.h"
@@ -79,7 +79,7 @@ public:
     return QVariant();
   }
 
-  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word) = 0;
+  virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) = 0;
 
   virtual int inheritanceDepth() const {
     return includeItem.pathNumber;

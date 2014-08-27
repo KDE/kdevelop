@@ -21,7 +21,7 @@
 #define KDEVPLATFORM_APPLYCHANGESWIDGET_H
 
 #include <KDE/KDialog>
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 namespace KTextEditor {
 class Document;

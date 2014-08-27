@@ -23,15 +23,16 @@
 #ifndef SUBLIME_IDEAL_H
 #define SUBLIME_IDEAL_H
 
-#include <QtGui/QAction>
-#include <QtGui/QActionEvent>
-#include <QtGui/QToolButton>
-#include <QtGui/QDockWidget>
-#include <QtGui/QStyleOption>
+#include <QAction>
+#include <QActionEvent>
+#include <QToolButton>
+#include <QDockWidget>
+#include <QStyleOption>
+#include <QPointer>
 
 #include "sublimedefs.h"
 
-class KAction;
+class QAction;
 class KActionMenu;
 
 namespace Sublime {
@@ -72,7 +73,7 @@ public:
     void toggleDocksShown();
 
     IdealButtonBarWidget* barForDockArea(Qt::DockWidgetArea area) const;
-    KAction* actionForArea(Qt::DockWidgetArea area) const;
+    QAction* actionForArea(Qt::DockWidgetArea area) const;
 
     enum Direction { NextDock, PrevDock };
     void goPrevNextDock(IdealController::Direction direction);
@@ -86,7 +87,7 @@ public:
     QWidget *bottomStatusBarLocation;
 
     IdealDockWidget* currentDockWidget();
-    QMap<Qt::DockWidgetArea, QWeakPointer<IdealDockWidget> > lastDockWidget;
+    QMap<Qt::DockWidgetArea, QPointer<IdealDockWidget> > lastDockWidget;
 
     void emitWidgetResized(Qt::DockWidgetArea dockArea, int thickness);
 
@@ -122,10 +123,10 @@ private:
 
     KActionMenu* m_docks;
 
-    KAction* m_showLeftDock;
-    KAction* m_showRightDock;
-    KAction* m_showBottomDock;
-    KAction* m_showTopDock;
+    QAction* m_showLeftDock;
+    QAction* m_showRightDock;
+    QAction* m_showBottomDock;
+    QAction* m_showTopDock;
 
 };
 

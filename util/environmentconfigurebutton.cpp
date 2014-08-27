@@ -23,13 +23,13 @@
 #include "environmentselectionwidget.h"
 #include "environmentgrouplist.h"
 
-#include <KIcon>
 #include <KLocalizedString>
 #include <KDialog>
 #include <KCModuleProxy>
 #include <KCModuleInfo>
 
 #include <QApplication>
+#include <QIcon>
 
 namespace KDevelop {
 
@@ -52,7 +52,7 @@ public:
         KCModuleProxy proxy("kcm_kdev_envsettings", 0, selected);
         dlg.setMainWidget(&proxy);
         dlg.setWindowTitle(proxy.moduleInfo().moduleName());
-        dlg.setWindowIcon(KIcon(proxy.moduleInfo().icon()));
+        dlg.setWindowIcon(QIcon::fromTheme(proxy.moduleInfo().icon()));
         dlg.resize(480, 320);
         if (dlg.exec() == KDialog::Accepted) {
             proxy.save();
@@ -70,7 +70,7 @@ EnvironmentConfigureButton::EnvironmentConfigureButton(QWidget* parent)
 {
     setText(QString());
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    setIcon(KIcon("configure"));
+    setIcon(QIcon::fromTheme("configure"));
     setToolTip(i18n("Configure environment variables"));
 
     connect(this, SIGNAL(clicked(bool)),
@@ -92,4 +92,4 @@ void EnvironmentConfigureButton::setSelectionWidget(EnvironmentSelectionWidget* 
 
 }
 
-#include "environmentconfigurebutton.moc"
+#include "moc_environmentconfigurebutton.cpp"

@@ -26,9 +26,7 @@
 #include "templateengine_p.h"
 #include "archivetemplateloader.h"
 
-#include <language/editor/simplecursor.h>
-#include <language/editor/simplerange.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <grantlee/context.h>
 
@@ -328,7 +326,7 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
 
         KUrl url = fileUrls[outputFile.identifier];
         IndexedString document(url);
-        SimpleRange range(SimpleCursor(0, 0), 0);
+        KTextEditor::Range range(KTextEditor::Cursor(0, 0), 0);
 
         DocumentChange change(document, range, QString(), render(file->data(), outputFile.identifier));
         changes.addChange(change);

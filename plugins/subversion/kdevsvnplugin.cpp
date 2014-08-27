@@ -75,10 +75,10 @@
 #include "svnlocationwidget.h"
 
 K_PLUGIN_FACTORY(KDevSvnFactory, registerPlugin<KDevSvnPlugin>();)
-K_EXPORT_PLUGIN(KDevSvnFactory(KAboutData("kdevsubversion", "kdevsubversion", ki18n("Subversion"), "0.1", ki18n("Support for Subversion version control systems"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevSvnFactory(KAboutData("kdevsubversion", "kdevsubversion", ki18n("Subversion"), "0.1", ki18n("Support for Subversion version control systems"), KAboutData::License_GPL)))
 
 KDevSvnPlugin::KDevSvnPlugin(QObject *parent, const QVariantList &)
-        : KDevelop::IPlugin(KDevSvnFactory::componentData(), parent)
+        : KDevelop::IPlugin("kdevsubversion", parent)
         , m_common(new KDevelop::VcsPluginHelper(this, this)),
         copy_action( 0 ), move_action( 0 )
 {
@@ -342,14 +342,14 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
     
     if( !copy_action )
     {
-        copy_action = new KAction(i18n("Copy..."), this);
+        copy_action = new QAction(i18n("Copy..."), this);
         connect(copy_action, SIGNAL(triggered()), this, SLOT(ctxCopy()));
     }
     svnmenu->addAction(copy_action);
 
     if( !move_action )
     {
-        move_action = new KAction(i18n("Move..."), this);
+        move_action = new QAction(i18n("Move..."), this);
         connect(move_action, SIGNAL(triggered()), this, SLOT(ctxMove()));
     }
     svnmenu->addAction(move_action);
@@ -434,7 +434,7 @@ void KDevSvnPlugin::ctxMove()
 
         KUrlRequesterDialog dlg(dir, i18n("Destination file/directory"), 0);
 
-        dlg.fileDialog()->setOperationMode( KFileDialog::Saving );
+        dlg.fileDialog()->setAcceptMode(QFileDialog::AcceptSave);
         if (isFile) {
             dlg.urlRequester()->setMode(KFile::File | KFile::Directory | KFile::LocalOnly);
         } else {

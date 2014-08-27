@@ -77,7 +77,7 @@ KDevCategoryItem::KDevCategoryItem( const QString &name )
 {
     setFlags(Qt::ItemIsEnabled);
     setToolTip( name );
-    setIcon( KIcon("folder") );
+    setIcon( QIcon::fromTheme("folder") );
 }
 
 KDevCategoryItem::~KDevCategoryItem()
@@ -115,7 +115,7 @@ KDevFileItem::KDevFileItem( const KUrl &url )
     if (!url.isEmpty()) {
         m_fileIcon = KFileItem(url, QString(), 0).iconName();
     }
-    setIcon( KIcon( m_fileIcon ) );
+    setIcon( QIcon::fromTheme( m_fileIcon ) );
 }
 
 KDevFileItem::~KDevFileItem()
@@ -157,4 +157,3 @@ KDevCategoryItem* KDevDocumentModel::category( const QString& category ) const
     return 0;
 }
 
-#include "kdevdocumentmodel.moc"

@@ -20,8 +20,9 @@
 #define KDEVPLATFORM_DUCHAINPOINTER_H
 
 #include <QtCore/QMetaType>
+#include <QtCore/QList>
 #include <ksharedptr.h>
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 //krazy:excludeall=dpointer
 
@@ -90,7 +91,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData {
     friend class DUChainPointer;
 
     public:
-    DUChainPointer() : d(KSharedPtr<DUChainPointerData>(0)) {
+    DUChainPointer() : d(QExplicitlySharedDataPointer<DUChainPointerData>(0)) {
     }
 
     DUChainPointer(const DUChainPointer& rhs)
@@ -111,7 +112,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData {
         d = rhs.d;
     }
 
-    explicit DUChainPointer( KSharedPtr<DUChainPointerData> rhs ) {
+    explicit DUChainPointer( QExplicitlySharedDataPointer<DUChainPointerData> rhs ) {
       if( dynamic_cast<Type*>(rhs->base()) )
         d = rhs;
     }
@@ -172,7 +173,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData {
     }
 
     private:
-      KSharedPtr<DUChainPointerData> d;
+      QExplicitlySharedDataPointer<DUChainPointerData> d;
   };
 
   typedef DUChainPointer<DUChainBase> DUChainBasePointer;

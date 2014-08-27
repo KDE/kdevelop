@@ -25,11 +25,11 @@
 
 #include <KLocalizedString>
 #include <KPushButton>
-
 #include <KShell>
-#include <KAction>
 
-EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* parent, Qt::WFlags flags )
+#include <QAction>
+
+EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* parent, Qt::WindowFlags flags )
     : KDialog( parent, flags ), m_item( item )
 {
   setButtons( /*Reset | */Apply | Cancel | Ok );
@@ -125,7 +125,7 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   stdoutCombo->setCurrentIndex( item->outputMode() );
   stderrCombo->setCurrentIndex( item->errorMode() );
   saveCombo->setCurrentIndex( item->saveMode() );
-  shortcutWidget->setShortcut( item->action()->shortcut() );
+  shortcutWidget->setShortcut( item->action()->shortcuts() );
   showOutputBox->setChecked( item->showOutput() );
   outputFilterCombo->setCurrentIndex( item->filterMode() );
   //END item to UI copying
@@ -174,7 +174,7 @@ void EditExternalScript::save()
   m_item->setShowOutput( showOutputBox->isChecked() );
 
   m_item->setFilterMode( outputFilterCombo->currentIndex() );
-  m_item->action()->setShortcut( shortcutWidget->shortcut() );
+  m_item->action()->setShortcuts( shortcutWidget->shortcut() );
 }
 
 void EditExternalScript::validate()
@@ -190,6 +190,5 @@ void EditExternalScript::validate()
   button(Apply)->setEnabled(valid);
 }
 
-#include "editexternalscript.moc"
 
 // kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on;

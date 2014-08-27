@@ -12,7 +12,7 @@
 #include "vcscommitdialog.h"
 
 #include <QtCore/QHash>
-#include <QtGui/QBrush>
+#include <QBrush>
 #include <QtCore/QRegExp>
 
 #include <KDE/KTextEdit>

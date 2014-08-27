@@ -199,6 +199,3 @@ void SvnBlameJob::blameLineReceived( const KDevelop::VcsAnnotationLine& line )
     m_annotations.append( qVariantFromValue( line ) );
     emit resultsReady( this );
 }
-
-#include "svnblamejob.moc"
-#include "svnblamejob_p.moc"

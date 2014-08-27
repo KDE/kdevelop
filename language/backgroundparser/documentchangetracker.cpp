@@ -30,7 +30,7 @@
 
 #include <util/foregroundlock.h>
 #include <editor/modificationrevisionset.h>
-#include <duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguage.h>
@@ -101,11 +101,11 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
     reset();
 }
 
-QList< QPair< SimpleRange, QString > > DocumentChangeTracker::completions() const
+QList< QPair< KTextEditor::Range, QString > > DocumentChangeTracker::completions() const
 {
     VERIFY_FOREGROUND_LOCKED
 
-    QList< QPair< SimpleRange , QString > > ret;
+    QList< QPair< KTextEditor::Range , QString > > ret;
     return ret;
 }
 
@@ -351,22 +351,22 @@ KDevelop::CursorInRevision DocumentChangeTracker::transformBetweenRevisions(KDev
     return cursor;
 }
 
-RangeInRevision DocumentChangeTracker::transformToRevision(SimpleRange range, qint64 toRevision) const
+RangeInRevision DocumentChangeTracker::transformToRevision(KTextEditor::Range range, qint64 toRevision) const
 {
     return transformBetweenRevisions(RangeInRevision::castFromSimpleRange(range), -1, toRevision);
 }
 
-CursorInRevision DocumentChangeTracker::transformToRevision(SimpleCursor cursor, qint64 toRevision, MovingCursor::InsertBehavior behavior) const
+CursorInRevision DocumentChangeTracker::transformToRevision(KTextEditor::Cursor cursor, qint64 toRevision, MovingCursor::InsertBehavior behavior) const
 {
     return transformBetweenRevisions(CursorInRevision::castFromSimpleCursor(cursor), -1, toRevision, behavior);
 }
 
-SimpleRange DocumentChangeTracker::transformToCurrentRevision(RangeInRevision range, qint64 fromRevision) const
+KTextEditor::Range DocumentChangeTracker::transformToCurrentRevision(RangeInRevision range, qint64 fromRevision) const
 {
     return transformBetweenRevisions(range, fromRevision, -1).castToSimpleRange();
 }
 
-SimpleCursor DocumentChangeTracker::transformToCurrentRevision(CursorInRevision cursor, qint64 fromRevision, MovingCursor::InsertBehavior behavior) const
+KTextEditor::Cursor DocumentChangeTracker::transformToCurrentRevision(CursorInRevision cursor, qint64 fromRevision, MovingCursor::InsertBehavior behavior) const
 {
     return transformBetweenRevisions(cursor, fromRevision, -1, behavior).castToSimpleCursor();
 }
@@ -518,23 +518,23 @@ CursorInRevision RevisionLockerAndClearer::transformFromRevision(const KDevelop:
     return m_p->m_tracker->transformBetweenRevisions(cursor, fromRevision, toRevision, behavior);
 }
 
-SimpleRange RevisionLockerAndClearer::transformToCurrentRevision(const KDevelop::RangeInRevision& range) const
+KTextEditor::Range RevisionLockerAndClearer::transformToCurrentRevision(const KDevelop::RangeInRevision& range) const
 {
     return transformToRevision(range, KDevelop::RevisionLockerAndClearer::Ptr()).castToSimpleRange();
 }
 
-SimpleCursor RevisionLockerAndClearer::transformToCurrentRevision(const KDevelop::CursorInRevision& cursor,
+KTextEditor::Cursor RevisionLockerAndClearer::transformToCurrentRevision(const KDevelop::CursorInRevision& cursor,
                                                                   MovingCursor::InsertBehavior behavior) const
 {
     return transformToRevision(cursor, KDevelop::RevisionLockerAndClearer::Ptr(), behavior).castToSimpleCursor();
 }
 
-RangeInRevision RevisionLockerAndClearer::transformFromCurrentRevision(const KDevelop::SimpleRange& range) const
+RangeInRevision RevisionLockerAndClearer::transformFromCurrentRevision(const KTextEditor::Range& range) const
 {
     return transformFromRevision(RangeInRevision::castFromSimpleRange(range), RevisionReference());
 }
 
-CursorInRevision RevisionLockerAndClearer::transformFromCurrentRevision(const KDevelop::SimpleCursor& cursor,
+CursorInRevision RevisionLockerAndClearer::transformFromCurrentRevision(const KTextEditor::Cursor& cursor,
                                                                         MovingCursor::InsertBehavior behavior) const
 {
     return transformFromRevision(CursorInRevision::castFromSimpleCursor(cursor), RevisionReference(), behavior);

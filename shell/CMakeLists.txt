@@ -3,7 +3,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9501 )
 add_subdirectory(settings)
 add_subdirectory(tests)
 
-set(kdevplatformshell_LIB_SRCS
+set(KDevPlatformShell_LIB_SRCS
     workingsetcontroller.cpp
     workingsets/workingset.cpp
     workingsets/workingsetfilelabel.cpp
@@ -58,45 +58,46 @@ set(kdevplatformshell_LIB_SRCS
     areadisplay.cpp
 )
 
-# Check if KTE is new enough to have the EditVIMode view mode flag
-try_compile( HAVE_EDITVIMODE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/testeditvimode.cpp
-             CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${KDE4_INCLUDES}"
-             LINK_LIBRARIES ${KDE4_KTEXTEDITOR_LIBS} )
-if(HAVE_EDITVIMODE)
-    add_definitions("-DKTEXTEDITOR_HAS_VIMODE=1")
-endif(HAVE_EDITVIMODE)
-
-set(kdevplatformshell_UI
+set(KDevPlatformShell_UI
     sessiondialog.ui
     projectinfopage.ui
     launchconfigurationdialog.ui
     projectsourcepage.ui
 )
 
-kde4_add_ui_files( kdevplatformshell_LIB_SRCS ${kdevplatformshell_UI} )
-kde4_add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
-target_link_libraries(kdevplatformshell LINK_PUBLIC
-    sublime
-    kdevplatformoutputview
-    kdevplatformdebugger
+qt5_wrap_ui( KDevPlatformShell_LIB_SRCS ${KDevPlatformShell_UI} )
+add_library(KDevPlatformShell ${KDevPlatformShell_LIB_SRCS})
+add_library(KDev::Shell ALIAS KDevPlatformShell)
+
+generate_export_header(KDevPlatformShell EXPORT_FILE_NAME shellexport.h)
+target_link_libraries(KDevPlatformShell
+LINK_PUBLIC
+    KF5::XmlGui
+
+    KDev::Sublime
+    KDev::OutputView
+    KDev::Debugger
+    KDev::Interfaces
+    KF5::KDELibs4Support
+LINK_PRIVATE
+    Qt5::Declarative
+
+    KF5::KIOWidgets
+    KF5::KCMUtils
+    KF5::Parts
+    KF5::NotifyConfig
+    KF5::TextEditor
+    KF5::ThreadWeaver
+    KF5::JobWidgets
+    KF5::ItemViews
+
+    KDev::Project
+    KDev::Vcs
+    KDev::Language
+    KDev::Util
+    KDev::Documentation
 )
-target_link_libraries(kdevplatformshell LINK_PRIVATE
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KFILE_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KNOTIFYCONFIG_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
-    ${KDE4_THREADWEAVER_LIBRARIES}
-    ${QT_QTDECLARATIVE_LIBRARIES}
-    kdevplatforminterfaces
-    kdevplatformproject
-    kdevplatformvcs
-    kdevplatformlanguage
-    kdevplatformutil
-    kdevplatformdocumentation
-)
-set_target_properties(kdevplatformshell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
+set_target_properties(KDevPlatformShell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Shell)
 
 install(FILES
     mainwindow.h
@@ -116,16 +117,16 @@ install(FILES
     sessionlock.h
     sourceformattercontroller.h
     language.h
-    shellexport.h
     selectioncontroller.h
     runcontroller.h
     launchconfiguration.h
+    ${CMAKE_CURRENT_BINARY_DIR}/shellexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell COMPONENT Devel
 )
 
-install(TARGETS kdevplatformshell EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS KDevPlatformShell EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevdebugger )
-install( FILES kdevsessionui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsession )
-install( FILES kdevsourceformatter.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsourceformatter )
+install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevdebugger )
+install( FILES kdevsessionui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevsession )
+install( FILES kdevsourceformatter.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevsourceformatter )
 install( FILES AssistantButton.qml assistantpopup.qml DESTINATION ${DATA_INSTALL_DIR}/kdevelop )

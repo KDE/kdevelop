@@ -22,7 +22,7 @@
 #include <language/codegen/documentchangeset.h>
 #include <language/codegen/basicrefactoring.h>
 
-#include <shell/documentcontroller.h>
+#include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
 
 #include <KLocalizedString>

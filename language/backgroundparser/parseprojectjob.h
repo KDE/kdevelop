@@ -20,8 +20,8 @@
 #define KDEVPLATFORM_PARSEPROJECTJOB_H
 
 #include <kjob.h>
-#include <language/duchain/indexedstring.h>
-#include "../languageexport.h"
+#include <serialization/indexedstring.h>
+#include <language/languageexport.h>
 
 #include <QSet>
 

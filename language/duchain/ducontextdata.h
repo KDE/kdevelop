@@ -27,7 +27,7 @@
 #include "duchainpointer.h"
 #include "declaration.h"
 #include "use.h"
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 #include "localindexeddeclaration.h"
 #include "localindexedducontext.h"

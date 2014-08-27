@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_PROJECTPROXYMODEL_H
 #define KDEVPLATFORM_PROJECTPROXYMODEL_H
 
-#include <QtGui/QSortFilterProxyModel>
+#include <QSortFilterProxyModel>
 #include "projectexport.h"
 
 #include <QList>

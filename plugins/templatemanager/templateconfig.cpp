@@ -28,12 +28,15 @@
 #include <interfaces/itemplateprovider.h>
 
 #include <KPluginFactory>
+#include <KCoreAddons/KAboutData>
+#include <KLocalizedString>
 
 K_PLUGIN_FACTORY(TemplateConfigFactory, registerPlugin<TemplateConfig>();)
-K_EXPORT_PLUGIN(TemplateConfigFactory("kdevtemplates_config"))
+// K_EXPORT_PLUGIN(TemplateConfigFactory("kdevtemplates_config"))
 
 TemplateConfig::TemplateConfig(QWidget* parent, const QVariantList& args)
-: KCModule(TemplateConfigFactory::componentData(), parent, args)
+    : KCModule(new KAboutData("kdevtemplates_config", i18n("Template Provider"), QString()
+        ), parent, args)
 {
     ui = new Ui::TemplateConfig;
     ui->setupUi(this);
@@ -52,3 +55,4 @@ TemplateConfig::~TemplateConfig()
     delete ui;
 }
 
+#include "templateconfig.moc"

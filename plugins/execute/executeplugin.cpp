@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <KConfigCore/KConfigGroup>
 #include <kdebug.h>
 #include <kjob.h>
 #include <kparts/mainwindow.h>
@@ -61,10 +62,10 @@ QString ExecutePlugin::projectTargetEntry = "Project Target";
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(KDevExecuteFactory, registerPlugin<ExecutePlugin>(); )
-K_EXPORT_PLUGIN(KDevExecuteFactory(KAboutData("kdevexecute", "kdevexecute", ki18n("Execute support"), "0.1", ki18n("This plugin allows running of programs with no instrumentor, ie. natively by the current host."), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevExecuteFactory(KAboutData("kdevexecute", "kdevexecute", ki18n("Execute support"), "0.1", ki18n("This plugin allows running of programs with no instrumentor, ie. natively by the current host."), KAboutData::License_GPL)))
 
 ExecutePlugin::ExecutePlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevexecute", parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( IExecutePlugin )
     m_configType = new NativeAppConfigType();
@@ -171,7 +172,7 @@ KUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& er
     KConfigGroup grp = cfg->config();
     if( grp.readEntry(ExecutePlugin::isExecutableEntry, false ) )
     {
-        executable = grp.readEntry( ExecutePlugin::executableEntry, KUrl("") );
+        executable = grp.readEntry( ExecutePlugin::executableEntry, QUrl() );
     } else 
     {
         QStringList prjitem = grp.readEntry( ExecutePlugin::projectTargetEntry, QStringList() );
@@ -240,7 +241,7 @@ KUrl ExecutePlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg ) cons
         return KUrl();
     }
     
-    return cfg->config().readEntry( ExecutePlugin::workingDirEntry, KUrl() );
+    return cfg->config().readEntry( ExecutePlugin::workingDirEntry, QUrl() );
 }
 
 

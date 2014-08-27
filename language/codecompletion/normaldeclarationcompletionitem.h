@@ -23,21 +23,21 @@
 #define KDEVPLATFORM_NORMALDECLARATIONCOMPLETIONITEM_H
 
 #include "codecompletionitem.h"
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop {
 
 class KDEVPLATFORMLANGUAGE_EXPORT NormalDeclarationCompletionItem : public CompletionTreeItem
 {
 public:
-  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<CodeCompletionContext> context=KSharedPtr<CodeCompletionContext>(), int inheritanceDepth = 0);
+  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), QExplicitlySharedDataPointer<CodeCompletionContext> context=QExplicitlySharedDataPointer<CodeCompletionContext>(), int inheritanceDepth = 0);
   virtual KDevelop::DeclarationPointer declaration() const;
-  KSharedPtr<CodeCompletionContext> completionContext() const;
+  QExplicitlySharedDataPointer<CodeCompletionContext> completionContext() const;
   virtual int inheritanceDepth() const;
   virtual int argumentHintDepth() const;
   QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
 
-  void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+  void execute(KTextEditor::View* document, const KTextEditor::Range& word) override;
 
 protected:
   virtual QString declarationName() const;
@@ -51,7 +51,7 @@ protected:
    */
   virtual void executed(KTextEditor::Document* document, const KTextEditor::Range& word);
 
-  KSharedPtr<CodeCompletionContext> m_completionContext;
+  QExplicitlySharedDataPointer<CodeCompletionContext> m_completionContext;
   KDevelop::DeclarationPointer m_declaration;
   int m_inheritanceDepth; //Inheritance-depth: 0 for local functions(within no class), 1 for within local class, 1000+ for global items.
   

@@ -29,6 +29,7 @@
 #include <KAction>
 #include <QFile>
 #include <QSignalMapper>
+#include <QMimeDatabase>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -40,6 +41,7 @@
 #include <language/duchain/classfunctiondeclaration.h>
 
 #include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 
 using namespace KDevelop;
 
@@ -52,7 +54,7 @@ KTextEditor::Cursor normalizeCursor(KTextEditor::Cursor c)
 }
 
 ///Tries to find a definition for the declaration at given cursor-position and document-url. DUChain must be locked.
-Declaration* definitionForCursorDeclaration(const KDevelop::SimpleCursor& cursor, const KUrl& url)
+Declaration* definitionForCursorDeclaration(const KTextEditor::Cursor& cursor, const KUrl& url)
 {
     QList<TopDUContext*> topContexts = DUChain::self()->chainsForDocument(url);
     foreach (TopDUContext* ctx, topContexts) {
@@ -86,21 +88,21 @@ QString findSwitchCandidate(const KUrl& docUrl)
 }
 
 K_PLUGIN_FACTORY(SwitchToBuddyPluginFactory, registerPlugin<SwitchToBuddyPlugin>(); )
-K_EXPORT_PLUGIN(SwitchToBuddyPluginFactory(KAboutData(
-                                            "kdevswitchtobuddy"
-                                           ,"kdevswitchtobuddy"
-                                           , ki18n("Switch to Buddy")
-                                           , "0.1"
-                                           , ki18n("Allows switching between buddy documents like implementation and header file.")
-                                           , KAboutData::License_GPL)
-                                           .addAuthor(ki18n("André Stein")
-                                           , ki18n("Author")
-                                           , "andre.stein@rwth-aachen.de"
-                                           , "http://steinsoft.net")
-))
+// K_EXPORT_PLUGIN(SwitchToBuddyPluginFactory(KAboutData(
+//                                             "kdevswitchtobuddy"
+//                                            ,"kdevswitchtobuddy"
+//                                            , ki18n("Switch to Buddy")
+//                                            , "0.1"
+//                                            , ki18n("Allows switching between buddy documents like implementation and header file.")
+//                                            , KAboutData::License_GPL)
+//                                            .addAuthor(ki18n("André Stein")
+//                                            , ki18n("Author")
+//                                            , "andre.stein@rwth-aachen.de"
+//                                            , "http://steinsoft.net")
+// ))
 
 SwitchToBuddyPlugin::SwitchToBuddyPlugin ( QObject* parent, const QVariantList& )
-    : IPlugin ( SwitchToBuddyPluginFactory::componentData(), parent )
+    : IPlugin ( "kdevswitchtobuddy", parent )
     , m_signalMapper(0)
 {
     setXMLFile("kdevswitchtobuddy.rc");
@@ -118,7 +120,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context)
     }
 
     KUrl currentUrl = ctx->url();
-    IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(currentUrl)->name());
+    IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(QMimeDatabase().mimeTypeForUrl(currentUrl).name());
     if (!buddyFinder)
         return ContextMenuExtension();
 
@@ -153,7 +155,7 @@ void SwitchToBuddyPlugin::createActionsForMainWindow(Sublime::MainWindow* window
 {
     xmlFile = this->xmlFile();
 
-    KAction* switchDefinitionDeclaration = actions.addAction("switch_definition_declaration");
+    QAction* switchDefinitionDeclaration = actions.addAction("switch_definition_declaration");
     switchDefinitionDeclaration->setText( i18n("&Switch Definition/Declaration") );
     switchDefinitionDeclaration->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_C );
     connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
@@ -169,20 +171,20 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
     kDebug() << "switching definition/declaration";
 
     KUrl docUrl;
-    SimpleCursor cursor;
+    KTextEditor::Cursor cursor;
 
     ///Step 1: Find the current top-level context of type DUContext::Other(the highest code-context).
     ///-- If it belongs to a function-declaration or definition, it can be retrieved through owner(), and we are in a definition.
     ///-- If no such context could be found, search for a declaration on the same line as the cursor, and switch to the according definition
     {
-        KDevelop::IDocument* doc = ICore::self()->documentController()->activeDocument();
-        if (!doc || !doc->textDocument() || !doc->textDocument()->activeView()) {
+        auto view = ICore::self()->documentController()->activeTextDocumentView();
+        if (!view) {
             kDebug() << "No active document";
             return;
         }
 
-        docUrl = doc->textDocument()->url();
-        cursor = SimpleCursor(doc->textDocument()->activeView()->cursorPosition());
+        docUrl = view->document()->url();
+        cursor = view->cursorPosition();
     }
 
     QString switchCandidate = findSwitchCandidate(docUrl);
@@ -243,18 +245,16 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
         FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(definition);
         if (def && def->declaration()) {
             Declaration* declaration = def->declaration();
-            KTextEditor::Range targetRange = declaration->rangeInCurrentRevision().textRange();
+            KTextEditor::Range targetRange = declaration->rangeInCurrentRevision();
             const auto url = declaration->url().toUrl();
             kDebug() << "found definition that has declaration: " << definition->toString() << "range" << targetRange << "url" << url;
             lock.unlock();
 
-            KDevelop::IDocument* document = ICore::self()->documentController()->documentForUrl(url);
-
-            if (!document ||
-                    (document->textDocument() && document->textDocument()->activeView() && !targetRange.contains(document->textDocument()->activeView()->cursorPosition()))) {
+            auto view = ICore::self()->documentController()->activeTextDocumentView();
+            if (view && !targetRange.contains(view->cursorPosition())) {
                 const auto pos = normalizeCursor(targetRange.start());
                 ICore::self()->documentController()->openDocument(url, KTextEditor::Range(pos, pos));
-            } else if (document) {
+            } else {
                 ICore::self()->documentController()->openDocument(url);
             }
             return;
@@ -274,22 +274,20 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
 
     if (def) {
         const auto url = def->url().toUrl();
-        KTextEditor::Range targetRange = def->rangeInCurrentRevision().textRange();
+        KTextEditor::Range targetRange = def->rangeInCurrentRevision();
 
         if (def->internalContext()) {
-            targetRange.end() = def->internalContext()->rangeInCurrentRevision().end.textCursor();
+            targetRange.end() = def->internalContext()->rangeInCurrentRevision().end();
         } else {
             kDebug() << "Declaration does not have internal context";
         }
         lock.unlock();
 
-        KDevelop::IDocument* document = ICore::self()->documentController()->documentForUrl(url);
-
-        if (!document ||
-                (document->textDocument() && (!document->textDocument()->activeView() || !targetRange.contains(document->textDocument()->activeView()->cursorPosition())))) {
+        auto view = ICore::self()->documentController()->activeTextDocumentView();
+        if (view && !targetRange.contains(view->cursorPosition())) {
             KTextEditor::Cursor pos(normalizeCursor(targetRange.start()));
             ICore::self()->documentController()->openDocument(url, KTextEditor::Range(pos, pos));
-        } else if (document) {
+        } else {
             //The cursor is already in the target range, only open the document
             ICore::self()->documentController()->openDocument(url);
         }
@@ -307,3 +305,5 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
         kDebug() << "Found no source/header candidate to switch";
     }
 }
+
+#include "switchtobuddyplugin.moc"

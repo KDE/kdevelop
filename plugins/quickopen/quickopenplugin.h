@@ -24,7 +24,8 @@
 
 #include <QtCore/QVariant>
 #include <QtCore/QTimer>
-#include <QtGui/QMenu>
+#include <QMenu>
+#include <QTime>
 
 #include <interfaces/iplugin.h>
 
@@ -33,10 +34,10 @@
 
 #include "ui_quickopen.h"
 
-class KAction;
+class QAction;
 
-namespace KDevelop {
-  class SimpleCursor;
+namespace KTextEditor {
+class Cursor;
 }
 
 class QuickOpenModel;
@@ -114,7 +115,7 @@ private:
     enum FunctionJumpDirection { NextFunction, PreviousFunction };
     void jumpToNearestFunction(FunctionJumpDirection direction);
 
-    QPair<KUrl, KDevelop::SimpleCursor> specialObjectJumpPosition() const;
+    QPair<KUrl, KTextEditor::Cursor> specialObjectJumpPosition() const;
     QWidget* specialObjectNavigationWidget() const;
     bool jumpToSpecialObject();
     void showQuickOpenWidget(const QStringList &items, const QStringList &scopes, bool preselectText);
@@ -129,8 +130,8 @@ private:
   
     //We can only have one widget at a time, because we manipulate the model.
     QPointer<QObject> m_currentWidgetHandler;
-    KAction* m_quickOpenDeclaration;
-    KAction* m_quickOpenDefinition;
+    QAction* m_quickOpenDeclaration;
+    QAction* m_quickOpenDefinition;
 };
 
 ///Will delete itself once the dialog is closed, so use QPointer when referencing it permanently

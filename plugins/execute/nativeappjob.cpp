@@ -41,6 +41,7 @@
 #include <project/projectmodel.h>
 
 #include "iexecuteplugin.h"
+#include <KConfigCore/ksharedconfig.h>
 
 using namespace KDevelop;
 
@@ -52,7 +53,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin", "kdevexecute")->extension<IExecutePlugin>();
     Q_ASSERT(iface);
         
-    KDevelop::EnvironmentGroupList l(KGlobal::config());
+    KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());
     QString envgrp = iface->environmentGroup(cfg);
     
     QString err;
@@ -218,4 +219,3 @@ KDevelop::OutputModel* NativeAppJob::model()
 }
 
 
-#include "nativeappjob.moc"

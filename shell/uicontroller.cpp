@@ -30,6 +30,8 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kmenubar.h>
+#include <kcomponentdata.h>
+#include <KCMUtils/ksettings/dispatcher.h>
 #include <ksettings/dialog.h>
 #include <ksettings/dispatcher.h>
 #include <kcmultidialog.h>
@@ -254,10 +256,8 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
     // FIXME: what this is supposed to do?
     // Answer: Its notifying the mainwindow to reload its settings when one of
     // the KCM's changes its settings and it works
-    KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(),
-                                    main, "loadSettings" );
-    KSettings::Dispatcher::registerComponent( Core::self()->componentData(),
-                                    main, "loadSettings" );
+    KSettings::Dispatcher::registerComponent( KComponentData::mainComponent().componentName(), main, "loadSettings" );
+    KSettings::Dispatcher::registerComponent( Core::self()->aboutData().componentName(), main, "loadSettings" );
 
     addMainWindow(main);
     showArea(areaName, main);
@@ -329,6 +329,9 @@ void UiController::raiseToolView(QWidget* toolViewWidget)
 
 void UiController::addToolView(const QString & name, IToolViewFactory *factory)
 {
+    if (!factory)
+        return;
+
     kDebug() ;
     Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
@@ -352,6 +355,9 @@ void KDevelop::UiController::raiseToolView(Sublime::View * view)
 
 void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
 {
+    if (!factory)
+        return;
+
     kDebug() ;
     //delete the tooldocument
     Sublime::ToolDocument *doc = d->factoryDocuments[factory];
@@ -394,7 +400,7 @@ void UiController::cleanup()
 {
     foreach (Sublime::MainWindow* w, mainWindows())
         w->saveSettings();
-    saveAllAreas(KGlobal::config());
+    saveAllAreas(KSharedConfig::openConfig());
 }
 
 void UiController::selectNewToolViewToAdd(MainWindow *mw)
@@ -466,7 +472,7 @@ Sublime::Controller* UiController::controller()
 
 KParts::MainWindow *UiController::activeMainWindow()
 {
-    return (KParts::MainWindow*)(activeSublimeWindow());
+    return activeSublimeWindow();
 }
 
 void UiController::saveArea(Sublime::Area * area, KConfigGroup & group)
@@ -665,12 +671,13 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
         return;
     }
 
-    TextEditorWidget* textWidget = dynamic_cast<TextEditorWidget*>(view->widget());
-    if(textWidget && textWidget->editorView()) {
+    auto editorView = qobject_cast<KTextEditor::View*>(view->widget());
+    Q_ASSERT(editorView);
+    if (editorView) {
         if ( !d->currentShownAssistant ) {
             d->currentShownAssistant = new AssistantPopup;
         }
-        d->currentShownAssistant->reset(textWidget->editorView(), assistant);
+        d->currentShownAssistant->reset(editorView, assistant);
     }
 }
 

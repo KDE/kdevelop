@@ -37,8 +37,8 @@ class QStringList;
 template <typename T> class ProjectKCModule : public KCModule
 {
     public:
-        ProjectKCModule( const KComponentData& componentData, QWidget* parent, const QVariantList& args = QVariantList() )
-            : KCModule( componentData, parent, args )
+        ProjectKCModule( KAboutData* data, QWidget* parent, const QVariantList& args = QVariantList() )
+            : KCModule( data, parent, args )
         {
             Q_ASSERT( args.count() > 3 );
             T::instance( args.at(0).toString() );

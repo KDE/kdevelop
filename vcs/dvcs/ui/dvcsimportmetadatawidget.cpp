@@ -53,7 +53,7 @@ DvcsImportMetadataWidget::DvcsImportMetadataWidget(QWidget *parent)
     d->m_ui->sourceLoc->setEnabled( false );
     d->m_ui->sourceLoc->setMode( KFile::Directory );
     connect( d->m_ui->sourceLoc, SIGNAL(textChanged(QString)), this, SIGNAL(changed()) );
-    connect( d->m_ui->sourceLoc, SIGNAL(urlSelected(KUrl)), this, SIGNAL(changed()) );
+    connect( d->m_ui->sourceLoc, SIGNAL(urlSelected(QUrl)), this, SIGNAL(changed()) );
 }
 
 DvcsImportMetadataWidget::~DvcsImportMetadataWidget()
@@ -61,7 +61,7 @@ DvcsImportMetadataWidget::~DvcsImportMetadataWidget()
     delete d_ptr;
 }
 
-KUrl DvcsImportMetadataWidget::source() const
+QUrl DvcsImportMetadataWidget::source() const
 {
     Q_D(const DvcsImportMetadataWidget);
     return d->m_ui->sourceLoc->url();
@@ -99,4 +99,3 @@ bool DvcsImportMetadataWidget::hasValidData() const
     return !d->m_ui->sourceLoc->text().isEmpty();
 }
 
-#include "dvcsimportmetadatawidget.moc"

@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_PROJECTTREEVIEW_H
 #define KDEVPLATFORM_PLUGIN_PROJECTTREEVIEW_H
 
-#include <QtGui/QTreeView>
+#include <QTreeView>
 #include <QtCore/QPointer>
 
 class QAbstractProxyModel;

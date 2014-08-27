@@ -19,13 +19,12 @@
 #ifndef KDEVPLATFORM_CODECOMPLETIONCONTEXT_H
 #define KDEVPLATFORM_CODECOMPLETIONCONTEXT_H
 
-#include <ktexteditor/cursor.h>
 #include <ksharedptr.h>
 
 #include "../duchain/duchainpointer.h"
-#include "../languageexport.h"
-#include "../editor/simplecursor.h"
+#include <language/languageexport.h>
 #include "../editor/cursorinrevision.h"
+#include "codecompletionitem.h"
 
 namespace KTextEditor {
   class View;
@@ -37,15 +36,15 @@ namespace KDevelop {
 
   class CompletionTreeItem;
   class CompletionTreeElement;
-  typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
-  typedef KSharedPtr<CompletionTreeElement> CompletionTreeElementPointer;
+  typedef QExplicitlySharedDataPointer<CompletionTreeItem> CompletionTreeItemPointer;
+  typedef QExplicitlySharedDataPointer<CompletionTreeElement> CompletionTreeElementPointer;
 
   /**
    * This class is responsible for finding out what kind of completion is needed, what expression should be evaluated for the container-class of the completion, what conversion will be applied to the result of the completion, etc.
    * */
   class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionContext : public QSharedData {
     public:
-      typedef KSharedPtr<CodeCompletionContext> Ptr;
+      typedef QExplicitlySharedDataPointer<CodeCompletionContext> Ptr;
 
       /**
        * @param text the text to analyze. It usually is the text in the range starting at the beginning of the context,
@@ -91,7 +90,7 @@ namespace KDevelop {
       CodeCompletionContext* parentContext();
 
       ///Sets the new parent context, and also updates the depth
-      void setParentContext(KSharedPtr<CodeCompletionContext> newParent);
+      void setParentContext(QExplicitlySharedDataPointer<CodeCompletionContext> newParent);
       
       DUContext* duContext() const;
       
@@ -105,7 +104,7 @@ namespace KDevelop {
 
       KDevelop::DUContextPointer m_duContext;
 
-      KSharedPtr<CodeCompletionContext> m_parentContext;
+      QExplicitlySharedDataPointer<CodeCompletionContext> m_parentContext;
   };
 }
 

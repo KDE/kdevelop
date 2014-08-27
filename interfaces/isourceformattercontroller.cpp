@@ -32,6 +32,5 @@ ISourceFormatterController::~ISourceFormatterController()
 
 }
 
-#include "isourceformattercontroller.moc"
 
 // kate: indent-mode cstyle; space-indent off; tab-width 4 = 0;

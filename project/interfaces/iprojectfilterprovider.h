@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_IPROJECTFILTERPROVIDER_H
 #define KDEVPLATFORM_IPROJECTFILTERPROVIDER_H
 
-#include "../projectexport.h"
+#include <project/projectexport.h>
 
 #include <QObject>
 #include <QSharedPointer>

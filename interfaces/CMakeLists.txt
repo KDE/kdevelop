@@ -1,10 +1,7 @@
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9502 )
-set(kdevplatforminterfaces_LIB_SRCS
-    ipatchsource.cpp
-    ipatchexporter.cpp
+set(KDevPlatformInterfaces_LIB_SRCS
     iassistant.cpp
     context.cpp
-    ipatchdocument.cpp
     iplugin.cpp
     idocument.cpp
     icore.cpp
@@ -45,20 +42,27 @@ set(kdevplatforminterfaces_LIB_SRCS
 )
 configure_file(ipluginversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h)
 
-kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
-target_link_libraries(kdevplatforminterfaces LINK_PUBLIC
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+add_library(KDevPlatformInterfaces ${KDevPlatformInterfaces_LIB_SRCS})
+add_library(KDev::Interfaces ALIAS KDevPlatformInterfaces)
+generate_export_header(KDevPlatformInterfaces EXPORT_FILE_NAME interfacesexport.h)
+target_link_libraries(KDevPlatformInterfaces
+LINK_PUBLIC
+    KF5::Parts
+    KF5::TextEditor
+    KF5::I18n
+    KF5::KDELibs4Support
+LINK_PRIVATE
+    KF5::NotifyConfig
+    KF5::KIOWidgets
+    KF5::KCMUtils
+    KF5::ThreadWeaver
 )
-target_link_libraries(kdevplatforminterfaces LINK_PRIVATE
-    ${KDE4_KNOTIFYCONFIG_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_THREADWEAVER_LIBRARIES}
-)
+target_include_directories(KDevPlatformInterfaces INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kdevplatform>")
+# TODO: this is ugly (sort-of cyclic dependecy):
+target_include_directories(KDevPlatformInterfaces PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../util") # for utilexport.h
 
-set_target_properties(kdevplatforminterfaces PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatforminterfaces EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+set_target_properties(KDevPlatformInterfaces PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Interfaces)
+install(TARGETS KDevPlatformInterfaces EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
     iassistant.h
@@ -67,9 +71,6 @@ install(FILES
     iplugin.h
     icore.h
     iuicontroller.h
-    ipatchdocument.h
-    ipatchexporter.h
-    ipatchsource.h
     iplugincontroller.h
     iprojectcontroller.h
     iproject.h
@@ -79,7 +80,6 @@ install(FILES
     idocumentcontroller.h
     isourceformatter.h
     isourceformattercontroller.h
-    interfacesexport.h
     istatus.h
     isession.h
     isessionlock.h
@@ -104,6 +104,7 @@ install(FILES
     itemplateprovider.h
     itestsuite.h
     itestcontroller.h
+    ${CMAKE_CURRENT_BINARY_DIR}/interfacesexport.h
     ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )

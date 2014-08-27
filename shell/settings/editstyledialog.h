@@ -20,8 +20,8 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_EDITSTYLEDIALOG_H
 #define KDEVPLATFORM_EDITSTYLEDIALOG_H
 
+#include <QMimeType>
 #include <KDialog>
-#include <KMimeType>
 #include <interfaces/isourceformatter.h>
 #include "ui_editstyledialog.h"
 
@@ -44,8 +44,8 @@ class EditStyleDialog : public KDialog
 		Q_OBJECT
 
 	public:
-		EditStyleDialog(KDevelop::ISourceFormatter *formatter, const KMimeType::Ptr &mime,
-		        const KDevelop::SourceFormatterStyle&, QWidget *parent = 0);
+		EditStyleDialog(KDevelop::ISourceFormatter* formatter, const QMimeType& mime,
+		        const KDevelop::SourceFormatterStyle&, QWidget* parent = 0);
 		virtual ~EditStyleDialog();
 
 		/** \return The string representing the style given by the \ref SettingsWidget.
@@ -63,7 +63,7 @@ class EditStyleDialog : public KDialog
 		KTextEditor::View *m_view;
 		KTextEditor::Document *m_document;
 		KDevelop::SettingsWidget *m_settingsWidget;
-		KMimeType::Ptr m_mimeType;
+		QMimeType m_mimeType;
 		QWidget *m_content;
 		Ui::EditStyle m_ui;
 		KDevelop::SourceFormatterStyle m_style;

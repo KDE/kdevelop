@@ -25,10 +25,9 @@
 #include <KDE/KSharedConfig>
 #include <KDE/KConfigGroup>
 #include <KDE/KToolBar>
-#include <KDE/KWindowSystem>
 
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
+#include <QApplication>
+#include <QDesktopWidget>
 #include <KDE/KStatusBar>
 #include <KDE/KMenuBar>
 #include <KLocalizedString>
@@ -47,7 +46,7 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
 {
     connect(this, SIGNAL(destroyed()), controller, SLOT(areaReleased()));
 
-    loadGeometry(KGlobal::config()->group("Main Window"));
+    loadGeometry(KSharedConfig::openConfig()->group("Main Window"));
 
     // don't allow AllowTabbedDocks - that doesn't make sense for "ideal" UI
     setDockOptions(QMainWindow::AnimatedDocks);
@@ -226,7 +225,7 @@ void MainWindow::saveSettings()
     QString group = "MainWindow";
     if (area())
         group += '_' + area()->objectName();
-    KConfigGroup cg = KGlobal::config()->group(group);
+    KConfigGroup cg = KSharedConfig::openConfig()->group(group);
     /* This will try to save window size, too.  But it's OK, since we
        won't use this information when loading.  */
     saveMainWindowSettings(cg);
@@ -249,7 +248,7 @@ void MainWindow::loadSettings()
     QString group = "MainWindow";
     if (area())
         group += '_' + area()->objectName();
-    KConfigGroup cg = KGlobal::config()->group(group);
+    KConfigGroup cg = KSharedConfig::openConfig()->group(group);
 
     // What follows is copy-paste from applyMainWindowSettings.  Unfortunately,
     // we don't really want that one to try restoring window size, and we also
@@ -308,7 +307,7 @@ void MainWindow::loadSettings()
         group += (toolbar->objectName().isEmpty() ? QString::number(n) : QString(" ")+toolbar->objectName());
 
         KConfigGroup toolbarGroup(&cg, group);
-        toolbar->applySettings(toolbarGroup, false);
+        toolbar->applySettings(toolbarGroup);
 
         if (toolbar->objectName() == "debugToolBar") {
             //debugToolBar visibility is stored separately to allow a area dependent default value
@@ -318,7 +317,7 @@ void MainWindow::loadSettings()
         n++;
     }
 
-    KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+    KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
     foreach (Container *container, findChildren<Container*>())
     {
         container->setTabBarHidden(uiGroup.readEntry("TabBarVisibility", 1) == 0);
@@ -334,7 +333,7 @@ void MainWindow::loadSettings()
 bool MainWindow::queryClose()
 {
 //    saveSettings();
-    KConfigGroup config(KGlobal::config(), "Main Window");
+    KConfigGroup config(KSharedConfig::openConfig(), "Main Window");
     saveGeometry(config);
     config.sync();
     
@@ -433,4 +432,4 @@ void MainWindow::setBackgroundCentralWidget(QWidget* w)
 
 }
 
-#include "mainwindow.moc"
+#include "moc_mainwindow.cpp"

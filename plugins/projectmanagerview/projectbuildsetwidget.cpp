@@ -28,6 +28,7 @@
 #include <QStringListModel>
 #include <QModelIndex>
 #include <QStandardItemModel>
+#include <KLocalizedString>
 
 #include <kdebug.h>
 #include <kicon.h>
@@ -54,27 +55,27 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
 {
     m_ui->setupUi( this );
     
-    m_ui->addItemButton->setIcon( KIcon( "list-add" ) );
+    m_ui->addItemButton->setIcon( QIcon::fromTheme( "list-add" ) );
     connect( m_ui->addItemButton, SIGNAL(clicked()),
              this, SLOT(addItems()) );
 
-    m_ui->removeItemButton->setIcon( KIcon( "list-remove" ) );
+    m_ui->removeItemButton->setIcon( QIcon::fromTheme( "list-remove" ) );
     connect( m_ui->removeItemButton, SIGNAL(clicked()),
              this, SLOT(removeItems()) );
 
-    m_ui->upButton->setIcon( KIcon( "go-up" ) );
+    m_ui->upButton->setIcon( QIcon::fromTheme( "go-up" ) );
     connect( m_ui->upButton, SIGNAL(clicked()),
              SLOT(moveUp()) );
     
-    m_ui->downButton->setIcon( KIcon( "go-down" ) );
+    m_ui->downButton->setIcon( QIcon::fromTheme( "go-down" ) );
     connect( m_ui->downButton, SIGNAL(clicked()),
              SLOT(moveDown()) );
     
-    m_ui->topButton->setIcon( KIcon( "go-top" ) );
+    m_ui->topButton->setIcon( QIcon::fromTheme( "go-top" ) );
     connect( m_ui->topButton, SIGNAL(clicked()),
              SLOT(moveToTop()) );
     
-    m_ui->bottomButton->setIcon( KIcon( "go-bottom" ) );
+    m_ui->bottomButton->setIcon( QIcon::fromTheme( "go-bottom" ) );
     connect( m_ui->bottomButton, SIGNAL(clicked()),
              SLOT(moveToBottom()) );
     
@@ -145,7 +146,7 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
 
     KMenu m;
     m.setTitle( i18n("Build Set") );
-    m.addAction( KIcon("list-remove"), i18n( "Remove From Build Set" ), this, SLOT(removeItems()) );
+    m.addAction( QIcon::fromTheme("list-remove"), i18n( "Remove From Build Set" ), this, SLOT(removeItems()) );
     
     if( !itemlist.isEmpty() )
     {

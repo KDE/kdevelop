@@ -42,20 +42,22 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/idocument.h>
 
+#include <QAction>
 #include <QScrollBar>
 #include <QApplication>
 #include <QDir>
+#include <QAction>
 
 #include <algorithm>
 
 K_PLUGIN_FACTORY(DocumentSwitcherFactory, registerPlugin<DocumentSwitcherPlugin>(); )
-K_EXPORT_PLUGIN(DocumentSwitcherFactory(KAboutData("kdevdocumentswitcher","kdevdocumentswitcher",ki18n("Document Switcher"), "0.1", ki18n("Switch between open documents using most-recently-used list"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(DocumentSwitcherFactory(KAboutData("kdevdocumentswitcher","kdevdocumentswitcher",ki18n("Document Switcher"), "0.1", ki18n("Switch between open documents using most-recently-used list"), KAboutData::License_GPL)))
 
 //TODO: Show frame around view's widget while walking through
 //TODO: Make the widget transparent
 
 DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantList &/*args*/)
-    :KDevelop::IPlugin(DocumentSwitcherFactory::componentData(), parent), view(0)
+    :KDevelop::IPlugin("kdevdocumentswitcher", parent), view(0)
 {
     setXMLFile("kdevdocumentswitcher.rc");
     kDebug() << "Adding active mainwindow from constructor" << KDevelop::ICore::self()->uiController()->activeMainWindow(); 
@@ -64,7 +66,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     
     forwardAction = actionCollection()->addAction ( "last_used_views_forward" );
     forwardAction->setText( i18n( "Last Used Views" ) );
-    forwardAction->setIcon( KIcon("go-next-view-page") );
+    forwardAction->setIcon( QIcon::fromTheme("go-next-view-page") );
     forwardAction->setShortcut( Qt::CTRL | Qt::Key_Tab );
     forwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views." ) );
     forwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
@@ -72,7 +74,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     
     backwardAction = actionCollection()->addAction ( "last_used_views_backward" );
     backwardAction->setText( i18n( "Last Used Views (Reverse)" ) );
-    backwardAction->setIcon( KIcon("go-previous-view-page") );
+    backwardAction->setIcon( QIcon::fromTheme("go-previous-view-page") );
     backwardAction->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_Tab );
     backwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views in reverse." ) );
     backwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );

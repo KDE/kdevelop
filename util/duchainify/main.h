@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QAtomicInt>
 #include <language/duchain/topducontext.h>
+#include <KUrl>
 
 namespace KDevelop {
 class ParseJob;

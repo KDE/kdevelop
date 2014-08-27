@@ -20,7 +20,7 @@
 
 #include <ksharedptr.h>
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop
 {
@@ -37,7 +37,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IAstContainer : public QSharedData
 {
   public:
     virtual ~IAstContainer();
-    typedef KSharedPtr<IAstContainer> Ptr;
+    typedef QExplicitlySharedDataPointer<IAstContainer> Ptr;
     
     /// Derived classes must redifine this typedef for CodeGenerator to work
     /// with this AST

@@ -26,6 +26,7 @@
 #include <QByteArray>
 #include <QMutex>
 #include <QMutexLocker>
+#include <threadweaver/qobjectdecorator.h>
 #include <QApplication>
 
 #include <kdebug.h>
@@ -89,23 +90,26 @@ public:
     bool hasReadContents : 1;
     bool aborted : 1;
     TopDUContext::Features features;
-    QList<QWeakPointer<QObject> > notify;
-    QWeakPointer<DocumentChangeTracker> tracker;
+    QList<QPointer<QObject> > notify;
+    QPointer<DocumentChangeTracker> tracker;
     RevisionReference revision;
     RevisionReference previousRevision;
 
     int parsePriority;
     ParseJob::SequentialProcessingFlags sequentialProcessingFlags;
+    ThreadWeaver::QObjectDecorator* decorator;
 };
 
 ParseJob::ParseJob( const IndexedString& url, KDevelop::ILanguageSupport* languageSupport )
-        : ThreadWeaver::JobSequence(),
+        : ThreadWeaver::Sequence(),
         d(new ParseJobPrivate(url, languageSupport))
-{}
+{
+    d->decorator = new ThreadWeaver::QObjectDecorator(this);
+}
 
 ParseJob::~ParseJob()
 {
-    typedef QWeakPointer<QObject> QObjectPointer;
+    typedef QPointer<QObject> QObjectPointer;
     foreach(const QObjectPointer &p, d->notify) {
         if(p) {
             QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, d->url), Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
@@ -195,7 +199,7 @@ ReferencedTopDUContext ParseJob::duChain() const
 
 bool ParseJob::abortRequested() const
 {
-    return d->abortRequested;
+    return d->abortRequested.load();
 }
 
 void ParseJob::requestAbort()
@@ -206,10 +210,10 @@ void ParseJob::requestAbort()
 void ParseJob::abortJob()
 {
     d->aborted = true;
-    setFinished(true);
+    setStatus(Status_Aborted);
 }
 
-void ParseJob::setNotifyWhenReady(const QList< QWeakPointer< QObject > >& notify
+void ParseJob::setNotifyWhenReady(const QList<QPointer< QObject > >& notify
 ) {
     d->notify = notify;
 }
@@ -277,7 +281,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
                                     "The file is %1 and exceeds the limit of %2.",
                                     KGlobal::locale()->formatByteSize(fileInfo.size()),
                                     KGlobal::locale()->formatByteSize(maximumFileSize)));
-            p->setFinalLocation(DocumentRange(document(), SimpleRange::invalid()));
+            p->setFinalLocation(DocumentRange(document(), KTextEditor::Range::invalid()));
             kWarning( 9007 ) << p->description() << p->explanation();
             return p;
         }
@@ -301,7 +305,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
               default:
                   break;
             }
-            p->setFinalLocation(DocumentRange(document(), SimpleRange::invalid()));
+            p->setFinalLocation(DocumentRange(document(), KTextEditor::Range::invalid()));
 
             kWarning( 9007 ) << "Could not open file" << document().str() << "(path" << localFile << ")" ;
 
@@ -518,6 +522,10 @@ bool ParseJob::hasTracker() const
     return d->tracker;
 }
 
+ThreadWeaver::QObjectDecorator* ParseJob::decorator() const
+{
+    return d->decorator;
 }
 
-#include "parsejob.moc"
+}
+

@@ -1,14 +1,12 @@
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 macro(SVN_CREATE_TEST name)
-    kde4_add_unit_test(${name} ${ARGN})
+    add_executable(${name} ${ARGN})
+    ecm_mark_as_test(${name})
     target_link_libraries(${name}
-                              ${QT_QTTEST_LIBRARY}
-                              ${QT_QTGUI_LIBRARY}
-                              ${KDE4_KDECORE_LIBS}
-                              kdevplatformtests
-                              kdevplatformutil
-                              kdevplatformvcs
+                              Qt5::Test
+                              Qt5::Gui
+                              KDev::Tests
+                              KDev::Util
+                              KDev::Vcs
                          )
 endmacro(SVN_CREATE_TEST)
 

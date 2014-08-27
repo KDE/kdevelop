@@ -25,8 +25,9 @@
 #include <kparts/part.h>
 
 #include <KTabWidget>
-#include <KMimeType>
 #include <KMimeTypeTrader>
+#include <QMimeType>
+#include <QMimeDatabase>
 #include <QBoxLayout>
 #include <QLayout>
 #include <QSplitter>
@@ -155,9 +156,9 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
     
     KUrl url = file.toUrl();
     
-    KMimeType::Ptr mimetype = KMimeType::findByUrl( url, 0, true );
+    QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(url);
     
-    KParts::ReadWritePart* part=KMimeTypeTrader::self()->createPartInstanceFromQuery<KParts::ReadWritePart>(mimetype->name(), widget, widget);
+    KParts::ReadWritePart* part=KMimeTypeTrader::self()->createPartInstanceFromQuery<KParts::ReadWritePart>(mimetype.name(), widget, widget);
     KTextEditor::Document* document=qobject_cast<KTextEditor::Document*>(part);
     Q_ASSERT(document);
     
@@ -201,4 +202,3 @@ void ApplyChangesWidget::updateDiffView(int index)
 
 }
 
-#include "applychangeswidget.moc"

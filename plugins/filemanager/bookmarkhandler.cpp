@@ -21,7 +21,6 @@
 */
 
 #include "bookmarkhandler.h"
-#include "bookmarkhandler.moc"
 #include "filemanager.h"
 #include "kdevfilemanagerplugin.h"
 #include <interfaces/icore.h>
@@ -33,7 +32,7 @@
 #include <KActionCollection>
 
 
-BookmarkHandler::BookmarkHandler( FileManager *parent, KMenu* kpopupmenu )
+BookmarkHandler::BookmarkHandler( FileManager *parent, QMenu* kpopupmenu )
     : QObject( parent ),
     KBookmarkOwner(),
     m_parent( parent ),
@@ -61,14 +60,14 @@ BookmarkHandler::~BookmarkHandler()
     delete m_bookmarkMenu;
 }
 
-QString BookmarkHandler::currentUrl() const
+QUrl BookmarkHandler::currentUrl() const
 {
-    return m_parent->dirOperator()->url().url();
+    return m_parent->dirOperator()->url();
 }
 
 QString BookmarkHandler::currentTitle() const
 {
-    return currentUrl();
+    return currentUrl().toDisplayString();
 }
 
 void BookmarkHandler::openBookmark( const KBookmark & bm, Qt::MouseButtons, Qt::KeyboardModifiers )

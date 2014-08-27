@@ -21,11 +21,12 @@
 #include "pastebinplugin.h"
 #include <QVariantList>
 
+#include <vcs/interfaces/ipatchsource.h>
+
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <interfaces/ipatchsource.h>
 #include <kjobtrackerinterface.h>
 #include <KIO/Job>
 #include <KMessageBox>
@@ -35,10 +36,10 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(KDevPastebinFactory, registerPlugin<PastebinPlugin>(); )
-K_EXPORT_PLUGIN(KDevPastebinFactory(KAboutData("kdevpastebin","kdevpastebin", ki18n("Pastebin Plugin"), "0.1", ki18n("Easily export patches to the Pastebin service"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevPastebinFactory(KAboutData("kdevpastebin","kdevpastebin", ki18n("Pastebin Plugin"), "0.1", ki18n("Easily export patches to the Pastebin service"), KAboutData::License_GPL)))
 
 PastebinPlugin::PastebinPlugin ( QObject* parent, const QVariantList& ) 
-    : IPlugin ( KDevPastebinFactory::componentData(), parent )
+    : IPlugin ( "kdevpastebin", parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchExporter )
 }
@@ -93,7 +94,7 @@ void PastebinPlugin::data(KIO::Job* job, const QByteArray &data)
         } else if (it->isEmpty() || it->startsWith("ERROR")) {
             KMessageBox::error(0, *it);
         } else {
-            QString htmlLink=QString("<a href='%1'>%1</a>").arg(*it);
+            QString htmlLink=QStringLiteral("<a href='%1'>%1</a>").arg(*it);
             KMessageBox::information(0, i18nc("The parameter is the link where the patch is stored", "<qt>You can find your patch at:<br/>%1</qt>", htmlLink), QString(), QString(), KMessageBox::AllowLink | KMessageBox::Notify);
         }
         m_result.erase(it);
@@ -101,3 +102,5 @@ void PastebinPlugin::data(KIO::Job* job, const QByteArray &data)
         *it += data;
     }
 }
+
+#include "pastebinplugin.moc"

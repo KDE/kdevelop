@@ -10,12 +10,12 @@ set(kdevbazaar_SRCS
     copyjob.cpp
 )
 
-kde4_add_plugin(kdevbazaar ${kdevbazaar_SRCS})
+add_library(kdevbazaar MODULE ${kdevbazaar_SRCS})
 target_link_libraries(kdevbazaar
     ${KDEVPLATFORM_VCS_LIBRARIES}
 )
 
-install(TARGETS kdevbazaar DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevbazaar DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 configure_file(kdevbazaar.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevbazaar.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevbazaar.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

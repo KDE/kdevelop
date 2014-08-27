@@ -17,7 +17,7 @@
 #include "projectfolder.h"
 
 #include <interfaces/iproject.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <KLocalizedString>
 
 using namespace KDevelop;
@@ -93,6 +93,5 @@ bool FilteredProjectFolder::isClassFiltered(const KDevelop::QualifiedIdentifier&
   return !a_id.last().toString().contains(m_filterString, Qt::CaseInsensitive);
 }
 
-#include "projectfolder.moc"
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

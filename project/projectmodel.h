@@ -193,11 +193,11 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         /** @returns RTTI info, allows to know the type of item */
         virtual int type() const;
 
-        /** @returns a string to pass to KIcon as icon-name suitable to represent this item. */
+        /** @returns a string to pass to QIcon::fromTheme() as icon-name suitable to represent this item. */
         virtual QString iconName() const;
 
         /** Get the path of this item (if any) converted to a url */
-        KDE_DEPRECATED KUrl url() const;
+        KDEVPLATFORMPROJECT_DEPRECATED KUrl url() const;
 
         /**
          * Set the path of this item.
@@ -432,8 +432,6 @@ public:
 
     ProjectModel( QObject *parent = 0 );
     virtual ~ProjectModel();
-
-    void resetModel();
 
     void clear();
 

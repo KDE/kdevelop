@@ -26,7 +26,7 @@
 #include <klocale.h>
 #include <kencodingprober.h>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <language/codegen/documentchangeset.h>
@@ -74,7 +74,7 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
             
             DocumentChangePointer change = DocumentChangePointer(new DocumentChange(
                 IndexedString(filename), 
-                SimpleRange(lineno, start, lineno, end),
+                KTextEditor::Range(lineno, start, lineno, end),
                 re.cap(0), QString()));
             
             res << GrepOutputItem(change, data, false);
@@ -169,7 +169,7 @@ void GrepJob::slotFindFinished()
     emit showMessage(this, i18np("Searching for <b>%2</b> in one file",
                                  "Searching for <b>%2</b> in %1 files",
                                  m_fileList.length(),
-                                 Qt::escape(m_regExp.pattern())));
+                                 m_regExp.pattern().toHtmlEscaped()));
 
     m_workState = WorkGrep;
     QMetaObject::invokeMethod( this, "slotWork", Qt::QueuedConnection);
@@ -331,4 +331,3 @@ void GrepJob::setPatternString(const QString& patternString)
     setObjectName(i18n("Grep: %1", m_patternString));
 }
 
-#include "grepjob.moc"

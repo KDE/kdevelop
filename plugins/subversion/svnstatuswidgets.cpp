@@ -83,7 +83,7 @@ SvnStatusDisplayWidget::SvnStatusDisplayWidget( const KUrl& url, bool repContact
     sortByColumn(0, Qt::AscendingOrder);
 
 //     QHeaderView *headerView = header();
-//     headerView->setResizeMode( QHeaderView::ResizeToContents );
+//     headerView->setSectionResizeMode( QHeaderView::ResizeToContents );
 }
 
 SvnStatusDisplayWidget::~SvnStatusDisplayWidget()

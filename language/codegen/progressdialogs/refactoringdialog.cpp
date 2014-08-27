@@ -21,7 +21,7 @@
 #include "refactoringdialog.h"
 
 #include <language/duchain/duchainlock.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/navigation/usescollector.h>
 
 namespace KDevelop

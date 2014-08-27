@@ -29,7 +29,7 @@
 #include <QtCore/QMutex>
 #include <QtCore/QHash>
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 #include <interfaces/istatus.h>
 #include <language/duchain/topducontext.h>
 #include "parsejob.h"
@@ -38,8 +38,9 @@ class QMutex;
 
 namespace ThreadWeaver
 {
-class Weaver;
 class Job;
+class QObjectDecorator;
+class Weaver;
 }
 
 namespace KDevelop
@@ -79,11 +80,6 @@ public:
     };
 
     /**
-     * Abort or dequeue all current running jobs with the specified @p parent.
-     */
-    Q_SCRIPTABLE void clear(QObject* parent);
-
-    /**
      * Queries the background parser as to whether there is currently
      * a parse job for @p document, and if so, returns it.
      *
@@ -92,11 +88,6 @@ public:
      * function.
      */
     Q_SCRIPTABLE ParseJob* parseJobForDocument(const IndexedString& document) const;
-
-    /**
-     * The dependency policy which applies to all jobs (it is applied automatically).
-     */
-    Q_SCRIPTABLE ParserDependencyPolicy* dependencyPolicy() const;
 
     /**
      * Set how many ThreadWeaver threads the background parser should set up and use.
@@ -215,7 +206,7 @@ public Q_SLOTS:
     void loadSettings();
 
 protected Q_SLOTS:
-    void parseComplete(ThreadWeaver::Job *job);
+    void parseComplete(const ThreadWeaver::JobPointer& job);
     void parseProgress(KDevelop::ParseJob*, float value, QString text);
     void startTimer();
     void aboutToQuit();

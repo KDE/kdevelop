@@ -21,8 +21,8 @@
 #include "gitmessagehighlighter.h"
 
 #include <QtCore/QString>
-#include <QtGui/QTextCharFormat>
-#include <QtGui/QTextEdit>
+#include <QTextCharFormat>
+#include <QTextEdit>
 #include <KDE/KLocalizedString>
 
 /// Recomended summary limit from http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
@@ -113,4 +113,3 @@ void GitMessageHighlighter::highlightBlock(const QString& text)
     setCurrentBlockState(blockState);
 }
 
-#include "gitmessagehighlighter.moc"

@@ -138,4 +138,3 @@ void ParseProjectJob::start() {
     }
 }
 
-#include "parseprojectjob.moc"

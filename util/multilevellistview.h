@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_MULTILEVELLISTVIEW_H
 #define KDEVPLATFORM_MULTILEVELLISTVIEW_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <KSelectionProxyModel>
 #include "utilexport.h"
 

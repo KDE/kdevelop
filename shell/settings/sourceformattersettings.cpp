@@ -23,13 +23,16 @@ Boston, MA 02110-1301, USA.
 #include <QList>
 #include <QListWidgetItem>
 #include <QInputDialog>
+#include <QMimeDatabase>
 #include <KMessageBox>
 #include <KIconLoader>
+#include <KDebug>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
-#include <ktexteditor/editorchooser.h>
 #include <ktexteditor/configinterface.h>
+#include <KCoreAddons/KAboutData>
+#include <KI18n/KLocalizedString>
 
 #include <interfaces/iplugin.h>
 #include <interfaces/ilanguage.h>
@@ -43,7 +46,7 @@ Boston, MA 02110-1301, USA.
 #define STYLE_ROLE (Qt::UserRole+1)
 
 K_PLUGIN_FACTORY(SourceFormatterSettingsFactory, registerPlugin<SourceFormatterSettings>();)
-K_EXPORT_PLUGIN(SourceFormatterSettingsFactory("kcm_kdevsourceformattersettings"))
+// K_EXPORT_PLUGIN(SourceFormatterSettingsFactory("kcm_kdevsourceformattersettings"))
 
 using KDevelop::Core;
 using KDevelop::ISourceFormatter;
@@ -58,7 +61,7 @@ LanguageSettings::LanguageSettings()
 }
 
 SourceFormatterSettings::SourceFormatterSettings(QWidget *parent, const QVariantList &args)
-    : KCModule(SourceFormatterSettingsFactory::componentData(), parent, args)
+    : KCModule(KAboutData::pluginData("kcm_kdevsourceformattersettings"), parent, args)
 {
     setupUi(this);
     connect( cbLanguages, SIGNAL(currentIndexChanged(int)), SLOT(selectLanguage(int)) );
@@ -71,22 +74,19 @@ SourceFormatterSettings::SourceFormatterSettings(QWidget *parent, const QVariant
     connect( btnEditStyle, SIGNAL(clicked()), SLOT(editStyle()) );
     connect( styleList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(styleNameChanged(QListWidgetItem*)) );
 
-    KTextEditor::Editor *editor = KTextEditor::EditorChooser::editor();
-    if (!editor)
-        KMessageBox::error(this, i18n("A KDE text-editor component could not be found.\n"
-        "Please check your KDE installation."));
-
-    m_document = editor->createDocument(this);
+    m_document = KTextEditor::Editor::instance()->createDocument(this);
     m_document->setReadWrite(false);
 
-    KTextEditor::View* view = qobject_cast<KTextEditor::View*>(m_document->createView(textEditor));
+    m_view = m_document->createView(textEditor);
+    m_view->setStatusBarEnabled(false);
+
     QVBoxLayout *layout2 = new QVBoxLayout(textEditor);
-    layout2->addWidget(view);
+    layout2->addWidget(m_view);
     textEditor->setLayout(layout2);
-    view->show();
+    m_view->show();
 
     KTextEditor::ConfigInterface *iface =
-    qobject_cast<KTextEditor::ConfigInterface*>(view);
+    qobject_cast<KTextEditor::ConfigInterface*>(m_view);
     if (iface) {
         iface->setConfigValue("dynamic-word-wrap", false);
         iface->setConfigValue("icon-bar", false);
@@ -120,14 +120,14 @@ void SourceFormatterSettings::load()
         }
         for( const SourceFormatterStyle* style: formatter->styles ) {
             for ( const SourceFormatterStyle::MimeHighlightPair& item: style->mimeTypes() ) {
-                KMimeType::Ptr mimePtr = KMimeType::mimeType(item.mimeType);
-                if (!mimePtr) {
+                QMimeType mime = QMimeDatabase().mimeTypeForName(item.mimeType);
+                if (!mime.isValid()) {
                     kWarning() << "plugin" << info.name() << "supports unknown mimetype entry" << item.mimeType;
                     continue;
                 }
                 QString languageName = item.highlightMode;
                 LanguageSettings& l = languages[languageName];
-                l.mimetypes.append( mimePtr );
+                l.mimetypes.append(mime);
                 l.formatters.insert( formatter );
             }
         }
@@ -154,8 +154,8 @@ void SourceFormatterSettings::load()
         // Pick the first appropriate mimetype for this language
         KConfigGroup grp = fmtctrl->configuration();
         LanguageSettings& l = languages[name];
-        foreach (const KMimeType::Ptr& mimetype, l.mimetypes) {
-            QStringList formatterAndStyleName = grp.readEntry( mimetype->name(), "" ).split( "||", QString::KeepEmptyParts );
+        foreach (const QMimeType& mimetype, l.mimetypes) {
+            QStringList formatterAndStyleName = grp.readEntry(mimetype.name(), "").split("||", QString::KeepEmptyParts);
             FormatterMap::const_iterator formatterIter = formatters.constFind(formatterAndStyleName.first());
             if (formatterIter == formatters.constEnd()) {
                 kDebug() << "Reference to unknown formatter" << formatterAndStyleName.first();
@@ -220,8 +220,8 @@ void SourceFormatterSettings::save()
     KConfigGroup grp = Core::self()->sourceFormatterControllerInternal()->configuration();
 
     for ( LanguageMap::const_iterator iter = languages.constBegin(); iter != languages.constEnd(); ++iter ) {
-        foreach( const KMimeType::Ptr& mime, iter.value().mimetypes ) {
-            grp.writeEntry( mime->name(), QString("%1||%2").arg(iter.value().selectedFormatter->formatter->name()).arg( iter.value().selectedStyle->name() ) );
+        foreach(const QMimeType& mime, iter.value().mimetypes) {
+            grp.writeEntry(mime.name(), QString("%1||%2").arg(iter.value().selectedFormatter->formatter->name()).arg(iter.value().selectedStyle->name()));
         }
     }
     foreach( SourceFormatter* fmt, formatters )
@@ -388,7 +388,7 @@ void SourceFormatterSettings::editStyle()
     LanguageSettings& l = languages[ language ];
     SourceFormatter* fmt = l.selectedFormatter;
 
-    KMimeType::Ptr mimetype = l.mimetypes.first();
+    QMimeType mimetype = l.mimetypes.first();
     if( fmt->formatter->editStyleWidget( mimetype ) != 0 ) {
         EditStyleDialog dlg( fmt->formatter, mimetype, *l.selectedStyle, this );
         if( dlg.exec() == QDialog::Accepted )
@@ -475,7 +475,7 @@ void SourceFormatterSettings::updatePreview()
         if( style->usePreview() )
         {
             ISourceFormatter* ifmt = fmt->formatter;
-            KMimeType::Ptr mime = l.mimetypes.first();
+            QMimeType mime = l.mimetypes.first();
             m_document->setHighlightingMode( style->modeForMimetype( mime ) );
 
             //NOTE: this is ugly, but otherwise kate might remove tabs again :-/
@@ -503,7 +503,7 @@ void SourceFormatterSettings::updatePreview()
     {
         m_document->setText( i18n( "No Language selected" ) );
     }
-    m_document->activeView()->setCursorPosition( KTextEditor::Cursor( 0, 0 ) );
+    m_view->setCursorPosition( KTextEditor::Cursor( 0, 0 ) );
     m_document->setReadWrite( false );
 }
 

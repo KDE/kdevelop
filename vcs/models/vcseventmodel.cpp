@@ -181,4 +181,3 @@ void VcsEventModel::jobReceivedResults(KJob* job)
 
 }
 
-#include "vcseventmodel.moc"

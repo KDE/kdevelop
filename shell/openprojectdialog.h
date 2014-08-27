@@ -13,6 +13,7 @@
 
 #include <kassistantdialog.h>
 #include <kio/udsentry.h>
+#include <KUrl>
 
 class KPageWidgetItem;
 namespace KIO

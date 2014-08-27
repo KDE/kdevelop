@@ -23,7 +23,7 @@
 
 #include "classbrowserplugin.h"
 
-#include <QtGui/QAction>
+#include <QAction>
 
 #include <klocale.h>
 #include <kpluginfactory.h>
@@ -40,7 +40,7 @@
 #include "language/duchain/duchain.h"
 #include "language/duchain/duchainlock.h"
 #include "language/duchain/declaration.h"
-#include "language/duchain/indexedstring.h"
+#include <serialization/indexedstring.h>
 
 #include "classmodel.h"
 #include "classtree.h"
@@ -53,7 +53,7 @@
 #include <interfaces/iprojectcontroller.h>
 
 K_PLUGIN_FACTORY(KDevClassBrowserFactory, registerPlugin<ClassBrowserPlugin>(); )
-K_EXPORT_PLUGIN(KDevClassBrowserFactory(KAboutData("kdevclassbrowser","kdevclassbrowser",ki18n("Class Browser"), "0.1", ki18n("This plugin provides a browsable model of the currently parsed classes and other items."), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevClassBrowserFactory(KAboutData("kdevclassbrowser","kdevclassbrowser",ki18n("Class Browser"), "0.1", ki18n("This plugin provides a browsable model of the currently parsed classes and other items."), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
@@ -82,7 +82,7 @@ private:
 };
 
 ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(KDevClassBrowserFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevclassbrowser", parent)
     , m_factory(new ClassBrowserFactory(this))
     , m_activeClassTree(0)
 {
@@ -175,7 +175,7 @@ void ClassBrowserPlugin::showDefinition(DeclarationPointer declaration)
   if (decl)
   {
     KUrl url(decl->url().str());
-    KTextEditor::Range range = decl->rangeInCurrentRevision().textRange();
+    KTextEditor::Range range = decl->rangeInCurrentRevision();
 
     readLock.unlock();
 

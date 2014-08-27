@@ -23,7 +23,7 @@ QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
 {
     KService::Ptr service = KService::serviceByDesktopName("konsolepart");
     KPluginFactory* factory = nullptr;
-    if (!service.isNull()) {
+    if (service) {
         factory = KPluginLoader(*service.data()).factory();
     }
     if (!factory) {
@@ -33,7 +33,7 @@ QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
 }
 
 K_PLUGIN_FACTORY(KonsoleViewFactory, registerPlugin<KDevKonsoleViewPlugin>( QString(), &createKonsoleView ); )
-K_EXPORT_PLUGIN(KonsoleViewFactory(KAboutData("kdevkonsoleview","kdevkonsole", ki18n("Konsole"), "0.1", ki18n("This plugin provides KDevelop with an embedded konsole for quick and easy command line access."), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KonsoleViewFactory(KAboutData("kdevkonsoleview","kdevkonsole", ki18n("Konsole"), "0.1", ki18n("This plugin provides KDevelop with an embedded konsole for quick and easy command line access."), KAboutData::License_GPL)))
 
 class KDevKonsoleViewFactory: public KDevelop::IToolViewFactory{
 public:
@@ -56,7 +56,7 @@ private:
 };
 
 KDevKonsoleViewPlugin::KDevKonsoleViewPlugin( KPluginFactory* konsoleFactory, QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin( KonsoleViewFactory::componentData(), parent )
+    : KDevelop::IPlugin( QStringLiteral("kdevkonsoleview"), parent )
     , m_konsoleFactory(konsoleFactory)
     , m_viewFactory(konsoleFactory ? new KDevKonsoleViewFactory(this) : nullptr)
 {

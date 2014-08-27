@@ -484,4 +484,3 @@ CvsJob * CvsProxy::status(const QString & repo, const KUrl::List & files, bool r
     return NULL;
 }
 
-#include "cvsproxy.moc"

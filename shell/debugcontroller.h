@@ -25,14 +25,16 @@
 #define KDEVPLATFORM_DEBUGCONTROLLER_H
 
 #include <QtCore/QVariantList>
-#include <QWeakPointer>
+#include <QPointer>
+
 #include <KDE/KXMLGUIClient>
-#include <KDE/KTextEditor/MarkInterface>
+
+#include <KTextEditor/MarkInterface>
 
 #include "../interfaces/idebugcontroller.h"
 #include "../debugger/interfaces/idebugsession.h"
 
-class KAction;
+class QAction;
 
 namespace Sublime {
     class Area;
@@ -96,20 +98,20 @@ private:
 
     static const QPixmap* executionPointPixmap();
 
-    KAction* m_continueDebugger;
-    //KAction* m_restartDebugger;
-    KAction* m_stopDebugger;
-    KAction* m_interruptDebugger;
-    KAction* m_runToCursor;
-    KAction* m_jumpToCursor;
-    KAction* m_stepOver;
-    KAction* m_stepIntoInstruction;
-    KAction* m_stepInto;
-    KAction* m_stepOverInstruction;
-    KAction* m_stepOut;
-    KAction* m_toggleBreakpoint;
+    QAction* m_continueDebugger;
+    //QAction* m_restartDebugger;
+    QAction* m_stopDebugger;
+    QAction* m_interruptDebugger;
+    QAction* m_runToCursor;
+    QAction* m_jumpToCursor;
+    QAction* m_stepOver;
+    QAction* m_stepIntoInstruction;
+    QAction* m_stepInto;
+    QAction* m_stepOverInstruction;
+    QAction* m_stepOut;
+    QAction* m_toggleBreakpoint;
 
-    QWeakPointer<IDebugSession> m_currentSession;
+    QPointer<IDebugSession> m_currentSession;
     BreakpointModel *m_breakpointModel;
     VariableCollection *m_variableCollection;    
     

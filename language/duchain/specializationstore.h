@@ -23,7 +23,7 @@
 
 #include "instantiationinformation.h"
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop {
   class DeclarationId;

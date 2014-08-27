@@ -28,7 +28,9 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/iruncontroller.h>
-#include <KIcon>
+
+#include <QIcon>
+
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KDebug>
@@ -49,7 +51,7 @@ class BranchItem : public QStandardItem
         void setCurrent(bool current)
         {
             setData(current, BranchesListModel::CurrentRole);
-            setIcon(KIcon( current ? "arrow-right" : ""));
+            setIcon(QIcon::fromTheme( current ? "arrow-right" : ""));
         }
         
         void setData(const QVariant& value, int role = Qt::UserRole + 1)
@@ -96,9 +98,13 @@ static QVariant runSynchronously(KDevelop::VcsJob* job)
 BranchesListModel::BranchesListModel(QObject* parent)
     : QStandardItemModel(parent), dvcsplugin(0)
 {
-    QHash< int, QByteArray > roles = roleNames();
+}
+
+QHash<int, QByteArray> BranchesListModel::roleNames() const
+{
+    auto roles = QAbstractItemModel::roleNames();
     roles.insert(CurrentRole, "isCurrent");
-    setRoleNames(roles);
+    return roles;
 }
 
 void BranchesListModel::createBranch(const QString& baseBranch, const QString& newBranch)

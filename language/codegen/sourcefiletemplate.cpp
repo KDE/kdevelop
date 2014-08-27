@@ -30,9 +30,12 @@
 #include <KZip>
 #include <KTar>
 #include <KConfigGroup>
+#include <kcomponentdata.h>
 
 #include <QFileInfo>
 #include <QDomDocument>
+#include <QStandardPaths>
+#include <QDir>
 
 using namespace KDevelop;
 typedef SourceFileTemplate::ConfigOption ConfigOption;
@@ -42,6 +45,7 @@ class KDevelop::SourceFileTemplatePrivate
 public:
     KArchive* archive;
     QString descriptionFileName;
+    QStringList searchLocations;
 
     ConfigOption readEntry(const QDomElement& element, TemplateRenderer* renderer);
 };
@@ -143,8 +147,18 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
     d->descriptionFileName = templateDescription;
     QString archiveFileName;
 
+    QStringList templateFiles;
     const QString templateBaseName = QFileInfo(templateDescription).baseName();
-    foreach (const QString& file, ICore::self()->componentData().dirs()->findAllResources("data", resourcePrefix + "/templates/"))
+
+    d->searchLocations.append(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "/kdevfiletemplates/templates/", QStandardPaths::LocateDirectory));
+
+    foreach(const QString& dir, d->searchLocations) {
+        foreach(const QString& file, QDir(dir).entryList(QDir::Files)) {
+            templateFiles += dir + file;
+        }
+    }
+
+    foreach (const QString& file, templateFiles)
     {
         kDebug() << "Found template archive" << file;
         if (QFileInfo(file).baseName() == templateBaseName)
@@ -308,4 +322,10 @@ QHash< QString, QList<ConfigOption> > SourceFileTemplate::customOptions(Template
         options.insert(groupName, optionGroup);
     }
     return options;
+}
+
+void SourceFileTemplate::addAdditionalSearchLocation(const QString& location)
+{
+    if(!d->searchLocations.contains(location))
+        d->searchLocations.append(location);
 }

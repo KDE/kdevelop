@@ -40,6 +40,8 @@
 #include "problemreporterplugin.h"
 #include "watcheddocumentset.h"
 
+#include <KIcon>
+
 using namespace KDevelop;
 
 namespace {
@@ -133,11 +135,11 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
             return getDisplayUrl(p->finalLocation().document.str(), baseDirectory);
         case Line:
             if (p->finalLocation().isValid())
-                return QString::number(p->finalLocation().start.line + 1);
+                return QString::number(p->finalLocation().start().line() + 1);
             break;
         case Column:
             if (p->finalLocation().isValid())
-                return QString::number(p->finalLocation().start.column + 1);
+                return QString::number(p->finalLocation().start().column() + 1);
             break;
         }
         break;
@@ -174,7 +176,7 @@ QModelIndex ProblemModel::index(int row, int column, const QModelIndex & parent)
     }
 
     if (row < m_problems.count())
-        return createIndex(row, column, 0);
+        return createIndex(row, column);
 
     return QModelIndex();
 }
@@ -288,16 +290,18 @@ void ProblemModel::getProblemsInternal(TopDUContext* context, bool showImports, 
 void ProblemModel::rebuildProblemList()
 {
     // No locking here, because it may be called from an already locked context
+    beginResetModel();
     m_problems = getProblems(m_documentSet->get(), m_showImports);
-    reset();
+    endResetModel();
 }
 
 void ProblemModel::setCurrentDocument(KDevelop::IDocument* document)
 {
     QWriteLocker locker(&m_lock);
+    beginResetModel();
     m_currentDocument = document->url();
     m_documentSet->setCurrentDocument(IndexedString(m_currentDocument));
-    reset();
+    endResetModel();
 }
 
 void ProblemModel::setShowImports(bool showImports)

@@ -20,9 +20,12 @@
     Boston, MA 02110-1301, USA.
 */
 
+#include "vcsfilechangesmodel.h"
+
+#include <QIcon>
+
 #include <KLocale>
-#include <KIcon>
-#include <KMimeType>
+#include <QMimeDatabase>
 #include <KDebug>
 
 #include <interfaces/icore.h>
@@ -30,7 +33,6 @@
 
 #include <vcs/vcsstatusinfo.h>
 
-#include "vcsfilechangesmodel.h"
 
 namespace KDevelop
 {
@@ -56,25 +58,25 @@ static QString stateToString(KDevelop::VcsStatusInfo::State state)
     return i18nc("Unknown VCS file status, probably a backend error", "?");
 }
 
-static KIcon stateToIcon(KDevelop::VcsStatusInfo::State state)
+static QIcon stateToIcon(KDevelop::VcsStatusInfo::State state)
 {
     switch(state)
     {
         case KDevelop::VcsStatusInfo::ItemAdded:
-            return KIcon("vcs-added");
+            return QIcon::fromTheme("vcs-added");
         case KDevelop::VcsStatusInfo::ItemDeleted:
-            return KIcon("vcs-removed");
+            return QIcon::fromTheme("vcs-removed");
         case KDevelop::VcsStatusInfo::ItemHasConflicts:
-            return KIcon("vcs-conflicting");
+            return QIcon::fromTheme("vcs-conflicting");
         case KDevelop::VcsStatusInfo::ItemModified:
-            return KIcon("vcs-locally-modified");
+            return QIcon::fromTheme("vcs-locally-modified");
         case KDevelop::VcsStatusInfo::ItemUpToDate:
-            return KIcon("vcs-normal");
+            return QIcon::fromTheme("vcs-normal");
         case KDevelop::VcsStatusInfo::ItemUnknown:
         case KDevelop::VcsStatusInfo::ItemUserState:
-            return KIcon("unknown");
+            return QIcon::fromTheme("unknown");
     }
-    return KIcon("dialog-error");
+    return QIcon::fromTheme("dialog-error");
 }
 
 class VcsFileChangesModelPrivate
@@ -104,7 +106,10 @@ int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsS
     } else {
         if(!it1) {
             QString path = ICore::self()->projectController()->prettyFileName(status.url(), KDevelop::IProjectController::FormatPlain);
-            KIcon icon(KMimeType::findByUrl(status.url(), 0, false, true)->iconName(status.url()));
+            QMimeType mime = status.url().isLocalFile()
+                ? QMimeDatabase().mimeTypeForFile(status.url().toLocalFile(), QMimeDatabase::MatchExtension)
+                : QMimeDatabase().mimeTypeForUrl(status.url());
+            QIcon icon = QIcon::fromTheme(mime.iconName());
             it1 = new QStandardItem(icon, path);
             itStatus = new QStandardItem;
 

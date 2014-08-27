@@ -22,9 +22,9 @@
 #include "filtermodel.h"
 
 #include <QDebug>
+#include <QIcon>
 
 #include <KLocalizedString>
-#include <KIcon>
 
 using namespace KDevelop;
 
@@ -136,17 +136,17 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         }
         if (filter.targets & Filter::Files && filter.targets & Filter::Folders) {
             if (role == Qt::DecorationRole) {
-                return KIcon("document-open");
+                return QIcon::fromTheme("document-open");
             }
             return i18n("Files and Folders");
         } else if (filter.targets & Filter::Folders) {
             if (role == Qt::DecorationRole) {
-                return KIcon("folder");
+                return QIcon::fromTheme("folder");
             }
             return i18n("Folders");
         } else {
             if (role == Qt::DecorationRole) {
-                return KIcon("text-plain");
+                return QIcon::fromTheme("text-plain");
             }
             return i18n("Files");
         }
@@ -158,12 +158,12 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
         }
         if (filter.type == Filter::Inclusive) {
             if (role == Qt::DecorationRole) {
-                return KIcon("list-add");
+                return QIcon::fromTheme("list-add");
             }
             return i18n("Include");
         } else {
             if (role == Qt::DecorationRole) {
-                return KIcon("list-remove");
+                return QIcon::fromTheme("list-remove");
             }
             return i18n("Exclude");
         }
@@ -286,4 +286,3 @@ bool FilterModel::setItemData(const QModelIndex& index, const QMap< int, QVarian
     return true;
 }
 
-#include "filtermodel.moc"

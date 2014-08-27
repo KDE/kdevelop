@@ -23,13 +23,12 @@
 
 #include <language/codegen/documentchangeset.h>
 
-#include <qtest_kde.h>
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>
+#include <QtTest/QTest>
 
-QTEST_KDEMAIN(TestDocumentchangeset, NoGUI);
+QTEST_GUILESS_MAIN(TestDocumentchangeset);
 
 using namespace KDevelop;
 
@@ -52,19 +51,19 @@ void TestDocumentchangeset::testReplaceSameLine()
     changes.addChange(
         DocumentChange(
             file.url(),
-            SimpleRange(0, 0, 0, 3),
+            KTextEditor::Range(0, 0, 0, 3),
             "abc", "foobar"
     ));
     changes.addChange(
         DocumentChange(
             file.url(),
-            SimpleRange(0, 4, 0, 7),
+            KTextEditor::Range(0, 4, 0, 7),
             "def", "foobar"
     ));
     changes.addChange(
         DocumentChange(
             file.url(),
-            SimpleRange(0, 8, 0, 11),
+            KTextEditor::Range(0, 8, 0, 11),
             "ghi", "foobar"
     ));
 
@@ -73,4 +72,3 @@ void TestDocumentchangeset::testReplaceSameLine()
     QVERIFY(result);
 }
 
-#include "test_documentchangeset.moc"

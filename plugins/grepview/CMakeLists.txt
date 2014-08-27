@@ -20,13 +20,13 @@ set(kdevgrepview_PART_UI
     grepoutputview.ui
 )
 
-kde4_add_ui_files(kdevgrepview_PART_SRCS ${kdevgrepview_PART_UI})
-kde4_add_plugin(kdevgrepview ${kdevgrepview_PART_SRCS})
+qt5_wrap_ui(kdevgrepview_PART_SRCS ${kdevgrepview_PART_UI})
+add_library(kdevgrepview MODULE ${kdevgrepview_PART_SRCS})
 target_link_libraries(kdevgrepview
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KF5::Parts
+    KF5::TextEditor
+    KF5::Completion
+    KF5::TextEditor
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
@@ -34,13 +34,13 @@ target_link_libraries(kdevgrepview
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
 )
 
-install(TARGETS kdevgrepview DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevgrepview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############
 
 configure_file(kdevgrepview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgrepview.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevgrepview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevgrepview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevgrepview )
+install( FILES kdevgrepview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevgrepview )
 
 add_subdirectory(tests)

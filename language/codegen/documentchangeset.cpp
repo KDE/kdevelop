@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include <QStringList>
+#include <QMimeDatabase>
 
 #include <KLocalizedString>
 
@@ -77,13 +78,13 @@ namespace
 {
 inline bool changeIsValid(const DocumentChange& change, const QStringList& textLines)
 {
-    return change.m_range.start <= change.m_range.end &&
-           change.m_range.end.line < textLines.size() &&
-           change.m_range.start.line >= 0 &&
-           change.m_range.start.column >= 0 &&
-           change.m_range.start.column <= textLines[change.m_range.start.line].length() &&
-           change.m_range.end.column >= 0 &&
-           change.m_range.end.column <= textLines[change.m_range.end.line].length();
+    return change.m_range.start() <= change.m_range.end() &&
+           change.m_range.end().line() < textLines.size() &&
+           change.m_range.start().line() >= 0 &&
+           change.m_range.start().column() >= 0 &&
+           change.m_range.start().column() <= textLines[change.m_range.start().line()].length() &&
+           change.m_range.end().column() >= 0 &&
+           change.m_range.end().column() <= textLines[change.m_range.end().line()].length();
 }
 
 inline bool duplicateChanges(const DocumentChangePointer& previous, const DocumentChangePointer& current)
@@ -96,19 +97,19 @@ inline bool duplicateChanges(const DocumentChangePointer& previous, const Docume
            (previous->m_ignoreOldText && current->m_ignoreOldText));
 }
 
-inline QString rangeText(const SimpleRange& range, const QStringList& textLines)
+inline QString rangeText(const KTextEditor::Range& range, const QStringList& textLines)
 {
     QStringList ret;
-    ret.reserve(range.end.line - range.start.line + 1);
-    for(int line = range.start.line; line <= range.end.line; ++line) {
+    ret.reserve(range.end().line() - range.start().line() + 1);
+    for(int line = range.start().line(); line <= range.end().line(); ++line) {
         const QString lineText = textLines.at(line);
         int startColumn = 0;
         int endColumn = lineText.length();
-        if (line == range.start.line) {
-            startColumn = range.start.column;
+        if (line == range.start().line()) {
+            startColumn = range.start().column();
         }
-        if (line == range.end.line) {
-            endColumn = range.end.column;
+        if (line == range.end().line()) {
+            endColumn = range.end().column();
         }
         ret << lineText.mid(startColumn, endColumn - startColumn);
     }
@@ -305,34 +306,31 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
 {
     DynamicCodeRepresentation* dynamic = dynamic_cast<DynamicCodeRepresentation*>(repr);
     if(dynamic) {
-        dynamic->startEdit();
+        auto transaction = dynamic->makeEditTransaction();
         //Replay the changes one by one
 
         for(int pos = sortedChangesList.size()-1; pos >= 0; --pos) {
             const DocumentChange& change(*sortedChangesList[pos]);
-            if(!dynamic->replace(change.m_range.textRange(), change.m_oldText, change.m_newText, change.m_ignoreOldText))
+            if(!dynamic->replace(change.m_range, change.m_oldText, change.m_newText, change.m_ignoreOldText))
             {
                 QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"")
                     .arg(change.m_document.str())
-                    .arg(change.m_range.start.line)
-                    .arg(change.m_range.start.column)
-                    .arg(change.m_range.end.line)
-                    .arg(change.m_range.end.column)
+                    .arg(change.m_range.start().line())
+                    .arg(change.m_range.start().column())
+                    .arg(change.m_range.end().line())
+                    .arg(change.m_range.end().column())
                     .arg(change.m_oldText)
-                    .arg(dynamic->rangeText(change.m_range.textRange()))
+                    .arg(dynamic->rangeText(change.m_range))
                     .arg(change.m_newText);
 
                 if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
                     kWarning() << warningString;
                 } else if(replacePolicy == DocumentChangeSet::StopOnFailedChange) {
-                    dynamic->endEdit();
                     return DocumentChangeSet::ChangeResult(warningString);
                 }
                 //If set to ignore failed changes just continue with the others
             }
         }
-
-        dynamic->endEdit();
         return true;
     }
 
@@ -366,7 +364,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
 
     KUrl url = file.toUrl();
 
-    KMimeType::Ptr mime = KMimeType::findByUrl(url);
+    QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
     QVector<int> removedLines;
 
     for(int pos = sortedChanges.size()-1; pos >= 0; --pos) {
@@ -376,10 +374,10 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
             ((encountered = rangeText(change.m_range, textLines)) == change.m_oldText || change.m_ignoreOldText))
         {
             ///Problem: This does not work if the other changes significantly alter the context @todo Use the changed context
-            QString leftContext = QStringList(textLines.mid(0, change.m_range.start.line+1)).join("\n");
-            leftContext.chop(textLines[change.m_range.start.line].length() - change.m_range.start.column);
+            QString leftContext = QStringList(textLines.mid(0, change.m_range.start().line()+1)).join("\n");
+            leftContext.chop(textLines[change.m_range.start().line()].length() - change.m_range.start().column());
 
-            QString rightContext = QStringList(textLines.mid(change.m_range.end.line)).join("\n").mid(change.m_range.end.column);
+            QString rightContext = QStringList(textLines.mid(change.m_range.end().line())).join("\n").mid(change.m_range.end().column());
 
             if(formatter && (formatPolicy == DocumentChangeSet::AutoFormatChanges
                                 || formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation))
@@ -423,18 +421,18 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                 }
             }
 
-            QString& line = textLines[change.m_range.start.line];
-            if (change.m_range.start.line == change.m_range.end.line) {
+            QString& line = textLines[change.m_range.start().line()];
+            if (change.m_range.start().line() == change.m_range.end().line()) {
                 // simply replace existing line content
-                line.replace(change.m_range.start.column,
-                             change.m_range.end.column-change.m_range.start.column,
+                line.replace(change.m_range.start().column(),
+                             change.m_range.end().column()-change.m_range.start().column(),
                              change.m_newText);
             } else {
                 // replace first line contents
-                line.replace(change.m_range.start.column, line.length() - change.m_range.start.column,
+                line.replace(change.m_range.start().column(), line.length() - change.m_range.start().column(),
                              change.m_newText);
                 // null other lines and remember for deletion
-                for(int i = change.m_range.start.line + 1; i <= change.m_range.end.line; ++i) {
+                for(int i = change.m_range.start().line() + 1; i <= change.m_range.end().line(); ++i) {
                     textLines[i].clear();
                     removedLines << i;
                 }
@@ -443,10 +441,10 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
             QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5"
                                             " = \"%6\"(encountered \"%7\") -> \"%8\"")
                                             .arg(file.str())
-                                            .arg(change.m_range.start.line)
-                                            .arg(change.m_range.start.column)
-                                            .arg(change.m_range.end.line)
-                                            .arg(change.m_range.end.column)
+                                            .arg(change.m_range.start().line())
+                                            .arg(change.m_range.start().column())
+                                            .arg(change.m_range.end().line())
+                                            .arg(change.m_range.end().column())
                                             .arg(change.m_oldText)
                                             .arg(encountered)
                                             .arg(change.m_newText);
@@ -477,17 +475,17 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
 DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const IndexedString& file,
                                                                            ChangesList& filteredChanges)
 {
-    typedef QMultiMap<SimpleCursor, DocumentChangePointer> ChangesMap;
+    typedef QMultiMap<KTextEditor::Cursor, DocumentChangePointer> ChangesMap;
     ChangesMap sortedChanges;
 
     foreach(const DocumentChangePointer &change, changes[file]) {
-        sortedChanges.insert(change->m_range.end, change);
+        sortedChanges.insert(change->m_range.end(), change);
     }
 
     //Remove duplicates
     ChangesMap::iterator previous = sortedChanges.begin();
     for(ChangesMap::iterator it = ++sortedChanges.begin(); it != sortedChanges.end(); ) {
-        if(( *previous ) && ( *previous )->m_range.end > (*it)->m_range.start) {
+        if(( *previous ) && ( *previous )->m_range.end() > (*it)->m_range.start()) {
             //intersection
             if(duplicateChanges(( *previous ), *it)) {
                 //duplicate, remove one
@@ -515,15 +513,15 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
                                "intersecting changes: "
                                "\"%2\"->\"%3\"@%4:%5->%6:%7 & \"%8\"->\"%9\"@%10:%11->%12:%13 ")
                         .arg(file.str(), ( *previous )->m_oldText, ( *previous )->m_newText)
-                        .arg(( *previous )->m_range.start.line)
-                        .arg(( *previous )->m_range.start.column)
-                        .arg(( *previous )->m_range.end.line)
-                        .arg(( *previous )->m_range.end.column)
+                        .arg(( *previous )->m_range.start().line())
+                        .arg(( *previous )->m_range.start().column())
+                        .arg(( *previous )->m_range.end().line())
+                        .arg(( *previous )->m_range.end().column())
                         .arg((*it)->m_oldText, (*it)->m_newText)
-                        .arg((*it)->m_range.start.line)
-                        .arg((*it)->m_range.start.column)
-                        .arg((*it)->m_range.end.line)
-                        .arg((*it)->m_range.end.column));
+                        .arg((*it)->m_range.start().line())
+                        .arg((*it)->m_range.start().column())
+                        .arg((*it)->m_range.end().line())
+                        .arg((*it)->m_range.end().column()));
             }
 
         }

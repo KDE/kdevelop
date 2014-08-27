@@ -83,4 +83,4 @@ void ObjectListTracker::deleteAll()
     d->m_list.clear();
 }
 
-#include "objectlist.moc"
+#include "moc_objectlist.cpp"

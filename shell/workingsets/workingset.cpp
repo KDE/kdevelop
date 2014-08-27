@@ -23,6 +23,7 @@
 
 #include <KTextEditor/Document>
 #include <KColorUtils>
+#include <KDebug>
 
 #include <QApplication>
 
@@ -565,4 +566,3 @@ void WorkingSet::changed( Sublime::Area* area )
   emit setChangedSignificantly();
 }
 
-#include "workingset.moc"

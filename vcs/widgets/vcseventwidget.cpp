@@ -21,14 +21,15 @@
 
 #include "vcseventwidget.h"
 
+#include <QAction>
 #include <QHeaderView>
 #include <QAction>
 #include <QClipboard>
 
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <kmenu.h>
-#include <KAction>
-
+#include <kdialog.h>
 
 #include <interfaces/iplugin.h>
 #include <interfaces/icore.h>
@@ -56,7 +57,7 @@ public:
     VcsEventWidgetPrivate( VcsEventWidget* w )
         : q( w )
     {
-        m_copyAction = new KAction(KIcon("edit-copy"), i18n("Copy revision number"), q);
+        m_copyAction = new QAction(QIcon::fromTheme("edit-copy"), i18n("Copy revision number"), q);
         m_copyAction->setShortcut(Qt::ControlModifier+Qt::Key_C);
         QObject::connect(m_copyAction, SIGNAL(triggered(bool)), q, SLOT(copyRevision()));
     }
@@ -67,7 +68,7 @@ public:
     KUrl m_url;
     QModelIndex m_contextIndex;
     VcsEventWidget* q;
-    KAction* m_copyAction;
+    QAction* m_copyAction;
     IBasicVersionControl* m_iface;
     void eventViewCustomContextMenuRequested( const QPoint &point );
     void eventViewClicked( const QModelIndex &index );
@@ -121,7 +122,7 @@ void VcsEventWidgetPrivate::eventViewClicked( const QModelIndex &index )
     }
 
     QHeaderView* header = m_ui->itemEventView->header();
-    header->setResizeMode(QHeaderView::ResizeToContents);
+    header->setSectionResizeMode(QHeaderView::ResizeToContents);
     header->setStretchLastSection(true);
 }
 
@@ -180,10 +181,10 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, const VcsRevision& rev, KDevelo
     d->m_ui->eventView->sortByColumn(0, Qt::DescendingOrder);
     d->m_ui->eventView->setContextMenuPolicy( Qt::CustomContextMenu );
     QHeaderView* header = d->m_ui->eventView->header();
-    header->setResizeMode( 0, QHeaderView::ResizeToContents );
-    header->setResizeMode( 1, QHeaderView::Stretch );
-    header->setResizeMode( 2, QHeaderView::ResizeToContents );
-    header->setResizeMode( 3, QHeaderView::ResizeToContents );
+    header->setSectionResizeMode( 0, QHeaderView::ResizeToContents );
+    header->setSectionResizeMode( 1, QHeaderView::Stretch );
+    header->setSectionResizeMode( 2, QHeaderView::ResizeToContents );
+    header->setSectionResizeMode( 3, QHeaderView::ResizeToContents );
 
     d->m_detailModel = new VcsItemEventModel(this);
     d->m_ui->itemEventView->setModel( d->m_detailModel );
@@ -205,4 +206,4 @@ VcsEventWidget::~VcsEventWidget()
 }
 
 
-#include "vcseventwidget.moc"
+#include "moc_vcseventwidget.cpp"

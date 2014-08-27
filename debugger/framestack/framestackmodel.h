@@ -26,9 +26,9 @@
 
 #include <KDE/KUrl>
 
-#include "../debuggerexport.h"
-#include "../interfaces/idebugsession.h"
-#include "../interfaces/iframestackmodel.h"
+#include <debugger/debuggerexport.h>
+#include <debugger/interfaces/idebugsession.h>
+#include <debugger/interfaces/iframestackmodel.h>
 
 namespace KDevelop {
 

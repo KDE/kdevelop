@@ -21,7 +21,7 @@
 
 #include <QtCore/QSet>
 #include <KDE/KUrl>
-#include "../languageexport.h"
+#include <language/languageexport.h>
 #include <KDE/KLineEdit>
 
 class QStringList;

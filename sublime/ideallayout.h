@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_SUBLIME_IDEALLAYOUT_H
 #define KDEVPLATFORM_SUBLIME_IDEALLAYOUT_H
 
-#include <QtGui/QLayout>
+#include <QLayout>
 #include <QtCore/QMap>
 #include <QtCore/QHash>
 
@@ -31,7 +31,7 @@
 #define IDEAL_LAYOUT_MARGIN  0
 #define IDEAL_LAYOUT_SPACING 2
 
-class KAction;
+class QAction;
 class KActionCollection;
 
 namespace Sublime {

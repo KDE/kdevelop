@@ -11,10 +11,12 @@
 
 #include "snippetview.h"
 
+#include <QAction>
 #include <QContextMenuEvent>
+
 #include <KMenu>
 #include <KMessageBox>
-#include <KAction>
+#include <KLocalizedString>
 #include <KDebug>
 
 #include "snippet.h"
@@ -56,17 +58,17 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
 
     snippetTree->header()->hide();
 
-    m_addRepoAction = new KAction(KIcon("folder-new"), i18n("Add Repository"), this);
+    m_addRepoAction = new QAction(QIcon::fromTheme("folder-new"), i18n("Add Repository"), this);
     connect(m_addRepoAction, SIGNAL(triggered()), this, SLOT(slotAddRepo()));
     addAction(m_addRepoAction);
-    m_editRepoAction = new KAction(KIcon("folder-txt"), i18n("Edit Repository"), this);
+    m_editRepoAction = new QAction(QIcon::fromTheme("folder-txt"), i18n("Edit Repository"), this);
     connect(m_editRepoAction, SIGNAL(triggered()), this, SLOT(slotEditRepo()));
     addAction(m_editRepoAction);
-    m_removeRepoAction = new KAction(KIcon("edit-delete"), i18n("Remove Repository"), this);
+    m_removeRepoAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Remove Repository"), this);
     connect(m_removeRepoAction, SIGNAL(triggered()), this, SLOT(slotRemoveRepo()));
     addAction(m_removeRepoAction);
 
-    m_putNewStuffAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Publish Repository"), this);
+    m_putNewStuffAction = new QAction(QIcon::fromTheme("get-hot-new-stuff"), i18n("Publish Repository"), this);
     connect(m_putNewStuffAction, SIGNAL(triggered()), this, SLOT(slotSnippetToGHNS()));
     addAction(m_putNewStuffAction);
 
@@ -74,19 +76,19 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
     separator->setSeparator(true);
     addAction(separator);
 
-    m_addSnippetAction = new KAction(KIcon("document-new"), i18n("Add Snippet"), this);
+    m_addSnippetAction = new QAction(QIcon::fromTheme("document-new"), i18n("Add Snippet"), this);
     connect(m_addSnippetAction, SIGNAL(triggered()), this, SLOT(slotAddSnippet()));
     addAction(m_addSnippetAction);
-    m_editSnippetAction = new KAction(KIcon("document-edit"), i18n("Edit Snippet"), this);
+    m_editSnippetAction = new QAction(QIcon::fromTheme("document-edit"), i18n("Edit Snippet"), this);
     connect(m_editSnippetAction, SIGNAL(triggered()), this, SLOT(slotEditSnippet()));
     addAction(m_editSnippetAction);
-    m_removeSnippetAction = new KAction(KIcon("document-close"), i18n("Remove Snippet"), this);
+    m_removeSnippetAction = new QAction(QIcon::fromTheme("document-close"), i18n("Remove Snippet"), this);
     connect(m_removeSnippetAction, SIGNAL(triggered()), this, SLOT(slotRemoveSnippet()));
     addAction(m_removeSnippetAction);
 
     addAction(separator);
 
-    m_getNewStuffAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Get New Snippets"), this);
+    m_getNewStuffAction = new QAction(QIcon::fromTheme("get-hot-new-stuff"), i18n("Get New Snippets"), this);
     connect(m_getNewStuffAction, SIGNAL(triggered()), this, SLOT(slotGHNS()));
     addAction(m_getNewStuffAction);
 
@@ -304,7 +306,7 @@ void SnippetView::slotSnippetToGHNS()
         return;
 
     KNS3::UploadDialog dialog("ktexteditor_codesnippets_core.knsrc", this);
-    dialog.setUploadFile(KUrl::fromPath(repo->file()));
+    dialog.setUploadFile(QUrl::fromLocalFile(repo->file()));
     dialog.setUploadName(repo->text());
     dialog.exec();
 }

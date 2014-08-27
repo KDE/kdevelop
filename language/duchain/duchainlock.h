@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_DUCHAINLOCK_H
 #define KDEVPLATFORM_DUCHAINLOCK_H
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop
 {
@@ -87,7 +87,7 @@ public:
    *
    * \warning Write-locks can NOT be acquired by threads that already have a read-lock.
    */
-  bool lockForWrite(uint timeout = 0);
+  bool lockForWrite(unsigned int timeout = 0);
 
   /**
    * Releases a previously acquired write lock.
@@ -115,7 +115,7 @@ public:
    * \param duChainLock lock to read-acquire. If this is left zero, DUChain::lock() is used.
    * \param timeout Timeout in milliseconds. If this is not zero, you've got to check locked() to see whether the lock succeeded.
    */
-  DUChainReadLocker(DUChainLock* duChainLock = 0, uint timeout = 0);
+  DUChainReadLocker(DUChainLock* duChainLock = 0, unsigned int timeout = 0);
 
   /// Destructor.
   ~DUChainReadLocker();
@@ -132,7 +132,7 @@ private:
   ///This class does not use a d-pointer for performance reasons (allocation+deletion in every high frequency is expensive)
   DUChainLock* m_lock;
   bool m_locked;
-  uint m_timeout;
+  unsigned int m_timeout;
 };
 
 /**
@@ -147,7 +147,7 @@ public:
    * \param duChainLock lock to write-acquire. If this is left zero, DUChain::lock() is used.
    * \param timeout Timeout in milliseconds. If this is not zero, you've got to check locked() to see whether the lock succeeded.
    */
-  DUChainWriteLocker(DUChainLock* duChainLock = 0, uint timeout = 0);
+  DUChainWriteLocker(DUChainLock* duChainLock = 0, unsigned int timeout = 0);
   /// Destructor.
   ~DUChainWriteLocker();
 
@@ -163,7 +163,7 @@ private:
   ///This class does not use a d-pointer for performance reasons (allocation+deletion in every high frequency is expensive)
   DUChainLock* m_lock;
   bool m_locked;
-  uint m_timeout;
+  unsigned int m_timeout;
 };
 
 /**

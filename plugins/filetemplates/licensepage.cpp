@@ -17,15 +17,19 @@
 */
 
 #include "licensepage.h"
+#include <KConfigCore/ksharedconfig.h>
 #include "ui_licensechooser.h"
 
+#include <KLocalizedString>
 #include <KDebug>
 #include <KStandardDirs>
 #include <KEMailSettings>
 #include <KComponentData>
 #include <KMessageBox>
+#include <KConfigGroup>
 
 #include <QDirIterator>
+#include <QStandardPaths>
 
 namespace KDevelop {
 
@@ -66,8 +70,7 @@ struct LicensePagePrivate
 void LicensePagePrivate::initializeLicenses()
 {
     kDebug() << "Searching for available licenses";
-    KStandardDirs * dirs = KGlobal::dirs();
-    QStringList licenseDirs = dirs->findDirs("data", "kdevcodegen/licenses");
+    QStringList licenseDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevcodegen/licenses", QStandardPaths::LocateDirectory);
 
     //Iterate through the possible directories that contain licenses, and load their names
     foreach(const QString& currentDir, licenseDirs)
@@ -153,8 +156,7 @@ bool LicensePagePrivate::saveLicense()
 {
     kDebug() << "Attempting to save custom license: " << license->licenseName->text();
 
-    QString localDataDir = KStandardDirs::locateLocal("data", "kdevcodegen/licenses/",
-                                                      KGlobal::activeComponent());
+    QString localDataDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/kdevcodegen/licenses/";
     QFile newFile(localDataDir + license->licenseName->text());
 
     if(newFile.exists())
@@ -212,7 +214,7 @@ LicensePage::LicensePage(QWidget* parent)
     d->initializeLicenses();
 
     //Set the license selection to the previous one
-    KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
+    KConfigGroup config(KSharedConfig::openConfig()->group("CodeGeneration"));
     d->license->licenseComboBox->setCurrentIndex(config.readEntry( "LastSelectedLicense", 0 ));
     // Needed to avoid a bug where licenseComboChanged doesn't get
     // called by QComboBox if the past selection was 0
@@ -224,7 +226,7 @@ LicensePage::~LicensePage()
     if (d->license->saveLicense->isChecked() && !d->license->licenseName->text().isEmpty()) {
         d->saveLicense();
     }
-    KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
+    KConfigGroup config(KSharedConfig::openConfig()->group("CodeGeneration"));
     //Do not save invalid license numbers'
     int index = d->license->licenseComboBox->currentIndex();
     if( index >= 0 || index < d->availableLicenses.size() )
@@ -270,4 +272,4 @@ QString LicensePage::license() const
 
 Q_DECLARE_TYPEINFO(KDevelop::LicensePagePrivate::LicenseInfo, Q_MOVABLE_TYPE);
 
-#include "licensepage.moc"
+#include "moc_licensepage.cpp"

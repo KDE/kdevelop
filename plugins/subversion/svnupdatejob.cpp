@@ -174,8 +174,3 @@ void SvnUpdateJob::setIgnoreExternals( bool ignore )
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setIgnoreExternals( ignore );
 }
-
-#include "svnupdatejob.moc"
-#include "svnupdatejob_p.moc"
-
-

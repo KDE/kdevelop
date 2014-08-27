@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_USES_H
 #define KDEVPLATFORM_USES_H
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 #include <util/kdevvarlengtharray.h>
 
 namespace KDevelop {

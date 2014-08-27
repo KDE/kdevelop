@@ -25,6 +25,9 @@
 #include "../../interfaces/idebugcontroller.h"
 #include "../variable/variablecollection.h"
 #include "iframestackmodel.h"
+#include <KDebug>
+
+#include <KDebug>
 
 namespace KDevelop {
 
@@ -125,4 +128,3 @@ QFlags<IVariableController::UpdateType> IVariableController::autoUpdate()
 
 }
 
-#include "ivariablecontroller.moc"

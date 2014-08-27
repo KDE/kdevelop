@@ -11,7 +11,7 @@
 #ifndef KDEVPLATFORM_PROJECTINFOPAGE_H
 #define KDEVPLATFORM_PROJECTINFOPAGE_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 namespace Ui
 {

@@ -20,7 +20,7 @@
 #define KDEVPLATFORM_APPENDEDLIST_STATIC_H
 
 #include <util/kdevvarlengtharray.h>
-#include "referencecounting.h"
+#include <serialization/referencecounting.h>
 
 namespace KDevelop {
 

@@ -32,23 +32,23 @@ set(kdevcvs_PART_UI
     checkoutdialog.ui
 )
 
-kde4_add_ui_files(kdevcvs_PART_SRCS ${kdevcvs_PART_UI})
-kde4_add_plugin(kdevcvs ${kdevcvs_PART_SRCS})
+qt5_wrap_ui(kdevcvs_PART_SRCS ${kdevcvs_PART_UI})
+add_library(kdevcvs MODULE ${kdevcvs_PART_SRCS})
 
 target_link_libraries(kdevcvs
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    kdevplatformutil
-    kdevplatforminterfaces
-    kdevplatformvcs
-    kdevplatformproject
-    kdevplatformlanguage
+    KF5::KIOWidgets
+    KF5::Parts
+    KDev::Util
+    KDev::Interfaces
+    KDev::Vcs
+    KDev::Project
+    KDev::Language
 )
 
-install(TARGETS kdevcvs DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevcvs DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############
 configure_file(kdevcvs.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcvs.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcvs.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevcvs.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcvs )
+install( FILES kdevcvs.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcvs )

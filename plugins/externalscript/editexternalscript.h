@@ -33,7 +33,7 @@ class EditExternalScript : public KDialog, private Ui::EditExternalScriptBase
   Q_OBJECT
 
 public:
-  EditExternalScript( ExternalScriptItem* item, QWidget* parent = 0, Qt::WFlags flags = 0 );
+  EditExternalScript( ExternalScriptItem* item, QWidget* parent = 0, Qt::WindowFlags flags = 0 );
   virtual ~EditExternalScript();
 
 private slots:

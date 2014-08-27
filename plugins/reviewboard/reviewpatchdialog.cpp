@@ -23,6 +23,7 @@
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 #include <KDebug>
+#include <KLocale>
 #include "ui_reviewpatch.h"
 #include "reviewboardjobs.h"
 
@@ -59,7 +60,7 @@ void ReviewPatchDialog::setBaseDir(const QString& repo)
     m_ui->basedir->setText(repo);
 }
 
-void ReviewPatchDialog::setServer(const KUrl& server)
+void ReviewPatchDialog::setServer(const QUrl& server)
 {
     m_ui->server->setUrl(server);
 }
@@ -79,7 +80,7 @@ QString ReviewPatchDialog::baseDir() const
     return m_ui->basedir->text();
 }
 
-KUrl ReviewPatchDialog::server() const
+QUrl ReviewPatchDialog::server() const
 {
     KUrl server=m_ui->server->url();
     server.setUser(m_ui->username->text());

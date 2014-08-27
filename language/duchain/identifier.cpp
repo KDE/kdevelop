@@ -21,11 +21,11 @@
 
 #include <QtCore/QHash>
 #include "stringhelpers.h"
-#include "indexedstring.h"
 #include "appendedlist_static.h"
-#include "repositories/itemrepository.h"
+#include "serialization/itemrepository.h"
 #include "util/kdevhash.h"
 
+#include <serialization/indexedstring.h>
 #include <utility>
 
 #define ifDebug(x)

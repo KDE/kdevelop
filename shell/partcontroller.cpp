@@ -26,6 +26,8 @@
 #include <QFile>
 #include <QTimer>
 #include <QMutexLocker>
+#include <QMimeType>
+#include <QMimeDatabase>
 #include <QApplication>
 
 #include <kdebug.h>
@@ -42,8 +44,6 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
 #include <ktexteditor/document.h>
-#include <ktexteditor/factory.h>
-#include <ktexteditor/containerinterface.h>
 
 #include "core.h"
 #include "textdocument.h"
@@ -58,15 +58,12 @@ namespace KDevelop
 class PartControllerPrivate
 {
 public:
-    PartControllerPrivate(): m_textEditor(0) {}
+    PartControllerPrivate() {}
 
     QString m_editor;
     QStringList m_textTypes;
 
     Core *m_core;
-
-    KTextEditor::Editor *m_textEditor;
-
 };
 
 PartController::PartController(Core *core, QWidget *toplevel)
@@ -91,53 +88,24 @@ PartController::~PartController()
 }
 
 //MOVE BACK TO DOCUMENTCONTROLLER OR MULTIBUFFER EVENTUALLY
-bool PartController::isTextType( KMimeType::Ptr mimeType )
+bool PartController::isTextType(const QMimeType& mimeType)
 {
     bool isTextType = false;
-    if ( d->m_textTypes.contains( mimeType->name() ) )
+    if (d->m_textTypes.contains(mimeType.name()))
     {
         isTextType = true;
     }
 
     // is this regular text - open in editor
     return ( isTextType
-             || mimeType->is( "text/plain" )
-             || mimeType->is( "text/html" )
-             || mimeType->is( "application/x-zerosize" ) );
+             || mimeType.inherits("text/plain")
+             || mimeType.inherits("text/html")
+             || mimeType.inherits("application/x-zerosize"));
 }
 
 KTextEditor::Editor* PartController::editorPart() const
 {
-    if (!d->m_textEditor)
-    {
-        KTextEditor::Factory * editorFactory = qobject_cast<KTextEditor::Factory*>(findPartFactory(
-            "text/plain",
-            "KTextEditor/Document",
-            "KTextEditor::Editor" ));
-
-        if (!editorFactory) {
-            KMessageBox::error(qApp->activeWindow(),
-                               i18n("Could not find KTextEditor::Factory, check your installation:\n"
-                                    "Make sure that Kate is installed, KDEDIRS is set properly and that you ran kbuildsycoca4." ),
-                               i18n("System Configuration Error"));
-            qApp->quit();
-            exit(EXIT_FAILURE);
-            return 0;
-        }
-
-        d->m_textEditor = editorFactory->editor();
-        qRegisterMetaType<KSharedConfig::Ptr>("KSharedConfig::Ptr");
-        Q_ASSERT(ICore::self()->activeSession());
-        d->m_textEditor->setProperty("sessionConfig", QVariant::fromValue(ICore::self()->activeSession()->config()));
-
-        KTextEditor::ContainerInterface * iface = qobject_cast<KTextEditor::ContainerInterface *>( d->m_textEditor );
-        if (iface) {
-            iface->setContainer( const_cast<PartController*>(this) );
-        } else {
-            // the kpart does not support ContainerInterface.
-        }
-    }
-    return d->m_textEditor;
+    return KTextEditor::Editor::instance();
 }
 
 KTextEditor::Document* PartController::createTextPart(const QString &encoding)
@@ -150,7 +118,6 @@ KTextEditor::Document* PartController::createTextPart(const QString &encoding)
         args.setMimeType( QString::fromLatin1( "text/plain;" ) + encoding );
         doc->setArguments( args );
     }
-    doc->editor()->readConfig();
 
     return doc;
 }
@@ -184,7 +151,7 @@ bool PartController::canCreatePart(const KUrl& url)
     if ( url.isEmpty() )
         mimeType = QString::fromLatin1("text/plain");
     else
-        mimeType = KMimeType::findByUrl( url )->name();
+        mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
 
     KService::List offers = KMimeTypeTrader::self()->query(
                                 mimeType,
@@ -203,7 +170,7 @@ KParts::Part* PartController::createPart( const KUrl & url, const QString& prefe
     else if ( !url.isValid() )
         return 0;
     else
-        mimeType = KMimeType::findByUrl( url )->name();
+        mimeType = QMimeDatabase().mimeTypeForUrl(url).name();
 
     KParts::Part* part = createPart( mimeType, preferredPart );
     if( part )
@@ -301,5 +268,4 @@ bool PartController::closeView(KTextEditor::View *view)
 
 
 }
-#include "partcontroller.moc"
 

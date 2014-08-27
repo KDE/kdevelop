@@ -23,7 +23,7 @@
 
 #include <cstdlib>
 #include <cstdio>
-#include <KAboutData>
+#include <k4aboutdata.h>
 #include <KCmdLineArgs>
 #include <KApplication>
 
@@ -155,7 +155,7 @@ private:
 
 /// call this after setting up @p aboutData in your @c main() function.
 template<class ParserT>
-int initAndRunParser(const KAboutData& aboutData, int argc, char* argv[])
+int initAndRunParser(const K4AboutData& aboutData, int argc, char* argv[])
 {
     qout.setCodec("UTF-8");
     qerr.setCodec("UTF-8");

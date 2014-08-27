@@ -22,12 +22,12 @@ Boston, MA 02110-1301, USA.
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <KSharedConfig>
+#include <KConfigSkeleton>
 #include <kconfiggroup.h>
 #include <kaboutdata.h>
 #include <kconfig.h>
 #include <kdebug.h>
-
-#include <project/projectconfigskeleton.h>
 
 #include "environmentwidget.h"
 
@@ -46,7 +46,7 @@ K_PLUGIN_FACTORY(PreferencesFactory, registerPlugin<EnvironmentPreferences>(); )
 K_EXPORT_PLUGIN(PreferencesFactory(KAboutData("kcm_kdev_envsettings", "kdevplatform", ki18n("Environment Settings"), "0.1")))
 
 EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QVariantList &args )
-    : KCModule( PreferencesFactory::componentData(), parent, args )
+    : KCModule( KAboutData::pluginData("kcm_kdev_envsettings"), parent, args )
     , d( new EnvironmentPreferencesPrivate )
 {
     QVBoxLayout * l = new QVBoxLayout( this );
@@ -57,7 +57,7 @@ EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QVariantL
              this, SLOT(settingsChanged()) );
 
 
-    d->skel = new KConfigSkeleton(KGlobal::config());
+    d->skel = new KConfigSkeleton(KSharedConfig::openConfig());
     addConfig( d->skel, d->preferencesDialog );
 
     if (!args.isEmpty() && args.first().canConvert<QString>()) {

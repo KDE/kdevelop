@@ -1,4 +1,4 @@
-PROJECT(git)
+project(git)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${git_SOURCE_DIR}/cmake)
 
@@ -17,18 +17,18 @@ set(kdevgit_PART_SRCS
     gitplugincheckinrepositoryjob.cpp
 )
 
-kde4_add_ui_files(kdevgit_PART_SRCS stashmanagerdialog.ui)
-kde4_add_plugin(kdevgit ${kdevgit_PART_SRCS})
+qt5_wrap_ui(kdevgit_PART_SRCS stashmanagerdialog.ui)
+add_library(kdevgit MODULE ${kdevgit_PART_SRCS})
 
 target_link_libraries(kdevgit
-    ${KDE4_KDEUI_LIBS}
     ${KDEVPLATFORM_UTIL_LIBRARIES}
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_VCS_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
+    KF5::SonnetUi
 )
 
-install(TARGETS kdevgit DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevgit DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############

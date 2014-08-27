@@ -30,7 +30,7 @@ namespace Sublime {
 /**
 @short Basic document that has an URL.
 */
-class SUBLIME_EXPORT UrlDocument: public Document {
+class KDEVPLATFORMSUBLIME_EXPORT UrlDocument: public Document {
 public:
     UrlDocument(Controller *controller, const KUrl &url);
     ~UrlDocument();

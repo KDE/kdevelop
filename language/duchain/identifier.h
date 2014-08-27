@@ -24,10 +24,9 @@
 #include <QtCore/QStringList>
 #include <QtCore/QMetaType>
 #include <util/kdevvarlengtharray.h>
-#include <config-kdevplatform.h>
 
-#include "../languageexport.h"
-#include "referencecounting.h"
+#include <language/languageexport.h>
+#include <serialization/referencecounting.h>
 
 //We use shared d-pointers, which is even better than a d-pointer, but krazy probably won't get it, so exclude the test.
 //krazy:excludeall=dpointer

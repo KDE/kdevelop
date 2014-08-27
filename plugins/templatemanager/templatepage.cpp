@@ -27,6 +27,7 @@
 #include <KArchive>
 #include <KZip>
 #include <KTar>
+#include <KUrl>
 #include <knewstuff3/uploaddialog.h>
 
 TemplatePage::TemplatePage (KDevelop::ITemplateProvider* provider, QWidget* parent) : QWidget (parent),

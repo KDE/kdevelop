@@ -24,7 +24,6 @@
 #include <QObject>
 #include <ktexteditor/movingrange.h>
 #include <ktexteditor/movinginterface.h>
-#include "simplerange.h"
 #include "documentrange.h"
 #include <backgroundparser/documentchangetracker.h>
 #include <QApplication>
@@ -45,7 +44,7 @@ class PersistentMovingRangePrivate : public QObject
   
   bool m_valid;
   bool m_shouldExpand;
-  SimpleRange m_range;
+  KTextEditor::Range m_range;
   IndexedString m_document;
   KTextEditor::Attribute::Ptr m_attribte;
   KTextEditor::MovingRange* m_movingRange;
@@ -55,10 +54,7 @@ class PersistentMovingRangePrivate : public QObject
   void updateRangeFromMoving() {
     if(m_movingRange)
     {
-      m_range.start.line = m_movingRange->start().line();
-      m_range.start.column = m_movingRange->start().column();
-      m_range.end.line = m_movingRange->end().line();
-      m_range.end.column = m_movingRange->end().column();
+      m_range = m_movingRange->toRange();
     }
   }
   

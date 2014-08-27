@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_INDEXEDDECLARATION_H
 #define KDEVPLATFORM_INDEXEDDECLARATION_H
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 #include "indexedtopducontext.h"
 #include <language/util/kdevhash.h>

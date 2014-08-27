@@ -16,8 +16,8 @@
 
 #include <set>
 #include <vector>
-#include "../languageexport.h"
-#include <language/duchain/repositories/itemrepository.h>
+#include <language/languageexport.h>
+#include <serialization/itemrepository.h>
 
 /**
  * This file provides a set system that can be used to efficiently manage sub-sets of a set of global objects.

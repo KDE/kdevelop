@@ -22,10 +22,9 @@
 #ifndef KDEVPLATFORM_TREEVIEW_H
 #define KDEVPLATFORM_TREEVIEW_H
 
-#include <QtGui/QTreeView>
+#include <QTreeView>
 
-#include "../debuggerexport.h"
-
+#include <debugger/debuggerexport.h>
 
 namespace KDevelop
 {

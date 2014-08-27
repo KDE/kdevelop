@@ -29,6 +29,7 @@
 #include "../duchain/duchainutils.h"
 
 #include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 
 namespace KDevelop {
@@ -39,7 +40,7 @@ const bool NormalDeclarationCompletionItem::shortenArgumentHintReturnValues = tr
 const int NormalDeclarationCompletionItem::maximumArgumentHintReturnValueLength = 30;
 const int NormalDeclarationCompletionItem::desiredTypeLength = 20;
 
-NormalDeclarationCompletionItem::NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl, KSharedPtr<CodeCompletionContext> context, int inheritanceDepth)
+NormalDeclarationCompletionItem::NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl, QExplicitlySharedDataPointer<CodeCompletionContext> context, int inheritanceDepth)
   : m_completionContext(context), m_declaration(decl), m_inheritanceDepth(inheritanceDepth) {
 }
 
@@ -47,7 +48,7 @@ KDevelop::DeclarationPointer NormalDeclarationCompletionItem::declaration() cons
   return m_declaration;
 }
 
-KSharedPtr< KDevelop::CodeCompletionContext > NormalDeclarationCompletionItem::completionContext() const {
+QExplicitlySharedDataPointer< KDevelop::CodeCompletionContext > NormalDeclarationCompletionItem::completionContext() const {
   return m_completionContext;
 }
 
@@ -73,11 +74,12 @@ QString NormalDeclarationCompletionItem::declarationName() const
     return ret;
 }
 
-void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& word) {
 
   if( m_completionContext && m_completionContext->depth() != 0 )
     return; //Do not replace any text when it is an argument-hint
 
+  KTextEditor::Document* document = view->document();
   QString newText;
 
   {
@@ -92,8 +94,8 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
 
   document->replaceText(word, newText);
   KTextEditor::Range newRange = word;
-  newRange.end().setColumn(newRange.start().column() + newText.length());
-  
+  newRange.setEnd(KTextEditor::Cursor(newRange.end().line(), newRange.start().column() + newText.length()));
+
   executed(document, newRange);
 }
 

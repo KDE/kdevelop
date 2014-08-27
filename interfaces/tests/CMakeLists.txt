@@ -1,15 +1,16 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 add_definitions(-DKDEVPLATFORMINTERFACES_EXPORT=)
 
 set(foregroundlock_SRC test_foregroundlock.cpp ../foregroundlock.cpp)
-kde4_add_unit_test(foregroundlocktest ${foregroundlock_SRC})
-target_link_libraries(foregroundlocktest ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
+add_executable(test_foregroundlock ${foregroundlock_SRC})
+target_include_directories(test_foregroundlock PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/..) # for export header
+add_test(test_foregroundlock test_foregroundlock)
+ecm_mark_as_test(test_foregroundlock)
+target_link_libraries(test_foregroundlock  Qt5::Test KF5::KDELibs4Support)
 
 if( RT_LIBRARY )
-    target_link_libraries( foregroundlocktest ${RT_LIBRARY} )
-endif( RT_LIBRARY )
+    target_link_libraries( test_foregroundlock ${RT_LIBRARY} )
+endif()
 
 if( Threads_FOUND )
-    target_link_libraries( foregroundlocktest ${CMAKE_THREAD_LIBS_INIT} )
-endif( Threads_FOUND )
+    target_link_libraries( test_foregroundlock ${CMAKE_THREAD_LIBS_INIT} )
+endif()

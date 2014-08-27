@@ -22,10 +22,9 @@
 
 #include "interfacesexport.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KConfigGroup;
-class KIcon;
 
 namespace KDevelop
 {
@@ -63,7 +62,7 @@ public:
      * an icon for the GUI
      * @returns an icon suitable for display in the GUI
      */
-    virtual KIcon icon() const = 0;
+    virtual QIcon icon() const = 0;
 Q_SIGNALS:
     void changed();
 };

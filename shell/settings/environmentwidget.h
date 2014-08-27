@@ -21,7 +21,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_ENVIRONMENTWIDGET_H
 #define KDEVPLATFORM_ENVIRONMENTWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "ui_environmentwidget.h"
 
 class KConfig;

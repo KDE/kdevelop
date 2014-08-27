@@ -176,7 +176,3 @@ void SvnLogJob::logEventReceived( const KDevelop::VcsEvent& ev )
     m_eventList << qVariantFromValue( ev );
     emit resultsReady( this );
 }
-
-#include "svnlogjob.moc"
-#include "svnlogjob_p.moc"
-

@@ -19,7 +19,7 @@
 #define KDEVPLATFORM_CLASSFUNCTIONDEFINITION_H
 
 #include "functiondeclaration.h"
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 using namespace KDevelop;
 

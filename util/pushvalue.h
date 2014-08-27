@@ -24,6 +24,8 @@
  * Backup the given reference-value given through @param ptr,
  * replace it with the value given through @param push,
  * restore the backed up value back on destruction.
+ *
+ * TODO: Replace by QScopedValueRollback as soon as we depend on Qt 5.4
  * */
 template<class Value>
 class PushValue

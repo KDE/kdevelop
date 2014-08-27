@@ -32,12 +32,14 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/parsingenvironment.h>
 
 #include <project/projectmodel.h>
+#include <project/projectutils.h>
 
 #include "../openwith/iopenwith.h"
+#include <KIconThemes/KIconLoader>
 
 using namespace KDevelop;
 
@@ -239,7 +241,7 @@ ProjectFileDataProvider::ProjectFileDataProvider()
 
 void ProjectFileDataProvider::projectClosing( IProject* project )
 {
-    foreach(ProjectFileItem* file, project->files()) {
+    foreach(ProjectFileItem* file, KDevelop::allFiles(project->projectItem())) {
         fileRemovedFromSet(file);
     }
 }
@@ -248,7 +250,7 @@ void ProjectFileDataProvider::projectOpened( IProject* project )
 {
     const int processAfter = 1000;
     int processed = 0;
-    foreach(ProjectFileItem* file, project->files()) {
+    foreach(ProjectFileItem* file, KDevelop::allFiles(project->projectItem())) {
         fileAddedToSet(file);
         if (++processed == processAfter) {
             // prevent UI-lockup when a huge project was imported
@@ -358,4 +360,3 @@ QSet<IndexedString> OpenFilesDataProvider::files() const
     return openFiles();
 }
 
-#include "projectfilequickopen.moc"

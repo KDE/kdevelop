@@ -30,11 +30,7 @@
 #include "tests/autotestshell.h"
 #include "tests/testcore.h"
 
-#include <KComponentData>
-#include <KStandardDirs>
 #include <KUrl>
-
-#include <qtest_kde.h>
 
 #define CHECK_TEMPLATE_VARIABLE(name, type, val)            \
 QVERIFY(variables.contains(#name));                         \
@@ -50,12 +46,7 @@ void TestTemplateClassGenerator::initTestCase()
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 
-    KComponentData data = ICore::self()->componentData();
-    baseUrl.setDirectory(KStandardDirs::locateLocal("tmp", "test_templateclassgenerator/", data));
-
-    KStandardDirs *dirs = data.dirs();
-    bool addedDir = dirs->addResourceDir("data", CODEGEN_TESTS_DATA_DIR, true);
-    QVERIFY(addedDir);
+    baseUrl.setDirectory(QString(CODEGEN_TESTS_EXPECTED_DIR) + "/");
 
     // Needed for extracting description out of template archives
     TemplatesModel model("kdevcodegentest");
@@ -269,9 +260,10 @@ TemplateClassGenerator* TestTemplateClassGenerator::loadTemplate (const QString&
 
     TemplateClassGenerator* generator = new TemplateClassGenerator(baseUrl);
 
-    QString tplDescription = ICore::self()->componentData().dirs()->findResource("data", "kdevcodegentest/template_descriptions/" + name + ".desktop");
+    QString tplDescription = QString(CODEGEN_DATA_DIR) + "/kdevcodegentest/templates/" + name + "/" + name + ".desktop";
     Q_ASSERT(!tplDescription.isEmpty());
     SourceFileTemplate tpl;
+    tpl.addAdditionalSearchLocation(QString(CODEGEN_TESTS_DATA_DIR) + "/kdevcodegentest/templates/");
     tpl.setTemplateDescription(tplDescription, "kdevcodegentest");
     Q_ASSERT(tpl.isValid());
     generator->setTemplateDescription(tpl);
@@ -296,4 +288,4 @@ void TestTemplateClassGenerator::setLowercaseFileNames(TemplateClassGenerator* g
 }
 
 
-QTEST_KDEMAIN(TestTemplateClassGenerator, NoGUI)
+QTEST_GUILESS_MAIN(TestTemplateClassGenerator)

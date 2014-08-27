@@ -1,22 +1,16 @@
-set(documentchangesettest_SRCS test_documentchangeset.cpp)
+ecm_add_test(test_documentchangeset.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
 
-kde4_add_unit_test(documentchangesettest ${documentchangesettest_SRCS})
-target_link_libraries(documentchangesettest ${QT_QTTEST_LIBRARY} kdevplatformtests kdevplatformlanguage)
+if (Grantlee_FOUND)
+    ecm_add_test(test_templaterenderer.cpp
+        LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
 
-set(templaterenderertest_SRCS test_templaterenderer.cpp)
+    ecm_add_test(test_templateclassgenerator.cpp
+        LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
 
-kde4_add_unit_test(templaterenderertest ${templaterenderertest_SRCS})
-target_link_libraries(templaterenderertest ${QT_QTTEST_LIBRARY} kdevplatformtests kdevplatformlanguage)
-
-set(templateclassgeneratortest_SRCS test_templateclassgenerator.cpp)
-
-kde4_add_unit_test(templateclassgeneratortest ${templateclassgeneratortest_SRCS})
-target_link_libraries(templateclassgeneratortest ${QT_QTTEST_LIBRARY} kdevplatformtests kdevplatformlanguage)
-
-set(templatesmodeltest_SRCS test_templatesmodel.cpp)
-
-kde4_add_unit_test(templatesmodeltest ${templatesmodeltest_SRCS})
-target_link_libraries(templatesmodeltest ${QT_QTTEST_LIBRARY} kdevplatformtests kdevplatformlanguage)
+    ecm_add_test(test_templatesmodel.cpp
+        LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
+endif()
 
 configure_file(codegen_tests_config.h.cmake codegen_tests_config.h)
 add_subdirectory(data)

@@ -25,8 +25,6 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
 
-#include <KDebug>
-
 using namespace KDevelop;
 
 QString getSafeString(const QVariant& variant)
@@ -157,10 +155,9 @@ QVariant ArgumentTypeFilter::doFilter (const QVariant& input, const QVariant& /*
     return Grantlee::SafeString(type);
 }
 
-KDevFilters::KDevFilters(QObject* parent)
+KDevFilters::KDevFilters(QObject* parent, const QVariantList &)
 : QObject(parent)
 {
-
 }
 
 KDevFilters::~KDevFilters()
@@ -182,5 +179,3 @@ QHash< QString, Grantlee::Filter* > KDevFilters::filters(const QString& name)
 
     return filters;
 }
-
-Q_EXPORT_PLUGIN2( kdev_filters, KDevelop::KDevFilters )

@@ -21,17 +21,17 @@
 #include "projectselectionpage.h"
 #include "projectvcspage.h"
 
-AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, ProjectTemplatesModel* templatesModel, QWidget *parent, Qt::WFlags flags)
+AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, ProjectTemplatesModel* templatesModel, QWidget *parent, Qt::WindowFlags flags)
     :KAssistantDialog(parent, flags)
 {
     setWindowTitle(i18n("Create New Project"));
-    KDialog::showButton(Help, false);
+//     KDialog::showButton(Help, false);
 
     m_selectionPage = new ProjectSelectionPage(templatesModel, this);
     m_vcsPage = new ProjectVcsPage( pluginController, this );
     m_vcsPage->setSourceLocation( m_selectionPage->location() );
-    connect( m_selectionPage, SIGNAL(locationChanged(KUrl)),
-             m_vcsPage, SLOT(setSourceLocation(KUrl)) );
+    connect( m_selectionPage, SIGNAL(locationChanged(QUrl)),
+             m_vcsPage, SLOT(setSourceLocation(QUrl)) );
     m_pageItems[m_selectionPage] = addPage(m_selectionPage, i18nc("Page for general configuration options", "General"));
 
     m_pageItems[m_vcsPage] = addPage(m_vcsPage, i18nc("Page for version control options", "Version Control") );

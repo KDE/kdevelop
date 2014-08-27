@@ -23,14 +23,19 @@
 #ifndef KDEVPLATFORM_PARSEJOB_H
 #define KDEVPLATFORM_PARSEJOB_H
 
-#include <QtCore/QWeakPointer>
+#include <QPointer>
+
 #include <KDE/KUrl>
 
-#include <threadweaver/JobSequence.h>
+#include <ThreadWeaver/Sequence>
 
-#include "../duchain/indexedstring.h"
+#include <serialization/indexedstring.h>
 #include <language/duchain/topducontext.h>
 #include <language/editor/modificationrevision.h>
+
+namespace ThreadWeaver {
+class QObjectDecorator;
+}
 
 namespace KDevelop
 {
@@ -47,7 +52,7 @@ class ReferencedTopDUContext;
  *
  * In your language plugin, don't forget to use acquire an UrlParseLock before starting to the actual parsing.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public ThreadWeaver::JobSequence
+class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public QObject, public ThreadWeaver::Sequence
 {
     Q_OBJECT
 
@@ -133,7 +138,7 @@ public:
     * The notification is guaranteed to be called once the parse-job finishes, from within its destructor.
     * The given top-context may be invalid if the update failed.
     */
-    Q_SCRIPTABLE void setNotifyWhenReady(const QList<QWeakPointer<QObject> >& notify);
+    Q_SCRIPTABLE void setNotifyWhenReady(const QList<QPointer<QObject> >& notify);
 
     /// Sets the du-context that was created by this parse-job
     Q_SCRIPTABLE virtual void setDuChain(ReferencedTopDUContext duChain);
@@ -179,6 +184,8 @@ public:
     ///Returns a control flow graph for the code in the parsed file.
     /// It's up to the caller to remove the returned instance
     virtual KDevelop::ControlFlowGraph* controlFlowGraph();
+
+    ThreadWeaver::QObjectDecorator* decorator() const;
 
 Q_SIGNALS:
     /**Can be used to give progress feedback to the background-parser. @param value should be between 0 and 1, where 0 = 0% and 1 = 100%
@@ -233,4 +240,6 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(ParseJob::SequentialProcessingFlags);
 
 }
+Q_DECLARE_METATYPE(KDevelop::ParseJob*);
+
 #endif

@@ -20,8 +20,7 @@
 
 #include "structuretype.h"
 
-#include "../indexedstring.h"
-#include "../repositories/typerepository.h"
+#include "typerepository.h"
 #include "typesystemdata.h"
 #include "typeregister.h"
 #include "typesystem.h"

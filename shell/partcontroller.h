@@ -24,12 +24,11 @@
 
 #include <QtCore/QMap>
 #include <QtCore/QHash>
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QtCore/QPointer>
 
 #include <kurl.h>
 #include <kmimetype.h>
-#include <KTextEditor/ContainerInterface>
 #include <KSharedConfig>
 
 #include "core.h"
@@ -46,6 +45,7 @@ namespace KTextEditor
 {
 class Document;
 class Editor;
+class View;
 }
 
 Q_DECLARE_METATYPE(KSharedConfig::Ptr)
@@ -53,11 +53,10 @@ Q_DECLARE_METATYPE(KSharedConfig::Ptr)
 namespace KDevelop
 {
 
-class KDEVPLATFORMSHELL_EXPORT PartController : public IPartController, public KTextEditor::MdiContainer
+class KDEVPLATFORMSHELL_EXPORT PartController : public IPartController
 {
     friend class CorePrivate;
     Q_OBJECT
-    Q_INTERFACES( KTextEditor::MdiContainer )
 
 public:
     PartController(Core *core, QWidget *toplevel);
@@ -81,10 +80,9 @@ public:
     KParts::ReadOnlyPart* readOnly( KParts::Part *part ) const;
     KParts::ReadWritePart* readWrite( KParts::Part *part ) const;
 
-    bool isTextType( KMimeType::Ptr mimeType );
+    bool isTextType(const QMimeType& mimeType);
 
 
-    //KTextEditor::MdiContainer implementation
     virtual void setActiveView( KTextEditor::View * view );
     virtual KTextEditor::View * activeView();
     virtual KTextEditor::Document * createDocument();

@@ -166,7 +166,7 @@ private:
     QThread m_thread;
 };
 
-K_GLOBAL_STATIC(ParsingThread, s_parsingThread);
+Q_GLOBAL_STATIC(ParsingThread, s_parsingThread);
 
 struct OutputModelPrivate
 {

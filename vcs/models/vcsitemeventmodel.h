@@ -22,8 +22,8 @@
 #define KDEVPLATFORM_VCSITEMEVENTMODEL_H
 
 
-#include <QtGui/QStandardItemModel>
-#include "../vcsexport.h"
+#include <QStandardItemModel>
+#include "vcsexport.h"
 
 template <typename T> class QList;
 

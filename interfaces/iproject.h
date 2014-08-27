@@ -43,10 +43,10 @@ template<typename T> class QSet;
 namespace KDevelop
 {
 
-class Path;
 class IPlugin;
 class IProjectFileManager;
 class IBuildSystemManager;
+class Path;
 class ProjectBaseItem;
 class ProjectFileItem;
 class ProjectFolderItem;
@@ -105,39 +105,30 @@ public:
      */
     Q_SCRIPTABLE virtual ProjectFolderItem* projectItem() const = 0;
 
-    /** Get how much files are there in the project */
-    Q_SCRIPTABLE virtual int fileCount() const = 0;
-
-    /** Get the item corresponding to the @p pos file */
-    Q_SCRIPTABLE virtual ProjectFileItem* fileAt( int pos) const = 0;
-
-    /** Get a list of all files in the project */
-    Q_SCRIPTABLE virtual QList<ProjectFileItem*> files() const = 0;
-
     /**
      * @return all items with the corresponding @p path
      */
     Q_SCRIPTABLE virtual QList<ProjectBaseItem*> itemsForPath( const IndexedString& path ) const = 0;
-    KDE_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectBaseItem*> itemsForUrl( const KUrl& url ) const = 0;
+    KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectBaseItem*> itemsForUrl( const KUrl& url ) const = 0;
 
     /**
      * @return all file items with the corresponding @p file path
      */
     Q_SCRIPTABLE virtual QList<ProjectFileItem*> filesForPath( const IndexedString& file ) const = 0;
-    KDE_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectFileItem*> filesForUrl( const KUrl& file ) const = 0;
+    KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectFileItem*> filesForUrl( const KUrl& file ) const = 0;
 
     /**
      * @return all folder items with the corresponding @p folder path
      */
     Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForPath( const IndexedString& folder ) const = 0;
-    KDE_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForUrl( const KUrl& folder ) const = 0;
+    KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForUrl( const KUrl& folder ) const = 0;
 
     /**
      * @return the path to the project file
      */
-    Q_SCRIPTABLE virtual Path projectFile() const = 0;
+    virtual Path projectFile() const = 0;
     /** Get the url of the project file.*/
-    KDE_DEPRECATED Q_SCRIPTABLE virtual KUrl projectFileUrl() const = 0;
+    KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual KUrl projectFileUrl() const = 0;
     virtual KSharedConfig::Ptr projectConfiguration() const = 0;
 
     virtual void addToFileSet( ProjectFileItem* item ) = 0;
@@ -153,13 +144,13 @@ public:
      * @brief Get the project folder
      * @return The canonical absolute directory of the project.
      */
-    KDE_DEPRECATED virtual Q_SCRIPTABLE const KUrl folder() const = 0;
+    KDEVPLATFORMINTERFACES_DEPRECATED virtual Q_SCRIPTABLE const KUrl folder() const = 0;
 
     /**
      * @brief Get the project path
      * @return The canonical absolute directory of the project.
      */
-    virtual Q_SCRIPTABLE Path path() const = 0;
+    virtual Path path() const = 0;
 
     /** Returns the name of the project. */
     virtual Q_SCRIPTABLE QString name() const = 0;

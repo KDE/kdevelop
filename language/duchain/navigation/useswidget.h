@@ -25,7 +25,7 @@
 
 #include <language/duchain/indexeddeclaration.h>
 #include <language/duchain/indexedtopducontext.h>
-#include "../../languageexport.h"
+#include <language/languageexport.h>
 #include "usescollector.h"
 #include <language/editor/persistentmovingrange.h>
 
@@ -45,7 +45,7 @@ namespace KDevelop {
     class KDEVPLATFORMLANGUAGE_EXPORT OneUseWidget : public QWidget {
       Q_OBJECT
       public:
-        OneUseWidget(IndexedDeclaration declaration, IndexedString document, SimpleRange range, const CodeRepresentation& code);
+        OneUseWidget(IndexedDeclaration declaration, IndexedString document, KTextEditor::Range range, const CodeRepresentation& code);
         ~OneUseWidget();
         
       private slots:

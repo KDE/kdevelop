@@ -26,12 +26,11 @@
 #include <QtCore/QVariant>
 #include <QtCore/QTimer>
 #include <QtCore/QVector>
-#include <QtGui/QIcon>
+#include <QIcon>
 
 #include <iostream>
 
-#include "../debuggerexport.h"
-//#include <KDebug>
+#include <debugger/debuggerexport.h>
 
 namespace KDevelop {
 

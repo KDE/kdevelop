@@ -37,11 +37,11 @@ namespace KDevelop
 {
 
 K_PLUGIN_FACTORY(BGPreferencesFactory, registerPlugin<BGPreferences>();)
-K_EXPORT_PLUGIN(BGPreferencesFactory( KAboutData("kcm_kdev_bgsettings", "kdevplatform", ki18n("Parser Background Settings"), "0.1")))
+// K_EXPORT_PLUGIN(BGPreferencesFactory( KAboutData("kcm_kdev_bgsettings", "kdevplatform", ki18n("Parser Background Settings"), "0.1")))
 
 
 BGPreferences::BGPreferences( QWidget *parent, const QVariantList &args )
- : KCModule( BGPreferencesFactory::componentData(), parent, args )
+    : KCModule( KAboutData::pluginData("kcm_kdev_bgsettings"), parent, args )
 {
 
     QVBoxLayout * l = new QVBoxLayout( this );
@@ -63,7 +63,7 @@ void BGPreferences::load()
     // stay backwards compatible
     Q_ASSERT(ICore::self()->activeSession());
     KConfigGroup config(ICore::self()->activeSession()->config(), "Background Parser");
-    KConfigGroup oldConfig(KGlobal::config(), "Background Parser");
+    KConfigGroup oldConfig(KSharedConfig::openConfig(), "Background Parser");
 #define BACKWARDS_COMPATIBLE_ENTRY(entry, default) \
 config.readEntry(entry, oldConfig.readEntry(entry, default))
 

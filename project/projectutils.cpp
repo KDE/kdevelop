@@ -22,8 +22,11 @@
 #include <project/projectmodel.h>
 #include "path.h"
 #include <QMenu>
-#include <KIcon>
-#include <KMenu>
+#include <QIcon>
+
+#include <KLocalizedString>
+
+#include <project/projectmodel.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/context.h>
@@ -48,9 +51,9 @@ public:
 public Q_SLOTS:
     void populate()
     {
-        KMenu* menu = new KMenu(m_text);
+        QMenu* menu = new QMenu(m_text);
         connect(menu, SIGNAL(aboutToHide()), menu, SLOT(deleteLater()));
-        menu->addAction(KIcon(m_item->iconName()), m_text)->setEnabled(false);
+        menu->addAction(QIcon::fromTheme(m_item->iconName()), m_text)->setEnabled(false);
         ProjectItemContext context(QList< ProjectBaseItem* >() << m_item);
         QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
         ContextMenuExtension::populateMenu(menu, extensions);
@@ -89,13 +92,43 @@ void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
                 text = i18n("Project %1", prettyName);
 
             QAction* action = menu->addAction(text);
-            action->setIcon(KIcon(parent->iconName()));
+            action->setIcon(QIcon::fromTheme(parent->iconName()));
             // The populator will either spawn a menu when the action is triggered, or it will delete itself
             new Populator(parent, action, QCursor::pos(), text);
         }
 
         parent = parent->parent();
     }
+}
+
+QList<ProjectFileItem*> allFiles(ProjectBaseItem* projectItem)
+{
+    QList<ProjectFileItem*> files;
+    if ( ProjectFolderItem * folder = projectItem->folder() )
+    {
+        QList<ProjectFolderItem*> folder_list = folder->folderList();
+        for ( QList<ProjectFolderItem*>::Iterator it = folder_list.begin(); it != folder_list.end(); ++it )
+        {
+            files += allFiles( ( *it ) );
+        }
+
+        QList<ProjectTargetItem*> target_list = folder->targetList();
+        for ( QList<ProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it )
+        {
+            files += allFiles( ( *it ) );
+        }
+
+        files += folder->fileList();
+    }
+    else if ( ProjectTargetItem * target = projectItem->target() )
+    {
+        files += target->fileList();
+    }
+    else if ( ProjectFileItem * file = projectItem->file() )
+    {
+        files.append( file );
+    }
+    return files;
 }
 
 }

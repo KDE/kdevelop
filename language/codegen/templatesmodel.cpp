@@ -28,10 +28,13 @@
 #include <KDebug>
 #include <KConfigGroup>
 #include <KLocale>
-#include <KMimeType>
+#include <QMimeType>
+#include <QMimeDatabase>
+#include <KUrl>
 
 #include <QFileInfo>
 #include <QDir>
+#include <QStandardPaths>
 
 using namespace KDevelop;
 
@@ -41,6 +44,8 @@ public:
     TemplatesModelPrivate(const QString& typePrefix);
 
     QString typePrefix;
+
+    QStringList searchPaths;
 
     QMap<QString, QStandardItem*> templateItems;
 
@@ -92,12 +97,14 @@ TemplatesModelPrivate::TemplatesModelPrivate(const QString& _typePrefix)
     }
 }
 
-
 TemplatesModel::TemplatesModel(const QString& typePrefix, QObject* parent)
 : QStandardItemModel(parent)
 , d(new TemplatesModelPrivate(typePrefix))
 {
-
+    const QStringList dataPaths = {QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)};
+    foreach(const QString& dataPath, dataPaths) {
+        addDataPath(dataPath);
+    }
 }
 
 TemplatesModel::~TemplatesModel()
@@ -105,25 +112,35 @@ TemplatesModel::~TemplatesModel()
     delete d;
 }
 
-
 void TemplatesModel::refresh()
 {
     clear();
     d->templateItems.clear();
-    d->templateItems[""] = invisibleRootItem();
+    d->templateItems[QString()] = invisibleRootItem();
     d->extractTemplateDescriptions();
 
-    KStandardDirs *dirs = ICore::self()->componentData().dirs();
-    const QStringList templateDescriptions = dirs->findAllResources("data", d->resourceFilter(TemplatesModelPrivate::Description));
-    const QStringList templateArchives = dirs->findAllResources("data", d->resourceFilter(TemplatesModelPrivate::Template));
-    foreach (const QString &templateDescription, templateDescriptions)
-    {
+    QStringList templateArchives;
+    foreach(const QString& archivePath, d->searchPaths) {
+        const QStringList files = QDir(archivePath).entryList(QDir::Files);
+        foreach(const QString& file, files) {
+            templateArchives.append(archivePath + file);
+        }
+    }
+
+    QStringList templateDescriptions;
+    const QStringList templatePaths = {QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ d->resourceFilter(TemplatesModelPrivate::Description)};
+    foreach(const QString& templateDescription, templatePaths) {
+        const QStringList files = QDir(templateDescription).entryList(QDir::Files);
+        foreach(const QString& file, files) {
+            templateDescriptions.append(templateDescription + file);
+        }
+    }
+
+    foreach (const QString &templateDescription, templateDescriptions) {
         QFileInfo fi(templateDescription);
         bool archiveFound = false;
-        foreach( const QString& templateArchive, templateArchives )
-        {
-            if( QFileInfo(templateArchive).baseName() == fi.baseName() )
-            {
+        foreach( const QString& templateArchive, templateArchives ) {
+            if( QFileInfo(templateArchive).baseName() == fi.baseName() ) {
                 archiveFound = true;
 
                 KConfig templateConfig(templateDescription);
@@ -139,7 +156,8 @@ void TemplatesModel::refresh()
 
                 if (general.hasKey("Icon"))
                 {
-                    QString icon = dirs->findResource("data", d->resourceFilter(TemplatesModelPrivate::Preview, general.readEntry("Icon")));
+                    QString icon = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                             d->resourceFilter(TemplatesModelPrivate::Preview, general.readEntry("Icon")));
                     if (QFile::exists(icon)) {
                         templateItem->setData(icon, IconNameRole);
                     }
@@ -183,10 +201,24 @@ QStandardItem *TemplatesModelPrivate::createItem(const QString& name, const QStr
 
 void TemplatesModelPrivate::extractTemplateDescriptions()
 {
-    KStandardDirs *dirs = ICore::self()->componentData().dirs();
-    QStringList templateArchives = dirs->findAllResources("data", resourceFilter(Template));
+    QStringList templateArchives;
+    searchPaths << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, resourceFilter(Template), QStandardPaths::LocateDirectory);
+    searchPaths.removeDuplicates();
+    foreach(const QString &archivePath, searchPaths) {
+        const QStringList files = QDir(archivePath).entryList(QDir::Files);
+        foreach(QString file, files) {
+            if(file.endsWith(".zip") || file.endsWith(".tar.bz2")) {
+                QString archfile = archivePath + file;
+                templateArchives.append(archfile);
+            }
+        }
+    }
 
-    QString localDescriptionsDir = dirs->saveLocation("data", resourceFilter(Description));
+    QString localDescriptionsDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ resourceFilter(Description);
+
+    QDir dir(localDescriptionsDir);
+    if(!dir.exists())
+        dir.mkpath(".");
 
     foreach (const QString &archName, templateArchives)
     {
@@ -279,7 +311,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
                 if (iconEntry && iconEntry->isFile())
                 {
                     const KArchiveFile* iconFile = static_cast<const KArchiveFile*>(iconEntry);
-                    QString saveDir = dirs->saveLocation("data", resourceFilter(Preview));
+                    const QString saveDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ resourceFilter(Preview);
                     iconFile->copyTo(saveDir);
                     QFileInfo iconInfo(saveDir + templateEntry->name());
                     QFile::rename(iconInfo.absoluteFilePath(), saveDir + templateInfo.baseName() + '.' + iconInfo.suffix());
@@ -296,11 +328,10 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
 QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
 {
     QFileInfo info(fileName);
-    KStandardDirs* dirs = ICore::self()->componentData().dirs();
-    QString description = dirs->findResource("data", d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + ".kdevtemplate"));
+    QString description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + ".kdevtemplate"));
     if (description.isEmpty())
     {
-        description = dirs->findResource("data", d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + ".desktop"));
+        description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + ".desktop"));
     }
 
     QModelIndexList indexes;
@@ -342,17 +373,27 @@ QString TemplatesModel::typePrefix() const
     return d->typePrefix;
 }
 
+void TemplatesModel::addDataPath(const QString& path)
+{
+    QString realpath = path + d->resourceFilter(TemplatesModelPrivate::Template);
+    d->searchPaths.append(realpath);
+}
+
 QString TemplatesModel::loadTemplateFile(const QString& fileName)
 {
-    KStandardDirs* dirs = ICore::self()->componentData().dirs();
-    QString saveLocation = dirs->saveLocation("data", d->resourceFilter(TemplatesModelPrivate::Template));
+    QString saveLocation = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ d->resourceFilter(TemplatesModelPrivate::Template);
+
+    QDir dir(saveLocation);
+    if(!dir.exists())
+        dir.mkpath(".");
+
     QFileInfo info(fileName);
     QString destination = saveLocation + info.baseName();
 
-    KMimeType::Ptr mimeType = KMimeType::findByUrl(KUrl(fileName));
-    kDebug() << "Loaded file" << fileName << "with type" << mimeType->name();
+    QMimeType mimeType = QMimeDatabase().mimeTypeForFile(fileName);
+    kDebug() << "Loaded file" << fileName << "with type" << mimeType.name();
 
-    if (mimeType->name() == "application/x-desktop")
+    if (mimeType.name() == "application/x-desktop")
     {
         kDebug() << "Loaded desktop file" << info.absoluteFilePath() << ", compressing";
 #ifdef Q_WS_WIN
@@ -383,7 +424,7 @@ QString TemplatesModel::loadTemplateFile(const QString& fileName)
     else
     {
         kDebug() << "Copying" << fileName << "to" << saveLocation;
-        QFile::copy(fileName, destination);
+        QFile::copy(fileName, saveLocation + info.fileName());
     }
 
     refresh();

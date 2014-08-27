@@ -25,7 +25,7 @@ ImportMetadataWidget::ImportMetadataWidget(QWidget *parent)
     m_ui->sourceLoc->setMode( KFile::Directory );
 
     connect( m_ui->sourceLoc, SIGNAL(textChanged(QString)), SIGNAL(changed()) );
-    connect( m_ui->sourceLoc, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
+    connect( m_ui->sourceLoc, SIGNAL(urlSelected(QUrl)), SIGNAL(changed()) );
     connect( m_ui->comment, SIGNAL(textChanged()), SIGNAL(changed()) );
     connect( m_ui->module, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( m_ui->releaseTag, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
@@ -39,7 +39,7 @@ ImportMetadataWidget::~ImportMetadataWidget()
     delete m_ui;
 }
 
-KUrl ImportMetadataWidget::source() const
+QUrl ImportMetadataWidget::source() const
 {
     return m_ui->sourceLoc->url() ;
 }
@@ -75,4 +75,3 @@ bool ImportMetadataWidget::hasValidData() const
     && !m_ui->module->text().isEmpty() && !m_ui->repository->text().isEmpty();
 }
 
-#include "importmetadatawidget.moc"

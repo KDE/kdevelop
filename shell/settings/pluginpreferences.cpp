@@ -19,13 +19,14 @@
  */
 #include "pluginpreferences.h"
 
-#include <QtGui/QVBoxLayout>
+#include <QVBoxLayout>
 
 #include <kgenericfactory.h>
 #include <kaboutdata.h>
 #include <kpluginselector.h>
 #include <kplugininfo.h>
 #include <ksettings/dispatcher.h>
+#include <kcomponentdata.h> // kdelibs4support
 
 #include <interfaces/isession.h>
 
@@ -37,11 +38,11 @@ namespace KDevelop
 {
 
 K_PLUGIN_FACTORY(PluginPreferencesFactory, registerPlugin<PluginPreferences>();)
-K_EXPORT_PLUGIN(PluginPreferencesFactory( KAboutData("kcm_kdev_pluginsettings", "kdevplatform", ki18n("Plugin Selection"), "0.1")))
+// K_EXPORT_PLUGIN(PluginPreferencesFactory( KAboutData("kcm_kdev_pluginsettings", "kdevplatform", ki18n("Plugin Selection"), "0.1")))
 
 
 PluginPreferences::PluginPreferences( QWidget *parent, const QVariantList &args )
- : KCModule( PluginPreferencesFactory::componentData(), parent, args )
+    : KCModule( KAboutData::pluginData("kcm_kdev_pluginsettings"), parent, args )
 {
     QVBoxLayout* lay = new QVBoxLayout(this );
     selector = new KPluginSelector( this );

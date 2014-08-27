@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_STRINGHELPERS_H
 #define KDEVPLATFORM_STRINGHELPERS_H
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 #include <QtCore/QChar>
 

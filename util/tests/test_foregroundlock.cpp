@@ -23,8 +23,6 @@
 #include <QDebug>
 #include <QThread>
 
-#include <unistd.h>
-
 #include "../foregroundlock.h"
 
 QTEST_MAIN(KDevelop::TestForegroundLock)
@@ -42,7 +40,7 @@ public:
             if (lock.tryLock()) {
                 lock.unlock();
             }
-            usleep(qrand() % 20);
+            QThread::usleep(qrand() % 20);
         }
     }
 };
@@ -83,7 +81,7 @@ void TestForegroundLock::testTryLock()
             break;
         }
         lock.relock();
-        usleep(10);
+        QThread::usleep(10);
         lock.unlock();
     }
 }

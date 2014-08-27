@@ -11,6 +11,7 @@
 #include "importdialog.h"
 
 #include <KMessageBox>
+#include <KI18n/KLocalizedString>
 #include <KDebug>
 
 #include <interfaces/icore.h>
@@ -87,4 +88,3 @@ void ImportDialog::jobFinished(KJob * job)
     }
 }
 
-#include "importdialog.moc"

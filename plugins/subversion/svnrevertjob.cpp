@@ -127,8 +127,3 @@ void SvnRevertJob::setRecursive( bool recursive )
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setRecursive( recursive );
 }
-
-
-#include "svnrevertjob.moc"
-#include "svnrevertjob_p.moc"
-

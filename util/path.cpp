@@ -22,9 +22,9 @@
 #include "path.h"
 
 #include <QStringList>
+#include <QDir>
 #include <QDebug>
 
-#include <language/duchain/indexedstring.h>
 #include <language/util/kdevhash.h>
 
 using namespace KDevelop;
@@ -36,40 +36,45 @@ Path::Path()
 
 Path::Path(const QString& pathOrUrl)
 {
-    init(KUrl(pathOrUrl));
+#if QT_VERSION >= 0x050400
+    init(QUrl::fromUserInput(pathOrUrl, QString(), QUrl::DefaultResolution));
+#else
+    init(QUrl::fromUserInput(pathOrUrl));
+#endif
 }
 
-Path::Path(const KUrl& url)
+Path::Path(const QUrl& url)
 {
     init(url);
 }
 
-void Path::init(KUrl url)
+void Path::init(QUrl url)
 {
     // we do not support urls with:
     // - fragments
     // - sub urls
     // - query
     // nor do we support relative urls
-    if (!url.isValid() || url.hasFragment() || url.hasQuery() || url.hasSubUrl() || url.isRelative() || !url.hasPath()) {
+    if (!url.isValid() || url.hasFragment() || url.hasQuery() || url.isRelative() || url.path().isEmpty()) {
         // invalid
-        qWarning("Path::init: invalid/unsupported Path encountered: \"%s\"", qPrintable(url.pathOrUrl()));
+        qWarning("Path::init: invalid/unsupported Path encountered: \"%s\"",
+                 qPrintable(url.toDisplayString(QUrl::PreferLocalFile)));
         return;
     }
 
     // remove /../ parts
-    url.cleanPath();
-
+    url.setPath(QDir::cleanPath(url.path()));
     // get the path as segmented list
-    QStringList path = url.path(KUrl::RemoveTrailingSlash).split('/', QString::SkipEmptyParts);
+    QStringList path = url.path().split('/', QString::SkipEmptyParts);
 
     if (!url.isLocalFile()) {
         // handle remote urls
         QString urlPrefix;
-        urlPrefix += url.protocol();
+        urlPrefix += url.scheme();
         urlPrefix += "://";
-        if (url.hasUser()) {
-            urlPrefix += url.user();
+        const QString user = url.userName();
+        if (!user.isEmpty()) {
+            urlPrefix += user;
             urlPrefix += '@';
         }
         urlPrefix += url.host();
@@ -111,7 +116,7 @@ static QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<
     totalLength += size;
 
     // skip Path segment if we only want the path
-    const int start = (onlyPath && !isLocalFile) ? 1 : 0;
+    int start = (onlyPath && !isLocalFile) ? 1 : 0;
 
     // path and url prefix
     for (int i = start; i < size; ++i) {
@@ -121,6 +126,14 @@ static QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<
     // build string representation
     QString res;
     res.reserve(totalLength);
+
+#ifdef Q_OS_WIN
+    if (start == 0 && isLocalFile) {
+        Q_ASSERT(data.at(0).endsWith(':')); // assume something along "C:"
+        res += data.at(0);
+        start++;
+    }
+#endif
 
     for (int i = start; i < size; ++i) {
         if (i || isLocalFile) {
@@ -265,9 +278,9 @@ bool Path::operator<(const Path& other) const
     return size < otherSize;
 }
 
-KUrl Path::toUrl() const
+QUrl Path::toUrl() const
 {
-    return KUrl(pathOrUrl());
+    return QUrl::fromUserInput(pathOrUrl());
 }
 
 QString Path::lastPathSegment() const
@@ -382,11 +395,11 @@ uint qHash(const Path& path)
     return hash;
 }
 
-Path::List toPathList(const KUrl::List& list)
+Path::List toPathList(const QList<QUrl>& list)
 {
     Path::List ret;
     ret.reserve(list.size());
-    foreach(const KUrl& url, list) {
+    foreach(const QUrl& url, list) {
         Path path(url);
         if (path.isValid()) {
             ret << path;

@@ -18,10 +18,13 @@
 */
 
 #include "kdevprojectdashboard.h"
+
+#include <QAction>
+
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KAboutData>
-#include <KAction>
+
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/context.h>
@@ -77,7 +80,7 @@ KDevelop::ContextMenuExtension KDevProjectDashboard::contextMenuExtension(KDevel
 
     ContextMenuExtension menuExt;
     if(!m_selectedProjects.isEmpty()) {
-        KAction* action = new KAction(KIcon("dashboard-show"), i18n("Show Dashboard"), this);
+        QAction* action = new QAction(QIcon::fromTheme("dashboard-show"), i18n("Show Dashboard"), this);
         connect(action, SIGNAL(triggered()), SLOT(showDashboard()));
         menuExt.addAction(ContextMenuExtension::ProjectGroup, action);
     }

@@ -34,7 +34,7 @@ class ToolDocument;
 /**
 @short Factory to create widgets for toolviews
 */
-class SUBLIME_EXPORT ToolFactory {
+class KDEVPLATFORMSUBLIME_EXPORT ToolFactory {
 public:
     virtual ~ToolFactory() {}
     virtual QWidget* create(ToolDocument *doc, QWidget *parent = 0) = 0;
@@ -65,7 +65,7 @@ private:
 /**
 @short Document to represent and manage widgets as toolviews
 */
-class SUBLIME_EXPORT ToolDocument: public Document {
+class KDEVPLATFORMSUBLIME_EXPORT ToolDocument: public Document {
 public:
     /**Initializes tool document with given @p factory. Document takes
     ownership over the factory and deletes it together with itself*/

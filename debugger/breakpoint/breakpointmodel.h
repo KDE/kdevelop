@@ -24,7 +24,7 @@
 
 #include <QtCore/QAbstractTableModel>
 
-#include <KDE/KTextEditor/MarkInterface>
+#include <KTextEditor/MarkInterface>
 #include "breakpoint.h"
 
 class KUrl;

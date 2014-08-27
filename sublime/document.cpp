@@ -174,4 +174,4 @@ QIcon Document::defaultIcon() const
 
 }
 
-#include "document.moc"
+#include "moc_document.cpp"

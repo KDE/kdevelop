@@ -22,7 +22,7 @@
 #include "types/functiontype.h"
 #include "declaration.h"
 #include "ducontext.h"
-#include "indexedstring.h"
+#include <serialization/indexedstring.h>
 
 namespace KDevelop {
 

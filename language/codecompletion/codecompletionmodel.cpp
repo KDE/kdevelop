@@ -77,7 +77,7 @@ public:
    
    virtual void run () {
      //We connect directly, so we can do the pre-grouping within the background thread
-     connect(m_worker, SIGNAL(foundDeclarationsReal(QList<KSharedPtr<CompletionTreeElement> >,KSharedPtr<CodeCompletionContext>)), m_model, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >,KSharedPtr<CodeCompletionContext>)), Qt::QueuedConnection);
+     connect(m_worker, SIGNAL(foundDeclarationsReal(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >,QExplicitlySharedDataPointer<CodeCompletionContext>)), m_model, SLOT(foundDeclarations(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >,QExplicitlySharedDataPointer<CodeCompletionContext>)), Qt::QueuedConnection);
 
      connect(m_model, SIGNAL(completionsNeeded(KDevelop::DUContextPointer,KTextEditor::Cursor,KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer,KTextEditor::Cursor,KTextEditor::View*)), Qt::QueuedConnection);
      connect(m_model, SIGNAL(doSpecialProcessingInBackground(uint)), m_worker, SLOT(doSpecialProcessing(uint)));
@@ -100,14 +100,14 @@ void CodeCompletionModel::setForceWaitForModel(bool wait)
 
 
 CodeCompletionModel::CodeCompletionModel( QObject * parent )
-  : CodeCompletionModel2(parent)
+  : KTextEditor::CodeCompletionModel(parent)
   , m_forceWaitForModel(false)
   , m_fullCompletion(true)
   , m_mutex(new QMutex)
   , m_thread(0)
 {
-  qRegisterMetaType<QList<CompletionTreeElement> >("QList<KSharedPtr<CompletionTreeElement> >");
-  qRegisterMetaType<KSharedPtr<CodeCompletionContext> >("KSharedPtr<CodeCompletionContext>");
+  qRegisterMetaType<QList<CompletionTreeElement> >("QList<QExplicitlySharedDataPointer<CompletionTreeElement> >");
+  qRegisterMetaType<QExplicitlySharedDataPointer<CodeCompletionContext> >("QExplicitlySharedDataPointer<CodeCompletionContext>");
   qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
 }
 
@@ -148,11 +148,13 @@ KDevelop::CodeCompletionWorker* CodeCompletionModel::worker() const {
   return m_thread->m_worker;
 }
 
-void CodeCompletionModel::clear() {
+void CodeCompletionModel::clear()
+{
+  beginResetModel();
   m_completionItems.clear();
   m_navigationWidgets.clear();
-  m_completionContext.clear();
-  reset();
+  m_completionContext.reset();
+  endResetModel();
 }
 
 void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url)
@@ -172,7 +174,7 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
   }
   setCurrentTopContext(TopDUContextPointer(top));
 
-  RangeInRevision rangeInRevision = top->transformToLocalRevision(SimpleRange(range));
+  RangeInRevision rangeInRevision = top->transformToLocalRevision(KTextEditor::Range(range));
   
   if (top) {
     kDebug() << "completion invoked for context" << (DUContext*)top;
@@ -187,7 +189,7 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
       thisContext = SpecializationStore::self().applySpecialization(top->findContextAt(rangeInRevision.start), top);
 
       if ( thisContext ) {
-        kDebug() << "after specialization:" << thisContext->localScopeIdentifier().toString() << thisContext->rangeInCurrentRevision().textRange();
+        kDebug() << "after specialization:" << thisContext->localScopeIdentifier().toString() << thisContext->rangeInCurrentRevision();
       }
 
       if(!thisContext)
@@ -196,9 +198,10 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
        kDebug() << "context is set to" << thisContext.data();
         if( !thisContext ) {
           kDebug() << "================== NO CONTEXT FOUND =======================";
+          beginResetModel();
           m_completionItems.clear();
           m_navigationWidgets.clear();
-          reset();
+          endResetModel();
           return;
         }
     }
@@ -235,10 +238,10 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
     kWarning() << "Completion invoked on a completion model which has no code completion worker assigned!";
   }
 
+  beginResetModel();
   m_navigationWidgets.clear();
   m_completionItems.clear();
-
-  reset();
+  endResetModel();
 
   worker()->abortCurrentCompletion();
   worker()->setFullCompletion(m_fullCompletion);
@@ -248,24 +251,27 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
   completionInvokedInternal(view, range, invocationType, url);
 }
 
-void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > items, KSharedPtr<CodeCompletionContext> completionContext)
+void CodeCompletionModel::foundDeclarations(QList<QExplicitlySharedDataPointer<CompletionTreeElement> > items, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext)
 {
   m_completionContext = completionContext;
   
   if(m_completionItems.isEmpty() && items.isEmpty()) {
-    if(m_forceWaitForModel)
-      reset(); //If we need to reset the model, reset it
+    if(m_forceWaitForModel) {
+      // TODO KF5: Check if this actually works
+      beginResetModel();
+      endResetModel(); //If we need to reset the model, reset it
+    }
     return; //We don't need to reset, which is bad for target model
   }
   
+  beginResetModel();
   m_completionItems = items;
-  
-  
+  endResetModel();
+
   if(m_completionContext) {
     kDebug() << "got completion-context with " << m_completionContext->ungroupedElements().size() << "ungrouped elements";
   }
 
-  reset();
 
 /*  if (completionContext == m_completionContext.data()) {
     if( !m_completionItems.isEmpty() ) {
@@ -277,12 +283,12 @@ void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeEleme
   }*/
 }
 
-CodeCompletionModelControllerInterface3::MatchReaction CodeCompletionModel::matchingItem(const QModelIndex& /*matched*/)
+KTextEditor::CodeCompletionModelControllerInterface::MatchReaction CodeCompletionModel::matchingItem(const QModelIndex& /*matched*/)
 {
     return None;
 }
 
-void CodeCompletionModel::setCompletionContext(KSharedPtr<CodeCompletionContext> completionContext)
+void CodeCompletionModel::setCompletionContext(QExplicitlySharedDataPointer<CodeCompletionContext> completionContext)
 {
   QMutexLocker lock(m_mutex);
   m_completionContext = completionContext;
@@ -292,25 +298,25 @@ void CodeCompletionModel::setCompletionContext(KSharedPtr<CodeCompletionContext>
   }
 }
 
-KSharedPtr<CodeCompletionContext> CodeCompletionModel::completionContext() const
+QExplicitlySharedDataPointer<CodeCompletionContext> CodeCompletionModel::completionContext() const
 {
   QMutexLocker lock(m_mutex);
   return m_completionContext;
 }
 
-void CodeCompletionModel::executeCompletionItem2(Document* document, const Range& word, const QModelIndex& index) const
+void CodeCompletionModel::executeCompletionItem(View* view, const KTextEditor::Range& word, const QModelIndex& index) const
 {
   //We must not lock the duchain at this place, because the items might rely on that
   CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
   if( !element || !element->asItem() )
     return;
 
-  element->asItem()->execute(document, word);
+  element->asItem()->execute(view, word);
 }
 
-KSharedPtr< KDevelop::CompletionTreeElement > CodeCompletionModel::itemForIndex(QModelIndex index) const {
+QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > CodeCompletionModel::itemForIndex(QModelIndex index) const {
   CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
-  return KSharedPtr< KDevelop::CompletionTreeElement >(element);
+  return QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement >(element);
 }
 
 QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
@@ -447,10 +453,10 @@ int CodeCompletionModel::rowCount ( const QModelIndex & parent ) const
 
 QString CodeCompletionModel::filterString(KTextEditor::View* view, const KTextEditor::Range& range, const KTextEditor::Cursor& position)
 {
-  m_filterString = KTextEditor::CodeCompletionModelControllerInterface3::filterString(view, range, position);
+  m_filterString = KTextEditor::CodeCompletionModelControllerInterface::filterString(view, range, position);
   return m_filterString;
 }
 
 }
 
-#include "codecompletionmodel.moc"
+#include "moc_codecompletionmodel.cpp"

@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_TYPEUTILS_H
 #define KDEVPLATFORM_TYPEUTILS_H
 
-#include "../../languageexport.h"
+#include <language/languageexport.h>
 #include "abstracttype.h"
 #include "unsuretype.h"
 #include "integraltype.h"
@@ -82,7 +82,7 @@ namespace TypeUtils {
   * as a template parameter.
   **/
   template <typename LanguageUnsureType=KDevelop::UnsureType>
-  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr mergeTypes(KDevelop::AbstractType::Ptr type, const KDevelop::AbstractType::Ptr newType) {
+  KDevelop::AbstractType::Ptr mergeTypes(KDevelop::AbstractType::Ptr type, const KDevelop::AbstractType::Ptr newType) {
     static_assert(std::is_base_of<KDevelop::UnsureType, LanguageUnsureType>::value,
                   "LanguageUnsureType must inherit from KDevelop::UnsureType");
 

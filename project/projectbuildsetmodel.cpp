@@ -105,6 +105,10 @@ ProjectBuildSetModel::ProjectBuildSetModel( QObject* parent )
 
 void ProjectBuildSetModel::loadFromSession( ISession* session )
 {
+    if (!session) {
+        return;
+    }
+
     // Load the item ordering cache
     KConfigGroup sessionBuildSetConfig = session->config()->group( "Buildset" );
     QVariantList sessionBuildItems = KDevelop::stringToQVariant( sessionBuildSetConfig.readEntry( "BuildItems", QString() ) ).toList();
@@ -115,6 +119,10 @@ void ProjectBuildSetModel::loadFromSession( ISession* session )
 
 void ProjectBuildSetModel::storeToSession( ISession* session )
 {
+    if (!session) {
+        return;
+    }
+
     // Store the item ordering cache
     QVariantList sessionBuildItems;
     foreach( const QStringList& item, m_orderingCache) {
@@ -255,7 +263,7 @@ QVariant ProjectBuildSetModel::data( const QModelIndex& idx, int role ) const
     } else if(role == Qt::DecorationRole && idx.column()==0) {
         KDevelop::ProjectBaseItem* item = m_items.at( idx.row() ).findItem();
         if( item ) {
-            return KIcon( item->iconName() );
+            return QIcon::fromTheme( item->iconName() );
         }
     }
     return QVariant();

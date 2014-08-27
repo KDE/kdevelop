@@ -49,4 +49,3 @@ void CvsDiffJob::slotProcessError(QProcess::ProcessError error) {
     KDevelop::DVcsJob::slotProcessError(error);
 }
 
-#include "cvsdiffjob.moc"

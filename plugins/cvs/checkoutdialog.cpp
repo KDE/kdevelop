@@ -11,6 +11,7 @@
 #include "checkoutdialog.h"
 
 #include <KMessageBox>
+#include <KI18n/KLocalizedString>
 #include <KDebug>
 
 #include <interfaces/icore.h>
@@ -83,4 +84,3 @@ void CheckoutDialog::jobFinished(KJob * job)
     }
 }
 
-#include "checkoutdialog.moc"

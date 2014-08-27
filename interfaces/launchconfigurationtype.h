@@ -26,7 +26,7 @@
 #include <QtCore/QStringList>
 
 class QMenu;
-class KIcon;
+class QIcon;
 class KUrl;
 class KConfigGroup;
 
@@ -101,7 +101,7 @@ public:
      * Provide an icon for this launch configuration type
      * @returns an icon to be used for representing launch configurations of this type
      */
-    virtual KIcon icon() const = 0;
+    virtual QIcon icon() const = 0;
     
     /**
      * Check whether this launch configuration type can launch the given project item

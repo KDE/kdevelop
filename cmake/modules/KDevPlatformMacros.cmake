@@ -14,6 +14,8 @@
 # Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 # Redistribution and use is allowed according to the terms of the BSD license.
 
+include(CMakeParseArguments)
+
 # creates a template archive from the given directory
 macro(kdevplatform_create_template_archive _templateName)
     get_filename_component(_tmp_file ${_templateName} ABSOLUTE)
@@ -72,7 +74,9 @@ macro(kdevplatform_add_template _installDirectory _templateName)
     endif(WIN32)
 
     install( FILES ${_template} DESTINATION ${_installDirectory})
-    macro_additional_clean_files(${_template})
+    GET_DIRECTORY_PROPERTY(_tmp_DIR_PROPS ADDITIONAL_MAKE_CLEAN_FILES )
+    list(APPEND _tmp_DIR_PROPS ${_template})
+    SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${_tmp_DIR_PROPS}")
 endmacro(kdevplatform_add_template _installDirectory _templateName)
 
 macro(kdevplatform_add_app_templates _templateNames)
@@ -84,5 +88,16 @@ endmacro(kdevplatform_add_app_templates _templateNames)
 macro(kdevplatform_add_file_templates _templateNames)
     foreach(_templateName ${ARGV})
         kdevplatform_add_template(${DATA_INSTALL_DIR}/kdevfiletemplates/templates ${_templateName})
-    endforeach(_templateName ${ARGV}) 
+    endforeach(_templateName ${ARGV})
 endmacro(kdevplatform_add_file_templates _templateNames)
+
+function(kdevplatform_add_test testName)
+    cmake_parse_arguments(args "" "" "SOURCES" ${ARGN})
+
+    if (NOT args_SOURCES)
+        message(FATAL_ERROR "Missing SOURCES argument")
+    endif()
+    add_executable(${testName} ${args_SOURCES})
+    add_test(${testName} ${testName})
+    ecm_mark_as_test(${testName})
+endfunction()

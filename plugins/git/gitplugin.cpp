@@ -61,7 +61,7 @@
 #include "gitplugincheckinrepositoryjob.h"
 
 K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
-K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
@@ -175,7 +175,7 @@ QDir urlDir(const KUrl::List& urls) { return urlDir(urls.first()); } //TODO: cou
 }
 
 GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
-    : DistributedVersionControlPlugin(parent, KDevGitFactory::componentData()), m_oldVersion(false)
+    : DistributedVersionControlPlugin(parent, "kdevgit"), m_oldVersion(false)
 {
     if (KStandardDirs::findExe("git").isEmpty()) {
         m_hasError = true;
@@ -354,7 +354,7 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
     
     DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this, KDevelop::OutputJob::Silent);
     job->setType(VcsJob::Diff);
-    *job << "git" << "diff" << "--no-prefix" << "--no-color" << "--no-ext-diff";
+    *job << "git" << "diff" << "--no-color" << "--no-ext-diff";
     if(srcRevision.revisionType()==VcsRevision::Special
         && dstRevision.revisionType()==VcsRevision::Special
         && srcRevision.specialType()==VcsRevision::Base
@@ -1036,7 +1036,7 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
                 item.setDate(QDateTime::fromTime_t(infoRegex.cap(2).trimmed().split(' ')[0].toUInt()));
             }
         } else if (modificationsRegex.exactMatch(line)) {
-            VcsItemEvent::Actions a = actionsFromString(modificationsRegex.cap(1)[0].toAscii());
+            VcsItemEvent::Actions a = actionsFromString(modificationsRegex.cap(1)[0].toLatin1());
             QString filenameA = modificationsRegex.cap(2);
             
             VcsItemEvent itemEvent;
@@ -1090,7 +1090,7 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
     KUrl d = job->directory().absolutePath();
     QMap<KUrl, VcsStatusInfo::State> allStatus;
     foreach(const QString& line, outputLines) {
-        VcsStatusInfo::State status = lsfilesToState(line[0].toAscii());
+        VcsStatusInfo::State status = lsfilesToState(line[0].toLatin1());
         
         KUrl url = d;
         url.addPath(line.right(line.size()-2));
@@ -1228,7 +1228,7 @@ VcsStatusInfo::State GitPlugin::messageToState(const QString& msg)
     
     if(msg.contains('U') || msg == "AA" || msg == "DD")
         ret = VcsStatusInfo::ItemHasConflicts;
-    else switch(msg[0].toAscii())
+    else switch(msg[0].toLatin1())
     {
         case 'M':
             ret = VcsStatusInfo::ItemModified;
@@ -1437,3 +1437,5 @@ CheckInRepositoryJob* GitPlugin::isInRepository(KTextEditor::Document* document)
 }
 
 
+
+#include "gitplugin.moc"

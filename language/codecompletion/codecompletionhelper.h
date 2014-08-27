@@ -18,18 +18,19 @@
 #ifndef KDEVPLATFORM_CODECOMPLETIONHELPER_H
 #define KDEVPLATFORM_CODECOMPLETIONHELPER_H
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 #include "../duchain/duchainpointer.h"
 #include "../duchain/declaration.h"
 
 namespace KTextEditor {
   class Document;
   class Range;
+  class View;
 }
 namespace KDevelop {
   class Declaration;
 
-  void KDEVPLATFORMLANGUAGE_EXPORT insertFunctionParenText(KTextEditor::Document* document, const KTextEditor::Cursor& pos, KDevelop::DeclarationPointer declaration, bool jumpForbidden = false);
+  void KDEVPLATFORMLANGUAGE_EXPORT insertFunctionParenText(KTextEditor::View* view, const KTextEditor::Cursor& pos, KDevelop::DeclarationPointer declaration, bool jumpForbidden = false);
 
 }
 #endif

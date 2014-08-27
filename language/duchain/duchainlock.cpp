@@ -91,7 +91,8 @@ bool DUChainLock::lockForRead(unsigned int timeout)
   ///Step 1: Increase the own reader-recursion. This will make sure no further write-locks will succeed
   d->changeOwnReaderRecursion(1);
 
-  if (d->m_writer == 0 || d->m_writer == QThread::currentThread()) {
+  QThread* w = d->m_writer.loadAcquire();
+  if (w == 0 || w == QThread::currentThread()) {
     //Successful lock: Either there is no writer, or we hold the write-lock by ourselves
   } else {
     ///Step 2: Start spinning until there is no writer any more
@@ -101,7 +102,7 @@ bool DUChainLock::lockForRead(unsigned int timeout)
       t.start();
     }
 
-    while (d->m_writer) {
+    while (d->m_writer.loadAcquire()) {
       if (!timeout || t.elapsed() < timeout) {
         usleep(uSleepTime);
       } else {
@@ -131,7 +132,7 @@ bool DUChainLock::lockForWrite(uint timeout)
 
   Q_ASSERT(d->ownReaderRecursion() == 0);
 
-  if (d->m_writer == QThread::currentThread()) {
+  if (d->m_writer.load() == QThread::currentThread()) {
     //We already hold the write lock, just increase the recursion count and return
     d->m_writerRecursion.fetchAndAddRelaxed(1);
     return true;
@@ -144,10 +145,10 @@ bool DUChainLock::lockForWrite(uint timeout)
 
   while (1) {
     //Try acquiring the write-lcok
-    if (d->m_totalReaderRecursion == 0 && d->m_writerRecursion.testAndSetOrdered(0, 1)) {
+    if (d->m_totalReaderRecursion.load() == 0 && d->m_writerRecursion.testAndSetOrdered(0, 1)) {
       //Now we can be sure that there is no other writer, as we have increased m_writerRecursion from 0 to 1
       d->m_writer = QThread::currentThread();
-      if (d->m_totalReaderRecursion == 0) {
+      if (d->m_totalReaderRecursion.load() == 0) {
         //There is still no readers, we have successfully acquired a write-lock
         return true;
       } else {
@@ -174,7 +175,8 @@ void DUChainLock::releaseWriteLock()
 
   //The order is important here, m_writerRecursion protects m_writer
 
-  if (d->m_writerRecursion == 1) {
+  //TODO: could testAndSet here
+  if (d->m_writerRecursion.load() == 1) {
     d->m_writer = 0;
     d->m_writerRecursion = 0;
   } else {
@@ -184,7 +186,7 @@ void DUChainLock::releaseWriteLock()
 
 bool DUChainLock::currentThreadHasWriteLock()
 {
-  return d->m_writer == QThread::currentThread();
+  return d->m_writer.load() == QThread::currentThread();
 }
 
 DUChainReadLocker::DUChainReadLocker(DUChainLock* duChainLock, uint timeout)

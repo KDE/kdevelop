@@ -54,22 +54,22 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, ProblemReporterPlugin* plugin)
 {
     setObjectName("Problem Reporter Tree");
     setWindowTitle(i18n("Problems"));
-    setWindowIcon( KIcon("dialog-information") ); ///@todo Use a proper icon
+    setWindowIcon( QIcon::fromTheme("dialog-information") ); ///@todo Use a proper icon
     setRootIsDecorated(false);
     setWhatsThis( i18n( "Problems" ) );
 
     setModel(m_plugin->getModel());
     header()->setStretchLastSection(false);
 
-    KAction* fullUpdateAction = new KAction(this);
+    QAction* fullUpdateAction = new QAction(this);
     fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     fullUpdateAction->setText(i18n("Force Full Update"));
     fullUpdateAction->setToolTip(i18nc("@info:tooltip", "Re-parse all watched documents"));
-    fullUpdateAction->setIcon(KIcon("view-refresh"));
+    fullUpdateAction->setIcon(QIcon::fromTheme("view-refresh"));
     connect(fullUpdateAction, SIGNAL(triggered(bool)), model(), SLOT(forceFullUpdate()));
     addAction(fullUpdateAction);
 
-    KAction* showImportsAction = new KAction(this);
+    QAction* showImportsAction = new QAction(this);
     addAction(showImportsAction);
     showImportsAction->setCheckable(true);
     showImportsAction->setChecked(false);
@@ -85,23 +85,23 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, ProblemReporterPlugin* plugin)
 
     QActionGroup* scopeActions = new QActionGroup(this);
 
-    KAction* currentDocumentAction = new KAction(this);
+    QAction* currentDocumentAction = new QAction(this);
     currentDocumentAction->setText(i18n("Current Document"));
     currentDocumentAction->setToolTip(i18nc("@info:tooltip", "Display problems in current document"));
 
-    KAction* openDocumentsAction = new KAction(this);
+    QAction* openDocumentsAction = new QAction(this);
     openDocumentsAction->setText(i18n("Open Documents"));
     openDocumentsAction->setToolTip(i18nc("@info:tooltip", "Display problems in all open documents"));
 
-    KAction* currentProjectAction = new KAction(this);
+    QAction* currentProjectAction = new QAction(this);
     currentProjectAction->setText(i18n("Current Project"));
     currentProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in current project"));
 
-    KAction* allProjectAction = new KAction(this);
+    QAction* allProjectAction = new QAction(this);
     allProjectAction->setText(i18n("All Projects"));
     allProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in all projects"));
 
-    KAction* scopeActionArray[] = {currentDocumentAction, openDocumentsAction, currentProjectAction, allProjectAction};
+    QAction* scopeActionArray[] = {currentDocumentAction, openDocumentsAction, currentProjectAction, allProjectAction};
     for (int i = 0; i < 4; ++i) {
         scopeActionArray[i]->setCheckable(true);
         scopeActions->addAction(scopeActionArray[i]);
@@ -127,16 +127,16 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, ProblemReporterPlugin* plugin)
     severityMenu->setToolTip(i18nc("@info:tooltip", "Select the lowest level of problem severity to be displayed"));
     QActionGroup* severityActions = new QActionGroup(this);
 
-    KAction* errorSeverityAction = new KAction(i18n("Error"), this);
+    QAction* errorSeverityAction = new QAction(i18n("Error"), this);
     errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display only errors"));
 
-    KAction* warningSeverityAction = new KAction(i18n("Warning"), this);
+    QAction* warningSeverityAction = new QAction(i18n("Warning"), this);
     warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors and warnings"));
 
-    KAction* hintSeverityAction = new KAction(i18n("Hint"), this);
+    QAction* hintSeverityAction = new QAction(i18n("Hint"), this);
     hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors, warnings and hints"));
 
-    KAction* severityActionArray[] = {errorSeverityAction, warningSeverityAction, hintSeverityAction};
+    QAction* severityActionArray[] = {errorSeverityAction, warningSeverityAction, hintSeverityAction};
     for (int i = 0; i < 3; ++i) {
         severityActionArray[i]->setCheckable(true);
         severityActions->addAction(severityActionArray[i]);
@@ -175,7 +175,7 @@ void ProblemTreeView::itemActivated(const QModelIndex& index)
         DUChainReadLocker lock(DUChain::lock());
         ProblemPointer problem = model()->problemForIndex(index);
         url = KUrl(problem->finalLocation().document.str());
-        start = problem->finalLocation().start.textCursor();
+        start = problem->finalLocation().start();
     }
 
     m_plugin->core()->documentController()->openDocument(url, start);
@@ -208,9 +208,9 @@ void ProblemTreeView::resizeColumns()
     }
 }
 
-void ProblemTreeView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void ProblemTreeView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles)
 {
-    QTreeView::dataChanged(topLeft, bottomRight);
+    QTreeView::dataChanged(topLeft, bottomRight, roles);
     resizeColumns();
 }
 
@@ -236,7 +236,7 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event) {
     if(index.isValid()) {
         KDevelop::ProblemPointer problem = model()->problemForIndex(index);
         if(problem) {
-            KSharedPtr<KDevelop::IAssistant> solution = problem->solutionAssistant();
+            QExplicitlySharedDataPointer<KDevelop::IAssistant> solution = problem->solutionAssistant();
             if(solution) {
                 QList<QAction*> actions;
                 foreach(KDevelop::IAssistantAction::Ptr action, solution->actions()) {
@@ -266,4 +266,3 @@ void ProblemTreeView::showEvent(QShowEvent * event)
         resizeColumnToContents(i);
 }
 
-#include "problemtreeview.moc"

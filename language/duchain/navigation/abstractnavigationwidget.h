@@ -25,7 +25,7 @@
 #include <QWidget>
 
 #include "../../interfaces/quickopendataprovider.h"
-#include "../../languageexport.h"
+#include <language/languageexport.h>
 #include "abstractnavigationcontext.h"
 
 class QWidget;

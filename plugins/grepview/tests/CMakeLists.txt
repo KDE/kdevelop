@@ -1,8 +1,5 @@
-
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 set(findReplaceTest_SRCS 
-    findreplacetest.cpp 
+    test_findreplace.cpp
     ../grepviewplugin.cpp
     ../grepdialog.cpp
     ../grepoutputmodel.cpp
@@ -17,13 +14,8 @@ set(kdevgrepview_PART_UI
     ../grepoutputview.ui
 )
 
-kde4_add_ui_files(findReplaceTest_SRCS ${kdevgrepview_PART_UI})
-kde4_add_unit_test(findreplace-test ${findReplaceTest_SRCS})
-target_link_libraries(findreplace-test
-    ${QT_QTTEST_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-)
+qt5_wrap_ui(findReplaceTest_SRCS ${kdevgrepview_PART_UI})
+ecm_add_test(${findReplaceTest_SRCS}
+    TEST_NAME test_findreplace
+    LINK_LIBRARIES Qt5::Test ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES}
+    GUI)

@@ -27,12 +27,9 @@
 #include "codedescriptionmetatypes.h"
 #include "archivetemplateloader.h"
 
-#include <grantlee/metatype.h>
-
 #include <interfaces/icore.h>
-
-#include <KComponentData>
-#include <KStandardDirs>
+#include <QStandardPaths>
+#include <QCoreApplication>
 
 using namespace KDevelop;
 using namespace Grantlee;
@@ -50,12 +47,7 @@ TemplateEngine::TemplateEngine()
     d->engine.setSmartTrimEnabled(true);
 #endif
 
-    addTemplateDirectories(ICore::self()->componentData().dirs()->findDirs("data", "kdevcodegen/templates"));
-
-    foreach (const QString& path, ICore::self()->componentData().dirs()->resourceDirs("lib"))
-    {
-        d->engine.addPluginPath(path);
-    }
+    addTemplateDirectories(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevcodegen/templates", QStandardPaths::LocateDirectory));
 
     Grantlee::registerMetaType<KDevelop::VariableDescription>();
     Grantlee::registerMetaType<KDevelop::FunctionDescription>();

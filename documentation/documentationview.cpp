@@ -18,7 +18,9 @@
 */
 
 #include "documentationview.h"
+
 #include <QAction>
+#include <QIcon>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QComboBox>
@@ -26,10 +28,11 @@
 #include <QCompleter>
 #include <QLayout>
 #include <QTextBrowser>
+
 #include <KLineEdit>
 #include <KDebug>
-#include <KIcon>
 #include <KLocale>
+
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationprovider.h>
 #include <interfaces/idocumentationproviderprovider.h>
@@ -42,7 +45,7 @@ using namespace KDevelop;
 DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* m)
     : QWidget(parent), mProvidersModel(m)
 {
-    setWindowIcon(KIcon("documentation"));
+    setWindowIcon(QIcon::fromTheme("documentation"));
     setWindowTitle(i18n("Documentation"));
 
     setLayout(new QVBoxLayout(this));
@@ -61,11 +64,11 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* m)
     mFindDoc = new DocumentationFindWidget;
     mFindDoc->hide();
     
-    mBack=mActions->addAction(KIcon("go-previous"), i18n("Back"));
-    mForward=mActions->addAction(KIcon("go-next"), i18n("Forward"));
-    mFind=mActions->addAction(KIcon("edit-find"), i18n("Find"), mFindDoc, SLOT(show()));
+    mBack=mActions->addAction(QIcon::fromTheme("go-previous"), i18n("Back"));
+    mForward=mActions->addAction(QIcon::fromTheme("go-next"), i18n("Forward"));
+    mFind=mActions->addAction(QIcon::fromTheme("edit-find"), i18n("Find"), mFindDoc, SLOT(show()));
     mActions->addSeparator();
-    mActions->addAction(KIcon("go-home"), i18n("Home"), this, SLOT(showHome()));
+    mActions->addAction(QIcon::fromTheme("go-home"), i18n("Home"), this, SLOT(showHome()));
     mProviders=new QComboBox(mActions);
     mProviders->setFocusPolicy(Qt::NoFocus);
     
@@ -101,8 +104,8 @@ void DocumentationView::initialize()
     mProviders->setModel(mProvidersModel);
     connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
     foreach(KDevelop::IDocumentationProvider* p, mProvidersModel->providers()) {
-        connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(KSharedPtr<KDevelop::IDocumentation>)),
-                SLOT(addHistory(KSharedPtr<KDevelop::IDocumentation>)));
+        connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(QExplicitlySharedDataPointer<KDevelop::IDocumentation>)),
+                SLOT(addHistory(QExplicitlySharedDataPointer<KDevelop::IDocumentation>)));
     }
     connect(mProvidersModel, SIGNAL(providersChanged()), this, SLOT(emptyHistory()));
     
@@ -145,13 +148,13 @@ void DocumentationView::changeProvider(const QModelIndex& idx)
     if(idx.isValid())
     {
         KDevelop::IDocumentationProvider* prov=mProvidersModel->provider(mProviders->currentIndex());
-        KSharedPtr<KDevelop::IDocumentation> doc=prov->documentationForIndex(idx);
+        QExplicitlySharedDataPointer<KDevelop::IDocumentation> doc=prov->documentationForIndex(idx);
         if(doc)
             showDocumentation(doc);
     }
 }
 
-void DocumentationView::showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)
+void DocumentationView::showDocumentation(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc)
 {
     kDebug(9529) << "showing" << doc->name();
     
@@ -159,7 +162,7 @@ void DocumentationView::showDocumentation(KSharedPtr< KDevelop::IDocumentation >
     updateView();
 }
 
-void DocumentationView::addHistory(KSharedPtr< KDevelop::IDocumentation > doc)
+void DocumentationView::addHistory(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc)
 {
     mBack->setEnabled( !mHistory.isEmpty() );
     mForward->setEnabled(false);

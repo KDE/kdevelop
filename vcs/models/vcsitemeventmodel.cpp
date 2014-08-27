@@ -20,16 +20,16 @@
 
 #include "vcsitemeventmodel.h"
 
+#include <QDebug>
+#include <QIcon>
 #include <QModelIndex>
 #include <QVariant>
 #include <QList>
+#include <QUrl>
+#include <QMimeType>
+#include <QMimeDatabase>
 
 #include <klocale.h>
-#include <KMimeType>
-#include <KIcon>
-
-#include <tests/modeltest.h>
-#include <QDebug>
 
 #include "../vcsrevision.h"
 #include "../vcsevent.h"
@@ -66,9 +66,12 @@ void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list
             actionStrings << i18n("Copied");
         else if( act & KDevelop::VcsItemEvent::Replaced )
             actionStrings << i18n("Replaced");
-        KMimeType::Ptr mime = KMimeType::findByUrl( ev.repositoryLocation(), 0, false, true );
+        QUrl repoUrl(ev.repositoryLocation());
+        QMimeType mime = repoUrl.isLocalFile()
+                ? QMimeDatabase().mimeTypeForFile(repoUrl.toLocalFile(), QMimeDatabase::MatchExtension)
+                : QMimeDatabase().mimeTypeForUrl(repoUrl.url());
         QList<QStandardItem*> rowItems = QList<QStandardItem*>()
-            << new QStandardItem(KIcon(mime->iconName()), ev.repositoryLocation())
+            << new QStandardItem(QIcon::fromTheme(mime.iconName()), ev.repositoryLocation())
             << new QStandardItem(actionStrings.join(i18nc("separes an action list", ", ")));
         QString loc = ev.repositoryCopySourceLocation();
         if(!loc.isEmpty()) { //according to the documentation, those are optional. don't force them on the UI
@@ -109,4 +112,3 @@ KDevelop::VcsItemEvent VcsItemEventModel::itemEventForIndex( const QModelIndex& 
 
 }
 
-#include "vcsitemeventmodel.moc"

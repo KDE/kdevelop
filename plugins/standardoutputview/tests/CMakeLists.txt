@@ -1,11 +1,8 @@
-set(standardOutputViewTest_SRCS
-    standardoutputviewtest.cpp
+set(test_standardOutputView_SRCS
+    test_standardoutputview.cpp
     ../outputwidget.cpp
     ../toolviewdata.cpp
 )
-
-kde4_add_unit_test(standardoutputview-test ${standardOutputViewTest_SRCS})
-target_link_libraries(standardoutputview-test
-    ${QT_QTTEST_LIBRARY}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-)
+ecm_add_test(${test_standardOutputView_SRCS}
+    TEST_NAME test_standardoutputview
+    LINK_LIBRARIES Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES})

@@ -25,7 +25,7 @@
 #include <KJob>
 #include <QSharedPointer>
 
-#include "../vcsexport.h"
+#include "vcsexport.h"
 
 namespace KTextEditor {
     class Document;

@@ -15,7 +15,7 @@ set(kdevfiletemplates_PART_SRCS
     testcasespage.cpp
 )
 
-kde4_add_ui_files(kdevfiletemplates_PART_SRCS
+qt5_wrap_ui(kdevfiletemplates_PART_SRCS
     templatepreviewtoolview.ui
     ui/licensechooser.ui
     ui/newclass.ui
@@ -25,25 +25,26 @@ kde4_add_ui_files(kdevfiletemplates_PART_SRCS
     ui/testcases.ui
 )
 
-kde4_add_plugin(kdevfiletemplates ${kdevfiletemplates_PART_SRCS})
+add_library(kdevfiletemplates MODULE ${kdevfiletemplates_PART_SRCS})
 
 target_link_libraries(kdevfiletemplates
-    ${KDE4_KDECORE_LIBS}
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
-    ${KDE4_KNEWSTUFF3_LIBS}
+    KDev::Interfaces
+    KDev::Language
+    KDev::Project
+    KDev::Util
+    KF5::NewStuff
+    KF5::TextEditor
+    KF5::ItemModels
 )
 
-install(TARGETS kdevfiletemplates DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevfiletemplates DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 
 ########### install files ###############
 
 configure_file(kdevfiletemplates.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevfiletemplates.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevfiletemplates.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevfiletemplates.rc DESTINATION ${DATA_INSTALL_DIR}/kdevfiletemplates )
+install( FILES kdevfiletemplates.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevfiletemplates )
 install( FILES kdevfiletemplates.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 install(FILES
@@ -80,14 +81,14 @@ main.cpp
     testcasespage.cpp
 )
 
-kde4_add_executable(testfiletemplates ${test_srcs})
+add_executable(testfiletemplates ${test_srcs})
 
 target_link_libraries(testfiletemplates
-    ${KDE4_KDECORE_LIBS}
+    
     ${KDEVPLATFORM_INTERFACES_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_UTIL_LIBRARIES}
     ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${KDE4_KNEWSTUFF3_LIBS}
+    KF5::NewStuff
 )

@@ -26,16 +26,17 @@
 #include <QtCore/QPair>
 #include <QtCore/QMap>
 #include <QtCore/QPointer>
-#include <KDE/KTextEditor/CodeCompletionModel>
-#include <KDE/KSharedPtr>
+#include <QExplicitlySharedDataPointer>
 
 #include "../duchain/duchainpointer.h"
-#include "../languageexport.h"
+#include <language/languageexport.h>
 #include "codecompletioncontext.h"
 #include "codecompletionitem.h"
 #include <interfaces/icompletionsettings.h>
+#include <ktexteditor/codecompletionmodel.h>
 #include <ktexteditor/codecompletionmodelcontrollerinterface.h>
 #include <kdeversion.h>
+#include <KUrl>
 
 class QIcon;
 class QString;
@@ -48,11 +49,11 @@ class Declaration;
 class CodeCompletionWorker;
 class CompletionWorkerThread;
 
-class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::CodeCompletionModel2
-, public KTextEditor::CodeCompletionModelControllerInterface3
+class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::CodeCompletionModel
+                                                      , public KTextEditor::CodeCompletionModelControllerInterface
 {
   Q_OBJECT
-  Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface3)
+  Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
 
   public:
     CodeCompletionModel(QObject* parent);
@@ -63,7 +64,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     virtual void initialize();
     
     ///Entry-point for code-completion. This determines ome settings, clears the model, and then calls completionInvokedInternal for further processing.
-    virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
+    virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType);
 
     virtual QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
 
@@ -81,8 +82,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     bool forceWaitForModel();
     
     ///Convenience-storage for use by the inherited completion model
-    void setCompletionContext(KSharedPtr<CodeCompletionContext> completionContext);
-    KSharedPtr<CodeCompletionContext> completionContext() const;
+    void setCompletionContext(QExplicitlySharedDataPointer<CodeCompletionContext> completionContext);
+    QExplicitlySharedDataPointer<CodeCompletionContext> completionContext() const;
 
     ///Convenience-storage for use by the inherited completion model
     KDevelop::TopDUContextPointer currentTopContext() const;
@@ -102,7 +103,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     void clear();
     
     ///Returns the tree-element that belogns to the index, or zero
-    KSharedPtr<CompletionTreeElement> itemForIndex(QModelIndex index) const;
+    QExplicitlySharedDataPointer<CompletionTreeElement> itemForIndex(QModelIndex index) const;
     
   Q_SIGNALS:
     ///Connection from this completion-model into the background worker thread. You should emit this from within completionInvokedInternal.
@@ -113,19 +114,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
 
   protected Q_SLOTS:
     ///Connection from the background-thread into the model: This is called when the background-thread is ready
-    virtual void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > item, KSharedPtr<CodeCompletionContext> completionContext);
+    virtual void foundDeclarations(QList<QExplicitlySharedDataPointer<CompletionTreeElement> > item, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext);
     
   protected:
     ///Eventually override this, determine the context or whatever, and then emit completionsNeeded(..) to continue processing in the background tread.
     ///The default-implementation does this completely, so if you don't need to do anything special, you can just leave it.
-    virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url);
+    virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType, const KUrl& url);
 
-    virtual void executeCompletionItem2(KTextEditor::Document* document, const KTextEditor::Range& word, const QModelIndex& index) const;
-    KSharedPtr<CodeCompletionContext> m_completionContext;
-    typedef QPair<KDevelop::DeclarationPointer, KSharedPtr<CodeCompletionContext> > DeclarationContextPair;
+    virtual void executeCompletionItem(KTextEditor::View* view, const KTextEditor::Range& word, const QModelIndex& index) const;
+
+    QExplicitlySharedDataPointer<CodeCompletionContext> m_completionContext;
+    typedef QPair<KDevelop::DeclarationPointer, QExplicitlySharedDataPointer<CodeCompletionContext> > DeclarationContextPair;
 
     mutable QMap<const CompletionTreeElement*, QPointer<QWidget> > m_navigationWidgets;
-    QList< KSharedPtr<CompletionTreeElement> > m_completionItems;
+    QList< QExplicitlySharedDataPointer<CompletionTreeElement> > m_completionItems;
 
     /// Should create a completion-worker. The worker must have no parent object,
     /// because else its thread-affinity can not be changed.

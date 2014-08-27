@@ -50,8 +50,7 @@ void TestHighlighting::cleanupTestCase()
 void TestHighlighting::testInitialization()
 {
     CodeHighlighting highlighting(this);
-    QVERIFY(!highlighting.attributeForDepth(0).isNull());
+    QVERIFY(highlighting.attributeForDepth(0));
 }
 
 
-#include "test_highlighting.moc"

@@ -131,5 +131,10 @@ void IDocument::notifyLoaded()
     emit core()->documentController()->documentLoaded(this);
 }
 
+KTextEditor::View* IDocument::activeTextView() const
+{
+    return 0;
+}
+
 }
 

@@ -14,19 +14,19 @@ set(kdevexternalscript_PART_UI
     editexternalscript.ui
 )
 
-kde4_add_ui_files(kdevexternalscript_PART_SRCS ${kdevexternalscript_PART_UI})
+qt5_wrap_ui(kdevexternalscript_PART_SRCS ${kdevexternalscript_PART_UI})
 
-kde4_add_plugin(kdevexternalscript ${kdevexternalscript_PART_SRCS})
+add_library(kdevexternalscript MODULE ${kdevexternalscript_PART_SRCS})
 
 target_link_libraries(kdevexternalscript
-    ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNEWSTUFF3_LIBS}
-    kdevplatformlanguage kdevplatforminterfaces kdevplatformproject
-    kdevplatformutil kdevplatformoutputview
+    KF5::TextEditor KF5::KIOWidgets KF5::Parts KF5::NewStuff
+    KDev::Language KDev::Interfaces KDev::Project
+    KDev::Util KDev::OutputView
 )
 
-install( TARGETS kdevexternalscript DESTINATION ${PLUGIN_INSTALL_DIR} )
+install( TARGETS kdevexternalscript DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 ########### install files ###############
 configure_file(kdevexternalscript.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevexternalscript.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevexternalscript.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES kdevexternalscript.rc DESTINATION ${DATA_INSTALL_DIR}/kdevexternalscript )
+install( FILES kdevexternalscript.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevexternalscript )

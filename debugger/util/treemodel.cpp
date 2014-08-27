@@ -97,7 +97,7 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent)
     if (childItem)
         return createIndex(row, column, childItem);
     else
-        return createIndex(row, column, 0);
+        return createIndex(row, column, nullptr);
 }
 
 QModelIndex TreeModel::parent(const QModelIndex &index) const
@@ -203,4 +203,3 @@ KDevelop::TreeItem* KDevelop::TreeModel::root() const
 }
 
 
-#include "treemodel.moc"

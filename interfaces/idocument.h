@@ -23,12 +23,15 @@
 
 #include <kurl.h>
 #include <kmimetype.h>
-#include <KDE/KTextEditor/Cursor>
-#include <KDE/KTextEditor/Range>
+#include <KTextEditor/Cursor>
+#include <KTextEditor/Range>
 
 #include "interfacesexport.h"
 namespace KParts { class Part; class MainWindow; }
-namespace KTextEditor { class Document; }
+namespace KTextEditor {
+    class Document;
+    class View;
+}
 namespace Sublime{ class View; }
 
 namespace KDevelop {
@@ -74,7 +77,7 @@ public:
     /**
      * Returns the mimetype of the document.
      */
-    virtual KMimeType::Ptr mimeType() const = 0;
+    virtual QMimeType mimeType() const = 0;
 
     /**
      * Returns the part for given @p view if this document is a KPart document or 0 otherwise.
@@ -180,6 +183,11 @@ public:
      * This needs to call notifyActivated()
      */
     virtual void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow) = 0;
+
+    /**
+     * @returns the active text view in case it's a text document and it has one.
+     */
+    virtual KTextEditor::View* activeTextView() const;
 
 protected:
     ICore* core();

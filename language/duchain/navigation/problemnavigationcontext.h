@@ -21,7 +21,7 @@
 
 #include <language/duchain/navigation/abstractnavigationcontext.h>
 #include <language/duchain/problem.h>
-#include "../../languageexport.h"
+#include <language/languageexport.h>
 #include <qpointer.h>
 
 namespace KDevelop {

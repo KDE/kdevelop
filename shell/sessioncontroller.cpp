@@ -34,6 +34,7 @@ Boston, MA 02110-1301, USA.
 #include <kparts/mainwindow.h>
 #include <kactioncollection.h>
 #include <kpushbutton.h>
+#include <kdebug.h>
 
 #include "session.h"
 #include "core.h"
@@ -59,19 +60,12 @@ Boston, MA 02110-1301, USA.
 #include <QListView>
 #include <QHeaderView>
 #include <interfaces/idocumentcontroller.h>
-#include <language/duchain/repositories/itemrepositoryregistry.h>
+#include <serialization/itemrepositoryregistry.h>
 #include <ktexteditor/document.h>
 #include <QLabel>
+#include <QAction>
 #include <QSortFilterProxyModel>
 #include <QDBusConnectionInterface>
-
-
-#include <kdeversion.h>
-
-#if KDE_IS_VERSION(4,5,60)
-    #define HAVE_RECOVERY_INTERFACE
-    #include <ktexteditor/recoveryinterface.h>
-#endif
 
 const int recoveryStorageInterval = 10; ///@todo Make this configurable
 
@@ -166,7 +160,7 @@ public:
     void newSession()
     {
         qsrand(QDateTime::currentDateTime().toTime_t());
-        Session* session = new Session( QUuid::createUuid() );
+        Session* session = new Session( QUuid::createUuid().toString() );
         
         KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << session->id().toString() << standardArguments());
         delete session;
@@ -236,7 +230,7 @@ public:
         Q_ASSERT(s->id().toString() == result.lock->id());
         sessionLock = result.lock;
 
-        KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup() );
+        KConfigGroup grp = KSharedConfig::openConfig()->group( SessionController::cfgSessionGroup() );
         grp.writeEntry( SessionController::cfgActiveSessionEntry(), s->id().toString() );
         grp.sync();
         if (Core::self()->setupFlags() & Core::NoUi) return result;
@@ -273,7 +267,7 @@ public:
             return;
         }
 
-        KAction* a = new KAction( grp );
+        QAction* a = new QAction( grp );
         a->setText( s->description() );
         a->setCheckable( false );
         a->setData( s->id().toString() );
@@ -303,7 +297,7 @@ public:
 
     static QString sessionBaseDirectory()
     {
-        return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName() + "/sessions/", true );
+        return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ KGlobal::mainComponent().componentName() + "/sessions/";
     }
 
     QString ownSessionDirectory() const
@@ -379,7 +373,7 @@ private slots:
                     ///TODO: user proper runtime locale for date, it might be different
                     ///      from what was used when the recovery file was saved
                     KGuiItem recover = KStandardGuiItem::cont();
-                    recover.setIcon(KIcon("edit-redo"));
+                    recover.setIcon(QIcon::fromTheme("edit-redo"));
                     recover.setText(i18n("Recover"));
                     KGuiItem discard = KStandardGuiItem::discard();
                     int choice = KMessageBox::warningContinueCancelList(qApp->activeWindow(),
@@ -417,8 +411,7 @@ private slots:
                                 kWarning() << "The document " << originalFile.prettyUrl() << " could not be opened as a text-document, creating a new document with the recovered contents";
                                 doc = ICore::self()->documentController()->openDocumentFromText(text);
                             }else{
-                                #ifdef HAVE_RECOVERY_INTERFACE
-                                KTextEditor::RecoveryInterface* recovery = qobject_cast<KTextEditor::RecoveryInterface*>(doc->textDocument());
+                                KTextEditor::Document* recovery = doc->textDocument();
                                 
                                 if(recovery && recovery->isDataRecoveryAvailable())
                                     // Use the recovery from the kate swap-file if possible
@@ -426,10 +419,6 @@ private slots:
                                 else
                                     // Use a simple recovery through "replace text"
                                     doc->textDocument()->setText(text);
-                                #else
-                                    // Use a simple recovery through "replace text"
-                                    doc->textDocument()->setText(text);
-                                #endif
                             }
                         }
                     }
@@ -541,7 +530,7 @@ SessionController::SessionController( QObject *parent )
         : QObject( parent ), d(new SessionControllerPrivate(this))
 {
     setObjectName("SessionController");
-    setComponentData(KComponentData("kdevsession"));
+    setComponentName(QStringLiteral("kdevsession"), QStringLiteral("KDevSession"));
     
     setXMLFile("kdevsessionui.rc");
 
@@ -550,23 +539,23 @@ SessionController::SessionController( QObject *parent )
 
     if (Core::self()->setupFlags() & Core::NoUi) return;
 
-    KAction* action = actionCollection()->addAction( "new_session", this, SLOT(newSession()) );
+    QAction* action = actionCollection()->addAction( "new_session", this, SLOT(newSession()) );
     action->setText( i18nc("@action:inmenu", "Start New Session") );
     action->setToolTip( i18nc("@info:tooltip", "Start a new KDevelop instance with an empty session") );
-    action->setIcon(KIcon("window-new"));
+    action->setIcon(QIcon::fromTheme("window-new"));
 
     action = actionCollection()->addAction( "rename_session", this, SLOT(renameSession()) );
     action->setText( i18n("Rename Current Session...") );
-    action->setIcon(KIcon("edit-rename"));
+    action->setIcon(QIcon::fromTheme("edit-rename"));
 
     action = actionCollection()->addAction( "delete_session", this, SLOT(deleteCurrentSession()) );
     action->setText( i18n("Delete Current Session...") );
-    action->setIcon(KIcon("edit-delete"));
+    action->setIcon(QIcon::fromTheme("edit-delete"));
 
     action = actionCollection()->addAction( "quit", this, SIGNAL(quitSession()) );
     action->setText( i18n("Quit") );
     action->setShortcut(Qt::CTRL | Qt::Key_Q);
-    action->setIcon(KIcon("application-exit"));
+    action->setIcon(QIcon::fromTheme("application-exit"));
 
     #if 0
     action = actionCollection()->addAction( "configure_sessions", this, SLOT(configureSessions()) );
@@ -593,13 +582,15 @@ void SessionController::cleanup()
 {
     d->recoveryTimer.stop();
 
-    Q_ASSERT(d->activeSession->id().toString() == d->sessionLock->id());
+    if (d->activeSession) {
+        Q_ASSERT(d->activeSession->id().toString() == d->sessionLock->id());
 
-    ISession* active = d->activeSession;
-    d->activeSession = 0;
-    if (active->isTemporary()) {
-        deleteSessionFromDisk(d->sessionLock);
+        if (d->activeSession->isTemporary()) {
+            deleteSessionFromDisk(d->sessionLock);
+        }
+        d->activeSession = 0;
     }
+
     d->sessionLock.clear();
     qDeleteAll(d->sessionActions);
     d->sessionActions.clear();
@@ -615,7 +606,7 @@ void SessionController::initialize( const QString& session )
         if( id.isNull() )
             continue;
         // Only create sessions for directories that represent proper uuid's
-        Session* ses = new Session( id, this );
+        Session* ses = new Session( id.toString(), this );
 
         //Delete sessions that have no name and are empty
         if( ses->containedProjects().isEmpty() && ses->name().isEmpty()
@@ -674,10 +665,10 @@ Session* SessionController::createSession( const QString& name )
     Session* s;
     if(name.startsWith('{'))
     {
-        s = new Session( QUuid(name) );
+        s = new Session( QUuid(name).toString() );
     }else{
         qsrand(QDateTime::currentDateTime().toTime_t());
-        s = new Session( QUuid::createUuid() );
+        s = new Session( QUuid::createUuid().toString() );
         s->setName( name );
     }
     d->addSession( s );
@@ -698,11 +689,14 @@ void SessionController::deleteSession( const ISessionLock::Ptr& lock )
         plugActionList( "available_sessions", d->grp->actions() );
     }
 
+    if (s == d->activeSession) {
+        d->activeSession = nullptr;
+    }
     deleteSessionFromDisk(lock);
 
     emit sessionDeleted( s->id().toString() );
     d->sessionActions.remove(s);
-    s->deleteLater();
+    delete s;
 }
 
 void SessionController::deleteSessionFromDisk( const ISessionLock::Ptr& lock )
@@ -715,7 +709,7 @@ void SessionController::loadDefaultSession( const QString& session )
 {
     QString load = session;
     if (load.isEmpty()) {
-        KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup() );
+        KConfigGroup grp = KSharedConfig::openConfig()->group( cfgSessionGroup() );
         load = grp.readEntry( cfgActiveSessionEntry(), "default" );
     }
 
@@ -752,10 +746,10 @@ QString SessionController::cloneSession( const QString& nameOrid )
     Session* origSession = session( nameOrid );
     qsrand(QDateTime::currentDateTime().toTime_t());
     QUuid id = QUuid::createUuid();
-    KIO::NetAccess::dircopy( sessionDirectory( origSession->id().toString() ),
-                             sessionDirectory( id.toString() ),
+    KIO::NetAccess::dircopy( QUrl::fromLocalFile(sessionDirectory( origSession->id().toString() )),
+                             QUrl::fromLocalFile(sessionDirectory( id.toString() )),
                              Core::self()->uiController()->activeMainWindow() );
-    Session* newSession = new Session( id );
+    Session* newSession = new Session( id.toString() );
     newSession->setName( i18n( "Copy of %1", origSession->name() ) );
     d->addSession(newSession);
     return newSession->name();
@@ -850,7 +844,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
 
     int row = 0;
 
-    QString defaultSession = KGlobal::config()->group( cfgSessionGroup() ).readEntry( cfgActiveSessionEntry(), "default" );
+    QString defaultSession = KSharedConfig::openConfig()->group( cfgSessionGroup() ).readEntry( cfgActiveSessionEntry(), "default" );
 
     foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
     {
@@ -873,7 +867,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
 
     if(!onlyRunning) {
         model->setItem(row, 0, new QStandardItem);
-        model->setItem(row, 1, new QStandardItem(KIcon("window-new"), i18n("Create New Session")));
+        model->setItem(row, 1, new QStandardItem(QIcon::fromTheme("window-new"), i18n("Create New Session")));
     }
 
     dialog.updateState();

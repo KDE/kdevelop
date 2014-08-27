@@ -23,7 +23,7 @@
 
 #include <QVariantHash>
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 class KUrl;
 

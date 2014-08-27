@@ -23,22 +23,17 @@
 #include <QMenu>
 #include <QLayout>
 #include <QAbstractItemView>
+#include <QtCore/QUrl>
+#include <QtWidgets/QFileDialog>
 
-#include <kurl.h>
-#include <kurlnavigator.h>
-#include <kfileplacesmodel.h>
-#include <klocale.h>
-#include <kaction.h>
-#include <kactioncollection.h>
-#include <kdiroperator.h>
-#include <kfileitem.h>
-#include <klineedit.h>
-#include <kinputdialog.h>
-#include <ktemporaryfile.h>
-#include <kio/netaccess.h>
-#include <kparts/mainwindow.h>
-#include <kmessagebox.h>
-#include <KActionMenu>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/StoredTransferJob>
+#include <KIOFileWidgets/KFilePlacesModel>
+#include <KParts/MainWindow>
+#include <KXmlGui/KActionCollection>
+#include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KActionMenu>
+
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
@@ -56,20 +51,20 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     : QWidget(parent), m_plugin(plugin)
 {
     setObjectName("FileManager");
-    setWindowIcon(SmallIcon("system-file-manager"));
+    setWindowIcon(QIcon::fromTheme("system-file-manager"));
     setWindowTitle(i18n("Filesystem"));
 
     QVBoxLayout *l = new QVBoxLayout(this);
     l->setMargin(0);
     l->setSpacing(0);
     KFilePlacesModel* model = new KFilePlacesModel( this );
-    urlnav = new KUrlNavigator(model, KUrl( QDir::homePath() ), this );
-    connect(urlnav, SIGNAL(urlChanged(KUrl)), SLOT(gotoUrl(KUrl)));
+    urlnav = new KUrlNavigator(model, QUrl::fromLocalFile(QDir::homePath()), this );
+    connect(urlnav, SIGNAL(urlChanged(QUrl)), SLOT(gotoUrl(QUrl)));
     l->addWidget(urlnav);
     dirop = new KDirOperator(QDir::homePath(), this);
     dirop->setView( KFile::Tree );
     dirop->setupMenu( KDirOperator::SortActions | KDirOperator::FileActions | KDirOperator::NavActions | KDirOperator::ViewActions );
-    connect(dirop, SIGNAL(urlEntered(KUrl)), SLOT(updateNav(KUrl)));
+    connect(dirop, SIGNAL(urlEntered(QUrl)), SLOT(updateNav(QUrl)));
     connect(dirop, SIGNAL(contextMenuAboutToShow(KFileItem,QMenu*)), SLOT(fillContextMenu(KFileItem,QMenu*)));
     l->addWidget(dirop);
 
@@ -83,8 +78,8 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     setupActions();
 
     // Connect the bookmark handler
-    connect(m_bookmarkHandler, SIGNAL(openUrl(KUrl)), this, SLOT(gotoUrl(KUrl)));
-    connect(m_bookmarkHandler, SIGNAL(openUrl(KUrl)), this, SLOT(updateNav(KUrl)));
+    connect(m_bookmarkHandler, SIGNAL(openUrl(QUrl)), this, SLOT(gotoUrl(QUrl)));
+    connect(m_bookmarkHandler, SIGNAL(openUrl(QUrl)), this, SLOT(updateNav(QUrl)));
 }
 
 void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
@@ -98,7 +93,7 @@ void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
     contextActions.append(menu->addSeparator());
     menu->addAction(newFileAction);
     contextActions.append(newFileAction);
-    KDevelop::FileContext context(item.url());
+    KDevelop::FileContext context(QList<QUrl>() << item.url());
     QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
     KDevelop::ContextMenuExtension::populateMenu(menu, extensions);
     QMenu* tmpMenu = new QMenu();
@@ -113,27 +108,27 @@ void FileManager::openFile(const KFileItem& file)
 }
 
 
-void FileManager::gotoUrl( const KUrl& url )
+void FileManager::gotoUrl( const QUrl& url )
 {
      dirop->setUrl( url, true );
 }
 
-void FileManager::updateNav( const KUrl& url )
+void FileManager::updateNav( const QUrl& url )
 {
     urlnav->setLocationUrl( url );
 }
 
 void FileManager::setupActions()
 {
-    KActionMenu *acmBookmarks = new KActionMenu(KIcon("bookmarks"), i18n("Bookmarks"), this);
+    KActionMenu *acmBookmarks = new KActionMenu(QIcon::fromTheme("bookmarks"), i18n("Bookmarks"), this);
     acmBookmarks->setDelayed(false);
     m_bookmarkHandler = new BookmarkHandler(this, acmBookmarks->menu());
     acmBookmarks->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
-    KAction* action = new KAction(this);
+    QAction* action = new QAction(this);
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     action->setText(i18n("Current Document Directory"));
-    action->setIcon(KIcon("dirsync"));
+    action->setIcon(QIcon::fromTheme("dirsync"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(syncCurrentDocumentDirectory()));
     tbActions << (dirop->actionCollection()->action("back"));
     tbActions << (dirop->actionCollection()->action("up"));
@@ -145,35 +140,31 @@ void FileManager::setupActions()
     tbActions << (dirop->actionCollection()->action("sorting menu"));
     tbActions << (dirop->actionCollection()->action("show hidden"));
 
-    newFileAction = new KAction(this);
+    newFileAction = new QAction(this);
     newFileAction->setText(i18n("New File..."));
-    newFileAction->setIcon(KIcon("document-new"));
+    newFileAction->setIcon(QIcon::fromTheme("document-new"));
     connect(newFileAction, SIGNAL(triggered()), this, SLOT(createNewFile()));
 }
 
 void FileManager::createNewFile()
 {
-    KParts::MainWindow *activeMainWindow = KDevelop::ICore::self()->uiController()->activeMainWindow();
-
-    //TODO: adymo: use KNameAndUrlInputDialog here once we depend on KDE 4.5
-    bool ok = false;
-    QString fileName = KInputDialog::getText(i18n("Create New File"),
-        i18n("Filename:"), "", &ok, activeMainWindow);
-    if (!ok) return;
-
-    KTemporaryFile tmpFile;
-    if (!tmpFile.open()) {
-        kError() << "Couldn't create temp file!";
+    QUrl destUrl = QFileDialog::getSaveFileUrl(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("Create New File"));
+    if (destUrl.isEmpty()) {
         return;
     }
 
-    KUrl destUrl = dirop->url();
-    destUrl.addPath(fileName);
+    KJob* job = KIO::storedPut(QByteArray(), destUrl, -1);
+    connect(job, &KJob::result, this, &FileManager::fileCreated);
+}
 
-    if (KIO::NetAccess::file_copy(KUrl(tmpFile.fileName()), destUrl))
-        KDevelop::ICore::self()->documentController()->openDocument( destUrl );
-    else
-        KMessageBox::error(activeMainWindow, i18n("Unable to create file '%1'", fileName));
+void FileManager::fileCreated(KJob* job)
+{
+    auto transferJob = qobject_cast<KIO::StoredTransferJob*>(job); Q_ASSERT(transferJob);
+    if (!transferJob->error()) {
+        KDevelop::ICore::self()->documentController()->openDocument( transferJob->url() );
+    } else {
+        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("Unable to create file '%1'", transferJob->url().toDisplayString(QUrl::PreferLocalFile)));
+    }
 }
 
 void FileManager::syncCurrentDocumentDirectory()
@@ -203,7 +194,4 @@ KDevFileManagerPlugin* FileManager::plugin() const
     return m_plugin;
 }
 
-
-
-
-#include "filemanager.moc"
+#include "moc_filemanager.cpp"

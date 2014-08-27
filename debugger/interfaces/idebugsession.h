@@ -21,9 +21,10 @@
 #ifndef KDEVPLATFORM_IDEBUGSESSION_H
 #define KDEVPLATFORM_IDEBUGSESSION_H
 
+#include <debugger/debuggerexport.h>
+
 #include <QtCore/QObject>
 #include <QtCore/QAbstractItemModel>
-#include "../debuggerexport.h"
 #include <KUrl>
 
 class KUrl;

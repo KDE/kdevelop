@@ -28,7 +28,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/movinginterface.h>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <language/duchain/navigation/problemnavigationcontext.h>
 #include <language/util/navigationtooltip.h>
@@ -92,22 +92,24 @@ void ProblemHighlighter::viewCreated(Document* , View* view)
     if( !iface )
         return;
 
-    connect(view, SIGNAL(needTextHint(KTextEditor::Cursor,QString&)), this, SLOT(textHintRequested(KTextEditor::Cursor,QString&)));
+    iface->registerTextHintProvider(new ProblemTextHintProvider(this));
 }
 
-void ProblemHighlighter::textHintRequested(const KTextEditor::Cursor& pos, QString& )
+ProblemTextHintProvider::ProblemTextHintProvider(ProblemHighlighter* highlighter)
+    : m_highlighter(highlighter)
 {
-    KTextEditor::View* view = qobject_cast<KTextEditor::View*>(sender());
-    Q_ASSERT(view);
+}
 
-    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
+QString ProblemTextHintProvider::textHint(View* view, const Cursor& pos)
+{
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(view->document());
     if(moving) {
         ///@todo Sort the ranges when writing them, and do binary search instead of linear
-        foreach(MovingRange* range, m_topHLRanges) {
-            if(m_problemsForRanges.contains(range) && range->contains(pos))
+        foreach(MovingRange* range, m_highlighter->m_topHLRanges) {
+            if(m_highlighter->m_problemsForRanges.contains(range) && range->contains(pos))
             {
                 //There is a problem which's range contains the cursor
-                ProblemPointer problem = m_problemsForRanges[range];
+                ProblemPointer problem = m_highlighter->m_problemsForRanges[range];
                 if (problem->source() == ProblemData::ToDo) {
                     continue;
                 }
@@ -119,10 +121,11 @@ void ProblemHighlighter::textHintRequested(const KTextEditor::Cursor& pos, QStri
 
                 tooltip->resize( widget->sizeHint() + QSize(10, 10) );
                 ActiveToolTip::showToolTip(tooltip, 99, "problem-tooltip");
-                return;
+                return QString();
             }
         }
     }
+    return QString();
 }
 
 ProblemHighlighter::~ProblemHighlighter()
@@ -174,19 +177,20 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         if (problem->finalLocation().document != url || !problem->finalLocation().isValid())
             continue;
 
-        SimpleRange range;
+        KTextEditor::Range range;
         if(top)
             range = top->transformFromLocalRevision(RangeInRevision::castFromSimpleRange(problem->finalLocation()));
         else
             range = problem->finalLocation();
 
-        if(range.end.line >= m_document->lines())
-            range.end = SimpleCursor(m_document->endOfLine(m_document->lines()-1));
+        if(range.end().line() >= m_document->lines())
+            range.end() = KTextEditor::Cursor(m_document->endOfLine(m_document->lines()-1));
 
-        if(range.isEmpty())
-            range.end.column += 1;
+        if(range.isEmpty()) {
+            range.end().setColumn(range.end().column() + 1);
+        }
 
-        KTextEditor::MovingRange* problemRange = iface->newMovingRange(range.textRange());
+        KTextEditor::MovingRange* problemRange = iface->newMovingRange(range);
 
         m_problemsForRanges.insert(problemRange, problem);
         m_topHLRanges.append(problemRange);
@@ -209,7 +213,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
             } else {
                 continue;
             }
-            markIface->addMark(problem->finalLocation().start.line, mark);
+            markIface->addMark(problem->finalLocation().start().line(), mark);
         }
     }
 }
@@ -244,4 +248,3 @@ void ProblemHighlighter::documentReloaded()
     setProblems(m_problems);
 }
 
-#include "problemhighlighter.moc"

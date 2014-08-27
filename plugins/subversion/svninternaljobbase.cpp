@@ -27,9 +27,10 @@
 
 #include <iostream>
 
-#include <ThreadWeaver.h>
+#include <ThreadWeaver/ThreadWeaver>
 #include <klocale.h>
 #include <kdebug.h>
+#include <ThreadWeaver/threadweaver/qobjectdecorator.h>
 
 extern "C" {
 #include <svn_auth.h>
@@ -43,16 +44,19 @@ extern "C" {
 #include "kdevsvncpp/revision.hpp"
 
 SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
-    : ThreadWeaver::Job( parent ), m_ctxt( new svn::Context() ),
+    : QObject(parent), m_ctxt( new svn::Context() ),
       m_guiSemaphore( 0 ), m_mutex( new QMutex() ), m_killMutex( new QMutex() ),
-      m_success( true ), sendFirstDelta( false ), killed( false )
+      m_success( true ), sendFirstDelta( false ), killed( false ),
+      m_decorator(new ThreadWeaver::QObjectDecorator(this, parent))
 {
     m_ctxt->setListener(this);
-    connect( this, SIGNAL(failed(ThreadWeaver::Job*)),
+
+
+    QObject::connect( m_decorator, SIGNAL(failed(ThreadWeaver::Job*)),
              parent, SLOT(internalJobFailed(ThreadWeaver::Job*)), Qt::QueuedConnection );
-    connect( this, SIGNAL(done(ThreadWeaver::Job*)),
+    QObject::connect( m_decorator, SIGNAL(done(ThreadWeaver::Job*)),
              parent, SLOT(internalJobDone(ThreadWeaver::Job*)), Qt::QueuedConnection );
-    connect( this, SIGNAL(started(ThreadWeaver::Job*)),
+    QObject::connect( m_decorator, SIGNAL(started(ThreadWeaver::Job*)),
              parent, SLOT(internalJobStarted(ThreadWeaver::Job*)), Qt::QueuedConnection );
 }
 

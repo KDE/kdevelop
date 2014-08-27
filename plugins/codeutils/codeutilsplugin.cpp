@@ -20,13 +20,13 @@
 
 #include "codeutilsplugin.h"
 
+#include <QAction>
 #include <QVariantList>
 
 #include <KLocale>
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KAboutData>
-#include <KAction>
 #include <KActionCollection>
 
 #include <KTextEditor/Document>
@@ -34,6 +34,7 @@
 #include <KTextEditor/TemplateInterface>
 #include <KStandardDirs>
 #include <QApplication>
+#include <QStandardPaths>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -57,20 +58,20 @@ using namespace KDevelop;
 using namespace KTextEditor;
 
 K_PLUGIN_FACTORY(CodeUtilsPluginFactory, registerPlugin<CodeUtilsPlugin>(); )
-K_EXPORT_PLUGIN(CodeUtilsPluginFactory(KAboutData("kdevcodeutils","kdevcodeutils", ki18n("Code Utilities"), "0.1", ki18n("Collection of various utilities that increase productivity while programming."), KAboutData::License_GPL)
-    .addAuthor(ki18n("Milian Wolff"), ki18n("Author"), "mail@milianw.de", "http://milianw.de")
-))
+// K_EXPORT_PLUGIN(CodeUtilsPluginFactory(KAboutData("kdevcodeutils","kdevcodeutils", ki18n("Code Utilities"), "0.1", ki18n("Collection of various utilities that increase productivity while programming."), KAboutData::License_GPL)
+//     .addAuthor(ki18n("Milian Wolff"), ki18n("Author"), "mail@milianw.de", "http://milianw.de")
+// ))
 
 int debugArea() { static int s_area = KDebug::registerArea("kdevcodeutils"); return s_area; }
 
 #define debug() kDebug(debugArea())
 
 CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
-    : IPlugin ( CodeUtilsPluginFactory::componentData(), parent )
+    : IPlugin ( "kdevcodeutils", parent )
 {
     setXMLFile( "kdevcodeutils.rc" );
 
-    KAction *action = actionCollection()->addAction( "document_declaration" );
+    QAction* action = actionCollection()->addAction( "document_declaration" );
     // i18n: action name; 'Document' is a verb
     action->setText( i18n( "Document Declaration" ) );
     action->setShortcut( i18n( "Alt+Shift+d" ) );
@@ -80,20 +81,12 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
     action->setWhatsThis( i18n( "Adds a basic Doxygen comment skeleton in front of "
                                 "the declaration under the cursor, e.g. with all the "
                                 "parameter of a function." ) );
-    action->setIcon( KIcon( "documentinfo" ) );
+    action->setIcon( QIcon::fromTheme( "documentinfo" ) );
 }
 
 void CodeUtilsPlugin::documentDeclaration()
 {
-    IDocument* doc = ICore::self()->documentController()->activeDocument();
-    if ( !doc ) {
-        return;
-    }
-    Document* textDoc = doc->textDocument();
-    if ( !textDoc ) {
-        return;
-    }
-    View* view =  textDoc->activeView();
+    View* view =  ICore::self()->documentController()->activeTextDocumentView();
     if ( !view ) {
         return;
     }
@@ -103,11 +96,11 @@ void CodeUtilsPlugin::documentDeclaration()
     }
 
     DUChainReadLocker lock;
-    TopDUContext* topCtx = DUChainUtils::standardContextForUrl(doc->url());
+    TopDUContext* topCtx = DUChainUtils::standardContextForUrl(view->document()->url());
     if ( !topCtx ) {
         return;
     }
-    Declaration* dec = DUChainUtils::declarationInLine( SimpleCursor( view->cursorPosition() ),
+    Declaration* dec = DUChainUtils::declarationInLine( KTextEditor::Cursor( view->cursorPosition() ),
                                                         topCtx );
     if ( !dec || dec->isForwardDeclaration() ) {
         return;
@@ -116,6 +109,7 @@ void CodeUtilsPlugin::documentDeclaration()
     int line = dec->range().start.line;
     Cursor insertPos( line, 0 );
 
+#if 0 //FIXME: KF5 porting, template does weird things
     TemplateRenderer renderer;
     renderer.addVariable("brief", i18n( "..." ));
 
@@ -157,7 +151,7 @@ void CodeUtilsPlugin::documentDeclaration()
         }
     }
 
-    QString fileName = core()->componentData().dirs()->findResource("data", "kdevcodeutils/templates/" + templateName + ".txt");
+    QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevcodeutils/templates/" + templateName + ".txt");
     if (fileName.isEmpty())
     {
         kWarning() << "No suitable template found" << fileName;
@@ -166,8 +160,11 @@ void CodeUtilsPlugin::documentDeclaration()
 
     const QString comment = renderer.renderFile(KUrl(fileName));
     tplIface->insertTemplateText(insertPos, comment, QMap<QString, QString>());
+#endif
 }
 
 CodeUtilsPlugin::~CodeUtilsPlugin()
 {
 }
+
+#include "codeutilsplugin.moc"

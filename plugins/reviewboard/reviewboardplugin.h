@@ -22,7 +22,7 @@
 #define KDEVPLATFORM_PLUGIN_REVIEWBOARDPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <interfaces/ipatchexporter.h>
+#include <vcs/interfaces/ipatchexporter.h>
 
 class KJob;
 namespace KIO {

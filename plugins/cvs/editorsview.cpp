@@ -15,6 +15,7 @@
 #include <QRegExp>
 #include <KDebug>
 #include <KMessageBox>
+#include <KI18n/KLocalizedString>
 
 #include "cvsplugin.h"
 #include "cvsjob.h"
@@ -118,4 +119,3 @@ void EditorsView::parseOutput(const QString& jobOutput, QMultiMap<QString,CvsLoc
     }
 }
 
-#include "editorsview.moc"

@@ -27,7 +27,7 @@
 class QAction;
 
 template<class T>
-class KSharedPtr;
+class QExplicitlySharedDataPointer;
 
 namespace KParts {
     class MainWindow;
@@ -132,7 +132,7 @@ public:
     /**
      * Shows an assistant popup at bottom within the current central widget
      * @p assistant the assistant that will be shown in a popup */
-    virtual void popUpAssistant(const KSharedPtr<IAssistant>& assistant) = 0;
+    virtual void popUpAssistant(const QExplicitlySharedDataPointer<IAssistant>& assistant) = 0;
 
     /**
      * Hides the assistant if it is currently being shown

@@ -37,7 +37,7 @@ class QModelIndex;
 class QStringListModel;
 class QEvent;
 
-class KAction;
+class QAction;
 
 class DocumentSwitcherPlugin: public KDevelop::IPlugin {
     Q_OBJECT
@@ -71,8 +71,8 @@ private:
     QMap<QObject*, QMap<Sublime::Area*, QList<Sublime::View*> > > documentLists;
     QListView* view;
     QStandardItemModel* model;
-    KAction* forwardAction;
-    KAction* backwardAction;
+    QAction* forwardAction;
+    QAction* backwardAction;
 };
 
 #endif

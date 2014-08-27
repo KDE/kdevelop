@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_ICONTEXTBROWSER_H
 #define KDEVPLATFORM_ICONTEXTBROWSER_H
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 
 #include <language/duchain/duchainpointer.h>
 

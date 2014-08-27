@@ -12,11 +12,12 @@
 
 #include "snippet.h"
 
+#include <QAction>
+#include <QIcon>
 #include <QTimer>
 #include <QFile>
 #include <QFileInfo>
 
-#include <KIcon>
 #include <KDebug>
 
 #include <QDomDocument>
@@ -24,14 +25,13 @@
 #include <KStandardDirs>
 
 #include <KMessageBox>
+#include <QtCore/QStandardPaths>
+#include <QtWidgets/QAction>
 #include <KLocalizedString>
 #include <QApplication>
 
 #include <KColorScheme>
-
 #include <KUser>
-
-#include <KAction>
 #include <KShortcut>
 
 #include "snippetstore.h"
@@ -39,7 +39,7 @@
 SnippetRepository::SnippetRepository(const QString& file)
  : QStandardItem(i18n("<empty repository>")), m_file(file), m_registeredScript(0)
 {
-    setIcon( KIcon("folder") );
+    setIcon( QIcon::fromTheme("folder") );
     bool activated = SnippetStore::self()->getConfig().readEntry<QStringList>("enabledRepositories", QStringList()).contains(file);
     setCheckState(activated ? Qt::Checked : Qt::Unchecked);
 
@@ -62,8 +62,8 @@ SnippetRepository* SnippetRepository::createRepoFromName(const QString& name)
     QString cleanName = name;
     cleanName.replace('/', '-');
 
-    SnippetRepository* repo = new SnippetRepository(KGlobal::dirs()->locateLocal( "data",
-                                                    "ktexteditor_snippets/data/" + cleanName + ".xml" ));
+    SnippetRepository* repo = new SnippetRepository(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                                           QStringLiteral("ktexteditor_snippets/data/") + cleanName + QStringLiteral(".xml") ));
     repo->setText(name);
     repo->setCheckState(Qt::Checked);
     KUser user;
@@ -206,14 +206,14 @@ void SnippetRepository::save()
     }
     //KMessageBox::information(0,doc.toString());
     QFileInfo fi(m_file);
-    QString outname = KGlobal::dirs()->locateLocal( "data", "ktexteditor_snippets/data/" + fi.fileName() );
+    QString outname = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "ktexteditor_snippets/data/" + fi.fileName() );
     if ( m_file != outname) {
         QFileInfo fiout(outname);
 //      if (fiout.exists()) {
 // there could be cases that new new name clashes with a global file, but I guess it is not that often.
         int i = 0;
         while(QFile::exists(outname)) {
-            outname = KGlobal::dirs()->locateLocal( "data", "ktexteditor_snippets/data/"+QString("%1_").arg(i++)+fi.fileName());
+            outname = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"ktexteditor_snippets/data/"+QString("%1_").arg(i++)+fi.fileName();
         }
         KMessageBox::information(QApplication::activeWindow(),
             i18n("You have edited a data file not located in your personal data directory; as such, a renamed clone of the original data file has been created within your personal data directory."));
@@ -235,9 +235,12 @@ void SnippetRepository::save()
         if ( !snippet ) {
             continue;
         }
-        config.writeEntry("shortcut " + snippet->text(),
-                          QStringList() << snippet->action()->shortcut().primary().toString()
-                                        << snippet->action()->shortcut().alternate().toString());
+        QStringList shortcuts;
+        if(snippet->action()->shortcuts().count()>0)
+            shortcuts << snippet->action()->shortcuts()[0].toString();
+        if(snippet->action()->shortcuts().count()>1)
+            shortcuts << snippet->action()->shortcuts()[1].toString();
+        config.writeEntry("shortcut " + snippet->text(), shortcuts);
     }
     config.sync();
 }
@@ -321,12 +324,11 @@ void SnippetRepository::slotParseFile()
             delete snippet;
             continue;
         } else {
-            const QStringList shortcuts = config.readEntry("shortcut " + snippet->text(), QStringList());
-            if ( shortcuts.count() >= 2 ) {
-                KShortcut shortcut;
-                shortcut.setPrimary(shortcuts.value(0));
-                shortcut.setAlternate(shortcuts.value(1));
-                snippet->action()->setShortcut(shortcut);
+            QList<QKeySequence> shortcuts;
+            const QStringList shortcutStrings = config.readEntry("shortcut " + snippet->text(), QStringList());
+            if (shortcutStrings.count() >= 2) {
+                shortcuts << QKeySequence::fromString(shortcuts.value(0)) << QKeySequence::fromString(shortcuts.value(1));
+                snippet->action()->setShortcuts(shortcuts);
             }
             appendRow(snippet);
         }

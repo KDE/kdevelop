@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_IDOCUMENTATIONPROVIDER_H
 #define KDEVPLATFORM_IDOCUMENTATIONPROVIDER_H
 
-#include <KDE/KSharedPtr>
+#include <QExplicitlySharedDataPointer>
 #include <QtCore/QObject>
 #include "interfacesexport.h"
 
@@ -38,13 +38,13 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationProvider
         virtual ~IDocumentationProvider();
         
         /** @returns an IDocument instance for the specified declaration or a null pointer if none could be found.*/
-        virtual KSharedPtr<IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration) const=0;
+        virtual QExplicitlySharedDataPointer<IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration) const=0;
         
         /** @returns an instance of an interface to create an index for all the items provided by this class. */
         virtual QAbstractListModel* indexModel() const=0;
         
         /** @returns the documentation information related to the index in the model. */
-        virtual KSharedPtr<IDocumentation> documentationForIndex(const QModelIndex& idx) const=0;
+        virtual QExplicitlySharedDataPointer<IDocumentation> documentationForIndex(const QModelIndex& idx) const=0;
     
         /** @returns some icon associated to the provider. */
         virtual QIcon icon() const=0;
@@ -53,10 +53,10 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationProvider
         virtual QString name() const=0;
         
         /** @returns a documentation item where we can show some home page information such a context index. */
-        virtual KSharedPtr<IDocumentation> homePage() const=0;
+        virtual QExplicitlySharedDataPointer<IDocumentation> homePage() const=0;
         
     Q_SIGNALS:
-        virtual void addHistory(const KSharedPtr<IDocumentation>& doc) const=0;
+        virtual void addHistory(const QExplicitlySharedDataPointer<IDocumentation>& doc) const=0;
 };
 
 }

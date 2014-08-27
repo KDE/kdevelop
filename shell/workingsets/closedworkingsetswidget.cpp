@@ -99,6 +99,7 @@ void ClosedWorkingSetsWidget::removeWorkingSet( WorkingSet* set )
 {
     delete m_buttons.take(set);
     Q_ASSERT(m_buttons.size() == m_layout->count());
+    setVisible(!m_buttons.isEmpty());
 }
 
 void ClosedWorkingSetsWidget::addWorkingSet( WorkingSet* set )
@@ -124,6 +125,6 @@ void ClosedWorkingSetsWidget::addWorkingSet( WorkingSet* set )
 
     m_layout->addWidget(button);
     m_buttons[set] = button;
+    setVisible(!m_buttons.isEmpty());
 }
 
-#include "closedworkingsetswidget.moc"

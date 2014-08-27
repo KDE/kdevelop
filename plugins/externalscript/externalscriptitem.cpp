@@ -22,7 +22,8 @@
 
 #include "externalscriptplugin.h"
 
-#include <KAction>
+#include <QAction>
+
 #include <KParts/MainWindow>
 #include <KLocalizedString>
 
@@ -110,19 +111,18 @@ void ExternalScriptItem::setFilterMode( int mode )
   m_filterMode = mode;
 }
 
-KAction* ExternalScriptItem::action()
+QAction* ExternalScriptItem::action()
 {
   ///TODO: this is quite ugly, or is it? if someone knows how to do it better, please refactor
   if ( !m_action ) {
     static int actionCount = 0;
-    m_action = new KAction( QString("executeScript%1").arg(actionCount), ExternalScriptPlugin::self() );
+    m_action = new QAction( QString("executeScript%1").arg(actionCount), ExternalScriptPlugin::self() );
     m_action->setData( QVariant::fromValue<ExternalScriptItem*>(this) );
     ExternalScriptPlugin::self()->connect(
       m_action, SIGNAL(triggered()),
       ExternalScriptPlugin::self(), SLOT(executeScriptFromActionData())
     );
-    m_action->setShortcutConfigurable( true );
-    m_action->setShortcut( KShortcut() );
+    m_action->setShortcut( QKeySequence() );
     // action needs to be added to a widget before it can work...
     KDevelop::ICore::self()->uiController()->activeMainWindow()->addAction(m_action);
   }

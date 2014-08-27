@@ -20,7 +20,8 @@
 #ifndef KDEVPLATFORM_IPROJECTBUILDER_H
 #define KDEVPLATFORM_IPROJECTBUILDER_H
 
-#include "../projectexport.h"
+#include <project/projectexport.h>
+
 #include <QtCore/QObject>
 
 class KJob;

@@ -21,18 +21,19 @@
 #define KDEVPLATFORM_STATICASSISTANTSMANAGER_H
 
 #include <QObject>
+#include <QPointer>
 
 #include "staticassistant.h"
 
 #include <language/languageexport.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <ktexteditor/range.h>
 #include <ktexteditor/cursor.h>
 
 class QTimer;
 
-typedef QWeakPointer<KTextEditor::Document> SafeDocumentPointer;
+typedef QPointer<KTextEditor::Document> SafeDocumentPointer;
 
 namespace KDevelop {
 
@@ -56,7 +57,7 @@ public:
     StaticAssistantsManager(QObject* parent = 0);
     virtual ~StaticAssistantsManager();
 
-    KSharedPtr<KDevelop::IAssistant> activeAssistant();
+    QExplicitlySharedDataPointer<KDevelop::IAssistant> activeAssistant();
 
     void registerAssistant(const StaticAssistant::Ptr assistant);
     void unregisterAssistant(const StaticAssistant::Ptr assistant);

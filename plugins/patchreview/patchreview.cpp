@@ -26,9 +26,12 @@
 
 #include <kparts/part.h>
 #include <kparts/factory.h>
+#include <KDebug>
+#include <KLocalizedString>
 
-#include "libdiff2/komparemodellist.h"
-#include "libdiff2/kompare.h"
+#include <libkomparediff2/komparemodellist.h>
+#include <libkomparediff2/kompare.h>
+#include <libkomparediff2/diffsettings.h>
 
 #include <kmessagebox.h>
 #include <ktexteditor/document.h>
@@ -45,7 +48,6 @@
 #include <sublime/area.h>
 #include <sublime/document.h>
 #include <sublime/view.h>
-#include "diffsettings.h"
 #include "patchhighlighter.h"
 #include "patchreviewtoolview.h"
 #include "localpatchsource.h"
@@ -86,7 +88,7 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
                 if ( doc->textDocument() ) {
                     const QList<KTextEditor::MovingRange*> ranges = m_highlighters[doc->url()]->ranges();
 
-                    KTextEditor::View * v = doc->textDocument()->activeView();
+                    KTextEditor::View * v = doc->activeTextView();
                     int bestLine = -1;
                     if ( v ) {
                         KTextEditor::Cursor c = v->cursorPosition();
@@ -277,7 +279,7 @@ void PatchReviewPlugin::updateKompareModel() {
 }
 
 K_PLUGIN_FACTORY( KDevProblemReporterFactory, registerPlugin<PatchReviewPlugin>(); )
-K_EXPORT_PLUGIN( KDevProblemReporterFactory( KAboutData( "kdevpatchreview", "kdevpatchreview", ki18n( "Patch Review" ), "0.1", ki18n( "Highlights code affected by a patch" ), KAboutData::License_GPL ) ) )
+// K_EXPORT_PLUGIN( KDevProblemReporterFactory( KAboutData( "kdevpatchreview", "kdevpatchreview", ki18n( "Patch Review" ), "0.1", ki18n( "Highlights code affected by a patch" ), KAboutData::License_GPL ) ) )
 
 class PatchReviewToolViewFactory : public KDevelop::IToolViewFactory
 {
@@ -493,7 +495,7 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
 }
 
 PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin( KDevProblemReporterFactory::componentData(), parent ),
+    : KDevelop::IPlugin( "kdevpatchreview", parent ),
     m_patch( 0 ), m_factory( new PatchReviewToolViewFactory( this ) ) {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchReview )
     qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
@@ -510,12 +512,11 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     connect( m_updateKompareTimer, SIGNAL( timeout() ), this, SLOT( updateKompareModel() ) );
 
     m_finishReview = new QAction(this);
-    m_finishReview->setIcon( KIcon( "dialog-ok" ) );
+    m_finishReview->setIcon( QIcon::fromTheme( "dialog-ok" ) );
     m_finishReview->setShortcut( Qt::CTRL|Qt::Key_Return );
     actionCollection()->addAction("commit_or_finish_review", m_finishReview);
     ICore::self()->uiController()->activeArea()->addAction(m_finishReview);
 
-    setPatch( IPatchSource::Ptr( new LocalPatchSource ) );
     areaChanged(ICore::self()->uiController()->activeArea());
 }
 

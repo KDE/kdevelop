@@ -22,13 +22,17 @@
 #ifndef KDEVPLATFORM_DOCUMENTCHANGETRACKER_H
 #define KDEVPLATFORM_DOCUMENTCHANGETRACKER_H
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
+#include <QExplicitlySharedDataPointer>
+#include <QPointer>
 #include <QPair>
-#include <language/editor/simplerange.h>
+#include <QPointer>
 #include <ktexteditor/movingrange.h>
 #include <language/editor/rangeinrevision.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/interfaces/ilanguagesupport.h>
+
+#include <ksharedptr.h>
 
 namespace KTextEditor
 {
@@ -53,7 +57,7 @@ class RevisionLockerAndClearerPrivate;
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT RevisionLockerAndClearer : public QSharedData {
 public:
-    typedef KSharedPtr<RevisionLockerAndClearer> Ptr;
+    typedef QExplicitlySharedDataPointer<RevisionLockerAndClearer> Ptr;
 
     ~RevisionLockerAndClearer();
 
@@ -82,12 +86,12 @@ public:
     /**
       * Transforms the given range from this revision into the current revision.
       */
-    SimpleRange transformToCurrentRevision(const RangeInRevision& range) const;
+    KTextEditor::Range transformToCurrentRevision(const RangeInRevision& range) const;
 
     /**
     * Transforms the given cursor from this revision into the current revision.
     */
-    SimpleCursor transformToCurrentRevision(const CursorInRevision& cursor,
+    KTextEditor::Cursor transformToCurrentRevision(const CursorInRevision& cursor,
                                             KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
 
     /**
@@ -105,12 +109,12 @@ public:
     /**
     * Transforms the given range from the current revision into this revision.
     */
-    RangeInRevision transformFromCurrentRevision(const SimpleRange& range) const;
+    RangeInRevision transformFromCurrentRevision(const KTextEditor::Range& range) const;
 
     /**
     * Transforms the given cursor from the current revision into this revision.
     */
-    CursorInRevision transformFromCurrentRevision(const SimpleCursor& cursor,
+    CursorInRevision transformFromCurrentRevision(const KTextEditor::Cursor& cursor,
                                                   KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
 
 private:
@@ -149,7 +153,7 @@ public:
      * Completions of the users current edits that are supposed to complete
      * not-yet-finished statements, like for example for-loops for parsing.
      * */
-    virtual QList<QPair<KDevelop::SimpleRange, QString> > completions() const;
+    virtual QList<QPair<KTextEditor::Range, QString> > completions() const;
 
     /**
      * Resets the tracking to the current revision.
@@ -226,13 +230,13 @@ public:
     RangeInRevision transformBetweenRevisions(RangeInRevision range, qint64 fromRevision, qint64 toRevision) const;
     CursorInRevision transformBetweenRevisions(CursorInRevision cursor, qint64 fromRevision, qint64 toRevision, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
 
-    SimpleRange transformToCurrentRevision(RangeInRevision range, qint64 fromRevision) const;
-    SimpleCursor transformToCurrentRevision(CursorInRevision cursor, qint64 fromRevision, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
+    KTextEditor::Range transformToCurrentRevision(RangeInRevision range, qint64 fromRevision) const;
+    KTextEditor::Cursor transformToCurrentRevision(CursorInRevision cursor, qint64 fromRevision, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
 
     /// Transform the range from the current revision into the given one
-    RangeInRevision transformToRevision(SimpleRange range, qint64 toRevision) const;
+    RangeInRevision transformToRevision(KTextEditor::Range range, qint64 toRevision) const;
     /// Transform the cursor from the current revision into the given one
-    CursorInRevision transformToRevision(SimpleCursor cursor, qint64 toRevision, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
+    CursorInRevision transformToRevision(KTextEditor::Cursor cursor, qint64 toRevision, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
 
 protected:
     QString m_textAtLastReset;

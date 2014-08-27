@@ -18,10 +18,11 @@
  ***************************************************************************/
 #include "urldocument.h"
 
+#include <QIcon>
 #include <QWidget>
+
 #include <KTextEdit>
-#include <KIcon>
-#include <KMimeType>
+#include <kio/global.h>
 
 #include <kdebug.h>
 
@@ -56,7 +57,7 @@ KUrl UrlDocument::url() const
 void UrlDocument::setUrl(const KUrl& newUrl)
 {
     //deep copy
-    d->url.setEncodedUrl(newUrl.url().toAscii());
+    d->url = QUrl::fromEncoded(newUrl.url().toLatin1());
     setTitle(newUrl.fileName());
     setToolTip(newUrl.prettyUrl());
 }
@@ -79,7 +80,7 @@ QString UrlDocument::documentSpecifier() const
 
 QIcon UrlDocument::defaultIcon() const
 {
-    return KIcon(KMimeType::iconNameForUrl(d->url));
+    return QIcon::fromTheme(KIO::iconNameForUrl(d->url));
 }
 
 }

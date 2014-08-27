@@ -29,7 +29,8 @@
 #include <QShowEvent>
 #include <QAction>
 #include <QMenu>
-#include <KIcon>
+#include <QIcon>
+
 #include <KTextBrowser>
 #include <KLocale>
 #include <KComboBox>
@@ -41,7 +42,7 @@
 #include <language/duchain/ducontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -107,18 +108,18 @@ void ContextBrowserView::declarationMenu() {
 }
 
 void ContextBrowserView::updateLockIcon(bool checked) {
-    m_lockButton->setIcon(KIcon(checked ? "document-encrypt" : "document-decrypt"));
+    m_lockButton->setIcon(QIcon::fromTheme(checked ? "document-encrypt" : "document-decrypt"));
 }
 
 ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* parent ) : QWidget(parent), m_plugin(plugin), m_navigationWidget(new KTextBrowser()), m_autoLocked(false) {
-    setWindowIcon( KIcon("applications-development-web") );
+    setWindowIcon( QIcon::fromTheme("applications-development-web") );
 
     m_allowLockedUpdate = false;
 
     m_buttons = new QHBoxLayout;
     m_buttons->addStretch();
     m_declarationMenuButton = new QToolButton();
-    m_declarationMenuButton->setIcon(KIcon("code-class"));
+    m_declarationMenuButton->setIcon(QIcon::fromTheme("code-class"));
     m_declarationMenuButton->setToolTip(i18n("Declaration menu"));
     connect(m_declarationMenuButton, SIGNAL(clicked(bool)), SLOT(declarationMenu()));
     m_buttons->addWidget(m_declarationMenuButton);
@@ -321,4 +322,3 @@ void ContextBrowserView::setSpecialNavigationWidget(QWidget* widget) {
     }
 }
 
-#include "contextbrowserview.moc"

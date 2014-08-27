@@ -24,7 +24,7 @@
 #ifndef KDEVPLATFORM_FRAMESTACKWIDGET_H
 #define KDEVPLATFORM_FRAMESTACKWIDGET_H
 
-#include "../debuggerexport.h"
+#include <debugger/debuggerexport.h>
 #include <debugger/interfaces/idebugsession.h>
 #include <util/autoorientedsplitter.h>
 

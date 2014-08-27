@@ -21,12 +21,13 @@
 #define KDEVPLATFORM_RENAMEACTION_H
 
 #include <interfaces/iassistant.h>
-#include <language/duchain/identifier.h>
 #include <language/editor/rangeinrevision.h>
 #include <language/backgroundparser/documentchangetracker.h>
 #include <language/languageexport.h>
 
 namespace KDevelop {
+
+class Identifier;
 
 /**
  * A HACK to circumvent the bad RangeInRevision API without rewriting everything.

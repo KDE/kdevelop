@@ -26,4 +26,3 @@ ICompletionSettings::~ICompletionSettings() {
 }
 }
 
-#include "icompletionsettings.moc"

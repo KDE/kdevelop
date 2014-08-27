@@ -1,10 +1,9 @@
 add_subdirectory(dvcs/tests)
 add_subdirectory(models/tests)
-add_subdirectory(tests)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=9509)
 
-set(kdevplatformvcs_UIS
+set(KDevPlatformVcs_UIS
     widgets/vcscommitdialog.ui
     widgets/vcseventwidget.ui
     widgets/vcsdiffwidget.ui
@@ -12,7 +11,7 @@ set(kdevplatformvcs_UIS
     dvcs/ui/branchmanager.ui
 )
 
-set(kdevplatformvcs_LIB_SRCS
+set(KDevPlatformVcs_LIB_SRCS
     vcsjob.cpp
     vcsrevision.cpp
     vcsannotation.cpp
@@ -43,26 +42,31 @@ set(kdevplatformvcs_LIB_SRCS
     dvcs/ui/revhistory/commitlogmodel.cpp
     interfaces/ibasicversioncontrol.cpp
     interfaces/icontentawareversioncontrol.cpp
+    interfaces/ipatchdocument.cpp
+    interfaces/ipatchexporter.cpp
+    interfaces/ipatchsource.cpp
 )
 
-kde4_add_ui_files(kdevplatformvcs_LIB_SRCS ${kdevplatformvcs_UIS})
-kde4_add_library(kdevplatformvcs SHARED ${kdevplatformvcs_LIB_SRCS})
-target_link_libraries(kdevplatformvcs LINK_PUBLIC
-    kdevplatformoutputview
-    kdevplatforminterfaces
+qt5_wrap_ui(KDevPlatformVcs_LIB_SRCS ${KDevPlatformVcs_UIS})
+add_library(KDevPlatformVcs ${KDevPlatformVcs_LIB_SRCS})
+add_library(KDev::Vcs ALIAS KDevPlatformVcs)
+generate_export_header(KDevPlatformVcs EXPORT_FILE_NAME vcsexport.h)
+target_link_libraries(KDevPlatformVcs
+LINK_PUBLIC
+    KDev::OutputView
+    KDev::Interfaces
+LINK_PRIVATE
+    KF5::KIOWidgets
+    KF5::Parts
+    KDev::Util
+    KDev::Project
+    KDev::Language
 )
-target_link_libraries(kdevplatformvcs LINK_PRIVATE
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    kdevplatformutil
-    kdevplatformproject
-    kdevplatformlanguage
-)
-set_target_properties(kdevplatformvcs PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatformvcs EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+set_target_properties(KDevPlatformVcs PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Vcs)
+install(TARGETS KDevPlatformVcs EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
-    vcsexport.h
+    ${CMAKE_CURRENT_BINARY_DIR}/vcsexport.h
     vcsjob.h
     vcsrevision.h
     vcsannotation.h
@@ -101,6 +105,9 @@ install(FILES
     interfaces/ibranchingversioncontrol.h
     interfaces/ibrowsableversioncontrol.h
     interfaces/irepositoryversioncontrol.h
+    interfaces/ipatchdocument.h
+    interfaces/ipatchexporter.h
+    interfaces/ipatchsource.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/interfaces COMPONENT Devel
 )
 

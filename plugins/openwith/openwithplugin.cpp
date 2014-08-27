@@ -21,6 +21,8 @@
 #include "openwithplugin.h"
 
 #include <QVariantList>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -49,11 +51,11 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(KDevOpenWithFactory, registerPlugin<OpenWithPlugin>(); )
-K_EXPORT_PLUGIN(KDevOpenWithFactory(KAboutData("kdevopenwith","kdevopenwith", ki18n("Open With"), "0.1", ki18n("This plugin allows to open files with associated external applications."), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevOpenWithFactory(KAboutData("kdevopenwith","kdevopenwith", ki18n("Open With"), "0.1", ki18n("This plugin allows to open files with associated external applications."), KAboutData::License_GPL)))
 
 
 OpenWithPlugin::OpenWithPlugin ( QObject* parent, const QVariantList& )
-    : IPlugin ( KDevOpenWithFactory::componentData(), parent ),
+    : IPlugin ( "kdevopenwith", parent ),
     m_actionMap( 0 )
 {
     KDEV_USE_EXTENSION_INTERFACE( IOpenWith )
@@ -99,8 +101,8 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
 
     // Ok, lets fetch the mimetype for the !!first!! url and the relevant services
     // TODO: Think about possible alternatives to using the mimetype of the first url.
-    KMimeType::Ptr mimetype = KMimeType::findByUrl( m_urls.first() );
-    m_mimeType = mimetype->name();
+    QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(m_urls.first());
+    m_mimeType = mimetype.name();
 
     QList<QAction*> partActions = actionsForServiceType("KParts/ReadOnlyPart");
     QList<QAction*> appActions = actionsForServiceType("Application");
@@ -114,7 +116,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
 
     // Now setup a menu with actions for each part and app
     KMenu* menu = new KMenu( i18n("Open With" ) );
-    menu->setIcon( SmallIcon( "document-open" ) );
+    menu->setIcon( QIcon::fromTheme( "document-open" ) );
 
     if (!partActions.isEmpty()) {
         menu->addTitle(i18n("Embedded Editors"));
@@ -125,8 +127,8 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
         menu->addActions( appActions );
     }
 
-    KAction* openAction = new KAction( i18n( "Open" ), this );
-    openAction->setIcon( SmallIcon( "document-open" ) );
+    QAction* openAction = new QAction( i18n( "Open" ), this );
+    openAction->setIcon( QIcon::fromTheme( "document-open" ) );
     connect( openAction, SIGNAL(triggered()), SLOT(openDefault()) );
 
     KDevelop::ContextMenuExtension ext;
@@ -151,7 +153,7 @@ bool isTextEditor(const KService::Ptr& service)
 
 QString defaultForMimeType(const QString& mimeType)
 {
-    KConfigGroup config = KGlobal::config()->group("Open With Defaults");
+    KConfigGroup config = KSharedConfig::openConfig()->group("Open With Defaults");
     if (config.hasKey(mimeType)) {
         QString storageId = config.readEntry(mimeType, QString());
         if (!storageId.isEmpty() && KService::serviceByStorageId(storageId)) {
@@ -171,8 +173,8 @@ QList<QAction*> OpenWithPlugin::actionsForServiceType( const QString& serviceTyp
     QAction* standardAction = 0;
     const QString defaultId = defaultForMimeType(m_mimeType);
     foreach( KService::Ptr svc, list ) {
-        KAction* act = new KAction( isTextEditor(svc) ? i18n("Default Editor") : svc->name(), this );
-        act->setIcon( SmallIcon( svc->icon() ) );
+        QAction* act = new QAction( isTextEditor(svc) ? i18n("Default Editor") : svc->name(), this );
+        act->setIcon( QIcon::fromTheme( svc->icon() ) );
         if (svc->storageId() == defaultId || (defaultId.isEmpty() && isTextEditor(svc))) {
             QFont font = act->font();
             font.setBold(true);
@@ -233,7 +235,7 @@ void OpenWithPlugin::open( const QString& storageid )
         }
     }
 
-    KConfigGroup config = KGlobal::config()->group("Open With Defaults");
+    KConfigGroup config = KSharedConfig::openConfig()->group("Open With Defaults");
     if (storageid != config.readEntry(m_mimeType, QString())) {
         int setDefault = KMessageBox::questionYesNo(
             qApp->activeWindow(),
@@ -256,6 +258,8 @@ void OpenWithPlugin::openFilesInternal( const KUrl::List& files )
     }
 
     m_urls = files;
-    m_mimeType = KMimeType::findByUrl( m_urls.first() )->name();
+    m_mimeType = QMimeDatabase().mimeTypeForUrl(m_urls.first()).name();
     openDefault();
 }
+
+#include "openwithplugin.moc"

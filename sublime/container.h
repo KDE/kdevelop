@@ -40,7 +40,7 @@ class Document;
 This container is placed inside mainwindow splitters to show widgets
 for views in the area.
 */
-class SUBLIME_EXPORT Container: public QWidget {
+class KDEVPLATFORMSUBLIME_EXPORT Container: public QWidget {
 Q_OBJECT
 public:
     Container(QWidget *parent = 0);

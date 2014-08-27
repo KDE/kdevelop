@@ -23,8 +23,8 @@ Boston, MA 02110-1301, USA.
 #include <kglobal.h>
 #include <interfaces/icore.h>
 #include <kcomponentdata.h>
-#include <QtGui/QBoxLayout>
-#include <QtGui/QLayout>
+#include <QBoxLayout>
+#include <QLayout>
 #include <KLocalizedString>
 #include <KDebug>
 
@@ -102,4 +102,3 @@ EnvironmentGroupList EnvironmentSelectionWidget::environment() const
 
 }
 
-#include "environmentselectionwidget.moc"

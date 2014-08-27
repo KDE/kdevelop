@@ -33,6 +33,10 @@ Boston, MA 02110-1301, USA.
 
 #include "shellexport.h"
 
+namespace KTextEditor {
+class View;
+}
+
 namespace Sublime {
     class Document;
     class Area;
@@ -79,6 +83,8 @@ public:
     /**Refers to the document currently active or focused.
     @return The active document.*/
     virtual IDocument* activeDocument() const;
+
+    virtual KTextEditor::View* activeTextDocumentView() const;
     
     virtual void activateDocument( IDocument * document, const KTextEditor::Range& range = KTextEditor::Range::invalid() );
 
@@ -159,7 +165,7 @@ public Q_SLOTS:
     void reloaded(KTextEditor::Document* doc);
     
 private Q_SLOTS:
-    virtual void slotOpenDocument(const KUrl &url);
+    virtual void slotOpenDocument(const QUrl &url);
     void notifyDocumentClosed(Sublime::Document* doc);
 
 private:

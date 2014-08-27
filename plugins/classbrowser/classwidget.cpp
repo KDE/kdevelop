@@ -23,10 +23,10 @@
 
 #include "classwidget.h"
 
-#include <QtGui/QLabel>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QHeaderView>
+#include <QLabel>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QHeaderView>
 
 #include <KLocalizedString>
 #include <KIconLoader>
@@ -47,14 +47,14 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
 {
   setObjectName("Class Browser Tree");
   setWindowTitle(i18n("Classes"));
-  setWindowIcon(SmallIcon("code-class"));
+  setWindowIcon(QIcon::fromTheme("code-class"));
 
   // Set tree in the plugin
   m_plugin->setActiveClassTree(m_tree);
 
   // Set model in the tree view
   m_tree->setModel(m_model);
-  m_tree->header()->setResizeMode(0, QHeaderView::ResizeToContents);
+  m_tree->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
   m_tree->header()->setStretchLastSection(false);
 
   // We need notification in the model for the collapse/expansion of nodes.
@@ -93,4 +93,3 @@ ClassWidget::~ClassWidget()
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on
 
-#include "classwidget.moc"

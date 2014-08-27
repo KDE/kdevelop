@@ -23,16 +23,17 @@
 #include "sublime/holdupdates.h"
 #include "util/kdevstringhandler.h"
 
+#include <QAction>
+#include <QDeclarativeContext>
 #include <QKeyEvent>
 #include <QDebug>
+#include <QEvent>
 #include <QTimer>
-#include <QDeclarativeContext>
 
+#include <KDebug>
 #include <KLocalizedString>
-#include <KAction>
 #include <KParts/MainWindow>
 #include <KStandardDirs>
-#include <KTextEditor/HighlightInterface>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/ConfigInterface>
@@ -273,11 +274,10 @@ bool AssistantPopup::viewportEvent(QEvent *event)
 
 bool AssistantPopup::eventFilter(QObject* object, QEvent* event)
 {
-    if (!m_view)
-        return false;
-
-    Q_ASSERT(object == m_view.data());
     Q_UNUSED(object);
+
+    if (!m_view || (object != m_view.data()))
+        return false;
 
     if (event->type() == QEvent::Resize) {
         updateLayoutType();
@@ -384,7 +384,7 @@ void AssistantPopup::updateState()
     }
 
     auto curShortcut = m_shortcuts.constBegin();
-    auto hideAction = new KAction(i18n("Hide"), this);
+    auto hideAction = new QAction(i18n("Hide"), this);
     connect(*curShortcut, SIGNAL(activated()), hideAction, SLOT(trigger()));
     connect(hideAction, SIGNAL(triggered()), this, SLOT(executeHideAction()));
 
@@ -399,8 +399,8 @@ void AssistantPopup::updateState()
     }
     items << hideAction;
 
-    auto doc = ICore::self()->documentController()->activeDocument();
-    m_config->setColorsFromView(doc->textDocument()->activeView());
+    auto view = ICore::self()->documentController()->activeTextDocumentView();
+    m_config->setColorsFromView(view);
     m_config->setModel(items);
     m_config->setTitle(m_assistant->title());
     setActive(false);
@@ -413,4 +413,3 @@ void AssistantPopup::updateState()
     show();
 }
 
-#include "assistantpopup.moc"

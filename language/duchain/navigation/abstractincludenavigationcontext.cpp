@@ -141,10 +141,10 @@ void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUCo
     int currentDeclarationLine = -1;
     int currentContextLine = -1;
     if(declarationIterator != declarations.constEnd())
-      currentDeclarationLine = (*declarationIterator)->rangeInCurrentRevision().textRange().start().line();
+      currentDeclarationLine = (*declarationIterator)->rangeInCurrentRevision().start().line();
 
     if(childIterator != children.constEnd())
-      currentDeclarationLine = (*childIterator)->rangeInCurrentRevision().textRange().start().line();
+      currentDeclarationLine = (*childIterator)->rangeInCurrentRevision().start().line();
 
     if((currentDeclarationLine <= currentContextLine || currentContextLine == -1 || childIterator == children.constEnd()) && declarationIterator != declarations.constEnd() )
     {
@@ -153,11 +153,11 @@ void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUCo
       if(!addedDeclarations.contains(id) && filterDeclaration(*declarationIterator) ) {
         //Show the declaration
         if(!first)
-          modifyHtml() += Qt::escape(", ");
+          modifyHtml() += QString(", ").toHtmlEscaped();
         else
           first = false;
 
-        modifyHtml() += Qt::escape(indent + declarationKind(DeclarationPointer(*declarationIterator)) + " ");
+        modifyHtml() += QString(indent + declarationKind(DeclarationPointer(*declarationIterator)) + " ").toHtmlEscaped();
         makeLink((*declarationIterator)->qualifiedIdentifier().toString(), DeclarationPointer(*declarationIterator), NavigationAction::NavigateDeclaration);
 
         addedDeclarations << id;

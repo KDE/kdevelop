@@ -24,7 +24,7 @@
 #include <QAbstractItemModel>
 #include <QSet>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <language/interfaces/quickopendataprovider.h>
 #include "expandingtree/expandingwidgetmodel.h"

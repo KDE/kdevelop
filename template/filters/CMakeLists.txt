@@ -1,6 +1,9 @@
-set(kdevfilters_SRCS kdevfilters.cpp)
+add_library(kdev_filters MODULE kdevfilters.cpp)
+grantlee_adjust_plugin_name(kdev_filters)
+target_link_libraries(kdev_filters
+    KDev::Language
+    KDev::Serialization
+    ${Grantlee_TEMPLATES_LIBRARIES}
+)
 
-grantlee_add_plugin(kdev_filters kdevfilters)
-target_link_libraries(kdev_filters ${KDE4_KDECORE_LIBS} kdevplatformlanguage)
-
-install(TARGETS kdev_filters DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR})
+install(TARGETS kdev_filters DESTINATION ${PLUGIN_INSTALL_DIR}/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR})

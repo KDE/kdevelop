@@ -24,7 +24,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_CLASSWIDGET_H
 #define KDEVPLATFORM_PLUGIN_CLASSWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class ClassBrowserPlugin;
 class ClassTree;

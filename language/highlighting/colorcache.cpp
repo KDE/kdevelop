@@ -36,8 +36,6 @@
 #include "../duchain/duchain.h"
 #include "../duchain/duchainlock.h"
 
-#include <KTextEditor/HighlightInterface>
-
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
@@ -109,13 +107,10 @@ ColorCache::ColorCache(QObject* parent)
 
 bool ColorCache::tryActiveDocument()
 {
-  ifDebug(kDebug() << "active doc" << ICore::self()->documentController()->activeDocument() << ICore::self()->documentController()->openDocuments();)
-  if ( IDocument* doc = ICore::self()->documentController()->activeDocument() ) {
-    ifDebug(kDebug() << "has text doc:" << doc->textDocument();)
-    if ( doc->textDocument() ) {
-      updateColorsFromDocument(doc->textDocument());
-      return true;
-    }
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
+  if ( view ) {
+    updateColorsFromView(view);
+    return true;
   }
   return false;
 }
@@ -158,9 +153,10 @@ void ColorCache::generateColors()
 
 void ColorCache::slotDocumentActivated(IDocument* doc)
 {
-  ifDebug(kDebug() << "doc activated:" << doc << doc->textDocument();)
-  if ( doc->textDocument() ) {
-    updateColorsFromDocument(doc->textDocument());
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
+  ifDebug(kDebug() << "doc activated:" << doc;)
+  if ( view ) {
+    updateColorsFromView(view);
   }
 }
 
@@ -170,44 +166,34 @@ void ColorCache::slotViewSettingsChanged()
   Q_ASSERT(view);
 
   ifDebug(kDebug() << "settings changed" << view;)
-  updateColorsFromDocument(view->document());
+  updateColorsFromView(view);
 }
 
-void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
+void ColorCache::updateColorsFromView(KTextEditor::View* view)
 {
-  ifDebug(kDebug() << "has view:" << doc->activeView() << doc->views().size();)
-  if ( !doc->activeView() ) {
+  if ( !view ) {
     // yeah, the HighlightInterface methods returning an Attribute
     // require a View... kill me for that mess
     return;
   }
+  KTextEditor::Document* doc = view->document();
 
   QColor foreground(QColor::Invalid);
   QColor background(QColor::Invalid);
 
-  // either the KDE 4.4 way with the HighlightInterface or fallback to the old way via global KDE color scheme
-
-  if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(doc) ) {
-    KTextEditor::Attribute::Ptr style = iface->defaultStyle(KTextEditor::HighlightInterface::dsNormal);
-    foreground = style->foreground().color();
-    if (style->hasProperty(QTextFormat::BackgroundBrush)) {
-      background = style->background().color();
-    }
-//     kDebug() << "got foreground:" << foreground.name() << "old is:" << m_foregroundColor.name();
-    //NOTE: this slot is defined in KatePart > 4.4, see ApiDocs of the ConfigInterface
-    if ( KTextEditor::View* view = m_view.data() ) {
-      // we only listen to a single view, i.e. the active one
-      disconnect(view, SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
-    }
-    connect(doc->activeView(), SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
-    m_view = doc->activeView();
-
-    if(!background.isValid()) {
-      // fallback for Kate < 4.5.2 where the background was never set in styles returned by defaultStyle()
-      background = KColorScheme(QPalette::Normal, KColorScheme::View).background(KColorScheme::NormalBackground).color();
-    }
-    ifDebug(kDebug() << "has iface" << foreground << background;)
+  KTextEditor::Attribute::Ptr style = view->defaultStyleAttribute(KTextEditor::dsNormal);
+  foreground = style->foreground().color();
+  if (style->hasProperty(QTextFormat::BackgroundBrush)) {
+    background = style->background().color();
   }
+//     kDebug() << "got foreground:" << foreground.name() << "old is:" << m_foregroundColor.name();
+  //NOTE: this slot is defined in KatePart > 4.4, see ApiDocs of the ConfigInterface
+  if ( KTextEditor::View* view = m_view.data() ) {
+    // we only listen to a single view, i.e. the active one
+    disconnect(view, SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
+  }
+  connect(view, SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
+  m_view = view;
 
   if ( !foreground.isValid() ) {
     // fallback to colorscheme variant
@@ -348,6 +334,5 @@ QColor ColorCache::foregroundColor() const
 
 }
 
-#include "colorcache.moc"
 
 // kate: space-indent on; indent-width 2; replace-trailing-space-save on; show-tabs on; tab-indents on; tab-width 2;

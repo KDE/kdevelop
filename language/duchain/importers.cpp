@@ -23,7 +23,7 @@
 
 #include "declarationid.h"
 #include "duchainpointer.h"
-#include "repositories/itemrepository.h"
+#include "serialization/itemrepository.h"
 #include "topducontext.h"
 
 namespace KDevelop {

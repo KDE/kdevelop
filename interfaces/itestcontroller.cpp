@@ -32,4 +32,3 @@ ITestController::~ITestController()
 
 }
 
-#include "itestcontroller.moc"

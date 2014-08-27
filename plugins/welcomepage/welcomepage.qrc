@@ -1,0 +1,23 @@
+<!DOCTYPE RCC><RCC version="1.0">
+ <qresource>
+     <!-- project dashboard plugins -->
+     <file>qml/plugins/Branches.qml</file>
+     <file>qml/plugins/Projects.qml</file>
+
+    <!-- components  -->
+    <file>qml/Develop.qml</file>
+    <file>qml/GettingStarted.qml</file>
+    <file>qml/Link.qml</file>
+    <file>qml/StandardPage.qml</file>
+    <file>qml/Heading.qml</file>
+    <file>qml/StandardBackground.qml</file>
+    <file>qml/ProjectsDashboard.qml</file>
+
+    <!-- areas  -->
+    <file>qml/area_code.qml</file>
+    <file>qml/area_debug.qml</file>
+    <file>qml/area_review.qml</file>
+
+    <file>qml/main.qml</file>
+ </qresource>
+</RCC>

@@ -36,7 +36,7 @@ ProblemNavigationContext::ProblemNavigationContext(ProblemPointer problem): m_pr
 {
   m_widget = 0;
 
-  KSharedPtr< IAssistant > solution = problem->solutionAssistant();
+  QExplicitlySharedDataPointer< IAssistant > solution = problem->solutionAssistant();
   if(solution && !solution->actions().isEmpty()) {
     m_widget = new QWidget;
     QHBoxLayout* layout = new QHBoxLayout(m_widget);
@@ -89,9 +89,9 @@ QString ProblemNavigationContext::html(bool shorten)
   modifyHtml() += "<html><body><p>";
 
   modifyHtml() += i18n("Problem in <b>%1</b>:<br/>", m_problem->sourceString());
-  modifyHtml() += Qt::escape(m_problem->description());
+  modifyHtml() += m_problem->description().toHtmlEscaped();
   modifyHtml() += "<br/>";
-  modifyHtml() += "<i style=\"white-space:pre-wrap\">" + Qt::escape(m_problem->explanation()) + "</i>";
+  modifyHtml() += "<i style=\"white-space:pre-wrap\">" + m_problem->explanation().toHtmlEscaped() + "</i>";
 
   const QList<ProblemPointer> diagnostics = m_problem->diagnostics();
   if (!diagnostics.isEmpty()) {
@@ -100,7 +100,7 @@ QString ProblemNavigationContext::html(bool shorten)
     DUChainReadLocker lock;
     for (auto diagnostic : diagnostics) {
       const DocumentRange range = diagnostic->finalLocation();
-      Declaration* declaration = DUChainUtils::itemUnderCursor(range.document.toUrl(), range.start);
+      Declaration* declaration = DUChainUtils::itemUnderCursor(range.document.toUrl(), range.start());
 
       modifyHtml() += labelHighlight(QString("%1: ").arg(diagnostic->severityString()));
       modifyHtml() += diagnostic->description();
@@ -109,7 +109,7 @@ QString ProblemNavigationContext::html(bool shorten)
         modifyHtml() += "<br/>";
         makeLink(declaration->toString(), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
         modifyHtml() += i18n(" in ");
-        makeLink(QString("%1 :%2").arg(declaration->url().toUrl().fileName()).arg(declaration->rangeInCurrentRevision().textRange().start().line()+1), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
+        makeLink(QString("%1 :%2").arg(declaration->url().toUrl().fileName()).arg(declaration->rangeInCurrentRevision().start().line()+1), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
       }
       modifyHtml() += "<br/>";
     }

@@ -31,7 +31,7 @@ ProjectInfoPage::ProjectInfoPage( QWidget* parent )
              this, SLOT(changeProjectManager(int)) );
     foreach( const KPluginInfo& info, Core::self()->pluginControllerInternal()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
     {
-        page_ui->managerCombo->addItem( KIcon(info.icon()), info.name(), info.pluginName() );
+        page_ui->managerCombo->addItem( QIcon::fromTheme(info.icon()), info.name(), info.pluginName() );
     }
 }
 
@@ -63,4 +63,3 @@ void ProjectInfoPage::setProjectManager( const QString& name )
 
 }
 
-#include "projectinfopage.moc"

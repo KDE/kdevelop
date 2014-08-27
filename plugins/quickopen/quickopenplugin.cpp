@@ -23,14 +23,15 @@
 
 #include <cassert>
 #include <typeinfo>
-#include <QtGui/QTreeView>
-#include <QtGui/QHeaderView>
+#include <QTreeView>
+#include <QHeaderView>
 #include <QDialog>
 #include <QKeyEvent>
 #include <QApplication>
 #include <QScrollBar>
 #include <QCheckBox>
 #include <QMetaObject>
+#include <QWidgetAction>
 
 #include <kbuttongroup.h>
 #include <klocale.h>
@@ -40,6 +41,8 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <kparts/mainwindow.h>
+#include <KConfigCore/ksharedconfig.h>
+#include <KConfigCore/KConfigGroup>
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <kshortcut.h>
@@ -56,7 +59,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/types/identifiedtype.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/types/functiontype.h>
 
 #include "expandingtree/expandingdelegate.h"
@@ -166,47 +169,32 @@ public:
 };
 
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
-K_EXPORT_PLUGIN(KDevQuickOpenFactory(KAboutData("kdevquickopen","kdevquickopen", ki18n("Quick Open"), "0.1", ki18n("This plugin allows quick access to project files and language-items like classes/functions."), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevQuickOpenFactory(KAboutData("kdevquickopen","kdevquickopen", ki18n("Quick Open"), "0.1", ki18n("This plugin allows quick access to project files and language-items like classes/functions."), KAboutData::License_GPL)))
 
 Declaration* cursorDeclaration() {
-  IDocument* doc = ICore::self()->documentController()->activeDocument();
-  if(!doc)
-    return 0;
 
-  KTextEditor::Document* textDoc = doc->textDocument();
-  if(!textDoc)
-    return 0;
-
-  KTextEditor::View* view = textDoc->activeView();
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
   if(!view)
     return 0;
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
-  return DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
+  return DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( view->document()->url(), KTextEditor::Cursor(view->cursorPosition()) ) );
 }
 
 ///The first definition that belongs to a context that surrounds the current cursor
 Declaration* cursorContextDeclaration() {
-  IDocument* doc = ICore::self()->documentController()->activeDocument();
-  if(!doc)
-    return 0;
-
-  KTextEditor::Document* textDoc = doc->textDocument();
-  if(!textDoc)
-    return 0;
-
-  KTextEditor::View* view = textDoc->activeView();
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
   if(!view)
     return 0;
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
-  TopDUContext* ctx = DUChainUtils::standardContextForUrl(doc->url());
+  TopDUContext* ctx = DUChainUtils::standardContextForUrl(view->document()->url());
   if(!ctx)
     return 0;
 
-  SimpleCursor cursor(view->cursorPosition());
+  KTextEditor::Cursor cursor(view->cursorPosition());
 
   DUContext* subCtx = ctx->findContext(ctx->transformToLocalRevision(cursor));
 
@@ -246,7 +234,7 @@ QString cursorItemText() {
   }
 
   AbstractType::Ptr t = decl->abstractType();
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.data());
   if( idType && idType->declaration(context) )
     decl = idType->declaration(context);
 
@@ -730,70 +718,71 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
 {
     xmlFile ="kdevquickopen.rc";
 
-    KAction* quickOpen = actions.addAction("quick_open");
+    QAction* quickOpen = actions.addAction("quick_open");
     quickOpen->setText( i18n("&Quick Open") );
-    quickOpen->setIcon( KIcon("quickopen") );
+    quickOpen->setIcon( QIcon::fromTheme("quickopen") );
     quickOpen->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_Q );
     connect(quickOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpen()));
 
-    KAction* quickOpenFile = actions.addAction("quick_open_file");
+    QAction* quickOpenFile = actions.addAction("quick_open_file");
     quickOpenFile->setText( i18n("Quick Open &File") );
-    quickOpenFile->setIcon( KIcon("quickopen-file") );
+    quickOpenFile->setIcon( QIcon::fromTheme("quickopen-file") );
     quickOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_O );
     connect(quickOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenFile()));
 
-    KAction* quickOpenClass = actions.addAction("quick_open_class");
+    QAction* quickOpenClass = actions.addAction("quick_open_class");
     quickOpenClass->setText( i18n("Quick Open &Class") );
-    quickOpenClass->setIcon( KIcon("quickopen-class") );
+    quickOpenClass->setIcon( QIcon::fromTheme("quickopen-class") );
     quickOpenClass->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_C );
     connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
 
-    KAction* quickOpenFunction = actions.addAction("quick_open_function");
+    QAction* quickOpenFunction = actions.addAction("quick_open_function");
     quickOpenFunction->setText( i18n("Quick Open &Function") );
-    quickOpenFunction->setIcon( KIcon("quickopen-function") );
+    quickOpenFunction->setIcon( QIcon::fromTheme("quickopen-function") );
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
     connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
 
-    KAction* quickOpenAlreadyOpen = actions.addAction("quick_open_already_open");
+    QAction* quickOpenAlreadyOpen = actions.addAction("quick_open_already_open");
     quickOpenAlreadyOpen->setText( i18n("Quick Open &Already Open File") );
-    quickOpenAlreadyOpen->setIcon( KIcon("quickopen-file") );
+    quickOpenAlreadyOpen->setIcon( QIcon::fromTheme("quickopen-file") );
     connect(quickOpenAlreadyOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpenOpenFile()));
 
-    KAction* quickOpenDocumentation = actions.addAction("quick_open_documentation");
+    QAction* quickOpenDocumentation = actions.addAction("quick_open_documentation");
     quickOpenDocumentation->setText( i18n("Quick Open &Documentation") );
-    quickOpenDocumentation->setIcon( KIcon("quickopen-documentation") );
+    quickOpenDocumentation->setIcon( QIcon::fromTheme("quickopen-documentation") );
     quickOpenDocumentation->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_D );
     connect(quickOpenDocumentation, SIGNAL(triggered(bool)), this, SLOT(quickOpenDocumentation()));
 
     m_quickOpenDeclaration = actions.addAction("quick_open_jump_declaration");
     m_quickOpenDeclaration->setText( i18n("Jump to Declaration") );
-    m_quickOpenDeclaration->setIcon( KIcon("go-jump-declaration" ) );
+    m_quickOpenDeclaration->setIcon( QIcon::fromTheme("go-jump-declaration" ) );
     m_quickOpenDeclaration->setShortcut( Qt::CTRL | Qt::Key_Period );
     connect(m_quickOpenDeclaration, SIGNAL(triggered(bool)), this, SLOT(quickOpenDeclaration()), Qt::QueuedConnection);
 
     m_quickOpenDefinition = actions.addAction("quick_open_jump_definition");
     m_quickOpenDefinition->setText( i18n("Jump to Definition") );
-    m_quickOpenDefinition->setIcon( KIcon("go-jump-definition" ) );
+    m_quickOpenDefinition->setIcon( QIcon::fromTheme("go-jump-definition" ) );
     m_quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
     connect(m_quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()), Qt::QueuedConnection);
 
-    KAction* quickOpenLine = actions.addAction("quick_open_line");
+    QWidgetAction* quickOpenLine = new QWidgetAction(this);
     quickOpenLine->setText( i18n("Embedded Quick Open") );
 //     quickOpenLine->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_E );
 //     connect(quickOpenLine, SIGNAL(triggered(bool)), this, SLOT(quickOpenLine(bool)));
     quickOpenLine->setDefaultWidget(createQuickOpenLineWidget());
+    actions.addAction("quick_open_line", quickOpenLine);
 
-    KAction* quickOpenNextFunction = actions.addAction("quick_open_next_function");
+    QAction* quickOpenNextFunction = actions.addAction("quick_open_next_function");
     quickOpenNextFunction->setText( i18n("Next Function") );
     quickOpenNextFunction->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_PageDown );
     connect(quickOpenNextFunction, SIGNAL(triggered(bool)), this, SLOT(nextFunction()));
 
-    KAction* quickOpenPrevFunction = actions.addAction("quick_open_prev_function");
+    QAction* quickOpenPrevFunction = actions.addAction("quick_open_prev_function");
     quickOpenPrevFunction->setText( i18n("Previous Function") );
     quickOpenPrevFunction->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_PageUp );
     connect(quickOpenPrevFunction, SIGNAL(triggered(bool)), this, SLOT(previousFunction()));
 
-    KAction* quickOpenNavigateFunctions = actions.addAction("quick_open_outline");
+    QAction* quickOpenNavigateFunctions = actions.addAction("quick_open_outline");
     quickOpenNavigateFunctions->setText( i18n("Outline") );
     quickOpenNavigateFunctions->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_N );
     connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));   
@@ -801,13 +790,13 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
 
 QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
                                  const QVariantList&)
-    : KDevelop::IPlugin(KDevQuickOpenFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevquickopen", parent)
 {
     staticQuickOpenPlugin = this;
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IQuickOpen )
     m_model = new QuickOpenModel( 0 );
 
-    KConfigGroup quickopengrp = KGlobal::config()->group("QuickOpen");
+    KConfigGroup quickopengrp = KSharedConfig::openConfig()->group("QuickOpen");
     lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList() << i18n("Project") << i18n("Includes") << i18n("Includers") << i18n("Currently Open") );
     lastUsedItems = quickopengrp.readEntry("SelectedItems", QStringList() );
 
@@ -953,14 +942,14 @@ void QuickOpenPlugin::showQuickOpenWidget(const QStringList& items, const QStrin
 void QuickOpenPlugin::storeScopes( const QStringList& scopes )
 {
   lastUsedScopes = scopes;
-  KConfigGroup grp = KGlobal::config()->group("QuickOpen");
+  KConfigGroup grp = KSharedConfig::openConfig()->group("QuickOpen");
   grp.writeEntry( "SelectedScopes", scopes );
 }
 
 void QuickOpenPlugin::storeItems( const QStringList& items )
 {
   lastUsedItems = items;
-  KConfigGroup grp = KGlobal::config()->group("QuickOpen");
+  KConfigGroup grp = KSharedConfig::openConfig()->group("QuickOpen");
   grp.writeEntry( "SelectedItems", items );
 }
 
@@ -1027,7 +1016,7 @@ void QuickOpenPlugin::quickOpenDeclaration()
   decl->activateSpecialization();
 
   IndexedString u = decl->url();
-  SimpleCursor c = decl->rangeInCurrentRevision().start;
+  KTextEditor::Cursor c = decl->rangeInCurrentRevision().start();
 
   if(u.str().isEmpty()) {
     kDebug() << "Got empty url for declaration" << decl->toString();
@@ -1035,7 +1024,7 @@ void QuickOpenPlugin::quickOpenDeclaration()
   }
 
   lock.unlock();
-  core()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
+  core()->documentController()->openDocument(KUrl(u.str()), c);
 }
 
 ///Returns all languages for that url that have a language support, and prints warnings for other ones.
@@ -1054,13 +1043,14 @@ QList<KDevelop::ILanguage*> languagesWithSupportForUrl(KUrl url) {
 
 QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
 {
-  if( !ICore::self()->documentController()->activeDocument() || !ICore::self()->documentController()->activeDocument()->textDocument() || !ICore::self()->documentController()->activeDocument()->textDocument()->activeView() )
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
+  if( !view )
     return 0;
 
   KUrl url = ICore::self()->documentController()->activeDocument()->url();
 
   foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
-    QWidget* w = language->languageSupport()->specialLanguageObjectNavigationWidget(url, SimpleCursor(ICore::self()->documentController()->activeDocument()->textDocument()->activeView()->cursorPosition()) );
+    QWidget* w = language->languageSupport()->specialLanguageObjectNavigationWidget(url, KTextEditor::Cursor(view->cursorPosition()) );
     if(w)
       return w;
   }
@@ -1068,32 +1058,34 @@ QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
   return 0;
 }
 
-QPair<KUrl, SimpleCursor> QuickOpenPlugin::specialObjectJumpPosition() const {
-  if( !ICore::self()->documentController()->activeDocument() || !ICore::self()->documentController()->activeDocument()->textDocument() || !ICore::self()->documentController()->activeDocument()->textDocument()->activeView() )
-    return qMakePair(KUrl(), SimpleCursor());
+QPair<KUrl, KTextEditor::Cursor> QuickOpenPlugin::specialObjectJumpPosition() const
+{
+  KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
+  if( !view )
+    return qMakePair(KUrl(), KTextEditor::Cursor());
 
   KUrl url = ICore::self()->documentController()->activeDocument()->url();
 
   foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
-    QPair<KUrl, SimpleCursor> pos = language->languageSupport()->specialLanguageObjectJumpCursor(url, SimpleCursor(ICore::self()->documentController()->activeDocument()->textDocument()->activeView()->cursorPosition()) );
+    QPair<KUrl, KTextEditor::Cursor> pos = language->languageSupport()->specialLanguageObjectJumpCursor(url, KTextEditor::Cursor(view->cursorPosition()) );
     if(pos.second.isValid()) {
       return pos;
     }
   }
 
-  return qMakePair(KUrl(), SimpleCursor::invalid());
+  return qMakePair(KUrl(), KTextEditor::Cursor::invalid());
 }
 
 bool QuickOpenPlugin::jumpToSpecialObject()
 {
-  QPair<KUrl, SimpleCursor> pos = specialObjectJumpPosition();
+  QPair<KUrl, KTextEditor::Cursor> pos = specialObjectJumpPosition();
   if(pos.second.isValid()) {
     if(pos.first.isEmpty()) {
       kDebug() << "Got empty url for special language object";
       return false;
     }
 
-    ICore::self()->documentController()->openDocument(pos.first, pos.second.textCursor());
+    ICore::self()->documentController()->openDocument(pos.first, pos.second);
     return true;
   }
   return false;
@@ -1113,11 +1105,11 @@ void QuickOpenPlugin::quickOpenDefinition()
   }
 
   IndexedString u = decl->url();
-  SimpleCursor c = decl->rangeInCurrentRevision().start;
+  KTextEditor::Cursor c = decl->rangeInCurrentRevision().start();
   if(FunctionDefinition* def = FunctionDefinition::definition(decl)) {
     def->activateSpecialization();
     u = def->url();
-    c = def->rangeInCurrentRevision().start;
+    c = def->rangeInCurrentRevision().start();
   }else{
     kDebug() << "Found no definition for declaration";
     decl->activateSpecialization();
@@ -1129,7 +1121,7 @@ void QuickOpenPlugin::quickOpenDefinition()
   }
 
   lock.unlock();
-  core()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
+  core()->documentController()->openDocument(KUrl(u.str()), c);
 }
 
 bool QuickOpenPlugin::freeModel()
@@ -1172,7 +1164,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
   OutlineFilter filter(items, OutlineFilter::Functions);
   DUChainUtils::collectItems( context, filter );
 
-  CursorInRevision cursor = context->transformToLocalRevision(SimpleCursor(doc->cursorPosition()));
+  CursorInRevision cursor = context->transformToLocalRevision(KTextEditor::Cursor(doc->cursorPosition()));
   if (!cursor.isValid())
     return;
 
@@ -1202,7 +1194,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
 
   KTextEditor::Cursor textCursor = KTextEditor::Cursor::invalid();
   if (c.isValid())
-    textCursor = context->transformFromLocalRevision(c).textCursor();
+    textCursor = context->transformFromLocalRevision(c);
 
   lock.unlock();
   if (textCursor.isValid())
@@ -1465,14 +1457,14 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
         break;
     // handle bug 260657 - "Outline menu doesn't follow main window on its move"
     case QEvent::Move: {
-            QWidget* widget = qobject_cast<QWidget*>(obj);
-            Q_ASSERT(widget);
+          if (QWidget* widget = qobject_cast<QWidget*>(obj)) {
             // close the outline menu in case a parent widget moved
             if (widget->isAncestorOf(this)) {
               kDebug() << "closing because of parent widget move";
               deactivate();
             }
             break;
+          }
         }
     case QEvent::FocusIn:
         if (dynamic_cast<QWidget*>(obj)) {

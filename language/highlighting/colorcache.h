@@ -24,12 +24,10 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QList>
-#include <QtGui/QColor>
-#include <QtCore/QWeakPointer>
+#include <QColor>
+#include <QtCore/QPointer>
 
-#include "../languageexport.h"
-
-#include <kdeversion.h>
+#include <language/languageexport.h>
 
 namespace KTextEditor {
 class Document;
@@ -127,7 +125,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// try to access the KatePart settings for the given doc or fallback to the global KDE scheme
     /// and update the colors if necessary
     /// @see generateColors(), updateColorsFromScheme()
-    void updateColorsFromDocument(KTextEditor::Document* doc);
+    void updateColorsFromView(KTextEditor::View* view);
 
     /// the default colors for the different types
     CodeHighlightingColors* m_defaultColors;
@@ -156,7 +154,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     uchar m_globalColorRatio;
 
     /// The view we are listening to for setting changes.
-    QWeakPointer<KTextEditor::View> m_view;
+    QPointer<KTextEditor::View> m_view;
 };
 
 }

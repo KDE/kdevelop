@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_IMPORTERS_H
 #define KDEVPLATFORM_IMPORTERS_H
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 #include "declarationid.h"
 
 

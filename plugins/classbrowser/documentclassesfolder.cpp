@@ -27,8 +27,9 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/codemodel.h>
+
+#include <QIcon>
 #include <QTimer>
-#include <KIcon>
 
 #include <boost/foreach.hpp>
 
@@ -65,7 +66,7 @@ StaticNamespaceFolderNode::StaticNamespaceFolderNode(const KDevelop::QualifiedId
 
 bool StaticNamespaceFolderNode::getIcon(QIcon& a_resultIcon)
 {
-  static KIcon folderIcon("namespace");
+  static QIcon folderIcon = QIcon::fromTheme("namespace");
   a_resultIcon = folderIcon;
   return true;
 }
@@ -447,7 +448,6 @@ StaticNamespaceFolderNode* DocumentClassesFolder::getNamespaceFolder(const KDeve
     return *iter;
 }
 
-#include "documentclassesfolder.moc"
 
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

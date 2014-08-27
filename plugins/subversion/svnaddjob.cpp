@@ -127,5 +127,3 @@ void SvnAddJob::setRecursive( bool recursive )
 
 
 #include "svnaddjob.moc"
-#include "svnaddjob_p.moc"
-

@@ -27,6 +27,7 @@
 #include <klibloader.h>
 #include <kde_terminal_interface.h>
 #include <kparts/part.h>
+#include <kparts/readonlypart.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -94,7 +95,7 @@ KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPlugin *plugin, QWidget* parent
     d->konsolepart = 0;
     setObjectName( i18n( "Konsole" ) );
 
-    setWindowIcon( KIcon( "utilities-terminal" ) );
+    setWindowIcon( QIcon::fromTheme( "utilities-terminal" ) );
     setWindowTitle( i18n( "Konsole" ) );
 
     d->m_vbox = new QVBoxLayout( this );
@@ -148,5 +149,4 @@ bool KDevKonsoleView::eventFilter( QObject* obj, QEvent *e )
     return QWidget::eventFilter( obj, e );
 }
 
-#include "kdevkonsoleview.moc"
-
+#include "moc_kdevkonsoleview.cpp"

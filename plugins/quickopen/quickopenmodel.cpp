@@ -142,6 +142,9 @@ void QuickOpenModel::textChanged( const QString& str )
 {
   if( m_filterText == str )
       return;
+
+  beginResetModel();
+
   m_filterText = str;
   foreach( const ProviderEntry& provider, m_providers )
     if( provider.enabled )
@@ -154,8 +157,7 @@ void QuickOpenModel::textChanged( const QString& str )
   for(int  a = 0; a < 50 && a < rowCount(QModelIndex()) ; ++a)
     getItem(a, true);
   
-
-  reset();
+  endResetModel();
 }
 
 void QuickOpenModel::restart(bool keepFilterText)
@@ -198,10 +200,10 @@ void QuickOpenModel::restart_internal(bool keepFilterText)
   if(keepFilterText) {
     textChanged(m_filterText);
   }else{
+    beginResetModel();
     m_cachedData.clear();
     clearExpanding();
-
-    reset();
+    endResetModel();
   }
 }
 
@@ -322,8 +324,11 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
   return ExpandingWidgetModel::data( index, role );
 }
 
-void QuickOpenModel::resetTimer() {
+void QuickOpenModel::resetTimer()
+{
+    int currentRow = treeView() ? treeView()->currentIndex().row() : -1;
 
+    beginResetModel();
     //Remove all cached data behind row m_resetBehindRow
     for(DataList::iterator it = m_cachedData.begin(); it != m_cachedData.end(); ) {
         if(it.key() > m_resetBehindRow)
@@ -331,13 +336,10 @@ void QuickOpenModel::resetTimer() {
         else
             ++it;
     }
-    
-    if(treeView()) {
-        QModelIndex currentIndex(treeView()->currentIndex());  
-        QAbstractItemModel::reset(); //New items have been inserted
-        if (currentIndex.isValid()) {
-            treeView()->setCurrentIndex(index(currentIndex.row(), 0, QModelIndex())); //Preserve the current index
-        }
+    endResetModel();
+
+    if (currentRow != -1) {
+        treeView()->setCurrentIndex(index(currentRow, 0, QModelIndex())); //Preserve the current index
     }
     m_resetBehindRow = 0;
 }

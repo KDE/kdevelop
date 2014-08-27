@@ -13,8 +13,8 @@
 
 #include "patchhighlighter.h"
 
-#include "libdiff2/difference.h"
-#include "libdiff2/diffmodel.h"
+#include <libkomparediff2/difference.h>
+#include <libkomparediff2/diffmodel.h>
 
 #include "patchreview.h"
 #include <language/highlighting/colorcache.h>
@@ -121,7 +121,7 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
         Diff2::MarkerList markers = line->markerList();
 
         for( int b = 0; b < markers.size(); ++b ) {
-            QString spanText = Qt::escape( string.mid( currentPos, markers[b]->offset() - currentPos ) );
+            QString spanText = string.mid( currentPos, markers[b]->offset() - currentPos ).toHtmlEscaped();
             if( markers[b]->type() == Diff2::Marker::End && ( currentPos != 0 || markers[b]->offset() != static_cast<uint>( string.size() ) ) )
             {
                 if( a == highlightMark.first && b == highlightMark.second )
@@ -134,7 +134,7 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
             currentPos = markers[b]->offset();
         }
 
-        html += Qt::escape( string.mid( currentPos, string.length()-currentPos ) );
+        html += string.mid( currentPos, string.length()-currentPos ).toHtmlEscaped();
         html += "<br/>";
     }
 
@@ -172,8 +172,9 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, const KTextEdito
 
     handled = true;
 
-    if( doc->activeView() ) ///This is a workaround, if the cursor is somewhere else, the editor will always jump there when a mark was clicked
-        doc->activeView()->setCursorPosition( KTextEditor::Cursor( mark.line, 0 ) );
+//     TODO: reconsider workaround
+//     if( doc->activeView() ) ///This is a workaround, if the cursor is somewhere else, the editor will always jump there when a mark was clicked
+//         doc->activeView()->setCursorPosition( KTextEditor::Cursor( mark.line, 0 ) );
 
     KTextEditor::MovingRange* range = rangeForMark( mark );
 
@@ -218,10 +219,9 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, const KTextEdito
 
         KTextEditor::Cursor start = range->start().toCursor();
         range->document()->replaceText( range->toRange(), replaceWith );
-        KTextEditor::Range newRange( start, start );
-
         uint replaceWithLines = replaceWith.count( '\n' );
-        newRange.end().setLine( newRange.end().line() +  replaceWithLines );
+        KTextEditor::Range newRange( start, KTextEditor::Cursor(start.line() +  replaceWithLines, start.column()) );
+
         range->setRange( newRange );
 
         addLineMarker( range, diff );
@@ -359,11 +359,11 @@ void PatchHighlighter::textInserted( KTextEditor::Document* doc, const KTextEdit
 
         KColorScheme scheme( QPalette::Active );
 
-        QImage tintedInsertion = KIcon( "insert-text" ).pixmap( 16, 16 ).toImage();
+        QImage tintedInsertion = QIcon::fromTheme( "insert-text" ).pixmap( 16, 16 ).toImage();
         KIconEffect::colorize( tintedInsertion, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
-        QImage tintedRemoval = KIcon( "edit-delete" ).pixmap( 16, 16 ).toImage();
+        QImage tintedRemoval = QIcon::fromTheme( "edit-delete" ).pixmap( 16, 16 ).toImage();
         KIconEffect::colorize( tintedRemoval, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
-        QImage tintedChange = KIcon( "text-field" ).pixmap( 16, 16 ).toImage();
+        QImage tintedChange = QIcon::fromTheme( "text-field" ).pixmap( 16, 16 ).toImage();
         KIconEffect::colorize( tintedChange, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
 
         markIface->setMarkDescription( KTextEditor::MarkInterface::markType22, i18n( "Insertion" ) );
@@ -374,11 +374,11 @@ void PatchHighlighter::textInserted( KTextEditor::Document* doc, const KTextEdit
         markIface->setMarkPixmap( KTextEditor::MarkInterface::markType24, QPixmap::fromImage( tintedChange ) );
 
         markIface->setMarkDescription( KTextEditor::MarkInterface::markType25, i18n( "Insertion" ) );
-        markIface->setMarkPixmap( KTextEditor::MarkInterface::markType25, KIcon( "insert-text" ).pixmap( 16, 16 ) );
+        markIface->setMarkPixmap( KTextEditor::MarkInterface::markType25, QIcon::fromTheme( "insert-text" ).pixmap( 16, 16 ) );
         markIface->setMarkDescription( KTextEditor::MarkInterface::markType26, i18n( "Removal" ) );
-        markIface->setMarkPixmap( KTextEditor::MarkInterface::markType26, KIcon( "edit-delete" ).pixmap( 16, 16 ) );
+        markIface->setMarkPixmap( KTextEditor::MarkInterface::markType26, QIcon::fromTheme( "edit-delete" ).pixmap( 16, 16 ) );
         markIface->setMarkDescription( KTextEditor::MarkInterface::markType27, i18n( "Change" ) );
-        markIface->setMarkPixmap( KTextEditor::MarkInterface::markType27, KIcon( "text-field" ).pixmap( 16, 16 ) );
+        markIface->setMarkPixmap( KTextEditor::MarkInterface::markType27, QIcon::fromTheme( "text-field" ).pixmap( 16, 16 ) );
 
         for ( Diff2::DifferenceList::const_iterator it = m_model->differences()->constBegin(); it != m_model->differences()->constEnd(); ++it ) {
             Diff2::Difference* diff = *it;
@@ -493,7 +493,7 @@ void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Di
     if( !markIface )
         return;
 
-    KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
+    KTextEditor::Attribute::Ptr t( new KTextEditor::Attribute() );
 
     bool isOriginalState = diff->applied() == m_plugin->patch()->isAlreadyApplied();
 
@@ -546,7 +546,7 @@ void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Di
                     KTextEditor::MovingRange * r2 = moving->newMovingRange( KTextEditor::Range( KTextEditor::Cursor( a + range->start().line(), currentPos ), KTextEditor::Cursor( a + range->start().line(), markers[b]->offset() ) ) );
                     m_ranges << r2;
 
-                    KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
+                    KTextEditor::Attribute::Ptr t( new KTextEditor::Attribute() );
 
                     t->setProperty( QTextFormat::BackgroundBrush, QBrush( ColorCache::self()->blendBackground( QColor( 255, 0, 0 ), 70 ) ) );
                     r2->setAttribute( t );

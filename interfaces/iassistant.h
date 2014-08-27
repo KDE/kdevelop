@@ -20,12 +20,12 @@
 #define KDEVPLATFORM_IASSISTANT_H
 
 #include <QtCore/QPointer>
-#include <QtGui/QIcon>
-#include <KDE/KSharedPtr>
+#include <QIcon>
+#include <QExplicitlySharedDataPointer>
 #include "interfacesexport.h"
 #include <util/ksharedobject.h>
 
-class KAction;
+class QAction;
 
 namespace KDevelop {
 
@@ -37,13 +37,13 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistantAction : public QObject, public KS
 public:
     IAssistantAction();
 
-    typedef KSharedPtr<IAssistantAction> Ptr;
+    typedef QExplicitlySharedDataPointer<IAssistantAction> Ptr;
 
     virtual ~IAssistantAction();
 
     ///Creates a KAction that represents this exact assistant action.
     ///The caller owns the action, and is responsible for deleting it.
-    virtual KAction* toKAction() const;
+    virtual QAction* toKAction() const;
 
     ///Should return a short description of the action.
     ///It may contain simple HTML formatting.
@@ -93,7 +93,7 @@ public:
     /**
      * No action is returned.
      */
-    virtual KAction* toKAction() const;
+    virtual QAction* toKAction() const;
 
 private:
     QString m_description;
@@ -108,7 +108,7 @@ public:
     IAssistant();
     virtual ~IAssistant();
 
-    typedef KSharedPtr<IAssistant> Ptr;
+    typedef QExplicitlySharedDataPointer<IAssistant> Ptr;
 
     ///Returns the stored list of actions
     QList<IAssistantAction::Ptr> actions() const;

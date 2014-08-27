@@ -13,6 +13,7 @@
 #include "appwizardpagewidget.h"
 #include "appwizarddialog.h"
 #include <knewstuff3/entry.h>
+#include <kconfiggroup.h>
 #include <QRegExpValidator>
 
 namespace KDevelop
@@ -39,9 +40,9 @@ public:
 
     QString selectedTemplate();
     QString appName();
-    KUrl location();
+    QUrl location();
 signals:
-    void locationChanged( const KUrl& );
+    void locationChanged( const QUrl& );
     void valid();
     void invalid();
 private slots:

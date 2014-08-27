@@ -24,7 +24,7 @@
 #include "kdevdocumentmodel.h"
 #include "kdevdocumentselection.h"
 
-#include <QtGui/QVBoxLayout>
+#include <QVBoxLayout>
 
 #include <kaction.h>
 #include <klocale.h>
@@ -36,7 +36,7 @@
 #include <interfaces/iuicontroller.h>
 
 K_PLUGIN_FACTORY(KDevDocumentViewFactory, registerPlugin<KDevDocumentViewPlugin>(); )
-K_EXPORT_PLUGIN(KDevDocumentViewFactory(KAboutData("kdevdocumentview","kdevdocumentview", ki18n("Document View"), "0.1", ki18n("This plugin displays a graphical view of all documents currently loaded and separates them by mimetype."), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevDocumentViewFactory(KAboutData("kdevdocumentview","kdevdocumentview", ki18n("Document View"), "0.1", ki18n("This plugin displays a graphical view of all documents currently loaded and separates them by mimetype."), KAboutData::License_GPL)))
 
 class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
 {
@@ -85,7 +85,7 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
 
 
 KDevDocumentViewPlugin::KDevDocumentViewPlugin( QObject *parent, const QVariantList& args )
-        : KDevelop::IPlugin( KDevDocumentViewFactory::componentData(), parent )
+        : KDevelop::IPlugin( "kdevdocumentview", parent )
 {
     Q_UNUSED( args );
 

@@ -59,7 +59,7 @@ public:
     KUrl::List m_urls;
 };
 
-FileContext::FileContext( const KUrl::List &urls )
+FileContext::FileContext( const QList<QUrl> &urls )
         : Context(), d( new FileContextPrivate( urls ) )
 {}
 
@@ -73,7 +73,7 @@ int FileContext::type() const
     return Context::FileContext;
 }
 
-KUrl::List FileContext::urls() const
+QList<QUrl> FileContext::urls() const
 {
     return d->m_urls;
 }
@@ -110,16 +110,16 @@ QList<ProjectBaseItem*> ProjectItemContext::items() const
 class OpenWithContextPrivate
 {
 public:
-    OpenWithContextPrivate(const KUrl::List& urls, const KMimeType::Ptr& mimeType)
+    OpenWithContextPrivate(const KUrl::List& urls, const QMimeType& mimeType)
     : m_urls( urls )
     , m_mimeType( mimeType )
     {}
 
     KUrl::List m_urls;
-    KMimeType::Ptr m_mimeType;
+    QMimeType m_mimeType;
 };
 
-OpenWithContext::OpenWithContext(const KUrl::List& urls, const KMimeType::Ptr& mimeType)
+OpenWithContext::OpenWithContext(const KUrl::List& urls, const QMimeType& mimeType)
 : Context()
 , d(new OpenWithContextPrivate(urls, mimeType))
 {
@@ -136,7 +136,7 @@ KUrl::List OpenWithContext::urls() const
     return d->m_urls;
 }
 
-KMimeType::Ptr OpenWithContext::mimeType() const
+QMimeType OpenWithContext::mimeType() const
 {
     return d->m_mimeType;
 }

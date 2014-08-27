@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QSet>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include "problemmodel.h"
 

@@ -37,15 +37,15 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
 
-#include <KIcon>
 #include <KActionCollection>
-#include <KAction>
 #include <KLocalizedString>
 #include <KJob>
-#include <krecursivefilterproxymodel.h>
+#include <KRecursiveFilterProxyModel>
 #include <KLineEdit>
 #include <KConfigGroup>
 
+#include <QAction>
+#include <QIcon>
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QHeaderView>
@@ -62,10 +62,10 @@ enum CustomRoles {
 //BEGIN TestViewFilterAction
 
 TestViewFilterAction::TestViewFilterAction(  const QString &initialFilter, QObject* parent )
-    : KAction( parent )
+    : QAction( parent )
     , m_intialFilter(initialFilter)
 {
-    setIcon(KIcon("view-filter"));
+    setIcon(QIcon::fromTheme("view-filter"));
     setText(i18n("Filter..."));
     setToolTip(i18n("Insert wildcard patterns to filter the test view"
                     " for matching test suites and cases."));
@@ -95,7 +95,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 , m_tree(new QTreeView(this))
 , m_filter(new KRecursiveFilterProxyModel(this))
 {
-    setWindowIcon(KIcon("preflight-verifier"));
+    setWindowIcon(QIcon::fromTheme("preflight-verifier"));
     setWindowTitle(i18n("Unit Tests"));
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -117,11 +117,11 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     m_filter->setSourceModel(m_model);
     m_tree->setModel(m_filter);
 
-    KAction* showSource = new KAction( KIcon("code-context"), i18n("Show Source"), this );
+    QAction* showSource = new QAction( QIcon::fromTheme("code-context"), i18n("Show Source"), this );
     connect (showSource, SIGNAL(triggered(bool)), SLOT(showSource()));
     m_contextMenuActions << showSource;
 
-    KAction* runSelected = new KAction( KIcon("system-run"), i18n("Run Selected Tests"), this );
+    QAction* runSelected = new QAction( QIcon::fromTheme("system-run"), i18n("Run Selected Tests"), this );
     connect (runSelected, SIGNAL(triggered(bool)), SLOT(runSelectedTests()));
     m_contextMenuActions << runSelected;
 
@@ -199,7 +199,7 @@ void TestView::notifyTestCaseStarted(ITestSuite* suite, const QStringList& test_
     debug() << "Notify a test of the suite " << suite->name() << " has started";
     
     // Global test suite icon
-    item->setIcon(KIcon("process-idle"));
+    item->setIcon(QIcon::fromTheme("process-idle"));
     
     for (int i = 0; i < item->rowCount(); ++i)
     {
@@ -208,40 +208,40 @@ void TestView::notifyTestCaseStarted(ITestSuite* suite, const QStringList& test_
         if (test_cases.contains(caseItem->text()))
         {
             // Each test case icon
-            caseItem->setIcon(KIcon("process-idle"));
+            caseItem->setIcon(QIcon::fromTheme("process-idle"));
         }
     }
 }
 
 
-KIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
+QIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
 {
     switch (result)
     {
         case TestResult::NotRun:
-            return KIcon("code-function");
+            return QIcon::fromTheme("code-function");
 
         case TestResult::Skipped:
-            return KIcon("task-delegate");
+            return QIcon::fromTheme("task-delegate");
 
         case TestResult::Passed:
-            return KIcon("dialog-ok-apply");
+            return QIcon::fromTheme("dialog-ok-apply");
 
         case TestResult::UnexpectedPass:
             // This is a very rare occurrence, so the icon should stand out
-            return KIcon("dialog-warning");
+            return QIcon::fromTheme("dialog-warning");
 
         case TestResult::Failed:
-            return KIcon("edit-delete");
+            return QIcon::fromTheme("edit-delete");
 
         case TestResult::ExpectedFail:
-            return KIcon("dialog-ok");
+            return QIcon::fromTheme("dialog-ok");
 
         case TestResult::Error:
-            return KIcon("dialog-cancel");
+            return QIcon::fromTheme("dialog-cancel");
 
         default:
-            return KIcon("");
+            return QIcon::fromTheme("");
     }
 }
 
@@ -370,7 +370,7 @@ void TestView::showSource()
     }
 
     KUrl url = d->url().toUrl();
-    KTextEditor::Cursor cursor = d->rangeInCurrentRevision().textRange().start();
+    KTextEditor::Cursor cursor = d->rangeInCurrentRevision().start();
     locker.unlock();
 
     IDocumentController* dc = ICore::self()->documentController();
@@ -383,7 +383,7 @@ void TestView::addTestSuite(ITestSuite* suite)
     QStandardItem* projectItem = itemForProject(suite->project());
     Q_ASSERT(projectItem);
 
-    QStandardItem* suiteItem = new QStandardItem(KIcon("view-list-tree"), suite->name());
+    QStandardItem* suiteItem = new QStandardItem(QIcon::fromTheme("view-list-tree"), suite->name());
 
     suiteItem->setData(suite->name(), SuiteRole);
     foreach (QString caseName, suite->cases())
@@ -403,7 +403,7 @@ void TestView::removeTestSuite(ITestSuite* suite)
 
 QStandardItem* TestView::addProject(IProject* project)
 {
-    QStandardItem* projectItem = new QStandardItem(KIcon("project-development"), project->name());
+    QStandardItem* projectItem = new QStandardItem(QIcon::fromTheme("project-development"), project->name());
     projectItem->setData(project->name(), ProjectRole);
     m_model->appendRow(projectItem);
     return projectItem;

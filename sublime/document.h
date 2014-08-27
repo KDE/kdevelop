@@ -41,7 +41,7 @@ class Controller;
 Subclass from Document and implement createViewWidget() method
 to return a new widget for a view.
 */
-class SUBLIME_EXPORT Document: public QObject {
+class KDEVPLATFORMSUBLIME_EXPORT Document: public QObject {
     Q_OBJECT
 public:
     /**Creates a document and adds it to a @p controller.*/

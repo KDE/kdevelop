@@ -161,7 +161,7 @@ bool CodeGeneratorBase::execute()
             QList<TopDUContext *> contexts = DUChain::self()->chainsForDocument(document);
             foreach(TopDUContext * top, contexts)
             {
-                kDebug() << "Checking top context with range: " << top->range().textRange() << " for a context";
+                kDebug() << "Checking top context with range: " << top->range() << " for a context";
                 if((d->context = top->findContextIncluding(d->range)))
                     break;
             }

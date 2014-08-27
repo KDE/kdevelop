@@ -33,7 +33,7 @@
 #include "ducontextdata.h"
 #include "ducontextdynamicdata.h"
 #include "duchainregister.h"
-#include "repositories/itemrepository.h"
+#include "serialization/itemrepository.h"
 #include "problem.h"
 
 //#define DEBUG_DATA_INFO
@@ -185,19 +185,19 @@ struct PtrType<T*>
 };
 
 template<typename T>
-struct PtrType<KSharedPtr<T>>
+struct PtrType<QExplicitlySharedDataPointer<T>>
 {
   using value = T*;
 };
 
 template<typename T>
-constexpr bool isSharedDataItem()
+Q_DECL_CONSTEXPR bool isSharedDataItem()
 {
   return false;
 }
 
 template<>
-constexpr bool isSharedDataItem<ProblemPointer>()
+Q_DECL_CONSTEXPR bool isSharedDataItem<ProblemPointer>()
 {
   return true;
 }
@@ -310,7 +310,7 @@ template<typename Item>
 bool TopDUContextDynamicData::DUChainItemStorage<Item>::itemsHaveChanged() const
 {
   for (auto item : items) {
-    if (item && item->d_ptr->m_dynamic) {
+    if (item && item->d_func()->m_dynamic) {
       return true;
     }
   }
@@ -639,7 +639,7 @@ QString KDevelop::TopDUContextDynamicData::filePath() const {
 
 bool TopDUContextDynamicData::hasChanged() const
 {
-  return !m_onDisk || m_topContext->d_ptr->m_dynamic
+  return !m_onDisk || m_topContext->d_func()->m_dynamic
         || m_contexts.itemsHaveChanged() || m_declarations.itemsHaveChanged()
         || m_problems.itemsHaveChanged();
 }

@@ -51,7 +51,7 @@
 #include <interfaces/isession.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
 #include "core.h"
@@ -145,7 +145,7 @@ public:
     QString developerTempFile;
     QString projectTempFile;
     IPlugin* manager;
-    QWeakPointer<IPlugin> vcsPlugin;
+    QPointer<IPlugin> vcsPlugin;
     ProjectFolderItem* topItem;
     QString name;
     KSharedConfig::Ptr m_cfg;
@@ -173,36 +173,6 @@ public:
         } else {
             projCtrl->abortOpeningProject(project);
         }
-    }
-
-    QList<ProjectFileItem*> recurseFiles( ProjectBaseItem * projectItem )
-    {
-        QList<ProjectFileItem*> files;
-        if ( ProjectFolderItem * folder = projectItem->folder() )
-        {
-            QList<ProjectFolderItem*> folder_list = folder->folderList();
-            for ( QList<ProjectFolderItem*>::Iterator it = folder_list.begin(); it != folder_list.end(); ++it )
-            {
-                files += recurseFiles( ( *it ) );
-            }
-
-            QList<ProjectTargetItem*> target_list = folder->targetList();
-            for ( QList<ProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it )
-            {
-                files += recurseFiles( ( *it ) );
-            }
-
-            files += folder->fileList();
-        }
-        else if ( ProjectTargetItem * target = projectItem->target() )
-        {
-            files += target->fileList();
-        }
-        else if ( ProjectFileItem * file = projectItem->file() )
-        {
-            files.append( file );
-        }
-        return files;
     }
 
     QList<ProjectBaseItem*> itemsForPath( const IndexedString& path ) const
@@ -372,6 +342,7 @@ public:
                             i18n( "Could not load project management plugin %1.",
                                   managerSetting ) );
             manager = 0;
+            return 0;
         }
         if (iface == 0)
         {
@@ -484,7 +455,6 @@ Path Project::path() const
 
 void Project::reloadModel()
 {
-    qDebug() << "reload!!!!!!!" << d->loading;
     if (d->loading) {
         d->scheduleReload = true;
         return;
@@ -579,25 +549,6 @@ bool Project::inProject( const IndexedString& path ) const
     return !d->itemsForPath( path ).isEmpty();
 }
 
-ProjectFileItem* Project::fileAt( int num ) const
-{
-    QList<ProjectFileItem*> files;
-    if ( d->topItem )
-        files = d->recurseFiles( d->topItem );
-
-    if( !files.isEmpty() && num >= 0 && num < files.count() )
-        return files.at( num );
-    return 0;
-}
-
-QList<ProjectFileItem *> Project::files() const
-{
-    QList<ProjectFileItem *> files;
-    if ( d->topItem )
-        files = d->recurseFiles( d->topItem );
-    return files;
-}
-
 QList< ProjectBaseItem* > Project::itemsForUrl(const KUrl& url) const
 {
     return d->itemsForPath(IndexedString(url));
@@ -640,14 +591,6 @@ QList<ProjectFolderItem*> Project::foldersForPath(const IndexedString& folder) c
     return items;
 }
 
-int Project::fileCount() const
-{
-    QList<ProjectFileItem*> files;
-    if ( d->topItem )
-        files = d->recurseFiles( d->topItem );
-    return files.count();
-}
-
 IProjectFileManager* Project::projectFileManager() const
 {
     return d->manager->extension<IProjectFileManager>();
@@ -681,11 +624,6 @@ KUrl Project::projectFileUrl() const
 Path Project::developerFile() const
 {
     return d->developerFile;
-}
-
-KUrl Project::developerFileUrl() const
-{
-    return d->developerFile.toUrl();
 }
 
 ProjectFolderItem* Project::projectItem() const

@@ -29,14 +29,15 @@
 #include <KMessageBox>
 #include <KDebug>
 #include <KIO/Job>
+#include <KUrl>
 #include <QFile>
 #include <QDir>
 #include <interfaces/icore.h>
-#include <interfaces/ipatchsource.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
+#include <vcs/interfaces/ipatchsource.h>
 #include <vcs/vcsjob.h>
 #include "reviewpatchdialog.h"
 #include "reviewboardjobs.h"
@@ -44,10 +45,10 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(KDevReviewBoardFactory, registerPlugin<ReviewBoardPlugin>(); )
-K_EXPORT_PLUGIN(KDevReviewBoardFactory(KAboutData("kdevreviewboard","kdevreviewboard", ki18n("ReviewBoard Support"), "0.1", ki18n("Deal with the ReviewBoard Patches"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(KDevReviewBoardFactory(KAboutData("kdevreviewboard","kdevreviewboard", ki18n("ReviewBoard Support"), "0.1", ki18n("Deal with the ReviewBoard Patches"), KAboutData::License_GPL)))
 
 ReviewBoardPlugin::ReviewBoardPlugin ( QObject* parent, const QVariantList& )
-    : IPlugin ( KDevReviewBoardFactory::componentData(), parent )
+    : IPlugin ( "kdevreviewboard", parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchExporter )
 }
@@ -67,7 +68,7 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
     if(p) {
         KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
 
-        if(versionedConfig.hasKey("server")) d.setServer(versionedConfig.readEntry<KUrl>("server", KUrl()));
+        if(versionedConfig.hasKey("server")) d.setServer(versionedConfig.readEntry<QUrl>("server", QUrl()));
         if(versionedConfig.hasKey("username")) d.setUsername(versionedConfig.readEntry("username", QString()));
         if(versionedConfig.hasKey("baseDir")) d.setBaseDir(versionedConfig.readEntry("baseDir", "/"));
         if(versionedConfig.hasKey("repository")) d.setRepository(versionedConfig.readEntry("repository", QString()));
@@ -91,12 +92,12 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
             KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
 
             // We store username in a diferent field. Unset it from server.
-            KUrl storeServer(d.server());
+            QUrl storeServer(d.server());
             storeServer.setUserName(QString());
             // Don't store password in plaintext inside .kdev4
             storeServer.setPassword(QString());
 
-            versionedConfig.writeEntry("server", storeServer);
+            versionedConfig.writeEntry<QUrl>("server", storeServer);
             versionedConfig.writeEntry("username", d.username());
             versionedConfig.writeEntry("baseDir", d.baseDir());
             versionedConfig.writeEntry("repository", d.repository());
@@ -130,3 +131,5 @@ void ReviewBoardPlugin::reviewCreated(KJob* j)
         KMessageBox::error(0, j->errorText());
     }
 }
+
+#include "reviewboardplugin.moc"

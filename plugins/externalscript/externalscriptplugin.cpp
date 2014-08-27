@@ -44,18 +44,18 @@
 
 #include <KPluginFactory>
 #include <KAboutData>
-#include <KAction>
 #include <KProcess>
 
+#include <QAction>
 #include <QStandardItemModel>
 #include <QDBusConnection>
 #include <QMenu>
 
 
 K_PLUGIN_FACTORY( ExternalScriptFactory, registerPlugin<ExternalScriptPlugin>(); )
-K_EXPORT_PLUGIN( ExternalScriptFactory( KAboutData( "kdevexternalscript", "kdevexternalscript", ki18n( "External Scripts" ),
-                                        "0.1", ki18n( "Run external scripts or applications to manipulate the editor contents or do other arbitrary actions." ),
-                                        KAboutData::License_GPL ) ) )
+// K_EXPORT_PLUGIN( ExternalScriptFactory( KAboutData( "kdevexternalscript", "kdevexternalscript", ki18n( "External Scripts" ),
+//                                         "0.1", ki18n( "Run external scripts or applications to manipulate the editor contents or do other arbitrary actions." ),
+//                                         KAboutData::License_GPL ) ) )
 
 class ExternalScriptViewFactory: public KDevelop::IToolViewFactory
 {
@@ -81,7 +81,7 @@ private:
 ExternalScriptPlugin* ExternalScriptPlugin::m_self = 0;
 
 ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList& /*args*/ )
-    : IPlugin( ExternalScriptFactory::componentData(), parent ),
+    : IPlugin( "kdevexternalscript", parent ),
     m_model( new QStandardItemModel( this ) ), m_factory( new ExternalScriptViewFactory( this ) )
 {
   Q_ASSERT( !m_self );
@@ -104,7 +104,7 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
       item->setErrorMode( static_cast<ExternalScriptItem::ErrorMode>( script.readEntry( "errorMode", 0u ) ) );
       item->setSaveMode( static_cast<ExternalScriptItem::SaveMode>( script.readEntry( "saveMode", 0u ) ) );
       item->setFilterMode( script.readEntry( "filterMode", 0u ));
-      item->action()->setShortcut( KShortcut( script.readEntry( "shortcuts" ) ) );
+      item->action()->setShortcut( QKeySequence( script.readEntry( "shortcuts" ) ) );
       item->setShowOutput( script.readEntry( "showOutput", true ) );
       m_model->appendRow( item );
     }
@@ -213,7 +213,7 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
         }
       }
 
-      KAction* scriptAction = new KAction( item->text(), this );
+      QAction* scriptAction = new QAction( item->text(), this );
       scriptAction->setData( QVariant::fromValue<ExternalScriptItem*>( item ));
       connect( scriptAction, SIGNAL( triggered() ), SLOT( executeScriptFromContextMenu() ) );
       menu->addAction( scriptAction );
@@ -235,7 +235,7 @@ void ExternalScriptPlugin::unload()
 
 KConfigGroup ExternalScriptPlugin::getConfig() const
 {
-  return KGlobal::config()->group("External Scripts");
+  return KSharedConfig::openConfig()->group("External Scripts");
 }
 
 QStandardItemModel* ExternalScriptPlugin::model() const
@@ -294,7 +294,7 @@ QString ExternalScriptPlugin::executeCommandSync ( QString command, QString work
 
 void ExternalScriptPlugin::executeScriptFromActionData() const
 {
-  KAction* action = dynamic_cast<KAction*>( sender() );
+  QAction* action = dynamic_cast<QAction*>( sender() );
   Q_ASSERT( action );
 
   ExternalScriptItem* item = action->data().value<ExternalScriptItem*>();
@@ -305,7 +305,7 @@ void ExternalScriptPlugin::executeScriptFromActionData() const
 
 void ExternalScriptPlugin::executeScriptFromContextMenu() const
 {
-  KAction* action = dynamic_cast<KAction*>( sender() );
+  QAction* action = dynamic_cast<QAction*>( sender() );
   Q_ASSERT( action );
 
   ExternalScriptItem* item = action->data().value<ExternalScriptItem*>();

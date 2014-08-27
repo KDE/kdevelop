@@ -46,6 +46,7 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <KDELibs4Support/KDE/KDialog>
 
 #include <KLocalizedString>
 #include <KConfig>
@@ -285,7 +286,7 @@ void TemplateClassAssistant::setup()
 {
     if (d->baseUrl.isValid())
     {
-        setWindowTitle(i18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.prettyUrl()));
+        setWindowTitle(xi18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.prettyUrl()));
     }
     else
     {
@@ -295,10 +296,10 @@ void TemplateClassAssistant::setup()
     d->templateSelectionPageWidget = new TemplateSelectionPage(this);
     connect(this, SIGNAL(accepted()), d->templateSelectionPageWidget, SLOT(saveConfig()));
     d->templateSelectionPage = addPage(d->templateSelectionPageWidget, i18n("Language and Template"));
-    d->templateSelectionPage->setIcon(KIcon("project-development-new-template"));
+    d->templateSelectionPage->setIcon(QIcon::fromTheme("project-development-new-template"));
 
     d->dummyPage = addPage(new QWidget(this), QLatin1String("Dummy Page"));
-    showButton(KDialog::Help, false);
+//     showButton(KDialog::Help, false);
 }
 
 void TemplateClassAssistant::templateChosen(const QString& templateDescription)
@@ -318,31 +319,31 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
 
     if (d->baseUrl.isValid())
     {
-        setWindowTitle(i18n("Create Files from Template <filename>%1</filename> in <filename>%2</filename>",
+        setWindowTitle(xi18n("Create Files from Template <filename>%1</filename> in <filename>%2</filename>",
                             d->fileTemplate.name(),
                             d->baseUrl.prettyUrl()));
     }
     else
     {
-        setWindowTitle(i18n("Create Files from Template <filename>%1</filename>", d->fileTemplate.name()));
+        setWindowTitle(xi18n("Create Files from Template <filename>%1</filename>", d->fileTemplate.name()));
     }
 
     if (d->type == "Class")
     {
         d->classIdentifierPageWidget = new ClassIdentifierPage(this);
         d->classIdentifierPage = addPage(d->classIdentifierPageWidget, i18n("Class Basics"));
-        d->classIdentifierPage->setIcon(KIcon("classnew"));
+        d->classIdentifierPage->setIcon(QIcon::fromTheme("classnew"));
         connect(d->classIdentifierPageWidget, SIGNAL(isValid(bool)), SLOT(setCurrentPageValid(bool)));
         setValid(d->classIdentifierPage, false);
 
         d->overridesPageWidget = new OverridesPage(this);
         d->overridesPage = addPage(d->overridesPageWidget, i18n("Override Methods"));
-        d->overridesPage->setIcon(KIcon("code-class"));
+        d->overridesPage->setIcon(QIcon::fromTheme("code-class"));
         setValid(d->overridesPage, true);
 
         d->membersPageWidget = new ClassMembersPage(this);
         d->membersPage = addPage(d->membersPageWidget, i18n("Class Members"));
-        d->membersPage->setIcon(KIcon("field"));
+        d->membersPage->setIcon(QIcon::fromTheme("field"));
         setValid(d->membersPage, true);
 
         d->helper = 0;
@@ -380,13 +381,13 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
 
     d->licensePageWidget = new LicensePage(this);
     d->licensePage = addPage(d->licensePageWidget, i18n("License"));
-    d->licensePage->setIcon(KIcon("text-x-copying"));
+    d->licensePage->setIcon(QIcon::fromTheme("text-x-copying"));
     setValid(d->licensePage, true);
 
     d->outputPageWidget = new OutputPage(this);
     d->outputPageWidget->prepareForm(d->fileTemplate);
     d->outputPage = addPage(d->outputPageWidget, i18n("Output"));
-    d->outputPage->setIcon(KIcon("document-save"));
+    d->outputPage->setIcon(QIcon::fromTheme("document-save"));
     connect(d->outputPageWidget, SIGNAL(isValid(bool)), SLOT(setCurrentPageValid(bool)));
     setValid(d->outputPage, false);
 
@@ -521,7 +522,7 @@ void TemplateClassAssistant::back()
 
         if (d->baseUrl.isValid())
         {
-            setWindowTitle(i18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.prettyUrl()));
+            setWindowTitle(xi18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.prettyUrl()));
         }
         else
         {
@@ -535,7 +536,7 @@ void TemplateClassAssistant::accept()
 {
     // next() is not called for the last page (when the user clicks Finish), so we have to set output locations here
     QHash<QString, KUrl> fileUrls = d->outputPageWidget->fileUrls();
-    QHash<QString, SimpleCursor> filePositions = d->outputPageWidget->filePositions();
+    QHash<QString, KTextEditor::Cursor> filePositions = d->outputPageWidget->filePositions();
 
     DocumentChangeSet changes;
     if (d->generator)

@@ -19,13 +19,14 @@
 #include "container.h"
 
 #include <QtCore/QMap>
-#include <QtGui/QBoxLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QStylePainter>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QStyleOptionTabBarBase>
-#include <QtGui/QToolButton>
-#include <QtGui/qstyle.h>
+#include <QBoxLayout>
+#include <QLabel>
+#include <QStylePainter>
+#include <QStackedWidget>
+#include <QStyleOptionTabBarBase>
+#include <QToolButton>
+#include <qstyle.h>
+#include <QPointer>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -97,7 +98,7 @@ struct ContainerPrivate {
     KSqueezedTextLabel *fileNameCorner;
     QLabel *fileStatus;
     KSqueezedTextLabel *statusCorner;
-    QWeakPointer<QWidget> leftCornerWidget;
+    QPointer<QWidget> leftCornerWidget;
     QToolButton* documentListButton;
     QMenu* documentListMenu;
     QMap<View*, QAction*> documentListActionForView;
@@ -211,7 +212,7 @@ Container::Container(QWidget *parent)
 
     d->documentListMenu = new QMenu(this);
     d->documentListButton = new QToolButton(this);
-    d->documentListButton->setIcon(KIcon("format-list-unordered"));
+    d->documentListButton->setIcon(QIcon::fromTheme("format-list-unordered"));
     d->documentListButton->setMenu(d->documentListMenu);
     d->documentListButton->setPopupMode(QToolButton::InstantPopup);
     d->documentListButton->setAutoRaise(true);
@@ -242,7 +243,7 @@ Container::Container(QWidget *parent)
     connect(d->tabBar, SIGNAL(mouseDoubleClick(int)), this, SLOT(doubleClickTriggered(int)));
     connect(d->documentListMenu, SIGNAL(triggered(QAction*)), this, SLOT(documentListActionTriggered(QAction*)));
 
-    KConfigGroup group = KGlobal::config()->group("UiSettings");
+    KConfigGroup group = KSharedConfig::openConfig()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
     d->tabBar->setTabsClosable(true);
     d->tabBar->setMovable(true);
@@ -514,9 +515,9 @@ void Container::contextMenu( int currentTab, const QPoint& pos )
     emit tabContextMenuRequested(viewForWidget(widget(currentTab)), &menu);
 
     menu.addSeparator();
-    QAction* closeTabAction = menu.addAction( KIcon("document-close"), i18n( "Close File" ) );
-    QAction* closeOtherTabsAction = menu.addAction( KIcon("document-close"), i18n( "Close Other Files" ) );
-    QAction* closeAllTabsAction = menu.addAction( KIcon("document-close"), i18n( "Close All Files" ) );
+    QAction* closeTabAction = menu.addAction( QIcon::fromTheme("document-close"), i18n( "Close File" ) );
+    QAction* closeOtherTabsAction = menu.addAction( QIcon::fromTheme("document-close"), i18n( "Close Other Files" ) );
+    QAction* closeAllTabsAction = menu.addAction( QIcon::fromTheme("document-close"), i18n( "Close All Files" ) );
 
     QAction* triggered = menu.exec(pos);
 
@@ -581,5 +582,4 @@ void Container::documentListActionTriggered(QAction* action)
 
 }
 
-#include "container.moc"
 

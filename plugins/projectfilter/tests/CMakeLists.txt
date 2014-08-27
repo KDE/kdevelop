@@ -1,11 +1,7 @@
-kde4_add_unit_test(testprojectfilter
-    test_projectfilter.cpp
+set(test_projectfilter_SRCS test_projectfilter.cpp
     ../projectfilter.cpp
-    ../filter.cpp
-)
+    ../filter.cpp)
 
-target_link_libraries(testprojectfilter
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${QT_QTTEST_LIBRARIES}
-)
+ecm_add_test(${test_projectfilter_SRCS}
+    TEST_NAME test_projectfilter
+    LINK_LIBRARIES ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES} ${QT_QTTEST_LIBRARIES})

@@ -145,4 +145,3 @@ KDevelop::VcsStatusInfo::State CvsStatusJob::String2EnumState(const QString& sta
     return state;
 }
 
-#include "cvsstatusjob.moc"

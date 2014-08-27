@@ -21,8 +21,8 @@
 
 #include "projectmanagerview.h"
 
-#include <QtGui/QHeaderView>
-#include <QtGui/QKeyEvent>
+#include <QHeaderView>
+#include <QKeyEvent>
 
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -47,7 +47,6 @@
 
 #include <sublime/mainwindow.h>
 
-#include "tests/modeltest.h"
 #include "projectmanagerviewplugin.h"
 #include "vcsoverlayproxymodel.h"
 #include "ui_projectmanagerview.h"
@@ -77,7 +76,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 
     m_ui->projectTreeView->installEventFilter(this);
 
-    setWindowIcon( SmallIcon( "project-development" ) );
+    setWindowIcon( QIcon::fromTheme( "project-development" ) );
 
     KConfigGroup pmviewConfig(ICore::self()->activeSession()->config(), sessionConfigGroup);
     if (pmviewConfig.hasKey(splitterStateConfigKey)) {
@@ -93,7 +92,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     m_syncAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     m_syncAction->setText(i18n("Locate Current Document"));
     m_syncAction->setToolTip(i18n("Locates the current document in the project tree and selects it."));
-    m_syncAction->setIcon(KIcon("dirsync"));
+    m_syncAction->setIcon(QIcon::fromTheme("dirsync"));
     m_syncAction->setShortcut(Qt::ControlModifier + Qt::Key_Less);
     connect(m_syncAction, SIGNAL(triggered(bool)), this, SLOT(locateCurrentDocument()));
     addAction(m_syncAction);
@@ -129,7 +128,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 
     // Need to set this to get horizontal scrollbar. Also needs to be done after
     // the setModel call
-    m_ui->projectTreeView->header()->setResizeMode( QHeaderView::ResizeToContents );
+    m_ui->projectTreeView->header()->setSectionResizeMode( QHeaderView::ResizeToContents );
 }
 
 bool ProjectManagerView::eventFilter(QObject* obj, QEvent* event)
@@ -265,4 +264,3 @@ QModelIndex ProjectManagerView::indexToView(const QModelIndex& index) const
     return m_overlayProxy->mapFromSource( m_modelFilter->mapFromSource(index) );
 }
 
-#include "projectmanagerview.moc"

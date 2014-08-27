@@ -33,12 +33,10 @@ Boston, MA 02110-1301, USA.
 
 #include "interfacesexport.h"
 
-#include <QtCore/QStringList>
+#include <QStringList>
+#include <QMimeType>
 
 #include <KDE/KUrl>
-#include <KDE/KMimeType>
-#include <KDE/KTextEditor/Cursor>
-#include <KDE/KTextEditor/View>
 
 template <typename T> class QList;
 
@@ -127,7 +125,7 @@ class KDEVPLATFORMINTERFACES_EXPORT FileContext : public Context
 public:
     /**Builds the file context using a @ref KUrl::List
         @param urls The list of selected url.*/
-    FileContext( const KUrl::List &urls );
+    FileContext( const QList<QUrl> &urls );
 
     /**Destructor.*/
     virtual ~FileContext();
@@ -135,7 +133,7 @@ public:
     virtual int type() const;
 
     /**@return A reference to the selected URLs.*/
-    KUrl::List urls() const;
+    QList<QUrl> urls() const;
 
 private:
     class FileContextPrivate* const d;
@@ -179,7 +177,7 @@ public:
      * @p url The files to open.
      * @p mimeType The mime type of said file.
      */
-    OpenWithContext(const KUrl::List& urls, const KMimeType::Ptr& mimeType);
+    OpenWithContext(const KUrl::List& urls, const QMimeType& mimeType);
 
     /**
      * @return Context::OpenWithContext
@@ -194,7 +192,7 @@ public:
     /**
      * @return The mimetype of the url to open.
      */
-    KMimeType::Ptr mimeType() const;
+    QMimeType mimeType() const;
 
 private:
     class OpenWithContextPrivate* const d;

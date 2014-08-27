@@ -151,7 +151,7 @@ void OutputJob::setToolTitle(const QString& title)
     m_toolTitle = title;
 }
 
-void OutputJob::setToolIcon(const KIcon& icon)
+void OutputJob::setToolIcon(const QIcon& icon)
 {
     m_toolIcon = icon;
 }
@@ -171,4 +171,3 @@ void OutputJob::setVerbosity(OutputJob::OutputJobVerbosity verbosity)
     m_verbosity = verbosity;
 }
 
-#include "outputjob.moc"

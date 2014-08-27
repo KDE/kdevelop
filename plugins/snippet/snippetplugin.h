@@ -29,7 +29,7 @@ class Part;
 }
 
 class Snippet;
-class KAction;
+class QAction;
 class QMenu;
 
 /**

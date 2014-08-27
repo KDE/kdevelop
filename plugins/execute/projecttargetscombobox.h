@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_PROJECTTARGETSCOMBOBOX_H
 #define KDEVPLATFORM_PLUGIN_PROJECTTARGETSCOMBOBOX_H
 
-#include <QtGui/QComboBox>
+#include <QComboBox>
 #include <project/projectmodel.h>
 
 namespace KDevelop {

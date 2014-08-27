@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_CODEDESCRIPTION_H
 #define KDEVPLATFORM_CODEDESCRIPTION_H
 
-#include "../languageexport.h"
+#include <language/languageexport.h>
 #include <language/duchain/duchainpointer.h>
 
 #include <QString>

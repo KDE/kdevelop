@@ -27,7 +27,7 @@
 
 #include "dvcsplugin.h"
 
-#include <QtGui/QMenu>
+#include <QMenu>
 #include <QtCore/QFileInfo>
 #include <QtCore/QString>
 
@@ -62,8 +62,8 @@ struct DistributedVersionControlPluginPrivate {
 };
 
 //class DistributedVersionControlPlugin
-DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent, KComponentData compData)
-        : IPlugin(compData, parent)
+DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent, const QString& componentName)
+        : IPlugin(componentName, parent)
         , d(new DistributedVersionControlPluginPrivate(this))
 {}
 

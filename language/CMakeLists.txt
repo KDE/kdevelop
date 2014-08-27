@@ -5,7 +5,7 @@ add_subdirectory(duchain/tests)
 add_subdirectory(backgroundparser/tests)
 add_subdirectory(codegen/tests)
 
-set(kdevplatformlanguage_LIB_SRCS
+set(KDevPlatformLanguage_LIB_SRCS
     assistant/staticassistantsmanager.cpp
     assistant/renameaction.cpp
     assistant/renameassistant.cpp
@@ -19,12 +19,10 @@ set(kdevplatformlanguage_LIB_SRCS
 
     backgroundparser/backgroundparser.cpp
     backgroundparser/parsejob.cpp
-    backgroundparser/parserdependencypolicy.cpp
     backgroundparser/documentchangetracker.cpp
     backgroundparser/parseprojectjob.cpp
     backgroundparser/urlparselock.cpp
 
-    duchain/referencecounting.cpp
     duchain/specializationstore.cpp
     duchain/codemodel.cpp
     duchain/duchain.cpp
@@ -62,7 +60,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/uses.cpp
     duchain/importers.cpp
     duchain/duchaindumper.cpp
-    duchain/indexedstring.cpp
     duchain/duchainregister.cpp
     duchain/persistentsymboltable.cpp
     duchain/instantiationinformation.cpp
@@ -70,6 +67,7 @@ set(kdevplatformlanguage_LIB_SRCS
 
     duchain/types/typesystem.cpp
     duchain/types/typeregister.cpp
+    duchain/types/typerepository.cpp
     duchain/types/identifiedtype.cpp
     duchain/types/abstracttype.cpp
     duchain/types/integraltype.cpp
@@ -89,10 +87,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/types/containertypes.cpp
 
     duchain/builders/dynamiclanguageexpressionvisitor.cpp
-
-    duchain/repositories/abstractitemrepository.cpp
-    duchain/repositories/itemrepositoryregistry.cpp
-    duchain/repositories/typerepository.cpp
 
     duchain/navigation/problemnavigationcontext.cpp
     duchain/navigation/abstractnavigationwidget.cpp
@@ -127,13 +121,8 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/documentchangeset.cpp
     codegen/duchainchangeset.cpp
     codegen/utilities.cpp
-    codegen/templatesmodel.cpp
-    codegen/templateclassgenerator.cpp
     codegen/codedescription.cpp
-    codegen/sourcefiletemplate.cpp
-    codegen/templaterenderer.cpp
-    codegen/templateengine.cpp
-    codegen/archivetemplateloader.cpp
+
     codegen/basicrefactoring.cpp
     codegen/progressdialogs/refactoringdialog.cpp
 
@@ -149,29 +138,50 @@ set(kdevplatformlanguage_LIB_SRCS
     checks/controlflowgraph.cpp checks/controlflownode.cpp
 )
 
-kde4_add_ui_files(kdevplatformlanguage_LIB_SRCS
+set(grantlee_LIB_SRCS
+    codegen/templatesmodel.cpp
+    codegen/templateclassgenerator.cpp
+    codegen/sourcefiletemplate.cpp
+    codegen/templaterenderer.cpp
+    codegen/templateengine.cpp
+    codegen/archivetemplateloader.cpp
+)
+
+if (Grantlee_FOUND)
+    list(APPEND KDevPlatformLanguage_LIB_SRCS ${grantlee_LIB_SRCS})
+endif()
+
+qt5_wrap_ui(KDevPlatformLanguage_LIB_SRCS
     codegen/basicrefactoring.ui
     codegen/progressdialogs/refactoringdialog.ui)
 
-kde4_add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
-target_link_libraries(kdevplatformlanguage LINK_PUBLIC
-        kdevplatforminterfaces
+add_library(KDevPlatformLanguage ${KDevPlatformLanguage_LIB_SRCS})
+add_library(KDev::Language ALIAS KDevPlatformLanguage)
+
+generate_export_header(KDevPlatformLanguage EXPORT_FILE_NAME languageexport.h)
+target_include_directories(KDevPlatformLanguage PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/../project)
+
+target_link_libraries(KDevPlatformLanguage LINK_PUBLIC
+        KF5::ThreadWeaver
+        KDev::Interfaces
+        KDev::Serialization
+LINK_PRIVATE
+        KF5::TextEditor
+        KF5::Parts
+        KF5::NewStuff
+        KF5::Archive
+        KF5::KDELibs4Support
+        KDev::Util
+        KDev::Project
+        ${Grantlee_TEMPLATES_LIBRARIES}
 )
-target_link_libraries(kdevplatformlanguage LINK_PRIVATE
-        ${KDE4_KPARTS_LIBS}
-        ${KDE4_KTEXTEDITOR_LIBS}
-        ${KDE4_THREADWEAVER_LIBRARIES}
-        ${KDE4_KNEWSTUFF3_LIBS}
-        kdevplatformutil
-        ${Grantlee_CORE_LIBRARIES}
-)
-set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatformlanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+set_target_properties(KDevPlatformLanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Language)
+install(TARGETS KDevPlatformLanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 
 install(FILES
-    languageexport.h
+    ${CMAKE_CURRENT_BINARY_DIR}/languageexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language COMPONENT Devel
 )
 
@@ -203,8 +213,6 @@ install(FILES
     editor/persistentmovingrange.h
     editor/documentrange.h
     editor/documentcursor.h
-    editor/simplecursor.h
-    editor/simplerange.h
     editor/cursorinrevision.h
     editor/rangeinrevision.h
     editor/modificationrevision.h
@@ -232,7 +240,6 @@ install(FILES
 )
 
 install(FILES
-    duchain/referencecounting.h
     duchain/parsingenvironment.h
     duchain/duchain.h
     duchain/codemodel.h
@@ -263,7 +270,6 @@ install(FILES
     duchain/dumpdotgraph.h
     duchain/duchainutils.h
     duchain/duchaindumper.h
-    duchain/indexedstring.h
     duchain/declarationid.h
     duchain/appendedlist.h
     duchain/duchainregister.h
@@ -286,6 +292,7 @@ install(FILES
     duchain/types/identifiedtype.h
     duchain/types/typesystem.h
     duchain/types/typeregister.h
+    duchain/types/typerepository.h
     duchain/types/typepointer.h
     duchain/types/typesystemdata.h
     duchain/types/abstracttype.h
@@ -314,16 +321,6 @@ install(FILES
     duchain/builders/abstractusebuilder.h
     duchain/builders/dynamiclanguageexpressionvisitor.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/builders COMPONENT Devel
-)
-
-install(FILES
-    duchain/repositories/itemrepositoryexampleitem.h
-    duchain/repositories/abstractitemrepository.h
-    duchain/repositories/itemrepositoryregistry.h
-    duchain/repositories/repositorymanager.h
-    duchain/repositories/itemrepository.h
-    duchain/repositories/typerepository.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/repositories COMPONENT Devel
 )
 
 install(FILES

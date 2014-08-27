@@ -23,10 +23,11 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow_p.h"
 
 #include <QtCore/QHash>
-#include <QtGui/QDockWidget>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QDropEvent>
-#include <QtGui/QMenuBar>
+#include <QDockWidget>
+#include <QDragEnterEvent>
+#include <QDomDocument>
+#include <QDropEvent>
+#include <QMenuBar>
 #include <QtDBus/QDBusConnection>
 
 #include <KDE/KApplication>
@@ -66,20 +67,20 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-void MainWindow::applyMainWindowSettings(const KConfigGroup& config, bool force)
+void MainWindow::applyMainWindowSettings(const KConfigGroup& config)
 {
     if(!d->changingActiveView())
-        KXmlGuiWindow::applyMainWindowSettings(config, force);
+        KXmlGuiWindow::applyMainWindowSettings(config);
 }
 
-MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
+MainWindow::MainWindow( Sublime::Controller *parent, Qt::WindowFlags flags )
         : Sublime::MainWindow( parent, flags )
 {
     QDBusConnection::sessionBus().registerObject( "/kdevelop/MainWindow",
         this, QDBusConnection::ExportScriptableSlots );
 
     setAcceptDrops( true );
-    KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
+    KConfigGroup cg = KSharedConfig::openConfig()->group( "UiSettings" );
     int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
     int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
     kDebug() << "Bottom Left:" << bottomleft;
@@ -180,7 +181,7 @@ void MainWindow::dropEvent( QDropEvent* ev )
 void MainWindow::loadSettings()
 {
     kDebug() << "Loading Settings";
-    KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
+    KConfigGroup cg = KSharedConfig::openConfig()->group( "UiSettings" );
 
     // dock widget corner layout
     int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
@@ -252,13 +253,9 @@ void MainWindow::configureShortcuts()
 
 void MainWindow::shortcutsChanged()
 {
-    //propagate shortcut changes to all the opened text documents by reloading the UI XML file
-    IDocument* activeDoc = Core::self()->documentController()->activeDocument();
-    if (!activeDoc || !activeDoc->textDocument()) {
+    KTextEditor::View *activeClient = Core::self()->documentController()->activeTextDocumentView();
+    if(!activeClient)
         return;
-    }
-
-    KTextEditor::View *activeClient = activeDoc->textDocument()->activeView();
 
     foreach(IDocument * doc, Core::self()->documentController()->openDocuments()) {
         KTextEditor::Document *textDocument = doc->textDocument();
@@ -383,4 +380,3 @@ void MainWindow::dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoi
 
 }
 
-#include "mainwindow.moc"

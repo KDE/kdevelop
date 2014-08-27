@@ -31,7 +31,7 @@
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 #include <QtCore/QDir>
-#include <QtGui/QStandardItemModel>
+#include <QStandardItemModel>
 
 #include <KDE/KDebug>
 #include <KDE/KLocale>

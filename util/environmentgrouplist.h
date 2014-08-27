@@ -42,7 +42,7 @@ namespace KDevelop
  *
  * Example Usage
  * \code
- *   KSharedConfigPtr config = KGlobal::config();
+ *   KSharedConfigPtr config = KSharedConfig::openConfig();
  *   EnvironmentGroupList env(config);
  *   KConfigGroup cfg(config, "QMake Builder");
  *   QMap<QString,QString> myenvVars = env.variables( cfg.readEntry("QMake Environment") );

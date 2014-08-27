@@ -20,6 +20,7 @@ Boston, MA 02110-1301, USA.
 #include "sessiondialog.h"
 #include "ui_sessiondialog.h"
 
+#include <KLocalizedString>
 #include <kcolorscheme.h>
 #include <kglobalsettings.h>
 
@@ -174,7 +175,7 @@ void SessionModel::cloneSession( const QModelIndex& idx )
     beginInsertRows( QModelIndex(), rowCount(), rowCount() );
 
     Core::self()->sessionController()->cloneSession(
-            Core::self()->sessionController()->sessions().at( idx.row() )->id()
+            Core::self()->sessionController()->sessions().at( idx.row() )->id().toString()
         );
     endInsertRows();
 }

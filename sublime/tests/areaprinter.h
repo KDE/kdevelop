@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEVPLATFORM_SUBLIMEAREAPRINTER_H
-#define KDEVPLATFORM_SUBLIMEAREAPRINTER_H
+#ifndef KDEVPLATFORM_AREAPRINTER_H
+#define KDEVPLATFORM_AREAPRINTER_H
 
 
 #include <sublime/area.h>

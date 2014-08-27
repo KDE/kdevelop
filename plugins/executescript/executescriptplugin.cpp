@@ -24,6 +24,7 @@
 
 #include <QApplication>
 
+#include <kconfiggroup.h>
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -64,12 +65,12 @@ QString ExecuteScriptPlugin::outputFilteringEntry = "Output Filtering Mode";
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(KDevExecuteFactory, registerPlugin<ExecuteScriptPlugin>(); )
-K_EXPORT_PLUGIN(KDevExecuteFactory(KAboutData("kdevexecutescript", "kdevexecutescript", ki18n("Execute script support"), "1.0 Beta 1", ki18n("Allows running of scripts"), KAboutData::License_GPL)
-    .addAuthor(ki18n("Niko Sams"), ki18n("Author"), "niko.sams@gmail.com", "http://nikosams.blogspot.com")
-))
+// K_EXPORT_PLUGIN(KDevExecuteFactory(KAboutData("kdevexecutescript", "kdevexecutescript", ki18n("Execute script support"), "1.0 Beta 1", ki18n("Allows running of scripts"), KAboutData::License_GPL)
+//     .addAuthor(ki18n("Niko Sams"), ki18n("Author"), "niko.sams@gmail.com", "http://nikosams.blogspot.com")
+// ))
 
 ExecuteScriptPlugin::ExecuteScriptPlugin(QObject *parent, const QVariantList&)
-    : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevexecutescript", parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( IExecuteScriptPlugin )
     m_configType = new ScriptAppConfigType();
@@ -100,7 +101,7 @@ KUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& 
     }
     KConfigGroup grp = cfg->config();
 
-    script = grp.readEntry( ExecuteScriptPlugin::executableEntry, KUrl("") );
+    script = grp.readEntry( ExecuteScriptPlugin::executableEntry, QUrl() );
     if( !script.isLocalFile() || script.isEmpty() )
     {
         err_ = i18n("No valid executable specified");
@@ -259,7 +260,7 @@ KUrl ExecuteScriptPlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg 
         return KUrl();
     }
     
-    return cfg->config().readEntry( ExecuteScriptPlugin::workingDirEntry, KUrl() );
+    return cfg->config().readEntry( ExecuteScriptPlugin::workingDirEntry, QUrl() );
 }
 
 

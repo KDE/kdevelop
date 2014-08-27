@@ -3,6 +3,7 @@
  *
  * Copyright 2005 Frerich Raabe <raabe@kde.org>
  * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
+ * Copyright 2014 Kevin Funk <kfunk@kde.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,138 +29,35 @@
 #ifndef KDEVPLATFORM_TYPEPOINTER_H
 #define KDEVPLATFORM_TYPEPOINTER_H
 
-#include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QAtomicPointer>
-#include <kdemacros.h>
 
-typedef QSharedData TypeShared;
+#include <QtCore/QExplicitlySharedDataPointer>
+
+namespace KDevelop {
 
 /**
- * \class TypePtr typepointer.h <TypePtr>
- *
- * Can be used to control the lifetime of an object that has derived
- * QSharedData. As long a someone holds
- * a TypePtr on some QSharedData object it won't become deleted but
- * is deleted once its reference count is 0.
- * This struct emulates C++ pointers virtually perfectly.
- * So just use it like a simple C++ pointer.
- *
- * The difference with using QSharedDataPointer is that QSharedDataPointer is
- * a building block for implementing a value class with implicit sharing (like QString),
- * whereas TypePtr provides refcounting to code that uses pointers.
- *
- * @author Waldo Bastian <bastian@kde.org>
+ * @brief QExplicitlySharedDataPointer wrapper with convenience functions attached
  */
-template< class T >
-class TypePtr
+template<class T>
+class TypePtr : public QExplicitlySharedDataPointer<T>
 {
+    using Base = QExplicitlySharedDataPointer<T>;
+
 public:
-    /**
-     * Creates a null pointer.
-     */
-    inline TypePtr()
-        : d(0) { }
+    // Note: No inheriting ctors for MSVC => We cannot use them here
+    TypePtr()
+      : QExplicitlySharedDataPointer<T>() {}
+    explicit TypePtr(T* data)
+      : QExplicitlySharedDataPointer<T>(data) {}
+    template<class X>
+    inline TypePtr(const TypePtr<X> &o)
+      : QExplicitlySharedDataPointer<T>(o) {}
 
-    /**
-     * Creates a new pointer.
-     * @param p the pointer
-     */
-    inline explicit TypePtr( T* p )
-        : d(p) { if(d) d->ref.ref(); }
-
-    /**
-     * Copies a pointer.
-     * @param o the pointer to copy
-     */
-    inline TypePtr( const TypePtr& o )
-        : d(o.d) { if(d) d->ref.ref(); }
-
-    /**
-     * Unreferences the object that this pointer points to. If it was
-     * the last reference, the object will be deleted.
-     */
-    inline ~TypePtr() { if (d && !d->ref.deref()) delete d; }
-
-    inline TypePtr<T>& operator= ( const TypePtr& o ) { attach(o.d); return *this; }
-    inline bool operator== ( const TypePtr& o ) const { return ( d == o.d ); }
-    inline bool operator!= ( const TypePtr& o ) const { return ( d != o.d ); }
-    inline bool operator< ( const TypePtr& o ) const { return ( d < o.d ); }
-
-    inline TypePtr<T>& operator= ( T* p ) { attach(p); return *this; }
-    inline bool operator== ( const T* p ) const { return ( d == p ); }
-    inline bool operator!= ( const T* p ) const { return ( d != p ); }
-
-    /**
-     * Test if the shared pointer is NOT null.
-     * @return true if the shared pointer is NOT null, false otherwise.
-     * @see isNull
-     */
-    inline operator bool() const { return ( d != 0 ); }
-
-    /**
-     * @return the pointer
-     * @warning Since often TypePtr is used only temporarily, it is dangerous to work
-     * with the pointer directly, because as soon as the TypePtr gets out of scope,
-     * the type instance is deleted. Make sure you have a TypePtr that holds the type alive.
-     */
-    inline T* unsafeData() { return d; }
-
-    /**
-     * @return the pointer
-     * @warning Since often TypePtr is used only temporarily, it is dangerous to work
-     * with the pointer directly, because as soon as the TypePtr gets out of scope,
-     * the type instance is deleted. Make sure you have a TypePtr that holds the type alive.
-     */
-    inline const T* unsafeData() const { return d; }
-
-    /**
-     * @return a const pointer to the shared object.
-     */
-    inline const T* constData() const { return d; }
-
-    inline const T& operator*() const { return *d; }
-    inline T& operator*() { return *d; }
-    inline const T* operator->() const { return d; }
-    inline T* operator->() { return d; }
-
-    /**
-     * Attach the given pointer to the current TypePtr.
-     * If the previous shared pointer is not owned by any TypePtr,
-     * it is deleted.
-     */
-    void attach(T* p);
-
-    /**
-     * Clear the pointer, i.e. make it a null pointer.
-     */
-    void clear();
-
-    /**
-     * Returns the number of references.
-     * @return the number of references
-     */
-    inline int count() const { return d ? static_cast<int>(d->ref) : 0; } // for debugging purposes
-
-    /**
-     * Test if the shared pointer is null.
-     * @return true if the pointer is null, false otherwise.
-     * @see opertor (bool)
-     */
-    inline bool isNull() const { return (d == 0); }
-
-    /**
-     * @return Whether this is the only shared pointer pointing to
-     * to the pointee, or whether it's shared among multiple
-     * shared pointers.
-     */
-    inline bool isUnique() const { return count() == 1; }
-
-    template <class U> friend class TypePtr;
+    using Base::operator=;
 
     ///Uses dynamic_cast to cast this pointer to the given type
     template<class U>
     TypePtr<U> cast(U * /*dummy*/ = 0) const {
-      return TypePtr<U>(dynamic_cast<U*>(d));
+      return TypePtr<U>(dynamic_cast<U*>(Base::data()));
     }
 
     /**
@@ -174,7 +72,7 @@ public:
      */
     template <class U>
     static TypePtr<T> staticCast( const TypePtr<U>& o ) {
-        return TypePtr<T>( static_cast<T *>( o.d ) );
+        return TypePtr<T>( static_cast<T *>( o.data() ) );
     }
     /**
      * Convert TypePtr<U> to TypePtr<T>, using a dynamic_cast.
@@ -189,40 +87,14 @@ public:
      */
     template <class U>
     static TypePtr<T> dynamicCast( const TypePtr<U>& o ) {
-        return TypePtr<T>( dynamic_cast<T *>( o.d ) );
+        return TypePtr<T>( dynamic_cast<T *>( o.data() ) );
     }
-
-protected:
-    T* d;
 };
 
-template <class T>
-Q_INLINE_TEMPLATE bool operator== (const T* p, const TypePtr<T>& o)
-{
-    return ( p == o.d );
 }
 
+// TODO: Remove once we depend on Qt 5.4, also see https://codereview.qt-project.org/#/c/88665/
 template <class T>
-Q_INLINE_TEMPLATE bool operator!= (const T* p, const TypePtr<T>& o)
-{
-    return ( p != o.d );
-}
-
-template <class T>
-Q_INLINE_TEMPLATE void TypePtr<T>::attach(T* p)
-{
-    if (d != p) {
-        if (p) p->ref.ref();
-        if (d && !d->ref.deref())
-            delete d;
-        d = p;
-    }
-}
-
-template <class T>
-Q_INLINE_TEMPLATE void TypePtr<T>::clear()
-{
-    attach(static_cast<T*>(0));
-}
+Q_DECL_CONSTEXPR uint qHash(const KDevelop::TypePtr<T>& type) { return qHash(type.data()); }
 
 #endif

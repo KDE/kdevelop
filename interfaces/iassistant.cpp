@@ -19,14 +19,14 @@
 #include "iassistant.h"
 #include "icore.h"
 
-#include <KAction>
+#include <QAction>
 #include <QXmlStreamReader>
 #include <QTextEdit>
 #include <QThread>
 
 using namespace KDevelop;
 
-Q_DECLARE_METATYPE(KSharedPtr<IAssistantAction>)
+Q_DECLARE_METATYPE(QExplicitlySharedDataPointer<IAssistantAction>)
 
 static QString removeHtmlFromString(QString string)
 {
@@ -46,16 +46,16 @@ void IAssistant::createActions()
 {
 }
 
-KAction* IAssistantAction::toKAction() const
+QAction* IAssistantAction::toKAction() const
 {
     Q_ASSERT(QThread::currentThread() == ICore::self()->thread() && "Actions must be created in the application main thread"
                                                     "(implement createActions() to create your actions)");
 
-    KAction* ret = new KAction(KIcon(icon()), removeHtmlFromString(description()), 0);
+    QAction* ret = new QAction(icon(), removeHtmlFromString(description()), 0);
     ret->setToolTip(toolTip());
 
-    //Add the data as a KSharedPtr to the action, so this assistant stays alive at least as long as the KAction
-    ret->setData(QVariant::fromValue(KSharedPtr<IAssistantAction>(const_cast<IAssistantAction*>(this))));
+    //Add the data as a QExplicitlySharedDataPointer to the action, so this assistant stays alive at least as long as the KAction
+    ret->setData(QVariant::fromValue(QExplicitlySharedDataPointer<IAssistantAction>(const_cast<IAssistantAction*>(this))));
 
     connect(ret, SIGNAL(triggered(bool)), SLOT(execute()));
     return ret;
@@ -105,7 +105,7 @@ void AssistantLabelAction::execute()
     // do nothing
 }
 
-KAction* AssistantLabelAction::toKAction() const
+QAction* AssistantLabelAction::toKAction() const
 {
     return 0;
 }
@@ -154,4 +154,3 @@ void IAssistant::clearActions()
 
 //END IAssistant
 
-#include "iassistant.moc"

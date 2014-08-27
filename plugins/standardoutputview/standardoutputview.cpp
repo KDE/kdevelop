@@ -25,8 +25,8 @@
 
 #include <QtCore/QList>
 #include <QtCore/QAbstractItemModel>
-#include <QtGui/QAction>
-#include <QtGui/QAbstractItemDelegate>
+#include <QAction>
+#include <QAbstractItemDelegate>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -46,7 +46,7 @@
 
 
 K_PLUGIN_FACTORY(StandardOutputViewFactory, registerPlugin<StandardOutputView>(); )
-K_EXPORT_PLUGIN(StandardOutputViewFactory(KAboutData("kdevstandardoutputview","kdevstandardoutputview",ki18n("Output View"), "0.1", ki18n("Provides toolviews for presenting the output of running apps"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(StandardOutputViewFactory(KAboutData("kdevstandardoutputview","kdevstandardoutputview",ki18n("Output View"), "0.1", ki18n("Provides toolviews for presenting the output of running apps"), KAboutData::License_GPL)))
 
 
 class OutputViewFactory : public KDevelop::IToolViewFactory{
@@ -74,24 +74,24 @@ private:
 };
 
 StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
-    : KDevelop::IPlugin(StandardOutputViewFactory::componentData(), parent)
+    : KDevelop::IPlugin("kdevstandardoutputview", parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IOutputView )
 
     setXMLFile("kdevstandardoutputview.rc");
     // setup actions
-    KAction *action;
+    QAction* action;
 
     action = actionCollection()->addAction("next_error");
     action->setText(i18n("Jump to Next Outputmark"));
     action->setShortcut( QKeySequence(Qt::Key_F4) );
-    action->setIcon(KIcon("arrow-right"));
+    action->setIcon(QIcon::fromTheme("arrow-right"));
     connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectNextItem()));
 
     action = actionCollection()->addAction("prev_error");
     action->setText(i18n("Jump to Previous Outputmark"));
     action->setShortcut( QKeySequence(Qt::SHIFT | Qt::Key_F4) );
-    action->setIcon(KIcon("arrow-left"));
+    action->setIcon(QIcon::fromTheme("arrow-left"));
     connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectPrevItem()));
 
     connect(KDevelop::ICore::self()->uiController()->controller(), SIGNAL(aboutToRemoveView(Sublime::View*)),
@@ -133,27 +133,27 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
     {
         case KDevelop::IOutputView::BuildView:
         {
-            ret = registerToolView( i18nc("@title:window", "Build"), KDevelop::IOutputView::HistoryView, KIcon("run-build"), KDevelop::IOutputView::AddFilterAction );
+            ret = registerToolView( i18nc("@title:window", "Build"), KDevelop::IOutputView::HistoryView, QIcon::fromTheme("run-build"), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::RunView:
         {
-            ret = registerToolView( i18nc("@title:window", "Run"), KDevelop::IOutputView::MultipleView, KIcon("system-run"), KDevelop::IOutputView::AddFilterAction );
+            ret = registerToolView( i18nc("@title:window", "Run"), KDevelop::IOutputView::MultipleView, QIcon::fromTheme("system-run"), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::DebugView:
         {
-            ret = registerToolView( i18nc("@title:window", "Debug"), KDevelop::IOutputView::MultipleView, KIcon("debugger"), KDevelop::IOutputView::AddFilterAction );
+            ret = registerToolView( i18nc("@title:window", "Debug"), KDevelop::IOutputView::MultipleView, QIcon::fromTheme("debugger"), KDevelop::IOutputView::AddFilterAction );
             break;
         }
         case KDevelop::IOutputView::TestView:
         {
-            ret = registerToolView( i18nc("@title:window", "Test"), KDevelop::IOutputView::HistoryView, KIcon("system-run"));
+            ret = registerToolView( i18nc("@title:window", "Test"), KDevelop::IOutputView::HistoryView, QIcon::fromTheme("system-run"));
             break;
         }
         case KDevelop::IOutputView::VcsView:
         {
-            ret = registerToolView( i18nc("@title:window", "Version Control"), KDevelop::IOutputView::HistoryView, KIcon("system-run"));
+            ret = registerToolView( i18nc("@title:window", "Version Control"), KDevelop::IOutputView::HistoryView, QIcon::fromTheme("system-run"));
             break;
         }
     }
@@ -165,7 +165,7 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
 
 int StandardOutputView::registerToolView( const QString& title,
                                           KDevelop::IOutputView::ViewType type,
-                                          const KIcon& icon, Options option,
+                                          const QIcon& icon, Options option,
                                           const QList<QAction*>& actionList )
 {
     // try to reuse existing toolview

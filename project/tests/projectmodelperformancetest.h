@@ -20,7 +20,7 @@
 #ifndef KDEVELOP_PROJECT_PROJECTMODELPERFORMANCETEST_INCLUDED
 #define KDEVELOP_PROJECT_PROJECTMODELPERFORMANCETEST_INCLUDED
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QtCore/QStack>
 
 namespace KDevelop

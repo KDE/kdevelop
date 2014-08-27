@@ -46,8 +46,8 @@ class KDEVPLATFORMPROJECT_EXPORT AbstractFileManagerPlugin : public IPlugin, pub
     Q_INTERFACES( KDevelop::IProjectFileManager )
 
 public:
-    explicit AbstractFileManagerPlugin( const KComponentData& instance, QObject *parent = 0,
-                                        const QVariantList& args = QVariantList() );
+    explicit AbstractFileManagerPlugin( const QString& componentName, QObject *parent = 0,
+                                        const QVariantList &args = QVariantList() );
     virtual ~AbstractFileManagerPlugin();
 
 //

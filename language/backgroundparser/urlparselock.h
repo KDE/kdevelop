@@ -21,7 +21,9 @@
 #ifndef KDEVPLATFORM_URLPARSELOCK_H
 #define KDEVPLATFORM_URLPARSELOCK_H
 
-#include "../duchain/indexedstring.h"
+#include <language/languageexport.h>
+
+#include <serialization/indexedstring.h>
 
 namespace KDevelop
 {

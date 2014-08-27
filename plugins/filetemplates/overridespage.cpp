@@ -212,7 +212,7 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const Decla
     overrideItem->setText(PropertiesColumn, functionPropertiesToString(function));
 
     if (function->isAbstract()) {
-        overrideItem->setIcon(ClassOrFunctionColumn, KIcon("flag-red"));
+        overrideItem->setIcon(ClassOrFunctionColumn, QIcon::fromTheme("flag-red"));
         overrideItem->setCheckState(ClassOrFunctionColumn, Qt::Checked);
         classItem->removeChild(overrideItem);
         classItem->insertChild(0, overrideItem);

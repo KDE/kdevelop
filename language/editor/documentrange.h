@@ -19,9 +19,8 @@
 #ifndef KDEVPLATFORM_DOCUMENTRANGE_H
 #define KDEVPLATFORM_DOCUMENTRANGE_H
 
-#include "../languageexport.h"
-#include "simplerange.h"
-#include <language/duchain/indexedstring.h>
+#include <language/languageexport.h>
+#include <serialization/indexedstring.h>
 #include "rangeinrevision.h"
 
 namespace KDevelop
@@ -31,21 +30,22 @@ class IndexedString;
 /**
  * Lightweight object that extends a range with information about the URL to which the range refers.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT DocumentRange : public SimpleRange
+class KDEVPLATFORMLANGUAGE_EXPORT DocumentRange : public KTextEditor::Range
 {
 public:
     DocumentRange() {
     }
   
-    inline DocumentRange(const IndexedString& document, const SimpleRange& range)  : SimpleRange(range), document(document) {
-    }
+    inline DocumentRange(const IndexedString& document, const KTextEditor::Range& range)
+      : KTextEditor::Range(range), document(document)
+    {}
 
     inline bool operator==(const DocumentRange& rhs) const {
-      return document == rhs.document && SimpleRange::operator==(rhs);
+      return document == rhs.document && *static_cast<const KTextEditor::Range*>(this) == rhs;
     }
 
     static DocumentRange invalid() {
-      return DocumentRange(IndexedString(), SimpleRange::invalid());
+      return DocumentRange(IndexedString(), KTextEditor::Range::invalid());
     }
 
     IndexedString document;

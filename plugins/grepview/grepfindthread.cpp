@@ -9,7 +9,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <kdebug.h>
 
 using KDevelop::IndexedString;

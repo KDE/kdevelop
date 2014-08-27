@@ -23,7 +23,7 @@
 
 #include "commitView.h"
 
-#include <QtGui/QPainter>
+#include <QPainter>
 #include <KDE/KDebug>
 
 #include "../../../vcsrevision.h"

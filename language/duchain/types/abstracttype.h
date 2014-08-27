@@ -23,7 +23,7 @@
 
 #include <QtCore/QString>
 #include "typepointer.h"
-#include "../../languageexport.h"
+#include <language/languageexport.h>
 
 namespace KDevelop
 {
@@ -85,7 +85,7 @@ class TypeExchanger;
  *
  *  \sa appendedlist.h
  */
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public TypeShared
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractType : public QSharedData
 {
 public:
   typedef TypePtr<AbstractType> Ptr;
@@ -289,14 +289,9 @@ private:
   AbstractType(const AbstractType& rhs);
 };
 
-template <class T>
-uint qHash(const TypePtr<T>& type) { return (uint)((size_t)type.unsafeData()); }
-
-
 /**
  * You can use these instead of dynamic_cast, for basic types it has better performance because it checks the whichType() member
 */
-
 template<class To>
 inline To fastCast(AbstractType* from) {
   return dynamic_cast<To>(from);

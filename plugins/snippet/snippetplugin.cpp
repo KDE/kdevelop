@@ -17,12 +17,12 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/codecompletioninterface.h>
+
+#include <QAction>
 #include <QMenu>
 
 #include <KActionCollection>
-#include <KAction>
 
-#include <KTextEditor/HighlightInterface>
 #include <KTextEditor/Editor>
 
 #include <interfaces/ipartcontroller.h>
@@ -42,7 +42,7 @@
 #include "legacy/editsnippet.h"
 
 K_PLUGIN_FACTORY(SnippetFactory, registerPlugin<SnippetPlugin>(); )
-K_EXPORT_PLUGIN(SnippetFactory(KAboutData("kdevsnippet","kdevsnippet", ki18n("Snippets"), "0.1", ki18n("This plugin allows to store code snippets and insert them into open files"), KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(SnippetFactory(KAboutData("kdevsnippet","kdevsnippet", ki18n("Snippets"), "0.1", ki18n("This plugin allows to store code snippets and insert them into open files"), KAboutData::License_GPL)))
 
 SnippetPlugin* SnippetPlugin::m_self = 0;
 
@@ -82,7 +82,7 @@ private:
 
 
 SnippetPlugin::SnippetPlugin(QObject *parent, const QVariantList &)
-  : KDevelop::IPlugin(SnippetFactory::componentData(), parent)
+  : KDevelop::IPlugin("kdevsnippet", parent)
 {
     Q_ASSERT(!m_self);
     m_self = this;
@@ -122,24 +122,23 @@ void SnippetPlugin::unload()
 
 void SnippetPlugin::insertSnippet(Snippet* snippet)
 {
-    KDevelop::IDocument* doc = core()->documentController()->activeDocument();
-    if (!doc) return;
-    if (doc->isTextDocument()) {
-        SnippetCompletionItem item(snippet, static_cast<SnippetRepository*>(snippet->parent()));
-        KTextEditor::Range range = doc->textSelection();
-        if ( !range.isValid() ) {
-            range = KTextEditor::Range(doc->cursorPosition(), doc->cursorPosition());
-        }
-        item.execute(doc->textDocument(), range);
-        if ( doc->textDocument()->activeView() ) {
-            doc->textDocument()->activeView()->setFocus();
-        }
+    KTextEditor::View* view = core()->documentController()->activeTextDocumentView();
+    if (!view)
+        return;
+    SnippetCompletionItem item(snippet, static_cast<SnippetRepository*>(snippet->parent()));
+    KTextEditor::Range range = view->selectionRange();
+    if ( !range.isValid() ) {
+        range = KTextEditor::Range(view->cursorPosition(), view->cursorPosition());
+    }
+    item.execute(view, range);
+    if ( view ) {
+        view->setFocus();
     }
 }
 
 void SnippetPlugin::insertSnippetFromActionData()
 {
-    KAction* action = dynamic_cast<KAction*>(sender());
+    QAction* action = dynamic_cast<QAction*>(sender());
     Q_ASSERT(action);
     Snippet* snippet = action->data().value<Snippet*>();
     Q_ASSERT(snippet);
@@ -148,7 +147,7 @@ void SnippetPlugin::insertSnippetFromActionData()
 
 void SnippetPlugin::viewCreated( KTextEditor::Document*, KTextEditor::View* view )
 {
-    KAction* selectionAction = view->actionCollection()->addAction("edit_selection_snippet", this, SLOT(createSnippetFromSelection()));
+    QAction* selectionAction = view->actionCollection()->addAction("edit_selection_snippet", this, SLOT(createSnippetFromSelection()));
     selectionAction->setData(QVariant::fromValue<void *>(view));
 }
 
@@ -177,7 +176,7 @@ KDevelop::ContextMenuExtension SnippetPlugin::contextMenuExtension(KDevelop::Con
     if ( context->type() == KDevelop::Context::EditorContext ) {
         KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
         if ( econtext->view()->selection() ) {
-            QAction* action = new QAction(KIcon("document-new"), i18n("Create Snippet"), this);
+            QAction* action = new QAction(QIcon::fromTheme("document-new"), i18n("Create Snippet"), this);
             connect(action, SIGNAL(triggered(bool)), this, SLOT(createSnippetFromSelection()));
             action->setData(QVariant::fromValue<void *>(econtext->view()));
             extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
@@ -194,13 +193,7 @@ void SnippetPlugin::createSnippetFromSelection()
     KTextEditor::View* view = static_cast<KTextEditor::View*>(action->data().value<void *>());
     Q_ASSERT(view);
 
-    QString mode;
-    if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
-            mode = iface->highlightingModeAt(view->selectionRange().start());
-    }
-    if ( mode.isEmpty() ) {
-        mode = view->document()->mode();
-    }
+    QString mode = view->document()->highlightingModeAt(view->selectionRange().start());;
 
     // try to look for a fitting repo
     SnippetRepository* match = 0;

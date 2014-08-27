@@ -18,7 +18,7 @@
  ***************************************************************************/
 #include "view.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include <kdebug.h>
 
@@ -138,4 +138,4 @@ void View::notifyPositionChanged(int newPositionInArea)
 
 }
 
-#include "view.moc"
+#include "moc_view.cpp"

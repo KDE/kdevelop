@@ -30,6 +30,10 @@
 
 #include "idocument.h"
 
+namespace KTextEditor {
+    class View;
+}
+
 namespace KDevelop {
 
 class ICore;
@@ -101,6 +105,12 @@ public:
     virtual IDocumentFactory* factory(const QString& mime) const = 0;
     
     Q_SCRIPTABLE virtual KTextEditor::Document* globalTextEditorInstance()=0;
+
+    /**
+     * @returns the KTextEditor::View of the current document, in case it is a text document
+     */
+    virtual KTextEditor::View* activeTextDocumentView() const = 0;
+
 public Q_SLOTS:
     /**
      * Opens a new or existing document.

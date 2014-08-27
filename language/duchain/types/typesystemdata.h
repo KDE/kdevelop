@@ -22,10 +22,11 @@
 #define KDEVPLATFORM_TYPESYSTEMDATA_H
 
 #include "../appendedlist.h"
-#include "../indexedstring.h"
 #include "indexedtype.h"
 #include "delayedtype.h"
 #include "identifiedtype.h"
+
+#include <serialization/indexedstring.h>
 
 namespace KDevelop {
 

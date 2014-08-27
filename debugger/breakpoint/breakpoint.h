@@ -128,7 +128,7 @@ protected:
     BreakpointKind m_kind;
     /* For watchpoints, the address it is set at.  */
     QString m_address;
-    KUrl m_url;
+    QUrl m_url;
     int m_line;
     QString m_condition;
     KTextEditor::MovingCursor *m_movingCursor;

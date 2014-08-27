@@ -24,17 +24,17 @@
 #include "standardoutputview.h"
 #include <QtCore/QTimer>
 #include <QtCore/QRegExp>
-#include <QtGui/QAbstractItemDelegate>
-#include <QtGui/QItemSelectionModel>
-#include <QtGui/QTreeView>
-#include <QtGui/QToolButton>
-#include <QtGui/QScrollBar>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
-#include <QtGui/QWidgetAction>
-#include <QtGui/QSortFilterProxyModel>
+#include <QAbstractItemDelegate>
+#include <QItemSelectionModel>
+#include <QTreeView>
+#include <QToolButton>
+#include <QScrollBar>
+#include <QVBoxLayout>
+#include <QStackedWidget>
+#include <QApplication>
+#include <QClipboard>
+#include <QWidgetAction>
+#include <QSortFilterProxyModel>
 #include <kmenu.h>
 #include <kaction.h>
 #include <kdebug.h>
@@ -77,12 +77,12 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         layout->addWidget( tabwidget );
         m_closeButton = new QToolButton( this );
         connect( m_closeButton, SIGNAL(clicked()), SLOT(closeActiveView()) );
-        m_closeButton->setIcon( KIcon("tab-close") );
+        m_closeButton->setIcon( QIcon::fromTheme("tab-close") );
         m_closeButton->setToolTip( i18n( "Close the currently active output view") );
 
         m_closeOthersAction = new QAction( this );
         connect(m_closeOthersAction, SIGNAL(triggered(bool)), SLOT(closeOtherViews()));
-        m_closeOthersAction->setIcon(KIcon("tab-close-other"));
+        m_closeOthersAction->setIcon(QIcon::fromTheme("tab-close-other"));
         m_closeOthersAction->setToolTip( i18n( "Close all other output views" ) );
         m_closeOthersAction->setText( m_closeOthersAction->toolTip() );
         addAction(m_closeOthersAction);
@@ -93,20 +93,20 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         stackwidget = new QStackedWidget( this );
         layout->addWidget( stackwidget );
 
-        previousAction = new KAction( KIcon( "go-previous" ), i18n("Previous"), this );
+        previousAction = new QAction( QIcon::fromTheme( "go-previous" ), i18n("Previous"), this );
         connect(previousAction, SIGNAL(triggered()), this, SLOT(previousOutput()));
         addAction(previousAction);
-        nextAction = new KAction( KIcon( "go-next" ), i18n("Next"), this );
+        nextAction = new QAction( QIcon::fromTheme( "go-next" ), i18n("Next"), this );
         connect(nextAction, SIGNAL(triggered()), this, SLOT(nextOutput()));
         addAction(nextAction);
     }
 
-    addAction(dynamic_cast<KAction*>(data->plugin->actionCollection()->action("prev_error")));
-    addAction(dynamic_cast<KAction*>(data->plugin->actionCollection()->action("next_error")));
+    addAction(dynamic_cast<QAction*>(data->plugin->actionCollection()->action("prev_error")));
+    addAction(dynamic_cast<QAction*>(data->plugin->actionCollection()->action("next_error")));
 
-    activateOnSelect = new KToggleAction( KIcon(), i18n("Select activated Item"), this );
+    activateOnSelect = new KToggleAction( QIcon(), i18n("Select activated Item"), this );
     activateOnSelect->setChecked( true );
-    focusOnSelect = new KToggleAction( KIcon(), i18n("Focus when selecting Item"), this );
+    focusOnSelect = new KToggleAction( QIcon(), i18n("Focus when selecting Item"), this );
     focusOnSelect->setChecked( false );
     if( data->option & KDevelop::IOutputView::ShowItemsButton )
     {
@@ -117,12 +117,12 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
 
-    KAction *selectAllAction = KStandardAction::selectAll(this, SLOT(selectAll()), this);
-    selectAllAction->setShortcut(KShortcut()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
+    QAction* selectAllAction = KStandardAction::selectAll(this, SLOT(selectAll()), this);
+    selectAllAction->setShortcut(QKeySequence()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
     selectAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(selectAllAction);
 
-    KAction *copyAction = KStandardAction::copy(this, SLOT(copySelection()), this);
+    QAction* copyAction = KStandardAction::copy(this, SLOT(copySelection()), this);
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(copyAction);
 
@@ -422,7 +422,7 @@ void OutputWidget::selectItem(Direction direction)
         ? iface->previousHighlightIndex( index )
         : iface->nextHighlightIndex( index );
 
-    kDebug() << "selecting item" << select << index << newIndex;
+    kDebug() << "old:" << index << "- new:" << newIndex;
     activateIndex(newIndex, view, iface);
 }
 
@@ -705,4 +705,3 @@ void OutputWidget::setTitle(int outputId, const QString& title)
     }
 }
 
-#include "outputwidget.moc"

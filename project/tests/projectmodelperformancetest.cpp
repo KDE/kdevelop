@@ -18,11 +18,11 @@
  ***************************************************************************/
 
 #include "projectmodelperformancetest.h"
-#include <QtGui/QSortFilterProxyModel>
-#include <QtGui/QTreeView>
-#include <QtGui/QPushButton>
-#include <QtGui/QGridLayout>
-#include <QtGui/QApplication>
+#include <QSortFilterProxyModel>
+#include <QTreeView>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QApplication>
 
 #include <projectmodel.h>
 #include <path.h>
@@ -204,4 +204,3 @@ int main( int argc, char** argv )
     return a.exec();
 }
 
-#include "projectmodelperformancetest.moc"

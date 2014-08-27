@@ -15,17 +15,16 @@ set(kdevexecute_PART_SRCS
     nativeappjob.cpp
 )
 
-kde4_add_ui_files( kdevexecute_PART_SRCS ${kdevexecute_PART_UIS} )
-kde4_add_plugin(kdevexecute ${kdevexecute_PART_SRCS}  )
+qt5_wrap_ui( kdevexecute_PART_SRCS ${kdevexecute_PART_UIS} )
+add_library(kdevexecute MODULE ${kdevexecute_PART_SRCS})
 target_link_libraries(kdevexecute 
-    ${KDE4_KDEUI_LIBS} 
-    ${KDE4_KCMUTILS_LIBS}
-    kdevplatforminterfaces 
-    kdevplatformutil 
-    kdevplatformproject 
-    kdevplatformoutputview)
+    KF5::KCMUtils
+    KDev::Interfaces
+    KDev::Util
+    KDev::Project
+    KDev::OutputView)
 
-install(TARGETS kdevexecute DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevexecute DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 
 ########### install files ###############

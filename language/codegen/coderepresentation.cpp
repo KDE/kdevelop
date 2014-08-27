@@ -18,8 +18,8 @@
 
 #include "coderepresentation.h"
 #include <QtCore/qfile.h>
-#include <KDE/KTextEditor/Document>
-#include <language/duchain/indexedstring.h>
+#include <KTextEditor/Document>
+#include <serialization/indexedstring.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
 #include <editor/modificationrevision.h>
@@ -47,7 +47,7 @@ QString CodeRepresentation::rangeText(const KTextEditor::Range& range) const
     return rangedText;
 }
 
-static void grepLine(const QString& identifier, const QString& lineText, int lineNumber, QVector<SimpleRange>& ret, bool surroundedByBoundary)
+static void grepLine(const QString& identifier, const QString& lineText, int lineNumber, QVector<KTextEditor::Range>& ret, bool surroundedByBoundary)
 {
     if (identifier.isEmpty())
         return;
@@ -65,51 +65,19 @@ static void grepLine(const QString& identifier, const QString& lineText, int lin
         if(!surroundedByBoundary || ( (end == lineText.length() || !lineText[end].isLetterOrNumber() || lineText[end] != '_')
                                         && (start-1 < 0 || !lineText[start-1].isLetterOrNumber() || lineText[start-1] != '_')) )
         {
-            ret << SimpleRange(lineNumber, start, lineNumber, end);
+            ret << KTextEditor::Range(lineNumber, start, lineNumber, end);
         }
     }
 }
 
-//NOTE: this is ugly, but otherwise kate might remove tabs again :-/
-// see also: https://bugs.kde.org/show_bug.cgi?id=291074
-struct EditorDisableReplaceTabs {
-  EditorDisableReplaceTabs(KTextEditor::Document* document) : m_iface(qobject_cast<KTextEditor::ConfigInterface*>(document)), m_count(0) {
-  }
-
-  void start() {
-    ++m_count;
-    if( m_count > 1 )
-      return;
-    if ( m_iface ) {
-      m_oldReplaceTabs = m_iface->configValue( "replace-tabs" );
-      m_iface->setConfigValue( "replace-tabs", false );
-    }
-  }
-
-  void end() {
-    --m_count;
-    if( m_count > 0 )
-      return;
-    
-    Q_ASSERT( m_count == 0 );
-    
-    if (m_iface)
-      m_iface->setConfigValue("replace-tabs", m_oldReplaceTabs);
-  }
-
-  KTextEditor::ConfigInterface* m_iface;
-  int m_count;
-  QVariant m_oldReplaceTabs;
-};
-
 class EditorCodeRepresentation : public DynamicCodeRepresentation {
   public:
-  EditorCodeRepresentation(KTextEditor::Document* document) : m_document(document), m_replaceTabs(document) {
+  EditorCodeRepresentation(KTextEditor::Document* document) : m_document(document) {
       m_url = IndexedString(m_document->url());
   }
   
-  virtual QVector< SimpleRange > grep ( const QString& identifier, bool surroundedByBoundary ) const {
-      QVector< SimpleRange > ret;
+  virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const {
+      QVector< KTextEditor::Range > ret;
 
       if (identifier.isEmpty())
         return ret;
@@ -118,6 +86,10 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
         grepLine(identifier, m_document->line(line), line, ret, surroundedByBoundary);
 
       return ret;
+  }
+
+  virtual KDevEditingTransaction::Ptr makeEditTransaction() {
+    return KDevEditingTransaction::Ptr(new KDevEditingTransaction(m_document));
   }
   
   QString line(int line) const {
@@ -135,26 +107,17 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
   }
   
   bool setText(const QString& text) {
-    
-    startEdit();
-    bool ret = m_document->setText(text);
-    endEdit();
+    bool ret;
+    {
+        KDevEditingTransaction t(m_document);
+        ret = m_document->setText(text);
+    }
     ModificationRevision::clearModificationCache(m_url);
     return ret;
   }
   
   bool fileExists(){
     return QFile(m_document->url().path()).exists();
-  }
-  
-  void startEdit() {
-      m_document->startEditing();
-      m_replaceTabs.start();
-  }
-  
-  void endEdit() {
-      m_document->endEditing();
-      m_replaceTabs.end();
   }
   
   bool replace(const KTextEditor::Range& range, const QString& oldText,
@@ -164,9 +127,11 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
           return false;
       }
 
-      startEdit();
-      bool ret = m_document->replaceText(range, newText);
-      endEdit();
+      bool ret;
+      {
+          KDevEditingTransaction t(m_document);
+          ret = m_document->replaceText(range, newText);
+      }
 
       ModificationRevision::clearModificationCache(m_url);
 
@@ -180,7 +145,6 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
   private:
     KTextEditor::Document* m_document;
     IndexedString m_url;
-    EditorDisableReplaceTabs m_replaceTabs;
 };
 
 class FileCodeRepresentation : public CodeRepresentation {
@@ -203,8 +167,8 @@ class FileCodeRepresentation : public CodeRepresentation {
       return lineData.at(line);
     }
     
-    virtual QVector< SimpleRange > grep ( const QString& identifier, bool surroundedByBoundary ) const {
-        QVector< SimpleRange > ret;
+    virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const {
+        QVector< KTextEditor::Range > ret;
 
         if (identifier.isEmpty())
             return ret;
@@ -276,7 +240,7 @@ class ArtificialStringData : public QSharedData {
 
 class StringCodeRepresentation : public CodeRepresentation {
   public:
-    StringCodeRepresentation(KSharedPtr<ArtificialStringData> _data) : data(_data) {
+    StringCodeRepresentation(QExplicitlySharedDataPointer<ArtificialStringData> _data) : data(_data) {
       Q_ASSERT(data);
     }
     
@@ -304,8 +268,8 @@ class StringCodeRepresentation : public CodeRepresentation {
         return false;
     }
     
-    virtual QVector< SimpleRange > grep ( const QString& identifier, bool surroundedByBoundary ) const {
-        QVector< SimpleRange > ret;
+    virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const {
+        QVector< KTextEditor::Range > ret;
 
         if (identifier.isEmpty())
             return ret;
@@ -317,13 +281,13 @@ class StringCodeRepresentation : public CodeRepresentation {
     }
     
   private:
-    KSharedPtr<ArtificialStringData> data;
+    QExplicitlySharedDataPointer<ArtificialStringData> data;
 };
 
-static QHash<IndexedString, KSharedPtr<ArtificialStringData> > artificialStrings;
+static QHash<IndexedString, QExplicitlySharedDataPointer<ArtificialStringData> > artificialStrings;
 
 //Return the representation for the given URL if it exists, or an empty pointer otherwise
-static KSharedPtr<ArtificialStringData> representationForPath(const IndexedString& path)
+static QExplicitlySharedDataPointer<ArtificialStringData> representationForPath(const IndexedString& path)
 {
     if(artificialStrings.contains(path))
         return artificialStrings[path];
@@ -333,13 +297,13 @@ static KSharedPtr<ArtificialStringData> representationForPath(const IndexedStrin
         if(artificialStrings.contains(constructedPath))
             return artificialStrings[constructedPath];
         else
-            return KSharedPtr<ArtificialStringData>();
+            return QExplicitlySharedDataPointer<ArtificialStringData>();
     }
 }
 
 bool artificialCodeRepresentationExists(const IndexedString& path)
 {
-    return !representationForPath(path).isNull();
+    return representationForPath(path);
 }
 
 CodeRepresentation::Ptr createCodeRepresentation(const IndexedString& path) {
@@ -384,7 +348,7 @@ InsertArtificialCodeRepresentation::InsertArtificialCodeRepresentation(const Ind
     
     Q_ASSERT(!artificialStrings.contains(m_file));
 
-    artificialStrings.insert(m_file, KSharedPtr<ArtificialStringData>(new ArtificialStringData(text)));
+    artificialStrings.insert(m_file, QExplicitlySharedDataPointer<ArtificialStringData>(new ArtificialStringData(text)));
 }
 
 IndexedString InsertArtificialCodeRepresentation::file()
@@ -409,3 +373,4 @@ QString InsertArtificialCodeRepresentation::text() {
 
 }
 
+// kate: indent-width 4;

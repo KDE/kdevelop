@@ -35,11 +35,12 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KLocalizedString>
-#include <KAction>
 #include <KActionCollection>
 
-K_PLUGIN_FACTORY(TestViewFactory, registerPlugin<TestViewPlugin>(); )
-K_EXPORT_PLUGIN(TestViewFactory(KAboutData("kdevtestview","kdevtestview", ki18n("Unit Test View"), "0.1", ki18n("Lets you see and run unit tests"), KAboutData::License_GPL)))
+#include <QAction>
+
+K_PLUGIN_FACTORY(TestViewFactory, registerPlugin<TestViewPlugin>();)
+// K_EXPORT_PLUGIN(TestViewFactory(KAboutData("kdevtestview","kdevtestview", ki18n("Unit Test View"), "0.1", ki18n("Lets you see and run unit tests"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
@@ -68,15 +69,16 @@ class TestToolViewFactory: public KDevelop::IToolViewFactory
         TestViewPlugin *mplugin;
 };
 
-TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args): IPlugin(TestViewFactory::componentData(), parent)
+TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args)
+    : IPlugin("kdevtestview", parent)
 {
     Q_UNUSED(args)
 
-    KAction* runAll = new KAction( KIcon("system-run"), i18n("Run All Tests"), this );
+    QAction* runAll = new QAction( QIcon::fromTheme("system-run"), i18n("Run All Tests"), this );
     connect(runAll, SIGNAL(triggered(bool)), SLOT(runAllTests()));
     actionCollection()->addAction("run_all_tests", runAll);
     
-    KAction* stopTest = new KAction( KIcon("process-stop"), i18n("Stop Running Tests"), this );
+    QAction* stopTest = new QAction( QIcon::fromTheme("process-stop"), i18n("Stop Running Tests"), this );
     connect(stopTest, SIGNAL(triggered(bool)), SLOT(stopRunningTests()));
     actionCollection()->addAction("stop_running_tests", stopTest);
 
@@ -152,3 +154,4 @@ void TestViewPlugin::jobStateChanged()
     actionCollection()->action("stop_running_tests")->setEnabled(found);
 }
 
+#include "testviewplugin.moc"

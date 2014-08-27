@@ -19,13 +19,12 @@
 */
 
 #include "persistentmovingrange.h"
-#include "simplerange.h"
 #include "persistentmovingrangeprivate.h"
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <util/foregroundlock.h>
 
-KDevelop::PersistentMovingRange::PersistentMovingRange(const SimpleRange& range, const IndexedString& document, bool shouldExpand)
+KDevelop::PersistentMovingRange::PersistentMovingRange(const KTextEditor::Range& range, const IndexedString& document, bool shouldExpand)
 : m_p(new PersistentMovingRangePrivate)
 {
   VERIFY_FOREGROUND_LOCKED;
@@ -58,7 +57,7 @@ KDevelop::PersistentMovingRange::~PersistentMovingRange()
   delete m_p;
 }
 
-KDevelop::SimpleRange KDevelop::PersistentMovingRange::range() const
+KTextEditor::Range KDevelop::PersistentMovingRange::range() const
 {
   VERIFY_FOREGROUND_LOCKED;
   

@@ -25,10 +25,12 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KSettings/Dispatcher>
-#include <KIcon>
 #include <KMessageBox>
 #include <KParts/MainWindow>
+#include <KLocalizedString>
+
 #include <QAction>
+#include <QIcon>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
@@ -43,13 +45,13 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(ProjectFilterProviderFactory, registerPlugin<ProjectFilterProvider>(); )
-K_EXPORT_PLUGIN(ProjectFilterProviderFactory(
-    KAboutData("kdevprojectfilter", "kdevprojectfilter", ki18n("Project Filter"),
-               "0.1", ki18n("Configure which files and folders inside the project folder should be included or excluded."),
-               KAboutData::License_GPL)))
+// K_EXPORT_PLUGIN(ProjectFilterProviderFactory(
+//     KAboutData("kdevprojectfilter", "kdevprojectfilter", ki18n("Project Filter"),
+//                "0.1", ki18n("Configure which files and folders inside the project folder should be included or excluded."),
+//                KAboutData::License_GPL)))
 
 ProjectFilterProvider::ProjectFilterProvider( QObject* parent, const QVariantList& /*args*/ )
-    : IPlugin( ProjectFilterProviderFactory::componentData(), parent )
+    : IPlugin( "kdevprojectfilter", parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( IProjectFilterProvider )
 
@@ -60,7 +62,7 @@ ProjectFilterProvider::ProjectFilterProvider( QObject* parent, const QVariantLis
 
     updateProjectFilters();
 
-    KSettings::Dispatcher::registerComponent(componentData(), this, "updateProjectFilters");
+    KSettings::Dispatcher::registerComponent(componentName(), this, "updateProjectFilters");
 }
 
 QSharedPointer<IProjectFilter> ProjectFilterProvider::createFilter(IProject* project) const
@@ -91,7 +93,7 @@ ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* contex
         return ret;
     }
 
-    QAction* action = new QAction(KIcon("view-filter"),
+    QAction* action = new QAction(QIcon::fromTheme("view-filter"),
                                   i18np("Exclude Item From Project",
                                         "Exclude Items From Project",
                                         items.size()), this);

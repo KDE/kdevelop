@@ -21,7 +21,7 @@
 #define KDEVPLATFORM_CODECOMPLETIONTESTHELPER_H
 
 #include <QtTest/QtTest>
-#include <QtGui/QStandardItemModel>
+#include <QStandardItemModel>
 
 #include "../duchain/declaration.h"
 #include "../duchain/duchain.h"
@@ -52,11 +52,11 @@ QStandardItemModel& fakeModel() {
 template <class T>
 struct CodeCompletionItemTester {
    
-  typedef KSharedPtr< KDevelop::CompletionTreeElement > Element;
+  typedef QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > Element;
   
   //Creates a CodeCompletionItemTester for the parent context
   CodeCompletionItemTester parent() {
-    KSharedPtr<T> parent = KSharedPtr<T>(dynamic_cast<T*>(completionContext->parentContext()));
+    QExplicitlySharedDataPointer<T> parent = QExplicitlySharedDataPointer<T>(dynamic_cast<T*>(completionContext->parentContext()));
     Q_ASSERT(parent);
     return CodeCompletionItemTester(parent);
   }
@@ -69,7 +69,7 @@ struct CodeCompletionItemTester {
   }
 
   //Can be used if you already have the completion context
-  CodeCompletionItemTester(KSharedPtr<T> context) {
+  CodeCompletionItemTester(QExplicitlySharedDataPointer<T> context) {
     completionContext = context;
     
     init();
@@ -96,10 +96,10 @@ struct CodeCompletionItemTester {
   }
   
   QStringList names; //Names of all completion-items, not sorted
-  typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
+  typedef QExplicitlySharedDataPointer <KDevelop::CompletionTreeItem > Item;
   QList <Item > items; //All items retrieved, sorted by name
 
-  KSharedPtr <T> completionContext;
+  QExplicitlySharedDataPointer <T> completionContext;
   
   //Convenience-function to retrieve data from completion-items by name
   QVariant itemData(QString itemName, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) {

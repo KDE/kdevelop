@@ -159,7 +159,7 @@ void Problem::setSource(ProblemData::Source source)
     d_func_dynamic()->source = source;
 }
 
-KSharedPtr<IAssistant> Problem::solutionAssistant() const
+QExplicitlySharedDataPointer<IAssistant> Problem::solutionAssistant() const
 {
     return {};
 }
