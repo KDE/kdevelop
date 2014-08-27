@@ -356,44 +356,8 @@ QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const KUrl& url, co
 
 TopDUContext* ClangSupport::standardContext(const KUrl& url, bool /*proxyContext*/)
 {
-    //Prefer context that the user currently working with. This is important for e.g. code-completion.
-    auto topChains = DUChain::self()->chainsForDocument(url);
-
-    // fallback without an AST but in a project
-    TopDUContext* contextWithProject = nullptr;
-    // fallback context with an attached AST but not in a project
-    TopDUContext* contextWithAST = nullptr;
-    // last-resort fallback without either project nor AST
-    TopDUContext* fallbackContext = nullptr;
-
-    // first, try to find a context that is in a project and has the AST attached
-    for (auto chain: topChains) {
-        if (auto file = dynamic_cast<ClangParsingEnvironmentFile*>(chain->parsingEnvironmentFile().data())) {
-            if (file->inProject()) {
-                if (chain->ast()) {
-                    // best possible match: has project information and an attached AST
-                    return chain;
-                } else if (!contextWithProject) {
-                    contextWithProject = chain;
-                    continue;
-                }
-            }
-        }
-
-        if (chain->ast() && !contextWithAST) {
-            contextWithAST = chain;
-        } else if (!fallbackContext) {
-            fallbackContext = chain;
-        }
-    }
-
-    if (contextWithProject) {
-        return contextWithProject;
-    } else if (contextWithAST) {
-        return contextWithAST;
-    } else {
-        return fallbackContext;
-    }
+    ClangParsingEnvironment env;
+    return DUChain::self()->chainForDocument(url, &env);
 }
 
 #include "clangsupport.moc"

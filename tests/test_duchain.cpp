@@ -752,26 +752,25 @@ void TestDUChain::testReparseChangeEnvironment()
             hashes[i] = env->environmentHash();
             QVERIFY(hashes[i]);
 
-            if (i) {
-                QEXPECT_FAIL("", "Somewhere, multiple environment files are generated", Abort);
-            }
+            // we should never end up with multiple env files or chains in memory for these files
             QCOMPARE(DUChain::self()->allEnvironmentFiles(impl.url()).size(), 1);
             QCOMPARE(DUChain::self()->chainsForDocument(impl.url()).size(), 1);
             QCOMPARE(DUChain::self()->allEnvironmentFiles(header.url()).size(), 1);
             QCOMPARE(DUChain::self()->chainsForDocument(header.url()).size(), 1);
         }
 
+        // in every run, we expect the environment to have changed
         for (int j = 0; j < i; ++j) {
             QVERIFY(hashes[i] != hashes[j]);
         }
 
         if (i == 0) {
-            // change defines
+            // 1) change defines
             m_provider->defines.insert("foooooooo", "baaar!");
         } else if (i == 1) {
-            // change includes
+            // 2) change includes
             m_provider->includes.append(Path("/foo/bar/asdf/lalala"));
-        }
+        } // 3) stop
     }
 }
 

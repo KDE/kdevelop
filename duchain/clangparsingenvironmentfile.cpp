@@ -106,10 +106,7 @@ void ClangParsingEnvironmentFile::setEnvironment(const ClangParsingEnvironment& 
 
 bool ClangParsingEnvironmentFile::matchEnvironment(const ParsingEnvironment* environment) const
 {
-    if (auto clangEnv = dynamic_cast<const ClangParsingEnvironment*>(environment)) {
-        return clangEnv->projectKnown() == d_func()->projectWasKnown && clangEnv->hash() == d_func()->environmentHash;
-    }
-    return false;
+    return dynamic_cast<const ClangParsingEnvironment*>(environment);
 }
 
 uint ClangParsingEnvironmentFile::environmentHash() const
