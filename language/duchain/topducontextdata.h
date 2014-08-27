@@ -37,34 +37,39 @@ class KDEVPLATFORMLANGUAGE_EXPORT TopDUContextData : public DUContextData
 {
 public:
   TopDUContextData(IndexedString url)
-    : DUContextData(), m_flags(TopDUContext::NoFlags), m_deleting(false), m_url(url), m_ownIndex(0), m_currentUsedDeclarationIndex(0)
+    : DUContextData()
+    , m_deleting(false)
+    , m_url(url)
+    , m_ownIndex(0)
+    , m_currentUsedDeclarationIndex(0)
   {
     initializeAppendedLists();
   }
 
-  TopDUContextData(const TopDUContextData& rhs) :DUContextData(rhs), m_deleting(false) {
+  TopDUContextData(const TopDUContextData& rhs)
+    : DUContextData(rhs)
+    , m_deleting(false)
+  {
     initializeAppendedLists();
     copyListsFrom(rhs);
     m_features = rhs.m_features;
-    m_flags = rhs.m_flags;
     m_url = rhs.m_url;
     m_currentUsedDeclarationIndex = rhs.m_currentUsedDeclarationIndex;
     m_ownIndex = rhs.m_ownIndex;
     m_importsCache = rhs.m_importsCache;
   }
+
   ~TopDUContextData() {
     freeAppendedLists();
   }
-  
-  TopDUContext::Flags m_flags;
 
   TopDUContext::Features m_features;
-  
+
   bool m_deleting : 1; ///@todo remove
 
   IndexedString m_url;
   uint m_ownIndex;
-  
+
   ///If this is not empty, it means that the cache is used instead of the implicit structure.
   TopDUContext::IndexedRecursiveImports m_importsCache;
 
@@ -76,7 +81,7 @@ public:
   APPENDED_LIST_FIRST(TopDUContextData, DeclarationId, m_usedDeclarationIds);
   APPENDED_LIST(TopDUContextData, LocalIndexedProblem, m_problems, m_usedDeclarationIds);
   END_APPENDED_LISTS(TopDUContextData, m_problems);
-  
+
   private:
   static void updateImportCacheRecursion(IndexedTopDUContext currentContext, std::set<uint>& visited);
   static void updateImportCacheRecursion(uint baseIndex, IndexedTopDUContext currentContext, TopDUContext::IndexedRecursiveImports& imports);

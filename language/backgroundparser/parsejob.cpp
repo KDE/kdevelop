@@ -475,7 +475,7 @@ bool ParseJob::isUpdateRequired(const IndexedString& languageString)
         if (file->language() != languageString) {
             continue;
         }
-        if (!file->needsUpdate() && file->featuresSatisfied(minimumFeatures())) {
+        if (!file->needsUpdate(environment()) && file->featuresSatisfied(minimumFeatures())) {
             kDebug() << "Already up to date" << document().str();
             setDuChain(file->topContext());
             lock.unlock();

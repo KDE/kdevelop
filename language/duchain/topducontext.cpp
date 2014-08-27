@@ -1063,14 +1063,6 @@ void TopDUContext::setInDuChain(bool b) {
   m_local->m_inDuChain = b;
 }
 
-TopDUContext::Flags TopDUContext::flags() const {
-  return d_func()->m_flags;
-}
-
-void TopDUContext::setFlags(Flags f) {
-  d_func_dynamic()->m_flags = f;
-}
-
 bool TopDUContext::isOnDisk() const {
   ///@todo Change this to releasingToDisk, and only enable it while saving a top-context to disk.
   return m_dynamicData->isOnDisk();

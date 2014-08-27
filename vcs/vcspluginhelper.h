@@ -75,6 +75,8 @@ private Q_SLOTS:
     void delayedModificationWarningOn();
 
 private:
+    void diffForRev(const KUrl& url);
+
     struct VcsPluginHelperPrivate;
     QScopedPointer<VcsPluginHelperPrivate> d;
 };

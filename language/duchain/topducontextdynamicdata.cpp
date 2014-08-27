@@ -594,9 +594,6 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
       return 0;
     }
 
-    //Disable the updating flag on loading. Sometimes it may be set when the context was saved while it was updated
-    ret->setFlags( (TopDUContext::Flags) (ret->flags() & (~TopDUContext::UpdatingContext)) );
-
     TopDUContextDynamicData& target(*ret->m_dynamicData);
 
     target.m_data.clear();
