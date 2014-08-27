@@ -340,30 +340,39 @@ void VcsPluginHelper::diffToBase()
 
 void VcsPluginHelper::diffForRev()
 {
+    if (d->ctxUrls.isEmpty()) {
+        return;
+    }
+    diffForRev(d->ctxUrls.first());
+}
+
+void VcsPluginHelper::diffForRevGlobal()
+{
+    if (d->ctxUrls.isEmpty()) {
+        return;
+    }
+    KUrl url = d->ctxUrls.first();
+    IProject* project = ICore::self()->projectController()->findProjectForUrl( url );
+    if( project ) {
+        url = project->path().toUrl();
+    }
+
+    diffForRev(url);
+}
+
+void VcsPluginHelper::diffForRev(const KUrl& url)
+{
     QAction* action = qobject_cast<QAction*>( sender() );
     Q_ASSERT(action);
     Q_ASSERT(action->data().canConvert<VcsRevision>());
     VcsRevision rev = action->data().value<VcsRevision>();
 
-    SINGLEURL_SETUP_VARS
     ICore::self()->documentController()->saveAllDocuments();
     VcsRevision prev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Previous);
-    KDevelop::VcsJob* job = iface->diff(url, prev, rev );
+    KDevelop::VcsJob* job = d->vcs->diff(url, prev, rev );
 
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(diffJobFinished(KJob*)));
     d->plugin->core()->runController()->registerJob(job);
-}
-
-void VcsPluginHelper::diffForRevGlobal()
-{
-    for(int a = 0; a < d->ctxUrls.size(); ++a)
-    {
-        KUrl& url(d->ctxUrls[a]);
-        IProject* project = ICore::self()->projectController()->findProjectForUrl( url );
-        if( project )
-            url = project->folder();
-    }
-    diffForRev();
 }
 
 void VcsPluginHelper::history(const VcsRevision& rev)
