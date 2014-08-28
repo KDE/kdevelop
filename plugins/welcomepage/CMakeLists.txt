@@ -20,5 +20,5 @@ target_link_libraries(kdevwelcomepage
 
 install(TARGETS kdevwelcomepage DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
-configure_file(kdevwelcomepageplugin.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevwelcomepage.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevwelcomepage.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+configure_file(kdevwelcomepage.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevwelcomepage.desktop)
+kcoreaddons_desktop_to_json(kdevwelcomepage ${CMAKE_CURRENT_BINARY_DIR}/kdevwelcomepage.desktop)
