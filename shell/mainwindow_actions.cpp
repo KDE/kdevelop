@@ -27,8 +27,6 @@ Boston, MA 02110-1301, USA.
 #include <ktogglefullscreenaction.h>
 #include <kcomponentdata.h>
 
-#include <ktexteditor/editor.h>
-
 #include <sublime/area.h>
 #include <sublime/view.h>
 
@@ -206,12 +204,6 @@ void MainWindowPrivate::showLoadedPlugins()
 {
     LoadedPluginsDialog dlg(m_mainWindow);
     dlg.exec();
-}
-
-void MainWindowPrivate::showEditorConfig()
-{
-    KTextEditor::Editor* editor = Core::self()->partController()->editorPart();
-    editor->configDialog(m_mainWindow);
 }
 
 void MainWindowPrivate::contextMenuFileNew()
