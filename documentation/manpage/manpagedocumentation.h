@@ -33,7 +33,6 @@
 class QWidget;
 class QStackedWidget;
 class QTreeView;
-class KHTMLPart;
 
 class ManPagePlugin;
 

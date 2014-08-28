@@ -226,11 +226,6 @@ public:
 
   virtual void setMacro(rpp::pp_macro* macro)
   {
-//     if (macro->name.str() == "KDE_EXPORT" || macro->name.str() == "KJS_EXPORT") {
-//       // Exploit that the parser understands the windows declaration spec stuff
-//       macro->definition = tokenizeFromByteArray("__declspec(dllexport)");
-//     }
-
     rpp::Environment::setMacro(macro);
   }
 };

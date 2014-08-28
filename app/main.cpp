@@ -206,7 +206,6 @@ int main( int argc, char *argv[] )
     aboutData.addCredit( ki18n("Nokia Corporation/Qt Software"), ki18n( "Designer code" ), "qt-info@nokia.com" );
 
     aboutData.addCredit( ki18n("Contributors to older versions:"), KLocalizedString(), "" );
-    aboutData.addCredit( ki18n("The KHTML authors"), ki18n( "HTML documentation component" ), "kfm-devel@kde.org" );
     aboutData.addCredit( ki18n("Bernd Gehrmann"), ki18n( "Initial idea, basic architecture, much initial source code" ), "bernd@kdevelop.org" );
     aboutData.addCredit( ki18n("Caleb Tennis"), ki18n( "KTabBar, bugfixes" ), "caleb@aei-tech.com" );
     aboutData.addCredit( ki18n("Richard Dale"), ki18n( "Java & Objective C support" ), "Richard_Dale@tipitina.demon.co.uk" );
