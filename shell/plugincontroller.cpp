@@ -41,6 +41,8 @@ Boston, MA 02110-1301, USA.
 #include <kdialog.h>
 #include <kaction.h>
 #include <kxmlguifactory.h>
+#include <kpluginloader.h>
+#include <kpluginmetadata.h>
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iplugin.h>
@@ -252,9 +254,31 @@ PluginController::PluginController(Core *core)
 {
     setObjectName("PluginController");
     d->core = core;
+
+    auto newPlugins = KPluginLoader::findPlugins("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION), [](const KPluginMetaData& meta) {
+        if (meta.serviceTypes().contains(QStringLiteral("KDevelop/Plugin"))) {
+            return true;
+        } else {
+            qWarning() << "Plugin" << meta.fileName() << "is installed into the kdevplatform plugin directory, but does not have"
+                " \"KDevelop/Plugin\" set as the service type. This plugin will not be loaded.";
+            return false;
+        }
+    });
+    qDebug() << "Found" << newPlugins.size() << " plugins using the new search method.";
+    d->plugins = KPluginInfo::fromKPluginMetaDataList(newPlugins);
+
     //kDebug() << "Fetching plugin info which matches:" << QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);
-    d->plugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QLatin1String( "KDevelop/Plugin" ),
+    KPluginInfo::List oldStylePlugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QStringLiteral( "KDevelop/Plugin" ),
         QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION) ) );
+    qDebug() << "Found" << oldStylePlugins.size() << " plugins using the old search method.";
+    if (!oldStylePlugins.isEmpty()) {
+        foreach (const KPluginInfo& info, oldStylePlugins) {
+            qWarning() << "Plugin" << info.pluginName() << "still uses the old .desktop file based metadata."
+                " It must be ported to JSON metadata or it will no longer work with future kdevelplatform versions.";
+        }
+    }
+    d->plugins.append(oldStylePlugins);
+
     d->cleanupMode = PluginControllerPrivate::Running;
     // Register the KDevelop::IPlugin* metatype so we can properly unload it
     qRegisterMetaType<KDevelop::IPlugin*>( "KDevelop::IPlugin*" );
@@ -482,7 +506,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         }
         loadOptionalDependencies( info );
 
-        KPluginLoader loader(*info.service());
+        KPluginLoader loader(info.service() ? *info.service() : KPluginName(info.libraryPath()));
         auto factory = loader.factory();
         if (factory) {
             plugin = factory->create<IPlugin>(d->core);
