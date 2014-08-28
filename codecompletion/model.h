@@ -26,6 +26,8 @@
 
 #include "codecompletionexport.h"
 
+#include <QMetaType>
+
 class KDEVCLANGCODECOMPLETION_EXPORT ClangCodeCompletionModel : public KDevelop::CodeCompletionModel
 {
     Q_OBJECT
@@ -35,7 +37,7 @@ public:
     virtual ~ClangCodeCompletionModel();
 
 signals:
-    void requestCompletion(const KUrl& url, const KDevelop::SimpleCursor& cursor, const QString& text);
+    void requestCompletion(const KUrl& url, const KTextEditor::Cursor& cursor, const QString& text);
 
 protected:
     KDevelop::CodeCompletionWorker* createCompletionWorker() override;
@@ -43,5 +45,7 @@ protected:
     void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range,
                                    InvocationType invocationType, const KUrl& url) override;
 };
+
+Q_DECLARE_METATYPE(KTextEditor::Cursor)
 
 #endif // CLANGCODECOMPLETIONMODEL_H

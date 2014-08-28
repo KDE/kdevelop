@@ -33,14 +33,14 @@
 #include <codecompletion/completionhelper.h>
 #include <codecompletion/context.h>
 
-QTEST_KDEMAIN(TestCodeCompletion, NoGUI);
+QTEST_GUILESS_MAIN(TestCodeCompletion);
 
 using namespace KDevelop;
 
 using ClangCodeCompletionItemTester = CodeCompletionItemTester<ClangCodeCompletionContext>;
 
 struct CompletionItems {
-    SimpleCursor position;
+    KTextEditor::Cursor position;
     QStringList completions;
 };
 Q_DECLARE_TYPEINFO(CompletionItems, Q_MOVABLE_TYPE);
@@ -71,14 +71,14 @@ void executeCompletionTest(const QString& code, const CompletionItemsList& expec
     DUChainReadLocker lock;
     auto top = file.topContext();
     QVERIFY(top);
-    const ParseSession session(ParseSessionData::Ptr::dynamicCast(top->ast()));
-    QVERIFY(session.data());
+    const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
+    QVERIFY(sessionData);
 
     foreach(CompletionItems items, expectedCompletionItems) {
         // TODO: We should not need to pass 'session' to the context, should just use the base class ctor
-        auto context = new ClangCodeCompletionContext(DUContextPointer(top), session, items.position, QString());
+        auto context = new ClangCodeCompletionContext(DUContextPointer(top), sessionData, items.position, QString());
         context->setFilters(filters);
-        auto tester = ClangCodeCompletionItemTester(KSharedPtr<ClangCodeCompletionContext>(context));
+        auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
 
         tester.names.sort();
         QCOMPARE(tester.names, items.completions);

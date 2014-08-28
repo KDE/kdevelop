@@ -43,7 +43,7 @@ public:
     virtual ~ClangCodeCompletionWorker() = default;
 
 public slots:
-    void completionRequested(const KUrl& url, const KDevelop::SimpleCursor& position, const QString& text)
+    void completionRequested(const KUrl& url, const KTextEditor::Cursor& position, const QString& text)
     {
         aborting() = false;
 
@@ -62,8 +62,8 @@ public slots:
         // We hold DUChain lock, and ask for ParseSession, but TUDUChain indirectly holds ParseSession lock.
         lock.unlock();
 
-        const ParseSession session(ParseSessionData::Ptr::dynamicCast(top->ast()));
-        if (!session.data()) {
+        const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
+        if (!sessionData) {
             // TODO: trigger reparse and re-request code completion
             kWarning() << "No parse session / AST attached to context for url" << url;
             return;
@@ -75,7 +75,7 @@ public slots:
         }
 
         lock.lock();
-        ClangCodeCompletionContext completionContext(DUContextPointer(top), session, position, text);
+        ClangCodeCompletionContext completionContext(DUContextPointer(top), sessionData, position, text);
 
         if (aborting()) {
             failed();
@@ -110,7 +110,7 @@ public slots:
 ClangCodeCompletionModel::ClangCodeCompletionModel(QObject* parent)
     : CodeCompletionModel(parent)
 {
-    qRegisterMetaType<KDevelop::SimpleCursor>();
+    qRegisterMetaType<KTextEditor::Cursor>();
 }
 
 ClangCodeCompletionModel::~ClangCodeCompletionModel()
@@ -121,8 +121,8 @@ ClangCodeCompletionModel::~ClangCodeCompletionModel()
 CodeCompletionWorker* ClangCodeCompletionModel::createCompletionWorker()
 {
     auto worker = new ClangCodeCompletionWorker(this);
-    connect(this, SIGNAL(requestCompletion(KUrl,KDevelop::SimpleCursor,QString)),
-            worker, SLOT(completionRequested(KUrl,KDevelop::SimpleCursor,QString)));
+    connect(this, SIGNAL(requestCompletion(KUrl,KTextEditor::Cursor,QString)),
+            worker, SLOT(completionRequested(KUrl,KTextEditor::Cursor,QString)));
     return worker;
 }
 
@@ -131,7 +131,7 @@ void ClangCodeCompletionModel::completionInvokedInternal(KTextEditor::View* view
 {
     // get text before this range so we can parse this version with clang
     auto text = view->document()->text({0, 0, range.start().line(), range.start().column()});
-    emit requestCompletion(url, SimpleCursor(range.start()), text);
+    emit requestCompletion(url, KTextEditor::Cursor(range.start()), text);
 }
 
 #include "model.moc"

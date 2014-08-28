@@ -21,8 +21,6 @@
 
 #include "duchain/tuduchain.h"
 
-#include <qtest_kde.h>
-
 #include <language/duchain/duchain.h>
 #include <language/codegen/coderepresentation.h>
 #include <language/backgroundparser/backgroundparser.h>
@@ -33,15 +31,19 @@
 
 #include "testfilepaths.h"
 
+#include <KDebug>
+
 //Include all used json tests, otherwise "Test not found"
 #include <tests/json/jsondeclarationtests.h>
 #include <tests/json/jsonducontexttests.h>
 #include <tests/json/jsontypetests.h>
 #include <interfaces/ilanguagecontroller.h>
 
+#include <QtTest>
+
 using namespace KDevelop;
 
-QTEST_KDEMAIN(TestFiles, GUI)
+QTEST_MAIN(TestFiles)
 
 void TestFiles::initTestCase()
 {

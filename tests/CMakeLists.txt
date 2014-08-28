@@ -2,7 +2,7 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-kde4_add_executable(clang-parser
+add_executable(clang-parser
     clang-parser.cpp
 )
 target_link_libraries(clang-parser
@@ -10,87 +10,71 @@ target_link_libraries(clang-parser
     kdevclangduchain
 )
 
-kde4_add_unit_test(test_buddies
-    test_buddies.cpp
-)
-target_link_libraries(test_buddies
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${QT_QTTEST_LIBRARY}
-)
-
-kde4_add_unit_test(test_codecompletion
-    test_codecompletion.cpp
-    $<TARGET_OBJECTS:kdevclangcodecompletion>
-    $<TARGET_OBJECTS:kdevclangutil>
+ecm_add_test(test_buddies.cpp
+    TEST_NAME test_buddies
+    LINK_LIBRARIES
+        ${KDEVPLATFORM_TESTS_LIBRARIES}
+        ${QT_QTTEST_LIBRARY}
 )
 
-target_link_libraries(test_codecompletion
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${QT_QTTEST_LIBRARY}
-    kdevclangduchain
+ecm_add_test(test_codecompletion.cpp
+        $<TARGET_OBJECTS:kdevclangcodecompletion>
+        $<TARGET_OBJECTS:kdevclangutil>
+    TEST_NAME test_codecompletion
+    LINK_LIBRARIES
+        ${KDEVPLATFORM_TESTS_LIBRARIES}
+        ${QT_QTTEST_LIBRARY}
+        kdevclangduchain
 )
 
-########### next target ###############
-
-kde4_add_unit_test(test_assistants
-    test_assistants.cpp
-    $<TARGET_OBJECTS:kdevclangcodegen>
-    $<TARGET_OBJECTS:kdevclangutil>
+ecm_add_test(test_assistants.cpp
+        $<TARGET_OBJECTS:kdevclangcodegen>
+        $<TARGET_OBJECTS:kdevclangutil>
+    TEST_NAME test_assistants
+    LINK_LIBRARIES
+        ${KDEVPLATFORM_TESTS_LIBRARIES}
+        ${QT_QTTEST_LIBRARY}
+        kdevclangduchain
 )
 
-target_link_libraries(test_assistants
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${QT_QTTEST_LIBRARY}
-    kdevclangduchain
+ecm_add_test(test_clangutils.cpp
+        $<TARGET_OBJECTS:kdevclangutil>
+    TEST_NAME test_clangutils
+    LINK_LIBRARIES
+        ${KDEVPLATFORM_TESTS_LIBRARIES}
+        ${QT_QTTEST_LIBRARY}
+        ${CLANG_CLANG_LIB}
 )
 
-kde4_add_unit_test(test_clangutils
-    test_clangutils.cpp
-    $<TARGET_OBJECTS:kdevclangutil>
+ecm_add_test(test_duchain.cpp
+    TEST_NAME test_duchain
+    LINK_LIBRARIES
+        ${KDEVPLATFORM_TESTS_LIBRARIES}
+        ${QT_QTTEST_LIBRARY}
+        kdevclangduchain
 )
 
-target_link_libraries(test_clangutils
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${QT_QTTEST_LIBRARY}
-    ${CLANG_CLANG_LIB}
+ecm_add_test(test_duchainutils.cpp
+    TEST_NAME test_duchainutils
+    LINK_LIBRARIES
+        ${KDEVPLATFORM_TESTS_LIBRARIES}
+        ${QT_QTTEST_LIBRARY}
+        kdevclangduchain
 )
 
-########### next target ###############
-
-kde4_add_unit_test(test_duchain
-    test_duchain.cpp
-)
-
-target_link_libraries(test_duchain
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${QT_QTTEST_LIBRARY}
-    kdevclangduchain
-)
-
-kde4_add_unit_test(test_duchainutils
-    test_duchainutils.cpp
-)
-
-target_link_libraries(test_duchainutils
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${QT_QTTEST_LIBRARY}
-    kdevclangduchain
-)
-
-kde4_add_unit_test(test_problems
-    test_problems.cpp
-)
-target_link_libraries(test_problems
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${QT_QTTEST_LIBRARY}
-    kdevclangduchain
+ecm_add_test(test_problems.cpp
+    TEST_NAME test_problems
+    LINK_LIBRARIES
+        ${KDEVPLATFORM_TESTS_LIBRARIES}
+        ${QT_QTTEST_LIBRARY}
+        kdevclangduchain
 )
 
 if(KDEVPLATFORM_JSONTESTS_LIBRARIES)
-  set(filestest_SRCS test_files.cpp)
-  kde4_add_unit_test(test_files ${filestest_SRCS})
   configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
-  target_link_libraries(test_files
+  ecm_add_test(test_files.cpp
+    TEST_NAME test_files
+    LINK_LIBRARIES
       ${QT_QTTEST_LIBRARY}
       ${QT_QTCORE_LIBRARY}
       ${KDEVPLATFORM_LANGUAGE_LIBRARIES}

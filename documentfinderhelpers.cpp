@@ -26,6 +26,7 @@
 #include <KMimeType>
 
 #include <QSet>
+#include <QStandardPaths>
 
 /**
  * @return all extensions which match the given @p mimeType.
@@ -96,7 +97,7 @@ QPair<QString,FileType> basePathAndTypeForUrl(const KUrl& url)
 
 QStringList DocumentFinderHelpers::mimeTypesList()
 {
-    KDesktopFile desktopFile("services", QString("kdevclangsupport.desktop"));
+    KDesktopFile desktopFile(QStandardPaths::GenericDataLocation, QString("kservices5/kdevclangsupport.desktop"));
     const KConfigGroup& desktopGroup = desktopFile.desktopGroup();
     QString mimeTypesStr = desktopGroup.readEntry("X-KDevelop-SupportedMimeTypes", "");
     return mimeTypesStr.split(QChar(','), QString::SkipEmptyParts);

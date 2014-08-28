@@ -66,9 +66,9 @@
 #include <QRegExp>
 
 K_PLUGIN_FACTORY(KDevClangSupportFactory, registerPlugin<ClangSupport>(); )
-K_EXPORT_PLUGIN(KDevClangSupportFactory(
-    KAboutData("kdevclangsupport", 0, ki18n("Clang Plugin"), "0.1",
-    ki18n("Support for C, C++ and Objective-C languages."), KAboutData::License_GPL)))
+//K_EXPORT_PLUGIN(KDevClangSupportFactory(
+//    KAboutData("kdevclangsupport", 0, ki18n("Clang Plugin"), "0.1",
+//    ki18n("Support for C, C++ and Objective-C languages."), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
@@ -83,83 +83,83 @@ namespace {
  *
  * @return Range pointing to the path-spec of the include or invalid range if there is no #include directive on the line.
  */
-SimpleRange rangeForIncludePathSpec(const QString& line, const SimpleRange& originalRange = SimpleRange())
+KTextEditor::Range rangeForIncludePathSpec(const QString& line, const KTextEditor::Range& originalRange = KTextEditor::Range())
 {
     if (!line.contains(QRegExp("^\\s*#include"))) {
-        return SimpleRange::invalid();
+        return KTextEditor::Range::invalid();
     }
 
-    SimpleRange range = originalRange;
+    KTextEditor::Range range = originalRange;
     int pos = 0;
     for (; pos < line.size(); ++pos) {
         if(line[pos] == '"' || line[pos] == '<') {
-            range.start.column = ++pos;
+            range.setStart({range.start().line(), ++pos});
             break;
         }
     }
 
     for (; pos < line.size(); ++pos) {
         if(line[pos] == '"' || line[pos] == '>') {
-            range.end.column = pos;
+            range.setEnd({range.start().line(), pos});
             break;
         }
     }
 
-    if(range.start > range.end) {
-        range.start = range.end;
+    if(range.start() > range.end()) {
+        range.setStart(range.end());
     }
     return range;
 }
 
-QPair<QString, SimpleRange> lineInDocument(const KUrl& url, const SimpleCursor& position)
+QPair<QString, KTextEditor::Range> lineInDocument(const KUrl& url, const KTextEditor::Cursor& position)
 {
     KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
-    if (!doc || !doc->textDocument() || !doc->textDocument()->activeView()) {
+    if (!doc || !doc->textDocument() || !ICore::self()->documentController()->activeTextDocumentView()) {
         return {};
     }
 
-    const int lineNumber = position.line;
+    const int lineNumber = position.line();
     const int lineLength = doc->textDocument()->lineLength(lineNumber);
     KTextEditor::Range range(lineNumber, 0, lineNumber, lineLength);
     QString line = doc->textDocument()->text(range);
     return {line, range};
 }
 
-QPair<TopDUContextPointer, SimpleRange> importedContextForPosition(const KUrl& url, const SimpleCursor& position)
+QPair<TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const KUrl& url, const KTextEditor::Cursor& position)
 {
     auto pair = lineInDocument(url, position);
 
     const QString line = pair.first;
     if (line.isEmpty())
-        return {{}, SimpleRange::invalid()};
+        return {{}, KTextEditor::Range::invalid()};
 
-    SimpleRange wordRange = rangeForIncludePathSpec(line, pair.second);
+    KTextEditor::Range wordRange = rangeForIncludePathSpec(line, pair.second);
     if (!wordRange.isValid()) {
-        return {{}, SimpleRange::invalid()};
+        return {{}, KTextEditor::Range::invalid()};
     }
 
     // Since this is called by the editor while editing, use a fast timeout so the editor stays responsive
     DUChainReadLocker lock(nullptr, 100);
     if (!lock.locked()) {
         debug() << "Failed to lock the du-chain in time";
-        return {TopDUContextPointer(), SimpleRange::invalid()};
+        return {TopDUContextPointer(), KTextEditor::Range::invalid()};
     }
 
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
     if (line.isEmpty() || !topContext || !topContext->parsingEnvironmentFile()) {
-        return {TopDUContextPointer(), SimpleRange::invalid()};
+        return {TopDUContextPointer(), KTextEditor::Range::invalid()};
     }
 
     if ((topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext())) {
         debug() << "Strange: standard-context for" << topContext->url().str() << "is a proxy-context";
-        return {TopDUContextPointer(), SimpleRange::invalid()};
+        return {TopDUContextPointer(), KTextEditor::Range::invalid()};
     }
 
     // It's an #include, find out which file was included at the given line
     foreach(const DUContext::Import &imported, topContext->importedParentContexts()) {
         auto context = imported.context(nullptr);
         if (context) {
-            if(topContext->transformFromLocalRevision(topContext->importPosition(context)).line == wordRange.start.line) {
+            if(topContext->transformFromLocalRevision(topContext->importPosition(context)).line() == wordRange.start().line()) {
                 if (auto importedTop = dynamic_cast<TopDUContext*>(context))
                     return {TopDUContextPointer(importedTop), wordRange};
             }
@@ -169,7 +169,7 @@ QPair<TopDUContextPointer, SimpleRange> importedContextForPosition(const KUrl& u
     // The last resort. Check if the file is already included (maybe recursively from another files).
     // This is needed as clang doesn't visit (clang_getInclusions) those inclusions.
     // TODO: Maybe create an assistant that'll report whether the file is already included?
-    auto includeName = line.mid(wordRange.start.column, wordRange.end.column - wordRange.start.column);
+    auto includeName = line.mid(wordRange.start().column(), wordRange.end().column() - wordRange.start().column());
 
     if (!includeName.isEmpty()) {
         if (includeName.startsWith(".")) {
@@ -190,10 +190,10 @@ QPair<TopDUContextPointer, SimpleRange> importedContextForPosition(const KUrl& u
         }
     }
 
-    return {{}, SimpleRange::invalid()};
+    return {{}, KTextEditor::Range::invalid()};
 }
 
-QPair<TopDUContextPointer, Use> macroExpansionForPosition(const KUrl& url, const SimpleCursor& position)
+QPair<TopDUContextPointer, Use> macroExpansionForPosition(const KUrl& url, const KTextEditor::Cursor& position)
 {
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
     if (topContext) {
@@ -211,7 +211,7 @@ QPair<TopDUContextPointer, Use> macroExpansionForPosition(const KUrl& url, const
 }
 
 ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
-    : IPlugin( KDevClangSupportFactory::componentData(), parent )
+    : IPlugin( "kdevclangsupport", parent )
     , ILanguageSupport()
     , m_highlighting(new KDevelop::CodeHighlighting(this))
     , m_refactoring(new SimpleRefactoring(this))
@@ -281,9 +281,9 @@ void ClangSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, 
 {
     _xmlFile = xmlFile();
 
-    KAction* renameDeclarationAction = actions.addAction("code_rename_declaration");
+    QAction* renameDeclarationAction = actions.addAction("code_rename_declaration");
     renameDeclarationAction->setText( i18n("Rename Declaration") );
-    renameDeclarationAction->setIcon(KIcon("edit-rename"));
+    renameDeclarationAction->setIcon(QIcon::fromTheme("edit-rename"));
     renameDeclarationAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_R);
     connect(renameDeclarationAction, SIGNAL(triggered(bool)), m_refactoring, SLOT(executeRenameAction()));
 }
@@ -300,7 +300,7 @@ KDevelop::ContextMenuExtension ClangSupport::contextMenuExtension(KDevelop::Cont
     return cm;
 }
 
-SimpleRange ClangSupport::specialLanguageObjectRange(const KUrl& url, const SimpleCursor& position)
+KTextEditor::Range ClangSupport::specialLanguageObjectRange(const KUrl& url, const KTextEditor::Cursor& position)
 {
     DUChainReadLocker lock;
     const QPair<TopDUContextPointer, Use> macroExpansion = macroExpansionForPosition(url, position);
@@ -308,26 +308,26 @@ SimpleRange ClangSupport::specialLanguageObjectRange(const KUrl& url, const Simp
         return macroExpansion.first->transformFromLocalRevision(macroExpansion.second.m_range);
     }
 
-    const QPair<TopDUContextPointer, SimpleRange> import = importedContextForPosition(url, position);
+    const QPair<TopDUContextPointer, KTextEditor::Range> import = importedContextForPosition(url, position);
     if(import.first) {
         return import.second;
     }
 
-    return SimpleRange::invalid();
+    return KTextEditor::Range::invalid();
 }
 
-QPair<KUrl, KDevelop::SimpleCursor> ClangSupport::specialLanguageObjectJumpCursor(const KUrl& url, const SimpleCursor& position)
+QPair<KUrl, KTextEditor::Cursor> ClangSupport::specialLanguageObjectJumpCursor(const KUrl& url, const KTextEditor::Cursor& position)
 {
-    const QPair<TopDUContextPointer, SimpleRange> import = importedContextForPosition(url, position);
+    const QPair<TopDUContextPointer, KTextEditor::Range> import = importedContextForPosition(url, position);
     DUChainReadLocker lock;
     if (import.first) {
-        return qMakePair(KUrl(import.first->url().str()), SimpleCursor(0,0));
+        return qMakePair(KUrl(import.first->url().str()), KTextEditor::Cursor(0,0));
     }
 
-    return {{}, SimpleCursor::invalid()};
+    return {{}, KTextEditor::Cursor::invalid()};
 }
 
-QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const SimpleCursor& position)
+QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position)
 {
     DUChainReadLocker lock;
     const QPair<TopDUContextPointer, Use> macroExpansion = macroExpansionForPosition(url, position);
@@ -339,7 +339,7 @@ QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const KUrl& url, co
         return new ClangNavigationWidget(macroDefinition, DocumentCursor(IndexedString(url), rangeInRevision));
     }
 
-    const QPair<TopDUContextPointer, SimpleRange> import = importedContextForPosition(url, position);
+    const QPair<TopDUContextPointer, KTextEditor::Range> import = importedContextForPosition(url, position);
 
     if (import.first) {
         // Prefer a standardContext, because the included one may have become empty due to

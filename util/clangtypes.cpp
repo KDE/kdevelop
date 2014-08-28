@@ -86,9 +86,9 @@ ClangLocation::operator DocumentCursor() const
     return {IndexedString(fileName), {static_cast<int>(line-1), static_cast<int>(column-1)}};
 }
 
-ClangLocation::operator SimpleCursor() const
+ClangLocation::operator KTextEditor::Cursor() const
 {
-    return cursorForCXSrcLoc<SimpleCursor>(location);
+    return cursorForCXSrcLoc<KTextEditor::Cursor>(location);
 }
 
 ClangLocation::operator CursorInRevision() const
@@ -132,10 +132,10 @@ DocumentRange ClangRange::toDocumentRange() const
     CXFile file;
     clang_getFileLocation(start, &file, 0, 0, 0);
     ClangString fileName(clang_getFileName(file));
-    return {IndexedString(fileName), toSimpleRange()};
+    return {IndexedString(fileName), toRange()};
 }
 
-SimpleRange ClangRange::toSimpleRange() const
+KTextEditor::Range ClangRange::toRange() const
 {
     return {start(), end()};
 }

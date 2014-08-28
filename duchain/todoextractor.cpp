@@ -71,7 +71,7 @@ public:
         /// Description of the problem
         QString description;
         /// Range within the comment
-        SimpleRange localRange;
+        KTextEditor::Range localRange;
     };
 
     CommentTodoParser(const QString& str, const QStringList& markerWords)
@@ -125,8 +125,8 @@ private:
 
         // check at what line within the comment we are by just counting the newlines until now
         const int line = std::count(m_str.constBegin(), m_str.constBegin() + m_offset, '\n');
-        SimpleCursor start = {line, m_offset - lineStart};
-        SimpleCursor end = {line, start.column + text.length()};
+        KTextEditor::Cursor start = {line, m_offset - lineStart};
+        KTextEditor::Cursor end = {line, start.column() + text.length()};
         m_results << Result{text, {start, end}};
 
         skipUntilNewline();
@@ -173,7 +173,7 @@ void TodoExtractor::extractTodos()
         }
 
         CXString tokenSpelling = clang_getTokenSpelling(m_unit, token);
-        auto tokenRange = ClangRange(clang_getTokenExtent(m_unit, token)).toSimpleRange();
+        auto tokenRange = ClangRange(clang_getTokenExtent(m_unit, token)).toRange();
         const QString text = ClangString(tokenSpelling).toString();
 
         CommentTodoParser parser(text, m_todoMarkerWords);
@@ -186,11 +186,11 @@ void TodoExtractor::extractTodos()
             // move the local range to the correct location
             // note: localRange is the range *within* the comment only
             auto localRange = result.localRange;
-            SimpleRange todoRange{
-                tokenRange.start.line + localRange.start.line,
-                localRange.start.column,
-                tokenRange.start.line + localRange.end.line,
-                localRange.end.column};
+            KTextEditor::Range todoRange{
+                tokenRange.start().line() + localRange.start().line(),
+                localRange.start().column(),
+                tokenRange.start().line() + localRange.end().line(),
+                localRange.end().column()};
             problem->setFinalLocation({m_file, todoRange});
             m_problems << problem;
         }

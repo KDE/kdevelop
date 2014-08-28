@@ -38,12 +38,12 @@ public:
     ClangSupport* clang() const;
 
 protected:
-    virtual void run();
+    virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread) override;
 
     virtual const KDevelop::ParsingEnvironment* environment() const override;
 
 private:
-    KSharedPtr<ParseSessionData> createSessionData() const;
+    QExplicitlySharedDataPointer<ParseSessionData> createSessionData() const;
 
     ClangParsingEnvironment m_environment;
 };

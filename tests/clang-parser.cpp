@@ -118,8 +118,8 @@ private:
 
 int main(int argc, char* argv[])
 {
-    KAboutData aboutData( "clang-parser", 0, ki18n( "clang-parser" ),
-                          "1", ki18n("KDevelop Clang parser debugging utility"), KAboutData::License_GPL,
+    K4AboutData aboutData( "clang-parser", 0, ki18n( "clang-parser" ),
+                          "1", ki18n("KDevelop Clang parser debugging utility"), K4AboutData::License_GPL,
                           ki18n( "2013 Milian Wolff" ), KLocalizedString(), "http://www.kdevelop.org" );
 
     return KDevelopUtils::initAndRunParser<ClangParser>(aboutData, argc, argv);

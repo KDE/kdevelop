@@ -32,14 +32,14 @@
 class KDEVCLANGDUCHAIN_EXPORT UnknownDeclarationProblem : public ClangProblem
 {
 public:
-    using Ptr = KSharedPtr<UnknownDeclarationProblem>;
-    using ConstPtr = KSharedPtr<const UnknownDeclarationProblem>;
+    using Ptr = QExplicitlySharedDataPointer<UnknownDeclarationProblem>;
+    using ConstPtr = QExplicitlySharedDataPointer<const UnknownDeclarationProblem>;
 
     UnknownDeclarationProblem(CXDiagnostic diagnostic);
 
     void setSymbol(const KDevelop::QualifiedIdentifier& identifier);
 
-    virtual KSharedPtr<KDevelop::IAssistant> solutionAssistant() const override;
+    virtual KDevelop::IAssistant::Ptr solutionAssistant() const override;
 
 private:
     KDevelop::QualifiedIdentifier m_identifier;

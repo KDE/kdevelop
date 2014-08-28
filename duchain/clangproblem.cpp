@@ -107,13 +107,13 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic)
     CXFile diagnosticFile;
     clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
     const ClangString fileName(clang_getFileName(diagnosticFile));
-    DocumentRange docRange(IndexedString(fileName), SimpleRange(location, location));
+    DocumentRange docRange(IndexedString(fileName), KTextEditor::Range(location, location));
     const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
     for (uint i = 0; i < numRanges; ++i) {
-        auto range = ClangRange(clang_getDiagnosticRange(diagnostic, i)).toSimpleRange();
-        if (range.start.line == docRange.start.line) {
-            docRange.start.column = qMin(range.start.column, docRange.start.column);
-            docRange.end.column = qMax(range.end.column, docRange.end.column);
+        auto range = ClangRange(clang_getDiagnosticRange(diagnostic, i)).toRange();
+        if (range.start().line() == docRange.start().line()) {
+            docRange.start().setColumn(qMin(range.start().column(), docRange.start().column()));
+            docRange.end().setColumn(qMax(range.end().column(), docRange.end().column()));
         }
     }
 
@@ -127,18 +127,18 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic)
     for (uint j = 0; j < numChildDiagnostics; ++j) {
         auto childDiagnostic = clang_getDiagnosticInSet(childDiagnostics, j);
         ClangProblem::Ptr problem(new ClangProblem(childDiagnostic));
-        diagnostics << ProblemPointer::staticCast(problem);
+        diagnostics << ProblemPointer(problem.data());
     }
     setDiagnostics(diagnostics);
 }
 
-KSharedPtr<IAssistant> ClangProblem::solutionAssistant() const
+IAssistant::Ptr ClangProblem::solutionAssistant() const
 {
     if (allFixits().isEmpty()) {
         return {};
     }
 
-    return KSharedPtr<IAssistant>(new ClangFixitAssistant(allFixits()));
+    return IAssistant::Ptr(new ClangFixitAssistant(allFixits()));
 }
 
 ClangFixits ClangProblem::fixits() const
@@ -157,7 +157,7 @@ ClangFixits ClangProblem::allFixits() const
     result << m_fixits;
 
     for (const ProblemPointer& diagnostic : diagnostics()) {
-        const Ptr problem = Ptr::staticCast(diagnostic);
+        const Ptr problem(dynamic_cast<ClangProblem*>(diagnostic.data()));
         Q_ASSERT(problem);
         result << problem->allFixits();
     }
@@ -211,15 +211,15 @@ QString ClangFixitAction::description() const
     formattedReplacement.replace("<", "&amp;lt;").replace(">", "&amp;gt;");
 
     const auto range = m_fixit.range;
-    if (range.start == range.end) {
+    if (range.start() == range.end()) {
         return i18n("Insert \"%1\" at line: %2, column: %3",
-                    formattedReplacement, range.start.line+1, range.start.column+1);
-    } else if (range.start.line == range.end.line) {
+                    formattedReplacement, range.start().line()+1, range.start().column()+1);
+    } else if (range.start().line() == range.end().line()) {
         return i18n("Replace text at line: %1, column: %2 with: \"%3\"",
-                    range.start.line+1, range.start.column+1, formattedReplacement);
+                    range.start().line()+1, range.start().column()+1, formattedReplacement);
     } else {
         return i18n("Replace multiple lines starting at line: %1, column: %2 with: \"%3\"",
-                    range.start.line+1, range.start.column+1, formattedReplacement);
+                    range.start().line()+1, range.start().column()+1, formattedReplacement);
     }
 }
 

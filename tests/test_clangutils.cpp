@@ -25,7 +25,6 @@
 #include "../debug.h"
 
 #include <language/editor/documentrange.h>
-#include <language/editor/simplerange.h>
 #include <tests/testcore.h>
 #include <tests/testhelpers.h>
 #include <tests/autotestshell.h>
@@ -34,12 +33,12 @@
 
 #include <KTemporaryFile>
 
-#include <qtest_kde.h>
+#include <QDebug>
 #include <QtTest>
 
 #include <memory>
 
-QTEST_KDEMAIN(TestClangUtils, GUI)
+QTEST_MAIN(TestClangUtils)
 
 using namespace KDevelop;
 
@@ -61,8 +60,8 @@ struct CursorCollectorVisitor
 CXSourceRange toCXRange(CXTranslationUnit unit, const DocumentRange& range)
 {
     auto file = clang_getFile(unit, range.document.c_str());
-    auto begin = clang_getLocation(unit, file, range.start.line+1, range.start.column+1);
-    auto end = clang_getLocation(unit, file, range.end.line+1, range.end.column+1);
+    auto begin = clang_getLocation(unit, file, range.start().line()+1, range.start().column()+1);
+    auto end = clang_getLocation(unit, file, range.end().line()+1, range.end().column()+1);
     return clang_getRange(begin, end);
 }
 
@@ -107,7 +106,7 @@ void runVisitor(const QByteArray& code, CXCursorVisitor visitor, CXClientData da
 
 }
 
-Q_DECLARE_METATYPE(KDevelop::SimpleRange);
+Q_DECLARE_METATYPE(KTextEditor::Range);
 
 void TestClangUtils::initTestCase()
 {
@@ -131,8 +130,7 @@ void TestClangUtils::testGetScope()
     runVisitor(code, visitor);
     QVERIFY(cursorIndex < visitor.cursors.size());
     const auto cursor = visitor.cursors[cursorIndex];
-    qDebug() << "Found decl:" << ClangString(clang_getCursorSpelling(cursor))
-        << "| range:" << ClangRange(clang_getCursorExtent(cursor)).toSimpleRange();
+    debug() << "Found decl:" << ClangString(clang_getCursorSpelling(cursor)) << "| range:" << ClangRange(clang_getCursorExtent(cursor)).toRange();
     const QString scope = ClangUtils::getScope(cursor);
     QCOMPARE(scope, expectedScope);
 
@@ -174,7 +172,7 @@ void TestClangUtils::testGetScope_data()
 void TestClangUtils::testGetRawContents()
 {
     QFETCH(QByteArray, code);
-    QFETCH(SimpleRange, range);
+    QFETCH(KTextEditor::Range, range);
     QFETCH(QString, expectedContents);
 
     CXTranslationUnit unit;
@@ -190,24 +188,24 @@ void TestClangUtils::testGetRawContents()
 void TestClangUtils::testGetRawContents_data()
 {
     QTest::addColumn<QByteArray>("code");
-    QTest::addColumn<SimpleRange>("range");
+    QTest::addColumn<KTextEditor::Range>("range");
     QTest::addColumn<QString>("expectedContents");
 
     QTest::newRow("complete")
         << QByteArray("void; int foo = 42; void;")
-        << SimpleRange(0, 6, 0, 18)
+        << KTextEditor::Range(0, 6, 0, 18)
         << "int foo = 42;";
     QTest::newRow("cut-off-at-start")
         << QByteArray("void; int foo = 42; void;")
-        << SimpleRange(0, 7, 0, 18)
+        << KTextEditor::Range(0, 7, 0, 18)
         << "nt foo = 42;";
     QTest::newRow("cut-off-at-end")
         << QByteArray("void; int foo = 42; void;")
-        << SimpleRange(0, 6, 0, 16)
+        << KTextEditor::Range(0, 6, 0, 16)
         << "int foo = 4";
     QTest::newRow("whitespace")
         << QByteArray("void; int         ; void;")
-        << SimpleRange(0, 5, 0, 17)
+        << KTextEditor::Range(0, 5, 0, 17)
         << " int         ";
 }
 

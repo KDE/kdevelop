@@ -214,14 +214,14 @@ ParseSession::ParseSession(ParseSessionData::Ptr data)
     : d(data)
 {
     if (d) {
-        d->m_mutex.lockInline();
+        d->m_mutex.lock();
     }
 }
 
 ParseSession::~ParseSession()
 {
     if (d) {
-        d->m_mutex.unlockInline();
+        d->m_mutex.unlock();
     }
 }
 
@@ -232,13 +232,13 @@ void ParseSession::setData(ParseSessionData::Ptr data)
     }
 
     if (d) {
-        d->m_mutex.unlockInline();
+        d->m_mutex.unlock();
     }
 
     d = data;
 
     if (d) {
-        d->m_mutex.lockInline();
+        d->m_mutex.lock();
     }
 }
 
@@ -300,7 +300,7 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         problem->setDescription(i18n("Header is not guarded against multiple inclusions"));
         problem->setExplanation(i18n("The given header is not guarded against multiple inclusions, "
             "either with the conventional #ifndef/#define/#endif macro guards or with #pragma once."));
-        problem->setFinalLocation({url(), SimpleRange()});
+        problem->setFinalLocation({url(), KTextEditor::Range()});
         problem->setSource(ProblemData::Preprocessor);
         problems << problem;
         // TODO: Easy to add an assistant here that adds the guards -- any takers?

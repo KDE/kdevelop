@@ -22,18 +22,18 @@
 #ifndef MISSINGINCLUDEPATHPROBLEM_H
 #define MISSINGINCLUDEPATHPROBLEM_H
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include "clangproblem.h"
 
 class MissingIncludePathProblem : public ClangProblem
 {
 public:
-    using Ptr = KSharedPtr<MissingIncludePathProblem>;
+    using Ptr = QExplicitlySharedDataPointer<MissingIncludePathProblem>;
 
     MissingIncludePathProblem(CXDiagnostic diagnostic);
 
-    virtual KSharedPtr<KDevelop::IAssistant> solutionAssistant() const override;
+    virtual KDevelop::IAssistant::Ptr solutionAssistant() const override;
 };
 
 #endif // MISSINGINCLUDEPATHPROBLEM_H

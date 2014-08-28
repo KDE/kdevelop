@@ -166,7 +166,7 @@ void AdaptSignatureAction::execute()
     }
 
     DocumentChangeSet changes;
-    SimpleRange parameterRange = ClangIntegration::DUChainUtils::functionSignatureRange(otherSide);
+    KTextEditor::Range parameterRange = ClangIntegration::DUChainUtils::functionSignatureRange(otherSide);
     QString newText = makeSignatureString(m_otherSideId,
                                           m_newSignature,
                                           m_otherSideTopContext.data());

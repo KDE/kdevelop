@@ -23,16 +23,19 @@
 
 #include "duchainexport.h"
 
+namespace KTextEditor {
+class Range;
+}
+
 namespace KDevelop {
 class Declaration;
-class SimpleRange;
 }
 
 namespace ClangIntegration {
 
 namespace DUChainUtils
 {
-    KDEVCLANGDUCHAIN_EXPORT KDevelop::SimpleRange functionSignatureRange(const KDevelop::Declaration* decl);
+    KDEVCLANGDUCHAIN_EXPORT KTextEditor::Range functionSignatureRange(const KDevelop::Declaration* decl);
 };
 
 }

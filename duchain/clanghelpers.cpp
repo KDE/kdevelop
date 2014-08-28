@@ -142,7 +142,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
 
         includedFiles.insert(file, context);
         if (update) {
-            auto envFile = KSharedPtr<ClangParsingEnvironmentFile>::dynamicCast(context->parsingEnvironmentFile());
+            auto envFile = ClangParsingEnvironmentFile::Ptr(dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data()));
             Q_ASSERT(envFile);
             if (!envFile->needsUpdate(&environment) && envFile->featuresSatisfied(features)) {
                 return context;

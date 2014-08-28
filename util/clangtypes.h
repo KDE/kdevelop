@@ -27,11 +27,14 @@
 
 #include <util/path.h>
 
+namespace KTextEditor {
+class Cursor;
+class Range;
+}
+
 namespace KDevelop {
 class DocumentCursor;
 class DocumentRange;
-class SimpleRange;
-class SimpleCursor;
 class CursorInRevision;
 class RangeInRevision;
 }
@@ -66,7 +69,7 @@ public:
 
     operator KDevelop::DocumentCursor() const;
 
-    operator KDevelop::SimpleCursor() const;
+    operator KTextEditor::Cursor() const;
 
     operator KDevelop::CursorInRevision() const;
 
@@ -90,7 +93,7 @@ public:
 
     KDevelop::DocumentRange toDocumentRange() const;
 
-    KDevelop::SimpleRange toSimpleRange() const;
+    KTextEditor::Range toRange() const;
 
     KDevelop::RangeInRevision toRangeInRevision() const;
 

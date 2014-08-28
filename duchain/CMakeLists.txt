@@ -26,7 +26,7 @@ include_directories(
 )
 
 target_link_libraries(kdevclangduchain LINK_PRIVATE
-    ${QT_QTCORE_LIBRARY}
+    Qt5::Core
 )
 
 target_link_libraries(kdevclangduchain LINK_PUBLIC

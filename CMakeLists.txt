@@ -1,21 +1,32 @@
 project(kdev-clang)
 
 set(VERSION_MAJOR 1)
-set(VERSION_MINOR 7)
-set(VERSION_PATCH 60)
+set(VERSION_MINOR 90)
+set(VERSION_PATCH 90)
 # KDevplatform dependency version
 set( KDEVPLATFORM_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}" )
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/)
 
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 2.8.12)
+find_package (ECM 0.0.9 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
-find_package(KDE4 REQUIRED)
+include(ECMAddTests)
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings)
+
+find_package(Qt5 REQUIRED Core Widgets Test)
+find_package(KF5 REQUIRED COMPONENTS KDELibs4Support ThreadWeaver TextEditor I18n)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 find_package(KDevelop REQUIRED)
 
 find_package(Clang 3.4)
-macro_log_feature(CLANG_FOUND "libclang" "LibClang is a high level C interface to clang" "http://clang.llvm.org/" TRUE "3.4")
+set_package_properties(Clang PROPERTIES
+    TYPE REQUIRED
+    PURPOSE "LibClang is a high level C interface to clang"
+    URL "http://clang.llvm.org/")
 
 add_definitions(${LLVM_CFLAGS})
 include_directories(
@@ -47,7 +58,7 @@ enable_testing()
 
 include_directories(
     ${KDE4_INCLUDES}
-    ${KDEVPLATFORM_INCLUDE_DIR}
+    ${CMAKE_INSTALL_PREFIX}/${KDEVPLATFORM_INCLUDE_DIR}
     ${KDEVELOP_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -60,7 +71,7 @@ add_subdirectory(codegen)
 add_subdirectory(util)
 add_subdirectory(tests)
 
-kde4_add_plugin(kdevclangsupport
+add_library(kdevclangsupport SHARED
     clangparsejob.cpp
     clangsupport.cpp
     documentfinderhelpers.cpp
@@ -72,14 +83,16 @@ kde4_add_plugin(kdevclangsupport
 target_link_libraries(kdevclangsupport
     kdevclangduchain
 
-    ${KDE4_THREADWEAVER_LIBS}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
+    KF5::ThreadWeaver
+    KF5::TextEditor
+    KDev::Util
+    KDev::Project
 )
 
 configure_file(kdevclangsupport.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevclangsupport.desktop)
 install( FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevclangsupport.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install(TARGETS kdevclangsupport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevclangsupport DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 install(FILES kdevclangsupport.rc DESTINATION ${DATA_INSTALL_DIR}/kdevclangsupport)
 
-macro_display_feature_log()
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

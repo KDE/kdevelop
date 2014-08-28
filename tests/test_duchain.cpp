@@ -46,7 +46,7 @@
 
 #include <custom-definesandincludes/idefinesandincludesmanager.h>
 
-QTEST_KDEMAIN(TestDUChain, NoGUI);
+QTEST_GUILESS_MAIN(TestDUChain);
 
 using namespace KDevelop;
 
@@ -570,10 +570,11 @@ void TestDUChain::testParsingEnvironment()
         auto top = file.topContext();
         QVERIFY(top);
 
-        auto session = ParseSession(ParseSessionData::Ptr::dynamicCast(top->ast()));
+        ParseSession session(ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(top->ast().data())));
         QVERIFY(session.data());
 
-        auto envFile = KSharedPtr<ClangParsingEnvironmentFile>::dynamicCast(file.topContext()->parsingEnvironmentFile());
+        auto envFile = QExplicitlySharedDataPointer<ClangParsingEnvironmentFile>(
+            dynamic_cast<ClangParsingEnvironmentFile*>(file.topContext()->parsingEnvironmentFile().data()));
 
         QCOMPARE(envFile->features(), astFeatures);
         QVERIFY(envFile->featuresSatisfied(astFeatures));
@@ -636,7 +637,8 @@ void TestDUChain::testParsingEnvironment()
         QVERIFY(!DUChain::self()->isInMemory(indexed.index()));
         QVERIFY(indexed.data());
         QVERIFY(DUChain::self()->environmentFileForDocument(indexed));
-        auto envFile = KSharedPtr<ClangParsingEnvironmentFile>::dynamicCast(DUChain::self()->environmentFileForDocument(indexed));
+        auto envFile = QExplicitlySharedDataPointer<ClangParsingEnvironmentFile>(
+            dynamic_cast<ClangParsingEnvironmentFile*>(DUChain::self()->environmentFileForDocument(indexed).data()));
         QVERIFY(envFile);
 
         qDebug() << envFile->features() << features;

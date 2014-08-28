@@ -25,11 +25,10 @@
 #include <KTextEditor/Cursor>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/topducontext.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <kurl.h>
 
 #include <language/backgroundparser/backgroundparser.h>
-#include <language/editor/simplecursor.h>
 #include <language/codegen/documentchangeset.h>
 #include <interfaces/ibuddydocumentfinder.h>
 
@@ -64,7 +63,7 @@ ParseSessionData::Ptr getSession(const KUrl& url)
         kWarning() << "No context found for" << url;
         return {};
     }
-    auto session = ParseSessionData::Ptr::dynamicCast(top->ast());
+    auto session = ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(top->ast().data()));
     if (!session) {
         kWarning() << "No parse session / AST attached to context for url" << url;
         return {};
@@ -85,9 +84,9 @@ CXChildVisitResult findDecl(CXCursor cursor, CXCursor /*parent*/, CXClientData d
     return CXChildVisit_Continue;
 }
 
-CXCursor getFunctionCursor(const SimpleCursor &sc, const CXTranslationUnit &unit, const CXFile &file)
+CXCursor getFunctionCursor(const KTextEditor::Cursor &sc, const CXTranslationUnit &unit, const CXFile &file)
 {
-    CXCursor cursor = ClangUtils::getCXCursor(sc.line, sc.column, unit, file);
+    CXCursor cursor = ClangUtils::getCXCursor(sc.line(), sc.column(), unit, file);
     if (clang_Cursor_isNull(cursor)) {
         return clang_getNullCursor();
     }
@@ -103,10 +102,10 @@ CXCursor getFunctionCursor(const SimpleCursor &sc, const CXTranslationUnit &unit
 
 CXChildVisitResult findLastParam(CXCursor cursor, CXCursor /*parent*/, CXClientData data)
 {
-    SimpleCursor *cur = static_cast<SimpleCursor*>(data);
+    KTextEditor::Cursor *cur = static_cast<KTextEditor::Cursor*>(data);
     if (clang_getCursorKind(cursor) == CXCursor_ParmDecl) {
         ClangRange range(clang_getCursorExtent(cursor));
-        SimpleCursor end = (SimpleCursor)range.end();
+        KTextEditor::Cursor end = (KTextEditor::Cursor)range.end();
         if (*cur < end) {
             *cur = end;
         }
@@ -116,30 +115,30 @@ CXChildVisitResult findLastParam(CXCursor cursor, CXCursor /*parent*/, CXClientD
 
 //Unfortunately, a function definition's cursor extent includes the function
 //body. We only want the range of the signature
-SimpleCursor findSignatureEnd(KTextEditor::Document *targetDoc, CXCursor cursor)
+KTextEditor::Cursor findSignatureEnd(KTextEditor::Document *targetDoc, CXCursor cursor)
 {
-    SimpleRange range = ClangRange(clang_getCursorExtent(cursor)).toSimpleRange();
-    SimpleCursor search = range.start;
+    KTextEditor::Range range = ClangRange(clang_getCursorExtent(cursor)).toRange();
+    KTextEditor::Cursor search = range.start();
     //We need to start at the end of the last paramater, so we don't have
     //to worry about parens in default arguments
     clang_visitChildren(cursor, findLastParam, &search);
 
-    int endLine = search.line, endColumn = search.column;
-    int rangeEnd = range.end.line;
+    int endLine = search.line(), endColumn = search.column();
+    int rangeEnd = range.end().line();
     QChar endChar(')'), searchChar;
 
     do {
-        searchChar = targetDoc->character(KTextEditor::Cursor(endLine, endColumn));
+        searchChar = targetDoc->characterAt(KTextEditor::Cursor(endLine, endColumn));
         while (searchChar != endChar && (endLine <= rangeEnd)) {
             endColumn++;
-            while ((searchChar = targetDoc->character(KTextEditor::Cursor(endLine, endColumn))) == QChar() && (endLine <= rangeEnd)) {
+            while ((searchChar = targetDoc->characterAt(KTextEditor::Cursor(endLine, endColumn))) == QChar() && (endLine <= rangeEnd)) {
                 endLine++;
                 endColumn = 0;
             }
         }
         if (searchChar != endChar) {
             debug() << "Could not find ending character of declaration";
-            return SimpleCursor::invalid();
+            return KTextEditor::Cursor::invalid();
         }
 
         if (endChar == QChar(')') && ClangUtils::isConstMethod(cursor)) {
@@ -147,10 +146,10 @@ SimpleCursor findSignatureEnd(KTextEditor::Document *targetDoc, CXCursor cursor)
         }
     } while (searchChar != endChar);
 
-    return SimpleCursor(endLine, endColumn+1);
+    return KTextEditor::Cursor(endLine, endColumn+1);
 }
 
-KUrl findCompanionFile(const KUrl& fileUrl, const SimpleCursor& sc, const CXFile& file, CXCursor& otherSide)
+KUrl findCompanionFile(const KUrl& fileUrl, const KTextEditor::Cursor& sc, const CXFile& file, CXCursor& otherSide)
 {
     static QStringList headerMime({"text/x-c++hdr", "text/x-chdr"});
     static QStringList srcMime({"text/x-c++src", "text/x-csrc"});
@@ -259,7 +258,7 @@ bool fixDefaults(QVector<QString>& defaults, const CXCursor& cursor, const QList
 }
 
 ClangAdaptSignatureAction::ClangAdaptSignatureAction(bool targetDecl, const KUrl& url,
-                                                     const SimpleRange& range,
+                                                     const KTextEditor::Range& range,
                                                      const QString& newSig, const QString& oldSig):
     m_targetDecl(targetDecl), m_url(url), m_range(range), m_newSig(newSig), m_oldSig(oldSig)
 {
@@ -329,7 +328,7 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
         return;
     }
 
-    const SimpleCursor simpleCursor(invocationRange.start());
+    const KTextEditor::Cursor simpleCursor(invocationRange.start());
     CXCursor cursor = getFunctionCursor(simpleCursor, session.unit(), session.file());
     if (clang_Cursor_isNull(cursor)) {
         return;
@@ -427,7 +426,7 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
     clearActions();
 
     DUChainReadLocker lock;
-    SimpleCursor c = SimpleCursor(m_view.data()->cursorPosition());
+    KTextEditor::Cursor c = KTextEditor::Cursor(m_view.data()->cursorPosition());
 
     const ParseSession sourceSession(getSession(m_view.data()->document()->url()));
     if (!sourceSession.data()) {
@@ -480,14 +479,14 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
     KUrl targetUrl = m_otherLoc.document.toUrl();
     KTextEditor::Document *targetDoc = ICore::self()->documentController()->documentForUrl(targetUrl)->textDocument();
 
-    SimpleCursor end = findSignatureEnd(targetDoc, otherCursor);
+    KTextEditor::Cursor end = findSignatureEnd(targetDoc, otherCursor);
     if (!end.isValid()) {
         reset();
         return;
     }
 
-    SimpleRange range = ClangRange(clang_getCursorExtent(otherCursor)).toSimpleRange();
-    range.end = end;
+    KTextEditor::Range range = ClangRange(clang_getCursorExtent(otherCursor)).toRange();
+    range.setEnd(end);
 
     IAssistantAction::Ptr action(new ClangAdaptSignatureAction(m_targetDecl, targetUrl, range, newSig, m_oldSig));
     connect(action.data(), SIGNAL(executed(IAssistantAction*)), SLOT(reset()));

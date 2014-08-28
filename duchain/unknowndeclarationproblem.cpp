@@ -390,7 +390,7 @@ KDevelop::Path::List includePaths( const KDevelop::Path& file )
  */
 QStringList includeFiles( const QualifiedIdentifier& identifier, const KDevelop::Path& file, const KDevelop::DocumentRange& range )
 {
-    const CursorInRevision cursor{ range.start.line, range.start.column };
+    const CursorInRevision cursor{ range.start().line(), range.start().column() };
     const auto includes = includePaths( file );
 
     if( includes.isEmpty() ) {
@@ -481,9 +481,9 @@ void UnknownDeclarationProblem::setSymbol(const QualifiedIdentifier& identifier)
     m_identifier = identifier;
 }
 
-KSharedPtr<IAssistant> UnknownDeclarationProblem::solutionAssistant() const
+IAssistant::Ptr UnknownDeclarationProblem::solutionAssistant() const
 {
     const Path path(finalLocation().document.str());
     const auto fixits = allFixits() + fixUnknownDeclaration(m_identifier, path, finalLocation());
-    return KSharedPtr<IAssistant>(new ClangFixitAssistant(fixits));
+    return IAssistant::Ptr(new ClangFixitAssistant(fixits));
 }

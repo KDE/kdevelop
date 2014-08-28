@@ -26,7 +26,7 @@
 #include "../duchain/cursorkindtraits.h"
 #include "../debug.h"
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/editor/documentrange.h>
 
 #include <clang-c/Index.h>
@@ -58,7 +58,7 @@ CXCursor ClangUtils::getCXCursor(int line, int column, const CXTranslationUnit& 
 namespace {
 
 struct FunctionInfo {
-    SimpleRange range;
+    KTextEditor::Range range;
     QString fileName;
     CXTranslationUnit unit;
     QStringList stringParts;
@@ -89,7 +89,7 @@ CXChildVisitResult paramVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientDa
     //Clang doesn't make a distinction between the default arguments being in
     //the declaration or definition, and the default arguments don't have lexical
     //parents. So this range check is the only thing that really works.
-    if ((info->fileName.isEmpty() || fileName == info->fileName) && info->range.contains(range.toSimpleRange())) {
+    if ((info->fileName.isEmpty() || fileName == info->fileName) && info->range.contains(range.toRange())) {
         clang_tokenize(info->unit, range.range(), &tokens, &numTokens);
         for (unsigned int i = 0; i < numTokens; i++) {
             info->stringParts.append(ClangString(clang_getTokenSpelling(info->unit, tokens[i])).toString());
@@ -121,7 +121,7 @@ QVector<QString> ClangUtils::getDefaultArguments(CXCursor cursor, DefaultArgumen
         fileName = ClangString(clang_getFileName(file)).toString();
     }
 
-    FunctionInfo info{ClangRange(clang_getCursorExtent(cursor)).toSimpleRange(), fileName,
+    FunctionInfo info{ClangRange(clang_getCursorExtent(cursor)).toRange(), fileName,
                       clang_Cursor_getTranslationUnit(cursor), QStringList()};
 
     for (int i = 0; i < numArgs; i++) {

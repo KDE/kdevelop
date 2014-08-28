@@ -29,7 +29,7 @@
 
 #include <KUrl>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/problem.h>
 #include <language/interfaces/iastcontainer.h>
 #include <util/path.h>
@@ -42,7 +42,7 @@ class ClangIndex;
 class KDEVCLANGDUCHAIN_EXPORT ParseSessionData : public KDevelop::IAstContainer
 {
 public:
-    using Ptr = KSharedPtr<ParseSessionData>;
+    using Ptr = QExplicitlySharedDataPointer<ParseSessionData>;
 
     enum Option {
         NoOption,                     ///< No special options
@@ -122,6 +122,8 @@ public:
     ClangParsingEnvironment environment() const;
 
 private:
+    Q_DISABLE_COPY(ParseSession);
+
     ParseSessionData::Ptr d;
 
 };

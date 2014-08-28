@@ -46,8 +46,8 @@ public:
     Q_DECLARE_FLAGS(ContextFilters, ContextFilter)
 
     ClangCodeCompletionContext(const KDevelop::DUContextPointer& context,
-                               const ParseSession& session,
-                               const KDevelop::SimpleCursor& position,
+                               const ParseSessionData::Ptr& sessionData,
+                               const KTextEditor::Cursor& position,
                                const QString& text);
     ~ClangCodeCompletionContext();
 
@@ -71,7 +71,7 @@ private:
     std::unique_ptr<CXCodeCompleteResults, void(*)(CXCodeCompleteResults*)> m_results;
     QList<KDevelop::CompletionTreeElementPointer> m_ungrouped;
     CompletionHelper m_completionHelper;
-    ParseSession m_parseSession;
+    ParseSessionData::Ptr m_parseSessionData;
     ContextFilters m_filters = NoFilter;
 };
 

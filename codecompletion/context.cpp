@@ -40,8 +40,11 @@
 #include "../debug.h"
 
 #include <memory>
+
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
+
+#include <KIcon>
 
 using namespace KDevelop;
 
@@ -82,9 +85,9 @@ public:
         return {};
     }
 
-    void execute(KTextEditor::Document* document, const KTextEditor::Range& word) override
+    void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
     {
-        document->replaceText(word, m_replacement);
+        view->document()->replaceText(word, m_replacement);
     }
 
 protected:
@@ -167,7 +170,7 @@ public:
         return NormalDeclarationCompletionItem::data(index, role, model);
     }
 
-    void execute(KTextEditor::Document* document, const KTextEditor::Range& word) override
+    void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
     {
         QString repl = m_replacement;
         DUChainReadLocker lock;
@@ -178,13 +181,13 @@ public:
 
         if(m_declaration->isFunctionDeclaration()) {
             repl += "()";
-            document->replaceText(word, repl);
+            view->document()->replaceText(word, repl);
             auto f = m_declaration->type<FunctionType>();
             if (f && f->indexedArgumentsSize()) {
-                document->activeView()->setCursorPosition(word.start() + KTextEditor::Cursor(0, repl.size() - 1));
+                view->setCursorPosition(word.start() + KTextEditor::Cursor(0, repl.size() - 1));
             }
         } else {
-            document->replaceText(word, repl);
+            view->document()->replaceText(word, repl);
         }
     }
 
@@ -221,7 +224,7 @@ using SimpleItem = CompletionItem<CompletionTreeItem>;
 /**
  * Return true in case position @p position represents a cursor inside a comment
  */
-bool isInsideComment(CXTranslationUnit unit, CXFile file, const KDevelop::SimpleCursor& position)
+bool isInsideComment(CXTranslationUnit unit, CXFile file, const KTextEditor::Cursor& position)
 {
     if (!position.isValid()) {
         return false;
@@ -229,7 +232,7 @@ bool isInsideComment(CXTranslationUnit unit, CXFile file, const KDevelop::Simple
 
     // TODO: This may get very slow for a large TU, investigate if we can improve this function
     auto begin = clang_getLocation(unit, file, 1, 1);
-    auto end = clang_getLocation(unit, file, position.line + 1, position.column + 1);
+    auto end = clang_getLocation(unit, file, position.line() + 1, position.column() + 1);
     CXSourceRange range = clang_getRange(begin, end);
 
     // tokenize the whole range from the start until 'position'
@@ -245,7 +248,7 @@ bool isInsideComment(CXTranslationUnit unit, CXFile file, const KDevelop::Simple
         }
 
         auto range = ClangRange(clang_getTokenExtent(unit, token));
-        if (range.toSimpleRange().contains(position)) {
+        if (range.toRange().contains(position)) {
             return true;
         }
     }
@@ -321,40 +324,43 @@ bool isValidSpecialCompletionIdentifier(const QualifiedIdentifier& identifier)
 }
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
-                                                       const ParseSession& session,
-                                                       const SimpleCursor& position,
+                                                       const ParseSessionData::Ptr& sessionData,
+                                                       const KTextEditor::Cursor& position,
                                                        const QString& text
                                                       )
     : CodeCompletionContext(context, text, CursorInRevision::castFromSimpleCursor(position), 0)
     , m_results(nullptr, clang_disposeCodeCompleteResults)
-    , m_parseSession(session)
+    , m_parseSessionData(sessionData)
 {
-    ClangString file(clang_getFileName(session.file()));
+    {
+        ParseSession session(m_parseSessionData);
+        ClangString file(clang_getFileName(session.file()));
 
-    const unsigned int completeOptions = clang_defaultCodeCompleteOptions();
+        const unsigned int completeOptions = clang_defaultCodeCompleteOptions();
 
-    if (!m_text.isEmpty()) {
-        debug() << "Unsaved contents found for file" << file << "- creating CXUnsavedFile";
+        if (!m_text.isEmpty()) {
+            debug() << "Unsaved contents found for file" << file << "- creating CXUnsavedFile";
 
-        CXUnsavedFile unsaved;
-        const QByteArray content = m_text.toUtf8();
-        unsaved.Contents = content.constData();
-        unsaved.Length = content.size() + 1; // + \0-byte
-        unsaved.Filename = file.c_str();
+            CXUnsavedFile unsaved;
+            const QByteArray content = m_text.toUtf8();
+            unsaved.Contents = content.constData();
+            unsaved.Length = content.size() + 1; // + \0-byte
+            unsaved.Filename = file.c_str();
 
-        m_results.reset(clang_codeCompleteAt(session.unit(), file.c_str(),
-                        position.line + 1, position.column + 1,
-                        &unsaved, 1u,
-                        completeOptions));
-    } else {
-        m_results.reset(clang_codeCompleteAt(session.unit(), file.c_str(),
-                        position.line + 1, position.column + 1,
-                        nullptr, 0u,
-                        completeOptions));
-    }
+            m_results.reset(clang_codeCompleteAt(session.unit(), file.c_str(),
+                            position.line() + 1, position.column() + 1,
+                            &unsaved, 1u,
+                            completeOptions));
+        } else {
+            m_results.reset(clang_codeCompleteAt(session.unit(), file.c_str(),
+                            position.line() + 1, position.column() + 1,
+                            nullptr, 0u,
+                            completeOptions));
+        }
 
-    if (!m_results) {
-        kWarning() << "Something went wrong during 'clang_codeCompleteAt' for file" << file.toString();
+        if (!m_results) {
+            kWarning() << "Something went wrong during 'clang_codeCompleteAt' for file" << file.toString();
+        }
     }
 
     // check 'isValidPosition' after parsing the new content
@@ -363,6 +369,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         return;
     }
 
+    ParseSession session(m_parseSessionData);
     m_completionHelper.computeCompletions(session, position);
 }
 
@@ -372,7 +379,8 @@ ClangCodeCompletionContext::~ClangCodeCompletionContext()
 
 bool ClangCodeCompletionContext::isValidPosition() const
 {
-    if (isInsideComment(m_parseSession.unit(), m_parseSession.file(), m_position.castToSimpleCursor())) {
+    ParseSession session(m_parseSessionData);
+    if (isInsideComment(session.unit(), session.file(), m_position.castToSimpleCursor())) {
         debug() << "Invalid completion context: Inside comment";
         return false;
     }

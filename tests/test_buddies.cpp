@@ -24,7 +24,7 @@
 
 #include <qtest_kde.h>
 
-#include <QtGui/QSplitter>
+#include <QSplitter>
 #include <QtTest/QtTest>
 
 #include <KTempDir>
@@ -77,6 +77,7 @@ void TestBuddies::verifyFilename(Sublime::View *view, const QString& endOfFilena
         Sublime::UrlDocument *urlDoc = dynamic_cast<Sublime::UrlDocument *>(view->document());
         QVERIFY(urlDoc);
         if (urlDoc) {
+            debug() << urlDoc->url().toLocalFile() << endOfFilename;
             QVERIFY(urlDoc->url().toLocalFile().endsWith(endOfFilename));
         }
     }
@@ -427,6 +428,6 @@ void TestBuddies::testSplitViewBuddies()
     QVERIFY(pContainer->hasWidget(pMainWindow->activeView()->widget()));
 }
 
-QTEST_KDEMAIN(TestBuddies, GUI)
+QTEST_MAIN(TestBuddies)
 
 #include "test_buddies.moc"

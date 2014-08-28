@@ -24,7 +24,6 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/functiondefinition.h>
-#include <language/editor/simplerange.h>
 #include <language/codegen/coderepresentation.h>
 
 #include "../debug.h"
@@ -33,7 +32,7 @@ using namespace KDevelop;
 
 namespace ClangIntegration {
 
-KDevelop::SimpleRange DUChainUtils::functionSignatureRange(const Declaration* decl)
+KTextEditor::Range DUChainUtils::functionSignatureRange(const Declaration* decl)
 {
     if (!decl->isFunctionDeclaration()) {
         kWarning() << "Invalid declaration:" << decl;
@@ -47,8 +46,8 @@ KDevelop::SimpleRange DUChainUtils::functionSignatureRange(const Declaration* de
         return functionContext->rangeInCurrentRevision();
     }
 
-    const auto start = functionContext->rangeInCurrentRevision().start;
-    const auto end = childContexts[0]->rangeInCurrentRevision().start;
+    const auto start = functionContext->rangeInCurrentRevision().start();
+    const auto end = childContexts[0]->rangeInCurrentRevision().start();
     return {start, end};
 }
 

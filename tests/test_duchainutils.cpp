@@ -20,8 +20,6 @@
 
 #include "test_duchainutils.h"
 
-#include <qtest_kde.h>
-
 #include <language/duchain/duchainlock.h>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
@@ -30,11 +28,13 @@
 
 #include "../duchain/duchainutils.h"
 
+#include <QtTest>
+
 using namespace KDevelop;
 
-QTEST_KDEMAIN(TestDUChainUtils, NoGUI);
+QTEST_GUILESS_MAIN(TestDUChainUtils);
 
-Q_DECLARE_METATYPE(SimpleRange);
+Q_DECLARE_METATYPE(KTextEditor::Range);
 
 void TestDUChainUtils::initTestCase()
 {
@@ -51,7 +51,7 @@ void TestDUChainUtils::cleanupTestCase()
 void TestDUChainUtils::getFunctionSignatureRange()
 {
     QFETCH(QString, code);
-    QFETCH(SimpleRange, expectedRange);
+    QFETCH(KTextEditor::Range, expectedRange);
     {
         TestFile file(code, "cpp");
         file.parse();
@@ -69,14 +69,14 @@ void TestDUChainUtils::getFunctionSignatureRange()
 void TestDUChainUtils::getFunctionSignatureRange_data()
 {
     QTest::addColumn<QString>("code");
-    QTest::addColumn<SimpleRange>("expectedRange");
+    QTest::addColumn<KTextEditor::Range>("expectedRange");
 
     QTest::newRow("function-declaration")
         << "void func(\nint a, int b\n);\n"
-        << SimpleRange(0, 0, 2, 1);
+        << KTextEditor::Range(0, 0, 2, 1);
     QTest::newRow("function-definition")
         << "void func(\nint a, int b\n) {}\n"
-        << SimpleRange(0, 0, 2, 2);
+        << KTextEditor::Range(0, 0, 2, 2);
 
 }
 

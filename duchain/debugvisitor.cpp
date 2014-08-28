@@ -62,11 +62,11 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
     }
 
     ClangRange range(clang_getCursorExtent(cursor));
-    KDevelop::SimpleRange simpleRange = range.toSimpleRange();
+    KTextEditor::Range simpleRange = range.toRange();
     ClangString fileName(clang_getFileName(file));
     (*data->out) << "| loc: " << fileName << '@' << '['
-        << '(' << simpleRange.start.line+1 << ',' << simpleRange.start.column+1 << "),"
-        << '(' << simpleRange.end.line+1 << ',' << simpleRange.end.column+1 << ")] ";
+        << '(' << simpleRange.start().line()+1 << ',' << simpleRange.start().column()+1 << "),"
+        << '(' << simpleRange.end().line()+1 << ',' << simpleRange.end().column()+1 << ")] ";
 
     if (clang_isDeclaration(kind)) {
         (*data->out) << "| isDecl";

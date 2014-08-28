@@ -31,7 +31,7 @@
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <interfaces/icore.h>
 #include <interfaces/ipartcontroller.h>
 
@@ -130,7 +130,7 @@ QString MacroNavigationContext::html(bool shorten)
 
     const KUrl url = m_macro->url().toUrl();
     const QString path = url.pathOrUrl();
-    KTextEditor::Cursor cursor(m_macro->rangeInCurrentRevision().start.textCursor());
+    KTextEditor::Cursor cursor(m_macro->rangeInCurrentRevision().start());
     NavigationAction action(url, cursor);
     modifyHtml() += i18nc("%1: macro type, i.e.: 'Function macro' or just 'Macro'"
                           "%2: the macro name and arguments"

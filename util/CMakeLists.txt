@@ -8,4 +8,5 @@ add_library(kdevclangutil OBJECT
     clangutils.cpp
     clangtypes.cpp
 )
+target_include_directories(kdevclangutil PRIVATE $<TARGET_PROPERTY:KF5::TextEditor,INTERFACE_INCLUDE_DIRECTORIES>)
 set_target_properties(kdevclangutil PROPERTIES POSITION_INDEPENDENT_CODE TRUE)

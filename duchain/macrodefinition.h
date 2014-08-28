@@ -24,7 +24,7 @@
 #include "duchainexport.h"
 
 #include <language/duchain/declaration.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 class MacroDefinitionData;
 

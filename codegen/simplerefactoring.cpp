@@ -27,6 +27,8 @@
 #include <language/duchain/duchainlock.h>
 #include <language/interfaces/codecontext.h>
 
+#include <KIcon>
+
 using namespace KDevelop;
 
 SimpleRefactoring::SimpleRefactoring(QObject *parent)

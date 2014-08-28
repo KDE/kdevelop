@@ -37,7 +37,8 @@
 #include <tests/testproject.h>
 #include <interfaces/ilanguagecontroller.h>
 
-#include <qtest_kde.h>
+#include <QtTest/QTest>
+
 
 using namespace KDevelop;
 
@@ -47,7 +48,7 @@ const QString FileName = "/tmp/stdin.cpp";
 
 }
 
-QTEST_KDEMAIN(TestProblems, NoGUI)
+QTEST_GUILESS_MAIN(TestProblems)
 
 void TestProblems::initTestCase()
 {
@@ -90,8 +91,8 @@ void TestProblems::testBasicProblems()
     QCOMPARE(problems.size(), 1);
     QCOMPARE(problems[0]->diagnostics().size(), 0);
     auto range = problems[0]->rangeInCurrentRevision();
-    QCOMPARE(range.start, SimpleCursor(0, 12));
-    QCOMPARE(range.end, SimpleCursor(0, 12));
+    QCOMPARE(range.start(), KTextEditor::Cursor(0, 12));
+    QCOMPARE(range.end(), KTextEditor::Cursor(0, 12));
 }
 
 void TestProblems::testBasicRangeSupport()
@@ -105,8 +106,8 @@ void TestProblems::testBasicRangeSupport()
     QCOMPARE(problems.size(), 1);
     QCOMPARE(problems[0]->diagnostics().size(), 0);
     auto range = problems[0]->rangeInCurrentRevision();
-    QCOMPARE(range.start, SimpleCursor(0, 14));
-    QCOMPARE(range.end, SimpleCursor(0, 19));
+    QCOMPARE(range.start(), KTextEditor::Cursor(0, 14));
+    QCOMPARE(range.end(), KTextEditor::Cursor(0, 19));
 }
 
 void TestProblems::testChildDiagnostics()
@@ -127,15 +128,15 @@ void TestProblems::testChildDiagnostics()
     auto problems = parse(code);
     QCOMPARE(problems.size(), 1);
     auto range = problems[0]->rangeInCurrentRevision();
-    QCOMPARE(range.start, SimpleCursor(2, 13));
-    QCOMPARE(range.end, SimpleCursor(2, 16));
+    QCOMPARE(range.start(), KTextEditor::Cursor(2, 13));
+    QCOMPARE(range.end(), KTextEditor::Cursor(2, 16));
     QCOMPARE(problems[0]->diagnostics().size(), 2);
     const ProblemPointer d1 = problems[0]->diagnostics()[0];
     QCOMPARE(d1->url().str(), FileName);
-    QCOMPARE(d1->rangeInCurrentRevision().start, SimpleCursor(0, 5));
+    QCOMPARE(d1->rangeInCurrentRevision().start(), KTextEditor::Cursor(0, 5));
     const ProblemPointer d2 = problems[0]->diagnostics()[1];
     QCOMPARE(d2->url().str(), FileName);
-    QCOMPARE(d2->rangeInCurrentRevision().start, SimpleCursor(1, 5));
+    QCOMPARE(d2->rangeInCurrentRevision().start(), KTextEditor::Cursor(1, 5));
 }
 
 Q_DECLARE_METATYPE(QVector<ClangFixit>);
@@ -177,7 +178,7 @@ void TestProblems::testFixits_data()
     QTest::newRow("extra-tokens test")
         << "#ifdef FOO\n#endif FOO\n"
         << 1
-        << QVector<ClangFixit>{ ClangFixit{"//", DocumentRange(IndexedString(FileName), SimpleRange(1, 7, 1, 7)), QString()} };
+        << QVector<ClangFixit>{ ClangFixit{"//", DocumentRange(IndexedString(FileName), KTextEditor::Range(1, 7, 1, 7)), QString()} };
 
     // expected:
     // test.cpp:1:19: warning: empty parentheses interpreted as a function declaration [-Wvexing-parse]
@@ -190,7 +191,7 @@ void TestProblems::testFixits_data()
     QTest::newRow("vexing-parse test")
         << "int main() { int a(); }\n"
         << 1
-        << QVector<ClangFixit>{ ClangFixit{" = 0", DocumentRange(IndexedString(FileName), SimpleRange(0, 18, 0, 20)), QString()} };
+        << QVector<ClangFixit>{ ClangFixit{" = 0", DocumentRange(IndexedString(FileName), KTextEditor::Range(0, 18, 0, 20)), QString()} };
 
     // expected:
     // test.cpp:2:21: error: no member named 'someVariablf' in 'C'; did you mean 'someVariable'?
@@ -201,7 +202,7 @@ void TestProblems::testFixits_data()
         << "class C{ int someVariable; };\n"
            "int main() { C c; c.someVariablf = 1; }\n"
         << 1
-        << QVector<ClangFixit>{ ClangFixit{"someVariable", DocumentRange(IndexedString(FileName), SimpleRange(1, 20, 1, 32)), QString()} };
+        << QVector<ClangFixit>{ ClangFixit{"someVariable", DocumentRange(IndexedString(FileName), KTextEditor::Range(1, 20, 1, 32)), QString()} };
 }
 
 void TestProblems::testMissingInclude()
@@ -242,8 +243,8 @@ void TestProblems::testMissingInclude()
 struct ExpectedTodo
 {
     QString description;
-    SimpleCursor start;
-    SimpleCursor end;
+    KTextEditor::Cursor start;
+    KTextEditor::Cursor end;
 };
 typedef QVector<ExpectedTodo> ExpectedTodos;
 Q_DECLARE_METATYPE(ExpectedTodos)
@@ -266,8 +267,8 @@ void TestProblems::testTodoProblems()
         auto problem = problems[i];
         auto expectedTodo = expectedTodos[i];
         QCOMPARE(problem->description(), expectedTodo.description);
-        QCOMPARE(problem->finalLocation().start, expectedTodo.start);
-        QCOMPARE(problem->finalLocation().end, expectedTodo.end);
+        QCOMPARE(problem->finalLocation().start(), expectedTodo.start);
+        QCOMPARE(problem->finalLocation().end(), expectedTodo.end);
     }
 }
 
@@ -309,7 +310,7 @@ void TestProblems::testTodoProblems_data()
         << ExpectedTodos{{"FIXME: bar", {2, 3}, {2, 13}}};
     QTest::newRow("non-ascii-todo")
         << "/* TODO: 例えば */"
-        << ExpectedTodos{{"TODO: 例えば", {0, 3}, {0, 18}}};
+        << ExpectedTodos{{"TODO: 例えば", {0, 3}, {0, 12}}};
 }
 
 

@@ -33,6 +33,8 @@ class ClangParsingEnvironmentFileData;
 class KDEVCLANGDUCHAIN_EXPORT ClangParsingEnvironmentFile : public KDevelop::ParsingEnvironmentFile
 {
 public:
+    using Ptr = QExplicitlySharedDataPointer<ClangParsingEnvironmentFile>;
+
     ClangParsingEnvironmentFile(const KDevelop::IndexedString& url, const ClangParsingEnvironment& environment,
                                 bool isSystemHeader);
     ClangParsingEnvironmentFile(ClangParsingEnvironmentFileData& data);

@@ -160,7 +160,7 @@ ClangSupport* ClangParseJob::clang() const
     return static_cast<ClangSupport*>(languageSupport());
 }
 
-void ClangParseJob::run()
+void ClangParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread)
 {
     QReadLocker parseLock(languageSupport()->language()->parseLock());
 
@@ -189,7 +189,7 @@ void ClangParseJob::run()
             DUChainWriteLocker lock;
             const auto& context = DUChainUtils::standardContextForUrl(document().toUrl());
             if (context) {
-                sessionData = ParseSessionData::Ptr::dynamicCast(context->ast());
+                sessionData = ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(context->ast().data()));
             }
         }
     }
@@ -260,9 +260,9 @@ void ClangParseJob::run()
             // the user
             // otherwise no editor component is open for this document and we can dispose
             // the TU to save memory
-            context->setAst(KSharedPtr<IAstContainer>::staticCast(session.data()));
+            context->setAst(IAstContainer::Ptr(session.data()));
         }
-        auto file = KSharedPtr<ClangParsingEnvironmentFile>::dynamicCast(context->parsingEnvironmentFile());
+        auto file = dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data());
         Q_ASSERT(file);
         // verify that features and environment where properly set in ClangHelpers::buildDUChain
         Q_ASSERT(file->featuresSatisfied(TopDUContext::Features(minimumFeatures() & ~TopDUContext::ForceUpdateRecursive)));

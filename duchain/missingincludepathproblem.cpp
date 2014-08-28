@@ -108,9 +108,9 @@ MissingIncludePathProblem::MissingIncludePathProblem(CXDiagnostic diagnostic)
     : ClangProblem(diagnostic)
 {}
 
-KSharedPtr< KDevelop::IAssistant > MissingIncludePathProblem::solutionAssistant() const
+KDevelop::IAssistant::Ptr MissingIncludePathProblem::solutionAssistant() const
 {
-    return KSharedPtr<KDevelop::IAssistant>(new MissingIncludePathAssistant(description(), finalLocation().document));
+    return KDevelop::IAssistant::Ptr(new MissingIncludePathAssistant(description(), finalLocation().document));
 }
 
 #include "missingincludepathproblem.moc"

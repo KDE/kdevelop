@@ -46,8 +46,8 @@ struct FuncImplementInfo
     QString prototype;
 };
 
-namespace KDevelop {
-    class SimpleCursor;
+namespace KTextEditor {
+class Cursor;
 }
 
 class ParseSession;
@@ -63,7 +63,7 @@ public:
     CompletionHelper();
 
     void computeCompletions(const ParseSession& session,
-                            const KDevelop::SimpleCursor& position);
+                            const KTextEditor::Cursor& position);
 
     FunctionOverrideList overrides() const;
     FunctionImplementsList implements() const;

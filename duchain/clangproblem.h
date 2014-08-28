@@ -26,7 +26,6 @@
 #include "duchainexport.h"
 
 #include <language/duchain/problem.h>
-#include <language/editor/simplerange.h>
 #include <interfaces/iassistant.h>
 
 #include <clang-c/Index.h>
@@ -52,8 +51,8 @@ using ClangFixits = QVector<ClangFixit>;
 class KDEVCLANGDUCHAIN_EXPORT ClangProblem : public KDevelop::Problem
 {
 public:
-    using Ptr = KSharedPtr<ClangProblem>;
-    using ConstPtr = KSharedPtr<const ClangProblem>;
+    using Ptr = QExplicitlySharedDataPointer<ClangProblem>;
+    using ConstPtr = QExplicitlySharedDataPointer<const ClangProblem>;
 
     /**
      * Import @p diagnostic into a ClangProblem object
@@ -62,7 +61,7 @@ public:
      */
     ClangProblem(CXDiagnostic diagnostic);
 
-    virtual KSharedPtr<KDevelop::IAssistant> solutionAssistant() const override;
+    virtual KDevelop::IAssistant::Ptr solutionAssistant() const override;
 
     ClangFixits fixits() const;
     void setFixits(const ClangFixits& fixits);

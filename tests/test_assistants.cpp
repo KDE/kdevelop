@@ -45,7 +45,7 @@
 using namespace KDevelop;
 using namespace KTextEditor;
 
-QTEST_KDEMAIN(TestAssistants, GUI)
+QTEST_MAIN(TestAssistants)
 
 ForegroundLock *globalTestLock = 0;
 StaticAssistantsManager *staticAssistantsManager() { return Core::self()->languageController()->staticAssistantsManager(); }
@@ -120,10 +120,11 @@ public:
         else {
             document = m_headerDocument;
         }
-        document.textDoc->activeView()->setSelection(where);
-        document.textDoc->activeView()->removeSelectionText();
-        document.textDoc->activeView()->setCursorPosition(where.start());
-        document.textDoc->activeView()->insertText(what);
+        KTextEditor::View* view = document.textDoc->createView(nullptr);
+        view->setSelection(where);
+        view->removeSelectionText();
+        view->setCursorPosition(where.start());
+        view->insertText(what);
         QCoreApplication::processEvents();
         if (waitForUpdate) {
             DUChain::self()->waitForUpdate(IndexedString(document.url), KDevelop::TopDUContext::AllDeclarationsAndContexts);
