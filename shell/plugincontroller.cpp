@@ -274,7 +274,7 @@ PluginController::PluginController(Core *core)
     if (!oldStylePlugins.isEmpty()) {
         foreach (const KPluginInfo& info, oldStylePlugins) {
             qWarning() << "Plugin" << info.pluginName() << "still uses the old .desktop file based metadata."
-                " It must be ported to JSON metadata or it will no longer work with future kdevelplatform versions.";
+                " It must be ported to JSON metadata or it will no longer work with future kdevplatform versions.";
         }
     }
     d->plugins.append(oldStylePlugins);
