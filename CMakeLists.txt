@@ -4,7 +4,7 @@ set(KDEVPLATFORM_VERSION_MINOR 90)
 set(KDEVPLATFORM_VERSION_PATCH 90)
 
 # plugin versions listed in the .desktop files
-set(KDEV_PLUGIN_VERSION 19)
+set(KDEV_PLUGIN_VERSION 20)
 # Increase this to reset incompatible item-repositories
 set(KDEV_ITEMREPOSITORY_VERSION 80)
 
