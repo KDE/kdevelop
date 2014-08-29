@@ -42,7 +42,7 @@ public:
     QString activeGroup;
 };
 
-K_PLUGIN_FACTORY(PreferencesFactory, registerPlugin<EnvironmentPreferences>(); )
+K_PLUGIN_FACTORY_WITH_JSON(PreferencesFactory, "kcm_kdev_envsettings.json", registerPlugin<EnvironmentPreferences>();)
 K_EXPORT_PLUGIN(PreferencesFactory(KAboutData("kcm_kdev_envsettings", "kdevplatform", ki18n("Environment Settings"), "0.1")))
 
 EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QVariantList &args )

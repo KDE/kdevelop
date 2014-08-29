@@ -30,4 +30,4 @@ install(TARGETS kdevexecute DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDE
 ########### install files ###############
 install(FILES iexecuteplugin.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/execute COMPONENT Devel)
 configure_file(kdevexecute.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevexecute.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevexecute.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kcoreaddons_desktop_to_json(kdevexecute ${CMAKE_CURRENT_BINARY_DIR}/kdevexecute.desktop)

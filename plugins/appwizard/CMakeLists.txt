@@ -32,6 +32,6 @@ install(TARGETS kdevappwizard DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${K
 ########### install files ###############
 
 configure_file(kdevappwizard.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevappwizard.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevappwizard.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevappwizard ${CMAKE_CURRENT_BINARY_DIR}/kdevappwizard.desktop)
 install( FILES kdevappwizard.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevappwizard )
 install( FILES kdevappwizard.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )

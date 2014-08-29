@@ -30,5 +30,5 @@ install( TARGETS kdevsnippet DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KD
 
 ########### install files ###############
 configure_file(kdevsnippet.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevsnippet.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevsnippet.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevsnippet ${CMAKE_CURRENT_BINARY_DIR}/kdevsnippet.desktop)
 install( FILES legacy/kdevsnippet.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevsnippet )

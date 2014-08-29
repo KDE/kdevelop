@@ -28,5 +28,5 @@ install( TARGETS kdevexternalscript DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatfo
 
 ########### install files ###############
 configure_file(kdevexternalscript.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevexternalscript.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevexternalscript.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevexternalscript ${CMAKE_CURRENT_BINARY_DIR}/kdevexternalscript.desktop)
 install( FILES kdevexternalscript.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevexternalscript )

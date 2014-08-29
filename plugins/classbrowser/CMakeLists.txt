@@ -36,5 +36,5 @@ install(TARGETS kdevclassbrowser DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/
 ########### install files ###############
 
 configure_file(kdevclassbrowser.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevclassbrowser.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevclassbrowser.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kcoreaddons_desktop_to_json(kdevclassbrowser ${CMAKE_CURRENT_BINARY_DIR}/kdevclassbrowser.desktop)
 install(FILES kdevclassbrowser.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclassbrowser)

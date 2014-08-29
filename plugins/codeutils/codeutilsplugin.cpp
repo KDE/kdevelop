@@ -56,7 +56,7 @@
 using namespace KDevelop;
 using namespace KTextEditor;
 
-K_PLUGIN_FACTORY(CodeUtilsPluginFactory, registerPlugin<CodeUtilsPlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(CodeUtilsPluginFactory, registerPlugin<CodeUtilsPlugin>(); )
 // K_EXPORT_PLUGIN(CodeUtilsPluginFactory(KAboutData("kdevcodeutils","kdevcodeutils", ki18n("Code Utilities"), "0.1", ki18n("Collection of various utilities that increase productivity while programming."), KAboutData::License_GPL)
 //     .addAuthor(ki18n("Milian Wolff"), ki18n("Author"), "mail@milianw.de", "http://milianw.de")
 // ))

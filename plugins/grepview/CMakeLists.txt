@@ -6,6 +6,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9001 )
 
 set(kdevgrepview_PART_SRCS
     grepviewplugin.cpp
+    grepviewpluginmetadata.cpp
     grepdialog.cpp
     grepoutputmodel.cpp
     grepoutputdelegate.cpp
@@ -40,7 +41,7 @@ install(TARGETS kdevgrepview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KD
 ########### install files ###############
 
 configure_file(kdevgrepview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgrepview.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevgrepview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevgrepview ${CMAKE_CURRENT_BINARY_DIR}/kdevgrepview.desktop)
 install( FILES kdevgrepview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevgrepview )
 
 add_subdirectory(tests)

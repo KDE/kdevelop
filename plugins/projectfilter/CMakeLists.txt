@@ -17,7 +17,7 @@ target_link_libraries( kdevprojectfilter
 install( TARGETS kdevprojectfilter DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 configure_file(kdevprojectfilter.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectfilter.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectfilter.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevprojectfilter ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectfilter.desktop)
 
 ##############################
 # KCM ########################
@@ -44,6 +44,7 @@ target_link_libraries( kcm_kdevprojectfilter
 
 install( TARGETS kcm_kdevprojectfilter DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm )
 configure_file(kcm_kdevprojectfilter.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevprojectfilter.desktop)
+kcoreaddons_desktop_to_json(kcm_kdevprojectfilter ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevprojectfilter.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevprojectfilter.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 add_subdirectory(tests)

@@ -13,12 +13,16 @@ set(kdevgit_PART_SRCS
     gitmessagehighlighter.cpp
     gitclonejob.cpp
     gitplugin.cpp
+    gitpluginmetadata.cpp
     gitjob.cpp
     gitplugincheckinrepositoryjob.cpp
 )
 
 qt5_wrap_ui(kdevgit_PART_SRCS stashmanagerdialog.ui)
 add_library(kdevgit MODULE ${kdevgit_PART_SRCS})
+
+configure_file(kdevgit.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgit.desktop)
+kcoreaddons_desktop_to_json(kdevgit ${CMAKE_CURRENT_BINARY_DIR}/kdevgit.desktop)
 
 target_link_libraries(kdevgit
     ${KDEVPLATFORM_UTIL_LIBRARIES}
@@ -28,9 +32,5 @@ target_link_libraries(kdevgit
     KF5::SonnetUi
 )
 
-install(TARGETS kdevgit DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-
-
 ########### install files ###############
-configure_file(kdevgit.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgit.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevgit.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install(TARGETS kdevgit DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})

@@ -31,7 +31,7 @@
 #include <KCoreAddons/KAboutData>
 #include <KLocalizedString>
 
-K_PLUGIN_FACTORY(TemplateConfigFactory, registerPlugin<TemplateConfig>();)
+K_PLUGIN_FACTORY_WITH_JSON(TemplateConfigFactory, "kdevtemplatemanager_config.json", registerPlugin<TemplateConfig>();)
 // K_EXPORT_PLUGIN(TemplateConfigFactory("kdevtemplates_config"))
 
 TemplateConfig::TemplateConfig(QWidget* parent, const QVariantList& args)

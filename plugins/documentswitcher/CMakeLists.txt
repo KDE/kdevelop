@@ -17,7 +17,7 @@ install(TARGETS kdevdocumentswitcher DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatf
 ########### install files ###############
 
 configure_file(kdevdocumentswitcher.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevdocumentswitcher.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevdocumentswitcher.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevdocumentswitcher ${CMAKE_CURRENT_BINARY_DIR}/kdevdocumentswitcher.desktop)
 install( FILES kdevdocumentswitcher.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevdocumentswitcher )
 
 

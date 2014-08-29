@@ -44,7 +44,7 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(ProjectFilterProviderFactory, registerPlugin<ProjectFilterProvider>(); )
+K_PLUGIN_FACTORY_WITH_JSON(ProjectFilterProviderFactory, "kdevprojectfilter.json", registerPlugin<ProjectFilterProvider>();)
 // K_EXPORT_PLUGIN(ProjectFilterProviderFactory(
 //     KAboutData("kdevprojectfilter", "kdevprojectfilter", ki18n("Project Filter"),
 //                "0.1", ki18n("Configure which files and folders inside the project folder should be included or excluded."),

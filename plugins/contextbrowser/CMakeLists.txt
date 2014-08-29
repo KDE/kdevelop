@@ -19,4 +19,4 @@ install(FILES kdevcontextbrowser.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevconte
 ########### install files ###############
 
 configure_file(kdevcontextbrowser.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcontextbrowser.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcontextbrowser.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kcoreaddons_desktop_to_json(kdevcontextbrowser ${CMAKE_CURRENT_BINARY_DIR}/kdevcontextbrowser.desktop)

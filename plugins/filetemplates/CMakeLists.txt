@@ -43,7 +43,7 @@ install(TARGETS kdevfiletemplates DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform
 ########### install files ###############
 
 configure_file(kdevfiletemplates.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevfiletemplates.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevfiletemplates.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevfiletemplates ${CMAKE_CURRENT_BINARY_DIR}/kdevfiletemplates.desktop)
 install( FILES kdevfiletemplates.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevfiletemplates )
 install( FILES kdevfiletemplates.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 

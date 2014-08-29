@@ -99,4 +99,4 @@ install(TARGETS kdevsubversion DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${
 
 ########### install files ###############
 configure_file(kdevsubversion.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevsubversion.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevsubversion.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevsubversion ${CMAKE_CURRENT_BINARY_DIR}/kdevsubversion.desktop)

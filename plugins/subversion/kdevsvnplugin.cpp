@@ -74,7 +74,7 @@
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include "svnlocationwidget.h"
 
-K_PLUGIN_FACTORY(KDevSvnFactory, registerPlugin<KDevSvnPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(KDevSvnFactory, "kdevsubversion.json", registerPlugin<KDevSvnPlugin>();)
 // K_EXPORT_PLUGIN(KDevSvnFactory(KAboutData("kdevsubversion", "kdevsubversion", ki18n("Subversion"), "0.1", ki18n("Support for Subversion version control systems"), KAboutData::License_GPL)))
 
 KDevSvnPlugin::KDevSvnPlugin(QObject *parent, const QVariantList &)

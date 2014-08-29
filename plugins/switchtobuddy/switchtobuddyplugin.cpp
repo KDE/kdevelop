@@ -87,7 +87,7 @@ QString findSwitchCandidate(const QUrl& docUrl)
 
 }
 
-K_PLUGIN_FACTORY(SwitchToBuddyPluginFactory, registerPlugin<SwitchToBuddyPlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(SwitchToBuddyPluginFactory, "kdevswitchtobuddy.json", registerPlugin<SwitchToBuddyPlugin>(); )
 // K_EXPORT_PLUGIN(SwitchToBuddyPluginFactory(KAboutData(
 //                                             "kdevswitchtobuddy"
 //                                            ,"kdevswitchtobuddy"

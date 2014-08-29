@@ -116,12 +116,19 @@ install( TARGETS
         DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
 
 configure_file(kcm_kdev_uisettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_uisettings.desktop)
+kcoreaddons_desktop_to_json(kcm_kdev_uisettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_uisettings.desktop)
 configure_file(kcm_kdev_envsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop)
+kcoreaddons_desktop_to_json(kcm_kdev_envsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop)
 configure_file(kcm_kdev_pluginsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_pluginsettings.desktop)
+kcoreaddons_desktop_to_json(kcm_kdev_pluginsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_pluginsettings.desktop)
 configure_file(kcm_kdev_projectsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_projectsettings.desktop)
+kcoreaddons_desktop_to_json(kcm_kdev_projectsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_projectsettings.desktop)
 configure_file(kcm_kdev_bgsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_bgsettings.desktop)
+kcoreaddons_desktop_to_json(kcm_kdev_bgsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_bgsettings.desktop)
 configure_file(kcm_kdev_ccsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_ccsettings.desktop)
+kcoreaddons_desktop_to_json(kcm_kdev_ccsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_ccsettings.desktop)
 configure_file(kcm_kdevsourceformattersettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevsourceformattersettings.desktop)
+kcoreaddons_desktop_to_json(kcm_kdevsourceformattersettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevsourceformattersettings.desktop)
 
 install( FILES 
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_uisettings.desktop

@@ -53,7 +53,7 @@
 #include <interfaces/iassistant.h>
 #include <kaction.h>
 
-K_PLUGIN_FACTORY(KDevProblemReporterFactory, registerPlugin<ProblemReporterPlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(KDevProblemReporterFactory, "kdevproblemreporter.json", registerPlugin<ProblemReporterPlugin>();)
 // K_EXPORT_PLUGIN(KDevProblemReporterFactory(KAboutData("kdevproblemreporter","kdevproblemreporter", ki18n("Problem Reporter"), "0.1", ki18n("Shows errors in source code"), KAboutData::License_GPL)))
 
 using namespace KDevelop;

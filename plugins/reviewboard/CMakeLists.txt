@@ -15,4 +15,4 @@ target_link_libraries(kdevreviewboard ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDE
 
 install(TARGETS kdevreviewboard DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 configure_file(kdevreviewboard.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevreviewboard.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevreviewboard.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kcoreaddons_desktop_to_json(kdevreviewboard ${CMAKE_CURRENT_BINARY_DIR}/kdevreviewboard.desktop)

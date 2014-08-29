@@ -21,4 +21,4 @@ install(TARGETS kdevgenericmanager DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatfor
 ########### install files ###############
 
 configure_file(kdevgenericmanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgenericmanager.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevgenericmanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevgenericmanager ${CMAKE_CURRENT_BINARY_DIR}/kdevgenericmanager.desktop)

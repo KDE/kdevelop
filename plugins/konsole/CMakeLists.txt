@@ -17,5 +17,5 @@ install(TARGETS kdevkonsoleview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/$
 ########### install files ###############
 
 configure_file(kdevkonsoleview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevkonsoleview.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevkonsoleview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevkonsoleview ${CMAKE_CURRENT_BINARY_DIR}/kdevkonsoleview.desktop)
 

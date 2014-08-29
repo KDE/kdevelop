@@ -66,7 +66,7 @@ using KDevelop::VcsJob;
 using KDevelop::VcsLocation;
 using KDevelop::ICore;
 
-K_PLUGIN_FACTORY(AppWizardFactory, registerPlugin<AppWizardPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(AppWizardFactory, "kdevappwizard.json", registerPlugin<AppWizardPlugin>();)
 // K_EXPORT_PLUGIN(AppWizardFactory(KAboutData("kdevappwizard","kdevappwizard", ki18n("Project Wizard"), "0.1", ki18n("Support for creating and importing projects"), KAboutData::License_GPL)))
 
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)

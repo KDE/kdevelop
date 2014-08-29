@@ -36,7 +36,7 @@
 namespace KDevelop
 {
 
-K_PLUGIN_FACTORY(BGPreferencesFactory, registerPlugin<BGPreferences>();)
+K_PLUGIN_FACTORY_WITH_JSON(BGPreferencesFactory, "kcm_kdev_bgsettings.json", registerPlugin<BGPreferences>();)
 // K_EXPORT_PLUGIN(BGPreferencesFactory( KAboutData("kcm_kdev_bgsettings", "kdevplatform", ki18n("Parser Background Settings"), "0.1")))
 
 

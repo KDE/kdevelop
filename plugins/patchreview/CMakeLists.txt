@@ -23,5 +23,5 @@ install(TARGETS kdevpatchreview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/$
 ########### install files ###############
 
 configure_file(kdevpatchreview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevpatchreview.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevpatchreview.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kcoreaddons_desktop_to_json(kdevpatchreview ${CMAKE_CURRENT_BINARY_DIR}/kdevpatchreview.desktop)
 install(FILES kdevpatchreview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevpatchreview)

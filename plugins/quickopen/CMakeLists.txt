@@ -33,5 +33,5 @@ install(TARGETS kdevquickopen DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${K
 ########### install files ###############
 
 configure_file(kdevquickopen.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevquickopen.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevquickopen.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kcoreaddons_desktop_to_json(kdevquickopen ${CMAKE_CURRENT_BINARY_DIR}/kdevquickopen.desktop)
 install(FILES kdevquickopen.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevquickopen)

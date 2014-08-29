@@ -12,5 +12,6 @@ target_link_libraries( kdevtemplatemanager_config KF5::ConfigWidgets KF5::Servic
 
 install(TARGETS kdevtemplatemanager_config DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
 configure_file(kdevtemplatemanager_config.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevtemplatemanager_config.desktop)
+kcoreaddons_desktop_to_json(kdevtemplatemanager_config ${CMAKE_CURRENT_BINARY_DIR}/kdevtemplatemanager_config.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevtemplatemanager_config.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 

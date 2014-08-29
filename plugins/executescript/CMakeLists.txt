@@ -34,4 +34,4 @@ install(TARGETS kdevexecutescript DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform
 ########### install files ###############
 install(FILES iexecutescriptplugin.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/executescript COMPONENT Devel)
 configure_file(kdevexecutescript.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevexecutescript.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevexecutescript.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kcoreaddons_desktop_to_json(kdevexecutescript ${CMAKE_CURRENT_BINARY_DIR}/kdevexecutescript.desktop)

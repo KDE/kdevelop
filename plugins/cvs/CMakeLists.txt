@@ -50,5 +50,5 @@ install(TARGETS kdevcvs DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PL
 
 ########### install files ###############
 configure_file(kdevcvs.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcvs.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcvs.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevcvs ${CMAKE_CURRENT_BINARY_DIR}/kdevcvs.desktop)
 install( FILES kdevcvs.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcvs )

@@ -43,8 +43,6 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(KDevBazaarFactory, registerPlugin<BazaarPlugin>();)
-
 BazaarPlugin::BazaarPlugin(QObject* parent, const QVariantList& args) :
     IPlugin("kdevbazaar", parent),
     m_vcsPluginHelper(new KDevelop::VcsPluginHelper(this, this)), m_hasError(false)

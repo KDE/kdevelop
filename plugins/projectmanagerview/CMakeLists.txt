@@ -25,7 +25,7 @@ install(TARGETS kdevprojectmanagerview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevpla
 ########### install files ###############
 
 configure_file(kdevprojectmanagerview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectmanagerview.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectmanagerview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevprojectmanagerview ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectmanagerview.desktop)
 install( FILES kdevprojectmanagerview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevprojectmanagerview )
 
 

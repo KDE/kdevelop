@@ -28,5 +28,5 @@ install(TARGETS kdevcodeutils DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${K
 ########### install files ###############
 
 configure_file(kdevcodeutils.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcodeutils.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcodeutils.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevcodeutils ${CMAKE_CURRENT_BINARY_DIR}/kdevcodeutils.desktop)
 install( FILES kdevcodeutils.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcodeutils )

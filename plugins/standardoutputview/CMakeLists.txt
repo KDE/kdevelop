@@ -18,6 +18,6 @@ target_link_libraries(kdevstandardoutputview
 install(TARGETS kdevstandardoutputview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 
 configure_file(kdevstandardoutputview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevstandardoutputview.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevstandardoutputview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+kcoreaddons_desktop_to_json(kdevstandardoutputview ${CMAKE_CURRENT_BINARY_DIR}/kdevstandardoutputview.desktop)
 install( FILES kdevstandardoutputview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevstandardoutputview )
 

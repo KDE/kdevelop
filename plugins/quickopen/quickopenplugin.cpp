@@ -168,7 +168,7 @@ public:
   OutlineMode mode;
 };
 
-K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(KDevQuickOpenFactory, "kdevquickopen.json", registerPlugin<QuickOpenPlugin>();)
 // K_EXPORT_PLUGIN(KDevQuickOpenFactory(KAboutData("kdevquickopen","kdevquickopen", ki18n("Quick Open"), "0.1", ki18n("This plugin allows quick access to project files and language-items like classes/functions."), KAboutData::License_GPL)))
 
 Declaration* cursorDeclaration() {

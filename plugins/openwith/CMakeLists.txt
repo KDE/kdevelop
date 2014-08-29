@@ -12,5 +12,5 @@ install(TARGETS kdevopenwith DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KD
 ########### install files ###############
 
 configure_file(kdevopenwith.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevopenwith.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevopenwith.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+kcoreaddons_desktop_to_json(kdevopenwith ${CMAKE_CURRENT_BINARY_DIR}/kdevopenwith.desktop)
 install( FILES iopenwith.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/openwith COMPONENT Devel)
