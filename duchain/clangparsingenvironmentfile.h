@@ -33,7 +33,8 @@ class ClangParsingEnvironmentFileData;
 class KDEVCLANGDUCHAIN_EXPORT ClangParsingEnvironmentFile : public KDevelop::ParsingEnvironmentFile
 {
 public:
-    ClangParsingEnvironmentFile(const KDevelop::IndexedString& url, const ClangParsingEnvironment& environment);
+    ClangParsingEnvironmentFile(const KDevelop::IndexedString& url, const ClangParsingEnvironment& environment,
+                                bool isSystemHeader);
     ClangParsingEnvironmentFile(ClangParsingEnvironmentFileData& data);
     ~ClangParsingEnvironmentFile();
 
@@ -43,9 +44,11 @@ public:
     virtual bool matchEnvironment(const KDevelop::ParsingEnvironment* environment) const override;
 
     void setEnvironment(const ClangParsingEnvironment& environment);
+    void setIsSystemHeader(bool isSystemHeader);
 
     uint environmentHash() const;
     bool inProject() const;
+    bool isSystemHeader() const;
 
     enum {
         Identity = 142

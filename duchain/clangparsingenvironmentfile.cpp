@@ -40,6 +40,7 @@ public:
         : ParsingEnvironmentFileData()
         , environmentHash(0)
         , projectWasKnown(false)
+        , isSystemHeader(false)
     {
     }
 
@@ -47,6 +48,7 @@ public:
         : ParsingEnvironmentFileData(rhs)
         , environmentHash(rhs.environmentHash)
         , projectWasKnown(rhs.projectWasKnown)
+        , isSystemHeader(rhs.isSystemHeader)
     {
     }
 
@@ -54,13 +56,17 @@ public:
 
     uint environmentHash;
     bool projectWasKnown;
+    bool isSystemHeader;
 };
 
-ClangParsingEnvironmentFile::ClangParsingEnvironmentFile(const IndexedString& url, const ClangParsingEnvironment& environment)
+ClangParsingEnvironmentFile::ClangParsingEnvironmentFile(const IndexedString& url,
+                                                         const ClangParsingEnvironment& environment,
+                                                         const bool isSystemHeader)
     : ParsingEnvironmentFile(*(new ClangParsingEnvironmentFileData), url)
 {
   d_func_dynamic()->setClassId(this);
   setEnvironment(environment);
+  setIsSystemHeader(isSystemHeader);
   setLanguage(ParseSession::languageString());
 }
 
@@ -81,7 +87,9 @@ bool ClangParsingEnvironmentFile::needsUpdate(const ParsingEnvironment* environm
     if (environment) {
         Q_ASSERT(dynamic_cast<const ClangParsingEnvironment*>(environment));
         auto env = static_cast<const ClangParsingEnvironment*>(environment);
-        if ((env->projectKnown() || env->projectKnown() == d_func()->projectWasKnown) && env->hash() != d_func()->environmentHash) {
+        if (!d_func()->isSystemHeader && env->hash() != d_func()->environmentHash
+            && (env->projectKnown() || env->projectKnown() == d_func()->projectWasKnown))
+        {
             debug() << "environment differs, require update:" << url()
                     << "new hash:" << env->hash() << "new project known:" << env->projectKnown()
                     << "old hash:" << d_func()->environmentHash << "old project known:" << d_func()->projectWasKnown;
@@ -115,4 +123,14 @@ uint ClangParsingEnvironmentFile::environmentHash() const
 bool ClangParsingEnvironmentFile::inProject() const
 {
     return d_func()->projectWasKnown;
+}
+
+void ClangParsingEnvironmentFile::setIsSystemHeader(bool isSystemHeader)
+{
+    d_func_dynamic()->isSystemHeader = isSystemHeader;
+}
+
+bool ClangParsingEnvironmentFile::isSystemHeader() const
+{
+    return d_func()->isSystemHeader;
 }

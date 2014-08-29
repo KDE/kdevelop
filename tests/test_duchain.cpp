@@ -54,12 +54,12 @@ class TestEnvironmentProvider final : public IDefinesAndIncludesManager::Backgro
 {
 public:
     virtual ~TestEnvironmentProvider() = default;
-    virtual QHash< QString, QString > definesInBackground(const QString& path) const
+    virtual QHash< QString, QString > definesInBackground(const QString& /*path*/) const
     {
         return defines;
     }
 
-    virtual Path::List includesInBackground(const QString& path) const
+    virtual Path::List includesInBackground(const QString& /*path*/) const
     {
         return includes;
     }
@@ -577,6 +577,8 @@ void TestDUChain::testParsingEnvironment()
 
         QCOMPARE(envFile->features(), astFeatures);
         QVERIFY(envFile->featuresSatisfied(astFeatures));
+        QCOMPARE(envFile->inProject(), false);
+        QCOMPARE(envFile->isSystemHeader(), false);
 
         // if no environment is given, no update should be triggered
         QVERIFY(!envFile->needsUpdate());
@@ -600,6 +602,13 @@ void TestDUChain::testParsingEnvironment()
 
         // changing it requires an update
         env.addIncludes(Path::List() << Path("/foo/bar/baz/blub"));
+        QVERIFY(envFile->needsUpdate(&env));
+
+        // but not when it's a system include
+        envFile->setIsSystemHeader(true);
+        QCOMPARE(envFile->isSystemHeader(), true);
+        QVERIFY(!envFile->needsUpdate(&env));
+        envFile->setIsSystemHeader(false);
         QVERIFY(envFile->needsUpdate(&env));
 
         // update it again

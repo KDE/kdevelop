@@ -79,9 +79,10 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor, CXClientData data)
     return CXChildVisit_Recurse;
 }
 
-ReferencedTopDUContext createTopContext(const IndexedString& path, const ClangParsingEnvironment& environment)
+ReferencedTopDUContext createTopContext(const IndexedString& path, const ClangParsingEnvironment& environment,
+                                        const bool isSystemHeader)
 {
-    ClangParsingEnvironmentFile* file = new ClangParsingEnvironmentFile(path, environment);
+    ClangParsingEnvironmentFile* file = new ClangParsingEnvironmentFile(path, environment, isSystemHeader);
     ReferencedTopDUContext context = new ClangTopDUContext(path, RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
     DUChain::self()->addDocumentChain(context);
     return context;
@@ -126,10 +127,13 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
     {
         const auto problems = session.problemsForFile(file);
 
+        auto fileLocation = clang_getLocation(session.unit(), file, 1, 1);
+        const bool isSystemHeader = clang_Location_isInSystemHeader(fileLocation);
+
         DUChainWriteLocker lock;
         context = DUChain::self()->chainForDocument(path, &environment);
         if (!context) {
-            context = ::createTopContext(path, environment);
+            context = ::createTopContext(path, environment, isSystemHeader);
         } else {
             update = true;
         }
@@ -138,13 +142,14 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
 
         includedFiles.insert(file, context);
         if (update) {
-            auto file = KSharedPtr<ClangParsingEnvironmentFile>::dynamicCast(context->parsingEnvironmentFile());
-            Q_ASSERT(file);
-            if (!file->needsUpdate(&environment) && file->featuresSatisfied(features)) {
+            auto envFile = KSharedPtr<ClangParsingEnvironmentFile>::dynamicCast(context->parsingEnvironmentFile());
+            Q_ASSERT(envFile);
+            if (!envFile->needsUpdate(&environment) && envFile->featuresSatisfied(features)) {
                 return context;
             } else {
-                file->setEnvironment(environment);
-                file->setModificationRevision(ModificationRevision::revisionForFile(context->url()));
+                envFile->setEnvironment(environment);
+                envFile->setIsSystemHeader(isSystemHeader);
+                envFile->setModificationRevision(ModificationRevision::revisionForFile(context->url()));
             }
 
             context->clearImportedParentContexts();
