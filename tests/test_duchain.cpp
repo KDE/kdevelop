@@ -648,6 +648,43 @@ void TestDUChain::testParsingEnvironment()
     }
 }
 
+void TestDUChain::testSystemIncludes()
+{
+    ClangParsingEnvironment env;
+
+    Path::List projectIncludes = {
+        Path("/projects/1"),
+        Path("/projects/1/sub"),
+        Path("/projects/2"),
+        Path("/projects/2/sub")
+    };
+    env.addIncludes(projectIncludes);
+    auto includes = env.includes();
+    // no project paths set, so everything is considered a system include
+    QCOMPARE(includes.system, projectIncludes);
+    QVERIFY(includes.project.isEmpty());
+
+    Path::List systemIncludes = {
+        Path("/sys"),
+        Path("/sys/sub")
+    };
+    env.addIncludes(systemIncludes);
+    includes = env.includes();
+    QCOMPARE(includes.system, projectIncludes + systemIncludes);
+    QVERIFY(includes.project.isEmpty());
+
+    Path::List projects = {
+        Path("/projects/1"),
+        Path("/projects/2")
+    };
+    env.setProjectPaths(projects);
+    // now the list should be properly separated
+    QCOMPARE(env.projectPaths(), projects);
+    includes = env.includes();
+    QCOMPARE(includes.system, systemIncludes);
+    QCOMPARE(includes.project, projectIncludes);
+}
+
 void TestDUChain::benchDUChainBuilder()
 {
     QBENCHMARK_ONCE {

@@ -28,14 +28,41 @@ int ClangParsingEnvironment::type() const
     return CppParsingEnvironment;
 }
 
+void ClangParsingEnvironment::setProjectPaths(const Path::List& projectPaths)
+{
+    m_projectPaths = projectPaths;
+}
+
+Path::List ClangParsingEnvironment::projectPaths() const
+{
+    return m_projectPaths;
+}
+
 void ClangParsingEnvironment::addIncludes(const Path::List& includes)
 {
     m_includes += includes;
 }
 
-Path::List ClangParsingEnvironment::includes() const
+ClangParsingEnvironment::IncludePaths ClangParsingEnvironment::includes() const
 {
-    return m_includes;
+    IncludePaths ret;
+    ret.project.reserve(m_includes.size());
+    ret.system.reserve(m_includes.size());
+    foreach (const auto& path, m_includes) {
+        bool inProject = false;
+        foreach (const auto& project, m_projectPaths) {
+            if (project.isParentOf(path) || project == path) {
+                inProject = true;
+                break;
+            }
+        }
+        if (inProject) {
+            ret.project.append(path);
+        } else {
+            ret.system.append(path);
+        }
+    }
+    return ret;
 }
 
 void ClangParsingEnvironment::addDefines(const QHash<QString, QString>& defines)

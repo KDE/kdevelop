@@ -145,6 +145,14 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(url.str()));
         m_environment.setProjectKnown(false);
     }
+
+    Path::List projectPaths;
+    const auto& projects = ICore::self()->projectController()->projects();
+    projectPaths.reserve(projects.size());
+    foreach (auto project, projects) {
+        projectPaths.append(project->path());
+    }
+    m_environment.setProjectPaths(projectPaths);
 }
 
 ClangSupport* ClangParseJob::clang() const

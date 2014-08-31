@@ -57,6 +57,7 @@ private slots:
     void testEnsureNoDoubleVisit();
     void testReparseWithAllDeclarationsContextsAndUses();
     void testParsingEnvironment();
+    void testSystemIncludes();
     void testReparseInclude();
     void testReparseChangeEnvironment();
 

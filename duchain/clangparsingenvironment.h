@@ -33,8 +33,31 @@ public:
     virtual ~ClangParsingEnvironment() = default;
     virtual int type() const override;
 
+    /**
+     * Sets the list of project paths.
+     *
+     * Any include path outside these project paths is considered
+     * to be a system include.
+     */
+    void setProjectPaths(const KDevelop::Path::List& projectPaths);
+    KDevelop::Path::List projectPaths() const;
+
+    /**
+     * Add the given list of @p include paths to this environment.
+     */
     void addIncludes(const KDevelop::Path::List& includes);
-    KDevelop::Path::List includes() const;
+
+    struct IncludePaths
+    {
+        /// This list contains all include paths outside the known projects paths.
+        KDevelop::Path::List system;
+        /// This list contains all include paths inside the known projects paths.
+        KDevelop::Path::List project;
+    };
+    /**
+     * Returns the list of includes, split into a list of system includes and project includes.
+     */
+    IncludePaths includes() const;
 
     void addDefines(const QHash<QString, QString>& defines);
     QHash<QString, QString> defines() const;
@@ -60,6 +83,7 @@ public:
     }
 
 private:
+    KDevelop::Path::List m_projectPaths;
     KDevelop::Path::List m_includes;
     QHash<QString, QString> m_defines;
     KDevelop::Path m_pchInclude;

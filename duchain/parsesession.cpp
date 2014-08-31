@@ -87,6 +87,23 @@ CXUnsavedFile fileForContents(const QByteArray& path, const QByteArray& contents
     return file;
 }
 
+void addIncludes(QVector<const char*>* args, QVector<QByteArray>* otherArgs,
+                 const Path::List& includes, const char* cliSwitch)
+{
+    foreach (const Path& url, includes) {
+        QFileInfo info(url.toLocalFile());
+        QByteArray path = url.toLocalFile().toUtf8();
+
+        if (info.isFile()) {
+            path.prepend("-include");
+        } else {
+            path.prepend(cliSwitch);
+        }
+        otherArgs->append(path);
+        args->append(path.constData());
+    }
+}
+
 }
 
 ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& contents, ClangIndex* index,
@@ -124,7 +141,9 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
     const auto& defines = environment.defines();
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> otherArgs;
-    otherArgs.reserve(includes.size() + defines.size() + pchInclude.isValid());
+    otherArgs.reserve(includes.system.size() + includes.project.size()
+                      + defines.size() + pchInclude.isValid());
+    args.reserve(args.size() + otherArgs.size());
     // NOTE: the PCH include must come before all other includes!
     if (pchInclude.isValid()) {
         args << "-include";
@@ -132,18 +151,8 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
         otherArgs << pchFile;
         args << pchFile.constData();
     }
-    foreach (const Path& url, includes) {
-        QFileInfo info(url.toLocalFile());
-        QByteArray path = url.toLocalFile().toUtf8();
-
-        if (info.isFile()) {
-            path.prepend("-include");
-        } else {
-            path.prepend("-I");
-        }
-        otherArgs << path;
-        args << path.constData();
-    }
+    addIncludes(&args, &otherArgs, includes.system, "-isystem");
+    addIncludes(&args, &otherArgs, includes.project, "-I");
     for (auto it = defines.begin(); it != defines.end(); ++it) {
         QByteArray define = QString("-D" + it.key() + '=' + it.value()).toUtf8();
         otherArgs << define;
