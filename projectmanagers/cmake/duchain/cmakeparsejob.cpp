@@ -20,6 +20,7 @@
 
 #include "cmakeparsejob.h"
 #include "declarationbuilder.h"
+#include "usebuilder.h"
 #include <cmakelistsparser.h>
 #include <cmakemanager.h>
 #include <language/backgroundparser/urlparselock.h>
@@ -110,11 +111,12 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
         }
 
 //         session.reparseImporters(context);
-//
-//         if ( context && minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUses ) {
-//             UseBuilder useBuilder(&session);
-//             useBuilder.buildUses(session.ast());
-//         }
+
+        if ( context && minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUses ) {
+            UseBuilder useBuilder(context);
+            CMakeContentIterator it(package);
+            useBuilder.startVisiting(&it);
+        }
     }
 
     if (abortRequested()) {

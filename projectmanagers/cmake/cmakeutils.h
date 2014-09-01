@@ -195,6 +195,9 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT void removeBuildDirConfig( KDevelop::IProject* project );
 
     KDEVCMAKECOMMON_EXPORT KDevelop::Path::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dirs);
+
+    /** Runs the process specified by @p execName with @p args */
+    KDEVCMAKECOMMON_EXPORT QString executeProcess(const QString& execName, const QStringList& args=QStringList());
 }
 
 #endif

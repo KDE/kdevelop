@@ -22,6 +22,8 @@
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
+#include <QProcess>
+#include <QTemporaryDir>
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -515,6 +517,27 @@ QStringList allBuildDirs(KDevelop::IProject* project)
     for (int i = 0; i < bdCount; ++i)
         result += KUrl( buildDirGroup( project, i ).readEntry( Config::Specific::buildDirPathKey ) ).toLocalFile(KUrl::RemoveTrailingSlash);
     return result;
+}
+
+QString executeProcess(const QString& execName, const QStringList& args)
+{
+    Q_ASSERT(!execName.isEmpty());
+    kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
+
+    QProcess p;
+    QTemporaryDir tmp("kdevcmakemanager");
+    p.setWorkingDirectory( tmp.path() );
+    p.start(execName, args, QIODevice::ReadOnly);
+
+    if(!p.waitForFinished())
+    {
+        kDebug() << "failed to execute:" << execName;
+    }
+
+    QByteArray b = p.readAllStandardOutput();
+    QString t;
+    t.prepend(b.trimmed());
+    return t;
 }
 
 }

@@ -127,29 +127,6 @@ namespace CMakeParserUtils
         return ret;
     }
 
-    QString executeProcess(const QString& execName, const QStringList& args)
-    {
-        Q_ASSERT(!execName.isEmpty());
-        kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
-        
-        KProcess p;
-        p.setOutputChannelMode(KProcess::MergedChannels);
-        p.setProgram(execName, args);
-        QTemporaryDir tmp("kdevcmakemanager");
-        p.setWorkingDirectory( tmp.path() );
-        p.start();
-        
-        if(!p.waitForFinished())
-        {
-            kDebug() << "failed to execute:" << execName;
-        }
-        
-        QByteArray b = p.readAllStandardOutput();
-        QString t;
-        t.prepend(b.trimmed());
-        return t;
-    }
-
     void printSubdirectories(const QList<Subdirectory>& subs)
     {
         Q_FOREACH(const Subdirectory& s, subs) {
