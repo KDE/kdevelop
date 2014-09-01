@@ -112,7 +112,7 @@ public:
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
 //     virtual KJob* createImportJob(KDevelop::ProjectFolderItem* item);
 //
-//     virtual bool reload(KDevelop::ProjectFolderItem*);
+    virtual bool reload(KDevelop::ProjectFolderItem*) override;
 //
 //     virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
 

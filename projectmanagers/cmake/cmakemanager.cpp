@@ -171,26 +171,11 @@ KDevelop::IProjectBuilder * CMakeManager::builder() const
     return _builder ;
 }
 
-// bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
-// {
-//     kDebug(9032) << "reloading" << folder->path();
-//     IProject* p = folder->project();
-//     if(!p->isReady())
-//         return false;
-//
-//     CMakeFolderItem* fi = dynamic_cast<CMakeFolderItem*>(folder);
-//     for(ProjectBaseItem* it = folder; !fi && it->parent();) {
-//         it = it->parent();
-//         fi = dynamic_cast<CMakeFolderItem*>(it);
-//     }
-//     Q_ASSERT(fi && "at least the root item should be a CMakeFolderItem");
-//
-//     KJob *job=createImportJob(fi);
-//     connect(job, SIGNAL(result(KJob*)), SLOT(importFinished(KJob*)));
-//     p->setReloadJob(job);
-//     ICore::self()->runController()->registerJob( job );
-//     return true;
-// }
+bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
+{
+    initializeProject(folder->project());
+    return true;
+}
 
 // void CMakeManager::importFinished(KJob* j)
 // {
