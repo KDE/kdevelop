@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef CMAKEMANAGERTEST_H
-#define CMAKEMANAGERTEST_H
+#ifndef TEST_CMAKEMANAGER_H
+#define TEST_CMAKEMANAGER_H
 
 #include <QtTest/QtTest>
 
@@ -31,7 +31,7 @@ class IProject;
  *   + Test that CMakeCache.txt is found, loaded and parsed
  * @author Esben Mose Hansen <kde@mosehansen.dk>
  **/
-class CMakeManagerTest : public QObject {
+class TestCMakeManager : public QObject {
     Q_OBJECT
 private slots:
     void initTestCase();
@@ -52,4 +52,4 @@ private slots:
     void testFaultyTarget();
 };
 
-#endif // CMAKEMANAGERTEST_H
+#endif // TEST_CMAKEMANAGER_H

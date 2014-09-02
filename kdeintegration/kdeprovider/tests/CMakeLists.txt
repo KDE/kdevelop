@@ -1,10 +1,10 @@
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-add_executable(kdeprojectsreadertest
+set(test_kdeprojectsreader_SRCS
     ../kdeprojectsreader.cpp
     ../kdeprojectsmodel.cpp
-    kdeprojectsreadertest.cpp)
-target_link_libraries(kdeprojectsreadertest Qt5::Test Qt5::Core Qt5::Gui Qt5::Network ${KDEVPLATFORM_VCS_LIBRARIES})
+    test_kdeprojectsreader.cpp)
 
-ecm_mark_as_test(kdeprojectsreadertest)
-add_test(kdeprojectsreadertest kdeprojectsreadertest)
+ecm_add_test(${test_kdeprojectsreader_SRCS}
+    TEST_NAME test_kdeprojectsreader
+    LINK_LIBRARIES Qt5::Test Qt5::Core Qt5::Gui Qt5::Network ${KDEVPLATFORM_VCS_LIBRARIES})

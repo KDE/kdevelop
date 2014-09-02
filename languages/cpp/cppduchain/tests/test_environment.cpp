@@ -20,7 +20,7 @@
  *
  */
 
-#include "testenvironment.h"
+#include "test_environment.h"
 
 #include <environmentmanager.h>
 #include <cpputils.h>

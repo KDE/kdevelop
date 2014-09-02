@@ -21,7 +21,7 @@ endmacro(kdevcmake_add_test)
 # kdevcmake_add_test(cmakeprojectvisitortest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} KF5::TextEditor  ${KDEVPLATFORM_TESTS_LIBRARIES})
 # kdevcmake_add_test(cmakeparserutilstest KF5::TextEditor)
 # kdevcmake_add_test(cmakeloadprojecttest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
-kdevcmake_add_test(cmakemanagertest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES})
+kdevcmake_add_test(test_cmakemanager ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES})
 # kdevcmake_add_test(ctestfindsuitestest ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 # this is not a unit test but a testing tool, kept here for convenience

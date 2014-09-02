@@ -18,12 +18,12 @@
   Boston, MA 02110-1301, USA.
 */
 
-#ifndef TESTSOURCEMANIPULATION_H
-#define TESTSOURCEMANIPULATION_H
+#ifndef TEST_SOURCEMANIPULATION_H
+#define TEST_SOURCEMANIPULATION_H
 
 #include <QObject>
 
-#include "testhelper.h"
+#include "test_helper.h"
 
 class TestSourceManipulation : public QObject, public Cpp::TestHelper
 {
@@ -37,4 +37,4 @@ private slots:
   void testFirstValidCodeLineBefore();
 };
 
-#endif // TESTSOURCEMANIPULATION_H
+#endif // TEST_SOURCEMANIPULATION_H

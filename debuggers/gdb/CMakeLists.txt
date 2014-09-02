@@ -98,22 +98,21 @@ target_link_libraries(kdevgdb
 
 install(TARGETS kdevgdb DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
-add_executable(gdbtest unittests/gdbtest.cpp ${kdevgdb_SRCS})
-ecm_mark_as_test(gdbtest)
-add_test(gdbtest gdbtest)
-
-target_link_libraries(gdbtest
-    Qt5::Test
-    ${KDEVPLATFORM_SHELL_LIBRARIES}
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_DEBUGGER_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
-    KF5::KIOWidgets
-    KF5::TextEditor
-    KF5::Parts
-    ${KDE4WORKSPACE_PROCESSUI_LIBS}
+set(test_gdb_SRCS unittests/test_gdb.cpp ${kdevgdb_SRCS})
+ecm_add_test(${test_gdb_SRCS}
+    TEST_NAME test_gdb
+    LINK_LIBRARIES
+        Qt5::Test
+        ${KDEVPLATFORM_SHELL_LIBRARIES}
+        ${KDEVPLATFORM_INTERFACES_LIBRARIES}
+        ${KDEVPLATFORM_PROJECT_LIBRARIES}
+        ${KDEVPLATFORM_DEBUGGER_LIBRARIES}
+        ${KDEVPLATFORM_TESTS_LIBRARIES}
+        ${KDEVPLATFORM_UTIL_LIBRARIES}
+        KF5::KIOWidgets
+        KF5::TextEditor
+        KF5::Parts
+        ${KDE4WORKSPACE_PROCESSUI_LIBS}
 )
 
 

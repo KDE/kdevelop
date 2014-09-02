@@ -27,7 +27,7 @@ set(test_common_SRCS
   ${setuphelpers_SRCS}
 )
 
-ecm_add_test(test_buddies.cpp TEST_NAME buddiestest
+ecm_add_test(test_buddies.cpp
 LINK_LIBRARIES
     Qt5::Test
     Qt5::Widgets
@@ -39,7 +39,6 @@ LINK_LIBRARIES
 
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
 ecm_add_test(test_cppfiles.cpp
-TEST_NAME cppfilestest
 LINK_LIBRARIES
     Qt5::Test
     Qt5::Core
@@ -50,7 +49,7 @@ LINK_LIBRARIES
     kdevcppparser
 )
 
-ecm_add_test(test_specialcompletion.cpp ${test_common_SRCS} TEST_NAME cppspecialcompletion
+ecm_add_test(test_specialcompletion.cpp ${test_common_SRCS} TEST_NAME test_specialcompletion
 LINK_LIBRARIES
     kdevcppduchain
     kdevcpprpp
@@ -64,7 +63,7 @@ LINK_LIBRARIES
 
 ########### next target ###############
 
-set(cppassistantstest_SRCS
+set(test_cppassistants_SRCS
   ${test_common_SRCS}
 
   test_cppassistants.cpp
@@ -72,7 +71,7 @@ set(cppassistantstest_SRCS
   ../codegen/adaptsignatureaction.cpp
 )
 
-ecm_add_test(${cppassistantstest_SRCS} TEST_NAME cppassistantstest
+ecm_add_test(${test_cppassistants_SRCS} TEST_NAME test_cppassistants
 LINK_LIBRARIES
     Qt5::Test
     kdevcppduchain
@@ -89,11 +88,11 @@ LINK_LIBRARIES
 
 add_definitions(-DTEST_COMPLETION)
 
-set(cppcodecompletiontest_SRCS
+set(test_cppcodecompletion_SRCS
   test_cppcodecompletion.cpp ${test_common_SRCS}
 )
 
-set(cppcodegentest_SRCS
+set(test_cppcodegen_SRCS
   test_cppcodegen.cpp
 
   ../codegen/simplerefactoring.cpp
@@ -105,8 +104,7 @@ set(cppcodegentest_SRCS
 
 add_definitions(-DBUILD_TESTS)
 
-ecm_add_test(${cppcodecompletiontest_SRCS} TEST_NAME cppcodecompletiontest
-TEST_NAME cppcodecompletiontest
+ecm_add_test(${test_cppcodecompletion_SRCS} TEST_NAME test_cppcodecompletion
 LINK_LIBRARIES
     Qt5::Test
     kdevcppduchain
@@ -121,7 +119,7 @@ LINK_LIBRARIES
     KF5::TextEditor
 )
 
-ecm_add_test(${cppcodegentest_SRCS} TEST_NAME cppcodegentest
+ecm_add_test(${test_cppcodegen_SRCS} TEST_NAME test_cppcodegen
 LINK_LIBRARIES
     kdevcppduchain
     kdevcpprpp

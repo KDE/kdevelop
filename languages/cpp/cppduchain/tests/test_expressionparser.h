@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TestExpressionParser_H
-#define TestExpressionParser_H
+#ifndef TEST_EXPRESSIONPARSER_H
+#define TEST_EXPRESSIONPARSER_H
 
 #include <QObject>
 #include <QByteArray>

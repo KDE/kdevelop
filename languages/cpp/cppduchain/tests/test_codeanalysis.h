@@ -16,17 +16,17 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DATAACCESSTEST_H
-#define DATAACCESSTEST_H
+#ifndef TEST_CODEANALYSIS_H
+#define TEST_CODEANALYSIS_H
 
 #include <QObject>
-#include "testhelper.h"
+#include "test_helper.h"
 
-class CodeAnalysisTest : public QObject, public Cpp::TestHelper
+class TestCodeAnalysis : public QObject, public Cpp::TestHelper
 {
   Q_OBJECT
   public:
-    explicit CodeAnalysisTest(QObject* parent = 0);
+    explicit TestCodeAnalysis(QObject* parent = 0);
     
   private slots:
     void initTestCase();
@@ -39,4 +39,4 @@ class CodeAnalysisTest : public QObject, public Cpp::TestHelper
     void testControlFlowCreation_data();
 };
 
-#endif // DATAACCESSTEST_H
+#endif // TEST_CODEANALYSIS_H

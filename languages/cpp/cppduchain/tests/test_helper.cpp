@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "testhelper.h"
+#include "test_helper.h"
 
 #include "parsesession.h"
 #include "parser.h"

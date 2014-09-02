@@ -14,7 +14,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "astyletest.h"
+#include "test_astyle.h"
 
 #include <QtTest/QTest>
 #include <QDebug>
@@ -22,9 +22,9 @@
 #include "../astyle_formatter.h"
 #include <util/formattinghelpers.h>
 
-QTEST_MAIN(AstyleTest)
+QTEST_MAIN(TestAstyle)
 
-void AstyleTest::initTestCase()
+void TestAstyle::initTestCase()
 {
     m_formatter = new AStyleFormatter;
     ///TODO: probably all settings should be covered by tests
@@ -33,7 +33,7 @@ void AstyleTest::initTestCase()
     m_formatter->setSpaceIndentation(4);
 }
 
-void AstyleTest::renameVariable()
+void TestAstyle::renameVariable()
 {
     // think this:
     // int asdf = 1;
@@ -53,7 +53,7 @@ void AstyleTest::renameVariable()
     QCOMPARE(formattedSource, QString("asdf"));
 }
 
-void AstyleTest::testFuzzyMatching()
+void TestAstyle::testFuzzyMatching()
 {
     // Some formatting styles inserts "{" and "}" parens behind "ifs", or change comment styles
     // The actual text changes, thus it is difficult to match original and formatted text
@@ -71,7 +71,7 @@ void AstyleTest::testFuzzyMatching()
     QCOMPARE( extracted, QString("a[0]") );
 }
 
-void AstyleTest::testTabMatching()
+void TestAstyle::testTabMatching()
 {
     // Some formatting styles inserts "{" and "}" parens behind "ifs", or change comment styles
     // The actual text changes, thus it is difficult to match original and formatted text
@@ -135,7 +135,7 @@ void AstyleTest::testTabMatching()
 }
 }
 
-void AstyleTest::overrideHelper()
+void TestAstyle::overrideHelper()
 {
     // think this:
     // virtual void asdf();
@@ -156,7 +156,7 @@ void AstyleTest::overrideHelper()
     QCOMPARE(formattedSource, QString("virtual void asdf();"));
 }
 
-void AstyleTest::varTypeAssistant()
+void TestAstyle::varTypeAssistant()
 {
     // think this:
     // asdf = 1;
@@ -179,7 +179,7 @@ void AstyleTest::varTypeAssistant()
 
 }
 
-void AstyleTest::testMultipleFormatters()
+void TestAstyle::testMultipleFormatters()
 {
     // just test that multiple formatters can exist at the same time
     AStyleFormatter* formatter1 = new AStyleFormatter;
@@ -188,7 +188,7 @@ void AstyleTest::testMultipleFormatters()
     delete formatter2;
 }
 
-void AstyleTest::testMacroFormatting()
+void TestAstyle::testMacroFormatting()
 {
     AStyleFormatter fmt;
     fmt.setSpaceIndentation(2);
@@ -197,7 +197,7 @@ void AstyleTest::testMacroFormatting()
     QCOMPARE(formatted, QString("#define asdf\\\n  foobar\n"));
 }
 
-void AstyleTest::testContext()
+void TestAstyle::testContext()
 {
     AStyleFormatter* formatter = new AStyleFormatter;
     formatter->setBracketFormatMode(astyle::LINUX_MODE);
@@ -299,7 +299,7 @@ void AstyleTest::testContext()
     delete formatter;
 }
 
-void AstyleTest::testTabIndentation()
+void TestAstyle::testTabIndentation()
 {
     AStyleFormatter formatter;
     formatter.setTabSpaceConversionMode(false);
@@ -311,7 +311,7 @@ void AstyleTest::testTabIndentation()
     QCOMPARE(formatted, expected);
 }
 
-void AstyleTest::testForeach()
+void TestAstyle::testForeach()
 {
     AStyleFormatter formatter;
     QVERIFY(formatter.predefinedStyle("KDELibs"));

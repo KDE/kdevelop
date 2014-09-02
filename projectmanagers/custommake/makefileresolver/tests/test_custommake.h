@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TESTCUSTOMMAKE_H
-#define TESTCUSTOMMAKE_H
+#ifndef TEST_CUSTOMMAKE_H
+#define TEST_CUSTOMMAKE_H
 
 #include <QtCore/QObject>
 
@@ -34,4 +34,4 @@ private slots:
     void testIncludeDirectories();
 };
 
-#endif // TESTCUSTOMMAKE_H
+#endif // TEST_CUSTOMMAKE_H

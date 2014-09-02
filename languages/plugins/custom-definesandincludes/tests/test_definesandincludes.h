@@ -16,8 +16,8 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef DEFINESANDINCLUDESTEST_H
-#define DEFINESANDINCLUDESTEST_H
+#ifndef TEST_DEFINESANDINCLUDES_H
+#define TEST_DEFINESANDINCLUDES_H
 
 #include <QtCore/QObject>
 
@@ -26,7 +26,7 @@ namespace KDevelop
 class TestCore;
 }
 
-class DefinesAndIncludesTest : public QObject
+class TestDefinesAndIncludes : public QObject
 {
     Q_OBJECT
 private slots:

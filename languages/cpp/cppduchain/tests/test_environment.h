@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef TESTENVIRONMENT_H
-#define TESTENVIRONMENT_H
+#ifndef TEST_ENVIRONMENT_H
+#define TEST_ENVIRONMENT_H
 
 #include <QObject>
 
@@ -37,4 +37,4 @@ private slots:
   void benchMerge_data();
 };
 
-#endif // TESTENVIRONMENT_H
+#endif // TEST_ENVIRONMENT_H

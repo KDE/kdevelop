@@ -14,14 +14,14 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ASTYLETEST_H
-#define ASTYLETEST_H
+#ifndef TEST_ASTYLE_H
+#define TEST_ASTYLE_H
 
 #include <QtCore/QObject>
 
 class AStyleFormatter;
 
-class AstyleTest : public QObject
+class TestAstyle : public QObject
 {
     Q_OBJECT
 
@@ -43,4 +43,4 @@ private:
     AStyleFormatter* m_formatter;
 };
 
-#endif // ASTYLETEST_H
+#endif // TEST_ASTYLE_H

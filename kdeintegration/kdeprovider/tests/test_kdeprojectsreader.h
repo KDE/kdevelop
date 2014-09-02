@@ -16,17 +16,17 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEPROJECTSREADERTEST_H
-#define KDEPROJECTSREADERTEST_H
+#ifndef TEST_KDEPROJECTSREADER_H
+#define TEST_KDEPROJECTSREADER_H
 
 #include <QObject>
 
 
-class KDEProjectsReaderTest : public QObject
+class TestKDEProjectsReader : public QObject
 {
     Q_OBJECT
     private slots:
         void testsProperParse();
 };
 
-#endif // KDEPROJECTSREADERTEST_H
+#endif // TEST_KDEPROJECTSREADER_H

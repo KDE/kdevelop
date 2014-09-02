@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "gdbtest.h"
+#include "test_gdb.h"
 
 #include <QtTest/QTest>
 #include <QSignalSpy>
@@ -1864,6 +1864,6 @@ void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::Deb
 QTEST_MAIN(GDBDebugger::GdbTest)
 
 
-#include "gdbtest.moc"
-#include "moc_gdbtest.cpp"
+#include "test_gdb.moc"
+#include "moc_test_gdb.cpp"
 

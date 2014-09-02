@@ -16,13 +16,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kdeprojectsreadertest.h"
+#include "test_kdeprojectsreader.h"
 #include <QTest>
 #include <QDebug>
 #include <QSignalSpy>
 #include "../kdeprojectsreader.h"
 
-QTEST_MAIN( KDEProjectsReaderTest )
+QTEST_MAIN( TestKDEProjectsReader )
 
 #define WAIT_FOR_SIGNAL(a,b) \
 {\
@@ -30,7 +30,7 @@ QTEST_MAIN( KDEProjectsReaderTest )
     QVERIFY2(gotSignal, "Timeout while waiting for opened signal");\
 } void(0)
 
-void KDEProjectsReaderTest::testsProperParse()
+void TestKDEProjectsReader::testsProperParse()
 {
     KDEProjectsModel m;
     KDEProjectsReader reader(&m, 0);

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TESTHELPER_H
-#define TESTHELPER_H
+#ifndef TEST_HELPER_H
+#define TEST_HELPER_H
 
 #include <QByteArray>
 
@@ -88,4 +88,4 @@ QByteArray readCodeFile(const QString& file);
 
 }
 
-#endif // TESTHELPER_H
+#endif // TEST_HELPER_H

@@ -17,7 +17,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#include "custombuildsystemplugintest.h"
+#include "test_custombuildsystemplugin.h"
 
 #include <QtTest/QtTest>
 
@@ -46,19 +46,19 @@ using KDevelop::AutoTestShell;
 using KDevelop::KDevSignalSpy;
 using KDevelop::Path;
 
-QTEST_MAIN(CustomBuildSystemPluginTest)
+QTEST_MAIN(TestCustomBuildSystemPlugin)
 
-void CustomBuildSystemPluginTest::cleanupTestCase()
+void TestCustomBuildSystemPlugin::cleanupTestCase()
 {
     TestCore::shutdown();
 }
-void CustomBuildSystemPluginTest::initTestCase()
+void TestCustomBuildSystemPlugin::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize();
 }
 
-void CustomBuildSystemPluginTest::loadSimpleProject()
+void TestCustomBuildSystemPlugin::loadSimpleProject()
 {
     KUrl projecturl( PROJECTS_SOURCE_DIR"/simpleproject/simpleproject.kdev4" );
     KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
@@ -74,7 +74,7 @@ void CustomBuildSystemPluginTest::loadSimpleProject()
               Path( "file:///home/andreas/projects/testcustom/build/" ) );
 }
 
-void CustomBuildSystemPluginTest::buildDirProject()
+void TestCustomBuildSystemPlugin::buildDirProject()
 {
     KUrl projecturl( PROJECTS_SOURCE_DIR"/builddirproject/builddirproject.kdev4" );
     KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
@@ -92,7 +92,7 @@ void CustomBuildSystemPluginTest::buildDirProject()
 }
 
 
-void CustomBuildSystemPluginTest::loadMultiPathProject()
+void TestCustomBuildSystemPlugin::loadMultiPathProject()
 {
     KUrl projecturl( PROJECTS_SOURCE_DIR"/multipathproject/multipathproject.kdev4" );
     KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );

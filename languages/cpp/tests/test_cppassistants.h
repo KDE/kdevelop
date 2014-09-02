@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TestCppAssistants_H
-#define TestCppAssistants_H
+#ifndef TEST_CPPASSISTANTS_H
+#define TEST_CPPASSISTANTS_H
 
 #include <QObject>
 

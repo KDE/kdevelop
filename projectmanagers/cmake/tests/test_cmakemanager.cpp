@@ -17,7 +17,7 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "cmakemanagertest.h"
+#include "test_cmakemanager.h"
 #include "testhelpers.h"
 #include "cmakemodelitems.h"
 #include <icmakemanager.h>
@@ -33,11 +33,11 @@
 #include <tests/testproject.h>
 #include <tests/testcore.h>
 
-QTEST_MAIN(CMakeManagerTest)
+QTEST_MAIN(TestCMakeManager)
 
 using namespace KDevelop;
 
-void CMakeManagerTest::initTestCase()
+void TestCMakeManager::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize();
@@ -45,12 +45,12 @@ void CMakeManagerTest::initTestCase()
     cleanup();
 }
 
-void CMakeManagerTest::cleanupTestCase()
+void TestCMakeManager::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void CMakeManagerTest::cleanup()
+void TestCMakeManager::cleanup()
 {
     foreach(IProject* p, ICore::self()->projectController()->projects()) {
         ICore::self()->projectController()->closeProject(p);
@@ -58,12 +58,12 @@ void CMakeManagerTest::cleanup()
     QVERIFY(ICore::self()->projectController()->projects().isEmpty());
 }
 
-void CMakeManagerTest::testWithBuildDirProject()
+void TestCMakeManager::testWithBuildDirProject()
 {
     loadProject("with_build_dir");
 }
 
-void CMakeManagerTest::testIncludePaths()
+void TestCMakeManager::testIncludePaths()
 {
     IProject* project = loadProject("single_subdirectory");
     Path sourceDir = project->path();
@@ -87,7 +87,7 @@ void CMakeManagerTest::testIncludePaths()
     QVERIFY(includeDirs.contains(subDir));
 }
 
-void CMakeManagerTest::testRelativePaths()
+void TestCMakeManager::testRelativePaths()
 {
     IProject* project = loadProject("relative_paths", "/out");
 
@@ -104,7 +104,7 @@ void CMakeManagerTest::testRelativePaths()
     QVERIFY(includeDirs.contains( incDir ));
 }
 
-void CMakeManagerTest::testTargetIncludePaths()
+void TestCMakeManager::testTargetIncludePaths()
 {
     IProject* project = loadProject("target_includes");
 
@@ -129,7 +129,7 @@ void CMakeManagerTest::testTargetIncludePaths()
     QVERIFY(foundInTarget);
 }
 
-void CMakeManagerTest::testTargetIncludeDirectories()
+void TestCMakeManager::testTargetIncludeDirectories()
 {
     IProject* project = loadProject("target_include_directories");
 
@@ -154,7 +154,7 @@ void CMakeManagerTest::testTargetIncludeDirectories()
     QVERIFY(foundInTarget);
 }
 
-void CMakeManagerTest::testQt5App()
+void TestCMakeManager::testQt5App()
 {
     if (!qgetenv("KDEV_CMAKE_TEST_QT5").toInt()) {
         QSKIP("Test only passes if Qt5 is available, define KDEV_CMAKE_TEST_QT5 to enable this test.", SkipAll);
@@ -183,7 +183,7 @@ void CMakeManagerTest::testQt5App()
     QVERIFY(foundWidgets);
 }
 
-void CMakeManagerTest::testQt5AppOld()
+void TestCMakeManager::testQt5AppOld()
 {
     if (!qgetenv("KDEV_CMAKE_TEST_QT5").toInt()) {
         QSKIP("Test only passes if Qt5 is available, define KDEV_CMAKE_TEST_QT5 to enable this test.", SkipAll);
@@ -212,7 +212,7 @@ void CMakeManagerTest::testQt5AppOld()
     QVERIFY(foundWidgets);
 }
 
-void CMakeManagerTest::testKF5App()
+void TestCMakeManager::testKF5App()
 {
     if (!qgetenv("KDEV_CMAKE_TEST_QT5").toInt()) {
         QSKIP("Test only passes if Qt5 is available, define KDEV_CMAKE_TEST_QT5 to enable this test.", SkipAll);
@@ -244,7 +244,7 @@ void CMakeManagerTest::testKF5App()
     QVERIFY(foundWidgetsAddons);
 }
 
-void CMakeManagerTest::testDefines()
+void TestCMakeManager::testDefines()
 {
     IProject* project = loadProject("defines");
 
@@ -291,7 +291,7 @@ void CMakeManagerTest::testDefines()
     QVERIFY(foundInTarget);
 }
 
-void CMakeManagerTest::testCustomTargetSources()
+void TestCMakeManager::testCustomTargetSources()
 {
     IProject* project = loadProject("custom_target_sources");
 
@@ -304,7 +304,7 @@ void CMakeManagerTest::testCustomTargetSources()
     QCOMPARE(target->fileList().first()->baseName(), QString("foo.cpp"));
 }
 
-void CMakeManagerTest::testConditionsInSubdirectoryBasedOnRootVariables()
+void TestCMakeManager::testConditionsInSubdirectoryBasedOnRootVariables()
 {
     IProject* project = loadProject("conditions_in_subdirectory_based_on_root_variables");
 
@@ -319,7 +319,7 @@ void CMakeManagerTest::testConditionsInSubdirectoryBasedOnRootVariables()
     QCOMPARE(subdirectoryFooItems.size(), 4); // three items for the targets, one item for the plain file
 }
 
-void CMakeManagerTest::testFaultyTarget()
+void TestCMakeManager::testFaultyTarget()
 {
     loadProject("faulty_target");
 }

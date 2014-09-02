@@ -17,7 +17,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#include "definesandincludestest.h"
+#include "test_definesandincludes.h"
 #include "projectsgenerator.h"
 
 #include <QtTest/QtTest>
@@ -43,23 +43,23 @@ using KDevelop::Path;
 
 static IProject* s_currentProject = nullptr;
 
-void DefinesAndIncludesTest::cleanupTestCase()
+void TestDefinesAndIncludes::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void DefinesAndIncludesTest::initTestCase()
+void TestDefinesAndIncludes::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize();
 }
 
-void DefinesAndIncludesTest::cleanup()
+void TestDefinesAndIncludes::cleanup()
 {
     ICore::self()->projectController()->closeProject( s_currentProject );
 }
 
-void DefinesAndIncludesTest::loadSimpleProject()
+void TestDefinesAndIncludes::loadSimpleProject()
 {
     s_currentProject = ProjectsGenerator::GenerateSimpleProject();
     QVERIFY( s_currentProject );
@@ -75,7 +75,7 @@ void DefinesAndIncludesTest::loadSimpleProject()
     QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
 }
 
-void DefinesAndIncludesTest::loadMultiPathProject()
+void TestDefinesAndIncludes::loadMultiPathProject()
 {
     s_currentProject = ProjectsGenerator::GenerateMultiPathProject();
     QVERIFY( s_currentProject );
@@ -108,7 +108,7 @@ void DefinesAndIncludesTest::loadMultiPathProject()
     QCOMPARE(defines, manager->defines( mainfile, IDefinesAndIncludesManager::UserDefined ));
 }
 
-void DefinesAndIncludesTest::testNoProjectIncludeDirectories()
+void TestDefinesAndIncludes::testNoProjectIncludeDirectories()
 {
     s_currentProject = ProjectsGenerator::GenerateSimpleProjectWithOutOfProjectFiles();
     QVERIFY(s_currentProject);
@@ -129,6 +129,6 @@ void DefinesAndIncludesTest::testNoProjectIncludeDirectories()
     QVERIFY(noProjectIncludes.contains(includePath2));
 }
 
-QTEST_MAIN(DefinesAndIncludesTest)
+QTEST_MAIN(TestDefinesAndIncludes)
 
-#include "definesandincludestest.moc"
+#include "test_definesandincludes.moc"

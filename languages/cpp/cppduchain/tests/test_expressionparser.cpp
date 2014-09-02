@@ -17,7 +17,7 @@
 */
 
 #include "test_expressionparser.h"
-#include "testhelper.h"
+#include "test_helper.h"
 
 #include <QtTest/QtTest>
 

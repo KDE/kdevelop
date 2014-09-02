@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TestCppCodeCompletion_H
-#define TestCppCodeCompletion_H
+#ifndef TEST_CPPCODECOMPLETION_H
+#define TEST_CPPCODECOMPLETION_H
 
 #include <QObject>
 #include <QByteArray>

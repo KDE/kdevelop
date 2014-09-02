@@ -16,30 +16,30 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "codeanalysistest.h"
+#include "test_codeanalysis.h"
 #include <QTest>
 #include <language/duchain/duchain.h>
 #include <language/checks/controlflowgraph.h>
 #include <language/checks/controlflownode.h>
 #include <language/duchain/declaration.h>
 
-QTEST_MAIN(CodeAnalysisTest)
+QTEST_MAIN(TestCodeAnalysis)
 
 using namespace KDevelop;
 using namespace Cpp;
 
-CodeAnalysisTest::CodeAnalysisTest(QObject* parent): QObject(parent)
+TestCodeAnalysis::TestCodeAnalysis(QObject* parent): QObject(parent)
 {
   initShell();
 }
 
-void CodeAnalysisTest::initTestCase()
+void TestCodeAnalysis::initTestCase()
 {}
 
-void CodeAnalysisTest::cleanupTestCase()
+void TestCodeAnalysis::cleanupTestCase()
 {}
 
-void CodeAnalysisTest::testUseReadWrite()
+void TestCodeAnalysis::testUseReadWrite()
 {
   QFETCH(QString, code);
   QFETCH(QVariantList, modFlags);
@@ -69,7 +69,7 @@ void CodeAnalysisTest::testUseReadWrite()
     i++;
   }
 }
-void CodeAnalysisTest::testUseReadWrite_data()
+void TestCodeAnalysis::testUseReadWrite_data()
 {
   QTest::addColumn<QString>("code");
   QTest::addColumn<QVariantList>("modFlags");
@@ -255,7 +255,7 @@ private:
     QByteArray m_sources;
 };
 
-void CodeAnalysisTest::testControlFlowCreation()
+void TestCodeAnalysis::testControlFlowCreation()
 {
   QFETCH(QString, code);
   QFETCH(int, nodeCount);
@@ -287,7 +287,7 @@ void CodeAnalysisTest::testControlFlowCreation()
   }
 }
 
-void CodeAnalysisTest::testControlFlowCreation_data()
+void TestCodeAnalysis::testControlFlowCreation_data()
 {
   QTest::addColumn<QString>("code");
   QTest::addColumn<int>("nodeCount");

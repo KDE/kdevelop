@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TESTDUCHAIN_H
-#define TESTDUCHAIN_H
+#ifndef TEST_DUCHAIN_H
+#define TEST_DUCHAIN_H
 
 #include <QObject>
 #include <QByteArray>
@@ -29,7 +29,7 @@
 #include <language/duchain/types/indexedtype.h>
 #include <language/editor/cursorinrevision.h>
 
-#include "testhelper.h"
+#include "test_helper.h"
 
 namespace KDevelop
 {

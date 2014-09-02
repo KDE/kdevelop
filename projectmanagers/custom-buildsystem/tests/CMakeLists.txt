@@ -1,12 +1,8 @@
 configure_file(testconfig.h.in testconfig.h)
 
-ecm_add_test(custombuildsystemplugintest.cpp ../debugarea.cpp TEST_NAME custombuildsystemplugintest)
-target_link_libraries( custombuildsystemplugintest
-        Qt5::Test
-        ${KDEVPLATFORM_TESTS_LIBRARIES}
-        ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    )
-
+ecm_add_test(test_custombuildsystemplugin.cpp ../debugarea.cpp
+    TEST_NAME test_custombuildsystemplugin
+    LINK_LIBRARIES Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES})
 
 # Small sample app loading a dialog with the config-ui and a dummy project
 # Useful for testing UI ideas quickly

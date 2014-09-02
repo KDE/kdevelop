@@ -17,8 +17,8 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef CUSTOMBUILDSYSTEMPLUGINTEST_H
-#define CUSTOMBUILDSYSTEMPLUGINTEST_H
+#ifndef TEST_CUSTOMBUILDSYSTEMPLUGIN_H
+#define TEST_CUSTOMBUILDSYSTEMPLUGIN_H
 
 #include <QtCore/QObject>
 
@@ -27,7 +27,7 @@ namespace KDevelop
 class TestCore;
 }
 
-class CustomBuildSystemPluginTest : public QObject
+class TestCustomBuildSystemPlugin : public QObject
 {
 Q_OBJECT
 private slots:
