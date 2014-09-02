@@ -67,8 +67,12 @@ bool tryLockForegroundMutexInternal(int interval = 0) {
     }
 }
 
-void unlockForegroundMutexInternal() {
-    Q_ASSERT(holderThread == QThread::currentThread());
+void unlockForegroundMutexInternal(bool duringDestruction = false) {
+    /// Note: QThread::currentThread() might already be invalid during destruction.
+    if (!duringDestruction) {
+        Q_ASSERT(holderThread == QThread::currentThread());
+    }
+
     Q_ASSERT(recursion > 0);
     recursion -= 1;
     if(recursion == 0)
@@ -228,9 +232,10 @@ namespace KDevelop {
 // Important: The foreground lock has to be held by default, so lock it during static initialization
 static struct StaticLock {
     StaticLock() {
-        // Only lock, without unlocking, because otherwise important variables like
-        // QThread::currentThread() might already be invalid during destruction.
         lockForegroundMutexInternal();
+    }
+    ~StaticLock() {
+        unlockForegroundMutexInternal(true);
     }
 } staticLock;
 
