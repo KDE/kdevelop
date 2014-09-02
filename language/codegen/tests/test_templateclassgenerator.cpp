@@ -46,7 +46,9 @@ void TestTemplateClassGenerator::initTestCase()
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 
-    baseUrl.setDirectory(QString(CODEGEN_TESTS_EXPECTED_DIR) + "/");
+    // Use a temporary directory for the template work
+    tempDir.setAutoRemove(true);
+    baseUrl.setDirectory(tempDir.path());
 
     // Needed for extracting description out of template archives
     TemplatesModel model("kdevcodegentest");

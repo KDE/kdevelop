@@ -23,6 +23,7 @@
 #define KDEVPLATFORM_TESTTEMPLATECLASSGENERATOR_H
 
 #include <QtTest>
+#include <QTemporaryDir>
 
 #include "language/codegen/codedescription.h"
 #include <KUrl>
@@ -58,6 +59,7 @@ private:
 
 private:
     KUrl baseUrl;
+    QTemporaryDir tempDir;
     KDevelop::ClassDescription description;
     void setLowercaseFileNames(KDevelop::TemplateClassGenerator* generator);
 };
