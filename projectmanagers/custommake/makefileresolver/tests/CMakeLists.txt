@@ -1,11 +1,12 @@
-set( test_custommake_SRCS
+set(test_custommake_SRCS
      test_custommake.cpp
      ../makefileresolver.cpp
-   )
+)
 
-kdevplatform_add_test( test_custommake SOURCES ${test_custommake_SRCS} )
-target_link_libraries( test_custommake
+ecm_add_test(${test_custommake_SRCS}
+    TEST_NAME test_custommake
+    LINK_LIBRARIES
         ${QT_QTTEST_LIBRARY}
         ${KDEVPLATFORM_TESTS_LIBRARIES}
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    )
+)
