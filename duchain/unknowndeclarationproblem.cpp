@@ -480,5 +480,5 @@ KSharedPtr<IAssistant> UnknownDeclarationProblem::solutionAssistant() const
 {
     const Path path(finalLocation().document.str());
     const auto fixits = allFixits() + fixUnknownDeclaration(m_identifier, path, finalLocation());
-    return KSharedPtr<IAssistant>(new ClangFixitAssistant(QObject::tr("Add Missing Include"), fixits));
+    return KSharedPtr<IAssistant>(new ClangFixitAssistant(fixits));
 }
