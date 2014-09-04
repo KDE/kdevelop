@@ -6,6 +6,7 @@ Name[cs]=Uvítací stránka KDevelop
 Name[en_GB]=KDevelop Welcome Page
 Name[es]=Página de bienvenida de KDevelop
 Name[fi]=KDevelopin tervetulosivu
+Name[hu]=KDevelop üdvözlőképernyő
 Name[nl]=Welkomstpagina van KDevelop
 Name[pl]=Strona powitalna KDevelop
 Name[pt]=Página de Boas-Vindas do KDevelop
