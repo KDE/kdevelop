@@ -79,8 +79,12 @@ bool isBlacklisted(const QString& path)
     return false;
 }
 
-QStringList scanIncludePaths( const QString& identifier, const QDir& dir )
+QStringList scanIncludePaths( const QString& identifier, const QDir& dir, int maxDepth = 3 )
 {
+    if (!maxDepth) {
+        return {};
+    }
+
     QStringList candidates;
     const auto path = dir.absolutePath();
 
@@ -98,8 +102,9 @@ QStringList scanIncludePaths( const QString& identifier, const QDir& dir )
         candidates.append( path + "/" + identifier + ext );
     }
 
+    maxDepth--;
     for( const auto& subdir : dir.entryList( QDir::Dirs | QDir::NoDotAndDotDot ) )
-        candidates += scanIncludePaths( identifier, QDir{ path + "/" + subdir } );
+        candidates += scanIncludePaths( identifier, QDir{ path + "/" + subdir }, maxDepth );
 
     return candidates;
 }
