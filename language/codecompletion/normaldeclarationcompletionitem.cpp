@@ -96,7 +96,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
   KTextEditor::Range newRange = word;
   newRange.setEnd(KTextEditor::Cursor(newRange.end().line(), newRange.start().column() + newText.length()));
 
-  executed(document, newRange);
+  executed(view, newRange);
 }
 
 QWidget* NormalDeclarationCompletionItem::createExpandingWidget(const KDevelop::CodeCompletionModel* model) const
@@ -116,9 +116,9 @@ QString NormalDeclarationCompletionItem::shortenedTypeString(KDevelop::Declarati
   return decl->abstractType()->toString();
 }
 
-void NormalDeclarationCompletionItem::executed(KTextEditor::Document* document, const KTextEditor::Range& word)
+void NormalDeclarationCompletionItem::executed(KTextEditor::View* view, const KTextEditor::Range& word)
 {
-  Q_UNUSED(document);
+  Q_UNUSED(view);
   Q_UNUSED(word);
 }
 
@@ -129,7 +129,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     kDebug(9007) << "Failed to lock the du-chain in time";
     return QVariant();
   }
-  
+
   if(!m_declaration)
     return QVariant();
 

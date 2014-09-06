@@ -49,17 +49,17 @@ protected:
    * Called after execute, you may insert additional chars for this declaration (eg. parens)
    * Default implementation does nothing
    */
-  virtual void executed(KTextEditor::Document* document, const KTextEditor::Range& word);
+  virtual void executed(KTextEditor::View* view, const KTextEditor::Range& word);
 
   QExplicitlySharedDataPointer<CodeCompletionContext> m_completionContext;
   KDevelop::DeclarationPointer m_declaration;
   int m_inheritanceDepth; //Inheritance-depth: 0 for local functions(within no class), 1 for within local class, 1000+ for global items.
-  
+
   static const int normalBestMatchesCount;
   static const bool shortenArgumentHintReturnValues;
   static const int maximumArgumentHintReturnValueLength;
   static const int desiredTypeLength;
-  
+
 };
 
 }
