@@ -297,11 +297,12 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
         return languages;
 
     KMimeType::Ptr mimeType;
-    
+
+    int accuracy = 0;
     if(!extension.isEmpty()) {
         // If we have recognized a file extension, allow using the file-contents
         // to look up the type. We will cache it after all.
-        mimeType = KMimeType::findByUrl(url);
+        mimeType = KMimeType::findByUrl(url, 0, false, false, &accuracy);
     } else {
         // If we have not recognized a file extension, do not allow using the file-contents
         // to look up the type. We cannot cache the result, and thus we might end up reading
@@ -319,8 +320,11 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
 
     languages = languagesForMimetype(mimeType->name());
 
-    if(!extension.isEmpty())
+    // E.g. because  of some txt file that begins with /* and considered as c++ file
+    // we don't want the c++ language support to parse all txt files.
+    if(!extension.isEmpty() && accuracy > 80) {
         d->fileExtensionCache.insert(extension, languages);
+    }
 
     return languages;
 }
