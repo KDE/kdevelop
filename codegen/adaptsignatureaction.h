@@ -31,6 +31,7 @@ class RenameAction;
 typedef QPair<KDevelop::IndexedType, QString> ParameterItem;
 struct Signature
 {
+    Signature(){};
     QList<ParameterItem> parameters;
     QList<QString> defaultParams;
     KDevelop::IndexedType returnType;
