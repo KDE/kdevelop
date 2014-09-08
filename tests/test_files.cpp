@@ -31,7 +31,8 @@
 
 #include "testfilepaths.h"
 
-#include <KDebug>
+//HACK: TODO: Don't define debug as an alias for our future qCDebug area
+#undef debug
 
 //Include all used json tests, otherwise "Test not found"
 #include <tests/json/jsondeclarationtests.h>
