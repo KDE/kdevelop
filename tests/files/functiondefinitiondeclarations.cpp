@@ -24,13 +24,13 @@ void someFunc(int a) { }
 
 class SomeClass
 {
-    /// "definition" : { "toString" : "void SomeClass::someClassFunc ()",
-    ///     "internalContext" : { "type" : "Function", "localDeclarationCount" : 0 }
+    /// "definition" : { "internalContext" : { "type" : "Function", "localDeclarationCount" : 0 },
+    /// "range" : "[(39, 16), (39, 29)]"
     /// }
     void someClassFunc();
     /// "definition" : { "internalContext" : { "type" : "Function", "localDeclarationCount" : 2 } }
     void someClassFunc(int arg, char arg);
-    /// "definition" : { "internalContext" : { "type" : "Function", "localDeclarationCount" : 0 } }
+    /// "qualifiedIdentifier" : "SomeClass::anotherClassFunc"
     void anotherClassFunc();
     /// "definition" : { "null" : true }
     void anotherClassFunc(int foo);
