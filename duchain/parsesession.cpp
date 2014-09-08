@@ -32,6 +32,8 @@
 #include "util/clangtypes.h"
 #include "../debug.h"
 
+#include <language/duchain/duchainlock.h>
+
 #include <KLocale>
 #include <KMimeType>
 
@@ -214,6 +216,7 @@ ParseSession::ParseSession(ParseSessionData::Ptr data)
     : d(data)
 {
     if (d) {
+        ENSURE_CHAIN_NOT_LOCKED
         d->m_mutex.lock();
     }
 }
@@ -238,6 +241,7 @@ void ParseSession::setData(ParseSessionData::Ptr data)
     d = data;
 
     if (d) {
+        ENSURE_CHAIN_NOT_LOCKED
         d->m_mutex.lock();
     }
 }

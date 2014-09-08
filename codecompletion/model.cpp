@@ -74,9 +74,9 @@ public slots:
             return;
         }
 
-        lock.lock();
         ClangCodeCompletionContext completionContext(DUContextPointer(top), sessionData, position, text);
 
+        lock.lock();
         if (aborting()) {
             failed();
             return;
