@@ -2,7 +2,7 @@ set(makefileresolver_SRCS
     makefileresolver.cpp
 )
 
-kde4_add_library(kdev4makefileresolver STATIC
+add_library(kdev4makefileresolver STATIC
     ${makefileresolver_SRCS}
 )
 target_link_libraries(kdev4makefileresolver

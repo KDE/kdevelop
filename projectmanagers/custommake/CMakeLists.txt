@@ -1,6 +1,5 @@
 project(custommakemanager)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9025 )
-add_subdirectory(makefileresolver)
 
 include_directories(
     ${makebuilder_SOURCE_DIR}
@@ -13,7 +12,6 @@ set(kdevcustommakemanager_PART_SRCS
     custommakemanager.cpp
     custommakemodelitems.cpp
 )
-
 
 add_library(kdevcustommakemanager MODULE ${kdevcustommakemanager_PART_SRCS})
 target_link_libraries( kdevcustommakemanager
@@ -29,3 +27,5 @@ install(TARGETS kdevcustommakemanager DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplat
 configure_file(kdevcustommakemanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcustommakemanager.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcustommakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevcustommakemanager.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcustommakemanager )
+
+add_subdirectory(makefileresolver)

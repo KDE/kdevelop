@@ -21,10 +21,6 @@
 
 #include "test_custommake.h"
 
-#include <QtTest/QtTest>
-
-#include <qtest_kde.h>
-
 #include <QFile>
 #include <QTextStream>
 #include <KDebug>
@@ -34,6 +30,8 @@
 #include <tests/testcore.h>
 
 #include "../makefileresolver.h"
+
+#include <QtTest>
 
 namespace {
 void createFile( QFile& file )
@@ -74,4 +72,6 @@ void TestCustomMake::testIncludeDirectories() {
     QCOMPARE(result.paths.size(), 4);
 }
 
-QTEST_KDEMAIN(TestCustomMake, NoGUI)
+QTEST_GUILESS_MAIN(TestCustomMake)
+
+#include "moc_test_custommake.cpp"

@@ -1,6 +1,6 @@
 set(test_custommake_SRCS
-     test_custommake.cpp
-     ../makefileresolver.cpp
+    test_custommake.cpp
+    ../makefileresolver.cpp
 )
 
 ecm_add_test(${test_custommake_SRCS}
