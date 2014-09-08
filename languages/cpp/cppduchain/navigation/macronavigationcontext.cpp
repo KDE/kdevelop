@@ -53,6 +53,7 @@ KTextEditor::View* createDocAndView(const QString& data, KTextEditor::Document**
   doc->setMode("C++");
   doc->setReadWrite(false);
   KTextEditor::View* view = doc->createView(0);
+  view->setStatusBarEnabled(false);
   if (KTextEditor::ConfigInterface* config = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
     config->setConfigValue("icon-bar", false);
     config->setConfigValue("folding-bar", false);
