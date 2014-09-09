@@ -66,6 +66,8 @@ ActiveToolTip::ActiveToolTip(QWidget *parent, const QPoint& position)
     p.setColor(QPalette::Text, p.color(QPalette::ToolTipText));
     setPalette(p);
 
+    setWindowFlags(Qt::WindowDoesNotAcceptFocus | windowFlags());
+
     qApp->installEventFilter(this);
 }
 
