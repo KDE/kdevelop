@@ -25,9 +25,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QAbstractItemModel>
-#include <KUrl>
-
-class KUrl;
+#include <QtCore/QUrl>
 
 namespace KDevelop {
 
@@ -97,7 +95,7 @@ public:
      * The default implementation just returns the url and is sufficient for
      * local debuggers. Remote debuggers can implement a path mapping mechanism.
      */
-    virtual QPair<KUrl, int> convertToLocalUrl(const QPair<KUrl, int> &remoteUrl) const;
+    virtual QPair<QUrl, int> convertToLocalUrl(const QPair<QUrl, int> &remoteUrl) const;
 
     /**
      * Returns the remote Url for a source file used in the current debug session.
@@ -105,7 +103,7 @@ public:
      * The default implementation just returns the url and is sufficient for
      * local debuggers. Remote debuggers can implement a path mapping mechanism.
      */
-    virtual QPair<KUrl, int> convertToRemoteUrl(const QPair<KUrl, int> &localUrl) const;
+    virtual QPair<QUrl, int> convertToRemoteUrl(const QPair<QUrl, int> &localUrl) const;
 
     IBreakpointController *breakpointController() const;
     IVariableController *variableController() const;    
@@ -126,7 +124,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void stateChanged(KDevelop::IDebugSession::DebuggerState state);
-    void showStepInSource(const KUrl& file, int line, const QString &addr);
+    void showStepInSource(const QUrl& file, int line, const QString &addr);
     void showStepInDisassemble(const QString &addr);
     void clearExecutionPoint();
     void finished();
@@ -144,7 +142,7 @@ Q_SIGNALS:
 public:
     using QObject::event; // prevent hiding of base method.
 
-    KUrl currentUrl() const;
+    QUrl currentUrl() const;
     int currentLine() const;
     QString currentAddr() const;
     
@@ -153,7 +151,7 @@ protected:
     // Clear the position before running code
     void clearCurrentPosition();
     /// Sets new position and emits showStepInSource or showStepInDisassemble (if source file is unavailable) signal
-    void setCurrentPosition(const KUrl& url, int line, const QString& addr);
+    void setCurrentPosition(const QUrl& url, int line, const QString& addr);
 
     /** Raises the specified event. Should be used instead of
         emitting 'event' directly, since this method can perform
@@ -176,7 +174,7 @@ private Q_SLOTS:
 
 private: //TODO use d-pointer
     // Current position in debugged program, gets set when the state changes
-    KUrl m_url;
+    QUrl m_url;
     int m_line;
     QString m_addr;
 

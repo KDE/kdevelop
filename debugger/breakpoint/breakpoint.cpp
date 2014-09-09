@@ -231,15 +231,15 @@ void Breakpoint::setLine(int line) {
     m_line = line;
     reportChange(LocationColumn);
 }
-void Breakpoint::setUrl(const KUrl& url) {
+void Breakpoint::setUrl(const QUrl& url) {
     Q_ASSERT(m_kind == CodeBreakpoint);
     m_url = url;
     reportChange(LocationColumn);
 }
-KUrl Breakpoint::url() const {
+QUrl Breakpoint::url() const {
     return m_url;
 }
-void Breakpoint::setLocation(const KUrl& url, int line)
+void Breakpoint::setLocation(const QUrl& url, int line)
 {
     Q_ASSERT(m_kind == CodeBreakpoint);
     m_url = url;

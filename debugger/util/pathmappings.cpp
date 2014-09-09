@@ -34,58 +34,46 @@
 #include <KDebug>
 #include <KConfigGroup>
 
+namespace {
+
+static QUrl rebaseMatchingUrl(const QUrl& toRebase, const KConfigGroup& config, const QString& baseEntry, const QString& rebaseEntry)
+{
+    const QUrl::UrlFormattingOption matchOpts = QUrl::NormalizePathSegments;
+    foreach (const QString &group, config.groupList()) {
+        KConfigGroup pathCfg = config.group(group);
+        const QString baseStr = pathCfg.readEntry(baseEntry, QUrl()).url(matchOpts);
+        const QString searchStr = toRebase.url(matchOpts);
+        if (searchStr.contains(baseStr)) {
+            const QUrl rebase = pathCfg.readEntry(rebaseEntry, QUrl());
+            return rebase.resolved(searchStr.mid(baseStr.length()));
+        }
+    }
+    //No mapping found
+    return toRebase;
+}
+
+}
+
 namespace KDevelop {
 
 const QString PathMappings::pathMappingsEntry("Path Mappings");
 const QString PathMappings::pathMappingRemoteEntry("Remote");
 const QString PathMappings::pathMappingLocalEntry("Local");
 
-KUrl PathMappings::convertToLocalUrl(const KConfigGroup& config, const KUrl& remoteUrl)
+QUrl PathMappings::convertToLocalUrl(const KConfigGroup& config, const QUrl& remoteUrl)
 {
     if (remoteUrl.isLocalFile() && QFile::exists(remoteUrl.toLocalFile())) {
         return remoteUrl;
     }
 
-    kDebug() << remoteUrl;
-
     KConfigGroup cfg = config.group(pathMappingsEntry);
-    foreach (const QString &group, cfg.groupList()) {
-        KConfigGroup pCfg = cfg.group(group);
-        KUrl remote = pCfg.readEntry(pathMappingRemoteEntry, QUrl());
-        KUrl local = pCfg.readEntry(pathMappingLocalEntry, QUrl());
-        kDebug() << remote << local;
-        kDebug() << remoteUrl.pathOrUrl() << remote.pathOrUrl();
-        if (remoteUrl.pathOrUrl().startsWith(remote.pathOrUrl())) {
-            QString path = remoteUrl.pathOrUrl().mid(remote.pathOrUrl().length());
-            local.addPath(path);
-            return local;
-        }
-    }
-
-    kDebug() << "no mapping found";
-    return remoteUrl;
+    return rebaseMatchingUrl(remoteUrl, cfg, pathMappingRemoteEntry, pathMappingLocalEntry);
 }
 
-KUrl PathMappings::convertToRemoteUrl(const KConfigGroup& config, const KUrl& localUrl)
+QUrl PathMappings::convertToRemoteUrl(const KConfigGroup& config, const QUrl& localUrl)
 {
-    kDebug() << localUrl;
-
     KConfigGroup cfg = config.group(pathMappingsEntry);
-    foreach (const QString &group, cfg.groupList()) {
-        KConfigGroup pCfg = cfg.group(group);
-        KUrl remote = pCfg.readEntry(pathMappingRemoteEntry, QUrl());
-        KUrl local = pCfg.readEntry(pathMappingLocalEntry, QUrl());
-        kDebug() << remote << local;
-        kDebug() << localUrl.pathOrUrl() << local.pathOrUrl();
-        if (localUrl.pathOrUrl().startsWith(local.pathOrUrl())) {
-            QString path = localUrl.pathOrUrl().mid(local.pathOrUrl().length());
-            remote.addPath(path);
-            return remote;
-        }
-    }
-
-    kDebug() << "no mapping found";
-    return localUrl;
+    return rebaseMatchingUrl(localUrl, cfg, pathMappingLocalEntry, pathMappingRemoteEntry);
 }
 
 
@@ -155,9 +143,9 @@ public:
                 endInsertRows();
             }
             if (index.column() == 0) {
-                m_paths[index.row()].remote = KUrl(value.toString());
+                m_paths[index.row()].remote = QUrl::fromUserInput(value.toString());
             } else if (index.column() == 1) {
-                m_paths[index.row()].local = KUrl(value.toString());
+                m_paths[index.row()].local = QUrl::fromLocalFile(value.toString());
             }
             dataChanged(index, index);
             return true;

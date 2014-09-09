@@ -24,8 +24,6 @@
 #include <QtCore/QModelIndex>
 #include <QtCore/QHash>
 
-#include <KDE/KUrl>
-
 #include <debugger/debuggerexport.h>
 #include <debugger/interfaces/idebugsession.h>
 #include <debugger/interfaces/iframestackmodel.h>

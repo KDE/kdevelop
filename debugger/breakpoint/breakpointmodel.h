@@ -27,7 +27,7 @@
 #include <KTextEditor/MarkInterface>
 #include "breakpoint.h"
 
-class KUrl;
+class QUrl;
 
 namespace KParts { class Part; }
 namespace KTextEditor {
@@ -58,11 +58,11 @@ public:
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
  
-    void toggleBreakpoint(const KUrl &url, const KTextEditor::Cursor& cursor);
+    void toggleBreakpoint(const QUrl &url, const KTextEditor::Cursor& cursor);
 
 
     KDevelop::Breakpoint* addCodeBreakpoint();
-    KDevelop::Breakpoint* addCodeBreakpoint(const KUrl& location, int line);
+    KDevelop::Breakpoint* addCodeBreakpoint(const QUrl& location, int line);
     KDevelop::Breakpoint* addCodeBreakpoint(const QString& expression);
     KDevelop::Breakpoint* addWatchpoint();
     KDevelop::Breakpoint* addWatchpoint(const QString& expression);
@@ -136,7 +136,7 @@ private:
 
     void reportChange(Breakpoint *breakpoint, Breakpoint::Column column);
     uint breakpointType(Breakpoint *breakpoint);
-    Breakpoint *breakpoint(const KUrl& url, int line);
+    Breakpoint *breakpoint(const QUrl& url, int line);
 
     bool m_dontUpdateMarks;
     QList<Breakpoint*> m_breakpoints;

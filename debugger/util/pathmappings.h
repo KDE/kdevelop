@@ -25,7 +25,7 @@
 
 #include <QWidget>
 
-#include <KUrl>
+#include <QtCore/QUrl>
 #include <KConfigGroup>
 
 #include <debugger/debuggerexport.h>
@@ -41,8 +41,8 @@ public:
     static const QString pathMappingRemoteEntry;
     static const QString pathMappingLocalEntry;
 
-    static KUrl convertToLocalUrl(const KConfigGroup &config, const KUrl& remoteUrl);
-    static KUrl convertToRemoteUrl(const KConfigGroup &config, const KUrl& localUrl);
+    static QUrl convertToLocalUrl(const KConfigGroup &config, const QUrl& remoteUrl);
+    static QUrl convertToRemoteUrl(const KConfigGroup &config, const QUrl& localUrl);
 };
 
 class KDEVPLATFORMDEBUGGER_EXPORT PathMappingsWidget : public QWidget

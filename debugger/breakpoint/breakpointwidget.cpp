@@ -301,7 +301,7 @@ void BreakpointWidget::slotOpenFile(const QModelIndex& breakpointIdx)
         return;
     }
 
-   ICore::self()->documentController()->openDocument(bp->url().pathOrUrl(KUrl::RemoveTrailingSlash), KTextEditor::Cursor(bp->line(), 0), IDocumentController::DoNotFocus);
+   ICore::self()->documentController()->openDocument(bp->url().url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash), KTextEditor::Cursor(bp->line(), 0), IDocumentController::DoNotFocus);
 }
 
 void BreakpointWidget::slotDisableAllBreakpoints()

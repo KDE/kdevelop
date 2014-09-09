@@ -204,7 +204,7 @@ void FramestackWidget::frameSelectionChanged(const QModelIndex& current /* previ
     IFrameStackModel::FrameItem f = m_session->frameStackModel()->frame(current);
     /* If line is -1, then it's not a source file at all.  */
     if (f.line != -1) {
-        QPair<KUrl, int> file = m_session->convertToLocalUrl(qMakePair(f.file, f.line));
+        QPair<QUrl, int> file = m_session->convertToLocalUrl(qMakePair(f.file, f.line));
         ICore::self()->documentController()->openDocument(file.first, KTextEditor::Cursor(file.second, 0), IDocumentController::DoNotFocus);
     }
 
@@ -224,9 +224,9 @@ void FramestackWidget::copySelection()
     Q_FOREACH( QModelIndex index, indexes) {
         IFrameStackModel::FrameItem frame = m_session->frameStackModel()->frame(index);
         if (frame.line == -1) {
-            content += QString("#%1 %2() at %3\n").arg(frame.nr).arg(frame.name).arg(frame.file.pathOrUrl(KUrl::RemoveTrailingSlash));
+            content += QString("#%1 %2() at %3\n").arg(frame.nr).arg(frame.name).arg(frame.file.url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash));
         } else {
-            content += QString("#%1 %2() at %3:%4\n").arg(frame.nr).arg(frame.name).arg(frame.file.pathOrUrl(KUrl::RemoveTrailingSlash)).arg(frame.line+1);
+            content += QString("#%1 %2() at %3:%4\n").arg(frame.nr).arg(frame.name).arg(frame.file.url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash)).arg(frame.line+1);
         }
     }
     cb->setText(content);

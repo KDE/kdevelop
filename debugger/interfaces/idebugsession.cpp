@@ -79,12 +79,12 @@ void IDebugSession::raiseEvent(event_t e)
     emit event(e);
 }
 
-QPair<KUrl, int> IDebugSession::convertToLocalUrl(const QPair<KUrl, int> &remoteUrl) const
+QPair<QUrl, int> IDebugSession::convertToLocalUrl(const QPair<QUrl, int> &remoteUrl) const
 {
     return remoteUrl;
 }
 
-QPair<KUrl, int> IDebugSession::convertToRemoteUrl(const QPair<KUrl, int>& localUrl) const
+QPair<QUrl, int> IDebugSession::convertToRemoteUrl(const QPair<QUrl, int>& localUrl) const
 {
     return localUrl;
 }
@@ -98,7 +98,7 @@ void IDebugSession::clearCurrentPosition()
     emit clearExecutionPoint();
 }
 
-void IDebugSession::setCurrentPosition(const KUrl& url, int line, const QString& addr)
+void IDebugSession::setCurrentPosition(const QUrl& url, int line, const QString& addr)
 {
     kDebug() << url << line << addr;
 
@@ -114,7 +114,7 @@ void IDebugSession::setCurrentPosition(const KUrl& url, int line, const QString&
     }
 }
 
-KUrl IDebugSession::currentUrl() const
+QUrl IDebugSession::currentUrl() const
 {
     return m_url;
 }

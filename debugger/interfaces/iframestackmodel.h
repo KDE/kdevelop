@@ -23,7 +23,7 @@
 
 #include "idebugsession.h"
 
-#include <KDE/KUrl>
+#include <QtCore/QUrl>
 
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QString>
@@ -39,7 +39,7 @@ namespace KDevelop {
         struct FrameItem {
             int nr;
             QString name;
-            KUrl file;
+            QUrl file;
             /* If -1, it means that file is not necessary a source file,
                but possibly a solib name.  */
             int line;

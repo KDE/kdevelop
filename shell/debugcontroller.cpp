@@ -340,7 +340,7 @@ void DebugController::clearExecutionPoint()
     }
 }
 
-void DebugController::showStepInSource(const KUrl &url, int lineNum)
+void DebugController::showStepInSource(const QUrl &url, int lineNum)
 {
     if((Core::self()->setupFlags() & Core::NoUi)) return;
 
@@ -348,7 +348,7 @@ void DebugController::showStepInSource(const KUrl &url, int lineNum)
     kDebug() << url << lineNum;
 
     Q_ASSERT(dynamic_cast<IDebugSession*>(sender()));
-    QPair<KUrl,int> openUrl = static_cast<IDebugSession*>(sender())->convertToLocalUrl(qMakePair<KUrl,int>( url, lineNum ));
+    QPair<QUrl,int> openUrl = static_cast<IDebugSession*>(sender())->convertToLocalUrl(qMakePair<QUrl,int>( url, lineNum ));
     KDevelop::IDocument* document = KDevelop::ICore::self()
         ->documentController()
         ->openDocument(openUrl.first, KTextEditor::Cursor(openUrl.second, 0), IDocumentController::DoNotFocus);

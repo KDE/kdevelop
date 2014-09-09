@@ -22,7 +22,7 @@
 #define KDEVPLATFORM_BREAKPOINT_H
 
 #include <QtCore/QSet>
-#include <KDE/KUrl>
+#include <QtCore/QUrl>
 #include "../util/treeitem.h"
 
 class KConfigGroup;
@@ -76,13 +76,13 @@ public:
         IgnoreHitsColumn
     };
 
-    void setUrl(const KUrl &url);
-    KUrl url() const;
+    void setUrl(const QUrl &url);
+    QUrl url() const;
     
     void setLine(int line);
     int line() const;
     
-    void setLocation(const KUrl& url, int line);
+    void setLocation(const QUrl& url, int line);
     QString location();
 
     BreakpointKind kind() const;

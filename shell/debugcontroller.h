@@ -83,7 +83,7 @@ private Q_SLOTS:
     void toggleBreakpoint();
 
     void debuggerStateChanged(KDevelop::IDebugSession::DebuggerState state);
-    void showStepInSource(const KUrl &file, int line);
+    void showStepInSource(const QUrl &file, int line);
     void clearExecutionPoint();
     
     void partAdded(KParts::Part* part);

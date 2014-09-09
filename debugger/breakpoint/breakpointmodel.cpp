@@ -322,7 +322,7 @@ const QPixmap* BreakpointModel::disabledBreakpointPixmap()
   return &pixmap;
 }
 
-void BreakpointModel::toggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor)
+void BreakpointModel::toggleBreakpoint(const QUrl& url, const KTextEditor::Cursor& cursor)
 {
     Breakpoint *b = breakpoint(url, cursor.line());
     if (b) {
@@ -475,7 +475,7 @@ Breakpoint* BreakpointModel::addCodeBreakpoint()
     return n;
 }
 
-Breakpoint* BreakpointModel::addCodeBreakpoint(const KUrl& url, int line)
+Breakpoint* BreakpointModel::addCodeBreakpoint(const QUrl& url, int line)
 {
     Breakpoint* n = addCodeBreakpoint();
     n->setLocation(url, line);
@@ -541,7 +541,7 @@ void BreakpointModel::registerBreakpoint(Breakpoint* breakpoint)
     m_breakpoints << breakpoint;
 }
 
-Breakpoint* BreakpointModel::breakpoint(const KUrl& url, int line) {
+Breakpoint* BreakpointModel::breakpoint(const QUrl& url, int line) {
     foreach (Breakpoint *b, m_breakpoints) {
         if (b->url() == url && b->line() == line) {
             return b;
@@ -549,4 +549,3 @@ Breakpoint* BreakpointModel::breakpoint(const KUrl& url, int line) {
     }
     return 0;
 }
-
