@@ -26,9 +26,6 @@
  ***************************************************************************/
 
 #include "test_bazaar.h"
-
-#include <qtest_kde.h>
-#include <QtTest/QtTest>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <KUrl>
@@ -38,6 +35,8 @@
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
 #include "../bazaarplugin.h"
+
+#include <QtTest/QtTest>
 
 #define VERIFYJOB(j) \
 do { QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::JobSucceeded); } while(0)
@@ -356,6 +355,6 @@ void TestBazaar::removeTempDirs()
             qDebug() << "KIO::NetAccess::del(" << bazaarTest_BaseDir2 << ") returned false";
 }
 
-QTEST_KDEMAIN(TestBazaar, GUI)
+QTEST_MAIN(TestBazaar)
 
 #include "test_bazaar.moc"
