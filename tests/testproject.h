@@ -46,7 +46,6 @@ public:
      * @p url Path to project directory.
      */
     TestProject(const Path& url = Path(), QObject* parent = 0);
-    KDEVPLATFORMTESTS_DEPRECATED TestProject(const KUrl& url, QObject* parent = 0);
     virtual ~TestProject();
     IProjectFileManager* projectFileManager() const { return 0; }
     IBuildSystemManager* buildSystemManager() const { return 0; }

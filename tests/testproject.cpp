@@ -39,16 +39,6 @@ TestProject::TestProject(const Path& path, QObject* parent)
     ICore::self()->projectController()->projectModel()->appendRow( m_root );
 }
 
-TestProject::TestProject(const KUrl& url, QObject* parent)
-: IProject(parent)
-, m_root(0)
-, m_projectConfiguration(KSharedConfig::openConfig())
-{
-    m_path = url.isValid() ? Path(url) : Path("/tmp/kdev-testproject/");
-    m_root = new ProjectFolderItem(this, m_path);
-    ICore::self()->projectController()->projectModel()->appendRow( m_root );
-}
-
 void TestProject::setPath(const Path& path)
 {
     m_path = path;
