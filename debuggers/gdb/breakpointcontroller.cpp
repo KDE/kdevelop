@@ -235,7 +235,7 @@ void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord
                 if (mi_b.hasField("fullname") && mi_b.hasField("line")) {
                     location = unquoteExpression(mi_b["fullname"].literal());
                     line = mi_b["line"].literal();
-                    if (location == b->url().pathOrUrl(KUrl::RemoveTrailingSlash) && line.toInt() - 1  == b->line()) {
+                    if (location == b->url().url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash) && line.toInt() - 1  == b->line()) {
                         updateBreakpoint = b;
                     } else {
                         kDebug() << location << ":" << line << "!=" << b->location();
@@ -250,7 +250,7 @@ void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord
                     kDebug() << "location" << location;
                     QRegExp rx("^(.+):(\\d+)$");
                     if (rx.indexIn(location) != -1) {
-                        if (unquoteExpression(rx.cap(1)) == b->url().pathOrUrl(KUrl::RemoveTrailingSlash) && rx.cap(2).toInt() - 1 == b->line()) {
+                        if (unquoteExpression(rx.cap(1)) == b->url().url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash) && rx.cap(2).toInt() - 1 == b->line()) {
                             updateBreakpoint = b;
                         } else {
                             kDebug() << "!=" << b->location();
@@ -328,7 +328,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
                 QString location;
                 if (breakpoint->line() != -1) {
-                    location = quoteExpression(breakpoint->url().pathOrUrl(KUrl::RemoveTrailingSlash)) + ':' + QString::number(breakpoint->line()+1);
+                    location = quoteExpression(breakpoint->url().url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash)) + ':' + QString::number(breakpoint->line()+1);
                 } else {
                     location = breakpoint->location();
                 }
@@ -477,11 +477,11 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
             if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
                 QRegExp rx("^(.+):(\\d+)$");
                 if (rx.indexIn(location) != -1) {
-                    breakpoint->setLocation(KUrl(unquoteExpression(rx.cap(1))), rx.cap(2).toInt()-1);
+                    breakpoint->setLocation(QUrl::fromUserInput(unquoteExpression(rx.cap(1))), rx.cap(2).toInt()-1);
                 } else {
                     //for regular expression breakpoints and not only...
                     if(b.hasField("fullname") && b.hasField("line")){
-                        breakpoint->setLocation(KUrl(unquoteExpression(b["fullname"].literal())), b["line"].toInt()-1);
+                        breakpoint->setLocation(QUrl::fromUserInput(unquoteExpression(b["fullname"].literal())), b["line"].toInt()-1);
                     }else{
                         breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));
                     }

@@ -105,7 +105,7 @@ public Q_SLOTS:
     /**
      * Start the debugger and examine the core file given by \a coreFile.
      */
-    void examineCoreFile(const KUrl& debugee, const KUrl& coreFile);
+    void examineCoreFile(const QUrl& debugee, const QUrl& coreFile);
 
     /**
      * Attach to currently running process with the given \a pid.
@@ -139,7 +139,7 @@ public:
     /**
      * Run currently executing program to the given \a url and \a line.
      */
-    void runUntil(const KUrl& url, int line);
+    void runUntil(const QUrl& url, int line);
 
     /**
      * Run currently executing program to the given \a address
@@ -148,7 +148,7 @@ public:
     /**
      * Move the execution point of the currently executing program to the given \a url and \a line.
      */
-    void jumpTo(const KUrl& url, int line);
+    void jumpTo(const QUrl& url, int line);
 
     /**
      * Move the execution point of the currently executing program to the given \a address.

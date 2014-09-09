@@ -155,8 +155,6 @@ class TestDebugSession : public DebugSession
 public:
     TestDebugSession() : DebugSession()
     {
-        qRegisterMetaType<KUrl>("KUrl");
-        
         KDevelop::ICore::self()->debugController()->addSession(this);
     }
     
@@ -165,7 +163,7 @@ public:
         return new TestFrameStackModel(this);
     }
         
-    KUrl url() { return currentUrl(); }
+    QUrl url() { return currentUrl(); }
     int line() { return currentLine(); }
     TestFrameStackModel *frameStackModel() const 
     { return static_cast<TestFrameStackModel*>(DebugSession::frameStackModel()); }
@@ -376,7 +374,7 @@ void GdbTest::testUpdateBreakpoint()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(breakpoints()->rowCount(), 2);
     b = breakpoints()->breakpoint(1);
-    QCOMPARE(b->url(), KUrl(debugeeFileName));
+    QCOMPARE(b->url(), QUrl::fromLocalFile(debugeeFileName));
     QCOMPARE(b->line(), 27);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -625,8 +623,7 @@ void GdbTest::testShowStepInSource()
 {
     TestDebugSession *session = new TestDebugSession;
 
-    qRegisterMetaType<KUrl>("KUrl");
-    QSignalSpy showStepInSourceSpy(session, SIGNAL(showStepInSource(KUrl,int,QString)));
+    QSignalSpy showStepInSourceSpy(session, SIGNAL(showStepInSource(QUrl,int,QString)));
 
     TestLaunchConfiguration cfg;
 
@@ -643,15 +640,15 @@ void GdbTest::testShowStepInSource()
     {
         QCOMPARE(showStepInSourceSpy.count(), 3);
         QList<QVariant> arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().value<KUrl>(), KUrl::fromPath(debugeeFileName));
+        QCOMPARE(arguments.first().value<QUrl>(), QUrl::fromLocalFile(debugeeFileName));
         QCOMPARE(arguments.at(1).toInt(), 29);
 
         arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().value<KUrl>(), KUrl::fromPath(debugeeFileName));
+        QCOMPARE(arguments.first().value<QUrl>(), QUrl::fromLocalFile(debugeeFileName));
         QCOMPARE(arguments.at(1).toInt(), 22);
 
         arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().value<KUrl>(), KUrl::fromPath(debugeeFileName));
+        QCOMPARE(arguments.first().value<QUrl>(), QUrl::fromLocalFile(debugeeFileName));
         QCOMPARE(arguments.at(1).toInt(), 23);
     }
 }
@@ -881,7 +878,7 @@ void GdbTest::testCoreFile()
     }
 
     TestDebugSession *session = new TestDebugSession;
-    session->examineCoreFile(findExecutable("debugeecrash"), KUrl(QDir::currentPath()+"/core"));
+    session->examineCoreFile(findExecutable("debugeecrash"), QUrl::fromLocalFile(QDir::currentPath()+"/core"));
     
     TestFrameStackModel *stackModel = session->frameStackModel();
     
@@ -1336,8 +1333,8 @@ void GdbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
 
     TestLaunchConfiguration cfg;
 
-    breakpoints()->addCodeBreakpoint(KUrl("debugee.cpp"), 31);
-    breakpoints()->addCodeBreakpoint(KUrl("debugee.cpp"), 21);
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile("debugee.cpp"), 31);
+    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile("debugee.cpp"), 21);
     QVERIFY(session->startProgram(&cfg, m_iface));
 
     //inject here, so it behaves similar like a command from .gdbinit
@@ -1614,7 +1611,7 @@ void GdbTest::testCatchpoint()
     const QList<KDevelop::FrameStackModel::FrameItem> frames = fsModel->frames(fsModel->currentThread());
     QVERIFY(frames.size() >= 2);
     // frame 0 is somewhere inside libstdc++
-    QCOMPARE(frames[1].file, KUrl(findSourceFile("debugeeexception.cpp")));
+    QCOMPARE(frames[1].file, QUrl::fromLocalFile(findSourceFile("debugeeexception.cpp")));
     QCOMPARE(frames[1].line, 22);
 
     QCOMPARE(breakpoints()->rowCount(),2);

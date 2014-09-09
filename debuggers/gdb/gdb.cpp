@@ -62,12 +62,12 @@ GDB::~GDB()
 void GDB::start(KConfigGroup& config)
 {
     // FIXME: verify that default value leads to something sensible
-    KUrl gdbUrl = config.readEntry(GDBDebugger::gdbPathEntry, QUrl());
+    QUrl gdbUrl = config.readEntry(GDBDebugger::gdbPathEntry, QUrl());
     if (gdbUrl.isEmpty()) {
         gdbBinary_ = "gdb";
     } else {
         // FIXME: verify its' a local path.
-        gdbBinary_ = gdbUrl.toLocalFile(KUrl::RemoveTrailingSlash);
+        gdbBinary_ = gdbUrl.url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash);
     }
     process_ = new KProcess(this);
     process_->setOutputChannelMode( KProcess::SeparateChannels );
@@ -85,7 +85,7 @@ void GDB::start(KConfigGroup& config)
     QStringList arguments;
     arguments << "--interpreter=mi2" << "-quiet";
 
-    KUrl shell = config.readEntry(GDBDebugger::debuggerShellEntry, QUrl());
+    QUrl shell = config.readEntry(GDBDebugger::debuggerShellEntry, QUrl());
     if( !shell.isEmpty() )
     {
         kDebug(9012) << "have shell" << shell;

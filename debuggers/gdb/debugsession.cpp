@@ -235,7 +235,7 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
     emit gdbStateChanged(oldState, newState);
 }
 
-void DebugSession::examineCoreFile(const KUrl& debugee, const KUrl& coreFile)
+void DebugSession::examineCoreFile(const QUrl& debugee, const QUrl& coreFile)
 {
     setStateOff(s_programExited|s_appNotStarted);
     setStateOn(s_core);
@@ -765,7 +765,7 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
             if (frame.hasField("addr"))     addr = frame["addr"].literal();
 
             // gdb counts lines from 1 and we don't
-            setCurrentPosition(KUrl::fromLocalFile(file), line.toInt() - 1, addr);
+            setCurrentPosition(QUrl::fromLocalFile(file), line.toInt() - 1, addr);
 
             updateState = true;
         }
@@ -994,10 +994,9 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
     // Configuration values
     bool    config_displayStaticMembers_ = grp.readEntry( GDBDebugger::staticMembersEntry, false );
     bool    config_asmDemangle_ = grp.readEntry( GDBDebugger::demangleNamesEntry, true );
-    KUrl config_dbgShell_ = grp.readEntry( GDBDebugger::debuggerShellEntry, QUrl() );
-    KUrl config_configGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbConfigEntry, QUrl() );
-    KUrl config_runShellScript_ = grp.readEntry( GDBDebugger::remoteGdbShellEntry, QUrl() );
-    KUrl config_runGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbRunEntry, QUrl() );
+    QUrl config_configGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbConfigEntry, QUrl() );
+    QUrl config_runShellScript_ = grp.readEntry( GDBDebugger::remoteGdbShellEntry, QUrl() );
+    QUrl config_runGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbRunEntry, QUrl() );
     
     Q_ASSERT(iface);
     bool config_useExternalTerminal = iface->useTerminal( cfg );
@@ -1031,13 +1030,13 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
 
     QStringList arguments = iface->arguments(cfg, err);
     // Change the "Working directory" to the correct one
-    QString dir = iface->workingDirectory(cfg).toLocalFile();
-    if (dir.isEmpty() || !KUrl(dir).isValid())
+    KUrl dir = iface->workingDirectory(cfg);
+    if (dir.isEmpty() || !dir.isValid())
     {
         dir = QFileInfo(executable).absolutePath();
     }
     
-    queueCmd(new GDBCommand(GDBMI::EnvironmentCd, KShell::quoteArg(dir)));
+    queueCmd(new GDBCommand(GDBMI::EnvironmentCd, KShell::quoteArg(dir.toLocalFile())));
 
     // Set the run arguments
     if (!arguments.isEmpty())
@@ -1162,7 +1161,7 @@ void DebugSession::slotKill()
 
 // **************************************************************************
 
-void DebugSession::runUntil(const KUrl& url, int line)
+void DebugSession::runUntil(const QUrl& url, int line)
 {
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
@@ -1194,7 +1193,7 @@ void DebugSession::jumpToMemoryAddress(QString& address){
     }
 }
 
-void DebugSession::jumpTo(const KUrl& url, int line)
+void DebugSession::jumpTo(const QUrl& url, int line)
 {
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
