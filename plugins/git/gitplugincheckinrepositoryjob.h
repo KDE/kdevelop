@@ -1,7 +1,5 @@
 /***************************************************************************
- *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
- *   Copyright 2009 Hugo Parente Lima <hugo.pl@gmail.com>                  *
- *   Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
+ *   Copyright 2014 Sven Brauch <svenbrauch@gmail.com>                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
