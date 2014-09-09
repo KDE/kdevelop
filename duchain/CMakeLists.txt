@@ -1,4 +1,4 @@
-kde4_add_library(kdevclangduchain SHARED
+add_library(kdevclangduchain SHARED
     parsesession.cpp
     clangdiagnosticevaluator.cpp
     clangducontext.cpp
