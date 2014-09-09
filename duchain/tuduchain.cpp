@@ -227,6 +227,7 @@ TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContext
                useRange = clang_getCursorExtent(cursor);
             }
 
+            auto range = ClangRange(useRange).toRangeInRevision();
             // For uses inside macro expansions, create an empty use range at the spelling location
             // the empty range is required in order to not "overlap" the macro expansion range
             // and to allow proper navigation for the macro expansion
@@ -239,14 +240,21 @@ TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContext
                     unsigned int spellingLocOffset;
                     clang_getSpellingLocation(spellingLocation, nullptr, nullptr, nullptr, &spellingLocOffset);
                     if (spellingLocOffset == expansionLocOffset) {
-                        useRange = clang_getRange(spellingLocation, spellingLocation);
+                        range.end.column = range.start.column;
                     }
+                }
+            } else {
+                // Workaround for wrong use range returned by clang for macro expansions
+                const auto contents = ClangUtils::getRawContents(tu, useRange);
+                const int firstOpeningParen = contents.indexOf('(');
+                if (firstOpeningParen != -1) {
+                    range.end.column = range.start.column + firstOpeningParen;
                 }
             }
 
             DUChainWriteLocker lock;
             auto usedIndex = top->indexForUsedDeclaration(used.data());
-            contextUses.first->createUse(usedIndex, ClangRange(useRange).toRangeInRevision());
+            contextUses.first->createUse(usedIndex, range);
         }
     }
 }
