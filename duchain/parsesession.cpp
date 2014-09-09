@@ -33,6 +33,7 @@
 #include "../debug.h"
 
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
 
 #include <KLocale>
 #include <KMimeType>
