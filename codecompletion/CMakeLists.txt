@@ -10,5 +10,4 @@ add_library(kdevclangcodecompletion OBJECT
 )
 target_include_directories(kdevclangcodecompletion PRIVATE $<TARGET_PROPERTY:KF5::TextEditor,INTERFACE_INCLUDE_DIRECTORIES>)
 set_target_properties(kdevclangcodecompletion PROPERTIES
-    AUTOMOC TRUE
     POSITION_INDEPENDENT_CODE TRUE)

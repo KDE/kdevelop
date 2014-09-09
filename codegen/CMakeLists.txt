@@ -14,5 +14,4 @@ target_include_directories(kdevclangcodegen PRIVATE
     $<TARGET_PROPERTY:KF5::TextEditor,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::ThreadWeaver,INTERFACE_INCLUDE_DIRECTORIES>)
 set_target_properties(kdevclangcodegen PROPERTIES
-    AUTOMOC TRUE
     POSITION_INDEPENDENT_CODE TRUE)
