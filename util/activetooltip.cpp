@@ -94,6 +94,13 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
         }
         break;
 
+    case QEvent::WindowActivate:
+        if (insideThis(object)) {
+            return false;
+        }
+        close();
+        break;
+
     case QEvent::WindowBlocked:
         // Modal dialog activated somewhere, it is the only case where a cursor
         // move may be missed and the popup has to be force-closed
