@@ -238,25 +238,25 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
     QAction* previousContext = actions.addAction("previous_context");
     previousContext->setText( i18n("&Previous Visited Context") );
     previousContext->setIcon( QIcon::fromTheme("go-previous-context" ) );
-    previousContext->setShortcut( Qt::META | Qt::Key_Left );
+    actions.setDefaultShortcut( previousContext, Qt::META | Qt::Key_Left );
     QObject::connect(previousContext, SIGNAL(triggered(bool)), this, SLOT(previousContextShortcut()));
 
     QAction* nextContext = actions.addAction("next_context");
     nextContext->setText( i18n("&Next Visited Context") );
     nextContext->setIcon( QIcon::fromTheme("go-next-context" ) );
-    nextContext->setShortcut( Qt::META | Qt::Key_Right );
+    actions.setDefaultShortcut( nextContext, Qt::META | Qt::Key_Right );
     QObject::connect(nextContext, SIGNAL(triggered(bool)), this, SLOT(nextContextShortcut()));
 
     QAction* previousUse = actions.addAction("previous_use");
     previousUse->setText( i18n("&Previous Use") );
     previousUse->setIcon( QIcon::fromTheme("go-previous-use") );
-    previousUse->setShortcut( Qt::META | Qt::SHIFT |  Qt::Key_Left );
+    actions.setDefaultShortcut( previousUse, Qt::META | Qt::SHIFT |  Qt::Key_Left );
     QObject::connect(previousUse, SIGNAL(triggered(bool)), this, SLOT(previousUseShortcut()));
 
     QAction* nextUse = actions.addAction("next_use");
     nextUse->setText( i18n("&Next Use") );
     nextUse->setIcon( QIcon::fromTheme("go-next-use") );
-    nextUse->setShortcut( Qt::META | Qt::SHIFT | Qt::Key_Right );
+    actions.setDefaultShortcut( nextUse, Qt::META | Qt::SHIFT | Qt::Key_Right );
     QObject::connect(nextUse, SIGNAL(triggered(bool)), this, SLOT(nextUseShortcut()));
 
     QWidgetAction* outline = new QWidgetAction(this);

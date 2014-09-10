@@ -424,7 +424,7 @@ void RunController::setupActions()
 
     d->runAction = new QAction( QIcon::fromTheme("system-run"), i18n("Execute Launch"), this);
     d->runAction->setIconText( i18nc("Short text for 'Execute launch' used in the toolbar", "Execute") );
-    d->runAction->setShortcut(Qt::SHIFT + Qt::Key_F9);
+    ac->setDefaultShortcut( d->runAction, Qt::SHIFT + Qt::Key_F9);
     d->runAction->setToolTip(i18nc("@info:tooltip", "Execute current launch"));
     d->runAction->setStatusTip(i18n("Execute current launch"));
     d->runAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration."));
@@ -432,7 +432,7 @@ void RunController::setupActions()
     connect(d->runAction, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
 
     d->dbgAction = new QAction( QIcon::fromTheme("debug-run"), i18n("Debug Launch"), this);
-    d->dbgAction->setShortcut(Qt::Key_F9);
+    ac->setDefaultShortcut( d->dbgAction, Qt::Key_F9);
     d->dbgAction->setIconText( i18nc("Short text for 'Debug launch' used in the toolbar", "Debug") );
     d->dbgAction->setToolTip(i18nc("@info:tooltip", "Debug current launch"));
     d->dbgAction->setStatusTip(i18n("Debug current launch"));
@@ -452,7 +452,7 @@ void RunController::setupActions()
     action = d->stopAction = new QAction( QIcon::fromTheme("process-stop"), i18n("Stop All Jobs"), this);
     action->setIconText(i18nc("Short text for 'Stop All Jobs' used in the toolbar", "Stop All"));
     // Ctrl+Escape would be nicer, but thats taken by the ksysguard desktop shortcut
-    action->setShortcut(QKeySequence("Ctrl+Shift+Escape"));
+    ac->setDefaultShortcut( action, QKeySequence("Ctrl+Shift+Escape"));
     action->setToolTip(i18nc("@info:tooltip", "Stop all currently running jobs"));
     action->setWhatsThis(i18nc("@info:whatsthis", "Requests that all running jobs are stopped."));
     action->setEnabled(false);

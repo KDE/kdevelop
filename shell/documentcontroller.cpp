@@ -610,7 +610,7 @@ void DocumentController::setupActions()
 
     action = ac->addAction( "file_open" );
     action->setIcon(QIcon::fromTheme("document-open"));
-    action->setShortcut( Qt::CTRL + Qt::Key_O );
+    ac->setDefaultShortcut(action, Qt::CTRL + Qt::Key_O );
     action->setText(i18n( "&Open..." ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(chooseDocument()) );
     action->setToolTip( i18n( "Open file" ) );
@@ -627,7 +627,7 @@ void DocumentController::setupActions()
     connect( action, SIGNAL(triggered(bool)), SLOT(slotSaveAllDocuments()) );
     action->setToolTip( i18n( "Save all open documents" ) );
     action->setWhatsThis( i18n( "Save all open documents, prompting for additional information when necessary." ) );
-    action->setShortcut( QKeySequence(Qt::CTRL + Qt::Key_L) );
+    ac->setDefaultShortcut(action, QKeySequence(Qt::CTRL + Qt::Key_L) );
     action->setEnabled(false);
 
     action = d->revertAll = ac->addAction( "file_revert_all" );
@@ -640,7 +640,7 @@ void DocumentController::setupActions()
 
     action = d->close = ac->addAction( "file_close" );
     action->setIcon(QIcon::fromTheme("window-close"));
-    action->setShortcut( Qt::CTRL + Qt::Key_W );
+    ac->setDefaultShortcut(action, Qt::CTRL + Qt::Key_W );
     action->setText( i18n( "&Close" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(fileClose()) );
     action->setToolTip( i18n( "Close file" ) );
@@ -657,7 +657,7 @@ void DocumentController::setupActions()
 
     action = d->closeAllOthers = ac->addAction( "file_closeother" );
     action->setIcon(QIcon::fromTheme("window-close"));
-    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_W );
+    ac->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_W );
     action->setText(i18n( "Close All Ot&hers" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(closeAllOtherDocuments()) );
     action->setToolTip( i18n( "Close all other documents" ) );

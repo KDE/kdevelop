@@ -89,7 +89,7 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
 
     QAction*action = actionCollection()->addAction("edit_grep");
     action->setText(i18n("Find/Replace in Fi&les..."));
-    action->setShortcut( QKeySequence("Ctrl+Alt+F") );
+    actionCollection()->setDefaultShortcut( action, QKeySequence("Ctrl+Alt+F") );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialogFromMenu()));
     action->setToolTip( i18n("Search for expressions over several files") );
     action->setWhatsThis( i18n("Opens the 'Find/Replace in files' dialog. There you "

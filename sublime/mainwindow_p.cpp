@@ -98,40 +98,41 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     QAction* action = new QAction(i18n("Show Left Dock"), this);
     action->setCheckable(true);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_L);
+    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_L);
     connect(action, SIGNAL(toggled(bool)), SLOT(showLeftDock(bool)));
+
     ac->addAction("show_left_dock", action);
 
     action = new QAction(i18n("Show Right Dock"), this);
     action->setCheckable(true);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_R);
+    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_R);
     connect(action, SIGNAL(toggled(bool)), SLOT(showRightDock(bool)));
     ac->addAction("show_right_dock", action);
 
     action = new QAction(i18n("Show Bottom Dock"), this);
     action->setCheckable(true);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_B);
+    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_B);
     connect(action, SIGNAL(toggled(bool)), SLOT(showBottomDock(bool)));
     ac->addAction("show_bottom_dock", action);
 
     action = new QAction(i18nc("@action", "Focus Editor"), this);
-    action->setShortcuts(QList<QKeySequence>() << (Qt::META | Qt::CTRL | Qt::Key_E) << Qt::META + Qt::Key_C);
+    ac->setDefaultShortcuts(action, QList<QKeySequence>() << (Qt::META | Qt::CTRL | Qt::Key_E) << Qt::META + Qt::Key_C);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(focusEditor()));
     ac->addAction("focus_editor", action);
 
     action = new QAction(i18n("Hide/Restore Docks"), this);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_H);
+    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_H);
     connect(action, SIGNAL(triggered(bool)), SLOT(toggleDocksShown()));
     ac->addAction("hide_all_docks", action);
 
     action = new QAction(i18n("Next Tool View"), this);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_N);
+    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_N);
     action->setIcon(QIcon::fromTheme("go-next"));
     connect(action, SIGNAL(triggered(bool)), SLOT(selectNextDock()));
     ac->addAction("select_next_dock", action);
 
     action = new QAction(i18n("Previous Tool View"), this);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_P);
+    ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_P);
     action->setIcon(QIcon::fromTheme("go-previous"));
     connect(action, SIGNAL(triggered(bool)), SLOT(selectPreviousDock()));
     ac->addAction("select_previous_dock", action);

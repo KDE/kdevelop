@@ -157,7 +157,7 @@ void SwitchToBuddyPlugin::createActionsForMainWindow(Sublime::MainWindow* window
 
     QAction* switchDefinitionDeclaration = actions.addAction("switch_definition_declaration");
     switchDefinitionDeclaration->setText( i18n("&Switch Definition/Declaration") );
-    switchDefinitionDeclaration->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_C );
+    actions.setDefaultShortcut( switchDefinitionDeclaration, Qt::CTRL | Qt::SHIFT | Qt::Key_C );
     connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
 }
 

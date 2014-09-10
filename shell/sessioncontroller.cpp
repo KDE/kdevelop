@@ -554,7 +554,7 @@ SessionController::SessionController( QObject *parent )
 
     action = actionCollection()->addAction( "quit", this, SIGNAL(quitSession()) );
     action->setText( i18n("Quit") );
-    action->setShortcut(Qt::CTRL | Qt::Key_Q);
+    actionCollection()->setDefaultShortcut( action, Qt::CTRL | Qt::Key_Q );
     action->setIcon(QIcon::fromTheme("application-exit"));
 
     #if 0

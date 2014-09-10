@@ -236,7 +236,7 @@ void DebugController::setupActions()
     ac->addAction("debug_jumptocursor", action);
 
     m_stepOver = action = new QAction(QIcon::fromTheme("debug-step-over"), i18n("Step &Over"), this);
-    action->setShortcut(Qt::Key_F10);
+    ac->setDefaultShortcut( action, Qt::Key_F10);
     action->setToolTip( i18n("Step over the next line") );
     action->setWhatsThis( i18n("Executes one line of source in the current source file. "
                                "If the source line is a call to a function the whole "
@@ -254,7 +254,7 @@ void DebugController::setupActions()
 
 
     m_stepInto = action = new QAction(QIcon::fromTheme("debug-step-into"), i18n("Step &Into"), this);
-    action->setShortcut(Qt::Key_F11);
+    ac->setDefaultShortcut( action, Qt::Key_F11);
     action->setToolTip( i18n("Step into the next statement") );
     action->setWhatsThis( i18n("Executes exactly one line of source. If the source line "
                                "is a call to a function then execution will stop after "
@@ -270,7 +270,7 @@ void DebugController::setupActions()
     ac->addAction("debug_stepintoinst", action);
 
     m_stepOut = action = new QAction(QIcon::fromTheme("debug-step-out"), i18n("Step O&ut"), this);
-    action->setShortcut(Qt::Key_F12);
+    ac->setDefaultShortcut( action, Qt::Key_F12);
     action->setToolTip( i18n("Step out of the current function") );
     action->setWhatsThis( i18n("Executes the application until the currently executing "
                                "function is completed. The debugger will then display "
@@ -281,7 +281,7 @@ void DebugController::setupActions()
     ac->addAction("debug_stepout", action);
 
     m_toggleBreakpoint = action = new QAction(QIcon::fromTheme("script-error"), i18n("Toggle Breakpoint"), this);
-    action->setShortcut( i18n("Ctrl+Alt+B") );
+    ac->setDefaultShortcut( action, i18n("Ctrl+Alt+B") );
     action->setToolTip(i18n("Toggle breakpoint"));
     action->setWhatsThis(i18n("Toggles the breakpoint at the current line in editor."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleBreakpoint()));

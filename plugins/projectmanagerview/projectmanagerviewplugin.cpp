@@ -113,7 +113,7 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
 
     d->m_build = new QAction( i18n("Build Selection"), this );
     d->m_build->setIconText( i18n("Build") );
-    d->m_build->setShortcut( Qt::Key_F8 );
+    actionCollection()->setDefaultShortcut( d->m_build, Qt::Key_F8 );
     d->m_build->setIcon(QIcon::fromTheme("run-build"));
     d->m_build->setEnabled( false );
     connect( d->m_build, SIGNAL(triggered()), this, SLOT(buildProjectItems()) );
@@ -121,7 +121,7 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     d->m_install = new QAction( i18n("Install Selection"), this );
     d->m_install->setIconText( i18n("Install") );
     d->m_install->setIcon(QIcon::fromTheme("run-build-install"));
-    d->m_install->setShortcut( Qt::SHIFT + Qt::Key_F8 );
+    actionCollection()->setDefaultShortcut( d->m_install, Qt::SHIFT + Qt::Key_F8 );
     d->m_install->setEnabled( false );
     connect( d->m_install, SIGNAL(triggered()), this, SLOT(installProjectItems()) );
     actionCollection()->addAction( "project_install", d->m_install );

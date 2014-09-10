@@ -247,7 +247,7 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( "view_next_window" );
     action->setText( i18n( "&Next Window" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(gotoNextWindow()) );
-    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Right );
+    actionCollection()->setDefaultShortcut(action, Qt::ALT + Qt::SHIFT + Qt::Key_Right );
     action->setToolTip( i18nc( "@info:tooltip", "Next window" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the next window." ) );
     action->setIcon(QIcon::fromTheme("go-next"));
@@ -255,7 +255,7 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( "view_previous_window" );
     action->setText( i18n( "&Previous Window" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(gotoPreviousWindow()) );
-    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Left );
+    actionCollection()->setDefaultShortcut(action, Qt::ALT + Qt::SHIFT + Qt::Key_Left );
     action->setToolTip( i18nc( "@info:tooltip", "Previous window" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the previous window." ) );
     action->setIcon(QIcon::fromTheme("go-previous"));
@@ -263,7 +263,7 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( "split_horizontal" );
     action->setIcon(QIcon::fromTheme( "view-split-top-bottom" ));
     action->setText( i18n( "Split View &Top/Bottom" ) );
-    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_T );
+    actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_T );
     connect( action, SIGNAL(triggered(bool)), SLOT(splitHorizontal()) );
     action->setToolTip( i18nc( "@info:tooltip", "Split horizontal" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Splits the current view horizontally." ) );
@@ -271,7 +271,7 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( "split_vertical" );
     action->setIcon(QIcon::fromTheme( "view-split-left-right" ));
     action->setText( i18n( "Split View &Left/Right" ) );
-    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_L );
+    actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_L );
     connect( action, SIGNAL(triggered(bool)), SLOT(splitVertical()) );
     action->setToolTip( i18nc( "@info:tooltip", "Split vertical" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Splits the current view vertically." ) );
@@ -279,7 +279,7 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( "view_next_split" );
     action->setText( i18n( "&Next Split View" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(gotoNextSplit()) );
-    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_N );
+    actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_N );
     action->setToolTip( i18nc( "@info:tooltip", "Next split view" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the next split view." ) );
     action->setIcon(QIcon::fromTheme("go-next"));
@@ -287,7 +287,7 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( "view_previous_split" );
     action->setText( i18n( "&Previous Split View" ) );
     connect( action, SIGNAL(triggered(bool)), SLOT(gotoPreviousSplit()) );
-    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_P );
+    actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_P );
     action->setToolTip( i18nc( "@info:tooltip", "Previous split view" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the previous split view." ) );
     action->setIcon(QIcon::fromTheme("go-previous"));
@@ -296,7 +296,7 @@ void MainWindowPrivate::setupActions()
 
     action = actionCollection()->addAction( "file_new" );
     action->setIcon(QIcon::fromTheme("document-new"));
-    action->setShortcut( Qt::CTRL + Qt::Key_N );
+    actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::Key_N );
     action->setText( i18n( "&New" ) );
     action->setIconText( i18nc( "Shorter Text for 'New File' shown in the toolbar", "New") );
     connect( action, SIGNAL(triggered(bool)), SLOT(fileNew()) );
@@ -305,7 +305,7 @@ void MainWindowPrivate::setupActions()
 
     action = actionCollection()->addAction( "add_toolview" );
     action->setIcon(QIcon::fromTheme("window-new"));
-    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_V );
+    actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_V );
     action->setText( i18n( "&Add Tool View..." ) );
     connect( action, SIGNAL(triggered(bool)),  SLOT(viewAddNewToolView()) );
     action->setToolTip( i18nc( "@info:tooltip", "Add tool view" ) );
