@@ -21,7 +21,7 @@
 #include "codegenhelper.h"
 
 #include "../duchain/duchainutils.h"
-#include "../debug.h"
+#include "../util/clangdebug.h"
 
 #include <language/assistant/renameaction.h>
 #include <language/codegen/documentchangeset.h>
@@ -144,7 +144,7 @@ void AdaptSignatureAction::execute()
     lock.unlock();
     m_otherSideTopContext = DUChain::self()->waitForUpdate(url, TopDUContext::AllDeclarationsContextsAndUses);
     if (!m_otherSideTopContext) {
-        debug() << "failed to update" << url.str();
+        clangDebug() << "failed to update" << url.str();
         return;
     }
 
@@ -152,16 +152,16 @@ void AdaptSignatureAction::execute()
 
     Declaration* otherSide = m_otherSideId.getDeclaration(m_otherSideTopContext.data());
     if (!otherSide) {
-        debug() << "could not find definition";
+        clangDebug() << "could not find definition";
         return;
     }
     DUContext* functionContext = DUChainUtils::getFunctionContext(otherSide);
     if (!functionContext) {
-        debug() << "no function context";
+        clangDebug() << "no function context";
         return;
     }
     if (!functionContext || functionContext->type() != DUContext::Function) {
-        debug() << "no correct function context";
+        clangDebug() << "no correct function context";
         return;
     }
 

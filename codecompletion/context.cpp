@@ -32,12 +32,12 @@
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
 
-#include "../duchain/parsesession.h"
+#include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
+#include "../duchain/parsesession.h"
 #include "../duchain/cursorkindtraits.h"
 #include "../duchain/navigationwidget.h"
 
-#include "../debug.h"
 
 #include <memory>
 
@@ -339,7 +339,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         const unsigned int completeOptions = clang_defaultCodeCompleteOptions();
 
         if (!m_text.isEmpty()) {
-            debug() << "Unsaved contents found for file" << file << "- creating CXUnsavedFile";
+            clangDebug() << "Unsaved contents found for file" << file << "- creating CXUnsavedFile";
 
             CXUnsavedFile unsaved;
             const QByteArray content = m_text.toUtf8();
@@ -381,7 +381,7 @@ bool ClangCodeCompletionContext::isValidPosition() const
 {
     ParseSession session(m_parseSessionData);
     if (isInsideComment(session.unit(), session.file(), m_position.castToSimpleCursor())) {
-        debug() << "Invalid completion context: Inside comment";
+        clangDebug() << "Invalid completion context: Inside comment";
         return false;
     }
     return true;
@@ -406,7 +406,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
     DUContext* ctx = m_duContext->findContextAt(m_position);
 
-    debug() << "Clang found" << m_results->NumResults << "completion results";
+    clangDebug() << "Clang found" << m_results->NumResults << "completion results";
 
     for (uint i = 0; i < m_results->NumResults; ++i) {
         if (abort) {
@@ -550,7 +550,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 item = declarationItem;
             } else {
                 // still, let's trust that Clang found something useful and put it into the completion result list
-                debug() << "Could not find declaration for" << qid;
+                clangDebug() << "Could not find declaration for" << qid;
                 item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement));
             }
 

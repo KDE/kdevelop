@@ -41,9 +41,9 @@
 #include "duchain/parsesession.h"
 #include "duchain/clangindex.h"
 #include "duchain/clangparsingenvironmentfile.h"
+#include "util/clangdebug.h"
 #include "util/clangtypes.h"
 
-#include "debug.h"
 #include "clangsupport.h"
 
 #include <QFile>

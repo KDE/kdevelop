@@ -23,7 +23,7 @@
 #include "unknowndeclarationproblem.h"
 
 #include "clanghelpers.h"
-#include "../debug.h"
+#include "../util/clangdebug.h"
 #include "../util/clangutils.h"
 #include "../util/clangtypes.h"
 
@@ -98,7 +98,7 @@ QStringList scanIncludePaths( const QString& identifier, const QDir& dir, int ma
             continue;
         }
 
-        debug() << "Found candidate file" << path + "/" + identifier + ext;
+        clangDebug() << "Found candidate file" << path + "/" + identifier + ext;
         candidates.append( path + "/" + identifier + ext );
     }
 
@@ -159,7 +159,7 @@ KDevelop::DocumentRange includeDirectivePosition(const KDevelop::Path& source, c
     DUChainReadLocker lock;
     const TopDUContext* top = DUChainUtils::standardContextForUrl( source.toUrl() );
     if( !top ) {
-        debug() << "unable to find standard context for" << source.toLocalFile() << "Creating null range";
+        clangDebug() << "unable to find standard context for" << source.toLocalFile() << "Creating null range";
         return KDevelop::DocumentRange::invalid();
     }
 
@@ -191,7 +191,7 @@ KDevelop::DocumentRange forwardDeclarationPosition( const KDevelop::Path& source
     DUChainReadLocker lock;
     const TopDUContext* top = DUChainUtils::standardContextForUrl( source.toUrl() );
     if( !top ) {
-        debug() << "unable to find standard context for" << source.toLocalFile() << "Creating null range";
+        clangDebug() << "unable to find standard context for" << source.toLocalFile() << "Creating null range";
         return KDevelop::DocumentRange::invalid();
     }
 
@@ -216,13 +216,13 @@ QVector<KDevelop::QualifiedIdentifier> possibleDeclarations( const QualifiedIden
     const TopDUContext* top = DUChainUtils::standardContextForUrl( file.toUrl() );
 
     if( !top ) {
-        debug() << "unable to find standard context for" << file.toLocalFile() << "Not creating duchain candidates";
+        clangDebug() << "unable to find standard context for" << file.toLocalFile() << "Not creating duchain candidates";
         return {};
     }
 
     const auto* context = top->findContextAt( cursor );
     if( !context ) {
-        debug() << "No context found at" << cursor;
+        clangDebug() << "No context found at" << cursor;
         return {};
     }
 
@@ -254,7 +254,7 @@ QVector<KDevelop::QualifiedIdentifier> possibleDeclarations( const QualifiedIden
         declarations.append( scopes + identifier );
     }
 
-    debug() << "Possible declarations:" << declarations;
+    clangDebug() << "Possible declarations:" << declarations;
     return declarations;
 }
 
@@ -267,7 +267,7 @@ QStringList duchainCandidates( const QualifiedIdentifier& identifier, const KDev
      */
     QStringList candidates;
     for( const auto& declaration : possibleDeclarations( identifier, file, cursor ) ) {
-        debug() << "Considering candidate declaration" << declaration;
+        clangDebug() << "Considering candidate declaration" << declaration;
         const IndexedDeclaration* declarations;
         uint declarationCount;
         PersistentSymbolTable::self().declarations( declaration , declarationCount, declarations );
@@ -293,7 +293,7 @@ QStringList duchainCandidates( const QualifiedIdentifier& identifier, const KDev
 
             if( !isBlacklisted( filepath ) ) {
                 candidates << filepath;
-                debug() << "Adding" << filepath << "determined from candidate" << declaration;
+                clangDebug() << "Adding" << filepath << "determined from candidate" << declaration;
             }
 
             for( const auto importer : decl->topContext()->parsingEnvironmentFile()->importers() ) {
@@ -314,14 +314,14 @@ QStringList duchainCandidates( const QualifiedIdentifier& identifier, const KDev
                  * we prefer this to other headers
                  */
                 candidates << filePath;
-                debug() << "Adding forwarder file" << filePath << "to the result set";
+                clangDebug() << "Adding forwarder file" << filePath << "to the result set";
             }
         }
     }
 
     std::sort( candidates.begin(), candidates.end() );
     candidates.erase( std::unique( candidates.begin(), candidates.end() ), candidates.end() );
-    debug() << "Candidates: " << candidates;
+    clangDebug() << "Candidates: " << candidates;
     return candidates;
 }
 
@@ -361,7 +361,7 @@ ClangFixit directiveForFile( const QString& includefile, const KDevelop::Path::L
 
     const auto range = DocumentRange(IndexedString(source.pathOrUrl()), includeDirectivePosition(source, canonicalFile.lastPathSegment()));
     if( !range.isValid() ) {
-        debug() << "unable to determine valid position for" << includefile << "in" << source.pathOrUrl();
+        clangDebug() << "unable to determine valid position for" << includefile << "in" << source.pathOrUrl();
         return {};
     }
 
@@ -394,7 +394,7 @@ QStringList includeFiles( const QualifiedIdentifier& identifier, const KDevelop:
     const auto includes = includePaths( file );
 
     if( includes.isEmpty() ) {
-        debug() << "Include path is empty";
+        clangDebug() << "Include path is empty";
         return {};
     }
 
@@ -442,7 +442,7 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
     for( const auto& includeFile : includefiles ) {
         const auto fixit = directiveForFile( includeFile, includepaths, file /* UP */ );
         if (!fixit.range.isValid()) {
-            debug() << "unable to create directive for" << includeFile << "in" << file.toLocalFile();
+            clangDebug() << "unable to create directive for" << includeFile << "in" << file.toLocalFile();
             continue;
         }
 

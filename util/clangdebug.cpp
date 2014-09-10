@@ -27,6 +27,8 @@
 #include <language/editor/documentcursor.h>
 #include <language/editor/documentrange.h>
 
+Q_LOGGING_CATEGORY(KDEV_CLANG, "kdev-clang")
+
 using namespace KDevelop;
 
 QDebug operator<<(QDebug dbg, CXString string)

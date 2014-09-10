@@ -31,7 +31,6 @@
 #include "util/clangdebug.h"
 #include "util/clangutils.h"
 #include "util/clangtypes.h"
-#include "../debug.h"
 
 #include <util/pushvalue.h>
 
@@ -130,7 +129,7 @@ private:
         EnableIf<IsDefinition == Decision::Maybe && IsInClass != Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor parent)
     {
-        IF_DEBUG(debug() << "IsInClass:" << IsInClass << "- isDefinition:" << IsDefinition;)
+        IF_DEBUG(clangDebug() << "IsInClass:" << IsInClass << "- isDefinition:" << IsDefinition;)
 
         const bool isDefinition = clang_isCursorDefinition(cursor);
         return isDefinition ?
@@ -145,7 +144,7 @@ private:
         EnableIf<IsInClass != Decision::Maybe && IsDefinition != Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor parent)
     {
-        IF_DEBUG(debug() << "IsInClass:" << IsInClass << "- isDefinition:" << IsDefinition;)
+        IF_DEBUG(clangDebug() << "IsInClass:" << IsInClass << "- isDefinition:" << IsDefinition;)
 
         // We may end up visiting the same cursor twice in some cases
         // see discussion on https://git.reviewboard.kde.org/r/119526/
@@ -164,7 +163,7 @@ private:
     template<CXTypeKind TK>
     AbstractType *dispatchType(CXType type, CXCursor cursor)
     {
-        IF_DEBUG(debug() << "TK:" << type.kind;)
+        IF_DEBUG(clangDebug() << "TK:" << type.kind;)
 
         auto kdevType = createType<TK>(type, cursor);
         setTypeModifiers<TK>(type, kdevType);
@@ -177,7 +176,7 @@ private:
     CXChildVisitResult buildDeclaration(CXCursor cursor)
     {
         auto id = makeId(cursor);
-        IF_DEBUG(debug() << "id:" << id << "- CK:" << CK << "- DeclType:" << typeid(DeclType).name() << "- hasContext:" << hasContext;)
+        IF_DEBUG(clangDebug() << "id:" << id << "- CK:" << CK << "- DeclType:" << typeid(DeclType).name() << "- hasContext:" << hasContext;)
 
         // Code path for class declarations that may be defined "out-of-line", e.g.
         // "SomeNameSpace::SomeClass {};"

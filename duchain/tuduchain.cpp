@@ -21,7 +21,7 @@
 
 #include "tuduchain.h"
 
-#include "debug.h"
+#include "util/clangdebug.h"
 
 #include <language/duchain/types/indexedtype.h>
 
@@ -457,7 +457,7 @@ CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor curso
     auto decl = findDeclaration(classDeclCursor);
     if (!decl) {
         // this happens for templates with template-dependent base classes e.g. - dunno whether we can/should do more here
-        debug() << "failed to find declaration for base specifier:" << ClangString(clang_getCursorDisplayName(cursor));
+        clangDebug() << "failed to find declaration for base specifier:" << ClangString(clang_getCursorDisplayName(cursor));
         return CXChildVisit_Continue;
     }
 

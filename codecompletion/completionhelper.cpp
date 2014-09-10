@@ -23,9 +23,9 @@
 
 #include "../duchain/cursorkindtraits.h"
 #include "../duchain/parsesession.h"
+#include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
 #include "../util/clangutils.h"
-#include "../debug.h"
 
 #include <language/duchain/stringhelpers.h>
 
@@ -269,7 +269,7 @@ void CompletionHelper::computeCompletions(const ParseSession& session, const KTe
     CXSourceLocation location = clang_getLocation(unit, session.file(), position.line() + 1, position.column() + 1);
 
     if (clang_equalLocations(clang_getNullLocation(), location)) {
-        debug() << "Completion helper given invalid position " << position
+        clangDebug() << "Completion helper given invalid position " << position
                  << " in file " << session.file();
         return;
     }

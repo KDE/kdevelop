@@ -43,8 +43,6 @@
 #include "../util/clangutils.h"
 #include "../util/clangtypes.h"
 
-#include "../debug.h"
-
 using namespace KDevelop;
 
 namespace {
@@ -137,7 +135,7 @@ KTextEditor::Cursor findSignatureEnd(KTextEditor::Document *targetDoc, CXCursor 
             }
         }
         if (searchChar != endChar) {
-            debug() << "Could not find ending character of declaration";
+            clangDebug() << "Could not find ending character of declaration";
             return KTextEditor::Cursor::invalid();
         }
 
@@ -161,13 +159,13 @@ KUrl findCompanionFile(const KUrl& fileUrl, const KTextEditor::Cursor& sc, const
     } else if (srcMime.contains(me)) {
         targetTypes = headerMime;
     } else {
-        debug() << "Unrecgonized file extension";
+        clangDebug() << "Unrecgonized file extension";
         return KUrl();
     }
 
     IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(fileUrl)->name());
     if (!buddyFinder) {
-        debug() << "Could not create buddy finder for " << fileUrl;
+        clangDebug() << "Could not create buddy finder for " << fileUrl;
         return KUrl();
     }
     foreach (KUrl potentialUrl, buddyFinder->getPotentialBuddies(fileUrl)) {
@@ -359,13 +357,13 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
             CXFile otherFile;
             clang_getFileLocation(clang_getCursorLocation(otherSide), &otherFile, nullptr, nullptr, nullptr);
             if (!otherFile) {
-                debug() << "Could not find file corresponding to other side of definition";
+                clangDebug() << "Could not find file corresponding to other side of definition";
                 return;
             }
 
             m_targetUnit = KUrl(ClangString(clang_getFileName(otherFile)).toString());
             if (m_targetUnit.isEmpty()) {
-                debug() << "Could not access file " << clang_getFileName(otherFile);
+                clangDebug() << "Could not access file " << clang_getFileName(otherFile);
                 return;
             }
         }
@@ -382,7 +380,7 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
         m_targetUnit = findCompanionFile(fileUrl, simpleCursor, session.file(), otherSide);
 
         if (m_targetUnit.isEmpty()) {
-            debug() << "Could not find candidate target for " << fileUrl;
+            clangDebug() << "Could not find candidate target for " << fileUrl;
             return;
         }
         m_targetDecl = false;
@@ -450,13 +448,13 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
     CXCursor cursor = getFunctionCursor(c, sourceSession.unit(), sourceSession.file());
     CXCursor otherCursor = getFunctionCursor(m_otherLoc, targetUnit, otherFile);
     if (clang_Cursor_isNull(cursor)) {
-        debug() << "Couldn't get source cursor " << clang_getFileName(sourceSession.file()) << ":" << c;
+        clangDebug() << "Couldn't get source cursor " << clang_getFileName(sourceSession.file()) << ":" << c;
         reset();
         return;
     }
 
     if (clang_Cursor_isNull(otherCursor)) {
-        debug() << "Couldn't get target cursor " << clang_getFileName(otherFile) << ":" << m_otherLoc;
+        clangDebug() << "Couldn't get target cursor " << clang_getFileName(otherFile) << ":" << m_otherLoc;
         reset();
         return;
     }

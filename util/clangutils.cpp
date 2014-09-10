@@ -24,7 +24,6 @@
 #include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
 #include "../duchain/cursorkindtraits.h"
-#include "../debug.h"
 
 #include <serialization/indexedstring.h>
 #include <language/editor/documentrange.h>
@@ -40,14 +39,14 @@ using namespace KDevelop;
 CXCursor ClangUtils::getCXCursor(int line, int column, const CXTranslationUnit& unit, const CXFile& file)
 {
     if (!file) {
-        debug() << "getCXCursor couldn't find file: " << clang_getFileName(file);
+        clangDebug() << "getCXCursor couldn't find file: " << clang_getFileName(file);
         return clang_getNullCursor();
     }
 
     CXSourceLocation location = clang_getLocation(unit, file, line + 1, column + 1);
 
     if (clang_equalLocations(clang_getNullLocation(), location)) {
-        debug() << "getCXCursor given invalid position " << line << ", " << column
+        clangDebug() << "getCXCursor given invalid position " << line << ", " << column
                 << " for file " << clang_getFileName(file);
         return clang_getNullCursor();
     }
@@ -80,7 +79,7 @@ CXChildVisitResult paramVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientDa
     CXFile file;
     clang_getFileLocation(clang_getCursorLocation(cursor),&file,nullptr,nullptr,nullptr);
     if (!file) {
-        debug() << "Couldn't find file associated with default parameter cursor!";
+        clangDebug() << "Couldn't find file associated with default parameter cursor!";
         //We keep going, because getting an error because we accidentally duplicated
         //a default parameter is better than deleting a default parameter
     }
@@ -114,7 +113,7 @@ QVector<QString> ClangUtils::getDefaultArguments(CXCursor cursor, DefaultArgumen
     CXFile file;
     clang_getFileLocation(clang_getCursorLocation(cursor),&file,nullptr,nullptr,nullptr);
     if (!file) {
-        debug() << "Couldn't find file associated with default parameter cursor!";
+        clangDebug() << "Couldn't find file associated with default parameter cursor!";
         //The empty string serves as a wildcard string, because it's better to
         //duplicate a default parameter than delete one
     } else {

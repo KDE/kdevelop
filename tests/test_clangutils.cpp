@@ -22,7 +22,7 @@
 
 #include "../util/clangutils.h"
 #include "../util/clangtypes.h"
-#include "../debug.h"
+#include "../util/clangdebug.h"
 
 #include <language/editor/documentrange.h>
 #include <tests/testcore.h>
@@ -130,7 +130,7 @@ void TestClangUtils::testGetScope()
     runVisitor(code, visitor);
     QVERIFY(cursorIndex < visitor.cursors.size());
     const auto cursor = visitor.cursors[cursorIndex];
-    debug() << "Found decl:" << ClangString(clang_getCursorSpelling(cursor)) << "| range:" << ClangRange(clang_getCursorExtent(cursor)).toRange();
+    clangDebug() << "Found decl:" << ClangString(clang_getCursorSpelling(cursor)) << "| range:" << ClangRange(clang_getCursorExtent(cursor)).toRange();
     const QString scope = ClangUtils::getScope(cursor);
     QCOMPARE(scope, expectedScope);
 

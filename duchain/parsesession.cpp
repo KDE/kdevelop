@@ -28,9 +28,8 @@
 #include "clanghelpers.h"
 #include "clangindex.h"
 #include "clangparsingenvironment.h"
-#include "debug.h"
+#include "util/clangdebug.h"
 #include "util/clangtypes.h"
-#include "../debug.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
@@ -177,7 +176,7 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
         &m_unit
     );
     if (code != CXError_Success) {
-        debug() << "clang_parseTranslationUnit2 return with error code" << code;
+        clangDebug() << "clang_parseTranslationUnit2 return with error code" << code;
     }
 #else
     m_unit = clang_parseTranslationUnit(
@@ -196,7 +195,7 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
             clang_saveTranslationUnit(m_unit, path + ".pch", CXSaveTranslationUnit_None);
         }
     } else {
-        debug() << "Failed to parse file:" << file.Filename;
+        clangDebug() << "Failed to parse file:" << file.Filename;
     }
 }
 

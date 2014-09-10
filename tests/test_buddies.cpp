@@ -20,8 +20,6 @@
 
 #include "test_buddies.h"
 
-#include "../debug.h"
-
 #include <qtest_kde.h>
 
 #include <QSplitter>
@@ -77,7 +75,7 @@ void TestBuddies::verifyFilename(Sublime::View *view, const QString& endOfFilena
         Sublime::UrlDocument *urlDoc = dynamic_cast<Sublime::UrlDocument *>(view->document());
         QVERIFY(urlDoc);
         if (urlDoc) {
-            debug() << urlDoc->url().toLocalFile() << endOfFilename;
+            qDebug() << urlDoc->url().toLocalFile() << endOfFilename;
             QVERIFY(urlDoc->url().toLocalFile().endsWith(endOfFilename));
         }
     }

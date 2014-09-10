@@ -27,7 +27,7 @@
 #include "parsesession.h"
 #include "clangparsingenvironment.h"
 
-#include "../debug.h"
+#include "../util/clangdebug.h"
 
 using namespace KDevelop;
 
@@ -90,7 +90,7 @@ bool ClangParsingEnvironmentFile::needsUpdate(const ParsingEnvironment* environm
         if (!d_func()->isSystemHeader && env->hash() != d_func()->environmentHash
             && (env->projectKnown() || env->projectKnown() == d_func()->projectWasKnown))
         {
-            debug() << "environment differs, require update:" << url()
+            clangDebug() << "environment differs, require update:" << url()
                     << "new hash:" << env->hash() << "new project known:" << env->projectKnown()
                     << "old hash:" << d_func()->environmentHash << "old project known:" << d_func()->projectWasKnown;
             return true;
@@ -99,7 +99,7 @@ bool ClangParsingEnvironmentFile::needsUpdate(const ParsingEnvironment* environm
 
     bool ret = KDevelop::ParsingEnvironmentFile::needsUpdate(environment);
     if (ret) {
-        debug() << "modification revision requires update:" << url();
+        clangDebug() << "modification revision requires update:" << url();
     }
     return ret;
 }

@@ -22,7 +22,7 @@
 #include "clangproblem.h"
 
 #include "util/clangtypes.h"
-#include "../debug.h"
+#include "util/clangdebug.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/codegen/documentchangeset.h>

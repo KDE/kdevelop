@@ -22,9 +22,12 @@
 #ifndef CLANGDEBUG_H
 #define CLANGDEBUG_H
 
-#include <QDebug>
+#include <QtCore/QLoggingCategory>
 
 #include <clang-c/Index.h>
+
+Q_DECLARE_LOGGING_CATEGORY(KDEV_CLANG)
+#define clangDebug() qCDebug(KDEV_CLANG)
 
 QDebug operator<<(QDebug dbg, CXString string);
 QDebug operator<<(QDebug dbg, CXSourceLocation location);
