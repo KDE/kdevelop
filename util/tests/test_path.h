@@ -50,6 +50,8 @@ private slots:
     void testPathBaseCtor_data();
     void testPathCd();
     void testPathCd_data();
+    void testHasParent_data();
+    void testHasParent();
 };
 
 #endif // TESTPATH_H

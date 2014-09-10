@@ -496,4 +496,27 @@ void TestPath::testPathCd_data()
     }
 }
 
+void TestPath::testHasParent_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<bool>("hasParent");
+
+    QTest::newRow("empty") << QString() << false;
+    QTest::newRow("/") << QString("/") << false;
+    QTest::newRow("/foo") << QString("/foo") << true;
+    QTest::newRow("/foo/bar") << QString("/foo/bar") << true;
+    QTest::newRow("//foo/bar") << QString("//foo/bar") << true;
+    QTest::newRow("http://foo.bar") << QString("http://foo.bar") << false;
+    QTest::newRow("http://foo.bar/") << QString("http://foo.bar/") << false;
+    QTest::newRow("http://foo.bar/asdf") << QString("http://foo.bar/asdf") << true;
+    QTest::newRow("http://foo.bar/asdf/asdf") << QString("http://foo.bar/asdf/asdf") << true;
+}
+
+void TestPath::testHasParent()
+{
+    QFETCH(QString, input);
+    Path path(input);
+    QTEST(path.hasParent(), "hasParent");
+}
+
 #include "test_path.moc"

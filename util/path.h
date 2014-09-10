@@ -312,6 +312,11 @@ public:
     Path parent() const;
 
     /**
+     * @return true when this path has a parent and false if this is a root or invalid path.
+     */
+    bool hasParent() const;
+
+    /**
      * Clear the path, i.e. make it invalid and empty.
      */
     void clear();

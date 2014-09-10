@@ -372,6 +372,12 @@ Path Path::parent() const
     return ret;
 }
 
+bool Path::hasParent() const
+{
+    const int rootIdx = isRemote() ? 1 : 0;
+    return m_data.size() > rootIdx && !m_data[rootIdx].isEmpty();
+}
+
 void Path::clear()
 {
     m_data.clear();
