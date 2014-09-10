@@ -44,7 +44,7 @@ CMakeParseJob::CMakeParseJob(const KDevelop::IndexedString& url, KDevelop::ILang
 
 IndexedString parentCMakeFile(const IndexedString& doc)
 {
-    return IndexedString(QUrl(KIO::upUrl(doc.toUrl().adjusted(QUrl::RemoveFilename)).toString()+"/CMakeLists.txt"));
+    return IndexedString(QUrl(KIO::upUrl(doc.toUrl().adjusted(QUrl::RemoveFilename)).toString()+"CMakeLists.txt"));
 }
 
 void CMakeParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
@@ -73,12 +73,11 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
                 parentCtx = DUChain::self()->chainForDocument(parentFile);
             }
 
-            if (!parentCtx && ICore::self()->languageController()->backgroundParser()->parseJobForDocument(parentFile)) {
+            if (!parentCtx) {
                 qDebug() << "waiting for..." << parentFile << document();
                 parentCtx = DUChain::self()->waitForUpdate(parentFile, TopDUContext::AllDeclarationsAndContexts);
-            } else if(!parentCtx) {
-                qDebug() << "required..." << parentFile;
             }
+            Q_ASSERT(parentCtx);
         }
     }
 
@@ -89,6 +88,8 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
     }
     if (context) {
         translateDUChainToRevision(context);
+
+        DUChainWriteLocker lock;
         context->setRange(RangeInRevision(0, 0, INT_MAX, INT_MAX));
         context->addImportedParentContext(parentCtx);
     }
