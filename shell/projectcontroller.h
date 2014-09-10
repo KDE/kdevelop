@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 
 #include <interfaces/iprojectcontroller.h>
 #include <kio/udsentry.h>
+#include <QUrl>
 
 #include "shellexport.h"
 
@@ -57,7 +58,7 @@ public Q_SLOTS:
      * @param fetch will tell the UI that the user might want to fetch the project first
      * @param startUrl tells where to look first
      */
-    virtual KUrl askProjectConfigLocation(bool fetch, const KUrl& startUrl = KUrl()) = 0;
+    virtual QUrl askProjectConfigLocation(bool fetch, const QUrl& startUrl = QUrl()) = 0;
     virtual bool userWantsReopen() = 0;
 };
 
@@ -82,21 +83,21 @@ public:
     virtual ProjectChangesModel* changesModel();
     virtual QItemSelectionModel* projectSelectionModel();
     virtual IProject* findProjectByName( const QString& name );
-    IProject* findProjectForUrl( const KUrl& ) const;
+    IProject* findProjectForUrl( const QUrl& ) const;
     void addProject(IProject*);
 //     IProject* currentProject() const;
 
     virtual bool isProjectNameUsed( const QString& name ) const;
     void setDialogProvider(IProjectDialogProvider*);
 
-    KUrl projectsBaseDirectory() const;
-    QString prettyFileName(const KUrl& url, FormattingOptions format = FormatHtml) const override;
-    QString prettyFilePath(const KUrl& url, FormattingOptions format = FormatHtml) const override;
+    QUrl projectsBaseDirectory() const;
+    QString prettyFileName(const QUrl& url, FormattingOptions format = FormatHtml) const override;
+    QString prettyFilePath(const QUrl& url, FormattingOptions format = FormatHtml) const override;
 
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
 public Q_SLOTS:
-    virtual void openProjectForUrl( const KUrl &sourceUrl );
+    virtual void openProjectForUrl( const QUrl &sourceUrl );
     virtual void fetchProject();
     virtual void openProject( const QUrl &KDev4ProjectFile = QUrl() );
     virtual void abortOpeningProject( IProject* );
@@ -109,7 +110,7 @@ public Q_SLOTS:
     void eventuallyOpenProjectFile(KIO::Job*,KIO::UDSEntryList);
     void openProjectForUrlSlot(bool);
 //     void changeCurrentProject( ProjectBaseItem* );
-    void openProjects(const KUrl::List& projects);
+    void openProjects(const QList<QUrl>& projects);
     void commitCurrentProject();
 
     // Maps the given path from the source to the equivalent path within the build directory
@@ -157,7 +158,7 @@ public:
     ProjectControllerPrivate* const d;
 
 public Q_SLOTS:
-    virtual KUrl askProjectConfigLocation(bool fetch, const KUrl& sta);
+    virtual QUrl askProjectConfigLocation(bool fetch, const QUrl& sta);
     virtual bool userWantsReopen();
 };
 

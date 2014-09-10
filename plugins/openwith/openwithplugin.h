@@ -45,7 +45,7 @@ public:
     virtual KDevelop::ContextMenuExtension contextMenuExtension ( KDevelop::Context* context );
 
 protected:
-    virtual void openFilesInternal( const KUrl::List& files );
+    virtual void openFilesInternal( const QList<QUrl>& files );
 
 private slots:
     void open( const QString& );
@@ -54,7 +54,7 @@ private slots:
 private:
     QList<QAction*> actionsForServiceType( const QString& serviceType );
     QScopedPointer<QSignalMapper> m_actionMap;
-    KUrl::List m_urls;
+    QList<QUrl> m_urls;
     QString m_mimeType;
     KService::List m_services;
 };

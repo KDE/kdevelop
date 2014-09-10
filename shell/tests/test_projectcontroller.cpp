@@ -24,7 +24,6 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kcomponentdata.h>
-#include <KUrl>
 #include <kdebug.h>
 #include <QtTest/QTest>
 
@@ -54,7 +53,7 @@ public:
     bool m_reopen;
 
 public slots:
-    virtual KUrl askProjectConfigLocation(bool fetch, const KUrl& startUrl = KUrl()) { return KUrl(); }
+    virtual QUrl askProjectConfigLocation(bool fetch, const QUrl& startUrl = QUrl()) { return QUrl(); }
     virtual bool userWantsReopen() { return m_reopen; }
 };
 

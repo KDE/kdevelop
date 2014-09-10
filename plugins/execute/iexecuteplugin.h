@@ -29,7 +29,7 @@ class ILaunchConfiguration;
 }
 
 class KJob;
-class KUrl;
+class QUrl;
 class QStringList;
 
 /**
@@ -41,9 +41,9 @@ class IExecutePlugin
 public:
     virtual ~IExecutePlugin() {}
 
-    virtual KUrl executable( KDevelop::ILaunchConfiguration* config, QString& error) const = 0;
+    virtual QUrl executable( KDevelop::ILaunchConfiguration* config, QString& error) const = 0;
     virtual QStringList arguments( KDevelop::ILaunchConfiguration* config, QString& error) const = 0;
-    virtual KUrl workingDirectory( KDevelop::ILaunchConfiguration* config) const = 0;
+    virtual QUrl workingDirectory( KDevelop::ILaunchConfiguration* config) const = 0;
     virtual KJob* dependecyJob( KDevelop::ILaunchConfiguration* config) const = 0;
     virtual QString environmentGroup( KDevelop::ILaunchConfiguration* config) const = 0;
     virtual bool useTerminal( KDevelop::ILaunchConfiguration* config) const = 0;

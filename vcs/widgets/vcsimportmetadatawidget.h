@@ -25,7 +25,7 @@
 #include "vcsexport.h"
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
-class KUrl;
+class QUrl;
 
 namespace KDevelop
 {

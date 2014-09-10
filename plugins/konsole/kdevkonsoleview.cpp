@@ -117,7 +117,7 @@ KDevKonsoleView::~KDevKonsoleView()
     delete d;
 }
 
-void KDevKonsoleView::setDirectory( const KUrl &url )
+void KDevKonsoleView::setDirectory( const QUrl &url )
 {
     if ( !url.isValid() || !url.isLocalFile() )
         return ;

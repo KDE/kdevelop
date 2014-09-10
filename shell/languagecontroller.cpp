@@ -70,7 +70,7 @@ struct LanguageControllerPrivate {
 
     void documentActivated(KDevelop::IDocument *document)
     {
-        KUrl url = document->url();
+        QUrl url = document->url();
         if (!url.isValid()) {
             return;
         }
@@ -237,7 +237,7 @@ bool isNumeric(const QString& str)
     return true;
 }
 
-QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
+QList<ILanguage*> LanguageController::languagesForUrl(const QUrl &url)
 {
     QMutexLocker lock(&d->dataMutex);
     

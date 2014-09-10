@@ -62,12 +62,12 @@ void KDevDocumentItem::setDocumentState(IDocument::DocumentState state)
     setIcon(icon());
 }
 
-const KUrl KDevDocumentItem::url() const
+const QUrl KDevDocumentItem::url() const
 {
     return m_url;
 }
 
-void KDevDocumentItem::setUrl(const KUrl& url)
+void KDevDocumentItem::setUrl(const QUrl& url)
 {
     m_url = url;
 }
@@ -96,7 +96,7 @@ QList<KDevFileItem*> KDevCategoryItem::fileList() const
     return lst;
 }
 
-KDevFileItem* KDevCategoryItem::file( const KUrl &url ) const
+KDevFileItem* KDevCategoryItem::file( const QUrl &url ) const
 {
     foreach( KDevFileItem * item, fileList() )
     {
@@ -107,7 +107,7 @@ KDevFileItem* KDevCategoryItem::file( const KUrl &url ) const
     return 0;
 }
 
-KDevFileItem::KDevFileItem( const KUrl &url )
+KDevFileItem::KDevFileItem( const QUrl &url )
         : KDevDocumentItem( url.fileName() )
 {
     setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);

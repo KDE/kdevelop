@@ -27,7 +27,7 @@
 #include <QtCore/QProcess>
 #include "iexecuteplugin.h"
 
-class KUrl;
+class QUrl;
 class KJob;
 
 class NativeAppConfigType;
@@ -56,9 +56,9 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     
     virtual void unload();
     
-    KUrl executable( KDevelop::ILaunchConfiguration*, QString& err ) const;
+    QUrl executable( KDevelop::ILaunchConfiguration*, QString& err ) const;
     QStringList arguments( KDevelop::ILaunchConfiguration*, QString& err ) const;
-    KUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const;
+    QUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const;
     KJob* dependecyJob( KDevelop::ILaunchConfiguration* ) const;
     QString environmentGroup( KDevelop::ILaunchConfiguration* ) const;
     bool useTerminal( KDevelop::ILaunchConfiguration* ) const;

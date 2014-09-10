@@ -26,7 +26,7 @@
 #include <QVariantList>
 #include <KConfigGroup>
 #include <QModelIndex>
-#include <KUrl>
+#include <QUrl>
 
 class ExternalScriptItem;
 
@@ -56,7 +56,7 @@ public:
   /**
    * Executes @p script.
    */
-  void execute(ExternalScriptItem* item, const KUrl &url) const;
+  void execute(ExternalScriptItem* item, const QUrl &url) const;
 
   /**
    * Executes @p script.
@@ -93,7 +93,7 @@ private:
   void saveItemForRow( int row );
 
   QStandardItemModel* m_model;
-  KUrl::List m_urls;
+  QList<QUrl> m_urls;
   static ExternalScriptPlugin* m_self;
 
   class ExternalScriptViewFactory *m_factory;

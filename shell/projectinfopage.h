@@ -18,8 +18,6 @@ namespace Ui
     class ProjectInfoPage;
 }
 
-class KUrl;
-
 namespace KDevelop
 {
 

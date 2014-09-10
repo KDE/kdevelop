@@ -52,6 +52,7 @@ void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list
         setColumnCount(2);
     
     bool copySource = false;
+    QMimeDatabase mimeDataBase;
     foreach(const KDevelop::VcsItemEvent& ev, list) {
         
         KDevelop::VcsItemEvent::Actions act = ev.actions();
@@ -66,10 +67,10 @@ void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list
             actionStrings << i18n("Copied");
         else if( act & KDevelop::VcsItemEvent::Replaced )
             actionStrings << i18n("Replaced");
-        QUrl repoUrl(ev.repositoryLocation());
+        QUrl repoUrl = QUrl::fromLocalFile(ev.repositoryLocation());
         QMimeType mime = repoUrl.isLocalFile()
-                ? QMimeDatabase().mimeTypeForFile(repoUrl.toLocalFile(), QMimeDatabase::MatchExtension)
-                : QMimeDatabase().mimeTypeForUrl(repoUrl.url());
+                ? mimeDataBase.mimeTypeForFile(repoUrl.toLocalFile(), QMimeDatabase::MatchExtension)
+                : mimeDataBase.mimeTypeForUrl(repoUrl);
         QList<QStandardItem*> rowItems = QList<QStandardItem*>()
             << new QStandardItem(QIcon::fromTheme(mime.iconName()), ev.repositoryLocation())
             << new QStandardItem(actionStrings.join(i18nc("separes an action list", ", ")));

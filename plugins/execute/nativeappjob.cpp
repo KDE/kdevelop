@@ -57,7 +57,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     QString envgrp = iface->environmentGroup(cfg);
     
     QString err;
-    KUrl executable = iface->executable( cfg, err );
+    QUrl executable = iface->executable( cfg, err );
     
     if( !err.isEmpty() ) 
     {
@@ -105,10 +105,10 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     // Now setup the process parameters
     
     proc->setEnvironment( l.createEnvironment( envgrp, proc->systemEnvironment()) );
-    KUrl wc = iface->workingDirectory( cfg );
+    QUrl wc = iface->workingDirectory( cfg );
     if( !wc.isValid() || wc.isEmpty() )
     {
-        wc = KUrl( QFileInfo( executable.toLocalFile() ).absolutePath() );
+        wc = QUrl::fromLocalFile( QFileInfo( executable.toLocalFile() ).absolutePath() );
     }
     proc->setWorkingDirectory( wc.toLocalFile() );
     proc->setProperty( "executable", executable );

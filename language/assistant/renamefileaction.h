@@ -22,7 +22,7 @@
 
 #include <interfaces/iassistant.h>
 
-#include <KUrl>
+#include <QUrl>
 
 namespace KDevelop {
 class BasicRefactoring;
@@ -33,7 +33,7 @@ class RenameFileAction : public KDevelop::IAssistantAction
     Q_OBJECT
 
 public:
-    RenameFileAction(KDevelop::BasicRefactoring* refactoring, const KUrl& file, const QString& newName);
+    RenameFileAction(KDevelop::BasicRefactoring* refactoring, const QUrl& file, const QString& newName);
     virtual ~RenameFileAction();
 
     virtual QString description() const override;

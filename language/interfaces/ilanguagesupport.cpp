@@ -26,24 +26,24 @@
 
 namespace KDevelop {
 
-TopDUContext* ILanguageSupport::standardContext(const KUrl& url, bool proxyContext) {
+TopDUContext* ILanguageSupport::standardContext(const QUrl& url, bool proxyContext) {
   Q_UNUSED(proxyContext)
   return DUChain::self()->chainForDocument(url);
 }
 
-KTextEditor::Range ILanguageSupport::specialLanguageObjectRange(const KUrl& url, const KTextEditor::Cursor& position) {
+KTextEditor::Range ILanguageSupport::specialLanguageObjectRange(const QUrl& url, const KTextEditor::Cursor& position) {
     Q_UNUSED(url)
     Q_UNUSED(position)
     return KTextEditor::Range::invalid();
 }
 
-QPair<KUrl, KTextEditor::Cursor> ILanguageSupport::specialLanguageObjectJumpCursor(const KUrl& url, const KTextEditor::Cursor& position) {
+QPair<QUrl, KTextEditor::Cursor> ILanguageSupport::specialLanguageObjectJumpCursor(const QUrl& url, const KTextEditor::Cursor& position) {
     Q_UNUSED(url)
     Q_UNUSED(position)
-    return QPair<KUrl, KTextEditor::Cursor>(KUrl(), KTextEditor::Cursor::invalid());
+    return QPair<QUrl, KTextEditor::Cursor>(QUrl(), KTextEditor::Cursor::invalid());
 }
 
-QWidget* ILanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position) {
+QWidget* ILanguageSupport::specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position) {
     Q_UNUSED(url)
     Q_UNUSED(position)
     return 0;

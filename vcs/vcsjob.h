@@ -28,7 +28,6 @@
 
 class QVariant;
 class QString;
-class KUrl;
 
 namespace KDevelop
 {

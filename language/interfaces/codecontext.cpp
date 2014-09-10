@@ -90,7 +90,7 @@ DeclarationContext::DeclarationContext( const IndexedDeclaration& declaration, c
 
 DeclarationContext::DeclarationContext(KTextEditor::View* view, KTextEditor::Cursor position) : DUContextContext(IndexedDUContext())
 {
-    const KUrl& url = view->document()->url();
+    const QUrl& url = view->document()->url();
     const KTextEditor::Cursor pos = KTextEditor::Cursor(position);
     DUChainReadLocker lock;
     DocumentRange useRange = DocumentRange(IndexedString(url), DUChainUtils::itemRangeUnderCursor(url, pos));

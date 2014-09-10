@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_ILANGUAGESUPPORT_H
 #define KDEVPLATFORM_ILANGUAGESUPPORT_H
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <language/languageexport.h>
 
@@ -56,7 +56,7 @@ public:
     /**
       * Only important for languages that can parse multiple different versions of a file, like C++ due to the preprocessor.
      * The default-implementation for other languages is "return DUChain::chainForDocument(url);"
-     * 
+     *
      * @param proxyContext      Whether the returned context should be a proxy-contexts. In C++, a proxy-contexts has no direct content.
      *                          It mainly just imports an actual content-context, and it holds all the imports. It can also represent
      *                          multiple different versions of the same content in the eyes of the preprocessor. Also, a proxy-context may contain the problem-
@@ -65,10 +65,10 @@ public:
      *                          (only the proxy-context knows about all the dependencies, since it contains most of the imports)
      *
      *  @warning The DUChain must be locked before calling this, @see KDevelop::DUChainReadLocker
-     * 
+     *
      *  @return the standard context used by this language for the given @param url.
       * */
-    virtual TopDUContext *standardContext(const KUrl& url, bool proxyContext = false);
+    virtual TopDUContext *standardContext(const QUrl& url, bool proxyContext = false);
 
     /**
       * Should return a code-highlighting instance for this language, or zero.
@@ -81,7 +81,7 @@ public:
     virtual BasicRefactoring* refactoring() const;
 
     /**
-     * Should return a document change-tracker for this language that tracks the changes in the given document 
+     * Should return a document change-tracker for this language that tracks the changes in the given document
      * */
     virtual DocumentChangeTracker* createChangeTrackerForDocument(KTextEditor::Document* document) const;
 
@@ -99,20 +99,20 @@ public:
      * */
 
     /**Should return the local range within the given url that belongs to the
-      *special language-object that contains @param position, or (KUrl(), KTextEditor::Range:invalid()) */
-    virtual KTextEditor::Range specialLanguageObjectRange(const KUrl& url, const KTextEditor::Cursor& position);
+      *special language-object that contains @param position, or (QUrl(), KTextEditor::Range:invalid()) */
+    virtual KTextEditor::Range specialLanguageObjectRange(const QUrl& url, const KTextEditor::Cursor& position);
 
     /**Should return the source-range and source-document that the
       *special language-object that contains @param position refers to, or KTextEditor::Range:invalid(). */
-    virtual QPair<KUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const KUrl& url, const KTextEditor::Cursor& position);
-    
+    virtual QPair<QUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const QUrl& url, const KTextEditor::Cursor& position);
+
     /**Should return a navigation-widget for the
       *special language-object that contains @param position refers, or 0.
       *If you setProperty("DoNotCloseOnCursorMove", true) on the widget returned,
       *then the widget will not close when the cursor moves in the document, which
       *enables you to change the document contents from the widget without immediately closing the widget.*/
-    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position);
-    
+    virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position);
+
     /**Should return a tiny piece of code which makes it possible for KDevelop to derive the indentation
       *settings from an automatic source formatter. Example for C++: "class C{\n class D {\n void c() {\n int m;\n }\n }\n};\n"
       *The sample must be completely unindented (no line must start with leading whitespace),
@@ -130,13 +130,13 @@ public:
      * on the returned items.
      */
     virtual SourceFormatterItemList sourceFormatterItems() const;
-    
+
     enum WhitespaceSensitivity {
         Insensitive = 0,
         IndentOnly = 1,
         Sensitive = 2
     };
-    
+
     /**Specifies whether this language is sensitive to whitespace changes.
       * - The default "Insensitive" will only schedule a document for reparsing when
       *   a change in a non-whitespace area happens (non-whitespace chars added or whitespace

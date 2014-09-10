@@ -28,7 +28,7 @@ using namespace KDevelop;
 
 static const int FROM_FILESYSTEM_SOURCE_INDEX = 0;
 
-ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
+ProjectSourcePage::ProjectSourcePage(const QUrl& initial, QWidget* parent)
     : QWidget(parent)
 {
     m_ui = new Ui::ProjectSourcePage;
@@ -126,7 +126,7 @@ IProjectProvider* ProjectSourcePage::providerPerIndex(int index)
 
 VcsJob* ProjectSourcePage::jobPerCurrent()
 {
-    KUrl url=m_ui->workingDir->url();
+    QUrl url=m_ui->workingDir->url();
     IPlugin* p=m_plugins[m_ui->sources->currentIndex()];
     VcsJob* job=0;
     
@@ -141,7 +141,7 @@ VcsJob* ProjectSourcePage::jobPerCurrent()
 
 void ProjectSourcePage::checkoutVcsProject()
 {
-    KUrl url=m_ui->workingDir->url();
+    QUrl url=m_ui->workingDir->url();
     QDir d(url.toLocalFile());
     if(!url.isLocalFile() && !d.exists()) {
         bool corr = d.mkpath(d.path());
@@ -194,7 +194,7 @@ void ProjectSourcePage::reevaluateCorrection()
 {
     //TODO: Probably we should just ignore remote URL's, I don't think we're ever going
     //to support checking out to remote directories
-    const KUrl cwd = m_ui->workingDir->url();
+    const QUrl cwd = m_ui->workingDir->url();
     const QDir dir = cwd.toLocalFile();
 
     // case where we import a project from local file system
@@ -204,7 +204,7 @@ void ProjectSourcePage::reevaluateCorrection()
     }
 
     // all other cases where remote locations need to be specified
-    bool correct=!cwd.isRelative() && (!cwd.isLocalFile() || QDir(cwd.upUrl().toLocalFile()).exists());
+    bool correct=!cwd.isRelative() && (!cwd.isLocalFile() || QDir(cwd.adjusted(QUrl::RemoveFilename).toLocalFile()).exists());
     emit isCorrect(correct && m_ui->creationProgress->value() == m_ui->creationProgress->maximum());
 
     bool validWidget = ((m_locationWidget && m_locationWidget->isCorrect()) ||
@@ -232,9 +232,7 @@ void ProjectSourcePage::locationChanged()
         QString currentUrl = m_ui->workingDir->text();
         currentUrl = currentUrl.left(currentUrl.lastIndexOf('/')+1);
         
-        KUrl current = currentUrl;
-        current.addPath(m_locationWidget->projectName());
-        
+        QUrl current = QUrl::fromUserInput(currentUrl + "/" + m_locationWidget->projectName());
         m_ui->workingDir->setUrl(current);
     }
     else
@@ -247,9 +245,7 @@ void ProjectSourcePage::projectChanged(const QString& name)
     QString currentUrl = m_ui->workingDir->text();
     currentUrl = currentUrl.left(currentUrl.lastIndexOf('/')+1);
     
-    KUrl current = currentUrl;
-    current.addPath(name);
-    
+    QUrl current = QUrl::fromUserInput(currentUrl + "/" + name);
     m_ui->workingDir->setUrl(current);
 }
 
@@ -264,7 +260,7 @@ void ProjectSourcePage::clearStatus()
     m_ui->status->clear();
 }
 
-KUrl ProjectSourcePage::workingDir() const
+QUrl ProjectSourcePage::workingDir() const
 {
     return m_ui->workingDir->url();
 }

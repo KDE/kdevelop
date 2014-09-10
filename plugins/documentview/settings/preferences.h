@@ -23,8 +23,6 @@
 
 #include <kdevcmodule.h>
 
-#include <kurl.h>
-
 namespace Ui
 {
 class SettingsWidget;

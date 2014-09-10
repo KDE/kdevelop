@@ -25,7 +25,7 @@
 
 #include "importmetadatawidget.h"
 
-ImportDialog::ImportDialog(CvsPlugin* plugin, const KUrl& url, QWidget *parent)
+ImportDialog::ImportDialog(CvsPlugin* plugin, const QUrl &url, QWidget *parent)
     : KDialog(parent), m_url(url), m_plugin(plugin)
 {
     m_widget = new ImportMetadataWidget(this);

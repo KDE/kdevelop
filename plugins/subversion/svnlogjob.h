@@ -25,7 +25,7 @@
 
 #include <QVariant>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsevent.h>
@@ -41,7 +41,7 @@ public:
     void start();
     SvnInternalJobBase* internalJob() const;
 
-    void setLocation( const KUrl& location );
+    void setLocation( const QUrl &location );
     void setLimit( int limit );
     void setEndRevision( const KDevelop::VcsRevision& rev );
     void setStartRevision( const KDevelop::VcsRevision& rev );

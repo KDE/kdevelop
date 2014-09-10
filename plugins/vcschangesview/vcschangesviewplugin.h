@@ -26,7 +26,6 @@
 #include <QStandardItemModel>
 
 class QModelIndex;
-class KUrl;
 class KJob;
 
 namespace KDevelop

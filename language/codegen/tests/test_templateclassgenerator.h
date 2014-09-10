@@ -24,9 +24,9 @@
 
 #include <QtTest>
 #include <QTemporaryDir>
+#include <QUrl>
 
 #include "language/codegen/codedescription.h"
-#include <KUrl>
 
 namespace KDevelop
 {
@@ -58,7 +58,7 @@ private:
     KDevelop::TemplateClassGenerator* loadTemplate(const QString& name);
 
 private:
-    KUrl baseUrl;
+    QUrl baseUrl;
     QTemporaryDir tempDir;
     KDevelop::ClassDescription description;
     void setLowercaseFileNames(KDevelop::TemplateClassGenerator* generator);

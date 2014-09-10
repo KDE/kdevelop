@@ -22,8 +22,9 @@
 
 #include <QObject>
 #include <QAtomicInt>
+#include <QUrl>
+
 #include <language/duchain/topducontext.h>
-#include <KUrl>
 
 namespace KDevelop {
 class ParseJob;
@@ -36,9 +37,9 @@ class Manager : public QObject {
     public:
         Manager(KCmdLineArgs* args);
         void addToBackgroundParser(QString path, KDevelop::TopDUContext::Features features);
-        QSet<KUrl> waiting();
+        QSet<QUrl> waiting();
     private:
-        QSet<KUrl> m_waiting;
+        QSet<QUrl> m_waiting;
         uint m_total;
         KCmdLineArgs* m_args;
         QAtomicInt m_allFilesAdded;

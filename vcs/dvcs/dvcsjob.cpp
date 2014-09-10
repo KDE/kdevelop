@@ -32,10 +32,10 @@
 #include <QtCore/QStringList>
 #include <QtCore/QDir>
 #include <QStandardItemModel>
+#include <QUrl>
 
 #include <KDebug>
 #include <KLocalizedString>
-#include <KUrl>
 
 #include <interfaces/iplugin.h>
 #include <outputview/outputmodel.h>
@@ -290,15 +290,15 @@ IPlugin* DVcsJob::vcsPlugin() const
     return d->vcsplugin;
 }
 
-DVcsJob& DVcsJob::operator<<(const KUrl& url)
+DVcsJob& DVcsJob::operator<<(const QUrl& url)
 {
     *d->childproc << url.toLocalFile();
     return *this;
 }
 
-DVcsJob& DVcsJob::operator<<(const QList< KUrl >& urls)
+DVcsJob& DVcsJob::operator<<(const QList< QUrl >& urls)
 {
-    foreach(const KUrl &url, urls)
+    foreach(const QUrl &url, urls)
         operator<<(url);
     return *this;
 }

@@ -22,7 +22,7 @@
 #include <serialization/indexedstring.h>
 
 #include <QExplicitlySharedDataPointer>
-#include <KUrl>
+#include <QUrl>
 
 #include "coderepresentation.h"
 
@@ -37,9 +37,8 @@ public:
     DocumentChange(const IndexedString& document, const KTextEditor::Range& range, const QString& oldText, const QString& newText) :
                    m_document(document), m_range(range), m_oldText(oldText), m_newText(newText), m_ignoreOldText(false) {
         //Clean the URL, so we don't get the same file be stored as a different one
-        KUrl url(m_document.toUrl());
-        url.cleanPath();
-        m_document = IndexedString(url);
+        QUrl url = m_document.toUrl();
+        m_document = IndexedString(url.adjusted(QUrl::NormalizePathSegments));
     }
 
     IndexedString m_document;

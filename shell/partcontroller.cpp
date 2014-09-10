@@ -143,7 +143,7 @@ KParts::Part* PartController::createPart( const QString & mimeType,
     return 0;
 }
 
-bool PartController::canCreatePart(const KUrl& url)
+bool PartController::canCreatePart(const QUrl& url)
 {
     if (!url.isValid()) return false;
 
@@ -160,7 +160,7 @@ bool PartController::canCreatePart(const KUrl& url)
     return offers.count() > 0;
 }
 
-KParts::Part* PartController::createPart( const KUrl & url, const QString& preferredPart )
+KParts::Part* PartController::createPart( const QUrl & url, const QString& preferredPart )
 {
     kDebug() << "creating part with url" << url << "and pref part:" << preferredPart;
     QString mimeType;

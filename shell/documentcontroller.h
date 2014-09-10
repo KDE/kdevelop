@@ -75,7 +75,7 @@ public:
     /**Finds the first document object corresponding to a given url.
     @param url The Url of the document.
     @return The corresponding document, or null if not found.*/
-    virtual IDocument* documentForUrl( const KUrl & url ) const;
+    virtual IDocument* documentForUrl( const QUrl & url ) const;
 
     /**@return The list of open documents*/
     virtual QList<IDocument*> openDocuments() const;
@@ -107,8 +107,8 @@ public:
     using IDocumentController::openDocument;
 
     /**checks that url is an url of empty document*/
-    static bool isEmptyDocumentUrl(const KUrl &url);
-    static KUrl nextEmptyDocumentUrl();
+    static bool isEmptyDocumentUrl(const QUrl &url);
+    static QUrl nextEmptyDocumentUrl();
     
     virtual IDocumentFactory* factory(const QString& mime) const;
 
@@ -128,7 +128,7 @@ public Q_SLOTS:
     @param buddy The buddy document
     @return The opened document
     */
-    virtual Q_SCRIPTABLE IDocument* openDocument( const KUrl &url,
+    virtual Q_SCRIPTABLE IDocument* openDocument( const QUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0,
             const QString& encoding = "",
@@ -136,9 +136,9 @@ public Q_SLOTS:
 
     virtual Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data );
     
-    virtual KDevelop::IDocument* openDocument( const KUrl &url, const QString& prefname );
+    virtual KDevelop::IDocument* openDocument( const QUrl &url, const QString& prefname );
 
-    virtual void closeDocument( const KUrl &url );
+    virtual void closeDocument( const QUrl &url );
     void fileClose();
     void slotSaveAllDocuments();
     virtual void closeAllDocuments();

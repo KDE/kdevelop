@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -20,6 +20,8 @@
 
 #include <QDebug>
 
+#include <util/path.h>
+
 using namespace KDevelop;
 
 IncludeItem::IncludeItem()
@@ -29,14 +31,14 @@ IncludeItem::IncludeItem()
 }
 
 ///Constructs the url from basePath and name.
-KUrl IncludeItem::url() const
+// TODO: port this to Path
+QUrl IncludeItem::url() const
 {
-  KUrl u;
+  QUrl u;
   if( !basePath.isEmpty() ) {
-    u = KUrl( basePath );
-    u.addPath( name );
+    u = Path(Path(basePath), name ).toUrl();
   }else{
-    u = KUrl( name );
+    u = QUrl::fromLocalFile( name );
   }
   return u;
 }

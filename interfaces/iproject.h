@@ -29,7 +29,7 @@
 
 #include <QtCore/QObject>
 
-#include <kurl.h>
+#include <QUrl>
 #include <ksharedconfig.h>
 
 #include "interfacesexport.h"
@@ -109,26 +109,26 @@ public:
      * @return all items with the corresponding @p path
      */
     Q_SCRIPTABLE virtual QList<ProjectBaseItem*> itemsForPath( const IndexedString& path ) const = 0;
-    KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectBaseItem*> itemsForUrl( const KUrl& url ) const = 0;
+    KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectBaseItem*> itemsForUrl( const QUrl &url ) const = 0;
 
     /**
      * @return all file items with the corresponding @p file path
      */
     Q_SCRIPTABLE virtual QList<ProjectFileItem*> filesForPath( const IndexedString& file ) const = 0;
-    KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectFileItem*> filesForUrl( const KUrl& file ) const = 0;
+    KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectFileItem*> filesForUrl( const QUrl &file ) const = 0;
 
     /**
      * @return all folder items with the corresponding @p folder path
      */
     Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForPath( const IndexedString& folder ) const = 0;
-    KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForUrl( const KUrl& folder ) const = 0;
+    KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForUrl( const QUrl &folder ) const = 0;
 
     /**
      * @return the path to the project file
      */
     virtual Path projectFile() const = 0;
     /** Get the url of the project file.*/
-    KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual KUrl projectFileUrl() const = 0;
+    KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual QUrl projectFileUrl() const = 0;
     virtual KSharedConfig::Ptr projectConfiguration() const = 0;
 
     virtual void addToFileSet( ProjectFileItem* item ) = 0;
@@ -144,7 +144,7 @@ public:
      * @brief Get the project folder
      * @return The canonical absolute directory of the project.
      */
-    KDEVPLATFORMINTERFACES_DEPRECATED virtual Q_SCRIPTABLE const KUrl folder() const = 0;
+    KDEVPLATFORMINTERFACES_DEPRECATED virtual Q_SCRIPTABLE const QUrl folder() const = 0;
 
     /**
      * @brief Get the project path

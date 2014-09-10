@@ -22,8 +22,6 @@
 
 #include <QtTest/QtTest>
 
-#include <KUrl>
-
 #include <vcs/dvcs/dvcsjob.h>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>

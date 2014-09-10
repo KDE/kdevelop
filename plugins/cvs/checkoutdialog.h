@@ -11,10 +11,10 @@
 #ifndef KDEVPLATFORM_PLUGIN_CHECKOUTDIALOG_H
 #define KDEVPLATFORM_PLUGIN_CHECKOUTDIALOG_H
 
-#include <QDialog>
+#include <QUrl>
+#include <QtWidgets/QDialog>
 
 #include <KJob>
-#include <KUrl>
 
 #include "ui_checkoutdialog.h"
 

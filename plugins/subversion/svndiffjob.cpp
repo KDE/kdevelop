@@ -107,14 +107,7 @@ void SvnInternalDiffJob::run()
             QByteArray srcba;
             if( source().type() == KDevelop::VcsLocation::LocalLocation )
             {
-                KUrl url = source().localUrl();
-                if( url.isLocalFile() )
-                {
-                    srcba = url.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
-                }else
-                {
-                    srcba = url.url( KUrl::RemoveTrailingSlash ).toUtf8();
-                }
+                srcba = source().localUrl().toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
             }else
             {
                 srcba = source().repositoryServer().toUtf8();
@@ -122,14 +115,7 @@ void SvnInternalDiffJob::run()
             QByteArray dstba;
             if( destination().type() == KDevelop::VcsLocation::LocalLocation )
             {
-                KUrl url = destination().localUrl();
-                if( url.isLocalFile() )
-                {
-                    dstba = url.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
-                }else
-                {
-                    dstba = url.url().toUtf8();
-                }
+                dstba = destination().localUrl().toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
             }else
             {
                 dstba = destination().repositoryServer().toUtf8();
@@ -149,14 +135,7 @@ void SvnInternalDiffJob::run()
             QByteArray srcba;
             if( source().type() == KDevelop::VcsLocation::LocalLocation )
             {
-                KUrl url = source().localUrl();
-                if( url.isLocalFile() )
-                {
-                    srcba = url.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
-                }else
-                {
-                    srcba = url.url().toUtf8();
-                }
+                srcba = source().localUrl().toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
             }else
             {
                 srcba = source().repositoryServer().toUtf8();
@@ -371,7 +350,7 @@ void SvnDiffJob::setNoDiffOnDelete( bool noDiffOnDelete )
 void SvnDiffJob::setDiff( const QString& diff )
 {
     m_diff = KDevelop::VcsDiff();
-    m_diff.setBaseDiff(KUrl("/"));
+    m_diff.setBaseDiff(QUrl::fromLocalFile("/"));
     m_diff.setType( KDevelop::VcsDiff::DiffUnified );
 
     m_diff.setContentType( KDevelop::VcsDiff::Text );
@@ -402,10 +381,10 @@ void SvnDiffJob::setDiff( const QString& diff )
             KDevelop::VcsLocation l = m_job->source();
             if( l.type() == KDevelop::VcsLocation::LocalLocation )
             {
-                l.setLocalUrl( KUrl( s ) );
+                l.setLocalUrl( QUrl::fromLocalFile( s ) );
             }else
             {
-                QString repoLocation = KUrl( l.repositoryServer() ).toLocalFile( KUrl::RemoveTrailingSlash );
+                QString repoLocation = QUrl( l.repositoryServer() ).toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash );
                 QFileInfo fi( repoLocation );
                 if( s == fi.fileName() )
                 {

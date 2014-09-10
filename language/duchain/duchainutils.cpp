@@ -264,7 +264,7 @@ TopDUContext* DUChainUtils::contentContextFromProxyContext(TopDUContext* top)
   return 0;
 }
 
-TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url, bool preferProxyContext) {
+TopDUContext* DUChainUtils::standardContextForUrl(const QUrl& url, bool preferProxyContext) {
   KDevelop::TopDUContext* chosen = 0;
 
   QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
@@ -279,11 +279,11 @@ TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url, bool preferPr
   }
 
   if(!chosen)
-    chosen = DUChain::self()->chainForDocument(IndexedString(url.pathOrUrl()), preferProxyContext);
+    chosen = DUChain::self()->chainForDocument(IndexedString(url.toString()), preferProxyContext);
 
   if(!chosen && preferProxyContext)
     return standardContextForUrl(url, false); // Fall back to a normal context
-  
+
   return chosen;
 }
 
@@ -305,7 +305,7 @@ Declaration* declarationUnderCursor(const CursorInRevision& c, DUContext* ctx)
   return 0;
 }
 
-Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const KTextEditor::Cursor& _c)
+Declaration* DUChainUtils::itemUnderCursor(const QUrl& url, const KTextEditor::Cursor& _c)
 {
   KDevelop::TopDUContext* chosen = standardContextForUrl(url);
 
@@ -331,7 +331,7 @@ Declaration* DUChainUtils::itemUnderCursor(const KUrl& url, const KTextEditor::C
   return 0;
 }
 
-KTextEditor::Range DUChainUtils::itemRangeUnderCursor(const KUrl& url, const KTextEditor::Cursor& cursor)
+KTextEditor::Range DUChainUtils::itemRangeUnderCursor(const QUrl& url, const KTextEditor::Cursor& cursor)
 {
   KDevelop::TopDUContext* chosen = standardContextForUrl(url);
 

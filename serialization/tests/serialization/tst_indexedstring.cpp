@@ -26,7 +26,6 @@
 
 #include <serialization/indexedstring.h>
 #include <QtTest/QTest>
-#include <kurl.h>
 
 #include <utility>
 
@@ -43,6 +42,26 @@ void TestIndexedString::initTestCase()
 void TestIndexedString::cleanupTestCase()
 {
   TestCore::shutdown();
+}
+
+void TestIndexedString::testUrl_data()
+{
+  QTest::addColumn<QUrl>("url");
+  QTest::addColumn<QString>("string");
+  QTest::newRow("empty") << QUrl() << QString();
+  QTest::newRow("/") << QUrl::fromLocalFile("/") << QString("/");
+  QTest::newRow("/foo/bar") << QUrl::fromLocalFile("/foo/bar") << QString("/foo/bar");
+  QTest::newRow("http://foo.com/") << QUrl("http://foo.com/") << QString("http://foo.com/");
+  QTest::newRow("http://foo.com/bar/asdf") << QUrl("http://foo.com/bar/asdf") << QString("http://foo.com/bar/asdf");
+  QTest::newRow("file:///bar/asdf") << QUrl("file:///bar/asdf") << QString("/bar/asdf");
+}
+
+void TestIndexedString::testUrl()
+{
+  QFETCH(QUrl, url);
+  IndexedString indexed(url);
+  QCOMPARE(indexed.toUrl(), url);
+  QTEST(indexed.str(), "string");
 }
 
 static QVector<QString> generateData()

@@ -27,7 +27,7 @@
 #include "ui_reviewpatch.h"
 #include "reviewboardjobs.h"
 
-ReviewPatchDialog::ReviewPatchDialog(const KUrl& dirUrl, QWidget* parent)
+ReviewPatchDialog::ReviewPatchDialog(const QUrl& dirUrl, QWidget* parent)
     : KDialog(parent)
 {
     m_ui = new Ui::ReviewPatch;
@@ -82,8 +82,8 @@ QString ReviewPatchDialog::baseDir() const
 
 QUrl ReviewPatchDialog::server() const
 {
-    KUrl server=m_ui->server->url();
-    server.setUser(m_ui->username->text());
+    QUrl server=m_ui->server->url();
+    server.setUserName(m_ui->username->text());
     server.setPassword(m_ui->password->text());
     return server;
 }
@@ -121,7 +121,7 @@ void ReviewPatchDialog::receivedProjects(KJob* job)
     if(!m_preferredRepository.isEmpty()) {
         QModelIndexList idxs = model->match(model->index(0,0), Qt::UserRole, m_preferredRepository, 1, Qt::MatchExactly);
         if(idxs.isEmpty()) {
-            idxs = model->match(model->index(0,0), Qt::DisplayRole, KUrl(m_preferredRepository).fileName(), 1, Qt::MatchExactly);
+            idxs = model->match(model->index(0,0), Qt::DisplayRole, QUrl::fromUserInput(m_preferredRepository).fileName(), 1, Qt::MatchExactly);
         }
         if(!idxs.isEmpty()) {
             m_ui->repositories->setCurrentIndex(idxs.first().row());
@@ -244,7 +244,7 @@ void ReviewPatchDialog::initializeFromRC(const QString& filePath)
     }
 
     if(values.contains("REVIEWBOARD_URL"))
-        setServer(KUrl(values["REVIEWBOARD_URL"]));
+        setServer(QUrl(values["REVIEWBOARD_URL"]));
     if(values.contains("REPOSITORY"))
         setRepository(values["REPOSITORY"]);
     kDebug() << "found:" << values;

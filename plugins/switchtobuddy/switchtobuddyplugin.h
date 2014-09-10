@@ -55,7 +55,7 @@ public:
 
 private slots:
     /**
-     * Context menu slot which switches to the KUrl provided
+     * Context menu slot which switches to the QUrl provided
      * in the data part of the sending QAction.
      */
     void switchToBuddy(const QString& url);

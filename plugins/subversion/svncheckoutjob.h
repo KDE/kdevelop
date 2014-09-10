@@ -40,7 +40,7 @@ public:
     void start();
     SvnInternalJobBase* internalJob() const;
 
-    void setMapping( const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
+    void setMapping( const KDevelop::VcsLocation & sourceRepository, const QUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
 private:
     SvnInternalCheckoutJob* m_job;
 

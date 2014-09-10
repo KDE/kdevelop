@@ -25,7 +25,6 @@
 #include <QtCore/QStringList>
 
 class KJob;
-class KUrl;
 
 namespace KDevelop {
 

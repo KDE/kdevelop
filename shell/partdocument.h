@@ -42,11 +42,11 @@ and sets part widget to be a view widget.
 class KDEVPLATFORMSHELL_EXPORT PartDocument: public Sublime::UrlDocument, public KDevelop::IDocument {
     Q_OBJECT
 public:
-    PartDocument(const KUrl &url, ICore* core, const QString& preferredPart = QString() );
+    PartDocument(const QUrl &url, ICore* core, const QString& preferredPart = QString() );
     virtual ~PartDocument();
 
-    virtual KUrl url() const;
-    void setUrl(const KUrl& newUrl);
+    virtual QUrl url() const;
+    void setUrl(const QUrl& newUrl);
 
     virtual QWidget *createViewWidget(QWidget *parent = 0);
     virtual KParts::Part *partForView(QWidget *view) const;

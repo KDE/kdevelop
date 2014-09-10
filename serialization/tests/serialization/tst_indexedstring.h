@@ -31,6 +31,9 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
+    void testUrl_data();
+    void testUrl();
+
     void index();
     void length();
     void qstring();

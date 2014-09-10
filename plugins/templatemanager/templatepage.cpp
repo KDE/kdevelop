@@ -22,13 +22,14 @@
 #include "ui_templatepage.h"
 #include <interfaces/itemplateprovider.h>
 #include <language/codegen/templatesmodel.h>
+
 #include <KFileDialog>
 #include <KNS3/DownloadDialog>
 #include <KArchive>
 #include <KZip>
 #include <KTar>
-#include <KUrl>
 #include <knewstuff3/uploaddialog.h>
+#include <QUrl>
 
 TemplatePage::TemplatePage (KDevelop::ITemplateProvider* provider, QWidget* parent) : QWidget (parent),
 m_provider(provider)
@@ -66,7 +67,7 @@ TemplatePage::~TemplatePage()
 
 void TemplatePage::loadFromFile()
 {
-    QString filename = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kdevtemplates"), m_provider->supportedMimeTypes().join(" "), this);
+    QString filename = KFileDialog::getOpenFileName(QUrl("kfiledialog:///kdevtemplates"), m_provider->supportedMimeTypes().join(" "), this);
 
     if (!filename.isEmpty())
     {
@@ -123,7 +124,6 @@ void TemplatePage::extractTemplate()
 
     archive->open(QIODevice::ReadOnly);
 
-    KUrl destination = KUrl::fromLocalFile(KFileDialog::getExistingDirectory());
-    destination.addPath(info.baseName());
-    archive->directory()->copyTo(destination.toLocalFile());
+    const QString destination = KFileDialog::getExistingDirectory() + '/' + info.baseName();
+    archive->directory()->copyTo(destination);
 }

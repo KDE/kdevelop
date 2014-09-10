@@ -41,7 +41,7 @@ namespace KDevelop {
  * /foo/bar/
  * /foo/bar/asdf.txt
  *
- * Normal QString/KUrl/QUrl types would not share any memory for these paths
+ * Normal QString/QUrl/QUrl types would not share any memory for these paths
  * at all. This class though can share the segments of the paths and thus
  * consume far less total memory.
  *
@@ -185,6 +185,16 @@ public:
     }
 
     /**
+     * Check whether this Path is empty.
+     *
+     * @return true if the Path is empty, false otherwise, i.e. if it contains data.
+     */
+    inline bool isEmpty() const
+    {
+        return m_data.isEmpty();
+    }
+
+    /**
      * Convert the Path to a string, yielding either the plain path for local
      * paths or the stringified URL for remote Paths.
      *
@@ -221,7 +231,7 @@ public:
      * p3.relativePath(p1); // returns: ../../bar
      * @endcode
      *
-     * @sa KUrl::relativePath
+     * @sa QUrl::relativePath
      */
     QString relativePath(const Path& path) const;
 
@@ -231,7 +241,7 @@ public:
      * For instance, ftp://host/dir/ is a parent of ftp://host/dir/subdir/blub,
      * or /foo is a parent of /foo/bar.
      *
-     * NOTE: Contrary to KUrl::isParentOf this returns false if the path equals this one.
+     * NOTE: Contrary to QUrl::isParentOf this returns false if the path equals this one.
      */
     bool isParentOf(const Path& path) const;
 
@@ -300,7 +310,7 @@ public:
      * Append @p path to this Path.
      *
      * NOTE: If @p path starts with a slash, this function ignores it.
-     *       I.e. you cannot set the path this way. @sa KUrl::addPath
+     *       I.e. you cannot set the path this way. @sa QUrl::addPath
      */
     void addPath(const QString& path);
 
@@ -326,7 +336,7 @@ public:
      *
      * NOTE: This is expensive.
      *
-     * @sa KUrl::cd
+     * @sa QUrl::cd
      */
     Path cd(const QString& dir) const;
 
@@ -347,6 +357,11 @@ KDEVPLATFORMUTIL_EXPORT uint qHash(const Path& path);
  * Convert the @p list of QUrls to a list of Paths.
  */
 KDEVPLATFORMUTIL_EXPORT Path::List toPathList(const QList<QUrl>& list);
+
+/**
+ * Convert the @p list of QStrings to a list of Paths.
+ */
+KDEVPLATFORMUTIL_EXPORT Path::List toPathList(const QList<QString>& list);
 }
 
 /**

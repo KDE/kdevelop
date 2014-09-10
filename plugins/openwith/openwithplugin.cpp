@@ -212,7 +212,7 @@ void OpenWithPlugin::openDefault()
         KService::Ptr service = KMimeTypeTrader::self()->preferredService(m_mimeType);
         KRun::run(*service, m_urls, ICore::self()->uiController()->activeMainWindow());
     } else {
-        foreach( const KUrl& u, m_urls ) {
+        foreach( const QUrl& u, m_urls ) {
             ICore::self()->documentController()->openDocument( u );
         }
     }
@@ -226,12 +226,12 @@ void OpenWithPlugin::open( const QString& storageid )
     } else {
         QString prefName = svc->desktopEntryName();
         if ( isTextEditor(svc) ) {
-            // If the user chose a KTE part, lets make sure we're creating a TextDocument instead of 
+            // If the user chose a KTE part, lets make sure we're creating a TextDocument instead of
             // a PartDocument by passing no preferredpart to the documentcontroller
             // TODO: Solve this rather inside DocumentController
             prefName = "";
         }
-        foreach( const KUrl& u, m_urls ) {
+        foreach( const QUrl& u, m_urls ) {
             ICore::self()->documentController()->openDocument( u, prefName );
         }
     }
@@ -252,7 +252,7 @@ void OpenWithPlugin::open( const QString& storageid )
     }
 }
 
-void OpenWithPlugin::openFilesInternal( const KUrl::List& files )
+void OpenWithPlugin::openFilesInternal( const QList<QUrl>& files )
 {
     if (files.isEmpty()) {
         return;

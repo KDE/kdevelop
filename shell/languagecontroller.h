@@ -48,7 +48,7 @@ public:
     /** @copydoc ILanguageController::language() */
     virtual ILanguage *language(const QString &name) const;
     /** @copydoc ILanguageController::languageForUrl() */
-    virtual QList<ILanguage*> languagesForUrl(const KUrl &url);
+    virtual QList<ILanguage*> languagesForUrl(const QUrl &url);
     /** @copydoc ILanguageController::backgroundParser() */
     Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const;
 

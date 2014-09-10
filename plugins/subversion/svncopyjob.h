@@ -25,7 +25,7 @@
 
 #include <QVariant>
 
-#include <kurl.h>
+#include <QUrl>
 
 class SvnInternalCopyJob;
 
@@ -38,8 +38,8 @@ class SvnCopyJob : public SvnJobBase
         void start();
         SvnInternalJobBase* internalJob() const;
 
-        void setSourceLocation( const KUrl& location );
-        void setDestinationLocation( const KUrl& location );
+        void setSourceLocation( const QUrl &location );
+        void setDestinationLocation( const QUrl &location );
     private:
         SvnInternalCopyJob* m_job;
 

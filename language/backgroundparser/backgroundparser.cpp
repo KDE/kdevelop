@@ -99,12 +99,12 @@ inline bool isValidURL(const KDevelop::IndexedString& url)
     if (url.isEmpty()) {
         return false;
     }
-    KUrl original = url.toUrl();
-    if (!original.isValid()) {
+    QUrl original = url.toUrl();
+    if (!original.isValid() || original.isRelative() || original.fileName().isEmpty()) {
+        qWarning() << "INVALID URL ENCOUNTERED:" << url << original;
         return false;
     }
-    KUrl cleaned = original;
-    cleaned.cleanPath();
+    QUrl cleaned = original.adjusted(QUrl::NormalizePathSegments);
     return original == cleaned;
 }
 }
@@ -206,8 +206,8 @@ public:
                     continue;
                 }
 
-                kDebug(9505) << "creating parse-job" << it->toUrl() << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
-                const QString elidedPathString = elidedPathLeft(it->toUrl().toLocalFile(), 70);
+                kDebug(9505) << "creating parse-job" << *it << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
+                const QString elidedPathString = elidedPathLeft(it->str(), 70);
                 emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
 
                 ThreadWeaver::QObjectDecorator* decorator = createParseJob(*it, parsePlan.features(), parsePlan.notifyWhenReady(), parsePlan.priority());
@@ -268,11 +268,11 @@ public:
     ThreadWeaver::QObjectDecorator* createParseJob(const IndexedString& url, TopDUContext::Features features, const QList<QPointer<QObject> >& notifyWhenReady, int priority = 0)
     {
         ///FIXME: use IndexedString in the other APIs as well! Esp. for createParseJob!
-        KUrl kUrl = url.toUrl();
-        QList<ILanguage*> languages = m_languageController->languagesForUrl(kUrl);
+        QUrl qUrl = url.toUrl();
+        QList<ILanguage*> languages = m_languageController->languagesForUrl(qUrl);
         foreach (ILanguage* language, languages) {
             if(!language) {
-                kWarning() << "got zero language for" << kUrl;
+                qWarning() << "got zero language for" << qUrl;
                 continue;
             }
             if(!language->languageSupport()) {
@@ -306,9 +306,9 @@ public:
         }
 
         if(languages.isEmpty())
-            kDebug() << "found no languages for url" << kUrl;
+            qDebug() << "found no languages for url" << qUrl;
         else
-            kDebug() << "could not create parse-job for url" << kUrl;
+            qDebug() << "could not create parse-job for url" << qUrl;
 
         //Notify that we failed
         typedef QPointer<QObject> Notify;

@@ -26,10 +26,10 @@
 #include "../vcsrevision.h"
 
 #include <QColor>
+#include <QUrl>
 
 class QModelIndex;
 template<typename T> class QList;
-class KUrl;
 
 namespace KDevelop
 {
@@ -42,7 +42,7 @@ class KDEVPLATFORMVCS_EXPORT VcsAnnotationModel : public KTextEditor::Annotation
 {
 Q_OBJECT
 public:
-    VcsAnnotationModel( VcsJob* job, const KUrl&, QObject*,
+    VcsAnnotationModel( VcsJob* job, const QUrl&, QObject*,
                         const QColor& foreground = QColor(Qt::black), const QColor& background = QColor(Qt::white) );
     virtual ~VcsAnnotationModel();
 

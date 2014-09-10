@@ -65,15 +65,15 @@ public :
         return m_modelList.data();
     }
 
-    void seekHunk( bool forwards, const KUrl& file = KUrl() );
+    void seekHunk( bool forwards, const QUrl& file = QUrl() );
 
     void setPatch( KDevelop::IPatchSource* patch );
 
     virtual void startReview( KDevelop::IPatchSource* patch, ReviewMode mode );
 
-    void finishReview( QList< KUrl > selection );
+    void finishReview( QList< QUrl > selection );
 
-    KUrl urlForFileModel( const Diff2::DiffModel* model );
+    QUrl urlForFileModel( const Diff2::DiffModel* model );
     QAction* finishReviewAction() const { return m_finishReview; }
 
 Q_SIGNALS:
@@ -110,8 +110,8 @@ private:
     // Returns false on failure (if the user disagreed).
     bool setUniqueEmptyWorkingSet();
 
-    void addHighlighting( const KUrl& file, KDevelop::IDocument* document = 0 );
-    void removeHighlighting( const KUrl& file = KUrl() );
+    void addHighlighting( const QUrl& file, KDevelop::IDocument* document = 0 );
+    void removeHighlighting( const QUrl& file = QUrl() );
 
     KDevelop::IPatchSource::Ptr m_patch;
 
@@ -127,7 +127,7 @@ private:
     QPointer< DiffSettings > m_diffSettings;
     QScopedPointer< Kompare::Info > m_kompareInfo;
     QScopedPointer< Diff2::KompareModelList > m_modelList;
-    typedef QMap< KUrl, QPointer< PatchHighlighter > > HighlightMap;
+    typedef QMap< QUrl, QPointer< PatchHighlighter > > HighlightMap;
     HighlightMap m_highlighters;
 };
 

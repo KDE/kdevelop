@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_BRANCHESLISTMODEL_H
 
 #include <QStandardItemModel>
-#include <KUrl>
+#include <QUrl>
 
 #include "vcsexport.h"
 
@@ -41,14 +41,14 @@ class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
         
         BranchesListModel(QObject* parent = 0);
 
-        void initialize(KDevelop::IBranchingVersionControl* dvcsplugin, const KUrl& repo);
+        void initialize(KDevelop::IBranchingVersionControl* dvcsplugin, const QUrl& repo);
 
         virtual QHash<int, QByteArray> roleNames() const override;
         
         void createBranch(const QString& baseBranch, const QString& newBranch);
         void removeBranch(const QString& branch);
         
-        KUrl repository() const { return repo; }
+        QUrl repository() const { return repo; }
         KDevelop::IBranchingVersionControl* interface();
         void refresh();
         QString currentBranch() const;
@@ -65,7 +65,7 @@ class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
         
     private:
         KDevelop::IBranchingVersionControl* dvcsplugin;
-        KUrl repo;
+        QUrl repo;
 };
 
 }

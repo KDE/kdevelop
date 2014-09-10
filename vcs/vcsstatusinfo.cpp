@@ -32,7 +32,7 @@ class VcsStatusInfoPrivate
 {
 public:
     int state;
-    KUrl url;
+    QUrl url;
 };
 
 VcsStatusInfo::VcsStatusInfo()
@@ -72,7 +72,7 @@ bool VcsStatusInfo::operator!=( const KDevelop::VcsStatusInfo& rhs) const
     return !(operator==(rhs));
 }
 
-void VcsStatusInfo::setUrl( const KUrl& url )
+void VcsStatusInfo::setUrl( const QUrl& url )
 {
     d->url = url;
 }
@@ -92,7 +92,7 @@ int VcsStatusInfo::extendedState() const
     return d->state;
 }
 
-KUrl VcsStatusInfo::url() const
+QUrl VcsStatusInfo::url() const
 {
     return d->url;
 }

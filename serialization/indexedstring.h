@@ -17,12 +17,11 @@
 //krazy:excludeall=dpointer,inline
 
 #include <QtCore/QMetaType>
+#include <QUrl>
 
 #include "referencecounting.h"
 
 #include "serializationexport.h"
-
-class KUrl;
 
 namespace KDevelop {
 
@@ -111,17 +110,17 @@ class KDEVPLATFORMSERIALIZATION_EXPORT IndexedString {
   ~IndexedString();
 
   /**
-   * Creates an indexed string from a KUrl, this is expensive.
+   * Creates an indexed string from a QUrl, this is expensive.
    */
-  explicit IndexedString( const KUrl& url );
+  explicit IndexedString( const QUrl& url );
 
   /**
-   * Re-construct a KUrl from this indexed string, the result can be used with the
-   * KUrl-using constructor.
+   * Re-construct a QUrl from this indexed string, the result can be used with the
+   * QUrl-using constructor.
    *
    * @note This is expensive.
    */
-  KUrl toUrl() const;
+  QUrl toUrl() const;
 
   inline unsigned int hash() const {
     return m_index;

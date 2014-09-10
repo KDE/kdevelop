@@ -22,12 +22,12 @@
 #define KDEVPLATFORM_PLUGIN_REVIEWPATCHDIALOG_H
 
 #include <KDialog>
+#include <QUrl>
 
 class QItemSelection;
 class QModelIndex;
 
 class KJob;
-class KUrl;
 
 namespace Ui {
     class ReviewPatch;
@@ -37,7 +37,7 @@ class ReviewPatchDialog : public KDialog
 {
     Q_OBJECT
     public:
-        ReviewPatchDialog(const KUrl& dirUrl, QWidget* parent = 0);
+        ReviewPatchDialog(const QUrl& dirUrl, QWidget* parent = 0);
         virtual ~ReviewPatchDialog();
 
         void setBaseDir(const QString& dir);

@@ -53,14 +53,8 @@ void SvnInternalCatJob::run()
         QByteArray srcba;
         if( source().type() == KDevelop::VcsLocation::LocalLocation )
         {
-            KUrl url = source().localUrl();
-            if( url.isLocalFile() )
-            {
-                srcba = url.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
-            }else
-            {
-                srcba = url.url( KUrl::RemoveTrailingSlash ).toUtf8();
-            }
+            QUrl url = source().localUrl();
+            srcba = url.toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
         }else
         {
             srcba = source().repositoryServer().toUtf8();

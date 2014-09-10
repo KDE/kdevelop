@@ -110,7 +110,7 @@ TestProject makeProject()
     << QString("Name=") + ret.name
     << "Manager=KDevGenericManager";
 
-    KUrl projecturl( dir.absoluteFilePath() + "/simpleproject.kdev4" );
+    QUrl projecturl = QUrl::fromLocalFile( dir.absoluteFilePath() + "/simpleproject.kdev4" );
     QFile projectFile(projecturl.toLocalFile());
     projectFile.open(QIODevice::WriteOnly);
     projectFile.write(projectFileContents.join("\n").toLatin1());
@@ -118,7 +118,7 @@ TestProject makeProject()
     ret.file = projecturl;
 
     Q_ASSERT(ret.dir->exists());
-    Q_ASSERT(projecturl.upUrl().toLocalFile() == ret.dir->name());
+    Q_ASSERT(projecturl.adjusted(QUrl::RemoveFilename).toLocalFile() == ret.dir->name());
 
     return ret;
 }
@@ -150,8 +150,7 @@ void ProjectLoadTest::addRemoveFiles()
     }
     QTest::qWait(500);
 
-    KUrl url(p.dir->name()+"/blub"+QString::number(50));
-    url.cleanPath();
+    QUrl url = QUrl::fromLocalFile(p.dir->name()+"/blub"+QString::number(50)).adjusted(QUrl::NormalizePathSegments);
     QCOMPARE(project->filesForPath(IndexedString(url)).count(), 1);
     ProjectFileItem* file = project->filesForPath(IndexedString(url)).first();
     project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file ); //message box has to be accepted manually :(
@@ -197,8 +196,7 @@ void ProjectLoadTest::removeDirRecursive()
     QCOMPARE(project->projectFile().toUrl(), p.file);
 
     for (int i=0; i<1; ++i) {
-        KUrl url(p.dir->name()+"/blub");
-        url.cleanPath();
+        QUrl url = QUrl::fromLocalFile(p.dir->name()+"/blub").adjusted(QUrl::NormalizePathSegments);
         QCOMPARE(project->foldersForPath(IndexedString(url)).count(), 1);
 
         ProjectFolderItem* file = project->foldersForPath(IndexedString(url)).first();
@@ -355,7 +353,7 @@ void ProjectLoadTest::addDuringImport()
     IProject* project = spy.value(0).first().value<IProject*>();
     QVERIFY(project);
     QCOMPARE(project->path(), Path(KIO::upUrl(p.file)));
-    KUrl file(p.file, "test/zzzzz/999");
+    QUrl file = p.file.resolved(QUrl("test/zzzzz/999"));
     QVERIFY(QFile::exists(file.toLocalFile()));
     // this most probably is not yet loaded
     // and this should not crash
@@ -363,8 +361,8 @@ void ProjectLoadTest::addDuringImport()
     // now delete that file and don't crash
     QFile::remove(file.toLocalFile());
     // now create another file
-    KUrl file2 = file;
-    file2.setFileName("999v2");
+    QUrl file2 = file.adjusted(QUrl::RemoveFilename);
+    file2.setPath(file2.path() + "999v2");
     createFile(file2.toLocalFile());
     QVERIFY(!project->isReady());
     // now wait for finish

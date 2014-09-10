@@ -43,7 +43,7 @@ public:
             ++wordEnd;
     }
 
-    KUrl m_url;
+    QUrl m_url;
     KTextEditor::Cursor m_position;
     QString m_currentLine, m_currentWord;
     KTextEditor::View* m_view;
@@ -63,7 +63,7 @@ int EditorContext::type() const
     return Context::EditorContext;
 }
 
-KUrl EditorContext::url() const
+QUrl EditorContext::url() const
 {
     return d->m_url;
 }

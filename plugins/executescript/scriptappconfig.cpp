@@ -52,7 +52,7 @@
 #include <util/environmentgrouplist.h>
 #include <project/projectitemlineedit.h>
 
-static const QString interpreterForUrl(const KUrl& url) {
+static const QString interpreterForUrl(const QUrl& url) {
     auto mimetype = QMimeDatabase().mimeTypeForUrl(url);
     static QHash<QString, QString> knownMimetypes;
     if ( knownMimetypes.isEmpty() ) {
@@ -82,7 +82,7 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     auto doc = KDevelop::ICore::self()->documentController()->activeDocument();
     interpreter->lineEdit()->setText( cfg.readEntry( ExecuteScriptPlugin::interpreterEntry,
                                                      doc ? interpreterForUrl(doc->url()) : "" ) );
-    executablePath->setUrl( cfg.readEntry( ExecuteScriptPlugin::executableEntry, "" ) );
+    executablePath->setUrl( QUrl::fromLocalFile(cfg.readEntry( ExecuteScriptPlugin::executableEntry, QString() )) );
     remoteHostCheckbox->setChecked( cfg.readEntry( ExecuteScriptPlugin::executeOnRemoteHostEntry, false ) );
     remoteHost->setText( cfg.readEntry( ExecuteScriptPlugin::remoteHostEntry, "" ) );
     bool runCurrent = cfg.readEntry( ExecuteScriptPlugin::runCurrentFileEntry, true );
@@ -111,9 +111,9 @@ ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
     //connect signals to changed signal
     connect( interpreter->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( executablePath->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( executablePath, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
+    connect( executablePath, SIGNAL(urlSelected(QUrl)), SIGNAL(changed()) );
     connect( arguments, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( workingDirectory, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
+    connect( workingDirectory, SIGNAL(urlSelected(QUrl)), SIGNAL(changed()) );
     connect( workingDirectory->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( environment, SIGNAL(currentProfileChanged(QString)), SIGNAL(changed()) );
     //connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
@@ -225,7 +225,7 @@ QIcon ScriptAppConfigType::icon() const
     return QIcon::fromTheme("preferences-plugin-script");
 }
 
-bool ScriptAppConfigType::canLaunch(const KUrl& file) const
+bool ScriptAppConfigType::canLaunch(const QUrl& file) const
 {
     return ! interpreterForUrl(file).isEmpty();
 }
@@ -237,7 +237,7 @@ bool ScriptAppConfigType::canLaunch(KDevelop::ProjectBaseItem* item) const
 
 void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const
 {
-    config.writeEntry(ExecuteScriptPlugin::executableEntry, QUrl(item->path().toUrl()));
+    config.writeEntry(ExecuteScriptPlugin::executableEntry, item->path().toUrl());
     config.writeEntry(ExecuteScriptPlugin::interpreterEntry, interpreterForUrl(item->path().toUrl()));
     config.writeEntry(ExecuteScriptPlugin::outputFilteringEntry, 2u);
     config.writeEntry(ExecuteScriptPlugin::runCurrentFileEntry, false);

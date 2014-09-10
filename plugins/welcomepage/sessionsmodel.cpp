@@ -51,14 +51,14 @@ QVariant SessionsModel::data(const QModelIndex& index, int role) const
         case Uuid:
             return m_sessions[index.row()].uuid.toString();
         case Projects:
-            return m_sessions[index.row()].projects;
+            return QVariant::fromValue(m_sessions[index.row()].projects);
         case VisibleIdentifier: {
             const KDevelop::SessionInfo& s = m_sessions[index.row()];
             return s.name.isEmpty() && !s.projects.isEmpty() ? s.projects.first().fileName() : s.name;
         }
         case ProjectNames: {
             QVariantList ret;
-            foreach(const KUrl& project, m_sessions[index.row()].projects) {
+            foreach(const QUrl& project, m_sessions[index.row()].projects) {
                 ret += project.fileName();
             }
             return ret;

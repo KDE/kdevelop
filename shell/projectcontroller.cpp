@@ -104,7 +104,7 @@ public:
     QPointer<QAction> m_closeProject;
     QPointer<QAction> m_openConfig;
     IProjectDialogProvider* dialog;
-    QList<KUrl> m_currentlyOpening; // project-file urls that are being opened
+    QList<QUrl> m_currentlyOpening; // project-file urls that are being opened
     IProject* m_configuringProject;
     ProjectController* q;
     ProjectBuildSetModel* buildset;
@@ -160,7 +160,7 @@ public:
             return;
         }
 
-        KUrl::List openProjects;
+        QList<QUrl> openProjects;
         openProjects.reserve( m_projects.size() );
 
         foreach( IProject* project, m_projects ) {
@@ -259,9 +259,9 @@ public:
     
     }
     
-    void importProject(const KUrl& url_)
+    void importProject(const QUrl& url_)
     {
-        KUrl url(url_);
+        QUrl url(url_);
         if ( url.isLocalFile() )
         {
             QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
@@ -272,7 +272,7 @@ public:
         if ( !url.isValid() )
         {
             KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),
-                            i18n("Invalid Location: %1", url.prettyUrl()));
+                            i18n("Invalid Location: %1", url.toDisplayString(QUrl::PreferLocalFile)));
             return;
         }
 
@@ -281,7 +281,7 @@ public:
             kDebug() << "Already opening " << url << ". Aborting.";
             KPassivePopup::message( i18n( "Project already being opened"), 
                                     i18n( "Already opening %1, not opening again", 
-                                        url.prettyUrl() ), 
+                                        url.toDisplayString(QUrl::PreferLocalFile) ),
                                     m_core->uiController()->activeMainWindow() );
             return;
         }
@@ -347,7 +347,7 @@ bool writeNewProjectFile( const QString& localConfigFile, const QString& name, c
     return true;
 }
 
-bool writeProjectSettingsToConfigFile(const KUrl& projectFileUrl, const QString& projectName, const QString& projectManager)
+bool writeProjectSettingsToConfigFile(const QUrl& projectFileUrl, const QString& projectName, const QString& projectManager)
 {
     if ( !projectFileUrl.isLocalFile() ) {
         KTemporaryFile tmp;
@@ -365,7 +365,7 @@ bool writeProjectSettingsToConfigFile(const KUrl& projectFileUrl, const QString&
 }
 
 
-bool projectFileExists( const KUrl& u )
+bool projectFileExists( const QUrl& u )
 {
     if( u.isLocalFile() ) 
     {
@@ -380,19 +380,19 @@ bool equalProjectFile( const QString& configPath, OpenProjectDialog* dlg )
 {
     KSharedConfig::Ptr cfg = KSharedConfig::openConfig( configPath, KConfig::SimpleConfig );
     KConfigGroup grp = cfg->group( "Project" );
-    QString defaultName = dlg->projectFileUrl().upUrl().fileName();
+    QString defaultName = dlg->projectFileUrl().adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).fileName();
     return (grp.readEntry( "Name", QString() ) == dlg->projectName() || dlg->projectName() == defaultName) &&
            grp.readEntry( "Manager", QString() ) == dlg->projectManager();
 }
 
-KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& startUrl)
+QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& startUrl)
 {
     Q_ASSERT(d);
     OpenProjectDialog dlg( fetch, startUrl, Core::self()->uiController()->activeMainWindow() );
     if(dlg.exec() == QDialog::Rejected)
-        return KUrl();
+        return QUrl();
 
-    KUrl projectFileUrl = dlg.projectFileUrl();
+    QUrl projectFileUrl = dlg.projectFileUrl();
     kDebug() << "selected project:" << projectFileUrl << dlg.projectName() << dlg.projectManager();
 
     // controls if existing project file should be saved
@@ -428,14 +428,14 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& sta
             cancel.setToolTip(i18nc("@info:tooltip", "Cancel and do not open the project."));
             int ret = KMessageBox::questionYesNoCancel(qApp->activeWindow(),
                 i18n("There already exists a project configuration file at %1.\n"
-                     "Do you want to override it or open the existing file?", projectFileUrl.pathOrUrl()),
+                     "Do you want to override it or open the existing file?", projectFileUrl.toDisplayString(QUrl::PreferLocalFile)),
                 i18n("Override existing project configuration"), yes, no, cancel );
             if ( ret == KMessageBox::No )
             {
                 writeProjectConfigToFile = false;
             } else if ( ret == KMessageBox::Cancel )
             {
-                return KUrl();
+                return QUrl();
             } // else fall through and write new file
         } else {
             writeProjectConfigToFile = false;
@@ -446,7 +446,7 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& sta
         if (!writeProjectSettingsToConfigFile(projectFileUrl, dlg.projectName(), dlg.projectManager())) {
             KMessageBox::error(d->m_core->uiControllerInternal()->defaultMainWindow(),
                 i18n("Unable to create configuration file %1", projectFileUrl.url()));
-            return KUrl();
+            return QUrl();
         }
     }
     return projectFileUrl;
@@ -602,18 +602,17 @@ void ProjectController::initialize()
 
     KSharedConfig::Ptr config = Core::self()->activeSession()->config();
     KConfigGroup group = config->group( "General Options" );
-    KUrl::List openProjects = group.readEntry( "Open Projects", QStringList() );
+    QList<QUrl> openProjects = group.readEntry( "Open Projects", QList<QUrl>() );
 
-    qRegisterMetaType<KUrl::List>();
-    QMetaObject::invokeMethod(this, "openProjects", Qt::QueuedConnection, Q_ARG(KUrl::List, openProjects));
+    QMetaObject::invokeMethod(this, "openProjects", Qt::QueuedConnection, Q_ARG(QList<QUrl>, openProjects));
     
     connect( Core::self()->selectionController(), SIGNAL(selectionChanged(KDevelop::Context*)),
              SLOT(updateActionStates(KDevelop::Context*)) );
 }
 
-void ProjectController::openProjects(const KUrl::List& projects)
+void ProjectController::openProjects(const QList<QUrl>& projects)
 {
-    foreach (const KUrl& url, projects)
+    foreach (const QUrl& url, projects)
         openProject(url);
 }
 
@@ -656,9 +655,7 @@ void ProjectController::eventuallyOpenProjectFile(KIO::Job* _job, KIO::UDSEntryL
             
             if(name.endsWith(".kdev4")) {
                 //We have found a project-file, open it
-                KUrl u(job->url());
-                u.addPath(name);
-                openProject(u);
+                openProject(Path(Path(job->url()), name).toUrl());
                 d->m_foundProjectFile = true;
             }
         }
@@ -667,7 +664,7 @@ void ProjectController::eventuallyOpenProjectFile(KIO::Job* _job, KIO::UDSEntryL
 
 void ProjectController::openProjectForUrlSlot(bool) {
     if(ICore::self()->documentController()->activeDocument()) {
-        KUrl url = ICore::self()->documentController()->activeDocument()->url();
+        QUrl url = ICore::self()->documentController()->activeDocument()->url();
         IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
         if(!project) {
             openProjectForUrl(url);
@@ -680,14 +677,15 @@ void ProjectController::openProjectForUrlSlot(bool) {
 }
 
 
-void ProjectController::openProjectForUrl(const KUrl& sourceUrl) {
-    KUrl dirUrl = sourceUrl.upUrl();
-    KUrl testAt = dirUrl;
+void ProjectController::openProjectForUrl(const QUrl& sourceUrl) {
+    Q_ASSERT(!sourceUrl.isRelative());
+    QUrl dirUrl = sourceUrl.adjusted(QUrl::RemoveFilename);
+    QUrl testAt = dirUrl;
     
     d->m_foundProjectFile = false;
     
     while(!testAt.path().isEmpty()) {
-        KUrl testProjectFile(testAt);
+        QUrl testProjectFile(testAt);
         KIO::ListJob* job = KIO::listDir(testAt);
         
         connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)), SLOT(eventuallyOpenProjectFile(KIO::Job*,KIO::UDSEntryList)));
@@ -698,13 +696,12 @@ void ProjectController::openProjectForUrl(const KUrl& sourceUrl) {
             d->m_foundProjectFile = false;
             return;
         }
-        KUrl oldTest = testAt;
-        testAt = testAt.upUrl();
+        QUrl oldTest = testAt.adjusted(QUrl::RemoveFilename);
         if(oldTest == testAt)
             break;
     }
     
-    KUrl askForOpen = d->dialog->askProjectConfigLocation(false, dirUrl);
+    QUrl askForOpen = d->dialog->askProjectConfigLocation(false, dirUrl);
     
     if(askForOpen.isValid())
         openProject(askForOpen);
@@ -712,7 +709,8 @@ void ProjectController::openProjectForUrl(const KUrl& sourceUrl) {
 
 void ProjectController::openProject( const QUrl &projectFile )
 {
-    KUrl url = projectFile;
+    Q_ASSERT(!projectFile.isRelative());
+    QUrl url = projectFile;
     QList<const Session*> existingSessions;
 
     if(!Core::self()->sessionController()->activeSession()->containedProjects().contains(url))
@@ -787,7 +785,7 @@ void ProjectController::openProject( const QUrl &projectFile )
 
 void ProjectController::fetchProject()
 {
-    KUrl url = d->dialog->askProjectConfigLocation(true);
+    QUrl url = d->dialog->askProjectConfigLocation(true);
 
     if ( !url.isEmpty() )    
     {
@@ -922,7 +920,7 @@ ProjectModel* ProjectController::projectModel()
     return d->model;
 }
 
-IProject* ProjectController::findProjectForUrl( const KUrl& url ) const
+IProject* ProjectController::findProjectForUrl( const QUrl& url ) const
 {
     if (d->m_projects.isEmpty()) {
         return 0;
@@ -975,14 +973,13 @@ bool ProjectController::isProjectNameUsed( const QString& name ) const
     return false;
 }
 
-KUrl ProjectController::projectsBaseDirectory() const
+QUrl ProjectController::projectsBaseDirectory() const
 {
     KConfigGroup group = ICore::self()->activeSession()->config()->group( "Project Manager" );
-    return group.readEntry( "Projects Base Directory",
-                                     QUrl( QDir::homePath()+"/projects" ) );
+    return group.readEntry( "Projects Base Directory", QUrl::fromLocalFile( QDir::homePath() + "/projects" ) );
 }
 
-QString ProjectController::prettyFilePath(const KUrl& url, FormattingOptions format) const
+QString ProjectController::prettyFilePath(const QUrl& url, FormattingOptions format) const
 {
     IProject* project = Core::self()->projectController()->findProjectForUrl(url);
     
@@ -999,25 +996,28 @@ QString ProjectController::prettyFilePath(const KUrl& url, FormattingOptions for
         }
     }
     
-    QString prefixText = url.upUrl().pathOrUrl(KUrl::AddTrailingSlash);
+    Path parent = Path(url).parent();
+    QString prefixText;
     if (project) {
         if (format == FormatHtml) {
             prefixText = "<i>" +  project->name() + "</i>/";
         } else {
             prefixText = project->name() + '/';
         }
-        QString relativePath = KUrl::relativeUrl(project->folder(), url.upUrl());
+        QString relativePath = project->path().relativePath(parent);
         if(relativePath.startsWith("./"))
             relativePath = relativePath.mid(2);
         prefixText += relativePath;
+    } else {
+        prefixText = parent.pathOrUrl() + '/';
     }
     return prefixText;
 }
 
-QString ProjectController::prettyFileName(const KUrl& url, FormattingOptions format) const
+QString ProjectController::prettyFileName(const QUrl& url, FormattingOptions format) const
 {
     IProject* project = Core::self()->projectController()->findProjectForUrl(url);
-    if(project && project->folder().equals(url, KUrl::CompareWithoutTrailingSlash))
+    if(project && project->path() == Path(url))
     {
         if (format == FormatHtml) {
             return "<i>" +  project->name() + "</i>";
@@ -1065,7 +1065,7 @@ void ProjectController::commitCurrentProject()
     if(!doc)
         return;
     
-    KUrl url=doc->url();
+    QUrl url=doc->url();
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
     
     if(project && project->versionControlPlugin()) {

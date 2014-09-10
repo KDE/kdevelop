@@ -24,7 +24,7 @@
 #include "svnjobbase.h"
 
 #include <vcs/vcsstatusinfo.h>
-#include <kurl.h>
+#include <QUrl>
 
 class SvnInternalStatusJob;
 
@@ -37,7 +37,7 @@ public:
     QVariant fetchResults();
     void start();
 
-    void setLocations( const KUrl::List& locations );
+    void setLocations( const QList<QUrl>& locations );
     void setRecursive( bool );
     SvnInternalJobBase* internalJob() const;
 public slots:

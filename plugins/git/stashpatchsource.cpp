@@ -36,7 +36,7 @@ StashPatchSource::StashPatchSource(const QString& stashName, GitPlugin* plugin, 
     tempFile.setAutoRemove(false);
     tempFile.setSuffix(".diff");
     tempFile.open();
-    m_patchFile = KUrl(tempFile.fileName());
+    m_patchFile = QUrl::fromLocalFile(tempFile.fileName());
 
     KDevelop::DVcsJob * job = m_plugin->gitStash(m_baseDir, QStringList() << "show" << "-u" << m_stashName, KDevelop::OutputJob::Silent);
 
@@ -49,16 +49,12 @@ StashPatchSource::~StashPatchSource()
     QFile::remove(m_patchFile.toLocalFile());
 }
 
-KUrl StashPatchSource::baseDir() const
+QUrl StashPatchSource::baseDir() const
 {
-    KUrl baseDirUrl(m_baseDir.absolutePath());
-
-    baseDirUrl.addPath("/");
-
-    return baseDirUrl;
+    return QUrl::fromLocalFile(m_baseDir.absolutePath());
 }
 
-KUrl StashPatchSource::file() const
+QUrl StashPatchSource::file() const
 {
     return m_patchFile;
 }

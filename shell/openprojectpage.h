@@ -14,8 +14,7 @@
 #include <QWidget>
 #include <QtCore/QMap>
 
-class KUrl;
-class KFileItem;
+class QUrl;
 class KFileWidget;
 
 namespace KDevelop
@@ -26,12 +25,12 @@ class OpenProjectPage : public QWidget
     Q_OBJECT
 
 public:
-    OpenProjectPage( const KUrl& startUrl, QWidget* parent = 0 );
+    OpenProjectPage( const QUrl& startUrl, QWidget* parent = 0 );
     QMap<QString,QStringList> projectFilters() const;
-    void setUrl(const KUrl& url);
+    void setUrl(const QUrl& url);
 
 signals:
-    void urlSelected( const KUrl& );
+    void urlSelected( const QUrl& );
     void accepted();
 
 protected:
@@ -39,12 +38,12 @@ protected:
 
 private slots:
     void highlightFile(const QString&);
-    void opsEntered(const KUrl& item );
+    void opsEntered(const QUrl& item );
     void comboTextChanged(const QString& );
-    void dirChanged(const KUrl& url);
+    void dirChanged(const QUrl& url);
 
 private:
-    KUrl getAbsoluteUrl( const QString& ) const;
+    QUrl getAbsoluteUrl( const QString& ) const;
     KFileWidget* fileWidget;
     QMap<QString,QStringList> m_projectFilters;
 };

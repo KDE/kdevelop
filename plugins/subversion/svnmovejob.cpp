@@ -42,8 +42,8 @@ void SvnInternalMoveJob::run()
     svn::Client cli(m_ctxt);
     try
     {
-        QByteArray srcba = sourceLocation().toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
-        QByteArray dstba = destinationLocation().toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
+        QByteArray srcba = sourceLocation().toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
+        QByteArray dstba = destinationLocation().toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
         cli.move( svn::Path( srcba.data() ), svn::Revision(), svn::Path( dstba.data() ), force() );
     }catch( svn::ClientException ce )
     {
@@ -56,25 +56,25 @@ void SvnInternalMoveJob::run()
 }
 
 
-void SvnInternalMoveJob::setDestinationLocation( const KUrl& url )
+void SvnInternalMoveJob::setDestinationLocation( const QUrl &url )
 {
     QMutexLocker l( m_mutex );
     m_destinationLocation = url;
 }
 
-KUrl SvnInternalMoveJob::destinationLocation() const
+QUrl SvnInternalMoveJob::destinationLocation() const
 {
     QMutexLocker l( m_mutex );
     return m_destinationLocation;
 }
 
-void SvnInternalMoveJob::setSourceLocation( const KUrl& url )
+void SvnInternalMoveJob::setSourceLocation( const QUrl &url )
 {
     QMutexLocker l( m_mutex );
     m_sourceLocation = url;
 }
 
-KUrl SvnInternalMoveJob::sourceLocation() const
+QUrl SvnInternalMoveJob::sourceLocation() const
 {
     QMutexLocker l( m_mutex );
     return m_sourceLocation;
@@ -123,13 +123,13 @@ SvnInternalJobBase* SvnMoveJob::internalJob() const
     return m_job;
 }
 
-void SvnMoveJob::setDestinationLocation( const KUrl& url )
+void SvnMoveJob::setDestinationLocation( const QUrl &url )
 {
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setDestinationLocation( url );
 }
 
-void SvnMoveJob::setSourceLocation( const KUrl& url )
+void SvnMoveJob::setSourceLocation( const QUrl &url )
 {
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setSourceLocation( url );

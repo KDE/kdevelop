@@ -45,7 +45,7 @@ static QUrl rebaseMatchingUrl(const QUrl& toRebase, const KConfigGroup& config, 
         const QString searchStr = toRebase.url(matchOpts);
         if (searchStr.contains(baseStr)) {
             const QUrl rebase = pathCfg.readEntry(rebaseEntry, QUrl());
-            return rebase.resolved(searchStr.mid(baseStr.length()));
+            return rebase.resolved(QUrl(searchStr.mid(baseStr.length())));
         }
     }
     //No mapping found

@@ -59,7 +59,7 @@ struct DVcsJobPrivate;
  * 
  * Usage example 1:
  * @code
- * VcsJob* j = add(KUrl::List() << a << b << c, IBasicVersionControl::Recursive);
+ * VcsJob* j = add(QList<QUrl>() << a << b << c, IBasicVersionControl::Recursive);
  * DVcsJob* job = qobject_cast<DVCSjob*>(j);
  * connect(job, SIGNAL(result(KJob*) ),
  *         this, SIGNAL(jobFinished(KJob*) ));
@@ -120,12 +120,12 @@ public:
      * 
      * Override if you need to treat paths beffore adding them as parameters.
      */
-    virtual DVcsJob& operator<<(const KUrl& arg);
+    virtual DVcsJob& operator<<(const QUrl& arg);
     
     /**
-     * @see operator<<(const KUrl& arg).
+     * @see operator<<(const QUrl& arg).
      */
-    DVcsJob& operator<<(const QList<KUrl>& args);
+    DVcsJob& operator<<(const QList<QUrl>& args);
 
     /**
      * Call this method to start this job.

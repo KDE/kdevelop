@@ -27,7 +27,7 @@
 
 class QMenu;
 class QIcon;
-class KUrl;
+class QUrl;
 class KConfigGroup;
 
 namespace KDevelop
@@ -102,10 +102,10 @@ public:
      * @returns an icon to be used for representing launch configurations of this type
      */
     virtual QIcon icon() const = 0;
-    
+
     /**
      * Check whether this launch configuration type can launch the given project item
-     * @param item the project tree item to test 
+     * @param item the project tree item to test
      * @returns true if this configuration type can launch the given item, false otherwise
      */
     virtual bool canLaunch( KDevelop::ProjectBaseItem* item ) const = 0;
@@ -115,7 +115,7 @@ public:
      * @param config the configuration to setup
      * @param item the item to launch
      */
-    virtual void configureLaunchFromItem( KConfigGroup config, 
+    virtual void configureLaunchFromItem( KConfigGroup config,
                                           KDevelop::ProjectBaseItem* item ) const = 0;
 
     /**
@@ -131,17 +131,17 @@ public:
     * @param file the file to test launchability
     * @returns true if this configuration type can launch the given file, false otherwise
     */
-    virtual bool canLaunch( const KUrl& file ) const = 0;
-    
+    virtual bool canLaunch( const QUrl& file ) const = 0;
+
     /**
      * Returns a menu that will be added to the UI where the interface will be
      * able to add any suggestion it needs, like default targets.
      */
     virtual QMenu* launcherSuggestions() { return 0; }
-    
+
 signals:
     void signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration* launch);
-    
+
 private:
     class LaunchConfigurationTypePrivate* const d;
 };

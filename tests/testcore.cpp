@@ -45,7 +45,7 @@ TestCore::TestCore()
 
 TestCore* TestCore::initialize( Core::Setup mode, const QString& session )
 {
-    qRegisterMetaType<KUrl::List>("KUrl::List");
+    qRegisterMetaType<QList<QUrl>>("QList<QUrl>");
 
     if (!Core::m_self) {
         new TestCore;

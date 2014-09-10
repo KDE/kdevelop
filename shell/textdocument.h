@@ -44,7 +44,7 @@ limited to Kate. Each conforming text editor will work.
 class KDEVPLATFORMSHELL_EXPORT TextDocument: public PartDocument {
     Q_OBJECT
 public:
-    TextDocument(const KUrl &url, ICore*, const QString& encoding );
+    TextDocument(const QUrl &url, ICore*, const QString& encoding );
     virtual ~TextDocument();
 
     virtual QWidget *createViewWidget(QWidget *parent = 0);

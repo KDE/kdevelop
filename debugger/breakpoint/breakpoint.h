@@ -22,7 +22,7 @@
 #define KDEVPLATFORM_BREAKPOINT_H
 
 #include <QtCore/QSet>
-#include <QtCore/QUrl>
+#include <QUrl>
 #include "../util/treeitem.h"
 
 class KConfigGroup;

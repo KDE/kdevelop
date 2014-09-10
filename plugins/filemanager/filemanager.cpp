@@ -23,7 +23,7 @@
 #include <QMenu>
 #include <QLayout>
 #include <QAbstractItemView>
-#include <QtCore/QUrl>
+#include <QUrl>
 #include <QtWidgets/QFileDialog>
 
 #include <KI18n/KLocalizedString>
@@ -61,7 +61,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     urlnav = new KUrlNavigator(model, QUrl::fromLocalFile(QDir::homePath()), this );
     connect(urlnav, SIGNAL(urlChanged(QUrl)), SLOT(gotoUrl(QUrl)));
     l->addWidget(urlnav);
-    dirop = new KDirOperator(QDir::homePath(), this);
+    dirop = new KDirOperator(QUrl::fromLocalFile(QDir::homePath()), this);
     dirop->setView( KFile::Tree );
     dirop->setupMenu( KDirOperator::SortActions | KDirOperator::FileActions | KDirOperator::NavActions | KDirOperator::ViewActions );
     connect(dirop, SIGNAL(urlEntered(QUrl)), SLOT(updateNav(QUrl)));
@@ -104,7 +104,7 @@ void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
 
 void FileManager::openFile(const KFileItem& file)
 {
-    KDevelop::IOpenWith::openFiles(KUrl::List() << file.url());
+    KDevelop::IOpenWith::openFiles(QList<QUrl>() << file.url());
 }
 
 
@@ -169,9 +169,8 @@ void FileManager::fileCreated(KJob* job)
 
 void FileManager::syncCurrentDocumentDirectory()
 {
-    if( KDevelop::IDocument* activeDoc =
-                    KDevelop::ICore::self()->documentController()->activeDocument() )
-        updateNav( activeDoc->url().upUrl() );
+    if( KDevelop::IDocument* activeDoc = KDevelop::ICore::self()->documentController()->activeDocument() )
+        updateNav( activeDoc->url().adjusted(QUrl::RemoveFilename) );
 }
 
 QList<QAction*> FileManager::toolBarActions() const

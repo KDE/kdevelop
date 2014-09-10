@@ -26,7 +26,7 @@
 #include <QReadWriteLock>
 
 #include <language/duchain/problem.h>
-#include <KUrl>
+#include <QUrl>
 
 namespace KDevelop {
     class IDocument;
@@ -107,7 +107,7 @@ private:
     QList<KDevelop::ProblemPointer> m_problems;
 
     QReadWriteLock m_lock;  // guards access to m_documentSet
-    KUrl m_currentDocument;  // current document
+    QUrl m_currentDocument;  // current document
     bool m_showImports; // include problems from imported documents
     KDevelop::ProblemData::Severity m_severity;
     WatchedDocumentSet* m_documentSet;

@@ -22,8 +22,9 @@
 #ifndef KDEVPLATFORM_FILTEREDITEM_H
 #define KDEVPLATFORM_FILTEREDITEM_H
 
-#include <QString>
-#include <KUrl>
+#include <QtCore/QMetaType>
+#include <QtCore/QString>
+#include <QUrl>
 
 #include <outputview/outputviewexport.h>
 
@@ -57,7 +58,7 @@ struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
     FilteredOutputItemType type;
     QString shortenedText;
     bool isActivatable;
-    KUrl url;
+    QUrl url;
     /// lineNo starts with 0
     int lineNo;
     /// columnNo starts with 0

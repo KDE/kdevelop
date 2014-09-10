@@ -21,8 +21,8 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QList>
+#include <QUrl>
 
-#include <kurl.h>
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/range.h>
 
@@ -41,7 +41,7 @@ class ICore;
 class KDEVPLATFORMINTERFACES_EXPORT IDocumentFactory {
 public:
     virtual ~IDocumentFactory() {}
-    virtual IDocument* create(const KUrl&, ICore* ) = 0;
+    virtual IDocument* create(const QUrl&, ICore* ) = 0;
 };
 
 /**
@@ -79,7 +79,7 @@ public:
      * @param url The Url of the document.
      * @return The corresponding document, or null if not found.
      */
-    Q_SCRIPTABLE virtual KDevelop::IDocument* documentForUrl( const KUrl & url ) const = 0;
+    Q_SCRIPTABLE virtual KDevelop::IDocument* documentForUrl( const QUrl & url ) const = 0;
 
     /// @return The list of all open documents
     Q_SCRIPTABLE virtual QList<KDevelop::IDocument*> openDocuments() const = 0;
@@ -119,7 +119,7 @@ public Q_SLOTS:
      * @param range The location information, if applicable.
      * @param activate Indicates whether to fully activate the document.
      */
-    KDevelop::IDocument* openDocument( const KUrl &url,
+    KDevelop::IDocument* openDocument( const QUrl &url,
             const KTextEditor::Cursor& cursor,
             DocumentActivationParams activationParams = 0,
             const QString& encoding = "");
@@ -137,7 +137,7 @@ public Q_SLOTS:
      *
      * @return The opened document
      */
-    virtual KDevelop::IDocument* openDocument( const KUrl &url,
+    virtual KDevelop::IDocument* openDocument( const QUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0,
             const QString& encoding = "",
@@ -165,7 +165,7 @@ public Q_SLOTS:
      * @param url The full Url of the document to open.
      * @param prefName The name of the preferred KPart to open that document
      */
-    virtual KDevelop::IDocument* openDocument( const KUrl &url, const QString& prefname ) = 0;
+    virtual KDevelop::IDocument* openDocument( const QUrl &url, const QString& prefname ) = 0;
 
     virtual void closeAllDocuments() = 0;
 

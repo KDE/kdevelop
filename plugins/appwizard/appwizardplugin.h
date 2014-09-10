@@ -22,7 +22,6 @@ class ProjectTemplatesModel;
 class ApplicationInfo;
 class KArchiveDirectory;
 class KTempDir;
-class KUrl;
 
 class AppWizardPlugin: public KDevelop::IPlugin, public KDevelop::ITemplateProvider
 {

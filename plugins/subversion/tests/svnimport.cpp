@@ -104,7 +104,7 @@ void SvnImport::testBasic()
     QString origcontent = "This is a Test";
     setupSampleProject( projectDir.name(), origcontent );
 
-    VcsJob* job = vcs->import( "import test", KUrl( projectDir.name() ), reposLoc );
+    VcsJob* job = vcs->import( "import test", QUrl::fromLocalFile( projectDir.name() ), reposLoc );
     validatingExecJob(job);
 
     KTempDir checkoutDir;
@@ -122,7 +122,7 @@ void SvnImport::testImportWithMissingDirs()
     setupSampleProject( projectDir.name(), origcontent );
 
     reposLoc.setRepositoryServer( reposLoc.repositoryServer() + "/foobar/" + QDir( projectDir.name() ).dirName() );
-    VcsJob* job = vcs->import( "import test", KUrl( projectDir.name() ), reposLoc );
+    VcsJob* job = vcs->import( "import test", QUrl::fromLocalFile( projectDir.name() ), reposLoc );
     validatingExecJob(job);
 
     KTempDir checkoutDir;
@@ -140,7 +140,7 @@ void SvnImport::testImportIntoDir()
     setupSampleProject( projectDir.name(), origcontent );
 
     reposLoc.setRepositoryServer( reposLoc.repositoryServer() + '/' + QDir( projectDir.name() ).dirName() );
-    VcsJob* job = vcs->import( "import test", KUrl( projectDir.name() ), reposLoc );
+    VcsJob* job = vcs->import( "import test", QUrl::fromLocalFile( projectDir.name() ), reposLoc );
     validatingExecJob(job);
 
     KTempDir checkoutDir;

@@ -26,8 +26,8 @@
 #include <QtCore/QHash>
 #include <QWidget>
 #include <QtCore/QPointer>
+#include <QUrl>
 
-#include <kurl.h>
 #include <kmimetype.h>
 #include <KSharedConfig>
 
@@ -65,11 +65,11 @@ public:
     KTextEditor::Document* createTextPart( const QString &encoding = QString() );
     virtual KTextEditor::Editor* editorPart() const;
 
-    bool canCreatePart( const KUrl &url );
+    bool canCreatePart( const QUrl &url );
 
     using IPartController::createPart;
 
-    KParts::Part* createPart( const KUrl &url, const QString& prefName = QString() );
+    KParts::Part* createPart( const QUrl &url, const QString& prefName = QString() );
     KParts::Part* createPart( const QString &mimeType,
                               const QString &partType,
                               const QString &className,

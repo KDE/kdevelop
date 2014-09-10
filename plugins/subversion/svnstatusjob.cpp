@@ -23,9 +23,9 @@
 
 #include <QFileInfo>
 #include <QMutexLocker>
+#include <QUrl>
 
 #include <KLocalizedString>
-#include <kurl.h>
 #include <kdebug.h>
 #include <ThreadWeaver.h>
 
@@ -81,13 +81,13 @@ void SvnInternalStatusJob::setRecursive( bool recursive )
     m_recursive = recursive;
 }
 
-void SvnInternalStatusJob::setLocations( const KUrl::List& urls )
+void SvnInternalStatusJob::setLocations( const QList<QUrl>& urls )
 {
     QMutexLocker l( m_mutex );
     m_locations = urls;
 }
 
-KUrl::List SvnInternalStatusJob::locations() const
+QList<QUrl> SvnInternalStatusJob::locations() const
 {
     QMutexLocker l( m_mutex );
     return m_locations;
@@ -104,18 +104,18 @@ void SvnInternalStatusJob::run()
     initBeforeRun();
 
     svn::Client cli(m_ctxt);
-    KUrl::List l = locations();
-    foreach( const KUrl &url, l )
+    QList<QUrl> l = locations();
+    foreach( const QUrl &url, l )
     {
         //kDebug(9510) << "Fetching status info for:" << url;
         try
         {
-            QByteArray ba = url.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
+            QByteArray ba = url.toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
             svn::StatusEntries se = cli.status( ba.data(), recursive() );
             for( svn::StatusEntries::const_iterator it = se.begin(); it != se.end() ; ++it )
             {
                 KDevelop::VcsStatusInfo info;
-                info.setUrl( KUrl( (*it).path() ) );
+                info.setUrl( QUrl::fromLocalFile( QString::fromUtf8( (*it).path() ) ) );
                 info.setState( getState( *it ) );
                 emit gotNewStatus( info );
             }
@@ -164,7 +164,7 @@ void SvnStatusJob::start()
     }
 }
 
-void SvnStatusJob::setLocations( const KUrl::List& urls )
+void SvnStatusJob::setLocations( const QList<QUrl>& urls )
 {
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setLocations( urls );

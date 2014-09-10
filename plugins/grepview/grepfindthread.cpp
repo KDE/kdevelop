@@ -1,6 +1,5 @@
 #include "grepfindthread.h"
 
-#include <KUrl>
 #include <QDir>
 #include <QSet>
 
@@ -17,14 +16,14 @@ using KDevelop::IndexedString;
 /**
  * @return Return true in case @p url is in @p dir within a maximum depth of @p maxDepth
  */
-static bool isInDirectory(const KUrl& url, const KUrl& dir, int maxDepth)
+static bool isInDirectory(const QUrl& url, const QUrl& dir, int maxDepth)
 {
-    KUrl folderUrl = url.upUrl();
+    QUrl folderUrl = url.adjusted(QUrl::RemoveFilename);
 
     int currentLevel = maxDepth;
     while(currentLevel > 0) {
-        folderUrl = folderUrl.upUrl();
-        if ( folderUrl.equals(dir, KUrl::CompareWithoutTrailingSlash) ) {
+        folderUrl = folderUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
+        if ( folderUrl == dir.adjusted(QUrl::StripTrailingSlash) ) {
             return true;
         }
         currentLevel--;
@@ -35,12 +34,12 @@ static bool isInDirectory(const KUrl& url, const KUrl& dir, int maxDepth)
 // the abort parameter must be volatile so that it
 // is evaluated every time - optimization might prevent that
 
-static KUrl::List thread_getProjectFiles(const KUrl dir, int depth, const QStringList include,
+static QList<QUrl> thread_getProjectFiles(const QUrl dir, int depth, const QStringList include,
                                          const QStringList exlude, volatile bool &abort)
 {
     ///@todo This is not thread-safe!
     KDevelop::IProject *project = KDevelop::ICore::self()->projectController()->findProjectForUrl( dir );
-    KUrl::List res;
+    QList<QUrl> res;
     if(!project)
         return res;
 
@@ -49,11 +48,11 @@ static KUrl::List thread_getProjectFiles(const KUrl dir, int depth, const QStrin
     {
         if(abort)
             break;
-        KUrl url = item.toUrl();
-        if( !url.equals(dir) )
+        QUrl url = item.toUrl();
+        if( url != dir )
         {
             if ( depth == 0 ) {
-                if ( !url.upUrl().equals(dir, KUrl::CompareWithoutTrailingSlash) ) {
+                if ( url.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash) != dir.adjusted(QUrl::StripTrailingSlash) ) {
                     continue;
                 }
             } else if ( !dir.isParentOf(url) ) {
@@ -74,7 +73,7 @@ static KUrl::List thread_getProjectFiles(const KUrl dir, int depth, const QStrin
     return res;
 }
 
-static KUrl::List thread_findFiles(const QDir& dir, int depth, const QStringList& include,
+static QList<QUrl> thread_findFiles(const QDir& dir, int depth, const QStringList& include,
                                    const QStringList& exclude, volatile bool &abort)
 {
     QFileInfoList infos = dir.entryInfoList(include, QDir::NoDotAndDotDot|QDir::Files|QDir::Readable);
@@ -82,12 +81,12 @@ static KUrl::List thread_findFiles(const QDir& dir, int depth, const QStringList
     if(!QFileInfo(dir.path()).isDir())
         infos << QFileInfo(dir.path());
     
-    KUrl::List dirFiles;
+    QList<QUrl> dirFiles;
     foreach(const QFileInfo &currFile, infos)
     {
         QString currName = currFile.canonicalFilePath();
         if(!QDir::match(exclude, currName))
-            dirFiles << currName;
+            dirFiles << QUrl::fromLocalFile(currName);
     }
     if(depth != 0)
     {
@@ -97,7 +96,7 @@ static KUrl::List thread_findFiles(const QDir& dir, int depth, const QStringList
             if(abort)
                 break;
             QString canonical = currDir.canonicalFilePath();
-            if(!KUrl(dir.canonicalPath()).isParentOf(canonical))
+            if (!canonical.startsWith(dir.canonicalPath()))
                 continue;
 
             if ( depth > 0 ) {
@@ -111,7 +110,7 @@ static KUrl::List thread_findFiles(const QDir& dir, int depth, const QStringList
 }
 
 GrepFindFilesThread::GrepFindFilesThread(QObject* parent,
-                                         const QList<KUrl>& startDirs,
+                                         const QList<QUrl>& startDirs,
                                          int depth, const QString& pats,
                                          const QString& excl,
                                          bool onlyProject)
@@ -143,7 +142,7 @@ void GrepFindFilesThread::run()
 
     kDebug() << "running with start dir" << m_startDirs;
     
-    foreach(KUrl directory, m_startDirs)
+    foreach(QUrl directory, m_startDirs)
     {
         if(m_project)
             m_files += thread_getProjectFiles(directory, m_depth, include, exclude, m_tryAbort);
@@ -156,7 +155,7 @@ void GrepFindFilesThread::run()
     qSort(m_files);
 }
 
-KUrl::List GrepFindFilesThread::files() const {
+QList<QUrl> GrepFindFilesThread::files() const {
     return m_files;
 }
 

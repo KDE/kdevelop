@@ -25,7 +25,6 @@
 #include <QtCore/QVariant>
 #include <project/builderjob.h>
 
-class KUrl;
 class ProjectBuildSetModel;
 
 namespace KDevelop

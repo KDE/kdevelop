@@ -67,7 +67,8 @@ void AbstractNavigationContext::addExternalHtml( const QString& text )
       if( fileEnd != -1 ) {
         QString file = text.mid( pos, fileEnd - pos );
         pos = fileEnd + 1;
-        makeLink( KUrl(file).fileName(), file, NavigationAction( KUrl(file), KTextEditor::Cursor() ) );
+        const QUrl url = QUrl::fromUserInput(file);
+        makeLink( url.fileName(), file, NavigationAction( url, KTextEditor::Cursor() ) );
       }
     }
 
@@ -153,7 +154,6 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
       kDebug() << "Navigation-action has invalid declaration" << endl;
       return NavigationContextPointer(this);
   }
-  qRegisterMetaType<KUrl>("KUrl");
   qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
 
   switch( action.type ) {
@@ -182,7 +182,7 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
       return registerChild(new UsesNavigationContext(action.decl.data(), this));
     case NavigationAction::JumpToSource:
       {
-        KUrl doc = action.document;
+        QUrl doc = action.document;
         KTextEditor::Cursor cursor = action.cursor;
         {
           DUChainReadLocker lock(DUChain::lock());
@@ -200,7 +200,7 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
         }
 
         //This is used to execute the slot delayed in the event-loop, so crashes are avoided
-        QMetaObject::invokeMethod( ICore::self()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, doc), Q_ARG(KTextEditor::Cursor, cursor) );
+        QMetaObject::invokeMethod( ICore::self()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(QUrl, doc), Q_ARG(KTextEditor::Cursor, cursor) );
         break;
       }
     case NavigationAction::ShowDocumentation: {

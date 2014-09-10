@@ -35,8 +35,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QStringList>
 #include <QMimeType>
-
-#include <KUrl>
+#include <QUrl>
 
 template <typename T> class QList;
 
@@ -123,7 +122,7 @@ A context for the a list of selected urls.
 class KDEVPLATFORMINTERFACES_EXPORT FileContext : public Context
 {
 public:
-    /**Builds the file context using a @ref KUrl::List
+    /**Builds the file context using a @ref QList<QUrl>
         @param urls The list of selected url.*/
     FileContext( const QList<QUrl> &urls );
 
@@ -177,7 +176,7 @@ public:
      * @p url The files to open.
      * @p mimeType The mime type of said file.
      */
-    OpenWithContext(const KUrl::List& urls, const QMimeType& mimeType);
+    OpenWithContext(const QList<QUrl>& urls, const QMimeType& mimeType);
 
     /**
      * @return Context::OpenWithContext
@@ -187,7 +186,7 @@ public:
     /**
      * @return The files to open.
      */
-    KUrl::List urls() const;
+    QList<QUrl> urls() const;
 
     /**
      * @return The mimetype of the url to open.

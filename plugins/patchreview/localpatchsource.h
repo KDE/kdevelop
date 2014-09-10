@@ -16,7 +16,7 @@
 
 #include <QString>
 #include <QWidget>
-#include <KUrl>
+#include <QUrl>
 #include <interfaces/ipatchsource.h>
 
 namespace Ui { class LocalPatchWidget; }
@@ -31,11 +31,11 @@ public:
 
     virtual QString name() const;
 
-    virtual KUrl baseDir() const {
+    virtual QUrl baseDir() const {
         return m_baseDir;
     }
 
-    virtual KUrl file() const {
+    virtual QUrl file() const {
         return m_filename;
     }
 
@@ -46,8 +46,8 @@ public:
     virtual void update();
     virtual QIcon icon() const;
 
-    void setFilename(const KUrl& filename) { m_filename = filename; }
-    void setBaseDir(const KUrl& dir) { m_baseDir = dir; }
+    void setFilename(const QUrl& filename) { m_filename = filename; }
+    void setBaseDir(const QUrl& dir) { m_baseDir = dir; }
     void setCommand(const QString& cmd) { m_command = cmd; }
 
     QString command() const { return m_command; }
@@ -59,8 +59,8 @@ public:
     virtual QWidget* customWidget() const;
 
 private:
-    KUrl m_filename;
-    KUrl m_baseDir;
+    QUrl m_filename;
+    QUrl m_baseDir;
     QString m_command;
     bool m_applied;
     uint m_depth;

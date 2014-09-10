@@ -22,8 +22,7 @@
 #define BAZAAR_BAZAARUTILS_H
 
 #include <QtCore/QDir>
-
-#include <KUrl>
+#include <QUrl>
 
 #include <vcs/vcsevent.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
@@ -35,20 +34,18 @@ class VcsStatusInfo;
 class VcsEvent;
 }
 
-class KUrl;
-
 namespace BazaarUtils
 {
 
 /**
  * Converts @p url to \code QDir \endcode instance assuming file is local
  */
-QDir toQDir(const KUrl& url);
+QDir toQDir(const QUrl& url);
 
 /**
  * @return working copy location of working copy which contains @p path.
  */
-QDir workingCopy(const KUrl& path);
+QDir workingCopy(const QUrl& path);
 
 /**
  * Translate VcsRevision into Revision Identifier accepted by Bazaar. This
@@ -76,7 +73,7 @@ QString getRevisionSpecRange(const KDevelop::VcsRevision& begin,
  * @return true if @p dirPath is valid working directory location, false
  * otherwise.
  */
-bool isValidDirectory(const KUrl& dirPath);
+bool isValidDirectory(const QUrl& dirPath);
 
 /**
  * Parses signle status info line to \code KDevelop::VcsStatusInfo \endcode.
@@ -89,7 +86,7 @@ KDevelop::VcsStatusInfo parseVcsStatusInfoLine(const QString& line);
  * @return Absolute path of file designated by @p pathInWorkingCopy relative to
  * @p workingCopy.
  */
-QString concatenatePath(const QDir& workingCopy, const KUrl& pathInWorkingCopy);
+QString concatenatePath(const QDir& workingCopy, const QUrl& pathInWorkingCopy);
 
 /**
  * Parses informations about single commit from @p action (which is signle part
@@ -111,7 +108,7 @@ KDevelop::VcsItemEvent::Action parseActionDescription(const QString& action);
  * handling support). This function removes directiories from list if
  * we are in NonRecursive mode (as directory for self is not versioned).
  */
-KUrl::List handleRecursion(const KUrl::List& listOfUrls, KDevelop::IBasicVersionControl::RecursionMode recursion);
+QList<QUrl> handleRecursion(const QList<QUrl>& listOfUrls, KDevelop::IBasicVersionControl::RecursionMode recursion);
 
 }
 

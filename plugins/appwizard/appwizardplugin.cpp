@@ -133,7 +133,7 @@ ICentralizedVersionControl* toCVCS(IPlugin* plugin)
 }
 
 /*! Trouble while initializing version control. Show failure message to user. */
-void vcsError(const QString &errorMsg, KTempDir &tmpdir, const QUrl &dest, const QString &details = QString())
+void vcsError(const QString &errorMsg, QTemporaryDir &tmpdir, const QUrl &dest, const QString &details = QString())
 {
     QString displayDetails = details;
     if (displayDetails.isEmpty())
@@ -161,13 +161,13 @@ bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& inf
     }
     kDebug() << "Initializing DVCS repository:" << dest.toLocalFile();
 
-    job = dvcs->add(KUrl::List(dest), KDevelop::IBasicVersionControl::Recursive);
+    job = dvcs->add(QList<QUrl>(dest), KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
         vcsError(i18n("Could not add files to the DVCS repository"), scratchArea, dest);
         return false;
     }
-    job = dvcs->commit(QString("initial project import from KDevelop"), KUrl::List(dest),
+    job = dvcs->commit(QString("initial project import from KDevelop"), QList<QUrl>(dest),
                             KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
@@ -283,7 +283,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         if ( !unpackArchive( arch->directory(), unpackDir ) )
         {
             QString errorMsg = i18n("Could not create new project");
-            vcsError(errorMsg, tmpdir, QUrl(unpackDir));
+            vcsError(errorMsg, tmpdir, QUrl::fromLocalFile(unpackDir));
             return QString();
         }
 
@@ -423,7 +423,7 @@ bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QStri
     // TODO: KF5 replacement? it just checks if the first 32 bytes contain non-ascii data
     if( KMimeType::isBinaryData(source) )
     {
-        KIO::CopyJob* job = KIO::copy( QUrl(source), QUrl(dest), KIO::HideProgressInfo );
+        KIO::CopyJob* job = KIO::copy( QUrl::fromUserInput(source), QUrl::fromUserInput(dest), KIO::HideProgressInfo );
         if( !job->exec() )
         {
             return false;

@@ -22,7 +22,9 @@
 #ifndef KDEVPLATFORM_IBASICVERSIONCONTROL_H
 #define KDEVPLATFORM_IBASICVERSIONCONTROL_H
 
-#include <KUrl>
+#include <QUrl>
+#include <QList>
+
 #include "../vcsrevision.h"
 #include "../vcsdiff.h"
 
@@ -94,12 +96,12 @@ public:
      *
      * @returns true if the version control system knows the given @p localLocation
      */
-    virtual bool isVersionControlled( const KUrl& localLocation ) = 0;
+    virtual bool isVersionControlled( const QUrl& localLocation ) = 0;
 
     /**
      * Get the repository location of a local file
      */
-    virtual VcsJob* repositoryLocation( const KUrl& localLocation ) = 0;
+    virtual VcsJob* repositoryLocation( const QUrl& localLocation ) = 0;
 
     /**
      * adds a local unversioned file or directory to the list of versioned files.
@@ -107,7 +109,7 @@ public:
      * @param recursion whether to add directories and their children or only directories themselves
      * @returns a job that executes the addition
      */
-    virtual VcsJob* add( const KUrl::List& localLocations,
+    virtual VcsJob* add( const QList<QUrl>& localLocations,
                          RecursionMode recursion = IBasicVersionControl::Recursive ) = 0;
 
     /**
@@ -115,21 +117,21 @@ public:
      * @param localLocations the list of files/directories to remove from the VCS
      * @returns a job that executes the removal
      */
-    virtual VcsJob* remove( const KUrl::List& localLocations ) = 0;
+    virtual VcsJob* remove( const QList<QUrl>& localLocations ) = 0;
 
     /**
      * executes a copy of a file/dir, preserving history if the VCS system
      * allows that, may be implemented by filesystem copy+add
      */
-    virtual VcsJob* copy( const KUrl& localLocationSrc,
-                          const KUrl& localLocationDstn ) = 0;
+    virtual VcsJob* copy( const QUrl& localLocationSrc,
+                          const QUrl& localLocationDstn ) = 0;
 
     /**
      * moves src to dst, preserving history if the VCS system allows that, may
      * be implemented by copy+remove
      */
-    virtual VcsJob* move( const KUrl& localLocationSrc,
-                          const KUrl& localLocationDst ) = 0;
+    virtual VcsJob* move( const QUrl& localLocationSrc,
+                          const QUrl& localLocationDst ) = 0;
 
     /**
      * Fetches the status of the given local vcs locations.
@@ -139,7 +141,7 @@ public:
      * KDevelo::VcsStatusInfo object which contains all the relevant
      * information about the status of a specific file or folder
      */
-    virtual VcsJob* status( const KUrl::List& localLocations,
+    virtual VcsJob* status( const QList<QUrl>& localLocations,
                             RecursionMode recursion = IBasicVersionControl::Recursive ) = 0;
 
     /**
@@ -147,7 +149,7 @@ public:
      * to the version in the repository
      * unedit() (if not a no-op) is implied.
      */
-    virtual VcsJob* revert( const KUrl::List& localLocations,
+    virtual VcsJob* revert( const QList<QUrl>& localLocations,
                             RecursionMode recursion = IBasicVersionControl::Recursive ) = 0;
 
     /**
@@ -160,7 +162,7 @@ public:
      * @param recursion defines whether the directories should be updated
      * recursively
      */
-    virtual VcsJob* update( const KUrl::List& localLocations,
+    virtual VcsJob* update( const QList<QUrl>& localLocations,
                             const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Head ),
                             RecursionMode recursion = IBasicVersionControl::Recursive ) = 0;
 
@@ -168,7 +170,7 @@ public:
      * Checks in the changes of the given file(s)/dir(s) into the repository
      */
     virtual VcsJob* commit( const QString& message,
-                            const KUrl::List& localLocations,
+                            const QList<QUrl>& localLocations,
                             RecursionMode recursion = IBasicVersionControl::Recursive ) = 0;
 
     /**
@@ -176,7 +178,7 @@ public:
      *
      * The diff is in unified diff format for text files by default
      */
-    virtual VcsJob* diff( const KUrl& fileOrDirectory,
+    virtual VcsJob* diff( const QUrl& fileOrDirectory,
                           const VcsRevision& srcRevision,
                           const VcsRevision& dstRevision,
                           VcsDiff::Type = VcsDiff::DiffUnified,
@@ -194,7 +196,7 @@ public:
      * @param limit Restrict to the most recent @p limit entries. Note that the
      * limit is @e advisory and may be ignored.
      */
-    virtual VcsJob* log( const KUrl& localLocation,
+    virtual VcsJob* log( const QUrl& localLocation,
                          const VcsRevision& rev,
                          unsigned long limit = 0 ) = 0;
 
@@ -209,7 +211,7 @@ public:
      * @param limit Do not show entries earlier than @p limit. Note that the
      * limit is @e advisory and may be ignored. The default is the first revision.
      */
-    virtual VcsJob* log( const KUrl& localLocation,
+    virtual VcsJob* log( const QUrl& localLocation,
                          const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Base ),
                          const VcsRevision& limit= VcsRevision::createSpecialRevision( VcsRevision::Start ) ) = 0;
 
@@ -227,14 +229,14 @@ public:
      * @param localLocation local file that should be annotated.
      * @param rev Revision that should be annotated.
      */
-    virtual VcsJob* annotate( const KUrl& localLocation,
+    virtual VcsJob* annotate( const QUrl& localLocation,
                               const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Head ) ) = 0;
 
     /**
      * check for conflicts in the given file and eventually present a
      * conflict solving dialog to the user
      */
-    virtual VcsJob* resolve( const KUrl::List& localLocations,
+    virtual VcsJob* resolve( const QList<QUrl>& localLocations,
                              RecursionMode recursion ) = 0;
 
     /**
@@ -246,7 +248,7 @@ public:
      * @param sourceRepository source of the checkout
      * @param destinationDirectory location of the created working copy (local repository)
      */
-    virtual VcsJob* createWorkingCopy(const VcsLocation & sourceRepository, const KUrl & destinationDirectory, RecursionMode recursion = IBasicVersionControl::Recursive) = 0;
+    virtual VcsJob* createWorkingCopy(const VcsLocation & sourceRepository, const QUrl & destinationDirectory, RecursionMode recursion = IBasicVersionControl::Recursive) = 0;
     
     virtual VcsLocationWidget* vcsLocation(QWidget* parent) const=0;
 
@@ -255,7 +257,7 @@ public:
      * Overwrite this to set e.g. a default commit message or to setup highlighting or validation.
      * The default implementation does nothing.
      */
-    virtual void setupCommitMessageEditor(const KUrl&, KTextEdit* edit) const;
+    virtual void setupCommitMessageEditor(const QUrl&, KTextEdit* edit) const;
 };
 
 }

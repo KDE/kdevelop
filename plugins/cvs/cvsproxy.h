@@ -12,7 +12,8 @@
 #define KDEVPLATFORM_PLUGIN_CVSPROXY_H
 
 
-#include <KUrl>
+#include <QUrl>
+
 #include <KJob>
 #include <vcs/vcsrevision.h>
 
@@ -39,9 +40,9 @@ class IPlugin;
  * }
  * @endcode
  *
- * @note All actions that take a KUrl::List also need an url to the repository which
- *       must be a common base directory to all files from the KUrl::List.
- *       Actions that just take a single KUrl don't need a repository, the cvs command will be
+ * @note All actions that take a QList<QUrl> also need an url to the repository which
+ *       must be a common base directory to all files from the QList<QUrl>.
+ *       Actions that just take a single QUrl don't need a repository, the cvs command will be
  *       called directly in the directory of the given file
  *
  * @author Robert Gruber <rgruber@users.sourceforge.net>
@@ -53,44 +54,44 @@ public:
     CvsProxy(KDevelop::IPlugin* parent = 0);
     ~CvsProxy();
 
-    bool isValidDirectory(KUrl dirPath) const;
-    bool isVersionControlled(KUrl filePath) const;
+    bool isValidDirectory(QUrl dirPath) const;
+    bool isVersionControlled(QUrl filePath) const;
 
-    CvsJob* import(const KUrl& directory,
+    CvsJob* import(const QUrl &directory,
                 const QString & server, const QString& repositoryName,
                 const QString& vendortag, const QString& releasetag,
                 const QString& message);
-    CvsJob* log(const KUrl& file, const KDevelop::VcsRevision& rev);
-    CvsJob* diff(const KUrl& url, 
+    CvsJob* log(const QUrl &file, const KDevelop::VcsRevision& rev);
+    CvsJob* diff(const QUrl &url,
                  const KDevelop::VcsRevision& revA, 
                  const KDevelop::VcsRevision& revB,
                  const QString& diffOptions="");
-    CvsJob* annotate(const KUrl& url, const KDevelop::VcsRevision& rev);
-    CvsJob* edit(const QString& repo, const KUrl::List& files);
-    CvsJob* unedit(const QString& repo, const KUrl::List& files);
-    CvsJob* editors(const QString& repo, const KUrl::List& files);
-    CvsJob* commit(const QString& repo, const KUrl::List& files,
+    CvsJob* annotate(const QUrl &url, const KDevelop::VcsRevision& rev);
+    CvsJob* edit(const QString& repo, const QList<QUrl>& files);
+    CvsJob* unedit(const QString& repo, const QList<QUrl>& files);
+    CvsJob* editors(const QString& repo, const QList<QUrl>& files);
+    CvsJob* commit(const QString& repo, const QList<QUrl>& files,
                 const QString& message);
-    CvsJob* add(const QString& repo, const KUrl::List& files,
+    CvsJob* add(const QString& repo, const QList<QUrl>& files,
                 bool recursiv = true, bool binary = false);
-    CvsJob* remove(const QString& repo, const KUrl::List& files);
-    CvsJob* update(const QString& repo, const KUrl::List& files,
+    CvsJob* remove(const QString& repo, const QList<QUrl>& files);
+    CvsJob* update(const QString& repo, const QList<QUrl>& files,
                 const KDevelop::VcsRevision& rev, 
                 const QString& updateOptions,
                 bool resursive = true, bool pruneDirs = true, bool createDirs = true);
 
-    CvsJob* checkout(const KUrl& targetDir,
+    CvsJob* checkout(const QUrl &targetDir,
                 const QString & server, const QString& module,
                 const QString& checkoutOptions="",
                 const QString& revision="",
                 bool recursive = true,
                 bool pruneDirs = true);
 
-    CvsJob* status(const QString & repo, const KUrl::List & files,
+    CvsJob* status(const QString & repo, const QList<QUrl> & files,
                 bool recursive=false, bool taginfo=false);
 
 private:
-    bool addFileList(CvsJob* job, const QString& repository, const KUrl::List& urls);
+    bool addFileList(CvsJob* job, const QString& repository, const QList<QUrl>& urls);
     QString convertVcsRevisionToString(const KDevelop::VcsRevision& rev);
     QString convertRevisionToPrevious(const KDevelop::VcsRevision& rev);
 

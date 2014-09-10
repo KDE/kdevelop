@@ -28,15 +28,15 @@ class SvnInternalAddJob : public SvnInternalJobBase
     Q_OBJECT
 public:
     SvnInternalAddJob( SvnJobBase* parent = 0 );
-    void setLocations( const KUrl::List& );
+    void setLocations( const QList<QUrl>& );
     void setRecursive( bool );
 
     bool recursive() const;
-    KUrl::List locations() const;
+    QList<QUrl> locations() const;
 protected:
     void run();
 private:
-    KUrl::List m_locations;
+    QList<QUrl> m_locations;
     bool m_recursive;
 };
 

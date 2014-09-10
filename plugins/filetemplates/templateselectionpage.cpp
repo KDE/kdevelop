@@ -101,11 +101,10 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
     renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
 
     KTempDir dir;
-    KUrl base(dir.name());
-    QHash<QString, KUrl> fileUrls;
+    QUrl base = QUrl::fromLocalFile(dir.name());
+    QHash<QString, QUrl> fileUrls;
     foreach(const SourceFileTemplate::OutputFile& out, fileTemplate.outputFiles()) {
-        KUrl url(base);
-        url.addPath(renderer.render(out.outputName));
+        QUrl url = base.resolved(renderer.render(out.outputName));
         fileUrls.insert(out.identifier, url);
     }
     DocumentChangeSet changes = renderer.renderFileTemplate(fileTemplate, base, fileUrls);
@@ -147,7 +146,7 @@ void TemplateSelectionPagePrivate::getMoreClicked()
 void TemplateSelectionPagePrivate::loadFileClicked()
 {
     QString filter = "application/x-desktop application/x-bzip-compressed-tar application/zip";
-    QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kdevclasstemplate"), filter, page);
+    QString fileName = QFileDialog::getOpenFileName(QUrl("kfiledialog:///kdevclasstemplate"), filter, page);
 
     if (!fileName.isEmpty())
     {

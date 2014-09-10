@@ -21,7 +21,9 @@
 #define KDEVPLATFORM_ILANGUAGECHECK_H
 
 #include "interfacesexport.h"
-#include <KUrl>
+
+#include <QUrl>
+#include <QObject>
 
 namespace KDevelop
 {
@@ -33,7 +35,7 @@ class ControlFlowGraph;
 class CheckData
 {
     public:
-        KUrl url;
+        QUrl url;
         TopDUContext* top;
         ControlFlowGraph* flow;
         DataAccessRepository* access;
@@ -43,10 +45,10 @@ class KDEVPLATFORMINTERFACES_EXPORT ILanguageCheck
 {
     public:
         virtual ~ILanguageCheck();
-        
+
         /** Runs the check. This will add problems to the TopDUContext if necessary */
         virtual void runCheck(const CheckData& data)=0;
-        
+
         /** @returns the name of the check */
         virtual QString name() const=0;
 };

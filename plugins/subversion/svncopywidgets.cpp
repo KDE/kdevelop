@@ -10,13 +10,13 @@
 
 #include "svncopywidgets.h"
 #include "svnrevisionwidget.h"
-#include <kurl.h>
+#include <QUrl>
 #include <kurlrequester.h>
 #include <klineedit.h>
 #include <QCheckBox>
 #include <QRadioButton>
 
-SvnCopyOptionDlg::SvnCopyOptionDlg( const KUrl &reqUrl, SvnInfoHolder *info,
+SvnCopyOptionDlg::SvnCopyOptionDlg( const QUrl &reqUrl, SvnInfoHolder *info,
                                     QWidget *parent )
     : KDialog( parent ), m_reqUrl(reqUrl), m_info(info)
 {
@@ -29,7 +29,7 @@ SvnCopyOptionDlg::SvnCopyOptionDlg( const KUrl &reqUrl, SvnInfoHolder *info,
     ui.revisionWidget->setKey( SvnRevision::Head );
     ui.revisionWidget->enableType( SvnRevision::Kind );
 
-    ui.reqEdit->setText( reqUrl.prettyUrl() );
+    ui.reqEdit->setText( reqUrl.toDisplayString(QUrl::PreferLocalFile) );
 
     ui.destEdit->setMode( KFile::File | KFile::Directory );
 
@@ -42,9 +42,9 @@ SvnCopyOptionDlg::SvnCopyOptionDlg( const KUrl &reqUrl, SvnInfoHolder *info,
 SvnCopyOptionDlg::~SvnCopyOptionDlg()
 {}
 
-KUrl SvnCopyOptionDlg::source()
+QUrl SvnCopyOptionDlg::source()
 {
-    return KUrl( ui.srcEdit->text() );
+    return QUrl::fromUserInput( ui.srcEdit->text() );
 }
 
 SvnRevision SvnCopyOptionDlg::sourceRev()
@@ -52,7 +52,7 @@ SvnRevision SvnCopyOptionDlg::sourceRev()
     return ui.revisionWidget->revision();
 }
 
-KUrl SvnCopyOptionDlg::dest()
+QUrl SvnCopyOptionDlg::dest()
 {
     return ui.destEdit->url();
 }
@@ -61,8 +61,8 @@ void SvnCopyOptionDlg::srcAsUrlClicked()
 {
     if( m_info ){
         ui.srcEdit->setUrl( m_info->url );
-        KUrl srcUrl( m_info->url );
-        ui.destEdit->setUrl( srcUrl.upUrl() );
+        QUrl srcUrl( m_info->url );
+        ui.destEdit->setUrl( srcUrl.resolved(QStringLiteral("..")) );
     }
 
     QList<SvnRevision::Keyword> keylist;
@@ -74,8 +74,8 @@ void SvnCopyOptionDlg::srcAsPathClicked()
 {
     ui.srcEdit->setText( m_reqUrl.toLocalFile() );
 
-    KUrl srcUrl( m_reqUrl.toLocalFile() );
-    KUrl destParent = srcUrl.upUrl();
+    QUrl srcUrl = QUrl::fromLocalFile( m_reqUrl.toLocalFile() );
+    QUrl destParent = srcUrl.resolved(QStringLiteral(".."));
     ui.destEdit->setPath( destParent.toLocalFile() );
 
     QList<SvnRevision::Keyword> keylist;

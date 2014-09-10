@@ -168,7 +168,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         WorkingSetFileLabel* fileLabel = new WorkingSetFileLabel;
         fileLabel->setTextFormat(Qt::RichText);
         // We add spaces behind and after, to make it look nicer
-        fileLabel->setText("&nbsp;" + Core::self()->projectController()->prettyFileName(KUrl(file)) + "&nbsp;");
+        fileLabel->setText("&nbsp;" + Core::self()->projectController()->prettyFileName(QUrl::fromUserInput(file)) + "&nbsp;");
         fileLabel->setToolTip(i18nc("@info:tooltip", "Click to open and activate this document."));
         fileLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         fileLayout->addWidget(fileLabel);
@@ -342,7 +342,7 @@ void WorkingSetToolTipWidget::buttonClicked(bool)
     QSet<QString> openFiles = Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow->area()->workingSet())->fileList().toSet();
 
     if(!openFiles.contains(s->objectName())) {
-        Core::self()->documentControllerInternal()->openDocument(s->objectName());
+        Core::self()->documentControllerInternal()->openDocument(QUrl::fromUserInput(s->objectName()));
     }else{
         openFiles.remove(s->objectName());
         filterViews(openFiles);
@@ -374,7 +374,7 @@ void WorkingSetToolTipWidget::labelClicked()
     }
 
     if(!found)
-        Core::self()->documentControllerInternal()->openDocument(s->objectName());
+        Core::self()->documentControllerInternal()->openDocument(QUrl::fromUserInput(s->objectName()));
 
     if(stillExists)
         updateFileButtons();

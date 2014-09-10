@@ -21,7 +21,7 @@
 
 #include "vcsexport.h"
 
-class KUrl;
+class QUrl;
 class QString;
 
 namespace KDevelop
@@ -31,7 +31,7 @@ class KDEVPLATFORMVCS_EXPORT IPatchDocument
 {
     public:
         virtual ~IPatchDocument();
-        virtual void setDiff(const QString& tocompare, const KUrl& file) = 0;
+        virtual void setDiff(const QString& tocompare, const QUrl& file) = 0;
 };
 
 }

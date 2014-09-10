@@ -26,8 +26,8 @@
 #include "ioutputviewmodel.h"
 
 #include <QtCore/QAbstractListModel>
+#include <QUrl>
 
-class KUrl;
 
 namespace KDevelop
 {
@@ -53,7 +53,7 @@ public:
         StaticAnalysisFilter
     };
 
-    explicit OutputModel( const KUrl& builddir , QObject* parent = 0 );
+    explicit OutputModel( const QUrl& builddir , QObject* parent = 0 );
     OutputModel( QObject* parent = 0 );
     virtual ~OutputModel();
 

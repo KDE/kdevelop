@@ -28,7 +28,7 @@ class ProjectSelectionPage;
 class ProjectTemplatesModel;
 class QModelIndex;
 class QStandardItem;
-class KUrl;
+class QUrl;
 
 class ProjectSelectionPage : public AppWizardPageWidget {
 Q_OBJECT

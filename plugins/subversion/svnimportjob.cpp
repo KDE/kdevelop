@@ -48,9 +48,9 @@ void SvnImportInternalJob::run()
         QMutexLocker l( m_mutex );
         QString srcdir = QFileInfo( m_sourceDirectory.toLocalFile() ).canonicalFilePath();
         QByteArray srcba = srcdir.toUtf8();
-        KUrl desturl = KUrl( m_destinationRepository.repositoryServer() );
-        desturl.cleanPath(KUrl::SimplifyDirSeparators);
-        QByteArray destba = desturl.url( KUrl::RemoveTrailingSlash ).toUtf8();
+        QUrl desturl = QUrl::fromUserInput( m_destinationRepository.repositoryServer() );
+        desturl.cleanPath(QUrl::SimplifyDirSeparators);
+        QByteArray destba = desturl.url( QUrl::StripTrailingSlash ).toUtf8();
         QByteArray msg = m_message.toUtf8();
         qDebug() << "Importing" << srcba << "into" << destba;
         cli.import( svn::Path( srcba.data() ), destba.data(), msg.data(), true );
@@ -69,7 +69,7 @@ bool SvnImportInternalJob::isValid() const
     return !m_message.isEmpty() && m_sourceDirectory.isLocalFile() && QFileInfo( m_sourceDirectory.toLocalFile() ).exists() && !m_destinationRepository.repositoryServer().isEmpty();
 }
 
-KUrl SvnImportInternalJob::source() const
+QUrl SvnImportInternalJob::source() const
 {
     QMutexLocker l( m_mutex );
     return m_sourceDirectory;
@@ -81,7 +81,7 @@ void SvnImportInternalJob::setMessage( const QString& message )
     m_message = message;
 }
 
-void SvnImportInternalJob::setMapping( const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository)
+void SvnImportInternalJob::setMapping( const QUrl &sourceDirectory, const KDevelop::VcsLocation & destinationRepository)
 {
     QMutexLocker l( m_mutex );
     m_sourceDirectory = sourceDirectory;
@@ -125,7 +125,7 @@ SvnInternalJobBase* SvnImportJob::internalJob() const
     return m_job;
 }
 
-void SvnImportJob::setMapping( const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository)
+void SvnImportJob::setMapping( const QUrl &sourceDirectory, const KDevelop::VcsLocation & destinationRepository)
 {
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setMapping( sourceDirectory, destinationRepository);

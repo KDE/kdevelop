@@ -23,8 +23,6 @@
 
 #include <kcmodule.h>
 
-#include <kurl.h>
-
 class KPluginSelector;
 
 namespace KDevelop

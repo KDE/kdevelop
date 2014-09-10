@@ -33,7 +33,7 @@ DefaultCreateClassHelper::~DefaultCreateClassHelper()
 
 }
 
-TemplateClassGenerator* DefaultCreateClassHelper::createGenerator(const KUrl& baseUrl)
+TemplateClassGenerator* DefaultCreateClassHelper::createGenerator(const QUrl& baseUrl)
 {
     return new TemplateClassGenerator(baseUrl);
 }

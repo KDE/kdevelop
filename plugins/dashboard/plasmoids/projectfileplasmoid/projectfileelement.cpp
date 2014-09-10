@@ -63,11 +63,10 @@ void ProjectFileItem::reloadData()
     DataEngine* thedata = dataEngine("org.kdevelop.projects");
     
     DataContainer* projectUrl=thedata->containerForSource(context()->currentActivity());
-    
-    KUrl url=projectUrl->data().value("projectFileUrl").value<KUrl>();
-    url=url.upUrl();
-    url.addPath(config().readEntry("relativePath"));
-    
+
+    QUrl url = projectUrl->data().value("projectFileUrl").value<QUrl>();
+    url = url.resolved(QString::fromLatin1("../") + config().readEntry("relativePath"));
+
     QFile f(url.toLocalFile());
     if(f.open(QFile::ReadOnly)) {
         m_output->setText(f.readAll());

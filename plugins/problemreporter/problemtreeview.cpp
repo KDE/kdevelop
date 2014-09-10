@@ -168,13 +168,13 @@ void ProblemTreeView::itemActivated(const QModelIndex& index)
         return;
 
     KTextEditor::Cursor start;
-    KUrl url;
+    QUrl url;
 
     {
         // TODO: is this really necessary?
         DUChainReadLocker lock(DUChain::lock());
         ProblemPointer problem = model()->problemForIndex(index);
-        url = KUrl(problem->finalLocation().document.str());
+        url = problem->finalLocation().document.toUrl();
         start = problem->finalLocation().start();
     }
 

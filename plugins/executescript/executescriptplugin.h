@@ -29,7 +29,7 @@
 #include "iexecutescriptplugin.h"
 
 class ScriptAppConfigType;
-class KUrl;
+class QUrl;
 class KJob;
 
 class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugin
@@ -59,10 +59,10 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     virtual void unload();
     
     QString interpreter( KDevelop::ILaunchConfiguration*, QString& err ) const;
-    KUrl script( KDevelop::ILaunchConfiguration*, QString& err ) const;
+    QUrl script( KDevelop::ILaunchConfiguration*, QString& err ) const;
     QString remoteHost(KDevelop::ILaunchConfiguration* , QString& err) const;
     QStringList arguments( KDevelop::ILaunchConfiguration*, QString& err ) const;
-    KUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const;
+    QUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const;
     QString environmentGroup( KDevelop::ILaunchConfiguration* ) const;
     //bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
     QString scriptAppConfigTypeId() const;

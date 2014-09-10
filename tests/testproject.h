@@ -57,24 +57,24 @@ public:
     ProjectFileItem* fileAt( int ) const { return 0; }
     QList<ProjectFileItem*> files() const;
     virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString&) const { return QList< ProjectBaseItem* >(); }
-    virtual QList< ProjectBaseItem* > itemsForUrl(const KUrl&) const { return QList< ProjectBaseItem* >(); }
+    virtual QList< ProjectBaseItem* > itemsForUrl(const QUrl&) const { return QList< ProjectBaseItem* >(); }
     virtual QList< ProjectFileItem* > filesForPath(const IndexedString&) const { return QList<ProjectFileItem*>(); }
-    KDEVPLATFORMTESTS_DEPRECATED QList<ProjectFileItem*> filesForUrl( const KUrl& ) const { return QList<ProjectFileItem*>(); }
+    KDEVPLATFORMTESTS_DEPRECATED QList<ProjectFileItem*> filesForUrl( const QUrl& ) const { return QList<ProjectFileItem*>(); }
     virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString&) const { return QList<ProjectFolderItem*>(); }
-    KDEVPLATFORMTESTS_DEPRECATED QList<ProjectFolderItem*> foldersForUrl( const KUrl& ) const { return QList<ProjectFolderItem*>(); }
+    KDEVPLATFORMTESTS_DEPRECATED QList<ProjectFolderItem*> foldersForUrl( const QUrl& ) const { return QList<ProjectFolderItem*>(); }
     void reloadModel() { }
     Path projectFile() const;
-    KDEVPLATFORMTESTS_DEPRECATED KUrl projectFileUrl() const;
+    KDEVPLATFORMTESTS_DEPRECATED QUrl projectFileUrl() const;
     KSharedConfig::Ptr projectConfiguration() const { return m_projectConfiguration; }
     void addToFileSet( ProjectFileItem* file);
     void removeFromFileSet( ProjectFileItem* file);
     QSet<IndexedString> fileSet() const { return m_fileSet; }
     bool isReady() const { return true; }
 
-    KDEVPLATFORMTESTS_DEPRECATED void setProjectUrl(const KUrl& url);
+    KDEVPLATFORMTESTS_DEPRECATED void setProjectUrl(const QUrl &url);
     void setPath(const Path& path);
 
-    KDEVPLATFORMTESTS_DEPRECATED const KUrl folder() const;
+    KDEVPLATFORMTESTS_DEPRECATED const QUrl folder() const;
     Path path() const;
     QString name() const { return "Test Project"; }
     virtual bool inProject(const IndexedString& path) const;

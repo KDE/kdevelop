@@ -50,8 +50,8 @@ struct OutputPagePrivate
     QHash<QString, KIntNumInput*> outputColumns;
     QList<QLabel*> labels;
 
-    QHash<QString, KUrl> defaultUrls;
-    QHash<QString, KUrl> lowerCaseUrls;
+    QHash<QString, QUrl> defaultUrls;
+    QHash<QString, QUrl> lowerCaseUrls;
     QStringList fileIdentifiers;
 
     void updateRanges(KIntNumInput* line, KIntNumInput* column, bool enable);
@@ -86,7 +86,7 @@ void OutputPagePrivate::updateFileNames()
 {
     bool lower = output->lowerFilenameCheckBox->isChecked();
 
-    QHash<QString, KUrl> urls = lower ? lowerCaseUrls : defaultUrls;
+    QHash<QString, QUrl> urls = lower ? lowerCaseUrls : defaultUrls;
     for (QHash<QString, KUrlRequester*>::const_iterator it = outputFiles.constBegin();
          it != outputFiles.constEnd(); ++it)
     {
@@ -111,7 +111,7 @@ void OutputPagePrivate::validate()
     {
         if (!it.value()->url().isValid()) {
             invalidFiles << it.key();
-        } else if (it.value()->url().isLocalFile() && !QFileInfo(KUrl(it.value()->url()).upUrl().toLocalFile()).isWritable()) {
+        } else if (it.value()->url().isLocalFile() && !QFileInfo(it.value()->url().adjusted(QUrl::RemoveFilename)).toLocalFile()).isWritable()) {
             invalidFiles << it.key();
         }
     }
@@ -219,7 +219,7 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
 }
 
 void OutputPage::loadFileTemplate(const SourceFileTemplate& fileTemplate,
-                                   const KUrl& baseUrl,
+                                   const QUrl& baseUrl,
                                    TemplateRenderer* renderer)
 {
     KConfigGroup codegenGroup( KSharedConfig::openConfig(), "CodeGeneration" );
@@ -230,21 +230,19 @@ void OutputPage::loadFileTemplate(const SourceFileTemplate& fileTemplate,
     {
         d->fileIdentifiers << file.identifier;
 
-        KUrl url = baseUrl;
-        url.addPath(renderer->render(file.outputName));
+        QUrl url = baseUrl.resolved(renderer->render(file.outputName));
         d->defaultUrls.insert(file.identifier, url);
 
-        url = baseUrl;
-        url.addPath(renderer->render(file.outputName).toLower());
+        url = baseUrl.resolved(renderer->render(file.outputName).toLower());
         d->lowerCaseUrls.insert(file.identifier, url);
     }
 
     d->updateFileNames();
 }
 
-QHash< QString, KUrl > OutputPage::fileUrls() const
+QHash< QString, QUrl > OutputPage::fileUrls() const
 {
-    QHash<QString, KUrl> urls;
+    QHash<QString, QUrl> urls;
     for (QHash<QString, KUrlRequester*>::const_iterator it = d->outputFiles.constBegin(); it != d->outputFiles.constEnd(); ++it)
     {
         urls.insert(it.key(), it.value()->url());

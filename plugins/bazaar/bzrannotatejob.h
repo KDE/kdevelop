@@ -25,8 +25,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QHash>
 #include <QtCore/QDir>
-
-#include <KUrl>
+#include <QUrl>
 
 #include <vcs/vcsevent.h>
 #include <vcs/vcsjob.h>
@@ -42,7 +41,7 @@ class BzrAnnotateJob : public KDevelop::VcsJob
     Q_OBJECT
 public:
 
-    explicit BzrAnnotateJob(const QDir& workingDir, const QString& revisionSpec, const KUrl& localLocation, KDevelop::IPlugin* parent = 0, OutputJobVerbosity verbosity = OutputJob::Verbose);
+    explicit BzrAnnotateJob(const QDir& workingDir, const QString& revisionSpec, const QUrl& localLocation, KDevelop::IPlugin* parent = 0, OutputJobVerbosity verbosity = OutputJob::Verbose);
 
     virtual QVariant fetchResults() override;
     virtual void start() override;
@@ -61,7 +60,7 @@ private slots:
 private:
     QDir m_workingDir;
     QString m_revisionSpec;
-    KUrl m_localLocation;
+    QUrl m_localLocation;
     KDevelop::IPlugin* m_vcsPlugin;
 
     JobStatus m_status;

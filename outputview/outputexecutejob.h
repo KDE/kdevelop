@@ -23,8 +23,8 @@
 #include "outputjob.h"
 #include "outputmodel.h"
 #include <QProcess>
+#include <QUrl>
 
-class KUrl;
 class KProcess;
 
 namespace KDevelop
@@ -93,7 +93,7 @@ public:
      *
      * @returns URL which has been set through \ref setWorkingDirectory(); empty URL if unset.
      */
-    virtual KUrl workingDirectory() const;
+    virtual QUrl workingDirectory() const;
 
     /**
      * Set a working directory for the job's process.
@@ -101,7 +101,7 @@ public:
      *
      * @param directory a valid local directory URL, or an empty URL to unset.
      */
-    void setWorkingDirectory( const KUrl& directory );
+    void setWorkingDirectory( const QUrl& directory );
 
     /**
      * Get process' command line.

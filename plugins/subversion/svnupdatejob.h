@@ -25,7 +25,7 @@
 
 #include <QVariant>
 #include <vcs/vcsrevision.h>
-#include <kurl.h>
+#include <QUrl>
 
 class SvnInternalUpdateJob;
 
@@ -38,7 +38,7 @@ public:
     void start();
     SvnInternalJobBase* internalJob() const;
 
-    void setLocations( const KUrl::List& locations );
+    void setLocations( const QList<QUrl>& locations );
     void setRecursive( bool );
     void setRevision( const KDevelop::VcsRevision& );
     void setIgnoreExternals( bool );

@@ -23,7 +23,7 @@
 #include <qidentityproxymodel.h>
 #include <project/projectmodel.h>
 
-class KUrl;
+class QUrl;
 namespace KDevelop {
     class IProject;
     class VcsJob;
@@ -41,7 +41,7 @@ class VcsOverlayProxyModel : public QIdentityProxyModel
     private slots:
         void addProject(KDevelop::IProject* p);
         void removeProject(KDevelop::IProject* p);
-        void repositoryBranchChanged(const KUrl& url);
+        void repositoryBranchChanged(const QUrl& url);
         void branchNameReady(KDevelop::VcsJob* job);
 
     private:

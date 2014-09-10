@@ -21,7 +21,7 @@
 #ifndef BAZAAR_COPYJOB_H
 #define BAZAAR_COPYJOB_H
 
-#include <KUrl>
+#include <QUrl>
 
 #include <vcs/vcsjob.h>
 
@@ -39,7 +39,7 @@ class CopyJob : public KDevelop::VcsJob
     Q_OBJECT
 
 public:
-    CopyJob(const KUrl& localLocationSrc, const KUrl& localLocationDstn, BazaarPlugin* parent = 0, OutputJobVerbosity verbosity = OutputJob::Verbose);
+    CopyJob(const QUrl& localLocationSrc, const QUrl& localLocationDstn, BazaarPlugin* parent = 0, OutputJobVerbosity verbosity = OutputJob::Verbose);
 
     virtual KDevelop::IPlugin* vcsPlugin() const override;
     virtual KDevelop::VcsJob::JobStatus status() const override;
@@ -51,12 +51,12 @@ protected:
 
 private slots:
     void finish(KJob*);
-    void addToVcs(KIO::Job* job, const KUrl& from, const KUrl& to, time_t mtime, bool directory, bool renamed);
+    void addToVcs(KIO::Job* job, const QUrl& from, const QUrl& to, time_t mtime, bool directory, bool renamed);
 
 private:
     BazaarPlugin* m_plugin;
-    KUrl m_source;
-    KUrl m_destination;
+    QUrl m_source;
+    QUrl m_destination;
 
     JobStatus m_status;
     QPointer<KJob> m_job;

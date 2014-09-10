@@ -26,11 +26,14 @@
  ***************************************************************************/
 
 #include "test_bazaar.h"
+
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
-#include <KUrl>
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
+#include <QUrl>
 #include <KDebug>
-#include <kio/netaccess.h>
+#include <KIO/DeleteJob>
 
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
@@ -85,7 +88,7 @@ void TestBazaar::repoInit()
 {
     kDebug() << "Trying to init repo";
     // make job that creates the local repository
-    VcsJob* j = m_plugin->init(KUrl(bazaarTest_BaseDir));
+    VcsJob* j = m_plugin->init(QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
 
     //check if the .bzr directory in the new local repository exists now
@@ -115,11 +118,11 @@ void TestBazaar::addFiles()
     f.close();
 
     //test bzr-status exitCode (see DVcsJob::setExitCode).
-    VcsJob* j = m_plugin->status(KUrl::List(bazaarTest_BaseDir));
+    VcsJob* j = m_plugin->status(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
 
     // /tmp/kdevBazaar_testdir/ and testfile
-    j = m_plugin->add(KUrl::List(QString(bazaarTest_BaseDir + bazaarTest_FileName)));
+    j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir + bazaarTest_FileName));
     VERIFYJOB(j);
 
     f.setFileName(bazaarSrcDir + bazaarTest_FileName3);
@@ -132,28 +135,28 @@ void TestBazaar::addFiles()
     f.close();
 
     //test bzr-status exitCode again
-    j = m_plugin->status(KUrl::List(bazaarTest_BaseDir));
+    j = m_plugin->status(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
 
     //repository path without trailing slash and a file in a parent directory
     // /tmp/repo  and /tmp/repo/src/bar
-    j = m_plugin->add(KUrl::List(QStringList(bazaarSrcDir + bazaarTest_FileName3)));
+    j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(bazaarSrcDir + bazaarTest_FileName3));
     VERIFYJOB(j);
 
     //let's use absolute path, because it's used in ContextMenus
-    j = m_plugin->add(KUrl::List(QStringList(bazaarTest_BaseDir + bazaarTest_FileName2)));
+    j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir + bazaarTest_FileName2));
     VERIFYJOB(j);
 
     //Now let's create several files and try "bzr add file1 file2 file3"
     QStringList files = QStringList() << "file1" << "file2" << "la la";
-    KUrl::List multipleFiles;
+    QList<QUrl> multipleFiles;
     foreach(const QString& file, files) {
         QFile f(bazaarTest_BaseDir + file);
         QVERIFY(f.open(QIODevice::WriteOnly));
         QTextStream input(&f);
         input << file;
         f.close();
-        multipleFiles << KUrl::fromPath(bazaarTest_BaseDir + file);
+        multipleFiles << QUrl::fromLocalFile(bazaarTest_BaseDir + file);
     }
     j = m_plugin->add(multipleFiles);
     VERIFYJOB(j);
@@ -171,11 +174,11 @@ void TestBazaar::commitFiles()
     prepareWhoamiInformations();
     kDebug() << "Committing...";
     //we start it after addFiles, so we just have to commit
-    VcsJob* j = m_plugin->commit(QString("Test commit"), KUrl::List(bazaarTest_BaseDir));
+    VcsJob* j = m_plugin->commit(QString("Test commit"), QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
 
     //test bzr-status exitCode one more time.
-    j = m_plugin->status(KUrl::List(bazaarTest_BaseDir));
+    j = m_plugin->status(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
 
     //since we committed the file to the "pure" repository, .bzr/repository/indices should exist
@@ -206,10 +209,10 @@ void TestBazaar::commitFiles()
     f.close();
 
     //add changes
-    j = m_plugin->add(KUrl::List(QStringList(bazaarTest_BaseDir + bazaarTest_FileName)));
+    j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir + bazaarTest_FileName));
     VERIFYJOB(j);
 
-    j = m_plugin->commit(QString("KDevelop's Test commit2"), KUrl::List(bazaarTest_BaseDir));
+    j = m_plugin->commit(QString("KDevelop's Test commit2"), QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
 }
 
@@ -244,10 +247,10 @@ void TestBazaar::testAnnotation()
     input << "An appended line";
     f.close();
 
-    VcsJob* j = m_plugin->commit(QString("KDevelop's Test commit3"), KUrl::List(bazaarTest_BaseDir));
+    VcsJob* j = m_plugin->commit(QString("KDevelop's Test commit3"), QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
 
-    j = m_plugin->annotate(KUrl(bazaarTest_BaseDir + bazaarTest_FileName), VcsRevision::createSpecialRevision(VcsRevision::Head));
+    j = m_plugin->annotate(QUrl::fromLocalFile(bazaarTest_BaseDir + bazaarTest_FileName), VcsRevision::createSpecialRevision(VcsRevision::Head));
     VERIFYJOB(j);
 
     QList<QVariant> results = j->fetchResults().toList();
@@ -270,7 +273,7 @@ void TestBazaar::testRemoveEmptyFolder()
     QDir d(bazaarTest_BaseDir);
     d.mkdir("emptydir");
 
-    VcsJob* j = m_plugin->remove(KUrl::List(KUrl::fromLocalFile(bazaarTest_BaseDir+"emptydir/")));
+    VcsJob* j = m_plugin->remove(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir+"emptydir/"));
     if (j) VERIFYJOB(j);
 
     QVERIFY(!d.exists("emptydir"));
@@ -286,7 +289,7 @@ void TestBazaar::testRemoveEmptyFolderInFolder()
     QDir d2(bazaarTest_BaseDir+"dir");
     d2.mkdir("emptydir");
 
-    VcsJob* j = m_plugin->remove(KUrl::List(KUrl::fromLocalFile(bazaarTest_BaseDir+"dir/")));
+    VcsJob* j = m_plugin->remove(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir+"dir/"));
     if (j) VERIFYJOB(j);
 
     QVERIFY(!d.exists("dir"));
@@ -302,7 +305,7 @@ void TestBazaar::testRemoveUnindexedFile()
     input << "An appended line";
     f.close();
 
-    VcsJob* j = m_plugin->remove(KUrl::List(KUrl::fromLocalFile(bazaarTest_BaseDir + bazaarTest_FileName)));
+    VcsJob* j = m_plugin->remove(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir + bazaarTest_FileName));
     if (j) VERIFYJOB(j);
 
     QVERIFY(!QFile::exists(bazaarTest_BaseDir + bazaarTest_FileName));
@@ -322,10 +325,10 @@ void TestBazaar::testRemoveFolderContainingUnversionedFiles()
         input << "An appended line";
         f.close();
     }
-    VcsJob* j = m_plugin->add(KUrl::List(KUrl::fromLocalFile(bazaarTest_BaseDir+"dir")),IBasicVersionControl::NonRecursive);
+    VcsJob* j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir+"dir"), IBasicVersionControl::NonRecursive);
     VERIFYJOB(j);
     prepareWhoamiInformations();
-    j = m_plugin->commit("initial commit", KUrl::List(KUrl::fromLocalFile(bazaarTest_BaseDir)));
+    j = m_plugin->commit("initial commit", QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
 
     {
@@ -336,7 +339,7 @@ void TestBazaar::testRemoveFolderContainingUnversionedFiles()
         f.close();
     }
 
-    j = m_plugin->remove(KUrl::List(KUrl::fromLocalFile(bazaarTest_BaseDir + "dir")));
+    j = m_plugin->remove(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir + "dir"));
     if (j) VERIFYJOB(j);
 
     QVERIFY(!QFile::exists(bazaarTest_BaseDir + "dir"));
@@ -347,12 +350,12 @@ void TestBazaar::testRemoveFolderContainingUnversionedFiles()
 void TestBazaar::removeTempDirs()
 {
     if (QFileInfo(bazaarTest_BaseDir).exists())
-        if (!KIO::NetAccess::del(KUrl(bazaarTest_BaseDir), 0))
-            qDebug() << "KIO::NetAccess::del(" << bazaarTest_BaseDir << ") returned false";
+        if (!(KIO::del(QUrl::fromLocalFile(bazaarTest_BaseDir))->exec()))
+            qDebug() << "KIO::del(" << bazaarTest_BaseDir << ") returned false";
 
     if (QFileInfo(bazaarTest_BaseDir2).exists())
-        if (!KIO::NetAccess::del(KUrl(bazaarTest_BaseDir2), 0))
-            qDebug() << "KIO::NetAccess::del(" << bazaarTest_BaseDir2 << ") returned false";
+        if (!(KIO::del(QUrl::fromLocalFile(bazaarTest_BaseDir2))->exec()))
+            qDebug() << "KIO::del(" << bazaarTest_BaseDir2 << ") returned false";
 }
 
 QTEST_MAIN(TestBazaar)

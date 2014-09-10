@@ -18,6 +18,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 #include "ibuddydocumentfinder.h"
+
+#include <QtCore/QMap>
+
 namespace KDevelop {
 
 //Our private data is entirely static, so don't need to create an

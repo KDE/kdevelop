@@ -25,7 +25,7 @@
 
 #include <QVariant>
 
-#include <kurl.h>
+#include <QUrl>
 
 class SvnInternalAddJob;
 
@@ -38,7 +38,7 @@ public:
     void start();
     SvnInternalJobBase* internalJob() const;
 
-    void setLocations( const KUrl::List& locations );
+    void setLocations( const QList<QUrl>& locations );
     void setRecursive( bool );
 private:
     SvnInternalAddJob* m_job;

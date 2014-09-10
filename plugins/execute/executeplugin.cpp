@@ -162,9 +162,9 @@ QString ExecutePlugin::environmentGroup( KDevelop::ILaunchConfiguration* cfg ) c
 }
 
 
-KUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& err ) const
+QUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& err ) const
 {
-    KUrl executable;
+    QUrl executable;
     if( !cfg ) 
     {
         return executable;
@@ -193,7 +193,7 @@ KUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& er
         KShell::Errors err_;
         if( KShell::splitArgs( executable.toLocalFile(), KShell::TildeExpand | KShell::AbortOnMeta, &err_ ).isEmpty() || err_ != KShell::NoError )
         {
-            executable = KUrl();
+            executable = QUrl();
             if( err_ == KShell::BadQuoting ) 
             {
                 err = i18n("There is a quoting error in the executable "
@@ -234,11 +234,11 @@ QString ExecutePlugin::terminal( KDevelop::ILaunchConfiguration* cfg ) const
 }
 
 
-KUrl ExecutePlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg ) const
+QUrl ExecutePlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg ) const
 {
     if( !cfg )
     {
-        return KUrl();
+        return QUrl();
     }
     
     return cfg->config().readEntry( ExecutePlugin::workingDirEntry, QUrl() );

@@ -39,7 +39,7 @@
 namespace KDevelop
 {
 
-OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget* parent )
+OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget* parent )
     : KAssistantDialog( parent )
     , sourcePage(nullptr)
     , openPage(nullptr)
@@ -47,9 +47,9 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
 {
     resize(QSize(700, 500));
     
-    KUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
+    QUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
+    start = start.adjusted(QUrl::NormalizePathSegments);
     KPageWidgetItem* currentPage = 0;
-    start.adjustPath(KUrl::AddTrailingSlash);
 
     if( fetch ) {
         sourcePageWidget = new ProjectSourcePage( start, this );
@@ -59,7 +59,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     }
     
     openPageWidget = new OpenProjectPage( start, this );
-    connect( openPageWidget, SIGNAL(urlSelected(KUrl)), this, SLOT(validateOpenUrl(KUrl)) );
+    connect( openPageWidget, SIGNAL(urlSelected(QUrl)), this, SLOT(validateOpenUrl(QUrl)) );
     connect( openPageWidget, SIGNAL(accepted()), this, SLOT(openPageAccepted()) );
     openPage = addPage( openPageWidget, i18n("Select a build system setup file, existing KDevelop project, "
                                              "or any folder to open as a project") );
@@ -89,7 +89,7 @@ void OpenProjectDialog::validateSourcePage(bool valid)
     openPageWidget->setUrl(sourcePageWidget->workingDir());
 }
 
-void OpenProjectDialog::validateOpenUrl( const KUrl& url )
+void OpenProjectDialog::validateOpenUrl( const QUrl& url )
 {
     bool isDir = false;
     QString extension;
@@ -136,9 +136,8 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
     {
         setAppropriate( projectInfoPage, true );
         m_url = url;
-        if( !isDir )
-        {
-             m_url = m_url.upUrl();
+        if( !isDir ) {
+             m_url = m_url.adjusted(QUrl::StripTrailingSlash | QUrl::RemoveFilename);
         }
         ProjectInfoPage* page = qobject_cast<ProjectInfoPage*>( projectInfoPage->widget() );
         if( page )
@@ -182,7 +181,7 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
                 }
             }
         }
-        m_url.addPath( m_url.fileName()+'.'+ShellExtension::getInstance()->projectFileExtension() );
+        m_url.setPath( m_url.path() + '/' + m_url.fileName() + '.' + ShellExtension::getInstance()->projectFileExtension() );
     } else
     {
         setAppropriate( projectInfoPage, false );
@@ -225,7 +224,7 @@ void OpenProjectDialog::validateProjectManager( const QString& manager )
     validateProjectInfo();
 }
 
-KUrl OpenProjectDialog::projectFileUrl()
+QUrl OpenProjectDialog::projectFileUrl()
 {
     return m_url;
 }

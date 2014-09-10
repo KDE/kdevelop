@@ -121,7 +121,7 @@ void BranchesListModel::createBranch(const QString& baseBranch, const QString& n
 
 void BranchesListModel::removeBranch(const QString& branch)
 {
-    KDevelop::VcsJob *branchJob = dvcsplugin->deleteBranch(KUrl(repo), branch);
+    KDevelop::VcsJob *branchJob = dvcsplugin->deleteBranch(repo, branch);
     
     kDebug() << "Removing branch:" << branch;
     if (branchJob->exec()) {
@@ -136,7 +136,7 @@ KDevelop::IBranchingVersionControl* BranchesListModel::interface()
     return dvcsplugin;
 }
 
-void BranchesListModel::initialize(KDevelop::IBranchingVersionControl* branching, const KUrl& r)
+void BranchesListModel::initialize(KDevelop::IBranchingVersionControl* branching, const QUrl& r)
 {
     dvcsplugin = branching;
     repo = r;

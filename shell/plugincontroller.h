@@ -26,8 +26,6 @@ Boston, MA 02110-1301, USA.
 
 
 #include <QtCore/QHash>
-
-#include <KUrl>
 #include <KPluginInfo>
 
 #include <interfaces/iplugincontroller.h>

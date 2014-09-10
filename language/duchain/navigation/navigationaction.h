@@ -19,7 +19,8 @@
 #ifndef KDEVPLATFORM_NAVIGATIONACTION_H
 #define KDEVPLATFORM_NAVIGATIONACTION_H
 
-#include <kurl.h>
+#include <QUrl>
+
 #include <ktexteditor/cursor.h>
 
 #include "../duchainpointer.h"
@@ -43,14 +44,14 @@ struct NavigationAction {
   ///When executed, this navigation-action calls the "executeKeyAction(QString) function in its navigation-context
   NavigationAction(QString _key) : targetContext(0), type(ExecuteKey), key(_key) {
   }
-  
+
   NavigationAction() : targetContext(0), type(None) {
   }
 
   NavigationAction( DeclarationPointer decl_, Type type_ ) : targetContext(0), decl(decl_), type(type_) {
   }
 
-  NavigationAction( const KUrl& _document, const KTextEditor::Cursor& _cursor) : targetContext(0), document(_document), cursor(_cursor) {
+  NavigationAction( const QUrl& _document, const KTextEditor::Cursor& _cursor) : targetContext(0), document(_document), cursor(_cursor) {
     type = JumpToSource;
   }
 
@@ -62,7 +63,7 @@ struct NavigationAction {
   DeclarationPointer decl;
   Type type;
 
-  KUrl document;
+  QUrl document;
   KTextEditor::Cursor cursor;
   QString key;
 };

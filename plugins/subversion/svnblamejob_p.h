@@ -31,18 +31,18 @@ namespace KDevelop {
     class VcsAnnotationLine;
 }
 
-class KUrl;
+class QUrl;
 class SvnInternalBlameJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
     SvnInternalBlameJob( SvnJobBase* parent = 0 );
 
-    void setLocation( const KUrl& location );
+    void setLocation( const QUrl &location );
     void setEndRevision( const KDevelop::VcsRevision& rev );
     void setStartRevision( const KDevelop::VcsRevision& rev );
 
-    KUrl location() const;
+    QUrl location() const;
     KDevelop::VcsRevision startRevision() const;
     KDevelop::VcsRevision endRevision() const;
 signals:
@@ -50,7 +50,7 @@ signals:
 protected:
     void run();
 private:
-    KUrl m_location;
+    QUrl m_location;
     KDevelop::VcsRevision m_startRevision;
     KDevelop::VcsRevision m_endRevision;
 };

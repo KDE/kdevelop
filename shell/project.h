@@ -27,8 +27,6 @@
 #ifndef KDEVPLATFORM_SHELLPROJECT_H
 #define KDEVPLATFORM_SHELLPROJECT_H
 
-#include <kurl.h>
-
 #include <interfaces/iproject.h>
 #include <interfaces/istatus.h>
 
@@ -69,15 +67,15 @@ public:
     virtual QList< ProjectFileItem* > filesForPath(const IndexedString& file) const;
     virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString& folder) const;
 
-    KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectBaseItem*> itemsForUrl(const KUrl& url) const;
-    KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectFileItem*> filesForUrl( const KUrl& ) const;
-    KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectFolderItem*> foldersForUrl(const KUrl& ) const;
+    KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectBaseItem*> itemsForUrl(const QUrl &url) const;
+    KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectFileItem*> filesForUrl( const QUrl& ) const;
+    KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectFolderItem*> foldersForUrl(const QUrl& ) const;
 
     QString projectTempFile() const;
     QString developerTempFile() const;
     Path developerFile() const;
     virtual void reloadModel();
-    virtual KDEVPLATFORMSHELL_DEPRECATED KUrl projectFileUrl() const;
+    virtual KDEVPLATFORMSHELL_DEPRECATED QUrl projectFileUrl() const;
     virtual Path projectFile() const;
     virtual KSharedConfig::Ptr projectConfiguration() const;
 
@@ -91,7 +89,7 @@ public:
      * @brief Get the project folder
      * @return The canonical absolute directory of the project.
      */
-    virtual KDEVPLATFORMSHELL_DEPRECATED const KUrl folder() const;
+    virtual KDEVPLATFORMSHELL_DEPRECATED const QUrl folder() const;
 
     virtual Path path() const;
 

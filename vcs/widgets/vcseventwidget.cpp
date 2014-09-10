@@ -65,7 +65,7 @@ public:
     Ui::VcsEventWidget* m_ui;
     VcsItemEventModel* m_detailModel;
     VcsEventModel *m_logModel;
-    KUrl m_url;
+    QUrl m_url;
     QModelIndex m_contextIndex;
     VcsEventWidget* q;
     QAction* m_copyAction;
@@ -168,7 +168,7 @@ void VcsEventWidgetPrivate::diffRevisions()
     dlg->show();
 }
 
-VcsEventWidget::VcsEventWidget( const KUrl& url, const VcsRevision& rev, KDevelop::IBasicVersionControl* iface, QWidget* parent )
+VcsEventWidget::VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelop::IBasicVersionControl* iface, QWidget* parent )
     : QWidget(parent), d(new VcsEventWidgetPrivate(this) )
 {
     d->m_iface = iface;

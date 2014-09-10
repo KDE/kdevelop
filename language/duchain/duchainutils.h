@@ -23,11 +23,11 @@
 #ifndef KDEVPLATFORM_DUCHAINUTILS_H
 #define KDEVPLATFORM_DUCHAINUTILS_H
 
+#include <QUrl>
+
 #include <ktexteditor/codecompletionmodel.h>
 
 #include <language/languageexport.h>
-
-class KUrl;
 
 class QIcon;
 
@@ -58,7 +58,7 @@ namespace DUChainUtils {
     *
     * FIXME: this should operate on IndexedString
     */
-  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::TopDUContext* standardContextForUrl(const KUrl& url, bool preferProxyContext = false);
+  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::TopDUContext* standardContextForUrl(const QUrl& url, bool preferProxyContext = false);
   /**
    * Returns the content-context associated to the given proxy-contex.
    * Returns the same context if it is not a proxy-context.
@@ -68,11 +68,11 @@ namespace DUChainUtils {
   /** Returns the Declaration/Definition under the cursor, or zero. DUChain does not need to be locked.
    * Must only be called from the foreground or with the foreground lock held.
    * If the item under the cursor is a use, the declaration is returned. */
-  KDEVPLATFORMLANGUAGE_EXPORT Declaration* itemUnderCursor(const KUrl& url, const KTextEditor::Cursor& cursor);
+  KDEVPLATFORMLANGUAGE_EXPORT Declaration* itemUnderCursor(const QUrl& url, const KTextEditor::Cursor& cursor);
   /** Returns the Declaration/Definition/Use range under the cursor or empty range.
    * DUChain must be locked.
    * Must only be called from the foreground or with the foreground lock held. */
-  KDEVPLATFORMLANGUAGE_EXPORT KTextEditor::Range itemRangeUnderCursor(const KUrl& url, const KTextEditor::Cursor& cursor);
+  KDEVPLATFORMLANGUAGE_EXPORT KTextEditor::Range itemRangeUnderCursor(const QUrl& url, const KTextEditor::Cursor& cursor);
   /**If the given declaration is a definition, and has a real declaration
     *attached, returns that declarations. Else returns the given argument. */
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationForDefinition(Declaration* definition, TopDUContext* topContext = 0);
@@ -116,7 +116,7 @@ namespace DUChainUtils {
 
   ///Returns the declaration that is overridden by the given one, or zero.
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* getOverridden(const Declaration* decl);
-  
+
   ///If the given declaration is a function-declaration, this follows the context-structure up to the function-context that contains the arguments,
   ///and returns it.
   KDEVPLATFORMLANGUAGE_EXPORT DUContext* getFunctionContext(Declaration* decl);

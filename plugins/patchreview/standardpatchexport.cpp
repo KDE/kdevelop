@@ -43,7 +43,7 @@ public:
 class KIOExport : public StandardExporter
 {
     virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) {
-        KUrl dest = KFileDialog::getSaveUrl();
+        QUrl dest = KFileDialog::getSaveUrl();
         if( !dest.isEmpty() ) { //We let KDE do the rest of the job including the notification
             KIO::CopyJob* job = KIO::copy( source->file(), dest );
             KIO::getJobTracker()->registerJob( job );
@@ -68,7 +68,7 @@ class TelepathyExport : public StandardExporter
 {
 public:
     virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) {
-        KProcess::startDetached( QStringList() << "ktp-send-file" << source->file().prettyUrl() );
+        KProcess::startDetached( QStringList() << "ktp-send-file" << source->file().toDisplayString(QUrl::PreferLocalFile) );
     }
 
     static bool isAvailable() { return !QStandardPaths::findExecutable( "ktp-send-file" ).isEmpty(); }
@@ -82,7 +82,7 @@ public:
     KompareExport() {}
 
     virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) {
-        KProcess::startDetached( QStringList("kompare") << source->baseDir().prettyUrl() << source->file().prettyUrl() );
+        KProcess::startDetached( QStringList("kompare") << source->baseDir().toDisplayString(QUrl::PreferLocalFile) << source->file().toDisplayString(QUrl::PreferLocalFile) );
     }
 
     static bool isAvailable() { return !QStandardPaths::findExecutable( "kompare" ).isEmpty(); }

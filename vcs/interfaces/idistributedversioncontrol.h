@@ -43,7 +43,7 @@ public:
     /**
      * Create a new repository inside the given local directory.
      */
-    virtual VcsJob* init(const KUrl& localRepositoryRoot) = 0;
+    virtual VcsJob* init(const QUrl& localRepositoryRoot) = 0;
 
     /**
      * Export the locally committed revisions to another repository.
@@ -51,7 +51,7 @@ public:
      * @param localRepositoryLocation Any location inside the local repository.
      * @param localOrRepoLocationDst The repository which will receive the pushed revisions.
      */
-    virtual VcsJob* push(const KUrl& localRepositoryLocation,
+    virtual VcsJob* push(const QUrl& localRepositoryLocation,
                          const VcsLocation& localOrRepoLocationDst) = 0;
 
     /**
@@ -63,7 +63,7 @@ public:
      * @param localRepositoryLocation Any location inside the local repository.
      */
     virtual VcsJob* pull(const VcsLocation& localOrRepoLocationSrc,
-                         const KUrl& localRepositoryLocation) = 0;
+                         const QUrl& localRepositoryLocation) = 0;
 };
 
 }

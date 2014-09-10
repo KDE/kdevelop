@@ -21,7 +21,6 @@
 #include "interfaces/itestsuite.h"
 #include <interfaces/icore.h>
 
-#include <KUrl>
 #include <KLocalizedString>
 #include <KDebug>
 

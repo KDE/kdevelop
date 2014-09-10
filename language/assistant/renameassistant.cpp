@@ -139,7 +139,7 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
         return;
     }
 
-    const KUrl url = view->document()->url();
+    const QUrl url = view->document()->url();
     const IndexedString indexedUrl(url);
     DUChainReadLocker lock;
 

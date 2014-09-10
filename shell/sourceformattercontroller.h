@@ -28,11 +28,11 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QList>
 #include <QtCore/QSet>
 #include <QMimeType>
+#include <QUrl>
 
 #include <kxmlguiclient.h>
 #include <KConfigGroup>
 #include <KPluginInfo>
-#include <KUrl>
 
 #include "shellexport.h"
 
@@ -98,7 +98,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		/** \return The formatter corresponding to the language
 		* of the document corresponding to the \arg url.
 		*/
-		ISourceFormatter* formatterForUrl(const KUrl &url);
+		ISourceFormatter* formatterForUrl(const QUrl &url);
 		/** Loads and returns a source formatter for this mime type.
 		* The language is then activated and the style is loaded.
 		* The source formatter is then ready to use on a file.
@@ -142,7 +142,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		/** \return A modeline string (to add at the end or the beginning of a file)
 		* corresponding to the settings of the active language.
 		*/
-		QString addModelineForCurrentLang(QString input, const KUrl& url, const QMimeType&);
+		QString addModelineForCurrentLang(QString input, const QUrl& url, const QMimeType&);
 		/** \return The name of kate indentation mode for the mime type.
 		* examples are cstyle, python, etc.
 		*/
@@ -150,13 +150,13 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		void formatDocument(KDevelop::IDocument* doc, ISourceFormatter* formatter, const QMimeType& mime);
 		// Adapts the mode of the editor regarding indentation-style
 		void adaptEditorIndentationMode(KTextEditor::Document* doc, KDevelop::ISourceFormatter* formatter, bool ignoreModeline = false);
-		void formatFiles(KUrl::List &list);
+		void formatFiles(QList<QUrl> &list);
 		// GUI actions
 		QAction* m_formatTextAction;
 		QAction* m_formatFilesAction;
 		QAction* m_formatLine;
 		QList<KDevelop::ProjectBaseItem*> m_prjItems;
-		KUrl::List m_urls;
+		QList<QUrl> m_urls;
 		bool m_enabled;
 };
 

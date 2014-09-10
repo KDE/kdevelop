@@ -132,7 +132,7 @@ void FilteringStrategyTest::testCompilerFilterStrategy()
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedAction);
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.errorInLine(line);
     QCOMPARE(item1.type, expectedError);
@@ -165,7 +165,7 @@ void FilteringStrategyTest::testCompilerFilterstrategyMultipleKeywords()
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedAction);
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.errorInLine(line);
     QCOMPARE(item1.type, expectedError);
@@ -199,7 +199,7 @@ void FilteringStrategyTest::testCompilerFilterStrategyShortenedText()
     QFETCH(QString, line);
     QFETCH(QString, expectedShortenedText);
 
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item = testee.actionInLine(line);
     QCOMPARE(item.shortenedText, expectedShortenedText);
@@ -370,7 +370,7 @@ void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction()
 {
     QFETCH(QString, line);
     QFETCH(QString, expectedLastDir);
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
     static CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.actionInLine(line);
     QCOMPARE(testee.getCurrentDirs().last(), expectedLastDir);
@@ -406,7 +406,7 @@ void FilteringStrategyTest::benchMarkCompilerFilterAction()
     QElapsedTimer totalTime;
     totalTime.start();
 
-    static CompilerFilterStrategy testee(projecturl);
+    static CompilerFilterStrategy testee(QUrl::fromLocalFile(projecturl));
     FilteredItem item1("dummyline", FilteredItem::InvalidItem);
     QBENCHMARK {
         for(int i = 0; i < outputlines.size(); ++i) {
@@ -468,7 +468,7 @@ void FilteringStrategyTest::testExtractionOfLineAndColumn()
     QFETCH(int, lineNr);
     QFETCH(int, column);
     QFETCH(FilteredItem::FilteredOutputItemType, itemtype);
-    KUrl projecturl( "./" );
+    QUrl projecturl = QUrl::fromLocalFile( "./" );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.errorInLine(line);
     QCOMPARE(item1.type , itemtype);

@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_INCLUDEITEM_H
 #define KDEVPLATFORM_INCLUDEITEM_H
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <language/languageexport.h>
 
@@ -33,12 +33,12 @@ public:
   IncludeItem();
 
   ///Constructs the url from basePath and name.
-  KUrl url() const;
+  QUrl url() const;
 
   ///The name of this include-item, starting behind basePath.
   QString name;
   ///basePath + name = Absolute path of file
-  KUrl basePath;
+  QUrl basePath;
   ///Which path in the include-path was used to find this item?
   int pathNumber;
   ///If this is true, this item represents a sub-directory. Else it represents a file.

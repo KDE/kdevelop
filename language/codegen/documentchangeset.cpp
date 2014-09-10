@@ -45,6 +45,8 @@
 
 #include <project/projectmodel.h>
 
+#include <util/path.h>
+
 namespace KDevelop {
 
 typedef QList<DocumentChangePointer> ChangesList;
@@ -189,7 +191,7 @@ void DocumentChangeSet::setActivationPolicy(DocumentChangeSet::ActivationPolicy 
 
 DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
 {
-    KUrl oldActiveDoc;
+    QUrl oldActiveDoc;
     if (IDocument* activeDoc = ICore::self()->documentController()->activeDocument()) {
         oldActiveDoc = activeDoc->url();
     }
@@ -197,14 +199,14 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
     // rename files
     QHash<IndexedString, IndexedString>::const_iterator it = d->documentsRename.constBegin();
     for(; it != d->documentsRename.constEnd(); ++it) {
-        KUrl url = it.key().toUrl();
+        QUrl url = it.key().toUrl();
         IProject* p = ICore::self()->projectController()->findProjectForUrl(url);
         if(p) {
             QList<ProjectFileItem*> files = p->filesForPath(it.key());
             if(!files.isEmpty()) {
                 ProjectBaseItem::RenameStatus renamed = files.first()->rename(it.value().str());
                 if(renamed == ProjectBaseItem::RenameOk) {
-                    const KUrl newUrl(url.upUrl(), it.value().str());
+                    const QUrl newUrl = Path(Path(url).parent(), it.value().str()).toUrl();
                     if (url == oldActiveDoc) {
                         oldActiveDoc = newUrl;
                     }
@@ -227,7 +229,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
                     }
                 } else {
                     ///FIXME: share code with project manager for the error code string representation
-                    return ChangeResult(i18n("Could not rename '%1' to '%2'", url.pathOrUrl(), it.value().str()));
+                    return ChangeResult(i18n("Could not rename '%1' to '%2'", url.toDisplayString(QUrl::PreferLocalFile), it.value().str()));
                 }
             } else {
                 //TODO: do it outside the project management?
@@ -362,7 +364,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
     //Create the actual new modified file
     QStringList textLines = repr->text().split('\n');
 
-    KUrl url = file.toUrl();
+    QUrl url = file.toUrl();
 
     QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
     QVector<int> removedLines;

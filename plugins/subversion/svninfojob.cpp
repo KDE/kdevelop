@@ -43,21 +43,21 @@ void SvnInternalInfoJob::run()
     svn::Client cli(m_ctxt);
     try
     {
-        QByteArray ba = location().toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
+        QByteArray ba = location().toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
         svn::InfoVector v = cli.info( ba.data() );
         svn::Info i = v.at(0);
         SvnInfoHolder h;
         h.name = QString::fromUtf8( i.path().path().c_str() );
-        h.url = KUrl( QString::fromUtf8( i.url() ) );
+        h.url = QUrl::fromUserInput( QString::fromUtf8( i.url() ) );
         h.rev = qlonglong( i.revision() );
         h.kind = i.kind();
-        h.repoUrl = KUrl( QString::fromUtf8( i.repos() ) );
+        h.repoUrl = QUrl::fromUserInput( QString::fromUtf8( i.repos() ) );
         h.repouuid = QString::fromUtf8( i.uuid() );
         h.lastChangedRev = qlonglong( i.lastChangedRevision() );
         h.lastChangedDate = QDateTime::fromTime_t( i.lastChangedDate() );
         h.lastChangedAuthor = QString::fromUtf8( i.lastChangedAuthor() );
         h.scheduled = i.schedule();
-        h.copyFromUrl = KUrl( QString::fromUtf8( i.copyFromUrl() ) );
+        h.copyFromUrl = QUrl::fromUserInput( QString::fromUtf8( i.copyFromUrl() ) );
         h.copyFromRevision = qlonglong( i.copyFromRevision() );
         h.textTime = QDateTime::fromTime_t( i.textTime() );
         h.propertyTime = QDateTime::fromTime_t( i.propertyTime() );
@@ -77,13 +77,13 @@ void SvnInternalInfoJob::run()
     }
 }
 
-void SvnInternalInfoJob::setLocation( const KUrl& url )
+void SvnInternalInfoJob::setLocation( const QUrl &url )
 {
     QMutexLocker l( m_mutex );
     m_location = url;
 }
 
-KUrl SvnInternalInfoJob::location() const
+QUrl SvnInternalInfoJob::location() const
 {
     QMutexLocker l( m_mutex );
     return m_location;
@@ -103,8 +103,8 @@ QVariant SvnInfoJob::fetchResults()
 {
     if( m_provideInfo == RepoUrlOnly )
     {
-        KUrl url = m_info.url;
-        return qVariantFromValue<KUrl>( url );
+        QUrl url = m_info.url;
+        return qVariantFromValue<QUrl>( url );
     }else if( m_provideInfo == RevisionOnly )
     {
         KDevelop::VcsRevision rev;
@@ -142,7 +142,7 @@ SvnInternalJobBase* SvnInfoJob::internalJob() const
     return m_job;
 }
 
-void SvnInfoJob::setLocation( const KUrl& url )
+void SvnInfoJob::setLocation( const QUrl &url )
 {
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setLocation( url );

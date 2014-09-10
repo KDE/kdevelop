@@ -216,7 +216,7 @@ void GrepOutputModel::activate( const QModelIndex &idx )
     if( !grepitem || !grepitem->isText() )
         return;
 
-    KUrl url(grepitem->filename());
+    QUrl url = QUrl::fromLocalFile(grepitem->filename());
 
     int line = grepitem->lineNumber() - 1;
     KTextEditor::Range range( line, 0, line+1, 0);
@@ -381,11 +381,11 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
 
     m_rootItem->setText(i18nc("%1 is e.g. '4 matches', %2 is e.g. '1 file'", "<h3>%1 in %2</h3>", matchText, fileText));
     
-    QString fnString = i18np("<big>%2 <i>(one match)</i></big>", "<big>%2 <i>(%1 matches)</i></big>", items.length(), ICore::self()->projectController()->prettyFileName(filename));
+    QString fnString = i18np("<big>%2 <i>(one match)</i></big>", "<big>%2 <i>(%1 matches)</i></big>",
+                             items.length(), ICore::self()->projectController()->prettyFileName(QUrl::fromLocalFile(filename)));
 
     GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString, m_itemsCheckable);
     m_rootItem->appendRow(fileItem);
-    //m_tracker.addUrl(KUrl(filename));
     foreach( const GrepOutputItem& item, items )
     {
         GrepOutputItem* copy = new GrepOutputItem(item);

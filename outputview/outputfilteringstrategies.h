@@ -31,8 +31,8 @@
 
 #include <QList>
 #include <QVector>
-
-class KUrl;
+#include <QtCore/QMap>
+#include <QUrl>
 
 namespace KDevelop
 {
@@ -73,7 +73,7 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT CompilerFilterStrategy : public IFilterStrat
 {
 
 public:
-    CompilerFilterStrategy(KUrl const& buildDir);
+    CompilerFilterStrategy(QUrl const& buildDir);
     virtual ~CompilerFilterStrategy();
 
     virtual FilteredItem errorInLine(QString const& line);

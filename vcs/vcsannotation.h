@@ -27,7 +27,7 @@
 
 class QString;
 class QDateTime;
-class KUrl;
+class QUrl;
 
 namespace KDevelop
 {
@@ -119,7 +119,7 @@ public:
     /**
      * @return the local url of the file
      */
-    KUrl location() const;
+    QUrl location() const;
     /**
      * @return the number of lines in the file
      */
@@ -143,7 +143,7 @@ public:
     /**
      * @param location the location of the file
      */
-    void setLocation( const KUrl& );
+    void setLocation( const QUrl& );
 
     bool containsLine( int lineno ) const;
 

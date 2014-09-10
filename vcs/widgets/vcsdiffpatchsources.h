@@ -48,19 +48,19 @@ public:
     virtual ~VCSDiffUpdater();
     virtual KDevelop::VcsDiff update() const = 0;
     virtual KDevelop::IBasicVersionControl* vcs() const = 0;
-    virtual KUrl url() const = 0;
+    virtual QUrl url() const = 0;
 };
 
 class KDEVPLATFORMVCS_EXPORT VCSStandardDiffUpdater : public VCSDiffUpdater {
 public:
-    VCSStandardDiffUpdater(KDevelop::IBasicVersionControl* vcs, KUrl url);
+    VCSStandardDiffUpdater(KDevelop::IBasicVersionControl* vcs, QUrl url);
     virtual ~VCSStandardDiffUpdater();
     virtual KDevelop::VcsDiff update() const;
     virtual KDevelop::IBasicVersionControl* vcs() const { return m_vcs; }
-    virtual KUrl url() const { return m_url; }
+    virtual QUrl url() const { return m_url; }
 private:
     KDevelop::IBasicVersionControl* m_vcs;
-    KUrl m_url;
+    QUrl m_url;
 };
 
 
@@ -71,9 +71,9 @@ class KDEVPLATFORMVCS_EXPORT VCSDiffPatchSource : public KDevelop::IPatchSource 
     VCSDiffPatchSource(const KDevelop::VcsDiff& diff);
     virtual ~VCSDiffPatchSource();
 
-    virtual KUrl baseDir() const ;
+    virtual QUrl baseDir() const ;
 
-    virtual KUrl file() const ;
+    virtual QUrl file() const ;
 
     virtual QString name() const ;
 
@@ -81,13 +81,13 @@ class KDEVPLATFORMVCS_EXPORT VCSDiffPatchSource : public KDevelop::IPatchSource 
 
     virtual bool isAlreadyApplied() const { return true; }
 
-    QMap<KUrl, KDevelop::VcsStatusInfo::State> additionalSelectableFiles() const ;
+    QMap<QUrl, KDevelop::VcsStatusInfo::State> additionalSelectableFiles() const ;
 
-    KUrl m_base, m_file;
+    QUrl m_base, m_file;
     QString m_name;
     VCSDiffUpdater* m_updater;
     QList<KDevelop::VcsStatusInfo> m_infos;
-    QMap<KUrl, KDevelop::VcsStatusInfo::State> m_selectable;
+    QMap<QUrl, KDevelop::VcsStatusInfo::State> m_selectable;
     private:
     void updateFromDiff(KDevelop::VcsDiff diff);
 };
@@ -111,10 +111,10 @@ class KDEVPLATFORMVCS_EXPORT VCSCommitDiffPatchSource : public VCSDiffPatchSourc
 
     virtual void cancelReview();
 
-    virtual bool finishReview(QList< KUrl > selection) ;
+    virtual bool finishReview(QList< QUrl > selection) ;
     QList<KDevelop::VcsStatusInfo> infos() const { return m_infos; }
 Q_SIGNALS:
-    void reviewFinished(QString message, QList<KUrl> selection);
+    void reviewFinished(QString message, QList<QUrl> selection);
     void reviewCancelled(QString message);
 public:
     QPointer<QWidget> m_commitMessageWidget;

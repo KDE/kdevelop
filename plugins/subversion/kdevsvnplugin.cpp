@@ -98,7 +98,7 @@ KDevSvnPlugin::~KDevSvnPlugin()
 {
 }
 
-bool KDevSvnPlugin::isVersionControlled(const KUrl& localLocation)
+bool KDevSvnPlugin::isVersionControlled(const QUrl &localLocation)
 {
     ///TODO: also check this in the other functions?
     if (!localLocation.isValid()) {
@@ -123,7 +123,7 @@ bool KDevSvnPlugin::isVersionControlled(const KUrl& localLocation)
     return false;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::repositoryLocation(const KUrl& localLocation)
+KDevelop::VcsJob* KDevSvnPlugin::repositoryLocation(const QUrl &localLocation)
 {
     SvnInfoJob* job = new SvnInfoJob(this);
 
@@ -132,7 +132,7 @@ KDevelop::VcsJob* KDevSvnPlugin::repositoryLocation(const KUrl& localLocation)
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::status(const KUrl::List& localLocations,
+KDevelop::VcsJob* KDevSvnPlugin::status(const QList<QUrl>& localLocations,
                                         KDevelop::IBasicVersionControl::RecursionMode mode)
 {
     SvnStatusJob* job = new SvnStatusJob(this);
@@ -141,7 +141,7 @@ KDevelop::VcsJob* KDevSvnPlugin::status(const KUrl::List& localLocations,
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::add(const KUrl::List& localLocations,
+KDevelop::VcsJob* KDevSvnPlugin::add(const QList<QUrl>& localLocations,
                                      KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     SvnAddJob* job = new SvnAddJob(this);
@@ -150,24 +150,24 @@ KDevelop::VcsJob* KDevSvnPlugin::add(const KUrl::List& localLocations,
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::remove(const KUrl::List& localLocations)
+KDevelop::VcsJob* KDevSvnPlugin::remove(const QList<QUrl>& localLocations)
 {
     SvnRemoveJob* job = new SvnRemoveJob(this);
     job->setLocations(localLocations);
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::edit(const KUrl& /*localLocation*/)
+KDevelop::VcsJob* KDevSvnPlugin::edit(const QUrl& /*localLocation*/)
 {
     return 0;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::unedit(const KUrl& /*localLocation*/)
+KDevelop::VcsJob* KDevSvnPlugin::unedit(const QUrl& /*localLocation*/)
 {
     return 0;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::localRevision(const KUrl& localLocation, KDevelop::VcsRevision::RevisionType type)
+KDevelop::VcsJob* KDevSvnPlugin::localRevision(const QUrl &localLocation, KDevelop::VcsRevision::RevisionType type)
 {
     SvnInfoJob* job = new SvnInfoJob(this);
 
@@ -177,7 +177,7 @@ KDevelop::VcsJob* KDevSvnPlugin::localRevision(const KUrl& localLocation, KDevel
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::copy(const KUrl& localLocationSrc, const KUrl& localLocationDstn)
+KDevelop::VcsJob* KDevSvnPlugin::copy(const QUrl &localLocationSrc, const QUrl& localLocationDstn)
 {
     SvnCopyJob* job = new SvnCopyJob(this);
     job->setSourceLocation(localLocationSrc);
@@ -185,7 +185,7 @@ KDevelop::VcsJob* KDevSvnPlugin::copy(const KUrl& localLocationSrc, const KUrl& 
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::move(const KUrl& localLocationSrc, const KUrl& localLocationDst)
+KDevelop::VcsJob* KDevSvnPlugin::move(const QUrl &localLocationSrc, const QUrl& localLocationDst)
 {
     SvnMoveJob* job = new SvnMoveJob(this);
     job->setSourceLocation(localLocationSrc);
@@ -193,7 +193,7 @@ KDevelop::VcsJob* KDevSvnPlugin::move(const KUrl& localLocationSrc, const KUrl& 
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::revert(const KUrl::List& localLocations,
+KDevelop::VcsJob* KDevSvnPlugin::revert(const QList<QUrl>& localLocations,
                                         KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     SvnRevertJob* job = new SvnRevertJob(this);
@@ -202,7 +202,7 @@ KDevelop::VcsJob* KDevSvnPlugin::revert(const KUrl::List& localLocations,
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::update(const KUrl::List& localLocations,
+KDevelop::VcsJob* KDevSvnPlugin::update(const QList<QUrl>& localLocations,
                                         const KDevelop::VcsRevision& rev,
                                         KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
@@ -213,7 +213,7 @@ KDevelop::VcsJob* KDevSvnPlugin::update(const KUrl::List& localLocations,
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::commit(const QString& message, const KUrl::List& localLocations,
+KDevelop::VcsJob* KDevSvnPlugin::commit(const QString& message, const QList<QUrl>& localLocations,
                                         KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     SvnCommitJob* job = new SvnCommitJob(this);
@@ -224,7 +224,7 @@ KDevelop::VcsJob* KDevSvnPlugin::commit(const QString& message, const KUrl::List
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::diff(const KUrl& fileOrDirectory,
+KDevelop::VcsJob* KDevSvnPlugin::diff(const QUrl &fileOrDirectory,
                                       const KDevelop::VcsRevision& srcRevision,
                                       const KDevelop::VcsRevision& dstRevision,
                                       KDevelop::VcsDiff::Type diffType,
@@ -251,7 +251,7 @@ KDevelop::VcsJob* KDevSvnPlugin::diff2(const KDevelop::VcsLocation& src,
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long limit)
+KDevelop::VcsJob* KDevSvnPlugin::log(const QUrl &localLocation, const KDevelop::VcsRevision& rev, unsigned long limit)
 {
     SvnLogJob* job = new SvnLogJob(this);
     job->setLocation(localLocation);
@@ -260,7 +260,7 @@ KDevelop::VcsJob* KDevSvnPlugin::log(const KUrl& localLocation, const KDevelop::
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::log(const KUrl& localLocation,
+KDevelop::VcsJob* KDevSvnPlugin::log(const QUrl &localLocation,
                                      const KDevelop::VcsRevision& startRev,
                                      const KDevelop::VcsRevision& endRev)
 {
@@ -271,7 +271,7 @@ KDevelop::VcsJob* KDevSvnPlugin::log(const KUrl& localLocation,
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::annotate(const KUrl& localLocation,
+KDevelop::VcsJob* KDevSvnPlugin::annotate(const QUrl &localLocation,
         const KDevelop::VcsRevision& rev)
 {
     SvnBlameJob* job = new SvnBlameJob(this);
@@ -284,7 +284,7 @@ KDevelop::VcsJob* KDevSvnPlugin::merge(const KDevelop::VcsLocation& localOrRepoL
                                        const KDevelop::VcsLocation& localOrRepoLocationDst,
                                        const KDevelop::VcsRevision& srcRevision,
                                        const KDevelop::VcsRevision& dstRevision,
-                                       const KUrl& localLocation)
+                                       const QUrl &localLocation)
 {
     // TODO implement merge
     Q_UNUSED(localOrRepoLocationSrc)
@@ -295,13 +295,13 @@ KDevelop::VcsJob* KDevSvnPlugin::merge(const KDevelop::VcsLocation& localOrRepoL
     return 0;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::resolve(const KUrl::List& /*localLocations*/,
+KDevelop::VcsJob* KDevSvnPlugin::resolve(const QList<QUrl>& /*localLocations*/,
         KDevelop::IBasicVersionControl::RecursionMode /*recursion*/)
 {
     return 0;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::import(const QString & commitMessage, const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository)
+KDevelop::VcsJob* KDevSvnPlugin::import(const QString & commitMessage, const QUrl &sourceDirectory, const KDevelop::VcsLocation & destinationRepository)
 {
     SvnImportJob* job = new SvnImportJob(this);
     job->setMapping(sourceDirectory, destinationRepository);
@@ -309,7 +309,7 @@ KDevelop::VcsJob* KDevSvnPlugin::import(const QString & commitMessage, const KUr
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion)
+KDevelop::VcsJob* KDevSvnPlugin::createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const QUrl &destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     SvnCheckoutJob* job = new SvnCheckoutJob(this);
     job->setMapping(sourceRepository, destinationDirectory, recursion);
@@ -321,10 +321,10 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
 {
     m_common->setupFromContext(context);
 
-    const KUrl::List & ctxUrlList  = m_common->contextUrlList();
+    const QList<QUrl> & ctxUrlList  = m_common->contextUrlList();
 
     bool hasVersionControlledEntries = false;
-    foreach(const KUrl &url, ctxUrlList) {
+    foreach(const QUrl &url, ctxUrlList) {
         if (isVersionControlled(url) || isVersionControlled(url.upUrl())) {
             hasVersionControlledEntries = true;
             break;
@@ -362,7 +362,7 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
 
 void KDevSvnPlugin::ctxInfo()
 {
-    KUrl::List const & ctxUrlList = m_common->contextUrlList();
+    QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() != 1) {
         KMessageBox::error(0, i18n("Please select only one item for this operation"));
         return;
@@ -371,7 +371,7 @@ void KDevSvnPlugin::ctxInfo()
 
 void KDevSvnPlugin::ctxStatus()
 {
-    KUrl::List const & ctxUrlList = m_common->contextUrlList();
+    QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() > 1) {
         KMessageBox::error(0, i18n("Please select only one item for this operation"));
         return;
@@ -380,20 +380,20 @@ void KDevSvnPlugin::ctxStatus()
 
 void KDevSvnPlugin::ctxCopy()
 {
-    KUrl::List const & ctxUrlList = m_common->contextUrlList();
+    QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() > 1) {
         KMessageBox::error(0, i18n("Please select only one item for this operation"));
         return;
     }
 
-    KUrl source = ctxUrlList.first();
+    QUrl source = ctxUrlList.first();
 
     if (source.isLocalFile()) {
         QString dir = source.toLocalFile();
         bool isFile = QFileInfo(source.toLocalFile()).isFile();
 
         if (isFile) {
-            dir = source.directory();
+            dir = source.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path();
         }
 
         KUrlRequesterDialog dlg(dir, i18n("Destination file/directory"), 0);
@@ -416,20 +416,20 @@ void KDevSvnPlugin::ctxCopy()
 
 void KDevSvnPlugin::ctxMove()
 {
-    KUrl::List const & ctxUrlList = m_common->contextUrlList();
+    QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() != 1) {
         KMessageBox::error(0, i18n("Please select only one item for this operation"));
         return;
     }
 
-    KUrl source = ctxUrlList.first();
+    QUrl source = ctxUrlList.first();
 
     if (source.isLocalFile()) {
         QString dir = source.toLocalFile();
         bool isFile = QFileInfo(source.toLocalFile()).isFile();
 
         if (isFile) {
-            dir = source.directory();
+            dir = source.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path();
         }
 
         KUrlRequesterDialog dlg(dir, i18n("Destination file/directory"), 0);
@@ -452,7 +452,7 @@ void KDevSvnPlugin::ctxMove()
 
 void KDevSvnPlugin::ctxCat()
 {
-    KUrl::List const & ctxUrlList = m_common->contextUrlList();
+    QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() != 1) {
         KMessageBox::error(0, i18n("Please select only one item for this operation"));
         return;
@@ -471,7 +471,7 @@ KDevelop::VcsImportMetadataWidget* KDevSvnPlugin::createImportMetadataWidget(QWi
 
 void KDevSvnPlugin::ctxImport()
 {
-    KUrl::List const & ctxUrlList = m_common->contextUrlList();
+    QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() != 1) {
         KMessageBox::error(0, i18n("Please select only one item for this operation"));
         return;
@@ -492,7 +492,7 @@ void KDevSvnPlugin::ctxImport()
 
 void KDevSvnPlugin::ctxCheckout()
 {
-    KUrl::List const & ctxUrlList = m_common->contextUrlList();
+    QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
     if (ctxUrlList.count() != 1) {
         KMessageBox::error(0, i18n("Please select only one item for this operation"));
         return;
@@ -502,7 +502,7 @@ void KDevSvnPlugin::ctxCheckout()
 
     dlg.setCaption(i18n("Checkout from Subversion repository"));
     SvnCheckoutMetadataWidget* widget = new SvnCheckoutMetadataWidget(&dlg);
-    KUrl tmp = ctxUrlList.first();
+    QUrl tmp = ctxUrlList.first();
     tmp.cd("..");
     widget->setDestinationLocation(tmp);
     dlg.setMainWidget(widget);

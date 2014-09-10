@@ -31,14 +31,14 @@ namespace Sublime {
 // struct UrlDocumentPrivate
 
 struct UrlDocumentPrivate {
-    KUrl url;
+    QUrl url;
 };
 
 
 
 // class UrlDocument
 
-UrlDocument::UrlDocument(Controller *controller, const KUrl &url)
+UrlDocument::UrlDocument(Controller *controller, const QUrl &url)
     :Document(url.fileName(), controller), d( new UrlDocumentPrivate() )
 {
     setUrl(url);
@@ -49,17 +49,17 @@ UrlDocument::~UrlDocument()
     delete d;
 }
 
-KUrl UrlDocument::url() const
+QUrl UrlDocument::url() const
 {
     return d->url;
 }
 
-void UrlDocument::setUrl(const KUrl& newUrl)
+void UrlDocument::setUrl(const QUrl& newUrl)
 {
     //deep copy
     d->url = QUrl::fromEncoded(newUrl.url().toLatin1());
     setTitle(newUrl.fileName());
-    setToolTip(newUrl.prettyUrl());
+    setToolTip(newUrl.toDisplayString(QUrl::PreferLocalFile));
 }
 
 QWidget *UrlDocument::createViewWidget(QWidget *parent)

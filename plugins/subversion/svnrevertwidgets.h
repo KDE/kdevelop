@@ -23,12 +23,12 @@ public:
     explicit SvnRevertOptionDlg( KDevSubversionPart *part, QWidget *parent = 0 );
     ~SvnRevertOptionDlg();
 
-    void setCandidates( const KUrl::List &urls );
-    KUrl::List candidates();
+    void setCandidates( const QList<QUrl> &urls );
+    QList<QUrl> candidates();
     bool recurse();
 
 private:
-    void insertRow( const KUrl &url, const QString &textStat, const QString &propStat );
+    void insertRow( const QUrl &url, const QString &textStat, const QString &propStat );
     Ui::SvnRevertOptionDlg ui;
     KDevSubversionPart *m_part;
 };

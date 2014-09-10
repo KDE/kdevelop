@@ -28,19 +28,19 @@ class SvnInternalUpdateJob : public SvnInternalJobBase
     Q_OBJECT
 public:
     SvnInternalUpdateJob( SvnJobBase* parent = 0 );
-    void setLocations( const KUrl::List& );
+    void setLocations( const QList<QUrl>& );
     void setRecursive( bool );
     void setRevision( const KDevelop::VcsRevision& );
     void setIgnoreExternals( bool );
 
     bool recursive() const;
-    KUrl::List locations() const;
+    QList<QUrl> locations() const;
     KDevelop::VcsRevision revision() const;
     bool ignoreExternals() const;
 protected:
     void run();
 private:
-    KUrl::List m_locations;
+    QList<QUrl> m_locations;
     bool m_recursive;
     bool m_ignoreExternals;
     KDevelop::VcsRevision m_revision;

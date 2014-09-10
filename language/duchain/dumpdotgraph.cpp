@@ -34,7 +34,7 @@ QString shortLabel(KDevelop::Declaration* declaration) {
 QString rangeToString( const KTextEditor::Range& r ) {
   return QString("%1:%2->%3:%4").arg(r.start().line()).arg(r.start().column()).arg(r.end().line()).arg(r.end().column());
 }
-  
+
 
 class DumpDotGraphPrivate
 {
@@ -43,8 +43,8 @@ public:
   QString dotGraphInternal(KDevelop::DUContext* contex, bool isMaster, bool shortened);
 
   void addDeclaration(QTextStream& stream, Declaration* decl);
-  
-  QMap<KUrl,QString> m_hadVersions;
+
+  QMap<QUrl,QString> m_hadVersions;
   QMap<KDevelop::DUChainBase*, bool> m_hadObjects;
   TopDUContext* m_topContext;
 };
@@ -57,7 +57,7 @@ QString DumpDotGraph::dotGraph(KDevelop::DUContext* context, bool shortened ) {
 }
 
 DumpDotGraph::DumpDotGraph() : d(new DumpDotGraphPrivate()) {
-  
+
 }
 
 DumpDotGraph::~DumpDotGraph() {
@@ -88,7 +88,7 @@ void DumpDotGraphPrivate::addDeclaration(QTextStream& stream, Declaration* dec) 
     //Definition
     stream << shortLabel(dec) <<  "[shape=regular,color=yellow,label=\"" << declarationForDefinition->toString() << " "<< rangeToString(dec->range().castToSimpleRange()) <<  "\"];\n";
     stream << shortLabel(dec->context()) << " -> " << shortLabel(dec) << ";\n";
-    
+
     stream << shortLabel(dec) << " -> " << shortLabel(declarationForDefinition) << "[label=\"defines\",color=green];\n";
     addDeclaration(stream, declarationForDefinition);
 
@@ -110,31 +110,31 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
 
   if( isMaster )
     stream << "Digraph chain {\n";
-  
+
   QString shape = "parallelogram";
   //QString shape = "box";
   QString label = "unknown";
-  
+
   if( dynamic_cast<TopDUContext*>(context) )
   {
     TopDUContext* topCtx = static_cast<TopDUContext*>(context);
     if( topCtx->parsingEnvironmentFile() ) {
-      QString file( topCtx->parsingEnvironmentFile()->url().str() );
-
-      KUrl url = KUrl(file);
+      QUrl url = topCtx->parsingEnvironmentFile()->url().toUrl();
+      const QString fileName = url.fileName();
+      QString file = url.toDisplayString(QUrl::PreferLocalFile);
       if(topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext())
-        url.addPath("_[proxy]_");
-      
+        url.setPath(url.path() + QString::fromLatin1("/_[proxy]_"));
+
       //Find the context this one is derived from. If there is one, connect it with a line, and shorten the url.
       if( m_hadVersions.contains(url) ) {
         stream << shortLabel(context) << " -> " << m_hadVersions[url] << "[color=blue,label=\"version\"];\n";
-        file = KUrl(file).fileName();
+        file = fileName;
       } else {
         m_hadVersions[url] = shortLabel(context);
       }
-      
+
       label = file;
-      
+
       if( topCtx->importers().count() != 0 )
         label += QString(" imported by %1").arg(topCtx->importers().count());
     } else {
@@ -154,15 +154,16 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
     foreach( DUContext* ctx, context->importers() )
       stream << dotGraphInternal(ctx, false, true);
   }
-  
+
   foreach (const DUContext::Import &parent, context->importedParentContexts()) {
     if( parent.context(m_topContext) ) {
       stream << dotGraphInternal(parent.context(m_topContext), false, true);
       QString label = "imports";
       if( (!dynamic_cast<TopDUContext*>(parent.context(m_topContext)) || !dynamic_cast<TopDUContext*>(context)) && !(parent.context(m_topContext)->url() == context->url()) ) {
-        label += " from " + KUrl(parent.context(m_topContext)->url().str()).fileName() + " to " + KUrl(context->url().str()).fileName();
+        label += " from " + parent.context(m_topContext)->url().toUrl().fileName()
+               + " to " + context->url().toUrl().fileName();
       }
-      
+
       stream << shortLabel(context) << " -> " << shortLabel(parent.context(m_topContext)) << "[style=dotted,label=\"" << label  << "\"];\n";
     }
   }
@@ -179,7 +180,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
 
   if( !context->localDeclarations().isEmpty() )
     label += QString(", %1 D.").arg(context->localDeclarations().count());
-  
+
   if(!shortened )
   {
     foreach (Declaration* dec, context->localDeclarations())
@@ -194,7 +195,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
 
   if( isMaster )
     stream << "}\n";
-    
+
   return ret;
 }
 }

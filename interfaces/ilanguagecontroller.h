@@ -21,10 +21,9 @@
 
 #include <QtCore/QList>
 #include <QtCore/QObject>
+#include <QUrl>
 
 #include "interfacesexport.h"
-
-class KUrl;
 
 namespace KDevelop {
 
@@ -52,8 +51,8 @@ public:
       *          If it is called from a background thread, it can not
       *          be loaded, and thus zero will be returned.
       * */
-    Q_SCRIPTABLE virtual QList<ILanguage*> languagesForUrl(const KUrl &url) = 0;
-    
+    Q_SCRIPTABLE virtual QList<ILanguage*> languagesForUrl(const QUrl &url) = 0;
+
     /** @return All languages currently loaded */
     Q_SCRIPTABLE virtual QList<ILanguage*> loadedLanguages() const = 0;
 

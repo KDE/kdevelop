@@ -136,7 +136,7 @@ int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsS
     }
 }
 
-QStandardItem* VcsFileChangesModel::fileItemForUrl(QStandardItem* parent, const KUrl& url)
+QStandardItem* VcsFileChangesModel::fileItemForUrl(QStandardItem* parent, const QUrl& url)
 {
     for(int i=0; i<parent->rowCount(); i++) {
         QStandardItem* curr=parent->child(i);
@@ -177,9 +177,9 @@ void VcsFileChangesModel::setAllChecked(bool checked)
     }
 }
 
-QList<KUrl> VcsFileChangesModel::checkedUrls(QStandardItem *parent) const
+QList<QUrl> VcsFileChangesModel::checkedUrls(QStandardItem *parent) const
 {
-    QList<KUrl> ret;
+    QList<QUrl> ret;
 
     for(int i = 0; i < parent->rowCount(); i++) {
         QStandardItem* item = parent->child(i);
@@ -191,9 +191,9 @@ QList<KUrl> VcsFileChangesModel::checkedUrls(QStandardItem *parent) const
     return ret;
 }
 
-QList<KUrl> VcsFileChangesModel::urls(QStandardItem *parent) const
+QList<QUrl> VcsFileChangesModel::urls(QStandardItem *parent) const
 {
-    QList<KUrl> ret;
+    QList<QUrl> ret;
 
     for(int i = 0; i < parent->rowCount(); i++) {
         ret << statusInfo(parent->child(i)).url();
@@ -202,9 +202,9 @@ QList<KUrl> VcsFileChangesModel::urls(QStandardItem *parent) const
     return ret;
 }
 
-void VcsFileChangesModel::checkUrls(QStandardItem *parent, const QList<KUrl>& urls) const
+void VcsFileChangesModel::checkUrls(QStandardItem *parent, const QList<QUrl>& urls) const
 {
-    QSet<KUrl> urlSet(urls.toSet());
+    QSet<QUrl> urlSet(urls.toSet());
 
     if(!d->allowSelection)
         return;

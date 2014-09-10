@@ -41,9 +41,8 @@ DashboardView::~DashboardView()
 QWidget* DashboardView::createWidget(QWidget* parent)
 {
     Q_UNUSED(parent);
-    KUrl originalUrl=m_project->projectFileUrl().toLocalFile();
-    KUrl customUrl=originalUrl.upUrl();
-    customUrl.addPath(".kdev4/_custom.kdev4");
+    QUrl originalUrl = m_project->projectFilePath().toUrl();
+    QUrl customUrl = originalUrl.resolved(QString("../.kdev4/_custom.kdev4"));
     if(!QFile::exists(customUrl.toLocalFile())) {
         KIO::CopyJob* job=KIO::copy(originalUrl, customUrl);
         KIO::NetAccess::synchronousRun(job, 0);

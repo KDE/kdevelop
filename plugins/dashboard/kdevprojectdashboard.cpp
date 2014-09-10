@@ -47,7 +47,7 @@ class ProjectDashboardFactory : public KDevelop::IDocumentFactory
          * Only create a document instance in case we are selecting
          * the .kdev4 project file of an *open* project
          */
-        virtual IDocument* create(const KUrl& url, ICore*)
+        virtual IDocument* create(const QUrl& url, ICore*)
         {
             IProject* proj = ICore::self()->projectController()->findProjectForUrl(url);
             if (!proj || proj->projectFileUrl() != url)

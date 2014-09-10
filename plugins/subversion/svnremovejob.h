@@ -24,9 +24,8 @@
 
 #include "svnjobbase.h"
 
-#include <QVariant>
-
-#include <kurl.h>
+#include <QtCore/QVariant>
+#include <QUrl>
 
 class SvnInternalRemoveJob;
 
@@ -39,7 +38,7 @@ public:
     void start();
     SvnInternalJobBase* internalJob() const;
 
-    void setLocations( const KUrl::List& locations );
+    void setLocations( const QList<QUrl>& locations );
     void setForce( bool force );
 private:
     SvnInternalRemoveJob* m_job;

@@ -26,7 +26,7 @@
 #include <language/languageexport.h>
 #include <language/duchain/duchainpointer.h>
 
-class KUrl;
+class QUrl;
 
 namespace KTextEditor {
 class Cursor;
@@ -72,7 +72,7 @@ class DocumentChangeSet;
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassGenerator
 {
 public:
-    typedef QHash<QString,KUrl> UrlHash;
+    typedef QHash<QString,QUrl> UrlHash;
 
     /**
      * Creates a new generator.
@@ -81,7 +81,7 @@ public:
      *
      * @param baseUrl the folder where new files will be created
      **/
-    explicit TemplateClassGenerator(const KUrl& baseUrl);
+    explicit TemplateClassGenerator(const QUrl& baseUrl);
     virtual ~TemplateClassGenerator();
 
     /**
@@ -141,11 +141,11 @@ public:
 
     QHash<QString,QString> fileLabels() const;
 
-    KUrl baseUrl() const;
+    QUrl baseUrl() const;
     UrlHash fileUrls() const;
 
-    void setFileUrl(const QString& outputFile, const KUrl& url);
-    KUrl fileUrl(const QString& outputFile) const;
+    void setFileUrl(const QString& outputFile, const QUrl& url);
+    QUrl fileUrl(const QString& outputFile) const;
 
     void setFilePosition(const QString& outputFile, const KTextEditor::Cursor& position);
     KTextEditor::Cursor filePosition(const QString& outputFile) const;

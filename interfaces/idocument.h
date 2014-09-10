@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_IDOCUMENT_H
 #define KDEVPLATFORM_IDOCUMENT_H
 
-#include <kurl.h>
+#include <QUrl>
 #include <kmimetype.h>
 #include <KTextEditor/Cursor>
 #include <KTextEditor/Range>
@@ -72,7 +72,7 @@ public:
     /**
      * Returns the URL of this document.
      */
-    virtual KUrl url() const = 0;
+    virtual QUrl url() const = 0;
 
     /**
      * Returns the mimetype of the document.

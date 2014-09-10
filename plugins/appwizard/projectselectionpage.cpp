@@ -177,7 +177,7 @@ void setForeground(QLabel* label, KColorScheme::ForegroundRole role)
 
 void ProjectSelectionPage::validateData()
 {
-    KUrl url = ui->locationUrl->url();
+    QUrl url = ui->locationUrl->url();
     if( !url.isLocalFile() || url.isEmpty() )
     {
         ui->locationValidLabel->setText( i18n("Invalid location") );
@@ -217,7 +217,7 @@ void ProjectSelectionPage::validateData()
         }
     }
 
-    QDir tDir(url.toLocalFile( KUrl::RemoveTrailingSlash ));
+    QDir tDir(url.toLocalFile());
     while (!tDir.exists() && !tDir.isRoot()) {
         if (!tDir.cdUp()) {
             break;
@@ -252,8 +252,8 @@ void ProjectSelectionPage::validateData()
     }
 
     // Check for non-empty target directory. Not an error, but need to display a warning.
-    url.addPath( encodedAppName() );
-    QFileInfo fi( url.toLocalFile( KUrl::RemoveTrailingSlash ) );
+    url.setPath( url.path() + '/' + encodedAppName() );
+    QFileInfo fi( url.toLocalFile() );
     if( fi.exists() && fi.isDir() )
     {
         if( !QDir( fi.absoluteFilePath()).entryList( QDir::NoDotAndDotDot | QDir::AllEntries ).isEmpty() )
@@ -312,7 +312,7 @@ bool ProjectSelectionPage::shouldContinue()
 void ProjectSelectionPage::loadFileClicked()
 {
     QString filter = "application/x-desktop application/x-bzip-compressed-tar application/zip";
-    QString fileName = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kdevapptemplate"), filter, this);
+    QString fileName = KFileDialog::getOpenFileName(QUrl("kfiledialog:///kdevapptemplate"), filter, this);
 
     if (!fileName.isEmpty())
     {

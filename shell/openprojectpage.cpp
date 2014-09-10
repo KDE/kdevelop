@@ -36,7 +36,7 @@
 namespace KDevelop
 {
 
-OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
+OpenProjectPage::OpenProjectPage( const QUrl& startUrl, QWidget* parent )
         : QWidget( parent )
 {
     QHBoxLayout* layout = new QHBoxLayout( this );
@@ -59,7 +59,7 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
             filters << QString("%1|%2 (%1)").arg(filter.toStringList().join(" ")).arg(desc.toString());
         }
     }
-	
+
     filters.prepend( i18n( "%1|All Project Files (%1)", allEntry.join(" ") ) );
 
     fileWidget->setFilter( filters.join("\n") );
@@ -70,37 +70,36 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
 
     QWidget* ops= fileWidget->findChild<QWidget*>( "KFileWidget::ops" );
     // Emitted for changes in the places view, the url navigator and when using the back/forward/up buttons
-    connect( ops, SIGNAL(urlEntered(KUrl)), SLOT(opsEntered(KUrl)));
+    connect( ops, SIGNAL(urlEntered(QUrl)), SLOT(opsEntered(QUrl)));
 
     // Emitted when selecting an entry from the "Name" box or editing in there
-    connect( fileWidget->locationEdit(), SIGNAL(editTextChanged(QString)), 
+    connect( fileWidget->locationEdit(), SIGNAL(editTextChanged(QString)),
              SLOT(comboTextChanged(QString)));
 
     // Emitted when clicking on a file in the fileview area
     connect( fileWidget, SIGNAL(fileHighlighted(QString)), SLOT(highlightFile(QString)) );
-    
-    connect( fileWidget->dirOperator()->dirLister(), SIGNAL(completed(KUrl)), SLOT(dirChanged(KUrl)));
+
+    connect( fileWidget->dirOperator()->dirLister(), SIGNAL(completed(QUrl)), SLOT(dirChanged(QUrl)));
 
     connect( fileWidget, SIGNAL(accepted()), SIGNAL(accepted()));
 }
 
-KUrl OpenProjectPage::getAbsoluteUrl( const QString& file ) const
+QUrl OpenProjectPage::getAbsoluteUrl( const QString& file ) const
 {
-    KUrl u(file);
+    QUrl u(file);
     if( u.isRelative() )
     {
-        u = fileWidget->baseUrl();
-        u.addPath( file );
+        u = fileWidget->baseUrl().resolved( u );
     }
     return u;
 }
 
-void OpenProjectPage::setUrl(const KUrl& url)
+void OpenProjectPage::setUrl(const QUrl& url)
 {
     fileWidget->setUrl(url, false);
 }
 
-void OpenProjectPage::dirChanged(const KUrl& /*url*/)
+void OpenProjectPage::dirChanged(const QUrl& /*url*/)
 {
     if(fileWidget->selectedFiles().isEmpty()) {
         KFileItemList items=fileWidget->dirOperator()->dirLister()->items();
@@ -122,7 +121,7 @@ void OpenProjectPage::highlightFile( const QString& file )
     emit urlSelected( getAbsoluteUrl( file ) );
 }
 
-void OpenProjectPage::opsEntered( const KUrl& url )
+void OpenProjectPage::opsEntered( const QUrl& url )
 {
     emit urlSelected( getAbsoluteUrl( url.url() ) );
 }

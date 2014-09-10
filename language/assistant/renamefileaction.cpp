@@ -33,11 +33,11 @@ using namespace KDevelop;
 struct RenameFileAction::Private
 {
     KDevelop::BasicRefactoring* m_refactoring;
-    KUrl m_file;
+    QUrl m_file;
     QString m_newName;
 };
 
-RenameFileAction::RenameFileAction(BasicRefactoring* refactoring, const KUrl& file, const QString& newName)
+RenameFileAction::RenameFileAction(BasicRefactoring* refactoring, const QUrl& file, const QString& newName)
     : d(new Private)
 {
     d->m_refactoring = refactoring;

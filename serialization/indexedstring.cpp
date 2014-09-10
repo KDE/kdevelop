@@ -14,7 +14,6 @@
 #include "indexedstring.h"
 #include "serialization/stringrepository.h"
 
-#include <kurl.h>
 #include "referencecounting.h"
 
 namespace KDevelop {
@@ -143,8 +142,9 @@ IndexedString::IndexedString( char c ) {
   m_index = 0xffff0000 | c;
 }
 
-IndexedString::IndexedString( const KUrl& url ) {
-  QByteArray array(url.pathOrUrl().toUtf8());
+IndexedString::IndexedString( const QUrl& url ) {
+  Q_ASSERT(url.isEmpty() || !url.isRelative());
+  QByteArray array(url.toString(QUrl::PreferLocalFile).toUtf8());
 
   const char* str = array.constData();
 
@@ -255,10 +255,14 @@ IndexedString& IndexedString::operator=(const IndexedString& rhs) {
   return *this;
 }
 
-
-KUrl IndexedString::toUrl() const {
-  KUrl url( str() );
-  return url;
+QUrl IndexedString::toUrl() const
+{
+  if (isEmpty()) {
+    return {};
+  }
+  QUrl ret = QUrl::fromUserInput( str() );
+  Q_ASSERT(!ret.isRelative());
+  return ret;
 }
 
 QString IndexedString::str() const {

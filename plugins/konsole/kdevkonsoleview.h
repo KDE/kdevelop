@@ -13,9 +13,7 @@
 #define KDEVPLATFORM_PLUGIN_KDEVKONSOLEVIEW_H
 
 #include <QWidget>
-
-class KUrl;
-
+#include <QUrl>
 
 class KDevKonsoleViewPlugin;
 
@@ -28,7 +26,7 @@ public:
     virtual ~KDevKonsoleView();
 
 public slots:
-    void setDirectory( const KUrl &dirUrl );
+    void setDirectory( const QUrl &dirUrl );
 
 protected:
     virtual bool eventFilter( QObject *obj, QEvent *e );

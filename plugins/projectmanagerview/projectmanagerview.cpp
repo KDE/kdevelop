@@ -23,10 +23,10 @@
 
 #include <QHeaderView>
 #include <QKeyEvent>
+#include <QUrl>
 
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <kurl.h>
 #include <KLocalizedString>
 #include <kactioncollection.h>
 #include <KLineEdit>
@@ -251,7 +251,7 @@ void ProjectManagerView::locateCurrentDocument()
 
 void ProjectManagerView::open( const Path& path )
 {
-    IOpenWith::openFiles(KUrl::List() << path.toUrl());
+    IOpenWith::openFiles(QList<QUrl>() << path.toUrl());
 }
 
 QModelIndex ProjectManagerView::indexFromView(const QModelIndex& index) const

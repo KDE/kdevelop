@@ -73,7 +73,7 @@ private:
     void setFileInfo( QStandardItem *item, unsigned int hunksNum ) {
         QString newText = i18ncp( "%1: number of changed hunks, %2: file name",
             "%2 (1 hunk)", "%2 (%1 hunks)", hunksNum,
-            item->data(VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url().pathOrUrl() );
+            item->data(VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url().toDisplayString(QUrl::PreferLocalFile) );
         item->setText( newText );
     }
 };
@@ -155,8 +155,8 @@ void PatchReviewToolView::fillEditFromPatch() {
 
     bool showTests = false;
     IProject* project = 0;
-    QMap<KUrl, VcsStatusInfo::State> files = ipatch->additionalSelectableFiles();
-    QMap<KUrl, VcsStatusInfo::State>::const_iterator it = files.constBegin();
+    QMap<QUrl, VcsStatusInfo::State> files = ipatch->additionalSelectableFiles();
+    QMap<QUrl, VcsStatusInfo::State>::const_iterator it = files.constBegin();
 
     for (; it != files.constEnd(); ++it) {
         project = ICore::self()->projectController()->findProjectForUrl(it.key());
@@ -236,7 +236,7 @@ void PatchReviewToolView::showEditDialog() {
 
 void PatchReviewToolView::customContextMenuRequested(const QPoint& )
 {
-    KUrl::List urls;
+    QList<QUrl> urls;
     QModelIndexList selectionIdxs = m_editPatch.filesList->selectionModel()->selectedIndexes();
     foreach(const QModelIndex& idx, selectionIdxs) {
         urls += idx.sibling(idx.row(), 0).data(KDevelop::VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url();
@@ -283,14 +283,14 @@ void PatchReviewToolView::seekFile(bool forwards)
 {
     if(!m_plugin->patch())
         return;
-    QList<KUrl> checkedUrls = m_fileModel->checkedUrls();
-    QList<KUrl> allUrls = m_fileModel->urls();
+    QList<QUrl> checkedUrls = m_fileModel->checkedUrls();
+    QList<QUrl> allUrls = m_fileModel->urls();
     IDocument* current = ICore::self()->documentController()->activeDocument();
     if(!current || checkedUrls.empty())
         return;
     kDebug() << "seeking direction" << forwards;
     int currentIndex = allUrls.indexOf(current->url());
-    KUrl newUrl;
+    QUrl newUrl;
     if((forwards && current->url() == checkedUrls.back()) ||
             (!forwards && current->url() == checkedUrls[0]))
     {
@@ -307,7 +307,7 @@ void PatchReviewToolView::seekFile(bool forwards)
     }
     else
     {
-        QSet<KUrl> checkedUrlsSet( checkedUrls.toSet() );
+        QSet<QUrl> checkedUrlsSet( checkedUrls.toSet() );
         for(int offset = 1; offset < allUrls.size(); ++offset)
         {
             int pos;
@@ -334,7 +334,7 @@ void PatchReviewToolView::seekFile(bool forwards)
     }
 }
 
-void PatchReviewToolView::activate( const KUrl& url, IDocument* buddy ) const
+void PatchReviewToolView::activate( const QUrl& url, IDocument* buddy ) const
 {
     kDebug() << "activating url" << url;
     // If the document is already open in this area, just re-activate it
@@ -361,7 +361,7 @@ void PatchReviewToolView::activate( const KUrl& url, IDocument* buddy ) const
 
 void PatchReviewToolView::fileItemChanged( QStandardItem* item )
 {
-    KUrl url = m_fileModel->statusInfo(item).url();
+    QUrl url = m_fileModel->statusInfo(item).url();
     if(item->checkState() != Qt::Checked)
     {
         // Eventually close the document
@@ -404,37 +404,34 @@ void PatchReviewToolView::selectAll()
 }
 
 void PatchReviewToolView::finishReview() {
-    QList<KUrl> selectedUrls = m_fileModel->checkedUrls();
-    kDebug() << "finishing review with" << selectedUrls;
+    QList<QUrl> selectedUrls = m_fileModel->checkedUrls();
+    qDebug() << "finishing review with" << selectedUrls;
     m_plugin->finishReview( selectedUrls );
 }
 
 void PatchReviewToolView::fileDoubleClicked( const QModelIndex& idx ) {
     QModelIndex i = idx.sibling(idx.row(), 0);
-    KUrl file = m_fileModel->statusInfo( i ).url();
+    QUrl file = m_fileModel->statusInfo( i ).url();
 
     activate( file );
 }
 
-KUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model ) {
-    KUrl file = m_patch->baseDir();
-
-    file.addPath( model->destinationPath() );
-    file.addPath( model->destinationFile() );
-
+QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model ) {
+    QUrl file = m_patch->baseDir();
+    file.setPath(file.path() + '/' + model->destinationPath() + '/' + model->destinationFile());
     return file;
 }
 
 void PatchReviewToolView::kompareModelChanged() {
     
-    QList<KUrl> oldCheckedUrls = m_fileModel->checkedUrls();
+    QList<QUrl> oldCheckedUrls = m_fileModel->checkedUrls();
     
     m_fileModel->clear();
     
     if ( !m_plugin->modelList() )
         return;
 
-    QMap<KUrl, KDevelop::VcsStatusInfo::State> additionalUrls = m_plugin->patch()->additionalSelectableFiles();
+    QMap<QUrl, KDevelop::VcsStatusInfo::State> additionalUrls = m_plugin->patch()->additionalSelectableFiles();
 
     const Diff2::DiffModelList* models = m_plugin->modelList()->models();
     if( models )
@@ -446,7 +443,7 @@ void PatchReviewToolView::kompareModelChanged() {
             if ( diffs )
                 cnt = diffs->count();
 
-            KUrl file = m_plugin->urlForFileModel( *it );
+            QUrl file = m_plugin->urlForFileModel( *it );
             if( !QFileInfo( file.toLocalFile() ).isReadable() )
                 continue;
 
@@ -458,7 +455,7 @@ void PatchReviewToolView::kompareModelChanged() {
         }
     }
 
-    for( QMap<KUrl, KDevelop::VcsStatusInfo::State>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); it++ ) {
+    for( QMap<QUrl, KDevelop::VcsStatusInfo::State>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); it++ ) {
         VcsStatusInfo status;
         status.setUrl( it.key() );
         status.setState( it.value() );
@@ -499,8 +496,8 @@ void PatchReviewToolView::runTests()
     }
 
     IProject* project = 0;
-    QMap<KUrl, VcsStatusInfo::State> files = ipatch->additionalSelectableFiles();
-    QMap<KUrl, VcsStatusInfo::State>::const_iterator it = files.constBegin();
+    QMap<QUrl, VcsStatusInfo::State> files = ipatch->additionalSelectableFiles();
+    QMap<QUrl, VcsStatusInfo::State>::const_iterator it = files.constBegin();
 
     for (; it != files.constEnd(); ++it) {
         project = ICore::self()->projectController()->findProjectForUrl(it.key());

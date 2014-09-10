@@ -72,10 +72,10 @@ using namespace KDevelop;
 class KDevelop::TemplateClassAssistantPrivate
 {
 public:
-    TemplateClassAssistantPrivate(const KUrl& baseUrl);
+    TemplateClassAssistantPrivate(const QUrl& baseUrl);
     ~TemplateClassAssistantPrivate();
 
-    void addFilesToTarget (const QHash<QString, KUrl>& fileUrls);
+    void addFilesToTarget (const QHash<QString, QUrl>& fileUrls);
 
     KPageWidgetItem* templateSelectionPage;
     KPageWidgetItem* classIdentifierPage;
@@ -96,7 +96,7 @@ public:
     TemplateOptionsPage* templateOptionsPageWidget;
     OutputPage* outputPageWidget;
 
-    KUrl baseUrl;
+    QUrl baseUrl;
     SourceFileTemplate fileTemplate;
     ICreateClassHelper* helper;
     TemplateClassGenerator* generator;
@@ -106,7 +106,7 @@ public:
     QVariantHash templateOptions;
 };
 
-TemplateClassAssistantPrivate::TemplateClassAssistantPrivate(const KUrl& baseUrl)
+TemplateClassAssistantPrivate::TemplateClassAssistantPrivate(const QUrl& baseUrl)
 : baseUrl(baseUrl)
 , helper(0)
 , generator(0)
@@ -129,10 +129,10 @@ TemplateClassAssistantPrivate::~TemplateClassAssistantPrivate()
     }
 }
 
-void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, KUrl >& fileUrls)
+void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl >& fileUrls)
 {
     // Add the generated files to a target, if one is found
-    KUrl url = baseUrl;
+    QUrl url = baseUrl;
     if (!url.isValid())
     {
         // This was probably not launched from the project manager view
@@ -140,10 +140,10 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, KUrl
 
         if (!fileUrls.isEmpty())
         {
-            url = fileUrls.constBegin().value().upUrl();
+            url = fileUrls.constBegin().value().adjusted(QUrl::RemoveFilename);
         }
     }
-    kDebug() << "Searching for targets with URL" << url.prettyUrl();
+    kDebug() << "Searching for targets with URL" << url;
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
     if (!project || !project->buildSystemManager())
     {
@@ -240,13 +240,13 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, KUrl
     Q_ASSERT(target);
 
     QList<ProjectFileItem*> fileItems;
-    foreach (const KUrl& fileUrl, fileUrls)
+    foreach (const QUrl &fileUrl, fileUrls)
     {
         foreach (ProjectBaseItem* item, project->itemsForUrl(fileUrl.upUrl()))
         {
             if (ProjectFolderItem* folder = item->folder())
             {
-                ///FIXME: use Path instead of KUrl in the template class assistant
+                ///FIXME: use Path instead of QUrl in the template class assistant
                 if (ProjectFileItem* file = project->projectFileManager()->addFile(Path(fileUrl), folder)) {
                     fileItems << file;
                     break;
@@ -261,7 +261,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, KUrl
 
 }
 
-TemplateClassAssistant::TemplateClassAssistant(QWidget* parent, const KUrl& baseUrl)
+TemplateClassAssistant::TemplateClassAssistant(QWidget* parent, const QUrl& baseUrl)
 : KAssistantDialog(parent)
 , d(new TemplateClassAssistantPrivate(baseUrl))
 {
@@ -286,7 +286,7 @@ void TemplateClassAssistant::setup()
 {
     if (d->baseUrl.isValid())
     {
-        setWindowTitle(xi18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.prettyUrl()));
+        setWindowTitle(xi18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.toDisplayString()));
     }
     else
     {
@@ -321,7 +321,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
     {
         setWindowTitle(xi18n("Create Files from Template <filename>%1</filename> in <filename>%2</filename>",
                             d->fileTemplate.name(),
-                            d->baseUrl.prettyUrl()));
+                            d->baseUrl.toDisplayString()));
     }
     else
     {
@@ -522,7 +522,7 @@ void TemplateClassAssistant::back()
 
         if (d->baseUrl.isValid())
         {
-            setWindowTitle(xi18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.prettyUrl()));
+            setWindowTitle(xi18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.toDisplayString()));
         }
         else
         {
@@ -535,13 +535,13 @@ void TemplateClassAssistant::back()
 void TemplateClassAssistant::accept()
 {
     // next() is not called for the last page (when the user clicks Finish), so we have to set output locations here
-    QHash<QString, KUrl> fileUrls = d->outputPageWidget->fileUrls();
+    QHash<QString, QUrl> fileUrls = d->outputPageWidget->fileUrls();
     QHash<QString, KTextEditor::Cursor> filePositions = d->outputPageWidget->filePositions();
 
     DocumentChangeSet changes;
     if (d->generator)
     {
-        QHash<QString, KUrl>::const_iterator it = fileUrls.constBegin();
+        QHash<QString, QUrl>::const_iterator it = fileUrls.constBegin();
         for (; it != fileUrls.constEnd(); ++it)
         {
             d->generator->setFileUrl(it.key(), it.value());
@@ -560,7 +560,7 @@ void TemplateClassAssistant::accept()
     changes.applyAllChanges();
 
     // Open the generated files in the editor
-    foreach (const KUrl& url, fileUrls)
+    foreach (const QUrl& url, fileUrls)
     {
         ICore::self()->documentController()->openDocument(url);
     }
@@ -573,7 +573,7 @@ void TemplateClassAssistant::setCurrentPageValid(bool valid)
     setValid(currentPage(), valid);
 }
 
-KUrl TemplateClassAssistant::baseUrl() const
+QUrl TemplateClassAssistant::baseUrl() const
 {
     return d->baseUrl;
 }

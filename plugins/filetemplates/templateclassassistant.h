@@ -21,7 +21,7 @@
 #define KDEVPLATFORM_PLUGIN_TEMPLATECLASSASSISTANT_H
 
 #include <KAssistantDialog>
-#include <KUrl>
+#include <QUrl>
 
 namespace KDevelop
 {
@@ -49,7 +49,7 @@ public:
      * @param parent parent widget
      * @param baseUrl the directory where the new class should be created
      **/
-    TemplateClassAssistant(QWidget* parent, const KUrl& baseUrl = KUrl());
+    TemplateClassAssistant(QWidget* parent, const QUrl& baseUrl = QUrl());
     /**
      * Destroys the assistant
      **/
@@ -66,7 +66,7 @@ public:
      * If the assistant was started from the context menu of a project item,
      * this function returns that item's URL. Otherwise, this returns an invalid URL.
      */
-    KUrl baseUrl() const;
+    QUrl baseUrl() const;
 
     /**
      * Called when the user selected a template in the first page of the assistant.

@@ -23,7 +23,8 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QObject>
 #include <QtCore/QList>
-#include <kurl.h>
+#include <QUrl>
+
 #include "interfacesexport.h"
 
 class QItemSelectionModel;
@@ -79,7 +80,7 @@ public:
      * @returns the first open project containing the url or null if no such
      * project can be found
      */
-    Q_SCRIPTABLE virtual IProject* findProjectForUrl( const KUrl& url ) const = 0;
+    Q_SCRIPTABLE virtual IProject* findProjectForUrl( const QUrl& url ) const = 0;
 
     /**
      * Checks whether the given project name is used already or not. The project
@@ -89,7 +90,7 @@ public:
      */
     Q_SCRIPTABLE virtual bool isProjectNameUsed( const QString& name ) const = 0;
 
-    virtual KUrl projectsBaseDirectory() const = 0;
+    virtual QUrl projectsBaseDirectory() const = 0;
 
     enum FormattingOptions {
         FormatHtml,
@@ -103,7 +104,7 @@ public:
      * The returned path always has a training slash.
      * @param format formatting used for the string
      */
-    Q_SCRIPTABLE virtual QString prettyFilePath(const KUrl& url, FormattingOptions format = FormatHtml) const = 0;
+    Q_SCRIPTABLE virtual QString prettyFilePath(const QUrl& url, FormattingOptions format = FormatHtml) const = 0;
     
     /**
      * Returns a pretty short representation of the given url, considering the currently loaded projects:
@@ -111,7 +112,7 @@ public:
      * the full file path.
      * @param format formatting used for the string
      */
-    Q_SCRIPTABLE virtual QString prettyFileName(const KUrl& url, FormattingOptions format = FormatHtml) const = 0;
+    Q_SCRIPTABLE virtual QString prettyFileName(const QUrl& url, FormattingOptions format = FormatHtml) const = 0;
 
     /**
      * @returns whether project files should be parsed or not
@@ -123,7 +124,7 @@ public Q_SLOTS:
      * Tries finding a project-file for the given source-url and opens it.
      * If no .kdev4 project file is found, the user is asked to import a project.
      */
-        virtual void openProjectForUrl( const KUrl &sourceUrl ) = 0;
+        virtual void openProjectForUrl( const QUrl &sourceUrl ) = 0;
     /**
      * open the project from the given kdev4 project file. This only reads
      * the file and starts creating the project model from it. The opening process

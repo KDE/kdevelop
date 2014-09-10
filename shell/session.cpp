@@ -21,8 +21,8 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
+#include <QUrl>
 
-#include <kurl.h>
 #include <kparts/mainwindow.h>
 #include <kdebug.h>
 #include <kstringhandler.h>
@@ -52,11 +52,10 @@ public:
     Session* q;
     bool isTemporary;
 
-    KUrl pluginArea( const IPlugin* plugin )
+    QUrl pluginArea( const IPlugin* plugin )
     {
         QString name = Core::self()->pluginController()->pluginInfo( plugin ).pluginName();
-        KUrl url( info.path );
-        url.addPath( name );
+        QUrl url = QUrl::fromLocalFile( info.path + '/' + name );
         if( !QFile::exists( url.toLocalFile() ) ) {
             QDir( info.path ).mkdir( name );
         }
@@ -97,7 +96,7 @@ QString Session::name() const
     return d->info.name;
 }
 
-KUrl::List Session::containedProjects() const
+QList<QUrl> Session::containedProjects() const
 {
     return d->info.projects;
 }
@@ -107,7 +106,7 @@ QString Session::description() const
     return d->info.description;
 }
 
-KUrl Session::pluginDataArea( const IPlugin* p )
+QUrl Session::pluginDataArea( const IPlugin* p )
 {
     return d->pluginArea( p );
 }
@@ -132,11 +131,11 @@ void Session::setName( const QString& newname )
     d->updateDescription();
 }
 
-void Session::setContainedProjects( const KUrl::List& projects )
+void Session::setContainedProjects( const QList<QUrl>& projects )
 {
     d->info.projects = projects;
 
-    d->info.config->group( cfgSessionOptionsGroup ).writeEntry( cfgSessionProjectsEntry, projects.toStringList() );
+    d->info.config->group( cfgSessionOptionsGroup ).writeEntry( cfgSessionProjectsEntry, projects );
     d->info.config->sync();
 
     d->updateDescription();
@@ -165,7 +164,7 @@ QString SessionPrivate::generatePrettyContents( const SessionInfo& info )
     QStringList projectNames;
     projectNames.reserve( info.projects.size() );
 
-    foreach( const KUrl& url, info.projects ) {
+    foreach( const QUrl& url, info.projects ) {
         IProject* project = 0;
         if( ICore::self() && ICore::self()->projectController() ) {
             project = ICore::self()->projectController()->findProjectForUrl( url );
@@ -233,7 +232,7 @@ SessionInfo Session::parse( const QString& id, bool mkdir )
     KConfigGroup cfgOptionsGroup = ret.config->group( cfgSessionOptionsGroup );
 
     ret.name = cfgRootGroup.readEntry( cfgSessionNameEntry, QString() );
-    ret.projects = cfgOptionsGroup.readEntry( cfgSessionProjectsEntry, QStringList() );
+    ret.projects = cfgOptionsGroup.readEntry( cfgSessionProjectsEntry, QList<QUrl>() );
     SessionPrivate::buildDescription( ret );
 
     return ret;

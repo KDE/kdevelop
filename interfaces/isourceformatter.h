@@ -25,7 +25,7 @@
 
 #include "interfacesexport.h"
 
-class KUrl;
+class QUrl;
 
 namespace KDevelop
 {
@@ -159,7 +159,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		 *
 		 * If the source-formatter cannot work correctly with the context, it will just return the input text.
 		*/
-		virtual QString formatSource(const QString &text, const KUrl& url, const QMimeType &mime, const QString& leftContext = QString(), const QString& rightContext = QString()) = 0;
+		virtual QString formatSource(const QString &text, const QUrl& url, const QMimeType &mime, const QString& leftContext = QString(), const QString& rightContext = QString()) = 0;
 
 		/**
 		 * Format with the given style, this is mostly for the kcm to format the preview text
@@ -168,7 +168,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		 */
 		virtual QString formatSourceWithStyle( SourceFormatterStyle,
 											   const QString& text,
-											   const KUrl& url,
+											   const QUrl& url,
 											   const QMimeType &mime,
 											   const QString& leftContext = QString(),
 											   const QString& rightContext = QString() ) = 0;
@@ -192,7 +192,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 			bool isValid() const {
 				return indentationTabWidth != 0 || indentWidth != 0;
 			}
-			
+
 			// The length of one tab used for indentation.
 			// Zero if unknown, -1 if tabs should not be used for indentation
 			int indentationTabWidth;
@@ -204,7 +204,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 
 		/** \return The indentation of the style applicable for the given url.
 		*/
-		virtual Indentation indentation(const KUrl& url) = 0;
+		virtual Indentation indentation(const QUrl& url) = 0;
 
 		/** \return A string representing the map. Values are written in the form
 		* key=value and separated with ','.

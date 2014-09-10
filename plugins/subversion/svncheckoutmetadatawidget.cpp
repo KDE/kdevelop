@@ -11,7 +11,7 @@
 #include "svncheckoutmetadatawidget.h"
 #include "ui_checkoutmetadatawidget.h"
 
-#include <kurl.h>
+#include <QUrl>
 #include <kurlrequester.h>
 
 #include <vcs/vcslocation.h>
@@ -34,12 +34,12 @@ KDevelop::VcsLocation SvnCheckoutMetadataWidget::source() const
     return src;
 }
 
-KUrl SvnCheckoutMetadataWidget::destination() const
+QUrl SvnCheckoutMetadataWidget::destination() const
 {
     return m_ui->dest->url();
 }
 
-void SvnCheckoutMetadataWidget::setDestinationLocation( const KUrl& url )
+void SvnCheckoutMetadataWidget::setDestinationLocation( const QUrl &url )
 {
     m_ui->dest->setUrl( url );
 }

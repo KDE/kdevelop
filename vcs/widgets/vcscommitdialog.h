@@ -13,7 +13,7 @@
 #define KDEVPLATFORM_VCS_COMMITDIALOG_H
 
 #include <KDialog>
-#include <KUrl>
+
 #include "vcsexport.h"
 
 namespace KDevelop

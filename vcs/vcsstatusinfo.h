@@ -23,8 +23,7 @@
 #define KDEVPLATFORM_VCSSTATUSINFO_H
 
 #include <QtCore/QVariant>
-
-#include <kurl.h>
+#include <QUrl>
 
 #include "vcsexport.h"
 
@@ -72,12 +71,12 @@ public:
      * retrieves the url of this status information item
      * @return the url
      */
-    KUrl url() const;
+    QUrl url() const;
     /**
      * Change the url of this status information item
      * @param url the url
      */
-    void setUrl( const KUrl& );
+    void setUrl( const QUrl& );
 
     VcsStatusInfo::State state() const;
     void setState( VcsStatusInfo::State );

@@ -23,13 +23,12 @@
 
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QUrl>
 
 #include <interfaces/idocument.h>
 
-#include <kurl.h>
 #include <kicon.h>
 
-class KUrl;
 class KDevDocumentItem;
 class KDevCategoryItem;
 class KDevFileItem;
@@ -54,14 +53,14 @@ public:
     KDevelop::IDocument::DocumentState documentState() const;
     void setDocumentState( KDevelop::IDocument::DocumentState state );
 
-    const KUrl url() const;
-    void setUrl(const KUrl &url);
+    const QUrl url() const;
+    void setUrl(const QUrl &url);
 
 protected:
     QString m_fileIcon;
 
 private:
-    KUrl m_url;
+    QUrl m_url;
     KDevelop::IDocument::DocumentState m_documentState;
 };
 
@@ -77,13 +76,13 @@ public:
     }
 
     QList<KDevFileItem*> fileList() const;
-    KDevFileItem* file( const KUrl &url ) const;
+    KDevFileItem* file( const QUrl &url ) const;
 };
 
 class KDevFileItem: public KDevDocumentItem
 {
 public:
-    explicit KDevFileItem( const KUrl &url );
+    explicit KDevFileItem( const QUrl &url );
     virtual ~KDevFileItem();
 
     virtual KDevFileItem *fileItem() const

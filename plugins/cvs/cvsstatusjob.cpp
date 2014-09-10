@@ -11,7 +11,7 @@
 #include "cvsstatusjob.h"
 
 #include <KDebug>
-#include <KUrl>
+#include <QUrl>
 #include <QDir>
 #include <QStringList>
 
@@ -60,7 +60,7 @@ void CvsStatusJob::addInfoToList(QList<QVariant>& infos,
 
     // ... and create a VcsFileInfo entry
     KDevelop::VcsStatusInfo info;
-    info.setUrl(QString(getDirectory() + QDir::separator() + file));
+    info.setUrl(QUrl::fromLocalFile(QString(getDirectory() + QDir::separator() + file)));
     info.setState(cvsState);
 
     kDebug(9500) << "Added status of: " << info.url() << endl;

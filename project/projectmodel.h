@@ -23,8 +23,9 @@
 #define KDEVPLATFORM_PROJECTMODEL_H
 
 #include <QtCore/QAbstractItemModel>
+#include <QUrl>
+
 #include "projectexport.h"
-#include <KUrl>
 #include <KSharedConfig>
 
 template<typename T1,typename T2> struct QPair;
@@ -197,7 +198,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         virtual QString iconName() const;
 
         /** Get the path of this item (if any) converted to a url */
-        KDEVPLATFORMPROJECT_DEPRECATED KUrl url() const;
+        KDEVPLATFORMPROJECT_DEPRECATED QUrl url() const;
 
         /**
          * Set the path of this item.
@@ -356,8 +357,8 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectExecutableTargetItem: public ProjectTarg
 
         virtual ProjectExecutableTargetItem *executable() const;
         virtual int type() const;
-        virtual KUrl builtUrl() const=0;
-        virtual KUrl installedUrl() const=0;
+        virtual QUrl builtUrl() const=0;
+        virtual QUrl installedUrl() const=0;
 };
 
 

@@ -17,13 +17,13 @@
 
 class SvnStatusHolder;
 template <typename T1, typename T2> class QMap;
-class KUrl;
+class QUrl;
 
 class SvnStatusOptionDlg : public KDialog
 {
     Q_OBJECT
 public:
-    explicit SvnStatusOptionDlg( const KUrl &path, QWidget *parent = 0 );
+    explicit SvnStatusOptionDlg( const QUrl &path, QWidget *parent = 0 );
     ~SvnStatusOptionDlg();
 
     SvnRevision revision();
@@ -43,15 +43,15 @@ class SvnStatusDisplayWidget : public QTreeWidget
 {
     Q_OBJECT
 public:
-    explicit SvnStatusDisplayWidget( const KUrl& requestedUrl,
+    explicit SvnStatusDisplayWidget( const QUrl &requestedUrl,
                                      bool contactRepository,
                                      QWidget *parent = 0 );
     ~SvnStatusDisplayWidget();
 
-    void setResults( const QMap< KUrl, SvnStatusHolder > &map );
+    void setResults( const QMap< QUrl, SvnStatusHolder > &map );
 
     bool m_repContacted;
-    KUrl m_reqUrl;
+    QUrl m_reqUrl;
 };
 
 #endif

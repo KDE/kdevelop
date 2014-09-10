@@ -28,7 +28,6 @@ Boston, MA 02110-1301, USA.
 #include <KShell>
 #include <QFileInfo>
 #include <QDir>
-#include <KUrl>
 
 namespace KDevelop
 {
@@ -58,7 +57,7 @@ public:
     OutputModel::OutputFilterStrategy m_filteringStrategy;
     QStringList m_arguments;
     QStringList m_privilegedExecutionCommand;
-    KUrl m_workingDirectory;
+    QUrl m_workingDirectory;
     QString m_environmentProfile;
     QHash<QString, QString> m_environmentOverrides;
     QString m_jobName;
@@ -150,12 +149,12 @@ void OutputExecuteJob::setJobName( const QString& name )
     setTitle( jobName );
 }
 
-KUrl OutputExecuteJob::workingDirectory() const
+QUrl OutputExecuteJob::workingDirectory() const
 {
     return d->m_workingDirectory;
 }
 
-void OutputExecuteJob::setWorkingDirectory( const KUrl& url )
+void OutputExecuteJob::setWorkingDirectory( const QUrl& url )
 {
     d->m_workingDirectory = url;
 }
@@ -167,7 +166,7 @@ void OutputExecuteJob::start()
 
     const bool isBuilder = d->m_properties.testFlag( IsBuilderHint );
 
-    const KUrl effectiveWorkingDirectory = workingDirectory();
+    const QUrl effectiveWorkingDirectory = workingDirectory();
     if( effectiveWorkingDirectory.isEmpty() ) {
         if( d->m_properties.testFlag( NeedWorkingDirectory ) ) {
             // A directory is not given, but we need it.
@@ -186,17 +185,17 @@ void OutputExecuteJob::start()
         if( !effectiveWorkingDirectory.isValid() ) {
             setError( InvalidWorkingDirectoryError );
             if( isBuilder ) {
-                setErrorText( i18n( "Invalid build directory '%1'", effectiveWorkingDirectory.prettyUrl() ) );
+                setErrorText( i18n( "Invalid build directory '%1'", effectiveWorkingDirectory.toDisplayString(QUrl::PreferLocalFile) ) );
             } else {
-                setErrorText( i18n( "Invalid working directory '%1'", effectiveWorkingDirectory.prettyUrl() ) );
+                setErrorText( i18n( "Invalid working directory '%1'", effectiveWorkingDirectory.toDisplayString(QUrl::PreferLocalFile) ) );
             }
             return emitResult();
         } else if( !effectiveWorkingDirectory.isLocalFile() ) {
             setError( InvalidWorkingDirectoryError );
             if( isBuilder ) {
-                setErrorText( i18n( "Build directory '%1' is not a local path", effectiveWorkingDirectory.prettyUrl() ) );
+                setErrorText( i18n( "Build directory '%1' is not a local path", effectiveWorkingDirectory.toDisplayString(QUrl::PreferLocalFile) ) );
             } else {
-                setErrorText( i18n( "Working directory '%1' is not a local path", effectiveWorkingDirectory.prettyUrl() ) );
+                setErrorText( i18n( "Working directory '%1' is not a local path", effectiveWorkingDirectory.toDisplayString(QUrl::PreferLocalFile) ) );
             }
             return emitResult();
         }
@@ -209,14 +208,14 @@ void OutputExecuteJob::start()
             // but is not a directory, or a symlink to an inexistent object.
             bool successfullyCreated = false;
             if( !d->m_properties.testFlag( CheckWorkingDirectory ) ) {
-                successfullyCreated = QDir( effectiveWorkingDirectory.directory() ).mkdir( effectiveWorkingDirectory.fileName() );
+                successfullyCreated = QDir().mkdir( effectiveWorkingDirectory.toLocalFile() );
             }
             if( !successfullyCreated ) {
                 setError( InvalidWorkingDirectoryError );
                 if( isBuilder ) {
-                    setErrorText( i18n( "Build directory '%1' does not exist or is not a directory", effectiveWorkingDirectory.prettyUrl() ) );
+                    setErrorText( i18n( "Build directory '%1' does not exist or is not a directory", effectiveWorkingDirectory.toDisplayString(QUrl::PreferLocalFile) ) );
                 } else {
-                    setErrorText( i18n( "Working directory '%1' does not exist or is not a directory", effectiveWorkingDirectory.prettyUrl() ) );
+                    setErrorText( i18n( "Working directory '%1' does not exist or is not a directory", effectiveWorkingDirectory.toDisplayString(QUrl::PreferLocalFile) ) );
                 }
                 return emitResult();
             }
@@ -251,7 +250,7 @@ void OutputExecuteJob::start()
     const QString joinedCommandLine = d->joinCommandLine();
     QString headerLine;
     if( !effectiveWorkingDirectory.isEmpty() ) {
-        headerLine = effectiveWorkingDirectory.toLocalFile( KUrl::RemoveTrailingSlash ) + "> " + joinedCommandLine;
+        headerLine = effectiveWorkingDirectory.toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ) + "> " + joinedCommandLine;
     } else {
         headerLine = joinedCommandLine;
     }

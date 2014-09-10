@@ -25,7 +25,7 @@ IDocumentController::IDocumentController(QObject *parent)
 {
 }
 
-KDevelop::IDocument* IDocumentController::openDocument( const KUrl &url,
+KDevelop::IDocument* IDocumentController::openDocument( const QUrl &url,
         const KTextEditor::Cursor& cursor,
         DocumentActivationParams activationParams,
         const QString& encoding)

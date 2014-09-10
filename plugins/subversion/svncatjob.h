@@ -25,7 +25,7 @@
 
 #include <QVariant>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <vcs/vcsdiff.h>
 

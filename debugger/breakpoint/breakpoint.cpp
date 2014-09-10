@@ -78,7 +78,6 @@ Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
     m_expression = config.readEntry("expression", QString());
     setCondition(config.readEntry("condition", ""));
     setIgnoreHits(config.readEntry("ignoreHits", 0));
-    
 }
 
 BreakpointModel *Breakpoint::breakpointModel()
@@ -100,7 +99,7 @@ bool Breakpoint::setData(int index, const QVariant& value)
             QRegExp rx("^(.+):([0-9]+)$");
             int idx = rx.indexIn(s);
             if (m_kind == CodeBreakpoint && idx != -1) {
-                m_url = QUrl(rx.cap(1));
+                m_url = QUrl::fromLocalFile(rx.cap(1));
                 m_line = rx.cap(2).toInt() - 1;
                 m_expression.clear();
             } else {
@@ -233,6 +232,7 @@ void Breakpoint::setLine(int line) {
 }
 void Breakpoint::setUrl(const QUrl& url) {
     Q_ASSERT(m_kind == CodeBreakpoint);
+    Q_ASSERT(url.isEmpty() || (!url.isRelative() && !url.fileName().isEmpty()));
     m_url = url;
     reportChange(LocationColumn);
 }
@@ -242,6 +242,7 @@ QUrl Breakpoint::url() const {
 void Breakpoint::setLocation(const QUrl& url, int line)
 {
     Q_ASSERT(m_kind == CodeBreakpoint);
+    Q_ASSERT(url.isEmpty() || (!url.isRelative() && !url.fileName().isEmpty()));
     m_url = url;
     m_line = line;
     reportChange(LocationColumn);

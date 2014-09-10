@@ -191,6 +191,7 @@ void TestPath::testPath()
     QCOMPARE(optUrl.isLocalFile(), url.isLocalFile());
     QCOMPARE(optUrl.pathOrUrl(), url.toDisplayString(QUrl::PreferLocalFile));
     QCOMPARE(optUrl.isValid(), url.isValid());
+    QCOMPARE(optUrl.isEmpty(), url.isEmpty());
     QCOMPARE(optUrl.lastPathSegment(), url.fileName());
     QCOMPARE(optUrl.path(), url.path());
     QCOMPARE(optUrl.parent().toUrl(), comparableUpUrl(url));
@@ -293,6 +294,7 @@ void TestPath::testPathInvalid()
     QFETCH(QString, input);
     Path url(input);
     QVERIFY(!url.isValid());
+    QVERIFY(url.isEmpty());
 }
 
 void TestPath::testPathInvalid_data()
@@ -369,7 +371,7 @@ void TestPath::testPathAddData()
     foreach(const QString& base, bases) {
         QUrl baseUrl = QUrl::fromUserInput(base);
         if (QDir::isRelativePath(pathToAdd)) {
-            baseUrl = baseUrl.resolved(pathToAdd);
+            baseUrl = baseUrl.resolved(QUrl(pathToAdd));
         } else {
             baseUrl.setPath(baseUrl.path() + pathToAdd);
         }
@@ -517,6 +519,25 @@ void TestPath::testHasParent()
     QFETCH(QString, input);
     Path path(input);
     QTEST(path.hasParent(), "hasParent");
+}
+
+void TestPath::QUrl_acceptance()
+{
+    const QUrl baseLocal = QUrl("file:///foo.h");
+    QCOMPARE(baseLocal.isValid(), true);
+    QCOMPARE(baseLocal.isRelative(), false);
+    QCOMPARE(baseLocal, QUrl::fromLocalFile("/foo.h"));
+    QCOMPARE(baseLocal, QUrl::fromUserInput("/foo.h"));
+
+    QUrl relative("bar.h");
+    QCOMPARE(relative.isRelative(), true);
+    QCOMPARE(baseLocal.resolved(relative), QUrl("file:///bar.h"));
+    QUrl relative2("/foo/bar.h");
+    QCOMPARE(relative2.isRelative(), true);
+    QCOMPARE(baseLocal.resolved(relative2), QUrl("file:///foo/bar.h"));
+
+    const QUrl baseRemote = QUrl("http://foo.org/asdf/foo/asdf");
+    QCOMPARE(baseRemote.resolved(relative), QUrl("http://foo.org/asdf/foo/bar.h"));
 }
 
 #include "test_path.moc"

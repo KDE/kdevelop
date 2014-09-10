@@ -21,8 +21,6 @@
 #include <QTextEdit>
 #include <QtTest/QtTest>
 
-#include <kurl.h>
-
 #include <sublime/controller.h>
 #include <sublime/tooldocument.h>
 #include <sublime/view.h>

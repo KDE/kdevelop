@@ -52,7 +52,7 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     setMainWidget(w);
 
     m_model = new BranchesListModel(this);
-    m_model->initialize(m_dvcPlugin, repository);
+    m_model->initialize(m_dvcPlugin, QUrl::fromLocalFile(repository));
     m_ui->branchView->setModel(m_model);
 
     QString branchName = m_model->currentBranch();
@@ -146,7 +146,7 @@ void BranchManager::checkoutBranch()
     }
 
     kDebug() << "Switching to" << branch << "in" << m_repository;
-    KDevelop::VcsJob *branchJob = m_dvcPlugin->switchBranch(m_repository, branch);
+    KDevelop::VcsJob *branchJob = m_dvcPlugin->switchBranch(QUrl::fromLocalFile(m_repository), branch);
 //     connect(branchJob, SIGNAL(finished(KJob*)), m_model, SIGNAL(resetCurrent()));
     
     ICore::self()->runController()->registerJob(branchJob);

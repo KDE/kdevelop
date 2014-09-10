@@ -66,7 +66,7 @@ const int maximumFilesToOpenDirectly = 15;
 
 Q_DECLARE_METATYPE( const Diff2::DiffModel* )
 
-void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
+void PatchReviewPlugin::seekHunk( bool forwards, const QUrl& fileName ) {
     try {
         kDebug() << forwards << fileName << fileName.isEmpty();
         if ( !m_modelList )
@@ -77,7 +77,7 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
             if ( !model || !model->differences() )
                 continue;
 
-            KUrl file = urlForFileModel( model );
+            QUrl file = urlForFileModel( model );
 
             if ( !fileName.isEmpty() && fileName != file )
                 continue;
@@ -122,7 +122,7 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
     kDebug() << "no matching hunk found";
 }
 
-void PatchReviewPlugin::addHighlighting( const KUrl& highlightFile, IDocument* document ) {
+void PatchReviewPlugin::addHighlighting( const QUrl& highlightFile, IDocument* document ) {
     try {
         if ( !modelList() )
             throw "no model";
@@ -132,12 +132,12 @@ void PatchReviewPlugin::addHighlighting( const KUrl& highlightFile, IDocument* d
             if ( !model )
                 continue;
 
-            KUrl file = urlForFileModel( model );
+            QUrl file = urlForFileModel( model );
 
             if ( file != highlightFile )
                 continue;
 
-            kDebug() << "highlighting" << file.prettyUrl();
+            kDebug() << "highlighting" << file.toDisplayString();
 
             IDocument* doc = document;
             if( !doc )
@@ -169,7 +169,7 @@ void PatchReviewPlugin::highlightPatch() {
             if ( !model )
                 continue;
 
-            KUrl file = urlForFileModel( model );
+            QUrl file = urlForFileModel( model );
 
             addHighlighting( file );
         }
@@ -180,7 +180,7 @@ void PatchReviewPlugin::highlightPatch() {
     }
 }
 
-void PatchReviewPlugin::removeHighlighting( const KUrl& file ) {
+void PatchReviewPlugin::removeHighlighting( const QUrl& file ) {
     if ( file.isEmpty() ) {
         ///Remove all highlighting
         qDeleteAll( m_highlighters );
@@ -347,7 +347,7 @@ void PatchReviewPlugin::cancelReview() {
     }
 }
 
-void PatchReviewPlugin::finishReview( QList<KUrl> selection ) {
+void PatchReviewPlugin::finishReview( QList<QUrl> selection ) {
     if( m_patch && m_patch->finishReview( selection ) ) {
         closeReview();
     }
@@ -407,7 +407,7 @@ void PatchReviewPlugin::updateReview() {
         return;
 
     // list of opened documents to prevent flicker
-    QMap<KUrl, IDocument*> documents;
+    QMap<QUrl, IDocument*> documents;
     foreach( IDocument* doc, ICore::self()->documentController()->openDocuments() ) {
         documents[doc->url()] = doc;
     }
@@ -435,7 +435,7 @@ void PatchReviewPlugin::updateReview() {
     if( m_modelList->modelCount() < maximumFilesToOpenDirectly ) {
         //Open all relates files
         for( int a = 0; a < m_modelList->modelCount(); ++a ) {
-            KUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
+            QUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
 
             if( QFileInfo( absoluteUrl.path() ).exists() && absoluteUrl.path() != "/dev/null" )
             {

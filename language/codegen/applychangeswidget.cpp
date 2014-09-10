@@ -154,7 +154,7 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
     QSplitter *v=new QSplitter(widget);
     m->addWidget(v);
     
-    KUrl url = file.toUrl();
+    QUrl url = file.toUrl();
     
     QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(url);
     
@@ -177,7 +177,7 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
         temp->write(repr->text().toUtf8());
         temp->close();
         
-        url = temp->fileName();
+        url = QUrl::fromLocalFile(temp->fileName());
         
         m_temps << temp;
     }

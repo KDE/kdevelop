@@ -31,7 +31,7 @@ class ILaunchConfiguration;
 }
 
 class KJob;
-class KUrl;
+class QUrl;
 class QStringList;
 
 /**
@@ -45,10 +45,10 @@ public:
     virtual ~IExecuteScriptPlugin() {}
 
     virtual QString interpreter( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
-    virtual KUrl script( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
+    virtual QUrl script( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
     virtual QString remoteHost( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
     virtual QStringList arguments( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
-    virtual KUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const = 0;
+    virtual QUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const = 0;
     virtual QString environmentGroup( KDevelop::ILaunchConfiguration* ) const = 0;
     //virtual bool useTerminal( KDevelop::ILaunchConfiguration* ) const = 0;
     virtual QString scriptAppConfigTypeId() const = 0;

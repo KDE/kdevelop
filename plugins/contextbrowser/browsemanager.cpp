@@ -197,10 +197,10 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
             if(textCursor.column() > 0)
                 textCursor.setColumn(textCursor.column()-1);
 
-            KUrl viewUrl = view->document()->url();
+            QUrl viewUrl = view->document()->url();
             QList<ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
 
-            QPair<KUrl, KTextEditor::Cursor> jumpTo;
+            QPair<QUrl, KTextEditor::Cursor> jumpTo;
 
             //Step 1: Look for a special language object(Macro, included header, etc.)
             foreach( ILanguage* language, languages) {
@@ -215,7 +215,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 KDevelop::DUChainReadLocker lock( DUChain::lock() );
                 foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), KTextEditor::Cursor(textCursor)) );
                 
-                if(foundDeclaration && foundDeclaration->url().toUrl().equals(view->document()->url()) && foundDeclaration->range().contains( foundDeclaration->transformToLocalRevision(KTextEditor::Cursor(textCursor)))) {
+                if(foundDeclaration && (foundDeclaration->url().toUrl() == view->document()->url()) && foundDeclaration->range().contains( foundDeclaration->transformToLocalRevision(KTextEditor::Cursor(textCursor)))) {
                     ///A declaration was clicked directly. Jumping to it is useless, so jump to the definition or something useful
 
                     bool foundBetter = false;

@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_IOPENWITH_H
 #define KDEVPLATFORM_PLUGIN_IOPENWITH_H
 
-#include <KUrl>
+#include <QUrl>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
@@ -42,7 +42,7 @@ public:
      * If the open with plugin was disabled by the user, the files will be opened
      * as text documents.
      */
-    static void openFiles(const KUrl::List &files)
+    static void openFiles(const QList<QUrl> &files)
     {
         IPlugin* i = ICore::self()->pluginController()->pluginForExtension( "org.kdevelop.IOpenWith" );
         if (i) {
@@ -52,13 +52,13 @@ public:
             return;
         }
 
-        foreach(const KUrl& url, files) {
+        foreach(const QUrl& url, files) {
             ICore::self()->documentController()->openDocument( url );
         }
     }
 
 protected:
-    virtual void openFilesInternal(const KUrl::List &files) = 0;
+    virtual void openFilesInternal(const QList<QUrl> &files) = 0;
 };
 
 }

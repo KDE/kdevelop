@@ -24,8 +24,8 @@
 #include <QTextEdit>
 #include <QLayout>
 #include <QPushButton>
+#include <QUrl>
 
-#include <kurl.h>
 #include <kdebug.h>
 #include <kmenubar.h>
 
@@ -42,9 +42,9 @@ Example1Main::Example1Main()
 {
     //documents
     m_controller = new Sublime::Controller(this);
-    Sublime::Document *doc1 = new Sublime::UrlDocument(m_controller, KUrl::fromPath("~/foo.cpp"));
-    Sublime::Document *doc2 = new Sublime::UrlDocument(m_controller, KUrl::fromPath("~/boo.cpp"));
-    Sublime::Document *doc3 = new Sublime::UrlDocument(m_controller, KUrl::fromPath("~/moo.cpp"));
+    Sublime::Document *doc1 = new Sublime::UrlDocument(m_controller, QUrl::fromLocalFile("~/foo.cpp"));
+    Sublime::Document *doc2 = new Sublime::UrlDocument(m_controller, QUrl::fromLocalFile("~/boo.cpp"));
+    Sublime::Document *doc3 = new Sublime::UrlDocument(m_controller, QUrl::fromLocalFile("~/moo.cpp"));
 
     //documents for toolviews
     Sublime::Document *tool1 = new Sublime::ToolDocument("ListView", m_controller,

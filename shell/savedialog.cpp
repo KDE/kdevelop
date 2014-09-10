@@ -40,7 +40,7 @@ public:
     {
         setFlags(Qt::ItemIsUserCheckable | flags());
         setData(Qt::CheckStateRole, Qt::Checked);
-        setText(m_doc->url().prettyUrl());
+        setText(m_doc->url().toDisplayString(QUrl::PreferLocalFile));
     }
 
     IDocument* doc() const { return m_doc; }

@@ -23,9 +23,8 @@
 
 #include "svnjobbase.h"
 
-#include <QVariant>
-
-#include <kurl.h>
+#include <QtCore/QVariant>
+#include <QUrl>
 
 class SvnInternalMoveJob;
 
@@ -38,8 +37,8 @@ class SvnMoveJob : public SvnJobBase
         void start();
         SvnInternalJobBase* internalJob() const;
 
-        void setSourceLocation( const KUrl& location );
-        void setDestinationLocation( const KUrl& location );
+        void setSourceLocation( const QUrl &location );
+        void setDestinationLocation( const QUrl &location );
         void setForce( bool );
     private:
         SvnInternalMoveJob* m_job;

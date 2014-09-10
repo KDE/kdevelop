@@ -21,7 +21,6 @@
 #include <QTextEdit>
 #include <QtTest/QtTest>
 
-#include <kurl.h>
 #include <kdebug.h>
 #include <kapplication.h>
 

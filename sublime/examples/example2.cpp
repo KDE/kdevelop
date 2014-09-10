@@ -16,11 +16,13 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
+
+#include <QUrl>
+
 #include <k4aboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <KLocalizedString>
-#include <kurl.h>
 
 #include <sublime/area.h>
 #include <sublime/urldocument.h>
@@ -41,7 +43,7 @@ int main(int argc, char **argv)
     Sublime::Controller *controller = new Sublime::Controller(&app);
     Sublime::Area *area = new Sublime::Area(controller, "Area");
     controller->addDefaultArea(area);
-    Sublime::Document *doc = new Sublime::UrlDocument(controller, KUrl::fromPath("~/foo.cpp"));
+    Sublime::Document *doc = new Sublime::UrlDocument(controller, QUrl::fromLocalFile("~/foo.cpp"));
     area->addView(doc->createView());
     Example2Main *window = new Example2Main(controller);
     controller->showArea(area, window);

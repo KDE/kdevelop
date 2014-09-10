@@ -28,7 +28,7 @@ public:
 
     virtual void setSourceLocation( const KDevelop::VcsLocation& );
     virtual void setSourceLocationEditable( bool );
-    virtual KUrl source() const;
+    virtual QUrl source() const;
     virtual KDevelop::VcsLocation destination() const;
     virtual QString message() const;
     virtual void setUseSourceDirForDestination( bool );

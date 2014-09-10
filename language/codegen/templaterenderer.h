@@ -25,7 +25,7 @@
 
 #include <language/languageexport.h>
 
-class KUrl;
+class QUrl;
 
 namespace KDevelop
 {
@@ -137,7 +137,7 @@ public:
      * @param name (optional) the name of this template
      * @return the rendered template
      **/
-    QString renderFile(const KUrl& url, const QString& name = QString()) const;
+    QString renderFile(const QUrl& url, const QString& name = QString()) const;
 
     /**
      * @brief Renders a list of templates
@@ -189,7 +189,7 @@ public:
      * @return KDevelop::DocumentChangeSet
      */
     DocumentChangeSet renderFileTemplate(const KDevelop::SourceFileTemplate& fileTemplate,
-                                         const KUrl& baseUrl, const QHash<QString, KUrl>& fileUrls);
+                                         const QUrl& baseUrl, const QHash<QString, QUrl>& fileUrls);
 
     /**
      * Returns the error string from the last call to render(), renderFile() or renderFileTemplate().

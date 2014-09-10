@@ -79,7 +79,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     IPlugin * plugin;
     IBasicVersionControl * vcs;
 
-    KUrl::List ctxUrls;
+    QList<QUrl> ctxUrls;
     QAction* commitAction;
     QAction* addAction;
     QAction* updateAction;
@@ -118,10 +118,10 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         connect(pushAction, SIGNAL(triggered()), parent, SLOT(push()));
     }
     
-    bool allLocalFiles(const KUrl::List& urls)
+    bool allLocalFiles(const QList<QUrl>& urls)
     {
         bool ret=true;
-        foreach(const KUrl& url, urls) {
+        foreach(const QUrl &url, urls) {
             QFileInfo info(url.toLocalFile());
             ret &= info.isFile();
         }
@@ -131,7 +131,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     QMenu* createMenu()
     {
         bool allVersioned=true;
-        foreach(const KUrl& url, ctxUrls) {
+        foreach(const QUrl &url, ctxUrls) {
             allVersioned=allVersioned && vcs->isVersionControlled(url);
             
             if(!allVersioned)
@@ -181,7 +181,7 @@ VcsPluginHelper::VcsPluginHelper(KDevelop::IPlugin* parent, KDevelop::IBasicVers
 VcsPluginHelper::~VcsPluginHelper()
 {}
 
-void VcsPluginHelper::addContextDocument(const KUrl &url)
+void VcsPluginHelper::addContextDocument(const QUrl &url)
 {
     d->ctxUrls.append(url);
 }
@@ -229,7 +229,7 @@ void VcsPluginHelper::setupFromContext(Context* context)
     }
 }
 
-KUrl::List const & VcsPluginHelper::contextUrlList()
+QList<QUrl> VcsPluginHelper::contextUrlList() const
 {
     return d->ctxUrls;
 }
@@ -253,7 +253,7 @@ QMenu* VcsPluginHelper::commonActions()
 
 #define SINGLEURL_SETUP_VARS \
     KDevelop::IBasicVersionControl* iface = d->vcs;\
-    const KUrl & url = d->ctxUrls.front();
+    const QUrl &url = d->ctxUrls.front();
 
 
 void VcsPluginHelper::revert()
@@ -261,7 +261,7 @@ void VcsPluginHelper::revert()
     VcsJob* job=d->vcs->revert(d->ctxUrls);
     connect(job, SIGNAL(finished(KJob*)), SLOT(revertDone(KJob*)));
     
-    foreach(const KUrl& url, d->ctxUrls) {
+    foreach(const QUrl &url, d->ctxUrls) {
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
         
         if(doc && doc->textDocument()) {
@@ -272,7 +272,7 @@ void VcsPluginHelper::revert()
             doc->textDocument()->setModified(false);
         }
     }
-    job->setProperty("urls", d->ctxUrls);
+    job->setProperty("urls", QVariant::fromValue(d->ctxUrls));
     
     d->plugin->core()->runController()->registerJob(job);
 }
@@ -292,9 +292,9 @@ void VcsPluginHelper::revertDone(KJob* job)
 void VcsPluginHelper::delayedModificationWarningOn()
 {
     QObject* timer = sender();
-    KUrl::List urls = timer->property("urls").value<KUrl::List>();
+    QList<QUrl> urls = timer->property("urls").value<QList<QUrl>>();
     
-    foreach(const KUrl& url, urls) {
+    foreach(const QUrl &url, urls) {
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
         
         if(doc) {
@@ -349,7 +349,7 @@ void VcsPluginHelper::diffForRevGlobal()
     if (d->ctxUrls.isEmpty()) {
         return;
     }
-    KUrl url = d->ctxUrls.first();
+    QUrl url = d->ctxUrls.first();
     IProject* project = ICore::self()->projectController()->findProjectForUrl( url );
     if( project ) {
         url = project->path().toUrl();
@@ -358,7 +358,7 @@ void VcsPluginHelper::diffForRevGlobal()
     diffForRev(url);
 }
 
-void VcsPluginHelper::diffForRev(const KUrl& url)
+void VcsPluginHelper::diffForRev(const QUrl& url)
 {
     QAction* action = qobject_cast<QAction*>( sender() );
     Q_ASSERT(action);
@@ -380,7 +380,7 @@ void VcsPluginHelper::history(const VcsRevision& rev)
     dlg->setAttribute(Qt::WA_DeleteOnClose);
     dlg->setButtons(KDialog::Close);
     dlg->setCaption(i18nc("%1: path or URL, %2: name of a version control system",
-                          "%2 History (%1)", url.pathOrUrl(), iface->name()));
+                          "%2 History (%1)", url.toDisplayString(QUrl::PreferLocalFile), iface->name()));
     KDevelop::VcsEventWidget* logWidget = new KDevelop::VcsEventWidget(url, rev, iface, dlg);
     dlg->setMainWidget(logWidget);
     dlg->show();
@@ -433,7 +433,7 @@ void VcsPluginHelper::annotation()
         }
     } else {
         KMessageBox::error(0, i18n("Cannot execute annotate action because the "
-                                   "document was not found, or was not a text document:\n%1", url.pathOrUrl()));
+                                   "document was not found, or was not a text document:\n%1", url.toDisplayString(QUrl::PreferLocalFile)));
     }
 }
 
@@ -500,7 +500,7 @@ void VcsPluginHelper::commit()
     Q_ASSERT(!d->ctxUrls.isEmpty());
     ICore::self()->documentController()->saveAllDocuments();
 
-    KUrl url = d->ctxUrls.first();
+    QUrl url = d->ctxUrls.first();
     
     // We start the commit UI no matter whether there is real differences, as it can also be used to commit untracked files
     VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(d->vcs, url));
@@ -516,7 +516,7 @@ void VcsPluginHelper::commit()
 
 void VcsPluginHelper::push()
 {
-    foreach(const KUrl& url, d->ctxUrls) {
+    foreach(const QUrl &url, d->ctxUrls) {
         VcsJob* job = d->plugin->extension<IDistributedVersionControl>()->push(url, VcsLocation());
         ICore::self()->runController()->registerJob(job);
     }
@@ -524,7 +524,7 @@ void VcsPluginHelper::push()
 
 void VcsPluginHelper::pull()
 {
-    foreach(const KUrl& url, d->ctxUrls) {
+    foreach(const QUrl &url, d->ctxUrls) {
         VcsJob* job = d->plugin->extension<IDistributedVersionControl>()->pull(VcsLocation(), url);
         ICore::self()->runController()->registerJob(job);
     }

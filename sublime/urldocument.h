@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_URLDOCUMENT_H
 #define KDEVPLATFORM_URLDOCUMENT_H
 
-#include <kurl.h>
+#include <QUrl>
 
 #include "sublimeexport.h"
 
@@ -32,14 +32,14 @@ namespace Sublime {
 */
 class KDEVPLATFORMSUBLIME_EXPORT UrlDocument: public Document {
 public:
-    UrlDocument(Controller *controller, const KUrl &url);
+    UrlDocument(Controller *controller, const QUrl &url);
     ~UrlDocument();
 
     virtual QString documentType() const;
 
     virtual QString documentSpecifier() const;
 
-    KUrl url() const;
+    QUrl url() const;
 
     /**
      * @return the icon for the mimetype of the document url.
@@ -48,7 +48,7 @@ public:
 
 protected:
     virtual QWidget *createViewWidget(QWidget *parent = 0);
-    void setUrl(const KUrl& newUrl);
+    void setUrl(const QUrl& newUrl);
 
 private:
     struct UrlDocumentPrivate * const d;

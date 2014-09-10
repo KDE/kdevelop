@@ -97,7 +97,7 @@ Sublime::View* WelcomePageDocument::newView(Sublime::Document* doc)
     return 0;
 }
 
-KUrl WelcomePageDocument::url() const
+QUrl WelcomePageDocument::url() const
 {
     return *s_welcomePageUrl;
 }

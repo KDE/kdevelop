@@ -102,10 +102,10 @@ public:
     QString diff() const;
     
     /** @returns the base directory of the diff. */
-    KUrl baseDiff() const;
+    QUrl baseDiff() const;
     
     /** Sets the base directory of the diff to the @p url */
-    void setBaseDiff(const KUrl& url) const;
+    void setBaseDiff(const QUrl& url) const;
 
     void setDiff( const QString& );
     void addLeftBinary( const KDevelop::VcsLocation&, const QByteArray& );

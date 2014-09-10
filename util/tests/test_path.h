@@ -52,6 +52,8 @@ private slots:
     void testPathCd_data();
     void testHasParent_data();
     void testHasParent();
+
+    void QUrl_acceptance();
 };
 
 #endif // TESTPATH_H

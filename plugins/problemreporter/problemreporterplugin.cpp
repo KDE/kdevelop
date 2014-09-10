@@ -117,7 +117,7 @@ void ProblemReporterPlugin::documentClosed(IDocument* doc)
   if(!doc->textDocument())
     return;
   
-  IndexedString url(doc->url().pathOrUrl());
+  IndexedString url(doc->url());
   delete m_highlighters.take(url);
 }
 

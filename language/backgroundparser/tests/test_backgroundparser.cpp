@@ -166,6 +166,10 @@ void TestBackgroundparser::initTestCase()
   connect(testLang, SIGNAL(parseJobCreated(KDevelop::ParseJob*)),
           &m_jobPlan, SLOT(parseJobCreated(KDevelop::ParseJob*)));
   langController->addTestLanguage(testLang, QStringList() << "text/plain");
+
+  const auto languages = langController->languagesForUrl(QUrl::fromLocalFile("/foo.txt"));
+  QCOMPARE(languages.size(), 1);
+  QCOMPARE(languages.first(), testLang->language());
 }
 
 void TestBackgroundparser::cleanupTestCase()
@@ -185,11 +189,11 @@ void TestBackgroundparser::testParseOrdering_foregroundThread()
     // foreground thread (active document being edited, ...) running all the time.
 
     // the long-running high-prio job
-    m_jobPlan.addJob(JobPrototype(KUrl("test_fgt_hp.txt"), -500, ParseJob::IgnoresSequentialProcessing, 630));
+    m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_fgt_hp.txt"), -500, ParseJob::IgnoresSequentialProcessing, 630));
 
     // several small background jobs
     for ( int i = 0; i < 10; i++ ) {
-        m_jobPlan.addJob(JobPrototype(KUrl("test_fgt_lp__" + QString::number(i) + ".txt"), i, ParseJob::FullSequentialProcessing, 40));
+        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_fgt_lp__" + QString::number(i) + ".txt"), i, ParseJob::FullSequentialProcessing, 40));
     }
 
     // not enough time if the small jobs run after the large one
@@ -201,11 +205,11 @@ void TestBackgroundparser::testParseOrdering_noSequentialProcessing()
     m_jobPlan.clear();
     for ( int i = 0; i < 20; i++ ) {
         // create jobs with no sequential processing, and different priorities
-        m_jobPlan.addJob(JobPrototype(KUrl("test_nsp1__" + QString::number(i) + ".txt"), i, ParseJob::IgnoresSequentialProcessing, i));
+        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_nsp1__" + QString::number(i) + ".txt"), i, ParseJob::IgnoresSequentialProcessing, i));
     }
     for ( int i = 0; i < 8; i++ ) {
         // create a few more jobs with the same priority
-        m_jobPlan.addJob(JobPrototype(KUrl("test_nsp2__" + QString::number(i) + ".txt"), 10, ParseJob::IgnoresSequentialProcessing, i));
+        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_nsp2__" + QString::number(i) + ".txt"), 10, ParseJob::IgnoresSequentialProcessing, i));
     }
     QVERIFY(m_jobPlan.runJobs(1000));
 }
@@ -215,10 +219,10 @@ void TestBackgroundparser::testParseOrdering_lockup()
     m_jobPlan.clear();
     for ( int i = 3; i > 0; i-- ) {
         // add 3 jobs which do not care about sequential processing, at 4 threads it should take no more than 1s to process them
-        m_jobPlan.addJob(JobPrototype(KUrl("test" + QString::number(i) + ".txt"), i, ParseJob::IgnoresSequentialProcessing, 200));
+        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test" + QString::number(i) + ".txt"), i, ParseJob::IgnoresSequentialProcessing, 200));
     }
     // add one job which requires sequential processing with high priority
-    m_jobPlan.addJob(JobPrototype(KUrl("test_hp.txt"), -200, ParseJob::FullSequentialProcessing, 200));
+    m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_hp.txt"), -200, ParseJob::FullSequentialProcessing, 200));
     // verify that the low-priority nonsequential jobs are run simultaneously with the other one.
     QVERIFY(m_jobPlan.runJobs(700));
 }
@@ -230,12 +234,12 @@ void TestBackgroundparser::testParseOrdering_simple()
         // the job with priority i should be at place i in the finished list
         // (lower priority value -> should be parsed first)
         ParseJob::SequentialProcessingFlags flags = ParseJob::FullSequentialProcessing;
-        m_jobPlan.addJob(JobPrototype(KUrl("test" + QString::number(i) + ".txt"),
+        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test" + QString::number(i) + ".txt"),
                                       i, flags));
     }
     // also add a few jobs which ignore the processing
     for ( int i = 0; i < 5; ++i ) {
-        m_jobPlan.addJob(JobPrototype(KUrl("test2-" + QString::number(i) + ".txt"),
+        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test2-" + QString::number(i) + ".txt"),
                                        BackgroundParser::NormalPriority,
                                        ParseJob::IgnoresSequentialProcessing));
     }
@@ -250,7 +254,7 @@ void TestBackgroundparser::benchmark()
     QVector<IndexedString> jobUrls;
     jobUrls.reserve(jobs);
     for ( int i = 0; i < jobs; ++i ) {
-        jobUrls << IndexedString("test" + QString::number(i) + ".txt");
+        jobUrls << IndexedString("/test" + QString::number(i) + ".txt");
     }
 
     QBENCHMARK {
@@ -272,10 +276,10 @@ void TestBackgroundparser::benchmarkDocumentChanges()
     QVERIFY(editor);
     KTextEditor::Document* doc = editor->createDocument(this);
     QVERIFY(doc);
-    doc->saveAs(KUrl::fromPath(QDir::tempPath() + "/__kdevbackgroundparsertest_benchmark.txt"));
-    
+    doc->saveAs(QUrl::fromLocalFile(QDir::tempPath() + "/__kdevbackgroundparsertest_benchmark.txt"));
+
     DocumentChangeTracker tracker(doc);
-    
+
     doc->setText("hello world");
     // required for proper benchmark results
     doc->createView(0);

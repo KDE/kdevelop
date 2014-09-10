@@ -21,10 +21,8 @@
 #ifndef KDEVPLATFORM_DVCS_PLUGIN_H
 #define KDEVPLATFORM_DVCS_PLUGIN_H
 
-#include <KUrl>
-#include <KComponentData>
-
-#include <QtCore/QObject>
+#include <QObject>
+#include <QUrl>
 
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iplugin.h>
@@ -87,7 +85,7 @@ public:
      * When a plugin wants to add elements to the vcs menu, this method can be
      * overridden.
      */
-    virtual void additionalMenuEntries(QMenu* menu, const KUrl::List& urls);
+    virtual void additionalMenuEntries(QMenu* menu, const QList<QUrl>& urls);
 public Q_SLOTS:
     //slots for context menu
     void ctxBranchManager();
@@ -95,7 +93,7 @@ public Q_SLOTS:
 
 protected:
     /** Checks if dirPath is located in DVCS repository */
-    virtual bool isValidDirectory(const KUrl &dirPath) = 0;
+    virtual bool isValidDirectory(const QUrl &dirPath) = 0;
 
 private:
     DistributedVersionControlPluginPrivate * const d;

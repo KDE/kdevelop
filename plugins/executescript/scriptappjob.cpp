@@ -76,7 +76,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
         return;
     }
 
-    KUrl script;
+    QUrl script;
     if( !iface->runCurrentFile( cfg ) )
     {
         script = iface->script( cfg, err );
@@ -147,10 +147,10 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     // Now setup the process parameters
     
     proc->setEnvironment( l.createEnvironment( envgrp, proc->systemEnvironment()) );
-    KUrl wc = iface->workingDirectory( cfg );
+    QUrl wc = iface->workingDirectory( cfg );
     if( !wc.isValid() || wc.isEmpty() )
     {
-        wc = KUrl( QFileInfo( script.toLocalFile() ).absolutePath() );
+        wc = QUrl::fromLocalFile( QFileInfo( script.toLocalFile() ).absolutePath() );
     }
     proc->setWorkingDirectory( wc.toLocalFile() );
     proc->setProperty( "executable", interpreter.first() );

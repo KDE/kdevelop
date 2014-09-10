@@ -15,10 +15,10 @@
 #define KDEVPLATFORM_PLUGIN_GREPDIALOG_H
 
 #include <QDialog>
+#include <QUrl>
 
 #include "ui_grepwidget.h"
 
-class KUrl;
 class KConfig;
 class KUrlRequester;
 class QPushButton;
@@ -59,7 +59,7 @@ private Q_SLOTS:
     void patternComboEditTextChanged( const QString& );
     void directoryChanged(const QString &dir);
     QMenu* createSyncButtonMenu();
-    void addUrlToMenu(QMenu* ret, const KUrl& url);
+    void addUrlToMenu(QMenu* ret, const QUrl& url);
     void addStringToMenu(QMenu* ret, QString string);
     void synchronizeDirActionTriggered(bool);
 
@@ -68,11 +68,11 @@ private Q_SLOTS:
 
 private:
     // Returns the chosen directories or files (only the top directories, not subfiles)
-    QList< KUrl > getDirectoryChoice() const;
+    QList< QUrl > getDirectoryChoice() const;
     // Returns whether the given url is a subfile/subdirectory of one of the chosen directories/files
     // This is slow, so don't call it too often
-    bool isPartOfChoice(KUrl url) const;
-    
+    bool isPartOfChoice(QUrl url) const;
+
     GrepViewPlugin * m_plugin;
 };
 

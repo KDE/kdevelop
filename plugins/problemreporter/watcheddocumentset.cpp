@@ -155,7 +155,7 @@ void CurrentProjectSet::setCurrentDocument(const KDevelop::IndexedString& url)
 
 void CurrentProjectSet::setCurrentDocumentInternal(const KDevelop::IndexedString& url)
 {
-    IProject* projectForUrl = model()->plugin()->core()->projectController()->findProjectForUrl(url.str());
+    IProject* projectForUrl = model()->plugin()->core()->projectController()->findProjectForUrl(url.toUrl());
     if (projectForUrl && projectForUrl != m_currentProject) {
         m_documents.clear();
         m_currentProject = projectForUrl;

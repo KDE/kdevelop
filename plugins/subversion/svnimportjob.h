@@ -35,7 +35,7 @@ public:
     void start();
     SvnInternalJobBase* internalJob() const;
 
-    void setMapping( const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository);
+    void setMapping( const QUrl &sourceDirectory, const KDevelop::VcsLocation & destinationRepository);
     void setMessage( const QString& );
 private:
     SvnImportInternalJob* m_job;

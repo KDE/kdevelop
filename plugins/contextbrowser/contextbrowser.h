@@ -27,8 +27,7 @@
 #include <QSet>
 #include <QMap>
 #include <QList>
-
-#include <KUrl>
+#include <QUrl>
 
 #include <KTextEditor/TextHintInterface>
 #include <interfaces/iplugin.h>
@@ -209,7 +208,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     KDevelop::IndexedDeclaration m_useDeclaration;
     KDevelop::IndexedDeclaration m_lastHighlightedDeclaration;
 
-    KUrl m_mouseHoverDocument;
+    QUrl m_mouseHoverDocument;
     KTextEditor::Cursor m_mouseHoverCursor;
     ContextBrowserViewFactory* m_viewFactory;
     QPointer<QWidget> m_currentToolTip;

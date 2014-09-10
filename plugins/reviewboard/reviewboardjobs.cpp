@@ -32,10 +32,11 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QUrlQuery>
 
 using namespace ReviewBoard;
 
-QByteArray ReviewBoard::urlToData(const KUrl& url)
+QByteArray ReviewBoard::urlToData(const QUrl& url)
 {
     QByteArray ret;
     if (url.isLocalFile()) {
@@ -71,7 +72,7 @@ QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
 
         //File
         if (val.second.type()==QVariant::Url) {
-            KUrl path=val.second.toUrl();
+            QUrl path=val.second.toUrl();
             hstr += "; filename=\"" + path.fileName().toLatin1() + "\"";
             const QMimeType mime = QMimeDatabase().mimeTypeForUrl(path);
             if (!mime.name().isEmpty()) {
@@ -100,22 +101,23 @@ QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
 
 }
 
-HttpCall::HttpCall(const KUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, const QByteArray& post, bool multipart, QObject* parent)
+HttpCall::HttpCall(const QUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, const QByteArray& post, bool multipart, QObject* parent)
     : KJob(parent), m_post(post), m_multipart(multipart)
 {
     m_requrl=s;
-    m_requrl.addPath(apiPath);
-
+    m_requrl.setPath(m_requrl.path() + '/' + apiPath);
+    QUrlQuery query;
     for(QList<QPair<QString,QString> >::const_iterator i = queryParameters.begin(); i < queryParameters.end(); i++) {
-        m_requrl.addQueryItem(i->first, i->second);
+        query.addQueryItem(i->first, i->second);
     }
+    m_requrl.setQuery(query);
 }
 
 void HttpCall::start()
 {
     QNetworkRequest r(m_requrl);
 
-    if(m_requrl.hasUser()) {
+    if(!m_requrl.userName().isEmpty()) {
         QByteArray head = "Basic " + m_requrl.userInfo().toLatin1().toBase64();
         r.setRawHeader("Authorization", head);
     }
@@ -164,7 +166,7 @@ void HttpCall::finished()
     emitResult();
 }
 
-NewRequest::NewRequest(const KUrl& server, const QString& projectPath, QObject* parent)
+NewRequest::NewRequest(const QUrl& server, const QString& projectPath, QObject* parent)
     : ReviewRequest(server, 0, parent), m_project(projectPath)
 {
     m_newreq = new HttpCall(this->server(), "/api/review-requests/", QList<QPair<QString,QString> >(), "repository="+projectPath.toLatin1(), false, this);
@@ -192,7 +194,7 @@ void NewRequest::done()
 }
 
 
-SubmitPatchRequest::SubmitPatchRequest(const KUrl& server, const KUrl& patch, const QString& basedir, const QString& id, QObject* parent)
+SubmitPatchRequest::SubmitPatchRequest(const QUrl& server, const QUrl& patch, const QString& basedir, const QString& id, QObject* parent)
     : ReviewRequest(server, id, parent), m_patch(patch), m_basedir(basedir)
 {
     QList<QPair<QString, QVariant> > vals;
@@ -219,7 +221,7 @@ void SubmitPatchRequest::done()
     emitResult();
 }
 
-ProjectsListRequest::ProjectsListRequest(const KUrl& server, QObject* parent)
+ProjectsListRequest::ProjectsListRequest(const QUrl& server, QObject* parent)
     : KJob(parent), m_server(server)
 {
 }
@@ -264,7 +266,7 @@ void ProjectsListRequest::done(KJob* job)
     }
 }
 
-ReviewListRequest::ReviewListRequest(const KUrl& server, const QString& user, const QString& reviewStatus, QObject* parent)
+ReviewListRequest::ReviewListRequest(const QUrl& server, const QString& user, const QString& reviewStatus, QObject* parent)
     : KJob(parent), m_server(server), m_user(user), m_reviewStatus(reviewStatus)
 {
 }

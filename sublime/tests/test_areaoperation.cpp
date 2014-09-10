@@ -23,6 +23,7 @@
 #include <QListView>
 #include <QTextEdit>
 #include <QSplitter>
+#include <QUrl>
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -53,10 +54,10 @@ struct ViewCounter {
 void TestAreaOperation::init()
 {
     m_controller = new Controller(this);
-    Document *doc1 = new UrlDocument(m_controller, KUrl::fromPath("~/foo.cpp"));
-    Document *doc2 = new UrlDocument(m_controller, KUrl::fromPath("~/boo.cpp"));
-    Document *doc3 = new UrlDocument(m_controller, KUrl::fromPath("~/moo.cpp"));
-    Document *doc4 = new UrlDocument(m_controller, KUrl::fromPath("~/zoo.cpp"));
+    Document *doc1 = new UrlDocument(m_controller, QUrl::fromLocalFile("~/foo.cpp"));
+    Document *doc2 = new UrlDocument(m_controller, QUrl::fromLocalFile("~/boo.cpp"));
+    Document *doc3 = new UrlDocument(m_controller, QUrl::fromLocalFile("~/moo.cpp"));
+    Document *doc4 = new UrlDocument(m_controller, QUrl::fromLocalFile("~/zoo.cpp"));
 
     //documents for toolviews
     Document *tool1 = new ToolDocument("tool1", m_controller, new SimpleToolWidgetFactory<QListView>("tool1"));
@@ -375,7 +376,7 @@ void TestAreaOperation::simpleViewAdditionAndDeletion()
     m_controller->showArea(m_area1, &mw);
     checkArea1(&mw);
 
-    Document *doc5 = new UrlDocument(m_controller, KUrl::fromPath("~/new.cpp"));
+    Document *doc5 = new UrlDocument(m_controller, QUrl::fromLocalFile("~/new.cpp"));
     View *view = doc5->createView();
     view->setObjectName("view1.5.1");
     m_area1->addView(view);
@@ -425,7 +426,7 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
 
     m_controller->showArea(m_area2, &mw);
 
-    Document *doc5 = new UrlDocument(m_controller, KUrl::fromPath("~/new.cpp"));
+    Document *doc5 = new UrlDocument(m_controller, QUrl::fromLocalFile("~/new.cpp"));
     View *view = doc5->createView();
     view->setObjectName("view2.5.1");
 

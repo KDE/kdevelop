@@ -453,12 +453,13 @@ void ProjectBaseItem::appendRow( ProjectBaseItem* item )
     }
 }
 
-KUrl ProjectBaseItem::url( ) const
+QUrl ProjectBaseItem::url( ) const
 {
     Q_D(const ProjectBaseItem);
-    KUrl url = d->m_path.toUrl();
+    QUrl url = d->m_path.toUrl();
     if (folder()) {
-        url.adjustPath(KUrl::AddTrailingSlash);
+        // FIXME: is this required?
+//         url.adjustPath(QUrl::AddTrailingSlash);
     }
     return url;
 }

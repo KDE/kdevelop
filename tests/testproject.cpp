@@ -46,7 +46,7 @@ void TestProject::setPath(const Path& path)
     }
 }
 
-void TestProject::setProjectUrl(const KUrl& url)
+void TestProject::setProjectUrl(const QUrl &url)
 {
     setPath(Path(url));
 }
@@ -77,7 +77,7 @@ void TestProject::setProjectItem(ProjectFolderItem* item)
     }
 }
 
-KUrl TestProject::projectFileUrl() const
+QUrl TestProject::projectFileUrl() const
 {
     return projectFile().toUrl();
 }
@@ -87,10 +87,11 @@ Path TestProject::projectFile() const
     return Path(m_path, m_path.lastPathSegment() + ".kdev4");
 }
 
-const KUrl TestProject::folder() const
+const QUrl TestProject::folder() const
 {
-    KUrl url = m_path.toUrl();
-    url.adjustPath(KUrl::AddTrailingSlash);
+    QUrl url = m_path.toUrl();
+    /// FIXME: is this required here?
+//     url.adjustPath(QUrl::AddTrailingSlash);
     return url;
 }
 

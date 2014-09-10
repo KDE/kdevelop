@@ -54,7 +54,7 @@ KTextEditor::Cursor normalizeCursor(KTextEditor::Cursor c)
 }
 
 ///Tries to find a definition for the declaration at given cursor-position and document-url. DUChain must be locked.
-Declaration* definitionForCursorDeclaration(const KTextEditor::Cursor& cursor, const KUrl& url)
+Declaration* definitionForCursorDeclaration(const KTextEditor::Cursor& cursor, const QUrl& url)
 {
     QList<TopDUContext*> topContexts = DUChain::self()->chainsForDocument(url);
     foreach (TopDUContext* ctx, topContexts) {
@@ -69,12 +69,12 @@ Declaration* definitionForCursorDeclaration(const KTextEditor::Cursor& cursor, c
     return 0;
 }
 
-QString findSwitchCandidate(const KUrl& docUrl)
+QString findSwitchCandidate(const QUrl& docUrl)
 {
     IBuddyDocumentFinder* finder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(docUrl)->name());
     if (finder) {
         // get the first entry that exists, use that as candidate
-        foreach(const KUrl& buddyUrl, finder->getPotentialBuddies(docUrl)) {
+        foreach(const QUrl& buddyUrl, finder->getPotentialBuddies(docUrl)) {
             if (!QFile::exists(buddyUrl.toLocalFile())) {
                 continue;
             }
@@ -119,7 +119,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context)
         return ContextMenuExtension();
     }
 
-    KUrl currentUrl = ctx->url();
+    QUrl currentUrl = ctx->url();
     IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(QMimeDatabase().mimeTypeForUrl(currentUrl).name());
     if (!buddyFinder)
         return ContextMenuExtension();
@@ -127,7 +127,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context)
     // Get all potential buddies for the current document and add a switch-to action
     // for each buddy who really exists in the file system. Note: if no buddies could be calculated
     // no extension actions are generated.
-    const QVector<KUrl>& potentialBuddies = buddyFinder->getPotentialBuddies(currentUrl);
+    const QVector<QUrl>& potentialBuddies = buddyFinder->getPotentialBuddies(currentUrl);
 
     ContextMenuExtension extension;
     if (m_signalMapper) {
@@ -135,7 +135,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context)
     }
     m_signalMapper = new QSignalMapper(this);
 
-    foreach(const KUrl& url, potentialBuddies) {
+    foreach(const QUrl& url, potentialBuddies) {
         if (!QFile::exists(url.toLocalFile())) {
             continue;
         }
@@ -163,14 +163,14 @@ void SwitchToBuddyPlugin::createActionsForMainWindow(Sublime::MainWindow* window
 
 void SwitchToBuddyPlugin::switchToBuddy(const QString& url)
 {
-    KDevelop::ICore::self()->documentController()->openDocument(url);
+    KDevelop::ICore::self()->documentController()->openDocument(QUrl::fromLocalFile(url));
 }
 
 void SwitchToBuddyPlugin::switchDefinitionDeclaration()
 {
     kDebug() << "switching definition/declaration";
 
-    KUrl docUrl;
+    QUrl docUrl;
     KTextEditor::Cursor cursor;
 
     ///Step 1: Find the current top-level context of type DUContext::Other(the highest code-context).
@@ -300,7 +300,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
 
     ///- If no definition/declaration could be found to switch to, just switch the document using normal header/source heuristic by file-extension
     if (!switchCandidate.isEmpty()) {
-        ICore::self()->documentController()->openDocument(KUrl(switchCandidate));
+        ICore::self()->documentController()->openDocument(QUrl::fromUserInput(switchCandidate));
     } else {
         kDebug() << "Found no source/header candidate to switch";
     }

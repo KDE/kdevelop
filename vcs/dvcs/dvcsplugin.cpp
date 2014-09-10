@@ -91,10 +91,10 @@ KDevelop::ContextMenuExtension
 DistributedVersionControlPlugin::contextMenuExtension(Context* context)
 {
     d->m_common->setupFromContext(context);
-    KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
+    QList<QUrl> const & ctxUrlList = d->m_common->contextUrlList();
 
     bool isWorkingDirectory = false;
-    foreach(const KUrl &url, ctxUrlList) {
+    foreach(const QUrl &url, ctxUrlList) {
         if (isValidDirectory(url)) {
             isWorkingDirectory = true;
             break;
@@ -118,7 +118,7 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
 
 }
 
-void DistributedVersionControlPlugin::additionalMenuEntries(QMenu* /*menu*/, const KUrl::List& /*urls*/)
+void DistributedVersionControlPlugin::additionalMenuEntries(QMenu* /*menu*/, const QList<QUrl>& /*urls*/)
 {}
 
 static QString stripPathToDir(const QString &path)
@@ -129,7 +129,7 @@ static QString stripPathToDir(const QString &path)
 
 void DistributedVersionControlPlugin::ctxBranchManager()
 {
-    KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
+    QList<QUrl> const & ctxUrlList = d->m_common->contextUrlList();
     Q_ASSERT(!ctxUrlList.isEmpty());    
     
     ICore::self()->documentController()->saveAllDocuments();
@@ -142,7 +142,7 @@ void DistributedVersionControlPlugin::ctxBranchManager()
 // This is redundant with the normal VCS "history" action
 void DistributedVersionControlPlugin::ctxRevHistory()
 {
-    KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
+    QList<QUrl> const & ctxUrlList = d->m_common->contextUrlList();
     Q_ASSERT(!ctxUrlList.isEmpty());
     
     KDialog d;

@@ -239,7 +239,7 @@ void TestQuickOpen::testProjectFileFilter()
     QCOMPARE(provider.data(0)->text(), QString("aaaa"));
 
     // don't show opened file
-    QVERIFY(core->documentController()->openDocument(KUrl(tmpFile.fileName())));
+    QVERIFY(core->documentController()->openDocument(QUrl::fromLocalFile(tmpFile.fileName())));
     // lazy load again
     QCOMPARE(items(provider), original);
     provider.reset();

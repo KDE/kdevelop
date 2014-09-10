@@ -11,7 +11,7 @@
 #include "cvsannotatejob.h"
 
 #include <KDebug>
-#include <KUrl>
+#include <QUrl>
 #include <QDir>
 #include <QLocale>
 #include <QDateTime>
@@ -80,7 +80,7 @@ void CvsAnnotateJob::parseOutput(const QString& jobOutput, const QString& workin
             annotateInfo.insertLine( linenumber, item );
             linenumber++;
         } else if (reFile.exactMatch(s)) {
-            KUrl url(workingDirectory + QDir::separator() + reFile.cap(1));
+            QUrl url = QUrl::fromLocalFile(workingDirectory + QDir::separator() + reFile.cap(1));
             annotateInfo.setLocation( url );
         } else {
             kDebug(9500) << "Unmatched:"<<s<<endl;

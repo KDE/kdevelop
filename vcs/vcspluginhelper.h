@@ -13,7 +13,8 @@
 
 #include "vcsexport.h"
 
-#include <kurl.h>
+#include <QUrl>
+
 #include "vcsrevision.h"
 
 class KJob;
@@ -48,8 +49,8 @@ public:
     virtual ~VcsPluginHelper();
 
     void setupFromContext(KDevelop::Context*);
-    void addContextDocument(const KUrl& url);
-    KUrl::List const & contextUrlList();
+    void addContextDocument(const QUrl& url);
+    QList<QUrl> contextUrlList() const;
     QMenu* commonActions();
 
 public Q_SLOTS:
@@ -66,7 +67,7 @@ public Q_SLOTS:
     void pull();
     void push();
     void diffJobFinished(KJob* job);
-    
+
     void revertDone(KJob* job);
     void disposeEventually(KTextEditor::Document*);
     void disposeEventually(View*, bool);
@@ -75,7 +76,7 @@ private Q_SLOTS:
     void delayedModificationWarningOn();
 
 private:
-    void diffForRev(const KUrl& url);
+    void diffForRev(const QUrl& url);
 
     struct VcsPluginHelperPrivate;
     QScopedPointer<VcsPluginHelperPrivate> d;

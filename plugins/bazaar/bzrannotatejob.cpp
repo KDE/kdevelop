@@ -31,7 +31,7 @@
 #include <vcs/vcsrevision.h>
 #include <interfaces/iplugin.h>
 
-BzrAnnotateJob::BzrAnnotateJob(const QDir& workingDir, const QString& revisionSpec, const KUrl& localLocation, KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
+BzrAnnotateJob::BzrAnnotateJob(const QDir& workingDir, const QString& revisionSpec, const QUrl& localLocation, KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
     : VcsJob(parent, verbosity), m_workingDir(workingDir), m_revisionSpec(revisionSpec), m_localLocation(localLocation), m_vcsPlugin(parent), m_status(KDevelop::VcsJob::JobNotStarted)
 {
     setType(JobType::Annotate);

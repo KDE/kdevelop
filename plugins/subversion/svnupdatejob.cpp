@@ -46,10 +46,10 @@ void SvnInternalUpdateJob::run()
 
     svn::Client cli(m_ctxt);
     std::vector<svn::Path> targets;
-    KUrl::List l = locations();
-    foreach( const KUrl &url, l )
+    QList<QUrl> l = locations();
+    foreach( const QUrl &url, l )
     {
-        QByteArray ba = url.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
+        QByteArray ba = url.toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
         targets.push_back( svn::Path( ba.data() ) );
     }
     try
@@ -77,7 +77,7 @@ void SvnInternalUpdateJob::setRecursive( bool recursive )
     m_recursive = recursive;
 }
 
-void SvnInternalUpdateJob::setLocations( const KUrl::List& urls )
+void SvnInternalUpdateJob::setLocations( const QList<QUrl>& urls )
 {
     QMutexLocker l( m_mutex );
     m_locations = urls;
@@ -102,7 +102,7 @@ void SvnInternalUpdateJob::setRevision( const KDevelop::VcsRevision& rev )
     m_revision = rev;
 }
 
-KUrl::List SvnInternalUpdateJob::locations() const
+QList<QUrl> SvnInternalUpdateJob::locations() const
 {
     QMutexLocker l( m_mutex );
     return m_locations;
@@ -151,7 +151,7 @@ SvnInternalJobBase* SvnUpdateJob::internalJob() const
     return m_job;
 }
 
-void SvnUpdateJob::setLocations( const KUrl::List& urls )
+void SvnUpdateJob::setLocations( const QList<QUrl>& urls )
 {
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setLocations( urls );

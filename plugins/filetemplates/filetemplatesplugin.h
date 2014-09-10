@@ -5,7 +5,7 @@
 #include <interfaces/itemplateprovider.h>
 #include <QVariantList>
 
-class KUrl;
+class QUrl;
 namespace KDevelop
 {
 class TemplatesModel;
@@ -41,7 +41,7 @@ public:
     virtual void reload();
     virtual void loadTemplate(const QString& fileName);
 
-    TemplateType determineTemplateType(const KUrl& url);
+    TemplateType determineTemplateType(const QUrl& url);
 
 private:
     KDevelop::TemplatesModel* m_model;

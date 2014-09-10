@@ -23,9 +23,9 @@ Boston, MA 02110-1301, USA.
 #include "shellexport.h"
 #include <QtCore/QObject>
 #include <QtCore/QUuid>
+#include <QUrl>
 #include <interfaces/isession.h>
 #include <interfaces/isessionlock.h>
-#include <kurl.h>
 
 namespace KDevelop
 {
@@ -35,7 +35,7 @@ struct SessionInfo
     QString name;
     QUuid uuid;
     QString description;
-    KUrl::List projects;
+    QList<QUrl> projects;
     QString path;
     KSharedConfig::Ptr config;
 };
@@ -52,11 +52,11 @@ public:
     Session( const QString& id, QObject * parent = 0 );
     virtual ~Session();
 
-    virtual KUrl pluginDataArea( const IPlugin* );
+    virtual QUrl pluginDataArea( const IPlugin* );
     virtual KSharedConfig::Ptr config();
 
-    virtual KUrl::List containedProjects() const;
-    virtual void setContainedProjects( const KUrl::List& projects );
+    virtual QList<QUrl> containedProjects() const;
+    virtual void setContainedProjects( const QList<QUrl>& projects );
 
     virtual QString name() const;
     void setName( const QString& );

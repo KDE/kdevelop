@@ -97,21 +97,14 @@ int ProblemModel::rowCount(const QModelIndex & parent) const
     return 0;
 }
 
-QString getDisplayUrl(const QString &url, const KUrl &base) {
-    KUrl location(url);
-    QString displayedUrl;
-    if ( location.protocol() == base.protocol() &&
-            location.user() == base.user() &&
-            location.host() == base.host() ) {
-        bool isParent;
-        displayedUrl = KUrl::relativePath(base.path(), location.path(), &isParent );
-        if ( !isParent ) {
-            displayedUrl = location.pathOrUrl();
-        }
+static QString getDisplayUrl(const QUrl &url, const QUrl &base)
+{
+    QUrl location = url;
+    if ( location.isParentOf(base) ) {
+        return location.toDisplayString(QUrl::PreferLocalFile).mid(base.toDisplayString(QUrl::PreferLocalFile).length());
     } else {
-        displayedUrl = location.pathOrUrl();
+        return location.toDisplayString(QUrl::PreferLocalFile);
     }
-    return displayedUrl;
 }
 
 QVariant ProblemModel::data(const QModelIndex & index, int role) const
@@ -122,7 +115,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
     DUChainReadLocker lock;
 
     ProblemPointer p = problemForIndex(index);
-    KUrl baseDirectory = m_currentDocument.upUrl();
+    QUrl baseDirectory = m_currentDocument.adjusted(QUrl::RemoveFilename);
 
     switch (role) {
     case Qt::DisplayRole:
@@ -132,7 +125,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
         case Error:
             return p->description();
         case File:
-            return getDisplayUrl(p->finalLocation().document.str(), baseDirectory);
+            return getDisplayUrl(p->finalLocation().document.toUrl(), baseDirectory);
         case Line:
             if (p->finalLocation().isValid())
                 return QString::number(p->finalLocation().start().line() + 1);

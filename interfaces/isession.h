@@ -22,13 +22,12 @@ Boston, MA 02110-1301, USA.
 
 #include "interfacesexport.h"
 #include <QtCore/QObject>
+#include <QUrl>
 
 #include <ksharedconfig.h>
-#include <kurl.h>
 
 class QUuid;
 class QString;
-class KUrl;
 
 namespace KDevelop
 {
@@ -52,9 +51,9 @@ public:
      */
     virtual QString description() const = 0;
     virtual QString name() const = 0;
-    virtual KUrl::List containedProjects() const = 0;
-    virtual void setContainedProjects( const KUrl::List& projects ) = 0;
-    virtual KUrl pluginDataArea( const IPlugin* ) = 0;
+    virtual QList<QUrl> containedProjects() const = 0;
+    virtual void setContainedProjects( const QList<QUrl>& projects ) = 0;
+    virtual QUrl pluginDataArea( const IPlugin* ) = 0;
     virtual KSharedConfig::Ptr config() = 0;
     virtual QUuid id() const = 0;
 

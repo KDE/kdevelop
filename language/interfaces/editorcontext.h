@@ -29,7 +29,7 @@ namespace KTextEditor {
     class Cursor;
 }
 
-class KUrl;
+class QUrl;
 
 namespace KDevelop {
 
@@ -50,7 +50,7 @@ public:
     virtual int type() const;
 
     /**@return The url for the file which this context was invoked for.*/
-    KUrl url() const;
+    QUrl url() const;
 
     /**@return The cursor position.*/
     KTextEditor::Cursor position() const;

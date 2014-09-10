@@ -44,12 +44,12 @@ public:
     QList<KDevelop::VcsEvent> m_events;
     KDevelop::IBasicVersionControl* m_iface;
     VcsRevision m_rev;
-    KUrl m_url;
+    QUrl m_url;
     bool done;
     bool fetching;
 };
 
-VcsEventModel::VcsEventModel( KDevelop::IBasicVersionControl* iface, const VcsRevision& rev, const KUrl& url, QObject* parent )
+VcsEventModel::VcsEventModel( KDevelop::IBasicVersionControl* iface, const VcsRevision& rev, const QUrl& url, QObject* parent )
     : QAbstractTableModel( parent ), d(new VcsEventModelPrivate)
 {
     d->m_iface = iface;

@@ -22,7 +22,8 @@
 
 #include <QObject>
 #include <QVector>
-#include <KUrl>
+#include <QUrl>
+
 #include "interfacesexport.h"
 
 namespace KDevelop {
@@ -75,29 +76,29 @@ public:
      *
      * @return true, if the two documents are buddies.
      * For example, a C++ implementation would return true for
-     * areBuddies(KUrl("...../foo.h"), KUrl("...../foo.cpp")).
+     * areBuddies(QUrl::fromLocalFile("...../foo.h"), QUrl::fromLocalFile("...../foo.cpp")).
      */
-    virtual bool areBuddies(const KUrl& url1, const KUrl& url2) = 0;
+    virtual bool areBuddies(const QUrl& url1, const QUrl& url2) = 0;
 
     /**
      * Called to determine the order of two documents in the tabbar.
      *
      * Example: a C++ implementation that wants to place the tab of the .h
      * file left of the .cpp tab must return true for
-     *   buddyOrder(KUrl("...../foo.h"),   KUrl("...../foo.cpp"))
+     *   buddyOrder(QUrl::fromLocalFile("...../foo.h"),   QUrl::fromLocalFile("...../foo.cpp"))
      * and false for
-     *   buddyOrder(KUrl("...../foo.cpp"), KUrl("...../foo.h")).
+     *   buddyOrder(QUrl::fromLocalFile("...../foo.cpp"), QUrl::fromLocalFile("...../foo.h")).
      *
      * @param url1 @param url2: two documents which are buddies,
      * this means areBuddies(url1,url2) returned true.
      * @return true, if url1's tab should be placed left of url2's tab.
      *         false, for the inverse.
      */
-    virtual bool buddyOrder(const KUrl& url1, const KUrl& url2) = 0;
+    virtual bool buddyOrder(const QUrl& url1, const QUrl& url2) = 0;
 
 
     /**
-     * Returns a list of KUrls of potential buddies of the document
+     * Returns a list of QUrls of potential buddies of the document
      * provided by @p url.
      *
      * The urls are potential buddies and it is not ensured that the files
@@ -106,7 +107,7 @@ public:
      * @returns list of potential buddy documents or an empty list
      *  if non are available.
      */
-    virtual QVector<KUrl> getPotentialBuddies(const KUrl& url) const = 0;
+    virtual QVector<QUrl> getPotentialBuddies(const QUrl& url) const = 0;
 
     /**
      * Registers a IBuddyDocumentFinder object for a mimetype.

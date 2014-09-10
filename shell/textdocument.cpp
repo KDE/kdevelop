@@ -140,7 +140,7 @@ struct TextDocumentPrivate {
         ContextMenuExtension::populateMenu(m_addedContextMenu, extensions);
         
         {
-            KUrl url = v->document()->url();
+            QUrl url = v->document()->url();
             QList< ProjectBaseItem* > items = Core::self()->projectController()->projectModel()->itemsForPath( IndexedString(url) );
             if (!items.isEmpty()) {
                 populateParentItemsMenu( items.front(), m_addedContextMenu );
@@ -347,7 +347,7 @@ struct TextViewPrivate
     KTextEditor::Range initialRange;
 };
 
-TextDocument::TextDocument(const KUrl &url, ICore* core, const QString& encoding)
+TextDocument::TextDocument(const QUrl &url, ICore* core, const QString& encoding)
     :PartDocument(url, core), d(new TextDocumentPrivate(this))
 {
     d->encoding = encoding;
@@ -530,7 +530,7 @@ bool TextDocument::save(DocumentSaveMode mode)
             break;
     }
 
-    KUrl urlBeforeSave = d->document->url();
+    QUrl urlBeforeSave = d->document->url();
     if (d->document->documentSave())
     {
         if (d->document->url() != urlBeforeSave)

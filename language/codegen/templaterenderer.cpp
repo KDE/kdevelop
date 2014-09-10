@@ -30,11 +30,12 @@
 
 #include <grantlee/context.h>
 
-#include <KUrl>
+#include <QUrl>
 #include <KDebug>
 #include <KArchive>
 
 #include <QFile>
+#include <QDir>
 
 using namespace Grantlee;
 
@@ -257,7 +258,7 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
     return output;
 }
 
-QString TemplateRenderer::renderFile(const KUrl& url, const QString& name) const
+QString TemplateRenderer::renderFile(const QUrl& url, const QString& name) const
 {
     QFile file(url.toLocalFile());
     file.open(QIODevice::ReadOnly);
@@ -290,20 +291,20 @@ TemplateRenderer::EmptyLinesPolicy TemplateRenderer::emptyLinesPolicy() const
 }
 
 DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate& fileTemplate,
-                                                       const KUrl& baseUrl,
-                                                       const QHash<QString, KUrl>& fileUrls)
+                                                       const QUrl& baseUrl,
+                                                       const QHash<QString, QUrl>& fileUrls)
 {
     DocumentChangeSet changes;
-    KUrl url(baseUrl);
+    const QDir baseDir(baseUrl.path());
 
-    url.adjustPath(KUrl::AddTrailingSlash);
     QRegExp nonAlphaNumeric("\\W");
-    for (QHash<QString,KUrl>::const_iterator it = fileUrls.constBegin(); it != fileUrls.constEnd(); ++it)
+    for (QHash<QString,QUrl>::const_iterator it = fileUrls.constBegin(); it != fileUrls.constEnd(); ++it)
     {
         QString cleanName = it.key().toLower();
         cleanName.replace(nonAlphaNumeric, "_");
-        addVariable("output_file_" + cleanName, KUrl::relativeUrl(url, it.value()));
-        addVariable("output_file_" + cleanName + "_absolute", it.value().toLocalFile());
+        const QString path = it.value().toLocalFile();
+        addVariable("output_file_" + cleanName, baseDir.relativeFilePath(path));
+        addVariable("output_file_" + cleanName + "_absolute", path);
     }
 
     const KArchiveDirectory* directory = fileTemplate.directory();
@@ -324,7 +325,7 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
             continue;
         }
 
-        KUrl url = fileUrls[outputFile.identifier];
+        QUrl url = fileUrls[outputFile.identifier];
         IndexedString document(url);
         KTextEditor::Range range(KTextEditor::Cursor(0, 0), 0);
 

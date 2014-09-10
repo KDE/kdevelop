@@ -534,6 +534,7 @@ TopDUContext::TopDUContext(const IndexedString& url, const RangeInRevision& rang
 , m_local(new TopDUContextLocalPrivate(this, DUChain::newTopContextIndex()))
 , m_dynamicData(new TopDUContextDynamicData(this))
 {
+  Q_ASSERT(url.toUrl().isValid() && !url.toUrl().isRelative());
   d_func_dynamic()->setClassId(this);
   setType(Global);
 

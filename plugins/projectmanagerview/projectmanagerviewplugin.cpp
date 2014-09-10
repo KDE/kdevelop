@@ -24,6 +24,7 @@
 #include <QInputDialog>
 #include <QApplication>
 #include <QClipboard>
+#include <QUrl>
 
 #include <kdebug.h>
 #include <kaction.h>
@@ -656,7 +657,7 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
 void ProjectManagerViewPlugin::copyFromContextMenu()
 {
     KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
-    KUrl::List urls;
+    QList<QUrl> urls;
     foreach (ProjectBaseItem* item, ctx->items()) {
         if (item->folder() || item->file()) {
             urls << item->path().toUrl();
@@ -664,8 +665,8 @@ void ProjectManagerViewPlugin::copyFromContextMenu()
     }
     kDebug() << urls;
     if (!urls.isEmpty()) {
-        QMimeData *data = new QMimeData;
-        urls.populateMimeData(data);
+        QMimeData* data = new QMimeData;
+        data->setUrls(urls);
         qApp->clipboard()->setMimeData(data);
     }
 }

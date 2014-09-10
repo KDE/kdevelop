@@ -29,7 +29,7 @@
 
 #include "bazaarplugin.h"
 
-CopyJob::CopyJob(const KUrl& localLocationSrc, const KUrl& localLocationDstn, BazaarPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
+CopyJob::CopyJob(const QUrl& localLocationSrc, const QUrl& localLocationDstn, BazaarPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
     : VcsJob(parent, verbosity), m_plugin(parent), m_source(localLocationSrc),
       m_destination(localLocationDstn), m_status(KDevelop::VcsJob::JobNotStarted)
 {
@@ -58,7 +58,7 @@ void CopyJob::start()
     if (m_status != KDevelop::VcsJob::JobNotStarted)
         return;
     KIO::CopyJob* job = KIO::copy(m_source, m_destination, KIO::HideProgressInfo);
-    connect(job, SIGNAL(copyingDone(KIO::Job*, KUrl, KUrl, time_t, bool, bool)), this, SLOT(addToVcs(KIO::Job*, KUrl, KUrl, time_t, bool, bool)));
+    connect(job, SIGNAL(copyingDone(KIO::Job*, QUrl, QUrl, time_t, bool, bool)), this, SLOT(addToVcs(KIO::Job*, QUrl, QUrl, time_t, bool, bool)));
     m_status = KDevelop::VcsJob::JobRunning;
     m_job = job;
     job->start();
@@ -73,7 +73,7 @@ bool CopyJob::doKill()
         return true;
 }
 
-void CopyJob::addToVcs(KIO::Job* job, const KUrl& from, const KUrl& to, time_t mtime, bool directory, bool renamed)
+void CopyJob::addToVcs(KIO::Job* job, const QUrl& from, const QUrl& to, time_t mtime, bool directory, bool renamed)
 {
     Q_UNUSED(job);
     Q_UNUSED(from);
@@ -82,7 +82,7 @@ void CopyJob::addToVcs(KIO::Job* job, const KUrl& from, const KUrl& to, time_t m
     Q_UNUSED(renamed);
     if (m_status != KDevelop::VcsJob::JobRunning)
         return;
-    KDevelop::VcsJob* job2 = m_plugin->add(to, KDevelop::IBasicVersionControl::Recursive);
+    KDevelop::VcsJob* job2 = m_plugin->add(QList<QUrl>() << to, KDevelop::IBasicVersionControl::Recursive);
     connect(job2, SIGNAL(result(KJob*)), this, SLOT(finish(KJob*)));
     m_job = job2;
     job2->start();

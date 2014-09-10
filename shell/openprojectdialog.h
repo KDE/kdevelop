@@ -11,9 +11,10 @@
 #ifndef KDEVPLATFORM_OPENPROJECTDIALOG_H
 #define KDEVPLATFORM_OPENPROJECTDIALOG_H
 
+#include <QUrl>
+
 #include <kassistantdialog.h>
 #include <kio/udsentry.h>
-#include <KUrl>
 
 class KPageWidgetItem;
 namespace KIO
@@ -31,14 +32,14 @@ class OpenProjectDialog : public KAssistantDialog
     Q_OBJECT
 
 public:
-    OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget* parent = 0 );
-    KUrl projectFileUrl();
+    OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget* parent = 0 );
+    QUrl projectFileUrl();
     QString projectName();
     QString projectManager();
 
 private slots:
     void validateSourcePage( bool );
-    void validateOpenUrl( const KUrl& );
+    void validateOpenUrl( const QUrl& );
     void validateProjectName( const QString& );
     void validateProjectManager( const QString& );
     void storeFileList(KIO::Job*, const KIO::UDSEntryList&);
@@ -46,7 +47,7 @@ private slots:
 
 private:
     void validateProjectInfo();
-    KUrl m_url;
+    QUrl m_url;
     QString m_projectName;
     QString m_projectManager;
     KPageWidgetItem* sourcePage;

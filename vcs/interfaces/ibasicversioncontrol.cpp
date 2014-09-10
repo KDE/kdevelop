@@ -21,7 +21,7 @@
 #include <KTextEdit>
 
 /// Default empty implementation
-void KDevelop::IBasicVersionControl::setupCommitMessageEditor(const KUrl&, KTextEdit* edit) const
+void KDevelop::IBasicVersionControl::setupCommitMessageEditor(const QUrl&, KTextEdit* edit) const
 {
     edit->setCheckSpellingEnabled(true);
 }

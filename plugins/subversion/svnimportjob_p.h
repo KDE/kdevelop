@@ -29,16 +29,16 @@ class SvnImportInternalJob : public SvnInternalJobBase
     Q_OBJECT
 public:
     SvnImportInternalJob( SvnJobBase* parent = 0 );
-    void setMapping( const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository);
+    void setMapping( const QUrl &sourceDirectory, const KDevelop::VcsLocation & destinationRepository);
     void setMessage( const QString& );
 
     QString message() const;
     bool isValid() const;
-    KUrl source() const;
+    QUrl source() const;
 protected:
     void run();
 private:
-    KUrl m_sourceDirectory;
+    QUrl m_sourceDirectory;
     KDevelop::VcsLocation m_destinationRepository;
     QString m_message;
 };

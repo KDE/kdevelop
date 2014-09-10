@@ -76,7 +76,7 @@ public:
     /**
      * @return Suggestion for new filename based on the current file's name @p current and new identifer @p newName
      */
-    virtual QString newFileName(const KUrl& current, const QString& newName);
+    virtual QString newFileName(const QUrl& current, const QString& newName);
 
     /**
      * Add the change(s) related to renaming @p file to @p newName to @p changes and return the result.
@@ -85,7 +85,7 @@ public:
      * @param newName The new name of the file *without* the file extension.
      * @param changes The change set to add the rename changes to.
      */
-    virtual KDevelop::DocumentChangeSet::ChangeResult addRenameFileChanges(const KUrl& current,
+    virtual KDevelop::DocumentChangeSet::ChangeResult addRenameFileChanges(const QUrl& current,
                                                                            const QString& newName,
                                                                            KDevelop::DocumentChangeSet* changes);
 

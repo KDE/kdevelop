@@ -64,7 +64,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
     layout->addLayout(titleLayout);
     layout->addWidget(m_commitMessageEdit.data());
     connect(this, SIGNAL(reviewCancelled(QString)), SLOT(addMessageToHistory(QString)));
-    connect(this, SIGNAL(reviewFinished(QString,QList<KUrl>)), SLOT(addMessageToHistory(QString)));
+    connect(this, SIGNAL(reviewFinished(QString,QList<QUrl>)), SLOT(addMessageToHistory(QString)));
 }
 
 QStringList VCSCommitDiffPatchSource::oldMessages() const
@@ -118,9 +118,9 @@ VCSDiffPatchSource::VCSDiffPatchSource(VCSDiffUpdater* updater)
 {
     update();
     KDevelop::IBasicVersionControl* vcs = m_updater->vcs();
-    KUrl url = m_updater->url();
+    QUrl url = m_updater->url();
 
-    QScopedPointer<VcsJob> statusJob(vcs->status(url));
+    QScopedPointer<VcsJob> statusJob(vcs->status(QList<QUrl>() << url));
     QVariant varlist;
 
     if( statusJob->exec() && statusJob->status() == VcsJob::JobSucceeded )
@@ -152,11 +152,11 @@ VCSDiffPatchSource::~VCSDiffPatchSource()
     delete m_updater;
 }
 
-KUrl VCSDiffPatchSource::baseDir() const {
+QUrl VCSDiffPatchSource::baseDir() const {
     return m_base;
 }
 
-KUrl VCSDiffPatchSource::file() const {
+QUrl VCSDiffPatchSource::file() const {
     return m_file;
 }
 
@@ -175,7 +175,7 @@ void VCSDiffPatchSource::updateFromDiff(VcsDiff vcsdiff)
         QTextStream t2(&temp2);
         t2 << vcsdiff.diff();
         kDebug() << "filename:" << temp2.fileName();
-        m_file = KUrl(temp2.fileName());
+        m_file = QUrl::fromLocalFile(temp2.fileName());
         temp2.close();
     }else{
         QFile file(m_file.path());
@@ -188,7 +188,6 @@ void VCSDiffPatchSource::updateFromDiff(VcsDiff vcsdiff)
 
     m_name = "VCS Diff";
     m_base = vcsdiff.baseDiff();
-    m_base.addPath("/");
     
     emit patchChanged();
 }
@@ -207,7 +206,7 @@ bool VCSCommitDiffPatchSource::canSelectFiles() const {
     return true;
 }
 
-QMap< KUrl, KDevelop::VcsStatusInfo::State> VCSDiffPatchSource::additionalSelectableFiles() const {
+QMap< QUrl, KDevelop::VcsStatusInfo::State> VCSDiffPatchSource::additionalSelectableFiles() const {
     return m_selectable;
 }
 
@@ -235,7 +234,7 @@ void VCSCommitDiffPatchSource::cancelReview() {
     deleteLater();
 }
 
-bool VCSCommitDiffPatchSource::finishReview(QList< KUrl > selection) {
+bool VCSCommitDiffPatchSource::finishReview(QList< QUrl > selection) {
 
     QString message;
 
@@ -244,7 +243,7 @@ bool VCSCommitDiffPatchSource::finishReview(QList< KUrl > selection) {
 
     kDebug() << "Finishing with selection" << selection;
     QString files;
-    foreach(const KUrl& url, selection)
+    foreach(const QUrl& url, selection)
         files += "<li>"+ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain) + "</li>";
 
     QString text = i18n("<qt>Files will be committed:\n<ul>%1</ul>\nWith message:\n <pre>%2</pre></qt>", files, message);
@@ -303,7 +302,7 @@ VcsDiff VCSStandardDiffUpdater::update() const
     return diffJob->fetchResults().value<VcsDiff>();
 }
 
-VCSStandardDiffUpdater::VCSStandardDiffUpdater(IBasicVersionControl* vcs, KUrl url) : m_vcs(vcs), m_url(url) {
+VCSStandardDiffUpdater::VCSStandardDiffUpdater(IBasicVersionControl* vcs, QUrl url) : m_vcs(vcs), m_url(url) {
 }
 
 VCSStandardDiffUpdater::~VCSStandardDiffUpdater() {

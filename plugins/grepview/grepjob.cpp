@@ -299,7 +299,7 @@ void GrepJob::setExcludeString(const QString& excludeString)
     m_excludeString = excludeString;
 }
 
-void GrepJob::setDirectoryChoice(const QList<KUrl>& choice)
+void GrepJob::setDirectoryChoice(const QList<QUrl>& choice)
 {
     m_directoryChoice = choice;
 }

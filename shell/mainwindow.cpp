@@ -28,6 +28,7 @@ Boston, MA 02110-1301, USA.
 #include <QDomDocument>
 #include <QDropEvent>
 #include <QMenuBar>
+#include <QUrl>
 #include <QtDBus/QDBusConnection>
 
 #include <KApplication>
@@ -167,10 +168,10 @@ void MainWindow::dropEvent( QDropEvent* ev )
     Sublime::View* dropToView = viewForPosition(mapToGlobal(ev->pos()));
     if(dropToView)
         activateView(dropToView);
-    
+
     foreach( const QUrl& u, ev->mimeData()->urls() )
     {
-        Core::self()->documentController()->openDocument( KUrl( u ) );
+        Core::self()->documentController()->openDocument( u );
     }
     ev->acceptProposedAction();
 }
@@ -325,22 +326,22 @@ bool MainWindow::queryClose()
 void MainWindow::updateCaption()
 {
     QString title = Core::self()->sessionController()->activeSession()->description();
-    
+
     if(area()->activeView())
     {
         if(!title.isEmpty())
             title += " - [ ";
-        
+
         Sublime::Document* doc = area()->activeView()->document();
         Sublime::UrlDocument* urlDoc = dynamic_cast<Sublime::UrlDocument*>(doc);
         if(urlDoc)
-            title += Core::self()->projectController()->prettyFileName(KUrl(urlDoc->documentSpecifier()), KDevelop::IProjectController::FormatPlain);
+            title += Core::self()->projectController()->prettyFileName(urlDoc->url(), KDevelop::IProjectController::FormatPlain);
         else
             title += doc->title();
-        
+
         title += " ]";
     }
-    
+
     setCaption(title);
 }
 

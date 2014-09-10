@@ -369,7 +369,7 @@ void TestView::showSource()
         return;
     }
 
-    KUrl url = d->url().toUrl();
+    QUrl url = d->url().toUrl();
     KTextEditor::Cursor cursor = d->rangeInCurrentRevision().start();
     locker.unlock();
 

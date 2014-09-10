@@ -91,9 +91,9 @@ void ExecuteScriptPlugin::unload()
     m_configType = 0;
 }
 
-KUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& err_ ) const
+QUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& err_ ) const
 {
-    KUrl script;
+    QUrl script;
 
     if( !cfg )
     {
@@ -111,7 +111,7 @@ KUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& 
         KShell::Errors err;
         if( KShell::splitArgs( script.toLocalFile(), KShell::TildeExpand | KShell::AbortOnMeta, &err ).isEmpty() || err != KShell::NoError )
         {
-            script = KUrl();
+            script = QUrl();
             if( err == KShell::BadQuoting )
             {
                 err_ = i18n("There is a quoting error in the script "
@@ -253,11 +253,11 @@ bool ExecuteScriptPlugin::useTerminal( KDevelop::ILaunchConfiguration* cfg ) con
 }
 */
 
-KUrl ExecuteScriptPlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg ) const
+QUrl ExecuteScriptPlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg ) const
 {
     if( !cfg )
     {
-        return KUrl();
+        return QUrl();
     }
     
     return cfg->config().readEntry( ExecuteScriptPlugin::workingDirEntry, QUrl() );

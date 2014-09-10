@@ -16,8 +16,8 @@ using namespace KDevelop;
 
 #define COMPARE_FILES(name)                                                 \
 do {                                                                        \
-KUrl resultUrl(baseUrl);                                                    \
-resultUrl.addPath(name);                                                    \
+QUrl resultUrl(baseUrl);                                                    \
+resultUrl.resolved(name);                                                   \
 QFile actualFile(resultUrl.toLocalFile());                                  \
 QVERIFY(actualFile.open(QIODevice::ReadOnly));                              \
 QFile expectedFile(CODEUTILS_TESTS_EXPECTED_DIR "/" name);                  \
@@ -62,7 +62,7 @@ void TestGenerationTest::cleanupTestCase()
 void TestGenerationTest::init()
 {
     dir.reset(new KTempDir);
-    baseUrl = KUrl(dir->name());
+    baseUrl = QUrl::fromLocalFile(dir->name());
 }
 
 void TestGenerationTest::yamlTemplate()
@@ -96,13 +96,12 @@ void TestGenerationTest::cppTemplate()
     COMPARE_FILES("testname.cpp");
 }
 
-QHash< QString, KUrl > TestGenerationTest::urls (const SourceFileTemplate& file)
+QHash< QString, QUrl > TestGenerationTest::urls (const SourceFileTemplate& file)
 {
-    QHash<QString, KUrl> ret;
+    QHash<QString, QUrl> ret;
     foreach (const SourceFileTemplate::OutputFile& output, file.outputFiles())
     {
-        KUrl url(baseUrl);
-        url.addPath(renderer->render(output.outputName).toLower());
+        QUrl url = baseUrl.resolved(renderer->render(output.outputName).toLower());
         ret.insert(output.identifier, url);
     }
     return ret;

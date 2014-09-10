@@ -82,7 +82,7 @@ void validatingExecJob(VcsJob* j, VcsJob::JobStatus status = VcsJob::JobSucceede
     QCOMPARE(j->status(), status);
 }
 
-void verifiedWrite(KUrl const & url, QString const & contents)
+void verifiedWrite(QUrl const & url, QString const & contents)
 {
     QFile f(url.path());
     QVERIFY(f.open(QIODevice::WriteOnly));
@@ -99,10 +99,10 @@ void fillWorkingDirectory(QString const & dirname)
     //we start it after repoInit, so we still have empty dvcs repo
     QVERIFY(dir.mkdir(vcsTestDir0));
     QVERIFY(dir.cd(vcsTestDir0));
-    KUrl file0(dir.absoluteFilePath(vcsTest_FileName0));
+    QUrl file0 = QUrl::fromLocalFile(dir.absoluteFilePath(vcsTest_FileName0));
     QVERIFY(dir.mkdir(vcsTestDir1));
     QVERIFY(dir.cd(vcsTestDir1));
-    KUrl file1(dir.absoluteFilePath(vcsTest_FileName1));
+    QUrl file1 = QUrl::fromLocalFile(dir.absoluteFilePath(vcsTest_FileName1));
     verifiedWrite(file0, simpleText);
     verifiedWrite(file1, keywordText);
 }
@@ -142,19 +142,18 @@ void SvnRecursiveAdd::test()
     VcsLocation reposLoc;
     reposLoc.setRepositoryServer("file://" + reposDir.name());
     KTempDir checkoutDir;
-    KUrl checkoutLoc = checkoutDir.name();
     kDebug() << "Checking out from " << reposLoc.repositoryServer() << " to " << checkoutLoc;
+    QUrl checkoutLoc = checkoutDir.name();
     qDebug() << "creating job";
     VcsJob* job = vcs->createWorkingCopy( reposLoc, checkoutLoc );
     validatingExecJob(job);
     qDebug() << "filling wc";
     fillWorkingDirectory(checkoutDir.name());
-    KUrl addUrl = checkoutLoc;
-    addUrl.addPath( vcsTestDir0 );
+    QUrl addUrl = checkoutLoc.resolved( vcsTestDir0 );
     kDebug() << "Recursively adding files at " << addUrl;
-    validatingExecJob(vcs->add(KUrl(addUrl), IBasicVersionControl::Recursive));
     kDebug() << "Recursively reverting changes at " << addUrl;
-    validatingExecJob(vcs->revert(KUrl(addUrl), IBasicVersionControl::Recursive));
+    validatingExecJob(vcs->add(addUrl, IBasicVersionControl::Recursive));
+    validatingExecJob(vcs->revert(addUrl, IBasicVersionControl::Recursive));
 }
 
 QTEST_MAIN(SvnRecursiveAdd)

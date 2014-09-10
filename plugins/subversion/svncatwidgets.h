@@ -13,17 +13,17 @@
 
 #include <kdialog.h>
 #include "ui_catoptiondlg.h"
-class KUrl;
+class QUrl;
 class SvnRevision;
 
 class SvnCatOptionDlg : public KDialog
 {
     Q_OBJECT
 public:
-    explicit SvnCatOptionDlg( const KUrl &path, QWidget *parent );
+    explicit SvnCatOptionDlg( const QUrl &path, QWidget *parent );
     ~SvnCatOptionDlg();
 
-    KUrl url();
+    QUrl url();
     SvnRevision revision();
 
 private:

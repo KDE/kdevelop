@@ -43,12 +43,12 @@ class KDEVPLATFORMVCS_EXPORT ProjectChangesModel : public VcsFileChangesModel
         QStandardItem* projectItem(KDevelop::IProject* p) const;
         static QStandardItem* fileItemForProject(QStandardItem* projectItem, const QUrl& url);
 
-        void changes(KDevelop::IProject* project, const KUrl::List& urls, KDevelop::IBasicVersionControl::RecursionMode mode);
+        void changes(KDevelop::IProject* project, const QList<QUrl>& urls, KDevelop::IBasicVersionControl::RecursionMode mode);
         
     public slots:
         void reloadAll();
         void reload(const QList<KDevelop::IProject*>& p);
-        void reload(const QList<KUrl>& p);
+        void reload(const QList<QUrl>& p);
         
         void addProject(KDevelop::IProject* p);
         void removeProject(KDevelop::IProject* p);
@@ -57,7 +57,7 @@ class KDEVPLATFORMVCS_EXPORT ProjectChangesModel : public VcsFileChangesModel
         void documentSaved(KDevelop::IDocument*);
         void itemsAdded(const QModelIndex& idx, int start, int end);
         void jobUnregistered(KJob*);
-        void repositoryBranchChanged(const KUrl& url);
+        void repositoryBranchChanged(const QUrl& url);
         void branchNameReady(KDevelop::VcsJob* job);
 };
 

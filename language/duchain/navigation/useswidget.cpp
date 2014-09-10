@@ -372,7 +372,7 @@ void ContextUsesWidget::linkWasActivated(QString link) {
     if(context) {
       CursorInRevision contextStart = context->range().start;
       KTextEditor::Cursor cursor(contextStart.line, contextStart.column);
-      KUrl url = context->url().toUrl();
+      QUrl url = context->url().toUrl();
       lock.unlock();
       ForegroundLock fgLock;
       ICore::self()->documentController()->openDocument(url, cursor);
@@ -632,7 +632,7 @@ void UsesWidget::UsesWidgetCollector::processUses( KDevelop::ReferencedTopDUCont
   bool toBack = widget->usesCount() == 0;
   // move to front the item belonging to the current open document
   IDocument* doc = ICore::self()->documentController()->activeDocument();
-  bool toFront = doc && doc->url().equals(topContext->url().toUrl());
+  bool toFront = doc && (doc->url() == topContext->url().toUrl());
 
   widget->setExpanded(true);
 

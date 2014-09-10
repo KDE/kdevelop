@@ -68,7 +68,7 @@ private slots:
 private:
     virtual void resizeEvent(QResizeEvent*);
 
-    void activate( const KUrl& url, KDevelop::IDocument* buddy = 0 ) const;
+    void activate( const QUrl& url, KDevelop::IDocument* buddy = 0 ) const;
     
     void kompareModelChanged();
 

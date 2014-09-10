@@ -20,9 +20,9 @@
 
 #include "vcsannotation.h"
 
-#include <QtCore/QDateTime>
-#include <QtCore/QHash>
-#include <KUrl>
+#include <QDateTime>
+#include <QHash>
+#include <QUrl>
 
 #include "vcsrevision.h"
 
@@ -33,7 +33,7 @@ class VcsAnnotationPrivate
 {
 public:
     QHash<int, VcsAnnotationLine> lines;
-    KUrl location;
+    QUrl location;
 };
 
 class VcsAnnotationLinePrivate
@@ -163,7 +163,7 @@ VcsAnnotation::~VcsAnnotation()
     delete d;
 }
 
-KUrl VcsAnnotation::location() const
+QUrl VcsAnnotation::location() const
 {
     return d->location;
 }
@@ -182,7 +182,7 @@ void VcsAnnotation::insertLine( int lineno, const VcsAnnotationLine& line )
     d->lines.insert( lineno, line );
 }
 
-void VcsAnnotation::setLocation(const KUrl& u)
+void VcsAnnotation::setLocation(const QUrl& u)
 {
     d->location = u;
 }

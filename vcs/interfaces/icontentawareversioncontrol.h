@@ -21,7 +21,6 @@
 #ifndef KDEVPLATFORM_ICONTENTAWAREVERSIONCONTROL_H
 #define KDEVPLATFORM_ICONTENTAWAREVERSIONCONTROL_H
 
-#include <KUrl>
 #include <KJob>
 #include <QSharedPointer>
 

@@ -77,52 +77,52 @@ public:
    
     QString name() const;
 
-    bool isVersionControlled(const KUrl &path);
+    bool isVersionControlled(const QUrl &path);
     
-    virtual KDevelop::VcsJob* copy(const KUrl& localLocationSrc, const KUrl& localLocationDstn);
-    virtual KDevelop::VcsJob* move(const KUrl& localLocationSrc, const KUrl& localLocationDst);
+    virtual KDevelop::VcsJob* copy(const QUrl& localLocationSrc, const QUrl& localLocationDstn);
+    virtual KDevelop::VcsJob* move(const QUrl& localLocationSrc, const QUrl& localLocationDst);
     
     //TODO
-    virtual KDevelop::VcsJob* pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation);
-    virtual KDevelop::VcsJob* push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst);
-    virtual KDevelop::VcsJob* repositoryLocation(const KUrl& localLocation);
-    virtual KDevelop::VcsJob* resolve(const KUrl::List& localLocations, RecursionMode recursion);
-    virtual KDevelop::VcsJob* update(const KUrl::List& localLocations, const KDevelop::VcsRevision& rev, RecursionMode recursion);
+    virtual KDevelop::VcsJob* pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const QUrl& localRepositoryLocation);
+    virtual KDevelop::VcsJob* push(const QUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst);
+    virtual KDevelop::VcsJob* repositoryLocation(const QUrl& localLocation);
+    virtual KDevelop::VcsJob* resolve(const QList<QUrl>& localLocations, RecursionMode recursion);
+    virtual KDevelop::VcsJob* update(const QList<QUrl>& localLocations, const KDevelop::VcsRevision& rev, RecursionMode recursion);
     KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const;
-    virtual void setupCommitMessageEditor(const KUrl& localLocation, KTextEdit* editor) const;
+    virtual void setupCommitMessageEditor(const QUrl& localLocation, KTextEdit* editor) const;
     //End of
 
-    KDevelop::VcsJob* add(const KUrl::List& localLocations,
+    KDevelop::VcsJob* add(const QList<QUrl>& localLocations,
                           KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
     KDevelop::VcsJob* createWorkingCopy(const KDevelop::VcsLocation & localOrRepoLocationSrc,
-                            const KUrl& localRepositoryRoot, KDevelop::IBasicVersionControl::RecursionMode);
+                            const QUrl& localRepositoryRoot, KDevelop::IBasicVersionControl::RecursionMode);
 
-    KDevelop::VcsJob* remove(const KUrl::List& files);
-    KDevelop::VcsJob* status(const KUrl::List& localLocations,
+    KDevelop::VcsJob* remove(const QList<QUrl>& files);
+    KDevelop::VcsJob* status(const QList<QUrl>& localLocations,
                              KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
     KDevelop::VcsJob* commit(const QString& message,
-                             const KUrl::List& localLocations,
+                             const QList<QUrl>& localLocations,
                              KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
 
-    virtual KDevelop::VcsJob* diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
+    virtual KDevelop::VcsJob* diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
                                    KDevelop::VcsDiff::Type, RecursionMode recursion);
 
-    virtual KDevelop::VcsJob* log( const KUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long limit);
-    virtual KDevelop::VcsJob* log(const KUrl& localLocation, const KDevelop::VcsRevision& rev, const KDevelop::VcsRevision& limit);
-    KDevelop::VcsJob* annotate(const KUrl &localLocation, const KDevelop::VcsRevision &rev);
-    KDevelop::VcsJob* revert(const KUrl::List& localLocations, RecursionMode recursion);
+    virtual KDevelop::VcsJob* log( const QUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long limit);
+    virtual KDevelop::VcsJob* log(const QUrl& localLocation, const KDevelop::VcsRevision& rev, const KDevelop::VcsRevision& limit);
+    KDevelop::VcsJob* annotate(const QUrl &localLocation, const KDevelop::VcsRevision &rev);
+    KDevelop::VcsJob* revert(const QList<QUrl>& localLocations, RecursionMode recursion);
 
     // Begin:  KDevelop::IDistributedVersionControl
-    KDevelop::VcsJob* init(const KUrl & directory);
+    KDevelop::VcsJob* init(const QUrl & directory);
 
     // Branch management
-    KDevelop::VcsJob* tag(const KUrl& repository, const QString& commitMessage, const KDevelop::VcsRevision& rev, const QString& tagName);
-    KDevelop::VcsJob* branch(const KUrl& repository, const KDevelop::VcsRevision& rev, const QString& branchName);
-    KDevelop::VcsJob* branches(const KUrl& repository);
-    KDevelop::VcsJob* currentBranch(const KUrl& repository);
-    KDevelop::VcsJob* deleteBranch(const KUrl& repository, const QString& branchName);
-    KDevelop::VcsJob* switchBranch(const KUrl& repository, const QString& branchName);
-    KDevelop::VcsJob* renameBranch(const KUrl& repository, const QString& oldBranchName, const QString& newBranchName);
+    KDevelop::VcsJob* tag(const QUrl& repository, const QString& commitMessage, const KDevelop::VcsRevision& rev, const QString& tagName);
+    KDevelop::VcsJob* branch(const QUrl& repository, const KDevelop::VcsRevision& rev, const QString& branchName);
+    KDevelop::VcsJob* branches(const QUrl& repository);
+    KDevelop::VcsJob* currentBranch(const QUrl& repository);
+    KDevelop::VcsJob* deleteBranch(const QUrl& repository, const QString& branchName);
+    KDevelop::VcsJob* switchBranch(const QUrl& repository, const QString& branchName);
+    KDevelop::VcsJob* renameBranch(const QUrl& repository, const QString& oldBranchName, const QString& newBranchName);
 
     //graph helpers
     QList<DVcsEvent> getAllCommits(const QString &repo);
@@ -131,24 +131,24 @@ public:
     void parseLogOutput(const KDevelop::DVcsJob * job,
                         QList<DVcsEvent>& commits) const;
 
-    virtual void additionalMenuEntries(QMenu* menu, const KUrl::List& urls);
+    virtual void additionalMenuEntries(QMenu* menu, const QList<QUrl>& urls);
     
     KDevelop::DVcsJob* gitStash(const QDir& repository, const QStringList& args, KDevelop::OutputJob::OutputJobVerbosity verbosity);
     
     bool hasStashes(const QDir& repository);
     bool hasModifications(const QDir& repository);
-    bool hasModifications(const QDir& repo, const KUrl& file);
+    bool hasModifications(const QDir& repo, const QUrl& file);
 
     virtual bool hasError() const;
     virtual QString errorDescription() const;
-    virtual void registerRepositoryForCurrentBranchChanges(const KUrl& repository);
+    virtual void registerRepositoryForCurrentBranchChanges(const QUrl& repository);
 
     KDevelop::CheckInRepositoryJob* isInRepository(KTextEditor::Document* document);
 protected:
   
-    KUrl repositoryRoot(const KUrl& path);
+    QUrl repositoryRoot(const QUrl& path);
   
-    bool isValidDirectory(const KUrl &dirPath);
+    bool isValidDirectory(const QUrl &dirPath);
 
     KDevelop::DVcsJob* lsFiles(const QDir &repository,
                      const QStringList &args,
@@ -178,10 +178,10 @@ private slots:
     void delayedBranchChanged();
 
 signals:
-    void repositoryBranchChanged(const KUrl& repository);
+    void repositoryBranchChanged(const QUrl& repository);
 
 private:
-    void addNotVersionedFiles(const QDir& dir, const KUrl::List& files);
+    void addNotVersionedFiles(const QDir& dir, const QList<QUrl>& files);
     
     //commit dialog "main" helper
     QStringList getLsFiles(const QDir &directory, const QStringList &args,
@@ -193,7 +193,7 @@ private:
     static KDevelop::VcsStatusInfo::State messageToState(const QString& ch);
 
     QList<QStringList> branchesShas;
-    KUrl::List m_urls;
+    QList<QUrl> m_urls;
     
     /** Tells if it's older than 1.7.0 or not */
     bool m_oldVersion;
@@ -201,7 +201,7 @@ private:
     bool m_hasError;
     QString m_errorDescription;
     KDirWatch* m_watcher;
-    KUrl::List m_branchesChange;
+    QList<QUrl> m_branchesChange;
 };
 
 QVariant runSynchronously(KDevelop::VcsJob* job);

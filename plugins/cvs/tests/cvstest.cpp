@@ -10,11 +10,10 @@
 
 #include "cvstest.h"
 
-#include <qtest_kde.h>
 #include <QtTest/QtTest>
+#include <QUrl>
 
-#include <KUrl>
-#include <kio/netaccess.h>
+#include <KIO/DeleteJob>
 
 #include <cvsjob.h>
 #include <cvsproxy.h>
@@ -35,7 +34,7 @@ void CvsTest::initTestCase()
 
     m_proxy = new CvsProxy;
 
-    // If the basedir for this cvs test exists from a 
+    // If the basedir for this cvs test exists from a
     // previous run; remove it...
     cleanup();
 }
@@ -59,7 +58,7 @@ void CvsTest::init()
 void CvsTest::cleanup()
 {
     if ( QFileInfo(CVSTEST_BASEDIR).exists() )
-        KIO::NetAccess::del(KUrl(QString(CVSTEST_BASEDIR)), 0);
+        KIO::del(QUrl::fromLocalFile(QString(CVSTEST_BASEDIR)))->exec();
 }
 
 void CvsTest::repoInit()
@@ -88,8 +87,8 @@ void CvsTest::importTestData()
     f.flush();
 
 
-    CvsJob* j = m_proxy->import(KUrl(CVS_IMPORT), CVS_REPO, 
-                        "test", "vendor", "release", 
+    CvsJob* j = m_proxy->import(QUrl::fromLocalFile(CVS_IMPORT), CVS_REPO,
+                        "test", "vendor", "release",
                         "test import message");
     QVERIFY( j );
 
@@ -108,7 +107,7 @@ void CvsTest::importTestData()
 
 void CvsTest::checkoutTestData()
 {
-    CvsJob* j = m_proxy->checkout(KUrl(CVS_CHECKOUT), CVS_REPO, "test");
+    CvsJob* j = m_proxy->checkout(QUrl::fromLocalFile(CVS_CHECKOUT), CVS_REPO, "test");
     QVERIFY( j );
 
     // try to start the job
@@ -138,10 +137,8 @@ void CvsTest::testLogFolder()
     checkoutTestData();
     QString testdir(CVS_CHECKOUT);
     KDevelop::VcsRevision rev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Head);
-    CvsJob* job = m_proxy->log(KUrl(testdir), rev);
+    CvsJob* job = m_proxy->log(QUrl::fromLocalFile(testdir), rev);
     QVERIFY(job);
 }
 
-QTEST_KDEMAIN(CvsTest, GUI)
-
-
+QTEST_MAIN(CvsTest)

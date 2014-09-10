@@ -29,15 +29,15 @@ class SvnInternalInfoJob : public SvnInternalJobBase
     Q_OBJECT
 public:
     SvnInternalInfoJob( SvnJobBase* parent = 0 );
-    void setLocation( const KUrl& );
+    void setLocation( const QUrl& );
 
-    KUrl location() const;
+    QUrl location() const;
 signals:
     void gotInfo( const SvnInfoHolder& );
 protected:
     void run();
 private:
-    KUrl m_location;
+    QUrl m_location;
 };
 
 

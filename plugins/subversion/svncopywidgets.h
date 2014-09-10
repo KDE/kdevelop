@@ -15,19 +15,19 @@
 #include "svnmodels.h"
 #include "ui_copyoptiondlg.h"
 
-class KUrl;
+class QUrl;
 class SvnRevision;
 
 class SvnCopyOptionDlg : public KDialog
 {
     Q_OBJECT
 public:
-    explicit SvnCopyOptionDlg( const KUrl &reqUrl, SvnInfoHolder *info, QWidget *parent );
+    explicit SvnCopyOptionDlg( const QUrl &reqUrl, SvnInfoHolder *info, QWidget *parent );
     ~SvnCopyOptionDlg();
 
-    KUrl source();
+    QUrl source();
     SvnRevision sourceRev();
-    KUrl dest();
+    QUrl dest();
 
 private Q_SLOTS:
     void srcAsUrlClicked();
@@ -35,7 +35,7 @@ private Q_SLOTS:
 
 private:
     Ui::SvnCopyOptionDlg ui;
-    KUrl m_reqUrl;
+    QUrl m_reqUrl;
     SvnInfoHolder *m_info;
 };
 

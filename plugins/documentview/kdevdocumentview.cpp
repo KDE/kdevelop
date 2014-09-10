@@ -102,7 +102,7 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
         if (proxyIndex.parent().isValid()) {
             // this is a document item
             KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
-            KUrl documentUrl = static_cast<KDevDocumentItem*>(m_documentModel->itemFromIndex(index))->fileItem()->url();
+            QUrl documentUrl = static_cast<KDevDocumentItem*>(m_documentModel->itemFromIndex(index))->fileItem()->url();
             if (dc->documentForUrl(documentUrl) != dc->activeDocument()) {
                 dc->openDocument(documentUrl);
                 return;
@@ -230,7 +230,7 @@ void KDevDocumentView::appendActions(QMenu* menu, const QList<QAction*>& actions
 bool KDevDocumentView::selectedDocHasChanges()
 {
     KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
-    foreach(const KUrl& url, m_selectedDocs)
+    foreach(const QUrl& url, m_selectedDocs)
     {
         KDevelop::IDocument* doc = dc->documentForUrl(url);
         if (!doc) continue;

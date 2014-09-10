@@ -20,10 +20,9 @@
 #define KDEVPLATFORM_PLUGIN_OUTPUTPAGE_H
 
 #include <QWidget>
-#include <KUrl>
+#include <QUrl>
 #include <ktexteditor/cursor.h>
 
-class KUrl;
 namespace KDevelop {
 
 class TemplateRenderer;
@@ -58,13 +57,13 @@ public:
      * @param baseUrl the directory where the files are to be generated
      * @param renderer used to render any variables in output URLs
      */
-    void loadFileTemplate(const KDevelop::SourceFileTemplate& fileTemplate, const KUrl& baseUrl,
+    void loadFileTemplate(const KDevelop::SourceFileTemplate& fileTemplate, const QUrl& baseUrl,
                           KDevelop::TemplateRenderer* renderer);
 
     /**
      * Returns the file URLs, as specified by the user.
      */
-    QHash<QString, KUrl> fileUrls() const;
+    QHash<QString, QUrl> fileUrls() const;
     /**
      * Returns the positions within files where code is to be generated.
      */

@@ -25,7 +25,7 @@
 
 #include <QWidget>
 
-#include <QtCore/QUrl>
+#include <QUrl>
 #include <KConfigGroup>
 
 #include <debugger/debuggerexport.h>

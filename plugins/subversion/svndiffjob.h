@@ -26,7 +26,7 @@
 
 #include <vcs/vcslocation.h>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <vcs/vcsdiff.h>
 

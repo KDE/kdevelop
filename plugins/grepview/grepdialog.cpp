@@ -43,11 +43,14 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/isession.h>
 
+#include <util/path.h>
+
 #include "grepviewplugin.h"
 #include "grepjob.h"
 #include "grepoutputview.h"
 #include "grepfindthread.h"
 #include "greputil.h"
+
 
 using namespace KDevelop;
 
@@ -184,17 +187,18 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
 void GrepDialog::selectDirectoryDialog()
 {
-    QString dirName = KFileDialog::getExistingDirectory(searchPaths->lineEdit()->text(), this, tr("Select directory to search in"));
+    QString dirName = KFileDialog::getExistingDirectory(QUrl::fromLocalFile(searchPaths->lineEdit()->text()),
+                                                        this, tr("Select directory to search in"));
 
     if (!dirName.isEmpty()) {
         setSearchLocations(dirName);
     }
 }
 
-void GrepDialog::addUrlToMenu(QMenu* menu, const KUrl& url)
+void GrepDialog::addUrlToMenu(QMenu* menu, const QUrl& url)
 {
     QAction* action = menu->addAction(m_plugin->core()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain));
-    action->setData(QVariant(url.pathOrUrl()));
+    action->setData(QVariant(url.toString()));
     connect(action, SIGNAL(triggered(bool)), SLOT(synchronizeDirActionTriggered(bool)));
 }
 
@@ -216,41 +220,34 @@ QMenu* GrepDialog::createSyncButtonMenu()
 {
     QMenu* ret = new QMenu;
 
-    QSet<KUrl> hadUrls;
-    
+    QSet<Path> hadUrls;
+
     IDocument *doc = m_plugin->core()->documentController()->activeDocument();
     if ( doc )
     {
-        KUrl url = doc->url();
-        url.cd("..");
-        while(m_plugin->core()->projectController()->findProjectForUrl(url))
+        Path url = Path(doc->url()).parent();
+
+        // always add the current file's parent directory
+        hadUrls.insert(url);
+        addUrlToMenu(ret, url.toUrl());
+
+        url = url.parent();
+
+        while(m_plugin->core()->projectController()->findProjectForUrl(url.toUrl()))
         {
-            url.adjustPath(KUrl::RemoveTrailingSlash);
             if(hadUrls.contains(url))
                 break;
             hadUrls.insert(url);
-            addUrlToMenu(ret, url);
-            if(!url.cd(".."))
-                break;
-        }
-
-        // if the current file's parent directory is not in the project, add it
-        url = doc->url().upUrl();
-        url.adjustPath(KUrl::RemoveTrailingSlash);
-        if(!hadUrls.contains(url))
-        {
-            hadUrls.insert(url);
-            addUrlToMenu(ret, url);
+            addUrlToMenu(ret, url.toUrl());
+            url = url.parent();
         }
     }
     
     foreach(IProject* project, m_plugin->core()->projectController()->projects())
     {
-        KUrl url = project->folder();
-        url.adjustPath(KUrl::RemoveTrailingSlash);
-        if(hadUrls.contains(url))
-            continue;
-        addUrlToMenu(ret, url);
+        if (!hadUrls.contains(project->path())) {
+            addUrlToMenu(ret, project->path().toUrl());
+        }
     }
     
     addStringToMenu(ret, allOpenFilesString);
@@ -260,15 +257,15 @@ QMenu* GrepDialog::createSyncButtonMenu()
 
 void GrepDialog::directoryChanged(const QString& dir)
 {
-    KUrl currentUrl = dir;
+    QUrl currentUrl = QUrl::fromLocalFile(dir);
     if( !currentUrl.isValid() ) {
         setEnableProjectBox(false);
         return;
     }
     
     bool projectAvailable = true;
-    
-    foreach(KUrl url, getDirectoryChoice())
+
+    foreach(QUrl url, getDirectoryChoice())
     {
         IProject *proj = ICore::self()->projectController()->findProjectForUrl( currentUrl );
         if( !proj || !proj->folder().isLocalFile() )
@@ -319,7 +316,7 @@ void GrepDialog::setSearchLocations(const QString &dir)
     if(!dir.isEmpty()) {
         if(QDir::isAbsolutePath(dir))
         {
-            static_cast<KUrlCompletion*>(searchPaths->completionObject())->setDir( dir );
+            static_cast<KUrlCompletion*>(searchPaths->completionObject())->setDir( QUrl::fromLocalFile(dir) );
         }
 
             if (searchPaths->contains(dir)) {
@@ -387,9 +384,9 @@ void GrepDialog::patternComboEditTextChanged( const QString& text)
     buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!text.isEmpty());
 }
 
-QList< KUrl > GrepDialog::getDirectoryChoice() const
+QList< QUrl > GrepDialog::getDirectoryChoice() const
 {
-    QList< KUrl > ret;
+    QList< QUrl > ret;
     QString text = searchPaths->currentText();
     if(text == allOpenFilesString)
     {
@@ -406,18 +403,18 @@ QList< KUrl > GrepDialog::getDirectoryChoice() const
             // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
             // a semicolon in the name.
             foreach(QString file, semicolonSeparatedFileList)
-                ret << KUrl::fromPath(file);
+                ret << QUrl::fromLocalFile(file);
         }else{
-            ret << KUrl(searchPaths->currentText());
+            ret << QUrl::fromUserInput(searchPaths->currentText());
         }
     }
     return ret;
 }
 
-bool GrepDialog::isPartOfChoice(KUrl url) const
+bool GrepDialog::isPartOfChoice(QUrl url) const
 {
-    foreach(KUrl choice, getDirectoryChoice())
-        if(choice.isParentOf(url) || choice.equals(url))
+    foreach(QUrl choice, getDirectoryChoice())
+        if(choice.isParentOf(url) || choice == url)
             return true;
     return false;
 }
@@ -428,50 +425,50 @@ void GrepDialog::startSearch()
     QList<IDocument*> unsavedFiles;
     QStringList include = GrepFindFilesThread::parseInclude(filesString());
     QStringList exclude = GrepFindFilesThread::parseExclude(excludeString());
-    
+
     foreach(IDocument* doc, ICore::self()->documentController()->openDocuments())
     {
-        KUrl docUrl = doc->url();
-        if(doc->state() != IDocument::Clean && isPartOfChoice(docUrl) && 
+        QUrl docUrl = doc->url();
+        if(doc->state() != IDocument::Clean && isPartOfChoice(docUrl) &&
            QDir::match(include, docUrl.fileName()) && !QDir::match(exclude, docUrl.toLocalFile()))
         {
             unsavedFiles << doc;
         }
     }
-    
+
     if(!ICore::self()->documentController()->saveSomeDocuments(unsavedFiles))
     {
         close();
         return;
     }
-    
-    QList<KUrl> choice = getDirectoryChoice();
-    
+
+    QList<QUrl> choice = getDirectoryChoice();
+
     GrepJob* job = m_plugin->newGrepJob();
-    
+
     QString descriptionOrUrl(searchPaths->currentText());
     QString description = descriptionOrUrl;
     // Shorten the description
     if(descriptionOrUrl != allOpenFilesString && descriptionOrUrl != allOpenProjectsString && choice.size() > 1)
-        description = i18np("%2, and %1 more item", "%2, and %1 more items", choice.size() - 1, choice[0].pathOrUrl());
-    
+        description = i18np("%2, and %1 more item", "%2, and %1 more items", choice.size() - 1, choice[0].toDisplayString(QUrl::PreferLocalFile));
+
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Find/Replace in Files"), m_plugin->toolViewFactory(), IUiController::CreateAndRaise);
     GrepOutputModel* outputModel = toolView->renewModel(patternString(), description);
-    
+
     connect(job, SIGNAL(showErrorMessage(QString,int)),
             toolView, SLOT(showErrorMessage(QString)));
     //the GrepOutputModel gets the 'showMessage' signal to store it and forward
     //it to toolView
     connect(job, SIGNAL(showMessage(KDevelop::IStatus*,QString,int)),
-            outputModel, SLOT(showMessageSlot(KDevelop::IStatus*,QString)));    
+            outputModel, SLOT(showMessageSlot(KDevelop::IStatus*,QString)));
     connect(outputModel, SIGNAL(showMessage(KDevelop::IStatus*,QString)),
             toolView, SLOT(showMessage(KDevelop::IStatus*,QString)));
-    
-    
+
+
     connect(toolView, SIGNAL(outputViewIsClosed()),
             job, SLOT(kill()));
-    
+
     job->setOutputModel(outputModel);
     job->setPatternString(patternString());
     job->setReplacementTemplateString(replacementTemplateString());

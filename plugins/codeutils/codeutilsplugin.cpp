@@ -157,7 +157,7 @@ void CodeUtilsPlugin::documentDeclaration()
         return;
     }
 
-    const QString comment = renderer.renderFile(KUrl(fileName));
+    const QString comment = renderer.renderFile(QUrl::fromLocalFile(fileName));
     tplIface->insertTemplateText(insertPos, comment, QMap<QString, QString>());
 #endif
 }

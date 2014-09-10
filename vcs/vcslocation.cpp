@@ -21,7 +21,6 @@
 #include "vcslocation.h"
 
 #include <QtCore/QVariant>
-#include <kurl.h>
 
 namespace KDevelop
 {
@@ -29,7 +28,7 @@ namespace KDevelop
 class VcsLocationPrivate
 {
 public:
-    KUrl m_localUrl;
+    QUrl m_localUrl;
     QString m_repoServer;
     QString m_repoPath;
     QString m_repoModule;
@@ -46,7 +45,7 @@ VcsLocation::VcsLocation()
 }
 
 
-VcsLocation::VcsLocation( const KUrl& u )
+VcsLocation::VcsLocation( const QUrl& u )
     : d(new VcsLocationPrivate)
 {
     setLocalUrl( u );
@@ -91,7 +90,7 @@ VcsLocation& VcsLocation::operator=( const VcsLocation& rhs )
     return *this;
 }
 
-KUrl VcsLocation::localUrl() const
+QUrl VcsLocation::localUrl() const
 {
     return d->m_localUrl;
 }
@@ -113,7 +112,7 @@ bool VcsLocation::isValid() const
                 && d->m_type == VcsLocation::RepositoryLocation ) );
 }
 
-void VcsLocation::setLocalUrl( const KUrl& url )
+void VcsLocation::setLocalUrl( const QUrl& url )
 {
     d->m_repoServer.clear();
     d->m_repoModule.clear();
@@ -127,7 +126,7 @@ void VcsLocation::setRepositoryServer( const QString& location )
 {
     d->m_repoServer = location;
     d->m_type = VcsLocation::RepositoryLocation;
-    d->m_localUrl = KUrl();
+    d->m_localUrl = QUrl();
 }
 
 bool VcsLocation::operator==( const KDevelop::VcsLocation& rhs )

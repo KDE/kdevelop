@@ -11,12 +11,13 @@
 #include "svnstatuswidgets.h"
 #include "svnrevisionwidget.h"
 #include "svnmodels.h"
-#include <kurl.h>
+#include <QUrl>
 #include <QCheckBox>
 #include <QMap>
 #include <QHeaderView>
+#include <QDir>
 
-SvnStatusOptionDlg::SvnStatusOptionDlg( const KUrl &path, QWidget *parent )
+SvnStatusOptionDlg::SvnStatusOptionDlg( const QUrl &path, QWidget *parent )
     : KDialog( parent )
 {
     ui.setupUi(mainWidget());
@@ -64,7 +65,7 @@ bool SvnStatusOptionDlg::ignoreExternals()
 
 ////////////////////////////////////////////////////////////////
 
-SvnStatusDisplayWidget::SvnStatusDisplayWidget( const KUrl& url, bool repContacted, QWidget *parent )
+SvnStatusDisplayWidget::SvnStatusDisplayWidget( const QUrl &url, bool repContacted, QWidget *parent )
     : QTreeWidget( parent )
     , m_repContacted( repContacted ), m_reqUrl(url)
 {
@@ -90,15 +91,18 @@ SvnStatusDisplayWidget::~SvnStatusDisplayWidget()
 {
 }
 
-void SvnStatusDisplayWidget::setResults( const QMap< KUrl, SvnStatusHolder > &map )
+void SvnStatusDisplayWidget::setResults( const QMap< QUrl, SvnStatusHolder > &map )
 {
     clear();
-    QMap<KUrl, SvnStatusHolder>::const_iterator it;
+    QMap<QUrl, SvnStatusHolder>::const_iterator it;
+
+    const QDir requestPath(m_reqUrl.toLocalFile());
+
     for( it = map.begin(); it != map.end(); ++it ){
         SvnStatusHolder holder = it.value();
         QTreeWidgetItem *item = new QTreeWidgetItem( this );
 
-        QString relative = KUrl::relativePath( m_reqUrl.toLocalFile(), it.key().toLocalFile() );
+        QString relative = requestPath.relativeFilePath( it.key().toLocalFile() );
         item->setText( 0, relative );
         item->setText( 1, SvnStatusHolder::statusToString( holder.textStatus ) );
         item->setText( 2, SvnStatusHolder::statusToString( holder.propStatus ) );

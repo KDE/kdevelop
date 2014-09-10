@@ -27,7 +27,7 @@
 
 class QPoint;
 class QModelIndex;
-class KUrl;
+class QUrl;
 
 namespace KDevelop
 {
@@ -39,7 +39,7 @@ class KDEVPLATFORMVCS_EXPORT VcsEventWidget : public QWidget
 {
     Q_OBJECT
 public:
-    VcsEventWidget( const KUrl& url, const VcsRevision& rev, KDevelop::IBasicVersionControl* iface, QWidget* parent = 0 );
+    VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelop::IBasicVersionControl* iface, QWidget* parent = 0 );
     virtual ~VcsEventWidget();
 
 private:

@@ -22,7 +22,6 @@
 #include <KPluginLoader>
 #include <KActionCollection>
 #include <KMessageBox>
-#include <KUrl>
 #include <KAction>
 #include <KAboutData>
 #include <KLocalizedString>
@@ -131,7 +130,7 @@ void CvsPlugin::setupActions()
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStatus()));
 }
 
-const KUrl CvsPlugin::urlFocusedDocument() const
+const QUrl CvsPlugin::urlFocusedDocument() const
 {
     KParts::ReadOnlyPart *plugin =
         dynamic_cast<KParts::ReadOnlyPart*>(core()->partController()->activePart());
@@ -140,13 +139,13 @@ const KUrl CvsPlugin::urlFocusedDocument() const
             return plugin->url();
         }
     }
-    return KUrl();
+    return QUrl();
 }
 
 
 void CvsPlugin::slotImport()
 {
-    KUrl url = urlFocusedDocument();
+    QUrl url = urlFocusedDocument();
 
     ImportDialog dlg(this, url);
     dlg.exec();
@@ -163,11 +162,11 @@ void CvsPlugin::slotCheckout()
 
 void CvsPlugin::slotStatus()
 {
-    KUrl url = urlFocusedDocument();
-    KUrl::List urls;
+    QUrl url = urlFocusedDocument();
+    QList<QUrl> urls;
     urls << url;
 
-    KDevelop::VcsJob* j = status(url, KDevelop::IBasicVersionControl::Recursive);
+    KDevelop::VcsJob* j = status(urls, KDevelop::IBasicVersionControl::Recursive);
     CvsJob* job = dynamic_cast<CvsJob*>(j);
     if (job) {
         CvsGenericOutputView* view = new CvsGenericOutputView(job);
@@ -180,10 +179,10 @@ void CvsPlugin::slotStatus()
 KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context* context)
 {
     d->m_common->setupFromContext(context);
-    KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
+    QList<QUrl> const & ctxUrlList = d->m_common->contextUrlList();
 
     bool hasVersionControlledEntries = false;
-    foreach(const KUrl &url, ctxUrlList) {
+    foreach(const QUrl &url, ctxUrlList) {
         if (d->m_proxy->isValidDirectory(url)) {
             hasVersionControlledEntries = true;
             break;
@@ -220,7 +219,7 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
 
 void CvsPlugin::ctxEdit()
 {
-    KUrl::List const & urls = d->m_common->contextUrlList();
+    QList<QUrl> const & urls = d->m_common->contextUrlList();
     Q_ASSERT(!urls.empty());
 
     KDevelop::VcsJob* j = edit(urls.front());
@@ -234,7 +233,7 @@ void CvsPlugin::ctxEdit()
 
 void CvsPlugin::ctxUnEdit()
 {
-    KUrl::List const & urls = d->m_common->contextUrlList();
+    QList<QUrl> const & urls = d->m_common->contextUrlList();
     Q_ASSERT(!urls.empty());
 
     KDevelop::VcsJob* j = unedit(urls.front());
@@ -248,10 +247,10 @@ void CvsPlugin::ctxUnEdit()
 
 void CvsPlugin::ctxEditors()
 {
-    KUrl::List const & urls = d->m_common->contextUrlList();
+    QList<QUrl> const & urls = d->m_common->contextUrlList();
     Q_ASSERT(!urls.empty());
 
-    CvsJob* job = d->m_proxy->editors(findWorkingDir(urls.front().toLocalFile()),
+    CvsJob* job = d->m_proxy->editors(findWorkingDir(urls.front()),
                                       urls);
     if (job) {
         KDevelop::ICore::self()->runController()->registerJob(job);
@@ -260,7 +259,7 @@ void CvsPlugin::ctxEditors()
     }
 }
 
-QString CvsPlugin::findWorkingDir(const KUrl& location)
+QString CvsPlugin::findWorkingDir(const QUrl& location)
 {
     QFileInfo fileInfo(location.toLocalFile());
 
@@ -275,85 +274,85 @@ QString CvsPlugin::findWorkingDir(const KUrl& location)
 
 // Begin:  KDevelop::IBasicVersionControl
 
-bool CvsPlugin::isVersionControlled(const KUrl & localLocation)
+bool CvsPlugin::isVersionControlled(const QUrl & localLocation)
 {
     return d->m_proxy->isVersionControlled(localLocation);
 }
 
-KDevelop::VcsJob * CvsPlugin::repositoryLocation(const KUrl & localLocation)
+KDevelop::VcsJob * CvsPlugin::repositoryLocation(const QUrl & localLocation)
 {
     Q_UNUSED(localLocation);
     return NULL;
 }
 
-KDevelop::VcsJob * CvsPlugin::add(const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
+KDevelop::VcsJob * CvsPlugin::add(const QList<QUrl> & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    CvsJob* job = d->m_proxy->add(findWorkingDir(localLocations[0].toLocalFile()),
+    CvsJob* job = d->m_proxy->add(findWorkingDir(localLocations[0]),
                                   localLocations,
                                   (recursion == KDevelop::IBasicVersionControl::Recursive) ? true : false);
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::remove(const KUrl::List & localLocations)
+KDevelop::VcsJob * CvsPlugin::remove(const QList<QUrl> & localLocations)
 {
-    CvsJob* job = d->m_proxy->remove(findWorkingDir(localLocations[0].toLocalFile()),
+    CvsJob* job = d->m_proxy->remove(findWorkingDir(localLocations[0]),
                                      localLocations);
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::localRevision(const KUrl & localLocation, KDevelop::VcsRevision::RevisionType)
+KDevelop::VcsJob * CvsPlugin::localRevision(const QUrl & localLocation, KDevelop::VcsRevision::RevisionType)
 {
     Q_UNUSED(localLocation)
     return NULL;
 }
 
-KDevelop::VcsJob * CvsPlugin::status(const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
+KDevelop::VcsJob * CvsPlugin::status(const QList<QUrl> & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    CvsJob* job = d->m_proxy->status(findWorkingDir(localLocations[0].toLocalFile()),
+    CvsJob* job = d->m_proxy->status(findWorkingDir(localLocations[0]),
                                      localLocations,
                                      (recursion == KDevelop::IBasicVersionControl::Recursive) ? true : false);
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::unedit(const KUrl & localLocation)
+KDevelop::VcsJob * CvsPlugin::unedit(const QUrl& localLocation)
 {
-    CvsJob* job = d->m_proxy->unedit(findWorkingDir(localLocation.toLocalFile()),
-                                     localLocation);
+    CvsJob* job = d->m_proxy->unedit(findWorkingDir(localLocation),
+                                     QList<QUrl>() << localLocation);
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::edit(const KUrl & localLocation)
+KDevelop::VcsJob * CvsPlugin::edit(const QUrl& localLocation)
 {
-    CvsJob* job = d->m_proxy->edit(findWorkingDir(localLocation.toLocalFile()),
-                                   localLocation);
+    CvsJob* job = d->m_proxy->edit(findWorkingDir(localLocation),
+                                   QList<QUrl>() << localLocation);
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::copy(const KUrl & localLocationSrc, const KUrl & localLocationDstn)
+KDevelop::VcsJob * CvsPlugin::copy(const QUrl & localLocationSrc, const QUrl & localLocationDstn)
 {
     bool ok = QFile::copy(localLocationSrc.toLocalFile(), localLocationDstn.path());
     if (!ok) {
         return NULL;
     }
 
-    KUrl::List listDstn;
+    QList<QUrl> listDstn;
     listDstn << localLocationDstn;
 
-    CvsJob* job = d->m_proxy->add(findWorkingDir(localLocationDstn.toLocalFile()),
+    CvsJob* job = d->m_proxy->add(findWorkingDir(localLocationDstn),
                                   listDstn, true);
 
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::move(const KUrl &, const KUrl &)
+KDevelop::VcsJob * CvsPlugin::move(const QUrl &, const QUrl &)
 {
     return NULL;
 }
 
-KDevelop::VcsJob * CvsPlugin::revert(const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
+KDevelop::VcsJob * CvsPlugin::revert(const QList<QUrl> & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     KDevelop::VcsRevision rev;
-    CvsJob* job = d->m_proxy->update(findWorkingDir(localLocations[0].toLocalFile()),
+    CvsJob* job = d->m_proxy->update(findWorkingDir(localLocations[0]),
                                      localLocations,
                                      rev,
                                      "-C",
@@ -362,9 +361,9 @@ KDevelop::VcsJob * CvsPlugin::revert(const KUrl::List & localLocations, KDevelop
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::update(const KUrl::List & localLocations, const KDevelop::VcsRevision & rev, KDevelop::IBasicVersionControl::RecursionMode recursion)
+KDevelop::VcsJob * CvsPlugin::update(const QList<QUrl> & localLocations, const KDevelop::VcsRevision & rev, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    CvsJob* job = d->m_proxy->update(findWorkingDir(localLocations[0].toLocalFile()),
+    CvsJob* job = d->m_proxy->update(findWorkingDir(localLocations[0]),
                                      localLocations,
                                      rev,
                                      "",
@@ -373,7 +372,7 @@ KDevelop::VcsJob * CvsPlugin::update(const KUrl::List & localLocations, const KD
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
+KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const QList<QUrl> & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     Q_UNUSED(recursion);
     QString msg = message;
@@ -384,19 +383,19 @@ KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const KUrl::List &
         }
     }
 
-    CvsJob* job = d->m_proxy->commit(findWorkingDir(localLocations[0].toLocalFile()),
+    CvsJob* job = d->m_proxy->commit(findWorkingDir(localLocations[0]),
                                      localLocations,
                                      msg);
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::diff(const KUrl & fileOrDirectory, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode)
+KDevelop::VcsJob * CvsPlugin::diff(const QUrl & fileOrDirectory, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode)
 {
     CvsJob* job = d->m_proxy->diff(fileOrDirectory, srcRevision, dstRevision, "-uN"/*always unified*/);
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::log(const KUrl & localLocation, const KDevelop::VcsRevision & rev, unsigned long limit)
+KDevelop::VcsJob * CvsPlugin::log(const QUrl & localLocation, const KDevelop::VcsRevision & rev, unsigned long limit)
 {
     Q_UNUSED(limit)
 
@@ -404,26 +403,26 @@ KDevelop::VcsJob * CvsPlugin::log(const KUrl & localLocation, const KDevelop::Vc
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::log(const KUrl & localLocation, const KDevelop::VcsRevision & rev, const KDevelop::VcsRevision & limit)
+KDevelop::VcsJob * CvsPlugin::log(const QUrl & localLocation, const KDevelop::VcsRevision & rev, const KDevelop::VcsRevision & limit)
 {
     Q_UNUSED(limit)
     return log(localLocation, rev, 0);
 }
 
-KDevelop::VcsJob * CvsPlugin::annotate(const KUrl & localLocation, const KDevelop::VcsRevision & rev)
+KDevelop::VcsJob * CvsPlugin::annotate(const QUrl & localLocation, const KDevelop::VcsRevision & rev)
 {
     CvsJob* job = d->m_proxy->annotate(localLocation, rev);
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::resolve(const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
+KDevelop::VcsJob * CvsPlugin::resolve(const QList<QUrl> & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     Q_UNUSED(localLocations);
     Q_UNUSED(recursion);
     return NULL;
 }
 
-KDevelop::VcsJob * CvsPlugin::import(const QString& commitMessage, const KUrl& sourceDirectory, const KDevelop::VcsLocation& destinationRepository)
+KDevelop::VcsJob * CvsPlugin::import(const QString& commitMessage, const QUrl& sourceDirectory, const KDevelop::VcsLocation& destinationRepository)
 {
     if (commitMessage.isEmpty()
             || !sourceDirectory.isLocalFile()
@@ -446,7 +445,7 @@ KDevelop::VcsJob * CvsPlugin::import(const QString& commitMessage, const KUrl& s
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion)
+KDevelop::VcsJob * CvsPlugin::createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const QUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     Q_UNUSED(recursion);
     if (!destinationDirectory.isLocalFile()

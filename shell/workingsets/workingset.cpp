@@ -326,8 +326,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                 recycle.erase( it );
                 continue;
             }
-            
-            IDocument* doc = Core::self()->documentControllerInternal()->openDocument(specifier,
+            IDocument* doc = Core::self()->documentControllerInternal()->openDocument(QUrl::fromUserInput(specifier),
                              KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
             Sublime::Document *document = dynamic_cast<Sublime::Document*>(doc);
             if (document) {

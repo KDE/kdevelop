@@ -20,6 +20,7 @@
 
 #include "reviewboardplugin.h"
 #include <QVariantList>
+#include <QUrl>
 
 #include <KPluginFactory>
 #include <KPluginLoader>
@@ -29,7 +30,6 @@
 #include <KMessageBox>
 #include <KDebug>
 #include <KIO/Job>
-#include <KUrl>
 #include <QFile>
 #include <QDir>
 #include <interfaces/icore.h>
@@ -58,12 +58,11 @@ ReviewBoardPlugin::~ReviewBoardPlugin()
 
 void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
 {
-    KUrl dirUrl = source->baseDir();
+    QUrl dirUrl = source->baseDir();
     m_source = source;
     ReviewPatchDialog d(dirUrl);
 
-    dirUrl.adjustPath(KUrl::RemoveTrailingSlash);
-    IProject* p = ICore::self()->projectController()->findProjectForUrl(dirUrl);
+    IProject* p = ICore::self()->projectController()->findProjectForUrl(dirUrl.adjusted(QUrl::StripTrailingSlash));
 
     if(p) {
         KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
@@ -109,9 +108,9 @@ void ReviewBoardPlugin::reviewDone(KJob* j)
 {
     if(j->error()==0) {
         ReviewBoard::SubmitPatchRequest const * job = qobject_cast<ReviewBoard::SubmitPatchRequest*>(j);
-        KUrl url = job->server();
+        QUrl url = job->server();
         url.setUserInfo(QString());
-        QString requrl = QString("%1/r/%2/").arg(url.prettyUrl()).arg(job->requestId());
+        QString requrl = QString("%1/r/%2/").arg(url.toDisplayString(QUrl::PreferLocalFile)).arg(job->requestId());
 
         KMessageBox::information(0, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", requrl),
                                     QString(), QString(), KMessageBox::AllowLink);

@@ -36,7 +36,7 @@ class IPluginController;
 class VcsImportMetadataWidget;
 }
 
-class KUrl;
+class QUrl;
 
 class ProjectVcsPage : public AppWizardPageWidget
 {
@@ -49,12 +49,12 @@ signals:
     void valid();
     void invalid();
 public slots:
-    void setSourceLocation( const KUrl& );
+    void setSourceLocation( const QUrl& );
     void vcsTypeChanged(int);
     void validateData();
 public:
     QString pluginName() const;
-    KUrl source() const;
+    QUrl source() const;
     KDevelop::VcsLocation destination() const;
     QString commitMessage() const;
 private:

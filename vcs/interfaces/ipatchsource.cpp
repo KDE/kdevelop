@@ -37,7 +37,7 @@ void IPatchSource::cancelReview()
 
 }
 
-bool IPatchSource::finishReview(QList< KUrl > selection)
+bool IPatchSource::finishReview(QList< QUrl > selection)
 {
     Q_UNUSED(selection);
     return true;
@@ -48,9 +48,9 @@ bool IPatchSource::canCancel() const
     return false;
 }
 
-QMap<KUrl, KDevelop::VcsStatusInfo::State> IPatchSource::additionalSelectableFiles() const
+QMap<QUrl, KDevelop::VcsStatusInfo::State> IPatchSource::additionalSelectableFiles() const
 {
-    return QMap<KUrl, KDevelop::VcsStatusInfo::State>();
+    return QMap<QUrl, KDevelop::VcsStatusInfo::State>();
 }
 
 bool IPatchSource::canSelectFiles() const

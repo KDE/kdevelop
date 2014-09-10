@@ -59,7 +59,7 @@ class KDevelop::TemplateClassGeneratorPrivate
 {
 public:
     SourceFileTemplate fileTemplate;
-    KUrl baseUrl;
+    QUrl baseUrl;
     TemplateRenderer renderer;
 
     QString name;
@@ -67,7 +67,7 @@ public:
     QStringList namespaces;
     QString license;
 
-    QHash<QString, KUrl> fileUrls;
+    QHash<QString, QUrl> fileUrls;
     QHash<QString, KTextEditor::Cursor> filePositions;
     ClassDescription description;
     
@@ -102,7 +102,7 @@ void TemplateClassGeneratorPrivate::fetchSuperClasses(const DeclarationPointer& 
 }
 
 
-TemplateClassGenerator::TemplateClassGenerator(const KUrl& baseUrl)
+TemplateClassGenerator::TemplateClassGenerator(const QUrl& baseUrl)
  : d(new TemplateClassGeneratorPrivate)
 {
     d->baseUrl = baseUrl;
@@ -144,9 +144,8 @@ TemplateClassGenerator::UrlHash TemplateClassGenerator::fileUrls() const
     {
         foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate.outputFiles())
         {
-            KUrl url(d->baseUrl);
             QString outputName = d->renderer.render(outputFile.outputName, outputFile.identifier);
-            url.addPath(outputName);
+            QUrl url = d->baseUrl.resolved(outputName);
             d->fileUrls.insert(outputFile.identifier, url);
         }
     }
@@ -154,20 +153,20 @@ TemplateClassGenerator::UrlHash TemplateClassGenerator::fileUrls() const
     return d->fileUrls;
 }
 
-KUrl TemplateClassGenerator::baseUrl() const
+QUrl TemplateClassGenerator::baseUrl() const
 {
     return d->baseUrl;
 }
 
-KUrl TemplateClassGenerator::fileUrl(const QString& outputFile) const
+QUrl TemplateClassGenerator::fileUrl(const QString& outputFile) const
 {
     return fileUrls().value(outputFile);
 }
 
-void TemplateClassGenerator::setFileUrl(const QString& outputFile, const KUrl& url)
+void TemplateClassGenerator::setFileUrl(const QString& outputFile, const QUrl& url)
 {
     d->fileUrls.insert(outputFile, url);
-    d->renderer.addVariable("output_file_" + outputFile.toLower(), KUrl::relativeUrl(d->baseUrl, url));
+    d->renderer.addVariable("output_file_" + outputFile.toLower(), QDir(url.path()).relativeFilePath(d->baseUrl.path()));
     d->renderer.addVariable("output_file_" + outputFile.toLower() + "_absolute", url.toLocalFile());
 }
 

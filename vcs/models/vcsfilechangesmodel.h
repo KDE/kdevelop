@@ -29,7 +29,7 @@
 
 #include "vcsexport.h"
 
-class KUrl;
+class QUrl;
 
 namespace KDevelop
 {
@@ -55,7 +55,7 @@ public:
     /**
      * Returns item for particular url.
      */
-    QStandardItem* fileItemForUrl(const KUrl &url) {
+    QStandardItem* fileItemForUrl(const QUrl &url) {
         return fileItemForUrl(invisibleRootItem(), url);
     }
 
@@ -69,21 +69,21 @@ public:
     /**
      * Returns list of currently checked urls.
      */
-    QList<KUrl> checkedUrls() const {
+    QList<QUrl> checkedUrls() const {
         return checkedUrls(invisibleRootItem());
     }
 
     /**
      * Returns urls of all files
      * */
-    QList<KUrl> urls() const {
+    QList<QUrl> urls() const {
         return urls(invisibleRootItem());
     }
     
     /**
      * Set the checked urls
      * */
-    void setCheckedUrls(const QList<KUrl>& urls) const {
+    void setCheckedUrls(const QList<QUrl>& urls) const {
         return checkUrls(invisibleRootItem(), urls);
     }
 
@@ -109,7 +109,7 @@ public:
     /**
      * Returns item for particular url.
      */
-    static QStandardItem* fileItemForUrl(QStandardItem *parent, const KUrl &url);
+    static QStandardItem* fileItemForUrl(QStandardItem *parent, const QUrl &url);
 
     void setIsCheckbable(bool checkable);
 public slots:
@@ -136,17 +136,17 @@ protected:
     /**
      * Returns list of currently checked urls.
      */
-    QList<KUrl> checkedUrls(QStandardItem *parent) const;
+    QList<QUrl> checkedUrls(QStandardItem *parent) const;
     
     /**
      * Checks the given urls, unchecks all others.
      * */
-    void checkUrls(QStandardItem *parent, const QList<KUrl>& urls) const;
+    void checkUrls(QStandardItem *parent, const QList<QUrl>& urls) const;
     
     /**
      * Returns all urls
      * */
-    QList<KUrl> urls(QStandardItem *parent) const;
+    QList<QUrl> urls(QStandardItem *parent) const;
 
 private:
     class VcsFileChangesModelPrivate *const d;

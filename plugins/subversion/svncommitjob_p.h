@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_PLUGIN_SVNCOMMITJOB_P_H
 
 #include <QString>
-#include <kurl.h>
+#include <QUrl>
 #include "svninternaljobbase.h"
 
 class SvnJobBase;
@@ -35,10 +35,10 @@ public:
     SvnInternalCommitJob( SvnJobBase* parent = 0 );
     void setRecursive( bool );
     void setCommitMessage( const QString& );
-    void setUrls( const KUrl::List& );
+    void setUrls( const QList<QUrl>& );
     void setKeepLock( bool );
 
-    KUrl::List urls() const;
+    QList<QUrl> urls() const;
     QString commitMessage() const;
     bool recursive() const;
     bool keepLock() const;
@@ -46,7 +46,7 @@ public:
 protected:
     void run();
 private:
-    KUrl::List m_urls;
+    QList<QUrl> m_urls;
     bool m_recursive;
     bool m_keepLock;
 };

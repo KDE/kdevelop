@@ -24,7 +24,6 @@
 #include <QtCore/QList>
 #include <QtCore/QObject>
 #include <QtCore/QSet>
-#include <KUrl>
 
 #include <ksharedptr.h>
 #include <language/languageexport.h>

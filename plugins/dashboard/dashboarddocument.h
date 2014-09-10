@@ -45,7 +45,7 @@ class DashboardDocument : public Sublime::UrlDocument, public KDevelop::IDocumen
         virtual KTextEditor::Document* textDocument() const;
         virtual KParts::Part* partForView(QWidget* view) const;
         virtual QMimeType mimeType() const override;
-        virtual KUrl url() const;
+        virtual QUrl url() const;
         
     protected:
         virtual Sublime::View* newView(Document* doc);

@@ -34,7 +34,7 @@ public:
     QHash<VcsLocation,QByteArray> rightBinaries;
     QHash<VcsLocation,QString> leftTexts;
     QHash<VcsLocation,QString> rightTexts;
-    KUrl baseDiff;
+    QUrl baseDiff;
     QString diff;
     VcsDiff::Type type;
     VcsDiff::Content content;
@@ -176,12 +176,12 @@ VcsDiff& VcsDiff::operator=( const VcsDiff& rhs)
     return *this;
 }
 
-KUrl VcsDiff::baseDiff() const
+QUrl VcsDiff::baseDiff() const
 {
     return d->baseDiff;
 }
 
-void VcsDiff::setBaseDiff(const KUrl& url) const
+void VcsDiff::setBaseDiff(const QUrl& url) const
 {
     d->baseDiff=url;
 }

@@ -14,7 +14,7 @@
 #include <QList>
 #include <QTreeWidget>
 #include <QFileInfo>
-#include <kurl.h>
+#include <QUrl>
 
 SvnRevertOptionDlg::SvnRevertOptionDlg( KDevSubversionPart *part, QWidget *parent )
     : KDialog(parent), m_part(part)
@@ -27,9 +27,9 @@ SvnRevertOptionDlg::SvnRevertOptionDlg( KDevSubversionPart *part, QWidget *paren
 SvnRevertOptionDlg::~SvnRevertOptionDlg()
 {}
 
-void SvnRevertOptionDlg::setCandidates( const KUrl::List &urls )
+void SvnRevertOptionDlg::setCandidates( const QList<QUrl> &urls )
 {
-    foreach( const KUrl &_url, urls ){
+    foreach( const QUrl &_url, urls ){
         QFileInfo fileInfo(_url.toLocalFile());
 
         if( fileInfo.isFile() ){
@@ -67,9 +67,9 @@ void SvnRevertOptionDlg::setCandidates( const KUrl::List &urls )
     }
 }
 
-KUrl::List SvnRevertOptionDlg::candidates()
+QList<QUrl> SvnRevertOptionDlg::candidates()
 {
-    KUrl::List list;
+    QList<QUrl> list;
 
     QTreeWidgetItemIterator it( ui.treeWidget, QTreeWidgetItemIterator::Checked );
     for( ; *it; ++it ){
@@ -84,7 +84,7 @@ bool SvnRevertOptionDlg::recurse()
     return ui.recursive->isChecked();
 }
 
-void SvnRevertOptionDlg::insertRow( const KUrl &url, const QString &textStat, const QString &propStat )
+void SvnRevertOptionDlg::insertRow( const QUrl &url, const QString &textStat, const QString &propStat )
 {
     QStringList list;
     list << "" << textStat << propStat << url.toLocalFile() ;

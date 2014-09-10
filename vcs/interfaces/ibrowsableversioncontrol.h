@@ -59,7 +59,7 @@ public:
      * @param limit Do not show entries earlier than @p limit. Note that the
      * limit is @e advisory and may be ignored.
      */
-    virtual VcsJob* log( const KUrl& localLocation,
+    virtual VcsJob* log( const QUrl& localLocation,
                          const VcsRevision& rev,
                          const VcsRevision& limit ) = 0;
 

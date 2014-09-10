@@ -28,7 +28,7 @@
 #include "bazaarplugin.h"
 
 DiffJob::DiffJob(const QDir& workingDir, const QString& revisionSpecRange,
-                 const KUrl& fileOrDirectory, BazaarPlugin* parent,
+                 const QUrl& fileOrDirectory, BazaarPlugin* parent,
                  KDevelop::OutputJob::OutputJobVerbosity verbosity)
     : VcsJob(parent, verbosity), m_plugin(parent),
       m_status(KDevelop::VcsJob::JobNotStarted)
@@ -80,7 +80,7 @@ void DiffJob::prepareResult(KJob*)
     if (m_job->process()->exitStatus() <= 2) {
         KDevelop::VcsDiff diff;
         diff.setDiff(m_job->output());
-        diff.setBaseDiff(KUrl(m_job->directory().absolutePath()));
+        diff.setBaseDiff(QUrl::fromLocalFile(m_job->directory().absolutePath()));
         m_result.setValue(diff);
         m_status = KDevelop::VcsJob::JobSucceeded;
     } else {

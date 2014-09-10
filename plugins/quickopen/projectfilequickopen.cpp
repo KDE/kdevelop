@@ -51,7 +51,7 @@ QSet<IndexedString> openFiles()
     const QList<IDocument*>& docs = ICore::self()->documentController()->openDocuments();
     openFiles.reserve(docs.size());
     foreach( IDocument* doc, docs ) {
-        openFiles << IndexedString(doc->url().pathOrUrl());
+        openFiles << IndexedString(doc->url());
     }
     return openFiles;
 }
@@ -87,8 +87,8 @@ QString ProjectFileData::htmlDescription() const
 
 bool ProjectFileData::execute( QString& filterText )
 {
-    const KUrl url = m_file.path.toUrl();
-    IOpenWith::openFiles(KUrl::List() << url);
+    const QUrl url = m_file.path.toUrl();
+    IOpenWith::openFiles(QList<QUrl>() << url);
     QString path;
     uint lineNumber;
     if (extractLineNumber(filterText, path, lineNumber)) {
@@ -129,7 +129,7 @@ QList<QVariant> ProjectFileData::highlighting() const
 
 QWidget* ProjectFileData::expandingWidget() const
 {
-    const KUrl url = m_file.path.toUrl();
+    const QUrl url = m_file.path.toUrl();
     DUChainReadLocker lock;
 
     ///Find a du-chain for the document
@@ -206,11 +206,7 @@ void BaseFileDataProvider::setFilterText( const QString& text )
         // assume we want to filter relative to active document's url
         IDocument* doc = ICore::self()->documentController()->activeDocument();
         if (doc) {
-            KUrl url = doc->url().upUrl();
-            url.addPath( path);
-            url.cleanPath();
-            url.adjustPath(KUrl::RemoveTrailingSlash);
-            path = url.pathOrUrl();
+            path = Path(Path(doc->url()).parent(), path).pathOrUrl();
         }
     }
     setFilter( path.split('/', QString::SkipEmptyParts) );

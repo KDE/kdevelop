@@ -83,8 +83,7 @@ Manager::Manager(KCmdLineArgs* args) : m_total(0), m_args(args), m_allFilesAdded
 
 void Manager::init()
 {
-    KUrl::List includes;
-
+    QList<QUrl> includes;
     if(m_args->count() == 0) {
         std::cerr << "Need file or directory to duchainify" << std::endl;
         QCoreApplication::exit(1);
@@ -224,7 +223,7 @@ void Manager::addToBackgroundParser(QString path, TopDUContext::Features feature
     if(info.isFile())
     {
         kDebug() << "adding file" << path;
-        KUrl pathUrl(info.canonicalFilePath());
+        QUrl pathUrl = QUrl::fromLocalFile(info.canonicalFilePath());
         
         m_waiting << pathUrl;
         ++m_total;
@@ -242,7 +241,7 @@ void Manager::addToBackgroundParser(QString path, TopDUContext::Features feature
     }
 }
 
-QSet< KUrl > Manager::waiting()
+QSet< QUrl > Manager::waiting()
 {
     return m_waiting;
 }

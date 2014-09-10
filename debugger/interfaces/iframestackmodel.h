@@ -23,7 +23,7 @@
 
 #include "idebugsession.h"
 
-#include <QtCore/QUrl>
+#include <QUrl>
 
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QString>

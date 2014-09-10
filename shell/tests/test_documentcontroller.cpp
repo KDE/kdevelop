@@ -61,7 +61,7 @@ void TestDocumentController::init()
 
     // pre-conditions
     QVERIFY(m_subject->openDocuments().empty());
-    QVERIFY(m_subject->documentForUrl(KUrl()) == 0);
+    QVERIFY(m_subject->documentForUrl(QUrl()) == 0);
     QVERIFY(m_subject->activeDocument() == 0);
 }
 
@@ -112,7 +112,7 @@ void TestDocumentController::testOpeningNewDocumentFromText()
 
 void TestDocumentController::testOpeningDocumentFromUrl()
 {
-    KUrl url(m_file1.fileName());
+    QUrl url = QUrl::fromLocalFile(m_file1.fileName());
     IDocument* document = m_subject->openDocument(url);
     QVERIFY(document != 0);
 }
@@ -173,17 +173,37 @@ void TestDocumentController::testCloseAllDocuments()
 
 
 
-KUrl TestDocumentController::createFile(const KTempDir& dir, const QString& filename)
+QUrl TestDocumentController::createFile(const KTempDir& dir, const QString& filename)
 {
     QFile file(dir.name() + filename);
     bool success = file.open(QIODevice::WriteOnly | QIODevice::Text);
     if(!success)
     {
         QWARN(QString("Failed to create file: " + dir.name() + filename).toLatin1().data());
-        return KUrl();
+        return QUrl();
     }
     file.close();
-    return KUrl(dir.name() + filename);
+    return QUrl::fromLocalFile(dir.name() + filename);
+}
+
+void TestDocumentController::testEmptyUrl()
+{
+    const auto first = DocumentController::nextEmptyDocumentUrl();
+    QVERIFY(DocumentController::isEmptyDocumentUrl(first));
+    QCOMPARE(DocumentController::nextEmptyDocumentUrl(), first);
+
+    auto doc = m_subject->openDocumentFromText(QString());
+    QCOMPARE(doc->url(), first);
+
+    const auto second = DocumentController::nextEmptyDocumentUrl();
+    QVERIFY(first != second);
+    QVERIFY(DocumentController::isEmptyDocumentUrl(second));
+
+    QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl()));
+    QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl("http://foo.org")));
+    QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl("http://foo.org/test")));
+    QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl::fromLocalFile("/")));
+    QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl::fromLocalFile("/test")));
 }
 
 QTEST_MAIN(TestDocumentController);

@@ -47,11 +47,11 @@ void TestModels::testVcsFileChangesModel()
     QVERIFY(model->rowCount() == 0);
 
     // Pull some files into
-    KUrl filenames[] = {
-        KUrl::fromLocalFile("foo"),
-        KUrl::fromLocalFile("bar"),
-        KUrl::fromLocalFile("pew"),
-        KUrl::fromLocalFile("trash")
+    QUrl filenames[] = {
+        QUrl::fromLocalFile("foo"),
+        QUrl::fromLocalFile("bar"),
+        QUrl::fromLocalFile("pew"),
+        QUrl::fromLocalFile("trash")
     };
     VcsStatusInfo::State states[] = {VcsStatusInfo::ItemAdded, VcsStatusInfo::ItemModified, VcsStatusInfo::ItemDeleted, VcsStatusInfo::ItemUpToDate};
     VcsStatusInfo status;

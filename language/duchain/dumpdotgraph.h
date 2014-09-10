@@ -16,7 +16,7 @@
 
 #include <QtCore/QMap>
 #include <QtCore/QString>
-#include <kurl.h>
+#include <QUrl>
 #include <language/languageexport.h>
 
 namespace KDevelop {

@@ -124,7 +124,7 @@ bool BasicRefactoring::shouldRenameUses(KDevelop::Declaration* declaration) cons
     return true;
 }
 
-QString BasicRefactoring::newFileName(const KUrl& current, const QString& newName)
+QString BasicRefactoring::newFileName(const QUrl& current, const QString& newName)
 {
     QPair<QString, QString> nameExtensionPair = splitFileAtExtension(current.fileName());
     // if current file is lowercased, keep that
@@ -135,7 +135,7 @@ QString BasicRefactoring::newFileName(const KUrl& current, const QString& newNam
     }
 }
 
-DocumentChangeSet::ChangeResult BasicRefactoring::addRenameFileChanges(const KUrl& current,
+DocumentChangeSet::ChangeResult BasicRefactoring::addRenameFileChanges(const QUrl& current,
                                                                         const QString& newName,
                                                                         DocumentChangeSet* changes)
 {
@@ -149,7 +149,7 @@ bool BasicRefactoring::shouldRenameFile(Declaration* declaration)
     if (!dynamic_cast<ClassDeclaration*>(declaration)) {
         return false;
     }
-    const KUrl currUrl = declaration->topContext()->url().toUrl();
+    const QUrl currUrl = declaration->topContext()->url().toUrl();
     const QString fileName = currUrl.fileName();
     const QPair<QString, QString> nameExtensionPair = splitFileAtExtension(fileName);
     // check whether we renamed something that is called like the document it lives in

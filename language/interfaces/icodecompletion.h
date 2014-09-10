@@ -20,8 +20,6 @@
 #ifndef KDEVPLATFORM_ICODECOMPLETION_H
 #define KDEVPLATFORM_ICODECOMPLETION_H
 
-#include <kurl.h>
-
 #include <language/languageexport.h>
 
 namespace KDevelop {

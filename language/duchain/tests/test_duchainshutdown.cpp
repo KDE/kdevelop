@@ -45,7 +45,7 @@ void TestDUChainShutdown::cleanupTestCase()
 void TestDUChainShutdown::runTest()
 {
   const QString ctxId = "foo::bar::asdf";
-  const QString path = "myurl";
+  const QString path = "/foo/myurl";
   const QString myLang = "fooLang";
 
   // step 1, store a bunch of data in the repository

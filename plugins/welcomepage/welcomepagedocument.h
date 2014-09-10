@@ -45,7 +45,7 @@ public:
     virtual KTextEditor::Document* textDocument() const;
     virtual KParts::Part* partForView(QWidget* view) const;
     virtual QMimeType mimeType() const override;
-    virtual KUrl url() const;
+    virtual QUrl url() const;
 
     static QUrl welcomePageUrl();
 protected:

@@ -85,7 +85,7 @@ public:
     QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const;  
     QIcon icon() const;
     bool canLaunch( KDevelop::ProjectBaseItem* item ) const;
-    bool canLaunch( const KUrl& file ) const;
+    bool canLaunch( const QUrl& file ) const;
     void configureLaunchFromItem ( KConfigGroup cfg, 
                                    KDevelop::ProjectBaseItem* item ) const;
     void configureLaunchFromCmdLineArguments ( KConfigGroup cfg,

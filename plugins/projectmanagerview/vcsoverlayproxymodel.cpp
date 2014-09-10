@@ -62,14 +62,14 @@ void VcsOverlayProxyModel::addProject(IProject* p)
     
     IBranchingVersionControl* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
     if(branchingExtension) {
-        const KUrl url = p->path().toUrl();
+        const QUrl url = p->path().toUrl();
         branchingExtension->registerRepositoryForCurrentBranchChanges(url);
-        connect(plugin, SIGNAL(repositoryBranchChanged(KUrl)), SLOT(repositoryBranchChanged(KUrl)));
+        connect(plugin, SIGNAL(repositoryBranchChanged(QUrl)), SLOT(repositoryBranchChanged(QUrl)));
         repositoryBranchChanged(url);
     }
 }
 
-void VcsOverlayProxyModel::repositoryBranchChanged(const KUrl& url)
+void VcsOverlayProxyModel::repositoryBranchChanged(const QUrl& url)
 {
     QList<IProject*> allProjects = ICore::self()->projectController()->projects();
     foreach(IProject* project, allProjects) {

@@ -41,7 +41,7 @@ public:
     QString preferredPart;
 };
 
-PartDocument::PartDocument(const KUrl& url, KDevelop::ICore* core, const QString& preferredPart)
+PartDocument::PartDocument(const QUrl& url, KDevelop::ICore* core, const QString& preferredPart)
     : Sublime::UrlDocument(core->uiController()->controller(), url), KDevelop::IDocument(core), d(new PartDocumentPrivate)
 {
     d->preferredPart = preferredPart;
@@ -194,12 +194,12 @@ void PartDocument::setTextSelection(const KTextEditor::Range &range)
     Q_UNUSED(range);
 }
 
-KUrl PartDocument::url() const
+QUrl PartDocument::url() const
 {
     return Sublime::UrlDocument::url();
 }
 
-void PartDocument::setUrl(const KUrl& newUrl)
+void PartDocument::setUrl(const QUrl& newUrl)
 {
     Sublime::UrlDocument::setUrl(newUrl);
     if(!prettyName().isEmpty())

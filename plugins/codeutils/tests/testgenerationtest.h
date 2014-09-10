@@ -6,7 +6,7 @@
 #define KDEVPLATFORM_PLUGIN_TESTGENERATIONTEST_H
 
 #include <QtTest/QtTest>
-#include <KUrl>
+#include <QUrl>
 #include <KTempDir>
 
 namespace KDevelop
@@ -32,7 +32,7 @@ private:
     QScopedPointer<KTempDir> dir;
     QUrl baseUrl;
 
-    QHash<QString,KUrl> urls(const KDevelop::SourceFileTemplate& file);
+    QHash<QString,QUrl> urls(const KDevelop::SourceFileTemplate& file);
 };
 
 #endif // KDEVPLATFORM_PLUGIN_TESTGENERATIONTEST_H

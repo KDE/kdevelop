@@ -245,7 +245,7 @@ void AbstractFileManagerPlugin::Private::created(const QString &path_)
     QFileInfo info(path_);
 
     ///FIXME: share memory with parent
-    const Path path(KUrl::fromPath(path_));
+    const Path path(path_);
     const IndexedString indexedPath(path.pathOrUrl());
     const IndexedString indexedParent(path.parent().pathOrUrl());
 

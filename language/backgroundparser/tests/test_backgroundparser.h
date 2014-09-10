@@ -41,7 +41,7 @@ public:
     , m_flags(ParseJob::IgnoresSequentialProcessing)
     {
     }
-    JobPrototype(const KUrl& url, int priority, ParseJob::SequentialProcessingFlags flags, int duration = 0)
+    JobPrototype(const QUrl& url, int priority, ParseJob::SequentialProcessingFlags flags, int duration = 0)
     : m_url(url)
     , m_priority(priority)
     , m_duration(duration)

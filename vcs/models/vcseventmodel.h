@@ -25,7 +25,7 @@
 
 #include "vcsexport.h"
 
-class KUrl;
+class QUrl;
 class KJob;
 
 namespace KDevelop
@@ -46,7 +46,7 @@ public:
         ColumnCount,
     };
 
-    VcsEventModel( KDevelop::IBasicVersionControl* iface, const KDevelop::VcsRevision& rev, const KUrl& url, QObject* parent );
+    VcsEventModel( KDevelop::IBasicVersionControl* iface, const KDevelop::VcsRevision& rev, const QUrl& url, QObject* parent );
     ~VcsEventModel();
     int rowCount( const QModelIndex& = QModelIndex() ) const;
     int columnCount( const QModelIndex& parent = QModelIndex() ) const;

@@ -30,10 +30,10 @@
 #include <QPen>
 #include <QHash>
 #include <QLocale>
+#include <QUrl>
 
-#include <kurl.h>
 #include <KLocalizedString>
-#include <kdebug.h>
+#include <KDebug>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
@@ -77,7 +77,7 @@ public:
     }
 };
 
-VcsAnnotationModel::VcsAnnotationModel(VcsJob *job, const KUrl& url, QObject* parent,
+VcsAnnotationModel::VcsAnnotationModel(VcsJob *job, const QUrl& url, QObject* parent,
                                        const QColor &foreground, const QColor &background)
     : d( new VcsAnnotationModelPrivate( this ) )
     , foreground(foreground)

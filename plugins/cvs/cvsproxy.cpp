@@ -13,8 +13,9 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDateTime>
+#include <QUrl>
+
 #include <KLocalizedString>
-#include <KUrl>
 #include <KMessageBox>
 #include <kshell.h>
 #include <KDebug>
@@ -36,33 +37,26 @@ CvsProxy::~CvsProxy()
 {
 }
 
-bool CvsProxy::isValidDirectory(KUrl dirPath) const
+bool CvsProxy::isValidDirectory(QUrl dirPath) const
 {
-    QFileInfo fsObject( dirPath.toLocalFile() );
-    if( !fsObject.isDir() )
-        dirPath.setFileName( QString() );
+    const QFileInfo fsObject( dirPath.toLocalFile() );
+    QDir dir = fsObject.isDir() ? fsObject.absoluteDir() : fsObject.dir();
 
-    dirPath.addPath( "CVS" );
-    fsObject.setFile( dirPath.toLocalFile() );
-    return fsObject.exists();
+    return dir.exists("CVS");
 }
 
-bool CvsProxy::isVersionControlled(KUrl filePath) const
+bool CvsProxy::isVersionControlled(QUrl filePath) const
 {
-    QFileInfo fsObject( filePath.toLocalFile() );
-    if( !fsObject.isDir() )
-        filePath.setFileName( QString() );
+    const QFileInfo fsObject( filePath.toLocalFile() );
+    QDir dir = fsObject.isDir() ? fsObject.absoluteDir() : fsObject.dir();
 
-    filePath.addPath( "CVS" );
-    QFileInfo cvsObject( filePath.toLocalFile() );
-    if( !cvsObject.exists() )
+    if( !dir.cd("CVS") )
         return false;
 
     if( fsObject.isDir() )
         return true;
 
-    filePath.addPath( "Entries" );
-    QFile cvsEntries( filePath.toLocalFile() );
+    QFile cvsEntries( dir.absoluteFilePath("Entries") );
     cvsEntries.open( QIODevice::ReadOnly );
     QString cvsEntriesData = cvsEntries.readAll();
     cvsEntries.close();
@@ -76,7 +70,7 @@ bool CvsProxy::prepareJob(CvsJob* job, const QString& repository, enum Requested
     // For other operations like "cvs import" isValidDirectory() would fail as the
     // directory is not yet under CVS control
     if (op == CvsProxy::NormalOperation &&
-        !isValidDirectory(repository)) {
+        !isValidDirectory(QUrl::fromLocalFile(repository))) {
         kDebug(9500) << repository << " is not a valid CVS repository";
         return false;
     }
@@ -90,15 +84,15 @@ bool CvsProxy::prepareJob(CvsJob* job, const QString& repository, enum Requested
     return true;
 }
 
-bool CvsProxy::addFileList(CvsJob* job, const QString& repository, const KUrl::List& urls)
+bool CvsProxy::addFileList(CvsJob* job, const QString& repository, const QList<QUrl>& urls)
 {
     QStringList args;
 
-    foreach(const KUrl &url, urls) {
+    QDir repoDir(repository);
+    foreach(const QUrl &url, urls) {
         ///@todo this is ok for now, but what if some of the urls are not
         ///      to the given repository
-        QString file = KUrl::relativeUrl(QString(repository + QDir::separator()), url);
-
+        const QString file = repoDir.relativeFilePath(url.toLocalFile());
         args << KShell::quoteArg( file );
     }
 
@@ -168,7 +162,7 @@ QString CvsProxy::convertRevisionToPrevious(const KDevelop::VcsRevision& rev)
     return str;
 }
 
-CvsJob* CvsProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
+CvsJob* CvsProxy::log(const QUrl &url, const KDevelop::VcsRevision& rev)
 {
     QFileInfo info(url.toLocalFile());
     // parent folder path for files, otherwise the folder path itself
@@ -195,7 +189,7 @@ CvsJob* CvsProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
     return NULL;
 }
 
-CvsJob* CvsProxy::diff(const KUrl& url, 
+CvsJob* CvsProxy::diff(const QUrl& url,
             const KDevelop::VcsRevision& revA, 
             const KDevelop::VcsRevision& revB,
             const QString& diffOptions)
@@ -229,7 +223,7 @@ CvsJob* CvsProxy::diff(const KUrl& url,
         if (!rB.isEmpty())
             *job << rB;
 
-        // in case the KUrl is a directory there is no filename
+        // in case the QUrl is a directory there is no filename
         if (!info.fileName().isEmpty())
             *job << KShell::quoteArg(info.fileName());
 
@@ -239,7 +233,7 @@ CvsJob* CvsProxy::diff(const KUrl& url,
     return NULL;
 }
 
-CvsJob * CvsProxy::annotate(const KUrl & url, const KDevelop::VcsRevision& rev)
+CvsJob * CvsProxy::annotate(const QUrl& url, const KDevelop::VcsRevision& rev)
 {
     QFileInfo info(url.toLocalFile());
 
@@ -260,7 +254,7 @@ CvsJob * CvsProxy::annotate(const KUrl & url, const KDevelop::VcsRevision& rev)
     return NULL;
 }
 
-CvsJob* CvsProxy::edit(const QString& repo, const KUrl::List& files)
+CvsJob* CvsProxy::edit(const QString& repo, const QList<QUrl>& files)
 {
     CvsJob* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
@@ -276,7 +270,7 @@ CvsJob* CvsProxy::edit(const QString& repo, const KUrl::List& files)
 }
 
 
-CvsJob* CvsProxy::unedit(const QString& repo, const KUrl::List& files)
+CvsJob* CvsProxy::unedit(const QString& repo, const QList<QUrl>& files)
 {
     CvsJob* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
@@ -291,7 +285,7 @@ CvsJob* CvsProxy::unedit(const QString& repo, const KUrl::List& files)
     return NULL;
 }
 
-CvsJob* CvsProxy::editors(const QString& repo, const KUrl::List& files)
+CvsJob* CvsProxy::editors(const QString& repo, const QList<QUrl>& files)
 {
     CvsJob* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
@@ -306,7 +300,7 @@ CvsJob* CvsProxy::editors(const QString& repo, const KUrl::List& files)
     return NULL;
 }
 
-CvsJob* CvsProxy::commit(const QString& repo, const KUrl::List& files, const QString& message)
+CvsJob* CvsProxy::commit(const QString& repo, const QList<QUrl>& files, const QString& message)
 {
     CvsJob* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
@@ -324,7 +318,7 @@ CvsJob* CvsProxy::commit(const QString& repo, const KUrl::List& files, const QSt
     return NULL;
 }
 
-CvsJob* CvsProxy::add(const QString & repo, const KUrl::List & files, 
+CvsJob* CvsProxy::add(const QString& repo, const QList<QUrl>& files,
                       bool recursiv, bool binary)
 {
     Q_UNUSED(recursiv);
@@ -346,7 +340,7 @@ CvsJob* CvsProxy::add(const QString & repo, const KUrl::List & files,
     return NULL;
 }
 
-CvsJob * CvsProxy::remove(const QString & repo, const KUrl::List & files)
+CvsJob * CvsProxy::remove(const QString& repo, const QList<QUrl>& files)
 {
     CvsJob* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
@@ -363,7 +357,7 @@ CvsJob * CvsProxy::remove(const QString & repo, const KUrl::List & files)
     return NULL;
 }
 
-CvsJob * CvsProxy::update(const QString & repo, const KUrl::List & files, 
+CvsJob * CvsProxy::update(const QString& repo, const QList<QUrl>& files,
                           const KDevelop::VcsRevision & rev, 
                           const QString & updateOptions, 
                           bool recursive, bool pruneDirs, bool createDirs)
@@ -396,7 +390,7 @@ CvsJob * CvsProxy::update(const QString & repo, const KUrl::List & files,
     return NULL;
 }
 
-CvsJob * CvsProxy::import(const KUrl & directory,
+CvsJob * CvsProxy::import(const QUrl& directory,
                           const QString & server, const QString & repositoryName,
                           const QString & vendortag, const QString & releasetag,
                           const QString& message)
@@ -422,7 +416,7 @@ CvsJob * CvsProxy::import(const KUrl & directory,
     return NULL;
 }
 
-CvsJob * CvsProxy::checkout(const KUrl & targetDir,
+CvsJob * CvsProxy::checkout(const QUrl& targetDir,
                             const QString & server, const QString & module,
                             const QString & checkoutOptions,
                             const QString & revision,
@@ -451,7 +445,7 @@ CvsJob * CvsProxy::checkout(const KUrl & targetDir,
         if (!recursive)
             *job << "-l";
 
-        *job << "-d" << targetDir.toLocalFile(KUrl::RemoveTrailingSlash);
+        *job << "-d" << targetDir.toString(QUrl::PreferLocalFile | QUrl::StripTrailingSlash);
 
         *job << module;
 
@@ -461,7 +455,7 @@ CvsJob * CvsProxy::checkout(const KUrl & targetDir,
     return NULL;
 }
 
-CvsJob * CvsProxy::status(const QString & repo, const KUrl::List & files, bool recursive, bool taginfo)
+CvsJob * CvsProxy::status(const QString & repo, const QList<QUrl> & files, bool recursive, bool taginfo)
 {
     CvsStatusJob* job = new CvsStatusJob(vcsplugin);
     job->setCommunicationMode( KProcess::MergedChannels );

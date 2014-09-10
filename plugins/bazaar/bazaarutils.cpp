@@ -23,18 +23,17 @@
 #include <QtCore/QDateTime>
 
 #include <KDebug>
-#include <KUrl>
 
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsstatusinfo.h>
 #include <vcs/vcsevent.h>
 
-QDir BazaarUtils::toQDir(const KUrl& url)
+QDir BazaarUtils::toQDir(const QUrl& url)
 {
     return QDir(url.toLocalFile());
 }
 
-QDir BazaarUtils::workingCopy(const KUrl& path)
+QDir BazaarUtils::workingCopy(const QUrl& path)
 {
     QDir dir = BazaarUtils::toQDir(path);
     while (!dir.exists(".bzr") && dir.cdUp());
@@ -118,7 +117,7 @@ QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& begin,
     return QString(); // Don't know how to handle this situation
 }
 
-bool BazaarUtils::isValidDirectory(const KUrl& dirPath)
+bool BazaarUtils::isValidDirectory(const QUrl& dirPath)
 {
     QDir dir = BazaarUtils::workingCopy(dirPath);
 
@@ -131,7 +130,7 @@ KDevelop::VcsStatusInfo BazaarUtils::parseVcsStatusInfoLine(const QString& line)
     KDevelop::VcsStatusInfo result;
     if (tokens.size() < 2) // Don't know how to handle this situation (it is an error)
         return result;
-    result.setUrl(tokens.back());
+    result.setUrl(QUrl::fromLocalFile(tokens.back()));
     if (tokens[0] == "M") {
         result.setState(KDevelop::VcsStatusInfo::ItemModified);
     } else if (tokens[0] == "C") {
@@ -149,7 +148,7 @@ KDevelop::VcsStatusInfo BazaarUtils::parseVcsStatusInfoLine(const QString& line)
     return result;
 }
 
-QString BazaarUtils::concatenatePath(const QDir& workingCopy, const KUrl& pathInWorkingCopy)
+QString BazaarUtils::concatenatePath(const QDir& workingCopy, const QUrl& pathInWorkingCopy)
 {
     return QFileInfo(workingCopy.absolutePath() + QDir::separator()
                      + pathInWorkingCopy.toLocalFile()).absoluteFilePath();
@@ -230,12 +229,12 @@ KDevelop::VcsItemEvent::Action BazaarUtils::parseActionDescription(const QString
     }
 }
 
-KUrl::List BazaarUtils::handleRecursion(const KUrl::List& listOfUrls, KDevelop::IBasicVersionControl::RecursionMode recursion)
+QList<QUrl> BazaarUtils::handleRecursion(const QList<QUrl>& listOfUrls, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     if (recursion == KDevelop::IBasicVersionControl::Recursive) {
         return listOfUrls;      // Nothing to do
     } else {
-        KUrl::List result;
+        QList<QUrl> result;
         for (const auto url : listOfUrls) {
             if (url.isLocalFile() && QFileInfo(url.toLocalFile()).isFile()) {
                 result.push_back(url);

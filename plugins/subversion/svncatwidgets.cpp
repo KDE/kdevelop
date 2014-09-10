@@ -13,7 +13,7 @@
 #include <kurlrequester.h>
 #include <QList>
 
-SvnCatOptionDlg::SvnCatOptionDlg( const KUrl &path, QWidget *parent )
+SvnCatOptionDlg::SvnCatOptionDlg( const QUrl &path, QWidget *parent )
     : KDialog( parent )
 {
     ui.setupUi(mainWidget());
@@ -32,7 +32,7 @@ SvnCatOptionDlg::SvnCatOptionDlg( const KUrl &path, QWidget *parent )
 SvnCatOptionDlg::~SvnCatOptionDlg()
 {}
 
-KUrl SvnCatOptionDlg::url()
+QUrl SvnCatOptionDlg::url()
 {
     return ui.urledit->url();
 }

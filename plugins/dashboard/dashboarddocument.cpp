@@ -90,7 +90,7 @@ Sublime::View* DashboardDocument::newView(Sublime::Document* doc)
     return 0;
 }
 
-KUrl DashboardDocument::url() const
+QUrl DashboardDocument::url() const
 {
     return m_project->projectFileUrl();
 }

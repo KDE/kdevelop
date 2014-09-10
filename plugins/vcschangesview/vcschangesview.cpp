@@ -68,7 +68,7 @@ static void appendActions(KMenu* menu, const QList<QAction*>& actions)
 
 void VcsChangesView::popupContextMenu( const QPoint &pos )
 {
-    KUrl::List urls;
+    QList<QUrl> urls;
     QList<IProject*> projects;
     QModelIndexList selectionIdxs = selectedIndexes();
     if(selectionIdxs.isEmpty())
@@ -141,7 +141,7 @@ void VcsChangesView::selectCurrentDocument()
     if(!doc)
         return;
     
-    KUrl url = doc->url();
+    QUrl url = doc->url();
     IProject* p = ICore::self()->projectController()->findProjectForUrl(url);
     QStandardItem* item = 0;
     
@@ -169,7 +169,7 @@ void VcsChangesView::openSelected(const QModelIndex& index)
         return;
     QModelIndex idx = index.sibling(index.row(), 0);
     VcsStatusInfo info = idx.data(ProjectChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>();
-    KUrl url = info.url();
+    QUrl url = info.url();
     
     ICore::self()->documentController()->openDocument(url);
 }

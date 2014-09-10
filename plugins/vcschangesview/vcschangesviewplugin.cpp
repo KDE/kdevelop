@@ -60,7 +60,7 @@ public:
         VcsChangesView* modif = new VcsChangesView(m_plugin, parent);
         modif->setModel(m_plugin->model());
         QObject::connect(modif, SIGNAL(reload(QList<KDevelop::IProject*>)), m_plugin->model(), SLOT(reload(QList<KDevelop::IProject*>)));
-        QObject::connect(modif, SIGNAL(reload(QList<KUrl>)), m_plugin->model(), SLOT(reload(QList<KUrl>)));
+        QObject::connect(modif, SIGNAL(reload(QList<QUrl>)), m_plugin->model(), SLOT(reload(QList<QUrl>)));
         QObject::connect(modif, SIGNAL(activated(QModelIndex)), m_plugin, SLOT(activated(QModelIndex)));
         return modif;
     }

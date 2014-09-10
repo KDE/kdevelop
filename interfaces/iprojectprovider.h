@@ -25,7 +25,7 @@
 #include <QWidget>
 #include "interfacesexport.h"
 
-class KUrl;
+class QUrl;
 
 namespace KDevelop
 {
@@ -45,7 +45,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IProjectProviderWidget : public QWidget
          *
          * @param destinationDirectory where the project will be downloaded.
          */
-        virtual VcsJob* createWorkingCopy(const KUrl & destinationDirectory) = 0;
+        virtual VcsJob* createWorkingCopy(const QUrl & destinationDirectory) = 0;
 
         /** @returns whether we have a correct location in the widget. */
         virtual bool isCorrect() const = 0;

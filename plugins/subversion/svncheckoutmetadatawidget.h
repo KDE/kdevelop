@@ -25,9 +25,9 @@ class SvnCheckoutMetadataWidget : public QWidget
 public:
     SvnCheckoutMetadataWidget( QWidget *parent );
     virtual ~SvnCheckoutMetadataWidget();
-    void setDestinationLocation( const KUrl& );
+    void setDestinationLocation( const QUrl& );
     virtual KDevelop::VcsLocation source() const;
-    virtual KUrl destination() const;
+    virtual QUrl destination() const;
     virtual KDevelop::IBasicVersionControl::RecursionMode recursionMode() const;
 
 private:

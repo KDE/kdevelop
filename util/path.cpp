@@ -170,7 +170,7 @@ QString Path::relativePath(const Path& path) const
         // different remote destinations or we are invalid, return input as-is
         return path.pathOrUrl();
     }
-    // while I'd love to use KUrl::relativePath here, it seems to behave pretty
+    // while I'd love to use QUrl::relativePath here, it seems to behave pretty
     // strangely, and adds unexpected "./" at the start for example
     // so instead, do it on our own based on _relativePath in kurl.cpp
     // this should also be more performant I think
@@ -401,18 +401,30 @@ uint qHash(const Path& path)
     return hash;
 }
 
-Path::List toPathList(const QList<QUrl>& list)
+template<typename Container>
+static Path::List toPathList_impl(const Container& list)
 {
     Path::List ret;
     ret.reserve(list.size());
-    foreach(const QUrl& url, list) {
-        Path path(url);
+    foreach (const auto& entry, list) {
+        Path path(entry);
         if (path.isValid()) {
             ret << path;
         }
     }
     return ret;
 }
+
+Path::List toPathList(const QList<QUrl>& list)
+{
+    return toPathList_impl(list);
+}
+
+Path::List toPathList(const QList< QString >& list)
+{
+    return toPathList_impl(list);
+}
+
 }
 
 QDebug operator<<(QDebug s, const Path& string)

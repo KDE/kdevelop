@@ -41,12 +41,12 @@ void SvnInternalAddJob::run()
     initBeforeRun();
 
     svn::Client cli(m_ctxt);
-    KUrl::List l = locations();
-    foreach( const KUrl &url, l )
+    QList<QUrl> l = locations();
+    foreach( const QUrl &url, l )
     {
         try
         {
-            QByteArray ba = url.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
+            QByteArray ba = url.toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
             cli.add( svn::Path( ba.data() ), recursive() );
         }catch( svn::ClientException ce )
         {
@@ -65,13 +65,13 @@ void SvnInternalAddJob::setRecursive( bool recursive )
     m_recursive = recursive;
 }
 
-void SvnInternalAddJob::setLocations( const KUrl::List& urls )
+void SvnInternalAddJob::setLocations( const QList<QUrl>& urls )
 {
     QMutexLocker l( m_mutex );
     m_locations = urls;
 }
 
-KUrl::List SvnInternalAddJob::locations() const
+QList<QUrl> SvnInternalAddJob::locations() const
 {
     QMutexLocker l( m_mutex );
     return m_locations;
@@ -113,7 +113,7 @@ SvnInternalJobBase* SvnAddJob::internalJob() const
     return m_job;
 }
 
-void SvnAddJob::setLocations( const KUrl::List& urls )
+void SvnAddJob::setLocations( const QList<QUrl>& urls )
 {
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setLocations( urls );

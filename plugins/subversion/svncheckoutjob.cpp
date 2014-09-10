@@ -53,11 +53,11 @@ void SvnInternalCheckoutJob::run()
     try
     {
         bool recurse = ( recursion() == KDevelop::IBasicVersionControl::Recursive );
-        KUrl desturl = KUrl( source().repositoryServer() );
-        desturl.cleanPath(KUrl::SimplifyDirSeparators);
-        QByteArray srcba = desturl.url( KUrl::RemoveTrailingSlash ).toUtf8();
-        KUrl destdir = KUrl(QFileInfo( destination().upUrl().toLocalFile() ).canonicalFilePath());
-        destdir.addPath( destination().fileName() );
+        QUrl desturl = QUrl( source().repositoryServer() ).adjusted(QUrl::StripTrailingSlash | QUrl::NormalizePathSegments  );
+
+        QByteArray srcba = desturl.toEncoded();
+        QUrl destdir = QUrl::fromLocalFile(QFileInfo( destination().adjusted(QUrl::StripTrailingSlash | QUrl::RemoveFilename).toLocalFile() ).canonicalFilePath());
+        destdir = destdir.resolved( destination().fileName() );
         QByteArray destba = destdir.toLocalFile().toUtf8();
         kDebug(9510) << srcba << destba << recurse;
         cli.checkout( srcba.data(), svn::Path( destba.data() ), svn::Revision::HEAD, recurse );
@@ -72,7 +72,7 @@ void SvnInternalCheckoutJob::run()
 }
 
 
-void SvnInternalCheckoutJob::setMapping( const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion )
+void SvnInternalCheckoutJob::setMapping( const KDevelop::VcsLocation & sourceRepository, const QUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion )
 {
     QMutexLocker l( m_mutex );
     m_sourceRepository = sourceRepository;
@@ -92,7 +92,7 @@ KDevelop::IBasicVersionControl::RecursionMode SvnInternalCheckoutJob::recursion(
     return m_recursion;
 }
 
-KUrl SvnInternalCheckoutJob::destination() const
+QUrl SvnInternalCheckoutJob::destination() const
 {
     QMutexLocker l( m_mutex );
     return m_destinationDirectory;
@@ -127,7 +127,7 @@ SvnInternalJobBase* SvnCheckoutJob::internalJob() const
     return m_job;
 }
 
-void SvnCheckoutJob::setMapping( const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion )
+void SvnCheckoutJob::setMapping( const KDevelop::VcsLocation & sourceRepository, const QUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion )
 {
     if( status() == KDevelop::VcsJob::JobNotStarted ) {
         m_job->setMapping(sourceRepository, destinationDirectory, recursion);

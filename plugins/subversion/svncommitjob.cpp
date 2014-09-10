@@ -60,7 +60,7 @@ void SvnInternalCommitJob::setCommitMessage( const QString& msg )
     m_commitMessage = msg;
 }
 
-void SvnInternalCommitJob::setUrls( const KUrl::List& urls )
+void SvnInternalCommitJob::setUrls( const QList<QUrl>& urls )
 {
     QMutexLocker l( m_mutex );
     m_urls = urls;
@@ -72,7 +72,7 @@ void SvnInternalCommitJob::setKeepLock( bool lock )
     m_keepLock = lock;
 }
 
-KUrl::List SvnInternalCommitJob::urls() const
+QList<QUrl> SvnInternalCommitJob::urls() const
 {
     QMutexLocker l( m_mutex );
     return m_urls;
@@ -102,10 +102,10 @@ void SvnInternalCommitJob::run()
     initBeforeRun();
     svn::Client cli(m_ctxt);
     std::vector<svn::Path> targets;
-    KUrl::List l = urls();
-    foreach( const KUrl &u, l )
+    QList<QUrl> l = urls();
+    foreach( const QUrl &u, l )
     {
-        QByteArray path = u.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
+        QByteArray path = u.toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
         targets.push_back( svn::Path( path.data() ) );
     }
     QByteArray ba = commitMessage().toUtf8();
@@ -170,7 +170,7 @@ void SvnCommitJob::setKeepLock( bool keepLock )
         m_job->setKeepLock( keepLock );
 }
 
-void SvnCommitJob::setUrls( const KUrl::List& urls )
+void SvnCommitJob::setUrls( const QList<QUrl>& urls )
 {
     kDebug(9510) << "Setting urls?" <<  status() << urls;
     if( status() == KDevelop::VcsJob::JobNotStarted )

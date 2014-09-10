@@ -25,8 +25,6 @@
 
 #include <QPointer>
 
-#include <KUrl>
-
 #include <ThreadWeaver/Sequence>
 
 #include <serialization/indexedstring.h>
@@ -176,11 +174,11 @@ public:
 
     /// Returns whether there is minimum features set up for some url
     static bool hasStaticMinimumFeatures();
-    
+
     ///Returns a structure containing information about data accesses in the parsed file.
     /// It's up to the caller to remove the returned instance
     virtual KDevelop::DataAccessRepository* dataAccessInformation();
-    
+
     ///Returns a control flow graph for the code in the parsed file.
     /// It's up to the caller to remove the returned instance
     virtual KDevelop::ControlFlowGraph* controlFlowGraph();

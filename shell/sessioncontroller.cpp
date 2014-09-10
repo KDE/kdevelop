@@ -291,7 +291,7 @@ public:
     bool recoveryDirectoryIsOwn;
     
     QTimer recoveryTimer;
-    QMap<KUrl, QStringList > currentRecoveryFiles;
+    QMap<QUrl, QStringList > currentRecoveryFiles;
 
     static QString sessionBaseDirectory()
     {
@@ -361,8 +361,8 @@ private slots:
                     if(!urlFile.exists())
                         break;
                     urlFile.open(QIODevice::ReadOnly);
-                    KUrl originalFile(QString::fromUtf8(urlFile.readAll()));
-                    urlList << originalFile.pathOrUrl();
+                    QUrl originalFile = QUrl::fromLocalFile(QString::fromUtf8(urlFile.readAll()));
+                    urlList << originalFile.toDisplayString(QUrl::PreferLocalFile);
                 }
                 
                 if(!urlList.isEmpty())
@@ -390,15 +390,15 @@ private slots:
                             if(!urlFile.exists())
                                 break;
                             urlFile.open(QIODevice::ReadOnly);
-                            KUrl originalFile(QString::fromUtf8(urlFile.readAll()));
-                            
+                            QUrl originalFile = QUrl::fromLocalFile(QString::fromUtf8(urlFile.readAll()));
+
                             QFile f(recoverySubDir.path() + '/' + QString("/%1_text").arg(num));
                             f.open(QIODevice::ReadOnly);
                             QString text = QString::fromUtf8(f.readAll());
-                            
+
                             if(text.isEmpty())
                             {
-                                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not recover %1, the recovery file is empty", originalFile.pathOrUrl()), i18n("Recovery"));
+                                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not recover %1, the recovery file is empty", originalFile.toDisplayString(QUrl::PreferLocalFile)), i18n("Recovery"));
                                 continue;
                             }
                             
@@ -406,11 +406,11 @@ private slots:
                             KDevelop::IDocument* doc = ICore::self()->documentController()->openDocument(originalFile);
                             if(!doc || !doc->textDocument())
                             {
-                                kWarning() << "The document " << originalFile.prettyUrl() << " could not be opened as a text-document, creating a new document with the recovered contents";
+                                qWarning() << "The document " << originalFile << " could not be opened as a text-document, creating a new document with the recovered contents";
                                 doc = ICore::self()->documentController()->openDocumentFromText(text);
                             }else{
                                 KTextEditor::Document* recovery = doc->textDocument();
-                                
+
                                 if(recovery && recovery->isDataRecoveryAvailable())
                                     // Use the recovery from the kate swap-file if possible
                                     recovery->recoverData();
@@ -483,7 +483,7 @@ private slots:
                             QString urlFilePath = recoveryCurrentDir.path() + QString("/%1_url").arg(num);
                             QFile urlFile(urlFilePath);
                             urlFile.open(QIODevice::WriteOnly);
-                            urlFile.write(document->url().pathOrUrl().toUtf8());
+                            urlFile.write(document->url().toString().toUtf8());
                             urlFile.close();
                             
                             QString textFilePath = recoveryCurrentDir.path() + '/' + QString("/%1_text").arg(num);

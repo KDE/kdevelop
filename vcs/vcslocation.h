@@ -22,12 +22,13 @@
 #ifndef KDEVPLATFORM_VCSLOCATION_H
 #define KDEVPLATFORM_VCSLOCATION_H
 
+#include <QHash>
+#include <QUrl>
+#include <QMetaType>
+
+class QVariant;
+
 #include "vcsexport.h"
-#include <QtCore/QList>
-#include <QtCore/QHash>
-
-#include <KUrl>
-
 
 namespace KDevelop
 {
@@ -47,7 +48,7 @@ public:
     };
 
     VcsLocation();
-    VcsLocation( const KUrl& );
+    VcsLocation( const QUrl& );
     VcsLocation( const QString& );
     ~VcsLocation();
     VcsLocation( const VcsLocation& );
@@ -56,7 +57,7 @@ public:
     /**
      * @returns Local url if this location is a LocalLocation
      */
-    KUrl localUrl() const;
+    QUrl localUrl() const;
 
     /**
      * Returns a string for the repository, usually this identifies the server.
@@ -93,7 +94,7 @@ public:
      * Set the local url for this location, automatically sets the type to LocalLocation
      * @param url the local url
      */
-    void setLocalUrl( const KUrl& url );
+    void setLocalUrl( const QUrl& url );
 
     /**
      * Set the server string for this location, automatically sets the type to RepositoryLocation

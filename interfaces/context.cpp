@@ -52,11 +52,11 @@ bool Context::hasType( int aType ) const
 class FileContextPrivate
 {
 public:
-    FileContextPrivate( const KUrl::List &urls )
+    FileContextPrivate( const QList<QUrl> &urls )
             : m_urls( urls )
     {}
 
-    KUrl::List m_urls;
+    QList<QUrl> m_urls;
 };
 
 FileContext::FileContext( const QList<QUrl> &urls )
@@ -110,16 +110,16 @@ QList<ProjectBaseItem*> ProjectItemContext::items() const
 class OpenWithContextPrivate
 {
 public:
-    OpenWithContextPrivate(const KUrl::List& urls, const QMimeType& mimeType)
+    OpenWithContextPrivate(const QList<QUrl>& urls, const QMimeType& mimeType)
     : m_urls( urls )
     , m_mimeType( mimeType )
     {}
 
-    KUrl::List m_urls;
+    QList<QUrl> m_urls;
     QMimeType m_mimeType;
 };
 
-OpenWithContext::OpenWithContext(const KUrl::List& urls, const QMimeType& mimeType)
+OpenWithContext::OpenWithContext(const QList<QUrl>& urls, const QMimeType& mimeType)
 : Context()
 , d(new OpenWithContextPrivate(urls, mimeType))
 {
@@ -131,7 +131,7 @@ int OpenWithContext::type() const
     return Context::OpenWithContext;
 }
 
-KUrl::List OpenWithContext::urls() const
+QList<QUrl> OpenWithContext::urls() const
 {
     return d->m_urls;
 }

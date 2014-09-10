@@ -9,13 +9,13 @@
  ***************************************************************************/
 
 #include "svnmovewidgets.h"
-#include <kurl.h>
+#include <QUrl>
 #include <kurlrequester.h>
 #include <klineedit.h>
 #include <QCheckBox>
 #include <QRadioButton>
 
-SvnMoveOptionDlg::SvnMoveOptionDlg( const KUrl &reqUrl, SvnInfoHolder *info, QWidget *parent )
+SvnMoveOptionDlg::SvnMoveOptionDlg( const QUrl &reqUrl, SvnInfoHolder *info, QWidget *parent )
     : KDialog( parent ), m_reqUrl(reqUrl), m_info(info)
 {
     ui.setupUi(mainWidget());
@@ -23,7 +23,7 @@ SvnMoveOptionDlg::SvnMoveOptionDlg( const KUrl &reqUrl, SvnInfoHolder *info, QWi
     setButtons( KDialog::Ok | KDialog::Cancel );
 
     ui.urlRadio->setChecked(true);
-    ui.reqEdit->setText( reqUrl.prettyUrl() );
+    ui.reqEdit->setText( reqUrl.toDisplayString(QUrl::PreferLocalFile) );
     ui.destEdit->setMode( KFile::File | KFile::Directory );
     srcAsUrlClicked();
 
@@ -34,12 +34,12 @@ SvnMoveOptionDlg::SvnMoveOptionDlg( const KUrl &reqUrl, SvnInfoHolder *info, QWi
 SvnMoveOptionDlg::~SvnMoveOptionDlg()
 {}
 
-KUrl SvnMoveOptionDlg::source()
+QUrl SvnMoveOptionDlg::source()
 {
-    return KUrl( ui.srcEdit->text() );
+    return QUrl::fromUserInput( ui.srcEdit->text() );
 }
 
-KUrl SvnMoveOptionDlg::dest()
+QUrl SvnMoveOptionDlg::dest()
 {
     return ui.destEdit->url();
 }
@@ -53,8 +53,8 @@ void SvnMoveOptionDlg::srcAsUrlClicked()
 {
     if( m_info ){
         ui.srcEdit->setUrl( m_info->url );
-        KUrl srcUrl( m_info->url );
-        ui.destEdit->setUrl( srcUrl.upUrl() );
+        QUrl srcUrl( m_info->url );
+        ui.destEdit->setUrl( srcUrl.resolved(QStringLiteral("..")) );
     }
 }
 
@@ -62,8 +62,8 @@ void SvnMoveOptionDlg::srcAsPathClicked()
 {
     ui.srcEdit->setText( m_reqUrl.toLocalFile() );
 
-    KUrl srcUrl( m_reqUrl.toLocalFile() );
-    KUrl destParent = srcUrl.upUrl();
+    QUrl srcUrl = QUrl::fromLocalFile( m_reqUrl.toLocalFile() );
+    QUrl destParent = srcUrl.resolved( QStringLiteral("..") );
     ui.destEdit->setPath( destParent.toLocalFile() );
 }
 

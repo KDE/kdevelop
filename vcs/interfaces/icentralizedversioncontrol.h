@@ -45,14 +45,14 @@ public:
     /**
      * this is for files only, it makes a file editable, this may be a no-op
      */
-    virtual VcsJob* edit( const KUrl& localLocation ) = 0;
+    virtual VcsJob* edit( const QUrl& localLocation ) = 0;
 
     /**
      * this is for files only, it makes a file un-editable, this may be a no-op
      * This is different from revert because it doesn't change the content of the
      * file (it may fail if the file has changed).
      */
-    virtual VcsJob* unedit( const KUrl& localLocation ) = 0;
+    virtual VcsJob* unedit( const QUrl& localLocation ) = 0;
 
     /**
      * retrieves status information for a file or dir recursive is only
@@ -63,7 +63,7 @@ public:
      * gives the revision of file/dir, that is the revision to which this files
      * was updated when update() was run the last time
      */
-    virtual VcsJob* localRevision( const KUrl& localLocation,
+    virtual VcsJob* localRevision( const QUrl& localLocation,
                                    VcsRevision::RevisionType ) = 0;
 
     /**
@@ -76,7 +76,7 @@ public:
     /**
      * take a mapping of local to repository locations and import that into the repository
      */
-    virtual VcsJob* import(const QString & commitMessage, const KUrl & sourceDirectory, const VcsLocation & destinationRepository) = 0;
+    virtual VcsJob* import(const QString & commitMessage, const QUrl & sourceDirectory, const VcsLocation & destinationRepository) = 0;
 };
 
 }

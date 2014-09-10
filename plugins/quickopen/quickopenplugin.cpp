@@ -1018,17 +1018,17 @@ void QuickOpenPlugin::quickOpenDeclaration()
   IndexedString u = decl->url();
   KTextEditor::Cursor c = decl->rangeInCurrentRevision().start();
 
-  if(u.str().isEmpty()) {
+  if(u.isEmpty()) {
     kDebug() << "Got empty url for declaration" << decl->toString();
     return;
   }
 
   lock.unlock();
-  core()->documentController()->openDocument(KUrl(u.str()), c);
+  core()->documentController()->openDocument(u.toUrl(), c);
 }
 
 ///Returns all languages for that url that have a language support, and prints warnings for other ones.
-QList<KDevelop::ILanguage*> languagesWithSupportForUrl(KUrl url) {
+QList<KDevelop::ILanguage*> languagesWithSupportForUrl(QUrl url) {
   QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
   QList<KDevelop::ILanguage*> ret;
   foreach( KDevelop::ILanguage* language, languages) {
@@ -1047,7 +1047,7 @@ QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
   if( !view )
     return 0;
 
-  KUrl url = ICore::self()->documentController()->activeDocument()->url();
+  QUrl url = ICore::self()->documentController()->activeDocument()->url();
 
   foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
     QWidget* w = language->languageSupport()->specialLanguageObjectNavigationWidget(url, KTextEditor::Cursor(view->cursorPosition()) );
@@ -1058,27 +1058,27 @@ QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
   return 0;
 }
 
-QPair<KUrl, KTextEditor::Cursor> QuickOpenPlugin::specialObjectJumpPosition() const
+QPair<QUrl, KTextEditor::Cursor> QuickOpenPlugin::specialObjectJumpPosition() const
 {
   KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
   if( !view )
-    return qMakePair(KUrl(), KTextEditor::Cursor());
+    return qMakePair(QUrl(), KTextEditor::Cursor());
 
-  KUrl url = ICore::self()->documentController()->activeDocument()->url();
+  QUrl url = ICore::self()->documentController()->activeDocument()->url();
 
   foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
-    QPair<KUrl, KTextEditor::Cursor> pos = language->languageSupport()->specialLanguageObjectJumpCursor(url, KTextEditor::Cursor(view->cursorPosition()) );
+    QPair<QUrl, KTextEditor::Cursor> pos = language->languageSupport()->specialLanguageObjectJumpCursor(url, KTextEditor::Cursor(view->cursorPosition()) );
     if(pos.second.isValid()) {
       return pos;
     }
   }
 
-  return qMakePair(KUrl(), KTextEditor::Cursor::invalid());
+  return qMakePair(QUrl(), KTextEditor::Cursor::invalid());
 }
 
 bool QuickOpenPlugin::jumpToSpecialObject()
 {
-  QPair<KUrl, KTextEditor::Cursor> pos = specialObjectJumpPosition();
+  QPair<QUrl, KTextEditor::Cursor> pos = specialObjectJumpPosition();
   if(pos.second.isValid()) {
     if(pos.first.isEmpty()) {
       kDebug() << "Got empty url for special language object";
@@ -1115,13 +1115,13 @@ void QuickOpenPlugin::quickOpenDefinition()
     decl->activateSpecialization();
   }
 
-  if(u.str().isEmpty()) {
+  if(u.isEmpty()) {
     kDebug() << "Got empty url for declaration" << decl->toString();
     return;
   }
 
   lock.unlock();
-  core()->documentController()->openDocument(KUrl(u.str()), c);
+  core()->documentController()->openDocument(u.toUrl(), c);
 }
 
 bool QuickOpenPlugin::freeModel()

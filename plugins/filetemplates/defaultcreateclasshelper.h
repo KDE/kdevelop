@@ -36,7 +36,7 @@ public:
     /**
      * @return a new @c TemplateClassGenerator.
      */
-    virtual KDevelop::TemplateClassGenerator* createGenerator(const KUrl& baseUrl);
+    virtual KDevelop::TemplateClassGenerator* createGenerator(const QUrl& baseUrl);
     /**
      * @return an empty list of methods.
      */

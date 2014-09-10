@@ -107,7 +107,7 @@ DUContext* contextForHighlightingAt(const KTextEditor::Cursor& position, TopDUCo
 }
 
 ///Duchain must be locked
-DUContext* getContextAt(const KUrl& url, KTextEditor::Cursor cursor)
+DUContext* getContextAt(const QUrl& url, KTextEditor::Cursor cursor)
 {
   TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
   if (!topContext) return 0;
@@ -436,7 +436,7 @@ static int getLineHeight(KTextEditor::View* view, int curLine)
   return std::abs(view->cursorToCoordinate(c).y() - currentHeight);
 }
 
-static QRect getItemBoundingRect(const KUrl& viewUrl, KTextEditor::View* view, KTextEditor::Cursor itemPosition)
+static QRect getItemBoundingRect(const QUrl& viewUrl, KTextEditor::View* view, KTextEditor::Cursor itemPosition)
 {
   DUChainReadLocker lock;
   KTextEditor::Range itemRange = DUChainUtils::itemRangeUnderCursor(viewUrl, KTextEditor::Cursor(itemPosition));
@@ -452,7 +452,7 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
   if(contextView && contextView->isVisible() && !contextView->isLocked())
     return; // If the context-browser view is visible, it will care about updating by itself
   
-  KUrl viewUrl(view->document()->url());
+  QUrl viewUrl = view->document()->url();
   QList<ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
   
   QWidget* navigationWidget = 0;
@@ -639,7 +639,7 @@ void ContextBrowserPlugin::updateForView(View* view)
     // Re-highlight
     ViewHighlights& highlights = m_highlightedRanges[view];
     
-    KUrl url = view->document()->url();
+    QUrl url = view->document()->url();
     IDocument* activeDoc = core()->documentController()->activeDocument();
     
     bool mouseHighlight = (url == m_mouseHoverDocument) && (m_mouseHoverCursor.isValid());
@@ -885,7 +885,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
         
           if(target && target != decl) {
             KTextEditor::Cursor jumpTo = target->rangeInCurrentRevision().start();
-            KUrl document = target->url().toUrl();
+            QUrl document = target->url().toUrl();
             lock.unlock();
             core()->documentController()->openDocument( document, cursorToRange(jumpTo)  );
             return;
@@ -914,7 +914,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
               QList<RangeInRevision> useRanges = allUses(top, decl, true);
               qSort(useRanges);
               if(!useRanges.isEmpty()) {
-                KUrl url = top->url().toUrl();
+                QUrl url = top->url().toUrl();
                 KTextEditor::Range selectUse = chosen->transformFromLocalRevision(forward ? useRanges.first() : useRanges.back());
                 lock.unlock();
                 core()->documentController()->openDocument(url, cursorToRange(selectUse.start()));
@@ -986,7 +986,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
                   if(definition)
                     decl = definition;
                 }
-                KUrl u(decl->url().str());
+                QUrl u = decl->url().toUrl();
                 KTextEditor::Range range = decl->rangeInCurrentRevision();
                 range.end() = range.start();
                 lock.unlock();
@@ -995,7 +995,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
               }else{
                 TopDUContext* nextTop = usingFiles[nextFile].data();
                 
-                KUrl u(nextTop->url().str());
+                QUrl u = nextTop->url().toUrl();
                 
                 QList<RangeInRevision> nextTopUses = allUses(nextTop, decl, true);
                 qSort(nextTopUses);
@@ -1012,7 +1012,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
               kDebug() << "not found own file in use list";
             }
           }else{
-              KUrl url(chosen->url().str());
+              QUrl url = chosen->url().toUrl();
               KTextEditor::Range range = chosen->transformFromLocalRevision(localUses[nextUse]);
               range.end() = range.start();
               lock.unlock();

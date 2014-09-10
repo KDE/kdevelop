@@ -1267,8 +1267,8 @@ void DUChain::removeFromEnvironmentManager( TopDUContext * chain ) {
   sdDUChainPrivate->removeEnvironmentInformation(file);
 }
 
-TopDUContext* DUChain::chainForDocument(const KUrl& document, bool proxyContext) const {
-  return chainForDocument(IndexedString(document.pathOrUrl()), proxyContext);
+TopDUContext* DUChain::chainForDocument(const QUrl& document, bool proxyContext) const {
+  return chainForDocument(IndexedString(document.toString()), proxyContext);
 }
 
 bool DUChain::isInMemory(uint topContextIndex) const {
@@ -1347,7 +1347,7 @@ TopDUContext* DUChain::chainForDocument(const KDevelop::IndexedString& document,
   return 0;
 }
 
-QList<TopDUContext*> DUChain::chainsForDocument(const KUrl& document) const
+QList<TopDUContext*> DUChain::chainsForDocument(const QUrl& document) const
 {
   return chainsForDocument(IndexedString(document));
 }
@@ -1372,7 +1372,7 @@ QList<TopDUContext*> DUChain::chainsForDocument(const IndexedString& document) c
   return chains;
 }
 
-TopDUContext* DUChain::chainForDocument( const KUrl& document, const KDevelop::ParsingEnvironment* environment, bool proxyContext ) const {
+TopDUContext* DUChain::chainForDocument( const QUrl& document, const KDevelop::ParsingEnvironment* environment, bool proxyContext ) const {
   return chainForDocument( IndexedString(document), environment, proxyContext );
 }
 
@@ -1422,11 +1422,11 @@ TopDUContext* DUChain::chainForDocument( const IndexedString& document, const Pa
   }
 }
 
-QList<KUrl> DUChain::documents() const
+QList<QUrl> DUChain::documents() const
 {
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
-  QList<KUrl> ret;
+  QList<QUrl> ret;
   foreach(TopDUContext* top, sdDUChainPrivate->m_chainsByUrl.values()) {
     ret << top->url().toUrl();
   }

@@ -46,7 +46,7 @@ KDEVPLATFORMLANGUAGE_EXPORT extern const int cacheModificationTimesForSeconds;
 class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
 {
   public:	
-	///Constructs a ModificationRevision for the file referenced by the given string, which should have been constructed using KUrl::pathOrUrl at some point
+	///Constructs a ModificationRevision for the file referenced by the given string, which should have been constructed using QUrl::pathOrUrl at some point
 	///This is efficient, because it uses a cache to look up the modification-revision, caching file-system stats for some time
 	static ModificationRevision revisionForFile(const IndexedString& fileName);
 

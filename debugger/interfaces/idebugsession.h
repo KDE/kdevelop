@@ -25,7 +25,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QAbstractItemModel>
-#include <QtCore/QUrl>
+#include <QUrl>
 
 namespace KDevelop {
 

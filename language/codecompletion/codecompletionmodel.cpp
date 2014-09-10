@@ -157,7 +157,7 @@ void CodeCompletionModel::clear()
   endResetModel();
 }
 
-void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url)
+void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const QUrl& url)
 {
   Q_ASSERT(m_thread == worker()->thread());
   Q_UNUSED(invocationType)
@@ -179,7 +179,7 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
   if (top) {
     kDebug() << "completion invoked for context" << (DUContext*)top;
 
-    if( top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->modificationRevision() != ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl())) ) {
+    if( top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->modificationRevision() != ModificationRevision::revisionForFile(IndexedString(url.toString())) ) {
       kDebug() << "Found context is not current. Its revision is " /*<< top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl()))*/;
     }
 
@@ -246,7 +246,7 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
   worker()->abortCurrentCompletion();
   worker()->setFullCompletion(m_fullCompletion);
 
-  KUrl url = view->document()->url();
+  QUrl url = view->document()->url();
 
   completionInvokedInternal(view, range, invocationType, url);
 }

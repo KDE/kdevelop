@@ -170,7 +170,7 @@ Q_GLOBAL_STATIC(ParsingThread, s_parsingThread);
 
 struct OutputModelPrivate
 {
-    OutputModelPrivate( OutputModel* model, const KUrl& builddir = KUrl() );
+    OutputModelPrivate( OutputModel* model, const QUrl& builddir = QUrl() );
     ~OutputModelPrivate();
     bool isValidIndex( const QModelIndex&, int currentRowCount ) const;
 
@@ -180,7 +180,7 @@ struct OutputModelPrivate
     QVector<FilteredItem> m_filteredItems;
     // We use std::set because that is ordered
     std::set<int> m_errorItems; // Indices of all items that we want to move to using previous and next
-    KUrl m_buildDir;
+    QUrl m_buildDir;
 
     void linesParsed(const QVector<KDevelop::FilteredItem>& items)
     {
@@ -197,7 +197,7 @@ struct OutputModelPrivate
     }
 };
 
-OutputModelPrivate::OutputModelPrivate( OutputModel* model_, const KUrl& builddir)
+OutputModelPrivate::OutputModelPrivate( OutputModel* model_, const QUrl& builddir)
 : model(model_)
 , worker(new ParseWorker )
 , m_buildDir( builddir )
@@ -220,7 +220,7 @@ OutputModelPrivate::~OutputModelPrivate()
     worker->deleteLater();
 }
 
-OutputModel::OutputModel( const KUrl& builddir, QObject* parent )
+OutputModel::OutputModel( const QUrl& builddir, QObject* parent )
 : QAbstractListModel(parent)
 , d( new OutputModelPrivate( this, builddir ) )
 {
@@ -286,9 +286,9 @@ void OutputModel::activate( const QModelIndex& index )
         kDebug() << "activating:" << item.lineNo << item.url;
         KTextEditor::Cursor range( item.lineNo, item.columnNo );
         KDevelop::IDocumentController *docCtrl = KDevelop::ICore::self()->documentController();
-        KUrl url = item.url;
+        QUrl url = item.url;
         if(url.isRelative()) {
-            url = KUrl(d->m_buildDir, url.path());
+            url = d->m_buildDir.resolved(url);
         }
         docCtrl->openDocument( url, range );
     } else {

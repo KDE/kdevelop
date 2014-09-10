@@ -20,7 +20,6 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_ENVIRONMENTPREFERENCES_H
 #define KDEVPLATFORM_ENVIRONMENTPREFERENCES_H
 
-#include <kurl.h>
 #include <kcmodule.h>
 #include <QtCore/QVariant>
 

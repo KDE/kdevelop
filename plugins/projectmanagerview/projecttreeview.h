@@ -25,7 +25,6 @@
 #include <QtCore/QPointer>
 
 class QAbstractProxyModel;
-class KUrl;
 class QAction;
 class QItemSelectionModel;
 class QMouseEvent;

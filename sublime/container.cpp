@@ -351,13 +351,7 @@ void Container::documentTitleChanged(Sublime::Document* doc)
             // the rest of the kdevplatform API
             UrlDocument* udoc = dynamic_cast<UrlDocument*>( doc );
             if( udoc ) {
-                QString pretty;
-                if( udoc->url().isLocalFile() ) {
-                    pretty = udoc->url().toLocalFile();
-                } else {
-                    pretty = udoc->url().prettyUrl();
-                }
-                txt = txt + " (" + pretty + ')';
+                txt = txt + " (" + udoc->url().toDisplayString(QUrl::PreferLocalFile) + ')';
             }
             d->fileNameCorner->setText( txt );
             int tabIndex = d->stack->indexOf(it.key());

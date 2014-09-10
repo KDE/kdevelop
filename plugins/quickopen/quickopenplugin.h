@@ -115,7 +115,7 @@ private:
     enum FunctionJumpDirection { NextFunction, PreviousFunction };
     void jumpToNearestFunction(FunctionJumpDirection direction);
 
-    QPair<KUrl, KTextEditor::Cursor> specialObjectJumpPosition() const;
+    QPair<QUrl, KTextEditor::Cursor> specialObjectJumpPosition() const;
     QWidget* specialObjectNavigationWidget() const;
     bool jumpToSpecialObject();
     void showQuickOpenWidget(const QStringList &items, const QStringList &scopes, bool preselectText);

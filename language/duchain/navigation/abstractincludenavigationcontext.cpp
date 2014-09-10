@@ -80,9 +80,9 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
   modifyHtml()  += "<html><body><p>" + fontSizePrefix(shorten);
   addExternalHtml(m_prefix);
 
-  KUrl u(m_item.url());
+  QUrl u = m_item.url();
   NavigationAction action(u, KTextEditor::Cursor(0,0));
-  makeLink(u.pathOrUrl(), u.pathOrUrl(), action);
+  makeLink(u.toString(), u.toString(), action);
   modifyHtml() += "<br />";
   
   QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);

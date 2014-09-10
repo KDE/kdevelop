@@ -24,13 +24,13 @@
 
 #include "test_git.h"
 
-#include <qtest_kde.h>
 #include <QtTest/QtTest>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
-#include <KUrl>
+#include <QUrl>
 #include <KDebug>
-#include <kio/netaccess.h>
+
+#include <KIO/DeleteJob>
 
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
@@ -84,16 +84,16 @@ void GitInitTest::repoInit()
 {
     kDebug() << "Trying to init repo";
     // make job that creates the local repository
-    VcsJob* j = m_plugin->init(KUrl(gitTest_BaseDir));
+    VcsJob* j = m_plugin->init(QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
 
     //check if the CVSROOT directory in the new local repository exists now
     QVERIFY(QFileInfo(gitRepo).exists());
 
     //check if isValidDirectory works
-    QVERIFY(m_plugin->isValidDirectory(KUrl(gitTest_BaseDir)));
+    QVERIFY(m_plugin->isValidDirectory(QUrl::fromLocalFile(gitTest_BaseDir)));
     //and for non-git dir, I hope nobody has /tmp under git
-    QVERIFY(!m_plugin->isValidDirectory(KUrl("/tmp")));
+    QVERIFY(!m_plugin->isValidDirectory(QUrl::fromLocalFile("/tmp")));
 
     //we have nothing, so output should be empty
     DVcsJob * j2 = m_plugin->gitRevParse(gitRepo, QStringList(QString("--branches")));
@@ -126,11 +126,11 @@ void GitInitTest::addFiles()
     f.close();
 
     //test git-status exitCode (see DVcsJob::setExitCode).
-    VcsJob* j = m_plugin->status(KUrl::List(gitTest_BaseDir));
+    VcsJob* j = m_plugin->status(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
 
     // /tmp/kdevGit_testdir/ and testfile
-    j = m_plugin->add(KUrl::List(QString(gitTest_BaseDir + gitTest_FileName)));
+    j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir + gitTest_FileName));
     VERIFYJOB(j);
 
     f.setFileName(gitSrcDir + gitTest_FileName3);
@@ -143,28 +143,28 @@ void GitInitTest::addFiles()
     f.close();
 
     //test git-status exitCode again
-    j = m_plugin->status(KUrl::List(gitTest_BaseDir));
+    j = m_plugin->status(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
 
     //repository path without trailing slash and a file in a parent directory
     // /tmp/repo  and /tmp/repo/src/bar
-    j = m_plugin->add(KUrl::List(QStringList(gitSrcDir + gitTest_FileName3)));
+    j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(gitSrcDir + gitTest_FileName3));
     VERIFYJOB(j);
 
     //let's use absolute path, because it's used in ContextMenus
-    j = m_plugin->add(KUrl::List(QStringList(gitTest_BaseDir + gitTest_FileName2)));
+    j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir + gitTest_FileName2));
     VERIFYJOB(j);
 
     //Now let's create several files and try "git add file1 file2 file3"
     QStringList files = QStringList() << "file1" << "file2" << "la la";
-    KUrl::List multipleFiles;
+    QList<QUrl> multipleFiles;
     foreach(const QString& file, files) {
         QFile f(gitTest_BaseDir + file);
         QVERIFY(f.open(QIODevice::WriteOnly));
         QTextStream input(&f);
         input << file;
         f.close();
-        multipleFiles << KUrl::fromPath(gitTest_BaseDir + file);
+        multipleFiles << QUrl::fromLocalFile(gitTest_BaseDir + file);
     }
     j = m_plugin->add(multipleFiles);
     VERIFYJOB(j);
@@ -174,11 +174,11 @@ void GitInitTest::commitFiles()
 {
     kDebug() << "Committing...";
     //we start it after addFiles, so we just have to commit
-    VcsJob* j = m_plugin->commit(QString("Test commit"), KUrl::List(gitTest_BaseDir));
+    VcsJob* j = m_plugin->commit(QString("Test commit"), QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
 
     //test git-status exitCode one more time.
-    j = m_plugin->status(KUrl::List(gitTest_BaseDir));
+    j = m_plugin->status(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
 
     //since we committed the file to the "pure" repository, .git/refs/heads/master should exist
@@ -221,10 +221,10 @@ void GitInitTest::commitFiles()
     f.close();
 
     //add changes
-    j = m_plugin->add(KUrl::List(QStringList(gitTest_BaseDir + gitTest_FileName)));
+    j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir + gitTest_FileName));
     VERIFYJOB(j);
 
-    j = m_plugin->commit(QString("KDevelop's Test commit2"), KUrl::List(gitTest_BaseDir));
+    j = m_plugin->commit(QString("KDevelop's Test commit2"), QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
 
     QString secondCommit;
@@ -261,32 +261,33 @@ void GitInitTest::testCommit()
 void GitInitTest::testBranch(const QString& newBranch)
 {
     //Already tested, so I assume that it works
-    QString oldBranch = runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString();
+    const QUrl baseUrl = QUrl::fromLocalFile(gitTest_BaseDir);
+    QString oldBranch = runSynchronously(m_plugin->currentBranch(baseUrl)).toString();
 
     VcsRevision rev;
     rev.setRevisionValue(oldBranch, KDevelop::VcsRevision::GlobalNumber);
-    VcsJob* j = m_plugin->branch(KUrl(gitTest_BaseDir), rev, newBranch);
+    VcsJob* j = m_plugin->branch(baseUrl, rev, newBranch);
     VERIFYJOB(j);
-    QVERIFY(runSynchronously(m_plugin->branches(KUrl(gitTest_BaseDir))).toStringList().contains(newBranch));
+    QVERIFY(runSynchronously(m_plugin->branches(baseUrl)).toStringList().contains(newBranch));
 
     // switch branch
-    j = m_plugin->switchBranch(KUrl(gitTest_BaseDir), newBranch);
+    j = m_plugin->switchBranch(baseUrl, newBranch);
     VERIFYJOB(j);
-    QCOMPARE(runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString(), newBranch);
+    QCOMPARE(runSynchronously(m_plugin->currentBranch(baseUrl)).toString(), newBranch);
 
     // get into detached head state
-    j = m_plugin->switchBranch(KUrl(gitTest_BaseDir), "HEAD~1");
+    j = m_plugin->switchBranch(baseUrl, "HEAD~1");
     VERIFYJOB(j);
-    QCOMPARE(runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString(), QString(""));
+    QCOMPARE(runSynchronously(m_plugin->currentBranch(baseUrl)).toString(), QString(""));
 
     // switch back
-    j = m_plugin->switchBranch(KUrl(gitTest_BaseDir), newBranch);
+    j = m_plugin->switchBranch(baseUrl, newBranch);
     VERIFYJOB(j);
-    QCOMPARE(runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString(), newBranch);
+    QCOMPARE(runSynchronously(m_plugin->currentBranch(baseUrl)).toString(), newBranch);
 
-    j = m_plugin->deleteBranch(KUrl(gitTest_BaseDir), oldBranch);
+    j = m_plugin->deleteBranch(baseUrl, oldBranch);
     VERIFYJOB(j);
-    QVERIFY(!runSynchronously(m_plugin->branches(KUrl(gitTest_BaseDir))).toStringList().contains(oldBranch));
+    QVERIFY(!runSynchronously(m_plugin->branches(baseUrl)).toStringList().contains(oldBranch));
 }
 
 void GitInitTest::testBranching()
@@ -295,10 +296,11 @@ void GitInitTest::testBranching()
     addFiles();
     commitFiles();
 
-    VcsJob* j = m_plugin->branches(KUrl(gitTest_BaseDir));
+    const QUrl baseUrl = QUrl::fromLocalFile(gitTest_BaseDir);
+    VcsJob* j = m_plugin->branches(baseUrl);
     VERIFYJOB(j);
 
-    QString curBranch = runSynchronously(m_plugin->currentBranch(gitTest_BaseDir)).toString();
+    QString curBranch = runSynchronously(m_plugin->currentBranch(baseUrl)).toString();
     QCOMPARE(curBranch, QString("master"));
 
     testBranch("new");
@@ -349,10 +351,10 @@ void GitInitTest::testAnnotation()
     input << "An appended line";
     f.close();
 
-    VcsJob* j = m_plugin->commit(QString("KDevelop's Test commit3"), KUrl::List(gitTest_BaseDir));
+    VcsJob* j = m_plugin->commit(QString("KDevelop's Test commit3"), QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
 
-    j = m_plugin->annotate(KUrl(gitTest_BaseDir + gitTest_FileName), VcsRevision::createSpecialRevision(VcsRevision::Head));
+    j = m_plugin->annotate(QUrl::fromLocalFile(gitTest_BaseDir + gitTest_FileName), VcsRevision::createSpecialRevision(VcsRevision::Head));
     VERIFYJOB(j);
 
     QList<QVariant> results = j->fetchResults().toList();
@@ -375,7 +377,7 @@ void GitInitTest::testRemoveEmptyFolder()
     QDir d(gitTest_BaseDir);
     d.mkdir("emptydir");
 
-    VcsJob* j = m_plugin->remove(KUrl::List(KUrl::fromLocalFile(gitTest_BaseDir+"emptydir/")));
+    VcsJob* j = m_plugin->remove(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir+"emptydir/"));
     if (j) VERIFYJOB(j);
 
     QVERIFY(!d.exists("emptydir"));
@@ -391,7 +393,7 @@ void GitInitTest::testRemoveEmptyFolderInFolder()
     QDir d2(gitTest_BaseDir+"dir");
     d2.mkdir("emptydir");
 
-    VcsJob* j = m_plugin->remove(KUrl::List(KUrl::fromLocalFile(gitTest_BaseDir+"dir/")));
+    VcsJob* j = m_plugin->remove(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir+"dir/"));
     if (j) VERIFYJOB(j);
 
     QVERIFY(!d.exists("dir"));
@@ -407,7 +409,7 @@ void GitInitTest::testRemoveUnindexedFile()
     input << "An appended line";
     f.close();
 
-    VcsJob* j = m_plugin->remove(KUrl::List(KUrl::fromLocalFile(gitTest_BaseDir + gitTest_FileName)));
+    VcsJob* j = m_plugin->remove(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir + gitTest_FileName));
     if (j) VERIFYJOB(j);
 
     QVERIFY(!QFile::exists(gitTest_BaseDir + gitTest_FileName));
@@ -427,9 +429,9 @@ void GitInitTest::testRemoveFolderContainingUnversionedFiles()
         input << "An appended line";
         f.close();
     }
-    VcsJob* j = m_plugin->add(KUrl::List(KUrl::fromLocalFile(gitTest_BaseDir+"dir")));
+    VcsJob* j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir+"dir"));
     VERIFYJOB(j);
-    j = m_plugin->commit("initial commit", KUrl::List(KUrl::fromLocalFile(gitTest_BaseDir)));
+    j = m_plugin->commit("initial commit", QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
 
     {
@@ -440,7 +442,7 @@ void GitInitTest::testRemoveFolderContainingUnversionedFiles()
         f.close();
     }
 
-    j = m_plugin->remove(KUrl::List(KUrl::fromLocalFile(gitTest_BaseDir + "dir")));
+    j = m_plugin->remove(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir + "dir"));
     if (j) VERIFYJOB(j);
 
     QVERIFY(!QFile::exists(gitTest_BaseDir + "dir"));
@@ -451,12 +453,12 @@ void GitInitTest::testRemoveFolderContainingUnversionedFiles()
 void GitInitTest::removeTempDirs()
 {
     if (QFileInfo(gitTest_BaseDir).exists())
-        if (!KIO::NetAccess::del(KUrl(gitTest_BaseDir), 0))
-            qDebug() << "KIO::NetAccess::del(" << gitTest_BaseDir << ") returned false";
+        if (!(KIO::del(QUrl::fromLocalFile(gitTest_BaseDir)))->exec())
+            qDebug() << "KIO::del(" << gitTest_BaseDir << ") returned false";
 
     if (QFileInfo(gitTest_BaseDir2).exists())
-        if (!KIO::NetAccess::del(KUrl(gitTest_BaseDir2), 0))
-            qDebug() << "KIO::NetAccess::del(" << gitTest_BaseDir2 << ") returned false";
+        if (!(KIO::del(QUrl::fromLocalFile(gitTest_BaseDir2)))->exec())
+            qDebug() << "KIO::del(" << gitTest_BaseDir2 << ") returned false";
 }
 
 QTEST_MAIN(GitInitTest)

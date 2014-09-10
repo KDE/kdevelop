@@ -18,8 +18,8 @@
 
 #include <QDir>
 #include <QPointer>
+#include <QUrl>
 
-#include <kurl.h>
 #include <kjob.h>
 
 #include <interfaces/istatus.h>
@@ -57,7 +57,7 @@ public:
     void setReplacementTemplateString(const QString &replTmplString);
     void setFilesString(const QString &filesString);
     void setExcludeString(const QString &excludeString);
-    void setDirectoryChoice(const QList<KUrl> &choice);
+    void setDirectoryChoice(const QList<QUrl> &choice);
     void setDepth(int depth);
     void setRegexpFlag(bool regexpFlag);
     void setCaseSensitive(bool caseSensitive);
@@ -90,15 +90,15 @@ private:
     QRegExp m_regExp;
     QString m_regExpSimple;
     GrepOutputModel *m_outputModel;
-    
+
     enum {
         WorkCollectFiles,
         WorkGrep,
         WorkIdle,
         WorkCancelled
     } m_workState;
-    
-    KUrl::List m_fileList;
+
+    QList<QUrl> m_fileList;
     int m_fileIndex;
     QPointer<GrepFindFilesThread> m_findThread;
 
@@ -107,7 +107,7 @@ private:
     QString m_replacementTemplateString;
     QString m_filesString;
     QString m_excludeString;
-    QList<KUrl> m_directoryChoice;
+    QList<QUrl> m_directoryChoice;
 
     bool m_useProjectFilesFlag;
     bool m_regexpFlag;
@@ -117,7 +117,7 @@ private:
     bool m_findSomething;
 };
 
-//FIXME: this function is used externally only for tests, find a way to keep it 
+//FIXME: this function is used externally only for tests, find a way to keep it
 //       static for a regular compilation
 GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re);
 

@@ -29,8 +29,6 @@
 #include <KLocalizedString>
 #include <QMimeType>
 #include <QMimeDatabase>
-#include <KUrl>
-
 #include <QFileInfo>
 #include <QDir>
 #include <QStandardPaths>

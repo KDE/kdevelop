@@ -40,7 +40,7 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
 
-bool KDevelop::removeUrl(const KDevelop::IProject* project, const KUrl& url, const bool isFolder)
+bool KDevelop::removeUrl(const KDevelop::IProject* project, const QUrl& url, const bool isFolder)
 {
     QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
 
@@ -55,7 +55,7 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const KUrl& url, con
 
         // We have a vcs and the file/folder is controller, need to make the rename through vcs
         if(vcs->isVersionControlled(url)) {
-            VcsJob* job=vcs->remove(KUrl::List() << url);
+            VcsJob* job=vcs->remove(QList<QUrl>() << url);
             if(job) {
                 return job->exec();
             }
@@ -65,8 +65,8 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const KUrl& url, con
     //if we didn't find a VCS, we remove using KIO (if the file still exists, the vcs plugin might have simply deleted the url without returning a job
     if ( !KIO::NetAccess::del( url, window ) && url.isLocalFile() && (QFileInfo(url.toLocalFile())).exists() ) {
         KMessageBox::error( window,
-            isFolder ? i18n( "Cannot remove folder <i>%1</i>.", url.pathOrUrl() )
-                        : i18n( "Cannot remove file <i>%1</i>.", url.pathOrUrl() ) );
+            isFolder ? i18n( "Cannot remove folder <i>%1</i>.", url.toDisplayString(QUrl::PreferLocalFile) )
+                        : i18n( "Cannot remove file <i>%1</i>.", url.toDisplayString(QUrl::PreferLocalFile) ) );
         return false;
     }
     return true;
@@ -77,11 +77,11 @@ bool KDevelop::removePath(const KDevelop::IProject* project, const KDevelop::Pat
     return removeUrl(project, path.toUrl(), isFolder);
 }
 
-bool KDevelop::createFile(const KUrl& file)
+bool KDevelop::createFile(const QUrl& file)
 {
     if (KIO::NetAccess::exists( file, KIO::NetAccess::DestinationSide, QApplication::activeWindow() )) {
         KMessageBox::error( QApplication::activeWindow(),
-                            i18n( "The file <i>%1</i> already exists.", file.pathOrUrl() ) );
+                            i18n( "The file <i>%1</i> already exists.", file.toDisplayString(QUrl::PreferLocalFile) ) );
         return false;
     }
 
@@ -89,12 +89,12 @@ bool KDevelop::createFile(const KUrl& file)
         KTemporaryFile temp;
         if ( !temp.open() || temp.write("\n") == -1 ) {
             KMessageBox::error( QApplication::activeWindow(),
-                                i18n( "Cannot create temporary file to create <i>%1</i>.", file.pathOrUrl() ) );
+                                i18n( "Cannot create temporary file to create <i>%1</i>.", file.toDisplayString(QUrl::PreferLocalFile) ) );
             return false;
         }
         if ( !KIO::NetAccess::upload( temp.fileName(), file, QApplication::activeWindow() ) ) {
             KMessageBox::error( QApplication::activeWindow(),
-                                i18n( "Cannot create file <i>%1</i>.", file.pathOrUrl() ) );
+                                i18n( "Cannot create file <i>%1</i>.", file.toDisplayString(QUrl::PreferLocalFile) ) );
             return false;
         }
     }
@@ -106,10 +106,10 @@ bool KDevelop::createFile(const KDevelop::Path& file)
     return createFile(file.toUrl());
 }
 
-bool KDevelop::createFolder(const KUrl& folder)
+bool KDevelop::createFolder(const QUrl& folder)
 {
     if ( !KIO::NetAccess::mkdir( folder, QApplication::activeWindow() ) ) {
-        KMessageBox::error( QApplication::activeWindow(), i18n( "Cannot create folder <i>%1</i>.", folder.pathOrUrl() ) );
+        KMessageBox::error( QApplication::activeWindow(), i18n( "Cannot create folder <i>%1</i>.", folder.toDisplayString(QUrl::PreferLocalFile) ) );
         return false;
     }
     return true;
@@ -120,7 +120,7 @@ bool KDevelop::createFolder(const KDevelop::Path& folder)
     return createFolder(folder.toUrl());
 }
 
-bool KDevelop::renameUrl(const KDevelop::IProject* project, const KUrl& oldname, const KUrl& newname)
+bool KDevelop::renameUrl(const KDevelop::IProject* project, const QUrl& oldname, const QUrl& newname)
 {
     bool wasVcsMoved = false;
     IPlugin* vcsplugin = project->versionControlPlugin();
@@ -153,7 +153,7 @@ bool KDevelop::renameUrl(const KDevelop::IProject* project, const KUrl& oldname,
     } else if (!wasVcsMoved) {
         // fallback for non-textdocuments (also folders e.g.)
         KIO::CopyJob* job = KIO::move(oldname, newname);
-        return KIO::NetAccess::synchronousRun(job, 0);
+        return job->exec();
     } else {
         return true;
     }
@@ -164,7 +164,7 @@ bool KDevelop::renamePath(const KDevelop::IProject* project, const KDevelop::Pat
     return renameUrl(project, oldName.toUrl(), newName.toUrl());
 }
 
-bool KDevelop::copyUrl(const KDevelop::IProject* project, const KUrl& source, const KUrl& target)
+bool KDevelop::copyUrl(const KDevelop::IProject* project, const QUrl& source, const QUrl& target)
 {
     IPlugin* vcsplugin=project->versionControlPlugin();
     if(vcsplugin) {

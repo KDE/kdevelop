@@ -14,7 +14,7 @@
 #include <QWidget>
 
 class KJob;
-class KUrl;
+class QUrl;
 namespace Ui { class ProjectSourcePage; }
 namespace KDevelop
 {
@@ -29,10 +29,10 @@ class ProjectSourcePage : public QWidget
 {
     Q_OBJECT
     public:
-        ProjectSourcePage(const KUrl& initial, QWidget* parent = 0);
+        ProjectSourcePage(const QUrl& initial, QWidget* parent = 0);
         virtual ~ProjectSourcePage();
 
-        KUrl workingDir() const;
+        QUrl workingDir() const;
         
     private slots:
         void setSourceIndex(int index);

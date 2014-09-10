@@ -15,17 +15,17 @@
 #include "svnmodels.h"
 #include "ui_moveoptiondlg.h"
 
-class KUrl;
+class QUrl;
 
 class SvnMoveOptionDlg : public KDialog
 {
     Q_OBJECT
 public:
-    explicit SvnMoveOptionDlg( const KUrl &reqUrl, SvnInfoHolder *info, QWidget *parent );
+    explicit SvnMoveOptionDlg( const QUrl &reqUrl, SvnInfoHolder *info, QWidget *parent );
     ~SvnMoveOptionDlg();
 
-    KUrl source();
-    KUrl dest();
+    QUrl source();
+    QUrl dest();
     bool force();
 
 private Q_SLOTS:
@@ -34,7 +34,7 @@ private Q_SLOTS:
 
 private:
     Ui::SvnMoveOptionDlg ui;
-    KUrl m_reqUrl;
+    QUrl m_reqUrl;
     SvnInfoHolder *m_info;
 };
 

@@ -71,13 +71,13 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     projectTarget->setBaseItem( project ? project->projectItem() : 0, true);
     projectTarget->setCurrentItemPath( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ) );
 
-    KUrl exe = cfg.readEntry( ExecutePlugin::executableEntry, QUrl());
+    QUrl exe = cfg.readEntry( ExecutePlugin::executableEntry, QUrl());
     if( !exe.isEmpty() || project ){
         executablePath->setUrl( !exe.isEmpty() ? exe : project->folder() );
     }else{
         KDevelop::IProjectController* pc = KDevelop::ICore::self()->projectController();
         if( pc ){
-            executablePath->setUrl( pc->projects().count() ? pc->projects().first()->folder() : KUrl() );
+            executablePath->setUrl( pc->projects().count() ? pc->projects().first()->folder() : QUrl() );
         }
     }
 
@@ -137,9 +137,9 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     connect( projectTargetRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
     connect( executableRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
     connect( executablePath->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( executablePath, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
+    connect( executablePath, SIGNAL(urlSelected(QUrl)), SIGNAL(changed()) );
     connect( arguments, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( workingDirectory, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
+    connect( workingDirectory, SIGNAL(urlSelected(QUrl)), SIGNAL(changed()) );
     connect( workingDirectory->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( environment, SIGNAL(currentProfileChanged(QString)), SIGNAL(changed()) );
     connect( addDependency, SIGNAL(clicked(bool)), SLOT(addDep()) );
@@ -391,7 +391,7 @@ bool NativeAppConfigType::canLaunch ( KDevelop::ProjectBaseItem* item ) const
     return false;
 }
 
-bool NativeAppConfigType::canLaunch ( const KUrl& file ) const
+bool NativeAppConfigType::canLaunch ( const QUrl& file ) const
 {
     return ( file.isLocalFile() && QFileInfo( file.toLocalFile() ).isExecutable() );
 }
@@ -401,7 +401,7 @@ void NativeAppConfigType::configureLaunchFromItem ( KConfigGroup cfg, KDevelop::
     cfg.writeEntry( ExecutePlugin::isExecutableEntry, false );
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
     cfg.writeEntry( ExecutePlugin::projectTargetEntry, model->pathFromIndex( model->indexFromItem( item ) ) );
-    cfg.writeEntry( ExecutePlugin::workingDirEntry, QUrl(item->executable()->builtUrl().upUrl()) );
+    cfg.writeEntry( ExecutePlugin::workingDirEntry, item->executable()->builtUrl().adjusted(QUrl::RemoveFilename) );
     cfg.sync();
 }
 

@@ -26,7 +26,7 @@ Boston, MA 02110-1301, USA.
 
 #include "interfacesexport.h"
 
-class KUrl;
+class QUrl;
 
 namespace KDevelop
 {
@@ -46,7 +46,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatterController : public QObject
 		/** \return The formatter corresponding to the language
 		* of the document corresponding to the \arg url.
 		*/
-		virtual ISourceFormatter* formatterForUrl(const KUrl &url) = 0;
+		virtual ISourceFormatter* formatterForUrl(const QUrl &url) = 0;
 		/** Loads and returns a source formatter for this mime type.
 		* The language is then activated and the style is loaded.
 		* The source formatter is then ready to use on a file.

@@ -26,7 +26,6 @@
 
 class QSortFilterProxyModel;
 class QAction;
-class KUrl;
 class KDevDocumentViewPlugin;
 class KDevDocumentModel;
 class KDevDocumentViewDelegate;
@@ -52,7 +51,7 @@ public:
     KDevDocumentViewPlugin *plugin() const;
 
 signals:
-    void activateURL( const KUrl &url );
+    void activateURL( const QUrl &url );
 
 public slots:
     void opened( KDevelop::IDocument* document );

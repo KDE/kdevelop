@@ -38,6 +38,8 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 
+#include <util/path.h>
+
 #include <vcs/vcsjob.h>
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsevent.h>
@@ -76,11 +78,11 @@ QVariant runSynchronously(KDevelop::VcsJob* job)
 
 namespace
 {
-    
-QDir dotGitDirectory(const KUrl& dirPath)
+
+QDir dotGitDirectory(const QUrl& dirPath)
 {
     const QFileInfo finfo(dirPath.toLocalFile());
-    QDir dir = finfo.isDir() ? QDir(dirPath.toLocalFile()) : finfo.absoluteDir();
+    QDir dir = finfo.absoluteDir();
     
     static const QString gitDir(".git");
     while (!dir.exists(gitDir) && dir.cdUp()) {} // cdUp, until there is a sub-directory called .git
@@ -92,15 +94,15 @@ QDir dotGitDirectory(const KUrl& dirPath)
  * Whenever a directory is provided, change it for all the files in it but not inner directories,
  * that way we make sure we won't get into recursion,
  */
-static KUrl::List preventRecursion(const KUrl::List& urls)
+static QList<QUrl> preventRecursion(const QList<QUrl>& urls)
 {
-    KUrl::List ret;
-    foreach(const KUrl& url, urls) {
+    QList<QUrl> ret;
+    foreach(const QUrl& url, urls) {
         QDir d(url.toLocalFile());
         if(d.exists()) {
             QStringList entries = d.entryList(QDir::Files | QDir::NoDotAndDotDot);
             foreach(const QString& entry, entries) {
-                KUrl entryUrl = d.absoluteFilePath(entry);
+                QUrl entryUrl = QUrl::fromLocalFile(d.absoluteFilePath(entry));
                 ret += entryUrl;
             }
         } else
@@ -161,7 +163,7 @@ QString revisionInterval(const KDevelop::VcsRevision& rev, const KDevelop::VcsRe
     return ret;
 }
 
-QDir urlDir(const KUrl& url)
+QDir urlDir(const QUrl& url)
 {
     QFileInfo f(url.toLocalFile());
     if(f.isDir())
@@ -169,7 +171,7 @@ QDir urlDir(const KUrl& url)
     else
         return f.absoluteDir();
 }
-QDir urlDir(const KUrl::List& urls) { return urlDir(urls.first()); } //TODO: could be improved
+QDir urlDir(const QList<QUrl>& urls) { return urlDir(urls.first()); } //TODO: could be improved
 
 }
 
@@ -221,12 +223,12 @@ bool GitPlugin::hasModifications(const QDir& d)
     return !emptyOutput(lsFiles(d, QStringList("-m"), OutputJob::Silent));
 }
 
-bool GitPlugin::hasModifications(const QDir& repo, const KUrl& file)
+bool GitPlugin::hasModifications(const QDir& repo, const QUrl& file)
 {
     return !emptyOutput(lsFiles(repo, QStringList() << "-m" << file.path(), OutputJob::Silent));
 }
 
-void GitPlugin::additionalMenuEntries(QMenu* menu, const KUrl::List& urls)
+void GitPlugin::additionalMenuEntries(QMenu* menu, const QList<QUrl>& urls)
 {
     m_urls = urls;
     
@@ -270,19 +272,19 @@ QString GitPlugin::name() const
     return QLatin1String("Git");
 }
 
-KUrl GitPlugin::repositoryRoot(const KUrl& path)
+QUrl GitPlugin::repositoryRoot(const QUrl& path)
 {
-    return KUrl(dotGitDirectory(path).absolutePath());
+    return QUrl::fromLocalFile(dotGitDirectory(path).absolutePath());
 }
 
-bool GitPlugin::isValidDirectory(const KUrl & dirPath)
+bool GitPlugin::isValidDirectory(const QUrl & dirPath)
 {
     QDir dir=dotGitDirectory(dirPath);
 
     return dir.cd(".git") && dir.exists("HEAD");
 }
 
-bool GitPlugin::isVersionControlled(const KUrl &path)
+bool GitPlugin::isVersionControlled(const QUrl &path)
 {
     QFileInfo fsObject(path.toLocalFile());
     if (!fsObject.exists()) {
@@ -298,7 +300,7 @@ bool GitPlugin::isVersionControlled(const KUrl &path)
     return !otherFiles.empty();
 }
 
-VcsJob* GitPlugin::init(const KUrl &directory)
+VcsJob* GitPlugin::init(const QUrl &directory)
 {
     DVcsJob* job = new DVcsJob(urlDir(directory), this);
     job->setType(VcsJob::Import);
@@ -306,7 +308,7 @@ VcsJob* GitPlugin::init(const KUrl &directory)
     return job;
 }
 
-VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & source, const KUrl& dest, KDevelop::IBasicVersionControl::RecursionMode)
+VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & source, const QUrl& dest, KDevelop::IBasicVersionControl::RecursionMode)
 {
     DVcsJob* job = new GitCloneJob(urlDir(dest), this);
     job->setType(VcsJob::Import);
@@ -314,7 +316,7 @@ VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & source, const
     return job;
 }
 
-VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
+VcsJob* GitPlugin::add(const QList<QUrl>& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     if (localLocations.empty())
         return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
@@ -325,7 +327,7 @@ VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersion
     return job;
 }
 
-KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
+KDevelop::VcsJob* GitPlugin::status(const QList<QUrl>& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     if (localLocations.empty())
         return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
@@ -346,11 +348,11 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
     return job;
 }
 
-VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
+VcsJob* GitPlugin::diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
                         VcsDiff::Type /*type*/, IBasicVersionControl::RecursionMode recursion)
 {
     //TODO: control different types
-    
+
     DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this, KDevelop::OutputJob::Silent);
     job->setType(VcsJob::Diff);
     *job << "git" << "diff" << "--no-color" << "--no-ext-diff";
@@ -364,14 +366,19 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
         if(!revstr.isEmpty())
             *job << revstr;
     }
-    
-    *job << "--" << (recursion == IBasicVersionControl::Recursive ? fileOrDirectory : preventRecursion(fileOrDirectory));
-    
+
+    *job << "--";
+    if (recursion == IBasicVersionControl::Recursive) {
+        *job << fileOrDirectory;
+    } else {
+        *job << preventRecursion(QList<QUrl>() << fileOrDirectory);
+    }
+
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitDiffOutput(KDevelop::DVcsJob*)));
     return job;
 }
 
-VcsJob* GitPlugin::revert(const KUrl::List& localLocations, IBasicVersionControl::RecursionMode recursion)
+VcsJob* GitPlugin::revert(const QList<QUrl>& localLocations, IBasicVersionControl::RecursionMode recursion)
 {
     if(localLocations.isEmpty() )
         return errorsFound(i18n("Could not revert changes"), OutputJob::Verbose);
@@ -380,7 +387,7 @@ VcsJob* GitPlugin::revert(const KUrl::List& localLocations, IBasicVersionControl
     QString modified;
     for (const auto& file: localLocations) {
         if (hasModifications(repo, file)) {
-            modified.append(file.pathOrUrl() + "<br/>");
+            modified.append(file.toDisplayString(QUrl::PreferLocalFile) + "<br/>");
         }
     }
     if (!modified.isEmpty()) {
@@ -403,7 +410,7 @@ VcsJob* GitPlugin::revert(const KUrl::List& localLocations, IBasicVersionControl
 //TODO: git doesn't like empty messages, but "KDevelop didn't provide any message, it may be a bug" looks ugly...
 //If no files specified then commit already added files
 VcsJob* GitPlugin::commit(const QString& message,
-                             const KUrl::List& localLocations,
+                             const QList<QUrl>& localLocations,
                              KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     if (localLocations.empty() || message.isEmpty())
@@ -412,7 +419,7 @@ VcsJob* GitPlugin::commit(const QString& message,
     QDir dir = dotGitDirectory(localLocations.front());
     DVcsJob* job = new DVcsJob(dir, this);
     job->setType(VcsJob::Commit);
-    KUrl::List files = (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
+    QList<QUrl> files = (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
     addNotVersionedFiles(dir, files);
     
     *job << "git" << "commit" << "-m" << message;
@@ -420,20 +427,19 @@ VcsJob* GitPlugin::commit(const QString& message,
     return job;
 }
 
-void GitPlugin::addNotVersionedFiles(const QDir& dir, const KUrl::List& files)
+void GitPlugin::addNotVersionedFiles(const QDir& dir, const QList<QUrl>& files)
 {
     QStringList otherStr = getLsFiles(dir, QStringList() << "--others", KDevelop::OutputJob::Silent);
-    KUrl::List toadd, otherFiles;
+    QList<QUrl> toadd, otherFiles;
     
     foreach(const QString& file, otherStr) {
-        KUrl v(dir.absolutePath());
-        v.addPath(file);
+        QUrl v = QUrl::fromLocalFile(dir.absoluteFilePath(file));
         
         otherFiles += v;
     }
     
     //We add the files that are not versioned
-    foreach(const KUrl& file, files) {
+    foreach(const QUrl& file, files) {
         if(otherFiles.contains(file) && QFileInfo(file.toLocalFile()).isFile())
             toadd += file;
     }
@@ -456,26 +462,26 @@ bool isEmptyDirStructure(const QDir &dir)
     return true;
 }
 
-VcsJob* GitPlugin::remove(const KUrl::List& files)
+VcsJob* GitPlugin::remove(const QList<QUrl>& files)
 {
     if (files.isEmpty())
         return errorsFound(i18n("No files to remove"));
     QDir dotGitDir = dotGitDirectory(files.front());
 
 
-    KUrl::List files_(files);
+    QList<QUrl> files_(files);
 
-    QMutableListIterator<KUrl> i(files_);
+    QMutableListIterator<QUrl> i(files_);
     while (i.hasNext()) {
-        KUrl file = i.next();
+        QUrl file = i.next();
         QFileInfo fileInfo(file.toLocalFile());
 
         QStringList otherStr = getLsFiles(dotGitDir, QStringList() << "--others" << "--" << file.toLocalFile(), KDevelop::OutputJob::Silent);
         if(!otherStr.isEmpty()) {
             //remove files not under version control
-            KUrl::List otherFiles;
+            QList<QUrl> otherFiles;
             foreach(const QString &f, otherStr) {
-                otherFiles << KUrl::fromLocalFile(dotGitDir.path()+'/'+f);
+                otherFiles << QUrl::fromLocalFile(dotGitDir.path()+'/'+f);
             }
             if (fileInfo.isFile()) {
                 //if it's an unversioned file we are done, don't use git rm on it
@@ -507,7 +513,7 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
     return job;
 }
 
-VcsJob* GitPlugin::log(const KUrl& localLocation,
+VcsJob* GitPlugin::log(const QUrl& localLocation,
                 const KDevelop::VcsRevision& src, const KDevelop::VcsRevision& dst)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
@@ -522,7 +528,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
 }
 
 
-VcsJob* GitPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long int limit)
+VcsJob* GitPlugin::log(const QUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long int limit)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
     job->setType(VcsJob::Log);
@@ -538,7 +544,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& r
     return job;
 }
 
-KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&)
+KDevelop::VcsJob* GitPlugin::annotate(const QUrl &localLocation, const KDevelop::VcsRevision&)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
     job->setType(VcsJob::Annotate);
@@ -622,7 +628,7 @@ DVcsJob* GitPlugin::gitStash(const QDir& repository, const QStringList& args, Ou
     return job;
 }
 
-VcsJob* GitPlugin::tag(const KUrl& repository, const QString& commitMessage, const VcsRevision& rev, const QString& tagName)
+VcsJob* GitPlugin::tag(const QUrl& repository, const QString& commitMessage, const VcsRevision& rev, const QString& tagName)
 {
     DVcsJob* job = new DVcsJob(urlDir(repository), this);
     *job << "git" << "tag" << "-m" << commitMessage << tagName;
@@ -631,7 +637,7 @@ VcsJob* GitPlugin::tag(const KUrl& repository, const QString& commitMessage, con
     return job;
 }
 
-VcsJob* GitPlugin::switchBranch(const KUrl &repository, const QString &branch)
+VcsJob* GitPlugin::switchBranch(const QUrl &repository, const QString &branch)
 {
     QDir d=urlDir(repository);
     
@@ -645,7 +651,7 @@ VcsJob* GitPlugin::switchBranch(const KUrl &repository, const QString &branch)
     return job;
 }
 
-VcsJob* GitPlugin::branch(const KUrl& repository, const KDevelop::VcsRevision& rev, const QString& branchName)
+VcsJob* GitPlugin::branch(const QUrl& repository, const KDevelop::VcsRevision& rev, const QString& branchName)
 {
     Q_ASSERT(!branchName.isEmpty());
     
@@ -657,7 +663,7 @@ VcsJob* GitPlugin::branch(const KUrl& repository, const KDevelop::VcsRevision& r
     return job;
 }
 
-VcsJob* GitPlugin::deleteBranch(const KUrl& repository, const QString& branchName)
+VcsJob* GitPlugin::deleteBranch(const QUrl& repository, const QString& branchName)
 {
     DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
     *job << "git" << "branch" << "-D" << branchName;
@@ -665,7 +671,7 @@ VcsJob* GitPlugin::deleteBranch(const KUrl& repository, const QString& branchNam
     return job;
 }
 
-VcsJob* GitPlugin::renameBranch(const KUrl& repository, const QString& oldBranchName, const QString& newBranchName)
+VcsJob* GitPlugin::renameBranch(const QUrl& repository, const QString& oldBranchName, const QString& newBranchName)
 {
     DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
     *job << "git" << "branch" << "-m" << newBranchName << oldBranchName;
@@ -673,7 +679,7 @@ VcsJob* GitPlugin::renameBranch(const KUrl& repository, const QString& oldBranch
     return job;
 }
 
-VcsJob* GitPlugin::currentBranch(const KUrl& repository)
+VcsJob* GitPlugin::currentBranch(const QUrl& repository)
 {
     DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
     job->setIgnoreError(true);
@@ -689,7 +695,7 @@ void GitPlugin::parseGitCurrentBranch(DVcsJob* job)
     job->setResults(out);
 }
 
-VcsJob* GitPlugin::branches(const KUrl &repository)
+VcsJob* GitPlugin::branches(const QUrl &repository)
 {
     DVcsJob* job=new DVcsJob(urlDir(repository));
     *job << "git" << "branch" << "-a";
@@ -909,11 +915,12 @@ QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
 
 void GitPlugin::initBranchHash(const QString &repo)
 {
-    QStringList gitBranches = runSynchronously(branches(KUrl(repo))).toStringList();
+    const QUrl repoUrl = QUrl::fromLocalFile(repo);
+    QStringList gitBranches = runSynchronously(branches(repoUrl)).toStringList();
     kDebug() << "BRANCHES: " << gitBranches;
     //Now root branch is the current branch. In future it should be the longest branch
     //other commitLists are got with git-rev-lits branch ^br1 ^ br2
-    QString root = runSynchronously(currentBranch(repo)).toString();
+    QString root = runSynchronously(currentBranch(repoUrl)).toString();
     QScopedPointer<DVcsJob> job(gitRevList(repo, QStringList(root)));
     bool ret = job->exec();
     Q_ASSERT(ret && job->status()==VcsJob::JobSucceeded && "TODO: provide a fall back in case of failing");
@@ -1062,7 +1069,7 @@ void GitPlugin::parseGitDiffOutput(DVcsJob* job)
 {
     VcsDiff diff;
     diff.setDiff(job->output());
-    diff.setBaseDiff(repositoryRoot(KUrl(job->directory().absolutePath())));
+    diff.setBaseDiff(repositoryRoot(QUrl::fromLocalFile(job->directory().absolutePath())));
     
     job->setResults(qVariantFromValue(diff));
 }
@@ -1086,19 +1093,18 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
 {
     QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
     
-    KUrl d = job->directory().absolutePath();
-    QMap<KUrl, VcsStatusInfo::State> allStatus;
+    QDir dir = job->directory();
+    QMap<QUrl, VcsStatusInfo::State> allStatus;
     foreach(const QString& line, outputLines) {
         VcsStatusInfo::State status = lsfilesToState(line[0].toLatin1());
         
-        KUrl url = d;
-        url.addPath(line.right(line.size()-2));
+        QUrl url = QUrl::fromLocalFile(dir.absoluteFilePath(line.right(line.size()-2)));
         
         allStatus[url] = status;
     }
     
     QVariantList statuses;
-    QMap< KUrl, VcsStatusInfo::State >::const_iterator it = allStatus.constBegin(), itEnd=allStatus.constEnd();
+    QMap< QUrl, VcsStatusInfo::State >::const_iterator it = allStatus.constBegin(), itEnd=allStatus.constEnd();
     for(; it!=itEnd; ++it) {
         
         VcsStatusInfo status;
@@ -1114,13 +1120,11 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
 void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 {
     QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
-    KUrl workingDir = job->directory().absolutePath();
-    KUrl dotGit = dotGitDirectory(workingDir).absolutePath();;
-    dotGit.adjustPath(KUrl::AddTrailingSlash);
-    workingDir.adjustPath(KUrl::AddTrailingSlash);
+    QDir workingDir = job->directory();
+    QDir dotGit = dotGitDirectory(QUrl::fromLocalFile(workingDir.absolutePath()));
     
     QVariantList statuses;
-    KUrl::List processedFiles;
+    QList<QUrl> processedFiles;
     
     foreach(const QString& line, outputLines) {
         //every line is 2 chars for the status, 1 space then the file desc
@@ -1130,7 +1134,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
         int arrow = curr.indexOf(" -> ");
         if(arrow>=0) {
             VcsStatusInfo status;
-            status.setUrl(KUrl(dotGit, curr.left(arrow)));
+            status.setUrl(QUrl::fromLocalFile(dotGit.absoluteFilePath(curr.left(arrow))));
             status.setState(VcsStatusInfo::ItemDeleted);
             statuses.append(qVariantFromValue<VcsStatusInfo>(status));
             processedFiles += status.url();
@@ -1143,7 +1147,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
         }
         
         VcsStatusInfo status;
-        status.setUrl(KUrl(dotGit, curr));
+        status.setUrl(QUrl::fromLocalFile(dotGit.absoluteFilePath(curr)));
         status.setState(messageToState(state));
         processedFiles.append(status.url());
         
@@ -1160,13 +1164,13 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
     //here we add the already up to date files
     QStringList files = getLsFiles(job->directory(), QStringList() << "-c" << "--" << paths, OutputJob::Silent);
     foreach(const QString& file, files) {
-        KUrl fileUrl(workingDir, file);
-        
+        QUrl fileUrl = QUrl::fromLocalFile(workingDir.absoluteFilePath(file));
+
         if(!processedFiles.contains(fileUrl)) {
             VcsStatusInfo status;
             status.setUrl(fileUrl);
             status.setState(VcsStatusInfo::ItemUpToDate);
-            
+
             statuses.append(qVariantFromValue<VcsStatusInfo>(status));
         }
     }
@@ -1213,7 +1217,7 @@ DVcsJob* GitPlugin::gitRevParse(const QString &repository, const QStringList &ar
 
 DVcsJob* GitPlugin::gitRevList(const QString& directory, const QStringList& args)
 {
-    DVcsJob* job = new DVcsJob(urlDir(directory), this, KDevelop::OutputJob::Silent);
+    DVcsJob* job = new DVcsJob(urlDir(QUrl::fromLocalFile(directory)), this, KDevelop::OutputJob::Silent);
     {
         *job << "git" << "rev-list" << args;
         return job;
@@ -1278,13 +1282,13 @@ void StandardJob::result(KJob* job)
     m_status=job->error() == 0? JobSucceeded : JobFailed; emitResult();
 }
 
-VcsJob* GitPlugin::copy(const KUrl& localLocationSrc, const KUrl& localLocationDstn)
+VcsJob* GitPlugin::copy(const QUrl& localLocationSrc, const QUrl& localLocationDstn)
 {
     //TODO: Probably we should "git add" after
     return new StandardJob(this, KIO::copy(localLocationSrc, localLocationDstn), KDevelop::OutputJob::Silent);
 }
 
-VcsJob* GitPlugin::move(const KUrl& source, const KUrl& destination)
+VcsJob* GitPlugin::move(const QUrl& source, const QUrl& destination)
 {
     QDir dir = urlDir(source);
 
@@ -1309,10 +1313,10 @@ VcsJob* GitPlugin::move(const KUrl& source, const KUrl& destination)
 
 void GitPlugin::parseGitRepoLocationOutput(DVcsJob* job)
 {
-    job->setResults(qVariantFromValue(KUrl(job->output())));
+    job->setResults(QVariant::fromValue(QUrl::fromLocalFile(job->output())));
 }
 
-VcsJob* GitPlugin::repositoryLocation(const KUrl& localLocation)
+VcsJob* GitPlugin::repositoryLocation(const QUrl& localLocation)
 {
     DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
     //Probably we should check first if origin is the proper remote we have to use but as a first attempt it works
@@ -1321,7 +1325,7 @@ VcsJob* GitPlugin::repositoryLocation(const KUrl& localLocation)
     return job;
 }
 
-VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation)
+VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const QUrl& localRepositoryLocation)
 {
     DVcsJob* job = new DVcsJob(urlDir(localRepositoryLocation), this);
     job->setCommunicationMode(KProcess::MergedChannels);
@@ -1331,7 +1335,7 @@ VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, con
     return job;
 }
 
-VcsJob* GitPlugin::push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst)
+VcsJob* GitPlugin::push(const QUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst)
 {
     DVcsJob* job = new DVcsJob(urlDir(localRepositoryLocation), this);
     job->setCommunicationMode(KProcess::MergedChannels);
@@ -1341,17 +1345,17 @@ VcsJob* GitPlugin::push(const KUrl& localRepositoryLocation, const KDevelop::Vcs
     return job;
 }
 
-VcsJob* GitPlugin::resolve(const KUrl::List& localLocations, IBasicVersionControl::RecursionMode recursion)
+VcsJob* GitPlugin::resolve(const QList<QUrl>& localLocations, IBasicVersionControl::RecursionMode recursion)
 {
     return add(localLocations, recursion);
 }
 
-VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsRevision& rev, IBasicVersionControl::RecursionMode recursion)
+VcsJob* GitPlugin::update(const QList<QUrl>& localLocations, const KDevelop::VcsRevision& rev, IBasicVersionControl::RecursionMode recursion)
 {
     if(rev.revisionType()==VcsRevision::Special && rev.revisionValue().value<VcsRevision::RevisionSpecialType>()==VcsRevision::Head) {
         return pull(VcsLocation(), localLocations.first());
     } else {
-        DVcsJob* job = new DVcsJob(urlDir(localLocations.first().toLocalFile()), this);
+        DVcsJob* job = new DVcsJob(urlDir(localLocations.first()), this);
         {
             //Probably we should check first if origin is the proper remote we have to use but as a first attempt it works
             *job << "git" << "checkout" << rev.revisionValue().toString() << "--";
@@ -1361,7 +1365,7 @@ VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsR
     }
 }
 
-void GitPlugin::setupCommitMessageEditor(const KUrl& localLocation, KTextEdit* editor) const
+void GitPlugin::setupCommitMessageEditor(const QUrl& localLocation, KTextEdit* editor) const
 {
     new GitMessageHighlighter(editor);
     QFile mergeMsgFile(dotGitDirectory(localLocation).filePath(".git/MERGE_MSG"));
@@ -1403,7 +1407,7 @@ QString GitPlugin::errorDescription() const
     return m_errorDescription;
 }
 
-void GitPlugin::registerRepositoryForCurrentBranchChanges(const KUrl& repository)
+void GitPlugin::registerRepositoryForCurrentBranchChanges(const QUrl& repository)
 {
     QDir dir = dotGitDirectory(repository);
     QString headFile = dir.absoluteFilePath(".git/HEAD");
@@ -1413,10 +1417,9 @@ void GitPlugin::registerRepositoryForCurrentBranchChanges(const KUrl& repository
 void GitPlugin::fileChanged(const QString& file)
 {
     Q_ASSERT(file.endsWith("HEAD"));
-    KUrl fileUrl(KUrl::fromPath(file));
-    fileUrl = fileUrl.upUrl(); //SMTH/.git/HEAD -> SMTH/.git/
-    fileUrl = fileUrl.upUrl(); //SMTH/.git/ -> SMTH/
-    
+    //SMTH/.git/HEAD -> SMTH/
+    const QUrl fileUrl = Path(file).parent().parent().toUrl();
+
     //We need to delay the emitted signal, otherwise the branch hasn't change yet
     //and the repository is not functional
     m_branchesChange.append(fileUrl);

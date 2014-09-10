@@ -12,7 +12,7 @@
 
 #include <kassistantdialog.h>
 #include <QMap>
-#include <kurl.h>
+#include <QUrl>
 
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
@@ -31,9 +31,9 @@ class ApplicationInfo
 {
 public:
     QString name;
-    KUrl location;
+    QUrl location;
     QString vcsPluginName;
-    KUrl sourceLocation;
+    QUrl sourceLocation;
     KDevelop::VcsLocation repository;
     QString importCommitMessage;
     QString appTemplate;

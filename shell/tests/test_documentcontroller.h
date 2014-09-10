@@ -24,7 +24,7 @@
 #include <QtCore/QObject>
 #include <KTemporaryFile>
 #include <KTempDir>
-#include <KUrl>
+#include <QUrl>
 
 namespace KDevelop
 {
@@ -49,9 +49,10 @@ private slots :
     void testSaveSomeDocuments();
     void testSaveAllDocuments();
     void testCloseAllDocuments();
+    void testEmptyUrl();
 
 private :
-    KUrl createFile(const KTempDir& dir, const QString& filename);
+    QUrl createFile(const KTempDir& dir, const QString& filename);
 
     IDocumentController* m_subject;
     KTempDir m_tempDir;

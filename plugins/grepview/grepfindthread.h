@@ -2,7 +2,7 @@
 #define KDEVPLATFORM_PLUGIN_GREPFINDTHREAD_H
 
 #include <QThread>
-#include <KUrl>
+#include <QUrl>
 
 class GrepFindFilesThread : public QThread
 {
@@ -18,14 +18,14 @@ public:
      * @param[in] exclusions Space-separated list of wildcard patterns to exclude. Matches the whole path.
      * @param[in] onlyProject Whether the search should only consider project files.
      */
-    GrepFindFilesThread(QObject *parent, const QList<KUrl> &startDirs, int depth,
+    GrepFindFilesThread(QObject *parent, const QList<QUrl> &startDirs, int depth,
                     const QString &patterns, const QString &exclusions,
                     bool onlyProject);
     /**
      * @brief Returns the list of found files
      * @return List of found files
      */
-    KUrl::List files() const;
+    QList<QUrl> files() const;
     /**
      * @brief Sets the internal m_tryAbort flag to @c true
      * @note It is not guaranteed that the thread stops its work immediately.
@@ -51,12 +51,12 @@ public:
 protected:
     void run();
 private:
-    QList<KUrl> m_startDirs;
+    QList<QUrl> m_startDirs;
     QString m_patString;
     QString m_exclString;
     int m_depth;
     bool m_project;
-    KUrl::List m_files;
+    QList<QUrl> m_files;
     volatile bool m_tryAbort;
     // creating with no parameters would be bad
     GrepFindFilesThread();

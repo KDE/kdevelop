@@ -21,8 +21,8 @@
 #ifndef KDEVPLATFORM_PLUGIN_REVIEWBOARDJOBS_H
 #define KDEVPLATFORM_PLUGIN_REVIEWBOARDJOBS_H
 
+#include <QUrl>
 #include <KJob>
-#include <KUrl>
 #include <QList>
 #include <QPair>
 #include <QNetworkAccessManager>
@@ -41,7 +41,7 @@ namespace ReviewBoard
     {
         Q_OBJECT
         public:
-            HttpCall(const KUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, const QByteArray& post, bool multipart, QObject* parent);
+            HttpCall(const QUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, const QByteArray& post, bool multipart, QObject* parent);
 
             virtual void start();
 
@@ -53,7 +53,7 @@ namespace ReviewBoard
         private:
             QVariant m_result;
             QNetworkReply* m_reply;
-            KUrl m_requrl;
+            QUrl m_requrl;
             QByteArray m_post;
 
             QNetworkAccessManager m_manager;
@@ -64,14 +64,14 @@ namespace ReviewBoard
     {
         Q_OBJECT
         public:
-            ReviewRequest(const KUrl& server, const QString& id, QObject* parent)
+            ReviewRequest(const QUrl& server, const QString& id, QObject* parent)
                           : KJob(parent), m_server(server), m_id(id) {}
             QString requestId() const { return m_id; }
             void setRequestId(QString id) { m_id = id; }
-            KUrl server() const { return m_server; }
+            QUrl server() const { return m_server; }
 
         private:
-            KUrl m_server;
+            QUrl m_server;
             QString m_id;
     };
 
@@ -79,7 +79,7 @@ namespace ReviewBoard
     {
         Q_OBJECT
         public:
-            NewRequest(const KUrl& server, const QString& project, QObject* parent = 0);
+            NewRequest(const QUrl& server, const QString& project, QObject* parent = 0);
             virtual void start();
 
         private slots:
@@ -94,7 +94,7 @@ namespace ReviewBoard
     {
         Q_OBJECT
         public:
-            SubmitPatchRequest(const KUrl& server, const KUrl& patch, const QString& basedir, const QString& id, QObject* parent = 0);
+            SubmitPatchRequest(const QUrl &server, const QUrl& patch, const QString& basedir, const QString& id, QObject* parent = 0);
             virtual void start();
 
         private slots:
@@ -102,7 +102,7 @@ namespace ReviewBoard
 
         private:
             HttpCall* m_uploadpatch;
-            KUrl m_patch;
+            QUrl m_patch;
             QString m_basedir;
     };
 
@@ -110,7 +110,7 @@ namespace ReviewBoard
     {
         Q_OBJECT
         public:
-            ProjectsListRequest(const KUrl& server, QObject* parent = 0);
+            ProjectsListRequest(const QUrl &server, QObject* parent = 0);
             virtual void start();
             QVariantList repositories() const;
 
@@ -119,7 +119,7 @@ namespace ReviewBoard
             void done(KJob* done);
 
         private:
-            KUrl m_server;
+            QUrl m_server;
             QVariantList m_repositories;
     };
 
@@ -127,7 +127,7 @@ namespace ReviewBoard
     {
         Q_OBJECT
         public:
-            ReviewListRequest(const KUrl& server, const QString& user, const QString& reviewStatus, QObject* parent = 0);
+            ReviewListRequest(const QUrl& server, const QString& user, const QString& reviewStatus, QObject* parent = 0);
             virtual void start();
             QVariantList reviews() const;
 
@@ -136,13 +136,13 @@ namespace ReviewBoard
             void done(KJob* done);
 
         private:
-            KUrl m_server;
+            QUrl m_server;
             QString m_user;
             QString m_reviewStatus;
             QVariantList m_reviews;
     };
 
-    QByteArray urlToData(const KUrl&);
+    QByteArray urlToData(const QUrl&);
 }
 
 #endif

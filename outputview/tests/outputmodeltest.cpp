@@ -70,7 +70,7 @@ void OutputModelTest::bench()
     QFETCH(KDevelop::OutputModel::OutputFilterStrategy, strategy);
     QFETCH(QStringList, lines);
 
-    OutputModel testee(KUrl("/tmp/build-foo"));
+    OutputModel testee(QUrl::fromLocalFile("/tmp/build-foo"));
     testee.setFilteringStrategy(strategy);
 
     quint64 processEventsCounter = 1;

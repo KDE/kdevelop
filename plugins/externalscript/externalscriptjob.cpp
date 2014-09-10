@@ -47,7 +47,7 @@
 #include <project/projectmodel.h>
 #include <util/path.h>
 
-ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const KUrl& url, ExternalScriptPlugin* parent )
+ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url, ExternalScriptPlugin* parent )
     : KDevelop::OutputJob( parent ),
     m_proc( 0 ), m_lineMaker( 0 ),
     m_outputMode( item->outputMode() ), m_inputMode( item->inputMode() ),
@@ -123,7 +123,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const KUrl& url,
     command.replace( "%i", QString::number( QCoreApplication::applicationPid() ) );
 
   if ( !m_url.isEmpty() ) {
-    const KUrl url = m_url;
+    const QUrl url = m_url;
 
     KDevelop::ProjectFolderItem* folder = 0;
     if ( KDevelop::ICore::self()->projectController()->findProjectForUrl( url ) ) {
@@ -142,10 +142,10 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const KUrl& url,
       ///TODO: make those placeholders escapeable
       if(item->performParameterReplacement())
       {
-        command.replace( "%d", KShell::quoteArg( m_url.pathOrUrl() ) );
+        command.replace( "%d", KShell::quoteArg( m_url.toString(QUrl::PreferLocalFile) ) );
 
         if ( KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl( m_url ) ) {
-          command.replace( "%p", project->folder().pathOrUrl() );
+          command.replace( "%p", project->path().pathOrUrl() );
         }
       }
     } else {
@@ -157,10 +157,10 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const KUrl& url,
       ///TODO: make those placeholders escapeable
       if(item->performParameterReplacement())
       {
-        command.replace( "%u", KShell::quoteArg( m_url.pathOrUrl() ) );
+        command.replace( "%u", KShell::quoteArg( m_url.toString() ) );
 
         ///TODO: does that work with remote files?
-        QFileInfo info( m_url.pathOrUrl() );
+        QFileInfo info( m_url.toString(QUrl::PreferLocalFile) );
 
         command.replace( "%f", KShell::quoteArg( info.filePath() ) );
         command.replace( "%b", KShell::quoteArg( info.baseName() ) );
@@ -172,7 +172,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const KUrl& url,
         }
 
         if ( KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl( m_url ) ) {
-          command.replace( "%p", project->folder().pathOrUrl() );
+          command.replace( "%p", project->path().pathOrUrl() );
         }
       }
     }

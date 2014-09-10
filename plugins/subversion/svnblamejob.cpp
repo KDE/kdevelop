@@ -44,7 +44,7 @@ void SvnInternalBlameJob::run()
 {
     initBeforeRun();
 
-    QByteArray ba = location().toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
+    QByteArray ba = location().toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
     
     svn::Client cli(m_ctxt);
     svn::AnnotatedFile* file;
@@ -105,13 +105,13 @@ void SvnInternalBlameJob::run()
     }
 }
 
-void SvnInternalBlameJob::setLocation( const KUrl& url )
+void SvnInternalBlameJob::setLocation( const QUrl &url )
 {
     QMutexLocker l( m_mutex );
     m_location = url;
 }
 
-KUrl SvnInternalBlameJob::location() const
+QUrl SvnInternalBlameJob::location() const
 {
     QMutexLocker l( m_mutex );
     return m_location;
@@ -176,7 +176,7 @@ SvnInternalJobBase* SvnBlameJob::internalJob() const
     return m_job;
 }
 
-void SvnBlameJob::setLocation( const KUrl& url )
+void SvnBlameJob::setLocation( const QUrl &url )
 {
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setLocation( url );

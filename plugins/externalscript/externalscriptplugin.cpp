@@ -244,7 +244,7 @@ QStandardItemModel* ExternalScriptPlugin::model() const
   return m_model;
 }
 
-void ExternalScriptPlugin::execute( ExternalScriptItem* item, const KUrl& url ) const
+void ExternalScriptPlugin::execute( ExternalScriptItem* item, const QUrl& url ) const
 {
   ExternalScriptJob* job = new ExternalScriptJob( item, url, const_cast<ExternalScriptPlugin*>(this) );
 
@@ -254,7 +254,7 @@ void ExternalScriptPlugin::execute( ExternalScriptItem* item, const KUrl& url ) 
 void ExternalScriptPlugin::execute(ExternalScriptItem* item) const
 {
   auto document = KDevelop::ICore::self()->documentController()->activeDocument();
-  execute( item, document ? document->url() : KUrl() );
+  execute( item, document ? document->url() : QUrl() );
 }
 
 bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDirectory ) const
@@ -262,7 +262,7 @@ bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDire
   // We extend ExternalScriptJob so that it deletes the temporarily created item on destruction
   class ExternalScriptJobOwningItem : public ExternalScriptJob {
   public:
-    ExternalScriptJobOwningItem( ExternalScriptItem* item, const KUrl &url, ExternalScriptPlugin* parent ) : ExternalScriptJob(item, url, parent), m_item(item) {
+    ExternalScriptJobOwningItem( ExternalScriptItem* item, const QUrl &url, ExternalScriptPlugin* parent ) : ExternalScriptJob(item, url, parent), m_item(item) {
     }
     ~ExternalScriptJobOwningItem() {
       delete m_item;
@@ -275,7 +275,7 @@ bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDire
   item->setWorkingDirectory(workingDirectory);
   item->setPerformParameterReplacement(false);
   debug() << "executing command " << command << " in dir " << workingDirectory << " as external script";
-  ExternalScriptJobOwningItem* job = new ExternalScriptJobOwningItem( item, KUrl(), const_cast<ExternalScriptPlugin*>(this) );
+  ExternalScriptJobOwningItem* job = new ExternalScriptJobOwningItem( item, QUrl(), const_cast<ExternalScriptPlugin*>(this) );
   // When a command is executed, for example through the terminal, we don't want the command output to be risen
   job->setVerbosity(KDevelop::OutputJob::Silent);
   
@@ -313,7 +313,7 @@ void ExternalScriptPlugin::executeScriptFromContextMenu() const
   ExternalScriptItem* item = action->data().value<ExternalScriptItem*>();
   Q_ASSERT( item );
 
-  foreach( const KUrl& url, m_urls) {
+  foreach( const QUrl& url, m_urls) {
     KDevelop::ICore::self()->documentController()->openDocument( url );
     execute( item, url );
   }

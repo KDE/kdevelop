@@ -25,7 +25,7 @@
 #include "topducontext.h"
 #include "parsingenvironment.h"
 
-class KUrl;
+class QUrl;
 
 namespace KDevelop
 {
@@ -106,19 +106,19 @@ public:
    *
    * @note The duchain must be at least read-locked locked when this is called!
    * */
-  Q_SCRIPTABLE TopDUContext* chainForDocument(const KUrl& document, bool proxyContext = false) const;
+  Q_SCRIPTABLE TopDUContext* chainForDocument(const QUrl& document, bool proxyContext = false) const;
   Q_SCRIPTABLE TopDUContext* chainForDocument(const IndexedString& document, bool proxyContext = false) const;
 
   /**
    * Return all chains for the given document that are currently in memory.
    * This does not load any chains from disk.
    * */
-  Q_SCRIPTABLE QList<TopDUContext*> chainsForDocument(const KUrl& document) const;
+  Q_SCRIPTABLE QList<TopDUContext*> chainsForDocument(const QUrl& document) const;
 
   /**
    * Return all chains for the given document that are currently in memory.
    * This does not load any chains from disk.
-   * Should be preferred over the KUrl version.
+   * Should be preferred over the QUrl version.
    * */
   Q_SCRIPTABLE QList<TopDUContext*> chainsForDocument(const IndexedString& document) const;
 
@@ -129,14 +129,14 @@ public:
    *
    * @note The duchain must be at least read-locked locked when this is called!
    * */
-  Q_SCRIPTABLE TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment, bool proxyContext = false) const;
+  Q_SCRIPTABLE TopDUContext* chainForDocument(const QUrl& document, const ParsingEnvironment* environment, bool proxyContext = false) const;
 
   /**
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
    * When no fitting chain is in memory, one may be loaded from disk.
    * @param proxyContext If this is true, only contexts are found that have an ParsingEnvironmentFile that has the proxy-flag set. Else, only content-contexts will be returned.
    *
-   * Prefer this over the KUrl version.
+   * Prefer this over the QUrl version.
    *
    * @note The duchain must be at least read-locked locked when this is called!
    * */
@@ -150,7 +150,7 @@ public:
    * 
    ** @param proxyContext If this is true, only contexts are found that have an ParsingEnvironmentFile that has the proxy-flag set. Else, only content-contexts will be returned.
    *
-   * Prefer this over the KUrl version.
+   * Prefer this over the QUrl version.
    *
    * @note The duchain must be at least read-locked locked when this is called!
    * */
@@ -190,10 +190,10 @@ public:
   Q_SCRIPTABLE IndexedString urlForIndex(uint index) const;
   
   /// Only used for debugging at the moment
-  Q_SCRIPTABLE QList<KUrl> documents() const;
+  Q_SCRIPTABLE QList<QUrl> documents() const;
 
   /// Only used for debugging at the moment
-  /// Prefer that over the KUrl version for performance reasons
+  /// Prefer that over the QUrl version for performance reasons
   Q_SCRIPTABLE QList<IndexedString> indexedDocuments() const;
 
   /**

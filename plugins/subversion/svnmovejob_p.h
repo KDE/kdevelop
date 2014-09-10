@@ -28,18 +28,18 @@ class SvnInternalMoveJob : public SvnInternalJobBase
     Q_OBJECT
 public:
     SvnInternalMoveJob( SvnJobBase* parent = 0 );
-    void setSourceLocation( const KUrl& );
-    void setDestinationLocation( const KUrl& );
+    void setSourceLocation( const QUrl& );
+    void setDestinationLocation( const QUrl& );
     void setForce( bool );
 
-    KUrl sourceLocation() const;
-    KUrl destinationLocation() const;
+    QUrl sourceLocation() const;
+    QUrl destinationLocation() const;
     bool force() const;
 protected:
     void run();
 private:
-    KUrl m_sourceLocation;
-    KUrl m_destinationLocation;
+    QUrl m_sourceLocation;
+    QUrl m_destinationLocation;
     bool m_force;
 };
 

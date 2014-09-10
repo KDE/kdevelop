@@ -39,8 +39,8 @@ class StashPatchSource : public KDevelop::IPatchSource
 public:
     StashPatchSource(const QString & stashName, GitPlugin * patch, const QDir & baseDir);
     virtual ~StashPatchSource();
-    virtual KUrl baseDir() const;
-    virtual KUrl file() const;
+    virtual QUrl baseDir() const;
+    virtual QUrl file() const;
     virtual void update();
     virtual bool isAlreadyApplied() const;
     virtual QString name() const;
@@ -54,7 +54,7 @@ private:
     QString m_stashName;
     GitPlugin * m_plugin;
     QDir m_baseDir;
-    KUrl m_patchFile;
+    QUrl m_patchFile;
 };
 
 #endif // STASHPATCHSOURCE_H

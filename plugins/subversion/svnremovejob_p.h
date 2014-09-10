@@ -28,17 +28,17 @@ class SvnInternalRemoveJob : public SvnInternalJobBase
     Q_OBJECT
 public:
     SvnInternalRemoveJob( SvnJobBase* parent = 0 );
-    void setLocations( const KUrl::List& );
+    void setLocations( const QList<QUrl>& );
     void setForce( bool );
 
-    KUrl::List locations() const;
+    QList<QUrl> locations() const;
 
     bool force() const;
 
 protected:
     void run();
 private:
-    KUrl::List m_locations;
+    QList<QUrl> m_locations;
     bool m_force;
 };
 

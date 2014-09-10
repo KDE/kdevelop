@@ -48,7 +48,7 @@ void SvnInternalLogJob::run()
              this, SIGNAL(logEvent(KDevelop::VcsEvent)) );
     try
     {
-        QByteArray ba = location().toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
+        QByteArray ba = location().toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
         cli.log( ba.data(),
                  createSvnCppRevisionFromVcsRevision( startRevision() ),
                  createSvnCppRevisionFromVcsRevision( endRevision() ),
@@ -63,13 +63,13 @@ void SvnInternalLogJob::run()
     }
 }
 
-void SvnInternalLogJob::setLocation( const KUrl& url )
+void SvnInternalLogJob::setLocation( const QUrl &url )
 {
     QMutexLocker l( m_mutex );
     m_location = url;
 }
 
-KUrl SvnInternalLogJob::location() const
+QUrl SvnInternalLogJob::location() const
 {
     QMutexLocker l( m_mutex );
     return m_location;
@@ -147,7 +147,7 @@ SvnInternalJobBase* SvnLogJob::internalJob() const
     return m_job;
 }
 
-void SvnLogJob::setLocation( const KUrl& url )
+void SvnLogJob::setLocation( const QUrl &url )
 {
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setLocation( url );

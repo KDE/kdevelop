@@ -125,7 +125,7 @@ SourceFormatterController::~SourceFormatterController()
 {
 }
 
-ISourceFormatter* SourceFormatterController::formatterForUrl(const KUrl &url)
+ISourceFormatter* SourceFormatterController::formatterForUrl(const QUrl &url)
 {
 	QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
 	return formatterForMimeType(mime);
@@ -224,7 +224,7 @@ QString SourceFormatterController::indentationMode(const QMimeType& mime)
 	return "none";
 }
 
-QString SourceFormatterController::addModelineForCurrentLang(QString input, const KUrl& url, const QMimeType& mime)
+QString SourceFormatterController::addModelineForCurrentLang(QString input, const QUrl& url, const QMimeType& mime)
 {
 	if( !isMimeTypeSupported(mime) )
 		return input;
@@ -514,13 +514,13 @@ void SourceFormatterController::formatFiles()
 	formatFiles(m_urls);
 }
 
-void SourceFormatterController::formatFiles(KUrl::List &list)
+void SourceFormatterController::formatFiles(QList<QUrl> &list)
 {
 	//! \todo IStatus
 	for (int fileCount = 0; fileCount < list.size(); fileCount++) {
 		// check mimetype
 		QMimeType mime = QMimeDatabase().mimeTypeForUrl(list[fileCount]);
-		kDebug() << "Checking file " << list[fileCount].pathOrUrl() << " of mime type " << mime.name() << endl;
+		qDebug() << "Checking file " << list[fileCount] << " of mime type " << mime.name() << endl;
 		ISourceFormatter *formatter = formatterForMimeType(mime);
 		if (!formatter) // unsupported mime type
 			continue;
@@ -529,12 +529,12 @@ void SourceFormatterController::formatFiles(KUrl::List &list)
 		KDevelop::IDocumentController *docController = KDevelop::ICore::self()->documentController();
 		KDevelop::IDocument *doc = docController->documentForUrl(list[fileCount]);
 		if (doc) {
-			kDebug() << "Processing file " << list[fileCount].pathOrUrl() << "opened in editor" << endl;
+			qDebug() << "Processing file " << list[fileCount] << "opened in editor" << endl;
 			formatDocument(doc, formatter, mime);
 			continue;
 		}
 
-		kDebug() << "Processing file " << list[fileCount].pathOrUrl() << endl;
+		qDebug() << "Processing file " << list[fileCount] << endl;
 		KIO::StoredTransferJob *job = KIO::storedGet(list[fileCount]);
 		if (job->exec()) {
 			QByteArray data = job->data();

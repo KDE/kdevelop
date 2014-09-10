@@ -12,7 +12,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <kurl.h>
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <KLocalizedString>

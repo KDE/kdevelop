@@ -25,8 +25,7 @@
 
 #include <QVariant>
 #include <QDateTime>
-
-#include <kurl.h>
+#include <QUrl>
 
 #include <vcs/vcsrevision.h>
 
@@ -39,16 +38,16 @@ class SvnInfoHolder
 {
 public:
     QString name;
-    KUrl url;
+    QUrl url;
     qlonglong rev;
     int kind;
-    KUrl repoUrl;
+    QUrl repoUrl;
     QString repouuid;
     qlonglong lastChangedRev;
     QDateTime lastChangedDate;
     QString lastChangedAuthor;
     int scheduled;
-    KUrl copyFromUrl;
+    QUrl copyFromUrl;
     qlonglong copyFromRevision;
     QDateTime textTime;
     QDateTime propertyTime;
@@ -77,7 +76,7 @@ public:
     void start();
     SvnInternalJobBase* internalJob() const;
 
-    void setLocation( const KUrl& location );
+    void setLocation( const QUrl &location );
     void setProvideInformation( ProvideInformationType );
     void setProvideRevisionType( KDevelop::VcsRevision::RevisionType );
 public slots:

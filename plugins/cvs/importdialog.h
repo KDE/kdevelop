@@ -12,7 +12,7 @@
 #define KDEVPLATFORM_PLUGIN_IMPORTDIALOG_H
 
 #include <KDialog>
-#include <KUrl>
+#include <QUrl>
 #include <KJob>
 
 class ImportMetadataWidget;
@@ -28,7 +28,7 @@ class ImportDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ImportDialog(CvsPlugin *plugin, const KUrl& url, QWidget* parent=0);
+    ImportDialog(CvsPlugin *plugin, const QUrl &url, QWidget* parent=0);
     virtual ~ImportDialog();
 
 public slots:
@@ -36,7 +36,7 @@ public slots:
     void jobFinished(KJob* job);
 
 private:
-    KUrl m_url;
+    QUrl m_url;
     CvsPlugin* m_plugin;
     ImportMetadataWidget* m_widget;
 };

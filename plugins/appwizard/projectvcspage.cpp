@@ -93,7 +93,7 @@ ProjectVcsPage::~ProjectVcsPage( )
     delete m_ui;
 }
 
-void ProjectVcsPage::setSourceLocation( const KUrl& s )
+void ProjectVcsPage::setSourceLocation( const QUrl& s )
 {
     foreach(KDevelop::VcsImportMetadataWidget* widget, importWidgets)
     {
@@ -120,11 +120,11 @@ QString ProjectVcsPage::commitMessage() const
         return importWidgets[idx]->message();
 }
 
-KUrl ProjectVcsPage::source() const
+QUrl ProjectVcsPage::source() const
 {
     int idx = m_ui->vcsTypes->currentIndex() - 1;
     if ( idx < 0 || idx >= importWidgets.size())
-        return KUrl();
+        return QUrl();
 
     return importWidgets[idx]->source();
 }

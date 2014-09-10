@@ -81,9 +81,10 @@ void ProjectChangesModel::addProject(IProject* p)
         
         IBranchingVersionControl* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
         if(branchingExtension) {
-            branchingExtension->registerRepositoryForCurrentBranchChanges(p->folder());
-            connect(plugin, SIGNAL(repositoryBranchChanged(KUrl)), this, SLOT(repositoryBranchChanged(KUrl)));
-            repositoryBranchChanged(p->folder());
+            const auto pathUrl = p->path().toUrl();
+            branchingExtension->registerRepositoryForCurrentBranchChanges(pathUrl);
+            connect(plugin, SIGNAL(repositoryBranchChanged(QUrl)), this, SLOT(repositoryBranchChanged(QUrl)));
+            repositoryBranchChanged(pathUrl);
         }
     } else {
         it->setEnabled(false);
@@ -123,14 +124,14 @@ void ProjectChangesModel::updateState(IProject* p, const KDevelop::VcsStatusInfo
     VcsFileChangesModel::updateState(pItem, status);
 }
 
-void ProjectChangesModel::changes(IProject* project, const KUrl::List& urls, IBasicVersionControl::RecursionMode mode)
+void ProjectChangesModel::changes(IProject* project, const QList<QUrl>& urls, IBasicVersionControl::RecursionMode mode)
 {
     IPlugin* vcsplugin=project->versionControlPlugin();
     IBasicVersionControl* vcs = vcsplugin ? vcsplugin->extension<IBasicVersionControl>() : 0;
     
     if(vcs && vcs->isVersionControlled(urls.first())) { //TODO: filter?
         VcsJob* job=vcs->status(urls, mode);
-        job->setProperty("urls", qVariantFromValue<KUrl::List>(urls));
+        job->setProperty("urls", qVariantFromValue<QList<QUrl>>(urls));
         job->setProperty("mode", qVariantFromValue<int>(mode));
         job->setProperty("project", qVariantFromValue(project));
         connect(job, SIGNAL(finished(KJob*)), SLOT(statusReady(KJob*)));
@@ -148,7 +149,7 @@ void ProjectChangesModel::statusReady(KJob* job)
     if(!project)
         return;
 
-    QSet<KUrl> foundUrls;
+    QSet<QUrl> foundUrls;
     foreach(const QVariant& state, states) {
         VcsStatusInfo st = state.value<VcsStatusInfo>();
         foundUrls += st.url();
@@ -159,12 +160,12 @@ void ProjectChangesModel::statusReady(KJob* job)
     QStandardItem* itProject = projectItem(project);
 
     IBasicVersionControl::RecursionMode mode = IBasicVersionControl::RecursionMode(job->property("mode").toInt());
-    QSet<KUrl> uncertainUrls = urls(itProject).toSet().subtract(foundUrls);
-    QList<KUrl> sourceUrls = job->property("urls").value<KUrl::List>();
-    foreach(const KUrl& url, sourceUrls) {
+    QSet<QUrl> uncertainUrls = urls(itProject).toSet().subtract(foundUrls);
+    QList<QUrl> sourceUrls = job->property("urls").value<QList<QUrl>>();
+    foreach(const QUrl& url, sourceUrls) {
         if(url.isLocalFile() && QDir(url.toLocalFile()).exists()) {
-            foreach(const KUrl& currentUrl, uncertainUrls) {
-                if((mode == IBasicVersionControl::NonRecursive && currentUrl.upUrl().equals(url, KUrl::CompareWithoutTrailingSlash))
+            foreach(const QUrl& currentUrl, uncertainUrls) {
+                if((mode == IBasicVersionControl::NonRecursive && currentUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash) == url.adjusted(QUrl::StripTrailingSlash))
                     || (mode == IBasicVersionControl::Recursive && url.isParentOf(currentUrl))
                 ) {
                     QStandardItem* fileItem = fileItemForUrl(itProject, currentUrl);
@@ -177,7 +178,7 @@ void ProjectChangesModel::statusReady(KJob* job)
 
 void ProjectChangesModel::documentSaved(KDevelop::IDocument* document)
 {
-    reload(KUrl::List() << document->url());
+    reload({document->url()});
 }
 
 void ProjectChangesModel::itemsAdded(const QModelIndex& parent, int start, int end)
@@ -193,7 +194,7 @@ void ProjectChangesModel::itemsAdded(const QModelIndex& parent, int start, int e
     if(!project)
         return;
     
-    KUrl::List urls;
+    QList<QUrl> urls;
     
     for(int i=start; i<end; i++) {
         QModelIndex idx=parent.child(i, 0);
@@ -210,16 +211,18 @@ void ProjectChangesModel::itemsAdded(const QModelIndex& parent, int start, int e
 void ProjectChangesModel::reload(const QList<IProject*>& projects)
 {
     foreach(IProject* project, projects)
-        changes(project, project->folder(), KDevelop::IBasicVersionControl::Recursive);
+        changes(project, {project->path().toUrl()}, KDevelop::IBasicVersionControl::Recursive);
 }
 
-void ProjectChangesModel::reload(const QList<KUrl>& urls)
+void ProjectChangesModel::reload(const QList<QUrl>& urls)
 {
-    foreach(const KUrl& url, urls) {
+    foreach(const QUrl& url, urls) {
         IProject* project=ICore::self()->projectController()->findProjectForUrl(url);
         
-        if(project)
-            changes(project, url, KDevelop::IBasicVersionControl::NonRecursive);
+        if (project) {
+            // FIXME: merge multiple urls of the same project
+            changes(project, {url}, KDevelop::IBasicVersionControl::NonRecursive);
+        }
     }
 }
 
@@ -247,7 +250,7 @@ void ProjectChangesModel::jobUnregistered(KJob* job)
     }
 }
 
-void ProjectChangesModel::repositoryBranchChanged(const KUrl& url)
+void ProjectChangesModel::repositoryBranchChanged(const QUrl& url)
 {
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
     if(project) {

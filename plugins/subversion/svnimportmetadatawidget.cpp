@@ -18,9 +18,9 @@ SvnImportMetadataWidget::SvnImportMetadataWidget( QWidget *parent )
     , useSourceDirForDestination( false )
 {
     m_ui->setupUi( this );
-    m_ui->srcEdit->setUrl( KUrl() );
+    m_ui->srcEdit->setUrl( QUrl() );
     connect( m_ui->srcEdit, SIGNAL(textChanged(QString)), SIGNAL(changed()) );
-    connect( m_ui->srcEdit, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
+    connect( m_ui->srcEdit, SIGNAL(urlSelected(QUrl)), SIGNAL(changed()) );
     connect( m_ui->dest, SIGNAL(textChanged(QString)), this, SIGNAL(changed()) );
     connect( m_ui->message, SIGNAL(textChanged()), this, SIGNAL(changed()) );
 }
@@ -35,7 +35,7 @@ void SvnImportMetadataWidget::setSourceLocation( const KDevelop::VcsLocation& im
     m_ui->srcEdit->setUrl( importdir.localUrl() );
 }
 
-KUrl SvnImportMetadataWidget::source() const
+QUrl SvnImportMetadataWidget::source() const
 {
     return m_ui->srcEdit->url();
 }

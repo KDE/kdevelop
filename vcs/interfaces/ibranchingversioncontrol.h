@@ -24,7 +24,7 @@
 
 #include <QObject>
 
-class KUrl;
+class QUrl;
 class QString;
 
 namespace KDevelop
@@ -46,7 +46,7 @@ public:
      * that take branch names instead of destination paths, or store metadata
      * about the branch. Not all VCS's will use this parameter.
      */
-    virtual VcsJob* branch( const KUrl& repository,
+    virtual VcsJob* branch( const QUrl& repository,
                             const VcsRevision& rev,
                             const QString& branchName ) = 0;
 
@@ -59,7 +59,7 @@ public:
      * take tag names instead of destination paths, or store metadata about the
      * tag. Not all VCS's will use this parameter.
      */
-    virtual VcsJob* tag( const KUrl& repository,
+    virtual VcsJob* tag( const QUrl& repository,
                          const QString& commitMessage,
                          const VcsRevision& rev,
                          const QString& tagName ) = 0;
@@ -70,14 +70,14 @@ public:
     * @param repository The repository path where the branch will be switched
     * @param branchName The branch name that will be switched to inside the specified repostory
     */
-   virtual VcsJob* switchBranch(const KUrl &repository, const QString &branchName) = 0;
+   virtual VcsJob* switchBranch(const QUrl &repository, const QString &branchName) = 0;
 
    /**
     * Returns the branches inside the specified repository in a QStringList
     *
     * @param repository The repository path where the branches will be returned from
     */
-   virtual VcsJob* branches(const KUrl &repository) = 0;
+   virtual VcsJob* branches(const QUrl &repository) = 0;
 
    /**
     * Returns the current branch name inside the specified repository in a QString
@@ -86,7 +86,7 @@ public:
     *
     * @param repository The repository path where the current branch will be returned from
     */
-   virtual VcsJob* currentBranch(const KUrl &repository) = 0;
+   virtual VcsJob* currentBranch(const QUrl &repository) = 0;
 
    /**
     * Deletes the desired branch inside the specified repository
@@ -94,7 +94,7 @@ public:
     * @param repository The repository path where the current branch will be deleted from
     * @param branchName The branch name that will be deleted inside the specified repository
     */
-   virtual VcsJob* deleteBranch(const KUrl &repository, const QString &branchName) = 0;
+   virtual VcsJob* deleteBranch(const QUrl &repository, const QString &branchName) = 0;
    
    /**
     * Deletes the desired branch inside the specified repository
@@ -103,16 +103,16 @@ public:
     * @param oldBranchName The branch name that will be renamed
     * @param newBranchName The new branch name
     */
-   virtual VcsJob* renameBranch(const KUrl &repository, const QString &oldBranchName, const QString &newBranchName) = 0;
+   virtual VcsJob* renameBranch(const QUrl &repository, const QString &oldBranchName, const QString &newBranchName) = 0;
 
    /**
     * Tells the implementation to report about changes in the current branch of a
     * given @p repository.
     */
-   virtual void registerRepositoryForCurrentBranchChanges(const KUrl& repository) = 0;
+   virtual void registerRepositoryForCurrentBranchChanges(const QUrl& repository) = 0;
 
 Q_SIGNALS:
-    void repositoryBranchChanged(const KUrl& repository);
+    void repositoryBranchChanged(const QUrl& repository);
 };
 
 }

@@ -11,7 +11,6 @@
 #include "svnupdatewidget.h"
 #include "ui_updateoptiondlg.h"
 #include "svnrevision.h"
-#include <kurl.h>
 #include <QRadioButton>
 #include <QComboBox>
 #include <QCheckBox>

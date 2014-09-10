@@ -24,8 +24,6 @@
 
 #include <kcmodule.h>
 
-#include <kurl.h>
-
 namespace Ui
 {
 class BGSettings;

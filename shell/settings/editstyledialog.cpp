@@ -20,13 +20,13 @@ Boston, MA 02110-1301, USA.
 #include "editstyledialog.h"
 
 #include <QVBoxLayout>
+#include <QUrl>
 #include <KMessageBox>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
 #include <ktexteditor/configinterface.h>
 #include <KI18n/KLocalizedString>
-#include <KUrl>
 
 #include <interfaces/isourceformatter.h>
 
@@ -92,7 +92,7 @@ void EditStyleDialog::updatePreviewText(const QString &text)
 	m_document->setReadWrite(true);
 	m_style.setContent( content() );
 	if (m_sourceFormatter) {
-		m_document->setText(m_sourceFormatter->formatSourceWithStyle( m_style, text, KUrl(), m_mimeType ));
+		m_document->setText(m_sourceFormatter->formatSourceWithStyle( m_style, text, QUrl(), m_mimeType ));
 	} else {
 		m_document->setText( i18n( "No Source Formatter available" ) );
 	}

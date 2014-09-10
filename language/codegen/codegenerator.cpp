@@ -126,7 +126,7 @@ bool CodeGeneratorBase::execute()
 
     //Shouldn't there be a method in iDocument to get a DocumentRange as well?
 
-    KUrl document;
+    QUrl document;
     if(!d->autoGen)
     {
         if( !ICore::self()->documentController()->activeDocument() )

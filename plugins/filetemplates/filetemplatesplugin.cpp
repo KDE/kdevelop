@@ -97,7 +97,7 @@ void FileTemplatesPlugin::unload()
 ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context)
 {
     ContextMenuExtension ext;
-    KUrl fileUrl;
+    QUrl fileUrl;
 
     if (context->type() == Context::ProjectItemContext)
     {
@@ -108,7 +108,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
             return ext;
         }
 
-        KUrl url;
+        QUrl url;
         ProjectBaseItem* item = items.first();
         if (item->folder())
         {
@@ -196,16 +196,16 @@ void FileTemplatesPlugin::loadTemplate(const QString& fileName)
 
 void FileTemplatesPlugin::createFromTemplate()
 {
-    KUrl baseUrl;
+    QUrl baseUrl;
     if (QAction* action = qobject_cast<QAction*>(sender()))
     {
-        baseUrl = action->data().value<KUrl>();
+        baseUrl = action->data().value<QUrl>();
     }
     if (!baseUrl.isValid()) {
         // fall-back to currently active document's parent directory
         IDocument* doc = ICore::self()->documentController()->activeDocument();
         if (doc && doc->url().isValid()) {
-            baseUrl = doc->url().upUrl();
+            baseUrl = doc->url().adjusted(QUrl::RemoveFilename);
         }
     }
     TemplateClassAssistant* assistant = new TemplateClassAssistant(QApplication::activeWindow(), baseUrl);
@@ -213,7 +213,7 @@ void FileTemplatesPlugin::createFromTemplate()
     assistant->show();
 }
 
-FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(const KUrl& url)
+FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(const QUrl& url)
 {
     QDir dir(url.toLocalFile());
 
@@ -282,7 +282,7 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
 void FileTemplatesPlugin::previewTemplate()
 {
     QAction* action = qobject_cast<QAction*>(sender());
-    if (!action || !action->data().value<KUrl>().isValid())
+    if (!action || !action->data().value<QUrl>().isValid())
     {
         return;
     }
@@ -292,7 +292,7 @@ void FileTemplatesPlugin::previewTemplate()
         return;
     }
 
-    core()->documentController()->activateDocument(core()->documentController()->openDocument(action->data().value<KUrl>()));
+    core()->documentController()->activateDocument(core()->documentController()->openDocument(action->data().value<QUrl>()));
 }
 
 #include "filetemplatesplugin.moc"

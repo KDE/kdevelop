@@ -94,7 +94,7 @@ struct DocumentControllerPrivate {
     QString presetEncoding;
 
     // used to map urls to open docs
-    QHash< KUrl, IDocument* > documents;
+    QHash< QUrl, IDocument* > documents;
 
     QHash< QString, IDocumentFactory* > factories;
     QList<KTemporaryFile*> tempFiles;
@@ -102,41 +102,44 @@ struct DocumentControllerPrivate {
     struct HistoryEntry
     {
         HistoryEntry() {}
-        HistoryEntry( const KUrl & u, const KTextEditor::Cursor& cursor );
+        HistoryEntry( const QUrl & u, const KTextEditor::Cursor& cursor );
 
-        KUrl url;
+        QUrl url;
         KTextEditor::Cursor cursor;
         int id;
     };
 
     void removeDocument(Sublime::Document *doc)
     {
-        QList<KUrl> urlsForDoc = documents.keys(dynamic_cast<KDevelop::IDocument*>(doc));
-        foreach (const KUrl &url, urlsForDoc)
+        QList<QUrl> urlsForDoc = documents.keys(dynamic_cast<KDevelop::IDocument*>(doc));
+        foreach (const QUrl &url, urlsForDoc)
         {
             kDebug() << "destroying document" << doc;
             documents.remove(url);
         }
     }
-    void chooseDocument()
-    {
 
-        KUrl dir;
-        if( controller->activeDocument() )
-        {
-            dir = KUrl( controller->activeDocument()->url() );
-            dir.setFileName(QString());
-        }else
-        {
-            dir = KSharedConfig::openConfig()->group("Open File").readEntry( "Last Open File Directory", QUrl(Core::self()->projectController()->projectsBaseDirectory()) );
+    KEncodingFileDialog::Result showOpenFile() const
+    {
+        QUrl dir;
+        if ( controller->activeDocument() ) {
+            dir = controller->activeDocument()->url().adjusted(QUrl::RemoveFilename);
+        } else  {
+            const auto cfg = KSharedConfig::openConfig()->group("Open File");
+            dir = cfg.readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
         }
 
-        KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlsAndEncoding( controller->encoding(), dir.url(), i18n( "*|Text File\n" ),
+        return KEncodingFileDialog::getOpenUrlsAndEncoding( controller->encoding(), dir, i18n( "*|Text File\n" ),
                                     Core::self()->uiControllerInternal()->defaultMainWindow(),
                                     i18n( "Open File" ) );
+    }
+
+    void chooseDocument()
+    {
+        const auto res = showOpenFile();
         if( !res.URLs.isEmpty() ) {
             QString encoding = res.encoding;
-            foreach( const KUrl& u, res.URLs ) {
+            foreach( const QUrl& u, res.URLs ) {
                 openDocumentInternal(u, QString(), KTextEditor::Range::invalid(), encoding  );
             }
         }
@@ -145,7 +148,7 @@ struct DocumentControllerPrivate {
 
     void changeDocumentUrl(KDevelop::IDocument* document)
     {
-        QMutableHashIterator<KUrl, IDocument*> it = documents;
+        QMutableHashIterator<QUrl, IDocument*> it = documents;
         while (it.hasNext()) {
             if (it.next().value() == document) {
                 if (documents.contains(document->url())) {
@@ -176,7 +179,7 @@ struct DocumentControllerPrivate {
         }
     }
 
-    KDevelop::IDocument* findBuddyDocument(const KUrl &url, IBuddyDocumentFinder* finder)
+    KDevelop::IDocument* findBuddyDocument(const QUrl &url, IBuddyDocumentFinder* finder)
     {
         QList<KDevelop::IDocument*> allDocs = controller->openDocuments();
         foreach( KDevelop::IDocument* doc, allDocs ) {
@@ -187,12 +190,13 @@ struct DocumentControllerPrivate {
         return 0;
     }
 
-
-    IDocument* openDocumentInternal( const KUrl & inputUrl, const QString& prefName = QString(),
+    IDocument* openDocumentInternal( const QUrl & inputUrl, const QString& prefName = QString(),
         const KTextEditor::Range& range = KTextEditor::Range::invalid(), const QString& encoding = "",
         DocumentController::DocumentActivationParams activationParams = 0,
         IDocument* buddy = 0)
     {
+        Q_ASSERT(!inputUrl.isRelative());
+        Q_ASSERT(!inputUrl.fileName().isEmpty());
         IDocument* previousActiveDocument = controller->activeDocument();
         KTextEditor::View* previousActiveTextView = controller->activeTextDocumentView();
         KTextEditor::Cursor previousActivePosition;
@@ -202,22 +206,11 @@ struct DocumentControllerPrivate {
 
         QString _encoding = encoding;
         
-        KUrl url = inputUrl;
+        QUrl url = inputUrl;
 
         if ( url.isEmpty() && (!activationParams.testFlag(IDocumentController::DoNotCreateView)) )
         {
-            KUrl dir;
-            if( controller->activeDocument() )
-            {
-                dir = controller->activeDocument()->url().upUrl();
-            }else
-            {
-                dir = KSharedConfig::openConfig()->group("Open File").readEntry( "Last Open File Directory", QUrl(Core::self()->projectController()->projectsBaseDirectory()) );
-            }
-
-            KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlAndEncoding( QString(), dir.url(), i18n( "*|Text File\n" ),
-                                        Core::self()->uiControllerInternal()->defaultMainWindow(),
-                                        i18n( "Open File" ) );
+            const auto res = showOpenFile();
             if( !res.URLs.isEmpty() )
                 url = res.URLs.first();
             _encoding = res.encoding;
@@ -226,15 +219,15 @@ struct DocumentControllerPrivate {
                 return 0;
         }
 
-        KSharedConfig::openConfig()->group("Open File").writeEntry( "Last Open File Directory", QUrl(url.upUrl()) );
+        KSharedConfig::openConfig()->group("Open File").writeEntry( "Last Open File Directory", url.adjusted(QUrl::RemoveFilename) );
 
         // clean it and resolve possible symlink
-        url.cleanPath( KUrl::SimplifyDirSeparators );
+        url = url.adjusted( QUrl::NormalizePathSegments );
         if ( url.isLocalFile() )
         {
             QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
             if ( !path.isEmpty() )
-                url.setPath( path );
+                url = QUrl::fromLocalFile( path );
         }
         
         //get a part document
@@ -342,7 +335,7 @@ struct DocumentControllerPrivate {
         if(previousActiveTextView)
             previousActivePosition = previousActiveTextView->cursorPosition();
         
-        KUrl url=doc->url();
+        QUrl url=doc->url();
         UiController *uiController = Core::self()->uiControllerInternal();
         Sublime::Area *area = uiController->activeArea();
         
@@ -701,15 +694,15 @@ bool DocumentController::openDocumentFromTextSimple( QString text )
 
 bool DocumentController::openDocumentSimple( QString url, int line, int column )
 {
-    return (bool)openDocument( KUrl(url), KTextEditor::Cursor( line, column ) );
+    return (bool)openDocument( QUrl::fromUserInput(url), KTextEditor::Cursor( line, column ) );
 }
 
-IDocument* DocumentController::openDocument( const KUrl& inputUrl, const QString& prefName )
+IDocument* DocumentController::openDocument( const QUrl& inputUrl, const QString& prefName )
 {
     return d->openDocumentInternal( inputUrl, prefName );
 }
 
-IDocument* DocumentController::openDocument( const KUrl & inputUrl,
+IDocument* DocumentController::openDocument( const QUrl & inputUrl,
         const KTextEditor::Range& range,
         DocumentActivationParams activationParams,
         const QString& encoding, IDocument* buddy)
@@ -739,7 +732,7 @@ void DocumentController::fileClose()
     }
 }
 
-void DocumentController::closeDocument( const KUrl &url )
+void DocumentController::closeDocument( const QUrl &url )
 {
     if( !d->documents.contains(url) )
         return;
@@ -773,12 +766,15 @@ void DocumentController::notifyDocumentClosed(Sublime::Document* doc_)
     emit documentClosed(doc);
 }
 
-IDocument * DocumentController::documentForUrl( const KUrl & dirtyUrl ) const
+IDocument * DocumentController::documentForUrl( const QUrl & dirtyUrl ) const
 {
-    //Fix urls that might not be absolute
-    KUrl url(dirtyUrl);
-    url.cleanPath();
-    return d->documents.value( url, 0 );
+    if (dirtyUrl.isEmpty()) {
+        return nullptr;
+    }
+    Q_ASSERT(!dirtyUrl.isRelative());
+    Q_ASSERT(!dirtyUrl.fileName().isEmpty());
+    //Fix urls that might not be normalized
+    return d->documents.value( dirtyUrl.adjusted( QUrl::NormalizePathSegments ), 0 );
 }
 
 QList<IDocument*> DocumentController::openDocuments() const
@@ -979,7 +975,7 @@ QString DocumentController::activeDocumentPath( QString target ) const
     if(target.size()) {
         foreach(IProject* project, Core::self()->projectController()->projects()) {
             if(project->name().startsWith(target, Qt::CaseInsensitive)) {
-                return project->folder().pathOrUrl() + "/.";
+                return project->path().pathOrUrl() + "/.";
             }
         }
     }
@@ -996,7 +992,7 @@ QString DocumentController::activeDocumentPath( QString target ) const
         }
         return QString();
     }
-    return doc->url().pathOrUrl();
+    return doc->url().toString();
 }
 
 QStringList DocumentController::activeDocumentPaths() const
@@ -1006,7 +1002,7 @@ QStringList DocumentController::activeDocumentPaths() const
     
     QSet<QString> documents;
     foreach(Sublime::View* view, uiController->activeSublimeWindow()->area()->views())
-        documents.insert(KUrl(view->document()->documentSpecifier()).pathOrUrl());
+        documents.insert(view->document()->documentSpecifier());
     
     return documents.toList();
 }
@@ -1023,32 +1019,37 @@ QStringList DocumentController::documentTypes() const
     return QStringList() << "Text";
 }
 
-bool DocumentController::isEmptyDocumentUrl(const KUrl &url)
+static QRegExp emptyDocumentPattern()
 {
-    QRegExp r(QString("^%1(\\s\\(\\d+\\))?$").arg(EMPTY_DOCUMENT_URL));
-    return r.indexIn(url.prettyUrl()) != -1;
+    static const QRegExp pattern(QString("^/%1(?:\\s\\(\\d+\\))?$").arg(EMPTY_DOCUMENT_URL));
+    return pattern;
 }
 
-KUrl DocumentController::nextEmptyDocumentUrl()
+bool DocumentController::isEmptyDocumentUrl(const QUrl &url)
+{
+    return emptyDocumentPattern().indexIn(url.toDisplayString(QUrl::PreferLocalFile)) != -1;
+}
+
+QUrl DocumentController::nextEmptyDocumentUrl()
 {
     int nextEmptyDocNumber = 0;
+    auto pattern = emptyDocumentPattern();
     foreach (IDocument *doc, Core::self()->documentControllerInternal()->openDocuments())
     {
         if (DocumentController::isEmptyDocumentUrl(doc->url()))
         {
-            QRegExp r(QString("^%1\\s\\((\\d+)\\)$").arg(EMPTY_DOCUMENT_URL));
-            if (r.indexIn(doc->url().prettyUrl()) != -1)
-                nextEmptyDocNumber = qMax(nextEmptyDocNumber, r.cap(1).toInt()+1);
+            if (pattern.indexIn(doc->url().toDisplayString(QUrl::PreferLocalFile)) != -1)
+                nextEmptyDocNumber = qMax(nextEmptyDocNumber, pattern.cap(1).toInt()+1);
             else
                 nextEmptyDocNumber = qMax(nextEmptyDocNumber, 1);
         }
     }
-    
-    KUrl url;
+
+    QUrl url;
     if (nextEmptyDocNumber > 0)
-        url = KUrl(QString("%1 (%2)").arg(EMPTY_DOCUMENT_URL).arg(nextEmptyDocNumber));
+        url = QUrl::fromLocalFile(QString("/%1 (%2)").arg(EMPTY_DOCUMENT_URL).arg(nextEmptyDocNumber));
     else
-        url = KUrl(EMPTY_DOCUMENT_URL);
+        url = QUrl::fromLocalFile('/' + EMPTY_DOCUMENT_URL);
     return url;
 }
 
@@ -1149,7 +1150,7 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
             while(index->isSplit())
                 index = index->first();
             // Simply open the document into the area index
-            IDocument* doc = Core::self()->documentControllerInternal()->openDocument(KUrl(urlsWithSeparators.front()),
+            IDocument* doc = Core::self()->documentControllerInternal()->openDocument(QUrl::fromUserInput(urlsWithSeparators.front()),
                         KTextEditor::Cursor::invalid(),
                         (IDocumentController::DocumentActivation) ( IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView) );
             Sublime::Document *sublimeDoc = dynamic_cast<Sublime::Document*>(doc);
@@ -1222,7 +1223,7 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
 void DocumentController::vcsAnnotateCurrentDocument()
 {
     IDocument* doc = activeDocument();
-    KUrl url = doc->url();
+    QUrl url = doc->url();
     IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(url);
     if(project && project->versionControlPlugin()) {
         IBasicVersionControl* iface = 0;

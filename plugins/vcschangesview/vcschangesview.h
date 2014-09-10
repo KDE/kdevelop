@@ -24,7 +24,7 @@
 #include <QTreeView>
 
 class VcsProjectIntegrationPlugin;
-class KUrl;
+class QUrl;
 namespace KDevelop { class IProject; }
 
 class VcsChangesView : public QTreeView
@@ -42,7 +42,7 @@ class VcsChangesView : public QTreeView
         
     signals:
         void reload(const QList<KDevelop::IProject*>& p);
-        void reload(const QList<KUrl>& p);
+        void reload(const QList<QUrl>& p);
 };
 
 #endif // KDEVPLATFORM_PLUGIN_VCSCHANGESVIEW_H

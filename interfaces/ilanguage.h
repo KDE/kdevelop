@@ -21,8 +21,6 @@
 
 #include <QtCore/QObject>
 
-#include <kurl.h>
-
 #include "interfacesexport.h"
 
 class QReadWriteLock;

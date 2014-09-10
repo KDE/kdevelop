@@ -25,7 +25,7 @@ CvsDiffJob::~CvsDiffJob()
 QVariant CvsDiffJob::fetchResults()
 {
     KDevelop::VcsDiff diff;
-    diff.setBaseDiff( process()->workingDirectory() );
+    diff.setBaseDiff( QUrl::fromLocalFile(process()->workingDirectory()) );
 
     diff.setDiff( output() );
 

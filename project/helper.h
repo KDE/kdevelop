@@ -22,7 +22,7 @@
 
 #include "projectexport.h"
 
-class KUrl;
+class QUrl;
 
 namespace KDevelop {
 class IProject;
@@ -33,7 +33,7 @@ class Path;
  * Set @p isFolder properly to get the correct messages.
  * @return whether url got deleted or not
  */
-bool KDEVPLATFORMPROJECT_EXPORT removeUrl(const KDevelop::IProject* project, const KUrl& url, const bool isFolder);
+bool KDEVPLATFORMPROJECT_EXPORT removeUrl(const KDevelop::IProject* project, const QUrl& url, const bool isFolder);
 
 /**
  * Deletes the path at @p path. The user is NOT asked for confirmation.
@@ -46,7 +46,7 @@ bool KDEVPLATFORMPROJECT_EXPORT removePath(const KDevelop::IProject* project, co
  * Creates a file at @p url. Shows the user an error message on failure.
  * @return whether file got created or not
  */
-bool KDEVPLATFORMPROJECT_EXPORT createFile(const KUrl& file);
+bool KDEVPLATFORMPROJECT_EXPORT createFile(const QUrl& file);
 
 /**
  * Creates a file at @p path. Shows the user an error message on failure.
@@ -58,7 +58,7 @@ bool KDEVPLATFORMPROJECT_EXPORT createFile(const Path& file);
  * Creates a folder at @p url. Shows the user an error message on failure.
  * @return whether folder got created or not
  */
-bool KDEVPLATFORMPROJECT_EXPORT createFolder(const KUrl& folder);
+bool KDEVPLATFORMPROJECT_EXPORT createFolder(const QUrl& folder);
 
 /**
  * Creates a folder at @p path. Shows the user an error message on failure.
@@ -70,7 +70,7 @@ bool KDEVPLATFORMPROJECT_EXPORT createFolder(const Path& folder);
  * Renames anything at @p oldname to @p oldname
  * @return whether it got renamed or not
  */
-bool KDEVPLATFORMPROJECT_EXPORT renameUrl(const KDevelop::IProject* project, const KUrl& oldname, const KUrl& newname);
+bool KDEVPLATFORMPROJECT_EXPORT renameUrl(const KDevelop::IProject* project, const QUrl& oldname, const QUrl& newname);
 
 /**
  * Renames anything at @p oldName to @p oldName
@@ -82,7 +82,7 @@ bool KDEVPLATFORMPROJECT_EXPORT renamePath(const KDevelop::IProject* project, co
  * Copies anything at @p source to @p target
  * @return whether it got copied or not
  */
-bool KDEVPLATFORMPROJECT_EXPORT copyUrl(const KDevelop::IProject* project, const KUrl& source, const KUrl& target);
+bool KDEVPLATFORMPROJECT_EXPORT copyUrl(const KDevelop::IProject* project, const QUrl& source, const QUrl& target);
 
 /**
  * Copies anything at @p source to @p target

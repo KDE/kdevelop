@@ -75,7 +75,7 @@ void LocalPatchSource::update()
             if ( !m_filename.isEmpty() ) {
                 QFile::remove( m_filename.toLocalFile() );
             }
-            m_filename = KUrl::fromLocalFile( filename );
+            m_filename = QUrl::fromLocalFile( filename );
             kDebug() << "success, diff: " << m_filename;
         }else{
             kWarning() << "PROBLEM";

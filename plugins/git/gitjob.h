@@ -23,7 +23,6 @@
 #define KDEVPLATFORM_PLUGIN_GITJOB_H
 
 #include <vcs/dvcs/dvcsjob.h>
-#include <KUrl>
 
 class GitJob : public KDevelop::DVcsJob
 {
