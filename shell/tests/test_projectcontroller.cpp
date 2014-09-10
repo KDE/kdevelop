@@ -31,12 +31,13 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include "../core.h"
-#include "../projectcontroller.h"
-#include "../project.h"
-#include "../../interfaces/iplugin.h"
-#include "../../project/interfaces/iprojectfilemanager.h"
-#include "../project/projectmodel.h"
+#include <interfaces/iplugin.h>
+#include <project/interfaces/iprojectfilemanager.h>
+#include <project/projectmodel.h>
+#include <shell/core.h>
+#include <shell/projectcontroller.h>
+#include <shell/plugincontroller.h>
+#include <shell/project.h>
 
 using namespace KDevelop;
 
@@ -64,7 +65,6 @@ class FakeFileManager : public IPlugin, public IProjectFileManager
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::IProjectFileManager)
-
 public:
     FakeFileManager(QObject*, const QVariantList&) : IPlugin(ICore::self()->aboutData().componentName(), Core::self()) {
         KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
@@ -128,16 +128,34 @@ public:
     virtual bool reload(ProjectFolderItem* item) { return false; }
 };
 
-K_PLUGIN_FACTORY(FakeFileManagerFactory, registerPlugin<FakeFileManager>(); )
-K_EXPORT_PLUGIN(FakeFileManager())
+class FakePluginController : public PluginController
+{
+public:
+    FakePluginController(Core* core)
+    : PluginController(core)
+    , m_fakeFileManager(new FakeFileManager)
+    {
+    }
 
+    IPlugin* pluginForExtension(const QString& extension, const QString& pluginName = {}, const QVariantMap& constraints = {}) override
+    {
+        if (extension == m_fakeFileManager->extensions().first())
+            return m_fakeFileManager;
+        return PluginController::pluginForExtension(extension, pluginName, constraints);
+    }
+
+private:
+    FakeFileManager* m_fakeFileManager;
+};
 
 ////////////////////// Fixture ///////////////////////////////////////////////
 
 void TestProjectController::initTestCase()
 {
     AutoTestShell::init();
-    TestCore::initialize();
+    TestCore* testCore = new TestCore;
+    testCore->setPluginController( new FakePluginController(testCore) );
+    testCore->initialize();
     qRegisterMetaType<KDevelop::IProject*>();
     m_core = Core::self();
     m_scratchDir = QDir(QDir::tempPath());
@@ -527,8 +545,7 @@ QSignalSpy* TestProjectController::createClosingSpy()
 
 FakeFileManager* TestProjectController::createFileManager()
 {
-    FakeFileManagerFactory* f = new FakeFileManagerFactory();
-    FakeFileManager* fileMng = qobject_cast<FakeFileManager*>(f->create());
+    FakeFileManager* fileMng = new FakeFileManager;
     m_fileManagerGarbage << fileMng;
     return fileMng;
 }
