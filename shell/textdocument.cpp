@@ -36,6 +36,7 @@
 #include <kdeversion.h>
 #include <kdebug.h>
 #include <KComponentData>
+#include <KDebug>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>

@@ -21,6 +21,8 @@
 
 #include "constantintegraltype.h"
 
+#include <QDebug>
+
 #include "typesystemdata.h"
 #include "typeregister.h"
 

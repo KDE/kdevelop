@@ -44,13 +44,13 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   IntPusher( completionRecursionDepth, completionRecursionDepth+1 );
 
   if( depth > 10 ) {
-    kDebug() << "too much recursion";
+    qWarning() << "too much recursion";
     m_valid = false;
     return;
   }
 
   if( completionRecursionDepth > 10 ) {
-    kDebug() << "too much recursion";
+    qWarning() << "too much recursion";
     m_valid = false;
     return;
   }

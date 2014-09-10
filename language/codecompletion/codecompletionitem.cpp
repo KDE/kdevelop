@@ -22,6 +22,7 @@
 #include "codecompletionitem.h"
 
 #include <QModelIndex>
+#include <QDebug>
 
 #include <ktexteditor/codecompletionmodel.h>
 #include <ktexteditor/range.h>
@@ -110,7 +111,7 @@ int CompletionTreeElement::rowInParent() const {
 void CompletionTreeItem::execute(KTextEditor::View* view, const KTextEditor::Range& word) {
   Q_UNUSED(view)
   Q_UNUSED(word)
-  kDebug(9700) << "doing nothing";
+  qWarning() << "doing nothing";
 }
 
 QVariant CompletionTreeItem::data(const QModelIndex& index, int role, const CodeCompletionModel* model) const {

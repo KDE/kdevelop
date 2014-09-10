@@ -52,7 +52,6 @@ ProblemNavigationContext::ProblemNavigationContext(ProblemPointer problem): m_pr
     menu->setFocusPolicy(Qt::NoFocus);
     foreach(IAssistantAction::Ptr action, solution->actions()) {
       menu->addAction(action->toKAction());
-      kDebug() << "adding action" << action->description();
     }
     button->setMenu(menu);
 

@@ -19,11 +19,13 @@
 #ifndef KDEVPLATFORM_APPENDEDLIST_H
 #define KDEVPLATFORM_APPENDEDLIST_H
 
-#include <QtCore/QMutex>
-#include <QtCore/QVector>
-#include <QtCore/QStack>
+#include <QMutex>
+#include <QVector>
+#include <QStack>
 #include <QString>
+
 #include <util/kdevvarlengtharray.h>
+
 #include <iostream>
 #include <time.h>
 
@@ -78,7 +80,7 @@ class TemporaryDataManager {
     ~TemporaryDataManager() {
       free(DynamicAppendedListMask); //Free the zero index, so we don't get wrong warnings
       uint cnt = usedItemCount();
-      if(cnt) //Don't use kDebug, because that may not work during destruction
+      if(cnt) //Don't use qDebug, because that may not work during destruction
         std::cout << m_id.toLocal8Bit().data() << " There were items left on destruction: " << usedItemCount() << "\n";
 
       for(uint a = 0; a < m_itemsUsed; ++a)
