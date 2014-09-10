@@ -18,9 +18,6 @@ ecm_add_test(test_shellbuddy.cpp
 ecm_add_test(test_shelldocumentoperation.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell KDev::Interfaces KDev::Sublime)
 
-## This test needs fixing:
-# creating a factory is not enough to inject a new project plugin, we also need a KPluginInfo
-# also need to adapt to naming scheme (test_projectcontroller.cpp)
 ecm_add_test(test_projectcontroller.cpp
     TEST_NAME test_projectcontroller
     LINK_LIBRARIES Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES} KDev::Shell KDev::Sublime KDev::Project KDev::Interfaces)
