@@ -125,15 +125,21 @@ void TestShellDocumentOperation::testKateDocumentAndViewCreation()
     QVERIFY(main);
     QVERIFY(main->guiFactory()->clients().contains(doc->views()[0]));
 
+    //KTextEditor::views is internally a QHash::keys() call: so the order of the views will vary
+    const auto originalView = doc->views()[0];
+
     //create the new view and activate it (using split action from mainwindow)
     QAction *splitAction = main->actionCollection()->action("split_vertical");
     QVERIFY(splitAction);
     splitAction->trigger();
-    QCOMPARE(doc->views().count(), 2);
+    const auto viewList = doc->views();
+    QCOMPARE(viewList.count(), 2);
+
+    const auto newlySplitView = originalView == viewList[0] ? viewList[1] : viewList[0];
 
     //check that we did switch to the new xmlguiclient
-    QVERIFY(!main->guiFactory()->clients().contains(doc->views()[0]));
-    QVERIFY(main->guiFactory()->clients().contains(doc->views()[1]));
+    QVERIFY(!main->guiFactory()->clients().contains(originalView));
+    QVERIFY(main->guiFactory()->clients().contains(newlySplitView));
 
     documentController->openDocuments()[0]->close(IDocument::Discard);
 }
