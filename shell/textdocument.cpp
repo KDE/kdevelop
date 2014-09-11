@@ -297,11 +297,7 @@ struct TextDocumentPrivate {
 
     void saveSessionConfig()
     {
-        if(!document->url().isValid()) {
-            return;
-        }
-
-        {
+        if(document->url().isValid()) {
             // make sure only MAX_DOC_SETTINGS entries are stored
             KConfigGroup katePartSettings = katePartSettingsGroup();
             // ordered list of documents
