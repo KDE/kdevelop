@@ -48,7 +48,7 @@
 QString preprocess(const QString& contents) {
   rpp::Preprocessor preprocessor;
   rpp::pp pp(&preprocessor);
-  QByteArray qba = stringFromContents(pp.processFile("anonymous", contents.toUtf8()));
+  QByteArray qba = stringFromContents(pp.processFile("/anonymous", contents.toUtf8()));
   if(pp.problems().empty())
     return QString::fromUtf8(qba);
   else
@@ -567,7 +567,7 @@ void TestParser::testEmptyInclude()
   // testcase for https://bugs.kde.org/show_bug.cgi?id=258972
   rpp::Preprocessor preprocessor;
   rpp::pp pp(&preprocessor);
-  pp.processFile("anonymous", QByteArray("#include\n\nint main(){\n    ;\n}\n"));
+  pp.processFile("/anonymous", QByteArray("#include\n\nint main(){\n    ;\n}\n"));
   QCOMPARE(pp.problems().size(), 1);
   qDebug() << pp.problems().first()->description();
   QCOMPARE(pp.problems().first()->finalLocation().start(), KTextEditor::Cursor(0, 8));
@@ -966,7 +966,7 @@ TranslationUnitAST* TestParser::parse(const QByteArray& unit)
 
   rpp::Preprocessor preprocessor;
   rpp::pp pp(&preprocessor);
-  lastSession->setContentsAndGenerateLocationTable(pp.processFile("anonymous", unit));
+  lastSession->setContentsAndGenerateLocationTable(pp.processFile("/anonymous", unit));
   return  parser.parse(lastSession);
 }
 

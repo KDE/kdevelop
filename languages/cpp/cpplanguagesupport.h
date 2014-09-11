@@ -119,14 +119,14 @@ public:
  *
  * @warning The du-chain must be locked before calling this.
 * */
-  virtual KDevelop::TopDUContext *standardContext(const KUrl& url, bool proxyContext = false);
+  virtual KDevelop::TopDUContext *standardContext(const QUrl &url, bool proxyContext = false);
 
     /**
      * IBuddyDocumentFinder overrides.
      */
-    virtual bool areBuddies(const KUrl& url1, const KUrl& url2);
-    virtual bool buddyOrder(const KUrl& url1, const KUrl& url2);
-    virtual QVector<KUrl> getPotentialBuddies(const KUrl& url) const;
+    virtual bool areBuddies(const QUrl &url1, const QUrl& url2);
+    virtual bool buddyOrder(const QUrl &url1, const QUrl& url2);
+    virtual QVector<QUrl> getPotentialBuddies(const QUrl &url) const;
 
 public slots:
     void findIncludePathsForJob(CPPParseJob* job);
@@ -135,17 +135,17 @@ private:
 
     //Returns the identifier and its range under the cursor as first return-value, and the tail behind it as the second
     //If the given line is an include directive, the complete line is returned starting at the directive
-    QPair<QPair<QString, KTextEditor::Range>, QString> cursorIdentifier(const KUrl& url, const KTextEditor::Cursor& position) const;
+    QPair<QPair<QString, KTextEditor::Range>, QString> cursorIdentifier(const QUrl &url, const KTextEditor::Cursor& position) const;
 
-    QPair<KDevelop::TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const KUrl& url, const KTextEditor::Cursor& position);
+    QPair<KDevelop::TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const QUrl &url, const KTextEditor::Cursor& position);
 
-    QPair<KTextEditor::Range, const rpp::pp_macro*> usedMacroForPosition(const KUrl& url, const KTextEditor::Cursor& position);
+    QPair<KTextEditor::Range, const rpp::pp_macro*> usedMacroForPosition(const QUrl &url, const KTextEditor::Cursor& position);
 
-    virtual KTextEditor::Range specialLanguageObjectRange(const KUrl& url, const KTextEditor::Cursor& position);
+    virtual KTextEditor::Range specialLanguageObjectRange(const QUrl &url, const KTextEditor::Cursor& position);
 
-    virtual QPair<KUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const KUrl& url, const KTextEditor::Cursor& position);
+    virtual QPair<QUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const QUrl &url, const KTextEditor::Cursor& position);
 
-    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position);
+    virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position);
 
     static CppLanguageSupport* m_self;
 

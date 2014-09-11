@@ -96,7 +96,7 @@ void CompilationDataAttached::addDefinitions(const QStringList& vars)
 }
 
 
-KUrl CMakeExecutableTargetItem::builtUrl() const
+QUrl CMakeExecutableTargetItem::builtUrl() const
 {
     if(!path.isValid()) {
         KDevelop::Path ret = project()->buildSystemManager()->buildDirectory(const_cast<CMakeExecutableTargetItem*>(this));
@@ -154,7 +154,7 @@ DUChainAttatched::~DUChainAttatched() {}
 
 CompilationDataAttached::~CompilationDataAttached() {}
 
-KUrl CMakeExecutableTargetItem::installedUrl() const {
+QUrl CMakeExecutableTargetItem::installedUrl() const {
     return QUrl();
 }
 void CompilationDataAttached::setIncludeDirectories(const QStringList& l)

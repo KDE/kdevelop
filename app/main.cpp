@@ -58,6 +58,7 @@
 #include <interfaces/ilauncher.h>
 #include <interfaces/iproject.h>
 #include <interfaces/launchconfigurationtype.h>
+#include <util/path.h>
 
 #include "kdevideextension.h"
 
@@ -65,10 +66,7 @@
 
 #include "splash.h"
 
-using KDevelop::Core;
-
-// Represents a file to be opened, consisting of its URL and the linenumber to jump to
-typedef QPair<QString, int> File;
+using namespace KDevelop;
 
 class KDevelopApplication: public KApplication {
 public:
@@ -105,10 +103,13 @@ static const KDevelop::SessionInfo* findSessionInList( QList<KDevelop::SessionIn
     return 0;
 }
 
+// Represents a file to be opened, consisting of its URL and the linenumber to jump to
+typedef QPair<QUrl, int> File;
+
 /// Parses a filename given as an argument by determining its line number and full path
 static File parseFilename(QString argument)
 {
-    if ( KUrl::isRelativeUrl(argument) && ! argument.startsWith('/') ) {
+    if ( !argument.startsWith('/') && QFileInfo(argument).isRelative() ) {
         argument = QDir::currentPath() + "/" + argument;
     }
     //Allow opening specific lines in documents, like mydoc.cpp:10
@@ -124,7 +125,7 @@ static File parseFilename(QString argument)
             line = lineNr;
         }
     }
-    return File(argument, line);
+    return File(QUrl::fromUserInput(argument), line);
 }
 
 /// Performs a DBus call to open the given @p files in the running kdev instance identified by @p pid
@@ -137,10 +138,10 @@ static int openFilesInRunningInstance(const QVector<File>& files, int pid)
     QStringList urls;
     bool errors_occured = false;
     foreach ( const File& file, files ) {
-        QDBusReply<bool> result = iface.call("openDocumentSimple", file.first);
+        QDBusReply<bool> result = iface.call("openDocumentSimple", file.first.toString());
         if ( ! result.value() ) {
             QTextStream err(stderr);
-            err << i18n("Could not open file %1.", file.first) << "\n";
+            err << i18n("Could not open file %1.", file.first.toDisplayString(QUrl::PreferLocalFile)) << "\n";
             errors_occured = true;
         }
     }
@@ -386,7 +387,7 @@ int main( int argc, char *argv[] )
             qerr << endl << i18nc("@info:shell", "Specify the binary you want to debug.") << endl;
             return 1;
         }
-        debugeeName = i18n("Debug %1", KUrl( debugArgs.first() ).fileName());
+        debugeeName = i18n("Debug %1", QUrl( debugArgs.first() ).fileName());
         session = debugeeName;
     } else if ( args->isSet("cs") || args->isSet("new-session") )
     {
@@ -413,7 +414,7 @@ int main( int argc, char *argv[] )
                 break;
             }
             else if (projectAsSession.isEmpty()) {
-                foreach(const KUrl& k, si.projects)
+                foreach(const QUrl& k, si.projects)
                 {
                     QString fn(k.fileName());
                     fn = fn.left(fn.indexOf('.'));
@@ -480,15 +481,15 @@ int main( int argc, char *argv[] )
             if( info.suffix() == "kdev4" ) {
                 // make sure the project is not already opened by the session controller
                 bool shouldOpen = true;
-                KUrl url(info.absoluteFilePath());
+                Path path(info.absoluteFilePath());
                 foreach(KDevelop::IProject* p, core->projectController()->projects()) {
-                    if (p->projectFileUrl() == url) {
+                    if (p->projectFile() == path) {
                         shouldOpen = false;
                         break;
                     }
                 }
                 if (shouldOpen) {
-                    core->projectController()->openProject( url );
+                    core->projectController()->openProject( path.toUrl() );
                 }
             }
         }
@@ -551,7 +552,7 @@ int main( int argc, char *argv[] )
     } else {
         foreach ( const File& file, initialFiles ) {
             if(!core->documentController()->openDocument(file.first, KTextEditor::Cursor(file.second, 0))) {
-                kWarning() << i18n("Could not open %1", file.first);
+                kWarning() << i18n("Could not open %1", file.first.toDisplayString(QUrl::PreferLocalFile));
             }
         }
     }

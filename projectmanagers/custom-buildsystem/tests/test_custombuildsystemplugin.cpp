@@ -60,7 +60,7 @@ void TestCustomBuildSystemPlugin::initTestCase()
 
 void TestCustomBuildSystemPlugin::loadSimpleProject()
 {
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/simpleproject/simpleproject.kdev4" );
+    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/simpleproject/simpleproject.kdev4" );
     KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
     ICore::self()->projectController()->openProject( projecturl );
     // Wait for the project to be opened
@@ -76,7 +76,7 @@ void TestCustomBuildSystemPlugin::loadSimpleProject()
 
 void TestCustomBuildSystemPlugin::buildDirProject()
 {
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/builddirproject/builddirproject.kdev4" );
+    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/builddirproject/builddirproject.kdev4" );
     KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
     ICore::self()->projectController()->openProject( projecturl );
     // Wait for the project to be opened
@@ -94,7 +94,7 @@ void TestCustomBuildSystemPlugin::buildDirProject()
 
 void TestCustomBuildSystemPlugin::loadMultiPathProject()
 {
-    KUrl projecturl( PROJECTS_SOURCE_DIR"/multipathproject/multipathproject.kdev4" );
+    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/multipathproject/multipathproject.kdev4" );
     KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
     ICore::self()->projectController()->openProject( projecturl );
     // Wait for the project to be opened

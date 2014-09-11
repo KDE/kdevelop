@@ -74,12 +74,12 @@ QString CMakeJob::cmakeBinary( KDevelop::IProject* project )
     return CMake::currentCMakeBinary( project ).toLocalFile();
 }
 
-KUrl CMakeJob::workingDirectory() const
+QUrl CMakeJob::workingDirectory() const
 {
-    KUrl url = CMake::currentBuildDir( m_project );
-    kDebug(9042) << "builddir: " << url;
-    Q_ASSERT(!url.isEmpty() && !url.isRelative()); //We cannot get the project folder as a build directory!
-    return url;
+    KDevelop::Path path = CMake::currentBuildDir( m_project );
+    kDebug(9042) << "builddir: " << path;
+    Q_ASSERT(path.isValid()); //We cannot get the project folder as a build directory!
+    return path.toUrl();
 }
 
 QStringList CMakeJob::commandLine() const

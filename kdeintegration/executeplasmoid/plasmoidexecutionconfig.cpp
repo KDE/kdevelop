@@ -32,6 +32,8 @@
 #include <serialization/indexedstring.h>
 #include <util/kdevstringhandler.h>
 #include <util/executecompositejob.h>
+#include <util/path.h>
+
 #include <KMessageBox>
 #include <KParts/MainWindow>
 #include <KConfigGroup>
@@ -281,16 +283,16 @@ QIcon PlasmoidExecutionConfigType::icon() const
     return QIcon::fromTheme("plasma");
 }
 
-bool canLaunchMetadataFile(const KUrl& url)
+static bool canLaunchMetadataFile(const KDevelop::Path &path)
 {
-    KConfig cfg(url.toLocalFile(), KConfig::SimpleConfig);
+    KConfig cfg(path.toLocalFile(), KConfig::SimpleConfig);
     KConfigGroup group(&cfg, "Desktop Entry");
     QStringList services = group.readEntry("ServiceTypes", group.readEntry("X-KDE-ServiceTypes", QStringList()));
     return services.contains("Plasma/Applet");
 }
 
 //don't bother, nobody uses this interface
-bool PlasmoidExecutionConfigType::canLaunch(const KUrl& ) const
+bool PlasmoidExecutionConfigType::canLaunch(const QUrl& ) const
 {
     return false;
 }
@@ -299,7 +301,7 @@ bool PlasmoidExecutionConfigType::canLaunch(KDevelop::ProjectBaseItem* item) con
 {
     KDevelop::ProjectFolderItem* folder = item->folder();
     if(folder && folder->hasFileOrFolder("metadata.desktop")) {
-        return canLaunchMetadataFile(KUrl(folder->url(), "metadata.desktop"));
+        return canLaunchMetadataFile(KDevelop::Path(folder->path(), "metadata.desktop"));
     }
     return false;
 }
@@ -319,10 +321,10 @@ QMenu* PlasmoidExecutionConfigType::launcherSuggestions()
     foreach(KDevelop::IProject* p, projects) {
         QSet<KDevelop::IndexedString> files = p->fileSet();
         foreach(const KDevelop::IndexedString& file, files) {
-            KUrl url = file.toUrl();
-            if(url.fileName()=="metadata.desktop" && canLaunchMetadataFile(url)) {
-                url = url.upUrl();
-                QString relUrl = KUrl::relativeUrl(p->folder(), url);
+            KDevelop::Path path(file.str());
+            if (path.lastPathSegment() == "metadata.desktop" && canLaunchMetadataFile(path)) {
+                path = path.parent();
+                QString relUrl = p->path().relativePath(path);
                 QAction* action = new QAction(relUrl, this);
                 action->setProperty("url", relUrl);
                 action->setProperty("project", qVariantFromValue<KDevelop::IProject*>(p));

@@ -43,11 +43,11 @@ static QString projectBuildDirs = "BuildDirs";
 
 struct TestProjectPaths {
     // foo/
-    KUrl sourceDir;
+    KDevelop::Path sourceDir;
     // foo/foo.kdev4
-    KUrl projectFile;
+    KDevelop::Path projectFile;
     // foo/.kdev4/foo.kdev4
-    KUrl configFile;
+    KDevelop::Path configFile;
 };
 
 TestProjectPaths projectPaths(const QString& project, QString name = QString())
@@ -56,11 +56,10 @@ TestProjectPaths projectPaths(const QString& project, QString name = QString())
     if(QDir::isRelativePath(project)) {
         QFileInfo info(QString(CMAKE_TESTS_PROJECTS_DIR)+"/"+project);
         Q_ASSERT(info.exists());
-        paths.sourceDir = info.canonicalFilePath();
+        paths.sourceDir = KDevelop::Path(info.canonicalFilePath());
     } else {
-        paths.sourceDir = project;
+        paths.sourceDir = KDevelop::Path(project);
     }
-    paths.sourceDir.adjustPath(KUrl::AddTrailingSlash);
 
     QString kdev4Name;
     if (name.isEmpty()) {
@@ -69,12 +68,10 @@ TestProjectPaths projectPaths(const QString& project, QString name = QString())
     } else
         kdev4Name = name+".kdev4";
 
-    paths.projectFile = paths.sourceDir;
-    paths.projectFile.addPath(kdev4Name);
+    paths.projectFile = KDevelop::Path(paths.sourceDir, kdev4Name);
     Q_ASSERT(QFile::exists(paths.projectFile.toLocalFile()));
 
-    paths.configFile = paths.sourceDir;
-    paths.configFile.addPath(".kdev4/" + kdev4Name);
+    paths.configFile = KDevelop::Path(paths.sourceDir, QString(QStringLiteral(".kdev4/") + kdev4Name));
 
     return paths;
 }
@@ -110,9 +107,9 @@ void defaultConfigure(const TestProjectPaths& paths)
     cmakeGrp.writeEntry( currentBuildDirectoryIndexKey, 0);
 
     KConfigGroup buildDirGrp = cmakeGrp.group(QStringLiteral("CMake Build Directory 0"));
-    buildDirGrp.writeEntry<QUrl>( currentBuildDirKey, bd.buildFolder() );
-    buildDirGrp.writeEntry<QUrl>( currentCMakeBinaryKey, bd.cmakeBinary() );
-    buildDirGrp.writeEntry<QUrl>( currentInstallDirKey, bd.installPrefix() );
+    buildDirGrp.writeEntry( currentBuildDirKey, bd.buildFolder().toLocalFile() );
+    buildDirGrp.writeEntry( currentCMakeBinaryKey, bd.cmakeBinary().toLocalFile() );
+    buildDirGrp.writeEntry( currentInstallDirKey, bd.installPrefix().toLocalFile() );
     buildDirGrp.writeEntry( currentExtraArgumentsKey, bd.extraArguments() );
     buildDirGrp.writeEntry( currentBuildTypeKey, bd.buildType() );
     buildDirGrp.writeEntry( projectBuildDirs, QStringList() << bd.buildFolder().toLocalFile());
@@ -125,7 +122,7 @@ KDevelop::IProject* loadProject(const QString& name, const QString& relative = Q
     const TestProjectPaths paths = projectPaths(name+relative, name);
     defaultConfigure(paths);
 
-    KDevelop::ICore::self()->projectController()->openProject(paths.projectFile);
+    KDevelop::ICore::self()->projectController()->openProject(paths.projectFile.toUrl());
 
     qRegisterMetaType<KDevelop::IProject*>();
     const bool gotSignal = QSignalSpy(
@@ -138,8 +135,7 @@ KDevelop::IProject* loadProject(const QString& name, const QString& relative = Q
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectByName(name);
     Q_ASSERT(project);
     Q_ASSERT(project->buildSystemManager());
-    Q_ASSERT(paths.projectFile == project->projectFileUrl());
-    Q_ASSERT(project->folder() == project->folder());
+    Q_ASSERT(paths.projectFile == project->projectFile());
     return project;
 }
 

@@ -177,7 +177,7 @@ QString sourceOrHeaderCandidate( const QString &path_, bool fast )
 }
 
 
-bool isHeader(const KUrl &url) {
+bool isHeader(const QUrl &url) {
   QFileInfo fi( url.toLocalFile() );
   QString path = fi.filePath();
   // extract the exension
@@ -351,8 +351,8 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const QString& source, bool l
         }
 
         if(local) {
-            KUrl localPath(source);
-            localPath.setFileName(QString());
+            QUrl localPath = QUrl::fromLocalFile(source);
+            localPath = localPath.adjusted(QUrl::RemoveFilename);
             paths.push_front(localPath.toLocalFile());
         }
       }
@@ -397,9 +397,9 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const QString& source, bool l
             }
             if(prependAddedPathToName) {
               item.name = addPath + item.name;
-              item.basePath = path;
+              item.basePath = QUrl::fromLocalFile(path);
             } else {
-              item.basePath = searchPath;
+              item.basePath = QUrl::fromLocalFile(searchPath);
             }
             
             item.isDirectory = dirContent.fileInfo().isDir();

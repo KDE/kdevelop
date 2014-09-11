@@ -26,13 +26,13 @@
 #include <QProcess>
 #include <QString>
 
+#include <util/path.h>
+
 namespace KDevelop {
 class IProject;
 class ProjectBaseItem;
 class CommandExecutor;
 }
-
-class KUrl;
 
 class CMakeJob: public KDevelop::OutputExecuteJob
 {
@@ -52,7 +52,7 @@ public:
     virtual void start();
 
     // This returns the build directory for registered item.
-    virtual KUrl workingDirectory() const;
+    virtual QUrl workingDirectory() const;
 
     // This returns the "cmake" command line.
     virtual QStringList commandLine() const;
@@ -62,7 +62,7 @@ public:
 
 private:
     QStringList cmakeArguments( KDevelop::IProject* project );
-    KUrl buildDir( KDevelop::IProject* project );
+    KDevelop::Path buildDir( KDevelop::IProject* project );
     QString cmakeBinary( KDevelop::IProject* project );
 
     KDevelop::IProject* m_project;

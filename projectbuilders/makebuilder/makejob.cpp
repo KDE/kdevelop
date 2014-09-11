@@ -106,7 +106,7 @@ QStringList MakeJob::customTargets() const
     return m_overrideTargets;
 }
 
-KUrl MakeJob::workingDirectory() const
+QUrl MakeJob::workingDirectory() const
 {
     ProjectBaseItem* it = item();
     if(!it)

@@ -28,7 +28,7 @@
 
 #include <QTreeWidget>
 
-#include <KUrl>
+#include <QUrl>
 #include <KDialog>
 
 #include <KConfigGroup>
@@ -115,7 +115,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     void slotActivate(bool activate);
     void slotDeactivate();
-    void slotShowStepInSource(const KUrl &fileName, int lineNum, const QString &address);
+    void slotShowStepInSource(const QUrl &fileName, int lineNum, const QString &address);
     void slotChangeAddress();
     ///Disassembles code at @p address and updates registers
     void update(const QString &address);

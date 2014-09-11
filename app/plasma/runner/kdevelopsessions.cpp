@@ -31,7 +31,7 @@
 #include <KToolInvocation>
 #include <KConfig>
 #include <KConfigGroup>
-#include <KUrl>
+#include <QUrl>
 #include <KStringHandler>
 
 bool kdevelopsessions_runner_compare_sessions(const Session &s1, const Session &s2) {

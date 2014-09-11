@@ -26,7 +26,7 @@
 #include <QHash>
 #include <QSet>
 
-#include <KUrl>
+#include <util/path.h>
 
 /**
 * This class parses the CMakeCache.txt files and put it to a Model
@@ -36,7 +36,7 @@ class CMakeCacheModel : public QStandardItemModel
 {
     Q_OBJECT
     public:
-        CMakeCacheModel(QObject* parent, const KUrl &path);
+        CMakeCacheModel(QObject* parent, const KDevelop::Path &path);
         ~CMakeCacheModel() {}
         bool writeDown() const { return writeBack(m_filePath); }
         int internal() const { return m_internalBegin; }
@@ -46,16 +46,16 @@ class CMakeCacheModel : public QStandardItemModel
         bool isInternal(int i) const;
         
         QList<QModelIndex> persistentIndices() const;
-        KUrl filePath() const;
+        KDevelop::Path filePath() const;
         void read();
         
     private slots:
         void reset();
         
     private:
-        bool writeBack(const KUrl& path) const;
+        bool writeBack(const KDevelop::Path &path) const;
         
-        KUrl m_filePath;
+        KDevelop::Path m_filePath;
         int m_internalBegin;
         QSet<QString> m_internal;
 };

@@ -73,7 +73,7 @@ void TestCppAssistants::cleanupTestCase()
   globalTestLock = 0;
 }
 
-static QString createFile(const QString& fileContents)
+static QUrl createFile(const QString& fileContents)
 {
   static KTempDir dirA;
   static int i = 0;
@@ -82,7 +82,7 @@ static QString createFile(const QString& fileContents)
   file.open(QIODevice::WriteOnly | QIODevice::Text);
   file.write(fileContents.toUtf8());
   file.close();
-  return file.fileName();
+  return QUrl::fromLocalFile(file.fileName());
 }
 
 class Testbed
@@ -100,7 +100,7 @@ public:
     m_headerDocument.textView = openDocument(m_headerDocument.url);
     m_headerDocument.textDoc = m_headerDocument.textView->document();
 
-    m_cppDocument.url = createFile(QString("#include \"%1\"\n").arg(m_headerDocument.url) + cppContents);
+    m_cppDocument.url = createFile(QString("#include \"%1\"\n").arg(m_headerDocument.url.toLocalFile()) + cppContents);
     m_cppDocument.textView = openDocument(m_cppDocument.url);
     m_cppDocument.textDoc = m_cppDocument.textView->document();
   }
@@ -145,12 +145,12 @@ public:
   }
 private:
   struct TestDocument {
-    QString url;
+    QUrl url;
     View *textView;
     Document *textDoc;
   };
 
-  View* openDocument(const QString& url)
+  View* openDocument(const QUrl& url)
   {
     Core::self()->documentController()->openDocument(url);
     DUChain::self()->waitForUpdate(IndexedString(url), KDevelop::TopDUContext::AllDeclarationsAndContexts);
@@ -407,7 +407,7 @@ void TestCppAssistants::testMacroExpansion()
   QFETCH(QString, expected);
   QFETCH(int, macroLine);
 
-  KUrl url(createFile(input));
+  QUrl url = createFile(input);
   Core::self()->documentController()->openDocument(url);
   DUChain::self()->waitForUpdate(IndexedString(url), KDevelop::TopDUContext::AllDeclarationsAndContexts);
 

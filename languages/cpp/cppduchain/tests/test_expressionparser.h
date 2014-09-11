@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QByteArray>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include "parser.h"
 #include "control.h"

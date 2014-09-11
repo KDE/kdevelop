@@ -37,6 +37,7 @@
 #include <util/processlinemaker.h>
 #include <util/environmentgrouplist.h>
 #include <util/commandexecutor.h>
+#include <util/path.h>
 
 #include <kshell.h>
 #include <interfaces/icore.h>
@@ -64,7 +65,7 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, ILaunch
     m_process->setArguments( arguments(cfg) );
     m_process->setWorkingDirectory(workingDirectory(cfg));
     
-    OutputModel* model = new OutputModel(m_process->workingDirectory(), this);
+    OutputModel* model = new OutputModel(QUrl::fromLocalFile(m_process->workingDirectory()), this);
     model->setFilteringStrategy(OutputModel::CompilerFilter);
     setModel( model );
 
@@ -138,7 +139,7 @@ QString PlasmoidExecutionJob::workingDirectory(ILaunchConfiguration* cfg)
     IProject* p = cfg->project();
     if(p) {
         QString identifier = cfg->config().readEntry("PlasmoidIdentifier", "");
-        QString possiblePath = KUrl(p->folder(), identifier).toLocalFile();
+        QString possiblePath = Path(p->path(), identifier).toLocalFile();
         if(QFileInfo(possiblePath).isDir()) {
             workingDirectory = possiblePath;
         }

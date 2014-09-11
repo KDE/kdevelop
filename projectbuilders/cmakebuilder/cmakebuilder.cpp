@@ -43,7 +43,7 @@
 #include <kdebug.h>
 #include <KProcess>
 #include <kjob.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include "cmakejob.h"
 #include "prunejob.h"

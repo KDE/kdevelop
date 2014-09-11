@@ -68,6 +68,7 @@
 #include <cpputils.h>
 #include <interfaces/ilanguage.h>
 #include <util/foregroundlock.h>
+#include <util/path.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 
@@ -137,10 +138,10 @@ struct MainThreadHelper : public QObject
   Q_OBJECT
 
   public slots:
-    void replaceCurrentAccess(const KUrl& url, const QString& oldAccess, const QString& newAccess);
+    void replaceCurrentAccess(const QUrl &url, const QString& oldAccess, const QString& newAccess);
 };
 
-void MainThreadHelper::replaceCurrentAccess(const KUrl& url, const QString& oldAccess, const QString& newAccess)
+void MainThreadHelper::replaceCurrentAccess(const QUrl &url, const QString& oldAccess, const QString& newAccess)
 {
   IDocument* document = ICore::self()->documentController()->documentForUrl(url);
   if(document) {
@@ -150,7 +151,7 @@ void MainThreadHelper::replaceCurrentAccess(const KUrl& url, const QString& oldA
       if(textDocument) {
         KTextEditor::Cursor cursor = activeView->cursorPosition();
 
-        static KUrl lastUrl;
+        static QUrl lastUrl;
         static KTextEditor::Cursor lastPos;
         if(lastUrl == url && lastPos == cursor) {
           kDebug() << "Not doing the same access replacement twice at" << lastUrl << lastPos;
@@ -1119,12 +1120,10 @@ bool CodeCompletionContext::doIncludeCompletion()
 
   kDebug(9007) << "extract prefix from " << line;
   //Extract the prefix-path
-  KUrl u(line);
 
   QString prefixPath;
   if(line.contains('/')) {
-    u.setFileName(QString());
-    prefixPath = u.toLocalFile();
+    prefixPath = Path(line).parent().toLocalFile();
   }
   kDebug(9007) << "extracted prefix " << prefixPath;
 
@@ -1247,7 +1246,7 @@ bool CodeCompletionContext::isImplementationHelperValid() const
                                  m_duContext->type() == DUContext::Global) );
 }
 
-static TopDUContext* proxyContextForUrl(KUrl url)
+static TopDUContext* proxyContextForUrl(QUrl url)
 {
   QList< ILanguage* > languages = ICore::self()->languageController()->languagesForUrl(url);
   foreach(ILanguage* language, languages)
@@ -2106,7 +2105,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
     ret += getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);
 
   if(!CppUtils::isHeader( searchInContext->url().toUrl() )) {
-    KUrl headerUrl = CppUtils::sourceOrHeaderCandidate( searchInContext->url().str(), false );
+    QUrl headerUrl = QUrl::fromLocalFile(CppUtils::sourceOrHeaderCandidate( searchInContext->url().str(), false ));
     searchInContext = ICore::self()->languageController()->language("C++")->languageSupport()->standardContext(headerUrl);
     if(searchInContext)
       ret += getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);
@@ -2335,7 +2334,7 @@ void CodeCompletionContext::replaceCurrentAccess(const QString& old, const QStri
 {
   //We must not change the document from within the background, so we use a queued connection to an object created in the foregroud
   QMetaObject::invokeMethod(&s_mainThreadHelper, "replaceCurrentAccess", Qt::QueuedConnection,
-                            Q_ARG(KUrl, m_duContext->url().toUrl()), Q_ARG(QString, old), Q_ARG(QString, _new));
+                            Q_ARG(QUrl, m_duContext->url().toUrl()), Q_ARG(QString, old), Q_ARG(QString, _new));
 }
 
 int CodeCompletionContext::matchPosition() const {

@@ -30,7 +30,7 @@
 // Qt
 #include <QtCore/QVariantList>
 
-class KUrl;
+class QUrl;
 
 namespace KASTEN_NAMESPACE
 {

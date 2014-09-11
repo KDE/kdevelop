@@ -36,7 +36,7 @@
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KAboutData>
-#include <KUrl>
+#include <QUrl>
 #include <KAction>
 #include <KMessageBox>
 #include <ktexteditor/document.h>
@@ -228,9 +228,9 @@ void CMakeManager::importFinished(KJob* j)
     m_projects[job->project()] = data;
 }
 
-// void CMakeManager::deletedWatchedDirectory(IProject* p, const KUrl& dir)
+// void CMakeManager::deletedWatchedDirectory(IProject* p, const QUrl &dir)
 // {
-//     if(p->folder().equals(dir, KUrl::CompareWithoutTrailingSlash)) {
+//     if(p->folder().equals(dir, QUrl::CompareWithoutTrailingSlash)) {
 //         ICore::self()->projectController()->closeProject(p);
 //     } else {
 //         if(dir.fileName()=="CMakeLists.txt") {
@@ -259,7 +259,7 @@ void CMakeManager::importFinished(KJob* j)
 
 // void CMakeManager::realDirectoryChanged(const QString& dir)
 // {
-//     KUrl path(dir);
+//     QUrl path(dir);
 //     IProject* p=ICore::self()->projectController()->findProjectForUrl(dir);
 //     if(!p || !p->isReady()) {
 //         if(p) {
@@ -270,7 +270,7 @@ void CMakeManager::importFinished(KJob* j)
 //     }
 //
 //     if(!QFile::exists(dir)) {
-//         path.adjustPath(KUrl::AddTrailingSlash);
+//         path.adjustPath(QUrl::AddTrailingSlash);
 //         deletedWatchedDirectory(p, path);
 //     } else
 //         dirtyFile(dir);
@@ -336,7 +336,7 @@ KDevelop::ICodeHighlighting* CMakeManager::codeHighlighting() const
 //     if(du)
 //     {
 //         KTextEditor::Cursor c;
-//         KUrl url;
+//         QUrl url;
 //         {
 //             KDevelop::DUChainReadLocker lock;
 //             Declaration* decl = du->declaration().data();
@@ -363,18 +363,18 @@ KDevelop::ICodeHighlighting* CMakeManager::codeHighlighting() const
 //     CMakeFolderItem *nearestCMakeFolderItem = nearestCMakeFolder(toFolder);
 //     IProject* project=toFolder->project();
 //
-//     KUrl::List movedUrls;
-//     KUrl::List oldUrls;
+//     QList<QUrl> movedUrls;
+//     QList<QUrl> oldUrls;
 //     foreach(ProjectBaseItem *movedItem, items)
 //     {
 //         QList<ProjectBaseItem*> dirtyItems = cmakeListedItemsAffectedByUrlChange(project, movedItem->url());
-//         KUrl movedItemNewUrl = toFolder->url();
+//         QUrl movedItemNewUrl = toFolder->url();
 //         movedItemNewUrl.addPath(movedItem->baseName());
 //         if (movedItem->folder())
-//             movedItemNewUrl.adjustPath(KUrl::AddTrailingSlash);
+//             movedItemNewUrl.adjustPath(QUrl::AddTrailingSlash);
 //         foreach(ProjectBaseItem* dirtyItem, dirtyItems)
 //         {
-//             KUrl dirtyItemNewUrl = afterMoveUrl(dirtyItem->url(), movedItem->url(), movedItemNewUrl);
+//             QUrl dirtyItemNewUrl = afterMoveUrl(dirtyItem->url(), movedItem->url(), movedItemNewUrl);
 //             if (CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>(dirtyItem))
 //             {
 //                 cmakeSuccessful &= changesWidgetRemoveCMakeFolder(folder, &changesWidget);
@@ -401,8 +401,8 @@ KDevelop::ICodeHighlighting* CMakeManager::codeHighlighting() const
 //             return false;
 //     }
 //
-//     KUrl::List::const_iterator it1=oldUrls.constBegin(), it1End=oldUrls.constEnd();
-//     KUrl::List::const_iterator it2=movedUrls.constBegin();
+//     QList<QUrl>::const_iterator it1=oldUrls.constBegin(), it1End=oldUrls.constEnd();
+//     QList<QUrl>::const_iterator it2=movedUrls.constBegin();
 //     Q_ASSERT(oldUrls.size()==movedUrls.size());
 //     for(; it1!=it1End; ++it1, ++it2)
 //     {
@@ -587,7 +587,7 @@ bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &_files, Pro
 //     bool cmakeSuccessful = true, changedCMakeLists=false;
 //     IProject* project=item->project();
 //     const Path oldPath=item->path();
-//     KUrl oldUrl=oldPath.toUrl();
+//     QUrl oldUrl=oldPath.toUrl();
 //     if (item->file())
 //     {
 //         QList<ProjectBaseItem*> targetFiles = cmakeListedItemsAffectedByUrlChange(project, oldUrl);
@@ -630,7 +630,7 @@ bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &_files, Pro
 //     return renameFileOrFolder(item, newPath);
 // }
 
-QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position)
+QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position)
 { return 0; }
 // {
 //     KDevelop::TopDUContextPointer top= TopDUContextPointer(KDevelop::DUChain::self()->chainForDocument(url));

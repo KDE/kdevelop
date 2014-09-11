@@ -430,7 +430,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     m_hadMemberAccess = m_memberAccess;
     
     CursorInRevision position = m_session->positionAt( m_session->token_stream->position(node->start_token) );
-    if( m_currentContext->url() != m_session->m_url ) //.equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) )
+    if( m_currentContext->url() != m_session->m_url ) //.equals( m_session->m_url, QUrl::CompareWithoutTrailingSlash ) )
       position = position.invalid();
 
     bool isConst = false;

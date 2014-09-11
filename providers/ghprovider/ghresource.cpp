@@ -19,7 +19,7 @@
 
 
 #include <KDebug>
-#include <KUrl>
+#include <QUrl>
 #include <kio/scheduler.h>
 #include <kio/transferjob.h>
 #include <kio/storedtransferjob.h>
@@ -56,8 +56,9 @@ void Resource::getOrgs(const QString &token)
 
 void Resource::authenticate(const QString &name, const QString &password)
 {
-    KUrl url = baseUrl;
-    url.addPath("/authorizations");
+    QUrl url = baseUrl;
+    url = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + '/' + "/authorizations");
     QByteArray data = "{ \"scopes\": [\"repo\"], \"note\": \"KDevelop Github Provider\" }";
     KIO::StoredTransferJob *job = KIO::storedHttpPost(data, url, KIO::HideProgressInfo);
     job->addMetaData("customHTTPHeader", "Authorization: Basic " + QString (name + ':' + password).toUtf8().toBase64());
@@ -67,8 +68,8 @@ void Resource::authenticate(const QString &name, const QString &password)
 
 void Resource::revokeAccess(const QString &id, const QString &name, const QString &password)
 {
-    KUrl url = baseUrl;
-    url.addPath("/authorizations/" + id);
+    QUrl url = baseUrl;
+    url.setPath(url.path() + "/authorizations/" + id);
     KIO::TransferJob *job = KIO::http_delete(url, KIO::HideProgressInfo);
     job->addMetaData("customHTTPHeader", "Authorization: Basic " + QString (name + ':' + password).toUtf8().toBase64());
     /* And we don't care if it's successful ;) */
@@ -77,8 +78,9 @@ void Resource::revokeAccess(const QString &id, const QString &name, const QStrin
 
 KIO::TransferJob * Resource::getTransferJob(const QString &uri, const QString &token) const
 {
-    KUrl url = baseUrl;
-    url.addPath(uri);
+    QUrl url = baseUrl;
+    url = url.adjusted(QUrl::StripTrailingSlash);
+    url.setPath(url.path() + '/' + uri);
     KIO::TransferJob *job = KIO::get(url, KIO::Reload, KIO::HideProgressInfo);
     if (!token.isEmpty())
         job->addMetaData("customHTTPHeader", "Authorization: token " + token);

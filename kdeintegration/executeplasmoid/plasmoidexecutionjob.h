@@ -24,7 +24,7 @@
 #include <QtCore/QProcess>
 #include <outputview/outputjob.h>
 
-class KUrl;
+class QUrl;
 class ExecutePlasmoidPlugin;
 
 namespace KDevelop

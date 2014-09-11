@@ -80,14 +80,14 @@
 namespace KDevelop
 {
 
-OktetaDocument::OktetaDocument( const KUrl& url , ICore* core )
+OktetaDocument::OktetaDocument( const QUrl &url , ICore* core )
   : Sublime::UrlDocument( core->uiController()->controller(), url ),
     IDocument( core ),
     mByteArrayDocument( 0 )
 {
 }
 
-KUrl OktetaDocument::url() const { return Sublime::UrlDocument::url(); }
+QUrl OktetaDocument::url() const { return Sublime::UrlDocument::url(); }
 
 // TODO: use fromContentAndUrl(ByteArrayIODevice) if document loaded
 QMimeType OktetaDocument::mimeType() const { return QMimeDatabase().mimeTypeForUrl( url() ); }

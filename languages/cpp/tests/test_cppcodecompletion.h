@@ -24,7 +24,7 @@
 #include <QByteArray>
 #include <QMap>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <language/editor/cursorinrevision.h>
 #include <language/duchain/identifier.h>
@@ -176,7 +176,7 @@ private:
   //Preprocesses the text, and parses all included strings within the correct context. Only strings that were added using addInclude(..) can be parsed. The url is only neede for the EnvironmentFile.
   QString preprocess( const IndexedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent = 0, bool stopAfterHeaders = false, QExplicitlySharedDataPointer<Cpp::EnvironmentFile>* = 0, rpp::LocationTable** returnLocationTable = 0L, PreprocessedContents* contents = 0L );
 
-  KDevelop::TopDUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType), rpp::pp* parent = 0, KUrl identity = QUrl(), TopDUContext* update = 0);
+  KDevelop::TopDUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType), rpp::pp* parent = 0, QUrl identity = QUrl(), TopDUContext* update = 0);
 
   void release(KDevelop::DUContext* top);
 

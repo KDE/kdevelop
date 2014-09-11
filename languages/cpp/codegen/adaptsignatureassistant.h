@@ -25,7 +25,7 @@
 #include <language/duchain/identifier.h>
 #include <language/duchain/topducontext.h>
 
-#include <KUrl>
+#include <QUrl>
 #include <QPointer>
 
 namespace KTextEditor {
@@ -50,7 +50,7 @@ class AdaptSignatureAssistant : public StaticAssistant
     virtual bool isUseful() const;
 
   private:
-    DUContext* findFunctionContext(const KUrl& url, const KTextEditor::Range& position) const;
+    DUContext* findFunctionContext(const QUrl &url, const KTextEditor::Range& position) const;
 
     ///Compare @param newSignature to m_oldSignature and put differences in oldPositions
     ///@returns whether or not there are any differences
@@ -69,7 +69,7 @@ class AdaptSignatureAssistant : public StaticAssistant
     DUContextPointer m_otherSideContext;
     //old signature of the _other_side
     Signature m_oldSignature;
-    KUrl m_document;
+    QUrl m_document;
     QPointer<KTextEditor::View> m_view;
 
   private slots:

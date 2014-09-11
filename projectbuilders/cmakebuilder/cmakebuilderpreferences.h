@@ -21,8 +21,9 @@
 #ifndef MAKEBUILDERPREFERENCES_H
 #define MAKEBUILDERPREFERENCES_H
 
+#include <QUrl>
+
 #include <kcmodule.h>
-#include <kurl.h>
 
 class QWidget;
 class QStringList;

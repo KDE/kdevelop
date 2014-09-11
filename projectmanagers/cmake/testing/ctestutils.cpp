@@ -48,7 +48,7 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolder
 
     foreach (const Test& test, testSuites)
     {
-        KUrl::List files;
+        QList<QUrl> files;
         QString exe = test.executable;
         QString targetName = QFileInfo(exe).fileName();
         QList<ProjectTargetItem*> items = bsm->targets(folder);

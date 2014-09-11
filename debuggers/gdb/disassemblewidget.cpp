@@ -234,8 +234,8 @@ void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
     m_registersManager->setSession(session);
 
     if (session) {
-        connect(session, SIGNAL(showStepInSource(KUrl,int,QString)),
-                SLOT(slotShowStepInSource(KUrl,int,QString)));
+        connect(session, SIGNAL(showStepInSource(QUrl,int,QString)),
+                SLOT(slotShowStepInSource(QUrl,int,QString)));
         connect(session,SIGNAL(showStepInDisassemble(QString)),SLOT(update(QString)));
     }
 }
@@ -293,7 +293,7 @@ void DisassembleWidget::slotActivate(bool activate)
 
 /***************************************************************************/
 
-void DisassembleWidget::slotShowStepInSource(const KUrl&, int,
+void DisassembleWidget::slotShowStepInSource(const QUrl&, int,
         const QString& currentAddress)
 {
     update(currentAddress);

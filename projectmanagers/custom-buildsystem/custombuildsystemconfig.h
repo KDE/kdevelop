@@ -24,14 +24,14 @@
 #include <QVector>
 #include <QList>
 #include <QStringList>
-#include <KUrl>
+#include <QUrl>
 
 struct CustomBuildSystemTool
 {
     enum ActionType { Build = 0, Configure, Install, Clean, Prune, Undefined };
     CustomBuildSystemTool() : enabled( false ), type( Undefined ) {}
     bool enabled;
-    KUrl executable;
+    QUrl executable;
     QString arguments;
     QString envGrp;
     ActionType type;
@@ -42,7 +42,7 @@ Q_DECLARE_METATYPE( CustomBuildSystemTool )
 struct CustomBuildSystemConfig
 {
     QString title;
-    KUrl buildDir;
+    QUrl buildDir;
     QVector<CustomBuildSystemTool> tools;
 
     CustomBuildSystemConfig()

@@ -17,14 +17,14 @@
 */
 
 #include "kdeprojectsreader.h"
-#include <KUrl>
+#include <QUrl>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QXmlStreamReader>
 #include <QDebug>
 #include <vcs/vcslocation.h>
 
-static KUrl kdeProjectsUrl("https://projects.kde.org/kde_projects.xml");
+static QUrl kdeProjectsUrl("https://projects.kde.org/kde_projects.xml");
 
 KDEProjectsReader::KDEProjectsReader(KDEProjectsModel* m, QObject* parent)
     : QObject(parent)

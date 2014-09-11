@@ -76,6 +76,12 @@ void TestCppCodegen::cleanupTestCase()
   globalTestLock = 0;
 }
 
+void TestCppCodegen::cleanup()
+{
+  // make sure there aren't any stale queued documents to be parsed
+  ICore::self()->languageController()->backgroundParser()->revertAllRequests(nullptr);
+}
+
 void dumpAST(InsertIntoDUChain& code)
 {
     DUChainReadLocker lock;
@@ -653,9 +659,6 @@ void TestCppCodegen::testMoveIntoSource()
   QFETCH(QString, newImpl);
   QFETCH(QualifiedIdentifier, id);
 
-  // make sure there aren't any stale queued documents to be parsed
-  QCOMPARE(ICore::self()->languageController()->backgroundParser()->queuedCount(), 0);
-
   TestFile header(origHeader, "h");
   TestFile impl(origImpl, "cpp", &header);
 
@@ -684,11 +687,6 @@ void TestCppCodegen::testMoveIntoSource()
 
   QCOMPARE(header.fileContents(), newHeader);
   QCOMPARE(impl.fileContents(), newImpl);
-
-  // SimpleRefactoring::moveIntoSource re-adds the documents to the BackgroundParser
-  // make sure we don't leave any stale requests for the next tests in the BackgroundParser
-  ICore::self()->languageController()->backgroundParser()->revertAllRequests(0);
-  QCOMPARE(ICore::self()->languageController()->backgroundParser()->queuedCount(), 0);
 }
 
 void TestCppCodegen::testMoveIntoSource_data()

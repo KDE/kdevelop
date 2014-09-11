@@ -22,7 +22,7 @@
 #include <interfaces/iassistant.h>
 #include <serialization/indexedstring.h>
 #include <language/duchain/problem.h>
-#include <kurl.h>
+#include <QUrl>
 
 
 namespace KDevelop {
@@ -45,12 +45,12 @@ private:
 
 class OpenProjectForFileAssistant : public KDevelop::IAssistantAction {
 public:
-  OpenProjectForFileAssistant(const KUrl&);
+  OpenProjectForFileAssistant(const QUrl&);
   virtual QString description() const override;
   virtual void execute() override;
 
 private:
-  KUrl m_url;
+  QUrl m_url;
 };
 
 class MissingIncludePathAssistant : public KDevelop::IAssistant {

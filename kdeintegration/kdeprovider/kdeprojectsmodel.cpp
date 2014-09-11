@@ -18,7 +18,7 @@
 
 #include "kdeprojectsmodel.h"
 #include <QIcon>
-#include <KUrl>
+#include <QUrl>
 #include <QDebug>
 #include <vcs/vcslocation.h>
 

@@ -37,27 +37,17 @@ using namespace KDevelop;
 
 namespace {
 
-QList<QUrl> fromLocalPaths(const QStringList &urls)
-{
-    QList<QUrl> lst;
-    lst.reserve(urls.size());
-    foreach (const QString &str, urls) {
-        lst.append(QUrl::fromLocalFile(str));
-    }
-    return lst;
-}
-
 CMakeFile dataFromJson(const QVariantMap& entry)
 {
     MakeFileResolver resolver;
     PathResolutionResult result = resolver.processOutput(entry["command"].toString(), entry["directory"].toString());
 
     CMakeFile ret;
-    ret.includes = KDevelop::toPathList(fromLocalPaths(result.paths));
+    ret.includes = KDevelop::toPathList(result.paths);
     return ret;
 }
 
-CMakeJsonData import(const KUrl& commandsFile)
+CMakeJsonData import(const Path& commandsFile)
 {
     // NOTE: to get compile_commands.json, you need -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     QFile f(commandsFile.toLocalFile());

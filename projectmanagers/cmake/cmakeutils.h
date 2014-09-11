@@ -22,7 +22,7 @@
 #define CMAKEUTILS_H
 
 #include "cmakecommonexport.h"
-#include <KUrl>
+
 #include <QStringList>
 #include <util/path.h>
 
@@ -30,10 +30,8 @@ namespace KDevelop
 {
     class ProjectBaseItem;
     class IProject;
-    class Path;
 }
 
-class KUrl;
 class ICMakeDocumentation;
 class CMakeCacheModel;
 
@@ -52,13 +50,13 @@ namespace CMake
      * @returns the current builddir for the given project or an empty url if none
      * has been set by the user.
      */
-    KDEVCMAKECOMMON_EXPORT KUrl currentBuildDir( KDevelop::IProject* project );
+    KDEVCMAKECOMMON_EXPORT KDevelop::Path currentBuildDir( KDevelop::IProject* project );
 
     /**
      * @returns the path to the 'compile_commands.json' file in the current builddir for the given project
      * or an empty url if none has been set by the user.
      */
-    KDEVCMAKECOMMON_EXPORT KUrl commandsFile( KDevelop::IProject* project );
+    KDEVCMAKECOMMON_EXPORT KDevelop::Path commandsFile( KDevelop::IProject* project );
 
     /**
      * @returns the current build type for the given project or "Release" as default value.
@@ -69,12 +67,12 @@ namespace CMake
      * @returns the current cmake binary for the given project or
      * QStandardPaths::findExecutable("cmake") as default value. 
      */
-    KDEVCMAKECOMMON_EXPORT KUrl currentCMakeBinary( KDevelop::IProject* project );
+    KDEVCMAKECOMMON_EXPORT KDevelop::Path currentCMakeBinary( KDevelop::IProject* project );
 
     /**
      * @returns the current install dir for the given project or "/usr/local" as default value.
      */
-    KDEVCMAKECOMMON_EXPORT KUrl currentInstallDir( KDevelop::IProject* project );
+    KDEVCMAKECOMMON_EXPORT KDevelop::Path currentInstallDir( KDevelop::IProject* project );
     
     /**
      * @returns the current extra arguments for the given project or "" as default value.
@@ -94,7 +92,7 @@ namespace CMake
     /**
      * Convenience function to get the project root.
      */
-    KDEVCMAKECOMMON_EXPORT KUrl projectRoot( KDevelop::IProject* project );
+    KDEVCMAKECOMMON_EXPORT KDevelop::Path projectRoot( KDevelop::IProject* project );
     
     /**
      * @returns the environment configuration for a @p project
@@ -104,7 +102,7 @@ namespace CMake
     /**
      * Sets the current install dir for the given project.
      */
-    KDEVCMAKECOMMON_EXPORT void setCurrentInstallDir( KDevelop::IProject* project, const KUrl& url );
+    KDEVCMAKECOMMON_EXPORT void setCurrentInstallDir( KDevelop::IProject* project, const KDevelop::Path &path );
 
     /**
      * Sets the current build type for the given project.
@@ -114,12 +112,12 @@ namespace CMake
     /**
      * Sets the current cmake binary for the given project.
      */
-    KDEVCMAKECOMMON_EXPORT void setCurrentCMakeBinary( KDevelop::IProject* project, const KUrl& url );
+    KDEVCMAKECOMMON_EXPORT void setCurrentCMakeBinary( KDevelop::IProject* project, const KDevelop::Path &path );
 
     /**
      * Sets the current build dir for the given project.
      */
-    KDEVCMAKECOMMON_EXPORT void setCurrentBuildDir( KDevelop::IProject* project, const KUrl& url );
+    KDEVCMAKECOMMON_EXPORT void setCurrentBuildDir( KDevelop::IProject* project, const KDevelop::Path& path );
     
     /**
      * Sets the current build dir for the given project.

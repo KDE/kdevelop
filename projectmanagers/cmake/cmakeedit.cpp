@@ -82,7 +82,7 @@ KTextEditor::Range rangeForText(KTextEditor::Document* doc, const KTextEditor::R
     return KTextEditor::Range(c, KTextEditor::Cursor(c.line(), c.column()+length));
 }
 
-bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& name, const KUrl& lists, bool add, const QString& replace)
+bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& name, const QUrl &lists, bool add, const QString& replace)
 {
     bool ret=false;
     KTextEditor::Range rx;
@@ -147,25 +147,25 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
     return ret;
 }
 
-QString dotlessRelativeUrl(const KUrl& baseUrl, const KUrl& url)
+QString dotlessRelativeUrl(const QUrl &baseUrl, const QUrl& url)
 {
-    QString dotlessRelative = KUrl::relativeUrl(baseUrl, url);
+    QString dotlessRelative = QUrl::relativeUrl(baseUrl, url);
     if (dotlessRelative.startsWith("./"))
         dotlessRelative.remove(0, 2);
     return dotlessRelative;
 }
 
-QString relativeToLists(const KUrl& listsPath, const KUrl& url)
+QString relativeToLists(const QUrl &listsPath, const QUrl& url)
 {
-    KUrl listsFolder(listsPath.upUrl());
-    listsFolder.adjustPath(KUrl::AddTrailingSlash);
+    QUrl listsFolder(listsPath.upUrl());
+    listsFolder.adjustPath(QUrl::AddTrailingSlash);
     return dotlessRelativeUrl(listsFolder, url);
 }
 
-KUrl afterMoveUrl(const KUrl& origUrl, const KUrl& movedOrigUrl, const KUrl& movedNewUrl)
+QUrl afterMoveUrl(const QUrl &origUrl, const QUrl& movedOrigUrl, const QUrl& movedNewUrl)
 {
     QString difference = dotlessRelativeUrl(movedOrigUrl, origUrl);
-    return KUrl(movedNewUrl, difference);
+    return QUrl(movedNewUrl, difference);
 }
 
 QString itemListspath(const ProjectBaseItem* item)
@@ -181,20 +181,20 @@ QString itemListspath(const ProjectBaseItem* item)
     return desc->descriptor().filePath;
 }
 
-bool itemAffected(const ProjectBaseItem *item, const KUrl &changeUrl)
+bool itemAffected(const ProjectBaseItem *item, const QUrl &changeUrl)
 {
-    KUrl listsPath = itemListspath(item);
+    QUrl listsPath = itemListspath(item);
     if (listsPath.isEmpty())
         return false;
     
-    KUrl listsFolder(listsPath);
+    QUrl listsFolder(listsPath);
     listsFolder = listsFolder.upUrl();
 
-    //Who thought it was a good idea to have KUrl::isParentOf return true if the urls are equal?
+    //Who thought it was a good idea to have QUrl::isParentOf return true if the urls are equal?
     return listsFolder.QUrl::isParentOf(changeUrl);
 }
 
-QList<ProjectBaseItem*> cmakeListedItemsAffectedByUrlChange(const IProject *proj, const KUrl &url, KUrl rootUrl)
+QList<ProjectBaseItem*> cmakeListedItemsAffectedByUrlChange(const IProject *proj, const QUrl &url, QUrl rootUrl)
 {
     if (rootUrl.isEmpty())
         rootUrl = url;
@@ -221,7 +221,7 @@ QList<ProjectBaseItem*> cmakeListedItemsAffectedByItemsChanged(const QList<Proje
     return dirtyItems;
 }
 
-bool changesWidgetRenameFolder(const CMakeFolderItem *folder, const KUrl &newUrl, ApplyChangesWidget *widget)
+bool changesWidgetRenameFolder(const CMakeFolderItem *folder, const QUrl &newUrl, ApplyChangesWidget *widget)
 {
     QString lists = folder->descriptor().filePath;
     widget->addDocuments(IndexedString(lists));
@@ -237,9 +237,9 @@ bool changesWidgetRemoveCMakeFolder(const CMakeFolderItem *folder, ApplyChangesW
     return widget->document()->removeText(range);
 }
 
-bool changesWidgetAddFolder(const KUrl &folderUrl, const CMakeFolderItem *toFolder, ApplyChangesWidget *widget)
+bool changesWidgetAddFolder(const QUrl &folderUrl, const CMakeFolderItem *toFolder, ApplyChangesWidget *widget)
 {
-    KUrl lists(toFolder->url(), "CMakeLists.txt");
+    QUrl lists(toFolder->url(), "CMakeLists.txt");
     QString relative(relativeToLists(lists, folderUrl));
     if (relative.endsWith('/'))
         relative.chop(1);
@@ -248,7 +248,7 @@ bool changesWidgetAddFolder(const KUrl &folderUrl, const CMakeFolderItem *toFold
     return widget->document()->insertLine(widget->document()->lines(), insert);
 }
 
-bool changesWidgetMoveTargetFile(const ProjectBaseItem *file, const KUrl &newUrl, ApplyChangesWidget *widget)
+bool changesWidgetMoveTargetFile(const ProjectBaseItem *file, const QUrl &newUrl, ApplyChangesWidget *widget)
 {
     const DescriptorAttatched *desc = dynamic_cast<const DescriptorAttatched*>(file->parent());
     if (!desc || desc->descriptor().arguments.isEmpty()) {

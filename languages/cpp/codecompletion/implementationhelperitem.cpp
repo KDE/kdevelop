@@ -143,7 +143,7 @@ QString ImplementationHelperItem::signaturePart(bool includeDefaultParams) {
   return ret;
 }
 
-QString ImplementationHelperItem::insertionText(KUrl url, KTextEditor::Cursor position, QualifiedIdentifier forceParentScope) {
+QString ImplementationHelperItem::insertionText(QUrl url, KTextEditor::Cursor position, QualifiedIdentifier forceParentScope) {
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
   QString newText;
   if(!m_declaration)

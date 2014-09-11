@@ -34,7 +34,7 @@ namespace KDevelop
 {
     class IProject;
 }
-class KUrl;
+class QUrl;
 class ProjectPathsModel;
 class IncludesModel;
 class QItemSelection;
@@ -53,7 +53,7 @@ private slots:
     // Handling of include-path url-requester, add and remove buttons
     void includePathSelected( const QModelIndex& selected );
     void includePathEdited();
-    void includePathUrlSelected(const KUrl&);
+    void includePathUrlSelected(const QUrl&);
     void addIncludePath();
     // Handles action and also Del-key in list
     void deleteIncludePath();
@@ -64,7 +64,7 @@ private slots:
 private:
     Ui::IncludesWidget* ui;
     IncludesModel* includesModel;
-    QString makeIncludeDirAbsolute( const KUrl& url ) const;
+    QString makeIncludeDirAbsolute( const QUrl &url ) const;
     // Enables/Disables widgets based on UI state/selection
     void updateEnablements();
     void updatePathsModel( const QVariant& newData, int role );

@@ -395,7 +395,7 @@ bool MissingDeclarationAssistant::canAddTo(Declaration* toClass, Declaration* fr
     return true;
   }
   // otherwise only if we currently edit the file, or if it's in an opened project
-  const KUrl url = toClass->url().toUrl();
+  const QUrl url = toClass->url().toUrl();
   return ICore::self()->projectController()->findProjectForUrl(url)
         || ICore::self()->documentController()->documentForUrl(url);
 }

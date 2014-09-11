@@ -65,11 +65,15 @@ void TestCustomMake::testIncludeDirectories() {
 
     MakeFileResolver mf;
     auto result = mf.resolveIncludePath(tempDir.name() + "testfile.cpp");
+    if (!result.success) {
+      qDebug() << result.errorMessage << result.longErrorMessage;
+      QFAIL("Failed to resolve include path.");
+    }
+    QCOMPARE(result.paths.size(), 4);
     QVERIFY(result.paths.contains("/testFile1"));
     QVERIFY(result.paths.contains("/testFile2"));
     QVERIFY(result.paths.contains("/testFile3"));
     QVERIFY(result.paths.contains("/testFile4"));
-    QCOMPARE(result.paths.size(), 4);
 }
 
 QTEST_GUILESS_MAIN(TestCustomMake)

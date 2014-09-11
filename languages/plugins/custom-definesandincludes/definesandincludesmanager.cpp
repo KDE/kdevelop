@@ -209,7 +209,7 @@ Path::List DefinesAndIncludesManager::includes(const QString& path) const
 
 void DefinesAndIncludesManager::openConfigurationDialog(const QString& pathToFile)
 {
-    if (auto project = KDevelop::ICore::self()->projectController()->findProjectForUrl(pathToFile)) {
+    if (auto project = KDevelop::ICore::self()->projectController()->findProjectForUrl(QUrl::fromLocalFile(pathToFile))) {
         KDevelop::ICore::self()->projectController()->configureProject(project);
     } else {
         m_noProjectIPM->openConfigurationDialog(pathToFile);

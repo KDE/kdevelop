@@ -93,7 +93,7 @@ struct FrameListHandler : public GDBCommandHandler
             f.nr = frame["level"].toInt();
             f.name = getFunctionOrAddress(frame);
             QPair<QString, int> loc = getSource(frame);
-            f.file = loc.first;
+            f.file = QUrl::fromLocalFile(loc.first);
             f.line = loc.second;
             frames << f;
         }

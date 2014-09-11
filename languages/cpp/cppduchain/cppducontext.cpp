@@ -25,6 +25,8 @@
 #include <language/duchain/topducontextdata.h>
 #include <language/duchain/forwarddeclaration.h>
 
+#include <util/path.h>
+
 namespace Cpp {
 
 QMutex cppDuContextInstantiationsMutex(QMutex::Recursive);
@@ -38,12 +40,12 @@ REGISTER_DUCHAIN_ITEM_WITH_DATA(CppNormalDUContext, DUContextData);
 template<>
 QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix ) const {
   if( decl == 0 ) {
-    KUrl u( url().str() );
+    Path path( url().str() );
     IncludeItem i;
     i.pathNumber = -1;
-    i.name = u.fileName();
+    i.name = path.lastPathSegment();
     i.isDirectory = false;
-    i.basePath = u.upUrl();
+    i.basePath = path.parent().toUrl();
     
     return new NavigationWidget( i, TopDUContextPointer(topContext ? topContext : this->topContext()), htmlPrefix, htmlSuffix );
   } else {

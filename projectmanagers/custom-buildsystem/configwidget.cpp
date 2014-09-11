@@ -49,7 +49,7 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( ui->enableAction, SIGNAL(toggled(bool)), SLOT(toggleActionEnablement(bool)) );
     connect( ui->actionArguments, SIGNAL(textEdited(QString)), SLOT(actionArgumentsEdited(QString)) );
     connect( ui->actionEnvironment, SIGNAL(activated(int)), SLOT(actionEnvironmentChanged(int)) );
-    connect( ui->actionExecutable, SIGNAL(urlSelected(KUrl)), SLOT(actionExecutableChanged(KUrl)) );
+    connect( ui->actionExecutable, SIGNAL(urlSelected(QUrl)), SLOT(actionExecutableChanged(QUrl)) );
     connect( ui->actionExecutable->lineEdit(), SIGNAL(textEdited(QString)), SLOT(actionExecutableChanged(QString)) );
 }
 
@@ -120,15 +120,15 @@ void ConfigWidget::actionEnvironmentChanged( int )
     emit changed();
 }
 
-void ConfigWidget::actionExecutableChanged( const KUrl& url )
+void ConfigWidget::actionExecutableChanged( const QUrl &url )
 {
-    m_tools[ ui->buildAction->currentIndex() ].executable = url.toLocalFile();
+    m_tools[ ui->buildAction->currentIndex() ].executable = url;
     emit changed();
 }
 
 void ConfigWidget::actionExecutableChanged(const QString& txt )
 {
-    m_tools[ ui->buildAction->currentIndex() ].executable = txt;
+    m_tools[ ui->buildAction->currentIndex() ].executable = QUrl::fromLocalFile(txt);
     emit changed();
 }
 

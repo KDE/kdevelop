@@ -126,7 +126,7 @@ public:
     virtual KDevelop::ParseJob *createParseJob(const KDevelop::IndexedString &url);
     virtual KDevelop::ILanguage *language();
     virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
-    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position);
+    virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position);
     
 //     void addPending(const KDevelop::Path& path, CMakeFolderItem* folder);
 //     CMakeFolderItem* takePending(const KDevelop::Path& path);

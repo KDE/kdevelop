@@ -26,7 +26,7 @@
 #include <kpluginfactory.h>
 #include <KDebug>
 #include <KAboutData>
-#include <KUrl>
+#include <QUrl>
 #include <interfaces/icore.h>
 
 using namespace KDevelop;
@@ -57,9 +57,9 @@ void ExecutePlasmoidPlugin::unload()
     m_configType = 0;
 }
 
-KUrl ExecutePlasmoidPlugin::executable(ILaunchConfiguration* config, QString& /*error*/) const
+QUrl ExecutePlasmoidPlugin::executable(ILaunchConfiguration* config, QString& /*error*/) const
 {
-    return PlasmoidExecutionJob::executable(config);
+    return QUrl::fromLocalFile(PlasmoidExecutionJob::executable(config));
 }
 
 QStringList ExecutePlasmoidPlugin::arguments(ILaunchConfiguration* config, QString& /*error*/) const
@@ -72,9 +72,9 @@ KJob* ExecutePlasmoidPlugin::dependecyJob(ILaunchConfiguration* config) const
     return PlasmoidLauncher::calculateDependencies(config);
 }
 
-KUrl ExecutePlasmoidPlugin::workingDirectory(ILaunchConfiguration* config) const
+QUrl ExecutePlasmoidPlugin::workingDirectory(ILaunchConfiguration* config) const
 {
-    return PlasmoidExecutionJob::workingDirectory(config);
+    return QUrl::fromLocalFile(PlasmoidExecutionJob::workingDirectory(config));
 }
 
 QString ExecutePlasmoidPlugin::environmentGroup(ILaunchConfiguration* /*config*/) const

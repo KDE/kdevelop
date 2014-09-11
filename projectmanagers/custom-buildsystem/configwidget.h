@@ -49,7 +49,7 @@ private slots:
     void toggleActionEnablement( bool );
     void actionArgumentsEdited( const QString& );
     void actionEnvironmentChanged( int );
-    void actionExecutableChanged( const KUrl& );
+    void actionExecutableChanged( const QUrl& );
     void actionExecutableChanged( const QString& );
 private:
     Ui::ConfigWidget* ui;

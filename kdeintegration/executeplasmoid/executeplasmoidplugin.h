@@ -29,7 +29,7 @@
 #include <QtCore/QProcess>
 
 class PlasmoidExecutionConfigType;
-class KUrl;
+class QUrl;
 class KJob;
 
 class ExecutePlasmoidPlugin : public KDevelop::IPlugin, public IExecutePlugin
@@ -41,14 +41,14 @@ class ExecutePlasmoidPlugin : public KDevelop::IPlugin, public IExecutePlugin
         virtual ~ExecutePlasmoidPlugin();
         virtual void unload();
 
-        virtual KUrl executable(KDevelop::ILaunchConfiguration* config, QString& error) const;
+        virtual QUrl executable(KDevelop::ILaunchConfiguration* config, QString& error) const;
         virtual QStringList arguments(KDevelop::ILaunchConfiguration* config, QString& error) const;
         virtual KJob* dependecyJob(KDevelop::ILaunchConfiguration* config) const;
         virtual QString environmentGroup(KDevelop::ILaunchConfiguration* config) const;
         virtual QString nativeAppConfigTypeId() const;
         virtual QString terminal(KDevelop::ILaunchConfiguration* config) const;
         virtual bool useTerminal(KDevelop::ILaunchConfiguration* config) const;
-        virtual KUrl workingDirectory(KDevelop::ILaunchConfiguration* config) const;
+        virtual QUrl workingDirectory(KDevelop::ILaunchConfiguration* config) const;
 
     private:
         PlasmoidExecutionConfigType* m_configType;

@@ -135,7 +135,7 @@ void ManPageModel::initSection()
 {
     const QString sectionUrl = iterator->peekNext().first;
     m_manMap[sectionUrl].clear();
-    auto list = KIO::listDir(sectionUrl, KIO::HideProgressInfo);
+    auto list = KIO::listDir(QUrl(sectionUrl), KIO::HideProgressInfo);
     connect(list, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)), SLOT(sectionEntries(KIO::Job*, KIO::UDSEntryList)));
     connect(list, SIGNAL(result(KJob*)), SLOT(sectionLoaded()));
 }

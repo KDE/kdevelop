@@ -123,8 +123,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeExecutableTargetItem
         CMakeExecutableTargetItem(KDevelop::IProject* project, const QString &name,
                                   CMakeFolderItem *parent, const QString& _outputName, const KDevelop::Path& basepath);
         
-        virtual KUrl builtUrl() const;
-        virtual KUrl installedUrl() const;
+        virtual QUrl builtUrl() const;
+        virtual QUrl installedUrl() const;
         
     private:
         QString outputName;
@@ -160,7 +160,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeCustomTargetItem
 class CMakeFileItem : public KDevelop::ProjectFileItem, public DUChainAttatched
 {
     public:
-        CMakeFileItem( KDevelop::IProject* project, const KUrl& file, QStandardItem *parent, KDevelop::Declaration *c)
+        CMakeFileItem( KDevelop::IProject* project, const QUrl &file, QStandardItem *parent, KDevelop::Declaration *c)
             : ProjectFileItem( project, file, parent), DUChainAttatched(c) {}
 };
 */

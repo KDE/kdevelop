@@ -576,14 +576,15 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
     }
     suffixFolders.removeDuplicates();
 
-    KUrl path;
+    QUrl path;
     foreach(const QString& mpath, suffixFolders)
     {
         if(mpath.isEmpty())
             continue;
 
-        KUrl afile(mpath);
-        afile.addPath(file);
+        QUrl afile(mpath);
+        afile = afile.adjusted(QUrl::StripTrailingSlash);
+        afile.setPath(afile.path() + '/' + file);
         kDebug(9042) << "Trying:" << mpath << '.' << file;
         QFileInfo f(afile.toLocalFile());
         if(f.exists() && f.isFile())
@@ -596,7 +597,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
         }
     }
     //kDebug(9042) << "find file" << file << "into:" << folders << "found at:" << path;
-    return path.toLocalFile(KUrl::RemoveTrailingSlash);
+    return path.adjusted(QUrl::StripTrailingSlash).toLocalFile();
 }
 
 int CMakeProjectVisitor::visit(const IncludeAst *inc)
@@ -607,7 +608,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
 
     QString possib=inc->includeFile();
     QString path;
-    if(!KUrl(possib).isRelative() && QFile::exists(possib))
+    if(!QUrl(possib).isRelative() && QFile::exists(possib))
         path=possib;
     else
     {
@@ -619,7 +620,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
     if(!path.isEmpty())
     {
         m_vars->insertMulti("CMAKE_CURRENT_LIST_FILE", QStringList(path));
-        m_vars->insertMulti("CMAKE_CURRENT_LIST_DIR", QStringList(KUrl(path).directory()));
+        m_vars->insertMulti("CMAKE_CURRENT_LIST_DIR", QStringList(QUrl(path).directory()));
         CMakeFileContent include = CMakeListsParser::readCMakeFile(path);
         if ( !include.isEmpty() )
         {
@@ -734,7 +735,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     foreach(const QString& possib, possibleConfigNames) {
         path = findFile(possib, configPath);
         if (!path.isEmpty()) {
-            m_vars->insertGlobal(pack->name()+"_DIR", QStringList(KUrl(path).directory()));
+            m_vars->insertGlobal(pack->name()+"_DIR", QStringList(QUrl(path).directory()));
             isConfig=true;
             break;
         }
@@ -753,7 +754,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     if(!path.isEmpty())
     {
         m_vars->insertMulti("CMAKE_CURRENT_LIST_FILE", QStringList(path));
-        m_vars->insertMulti("CMAKE_CURRENT_LIST_DIR", QStringList(KUrl(path).directory()));
+        m_vars->insertMulti("CMAKE_CURRENT_LIST_DIR", QStringList(QUrl(path).directory()));
         if(pack->isRequired())
             m_vars->insert(pack->name()+"_FIND_REQUIRED", QStringList("TRUE"));
         if(pack->isQuiet())
@@ -770,7 +771,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         CMakeFileContent package=CMakeListsParser::readCMakeFile( path );
         if ( !package.isEmpty() )
         {
-            path=KUrl(path).pathOrUrl();
+            path=QUrl(path).pathOrUrl();
             kDebug(9042) << "================== Found" << path << "===============";
             walk(package, 0, true);
             m_hitReturn = false;
@@ -1585,7 +1586,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             break;
         case FileAst::Read:
         {
-            KUrl filename=file->path();
+            QUrl filename =file->path();
             QFileInfo ifile(filename.toLocalFile());
             kDebug(9042) << "FileAst: reading " << file->path() << ifile.isFile();
             if(!ifile.isFile())
@@ -1638,7 +1639,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             kDebug(9042) << "warning. file-make_directory. KDevelop won't create anything.";
             break;
         case FileAst::RelativePath:
-            m_vars->insert(file->variable(), QStringList(KUrl::relativePath(file->directory(), file->path())));
+            m_vars->insert(file->variable(), QStringList(QUrl::relativePath(file->directory(), file->path())));
             kDebug(9042) << "file relative_path" << file->directory() << file->path();
             break;
         case FileAst::ToCmakePath:
@@ -1656,7 +1657,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                     << m_vars->value(file->variable()) << "path:" << file->path();
             break;
         case FileAst::Strings: {
-            KUrl filename=file->path();
+            QUrl filename =file->path();
             QFileInfo ifile(filename.toLocalFile());
             kDebug(9042) << "FileAst: reading " << file->path() << ifile.isFile();
             if(!ifile.isFile())
@@ -2221,9 +2222,10 @@ int CMakeProjectVisitor::visit(const GetDirPropertyAst* getdp)
     QString dir=getdp->directory();
     if(dir.isEmpty()) {
         dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
-    } else if(KUrl::isRelativeUrl(dir)) {
-        KUrl u(m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString()));
-        u.addPath(dir);
+    } else if(QUrl::isRelativeUrl(dir)) {
+        QUrl u(m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString()));
+        u = u.adjusted(QUrl::StripTrailingSlash);
+        u.setPath(u.path() + '/' + dir);
         dir=u.path();
     }
     

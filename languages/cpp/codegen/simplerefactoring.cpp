@@ -143,7 +143,7 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
 
   CodeRepresentation::Ptr code = createCodeRepresentation(decl->url());
   if(!code) {
-    return i18n("No document for %1", decl->url().toUrl().prettyUrl());
+    return i18n("No document for %1", decl->url().str());
   }
 
   KTextEditor::Range headerRange = decl->internalContext()->rangeInCurrentRevision();
@@ -226,7 +226,7 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
 
 }
 
-DocumentChangeSet::ChangeResult SimpleRefactoring::addRenameFileChanges(const KUrl& current, const QString& newName, DocumentChangeSet* changes)
+DocumentChangeSet::ChangeResult SimpleRefactoring::addRenameFileChanges(const QUrl &current, const QString& newName, DocumentChangeSet* changes)
 {
   auto result = KDevelop::BasicRefactoring::addRenameFileChanges(current, newName, changes);
   if (!result) {
@@ -234,7 +234,7 @@ DocumentChangeSet::ChangeResult SimpleRefactoring::addRenameFileChanges(const KU
   }
 
   // check for implementation file
-  const KUrl otherFile = CppUtils::sourceOrHeaderCandidate(current.toLocalFile());
+  const QUrl otherFile = QUrl::fromLocalFile(CppUtils::sourceOrHeaderCandidate(current.toLocalFile()));
   if (otherFile.isValid()) {
     // also rename this other file
     result = changes->addDocumentRenameChange(

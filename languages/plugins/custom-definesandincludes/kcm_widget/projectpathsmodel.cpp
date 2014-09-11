@@ -56,7 +56,7 @@ QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const
         break;
     }
     case FullUrlDataRole:
-        return QVariant::fromValue(KUrl( sanitizePath( pathConfig.path, true, false ) ));
+        return QVariant::fromValue(QUrl::fromUserInput( sanitizePath( pathConfig.path, true, false ) ));
         break;
     default:
         break;
@@ -108,7 +108,7 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
         pathConfig.path = sanitizePath( value.toString(), true );
         break;
     case FullUrlDataRole:
-        pathConfig.path = sanitizeUrl( value.value<KUrl>() );
+        pathConfig.path = sanitizeUrl( value.value<QUrl>() );
         break;
     default:
         return false;
@@ -168,7 +168,7 @@ bool ProjectPathsModel::removeRows( int row, int count, const QModelIndex& paren
     return false;
 }
 
-void ProjectPathsModel::addPath( const KUrl& url )
+void ProjectPathsModel::addPath( const QUrl &url )
 {
     if( !project->path().isParentOf(KDevelop::Path(url)) ) {
         return;
@@ -194,14 +194,13 @@ void ProjectPathsModel::addPathInternal( const ConfigEntry& config, bool prepend
     }
 }
 
-QString ProjectPathsModel::sanitizeUrl( KUrl url, bool needRelative ) const
+QString ProjectPathsModel::sanitizeUrl( QUrl url, bool needRelative ) const
 {
     Q_ASSERT( project );
 
     if( needRelative )
         return project->path().relativePath( KDevelop::Path( url ) );
-    url.cleanPath();
-    return url.pathOrUrl( KUrl::RemoveTrailingSlash );
+    return url.adjusted(QUrl::StripTrailingSlash | QUrl::NormalizePathSegments).toString(QUrl::PreferLocalFile);
 }
 
 QString ProjectPathsModel::sanitizePath( const QString& path, bool expectRelative, bool needRelative ) const
@@ -209,12 +208,11 @@ QString ProjectPathsModel::sanitizePath( const QString& path, bool expectRelativ
     Q_ASSERT( project );
     Q_ASSERT( expectRelative || project->inProject(KDevelop::IndexedString(path)) );
 
-    KUrl url;
+    QUrl url;
     if( expectRelative ) {
-        url = project->path().toUrl();
-        url.addPath(path);
+        url = KDevelop::Path(project->path(), path).toUrl();
     } else {
-        url = path;
+        url = QUrl::fromUserInput(path);
     }
     return sanitizeUrl( url, needRelative );
 }

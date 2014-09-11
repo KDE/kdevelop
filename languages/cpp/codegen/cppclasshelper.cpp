@@ -40,7 +40,7 @@ CppClassHelper::~CppClassHelper()
 
 }
 
-TemplateClassGenerator* CppClassHelper::createGenerator(const KUrl& baseUrl)
+TemplateClassGenerator* CppClassHelper::createGenerator(const QUrl& baseUrl)
 {
     return new CppTemplateNewClass(baseUrl);
 }
@@ -83,7 +83,7 @@ QList<DeclarationPointer> CppClassHelper::defaultMethods(const QString& name) co
     return methods;
 }
 
-CppTemplateNewClass::CppTemplateNewClass(const KUrl& url)
+CppTemplateNewClass::CppTemplateNewClass(const QUrl& url)
 : TemplateClassGenerator(url)
 {
 
@@ -164,8 +164,8 @@ QVariantHash CppTemplateNewClass::extraVariables()
     QStringList includedFiles;
     DUChainReadLocker locker(DUChain::lock());
 
-    KUrl sourceUrl;
-    QHash<QString, KUrl> urls = fileUrls();
+    QUrl sourceUrl;
+    QHash<QString, QUrl> urls = fileUrls();
     if (!urls.isEmpty())
     {
         sourceUrl = urls.constBegin().value();

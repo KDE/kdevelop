@@ -85,7 +85,7 @@ ProviderWidget::ProviderWidget(QWidget *parent)
     layout()->addWidget(m_projects);
 }
 
-KDevelop::VcsJob * ProviderWidget::createWorkingCopy(const KUrl &dest)
+KDevelop::VcsJob * ProviderWidget::createWorkingCopy(const QUrl &dest)
 {
     QModelIndex pos = m_projects->currentIndex();
     if (!pos.isValid())

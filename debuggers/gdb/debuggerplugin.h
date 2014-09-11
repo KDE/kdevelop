@@ -30,7 +30,7 @@
 
 #include <KConfigGroup>
 #include <KTextEditor/Cursor>
-#include <kurl.h>
+#include <QUrl>
 
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>
@@ -123,8 +123,8 @@ Q_SIGNALS:
     void stopDebugger();
     void attachTo(int pid);
     void coreFile(const QString& core);
-    void runUntil(const KUrl& url, int line);
-    void jumpTo(const KUrl& url, int line);
+    void runUntil(const QUrl &url, int line);
+    void jumpTo(const QUrl &url, int line);
 
 protected:
     virtual void initializeGuiState();

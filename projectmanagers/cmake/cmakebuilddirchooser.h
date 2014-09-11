@@ -23,7 +23,8 @@
 
 #include <KDialog>
 #include <QFlags>
-#include <kurl.h>
+
+#include <util/path.h>
 
 #include "cmakecommonexport.h"
 
@@ -49,17 +50,17 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public KDialog
         explicit CMakeBuildDirChooser(QWidget* parent = 0);
         ~CMakeBuildDirChooser();
 
-        KUrl cmakeBinary() const;
-        KUrl installPrefix() const;
-        KUrl buildFolder() const;
+        KDevelop::Path cmakeBinary() const;
+        KDevelop::Path installPrefix() const;
+        KDevelop::Path buildFolder() const;
         QString buildType() const;
         QString extraArguments() const;
 
-        void setCMakeBinary(const KUrl&);
-        void setInstallPrefix(const KUrl&);
-        void setBuildFolder(const KUrl&);
-        void setBuildType(const QString&);
-        void setSourceFolder( const KUrl& srcFolder );
+        void setCMakeBinary(const KDevelop::Path& path);
+        void setInstallPrefix(const KDevelop::Path& path);
+        void setBuildFolder(const KDevelop::Path& path);
+        void setBuildType(const QString& buildType);
+        void setSourceFolder( const KDevelop::Path& srcFolder );
         void setAlreadyUsed(const QStringList& used);
         void setStatus(const QString& message, bool canApply);
         void setExtraArguments(const QString& args);
@@ -68,11 +69,11 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public KDialog
         void updated();
     private:
         QStringList m_alreadyUsed;
-        static QString buildDirProject(const KUrl& buildDir);
+        static QString buildDirProject(const KDevelop::Path &buildDir);
         QStringList extraArgumentsHistory() const;
 
         Ui::CMakeBuildDirChooser* m_chooserUi;
-        KUrl m_srcFolder;
+        KDevelop::Path m_srcFolder;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS( CMakeBuildDirChooser::StatusTypes )
 

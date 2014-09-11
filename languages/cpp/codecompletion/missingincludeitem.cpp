@@ -114,13 +114,14 @@ int findIncludeLineFromDUChain(KTextEditor::Document* document, int maxLine, con
 }
 
 ///Decide whether the file is allowed to be included directly. If yes, this should return false.
-bool isBlacklistedInclude(const KUrl& url) {
+bool isBlacklistedInclude(const QUrl &url) {
   QString fileName = url.fileName();
   if(isSource(fileName))
     return true;
 
   //Do not allow including directly from the bits directory. Instead use one of the forwarding headers in other directories, when possible.
-  if(url.upUrl().fileName() == "bits" && url.path().contains("/include/c++/")) {
+  const QString path = url.path();
+  if(path.contains("/bits/") && path.contains("/include/c++/")) {
     return true;
   }
 
@@ -243,7 +244,7 @@ QStringList candidateIncludeFilesFromNameMatcher(const QList<IncludeItem>& inclu
   return result;
 }
 
-QExplicitlySharedDataPointer<MissingIncludeCompletionItem> includeDirectiveFromUrl(const KUrl& fromUrl, const IndexedDeclaration& decl) {
+QExplicitlySharedDataPointer<MissingIncludeCompletionItem> includeDirectiveFromUrl(const QUrl &fromUrl, const IndexedDeclaration& decl) {
   QExplicitlySharedDataPointer<MissingIncludeCompletionItem> item;
   if(decl.data()) {
     QSet<QString> temp;
@@ -327,7 +328,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
     return ret;
   }
   
-  KUrl currentUrl(context->topContext()->url().str());
+  QUrl currentUrl = context->topContext()->url().toUrl();
   const auto currentPath = Path(currentUrl).parent();
 
   Cpp::EnvironmentFilePointer env(dynamic_cast<Cpp::EnvironmentFile*>(context->topContext()->parsingEnvironmentFile().data()));

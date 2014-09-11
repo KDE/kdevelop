@@ -17,7 +17,7 @@ CustomMakeTargetItem::CustomMakeTargetItem( KDevelop::IProject *project, const Q
 {
 }
 
-KUrl::List CustomMakeTargetItem::includeDirectories() const
+QList<QUrl> CustomMakeTargetItem::includeDirectories() const
 {
     return m_includeDirs;
 }

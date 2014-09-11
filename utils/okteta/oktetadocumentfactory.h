@@ -40,7 +40,7 @@ class OktetaDocumentFactory : public IDocumentFactory
     explicit OktetaDocumentFactory( OktetaPlugin* plugin );
 
   public: // IDocumentFactory API
-    virtual IDocument* create( const KUrl& url, ICore* core );
+    virtual IDocument* create( const QUrl &url, ICore* core );
 
   protected:
     OktetaPlugin* mPlugin;
@@ -52,7 +52,7 @@ inline OktetaDocumentFactory::OktetaDocumentFactory( OktetaPlugin* plugin )
 {
 }
 
-inline IDocument* OktetaDocumentFactory::create( const KUrl& url, ICore* core )
+inline IDocument* OktetaDocumentFactory::create( const QUrl &url, ICore* core )
 {
     OktetaDocument* document = new OktetaDocument( url, core );
     document->setPlugin( mPlugin );

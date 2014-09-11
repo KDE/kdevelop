@@ -33,7 +33,7 @@
 #include "astyle_stringiterator.h"
 #include "astyle_preferences.h"
 #include <KLocalizedString>
-#include <KUrl>
+#include <QUrl>
 
 using namespace KDevelop;
 
@@ -71,7 +71,7 @@ QString AStylePlugin::description()
         "Home Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>");
 }
 
-QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QString& text, const KUrl& /*url*/, const QMimeType& mime, const QString& leftContext, const QString& rightContext )
+QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QString& text, const QUrl& /*url*/, const QMimeType& mime, const QString& leftContext, const QString& rightContext )
 {
     if(mime.inherits("text/x-java"))
         m_formatter->setJavaStyle();
@@ -91,7 +91,7 @@ QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QStri
     return m_formatter->formatSource(text, leftContext, rightContext);
 }
 
-QString AStylePlugin::formatSource(const QString& text, const KUrl& url, const QMimeType& mime, const QString& leftContext, const QString& rightContext)
+QString AStylePlugin::formatSource(const QString& text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext)
 {
     return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, url, mime, leftContext, rightContext );
 }
@@ -151,7 +151,7 @@ QString AStylePlugin::previewText(const SourceFormatterStyle& style, const QMime
         + formattingSample();
 }
 
-AStylePlugin::Indentation AStylePlugin::indentation( const KUrl& url )
+AStylePlugin::Indentation AStylePlugin::indentation( const QUrl &url )
 {
     // Call formatSource first, to initialize the m_formatter data structures according to the URL
     formatSource( "", url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString() );

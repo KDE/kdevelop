@@ -27,12 +27,12 @@
 #include <QMultiMap>
 #include <QMapIterator>
 #include <QSet>
+#include <QUrl>
 
 #include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <KLocalizedString>
-#include <kurl.h>
 
 #include "parser.h"
 #include "parsesession.h"
@@ -128,7 +128,7 @@ public:
 
   void run();
 
-  QString preprocess(const KUrl& url, int sourceLine = -1);
+  QString preprocess(const QUrl &url, int sourceLine = -1);
 
   virtual rpp::Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine, bool skipCurrentPath);
 
@@ -137,7 +137,7 @@ public:
 private:
   void addWinDeclMacro();
 
-  KUrl kdeIncludes, outputDirectory, folderUrl;
+  QUrl kdeIncludes, outputDirectory, folderUrl;
 
   // path, filename
   QMultiMap<QString, QString> filesToInstall;
@@ -156,7 +156,7 @@ private:
   FileBlock* topBlock;
 
   QStack<FileBlock*> currentFileBlocks;
-  QStack<KUrl> preprocessing;
+  QStack<QUrl> preprocessing;
 
   rpp::pp preprocessor;
   //QStack includeUrls;
@@ -347,7 +347,7 @@ HeaderGenerator::HeaderGenerator()
   topBlock->setMacro(makeConstant(exportMacro));
 }
 
-QString HeaderGenerator::preprocess(const KUrl& url, int sourceLine)
+QString HeaderGenerator::preprocess(const QUrl &url, int sourceLine)
 {
   //kDebug(9007) << url;
 
@@ -378,26 +378,26 @@ rpp::Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type
 {
   //kDebug(9007) << fileName << "from" << preprocessing.top();
 
-  KUrl::List toTry;
+  QList<QUrl> toTry;
 
   {
-    KUrl url(folderUrl, fileName);
+    QUrl url(folderUrl, fileName);
 
     toTry << url;
   }
 
   for (QDomElement includes = folderElement.firstChildElement("includes"); !includes.isNull(); includes = includes.nextSiblingElement("includes")) {
     for (QDomElement include = includes.firstChildElement("include"); !include.isNull(); include = include.nextSiblingElement("include")) {
-      KUrl path(include.toElement().text() + '/');
-      KUrl url(path, fileName);
+      QUrl path(include.toElement().text() + '/');
+      QUrl url(path, fileName);
 
       toTry << url;
     }
   }
 
-  toTry << KUrl("/usr/include/linux/" + fileName);
+  toTry << QUrl("/usr/include/linux/" + fileName);
 
-  foreach (const KUrl& url, toTry) {
+  foreach (const QUrl &url, toTry) {
     if (url.isValid()) {
       if (QFile::exists(url.toLocalFile())) {
         // found it
@@ -438,7 +438,7 @@ void HeaderGenerator::run()
 
   int fileCount = 0;
 
-  QFile kdelibsExport(kdeIncludes.toLocalFile(KUrl::AddTrailingSlash) + "kdelibs_export.h");
+  QFile kdelibsExport(kdeIncludes.toLocalFile(QUrl::AddTrailingSlash) + "kdelibs_export.h");
   if (!kdelibsExport.open(QIODevice::ReadOnly)) {
     kWarning() << "Could not open kdelibs_export.h in kde includes directory.  Are you sure you have installed kdelibs?" ;
     status = -1;
@@ -447,10 +447,10 @@ void HeaderGenerator::run()
 
   for (int i = 0; i < folders.count(); ++i) {
     folderElement = folders.at(i).toElement();
-    folderUrl = KUrl(folderElement.attribute("name") + '/');
+    folderUrl = QUrl(folderElement.attribute("name") + '/');
 
     for (QDomElement install = folderElement.firstChildElement(installElementName); !install.isNull(); install = install.nextSiblingElement(installElementName)) {
-      KUrl installDestination(install.attribute("destination"));
+      QUrl installDestination(install.attribute("destination"));
       if (!installDestination.toLocalFile().startsWith(kdeIncludes.toLocalFile())) {
         continue;
       }
@@ -514,7 +514,7 @@ void HeaderGenerator::run()
         }
 
         foreach (const QString& className, hg.m_classes) {
-          QString forwardingHeaderPath(outputDirectory.toLocalFile(KUrl::AddTrailingSlash) + className);
+          QString forwardingHeaderPath(outputDirectory.toLocalFile(QUrl::AddTrailingSlash) + className);
           QString classDirectory;
           int index = className.lastIndexOf('/');
           if (index > 0)
@@ -539,7 +539,7 @@ void HeaderGenerator::run()
           if (!sourceRelativeInstallPath.isEmpty())
             sourceRelativeInstallPath += '/';
 
-          KUrl sourceUrl(source.text());
+          QUrl sourceUrl(source.text());
           QString sourceRelativeUrl = sourceRelativeInstallPath + source.text().mid(folderUrl.toLocalFile().length());
 
           QString dotdot;
@@ -578,7 +578,7 @@ void HeaderGenerator::run()
         QString namespaceName = it.key();
 
         // Found a namespace without a class... install a file for it
-        QString forwardingHeaderPath(outputDirectory.toLocalFile(KUrl::AddTrailingSlash) + namespaceName);
+        QString forwardingHeaderPath(outputDirectory.toLocalFile(QUrl::AddTrailingSlash) + namespaceName);
         QString namespaceDirectory;
         int index = namespaceName.lastIndexOf('/');
         if (index > 0)
@@ -610,7 +610,7 @@ void HeaderGenerator::run()
     ts = 0;
   }
 
-  QFile cmakelist(outputDirectory.toLocalFile(KUrl::AddTrailingSlash) + "CMakeLists.txt");
+  QFile cmakelist(outputDirectory.toLocalFile(QUrl::AddTrailingSlash) + "CMakeLists.txt");
   if (!cmakelist.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     kWarning() << "Could not open cmake list file for writing." ;
     status = -1;

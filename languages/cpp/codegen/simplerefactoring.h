@@ -45,7 +45,7 @@ public:
                                                                        KDevelop::DocumentChangeSet& changes,
                                                                        const QList<KDevelop::IndexedDeclaration>& declarations);
 
-  virtual KDevelop::DocumentChangeSet::ChangeResult addRenameFileChanges(const KUrl& current, const QString& newName, KDevelop::DocumentChangeSet* changes) override;
+  virtual KDevelop::DocumentChangeSet::ChangeResult addRenameFileChanges(const QUrl &current, const QString& newName, KDevelop::DocumentChangeSet* changes) override;
 
   /**
    * Move the given inline declaration to the .cpp implementation file.

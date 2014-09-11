@@ -37,7 +37,7 @@ class ProjectBaseItem;
 class ProcessLineMaker;
 }
 
-class KUrl;
+class QUrl;
 
 class MakeJob: public KDevelop::OutputExecuteJob
 {
@@ -73,7 +73,7 @@ public:
 
 
     // This returns the build directory for registered item.
-    virtual KUrl workingDirectory() const;
+    virtual QUrl workingDirectory() const;
 
     // This returns the "make" command line.
     virtual QStringList commandLine() const;

@@ -79,7 +79,7 @@ void CTestFindSuitesTest::testCTestSuite()
         QCOMPARE(suite->cases(), QStringList());
         QVERIFY(!suite->declaration().isValid());
         CTestSuite* ctest = (CTestSuite*)(suite);
-        QString exeSubdir = KUrl::relativeUrl(project->folder(), ctest->executable().directory());
+        QString exeSubdir = QUrl::relativeUrl(project->folder(), ctest->executable().directory());
         QCOMPARE(exeSubdir, ctest->name() == "fail" ? QString("build/bin") : QString("build") );
     }
 }
@@ -99,7 +99,7 @@ void CTestFindSuitesTest::testQtTestSuite()
     DUChainReadLocker locker(DUChain::lock());
     QVERIFY(suite->declaration().isValid());
 
-    QString exeSubdir = KUrl::relativeUrl(project->folder(), suite->executable().directory());
+    QString exeSubdir = QUrl::relativeUrl(project->folder(), suite->executable().directory());
     QCOMPARE(exeSubdir, QString("build") );
 
     foreach (const QString& testCase, suite->cases())

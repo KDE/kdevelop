@@ -22,7 +22,7 @@
 #include <QVariant>
 #include <QModelIndex>
 #include <QMimeDatabase>
-#include <kurl.h>
+#include <QUrl>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/ducontext.h>
@@ -108,7 +108,7 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
         QString tocomplete=d->text(Range(start, range.end()-Cursor(0,1)));
         
         int lastdir=tocomplete.lastIndexOf('/');
-        QString path = KUrl(d->url()).upUrl().path(KUrl::AddTrailingSlash);
+        QString path = QUrl(d->url()).upUrl().path(QUrl::AddTrailingSlash);
         QString basePath;
         if(lastdir>=0) {
             basePath=tocomplete.mid(0, lastdir);

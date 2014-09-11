@@ -18,12 +18,12 @@ class CustomMakeTargetItem : public KDevelop::ProjectTargetItem
 public:
     CustomMakeTargetItem( KDevelop::IProject *project, const QString &name, ProjectBaseItem*parent=NULL );
 
-    virtual KUrl::List includeDirectories() const;
+    virtual QList<QUrl> includeDirectories() const;
     virtual QHash<QString, QString> environment() const;
     virtual QList<QPair<QString, QString> > defines() const;
 
 private:
-    KUrl::List m_includeDirs;
+    QList<QUrl> m_includeDirs;
     QHash<QString, QString> m_envs;
     QList<QPair <QString, QString> > m_defines;
 

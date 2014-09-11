@@ -29,29 +29,30 @@
 
 #include <KColorScheme>
 
+using namespace KDevelop;
+
 namespace {
 
 const int maxExtraArgumentsInHistory = 15;
 
 /// Return the proposed build folder URL for given @p srcFolder
-KUrl proposedBuildUrl(const KUrl& srcFolder)
+Path proposedBuildFolder(const Path &srcFolder)
 {
-    KUrl proposedBuildUrl;
+    Path proposedBuildFolder;
     if (srcFolder.path().contains("/src/"))
     {
         const QString srcBuildPath = srcFolder.path().replace("/src/", "/build/");
         if (QDir(srcBuildPath).exists())
         {
-            proposedBuildUrl = KUrl(srcBuildPath);
+            proposedBuildFolder = Path(srcBuildPath);
         }
     }
-    if (proposedBuildUrl.isEmpty())
+    if (!proposedBuildFolder.isValid())
     {
-        proposedBuildUrl = KUrl( srcFolder.toLocalFile() + "/build" );
+        proposedBuildFolder = Path( srcFolder, "build" );
     }
 
-    proposedBuildUrl.cleanPath();
-    return proposedBuildUrl;
+    return proposedBuildFolder;
 }
 
 }
@@ -69,8 +70,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     m_chooserUi->installPrefix->setMode(KFile::Directory|KFile::ExistingOnly);
 //     setMainWidget(w);
 
-    QString cmakeBin=QStandardPaths::findExecutable( "cmake" );
-    setCMakeBinary(KUrl(cmakeBin));
+    setCMakeBinary(Path(QStandardPaths::findExecutable( "cmake" )));
 
     KConfigGroup config = KSharedConfig::openConfig()->group("CMakeBuildDirChooser");
     QStringList lastExtraArguments = config.readEntry("LastExtraArguments", QStringList());;
@@ -97,22 +97,23 @@ CMakeBuildDirChooser::~CMakeBuildDirChooser()
     delete m_chooserUi;
 }
 
-void CMakeBuildDirChooser::setSourceFolder( const KUrl& srcFolder )
+void CMakeBuildDirChooser::setSourceFolder( const Path &srcFolder )
 {
     m_srcFolder = srcFolder;
 
-    m_chooserUi->buildFolder->setUrl(proposedBuildUrl(srcFolder));
+    m_chooserUi->buildFolder->setUrl(proposedBuildFolder(srcFolder).toUrl());
     setCaption(i18n("Configure a build directory for %1", srcFolder.toLocalFile()));
     update();
 }
 
-QString CMakeBuildDirChooser::buildDirProject(const KUrl& srcDir)
+QString CMakeBuildDirChooser::buildDirProject(const Path &srcDir)
 {
-    QFile file(srcDir.toLocalFile()+"/CMakeCache.txt");
+    const Path cachePath(srcDir, "CMakeCache.txt");
+    QFile file(cachePath.toLocalFile());
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        kWarning(9032) << "Something really strange happened reading CMakeCache.txt";
+        kWarning(9032) << "Something really strange happened reading" << cachePath;
         return QString();
     }
 
@@ -149,25 +150,26 @@ void CMakeBuildDirChooser::updated()
         return;
     }
 
-    bool emptyUrl=m_chooserUi->buildFolder->url().isEmpty();
+    Path chosenBuildFolder(m_chooserUi->buildFolder->url());
+    bool emptyUrl = !chosenBuildFolder.isValid();
     if( emptyUrl ) st |= BuildFolderEmpty;
 
     bool dirEmpty = false, dirExists= false, dirRelative = false;
     QString srcDir;
     if(!emptyUrl)
     {
-        QDir d(m_chooserUi->buildFolder->url().toLocalFile());
+        QDir d(chosenBuildFolder.toLocalFile());
         dirExists = d.exists();
         dirEmpty = dirExists && d.count()<=2;
         dirRelative = d.isRelative();
         if(!dirEmpty && dirExists && !dirRelative)
         {
-            bool hasCache=QFile::exists(m_chooserUi->buildFolder->url().toLocalFile()+"/CMakeCache.txt");
+            bool hasCache=QFile::exists(Path(chosenBuildFolder, "CMakeCache.txt").toLocalFile());
             if(hasCache)
             {
-                QString proposed=m_srcFolder.toLocalFile(KUrl::RemoveTrailingSlash);
+                QString proposed=m_srcFolder.toLocalFile();
 
-                srcDir=buildDirProject(m_chooserUi->buildFolder->url());
+                srcDir = buildDirProject(chosenBuildFolder);
                 if(!srcDir.isEmpty())
                 {
                     if(QDir(srcDir).canonicalPath()==QDir(proposed).canonicalPath())
@@ -182,7 +184,7 @@ void CMakeBuildDirChooser::updated()
             }
         }
         
-        if(m_alreadyUsed.contains(buildFolder().toLocalFile(KUrl::RemoveTrailingSlash))) {
+        if(m_alreadyUsed.contains(chosenBuildFolder.toLocalFile())) {
             st=DirAlreadyCreated;
         }
     }
@@ -227,21 +229,21 @@ void CMakeBuildDirChooser::updated()
     }
 }
 
-void CMakeBuildDirChooser::setCMakeBinary(const KUrl& url) 
+void CMakeBuildDirChooser::setCMakeBinary(const Path& path)
 { 
-    m_chooserUi->cmakeBin->setUrl(url); 
+    m_chooserUi->cmakeBin->setUrl(path.toUrl());
     updated();
 }
 
-void CMakeBuildDirChooser::setInstallPrefix(const KUrl& url) 
+void CMakeBuildDirChooser::setInstallPrefix(const Path& path)
 { 
-    m_chooserUi->installPrefix->setUrl(url); 
+    m_chooserUi->installPrefix->setUrl(path.toUrl());
     updated();
 }
 
-void CMakeBuildDirChooser::setBuildFolder(const KUrl& url) 
+void CMakeBuildDirChooser::setBuildFolder(const Path& path)
 { 
-    m_chooserUi->buildFolder->setUrl(url); 
+    m_chooserUi->buildFolder->setUrl(path.toUrl());
     updated();
 }
 
@@ -284,11 +286,11 @@ void CMakeBuildDirChooser::setStatus(const QString& message, bool canApply)
     }
 }
 
-KUrl CMakeBuildDirChooser::cmakeBinary() const { return m_chooserUi->cmakeBin->url(); }
+Path CMakeBuildDirChooser::cmakeBinary() const { return Path(m_chooserUi->cmakeBin->url()); }
 
-KUrl CMakeBuildDirChooser::installPrefix() const { return m_chooserUi->installPrefix->url(); }
+Path CMakeBuildDirChooser::installPrefix() const { return Path(m_chooserUi->installPrefix->url()); }
 
-KUrl CMakeBuildDirChooser::buildFolder() const { return m_chooserUi->buildFolder->url(); }
+Path CMakeBuildDirChooser::buildFolder() const { return Path(m_chooserUi->buildFolder->url()); }
 
 QString CMakeBuildDirChooser::buildType() const { return m_chooserUi->buildType->currentText(); }
 

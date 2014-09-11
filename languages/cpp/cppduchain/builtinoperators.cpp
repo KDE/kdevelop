@@ -17,8 +17,12 @@
 */
 
 #include "builtinoperators.h"
-#include "cpptypes.h"
+
+#include <KDebug>
+
 #include <language/duchain/types/constantintegraltype.h>
+
+#include "cpptypes.h"
 #include "parser/tokens.h"
 
 #include <KDebug>

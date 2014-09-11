@@ -42,7 +42,7 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 
         /** Formats using the current style.
         */
-        virtual QString formatSource(const QString& text, const KUrl& url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) override;
+        virtual QString formatSource(const QString& text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) override;
 
         /** \return A map of predefined styles (a key and a caption for each type)
         */
@@ -53,7 +53,7 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
         virtual KDevelop::SettingsWidget* editStyleWidget(const QMimeType& mime) override;
 
         virtual QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
-                                              const KUrl& url,
+                                              const QUrl &url,
                                               const QMimeType& mime,
                                               const QString& leftContext = QString(),
                                               const QString& rightContext = QString()) override;
@@ -64,7 +64,7 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 
         /** \return The indentation type of the currently selected style.
         */
-        virtual Indentation indentation(const KUrl& url) override;
+        virtual Indentation indentation(const QUrl &url) override;
 
         static QString formattingSample();
         static QString indentingSample();

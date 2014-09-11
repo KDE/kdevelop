@@ -31,7 +31,7 @@ namespace KDevelop {
 class KDevNinjaBuilderPlugin;
 
 class KProcess;
-class KUrl;
+class QUrl;
 
 class NinjaJob : public KDevelop::OutputExecuteJob
 {
@@ -48,7 +48,7 @@ class NinjaJob : public KDevelop::OutputExecuteJob
 
         KDevelop::ProjectBaseItem* item() const;
 
-        virtual KUrl workingDirectory() const;
+        virtual QUrl workingDirectory() const;
         virtual QStringList privilegedExecutionCommand() const;
 
     protected slots:

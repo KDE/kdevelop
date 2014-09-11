@@ -98,9 +98,9 @@ void TestCppCodeCompletion::initTestCase()
   DUChain::self()->disablePersistentStorage();
   typeInt = AbstractType::Ptr(new IntegralType(IntegralType::TypeInt));
 
-  addInclude( "testFile1.h", testFile1 );
-  addInclude( "testFile2.h", testFile2 );
-  addInclude( "testFile3.h", testFile3 );
+  addInclude( "/testFile1.h", testFile1 );
+  addInclude( "/testFile2.h", testFile2 );
+  addInclude( "/testFile3.h", testFile3 );
 }
 
 void TestCppCodeCompletion::cleanupTestCase()
@@ -745,7 +745,7 @@ void TestCppCodeCompletion::testNoMemberAccess() {
 
 void TestCppCodeCompletion::testFunctionImplementation() {
   //__hidden1 and _Hidden2 should not be visible in the code-completion, as their identifiers are reserved to C++ implementations and standard libraries.
-  addInclude("myclass.h", "namespace mynamespace { class myclass { void students(); }; }; class __hidden1; int _Hidden2; ");
+  addInclude("/myclass.h", "namespace mynamespace { class myclass { void students(); }; }; class __hidden1; int _Hidden2; ");
   QByteArray test = "#include \"myclass.h\"\nnamespace mynamespace { }";
   
   TopDUContext* context = parse(test, DumpNone);
@@ -1203,7 +1203,7 @@ void TestCppCodeCompletion::testSignalSlotCompletion() {
     // By processing qobjectdefs.h, we make sure that the qt-specific macros are defined in the duchain through overriding (see setuphelpers.cpp)
     addInclude("/qobjectdefs.h", "#define signals\n#define slots\n#define Q_SIGNALS\n#define Q_SLOTS\n#define Q_PRIVATE_SLOT\n#define SIGNAL\n#define SLOT\n int n;\n");
   
-    addInclude("QObject.h", "#include \"/qobjectdefs.h\"\n class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); };");
+    addInclude("/QObject.h", "#include \"/qobjectdefs.h\"\n class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); };");
     
     QByteArray test("#include \"QObject.h\"\n class TE; class A : public QObject { public slots: void slot1(); void slot2(TE*); signals: void signal1(TE*, char);void signal2(); public: void test() { } private: Q_PRIVATE_SLOT(d,void slot3(TE*))  };");
 
@@ -1234,7 +1234,7 @@ void TestCppCodeCompletion::testSignalSlotExecution()
 {
     // By processing qobjectdefs.h, we make sure that the qt-specific macros are defined in the duchain through overriding (see setuphelpers.cpp)
     addInclude("/qobjectdefs.h", "#define signals\n#define slots\n#define Q_SIGNALS\n#define Q_SLOTS\n#define Q_PRIVATE_SLOT\n#define SIGNAL\n#define SLOT\n int n;\n");
-    addInclude("QObject.h", "#include \"/qobjectdefs.h\"\n class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); };");
+    addInclude("/QObject.h", "#include \"/qobjectdefs.h\"\n class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); };");
 
     QByteArray test("#include \"QObject.h\""
                     "\nclass A : public QObject { public slots: void slot1(); void slot2(void*);"
@@ -1909,8 +1909,8 @@ void TestCppCodeCompletion::testAfterNamespace()
 void TestCppCodeCompletion::testIndirectImports()
 {
   {
-    addInclude("testIndirectImportsHeader1.h", "class C {};");
-    addInclude("testIndirectImportsHeader2.h", "template<class T> class D : public T {};");
+    addInclude("/testIndirectImportsHeader1.h", "class C {};");
+    addInclude("/testIndirectImportsHeader2.h", "template<class T> class D : public T {};");
     
     QByteArray method("#include \"testIndirectImportsHeader2.h\"\n#include \"testIndirectImportsHeader1.h\"\n typedef D<C> Base; class MyClass : public C, public Base {}; ");
 
@@ -1941,7 +1941,7 @@ void TestCppCodeCompletion::testIndirectImports()
 
 void TestCppCodeCompletion::testSameNamespace() {
   {
-    addInclude("testSameNamespaceClassHeader.h", "namespace A {\n class B\n {\n \n};\n \n}");
+    addInclude("/testSameNamespaceClassHeader.h", "namespace A {\n class B\n {\n \n};\n \n}");
     
     QByteArray method("#include \"testSameNamespaceClassHeader.h\"\n namespace A {\n namespace AA {\n};\n };\n");
 
@@ -2292,7 +2292,7 @@ void TestCppCodeCompletion::testTypeConversion2() {
 void TestCppCodeCompletion::testInclude() {
   TEST_FILE_PARSE_ONLY
 
-  addInclude("file1.h", "#include \"testFile1.h\"\n#include \"testFile2.h\"\n");
+  addInclude("/file1.h", "#include \"testFile1.h\"\n#include \"testFile2.h\"\n");
 
 
   QByteArray test = "#include \"file1.h\"  \n  struct Cont { operator int() {}; }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }; HONK undefinedHonk;";
@@ -2435,8 +2435,8 @@ void TestCppCodeCompletion::testHeaderSections() {
    * Make sure that the ends of header-sections are recognized correctly
    * */
 
-  addInclude( "someHeader.h", "\n" );
-  addInclude( "otherHeader.h", "\n" );
+  addInclude( "/someHeader.h", "\n" );
+  addInclude( "/otherHeader.h", "\n" );
 
   IncludeFileList includes;
 
@@ -2469,7 +2469,7 @@ void TestCppCodeCompletion::testHeaderSections() {
 
 void TestCppCodeCompletion::testForwardDeclaration()
 {
-  addInclude( "testdeclaration.h", "class Test{ };" );
+  addInclude( "/testdeclaration.h", "class Test{ };" );
   QByteArray method("#include \"testdeclaration.h\"\n class Test; ");
 
   DUContext* top = parse(method, DumpNone);
@@ -2524,8 +2524,8 @@ void TestCppCodeCompletion::testUsesThroughMacros() {
 
 void TestCppCodeCompletion::testMacroIncludeDirectives()
 {
-  addInclude( "macroincludedirectivetest1.h", "class Test1{ };" );
-  addInclude( "macro includedirectivetest2.h", "class Test1{ };" );
+  addInclude( "/macroincludedirectivetest1.h", "class Test1{ };" );
+  addInclude( "/macro includedirectivetest2.h", "class Test1{ };" );
 
   {
     QByteArray method("#define TEST macroincludedirectivetest1.h \n #define TEST_HPP <TEST> \n #include TEST_HPP\n");
@@ -2590,8 +2590,8 @@ void TestCppCodeCompletion::testMacroIncludeDirectives()
 
 void TestCppCodeCompletion::testAcrossHeaderReferences()
 {
-  addInclude( "acrossheader1.h", "class Test{ };" );
-  addInclude( "acrossheader2.h", "Test t;" );
+  addInclude( "/acrossheader1.h", "class Test{ };" );
+  addInclude( "/acrossheader2.h", "Test t;" );
   QByteArray method("#include \"acrossheader1.h\"\n#include \"acrossheader2.h\"\n");
 
   DUContext* top = parse(method, DumpNone);
@@ -2609,8 +2609,8 @@ void TestCppCodeCompletion::testAcrossHeaderReferences()
 }
 
 void TestCppCodeCompletion::testAcrossHeaderTemplateResolution() {
-  addInclude("acrossheaderresolution1.h", "class C {}; namespace std { template<class T> class A {  }; }");
-  addInclude("acrossheaderresolution2.h", "namespace std { template<class T> class B { typedef A<T> Type; }; }");
+  addInclude("/acrossheaderresolution1.h", "class C {}; namespace std { template<class T> class A {  }; }");
+  addInclude("/acrossheaderresolution2.h", "namespace std { template<class T> class B { typedef A<T> Type; }; }");
   
   QByteArray method("#include \"acrossheaderresolution1.h\"\n#include \"acrossheaderresolution2.h\"\n std::B<C>::Type t;");
   
@@ -2627,8 +2627,8 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateResolution() {
 
 void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
 {
-  addInclude( "acrossheader1.h", "class Dummy { }; template<class Q> class Test{ };" );
-  addInclude( "acrossheader2.h", "template<class B, class B2 = Test<B> > class Test2 : public Test<B>{ Test<B> bm; };" );
+  addInclude( "/acrossheader1.h", "class Dummy { }; template<class Q> class Test{ };" );
+  addInclude( "/acrossheader2.h", "template<class B, class B2 = Test<B> > class Test2 : public Test<B>{ Test<B> bm; };" );
   QByteArray method("#include \"acrossheader1.h\"\n#include \"acrossheader2.h\"\n ");
 
   DUContext* top = parse(method, DumpNone);
@@ -2690,6 +2690,7 @@ void TestCppCodeCompletion::release(DUContext* top)
 }
 
 void TestCppCodeCompletion::addInclude( const QString& identity, const QString& text ) {
+  Q_ASSERT(!identity.isEmpty() && identity.startsWith('/'));
   fakeIncludes[identity] = text;
 }
 
@@ -2821,8 +2822,8 @@ void TestCppCodeCompletion::testNaiveMatching() {
   return;
     Cpp::EnvironmentManager::self()->setMatchingLevel(Cpp::EnvironmentManager::Naive);
     {
-      addInclude("recursive_test_1.h", "#include \"recursive_test_2.h\"\nint i1;\n");
-      addInclude("recursive_test_2.h", "#include \"recursive_test_1.h\"\nint i2;\n");
+      addInclude("/recursive_test_1.h", "#include \"recursive_test_2.h\"\nint i1;\n");
+      addInclude("/recursive_test_2.h", "#include \"recursive_test_1.h\"\nint i2;\n");
       
       TopDUContext* test1 = parse(QByteArray("#include \"recursive_test_1.h\"\n"), DumpNone);
       DUChainWriteLocker l(DUChain::lock());
@@ -2886,8 +2887,8 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
     {
       CppPreprocessEnvironment::setRecordOnlyImportantString(false);
       
-      addInclude("deep2.h", "#ifdef WANT_DEEP\nint x;\n#undef WANT_DEEP\n#endif\n");
-      addInclude("deep1.h", "#define WANT_DEEP\n#include \"deep2.h\"\n");
+      addInclude("/deep2.h", "#ifdef WANT_DEEP\nint x;\n#undef WANT_DEEP\n#endif\n");
+      addInclude("/deep1.h", "#define WANT_DEEP\n#include \"deep2.h\"\n");
       TopDUContext* test1 = parse(QByteArray("#include \"deep1.h\""), DumpNone);
       Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
       DUChainWriteLocker lock(DUChain::lock());
@@ -2897,8 +2898,8 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
       QCOMPARE(envFile1->usedMacros().set().count(), 0u);
     }
 
-    addInclude("h1.h", "#ifndef H1_H  \n#define H1_H  \n  class H1 {};\n #else \n class H1_Already_Defined {}; \n#endif");
-    addInclude("h1_user.h", "#ifndef H1_USER \n#define H1_USER \n#include \"h1.h\" \nclass H1User {}; \n#endif\n");
+    addInclude("/h1.h", "#ifndef H1_H  \n#define H1_H  \n  class H1 {};\n #else \n class H1_Already_Defined {}; \n#endif");
+    addInclude("/h1_user.h", "#ifndef H1_USER \n#define H1_USER \n#include \"h1.h\" \nclass H1User {}; \n#endif\n");
 
     {
       TopDUContext* test1 = parse(QByteArray("#include \"h1.h\" \n#include \"h1_user.h\"\n\nclass Honk {};"), DumpNone);
@@ -2921,8 +2922,8 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
     }
 
     { //Test shadowing of strings through #undefs
-      addInclude("stringset_test1.h", "String1 s1;\n#undef String2\n String2 s2;");
-      addInclude("stringset_test2.h", "String1 s1;\n#undef String2\n String2 s2;");
+      addInclude("/stringset_test1.h", "String1 s1;\n#undef String2\n String2 s2;");
+      addInclude("/stringset_test2.h", "String1 s1;\n#undef String2\n String2 s2;");
 
       {
         TopDUContext* top = parse(QByteArray("#include \"stringset_test1.h\"\n"), DumpNone);
@@ -2983,7 +2984,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QCOMPARE(toStringList(envFile2->strings()), splitSorted("String1\ns1\ns2"));
       }
       {
-        addInclude("usingtest1.h", "#define HONK\nMACRO m\n#undef HONK2\n");
+        addInclude("/usingtest1.h", "#define HONK\nMACRO m\n#undef HONK2\n");
 
         TopDUContext* top = parse(QByteArray("#define MACRO meh\nint MACRO;\n#include \"usingtest1.h\"\n"), DumpNone);
         DUChainWriteLocker lock(DUChain::lock());
@@ -3012,8 +3013,8 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
       }
     }
 
-/*    addInclude( "envmatch_header1.h", "#include \"envmatch_header2.h\"\n class SomeName; #define SomeName SomeAlternativeName" );
-    addInclude( "envmatch_header2.h", "#ifndef SOMEDEF\n #define SOMEDEF\n#endif\n" );
+/*    addInclude( "/envmatch_header1.h", "#include \"envmatch_header2.h\"\n class SomeName; #define SomeName SomeAlternativeName" );
+    addInclude( "/envmatch_header2.h", "#ifndef SOMEDEF\n #define SOMEDEF\n#endif\n" );
     QByteArray method1("#include \"envmatch_header1.h\"");
     QByteArray method2("#include \"envmatch_header1.h\"");
     QByteArray method3("#include \"envmatch_header1.h\"\n#include \"envmatch_header1.h\"");
@@ -3479,7 +3480,7 @@ public:
     QMap<QString,QString>::const_iterator it = cc->fakeIncludes.constFind(fileName);
     if( it != cc->fakeIncludes.constEnd() || !pp ) {
       kDebug(9007) << "parsing included file \"" << fileName << "\"";
-      included << LineContextPair( dynamic_cast<TopDUContext*>(cc->parse( (*it).toUtf8(), TestCppCodeCompletion::DumpNone, pp, KUrl(it.key()))), sourceLine );
+      included << LineContextPair( dynamic_cast<TopDUContext*>(cc->parse( (*it).toUtf8(), TestCppCodeCompletion::DumpNone, pp, QUrl::fromLocalFile(it.key()))), sourceLine );
     } else {
       kDebug(9007) << "could not find include-file \"" << fileName << "\"";
     }
@@ -3548,7 +3549,7 @@ QString TestCppCodeCompletion::preprocess( const IndexedString& url, const QStri
     return result;
 }
 
-TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, rpp::pp* parent, KUrl _identity, TopDUContext* update)
+TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, rpp::pp* parent, QUrl _identity, TopDUContext* update)
 {
   if (dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
@@ -3650,7 +3651,7 @@ void TestCppCodeCompletion::testCompletedIncludeFilePath()
   QVERIFY(file.open(QIODevice::ReadWrite));
   QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(QString(tempDir.name() + "source.cpp"), true, innerDirName, QStringList() << tempDir.name());
   QCOMPARE(includeItems.size(), 1);
-  QCOMPARE(includeItems[0].basePath, KUrl(innerDir.absolutePath()));
+  QCOMPARE(includeItems[0].basePath, QUrl::fromLocalFile(innerDir.absolutePath()));
 }
 
 /**
@@ -3670,7 +3671,7 @@ void TestCppCodeCompletion::testMultipleIncludeCompletionItems()
   QVERIFY(file.open(QIODevice::ReadWrite));
   QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(innerDir1.absoluteFilePath("source.cpp"), true, QString("../" + innerDirName1), QStringList() << QString(tempDir.name() + innerDirName1) << QString(tempDir.name() + innerDirName2));
   QCOMPARE(includeItems.size(), 1);
-  QCOMPARE(includeItems[0].basePath, KUrl(innerDir1.absolutePath()));
+  QCOMPARE(includeItems[0].basePath, QUrl::fromLocalFile(innerDir1.absolutePath()));
 }
 
 void TestCppCodeCompletion::testAfterVisibility_data()

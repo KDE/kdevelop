@@ -26,7 +26,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QPair>
 #include <QtCore/QSet>
-#include <KUrl>
+#include <QUrl>
 #include <project/interfaces/iprojectbuilder.h>
 
 class QStringList;

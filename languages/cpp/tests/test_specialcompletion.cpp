@@ -87,7 +87,9 @@ void TestSpecialCompletion::testMissingInclude()
     TestFile workingFile("int main() {}", "cpp", project);
     workingFile.parse(TopDUContext::AllDeclarationsAndContexts);
 
-    QCOMPARE(include.url().toUrl().upUrl(), workingFile.url().toUrl().upUrl());
+    const Path includePath(include.url().str());
+    const Path workingPath(workingFile.url().str());
+    QCOMPARE(includePath.parent(), workingPath.parent());
 
     QVERIFY(include.waitForParsed());
     QVERIFY(workingFile.waitForParsed());
@@ -131,7 +133,9 @@ void TestSpecialCompletion::testIncludeDefine()
                     "cpp", project);
     active.parse(TopDUContext::AllDeclarationsAndContexts);
 
-    QCOMPARE(include.url().toUrl().upUrl(), active.url().toUrl().upUrl());
+    const Path includePath(include.url().str());
+    const Path activePath(active.url().str());
+    QCOMPARE(includePath.parent(), activePath.parent());
 
     QVERIFY(include.waitForParsed());
     QVERIFY(active.waitForParsed());
@@ -210,14 +214,20 @@ void TestSpecialCompletion::testIncludeGrouping()
                     "cpp", project);
     active.parse(TopDUContext::AllDeclarationsAndContexts);
 
-    QCOMPARE(includeA.url().toUrl().upUrl().upUrl(), active.url().toUrl().upUrl());
-    QCOMPARE(includeB.url().toUrl().upUrl().upUrl(), active.url().toUrl().upUrl());
-    QCOMPARE(includeC.url().toUrl().upUrl().upUrl(), active.url().toUrl().upUrl());
-    QCOMPARE(includeD.url().toUrl().upUrl().upUrl(), active.url().toUrl().upUrl());
+    const Path aPath(includeA.url().str());
+    const Path bPath(includeB.url().str());
+    const Path cPath(includeC.url().str());
+    const Path dPath(includeD.url().str());
+    const Path activePath(active.url().str());
 
-    QCOMPARE(includeA.url().toUrl().upUrl(), includeC.url().toUrl().upUrl());
-    QCOMPARE(includeB.url().toUrl().upUrl(), includeD.url().toUrl().upUrl());
-    QVERIFY(includeC.url().toUrl().upUrl() != includeB.url().toUrl().upUrl());
+    QCOMPARE(aPath.parent().parent(), activePath.parent());
+    QCOMPARE(bPath.parent().parent(), activePath.parent());
+    QCOMPARE(cPath.parent().parent(), activePath.parent());
+    QCOMPARE(dPath.parent().parent(), activePath.parent());
+
+    QCOMPARE(aPath.parent(), cPath.parent());
+    QCOMPARE(bPath.parent(), bPath.parent());
+    QVERIFY(cPath.parent() != bPath.parent());
 
     QVERIFY(includeA.waitForParsed());
     QVERIFY(includeB.waitForParsed());
@@ -282,7 +292,7 @@ void TestSpecialCompletion::testIncludeComment()
                     "cpp", project);
     active.parse(TopDUContext::AllDeclarationsAndContexts);
 
-    QCOMPARE(include.url().toUrl().upUrl(), active.url().toUrl().upUrl());
+    QCOMPARE(Path(include.url().str()).parent(), Path(active.url().str()).parent());
 
     QVERIFY(include.waitForParsed());
     QVERIFY(active.waitForParsed());

@@ -28,7 +28,6 @@
 #include <kconfig.h>
 #include <KLocalizedString>
 #include <kconfiggroup.h>
-#include <kurl.h>
 #include <kparts/mainwindow.h>
 #include <kdebug.h>
 
@@ -36,12 +35,12 @@
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentationcontroller.h>
+#include <interfaces/iplugincontroller.h>
 
 #include "icmakedocumentation.h"
 #include "cmakebuilddirchooser.h"
 #include "settings/cmakecachemodel.h"
-#include <interfaces/idocumentationcontroller.h>
-#include <interfaces/iplugincontroller.h>
 
 namespace Config
 {
@@ -139,16 +138,6 @@ void writeProjectBaseParameter( KDevelop::IProject* project, const QString& key,
     baseGrp.writeEntry( key, value );
 }
 
-inline QString replaceBuildDir(QString in, QString buildDir)
-{
-    return in.replace("#[bin_dir]", buildDir);
-}
-
-inline  QString replaceInstallDir(QString in, QString installDir)
-{
-    return in.replace("#[install_dir]", installDir);
-}
-
 } // namespace
 
 namespace CMake
@@ -190,35 +179,35 @@ KDevelop::Path::List resolveSystemDirs(KDevelop::IProject* project, const QStrin
 ///NOTE: when you change this, update @c defaultConfigure in cmakemanagertest.cpp
 bool checkForNeedingConfigure( KDevelop::IProject* project )
 {
-    KUrl builddir = currentBuildDir(project);
+    const KDevelop::Path builddir = currentBuildDir(project);
     if( !builddir.isValid() )
     {
         CMakeBuildDirChooser bd;
         
-        KUrl folderUrl=project->folder();
+        KDevelop::Path folder = project->path();
         QString relative=CMake::projectRootRelative(project);
-        folderUrl.cd(relative);
+        folder.cd(relative);
         
-        bd.setSourceFolder( folderUrl );
+        bd.setSourceFolder( folder );
         bd.setAlreadyUsed( CMake::allBuildDirs(project) );
-        bd.setCMakeBinary(QStandardPaths::findExecutable("cmake"));
+        bd.setCMakeBinary( currentCMakeBinary(project) );
 
         if( !bd.exec() )
         {
             return false;
         }
 
-        QString newbuilddir = bd.buildFolder().toLocalFile( KUrl::RemoveTrailingSlash );
+        QString newbuilddir = bd.buildFolder().toLocalFile();
         int addedBuildDirIndex = buildDirCount( project ); // old count is the new index
 
         // Initialize the kconfig items with the values from the dialog, this ensures the settings
         // end up in the config file once the changes are saved
         kDebug( 9042 ) << "adding to cmake config: new builddir index" << addedBuildDirIndex;
-        kDebug( 9042 ) << "adding to cmake config: builddir path " << bd.buildFolder().url();
-        kDebug( 9042 ) << "adding to cmake config: installdir " << bd.installPrefix().url();
+        kDebug( 9042 ) << "adding to cmake config: builddir path " << bd.buildFolder();
+        kDebug( 9042 ) << "adding to cmake config: installdir " << bd.installPrefix();
         kDebug( 9042 ) << "adding to cmake config: extra args" << bd.extraArguments();
         kDebug( 9042 ) << "adding to cmake config: build type " << bd.buildType();
-        kDebug( 9042 ) << "adding to cmake config: cmake binary " << bd.cmakeBinary().url();
+        kDebug( 9042 ) << "adding to cmake config: cmake binary " << bd.cmakeBinary();
         kDebug( 9042 ) << "adding to cmake config: environment <null>";
         CMake::setBuildDirCount( project, addedBuildDirIndex + 1 );
         CMake::setCurrentBuildDirIndex( project, addedBuildDirIndex );
@@ -230,48 +219,39 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
         CMake::setCurrentEnvironment( project, QString() );
 
         return true;
-    } else if( !QFileInfo( builddir.toLocalFile() + "/CMakeCache.txt" ).exists() ||
-               !(QFileInfo( builddir.toLocalFile() + "/Makefile" ).exists() || QFileInfo( builddir.toLocalFile() + "/build.ninja" ).exists())
-    ) //TODO: maybe we could use the builder for that?
+    } else if( !QFile::exists( KDevelop::Path(builddir, "CMakeCache.txt").toLocalFile() ) ||
+                //TODO: maybe we could use the builder for that?
+               !(QFile::exists( KDevelop::Path(builddir, "Makefile").toLocalFile() ) ||
+                    QFile::exists( KDevelop::Path(builddir, "build.ninja").toLocalFile() ) ) )
     {
         // User entered information already, but cmake hasn't actually been run yet.
         return true;
-    } 
+    }
     return false;
 }
 
-KUrl projectRoot(KDevelop::IProject* project)
+KDevelop::Path projectRoot(KDevelop::IProject* project)
 {
     if (!project) {
-        return KUrl();
+        return {};
     }
 
-    KUrl projectPath = project->folder();
-
-    // We need this as its own variable as .cd mutates the object and would be
-    // turned into a no-op by assert
-    const bool correct = projectPath.cd(CMake::projectRootRelative(project));
-    Q_ASSERT(correct);
-    Q_UNUSED(correct);
-
-    return projectPath;
+    return project->path().cd(CMake::projectRootRelative(project));
 }
 
-KUrl currentBuildDir( KDevelop::IProject* project )
+KDevelop::Path currentBuildDir( KDevelop::IProject* project )
 {
-    return readProjectParameter( project, Config::Specific::buildDirPathKey, QString() );
+    return KDevelop::Path(readProjectParameter( project, Config::Specific::buildDirPathKey, QString() ));
 }
 
-KUrl commandsFile(KDevelop::IProject* project)
+KDevelop::Path commandsFile(KDevelop::IProject* project)
 {
     auto currentBuildDir = CMake::currentBuildDir(project);
     if (currentBuildDir.isEmpty()) {
         return {};
     }
 
-    KUrl commandsFile(currentBuildDir);
-    commandsFile.addPath("compile_commands.json");
-    return commandsFile;
+    return KDevelop::Path(currentBuildDir, QStringLiteral("compile_commands.json"));
 }
 
 QString currentBuildType( KDevelop::IProject* project )
@@ -279,14 +259,15 @@ QString currentBuildType( KDevelop::IProject* project )
     return readProjectParameter( project, Config::Specific::cmakeBuildTypeKey, "Release" );
 }
 
-KUrl currentCMakeBinary( KDevelop::IProject* project )
+KDevelop::Path currentCMakeBinary( KDevelop::IProject* project )
 {
-    return readProjectParameter( project, Config::Specific::cmakeBinKey, QStandardPaths::findExecutable( "cmake" ) );
+    return KDevelop::Path(readProjectParameter( project, Config::Specific::cmakeBinKey,
+                                                QStandardPaths::findExecutable( "cmake" ) ));
 }
 
-KUrl currentInstallDir( KDevelop::IProject* project )
+KDevelop::Path currentInstallDir( KDevelop::IProject* project )
 {
-    return readProjectParameter( project, Config::Specific::cmakeInstallDirKey, "/usr/local" );
+    return KDevelop::Path(readProjectParameter( project, Config::Specific::cmakeInstallDirKey, "/usr/local" ));
 }
 
 QString projectRootRelative( KDevelop::IProject* project )
@@ -304,9 +285,9 @@ QString currentExtraArguments( KDevelop::IProject* project )
     return readProjectParameter( project, Config::Specific::cmakeArgumentsKey, QString() );
 }
 
-void setCurrentInstallDir( KDevelop::IProject* project, const KUrl& url )
+void setCurrentInstallDir( KDevelop::IProject* project, const KDevelop::Path& path )
 {
-    writeProjectParameter( project, Config::Specific::cmakeInstallDirKey, url.url() );
+    writeProjectParameter( project, Config::Specific::cmakeInstallDirKey, path.toLocalFile() );
 }
 
 void setCurrentBuildType( KDevelop::IProject* project, const QString& type )
@@ -314,14 +295,14 @@ void setCurrentBuildType( KDevelop::IProject* project, const QString& type )
     writeProjectParameter( project, Config::Specific::cmakeBuildTypeKey, type );
 }
 
-void setCurrentCMakeBinary( KDevelop::IProject* project, const KUrl& url )
+void setCurrentCMakeBinary( KDevelop::IProject* project, const KDevelop::Path& path )
 {
-    writeProjectParameter( project, Config::Specific::cmakeBinKey, url.url() );
+    writeProjectParameter( project, Config::Specific::cmakeBinKey, path.toLocalFile() );
 }
 
-void setCurrentBuildDir( KDevelop::IProject* project, const KUrl& url )
+void setCurrentBuildDir( KDevelop::IProject* project, const KDevelop::Path& path )
 {
-    writeProjectParameter( project, Config::Specific::buildDirPathKey, url.url() );
+    writeProjectParameter( project, Config::Specific::buildDirPathKey, path.toLocalFile() );
 }
 
 void setProjectRootRelative( KDevelop::IProject* project, const QString& relative)
@@ -416,7 +397,7 @@ void updateConfig( KDevelop::IProject* project, int buildDirIndex, CMakeCacheMod
     bool deleteModel = false;
     if (!model)
     {
-        KUrl cacheFilePath( buildDirGrp.readEntry( Config::Specific::buildDirPathKey, QString() ) );
+        KDevelop::Path cacheFilePath( buildDirGrp.readEntry( Config::Specific::buildDirPathKey, QString() ) );
         cacheFilePath.addPath("CMakeCache.txt");
 
         if( QFile::exists( cacheFilePath.toLocalFile() ) )
@@ -428,8 +409,8 @@ void updateConfig( KDevelop::IProject* project, int buildDirIndex, CMakeCacheMod
     if (!model)
         return;
 
-    buildDirGrp.writeEntry( Config::Specific::cmakeBinKey, KUrl( model->value("CMAKE_COMMAND") ).url() );
-    buildDirGrp.writeEntry( Config::Specific::cmakeInstallDirKey, KUrl( model->value("CMAKE_INSTALL_PREFIX") ).url() );
+    buildDirGrp.writeEntry( Config::Specific::cmakeBinKey, model->value("CMAKE_COMMAND") );
+    buildDirGrp.writeEntry( Config::Specific::cmakeInstallDirKey, model->value("CMAKE_INSTALL_PREFIX") );
     buildDirGrp.writeEntry( Config::Specific::cmakeBuildTypeKey, model->value("CMAKE_BUILD_TYPE") );
     if (deleteModel)
         delete model;
@@ -445,20 +426,16 @@ void attemptMigrate( KDevelop::IProject* project )
 
     KConfigGroup baseGrp = baseGroup(project);
 
-    KUrl buildDir( baseGrp.readEntry( Config::Old::currentBuildDirKey, QString() ) );
+    KDevelop::Path buildDir( baseGrp.readEntry( Config::Old::currentBuildDirKey, QString() ) );
     int buildDirIndex = -1;
-    QStringList existingBuildDirs;
+    const QStringList existingBuildDirs = baseGrp.readEntry( Config::Old::projectBuildDirs, QStringList() );
     {
-        // the directories are originally stored in a path list, so need to convert them to URLs
-        QStringList existingBuildDirPathes = baseGrp.readEntry( Config::Old::projectBuildDirs, QStringList() );
-
         // also, find current build directory in this list (we need an index, not path)
         QString currentBuildDirCanonicalPath = QDir( buildDir.toLocalFile() ).canonicalPath();
 
-        for( int i = 0; i < existingBuildDirPathes.count(); ++i )
+        for( int i = 0; i < existingBuildDirs.count(); ++i )
         {
-            const QString& nextBuildDir = existingBuildDirPathes.at(i);
-            existingBuildDirs += KUrl(nextBuildDir).url();
+            const QString& nextBuildDir = existingBuildDirs.at(i);
             if( QDir(nextBuildDir).canonicalPath() == currentBuildDirCanonicalPath )
             {
                 buildDirIndex = i;
@@ -479,7 +456,7 @@ void attemptMigrate( KDevelop::IProject* project )
         kDebug() << "CMake settings migration: writing group" << i << ": path" << existingBuildDirs.at(i);
 
         KConfigGroup buildDirGrp = buildDirGroup( project, i );
-        buildDirGrp.writeEntry( Config::Specific::buildDirPathKey, KUrl( existingBuildDirs.at(i) ).url() );
+        buildDirGrp.writeEntry( Config::Specific::buildDirPathKey, existingBuildDirs.at(i) );
     }
 
     baseGrp.deleteEntry( Config::Old::currentBuildDirKey );
@@ -526,7 +503,7 @@ QStringList allBuildDirs(KDevelop::IProject* project)
     QStringList result;
     int bdCount = buildDirCount(project);
     for (int i = 0; i < bdCount; ++i)
-        result += KUrl( buildDirGroup( project, i ).readEntry( Config::Specific::buildDirPathKey ) ).toLocalFile(KUrl::RemoveTrailingSlash);
+        result += buildDirGroup( project, i ).readEntry( Config::Specific::buildDirPathKey );
     return result;
 }
 

@@ -17,7 +17,6 @@
 #include <QStringList>
 #include <language/editor/modificationrevisionset.h>
 
-class KUrl;
 class QDir;
 class QFile;
 
@@ -68,7 +67,7 @@ class MakeFileResolver
     bool m_isResolving;
     bool m_outOfSource;
 
-    KUrl mapToBuild(const KUrl& url) const;
+    QString mapToBuild(const QString &path) const;
 
     ///Executes the command using KProcess
     bool executeCommand( const QString& command, const QString& workingDirectory, QString& result ) const;

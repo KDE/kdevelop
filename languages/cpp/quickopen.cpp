@@ -27,6 +27,7 @@
 
 #include <KLocalizedString>
 #include <kiconloader.h>
+#include <KIO/Global>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
@@ -85,18 +86,19 @@ bool IncludeFileData::execute( QString& filterText ) {
   if( m_item.isDirectory ) {
     //Change the filter-text to match the sub-directory
     // Line number not expected for directory
-    KUrl u( filterText );
+    QUrl u = QUrl::fromLocalFile( filterText );
 //     kDebug() << "filter-text:" << u;
     QString addName = m_item.name;
     if(addName.contains('/'))
       addName = addName.split('/').last();
-    u.setFileName( addName );                                   
+    u = u.adjusted(QUrl::RemoveFilename);
+    u.setPath(u.path() +  addName );
 //     kDebug() << "with added:" << u;
-    filterText = u.toLocalFile( KUrl::AddTrailingSlash );
+    filterText = u.toLocalFile() + '/';
 //     kDebug() << "new:" << filterText;
     return false;
   } else {
-    KUrl u = m_item.url();
+    QUrl u = m_item.url();
     
     IDocument* doc = ICore::self()->documentController()->openDocument( u );
     if (hasLineNumber) {
@@ -116,7 +118,7 @@ QList<QVariant> IncludeFileData::highlighting() const {
   
   QList<QVariant> ret;
 
-  KUrl url(m_item.name);
+  QUrl url = QUrl::fromLocalFile(m_item.name);
   int fileNameLength = url.fileName().length();
   if(m_item.isDirectory)
     ++fileNameLength;
@@ -155,7 +157,7 @@ QWidget* IncludeFileData::expandingWidget() const {
   DUChainReadLocker lock( DUChain::lock() );
   QString htmlPrefix, htmlSuffix;
   
-  QList<KUrl> inclusionPath; //Here, store the shortest way of intermediate includes to the included file.
+  QList<QUrl> inclusionPath; //Here, store the shortest way of intermediate includes to the included file.
 
   if( m_item.pathNumber == -1 ) {
     htmlPrefix = i18n("This file imports the current open document<br/>");
@@ -166,18 +168,18 @@ QWidget* IncludeFileData::expandingWidget() const {
     htmlSuffix = "<br/>" + i18n( "In include path %1", m_item.pathNumber );
   }
   
-  foreach( const KUrl& u, inclusionPath )
-    htmlPrefix += i18n("Included through %1 <br/>", QString("KDEV_FILE_LINK{%1}").arg(u.pathOrUrl()) );
+  foreach( const QUrl &u, inclusionPath )
+    htmlPrefix += i18n("Included through %1 <br/>", QString("KDEV_FILE_LINK{%1}").arg(u.toDisplayString(QUrl::PreferLocalFile)) );
   
   return new NavigationWidget( m_item, getCurrentTopDUContext(), htmlPrefix, htmlSuffix );
 }
 
 QString IncludeFileData::htmlDescription() const
 {
-  KUrl path = m_item.url();
+  QUrl path = m_item.url();
   
   if( m_item.isDirectory ) {
-    return QString( i18n("Directory %1", path.pathOrUrl()) );
+    return QString( i18n("Directory %1", path.toDisplayString(QUrl::PreferLocalFile)) );
   }
 
   return i18n( "In %1th include path", m_item.pathNumber );
@@ -248,17 +250,13 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
       text = text.mid(2);
       explicitPath = true;
     }else if(text.startsWith("../")) {
-      KUrl u(m_baseUrl);
-      u.setFileName(QString());
-      if(!u.isEmpty())
-        u = u.upUrl();
-      addIncludePaths << u.toLocalFile();
+      addIncludePaths << KIO::upUrl(m_baseUrl).toLocalFile();
       allIncludeItems.clear();
       text = text.mid(3);
       explicitPath = true;
     }else if(text.startsWith("./")) {
-      KUrl u(m_baseUrl);
-      u.setFileName(QString());
+      QUrl u = m_baseUrl;
+      u = u.adjusted(QUrl::RemoveFilename);
       addIncludePaths << u.toLocalFile();
       allIncludeItems.clear();
       text = text.mid(2);
@@ -267,9 +265,9 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
     
     QString prefixPath;
     if (!explicitPath || !text.isEmpty()) {
-      KUrl u( text );
+      QUrl u = QUrl::fromLocalFile( text );
 
-      u.setFileName( QString() );
+      u = u.adjusted(QUrl::RemoveFilename);
       prefixPath = u.toLocalFile();
     }
 
@@ -366,7 +364,7 @@ QuickOpenDataPointer IncludeFileDataProvider::data( uint row ) const
 
   if( m_duContext )
   {
-    KUrl u = items[row].url();
+    QUrl u = items[row].url();
 
     QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
 
@@ -393,9 +391,10 @@ QSet<IndexedString> IncludeFileDataProvider::files() const {
   QSet<IndexedString> set;
   foreach(const KDevelop::IncludeItem& item, items()) {
     if( !item.basePath.isEmpty() ) {
-      KUrl path = item.basePath;
-      path.addPath( item.name );
-      set << IndexedString(path.pathOrUrl());
+      QUrl path = item.basePath;
+      path = path.adjusted(QUrl::StripTrailingSlash);
+      path.setPath(path.path() + '/' + item.name );
+      set << IndexedString(path);
     }else{
       set << IndexedString(item.name);
     }

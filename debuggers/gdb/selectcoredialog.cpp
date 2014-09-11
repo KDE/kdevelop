@@ -33,12 +33,12 @@ SelectCoreDialog::SelectCoreDialog(QWidget* parent)
     setCaption(i18n("Select Core File"));
 }
 
-KUrl SelectCoreDialog::binary() const
+QUrl SelectCoreDialog::binary() const
 {
     return m_ui.binaryFile->url();
 }
 
-KUrl SelectCoreDialog::core() const
+QUrl SelectCoreDialog::core() const
 {
     return m_ui.coreFile->url();
 }

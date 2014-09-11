@@ -55,7 +55,7 @@ void KDevProjectOpen::openProject(const QUrl& path)
     defaultConfigure(paths);
 
     m_toOpen++;
-    ICore::self()->projectController()->openProject(paths.projectFile);
+    ICore::self()->projectController()->openProject(paths.projectFile.toUrl());
 }
 
 void KDevProjectOpen::projectDone(IProject* )

@@ -131,7 +131,7 @@ KDevelop::ReferencedTopDUContext CMakeImportJob::initializeProject(CMakeFolderIt
     m_data.modulePath=initials.first["CMAKE_MODULE_PATH"];
     m_data.vm=initials.first;
     m_data.vm.insertGlobal("CMAKE_SOURCE_DIR", QStringList(base.toLocalFile()));
-    m_data.vm.insertGlobal("CMAKE_BINARY_DIR", QStringList(CMake::currentBuildDir(m_project).toLocalFile(KUrl::RemoveTrailingSlash)));
+    m_data.vm.insertGlobal("CMAKE_BINARY_DIR", QStringList(CMake::currentBuildDir(m_project).toLocalFile(QUrl::RemoveTrailingSlash)));
     
     const Path cachefile(m_manager->buildDirectory(m_project->projectItem()), "CMakeCache.txt");
     m_data.cache = CMakeParserUtils::readCache(cachefile);

@@ -58,7 +58,7 @@ IncludesWidget::IncludesWidget( QWidget* parent )
     ui->includePaths->setModel( includesModel );
     connect( ui->includePaths->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(includePathSelected(QModelIndex)) );
     connect( ui->includePathRequester, SIGNAL(textChanged(QString)), SLOT(includePathEdited()) );
-    connect( ui->includePathRequester, SIGNAL(urlSelected(KUrl)), SLOT(includePathUrlSelected(KUrl)) );
+    connect( ui->includePathRequester, SIGNAL(urlSelected(QUrl)), SLOT(includePathUrlSelected(QUrl)) );
     connect( includesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(includesChanged()) );
     connect( includesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(includesChanged())  );
     connect( includesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(includesChanged())  );
@@ -119,7 +119,7 @@ void IncludesWidget::deleteIncludePath()
     updateEnablements();
 }
 
-void IncludesWidget::includePathUrlSelected(const KUrl& url)
+void IncludesWidget::includePathUrlSelected(const QUrl &url)
 {
     Q_UNUSED(url);
     updateEnablements();
@@ -136,7 +136,7 @@ void IncludesWidget::updateEnablements() {
     ui->removeIncludePath->setEnabled( ui->includePaths->currentIndex().isValid() );
 }
 
-QString IncludesWidget::makeIncludeDirAbsolute(const KUrl& url) const
+QString IncludesWidget::makeIncludeDirAbsolute(const QUrl &url) const
 {
     QString localFile = url.toLocalFile();
     if( url.isRelative() ) {

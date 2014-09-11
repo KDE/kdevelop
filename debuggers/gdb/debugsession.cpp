@@ -39,6 +39,7 @@
 #include <KParts/MainWindow>
 #include <KSharedConfig>
 #include <KShell>
+#include <QUrl>
 
 #include <interfaces/idocument.h>
 #include <interfaces/icore.h>
@@ -365,7 +366,7 @@ void DebugSession::runToCursor()
     if (KDevelop::IDocument* doc = KDevelop::ICore::self()->documentController()->activeDocument()) {
         KTextEditor::Cursor cursor = doc->cursorPosition();
         if (cursor.isValid())
-            runUntil(doc->url().path(), cursor.line() + 1);
+            runUntil(doc->url(), cursor.line() + 1);
     }
 }
 
@@ -374,7 +375,7 @@ void DebugSession::jumpToCursor()
     if (KDevelop::IDocument* doc = KDevelop::ICore::self()->documentController()->activeDocument()) {
         KTextEditor::Cursor cursor = doc->cursorPosition();
         if (cursor.isValid())
-            jumpTo(doc->url().path(), cursor.line() + 1);
+            jumpTo(doc->url(), cursor.line() + 1);
     }
 }
 
@@ -1030,10 +1031,10 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
 
     QStringList arguments = iface->arguments(cfg, err);
     // Change the "Working directory" to the correct one
-    KUrl dir = iface->workingDirectory(cfg);
+    QUrl dir = iface->workingDirectory(cfg);
     if (dir.isEmpty() || !dir.isValid())
     {
-        dir = QFileInfo(executable).absolutePath();
+        dir = QUrl::fromLocalFile(QFileInfo(executable).absolutePath());
     }
     
     queueCmd(new GDBCommand(GDBMI::EnvironmentCd, KShell::quoteArg(dir.toLocalFile())));

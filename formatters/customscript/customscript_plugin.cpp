@@ -107,7 +107,7 @@ QString CustomScriptPlugin::description()
 				"can be easily shared by all team members, independent of their preferred IDE.");
 }
 
-QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const KUrl& url, const QMimeType& /*mime*/, const QString& leftContext, const QString& rightContext)
+QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const QUrl &url, const QMimeType& /*mime*/, const QString& leftContext, const QString& rightContext)
 {
 	KProcess proc;
 	QTextStream ios(&proc);
@@ -212,7 +212,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
     return KDevelop::extractFormattedTextFromContext(output, text, leftContext, rightContext, tabWidth);
 }
 
-QString CustomScriptPlugin::formatSource(const QString& text, const KUrl& url, const QMimeType& mime, const QString& leftContext, const QString& rightContext)
+QString CustomScriptPlugin::formatSource(const QString& text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext)
 {
 	return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, url, mime, leftContext, rightContext );
 }
@@ -393,7 +393,7 @@ QString CustomScriptPlugin::previewText(const SourceFormatterStyle& style, const
 }
 
 
-QStringList CustomScriptPlugin::computeIndentationFromSample( const KUrl& url )
+QStringList CustomScriptPlugin::computeIndentationFromSample( const QUrl &url )
 {
 	QStringList ret;
 
@@ -425,7 +425,7 @@ QStringList CustomScriptPlugin::computeIndentationFromSample( const KUrl& url )
 	return ret;
 }
 
-CustomScriptPlugin::Indentation CustomScriptPlugin::indentation( const KUrl& url )
+CustomScriptPlugin::Indentation CustomScriptPlugin::indentation( const QUrl &url )
 {
     Indentation ret;
     QStringList indent = computeIndentationFromSample( url );
@@ -484,7 +484,7 @@ CustomScriptPlugin::Indentation CustomScriptPlugin::indentation( const KUrl& url
 void CustomScriptPreferences::updateTimeout()
 {
 	const QString& text = indentPluginSingleton.data()->previewText(m_style, QMimeType());
-    QString formatted = indentPluginSingleton.data()->formatSourceWithStyle(m_style, text, KUrl(), QMimeType());
+    QString formatted = indentPluginSingleton.data()->formatSourceWithStyle(m_style, text, QUrl(), QMimeType());
     emit previewTextChanged ( formatted );
 }
 

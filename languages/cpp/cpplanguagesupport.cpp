@@ -133,7 +133,7 @@ KDevelop::ContextMenuExtension CppLanguageSupport::contextMenuExtension(KDevelop
 }
 
 ///Tries to find a definition for the declaration at given cursor-position and document-url. DUChain must be locked.
-Declaration* definitionForCursorDeclaration(const KTextEditor::Cursor& cursor, const KUrl& url) {
+Declaration* definitionForCursorDeclaration(const KTextEditor::Cursor& cursor, const QUrl &url) {
   QList<TopDUContext*> topContexts = DUChain::self()->chainsForDocument( url );
   foreach(TopDUContext* ctx, topContexts) {
     Declaration* decl = DUChainUtils::declarationInLine(cursor, ctx);
@@ -292,7 +292,7 @@ KDevelop::ILanguage *CppLanguageSupport::language()
     return core()->languageController()->language(name());
 }
 
-TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool proxyContext)
+TopDUContext* CppLanguageSupport::standardContext(const QUrl &url, bool proxyContext)
 {
   DUChainReadLocker lock(DUChain::lock());
   const ParsingEnvironment* env = PreprocessJob::standardEnvironment();
@@ -366,7 +366,7 @@ enum FileType {
  *
  * @returns pair of base path and file type which has been found for @p url.
  */
-QPair<QString,FileType> basePathAndType(const KUrl& url)
+QPair<QString,FileType> basePathAndType(const QUrl &url)
 {
     QString path = url.toLocalFile();
     int idxSlash = path.lastIndexOf("/");
@@ -398,7 +398,7 @@ QPair<QString,FileType> basePathAndType(const KUrl& url)
  * is the same, and one extension starts with h/H and the other one with c/C.
  * For example, foo.hpp and foo.C are buddies.
  */
-bool CppLanguageSupport::areBuddies(const KUrl& url1, const KUrl& url2)
+bool CppLanguageSupport::areBuddies(const QUrl &url1, const QUrl& url2)
 {
     QPair<QString, FileType> type1 = basePathAndType(url1);
     QPair<QString, FileType> type2 = basePathAndType(url2);
@@ -409,7 +409,7 @@ bool CppLanguageSupport::areBuddies(const KUrl& url1, const KUrl& url2)
 /**
  * Behavior: places foo.h* / foo.H* left of foo.c* / foo.C*
  */
-bool CppLanguageSupport::buddyOrder(const KUrl& url1, const KUrl& url2)
+bool CppLanguageSupport::buddyOrder(const QUrl &url1, const QUrl& url2)
 {
     QPair<QString, FileType> type1 = basePathAndType(url1);
     QPair<QString, FileType> type2 = basePathAndType(url2);
@@ -417,26 +417,26 @@ bool CppLanguageSupport::buddyOrder(const KUrl& url1, const KUrl& url2)
     return(type1.second == Header && type2.second == Source);
 }
 
-QVector< KUrl > CppLanguageSupport::getPotentialBuddies(const KUrl& url) const
+QVector< QUrl > CppLanguageSupport::getPotentialBuddies(const QUrl &url) const
 {
     QPair<QString, FileType> type = basePathAndType(url);
     // Don't do anything for types we don't know
     if (type.second == Unknown) {
-      return QVector< KUrl >();
+      return QVector< QUrl >();
     }
 
     // Depending on the buddy's file type we either generate source extensions (for headers)
     // or header extensions (for sources)
     const QSet<QString>& extensions = ( type.second == Header ? getSourceFileExtensions() : getHeaderFileExtensions() );
-    QVector< KUrl > buddies;
+    QVector< QUrl > buddies;
     foreach(const QString& extension, extensions) {
-      buddies.append(KUrl(type.first + "." + extension));
+      buddies.append(QUrl::fromLocalFile(type.first + "." + extension));
     }
 
     return buddies;
 }
 
-QPair<QPair<QString, KTextEditor::Range>, QString> CppLanguageSupport::cursorIdentifier(const KUrl& url, const KTextEditor::Cursor& position) const {
+QPair<QPair<QString, KTextEditor::Range>, QString> CppLanguageSupport::cursorIdentifier(const QUrl &url, const KTextEditor::Cursor& position) const {
   KDevelop::IDocument* doc = core()->documentController()->documentForUrl(url);
   if(!doc || !doc->activeTextView())
     return qMakePair(qMakePair(QString(), KTextEditor::Range::invalid()), QString());
@@ -471,7 +471,7 @@ QPair<QPair<QString, KTextEditor::Range>, QString> CppLanguageSupport::cursorIde
   return qMakePair( qMakePair(line.mid(start, end-start), wordRange), line.mid(end) );
 }
 
-QPair<TopDUContextPointer, KTextEditor::Range> CppLanguageSupport::importedContextForPosition(const KUrl& url, const KTextEditor::Cursor& position) {
+QPair<TopDUContextPointer, KTextEditor::Range> CppLanguageSupport::importedContextForPosition(const QUrl &url, const KTextEditor::Cursor& position) {
   QPair<QPair<QString, KTextEditor::Range>, QString> found = cursorIdentifier(url, position);
   if(!found.first.second.isValid())
     return qMakePair(TopDUContextPointer(), KTextEditor::Range::invalid());
@@ -509,7 +509,7 @@ QPair<TopDUContextPointer, KTextEditor::Range> CppLanguageSupport::importedConte
     return qMakePair(TopDUContextPointer(), KTextEditor::Range::invalid());
 
   if((ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext())) {
-    kDebug() << "Strange: standard-context for" << ctx->url().str() << "is a proxy-context";
+    kDebug() << "Strange: standard-context for" << ctx->url() << "is a proxy-context";
     return qMakePair(TopDUContextPointer(), KTextEditor::Range::invalid());
   }
 
@@ -531,7 +531,7 @@ QPair<TopDUContextPointer, KTextEditor::Range> CppLanguageSupport::importedConte
   return qMakePair(TopDUContextPointer(), KTextEditor::Range::invalid());
 }
 
-QPair<KTextEditor::Range, const rpp::pp_macro*> CppLanguageSupport::usedMacroForPosition(const KUrl& url, const KTextEditor::Cursor& position) {
+QPair<KTextEditor::Range, const rpp::pp_macro*> CppLanguageSupport::usedMacroForPosition(const QUrl &url, const KTextEditor::Cursor& position) {
   //Extract the word under the cursor
 
   QPair<QPair<QString, KTextEditor::Range>, QString> found = cursorIdentifier(url, position);
@@ -549,7 +549,7 @@ QPair<KTextEditor::Range, const rpp::pp_macro*> CppLanguageSupport::usedMacroFor
   }
 
   TopDUContext* ctx = standardContext(url, true);
-  if(word.str().isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
+  if(word.isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
     return qMakePair(KTextEditor::Range::invalid(), (const rpp::pp_macro*)0);
 
   Cpp::EnvironmentFilePointer p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
@@ -579,7 +579,7 @@ QPair<KTextEditor::Range, const rpp::pp_macro*> CppLanguageSupport::usedMacroFor
   return qMakePair(KTextEditor::Range::invalid(), (const rpp::pp_macro*)0);
 }
 
-KTextEditor::Range CppLanguageSupport::specialLanguageObjectRange(const KUrl& url, const KTextEditor::Cursor& position) {
+KTextEditor::Range CppLanguageSupport::specialLanguageObjectRange(const QUrl &url, const KTextEditor::Cursor& position) {
 
   QPair<TopDUContextPointer, KTextEditor::Range> import = importedContextForPosition(url, position);
   if(import.first)
@@ -588,13 +588,13 @@ KTextEditor::Range CppLanguageSupport::specialLanguageObjectRange(const KUrl& ur
   return usedMacroForPosition(url, position).first;
 }
 
-QPair<KUrl, KTextEditor::Cursor> CppLanguageSupport::specialLanguageObjectJumpCursor(const KUrl& url, const KTextEditor::Cursor& position) {
+QPair<QUrl, KTextEditor::Cursor> CppLanguageSupport::specialLanguageObjectJumpCursor(const QUrl &url, const KTextEditor::Cursor& position) {
 
   QPair<TopDUContextPointer, KTextEditor::Range> import = importedContextForPosition(url, position);
     if(import.first) {
       DUChainReadLocker lock(DUChain::lock());
       if(import.first)
-        return qMakePair(KUrl(import.first->url().str()), KTextEditor::Cursor(0,0));
+        return qMakePair(import.first->url().toUrl(), KTextEditor::Cursor(0,0));
     }
 
     QPair<KTextEditor::Range, const rpp::pp_macro*> m = usedMacroForPosition(url, position);
@@ -602,10 +602,10 @@ QPair<KUrl, KTextEditor::Cursor> CppLanguageSupport::specialLanguageObjectJumpCu
     if(!m.first.isValid())
       return qMakePair(QUrl(), KTextEditor::Cursor::invalid());
 
-    return qMakePair(KUrl(m.second->file.str()), KTextEditor::Cursor(m.second->sourceLine, 0));
+    return qMakePair(m.second->file.toUrl(), KTextEditor::Cursor(m.second->sourceLine, 0));
 }
 
-QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position) {
+QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position) {
 
   QPair<TopDUContextPointer, KTextEditor::Range> import = importedContextForPosition(url, position);
     if(import.first) {
@@ -614,7 +614,7 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
         //Prefer a standardContext, because the included one may have become empty due to
         if(import.first->localDeclarations().count() == 0 && import.first->childContexts().count() == 0) {
 
-          KDevelop::TopDUContext* betterCtx = standardContext(KUrl(import.first->url().str()));
+          KDevelop::TopDUContext* betterCtx = standardContext(import.first->url().toUrl());
 
           if(betterCtx && (betterCtx->localDeclarations().count() != 0 || betterCtx->childContexts().count() != 0))
             return betterCtx->createNavigationWidget(0, 0, i18n("Emptied by preprocessor<br />"));

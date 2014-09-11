@@ -24,7 +24,7 @@
 
 #include <KDialog>
 #include "ui_selectcore.h"
-#include <kurl.h>
+#include <QUrl>
 
 namespace GDBDebugger {
 
@@ -32,8 +32,8 @@ class SelectCoreDialog : public KDialog
 {
 public:
     SelectCoreDialog(QWidget *parent = 0);
-    KUrl binary() const;
-    KUrl core() const;
+    QUrl binary() const;
+    QUrl core() const;
 
 private:
     Ui::SelectCore m_ui;

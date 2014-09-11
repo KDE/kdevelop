@@ -49,7 +49,7 @@ class OktetaDocument : public Sublime::UrlDocument, public IDocument
     Q_OBJECT
 
   public:
-    OktetaDocument( const KUrl& url, ICore* core );
+    OktetaDocument( const QUrl &url, ICore* core );
 
     virtual ~OktetaDocument();
 
@@ -60,7 +60,7 @@ class OktetaDocument : public Sublime::UrlDocument, public IDocument
     virtual KParts::Part* partForView( QWidget* widget ) const;
     virtual DocumentState state() const;
     virtual KTextEditor::Document* textDocument() const;
-    virtual KUrl url() const;
+    virtual QUrl url() const;
 
     virtual void activate( Sublime::View* view, KParts::MainWindow* mainWindow );
     virtual bool close( IDocument::DocumentSaveMode = IDocument::Default );

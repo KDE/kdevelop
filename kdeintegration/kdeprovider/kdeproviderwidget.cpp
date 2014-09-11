@@ -77,14 +77,14 @@ VcsLocation extractLocation(const QModelIndex& pos)
 {
     QString gitUrl=KDEProviderSettings::self()->gitProtocol();
     if(gitUrl=="kde:") {
-        return VcsLocation(KUrl("kde:"+pos.data(KDEProjectsModel::IdentifierRole).toString()));
+        return VcsLocation(QUrl("kde:"+pos.data(KDEProjectsModel::IdentifierRole).toString()));
     } else {
         QMap<QString, QVariant> urls = pos.data(KDEProjectsModel::VcsLocationRole).toMap();
         return VcsLocation(urls[gitUrl].toUrl());
     }
 }
 
-VcsJob* KDEProviderWidget::createWorkingCopy(const KUrl& destinationDirectory)
+VcsJob* KDEProviderWidget::createWorkingCopy(const QUrl &destinationDirectory)
 {
     QModelIndex pos = m_projects->currentIndex();
     if(!pos.isValid())

@@ -20,20 +20,24 @@
 */
 
 #include "qthelpdocumentation.h"
+
 #include <QLabel>
-#include <KLocalizedString>
-#include <KUrl>
+#include <QUrl>
 #include <QTreeView>
 #include <QHelpContentModel>
 #include <QHeaderView>
 #include <QMenu>
+#include <QTemporaryFile>
+
+#include <KLocalizedString>
+
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <documentation/standarddocumentationview.h>
 #include "qthelpnetwork.h"
 #include "qthelpproviderabstract.h"
 #include "kdebug.h"
-#include <QTemporaryFile>
+
 QtHelpProviderAbstract* QtHelpDocumentation::s_provider=0;
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)

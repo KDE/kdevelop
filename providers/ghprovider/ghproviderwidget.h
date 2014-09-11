@@ -53,7 +53,7 @@ public:
     explicit ProviderWidget(QWidget *parent = nullptr);
 
     /// Re-implemented from KDevelop::IProjectProviderWidget.
-    virtual KDevelop::VcsJob * createWorkingCopy(const KUrl &dest) override;
+    virtual KDevelop::VcsJob * createWorkingCopy(const QUrl &dest) override;
 
     /// Re-implemented from KDevelop::IProjectProviderWidget.
     virtual bool isCorrect() const override;

@@ -21,6 +21,8 @@
 #include <language/duchain/types/alltypes.h>
 #include <kdebug.h>
 
+#include <KDebug>
+
 using namespace KDevelop;
 
 DumpTypes::DumpTypes()

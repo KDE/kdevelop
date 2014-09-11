@@ -25,6 +25,8 @@
 #include <project/projectkcmodule.h>
 #include "cmakecachemodel.h"
 
+#include <util/path.h>
+
 #include <KSharedConfig>
 
 class QItemSelection;
@@ -60,9 +62,9 @@ class CMakePreferences : public KCModule
         void configure();
         
         KDevelop::IProject* m_project;
-        KUrl m_srcFolder;
-        KUrl m_subprojFolder;
-        void updateCache( const KUrl & );
+        KDevelop::Path m_srcFolder;
+        KDevelop::Path m_subprojFolder;
+        void updateCache( const KDevelop::Path & );
         Ui::CMakeBuildSettings* m_prefsUi;
         CMakeCacheModel* m_currentModel;
 };

@@ -26,7 +26,7 @@
 #include <language/interfaces/icreateclasshelper.h>
 #include <language/codegen/templateclassgenerator.h>
 
-#include <KUrl>
+#include <QUrl>
 
 class CppClassHelper : public KDevelop::ICreateClassHelper
 {
@@ -35,7 +35,7 @@ public:
     CppClassHelper();
     virtual ~CppClassHelper();
 
-    virtual KDevelop::TemplateClassGenerator* createGenerator(const KUrl& baseUrl);
+    virtual KDevelop::TemplateClassGenerator* createGenerator(const QUrl &baseUrl);
     virtual QList< KDevelop::DeclarationPointer > defaultMethods(const QString& name) const;
 };
 
@@ -51,7 +51,7 @@ public:
 class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
 {
   public:
-    CppTemplateNewClass(const KUrl& url);
+    CppTemplateNewClass(const QUrl &url);
     virtual ~CppTemplateNewClass();
 
     virtual KDevelop::DocumentChangeSet generate();

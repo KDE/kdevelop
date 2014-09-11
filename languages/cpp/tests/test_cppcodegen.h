@@ -30,6 +30,7 @@ class TestCppCodegen : public QObject
   private slots:
     void initTestCase();
     void cleanupTestCase();
+    void cleanup();
     
     // Tests
     void testAssistants();

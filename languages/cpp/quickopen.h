@@ -24,7 +24,7 @@
 
 #include <language/interfaces/quickopendataprovider.h>
 #include <language/interfaces/quickopenfilter.h>
-#include <kurl.h>
+#include <QUrl>
 #include <language/duchain/duchainpointer.h>
 #include <serialization/indexedstring.h>
 #include <language/util/includeitem.h>
@@ -83,7 +83,7 @@ class IncludeFileDataProvider: public KDevelop::QuickOpenDataProviderBase, publi
 
   private:
 
-    KUrl m_baseUrl;
+    QUrl m_baseUrl;
     QString m_lastSearchedPrefix;
 
     QList<KDevelop::IncludeItem> m_baseItems;

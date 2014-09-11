@@ -25,7 +25,7 @@
 
 #include <QStack>
 #include <KDebug>
-#include <KUrl>
+#include <QDir>
 
 QMap<QChar, QChar> whatToScape()
 {
@@ -111,9 +111,7 @@ CMakeFileContent readCMakeFile(const QString & _fileName)
     }
 
     CMakeFileContent ret;
-    KUrl u = KUrl::fromPath(_fileName);
-    u.cleanPath();
-    QString fileName = u.toLocalFile();
+    QString fileName = QDir::cleanPath(_fileName);
 
     bool readError = false, haveNewline = true;
     cmListFileLexer_Token* token;

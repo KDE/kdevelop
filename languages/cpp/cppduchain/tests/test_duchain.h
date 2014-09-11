@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QByteArray>
 
-#include <kurl.h>
+#include <QUrl>
 
 #include <language/duchain/identifier.h>
 #include <language/duchain/types/indexedtype.h>
@@ -239,7 +239,7 @@ public:
 private:
   // Declaration - use chain
   KDevelop::Declaration* noDef;
-  KUrl file1, file2;
+  KDevelop::IndexedString file;
   KDevelop::TopDUContext* topContext;
 
   KDevelop::IndexedType typeVoid;

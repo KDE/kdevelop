@@ -29,7 +29,7 @@ class Declaration;
 class ParsingEnvironment;
 }
 
-class KUrl;
+class QUrl;
 
 namespace CppUtils
 {
@@ -41,7 +41,7 @@ int findEndOfInclude(QString line);
 QString sourceOrHeaderCandidate( const QString &path, bool fast = false );
 
 ///Returns true if the given url is a header, looking at he known file extensions
-bool isHeader(const KUrl &url);
+bool isHeader(const QUrl &url);
 
 const Cpp::ReferenceCountedMacroSet& standardMacros();
 

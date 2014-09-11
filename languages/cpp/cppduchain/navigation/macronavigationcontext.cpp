@@ -132,8 +132,8 @@ QString MacroNavigationContext::html(bool shorten)
     args += ')';
   }
 
-  const KUrl url = m_macro->file.toUrl();
-  const QString path = url.pathOrUrl();
+  const QUrl url = m_macro->file.toUrl();
+  const QString path = url.toLocalFile();
   KTextEditor::Cursor cursor(m_macro->sourceLine, 0);
   NavigationAction action(url, cursor);
   modifyHtml() += i18nc("%1: macro type, i.e.: 'Function macro' or just 'Macro'"

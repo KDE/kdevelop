@@ -46,7 +46,7 @@ void PruneJob::start()
     setModel(output);
     startOutput();
     
-    KUrl builddir = CMake::currentBuildDir( m_project );
+    Path builddir = CMake::currentBuildDir( m_project );
     if( builddir.isEmpty() )
     {
         output->appendLine(i18n("No Build Directory configured, cannot clear builddir"));
@@ -61,14 +61,12 @@ void PruneJob::start()
     }
 
     QDir d( builddir.toLocalFile() );
-    KUrl::List urls;
+    QList<QUrl> urls;
     foreach( const QString& entry, d.entryList( QDir::NoDotAndDotDot | QDir::AllEntries ) )
     {
-        KUrl tmp = builddir;
-        tmp.addPath( entry );
-        urls << tmp;
+        urls << Path(builddir, entry).toUrl();
     }
-    output->appendLine(i18n("%1> rm -rf %2", m_project->folder().pathOrUrl(KUrl::RemoveTrailingSlash), builddir.pathOrUrl()));
+    output->appendLine(i18n("%1> rm -rf %2", m_project->path().pathOrUrl(), builddir.toLocalFile()));
     m_job = KIO::del( urls );
     m_job->start();
     connect(m_job, SIGNAL(finished(KJob*)), SLOT(jobFinished(KJob*)));

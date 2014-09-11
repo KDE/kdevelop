@@ -42,7 +42,7 @@ NoProjectCustomIncludePaths::NoProjectCustomIncludePaths(QWidget* parent)
 
 void NoProjectCustomIncludePaths::setStorageDirectory(const QString& path)
 {
-    m_ui->storageDirectory->setUrl(path);
+    m_ui->storageDirectory->setUrl(QUrl::fromLocalFile(path));
 }
 
 QString NoProjectCustomIncludePaths::storageDirectory() const

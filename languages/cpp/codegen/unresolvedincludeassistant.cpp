@@ -52,7 +52,7 @@ QString Cpp::AddCustomIncludePathAction::description() const {
 }
 
 
-Cpp::OpenProjectForFileAssistant::OpenProjectForFileAssistant(const KUrl& url) : m_url(url) {
+Cpp::OpenProjectForFileAssistant::OpenProjectForFileAssistant(const QUrl &url) : m_url(url) {
 }
 
 void Cpp::OpenProjectForFileAssistant::execute() {

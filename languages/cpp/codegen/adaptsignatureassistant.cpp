@@ -38,7 +38,7 @@ using namespace Cpp;
 
 namespace {
 
-Declaration *getDeclarationAtCursor(const KTextEditor::Cursor &cursor, const KUrl &documentUrl)
+Declaration *getDeclarationAtCursor(const KTextEditor::Cursor &cursor, const QUrl &documentUrl)
 {
   ENSURE_CHAIN_READ_LOCKED
   ReferencedTopDUContext top(DUChainUtils::standardContextForUrl(documentUrl));
@@ -95,7 +95,7 @@ void AdaptSignatureAssistant::reset()
   m_otherSideTopContext = {};
   m_otherSideContext = {};
   m_oldSignature = {};
-  m_document = {};
+  m_document.clear();
   m_view.clear();
 }
 

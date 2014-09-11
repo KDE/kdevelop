@@ -81,10 +81,9 @@ void TestDUChain::initTestCase()
 
   initShell();
 
-  file1 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/duchain.cpp";
-  file2 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/dubuilder.cpp";
+  file = IndexedString("file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/duchain.cpp");
 
-  topContext = new TopDUContext(IndexedString(file1.pathOrUrl()), RangeInRevision(CursorInRevision(0,0),CursorInRevision(25,0)));
+  topContext = new TopDUContext(file, RangeInRevision(CursorInRevision(0,0),CursorInRevision(25,0)));
   DUChainWriteLocker lock(DUChain::lock());
 
   DUChain::self()->addDocumentChain(topContext);
@@ -136,7 +135,7 @@ void TestDUChain::testContextRelationships()
 
   DUChainWriteLocker lock(DUChain::lock());
 
-  QCOMPARE(DUChain::self()->chainForDocument(file1), topContext);
+  QCOMPARE(DUChain::self()->chainForDocument(file), topContext);
 
   DUContext* firstChild = new DUContext(RangeInRevision(CursorInRevision(4,4), CursorInRevision(10,3)), topContext);
 

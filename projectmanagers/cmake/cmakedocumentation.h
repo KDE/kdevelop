@@ -31,7 +31,7 @@
 class QStringListModel;
 namespace KDevelop { class Declaration; }
 class CMakeManager;
-class KUrl;
+class QUrl;
 
 class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
 {
@@ -44,7 +44,7 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
         virtual bool hasError() const;
         virtual QString errorDescription() const;
 
-        QExplicitlySharedDataPointer<KDevelop::IDocumentation> description(const QString& identifier, const KUrl& file) const;
+        QExplicitlySharedDataPointer<KDevelop::IDocumentation> description(const QString& identifier, const QUrl &file) const;
         QExplicitlySharedDataPointer<KDevelop::IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration) const;
         
         QStringList names(Type t) const;

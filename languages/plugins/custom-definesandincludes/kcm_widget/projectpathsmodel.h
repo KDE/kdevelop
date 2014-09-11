@@ -22,7 +22,7 @@
 #include <QAbstractListModel>
 #include <QList>
 
-#include <KUrl>
+#include <QUrl>
 
 #include "idefinesandincludesmanager.h"
 
@@ -45,7 +45,7 @@ public:
     ProjectPathsModel( QObject* parent = 0 );
     void setProject( KDevelop::IProject* w_project );
     void setPaths( const QList< ConfigEntry >& paths );
-    void addPath( const KUrl& url );
+    void addPath( const QUrl &url );
     QList<ConfigEntry> paths() const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -58,7 +58,7 @@ private:
 
     void addPathInternal( const ConfigEntry& config, bool prepend );
     QString sanitizePath( const QString& path, bool expectRelative = true, bool needRelative = true ) const;
-    QString sanitizeUrl( KUrl url, bool needRelative = true ) const;
+    QString sanitizeUrl( QUrl url, bool needRelative = true ) const;
 };
 
 #endif // PROJECTPATHSMODEL_H

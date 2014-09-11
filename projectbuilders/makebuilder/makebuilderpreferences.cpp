@@ -43,7 +43,7 @@ MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QVariantLi
     m_prefsUi = new Ui::MakeConfig;
     m_prefsUi->setupUi( w );
     connect( m_prefsUi->makeBinary, SIGNAL(textChanged(QString)), SLOT(changed()) );
-    connect( m_prefsUi->makeBinary, SIGNAL(urlSelected(KUrl)), SLOT(changed()) );
+    connect( m_prefsUi->makeBinary, SIGNAL(urlSelected(QUrl)), SLOT(changed()) );
     l->addWidget( w );
 
     m_prefsUi->configureEnvironment->setSelectionWidget( m_prefsUi->kcfg_environmentProfile );

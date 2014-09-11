@@ -30,8 +30,8 @@
 #include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>
+#include <QUrl>
 
-#include <kurl.h>
 #include <KLocalizedString>
 #include <kdebug.h>
 #include <KDirWatch>
@@ -75,7 +75,7 @@ public:
             }
         }
 
-        return toPathList(KUrl::List(m_resolver->resolveIncludePath(path).paths));
+        return toPathList(m_resolver->resolveIncludePath(path).paths);
     }
 
     virtual IDefinesAndIncludesManager::Type type() const

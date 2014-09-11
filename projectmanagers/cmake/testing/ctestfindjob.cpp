@@ -66,7 +66,7 @@ void CTestFindJob::findTestCases()
         return;
     }
 
-    foreach (const KUrl& file, m_pendingFiles)
+    foreach (const QUrl &file, m_pendingFiles)
     {
         KDevelop::DUChain::self()->updateContextForUrl(KDevelop::IndexedString(file), KDevelop::TopDUContext::AllDeclarationsAndContexts, this);
     }

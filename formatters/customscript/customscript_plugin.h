@@ -45,10 +45,10 @@ class CustomScriptPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFor
 
 		/** Formats using the current style.
 		*/
-		virtual QString formatSource(const QString &text, const KUrl& url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) override;
+		virtual QString formatSource(const QString &text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) override;
 
 		virtual QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
-											  const KUrl& url,
+											  const QUrl &url,
 											  const QMimeType& mime,
 											  const QString& leftContext = QString(),
 											  const QString& rightContext = QString()) override;
@@ -67,10 +67,10 @@ class CustomScriptPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFor
 
 		/** \return The indentation of the currently selected style.
 		*/
-		virtual Indentation indentation(const KUrl& url) override;
+		virtual Indentation indentation(const QUrl &url) override;
 
 	private:
-		QStringList computeIndentationFromSample(const KUrl& url);
+		QStringList computeIndentationFromSample(const QUrl &url);
 		
 		QStringList m_options;
 		KDevelop::SourceFormatterStyle m_currentStyle;

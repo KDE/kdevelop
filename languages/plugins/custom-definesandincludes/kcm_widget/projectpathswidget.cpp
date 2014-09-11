@@ -138,7 +138,7 @@ void ProjectPathsWidget::clear()
 
 void ProjectPathsWidget::addProjectPath()
 {
-    KFileDialog dlg(pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).value<KUrl>(), "", this);
+    KFileDialog dlg(pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).value<QUrl>(), "", this);
     dlg.setMode( KFile::LocalOnly | KFile::ExistingOnly | KFile::File | KFile::Directory );
     dlg.exec();
     pathsModel->addPath(dlg.selectedUrl());

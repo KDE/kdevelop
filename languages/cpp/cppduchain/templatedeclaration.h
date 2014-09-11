@@ -320,7 +320,7 @@ namespace Cpp {
           context->owner()->activateSpecialization(); //will also add to the background-parser
         }else{
 //           context->topContext()->setHasUses(false); //Force re-building of the uses
-//           ICore::self()->languageController()->backgroundParser()->addDocument( KUrl(this->url().str()) );
+//           ICore::self()->languageController()->backgroundParser()->addDocument( this->url().toUrl() );
         }
       }
     }

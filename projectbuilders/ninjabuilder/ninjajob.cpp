@@ -20,7 +20,7 @@
 #include "kdevninjabuilderplugin.h"
 
 #include <KProcess>
-#include <KUrl>
+#include <QUrl>
 #include <KDebug>
 #include <KLocalizedString>
 #include <KConfigGroup>
@@ -80,7 +80,7 @@ QString NinjaJob::ninjaBinary()
     return path;
 }
 
-KUrl NinjaJob::workingDirectory() const
+QUrl NinjaJob::workingDirectory() const
 {
     KDevelop::ProjectBaseItem* it = item();
     if(!it)

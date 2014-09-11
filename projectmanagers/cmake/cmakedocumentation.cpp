@@ -111,7 +111,7 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
     return desc;
 }
 
-QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const KUrl& file) const
+QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const QUrl &file) const
 {
     initializeModel(); //make it not queued
     if (!QMimeDatabase().mimeTypeForUrl(file).inherits("text/x-cmake")) {
@@ -156,7 +156,7 @@ QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::docum
 
 QExplicitlySharedDataPointer<KDevelop::IDocumentation > CMakeDocumentation::documentationForIndex(const QModelIndex& idx) const
 {
-    return description(idx.data().toString(), KUrl("CMakeLists.txt"));
+    return description(idx.data().toString(), QUrl("CMakeLists.txt"));
 }
 
 QAbstractListModel* CMakeDocumentation::indexModel() const
