@@ -24,6 +24,7 @@
 #include <KTextEditor/Document>
 #include <KColorUtils>
 #include <KDebug>
+#include <KProtocolInfo>
 
 #include <QApplication>
 
@@ -137,6 +138,13 @@ void WorkingSet::saveFromArea( Sublime::Area* a, Sublime::AreaIndex * area, KCon
         foreach (Sublime::View* view, area->views()) {
             //The working set config gets an updated list of files
             QString docSpec = view->document()->documentSpecifier();
+
+            //only save the documents from protocols KIO understands
+            //otherwise we try to load kdev:// too early
+            if (!KProtocolInfo::isKnownProtocol(QUrl(docSpec))) {
+                continue;
+            }
+
             setGroup.writeEntry(QString("View %1").arg(index), docSpec);
             setGroup.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
             //The area specific config stores the working set documents in order along with their state
