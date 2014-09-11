@@ -24,12 +24,6 @@
 
 QTEST_MAIN( TestKDEProjectsReader )
 
-#define WAIT_FOR_SIGNAL(a,b) \
-{\
-    bool gotSignal = QSignalSpy((a), SIGNAL(b)).wait(30000);\
-    QVERIFY2(gotSignal, "Timeout while waiting for opened signal");\
-} void(0)
-
 void TestKDEProjectsReader::testsProperParse()
 {
     KDEProjectsModel m;
@@ -40,8 +34,11 @@ void TestKDEProjectsReader::testsProperParse()
     
     QVERIFY(!reader.hasErrors());
     
-    WAIT_FOR_SIGNAL(&reader,downloadDone());
-    
+    /// FIXME: a unit test should never try to download anything from the website
+    ///        this must be mocked properly
+    QSignalSpy downloadDoneSpy(&reader, SIGNAL(downloadDone()));
+    QVERIFY(downloadDoneSpy.wait(30000));
+
     for(int i=0; i<m.rowCount(); i++) {
         QStandardItem* item = m.item(i,0);
         qDebug() << ":::::" << item->text() << item->icon() << item->data(KDEProjectsModel::VcsLocationRole);
