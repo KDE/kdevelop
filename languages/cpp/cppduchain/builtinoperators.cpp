@@ -21,6 +21,8 @@
 #include <language/duchain/types/constantintegraltype.h>
 #include "parser/tokens.h"
 
+#include <KDebug>
+
 using namespace KDevelop;
 
 /** A helper-class for evaluating constant binary expressions under different types(int, float, etc.) */
