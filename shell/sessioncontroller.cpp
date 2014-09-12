@@ -798,9 +798,6 @@ SessionRunInfo SessionController::sessionRunInfo(const QString& id)
 
 QString SessionController::showSessionChooserDialog(QString headerText, bool onlyRunning)
 {
-    // The catalog hasn't been loaded yet
-    KGlobal::locale()->insertCatalog("kdevplatform");
-
     ///FIXME: move this code into sessiondialog.cpp
     QListView* view = new QListView;
     KLineEdit* filter = new KLineEdit;
