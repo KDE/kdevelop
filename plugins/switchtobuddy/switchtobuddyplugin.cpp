@@ -221,11 +221,11 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
             ctx = standardCtx;
         }
 
-        while (ctx && ctx->parentContext() && ctx->parentContext()->type() == DUContext::Other) {
+        while (ctx && ctx->parentContext() && (ctx->parentContext()->type() == DUContext::Other || ctx->parentContext()->type() == DUContext::Function)) {
             ctx = ctx->parentContext();
         }
 
-        if (ctx && ctx->owner() && ctx->type() == DUContext::Other && ctx->owner()->isDefinition()) {
+        if (ctx && ctx->owner() && (ctx->type() == DUContext::Other || ctx->type() == DUContext::Function) && ctx->owner()->isDefinition()) {
             definition = ctx->owner();
             kDebug() << "found definition while traversing:" << definition->toString();
         }
