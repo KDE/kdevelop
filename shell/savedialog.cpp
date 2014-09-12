@@ -25,7 +25,7 @@
 #include <QListWidgetItem>
 #include <QVBoxLayout>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <interfaces/idocument.h>
 

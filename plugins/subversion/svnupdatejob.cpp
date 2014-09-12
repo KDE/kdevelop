@@ -25,7 +25,7 @@
 #include <QDateTime>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <ThreadWeaver.h>
 

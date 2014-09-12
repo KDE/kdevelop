@@ -30,7 +30,7 @@
 #include <QTimer>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kactionmenu.h>
 #include <kacceleratormanager.h>
 #include <kactioncollection.h>

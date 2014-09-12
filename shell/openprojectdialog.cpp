@@ -17,7 +17,7 @@
 
 #include <kpagewidgetmodel.h>
 #include <kmessagebox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <KColorScheme>
 
 #include <kio/netaccess.h>

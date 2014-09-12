@@ -19,7 +19,7 @@
 #include <kglobalsettings.h>
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/document.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QModelIndex>
 #include <QTextDocument>

@@ -36,7 +36,7 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <ktexteditor/document.h>
 

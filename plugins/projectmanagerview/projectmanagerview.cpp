@@ -27,7 +27,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kactioncollection.h>
 #include <KLineEdit>
 

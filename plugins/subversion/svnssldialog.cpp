@@ -10,7 +10,7 @@
 
 #include "svnssldialog.h"
 #include <QTreeWidgetItem>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "ui_ssltrustdialog.h"
 

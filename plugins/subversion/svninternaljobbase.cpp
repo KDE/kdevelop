@@ -28,7 +28,7 @@
 #include <iostream>
 
 #include <ThreadWeaver/ThreadWeaver>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <ThreadWeaver/threadweaver/qobjectdecorator.h>
 

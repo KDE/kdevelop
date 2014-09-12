@@ -24,7 +24,7 @@
 #include <ktar.h>
 #include <kzip.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kaction.h>
 #include <ktempdir.h>
 #include <ksharedconfig.h>

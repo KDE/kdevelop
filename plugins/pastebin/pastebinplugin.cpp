@@ -26,7 +26,7 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kaboutdata.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kjobtrackerinterface.h>
 #include <KIO/Job>
 #include <KMessageBox>

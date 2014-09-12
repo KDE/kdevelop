@@ -29,7 +29,7 @@
 #include <QMimeType>
 #include <QMimeDatabase>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "../vcsrevision.h"
 #include "../vcsevent.h"

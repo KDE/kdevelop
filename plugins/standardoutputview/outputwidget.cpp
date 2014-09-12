@@ -39,7 +39,7 @@
 #include <kaction.h>
 #include <kdebug.h>
 #include <ktoggleaction.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kicon.h>
 #include <ktabwidget.h>
 #include <kstandardaction.h>

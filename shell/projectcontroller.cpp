@@ -35,7 +35,7 @@ Boston, MA 02110-1301, USA.
 
 #include <kaction.h>
 #include <kconfig.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kpassivepopup.h>
 #include <kservice.h>
 #include <kstandardaction.h>

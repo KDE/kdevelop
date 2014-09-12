@@ -23,7 +23,7 @@
 
 #include <QApplication>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <KConfigCore/KConfigGroup>

@@ -29,7 +29,7 @@
 #include <QPointer>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktabbar.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>

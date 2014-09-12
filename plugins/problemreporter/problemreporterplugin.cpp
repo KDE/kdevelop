@@ -25,7 +25,7 @@
 
 #include <QMenu>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kpluginfactory.h>
 #include <kaboutdata.h>
 #include <kpluginloader.h>

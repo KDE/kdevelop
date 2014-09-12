@@ -26,7 +26,7 @@
 #include <QList>
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "../vcsevent.h"
 #include "../vcsrevision.h"

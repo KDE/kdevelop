@@ -26,7 +26,7 @@
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "../duchain/ducontext.h"
 #include "../duchain/duchainlock.h"

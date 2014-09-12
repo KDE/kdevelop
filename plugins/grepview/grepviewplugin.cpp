@@ -27,7 +27,7 @@
 #include <kpluginloader.h>
 #include <kaboutdata.h>
 #include <kactioncollection.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kaction.h>
 #include <ktexteditor/document.h>

@@ -28,7 +28,7 @@
 #include <QFileInfo>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ThreadWeaver.h>
 
 #include <vcs/vcsrevision.h>

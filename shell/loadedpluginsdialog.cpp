@@ -25,7 +25,7 @@
 #include <QVBoxLayout>
 #include <QPainter>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kglobal.h>
 #include <ktitlewidget.h>
 #include <kcomponentdata.h>

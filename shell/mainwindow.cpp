@@ -34,7 +34,7 @@ Boston, MA 02110-1301, USA.
 #include <KDE/KActionCollection>
 #include <kmenu.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktemporaryfile.h>
 #include <kactioncollection.h>
 #include <kdebug.h>

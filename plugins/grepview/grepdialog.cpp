@@ -26,7 +26,7 @@
 #include <kpushbutton.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <kdebug.h>

@@ -23,7 +23,7 @@
 #include <kurl.h>
 #include <kicon.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <klibloader.h>
 #include <kde_terminal_interface.h>
 #include <kparts/part.h>

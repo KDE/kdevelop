@@ -20,7 +20,7 @@
 #include "forwarddeclaration.h"
 
 #include <ktexteditor/document.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "duchain.h"
 #include "duchainlock.h"

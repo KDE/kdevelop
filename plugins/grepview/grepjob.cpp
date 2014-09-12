@@ -23,7 +23,7 @@
 #include <QTextDocument>
 #include <QTextStream>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kencodingprober.h>
 
 #include <serialization/indexedstring.h>

@@ -19,7 +19,7 @@
 */
 #include "scriptappconfig.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <kicon.h>
 

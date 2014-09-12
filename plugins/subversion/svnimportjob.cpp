@@ -24,7 +24,7 @@
 #include <QMutexLocker>
 #include <QFileInfo>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <ThreadWeaver.h>
 

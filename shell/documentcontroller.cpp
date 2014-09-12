@@ -33,7 +33,7 @@ Boston, MA 02110-1301, USA.
 #include <kio/netaccess.h>
 #include <kencodingfiledialog.h>
 #include <kactioncollection.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <krecentfilesaction.h>
 #include <ktemporaryfile.h>
 #include <kplugininfo.h>

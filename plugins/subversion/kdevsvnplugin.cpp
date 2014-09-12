@@ -24,7 +24,7 @@
 #include <ktexteditor/markinterface.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kurlrequester.h>
 #include <kaction.h>
 #include <kurlrequesterdialog.h>

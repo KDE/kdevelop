@@ -27,7 +27,7 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kaboutdata.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kaction.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>

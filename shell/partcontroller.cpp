@@ -31,7 +31,7 @@
 #include <QApplication>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <KMessageBox>

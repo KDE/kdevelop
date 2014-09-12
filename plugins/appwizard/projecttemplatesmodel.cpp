@@ -15,7 +15,7 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <kconfiggroup.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 

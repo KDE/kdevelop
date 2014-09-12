@@ -24,7 +24,7 @@
 #include <QGridLayout>
 #include <QToolButton>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <klineedit.h>
 #include <kcombobox.h>
 #include <kdebug.h>

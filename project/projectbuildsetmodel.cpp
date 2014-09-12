@@ -24,7 +24,7 @@
 #include <QVariant>
 
 #include <kurl.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <kconfiggroup.h>
 

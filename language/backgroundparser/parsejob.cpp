@@ -30,7 +30,7 @@
 #include <QApplication>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktexteditor/movinginterface.h>
 
 #include "backgroundparser.h"

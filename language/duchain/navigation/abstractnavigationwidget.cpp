@@ -24,7 +24,7 @@
 #include <QScrollBar>
 #include <QBoxLayout>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktextbrowser.h>
 
 #include "../declaration.h"

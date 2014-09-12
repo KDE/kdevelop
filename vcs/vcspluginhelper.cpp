@@ -16,7 +16,7 @@
 #include <QMenu>
 
 #include <kaboutdata.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>

@@ -12,7 +12,7 @@
 #include <QSignalMapper>
 #include <QDir>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <interfaces/iplugincontroller.h>
 #include <vcs/vcslocation.h>

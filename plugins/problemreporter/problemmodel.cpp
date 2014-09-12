@@ -22,7 +22,7 @@
 #include "problemmodel.h"
 
 #include <QTimer>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/backgroundparser/parsejob.h>

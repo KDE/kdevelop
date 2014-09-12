@@ -25,7 +25,7 @@
 #include <QMutexLocker>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <ThreadWeaver.h>
 

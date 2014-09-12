@@ -35,7 +35,7 @@
 #include <kmenu.h>
 #include <kdebug.h>
 #include <kurl.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <project/projectmodel.h>
 #include <language/duchain/duchainutils.h>

@@ -17,7 +17,7 @@
 
 #include <ktemporaryfile.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kprocess.h>
 #include <KLineEdit>
 #include <kshell.h>

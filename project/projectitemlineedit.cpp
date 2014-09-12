@@ -28,7 +28,7 @@
 #include <kcolorscheme.h>
 #include <QValidator>
 #include <interfaces/iproject.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kaction.h>
 #include <QMenu>
 #include <KDialog>

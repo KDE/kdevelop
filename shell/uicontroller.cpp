@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmenubar.h>
 #include <kcomponentdata.h>
 #include <KCMUtils/ksettings/dispatcher.h>

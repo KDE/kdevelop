@@ -22,7 +22,7 @@
 #include "documentchangeset.h"
 #include "duchainchangeset.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>

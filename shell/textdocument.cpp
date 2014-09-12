@@ -29,7 +29,7 @@
 #include <QLayout>
 #include <QMimeDatabase>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>

@@ -29,7 +29,7 @@
 #include <QStandardItemModel>
 #include <kparts/mainwindow.h>
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 
 #include <vector>

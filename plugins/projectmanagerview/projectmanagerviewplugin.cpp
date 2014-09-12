@@ -29,7 +29,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kaboutdata.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kparts/mainwindow.h>
 #include <kpluginfactory.h>

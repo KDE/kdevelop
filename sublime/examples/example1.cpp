@@ -19,7 +19,7 @@
 #include <k4aboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "example1main.h"
 

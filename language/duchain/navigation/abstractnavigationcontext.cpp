@@ -19,7 +19,7 @@
 #include "abstractnavigationcontext.h"
 
 #include <QTextDocument>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "abstractdeclarationnavigationcontext.h"
 #include "abstractnavigationwidget.h"

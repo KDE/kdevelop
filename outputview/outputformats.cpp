@@ -12,7 +12,7 @@
 
 #include "outputformats.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 namespace KDevelop
 {

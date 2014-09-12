@@ -31,7 +31,7 @@
 #include <QHash>
 
 #include <kurl.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kglobal.h>
 #include <kdebug.h>
 

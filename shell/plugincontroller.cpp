@@ -34,7 +34,7 @@ Boston, MA 02110-1301, USA.
 #include <kservicetypetrader.h>
 #include <kmessagebox.h>
 #include <kconfig.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kxmlguiwindow.h>
 #include <assert.h>
 #include <kdebug.h>

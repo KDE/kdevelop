@@ -22,7 +22,7 @@
 #include <QFileInfo>
 
 #include <kprocess.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>

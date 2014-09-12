@@ -34,7 +34,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kio/job.h>
 #include <kio/netaccess.h>
 #include <kio/global.h>

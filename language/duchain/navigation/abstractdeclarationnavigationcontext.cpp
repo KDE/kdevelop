@@ -20,7 +20,7 @@
 
 #include <QTextDocument>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "../functiondeclaration.h"
 #include "../functiondefinition.h"

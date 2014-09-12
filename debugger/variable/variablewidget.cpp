@@ -36,7 +36,7 @@
 #include <klineedit.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include "../../interfaces/icore.h"
 #include <interfaces/idebugcontroller.h>

@@ -20,7 +20,7 @@
 
 #include <QTextDocument>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>

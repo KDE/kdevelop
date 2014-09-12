@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include "vcsjob.h"
 
-//#include <klocale.h>
+//#include <KLocalizedString>
 
 namespace KDevelop {
 

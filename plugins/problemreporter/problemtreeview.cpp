@@ -30,7 +30,7 @@
 
 #include <kaction.h>
 #include <kactionmenu.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kicon.h>
 #include <KMenu>
 

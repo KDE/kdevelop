@@ -27,7 +27,7 @@
 #include <QVBoxLayout>
 
 #include <kaction.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmimetype.h>
 #include <kaboutdata.h>
 #include <kgenericfactory.h>

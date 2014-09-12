@@ -22,7 +22,7 @@
 #include <QListView>
 #include <QStringListModel>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kdebug.h>
