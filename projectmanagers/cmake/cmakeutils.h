@@ -67,7 +67,7 @@ namespace CMake
 
     /**
      * @returns the current cmake binary for the given project or
-     * KStandardDirs::findExe("cmake") as default value. 
+     * QStandardPaths::findExecutable("cmake") as default value. 
      */
     KDEVCMAKECOMMON_EXPORT KUrl currentCMakeBinary( KDevelop::IProject* project );
 

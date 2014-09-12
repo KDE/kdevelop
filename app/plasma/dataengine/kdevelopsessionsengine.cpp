@@ -22,7 +22,6 @@
 #include <QtCore/QStandardPaths>
 #include <QtCore/QDir>
 
-#include <KStandardDirs>
 #include <KDirWatch>
 #include <KConfig>
 #include <QFileInfo>

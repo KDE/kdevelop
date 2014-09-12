@@ -25,6 +25,7 @@
 #include <QProgressBar>
 #include <QVBoxLayout>
 #include <QStackedWidget>
+#include <QStandardPaths>
 
 #include "manpagedocumentation.h"
 #include "manpageplugin.h"
@@ -33,7 +34,6 @@
 #include <KIO/TransferJob>
 #include <KIO/Job>
 #include <kio/jobclasses.h>
-#include <KStandardDirs>
 #include <documentation/standarddocumentationview.h>
 
 ManPagePlugin* ManPageDocumentation::s_provider=0;
@@ -74,7 +74,7 @@ QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWi
     view->setDocumentation(QExplicitlySharedDataPointer<IDocumentation>(this));
 
     // apply custom style-sheet to normalize look of the page
-    const QString cssFile = KStandardDirs::locate("data", "kdevmanpage/manpagedocumentation.css");
+    const QString cssFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevmanpage/manpagedocumentation.css");
     QWebSettings* settings = view->settings();
     settings->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 

@@ -23,7 +23,6 @@
 
 #include <project/projectkcmodule.h>
 #include <kurl.h>
-#include <kstandarddirs.h>
 
 class QWidget;
 class QStringList;

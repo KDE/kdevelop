@@ -30,6 +30,7 @@
 #include <QtCore/QFileInfo>
 #include <QApplication>
 #include <QRegExp>
+#include <QStandardPaths>
 
 #include <KDebug>
 #include <KMessageBox>
@@ -37,7 +38,6 @@
 #include <KToolBar>
 #include <KParts/MainWindow>
 #include <KSharedConfig>
-#include <KStandardDirs>
 #include <KShell>
 
 #include <interfaces/idocument.h>
@@ -937,7 +937,7 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     queueCmd(new GDBCommand(GDBMI::GdbSet, "charset UTF-8"));
     queueCmd(new GDBCommand(GDBMI::GdbSet, "print sevenbit-strings off"));
 
-    QString fileName = KStandardDirs::locate("data", "kdevgdb/printers/gdbinit");
+    QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevgdb/printers/gdbinit");
     if (!fileName.isEmpty()) {
         queueCmd(new GDBCommand(GDBMI::NonMI, "source " + fileName));
     }

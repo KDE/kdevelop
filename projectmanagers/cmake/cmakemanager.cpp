@@ -40,7 +40,6 @@
 #include <KAction>
 #include <KMessageBox>
 #include <ktexteditor/document.h>
-#include <KStandardDirs>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -100,7 +99,7 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
 
 bool CMakeManager::hasError() const
 {
-    return KStandardDirs::findExe("cmake").isEmpty();
+    return QStandardPaths::findExecutable("cmake").isEmpty();
 }
 
 QString CMakeManager::errorDescription() const

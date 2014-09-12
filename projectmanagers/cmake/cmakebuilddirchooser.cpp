@@ -23,7 +23,6 @@
 #include <KDebug>
 #include <KProcess>
 #include <KMessageBox>
-#include <KStandardDirs>
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include "ui_cmakebuilddirchooser.h"
@@ -70,7 +69,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     m_chooserUi->installPrefix->setMode(KFile::Directory|KFile::ExistingOnly);
 //     setMainWidget(w);
 
-    QString cmakeBin=KStandardDirs::findExe( "cmake" );
+    QString cmakeBin=QStandardPaths::findExecutable( "cmake" );
     setCMakeBinary(KUrl(cmakeBin));
 
     KConfigGroup config = KSharedConfig::openConfig()->group("CMakeBuildDirChooser");

@@ -26,7 +26,6 @@
 #include <QStringListModel>
 #include <QMimeDatabase>
 #include <interfaces/iproject.h>
-#include <KStandardDirs>
 #include <KGlobalSettings>
 #include <documentation/standarddocumentationview.h>
 #include <language/duchain/declaration.h>
@@ -46,7 +45,7 @@ KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider
 
 CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin( "kdevcmakedocumentation", parent )
-    , mCMakeCmd(KStandardDirs::findExe("cmake"))
+    , mCMakeCmd(QStandardPaths::findExecutable("cmake"))
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
     KDEV_USE_EXTENSION_INTERFACE( ICMakeDocumentation )

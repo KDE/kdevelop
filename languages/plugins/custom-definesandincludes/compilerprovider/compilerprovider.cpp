@@ -35,7 +35,6 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KLocalizedString>
-#include <KStandardDirs>
 
 using namespace KDevelop;
 using KDevelop::Path;
@@ -106,7 +105,7 @@ CompilerPointer CompilerProvider::checkCompilerExists( const CompilerPointer& co
     //This may happen for opened for the first time projects
     if ( !compiler ) {
         for ( auto& compiler : m_compilers ) {
-            if ( KStandardDirs::findExe( compiler->path() ).isEmpty() ) {
+            if ( QStandardPaths::findExecutable( compiler->path() ).isEmpty() ) {
                 continue;
             }
             definesAndIncludesDebug() << "Selected compiler: " << compiler->name();
@@ -172,14 +171,14 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
     m_factories.append(CompilerFactoryPointer(new MsvcFactory()));
 #endif
 
-    if (!KStandardDirs::findExe( "gcc" ).isEmpty()) {
+    if (!QStandardPaths::findExecutable( "gcc" ).isEmpty()) {
         registerCompiler( m_factories[0]->createCompiler("GCC", "gcc", false) );
     }
-    if (!KStandardDirs::findExe( "clang" ).isEmpty()) {
+    if (!QStandardPaths::findExecutable( "clang" ).isEmpty()) {
         registerCompiler( m_factories[1]->createCompiler("Clang", "clang", false) );
     }
 #ifdef _WIN32
-    if (!KStandardDirs::findExe("cl.exe").isEmpty()) {
+    if (!QStandardPaths::findExecutable("cl.exe").isEmpty()) {
         registerCompiler(m_factories[2]->createCompiler("MSVC", "cl.exe", false));
     }
 #endif

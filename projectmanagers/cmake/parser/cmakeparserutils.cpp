@@ -27,7 +27,6 @@
 #include <kdebug.h>
 #include "variablemap.h"
 #include <kprocess.h>
-#include <kstandarddirs.h>
 #include "cmakeprojectvisitor.h"
 #include "cmakeprojectdata.h"
 #include "cmakecachereader.h"
@@ -77,7 +76,7 @@ namespace CMakeParserUtils
         if (!ret.first.isEmpty()) {
             return ret;
         }
-        QString cmakeCmd=KStandardDirs::findExe("cmake");
+        QString cmakeCmd=QStandardPaths::findExecutable("cmake");
         
         QString systeminfo=executeProcess(cmakeCmd, QStringList("--system-information"));
         

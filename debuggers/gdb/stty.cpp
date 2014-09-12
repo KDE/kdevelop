@@ -94,7 +94,7 @@ static int chownpty(int fd, int grant)
         if (fd != PTY_FILENO && dup2(fd, PTY_FILENO) < 0)
             ::exit(1);
 
-        QString path = KStandardDirs::locate("exe", BASE_CHOWN);
+        QString path = QStandardPaths::findExecutable(BASE_CHOWN);
         execle(QFile::encodeName(path), BASE_CHOWN, grant?"--grant":"--revoke", (void *)0, NULL);
         ::exit(1); // should not be reached
     }
@@ -287,7 +287,7 @@ bool STTY::findExternalTTY(const QString& termApp)
 {
     QString appName(termApp.isEmpty() ? QString("xterm") : termApp);
 
-    if (KStandardDirs::findExe(appName).isEmpty()) {
+    if (QStandardPaths::findExecutable(appName).isEmpty()) {
         m_lastError = i18n("%1 is incorrect terminal name", termApp);
         return false;
     }

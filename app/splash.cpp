@@ -29,6 +29,7 @@
 #include <QQmlContext>
 #include <QQuickItem>
 #include <qscreen.h>
+#include <QStandardPaths>
 
 #include "config.h"
 
@@ -48,7 +49,7 @@ KDevSplashScreen::KDevSplashScreen()
     engine()->rootContext()->setContextProperty("appVersionMinor", VERSION_MINOR);
     engine()->rootContext()->setContextProperty("appVersionPatch", VERSION_PATCH);
 
-    QString splashScript = KStandardDirs::locate("data", "kdevelop/splash.qml");
+    QString splashScript = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevelop/splash.qml");
     setSource(QUrl::fromLocalFile(splashScript));
     if ( !rootObject() ) {
         kWarning() << "Could not find KDevelop splash screen: kdevelop/splash.qml" << splashScript;

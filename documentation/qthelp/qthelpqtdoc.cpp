@@ -23,9 +23,9 @@
 
 #include <QDir>
 #include <QIcon>
+#include <QStandardPaths>
 
 #include <KLocalizedString>
-#include <KStandardDirs>
 #include <KProcess>
 #include <KDebug>
 
@@ -38,7 +38,7 @@ QString qmakeCandidate()
     // return the first qmake executable we can find
     const QStringList candidates = {"qmake", "qmake-qt4", "qmake-qt5"};
     auto it = std::find_if(candidates.constBegin(), candidates.constEnd(), [](const QString& candidate) {
-        return !KStandardDirs::findExe(candidate).isEmpty();
+        return !QStandardPaths::findExecutable(candidate).isEmpty();
     });
     return it != candidates.constEnd() ? *it : QString();
 }

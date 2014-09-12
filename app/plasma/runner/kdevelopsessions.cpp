@@ -28,7 +28,6 @@
 #include <QIcon>
 #include <QFile>
 #include <KDirWatch>
-#include <KStandardDirs>
 #include <KToolInvocation>
 #include <KConfig>
 #include <KConfigGroup>

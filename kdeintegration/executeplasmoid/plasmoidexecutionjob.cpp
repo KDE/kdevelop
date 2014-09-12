@@ -44,7 +44,6 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
-#include <KStandardDirs>
 
 using namespace KDevelop;
 
@@ -120,7 +119,7 @@ void PlasmoidExecutionJob::slotFailed(QProcess::ProcessError error)
 
 QString PlasmoidExecutionJob::executable(ILaunchConfiguration*)
 {
-    return KStandardDirs::findExe("plasmoidviewer");
+    return QStandardPaths::findExecutable("plasmoidviewer");
 }
 
 QStringList PlasmoidExecutionJob::arguments(ILaunchConfiguration* cfg)

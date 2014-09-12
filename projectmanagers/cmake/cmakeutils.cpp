@@ -31,7 +31,6 @@
 #include <kurl.h>
 #include <kparts/mainwindow.h>
 #include <kdebug.h>
-#include <kstandarddirs.h>
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
@@ -202,7 +201,7 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
         
         bd.setSourceFolder( folderUrl );
         bd.setAlreadyUsed( CMake::allBuildDirs(project) );
-        bd.setCMakeBinary(KStandardDirs::findExe("cmake"));
+        bd.setCMakeBinary(QStandardPaths::findExecutable("cmake"));
 
         if( !bd.exec() )
         {
@@ -282,7 +281,7 @@ QString currentBuildType( KDevelop::IProject* project )
 
 KUrl currentCMakeBinary( KDevelop::IProject* project )
 {
-    return readProjectParameter( project, Config::Specific::cmakeBinKey, KStandardDirs::findExe( "cmake" ) );
+    return readProjectParameter( project, Config::Specific::cmakeBinKey, QStandardPaths::findExecutable( "cmake" ) );
 }
 
 KUrl currentInstallDir( KDevelop::IProject* project )

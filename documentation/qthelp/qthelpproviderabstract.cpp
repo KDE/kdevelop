@@ -26,7 +26,7 @@
 #include <QHelpContentModel>
 
 #include <KDebug>
-#include <KStandardDirs>
+#include <QStandardPaths>
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
@@ -37,7 +37,7 @@
 
 QtHelpProviderAbstract::QtHelpProviderAbstract(QObject *parent, const QString &collectionFileName, const QVariantList &args)
     : QObject(parent)
-    , m_engine(KStandardDirs::locateLocal("appdata", collectionFileName, true))
+    , m_engine(QStandardPaths::writableLocation(QStandardPaths::DataLocation)+'/'+collectionFileName)
 {
     Q_UNUSED(args);
     if( !m_engine.setupData() ) {

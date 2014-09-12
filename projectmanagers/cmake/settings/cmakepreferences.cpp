@@ -44,7 +44,6 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <interfaces/iruncontroller.h>
-#include <KStandardDirs>
 #include <KAboutData>
 #include <util/environmentgrouplist.h>
 #include <KLocalizedString>
@@ -279,7 +278,7 @@ void CMakePreferences::createBuildDir()
     // It may be '/' or '\', so maybe should we rely on CMake::allBuildDirs() for returning well-formed pathes?
     QStringList used = CMake::allBuildDirs( m_project );
     bdCreator.setAlreadyUsed(used);
-    bdCreator.setCMakeBinary(KStandardDirs::findExe("cmake"));
+    bdCreator.setCMakeBinary(QStandardPaths::findExecutable("cmake"));
     
     if(bdCreator.exec())
     {

@@ -30,7 +30,6 @@
 #include <KSharedConfig>
 #include <KDebug>
 #include <KProcess>
-#include <KStandardDirs>
 
 #include <tests/testcore.h>
 #include <shell/shellextension.h>
@@ -1386,7 +1385,7 @@ void GdbTest::testRunGdbScript()
 
 void GdbTest::testRemoteDebug()
 {
-    const QString gdbserverExecutable = KStandardDirs::findExe("gdbserver");
+    const QString gdbserverExecutable = QStandardPaths::findExecutable("gdbserver");
     if (gdbserverExecutable.isEmpty()) {
         QSKIP("Skipping, gdbserver not available", SkipSingle);
     }
@@ -1427,7 +1426,7 @@ void GdbTest::testRemoteDebug()
 
 void GdbTest::testRemoteDebugInsertBreakpoint()
 {
-    const QString gdbserverExecutable = KStandardDirs::findExe("gdbserver");
+    const QString gdbserverExecutable = QStandardPaths::findExecutable("gdbserver");
     if (gdbserverExecutable.isEmpty()) {
         QSKIP("Skipping, gdbserver not available", SkipSingle);
     }
@@ -1479,7 +1478,7 @@ void GdbTest::testRemoteDebugInsertBreakpoint()
 
 void GdbTest::testRemoteDebugInsertBreakpointPickupOnlyOnce()
 {
-    const QString gdbserverExecutable = KStandardDirs::findExe("gdbserver");
+    const QString gdbserverExecutable = QStandardPaths::findExecutable("gdbserver");
     if (gdbserverExecutable.isEmpty()) {
         QSKIP("Skipping, gdbserver not available", SkipSingle);
     }
@@ -1805,7 +1804,7 @@ void GdbTest::testDebugInExternalTerminal()
     foreach (const QString & console, QStringList() << "konsole" << "xterm" << "xfce4-terminal" << "gnome-terminal") {
 
         TestDebugSession* session = 0;
-        if (KStandardDirs::findExe(console).isEmpty()) {
+        if (QStandardPaths::findExecutable(console).isEmpty()) {
             continue;
         }
 

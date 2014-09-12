@@ -28,7 +28,7 @@
 #include <qdir.h>
 #include <kpushbutton.h>
 #include <kdebug.h>
-#include <kstandarddirs.h>
+#include <QStandardPaths>
 
 #include <tests/testproject.h>
 
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
 
-    KTempDir tempdir(KStandardDirs::locateLocal("tmp", "kdev-custom-uitest"));
+    KTempDir tempdir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"/kdev-custom-uitest");
 
     kDebug(cbsDebugArea()) << "created tempdir:" << tempdir.name();
 

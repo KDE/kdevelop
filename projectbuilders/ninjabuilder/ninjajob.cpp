@@ -24,7 +24,6 @@
 #include <KDebug>
 #include <KLocalizedString>
 #include <KConfigGroup>
-#include <KStandardDirs>
 #include <interfaces/iproject.h>
 #include <outputview/outputmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
@@ -74,9 +73,9 @@ void NinjaJob::setIsInstalling( bool isInstalling )
 
 QString NinjaJob::ninjaBinary()
 {
-    QString path = KStandardDirs::findExe("ninja-build");
+    QString path = QStandardPaths::findExecutable("ninja-build");
     if (path.isEmpty()) {
-        path = KStandardDirs::findExe("ninja");
+        path = QStandardPaths::findExecutable("ninja");
     }
     return path;
 }
