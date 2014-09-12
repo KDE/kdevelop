@@ -162,7 +162,8 @@ public:
         loading = false;
 
         ProjectController* projCtrl = Core::self()->projectControllerInternal();
-        if (job->errorText().isEmpty() && !Core::self()->shuttingDown()) {
+        if (job->error() == 0 && !Core::self()->shuttingDown()) {
+
             if(fullReload)
                 projCtrl->projectModel()->appendRow(topItem);
 
@@ -210,7 +211,7 @@ public:
         progress->setDone();
         ProjectController* projCtrl = Core::self()->projectControllerInternal();
 
-        if(job->errorText().isEmpty() && !Core::self()->shuttingDown()) {
+        if(job->error() == 0 && !Core::self()->shuttingDown()) {
             loading=false;
             projCtrl->projectModel()->appendRow(topItem);
             projCtrl->projectImportingFinished( project );
