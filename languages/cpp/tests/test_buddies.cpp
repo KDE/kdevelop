@@ -69,15 +69,9 @@ void TestBuddies::cleanupTestCase()
 void TestBuddies::verifyFilename(Sublime::View *view, const QString& endOfFilename)
 {
     QVERIFY(view);
-    if(view)
-    {
-        Sublime::UrlDocument *urlDoc = dynamic_cast<Sublime::UrlDocument *>(view->document());
-        QVERIFY(urlDoc);
-        if(urlDoc)
-        {
-            QVERIFY(urlDoc->url().toLocalFile().endsWith(endOfFilename));
-        }
-    }
+    Sublime::UrlDocument *urlDoc = dynamic_cast<Sublime::UrlDocument *>(view->document());
+    QVERIFY(urlDoc);
+    QCOMPARE(urlDoc->url().fileName(), endOfFilename);
 }
 
 
