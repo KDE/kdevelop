@@ -24,6 +24,7 @@
 
 #include <QTest>
 #include <QElapsedTimer>
+#include <QTemporaryFile>
 #include <QApplication>
 
 #include <KTextEditor/Editor>
@@ -276,7 +277,9 @@ void TestBackgroundparser::benchmarkDocumentChanges()
     QVERIFY(editor);
     KTextEditor::Document* doc = editor->createDocument(this);
     QVERIFY(doc);
-    doc->saveAs(QUrl::fromLocalFile(QDir::tempPath() + "/__kdevbackgroundparsertest_benchmark.txt"));
+    QTemporaryFile file;
+    QVERIFY(file.open());
+    doc->saveAs(QUrl::fromLocalFile(file.fileName()));
 
     DocumentChangeTracker tracker(doc);
 
