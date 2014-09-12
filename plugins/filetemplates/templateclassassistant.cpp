@@ -54,7 +54,7 @@
 #include <QLabel>
 #include <QListWidget>
 #include <QPointer>
-
+#include <KDebug>
 #define REMOVE_PAGE(name)       \
 if (d->name##Page)              \
 {                               \
