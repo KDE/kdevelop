@@ -21,18 +21,54 @@
 
 #include "model.h"
 #include "context.h"
+#include "includepathcompletioncontext.h"
+
 #include <duchain/parsesession.h>
 
 #include <language/codecompletion/codecompletionworker.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainlock.h>
+
+#include <QRegularExpression>
+
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
 
 using namespace KDevelop;
 
 namespace {
+
+bool includePathCompletionRequired(const QString& text)
+{
+    QString line;
+    const int idx = text.lastIndexOf('\n');
+    if (idx != -1) {
+        line = text.mid(idx + 1).trimmed();
+    } else {
+        line = text.trimmed();
+    }
+
+    const static QRegularExpression includeRegExp("^\\s*#\\s*include");
+    if (!line.contains(includeRegExp)) {
+        return false;
+    }
+
+    return true;
+}
+
+QSharedPointer<CodeCompletionContext> createCompletionContext(const KDevelop::DUContextPointer& context,
+                                                              const ParseSessionData::Ptr& session,
+                                                              const KTextEditor::Cursor& position,
+                                                              const QString& text)
+{
+    if (includePathCompletionRequired(text)) {
+        return QSharedPointer<IncludePathCompletionContext>(new IncludePathCompletionContext(context, session, position, text));
+    } else {
+        return QSharedPointer<ClangCodeCompletionContext>(new ClangCodeCompletionContext(context, session, position, text));
+    }
+}
+
 class ClangCodeCompletionWorker : public CodeCompletionWorker
 {
     Q_OBJECT
@@ -74,7 +110,7 @@ public slots:
             return;
         }
 
-        ClangCodeCompletionContext completionContext(DUContextPointer(top), sessionData, position, text);
+        auto completionContext = ::createCompletionContext(DUContextPointer(top), sessionData, position, text);
 
         lock.lock();
         if (aborting()) {
@@ -86,7 +122,7 @@ public slots:
         // NOTE: cursor might be wrong here, but shouldn't matter much I hope...
         //       when the document changed significantly, then the cache is off anyways and we don't get anything sensible
         //       the position here is just a "optimization" to only search up to that position
-        const auto& items = completionContext.completionItems(abort);
+        const auto& items = completionContext->completionItems(abort);
 
         if (aborting()) {
             failed();
@@ -100,7 +136,7 @@ public slots:
             return;
         }
 
-        tree += completionContext.ungroupedElements();
+        tree += completionContext->ungroupedElements();
 
         foundDeclarations( tree, {} );
     }

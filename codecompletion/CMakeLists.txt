@@ -6,6 +6,7 @@ include_directories(
 add_library(kdevclangcodecompletion STATIC
     model.cpp
     context.cpp
+    includepathcompletioncontext.cpp
     completionhelper.cpp
 )
 target_link_libraries(kdevclangcodecompletion

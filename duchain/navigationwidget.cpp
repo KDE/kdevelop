@@ -101,3 +101,7 @@ ClangNavigationWidget::ClangNavigationWidget(const IncludeItem& includeItem, KDe
     setContext( m_startContext );
 }
 
+QString ClangNavigationWidget::shortDescription(const IncludeItem& includeItem) {
+  NavigationContextPointer ctx(new IncludeNavigationContext(includeItem, {}));
+  return ctx->html(true);
+}

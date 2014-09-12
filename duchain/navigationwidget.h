@@ -43,6 +43,9 @@ public:
     ClangNavigationWidget(const KDevelop::IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext,
                           const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
     virtual ~ClangNavigationWidget() = default;
+
+    /// Used by @see AbstractIncludeFileCompletionItem
+    static QString shortDescription(const KDevelop::IncludeItem& includeItem);
 };
 
 #endif // NAVIGATIONWIDGET_H
