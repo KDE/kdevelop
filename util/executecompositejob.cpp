@@ -49,10 +49,13 @@ ExecuteCompositeJob::~ExecuteCompositeJob()
 
 void ExecuteCompositeJob::start()
 {
-    if(hasSubjobs())
-        subjobs().first()->start();
-    else
+    if(hasSubjobs()) {
+        auto first = subjobs().first();
+        kDebug() << "starting:" << first;
+        first->start();
+    } else {
         emitResult();
+    }
 }
 
 void ExecuteCompositeJob::slotResult(KJob* job)
@@ -60,10 +63,10 @@ void ExecuteCompositeJob::slotResult(KJob* job)
     kDebug() << "finished: "<< job << job->error() << error();
     KCompositeJob::slotResult(job);
 
-    if(hasSubjobs() && !error() && !d->m_killing)
-    {
+    if (hasSubjobs() && !error() && !d->m_killing) {
         kDebug() << "remaining: " << subjobs().count() << subjobs();
-        KJob* nextJob=subjobs().first();
+        KJob* nextJob = subjobs().first();
+        kDebug() << "starting:" << nextJob;
         nextJob->start();
     } else {
         setError(job->error());
