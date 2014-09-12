@@ -31,8 +31,6 @@
 #include <KLocalizedString>
 
 #include <kdebug.h>
-#include <kicon.h>
-#include <kmenu.h>
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
@@ -45,6 +43,7 @@
 
 #include "ui_projectbuildsetwidget.h"
 #include <QHeaderView>
+#include <QMenu>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <interfaces/iplugincontroller.h>
@@ -144,7 +143,7 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
     }
     
 
-    KMenu m;
+    QMenu m;
     m.setTitle( i18n("Build Set") );
     m.addAction( QIcon::fromTheme("list-remove"), i18n( "Remove From Build Set" ), this, SLOT(removeItems()) );
     

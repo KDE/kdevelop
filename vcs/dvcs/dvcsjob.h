@@ -30,7 +30,7 @@
 
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
-#include <KDE/KProcess>
+#include <KProcess>
 
 #include <vcs/vcsexport.h>
 #include "../vcsjob.h"

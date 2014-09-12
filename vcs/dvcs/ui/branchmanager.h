@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_BRANCH_MANAGER_H
 #define KDEVPLATFORM_BRANCH_MANAGER_H
 
-#include <KDE/KDialog>
+#include <KDialog>
 
 class KJob;
 

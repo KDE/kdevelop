@@ -18,7 +18,7 @@
 */
 #include "isourceformatter.h"
 
-#include <KDE/KLocale>
+#include <KLocale>
 
 namespace KDevelop
 {

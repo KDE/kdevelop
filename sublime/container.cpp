@@ -25,21 +25,17 @@
 #include <QStackedWidget>
 #include <QStyleOptionTabBarBase>
 #include <QToolButton>
-#include <qstyle.h>
+#include <QStyle>
 #include <QPointer>
+#include <QTabBar>
+#include <QMenu>
 
 #include <kdebug.h>
 #include <KLocalizedString>
-#include <ktabbar.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
-#include <kglobal.h>
-#include <kdeversion.h>
 #include <kacceleratormanager.h>
-#include <kmenu.h>
-#include <kicon.h>
-#include <kmimetype.h>
 
 #include "view.h"
 #include "document.h"
@@ -52,9 +48,9 @@ namespace Sublime {
 
 // struct ContainerPrivate
 
-class ContainerTabBar : public KTabBar {
+class ContainerTabBar : public QTabBar {
     public:
-    ContainerTabBar(Container* container) : KTabBar(container), m_container(container) {
+    ContainerTabBar(Container* container) : QTabBar(container), m_container(container) {
     }
     
     virtual bool event(QEvent* ev) {
@@ -72,14 +68,14 @@ class ContainerTabBar : public KTabBar {
             return true;
         }
         
-        return KTabBar::event(ev);
+        return QTabBar::event(ev);
     }
     virtual void mousePressEvent(QMouseEvent* event) {
         if (event->button() == Qt::MidButton) {
             // just close on midbutton, drag can still be done with left mouse button
             return;
         }
-        KTabBar::mousePressEvent(event);
+        QTabBar::mousePressEvent(event);
     }
     Container* m_container;
 };
@@ -139,7 +135,7 @@ struct ContainerPrivate {
 
 class UnderlinedLabel: public KSqueezedTextLabel {
 public:
-    UnderlinedLabel(KTabBar *tabBar, QWidget* parent = 0)
+    UnderlinedLabel(QTabBar *tabBar, QWidget* parent = 0)
         :KSqueezedTextLabel(parent), m_tabBar(tabBar)
     {
     }
@@ -174,13 +170,13 @@ protected:
         KSqueezedTextLabel::paintEvent(ev);
     }
 
-    KTabBar *m_tabBar;
+    QTabBar *m_tabBar;
 };
 
 
 class StatusLabel: public UnderlinedLabel {
 public:
-    StatusLabel(KTabBar *tabBar, QWidget* parent = 0):
+    StatusLabel(QTabBar *tabBar, QWidget* parent = 0):
         UnderlinedLabel(tabBar, parent)
     {
         setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -510,7 +506,7 @@ void Container::tabMoved(int from, int to)
 
 void Container::contextMenu( int currentTab, const QPoint& pos )
 {
-    KMenu menu;
+    QMenu menu;
 
     emit tabContextMenuRequested(viewForWidget(widget(currentTab)), &menu);
 

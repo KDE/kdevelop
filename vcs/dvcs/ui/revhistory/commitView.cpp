@@ -24,7 +24,7 @@
 #include "commitView.h"
 
 #include <QPainter>
-#include <KDE/KDebug>
+#include <KDebug>
 
 #include "../../../vcsrevision.h"
 #include "commitlogmodel.h"

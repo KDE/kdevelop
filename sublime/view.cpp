@@ -20,8 +20,6 @@
 
 #include <QWidget>
 
-#include <kdebug.h>
-
 #include "document.h"
 #include "tooldocument.h"
 

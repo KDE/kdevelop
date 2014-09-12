@@ -27,8 +27,8 @@
 #include <QLabel>
 #include <QtCore/QSignalMapper>
 
-#include <KDE/KColorScheme>
-#include <KDE/KDebug>
+#include <KColorScheme>
+#include <KDebug>
 #include <KSqueezedTextLabel>
 
 #include <interfaces/istatus.h>
@@ -44,7 +44,7 @@ namespace KDevelop
 {
 
 StatusBar::StatusBar(QWidget* parent)
-    : KStatusBar(parent)
+    : QStatusBar(parent)
     , m_timer(new QTimer(this))
     , m_currentView(0)
     , m_errorRemovalMapper(new QSignalMapper(this))
@@ -83,14 +83,14 @@ void StatusBar::viewChanged(Sublime::View* view)
 
     if (view) {
         connect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(viewStatusChanged(Sublime::View*)));
-        changeItem(view->viewStatus(), 0);
+        QStatusBar::showMessage(view->viewStatus(), 0);
 
     }
 }
 
 void StatusBar::viewStatusChanged(Sublime::View* view)
 {
-    changeItem(view->viewStatus(), 0);
+    QStatusBar::showMessage(view->viewStatus(), 0);
 }
 
 void StatusBar::pluginLoaded(IPlugin* plugin)
@@ -193,9 +193,9 @@ void StatusBar::updateMessage()
     }
 
     if (!ret.isEmpty())
-        KStatusBar::showMessage(ret);
+        QStatusBar::showMessage(ret);
     else
-        KStatusBar::clearMessage();
+        QStatusBar::clearMessage();
 
     if (timeout) {
         m_time.start();

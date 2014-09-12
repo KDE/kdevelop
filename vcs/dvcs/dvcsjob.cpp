@@ -33,9 +33,9 @@
 #include <QtCore/QDir>
 #include <QStandardItemModel>
 
-#include <KDE/KDebug>
-#include <KDE/KLocale>
-#include <KDE/KUrl>
+#include <KDebug>
+#include <KLocale>
+#include <KUrl>
 
 #include <interfaces/iplugin.h>
 #include <outputview/outputmodel.h>

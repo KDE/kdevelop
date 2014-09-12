@@ -27,12 +27,12 @@
 #include <interfaces/iuicontroller.h>
 
 #include <KLocalizedString>
-#include <KMenuBar>
 
 #include <QMenu>
 #include <QToolButton>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QMenuBar>
 #include <QEvent>
 
 using namespace KDevelop;

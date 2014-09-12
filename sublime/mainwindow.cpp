@@ -19,17 +19,15 @@
 #include "mainwindow.h"
 #include "mainwindow_p.h"
 
-#include <KDE/KDebug>
-#include <KDE/KGlobal>
-#include <KDE/KConfig>
-#include <KDE/KSharedConfig>
-#include <KDE/KConfigGroup>
-#include <KDE/KToolBar>
-
 #include <QApplication>
 #include <QDesktopWidget>
-#include <KDE/KStatusBar>
-#include <KDE/KMenuBar>
+#include <QStatusBar>
+#include <QMenuBar>
+#include <KDebug>
+#include <KConfig>
+#include <KSharedConfig>
+#include <KConfigGroup>
+#include <KToolBar>
 #include <KLocalizedString>
 
 #include "area.h"
@@ -253,7 +251,7 @@ void MainWindow::loadSettings()
     // What follows is copy-paste from applyMainWindowSettings.  Unfortunately,
     // we don't really want that one to try restoring window size, and we also
     // cannot stop it from doing that in any clean way.
-    QStatusBar* sb = findChild<KStatusBar *>();
+    QStatusBar* sb = findChild<QStatusBar *>();
     if (sb) {
         QString entry = cg.readEntry("StatusBar", "Enabled");
         if ( entry == "Disabled" )
@@ -262,7 +260,7 @@ void MainWindow::loadSettings()
            sb->show();
     }
 
-    QMenuBar* mb = findChild<KMenuBar *>();
+    QMenuBar* mb = findChild<QMenuBar *>();
     if (mb) {
         QString entry = cg.readEntry ("MenuBar", "Enabled");
         if ( entry == "Disabled" )
@@ -396,7 +394,7 @@ void MainWindow::tabDoubleClicked(View* view)
     d->toggleDocksShown();
 }
 
-void MainWindow::tabContextMenuRequested(View* , KMenu* )
+void MainWindow::tabContextMenuRequested(View* , QMenu* )
 {
     // do nothing
 }

@@ -23,12 +23,12 @@
 
 #include <QAction>
 #include <QHeaderView>
+#include <QMenu>
 #include <QAction>
 #include <QClipboard>
 
 #include <KLocalizedString>
 #include <kdebug.h>
-#include <kmenu.h>
 #include <kdialog.h>
 
 #include <interfaces/iplugin.h>
@@ -87,7 +87,7 @@ void VcsEventWidgetPrivate::eventViewCustomContextMenuRequested( const QPoint &p
         return;
     }
 
-    KMenu menu( m_ui->eventView );
+    QMenu menu( m_ui->eventView );
     menu.addAction(m_copyAction);
     menu.addAction(i18n("Diff to previous revision"), q, SLOT(diffToPrevious()));
     QAction* action = menu.addAction(i18n("Diff between revisions"), q, SLOT(diffRevisions()));

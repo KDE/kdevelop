@@ -12,8 +12,8 @@
 #ifndef KDEVPLATFORM_VCS_COMMITDIALOG_H
 #define KDEVPLATFORM_VCS_COMMITDIALOG_H
 
-#include <KDE/KDialog>
-#include <KDE/KUrl>
+#include <KDialog>
+#include <KUrl>
 #include "vcsexport.h"
 
 namespace KDevelop

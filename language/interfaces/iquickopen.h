@@ -20,9 +20,9 @@
 #define KDEVPLATFORM_IQUICKOPEN_H
 
 #include <QtCore/QSet>
-#include <KDE/KUrl>
+#include <KUrl>
 #include <language/languageexport.h>
-#include <KDE/KLineEdit>
+#include <KLineEdit>
 
 class QStringList;
 

@@ -24,8 +24,8 @@
 
 #include <QtCore/QAbstractItemModel>
 #include "projectexport.h"
-#include <KDE/KUrl>
-#include <KDE/KSharedConfig>
+#include <KUrl>
+#include <KSharedConfig>
 
 template<typename T1,typename T2> struct QPair;
 template<typename T> class QList;

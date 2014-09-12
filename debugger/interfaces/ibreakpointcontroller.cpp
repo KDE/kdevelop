@@ -24,7 +24,7 @@
 
 #include "ibreakpointcontroller.h"
 
-#include <KDE/KDebug>          // remove later
+#include <KDebug>          // remove later
 #include <KNotification>
 #include <KLocalizedString>
 #include <KGlobal>

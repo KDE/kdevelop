@@ -25,7 +25,7 @@
 
 #include <QPointer>
 
-#include <KDE/KUrl>
+#include <KUrl>
 
 #include <ThreadWeaver/Sequence>
 

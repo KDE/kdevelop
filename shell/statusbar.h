@@ -22,8 +22,7 @@
 
 #include <QtCore/QTime>
 #include <QtCore/QMap>
-
-#include <KDE/KStatusBar>
+#include <QStatusBar>
 
 class QProgressBar;
 class QSignalMapper;
@@ -47,7 +46,7 @@ class ProgressManager;
 /**
  * Status bar
  */
-class StatusBar : public KStatusBar
+class StatusBar : public QStatusBar
 {
     Q_OBJECT
 

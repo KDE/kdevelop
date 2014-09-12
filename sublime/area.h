@@ -26,7 +26,7 @@
 #include "areaindex.h"
 #include "sublimedefs.h"
 
-#include <KDE/KConfigGroup>
+#include <KConfigGroup>
 
 class QAction;
 namespace Sublime {

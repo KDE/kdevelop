@@ -26,15 +26,16 @@
 #include "document.h"
 #include "view.h"
 
-#include <KMenu>
 #include <KLocalizedString>
 #include <KDialog>
-#include <KGlobal>
 #include <KShortcutWidget>
 #include <KSharedConfig>
 
 #include <QAbstractButton>
 #include <QToolBar>
+#include <QVBoxLayout>
+#include <qdialogbuttonbox.h>
+#include <QMenu>
 
 using namespace Sublime;
 
@@ -94,8 +95,8 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     QWidget* senderWidget = qobject_cast<QWidget*>(sender());
     Q_ASSERT(senderWidget);
 
-    KMenu menu;
-    menu.addTitle(windowIcon(), windowTitle());
+    QMenu menu;
+    menu.addSection(windowIcon(), windowTitle());
 
     QList< QAction* > viewActions = m_view->contextMenuActions();
     if(!viewActions.isEmpty()) {
@@ -149,12 +150,15 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             slotRemove();
             return;
         } else if ( triggered == setShortcut ) {
-            KDialog *dialog = new KDialog(this);
-            dialog->setCaption(i18n("Assign Shortcut For '%1' Tool View", m_view->document()->title()));
-            dialog->setButtons( KDialog::Ok | KDialog::Cancel );
+            QDialog* dialog(new KDialog(this));
+            dialog->setWindowTitle(i18n("Assign Shortcut For '%1' Tool View", m_view->document()->title()));
             KShortcutWidget *w = new KShortcutWidget(dialog);
             w->setShortcut(m_controller->actionForView(m_view)->shortcuts());
-            dialog->setMainWidget(w);
+            QVBoxLayout* dialogLayout = new QVBoxLayout(dialog);
+            dialogLayout->addWidget(w);
+            QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel , dialog);
+            connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
+            connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
 
             if (dialog->exec() == QDialog::Accepted) {
                 m_controller->actionForView(m_view)->setShortcuts(w->shortcut());
@@ -167,8 +171,8 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
                 config.writeEntry(QString("Shortcut for %1").arg(m_view->document()->title()), shortcuts);
                 config.sync();
             }
-
             delete dialog;
+
             return;
         } else if ( triggered == detach ) {
             setFloating(true);

@@ -27,8 +27,8 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QHash>
 
-#include <KDE/KUrl>
-#include <KDE/KPluginInfo>
+#include <KUrl>
+#include <KPluginInfo>
 
 #include <interfaces/iplugincontroller.h>
 

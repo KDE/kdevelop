@@ -23,7 +23,7 @@
 #include <QtCore/QString>
 #include <QTextCharFormat>
 #include <QTextEdit>
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 
 /// Recomended summary limit from http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
 static const int summarySoftLimit = 50;

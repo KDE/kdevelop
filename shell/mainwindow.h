@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_MAINWINDOW_H
 #define KDEVPLATFORM_MAINWINDOW_H
 
-#include <KDE/KXmlGuiWindow>
+#include <KXmlGuiWindow>
 
 #include <sublime/mainwindow.h>
 
@@ -85,7 +85,7 @@ protected:
 
 
 protected Q_SLOTS:
-    virtual void tabContextMenuRequested(Sublime::View* , KMenu* );
+    virtual void tabContextMenuRequested(Sublime::View* , QMenu* );
     virtual void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab);
     virtual void dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&);
 

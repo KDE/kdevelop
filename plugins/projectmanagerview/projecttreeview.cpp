@@ -28,11 +28,11 @@
 #include <QApplication>
 #include <QAbstractProxyModel>
 #include <QItemDelegate>
+#include <QMenu>
 
 #include <kxmlguiwindow.h>
 #include <kglobalsettings.h>
 #include <kaction.h>
-#include <kmenu.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <KLocalizedString>
@@ -154,7 +154,7 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
     {
         if (ProjectFolderItem *folder = destItem->folder())
         {
-            KMenu dropMenu(this);
+            QMenu dropMenu(this);
 
             QString seq = QKeySequence( Qt::ShiftModifier ).toString();
             seq.chop(1); // chop superfluous '+'
@@ -219,7 +219,7 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
         }
         else if (destItem->target() && destItem->project()->buildSystemManager())
         {
-            KMenu dropMenu(this);
+            QMenu dropMenu(this);
 
             QString seq = QKeySequence( Qt::ControlModifier ).toString();
             seq.chop(1);
@@ -313,7 +313,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         m_ctxProject = 0;
     }
 
-    KMenu menu( this );
+    QMenu menu( this );
 
     KDevelop::ProjectItemContext context(itemlist);
     QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );

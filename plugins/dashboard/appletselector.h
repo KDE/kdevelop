@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_APPLETSELECTOR_H
 #define KDEVPLATFORM_PLUGIN_APPLETSELECTOR_H
 
-#include <KDE/KDialog>
+#include <KDialog>
 #include <KPluginInfo>
 
 class QStandardItemModel;

@@ -27,7 +27,7 @@
 #include <QtCore/QVariantList>
 #include <QPointer>
 
-#include <KDE/KXMLGUIClient>
+#include <KXMLGUIClient>
 
 #include <KTextEditor/MarkInterface>
 

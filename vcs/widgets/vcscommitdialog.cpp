@@ -15,12 +15,12 @@
 #include <QBrush>
 #include <QtCore/QRegExp>
 
-#include <KDE/KTextEdit>
-#include <KDE/KComboBox>
-#include <KDE/KLocale>
-#include <KDE/KDebug>
-#include <KDE/KColorScheme>
-#include <KDE/KMessageBox>
+#include <KTextEdit>
+#include <KComboBox>
+#include <KLocale>
+#include <KDebug>
+#include <KColorScheme>
+#include <KMessageBox>
 #include <kparts/mainwindow.h>
 
 #include <interfaces/icore.h>

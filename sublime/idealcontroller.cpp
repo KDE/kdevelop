@@ -26,17 +26,12 @@
 #include <QIcon>
 #include <QMainWindow>
 #include <QStylePainter>
+#include <QToolBar>
 
-#include <kdebug.h>
 #include <KLocalizedString>
-#include <kglobal.h>
-#include <kshortcutwidget.h>
-#include <KActionCollection>
+#include <KSharedConfig>
 #include <KActionMenu>
 #include <KAcceleratorManager>
-#include <KMenu>
-#include <KToolBar>
-#include <KDialog>
 
 #include "area.h"
 #include "view.h"
@@ -108,7 +103,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
       dock->setWidget(w);
     } else {
       QMainWindow *toolView = new QMainWindow();
-      KToolBar *toolBar = new KToolBar(toolView);
+      QToolBar *toolBar = new QToolBar(toolView);
       int iconSize = m_mainWindow->style()->pixelMetric(QStyle::PM_SmallIconSize);
       toolBar->setIconSize(QSize(iconSize, iconSize));
       toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);

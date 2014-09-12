@@ -21,9 +21,9 @@
 #ifndef KDEVPLATFORM_MAIN_H
 #define KDEVPLATFORM_MAIN_H
 
-#include <KDE/KDialog>
-#include <KDE/KDebug>
-#include <KDE/KLocalizedString>
+#include <KDialog>
+#include <KDebug>
+#include <KLocalizedString>
 
 #include <QtCore/QDir>
 #include <QtGui>   

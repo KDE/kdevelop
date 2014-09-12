@@ -24,13 +24,13 @@ Boston, MA 02110-1301, USA.
 
 #include <QDir>
 #include <QHeaderView>
+#include <QMenu>
 #include <QContextMenuEvent>
 #include <QSortFilterProxyModel>
 
 #include <kaction.h>
 #include <KLocalizedString>
 #include <kurl.h>
-#include <kmenu.h>
 #include <kiconloader.h>
 #include <kstandardaction.h>
 #include <klocalizedstring.h>
@@ -178,7 +178,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
 
     if (!m_selectedDocs.isEmpty())
     {
-        KMenu* ctxMenu = new KMenu(this);
+        QMenu* ctxMenu = new QMenu(this);
 
         KDevelop::FileContext context(m_selectedDocs);
         QList<KDevelop::ContextMenuExtension> extensions =

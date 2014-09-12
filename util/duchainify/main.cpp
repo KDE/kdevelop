@@ -38,9 +38,9 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <KDE/KApplication>
-#include <KDE/KCmdLineArgs>
-#include <KDE/KDebug>
+#include <KApplication>
+#include <KCmdLineArgs>
+#include <KDebug>
 #include <k4aboutdata.h>
 
 #include <QtCore/QStringList>

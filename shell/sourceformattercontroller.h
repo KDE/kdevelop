@@ -30,8 +30,8 @@ Boston, MA 02110-1301, USA.
 #include <QMimeType>
 
 #include <kxmlguiclient.h>
-#include <KDE/KConfigGroup>
-#include <KDE/KPluginInfo>
+#include <KConfigGroup>
+#include <KPluginInfo>
 #include <KUrl>
 
 #include "shellexport.h"

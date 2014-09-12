@@ -29,8 +29,6 @@
 #include <QObject>
 
 class FileManager;
-class KMenu;
-class KUrl;
 
 class BookmarkHandler : public QObject, public KBookmarkOwner
 {

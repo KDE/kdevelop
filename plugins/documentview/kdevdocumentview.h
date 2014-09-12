@@ -32,7 +32,6 @@ class KDevDocumentModel;
 class KDevDocumentViewDelegate;
 class KDevDocumentSelection;
 class KDevFileItem;
-class KMenu;
 namespace KDevelop
 {
     class IDocument;

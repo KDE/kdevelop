@@ -26,7 +26,7 @@
 #include <QtCore/QList>
 #include <QtCore/QHash>
 
-#include <KDE/KUrl>
+#include <KUrl>
 
 
 namespace KDevelop

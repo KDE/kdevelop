@@ -22,7 +22,7 @@
 
 #include <QtTest/QtTest>
 
-#include <KDE/KUrl>
+#include <KUrl>
 
 #include <vcs/dvcs/dvcsjob.h>
 #include <tests/testcore.h>

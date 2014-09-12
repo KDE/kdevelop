@@ -19,15 +19,13 @@
 #ifndef KDEVPLATFORM_SUBLIMECONTAINER_H
 #define KDEVPLATFORM_SUBLIMECONTAINER_H
 
-#include <ktabwidget.h>
+#include <QWidget>
 
 #include "sublimeexport.h"
 
+class QMenu;
 class QBoxLayout;
-
 class QPaintEvent;
-
-class KMenu;
 
 namespace Sublime {
 
@@ -75,7 +73,7 @@ public:
 Q_SIGNALS:
     void activateView(Sublime::View* view);
     void requestClose(QWidget *w);
-    void tabContextMenuRequested(Sublime::View* view, KMenu* menu);
+    void tabContextMenuRequested(Sublime::View* view, QMenu* menu);
     /**
      * @p view The view represented by the tab that was hovered
      * @p Container The tab container that triggered the event

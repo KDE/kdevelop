@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 #include <language/util/navigationtooltip.h>
 
 class KActionCollection;
-class KMenu;
+class QMenu;
 
 namespace Sublime {
 class View;
@@ -63,7 +63,7 @@ public:
     void setupStatusBar();
     void registerStatus(QObject*);
 
-    void tabContextMenuRequested(Sublime::View *view, KMenu* menu);
+    void tabContextMenuRequested(Sublime::View *view, QMenu* menu);
     void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab);
     void dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position);
 

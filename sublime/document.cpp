@@ -18,8 +18,6 @@
  ***************************************************************************/
 #include "document.h"
 
-#include <kdebug.h>
-
 #include "view.h"
 #include "area.h"
 #include "controller.h"
@@ -130,7 +128,6 @@ QIcon Document::statusIcon() const
 
 void Document::closeViews()
 {
-    kDebug() << "closing all views for the document";
     foreach (Sublime::Area *area, controller()->allAreas())
     {
         QList<Sublime::View*> areaViews = area->views();

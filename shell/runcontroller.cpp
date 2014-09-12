@@ -21,16 +21,17 @@ Boston, MA 02110-1301, USA.
 #include "runcontroller.h"
 
 #include <QApplication>
+#include <QMenu>
 #include <QStandardItemModel>
 #include <QPalette>
 
-#include <KDE/KSelectAction>
-#include <KDE/KActionMenu>
-#include <KDE/KActionCollection>
-#include <KDE/KMessageBox>
-#include <KDE/KLocale>
-#include <KDE/KDebug>
-#include <KDE/KColorScheme>
+#include <KSelectAction>
+#include <KActionMenu>
+#include <KActionCollection>
+#include <KMessageBox>
+#include <KLocale>
+#include <KDebug>
+#include <KColorScheme>
 #include <kdialogjobuidelegate.h>
 
 #include <interfaces/iproject.h>
@@ -56,7 +57,6 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <sublime/area.h>
-#include <kmenu.h>
 
 using namespace KDevelop;
 

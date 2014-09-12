@@ -21,8 +21,8 @@
 #ifndef KDEVPLATFORM_DVCS_PLUGIN_H
 #define KDEVPLATFORM_DVCS_PLUGIN_H
 
-#include <KDE/KUrl>
-#include <KDE/KComponentData>
+#include <KUrl>
+#include <KComponentData>
 
 #include <QtCore/QObject>
 

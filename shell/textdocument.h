@@ -21,7 +21,7 @@
 #define KDEVPLATFORM_TEXTDOCUMENT_H
 
 #include <QWidget>
-#include <KDE/KXMLGUIClient>
+#include <KXMLGUIClient>
 
 #include <sublime/view.h>
 

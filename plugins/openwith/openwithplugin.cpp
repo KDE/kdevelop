@@ -23,6 +23,8 @@
 #include <QVariantList>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QApplication>
+#include <QMenu>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -38,7 +40,6 @@
 #include <kservicetypetrader.h>
 #include <kmimetypetrader.h>
 #include <QSignalMapper>
-#include <kmenu.h>
 #include <krun.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
@@ -46,8 +47,8 @@
 #include <interfaces/idocumentcontroller.h>
 #include <kparts/mainwindow.h>
 #include <KMessageBox>
-#include <QApplication>
 #include <KConfigGroup>
+
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(KDevOpenWithFactory, registerPlugin<OpenWithPlugin>(); )
@@ -115,15 +116,15 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     }
 
     // Now setup a menu with actions for each part and app
-    KMenu* menu = new KMenu( i18n("Open With" ) );
+    QMenu* menu = new QMenu( i18n("Open With" ) );
     menu->setIcon( QIcon::fromTheme( "document-open" ) );
 
     if (!partActions.isEmpty()) {
-        menu->addTitle(i18n("Embedded Editors"));
+        menu->addSection(i18n("Embedded Editors"));
         menu->addActions( partActions );
     }
     if (!appActions.isEmpty()) {
-        menu->addTitle(i18n("External Applications"));
+        menu->addSection(i18n("External Applications"));
         menu->addActions( appActions );
     }
 

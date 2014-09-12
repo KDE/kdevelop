@@ -26,8 +26,6 @@
 #include "../util/treeview.h"
 #include "variablecollection.h"
 
-class KMenu;
-class KLineEdit;
 class KHistoryComboBox;
 
 namespace KDevelop
@@ -103,7 +101,7 @@ private: // helper functions
 
     void copyToClipboard(AbstractVariableItem* item);
 
-    KMenu* activePopup_;
+    QMenu* activePopup_;
     QAction* toggleWatch_;
 #endif
 private:

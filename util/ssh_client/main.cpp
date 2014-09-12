@@ -29,10 +29,10 @@ it has similar functionality, but I failed to make it work correctly.
 
 #include "main.h"
 
-#include <KDE/KApplication>
-#include <KDE/KAboutData>
-#include <KDE/KCmdLineArgs>
-#include <KDE/KMessageBox>
+#include <KApplication>
+#include <KAboutData>
+#include <KCmdLineArgs>
+#include <KMessageBox>
 
 #include <QtNetwork/QTcpSocket>
 

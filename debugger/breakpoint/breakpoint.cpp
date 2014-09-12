@@ -21,9 +21,9 @@
 
 #include "breakpoint.h"
 
-#include <KDE/KLocale>
-#include <KDE/KConfigGroup>
-#include <KDE/KDebug>
+#include <KLocale>
+#include <KConfigGroup>
+#include <KDebug>
 
 #include "breakpointmodel.h"
 #include "../../interfaces/icore.h"

@@ -36,7 +36,7 @@ Boston, MA 02110-1301, USA.
 #include <QStringList>
 #include <QMimeType>
 
-#include <KDE/KUrl>
+#include <KUrl>
 
 template <typename T> class QList;
 
@@ -58,7 +58,7 @@ The plugin that originally gets the contextmenu event shouldn't add its own
 actions directly to the menu but instead use the same mechanism.
 
 <b>How to show a context menu from a plugin:</b>
--# Create a KMenu in context menu event handler: @code KMenu menu(this); @endcode
+-# Create a QMenu in context menu event handler: @code QMenu menu(this); @endcode
 -# Create a context: @code FileContext context(list). @endcode
 -# Query for plugins:
 @code @code QList<ContextMenuExtension> extensions =

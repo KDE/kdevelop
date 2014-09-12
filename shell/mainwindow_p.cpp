@@ -24,8 +24,8 @@ Boston, MA 02110-1301, USA.
 #include <QApplication>
 #include <QBoxLayout>
 #include <QLabel>
+#include <QMenu>
 
-#include <kmenu.h>
 #include <kdebug.h>
 #include <kxmlguiclient.h>
 #include <kxmlguifactory.h>
@@ -341,7 +341,7 @@ void MainWindowPrivate::showErrorMessage(QString message, int timeout)
     m_statusBar->showErrorMessage(message, timeout);
 }
 
-void MainWindowPrivate::tabContextMenuRequested(Sublime::View* view, KMenu* menu)
+void MainWindowPrivate::tabContextMenuRequested(Sublime::View* view, QMenu* menu)
 {
     m_tabView = view;
 
@@ -401,8 +401,8 @@ void MainWindowPrivate::tabToolTipRequested(Sublime::View* view, Sublime::Contai
 
 void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position)
 {
-    KMenu menu;
-    menu.addTitle(QIcon::fromTheme("window-new"), i18n("Add Tool View"));
+    QMenu menu;
+    menu.addSection(QIcon::fromTheme("window-new"), i18n("Add Tool View"));
     QMap<IToolViewFactory*, Sublime::ToolDocument*> factories =
         Core::self()->uiControllerInternal()->factoryDocuments();
     QMap<QAction*, IToolViewFactory*> actionToFactory;

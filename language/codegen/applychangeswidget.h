@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_APPLYCHANGESWIDGET_H
 #define KDEVPLATFORM_APPLYCHANGESWIDGET_H
 
-#include <KDE/KDialog>
+#include <KDialog>
 #include <language/languageexport.h>
 
 namespace KTextEditor {

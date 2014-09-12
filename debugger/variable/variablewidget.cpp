@@ -25,6 +25,7 @@
 #include <QKeyEvent>
 #include <QFocusEvent>
 #include <QVBoxLayout>
+#include <QMenu>
 #include <QPoint>
 #include <QClipboard>
 
@@ -32,7 +33,6 @@
 #include <kmessagebox.h>
 #include <khistorycombobox.h>
 #include <kdebug.h>
-#include <kmenu.h>
 #include <klineedit.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
@@ -331,7 +331,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 
     if (RecentItem* recent = qobject_cast<RecentItem*>(item))
     {
-        KMenu popup(this);
+        QMenu popup(this);
         popup.addTitle(i18n("Recent Expressions"));
         QAction* remove = popup.addAction(QIcon::fromTheme("editdelete"), i18n("Remove All"));
         QAction* reevaluate = popup.addAction(QIcon::fromTheme("reload"), i18n("Re-evaluate All"));
@@ -356,8 +356,8 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
     }
     else
     {
-        activePopup_ = new KMenu(this);
-        KMenu format(this);
+        activePopup_ = new QMenu(this);
+        QMenu format(this);
 
         QAction* remember = 0;
         QAction* remove = 0;

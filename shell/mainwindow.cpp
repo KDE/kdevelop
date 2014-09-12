@@ -30,10 +30,8 @@ Boston, MA 02110-1301, USA.
 #include <QMenuBar>
 #include <QtDBus/QDBusConnection>
 
-#include <KDE/KApplication>
-#include <KDE/KActionCollection>
-#include <kmenu.h>
-#include <kglobal.h>
+#include <KApplication>
+#include <KActionCollection>
 #include <KLocalizedString>
 #include <ktemporaryfile.h>
 #include <kactioncollection.h>
@@ -44,7 +42,6 @@ Boston, MA 02110-1301, USA.
 #include <kxmlguifactory.h>
 #include <ktoggleaction.h>
 #include <KWindowSystem>
-#include <KMenuBar>
 
 #include <sublime/area.h>
 #include "shellextension.h"
@@ -362,7 +359,7 @@ void MainWindow::showErrorMessage(const QString& message, int timeout)
     d->showErrorMessage(message, timeout);
 }
 
-void MainWindow::tabContextMenuRequested(Sublime::View* view, KMenu* menu)
+void MainWindow::tabContextMenuRequested(Sublime::View* view, QMenu* menu)
 {
     Sublime::MainWindow::tabContextMenuRequested(view, menu);
     d->tabContextMenuRequested(view, menu);

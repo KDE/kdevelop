@@ -23,7 +23,7 @@
 #include <KActionCollection>
 #include <interfaces/iprojectcontroller.h>
 #include <QDebug>
-#include <KMenuBar>
+#include <QMenuBar>
 #include <qdesktopservices.h>
 #include <sublime/area.h>
 #include <sublime/view.h>

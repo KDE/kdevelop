@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_IBASICVERSIONCONTROL_H
 #define KDEVPLATFORM_IBASICVERSIONCONTROL_H
 
-#include <KDE/KUrl>
+#include <KUrl>
 #include "../vcsrevision.h"
 #include "../vcsdiff.h"
 
