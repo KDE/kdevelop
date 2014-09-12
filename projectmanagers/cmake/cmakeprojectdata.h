@@ -21,6 +21,7 @@
 #ifndef CMAKEPROJECTDATA_H
 #define CMAKEPROJECTDATA_H
 
+#include <QSharedPointer>
 #include <QStringList>
 #include <QFileSystemWatcher>
 #include "cmaketypes.h"
@@ -43,6 +44,12 @@ inline QDebug &operator<<(QDebug debug, const CMakeFile& file)
     return debug.maybeSpace();
 }
 
+struct CMakeJsonData
+{
+    QHash<KDevelop::Path, CMakeFile> files;
+    bool isValid = false;
+};
+
 struct CMakeProjectData
 {
     CMakeProjectData() : watcher(new QFileSystemWatcher) {}
@@ -50,7 +57,7 @@ struct CMakeProjectData
 
     CMakeProperties properties;
     CacheValues cache;
-    QHash<KDevelop::Path, CMakeFile> files;
+    CMakeJsonData jsonData;
     QSharedPointer<QFileSystemWatcher> watcher;
 };
 

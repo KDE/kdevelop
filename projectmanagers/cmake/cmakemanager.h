@@ -110,7 +110,8 @@ public:
 //
 //     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
-//     virtual KJob* createImportJob(KDevelop::ProjectFolderItem* item);
+
+    virtual KJob* createImportJob(KDevelop::ProjectFolderItem* item) override;
 //
     virtual bool reload(KDevelop::ProjectFolderItem*) override;
 //
@@ -150,11 +151,9 @@ private slots:
 //
 //     void directoryChanged(const QString& dir);
 //     void filesystemBuffererTimeout();
-//     void importFinished(KJob* job);
+    void importFinished(KJob* job);
 
 private:
-    void initializeProject(KDevelop::IProject* project);
-
     QHash<KDevelop::IProject*, CMakeProjectData> m_projects;
     KDevelop::ProjectFilterManager* m_filter;
     KDevelop::ICodeHighlighting* m_highlight;
