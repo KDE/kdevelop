@@ -23,7 +23,6 @@
 
 #include <QMutex>
 #include <QMutexLocker>
-#include <qregularexpression.h>
 
 #include <kdebug.h>
 #include <ktexteditor/document.h>
@@ -60,10 +59,6 @@ using namespace KTextEditor;
  *             -> Maybe alter the file-modification caches directly
  * */
 
-namespace {
-    QRegExp whiteSpaceRegExp("\\s");
-};
-
 namespace KDevelop
 {
 
@@ -87,7 +82,6 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
 
     connect(document, SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Cursor,QString)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Cursor,QString)));
     connect(document, SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)));
-    connect(document, SIGNAL(textChanged(KTextEditor::Document*)), SLOT(textChanged(KTextEditor::Document*,KTextEditor::Range,QString,KTextEditor::Range)));
     connect(document, SIGNAL(destroyed(QObject*)), SLOT(documentDestroyed(QObject*)));
     connect(document, SIGNAL(documentSavedOrUploaded(KTextEditor::Document*,bool)), SLOT(documentSavedOrUploaded(KTextEditor::Document*,bool)));
 
@@ -158,7 +152,7 @@ bool DocumentChangeTracker::needUpdate() const
     return m_needUpdate;
 }
 
-bool DocumentChangeTracker::checkMergeTokens(const KTextEditor::Range& range, QString /*oldText*/, QString /*newText*/)
+bool DocumentChangeTracker::checkMergeTokens(const KTextEditor::Range& range)
 {
     ///@todo Improve this so that it notices when we wrapped in/out of a line-comment
     ///@todo Improve this so that it really checks whether some merge-able tokens have been moved together
@@ -170,28 +164,6 @@ bool DocumentChangeTracker::checkMergeTokens(const KTextEditor::Range& range, QS
             return true;
     }
     return false;
-}
-
-void DocumentChangeTracker::textChanged( Document* document, Range /*oldRange*/, QString oldText, Range newRange )
-{
-    m_currentCleanedInsertion.clear();
-
-    QString newText = document->text(newRange);
-
-    QRegularExpression spacesMatch("^\\s*$");
-    bool oldTextOnlyWhitespace = spacesMatch.match(oldText).hasMatch();
-    bool newTextOnlyWhitespace = spacesMatch.match(newText).hasMatch();
-
-    m_needUpdate = !oldTextOnlyWhitespace || !newTextOnlyWhitespace || !checkMergeTokens(newRange, oldText, newText);
-
-    #ifdef ALWAYS_UPDATE
-    m_needUpdate = true;
-    #endif
-
-    m_currentCleanedInsertion.clear();
-    m_lastInsertionPosition = KTextEditor::Cursor::invalid();
-
-    updateChangedRange(newRange);
 }
 
 void DocumentChangeTracker::updateChangedRange( Range changed )
@@ -213,27 +185,37 @@ void DocumentChangeTracker::updateChangedRange( Range changed )
 
 static Cursor cursorAdd(Cursor c, const QString& text)
 {
-    c.setLine(c.line()+text.count('\n'));
-    c.setColumn(c.column()+(text.count() - qMin(0, text.lastIndexOf('\n'))));
+    c.setLine(c.line() + text.count('\n'));
+    c.setColumn(c.column() + (text.length() - qMin(0, text.lastIndexOf('\n'))));
     return c;
 }
 
-void DocumentChangeTracker::textInserted( Document* document, const Cursor& c, const QString& text )
+static bool whitespaceOnly(const QString& string)
+{
+    for (QChar c : string) {
+        if (!c.isSpace()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void DocumentChangeTracker::textInserted( Document* document, const Cursor& cursor, const QString& text)
 {
     if ( m_whitespaceSensitivity == ILanguageSupport::Sensitive ) {
         m_needUpdate = true;
     }
 
-    Range range(c, cursorAdd(c, text));
+    /// TODO: get this data from KTextEditor directly, make its signal public
+    Range range(cursor, cursorAdd(cursor, text));
+
     if ( ! m_needUpdate ) {
-        QString textWithoutWhitespace = text;
-        textWithoutWhitespace.remove(whiteSpaceRegExp);
-        bool changeIsWhitespaceOnly = textWithoutWhitespace.isEmpty() && checkMergeTokens(range, "", text);
+        bool changeIsWhitespaceOnly = whitespaceOnly(text) && checkMergeTokens(range);
         if ( m_whitespaceSensitivity == ILanguageSupport::IndentOnly && changeIsWhitespaceOnly ) {
             // The language requires a document to be re-parsed if the indentation changes (e.g. python),
             // so do some special checks here to see if that is the case.
             if ( changeIsWhitespaceOnly ) {
-                QString fromLineBeginning = document->text(Range(Cursor(range.start().line(), 0), range.end()));
+                QString fromLineBeginning = document->text(Range(Cursor(cursor.line(), 0), range.end()));
                 bool inIndent = true;
                 for ( int i = fromLineBeginning.length() - 1; i >= 0; --i ) {
                     if ( ! fromLineBeginning.at(i).isSpace() ) {
@@ -256,7 +238,7 @@ void DocumentChangeTracker::textInserted( Document* document, const Cursor& c, c
     m_needUpdate = true;
     #endif
 
-    if(m_lastInsertionPosition == KTextEditor::Cursor::invalid() || m_lastInsertionPosition == range.start())
+    if(!m_lastInsertionPosition.isValid() || m_lastInsertionPosition == cursor)
     {
         m_currentCleanedInsertion.append(text);
         m_lastInsertionPosition = range.end();
@@ -265,17 +247,12 @@ void DocumentChangeTracker::textInserted( Document* document, const Cursor& c, c
     updateChangedRange(range);
 }
 
-void DocumentChangeTracker::textRemoved( Document* /*document*/, Range oldRange, QString oldText )
+void DocumentChangeTracker::textRemoved( Document* /*document*/, const Range& oldRange, const QString& oldText )
 {
-    QString text = oldText;
-
-    QString textWithoutWhitespace = text;
-    textWithoutWhitespace.remove(whiteSpaceRegExp);
-
-    if(textWithoutWhitespace.isEmpty() && checkMergeTokens(Range(oldRange.start(), oldRange.start()), oldText, ""))
+    if (whitespaceOnly(oldText) && checkMergeTokens(Range(oldRange.start(), oldRange.start())))
     {
         // Only whitespace was changed, no update is required
-    }else{
+    } else {
         m_needUpdate = true; // If we've inserted something else than whitespace, an update is required
     }
 

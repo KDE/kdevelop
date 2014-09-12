@@ -252,15 +252,13 @@ protected:
 
     void updateChangedRange(KTextEditor::Range changed);
 public slots:
-    virtual void textInserted( KTextEditor::Document* document, const KTextEditor::Cursor& c, const QString& text );
-    virtual void textRemoved( KTextEditor::Document* document, KTextEditor::Range oldRange, QString oldText );
-    virtual void textChanged( KTextEditor::Document* document, KTextEditor::Range oldRange, QString oldText, KTextEditor::Range newRange );
+    virtual void textInserted( KTextEditor::Document* document, const KTextEditor::Cursor& position, const QString& inserted );
+    virtual void textRemoved( KTextEditor::Document* document, const KTextEditor::Range& range, const QString& oldText );
     void documentDestroyed( QObject* );
     void aboutToInvalidateMovingInterfaceContent ( KTextEditor::Document* document );
     void documentSavedOrUploaded(KTextEditor::Document*,bool);
 private:
-
-    virtual bool checkMergeTokens(const KTextEditor::Range& range, QString oldText, QString newText);
+    bool checkMergeTokens(const KTextEditor::Range& range);
 
     friend class RevisionLockerAndClearerPrivate;
     void lockRevision(qint64 revision);
