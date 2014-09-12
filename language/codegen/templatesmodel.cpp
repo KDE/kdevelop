@@ -23,7 +23,6 @@
 
 #include <KTar>
 #include <KZip>
-#include <KStandardDirs>
 #include <KComponentData>
 #include <KDebug>
 #include <KConfigGroup>

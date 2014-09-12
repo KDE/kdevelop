@@ -22,7 +22,6 @@
 
 #include <KLocalizedString>
 #include <KDebug>
-#include <KStandardDirs>
 #include <KEMailSettings>
 #include <KComponentData>
 #include <KMessageBox>

@@ -25,7 +25,6 @@
 
 #include <KDebug>
 #include <KComponentData>
-#include <KStandardDirs>
 #include <KArchive>
 #include <KZip>
 #include <KTar>

@@ -11,8 +11,6 @@
 #include <language/codegen/documentchangeset.h>
 #include <language/codegen/templaterenderer.h>
 
-#include <KStandardDirs>
-
 using namespace KDevelop;
 
 

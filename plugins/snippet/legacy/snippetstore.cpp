@@ -17,7 +17,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
 
-#include <KStandardDirs>
 #include <KDebug>
 
 #include <ktexteditor/editor.h>

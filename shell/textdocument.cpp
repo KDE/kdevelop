@@ -32,7 +32,6 @@
 #include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
-#include <kstandarddirs.h>
 #include <kxmlguifactory.h>
 #include <kdeversion.h>
 #include <kdebug.h>
@@ -442,7 +441,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         QStringList katePartUIs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, uiFile);
         if (!katePartUIs.isEmpty()) {
             const QString katePartUI = katePartUIs.last();
-            const QString katePartLocalUI = KStandardDirs::locateLocal("data", uiFile);
+            const QString katePartLocalUI = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+ '/' + uiFile;
             if (!QFile::exists(katePartLocalUI)) {
                 // prevent warning:
                 // kdevelop/kdeui (kdelibs): No such XML file ".../.kde/share/apps/kdevelop/katepartui.rc"

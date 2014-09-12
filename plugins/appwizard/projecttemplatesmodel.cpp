@@ -16,7 +16,6 @@
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <KLocalizedString>
-#include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
 #include "appwizardplugin.h"

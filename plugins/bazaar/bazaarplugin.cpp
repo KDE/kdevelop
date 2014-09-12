@@ -23,11 +23,11 @@
 #include <QtCore/QDir>
 #include <QtCore/QDateTime>
 #include <QMenu>
+#include <QStandardPaths>
 
 #include <KPluginFactory>
 #include <KLocalizedString>
 #include <KAboutData>
-#include <KStandardDirs>
 
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include <vcs/dvcs/dvcsjob.h>
@@ -50,7 +50,7 @@ BazaarPlugin::BazaarPlugin(QObject* parent, const QVariantList& args) :
     m_vcsPluginHelper(new KDevelop::VcsPluginHelper(this, this)), m_hasError(false)
 {
     Q_UNUSED(args); // What is this?
-    if (KStandardDirs::findExe("bzr").isEmpty()) {
+    if (QStandardPaths::findExecutable("bzr").isEmpty()) {
         m_hasError = true;
         m_errorDescription = i18n("Bazaar is not installed (bzr executable not"
                                  " found)");

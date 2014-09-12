@@ -37,7 +37,6 @@
 #include <project/projectmodel.h>
 
 #include <KComponentData>
-#include <KStandardDirs>
 
 #include <QFileInfo>
 

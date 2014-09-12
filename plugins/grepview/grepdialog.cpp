@@ -32,7 +32,6 @@
 #include <kcombobox.h>
 #include <kurlcompletion.h>
 #include <kurlcompletion.h>
-#include <kstandarddirs.h>
 #include <klineedit.h>
 #include <KCompletion/kcompletion.h>
 

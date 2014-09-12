@@ -23,7 +23,6 @@
 #include <QtCore/QCoreApplication>
 #include <QtDBus/QDBusConnection>
 
-#include <KStandardDirs>
 #include <KDebug>
 #include <KLocalizedString>
 
@@ -272,7 +271,7 @@ void ItemRepositoryRegistryPrivate::deleteDataDirectory(const QString& path, boo
   Q_UNUSED(result);
   // Just recreate the directory then; leave old path (as it is dependent on appname and session only).
   if(recreate) {
-    KStandardDirs::makeDir(path);
+    QDir().mkpath(path);
   }
 }
 
@@ -289,7 +288,7 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
     deleteDataDirectory(path);
   }
 
-  KStandardDirs::makeDir(path);
+  QDir().mkpath(path);
 
   foreach(AbstractItemRepository* repository, m_repositories.keys()) {
     if(!repository->open(path)) {

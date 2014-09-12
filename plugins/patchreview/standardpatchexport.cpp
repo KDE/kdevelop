@@ -29,7 +29,7 @@
 #include <interfaces/iruncontroller.h>
 #include <QMenu>
 #include "patchreview.h"
-#include <KStandardDirs>
+#include <QStandardPaths>
 #include <KProcess>
 #include <QIcon>
 
@@ -71,7 +71,7 @@ public:
         KProcess::startDetached( QStringList() << "ktp-send-file" << source->file().prettyUrl() );
     }
 
-    static bool isAvailable() { return !KStandardDirs::findExe( "ktp-send-file" ).isEmpty(); }
+    static bool isAvailable() { return !QStandardPaths::findExecutable( "ktp-send-file" ).isEmpty(); }
     virtual QIcon icon() const { return QIcon::fromTheme( "telepathy-kde" ); }
     virtual QString name() const { return i18n( "Send to contact..." ); }
 };
@@ -85,7 +85,7 @@ public:
         KProcess::startDetached( QStringList("kompare") << source->baseDir().prettyUrl() << source->file().prettyUrl() );
     }
 
-    static bool isAvailable() { return !KStandardDirs::findExe( "kompare" ).isEmpty(); }
+    static bool isAvailable() { return !QStandardPaths::findExecutable( "kompare" ).isEmpty(); }
     virtual QIcon icon() const { return QIcon::fromTheme( "kompare" ); }
     virtual QString name() const { return i18n( "Side view (Kompare)..." ); }
 

@@ -52,7 +52,6 @@
 #include <interfaces/iruncontroller.h>
 #include "stashmanagerdialog.h"
 #include <KMessageBox>
-#include <KStandardDirs>
 #include <KTextEdit>
 #include <KDirWatch>
 #include <KTextEditor/Document>
@@ -177,7 +176,7 @@ QDir urlDir(const KUrl::List& urls) { return urlDir(urls.first()); } //TODO: cou
 GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
     : DistributedVersionControlPlugin(parent, "kdevgit"), m_oldVersion(false)
 {
-    if (KStandardDirs::findExe("git").isEmpty()) {
+    if (QStandardPaths::findExecutable("git").isEmpty()) {
         m_hasError = true;
         m_errorDescription = i18n("git is not installed");
         return;

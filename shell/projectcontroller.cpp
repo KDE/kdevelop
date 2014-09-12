@@ -50,7 +50,6 @@ Boston, MA 02110-1301, USA.
 #include <kconfiggroup.h>
 #include <ksettings/dialog.h>
 #include <kio/netaccess.h>
-#include <kstandarddirs.h>
 
 #include <ksettings/dispatcher.h>
 

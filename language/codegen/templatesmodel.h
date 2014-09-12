@@ -37,7 +37,7 @@ class TemplatesModelPrivate;
  * displays them as a three-level tree structure.
  *
  * The locations for loading and storing files are determined by the typePrefix.
- * We use KStandardDirs with the "data" type and create a filter string as such:
+ * We use QStandardPaths with the GenericData type and create a filter string as such:
  * \li templates: typePrefix "/templates/"
  * \li descriptions: typePrefix "/template_descriptions/"
  * \li previews: typePrefix "/template_previews/"

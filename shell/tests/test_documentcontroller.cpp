@@ -27,7 +27,6 @@
 #include <tests/autotestshell.h>
 #include <shell/core.h>
 #include <interfaces/idocumentcontroller.h>
-#include <KStandardDirs>
 #include <ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <languagecontroller.h>

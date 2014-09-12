@@ -33,7 +33,6 @@
 #include <KDebug>
 #include <KLocalizedString>
 #include <KParts/MainWindow>
-#include <KStandardDirs>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/ConfigInterface>
@@ -190,7 +189,7 @@ AssistantPopup::AssistantPopup()
 
     rootContext()->setContextProperty("config", m_config);
 
-    setSource(QUrl::fromLocalFile(KStandardDirs::locate("data", "kdevelop/assistantpopup.qml")));
+    setSource(QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevelop/assistantpopup.qml")));
     if (!rootObject()) {
         kWarning() << "Failed to load assistant markup! The assistant will not work.";
     }

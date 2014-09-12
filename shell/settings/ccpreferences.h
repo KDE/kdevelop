@@ -25,7 +25,6 @@
 #include <kcmodule.h>
 
 #include <kurl.h>
-#include <kstandarddirs.h>
 
 namespace Ui
 {

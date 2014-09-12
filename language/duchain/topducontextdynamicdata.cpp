@@ -20,7 +20,7 @@
 
 #include "topducontextdynamicdata.h"
 
-#include <kstandarddirs.h>
+#include <QStandardPaths>
 #include <typeinfo>
 #include <QtCore/QFile>
 #include <QtCore/QByteArray>
@@ -709,7 +709,7 @@ void TopDUContextDynamicData::store() {
 
     unmap();
 
-    KStandardDirs::makeDir(basePath());
+    QDir().mkpath(basePath());
 
     QFile file(filePath());
     if(file.open(QIODevice::WriteOnly)) {

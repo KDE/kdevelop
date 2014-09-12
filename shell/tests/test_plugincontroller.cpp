@@ -27,9 +27,9 @@
 
 #include <kcomponentdata.h>
 #include <kprocess.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kglobal.h>
+#include <kstandarddirs.h>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>

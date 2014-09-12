@@ -22,7 +22,6 @@
 
 #include <QDomDocument>
 #include <QDomElement>
-#include <KStandardDirs>
 
 #include <KMessageBox>
 #include <QtCore/QStandardPaths>

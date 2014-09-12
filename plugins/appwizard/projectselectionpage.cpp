@@ -14,7 +14,6 @@
 
 #include <klineedit.h>
 #include <kcomponentdata.h>
-#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 

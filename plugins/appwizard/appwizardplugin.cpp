@@ -30,7 +30,6 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 #include <kmacroexpander.h>
 #include <kpluginfactory.h>
 #include <kaboutdata.h>

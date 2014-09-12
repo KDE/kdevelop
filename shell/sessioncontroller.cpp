@@ -27,7 +27,6 @@ Boston, MA 02110-1301, USA.
 
 #include <kcmdlineargs.h>
 #include <kconfiggroup.h>
-#include <kstandarddirs.h>
 #include <KLocalizedString>
 #include <kio/netaccess.h>
 #include <kparts/mainwindow.h>

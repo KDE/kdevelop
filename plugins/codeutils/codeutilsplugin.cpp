@@ -32,7 +32,6 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/TemplateInterface>
-#include <KStandardDirs>
 #include <QApplication>
 #include <QStandardPaths>
 

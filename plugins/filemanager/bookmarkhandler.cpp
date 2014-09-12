@@ -27,7 +27,6 @@
 #include <interfaces/isession.h>
 
 #include <kdiroperator.h>
-#include <kstandarddirs.h>
 #include <KDebug>
 #include <KActionCollection>
 

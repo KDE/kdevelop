@@ -39,7 +39,6 @@ Boston, MA 02110-1301, USA.
 #include <assert.h>
 #include <kdebug.h>
 #include <kdialog.h>
-#include <kstandarddirs.h>
 #include <kaction.h>
 #include <kxmlguifactory.h>
 
