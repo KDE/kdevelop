@@ -29,7 +29,6 @@
 #include <KShell>
 #include <KConfig>
 #include <KConfigGroup>
-#include <KGlobal>
 #include <KLocalizedString>
 
 #include <interfaces/iproject.h>

@@ -25,7 +25,6 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KGlobal>
 #include <KMessageBox>
 #include <KShell>
 #include <KLocalizedString>

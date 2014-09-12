@@ -21,7 +21,6 @@
 #include "templatedeclaration.h"
 
 #include <QThreadStorage>
-#include <kglobal.h>
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/declarationdata.h>

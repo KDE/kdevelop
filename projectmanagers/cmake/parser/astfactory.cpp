@@ -21,7 +21,6 @@
 #include "astfactory.h"
 #include <map>
 #include <QtCore/QString>
-#include <kglobal.h>
 #include "cmakeast.h"
 
 class AstFactory::Private

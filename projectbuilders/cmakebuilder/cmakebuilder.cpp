@@ -39,7 +39,6 @@
 #include <kio/deletejob.h>
 #include <kaboutdata.h>
 #include <kmessagebox.h>
-#include <kglobal.h>
 #include <KLocalizedString>
 #include <kdebug.h>
 #include <KProcess>

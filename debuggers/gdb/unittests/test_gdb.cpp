@@ -27,7 +27,6 @@
 #include <QDir>
 #include <QTemporaryFile>
 
-#include <KGlobal>
 #include <KSharedConfig>
 #include <KDebug>
 #include <KProcess>

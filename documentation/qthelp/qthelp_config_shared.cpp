@@ -21,7 +21,6 @@
 #include "qthelp_config_shared.h"
 
 #include <KSharedConfig>
-#include <KGlobal>
 #include <KConfigGroup>
 
 void qtHelpReadConfig(QStringList& iconList, QStringList& nameList,

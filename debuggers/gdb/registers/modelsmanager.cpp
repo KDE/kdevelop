@@ -25,7 +25,6 @@
 #include <QSharedPointer>
 
 #include <KDebug>
-#include <KGlobal>
 #include <KSharedPtr>
 #include <KSharedConfig>
 

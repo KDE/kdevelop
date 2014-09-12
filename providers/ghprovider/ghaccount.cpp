@@ -19,7 +19,7 @@
 
 
 #include <KConfig>
-#include <KGlobal>
+#include <KSharedConfig>
 
 #include <ghaccount.h>
 #include <ghresource.h>

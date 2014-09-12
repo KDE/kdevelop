@@ -22,7 +22,6 @@
 #include <KLocalizedString>
 #include <KProcess>
 #include <KConfigGroup>
-#include <KGlobal>
 #include <KShell>
 
 #include <outputview/outputmodel.h>
