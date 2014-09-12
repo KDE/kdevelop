@@ -19,6 +19,7 @@
 #include "dumptypes.h"
 
 #include <language/duchain/types/alltypes.h>
+#include <kdebug.h>
 
 using namespace KDevelop;
 
