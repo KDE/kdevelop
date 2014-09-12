@@ -30,8 +30,6 @@
 #include <QUrl>
 #include <KDebug>
 
-#include <KIO/DeleteJob>
-
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
 #include "../gitplugin.h"
@@ -452,13 +450,12 @@ void GitInitTest::testRemoveFolderContainingUnversionedFiles()
 
 void GitInitTest::removeTempDirs()
 {
-    if (QFileInfo(gitTest_BaseDir).exists())
-        if (!(KIO::del(QUrl::fromLocalFile(gitTest_BaseDir)))->exec())
-            qDebug() << "KIO::del(" << gitTest_BaseDir << ") returned false";
-
-    if (QFileInfo(gitTest_BaseDir2).exists())
-        if (!(KIO::del(QUrl::fromLocalFile(gitTest_BaseDir2)))->exec())
-            qDebug() << "KIO::del(" << gitTest_BaseDir2 << ") returned false";
+    for (const auto& dirPath : {gitTest_BaseDir, gitTest_BaseDir2}) {
+        QDir dir(dirPath);
+        if (dir.exists() && !dir.removeRecursively()) {
+            qDebug() << "QDir::removeRecursively(" << dirPath << ") returned false";
+        }
+    }
 }
 
 QTEST_MAIN(GitInitTest)
