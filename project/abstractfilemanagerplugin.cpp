@@ -36,7 +36,6 @@
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
-#include <interfaces/iruncontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <serialization/indexedstring.h>
 
@@ -126,8 +125,6 @@ KIO::Job* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolde
     FileManagerListJob* listJob = new FileManagerListJob( item, forceRecursion );
     m_projectJobs[ item->project() ] << listJob;
     kDebug(9517) << "adding job" << listJob << item << item->path() << "for project" << item->project();
-
-    ICore::self()->runController()->registerJob( listJob );
 
     q->connect( listJob, SIGNAL(finished(KJob*)),
                 q, SLOT(jobFinished(KJob*)) );
