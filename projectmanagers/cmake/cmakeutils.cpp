@@ -263,6 +263,18 @@ KUrl currentBuildDir( KDevelop::IProject* project )
     return readProjectParameter( project, Config::Specific::buildDirPathKey, QString() );
 }
 
+KUrl commandsFile(KDevelop::IProject* project)
+{
+    auto currentBuildDir = CMake::currentBuildDir(project);
+    if (currentBuildDir.isEmpty()) {
+        return {};
+    }
+
+    KUrl commandsFile(currentBuildDir);
+    commandsFile.addPath("compile_commands.json");
+    return commandsFile;
+}
+
 QString currentBuildType( KDevelop::IProject* project )
 {
     return readProjectParameter( project, Config::Specific::cmakeBuildTypeKey, "Release" );
