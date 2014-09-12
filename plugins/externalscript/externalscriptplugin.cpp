@@ -252,7 +252,8 @@ void ExternalScriptPlugin::execute( ExternalScriptItem* item, const KUrl& url ) 
 
 void ExternalScriptPlugin::execute(ExternalScriptItem* item) const
 {
-  execute( item, KDevelop::ICore::self()->documentController()->activeDocument()->url() );
+  auto document = KDevelop::ICore::self()->documentController()->activeDocument();
+  execute( item, document ? document->url() : KUrl() );
 }
 
 bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDirectory ) const

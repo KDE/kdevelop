@@ -328,8 +328,9 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
 
     languages = languagesForMimetype(mimeType.name());
 
-    if(!extension.isEmpty())
+    if(!extension.isEmpty()) {
         d->fileExtensionCache.insert(extension, languages);
+    }
 
     return languages;
 }
