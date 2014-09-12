@@ -219,12 +219,12 @@ void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*wind
     QAction* renameDeclarationAction = actions.addAction("code_rename_declaration");
     renameDeclarationAction->setText( i18n("Rename Declaration") );
     renameDeclarationAction->setIcon(QIcon::fromTheme("edit-rename"));
-    renameDeclarationAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_R);
+    actions.setDefaultShortcut(renameDeclarationAction, Qt::CTRL | Qt::ALT | Qt::Key_R);
     connect(renameDeclarationAction, SIGNAL(triggered(bool)), m_refactoring, SLOT(executeRenameAction()));
 
     QAction* moveIntoSourceAction = actions.addAction("code_move_definition");
     moveIntoSourceAction->setText( i18n("Move into Source") );
-    moveIntoSourceAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_S);
+    actions.setDefaultShortcut(moveIntoSourceAction, Qt::CTRL | Qt::ALT | Qt::Key_S);
     connect(moveIntoSourceAction, SIGNAL(triggered(bool)), m_refactoring, SLOT(executeMoveIntoSourceAction()));
 }
 
