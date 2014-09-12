@@ -18,7 +18,7 @@
  */
 
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KAboutData>
 #include <KPluginFactory>
 

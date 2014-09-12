@@ -18,7 +18,7 @@
 
 #include "definesmodel.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 DefinesModel::DefinesModel( QObject* parent )
     : QAbstractTableModel( parent )

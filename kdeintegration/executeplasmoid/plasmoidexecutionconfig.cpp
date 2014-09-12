@@ -20,7 +20,7 @@
 #include "plasmoidexecutionconfig.h"
 #include "plasmoidexecutionjob.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/icore.h>

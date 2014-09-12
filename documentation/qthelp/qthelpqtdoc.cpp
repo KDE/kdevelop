@@ -24,7 +24,7 @@
 #include <QDir>
 #include <QIcon>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KStandardDirs>
 #include <KProcess>
 #include <KDebug>

@@ -20,7 +20,7 @@
 
 #include <QLabel>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KMessageBox>
 #include <KPasswordDialog>
 

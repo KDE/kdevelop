@@ -35,7 +35,7 @@
 #include <language/duchain/problem.h>
 
 #include <KProcess>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KDebug>
 #include <QHash>
 #include <QQueue>

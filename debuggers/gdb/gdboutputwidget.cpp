@@ -26,7 +26,7 @@
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmenu.h>
 #include <kcolorscheme.h>
 

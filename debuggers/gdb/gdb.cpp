@@ -28,7 +28,7 @@
 #include <KGlobal>
 #include <KMessageBox>
 #include <KShell>
-#include <KLocale>
+#include <KLocalizedString>
 #include <kdebug.h>
 
 #include <QApplication>

@@ -21,7 +21,7 @@
 #include "cmakecachemodel.h"
 #include <QFile>
 #include <KDebug>
-#include <KLocale>
+#include <KLocalizedString>
 
 #include "cmakecachereader.h"
 

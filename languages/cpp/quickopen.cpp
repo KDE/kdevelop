@@ -25,7 +25,7 @@
 #include <QIcon>
 #include <QSet>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kiconloader.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>

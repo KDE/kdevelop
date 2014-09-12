@@ -26,7 +26,7 @@
 #include <QFileInfo>
 
 #include <KDebug>
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>

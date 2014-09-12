@@ -20,7 +20,7 @@
 
 #include "cmakehelpdocumentation.h"
 #include <QTreeView>
-#include <KLocale>
+#include <KLocalizedString>
 #include <QDebug>
 #include "cmakedoc.h"
 #include "icmakedocumentation.h"

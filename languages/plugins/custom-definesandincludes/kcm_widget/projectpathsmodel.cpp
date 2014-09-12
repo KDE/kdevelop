@@ -18,7 +18,7 @@
 
 #include "projectpathsmodel.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <interfaces/iproject.h>
 #include <serialization/indexedstring.h>
 #include <util/path.h>

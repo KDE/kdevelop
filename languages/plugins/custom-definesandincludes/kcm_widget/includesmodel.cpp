@@ -18,7 +18,7 @@
 
 #include "includesmodel.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 IncludesModel::IncludesModel( QObject* parent )
     : QAbstractListModel( parent )

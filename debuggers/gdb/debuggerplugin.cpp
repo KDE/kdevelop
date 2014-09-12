@@ -39,7 +39,7 @@
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
 #include <kparts/part.h>

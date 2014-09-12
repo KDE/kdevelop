@@ -20,7 +20,7 @@
 #include <kapplication.h>
 #include <k4aboutdata.h>
 #include <kcmdlineargs.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdialog.h>
 #include <ktempdir.h>
 #include <qfile.h>

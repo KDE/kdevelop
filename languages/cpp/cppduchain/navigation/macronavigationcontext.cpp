@@ -20,7 +20,7 @@
 
 #include <QTextDocument>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <KTextEditor/Editor>
 #include <KTextEditor/Document>

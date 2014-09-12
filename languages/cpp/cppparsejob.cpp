@@ -40,7 +40,7 @@
 #include <QReadLocker>
 
 #include <KDebug>
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <ThreadWeaver/Thread>
 

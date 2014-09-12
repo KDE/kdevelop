@@ -26,7 +26,7 @@
 #include <QTime>
 
 #include <kdebug.h>
-#include <klocale.h> 
+#include <KLocalizedString> 
 
 #include <language/duchain/problem.h>
 #include <serialization/indexedstring.h>

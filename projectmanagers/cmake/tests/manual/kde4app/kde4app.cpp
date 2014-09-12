@@ -18,7 +18,7 @@
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 
-#include <KDE/KLocale>
+#include <KLocalizedString>
 
 kde4app::kde4app()
     : KXmlGuiWindow(),

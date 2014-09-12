@@ -23,7 +23,7 @@
 
 #include "compilersmodel.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <QVariant>
 
 #include "../compilerprovider/icompilerprovider.h"

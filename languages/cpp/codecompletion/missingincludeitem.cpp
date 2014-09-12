@@ -19,7 +19,7 @@
 #include "missingincludeitem.h"
 
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>

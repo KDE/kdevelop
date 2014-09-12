@@ -65,7 +65,7 @@
 #include <QProcess>
 #include <QTemporaryFile>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kdebug.h>

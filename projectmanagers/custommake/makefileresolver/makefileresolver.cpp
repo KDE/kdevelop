@@ -55,7 +55,7 @@
 
 #include <kurl.h>
 #include <kprocess.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <serialization/indexedstring.h>
 #include <util/pushvalue.h>

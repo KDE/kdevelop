@@ -24,7 +24,7 @@
 #include <QProgressBar>
 #include <QLabel>
 #include <QVBoxLayout>
-#include <KLocale>
+#include <KLocalizedString>
 #include <QHeaderView>
 #include <QTreeView>
 

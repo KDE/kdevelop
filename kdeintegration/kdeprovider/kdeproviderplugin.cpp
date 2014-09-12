@@ -24,7 +24,7 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kaboutdata.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include "kdeproviderwidget.h"
 
 using namespace KDevelop;

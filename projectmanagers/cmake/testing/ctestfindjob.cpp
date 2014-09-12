@@ -28,7 +28,7 @@
 
 #include <QFileInfo>
 #include <KProcess>
-#include <KLocale>
+#include <KLocalizedString>
 
 CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)
 : KJob(parent)

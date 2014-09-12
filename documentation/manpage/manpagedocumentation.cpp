@@ -19,7 +19,7 @@
 */
 
 #include <QLabel>
-#include <KLocale>
+#include <KLocalizedString>
 #include <QTreeView>
 #include <QHeaderView>
 #include <QProgressBar>

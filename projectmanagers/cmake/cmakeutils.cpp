@@ -26,7 +26,7 @@
 #include <QTemporaryDir>
 
 #include <kconfig.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kconfiggroup.h>
 #include <kurl.h>
 #include <kparts/mainwindow.h>

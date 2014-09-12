@@ -2,7 +2,7 @@
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <KDE/KLocale>
+#include <KLocalizedString>
 
 static const char description[] =
     I18N_NOOP("A KDE 4 Application");

@@ -40,7 +40,7 @@
 #include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <KProcess>
 #include <kjob.h>

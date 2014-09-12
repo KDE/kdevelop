@@ -19,7 +19,7 @@
 
 #include "custombuildjob.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KProcess>
 #include <KConfigGroup>
 #include <KGlobal>

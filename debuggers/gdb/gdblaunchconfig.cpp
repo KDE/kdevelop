@@ -25,7 +25,7 @@
 #include "gdblaunchconfig.h"
 
 #include <kconfiggroup.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kshell.h>
 #include <kmessagebox.h>
 #include <kparts/mainwindow.h>

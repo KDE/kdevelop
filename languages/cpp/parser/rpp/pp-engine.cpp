@@ -26,7 +26,7 @@
 #include <QTextStream>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <language/duchain/duchain.h>
 

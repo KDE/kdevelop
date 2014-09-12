@@ -6,7 +6,7 @@
 #include "kde4appview.h"
 #include "settings.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QtGui/QLabel>
 
 kde4appView::kde4appView(QWidget *)

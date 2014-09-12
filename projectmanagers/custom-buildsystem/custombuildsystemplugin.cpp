@@ -20,7 +20,7 @@
 #include "custombuildsystemplugin.h"
 
 #include <KPluginFactory>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KAboutData>
 #include <KComponentData>
 

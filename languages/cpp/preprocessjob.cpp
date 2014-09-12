@@ -29,7 +29,7 @@
 #include <QReadWriteLock>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/codegen/coderepresentation.h>

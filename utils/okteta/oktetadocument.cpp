@@ -71,7 +71,7 @@
 #include <sublime/controller.h>
 // KDE
 #include <KMessageBox>
-#include <KLocale>
+#include <KLocalizedString>
 // Qt
 #include <QApplication>
 #include <QMimeDatabase>

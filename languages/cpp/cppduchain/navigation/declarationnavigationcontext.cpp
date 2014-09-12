@@ -20,7 +20,7 @@
 
 #include <QTextDocument>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/namespacealiasdeclaration.h>

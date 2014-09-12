@@ -41,7 +41,7 @@
 #include <QSplitter>
 #include <QHeaderView>
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <util/autoorientedsplitter.h>
 

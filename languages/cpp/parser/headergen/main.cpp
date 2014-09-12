@@ -31,7 +31,7 @@
 #include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kurl.h>
 
 #include "parser.h"
