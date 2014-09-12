@@ -34,7 +34,7 @@
 
 #include <KDebug>
 #include <KHBox>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KStandardGuiItem>
 
 #include <QApplication>

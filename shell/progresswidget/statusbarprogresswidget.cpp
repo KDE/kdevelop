@@ -38,7 +38,7 @@
 #include "progressdialog.h"
 #include "progressmanager.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KIconLoader>
 #include <KDebug>
 

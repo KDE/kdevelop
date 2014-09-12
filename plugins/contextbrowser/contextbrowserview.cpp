@@ -32,7 +32,7 @@
 #include <QIcon>
 
 #include <KTextBrowser>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KComboBox>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>

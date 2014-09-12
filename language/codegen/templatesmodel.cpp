@@ -27,7 +27,7 @@
 #include <KComponentData>
 #include <KDebug>
 #include <KConfigGroup>
-#include <KLocale>
+#include <KLocalizedString>
 #include <QMimeType>
 #include <QMimeDatabase>
 #include <KUrl>

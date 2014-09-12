@@ -24,7 +24,7 @@
 
 #include <QIcon>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <QMimeDatabase>
 #include <KDebug>
 

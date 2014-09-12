@@ -13,7 +13,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDateTime>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KUrl>
 #include <KMessageBox>
 #include <kshell.h>

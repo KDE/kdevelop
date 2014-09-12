@@ -18,7 +18,8 @@
 */
 #include "isourceformatter.h"
 
-#include <KLocale>
+#include <KLocalizedString>
+#include <QVariant>
 
 namespace KDevelop
 {

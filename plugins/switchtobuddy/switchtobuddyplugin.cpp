@@ -21,7 +21,7 @@
 
 #include "switchtobuddyplugin.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KAboutData>

@@ -25,7 +25,7 @@
 #include <QMenu>
 #include <QAction>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 namespace KDevelop
 {

@@ -34,7 +34,7 @@
 #include <QStandardItemModel>
 
 #include <KDebug>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KUrl>
 
 #include <interfaces/iplugin.h>

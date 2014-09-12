@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 #include <KActionMenu>
 #include <KActionCollection>
 #include <KMessageBox>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KDebug>
 #include <KColorScheme>
 #include <kdialogjobuidelegate.h>

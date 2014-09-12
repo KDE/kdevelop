@@ -31,7 +31,7 @@
 
 #include <KLineEdit>
 #include <KDebug>
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationprovider.h>

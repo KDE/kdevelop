@@ -10,7 +10,7 @@
 
 #include "cvsmainview.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KDebug>
 
 #include "cvsplugin.h"

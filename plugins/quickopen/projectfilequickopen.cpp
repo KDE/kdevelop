@@ -22,7 +22,7 @@
 #include <QTextBrowser>
 #include <QApplication>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/idocumentcontroller.h>

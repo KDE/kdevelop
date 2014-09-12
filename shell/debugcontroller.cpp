@@ -26,7 +26,7 @@
 
 #include <QtCore/QMetaEnum>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KDebug>
 #include <KActionCollection>
 #include <KAction>

@@ -26,7 +26,7 @@
 #include <QFont>
 #include <QApplication>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KDebug>
 #include <KTextEditor/TextHintInterface>
 #include <KTextEditor/Document>

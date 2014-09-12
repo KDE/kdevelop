@@ -21,7 +21,7 @@
 #include <QMimeDatabase>
 
 #include <KMessageBox>
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <sublime/area.h>
 #include <sublime/view.h>

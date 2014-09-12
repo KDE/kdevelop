@@ -24,7 +24,7 @@
 #include "progressmanager.h"
 
 #include <KDebug>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KGlobal>
 
 namespace KDevelop {

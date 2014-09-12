@@ -21,7 +21,7 @@
 
 #include "breakpoint.h"
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KConfigGroup>
 #include <KDebug>
 

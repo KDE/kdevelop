@@ -24,7 +24,7 @@
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KAboutData>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KDialog>
 #include <KMessageBox>
 #include <KDebug>

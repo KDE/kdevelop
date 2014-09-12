@@ -25,7 +25,7 @@
 #include <QMenu>
 
 #include <KPluginFactory>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KAboutData>
 #include <KStandardDirs>
 

@@ -36,7 +36,7 @@
 #include <QSignalMapper>
 #include <QDesktopWidget>
 #include <KTextEditor/View>
-#include <KLocale>
+#include <KLocalizedString>
 #include <QPainter>
 
 #include "variablecollection.h"

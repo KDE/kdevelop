@@ -33,7 +33,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <QPointer>
-#include <KLocale>
+#include <KLocalizedString>
 
 namespace KDevelop
 {

@@ -23,7 +23,7 @@
 #include <QAction>
 #include <QVariantList>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KAboutData>

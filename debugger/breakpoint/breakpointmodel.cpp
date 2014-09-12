@@ -27,7 +27,7 @@
 
 #include <KParts/PartManager>
 #include <KDebug>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <ktexteditor/movinginterface.h>
 

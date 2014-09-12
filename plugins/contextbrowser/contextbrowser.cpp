@@ -34,7 +34,7 @@
 #include <QMenu>
 #include <qalgorithms.h>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <KActionCollection>
 #include <KAboutData>
 #include <KDebug>

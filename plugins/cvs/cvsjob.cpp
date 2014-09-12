@@ -16,7 +16,7 @@
 
 #include <QStringList>
 #include <KDebug>
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <interfaces/iplugin.h>
 #include <QDir>

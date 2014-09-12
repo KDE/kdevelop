@@ -17,7 +17,7 @@
 
 #include <KTextEdit>
 #include <KComboBox>
-#include <KLocale>
+#include <KLocalizedString>
 #include <KDebug>
 #include <KColorScheme>
 #include <KMessageBox>

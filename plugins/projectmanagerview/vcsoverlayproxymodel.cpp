@@ -28,7 +28,7 @@
 #include <project/projectmodel.h>
 #include <util/path.h>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 #include <QDebug>
 

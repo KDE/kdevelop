@@ -23,7 +23,7 @@
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 #include <KDebug>
-#include <KLocale>
+#include <KLocalizedString>
 #include "ui_reviewpatch.h"
 #include "reviewboardjobs.h"
 
