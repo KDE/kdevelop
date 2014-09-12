@@ -148,6 +148,7 @@ public Q_SLOTS:
 
     ///Reverts all requests that were made for the given notification-target.
     ///priorities and requested features will be reverted as well.
+    ///When @p notifyWhenReady is set to a nullptr, all requests will be reverted.
     void revertAllRequests(QObject* notifyWhenReady);
 
     /**

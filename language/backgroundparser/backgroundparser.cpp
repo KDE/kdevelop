@@ -522,7 +522,7 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
         d->m_documentsForPriority[it.value().priority()].remove(it.key());
 
         foreach ( const BackgroundParserPrivate::DocumentParseTarget& target, (*it).targets ) {
-            if ( target.notifyWhenReady.data() == notifyWhenReady ) {
+            if ( notifyWhenReady && target.notifyWhenReady.data() == notifyWhenReady ) {
                 (*it).targets.remove(target);
             }
         }
