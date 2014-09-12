@@ -65,7 +65,7 @@ QUrl findExecutable(const QString& name)
 
 QString findSourceFile(const QString& name)
 {
-    QFileInfo info(QFileInfo(__FILE__).dir().path() + '/' + name);
+    QFileInfo info(QFileInfo(__FILE__).dir().absoluteFilePath(name));
     Q_ASSERT(info.exists());
     return info.canonicalFilePath();
 }
@@ -343,7 +343,7 @@ void GdbTest::testPendingBreakpoint()
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 28);
 
-    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("/gdbtest.cpp")), 10);
+    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(findSourceFile("test_gdb.cpp")), 10);
     QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::NotStartedState);
 
     session->startProgram(&cfg, m_iface);
