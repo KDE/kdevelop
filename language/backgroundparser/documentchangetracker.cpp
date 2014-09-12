@@ -23,6 +23,7 @@
 
 #include <QMutex>
 #include <QMutexLocker>
+#include <qregularexpression.h>
 
 #include <kdebug.h>
 #include <ktexteditor/document.h>
@@ -177,18 +178,11 @@ void DocumentChangeTracker::textChanged( Document* document, Range /*oldRange*/,
 
     QString newText = document->text(newRange);
 
-    QString oldTextWithoutWhitespace = oldText;
-    oldTextWithoutWhitespace.remove(whiteSpaceRegExp);
+    QRegularExpression spacesMatch("^\\s*$");
+    bool oldTextOnlyWhitespace = spacesMatch.match(oldText).hasMatch();
+    bool newTextOnlyWhitespace = spacesMatch.match(newText).hasMatch();
 
-    QString newTextWithoutWhitespace = newText;
-    newTextWithoutWhitespace.remove(whiteSpaceRegExp);
-
-    if(oldTextWithoutWhitespace.isEmpty() && newTextWithoutWhitespace.isEmpty() && checkMergeTokens(newRange, oldText, newText))
-    {
-        // Only whitespace was changed, no update is required
-    }else{
-        m_needUpdate = true;
-    }
+    m_needUpdate = !oldTextOnlyWhitespace || !newTextOnlyWhitespace || !checkMergeTokens(newRange, oldText, newText);
 
     #ifdef ALWAYS_UPDATE
     m_needUpdate = true;
