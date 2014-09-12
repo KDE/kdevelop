@@ -24,7 +24,6 @@ Boston, MA 02110-1301, USA.
 #include <util/processlinemaker.h>
 #include <KDebug>
 #include <KProcess>
-#include <KGlobal>
 #include <KLocalizedString>
 #include <KShell>
 #include <QFileInfo>

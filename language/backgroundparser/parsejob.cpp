@@ -31,6 +31,7 @@
 
 #include <kdebug.h>
 #include <KLocalizedString>
+#include <KFormat>
 #include <ktexteditor/movinginterface.h>
 
 #include "backgroundparser.h"
@@ -274,13 +275,15 @@ KDevelop::ProblemPointer ParseJob::readContents()
 
         static const int maximumFileSize = 5 * 1024 * 1024; // 5 MB
         if (fileInfo.size() > maximumFileSize) {
+            KFormat f;
+
             KDevelop::ProblemPointer p(new Problem());
             p->setSource(KDevelop::ProblemData::Disk);
             p->setDescription(i18nc("%1: filename", "Skipped file that is too large: '%1'", localFile ));
             p->setExplanation(i18nc("%1: file size, %2: limit file size",
                                     "The file is %1 and exceeds the limit of %2.",
-                                    KGlobal::locale()->formatByteSize(fileInfo.size()),
-                                    KGlobal::locale()->formatByteSize(maximumFileSize)));
+                                    f.formatByteSize(fileInfo.size()),
+                                    f.formatByteSize(maximumFileSize)));
             p->setFinalLocation(DocumentRange(document(), KTextEditor::Range::invalid()));
             kWarning( 9007 ) << p->description() << p->explanation();
             return p;

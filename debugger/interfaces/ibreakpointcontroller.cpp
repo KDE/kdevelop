@@ -27,7 +27,6 @@
 #include <KDebug>          // remove later
 #include <KNotification>
 #include <KLocalizedString>
-#include <KGlobal>
 #include <KParts/MainWindow>
 
 #include "idebugsession.h"

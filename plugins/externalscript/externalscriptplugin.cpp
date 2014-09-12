@@ -45,6 +45,7 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KProcess>
+#include <KLocalizedString>
 
 #include <QAction>
 #include <QStandardItemModel>

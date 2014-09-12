@@ -33,8 +33,6 @@
 #include <QtCore/QWaitCondition>
 #include <QtCore/QMutex>
 
-#include <KGlobal>
-
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguage.h>
@@ -1099,7 +1097,7 @@ private:
   ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest> m_environmentInfo;
 };
 
-K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
+Q_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
 
 
 DUChain::DUChain()

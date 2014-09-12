@@ -24,7 +24,6 @@
 #include <kconfiggroup.h>
 #include <kfiledialog.h>
 #include <kpushbutton.h>
-#include <kglobal.h>
 #include <kiconloader.h>
 #include <KLocalizedString>
 #include <kconfig.h>

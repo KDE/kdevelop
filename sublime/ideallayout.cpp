@@ -25,7 +25,6 @@
 
 #include "kdebug.h"
 #include <KConfigGroup>
-#include <KGlobal>
 #include <KConfig>
 
 using namespace Sublime;

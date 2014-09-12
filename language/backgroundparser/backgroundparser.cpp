@@ -33,7 +33,6 @@
 #include <QPointer>
 
 #include <kdebug.h>
-#include <kglobal.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <KLocalizedString>

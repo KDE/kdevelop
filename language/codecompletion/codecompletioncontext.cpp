@@ -21,6 +21,7 @@
 #include <util/pushvalue.h>
 #include "codecompletionitem.h"
 #include <language/duchain/ducontext.h>
+#include <kdebug.h>
 
 using namespace KDevelop;
 

@@ -26,7 +26,6 @@
 #include <QPainter>
 
 #include <KLocalizedString>
-#include <kglobal.h>
 #include <ktitlewidget.h>
 #include <kcomponentdata.h>
 #include <kaboutdata.h>

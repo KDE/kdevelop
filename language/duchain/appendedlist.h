@@ -22,8 +22,7 @@
 #include <QtCore/QMutex>
 #include <QtCore/QVector>
 #include <QtCore/QStack>
-#include <kglobal.h>
-#include <kdebug.h>
+#include <QString>
 #include <util/kdevvarlengtharray.h>
 #include <iostream>
 #include <time.h>
@@ -210,7 +209,7 @@ class TemporaryDataManager {
 
 #define DEFINE_LIST_MEMBER_HASH(container, member, type) \
     typedef KDevelop::TemporaryDataManager<KDevVarLengthArray<type, 10> > temporaryHash ## container ## member ## Type; \
-    K_GLOBAL_STATIC_WITH_ARGS(temporaryHash ## container ## member ## Type, temporaryHash ## container ## member ## Static, ( #container "::" #member )) \
+    Q_GLOBAL_STATIC_WITH_ARGS(temporaryHash ## container ## member ## Type, temporaryHash ## container ## member ## Static, ( #container "::" #member )) \
     temporaryHash ## container ## member ## Type& temporaryHash ## container ## member() { \
         return *temporaryHash ## container ## member ## Static; \
     }

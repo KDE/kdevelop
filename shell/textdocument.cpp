@@ -35,6 +35,7 @@
 #include <kstandarddirs.h>
 #include <kxmlguifactory.h>
 #include <kdeversion.h>
+#include <kdebug.h>
 #include <KComponentData>
 
 #include <ktexteditor/view.h>
@@ -766,7 +767,7 @@ KTextEditor::View *KDevelop::TextView::textView() const
 QString KDevelop::TextView::viewStatus() const
 {
     const KTextEditor::Cursor pos = d->view ? d->view->cursorPosition() : KTextEditor::Cursor::invalid();
-    return i18n(" Line: %1 Col: %2 ", KGlobal::locale()->formatNumber(pos.line() + 1, 0), KGlobal::locale()->formatNumber(pos.column() + 1, 0));
+    return i18n(" Line: %1 Col: %2 ", pos.line() + 1, pos.column() + 1);
 }
 
 void KDevelop::TextViewPrivate::sendStatusChanged()

@@ -25,6 +25,8 @@
 #include <KUrl>
 #include <KAction>
 #include <KAboutData>
+#include <KLocalizedString>
+#include <KDebug>
 
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>

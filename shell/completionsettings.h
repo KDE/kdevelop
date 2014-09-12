@@ -21,9 +21,8 @@
 #define KDEVPLATFORM_COMPLETIONSETTINGS_H
 
 #include <interfaces/icompletionsettings.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>  
-#include <kglobal.h>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 namespace KDevelop
 {

@@ -20,7 +20,6 @@ Boston, MA 02110-1301, USA.
 #include "environmentgrouplist.h"
 #include "environmentselectionmodel.h"
 #include <ksettings/dispatcher.h>
-#include <kglobal.h>
 #include <interfaces/icore.h>
 #include <kcomponentdata.h>
 #include <QBoxLayout>

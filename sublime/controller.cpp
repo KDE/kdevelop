@@ -25,7 +25,6 @@
 #include <QApplication>
 
 #include <kdebug.h>
-#include <KGlobal>
 #include <KSharedConfig>
 
 #include "area.h"

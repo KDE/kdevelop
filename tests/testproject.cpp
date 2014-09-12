@@ -20,7 +20,6 @@
 
 #include "testproject.h"
 
-#include <KGlobal>
 #include <QDebug>
 
 #include <project/projectmodel.h>

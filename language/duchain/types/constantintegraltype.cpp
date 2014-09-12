@@ -24,6 +24,8 @@
 #include "typesystemdata.h"
 #include "typeregister.h"
 
+#include <QDebug>
+
 namespace KDevelop {
 
 REGISTER_TYPE(ConstantIntegralType);
@@ -150,7 +152,7 @@ template<>
 KDEVPLATFORMLANGUAGE_EXPORT
 void ConstantIntegralType::setValueInternal<qint64>(qint64 value) {
   if((modifiers() & UnsignedModifier)) {
-    kDebug() << "setValue(signed) called on unsigned type";
+    qWarning() << "setValue(signed) called on unsigned type";
   }
   d_func_dynamic()->m_value = value;
 }
@@ -159,7 +161,7 @@ template<>
 KDEVPLATFORMLANGUAGE_EXPORT
 void ConstantIntegralType::setValueInternal<quint64>(quint64 value) {
   if(!(modifiers() & UnsignedModifier)) {
-    kDebug() << "setValue(unsigned) called on not unsigned type";
+    qWarning() << "setValue(unsigned) called on not unsigned type";
   }
   d_func_dynamic()->m_value = (qint64)value;
 }
@@ -168,7 +170,7 @@ template<>
 KDEVPLATFORMLANGUAGE_EXPORT
 void ConstantIntegralType::setValueInternal<float>(float value) {
   if(dataType() != TypeFloat) {
-    kDebug() << "setValue(float) called on non-float type";
+    qWarning() << "setValue(float) called on non-float type";
   }
   memcpy(&d_func_dynamic()->m_value, &value, sizeof(float));
 }
@@ -177,7 +179,7 @@ template<>
 KDEVPLATFORMLANGUAGE_EXPORT
 void ConstantIntegralType::setValueInternal<double>(double value) {
   if(dataType() != TypeDouble) {
-    kDebug() << "setValue(double) called on non-double type";
+    qWarning() << "setValue(double) called on non-double type";
   }
   memcpy(&d_func_dynamic()->m_value, &value, sizeof(double));
 }

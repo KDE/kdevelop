@@ -22,10 +22,10 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <kglobal.h>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kconfiggroup.h>
+#include <KLocalizedString>
 
 #include "../core.h"
 #include "../sessioncontroller.h"

@@ -19,12 +19,12 @@
 #include <kurlcompletion.h>
 #include <kurlcombobox.h>
 #include <kurlpixmapprovider.h>
-#include <kglobal.h>
 #include <kfileitem.h>
 #include <ksharedconfig.h>
 #include <kdebug.h>
 #include <kplugininfo.h>
 #include <kfilewidget.h>
+#include <KLocalizedString>
 
 #include "shellextension.h"
 #include "core.h"

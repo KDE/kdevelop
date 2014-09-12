@@ -29,10 +29,10 @@
 #include <QBrush>
 #include <QPen>
 #include <QHash>
+#include <QLocale>
 
 #include <kurl.h>
 #include <KLocalizedString>
-#include <kglobal.h>
 #include <kdebug.h>
 
 #include <interfaces/icore.h>
@@ -126,7 +126,7 @@ QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
     } else if( role == Qt::ToolTipRole )
     {
         return QVariant( i18n("Author: %1\nDate: %2\nCommit Message: %3",
-                              aline.author(), KGlobal::locale()->formatDateTime( aline.date() ), aline.commitMessage() ) );
+                              aline.author(), QLocale().toString( aline.date() ), aline.commitMessage() ) );
     }
     return QVariant();
 }

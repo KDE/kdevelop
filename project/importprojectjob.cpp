@@ -26,8 +26,6 @@
 #include <QFutureWatcher>
 
 
-#include <kglobal.h>
-
 #include <interfaces/iprojectfilemanager.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>

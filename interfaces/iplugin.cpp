@@ -27,7 +27,6 @@
  Boston, MA 02110-1301, USA.
 */
 #include "iplugin.h"
-#include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kcomponentdata.h>
 #include <kiconloader.h>

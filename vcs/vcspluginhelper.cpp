@@ -17,7 +17,6 @@
 
 #include <kaboutdata.h>
 #include <KLocalizedString>
-#include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>

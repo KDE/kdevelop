@@ -26,8 +26,9 @@
 #include <qtextdocument.h>
 #include <qboxlayout.h>
 #include <interfaces/iassistant.h>
-#include <qmenu.h>
+#include <QMenu>
 #include <kaction.h>
+#include <kdebug.h>
 #include <util/richtextpushbutton.h>
 
 using namespace KDevelop;

@@ -24,10 +24,8 @@
 #include <QtCore/QTimer>
 
 #include <kdebug.h>
-#include <kglobal.h>
 #include <KLocalizedString>
 #include <KComponentData>
-#include <ksplashscreen.h>
 
 #include <language/duchain/duchain.h>
 

@@ -25,7 +25,6 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 
-#include <kglobal.h>
 #include <kcmdlineargs.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
@@ -297,7 +296,7 @@ public:
 
     static QString sessionBaseDirectory()
     {
-        return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ KGlobal::mainComponent().componentName() + "/sessions/";
+        return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ KComponentData::mainComponent().componentName() + "/sessions/";
     }
 
     QString ownSessionDirectory() const
