@@ -37,8 +37,11 @@
 #include <interfaces/iassistant.h>
 
 namespace KDevelop {
-    class KTextEditor::Cursor;
     class IndexedString;
+}
+
+namespace KTextEditor {
+    class Cursor;
 }
 
 struct ParamInfo
