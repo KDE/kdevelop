@@ -307,8 +307,8 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
             connect(container, SIGNAL(activateView(Sublime::View*)), d->m_mainWindow, SLOT(activateView(Sublime::View*)));
             connect(container, SIGNAL(tabDoubleClicked(Sublime::View*)),
                     d->m_mainWindow, SLOT(tabDoubleClicked(Sublime::View*)));
-            connect(container, SIGNAL(tabContextMenuRequested(Sublime::View*,KMenu*)),
-                    d->m_mainWindow, SLOT(tabContextMenuRequested(Sublime::View*,KMenu*)));
+            connect(container, SIGNAL(tabContextMenuRequested(Sublime::View*,QMenu*)),
+                    d->m_mainWindow, SLOT(tabContextMenuRequested(Sublime::View*,QMenu*)));
             connect(container, SIGNAL(tabToolTipRequested(Sublime::View*,Sublime::Container*,int)),
                     d->m_mainWindow, SLOT(tabToolTipRequested(Sublime::View*,Sublime::Container*,int)));
             connect(container, SIGNAL(requestClose(QWidget*)),

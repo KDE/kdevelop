@@ -233,10 +233,9 @@ Container::Container(QWidget *parent)
     connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
     connect(d->tabBar, SIGNAL(tabCloseRequested(int)), this, SLOT(requestClose(int)));
     connect(d->tabBar, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
-    connect(d->tabBar, SIGNAL(wheelDelta(int)), this, SLOT(wheelScroll(int)));
-    connect(d->tabBar, SIGNAL(contextMenu(int,QPoint)), this, SLOT(contextMenu(int,QPoint)));
-    connect(d->tabBar, SIGNAL(mouseMiddleClick(int)), this, SLOT(requestClose(int)));
-    connect(d->tabBar, SIGNAL(mouseDoubleClick(int)), this, SLOT(doubleClickTriggered(int)));
+    connect(d->tabBar, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
+    connect(d->tabBar, SIGNAL(mouseMiddleClick(int)), this, SLOT(requestClose(int))); //FIXME: should move this to the style, probably
+    connect(d->tabBar, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(doubleClickTriggered(int)));
     connect(d->documentListMenu, SIGNAL(triggered(QAction*)), this, SLOT(documentListActionTriggered(QAction*)));
 
     KConfigGroup group = KSharedConfig::openConfig()->group("UiSettings");
@@ -267,31 +266,6 @@ void Container::setLeftCornerWidget(QWidget* widget)
 Container::~Container()
 {
     delete d;
-}
-
-void Container::wheelScroll(int delta)
-{
-    int nextIndex = -1;
-    if( delta > 0 )
-    {
-        if( d->tabBar->currentIndex() == 0 )
-        {
-            nextIndex = d->tabBar->count() - 1;
-        } else
-        {
-            nextIndex = d->tabBar->currentIndex() -1;
-        }
-    } else 
-    {
-        if( d->tabBar->currentIndex() == d->tabBar->count() - 1 )
-        {
-            nextIndex = 0;
-        } else
-        {
-            nextIndex = d->tabBar->currentIndex() + 1;
-        }
-    }
-    widgetActivated( nextIndex );
 }
 
 void Container::requestClose(int idx)
@@ -504,8 +478,10 @@ void Container::tabMoved(int from, int to)
     d->viewForWidget[w]->notifyPositionChanged(to);
 }
 
-void Container::contextMenu( int currentTab, const QPoint& pos )
+void Container::contextMenu( const QPoint& pos )
 {
+    int currentTab = d->tabBar->tabAt(pos);
+
     QMenu menu;
 
     emit tabContextMenuRequested(viewForWidget(widget(currentTab)), &menu);

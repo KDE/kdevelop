@@ -89,8 +89,7 @@ private Q_SLOTS:
     void statusChanged(Sublime::View *view);
     void requestClose(int idx);
     void tabMoved(int from, int to);
-    void wheelScroll(int);
-    void contextMenu(int, const QPoint&);
+    void contextMenu(const QPoint&);
     void doubleClickTriggered(int tab);
     void documentListActionTriggered(QAction*);
 

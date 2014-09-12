@@ -252,7 +252,7 @@ protected:
 
     void updateChangedRange(KTextEditor::Range changed);
 public slots:
-    virtual void textInserted( KTextEditor::Document*,KTextEditor::Range );
+    virtual void textInserted( KTextEditor::Document* document, const KTextEditor::Cursor& c, const QString& text );
     virtual void textRemoved( KTextEditor::Document* document, KTextEditor::Range oldRange, QString oldText );
     virtual void textChanged( KTextEditor::Document* document, KTextEditor::Range oldRange, QString oldText, KTextEditor::Range newRange );
     void documentDestroyed( QObject* );

@@ -84,9 +84,9 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
         }
     }
 
-    connect(document, SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
+    connect(document, SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Cursor,QString)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Cursor,QString)));
     connect(document, SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)));
-    connect(document, SIGNAL(textChanged(KTextEditor::Document*,KTextEditor::Range,QString,KTextEditor::Range)), SLOT(textChanged(KTextEditor::Document*,KTextEditor::Range,QString,KTextEditor::Range)));
+    connect(document, SIGNAL(textChanged(KTextEditor::Document*)), SLOT(textChanged(KTextEditor::Document*,KTextEditor::Range,QString,KTextEditor::Range)));
     connect(document, SIGNAL(destroyed(QObject*)), SLOT(documentDestroyed(QObject*)));
     connect(document, SIGNAL(documentSavedOrUploaded(KTextEditor::Document*,bool)), SLOT(documentSavedOrUploaded(KTextEditor::Document*,bool)));
 
@@ -217,14 +217,20 @@ void DocumentChangeTracker::updateChangedRange( Range changed )
         ICore::self()->languageController()->backgroundParser()->addDocument(m_url, TopDUContext::AllDeclarationsContextsAndUses);
 }
 
-void DocumentChangeTracker::textInserted( Document* document, Range range )
+static Cursor cursorAdd(Cursor c, const QString& text)
 {
-    QString text = document->text(range);
+    c.setLine(c.line()+text.count('\n'));
+    c.setColumn(c.column()+(text.count() - qMin(0, text.lastIndexOf('\n'))));
+    return c;
+}
 
+void DocumentChangeTracker::textInserted( Document* document, const Cursor& c, const QString& text )
+{
     if ( m_whitespaceSensitivity == ILanguageSupport::Sensitive ) {
         m_needUpdate = true;
     }
 
+    Range range(c, cursorAdd(c, text));
     if ( ! m_needUpdate ) {
         QString textWithoutWhitespace = text;
         textWithoutWhitespace.remove(whiteSpaceRegExp);
