@@ -76,6 +76,7 @@ void TestCMakeManager::testIncludePaths()
     ProjectBaseItem* fooCppItem = items.first();
 
     Path::List includeDirs = project->buildSystemManager()->includeDirectories(fooCppItem);
+    QVERIFY(includeDirs.size() >= 3);
 
     Path buildDir(sourceDir, "build/");
     QVERIFY(includeDirs.contains(buildDir));
