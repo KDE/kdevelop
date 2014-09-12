@@ -19,6 +19,8 @@
 #ifndef KDEVPLATFORM_TYPEREGISTER_H
 #define KDEVPLATFORM_TYPEREGISTER_H
 
+#include <QHash>
+
 #include "abstracttype.h"
 #include "typesystemdata.h"
 
