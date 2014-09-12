@@ -75,9 +75,10 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
 
             if (!parentCtx) {
                 qDebug() << "waiting for..." << parentFile << document();
-                parentCtx = DUChain::self()->waitForUpdate(parentFile, TopDUContext::AllDeclarationsAndContexts);
+                //FIXME: Currently dead-locks
+                //parentCtx = DUChain::self()->waitForUpdate(parentFile, TopDUContext::AllDeclarationsAndContexts);
             }
-            Q_ASSERT(parentCtx);
+            //Q_ASSERT(parentCtx);
         }
     }
 
