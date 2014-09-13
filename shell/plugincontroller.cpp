@@ -215,12 +215,10 @@ public:
     void foreachEnabledPlugin(F func, const QString &extension = {}, const QVariantMap& constraints = {}, const QString &pluginName = {})
     {
         foreach (const auto& info, plugins) {
-            if( !isEnabled(info) ) {
-                continue;
-            }
             if ((pluginName.isEmpty() || info.pluginName() == pluginName)
                 && (extension.isEmpty() || info.property(KEY_Interfaces).toStringList().contains(extension))
-                && constraintsMatch(info, constraints))
+                && constraintsMatch(info, constraints)
+                && isEnabled(info))
             {
                 if (!func(info)) {
                     break;
@@ -236,10 +234,14 @@ public:
             return false;
         }
 
+        if (!isGlobalPlugin( info ) || !isUserSelectable( info )) {
+            return true;
+        }
+
         KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins );
         bool isEnabled = grp.readEntry( info.pluginName()+"Enabled", ShellExtension::getInstance()->defaultPlugins().isEmpty() || ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() ) );
         //kDebug() << "read config:" << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() );
-        return !isGlobalPlugin( info ) || !isUserSelectable( info ) || isEnabled;
+        return isEnabled;
     }
 
     Core *core;
