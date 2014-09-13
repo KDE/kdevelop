@@ -37,7 +37,7 @@ static QString currentBuildTypeKey = "Build Type";
 static QString currentInstallDirKey = "Install Directory";
 static QString currentExtraArgumentsKey = "Extra Arguments";
 static QString currentBuildDirectoryIndexKey = "Current Build Directory Index";
-static QString projectBuildDirectoryCount = "ProjectRootRelative";
+static QString projectBuildDirectoryCount = "Build Directory Count";
 static QString projectRootRelativeKey = "ProjectRootRelative";
 static QString projectBuildDirs = "BuildDirs";
 
