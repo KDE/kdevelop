@@ -138,9 +138,18 @@ KIO::Job* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolde
 void AbstractFileManagerPlugin::Private::jobFinished(KJob* job)
 {
     FileManagerListJob* gmlJob = qobject_cast<FileManagerListJob*>(job);
-    Q_ASSERT(gmlJob);
-    ifDebug(kDebug(9517) << job << gmlJob << gmlJob->item();)
-    m_projectJobs[ gmlJob->item()->project() ].removeOne( gmlJob );
+    if (gmlJob) {
+        ifDebug(kDebug(9517) << job << gmlJob << gmlJob->item();)
+        m_projectJobs[ gmlJob->item()->project() ].removeOne( gmlJob );
+    } else {
+        // job emitted its finished signal from its destructor
+        // ensure we don't keep a dangling point in our list
+        for (auto& jobs : m_projectJobs) {
+            if (jobs.removeOne(reinterpret_cast<FileManagerListJob*>(job))) {
+                break;
+            }
+        }
+    }
 }
 
 void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
