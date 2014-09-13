@@ -18,7 +18,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "test_benchhashes.h"
+#include "bench_hashes.h"
 
 #include <serialization/indexedstring.h>
 
@@ -66,13 +66,13 @@ inline void insertData(QStringHash& hash, const InputData& data)
   }
 }
 
-QTEST_GUILESS_MAIN(TestBenchHashes);
+QTEST_GUILESS_MAIN(BenchHashes);
 
 using namespace KDevelop;
 
 Q_DECLARE_METATYPE(InputData)
 
-void TestBenchHashes::initTestCase()
+void BenchHashes::initTestCase()
 {
   AutoTestShell::init();
   TestCore::initialize(Core::NoUi);
@@ -80,12 +80,12 @@ void TestBenchHashes::initTestCase()
   qRegisterMetaType<InputData>();
 }
 
-void TestBenchHashes::cleanupTestCase()
+void BenchHashes::cleanupTestCase()
 {
   TestCore::shutdown();
 }
 
-void TestBenchHashes::feedData()
+void BenchHashes::feedData()
 {
   QTest::addColumn<bool>("useStl");
   QTest::addColumn<InputData>("data");
@@ -104,7 +104,7 @@ void TestBenchHashes::feedData()
   }
 }
 
-void TestBenchHashes::insert()
+void BenchHashes::insert()
 {
   QFETCH(bool, useStl);
   QFETCH(InputData, data);
@@ -122,12 +122,12 @@ void TestBenchHashes::insert()
   }
 }
 
-void TestBenchHashes::insert_data()
+void BenchHashes::insert_data()
 {
   feedData();
 }
 
-void TestBenchHashes::find()
+void BenchHashes::find()
 {
   QFETCH(bool, useStl);
   QFETCH(InputData, data);
@@ -151,12 +151,12 @@ void TestBenchHashes::find()
   }
 }
 
-void TestBenchHashes::find_data()
+void BenchHashes::find_data()
 {
   feedData();
 }
 
-void TestBenchHashes::constFind()
+void BenchHashes::constFind()
 {
   QFETCH(bool, useStl);
   QFETCH(InputData, data);
@@ -181,12 +181,12 @@ void TestBenchHashes::constFind()
   }
 }
 
-void TestBenchHashes::constFind_data()
+void BenchHashes::constFind_data()
 {
   feedData();
 }
 
-void TestBenchHashes::remove()
+void BenchHashes::remove()
 {
   QFETCH(bool, useStl);
   QFETCH(InputData, data);
@@ -210,7 +210,7 @@ void TestBenchHashes::remove()
   }
 }
 
-void TestBenchHashes::remove_data()
+void BenchHashes::remove_data()
 {
   feedData();
 }
@@ -225,7 +225,7 @@ struct TypeRepoTestData
  * somewhat artificial benchmark to test speed impact if we'd ever change
  * the underlying data type of the TypeSystem / TypeRegister.
  */
-void TestBenchHashes::typeRepo()
+void BenchHashes::typeRepo()
 {
   QFETCH(int, type);
   if (type == 1 || type == 2) {
@@ -302,7 +302,7 @@ void TestBenchHashes::typeRepo()
   }
 }
 
-void TestBenchHashes::typeRepo_data()
+void BenchHashes::typeRepo_data()
 {
   QTest::addColumn<int>("type");
 

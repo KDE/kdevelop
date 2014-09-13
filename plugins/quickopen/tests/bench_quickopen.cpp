@@ -18,21 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "test_quickopenbench.h"
+#include "bench_quickopen.h"
 
 #include <QIcon>
 #include <QtTest/QTest>
 
-QTEST_MAIN(TestQuickOpenBench);
+QTEST_MAIN(BenchQuickOpen);
 
 using namespace KDevelop;
 
-TestQuickOpenBench::TestQuickOpenBench(QObject* parent)
+BenchQuickOpen::BenchQuickOpen(QObject* parent)
 : QuickOpenTestBase(Core::NoUi, parent)
 {
 }
 
-void TestQuickOpenBench::getData()
+void BenchQuickOpen::getData()
 {
     QTest::addColumn<int>("files");
     QTest::addColumn<QString>("filter");
@@ -47,7 +47,7 @@ void TestQuickOpenBench::getData()
     QTest::newRow("0500-f/b") << 500  << "f/b";
 }
 
-void TestQuickOpenBench::benchProjectFileFilter_addRemoveProject()
+void BenchQuickOpen::benchProjectFileFilter_addRemoveProject()
 {
     QFETCH(int, files);
     QFETCH(QString, filter);
@@ -61,12 +61,12 @@ void TestQuickOpenBench::benchProjectFileFilter_addRemoveProject()
     }
 }
 
-void TestQuickOpenBench::benchProjectFileFilter_addRemoveProject_data()
+void BenchQuickOpen::benchProjectFileFilter_addRemoveProject_data()
 {
     getData();
 }
 
-void TestQuickOpenBench::benchProjectFileFilter_reset()
+void BenchQuickOpen::benchProjectFileFilter_reset()
 {
     QFETCH(int, files);
     QFETCH(QString, filter);
@@ -81,12 +81,12 @@ void TestQuickOpenBench::benchProjectFileFilter_reset()
     }
 }
 
-void TestQuickOpenBench::benchProjectFileFilter_reset_data()
+void BenchQuickOpen::benchProjectFileFilter_reset_data()
 {
     getData();
 }
 
-void TestQuickOpenBench::benchProjectFileFilter_setFilter()
+void BenchQuickOpen::benchProjectFileFilter_setFilter()
 {
     QFETCH(int, files);
     QFETCH(QString, filter);
@@ -104,12 +104,12 @@ void TestQuickOpenBench::benchProjectFileFilter_setFilter()
     }
 }
 
-void TestQuickOpenBench::benchProjectFileFilter_setFilter_data()
+void BenchQuickOpen::benchProjectFileFilter_setFilter_data()
 {
     getData();
 }
 
-void TestQuickOpenBench::benchProjectFileFilter_providerData()
+void BenchQuickOpen::benchProjectFileFilter_providerData()
 {
     QFETCH(int, files);
     QFETCH(QString, filter);
@@ -128,12 +128,12 @@ void TestQuickOpenBench::benchProjectFileFilter_providerData()
     }
 }
 
-void TestQuickOpenBench::benchProjectFileFilter_providerData_data()
+void BenchQuickOpen::benchProjectFileFilter_providerData_data()
 {
     getData();
 }
 
-void TestQuickOpenBench::benchProjectFileFilter_providerDataIcon()
+void BenchQuickOpen::benchProjectFileFilter_providerDataIcon()
 {
     QFETCH(int, files);
     QFETCH(QString, filter);
@@ -152,7 +152,7 @@ void TestQuickOpenBench::benchProjectFileFilter_providerDataIcon()
     }
 }
 
-void TestQuickOpenBench::benchProjectFileFilter_providerDataIcon_data()
+void BenchQuickOpen::benchProjectFileFilter_providerDataIcon_data()
 {
     getData();
 }

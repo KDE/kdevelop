@@ -1,37 +1,13 @@
-set(quickopentestbase_SRCS
+add_library(quickopentestbase STATIC
     quickopentestbase.cpp
-    ../projectfilequickopen.cpp
-)
+    ../projectfilequickopen.cpp)
 
-add_library(quickopentestbase STATIC ${quickopentestbase_SRCS})
-target_link_libraries(quickopentestbase
-    
-    Qt5::Test
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    KDev::Language
-)
+target_link_libraries(quickopentestbase PUBLIC
+    Qt5::Test KDev::Tests KDev::Project KDev::Language)
 
-set(test_quickopen_SRCS
-    test_quickopen.cpp
-    ${quickopentestbase_SRCS}
-)
+ecm_add_test(test_quickopen.cpp LINK_LIBRARIES quickopentestbase)
 
-ecm_add_test(${test_quickopen_SRCS}
-    TEST_NAME test_quickopen
-    LINK_LIBRARIES quickopentestbase Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} KDev::Language
-)
-
-# darn, cannot set per-target so useless :(
-# set(CMAKE_BUILD_TYPE Release)
-
-set(test_quickopenbench_SRCS
-    test_quickopenbench.cpp
-    ${quickopentestbase_SRCS}
-)
-ecm_add_test(${test_quickopenbench_SRCS}
-    TEST_NAME test_quickopenbench
-    LINK_LIBRARIES quickopentestbase Qt5::Test ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} KDev::Language
-)
-# TODO KF5: Port?
-#set_tests_properties(quickopenbench PROPERTIES TIMEOUT 240)
+if(NOT COMPILER_OPTIMIZATIONS_DISABLED)
+    ecm_add_test(bench_quickopen.cpp LINK_LIBRARIES quickopentestbase)
+    set_tests_properties(bench_quickopen PROPERTIES TIMEOUT 30)
+endif()

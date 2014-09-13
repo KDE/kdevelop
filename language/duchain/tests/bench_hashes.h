@@ -18,12 +18,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVPLATFORM_TEST_BENCHHASHES_H
-#define KDEVPLATFORM_TEST_BENCHHASHES_H
+#ifndef KDEVPLATFORM_BENCH_HASHES_H
+#define KDEVPLATFORM_BENCH_HASHES_H
 
 #include <QObject>
 
-class TestBenchHashes : public QObject
+class BenchHashes : public QObject
 {
   Q_OBJECT
 
@@ -46,4 +46,4 @@ private slots:
   void typeRepo_data();
 };
 
-#endif // KDEVPLATFORM_TEST_BENCHHASHES_H
+#endif // KDEVPLATFORM_BENCH_HASHES_H

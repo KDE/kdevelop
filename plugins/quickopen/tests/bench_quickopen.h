@@ -18,16 +18,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KDEVPLATFORM_PLUGIN_TEST_QUICKOPENBENCH_H
-#define KDEVPLATFORM_PLUGIN_TEST_QUICKOPENBENCH_H
+#ifndef KDEVPLATFORM_PLUGIN_BENCH_QUICKOPEN_H
+#define KDEVPLATFORM_PLUGIN_BENCH_QUICKOPEN_H
 
 #include "quickopentestbase.h"
 
-class TestQuickOpenBench : public QuickOpenTestBase
+class BenchQuickOpen : public QuickOpenTestBase
 {
     Q_OBJECT
 public:
-    explicit TestQuickOpenBench(QObject* parent = 0);
+    explicit BenchQuickOpen(QObject* parent = 0);
 private:
     void getData();
 private slots:
@@ -43,4 +43,4 @@ private slots:
     void benchProjectFileFilter_providerDataIcon_data();
 };
 
-#endif // KDEVPLATFORM_PLUGIN_TEST_QUICKOPENBENCH_H
+#endif // KDEVPLATFORM_PLUGIN_BENCH_QUICKOPEN_H
