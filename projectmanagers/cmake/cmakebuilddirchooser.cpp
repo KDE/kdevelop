@@ -39,16 +39,14 @@ const int maxExtraArgumentsInHistory = 15;
 Path proposedBuildFolder(const Path &srcFolder)
 {
     Path proposedBuildFolder;
-    if (srcFolder.path().contains("/src/"))
-    {
+    if (srcFolder.path().contains("/src/")) {
         const QString srcBuildPath = srcFolder.path().replace("/src/", "/build/");
-        if (QDir(srcBuildPath).exists())
-        {
+        Q_ASSERT(!srcBuildPath.isEmpty());
+        if (QDir(srcBuildPath).exists()) {
             proposedBuildFolder = Path(srcBuildPath);
         }
     }
-    if (!proposedBuildFolder.isValid())
-    {
+    if (!proposedBuildFolder.isValid()) {
         proposedBuildFolder = Path( srcFolder, "build" );
     }
 
@@ -151,7 +149,7 @@ void CMakeBuildDirChooser::updated()
     }
 
     Path chosenBuildFolder(m_chooserUi->buildFolder->url());
-    bool emptyUrl = !chosenBuildFolder.isValid();
+    bool emptyUrl = chosenBuildFolder.isEmpty();
     if( emptyUrl ) st |= BuildFolderEmpty;
 
     bool dirEmpty = false, dirExists= false, dirRelative = false;

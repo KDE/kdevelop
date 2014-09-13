@@ -60,6 +60,7 @@ TestProjectPaths projectPaths(const QString& project, QString name = QString())
     } else {
         paths.sourceDir = KDevelop::Path(project);
     }
+    Q_ASSERT(QFile::exists(paths.sourceDir.toLocalFile()));
 
     QString kdev4Name;
     if (name.isEmpty()) {
@@ -119,18 +120,19 @@ void defaultConfigure(const TestProjectPaths& paths)
 
 KDevelop::IProject* loadProject(const QString& name, const QString& relative = QString())
 {
+    qRegisterMetaType<KDevelop::IProject*>();
+
     const TestProjectPaths paths = projectPaths(name+relative, name);
     defaultConfigure(paths);
 
+    QSignalSpy spy(KDevelop::ICore::self()->projectController(),
+                   SIGNAL(projectOpened(KDevelop::IProject*)));
+    Q_ASSERT(spy.isValid());
+
     KDevelop::ICore::self()->projectController()->openProject(paths.projectFile.toUrl());
 
-    qRegisterMetaType<KDevelop::IProject*>();
-    const bool gotSignal = QSignalSpy(
-            KDevelop::ICore::self()->projectController(),
-            SIGNAL(projectOpened(KDevelop::IProject*))).wait(30000);
-    if( !gotSignal )
+    if ( spy.isEmpty() && !spy.wait(30000) )
         qFatal( "Timeout while waiting for opened signal" );
-
 
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectByName(name);
     Q_ASSERT(project);
