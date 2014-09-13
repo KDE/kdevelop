@@ -55,7 +55,8 @@ KDevWelcomePagePlugin::KDevWelcomePagePlugin( QObject* parent, const QVariantLis
 {
     ICore::self()->documentController()->registerDocumentForMimetype("text/x-kdevelop-internal", new WelcomePageFactory);
 
-    QTimer::singleShot(500, this, SLOT(openWelcomePage()));
+    //FIXME: When and where to open the welcome page?
+    //QTimer::singleShot(500, this, SLOT(openWelcomePage()));
 }
 
 void KDevWelcomePagePlugin::openWelcomePage()
