@@ -74,10 +74,17 @@ void executeCompletionTest(const QString& code, const CompletionItemsList& expec
     const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
     QVERIFY(sessionData);
 
+    DUContextPointer topPtr(top);
+
+    // don't hold DUChain lock when constructing ClangCodeCompletionContext
+    lock.unlock();
+
     foreach(CompletionItems items, expectedCompletionItems) {
         // TODO: We should not need to pass 'session' to the context, should just use the base class ctor
-        auto context = new ClangCodeCompletionContext(DUContextPointer(top), sessionData, items.position, QString());
+        auto context = new ClangCodeCompletionContext(topPtr, sessionData, items.position, QString());
         context->setFilters(filters);
+
+        DUChainReadLocker lock;
         auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
 
         tester.names.sort();

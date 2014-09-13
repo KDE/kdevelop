@@ -404,8 +404,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
     QSet<Declaration*> handled;
 
-    DUContext* ctx = m_duContext->findContextAt(m_position);
-
     clangDebug() << "Clang found" << m_results->NumResults << "completion results";
 
     for (uint i = 0; i < m_results->NumResults; ++i) {
@@ -523,8 +521,11 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 continue;
             }
 
+            DUChainReadLocker lock;
+
             // TODO: This easily breaks if there are multiple function overloads
             // e.g. void foo(), void foo(int) => only the first is selected
+            DUContext* ctx = m_duContext->findContextAt(m_position);
             Declaration* found = 0;
             foreach(Declaration* dec, ctx->findDeclarations(qid, m_position)) {
                 if (!handled.contains(dec)) {
