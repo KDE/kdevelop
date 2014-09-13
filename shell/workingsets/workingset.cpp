@@ -315,8 +315,11 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
         int viewCount = setGroup.readEntry("View Count", 0);
         QMap<int, Sublime::View*> createdViews;
         for (int i = 0; i < viewCount; ++i) {
-            QString type = setGroup.readEntry(QString("View %1 Type").arg(i), "");
-            QString specifier = setGroup.readEntry(QString("View %1").arg(i), "");
+            QString type = setGroup.readEntry(QString("View %1 Type").arg(i), QString());
+            QString specifier = setGroup.readEntry(QString("View %1").arg(i), QString());
+            if (type.isEmpty() || specifier.isEmpty()) {
+                continue;
+            }
             Sublime::View* previousView = area->views().empty() ? 0 : area->views().back();
 
             QMultiMap<QString, Sublime::View*>::iterator it = recycle.find( specifier );
