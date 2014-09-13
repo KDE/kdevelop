@@ -60,45 +60,50 @@ namespace ReviewBoard
             bool m_multipart;
     };
 
-    class NewRequest : public KJob
+    class ReviewRequest : public KJob
+    {
+        Q_OBJECT
+        public:
+            ReviewRequest(const KUrl& server, const QString& id, QObject* parent)
+                          : KJob(parent), m_server(server), m_id(id) {}
+            QString requestId() const { return m_id; }
+            void setRequestId(QString id) { m_id = id; }
+            KUrl server() const { return m_server; }
+
+        private:
+            KUrl m_server;
+            QString m_id;
+    };
+
+    class NewRequest : public ReviewRequest
     {
         Q_OBJECT
         public:
             NewRequest(const KUrl& server, const QString& project, QObject* parent = 0);
-
             virtual void start();
-            QString requestId() const;
-            KUrl server() const { return m_server; }
 
         private slots:
             void done();
 
         private:
-            KUrl m_server;
             HttpCall* m_newreq;
-
-            QString m_id;
             QString m_project;
     };
 
-    class SubmitPatchRequest : public KJob
+    class SubmitPatchRequest : public ReviewRequest
     {
         Q_OBJECT
         public:
             SubmitPatchRequest(const KUrl& server, const KUrl& patch, const QString& basedir, const QString& id, QObject* parent = 0);
             virtual void start();
-            KUrl server() const { return m_server; }
-            QString requestId() const;
 
         private slots:
             void done();
 
         private:
-            KUrl m_server;
             HttpCall* m_uploadpatch;
             KUrl m_patch;
             QString m_basedir;
-            QString m_id;
     };
 
     class ProjectsListRequest : public KJob

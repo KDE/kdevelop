@@ -16,41 +16,51 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#include <KApplication>
-#include <k4aboutdata.h>
-#include <KCmdLineArgs>
+#include <QtCore/QCommandLineOption>
+#include <QtCore/QCommandLineParser>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtWidgets/QApplication>
+
+#include <KAboutData>
+#include <KLocalizedString>
 #include <KMessageBox>
-#include <QDebug>
-#include <QDir>
+
 #include "reviewpatchdialog.h"
 #include "reviewboardjobs.h"
 
 int main(int argc, char *argv[])
 {
-    K4AboutData about("reviewboardtest", 0, ki18n(("ReviewBoard Test")), "0.10", ki18n("Test ReviewBoard support"),
-            K4AboutData::License_GPL, ki18n("(C) 2010 Aleix Pol Gonzalez"));
-    about.addAuthor( ki18n("Aleix Pol Gonzalez"), KLocalizedString(), "aleixpol@kde.org" );
+    KAboutData about("reviewboardtest", i18n(("ReviewBoard Test")), "0.10", i18n("Test ReviewBoard support"),
+        KAboutLicense::GPL, i18n("(C) 2010 Aleix Pol Gonzalez"));
+    about.addAuthor( i18n("Aleix Pol Gonzalez"), QString(), "aleixpol@kde.org" );
 
-    KCmdLineArgs::init( argc, argv, &about );
-    KCmdLineOptions options;
-    options.add("+patch", ki18n( "Patch" ));
-    options.add("basedir <dir>", ki18n( "Base Directory" ));
-    KCmdLineArgs::addCmdLineOptions( options );
-    KApplication app;
-
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    QApplication app(argc, argv);
+    KAboutData::setApplicationData(about);
+    QCommandLineParser parser;
+    parser.addVersionOption();
+    parser.addHelpOption();
+    parser.addPositionalArgument("patch", i18n( "Patch" ));
+    parser.addOption(QCommandLineOption(QLatin1String("basedir <dir>"), i18n( "Base Directory" )));
+    parser.addOption(QCommandLineOption(QLatin1String("id <id>"), i18n( "Review request ID" )));
+    about.setupCommandLine(&parser);
+    parser.process(app);
+    about.processCommandLine(&parser);
 
     ReviewPatchDialog d(QDir::currentPath());
-
-    KUrl patch(args->arg(0));
-    QString basedir=args->getOption("basedir");
-
-    qDebug() << "patch:" << patch << ", basedir:" << basedir;
-
     int ret=d.exec();
     if(ret==QDialog::Accepted) {
         KUrl url=d.server();
-        ReviewBoard::NewRequest* job=new ReviewBoard::NewRequest(d.server(), d.repository());
+        ReviewBoard::ReviewRequest* job;
+        if (parser.positionalArguments().count() == 0) {
+            job = new ReviewBoard::NewRequest(d.server(), d.repository());
+        } else {
+            QUrl patch = QUrl::fromUserInput(parser.positionalArguments()[0]);
+            QString basedir=parser.value("basedir");
+            QString id=parser.value("id");
+            qDebug() << "patch:" << patch << ", basedir:" << basedir;
+            job = new ReviewBoard::SubmitPatchRequest(d.server(), patch, basedir, id);
+        }
         bool corr = job->exec();
         if(corr) {
             url.setUserInfo(QString());

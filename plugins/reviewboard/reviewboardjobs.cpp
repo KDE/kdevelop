@@ -165,20 +165,15 @@ void HttpCall::finished()
 }
 
 NewRequest::NewRequest(const KUrl& server, const QString& projectPath, QObject* parent)
-    : KJob(parent), m_server(server), m_project(projectPath)
+    : ReviewRequest(server, 0, parent), m_project(projectPath)
 {
-    m_newreq = new HttpCall(m_server, "/api/review-requests/", QList<QPair<QString,QString> >(), "repository="+projectPath.toLatin1(), false, this);
+    m_newreq = new HttpCall(this->server(), "/api/review-requests/", QList<QPair<QString,QString> >(), "repository="+projectPath.toLatin1(), false, this);
     connect(m_newreq, SIGNAL(finished(KJob*)), SLOT(done()));
 }
 
 void NewRequest::start()
 {
     m_newreq->start();
-}
-
-QString NewRequest::requestId() const
-{
-    return m_id;
 }
 
 void NewRequest::done()
@@ -189,9 +184,8 @@ void NewRequest::done()
         setErrorText(i18n("Could not create the new request:\n%1", m_newreq->errorString()));
     } else {
         QVariant res = m_newreq->result();
-
-        m_id = res.toMap()["review_request"].toMap()["id"].toString();
-        Q_ASSERT(!m_id.isEmpty());
+        setRequestId(res.toMap()["review_request"].toMap()["id"].toString());
+        Q_ASSERT(!requestId().isEmpty());
     }
 
     emitResult();
@@ -199,24 +193,19 @@ void NewRequest::done()
 
 
 SubmitPatchRequest::SubmitPatchRequest(const KUrl& server, const KUrl& patch, const QString& basedir, const QString& id, QObject* parent)
-    : KJob(parent), m_server(server), m_patch(patch), m_basedir(basedir), m_id(id)
+    : ReviewRequest(server, id, parent), m_patch(patch), m_basedir(basedir)
 {
     QList<QPair<QString, QVariant> > vals;
     vals += QPair<QString, QVariant>("basedir", m_basedir);
     vals += QPair<QString, QVariant>("path", qVariantFromValue<QUrl>(m_patch));
 
-    m_uploadpatch = new HttpCall(m_server, "/api/review-requests/"+m_id+"/diffs/", QList<QPair<QString,QString> >(), multipartFormData(vals), true, this);
+    m_uploadpatch = new HttpCall(this->server(), "/api/review-requests/"+requestId()+"/diffs/", QList<QPair<QString,QString> >(), multipartFormData(vals), true, this);
     connect(m_uploadpatch, SIGNAL(finished(KJob*)), SLOT(done()));
 }
 
 void SubmitPatchRequest::start()
 {
     m_uploadpatch->start();
-}
-
-QString SubmitPatchRequest::requestId() const
-{
-    return m_id;
 }
 
 void SubmitPatchRequest::done()
