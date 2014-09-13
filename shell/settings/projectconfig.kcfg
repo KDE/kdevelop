@@ -15,7 +15,7 @@
         be slower.</whatsthis>
     </entry>
     <entry name="projectsBaseDirectory" key="Projects Base Directory" type="Url">
-        <default code="true">QString(QDir::homePath()+"/projects")</default>
+        <default code="true">QUrl::fromLocalFile(QDir::homePath()+"/projects")</default>
         <whatsthis>Chooses the base directory where new projects are created.</whatsthis>
     </entry>
     <entry name="saveDocuments" key="Save All Documents Before Building" type="Bool" default="true">
