@@ -169,6 +169,18 @@ bool ClangUtils::isConstMethod(CXCursor cursor)
 #endif
 }
 
+bool ClangUtils::isFileEqual(CXFile file1, CXFile file2)
+{
+#if CINDEX_VERSION_MINOR >= 28
+    return clang_File_isEqual(file1, file2);
+#else
+    // note: according to the implementation of clang_File_isEqual, file1 and file2 can still be equal,
+    // regardless of whether file1 == file2 is true or not
+    // however, we didn't see any problems with pure pointer comparisions until now, so fall back to that
+    return file1 == file2;
+#endif
+}
+
 constexpr bool isScopeKind(CXCursorKind kind)
 {
     return kind == CXCursor_Namespace || kind == CXCursor_StructDecl ||

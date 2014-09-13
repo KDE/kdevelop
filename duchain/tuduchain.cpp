@@ -273,7 +273,7 @@ CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXCl
     auto location = clang_getCursorLocation(cursor);
     CXFile file;
     clang_getFileLocation(location, &file, nullptr, nullptr, nullptr);
-    if (file != thisPtr->m_file) {
+    if (!ClangUtils::isFileEqual(file, thisPtr->m_file)) {
         return CXChildVisit_Continue;
     }
 

@@ -103,6 +103,13 @@ namespace ClangUtils
      * const qualified class method.
      */
     bool isConstMethod(CXCursor cursor);
+
+    /**
+     * @brief Return true if file @p file1 and file @p file2 are equal
+     *
+     * @see clang_File_isEqual
+     */
+    bool isFileEqual(CXFile file1, CXFile file2);
 };
 
 #endif // CLANGUTILS_H
