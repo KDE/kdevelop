@@ -462,38 +462,33 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
     
     m_ids[breakpoint] = b["number"].literal();
 
-    if (b.hasField("original-location")) {
-        if (breakpoint->address().isEmpty()) {
-            /* If the address is not empty, it means that the breakpoint
-               is set by KDevelop, not by the user, and that we want to
-               show the original expression, not the address, in the table.
-               TODO: this also means that if used added a watchpoint in gdb
-               like "watch foo", then we'll show it in the breakpoint table
-               just fine, but after KDevelop restart, we'll try to add the
-               breakpoint using basically "watch *&(foo)".  I'm not sure if
-               that's a problem or not.  */
-            QString location = b["original-location"].literal();
-            kDebug() << "location" << location;
-            if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
-                QRegExp rx("^(.+):(\\d+)$");
-                if (rx.indexIn(location) != -1) {
-                    breakpoint->setLocation(QUrl::fromUserInput(unquoteExpression(rx.cap(1))), rx.cap(2).toInt()-1);
-                } else {
-                    //for regular expression breakpoints and not only...
-                    if(b.hasField("fullname") && b.hasField("line")){
-                        breakpoint->setLocation(QUrl::fromUserInput(unquoteExpression(b["fullname"].literal())), b["line"].toInt()-1);
-                    }else{
-                        breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));
-                    }
-                }
-            } else {
-                breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));
-            }
+    /* If the address is not empty, it means that the breakpoint
+        is set by KDevelop, not by the user, and that we want to
+        show the original expression, not the address, in the table.
+        TODO: this also means that if used added a watchpoint in gdb
+        like "watch foo", then we'll show it in the breakpoint table
+        just fine, but after KDevelop restart, we'll try to add the
+        breakpoint using basically "watch *&(foo)".  I'm not sure if
+        that's a problem or not.  */
+    const bool emptyAddress = breakpoint->address().isEmpty();
+    const bool isCodeBreakpoint = breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint;
+
+    if (emptyAddress && isCodeBreakpoint && b.hasField("fullname") && b.hasField("line")){
+        breakpoint->setLocation(QUrl::fromLocalFile(unquoteExpression(b["fullname"].literal())),
+                                b["line"].toInt()-1);
+    } else if (emptyAddress && isCodeBreakpoint && b.hasField("original-location")) {
+        QRegExp rx("^(.+):(\\d+)$");
+        QString location = b["original-location"].literal();
+        kDebug() << "location" << location;
+        if (rx.indexIn(location) != -1) {
+            breakpoint->setLocation(QUrl::fromLocalFile(unquoteExpression(rx.cap(1))), rx.cap(2).toInt()-1);
+        } else {
+            breakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));
         }
     } else if (b.hasField("what") && b["what"].literal() == "exception throw") {
         breakpoint->setExpression("catch throw");
     } else {
-        kWarning() << "That's too bad, breakpoint doesn't contain \"original-location\" field ";
+        qWarning() << "Breakpoint doesn't contain required location/expression data: " << m_ids[breakpoint];
     }
 
     if (!m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)
