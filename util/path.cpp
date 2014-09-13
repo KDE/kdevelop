@@ -50,12 +50,16 @@ Path::Path(const QUrl& url)
 
 void Path::init(QUrl url)
 {
+    if (!url.isValid()) {
+        // empty or invalid Path
+        return;
+    }
     // we do not support urls with:
     // - fragments
     // - sub urls
     // - query
     // nor do we support relative urls
-    if (!url.isValid() || url.hasFragment() || url.hasQuery() || url.isRelative() || url.path().isEmpty()) {
+    if (url.hasFragment() || url.hasQuery() || url.isRelative() || url.path().isEmpty()) {
         // invalid
         qWarning("Path::init: invalid/unsupported Path encountered: \"%s\"",
                  qPrintable(url.toDisplayString(QUrl::PreferLocalFile)));
