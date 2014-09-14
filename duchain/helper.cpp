@@ -51,7 +51,7 @@ DeclarationPointer getDeclaration(const QualifiedIdentifier& id, const DUContext
     DUChainReadLocker lock;
     if (context) {
         auto declarations = context->findDeclarations(
-            id.last(),
+            id.indexedLast(),
             CursorInRevision(INT_MAX, INT_MAX),
             nullptr,
             searchInParent ? DUContext::NoSearchFlags : DUContext::DontSearchInParent

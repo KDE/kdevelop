@@ -79,7 +79,8 @@ protected:
     virtual void endVisit(QmlJS::AST::FunctionExpression* node);
 
     // Variables
-    bool inferArgumentsFromCall(QmlJS::AST::Node* base,
+    /// NOTE: this visits the @p base node and its children
+    void inferArgumentsFromCall(QmlJS::AST::Node* base,
                                 QmlJS::AST::ArgumentList* arguments);
     virtual bool visit(QmlJS::AST::VariableDeclaration* node);
     virtual void endVisit(QmlJS::AST::VariableDeclaration* node);

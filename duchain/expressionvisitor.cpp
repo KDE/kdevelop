@@ -33,8 +33,8 @@
 using namespace KDevelop;
 
 ExpressionVisitor::ExpressionVisitor(DUContext* context)
-: DynamicLanguageExpressionVisitor(context),
-  m_prototypeDepth(0)
+    : DynamicLanguageExpressionVisitor(context)
+    , m_prototypeDepth(0)
 {
 }
 
@@ -371,10 +371,12 @@ bool ExpressionVisitor::encounterGlobalDeclaration(const QualifiedIdentifier& id
 
     PersistentSymbolTable::self().declarations(IndexedQualifiedIdentifier(id), count, declarations);
 
+    if (count && !m_currentDir.isValid()) {
+        m_currentDir = Path(m_context->topContext()->url().str()).parent();
+    }
+
     // Explore the declarations and filter-out those that come from a file
     // outside the current directory
-    Path currentDir = Path(m_context->topContext()->url().str()).parent();
-
     for (uint i=0; i<count; ++i) {
         const IndexedDeclaration& decl = declarations[i];
         IndexedTopDUContext declTopContext = decl.indexedTopContext();
@@ -383,7 +385,7 @@ bool ExpressionVisitor::encounterGlobalDeclaration(const QualifiedIdentifier& id
             continue;
         }
 
-        if (currentDir.isDirectParentOf(Path(declTopContext.url().str()))) {
+        if (m_currentDir.isDirectParentOf(Path(declTopContext.url().str()))) {
             encounterLvalue(DeclarationPointer(decl.declaration()));
             return true;
         }

@@ -25,6 +25,8 @@
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/ducontext.h>
 
+#include <util/path.h>
+
 #include <qmljs/parser/qmljsast_p.h>
 
 #include "duchainexport.h"
@@ -100,6 +102,7 @@ private:
 
 private:
     int m_prototypeDepth;   // 2 = the current node is "prototype" or "__proto__". 1 = we have just closed this node. <= 0 : "__proto__" is not the last node (as in "foo.prototype.bar")
+    KDevelop::Path m_currentDir;
 };
 
 #endif // EXPRESSIONVISITOR_H
