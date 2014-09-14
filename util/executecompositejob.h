@@ -36,9 +36,6 @@ public:
 
     virtual void start();
 
-    virtual bool addSubjob(KJob* job) override;
-
-    const QList<KJob*> &subjobs() const;
 public Q_SLOTS:
     virtual void slotResult(KJob* job);
 protected:

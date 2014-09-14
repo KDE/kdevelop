@@ -60,7 +60,7 @@ void ExecuteCompositeJob::start()
 
 void ExecuteCompositeJob::slotResult(KJob* job)
 {
-    kDebug() << "finished: "<< job << "remaining:" << subjobs().size();
+    kDebug() << "finished: "<< job;
     if (job->error()) {
         kDebug() << "JOB ERROR:" << job->error() << job->errorString();
     }
@@ -96,26 +96,6 @@ bool ExecuteCompositeJob::doKill()
         }
     }
     return true;
-}
-
-bool ExecuteCompositeJob::addSubjob(KJob* job)
-{
-    // work-around for kdelibs bug: https://bugs.kde.org/show_bug.cgi?id=230692
-    // (fixed in 4.11)
-    // TODO: remove this method overwrite as soon as we depend on kdelibs 4.11
-    bool success = KCompositeJob::addSubjob(job);
-    // if job's parent != this => we're using kdelibs <= 4.10
-    if (job->parent() != this) {
-        // set the parent to 0, so the original parent won't delete this job
-        // KCompositeJob takes care of deletion
-        job->setParent(0);
-    }
-    return success;
-}
-
-const QList< KJob* >& ExecuteCompositeJob::subjobs() const
-{
-    return KCompositeJob::subjobs();
 }
 
 }
