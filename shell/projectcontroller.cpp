@@ -709,10 +709,18 @@ void ProjectController::openProjectForUrl(const QUrl& sourceUrl) {
 
 void ProjectController::openProject( const QUrl &projectFile )
 {
-    Q_ASSERT(!projectFile.isRelative());
     QUrl url = projectFile;
-    QList<const Session*> existingSessions;
 
+    if ( url.isEmpty() ) {
+        url = d->dialog->askProjectConfigLocation(false);
+        if ( url.isEmpty() ) {
+            return;
+        }
+    }
+
+    Q_ASSERT(!url.isRelative());
+
+    QList<const Session*> existingSessions;
     if(!Core::self()->sessionController()->activeSession()->containedProjects().contains(url))
     {
         foreach( const Session* session, Core::self()->sessionController()->sessions())
