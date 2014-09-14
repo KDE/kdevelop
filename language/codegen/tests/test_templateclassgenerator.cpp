@@ -46,7 +46,7 @@ void TestTemplateClassGenerator::initTestCase()
 
     // Use a temporary directory for the template work
     tempDir.setAutoRemove(true);
-    baseUrl.setDirectory(tempDir.path());
+    baseUrl = QUrl::fromLocalFile(tempDir.path() + '/');
 
     // Needed for extracting description out of template archives
     TemplatesModel model("kdevcodegentest");
@@ -107,10 +107,10 @@ void TestTemplateClassGenerator::defaultFileUrlsCpp()
     QCOMPARE(files.size(), 2);
 
     QVERIFY(files.contains("Header"));
-    QCOMPARE(files["Header"], baseUrl.resolved(QString("ClassName.h")));
+    QCOMPARE(files["Header"], baseUrl.resolved(QUrl("ClassName.h")));
 
     QVERIFY(files.contains("Implementation"));
-    QCOMPARE(files["Implementation"], baseUrl.resolved(QString("ClassName.cpp")));
+    QCOMPARE(files["Implementation"], baseUrl.resolved(QUrl("ClassName.cpp")));
 }
 
 void TestTemplateClassGenerator::defaultFileUrlsYaml()
@@ -120,7 +120,7 @@ void TestTemplateClassGenerator::defaultFileUrlsYaml()
     QCOMPARE(files.size(), 1);
 
     QVERIFY(files.contains("Description"));
-    QCOMPARE(files["Description"], baseUrl.resolved(QString("ClassName.yaml")));
+    QCOMPARE(files["Description"], baseUrl.resolved(QUrl("ClassName.yaml")));
 }
 
 void TestTemplateClassGenerator::customOptions()
@@ -138,7 +138,7 @@ void TestTemplateClassGenerator::templateVariablesCpp()
     CHECK_TEMPLATE_VARIABLE(name, QString, QString("ClassName"));
 
     CHECK_TEMPLATE_VARIABLE(output_file_header, QString, QString("classname.h"));
-    CHECK_TEMPLATE_VARIABLE(output_file_header_absolute, QString, baseUrl.resolved(QString("classname.h")).toLocalFile());
+    CHECK_TEMPLATE_VARIABLE(output_file_header_absolute, QString, baseUrl.resolved(QUrl("classname.h")).toLocalFile());
 }
 
 void TestTemplateClassGenerator::templateVariablesYaml()
@@ -150,7 +150,7 @@ void TestTemplateClassGenerator::templateVariablesYaml()
     CHECK_TEMPLATE_VARIABLE(name, QString, QString("ClassName"));
 
     CHECK_TEMPLATE_VARIABLE(output_file_description, QString, QString("classname.yaml"));
-    CHECK_TEMPLATE_VARIABLE(output_file_description_absolute, QString, baseUrl.resolved(QString("classname.yaml")).toLocalFile());
+    CHECK_TEMPLATE_VARIABLE(output_file_description_absolute, QString, baseUrl.resolved(QUrl("classname.yaml")).toLocalFile());
 }
 
 void TestTemplateClassGenerator::codeDescription()
@@ -205,14 +205,14 @@ void TestTemplateClassGenerator::cppOutput()
     changes.setFormatPolicy(DocumentChangeSet::NoAutoFormat);
     changes.applyAllChanges();
 
-    QFile header(baseUrl.resolved(QString("classname.h")).toLocalFile());
+    QFile header(baseUrl.resolved(QUrl("classname.h")).toLocalFile());
     QVERIFY(header.open(QIODevice::ReadOnly));
 
     QFile testHeader(CODEGEN_TESTS_EXPECTED_DIR "/classname.h");
     testHeader.open(QIODevice::ReadOnly);
     COMPARE_FILES(header, testHeader);
 
-    QFile implementation(baseUrl.resolved(QString("classname.cpp")).toLocalFile());
+    QFile implementation(baseUrl.resolved(QUrl("classname.cpp")).toLocalFile());
     QVERIFY(implementation.open(QIODevice::ReadOnly));
 
     QFile testImplementation(CODEGEN_TESTS_EXPECTED_DIR "/classname.cpp");
@@ -226,7 +226,7 @@ void TestTemplateClassGenerator::yamlOutput()
     setLowercaseFileNames(generator);
     generator->generate().applyAllChanges();
 
-    QFile yaml(baseUrl.resolved(QString("classname.yaml")).toLocalFile());
+    QFile yaml(baseUrl.resolved(QUrl("classname.yaml")).toLocalFile());
     QVERIFY(yaml.open(QIODevice::ReadOnly));
 
     QFile testYaml(CODEGEN_TESTS_EXPECTED_DIR "/classname.yaml");
@@ -265,7 +265,7 @@ void TestTemplateClassGenerator::setLowercaseFileNames(TemplateClassGenerator* g
     for (; it != urls.constEnd(); ++it)
     {
         QString fileName = it.value().fileName().toLower();
-        QUrl base = it.value().resolved(QString("../" + fileName));
+        QUrl base = it.value().resolved(QUrl(QString("./%1").arg(fileName)));
         generator->setFileUrl(it.key(), base);
     }
 }

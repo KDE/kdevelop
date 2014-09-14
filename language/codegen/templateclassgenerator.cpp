@@ -105,6 +105,8 @@ void TemplateClassGeneratorPrivate::fetchSuperClasses(const DeclarationPointer& 
 TemplateClassGenerator::TemplateClassGenerator(const QUrl& baseUrl)
  : d(new TemplateClassGeneratorPrivate)
 {
+    Q_ASSERT(baseUrl.path().endsWith('/')); // assume folder
+
     d->baseUrl = baseUrl;
     d->renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
 }
@@ -145,7 +147,7 @@ TemplateClassGenerator::UrlHash TemplateClassGenerator::fileUrls() const
         foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate.outputFiles())
         {
             QString outputName = d->renderer.render(outputFile.outputName, outputFile.identifier);
-            QUrl url = d->baseUrl.resolved(outputName);
+            QUrl url = d->baseUrl.resolved(QUrl(outputName));
             d->fileUrls.insert(outputFile.identifier, url);
         }
     }
@@ -166,7 +168,7 @@ QUrl TemplateClassGenerator::fileUrl(const QString& outputFile) const
 void TemplateClassGenerator::setFileUrl(const QString& outputFile, const QUrl& url)
 {
     d->fileUrls.insert(outputFile, url);
-    d->renderer.addVariable("output_file_" + outputFile.toLower(), QDir(url.path()).relativeFilePath(d->baseUrl.path()));
+    d->renderer.addVariable("output_file_" + outputFile.toLower(), QDir(d->baseUrl.path()).relativeFilePath(url.path()));
     d->renderer.addVariable("output_file_" + outputFile.toLower() + "_absolute", url.toLocalFile());
 }
 

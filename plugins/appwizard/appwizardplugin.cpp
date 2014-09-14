@@ -109,7 +109,7 @@ void AppWizardPlugin::slotNewProject()
             if (!file.isEmpty())
             {
                 file = KMacroExpander::expandMacros(file, m_variables);
-                core()->documentController()->openDocument(file);
+                core()->documentController()->openDocument(QUrl::fromUserInput(file));
             }
         } else {
             KMessageBox::error( ICore::self()->uiController()->activeMainWindow(), i18n("Could not create project from template\n"), i18n("Failed to create project") );
@@ -133,7 +133,7 @@ ICentralizedVersionControl* toCVCS(IPlugin* plugin)
 }
 
 /*! Trouble while initializing version control. Show failure message to user. */
-void vcsError(const QString &errorMsg, QTemporaryDir &tmpdir, const QUrl &dest, const QString &details = QString())
+void vcsError(const QString &errorMsg, KTempDir &tmpdir, const QUrl &dest, const QString &details = QString())
 {
     QString displayDetails = details;
     if (displayDetails.isEmpty())
@@ -151,23 +151,23 @@ bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& inf
     Q_ASSERT(dvcs);
     kDebug() << "DVCS system is used, just initializing DVCS";
 
-    QUrl dest = info.location;
+    const QUrl& dest = info.location;
     //TODO: check if we want to handle KDevelop project files (like now) or only SRC dir
-    VcsJob* job = dvcs->init(dest.toLocalFile());
+    VcsJob* job = dvcs->init(dest);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
         vcsError(i18n("Could not initialize DVCS repository"), scratchArea, dest);
         return false;
     }
-    kDebug() << "Initializing DVCS repository:" << dest.toLocalFile();
+    kDebug() << "Initializing DVCS repository:" << dest;
 
-    job = dvcs->add(QList<QUrl>(dest), KDevelop::IBasicVersionControl::Recursive);
+    job = dvcs->add({dest}, KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
         vcsError(i18n("Could not add files to the DVCS repository"), scratchArea, dest);
         return false;
     }
-    job = dvcs->commit(QString("initial project import from KDevelop"), QList<QUrl>(dest),
+    job = dvcs->commit(QString("initial project import from KDevelop"), {dest},
                             KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
@@ -185,10 +185,10 @@ bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& inf
 
     kDebug() << "Importing" << info.sourceLocation << "to"
              << info.repository.repositoryServer();
-    VcsJob* job = cvcs->import( info.importCommitMessage, scratchArea.name(), info.repository);
+    VcsJob* job = cvcs->import( info.importCommitMessage, QUrl::fromLocalFile(scratchArea.name()), info.repository);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded )
     {
-        vcsError(i18n("Could not import project"), scratchArea, info.repository.repositoryServer());
+        vcsError(i18n("Could not import project"), scratchArea, QUrl::fromUserInput(info.repository.repositoryServer()));
         return false;
     }
 
@@ -196,7 +196,7 @@ bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& inf
     job = cvcs->createWorkingCopy( info.repository, info.location, IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded )
     {
-        vcsError(i18n("Could not checkout imported project"), scratchArea, info.repository.repositoryServer());
+        vcsError(i18n("Could not checkout imported project"), scratchArea, QUrl::fromUserInput(info.repository.repositoryServer()));
         return false;
     }
 

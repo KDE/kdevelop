@@ -55,6 +55,9 @@
 #include <QListWidget>
 #include <QPointer>
 #include <KDebug>
+
+#include <KIO/Global>
+
 #define REMOVE_PAGE(name)       \
 if (d->name##Page)              \
 {                               \
@@ -242,7 +245,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
     QList<ProjectFileItem*> fileItems;
     foreach (const QUrl &fileUrl, fileUrls)
     {
-        foreach (ProjectBaseItem* item, project->itemsForUrl(fileUrl.upUrl()))
+        foreach (ProjectBaseItem* item, project->itemsForUrl(KIO::upUrl(fileUrl)))
         {
             if (ProjectFolderItem* folder = item->folder())
             {

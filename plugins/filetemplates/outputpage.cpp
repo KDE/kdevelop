@@ -111,7 +111,7 @@ void OutputPagePrivate::validate()
     {
         if (!it.value()->url().isValid()) {
             invalidFiles << it.key();
-        } else if (it.value()->url().isLocalFile() && !QFileInfo(it.value()->url().adjusted(QUrl::RemoveFilename)).toLocalFile()).isWritable()) {
+        } else if (it.value()->url().isLocalFile() && !QFileInfo(it.value()->url().adjusted(QUrl::RemoveFilename).toLocalFile()).isWritable()) {
             invalidFiles << it.key();
         }
     }
@@ -230,10 +230,10 @@ void OutputPage::loadFileTemplate(const SourceFileTemplate& fileTemplate,
     {
         d->fileIdentifiers << file.identifier;
 
-        QUrl url = baseUrl.resolved(renderer->render(file.outputName));
+        QUrl url = baseUrl.resolved(QUrl(renderer->render(file.outputName)));
         d->defaultUrls.insert(file.identifier, url);
 
-        url = baseUrl.resolved(renderer->render(file.outputName).toLower());
+        url = baseUrl.resolved(QUrl(renderer->render(file.outputName).toLower()));
         d->lowerCaseUrls.insert(file.identifier, url);
     }
 
