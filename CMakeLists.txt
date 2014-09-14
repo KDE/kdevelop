@@ -64,7 +64,7 @@ target_link_libraries(kdevqmljslanguagesupport
     KF5::KDELibs4Support
 )
 
-install(TARGETS kdevqmljslanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevqmljslanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 install(DIRECTORY navigation/propertywidgets DESTINATION ${DATA_INSTALL_DIR})
 
 configure_file(kdevqmljssupport.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqmljssupport.desktop)
