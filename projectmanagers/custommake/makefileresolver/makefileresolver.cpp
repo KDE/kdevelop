@@ -58,7 +58,7 @@
 #include <util/pushvalue.h>
 #include <util/path.h>
 
-#define VERBOSE
+// #define VERBOSE
 
 #if defined(VERBOSE)
 #define ifTest(x) x
@@ -84,6 +84,7 @@ namespace {
     { }
     ModificationRevisionSet modificationTime;
     Path::List paths;
+    QHash<QString, QString> defines;
     QString errorMessage, longErrorMessage;
     bool failed;
     QMap<QString,bool> failedFiles;
@@ -266,13 +267,14 @@ namespace {
       bool m_shouldTouchFiles;
   };
 
-void PathResolutionResult::addPathsUnique(const PathResolutionResult& rhs)
+void PathResolutionResult::mergeWith(const PathResolutionResult& rhs)
 {
     foreach(const Path& path, rhs.paths) {
         if(!paths.contains(path))
             paths.append(path);
     }
     includePathDependency += rhs.includePathDependency;
+    defines.unite(rhs.defines);
 }
 
 PathResolutionResult::PathResolutionResult(bool success, const QString& errorMessage, const QString& longErrorMessage)
@@ -407,7 +409,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
         QString checkFor = localName + "/" + file;
         PathResolutionResult oneUp = resolveIncludePath(checkFor, sourceDir.path(), maxStepsUp-1);
         if (oneUp.success) {
-          oneUp.addPathsUnique(resultOnFail);
+          oneUp.mergeWith(resultOnFail);
           return oneUp;
         }
       }
@@ -422,6 +424,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
   PushValue<bool> e(m_isResolving, true);
 
   Path::List cachedPaths; //If the call doesn't succeed, use the cached not up-to-date version
+  QHash<QString, QString> cachedDefines;
   ModificationRevisionSet dependency;
   dependency.addModificationRevision(IndexedString(makeFile.filePath()), ModificationRevision::revisionForFile(IndexedString(makeFile.filePath())));
   dependency += resultOnFail.includePathDependency;
@@ -430,22 +433,25 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
     QMutexLocker l(&s_cacheMutex);
     it = s_cache.find(dir.path());
     if (it != s_cache.end()) {
-      cachedPaths = (*it).paths;
-      if (dependency == (*it).modificationTime) {
-        if (!(*it).failed) {
+      cachedPaths = it->paths;
+      cachedDefines = it->defines;
+      if (dependency == it->modificationTime) {
+        if (!it->failed) {
           //We have a valid cached result
           PathResolutionResult ret(true);
-          ret.paths = (*it).paths;
-          ret.addPathsUnique(resultOnFail);
+          ret.paths = it->paths;
+          ret.defines = it->defines;
+          ret.mergeWith(resultOnFail);
           return ret;
         } else {
           //We have a cached failed result. We should use that for some time but then try again. Return the failed result if: (there were too many tries within this folder OR this file was already tried) AND The last tries have not expired yet
-          if (/*((*it).failedFiles.size() > 3 || (*it).failedFiles.find(file) != (*it).failedFiles.end()) &&*/ (*it).failTime.secsTo(QDateTime::currentDateTime()) < CACHE_FAIL_FOR_SECONDS) {
+          if (/*(it->failedFiles.size() > 3 || it->failedFiles.find(file) != it->failedFiles.end()) &&*/ it->failTime.secsTo(QDateTime::currentDateTime()) < CACHE_FAIL_FOR_SECONDS) {
             PathResolutionResult ret(false); //Fake that the result is ok
-            ret.errorMessage = i18n("Cached: %1", (*it).errorMessage);
-            ret.longErrorMessage = (*it).longErrorMessage;
-            ret.paths = (*it).paths;
-            ret.addPathsUnique(resultOnFail);
+            ret.errorMessage = i18n("Cached: %1", it->errorMessage);
+            ret.longErrorMessage = it->longErrorMessage;
+            ret.paths = it->paths;
+            ret.defines = it->defines;
+            ret.mergeWith(resultOnFail);
             return ret;
           } else {
             //Try getting a correct result again
@@ -501,6 +507,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 
   if (res.paths.isEmpty())
       res.paths = cachedPaths; //We failed, maybe there is an old cached result, use that.
+      res.defines = cachedDefines;
 
   {
     QMutexLocker l(&s_cacheMutex);
@@ -656,28 +663,47 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   return ret;
 }
 
+static QRegularExpression defineRegularExpression()
+{
+  static const QRegularExpression pattern(QStringLiteral(
+    "-D([^\\s=]+)(?:=(\".*(?<!\\\\)\"|[^\\s]*))?"
+  ));
+  return pattern;
+}
+
 PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, const QString& workingDirectory) const
 {
   PathResolutionResult ret(true);
   ret.longErrorMessage = fullOutput;
   ifTest(cout << "full output: " << qPrintable(fullOutput) << endl);
 
-  const auto& includeRx = includeRegularExpression();
-  auto it = includeRx.globalMatch(fullOutput);
-  while (it.hasNext()) {
-    const auto match = it.next();
-    QString path = match.captured(1);
-    if (path.startsWith('"') || (path.startsWith('\'') && path.length() > 2)) {
-      //probable a quoted path
-      if (path.endsWith(path.left(1))) {
-        //Quotation is ok, remove it
-        path = path.mid(1, path.length() - 2);
+  {
+    const auto& includeRx = includeRegularExpression();
+    auto it = includeRx.globalMatch(fullOutput);
+    while (it.hasNext()) {
+      const auto match = it.next();
+      QString path = match.captured(1);
+      if (path.startsWith('"') || (path.startsWith('\'') && path.length() > 2)) {
+        //probable a quoted path
+        if (path.endsWith(path.left(1))) {
+          //Quotation is ok, remove it
+          path = path.mid(1, path.length() - 2);
+        }
       }
-    }
-    if (QFileInfo(path).isRelative())
-      path = workingDirectory + '/' + path;
+      if (QFileInfo(path).isRelative())
+        path = workingDirectory + '/' + path;
 
-    ret.paths << Path(path);
+      ret.paths << Path(path);
+    }
+  }
+
+  {
+    const auto& defineRx = defineRegularExpression();
+    auto it = defineRx.globalMatch(fullOutput);
+    while (it.hasNext()) {
+      const auto match = it.next();
+      ret.defines[match.captured(1)] = match.captured(2);
+    }
   }
 
   return ret;

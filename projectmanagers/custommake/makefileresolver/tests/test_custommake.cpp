@@ -81,6 +81,18 @@ void TestCustomMake::testIncludeDirectories()
     QVERIFY(result.paths.contains(Path("/testFile4")));
 }
 
+void TestCustomMake::testDefines()
+{
+    MakeFileResolver mf;
+    const auto result = mf.processOutput("-DFOO -DBAR=ASDF -DLALA=1 -DMEH= -DSTR=\"foo \\\" bar\" -DEND", QString());
+    QCOMPARE(result.defines.value("FOO", "not found"), QString());
+    QCOMPARE(result.defines.value("BAR", "not found"), QString("ASDF"));
+    QCOMPARE(result.defines.value("LALA", "not found"), QString("1"));
+    QCOMPARE(result.defines.value("MEH", "not found"), QString());
+    QCOMPARE(result.defines.value("STR", "not found"), QString("\"foo \\\" bar\""));
+    QCOMPARE(result.defines.value("END", "not found"), QString());
+}
+
 QTEST_GUILESS_MAIN(TestCustomMake)
 
 #include "moc_test_custommake.cpp"

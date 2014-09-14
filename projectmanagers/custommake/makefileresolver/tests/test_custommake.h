@@ -32,6 +32,7 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     void testIncludeDirectories();
+    void testDefines();
 };
 
 #endif // TEST_CUSTOMMAKE_H

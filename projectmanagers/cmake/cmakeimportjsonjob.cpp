@@ -83,6 +83,7 @@ CMakeJsonData import(const Path& commandsFile)
 
         CMakeFile ret;
         ret.includes = result.paths;
+        ret.defines = result.defines;
         data.files[Path(entry["file"].toString())] = ret;
     }
 

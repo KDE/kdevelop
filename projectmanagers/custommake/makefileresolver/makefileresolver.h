@@ -30,8 +30,9 @@ struct PathResolutionResult
   KDevelop::ModificationRevisionSet includePathDependency;
 
   KDevelop::Path::List paths;
+  QHash<QString, QString> defines;
 
-  void addPathsUnique(const PathResolutionResult& rhs);
+  void mergeWith(const PathResolutionResult& rhs);
 
   operator bool() const;
 };
