@@ -33,6 +33,16 @@ target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
         kdev4noprojectincludesanddefines )
 generate_export_header(kdevdefinesandincludesmanager EXPORT_FILE_NAME definesandincludesmanagerexport.h)
 
+option(BUILD_kdev_includepathsconverter "Build utility to modify include paths of a project from command line." ON)
+if(BUILD_kdev_includepathsconverter)
+    add_executable(kdev_includepathsconverter includepathsconverter.cpp)
+    target_link_libraries(kdev_includepathsconverter LINK_PRIVATE
+        ${KDEVPLATFORM_PROJECT_LIBRARIES}
+        kdevdefinesandincludessettings
+    )
+    install(TARGETS kdev_includepathsconverter ${INSTALL_TARGETS_DEFAULT_ARGS} )
+endif(BUILD_kdev_includepathsconverter)
+
 install( TARGETS kdevdefinesandincludesmanager
          DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 install( TARGETS kdevdefinesandincludessettings ${INSTALL_TARGETS_DEFAULT_ARGS} )
