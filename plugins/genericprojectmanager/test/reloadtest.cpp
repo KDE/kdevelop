@@ -76,7 +76,10 @@ void ProjectLoadTest::cleanupTestCase()
 
 void ProjectLoadTest::init()
 {
-    Q_ASSERT(ICore::self()->projectController()->projects().isEmpty());
+    foreach(IProject* p, ICore::self()->projectController()->projects()) {
+        ICore::self()->projectController()->closeProject(p);
+    }
+    QCOMPARE(ICore::self()->projectController()->projects().size(), 0);
 }
 
 struct TestProject
