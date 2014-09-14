@@ -185,7 +185,7 @@ void ProjectItemDataProvider::setFilterText( const QString& text )
     }
 
     //then, for the last part, we use the already built cache to sort the items according with their distance
-    qSort(m_filteredItems.begin(), m_filteredItems.end(), ClosestMatchToText(heights));
+    std::sort(m_filteredItems.begin(), m_filteredItems.end(), ClosestMatchToText(heights));
 }
 
 QList<KDevelop::QuickOpenDataPointer> ProjectItemDataProvider::data( uint start, uint end ) const

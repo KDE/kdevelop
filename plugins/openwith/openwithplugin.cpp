@@ -190,7 +190,7 @@ QList<QAction*> OpenWithPlugin::actionsForServiceType( const QString& serviceTyp
             standardAction = act;
         }
     }
-    qSort(actions.begin(), actions.end(), sortActions);
+    std::sort(actions.begin(), actions.end(), sortActions);
     if (standardAction) {
         actions.removeOne(standardAction);
         actions.prepend(standardAction);

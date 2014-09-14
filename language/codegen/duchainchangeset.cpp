@@ -51,7 +51,7 @@ DUChainChangeSet & DUChainChangeSet::operator<<(DUChainChangeSet & rhs)
     
 #ifndef NDEBUG
     //check for possible duplicates
-    qSort<QList<DUChainRef *> >(m_objectRefs);
+    std::sort(m_objectRefs.begin(), m_objectRefs.end());
     
     for(QList<DUChainRef *>::iterator i = m_objectRefs.begin(); i < m_objectRefs.end() - 1; ++i  )
         Q_ASSERT(*i != *(i + 1));

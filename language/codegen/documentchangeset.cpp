@@ -463,7 +463,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
 
     if (!removedLines.isEmpty()) {
         int offset = 0;
-        qSort(removedLines);
+        std::sort(removedLines.begin(), removedLines.end());
         foreach(int l, removedLines) {
             textLines.removeAt(l - offset);
             ++offset;

@@ -146,7 +146,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
 
     QMenu* m = new QMenu(this);
     QList<LaunchConfigurationType*> types = Core::self()->runController()->launchConfigurationTypes();
-    qSort(types.begin(), types.end(), launchConfigGreaterThan); //we want it in reverse order
+    std::sort(types.begin(), types.end(), launchConfigGreaterThan); //we want it in reverse order
     foreach(LaunchConfigurationType* type, types)
     {
         connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));

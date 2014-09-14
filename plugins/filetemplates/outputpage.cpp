@@ -120,7 +120,7 @@ void OutputPagePrivate::validate()
     if (valid) {
         output->messageWidget->animatedHide();
     } else {
-        qSort(invalidFiles);
+        std::sort(invalidFiles.begin(), invalidFiles.end());
         output->messageWidget->setMessageType(KMessageWidget::Error);
         output->messageWidget->setCloseButtonVisible(false);
         output->messageWidget->setText(i18np("Invalid output file: %2", "Invalid output files: %2", invalidFiles.count(), invalidFiles.join(", ")));

@@ -56,7 +56,7 @@ public:
         : QAbstractListModel(parent)
     {
         m_plugins = KDevelop::Core::self()->pluginControllerInternal()->loadedPlugins();
-        qSort(m_plugins.begin(), m_plugins.end(), sortPlugins);
+        std::sort(m_plugins.begin(), m_plugins.end(), sortPlugins);
     }
 
     KDevelop::IPlugin *plugin(const QModelIndex& index) const

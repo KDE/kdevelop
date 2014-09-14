@@ -120,7 +120,7 @@ struct ContainerPrivate {
             views << view;
         }
 
-        qSort(views.begin(), views.end(), sortViews);
+        std::sort(views.begin(), views.end(), sortViews);
 
         foreach(View* view, views) {
             QAction* action = documentListMenu->addAction(view->document()->title());

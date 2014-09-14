@@ -112,7 +112,7 @@ QList<ProjectFileItem*> fileItemsWithin(const QList<ProjectBaseItem*> items)
 
 QList<ProjectBaseItem*> topLevelItemsWithin(QList<ProjectBaseItem*> items)
 {
-    qSort(items.begin(), items.end(), ProjectBaseItem::pathLessThan);
+    std::sort(items.begin(), items.end(), ProjectBaseItem::pathLessThan);
     Path lastFolder;
     for (int i = items.size() - 1; i >= 0; --i)
     {

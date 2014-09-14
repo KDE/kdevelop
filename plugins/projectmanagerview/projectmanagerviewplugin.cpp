@@ -509,7 +509,7 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
 
     //copy the list of selected items and sort it to guarantee parents will come before children
     QList<KDevelop::ProjectBaseItem*> sortedItems = items;
-    qSort(sortedItems.begin(), sortedItems.end(), ProjectBaseItem::pathLessThan);
+    std::sort(sortedItems.begin(), sortedItems.end(), ProjectBaseItem::pathLessThan);
 
     Path lastFolder;
     QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> > filteredItems;

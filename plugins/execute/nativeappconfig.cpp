@@ -480,8 +480,8 @@ QMenu* NativeAppConfigType::launcherSuggestions()
                     submenus += submenu;
                 }
             }
-            qSort(separateActions.begin(), separateActions.end(), actionLess);
-            qSort(submenus.begin(), submenus.end(), menuLess);
+            std::sort(separateActions.begin(), separateActions.end(), actionLess);
+            std::sort(submenus.begin(), submenus.end(), menuLess);
             foreach(QMenu* m, submenus)
                 projectMenu->addMenu(m);
             projectMenu->addActions(separateActions);

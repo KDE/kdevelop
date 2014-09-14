@@ -152,7 +152,7 @@ void GrepFindFilesThread::run()
         }
     }
 
-    qSort(m_files);
+    std::sort(m_files.end(), m_files.end());
 }
 
 QList<QUrl> GrepFindFilesThread::files() const {

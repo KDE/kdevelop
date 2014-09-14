@@ -494,7 +494,7 @@ struct SortNodesFunctor
 void Node::recursiveSortInternal()
 {
   // Sort my nodes.
-  qSort(m_children.begin(), m_children.end(), SortNodesFunctor());
+  std::sort(m_children.begin(), m_children.end(), SortNodesFunctor());
 
   // Tell each node to sort it self.
   foreach (Node* node, m_children)

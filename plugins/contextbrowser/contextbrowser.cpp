@@ -912,7 +912,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
             TopDUContext* top = (forward ? usingFiles[0] : usingFiles.back()).data();
             if(top) {
               QList<RangeInRevision> useRanges = allUses(top, decl, true);
-              qSort(useRanges);
+              std::sort(useRanges.begin(), useRanges.end());
               if(!useRanges.isEmpty()) {
                 QUrl url = top->url().toUrl();
                 KTextEditor::Range selectUse = chosen->transformFromLocalRevision(forward ? useRanges.first() : useRanges.back());
@@ -925,7 +925,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
         }
         //Check whether we are within a use
         QList<RangeInRevision> localUses = allUses(chosen, decl, true);
-        qSort(localUses);
+        std::sort(localUses.begin(), localUses.end());
         for(int a = 0; a < localUses.size(); ++a) {
           int nextUse = (forward ? a+1 : a-1);
           bool pick = localUses[a].contains(c);
@@ -998,7 +998,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
                 QUrl u = nextTop->url().toUrl();
                 
                 QList<RangeInRevision> nextTopUses = allUses(nextTop, decl, true);
-                qSort(nextTopUses);
+                std::sort(nextTopUses.begin(), nextTopUses.end());
                 
                 if(!nextTopUses.isEmpty()) {
                   KTextEditor::Range range =  chosen->transformFromLocalRevision(forward ? nextTopUses.front() : nextTopUses.back());

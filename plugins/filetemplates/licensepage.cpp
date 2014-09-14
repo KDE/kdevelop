@@ -87,7 +87,7 @@ void LicensePagePrivate::initializeLicenses()
         }
     }
 
-    qSort(availableLicenses);
+    std::sort(availableLicenses.begin(), availableLicenses.end());
 
     foreach(const LicenseInfo& info, availableLicenses) {
         license->licenseComboBox->addItem(info.name);
