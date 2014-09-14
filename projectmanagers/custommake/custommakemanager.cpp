@@ -75,7 +75,7 @@ public:
             }
         }
 
-        return toPathList(m_resolver->resolveIncludePath(path).paths);
+        return m_resolver->resolveIncludePath(path).paths;
     }
 
     virtual IDefinesAndIncludesManager::Type type() const

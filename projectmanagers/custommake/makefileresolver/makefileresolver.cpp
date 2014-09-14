@@ -46,11 +46,9 @@
 #include <sys/time.h>
 #include <time.h>
 
-#ifdef TEST
-#include <QApplication>
-#endif
 #include <QDir>
 #include <QFileInfo>
+#include <QRegularExpression>
 #include <QRegExp>
 
 #include <kprocess.h>
@@ -60,9 +58,9 @@
 #include <util/pushvalue.h>
 #include <util/path.h>
 
-// #define VERBOSE
+#define VERBOSE
 
-#if defined(TEST) || defined(VERBOSE)
+#if defined(VERBOSE)
 #define ifTest(x) x
 #else
 #define ifTest(x)
@@ -85,7 +83,7 @@ namespace {
       : failed(false)
     { }
     ModificationRevisionSet modificationTime;
-    QStringList paths;
+    Path::List paths;
     QString errorMessage, longErrorMessage;
     bool failed;
     QMap<QString,bool> failedFiles;
@@ -270,7 +268,7 @@ namespace {
 
 void PathResolutionResult::addPathsUnique(const PathResolutionResult& rhs)
 {
-    foreach(const QString& path, rhs.paths) {
+    foreach(const Path& path, rhs.paths) {
         if(!paths.contains(path))
             paths.append(path);
     }
@@ -423,7 +421,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 
   PushValue<bool> e(m_isResolving, true);
 
-  QStringList cachedPaths; //If the call doesn't succeed, use the cached not up-to-date version
+  Path::List cachedPaths; //If the call doesn't succeed, use the cached not up-to-date version
   ModificationRevisionSet dependency;
   dependency.addModificationRevision(IndexedString(makeFile.filePath()), ModificationRevision::revisionForFile(IndexedString(makeFile.filePath())));
   dependency += resultOnFail.includePathDependency;
@@ -532,24 +530,17 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
   return res;
 }
 
-QRegExp includeRegularExpression()
+static QRegularExpression includeRegularExpression()
 {
-  //when updating this, please also run and update the test_custommake.cpp
-  QString includeParameterRx("\\s(?:--include-dir=|-I\\s*|-isystem\\s+)");
-  QString quotedRx("\\'.*\\'|\\\".*\\\""); //Matches "hello", 'hello', 'hello"hallo"', etc.
-  QString escapedPathRx("((?:\\\\.)?([\\S^\\\\]?))+"); //Matches /usr/I\ am\ a\ strange\ path/include
-
-  QRegExp includeRx(QString("%1(%2|%3)(?=\\s)").arg(includeParameterRx).arg(quotedRx).arg(escapedPathRx), Qt::CaseSensitive, QRegExp::RegExp2);
-//   includeRx.setMinimal(true);
-  if(!includeRx.isValid())
-      qCritical() << "error" << includeRx.errorString();
-  return includeRx;
-}
-
-PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, const QString& workingDirectory) const
-{
-  QRegExp rx = includeRegularExpression();
-  return processOutput(fullOutput, rx, workingDirectory);
+  static const QRegularExpression expression(QStringLiteral(
+    "\\s(?:--include-dir=|-I\\s*|-isystem\\s+)("
+    "\\'.*\\'|\\\".*\\\"" //Matches "hello", 'hello', 'hello"hallo"', etc.
+    "|"
+    "((?:\\\\.)?([\\S^\\\\]?))+" //Matches /usr/I\ am\ a\ strange\ path/include
+    ")(?=\\s)"
+  ));
+  Q_ASSERT(expression.isValid());
+  return expression;
 }
 
 PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString& file, const QString& workingDirectory,
@@ -582,8 +573,6 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   if ((lineEnd = fullOutput.indexOf('\n')) != -1)
     firstLine.truncate(lineEnd); //Only look at the first line of output
 
-  QRegExp includeRx = includeRegularExpression();
-
   /**
    * There's two possible cases this can currently handle.
    * 1.: gcc is called, with the parameters we are searching for (so we parse the parameters)
@@ -592,7 +581,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 
   ///STEP 1: Test if it is a recursive make-call
   // Do not search for recursive make-calls if we already have include-paths available. Happens in kernel modules.
-  if (!fullOutput.contains(includeRx)) {
+  if (!includeRegularExpression().match(fullOutput).hasMatch()) {
     QRegExp makeRx("\\bmake\\s");
     int offset = 0;
     while ((offset = makeRx.indexIn(firstLine, offset)) != -1) {
@@ -659,7 +648,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 
   ///STEP 2: Search the output for include-paths
 
-  PathResolutionResult ret = processOutput(fullOutput, includeRx, workingDirectory);
+  PathResolutionResult ret = processOutput(fullOutput, workingDirectory);
   if (ret.paths.isEmpty())
     return PathResolutionResult(false, i18n("Could not extract include paths from make output"),
                                 i18n("Folder: \"%1\"  Command: \"%2\"  Output: \"%3\"", workingDirectory,
@@ -667,18 +656,17 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   return ret;
 }
 
-PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, QRegExp& includeRx, const QString& workingDirectory) const
+PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, const QString& workingDirectory) const
 {
   PathResolutionResult ret(true);
   ret.longErrorMessage = fullOutput;
-  ifTest(cout << "full output" << qPrintable(fullOutput) << endl);
+  ifTest(cout << "full output: " << qPrintable(fullOutput) << endl);
 
-  int offset = 0;
-
-  while ((offset = includeRx.indexIn(fullOutput, offset)) != -1) {
-    offset += 1; ///The previous white space
-
-    QString path = includeRx.cap(1);
+  const auto& includeRx = includeRegularExpression();
+  auto it = includeRx.globalMatch(fullOutput);
+  while (it.hasNext()) {
+    const auto match = it.next();
+    QString path = match.captured(1);
     if (path.startsWith('"') || (path.startsWith('\'') && path.length() > 2)) {
       //probable a quoted path
       if (path.endsWith(path.left(1))) {
@@ -689,9 +677,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
     if (QFileInfo(path).isRelative())
       path = workingDirectory + '/' + path;
 
-    ret.paths << QDir::cleanPath(path);
-
-    offset += includeRx.matchedLength()-1;
+    ret.paths << Path(path);
   }
 
   return ret;
@@ -712,41 +698,3 @@ void MakeFileResolver::setOutOfSourceBuildSystem(const QString& source, const QS
   m_source = QDir::cleanPath(source);
   m_build = QDir::cleanPath(m_build);
 }
-
-#ifdef TEST
-
-/** This can be used for testing and debugging the system. To compile it
- * enable BUILD_kdev_makefileresolver in the CMakeLists.txt file
- * */
-
-#include <tests/testcore.h>
-#include <tests/autotestshell.h>
-
-int main(int argc, char **argv)
-{
-    QApplication app(argc,argv);
-
-    AutoTestShell::init();
-    KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
-
-    MakeFileResolver resolver;
-    if (argc < 2) {
-        cout << "params: 1. file-name, [2. source-directory 3. build-directory]" << endl;
-        return 1;
-    }
-    if (argc >= 4) {
-        cout << "mapping" << argv[2] << "->" << argv[3] << endl;
-        resolver.setOutOfSourceBuildSystem(argv[2], argv[3]);
-    }
-    PathResolutionResult res = resolver.resolveIncludePath(argv[1]);
-    cout << "success:" << res.success << "\n";
-    if (!res.success) {
-        cout << "error-message: \n" << qPrintable(res.errorMessage) << "\n";
-        cout << "long error-message: \n" << qPrintable(res.longErrorMessage) << "\n";
-    }
-    cout << "path: \n" << qPrintable(res.paths.join("\n")) << "\n";
-    TestCore::shutdown();
-
-    return res.success;
-}
-#endif

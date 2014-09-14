@@ -82,7 +82,7 @@ CMakeJsonData import(const Path& commandsFile)
         PathResolutionResult result = resolver.processOutput(entry["command"].toString(), entry["directory"].toString());
 
         CMakeFile ret;
-        ret.includes = KDevelop::toPathList(result.paths);
+        ret.includes = result.paths;
         data.files[Path(entry["file"].toString())] = ret;
     }
 

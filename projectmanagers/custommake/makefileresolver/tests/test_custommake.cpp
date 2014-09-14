@@ -33,6 +33,8 @@
 
 #include <QtTest>
 
+using namespace KDevelop;
+
 namespace {
 void createFile( QFile& file )
 {
@@ -43,16 +45,19 @@ void createFile( QFile& file )
 }
 }
 
-void TestCustomMake::initTestCase() {
-    KDevelop::AutoTestShell::init();
-    KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
+void TestCustomMake::initTestCase()
+{
+    AutoTestShell::init();
+    TestCore::initialize(Core::NoUi);
 }
 
-void TestCustomMake::cleanupTestCase() {
-    KDevelop::TestCore::shutdown();
+void TestCustomMake::cleanupTestCase()
+{
+    TestCore::shutdown();
 }
 
-void TestCustomMake::testIncludeDirectories() {
+void TestCustomMake::testIncludeDirectories()
+{
     KTempDir tempDir;
     {
         QFile file( tempDir.name() + "Makefile" );
@@ -70,10 +75,10 @@ void TestCustomMake::testIncludeDirectories() {
       QFAIL("Failed to resolve include path.");
     }
     QCOMPARE(result.paths.size(), 4);
-    QVERIFY(result.paths.contains("/testFile1"));
-    QVERIFY(result.paths.contains("/testFile2"));
-    QVERIFY(result.paths.contains("/testFile3"));
-    QVERIFY(result.paths.contains("/testFile4"));
+    QVERIFY(result.paths.contains(Path("/testFile1")));
+    QVERIFY(result.paths.contains(Path("/testFile2")));
+    QVERIFY(result.paths.contains(Path("/testFile3")));
+    QVERIFY(result.paths.contains(Path("/testFile4")));
 }
 
 QTEST_GUILESS_MAIN(TestCustomMake)

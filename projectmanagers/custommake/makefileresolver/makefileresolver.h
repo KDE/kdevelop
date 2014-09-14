@@ -14,13 +14,10 @@
 #define INCLUDEPATHRESOLVER_H
 
 #include <QString>
-#include <QStringList>
+
 #include <language/editor/modificationrevisionset.h>
 
-class QDir;
-class QFile;
-
-class FileModificationTimeWrapper;
+#include <util/path.h>
 
 struct PathResolutionResult
 {
@@ -32,7 +29,7 @@ struct PathResolutionResult
 
   KDevelop::ModificationRevisionSet includePathDependency;
 
-  QStringList paths;
+  KDevelop::Path::List paths;
 
   void addPathsUnique(const PathResolutionResult& rhs);
 
@@ -74,7 +71,6 @@ class MakeFileResolver
     ///file should be the name of the target, without extension(because that may be different)
     PathResolutionResult resolveIncludePathInternal( const QString& file, const QString& workingDirectory,
                                                       const QString& makeParameters, const SourcePathInformation& source, int maxDepth );
-    PathResolutionResult processOutput(const QString& fullOutput, QRegExp& includeRx, const QString& workingDirectory) const;
     QString m_source;
     QString m_build;
 };
