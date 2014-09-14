@@ -27,6 +27,7 @@
 #include <language/editor/rangeinrevision.h>
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/declaration.h>
+#include <serialization/indexedstring.h>
 
 #include <QTest>
 
@@ -72,6 +73,12 @@ inline char* toString(const KDevelop::AbstractType::Ptr& type)
     QString s = QString("Type: %1")
         .arg(type ? type->toString() : QString("<null>"));
     return qstrdup(s.toLatin1().constData());
+}
+
+template<>
+inline char* toString(const KDevelop::IndexedString& string)
+{
+    return qstrdup(qPrintable(string.str()));
 }
 
 }
