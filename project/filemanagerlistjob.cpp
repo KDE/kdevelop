@@ -29,7 +29,7 @@
 using namespace KDevelop;
 
 FileManagerListJob::FileManagerListJob(ProjectFolderItem* item, const bool forceRecursion)
-    : KIO::Job(), m_item(0), m_forceRecursion(forceRecursion), m_aborted(false)
+    : KIO::Job(), m_item(item), m_forceRecursion(forceRecursion), m_aborted(false)
 {
     /* the following line is not an error in judgment, apparently starting a
      * listJob while the previous one hasn't self-destructed takes a lot of time,
@@ -37,7 +37,6 @@ FileManagerListJob::FileManagerListJob(ProjectFolderItem* item, const bool force
     connect( this, SIGNAL(nextJob()), SLOT(startNextJob()), Qt::QueuedConnection );
 
     addSubDir(item);
-    startNextJob();
 
 #ifdef TIME_IMPORT_JOB
     m_timer.start();
@@ -51,7 +50,8 @@ ProjectFolderItem* FileManagerListJob::item() const
 
 void FileManagerListJob::addSubDir( ProjectFolderItem* item )
 {
-    Q_ASSERT(!m_item || m_item->path().isDirectParentOf(item->path()));
+    Q_ASSERT(!m_listQueue.contains(item));
+    Q_ASSERT(!m_item || m_item == item || m_item->path().isDirectParentOf(item->path()));
 
     m_listQueue.enqueue(item);
 }
@@ -114,3 +114,7 @@ void FileManagerListJob::abort()
     m_aborted = true;
 }
 
+void FileManagerListJob::start()
+{
+    startNextJob();
+}
