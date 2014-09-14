@@ -193,17 +193,8 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url )
 
 void OpenProjectDialog::openPageAccepted()
 {
-    if ( isValid( openPage ) )
-    {
-        ///TODO: cleanup to just call next() once we depend on kde 4.7.3 or higher
-        ///      requires bugfix in kdelibs, workaround for now
-        if ( isAppropriate( projectInfoPage ) )
-        {
-            next();
-        } else
-        {
-            accept();
-        }
+    if ( isValid( openPage ) ) {
+        next();
     }
 }
 
