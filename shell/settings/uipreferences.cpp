@@ -35,7 +35,6 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(UiPreferencesFactory, "kcm_kdev_uisettings.json", registerPlugin<UiPreferences>();)
-// K_EXPORT_PLUGIN(UiPreferencesFactory(KAboutData("kcm_kdev_uisettings", "kdevplatform", ki18n("User Interface Settings"), "0.1")))
 
 UiPreferences::UiPreferences(QWidget* parent, const QVariantList& args )
     : KCModule( KAboutData::pluginData("kcm_kdev_uisettings"), parent, args )

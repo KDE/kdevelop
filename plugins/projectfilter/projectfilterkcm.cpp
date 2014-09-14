@@ -44,7 +44,6 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(ProjectFilterKCMFactory, "kcm_kdevprojectfilter.json", registerPlugin<ProjectFilterKCM>();)
-// K_EXPORT_PLUGIN(ProjectFilterKCMFactory("kcm_kdevprojectfilter"))
 
 ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
     : ProjectKCModule<ProjectFilterSettings>(KAboutData::pluginData("kcm_kdevprojectfilter"), parent, args)

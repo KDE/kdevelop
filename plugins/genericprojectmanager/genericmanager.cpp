@@ -27,9 +27,6 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(GenericSupportFactory, "kdevgenericmanager.json", registerPlugin<GenericProjectManager>();)
-// K_EXPORT_PLUGIN(GenericSupportFactory(
-//     KAboutData("kdevgenericmanager", "kdevgenericprojectmanager", ki18n("Generic Project Manager"),
-//                "0.2", ki18n("A plugin to support basic project management on a filesystem level"), KAboutData::License_GPL)))
 
 GenericProjectManager::GenericProjectManager( QObject* parent, const QVariantList& args )
     : AbstractFileManagerPlugin( "kdevgenericmanager", parent, args )

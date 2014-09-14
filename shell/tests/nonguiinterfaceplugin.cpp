@@ -27,7 +27,6 @@
 #include <kpluginloader.h>
 
 K_PLUGIN_FACTORY(KDevNonGuiInterfacePluginFactory, registerPlugin<NonGuiInterfacePlugin>(); )
-//K_EXPORT_PLUGIN(KDevNonGuiInterfacePluginFactory( KAboutData("kdevnonguiinterfaceplugin", "kdevnonguiinterfaceplugin", ki18n("Plugin for unit-tests"), "0.1", ki18n("Plugin for unit-tests"), KAboutData::License_LGPL ) ) )
 
 NonGuiInterfacePlugin::NonGuiInterfacePlugin( QObject* parent, const QVariantList& )
     : IPlugin( "kdevnonguiinterfaceplugin", parent )

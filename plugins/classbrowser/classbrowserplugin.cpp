@@ -53,7 +53,6 @@
 #include <interfaces/iprojectcontroller.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevClassBrowserFactory, "kdevclassbrowser.json", registerPlugin<ClassBrowserPlugin>(); )
-// K_EXPORT_PLUGIN(KDevClassBrowserFactory(KAboutData("kdevclassbrowser","kdevclassbrowser",ki18n("Class Browser"), "0.1", ki18n("This plugin provides a browsable model of the currently parsed classes and other items."), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 

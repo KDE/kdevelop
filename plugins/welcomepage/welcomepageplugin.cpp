@@ -36,8 +36,6 @@
 #include "welcomepagedocument.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevWelcomePagePluginFactory, "kdevwelcomepage.json", registerPlugin<KDevWelcomePagePlugin>();)
-// K_EXPORT_PLUGIN(KDevWelcomePagePluginFactory(KAboutData("kdevprojectdashboard","kdevprojectdashboard", ki18n("Project Dashboard"),
-//                                                        "0.1", ki18n("This plugin shows relevant information of some project when it's invoked"), KAboutData::License_LGPL)))
 
 using namespace KDevelop;
 

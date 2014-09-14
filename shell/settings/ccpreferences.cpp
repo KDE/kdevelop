@@ -49,7 +49,6 @@ namespace KDevelop
 {
 
 K_PLUGIN_FACTORY_WITH_JSON(CCPreferencesFactory, "kcm_kdev_ccsettings.json", registerPlugin<CCPreferences>();)
-// K_EXPORT_PLUGIN(CCPreferencesFactory(KAboutData("kcm_kdev_ccsettings", "kdevplatform", ki18n("Language Support Settings"), "0.1")))
 
 CCPreferences::CCPreferences( QWidget *parent, const QVariantList &args )
     : KCModule( KAboutData::pluginData("kcm_kdev_ccsettings"), parent, args )

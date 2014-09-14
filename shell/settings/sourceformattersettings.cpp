@@ -46,7 +46,6 @@ Boston, MA 02110-1301, USA.
 #define STYLE_ROLE (Qt::UserRole+1)
 
 K_PLUGIN_FACTORY_WITH_JSON(SourceFormatterSettingsFactory, "kcm_kdevsourceformattersettings.json", registerPlugin<SourceFormatterSettings>();)
-// K_EXPORT_PLUGIN(SourceFormatterSettingsFactory("kcm_kdevsourceformattersettings"))
 
 using KDevelop::Core;
 using KDevelop::ISourceFormatter;

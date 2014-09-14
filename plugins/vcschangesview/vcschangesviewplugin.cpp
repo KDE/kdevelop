@@ -44,9 +44,6 @@
 #include <vcs/models/projectchangesmodel.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(VcsProjectIntegrationFactory, "kdevvcschangesview.json", registerPlugin<VcsProjectIntegrationPlugin>();)
-// K_EXPORT_PLUGIN(VcsProjectIntegrationFactory(
-//     KAboutData("kdevvcsprojectintegration","kdevvcsprojectintegration",
-//                ki18n("VCS Project Integration"), "0.1", ki18n("This plugin provides integration between the projects and their VCS infrastructure"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 

@@ -56,7 +56,6 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(ProjectManagerFactory, "kdevprojectmanagerview.json", registerPlugin<ProjectManagerViewPlugin>();)
-// K_EXPORT_PLUGIN(ProjectManagerFactory(KAboutData("kdevprojectmanagerview","kdevprojectmanagerview", ki18n("Project Management View"), "0.1", ki18n("Toolview to do all the project management stuff"), KAboutData::License_GPL)))
 
 class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
 {

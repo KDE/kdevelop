@@ -51,7 +51,6 @@
 #include <algorithm>
 
 K_PLUGIN_FACTORY_WITH_JSON(DocumentSwitcherFactory, "kdevdocumentswitcher.json", registerPlugin<DocumentSwitcherPlugin>();)
-// K_EXPORT_PLUGIN(DocumentSwitcherFactory(KAboutData("kdevdocumentswitcher","kdevdocumentswitcher",ki18n("Document Switcher"), "0.1", ki18n("Switch between open documents using most-recently-used list"), KAboutData::License_GPL)))
 
 //TODO: Show frame around view's widget while walking through
 //TODO: Make the widget transparent

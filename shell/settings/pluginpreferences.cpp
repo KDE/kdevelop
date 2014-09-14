@@ -38,8 +38,6 @@ namespace KDevelop
 {
 
 K_PLUGIN_FACTORY_WITH_JSON(PluginPreferencesFactory, "kcm_kdev_pluginsettings.desktop", registerPlugin<PluginPreferences>();)
-// K_EXPORT_PLUGIN(PluginPreferencesFactory( KAboutData("kcm_kdev_pluginsettings", "kdevplatform", ki18n("Plugin Selection"), "0.1")))
-
 
 PluginPreferences::PluginPreferences( QWidget *parent, const QVariantList &args )
     : KCModule( KAboutData::pluginData("kcm_kdev_pluginsettings"), parent, args )

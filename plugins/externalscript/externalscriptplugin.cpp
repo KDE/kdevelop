@@ -54,9 +54,6 @@
 
 
 K_PLUGIN_FACTORY_WITH_JSON(ExternalScriptFactory, "kdevexternalscript.json", registerPlugin<ExternalScriptPlugin>();)
-// K_EXPORT_PLUGIN( ExternalScriptFactory( KAboutData( "kdevexternalscript", "kdevexternalscript", ki18n( "External Scripts" ),
-//                                         "0.1", ki18n( "Run external scripts or applications to manipulate the editor contents or do other arbitrary actions." ),
-//                                         KAboutData::License_GPL ) ) )
 
 class ExternalScriptViewFactory: public KDevelop::IToolViewFactory
 {
