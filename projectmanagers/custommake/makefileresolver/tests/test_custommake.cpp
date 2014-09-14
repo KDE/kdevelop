@@ -84,8 +84,8 @@ void TestCustomMake::testIncludeDirectories()
 void TestCustomMake::testDefines()
 {
     MakeFileResolver mf;
-    const auto result = mf.processOutput("-DFOO -DBAR=ASDF -DLALA=1 -DMEH= -DSTR=\"foo \\\" bar\" -DEND", QString());
-    QCOMPARE(result.defines.value("FOO", "not found"), QString());
+    const auto result = mf.processOutput("-DFOO  -DFOO=\"foo\" -DBAR=ASDF -DLALA=1 -DMEH= -DSTR=\"foo \\\" bar\" -DEND", QString());
+    QCOMPARE(result.defines.value("FOO", "not found"), QString("\"foo\""));
     QCOMPARE(result.defines.value("BAR", "not found"), QString("ASDF"));
     QCOMPARE(result.defines.value("LALA", "not found"), QString("1"));
     QCOMPARE(result.defines.value("MEH", "not found"), QString());

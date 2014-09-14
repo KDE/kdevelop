@@ -666,7 +666,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 static QRegularExpression defineRegularExpression()
 {
   static const QRegularExpression pattern(QStringLiteral(
-    "-D([^\\s=]+)(?:=(\".*(?<!\\\\)\"|[^\\s]*))?"
+    "-D([^\\s=]+)(?:=(\".*?(?<!\\\\)\"|[^\\s]*))?"
   ));
   return pattern;
 }
