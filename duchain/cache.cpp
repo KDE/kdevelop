@@ -25,10 +25,9 @@
 #include <QString>
 #include <QProcess>
 #include <QDir>
+#include <QStandardPaths>
 #include <QCryptographicHash>
-
-#include <kglobal.h>
-#include <kstandarddirs.h>
+#include <QCoreApplication>
 
 QmlJS::Cache::Cache()
 {
@@ -64,35 +63,42 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
         return path;
     }
 
-    // Look for <uri>_<version>.qml in the shipped files
-    QString fileName = (version.isNull() ? uri : QString("%1_%2.qml").arg(uri, version));
-    path = KGlobal::dirs()->findResource("data",
-        QString("kdevqmljssupport/qmlplugins/%1").arg(fileName)
-    );
+    // List of the paths in which the modules will be looked for
+    KDevelop::Path::List paths;
 
-    if (!path.isNull()) {
-        m_modulePaths.insert(cacheKey, path);
-        return path;
+    for (auto path : QCoreApplication::instance()->libraryPaths()) {
+        KDevelop::Path p(path);
+
+        // Change /path/to/qt5/plugins to /path/to/qt5/{qml,imports}
+        paths << p.cd(QLatin1String("../qml"));
+        paths << p.cd(QLatin1String("../imports"));
     }
 
-    // Look for <uri> (with the dots replaced with slashes) in the standard KDE
-    // QML imports dir.
+    paths << m_includeDirs[baseFile];
+
+    // Find the path for which <path>/u/r/i exists
     QString fragment = QString(uri).replace(QLatin1Char('.'), QDir::separator());
-    QStringList dirs = KGlobal::dirs()->findDirs("module",
-        QString("imports/%1").arg(fragment)
-    );
+    bool isVersion1 = version.startsWith(QLatin1String("1."));
+    bool isQtQuick = (uri == QLatin1String("QtQuick"));
 
-    if (dirs.count() != 0) {
-        m_modulePaths.insert(cacheKey, dirs.first());
-        return dirs.first();
+    if (!version.isEmpty() && !isVersion1) {
+        // Modules having a version greater or equal to 2 are stored in a directory
+        // name like QtQuick.2
+        fragment += QLatin1Char('.') + version.section(QLatin1Char('.'), 0, 0);
     }
 
-    // Look into the custom include dirs of this file
-    for (KDevelop::Path dir : m_includeDirs[baseFile]) {
-        dir.addPath(fragment);
+    for (auto p : paths) {
+        QString pathString = p.cd(fragment).path();
 
-        if (QFile::exists(dir.path())) {
-            path = dir.path();
+        // HACK: QtQuick 1.0 is put in $LIB/qt5/imports/builtins.qmltypes. The "QtQuick"
+        //       identifier appears nowhere.
+        if (isQtQuick && isVersion1) {
+            if (QFile::exists(p.cd(QLatin1String("builtins.qmltypes")).path())) {
+                path = p.path();
+                break;
+            }
+        } else if (QFile::exists(pathString)) {
+            path = pathString;
             break;
         }
     }
@@ -105,11 +111,17 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
 {
     QMutexLocker lock(&m_mutex);
     QStringList result;
-    KStandardDirs d;
 
     for (const QFileInfo& fileInfo : fileInfos) {
         QString filePath = fileInfo.canonicalFilePath();
 
+        // If the module directory contains a plugins.qmltypes files, use it
+        // and skip everything else
+        if (filePath.endsWith(QLatin1String("plugins.qmltypes"))) {
+            return QStringList() << filePath;
+        }
+
+        // Non-so files don't need any treatment
         if (!filePath.endsWith(QLatin1String(".so"))) {
             result.append(filePath);
             continue;
@@ -127,11 +139,11 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
         }
 
         // Locate an existing dump of the file
-        QString dumpHash = QString::fromUtf8(
-            QCryptographicHash::hash(filePath.toUtf8(), QCryptographicHash::Md5).toHex()
-        ) + QLatin1String("_0.0.qml");
-        QString dumpPath = d.findResource("data",
-            QString("kdevqmljssupport/%1").arg(dumpHash)
+        QString dumpFile = QString("kdevqmljssupport/%1.qml").arg(
+            QString::fromAscii(QCryptographicHash::hash(filePath.toUtf8(), QCryptographicHash::Md5).toHex())
+        );
+        QString dumpPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+            dumpFile
         );
 
         if (!dumpPath.isNull()) {
@@ -158,8 +170,8 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
 
             // Open a file in which the dump can be written
             QFile dumpFile(
-                d.saveLocation("data", QLatin1String("kdevqmljssupport")) +
-                dumpHash
+                QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
+                + dumpPath
             );
 
             if (dumpFile.open(QIODevice::WriteOnly)) {

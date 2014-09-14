@@ -57,6 +57,14 @@ struct CompletionParameters
     QList<CompletionTreeItemPointer> completionItems;
 };
 
+QStandardItemModel& fakeModel() {
+  static QStandardItemModel model;
+  model.setColumnCount(10);
+  model.setRowCount(10);
+  return model;
+}
+
+
 void runCompletion(CompletionParameters* parameters)
 {
     parameters->completionContext = CompletionContextPtr(new QmlJS::CodeCompletionContext(parameters->contextAtCursor,
@@ -72,7 +80,7 @@ CompletionParameters prepareCompletion(const QString& initCode, const QString& i
     CompletionParameters completion_data;
 
     // Simulate that the user has entered invokeCode where %INVOKE is, put
-    // the cursor where %CURRSOR is, and then asked for completions
+    // the cursor where %CURSOR is, and then asked for completions
     Q_ASSERT(initCode.indexOf("%INVOKE") != -1);
 
     // Create a file containing the given code, with "%INVOKE" removed
@@ -132,9 +140,30 @@ bool containsItemForDeclarationNamed(const CompletionParameters& params, const Q
     return false;
 }
 
+bool containsItemForText(const CompletionParameters& params, const QString& item)
+{
+    QModelIndex idx = fakeModel().index(0, KDevelop::CodeCompletionModel::Name);
+
+    for (auto ptr : params.completionItems) {
+        if (ptr->data(idx, Qt::DisplayRole, nullptr).toString() == item) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool declarationInCompletionList(const QString& initCode, const QString& invokeCode, QString itemName, bool qml)
 {
     return containsItemForDeclarationNamed(
+        prepareCompletion(initCode, invokeCode, qml),
+        itemName
+    );
+}
+
+bool itemInCompletionList(const QString& initCode, const QString& invokeCode, QString itemName, bool qml)
+{
+    return containsItemForText(
         prepareCompletion(initCode, invokeCode, qml),
         itemName
     );
@@ -237,7 +266,7 @@ void QmlCompletionTest::testContainsDeclaration_data()
 
     // Built-in QML types
     QTest::newRow("qml_builtin_types") <<
-        "import QtQuick 2.0\n"
+        "import QtQuick 1.0\n"    // Test QtQuick 1.0, not always 2.0, so that we ensure that both versions work
         "\n"
         "Text {\n"
         " id: foo\n"
@@ -279,11 +308,32 @@ void QmlCompletionTest::testDoesNotContainDeclaration_data()
     // for properties/signals of the surrounding components
     QTest::newRow("qml_script_binding_not_surrounding") << "Item { property int foo; Item { %INVOKE } }" << "%CURSOR" << "foo" << false;
 
-    // Some QML components are only available in specific versions of their module
-    QTest::newRow("qml_module_version_2.0") << "import QtQuick 2.0\n Item { id: a\n %INVOKE }" << "%CURSOR" << "OpacityAnimator" << true;
-
     // Don't list the declarations that are not in a namespace but are imported from it
     QTest::newRow("qml_namespace_js_builtins") << "import org.kde.kdevplatform 1.0 as KDev\n Item { id: a\n %INVOKE }" << "KDev.%CURSOR" << "String" << true;
 }
+
+void QmlCompletionTest::testContainsText()
+{
+    QFETCH(QString, invokeCode);
+    QFETCH(QString, completionCode);
+    QFETCH(QString, item);
+    QFETCH(bool, qml);
+
+    QVERIFY(itemInCompletionList(invokeCode, completionCode, item, qml));
+}
+
+void QmlCompletionTest::testContainsText_data()
+{
+    QTest::addColumn<QString>("invokeCode");
+    QTest::addColumn<QString>("completionCode");
+    QTest::addColumn<QString>("item");
+    QTest::addColumn<bool>("qml");
+
+    QTest::newRow("qml_import") << "%INVOKE" << "import %CURSOR" << "QtQuick" << true;
+    QTest::newRow("qml_import_prefix") << "%INVOKE" << "import QtQuick.%CURSOR" << "QtQuick.Dialogs" << true;
+
+    QTest::newRow("js_node_require") << "%INVOKE" << "var m = require(%CURSOR" << "tls" << false;
+}
+
 
 }

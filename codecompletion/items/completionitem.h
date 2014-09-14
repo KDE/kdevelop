@@ -49,7 +49,7 @@ public:
     virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
 
 protected:
-    virtual void executed(KTextEditor::Document* document, const KTextEditor::Range& word);
+    virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word);
 
 private:
     Decoration m_decoration;

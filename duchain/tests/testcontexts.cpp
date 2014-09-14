@@ -24,13 +24,13 @@
 #include "../parsesession.h"
 #include "../declarationbuilder.h"
 
-#include <qtest_kde.h>
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testhelpers.h>
 
-QTEST_KDEMAIN(TestContexts, NoGUI);
+#include <QtTest>
+
+QTEST_GUILESS_MAIN(TestContexts);
 
 using namespace KDevelop;
 
@@ -51,7 +51,7 @@ void TestContexts::testFunctionContext()
     QFETCH(RangeInRevision, argCtxRange);
     QFETCH(RangeInRevision, bodyCtxRange);
 
-    const IndexedString file(QString("%1-functionContext.js").arg(qrand()));
+    const IndexedString file(QUrl(QString("file:///internal/%1-functionContext.js").arg(qrand())));
     ParseSession session(file, code, 0);
     QVERIFY(session.ast());
     QCOMPARE(session.language(), QmlJS::Language::JavaScript);
@@ -65,9 +65,9 @@ void TestContexts::testFunctionContext()
     QCOMPARE(top->type(), DUContext::Global);
 
     // the function arguments (containing the prototype context and the function body)
-    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->childContexts().count(), 3);        // module, exports, the function
 
-    DUContext* argCtx = top->childContexts().at(0);
+    DUContext* argCtx = top->childContexts().at(2);
     QCOMPARE(argCtx->type(), DUContext::Function);
     QCOMPARE(argCtx->range(), argCtxRange);
     QCOMPARE(argCtx->childContexts().size(), 2);    // The prototype context then the body context
@@ -104,7 +104,7 @@ void TestContexts::testFunctionContext_data()
 
 void TestContexts::testQMLContext()
 {
-    const IndexedString file("testQMLContext.qml");
+    const IndexedString file(QUrl("file:///internal/testQMLContext.qml"));
     ParseSession session(file, "Text {\n"
                                "  id: main\n"
                                "  Text {\n"
@@ -125,8 +125,8 @@ void TestContexts::testQMLContext()
 
     QCOMPARE(top->type(), DUContext::Global);
 
-    QCOMPARE(top->childContexts().count(), 1);
-    DUContext* mainCtx = top->childContexts().first();
+    QCOMPARE(top->childContexts().count(), 3);        // module, exports, Text
+    DUContext* mainCtx = top->childContexts().at(2);
     QCOMPARE(mainCtx->type(), DUContext::Class);
     QCOMPARE(mainCtx->range(), RangeInRevision(0, 6, 8, 0));
     QCOMPARE(mainCtx->childContexts().size(), 2);

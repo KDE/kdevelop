@@ -15,19 +15,16 @@
  *  along with this program; if not, write to the Free Software                      *
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
-
-import QtQuick 1.1
+import QtQuick 2.2
+import QtQuick.Controls 1.2 as QtControls
 
 PropertyWidget {
+    id: root
     width: 120
     height: 120
-    value: "1"
-    function sliderToValue(slider) {
-        return Math.round(slider/96*20)/20.0;
-    }
-    function valueToSlider(value) {
-        return value*96;
-    }
+    value: (slider.value / 100).toFixed(2)
+    onInitialValueChanged: slider.value = parseFloat(root.initialValue) * 100.0
+
     Text {
         z: 20
         anchors.bottom: parent.bottom
@@ -36,12 +33,12 @@ PropertyWidget {
         color: "white"
         opacity: 0.8
     }
-    Slider {
-        z: 20
-        initialValue: valueToSlider(parent.value)
-        anchors.horizontalCenter: parent.horizontalCenter
+    QtControls.Slider {
+        id: slider
+        anchors.top: parent.top
+        anchors.left: parent.left
+        maximumValue: 100
         width: 100
-        height: 12
     }
     Rectangle {
         anchors.centerIn: parent

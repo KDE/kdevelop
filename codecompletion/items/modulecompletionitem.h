@@ -30,18 +30,23 @@ namespace QmlJS {
 class ModuleCompletionItem : public KDevelop::CompletionTreeItem
 {
 public:
-    ModuleCompletionItem(const QString &name);
+    enum Decoration {
+        Import,        /*!< "import module", used for QML module imports */
+        Quotes         /*!< Put quotes around the module name */
+    };
+
+    ModuleCompletionItem(const QString &name, Decoration decoration);
 
     virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
     virtual int inheritanceDepth() const;
     virtual int argumentHintDepth() const;
     virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
 
-    virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+    virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word);
 
 private:
     QString m_name;
-    QString m_version;
+    Decoration m_decoration;
 };
 
 }

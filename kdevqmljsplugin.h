@@ -29,6 +29,7 @@ class KDevQmlJsPlugin : public KDevelop::IPlugin, public KDevelop::ILanguageSupp
     Q_INTERFACES( KDevelop::ILanguageSupport )
 public:
     explicit KDevQmlJsPlugin( QObject* parent, const QVariantList& args = QVariantList() );
+    virtual ~KDevQmlJsPlugin();
 
     virtual KDevelop::ParseJob* createParseJob(const KDevelop::IndexedString& url);
     virtual QString name() const;
@@ -37,7 +38,7 @@ public:
     virtual KDevelop::BasicRefactoring* refactoring() const;
 
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
-    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
+    virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position) override;
 
 private:
     KDevelop::ICodeHighlighting* m_highlighting;

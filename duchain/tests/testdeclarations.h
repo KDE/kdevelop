@@ -31,6 +31,7 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
+    void testJSProblems();
     void testFunction();
 
     void testQMLId();

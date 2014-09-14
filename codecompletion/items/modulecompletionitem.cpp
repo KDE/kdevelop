@@ -24,19 +24,16 @@
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/duchain/duchainutils.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 
 #include <QIcon>
 
 using namespace KDevelop;
 
-QmlJS::ModuleCompletionItem::ModuleCompletionItem(const QString& name)
+QmlJS::ModuleCompletionItem::ModuleCompletionItem(const QString& name, Decoration decoration)
+: m_name(name),
+  m_decoration(decoration)
 {
-    QStringList nameAndVersion = name
-        .section(QLatin1Char('.'), 0, -2)
-        .split(QLatin1Char('_'));
-
-    m_name = nameAndVersion.at(0);
-    m_version = (nameAndVersion.count() > 1 ? nameAndVersion.at(1) : QLatin1String("1.0"));
 }
 
 int QmlJS::ModuleCompletionItem::argumentHintDepth() const
@@ -68,8 +65,6 @@ QVariant QmlJS::ModuleCompletionItem::data(const QModelIndex& index, int role, c
             return QLatin1String("module");
         case CodeCompletionModel::Name:
             return m_name;
-        case CodeCompletionModel::Postfix:
-            return m_version;
         }
         break;
 
@@ -87,11 +82,18 @@ QVariant QmlJS::ModuleCompletionItem::data(const QModelIndex& index, int role, c
     return QVariant();
 }
 
-void QmlJS::ModuleCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word)
+void QmlJS::ModuleCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& word)
 {
-    // Replace the whole line with an import statement
-    document->replaceText(
-        KTextEditor::Range(word.start().line(), 0, word.start().line(), INT_MAX),
-        QString("import %1 %2").arg(m_name, m_version)
-    );
+    switch (m_decoration) {
+    case Import:
+        // Replace the whole line with an import statement
+        view->document()->replaceText(
+            KTextEditor::Range(word.start().line(), 0, word.start().line(), INT_MAX),
+            QString("import %1").arg(m_name)
+        );
+        break;
+    case Quotes:
+        view->document()->replaceText(word, QString("\"%1\"").arg(m_name));
+        break;
+    }
 }

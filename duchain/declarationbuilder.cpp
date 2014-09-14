@@ -40,6 +40,8 @@
 
 #include <QtCore/QDirIterator>
 #include <QtCore/QFileInfo>
+#include <QtCore/QStandardPaths>
+#include <KLocalizedString>
 
 using namespace KDevelop;
 
@@ -80,8 +82,13 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
 
 void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
 {
-    QString fileName = QmlJS::Cache::instance().modulePath(m_session->url(), QLatin1String("ecmascript_1.0.js"));
-    ReferencedTopDUContext importedContext = m_session->contextOfFile(fileName);
+    DUContext* builtinQmlContext = nullptr;
+
+    if (QmlJS::isQmlFile(currentContext())) {
+        builtinQmlContext = m_session->contextOfFile(
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("kdevqmljssupport/nodejsmodules/__builtin_qml.qml"))
+        );
+    }
 
     {
         DUChainWriteLocker lock;
@@ -90,14 +97,12 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
         // and there musn't be any leftover parent context
         currentContext()->topContext()->clearImportedParentContexts();
 
-        // Import the built-in ECMAScript declarations
-        if (importedContext && importedContext.data() != currentContext()) {
-            currentContext()->addImportedParentContext(importedContext);
+        // Initialize Node.js
+        QmlJS::NodeJS::instance().initialize(this);
 
-            // Initialize Node.js (this initialization is done in this if in order
-            // to avoid having "module" and "exports" declared in ecmascript.js
-            // and imported everywhere, thus appearing multiple times.
-            QmlJS::NodeJS::instance().initialize(this);
+        // Built-in QML types (color, rect, etc)
+        if (builtinQmlContext) {
+            topContext()->addImportedParentContext(builtinQmlContext);
         }
     }
 
@@ -328,11 +333,6 @@ void DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
         return;
     }
 
-    // Don't touch functions declared outside this file
-    if (func_declaration->topContext() != topContext()) {
-        return;
-    }
-
     // Put the argument nodes in a list that has a definite size
     QVector<Declaration *> argumentDecls = func_declaration->internalContext()->localDeclarations();
     QVector<QmlJS::AST::ArgumentList *> args;
@@ -359,20 +359,33 @@ void DeclarationBuilder::inferArgumentsFromCall(QmlJS::AST::Node* base, QmlJS::A
         AbstractType::Ptr new_type = QmlJS::mergeTypes(current_type, call_type);
 
         // Update the declaration of the argument and its type in the function type
-        new_func_type->addArgument(new_type);
-        argumentDecls.at(i)->setAbstractType(new_type);
+        if (func_declaration->topContext() == topContext()) {
+            new_func_type->addArgument(new_type);
+            argumentDecls.at(i)->setAbstractType(new_type);
+        }
+
+        // Add a warning if it is possible that the argument types don't match
+        if (!m_prebuilding && !areTypesEqual(current_type, call_type)) {
+            m_session->addProblem(argument, i18n(
+                "Possible type mismatch between the argument type (%1) and the value passed as argument (%2)",
+                current_type->toString(),
+                call_type->toString()
+            ), ProblemData::Hint);
+        }
     }
 
     // Replace the function's type with the new type having updated arguments
-    new_func_type->setReturnType(func_type->returnType());
-    new_func_type->setDeclaration(func_declaration);
-    func_declaration->setAbstractType(new_func_type.cast<AbstractType>());
+    if (func_declaration->topContext() == topContext()) {
+        new_func_type->setReturnType(func_type->returnType());
+        new_func_type->setDeclaration(func_declaration);
+        func_declaration->setAbstractType(new_func_type.cast<AbstractType>());
 
-    if (expr.declaration) {
-        // expr.declaration is the variable that contains the function, while
-        // func_declaration is the declaration of the function. They can be
-        // different and both need to be updated
-        expr.declaration->setAbstractType(new_func_type.cast<AbstractType>());
+        if (expr.declaration) {
+            // expr.declaration is the variable that contains the function, while
+            // func_declaration is the declaration of the function. They can be
+            // different and both need to be updated
+            expr.declaration->setAbstractType(new_func_type.cast<AbstractType>());
+        }
     }
 
     return;
@@ -678,26 +691,8 @@ void DeclarationBuilder::endVisit(QmlJS::AST::ObjectLiteral* node)
 }
 
 /*
- * plugin.qmltypes files
+ * plugins.qmltypes files
  */
-QualifiedIdentifier DeclarationBuilder::declareModule(const RangeInRevision& range)
-{
-    // Declare a namespace whose name is the base name of the current file
-    QualifiedIdentifier name(m_session->moduleName() + m_session->moduleVersion());
-    StructureType::Ptr type(new StructureType);
-
-    {
-        DUChainWriteLocker lock;
-        Declaration* decl = openDeclaration<Declaration>(name, range);
-
-        decl->setKind(Declaration::Namespace);
-        type->setDeclaration(decl);
-    }
-    openType(type);
-
-    return name;
-}
-
 void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectInitializer* node,
                                           const RangeInRevision &range,
                                           const QualifiedIdentifier &name)
@@ -832,10 +827,6 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
         declareEnum(range, name);
         contextType = DUContext::Enum;
         name = QualifiedIdentifier();   // Enum contexts should have no name so that their members have the correct scope
-    } else if (baseclass == QLatin1String("Module")) {
-        // QML Module, that declares a namespace
-        name = declareModule(range);
-        contextType = DUContext::Class;
     } else {
         // Define an anonymous subclass of the baseclass. This subclass will
         // be instantiated when "id:" is encountered
@@ -884,10 +875,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
 
         decl->setInternalContext(ctx);
 
-        if (baseclass == QLatin1String("Module")) {
-            // If we opened a namespace, give it a proper scope
-            ctx->setLocalScopeIdentifier(decl->qualifiedIdentifier());
-        } else if (contextType == DUContext::Enum) {
+        if (contextType == DUContext::Enum) {
             ctx->setPropagateDeclarations(true);
         }
     }
@@ -957,13 +945,7 @@ DeclarationBuilder::ExportLiteralsAndNames DeclarationBuilder::exportedNames(Qml
 
         if (!knownNames.contains(name)) {
             knownNames.insert(name);
-
-            // Declare the components that appeared in a version lower or equal
-            // to the version of this module. Lexicographic order can be used
-            // because only the last digit of the version changes.
-            if (version <= m_session->moduleVersion() || m_session->moduleVersion() == QLatin1String("0.0")) {
-                res.append(qMakePair(stringliteral, name));
-            }
+            res.append(qMakePair(stringliteral, name));
         }
     }
 
@@ -1026,13 +1008,15 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
         entries = QDir(directory).entryInfoList(
             QStringList()
                 << (QLatin1String("*.") + currentFilePath.section(QLatin1Char('.'), -1, -1))
+                << QLatin1String("*.qmltypes")
                 << QLatin1String("*.so"),
             QDir::Files
         );
     } else if (dir.isFile()) {
         // Import the specific file given in the import statement
         entries.append(dir);
-    } else {
+    } else if (!m_prebuilding) {
+        m_session->addProblem(node, i18n("Module not found, some types or properties may not be recognized"));
         return;
     }
 
@@ -1071,42 +1055,6 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
     }
 }
 
-void DeclarationBuilder::importModuleFile(const QString& file,
-                                          const QString& uri,
-                                          const QString& version,
-                                          QmlJS::AST::UiImport* node)
-{
-    // Import the file corresponding to the URI
-    ReferencedTopDUContext importedContext = m_session->contextOfFile(file);
-
-    if (importedContext) {
-        // Create a namespace import statement
-        QualifiedIdentifier importedNamespaceName(uri + version);  // Modules contain namespaces like QtQuick1.0
-        NamespaceAliasDeclaration* decl;
-        DUChainWriteLocker lock;
-
-        currentContext()->addImportedParentContext(
-            importedContext,
-            m_session->locationToRange(node->importToken).start
-        );
-
-        if (node->importId.isEmpty()) {
-            decl = openDeclaration<NamespaceAliasDeclaration>(
-                QualifiedIdentifier(globalImportIdentifier()),
-                m_session->locationToRange(node->importToken)
-            );
-        } else {
-            decl = openDeclaration<NamespaceAliasDeclaration>(
-                QualifiedIdentifier(node->importId.toString()),
-                m_session->locationToRange(node->importIdToken)
-            );
-        }
-
-        decl->setImportIdentifier(importedNamespaceName);
-        closeDeclaration();
-    }
-}
-
 void DeclarationBuilder::importModule(QmlJS::AST::UiImport* node)
 {
     QmlJS::AST::UiQualifiedId *part = node->importUri;
@@ -1124,16 +1072,9 @@ void DeclarationBuilder::importModule(QmlJS::AST::UiImport* node)
     // Version of the import
     QString version = m_session->symbolAt(node->versionToken);
 
-    // Import the file corresponding to the URI
+    // Import the directory containing the module
     QString modulePath = QmlJS::Cache::instance().modulePath(m_session->url(), uri, version);
-
-    if (modulePath.endsWith(QLatin1String(".qml"))) {
-        // Module file
-        importModuleFile(modulePath, uri, version, node);
-    } else {
-        // The module is a directory, import it directly
-        importDirectory(modulePath, node);
-    }
+    importDirectory(modulePath, node);
 }
 
 bool DeclarationBuilder::visit(QmlJS::AST::UiImport* node)
@@ -1179,7 +1120,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
             m_skipEndVisit.push(true);
             return false;
         }
-    } else if (baseclass == QLatin1String("Module") && m_session->moduleVersion() == QLatin1String("0.0")) {
+    } else if (baseclass == QLatin1String("Module")) {
         // "Module" is disabled. This allows the declarations of a module
         // dump to appear in the same namespace as the .qml files in the same
         // directory.
@@ -1262,6 +1203,19 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiScriptBinding* node)
                 signal->internalContext(),
                 nullptr
             ));
+        }
+    } else {
+        // Check that the type of the value matches the type of the property
+        AbstractType::Ptr expressionType = findType(node->statement).type;
+        auto expressionIntegralType = IntegralType::Ptr::dynamicCast(expressionType);
+        DUChainReadLocker lock;
+
+        if (!m_prebuilding && bindingDecl && !areTypesEqual(bindingDecl->abstractType(), expressionType)) {
+            m_session->addProblem(node->qualifiedId, i18n(
+                "Mismatch between the value type (%1) and the property type (%2)",
+                expressionType->toString(),
+                bindingDecl->abstractType()->toString()
+            ), ProblemData::Error);
         }
     }
 
@@ -1499,4 +1453,38 @@ void DeclarationBuilder::registerBaseClasses()
             }
         }
     }
+}
+
+bool DeclarationBuilder::areTypesEqual(const AbstractType::Ptr& a, const AbstractType::Ptr& b)
+{
+    if (!a || !b) {
+        return true;
+    }
+
+    if (a->whichType() == AbstractType::TypeUnsure || b->whichType() == AbstractType::TypeUnsure) {
+        // Don't try to guess something if one of the types is unsure
+        return true;
+    }
+
+    auto aIntegral = IntegralType::Ptr::dynamicCast(a);
+    auto bIntegral = IntegralType::Ptr::dynamicCast(b);
+
+    if ((aIntegral && aIntegral->dataType() == IntegralType::TypeMixed) ||
+        (bIntegral && bIntegral->dataType() == IntegralType::TypeMixed)) {
+        // Mixed types, don't try to be clever
+        return true;
+    }
+
+    if (bIntegral && bIntegral->dataType() == IntegralType::TypeString) {
+        // In QML/JS, a string can be converted to nearly everything else
+        return true;
+    }
+
+    if (aIntegral && bIntegral && bIntegral->dataType() == IntegralType::TypeInt &&
+        (aIntegral->dataType() == IntegralType::TypeDouble || aIntegral->dataType() == IntegralType::TypeFloat)) {
+        // Cast from int to float possible
+        return true;
+    }
+
+    return a->equals(b.constData());
 }

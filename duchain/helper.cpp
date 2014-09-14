@@ -20,6 +20,7 @@
 #include "functiondeclaration.h"
 #include "functiontype.h"
 #include "parsesession.h"
+#include "frameworks/nodejs.h"
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
@@ -171,10 +172,6 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
         if (decl && (funcDecl = dynamic_cast<QmlJS::FunctionDeclaration*>(decl)) &&
             funcDecl->prototypeContext()) {
             return funcDecl->prototypeContext();
-        } else {
-            return getInternalContext(
-                getDeclaration(QualifiedIdentifier(QLatin1String("Function")), declaration->topContext())
-            );
         }
     }
 
@@ -201,32 +198,36 @@ DUContext* getInternalContext(const DeclarationPointer& declaration)
             return getInternalContext(
                 DeclarationPointer(structureType->declaration(declaration->topContext()))
             );
-        } else if (integralType) {
+        } else if ((integralType || functionType) && declaration->identifier() != Identifier(QLatin1String("Object"))) {
             QString baseClass;
 
             // Compute from which base Javascript class a type inherits
-            switch (integralType->dataType()) {
-                case IntegralType::TypeBoolean:
-                    baseClass = QLatin1String("Boolean");
-                    break;
-                case IntegralType::TypeString:
-                    baseClass = QLatin1String("String");
-                    break;
-                case IntegralType::TypeInt:
-                case IntegralType::TypeFloat:
-                case IntegralType::TypeDouble:
-                    baseClass = QLatin1String("Number");
-                    break;
-                case IntegralType::TypeArray:
-                    baseClass = QLatin1String("Array");
-                    break;
-                default:
-                    baseClass = QLatin1String("Object");
-                    break;
+            if (integralType) {
+                switch (integralType->dataType()) {
+                    case IntegralType::TypeBoolean:
+                        baseClass = QLatin1String("Boolean");
+                        break;
+                    case IntegralType::TypeString:
+                        baseClass = QLatin1String("String");
+                        break;
+                    case IntegralType::TypeInt:
+                    case IntegralType::TypeFloat:
+                    case IntegralType::TypeDouble:
+                        baseClass = QLatin1String("Number");
+                        break;
+                    case IntegralType::TypeArray:
+                        baseClass = QLatin1String("Array");
+                        break;
+                    default:
+                        baseClass = QLatin1String("Object");
+                        break;
+                }
+            } else if (functionType) {
+                baseClass = QLatin1String("Function");
             }
 
             return getInternalContext(
-                getDeclaration(QualifiedIdentifier(baseClass), declaration->topContext())
+                NodeJS::instance().moduleMember(QLatin1String("__builtin_ecmascript"), baseClass, declaration->topContext()->url())
             );
         } else {
             return nullptr;
@@ -268,7 +269,7 @@ void importDeclarationInContext(DUContext* context, const DeclarationPointer& de
 void importObjectContext(DUContext* context, TopDUContext* topContext)
 {
     DeclarationPointer objectDeclaration =
-        getDeclaration(QualifiedIdentifier(QLatin1String("Object")), topContext);
+        NodeJS::instance().moduleMember(QLatin1String("__builtin_ecmascript"), QLatin1String("Object"), topContext->url());
 
     if (objectDeclaration) {
         importDeclarationInContext(context, objectDeclaration);

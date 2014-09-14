@@ -13,7 +13,7 @@ set(completion_SRCS
     worker.cpp
 )
 
-kde4_add_library(kdevqmljscompletion SHARED ${completion_SRCS})
+add_library(kdevqmljscompletion SHARED ${completion_SRCS})
 
 target_link_libraries(kdevqmljscompletion LINK_PRIVATE
     ${KDE4_KDECORE_LIBS}

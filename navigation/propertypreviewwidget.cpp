@@ -19,15 +19,16 @@
 
 #include "propertypreviewwidget.h"
 
-#include <QDeclarativeView>
+#include <QQuickWidget>
+#include <QQuickItem>
 #include <QLayout>
-#include <qgraphicsitem.h>
 #include <QLabel>
-#include <KStandardDirs>
+#include <QDir>
+#include <QStandardPaths>
+#include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
-#include <KLocalizedString>
-#include <kdeclarative.h>
+#include <KDeclarative/KDeclarative>
 
 #include <language/duchain/ducontext.h>
 #include <language/duchain/duchainlock.h>
@@ -37,8 +38,8 @@
 QHash<QString, SupportedProperty> PropertyPreviewWidget::supportedProperties;
 
 QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
-                                                    SimpleRange keyRange,
-                                                    SimpleRange valueRange,
+                                                    KTextEditor::Range keyRange,
+                                                    KTextEditor::Range valueRange,
                                                     Declaration* decl,
                                                     const QString& key,
                                                     const QString& value)
@@ -47,12 +48,11 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
     supportedProperties.insertMulti(key, SupportedProperty(QUrl(base + filename), type, class));
 
     if ( supportedProperties.isEmpty() ) {
-        KStandardDirs d;
-        QStringList bases = d.findDirs("data", "propertywidgets");
-        if ( bases.isEmpty() ) {
-            return 0;
-        }
-        QString base = bases.first();
+        QString base = QStandardPaths::locate(
+            QStandardPaths::GenericDataLocation,
+            QLatin1String("propertywidgets"),
+            QStandardPaths::LocateDirectory
+        ) + QDir::separator();
 
         // Positioning
         PROP("width", "Width.qml", QString(), QString())
@@ -115,68 +115,71 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
     return 0;
 }
 
-void PropertyPreviewWidget::updateValue(const QString& newValue)
+void PropertyPreviewWidget::updateValue()
 {
-    if ( ! wasChanged ) {
-        document->startEditing();
-        wasChanged = true;
-    }
-    // communicate the changed value to the QML view
-    view->rootObject()->setProperty("value", newValue);
+    QString newValue = view->rootObject()->property("value").toString();
+
     // set the cursor to the edited range, otherwise the view will jump if we call doc->endEditing()
-    document->activeView()->setCursorPosition(KTextEditor::Cursor(valueRange.start.line, valueRange.start.column));
-    if ( valueRange.end.column - valueRange.start.column == newValue.size() ) {
-        document->replaceText(valueRange.textRange(), newValue);
+    //document->activeView()->setCursorPosition(KTextEditor::Cursor(valueRange.start.line, valueRange.start.column));
+    if (valueRange.end().column() - valueRange.start().column() == newValue.size()) {
+        document->replaceText(valueRange, newValue);
     }
     else {
         // the length of the text changed so don't replace it but remove the old
         // and insert the new text.
-        document->removeText(valueRange.textRange());
-        document->insertText(valueRange.textRange().start(), newValue);
-        valueRange.end.column = valueRange.start.column + newValue.size();
-        document->endEditing();
-        document->startEditing();
+        KTextEditor::Document::EditingTransaction transaction(document);
+        document->removeText(valueRange);
+        document->insertText(valueRange.start(), newValue);
+
+        valueRange.setRange(
+            valueRange.start(),
+            KTextEditor::Cursor(valueRange.start().line(), valueRange.start().column() + newValue.size())
+        );
     }
 }
 
 PropertyPreviewWidget::~PropertyPreviewWidget()
 {
-    if ( wasChanged ) {
-        document->endEditing();
-    }
 }
 
-PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, SimpleRange keyRange, SimpleRange valueRange,
+PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, KTextEditor::Range keyRange, KTextEditor::Range valueRange,
                                              const SupportedProperty& property, const QString& value)
     : QWidget()
-    , view(new QDeclarativeView)
+    , view(new QQuickWidget)
     , document(doc)
     , keyRange(keyRange)
     , valueRange(valueRange)
     , property(property)
-    , wasChanged(false)
 {
     //setup kdeclarative library
-    KDeclarative kdeclarative;
+    KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(view->engine());
     kdeclarative.initialize();
-    //binds things like kconfig and icons
-    kdeclarative.setupBindings();
+    kdeclarative.setupBindings();        //binds things like kconfig and icons
+
+    // Configure layout
+    QHBoxLayout*l = new QHBoxLayout;
+
+    l->setContentsMargins(0, 0, 0, 0);
+    setLayout(l);
 
     // see docstring for ILanguageSupport::specialLanguageObjectNavigationWidget
     setProperty("DoNotCloseOnCursorMove", true);
+
     view->setSource(property.qmlfile);
-    setLayout(new QHBoxLayout);
-    // don't crash because of a syntax error or missing QML file
-    if ( ! view->rootObject() ) {
-        layout()->addWidget(new QLabel(i18n("Error loading QML file: %1", property.qmlfile.path())));
+
+    if (!view->rootObject()) {
+        // don't crash because of a syntax error or missing QML file
+        l->addWidget(new QLabel(i18n("Error loading QML file: %1", property.qmlfile.path())));
         delete view;
         return;
     }
+
     // set the initial value read from the document
-    view->rootObject()->setProperty("value", value);
+    view->rootObject()->setProperty("initialValue", value);
+
     // connect to the slot which has to be emitted from QML when the value changes
-    QObject::connect(view->rootObject(), SIGNAL(valueChanged(QString)),
-                     this, SLOT(updateValue(QString)));
-    layout()->addWidget(view);
+    QObject::connect(view->rootObject(), SIGNAL(valueChanged()),
+                     this, SLOT(updateValue()));
+    l->addWidget(view);
 }

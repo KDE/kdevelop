@@ -15,25 +15,26 @@
  *  along with this program; if not, write to the Free Software                      *
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
-
-import QtQuick 1.1
+import QtQuick 2.2
+import QtQuick.Controls 1.2 as QtControls
 
 PropertyWidget {
+    id: root
     width: 150
     height: 110
-    value: "3"
+    value: sliderToValue(slider.value)
+    onInitialValueChanged: slider.value = root.initialValue * 4.0
+
     function sliderToValue(slider) {
         return Math.round(slider/4.0)
     }
-    function valueToSlider(value) {
-        return value*4;
-    }
-    Slider {
-        initialValue: valueToSlider(parent.value)
+
+    QtControls.Slider {
+        id: slider
         anchors.top: parent.top
         anchors.left: parent.left
+        maximumValue: 100.0
         width: 100
-        height: 12
     }
     Text {
         z: 20

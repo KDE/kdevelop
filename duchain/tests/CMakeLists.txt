@@ -6,7 +6,8 @@ include_directories(
 
 set(testcontexts_SRCS testcontexts.cpp)
 
-kde4_add_unit_test(testcontexts ${testcontexts_SRCS})
+add_executable(testcontexts ${testcontexts_SRCS})
+add_test(testcontexts testcontexts)
 target_link_libraries(testcontexts
     ${KDE4_KDECORE_LIBS}
     ${QT_QTTEST_LIBRARY}
@@ -19,7 +20,8 @@ target_link_libraries(testcontexts
 
 set(testdeclarations_SRCS testdeclarations.cpp)
 
-kde4_add_unit_test(testdeclarations ${testdeclarations_SRCS})
+add_executable(testdeclarations ${testdeclarations_SRCS})
+add_test(testdeclarations testdeclarations)
 target_link_libraries(testdeclarations
     ${KDE4_KDECORE_LIBS}
     ${QT_QTTEST_LIBRARY}

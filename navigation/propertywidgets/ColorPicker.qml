@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 2.010-1301, USA.
  */
-import QtQuick 1.1
+import QtQuick 2.2
 
 PropertyWidget {
     id: picker
@@ -25,17 +25,19 @@ PropertyWidget {
     property real hue
     property real saturation
     property real lightness
-    property bool __reactOnChange: updateColor(value)
 
     function currentColor() {
         return Qt.hsla(picker.hue, picker.saturation, picker.lightness, 1.0)
     }
 
-    function updateColor(clr) {
+    onInitialValueChanged: {
         // QML does not expose any way of getting the components of a color
         // parsed by Qt, thus we have to to the parsing ourselves (this breaks
         // named colors)
         // TODO: QtQuick2 exposes the r, g and b attributes of color.
+        var clr = picker.initialValue;
+        console.log(clr);
+
         if (clr[0] == '"') {
             clr = clr.slice(1, 8);
         }
@@ -182,7 +184,7 @@ PropertyWidget {
         repeat: false
 
         onTriggered: {
-            picker.valueChanged('"' + currentColor().toString() + '"');
+            picker.value = '"' + currentColor().toString() + '"';
         }
     }
 }

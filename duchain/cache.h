@@ -24,7 +24,7 @@
 #define __CACHE_H__
 
 #include "duchainexport.h"
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <util/path.h>
 
 #include <QHash>
@@ -38,7 +38,7 @@ namespace QmlJS
 
 /**
  * Cache for values that may be slow to compute (search paths, things
- * involving KStandardDirs, etc)
+ * involving QStandardPaths, etc)
  */
 class KDEVQMLJSDUCHAIN_EXPORT Cache
 {
@@ -61,7 +61,7 @@ public:
      */
     QString modulePath(const KDevelop::IndexedString& baseFile,
                        const QString& uri,
-                       const QString& version = QString());
+                       const QString& version = QLatin1String("1.0"));
 
     /**
      * Return the list of the paths of the given files.

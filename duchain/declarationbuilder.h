@@ -102,7 +102,6 @@ protected:
     virtual void endVisit(QmlJS::AST::ObjectLiteral* node);
 
     // plugin.qmltypes
-    KDevelop::QualifiedIdentifier declareModule(const KDevelop::RangeInRevision &range);
     void declareComponent(QmlJS::AST::UiObjectInitializer* node,
                           const KDevelop::RangeInRevision &range,
                           const KDevelop::QualifiedIdentifier &name);
@@ -130,10 +129,6 @@ protected:
 
     // UI
     void importDirectory(const QString& directory, QmlJS::AST::UiImport* node);
-    void importModuleFile(const QString& file,
-                          const QString& uri,
-                          const QString& version,
-                          QmlJS::AST::UiImport* node);
     void importModule(QmlJS::AST::UiImport* node);
     virtual bool visit(QmlJS::AST::UiImport* node);
 
@@ -166,6 +161,8 @@ private:
     void addBaseClass(KDevelop::ClassDeclaration* classDecl, const KDevelop::IndexedType& type);
     KDevelop::AbstractType::Ptr typeFromName(const QString& name);          /*!< @brief Type from a general name (int, string, or a class name) */
     KDevelop::AbstractType::Ptr typeFromClassName(const QString& name);     /*!< @brief Type from a class name, built-in types are not supported here */
+    bool areTypesEqual(const KDevelop::AbstractType::Ptr& a,
+                       const KDevelop::AbstractType::Ptr& b);
 
     using DeclarationBuilderBase::setComment;
     void setComment(QmlJS::AST::Node* node);

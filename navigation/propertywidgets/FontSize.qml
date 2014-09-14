@@ -15,22 +15,18 @@
  *  along with this program; if not, write to the Free Software                      *
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
-
-import QtQuick 1.1
+import QtQuick 2.2
+import QtQuick.Controls 1.2 as QtControls
 
 // TODO support other size types than PointSize
 
 PropertyWidget {
+    id: root
     width: 220
     height: 120
-    value: "10"
-    color: "#00FFFFFF"
-    function sliderToValue(slider) {
-        return Math.round(slider/4) + 4;
-    }
-    function valueToSlider(value) {
-        return (value - 4)*4;
-    }
+    value: slider.value.toFixed(1)
+    onInitialValueChanged: slider.value = root.initialValue
+
     Text {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
@@ -38,17 +34,18 @@ PropertyWidget {
         color: "white"
         opacity: 0.8
     }
-    Slider {
-        initialValue: valueToSlider(parent.value)
+    QtControls.Slider {
+        id: slider
         anchors.top: parent.top
         anchors.left: parent.left
+        minimumValue: 4
+        maximumValue: 50
         width: 100
-        height: 12
     }
     Text {
         color: "white"
         anchors.centerIn: parent
-        font.pointSize: parent.value
+        font.pointSize: slider.value
         font.family: "sans" // TODO
         text: i18nc("example text to test a font", "The lazy dog jumps over<br>the quick brown fox.")
         horizontalAlignment: TextInput.AlignHCenter

@@ -67,6 +67,7 @@ _dataview = 'new DataView()'
 _iterator = '{next: function() {}, done: true, value: _mixed}'
 _promise = 'new Promise()'
 
+Module().members(
 Class('Object').members(
     F(_object, 'assign', ('target', _object), ('sources', _mixed)),
     F(_object, 'create', ('O', _object), ('properties', _object)),
@@ -92,7 +93,7 @@ Class('Object').members(
     F(_bool, 'propertyIsEnumerable', ('property', _string)),
     F(_string, 'toLocaleString'),
     F(_string, 'toString'),
-).print()
+),
 
 Class('Function').members(
     Var(_int, 'length'),
@@ -101,20 +102,24 @@ Class('Function').members(
     F(_mixed, 'call', ('thisArg', _object), ('arguments', _mixed)),
     F(_function, 'toMethod', ('newHome', _object), ('methodName', _string)),
     Var(_string, 'name')
-).print()
+),
 
 Class('Boolean', ('value', _bool)).members(
     F(_bool, 'valueOf'),
-).print()
+),
 
 # 19.4 (Symbol) skipped for now because it is far too internal
 Class('Error', ('message', _string)).members(
     Var(_string, 'message'),
     Var(_string, 'name'),
-).print()
+),
 
-for e in ['Eval', 'Range', 'Reference', 'Syntax', 'Type', 'URI']:
-    Class(e + 'Error').prototype('Error').print()
+Class('EvalError').prototype('Error'),
+Class('RangeError').prototype('Error'),
+Class('ReferenceError').prototype('Error'),
+Class('SyntaxError').prototype('Error'),
+Class('TypeError').prototype('Error'),
+Class('URIError').prototype('Error'),
 
 # 19.5.6 (NativeError) skipped because it seems too internal
 
@@ -138,7 +143,7 @@ Class('Number', ('value', _float)).members(
     F(_string, 'toFixed', ('fractionDigits', _int)),
     F(_string, 'toPrecision', ('precision', _int)),
     F(_float, 'valueOf'),
-).print()
+),
 
 Struct('Math').members(
     Var(_float, 'E'),
@@ -183,7 +188,7 @@ Struct('Math').members(
     F(_float, 'tan', ('x', _float)),
     F(_float, 'tanh', ('x', _float)),
     F(_int, 'trunc', ('x', _float)),
-).print()
+),
 
 Class('Date', ('year', _int), ('month', _int), ('date', _int), ('hours', _int), ('minutes', _int), ('seconds', _int), ('ms', _int)).members(
     F(_date, 'now'),
@@ -230,7 +235,7 @@ Class('Date', ('year', _int), ('month', _int), ('date', _int), ('hours', _int), 
     F(_string, 'toTimeString'),
     F(_string, 'toUTCString'),
     F(_int, 'valueOf'),
-).print()
+),
 
 # Text Processing (section 21)
 Class('String', ('value', _mixed)).members(
@@ -262,7 +267,7 @@ Class('String', ('value', _mixed)).members(
     F(_string, 'trim'),
     F(_string, 'valueOf'),
     Var(_int, 'length'),
-).print()
+),
 
 Class('RegExp', ('pattern', _string), ('flags', _string)).members(
     F(_void, 'compile'),
@@ -279,7 +284,7 @@ Class('RegExp', ('pattern', _string), ('flags', _string)).members(
     Var(_bool, 'unicode'),
     Var(_int, 'lastIndex'),
     Var(_string, 'lastMatch'),
-).print()
+),
 
 # Array Objects (section 22)
 Class('Array', ('len', _int)).members(
@@ -313,16 +318,7 @@ Class('Array', ('len', _int)).members(
     F(_int, 'unshift', ('items', _mixed)),
     F(_iterator, 'values'),
     Var(_int, 'length'),
-).print()
-
-for a in ['Int8', 'Uint8', 'Uint8Clamped', 'Int16', 'Uint16', 'Int32', 'Uint32', 'Float32', 'Float64']:
-    Class(a + 'Array', ('length', _int)).prototype('Array').members(
-        Var(_mixed, 'buffer'),
-        Var(_int, 'byteLength'),
-        Var(_int, 'byteOffset'),
-        F(_array, 'subarray', ('begin', _int), ('end', _int)),
-        Var(_int, 'BYTES_PER_ELEMENT'),
-    ).print()
+),
 
 # Keyed Collection (section 23)
 Class('Map', ('iterable', _mixed)).members(
@@ -335,7 +331,7 @@ Class('Map', ('iterable', _mixed)).members(
     F(_map, 'set', ('key', _mixed), ('value', _mixed)),
     Var(_int, 'size'),
     F(_iterator, 'values'),
-).print()
+),
 
 Class('Set', ('iterable', _mixed)).members(
     F(_set, 'add', ('value', _mixed)),
@@ -346,7 +342,7 @@ Class('Set', ('iterable', _mixed)).members(
     F(_bool, 'has', ('value', _mixed)),
     Var(_int, 'size'),
     F(_iterator, 'values'),
-).print()
+),
 
 Class('WeakMap', ('iterable', _mixed)).members(
     F(_void, 'clear'),
@@ -354,21 +350,21 @@ Class('WeakMap', ('iterable', _mixed)).members(
     F(_mixed, 'get', ('key', _mixed)),
     F(_bool, 'has', ('key', _mixed)),
     F(_map, 'set', ('key', _mixed), ('value', _mixed)),
-).print()
+),
 
 Class('WeakSet', ('iterable', _mixed)).members(
     F(_set, 'add', ('value', _mixed)),
     F(_void, 'clear'),
     F(_bool, 'delete', ('value', _mixed)),
     F(_bool, 'has', ('value', _mixed)),
-).print()
+),
 
 # Structured Data (section 24)
 Class('ArrayBuffer', ('length', _int)).members(
     F(_bool, 'isView', ('arg', _mixed)),
     Var(_int, 'byteLength'),
     F(_arraybuffer, 'slice', ('start', _int), ('end', _int)),
-).print()
+),
 
 Class('DataView', ('buffer', _arraybuffer), ('byteOffset', _int), ('byteLength', _int)).members(
     Var(_dataview, 'buffer'),
@@ -390,12 +386,12 @@ Class('DataView', ('buffer', _arraybuffer), ('byteOffset', _int), ('byteLength',
     F(_void, 'setUInt8', ('byteOffset', _int), ('value', _int)),
     F(_void, 'setUInt16', ('byteOffset', _int), ('value', _int), ('littleEndian', _bool)),
     F(_void, 'setUInt32', ('byteOffset', _int), ('value', _int), ('littleEndian', _bool)),
-).print()
+),
 
 Struct('JSON').members(
     F(_mixed, 'parse', ('text', _string), ('reviver', _function)),
     F(_string, 'stringify', ('value', _mixed), ('replacer', _function), ('space', _string)),
-).print()
+),
 
 # Control Abstraction Objects (section 25)
 Class('Promise', ('executor', _function)).members(
@@ -404,7 +400,7 @@ Class('Promise', ('executor', _function)).members(
     F(_promise, 'resolve', ('x', _mixed)),
     F(_void, 'catch', ('onRejected', _function)),
     F(_void, 'then', ('onFulfilled', _function), ('onRejected', _function)),
-).print()
+),
 
 Struct('Reflect').members(
     F(_mixed, 'apply', ('target', _function), ('thisArgument', _object), ('argumentList', _array)),
@@ -415,6 +411,14 @@ Struct('Reflect').members(
     F(_bool, 'has', ('target', _object), ('propertyKey', _string)),
     F(_array, 'ownKeys', ('target', _object)),
     F(_void, 'set', ('target', _object), ('propertyKey', _string), ('value', _mixed), ('receiver', _object)),
-).print()
+),
 
+*[Class(a + 'Array', ('length', _int)).prototype('Array').members(
+    Var(_mixed, 'buffer'),
+    Var(_int, 'byteLength'),
+    Var(_int, 'byteOffset'),
+    F(_array, 'subarray', ('begin', _int), ('end', _int)),
+    Var(_int, 'BYTES_PER_ELEMENT'),
+) for a in ['Int8', 'Uint8', 'Uint8Clamped', 'Int16', 'Uint16', 'Int32', 'Uint32', 'Float32', 'Float64']]
+).print()
 # Realm, Loader and Proxy not decribed for now

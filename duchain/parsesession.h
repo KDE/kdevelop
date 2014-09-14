@@ -21,7 +21,7 @@
 
 #include <qmljs/qmljsdocument.h>
 
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 #include <language/duchain/problem.h>
 #include <language/duchain/topducontext.h>
 
@@ -66,14 +66,9 @@ public:
     KDevelop::IndexedString url() const;
 
     /**
-     * @return The module name of this file ("/foo/QtQuick_1.0.qml" yields "QtQuick")
+     * @return The module name of this file ("/foo/QtQuick.qml" yields "QtQuick")
      */
     QString moduleName() const;
-
-    /**
-     * @return The version of this file, or QString if none ("QtQuick_1.0.qml" yields "1.0")
-     */
-    QString moduleVersion() const;
 
     /**
      * @return true if the document was properly parsed, false otherwise.
@@ -84,6 +79,13 @@ public:
      * @return the root AST node or null if it failed to parse.
      */
     QmlJS::AST::Node* ast() const;
+
+    /**
+     * Add a problem concerning the given range
+     */
+    void addProblem(QmlJS::AST::Node* node,
+                    const QString& message,
+                    KDevelop::ProblemData::Severity severity = KDevelop::ProblemData::Warning);
 
     /**
      * @return the problems encountered during parsing.
@@ -183,12 +185,12 @@ public:
 
 private:
     KDevelop::IndexedString m_url;
-    QString m_baseNameWithoutVersion;
-    QString m_version;
+    QString m_baseName;
     QmlJS::Document::MutablePtr m_doc;
     int m_ownPriority;
     bool m_allDependenciesSatisfied;
 
+    QList<KDevelop::ProblemPointer> m_problems;
     typedef QHash<QmlJS::AST::Node*, KDevelop::DUContextPointer> NodeToContextHash;
     NodeToContextHash m_astToContext;
 };

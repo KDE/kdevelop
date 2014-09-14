@@ -24,17 +24,18 @@
 #include "../parsesession.h"
 #include "../declarationbuilder.h"
 
-#include <qtest_kde.h>
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testhelpers.h>
 
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/integraltype.h>
+#include <language/duchain/problem.h>
 #include <language/duchain/classdeclaration.h>
 
-QTEST_KDEMAIN(TestDeclarations, NoGUI);
+#include <QtTest>
+
+QTEST_GUILESS_MAIN(TestDeclarations);
 
 using namespace KDevelop;
 
@@ -49,9 +50,28 @@ void TestDeclarations::cleanupTestCase()
     TestCore::shutdown();
 }
 
+void TestDeclarations::testJSProblems()
+{
+    const IndexedString file(QUrl("file:///internal/jsproblems.js"));
+    ParseSession session(file,
+        "function f(a) {}\n"
+        "f(2);\n"
+        "f(true);\n",
+    0);
+
+    QVERIFY(session.ast());
+    DeclarationBuilder builder(&session);
+
+    builder.build(file, session.ast());
+    auto problems = session.problems();
+
+    QCOMPARE(problems.count(), 1);
+    QCOMPARE((KTextEditor::Range)problems.at(0)->finalLocation(), KTextEditor::Range(2, 2, 2, 6));
+}
+
 void TestDeclarations::testFunction()
 {
-    const IndexedString file("functionArgs.js");
+    const IndexedString file(QUrl("file:///internal/functionArgs.js"));
     //                          0         1         2         3
     //                          01234567890123456789012345678901234567890
     ParseSession session(file, "/**\n * some comment\n */\n"
@@ -66,9 +86,9 @@ void TestDeclarations::testFunction()
 
     DUChainReadLocker lock;
 
-    QCOMPARE(top->localDeclarations().size(), 1);
+    QCOMPARE(top->localDeclarations().size(), 3); // module, exports and foo
 
-    FunctionDeclaration* fooDec = dynamic_cast<FunctionDeclaration*>(top->localDeclarations().at(0));
+    FunctionDeclaration* fooDec = dynamic_cast<FunctionDeclaration*>(top->localDeclarations().at(2));
     QVERIFY(fooDec);
     QCOMPARE(fooDec->range(), RangeInRevision(3, 9, 3, 12));
     QCOMPARE(QString::fromUtf8(fooDec->comment()), QString("some comment"));
@@ -106,7 +126,7 @@ void TestDeclarations::testFunction()
 
 void TestDeclarations::testQMLId()
 {
-    const IndexedString file("qmlId.qml");
+    const IndexedString file(QUrl("file:///internal/qmlId.qml"));
 
     ReferencedTopDUContext top;
 
@@ -128,10 +148,10 @@ void TestDeclarations::testQMLId()
 
         DUChainReadLocker lock;
 
-        QCOMPARE(top->localDeclarations().size(), 3);       // Text, test and child are all in the global scope
+        QCOMPARE(top->localDeclarations().size(), 5);       // module, exports, Text, test and child are all in the global scope
 
         // First declaration, the anonymous class
-        ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(top->localDeclarations().first());
+        ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(top->localDeclarations().at(2));
         QVERIFY(classDecl);
         QCOMPARE(classDecl->abstractType()->toString(), QString("qmlId"));
         QCOMPARE(classDecl->range(), RangeInRevision(5, 0, 5, 0));
@@ -139,7 +159,7 @@ void TestDeclarations::testQMLId()
         QCOMPARE(classDecl->internalContext()->range(), RangeInRevision(5, 6, 5, 37));
 
         // Second declaration: test
-        Declaration* dec = top->localDeclarations().at(1);
+        Declaration* dec = top->localDeclarations().at(3);
         QVERIFY(dec);
         QCOMPARE(dec->identifier().toString(), QString("test"));
         QCOMPARE(dec->abstractType()->toString(), QString("qmlId"));
@@ -167,9 +187,9 @@ void TestDeclarations::testQMLId()
 
         DUChainReadLocker lock;
 
-        QCOMPARE(top->localDeclarations().size(), 4); // Text, test, child and foo
+        QCOMPARE(top->localDeclarations().size(), 6); // module, exports, Text, test, child and foo
         // First declaration, the anonymous class
-        ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(top->localDeclarations().first());
+        ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(top->localDeclarations().at(2));
         QVERIFY(classDecl);
         QCOMPARE(classDecl->abstractType()->toString(), QString("qmlId"));
         QCOMPARE(classDecl->range(), RangeInRevision(5, 0, 5, 0));
@@ -177,7 +197,7 @@ void TestDeclarations::testQMLId()
         QCOMPARE(classDecl->internalContext()->range(), RangeInRevision(5, 6, 6, 17));
 
         // Second declaration: test
-        Declaration* dec = top->localDeclarations().at(1);
+        Declaration* dec = top->localDeclarations().at(3);
         QVERIFY(dec);
         QCOMPARE(dec->identifier().toString(), QString("test"));
         QCOMPARE(dec->abstractType()->toString(), QString("qmlId"));
@@ -186,7 +206,7 @@ void TestDeclarations::testQMLId()
 
 void TestDeclarations::testProperty()
 {
-    const IndexedString file("qmlProperty.qml");
+    const IndexedString file(QUrl("file:///internal/qmlProperty.qml"));
     //                          0         1         2         3
     //                          01234567890123456789012345678901234567890
     ParseSession session(file, "Text {\n"
@@ -203,8 +223,8 @@ void TestDeclarations::testProperty()
 
     DUChainReadLocker lock;
 
-    QCOMPARE(top->localDeclarations().size(), 1);
-    ClassDeclaration* text = dynamic_cast<ClassDeclaration*>(top->localDeclarations().first());
+    QCOMPARE(top->localDeclarations().size(), 3);        // module, exports, Text
+    ClassDeclaration* text = dynamic_cast<ClassDeclaration*>(top->localDeclarations().at(2));
     QVERIFY(text);
     QVERIFY(text->internalContext());
     QCOMPARE(text->internalContext()->type(), DUContext::Class);
