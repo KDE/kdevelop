@@ -3815,7 +3815,7 @@ void TestCppCodeCompletion::testDuplicatedNamespace()
   DUChainWriteLocker lock;
   CompletionItemTester tester(top->childContexts().last(), "foo::");
   //TODO: the sort-order is apparently undefined...
-  qSort(tester.names);
+  std::sort(tester.names.begin(), tester.names.end());
   QCOMPARE(tester.names, QStringList() << "asdf" << "bar" );
   release(top);
 }

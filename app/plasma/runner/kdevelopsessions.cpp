@@ -101,7 +101,7 @@ void KDevelopSessions::loadSessions()
         session.name = group.readEntry("SessionPrettyContents");;
         m_sessions << session;
     }
-    qSort(m_sessions.begin(), m_sessions.end(), kdevelopsessions_runner_compare_sessions);
+    std::sort(m_sessions.begin(), m_sessions.end(), kdevelopsessions_runner_compare_sessions);
 }
 
 void KDevelopSessions::match(Plasma::RunnerContext &context)

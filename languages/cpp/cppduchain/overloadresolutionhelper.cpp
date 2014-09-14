@@ -161,7 +161,7 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolveToList(bool p
     }
   }
 
-  qSort( viableFunctions );
+  std::sort(viableFunctions.begin(), viableFunctions.end());
 
   QList<OverloadResolutionFunction> ret;
   

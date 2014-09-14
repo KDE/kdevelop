@@ -256,7 +256,7 @@ QExplicitlySharedDataPointer<MissingIncludeCompletionItem> includeDirectiveFromU
     foreach(const QString& file, candidateFiles)
       items += itemsForFile(QString(), file, includePaths, fromPath, decl, 0, temp);
 
-    qSort<QList<KDevelop::CompletionTreeItemPointer>::iterator, DirectiveShorterThan>(items.begin(), items.end(), DirectiveShorterThan());
+    std::sort(items.begin(), items.end(), DirectiveShorterThan());
     if(!items.isEmpty()) {
       item = QExplicitlySharedDataPointer<MissingIncludeCompletionItem>(dynamic_cast<MissingIncludeCompletionItem*>(items.begin()->data()));
     }
@@ -438,7 +438,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
     }
   }
 
-  qSort<QList<KDevelop::CompletionTreeItemPointer>::iterator, DirectiveShorterThan>(ret.begin(), ret.end(), DirectiveShorterThan());
+  std::sort(ret.begin(), ret.end(), DirectiveShorterThan());
   
   return ret;
 }

@@ -255,7 +255,7 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
     viableFunctions << viable;
   }
 
-  qSort( viableFunctions );
+  std::sort(viableFunctions.begin(), viableFunctions.end());
 
   return viableFunctions;
 }

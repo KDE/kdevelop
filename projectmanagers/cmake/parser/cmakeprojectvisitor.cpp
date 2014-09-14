@@ -1827,7 +1827,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             break;
         case ListAst::RemoveAt: {
             QList<int> indices=list->index();
-            qSort(indices);
+            std::sort(indices.begin(), indices.end());
             QList<int>::const_iterator it=indices.constEnd();
             kDebug(9042) << "list remove: " << theList << indices;
             do
@@ -1838,7 +1838,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             m_vars->insert(list->list(), theList);
         }   break;
         case ListAst::Sort:
-            qSort(theList);
+            std::sort(theList.begin(), theList.end());
             m_vars->insert(list->list(), theList);
             break;
         case ListAst::Reverse: {
