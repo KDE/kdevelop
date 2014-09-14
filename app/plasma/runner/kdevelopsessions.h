@@ -17,10 +17,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef KATESESSIONS_H
-#define KATESESSIONS_H
+#ifndef KDEVELOPSESSIONSRUNNER_H
+#define KDEVELOPSESSIONSRUNNER_H
 
-#include <plasma/abstractrunner.h>
+#include <KRunner/AbstractRunner>
 
 #include <QIcon>
 
@@ -49,7 +49,5 @@ class KDevelopSessions : public Plasma::AbstractRunner {
         QIcon m_icon;
         QVector<Session> m_sessions;
 };
-
-K_EXPORT_PLASMA_RUNNER(kdevelopsessions, KDevelopSessions)
 
 #endif

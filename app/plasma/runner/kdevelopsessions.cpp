@@ -34,6 +34,8 @@
 #include <QUrl>
 #include <KStringHandler>
 
+K_EXPORT_PLASMA_RUNNER(kdevelopsessions, KDevelopSessions)
+
 bool kdevelopsessions_runner_compare_sessions(const Session &s1, const Session &s2) {
     QCollator c;
     return c.compare(s1.name, s2.name) < 0;
@@ -159,7 +161,7 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
             match.setData(session.id);
             match.setText(session.name);
             match.setSubtext(i18n("Open KDevelop Session"));
-            context.addMatch(term, match);
+            context.addMatch(match);
         }
     }
 }
@@ -172,7 +174,7 @@ void KDevelopSessions::run(const Plasma::RunnerContext &context, const Plasma::Q
         qWarning() << "No KDevelop session id in match!";
         return;
     }
-    kDebug() << "Open KDevelop session" << sessionId;
+    qDebug() << "Open KDevelop session" << sessionId;
     QStringList args;
     args << QLatin1String("--open-session") << sessionId;
     KToolInvocation::kdeinitExec(QLatin1String("kdevelop"), args);
