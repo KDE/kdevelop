@@ -24,13 +24,13 @@
 #include "../parsesession.h"
 #include "../declarationbuilder.h"
 
-#include <qtest_kde.h>
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testhelpers.h>
 
-QTEST_KDEMAIN(TestContexts, NoGUI);
+#include <QtTest>
+
+QTEST_GUILESS_MAIN(TestContexts);
 
 using namespace KDevelop;
 
@@ -51,7 +51,7 @@ void TestContexts::testFunctionContext()
     QFETCH(RangeInRevision, argCtxRange);
     QFETCH(RangeInRevision, bodyCtxRange);
 
-    const IndexedString file(QString("%1-functionContext.js").arg(qrand()));
+    const IndexedString file(QUrl(QString("file:///internal/%1-functionContext.js").arg(qrand())));
     ParseSession session(file, code, 0);
     QVERIFY(session.ast());
     QCOMPARE(session.language(), QmlJS::Language::JavaScript);
@@ -104,7 +104,7 @@ void TestContexts::testFunctionContext_data()
 
 void TestContexts::testQMLContext()
 {
-    const IndexedString file("testQMLContext.qml");
+    const IndexedString file(QUrl("file:///internal/testQMLContext.qml"));
     ParseSession session(file, "Text {\n"
                                "  id: main\n"
                                "  Text {\n"

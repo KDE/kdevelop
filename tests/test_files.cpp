@@ -19,8 +19,6 @@
 
 #include "test_files.h"
 
-#include <qtest_kde.h>
-
 #include <language/duchain/duchain.h>
 #include <language/codegen/coderepresentation.h>
 #include <language/backgroundparser/backgroundparser.h>
@@ -37,11 +35,13 @@
 #include <tests/json/jsontypetests.h>
 #include <interfaces/ilanguagecontroller.h>
 
+#include <QtTest>
+
 // #include "cppjsontests.h"
 
 using namespace KDevelop;
 
-QTEST_KDEMAIN(TestFiles, GUI)
+QTEST_MAIN(TestFiles)
 
 void TestFiles::initTestCase()
 {

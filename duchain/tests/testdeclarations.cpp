@@ -24,8 +24,6 @@
 #include "../parsesession.h"
 #include "../declarationbuilder.h"
 
-#include <qtest_kde.h>
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testhelpers.h>
@@ -35,7 +33,9 @@
 #include <language/duchain/problem.h>
 #include <language/duchain/classdeclaration.h>
 
-QTEST_KDEMAIN(TestDeclarations, NoGUI);
+#include <QtTest>
+
+QTEST_GUILESS_MAIN(TestDeclarations);
 
 using namespace KDevelop;
 
@@ -52,7 +52,7 @@ void TestDeclarations::cleanupTestCase()
 
 void TestDeclarations::testJSProblems()
 {
-    const IndexedString file("jsproblems.js");
+    const IndexedString file(QUrl("file:///internal/jsproblems.js"));
     ParseSession session(file,
         "function f(a) {}\n"
         "f(2);\n"
@@ -71,7 +71,7 @@ void TestDeclarations::testJSProblems()
 
 void TestDeclarations::testFunction()
 {
-    const IndexedString file("functionArgs.js");
+    const IndexedString file(QUrl("file:///internal/functionArgs.js"));
     //                          0         1         2         3
     //                          01234567890123456789012345678901234567890
     ParseSession session(file, "/**\n * some comment\n */\n"
@@ -126,7 +126,7 @@ void TestDeclarations::testFunction()
 
 void TestDeclarations::testQMLId()
 {
-    const IndexedString file("qmlId.qml");
+    const IndexedString file(QUrl("file:///internal/qmlId.qml"));
 
     ReferencedTopDUContext top;
 
@@ -206,7 +206,7 @@ void TestDeclarations::testQMLId()
 
 void TestDeclarations::testProperty()
 {
-    const IndexedString file("qmlProperty.qml");
+    const IndexedString file(QUrl("file:///internal/qmlProperty.qml"));
     //                          0         1         2         3
     //                          01234567890123456789012345678901234567890
     ParseSession session(file, "Text {\n"
