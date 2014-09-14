@@ -265,7 +265,7 @@ PluginController::PluginController(Core *core)
         }
     });
     qDebug() << "Found" << newPlugins.size() << " plugins using the new search method.";
-    d->plugins = KPluginInfo::fromKPluginMetaDataList(newPlugins);
+    d->plugins = KPluginInfo::fromMetaData(newPlugins);
 
     //kDebug() << "Fetching plugin info which matches:" << QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);
     KPluginInfo::List oldStylePlugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QStringLiteral( "KDevelop/Plugin" ),
