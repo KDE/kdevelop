@@ -70,12 +70,6 @@ void IncludePathComputer::computeForeground()
     }
 
     m_noProject = false;
-    IBuildSystemManager* buildManager = project->buildSystemManager();
-    if (!buildManager) {
-      // We found the project, but no build manager!!
-      kDebug() << "didn't get build manager for project:" << project->name();
-      continue;
-    }
 
     auto idm = IDefinesAndIncludesManager::manager();
 
@@ -100,10 +94,10 @@ void IncludePathComputer::computeForeground()
 
     m_projectName = project->name();
 
-      for (const auto& dir : idm->includes(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined | IDefinesAndIncludesManager::CompilerSpecific))){
-        addInclude(dir);
-      }
-      m_defines = idm->defines(file);
+    for (const auto& dir : idm->includes(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined | IDefinesAndIncludesManager::CompilerSpecific))){
+      addInclude(dir);
+    }
+    m_defines = idm->defines(file);
 
     kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
     foreach (const Path& dir, dirs) {
@@ -125,11 +119,11 @@ void IncludePathComputer::computeBackground()
     return;
   }
 
-    auto result = IDefinesAndIncludesManager::manager()->includesInBackground(m_source);
+  auto result = IDefinesAndIncludesManager::manager()->includesInBackground(m_source);
 
-    foreach (const auto& res, result) {
-        addInclude(res);
-    }
+  foreach (const auto& res, result) {
+    addInclude(res);
+  }
 
   if (m_noProject) {
     // Last chance: Take a parsed version of the file from the du-chain, and get its include-paths
