@@ -156,7 +156,7 @@ const QPair<KTextEditor::Range, KTextEditor::Range> parseProperty(const QString&
     ));
 };
 
-QWidget* KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position)
+QWidget* KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position)
 {
     IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
     if ( doc && doc->textDocument() ) {

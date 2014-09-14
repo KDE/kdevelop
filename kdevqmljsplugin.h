@@ -38,7 +38,7 @@ public:
     virtual KDevelop::BasicRefactoring* refactoring() const;
 
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
-    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position);
+    virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position) override;
 
 private:
     KDevelop::ICodeHighlighting* m_highlighting;
