@@ -666,9 +666,27 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 static QRegularExpression defineRegularExpression()
 {
   static const QRegularExpression pattern(QStringLiteral(
-    "-D([^\\s=]+)(?:=(\".*?(?<!\\\\)\"|[^\\s]*))?"
+    "-D([^\\s=]+)(?:=(?:\"(.*?)(?<!\\\\)\"|([^\\s]*)))?"
   ));
+  Q_ASSERT(pattern.isValid());
   return pattern;
+}
+
+static QString unescape(const QStringRef& input)
+{
+  QString output;
+  output.reserve(input.length());
+  bool isEscaped = false;
+  for (auto it = input.data(), end = it + input.length(); it != end; ++it) {
+    QChar c = *it;
+    if (!isEscaped && c == '\\') {
+      isEscaped = true;
+    } else {
+      output.append(c);
+      isEscaped = false;
+    }
+  }
+  return output;
 }
 
 PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, const QString& workingDirectory) const
@@ -702,7 +720,11 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
     auto it = defineRx.globalMatch(fullOutput);
     while (it.hasNext()) {
       const auto match = it.next();
-      ret.defines[match.captured(1)] = match.captured(2);
+      QString value;
+      if (match.lastCapturedIndex() > 1) {
+        value = unescape(match.capturedRef(match.lastCapturedIndex()));
+      }
+      ret.defines[match.captured(1)] = value;
     }
   }
 
