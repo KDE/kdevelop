@@ -30,22 +30,14 @@
 #include <interfaces/iproject.h>
 
 #include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include <QtConcurrentRun>
 #include <QFutureWatcher>
 
 using namespace KDevelop;
 
 namespace {
-
-CMakeFile dataFromJson(const QVariantMap& entry)
-{
-    MakeFileResolver resolver;
-    PathResolutionResult result = resolver.processOutput(entry["command"].toString(), entry["directory"].toString());
-
-    CMakeFile ret;
-    ret.includes = KDevelop::toPathList(result.paths);
-    return ret;
-}
 
 CMakeJsonData import(const Path& commandsFile)
 {
@@ -60,14 +52,38 @@ CMakeJsonData import(const Path& commandsFile)
     kDebug() << "Found commands file" << commandsFile;
 
     CMakeJsonData data;
-    QJsonDocument parser;
     QJsonParseError error;
-    QVariantList values = parser.fromJson(f.readAll(), &error).toVariant().toList();
-    Q_ASSERT(error.error == QJsonParseError::NoError);
+    const QJsonDocument document = QJsonDocument::fromJson(f.readAll(), &error);
+    if (error.error) {
+        qDebug() << "Failed to parse JSON in commands file:" << error.errorString() << commandsFile;
+        data.isValid = false;
+        return data;
+    } else if (!document.isArray()) {
+        qDebug() << "JSON document in commands file is not an array: " << commandsFile;
+        data.isValid = false;
+        return data;
+    }
 
-    foreach(const QVariant& v, values) {
-        QVariantMap entry = v.toMap();
-        data.files[Path(entry["file"].toString())] = dataFromJson(entry);
+    MakeFileResolver resolver;
+    static const QString KEY_COMMAND = QStringLiteral("command");
+    static const QString KEY_DIRECTORY = QStringLiteral("directory");
+    static const QString KEY_FILE = QStringLiteral("file");
+    foreach(const QJsonValue& value, document.array()) {
+        if (!value.isObject()) {
+            qDebug() << "JSON command file entry is not an object:" << value;
+            continue;
+        }
+        const QJsonObject entry = value.toObject();
+        if (!entry.contains(KEY_FILE) || !entry.contains(KEY_COMMAND) || !entry.contains(KEY_DIRECTORY)) {
+            qDebug() << "JSON command file entry does not contain required keys:" << entry;
+            continue;
+        }
+
+        PathResolutionResult result = resolver.processOutput(entry["command"].toString(), entry["directory"].toString());
+
+        CMakeFile ret;
+        ret.includes = KDevelop::toPathList(result.paths);
+        data.files[Path(entry["file"].toString())] = ret;
     }
 
     data.isValid = true;
