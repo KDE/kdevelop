@@ -190,14 +190,10 @@ bool DUChainLock::currentThreadHasWriteLock()
 }
 
 DUChainReadLocker::DUChainReadLocker(DUChainLock* duChainLock, uint timeout)
-  : m_locked(false)
+  : m_lock(duChainLock ? duChainLock : DUChain::lock())
+  , m_locked(false)
   , m_timeout(timeout)
 {
-  m_lock = duChainLock;
-  if (!m_lock) {
-    m_lock = DUChain::lock();
-  }
-  m_timeout = timeout;
   lock();
 }
 
