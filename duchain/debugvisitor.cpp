@@ -31,7 +31,7 @@ struct ClientData
     uint depth;
 };
 
-CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
+CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
 {
     auto data = static_cast<ClientData*>(d);
 
@@ -80,7 +80,7 @@ CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
     (*data->out) << endl;
 
     ClientData childData{data->out, data->session, data->depth + 1};
-    clang_visitChildren(cursor, &::visit, &childData);
+    clang_visitChildren(cursor, &visitCursor, &childData);
 
     return CXChildVisit_Continue;
 }
@@ -98,5 +98,5 @@ void DebugVisitor::visit(CXTranslationUnit unit)
     auto cursor = clang_getTranslationUnitCursor(unit);
     QTextStream out(stdout);
     ClientData data {&out, m_session, 0};
-    clang_visitChildren(cursor, &::visit, &data);
+    clang_visitChildren(cursor, &visitCursor, &data);
 }
