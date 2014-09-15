@@ -230,6 +230,13 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
 
 ClangSupport::~ClangSupport()
 {
+    ILanguage* lang = language();
+    if (lang) {
+        lang->parseLock()->lockForWrite();
+        // By locking the parse-mutexes, we make sure that parse jobs get a chance to finish in a good state
+        lang->parseLock()->unlock();
+    }
+
     for(const auto& type : DocumentFinderHelpers::mimeTypesList()) {
         KDevelop::IBuddyDocumentFinder::removeFinder(type);
     }
