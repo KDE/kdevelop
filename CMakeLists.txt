@@ -53,7 +53,6 @@ find_package(KF5 REQUIRED COMPONENTS
   NewStuff
   NotifyConfig
   Parts
-  Service
   Sonnet
   TextEditor
   ThreadWeaver
@@ -65,6 +64,7 @@ find_package(KF5 REQUIRED COMPONENTS
 )
 
 find_package(KF5XmlGui 5.1 REQUIRED)
+find_package(KF5Service 5.3 REQUIRED)
 
 # TODO KF5: Remove Grantlee found check as soon there is an official version of Grantlee for Qt5
 find_package(Grantlee 1.0.0)
