@@ -138,12 +138,6 @@ public:
 
     ~BackgroundParserPrivate()
     {
-        suspend();
-
-        m_weaver.dequeue();
-        m_weaver.requestAbort();
-        m_weaver.finish();
-
         // Release dequeued jobs
         QHashIterator<IndexedString, ThreadWeaver::QObjectDecorator*> it = m_parseJobs;
         while (it.hasNext()) {
