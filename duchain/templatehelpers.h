@@ -24,6 +24,8 @@
 
 #include <QDebug>
 
+#include <type_traits>
+
 enum class Decision
 {
     True,
