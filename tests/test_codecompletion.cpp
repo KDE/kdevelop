@@ -21,8 +21,6 @@
 
 #include "test_codecompletion.h"
 
-#include <qtest_kde.h>
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>

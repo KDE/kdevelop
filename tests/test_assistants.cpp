@@ -21,7 +21,6 @@
 
 #include <QtTest/QtTest>
 #include <QTemporaryDir>
-#include <qtest_kde.h>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>

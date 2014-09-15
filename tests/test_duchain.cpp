@@ -21,8 +21,6 @@
 
 #include "test_duchain.h"
 
-#include <qtest_kde.h>
-
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>
@@ -45,6 +43,8 @@
 #include <duchain/parsesession.h>
 
 #include <custom-definesandincludes/idefinesandincludesmanager.h>
+
+#include <QtTest>
 
 QTEST_GUILESS_MAIN(TestDUChain);
 

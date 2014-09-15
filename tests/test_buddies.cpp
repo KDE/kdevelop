@@ -20,8 +20,6 @@
 
 #include "test_buddies.h"
 
-#include <qtest_kde.h>
-
 #include <QSplitter>
 #include <QtTest/QtTest>
 
@@ -44,6 +42,8 @@
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
+
+#include <KSharedConfig>
 
 Sublime::MainWindow* toSublimeWindow(KParts::MainWindow* window)
 {
@@ -90,7 +90,7 @@ void TestBuddies::createFile(const QDir& dir, const QString& filename)
 void TestBuddies::enableBuddies(bool enable)
 {
     {
-        KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+        KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
         uiGroup.writeEntry("TabBarArrangeBuddies", (enable ? 1 : 0));
         uiGroup.sync();
     }
@@ -101,7 +101,7 @@ void TestBuddies::enableBuddies(bool enable)
 void TestBuddies::enableOpenAfterCurrent(bool enable)
 {
     {
-        KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+        KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
         uiGroup.writeEntry("TabBarOpenAfterCurrent", (enable ? 1 : 0));
         uiGroup.sync();
     }
