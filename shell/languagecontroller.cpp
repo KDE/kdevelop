@@ -219,7 +219,7 @@ ILanguage *LanguageController::language(const QString &name) const
         QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport, constraints);
         if(!supports.isEmpty()) {
             ILanguageSupport *languageSupport = supports[0]->extension<ILanguageSupport>();
-            if(supports[0])
+            if(languageSupport)
                 ret = d->addLanguageForSupport(languageSupport);
         }
         return ret;
