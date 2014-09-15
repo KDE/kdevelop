@@ -287,11 +287,6 @@ QString CppLanguageSupport::name() const
     return "C++";
 }
 
-KDevelop::ILanguage *CppLanguageSupport::language()
-{
-    return core()->languageController()->language(name());
-}
-
 TopDUContext* CppLanguageSupport::standardContext(const QUrl &url, bool proxyContext)
 {
   DUChainReadLocker lock(DUChain::lock());

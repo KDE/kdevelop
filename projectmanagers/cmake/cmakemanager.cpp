@@ -297,11 +297,6 @@ KDevelop::ParseJob * CMakeManager::createParseJob(const IndexedString &url)
     return new CMakeParseJob(url, this);
 }
 
-KDevelop::ILanguage * CMakeManager::language()
-{
-    return core()->languageController()->language(name());
-}
-
 KDevelop::ICodeHighlighting* CMakeManager::codeHighlighting() const
 {
     return m_highlight;

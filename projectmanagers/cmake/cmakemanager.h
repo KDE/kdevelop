@@ -124,7 +124,6 @@ public:
     //LanguageSupport
     virtual QString name() const;
     virtual KDevelop::ParseJob *createParseJob(const KDevelop::IndexedString &url);
-    virtual KDevelop::ILanguage *language();
     virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
     virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position);
     

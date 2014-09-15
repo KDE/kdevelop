@@ -93,7 +93,6 @@ public:
 
     KDevelop::ICodeHighlighting *codeHighlighting() const;
     KDevelop::BasicRefactoring* refactoring() const;
-    KDevelop::ILanguage *language();
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
     KDevelop::ParseJob *createParseJob( const KDevelop::IndexedString &url );
     //KDevelop::AstRepresentationPtr  generateAst(const KDevelop::TopDUContext & topContext);
