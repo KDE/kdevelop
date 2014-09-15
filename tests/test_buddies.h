@@ -21,9 +21,8 @@
 #ifndef SHELLBUDDYTEST_H
 #define SHELLBUDDYTEST_H
 
-#include <QObject>
-
-class KTempDir;
+#include <QtCore/QObject>
+#include <QtCore/QDir>
 
 namespace Sublime {
 class View;
@@ -57,7 +56,7 @@ private slots:
 
 private:
     void verifyFilename(Sublime::View *view, const QString& endOfFilename);
-    void createFile(const KTempDir& dir, const QString& filename);
+    void createFile(const QDir& dir, const QString& filename);
     void enableBuddies(bool enable = true);
     void enableOpenAfterCurrent(bool enable = true);
 

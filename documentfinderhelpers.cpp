@@ -71,7 +71,7 @@ enum FileType {
  *
  * @returns pair of base path and file type which has been found for @p url.
  */
-QPair<QString,FileType> basePathAndTypeForUrl(const KUrl& url)
+QPair<QString,FileType> basePathAndTypeForUrl(const QUrl &url)
 {
     QString path = url.toLocalFile();
     int idxSlash = path.lastIndexOf('/');
@@ -103,7 +103,7 @@ QStringList DocumentFinderHelpers::mimeTypesList()
     return mimeTypesStr.split(QChar(','), QString::SkipEmptyParts);
 }
 
-bool DocumentFinderHelpers::areBuddies(const KUrl& url1, const KUrl& url2)
+bool DocumentFinderHelpers::areBuddies(const QUrl &url1, const QUrl& url2)
 {
     auto type1 = basePathAndTypeForUrl(url1);
     auto type2 = basePathAndTypeForUrl(url2);
@@ -111,7 +111,7 @@ bool DocumentFinderHelpers::areBuddies(const KUrl& url1, const KUrl& url2)
                                           (type1.second == Source && type2.second == Header)));
 }
 
-bool DocumentFinderHelpers::buddyOrder(const KUrl& url1, const KUrl& url2)
+bool DocumentFinderHelpers::buddyOrder(const QUrl &url1, const QUrl& url2)
 {
     auto type1 = basePathAndTypeForUrl(url1);
     auto type2 = basePathAndTypeForUrl(url2);
@@ -119,7 +119,7 @@ bool DocumentFinderHelpers::buddyOrder(const KUrl& url1, const KUrl& url2)
     return(type1.second == Header && type2.second == Source);
 }
 
-QVector< KUrl > DocumentFinderHelpers::getPotentialBuddies(const KUrl& url)
+QVector< QUrl > DocumentFinderHelpers::getPotentialBuddies(const QUrl &url)
 {
     auto type = basePathAndTypeForUrl(url);
     // Don't do anything for types we don't know
@@ -130,9 +130,9 @@ QVector< KUrl > DocumentFinderHelpers::getPotentialBuddies(const KUrl& url)
     // Depending on the buddy's file type we either generate source extensions (for headers)
     // or header extensions (for sources)
     const auto& extensions = ( type.second == Header ? getSourceFileExtensions() : getHeaderFileExtensions() );
-    QVector< KUrl > buddies;
+    QVector< QUrl > buddies;
     for(const QString& extension : extensions) {
-        buddies.append(KUrl(type.first + '.' + extension));
+        buddies.append(QUrl::fromLocalFile(type.first + '.' + extension));
     }
 
     return buddies;

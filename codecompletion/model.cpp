@@ -43,7 +43,7 @@ public:
     virtual ~ClangCodeCompletionWorker() = default;
 
 public slots:
-    void completionRequested(const KUrl& url, const KTextEditor::Cursor& position, const QString& text)
+    void completionRequested(const QUrl &url, const KTextEditor::Cursor& position, const QString& text)
     {
         aborting() = false;
 
@@ -121,13 +121,13 @@ ClangCodeCompletionModel::~ClangCodeCompletionModel()
 CodeCompletionWorker* ClangCodeCompletionModel::createCompletionWorker()
 {
     auto worker = new ClangCodeCompletionWorker(this);
-    connect(this, SIGNAL(requestCompletion(KUrl,KTextEditor::Cursor,QString)),
-            worker, SLOT(completionRequested(KUrl,KTextEditor::Cursor,QString)));
+    connect(this, SIGNAL(requestCompletion(QUrl,KTextEditor::Cursor,QString)),
+            worker, SLOT(completionRequested(QUrl,KTextEditor::Cursor,QString)));
     return worker;
 }
 
 void ClangCodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range,
-                                                         CodeCompletionModel::InvocationType /*invocationType*/, const KUrl& url)
+                                                         CodeCompletionModel::InvocationType /*invocationType*/, const QUrl &url)
 {
     // get text before this range so we can parse this version with clang
     auto text = view->document()->text({0, 0, range.start().line(), range.start().column()});

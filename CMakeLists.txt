@@ -51,6 +51,8 @@ configure_file(
 
 enable_testing()
 
+add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
+
 include_directories(
     ${KDE4_INCLUDES}
     ${CMAKE_INSTALL_PREFIX}/${KDEVPLATFORM_INCLUDE_DIR}

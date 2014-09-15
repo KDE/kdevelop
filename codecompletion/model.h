@@ -37,13 +37,13 @@ public:
     virtual ~ClangCodeCompletionModel();
 
 signals:
-    void requestCompletion(const KUrl& url, const KTextEditor::Cursor& cursor, const QString& text);
+    void requestCompletion(const QUrl &url, const KTextEditor::Cursor& cursor, const QString& text);
 
 protected:
     KDevelop::CodeCompletionWorker* createCompletionWorker() override;
 
     void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range,
-                                   InvocationType invocationType, const KUrl& url) override;
+                                   InvocationType invocationType, const QUrl &url) override;
 };
 
 Q_DECLARE_METATYPE(KTextEditor::Cursor)

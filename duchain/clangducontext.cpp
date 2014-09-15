@@ -37,12 +37,12 @@ QWidget* ClangTopDUContext::createNavigationWidget(Declaration* decl, TopDUConte
                                                    const QString& htmlPrefix, const QString& htmlSuffix) const
 {
     if (!decl) {
-        KUrl u(url().str());
+        const QUrl u = url().toUrl();
         IncludeItem item;
         item.pathNumber = -1;
         item.name = u.fileName();
         item.isDirectory = false;
-        item.basePath = u.upUrl();
+        item.basePath = u.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
 
         return new ClangNavigationWidget(item, TopDUContextPointer(topContext ? topContext : this->topContext()), htmlPrefix, htmlSuffix);
     }

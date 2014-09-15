@@ -111,7 +111,7 @@ KTextEditor::Range rangeForIncludePathSpec(const QString& line, const KTextEdito
     return range;
 }
 
-QPair<QString, KTextEditor::Range> lineInDocument(const KUrl& url, const KTextEditor::Cursor& position)
+QPair<QString, KTextEditor::Range> lineInDocument(const QUrl &url, const KTextEditor::Cursor& position)
 {
     KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
     if (!doc || !doc->textDocument() || !ICore::self()->documentController()->activeTextDocumentView()) {
@@ -125,7 +125,7 @@ QPair<QString, KTextEditor::Range> lineInDocument(const KUrl& url, const KTextEd
     return {line, range};
 }
 
-QPair<TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const KUrl& url, const KTextEditor::Cursor& position)
+QPair<TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const QUrl &url, const KTextEditor::Cursor& position)
 {
     auto pair = lineInDocument(url, position);
 
@@ -173,10 +173,8 @@ QPair<TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const 
 
     if (!includeName.isEmpty()) {
         if (includeName.startsWith(".")) {
-            KUrl dir(url.directory());
-            dir.addPath(includeName);
-            dir.cleanPath();
-            includeName = dir.pathOrUrl();
+            const Path dir = Path(url).parent();
+            includeName = Path(dir, includeName).toLocalFile();
         }
 
         const auto recursiveImports = topContext->recursiveImportIndices();
@@ -193,7 +191,7 @@ QPair<TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const 
     return {{}, KTextEditor::Range::invalid()};
 }
 
-QPair<TopDUContextPointer, Use> macroExpansionForPosition(const KUrl& url, const KTextEditor::Cursor& position)
+QPair<TopDUContextPointer, Use> macroExpansionForPosition(const QUrl &url, const KTextEditor::Cursor& position)
 {
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
     if (topContext) {
@@ -262,17 +260,17 @@ ClangIndex* ClangSupport::index()
     return m_index.data();
 }
 
-bool ClangSupport::areBuddies(const KUrl& url1, const KUrl& url2)
+bool ClangSupport::areBuddies(const QUrl &url1, const QUrl& url2)
 {
     return DocumentFinderHelpers::areBuddies(url1, url2);
 }
 
-bool ClangSupport::buddyOrder(const KUrl& url1, const KUrl& url2)
+bool ClangSupport::buddyOrder(const QUrl &url1, const QUrl& url2)
 {
     return DocumentFinderHelpers::buddyOrder(url1, url2);
 }
 
-QVector< KUrl > ClangSupport::getPotentialBuddies(const KUrl& url) const
+QVector< QUrl > ClangSupport::getPotentialBuddies(const QUrl &url) const
 {
     return DocumentFinderHelpers::getPotentialBuddies(url);
 }
@@ -300,7 +298,7 @@ KDevelop::ContextMenuExtension ClangSupport::contextMenuExtension(KDevelop::Cont
     return cm;
 }
 
-KTextEditor::Range ClangSupport::specialLanguageObjectRange(const KUrl& url, const KTextEditor::Cursor& position)
+KTextEditor::Range ClangSupport::specialLanguageObjectRange(const QUrl &url, const KTextEditor::Cursor& position)
 {
     DUChainReadLocker lock;
     const QPair<TopDUContextPointer, Use> macroExpansion = macroExpansionForPosition(url, position);
@@ -316,18 +314,18 @@ KTextEditor::Range ClangSupport::specialLanguageObjectRange(const KUrl& url, con
     return KTextEditor::Range::invalid();
 }
 
-QPair<KUrl, KTextEditor::Cursor> ClangSupport::specialLanguageObjectJumpCursor(const KUrl& url, const KTextEditor::Cursor& position)
+QPair<QUrl, KTextEditor::Cursor> ClangSupport::specialLanguageObjectJumpCursor(const QUrl &url, const KTextEditor::Cursor& position)
 {
     const QPair<TopDUContextPointer, KTextEditor::Range> import = importedContextForPosition(url, position);
     DUChainReadLocker lock;
     if (import.first) {
-        return qMakePair(KUrl(import.first->url().str()), KTextEditor::Cursor(0,0));
+        return qMakePair(import.first->url().toUrl(), KTextEditor::Cursor(0,0));
     }
 
     return {{}, KTextEditor::Cursor::invalid()};
 }
 
-QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const KUrl& url, const KTextEditor::Cursor& position)
+QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position)
 {
     DUChainReadLocker lock;
     const QPair<TopDUContextPointer, Use> macroExpansion = macroExpansionForPosition(url, position);
@@ -344,7 +342,7 @@ QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const KUrl& url, co
     if (import.first) {
         // Prefer a standardContext, because the included one may have become empty due to
         if (import.first->localDeclarations().count() == 0 && import.first->childContexts().count() == 0) {
-            KDevelop::TopDUContext* betterCtx = standardContext(KUrl(import.first->url().str()));
+            KDevelop::TopDUContext* betterCtx = standardContext(import.first->url().toUrl());
             if (betterCtx && (betterCtx->localDeclarations().count() != 0 || betterCtx->childContexts().count() != 0)) {
                 return betterCtx->createNavigationWidget(0, 0, i18n("Emptied by preprocessor<br />"));
             }
@@ -354,7 +352,7 @@ QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const KUrl& url, co
     return nullptr;
 }
 
-TopDUContext* ClangSupport::standardContext(const KUrl& url, bool /*proxyContext*/)
+TopDUContext* ClangSupport::standardContext(const QUrl &url, bool /*proxyContext*/)
 {
     ClangParsingEnvironment env;
     return DUChain::self()->chainForDocument(url, &env);

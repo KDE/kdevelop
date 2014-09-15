@@ -26,7 +26,7 @@
 #include <language/duchain/identifier.h>
 #include <language/duchain/topducontext.h>
 
-#include <KUrl>
+#include <QUrl>
 
 namespace KTextEditor {
 class View;
@@ -65,7 +65,7 @@ private:
     KDevelop::DUContextPointer m_otherSideContext;
     //old signature of the _other_side
     Signature m_oldSignature;
-    KUrl m_document;
+    QUrl m_document;
     QWeakPointer<KTextEditor::View> m_view;
 
 private slots:

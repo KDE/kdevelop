@@ -36,7 +36,7 @@
 using namespace KDevelop;
 
 namespace {
-Declaration *getDeclarationAtCursor(const KTextEditor::Cursor &cursor, const KUrl &documentUrl)
+Declaration *getDeclarationAtCursor(const KTextEditor::Cursor &cursor, const QUrl &documentUrl)
 {
     ENSURE_CHAIN_READ_LOCKED
     ReferencedTopDUContext top(DUChainUtils::standardContextForUrl(documentUrl));

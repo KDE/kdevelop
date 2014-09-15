@@ -29,6 +29,7 @@
 #include <interfaces/ibuddydocumentfinder.h>
 
 #include <QStringList>
+#include <QVariantList>
 
 class ClangIndex;
 class SimpleRefactoring;
@@ -55,22 +56,22 @@ public:
     virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions);
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
-    virtual KTextEditor::Range specialLanguageObjectRange(const KUrl& url,
+    virtual KTextEditor::Range specialLanguageObjectRange(const QUrl &url,
                                                              const KTextEditor::Cursor& position) override;
-    virtual QPair<KUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const KUrl& url,
+    virtual QPair<QUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const QUrl &url,
                                                                                 const KTextEditor::Cursor& position) override;
-    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url,
+    virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl &url,
                                                            const KTextEditor::Cursor& position) override;
 
     ClangIndex* index();
 
-    virtual KDevelop::TopDUContext* standardContext(const KUrl& url, bool proxyContext = false) override;
+    virtual KDevelop::TopDUContext* standardContext(const QUrl &url, bool proxyContext = false) override;
 
     //BEGIN IBuddyDocumentFinder
 
-    virtual bool areBuddies(const KUrl& url1, const KUrl& url2) override;
-    virtual bool buddyOrder(const KUrl& url1, const KUrl& url2) override;
-    virtual QVector< KUrl > getPotentialBuddies(const KUrl& url) const override;
+    virtual bool areBuddies(const QUrl &url1, const QUrl& url2) override;
+    virtual bool buddyOrder(const QUrl &url1, const QUrl& url2) override;
+    virtual QVector< QUrl > getPotentialBuddies(const QUrl &url) const override;
 
     //END IBuddyDocumentFinder
 

@@ -26,7 +26,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/topducontext.h>
 #include <serialization/indexedstring.h>
-#include <kurl.h>
+#include <QUrl>
 
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/codegen/documentchangeset.h>
@@ -53,7 +53,7 @@ struct DeclSearchInfo
     CXCursor decl;
 };
 
-ParseSessionData::Ptr getSession(const KUrl& url)
+ParseSessionData::Ptr getSession(const QUrl &url)
 {
     DUChainReadLocker lock;
     auto top = DUChainUtils::standardContextForUrl(url);
@@ -147,7 +147,7 @@ KTextEditor::Cursor findSignatureEnd(KTextEditor::Document *targetDoc, CXCursor 
     return KTextEditor::Cursor(endLine, endColumn+1);
 }
 
-KUrl findCompanionFile(const KUrl& fileUrl, const KTextEditor::Cursor& sc, const CXFile& file, CXCursor& otherSide)
+QUrl findCompanionFile(const QUrl &fileUrl, const KTextEditor::Cursor& sc, const CXFile& file, CXCursor& otherSide)
 {
     static QStringList headerMime({"text/x-c++hdr", "text/x-chdr"});
     static QStringList srcMime({"text/x-c++src", "text/x-csrc"});
@@ -160,16 +160,16 @@ KUrl findCompanionFile(const KUrl& fileUrl, const KTextEditor::Cursor& sc, const
         targetTypes = headerMime;
     } else {
         clangDebug() << "Unrecgonized file extension";
-        return KUrl();
+        return QUrl();
     }
 
     IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(fileUrl)->name());
     if (!buddyFinder) {
         clangDebug() << "Could not create buddy finder for " << fileUrl;
-        return KUrl();
+        return QUrl();
     }
-    foreach (KUrl potentialUrl, buddyFinder->getPotentialBuddies(fileUrl)) {
-        QString potentialMime = KMimeType::findByUrl(potentialUrl.url())->name();
+    foreach (QUrl potentialUrl, buddyFinder->getPotentialBuddies(fileUrl)) {
+        QString potentialMime = KMimeType::findByUrl(potentialUrl)->name();
         if (!QFile::exists(potentialUrl.toLocalFile()) || !targetTypes.contains(potentialMime)) {
             continue;
         }
@@ -193,7 +193,7 @@ KUrl findCompanionFile(const KUrl& fileUrl, const KTextEditor::Cursor& sc, const
 
         return potentialUrl;
     }
-    return KUrl();
+    return QUrl();
 }
 
 bool fixDefaults(QVector<QString>& defaults, const CXCursor& cursor, const QList<ParamInfo>& oldInfo)
@@ -255,7 +255,7 @@ bool fixDefaults(QVector<QString>& defaults, const CXCursor& cursor, const QList
 
 }
 
-ClangAdaptSignatureAction::ClangAdaptSignatureAction(bool targetDecl, const KUrl& url,
+ClangAdaptSignatureAction::ClangAdaptSignatureAction(bool targetDecl, const QUrl &url,
                                                      const KTextEditor::Range& range,
                                                      const QString& newSig, const QString& oldSig):
     m_targetDecl(targetDecl), m_url(url), m_range(range), m_newSig(newSig), m_oldSig(oldSig)
@@ -320,7 +320,7 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
     reset();
     m_view = view;
 
-    KUrl fileUrl = m_view.data()->document()->url();
+    QUrl fileUrl = m_view.data()->document()->url();
     const ParseSession session(getSession(fileUrl));
     if (!session.data()) {
         return;
@@ -361,7 +361,7 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
                 return;
             }
 
-            m_targetUnit = KUrl(ClangString(clang_getFileName(otherFile)).toString());
+            m_targetUnit = QUrl::fromLocalFile(ClangString(clang_getFileName(otherFile)).toString());
             if (m_targetUnit.isEmpty()) {
                 clangDebug() << "Could not access file " << clang_getFileName(otherFile);
                 return;
@@ -474,7 +474,7 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
         return;
     }
 
-    KUrl targetUrl = m_otherLoc.document.toUrl();
+    QUrl targetUrl = m_otherLoc.document.toUrl();
     KTextEditor::Document *targetDoc = ICore::self()->documentController()->documentForUrl(targetUrl)->textDocument();
 
     KTextEditor::Cursor end = findSignatureEnd(targetDoc, otherCursor);

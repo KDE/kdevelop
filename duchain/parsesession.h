@@ -27,7 +27,7 @@
 
 #include <clang-c/Index.h>
 
-#include <KUrl>
+#include <QUrl>
 
 #include <serialization/indexedstring.h>
 #include <language/duchain/problem.h>

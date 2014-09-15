@@ -213,7 +213,7 @@ void TestProblems::testMissingInclude()
     TestFile workingFile("int main() { A a; }", "cpp");
     workingFile.parse(TopDUContext::AllDeclarationsAndContexts);
 
-    QCOMPARE(include.url().toUrl().upUrl(), workingFile.url().toUrl().upUrl());
+    QCOMPARE(include.url().toUrl().adjusted(QUrl::RemoveFilename), workingFile.url().toUrl().adjusted(QUrl::RemoveFilename));
     QVERIFY(include.waitForParsed());
     QVERIFY(workingFile.waitForParsed());
 

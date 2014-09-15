@@ -25,7 +25,7 @@
 #include <QStringList>
 #include <QVector>
 
-#include <KUrl>
+#include <QUrl>
 
 /// Helper class for handling @see IBuddyDocumentFinder features.
 class DocumentFinderHelpers
@@ -39,13 +39,13 @@ public:
      * is the same, and one extension starts with h/H and the other one with c/C.
      * For example, foo.hpp and foo.C are buddies.
      */
-    static bool areBuddies(const KUrl& url1, const KUrl& url2);
+    static bool areBuddies(const QUrl &url1, const QUrl& url2);
 
     /// @see KDevelop::IBuddyDocumentFinder
-    static bool buddyOrder(const KUrl& url1, const KUrl& url2);
+    static bool buddyOrder(const QUrl &url1, const QUrl& url2);
 
     /// @see KDevelop::IBuddyDocumentFinder
-    static QVector< KUrl > getPotentialBuddies(const KUrl& url);
+    static QVector< QUrl > getPotentialBuddies(const QUrl &url);
 };
 
 #endif // DOCUMENTFINDERHELPERS_H

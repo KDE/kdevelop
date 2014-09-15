@@ -53,7 +53,7 @@ struct ParamInfo
 class ClangAdaptSignatureAction : public KDevelop::IAssistantAction
 {
 public:
-    ClangAdaptSignatureAction(bool targetDecl, const KUrl& url, const KTextEditor::Range& range, const QString& newSig, const QString &oldSig);
+    ClangAdaptSignatureAction(bool targetDecl, const QUrl &url, const KTextEditor::Range& range, const QString& newSig, const QString &oldSig);
 
     virtual QString description() const;
 
@@ -62,7 +62,7 @@ public:
     virtual void execute();
 private:
     bool m_targetDecl;
-    KUrl m_url;
+    QUrl m_url;
     KTextEditor::Range m_range;
     QString m_newSig;
     QString m_oldSig;
@@ -91,7 +91,7 @@ private:
 
     //True if and only if the assistant is adjusting the declaration
     bool m_targetDecl;
-    KUrl m_targetUnit;
+    QUrl m_targetUnit;
 
     KDevelop::DocumentCursor m_otherLoc;
 

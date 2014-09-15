@@ -20,7 +20,7 @@
 #include "test_assistants.h"
 
 #include <QtTest/QtTest>
-#include <KTempDir>
+#include <QTemporaryDir>
 #include <qtest_kde.h>
 
 #include <tests/autotestshell.h>
@@ -70,14 +70,16 @@ void TestAssistants::cleanupTestCase()
     globalTestLock = 0;
 }
 
-static QString createFile(const QString& fileContents, QString extension, int id)
+static QUrl createFile(const QString& fileContents, QString extension, int id)
 {
-    static KTempDir dirA;
-    QFile file(dirA.name() + QString::number(id) + extension);
+    static QTemporaryDir tempDirA;
+    Q_ASSERT(tempDirA.isValid());
+    static QDir dirA(tempDirA.path());
+    QFile file(dirA.filePath(QString::number(id) + extension));
     file.open(QIODevice::WriteOnly | QIODevice::Text);
     file.write(fileContents.toUtf8());
     file.close();
-    return file.fileName();
+    return QUrl::fromLocalFile(file.fileName());
 }
 
 class Testbed
@@ -97,7 +99,7 @@ public:
         m_headerDocument.url = createFile(headerContents,".h",id);
         m_headerDocument.textDoc = openDocument(m_headerDocument.url);
 
-        m_cppDocument.url = createFile(QString("#include \"%1\"\n").arg(m_headerDocument.url) + cppContents,".cpp",id);
+        m_cppDocument.url = createFile(QString("#include \"%1\"\n").arg(m_headerDocument.url.toLocalFile()) + cppContents,".cpp",id);
         m_cppDocument.textDoc = openDocument(m_cppDocument.url);
     }
     ~Testbed()
@@ -144,11 +146,11 @@ public:
     }
 private:
     struct TestDocument {
-        QString url;
+        QUrl url;
         Document *textDoc;
     };
 
-    Document* openDocument(const QString& url)
+    Document* openDocument(const QUrl& url)
     {
         Core::self()->documentController()->openDocument(url);
         DUChain::self()->waitForUpdate(IndexedString(url), KDevelop::TopDUContext::AllDeclarationsAndContexts);
