@@ -3,10 +3,13 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_library(kdevclangutil OBJECT
+add_library(kdevclangutil STATIC
     clangdebug.cpp
     clangutils.cpp
     clangtypes.cpp
 )
-target_include_directories(kdevclangutil PRIVATE $<TARGET_PROPERTY:KF5::TextEditor,INTERFACE_INCLUDE_DIRECTORIES>)
+target_link_libraries(kdevclangutil
+LINK_PRIVATE
+    KDev::Util
+    KF5::TextEditor)
 set_target_properties(kdevclangutil PROPERTIES POSITION_INDEPENDENT_CODE TRUE)

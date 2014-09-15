@@ -17,20 +17,20 @@ add_library(kdevclangduchain SHARED
     macronavigationcontext.cpp
     navigationwidget.cpp
     todoextractor.cpp
-
-    $<TARGET_OBJECTS:kdevclangutil>
 )
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-target_link_libraries(kdevclangduchain LINK_PRIVATE
+target_link_libraries(kdevclangduchain
+LINK_PRIVATE
     Qt5::Core
-)
-
-target_link_libraries(kdevclangduchain LINK_PUBLIC
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    kdevclangcodegen
+    kdevclangcodecompletion
+    kdevclangutil
+LINK_PUBLIC
+    KDev::Language
     ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_UTIL_LIBRARIES}
     ${CLANG_CLANG_LIB}

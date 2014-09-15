@@ -18,32 +18,30 @@ ecm_add_test(test_buddies.cpp
 )
 
 ecm_add_test(test_codecompletion.cpp
-        $<TARGET_OBJECTS:kdevclangcodecompletion>
-        $<TARGET_OBJECTS:kdevclangutil>
     TEST_NAME test_codecompletion
     LINK_LIBRARIES
         ${KDEVPLATFORM_TESTS_LIBRARIES}
         ${QT_QTTEST_LIBRARY}
+        kdevclangcodecompletion
         kdevclangduchain
 )
 
 ecm_add_test(test_assistants.cpp
-        $<TARGET_OBJECTS:kdevclangcodegen>
-        $<TARGET_OBJECTS:kdevclangutil>
     TEST_NAME test_assistants
     LINK_LIBRARIES
         ${KDEVPLATFORM_TESTS_LIBRARIES}
         ${QT_QTTEST_LIBRARY}
         kdevclangduchain
+        kdevclangutil
 )
 
 ecm_add_test(test_clangutils.cpp
-        $<TARGET_OBJECTS:kdevclangutil>
     TEST_NAME test_clangutils
     LINK_LIBRARIES
         ${KDEVPLATFORM_TESTS_LIBRARIES}
         ${QT_QTTEST_LIBRARY}
         ${CLANG_CLANG_LIB}
+        kdevclangduchain
 )
 
 ecm_add_test(test_duchain.cpp
@@ -59,6 +57,7 @@ ecm_add_test(test_duchainutils.cpp
     LINK_LIBRARIES
         ${KDEVPLATFORM_TESTS_LIBRARIES}
         ${QT_QTTEST_LIBRARY}
+        kdevclangcodecompletion
         kdevclangduchain
 )
 

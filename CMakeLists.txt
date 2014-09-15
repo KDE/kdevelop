@@ -55,7 +55,6 @@ add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 include_directories(
     ${KDE4_INCLUDES}
-    ${CMAKE_INSTALL_PREFIX}/${KDEVPLATFORM_INCLUDE_DIR}
     ${KDEVELOP_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -72,13 +71,12 @@ add_library(kdevclangsupport SHARED
     clangparsejob.cpp
     clangsupport.cpp
     documentfinderhelpers.cpp
-
-    $<TARGET_OBJECTS:kdevclangcodecompletion>
-    $<TARGET_OBJECTS:kdevclangcodegen>
-    $<TARGET_OBJECTS:kdevclangutil>
 )
 target_link_libraries(kdevclangsupport
     kdevclangduchain
+    kdevclangcodecompletion
+    kdevclangcodegen
+    kdevclangutil
 
     KF5::ThreadWeaver
     KF5::TextEditor

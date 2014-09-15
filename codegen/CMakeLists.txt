@@ -3,15 +3,18 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_library(kdevclangcodegen OBJECT
+add_library(kdevclangcodegen STATIC
     adaptsignatureaction.cpp
     adaptsignatureassistant.cpp
     simplerefactoring.cpp
     clangsignatureassistant.cpp
     codegenhelper.cpp
 )
-target_include_directories(kdevclangcodegen PRIVATE
-    $<TARGET_PROPERTY:KF5::TextEditor,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::ThreadWeaver,INTERFACE_INCLUDE_DIRECTORIES>)
+target_link_libraries(kdevclangcodegen
+    LINK_PRIVATE
+        KF5::TextEditor
+        KF5::ThreadWeaver
+        KDev::Language
+)
 set_target_properties(kdevclangcodegen PROPERTIES
     POSITION_INDEPENDENT_CODE TRUE)

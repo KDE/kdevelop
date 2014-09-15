@@ -3,11 +3,15 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_library(kdevclangcodecompletion OBJECT
+add_library(kdevclangcodecompletion STATIC
     model.cpp
     context.cpp
     completionhelper.cpp
 )
-target_include_directories(kdevclangcodecompletion PRIVATE $<TARGET_PROPERTY:KF5::TextEditor,INTERFACE_INCLUDE_DIRECTORIES>)
+target_link_libraries(kdevclangcodecompletion
+LINK_PRIVATE
+    KF5::TextEditor
+    KDev::Language
+)
 set_target_properties(kdevclangcodecompletion PROPERTIES
     POSITION_INDEPENDENT_CODE TRUE)
