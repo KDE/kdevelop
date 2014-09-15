@@ -373,18 +373,12 @@ struct DocumentControllerPrivate {
                     break;
                 }
             }
-            bool addView = false, applyRange = true;
+            bool addView = false;
             if (!partView)
             {
                 //no view currently shown for this url
                 partView = sdoc->createView();
                 addView = true;
-            }
-            
-            KDevelop::TextView* textView = dynamic_cast<KDevelop::TextView*>(partView);
-            if(textView) {
-                applyRange = false;
-                textView->setInitialRange(range);
             }
             
             if(addView) {
@@ -500,7 +494,7 @@ struct DocumentControllerPrivate {
                 fileOpenRecent->addUrl( url );
             }
 
-            if( applyRange && range.isValid() )
+            if( range.isValid() )
             {
                 if (range.isEmpty())
                     doc->setCursorPosition( range.start() );
