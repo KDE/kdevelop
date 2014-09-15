@@ -47,15 +47,16 @@ const int tooltipContextSize = 2; //How many lines around the use are shown in t
 ///The returned text is fully escaped
 ///@param cutOff The total count of characters that should be cut of, all in all on both sides together.
 ///@param range The range that is highlighted, and that will be preserved during cutting, given that there is enough room beside it.
-QString highlightAndEscapeUseText(QString line, uint cutOff, KTextEditor::Range range) {
-  uint leftCutRoom = range.start().column();
-  uint rightCutRoom = line.length() - range.end().column();
+QString highlightAndEscapeUseText(QString line, int cutOff, KTextEditor::Range range)
+{
+  int leftCutRoom = range.start().column();
+  int rightCutRoom = line.length() - range.end().column();
 
   if(range.start().column() < 0 || range.end().column() > line.length() || cutOff > leftCutRoom + rightCutRoom)
     return QString(); //Not enough room for cutting off on sides
 
-  uint leftCut = 0;
-  uint rightCut = 0;
+  int leftCut = 0;
+  int rightCut = 0;
 
   if(leftCutRoom < rightCutRoom) {
     if(leftCutRoom * 2 >= cutOff) {
@@ -82,8 +83,7 @@ QString highlightAndEscapeUseText(QString line, uint cutOff, KTextEditor::Range 
 
   line = line.left(line.length() - rightCut);
   line = line.mid(leftCut);
-  range.start().setColumn(range.start().column() - leftCut);
-  range.end().setColumn(range.end().column() - leftCut);
+  range += KTextEditor::Range(0, -leftCut, 0, -leftCut);
 
   Q_ASSERT(range.start().column() >= 0 && range.end().column() <= line.length());
 
