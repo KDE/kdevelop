@@ -24,7 +24,6 @@
 
 #include <QStringList>
 #include <QVector>
-#include "codecompletionexport.h"
 
 #include <language/duchain/duchainpointer.h>
 
@@ -57,7 +56,7 @@ Q_DECLARE_TYPEINFO(FuncImplementInfo, Q_MOVABLE_TYPE);
 using FunctionOverrideList = QVector<FuncOverrideInfo>;
 using FunctionImplementsList = QVector<FuncImplementInfo>;
 
-class KDEVCLANGCODECOMPLETION_EXPORT CompletionHelper
+class CompletionHelper
 {
 public:
     CompletionHelper();

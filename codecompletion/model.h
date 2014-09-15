@@ -24,11 +24,9 @@
 
 #include <language/codecompletion/codecompletionmodel.h>
 
-#include "codecompletionexport.h"
-
 #include <QMetaType>
 
-class KDEVCLANGCODECOMPLETION_EXPORT ClangCodeCompletionModel : public KDevelop::CodeCompletionModel
+class ClangCodeCompletionModel : public KDevelop::CodeCompletionModel
 {
     Q_OBJECT
 
