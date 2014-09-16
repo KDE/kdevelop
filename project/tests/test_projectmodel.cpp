@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "test_projectmodel.h"
+
 #include <QtTest/QTest>
 #include <QSortFilterProxyModel>
 #include <QtCore/QThread>
@@ -33,18 +34,9 @@
 #include <tests/kdevsignalspy.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <util/path.h>
 
-using KDevelop::ProjectModel;
-using KDevelop::ProjectBaseItem;
-using KDevelop::ProjectFolderItem;
-using KDevelop::ProjectFileItem;
-using KDevelop::ProjectExecutableTargetItem;
-using KDevelop::ProjectLibraryTargetItem;
-using KDevelop::ProjectTargetItem;
-using KDevelop::ProjectBuildFolderItem;
-using KDevelop::Path;
-
-using KDevelop::TestProject;
+using namespace KDevelop;
 
 void debugItemModel(QAbstractItemModel* m, const QModelIndex& parent=QModelIndex(), int depth=0)
 {
@@ -57,11 +49,11 @@ void debugItemModel(QAbstractItemModel* m, const QModelIndex& parent=QModelIndex
 
 void TestProjectModel::initTestCase()
 {
-    KDevelop::AutoTestShell::init();
-    KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
+    AutoTestShell::init();
+    TestCore::initialize(Core::NoUi);
 
     qRegisterMetaType<QModelIndex>("QModelIndex");
-    model = KDevelop::ICore::self()->projectController()->projectModel();
+    model = ICore::self()->projectController()->projectModel();
     new ModelTest( model, this );
     proxy = new ProjectProxyModel( model );
     new ModelTest(proxy, proxy);
@@ -75,7 +67,7 @@ void TestProjectModel::init()
 
 void TestProjectModel::cleanupTestCase()
 {
-    KDevelop::TestCore::shutdown();
+    TestCore::shutdown();
 }
 
 void TestProjectModel::testCreateFileSystemItems()
@@ -474,7 +466,7 @@ void TestProjectModel::testItemsForPath()
 
     model->appendRow(root);
 
-    QList< ProjectBaseItem* > items = model->itemsForPath(KDevelop::IndexedString(path.pathOrUrl()));
+    auto items = model->itemsForPath(IndexedString(path.pathOrUrl()));
     QCOMPARE(items.size(), matches);
     foreach(ProjectBaseItem* item, items) {
         QVERIFY(item->path() == path);
