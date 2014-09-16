@@ -1268,7 +1268,7 @@ void DUChain::removeFromEnvironmentManager( TopDUContext * chain ) {
 }
 
 TopDUContext* DUChain::chainForDocument(const QUrl& document, bool proxyContext) const {
-  return chainForDocument(IndexedString(document.toString()), proxyContext);
+  return chainForDocument(IndexedString(document), proxyContext);
 }
 
 bool DUChain::isInMemory(uint topContextIndex) const {
