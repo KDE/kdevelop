@@ -44,7 +44,8 @@ KDevSplashScreen::KDevSplashScreen()
     setMinimumSize(geo.size());
     setGeometry(geo);
 
-    engine()->rootContext()->setContextProperty("appIcon", KIconLoader().iconPath("kdevelop", -48));
+    engine()->rootContext()->setContextProperty("appIcon",
+        QUrl::fromLocalFile(KIconLoader().iconPath("kdevelop", -48)));
     engine()->rootContext()->setContextProperty("appVersionMajor", VERSION_MAJOR);
     engine()->rootContext()->setContextProperty("appVersionMinor", VERSION_MINOR);
     engine()->rootContext()->setContextProperty("appVersionPatch", VERSION_PATCH);
