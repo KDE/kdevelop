@@ -43,7 +43,6 @@ using KDevelop::ProjectFileItem;
 using KDevelop::IPlugin;
 using KDevelop::ICore;
 using KDevelop::IOutputView;
-using KDevelop::IGenericProjectManager;
 using KDevelop::IProjectFileManager;
 using KDevelop::IProjectBuilder;
 using KDevelop::IProject;

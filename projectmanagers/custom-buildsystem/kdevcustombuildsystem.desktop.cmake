@@ -66,5 +66,5 @@ X-KDE-PluginInfo-Name=KDevCustomBuildSystem
 X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Category=Project
 X-KDevelop-Interfaces=org.kdevelop.IProjectBuilder,org.kdevelop.IProjectFileManager,org.kdevelop.IBuildSystemManager
-X-KDevelop-IRequired=org.kdevelop.IOutputView,org.kdevelop.IGenericProjectManager
+X-KDevelop-IRequired=org.kdevelop.IOutputView
 X-KDevelop-Mode=NoGUI
