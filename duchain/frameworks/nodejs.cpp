@@ -89,10 +89,11 @@ void NodeJS::createObject(const QString& name, int index, DeclarationBuilder* bu
 
 DeclarationPointer NodeJS::moduleExports(const QString& moduleName, const IndexedString& url)
 {
-    QString fileName = moduleFileName(moduleName, url.str());
+    QString urlStr = url.str();
+    QString fileName = moduleFileName(moduleName, urlStr);
     DeclarationPointer exports;
 
-    if (fileName.isEmpty()) {
+    if (fileName.isEmpty() || urlStr.contains("__builtin_ecmascript.js") || urlStr == fileName) {
         return exports;
     }
 

@@ -242,13 +242,13 @@ ReferencedTopDUContext ParseSession::contextOfFile(const QString& fileName,
     ReferencedTopDUContext moduleContext = DUChain::self()->chainForDocument(moduleFileString);
 
     lock.unlock();
+    QmlJS::Cache::instance().addDependency(url, moduleFileString);
 
     if (!moduleContext) {
         // Queue the file on which we depend with a lower priority than the one of this file
         scheduleForParsing(moduleFileString, ownPriority - 1);
 
         // Register a dependency between this file and the imported one
-        QmlJS::Cache::instance().addDependency(url, moduleFileString);
         return ReferencedTopDUContext();
     } else {
         return moduleContext;
@@ -268,9 +268,11 @@ void ParseSession::scheduleForParsing(const IndexedString& url, int priority)
     TopDUContext::Features features = (TopDUContext::Features)
         (TopDUContext::ForceUpdate | TopDUContext::AllDeclarationsContextsAndUses);
 
-    if (!bgparser->isQueued(url)) {
-        bgparser->addDocument(url, features, priority, 0, ParseJob::FullSequentialProcessing);
+    if (bgparser->isQueued(url)) {
+        bgparser->removeDocument(url);
     }
+
+    bgparser->addDocument(url, features, priority, 0, ParseJob::FullSequentialProcessing);
 }
 
 void ParseSession::dumpNode(QmlJS::AST::Node* node) const

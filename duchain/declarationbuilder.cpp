@@ -84,7 +84,7 @@ void DeclarationBuilder::startVisiting(QmlJS::AST::Node* node)
 {
     DUContext* builtinQmlContext = nullptr;
 
-    if (QmlJS::isQmlFile(currentContext())) {
+    if (QmlJS::isQmlFile(currentContext()) && !currentContext()->url().str().contains("__builtin_qml.qml")) {
         builtinQmlContext = m_session->contextOfFile(
             QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("kdevqmljssupport/nodejsmodules/__builtin_qml.qml"))
         );

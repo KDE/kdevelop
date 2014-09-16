@@ -31,6 +31,7 @@
 #include <QStringList>
 #include <QFileInfo>
 #include <QList>
+#include <QSet>
 #include <QMutex>
 
 namespace QmlJS
@@ -112,8 +113,8 @@ private:
     QMutex m_mutex;
     QHash<QString, QString> m_modulePaths;
     QList<PluginDumpExecutable> m_pluginDumpExecutables;
-    QHash<KDevelop::IndexedString, QList<KDevelop::IndexedString>> m_dependees;
-    QHash<KDevelop::IndexedString, QList<KDevelop::IndexedString>> m_dependencies;
+    QHash<KDevelop::IndexedString, QSet<KDevelop::IndexedString>> m_dependees;
+    QHash<KDevelop::IndexedString, QSet<KDevelop::IndexedString>> m_dependencies;
     QHash<KDevelop::IndexedString, bool> m_isUpToDate;
     QHash<KDevelop::IndexedString, KDevelop::Path::List> m_includeDirs;
 };

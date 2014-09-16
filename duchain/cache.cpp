@@ -203,22 +203,22 @@ void QmlJS::Cache::addDependency(const KDevelop::IndexedString& file, const KDev
 {
     QMutexLocker lock(&m_mutex);
 
-    m_dependees[dependency].append(file);
-    m_dependencies[file].append(dependency);
+    m_dependees[dependency].insert(file);
+    m_dependencies[file].insert(dependency);
 }
 
 QList<KDevelop::IndexedString> QmlJS::Cache::filesThatDependOn(const KDevelop::IndexedString& file)
 {
     QMutexLocker lock(&m_mutex);
 
-    return m_dependees[file];
+    return m_dependees[file].toList();
 }
 
 QList<KDevelop::IndexedString> QmlJS::Cache::dependencies(const KDevelop::IndexedString& file)
 {
     QMutexLocker lock(&m_mutex);
 
-    return m_dependencies[file];
+    return m_dependencies[file].toList();
 }
 
 bool QmlJS::Cache::isUpToDate(const KDevelop::IndexedString& file)
