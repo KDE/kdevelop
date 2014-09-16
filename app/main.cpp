@@ -456,8 +456,8 @@ int main( int argc, char *argv[] )
 
     KDevIDEExtension::init();
 
-    KDevSplashScreen* splash = 0;
-    if ( !QProcessEnvironment::systemEnvironment().contains("KDEV_DISABLE_SPLASH") ) {
+    KDevSplashScreen* splash = nullptr;
+    if (!QProcessEnvironment::systemEnvironment().contains("KDEV_DISABLE_SPLASH")) {
         splash = new KDevSplashScreen;
         splash->show();
     }
@@ -468,9 +468,9 @@ int main( int argc, char *argv[] )
 //     TODO: port to kf5
 //     KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
     Core* core = Core::self();
-    QByteArray disable = qgetenv("KDEV_DISABLE_WELCOMEPAGE");
-    if (disable.isEmpty())
+    if (!QProcessEnvironment::systemEnvironment().contains("KDEV_DISABLE_WELCOMEPAGE")) {
         core->pluginController()->loadPlugin("KDevWelcomePage");
+    }
 
     QStringList projectNames = args->getOptionList("project");
     if(!projectNames.isEmpty())
