@@ -1311,20 +1311,6 @@ TopDUContext* DUChain::chainForDocument(const KDevelop::IndexedString& document,
   if(sdDUChainPrivate->m_destroyed)
     return 0;
 
-  QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
-/*    {
-      int count = 0;
-      QMap<IdentifiedFile, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chains.lowerBound(document);
-      for( ; it != sdDUChainPrivate->m_chains.end() && it.key().url() == document.url(); ++it )
-        ++count;
-      if( count > 1 )
-        kDebug(9505) << "found " << count << " chains for " << document.url().str();
-
-    }*/
-
-  //Eventually load an existing chain from disk
-  l.unlock();
-  
   QList<ParsingEnvironmentFilePointer> list = sdDUChainPrivate->getEnvironmentInformation(document);
   
   foreach(const ParsingEnvironmentFilePointer &file, list)
@@ -1362,7 +1348,7 @@ QList<TopDUContext*> DUChain::chainsForDocument(const IndexedString& document) c
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
   // Match all parsed versions of this document
-  for (QMultiMap<IndexedString, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chainsByUrl.lowerBound(document); it != sdDUChainPrivate->m_chainsByUrl.end(); ++it) {
+  for (auto it = sdDUChainPrivate->m_chainsByUrl.lowerBound(document); it != sdDUChainPrivate->m_chainsByUrl.end(); ++it) {
     if (it.key() == document)
       chains << it.value();
     else
@@ -1386,7 +1372,7 @@ ParsingEnvironmentFilePointer DUChain::environmentFileForDocument( const Indexed
 
 //    kDebug() << document.str() << ": matching" << list.size() << (onlyProxyContexts ? "proxy-contexts" : (noProxyContexts ? "content-contexts" : "contexts"));
 
-  QList< ParsingEnvironmentFilePointer>::const_iterator it = list.constBegin();
+  auto it = list.constBegin();
   while(it != list.constEnd()) {
     if(*it && ((*it)->isProxyContext() == proxyContext) && (*it)->matchEnvironment(environment) &&
       // Verify that the environment-file and its top-context are "good": The top-context must exist,
