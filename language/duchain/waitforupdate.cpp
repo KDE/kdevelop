@@ -20,15 +20,14 @@
 
 using namespace KDevelop;
 
-WaitForUpdate::WaitForUpdate() : m_dataMutex(QMutex::Recursive), m_ready(false)
+WaitForUpdate::WaitForUpdate()
+  : m_ready(false)
 {
 }
 
-void WaitForUpdate::updateReady(KDevelop::IndexedString /*url*/, KDevelop::ReferencedTopDUContext topContext) {
-  QMutexLocker lock(&m_dataMutex);
-  QMutexLocker lock2(&m_waitMutex);
+void WaitForUpdate::updateReady(const KDevelop::IndexedString& /*url*/,
+                                const KDevelop::ReferencedTopDUContext topContext)
+{
   m_ready = true;
   m_topContext = topContext;
-  m_wait.wakeAll();
 }
-

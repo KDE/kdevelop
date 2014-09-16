@@ -1653,9 +1653,6 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
   Q_ASSERT(!lock()->currentThreadHasReadLock() && !lock()->currentThreadHasWriteLock());
 
   WaitForUpdate waiter;
-  
-  waiter.m_dataMutex.lock();
-  
   updateContextForUrl(document, minFeatures, &waiter);
   
 //   waiter.m_waitMutex.lock();

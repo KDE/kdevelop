@@ -24,26 +24,23 @@
 #include <serialization/indexedstring.h>
 
 #include <QtCore/QObject>
-#include <QMutex>
-#include <QWaitCondition>
 
 namespace KDevelop {
 
-struct WaitForUpdate : public QObject {
+struct WaitForUpdate : public QObject
+{
   Q_OBJECT
-  public slots:
-    
-    void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
 
   public:
     WaitForUpdate();
-    
-    QMutex m_dataMutex;
-    QMutex m_waitMutex;
-    QWaitCondition m_wait;
+
+  public slots:
+    void updateReady(const KDevelop::IndexedString& url,
+                     const KDevelop::ReferencedTopDUContext topContext);
+
+  public:
     bool m_ready;
-    KDevelop::IndexedString m_url;
-    KDevelop::ReferencedTopDUContext m_topContext;
+    ReferencedTopDUContext m_topContext;
 };
 
 }
