@@ -474,6 +474,9 @@ void Container::tabMoved(int from, int to)
 
 void Container::contextMenu( const QPoint& pos )
 {
+    QWidget* senderWidget = qobject_cast<QWidget*>(sender());
+    Q_ASSERT(senderWidget);
+
     int currentTab = d->tabBar->tabAt(pos);
 
     QMenu menu;
@@ -485,7 +488,7 @@ void Container::contextMenu( const QPoint& pos )
     QAction* closeOtherTabsAction = menu.addAction( QIcon::fromTheme("document-close"), i18n( "Close Other Files" ) );
     QAction* closeAllTabsAction = menu.addAction( QIcon::fromTheme("document-close"), i18n( "Close All Files" ) );
 
-    QAction* triggered = menu.exec(pos);
+    QAction* triggered = menu.exec(senderWidget->mapToGlobal(pos));
 
     if (triggered) {
         if ( triggered == closeTabAction ) {
