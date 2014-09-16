@@ -393,7 +393,7 @@ void OutputWidget::activateIndex(const QModelIndex &index, QAbstractItemView *vi
 
 void OutputWidget::selectNextItem()
 {
-    selectItem(Previous);
+    selectItem(Next);
 }
 
 void OutputWidget::selectPrevItem()
