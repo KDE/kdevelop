@@ -1013,9 +1013,12 @@ QString ProjectController::prettyFilePath(const QUrl& url, FormattingOptions for
             prefixText = project->name() + '/';
         }
         QString relativePath = project->path().relativePath(parent);
-        if(relativePath.startsWith("./"))
+        if(relativePath.startsWith("./")) {
             relativePath = relativePath.mid(2);
-        prefixText += relativePath;
+        }
+        if (!relativePath.isEmpty()) {
+            prefixText += relativePath + '/';
+        }
     } else {
         prefixText = parent.pathOrUrl() + '/';
     }

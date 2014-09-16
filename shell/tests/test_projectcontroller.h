@@ -55,6 +55,7 @@ private slots:
     void singleFile();
     void singleDirectory();
     void fileInSubdirectory();
+    void prettyFileName_data();
     void prettyFileName();
 
 private:

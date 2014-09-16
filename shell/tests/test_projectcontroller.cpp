@@ -466,8 +466,20 @@ void TestProjectController::fileInSubdirectory()
     ASSERT_SINGLE_FILE_IN(sub,"zoo",filePath,file);
 }
 
+void TestProjectController::prettyFileName_data()
+{
+    QTest::addColumn<QString>("relativeFilePath");
+
+    QTest::newRow("basic")
+        << "foobar.txt";
+    QTest::newRow("subfolder")
+        << "sub/foobar.txt";
+}
+
 void TestProjectController::prettyFileName()
 {
+    QFETCH(QString, relativeFilePath);
+
     m_projCtrl->openProject(m_projFilePath.toUrl());
     WAIT_FOR_OPEN_SIGNAL;
     Project* proj;
@@ -476,10 +488,10 @@ void TestProjectController::prettyFileName()
     FakeFileManager* fileMng = createFileManager();
     proj->setManagerPlugin(fileMng);
 
-    Path filePath = Path(m_projFolder, QString::fromLatin1("foobar.txt"));
+    Path filePath = Path(m_projFolder, relativeFilePath);
     fileMng->addFileToFolder(m_projFolder, filePath);
 
-    QCOMPARE(m_projCtrl->prettyFileName(filePath.toUrl(), ProjectController::FormattingOptions::FormatPlain), QString(m_projName + '/' + filePath.toUrl().fileName()));
+    QCOMPARE(m_projCtrl->prettyFileName(filePath.toUrl(), ProjectController::FormattingOptions::FormatPlain), QString(m_projName + '/' + relativeFilePath));
 }
 
 ////////////////////// Helpers ///////////////////////////////////////////////
