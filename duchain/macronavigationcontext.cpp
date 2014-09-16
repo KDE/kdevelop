@@ -55,6 +55,7 @@ KTextEditor::View* createDocAndView(const QString& data, KTextEditor::Document**
     doc->setReadWrite(false);
 
     KTextEditor::View* view = doc->createView(0);
+    view->setStatusBarEnabled(false);
     if (KTextEditor::ConfigInterface* config = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
         config->setConfigValue("icon-bar", false);
         config->setConfigValue("folding-bar", false);
@@ -133,11 +134,12 @@ QString MacroNavigationContext::html(bool shorten)
     KTextEditor::Cursor cursor(m_macro->rangeInCurrentRevision().start());
     NavigationAction action(url, cursor);
     modifyHtml() += i18nc("%1: macro type, i.e.: 'Function macro' or just 'Macro'"
-                          "%2: the macro name and arguments"
-                          "%3 the link to the definition",
-                          "%1: %2, defined in %3",
+                          "%2: the macro name and arguments",
+                          "%1: %2",
                           (m_macro->isFunctionLike() ? i18n("Function macro") : i18n("Macro")),
-                          importantHighlight(name()) + parameters,
+                          importantHighlight(name()) + parameters);
+    modifyHtml() += "<br/>";
+    modifyHtml() += i18nc("%1: the link to the definition", "Defined in: %1",
                           createLink(QString("%1 :%2").arg(url.fileName()).arg(cursor.line()+1), path, action));
 
     modifyHtml() += " "; //The action name _must_ stay "show_uses", since that is also used from outside
