@@ -37,11 +37,22 @@
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <tests/testfile.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/ibuddydocumentfinder.h>
+
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/ducontext.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/duchainutils.h>
+#include <language/duchain/parsingenvironment.h>
+
+using namespace KDevelop;
 
 #include <KSharedConfig>
 
@@ -65,6 +76,17 @@ void TestBuddies::initTestCase()
 void TestBuddies::cleanupTestCase()
 {
     TestCore::shutdown();
+}
+
+void TestBuddies::init()
+{
+    // Make sure we start with an empty document set
+    QCOMPARE(m_documentController->openDocuments().count(), 0);
+}
+
+void TestBuddies::cleanup()
+{
+    m_documentController->closeAllDocuments();
 }
 
 void TestBuddies::verifyFilename(Sublime::View *view, const QString& endOfFilename)
@@ -111,7 +133,6 @@ void TestBuddies::enableOpenAfterCurrent(bool enable)
 
 void TestBuddies::testDeclarationDefinitionOrder()
 {
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
     enableBuddies();
     enableOpenAfterCurrent();
 
@@ -143,15 +164,10 @@ void TestBuddies::testDeclarationDefinitionOrder()
     verifyFilename(areaIndex->views().value(3), "b.cpp");
     verifyFilename(areaIndex->views().value(4), "c.h");
     verifyFilename(areaIndex->views().value(5), "c.cpp");
-
-    for(int i = 0; i < 6; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
 
 void TestBuddies::testMultiDotFilenames()
 {
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
     enableBuddies();
     enableOpenAfterCurrent();
 
@@ -177,18 +193,11 @@ void TestBuddies::testMultiDotFilenames()
     verifyFilename(areaIndex->views().value(1), "lots.of.dots.h");
     verifyFilename(areaIndex->views().value(2), "lots.of.dots.cpp");
     verifyFilename(areaIndex->views().value(3), "b.cpp");
-
-    for(int i = 0; i < 4; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
-
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
 
 
 void TestBuddies::testActivation()
 {
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
-
     enableBuddies();
     enableOpenAfterCurrent();
 
@@ -204,11 +213,6 @@ void TestBuddies::testActivation()
 
     m_documentController->openDocument(QUrl::fromLocalFile(dirA.filePath("b.cpp")));
     verifyFilename(toSublimeWindow(m_uiController->activeMainWindow())->activeView(), "b.cpp");
-
-    QCOMPARE(m_documentController->openDocuments().count(), 3);
-    for(int i = 0; i < 3; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
 
 void TestBuddies::testDisableBuddies()
@@ -220,7 +224,6 @@ void TestBuddies::testDisableBuddies()
        Activate a.cpp
        Open b.cpp
        Verify order (a.cpp b.cpp a.h) */
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
     enableBuddies(false);
     enableOpenAfterCurrent();
 
@@ -249,11 +252,6 @@ void TestBuddies::testDisableBuddies()
     verifyFilename(areaIndex->views().value(1), "b.cpp");
     verifyFilename(areaIndex->views().value(2), "a.h");
     verifyFilename(toSublimeWindow(m_uiController->activeMainWindow())->activeView(), "b.cpp");
-
-    QCOMPARE(m_documentController->openDocuments().count(), 3);
-    for(int i = 0; i < 3; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
 
 void TestBuddies::testDisableOpenAfterCurrent()
@@ -265,7 +263,6 @@ void TestBuddies::testDisableOpenAfterCurrent()
        Open x.cpp => tab must be placed at the end
        Verify order (foo.h foo.cpp bar.cpp x.cpp)
        Verify that x.cpp is activated*/
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
     enableBuddies();
     enableOpenAfterCurrent(false);
 
@@ -294,11 +291,6 @@ void TestBuddies::testDisableOpenAfterCurrent()
     verifyFilename(areaIndex->views().value(2), "bar.cpp");
     verifyFilename(areaIndex->views().value(3), "x.cpp");
     verifyFilename(toSublimeWindow(m_uiController->activeMainWindow())->activeView(), "x.cpp");
-
-    QCOMPARE(m_documentController->openDocuments().count(), 4);
-    for(int i = 0; i < 4; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
 
 void TestBuddies::testDisableAll()
@@ -309,7 +301,6 @@ void TestBuddies::testDisableAll()
        Open       bar.cpp
        Verify order (foo.cpp bar.h foo.h bar.cpp)
        Verify that bar.cpp is activated*/
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
     enableBuddies(false);
     enableOpenAfterCurrent(false);
 
@@ -336,11 +327,6 @@ void TestBuddies::testDisableAll()
     verifyFilename(areaIndex->views().value(2), "foo.h");
     verifyFilename(areaIndex->views().value(3), "bar.cpp");
     verifyFilename(toSublimeWindow(m_uiController->activeMainWindow())->activeView(), "bar.cpp");
-
-    QCOMPARE(m_documentController->openDocuments().count(), 4);
-    for(int i = 0; i < 4; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
 
 
@@ -351,7 +337,6 @@ void TestBuddies::testMultipleFolders()
        Open f/a.cpp f/xyz.cpp g/a.h
        Verify g/a.h is activated
        Verify order (f/a.cpp f/xyz.cpp g/a.h)*/
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
     enableBuddies();
     enableOpenAfterCurrent();
 
@@ -374,18 +359,12 @@ void TestBuddies::testMultipleFolders()
     verifyFilename(areaIndex->views().value(1), "x.cpp");
     verifyFilename(areaIndex->views().value(2), "a.h");
     verifyFilename(toSublimeWindow(m_uiController->activeMainWindow())->activeView(), "a.h");
-
-    QCOMPARE(m_documentController->openDocuments().count(), 3);
-    for(int i = 0; i < 3; i++)
-        m_documentController->openDocuments()[0]->close(IDocument::Discard);
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
 }
 
 void TestBuddies::testSplitViewBuddies()
 {
     Sublime::MainWindow *pMainWindow = toSublimeWindow(m_uiController->activeMainWindow());
 
-    QCOMPARE(m_documentController->openDocuments().count(), 0);
     enableBuddies();
     enableOpenAfterCurrent();
 
@@ -431,6 +410,102 @@ void TestBuddies::testSplitViewBuddies()
     // and check its presence alongside pNewView in pContainer
     QVERIFY(pContainer->hasWidget(pNewView->widget()));
     QVERIFY(pContainer->hasWidget(pMainWindow->activeView()->widget()));
+}
+
+void TestBuddies::testDUChainBuddy()
+{
+    enableBuddies();
+    enableOpenAfterCurrent();
+
+    QTemporaryDir dirA;
+
+    TestFile header("void myfunction();\n", "h", 0, dirA.path());
+    TestFile other("void otherfunction() {}\n", "cpp", 0, dirA.path());
+    TestFile source(
+        QString("#include \"%1\"\nvoid myfunction() {}\n").arg(header.url().toUrl().fileName()),
+        "cpp", 0, dirA.path()
+    );
+
+    header.parseAndWait();
+    other.parseAndWait();
+    source.parseAndWait();
+
+    // Test IBuddyDocumentFinder::getPotentialBuddies()
+    IBuddyDocumentFinder* sourceBuddyFinder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(source.url().toUrl())->name());
+    QVector< QUrl > sourceBuddies = sourceBuddyFinder->getPotentialBuddies(source.url().toUrl());
+    if (!sourceBuddies.contains(header.url().toUrl())) {
+        qDebug() << "got source buddies: " << sourceBuddies;
+        qDebug() << "expected: " << header.url().toUrl();
+        QFAIL("Failed to find buddy for source file");
+    }
+    QVERIFY2(!sourceBuddies.contains(other.url().toUrl()), "source buddy list contains unrelated file");
+
+    IBuddyDocumentFinder* headerBuddyFinder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(header.url().toUrl())->name());
+    QVector< QUrl > headerBuddies = headerBuddyFinder->getPotentialBuddies(header.url().toUrl());
+    if (!headerBuddies.contains(source.url().toUrl())) {
+        qDebug() << "got header buddies: " << headerBuddies;
+        qDebug() << "expected: " << source.url().toUrl();
+        QFAIL("Failed to find buddy for header file");
+    }
+    QVERIFY2(!headerBuddies.contains(other.url().toUrl()), "header buddy list contains unrelated file");
+
+    // Test IBuddyDocumentFinder::areBuddies()
+    QVERIFY(sourceBuddyFinder->areBuddies(source.url().toUrl(), header.url().toUrl()));
+}
+
+void TestBuddies::testDUChainBuddyVote()
+{
+    /*
+     * Test that the DUChain buddy system finds the buddy file with the most
+     * common declarations/definitions
+     */
+
+    enableBuddies();
+    enableOpenAfterCurrent();
+
+    QTemporaryDir dirA;
+
+    TestFile header("void func1();\nvoid func2();\nvoid func3();\n", "h", 0, dirA.path());
+    TestFile source1(
+        QString("#include \"%1\"\nvoid func1() {}\n").arg(header.url().toUrl().fileName()),
+        "cpp", 0, dirA.path()
+    );
+    TestFile source2(
+        QString("#include \"%1\"\nvoid func2() {}\nvoid func3() {}\n").arg(header.url().toUrl().fileName()),
+        "cpp", 0, dirA.path()
+    );
+
+    // -> buddy(header) should resolve to source2
+
+    header.parseAndWait();
+    source1.parseAndWait();
+    source2.parseAndWait();
+
+    // Test IBuddyDocumentFinder::getPotentialBuddies()
+    IBuddyDocumentFinder* sourceBuddyFinder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(source1.url().toUrl())->name());
+    QVector< QUrl > sourceBuddies = sourceBuddyFinder->getPotentialBuddies(source1.url().toUrl());
+    if (!sourceBuddies.contains(header.url().toUrl())) {
+        qDebug() << "got source buddies: " << sourceBuddies;
+        qDebug() << "expected: " << header.url().toUrl();
+        QFAIL("Failed to find buddy for source file");
+    }
+
+    IBuddyDocumentFinder* source2BuddyFinder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(source2.url().toUrl())->name());
+    QVector< QUrl > source2Buddies = source2BuddyFinder->getPotentialBuddies(source2.url().toUrl());
+    if (!source2Buddies.contains(header.url().toUrl())) {
+        qDebug() << "got source2 buddies: " << source2Buddies;
+        qDebug() << "expected: " << header.url().toUrl();
+        QFAIL("Failed to find buddy for source2 file");
+    }
+
+    IBuddyDocumentFinder* headerBuddyFinder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(header.url().toUrl())->name());
+    QVector< QUrl > headerBuddies = headerBuddyFinder->getPotentialBuddies(header.url().toUrl());
+    if (!headerBuddies.contains(source2.url().toUrl())) {
+        qDebug() << "got header buddies: " << headerBuddies;
+        qDebug() << "expected: " << source2.url().toUrl();
+        QFAIL("Failed to find buddy for header file");
+    }
+    QVERIFY2(!headerBuddies.contains(source1.url().toUrl()), "header buddy list contains weaker file");
 }
 
 QTEST_MAIN(TestBuddies)

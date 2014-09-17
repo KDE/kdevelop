@@ -44,6 +44,9 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
+    void init();
+    void cleanup();
+
     void testDeclarationDefinitionOrder();
     void testMultiDotFilenames();
     void testActivation();
@@ -53,6 +56,9 @@ private slots:
 
     void testMultipleFolders();
     void testSplitViewBuddies();
+
+    void testDUChainBuddy();
+    void testDUChainBuddyVote();
 
 private:
     void verifyFilename(Sublime::View *view, const QString& endOfFilename);
