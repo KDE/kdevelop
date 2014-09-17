@@ -34,7 +34,7 @@ int debugArea()
     return area;
 }
 
-K_PLUGIN_FACTORY_WITH_JSON(FileTemplatesFactory, "kdevfiletemplates.desktop", registerPlugin<FileTemplatesPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(FileTemplatesFactory, "kdevfiletemplates.json", registerPlugin<FileTemplatesPlugin>();)
 
 class TemplatePreviewFactory : public KDevelop::IToolViewFactory
 {
