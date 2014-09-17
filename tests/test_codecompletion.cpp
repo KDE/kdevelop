@@ -30,6 +30,7 @@
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <codecompletion/completionhelper.h>
 #include <codecompletion/context.h>
+#include <codecompletion/includepathcompletioncontext.h>
 
 QTEST_GUILESS_MAIN(TestCodeCompletion);
 
@@ -88,6 +89,29 @@ void executeCompletionTest(const QString& code, const CompletionItemsList& expec
         tester.names.sort();
         QCOMPARE(tester.names, items.completions);
     }
+}
+
+void executeIncludePathCompletion(TestFile* file, const KTextEditor::Cursor& position, QStringList* completionItems)
+{
+    completionItems->clear();
+    QVERIFY(file->parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+
+    DUChainReadLocker lock;
+    auto top = file->topContext();
+    QVERIFY(top);
+    const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
+    QVERIFY(sessionData);
+
+    DUContextPointer topPtr(top);
+
+    lock.unlock();
+
+    auto context = new IncludePathCompletionContext(topPtr, sessionData, position, file->fileContents());
+
+    lock.lock();
+    auto tester = CodeCompletionItemTester<IncludePathCompletionContext>(QExplicitlySharedDataPointer<IncludePathCompletionContext>(context));
+
+    *completionItems = tester.names;
 }
 
 }
@@ -341,5 +365,24 @@ void TestCodeCompletion::testInvalidCompletions_data()
         << CompletionItemsList{{{2, 0}, {}}};
 }
 
+void TestCodeCompletion::testIncludePathCompletion()
+{
+    QStringList items;
+
+    TestFile file1("#include <", "cpp");
+    executeIncludePathCompletion(&file1, {0, 9}, &items);
+    QVERIFY(items.contains("iostream"));
+
+    TestFile file2("#include \"", "cpp");
+    executeIncludePathCompletion(&file2, {0, 9}, &items);
+    QVERIFY(!items.contains("iostream"));
+
+    TestFile header("int foo() { return 42; }\n", "h");
+    TestFile impl("#include \"", "cpp", &header);
+
+    executeIncludePathCompletion(&impl, {0, 9}, &items);
+    QVERIFY(items.contains(header.url().toUrl().fileName()));
+    QVERIFY(!items.contains("iostream"));
+}
 
 #include "test_codecompletion.moc"

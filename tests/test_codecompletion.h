@@ -32,6 +32,8 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
+    void testIncludePathCompletion();
+
     void testClangCodeCompletion();
     void testClangCodeCompletion_data();
     void testVirtualOverride();
