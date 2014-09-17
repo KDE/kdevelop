@@ -7,10 +7,10 @@ add_subdirectory( tests )
 set( custom_SRCS custombuildsystemplugin.cpp custombuildjob.cpp )
 add_library(kdevcustombuildsystem MODULE ${custom_SRCS} )
 target_link_libraries( kdevcustombuildsystem
-        ${KDEVPLATFORM_PROJECT_LIBRARIES}
-        ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-        ${KDEVPLATFORM_UTIL_LIBRARIES}
-        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
+        KDev::Project
+        KDev::Interfaces
+        KDev::Util
+        KDev::OutputView
     )
 
 ## KCM for the Plugin
@@ -26,7 +26,7 @@ qt5_wrap_ui( custom_kcm_SRCS
                  )
 kconfig_add_kcfg_files( custom_kcm_SRCS kcfg_custombuildsystemconfig.kcfgc )
 add_library(kcm_kdevcustombuildsystem MODULE ${custom_kcm_SRCS} )
-target_link_libraries( kcm_kdevcustombuildsystem KF5::KIOWidgets ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
+target_link_libraries( kcm_kdevcustombuildsystem KF5::KIOWidgets KDev::Interfaces KDev::Language KDev::Project KDev::Util )
 
 ## Installation
 install(TARGETS kcm_kdevcustombuildsystem DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)

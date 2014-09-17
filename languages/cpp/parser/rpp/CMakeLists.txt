@@ -23,7 +23,7 @@ set(kdevcpprpp_LIB_SRCS
 add_library(kdevcpprpp SHARED ${kdevcpprpp_LIB_SRCS})
 target_link_libraries(kdevcpprpp LINK_PRIVATE
   
-  ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+  KDev::Language
   KF5::TextEditor
 )
 generate_export_header(kdevcpprpp EXPORT_FILE_NAME cpprppexport.h)

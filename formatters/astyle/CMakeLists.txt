@@ -19,13 +19,13 @@ qt5_wrap_ui(kdevastyle_PART_SRCS ${astyle_preferences_UI} )
 add_library(kdevastyle MODULE ${kdevastyle_PART_SRCS})
 target_link_libraries(kdevastyle
     
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
+    
+    KF5::Parts
     KF5::KIOWidgets
     KF5::TextEditor
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES})
+    KDev::Interfaces
+    KDev::Project
+    KDev::Util)
 
 install(TARGETS kdevastyle DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 

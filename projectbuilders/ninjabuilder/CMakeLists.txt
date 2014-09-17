@@ -2,11 +2,11 @@ project(kdev-ninja)
 
 add_library(kdevninja MODULE ninjajob.cpp kdevninjabuilderplugin.cpp)
 target_link_libraries(kdevninja
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
+    KDev::Interfaces
+    KDev::Project
+    KDev::Language
+    KDev::OutputView
+    KDev::Util
 )
 
 install(TARGETS kdevninja DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
@@ -19,9 +19,9 @@ kconfig_add_kcfg_files(ninjabuilder_cfg_SRCS ninjabuilderconfig.kcfgc)
 add_library(kcm_kdev_ninjabuilder MODULE ninjabuilderpreferences.cpp ${ninjabuilder_cfg_SRCS})
 target_link_libraries(kcm_kdev_ninjabuilder
 	KF5::KIOWidgets
-	${KDEVPLATFORM_INTERFACES_LIBRARIES}
-	${KDEVPLATFORM_PROJECT_LIBRARIES}
-	${KDEVPLATFORM_UTIL_LIBRARIES})
+	KDev::Interfaces
+	KDev::Project
+	KDev::Util)
 
 install(TARGETS kcm_kdev_ninjabuilder DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
 

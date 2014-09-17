@@ -12,8 +12,8 @@ add_library(kdev4noprojectincludesanddefines STATIC
 
 target_link_libraries( kdev4noprojectincludesanddefines 
 LINK_PRIVATE
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    KDev::Util
+    KDev::Language
     ${KDE4_THREADWEAVER_LIBRARIES}
 )
 

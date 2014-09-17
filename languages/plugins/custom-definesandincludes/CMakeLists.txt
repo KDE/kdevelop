@@ -1,5 +1,5 @@
 include_directories(
-    ${KDE4_INCLUDES}
+    
     ${KDEVPLATFORM_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/..
@@ -19,16 +19,16 @@ set( kdevdefinesandincludesmanager_SRCS
 
 add_library(kdevdefinesandincludessettings settingsmanager.cpp compilerprovider/icompiler.cpp)
 target_link_libraries( kdevdefinesandincludessettings LINK_PRIVATE
-        ${KDEVPLATFORM_PROJECT_LIBRARIES}
-        ${KDEVPLATFORM_UTIL_LIBRARIES} )
+        KDev::Project
+        KDev::Util )
 generate_export_header(kdevdefinesandincludessettings EXPORT_FILE_NAME definesandincludessettingsexport.h)
 
 add_library(kdevdefinesandincludesmanager MODULE
         ${kdevdefinesandincludesmanager_SRCS} )
 target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
-        ${KDEVPLATFORM_PROJECT_LIBRARIES}
-        ${KDEVPLATFORM_UTIL_LIBRARIES}
-        ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+        KDev::Project
+        KDev::Util
+        KDev::Language
         kdevdefinesandincludessettings
         kdev4noprojectincludesanddefines )
 generate_export_header(kdevdefinesandincludesmanager EXPORT_FILE_NAME definesandincludesmanagerexport.h)

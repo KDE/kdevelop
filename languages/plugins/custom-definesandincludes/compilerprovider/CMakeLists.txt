@@ -11,9 +11,9 @@ add_library(kdevcompilerprovider MODULE
         ${compilerprovider_SRCS})
 
 target_link_libraries( kdevcompilerprovider LINK_PRIVATE
-        ${KDEVPLATFORM_PROJECT_LIBRARIES}
-        ${KDEVPLATFORM_UTIL_LIBRARIES}
-        ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+        KDev::Project
+        KDev::Util
+        KDev::Language
         kdevdefinesandincludessettings )
 
 install( TARGETS kdevcompilerprovider

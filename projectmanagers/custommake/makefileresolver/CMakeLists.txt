@@ -6,9 +6,9 @@ add_library(kdev4makefileresolver STATIC
     ${makefileresolver_SRCS}
 )
 target_link_libraries(kdev4makefileresolver
-  ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES}
-  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-  ${KDEVPLATFORM_TESTS_LIBRARIES}
+  KDev::Interfaces KDev::Project
+  Qt5::Core Qt5::Gui KF5::KDELibs4Support KDev::Language
+  KDev::Tests
 )
 set_target_properties(kdev4makefileresolver PROPERTIES POSITION_INDEPENDENT_CODE ON)
 

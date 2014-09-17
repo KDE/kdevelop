@@ -31,10 +31,10 @@ ecm_add_test(test_buddies.cpp
 LINK_LIBRARIES
     Qt5::Test
     Qt5::Widgets
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${KDEVPLATFORM_SUBLIME_LIBRARIES}
+    KDev::Language
+    KDev::Project
+    KDev::Tests
+    KDev::Sublime
 )
 
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
@@ -42,9 +42,9 @@ ecm_add_test(test_cppfiles.cpp
 LINK_LIBRARIES
     Qt5::Test
     Qt5::Core
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${KDEVPLATFORM_JSONTESTS_LIBRARIES}
+    KDev::Language
+    KDev::Tests
+    KDev::JsonTests
     kdevcppduchain
     kdevcppparser
 )
@@ -56,9 +56,9 @@ LINK_LIBRARIES
     kdevcppparser
     Qt5::Test
     Qt5::Core
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    KDev::Language
+    KDev::Project
+    KDev::Tests
 )
 
 ########### next target ###############
@@ -77,10 +77,10 @@ LINK_LIBRARIES
     kdevcppduchain
     kdevcpprpp
     kdevcppparser
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    KDev::Interfaces
+    KDev::Project
+    KDev::Language
+    KDev::Tests
 
     KF5::ThreadWeaver
     KF5::TextEditor
@@ -110,10 +110,10 @@ LINK_LIBRARIES
     kdevcppduchain
     kdevcpprpp
     kdevcppparser
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    KDev::Interfaces
+    KDev::Project
+    KDev::Language
+    KDev::Tests
 
     KF5::ThreadWeaver
     KF5::TextEditor
@@ -126,13 +126,13 @@ LINK_LIBRARIES
     kdevcppparser
     Qt5::Test
     Qt5::Core
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    KDev::Language
+    KDev::Project
+    KDev::Tests
 )
 
 add_executable( cpp-parser cpp-parser.cpp )
 ecm_mark_as_test(cpp-parser)
 target_link_libraries(cpp-parser
-    Qt5::Core ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    Qt5::Core KDev::Tests KDev::Language
     kdevcppparser kdevcppduchain kdevcpprpp KF5::KDELibs4Support)

@@ -62,9 +62,9 @@ set(kdevcppduchain_LIB_SRCS
 
 add_library(kdevcppduchain SHARED ${kdevcppduchain_LIB_SRCS})
 target_link_libraries(kdevcppduchain LINK_PRIVATE
-		${KDEVPLATFORM_LANGUAGE_LIBRARIES} 
-		${KDEVPLATFORM_INTERFACES_LIBRARIES} 
-		${KDEVPLATFORM_UTIL_LIBRARIES} 
+		KDev::Language 
+		KDev::Interfaces 
+		KDev::Util 
 		kdevcppparser
 		KF5::TextEditor 
 		kdevcpprpp)

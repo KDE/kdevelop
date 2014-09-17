@@ -68,7 +68,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-field-initializers")
 endif()
 
-include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR} ${KDE4_INCLUDES} )
+include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR}  )
 
 # create config.h
 configure_file (config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )

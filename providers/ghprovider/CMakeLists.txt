@@ -17,11 +17,11 @@ set(kdevghprovider_PART_SRCS
 add_library(kdevghprovider MODULE ${kdevghprovider_PART_SRCS})
 target_link_libraries(kdevghprovider
   KF5::KIOWidgets
-  ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-  ${KDEVPLATFORM_VCS_LIBRARIES}
-  ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-  ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
-  ${KDEVPLATFORM_UTIL_LIBRARIES}
+  KDev::Interfaces
+  KDev::Vcs
+  KDev::Language
+  KDev::OutputView
+  KDev::Util
 )
 
 install(TARGETS kdevghprovider DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})

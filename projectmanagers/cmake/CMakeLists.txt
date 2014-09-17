@@ -81,30 +81,30 @@ remove_definitions( -DQT_NO_STL )
 
 qt5_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
 add_library( kdevcmakecommon SHARED ${cmakecommon_SRCS} )
-target_link_libraries( kdevcmakecommon LINK_PRIVATE ${KDE4_KDEUI_LIBS}
-                        KF5::TextEditor ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES}
-                        ${QT_QTSCRIPT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+target_link_libraries( kdevcmakecommon LINK_PRIVATE 
+                        KF5::TextEditor KDev::Interfaces KDev::Project KDev::Util
+                        ${QT_QTSCRIPT_LIBRARY} KDev::Language
                         )
 generate_export_header(kdevcmakecommon EXPORT_FILE_NAME cmakecommonexport.h)
 
 qt5_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
 add_library(kdevcmakemanager MODULE ${cmakemanager_SRCS} ../custommake/makefileresolver/makefileresolver.cpp)
-target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} KF5::KIOWidgets ${KDEVPLATFORM_UTIL_LIBRARIES}
-                        ${KDEVPLATFORM_INTERFACES_LIBRARIES} kdevcmakecommon
-                        ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-                        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES} KF5::TextEditor Qt5::Concurrent)
+target_link_libraries( kdevcmakemanager  KF5::KIOWidgets KDev::Util
+                        KDev::Interfaces kdevcmakecommon
+                        KDev::Project KDev::Language
+                        KDev::OutputView KF5::TextEditor Qt5::Concurrent)
                         
 add_library(kdevcmakedocumentation MODULE ${cmakedoc_SRCS} )
 target_link_libraries( kdevcmakedocumentation
-                        ${KDEVPLATFORM_INTERFACES_LIBRARIES} kdevcmakecommon
-                        ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-                        ${KDEVPLATFORM_DOCUMENTATION_LIBRARIES}
+                        KDev::Interfaces kdevcmakecommon
+                        KDev::Project KDev::Language
+                        KDev::Documentation
                         KF5::TextEditor Qt5::WebKitWidgets)
 
 qt5_wrap_ui( cmakesettings_SRCS ${cmakesettings_UI} )
 add_library(kcm_kdevcmake_settings MODULE ${cmakesettings_SRCS} )
 target_link_libraries( kcm_kdevcmake_settings KF5::KIOWidgets
-                       ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES}
+                       KDev::Interfaces KDev::Project KDev::Util
                        kdevcmakecommon )
 
 install(TARGETS kdevcmakemanager DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )

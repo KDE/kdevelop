@@ -85,13 +85,13 @@ set(kdevgdb_UI
 qt5_wrap_ui(kdevgdb_SRCS ${kdevgdb_UI})
 add_library(kdevgdb MODULE ${kdevgdb_SRCS})
 target_link_libraries(kdevgdb
-    ${KDEVPLATFORM_SUBLIME_LIBRARIES}
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_DEBUGGER_LIBRARIES}
-    ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
+    KDev::Sublime
+    KDev::Interfaces
+    KDev::Language
+    KDev::Debugger
+    KDev::OutputView
+    KDev::Project
+    KDev::Util
     KF5::TextEditor
     ${KDE4WORKSPACE_PROCESSUI_LIBS}
 )
@@ -103,12 +103,12 @@ ecm_add_test(${test_gdb_SRCS}
     TEST_NAME test_gdb
     LINK_LIBRARIES
         Qt5::Test
-        ${KDEVPLATFORM_SHELL_LIBRARIES}
-        ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-        ${KDEVPLATFORM_PROJECT_LIBRARIES}
-        ${KDEVPLATFORM_DEBUGGER_LIBRARIES}
-        ${KDEVPLATFORM_TESTS_LIBRARIES}
-        ${KDEVPLATFORM_UTIL_LIBRARIES}
+        KDev::Shell
+        KDev::Interfaces
+        KDev::Project
+        KDev::Debugger
+        KDev::Tests
+        KDev::Util
         KF5::KIOWidgets
         KF5::TextEditor
         KF5::Parts

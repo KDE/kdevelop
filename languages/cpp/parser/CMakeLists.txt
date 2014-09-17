@@ -35,11 +35,11 @@ set(kdevcppparser_LIB_SRCS
 #       to the plugin target
 add_library(kdevcppparser SHARED ${kdevcppparser_LIB_SRCS})
 target_link_libraries(kdevcppparser LINK_PRIVATE
-  ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+  KDev::Language
   
   KF5::TextEditor
   kdevcpprpp
-  ${KDEVPLATFORM_INTERFACES_LIBRARIES}
+  KDev::Interfaces
 )
 generate_export_header(kdevcppparser EXPORT_FILE_NAME cppparserexport.h)
 install(TARGETS kdevcppparser ${INSTALL_TARGETS_DEFAULT_ARGS} )

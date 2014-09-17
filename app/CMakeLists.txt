@@ -17,8 +17,8 @@ add_executable(kdevelop ${kdevelop_SRCS} )
 
 target_link_libraries(kdevelop
     
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_SHELL_LIBRARIES}
+    KDev::Interfaces
+    KDev::Shell
 
     KF5::KDELibs4Support
     KF5::Declarative

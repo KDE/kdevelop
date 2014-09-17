@@ -51,10 +51,10 @@ target_link_libraries(kdevcpplanguagesupport
     kdevcpprpp
     kdevcppduchain
     kdevcppparser
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
+    KDev::Interfaces
+    KDev::Language
+    KDev::Project
+    KDev::Util
     ${KDE4_THREADWEAVER_LIBRARIES}
     
     KF5::TextEditor
