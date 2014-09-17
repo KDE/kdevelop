@@ -85,6 +85,7 @@ Comment[et]=Teistele pluginatele kättesaadav tekstiväljundi tööriistavaade, 
 Comment[fi]=Tarjoaa tekstitulostetyökalunäkymän muille liitännäisille käytettäväksi, näyttää asiat kuin kääntäjäviestit.
 Comment[fr]=Fournit une vue des outils de sortie en mode texte pour à utiliser pour afficher des éléments comme les messages du compilateur.
 Comment[gl]=Fornece unha ferramenta de saída de texto a outros complementos, para mostrar cousas como mensaxes do compilador.
+Comment[hu]=Szöveges kimeneti eszköznézetet biztosít más bővítményeknek, például a fordító üzeneteinek megjelenítésére.
 Comment[it]=Fornisce una vista strumenti testuale per le estensioni da usare, per mostrare le cose come i messaggi del compilatore.
 Comment[kk]=Басқа плагиндерге компилятордың хабарламалары секілді мәтінді жазуларды шығару үшін колданатын плагині.
 Comment[nb]=Viser en tekstlig verktøyvisning av utdata som andre programtillegg kan bruke, for å vise slikt som kompilatormeldinger.

@@ -16,6 +16,7 @@ Comment[et]=See plugin võimaldab panna programme aktiivses masinas tööle ilma
 Comment[fi]=Tämä liitännäinen mahdollistaa ohjelmien suorittamisen ilman välikappaletta, ts. natiivisti nykyisellä tietokoneella.
 Comment[fr]=Ce module externe permet le lancement de programmes sans instrumenteur, c'est-à-dire nativement par l'hôte actuel.
 Comment[gl]=Este complemento permite executar programas sen instrumentador, i.e. de xeito nativo na máquina actual.
+Comment[hu]=Ez a bővítmény lehetővé teszi programok futtatását instrumentor nélkül, például natívan a jelenlegi gépen.
 Comment[it]=Questa estensione permette l'esecuzione dei programmi senza instrumentor, vale a dire nativamente da parte dell'host attuale.
 Comment[kk]=Бұл плагин көмегімен бағдарламаны тікелей назардағы хостта жегуге болады.
 Comment[nb]=Dette programtillegget tillater kjøring av programmer uten instrumentering, dvs. lokalt på den gjeldende verten.

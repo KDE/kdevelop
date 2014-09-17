@@ -56,6 +56,7 @@ Comment[et]=Määramine, millised projektikataloogi failid ja kataloogid kaasata
 Comment[fi]=Valitse, mitkä projektikansiossa olevat tiedostot ja kansiot pitäisi ottaa mukaan ja mitkä pitäisi jättää pois.
 Comment[fr]=Configure quels fichiers et dossier au sein du projet doivent être inclus ou exclus.
 Comment[gl]=Configurar cales ficheiros e cartafoles dentro do cartafol do proxecto deben incluírse ou excluírse.
+Comment[hu]=Beállítja, hogy mely fájlokat és mappákat kell belefoglalni vagy kihagyni a projektmappában.
 Comment[it]=Configura quali file e cartelle nella cartella del progetto devono essere incluse o escluse.
 Comment[kk]=Жоба қапшығындағы қай файлдар мен қапшықтарды есепке кіргізу қайсын кіргізбеу керек.
 Comment[nb]=Bestem hvilke filer og mapper inni prosjektmappa skal tas med eller utelates.

@@ -15,6 +15,7 @@ Comment[et]=Välised skriptid või rakendused, mis võimaldavad muuta redaktori 
 Comment[fi]=Suorittaa ulkoisia skriptejä tai sovelluksia editorisisällön manipuloimiseksi tai muiden satunnaisten tehtävien tekemiseksi.
 Comment[fr]=Lancer des scripts ou des applications externes pour manipuler le contenu de l'éditeur ou effectuer d'autres actions arbitraires.
 Comment[gl]=Executa scripts externos ou programas para manipular os contidos do editor ou levar a cabo outras accións.
+Comment[hu]=Külső szkriptek vagy alkalmazások futtatása szerkesztő tartalmának manipulálására, vagy más műveletek végrehajtására.
 Comment[it]=Eseguire script o applicazioni esterne per manipolare il contenuto dell'editor o per fare altre azioni.
 Comment[kk]=Редактор мазмұнын өңдеу не басқа да істерге арналған сыртқы скрипт не бағдарламаны орындау.
 Comment[nb]=Kjør eksterne skripter eller programmer for å behandle redigeringsinnholdet eller utføre andre vilkårlige handlinger.
