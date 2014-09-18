@@ -23,7 +23,7 @@
 #define QTHELPCONFIG_H
 
 #include <KCModule>
-#include <knewstuff3/entry.h>
+#include <kns3/entry.h>
 
 class QTreeWidgetItem;
 

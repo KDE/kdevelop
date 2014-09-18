@@ -28,7 +28,7 @@
 #include <KAboutData>
 #include <KDebug>
 #include <KSettings/Dispatcher>
-#include <knewstuff3/knewstuffbutton.h>
+#include <kns3/knewstuffbutton.h>
 #include <qhelpenginecore.h>
 #include <QFileDialog>
 
