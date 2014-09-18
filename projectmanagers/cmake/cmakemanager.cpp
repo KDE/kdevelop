@@ -73,7 +73,7 @@ K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
 const QString DIALOG_CAPTION = i18n("KDevelop - CMake Support");
 
 CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
-    : KDevelop::AbstractFileManagerPlugin( "cmakemanager", parent )
+    : KDevelop::AbstractFileManagerPlugin( "kdevcmakemanager", parent )
     , m_filter( new ProjectFilterManager( this ) )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
