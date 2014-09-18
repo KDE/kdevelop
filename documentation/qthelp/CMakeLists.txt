@@ -12,9 +12,8 @@ set(kdevqthelp_SRCS
 
 add_library(kdevqthelp MODULE ${kdevqthelp_SRCS})
 target_link_libraries(kdevqthelp
-    KF5::KCMUtils KF5::KIOWidgets  KF5::TextEditor Qt5::Help Qt5::WebKitWidgets
-    KDev::Language KDev::Documentation KDev::Interfaces
-    KF5::KCMUtils )
+    KF5::KCMUtils KF5::KI18n KF5::KIOWidgets KF5::TextEditor Qt5::Help Qt5::WebKitWidgets
+    KDev::Language KDev::Documentation KDev::Interfaces)
 
 install(TARGETS kdevqthelp DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
@@ -36,7 +35,7 @@ qt5_wrap_ui(kdevqthelp_config_SRCS
 add_library(kdevqthelp_config MODULE ${kdevqthelp_config_SRCS} )
 
 target_link_libraries( kdevqthelp_config 
- KF5::KIOWidgets Qt5::Help KF5::NewStuff KF5::KCMUtils)
+ KF5::KIOWidgets Qt5::Help KF5::NewStuff KF5::KCMUtils KF5::KI18n)
 
 install(TARGETS kdevqthelp_config DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
 configure_file(kdevqthelp_config.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp_config.desktop)
