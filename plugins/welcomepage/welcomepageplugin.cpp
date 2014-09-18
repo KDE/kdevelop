@@ -49,7 +49,7 @@ public:
 };
 
 KDevWelcomePagePlugin::KDevWelcomePagePlugin( QObject* parent, const QVariantList& )
-    : IPlugin("welcomepageplugin", parent )
+    : IPlugin("kdevwelcomepage", parent )
 {
     ICore::self()->documentController()->registerDocumentForMimetype("text/x-kdevelop-internal", new WelcomePageFactory);
 
