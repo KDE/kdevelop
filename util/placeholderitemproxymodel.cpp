@@ -143,6 +143,16 @@ QModelIndex PlaceholderItemProxyModel::buddy(const QModelIndex& index) const
     return QIdentityProxyModel::buddy(index);
 }
 
+QModelIndex PlaceholderItemProxyModel::sibling(int row, int column, const QModelIndex& idx) const
+{
+    const bool isPlaceHolderRow = (sourceModel() ? row == sourceModel()->rowCount() : false);
+    if (isPlaceHolderRow) {
+        return index(row, column, QModelIndex());
+    }
+    return QIdentityProxyModel::sibling(row, column, idx);
+}
+
+
 QModelIndex PlaceholderItemProxyModel::mapToSource(const QModelIndex& proxyIndex) const
 {
     if (d->isPlaceholderRow(proxyIndex)) {
