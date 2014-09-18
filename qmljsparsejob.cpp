@@ -111,7 +111,7 @@ void QmlJsParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* 
         }
     }
 
-    debug() << "parsing" << document().str();
+    qCDebug(KDEV_QMLJS) << "parsing" << document().str();
 
     ProblemPointer p = readContents();
     if (p) {
@@ -192,9 +192,9 @@ void QmlJsParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* 
     highlightDUChain();
 
     if (session.isParsedCorrectly()) {
-        debug() << "===Success===" << document().str();
+        qCDebug(KDEV_QMLJS) << "===Success===" << document().str();
     } else {
-        debug() << "===Failed===" << document().str();
+        qCDebug(KDEV_QMLJS) << "===Failed===" << document().str();
     }
 }
 

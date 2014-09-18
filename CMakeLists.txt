@@ -52,6 +52,7 @@ add_library(kdevqmljslanguagesupport MODULE
     qmljsparsejob.cpp
     qmljshighlighting.cpp
     kdevqmljsplugin.cpp
+    debug.cpp
     navigation/propertypreviewwidget.cpp
 )
 target_link_libraries(kdevqmljslanguagesupport

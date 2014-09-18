@@ -1,6 +1,5 @@
 /*************************************************************************************
- *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
- *  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
+ *  Copyright (C) 2014 by Denis Steckelmacher                                        *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -22,6 +21,6 @@
 
 #include <QLoggingCategory>
 
-Q_DECLARE_LOGGING_CATEGORY(KDEV_QMLJS)
+Q_DECLARE_LOGGING_CATEGORY(KDEV_QMLJS_DUCHAIN)
 
 #endif // DEBUG_H

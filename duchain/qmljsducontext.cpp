@@ -21,6 +21,7 @@
  *
  */
 #include "qmljsducontext.h"
+#include "debug.h"
 
 #include <language/duchain/topducontext.h>
 #include <language/duchain/topducontextdata.h>
@@ -40,7 +41,7 @@ REGISTER_DUCHAIN_ITEM_WITH_DATA(QmlJSNormalDUContext, DUContextData);
 template<>
 QWidget* QmlJSTopDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const {
     if (!decl) {
-        kDebug() << "no declaration, not returning navigationwidget";
+        qCDebug(KDEV_QMLJS_DUCHAIN) << "no declaration, not returning navigationwidget";
         return 0;
     }
     return new NavigationWidget(decl, topContext, htmlPrefix, htmlSuffix);
@@ -49,7 +50,7 @@ QWidget* QmlJSTopDUContext::createNavigationWidget(Declaration* decl, TopDUConte
 template<>
 QWidget* QmlJSNormalDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const {
     if (!decl) {
-        kDebug() << "no declaration, not returning navigationwidget";
+        qCDebug(KDEV_QMLJS_DUCHAIN) << "no declaration, not returning navigationwidget";
         return 0;
     }
     return new NavigationWidget(decl, topContext, htmlPrefix, htmlSuffix);

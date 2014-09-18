@@ -18,6 +18,7 @@
  *************************************************************************************/
 
 #include "declarationbuilder.h"
+#include "debug.h"
 
 #include <language/duchain/types/integraltype.h>
 #include <language/duchain/types/enumerationtype.h>
@@ -60,21 +61,21 @@ ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
     // The declaration builder needs to run twice, so it can resolve uses of e.g. functions
     // which are called before they are defined (which is easily possible, due to JS's dynamic nature).
     if (!m_prebuilding) {
-        kDebug() << "building, but running pre-builder first";
+        qCDebug(KDEV_QMLJS_DUCHAIN) << "building, but running pre-builder first";
         DeclarationBuilder* prebuilder = new DeclarationBuilder(m_session);
 
         prebuilder->m_prebuilding = true;
         updateContext = prebuilder->build(url, node, updateContext);
 
-        kDebug() << "pre-builder finished";
+        qCDebug(KDEV_QMLJS_DUCHAIN) << "pre-builder finished";
         delete prebuilder;
 
         if (!m_session->allDependenciesSatisfied()) {
-            kDebug() << "dependencies were missing, don't perform the second parsing pass";
+            qCDebug(KDEV_QMLJS_DUCHAIN) << "dependencies were missing, don't perform the second parsing pass";
             return updateContext;
         }
     } else {
-        kDebug() << "prebuilding";
+        qCDebug(KDEV_QMLJS_DUCHAIN) << "prebuilding";
     }
 
     return DeclarationBuilderBase::build(url, node, updateContext);

@@ -1,4 +1,5 @@
 add_library(kdevqmljsduchain SHARED
+    debug.cpp
     cache.cpp
     helper.cpp
     parsesession.cpp

@@ -1,6 +1,5 @@
 /*************************************************************************************
- *  Copyright (C) 2012 by Aleix Pol <aleixpol@kde.org>                               *
- *  Copyright (C) 2012 by Milian Wolff <mail@milianw.de>                             *
+ *  Copyright (C) 2014 by Denis Steckelmacher                                        *
  *                                                                                   *
  *  This program is free software; you can redistribute it and/or                    *
  *  modify it under the terms of the GNU General Public License                      *
@@ -17,11 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#ifndef DEBUG_H
-#define DEBUG_H
+#include "debug.h"
 
-#include <QLoggingCategory>
-
-Q_DECLARE_LOGGING_CATEGORY(KDEV_QMLJS)
-
-#endif // DEBUG_H
+Q_LOGGING_CATEGORY(KDEV_QMLJS_DUCHAIN, "kdev.qmljs")
