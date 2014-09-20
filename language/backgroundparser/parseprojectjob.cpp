@@ -91,6 +91,11 @@ void ParseProjectJob::start() {
         return;
     }
 
+    if (m_filesToParse.isEmpty()) {
+        deleteLater();
+        return;
+    }
+
     kDebug() << "starting project parse job";
 
     TopDUContext::Features processingLevel = m_filesToParse.size() < ICore::self()->languageController()->completionSettings()->minFilesForSimplifiedParsing() ?
