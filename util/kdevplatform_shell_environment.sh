@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This file is part of KDevelop
 # Copyright 2011 David Nolden <david.nolden.kdevelop@art-master.de>
@@ -18,24 +18,20 @@
 # the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA 02110-1301, USA.
 
-# NOTE: While this script is more or less portable, it uses exclamation
-# mark in function names, which goes beyond the SUS/POSIX specs. This is
-# known to break with dash (Debian shell) at least.
-
-if [ -n "$KDEV_REAL_ENV" ]; then
-    # Since this runs as a replacement for the init-file, we need to chain in the 'real' one
-    . "$KDEV_REAL_ENV"
+if [ -e ~/.bashrc ]; then
+    # Since this runs as a replacement for the init-file, we need to chain in the 'real' bash-rc
+    source ~/.bashrc
 fi
 
-if [ -z "$APPLICATION_HOST" ]; then
+if ! [ "$APPLICATION_HOST" ]; then
     export APPLICATION_HOST=$(hostname)
 fi
 
-if [ -z "$KDEV_SHELL_ENVIRONMENT_ID" ]; then
+if ! [ "$KDEV_SHELL_ENVIRONMENT_ID" ]; then
     export KDEV_SHELL_ENVIRONMENT_ID="default"
 fi
 
-if [ -z "$KDEV_DBUS_ID" ]; then
+if ! [ "$KDEV_DBUS_ID" ]; then
     echo "The required environment variable KDEV_DBUS_ID is not set. This variable defines the dbus id of the application instance instance which is supposed to be attached."
     exit 5
 fi
@@ -51,9 +47,9 @@ if ! [ -e "$KDEV_BASEDIR/kdev_dbus_socket_transformer" ]; then
 fi
 
 # Takes a list of tools, and prints a warning of one of them is not available in the path
-checkToolsInPath() {
-    for TOOL in "$@"; do
-        if [ -z "$(command -v $TOOL 2> /dev/null)" ]; then
+function checkToolsInPath {
+    for TOOL in $@; do
+        if ! [ "$(which $TOOL 2> /dev/null)" ]; then
             echo "The utility $TOOL is not in your path, the shell integration will not work properly."
         fi
     done
@@ -62,33 +58,33 @@ checkToolsInPath() {
 # Check if all required tools are there (on the host machine)
 checkToolsInPath sed qdbus ls cut dirname mktemp basename readlink hostname
 
-if [ -n "$KDEV_SSH_FORWARD_CHAIN" ]; then
+if ! [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
     # Check for additional utilities that are required on the client machine
     checkToolsInPath kioclient
 fi
 
 # Queries the session name from the running application instance
-getSessionName() {
-    echo "$(qdbus \"$KDEV_DBUS_ID\" /kdevelop/SessionController org.kdevelop.kdevelop.KDevelop.SessionController.sessionName)"
+function getSessionName {
+    echo "$(qdbus $KDEV_DBUS_ID /kdevelop/SessionController org.kdevelop.kdevelop.KDevelop.SessionController.sessionName)"
 }
 
-getSessionDir() {
-    echo "$(qdbus \"$KDEV_DBUS_ID\" /kdevelop/SessionController org.kdevelop.kdevelop.KDevelop.SessionController.sessionDir)"
+function getSessionDir {
+    echo "$(qdbus $KDEV_DBUS_ID /kdevelop/SessionController org.kdevelop.kdevelop.KDevelop.SessionController.sessionDir)"
 }
 
-getCurrentShellEnvPath() {
-    local ENV_ID="$KDEV_SHELL_ENVIRONMENT_ID"
-    if [ -n "$1" ]; then
-        ENV_ID="$1"
+function getCurrentShellEnvPath {
+    local ENV_ID=$KDEV_SHELL_ENVIRONMENT_ID
+    if [ "$1" ]; then
+        ENV_ID=$1
     fi
 
     echo "$(getSessionDir)/${ENV_ID}.sh"
 }
 
-help! () {
+function help! {
     echo "You are controlling the $APPLICATION session '$(getSessionName)'"
     echo ""
-    if [ "X$1" = X ]; then
+    if [ "$1" == "" ]; then
     echo "Standard commands:"
     echo "raise!                                 - Raise the window."
     echo "sync!                                  - Synchronize the working directory with the currently open document. See \"help! sync\""
@@ -108,7 +104,7 @@ help! () {
     echo "Most commands can be abbreviated by the first character(s), eg. r! instead of raise!, and se! instead of search!."
     fi
 
-    if [ X"$1" = "Xopen" ]; then
+    if [ "$1" == "open" ]; then
     echo "Extended opening:"
     echo "The open! command can also be used to open files in specific tool-view configurations, by adding split-separators:"
     echo "- Files around the / separator will be arranged horizontally by split-view."
@@ -127,7 +123,7 @@ help! () {
     echo "Short forms: o! = open!, eo! = eopen!, c! = create!"
     fi
 
-    if [ "X$1" = "Xsync" ]; then
+    if [ "$1" == "sync" ]; then
     echo "Extended syncing:"
     echo "sync!    [[project-name]]           - If no project-name is given, then the sync! command synchronizes to the currently active document."
     echo "                                      If no document is active, then it synchronizes to the currently selected item in the project tree-view."
@@ -141,7 +137,7 @@ help! () {
     echo "Short forms: s! = sync!, ss! = syncsel!, p! = project!, b! = bdir!"
     fi
 
-    if [ "X$1" = "Xremote" ]; then
+    if [ "$1" == "remote" ]; then
     echo "Extended remote commands:"
     echo "ssh!  [ssh arguments]                  - Connect to a remote host via ssh, keeping the control-connection alive."
     echo "                                       - The whole dbus environment is forwarded, KDevelop needs to be installed on both sides."
@@ -156,7 +152,7 @@ help! () {
     echo "Short forms: e! = exec!, ce! = cexec!, cth! = copytohost!, ctc! = copytoclient!"
     fi
 
-    if [ "X$1" = "Xenv" ]; then
+    if [ "$1" == "env" ]; then
       echo "Environment management:"
       echo "The environment can be used to store session-specific macros and generally manipulate the shell environment"
       echo "for embedded shell sessions. The environment is sourced into the shell when the shell is initialized, and"
@@ -174,126 +170,126 @@ help! () {
 
 # Short versions of the commands:
 
-r! () {
-    "raise!" "$@"
+function r! {
+    raise! $@
 }
 
-s! () {
-    "sync!" "$@"
+function s! {
+    sync! $@
 }
 
-ss! () {
-    "syncsel!"
+function ss! {
+    syncsel!
 }
 
-syncsel! () {
-    "sync!" '[selection]'
+function syncsel! {
+    sync! '[selection]'
 }
 
-p! () {
-    if [ $# -gt 0 ]; then
-        "s!" "$@"
+function p! {
+    if [ "$@" ]; then
+        s! $@
     fi
-    "project!"
+    project!
 }
 
-b! () {
-    if [ $# -gt 0 ]; then
-        "s!" "$@"
+function b! {
+    if [ "$@" ]; then
+        s! $@
     fi
-    "bdir!"
+    bdir!
 }
 
-o! () {
-    "open!" "$@"
+function o! {
+    open! $@
 }
 
-eo! () {
-    "eopen!" "$@"
+function eo! {
+    eopen! $@
 }
 
-e! () {
-    "exec!" "$@"
+function e! {
+    exec! $@
 }
 
-ce! () {
-    "cexec!" "$@"
+function ce! {
+    cexec! $@
 }
 
-c! () {
-    "create!" "$@"
+function c! {
+    create! $@
 }
 
-se! () {
-    "search!" "$@"
+function se! {
+    search! $@
 }
 
-ds! () {
-    "dsearch!" "$@"
+function ds! {
+    dsearch! $@
 }
 
-h! () {
-    "help!" "$@"
+function h! {
+    help! $@
 }
 
-cth! () {
-    "copytohost!" "$@"
+function cth! {
+    copytohost! $@
 }
 
-ctc! () {
-    "copytoclient!" "$@"
+function ctc! {
+    copytoclient! $@
 }
 
-sev! () {
-    "setenv!" "$@"
+function sev! {
+    setenv! $@
 }
 
-ee! () {
-    "editenv!" "$@"
+function ee! {
+    editenv! $@
 }
 
-shev! () {
-    "showenv!" "$@"
+function shev! {
+    showenv! $@
 }
 
 # Internals:
 
 # Opens a document in internally in the application
-openDocument () {
+function openDocument {
     RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentSimple $1)
-    if ! [ "X$RESULT" == "Xtrue" ]; then
+    if ! [ "$RESULT" == "true" ]; then
         echo "Failed to open $1"
     fi
 }
 
 # Opens a document in internally in the application
-openDocuments () {
+function openDocuments {
     RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentsSimple "(" $1 ")")
-    if ! [ "X$RESULT" == "Xtrue" ]; then
+    if ! [ "$RESULT" == "true" ]; then
         echo "Failed to open $1"
     fi
 }
 
 # Executes a command on the client machine using the custom-script integration.
 # First argument: The full command. Second argument: The working directory.
-executeInApp () {
+function executeInApp {
     local CMD="$1"
     local WD=$2
-    if [ -z "$WD" ]; then
+    if ! [ "$WD" ]; then
         WD=$(pwd)
     fi
     RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ExternalScriptPlugin org.kdevelop.ExternalScriptPlugin.executeCommand "$CMD" "$WD")
-    if [ "X$RESULT" == "Xtrue" ]; then
+    if ! [ "$RESULT" == "true" ]; then
         echo "Execution failed"
     fi
 }
 
 # First argument: The full command. Second argument: The working directory.
 # Executes the command silently and synchronously, and returns the output
-executeInAppSync () {
+function executeInAppSync {
     local CMD=$1
     local WD=$2
-    if [ -z "$WD" ]; then
+    if ! [ "$WD" ]; then
         WD=$(pwd)
     fi
     RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ExternalScriptPlugin org.kdevelop.ExternalScriptPlugin.executeCommandSync "$CMD" "$WD")
@@ -302,31 +298,31 @@ executeInAppSync () {
 
 # Getter functions:
 
-getActiveDocument () {
-    qdbus "$KDEV_DBUS_ID" /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPath "$@"
+function getActiveDocument {
+    qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPath $@
 }
 
-getOpenDocuments () {
-    qdbus "$KDEV_DBUS_ID" /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPaths
+function getOpenDocuments {
+    qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPaths
 }
 
-raise! () {
-    qdbus "$KDEV_DBUS_ID" /kdevelop/MainWindow org.kdevelop.MainWindow.ensureVisible
+function raise! {
+    qdbus $KDEV_DBUS_ID /kdevelop/MainWindow org.kdevelop.MainWindow.ensureVisible
 }
 
-bdir! () {
-    TARG=$(qdbus "$KDEV_DBUS_ID" /org/kdevelop/ProjectController org.kdevelop.ProjectController.mapSourceBuild "$(pwd)" false)
-    if [ -n "$TARG" ]; then
-        cd -- "$TARG"
+function bdir! {
+    TARG=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ProjectController org.kdevelop.ProjectController.mapSourceBuild "$(pwd)" false)
+    if [ "$TARG" ]; then
+        cd $TARG
     else
         echo "Got no path"
     fi
 }
 
-project! () {
-    TARG=$(qdbus "$KDEV_DBUS_ID" /org/kdevelop/ProjectController org.kdevelop.ProjectController.mapSourceBuild "$(pwd)" true)
-    if [ -n "$TARG" ]; then
-        cd -- "$TARG"
+function project! {
+    TARG=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ProjectController org.kdevelop.ProjectController.mapSourceBuild "$(pwd)" true)
+    if [ "$TARG" ]; then
+        cd $TARG
     else
         echo "Got no path"
     fi
@@ -335,16 +331,15 @@ project! () {
 
 # Main functions:
 
-raise!() {
-    qdbus "$KDEV_DBUS_ID" /kdevelop/MainWindow org.kdevelop.MainWindow.ensureVisible
+function raise! {
+    qdbus $KDEV_DBUS_ID /kdevelop/MainWindow org.kdevelop.MainWindow.ensureVisible
 }
 
-sync!() {
+function sync! {
     local P=$(getActiveDocument $@)
-    if [ -n "$P" ]; then
+    if [ "$P" ]; then
 
-        case $P in
-        fish://*)
+        if [[ "$P" == fish://* ]]; then
             # This regular expression filters the user@host:port out of fish:///user@host:port/path/...
             LOGIN=$(echo $P | sed "s/fish\:\/\/*\([^\/]*\)\(\/.*\)/\1/")
             P_ON_HOST=$(echo $P | sed "s/fish\:\/\/*\([^\/]*\)\(\/.*\)/\2/")
@@ -375,21 +370,18 @@ sync!() {
                     return
                 fi
             fi
-            ;;
-        *)
-            if [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
-                # This session is being forwarded to another machine, but the current document is not
-                # However, we won't complain, because it's possible that the machines share the same file-system
-                if [ $(isEqualFileOnHostAndClient $P) != "yes" ]; then
-                    echo "Cannot synchronize the working directory, because the file systems do not match"
-                    return
-                fi
+
+        elif [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
+            # This session is being forwarded to another machine, but the current document is not
+            # However, we won't complain, because it's possible that the machines share the same file-system
+            if [ $(isEqualFileOnHostAndClient $P) != "yes" ]; then
+                echo "Cannot synchronize the working directory, because the file systems do not match"
+                return
             fi
-            ;;
-        esac
+        fi
 
         [ -d "$P" ] || P=$(dirname "$P")
-        cd -- "$P"
+        cd "$P"
     else
         echo "Got no path"
     fi
@@ -397,14 +389,14 @@ sync!() {
 
 # Take a path, and returns "yes" if the equal file is available on the host and the client
 # The check is performed by comparing inode-numbers
-isEqualFileOnHostAndClient() {
-    trimWhiteSpace() {
-        printf "%s" "$1"
+function isEqualFileOnHostAndClient {
+    function trimWhiteSpace() {
+        echo $1
     }
 
     FILE=$1
-    INODE_HOST=$(trimWhiteSpace $(/bin/ls -i "$FILE" | cut -d' ' -f1) )
-    INODE_CLIENT=$(trimWhiteSpace $(executeInAppSync "/bin/ls -i $FILE | cut -d' ' -f1" "$(dirname "$FILE")"))
+    INODE_HOST=$(trimWhiteSpace $(ls --color=never -i $FILE | cut -d' ' -f1))
+    INODE_CLIENT=$(trimWhiteSpace $(executeInAppSync "ls --color=never -i $FILE | cut -d' ' -f1" "$(dirname $FILE)"))
     if [ "$INODE_HOST" == "$INODE_CLIENT" ]; then
         echo "yes"
     else
@@ -413,9 +405,9 @@ isEqualFileOnHostAndClient() {
 }
 
 # Takes a relative file, returns an absolute file/url that should be valid on the client.
-mapFileToClient() {
+function mapFileToClient {
     local RELATIVE_FILE=$1
-    FILE=$(readlink -f "$RELATIVE_FILE")
+    FILE=$(readlink -f $RELATIVE_FILE)
     if ! [ -e "$FILE" ]; then
         # Try opening the file anyway, it might be an url or something else we don't understand here
         FILE=$RELATIVE_FILE
@@ -427,13 +419,11 @@ mapFileToClient() {
             if [ "$(isEqualFileOnHostAndClient "$FILE")" != "yes" ]; then
                     # We can eventually map the file using the fish protocol
                     FISH_HOST=$KDEV_SSH_FORWARD_CHAIN
-                    case $FISH_HOST in
-                    *\,*)
+                    if [[ "$FISH_HOST" == *\,* ]]; then
                         # Extracts everything before the first comma
                         FISH_HOST=$(echo $FISH_HOST | sed 's/\([^,]*\),\(.*\)/\1/')
                         echo "ssh chain is too long: $KDEV_SSH_FORWARD_CHAIN mapping anyway using $FISH_HOST" 1>&2
-                        ;;
-                    esac
+                    fi
                     # Theoretically, we can only map through fish if the forward-chains contains no comma, which means that
                     # we forward only once. Try anyway, there might be the same filesystem on the whole forward-chain.
                     FILE="fish://$FISH_HOST$FILE"
@@ -443,8 +433,7 @@ mapFileToClient() {
     echo $FILE
 }
 
-open!() {
-    # would break on files with whitespace in names
+function open! {
     FILES=$@
     NEWFILES=""
     for RELATIVE_FILE in $FILES; do
@@ -459,8 +448,7 @@ open!() {
     openDocuments "$NEWFILES"
 }
 
-eopen!() {
-    # would break on files with whitespace in names
+function eopen! {
     FILES=$@
     for RELATIVE_FILE in $FILES; do
         FILE=$(mapFileToClient $RELATIVE_FILE)
@@ -468,8 +456,7 @@ eopen!() {
     done
 }
 
-exec!() {
-    # would break on files with whitespace in names
+function exec! {
     FILES=$@
     ARGS=""
     for RELATIVE_FILE in $FILES; do
@@ -485,16 +472,15 @@ exec!() {
     executeInApp "$ARGS"
 }
 
-copytohost!() {
+function copytohost! {
     executeInApp "kioclient copy $1 $(mapFileToClient $2)"
 }
 
-copytoclient!() {
+function copytoclient! {
     executeInApp "kioclient copy $(mapFileToClient $1) $2"
 }
 
-cexec!() {
-    # would break on files with whitespace in names
+function cexec! {
     FILES=$@
     ARGS=""
     PREFIX=""
@@ -522,9 +508,9 @@ cexec!() {
     executeInApp "$PREFIX $ARGS"
 }
 
-create!() {
-    FILE=$(readlink -f "$1")
-    if [ -z "$FILE" ]; then
+function create! {
+    FILE=$(readlink -f $1)
+    if ! [ "$FILE" ]; then
         echo "Error: Bad arguments."
         return 1
     fi
@@ -532,12 +518,12 @@ create!() {
         echo "The file $FILE already exists"
         return 2
     fi
-    echo "$2" > $FILE
+    echo $2 > $FILE
 
     openDocument $(mapFileToClient $FILE)
 }
 
-search!() {
+function search! {
     PATTERN=$1
 
 #     if ! [ "$PATTERN" ]; then
@@ -547,26 +533,26 @@ search!() {
 
     LOCATION=$2
 
-    if [ -z "$LOCATION" ]; then
+    if ! [ "$LOCATION" ]; then
         LOCATION="."
     fi
 
-    LOCATION=$(mapFileToClient "$LOCATION")
+    LOCATION=$(mapFileToClient $LOCATION)
 
-    for LOC in "$@"; do
-        if [ "X$LOC" == "X$1" ]; then
+    for LOC in $*; do
+        if [ "$LOC" == "$1" ]; then
             continue;
         fi
-        if [ "X$LOC" == "X$2" ]; then
+        if [ "$LOC" == "$2" ]; then
             continue;
         fi
-        LOCATION="$LOCATION;$(mapFileToClient "$LOC")"
+        LOCATION="$LOCATION;$(mapFileToClient $LOC)"
     done
 
-    qdbus "$KDEV_DBUS_ID" /org/kdevelop/GrepViewPlugin org.kdevelop.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" true
+    qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" true
 }
 
-dsearch!() {
+function dsearch! {
     PATTERN=$1
 
     if ! [ "$PATTERN" ]; then
@@ -580,19 +566,19 @@ dsearch!() {
         LOCATION="."
     fi
 
-    LOCATION=$(mapFileToClient "$LOCATION")
+    LOCATION=$(mapFileToClient $LOCATION)
 
-    for LOC in "$@"; do
-        if [ "X$LOC" == "X$1" ]; then
+    for LOC in $*; do
+        if [ "$LOC" == "$1" ]; then
             continue;
         fi
-        if [ "X$LOC" == "X$2" ]; then
+        if [ "$LOC" == "$2" ]; then
             continue;
         fi
-        LOCATION="$LOCATION;$(mapFileToClient "$LOC")"
+        LOCATION="$LOCATION;$(mapFileToClient $LOC)"
     done
 
-    qdbus "$KDEV_DBUS_ID" /org/kdevelop/GrepViewPlugin org.kdevelop.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" false
+    qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" false
 }
 
 ##### SSH DBUS FORWARDING --------------------------------------------------------------------------------------------------------------------
@@ -610,12 +596,12 @@ export DBUS_FORWARDING_TCP_MAX_LOCAL_PORT=10000
 export DBUS_ABSTRACT_SOCKET_TARGET_INDEX=1
 export DBUS_ABSTRACT_SOCKET_MAX_TARGET_INDEX=1000
 
-getPortFromSSHCommand() {
+function getPortFromSSHCommand {
     # The port is given to ssh exclusively in the format "-p PORT"
     # This regular expression extracts the "4821" from "ssh -q bla1 -p 4821 bla2"
     local ARGS=$@
     local RET=$(echo "$@" | sed "s/.*-p \+\([0-9]*\).*/\1/")
-    if [ "X$ARGS" == "X$RET" ]; then
+    if [ "$ARGS" == "$RET" ]; then
         # There was no match
         echo ""
     else
@@ -623,12 +609,12 @@ getPortFromSSHCommand() {
     fi
 }
 
-getLoginFromSSHCommand() {
+function getLoginFromSSHCommand {
     # The login name can be given to ssh in the format "-l NAME"
     # This regular expression extracts the "NAME" from "ssh -q bla1 -l NAME bla2"
     local ARGS=$@
     local RET=$(echo "$ARGS" | sed "s/.*-l \+\([a-z,A-Z,_,0-9]*\).*/\1/")
-    if [ "X$RET" == "X$ARGS" -o -z "$RET" ]; then
+    if [ "$RET" == "$ARGS" ] || [ "$RET" == "" ]; then
         # There was no match
         echo ""
     else
@@ -636,26 +622,25 @@ getLoginFromSSHCommand() {
     fi
 }
 
-getHostFromSSHCommand() {
+function getHostFromSSHCommand {
     # This regular expression extracts the "bla2" from "echo "ssh -q bla1 -p 4821 bla2"
     # Specifically, it finds the first argument which is not preceded by a "-x" parameter kind specification.
-    # XXX This will break if you'd call, say, "ssh -v host ..."
 
     local CLEANED=""
     local NEWCLEANED="$@"
 
-    while ! [ "X$NEWCLEANED" == "X$CLEANED" ]; do
+    while ! [ "$NEWCLEANED" == "$CLEANED" ]; do
         CLEANED="$NEWCLEANED"
     # This expression removes one "-x ARG" parameter
-        NEWCLEANED="$(echo "$CLEANED" | sed "s/\(.*\)\(-[a-z,A-Z] \+[a-z,0-9]*\)\ \(.*\)/\1\3/")"
+        NEWCLEANED="$(echo $CLEANED | sed "s/\(.*\)\(-[a-z,A-Z] \+[a-z,0-9]*\)\ \(.*\)/\1\3/")"
     done
 
     # After cleaning, the result should only consist of the host-name followed by an optional command.
     # Select the host-name, by extracting the forst column.
-    echo "$CLEANED" | cut -d" " -f 1
+    echo $CLEANED | cut --delimiter=" " -f 1
 }
 
-getSSHForwardOptionsFromCommand() {
+function getSSHForwardOptionsFromCommand {
 
     HOST="$(getLoginFromSSHCommand "$@")$(getHostFromSSHCommand "$@")$(getPortFromSSHCommand "$@")"
 
@@ -668,13 +653,13 @@ getSSHForwardOptionsFromCommand() {
     fi
 }
 
-getDBusAbstractSocketSuffix() {
+function getDBusAbstractSocketSuffix {
     # From something like DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-wYmSkVH7FE,guid=b214dad39e0292a4299778d64d761a5b
     # extract the /tmp/dbus-wYmSkVH7FE
     echo $DBUS_SESSION_BUS_ADDRESS | sed 's/unix\:abstract\=.*\(,guid\=.*\)/\1/'
 }
 
-keepForwardingDBusToTCPSocket() {
+function keepForwardingDBusToTCPSocket {
     while ! $KDEV_BASEDIR/kdev_dbus_socket_transformer $DBUS_FORWARDING_TCP_LOCAL_PORT --bind-only; do
         if (($DBUS_FORWARDING_TCP_LOCAL_PORT<$DBUS_FORWARDING_TCP_MAX_LOCAL_PORT)); then
             export DBUS_FORWARDING_TCP_LOCAL_PORT=$(($DBUS_FORWARDING_TCP_LOCAL_PORT+1))
@@ -689,7 +674,7 @@ keepForwardingDBusToTCPSocket() {
     return 0;
 }
 
-keepForwardingDBusFromTCPSocket() {
+function keepForwardingDBusFromTCPSocket {
 
     while ! $KDEV_BASEDIR/kdev_dbus_socket_transformer $FORWARD_DBUS_FROM_PORT ${DBUS_ABSTRACT_SOCKET_TARGET_BASE_PATH}-${DBUS_ABSTRACT_SOCKET_TARGET_INDEX} --bind-only; do
         if ((${DBUS_ABSTRACT_SOCKET_TARGET_INDEX}<${DBUS_ABSTRACT_SOCKET_MAX_TARGET_INDEX})); then
@@ -705,12 +690,11 @@ keepForwardingDBusFromTCPSocket() {
     $KDEV_BASEDIR/kdev_dbus_socket_transformer $FORWARD_DBUS_FROM_PORT $PATH&
 }
 
-ssh! () {
-    # XXX This entire function is broken by design
+function ssh! {
     keepForwardingDBusToTCPSocket # Start the dbus forwarding subprocess
     DBUS_FORWARDING_TCP_TARGET_PORT=$((5000+($RANDOM%50000)))
 
-    ssh "$@" -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
+    ssh $@ -t -R localhost:$DBUS_FORWARDING_TCP_TARGET_PORT:localhost:$DBUS_FORWARDING_TCP_LOCAL_PORT \
          " APPLICATION=$APPLICATION \
            KDEV_BASEDIR=$KDEV_BASEDIR \
            KDEV_DBUS_ID=$KDEV_DBUS_ID \
@@ -742,17 +726,17 @@ ssh! () {
 }
 
 # A version of ssh! that preserves the current working directory
-ssw! () {
+function ssw! {
     KDEV_WORKING_DIR=$(pwd)
-    ssh! "$@"
+    ssh! $@
 }
 
-env! () {
+function env! {
     FILES="$(executeInAppSync "ls $(getSessionDir)/*.sh" "")"
     for FILE in $FILES; do
-        FILE=$(basename "$FILE")
+        FILE=$(basename $FILE)
         ID=${FILE%.sh} # This ugly construct strips away the .sh suffix
-        if [ "X$ID" == "X$KDEV_SHELL_ENVIRONMENT_ID" ]; then
+        if [ "$ID" == "$KDEV_SHELL_ENVIRONMENT_ID" ]; then
             echo "$ID   [current]"
         else
             echo "$ID"
@@ -760,7 +744,7 @@ env! () {
     done
 }
 
-editenv! () {
+function editenv! {
     local ENV_ID=$KDEV_SHELL_ENVIRONMENT_ID
     if [ "$1" ]; then
         ENV_ID=$1
@@ -771,7 +755,7 @@ editenv! () {
     openDocument "$(getCurrentShellEnvPath $ENV_ID)"
 }
 
-setenv! () {
+function setenv! {
     if [ "$1" ]; then
         KDEV_SHELL_ENVIRONMENT_ID=$1
     fi
@@ -789,9 +773,9 @@ setenv! () {
     rm $TEMP
 }
 
-showenv! () {
+function showenv! {
     local ENV_ID=$KDEV_SHELL_ENVIRONMENT_ID
-    if [ -n "$1" ]; then
+    if [ "$1" ]; then
         ENV_ID=$1
     fi
 
@@ -801,13 +785,13 @@ showenv! () {
     echo $(executeInAppSync "cat \"$(getCurrentShellEnvPath $ENV_ID)\"" "")
 }
 
-if [ -n "$FORWARD_DBUS_FROM_PORT" ]; then
+if [ "$FORWARD_DBUS_FROM_PORT" ]; then
     # Start the target-side dbus forwarding, transforming from the ssh pipe to the abstract unix domain socket
     export DBUS_SESSION_BUS_ADDRESS=unix:abstract=${DBUS_ABSTRACT_SOCKET_TARGET_BASE_PATH}-${DBUS_ABSTRACT_SOCKET_TARGET_INDEX}${DBUS_SOCKET_SUFFIX}
     keepForwardingDBusFromTCPSocket
 fi
 
-"setenv!"
+setenv!
 
 ##### INITIALIZATION --------------------------------------------------------------------------------------------------------------------
 
@@ -816,6 +800,6 @@ PS1="!$PS1"
 
 echo "You are controlling the $APPLICATION session '$(getSessionName)'. Type help! for more information."
 
-if [ -n "$KDEV_WORKING_DIR" ]; then
-    cd -- "$KDEV_WORKING_DIR"
+if [ "$KDEV_WORKING_DIR" ]; then
+    cd $KDEV_WORKING_DIR
 fi
