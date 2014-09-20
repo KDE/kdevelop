@@ -79,7 +79,7 @@ public:
 };
 
 IPlugin::IPlugin( const QString &componentName, QObject *parent )
-        : QObject( parent ),
+        : KTextEditor::Plugin(parent),
 	  KXMLGUIClient(), d( new IPluginPrivate(this) )
 {
     // The following cast is safe, there's no component in KDevPlatform that
@@ -183,6 +183,16 @@ bool KDevelop::IPlugin::hasError() const
 QString KDevelop::IPlugin::errorDescription() const
 {
     return QString();
+}
+
+int KDevelop::IPlugin::perProjectConfigPages() const
+{
+    return 0;
+}
+
+KTextEditor::ConfigPage* KDevelop::IPlugin::perProjectConfigPage(int, QWidget*)
+{
+    return nullptr;
 }
 
 #include "moc_iplugin.cpp"

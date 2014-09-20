@@ -23,11 +23,13 @@
 #define KDEVPLATFORM_IPLUGIN_H
 
 #include <QtCore/QObject>
-#include <kxmlguiclient.h>
-
 #include <QtCore/QList>
 #include <QtCore/QPointer>
 #include <QtCore/QPair>
+
+#include <KXMLGUIClient>
+#include <KTextEditor/Plugin>
+
 #include "interfacesexport.h"
 
 class KComponentData;
@@ -140,7 +142,7 @@ class ContextMenuExtension;
  * @sa Core class documentation for information about features available to
  * plugins from shell applications.
  */
-class KDEVPLATFORMINTERFACES_EXPORT IPlugin: public QObject, public KXMLGUIClient
+class KDEVPLATFORMINTERFACES_EXPORT IPlugin: public KTextEditor::Plugin, public KXMLGUIClient
 {
     Q_OBJECT
 
@@ -217,6 +219,26 @@ public:
      * Description of the last encountered error, of an empty string if none.
      */
     virtual QString errorDescription() const;
+
+    /**
+     * Get the number of available config pages for per project settings.
+     * @return number of per project config pages, default implementation says 0
+     * @see perProjectConfigPage()
+     */
+    virtual int perProjectConfigPages() const;
+
+    /**
+     * Get the per project config page with the \p number, config pages from 0 to
+     * configPages()-1 are available if configPages() > 0.
+     * @param number index of config page
+     * @param parent parent widget for config page
+     * @return newly created config page or NULL, if the number is out of bounds, default implementation returns NULL
+     * @see perProjectConfigPages()
+     */
+    virtual KTextEditor::ConfigPage* perProjectConfigPage(int number, QWidget *parent);
+
+    /** This is implemented to do nothing, so that we can inherit from KTextEditor::Plugin */
+    virtual QObject* createView(KTextEditor::MainWindow*) override final { return nullptr; };
 
 protected:
     void addExtension( const QString& );
