@@ -22,7 +22,7 @@
 #include <util/activetooltip.h>
 #include <KDebug>
 #include <KLocalizedString>
-#include <KTextBrowser>
+#include <QTextBrowser>
 #include <KParts/MainWindow>
 #include <KIconEffect>
 #include <KColorScheme>
@@ -138,7 +138,7 @@ void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange*
         html += "<br/>";
     }
 
-    KTextBrowser* browser = new KTextBrowser;
+    auto browser = new QTextBrowser;
     browser->setPalette( QApplication::palette() );
     browser->setHtml( html );
 

@@ -70,7 +70,7 @@ QSize AbstractNavigationWidget::sizeHint() const
 
 void AbstractNavigationWidget::initBrowser(int height) {
   Q_UNUSED(height);
-  m_browser = new KTextBrowser;
+  m_browser = new QTextBrowser;
   
   // since we can embed arbitrary HTML we have to make sure it stays readable by forcing a black-white palette
   QPalette p;

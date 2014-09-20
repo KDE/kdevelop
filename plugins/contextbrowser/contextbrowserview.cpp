@@ -31,7 +31,7 @@
 #include <QMenu>
 #include <QIcon>
 
-#include <KTextBrowser>
+#include <QTextBrowser>
 #include <KLocalizedString>
 #include <KComboBox>
 #include <ktexteditor/document.h>
@@ -111,7 +111,7 @@ void ContextBrowserView::updateLockIcon(bool checked) {
     m_lockButton->setIcon(QIcon::fromTheme(checked ? "document-encrypt" : "document-decrypt"));
 }
 
-ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* parent ) : QWidget(parent), m_plugin(plugin), m_navigationWidget(new KTextBrowser()), m_autoLocked(false) {
+ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* parent ) : QWidget(parent), m_plugin(plugin), m_navigationWidget(new QTextBrowser()), m_autoLocked(false) {
     setWindowIcon( QIcon::fromTheme("applications-development-web") );
 
     m_allowLockedUpdate = false;

@@ -25,7 +25,7 @@
 #include <QFormLayout>
 #include <KConfigDialog>
 #include <QGraphicsLinearLayout>
-#include <KTextBrowser>
+#include <QTextBrowser>
 #include <QScrollBar>
 #include <plasma/containment.h>
 
