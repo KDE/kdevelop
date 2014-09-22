@@ -33,12 +33,13 @@ namespace KDevelop
 {
 
 class FilterModel;
+class ProjectFilterProvider;
 
 class ProjectFilterKCM : public ProjectConfigPage<ProjectFilterSettings>
 {
     Q_OBJECT
 public:
-    ProjectFilterKCM(const KDevelop::ProjectConfigOptions& options, QWidget* parent);
+    ProjectFilterKCM(ProjectFilterProvider* provider, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
     virtual ~ProjectFilterKCM();
 
     virtual QString name() const;
@@ -63,6 +64,7 @@ public Q_SLOTS:
 
 private:
     FilterModel *m_model;
+    ProjectFilterProvider* m_projectFilterProvider;
     QScopedPointer<Ui::ProjectFilterSettings> m_ui;
 };
 

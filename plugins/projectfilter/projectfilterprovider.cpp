@@ -56,7 +56,10 @@ ProjectFilterProvider::ProjectFilterProvider( QObject* parent, const QVariantLis
     connect(core()->projectController(), &IProjectController::projectAboutToBeOpened,
             this, &ProjectFilterProvider::projectAboutToBeOpened);
 
-    updateProjectFilters();
+    // initialize the filters for each project
+    foreach(IProject* project, core()->projectController()->projects()) {
+        updateProjectFilters(project);
+    }
 }
 
 QSharedPointer<IProjectFilter> ProjectFilterProvider::createFilter(IProject* project) const
@@ -131,16 +134,14 @@ void ProjectFilterProvider::addFilterFromContextMenu()
                                    items.size()), i18n("Project Filter Added"), "projectfilter-addfromctxmenu");
 }
 
-void ProjectFilterProvider::updateProjectFilters()
+void ProjectFilterProvider::updateProjectFilters(IProject* project)
 {
-    foreach(IProject* project, core()->projectController()->projects()) {
-        Filters newFilters = deserialize(readFilters(project->projectConfiguration()));
-        Filters& filters = m_filters[project];
-        if (filters != newFilters) {
-            projectFilterDebug() << "project filter changed:" << project->name();
-            filters = newFilters;
-            emit filterChanged(this, project);
-        }
+    Filters newFilters = deserialize(readFilters(project->projectConfiguration()));
+    Filters& filters = m_filters[project];
+    if (filters != newFilters) {
+        projectFilterDebug() << "project filter changed:" << project->name();
+        filters = newFilters;
+        emit filterChanged(this, project);
     }
 }
 
@@ -161,7 +162,7 @@ int ProjectFilterProvider::perProjectConfigPages() const
 
 ConfigPage* ProjectFilterProvider::perProjectConfigPage(int i, const ProjectConfigOptions& options, QWidget* parent)
 {
-    return i == 0 ? new ProjectFilterKCM(options, parent) : nullptr;
+    return i == 0 ? new ProjectFilterKCM(this, options, parent) : nullptr;
 }
 
 #include "projectfilterprovider.moc"

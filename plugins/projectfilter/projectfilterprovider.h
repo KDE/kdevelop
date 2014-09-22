@@ -49,8 +49,9 @@ public:
 signals:
     void filterChanged(KDevelop::IProjectFilterProvider*, KDevelop::IProject*);
 
+public slots:
+    void updateProjectFilters(KDevelop::IProject* project);
 private slots:
-    void updateProjectFilters();
     void projectClosing(KDevelop::IProject*);
     void projectAboutToBeOpened(KDevelop::IProject*);
 

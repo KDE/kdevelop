@@ -65,7 +65,10 @@ public:
         conf->setProjectFile(options.projectFile);
     }
 
-    virtual ~ProjectConfigPage() {}
+    virtual ~ProjectConfigPage()
+    {
+        delete T::self();
+    }
 
     KDevelop::IProject* project() const
     {

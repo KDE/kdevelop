@@ -59,6 +59,7 @@ public:
      * This is handled automatically by KDevelop::ConfigDialog, subclasses don't need to call this.
      */
     void initConfigManager();
+    KCoreConfigSkeleton* configSkeleton() { return m_configSkeleton; }
 private:
     QScopedPointer<KConfigDialogManager> m_configManager;
     KCoreConfigSkeleton* m_configSkeleton;

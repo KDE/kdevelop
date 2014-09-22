@@ -37,12 +37,14 @@
 #include "projectfilterdebug.h"
 #include "filtermodel.h"
 #include "comboboxdelegate.h"
+#include "projectfilterprovider.h"
 
 using namespace KDevelop;
 
-ProjectFilterKCM::ProjectFilterKCM(const ProjectConfigOptions& options, QWidget* parent)
+ProjectFilterKCM::ProjectFilterKCM(ProjectFilterProvider* provider, const ProjectConfigOptions& options, QWidget* parent)
     : ProjectConfigPage<ProjectFilterSettings>(options, parent)
     , m_model(new FilterModel(this))
+    , m_projectFilterProvider(provider)
     , m_ui(new Ui::ProjectFilterSettings)
 {
     QVBoxLayout *l = new QVBoxLayout(this);
@@ -98,6 +100,7 @@ void ProjectFilterKCM::apply()
 {
     ProjectConfigPage::apply();
     writeFilters(m_model->filters(), project()->projectConfiguration());
+    m_projectFilterProvider->updateProjectFilters(project());
 }
 
 void ProjectFilterKCM::reset()
