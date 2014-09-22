@@ -155,6 +155,6 @@ void KDevelopSessionsEngine::updateSessions()
     }
 }
 
-K_EXPORT_PLASMA_DATAENGINE(kdevelopsessionsengine, KDevelopSessionsEngine)
+K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(kdevelopsessionsengine, KDevelopSessionsEngine, "plasma-dataengine-kdevelopsessions.json")
 
 #include "kdevelopsessionsengine.moc"
