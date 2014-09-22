@@ -17,7 +17,7 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "testqthelpplugin.h"
+#include "test_qthelpplugin.h"
 #include "../qthelpplugin.h"
 #include "../qthelpprovider.h"
 #include "../qthelp_config_shared.h"

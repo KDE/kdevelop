@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef TESTQTHELPPLUGIN_H
-#define TESTQTHELPPLUGIN_H
+#ifndef TEST_QTHELPPLUGIN_H
+#define TEST_QTHELPPLUGIN_H
 
 #include <tests/testcore.h>
 
@@ -51,4 +51,4 @@ private slots:
     void cleanupTestCase();
 };
 
-#endif // TESTQTHELPPLUGIN_H
+#endif // TEST_QTHELPPLUGIN_H

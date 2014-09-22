@@ -1,10 +1,7 @@
-add_executable(test_compilerprovider
+set(test_compilerprovider_SRCS
     test_compilerprovider.cpp
     ../icompiler.cpp
 )
-ecm_mark_as_test(test_compilerprovider)
-add_test(test_compilerprovider test_compilerprovider)
-target_link_libraries(test_compilerprovider
-     KDev::Tests
-     Qt5::Test
-)
+ecm_add_test(${test_compilerprovider_SRCS}
+    TEST_NAME test_compilerprovider
+    LINK_LIBRARIES KDev::Tests Qt5::Test)

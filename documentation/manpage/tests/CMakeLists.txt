@@ -6,11 +6,6 @@ set(test_manpagemodel_SRCS
     ../manpageplugin.cpp
 )
 
-add_executable(test_manpagemodel ${test_manpagemodel_SRCS} )
-target_link_libraries(test_manpagemodel Qt5::Test
-    KDev::Documentation
-    KDev::Interfaces
-    KDev::Tests
-)
-ecm_mark_as_test(test_manpagemodel)
-add_test(test_manpagemodel test_manpagemodel)
+ecm_add_test(${test_manpagemodel_SRCS}
+    TEST_NAME test_manpagemodel
+    LINK_LIBRARIES Qt5::Test KDev::Documentation KDev::Interfaces KDev::Tests)
