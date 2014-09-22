@@ -27,6 +27,10 @@
 #include <ksharedconfig.h>
 #include <interfaces/iassistant.h>
 
+#include <KTextEditor/ConfigPage>
+#include <KTextEditor/Editor>
+#include <KLocalizedString>
+
 class QListWidgetItem;
 
 namespace Sublime {

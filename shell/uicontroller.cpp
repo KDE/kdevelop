@@ -43,6 +43,9 @@
 #include <sublime/holdupdates.h>
 
 #include "core.h"
+#include "configpage.h"
+#include "configdialog.h"
+#include "debug.h"
 #include "shellextension.h"
 #include "partcontroller.h"
 #include "plugincontroller.h"
@@ -57,9 +60,10 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <KTextEditor/Editor>
 #include "workingsetcontroller.h"
 #include "workingsets/workingset.h"
-#include "debug.h"
+#include "settings/uipreferences.h"
 
 namespace KDevelop {
 
@@ -466,16 +470,30 @@ void UiController::addNewToolView(MainWindow *mw, QListWidgetItem* item)
 
 void UiController::showSettingsDialog()
 {
-    QStringList blacklist = d->core->pluginControllerInternal()->projectPlugins();
-    foreach(const KPluginInfo& info, d->core->pluginControllerInternal()->allPluginInfos()) {
-        if (!blacklist.contains(info.pluginName()) && !info.isPluginEnabled()) {
-            blacklist << info.pluginName();
+//     QStringList blacklist = d->core->pluginControllerInternal()->projectPlugins();
+//     foreach(const KPluginInfo& info, d->core->pluginControllerInternal()->allPluginInfos()) {
+//         if (!blacklist.contains(info.pluginName()) && !info.isPluginEnabled()) {
+//             blacklist << info.pluginName();
+//         }
+//     }
+//     kDebug() << "blacklist" << blacklist;
+//     KSettings::Dialog cfgDlg( QStringList() << "kdevplatform",
+//                                         activeMainWindow() );
+//     cfgDlg.setMinimumSize( 550, 300 );
+//     cfgDlg.setComponentBlacklist( blacklist );
+//     cfgDlg.exec();
+
+    auto configPages = QList<KDevelop::ConfigPage*>()
+        << new UiPreferences(activeMainWindow());
+
+    for (IPlugin* plugin : ICore::self()->pluginController()->loadedPlugins()) {
+        for (int i = 0; i < plugin->configPages(); ++i) {
+            configPages.append(plugin->configPage(i, activeMainWindow()));
         }
     }
-    qCDebug(SHELL) << "blacklist" << blacklist;
-    KSettings::Dialog cfgDlg( QStringList() << "kdevplatform",
-                                        activeMainWindow() );
-    cfgDlg.setComponentBlacklist( blacklist );
+    configPages << new EditorConfigPage(activeMainWindow());
+
+    ConfigDialog cfgDlg(configPages, activeMainWindow());
     cfgDlg.exec();
 }
 
@@ -701,7 +719,6 @@ const QMap< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDo
 }
 
 }
-
 
 #include "uicontroller.moc"
 #include "moc_uicontroller.cpp"

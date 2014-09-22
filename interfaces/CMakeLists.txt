@@ -1,6 +1,7 @@
 set(KDevPlatformInterfaces_LIB_SRCS
     iassistant.cpp
     context.cpp
+    configpage.cpp
     iplugin.cpp
     idocument.cpp
     icore.cpp
@@ -68,6 +69,7 @@ install(TARGETS KDevPlatformInterfaces EXPORT KDevPlatformTargets ${INSTALL_TARG
 install(FILES
     iassistant.h
     context.h
+    configpage.h
     contextmenuextension.h
     iplugin.h
     icore.h

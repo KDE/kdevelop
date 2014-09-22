@@ -25,6 +25,7 @@ set(KDevPlatformUtil_LIB_SRCS
     projecttestjob.cpp
     path.cpp
     debug.cpp
+    configdialog.cpp
 )
 
 set (KDevPlatformUtil_LIB_UI
@@ -49,6 +50,7 @@ LINK_PUBLIC
     KF5::ConfigWidgets
     KF5::ItemModels
 LINK_PRIVATE
+    KF5::WidgetsAddons
     KF5::KCMUtils
     KDev::Interfaces
 )

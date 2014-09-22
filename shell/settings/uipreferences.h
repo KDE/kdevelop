@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_UIPREFERENCES_H
 #define KDEVPLATFORM_UIPREFERENCES_H
 
-#include <kcmodule.h>
+#include "configpage.h"
 
 namespace Ui{
     class UiConfig;
@@ -31,18 +31,22 @@ namespace Ui{
  @author Andreas Pakulat <apaku@gmx.de>
 */
 
-class UiPreferences : public KCModule
+class UiPreferences : public KDevelop::ConfigPage
 {
-    public:
-        explicit UiPreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
+public:
+    explicit UiPreferences(QWidget* parent = nullptr);
 
-        ~UiPreferences();
+    ~UiPreferences();
 
-        virtual void save();
+    virtual QString name() const override;
+    virtual QString fullName() const override;
+    virtual QIcon icon() const override;
 
-
-    private:
-        Ui::UiConfig* m_uiconfigUi;
+public Q_SLOTS:
+    // need to customze behaviour
+    virtual void apply() override;
+private:
+    Ui::UiConfig* m_uiconfigUi;
 };
 
 #endif

@@ -56,6 +56,8 @@ set(KDevPlatformShell_LIB_SRCS
     progresswidget/progressdialog.cpp
 
     areadisplay.cpp
+
+    settings/uipreferences.cpp
 )
 
 set(KDevPlatformShell_UI
@@ -63,9 +65,12 @@ set(KDevPlatformShell_UI
     projectinfopage.ui
     launchconfigurationdialog.ui
     projectsourcepage.ui
+    settings/uiconfig.ui
 )
 
-ki18n_wrap_ui( KDevPlatformShell_LIB_SRCS ${KDevPlatformShell_UI} )
+ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS ${KDevPlatformShell_UI})
+kconfig_add_kcfg_files(KDevPlatformShell_LIB_SRCS settings/uiconfig.kcfgc)
+
 add_library(KDevPlatformShell ${KDevPlatformShell_LIB_SRCS})
 add_library(KDev::Shell ALIAS KDevPlatformShell)
 

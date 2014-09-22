@@ -22,9 +22,7 @@
 
 #include <QVBoxLayout>
 
-#include <kpluginfactory.h>
-#include <kaboutdata.h>
-#include <kpluginloader.h>
+#include <KLocalizedString>
 
 #include "../core.h"
 #include "../mainwindow.h"
@@ -34,19 +32,14 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY_WITH_JSON(UiPreferencesFactory, "kcm_kdev_uisettings.json", registerPlugin<UiPreferences>();)
-
-UiPreferences::UiPreferences(QWidget* parent, const QVariantList& args )
-    : KCModule( KAboutData::pluginData("kcm_kdev_uisettings"), parent, args )
+UiPreferences::UiPreferences(QWidget* parent)
+    : ConfigPage(UiConfig::self(), parent)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget(parent);
     m_uiconfigUi = new Ui::UiConfig();
     m_uiconfigUi->setupUi( w );
     l->addWidget( w );
-
-    addConfig( UiConfig::self(), w );
-    load();
 }
 
 UiPreferences::~UiPreferences()
@@ -54,14 +47,29 @@ UiPreferences::~UiPreferences()
     delete m_uiconfigUi;
 }
 
-void UiPreferences::save()
+void UiPreferences::apply()
 {
-    KCModule::save();
+    KDevelop::ConfigPage::apply();
 
     UiController *uiController = Core::self()->uiControllerInternal();
     foreach (Sublime::MainWindow *window, uiController->mainWindows())
         (static_cast<KDevelop::MainWindow*>(window))->loadSettings();
     uiController->loadSettings();
+}
+
+QString UiPreferences::name() const
+{
+    return i18n("User Interface");
+}
+
+QIcon UiPreferences::icon() const
+{
+    return QIcon::fromTheme(QStringLiteral("preferences-desktop-theme"));
+}
+
+QString UiPreferences::fullName() const
+{
+    return i18n("Configure User Interface");
 }
 
 #include "uipreferences.moc"

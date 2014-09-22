@@ -50,6 +50,7 @@ find_package(KF5 REQUIRED COMPONENTS
   Archive
   Config
   GuiAddons
+  WidgetsAddons
   I18n
   ItemModels
   ItemViews

@@ -195,4 +195,10 @@ KTextEditor::ConfigPage* KDevelop::IPlugin::perProjectConfigPage(int, QWidget*)
     return nullptr;
 }
 
+KDevelop::ConfigPage* KDevelop::IPlugin::configPage ( int number, QWidget* parent )
+{
+    return nullptr;
+}
+
+
 #include "moc_iplugin.cpp"

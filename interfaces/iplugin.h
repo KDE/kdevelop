@@ -31,6 +31,7 @@
 #include <KTextEditor/Plugin>
 
 #include "interfacesexport.h"
+#include "configpage.h"
 
 class KComponentData;
 class QAction;
@@ -236,6 +237,13 @@ public:
      * @see perProjectConfigPages()
      */
     virtual KTextEditor::ConfigPage* perProjectConfigPage(int number, QWidget *parent);
+
+    /**
+     * Make sure plugins return a KDevelop::ConfigPage and not just a KTextEditor::ConfigPage
+     * @see KTextEditor::Plugin::configPage
+     */
+    virtual KDevelop::ConfigPage* configPage(int number, QWidget *parent) override;
+
 
     /** This is implemented to do nothing, so that we can inherit from KTextEditor::Plugin */
     virtual QObject* createView(KTextEditor::MainWindow*) override final { return nullptr; };

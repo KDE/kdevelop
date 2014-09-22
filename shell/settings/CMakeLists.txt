@@ -11,20 +11,6 @@ set( pluginsettings_cfg_SRCS
 add_library( kcm_kdev_pluginsettings MODULE ${pluginsettings_cfg_SRCS} )
 target_link_libraries( kcm_kdev_pluginsettings KF5::KCMUtils KDev::Shell )
 
-########### UI settings
-set( uisettings_cfg_SRCS
-    uipreferences.cpp
-)
-
-set( uisettings_cfg_UI
-    uiconfig.ui
-)
-
-ki18n_wrap_ui( uisettings_cfg_SRCS ${uisettings_cfg_UI} )
-kconfig_add_kcfg_files( uisettings_cfg_SRCS uiconfig.kcfgc )
-add_library( kcm_kdev_uisettings MODULE ${uisettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_uisettings KF5::KCMUtils KDev::Shell KDev::Sublime )
-
 ########### Background Parser
 
 set( bgsettings_cfg_SRCS
@@ -112,13 +98,9 @@ install( TARGETS
         kcm_kdev_ccsettings
         kcm_kdev_bgsettings
         kcm_kdev_pluginsettings
-        kcm_kdev_envsettings
-        kcm_kdev_uisettings
+        kcm_kdev_envsettings 
         kcm_kdevsourceformattersettings
         DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
-
-configure_file(kcm_kdev_uisettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_uisettings.desktop)
-kcoreaddons_desktop_to_json(kcm_kdev_uisettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_uisettings.desktop)
 configure_file(kcm_kdev_envsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop)
 kcoreaddons_desktop_to_json(kcm_kdev_envsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop)
 configure_file(kcm_kdev_pluginsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_pluginsettings.desktop)
@@ -132,8 +114,7 @@ kcoreaddons_desktop_to_json(kcm_kdev_ccsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_
 configure_file(kcm_kdevsourceformattersettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevsourceformattersettings.desktop)
 kcoreaddons_desktop_to_json(kcm_kdevsourceformattersettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevsourceformattersettings.desktop)
 
-install( FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_uisettings.desktop
+install( FILES 
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_pluginsettings.desktop
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_projectsettings.desktop
