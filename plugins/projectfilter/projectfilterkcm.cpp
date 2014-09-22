@@ -22,9 +22,6 @@
 #include <QStandardItemModel>
 #include <QKeyEvent>
 
-#include <KConfigDialogManager>
-#include <ksettings/dispatcher.h>
-#include <KCoreAddons/KAboutData>
 #include <KMessageWidget>
 #include <KLocalizedString>
 
@@ -43,10 +40,8 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY_WITH_JSON(ProjectFilterKCMFactory, "kcm_kdevprojectfilter.json", registerPlugin<ProjectFilterKCM>();)
-
-ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
-    : ProjectKCModule<ProjectFilterSettings>(KAboutData::pluginData("kcm_kdevprojectfilter"), parent, args)
+ProjectFilterKCM::ProjectFilterKCM(const ProjectConfigOptions& options, QWidget* parent)
+    : ProjectConfigPage<ProjectFilterSettings>(options, parent)
     , m_model(new FilterModel(this))
     , m_ui(new Ui::ProjectFilterSettings)
 {
@@ -77,8 +72,7 @@ ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
     m_ui->filters->setAutoScroll(true);
     l->addWidget(w);
 
-    addConfig( ProjectFilterSettings::self(), w );
-    load();
+    reset();
     selectionChanged();
 
     connect(m_ui->filters->selectionModel(), &QItemSelectionModel::currentChanged,
@@ -100,20 +94,21 @@ ProjectFilterKCM::~ProjectFilterKCM()
 {
 }
 
-void ProjectFilterKCM::save()
+void ProjectFilterKCM::apply()
 {
+    ProjectConfigPage::apply();
     writeFilters(m_model->filters(), project()->projectConfiguration());
-
-    KSettings::Dispatcher::reparseConfiguration("kdevprojectfilter");
 }
 
-void ProjectFilterKCM::load()
+void ProjectFilterKCM::reset()
 {
+    ProjectConfigPage::reset();
     m_model->setFilters(readFilters(project()->projectConfiguration()));
 }
 
 void ProjectFilterKCM::defaults()
 {
+    ProjectConfigPage::defaults();
     m_model->setFilters(defaultFilters());
 }
 
@@ -200,7 +195,22 @@ void ProjectFilterKCM::emitChanged()
         }
     }
 
-    emit changed(true);
+    emit changed();
+}
+
+QString ProjectFilterKCM::fullName() const
+{
+    return i18n("Configure which files and folders inside the project folder should be included or excluded.");
+}
+
+QIcon ProjectFilterKCM::icon() const
+{
+    return QIcon::fromTheme(QStringLiteral("view-filter"));
+}
+
+QString ProjectFilterKCM::name() const
+{
+    return i18n("Project Filter");
 }
 
 #include "projectfilterkcm.moc"

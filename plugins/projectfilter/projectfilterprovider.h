@@ -43,6 +43,9 @@ public:
 
     virtual ContextMenuExtension contextMenuExtension(Context* context);
 
+    virtual int perProjectConfigPages() const override;
+    virtual ConfigPage* perProjectConfigPage(int number, const ProjectConfigOptions& options, QWidget* parent) override;
+
 signals:
     void filterChanged(KDevelop::IProjectFilterProvider*, KDevelop::IProject*);
 

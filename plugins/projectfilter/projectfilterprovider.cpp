@@ -24,7 +24,6 @@
 #include <KPluginLoader>
 #include <KPluginFactory>
 #include <KAboutData>
-#include <ksettings/dispatcher.h>
 #include <KMessageBox>
 #include <KParts/MainWindow>
 #include <KLocalizedString>
@@ -40,6 +39,7 @@
 #include <interfaces/iuicontroller.h>
 
 #include "projectfilterdebug.h"
+#include "projectfilterkcm.h"
 #include <project/projectmodel.h>
 
 using namespace KDevelop;
@@ -57,8 +57,6 @@ ProjectFilterProvider::ProjectFilterProvider( QObject* parent, const QVariantLis
             this, &ProjectFilterProvider::projectAboutToBeOpened);
 
     updateProjectFilters();
-
-    KSettings::Dispatcher::registerComponent(componentName(), this, "updateProjectFilters");
 }
 
 QSharedPointer<IProjectFilter> ProjectFilterProvider::createFilter(IProject* project) const
@@ -154,6 +152,16 @@ void ProjectFilterProvider::projectAboutToBeOpened(IProject* project)
 void ProjectFilterProvider::projectClosing(IProject* project)
 {
     m_filters.remove(project);
+}
+
+int ProjectFilterProvider::perProjectConfigPages() const
+{
+    return 1;
+}
+
+ConfigPage* ProjectFilterProvider::perProjectConfigPage(int i, const ProjectConfigOptions& options, QWidget* parent)
+{
+    return i == 0 ? new ProjectFilterKCM(options, parent) : nullptr;
 }
 
 #include "projectfilterprovider.moc"

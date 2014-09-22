@@ -54,7 +54,7 @@ namespace KDevelop
 class ICore;
 class Context;
 class ContextMenuExtension;
-
+struct ProjectConfigOptions;
 /**
  * The base class for all KDevelop plugins.
  *
@@ -231,12 +231,15 @@ public:
     /**
      * Get the per project config page with the \p number, config pages from 0 to
      * configPages()-1 are available if configPages() > 0.
+     *
      * @param number index of config page
+     * @param options The options used to initialize the ProjectConfigPage
      * @param parent parent widget for config page
-     * @return newly created config page or NULL, if the number is out of bounds, default implementation returns NULL
-     * @see perProjectConfigPages()
+     * @return newly created config page or NULL, if the number is out of bounds, default implementation returns NULL.
+     * This config page should inherit from ProjectConfigPage, but it is not a strict requirement.
+     * @see perProjectConfigPages(), ProjectConfigPage
      */
-    virtual KTextEditor::ConfigPage* perProjectConfigPage(int number, QWidget *parent);
+    virtual ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
 
     /**
      * Make sure plugins return a KDevelop::ConfigPage and not just a KTextEditor::ConfigPage

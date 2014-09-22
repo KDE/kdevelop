@@ -7,23 +7,6 @@ set( projectfilter_SRCS
     projectfilter.cpp
     projectfilterdebug.cpp
     filter.cpp
-)
-
-add_library( kdevprojectfilter MODULE ${projectfilter_SRCS} )
-target_link_libraries( kdevprojectfilter
-    KF5::KCMUtils
-    KDev::Project KDev::Util KDev::Interfaces )
-
-install( TARGETS kdevprojectfilter DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-
-configure_file(kdevprojectfilter.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectfilter.desktop)
-kcoreaddons_desktop_to_json(kdevprojectfilter ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectfilter.desktop)
-
-##############################
-# KCM ########################
-##############################
-
-set( projectfilterkcm_SRCS
     projectfilterkcm.cpp
     projectfilterdebug.cpp
     filter.cpp
@@ -31,20 +14,14 @@ set( projectfilterkcm_SRCS
     comboboxdelegate.cpp
 )
 
-set( projectfilterkcm_UI
-    projectfiltersettings.ui
-)
+ki18n_wrap_ui(projectfilter_SRCS projectfiltersettings.ui)
+kconfig_add_kcfg_files(projectfilter_SRCS projectfiltersettings.kcfgc)
 
-ki18n_wrap_ui( projectfilterkcm_SRCS ${projectfilterkcm_UI} )
-kconfig_add_kcfg_files( projectfilterkcm_SRCS projectfiltersettings.kcfgc )
-add_library( kcm_kdevprojectfilter MODULE ${projectfilterkcm_SRCS} )
-target_link_libraries( kcm_kdevprojectfilter
-    KF5::KCMUtils
-    KDev::Project KDev::Util KDev::Interfaces)
+add_library( kdevprojectfilter MODULE ${projectfilter_SRCS} )
+target_link_libraries(kdevprojectfilter KDev::Project KDev::Util KDev::Interfaces)
+configure_file(kdevprojectfilter.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectfilter.desktop)
+kcoreaddons_desktop_to_json(kdevprojectfilter ${CMAKE_CURRENT_BINARY_DIR}/kdevprojectfilter.desktop)
 
-install( TARGETS kcm_kdevprojectfilter DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm )
-configure_file(kcm_kdevprojectfilter.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevprojectfilter.desktop)
-kcoreaddons_desktop_to_json(kcm_kdevprojectfilter ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevprojectfilter.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevprojectfilter.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS kdevprojectfilter DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 add_subdirectory(tests)

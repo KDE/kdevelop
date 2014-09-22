@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_PROJECTFILTERKCM_H
 #define KDEVPLATFORM_PLUGIN_PROJECTFILTERKCM_H
 
-#include <project/projectkcmodule.h>
+#include <project/projectconfigpage.h>
 
 #include "projectfiltersettings.h"
 
@@ -34,16 +34,16 @@ namespace KDevelop
 
 class FilterModel;
 
-class ProjectFilterKCM : public ProjectKCModule<ProjectFilterSettings>
+class ProjectFilterKCM : public ProjectConfigPage<ProjectFilterSettings>
 {
     Q_OBJECT
 public:
-    ProjectFilterKCM(QWidget* parent, const QVariantList& args);
+    ProjectFilterKCM(const KDevelop::ProjectConfigOptions& options, QWidget* parent);
     virtual ~ProjectFilterKCM();
 
-    virtual void save();
-    virtual void load();
-    virtual void defaults();
+    virtual QString name() const;
+    virtual QIcon icon() const;
+    virtual QString fullName() const;
 
 protected:
     virtual bool eventFilter(QObject* object, QEvent* event);
@@ -55,6 +55,11 @@ private slots:
     void moveDown();
     void selectionChanged();
     void emitChanged();
+
+public Q_SLOTS:
+    virtual void apply() override;
+    virtual void reset() override;
+    virtual void defaults() override;
 
 private:
     FilterModel *m_model;

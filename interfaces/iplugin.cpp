@@ -190,12 +190,12 @@ int KDevelop::IPlugin::perProjectConfigPages() const
     return 0;
 }
 
-KTextEditor::ConfigPage* KDevelop::IPlugin::perProjectConfigPage(int, QWidget*)
+KDevelop::ConfigPage* KDevelop::IPlugin::perProjectConfigPage(int, const ProjectConfigOptions&, QWidget*)
 {
     return nullptr;
 }
 
-KDevelop::ConfigPage* KDevelop::IPlugin::configPage ( int number, QWidget* parent )
+KDevelop::ConfigPage* KDevelop::IPlugin::configPage (int, QWidget*)
 {
     return nullptr;
 }

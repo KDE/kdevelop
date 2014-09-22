@@ -58,7 +58,7 @@ install(FILES
     importprojectjob.h
     projectconfigskeleton.h
     projectmodel.h
-    projectkcmodule.h
+    projectconfigpage.h
     projectitemlineedit.h
     projectbuildsetmodel.h
     builderjob.h

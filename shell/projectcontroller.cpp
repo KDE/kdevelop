@@ -63,8 +63,10 @@ Boston, MA 02110-1301, USA.
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/projectmodel.h>
 #include <project/projectbuildsetmodel.h>
+#include <projectconfigpage.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
+#include <util/configdialog.h>
 
 #include "core.h"
 #include "project.h"
@@ -138,21 +140,41 @@ public:
         //that's different from the component name of the application, else
         //the plugin will show up on all projects settings dialogs.
 
-        QStringList pluginsForPrj = findPluginsForProject( proj );
-        qCDebug(SHELL) << "Using pluginlist:" << pluginsForPrj;
-        pluginsForPrj << "kdevplatformproject"; // for project-wide env settings.
-        KSettings::Dialog cfgDlg( pluginsForPrj, m_core->uiController()->activeMainWindow() );
-        cfgDlg.setKCMArguments( QStringList()
-                                    << proj->developerTempFile()
-                                    << proj->projectTempFile()
-                                    << proj->projectFile().pathOrUrl()
-                                    << proj->developerFile().pathOrUrl()
-                                    << proj->name() );
-        m_configuringProject = proj;
-        cfgDlg.setWindowTitle( i18n("Configure Project %1", proj->name()) );
+//         QStringList pluginsForPrj = findPluginsForProject( proj );
+//         kDebug() << "Using pluginlist:" << pluginsForPrj;
+//         pluginsForPrj << "kdevplatformproject"; // for project-wide env settings.
+//         KSettings::Dialog cfgDlg( pluginsForPrj, m_core->uiController()->activeMainWindow() );
+//         cfgDlg.setKCMArguments( QStringList()
+//                                     << proj->developerTempFile()
+//                                     << proj->projectTempFile()
+//                                     << proj->projectFile().pathOrUrl()
+//                                     << proj->developerFile().pathOrUrl()
+//                                     << proj->name() );
+//         m_configuringProject = proj;
+//         cfgDlg.setWindowTitle( i18n("Configure Project %1", proj->name()) );
+//         cfgDlg.exec();
+//         proj->projectConfiguration()->sync();
+//         m_configuringProject = 0;
+        QList<KDevelop::ConfigPage*> configPages;
+        auto mainWindow = m_core->uiController()->activeMainWindow();
+
+        ProjectConfigOptions options;
+        options.developerFile = proj->developerFile();
+        options.developerTempFile = proj->developerTempFile();
+        options.projectFile = proj->projectFile();
+        options.projectTempFile = proj->projectTempFile();
+        options.projectName = proj->name();
+
+        for (IPlugin* plugin : findPluginsForProject(proj)) {
+            for (int i = 0; i < plugin->perProjectConfigPages(); ++i) {
+                configPages.append(plugin->perProjectConfigPage(i, options, mainWindow));
+            }
+        }
+
+        KDevelop::ConfigDialog cfgDlg(configPages, mainWindow);
+        cfgDlg.setWindowTitle(i18n("Configure Project %1", proj->name()));
         cfgDlg.exec();
         proj->projectConfiguration()->sync();
-        m_configuringProject = 0;
     }
 
     void saveListOfOpenedProjects()
@@ -182,10 +204,10 @@ public:
         }
     }
 
-    QStringList findPluginsForProject( IProject* project )
+    QList<IPlugin*> findPluginsForProject( IProject* project )
     {
         QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
-        QStringList pluginnames;
+        QList<IPlugin*> projectPlugins;
         QList< IProjectBuilder* > buildersForKcm;
         // Important to also include the "top" builder for the project, so
         // projects with only one such builder are kept working. Otherwise the project config
@@ -213,10 +235,11 @@ public:
             {
                 continue;
             }
-            pluginnames << info.pluginName();
+            qCDebug(SHELL) << "Using plugin" << info.pluginName() << "for project" << project->name();
+            projectPlugins << plugin;
         }
 
-        return pluginnames;
+        return projectPlugins;
     }
 
     void notifyProjectConfigurationChanged()
