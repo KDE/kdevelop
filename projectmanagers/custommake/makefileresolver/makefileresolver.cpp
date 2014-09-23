@@ -539,13 +539,13 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 
 static QRegularExpression includeRegularExpression()
 {
-  static const QRegularExpression expression(QStringLiteral(
+  static const QRegularExpression expression(
     "\\s(?:--include-dir=|-I\\s*|-isystem\\s+)("
     "\\'.*\\'|\\\".*\\\"" //Matches "hello", 'hello', 'hello"hallo"', etc.
     "|"
     "((?:\\\\.)?([\\S^\\\\]?))+" //Matches /usr/I\ am\ a\ strange\ path/include
     ")(?=\\s)"
-  ));
+  );
   Q_ASSERT(expression.isValid());
   return expression;
 }
@@ -665,9 +665,9 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
 
 static QRegularExpression defineRegularExpression()
 {
-  static const QRegularExpression pattern(QStringLiteral(
+  static const QRegularExpression pattern(
     "-D([^\\s=]+)(?:=(?:\"(.*?)(?<!\\\\)\"|([^\\s]*)))?"
-  ));
+  );
   Q_ASSERT(pattern.isValid());
   return pattern;
 }
