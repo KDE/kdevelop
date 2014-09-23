@@ -39,7 +39,6 @@ find_package(KF5 REQUIRED COMPONENTS
   JobWidgets
   KCMUtils
   KIO
-  Runner
   NewStuff
   NotifyConfig
   Parts
