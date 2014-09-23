@@ -162,7 +162,7 @@ protected:
   /// Convenience function. Same as openDeclaration(), but creates a forward declaration.
   ForwardDeclaration* openForwardDeclaration(NameT* name, T* range)
   {
-    return openDeclaration<ForwardDeclaration*>(name, range);
+    return openDeclaration<ForwardDeclaration>(name, range);
   }
 
   /// Set the internal context of a declaration; for example, a class declaration's internal context
