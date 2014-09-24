@@ -21,15 +21,11 @@
 
 #include "shellexport.h"
 
+#include <KSharedConfig>
+
 #include <interfaces/iuicontroller.h>
-#include <sublime/controller.h>
-
-#include <ksharedconfig.h>
 #include <interfaces/iassistant.h>
-
-#include <KTextEditor/ConfigPage>
-#include <KTextEditor/Editor>
-#include <KLocalizedString>
+#include <sublime/controller.h>
 
 class QListWidgetItem;
 
