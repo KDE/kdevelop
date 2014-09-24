@@ -114,7 +114,7 @@ void KDevelop::ConfigDialog::removeConfigPage(ConfigPage* page)
     auto item = itemForPage(page);
     Q_ASSERT(item);
     removePage(item);
-
+    m_pages.removeAll(item);
 }
 
 void KDevelop::ConfigDialog::addConfigPage(ConfigPage* page, ConfigPage* previous)
@@ -125,7 +125,7 @@ void KDevelop::ConfigDialog::addConfigPage(ConfigPage* page, ConfigPage* previou
         Q_ASSERT(previousItem);
         item = insertPage(previousItem, page, page->name());
     } else {
-         item = addPage(page, page->name());
+        item = addPage(page, page->name());
     }
     m_pages.append(item);
     item->setHeader(page->fullName());
