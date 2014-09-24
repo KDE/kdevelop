@@ -26,8 +26,9 @@
 
 
 namespace KDevelop {
-
 class ConfigPage;
+class IPlugin;
+
 /**
  * This class is meant to be used to show the global config dialog and the per-project config dialog
  */
@@ -61,9 +62,11 @@ private:
     KPageWidgetItem* itemForPage(ConfigPage* page) const;
     int checkForUnsavedChanges(KPageWidgetItem* current, KPageWidgetItem* before);
     void applyChanges(ConfigPage* page);
+    void removePagesForPlugin(IPlugin* plugin);
 
 private:
-    QList<KPageWidgetItem*> m_pages;
+    // we have to use QPointer since KPageDialog::removePage() also removes all child pages
+    QVector<QPointer<KPageWidgetItem>> m_pages;
     bool m_currentPageHasChanges;
 };
 

@@ -30,6 +30,8 @@
 
 #include <iplugin.h>
 #include <configpage.h>
+#include <icore.h>
+#include <iplugincontroller.h>
 
 KDevelop::ConfigDialog::ConfigDialog(QList<ConfigPage*> pages, QWidget* parent, Qt::WindowFlags flags)
         : KPageDialog(parent, flags), m_currentPageHasChanges(false)
@@ -59,6 +61,9 @@ KDevelop::ConfigDialog::ConfigDialog(QList<ConfigPage*> pages, QWidget* parent, 
     });
 
     connect(this, &KPageDialog::currentPageChanged, this, &ConfigDialog::checkForUnsavedChanges);
+    // make sure we don't keep any entries for unloaded plugins
+    connect(ICore::self()->pluginController(), &IPluginController::unloadingPlugin,
+            this, &ConfigDialog::removePagesForPlugin);
 }
 
 
@@ -114,7 +119,24 @@ void KDevelop::ConfigDialog::removeConfigPage(ConfigPage* page)
     auto item = itemForPage(page);
     Q_ASSERT(item);
     removePage(item);
-    m_pages.removeAll(item);
+    m_pages.removeAll(QPointer<KPageWidgetItem>(item));
+    // also remove all items that were deleted because a parent KPageWidgetItem was removed
+    m_pages.removeAll(QPointer<KPageWidgetItem>());
+}
+
+void KDevelop::ConfigDialog::removePagesForPlugin(KDevelop::IPlugin* plugin)
+{
+    std::remove_if(m_pages.begin(), m_pages.end(), [plugin](const QPointer<KPageWidgetItem>& item) {
+        if (!item) {
+            return true;
+        }
+        if (auto page = qobject_cast<ConfigPage*>(item->widget())) {
+            return page->plugin() == plugin;
+        }
+        return false;
+    });
+    // also remove all items that were deleted because a parent KPageWidgetItem was removed
+    m_pages.removeAll(QPointer<KPageWidgetItem>());
 }
 
 void KDevelop::ConfigDialog::addConfigPage(ConfigPage* page, ConfigPage* previous)
@@ -140,6 +162,7 @@ void KDevelop::ConfigDialog::addConfigPage(ConfigPage* page, ConfigPage* previou
         KPageWidgetItem* childItem = addSubPage(item, child, child->name());
         childItem->setHeader(child->fullName());
         childItem->setIcon(child->icon());
+        m_pages.append(childItem);
         connect(child, &ConfigPage::changed, onChanged);
         child->initConfigManager();
     }
@@ -153,4 +176,3 @@ void KDevelop::ConfigDialog::applyChanges(ConfigPage* page)
     qDebug("Applied changes to page '%s'", qPrintable(page->name()));
     emit configSaved(page);
 }
-
