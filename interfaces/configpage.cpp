@@ -76,7 +76,7 @@ QList<ConfigPage*> ConfigPage::childPages()
     return {};
 }
 
-KTextEditorConfigPageWrapper::KTextEditorConfigPageWrapper(KTextEditor::ConfigPage* page, QWidget* parent)
+KTextEditorConfigPageAdapter::KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent)
         : ConfigPage(nullptr, parent), m_page(page)
 {
     page->setParent(this);
@@ -85,36 +85,36 @@ KTextEditorConfigPageWrapper::KTextEditorConfigPageWrapper(KTextEditor::ConfigPa
     this->setLayout(layout);
 }
 
-KTextEditorConfigPageWrapper::~KTextEditorConfigPageWrapper()
+KTextEditorConfigPageAdapter::~KTextEditorConfigPageAdapter()
 {
 }
 
-void KTextEditorConfigPageWrapper::apply()
+void KTextEditorConfigPageAdapter::apply()
 {
     m_page->apply();
 }
 
-void KTextEditorConfigPageWrapper::defaults()
+void KTextEditorConfigPageAdapter::defaults()
 {
     m_page->defaults();
 }
 
-void KTextEditorConfigPageWrapper::reset()
+void KTextEditorConfigPageAdapter::reset()
 {
     m_page->reset();
 }
 
-QString KTextEditorConfigPageWrapper::fullName() const
+QString KTextEditorConfigPageAdapter::fullName() const
 {
     return m_page->fullName();
 }
 
-QIcon KTextEditorConfigPageWrapper::icon() const
+QIcon KTextEditorConfigPageAdapter::icon() const
 {
     return m_page->icon();
 }
 
-QString KTextEditorConfigPageWrapper::name() const
+QString KTextEditorConfigPageAdapter::name() const
 {
     return m_page->name();
 }
@@ -148,7 +148,7 @@ QList<ConfigPage*> EditorConfigPage::childPages()
     QList<ConfigPage*> ret;
     auto editor = KTextEditor::Editor::instance();
     for (int i = 0; i < editor->configPages(); ++i) {
-        ret.append(new KTextEditorConfigPageWrapper(editor->configPage(i, this), this));
+        ret.append(new KTextEditorConfigPageAdapter(editor->configPage(i, this), this));
     }
     return ret;
 };

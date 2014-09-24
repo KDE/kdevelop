@@ -69,13 +69,13 @@ private:
     KCoreConfigSkeleton* m_configSkeleton;
 };
 
-class KDEVPLATFORMINTERFACES_EXPORT KTextEditorConfigPageWrapper : public ConfigPage
+class KDEVPLATFORMINTERFACES_EXPORT KTextEditorConfigPageAdapter : public ConfigPage
 {
     Q_OBJECT
 
 public:
-    explicit KTextEditorConfigPageWrapper(KTextEditor::ConfigPage* page, QWidget* parent = nullptr);
-    virtual ~KTextEditorConfigPageWrapper();
+    explicit KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent = nullptr);
+    virtual ~KTextEditorConfigPageAdapter();
 
     virtual QString name() const override;
     virtual QIcon icon() const override;
