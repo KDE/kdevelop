@@ -56,7 +56,6 @@ LINK_PRIVATE
     KF5::IconThemes
     KF5::NotifyConfig
     KF5::KIOWidgets
-    KF5::KCMUtils
     KF5::ThreadWeaver
 )
 target_include_directories(KDevPlatformInterfaces INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kdevplatform>")

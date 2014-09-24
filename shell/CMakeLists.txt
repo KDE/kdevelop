@@ -90,7 +90,6 @@ LINK_PRIVATE
     KF5::IconThemes
     KF5::KIOFileWidgets
     KF5::KIOWidgets
-    KF5::KCMUtils
     KF5::Parts
     KF5::Notifications
     KF5::NotifyConfig
