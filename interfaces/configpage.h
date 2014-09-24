@@ -33,6 +33,7 @@ namespace KDevelop {
 class KDEVPLATFORMINTERFACES_EXPORT ConfigPage : public KTextEditor::ConfigPage
 {
     Q_OBJECT
+
 public:
     /**
      * Create a new config page
@@ -48,10 +49,12 @@ public:
      * @return By default returns an empty list
      */
     virtual QList<ConfigPage*> childPages();
+
 public Q_SLOTS:
     virtual void apply() override;
     virtual void defaults() override;
     virtual void reset() override;
+
 public:
     /**
      * Initializes the KConfigDialogManager.
@@ -60,6 +63,7 @@ public:
      */
     void initConfigManager();
     KCoreConfigSkeleton* configSkeleton() { return m_configSkeleton; }
+
 private:
     QScopedPointer<KConfigDialogManager> m_configManager;
     KCoreConfigSkeleton* m_configSkeleton;
@@ -68,6 +72,7 @@ private:
 class KDEVPLATFORMINTERFACES_EXPORT KTextEditorConfigPageWrapper : public ConfigPage
 {
     Q_OBJECT
+
 public:
     explicit KTextEditorConfigPageWrapper(KTextEditor::ConfigPage* page, QWidget* parent = nullptr);
     virtual ~KTextEditorConfigPageWrapper();
@@ -75,10 +80,12 @@ public:
     virtual QString name() const override;
     virtual QIcon icon() const override;
     virtual QString fullName() const override;
+
 public Q_SLOTS:
     virtual void apply() override;
     virtual void defaults() override;
     virtual void reset() override;
+
 private:
     KTextEditor::ConfigPage* m_page;
 };
@@ -87,6 +94,7 @@ private:
 class KDEVPLATFORMINTERFACES_EXPORT EditorConfigPage : public ConfigPage
 {
     Q_OBJECT
+
 public:
     EditorConfigPage(QWidget* parent);
     virtual ~EditorConfigPage();
@@ -94,7 +102,8 @@ public:
     virtual QString name() const override;
     virtual QIcon icon() const override;
     virtual QString fullName() const override;
-    virtual QList< ConfigPage* > childPages() override;
+    virtual QList<ConfigPage*> childPages() override;
+
 public Q_SLOTS:
     virtual void apply() override {};
     virtual void reset() override {};
