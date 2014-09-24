@@ -49,11 +49,14 @@ public Q_SLOTS:
      * it will be inserted as the last config page.
      */
     void addConfigPage(ConfigPage* page, ConfigPage* next = nullptr);
+Q_SIGNALS:
+    void configSaved(ConfigPage* page);
 protected:
     virtual void closeEvent(QCloseEvent* event);
 private:
     KPageWidgetItem* itemForPage(ConfigPage* page) const;
     int checkForUnsavedChanges(KPageWidgetItem* current, KPageWidgetItem* before);
+    void applyChanges(ConfigPage* page);
 private:
     QList<KPageWidgetItem*> m_pages;
     bool m_currentPageHasChanges;

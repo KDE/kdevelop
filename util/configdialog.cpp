@@ -43,16 +43,14 @@ KDevelop::ConfigDialog::ConfigDialog(QList<ConfigPage*> pages, QWidget* parent, 
         addConfigPage(page);
     }
 
-    auto applyChanges = [this]() {
+    auto onApplyClicked = [this]() {
         auto page = qobject_cast<ConfigPage*>(currentPage()->widget());
         Q_ASSERT(page);
-        page->apply();
-        m_currentPageHasChanges = false;
-        button(QDialogButtonBox::Apply)->setEnabled(false);
-        qDebug("Applied changes");
+        applyChanges(page);
     };
-    connect(button(QDialogButtonBox::Apply), &QPushButton::clicked, applyChanges);
-    connect(button(QDialogButtonBox::Ok), &QPushButton::clicked, applyChanges);
+
+    connect(button(QDialogButtonBox::Apply), &QPushButton::clicked, onApplyClicked);
+    connect(button(QDialogButtonBox::Ok), &QPushButton::clicked, onApplyClicked);
     connect(button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked, [this]() {
         auto page = qobject_cast<ConfigPage*>(currentPage()->widget());
         Q_ASSERT(page);
@@ -88,9 +86,7 @@ int KDevelop::ConfigDialog::checkForUnsavedChanges(KPageWidgetItem* current, KPa
             m_currentPageHasChanges = false;
             button(QDialogButtonBox::Apply)->setEnabled(false);
         } else if (dialogResult == KMessageBox::Yes) {
-            oldPage->apply();
-            m_currentPageHasChanges = false;
-            button(QDialogButtonBox::Apply)->setEnabled(false);
+            applyChanges(oldPage);
         } else if (dialogResult == KMessageBox::Cancel) {
             // restore old state
             QSignalBlocker block(this); // prevent recursion
@@ -148,3 +144,13 @@ void KDevelop::ConfigDialog::addConfigPage(ConfigPage* page, ConfigPage* previou
         child->initConfigManager();
     }
 }
+
+void KDevelop::ConfigDialog::applyChanges(ConfigPage* page)
+{
+    page->apply();
+    m_currentPageHasChanges = false;
+    button(QDialogButtonBox::Apply)->setEnabled(false);
+    qDebug("Applied changes to page '%s'", qPrintable(page->name()));
+    emit configSaved(page);
+}
+
