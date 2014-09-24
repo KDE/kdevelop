@@ -3,14 +3,6 @@ include_directories(
     ${KDevPlatform_SOURCE_DIR}
 )
 
-########### Plugin Selector
-set( pluginsettings_cfg_SRCS
-     pluginpreferences.cpp
-)
-
-add_library( kcm_kdev_pluginsettings MODULE ${pluginsettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_pluginsettings KF5::KCMUtils KDev::Shell )
-
 ########### Background Parser
 
 set( bgsettings_cfg_SRCS
@@ -97,14 +89,11 @@ install( TARGETS
         kcm_kdev_projectsettings
         kcm_kdev_ccsettings
         kcm_kdev_bgsettings
-        kcm_kdev_pluginsettings
         kcm_kdev_envsettings 
         kcm_kdevsourceformattersettings
         DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
 configure_file(kcm_kdev_envsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop)
 kcoreaddons_desktop_to_json(kcm_kdev_envsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop)
-configure_file(kcm_kdev_pluginsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_pluginsettings.desktop)
-kcoreaddons_desktop_to_json(kcm_kdev_pluginsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_pluginsettings.desktop)
 configure_file(kcm_kdev_projectsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_projectsettings.desktop)
 kcoreaddons_desktop_to_json(kcm_kdev_projectsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_projectsettings.desktop)
 configure_file(kcm_kdev_bgsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_bgsettings.desktop)
@@ -116,7 +105,6 @@ kcoreaddons_desktop_to_json(kcm_kdevsourceformattersettings ${CMAKE_CURRENT_BINA
 
 install( FILES 
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop
-        ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_pluginsettings.desktop
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_projectsettings.desktop
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_bgsettings.desktop
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_ccsettings.desktop

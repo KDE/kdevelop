@@ -21,23 +21,31 @@
 #ifndef KDEVPLATFORM_PLUGINPREFERENCES_H
 #define KDEVPLATFORM_PLUGINPREFERENCES_H
 
-#include <kcmodule.h>
+#include <QIcon>
+#include <KLocalizedString>
+
+#include <interfaces/configpage.h>
 
 class KPluginSelector;
 
 namespace KDevelop
 {
 
-class PluginPreferences : public KCModule
+class PluginPreferences : public ConfigPage
 {
     Q_OBJECT
 public:
-    PluginPreferences( QWidget *, const QVariantList & );
-    void load();
-    void save();
-    void defaults();
-public slots:
-    void reparseConfig( const QByteArray& );
+    explicit PluginPreferences(QWidget*);
+
+    virtual QString name() const override { return i18n("Plugins"); };
+    virtual QString fullName() const override { return i18n("Configure Plugins"); };
+    virtual QIcon icon() const override { return QIcon("preferences-plugin"); }
+
+public Q_SLOTS:
+    virtual void apply() override;
+    virtual void reset() override;
+    virtual void defaults() override;
+
 private:
     KPluginSelector* selector;
 };

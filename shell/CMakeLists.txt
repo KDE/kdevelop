@@ -58,6 +58,7 @@ set(KDevPlatformShell_LIB_SRCS
     areadisplay.cpp
 
     settings/uipreferences.cpp
+    settings/pluginpreferences.cpp
 )
 
 set(KDevPlatformShell_UI
@@ -98,6 +99,7 @@ LINK_PRIVATE
     KF5::JobWidgets
     KF5::ItemViews
     KF5::WindowSystem
+    KF5::KCMUtils #for KPluginSelector, not sure why it needs to be there
 
     KDev::Project
     KDev::Vcs

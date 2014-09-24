@@ -60,6 +60,7 @@
 #include "workingsetcontroller.h"
 #include "workingsets/workingset.h"
 #include "settings/uipreferences.h"
+#include "settings/pluginpreferences.h"
 
 namespace KDevelop {
 
@@ -475,7 +476,8 @@ void UiController::showSettingsDialog()
 //     cfgDlg.exec();
 
     auto configPages = QList<KDevelop::ConfigPage*>()
-        << new UiPreferences(activeMainWindow());
+        << new UiPreferences(activeMainWindow())
+        << new PluginPreferences(activeMainWindow());
 
     for (IPlugin* plugin : ICore::self()->pluginController()->loadedPlugins()) {
         for (int i = 0; i < plugin->configPages(); ++i) {

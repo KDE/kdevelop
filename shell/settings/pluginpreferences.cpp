@@ -23,11 +23,7 @@
 #include <QDebug>
 #include <QVBoxLayout>
 
-#include <kaboutdata.h>
-#include <kpluginselector.h>
-#include <kplugininfo.h>
-#include <ksettings/dispatcher.h>
-#include <KLocalizedString>
+#include <KPluginSelector>
 
 #include <interfaces/isession.h>
 
@@ -38,10 +34,8 @@
 namespace KDevelop
 {
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginPreferencesFactory, "kcm_kdev_pluginsettings.json", registerPlugin<PluginPreferences>();)
-
-PluginPreferences::PluginPreferences( QWidget *parent, const QVariantList &args )
-    : KCModule( KAboutData::pluginData("kcm_kdev_pluginsettings"), parent, args )
+PluginPreferences::PluginPreferences(QWidget* parent)
+    : ConfigPage(nullptr, nullptr, parent)
 {
     QVBoxLayout* lay = new QVBoxLayout(this );
     selector = new KPluginSelector( this );
@@ -81,35 +75,28 @@ PluginPreferences::PluginPreferences( QWidget *parent, const QVariantList &args 
                               Core::self()->activeSession()->config() );
         ++it;
     }
-    connect( selector, &KPluginSelector::changed, this, static_cast<void(PluginPreferences::*)()>(&PluginPreferences::changed) );
-    connect( selector, &KPluginSelector::configCommitted, this, &PluginPreferences::reparseConfig );
+    connect(selector, &KPluginSelector::changed, this, &PluginPreferences::changed);
     selector->load();
-}
-
-void PluginPreferences::reparseConfig( const QByteArray& conf )
-{
-    KSettings::Dispatcher::reparseConfiguration( conf );
 }
 
 void PluginPreferences::defaults()
 {
     Core::self()->pluginControllerInternal()->resetToDefaults();
     selector->load();
-    KCModule::defaults();
 }
 
-void PluginPreferences::save()
+void PluginPreferences::apply()
 {
     selector->save();
-    KCModule::save();
+    qDebug() << "Plugins before apply: " << Core::self()->pluginControllerInternal()->allPluginNames();
     Core::self()->pluginControllerInternal()->updateLoadedPlugins();
-    selector->load();   // Some plugins may have failed to load, they must be unchecked.
+    qDebug() << "Plugins after apply: " << Core::self()->pluginControllerInternal()->allPluginNames();
+    selector->load(); // Some plugins may have failed to load, they must be unchecked.
 }
 
-void PluginPreferences::load()
+void PluginPreferences::reset()
 {
     selector->load();
-    KCModule::load();
 }
 
 }

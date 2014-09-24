@@ -502,6 +502,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     emit loadingPlugin( info.pluginName() );
     IPlugin *plugin = 0;
     QStringList missingInterfaces;
+    QString pluginLoadPath;
     if ( checkForDependencies( info, missingInterfaces ) ) {
 
         if (!missingInterfaces.isEmpty()) {
@@ -522,6 +523,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         } else {
             qWarning() << "Could not obtain factory to load plugin" << pluginId << loader.errorString();
         }
+        pluginLoadPath = loader.fileName();
     }
 
     if ( plugin ) {
@@ -535,7 +537,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         d->loadedPlugins.insert( info, plugin );
         info.setPluginEnabled( true );
 
-        qCDebug(SHELL) << "Successfully loaded plugin '" << pluginId << "'";
+        qCDebug(SHELL) << "Successfully loaded plugin" << pluginId << "from" << pluginLoadPath;
         emit pluginLoaded( plugin );
     } else {
         if( !missingInterfaces.isEmpty() ) {
