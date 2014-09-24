@@ -49,8 +49,7 @@ Boston, MA 02110-1301, USA.
 #include <kactionmenu.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
-#include <ksettings/dialog.h>
-#include <ksettings/dispatcher.h>
+#include <kio/netaccess.h>
 
 #include <sublime/area.h>
 #include <interfaces/iplugin.h>
@@ -171,10 +170,20 @@ public:
             }
         }
 
+        Q_ASSERT(!m_configuringProject);
+        m_configuringProject = proj;
         KDevelop::ConfigDialog cfgDlg(configPages, mainWindow);
+        QObject::connect(&cfgDlg, &ConfigDialog::configSaved, [this](ConfigPage* page) {
+            Q_UNUSED(page)
+            Q_ASSERT_X(m_configuringProject, Q_FUNC_INFO,
+                    "ConfigDialog signalled project config change, but no project set for configuring!");
+            emit q->projectConfigurationChanged(m_configuringProject);
+        });
         cfgDlg.setWindowTitle(i18n("Configure Project %1", proj->name()));
         cfgDlg.exec();
         proj->projectConfiguration()->sync();
+        m_configuringProject = nullptr;
+
     }
 
     void saveListOfOpenedProjects()
@@ -240,14 +249,6 @@ public:
         }
 
         return projectPlugins;
-    }
-
-    void notifyProjectConfigurationChanged()
-    {
-        if( m_configuringProject )
-        {
-            emit q->projectConfigurationChanged( m_configuringProject );
-        }
     }
 
     void updateActionStates( Context* ctx )
@@ -626,9 +627,6 @@ void ProjectController::initialize()
 
     loadSettings(false);
     d->dialog = new ProjectDialogProvider(d);
-    KSettings::Dispatcher::registerComponent( QStringLiteral("kdevplatformproject"),
-                                              this,
-                                              "notifyProjectConfigurationChanged" );
 
     QDBusConnection::sessionBus().registerObject( "/org/kdevelop/ProjectController",
         this, QDBusConnection::ExportScriptableSlots );
