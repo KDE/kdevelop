@@ -27,8 +27,8 @@
 
 using namespace KDevelop;
 
-ConfigPage::ConfigPage(KCoreConfigSkeleton* config, QWidget* parent)
-        : KTextEditor::ConfigPage(parent), m_configSkeleton(config)
+ConfigPage::ConfigPage(IPlugin* plugin, KCoreConfigSkeleton* config, QWidget* parent)
+        : KTextEditor::ConfigPage(parent), m_configSkeleton(config), m_plugin(plugin)
 {
     if (m_configSkeleton) {
         m_configManager.reset(new KConfigDialogManager(parent, m_configSkeleton));
@@ -40,13 +40,13 @@ ConfigPage::ConfigPage(KCoreConfigSkeleton* config, QWidget* parent)
 
 ConfigPage::~ConfigPage()
 {
-
 }
 
 void ConfigPage::apply()
 {
     Q_ASSERT(m_configManager); // if null, this method must be overriden
     m_configManager->updateSettings();
+    m_configSkeleton->load();
     m_configManager->updateWidgets();
 }
 
@@ -70,14 +70,18 @@ void ConfigPage::initConfigManager()
     }
 }
 
-
 QList<ConfigPage*> ConfigPage::childPages()
 {
     return {};
 }
 
+IPlugin* ConfigPage::plugin()
+{
+    return m_plugin;
+}
+
 KTextEditorConfigPageAdapter::KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent)
-        : ConfigPage(nullptr, parent), m_page(page)
+        : ConfigPage(nullptr, nullptr, parent), m_page(page)
 {
     page->setParent(this);
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -120,7 +124,7 @@ QString KTextEditorConfigPageAdapter::name() const
 }
 
 EditorConfigPage::EditorConfigPage(QWidget* parent)
-        : ConfigPage(nullptr, parent)
+        : ConfigPage(nullptr, nullptr, parent)
 {
     qDebug("Editor config page created");
     setObjectName("editorconfig");

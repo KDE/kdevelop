@@ -29,6 +29,7 @@
 #include "interfacesexport.h"
 
 namespace KDevelop {
+class IPlugin;
 
 class KDEVPLATFORMINTERFACES_EXPORT ConfigPage : public KTextEditor::ConfigPage
 {
@@ -37,11 +38,12 @@ class KDEVPLATFORMINTERFACES_EXPORT ConfigPage : public KTextEditor::ConfigPage
 public:
     /**
      * Create a new config page
+     * @param plugin the plugin that created this config page
      * @param config the config skeleton that is used to store the preferences. If you don't use
      * a K(Core)ConfigSkeleton to save the settings you can also pass null here.
      * However this means that you will have to manually implement the apply(), defaults() and reset() slots
      */
-    explicit ConfigPage(KCoreConfigSkeleton* config = nullptr, QWidget* parent = nullptr);
+    explicit ConfigPage(IPlugin* plugin, KCoreConfigSkeleton* config = nullptr, QWidget* parent = nullptr);
     virtual ~ConfigPage();
 
     /**
@@ -49,6 +51,11 @@ public:
      * @return By default returns an empty list
      */
     virtual QList<ConfigPage*> childPages();
+
+    /**
+     * @return the plugin that this config page was created by or nullptr if it was not created by a plugin.
+     */
+    IPlugin* plugin();
 
 public Q_SLOTS:
     virtual void apply() override;
@@ -67,6 +74,7 @@ public:
 private:
     QScopedPointer<KConfigDialogManager> m_configManager;
     KCoreConfigSkeleton* m_configSkeleton;
+    IPlugin* m_plugin;
 };
 
 class KDEVPLATFORMINTERFACES_EXPORT KTextEditorConfigPageAdapter : public ConfigPage

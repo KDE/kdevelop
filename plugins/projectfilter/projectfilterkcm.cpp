@@ -42,7 +42,7 @@
 using namespace KDevelop;
 
 ProjectFilterKCM::ProjectFilterKCM(ProjectFilterProvider* provider, const ProjectConfigOptions& options, QWidget* parent)
-    : ProjectConfigPage<ProjectFilterSettings>(options, parent)
+    : ProjectConfigPage<ProjectFilterSettings>(provider, options, parent)
     , m_model(new FilterModel(this))
     , m_projectFilterProvider(provider)
     , m_ui(new Ui::ProjectFilterSettings)

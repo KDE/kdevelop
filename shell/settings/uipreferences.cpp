@@ -33,7 +33,7 @@
 using namespace KDevelop;
 
 UiPreferences::UiPreferences(QWidget* parent)
-    : ConfigPage(UiConfig::self(), parent)
+    : ConfigPage(nullptr, UiConfig::self(), parent)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget(parent);

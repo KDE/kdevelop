@@ -55,8 +55,8 @@ class ProjectConfigPage : public KDevelop::ConfigPage
 {
     static_assert(std::is_base_of<KDevelop::ProjectConfigSkeleton, T>::value, "T must inherit from KDevelop::ProjectConfigSkeleton");
 public:
-    ProjectConfigPage(const KDevelop::ProjectConfigOptions& options, QWidget* parent)
-        : KDevelop::ConfigPage(initConfigSkeleton(options), parent), projectName(options.projectName)
+    ProjectConfigPage(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+        : KDevelop::ConfigPage(plugin, initConfigSkeleton(options), parent), projectName(options.projectName)
     {
         KDevelop::ProjectConfigSkeleton* conf = T::self();
         conf->setDeveloperTempFile(options.developerTempFile);
