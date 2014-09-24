@@ -25,15 +25,11 @@
 #include <QApplication>
 #include <QListWidget>
 #include <QToolBar>
+#include <QMenuBar>
 
 #include <QDialog>
 #include <KAboutData>
 #include <KLocalizedString>
-#include <QMenuBar>
-#include <ksettings/dispatcher.h>
-#include <ksettings/dialog.h>
-#include <ksettings/dispatcher.h>
-#include <kcmultidialog.h>
 #include <kxmlguifactory.h>
 #include <kxmlguiclient.h>
 
@@ -260,11 +256,6 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
     }
 
     MainWindow *main = new MainWindow(this);
-    // FIXME: what this is supposed to do?
-    // Answer: Its notifying the mainwindow to reload its settings when one of
-    // the KCM's changes its settings and it works
-    KSettings::Dispatcher::registerComponent( QCoreApplication::applicationName(), main, "loadSettings" );
-    KSettings::Dispatcher::registerComponent( Core::self()->aboutData().componentName(), main, "loadSettings" );
 
     addMainWindow(main);
     showArea(areaName, main);
@@ -494,6 +485,8 @@ void UiController::showSettingsDialog()
     configPages << new EditorConfigPage(activeMainWindow());
 
     ConfigDialog cfgDlg(configPages, activeMainWindow());
+    // TODO: only load settings if a UI related page was changed?
+    connect(&cfgDlg, &ConfigDialog::configSaved, activeSublimeWindow(), &Sublime::MainWindow::loadSettings);
     cfgDlg.exec();
 }
 
