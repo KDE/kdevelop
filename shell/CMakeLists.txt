@@ -99,7 +99,7 @@ LINK_PRIVATE
     KF5::JobWidgets
     KF5::ItemViews
     KF5::WindowSystem
-    KF5::KCMUtils #for KPluginSelector, not sure why it needs to be there
+    KF5::KCMUtils #for KPluginSelector, not sure why it is in kcmutils
 
     KDev::Project
     KDev::Vcs

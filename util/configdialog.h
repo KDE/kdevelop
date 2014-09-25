@@ -22,8 +22,8 @@
 #define KDEVPLATFORM_CONFIGDIALOG_H
 
 #include <KPageDialog>
-#include "utilexport.h"
 
+#include "utilexport.h"
 
 namespace KDevelop {
 class ConfigPage;
@@ -63,6 +63,7 @@ private:
     int checkForUnsavedChanges(KPageWidgetItem* current, KPageWidgetItem* before);
     void applyChanges(ConfigPage* page);
     void removePagesForPlugin(IPlugin* plugin);
+    void addConfigPageInternal(KPageWidgetItem* item, ConfigPage* page);
 
 private:
     // we have to use QPointer since KPageDialog::removePage() also removes all child pages

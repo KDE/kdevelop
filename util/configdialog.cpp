@@ -126,15 +126,20 @@ void KDevelop::ConfigDialog::removeConfigPage(ConfigPage* page)
 
 void KDevelop::ConfigDialog::removePagesForPlugin(KDevelop::IPlugin* plugin)
 {
-    std::remove_if(m_pages.begin(), m_pages.end(), [plugin](const QPointer<KPageWidgetItem>& item) {
+    Q_ASSERT(plugin);
+    qDebug("Plugin %s (%p) is about to be unloaded.",
+            qPrintable(ICore::self()->pluginController()->pluginInfo(plugin).pluginName()), plugin);
+    for (auto it = m_pages.begin(); it != m_pages.end(); ++it) {
+        auto item = *it;
         if (!item) {
-            return true;
+            continue;
         }
-        if (auto page = qobject_cast<ConfigPage*>(item->widget())) {
-            return page->plugin() == plugin;
+        auto page = qobject_cast<ConfigPage*>(item->widget());
+        if (page && page->plugin() == plugin) {
+            qDebug("Removing page %s (%s) because associated plugin (%p) is unloading.",
+                    qPrintable(page->name()), qPrintable(page->fullName()), page->plugin());
         }
-        return false;
-    });
+    };
     // also remove all items that were deleted because a parent KPageWidgetItem was removed
     m_pages.removeAll(QPointer<KPageWidgetItem>());
 }
