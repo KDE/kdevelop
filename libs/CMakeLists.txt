@@ -26,6 +26,8 @@ add_library(kdevqtc-qmlsupport SHARED
 	utils/qtcassert.cpp
 	utils/savefile.cpp
 )
+
+set_target_properties(kdevqtc-qmlsupport PROPERTIES COMPILE_FLAGS "-DLANGUAGEUTILS_BUILD_DIR\ -DQMLJS_BUILD_DIR\ -DQTCREATOR_UTILS_LIB")
 target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
