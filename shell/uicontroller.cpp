@@ -475,20 +475,28 @@ void UiController::showSettingsDialog()
 //     cfgDlg.setComponentBlacklist( blacklist );
 //     cfgDlg.exec();
 
+    auto editorConfigPage = new EditorConfigPage(activeMainWindow());
+
     auto configPages = QList<KDevelop::ConfigPage*>()
         << new UiPreferences(activeMainWindow())
-        << new PluginPreferences(activeMainWindow());
-
-    for (IPlugin* plugin : ICore::self()->pluginController()->loadedPlugins()) {
-        for (int i = 0; i < plugin->configPages(); ++i) {
-            configPages.append(plugin->configPage(i, activeMainWindow()));
-        }
-    }
-    configPages << new EditorConfigPage(activeMainWindow());
+        << new PluginPreferences(activeMainWindow())
+        << editorConfigPage;
 
     ConfigDialog cfgDlg(configPages, activeMainWindow());
+
+    auto addPluginPages = [&](IPlugin* plugin) {
+        for (int i = 0; i < plugin->configPages(); ++i) {
+            // insert them before the editor config page
+            cfgDlg.addConfigPage(plugin->configPage(i, activeMainWindow()), editorConfigPage);
+        }
+    };
+    for (IPlugin* plugin : ICore::self()->pluginController()->loadedPlugins()) {
+        addPluginPages(plugin);
+    }
     // TODO: only load settings if a UI related page was changed?
     connect(&cfgDlg, &ConfigDialog::configSaved, activeSublimeWindow(), &Sublime::MainWindow::loadSettings);
+    // make sure that pages get added whenever a new plugin is loaded
+    connect(ICore::self()->pluginController(), &IPluginController::pluginLoaded, addPluginPages);
     cfgDlg.exec();
 }
 

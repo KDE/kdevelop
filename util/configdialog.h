@@ -64,11 +64,13 @@ private:
     void applyChanges(ConfigPage* page);
     void removePagesForPlugin(IPlugin* plugin);
     void addConfigPageInternal(KPageWidgetItem* item, ConfigPage* page);
+    void onPageChanged();
 
 private:
     // we have to use QPointer since KPageDialog::removePage() also removes all child pages
     QVector<QPointer<KPageWidgetItem>> m_pages;
-    bool m_currentPageHasChanges;
+    bool m_currentPageHasChanges = false; // TODO: QHash
+    bool m_currentlyApplyingChanges = false;
 };
 
 }

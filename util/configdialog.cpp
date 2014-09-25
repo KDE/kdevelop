@@ -22,6 +22,7 @@
 
 #include <QPushButton>
 #include <QCloseEvent>
+#include <QDebug>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -79,8 +80,10 @@ KPageWidgetItem* KDevelop::ConfigDialog::itemForPage(ConfigPage* page) const
 
 int KDevelop::ConfigDialog::checkForUnsavedChanges(KPageWidgetItem* current, KPageWidgetItem* before)
 {
+    qDebug() << "Check for unsaved changes: before =" << before << (before ? before->name() : QString()) << ", current = " << current << (current ? current->name() : QString());
     Q_UNUSED(current);
     if (m_currentPageHasChanges) {
+        // before must be non-null, because if we change from nothing to a new page m_currentPageHasChanges must also be false!
         auto oldPage = qobject_cast<ConfigPage*>(before->widget());
         Q_ASSERT(oldPage);
         auto dialogResult = KMessageBox::warningYesNoCancel(this, i18n("The settings of the current module have changed.\n"
@@ -129,6 +132,7 @@ void KDevelop::ConfigDialog::removePagesForPlugin(KDevelop::IPlugin* plugin)
     Q_ASSERT(plugin);
     qDebug("Plugin %s (%p) is about to be unloaded.",
             qPrintable(ICore::self()->pluginController()->pluginInfo(plugin).pluginName()), plugin);
+    qDebug() << m_pages.size() << "pages before:" << m_pages;
     for (auto it = m_pages.begin(); it != m_pages.end(); ++it) {
         auto item = *it;
         if (!item) {
@@ -136,47 +140,73 @@ void KDevelop::ConfigDialog::removePagesForPlugin(KDevelop::IPlugin* plugin)
         }
         auto page = qobject_cast<ConfigPage*>(item->widget());
         if (page && page->plugin() == plugin) {
-            qDebug("Removing page %s (%s) because associated plugin (%p) is unloading.",
-                    qPrintable(page->name()), qPrintable(page->fullName()), page->plugin());
+            qDebug("Removing page %s (%s) (%p) because associated plugin (%p) is unloading.",
+                    qPrintable(page->name()), qPrintable(page->fullName()), item.data(), page->plugin());
+            removePage(item); // this also deletes the config page -> QPointer is set to null
         }
     };
+    qDebug() << m_pages.size() << "Pages before after:" << m_pages;
     // also remove all items that were deleted because a parent KPageWidgetItem was removed
     m_pages.removeAll(QPointer<KPageWidgetItem>());
+    qDebug() << m_pages.size() << "Pages before after null removal:" << m_pages;
 }
 
 void KDevelop::ConfigDialog::addConfigPage(ConfigPage* page, ConfigPage* previous)
 {
-    KPageWidgetItem* item;
     if (previous) {
         auto previousItem = itemForPage(previous);
         Q_ASSERT(previousItem);
-        item = insertPage(previousItem, page, page->name());
+        addConfigPageInternal(insertPage(previousItem, page, page->name()), page);
     } else {
-        item = addPage(page, page->name());
-    }
-    m_pages.append(item);
-    item->setHeader(page->fullName());
-    item->setIcon(page->icon());
-    auto onChanged = [this]() {
-        m_currentPageHasChanges = true;
-        button(QDialogButtonBox::Apply)->setEnabled(true);
-    };
-    connect(page, &ConfigPage::changed, onChanged);
-    page->initConfigManager();
-    for (auto child : page->childPages()) {
-        KPageWidgetItem* childItem = addSubPage(item, child, child->name());
-        childItem->setHeader(child->fullName());
-        childItem->setIcon(child->icon());
-        m_pages.append(childItem);
-        connect(child, &ConfigPage::changed, onChanged);
-        child->initConfigManager();
+        addConfigPageInternal(addPage(page, page->name()), page);
     }
 }
 
+void KDevelop::ConfigDialog::addConfigPageInternal(KPageWidgetItem* item, ConfigPage* page)
+{
+    item->setHeader(page->fullName());
+    item->setIcon(page->icon());
+    connect(page, &ConfigPage::changed, this, &ConfigDialog::onPageChanged);
+    page->initConfigManager();
+    m_pages.append(item);
+    for (auto child : page->childPages()) {
+        addConfigPageInternal(addSubPage(item, child, child->name()), child);
+    }
+}
+
+void KDevelop::ConfigDialog::onPageChanged()
+{
+    QObject* from = sender();
+    if (from && from != currentPage()->widget()) {
+        qFatal("Settings in a different page changed, this case is not handled yet");
+        // TODO: add a QHash<ConfigPage*, bool> as a member to make sure the apply button is always correct
+
+        // TODO: when pressing okay show confirm dialog if other pages have changed or just silently apply every page? "Items on other pages have changed, do you wish to review those changes? + list with changed pages."
+    }
+    if (!m_currentlyApplyingChanges) {
+        // e.g. PluginPreferences emits changed() from its apply method, better fix this here than having to
+        // ensure that no plugin emits changed() from apply()
+        // together with KPageDialog emitting currentPageChanged("Plugins", nullptr) this could cause a crash
+        // when we dereference before
+        m_currentPageHasChanges = true;
+        button(QDialogButtonBox::Apply)->setEnabled(true);
+    }
+}
+
+
 void KDevelop::ConfigDialog::applyChanges(ConfigPage* page)
 {
-    page->apply();
+    // must set this to false before calling apply, otherwise we get the confirmation dialog
+    // whenever we enable/disable plugins.
+    // This is because KPageWidget then emits currentPageChanged("Plugins", nullptr), which seems like a bug to me,
+    // it should rather emit currentPageChanged("Plugins", "Plugins") or even better nothing at all, since the current
+    // page did not actually change!
+    // TODO: fix KPageWidget
     m_currentPageHasChanges = false;
+    m_currentlyApplyingChanges = true;
+    page->apply();
+    m_currentlyApplyingChanges = false;
+    Q_ASSERT(!m_currentPageHasChanges);
     button(QDialogButtonBox::Apply)->setEnabled(false);
     qDebug("Applied changes to page '%s'", qPrintable(page->name()));
     emit configSaved(page);
