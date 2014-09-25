@@ -24,7 +24,7 @@
 
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 
-#include "../duchainexport.h"
+#include "duchainexport.h"
 
 namespace QmlJS {
 

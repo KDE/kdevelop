@@ -1,3 +1,6 @@
+# include current binary dir explicitly to make nodejs.h find duchainexport.h
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 add_library(kdevqmljsduchain SHARED
     debug.cpp
     cache.cpp
@@ -17,6 +20,9 @@ add_library(kdevqmljsduchain SHARED
 
     frameworks/nodejs.cpp
 )
+
+generate_export_header(kdevqmljsduchain EXPORT_MACRO_NAME KDEVQMLJSDUCHAIN_EXPORT
+                                        EXPORT_FILE_NAME duchainexport.h)
 
 target_link_libraries(kdevqmljsduchain LINK_PRIVATE
     ${QT_QTCORE_LIBRARY}

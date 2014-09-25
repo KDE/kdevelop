@@ -23,7 +23,7 @@
 #define __FRAMEWORK_NODEJS_H__
 
 #include "../declarationbuilder.h"
-#include "../duchainexport.h"
+#include "duchainexport.h"
 #include <language/duchain/duchainpointer.h>
 #include <util/path.h>
 
