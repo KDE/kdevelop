@@ -3,8 +3,6 @@ project(executeplasmoid)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9515 )
 
 include_directories(
-    ${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDE4_INCLUDES}
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
@@ -23,13 +21,12 @@ set(kdevexecuteplasmoid_PART_SRCS
 
 qt5_wrap_ui( kdevexecuteplasmoid_PART_SRCS ${kdevexecuteplasmoid_PART_UIS} )
 add_library(kdevexecuteplasmoid MODULE ${kdevexecuteplasmoid_PART_SRCS}  )
-target_link_libraries(kdevexecuteplasmoid 
-    ${KDE4_KDEUI_LIBS}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES} 
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES} 
-    ${KDEVPLATFORM_UTIL_LIBRARIES} 
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES})
+target_link_libraries(kdevexecuteplasmoid
+    KDev::Language
+    KDev::Interfaces
+    KDev::Util
+    KDev::Project
+    KDev::OutputView)
 
 install(TARGETS kdevexecuteplasmoid DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
