@@ -133,7 +133,7 @@ public:
 ///Implements everything necessary to merge the given Parent class with IdentifiedType
 ///Your used Data class must be based on the Data member class
 template<class Parent>
-class KDEVPLATFORMLANGUAGE_EXPORT MergeIdentifiedType : public Parent, public IdentifiedType {
+class MergeIdentifiedType : public Parent, public IdentifiedType {
   public:
 
     class Data : public Parent::Data, public IdentifiedTypeData {
