@@ -136,7 +136,7 @@ void TestIndexedString::hashString()
   QVector<QString> data = generateData();
   QBENCHMARK {
     foreach(const QString& item, data) {
-      qHash(item);
+      (void)qHash(item);
     }
   }
 }
