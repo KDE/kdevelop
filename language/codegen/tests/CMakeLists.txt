@@ -1,7 +1,7 @@
 ecm_add_test(test_documentchangeset.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
 
-if (Grantlee_FOUND)
+if (Grantlee5_FOUND)
     ecm_add_test(test_templaterenderer.cpp
         LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
 
