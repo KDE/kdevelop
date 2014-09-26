@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tst_itemrepository.h"
+#include "bench_itemrepository.h"
 
 
 #include <tests/testcore.h>

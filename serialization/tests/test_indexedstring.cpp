@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tst_indexedstring.h"
+#include "test_indexedstring.h"
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
