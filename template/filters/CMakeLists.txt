@@ -6,4 +6,7 @@ target_link_libraries(kdev_filters
     Grantlee5::Templates
 )
 
-install(TARGETS kdev_filters DESTINATION ${PLUGIN_INSTALL_DIR}/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR})
+get_property(Grantlee_PLUGIN_DIR TARGET Grantlee5::defaulttags PROPERTY LOCATION)
+get_filename_component(Grantlee_PLUGIN_DIR ${Grantlee_PLUGIN_DIR} PATH)
+
+install(TARGETS kdev_filters DESTINATION ${Grantlee_PLUGIN_DIR})
