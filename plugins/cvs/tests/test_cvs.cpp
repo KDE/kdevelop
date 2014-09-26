@@ -8,7 +8,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "cvstest.h"
+#include "test_cvs.h"
 
 #include <QtTest/QtTest>
 #include <QUrl>
@@ -27,7 +27,7 @@
 #define CVS_TESTFILE_NAME       "testfile"
 #define CVS_CHECKOUT            CVSTEST_BASEDIR "working/"
 
-void CvsTest::initTestCase()
+void TestCvs::initTestCase()
 {
     KDevelop::AutoTestShell::init();
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
@@ -39,14 +39,14 @@ void CvsTest::initTestCase()
     cleanup();
 }
 
-void CvsTest::cleanupTestCase()
+void TestCvs::cleanupTestCase()
 {
     KDevelop::TestCore::shutdown();
 
     delete m_proxy;
 }
 
-void CvsTest::init()
+void TestCvs::init()
 {
     // Now create the basic directory structure
     QDir tmpdir("/tmp");
@@ -55,13 +55,13 @@ void CvsTest::init()
     tmpdir.mkdir(CVS_IMPORT);
 }
 
-void CvsTest::cleanup()
+void TestCvs::cleanup()
 {
     if ( QFileInfo(CVSTEST_BASEDIR).exists() )
         KIO::del(QUrl::fromLocalFile(QString(CVSTEST_BASEDIR)))->exec();
 }
 
-void CvsTest::repoInit()
+void TestCvs::repoInit()
 {
     // make job that creates the local repository
     CvsJob* j = new CvsJob(0);
@@ -76,7 +76,7 @@ void CvsTest::repoInit()
     QVERIFY( QFileInfo(QString(CVS_REPO "/CVSROOT")).exists() );
 }
 
-void CvsTest::importTestData()
+void TestCvs::importTestData()
 {
     // create a file so we don't import an empty dir
     QFile f(CVS_IMPORT "" CVS_TESTFILE_NAME);
@@ -105,7 +105,7 @@ void CvsTest::importTestData()
 }
 
 
-void CvsTest::checkoutTestData()
+void TestCvs::checkoutTestData()
 {
     CvsJob* j = m_proxy->checkout(QUrl::fromLocalFile(CVS_CHECKOUT), CVS_REPO, "test");
     QVERIFY( j );
@@ -123,14 +123,14 @@ void CvsTest::checkoutTestData()
 }
 
 
-void CvsTest::testInitAndImport()
+void TestCvs::testInitAndImport()
 {
     repoInit();
     importTestData();
     checkoutTestData();
 }
 
-void CvsTest::testLogFolder()
+void TestCvs::testLogFolder()
 {
     repoInit();
     importTestData();
@@ -141,4 +141,4 @@ void CvsTest::testLogFolder()
     QVERIFY(job);
 }
 
-QTEST_MAIN(CvsTest)
+QTEST_MAIN(TestCvs)

@@ -20,7 +20,7 @@ if (CVS)
 		${KDevPlatform_SOURCE_DIR}/plugins/cvs
 	)
     set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-	set(cvstest_SRCS cvstest.cpp
+	set(test_cvs_SRCS test_cvs.cpp
         ../cvsjob.cpp
         ../cvsproxy.cpp
         ../cvsannotatejob.cpp
@@ -28,15 +28,13 @@ if (CVS)
         ../cvsstatusjob.cpp
         ../cvsdiffjob.cpp
     )
-	add_executable(kdevcvs-test ${cvstest_SRCS})
-	add_test(kdevcvs-test kdevcvs-test)
-    ecm_mark_as_test(kdevcvs-test)
-	target_link_libraries(kdevcvs-test
-		Qt5::Test
-		
-        KDev::Util
-        KDev::Vcs
-        KDev::Tests
+    ecm_add_test(${test_cvs_SRCS}
+        TEST_NAME test_cvs
+        LINK_LIBRARIES
+            Qt5::Test
+            KDev::Util
+            KDev::Vcs
+            KDev::Tests
 	)
 
 endif ()
