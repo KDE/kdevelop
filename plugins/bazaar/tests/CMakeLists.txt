@@ -15,5 +15,5 @@ if (BZR_FOUND)
 
     ecm_add_test(${bazaartest_SRCS}
         TEST_NAME test_kdevbazaar
-        LINK_LIBRARIES Qt5::Test ${KDEVPLATFORM_VCS_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
+        LINK_LIBRARIES Qt5::Test KDev::Vcs KDev::Util KDev::Tests)
 endif()

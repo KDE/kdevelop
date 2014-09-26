@@ -17,5 +17,5 @@ set(kdevgrepview_PART_UI
 qt5_wrap_ui(findReplaceTest_SRCS ${kdevgrepview_PART_UI})
 ecm_add_test(${findReplaceTest_SRCS}
     TEST_NAME test_findreplace
-    LINK_LIBRARIES Qt5::Test ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES}
+    LINK_LIBRARIES Qt5::Test KDev::Language KDev::Project KDev::Util KDev::Tests
     GUI)

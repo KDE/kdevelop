@@ -22,11 +22,11 @@ set(kdevexecutescript_PART_SRCS
 
 qt5_wrap_ui( kdevexecutescript_PART_SRCS ${kdevexecutescript_PART_UIS} )
 add_library(kdevexecutescript MODULE ${kdevexecutescript_PART_SRCS})
-target_link_libraries(kdevexecutescript 
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES} 
-    ${KDEVPLATFORM_UTIL_LIBRARIES} 
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES})
+target_link_libraries(kdevexecutescript
+    KDev::Interfaces
+    KDev::Util
+    KDev::Project
+    KDev::OutputView)
 
 install(TARGETS kdevexecutescript DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 

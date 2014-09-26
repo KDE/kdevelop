@@ -17,6 +17,6 @@ if (GIT_FOUND)
     qt5_wrap_ui(gittest_SRCS ../stashmanagerdialog.ui)
     ecm_add_test(${gittest_SRCS}
         TEST_NAME test_kdevgit
-        LINK_LIBRARIES Qt5::Test ${KDEVPLATFORM_VCS_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES}
+        LINK_LIBRARIES Qt5::Test KDev::Vcs KDev::Util KDev::Tests
         GUI)
 endif ()

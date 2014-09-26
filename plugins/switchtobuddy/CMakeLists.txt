@@ -11,8 +11,8 @@ include_directories(CMAKE_CURRENT_BINARY_DIR)
 add_library(kdevswitchtobuddy MODULE ${kdevswitchtobuddy_PART_SRCS})
 
 target_link_libraries(kdevswitchtobuddy
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    KDev::Interfaces
+    KDev::Language
 )
 
 install(TARGETS kdevswitchtobuddy DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )

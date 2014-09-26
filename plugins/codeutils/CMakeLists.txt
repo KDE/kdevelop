@@ -13,10 +13,10 @@ add_library(kdevcodeutils MODULE ${kdevcodeutils_PART_SRCS})
 target_link_libraries(kdevcodeutils
     KF5::Parts
     KF5::TextEditor
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    KDev::Interfaces
+    KDev::Project
+    KDev::Util
+    KDev::Language
 )
 
 add_subdirectory(doc_templates)

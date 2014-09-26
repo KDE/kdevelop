@@ -25,10 +25,10 @@ configure_file(kdevgit.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgit.desktop
 kcoreaddons_desktop_to_json(kdevgit ${CMAKE_CURRENT_BINARY_DIR}/kdevgit.desktop)
 
 target_link_libraries(kdevgit
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_VCS_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
+    KDev::Util
+    KDev::Interfaces
+    KDev::Vcs
+    KDev::Project
     KF5::SonnetUi
 )
 

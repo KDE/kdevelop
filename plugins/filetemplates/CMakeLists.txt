@@ -85,10 +85,10 @@ add_executable(testfiletemplates ${test_srcs})
 
 target_link_libraries(testfiletemplates
     
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    KDev::Interfaces
+    KDev::Language
+    KDev::Project
+    KDev::Util
+    KDev::Tests
     KF5::NewStuff
 )

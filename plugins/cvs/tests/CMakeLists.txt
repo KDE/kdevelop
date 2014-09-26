@@ -16,12 +16,7 @@ find_program(CVS NAMES cvs
 )
 
 if (CVS)
-
-	include_directories( ${KDE4_INCLUDES}
-		${KDevPlatform_SOURCE_DIR}
-        ${KDevPlatform_SOURCE_DIR}/util
-        ${KDevPlatform_SOURCE_DIR}/interfaces
-		${KDevPlatform_SOURCE_DIR}/vcs
+	include_directories(
 		${KDevPlatform_SOURCE_DIR}/plugins/cvs
 	)
     set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )

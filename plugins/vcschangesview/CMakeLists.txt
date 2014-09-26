@@ -7,7 +7,7 @@ set(vcschangesview_SRCS
 )
 
 add_library(kdevvcschangesviewplugin MODULE ${vcschangesview_SRCS})
-target_link_libraries(kdevvcschangesviewplugin ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_VCS_LIBRARIES})
+target_link_libraries(kdevvcschangesviewplugin KDev::Interfaces KDev::Project KDev::Vcs)
 
 install(TARGETS kdevvcschangesviewplugin DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 

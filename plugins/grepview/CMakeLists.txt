@@ -28,11 +28,11 @@ target_link_libraries(kdevgrepview
     KF5::TextEditor
     KF5::Completion
     KF5::TextEditor
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    KDev::Interfaces
+    KDev::OutputView
+    KDev::Project
+    KDev::Util
+    KDev::Language
 )
 
 install(TARGETS kdevgrepview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )

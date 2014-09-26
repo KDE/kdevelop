@@ -13,7 +13,7 @@ set(kdevbazaar_SRCS
 
 add_library(kdevbazaar MODULE ${kdevbazaar_SRCS})
 target_link_libraries(kdevbazaar
-    ${KDEVPLATFORM_VCS_LIBRARIES}
+    KDev::Vcs
 )
 
 install(TARGETS kdevbazaar DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
