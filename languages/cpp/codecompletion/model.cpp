@@ -174,9 +174,6 @@ Range CodeCompletionModel::updateCompletionRange(View* view, const KTextEditor::
       int row = rowCount() - completionContext()->ungroupedElements().size();
       
       foreach(KDevelop::CompletionTreeElementPointer item, completionContext()->ungroupedElements()) {
-        
-        QModelIndex parent = index(row, 0);
-        
         KDevelop::CompletionCustomGroupNode* group = dynamic_cast<KDevelop::CompletionCustomGroupNode*>(item.data());
         if(group) {
           int subRow = 0;
