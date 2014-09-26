@@ -147,7 +147,7 @@ set(grantlee_LIB_SRCS
     codegen/archivetemplateloader.cpp
 )
 
-if (Grantlee_FOUND)
+if (Grantlee5_FOUND)
     list(APPEND KDevPlatformLanguage_LIB_SRCS ${grantlee_LIB_SRCS})
 endif()
 
@@ -173,8 +173,12 @@ LINK_PRIVATE
         KF5::KDELibs4Support
         KDev::Util
         KDev::Project
-        ${Grantlee_TEMPLATES_LIBRARIES}
 )
+
+if (Grantlee5_FOUND)
+    target_link_libraries(KDevPlatformLanguage LINK_PRIVATE Grantlee5::Templates)
+endif()
+
 set_target_properties(KDevPlatformLanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Language)
 install(TARGETS KDevPlatformLanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

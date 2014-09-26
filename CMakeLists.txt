@@ -68,7 +68,7 @@ find_package(KF5Service 5.3 REQUIRED)
 
 # TODO KF5: Remove Grantlee found check as soon there is an official version of Grantlee for Qt5
 find_package(Grantlee5)
-set_package_properties(Grantlee PROPERTIES
+set_package_properties(Grantlee5 PROPERTIES
     PURPOSE "Grantlee templating library, needed for file templates"
     URL "http://www.grantlee.org/")
 
@@ -87,9 +87,6 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
 include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR})
-if (Grantlee_FOUND)
-    include_directories(${Grantlee_INCLUDE_DIRS})
-endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/)
 
 # Now set the usual KDEVPLATFORM_XXX_LIBRARIES variable so we can more easily move plugins around
@@ -129,7 +126,7 @@ add_subdirectory(debugger)
 add_subdirectory(documentation)
 add_subdirectory(serialization)
 
-if (Grantlee_FOUND)
+if (Grantlee5_FOUND)
     add_subdirectory(template)
 endif()
 add_subdirectory(tests)

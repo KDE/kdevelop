@@ -54,7 +54,7 @@ TemplateEngine::TemplateEngine()
     Grantlee::registerMetaType<KDevelop::InheritanceDescription>();
     Grantlee::registerMetaType<KDevelop::ClassDescription>();
 
-    d->engine.addTemplateLoader(AbstractTemplateLoader::Ptr(ArchiveTemplateLoader::self()));
+    d->engine.addTemplateLoader(QSharedPointer<AbstractTemplateLoader>(ArchiveTemplateLoader::self()));
 }
 
 TemplateEngine::~TemplateEngine()
@@ -65,5 +65,5 @@ void TemplateEngine::addTemplateDirectories(const QStringList& directories)
 {
     FileSystemTemplateLoader* loader = new FileSystemTemplateLoader;
     loader->setTemplateDirs(directories);
-    d->engine.addTemplateLoader(AbstractTemplateLoader::Ptr(loader));
+    d->engine.addTemplateLoader(QSharedPointer<AbstractTemplateLoader>(loader));
 }
