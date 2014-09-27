@@ -269,7 +269,7 @@ static char const * const _S_token_texts[] = {
   "__qt_property__"
 };
 
-static char _S_printable[][2] = {
+static const char _S_printable[][2] = {
   { char(32), '\0' },
   { char(33), '\0' },
   { char(34), '\0' },

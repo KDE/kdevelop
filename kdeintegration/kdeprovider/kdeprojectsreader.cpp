@@ -24,7 +24,7 @@
 #include <QDebug>
 #include <vcs/vcslocation.h>
 
-static QUrl kdeProjectsUrl("https://projects.kde.org/kde_projects.xml");
+static const QUrl kdeProjectsUrl("https://projects.kde.org/kde_projects.xml");
 
 KDEProjectsReader::KDEProjectsReader(KDEProjectsModel* m, QObject* parent)
     : QObject(parent)

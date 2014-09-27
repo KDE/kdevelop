@@ -45,7 +45,7 @@
 #include "sourcemanipulation.h"
 
 //Whether relative urls like "../bla" should be allowed. Even if this is false, they will be preferred over global urls.
-bool allowDotDot = true;
+static const bool allowDotDot = true;
 const uint maxDeclarationCount = 30;
 
 using namespace KTextEditor;

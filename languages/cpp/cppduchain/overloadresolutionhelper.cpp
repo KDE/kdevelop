@@ -35,7 +35,7 @@ using namespace KDevelop;
 using namespace Cpp;
 
 ///@todo Decide whether this should be enabled or disabled (by performance considerations)
-bool useADLForOperators = true;
+static const bool useADLForOperators = true;
 
 OverloadResolutionFunction::OverloadResolutionFunction() : matchedArguments(0) {
 }

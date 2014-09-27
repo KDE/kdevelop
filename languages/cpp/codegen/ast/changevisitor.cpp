@@ -18,7 +18,7 @@
 
 #include "changevisitor.h"
 
-ChangeVisitor::visitor_fun_ptr ChangeVisitor::_S_table[AST::NODE_KIND_COUNT] = {
+const ChangeVisitor::visitor_fun_ptr ChangeVisitor::_S_table[AST::NODE_KIND_COUNT] = {
   0,
   reinterpret_cast<ChangeVisitor::visitor_fun_ptr>(&ChangeVisitor::visitAccessSpecifier),
   reinterpret_cast<ChangeVisitor::visitor_fun_ptr>(&ChangeVisitor::visitAsmDefinition),

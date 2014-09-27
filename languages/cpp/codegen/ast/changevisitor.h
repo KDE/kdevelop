@@ -109,7 +109,7 @@ protected:
 
 private:
   typedef void (ChangeVisitor::*visitor_fun_ptr)(Change*, AST *);
-  static visitor_fun_ptr _S_table[];
+  static const visitor_fun_ptr _S_table[];
 };
 
 #endif // CHANGEVISITOR_H

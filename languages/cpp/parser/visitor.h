@@ -121,7 +121,7 @@ protected:
 
 private:
   typedef void (Visitor::*visitor_fun_ptr)(AST *);
-  static visitor_fun_ptr _S_table[];
+  static const visitor_fun_ptr _S_table[];
 };
 
 template <class _Tp>

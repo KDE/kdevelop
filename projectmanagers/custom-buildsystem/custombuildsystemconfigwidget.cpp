@@ -32,7 +32,7 @@ QString generateToolGroupName( CustomBuildSystemTool::ActionType type )
 {
     static const int toolTypeCount = CustomBuildSystemTool::Undefined + 1;
     // Static Qt-based objects are discouraged (MSVC-incompatible), so use raw strings
-    static const char* toolTypes[] = {
+    static const char* const toolTypes[] = {
         "Build",
         "Configure",
         "Install",
