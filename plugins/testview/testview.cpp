@@ -86,8 +86,8 @@ QWidget* TestViewFilterAction::createWidget( QWidget* parent )
 
 //END TestViwFilterAction
 
-static const char* sessionConfigGroup = "TestView";
-static const char* filterConfigKey = "filter";
+static const char sessionConfigGroup[] = "TestView";
+static const char filterConfigKey[] = "filter";
 
 TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 : QWidget(parent)

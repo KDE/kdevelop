@@ -48,8 +48,8 @@
 
 using namespace KDevelop;
 
-const char* LastUsedTemplateEntry = "LastUsedTemplate";
-const char* FileTemplatesGroup = "SourceFileTemplates";
+static const char LastUsedTemplateEntry[] = "LastUsedTemplate";
+static const char FileTemplatesGroup[] = "SourceFileTemplates";
 
 class KDevelop::TemplateSelectionPagePrivate
 {

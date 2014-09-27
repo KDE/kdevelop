@@ -33,7 +33,7 @@
 
 using namespace KDevelop;
 
-static const char* BREAKPOINT_KINDS[Breakpoint::LastBreakpointKind] = {
+static const char* const BREAKPOINT_KINDS[Breakpoint::LastBreakpointKind] = {
     "Code",
     "Write",
     "Read",

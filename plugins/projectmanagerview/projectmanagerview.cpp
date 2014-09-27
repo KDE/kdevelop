@@ -64,8 +64,8 @@ ProjectManagerView *ProjectManagerViewItemContext::view() const
 }
 
 
-static const char* sessionConfigGroup = "ProjectManagerView";
-static const char* splitterStateConfigKey = "splitterState";
+static const char sessionConfigGroup[] = "ProjectManagerView";
+static const char splitterStateConfigKey[] = "splitterState";
 static const int projectTreeViewStrechFactor = 75; // %
 static const int projectBuildSetStrechFactor = 25; // %
 

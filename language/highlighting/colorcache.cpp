@@ -43,12 +43,12 @@
 
 // ######### start interpolation
 
-uint totalColorInterpolationStepCount = 6;
-uint interpolationWaypoints[] = {0xff0000, 0xff9900, 0x00ff00, 0x00aaff, 0x0000ff, 0xaa00ff};
+static const uint totalColorInterpolationStepCount = 6;
+static const uint interpolationWaypoints[] = {0xff0000, 0xff9900, 0x00ff00, 0x00aaff, 0x0000ff, 0xaa00ff};
 //Do less steps when interpolating to/from green: Green is very dominant, and different mixed green tones are hard to distinguish(and always seem green).
-uint interpolationLengths[] = {0xff, 0xff, 0xbb, 0xbb, 0xbb, 0xff};
+static const uint interpolationLengths[] = {0xff, 0xff, 0xbb, 0xbb, 0xbb, 0xff};
 
-uint totalGeneratedColors = 10;
+static const uint totalGeneratedColors = 10;
 
 uint totalColorInterpolationSteps()
 {

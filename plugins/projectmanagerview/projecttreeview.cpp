@@ -60,7 +60,7 @@
 
 using namespace KDevelop;
 
-static const char* settingsConfigGroup = "ProjectTreeView";
+static const char settingsConfigGroup[] = "ProjectTreeView";
 
 ProjectTreeView::ProjectTreeView( QWidget *parent )
         : QTreeView( parent ), m_ctxProject( 0 )

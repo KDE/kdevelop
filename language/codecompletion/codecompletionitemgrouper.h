@@ -98,7 +98,7 @@ struct SimplifiedAttributesExtractor {
   
   enum { Role = KTextEditor::CodeCompletionModel::CompletionRole };
 
-  static int groupingProperties;
+  static const int groupingProperties;
   
   static KeyType extract( const CompletionTreeItemPointer& item ) {
       DUChainReadLocker lock(DUChain::lock());
