@@ -115,10 +115,6 @@ protected:
   virtual void visitLambdaCapture(LambdaCaptureAST* );
   virtual void visitLambdaDeclarator(LambdaDeclaratorAST* );
   virtual void visitAliasDeclaration(AliasDeclarationAST* );
-
-private:
-  typedef void (Visitor::*visitor_fun_ptr)(AST *);
-  static visitor_fun_ptr _S_table[];
 };
 
 #endif // VISITOR_H
