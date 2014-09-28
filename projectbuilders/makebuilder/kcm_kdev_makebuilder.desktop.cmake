@@ -38,6 +38,7 @@ Name[nb]=Make
 Name[nds]=Make
 Name[ne]=बनाउनुहोस्
 Name[nl]=Make
+Name[oc]=Crear
 Name[pa]=Make
 Name[pl]=Make
 Name[pt]=Make
