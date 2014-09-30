@@ -222,7 +222,7 @@ unsigned int rpp::Stream::popLastOutput() {
 }
 
 unsigned int rpp::Stream::peekLastOutput(uint backOffset) const {
-  if(m_pos - backOffset > 0)
+  if(m_pos > backOffset)
     return m_string->at(m_pos - backOffset - 1);
   return 0;
 }
