@@ -12,7 +12,7 @@ ecm_add_test(test_duchainshutdown.cpp
 
 ########### next target ###############
 
-ecm_add_test(tst_identifier.cpp
+ecm_add_test(test_identifier.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
 
 ########### next target ###############

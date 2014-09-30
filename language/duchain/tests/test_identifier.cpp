@@ -18,7 +18,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "tst_identifier.h"
+#include "test_identifier.h"
 
 #include <language/duchain/identifier.h>
 #include <serialization/indexedstring.h>
