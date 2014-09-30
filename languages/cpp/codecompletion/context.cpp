@@ -693,7 +693,7 @@ bool CodeCompletionContext::doSignalSlotCompletion() {
     setParentContext(KDevelop::CodeCompletionContext::Ptr(parentContext()->parentContext()));
   }
 
-  if( !parentContext() || !m_expression.isEmpty() ||
+  if( !m_expression.isEmpty() ||
       parentContext()->accessType() != FunctionCallAccess )
     return false;
 
