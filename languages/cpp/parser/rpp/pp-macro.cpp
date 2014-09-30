@@ -41,7 +41,7 @@ bool pp_macro::operator==(const pp_macro& rhs) const {
   if(completeHash() != rhs.completeHash())
     return false;
   
-  return name == rhs.name && file == rhs.file &&
+  return name == rhs.name &&
          file == rhs.file &&
          sourceLine == rhs.sourceLine &&
          defined == rhs.defined &&

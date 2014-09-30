@@ -177,7 +177,7 @@ AbstractType::Ptr binaryOperatorReturnType(AbstractType::Ptr left, AbstractType:
         ret = right;
     }
 
-    if(tokenKind == '<' || tokenKind == '>' || tokenKind == Token_eq || tokenKind == Token_not_eq || tokenKind == Token_leq || tokenKind == Token_geq || tokenKind == Token_not_eq || tokenKind == Token_and || tokenKind == Token_or)
+    if(tokenKind == '<' || tokenKind == '>' || tokenKind == Token_eq || tokenKind == Token_not_eq || tokenKind == Token_leq || tokenKind == Token_geq || tokenKind == Token_and || tokenKind == Token_or)
       ret = AbstractType::Ptr(new IntegralType(IntegralType::TypeBoolean));
   }
 

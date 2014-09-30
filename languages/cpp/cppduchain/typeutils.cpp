@@ -191,7 +191,7 @@ using namespace KDevelop;
     QList<Declaration*> functions;
     Declaration* klassDecl = klass->declaration(topContext);
     DUContext* context = klassDecl ? klassDecl->internalContext() : 0;
-    if( !context || !context->owner() || !context->owner() ) {
+    if( !context || !context->owner() ) {
 //       kDebug(9007) << "Tried to get constructors of a class without context";
       return functions;
     }
