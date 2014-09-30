@@ -18,7 +18,7 @@ LINK_PRIVATE
     KDev::Util
 )
 
-set_target_properties(KDevPlatformSerialization PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
+set_target_properties(KDevPlatformSerialization PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Serialization)
 install(TARGETS KDevPlatformSerialization EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
