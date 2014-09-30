@@ -43,7 +43,8 @@ SourceFormatterStyle::SourceFormatterStyle()
 };
 
 SourceFormatterStyle::SourceFormatterStyle(const QString &name)
-	: m_name(name)
+	: m_usePreview(false)
+	, m_name(name)
 {
 }
 

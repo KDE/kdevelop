@@ -39,6 +39,11 @@ CvsJob::CvsJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosit
 {
 }
 
+CvsJob::~CvsJob()
+{
+    delete d;
+}
+
 QString CvsJob::cvsCommand()
 {
     return dvcsCommand().join(" ");

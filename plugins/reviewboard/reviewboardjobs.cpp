@@ -102,7 +102,10 @@ QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
 }
 
 HttpCall::HttpCall(const QUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, const QByteArray& post, bool multipart, QObject* parent)
-    : KJob(parent), m_post(post), m_multipart(multipart)
+    : KJob(parent)
+    , m_reply(nullptr)
+    , m_post(post)
+    , m_multipart(multipart)
 {
     m_requrl=s;
     m_requrl.setPath(m_requrl.path() + '/' + apiPath);

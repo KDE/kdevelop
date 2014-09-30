@@ -178,6 +178,8 @@ public:
      */
     OpenWithContext(const QList<QUrl>& urls, const QMimeType& mimeType);
 
+    virtual ~OpenWithContext();
+
     /**
      * @return Context::OpenWithContext
      */

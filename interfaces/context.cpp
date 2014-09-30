@@ -123,7 +123,11 @@ OpenWithContext::OpenWithContext(const QList<QUrl>& urls, const QMimeType& mimeT
 : Context()
 , d(new OpenWithContextPrivate(urls, mimeType))
 {
+}
 
+OpenWithContext::~OpenWithContext()
+{
+    delete d;
 }
 
 int OpenWithContext::type() const

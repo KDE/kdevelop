@@ -33,6 +33,8 @@ public:
 
     KDEVPLATFORMVCS_DEPRECATED CvsJob(KDevelop::IPlugin* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
+    virtual ~CvsJob();
+
     /**
      * @return The command that is executed when calling start()
      */
