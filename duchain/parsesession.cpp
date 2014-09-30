@@ -150,7 +150,7 @@ QString ParseSession::commentForLocation(const QmlJS::AST::SourceLocation& locat
 {
     // find most recent comment in sorted list of comments
     const QList< QmlJS::AST::SourceLocation >& comments = m_doc->engine()->comments();
-    QList< QmlJS::AST::SourceLocation >::const_iterator it = qLowerBound(
+    auto it = std::lower_bound(
         comments.constBegin(),
         comments.constEnd(),
         location, compareSourceLocation
