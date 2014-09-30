@@ -51,7 +51,6 @@ void TreeItem::setData(const QVector<QVariant> &data)
 void TreeItem::appendChild(TreeItem *item, bool initial)
 {
     QModelIndex index = model_->indexForItem(this, 0);
-    QModelIndex index2 = model_->indexForItem(this, itemData.size()-1);
 
     // Note that we need emit beginRemoveRows, even if we're replacing
     // ellipsis item with the real one.  The number of rows does not change
