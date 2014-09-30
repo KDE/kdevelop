@@ -1304,7 +1304,7 @@ int DUContext::createUse(int declarationIndex, const RangeInRevision& range, int
     //Find position where to insert
     const unsigned int size = d->m_usesSize();
     const Use* uses = d->m_uses();
-    const Use* lowerBound = qLowerBound(uses, uses + size, use, usesRangeLessThan);
+    const Use* lowerBound = std::lower_bound(uses, uses + size, use, usesRangeLessThan);
     insertBefore = lowerBound - uses;
     // comment out to test this:
     /*

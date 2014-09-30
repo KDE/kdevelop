@@ -268,7 +268,7 @@ void ProjectFileDataProvider::fileAddedToSet( ProjectFileItem* file )
     f.path = file->path();
     f.indexedPath = file->indexedPath();
     f.outsideOfProject = !f.projectPath.isParentOf(f.path);
-    QList<ProjectFile>::iterator it = qLowerBound(m_projectFiles.begin(), m_projectFiles.end(), f);
+    auto it = std::lower_bound(m_projectFiles.begin(), m_projectFiles.end(), f);
     if (it == m_projectFiles.end() || it->path != f.path) {
         m_projectFiles.insert(it, f);
     }
@@ -282,16 +282,16 @@ void ProjectFileDataProvider::fileRemovedFromSet( ProjectFileItem* file )
     // fast-path for non-generated files
     // NOTE: figuring out whether something is generated is expensive... and since
     // generated files are rare we apply this two-step algorithm here
-    QList<ProjectFile>::iterator it = qBinaryFind(m_projectFiles.begin(), m_projectFiles.end(), item);
-    if (it != m_projectFiles.end()) {
+    auto it = std::lower_bound(m_projectFiles.begin(), m_projectFiles.end(), item);
+    if (it != m_projectFiles.end() && !(item < *it)) {
         m_projectFiles.erase(it);
         return;
     }
 
     // last try: maybe it was generated
     item.outsideOfProject = true;
-    it = qBinaryFind(m_projectFiles.begin(), m_projectFiles.end(), item);
-    if (it != m_projectFiles.end()) {
+    it = std::lower_bound(m_projectFiles.begin(), m_projectFiles.end(), item);
+    if (it != m_projectFiles.end() && !(item < *it)) {
         m_projectFiles.erase(it);
         return;
     }
@@ -346,7 +346,7 @@ void OpenFilesDataProvider::reset()
         currentFiles << f;
     }
 
-    qSort(currentFiles);
+    std::sort(currentFiles.begin(), currentFiles.end());
 
     setItems(currentFiles);
 }
