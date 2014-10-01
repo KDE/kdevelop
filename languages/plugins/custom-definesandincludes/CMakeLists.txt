@@ -10,8 +10,6 @@ add_subdirectory(tests)
 add_subdirectory(compilerprovider)
 add_subdirectory(noprojectincludesanddefines)
 
-add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-
 set( kdevdefinesandincludesmanager_SRCS
         definesandincludesmanager.cpp
         debugarea.cpp
