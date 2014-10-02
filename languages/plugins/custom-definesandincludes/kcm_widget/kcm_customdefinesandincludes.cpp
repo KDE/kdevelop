@@ -116,15 +116,7 @@ void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
     }
 
     if ( settings->needToReparseCurrentProject( cfg ) ) {
-        using namespace KDevelop;
-        ICore::self()->projectController()->reparseProject(project(), true);
-
-        //TODO: BackgroundParser should check whether a document is currently opened and prioritize it then. The _focused_ one should be prioritized even further.
-        for (auto document : ICore::self()->documentController()->openDocuments()) {
-            if (!project()->filesForPath(IndexedString(document->url())).isEmpty()) {
-                document->reload();
-            }
-        }
+        KDevelop::ICore::self()->projectController()->reparseProject(project(), true);
     }
 }
 
