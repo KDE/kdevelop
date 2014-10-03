@@ -23,6 +23,7 @@
   <name xml:lang="x-test">xxKDevelopxx</name>
   <summary>It is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.</summary>
   <summary xml:lang="ca">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
+  <summary xml:lang="de">KDevelop ist eine leistungsfähige integrierte Entwicklungsumgebung (IDE) für C/C++ und andere Programmiersprachen, die durch Module erweitert werden kann.</summary>
   <summary xml:lang="en-GB">It is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.</summary>
   <summary xml:lang="es">Es un entorno de desarrollo integrado para C/C++ y otros lenguajes de programación con múltiples funcionalidades y que se puede extender con complementos.</summary>
   <summary xml:lang="fi">Kaikkien ominaisuuksien liitännäisillä laajennettava IDE C/C++:lle ja muille ohjelmointikielille.</summary>
