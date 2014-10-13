@@ -22,8 +22,7 @@
 #define KDEVPLATFORM_PROJECTCONFIGPAGE_H
 
 
-#include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
 #include <interfaces/configpage.h>
 
 #include <util/path.h>
@@ -41,8 +40,7 @@ struct ProjectConfigOptions {
     QString developerTempFile;
     Path developerFile;
     QString projectTempFile;
-    Path projectFile;
-    QString projectName;
+    KDevelop::IProject* project;
 };
 
 }
@@ -56,23 +54,28 @@ class ProjectConfigPage : public KDevelop::ConfigPage
     static_assert(std::is_base_of<KDevelop::ProjectConfigSkeleton, T>::value, "T must inherit from KDevelop::ProjectConfigSkeleton");
 public:
     ProjectConfigPage(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
-        : KDevelop::ConfigPage(plugin, initConfigSkeleton(options), parent), projectName(options.projectName)
+        : KDevelop::ConfigPage(plugin, initConfigSkeleton(options), parent)
+        , m_project(options.project)
     {
         KDevelop::ProjectConfigSkeleton* conf = T::self();
         conf->setDeveloperTempFile(options.developerTempFile);
         conf->setDeveloperFile(options.developerFile);
         conf->setProjectTempFile(options.projectTempFile);
-        conf->setProjectFile(options.projectFile);
+        conf->setProjectFile(m_project->projectFile());
     }
 
     virtual ~ProjectConfigPage()
     {
+        // we have to delete T::self otherwise we get the following message on the
+        // next call to T::intance(QString):
+        // "T::instance called after the first use - ignoring"
+        // which means that we will continue using the old file
         delete T::self();
     }
 
     KDevelop::IProject* project() const
     {
-        return KDevelop::ICore::self()->projectController()->findProjectByName( projectName );
+        return m_project;
     }
 private:
     static inline KDevelop::ProjectConfigSkeleton* initConfigSkeleton(const KDevelop::ProjectConfigOptions& options)
@@ -81,7 +84,7 @@ private:
         return T::self();
     }
 private:
-    QString projectName;
+    KDevelop::IProject* m_project;
 };
 
 #endif

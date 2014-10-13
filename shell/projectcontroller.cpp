@@ -160,9 +160,8 @@ public:
         ProjectConfigOptions options;
         options.developerFile = proj->developerFile();
         options.developerTempFile = proj->developerTempFile();
-        options.projectFile = proj->projectFile();
         options.projectTempFile = proj->projectTempFile();
-        options.projectName = proj->name();
+        options.project = proj;
 
         for (IPlugin* plugin : findPluginsForProject(proj)) {
             for (int i = 0; i < plugin->perProjectConfigPages(); ++i) {
