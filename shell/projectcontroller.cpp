@@ -135,25 +135,6 @@ public:
         if( !proj )
             return;
 
-        //@FIXME: Currently it is important to set a parentApp on the kcms
-        //that's different from the component name of the application, else
-        //the plugin will show up on all projects settings dialogs.
-
-//         QStringList pluginsForPrj = findPluginsForProject( proj );
-//         kDebug() << "Using pluginlist:" << pluginsForPrj;
-//         pluginsForPrj << "kdevplatformproject"; // for project-wide env settings.
-//         KSettings::Dialog cfgDlg( pluginsForPrj, m_core->uiController()->activeMainWindow() );
-//         cfgDlg.setKCMArguments( QStringList()
-//                                     << proj->developerTempFile()
-//                                     << proj->projectTempFile()
-//                                     << proj->projectFile().pathOrUrl()
-//                                     << proj->developerFile().pathOrUrl()
-//                                     << proj->name() );
-//         m_configuringProject = proj;
-//         cfgDlg.setWindowTitle( i18n("Configure Project %1", proj->name()) );
-//         cfgDlg.exec();
-//         proj->projectConfiguration()->sync();
-//         m_configuringProject = 0;
         QList<KDevelop::ConfigPage*> configPages;
         auto mainWindow = m_core->uiController()->activeMainWindow();
 
