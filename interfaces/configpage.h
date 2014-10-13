@@ -77,47 +77,6 @@ private:
     IPlugin* m_plugin;
 };
 
-class KDEVPLATFORMINTERFACES_EXPORT KTextEditorConfigPageAdapter : public ConfigPage
-{
-    Q_OBJECT
-
-public:
-    explicit KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent = nullptr);
-    virtual ~KTextEditorConfigPageAdapter();
-
-    virtual QString name() const override;
-    virtual QIcon icon() const override;
-    virtual QString fullName() const override;
-
-public Q_SLOTS:
-    virtual void apply() override;
-    virtual void defaults() override;
-    virtual void reset() override;
-
-private:
-    KTextEditor::ConfigPage* m_page;
-};
-
-
-class KDEVPLATFORMINTERFACES_EXPORT EditorConfigPage : public ConfigPage
-{
-    Q_OBJECT
-
-public:
-    EditorConfigPage(QWidget* parent);
-    virtual ~EditorConfigPage();
-
-    virtual QString name() const override;
-    virtual QIcon icon() const override;
-    virtual QString fullName() const override;
-    virtual QList<ConfigPage*> childPages() override;
-
-public Q_SLOTS:
-    virtual void apply() override {};
-    virtual void reset() override {};
-    virtual void defaults() override {};
-};
-
 }
 
 #endif // KDEVELOP_CONFIGPAGE_H

@@ -26,6 +26,7 @@
 #include <QListWidget>
 #include <QToolBar>
 #include <QMenuBar>
+#include <QVBoxLayout>
 
 #include <QDialog>
 #include <KAboutData>
@@ -213,6 +214,91 @@ private:
     MainWindow *m_mw;
 };
 
+class KTextEditorConfigPageAdapter : public ConfigPage
+{
+    Q_OBJECT
+
+public:
+    explicit KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent = nullptr)
+            : ConfigPage(nullptr, nullptr, parent), m_page(page)
+    {
+        page->setParent(this);
+        QVBoxLayout* layout = new QVBoxLayout(this);
+        layout->addWidget(page);
+        this->setLayout(layout);
+    }
+    virtual ~KTextEditorConfigPageAdapter() {}
+
+    virtual QString name() const override
+    {
+        return m_page->name();
+    }
+    virtual QIcon icon() const override
+    {
+        return m_page->icon();
+    }
+    virtual QString fullName() const override
+    {
+        return m_page->fullName();
+    }
+public Q_SLOTS:
+    virtual void apply() override
+    {
+        m_page->apply();
+    }
+    virtual void defaults() override
+    {
+        m_page->defaults();
+    }
+    virtual void reset() override
+    {
+        m_page->reset();
+    }
+
+private:
+    KTextEditor::ConfigPage* m_page;
+};
+
+
+class EditorConfigPage : public ConfigPage
+{
+    Q_OBJECT
+
+public:
+    EditorConfigPage(QWidget* parent)
+            : ConfigPage(nullptr, nullptr, parent)
+    {
+        setObjectName("editorconfig");
+    }
+    virtual ~EditorConfigPage() {};
+
+    virtual QString name() const override
+    {
+        return i18n("Editor");
+    }
+    virtual QIcon icon() const override
+    {
+        return QIcon::fromTheme(QStringLiteral("accessories-text-editor"));
+    }
+    virtual QString fullName() const override
+    {
+        return i18n("Configure Text editor");
+    }
+    virtual QList<ConfigPage*> childPages() override
+    {
+        QList<ConfigPage*> ret;
+        auto editor = KTextEditor::Editor::instance();
+        for (int i = 0; i < editor->configPages(); ++i) {
+            ret.append(new KTextEditorConfigPageAdapter(editor->configPage(i, this), this));
+        }
+        return ret;
+    }
+
+public Q_SLOTS:
+    virtual void apply() override {};
+    virtual void reset() override {};
+    virtual void defaults() override {};
+};
 
 UiController::UiController(Core *core)
     :Sublime::Controller(0), IUiController(), d(new UiControllerPrivate(this))
