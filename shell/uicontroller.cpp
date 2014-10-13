@@ -284,14 +284,19 @@ public:
     {
         return i18n("Configure Text editor");
     }
-    virtual QList<ConfigPage*> childPages() override
+
+    virtual int childPages() const override
     {
-        QList<ConfigPage*> ret;
-        auto editor = KTextEditor::Editor::instance();
-        for (int i = 0; i < editor->configPages(); ++i) {
-            ret.append(new KTextEditorConfigPageAdapter(editor->configPage(i, this), this));
+        return KTextEditor::Editor::instance()->configPages();
+    }
+
+    virtual ConfigPage* childPage(int number) override
+    {
+        auto page = KTextEditor::Editor::instance()->configPage(number, this);
+        if (page) {
+            return new KTextEditorConfigPageAdapter(page, this);
         }
-        return ret;
+        return nullptr;
     }
 
 public Q_SLOTS:

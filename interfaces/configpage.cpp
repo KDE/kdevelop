@@ -23,8 +23,6 @@
 #include <QIcon>
 #include <QVBoxLayout>
 
-#include <KTextEditor/Editor>
-
 namespace KDevelop {
 
 class ConfigPagePrivate {
@@ -86,9 +84,15 @@ KCoreConfigSkeleton* ConfigPage::configSkeleton()
     return d->configSkeleton;
 }
 
-QList<ConfigPage*> ConfigPage::childPages()
+int ConfigPage::childPages() const
 {
-    return {};
+    return 0;
+}
+
+ConfigPage* ConfigPage::childPage(int number)
+{
+    Q_UNUSED(number)
+    return nullptr;
 }
 
 IPlugin* ConfigPage::plugin()

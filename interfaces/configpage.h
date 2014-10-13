@@ -49,10 +49,15 @@ public:
     virtual ~ConfigPage();
 
     /**
-     * Get any subpages of the current page.
-     * @return By default returns an empty list
+     * Get the number of subpages of this page
+     * @return The number of child pages or an integer < 1 if there are none.
      */
-    virtual QList<ConfigPage*> childPages();
+    virtual int childPages() const;
+
+    /**
+     * @return the child config page for index @p number or @c nullptr if there is none.
+     */
+    virtual ConfigPage* childPage(int number);
 
     /**
      * @return the plugin that this config page was created by or nullptr if it was not created by a plugin.

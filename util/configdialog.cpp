@@ -169,7 +169,8 @@ void KDevelop::ConfigDialog::addConfigPageInternal(KPageWidgetItem* item, Config
     connect(page, &ConfigPage::changed, this, &ConfigDialog::onPageChanged);
     page->initConfigManager();
     m_pages.append(item);
-    for (auto child : page->childPages()) {
+    for (int i = 0; i < page->childPages(); ++i) {
+        auto child = page->childPage(i);
         addConfigPageInternal(addSubPage(item, child, child->name()), child);
     }
 }
