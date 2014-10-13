@@ -31,6 +31,8 @@
 namespace KDevelop {
 class IPlugin;
 
+class ConfigPagePrivate;
+
 class KDEVPLATFORMINTERFACES_EXPORT ConfigPage : public KTextEditor::ConfigPage
 {
     Q_OBJECT
@@ -69,12 +71,15 @@ public:
      * This is handled automatically by KDevelop::ConfigDialog, subclasses don't need to call this.
      */
     void initConfigManager();
-    KCoreConfigSkeleton* configSkeleton() { return m_configSkeleton; }
+
+    /**
+     * @return the KCoreConfigSkeleton used to store the settings for this page or @c nullptr
+     * if settings are managed differently
+     */
+    KCoreConfigSkeleton* configSkeleton();
 
 private:
-    QScopedPointer<KConfigDialogManager> m_configManager;
-    KCoreConfigSkeleton* m_configSkeleton;
-    IPlugin* m_plugin;
+    QScopedPointer<ConfigPagePrivate> d;
 };
 
 }

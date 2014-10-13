@@ -25,15 +25,26 @@
 
 #include <KTextEditor/Editor>
 
-using namespace KDevelop;
+namespace KDevelop {
+
+class ConfigPagePrivate {
+public:
+    ConfigPagePrivate(IPlugin* plugin, KCoreConfigSkeleton* config)
+        : configSkeleton(config), plugin(plugin)
+        {
+        }
+    QScopedPointer<KConfigDialogManager> configManager;
+    KCoreConfigSkeleton* configSkeleton;
+    IPlugin* plugin;
+};
 
 ConfigPage::ConfigPage(IPlugin* plugin, KCoreConfigSkeleton* config, QWidget* parent)
-        : KTextEditor::ConfigPage(parent), m_configSkeleton(config), m_plugin(plugin)
+        : KTextEditor::ConfigPage(parent), d(new ConfigPagePrivate(plugin, config))
 {
-    if (m_configSkeleton) {
-        m_configManager.reset(new KConfigDialogManager(parent, m_configSkeleton));
-        connect(m_configManager.data(), &KConfigDialogManager::widgetModified, this, &ConfigPage::changed);
-        // m_configManager->addWidget(this) must be called from the config dialog,
+    if (d->configSkeleton) {
+        d->configManager.reset(new KConfigDialogManager(parent, d->configSkeleton));
+        connect(d->configManager.data(), &KConfigDialogManager::widgetModified, this, &ConfigPage::changed);
+        // d->configManager->addWidget(this) must be called from the config dialog,
         // since the widget tree is not complete yet when calling this constructor
     }
 }
@@ -44,30 +55,35 @@ ConfigPage::~ConfigPage()
 
 void ConfigPage::apply()
 {
-    Q_ASSERT(m_configManager); // if null, this method must be overriden
-    m_configManager->updateSettings();
-    m_configSkeleton->load();
-    m_configManager->updateWidgets();
+    Q_ASSERT(d->configManager); // if null, this method must be overriden
+    d->configManager->updateSettings();
+    d->configSkeleton->load();
+    d->configManager->updateWidgets();
 }
 
 void ConfigPage::defaults()
 {
-    Q_ASSERT(m_configManager); // if null, this method must be overriden
-    m_configManager->updateWidgetsDefault();
+    Q_ASSERT(d->configManager); // if null, this method must be overriden
+    d->configManager->updateWidgetsDefault();
 }
 
 void ConfigPage::reset()
 {
-    Q_ASSERT(m_configManager); // if null, this method must be overriden
-    m_configManager->updateWidgets();
+    Q_ASSERT(d->configManager); // if null, this method must be overriden
+    d->configManager->updateWidgets();
 }
 
 void ConfigPage::initConfigManager()
 {
-    if (m_configManager) {
-        m_configManager->addWidget(this);
-        m_configManager->updateWidgets();
+    if (d->configManager) {
+        d->configManager->addWidget(this);
+        d->configManager->updateWidgets();
     }
+}
+
+KCoreConfigSkeleton* ConfigPage::configSkeleton()
+{
+    return d->configSkeleton;
 }
 
 QList<ConfigPage*> ConfigPage::childPages()
@@ -77,5 +93,7 @@ QList<ConfigPage*> ConfigPage::childPages()
 
 IPlugin* ConfigPage::plugin()
 {
-    return m_plugin;
+    return d->plugin;
 }
+
+} // namespace KDevelop
