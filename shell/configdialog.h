@@ -23,8 +23,6 @@
 
 #include <KPageDialog>
 
-#include "utilexport.h"
-
 namespace KDevelop {
 class ConfigPage;
 class IPlugin;
@@ -32,7 +30,7 @@ class IPlugin;
 /**
  * This class is meant to be used to show the global config dialog and the per-project config dialog
  */
-class KDEVPLATFORMUTIL_EXPORT ConfigDialog : public KPageDialog
+class ConfigDialog : public KPageDialog
 {
     Q_OBJECT
 

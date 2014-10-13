@@ -65,13 +65,13 @@ Boston, MA 02110-1301, USA.
 #include <projectconfigpage.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
-#include <util/configdialog.h>
 
 #include "core.h"
 #include "project.h"
 #include "mainwindow.h"
 #include "shellextension.h"
 #include "plugincontroller.h"
+#include "configdialog.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
 #include "openprojectdialog.h"
