@@ -24,6 +24,7 @@
 #include "typeregister.h"
 #include "typesystem.h"
 #include "typerepository.h"
+#include "util/debug.h"
 
 namespace KDevelop
 {
@@ -100,7 +101,7 @@ IndexedType AbstractType::indexed() const
 
 bool AbstractType::equals(const AbstractType* rhs) const
 {
-    //kDebug() << this << rhs << modifiers() << rhs->modifiers();
+    //qCDebug(LANGUAGE) << this << rhs << modifiers() << rhs->modifiers();
     return d_func()->typeClassId == rhs->d_func()->typeClassId && modifiers() == rhs->modifiers();
 }
 

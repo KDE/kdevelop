@@ -1,5 +1,4 @@
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9501 )
 add_subdirectory(settings)
 add_subdirectory(tests)
 
@@ -49,6 +48,7 @@ set(KDevPlatformShell_LIB_SRCS
     loadedpluginsdialog.cpp
     testcontroller.cpp
     projectsourcepage.cpp
+    debug.cpp
 
     progresswidget/progressmanager.cpp
     progresswidget/statusbarprogresswidget.cpp

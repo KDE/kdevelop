@@ -53,14 +53,13 @@
 #include <language/codegen/documentchangeset.h>
 #include <project/projectmodel.h>
 
+Q_LOGGING_CATEGORY(PLUGIN_CODEUTILS, "kdevplatform.plugins.codeutils")
+
+
 using namespace KDevelop;
 using namespace KTextEditor;
 
 K_PLUGIN_FACTORY_WITH_JSON(CodeUtilsPluginFactory, registerPlugin<CodeUtilsPlugin>(); )
-
-int debugArea() { static int s_area = KDebug::registerArea("kdevcodeutils"); return s_area; }
-
-#define debug() kDebug(debugArea())
 
 CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
     : IPlugin ( "kdevcodeutils", parent )
@@ -124,7 +123,7 @@ void CodeUtilsPlugin::documentDeclaration()
     {
         FunctionDescription description = FunctionDescription(DeclarationPointer(dec));
         renderer.addVariable("function", QVariant::fromValue(description));
-        kDebug() << "Found function" << description.name << "with" << description.arguments.size() << "arguments";
+        qCDebug(PLUGIN_CODEUTILS) << "Found function" << description.name << "with" << description.arguments.size() << "arguments";
     }
 
     lock.unlock();
@@ -150,7 +149,7 @@ void CodeUtilsPlugin::documentDeclaration()
     QString fileName = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevcodeutils/templates/" + templateName + ".txt");
     if (fileName.isEmpty())
     {
-        kWarning() << "No suitable template found" << fileName;
+        qWarning() << "No suitable template found" << fileName;
         return;
     }
 

@@ -23,8 +23,8 @@
 #include <project/projectmodel.h>
 
 #include "path.h"
+#include "debug.h"
 
-#include <KDebug>
 
 using namespace KDevelop;
 
@@ -91,14 +91,14 @@ void FileManagerListJob::slotResult(KJob* job)
     entryList.clear();
 
     if( job->error() ) {
-        kDebug(9517) << "error in list job:" << job->error() << job->errorString();
+        qCDebug(PROJECT) << "error in list job:" << job->error() << job->errorString();
     }
 
     if( m_listQueue.isEmpty() ) {
         emitResult();
 
 #ifdef TIME_IMPORT_JOB
-    qDebug() << "TIME FOR LISTJOB:" << m_timer.elapsed();
+        qCDebug(PROJECT) << "TIME FOR LISTJOB:" << m_timer.elapsed();
 #endif
     } else {
         emit nextJob();

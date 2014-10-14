@@ -18,6 +18,7 @@
 */
 
 #include "codedescription.h"
+#include "util/debug.h"
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
@@ -128,7 +129,7 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
             if (function)
             {
                 var.value = function->defaultParameterForArgument(i).str();
-                kDebug() << var.name << var.value;
+                qCDebug(LANGUAGE) << var.name << var.value;
             }
             arguments << var;
             ++i;

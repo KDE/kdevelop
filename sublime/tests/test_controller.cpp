@@ -20,8 +20,8 @@
 
 #include <QTextEdit>
 #include <QtTest/QtTest>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kapplication.h>
 
 #include <sublime/controller.h>
@@ -70,10 +70,10 @@ void TestController::areaDeletion()
     QCOMPARE(controller->defaultAreas().count(), 0);
 
     QTest::qWait(100); // wait for deleteLaters
-    kDebug() << "Deleting doc";
+    qDebug() << "Deleting doc";
     delete doc;
     QTest::qWait(100); // wait for deleteLaters
-    kDebug() << "View2 & view3 are destructored at this point (but no earlier).";
+    qDebug() << "View2 & view3 are destructored at this point (but no earlier).";
 }
 
 void TestController::namedAreas()

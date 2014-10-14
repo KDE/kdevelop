@@ -40,9 +40,9 @@
 
 #include <KApplication>
 #include <KCmdLineArgs>
-#include <KDebug>
 #include <k4aboutdata.h>
 
+#include <QtCore/QDebug>
 #include <QtCore/QStringList>
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
@@ -127,7 +127,7 @@ void Manager::init()
         features |= TopDUContext::ForceUpdate;
     if(m_args->isSet("force-update-recursive"))
         features |= TopDUContext::ForceUpdateRecursive;
-    
+
     if(m_args->isSet("threads"))
     {
         bool ok = false;
@@ -167,10 +167,10 @@ void Manager::init()
 
 void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
 {
-    kDebug() << "finished" << url.toUrl().toLocalFile() << "success: " << (bool)topContext;
-    
+    qDebug() << "finished" << url.toUrl().toLocalFile() << "success: " << (bool)topContext;
+
     m_waiting.remove(url.toUrl());
-    
+
     std::cerr << "processed " << (m_total - m_waiting.size()) << " out of " << m_total << std::endl;
     if (!topContext)
         return;
@@ -219,17 +219,17 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
 void Manager::addToBackgroundParser(QString path, TopDUContext::Features features)
 {
     QFileInfo info(path);
-    
+
     if(info.isFile())
     {
-        kDebug() << "adding file" << path;
+        qDebug() << "adding file" << path;
         QUrl pathUrl = QUrl::fromLocalFile(info.canonicalFilePath());
-        
+
         m_waiting << pathUrl;
         ++m_total;
-        
+
         KDevelop::DUChain::self()->updateContextForUrl(KDevelop::IndexedString(pathUrl), features, this);
-        
+
     }else if(info.isDir())
     {
         QDirIterator contents(path);
@@ -261,7 +261,7 @@ int main(int argc, char** argv)
     KCmdLineArgs::init( argc, argv, &aboutData, KCmdLineArgs::CmdLineArgNone );
     KCmdLineOptions options;
     options.add("+path", ki18n("file or directory"));
-    
+
     options.add("w").add("warnings", ki18n("Show warnings"));
     options.add("V").add("verbose", ki18n("Show warnings and debug output"));
     options.add("u").add("force-update", ki18n("Enforce an update of the top-contexts corresponding to the given files"));

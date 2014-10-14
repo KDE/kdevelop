@@ -23,6 +23,7 @@
 #include "outputmodel.h"
 #include "filtereditem.h"
 #include "outputfilteringstrategies.h"
+#include "debug.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -33,7 +34,6 @@
 #include <QFont>
 #include <QApplication>
 
-#include <KDebug>
 #include <KGlobalSettings>
 
 
@@ -277,13 +277,13 @@ void OutputModel::activate( const QModelIndex& index )
     {
         return;
     }
-    kDebug() << "Model activated" << index.row();
+    qCDebug(OUTPUTVIEW) << "Model activated" << index.row();
 
 
     FilteredItem item = d->m_filteredItems.at( index.row() );
     if( item.isActivatable )
     {
-        kDebug() << "activating:" << item.lineNo << item.url;
+        qCDebug(OUTPUTVIEW) << "activating:" << item.lineNo << item.url;
         KTextEditor::Cursor range( item.lineNo, item.columnNo );
         KDevelop::IDocumentController *docCtrl = KDevelop::ICore::self()->documentController();
         QUrl url = item.url;
@@ -292,7 +292,7 @@ void OutputModel::activate( const QModelIndex& index )
         }
         docCtrl->openDocument( url, range );
     } else {
-        kDebug() << "not an activateable item";
+        qCDebug(OUTPUTVIEW) << "not an activateable item";
     }
 }
 
@@ -302,7 +302,7 @@ QModelIndex OutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
 
     if( !d->m_errorItems.empty() )
     {
-        kDebug() << "searching next error";
+        qCDebug(OUTPUTVIEW) << "searching next error";
         // Jump to the next error item
         std::set< int >::const_iterator next = d->m_errorItems.lower_bound( startrow );
         if( next == d->m_errorItems.end() )
@@ -311,7 +311,7 @@ QModelIndex OutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
         return index( *next, 0, QModelIndex() );
     }
 
-    for( int row = 0; row < rowCount(); ++row ) 
+    for( int row = 0; row < rowCount(); ++row )
     {
         int currow = (startrow + row) % rowCount();
         if( d->m_filteredItems.at( currow ).isActivatable )
@@ -329,7 +329,7 @@ QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
 
     if(!d->m_errorItems.empty())
     {
-        kDebug() << "searching previous error";
+        qCDebug(OUTPUTVIEW) << "searching previous error";
 
         // Jump to the previous error item
         std::set< int >::const_iterator previous = d->m_errorItems.lower_bound( currentIdx.row() );

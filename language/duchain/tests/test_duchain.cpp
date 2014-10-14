@@ -97,7 +97,7 @@ void TestDUChain::testStringSets() {
 
   BasicSetRepository rep("test repository");
 
-//  kDebug() << "Start repository-layout: \n" << rep.dumpDotGraph();
+//  qDebug() << "Start repository-layout: \n" << rep.dumpDotGraph();
 
   qint64 repositoryTime = 0; //Time spent on repository-operations
   qint64 genericTime = 0; //Time spend on equivalent operations with generic sets
@@ -379,8 +379,8 @@ void TestDUChain::testIndexedStrings() {
     for(int b = 0; b < length; ++b)
       testString.append((char)(rand() % 6) + 'a');
     QByteArray array = testString.toUtf8();
-    //kDebug() << "checking with" << testString;
-    //kDebug() << "checking" << a;
+    //qDebug() << "checking with" << testString;
+    //qDebug() << "checking" << a;
     IndexedString indexed(array.constData(), array.size(), IndexedString::hashString(array.constData(), array.size()));
 
     QCOMPARE(indexed.str(), testString);
@@ -391,9 +391,9 @@ void TestDUChain::testIndexedStrings() {
     }
 
     if(a % (testCount/10) == 0)
-      kDebug() << a << "of" << testCount;
+      qDebug() << a << "of" << testCount;
   }
-  kDebug() << a << "successful tests";
+  qDebug() << a << "successful tests";
 }
 
 struct TestContext {
@@ -535,7 +535,7 @@ uint collectNaiveNodeCount(uint currentNode) {
 void TestDUChain::testImportStructure()
 {
   Timer total;
-  kDebug() << "before: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
+  qDebug() << "before: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
 
   ///Maintains a naive import-structure along with a real top-context import structure, and allows comparing both.
   int cycles = 5;
@@ -550,16 +550,16 @@ void TestDUChain::testImportStructure()
     for(int a = 0; a < contextCount; a++)
       allContexts << new TestContext();
     for(int c = 0; c < cycles; ++c) {
-      //kDebug() << "main-cycle" << t  << "sub-cycle" << c;
+      //qDebug() << "main-cycle" << t  << "sub-cycle" << c;
       //Add random imports and compare
       for(int a = 0; a < contextCount; a++) {
         //Import up to 5 random other contexts into each context
         int importCount = rand() % 5;
-        //kDebug()   << "cnt> " << importCount;
+        //qDebug()   << "cnt> " << importCount;
         for(int i = 0; i < importCount; ++i)
         {
           //int importNr = rand() % contextCount;
-          //kDebug() << "nmr > " << importNr;
+          //qDebug() << "nmr > " << importNr;
           //allContexts[a]->import(allContexts[importNr]);
           allContexts[a]->import(allContexts[rand() % contextCount]);
         }
@@ -591,12 +591,12 @@ void TestDUChain::testImportStructure()
       }
     }
 
-    kDebug() << "after: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
+    qDebug() << "after: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
 
     for(int a = 0; a < contextCount; ++a)
       delete allContexts[a];
     allContexts.clear();
-    kDebug() << "after cleanup: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
+    qDebug() << "after cleanup: " << KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
   }
   qDebug() << "total ns needed for import-structure test:" << float(total.elapsed());
 }
@@ -881,7 +881,7 @@ void TestDUChain::testImportCache()
   DUChainReadLocker lock(DUChain::lock());
   for(uint a = 0; a < topContextCount; ++a) {
     if(a % qMax(1u, topContextCount / 100) == 0) {
-      kDebug() << "progress:" << (a * 100) / topContextCount;
+      qDebug() << "progress:" << (a * 100) / topContextCount;
     }
     TopDUContext* context = DUChain::self()->chainForIndex(a);
     if(context) {
@@ -894,9 +894,9 @@ void TestDUChain::testImportCache()
   }
 
   QVERIFY(analyzedCount);
-  kDebug() << "average total count of imports:" << totalImportCount / analyzedCount;
-  kDebug() << "count of reachable nodes:" << reachableNodes.size();
-  kDebug() << "naive node-count:" << naiveNodeCount << "sharing compression factor:" << ((float)reachableNodes.size()) / ((float)naiveNodeCount);
+  qDebug() << "average total count of imports:" << totalImportCount / analyzedCount;
+  qDebug() << "count of reachable nodes:" << reachableNodes.size();
+  qDebug() << "naive node-count:" << naiveNodeCount << "sharing compression factor:" << ((float)reachableNodes.size()) / ((float)naiveNodeCount);
 }
 
 #endif

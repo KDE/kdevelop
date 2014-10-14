@@ -23,7 +23,6 @@
 
 #include <QMutexLocker>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <ThreadWeaver.h>
@@ -56,7 +55,7 @@ void SvnInternalRemoveJob::run()
 
     }catch( svn::ClientException ce )
     {
-        kDebug(9510) << "Exception while removing files: "
+        qCDebug(PLUGIN_SVN) << "Exception while removing files: "
                 << m_locations
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
@@ -109,7 +108,7 @@ void SvnRemoveJob::start()
         setErrorText( i18n( "Not enough information to execute remove job" ) );
     }else
     {
-        kDebug(9510) << "removing urls:" << m_job->locations();
+        qCDebug(PLUGIN_SVN) << "removing urls:" << m_job->locations();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
 }

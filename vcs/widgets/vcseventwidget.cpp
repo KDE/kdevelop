@@ -28,7 +28,6 @@
 #include <QClipboard>
 
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <kdialog.h>
 
 #include <interfaces/iplugin.h>
@@ -43,6 +42,7 @@
 #include "../vcsrevision.h"
 #include "../vcsevent.h"
 #include "../vcslocation.h"
+#include "../debug.h"
 
 #include "../models/vcsitemeventmodel.h"
 #include "../models/vcseventmodel.h"
@@ -83,7 +83,7 @@ void VcsEventWidgetPrivate::eventViewCustomContextMenuRequested( const QPoint &p
 {
     m_contextIndex = m_ui->eventView->indexAt( point );
     if( !m_contextIndex.isValid() ){
-        kDebug() << "contextMenu is not in TreeView";
+        qCDebug(VCS) << "contextMenu is not in TreeView";
         return;
     }
 
@@ -107,7 +107,7 @@ void VcsEventWidgetPrivate::eventViewClicked( const QModelIndex &index )
 {
     KDevelop::VcsEvent ev = m_logModel->eventForIndex( index );
     m_detailModel->removeRows(0, m_detailModel->rowCount());
-    
+
     if( ev.revision().revisionType() != KDevelop::VcsRevision::Invalid )
     {
         m_ui->itemEventView->setEnabled(true);
@@ -140,9 +140,9 @@ void VcsEventWidgetPrivate::diffToPrevious()
     VcsDiffWidget* widget = new VcsDiffWidget( job );
     widget->setRevisions( prev, ev.revision() );
     KDialog* dlg = new KDialog( q );
-    
+
     widget->connect(widget, SIGNAL(destroyed(QObject*)), dlg, SLOT(deleteLater()));
-    
+
     dlg->setCaption( i18n("Difference To Previous") );
     dlg->setButtons( KDialog::Ok );
     dlg->setMainWidget( widget );

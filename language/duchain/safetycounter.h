@@ -15,19 +15,19 @@
 #ifndef __SAFETYCOUNTER_H__
 #define __SAFETYCOUNTER_H__
 
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 struct SafetyCounter {
   int safetyCounter;
   const int maxSafetyCounter;
-  
+
   SafetyCounter( int max = 40000 ) : safetyCounter(0), maxSafetyCounter(max) {
   }
-  
+
   void init() {
     safetyCounter = 0;
   }
-  
+
   SafetyCounter& operator ++() {
     safetyCounter++;
     return *this;
@@ -37,22 +37,21 @@ struct SafetyCounter {
   bool ok() const {
     return safetyCounter < maxSafetyCounter;
   }
-  
+
   operator bool() {
     safetyCounter++;
     bool ret = safetyCounter < maxSafetyCounter;
-	  if( !ret ) {
-			if( safetyCounter == maxSafetyCounter ) {
+    if( !ret ) {
+      if( safetyCounter == maxSafetyCounter ) {
 #ifdef DEPTHBACKTRACE
-      	kDebug() << "WARNING: Safety-counter reached count > " << maxSafetyCounter << ", operation stopped";
+        qDebug() << "WARNING: Safety-counter reached count > " << maxSafetyCounter << ", operation stopped";
 #endif
-		  	kDebug() << endl << kBacktrace();
-			}
-	  }
-    
+      }
+    }
+
     return ret;
   }
-  
+
 };
 
 #endif

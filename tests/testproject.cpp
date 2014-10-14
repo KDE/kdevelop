@@ -20,8 +20,6 @@
 
 #include "testproject.h"
 
-#include <QDebug>
-
 #include <project/projectmodel.h>
 
 #include <interfaces/icore.h>

@@ -24,12 +24,12 @@
 #include <QListView>
 #include <QVBoxLayout>
 #include <QPainter>
+#include <QDebug>
 
 #include <KLocalizedString>
 #include <ktitlewidget.h>
 #include <kcomponentdata.h>
 #include <kaboutdata.h>
-#include <kdebug.h>
 #include <KWidgetItemDelegate>
 #include <KPushButton>
 #include <KIconLoader>
@@ -228,7 +228,7 @@ public:
         retFont.setBold(true);
         return retFont;
     }
- 
+
 private Q_SLOTS:
     void info()
     {
@@ -282,9 +282,9 @@ LoadedPluginsDialog::LoadedPluginsDialog( QWidget* parent )
     setPlainCaption(i18n("Loaded Plugins"));
     setButtons(KDialog::Close);
     setDefaultButton(KDialog::Close);
-    
+
     QVBoxLayout* vbox = new QVBoxLayout(mainWidget());
-    
+
     KTitleWidget* title = new KTitleWidget(this);
     title->setPixmap(QIcon::fromTheme(KComponentData::mainComponent().aboutData()->programIconName()), KTitleWidget::ImageLeft);
     title->setText(i18n("<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>", KComponentData::mainComponent().aboutData()->programName()));

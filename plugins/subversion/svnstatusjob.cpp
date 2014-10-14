@@ -26,7 +26,6 @@
 #include <QUrl>
 
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <ThreadWeaver.h>
 
 extern "C"
@@ -100,14 +99,14 @@ bool SvnInternalStatusJob::recursive() const
 
 void SvnInternalStatusJob::run()
 {
-    kDebug(9510) << "Running internal status job with urls:" << m_locations;
+    qCDebug(PLUGIN_SVN) << "Running internal status job with urls:" << m_locations;
     initBeforeRun();
 
     svn::Client cli(m_ctxt);
     QList<QUrl> l = locations();
     foreach( const QUrl &url, l )
     {
-        //kDebug(9510) << "Fetching status info for:" << url;
+        //qCDebug(PLUGIN_SVN) << "Fetching status info for:" << url;
         try
         {
             QByteArray ba = url.toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
@@ -121,7 +120,7 @@ void SvnInternalStatusJob::run()
             }
         }catch( svn::ClientException ce )
         {
-            kDebug(9510) << "Couldn't get status: " << url << QString::fromUtf8( ce.message() );
+            qCDebug(PLUGIN_SVN) << "Couldn't get status: " << url << QString::fromUtf8( ce.message() );
             setErrorMessage( QString::fromUtf8( ce.message() ) );
             m_success = false;
         }
@@ -156,7 +155,7 @@ void SvnStatusJob::start()
         setErrorText( i18n( "Not enough information to execute status job" ) );
     }else
     {
-        kDebug(9510) << "Starting status job";
+        qCDebug(PLUGIN_SVN) << "Starting status job";
         connect( m_job, SIGNAL(gotNewStatus(KDevelop::VcsStatusInfo)),
             this, SLOT(addToStats(KDevelop::VcsStatusInfo)),
                         Qt::QueuedConnection );
@@ -178,14 +177,14 @@ void SvnStatusJob::setRecursive( bool recursive )
 
 void SvnStatusJob::addToStats( const KDevelop::VcsStatusInfo& info )
 {
-    //kDebug(9510) << "new status info:" << info.url() << info.state();
+    //qCDebug(PLUGIN_SVN) << "new status info:" << info.url() << info.state();
     if( !m_stats.contains( qVariantFromValue( info ) ) )
     {
         m_stats << qVariantFromValue( info );
         emit resultsReady( this );
     }else
     {
-        kDebug(9510) << "Already have this info:";
+        qCDebug(PLUGIN_SVN) << "Already have this info:";
     }
 }
 

@@ -23,7 +23,6 @@
 #include <QLabel>
 
 #include <ktextedit.h>
-#include <kdebug.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
@@ -31,6 +30,7 @@
 #include "../vcsjob.h"
 #include "../vcsrevision.h"
 #include "../vcsdiff.h"
+#include "../debug.h"
 
 #include "ui_vcsdiffwidget.h"
 #include "vcsdiffpatchsources.h"
@@ -44,10 +44,10 @@ public:
     Ui::VcsDiffWidget* m_ui;
     VcsJob* m_job;
     VcsDiffWidget* q;
-    
+
     VcsDiffWidgetPrivate(VcsDiffWidget* _q) : q(_q) {
     }
-    
+
     void diffReady( KDevelop::VcsJob* job )
     {
         if( job != m_job )
@@ -56,7 +56,7 @@ public:
 
         // Try using the patch-review plugin if possible
         VCSDiffPatchSource* patch = new VCSDiffPatchSource(diff);
-        
+
         if(showVcsDiff(patch))
         {
             q->deleteLater();
@@ -64,15 +64,15 @@ public:
         }else{
             delete patch;
         }
-        
-        kDebug() << "diff:" << diff.leftTexts().count();
+
+        qCDebug(VCS) << "diff:" << diff.leftTexts().count();
         foreach( const KDevelop::VcsLocation &l, diff.leftTexts().keys() )
         {
-            kDebug() << "diff:" << l.localUrl() << l.repositoryServer();
+            qCDebug(VCS) << "diff:" << l.localUrl() << l.repositoryServer();
         }
-        kDebug() << "diff:" << diff.diff();
-        kDebug() << "diff:" << diff.type();
-        kDebug() << "diff:" << diff.contentType();
+        qCDebug(VCS) << "diff:" << diff.diff();
+        qCDebug(VCS) << "diff:" << diff.type();
+        qCDebug(VCS) << "diff:" << diff.contentType();
         m_ui->diffDisplay->setPlainText( diff.diff() );
         m_ui->diffDisplay->setReadOnly( true );
 

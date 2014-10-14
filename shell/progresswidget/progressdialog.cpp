@@ -32,7 +32,6 @@
 #include "progressdialog.h"
 #include "progressmanager.h"
 
-#include <KDebug>
 #include <KHBox>
 #include <KLocalizedString>
 #include <KStandardGuiItem>

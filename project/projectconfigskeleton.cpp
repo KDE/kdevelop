@@ -19,12 +19,12 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "projectconfigskeleton.h"
+#include "debug.h"
 
 #include <interfaces/iproject.h>
 
 #include <util/path.h>
 
-#include <kdebug.h>
 #include <kio/netaccess.h>
 
 namespace KDevelop
@@ -85,7 +85,7 @@ Path ProjectConfigSkeleton::developerFile() const
 
 void ProjectConfigSkeleton::setDefaults()
 {
-    kDebug(9503) << "Setting Defaults";
+    qCDebug(PROJECT) << "Setting Defaults";
     KConfig cfg( d->m_projectTempFile );
     Q_FOREACH( KConfigSkeletonItem* item, items() )
     {
@@ -112,7 +112,7 @@ bool ProjectConfigSkeleton::useDefaults( bool b )
             item->swapDefault();
             if( cfg.hasGroup( item->group() ) )
             {
-                kDebug(9503) << "reading";
+                qCDebug(PROJECT) << "reading";
                 KConfigGroup grp = cfg.group( item->group() );
 		if( grp.hasKey( item->key() ) )
                     item->setProperty( grp.readEntry( item->key(), item->property() ) );

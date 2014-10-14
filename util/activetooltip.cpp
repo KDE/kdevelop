@@ -19,6 +19,7 @@
 */
 
 #include "activetooltip.h"
+#include "debug.h"
 
 #include <QPoint>
 #include <QPalette>
@@ -27,7 +28,6 @@
 #include <QMouseEvent>
 #include <QPointer>
 #include <limits>
-#include <kdebug.h>
 #include <qdesktopwidget.h>
 #include <qmenu.h>
 #include <qstylepainter.h>
@@ -56,7 +56,7 @@ ActiveToolTip::ActiveToolTip(QWidget *parent, const QPoint& position)
     move(position);
 
     QPalette p;
-    
+
     // adjust background color to use tooltip colors
     p.setColor(backgroundRole(), p.color(QPalette::ToolTipBase));
     p.setColor(QPalette::Base, p.color(QPalette::ToolTipBase));
@@ -88,7 +88,7 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
 
             if(distance > (int)d->previousDistance_) {
                 // Close if the widget under the mouse is not a child widget of the tool-tip
-                kDebug() << "closing because of mouse move outside the widget";
+                qCDebug(UTIL) << "closing because of mouse move outside the widget";
                 close();
             } else {
                 d->previousDistance_ = distance;
@@ -141,7 +141,7 @@ bool ActiveToolTip::insideThis(QObject* object)
 }
 
 void ActiveToolTip::showEvent(QShowEvent*)
-{        
+{
     adjustRect();
 }
 
@@ -153,14 +153,14 @@ void ActiveToolTip::updateMouseDistance()
 void ActiveToolTip::moveEvent(QMoveEvent* ev)
 {
     QWidget::moveEvent(ev);
-    
+
     updateMouseDistance();
 }
 
 void ActiveToolTip::resizeEvent(QResizeEvent*)
 {
     adjustRect();
-    
+
     // set mask from style
     QStyleOptionFrame opt;
     opt.init(this);
@@ -206,7 +206,7 @@ namespace {
     typedef QMultiMap<float, QPair<QPointer<ActiveToolTip>, QString> > ToolTipPriorityMap;
     static ToolTipPriorityMap registeredToolTips;
     ActiveToolTipManager manager;
-    
+
     QWidget* masterWidget(QWidget* w) {
     while(w && w->parent() && qobject_cast<QWidget*>(w->parent()))
         w = qobject_cast<QWidget*>(w->parent());
@@ -219,7 +219,7 @@ void ActiveToolTipManager::doVisibility() {
     int lastBottomPosition = -1;
     int lastLeftPosition = -1;
     QRect fullGeometry; //Geometry of all visible tooltips together
-    
+
     for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
         QPointer< ActiveToolTip > w = (*it).first;
         if(w) {
@@ -232,13 +232,13 @@ void ActiveToolTipManager::doVisibility() {
                 }
                 if(lastLeftPosition != -1)
                     geom.moveLeft(lastLeftPosition);
-                
+
                 (w.data())->setGeometry(geom);
 //                 (w.data())->show();
-                    
+
                 lastBottomPosition = (w.data())->geometry().bottom();
                 lastLeftPosition = (w.data())->geometry().left();
-                
+
                 if(it == registeredToolTips.constBegin())
                     fullGeometry = (w.data())->geometry();
                 else
@@ -301,7 +301,7 @@ void ActiveToolTipManager::doVisibility() {
 }
 
 void ActiveToolTip::showToolTip(KDevelop::ActiveToolTip* tooltip, float priority, QString uniqueId) {
-    
+
     if(!uniqueId.isEmpty()) {
         for(QMap< float, QPair< QPointer< ActiveToolTip >, QString > >::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
             if((*it).second == uniqueId)

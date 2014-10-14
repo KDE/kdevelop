@@ -17,12 +17,13 @@
 */
 
 #include "quickopenmodel.h"
+#include "debug.h"
 
 #include <QTreeView>
 #include <QTimer>
+#include <QDebug>
 
 #include <ktexteditor/codecompletionmodel.h>
-#include <kdebug.h>
 #include <typeinfo>
 
 #define QUICKOPEN_USE_ITEM_CACHING
@@ -101,20 +102,20 @@ void QuickOpenModel::enableProviders( const QStringList& _items, const QStringLi
   }
   m_enabledItems = items;
   m_enabledScopes  = scopes;
-  kDebug() << "params " << items << " " << scopes;
+  qCDebug(PLUGIN_QUICKOPEN) << "params " << items << " " << scopes;
 
   //We use 2 iterations here: In the first iteration, all providers that implement QuickOpenFileSetInterface are initialized, then the other ones.
   //The reason is that the second group can refer to the first one.
   for( ProviderList::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
     if( !dynamic_cast<QuickOpenFileSetInterface*>((*it).provider) )
       continue;
-    kDebug() << "comparing" << (*it).scopes << (*it).types;
+    qCDebug(PLUGIN_QUICKOPEN) << "comparing" << (*it).scopes << (*it).types;
     if( ( scopes.isEmpty() || !( scopes & (*it).scopes ).isEmpty() ) && ( !( items & (*it).types ).isEmpty() || items.isEmpty() ) ) {
-      kDebug() << "enabling " << (*it).types << " " << (*it).scopes;
+      qCDebug(PLUGIN_QUICKOPEN) << "enabling " << (*it).types << " " << (*it).scopes;
       (*it).enabled = true;
       (*it).provider->enableData( _items, _scopes );
     } else {
-      kDebug() << "disabling " << (*it).types << " " << (*it).scopes;
+      qCDebug(PLUGIN_QUICKOPEN) << "disabling " << (*it).types << " " << (*it).scopes;
       (*it).enabled = false;
       if( ( scopes.isEmpty() || !( scopes & (*it).scopes ).isEmpty() ) )
         (*it).provider->enableData( _items, _scopes ); //The provider may still provide files
@@ -124,13 +125,13 @@ void QuickOpenModel::enableProviders( const QStringList& _items, const QStringLi
   for( ProviderList::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
     if( dynamic_cast<QuickOpenFileSetInterface*>((*it).provider) )
       continue;
-    kDebug() << "comparing" << (*it).scopes << (*it).types;
+    qCDebug(PLUGIN_QUICKOPEN) << "comparing" << (*it).scopes << (*it).types;
     if( ( scopes.isEmpty() || !( scopes & (*it).scopes ).isEmpty() ) && ( !( items & (*it).types ).isEmpty() || items.isEmpty() ) ) {
-      kDebug() << "enabling " << (*it).types << " " << (*it).scopes;
+      qCDebug(PLUGIN_QUICKOPEN) << "enabling " << (*it).types << " " << (*it).scopes;
       (*it).enabled = true;
       (*it).provider->enableData( _items, _scopes );
     } else {
-      kDebug() << "disabling " << (*it).types << " " << (*it).scopes;
+      qCDebug(PLUGIN_QUICKOPEN) << "disabling " << (*it).types << " " << (*it).scopes;
       (*it).enabled = false;
     }
   }
@@ -156,7 +157,7 @@ void QuickOpenModel::textChanged( const QString& str )
   //Get the 50 first items, so the data-providers notice changes without ui-glitches due to resetting
   for(int  a = 0; a < 50 && a < rowCount(QModelIndex()) ; ++a)
     getItem(a, true);
-  
+
   endResetModel();
 }
 
@@ -172,7 +173,7 @@ void QuickOpenModel::restart_internal(bool keepFilterText)
 {
   if(!keepFilterText)
     m_filterText.clear();
-  
+
   bool anyEnabled = false;
 
   foreach( const ProviderEntry& e, m_providers )
@@ -180,7 +181,7 @@ void QuickOpenModel::restart_internal(bool keepFilterText)
 
   if( !anyEnabled )
     return;
-  
+
   foreach( const ProviderEntry& provider, m_providers ) {
     if( !dynamic_cast<QuickOpenFileSetInterface*>(provider.provider) )
       continue;
@@ -284,7 +285,7 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
       QWidget* w =  d->expandingWidget();
       if(w && m_expandingWidgetHeightIncrease)
         w->resize(w->width(), w->height() + m_expandingWidgetHeightIncrease);
-      
+
       v.setValue<QWidget*>(w);
       return v;
     }
@@ -365,7 +366,7 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row, bool noReset ) const {
       QuickOpenDataPointer item = provider.provider->data( row );
 
       if(!noReset && provider.provider->itemCount() != itemCount) {
-          kDebug() << "item-count in provider has changed, resetting model";
+          qCDebug(PLUGIN_QUICKOPEN) << "item-count in provider has changed, resetting model";
           m_resetTimer->start(0);
           m_resetBehindRow = rowOffset + row; //Don't reset everything, only everything behind this position
       }
@@ -380,7 +381,7 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row, bool noReset ) const {
     }
   }
 
-//   kWarning() << "No item for row " <<  row;
+//   qWarning() << "No item for row " <<  row;
 
   return QuickOpenDataPointer();
 }
@@ -391,7 +392,7 @@ QSet<IndexedString> QuickOpenModel::fileSet() const {
     if( m_enabledScopes.isEmpty() || !( m_enabledScopes & provider.scopes ).isEmpty() ) {
         if( QuickOpenFileSetInterface* iface = dynamic_cast<QuickOpenFileSetInterface*>(provider.provider) ) {
         QSet<IndexedString> ifiles = iface->files();
-        //kDebug() << "got file-list with" << ifiles.count() << "entries from data-provider" << typeid(*iface).name();
+        //qCDebug(PLUGIN_QUICKOPEN) << "got file-list with" << ifiles.count() << "entries from data-provider" << typeid(*iface).name();
         merged += ifiles;
         }
     }
@@ -417,9 +418,9 @@ int QuickOpenModel::contextMatchQuality(const QModelIndex & /*index*/) const {
 
 bool QuickOpenModel::execute( const QModelIndex& index, QString& filterText )
 {
-  kDebug() << "executing model";
+  qCDebug(PLUGIN_QUICKOPEN) << "executing model";
   if( !index.isValid() ) {
-    kWarning() << "Invalid index executed";
+    qWarning() << "Invalid index executed";
     return false;
   }
 
@@ -428,7 +429,7 @@ bool QuickOpenModel::execute( const QModelIndex& index, QString& filterText )
   if( item ) {
     return item->execute( filterText );
   }else{
-    kWarning() << "Got no item for row " << index.row() << " ";
+    qWarning() << "Got no item for row " << index.row() << " ";
   }
 
   return false;

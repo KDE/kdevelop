@@ -23,7 +23,6 @@
 
 #include <QMutexLocker>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <ThreadWeaver.h>
@@ -55,7 +54,7 @@ void SvnInternalRevertJob::run()
         cli.revert( svn::Targets( targets ), recursive() );
     }catch( svn::ClientException ce )
     {
-        kDebug(9510) << "Exception while reverting files: "
+        qCDebug(PLUGIN_SVN) << "Exception while reverting files: "
                 << m_locations
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );

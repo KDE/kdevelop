@@ -25,15 +25,15 @@
 #include "templateengine.h"
 #include "templateengine_p.h"
 #include "archivetemplateloader.h"
+#include "util/debug.h"
 
 #include <serialization/indexedstring.h>
 
 #include <grantlee/context.h>
 
 #include <QUrl>
-#include <KDebug>
 #include <KArchive>
-
+#include <QDebug>
 #include <QFile>
 #include <QDir>
 
@@ -264,14 +264,14 @@ QString TemplateRenderer::renderFile(const QUrl& url, const QString& name) const
     file.open(QIODevice::ReadOnly);
 
     QString content(file.readAll());
-    kDebug() << content;
+    qCDebug(LANGUAGE) << content;
 
     return render(content, name);
 }
 
 QStringList TemplateRenderer::render(const QStringList& contents) const
 {
-    kDebug() << d->context.stackHash(0);
+    qCDebug(LANGUAGE) << d->context.stackHash(0);
     QStringList ret;
     foreach (const QString& content, contents)
     {
@@ -314,14 +314,14 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
         const KArchiveEntry* entry = directory->entry(outputFile.fileName);
         if (!entry)
         {
-            kWarning() << "Entry" << outputFile.fileName << "is mentioned in group" << outputFile.identifier << "but is not present in the archive";
+            qWarning() << "Entry" << outputFile.fileName << "is mentioned in group" << outputFile.identifier << "but is not present in the archive";
             continue;
         }
 
         const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(entry);
         if (!file)
         {
-            kWarning() << "Entry" << entry->name() << "is not a file";
+            qWarning() << "Entry" << entry->name() << "is not a file";
             continue;
         }
 
@@ -331,7 +331,7 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
 
         DocumentChange change(document, range, QString(), render(file->data(), outputFile.identifier));
         changes.addChange(change);
-        kDebug() << "Added change for file" << document.str();
+        qCDebug(LANGUAGE) << "Added change for file" << document.str();
     }
 
     return changes;

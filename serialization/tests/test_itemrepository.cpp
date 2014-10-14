@@ -16,7 +16,7 @@ struct TestItem {
   unsigned int hash() const {
     return m_hash;
   }
-  
+
   //Every item has to implement this function, and return the complete size this item takes in memory.
   //Must be exactly the same value as ExampleItemRequest::itemSize() has returned while creating the item.
   unsigned int itemSize() const {
@@ -50,24 +50,24 @@ struct TestItemRequest {
   uint hash() const {
     return m_item.hash();
   }
-  
+
   //Should return the size of an item created with createItem
   size_t itemSize() const {
       return m_item.itemSize();
   }
-  
+
   void createItem(TestItem* item) const {
     memcpy(item, &m_item, m_item.itemSize());
   }
-  
+
   static void destroy(TestItem* /*item*/, KDevelop::AbstractItemRepository&) {
     //Nothing to do
   }
-  
+
   static bool persistent(const TestItem* /*item*/) {
     return true;
   }
-  
+
   //Should return whether the here requested item equals the given item
   bool equals(const TestItem* item) const {
     return hash() == item->hash() && (!m_compareData || m_item.equals(item));
@@ -85,11 +85,11 @@ TestItem* createItem(uint id, uint size) {
   char* data = new char[size];
   uint dataSize = size - sizeof(TestItem);
   ret = new (data) TestItem(id, dataSize);
-  
+
   //Fill in same random pattern
   for(uint a = 0; a < dataSize; ++a)
     data[sizeof(TestItem) + a] = (char)(a + id);
-  
+
   return ret;
 }
 
@@ -116,9 +116,9 @@ class TestItemRepository : public QObject {
       uint totalSize = 0;
       srand(time(NULL));
       uint highestSeenIndex = 0;
-      
+
       for(uint a = 0; a < cycles; ++a) {
-        
+
         {
           //Insert an item
           uint itemDecision = rand() % (smallItemsFraction + largeItemsFraction);
@@ -142,7 +142,7 @@ class TestItemRepository : public QObject {
           if(itemSize > maxSize)
             maxSize = itemSize;
         }
-        
+
         for(uint a = 0; a < checksPerCycle; ++a) {
             //Check an item
             uint pick = rand() % itemId;
@@ -151,7 +151,7 @@ class TestItemRepository : public QObject {
               QVERIFY(index);
               QVERIFY(realItemsByIndex.contains(index));
               QVERIFY(realItemsByIndex[index]->equals(repository.itemFromIndex(index)));
-              
+
               if((uint) (rand() % 100) < deletionProbability) {
                 ++totalDeletions;
                 //Delete the item
@@ -160,13 +160,13 @@ class TestItemRepository : public QObject {
                 uint newIndex = repository.index(*realItemsById[pick]);
                 QVERIFY(newIndex);
                 QVERIFY(realItemsByIndex[index]->equals(repository.itemFromIndex(newIndex)));
-                
+
 #ifdef POSITION_TEST
                 //Since we have previously deleted the item, there must be enough space
                 if(!((newIndex >> 16) <= (highestSeenIndex >> 16))) {
-                  kDebug() << "size:" << realItemsById[pick]->itemSize();
-                  kDebug() << "previous highest seen bucket:" << (highestSeenIndex >> 16);
-                  kDebug() << "new bucket:" << (newIndex >> 16);
+                  qDebug() << "size:" << realItemsById[pick]->itemSize();
+                  qDebug() << "previous highest seen bucket:" << (highestSeenIndex >> 16);
+                  qDebug() << "new bucket:" << (newIndex >> 16);
                 }
                 QVERIFY((newIndex >> 16) <= (highestSeenIndex >> 16));
 #endif
@@ -178,13 +178,13 @@ class TestItemRepository : public QObject {
               }
            }
         }
-        
-        
+
+
       }
-      kDebug() << "total insertions:" << totalInsertions << "total deletions:" << totalDeletions << "average item size:" << (totalSize / totalInsertions) << "biggest item size:" << maxSize;
-      
+      qDebug() << "total insertions:" << totalInsertions << "total deletions:" << totalDeletions << "average item size:" << (totalSize / totalInsertions) << "biggest item size:" << maxSize;
+
       KDevelop::ItemRepository<TestItem, TestItemRequest>::Statistics stats = repository.statistics();
-      kDebug() << stats;
+      qDebug() << stats;
       QVERIFY(stats.freeUnreachableSpace < stats.freeSpaceInBuckets/100); // < 1% of the free space is unreachable
       QVERIFY(stats.freeSpaceInBuckets < stats.usedSpaceForBuckets); // < 20% free space
     }

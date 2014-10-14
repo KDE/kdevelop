@@ -48,6 +48,7 @@
 #include <interfaces/idocumentcontroller.h>
 
 #include "contextbrowser.h"
+#include "debug.h"
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/specializationstore.h>
@@ -91,7 +92,7 @@ void ContextBrowserView::resetWidget()
 
 void ContextBrowserView::declarationMenu() {
     DUChainReadLocker lock(DUChain::lock());
-    
+
     AbstractNavigationWidget* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
     if(navigationWidget) {
         AbstractDeclarationNavigationContext* navigationContext = dynamic_cast<AbstractDeclarationNavigationContext*>(navigationWidget->context().data());
@@ -148,15 +149,15 @@ ContextBrowserView::~ContextBrowserView() {
 
 void ContextBrowserView::focusInEvent(QFocusEvent* event) {
     //Indicate that we have focus
-    kDebug() << "got focus";
+    qCDebug(PLUGIN_CONTEXTBROWSER) << "got focus";
 //     parentWidget()->setBackgroundRole(QPalette::ToolTipBase);
 /*    m_layout->removeItem(m_buttons);*/
-    
+
     return QWidget::focusInEvent(event);
 }
 
 void ContextBrowserView::focusOutEvent(QFocusEvent* event) {
-    kDebug() << "lost focus";
+    qCDebug(PLUGIN_CONTEXTBROWSER) << "lost focus";
 //     parentWidget()->setBackgroundRole(QPalette::Background);
 /*    m_layout->insertLayout(0, m_buttons);
     for(int a = 0; a < m_buttons->count(); ++a) {
@@ -167,7 +168,7 @@ void ContextBrowserView::focusOutEvent(QFocusEvent* event) {
 
 bool ContextBrowserView::event(QEvent* event) {
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-    
+
     if(hasFocus() && keyEvent) {
         AbstractNavigationWidget* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
         if(navigationWidget && event->type() == QEvent::KeyPress) {
@@ -182,8 +183,8 @@ bool ContextBrowserView::event(QEvent* event) {
                 navigationWidget->down();
             if(key == Qt::Key_Return || key == Qt::Key_Enter)
                 navigationWidget->accept();
-            
-            
+
+
             if(key == Qt::Key_L)
                 m_lockButton->toggle();
         }
@@ -229,7 +230,7 @@ void ContextBrowserView::updateMainWidget(QWidget* widget)
 {
     if (widget) {
         setUpdatesEnabled(false);
-        kDebug() << "";
+        qCDebug(PLUGIN_CONTEXTBROWSER) << "";
         resetWidget();
         m_navigationWidget = widget;
         m_layout->insertWidget(1, widget, 1);
@@ -264,14 +265,14 @@ void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::T
         m_autoLocked = false;
         m_lockButton->setChecked(false);
     }
-    
+
     if(m_navigationWidgetDeclaration == decl->id() && !force)
         return;
-    
+
     m_navigationWidgetDeclaration = decl->id();
-    
+
     if (!isLocked() && (isVisible() || force)) {  // NO-OP if toolview is hidden, for performance reasons
-        
+
         QWidget* w = createWidget(decl, topContext);
         updateMainWidget(w);
     }
@@ -295,9 +296,9 @@ void ContextBrowserView::setNavigationWidget(QWidget* widget) {
 void ContextBrowserView::setContext(KDevelop::DUContext* context) {
     if(!context)
         return;
-    
+
     m_lastUsedTopContext = IndexedTopDUContext(context->topContext());
-    
+
     if(context->owner()) {
         if(context->owner()->id() == m_navigationWidgetDeclaration)
             return;
@@ -305,9 +306,9 @@ void ContextBrowserView::setContext(KDevelop::DUContext* context) {
     }else{
         m_navigationWidgetDeclaration = DeclarationId();
     }
-    
+
     if (!isLocked() && isVisible()) { // NO-OP if toolview is hidden, for performance reasons
-        
+
         QWidget* w = createWidget(context);
         updateMainWidget(w);
     }

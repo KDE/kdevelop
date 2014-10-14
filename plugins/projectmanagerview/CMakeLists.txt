@@ -1,6 +1,4 @@
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9511 )
-
 ########### next target ###############
 
 set(kdevprojectmanagerview_PLUGIN_SRCS

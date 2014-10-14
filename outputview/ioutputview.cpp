@@ -19,6 +19,9 @@
  */
 
 #include "ioutputview.h"
+#include "debug.h"
+
+Q_LOGGING_CATEGORY(OUTPUTVIEW, "kdevplatform.outputview")
 
 namespace KDevelop
 {

@@ -53,6 +53,7 @@
 #include <interfaces/iassistant.h>
 #include <kaction.h>
 
+Q_LOGGING_CATEGORY(PLUGIN_PROBLEMREPORTER, "kdevplatform.plugins.problemreporter")
 K_PLUGIN_FACTORY_WITH_JSON(KDevProblemReporterFactory, "kdevproblemreporter.json", registerPlugin<ProblemReporterPlugin>();)
 
 using namespace KDevelop;
@@ -115,7 +116,7 @@ void ProblemReporterPlugin::documentClosed(IDocument* doc)
 {
   if(!doc->textDocument())
     return;
-  
+
   IndexedString url(doc->url());
   delete m_highlighters.take(url);
 }
@@ -146,18 +147,18 @@ void ProblemReporterPlugin::parseJobFinished(KDevelop::ParseJob* parseJob)
 
 KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDevelop::Context* context) {
   KDevelop::ContextMenuExtension extension;
-  
+
   KDevelop::EditorContext* editorContext = dynamic_cast<KDevelop::EditorContext*>(context);
   if(editorContext) {
       DUChainReadLocker lock(DUChain::lock(), 1000);
       if(!lock.locked()) {
-        kDebug() << "failed to lock duchain in time";
+        qCDebug(PLUGIN_PROBLEMREPORTER) << "failed to lock duchain in time";
         return extension;
       }
-      
+
     QString title;
     QList<QAction*> actions;
-    
+
     TopDUContext* top = DUChainUtils::standardContextForUrl(editorContext->url());
     if(top) {
       foreach(KDevelop::ProblemPointer problem, top->problems()) {
@@ -171,7 +172,7 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
         }
       }
     }
-    
+
     if(!actions.isEmpty()) {
       QString text;
       if(title.isEmpty())
@@ -179,13 +180,13 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
       else {
         text = i18n("Solve: %1", KDevelop::htmlToPlainText(title));
       }
-      
+
       QAction* menuAction = new QAction(text, 0);
       QMenu* menu(new QMenu(text, 0));
       menuAction->setMenu(menu);
       foreach(QAction* action, actions)
         menu->addAction(action);
-      
+
       extension.addAction(ContextMenuExtension::ExtensionGroup, menuAction);
     }
   }

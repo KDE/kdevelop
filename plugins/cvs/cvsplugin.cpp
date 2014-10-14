@@ -25,7 +25,6 @@
 #include <KAction>
 #include <KAboutData>
 #include <KLocalizedString>
-#include <KDebug>
 
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
@@ -46,10 +45,12 @@
 #include "checkoutdialog.h"
 #include "importdialog.h"
 #include "importmetadatawidget.h"
+#include "debug.h"
 #include <language/interfaces/editorcontext.h>
 #include <vcs/vcspluginhelper.h>
 #include <vcs/widgets/standardvcslocationwidget.h>
 
+Q_LOGGING_CATEGORY(PLUGIN_CVS, "kdevplatform.plugins.cvs")
 K_PLUGIN_FACTORY(KDevCvsFactory, registerPlugin<CvsPlugin>();)
 // K_EXPORT_PLUGIN(KDevCvsFactory(KAboutData("kdevcvs", "kdevcvs", ki18n("CVS"), "0.1", ki18n("Support for CVS version control system"), KAboutData::License_GPL)))
 
@@ -189,7 +190,7 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
         }
     }
 
-    kDebug() << "version controlled?" << hasVersionControlledEntries;
+    qCDebug(PLUGIN_CVS) << "version controlled?" << hasVersionControlledEntries;
 
     if (!hasVersionControlledEntries)
         return IPlugin::contextMenuExtension(context);
@@ -431,7 +432,7 @@ KDevelop::VcsJob * CvsPlugin::import(const QString& commitMessage, const QUrl& s
         return 0;
     }
 
-    kDebug(9500) << "CVS Import requested "
+    qCDebug(PLUGIN_CVS) << "CVS Import requested "
     << "src:" << sourceDirectory.toLocalFile()
     << "srv:" << destinationRepository.repositoryServer()
     << "module:" << destinationRepository.repositoryModule();
@@ -454,7 +455,7 @@ KDevelop::VcsJob * CvsPlugin::createWorkingCopy(const KDevelop::VcsLocation & so
         return 0;
     }
 
-    kDebug(9500) << "CVS Checkout requested "
+    qCDebug(PLUGIN_CVS) << "CVS Checkout requested "
     << "dest:" << destinationDirectory.toLocalFile()
     << "srv:" << sourceRepository.repositoryServer()
     << "module:" << sourceRepository.repositoryModule()

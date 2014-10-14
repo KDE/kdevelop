@@ -22,8 +22,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QTreeView>
 
-#include <kdebug.h>
-
 KDevDocumentViewDelegate::KDevDocumentViewDelegate( QObject *parent )
     : QItemDelegate( parent )
 {}

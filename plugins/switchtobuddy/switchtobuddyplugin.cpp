@@ -43,6 +43,8 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 
+Q_LOGGING_CATEGORY(PLUGIN_SWITCHTOBUDDY, "kdevplatform.plugins.switchtobuddy")
+
 using namespace KDevelop;
 
 namespace {
@@ -156,7 +158,7 @@ void SwitchToBuddyPlugin::switchToBuddy(const QString& url)
 
 void SwitchToBuddyPlugin::switchDefinitionDeclaration()
 {
-    kDebug() << "switching definition/declaration";
+    qCDebug(PLUGIN_SWITCHTOBUDDY) << "switching definition/declaration";
 
     QUrl docUrl;
     KTextEditor::Cursor cursor;
@@ -167,7 +169,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
     {
         auto view = ICore::self()->documentController()->activeTextDocumentView();
         if (!view) {
-            kDebug() << "No active document";
+            qCDebug(PLUGIN_SWITCHTOBUDDY) << "No active document";
             return;
         }
 
@@ -185,16 +187,16 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
         //At least 'VisibleDeclarationsAndContexts' is required so we can do a switch
         if (!ctx || (ctx->parsingEnvironmentFile() && !ctx->parsingEnvironmentFile()->featuresSatisfied(TopDUContext::AllDeclarationsContextsAndUses))) {
             lock.unlock();
-            kDebug() << "Parsing switch-candidate before switching" << switchCandidate;
+            qCDebug(PLUGIN_SWITCHTOBUDDY) << "Parsing switch-candidate before switching" << switchCandidate;
             ReferencedTopDUContext updatedContext = DUChain::self()->waitForUpdate(IndexedString(switchCandidate), TopDUContext::AllDeclarationsContextsAndUses);
             if (!updatedContext) {
-                kDebug() << "Failed to update document:" << switchCandidate;
+                qCDebug(PLUGIN_SWITCHTOBUDDY) << "Failed to update document:" << switchCandidate;
                 return;
             }
         }
     }
 
-    kDebug() << "Document:" << docUrl;
+    qCDebug(PLUGIN_SWITCHTOBUDDY) << "Document:" << docUrl;
 
     DUChainReadLocker lock;
 
@@ -215,7 +217,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
 
         if (ctx && ctx->owner() && (ctx->type() == DUContext::Other || ctx->type() == DUContext::Function) && ctx->owner()->isDefinition()) {
             definition = ctx->owner();
-            kDebug() << "found definition while traversing:" << definition->toString();
+            qCDebug(PLUGIN_SWITCHTOBUDDY) << "found definition while traversing:" << definition->toString();
         }
 
         if (!definition && ctx) {
@@ -224,7 +226,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
 
         if (ClassFunctionDeclaration* cDef = dynamic_cast<ClassFunctionDeclaration*>(definition)) {
             if (cDef->isSignal()) {
-                kDebug() << "found definition is a signal, not switching to .moc implementation";
+                qCDebug(PLUGIN_SWITCHTOBUDDY) << "found definition is a signal, not switching to .moc implementation";
                 definition = 0;
                 wasSignal = true;
             }
@@ -235,7 +237,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
             Declaration* declaration = def->declaration();
             KTextEditor::Range targetRange = declaration->rangeInCurrentRevision();
             const auto url = declaration->url().toUrl();
-            kDebug() << "found definition that has declaration: " << definition->toString() << "range" << targetRange << "url" << url;
+            qCDebug(PLUGIN_SWITCHTOBUDDY) << "found definition that has declaration: " << definition->toString() << "range" << targetRange << "url" << url;
             lock.unlock();
 
             auto view = ICore::self()->documentController()->activeTextDocumentView();
@@ -247,12 +249,12 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
             }
             return;
         } else {
-            kDebug() << "Definition has no assigned declaration";
+            qCDebug(PLUGIN_SWITCHTOBUDDY) << "Definition has no assigned declaration";
         }
 
-        kDebug() << "Could not get definition/declaration from context";
+        qCDebug(PLUGIN_SWITCHTOBUDDY) << "Could not get definition/declaration from context";
     } else {
-        kDebug() << "Got no context for the current document";
+        qCDebug(PLUGIN_SWITCHTOBUDDY) << "Got no context for the current document";
     }
 
     Declaration* def = 0;
@@ -267,7 +269,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
         if (def->internalContext()) {
             targetRange.end() = def->internalContext()->rangeInCurrentRevision().end();
         } else {
-            kDebug() << "Declaration does not have internal context";
+            qCDebug(PLUGIN_SWITCHTOBUDDY) << "Declaration does not have internal context";
         }
         lock.unlock();
 
@@ -281,7 +283,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
         }
         return;
     } else if (!wasSignal) {
-        kWarning() << "Found no definition assigned to cursor position";
+        qWarning() << "Found no definition assigned to cursor position";
     }
 
     lock.unlock();
@@ -290,7 +292,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
     if (!switchCandidate.isEmpty()) {
         ICore::self()->documentController()->openDocument(QUrl::fromUserInput(switchCandidate));
     } else {
-        kDebug() << "Found no source/header candidate to switch";
+        qCDebug(PLUGIN_SWITCHTOBUDDY) << "Found no source/header candidate to switch";
     }
 }
 

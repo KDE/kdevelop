@@ -28,13 +28,14 @@
 #include <QMutexLocker>
 #include <threadweaver/qobjectdecorator.h>
 #include <QApplication>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <KFormat>
 #include <ktexteditor/movinginterface.h>
 
 #include "backgroundparser.h"
+#include "util/debug.h"
 #include "duchain/topducontext.h"
 
 #include "duchain/duchainlock.h"
@@ -247,7 +248,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
     if(artificialCodeRepresentationExists(document())) {
         CodeRepresentation::Ptr repr = createCodeRepresentation(document());
         d->contents.contents = repr->text().toUtf8();
-        kDebug() << "took contents for " << document().str() << " from artificial code-representation";
+        qCDebug(LANGUAGE) << "took contents for " << document().str() << " from artificial code-representation";
         return KDevelop::ProblemPointer();
     }
 
@@ -285,7 +286,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
                                     f.formatByteSize(fileInfo.size()),
                                     f.formatByteSize(maximumFileSize)));
             p->setFinalLocation(DocumentRange(document(), KTextEditor::Range::invalid()));
-            kWarning( 9007 ) << p->description() << p->explanation();
+            qCWarning(LANGUAGE) << p->description() << p->explanation();
             return p;
         }
         QFile file( localFile );
@@ -310,7 +311,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
             }
             p->setFinalLocation(DocumentRange(document(), KTextEditor::Range::invalid()));
 
-            kWarning( 9007 ) << "Could not open file" << document().str() << "(path" << localFile << ")" ;
+            qCWarning(LANGUAGE) << "Could not open file" << document().str() << "(path" << localFile << ")" ;
 
             return p;
         }
@@ -389,7 +390,7 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
 
     if(targetRevision == -1)
     {
-        kDebug() << "invalid target revision" << targetRevision;
+        qCDebug(LANGUAGE) << "invalid target revision" << targetRevision;
         return;
     }
 
@@ -405,14 +406,14 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
 
         if(sourceRevision == -1)
         {
-            kDebug() << "invalid source revision" << sourceRevision;
+            qCDebug(LANGUAGE) << "invalid source revision" << sourceRevision;
             return;
         }
     }
 
     if(sourceRevision > targetRevision)
     {
-        kDebug() << "for document" << document().str() << ": source revision is higher than target revision:" << sourceRevision << " > " << targetRevision;
+        qCDebug(LANGUAGE) << "for document" << document().str() << ": source revision is higher than target revision:" << sourceRevision << " > " << targetRevision;
         return;
     }
 
@@ -421,19 +422,19 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
     {
         if(!d->previousRevision)
         {
-            kDebug() << "not translating because there is no valid predecessor-revision";
+            qCDebug(LANGUAGE) << "not translating because there is no valid predecessor-revision";
             return;
         }
 
         if(sourceRevision != d->previousRevision->revision() || !d->previousRevision->valid())
         {
-            kDebug() << "not translating because the document revision does not match the tracker start revision (maybe the document was cleared)";
+            qCDebug(LANGUAGE) << "not translating because the document revision does not match the tracker start revision (maybe the document was cleared)";
             return;
         }
 
         if(!t->holdingRevision(sourceRevision) || !t->holdingRevision(targetRevision))
         {
-            kDebug() << "lost one of the translation revisions, not doing the map";
+            qCDebug(LANGUAGE) << "lost one of the translation revisions, not doing the map";
             return;
         }
 
@@ -479,7 +480,7 @@ bool ParseJob::isUpdateRequired(const IndexedString& languageString)
             continue;
         }
         if (!file->needsUpdate(environment()) && file->featuresSatisfied(minimumFeatures())) {
-            kDebug() << "Already up to date" << document().str();
+            qCDebug(LANGUAGE) << "Already up to date" << document().str();
             setDuChain(file->topContext());
             lock.unlock();
             highlightDUChain();

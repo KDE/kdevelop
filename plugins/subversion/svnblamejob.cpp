@@ -25,7 +25,6 @@
 #include <QMutexLocker>
 
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <ThreadWeaver.h>
 
 #include "svnclient.h"
@@ -45,7 +44,7 @@ void SvnInternalBlameJob::run()
     initBeforeRun();
 
     QByteArray ba = location().toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
-    
+
     svn::Client cli(m_ctxt);
     svn::AnnotatedFile* file;
     try
@@ -55,7 +54,7 @@ void SvnInternalBlameJob::run()
                              createSvnCppRevisionFromVcsRevision( endRevision() ) );
     }catch( svn::ClientException ce )
     {
-        kDebug(9510) << "Exception while blaming file: "
+        qCDebug(PLUGIN_SVN) << "Exception while blaming file: "
                 << location()
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
@@ -84,7 +83,7 @@ void SvnInternalBlameJob::run()
         }
     }catch( svn::ClientException ce )
     {
-        kDebug(9510) << "Exception while fetching log messages for blame: "
+        qCDebug(PLUGIN_SVN) << "Exception while fetching log messages for blame: "
                      << location()
                      << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
@@ -166,7 +165,7 @@ void SvnBlameJob::start()
     {
         connect( m_job, SIGNAL(blameLine(KDevelop::VcsAnnotationLine)),
                  this, SLOT(blameLineReceived(KDevelop::VcsAnnotationLine)) );
-        kDebug(9510) << "blameging url:" << m_job->location();
+        qCDebug(PLUGIN_SVN) << "blameging url:" << m_job->location();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
 }

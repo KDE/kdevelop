@@ -22,7 +22,6 @@
 #include "vcsoverlayproxymodel.h"
 
 #include <QPainter>
-#include <QDebug>
 
 ProjectModelItemDelegate::ProjectModelItemDelegate(QObject* parent)
     : QItemDelegate(parent)

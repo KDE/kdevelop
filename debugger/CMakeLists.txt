@@ -1,4 +1,3 @@
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9531 )
 
 
 ########### next target ###############
@@ -12,6 +11,7 @@ set( KDevPlatformDebugger_LIB_SRCS
     util/treemodel.cpp
     util/treeview.cpp
     util/pathmappings.cpp
+    util/debug.cpp
     breakpoint/breakpoint.cpp
     breakpoint/breakpointmodel.cpp
     breakpoint/breakpointwidget.cpp

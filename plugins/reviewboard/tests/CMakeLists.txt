@@ -4,6 +4,7 @@ set(reviewboardtest_SRCS
     main.cpp
     ../reviewpatchdialog.cpp
     ../reviewboardjobs.cpp
+    ../debug.cpp
 )
 
 qt5_wrap_ui(reviewboardtest_SRCS ../reviewpatch.ui)

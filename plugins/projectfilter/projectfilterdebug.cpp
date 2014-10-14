@@ -21,12 +21,8 @@
 
 #include "projectfilterdebug.h"
 
-namespace KDevelop {
+Q_LOGGING_CATEGORY(PLUGIN_PROJECTFILTER, "kdevplatform.plugins.projectfilter")
 
-int projectFilterDebugArea()
-{
-    static int area = KDebug::registerArea("kdevprojectfilter");
-    return area;
-}
+namespace KDevelop {
 
 }

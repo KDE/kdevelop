@@ -1,6 +1,6 @@
 /*
     Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
-    
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -27,6 +27,7 @@
 #include <interfaces/iruncontroller.h>
 #include "vcsjob.h"
 #include "vcsdiff.h"
+#include "../debug.h"
 #include <interfaces/iplugincontroller.h>
 #include <KComboBox>
 #include <KTextEdit>
@@ -46,21 +47,21 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
     m_commitMessageEdit.data()->setFont( KGlobalSettings::fixedFont() );
     m_commitMessageEdit.data()->setLineWrapMode(QTextEdit::NoWrap);
     m_vcs->setupCommitMessageEditor(updater->url(), m_commitMessageEdit.data());
-    
+
     QHBoxLayout* titleLayout = new QHBoxLayout;
     titleLayout->addWidget(new QLabel(i18n("Commit Message:")));
-    
+
     m_oldMessages = new KComboBox(m_commitMessageWidget.data());
-    
+
     m_oldMessages->addItem(i18n("Old Messages"));
     foreach(QString message, oldMessages())
         m_oldMessages->addItem(message, message);
     m_oldMessages->setMaximumWidth(200);
-    
+
     connect(m_oldMessages, SIGNAL(currentIndexChanged(QString)), this, SLOT(oldMessageChanged(QString)));
-    
+
     titleLayout->addWidget(m_oldMessages);
-    
+
     layout->addLayout(titleLayout);
     layout->addWidget(m_commitMessageEdit.data());
     connect(this, SIGNAL(reviewCancelled(QString)), SLOT(addMessageToHistory(QString)));
@@ -77,16 +78,16 @@ void VCSCommitDiffPatchSource::addMessageToHistory(const QString& message)
 {
     if(ICore::self()->shuttingDown())
         return;
-    
+
     KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
-    
+
     const int maxMessages = 10;
     QStringList oldMessages = vcsGroup.readEntry("OldCommitMessages", QStringList());
-    
+
     oldMessages.removeAll(message);
     oldMessages.push_front(message);
     oldMessages = oldMessages.mid(0, maxMessages);
-    
+
     vcsGroup.writeEntry("OldCommitMessages", oldMessages);
 }
 
@@ -130,14 +131,14 @@ VCSDiffPatchSource::VCSDiffPatchSource(VCSDiffUpdater* updater)
         foreach( const QVariant &var, varlist.toList() )
         {
             VcsStatusInfo info = var.value<KDevelop::VcsStatusInfo>();
-            
+
             m_infos += info;
             if(info.state()!=VcsStatusInfo::ItemUpToDate)
                 m_selectable[info.url()] = info.state();
         }
     }
     else
-        kDebug() << "Couldn't get status for urls: " << url;
+        qCDebug(VCS) << "Couldn't get status for urls: " << url;
 }
 
 VCSDiffPatchSource::VCSDiffPatchSource(const KDevelop::VcsDiff& diff)
@@ -174,7 +175,7 @@ void VCSDiffPatchSource::updateFromDiff(VcsDiff vcsdiff)
         temp2.open();
         QTextStream t2(&temp2);
         t2 << vcsdiff.diff();
-        kDebug() << "filename:" << temp2.fileName();
+        qCDebug(VCS) << "filename:" << temp2.fileName();
         m_file = QUrl::fromLocalFile(temp2.fileName());
         temp2.close();
     }else{
@@ -184,11 +185,11 @@ void VCSDiffPatchSource::updateFromDiff(VcsDiff vcsdiff)
         t2 << vcsdiff.diff();
     }
 
-    kDebug() << "using file" << m_file << vcsdiff.diff() << "base" << vcsdiff.baseDiff();
+    qCDebug(VCS) << "using file" << m_file << vcsdiff.diff() << "base" << vcsdiff.baseDiff();
 
     m_name = "VCS Diff";
     m_base = vcsdiff.baseDiff();
-    
+
     emit patchChanged();
 }
 
@@ -223,14 +224,14 @@ bool VCSCommitDiffPatchSource::canCancel() const {
 }
 
 void VCSCommitDiffPatchSource::cancelReview() {
-    
+
     QString message;
 
     if (m_commitMessageEdit)
         message = m_commitMessageEdit.data()->toPlainText();
 
     emit reviewCancelled(message);
-    
+
     deleteLater();
 }
 
@@ -241,7 +242,7 @@ bool VCSCommitDiffPatchSource::finishReview(QList< QUrl > selection) {
     if (m_commitMessageEdit)
         message = m_commitMessageEdit.data()->toPlainText();
 
-    kDebug() << "Finishing with selection" << selection;
+    qCDebug(VCS) << "Finishing with selection" << selection;
     QString files;
     foreach(const QUrl& url, selection)
         files += "<li>"+ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain) + "</li>";
@@ -276,14 +277,14 @@ bool showVcsDiff(IPatchSource* vcsDiff)
 
     //Only give one VCS diff at a time to the patch review plugin
     delete currentShownDiff;
-    
+
     currentShownDiff = vcsDiff;
-    
+
     if( patchReview ) {
         patchReview->startReview(currentShownDiff);
         return true;
     } else {
-        kWarning() << "Patch review plugin not found";
+        qWarning() << "Patch review plugin not found";
         return false;
     }
 }

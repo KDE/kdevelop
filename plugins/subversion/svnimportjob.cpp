@@ -25,7 +25,6 @@
 #include <QFileInfo>
 
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <ThreadWeaver.h>
 
 #include "kdevsvncpp/client.hpp"
@@ -56,7 +55,7 @@ void SvnImportInternalJob::run()
         cli.import( svn::Path( srcba.data() ), destba.data(), msg.data(), true );
     }catch( svn::ClientException ce )
     {
-        kDebug() << "Exception while importing: "
+        qCDebug(PLUGIN_SVN) << "Exception while importing: "
                 << m_sourceDirectory
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
@@ -115,7 +114,7 @@ void SvnImportJob::start()
         setErrorText( i18n( "Not enough information to import" ) );
     }else
     {
-        kDebug() << "importing:" << m_job->source();
+        qCDebug(PLUGIN_SVN) << "importing:" << m_job->source();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
 }

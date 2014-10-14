@@ -28,7 +28,6 @@
 #include <ThreadWeaver/Weaver>
 #include <QStandardItemModel>
 #include <kparts/mainwindow.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 
 
@@ -114,7 +113,7 @@ void SvnInternalCommitJob::run()
         cli.commit( svn::Targets(targets), ba.data(), recursive(), keepLock() );
     }catch( svn::ClientException ce )
     {
-        kDebug(9510) << "Couldn't commit:" << QString::fromUtf8( ce.message() );
+        qCDebug(PLUGIN_SVN) << "Couldn't commit:" << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
         m_success = false;
     }
@@ -172,7 +171,7 @@ void SvnCommitJob::setKeepLock( bool keepLock )
 
 void SvnCommitJob::setUrls( const QList<QUrl>& urls )
 {
-    kDebug(9510) << "Setting urls?" <<  status() << urls;
+    qCDebug(PLUGIN_SVN) << "Setting urls?" <<  status() << urls;
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setUrls( urls );
 }

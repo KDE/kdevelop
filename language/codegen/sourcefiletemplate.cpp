@@ -20,10 +20,10 @@
 
 #include "sourcefiletemplate.h"
 #include "templaterenderer.h"
+#include "util/debug.h"
 
 #include <interfaces/icore.h>
 
-#include <KDebug>
 #include <KComponentData>
 #include <KArchive>
 #include <KZip>
@@ -35,6 +35,7 @@
 #include <QDomDocument>
 #include <QStandardPaths>
 #include <QDir>
+#include <QDebug>
 
 using namespace KDevelop;
 typedef SourceFileTemplate::ConfigOption ConfigOption;
@@ -87,7 +88,7 @@ ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element,
         }
     }
 
-    kDebug() << "Read entry" << entry.name << "with default value" << entry.value;
+    qCDebug(LANGUAGE) << "Read entry" << entry.name << "with default value" << entry.value;
     return entry;
 }
 
@@ -159,7 +160,7 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
 
     foreach (const QString& file, templateFiles)
     {
-        kDebug() << "Found template archive" << file;
+        qCDebug(LANGUAGE) << "Found template archive" << file;
         if (QFileInfo(file).baseName() == templateBaseName)
         {
             archiveFileName = file;
@@ -169,7 +170,7 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
 
     if (archiveFileName.isEmpty() || !QFileInfo(archiveFileName).exists())
     {
-        kWarning() << "Could not find a template archive for description" << templateDescription;
+        qWarning() << "Could not find a template archive for description" << templateDescription;
         d->archive = 0;
     }
     else
@@ -242,7 +243,7 @@ QList< SourceFileTemplate::OutputFile > SourceFileTemplate::outputFiles() const
     KConfigGroup group(&templateConfig, "General");
 
     QStringList files = group.readEntry("Files", QStringList());
-    kDebug() << "Files in template" << files;
+    qCDebug(LANGUAGE) << "Files in template" << files;
     foreach (const QString& fileGroup, files)
     {
         KConfigGroup cg(&templateConfig, fileGroup);
@@ -265,7 +266,7 @@ bool SourceFileTemplate::hasCustomOptions() const
     KConfigGroup cg(&templateConfig, "General");
     bool hasOptions = d->archive->directory()->entries().contains(cg.readEntry("OptionsFile", "options.kcfg"));
 
-    kDebug() << cg.readEntry("OptionsFile", "options.kcfg") << hasOptions;
+    qCDebug(LANGUAGE) << cg.readEntry("OptionsFile", "options.kcfg") << hasOptions;
     return hasOptions;
 }
 
@@ -293,14 +294,14 @@ QHash< QString, QList<ConfigOption> > SourceFileTemplate::customOptions(Template
     int errorRow;
     int errorCol;
     if ( !doc.setContent( file->data(), &errorMsg, &errorRow, &errorCol ) ) {
-        kDebug() << "Unable to load document.";
-        kDebug() << "Parse error in line " << errorRow << ", col " << errorCol << ": " << errorMsg;
+        qCDebug(LANGUAGE) << "Unable to load document.";
+        qCDebug(LANGUAGE) << "Parse error in line " << errorRow << ", col " << errorCol << ": " << errorMsg;
         return options;
     }
 
     QDomElement cfgElement = doc.documentElement();
     if ( cfgElement.isNull() ) {
-        kDebug() << "No document in kcfg file";
+        qCDebug(LANGUAGE) << "No document in kcfg file";
         return options;
     }
 

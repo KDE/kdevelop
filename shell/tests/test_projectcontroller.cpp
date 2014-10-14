@@ -24,7 +24,6 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kcomponentdata.h>
-#include <kdebug.h>
 #include <QtTest/QTest>
 
 #include <tests/autotestshell.h>

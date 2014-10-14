@@ -27,7 +27,6 @@
 #include <QApplication>
 
 #include <KLocalizedString>
-#include <KDebug>
 #include <KTextEditor/TextHintInterface>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
@@ -41,6 +40,7 @@
 #include "../../interfaces/idebugcontroller.h"
 #include "../interfaces/idebugsession.h"
 #include "../interfaces/ivariablecontroller.h"
+#include "util/debug.h"
 #include "variabletooltip.h"
 #include <sublime/area.h>
 
@@ -329,7 +329,7 @@ QList<Variable*> Locals::updateLocals(QStringList locals)
             // FIXME: passing variableCollection this way is awkward.
             // In future, variableCollection probably should get a
             // method to create variable.
-            Variable* v = 
+            Variable* v =
                 currentSession()->variableController()->createVariable(
                     ICore::self()->debugController()->variableCollection(),
                     this, var );
@@ -440,7 +440,7 @@ void VariableCollection::variableWidgetShown()
 void VariableCollection::updateAutoUpdate(IDebugSession* session)
 {
     if (!session) session = currentSession();
-    kDebug() << session;
+    qCDebug(DEBUGGER) << session;
     if (!session) return;
 
     if (!m_widgetVisible) {

@@ -24,13 +24,13 @@
 #include <QMouseEvent>
 #include <QApplication>
 
-#include <kdebug.h>
 #include <KSharedConfig>
 
 #include "area.h"
 #include "view.h"
 #include "document.h"
 #include "mainwindow.h"
+#include "sublimedebug.h"
 
 namespace Sublime {
 
@@ -153,7 +153,7 @@ void Controller::showArea(const QString& areaTypeId, MainWindow *mainWindow)
     Area* area = NULL;
     foreach (Area* a, d->mainWindowAreas[index])
     {
-        kDebug() << "Object name: " << a->objectName() << " id "
+        qCDebug(SUBLIME) << "Object name: " << a->objectName() << " id "
                      << areaTypeId;
         if (a->objectName() == areaTypeId)
         {
@@ -253,10 +253,10 @@ void Controller::addDocument(Document *document)
 void Controller::areaReleased()
 {
     MainWindow *w = reinterpret_cast<Sublime::MainWindow*>(sender());
-    kDebug() << "marking areas as mainwindow-free" << w << d->controlledWindows.contains(w) << d->shownAreas.keys(w);
+    qCDebug(SUBLIME) << "marking areas as mainwindow-free" << w << d->controlledWindows.contains(w) << d->shownAreas.keys(w);
     foreach (Area *area, d->shownAreas.keys(w))
     {
-        kDebug() << "" << area->objectName();
+        qCDebug(SUBLIME) << "" << area->objectName();
         areaReleased(area);
         disconnect(area, 0, w, 0);
     }

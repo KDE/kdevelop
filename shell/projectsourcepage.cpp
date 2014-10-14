@@ -18,7 +18,6 @@
 #include <vcs/widgets/vcslocationwidget.h>
 #include <vcs/vcsjob.h>
 #include <QVBoxLayout>
-#include <QDebug>
 #include <KMessageBox>
 #include <KColorScheme>
 #include <KLocalizedString>

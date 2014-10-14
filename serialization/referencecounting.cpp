@@ -23,7 +23,6 @@
 #include <QMutex>
 #include <QMap>
 #include <QAtomicInt>
-#include <kdebug.h>
 #include "serialization/itemrepository.h"
 #include <util/spinlock.h>
 
@@ -33,10 +32,10 @@ namespace KDevelop {
 
   //Protects the reference-counting data through a spin-lock
   SpinLockData refCountingLock;
-  
+
   QMap<void*, QPair<uint, uint> >* refCountingRanges = new QMap<void*, QPair<uint, uint> >(); //ptr, <size, count>, leaked intentionally!
   bool refCountingHasAdditionalRanges = false; //Whether 'refCountingRanges' is non-empty
-  
+
   //Speedup: In most cases there is only exactly one reference-counted range active,
   //so the first reference-counting range can be marked here.
   void* refCountingFirstRangeStart = 0;
@@ -76,7 +75,7 @@ void KDevelop::disableDUChainReferenceCounting(void* start)
   }else{
     Q_ASSERT(0);
   }
-  
+
   if(!refCountingFirstRangeStart && !refCountingHasAdditionalRanges)
     doReferenceCounting = false;
 }
@@ -84,9 +83,9 @@ void KDevelop::disableDUChainReferenceCounting(void* start)
 void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
 {
   SpinLock<> lock(refCountingLock);
-  
+
   doReferenceCounting = true;
-  
+
   if(refCountingFirstRangeStart && ((char*)refCountingFirstRangeStart) <= (char*)start && (char*)start < ((char*)refCountingFirstRangeStart) + refCountingFirstRangeExtent.first)
   {
     //Increase the count for the first range
@@ -107,20 +106,20 @@ void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
       //The item is behind
       it = refCountingRanges->end();
     }
-    
+
     if(it == refCountingRanges->end()) {
       QMap< void*, QPair<uint, uint> >::iterator inserted = refCountingRanges->insert(start, qMakePair(size, 1u));
       //Merge following ranges
       QMap< void*, QPair<uint, uint> >::iterator it = inserted;
       ++it;
       while(it != refCountingRanges->end() && it.key() < ((char*)start) + size) {
-        
+
         inserted.value().second += it.value().second; //Accumulate count
         if(((char*)start) + size < ((char*)inserted.key()) + it.value().first) {
           //Update end position
           inserted.value().first = (((char*)inserted.key()) + it.value().first) - ((char*)start);
         }
-        
+
         it = refCountingRanges->erase(it);
       }
     }else{
@@ -128,14 +127,14 @@ void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
       if(it.value().first < size)
         it.value().first = size;
     }
-    
+
     refCountingHasAdditionalRanges = true;
   }else{
     refCountingFirstRangeStart = start;
     refCountingFirstRangeExtent.first = size;
     refCountingFirstRangeExtent.second = 1;
   }
-  
+
   Q_ASSERT(refCountingHasAdditionalRanges == (refCountingRanges && !refCountingRanges->isEmpty()));
 #ifdef TEST_REFERENCE_COUNTING
   Q_ASSERT(shouldDoDUChainReferenceCounting(start));
@@ -160,7 +159,7 @@ struct ReferenceCountItem {
   ///Item entries:
   ReferenceCountItem(uint id, uint target) : m_id(id), m_targetId(target) {
   }
-  
+
   //Every item has to implement this function, and return a valid hash.
   //Must be exactly the same hash value as ReferenceCountItemRequest::hash() has returned while creating the item.
   unsigned int hash() const {
@@ -172,10 +171,10 @@ struct ReferenceCountItem {
   unsigned short int itemSize() const {
     return sizeof(ReferenceCountItem);
   }
-  
+
   uint m_id;
   uint m_targetId;
-  
+
   ///Request entries:
   enum {
     AverageSize = 8
@@ -186,7 +185,7 @@ struct ReferenceCountItem {
   }
   static void destroy(ReferenceCountItem* /*item*/, AbstractItemRepository&) {
   }
-  
+
   static bool persistent(const ReferenceCountItem*) {
     return true;
   }
@@ -232,13 +231,13 @@ void ReferenceCountManager::increase(uint& ref, uint targetId) {
   Q_ASSERT(shouldDoDUChainReferenceCounting(this));
   Q_ASSERT(!references->findIndex(ReferenceCountItem(m_id, targetId)));
   ++ref;
-  
+
   {
     int oldIndex = oldReferences->findIndex(ReferenceCountItem(m_id, targetId));
     if(oldIndex)
       oldReferences->deleteItem(oldIndex);
   }
-  
+
   Q_ASSERT(references->index(ReferenceCountItem(m_id, targetId)));
 }
 

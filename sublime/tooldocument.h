@@ -23,8 +23,6 @@
 
 #include "sublimeexport.h"
 
-#include <QtCore/QDebug>
-
 class QAction;
 
 namespace Sublime {
@@ -82,7 +80,7 @@ protected:
 
 private:
     struct ToolDocumentPrivate * const d;
-    
+
     friend class View;
 };
 

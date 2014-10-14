@@ -28,7 +28,6 @@
 #include <interfaces/iassistant.h>
 #include <QMenu>
 #include <kaction.h>
-#include <kdebug.h>
 #include <util/richtextpushbutton.h>
 
 using namespace KDevelop;

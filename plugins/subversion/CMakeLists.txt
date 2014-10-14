@@ -4,8 +4,6 @@ project(KDevSubversionPlugin)
 add_subdirectory(tests)
 add_subdirectory(icons)
 
-add_definitions( ${KDE4_ENABLE_EXCEPTIONS} -DKDE_DEFAULT_DEBUG_AREA=9510 )
-
 include_directories( ${KDevSubversionPlugin_SOURCE_DIR}
                      ${KDevPlatform_SOURCE_DIR}/interfaces
                      ${SUBVERSION_INCLUDE_DIRS}

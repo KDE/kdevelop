@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "gitclonejob.h"
-#include <QDebug>
 
 GitCloneJob::GitCloneJob(const QDir& d, KDevelop::IPlugin* parent, OutputJobVerbosity verbosity)
     : DVcsJob(d, parent, verbosity)

@@ -22,7 +22,6 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kconfiggroup.h>
 #include <KLocalizedString>
@@ -34,6 +33,7 @@
 #include <QFileInfo>
 #include <QtTest/QTest>
 #include <QSignalSpy>
+#include <QtCore/QDebug>
 
 using namespace KDevelop;
 
@@ -48,14 +48,14 @@ void verifySessionDir( const QString& sessiondir, const QString& name, bool exis
 {
     if( exists )
     {
-        kDebug() << "checking existing session" << sessiondir;
+        qDebug() << "checking existing session" << sessiondir;
         QVERIFY( QFileInfo( sessiondir ).exists() );
         QVERIFY( QFileInfo( sessiondir ).isDir() );
         QVERIFY( QFileInfo( sessiondir+"/sessionrc" ).exists() );
         KSharedConfig::Ptr cfg = KSharedConfig::openConfig( sessiondir+"/sessionrc" );
         QCOMPARE( name, cfg->group("").readEntry( Session::cfgSessionNameEntry, "" ) );
     } else {
-        kDebug() << "checking not-existing dir: " << sessiondir;
+        qDebug() << "checking not-existing dir: " << sessiondir;
         QVERIFY( !QFileInfo( sessiondir ).exists() );
     }
 }

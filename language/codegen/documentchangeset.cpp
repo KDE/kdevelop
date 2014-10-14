@@ -19,6 +19,7 @@
 #include "documentchangeset.h"
 
 #include "coderepresentation.h"
+#include "util/debug.h"
 
 #include <algorithm>
 
@@ -233,10 +234,10 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
                 }
             } else {
                 //TODO: do it outside the project management?
-                kWarning() << "tried to rename file not tracked by project - not implemented";
+                qWarning() << "tried to rename file not tracked by project - not implemented";
             }
         } else {
-            kWarning() << "tried to rename a file outside of a project - not implemented";
+            qWarning() << "tried to rename a file outside of a project - not implemented";
         }
     }
 
@@ -326,7 +327,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
                     .arg(change.m_newText);
 
                 if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
-                    kWarning() << warningString;
+                    qWarning() << warningString;
                 } else if(replacePolicy == DocumentChangeSet::StopOnFailedChange) {
                     return DocumentChangeSet::ChangeResult(warningString);
                 }
@@ -341,7 +342,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
         QString warningString = QString("Could not replace text in the document: %1")
             .arg(sortedChangesList.begin()->data()->m_document.str());
         if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
-            kWarning() << warningString;
+            qWarning() << warningString;
         }
 
         return DocumentChangeSet::ChangeResult(warningString);
@@ -418,7 +419,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                         }
                         change.m_newText = newLines.join("\n");
                     } else {
-                        kDebug() << "Cannot keep the indentation because the line count has changed" << oldNewText;
+                        qCDebug(LANGUAGE) << "Cannot keep the indentation because the line count has changed" << oldNewText;
                     }
                 }
             }
@@ -454,7 +455,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
             if(replacePolicy == DocumentChangeSet::IgnoreFailedChange) {
                 //Just don't do the replacement
             } else if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
-                kWarning() << warningString;
+                qWarning() << warningString;
             } else {
                 return DocumentChangeSet::ChangeResult(warningString, sortedChanges[pos]);
             }
@@ -498,13 +499,13 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
             //When two changes contain each other, and the container change is set to ignore old text, then it should be safe to
             //just ignore the contained change, and apply the bigger change
             else if((*it)->m_range.contains(( *previous )->m_range) && (*it)->m_ignoreOldText  ) {
-                kDebug() << "Removing change: " << ( *previous )->m_oldText << "->" << ( *previous )->m_newText
+                qCDebug(LANGUAGE) << "Removing change: " << ( *previous )->m_oldText << "->" << ( *previous )->m_newText
                          << ", because it is contained by change: " << (*it)->m_oldText << "->" << (*it)->m_newText;
                 sortedChanges.erase(previous);
             }
             //This case is for when both have the same end, either of them could be the containing range
             else if((*previous)->m_range.contains((*it)->m_range) && (*previous)->m_ignoreOldText  ) {
-                kDebug() << "Removing change: " << (*it)->m_oldText << "->" << (*it)->m_newText
+                qCDebug(LANGUAGE) << "Removing change: " << (*it)->m_oldText << "->" << (*it)->m_newText
                          << ", because it is contained by change: " << ( *previous )->m_oldText
                          << "->" << ( *previous )->m_newText;
                 it = sortedChanges.erase(it);
@@ -562,7 +563,7 @@ void DocumentChangeSetPrivate::updateFiles()
         // Eventually update _all_ affected files
         foreach(const IndexedString &file, changes.keys()) {
             if(!file.toUrl().isValid()) {
-                kWarning() << "Trying to apply changes to an invalid document";
+                qWarning() << "Trying to apply changes to an invalid document";
                 continue;
             }
 

@@ -12,7 +12,6 @@
 #include "ui_projectinfopage.h"
 
 #include <kplugininfo.h>
-#include <kdebug.h>
 
 #include "core.h"
 #include "plugincontroller.h"

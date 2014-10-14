@@ -25,8 +25,8 @@
 #include <QLayout>
 #include <QPushButton>
 #include <QUrl>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kmenubar.h>
 
 #include <sublime/view.h>
@@ -53,7 +53,7 @@ Example1Main::Example1Main()
         new Sublime::SimpleToolWidgetFactory<QTextEdit>("TextEdit"));
 
     //areas (aka perspectives)
-    kDebug(9504) << "constructing area 1";
+    qDebug() << "constructing area 1";
     m_area1 = new Sublime::Area(m_controller, "Area 1");
     m_controller->addDefaultArea(m_area1);
     m_area1->addView(doc1->createView());
@@ -62,7 +62,7 @@ Example1Main::Example1Main()
     m_area1->addToolView(tool1->createView(), Sublime::Left);
     m_area1->addToolView(tool2->createView(), Sublime::Bottom);
 
-    kDebug(9504) << "constructing area 2";
+    qDebug() << "constructing area 2";
     m_area2 = new Sublime::Area(m_controller, "Area 2");
     m_controller->addDefaultArea(m_area2);
     Sublime::View *view1 = doc1->createView();

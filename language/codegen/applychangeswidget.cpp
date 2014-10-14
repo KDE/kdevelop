@@ -32,7 +32,6 @@
 #include <QLayout>
 #include <QSplitter>
 #include <QLabel>
-#include <QDebug>
 #include <KPushButton>
 #include "coderepresentation.h"
 #include <interfaces/icore.h>
@@ -43,7 +42,7 @@
 
 namespace KDevelop
 {
-    
+
 class ApplyChangesWidgetPrivate
 {
 public:
@@ -73,17 +72,17 @@ ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
     setInitialSize(QSize(800, 400));
 
     KDialog::setButtons(KDialog::Ok | KDialog::Cancel);
-    
+
     QWidget* w=new QWidget(this);
     d->m_info=new QLabel(w);
     d->m_documentTabs = new KTabWidget(w);
     connect(d->m_documentTabs, SIGNAL(currentChanged(int)),
             this, SLOT(indexChanged(int)));
-            
+
     QVBoxLayout* l = new QVBoxLayout(w);
     l->addWidget(d->m_info);
     l->addWidget(d->m_documentTabs);
-    
+
     setMainWidget(w);
 }
 
@@ -125,7 +124,7 @@ void ApplyChangesWidget::addDocuments(const IndexedString & original)
 bool ApplyChangesWidget::applyAllChanges()
 {
     /// @todo implement safeguard in case a file saving fails
-    
+
     bool ret = true;
     for(int i = 0; i < d->m_files.size(); ++i )
         if(d->m_editParts[i]->saveAs(d->m_files[i].toUrl())) {
@@ -134,7 +133,7 @@ bool ApplyChangesWidget::applyAllChanges()
                 doc->reload();
         } else
             ret = false;
-        
+
     return ret;
 }
 
@@ -149,24 +148,24 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
 {
     QWidget * widget = m_documentTabs->currentWidget();
     Q_ASSERT(widget);
-    
+
     QVBoxLayout *m=new QVBoxLayout(widget);
     QSplitter *v=new QSplitter(widget);
     m->addWidget(v);
-    
+
     QUrl url = file.toUrl();
-    
+
     QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(url);
-    
+
     KParts::ReadWritePart* part=KMimeTypeTrader::self()->createPartInstanceFromQuery<KParts::ReadWritePart>(mimetype.name(), widget, widget);
     KTextEditor::Document* document=qobject_cast<KTextEditor::Document*>(part);
     Q_ASSERT(document);
-    
+
     Q_ASSERT(document->action("file_save"));
     document->action("file_save")->setEnabled(false);
-    
+
     m_editParts.insert(m_index, part);
-    
+
     //Open the best code representation, even if it is artificial
     CodeRepresentation::Ptr repr = createCodeRepresentation(file);
     if(!repr->fileExists())
@@ -176,9 +175,9 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
         temp->open();
         temp->write(repr->text().toUtf8());
         temp->close();
-        
+
         url = QUrl::fromLocalFile(temp->fileName());
-        
+
         m_temps << temp;
     }
     m_editParts[m_index]->openUrl(url);

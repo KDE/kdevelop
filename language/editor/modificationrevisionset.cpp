@@ -1,6 +1,6 @@
 /*
    Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -17,6 +17,7 @@
 */
 
 #include "./modificationrevisionset.h"
+#include "util/debug.h"
 
 #include <serialization/itemrepository.h>
 #include <serialization/indexedstring.h>
@@ -30,25 +31,25 @@
 namespace KDevelop {
 
 QMutex modificationRevisionSetMutex(QMutex::Recursive);
-  
+
 struct FileModificationPair {
   KDevelop::IndexedString file;
   KDevelop::ModificationRevision revision;
 
   FileModificationPair() {
   }
-  
+
   FileModificationPair(KDevelop::IndexedString _file, KDevelop::ModificationRevision _revision) : file(_file), revision(_revision) {
   }
-  
+
   unsigned int hash() const {
     return ((file.hash() + revision.modificationTime) * 17 + revision.revision) * 73;
   }
-  
+
   unsigned short int itemSize() const {
     return sizeof(FileModificationPair);
   }
-  
+
   bool operator==(const FileModificationPair& rhs) const {
     return file == rhs.file && revision == rhs.revision;
   }
@@ -58,9 +59,9 @@ struct FileModificationPairRequest {
 
   FileModificationPairRequest(const FileModificationPair& data) : m_data(data) {
   }
-  
+
   const FileModificationPair& m_data;
-  
+
   enum {
     AverageSize = sizeof(FileModificationPair)
   };
@@ -68,7 +69,7 @@ struct FileModificationPairRequest {
   unsigned int hash() const {
     return m_data.hash();
   }
-  
+
   size_t itemSize() const {
       return m_data.itemSize();
   }
@@ -76,15 +77,15 @@ struct FileModificationPairRequest {
   void createItem(FileModificationPair* item) const {
     new (item)  FileModificationPair(m_data);
   }
-  
+
   bool equals(const FileModificationPair* item) const {
     return *item == m_data;
   }
-  
+
   static void destroy(FileModificationPair* item, KDevelop::AbstractItemRepository&) {
     item->~FileModificationPair();
   }
-  
+
   static bool persistent(const FileModificationPair* /*item*/) {
     return true; //Reference-counting is done implicitly using the set-repository
   }
@@ -136,7 +137,7 @@ uint ModificationRevisionSet::size() const {
 
 void ModificationRevisionSet::clear() {
   QMutexLocker lock(&modificationRevisionSetMutex);
-  
+
   if(m_index) {
     Utils::Set oldModificationTimes = Utils::Set(m_index, &FileModificationSetRepositoryRepresenter::repository());
     oldModificationTimes.staticUnref();
@@ -146,7 +147,7 @@ void ModificationRevisionSet::clear() {
 
 void ModificationRevisionSet::addModificationRevision(const IndexedString& url, const KDevelop::ModificationRevision& revision) {
   QMutexLocker lock(&modificationRevisionSetMutex);
-  
+
   if(m_index == 0) {
     Utils::Set set = FileModificationSetRepositoryRepresenter::repository().createSet(fileModificationPairRepository().index(FileModificationPair(url, revision)));
     set.staticRef();
@@ -154,36 +155,36 @@ void ModificationRevisionSet::addModificationRevision(const IndexedString& url, 
   }else{
     Utils::Set oldModificationTimes = Utils::Set(m_index, &FileModificationSetRepositoryRepresenter::repository());
     Utils::Set newModificationTimes = oldModificationTimes;
-    
+
     Utils::Set tempSet = FileModificationSetRepositoryRepresenter::repository().createSet(fileModificationPairRepository().index(FileModificationPair(url, revision)));
     tempSet.staticRef();
-    
+
     newModificationTimes += tempSet;
     newModificationTimes.staticRef();
     oldModificationTimes.staticUnref();
     tempSet.staticUnref();
-    
+
     m_index = newModificationTimes.setIndex();
   }
 }
 
 bool ModificationRevisionSet::removeModificationRevision(const IndexedString& url, const KDevelop::ModificationRevision& revision) {
   QMutexLocker lock(&modificationRevisionSetMutex);
-  
+
   if(!m_index)
     return false;
 
   Utils::Set oldModificationTimes = Utils::Set(m_index, &FileModificationSetRepositoryRepresenter::repository());
   Utils::Set newModificationTimes = oldModificationTimes;
-  
+
   Utils::Set tempSet = FileModificationSetRepositoryRepresenter::repository().createSet(fileModificationPairRepository().index(FileModificationPair(url, revision)));
   tempSet.staticRef();
-  
+
   newModificationTimes -= tempSet;
   newModificationTimes.staticRef();
   oldModificationTimes.staticUnref();
   tempSet.staticUnref();
-  
+
   m_index = newModificationTimes.setIndex();
   return m_index != oldModificationTimes.setIndex();
 }
@@ -208,27 +209,27 @@ bool ModificationRevisionSet::removeModificationRevision(const IndexedString& ur
 
 static bool nodeNeedsUpdate(uint index) {
   QMutexLocker lock(&modificationRevisionSetMutex);
-  
+
   if(!index)
     return false;
-  
+
   timeval currentTime;
   gettimeofday(&currentTime, 0);
-  
+
   QHash<uint, std::pair<timeval, bool> >::const_iterator cached = needsUpdateCache.constFind(index);
   if(cached != needsUpdateCache.constEnd()) {
-    
+
     timeval  age;
     timersub(&currentTime, &(*cached).first, &age);
-    
+
     if( age.tv_sec < cacheModificationTimesForSeconds )
     {
       return cached->second;
     }
   }
-  
+
   bool result = false;
-  
+
   const Utils::SetNodeData* nodeData = FileModificationSetRepositoryRepresenter::repository().nodeFromIndex(index);
   if(nodeData->contiguous()) {
     //Do  the actual checking
@@ -243,9 +244,9 @@ static bool nodeNeedsUpdate(uint index) {
   }else{
     result = nodeNeedsUpdate(nodeData->leftNode()) || nodeNeedsUpdate(nodeData->rightNode());
   }
-  
+
   needsUpdateCache.insert(index, std::make_pair(currentTime, result));
-  
+
   return result;
 }
 
@@ -261,7 +262,7 @@ QString ModificationRevisionSet::toString() const
     if(!first)
       ret += ", ";
     first = false;
-    
+
     const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);
     ret += data->file.str() + ':' + data->revision.toString();
     ++it;
@@ -273,7 +274,7 @@ QString ModificationRevisionSet::toString() const
 
 bool ModificationRevisionSet::needsUpdate() const {
   QMutexLocker lock(&modificationRevisionSetMutex);
-  
+
   #ifdef DEBUG_NEEDSUPDATE
   Utils::Set set(m_index, &FileModificationSetRepositoryRepresenter::repository());
   Utils::Set::Iterator it = set.iterator();
@@ -281,7 +282,7 @@ bool ModificationRevisionSet::needsUpdate() const {
     const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);
     ModificationRevision revision = KDevelop::ModificationRevision::revisionForFile( data->file );
     if( revision != data->revision ) {
-       kDebug() << "dependency" << data->file.str() << "has changed, stored stamp:" << data->revision << "new time:" << revision ;
+       qCDebug(LANGUAGE) << "dependency" << data->file.str() << "has changed, stored stamp:" << data->revision << "new time:" << revision ;
        return true;
     }
     ++it;
@@ -294,33 +295,33 @@ bool ModificationRevisionSet::needsUpdate() const {
 
 ModificationRevisionSet& ModificationRevisionSet::operator+=(const ModificationRevisionSet& rhs) {
   QMutexLocker lock(&modificationRevisionSetMutex);
-  
+
   Utils::Set oldModificationTimes = Utils::Set(m_index, &FileModificationSetRepositoryRepresenter::repository());
   Utils::Set otherModificationTimes = Utils::Set(rhs.m_index, &FileModificationSetRepositoryRepresenter::repository());
-  
+
   Utils::Set newModificationTimes = oldModificationTimes;
-  
+
   newModificationTimes += otherModificationTimes;
   newModificationTimes.staticRef();
   oldModificationTimes.staticUnref();
-  
+
   m_index = newModificationTimes.setIndex();
-  
+
   return *this;
 }
 
 ModificationRevisionSet& ModificationRevisionSet::operator-=(const ModificationRevisionSet& rhs) {
   QMutexLocker lock(&modificationRevisionSetMutex);
-  
+
   Utils::Set oldModificationTimes = Utils::Set(m_index, &FileModificationSetRepositoryRepresenter::repository());
   Utils::Set otherModificationTimes = Utils::Set(rhs.m_index, &FileModificationSetRepositoryRepresenter::repository());
-  
+
   Utils::Set newModificationTimes = oldModificationTimes;
-  
+
   newModificationTimes -= otherModificationTimes;
   newModificationTimes.staticRef();
   oldModificationTimes.staticUnref();
-  
+
   m_index = newModificationTimes.setIndex();
 
   return *this;

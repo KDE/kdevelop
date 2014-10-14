@@ -24,6 +24,9 @@
 #include <interfaces/iplugin.h>
 #include <vcs/interfaces/ipatchexporter.h>
 
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(PLUGIN_PASTEBIN)
+
 namespace KIO {
 class Job;
 }
@@ -35,9 +38,9 @@ class PastebinPlugin : public KDevelop::IPlugin, KDevelop::IPatchExporter
     public:
         PastebinPlugin ( QObject* parent, const QList<QVariant>& args  );
         virtual ~PastebinPlugin();
-        
+
         virtual void exportPatch(KDevelop::IPatchSource::Ptr source);
-    
+
     public slots:
         void data(KIO::Job* job, const QByteArray &data);
     private:

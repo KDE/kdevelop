@@ -25,7 +25,6 @@ Boston, MA 02110-1301, USA.
 #include <QBoxLayout>
 #include <QLayout>
 #include <KLocalizedString>
-#include <KDebug>
 
 namespace KDevelop
 {

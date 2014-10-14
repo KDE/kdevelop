@@ -25,7 +25,6 @@
 #include <kmimetype.h>
 #include <kparts/part.h>
 #include <kparts/readonlypart.h>
-#include <kdebug.h>
 
 namespace KDevelop {
     

@@ -17,8 +17,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
 
-#include <KDebug>
-
 #include <ktexteditor/editor.h>
 #include <interfaces/ipartcontroller.h>
 #include <ktexteditor/templateinterface2.h>

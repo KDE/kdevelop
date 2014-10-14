@@ -24,7 +24,6 @@ Boston, MA 02110-1301, USA.
 #include <QUrl>
 
 #include <kparts/mainwindow.h>
-#include <kdebug.h>
 #include <kstringhandler.h>
 
 #include <interfaces/iplugincontroller.h>

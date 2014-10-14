@@ -27,7 +27,7 @@
 #include <QTextFormat>
 #include <QBrush>
 #include <QDir>
-#include <kdebug.h>
+#include <QDebug>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <kiconloader.h>
@@ -47,6 +47,7 @@
 #include "../interfaces/icore.h"
 #include "../interfaces/ilanguagecontroller.h"
 #include "../interfaces/icompletionsettings.h"
+#include "util/debug.h"
 
 #include "codecompletionworker.h"
 #include "codecompletioncontext.h"
@@ -70,11 +71,11 @@ public:
      m_worker->moveToThread(this);
      Q_ASSERT(m_worker->thread() == this);
    }
-   
+
    ~CompletionWorkerThread() {
      delete m_worker;
    }
-   
+
    virtual void run () {
      //We connect directly, so we can do the pre-grouping within the background thread
      connect(m_worker, SIGNAL(foundDeclarationsReal(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >,QExplicitlySharedDataPointer<CodeCompletionContext>)), m_model, SLOT(foundDeclarations(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >,QExplicitlySharedDataPointer<CodeCompletionContext>)), Qt::QueuedConnection);
@@ -83,7 +84,7 @@ public:
      connect(m_model, SIGNAL(doSpecialProcessingInBackground(uint)), m_worker, SLOT(doSpecialProcessing(uint)));
      exec();
    }
-   
+
    CodeCompletionModel* m_model;
    CodeCompletionWorker* m_worker;
 };
@@ -127,7 +128,7 @@ CodeCompletionModel::~CodeCompletionModel()
     m_thread->m_worker->abortCurrentCompletion();
   m_thread->quit();
   m_thread->wait();
-  
+
   delete m_thread;
   delete m_mutex;
 }
@@ -164,10 +165,10 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
 
   DUChainReadLocker lock(DUChain::lock(), 400);
   if( !lock.locked() ) {
-    kDebug() << "could not lock du-chain in time";
+    qCDebug(LANGUAGE) << "could not lock du-chain in time";
     return;
   }
-  
+
   TopDUContext* top = DUChainUtils::standardContextForUrl( url );
   if(!top) {
     return;
@@ -175,29 +176,29 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
   setCurrentTopContext(TopDUContextPointer(top));
 
   RangeInRevision rangeInRevision = top->transformToLocalRevision(KTextEditor::Range(range));
-  
+
   if (top) {
-    kDebug() << "completion invoked for context" << (DUContext*)top;
+    qCDebug(LANGUAGE) << "completion invoked for context" << (DUContext*)top;
 
     if( top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->modificationRevision() != ModificationRevision::revisionForFile(IndexedString(url.toString())) ) {
-      kDebug() << "Found context is not current. Its revision is " /*<< top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl()))*/;
+      qCDebug(LANGUAGE) << "Found context is not current. Its revision is " /*<< top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << ModificationRevision::revisionForFile(IndexedString(url.toString()))*/;
     }
 
     DUContextPointer thisContext;
     {
-      kDebug() << "apply specialization:" << range.start();
+      qCDebug(LANGUAGE) << "apply specialization:" << range.start();
       thisContext = SpecializationStore::self().applySpecialization(top->findContextAt(rangeInRevision.start), top);
 
       if ( thisContext ) {
-        kDebug() << "after specialization:" << thisContext->localScopeIdentifier().toString() << thisContext->rangeInCurrentRevision();
+        qCDebug(LANGUAGE) << "after specialization:" << thisContext->localScopeIdentifier().toString() << thisContext->rangeInCurrentRevision();
       }
 
       if(!thisContext)
         thisContext = top;
 
-       kDebug() << "context is set to" << thisContext.data();
+       qCDebug(LANGUAGE) << "context is set to" << thisContext.data();
         if( !thisContext ) {
-          kDebug() << "================== NO CONTEXT FOUND =======================";
+          qCDebug(LANGUAGE) << "================== NO CONTEXT FOUND =======================";
           beginResetModel();
           m_completionItems.clear();
           m_navigationWidgets.clear();
@@ -210,10 +211,10 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
 
     if(m_forceWaitForModel)
       emit waitForReset();
-    
+
     emit completionsNeeded(thisContext, range.start(), view);
   } else {
-    kDebug() << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
+    qCDebug(LANGUAGE) << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
   }
 }
 
@@ -222,20 +223,20 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
 {
   //If this triggers, initialize() has not been called after creation.
   Q_ASSERT(m_thread);
-  
+
   KDevelop::ICompletionSettings::CompletionLevel level = KDevelop::ICore::self()->languageController()->completionSettings()->completionLevel();
   if(level == KDevelop::ICompletionSettings::AlwaysFull || (invocationType != AutomaticInvocation && level == KDevelop::ICompletionSettings::MinimalWhenAutomatic))
     m_fullCompletion = true;
   else
     m_fullCompletion = false;
-  
+
   //Only use grouping in full completion mode
   setHasGroups(m_fullCompletion);
-  
+
   Q_UNUSED(invocationType)
 
   if (!worker()) {
-    kWarning() << "Completion invoked on a completion model which has no code completion worker assigned!";
+    qWarning() << "Completion invoked on a completion model which has no code completion worker assigned!";
   }
 
   beginResetModel();
@@ -254,7 +255,7 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
 void CodeCompletionModel::foundDeclarations(QList<QExplicitlySharedDataPointer<CompletionTreeElement> > items, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext)
 {
   m_completionContext = completionContext;
-  
+
   if(m_completionItems.isEmpty() && items.isEmpty()) {
     if(m_forceWaitForModel) {
       // TODO KF5: Check if this actually works
@@ -263,13 +264,13 @@ void CodeCompletionModel::foundDeclarations(QList<QExplicitlySharedDataPointer<C
     }
     return; //We don't need to reset, which is bad for target model
   }
-  
+
   beginResetModel();
   m_completionItems = items;
   endResetModel();
 
   if(m_completionContext) {
-    kDebug() << "got completion-context with " << m_completionContext->ungroupedElements().size() << "ungrouped elements";
+    qCDebug(LANGUAGE) << "got completion-context with " << m_completionContext->ungroupedElements().size() << "ungrouped elements";
   }
 
 
@@ -294,7 +295,7 @@ void CodeCompletionModel::setCompletionContext(QExplicitlySharedDataPointer<Code
   m_completionContext = completionContext;
 
   if(m_completionContext) {
-    kDebug() << "got completion-context with " << m_completionContext->ungroupedElements().size() << "ungrouped elements";
+    qCDebug(LANGUAGE) << "got completion-context with " << m_completionContext->ungroupedElements().size() << "ungrouped elements";
   }
 }
 
@@ -334,7 +335,7 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
     if( treeElement.asNode() ) {
       return QVariant(treeElement.asNode()->role);
     }else {
-      kDebug() << "Requested group-role from leaf tree element";
+      qCDebug(LANGUAGE) << "Requested group-role from leaf tree element";
       return QVariant();
     }
   }else{
@@ -353,7 +354,7 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   }
 
   if(!treeElement.asItem()) {
-    kWarning() << "Error in completion model";
+    qWarning() << "Error in completion model";
     return QVariant();
   }
 
@@ -372,17 +373,17 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
       break;
     }
   }
-  
+
   //In minimal completion mode, hide all columns except the "name" one
   if(!m_fullCompletion && role == Qt::DisplayRole && index.column() != Name && (treeElement.asItem()->argumentHintDepth() == 0 || index.column() == Prefix))
     return QVariant();
-  
+
   QVariant ret = treeElement.asItem()->data(index, role, this);
 
   //In reduced completion mode, don't show information text with the selected items
   if(role == ItemSelected && (!m_fullCompletion || !ICore::self()->languageController()->completionSettings()->showMultiLineSelectionInformation()))
     return QVariant();
-  
+
   return ret;
 }
 
@@ -404,7 +405,7 @@ QModelIndex CodeCompletionModel::index(int row, int column, const QModelIndex& p
     CompletionTreeNode* node = element->asNode();
 
     if( !node ) {
-      kDebug() << "Requested sub-index of leaf node";
+      qCDebug(LANGUAGE) << "Requested sub-index of leaf node";
       return QModelIndex();
     }
 

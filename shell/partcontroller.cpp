@@ -29,8 +29,8 @@
 #include <QMimeType>
 #include <QMimeDatabase>
 #include <QApplication>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
@@ -47,6 +47,7 @@
 
 #include "core.h"
 #include "textdocument.h"
+#include "debug.h"
 #include <interfaces/isession.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -162,7 +163,7 @@ bool PartController::canCreatePart(const QUrl& url)
 
 KParts::Part* PartController::createPart( const QUrl & url, const QString& preferredPart )
 {
-    kDebug() << "creating part with url" << url << "and pref part:" << preferredPart;
+    qCDebug(SHELL) << "creating part with url" << url << "and pref part:" << preferredPart;
     QString mimeType;
     if ( url.isEmpty() )
         //create a part for empty text file
@@ -237,7 +238,7 @@ KTextEditor::View *PartController::activeView()
 KTextEditor::Document *PartController::createDocument()
 {
   // NOTE: not implemented
-  kWarning() << "WARNING: interface call not implemented";
+  qWarning() << "WARNING: interface call not implemented";
   return 0;
 }
 
@@ -245,7 +246,7 @@ bool PartController::closeDocument(KTextEditor::Document *doc)
 {
   Q_UNUSED(doc)
   // NOTE: not implemented
-  kWarning() << "WARNING: interface call not implemented";
+  qWarning() << "WARNING: interface call not implemented";
   return false;
 }
 
@@ -253,7 +254,7 @@ KTextEditor::View *PartController::createView(KTextEditor::Document *doc)
 {
   Q_UNUSED(doc)
   // NOTE: not implemented
-  kWarning() << "WARNING: interface call not implemented";
+  qWarning() << "WARNING: interface call not implemented";
   return 0;
 }
 
@@ -261,7 +262,7 @@ bool PartController::closeView(KTextEditor::View *view)
 {
   Q_UNUSED(view)
   // NOTE: not implemented
-  kWarning() << "WARNING: interface call not implemented";
+  qWarning() << "WARNING: interface call not implemented";
   return false;
 }
 //END KTextEditor::MdiContainer

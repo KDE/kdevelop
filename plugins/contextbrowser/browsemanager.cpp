@@ -22,7 +22,6 @@
 #include "browsemanager.h"
 #include <QMouseEvent>
 #include <QToolButton>
-#include <kdebug.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <interfaces/icore.h>
@@ -42,6 +41,7 @@
 #include <qapplication.h>
 
 #include "contextbrowser.h"
+#include "debug.h"
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -95,9 +95,9 @@ void BrowseManager::eventuallyStartDelayedBrowsing() {
 BrowseManager::BrowseManager(ContextBrowserPlugin* controller) : QObject(controller), m_plugin(controller), m_browsing(false), m_browsingByKey(0), m_watcher(this) {
     m_delayedBrowsingTimer = new QTimer(this);
     m_delayedBrowsingTimer->setSingleShot(true);
-    
+
     connect(m_delayedBrowsingTimer, SIGNAL(timeout()), this, SLOT(eventuallyStartDelayedBrowsing()));
-    
+
     foreach(KTextEditor::View* view, m_watcher.allViews())
         viewAdded(view);
 }
@@ -118,16 +118,16 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     KTextEditor::View* view = viewFromWidget(widget);
     if(!view)
         return false;
-    
+
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
     const int browseKey = Qt::Key_Control;
     const int magicModifier = Qt::Key_Alt;
-    
+
     //Eventually start key-browsing
     if(keyEvent && (keyEvent->key() == browseKey || keyEvent->key() == magicModifier) && !m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
         m_browsingByKey = keyEvent->key();
-        
+
         if(keyEvent->key() == magicModifier) {
             if(dynamic_cast<KTextEditor::CodeCompletionInterface*>(view) && dynamic_cast<KTextEditor::CodeCompletionInterface*>(view)->isCompletionActive())
             {
@@ -136,7 +136,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 m_delayedBrowsingTimer->start(300);
                 m_browingStartedInView = view;
             }
-            
+
             if(magicModifier == Qt::Key_Alt) {
                 //ugly hack:
                 //If the magic modifier is ALT, we have to prevent it from being taken by the menu-bar to switch focus to it.
@@ -148,12 +148,12 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 QApplication::postEvent(masterWidget(widget), releaseEvent);
             }
         }
-        
+
         if(!m_browsing)
-            m_plugin->setAllowBrowsing(true); 
-        
+            m_plugin->setAllowBrowsing(true);
+
     }
-    
+
     QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(event);
     //Eventually stop key-browsing
     if((keyEvent && m_browsingByKey && keyEvent->key() == m_browsingByKey && keyEvent->type() == QEvent::KeyRelease)
@@ -185,12 +185,12 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     if(mouseEvent) {
         KTextEditor::View* iface = dynamic_cast<KTextEditor::View*>(view);
         if(!iface) {
-            kDebug() << "Update kdelibs for the browsing-mode to work";
+            qCDebug(PLUGIN_CONTEXTBROWSER) << "Update kdelibs for the browsing-mode to work";
             return false;
         }
-        
+
         QPoint coordinatesInView = widget->mapTo(view, mouseEvent->pos());
-        
+
         KTextEditor::Cursor textCursor = iface->coordinatesToCursor(coordinatesInView);
         if(textCursor.isValid()) {
             ///@todo find out why this is needed, fix the code in kate
@@ -214,7 +214,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 Declaration* foundDeclaration = 0;
                 KDevelop::DUChainReadLocker lock( DUChain::lock() );
                 foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), KTextEditor::Cursor(textCursor)) );
-                
+
                 if(foundDeclaration && (foundDeclaration->url().toUrl() == view->document()->url()) && foundDeclaration->range().contains( foundDeclaration->transformToLocalRevision(KTextEditor::Cursor(textCursor)))) {
                     ///A declaration was clicked directly. Jumping to it is useless, so jump to the definition or something useful
 
@@ -245,7 +245,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                         }
                     }
                 }
-                
+
                 if( foundDeclaration ) {
                     jumpTo.first = foundDeclaration->url().toUrl();
                     jumpTo.second = foundDeclaration->rangeInCurrentRevision().start();
@@ -277,7 +277,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
 void BrowseManager::resetChangedCursor() {
     QMap<QPointer<QWidget>, QCursor> cursors = m_oldCursors;
     m_oldCursors.clear();
-    
+
     for(QMap<QPointer<QWidget>, QCursor>::iterator it = cursors.begin(); it != cursors.end(); ++it)
         if(it.key())
             it.key()->setCursor(QCursor(Qt::IBeamCursor));
@@ -295,7 +295,7 @@ void BrowseManager::applyEventFilter(QWidget* object, bool install) {
         object->installEventFilter(this);
     else
         object->removeEventFilter(this);
-    
+
     foreach(QObject* child, object->children())
         if(qobject_cast<QWidget*>(child))
             applyEventFilter(qobject_cast<QWidget*>(child), install);
@@ -324,12 +324,12 @@ void BrowseManager::setBrowsing(bool enabled) {
     if(enabled == m_browsing)
         return;
     m_browsing = enabled;
-    
+
     //This collects all the views
     if(enabled) {
-        kDebug() << "Enabled browsing-mode";
+        qCDebug(PLUGIN_CONTEXTBROWSER) << "Enabled browsing-mode";
     }else{
-        kDebug() << "Disabled browsing-mode";
+        qCDebug(PLUGIN_CONTEXTBROWSER) << "Disabled browsing-mode";
         resetChangedCursor();
     }
 }

@@ -23,7 +23,6 @@
 
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
-#include <kdebug.h>
 #include <kparts/mainwindow.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -98,7 +97,7 @@ void TestShellDocumentOperation::testClosing()
         QCOMPARE(area->views().count(), 2);
 
         QPointer<Sublime::View> the_view = area->views()[1];
-        kDebug(9504) << this << "see views " << area->views()[0]
+        qDebug() << this << "see views " << area->views()[0]
                      << " " << area->views()[1];
         QPointer<QWidget> the_widget = the_view->widget();
         doc2->close(IDocument::Discard);

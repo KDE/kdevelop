@@ -17,6 +17,7 @@
 #include "grepoutputdelegate.h"
 #include "grepjob.h"
 #include "grepoutputview.h"
+#include "debug.h"
 
 #include <QWhatsThis>
 #include <QDBusConnection>
@@ -46,6 +47,8 @@
 #include <util/path.h>
 #include <language/interfaces/editorcontext.h>
 #include <outputview/ioutputview.h>
+
+Q_LOGGING_CATEGORY(PLUGIN_GREPVIEW, "kdevplatform.plugins.grepview")
 
 static QString patternFromSelection(const KDevelop::IDocument* doc)
 {
@@ -166,7 +169,7 @@ void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOpti
 {
     GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow() );
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
-    
+
     if(!pattern.isEmpty())
     {
         dlg->setPattern(pattern);
@@ -182,8 +185,8 @@ void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool showOpti
     //if directory is empty then use a default value from the config file.
     if (!m_directory.isEmpty()) {
         dlg->setSearchLocations(m_directory);
-    } 
-    
+    }
+
     if(showOptions)
         dlg->show();
     else{
@@ -219,7 +222,7 @@ GrepJob* GrepViewPlugin::newGrepJob()
     return m_currentJob;
 }
 
-GrepJob* GrepViewPlugin::grepJob() 
+GrepJob* GrepViewPlugin::grepJob()
 {
     return m_currentJob;
 }

@@ -21,8 +21,7 @@
 #include "bazaarutils.h"
 
 #include <QtCore/QDateTime>
-
-#include <KDebug>
+#include <QtCore/QDebug>
 
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsstatusinfo.h>
@@ -143,7 +142,7 @@ KDevelop::VcsStatusInfo BazaarUtils::parseVcsStatusInfoLine(const QString& line)
         result.setState(KDevelop::VcsStatusInfo::ItemDeleted);
     } else {
         result.setState(KDevelop::VcsStatusInfo::ItemUserState);
-        kWarning() << "Unsupported status: " << tokens[0];
+        qWarning() << "Unsupported status: " << tokens[0];
     }
     return result;
 }

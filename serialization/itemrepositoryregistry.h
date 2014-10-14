@@ -79,7 +79,7 @@ class KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry {
     /// @returns Count of bytes of data that have been removed.
     int finalCleanup();
 
-    /// Prints the statistics of all registered item-repositories to the command line using kDebug().
+    /// Prints the statistics of all registered item-repositories to the command line using qDebug().
     void printAllStatistics() const;
 
     /// Marks the directory as inconsistent, so it will be discarded

@@ -23,6 +23,7 @@
 #include "ducontext.h"
 #include "duchainregister.h"
 #include "types/functiontype.h"
+#include "util/debug.h"
 
 namespace KDevelop
 {
@@ -63,7 +64,7 @@ bool FunctionDeclaration::isFunctionDeclaration() const
 
 void FunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
   if( type && !type.cast<FunctionType>() ) {
-    kDebug() << "wrong type attached to function declaration:" << type->toString();
+    qCDebug(LANGUAGE) << "wrong type attached to function declaration:" << type->toString();
   }
   Declaration::setAbstractType(type);
 }

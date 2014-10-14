@@ -20,10 +20,9 @@
 
 #include <QList>
 
-#include <kdebug.h>
-
 #include "view.h"
 #include "document.h"
+#include "sublimedebug.h"
 
 namespace Sublime {
 
@@ -80,7 +79,7 @@ AreaIndex::AreaIndex(AreaIndex *parent) : d(new AreaIndexPrivate)
 
 AreaIndex::AreaIndex(const AreaIndex &index)  : d(new AreaIndexPrivate( *(index.d) ) )
 {
-    kDebug() << "copying area index";
+    qCDebug(SUBLIME) << "copying area index";
     if (d->first)
         d->first->setParent(this);
     if (d->second)

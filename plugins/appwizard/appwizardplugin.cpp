@@ -20,10 +20,10 @@
 #include <QTextStream>
 #include <QDirIterator>
 #include <QStandardPaths>
+#include <QDebug>
 
 #include <ktar.h>
 #include <kzip.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <kaction.h>
 #include <ktempdir.h>
@@ -57,6 +57,7 @@
 #include "projectselectionpage.h"
 #include "projectvcspage.h"
 #include "projecttemplatesmodel.h"
+#include "debug.h"
 
 using KDevelop::IBasicVersionControl;
 using KDevelop::ICentralizedVersionControl;
@@ -66,6 +67,7 @@ using KDevelop::VcsJob;
 using KDevelop::VcsLocation;
 using KDevelop::ICore;
 
+Q_LOGGING_CATEGORY(PLUGIN_APPWIZARD, "kdevplatform.plugins.appwizard")
 K_PLUGIN_FACTORY_WITH_JSON(AppWizardFactory, "kdevappwizard.json", registerPlugin<AppWizardPlugin>();)
 
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
@@ -148,7 +150,7 @@ void vcsError(const QString &errorMsg, KTempDir &tmpdir, const QUrl &dest, const
 bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& info, KTempDir& scratchArea)
 {
     Q_ASSERT(dvcs);
-    kDebug() << "DVCS system is used, just initializing DVCS";
+    qCDebug(PLUGIN_APPWIZARD) << "DVCS system is used, just initializing DVCS";
 
     const QUrl& dest = info.location;
     //TODO: check if we want to handle KDevelop project files (like now) or only SRC dir
@@ -158,7 +160,7 @@ bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& inf
         vcsError(i18n("Could not initialize DVCS repository"), scratchArea, dest);
         return false;
     }
-    kDebug() << "Initializing DVCS repository:" << dest;
+    qCDebug(PLUGIN_APPWIZARD) << "Initializing DVCS repository:" << dest;
 
     job = dvcs->add({dest}, KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
@@ -182,7 +184,7 @@ bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& inf
 {
     Q_ASSERT(cvcs);
 
-    kDebug() << "Importing" << info.sourceLocation << "to"
+    qCDebug(PLUGIN_APPWIZARD) << "Importing" << info.sourceLocation << "to"
              << info.repository.repositoryServer();
     VcsJob* job = cvcs->import( info.importCommitMessage, QUrl::fromLocalFile(scratchArea.name()), info.repository);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded )
@@ -191,7 +193,7 @@ bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& inf
         return false;
     }
 
-    kDebug() << "Checking out";
+    qCDebug(PLUGIN_APPWIZARD) << "Checking out";
     job = cvcs->createWorkingCopy( info.repository, info.location, IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded )
     {
@@ -215,7 +217,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 {
     QFileInfo templateInfo(info.appTemplate);
     if (!templateInfo.exists()) {
-        kWarning() << "Project app template does not exist:" << info.appTemplate;
+        qWarning() << "Project app template does not exist:" << info.appTemplate;
         return QString();
     }
 
@@ -321,7 +323,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         tmpdir.unlink();
     }else
     {
-        kDebug() << "failed to open template archive";
+        qCDebug(PLUGIN_APPWIZARD) << "failed to open template archive";
         return QString();
     }
 
@@ -336,11 +338,11 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         projectFileName = it.next();
     }
 
-    kDebug() << "Returning" << projectFileName << QFileInfo( projectFileName ).exists() ;
+    qCDebug(PLUGIN_APPWIZARD) << "Returning" << projectFileName << QFileInfo( projectFileName ).exists() ;
 
     if( ! QFileInfo( projectFileName ).exists() )
     {
-        kDebug() << "creating .kdev4 file";
+        qCDebug(PLUGIN_APPWIZARD) << "creating .kdev4 file";
         KSharedConfig::Ptr cfg = KSharedConfig::openConfig( projectFileName, KConfig::SimpleConfig );
         KConfigGroup project = cfg->group( "Project" );
         project.writeEntry( "Name", info.name );
@@ -363,7 +365,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         project.sync();
         cfg->sync();
         KConfigGroup project2 = cfg->group( "Project" );
-        kDebug() << "kdev4 file contents:" << project2.readEntry("Name", "") << project2.readEntry("Manager", "" );
+        qCDebug(PLUGIN_APPWIZARD) << "kdev4 file contents:" << project2.readEntry("Name", "") << project2.readEntry("Manager", "" );
     }
 
     return projectFileName;
@@ -371,9 +373,9 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 
 bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
 {
-    kDebug() << "unpacking dir:" << dir->name() << "to" << dest;
+    qCDebug(PLUGIN_APPWIZARD) << "unpacking dir:" << dir->name() << "to" << dest;
     const QStringList entries = dir->entries();
-    kDebug() << "entries:" << entries.join(",");
+    qCDebug(PLUGIN_APPWIZARD) << "entries:" << entries.join(",");
 
     //This extra tempdir is needed just for the files files have special names,
     //which may contain macros also files contain content with macros. So the
@@ -418,7 +420,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
 
 bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QString &dest)
 {
-    kDebug() << "copy:" << source << "to" << dest;
+    qCDebug(PLUGIN_APPWIZARD) << "copy:" << source << "to" << dest;
     // TODO: KF5 replacement? it just checks if the first 32 bytes contain non-ascii data
     if( KMimeType::isBinaryData(source) )
     {

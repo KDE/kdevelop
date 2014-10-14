@@ -29,7 +29,7 @@
 #include <QMimeDatabase>
 #include <QColor>
 #include <QFileInfo>
-#include <kdebug.h>
+#include <QDebug>
 
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
@@ -217,7 +217,7 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
 {
     Q_D(ProjectBaseItem);
     Q_ASSERT(row >= 0 && row < d->children.size());
-    
+
     if( model() ) {
         QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", Qt::DirectConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
     }
@@ -230,7 +230,7 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
         child(i)->d_func()->row--;
         Q_ASSERT(child(i)->d_func()->row==i);
     }
-    
+
     if( model() ) {
         QMetaObject::invokeMethod( model(), "rowsRemoved", Qt::DirectConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
     }
@@ -434,7 +434,7 @@ void ProjectBaseItem::appendRow( ProjectBaseItem* item )
     }
     if( item->parent() ) {
         // Proper way is to first removeRow() on the original parent, then appendRow on this one
-        kWarning() << "Ignoring double insertion of item" << item;
+        qWarning() << "Ignoring double insertion of item" << item;
         return;
     }
     // this is too slow... O(n) and thankfully not a problem anyways
@@ -559,7 +559,7 @@ QList<ProjectTargetItem*> ProjectBaseItem::targetList() const
     for ( int i = 0; i < rowCount(); ++i )
     {
         ProjectBaseItem* item = child( i );
-        
+
         if ( item->type() == Target || item->type() == LibraryTarget || item->type() == ExecutableTarget )
         {
             ProjectTargetItem *kdevitem = dynamic_cast<ProjectTargetItem*>( item );

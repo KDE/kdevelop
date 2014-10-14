@@ -20,9 +20,10 @@
 
 #include "svnimport.h"
 #include <QtTest/QtTest>
+#include <QDebug>
+
 #include <KTempDir>
 #include <KProcess>
-#include <kdebug.h>
 #include <kparts/part.h>
 #include <kio/netaccess.h>
 #include <interfaces/iplugincontroller.h>
@@ -33,7 +34,7 @@
 
 #define VERBOSE
 #if defined(VERBOSE)
-#define TRACE(X) kDebug() << X
+#define TRACE(X) qDebug() << X
 #else
 #define TRACE(X) { line = line; }
 #endif
@@ -45,7 +46,7 @@ void validatingExecJob(VcsJob* j, VcsJob::JobStatus status = VcsJob::JobSucceede
     QVERIFY(j);
 
     if (!j->exec()) {
-        kDebug() << j->errorString();
+        qDebug() << j->errorString();
         // On error, wait for key in order to allow manual state inspection
     }
     QCOMPARE(j->status(), status);
@@ -99,7 +100,7 @@ void SvnImport::testBasic()
     KTempDir reposDir;
     VcsLocation reposLoc;
     setupLocalRepository( reposDir.name(), reposLoc );
-    
+
     KTempDir projectDir;
     QString origcontent = "This is a Test";
     setupSampleProject( projectDir.name(), origcontent );

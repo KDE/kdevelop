@@ -17,6 +17,7 @@
 */
 
 #include "useswidget.h"
+#include "util/debug.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
@@ -159,7 +160,7 @@ void OneUseWidget::resizeEvent ( QResizeEvent * event ) {
   QSize size = event->size();
 
   KTextEditor::Range range = m_range->range();
-  
+
   int cutOff = 0;
   int maxCutOff = m_sourceLine.length() - (range.end().column() - range.start().column());
 
@@ -229,11 +230,11 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
   //hide these buttons for now, they're senseless
 
   m_layout->addLayout(m_headerLayout);
-  
+
   QHBoxLayout* spaceLayout = new QHBoxLayout;
   spaceLayout->addSpacing(10);
   spaceLayout->addLayout(m_itemLayout);
-  
+
   m_layout->addLayout(spaceLayout);
 
   if(maxHeight)
@@ -311,7 +312,7 @@ uint countUses(int usedDeclarationIndex, DUContext* context) {
 QList<OneUseWidget*> createUseWidgets(const CodeRepresentation& code, int usedDeclarationIndex, IndexedDeclaration decl, DUContext* context) {
   QList<OneUseWidget*> ret;
   VERIFY_FOREGROUND_LOCKED
-  
+
   for(int useIndex = 0; useIndex < context->usesCount(); ++useIndex)
     if(context->uses()[useIndex].m_declarationIndex == usedDeclarationIndex)
       ret << new OneUseWidget(decl, context->url(), context->transformFromLocalRevision(context->uses()[useIndex].m_range), code);
@@ -358,7 +359,7 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<Index
       }
     }
 
-    QLabel* headerLabel = new QLabel(i18nc("%1: source file", "In %1", "<a href='navigateToFunction'>" 
+    QLabel* headerLabel = new QLabel(i18nc("%1: source file", "In %1", "<a href='navigateToFunction'>"
                                           + headerText.toHtmlEscaped() + "</a>: "));
     addHeaderItem(headerLabel);
     setUpdatesEnabled(true);
@@ -592,7 +593,7 @@ void UsesWidget::UsesWidgetCollector::maximumProgress(uint max) {
     m_widget->m_progressBar->setMinimum(0);
     m_widget->m_progressBar->setValue(0);
   }else{
-    kWarning() << "maximumProgress called twice";
+    qWarning() << "maximumProgress called twice";
   }
 }
 
@@ -614,7 +615,7 @@ void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
       m_widget->setUpdatesEnabled(true);
     }
   }else{
-    kWarning() << "progress() called too often";
+    qWarning() << "progress() called too often";
   }
 }
 
@@ -625,9 +626,10 @@ void UsesWidget::UsesWidgetCollector::processUses( KDevelop::ReferencedTopDUCont
 
   DUChainReadLocker lock;
 
-  kDebug() << "processing" << topContext->url().str();
+
+  qCDebug(LANGUAGE) << "processing" << topContext->url().str();
   TopContextUsesWidget* widget = new TopContextUsesWidget(declaration(), declarations(), topContext.data());
-  
+
   // move to back if it's just the declaration/definition
   bool toBack = widget->usesCount() == 0;
   // move to front the item belonging to the current open document

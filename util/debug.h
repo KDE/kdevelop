@@ -1,0 +1,7 @@
+#ifndef KDEVPLATFORM_UTIL_DEBUG_H
+#define KDEVPLATFORM_UTIL_DEBUG_H
+
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(UTIL)
+
+#endif

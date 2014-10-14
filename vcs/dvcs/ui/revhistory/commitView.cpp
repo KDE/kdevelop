@@ -22,9 +22,9 @@
  ***************************************************************************/
 
 #include "commitView.h"
+#include "../../../debug.h"
 
 #include <QPainter>
-#include <KDebug>
 
 #include "../../../vcsrevision.h"
 #include "commitlogmodel.h"
@@ -55,7 +55,7 @@
 //         BOUNDARY_C, // corresponds to MERGE_FORK
 //         BOUNDARY_R, // corresponds to MERGE_FORK_R
 //         BOUNDARY_L, // corresponds to MERGE_FORK_L
-// 
+//
 //         LANE_TYPES_NUM
     };
 
@@ -70,14 +70,14 @@ CommitView::CommitView(QWidget *parent)
 
 /*===============================================================================================*/
 
-CommitViewDelegate::CommitViewDelegate(CommitView* _view, QObject* p) 
-    : QItemDelegate(p) 
+CommitViewDelegate::CommitViewDelegate(CommitView* _view, QObject* p)
+    : QItemDelegate(p)
 {
     view = _view;
 }
 
 void CommitViewDelegate::paint(QPainter* p, const QStyleOptionViewItem& opt,
-                               const QModelIndex& index) const 
+                               const QModelIndex& index) const
 {
     p->setRenderHints(QPainter::Antialiasing);
 
@@ -124,7 +124,7 @@ void CommitViewDelegate::paintGraph(QPainter* p, const QStyleOptionViewItem& opt
         {
             x1 = x2;
             x2 += lw;
-            paintGraphLane(p, (dynamic_cast<CommitLogModel*>(model))->getProperties(index.row())[curBr], 
+            paintGraphLane(p, (dynamic_cast<CommitLogModel*>(model))->getProperties(index.row())[curBr],
                            x1, x2, view->getLineHeight(index), colors[curBr % 8], back);
         }
     p->restore();
@@ -132,7 +132,7 @@ void CommitViewDelegate::paintGraph(QPainter* p, const QStyleOptionViewItem& opt
 
 
 void CommitViewDelegate::paintGraphLane(QPainter* p, int type, int x1, int x2, const int height,
-                                        const QColor& col, const QBrush& back) const 
+                                        const QColor& col, const QBrush& back) const
 {
     Q_UNUSED(back);
 
@@ -220,7 +220,7 @@ void CommitViewDelegate::paintGraphLane(QPainter* p, int type, int x1, int x2, c
     //we always have parent branch at the right
     case DVcsEvent::MERGE:
     {
-        kDebug() << "MERGE!";
+        qCDebug(VCS) << "MERGE!";
         p->setPen(Qt::NoPen);
         p->setBrush(col);
         p->drawLine(P_CENTER, x1, 0);

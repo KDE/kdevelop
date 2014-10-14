@@ -21,6 +21,7 @@
  */
 
 #include "classmodelnode.h"
+#include "debug.h"
 
 #include <typeinfo>
 #include <KLocalizedString>
@@ -51,7 +52,7 @@ Declaration* IdentifierNode::getDeclaration()
 {
   if ( !m_cachedDeclaration )
     m_cachedDeclaration = m_indexedDeclaration.declaration();
-  
+
   return m_cachedDeclaration.data();
 }
 
@@ -191,7 +192,7 @@ bool ClassNode::updateClassDeclarations()
       else
       {
         // Debug - for reference.
-        kDebug() << "class: " << klass->toString() << "name: " << decl->toString() << " - unknown declaration type: " << typeid(*decl).name();
+        qCDebug(PLUGIN_CLASSBROWSER) << "class: " << klass->toString() << "name: " << decl->toString() << " - unknown declaration type: " << typeid(*decl).name();
       }
 
       if ( newNode )
@@ -384,7 +385,7 @@ BaseClassesFolderNode::BaseClassesFolderNode(NodesModelInterface* a_model)
 void BaseClassesFolderNode::populateNode()
 {
   DUChainReadLocker readLock(DUChain::lock());
-  
+
   ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>( static_cast<ClassNode*>(getParent())->getDeclaration() );
   if ( klass )
   {
@@ -504,9 +505,9 @@ void Node::recursiveSortInternal()
 void Node::recursiveSort()
 {
   m_model->nodesLayoutAboutToBeChanged(this);
-  
+
   recursiveSortInternal();
-  
+
   m_model->nodesLayoutChanged(this);
 }
 

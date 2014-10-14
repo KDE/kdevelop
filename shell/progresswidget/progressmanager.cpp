@@ -22,8 +22,8 @@
 */
 
 #include "progressmanager.h"
+#include "../debug.h"
 
-#include <KDebug>
 #include <KLocalizedString>
 
 namespace KDevelop {
@@ -46,7 +46,7 @@ ProgressItem::~ProgressItem()
 
 void ProgressItem::setComplete()
 {
-    //   kDebug() << label();
+    //   qCDebug(SHELL) << label();
     if ( mChildren.isEmpty() ) {
         if ( mCompletedCalled )
             return;
@@ -92,7 +92,7 @@ void ProgressItem::cancel()
         return;
     }
 
-    kDebug() << label();
+    qCDebug(SHELL) << label();
     mCanceled = true;
     // Cancel all children.
     QList<ProgressItem* > kids = mChildren.keys();
@@ -111,7 +111,7 @@ void ProgressItem::cancel()
 void ProgressItem::setProgress( unsigned int v )
 {
     mProgress = v;
-    // kDebug() << label() << " :" << v;
+    // qCDebug(SHELL) << label() << " :" << v;
     emit progressItemProgress( this, mProgress );
 }
 

@@ -73,7 +73,9 @@
 #include <vcs/vcspluginhelper.h>
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include "svnlocationwidget.h"
+#include "debug.h"
 
+Q_LOGGING_CATEGORY(PLUGIN_SVN, "kdevplatform.plugins.svn")
 K_PLUGIN_FACTORY_WITH_JSON(KDevSvnFactory, "kdevsubversion.json", registerPlugin<KDevSvnPlugin>();)
 
 KDevSvnPlugin::KDevSvnPlugin(QObject *parent, const QVariantList &)
@@ -116,7 +118,7 @@ bool KDevSvnPlugin::isVersionControlled(const QUrl &localLocation)
             return !h.name.isEmpty();
         }
     } else {
-        kDebug(9510) << "Couldn't execute job";
+        qCDebug(PLUGIN_SVN) << "Couldn't execute job";
     }
 
     return false;
@@ -216,7 +218,7 @@ KDevelop::VcsJob* KDevSvnPlugin::commit(const QString& message, const QList<QUrl
                                         KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     SvnCommitJob* job = new SvnCommitJob(this);
-    kDebug(9510) << "Committing locations:" << localLocations << endl;
+    qCDebug(PLUGIN_SVN) << "Committing locations:" << localLocations << endl;
     job->setUrls(localLocations);
     job->setCommitMessage(message) ;
     job->setRecursive((recursion == KDevelop::IBasicVersionControl::Recursive));
@@ -330,7 +332,7 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
         }
     }
 
-    kDebug() << "version controlled?" << hasVersionControlledEntries;
+    qCDebug(PLUGIN_SVN) << "version controlled?" << hasVersionControlledEntries;
 
     if (!hasVersionControlledEntries)
         return IPlugin::contextMenuExtension(context);
@@ -338,7 +340,7 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
 
     QMenu* svnmenu= m_common->commonActions();
     svnmenu->addSeparator();
-    
+
     if( !copy_action )
     {
         copy_action = new QAction(i18n("Copy..."), this);

@@ -32,6 +32,7 @@
 
 #include "../duchain/duchain.h"
 #include "../duchain/topducontext.h"
+#include "util/debug.h"
 #include "codecompletionmodel.h"
 #include <interfaces/idocumentcontroller.h>
 
@@ -73,7 +74,7 @@ void CodeCompletion::viewCreated(KTextEditor::Document * document, KTextEditor::
 
   if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
     cc->registerCompletionModel(m_model);
-    kDebug() << "Registered completion model";
+    qCDebug(LANGUAGE) << "Registered completion model";
   }
 }
 
@@ -81,7 +82,7 @@ void CodeCompletion::documentUrlChanged(KDevelop::IDocument* document)
 {
   // The URL has changed (might have a different language now), so we re-register the document
   Document* textDocument = document->textDocument();
-  
+
   if(textDocument)
   {
     checkDocument(textDocument);
@@ -99,7 +100,7 @@ void CodeCompletion::unregisterDocument(Document* textDocument)
   foreach (KTextEditor::View* view, textDocument->views())
     if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view))
       cc->unregisterCompletionModel(m_model);
-    
+
   disconnect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)));
 }
 
@@ -108,7 +109,7 @@ void CodeCompletion::checkDocument(Document* textDocument)
   unregisterDocument(textDocument);
 
   QList<ILanguage*> langs=ICore::self()->languageController()->languagesForUrl( textDocument->url() );
-  
+
   bool found=false;
   foreach(ILanguage* lang, langs) {
     if(m_language==lang->name()) {
@@ -118,7 +119,7 @@ void CodeCompletion::checkDocument(Document* textDocument)
   }
   if(!found && !m_language.isEmpty())
       return;
-  
+
   foreach (KTextEditor::View* view, textDocument->views())
     viewCreated(textDocument, view);
 

@@ -29,6 +29,8 @@
 #include "../duchain/duchainlock.h"
 #include "codecompletionmodel.h"
 
+#include "QtCore/QDebug"
+
 namespace KDevelop {
 
 //A completion item used for completing include-files
@@ -41,7 +43,7 @@ public:
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
     DUChainReadLocker lock(DUChain::lock(), 500);
     if(!lock.locked()) {
-      kDebug() << "Failed to lock the du-chain in time";
+      qDebug() << "Failed to lock the du-chain in time";
       return QVariant();
     }
 

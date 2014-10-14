@@ -24,8 +24,6 @@
 #include <QtCore/QString>
 #include <QTextStream>
 
-#include <KDebug>
-
 #include "definitions.h"
 #include "ducontext.h"
 #include "topducontext.h"
@@ -140,7 +138,7 @@ void DUChainDumper::Private::dump(DUContext * context, int allowedDepth, bool is
     foreach (Declaration* dec, context->localDeclarations(top)) {
 
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
-      
+
       qout << Indent((m_indent+2) * 2) << "Declaration:" << dec->toString() << "[" << dec->qualifiedIdentifier() << "]"
         << dec << "(internal ctx:" << dec->internalContext() << ")" << dec->range().castToSimpleRange() << ","
         << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, "))

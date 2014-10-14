@@ -21,9 +21,11 @@
 
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(PLUGIN_DOCUMENTSWITCHER)
 
 class QStandardItemModel;
-namespace Sublime 
+namespace Sublime
 {
     class View;
     class MainWindow;
@@ -44,7 +46,7 @@ class DocumentSwitcherPlugin: public KDevelop::IPlugin {
 public:
     DocumentSwitcherPlugin( QObject *parent, const QVariantList &args = QVariantList() );
     ~DocumentSwitcherPlugin();
-    
+
     virtual void unload();
 public slots:
     void itemActivated( const QModelIndex& );

@@ -28,9 +28,11 @@
 #include <QStringListModel>
 #include <QModelIndex>
 #include <QStandardItemModel>
-#include <KLocalizedString>
+#include <QIcon>
+#include <QMenu>
+#include <QHeaderView>
 
-#include <kdebug.h>
+#include <KLocalizedString>
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
@@ -42,8 +44,8 @@
 #include "projectmanagerview.h"
 
 #include "ui_projectbuildsetwidget.h"
-#include <QHeaderView>
-#include <QMenu>
+#include "debug.h"
+
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <interfaces/iplugincontroller.h>
@@ -53,7 +55,7 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
      m_ui( new Ui::ProjectBuildSetWidget )
 {
     m_ui->setupUi( this );
-    
+
     m_ui->addItemButton->setIcon( QIcon::fromTheme( "list-add" ) );
     connect( m_ui->addItemButton, SIGNAL(clicked()),
              this, SLOT(addItems()) );
@@ -65,19 +67,19 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
     m_ui->upButton->setIcon( QIcon::fromTheme( "go-up" ) );
     connect( m_ui->upButton, SIGNAL(clicked()),
              SLOT(moveUp()) );
-    
+
     m_ui->downButton->setIcon( QIcon::fromTheme( "go-down" ) );
     connect( m_ui->downButton, SIGNAL(clicked()),
              SLOT(moveDown()) );
-    
+
     m_ui->topButton->setIcon( QIcon::fromTheme( "go-top" ) );
     connect( m_ui->topButton, SIGNAL(clicked()),
              SLOT(moveToTop()) );
-    
+
     m_ui->bottomButton->setIcon( QIcon::fromTheme( "go-bottom" ) );
     connect( m_ui->bottomButton, SIGNAL(clicked()),
              SLOT(moveToBottom()) );
-    
+
     m_ui->itemView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( m_ui->itemView, SIGNAL(customContextMenuRequested(QPoint)),
              SLOT(showContextMenu(QPoint)) );
@@ -95,7 +97,7 @@ void ProjectBuildSetWidget::setProjectView( ProjectManagerView* view )
 void ProjectBuildSetWidget::selectionChanged()
 {
     QModelIndexList selectedRows = m_ui->itemView->selectionModel()->selectedRows();
-    kDebug() << "checking selectionmodel:" << selectedRows;
+    qCDebug(PLUGIN_PROJECTMANAGERVIEW) << "checking selectionmodel:" << selectedRows;
     m_ui->removeItemButton->setEnabled( !selectedRows.isEmpty() );
     m_ui->addItemButton->setEnabled( !m_view->selectedItems().isEmpty() );
 
@@ -128,11 +130,11 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
         return;
 
     QList<KDevelop::ProjectBaseItem*> itemlist;
-    
+
     if(m_ui->itemView->selectionModel()->selectedRows().count() == 1)
     {
         KDevelop::ProjectBuildSetModel* buildSet = KDevelop::ICore::self()->projectController()->buildSetModel();
-        
+
         int row = m_ui->itemView->selectionModel()->selectedRows()[0].row();
         if(row < buildSet->items().size())
         {
@@ -141,12 +143,12 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
                 itemlist << item;
         }
     }
-    
+
 
     QMenu m;
     m.setTitle( i18n("Build Set") );
     m.addAction( QIcon::fromTheme("list-remove"), i18n( "Remove From Build Set" ), this, SLOT(removeItems()) );
-    
+
     if( !itemlist.isEmpty() )
     {
         KDevelop::ProjectItemContext context(itemlist);
@@ -177,7 +179,7 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
 
         showContextMenu_appendActions(m, projectActions);
     }
-    
+
     m.exec( m_ui->itemView->viewport()->mapToGlobal( p ) );
 }
 
@@ -194,18 +196,18 @@ void ProjectBuildSetWidget::removeItems()
     // We only support contigous selection, so we only need to remove the first range
     QItemSelectionRange range = m_ui->itemView->selectionModel()->selection().first();
     int top = range.top();
-    kDebug() << "removing:" << range.top() << range.height();
+    qCDebug(PLUGIN_PROJECTMANAGERVIEW) << "removing:" << range.top() << range.height();
     KDevelop::ProjectBuildSetModel* buildSet = KDevelop::ICore::self()->projectController()->buildSetModel();
     buildSet->removeRows( range.top(), range.height() );
     top = qMin( top, buildSet->rowCount() - 1 );
     QModelIndex sidx = buildSet->index( top, 0 );
     QModelIndex eidx = buildSet->index( top, buildSet->columnCount() - 1 );
-    m_ui->itemView->selectionModel()->select( QItemSelection( sidx, eidx ), 
+    m_ui->itemView->selectionModel()->select( QItemSelection( sidx, eidx ),
                                               QItemSelectionModel::ClearAndSelect );
     m_ui->itemView->selectionModel()->setCurrentIndex( sidx,  QItemSelectionModel::Current );
 }
 
-void ProjectBuildSetWidget::moveDown() 
+void ProjectBuildSetWidget::moveDown()
 {
     // We only support contigous selection, so we only need to remove the first range
     QItemSelectionRange range = m_ui->itemView->selectionModel()->selection().first();
@@ -213,14 +215,14 @@ void ProjectBuildSetWidget::moveDown()
     KDevelop::ProjectBuildSetModel* buildSet = KDevelop::ICore::self()->projectController()->buildSetModel();
     buildSet->moveRowsDown( top, height );
     int columnCount = buildSet->columnCount();
-    QItemSelection newrange( buildSet->index( top + 1, 0 ), 
+    QItemSelection newrange( buildSet->index( top + 1, 0 ),
                              buildSet->index( top + height, columnCount - 1 ) );
     m_ui->itemView->selectionModel()->select( newrange, QItemSelectionModel::ClearAndSelect );
     m_ui->itemView->selectionModel()->setCurrentIndex( newrange.first().topLeft(),
                                                        QItemSelectionModel::Current );
 }
 
-void ProjectBuildSetWidget::moveToBottom() 
+void ProjectBuildSetWidget::moveToBottom()
 {
     // We only support contigous selection, so we only need to remove the first range
     QItemSelectionRange range = m_ui->itemView->selectionModel()->selection().first();
@@ -229,14 +231,14 @@ void ProjectBuildSetWidget::moveToBottom()
     buildSet->moveRowsToBottom( top, height );
     int rowCount = buildSet->rowCount();
     int columnCount = buildSet->columnCount();
-    QItemSelection newrange( buildSet->index( rowCount - height, 0 ), 
+    QItemSelection newrange( buildSet->index( rowCount - height, 0 ),
                              buildSet->index( rowCount - 1, columnCount - 1 ) );
     m_ui->itemView->selectionModel()->select( newrange, QItemSelectionModel::ClearAndSelect );
     m_ui->itemView->selectionModel()->setCurrentIndex( newrange.first().topLeft(),
                                                        QItemSelectionModel::Current );
 }
 
-void ProjectBuildSetWidget::moveUp() 
+void ProjectBuildSetWidget::moveUp()
 {
     // We only support contigous selection, so we only need to remove the first range
     QItemSelectionRange range = m_ui->itemView->selectionModel()->selection().first();
@@ -244,7 +246,7 @@ void ProjectBuildSetWidget::moveUp()
     KDevelop::ProjectBuildSetModel* buildSet = KDevelop::ICore::self()->projectController()->buildSetModel();
     buildSet->moveRowsUp( top, height );
     int columnCount = buildSet->columnCount();
-    QItemSelection newrange( buildSet->index( top - 1, 0 ), 
+    QItemSelection newrange( buildSet->index( top - 1, 0 ),
                              buildSet->index( top - 2 + height, columnCount - 1 ) );
     m_ui->itemView->selectionModel()->select( newrange, QItemSelectionModel::ClearAndSelect );
     m_ui->itemView->selectionModel()->setCurrentIndex( newrange.first().topLeft(),
@@ -252,7 +254,7 @@ void ProjectBuildSetWidget::moveUp()
 }
 
 
-void ProjectBuildSetWidget::moveToTop() 
+void ProjectBuildSetWidget::moveToTop()
 {
     // We only support contigous selection, so we only need to remove the first range
     QItemSelectionRange range = m_ui->itemView->selectionModel()->selection().first();
@@ -260,7 +262,7 @@ void ProjectBuildSetWidget::moveToTop()
     KDevelop::ProjectBuildSetModel* buildSet = KDevelop::ICore::self()->projectController()->buildSetModel();
     buildSet->moveRowsToTop( top, height );
     int columnCount = buildSet->columnCount();
-    QItemSelection newrange( buildSet->index( 0, 0 ), 
+    QItemSelection newrange( buildSet->index( 0, 0 ),
                              buildSet->index( height - 1, columnCount - 1 ) );
     m_ui->itemView->selectionModel()->select( newrange, QItemSelectionModel::ClearAndSelect );
     m_ui->itemView->selectionModel()->setCurrentIndex( newrange.first().topLeft(),

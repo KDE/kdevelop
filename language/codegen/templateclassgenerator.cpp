@@ -19,6 +19,7 @@
 
 #include "templateclassgenerator.h"
 #include "archivetemplateloader.h"
+#include "util/debug.h"
 
 #include "interfaces/icore.h"
 #include <interfaces/iprojectcontroller.h>
@@ -70,7 +71,7 @@ public:
     QHash<QString, QUrl> fileUrls;
     QHash<QString, KTextEditor::Cursor> filePositions;
     ClassDescription description;
-    
+
     QList<DeclarationPointer> directBaseClasses;
     QList<DeclarationPointer> allBaseClasses;
 
@@ -252,7 +253,7 @@ void TemplateClassGenerator::setNamespaces(const QStringList& namespaces) const
 /// Specify license for this class
 void TemplateClassGenerator::setLicense(const QString& license)
 {
-    kDebug() << "New Class: " << d->name << "Set license: " << d->license;
+    qCDebug(LANGUAGE) << "New Class: " << d->name << "Set license: " << d->license;
     d->license = license;
     d->renderer.addVariable("license", license);
 }

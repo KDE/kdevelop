@@ -32,11 +32,11 @@
 
 #include <KLocalizedString>
 #include <KPassivePopup>
-#include <KDebug>
 
 #include "breakpointdetails.h"
 #include "../breakpoint/breakpoint.h"
 #include "../breakpoint/breakpointmodel.h"
+#include "util/debug.h"
 #include <interfaces/idebugcontroller.h>
 #include <util/autoorientedsplitter.h>
 
@@ -175,7 +175,7 @@ void BreakpointWidget::slotPopupMenuAboutToShow()
         breakpointDisableAll_->setDisabled(allDisabled);
         breakpointEnableAll_->setDisabled(allEnabled);
     }
-       
+
 }
 
 void BreakpointWidget::showEvent(QShowEvent *)
@@ -236,7 +236,7 @@ void BreakpointWidget::slotRemoveBreakpoint()
 {
     QItemSelectionModel* sel = m_breakpointsView->selectionModel();
     QModelIndexList selected = sel->selectedIndexes();
-    IF_DEBUG( kDebug() << selected; )
+    IF_DEBUG( qCDebug(DEBUGGER) << selected; )
     if (!selected.isEmpty()) {
         m_debugController->breakpointModel()->removeRow(selected.first().row());
     }
@@ -251,7 +251,7 @@ void BreakpointWidget::slotRemoveAllBreakpoints()
 void BreakpointWidget::slotUpdateBreakpointDetail()
 {
     QModelIndexList selected = m_breakpointsView->selectionModel()->selectedIndexes();
-    IF_DEBUG( kDebug() << selected; )
+    IF_DEBUG( qCDebug(DEBUGGER) << selected; )
     if (selected.isEmpty()) {
         details_->setItem(0);
     } else {
@@ -261,7 +261,7 @@ void BreakpointWidget::slotUpdateBreakpointDetail()
 
 void BreakpointWidget::breakpointHit(KDevelop::Breakpoint* b)
 {
-    IF_DEBUG( kDebug() << b; )
+    IF_DEBUG( qCDebug(DEBUGGER) << b; )
     const QModelIndex index = m_proxyModel->mapFromSource(m_debugController->breakpointModel()->breakpointIndex(b, 0));
     m_breakpointsView->selectionModel()->select(
         index,
@@ -271,7 +271,7 @@ void BreakpointWidget::breakpointHit(KDevelop::Breakpoint* b)
 
 void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& msg, int column)
 {
-    IF_DEBUG( kDebug() << b << msg << column; )
+    IF_DEBUG( qCDebug(DEBUGGER) << b << msg << column; )
 
     // FIXME: we probably should prevent this error notification during
     // initial setting of breakpoint, to avoid a cloud of popups.

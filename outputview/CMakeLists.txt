@@ -1,5 +1,4 @@
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9507 )
 set( outputviewinterfaces_LIB_SRCS
     outputdelegate.cpp
     outputformats.cpp

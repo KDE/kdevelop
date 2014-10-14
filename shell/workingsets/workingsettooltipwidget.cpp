@@ -19,10 +19,10 @@
 #include "workingsettooltipwidget.h"
 
 #include <KLocalizedString>
-#include <KDebug>
 
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QDebug>
 
 #include "core.h"
 #include "documentcontroller.h"
@@ -210,7 +210,7 @@ void WorkingSetToolTipWidget::nextDocument()
 
     if(active == -1)
     {
-        kWarning() << "Found no active document";
+        qWarning() << "Found no active document";
         return;
     }
 
@@ -230,7 +230,7 @@ void WorkingSetToolTipWidget::previousDocument()
 
     if(active == -1)
     {
-        kWarning() << "Found no active document";
+        qWarning() << "Found no active document";
         return;
     }
 
@@ -269,7 +269,7 @@ void WorkingSetToolTipWidget::updateFileButtons()
         currentWorkingSet = controller->getWorkingSet(mainWindow->area()->workingSet());
         openFiles = currentWorkingSet->fileList().toSet();
     }
-    
+
     bool allOpen = true;
     bool noneOpen = true;
 

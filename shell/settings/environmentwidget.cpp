@@ -28,7 +28,6 @@ Boston, MA 02110-1301, USA.
 #include <QMap>
 #include <QProcess>
 
-#include <kdebug.h>
 #include <kdialog.h>
 #include <klineedit.h>
 #include <ktextedit.h>
@@ -39,6 +38,7 @@ Boston, MA 02110-1301, USA.
 
 #include "environmentgroupmodel.h"
 #include "placeholderitemproxymodel.h"
+#include "../debug.h"
 
 namespace KDevelop
 {
@@ -107,13 +107,13 @@ void EnvironmentWidget::setAsDefault()
 
 void EnvironmentWidget::loadSettings( KConfig* config )
 {
-    kDebug() << "Loading groups from config";
+    qCDebug(SHELL) << "Loading groups from config";
     groupModel->loadFromConfig( config );
 
     ui.activeCombo->clear();
 
     QStringList groupList = groupModel->groups();
-    kDebug() << "Grouplist:" << groupList << "default group:" << groupModel->defaultGroup();
+    qCDebug(SHELL) << "Grouplist:" << groupList << "default group:" << groupModel->defaultGroup();
     ui.activeCombo->addItems( groupList );
     int idx = ui.activeCombo->findText( groupModel->defaultGroup() );
     ui.activeCombo->setCurrentIndex( idx );
@@ -212,7 +212,7 @@ void EnvironmentWidget::activeGroupChanged( int /*idx*/ )
     enableButtons( ui.activeCombo->currentText() );
 }
 
-void EnvironmentWidget::enableButtons( const QString& txt ) 
+void EnvironmentWidget::enableButtons( const QString& txt )
 {
     ui.addgrpBtn->setEnabled( !groupModel->groups().contains( txt  ) );
     ui.removegrpBtn->setEnabled( ( groupModel->groups().contains( txt  ) && groupModel->defaultGroup() != txt ) );

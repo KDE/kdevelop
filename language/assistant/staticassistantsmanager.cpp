@@ -18,6 +18,7 @@
 */
 
 #include "staticassistantsmanager.h"
+#include "util/debug.h"
 
 #include <QTimer>
 
@@ -175,7 +176,7 @@ void StaticAssistantsManager::Private::eventuallyStartAssistant()
         return;
     }
 
-    kDebug() << "Trying to find assistants for language" << language->name();
+    qCDebug(LANGUAGE) << "Trying to find assistants for language" << language->name();
     foreach (auto assistant, m_registeredAssistants) {
         if (assistant->supportedLanguage() != language->languageSupport())
             continue;

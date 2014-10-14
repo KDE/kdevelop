@@ -172,13 +172,13 @@ void TestView::updateTestSuite(ITestSuite* suite, const TestResult& result)
         return;
     }
 
-    debug() << "Updating test suite" << suite->name();
+    qCDebug(PLUGIN_TESTVIEW) << "Updating test suite" << suite->name();
 
     item->setIcon(iconForTestResult(result.suiteResult));
 
     for (int i = 0; i < item->rowCount(); ++i)
     {
-        debug() << "Found a test case" << item->child(i)->text();
+        qCDebug(PLUGIN_TESTVIEW) << "Found a test case" << item->child(i)->text();
         QStandardItem* caseItem = item->child(i);
         if (result.testCaseResults.contains(caseItem->text()))
         {
@@ -195,15 +195,15 @@ void TestView::notifyTestCaseStarted(ITestSuite* suite, const QStringList& test_
     {
         return;
     }
-    
-    debug() << "Notify a test of the suite " << suite->name() << " has started";
-    
+
+    qCDebug(PLUGIN_TESTVIEW) << "Notify a test of the suite " << suite->name() << " has started";
+
     // Global test suite icon
     item->setIcon(QIcon::fromTheme("process-idle"));
-    
+
     for (int i = 0; i < item->rowCount(); ++i)
     {
-        debug() << "Found a test case" << item->child(i)->text();
+        qCDebug(PLUGIN_TESTVIEW) << "Found a test case" << item->child(i)->text();
         QStandardItem* caseItem = item->child(i);
         if (test_cases.contains(caseItem->text()))
         {
@@ -374,7 +374,7 @@ void TestView::showSource()
     locker.unlock();
 
     IDocumentController* dc = ICore::self()->documentController();
-    debug() << "Activating declaration in" << url;
+    qCDebug(PLUGIN_TESTVIEW) << "Activating declaration in" << url;
     dc->openDocument(url, cursor);
 }
 

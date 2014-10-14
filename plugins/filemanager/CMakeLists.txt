@@ -1,4 +1,3 @@
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9516 )
 
 ########### next target ###############
 

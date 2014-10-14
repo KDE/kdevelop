@@ -9,8 +9,8 @@
  ***************************************************************************/
 
 #include "cvsstatusjob.h"
+#include "debug.h"
 
-#include <KDebug>
 #include <QUrl>
 #include <QDir>
 #include <QStringList>
@@ -36,8 +36,8 @@ QVariant CvsStatusJob::fetchResults()
     return infos;
 }
 
-void CvsStatusJob::addInfoToList(QList<QVariant>& infos, 
-        const QString& currentDir, const QString& filename, 
+void CvsStatusJob::addInfoToList(QList<QVariant>& infos,
+        const QString& currentDir, const QString& filename,
         const QString& statusString)
 {
     KDevelop::VcsStatusInfo::State cvsState = String2EnumState( statusString );
@@ -50,7 +50,7 @@ void CvsStatusJob::addInfoToList(QList<QVariant>& infos,
     }
 
     // join the current directory (if any) and the found filename ...
-    // note: current directy is always relative to the directory where the 
+    // note: current directy is always relative to the directory where the
     //       cvs command was executed
     QString file = currentDir;
     if (file.length() > 0) {
@@ -63,7 +63,7 @@ void CvsStatusJob::addInfoToList(QList<QVariant>& infos,
     info.setUrl(QUrl::fromLocalFile(QString(getDirectory() + QDir::separator() + file)));
     info.setState(cvsState);
 
-    kDebug(9500) << "Added status of: " << info.url() << endl;
+    qCDebug(PLUGIN_CVS) << "Added status of: " << info.url() << endl;
     infos << qVariantFromValue( info );
 }
 
@@ -91,7 +91,7 @@ void CvsStatusJob::parseOutput(const QString& jobOutput, QList<QVariant>& infos)
 
         if ( re_start.exactMatch(s) ) {
             if ( !filename.isEmpty() ) {
-//                kDebug(9500) << "File:" << filename << "Status:" << status
+//                qCDebug(PLUGIN_CVS) << "File:" << filename << "Status:" << status
 //                    << "working:" << workrev << "repo:" << reporev << endl;
 
                 addInfoToList( infos, currentDir, filename, status );
@@ -115,7 +115,7 @@ void CvsStatusJob::parseOutput(const QString& jobOutput, QList<QVariant>& infos)
     }
 
     if ( !filename.isEmpty() ) {
-//        kDebug(9500) << "File:" << filename << "Status:" << status
+//        qCDebug(PLUGIN_CVS) << "File:" << filename << "Status:" << status
 //            << "working:" << workrev << "repo:" << reporev << endl;
 
         addInfoToList( infos, currentDir, filename, status );
@@ -137,7 +137,7 @@ KDevelop::VcsStatusInfo::State CvsStatusJob::String2EnumState(const QString& sta
         return KDevelop::VcsStatusInfo::ItemDeleted;
     else if (stateAsString == "Unresolved Conflict")
         return KDevelop::VcsStatusInfo::ItemHasConflicts;
-    else if (stateAsString == "Needs Patch") 
+    else if (stateAsString == "Needs Patch")
         return KDevelop::VcsStatusInfo::ItemUpToDate;
     else
         return KDevelop::VcsStatusInfo::ItemUnknown;

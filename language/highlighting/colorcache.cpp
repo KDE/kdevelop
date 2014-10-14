@@ -35,6 +35,7 @@
 #include "../interfaces/ilanguagesupport.h"
 #include "../duchain/duchain.h"
 #include "../duchain/duchainlock.h"
+#include "util/debug.h"
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
@@ -141,10 +142,10 @@ void ColorCache::generateColors()
   m_colors.clear();
   uint step = totalColorInterpolationSteps() / totalGeneratedColors;
   uint currentPos = m_colorOffset;
-  ifDebug(kDebug() << "text color:" << m_foregroundColor;)
+  ifDebug(qCDebug(LANGUAGE) << "text color:" << m_foregroundColor;)
   for(uint a = 0; a < totalGeneratedColors; ++a) {
     m_colors.append( blendLocalColor( interpolate( currentPos ) ) );
-    ifDebug(kDebug() << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps() << ":" << (void*) m_colors.last().rgb();)
+    ifDebug(qCDebug(LANGUAGE) << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps() << ":" << (void*) m_colors.last().rgb();)
     currentPos += step;
   }
   m_validColorCount = m_colors.count();
@@ -154,7 +155,7 @@ void ColorCache::generateColors()
 void ColorCache::slotDocumentActivated(IDocument* doc)
 {
   KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
-  ifDebug(kDebug() << "doc activated:" << doc;)
+  ifDebug(qCDebug(LANGUAGE) << "doc activated:" << doc;)
   if ( view ) {
     updateColorsFromView(view);
   }
@@ -165,7 +166,7 @@ void ColorCache::slotViewSettingsChanged()
   KTextEditor::View* view = qobject_cast<KTextEditor::View*>(sender());
   Q_ASSERT(view);
 
-  ifDebug(kDebug() << "settings changed" << view;)
+  ifDebug(qCDebug(LANGUAGE) << "settings changed" << view;)
   updateColorsFromView(view);
 }
 
@@ -186,7 +187,7 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
   if (style->hasProperty(QTextFormat::BackgroundBrush)) {
     background = style->background().color();
   }
-//     kDebug() << "got foreground:" << foreground.name() << "old is:" << m_foregroundColor.name();
+//     qCDebug(LANGUAGE) << "got foreground:" << foreground.name() << "old is:" << m_foregroundColor.name();
   //NOTE: this slot is defined in KatePart > 4.4, see ApiDocs of the ConfigInterface
   if ( KTextEditor::View* view = m_view.data() ) {
     // we only listen to a single view, i.e. the active one
@@ -197,13 +198,13 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
 
   if ( !foreground.isValid() ) {
     // fallback to colorscheme variant
-    ifDebug(kDebug() << "updating from scheme";)
+    ifDebug(qCDebug(LANGUAGE) << "updating from scheme";)
     updateColorsFromScheme();
   } else if ( m_foregroundColor != foreground || m_backgroundColor != background ) {
     m_foregroundColor = foreground;
     m_backgroundColor = background;
 
-    ifDebug(kDebug() << "updating from document";)
+    ifDebug(qCDebug(LANGUAGE) << "updating from document";)
     update();
   }
 }
@@ -237,7 +238,7 @@ void ColorCache::updateColorsFromSettings()
 void ColorCache::update()
 {
   if ( !m_self ) {
-    ifDebug(kDebug() << "not updating - still initializating";)
+    ifDebug(qCDebug(LANGUAGE) << "not updating - still initializating";)
     // don't update on startup, updateInternal is called directly there
     return;
   }
@@ -247,7 +248,7 @@ void ColorCache::update()
 
 void ColorCache::updateInternal()
 {
-  ifDebug(kDebug() << "update internal" << m_self;)
+  ifDebug(qCDebug(LANGUAGE) << "update internal" << m_self;)
   generateColors();
 
   if ( !m_self ) {

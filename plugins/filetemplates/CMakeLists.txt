@@ -13,6 +13,7 @@ set(kdevfiletemplates_PART_SRCS
     templateoptionspage.cpp
     templateselectionpage.cpp
     testcasespage.cpp
+    debug.cpp
 )
 
 qt5_wrap_ui(kdevfiletemplates_PART_SRCS
@@ -79,12 +80,13 @@ main.cpp
     templateoptionspage.cpp
     templateselectionpage.cpp
     testcasespage.cpp
+    debug.cpp
 )
 
 add_executable(testfiletemplates ${test_srcs})
 
 target_link_libraries(testfiletemplates
-    
+
     KDev::Interfaces
     KDev::Language
     KDev::Project

@@ -18,7 +18,6 @@
 */
 
 #include "vcschangesviewplugin.h"
-#include <QDebug>
 #include <QPalette>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>

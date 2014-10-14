@@ -23,6 +23,7 @@
 #include "../duchain/duchain.h"
 
 #include "language/interfaces/iastcontainer.h"
+#include "util/debug.h"
 
 namespace KDevelop
 {
@@ -182,7 +183,7 @@ protected:
     {
         if(!m_AstContainers.contains(file))
         {
-            kDebug() << "Ast requested for: " << file.str();
+            qCDebug(LANGUAGE) << "Ast requested for: " << file.str();
 
             TopDUContext * context = DUChain::self()->waitForUpdate(file, KDevelop::TopDUContext::AST).data();
 

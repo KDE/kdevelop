@@ -36,7 +36,6 @@
 #include <QWidgetAction>
 #include <QSortFilterProxyModel>
 #include <kaction.h>
-#include <kdebug.h>
 #include <ktoggleaction.h>
 #include <KLocalizedString>
 #include <kicon.h>
@@ -49,7 +48,9 @@
 #include <util/focusedtreeview.h>
 
 #include "toolviewdata.h"
+#include "debug.h"
 
+Q_LOGGING_CATEGORY(PLUGIN_STANDARDOUTPUTVIEW, "kdevplatform.plugins.standardoutputview")
 Q_DECLARE_METATYPE(QTreeView*)
 
 OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
@@ -176,7 +177,7 @@ void OutputWidget::addOutput( int id )
     setCurrentWidget( listview );
     connect( data->outputdata.value(id), SIGNAL(modelChanged(int)), this, SLOT(changeModel(int)));
     connect( data->outputdata.value(id), SIGNAL(delegateChanged(int)), this, SLOT(changeDelegate(int)));
-    
+
     enableActions();
 }
 
@@ -421,7 +422,7 @@ void OutputWidget::selectItem(Direction direction)
         ? iface->previousHighlightIndex( index )
         : iface->nextHighlightIndex( index );
 
-    kDebug() << "old:" << index << "- new:" << newIndex;
+    qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "old:" << index << "- new:" << newIndex;
     activateIndex(newIndex, view, iface);
 }
 
@@ -455,7 +456,7 @@ QTreeView* OutputWidget::createListView(int id)
     {
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
         {
-            kDebug() << "creating listview";
+            qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "creating listview";
             listview = createFocusedTreeView(this);
 
             views[id] = listview;

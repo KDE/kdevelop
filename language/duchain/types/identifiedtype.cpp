@@ -23,6 +23,7 @@
 #include "../declaration.h"
 #include "../duchainpointer.h"
 #include "../declarationid.h"
+#include "util/debug.h"
 
 namespace KDevelop
 {
@@ -41,7 +42,7 @@ bool IdentifiedType::equals(const IdentifiedType* rhs) const
   if( idData()->m_id == rhs->idData()->m_id )
     ret = true;
 
-  //kDebug() << this << rhs << true;
+  //qCDebug(LANGUAGE) << this << rhs << true;
   return ret;
 }
 

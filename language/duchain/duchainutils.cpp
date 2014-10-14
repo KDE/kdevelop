@@ -22,13 +22,12 @@
 
 #include "duchainutils.h"
 
-#include <kiconloader.h>
-
 #include <interfaces/ilanguage.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 
 #include "../interfaces/ilanguagesupport.h"
+#include "util/debug.h"
 
 #include "declaration.h"
 #include "classfunctiondeclaration.h"
@@ -252,12 +251,12 @@ TopDUContext* DUChainUtils::contentContextFromProxyContext(TopDUContext* top)
       if(!ret)
         return 0;
       if(ret->url() != top->url())
-        kDebug() << "url-mismatch between content and proxy:" << top->url().toUrl() << ret->url().toUrl();
+        qCDebug(LANGUAGE) << "url-mismatch between content and proxy:" << top->url().toUrl() << ret->url().toUrl();
       if(ret->url() == top->url() && !ret->parsingEnvironmentFile()->isProxyContext())
         return ret;
     }
     else {
-      kDebug() << "Proxy-context imports no content-context";
+      qCDebug(LANGUAGE) << "Proxy-context imports no content-context";
     }
   } else
     return top;
@@ -374,9 +373,9 @@ Declaration* DUChainUtils::declarationForDefinition(Declaration* definition, Top
 Declaration* DUChainUtils::declarationInLine(const KTextEditor::Cursor& _cursor, DUContext* ctx) {
   if(!ctx)
     return 0;
-  
+
   CursorInRevision cursor = ctx->transformToLocalRevision(_cursor);
-  
+
   foreach(Declaration* decl, ctx->localDeclarations()) {
     if(decl->range().start.line == cursor.line)
       return decl;
@@ -460,7 +459,7 @@ KDevelop::DUContext* DUChainUtils::getArgumentContext(KDevelop::Declaration* dec
 QList<IndexedDeclaration> DUChainUtils::collectAllVersions(Declaration* decl) {
   QList<IndexedDeclaration> ret;
   ret << IndexedDeclaration(decl);
-  
+
   if(decl->inSymbolTable())
   {
     uint count;
@@ -470,7 +469,7 @@ QList<IndexedDeclaration> DUChainUtils::collectAllVersions(Declaration* decl) {
       if(!(allDeclarations[a] == IndexedDeclaration(decl)))
         ret << allDeclarations[a];
   }
-  
+
   return ret;
 }
 
@@ -478,7 +477,7 @@ QList<IndexedDeclaration> DUChainUtils::collectAllVersions(Declaration* decl) {
 QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions)
 {
   QList<Declaration*> ret;
-  
+
   if(!dynamic_cast<const ClassDeclaration*>(decl))
     return ret;
 
@@ -487,21 +486,21 @@ QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& m
 
   if(decl->internalContext() && decl->internalContext()->type() == DUContext::Class)
     FOREACH_ARRAY(const IndexedDUContext& importer, decl->internalContext()->indexedImporters()) {
-      
+
       DUContext* imp = importer.data();
-      
+
       if(!imp)
         continue;
-      
+
       if(imp->type() == DUContext::Class && imp->owner())
         ret << imp->owner();
 
       --maxAllowedSteps;
-      
+
       if(maxAllowedSteps == 0)
         return ret;
     }
-    
+
     if(maxAllowedSteps == 0)
       return ret;
 
@@ -511,42 +510,42 @@ QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& m
     PersistentSymbolTable::self().declarations(decl->qualifiedIdentifier(), count, allDeclarations);
     for(uint a = 0; a < count; ++a) {
       ++maxAllowedSteps;
-      
+
       if(allDeclarations[a].data() && allDeclarations[a].data() != decl) {
         ret += getInheriters(allDeclarations[a].data(), maxAllowedSteps, false);
       }
-      
+
       if(maxAllowedSteps == 0)
         return ret;
     }
   }
-  
+
   return ret;
 }
 
 QList<Declaration*> DUChainUtils::getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration, uint& maxAllowedSteps) {
   QList<Declaration*> ret;
-  
+
   if(maxAllowedSteps == 0)
     return ret;
-  
+
   if(currentClass != overriddenDeclaration->context()->owner() && currentClass->internalContext())
     ret += currentClass->internalContext()->findLocalDeclarations(overriddenDeclaration->identifier(), CursorInRevision::invalid(), currentClass->topContext(), overriddenDeclaration->abstractType());
-  
+
   foreach(Declaration* inheriter, getInheriters(currentClass, maxAllowedSteps))
     ret += getOverriders(inheriter, overriddenDeclaration, maxAllowedSteps);
-  
+
   return ret;
 }
 
 static bool hasUse(DUContext* context, int usedDeclarationIndex) {
   if(usedDeclarationIndex == std::numeric_limits<int>::max())
     return false;
-  
+
   for(int a = 0; a < context->usesCount(); ++a)
     if(context->uses()[a].m_declarationIndex == usedDeclarationIndex)
       return true;
-    
+
   foreach(DUContext* child, context->childContexts())
     if(hasUse(child, usedDeclarationIndex))
       return true;
@@ -560,16 +559,16 @@ bool DUChainUtils::contextHasUse(DUContext* context, Declaration* declaration) {
 static uint countUses(DUContext* context, int usedDeclarationIndex) {
   if(usedDeclarationIndex == std::numeric_limits<int>::max())
     return 0;
-  
+
   uint ret = 0;
-  
+
   for(int a = 0; a < context->usesCount(); ++a)
     if(context->uses()[a].m_declarationIndex == usedDeclarationIndex)
       ++ret;
-    
+
   foreach(DUContext* child, context->childContexts())
     ret += countUses(child, usedDeclarationIndex);
-  
+
   return ret;
 }
 
@@ -581,13 +580,13 @@ Declaration* DUChainUtils::getOverridden(const Declaration* decl) {
   const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl);
   if(!classFunDecl || !classFunDecl->isVirtual())
     return 0;
-  
+
   QList<Declaration*> decls;
 
   foreach(const DUContext::Import &import, decl->context()->importedParentContexts()) {
     DUContext* ctx = import.context(decl->topContext());
     if(ctx)
-      decls += ctx->findDeclarations(QualifiedIdentifier(decl->identifier()), 
+      decls += ctx->findDeclarations(QualifiedIdentifier(decl->identifier()),
                                             CursorInRevision::invalid(), decl->abstractType(), decl->topContext(), DUContext::DontSearchInParent);
   }
 
@@ -596,7 +595,7 @@ Declaration* DUChainUtils::getOverridden(const Declaration* decl) {
     if(foundClassFunDecl && foundClassFunDecl->isVirtual())
       return found;
   }
-    
+
   return 0;
 }
 
@@ -609,7 +608,7 @@ DUContext* DUChainUtils::getFunctionContext(Declaration* decl) {
         functionContext = ctx;
     }
   }
-  
+
   if(functionContext && functionContext->type() == DUContext::Function)
     return functionContext;
   return 0;

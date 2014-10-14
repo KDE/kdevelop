@@ -28,7 +28,6 @@
 #include <QtCore/QSignalMapper>
 
 #include <KColorScheme>
-#include <KDebug>
 #include <KSqueezedTextLabel>
 
 #include <interfaces/istatus.h>

@@ -22,12 +22,12 @@
 #include "executeplugin.h"
 
 #include <QApplication>
+#include <QDebug>
 
 #include <KLocalizedString>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <KConfigCore/KConfigGroup>
-#include <kdebug.h>
 #include <kjob.h>
 #include <kparts/mainwindow.h>
 #include <kmessagebox.h>
@@ -41,6 +41,7 @@
 #include <util/environmentgrouplist.h>
 
 #include "nativeappconfig.h"
+#include "debug.h"
 #include <project/projectmodel.h>
 #include <project/builderjob.h>
 #include <kshell.h>
@@ -61,6 +62,7 @@ QString ExecutePlugin::projectTargetEntry = "Project Target";
 
 using namespace KDevelop;
 
+Q_LOGGING_CATEGORY(PLUGIN_EXECUTE, "kdevplatform.plugins.execute")
 K_PLUGIN_FACTORY_WITH_JSON(KDevExecuteFactory, "kdevexecute.json", registerPlugin<ExecutePlugin>();)
 
 ExecutePlugin::ExecutePlugin(QObject *parent, const QVariantList&)
@@ -69,7 +71,7 @@ ExecutePlugin::ExecutePlugin(QObject *parent, const QVariantList&)
     KDEV_USE_EXTENSION_INTERFACE( IExecutePlugin )
     m_configType = new NativeAppConfigType();
     m_configType->addLauncher( new NativeAppLauncher() );
-    kDebug() << "adding native app launch config";
+    qCDebug(PLUGIN_EXECUTE) << "adding native app launch config";
     core()->runController()->addConfigurationType( m_configType );
 }
 
@@ -91,24 +93,24 @@ QStringList ExecutePlugin::arguments( KDevelop::ILaunchConfiguration* cfg, QStri
     {
         return QStringList();
     }
-    
+
     KShell::Errors err;
     QStringList args = KShell::splitArgs( cfg->config().readEntry( ExecutePlugin::argumentsEntry, "" ), KShell::TildeExpand | KShell::AbortOnMeta, &err );
     if( err != KShell::NoError )
     {
-        
-        if( err == KShell::BadQuoting ) 
+
+        if( err == KShell::BadQuoting )
         {
             err_ = i18n("There is a quoting error in the arguments for "
             "the launch configuration '%1'. Aborting start.", cfg->name() );
-        } else 
-        {   
+        } else
+        {
             err_ = i18n("A shell meta character was included in the "
             "arguments for the launch configuration '%1', "
             "this is not supported currently. Aborting start.", cfg->name() );
         }
         args = QStringList();
-        kWarning() << "Launch Configuration:" << cfg->name() << "arguments have meta characters";
+        qWarning() << "Launch Configuration:" << cfg->name() << "arguments have meta characters";
     }
     return args;
 }
@@ -118,7 +120,7 @@ KJob* ExecutePlugin::dependecyJob( KDevelop::ILaunchConfiguration* cfg ) const
 {
     QVariantList deps = KDevelop::stringToQVariant( cfg->config().readEntry( dependencyEntry, QString() ) ).toList();
     QString depAction = cfg->config().readEntry( dependencyActionEntry, "Nothing" );
-    if( depAction != "Nothing" && !deps.isEmpty() ) 
+    if( depAction != "Nothing" && !deps.isEmpty() )
     {
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
         QList<KDevelop::ProjectBaseItem*> items;
@@ -156,7 +158,7 @@ QString ExecutePlugin::environmentGroup( KDevelop::ILaunchConfiguration* cfg ) c
     {
         return "";
     }
-    
+
     return cfg->config().readEntry( ExecutePlugin::environmentGroupEntry, "" );
 }
 
@@ -164,7 +166,7 @@ QString ExecutePlugin::environmentGroup( KDevelop::ILaunchConfiguration* cfg ) c
 QUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& err ) const
 {
     QUrl executable;
-    if( !cfg ) 
+    if( !cfg )
     {
         return executable;
     }
@@ -172,7 +174,7 @@ QUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& er
     if( grp.readEntry(ExecutePlugin::isExecutableEntry, false ) )
     {
         executable = grp.readEntry( ExecutePlugin::executableEntry, QUrl() );
-    } else 
+    } else
     {
         QStringList prjitem = grp.readEntry( ExecutePlugin::projectTargetEntry, QStringList() );
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
@@ -186,25 +188,25 @@ QUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& er
     if( executable.isEmpty() )
     {
         err = i18n("No valid executable specified");
-        kWarning() << "Launch Configuration:" << cfg->name() << "no valid executable set";
+        qWarning() << "Launch Configuration:" << cfg->name() << "no valid executable set";
     } else
     {
         KShell::Errors err_;
         if( KShell::splitArgs( executable.toLocalFile(), KShell::TildeExpand | KShell::AbortOnMeta, &err_ ).isEmpty() || err_ != KShell::NoError )
         {
             executable = QUrl();
-            if( err_ == KShell::BadQuoting ) 
+            if( err_ == KShell::BadQuoting )
             {
                 err = i18n("There is a quoting error in the executable "
                 "for the launch configuration '%1'. "
                 "Aborting start.", cfg->name() );
-            } else 
-            {   
+            } else
+            {
                 err = i18n("A shell meta character was included in the "
                 "executable for the launch configuration '%1', "
                 "this is not supported currently. Aborting start.", cfg->name() );
             }
-            kWarning() << "Launch Configuration:" << cfg->name() << "executable has meta characters";
+            qWarning() << "Launch Configuration:" << cfg->name() << "executable has meta characters";
         }
     }
     return executable;
@@ -217,7 +219,7 @@ bool ExecutePlugin::useTerminal( KDevelop::ILaunchConfiguration* cfg ) const
     {
         return false;
     }
-    
+
     return cfg->config().readEntry( ExecutePlugin::useTerminalEntry, false );
 }
 
@@ -228,7 +230,7 @@ QString ExecutePlugin::terminal( KDevelop::ILaunchConfiguration* cfg ) const
     {
         return QString();
     }
-    
+
     return cfg->config().readEntry( ExecutePlugin::terminalEntry, QString() );
 }
 
@@ -239,7 +241,7 @@ QUrl ExecutePlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg ) cons
     {
         return QUrl();
     }
-    
+
     return cfg->config().readEntry( ExecutePlugin::workingDirEntry, QUrl() );
 }
 

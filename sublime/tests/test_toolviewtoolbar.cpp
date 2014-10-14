@@ -35,8 +35,6 @@
 #include <sublime/mainwindow.h>
 #include <sublime/tooldocument.h>
 
-#include "kdebug.h"
-
 using namespace Sublime;
 
 class ToolViewToolBarFactory : public SimpleToolWidgetFactory<QTextEdit> {

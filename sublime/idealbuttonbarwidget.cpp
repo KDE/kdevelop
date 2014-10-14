@@ -34,7 +34,6 @@
 
 #include <QBoxLayout>
 #include <QApplication>
-#include <QDebug>
 
 using namespace Sublime;
 
@@ -76,7 +75,7 @@ QAction* IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *
     action->setCheckable(true);
     action->setText(title);
     action->setIcon(dock->windowIcon());
-    
+
     //restore toolview shortcut config
     KConfigGroup config = KSharedConfig::openConfig()->group("UI");
     QList<QKeySequence> shortcuts;

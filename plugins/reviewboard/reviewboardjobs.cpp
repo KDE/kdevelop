@@ -28,7 +28,6 @@
 #include <QMimeType>
 #include <QMimeDatabase>
 #include <QFile>
-#include <QDebug>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>

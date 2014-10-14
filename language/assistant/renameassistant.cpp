@@ -125,7 +125,7 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
     clearActions();
 
     if (!supportedLanguage()->refactoring()) {
-        kWarning() << "Refactoring not supported. Aborting.";
+        qWarning() << "Refactoring not supported. Aborting.";
         return;
     }
 

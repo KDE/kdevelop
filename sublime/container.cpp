@@ -30,7 +30,6 @@
 #include <QTabBar>
 #include <QMenu>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <kconfig.h>
 #include <kconfiggroup.h>

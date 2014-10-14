@@ -86,7 +86,7 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
   m_self = this;
 
   QDBusConnection::sessionBus().registerObject( "/org/kdevelop/ExternalScriptPlugin", this, QDBusConnection::ExportScriptableSlots );
-  
+
   setXMLFile( "kdevexternalscript.rc" );
 
   //BEGIN load config
@@ -271,18 +271,18 @@ bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDire
   item->setCommand(command);
   item->setWorkingDirectory(workingDirectory);
   item->setPerformParameterReplacement(false);
-  debug() << "executing command " << command << " in dir " << workingDirectory << " as external script";
+  qCDebug(PLUGIN_EXTERNALSCRIPT) << "executing command " << command << " in dir " << workingDirectory << " as external script";
   ExternalScriptJobOwningItem* job = new ExternalScriptJobOwningItem( item, QUrl(), const_cast<ExternalScriptPlugin*>(this) );
   // When a command is executed, for example through the terminal, we don't want the command output to be risen
   job->setVerbosity(KDevelop::OutputJob::Silent);
-  
+
   KDevelop::ICore::self()->runController()->registerJob( job );
   return true;
 }
 
 QString ExternalScriptPlugin::executeCommandSync ( QString command, QString workingDirectory ) const
 {
-  debug() << "executing command " << command << " in working-dir " << workingDirectory;
+  qCDebug(PLUGIN_EXTERNALSCRIPT) << "executing command " << command << " in working-dir " << workingDirectory;
   KProcess process;
   process.setWorkingDirectory( workingDirectory );
   process.setShellCommand( command );
@@ -328,7 +328,7 @@ void ExternalScriptPlugin::rowsRemoved( const QModelIndex& /*parent*/, int start
   KConfigGroup config = getConfig();
   for ( int i = start; i <= end; ++i ) {
     KConfigGroup child = config.group( QString("script %1").arg(i) );
-    debug() << "removing config group:" << child.name();
+    qCDebug(PLUGIN_EXTERNALSCRIPT) << "removing config group:" << child.name();
     child.deleteGroup();
   }
   config.sync();
@@ -349,7 +349,7 @@ void ExternalScriptPlugin::saveItemForRow( int row )
   ExternalScriptItem* item = dynamic_cast<ExternalScriptItem*>( m_model->item( row ) );
   Q_ASSERT( item );
 
-  debug() << "save extern script:" << item << idx;
+  qCDebug(PLUGIN_EXTERNALSCRIPT) << "save extern script:" << item << idx;
   KConfigGroup config = getConfig().group( QString("script %1").arg( row ) );
   config.writeEntry( "name", item->text() );
   config.writeEntry( "command", item->command() );
@@ -365,4 +365,4 @@ void ExternalScriptPlugin::saveItemForRow( int row )
 
 #include "externalscriptplugin.moc"
 
-// kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on; 
+// kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on;

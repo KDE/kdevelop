@@ -18,15 +18,14 @@
  * Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+
 #include "treeitem.h"
 
 #include <QStringList>
 #include <QModelIndex>
 
+#include "debug.h"
 #include "treemodel.h"
-
-#include "kdebug.h"
 
 using namespace KDevelop;
 
@@ -83,7 +82,7 @@ void TreeItem::insertChild(int position, TreeItem *child, bool initial)
         model_->beginInsertRows(index, position, position);
     childItems.insert(position, child);
     if (!initial)
-        model_->endInsertRows();    
+        model_->endInsertRows();
 }
 
 void TreeItem::reportChange()
@@ -150,7 +149,7 @@ TreeItem *TreeItem::child(int row)
         return ellipsis_;
     else
         return NULL;
-       
+
 }
 
 int TreeItem::childCount() const
@@ -200,7 +199,7 @@ public:
 
     void clicked()
     {
-        kDebug() << "Ellipsis item clicked";
+        qCDebug(DEBUGGER) << "Ellipsis item clicked";
         /* FIXME: restore
            Q_ASSERT (parentItem->hasMore()); */
         parentItem->fetchMoreChildren();

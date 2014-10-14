@@ -32,7 +32,6 @@
 #include <QThread>
 #include <QPointer>
 
-#include <kdebug.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <KLocalizedString>
@@ -47,6 +46,7 @@
 #include <interfaces/ilanguage.h>
 
 #include "../interfaces/ilanguagesupport.h"
+#include "util/debug.h"
 
 #include "parsejob.h"
 #include <editor/modificationrevisionset.h>
@@ -200,7 +200,7 @@ public:
                     continue;
                 }
 
-                kDebug(9505) << "creating parse-job" << *it << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
+                qCDebug(LANGUAGE) << "creating parse-job" << *it << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
                 const QString elidedPathString = elidedPathLeft(it->str(), 70);
                 emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
 
@@ -270,7 +270,7 @@ public:
                 continue;
             }
             if(!language->languageSupport()) {
-                kWarning() << "language has no language support assigned:" << language->name();
+                qWarning() << "language has no language support assigned:" << language->name();
                 continue;
             }
             ParseJob* job = language->languageSupport()->createParseJob(url);
@@ -300,9 +300,9 @@ public:
         }
 
         if(languages.isEmpty())
-            qDebug() << "found no languages for url" << qUrl;
+            qCDebug(LANGUAGE) << "found no languages for url" << qUrl;
         else
-            qDebug() << "could not create parse-job for url" << qUrl;
+            qCDebug(LANGUAGE) << "could not create parse-job for url" << qUrl;
 
         //Notify that we failed
         typedef QPointer<QObject> Notify;
@@ -376,7 +376,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     int m_threads;
 
     bool m_shuttingDown;
-    
+
     struct DocumentParseTarget {
         QPointer<QObject> notifyWhenReady;
         int priority;
@@ -453,7 +453,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
 };
 
 inline uint qHash(const BackgroundParserPrivate::DocumentParseTarget& target) {
-    return target.features * 7 + target.priority * 13 + target.sequentialProcessingFlags * 17 
+    return target.features * 7 + target.priority * 13 + target.sequentialProcessingFlags * 17
                                + reinterpret_cast<size_t>(target.notifyWhenReady.data());
 };
 
@@ -535,7 +535,7 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 
 void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Features features, int priority, QObject* notifyWhenReady, ParseJob::SequentialProcessingFlags flags)
 {
-//     kDebug(9505) << "BackgroundParser::addDocument" << url.toUrl();
+//     qCDebug(LANGUAGE) << "BackgroundParser::addDocument" << url.toUrl();
     Q_ASSERT(isValidURL(url));
     QMutexLocker lock(&d->m_mutex);
     {
@@ -554,7 +554,7 @@ void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Featu
             it.value().targets << target;
             d->m_documentsForPriority[it.value().priority()].insert(url);
         }else{
-//             kDebug(9505) << "BackgroundParser::addDocument: queuing" << cleanedUrl;
+//             qCDebug(LANGUAGE) << "BackgroundParser::addDocument: queuing" << cleanedUrl;
             d->m_documents[url].targets << target;
             d->m_documentsForPriority[d->m_documents[url].priority()].insert(url);
             ++d->m_maxParseJobs; //So the progress-bar waits for this document
@@ -685,7 +685,7 @@ void BackgroundParser::updateProgressBar()
 {
     if (d->m_doneParseJobs >= d->m_maxParseJobs) {
         if(d->m_doneParseJobs > d->m_maxParseJobs) {
-            kDebug() << "m_doneParseJobs larger than m_maxParseJobs:" << d->m_doneParseJobs << d->m_maxParseJobs;
+            qCDebug(LANGUAGE) << "m_doneParseJobs larger than m_maxParseJobs:" << d->m_doneParseJobs << d->m_maxParseJobs;
         }
         d->m_doneParseJobs = 0;
         d->m_maxParseJobs = 0;
@@ -731,7 +731,7 @@ void BackgroundParser::setDelay(int miliseconds)
 QList< IndexedString > BackgroundParser::managedDocuments()
 {
     QMutexLocker l(&d->m_mutex);
-    
+
     return d->m_managed.keys();
 }
 
@@ -764,7 +764,7 @@ void BackgroundParser::documentClosed(IDocument* document)
         IndexedString url(d->m_managedTextDocumentUrls[textDocument]);
         Q_ASSERT(d->m_managed.contains(url));
 
-        kDebug() << "removing" << url.str() << "from background parser";
+        qCDebug(LANGUAGE) << "removing" << url.str() << "from background parser";
         delete d->m_managed[url];
         d->m_managedTextDocumentUrls.remove(textDocument);
         d->m_managed.remove(url);
@@ -777,33 +777,33 @@ void BackgroundParser::documentLoaded( IDocument* document )
     if(document->textDocument() && document->textDocument()->url().isValid())
     {
         KTextEditor::Document* textDocument = document->textDocument();
-        
+
         IndexedString url(document->url());
         // Some debugging because we had issues with this
-        
+
         if(d->m_managed.contains(url) && d->m_managed[url]->document() == textDocument)
         {
-            kDebug() << "Got redundant documentLoaded from" << document->url() << textDocument;
+            qCDebug(LANGUAGE) << "Got redundant documentLoaded from" << document->url() << textDocument;
             return;
         }
-        
-        kDebug() << "Creating change tracker for " << document->url();
-        
-        
+
+        qCDebug(LANGUAGE) << "Creating change tracker for " << document->url();
+
+
         Q_ASSERT(!d->m_managed.contains(url));
         Q_ASSERT(!d->m_managedTextDocumentUrls.contains(textDocument));
-        
+
         d->m_managedTextDocumentUrls[textDocument] = url;
         d->m_managed.insert(url, new DocumentChangeTracker(textDocument));
     }else{
-        kDebug() << "NOT creating change tracker for" << document->url();
+        qCDebug(LANGUAGE) << "NOT creating change tracker for" << document->url();
     }
 }
 
 void BackgroundParser::documentUrlChanged(IDocument* document)
 {
     documentClosed(document);
-    
+
     // Only call documentLoaded if the file wasn't renamed to a filename that is already tracked.
     if(document->textDocument() && !d->m_managed.contains(IndexedString(document->textDocument()->url())))
         documentLoaded(document);

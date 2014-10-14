@@ -28,7 +28,6 @@
 #include <QThreadStorage>
 #include <QElapsedTimer>
 
-#include <KDebug>
 
 ///@todo Always prefer exactly that lock that is requested by the thread that has the foreground mutex,
 ///           to reduce the amount of UI blocking.

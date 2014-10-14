@@ -9,8 +9,8 @@
  ***************************************************************************/
 
 #include "cvslogjob.h"
+#include "debug.h"
 
-#include <KDebug>
 #include <QRegExp>
 #include <QDateTime>
 
@@ -51,17 +51,17 @@ void CvsLogJob::parseOutput(const QString& jobOutput, QList<QVariant>& events)
 
     for (int i=0; i<lines.count(); ++i) {
         QString s = lines[i];
-//         kDebug(9500) << "line:" << s ;
+//         qCDebug(PLUGIN_CVS) << "line:" << s ;
 
         if (rx_rev.exactMatch(s)) {
-//             kDebug(9500) << "MATCH REVISION" ;
+//             qCDebug(PLUGIN_CVS) << "MATCH REVISION" ;
             KDevelop::VcsRevision rev;
             rev.setRevisionValue( rx_rev.cap(1), KDevelop::VcsRevision::FileNumber );
             item.setRevision( rev );
         } else if (rx_branch.exactMatch(s)) {
-//             kDebug(9500) << "MATCH BRANCH" ;
+//             qCDebug(PLUGIN_CVS) << "MATCH BRANCH" ;
         } else if (rx_date.exactMatch(s)) {
-//             kDebug(9500) << "MATCH DATE" ;
+//             qCDebug(PLUGIN_CVS) << "MATCH DATE" ;
             QString date = rx_date.cap(1);
             // cut out the part that matches the Qt::ISODate format
             date.truncate(19);
@@ -69,7 +69,7 @@ void CvsLogJob::parseOutput(const QString& jobOutput, QList<QVariant>& events)
             item.setDate( QDateTime::fromString( date, Qt::ISODate ) );
             item.setAuthor( rx_date.cap(2) );
         } else  if (rx_sep.exactMatch(s)) {
-//             kDebug(9500) << "MATCH SEPARATOR" ;
+//             qCDebug(PLUGIN_CVS) << "MATCH SEPARATOR" ;
             if (firstSeperatorReached) {
                 item.setMessage( log );
                 log.clear();
@@ -83,7 +83,7 @@ void CvsLogJob::parseOutput(const QString& jobOutput, QList<QVariant>& events)
             }
         } else {
             if (firstSeperatorReached) {
-//                 kDebug(9500) << "ADDING LOG" ;
+//                 qCDebug(PLUGIN_CVS) << "ADDING LOG" ;
                 log += s+'\n';
             }
         }

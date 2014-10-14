@@ -1,6 +1,4 @@
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9515 )
-
 ########### next target ###############
 
 set(kdevexecute_PART_UIS
@@ -17,7 +15,7 @@ set(kdevexecute_PART_SRCS
 
 qt5_wrap_ui( kdevexecute_PART_SRCS ${kdevexecute_PART_UIS} )
 add_library(kdevexecute MODULE ${kdevexecute_PART_SRCS})
-target_link_libraries(kdevexecute 
+target_link_libraries(kdevexecute
     KF5::KCMUtils
     KDev::Interfaces
     KDev::Util

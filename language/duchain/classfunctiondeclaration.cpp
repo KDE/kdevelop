@@ -20,10 +20,10 @@
 */
 
 #include "classfunctiondeclaration.h"
-
 #include "ducontext.h"
 #include "types/functiontype.h"
 #include "duchainregister.h"
+#include "util/debug.h"
 
 namespace KDevelop
 {
@@ -43,7 +43,7 @@ void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
   ///      typedef bool (*EventFilter)(void *message, long *result);
   ///      in e.g. qcoreapplication.h:172
   if(type && !dynamic_cast<FunctionType*>(type.data()) && type->whichType() != AbstractType::TypeAlias) {
-    kWarning(9505) << "WARNING: Non-function type assigned to function declaration. Type is: "
+    qCWarning(LANGUAGE) << "WARNING: Non-function type assigned to function declaration. Type is: "
                       << type->toString() << "whichType:" << type->whichType()
                       << "Declaration is:" << toString()
                       << topContext()->url().str() << range().castToSimpleRange();
@@ -94,7 +94,7 @@ QString ClassFunctionDeclaration::toString() const {
     return QString("%1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
   } else {
     QString type = abstractType() ? abstractType()->toString() : QString("<notype>");
-    kDebug(9505) << "A function has a bad type attached:" << type;
+    qCDebug(LANGUAGE) << "A function has a bad type attached:" << type;
     return QString("invalid member-function %1 type %2").arg(identifier().toString()).arg(type);
   }
 }

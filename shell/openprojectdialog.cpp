@@ -26,7 +26,6 @@
 #include <kio/jobuidelegate.h>
 #include <KJobWidgets/KJobWidgets>
 
-#include <kdebug.h>
 #include <KDialog>
 
 #include "core.h"

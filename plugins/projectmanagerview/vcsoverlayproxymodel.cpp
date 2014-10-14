@@ -30,7 +30,6 @@
 
 #include <KLocalizedString>
 
-#include <QDebug>
 
 using namespace KDevelop;
 
@@ -59,7 +58,7 @@ void VcsOverlayProxyModel::addProject(IProject* p)
     IPlugin* plugin = p->versionControlPlugin();
     if(!plugin)
         return;
-    
+
     IBranchingVersionControl* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
     if(branchingExtension) {
         const QUrl url = p->path().toUrl();

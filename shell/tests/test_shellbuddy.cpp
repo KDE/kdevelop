@@ -21,10 +21,10 @@
 
 #include <QSplitter>
 #include <QtTest/QtTest>
+#include <QDebug>
 
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
-#include <kdebug.h>
 #include <kparts/mainwindow.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>

@@ -46,7 +46,6 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <kshortcut.h>
-#include <kdebug.h>
 
 #include <interfaces/ilanguage.h>
 #include <interfaces/icore.h>
@@ -69,6 +68,7 @@
 #include "projectitemquickopen.h"
 #include "declarationlistquickopen.h"
 #include "documentationquickopenprovider.h"
+#include "debug.h"
 #include <language/duchain/functiondefinition.h>
 #include <qmenu.h>
 #include <qdesktopwidget.h>
@@ -77,6 +77,8 @@
 #include <language/util/navigationtooltip.h>
 #include <interfaces/contextmenuextension.h>
 #include <language/interfaces/codecontext.h>
+
+Q_LOGGING_CATEGORY(PLUGIN_QUICKOPEN, "kdevplatform.plugins.quickopen")
 
 using namespace KDevelop;
 
@@ -114,14 +116,14 @@ class StandardQuickOpenWidgetCreator : public QuickOpenWidgetCreator {
       QStringList useItems = m_items;
       if(useItems.isEmpty())
         useItems = QuickOpenPlugin::self()->lastUsedItems;
-      
+
       QStringList useScopes = m_scopes;
       if(useScopes.isEmpty())
         useScopes = QuickOpenPlugin::self()->lastUsedScopes;
-      
+
       return new QuickOpenWidget( i18n("Quick Open"), QuickOpenPlugin::self()->m_model, QuickOpenPlugin::self()->lastUsedItems, useScopes, false, true );
     }
-    
+
     QStringList m_items;
     QStringList m_scopes;
 };
@@ -228,7 +230,7 @@ QString cursorItemText() {
   TopDUContext* context = DUChainUtils::standardContextForUrl( doc->url() );
 
   if( !context ) {
-    kDebug() << "Got no standard context";
+    qCDebug(PLUGIN_QUICKOPEN) << "Got no standard context";
     return QString();
   }
 
@@ -268,7 +270,7 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
   o.list->header()->hide();
   o.list->setRootIsDecorated( false );
   o.list->setVerticalScrollMode( QAbstractItemView::ScrollPerItem );
-  
+
   connect(o.list->verticalScrollBar(), SIGNAL(valueChanged(int)), m_model, SLOT(placeExpandingWidgets()));
 
   o.searchLine->setFocus();
@@ -280,7 +282,7 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
     QStringList allScopes = m_model->allScopes();
 
     QMenu* itemsMenu = new QMenu;
-    
+
     foreach( const QString &type, allTypes )
     {
       QAction* action = new QAction(type, itemsMenu);
@@ -303,7 +305,7 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
       connect( action, SIGNAL(toggled(bool)), this, SLOT(updateProviders()), Qt::QueuedConnection );
       scopesMenu->addAction(action);
     }
-    
+
     o.scopesButton->setMenu(scopesMenu);
 
   }else{
@@ -315,10 +317,10 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
   }
 
   showSearchField(!noSearchField);
-  
+
   o.okButton->hide();
   o.cancelButton->hide();
-  
+
   o.searchLine->installEventFilter( this );
   o.list->installEventFilter( this );
   o.list->setFocusPolicy(Qt::NoFocus);
@@ -332,10 +334,10 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
   connect(o.okButton, SIGNAL(clicked(bool)), this, SLOT(accept()));
   connect(o.okButton, SIGNAL(clicked(bool)), SIGNAL(ready()));
   connect(o.cancelButton, SIGNAL(clicked(bool)), SIGNAL(ready()));
-  
+
   updateProviders();
   updateTimerInterval(true);
-  
+
 // no need to call this, it's done by updateProviders already
 //   m_model->restart();
 }
@@ -360,7 +362,7 @@ void QuickOpenWidget::updateTimerInterval(bool cheapFilterChange)
 void QuickOpenWidget::showEvent(QShowEvent* e)
 {
     QWidget::showEvent(e);
-    
+
     // The column width only has an effect _after_ the widget has been shown
     o.list->setColumnWidth( 0, 20 );
 }
@@ -390,18 +392,18 @@ void QuickOpenWidget::prepareShow()
   o.list->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
   m_model->setTreeView( o.list );
   o.list->setModel( m_model );
-  
+
   m_filterTimer.stop();
   m_filter = QString();
-  
+
   if (!m_preselectedText.isEmpty())
   {
     o.searchLine->setText(m_preselectedText);
     o.searchLine->selectAll();
   }
-  
+
   m_model->restart(false);
-  
+
   connect( o.list->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
            SLOT(callRowSelected()) );
   connect( o.list->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
@@ -423,7 +425,7 @@ QuickOpenWidgetDialog::QuickOpenWidgetDialog(QString title, QuickOpenModel* mode
   m_widget = new QuickOpenWidget(title, model, initialItems, initialScopes, listOnly, noSearchField);
   // the QMenu might close on esc and we want to close the whole dialog then
   connect( m_widget, SIGNAL(aboutToHide()), this, SLOT(deleteLater()) );
-  
+
   //KDialog always sets the focus on the "OK" button, so we use QDialog
   m_dialog = new QDialog( ICore::self()->uiController()->activeMainWindow() );
   m_dialog->resize(QSize(800, 400));
@@ -455,11 +457,11 @@ void QuickOpenWidget::updateProviders() {
       menu->setActiveAction(action);
     }
   }
-  
+
   QStringList checkedItems;
-  
+
   if(o.itemsButton->menu()) {
-  
+
     foreach( QObject* obj, o.itemsButton->menu()->children() ) {
       QAction* box = qobject_cast<QAction*>( obj );
       if( box ) {
@@ -471,9 +473,9 @@ void QuickOpenWidget::updateProviders() {
   }
 
   QStringList checkedScopes;
-  
+
   if(o.scopesButton->menu()) {
-    
+
     foreach( QObject* obj, o.scopesButton->menu()->children() ) {
       QAction* box = qobject_cast<QAction*>( obj );
       if( box ) {
@@ -481,7 +483,7 @@ void QuickOpenWidget::updateProviders() {
           checkedScopes << box->text().remove('&');
       }
     }
-    
+
     o.scopesButton->setText(checkedScopes.join(", "));
   }
 
@@ -513,7 +515,7 @@ void QuickOpenWidget::callRowSelected() {
   if( currentIndex.isValid() )
     m_model->rowSelected( currentIndex );
   else
-    kDebug() << "current index is not valid";
+    qCDebug(PLUGIN_QUICKOPEN) << "current index is not valid";
 }
 
 void QuickOpenWidget::accept() {
@@ -531,7 +533,7 @@ void QuickOpenWidget::doubleClicked ( const QModelIndex & index ) {
 bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
 {
   QKeyEvent *keyEvent = dynamic_cast<QKeyEvent*>(event);
-  
+
   if( event->type() == QEvent::KeyRelease ) {
     if(keyEvent->key() == Qt::Key_Alt) {
       if((m_expandedTemporary && m_altDownTime.msecsTo( QTime::currentTime() ) > 300) || (!m_expandedTemporary && m_altDownTime.msecsTo( QTime::currentTime() ) < 300 && m_hadNoCommandSinceAlt)) {
@@ -541,12 +543,12 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
           row = row.sibling( row.row(), 0 );
           if(m_model->isExpanded( row ))
             m_model->setExpanded( row, false );
-        }      
+        }
       }
       m_expandedTemporary = false;
     }
   }
-  
+
   if( event->type() == QEvent::KeyPress  ) {
     m_hadNoCommandSinceAlt = false;
     if(keyEvent->key() == Qt::Key_Alt) {
@@ -560,7 +562,7 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
           m_expandedTemporary = true;
           m_model->setExpanded( row, true );
         }
-      }      
+      }
     }
 
     switch( keyEvent->key() ) {
@@ -666,16 +668,16 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
           }
         } else {
           QString filterText = o.searchLine->text();
-          
+
           //Safety: Track whether this object is deleted. When execute() is called, a dialog may be opened,
           //which kills the quickopen widget.
           QPointer<QObject> stillExists(this);
-          
+
           if( m_model->execute( o.list->currentIndex(), filterText ) ) {
-            
+
             if(!stillExists)
               return true;
-            
+
             if(!(keyEvent->modifiers() & Qt::ShiftModifier))
               emit ready();
           } else {
@@ -702,7 +704,7 @@ QuickOpenLineEdit* QuickOpenPlugin::quickOpenLine(QString name)
       return line;
     }
   }
-  
+
   return 0;
 }
 
@@ -784,7 +786,7 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
     QAction* quickOpenNavigateFunctions = actions.addAction("quick_open_outline");
     quickOpenNavigateFunctions->setText( i18n("Outline") );
     actions.setDefaultShortcut( quickOpenNavigateFunctions, Qt::CTRL| Qt::ALT | Qt::Key_N );
-    connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));   
+    connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));
 }
 
 QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
@@ -899,11 +901,11 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
 
   if( modes & Classes )
     initialItems << i18n("Classes");
-  
+
   QStringList useScopes;
   if ( modes != OpenFiles )
     useScopes = lastUsedScopes;
-  
+
   if((modes & OpenFiles) && !useScopes.contains(i18n("Currently Open")))
     useScopes << i18n("Currently Open");
 
@@ -1009,7 +1011,7 @@ void QuickOpenPlugin::quickOpenDeclaration()
   Declaration* decl = cursorDeclaration();
 
   if(!decl) {
-    kDebug() << "Found no declaration for cursor, cannot jump";
+    qCDebug(PLUGIN_QUICKOPEN) << "Found no declaration for cursor, cannot jump";
     return;
   }
   decl->activateSpecialization();
@@ -1018,7 +1020,7 @@ void QuickOpenPlugin::quickOpenDeclaration()
   KTextEditor::Cursor c = decl->rangeInCurrentRevision().start();
 
   if(u.isEmpty()) {
-    kDebug() << "Got empty url for declaration" << decl->toString();
+    qCDebug(PLUGIN_QUICKOPEN) << "Got empty url for declaration" << decl->toString();
     return;
   }
 
@@ -1034,7 +1036,7 @@ QList<KDevelop::ILanguage*> languagesWithSupportForUrl(QUrl url) {
     if(language->languageSupport()) {
       ret << language;
     }else{
-      kDebug() << "got no language-support for language" << language->name();
+      qCDebug(PLUGIN_QUICKOPEN) << "got no language-support for language" << language->name();
     }
   }
   return ret;
@@ -1080,7 +1082,7 @@ bool QuickOpenPlugin::jumpToSpecialObject()
   QPair<QUrl, KTextEditor::Cursor> pos = specialObjectJumpPosition();
   if(pos.second.isValid()) {
     if(pos.first.isEmpty()) {
-      kDebug() << "Got empty url for special language object";
+      qCDebug(PLUGIN_QUICKOPEN) << "Got empty url for special language object";
       return false;
     }
 
@@ -1099,7 +1101,7 @@ void QuickOpenPlugin::quickOpenDefinition()
   Declaration* decl = cursorDeclaration();
 
   if(!decl) {
-    kDebug() << "Found no declaration for cursor, cannot jump";
+    qCDebug(PLUGIN_QUICKOPEN) << "Found no declaration for cursor, cannot jump";
     return;
   }
 
@@ -1110,12 +1112,12 @@ void QuickOpenPlugin::quickOpenDefinition()
     u = def->url();
     c = def->rangeInCurrentRevision().start();
   }else{
-    kDebug() << "Found no definition for declaration";
+    qCDebug(PLUGIN_QUICKOPEN) << "Found no definition for declaration";
     decl->activateSpecialization();
   }
 
   if(u.isEmpty()) {
-    kDebug() << "Got empty url for declaration" << decl->toString();
+    qCDebug(PLUGIN_QUICKOPEN) << "Got empty url for declaration" << decl->toString();
     return;
   }
 
@@ -1146,7 +1148,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
 {
   IDocument* doc = ICore::self()->documentController()->activeDocument();
   if(!doc) {
-    kDebug() << "No active document";
+    qCDebug(PLUGIN_QUICKOPEN) << "No active document";
     return;
   }
 
@@ -1155,7 +1157,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
   TopDUContext* context = DUChainUtils::standardContextForUrl( doc->url() );
 
   if( !context ) {
-    kDebug() << "Got no standard context";
+    qCDebug(PLUGIN_QUICKOPEN) << "Got no standard context";
     return;
   }
 
@@ -1199,21 +1201,21 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
   if (textCursor.isValid())
     core()->documentController()->openDocument(doc->url(), textCursor);
   else
-    kDebug() << "No declaration to jump to";
+    qCDebug(PLUGIN_QUICKOPEN) << "No declaration to jump to";
 }
 
 
 struct CreateOutlineDialog {
   CreateOutlineDialog() : dialog(0), cursorDecl(0), model(0) {
   }
-  
+
   void start() {
     if(!QuickOpenPlugin::self()->freeModel())
         return;
 
       IDocument* doc = ICore::self()->documentController()->activeDocument();
       if(!doc) {
-        kDebug() << "No active document";
+        qCDebug(PLUGIN_QUICKOPEN) << "No active document";
         return;
       }
 
@@ -1222,7 +1224,7 @@ struct CreateOutlineDialog {
       TopDUContext* context = DUChainUtils::standardContextForUrl( doc->url() );
 
       if( !context ) {
-        kDebug() << "Got no standard context";
+        qCDebug(PLUGIN_QUICKOPEN) << "Got no standard context";
         return;
       }
 
@@ -1242,8 +1244,8 @@ struct CreateOutlineDialog {
       model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(QuickOpenPlugin::self(), items, true) );
 
       dialog = new QuickOpenWidgetDialog( i18n("Outline"), model, QStringList(), QStringList(), true );
-      
-      model->setParent(dialog->widget());    
+
+      model->setParent(dialog->widget());
   }
   void finish() {
     //Select the declaration that contains the cursor
@@ -1268,23 +1270,23 @@ class OutlineQuickopenWidgetCreator : public QuickOpenWidgetCreator {
   public:
     OutlineQuickopenWidgetCreator(QStringList /*scopes*/, QStringList /*items*/) : m_creator(0) {
     }
-    
+
     ~OutlineQuickopenWidgetCreator() {
       delete m_creator;
     }
-    
+
     virtual QuickOpenWidget* createWidget() {
       delete m_creator;
       m_creator = new CreateOutlineDialog;
       m_creator->start();
-      
+
       if(!m_creator->dialog)
         return 0;
-      
+
       m_creator->dialog->deleteLater();
       return m_creator->dialog->widget();
     }
-    
+
     virtual void widgetShown() {
       if(m_creator) {
         m_creator->finish();
@@ -1292,11 +1294,11 @@ class OutlineQuickopenWidgetCreator : public QuickOpenWidgetCreator {
         m_creator = 0;
       }
     }
-    
+
     virtual QString objectNameForLine() {
       return "Outline";
     }
-    
+
     CreateOutlineDialog* m_creator;
 };
 
@@ -1304,22 +1306,22 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
 {
   CreateOutlineDialog create;
   create.start();
-  
+
   if(!create.dialog)
     return;
-  
+
   m_currentWidgetHandler = create.dialog;
-  
+
   QuickOpenLineEdit* line = quickOpenLine("Outline");
   if(!line)
     line  = quickOpenLine();
-  
+
   if(line) {
     line->showWithWidget(create.dialog->widget());
     create.dialog->deleteLater();
   }else
     create.dialog->run();
-  
+
   create.finish();
 }
 
@@ -1343,7 +1345,7 @@ QuickOpenLineEdit::~QuickOpenLineEdit() {
 bool QuickOpenLineEdit::insideThis(QObject* object) {
     while (object)
     {
-        kDebug() << object;
+        qCDebug(PLUGIN_QUICKOPEN) << object;
         if (object == this || object == m_widget)
         {
             return true;
@@ -1362,10 +1364,10 @@ void QuickOpenLineEdit::widgetDestroyed(QObject* obj)
 void QuickOpenLineEdit::showWithWidget(QuickOpenWidget* widget)
 {
   connect(widget, SIGNAL(destroyed(QObject*)), SLOT(widgetDestroyed(QObject*)));
-  kDebug() << "storing widget" << widget;
+  qCDebug(PLUGIN_QUICKOPEN) << "storing widget" << widget;
   deactivate();
   if(m_widget) {
-    kDebug() << "deleting" << m_widget;
+    qCDebug(PLUGIN_QUICKOPEN) << "deleting" << m_widget;
     delete m_widget;
   }
   m_widget = widget;
@@ -1376,8 +1378,8 @@ void QuickOpenLineEdit::showWithWidget(QuickOpenWidget* widget)
 void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     QLineEdit::focusInEvent(ev);
 //       delete m_widget;
-    kDebug() << "got focus";
-    kDebug() << "old widget" << m_widget << "force update:" << m_forceUpdate;
+    qCDebug(PLUGIN_QUICKOPEN) << "got focus";
+    qCDebug(PLUGIN_QUICKOPEN) << "old widget" << m_widget << "force update:" << m_forceUpdate;
     if (m_widget && !m_forceUpdate)
         return;
 
@@ -1385,9 +1387,9 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
         deactivate();
         return;
     }
-    
+
     m_forceUpdate = false;
-    
+
     if(!m_widget)
     {
       m_widget = m_widgetCreator->createWidget();
@@ -1401,11 +1403,11 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
 
     m_widget->showStandardButtons(false);
     m_widget->showSearchField(false);
-    
+
     m_widget->setParent(0, Qt::ToolTip);
     m_widget->setFocusPolicy(Qt::NoFocus);
     m_widget->setAlternativeSearchField(this);
-    
+
     QuickOpenPlugin::self()->m_currentWidgetHandler = m_widget;
     connect(m_widget, SIGNAL(ready()), SLOT(deactivate()));
 
@@ -1424,7 +1426,7 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     }
     m_widget->setGeometry(widgetGeometry);
     m_widget->show();
-    
+
     m_widgetCreator->widgetShown();
 }
 
@@ -1451,7 +1453,7 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
       break;
      case QEvent::WindowActivate:
     case QEvent::WindowDeactivate:
-        kDebug() << "closing because of window activation";
+        qCDebug(PLUGIN_QUICKOPEN) << "closing because of window activation";
         deactivate();
         break;
     // handle bug 260657 - "Outline menu doesn't follow main window on its move"
@@ -1459,7 +1461,7 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
           if (QWidget* widget = qobject_cast<QWidget*>(obj)) {
             // close the outline menu in case a parent widget moved
             if (widget->isAncestorOf(this)) {
-              kDebug() << "closing because of parent widget move";
+              qCDebug(PLUGIN_QUICKOPEN) << "closing because of parent widget move";
               deactivate();
             }
             break;
@@ -1470,11 +1472,11 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
             QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(e);
             Q_ASSERT(focusEvent);
             //Eat the focus event, keep the focus
-            kDebug() << "focus change" << "inside this: " << insideThis(obj) << "this" << this << "obj" << obj;
+            qCDebug(PLUGIN_QUICKOPEN) << "focus change" << "inside this: " << insideThis(obj) << "this" << this << "obj" << obj;
             if(obj == this)
               return false;
-            
-            kDebug() << "reason" << focusEvent->reason();
+
+            qCDebug(PLUGIN_QUICKOPEN) << "reason" << focusEvent->reason();
             if (focusEvent->reason() != Qt::MouseFocusReason && focusEvent->reason() != Qt::ActiveWindowFocusReason) {
                 QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
                 return false;
@@ -1489,30 +1491,30 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
     return false;
 }
 void QuickOpenLineEdit::activate() {
-    kDebug() << "activating";
+    qCDebug(PLUGIN_QUICKOPEN) << "activating";
     setText("");
     setStyleSheet("");
     qApp->installEventFilter(this);
 }
 void QuickOpenLineEdit::deactivate() {
-    kDebug() << "deactivating";
-    
+    qCDebug(PLUGIN_QUICKOPEN) << "deactivating";
+
     clear();
 
     if(m_widget || hasFocus())
       QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
-    
+
    if (m_widget)
         m_widget->deleteLater();
-    
+
     m_widget = 0;
     qApp->removeEventFilter(this);
-    
+
 }
 
 void QuickOpenLineEdit::checkFocus()
 {
-    kDebug() << "checking focus" << m_widget;
+    qCDebug(PLUGIN_QUICKOPEN) << "checking focus" << m_widget;
     if(m_widget) {
       if(isVisible() && !isHidden())
         setFocus();
@@ -1521,7 +1523,7 @@ void QuickOpenLineEdit::checkFocus()
     }else{
        if (ICore::self()->documentController()->activeDocument())
            ICore::self()->documentController()->activateDocument(ICore::self()->documentController()->activeDocument());
-       
+
        //Make sure the focus is somewehre else, even if there is no active document
        setEnabled(false);
        setEnabled(true);

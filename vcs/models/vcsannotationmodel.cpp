@@ -33,7 +33,6 @@
 #include <QUrl>
 
 #include <KLocalizedString>
-#include <KDebug>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>

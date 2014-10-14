@@ -22,14 +22,15 @@
 #include <QtCore/QProcessEnvironment>
 #include <QtCore/QCoreApplication>
 #include <QtDBus/QDBusConnection>
+#include <QtCore/QDebug>
 
-#include <KDebug>
 #include <KLocalizedString>
 
 #include <util/fileutils.h>
 #include <util/shellutils.h>
 
 #include "abstractitemrepository.h"
+#include "debug.h"
 
 using namespace KDevelop;
 
@@ -63,17 +64,17 @@ bool shouldClear(const QString& path)
   }
 
   if (getenv("CLEAR_DUCHAIN_DIR")) {
-    kDebug() << "clearing duchain directory because CLEAR_DUCHAIN_DIR is set";
+    qCDebug(SERIALIZATION) << "clearing duchain directory because CLEAR_DUCHAIN_DIR is set";
     return true;
   }
 
   if (dir.exists("is_writing")) {
-    kWarning() << "repository" << path << "was write-locked, it probably is inconsistent";
+    qWarning() << "repository" << path << "was write-locked, it probably is inconsistent";
     return true;
   }
 
   if (!dir.exists(QString("version_%1").arg(staticItemRepositoryVersion()))) {
-    kWarning() << "version-hint not found, seems to be an old version";
+    qWarning() << "version-hint not found, seems to be an old version";
     return true;
   }
 
@@ -83,7 +84,7 @@ bool shouldClear(const QString& path)
     QDataStream stream(&crashesFile);
     stream >> count;
 
-    kDebug() << "current count of crashes: " << count;
+    qCDebug(SERIALIZATION) << "current count of crashes: " << count;
 
     if (count >= crashesBeforeCleanup && !getenv("DONT_CLEAR_DUCHAIN_DIR")) {
       bool userAnswer = askUser(i18np("The previous session crashed", "Session crashed %1 times in a row", count),
@@ -92,11 +93,11 @@ bool shouldClear(const QString& path)
                                 i18n("The crash may be caused by a corruption of cached data.\n\n"
                                       "Press OK if you want KDevelop to clear the cache, otherwise press Cancel if you are sure the crash has another origin."));
       if (userAnswer) {
-        kDebug() << "User chose to clean repository";
+        qCDebug(SERIALIZATION) << "User chose to clean repository";
         return true;
       } else {
         setCrashCounter(crashesFile, 1);
-        kDebug() << "User chose to reset crash counter";
+        qCDebug(SERIALIZATION) << "User chose to reset crash counter";
       }
     } else {
       ///Increase the crash-count. It will be reset if kdevelop is shut down cleanly.
@@ -210,7 +211,7 @@ void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* reposito
   if(!d->m_path.isEmpty()) {
     if(!repository->open(d->m_path)) {
       d->deleteDataDirectory(d->m_path);
-      kError() << "failed to open a repository";
+      qCritical() << "failed to open a repository";
       abort();
     }
   }
@@ -284,7 +285,7 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
 
   // Check if the repository shall be cleared
   if (shouldClear(path)) {
-    kWarning() << QString("The data-repository at %1 has to be cleared.").arg(m_path);
+    qWarning() << QString("The data-repository at %1 has to be cleared.").arg(m_path);
     deleteDataDirectory(path);
   }
 
@@ -293,7 +294,7 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
   foreach(AbstractItemRepository* repository, m_repositories.keys()) {
     if(!repository->open(path)) {
       deleteDataDirectory(path);
-      kError() << "failed to open a repository";
+      qCritical() << "failed to open a repository";
       abort();
     }
   }
@@ -328,7 +329,7 @@ void ItemRepositoryRegistry::store()
   if(versionFile.open(QIODevice::WriteOnly)) {
     versionFile.close();
   } else {
-    kWarning() << "Could not open version file for writing";
+    qWarning() << "Could not open version file for writing";
   }
 
   //Store all custom counter values
@@ -343,7 +344,7 @@ void ItemRepositoryRegistry::store()
       stream << it.value()->fetchAndAddRelaxed(0);
     }
   } else {
-    kWarning() << "Could not open counter file for writing";
+    qWarning() << "Could not open counter file for writing";
   }
 }
 
@@ -351,8 +352,8 @@ void ItemRepositoryRegistry::printAllStatistics() const
 {
   QMutexLocker lock(&d->m_mutex);
   foreach(AbstractItemRepository* repository, d->m_repositories.keys()) {
-    kDebug() << "statistics in" << repository->repositoryName() << ":";
-    kDebug() << repository->printStatistics();
+    qCDebug(SERIALIZATION) << "statistics in" << repository->repositoryName() << ":";
+    qCDebug(SERIALIZATION) << repository->printStatistics();
   }
 }
 
@@ -363,7 +364,7 @@ int ItemRepositoryRegistry::finalCleanup()
   foreach(AbstractItemRepository* repository, d->m_repositories.keys()) {
     int added = repository->finalCleanup();
     changed += added;
-    kDebug() << "cleaned in" << repository->repositoryName() << ":" << added;
+    qCDebug(SERIALIZATION) << "cleaned in" << repository->repositoryName() << ":" << added;
   }
   return changed;
 }

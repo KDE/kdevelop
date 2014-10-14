@@ -27,8 +27,6 @@
 
 #include "treeitem.h"
 
-#include "kdebug.h"
-
 using namespace KDevelop;
 
 TreeModel::TreeModel(const QVector<QString>& headers,
@@ -73,7 +71,7 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 
 QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
                                int role) const
-{ 
+{
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         return headers_[section];
 
@@ -144,7 +142,7 @@ QModelIndex TreeModel::indexForItem(TreeItem *item, int column) const
     if (item->parent() == 0)
         return QModelIndex();
 
-    if (TreeItem* parent = item->parent()) 
+    if (TreeItem* parent = item->parent())
     {
         /* FIXME: we might store row directly in item.  */
         int row = parent->childItems.indexOf(item);
@@ -152,10 +150,10 @@ QModelIndex TreeModel::indexForItem(TreeItem *item, int column) const
 
         return createIndex(row, column, item);
     }
-    else 
+    else
     {
         return QModelIndex();
-    }        
+    }
 }
 
 void TreeModel::expanded(const QModelIndex &index)
@@ -186,7 +184,7 @@ bool TreeModel::setData(const QModelIndex& index, const QVariant& value,
 {
     /* FIXME: CheckStateRole is dirty.  Should we pass the role to
        the item?  */
-    if (index.isValid() 
+    if (index.isValid()
         && (role == Qt::EditRole || role == Qt::CheckStateRole))
     {
 

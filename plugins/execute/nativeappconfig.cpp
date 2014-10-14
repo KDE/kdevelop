@@ -20,7 +20,6 @@
 #include "nativeappconfig.h"
 
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <kicon.h>
 
 #include <interfaces/icore.h>
@@ -42,11 +41,13 @@
 #include <interfaces/iplugincontroller.h>
 
 #include "executeplugin.h"
+#include "debug.h"
 #include <util/kdevstringhandler.h>
 #include <util/environmentgrouplist.h>
 #include <project/projectitemlineedit.h>
 #include "projecttargetscombobox.h"
 #include <QMenu>
+#include <QDebug>
 
 #include <KCModuleProxy>
 #include <KConfigDialog>
@@ -65,7 +66,7 @@ static KDevelop::ProjectBaseItem* itemForPath(const QStringList& path, KDevelop:
 
 //TODO: Make sure to auto-add the executable target to the dependencies when its used.
 
-void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* project ) 
+void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* project )
 {
     bool b = blockSignals( true );
     projectTarget->setBaseItem( project ? project->projectItem() : 0, true);
@@ -103,7 +104,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
         QIcon icon;
         if(pitem)
             icon=QIcon::fromTheme(pitem->iconName());
-        
+
         QListWidgetItem* item = new QListWidgetItem(icon, KDevelop::joinWithEscaping( deplist, '/', '\\' ), dependencies );
         item->setData( Qt::UserRole, dep );
     }
@@ -111,10 +112,10 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     blockSignals( b );
 }
 
-NativeAppConfigPage::NativeAppConfigPage( QWidget* parent ) 
+NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     : LaunchConfigurationPage( parent )
 {
-    setupUi(this);    
+    setupUi(this);
     //Setup data info for combobox
     dependencyAction->setItemData(0, "Nothing" );
     dependencyAction->setItemData(1, "Build" );
@@ -126,7 +127,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     moveDepUp->setIcon( QIcon::fromTheme("go-up") );
     moveDepDown->setIcon( QIcon::fromTheme("go-down") );
     browseProject->setIcon(QIcon::fromTheme("folder-document"));
-    
+
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
 
@@ -165,8 +166,8 @@ void NativeAppConfigPage::depEdited( const QString& str )
 {
     int pos;
     QString tmp = str;
-    addDependency->setEnabled( !str.isEmpty() 
-                               && ( !targetDependency->validator() 
+    addDependency->setEnabled( !str.isEmpty()
+                               && ( !targetDependency->validator()
                                || targetDependency->validator()->validate( tmp, pos ) == QValidator::Acceptable ) );
 }
 
@@ -180,17 +181,17 @@ void NativeAppConfigPage::activateDeps( int idx )
 void NativeAppConfigPage::checkActions( const QItemSelection& selected, const QItemSelection& unselected )
 {
     Q_UNUSED( unselected );
-    kDebug() << "checkActions";
+    qCDebug(PLUGIN_EXECUTE) << "checkActions";
     if( !selected.indexes().isEmpty() )
     {
-        kDebug() << "have selection";
+        qCDebug(PLUGIN_EXECUTE) << "have selection";
         Q_ASSERT( selected.indexes().count() == 1 );
         QModelIndex idx = selected.indexes().at( 0 );
-        kDebug() << "index" << idx;
+        qCDebug(PLUGIN_EXECUTE) << "index" << idx;
         moveDepUp->setEnabled( idx.row() > 0 );
         moveDepDown->setEnabled( idx.row() < dependencies->count() - 1 );
         removeDependency->setEnabled( true );
-    } else 
+    } else
     {
         removeDependency->setEnabled( false );
         moveDepUp->setEnabled( false );
@@ -214,7 +215,7 @@ void NativeAppConfigPage::moveDependencyDown()
 
 void NativeAppConfigPage::moveDependencyUp()
 {
-    
+
     QList<QListWidgetItem*> list = dependencies->selectedItems();
     if( !list.isEmpty() )
     {
@@ -258,7 +259,7 @@ void NativeAppConfigPage::removeDep()
         Q_ASSERT( list.count() == 1 );
         int row = dependencies->row( list.at(0) );
         delete dependencies->takeItem( row );
-        
+
         dependencies->selectionModel()->select( dependencies->model()->index( row - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
     }
 }
@@ -283,12 +284,12 @@ void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
     cfg.writeEntry( ExecutePlugin::dependencyEntry, KDevelop::qvariantToString( QVariant( deps ) ) );
 }
 
-QString NativeAppConfigPage::title() const 
+QString NativeAppConfigPage::title() const
 {
     return i18n("Configure Native Application");
 }
 
-QList< KDevelop::LaunchConfigurationPageFactory* > NativeAppLauncher::configPages() const 
+QList< KDevelop::LaunchConfigurationPageFactory* > NativeAppLauncher::configPages() const
 {
     return QList<KDevelop::LaunchConfigurationPageFactory*>();
 }
@@ -298,12 +299,12 @@ QString NativeAppLauncher::description() const
     return "Executes Native Applications";
 }
 
-QString NativeAppLauncher::id() 
+QString NativeAppLauncher::id()
 {
     return "nativeAppLauncher";
 }
 
-QString NativeAppLauncher::name() const 
+QString NativeAppLauncher::name() const
 {
     return i18n("Native Application");
 }
@@ -331,9 +332,9 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
         }
         l << new NativeAppJob( KDevelop::ICore::self()->runController(), cfg );
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
-        
+
     }
-    kWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
+    qWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return 0;
 }
 
@@ -351,7 +352,7 @@ NativeAppPageFactory::NativeAppPageFactory()
 {
 }
 
-NativeAppConfigType::NativeAppConfigType() 
+NativeAppConfigType::NativeAppConfigType()
 {
     factoryList.append( new NativeAppPageFactory() );
 }
@@ -368,12 +369,12 @@ QString NativeAppConfigType::name() const
 }
 
 
-QList<KDevelop::LaunchConfigurationPageFactory*> NativeAppConfigType::configPages() const 
+QList<KDevelop::LaunchConfigurationPageFactory*> NativeAppConfigType::configPages() const
 {
     return factoryList;
 }
 
-QString NativeAppConfigType::id() const 
+QString NativeAppConfigType::id() const
 {
     return ExecutePlugin::_nativeAppConfigTypeId;
 }
@@ -420,7 +421,7 @@ QList<KDevelop::ProjectTargetItem*> targetsInFolder(KDevelop::ProjectFolderItem*
     QList<KDevelop::ProjectTargetItem*> ret;
     foreach(KDevelop::ProjectFolderItem* f, folder->folderList())
         ret += targetsInFolder(f);
-    
+
     ret += folder->targetList();
     return ret;
 }
@@ -438,10 +439,10 @@ bool menuLess(QMenu* a, QMenu* b)
 QMenu* NativeAppConfigType::launcherSuggestions()
 {
     QMenu* ret = new QMenu(i18n("Project Executables"));
-    
+
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
     QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
-    
+
     foreach(KDevelop::IProject* project, projects) {
         if(project->projectFileManager()->features() & KDevelop::IProjectFileManager::Targets) {
             QList<KDevelop::ProjectTargetItem*> targets=targetsInFolder(project->projectItem());
@@ -489,7 +490,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
             projectMenu->setEnabled(!projectMenu->isEmpty());
         }
     }
-    
+
     return ret;
 }
 
@@ -501,17 +502,17 @@ void NativeAppConfigType::suggestionTriggered()
     if(pitem) {
         QPair<QString,QString> launcher = qMakePair( launchers().at( 0 )->supportedModes().at(0), launchers().at( 0 )->id() );
         KDevelop::IProject* p = pitem->project();
-        
+
         KDevelop::ILaunchConfiguration* config = KDevelop::ICore::self()->runController()->createLaunchConfiguration(this, launcher, p, pitem->text());
         KConfigGroup cfg = config->config();
-        
+
         QStringList splitPath = model->pathFromIndex(pitem->index());
 //         QString path = KDevelop::joinWithEscaping(splitPath,'/','\\');
         cfg.writeEntry( ExecutePlugin::projectTargetEntry, splitPath );
         cfg.writeEntry( ExecutePlugin::dependencyEntry, KDevelop::qvariantToString( QVariantList() << splitPath ) );
         cfg.writeEntry( ExecutePlugin::dependencyActionEntry, "Build" );
         cfg.sync();
-        
+
         emit signalAddLaunchConfiguration(config);
     }
 }

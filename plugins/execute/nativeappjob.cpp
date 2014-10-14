@@ -20,12 +20,12 @@
 #include "nativeappjob.h"
 
 #include <QFileInfo>
+#include <QDebug>
 
 #include <kprocess.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <kparts/mainwindow.h>
 
 #include <interfaces/ilaunchconfiguration.h>
@@ -41,56 +41,57 @@
 #include <project/projectmodel.h>
 
 #include "iexecuteplugin.h"
+#include "debug.h"
 #include <KConfigCore/ksharedconfig.h>
 
 using namespace KDevelop;
 
-NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg) 
+NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     : KDevelop::OutputJob( parent ), proc(0)
 {
     setCapabilities(Killable);
-    
+
     IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin", "kdevexecute")->extension<IExecutePlugin>();
     Q_ASSERT(iface);
-        
+
     KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());
     QString envgrp = iface->environmentGroup(cfg);
-    
+
     QString err;
     QUrl executable = iface->executable( cfg, err );
-    
-    if( !err.isEmpty() ) 
+
+    if( !err.isEmpty() )
     {
         setError( -1 );
         setErrorText( err );
         return;
     }
-    
+
     if( envgrp.isEmpty() )
     {
-        kWarning() << "Launch Configuration:" << cfg->name() << i18n("No environment group specified, looks like a broken "
+        qWarning() << "Launch Configuration:" << cfg->name() << i18n("No environment group specified, looks like a broken "
                        "configuration, please check run configuration '%1'. "
                        "Using default environment group.", cfg->name() );
         envgrp = l.defaultGroup();
     }
-    
+
     QStringList arguments = iface->arguments( cfg, err );
-    if( !err.isEmpty() ) 
+    if( !err.isEmpty() )
     {
         setError( -2 );
         setErrorText( err );
     }
-    
+
     if( error() != 0 )
     {
-        kWarning() << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
+        qWarning() << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
         return;
     }
-    
+
     proc = new KProcess( this );
-    
+
     lineMaker = new KDevelop::ProcessLineMaker( proc, this );
-    
+
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
     OutputModel* m = new OutputModel;
@@ -103,7 +104,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     connect( proc, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(processFinished(int,QProcess::ExitStatus)) );
 
     // Now setup the process parameters
-    
+
     proc->setEnvironment( l.createEnvironment( envgrp, proc->systemEnvironment()) );
     QUrl wc = iface->workingDirectory( cfg );
     if( !wc.isValid() || wc.isEmpty() )
@@ -112,11 +113,11 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     }
     proc->setWorkingDirectory( wc.toLocalFile() );
     proc->setProperty( "executable", executable );
-    
-    kDebug() << "setting app:" << executable << arguments;
-    
+
+    qCDebug(PLUGIN_EXECUTE) << "setting app:" << executable << arguments;
+
     proc->setOutputChannelMode(KProcess::MergedChannels);
-    
+
     if (iface->useTerminal(cfg)) {
         QStringList args = KShell::splitArgs(iface->terminal(cfg));
         for (QStringList::iterator it = args.begin(); it != args.end(); ++it) {
@@ -131,14 +132,14 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     } else {
         proc->setProgram( executable.toLocalFile(), arguments );
     }
-    
+
     setObjectName(cfg->name());
 }
 
 
-void NativeAppJob::start() 
+void NativeAppJob::start()
 {
-    kDebug() << "launching?" << proc;
+    qCDebug(PLUGIN_EXECUTE) << "launching?" << proc;
     if( proc )
     {
         startOutput();
@@ -146,7 +147,7 @@ void NativeAppJob::start()
         proc->start();
     } else
     {
-        kWarning() << "No process, something went wrong when creating the job";
+        qWarning() << "No process, something went wrong when creating the job";
         // No process means we've returned early on from the constructor, some bad error happened
         emitResult();
     }
@@ -161,7 +162,7 @@ bool NativeAppJob::doKill()
     return true;
 }
 
-void NativeAppJob::processFinished( int exitCode , QProcess::ExitStatus status ) 
+void NativeAppJob::processFinished( int exitCode , QProcess::ExitStatus status )
 {
     if (!model()) {
         outputDone();
@@ -192,7 +193,7 @@ void NativeAppJob::outputDone()
     emitResult();
 }
 
-void NativeAppJob::processError( QProcess::ProcessError error ) 
+void NativeAppJob::processError( QProcess::ProcessError error )
 {
     if( error == QProcess::FailedToStart )
     {
@@ -203,7 +204,7 @@ void NativeAppJob::processError( QProcess::ProcessError error )
         setErrorText( errmsg );
         emitResult();
     }
-    kDebug() << "Process error";
+    qCDebug(PLUGIN_EXECUTE) << "Process error";
 }
 
 void NativeAppJob::appendLine(const QString& l)

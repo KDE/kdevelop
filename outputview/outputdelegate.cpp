@@ -26,7 +26,6 @@
 
 #include <QPainter>
 
-#include <kdebug.h>
 
 namespace KDevelop
 {

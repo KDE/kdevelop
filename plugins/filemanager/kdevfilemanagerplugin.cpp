@@ -24,7 +24,6 @@
 #include <KLocalizedString>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-#include <kdebug.h>
 #include <kactioncollection.h>
 #include <kaboutdata.h>
 

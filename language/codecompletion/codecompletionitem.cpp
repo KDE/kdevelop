@@ -22,13 +22,11 @@
 #include "codecompletionitem.h"
 
 #include <QModelIndex>
-#include <QDebug>
 
 #include <ktexteditor/codecompletionmodel.h>
 #include <ktexteditor/range.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
-#include <kdebug.h>
 
 #include "../duchain/declaration.h"
 #include "../duchain/duchainutils.h"

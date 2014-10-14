@@ -28,7 +28,7 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <QUrl>
-#include <KDebug>
+#include <QDebug>
 
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
@@ -80,7 +80,7 @@ void GitInitTest::cleanup()
 
 void GitInitTest::repoInit()
 {
-    kDebug() << "Trying to init repo";
+    qDebug() << "Trying to init repo";
     // make job that creates the local repository
     VcsJob* j = m_plugin->init(QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
@@ -103,7 +103,7 @@ void GitInitTest::repoInit()
 
 void GitInitTest::addFiles()
 {
-    kDebug() << "Adding files to the repo";
+    qDebug() << "Adding files to the repo";
 
     //we start it after repoInit, so we still have empty git repo
     QFile f(gitTest_BaseDir + gitTest_FileName);
@@ -170,7 +170,7 @@ void GitInitTest::addFiles()
 
 void GitInitTest::commitFiles()
 {
-    kDebug() << "Committing...";
+    qDebug() << "Committing...";
     //we start it after addFiles, so we just have to commit
     VcsJob* j = m_plugin->commit(QString("Test commit"), QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
@@ -207,7 +207,7 @@ void GitInitTest::commitFiles()
 
     QVERIFY(!firstCommit.isEmpty());
 
-    kDebug() << "Committing one more time";
+    qDebug() << "Committing one more time";
     //let's try to change the file and test "git commit -a"
     QFile f(gitTest_BaseDir + gitTest_FileName);
 

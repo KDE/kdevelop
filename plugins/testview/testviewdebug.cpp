@@ -21,9 +21,4 @@
 
 #include "testviewdebug.h"
 
-
-int debugArea()
-{
-  static int area = KDebug::registerArea("KDevplatform (Test View)", false);
-  return area;
-}
+Q_LOGGING_CATEGORY(PLUGIN_TESTVIEW, "kdevplatform.plugins.testview")

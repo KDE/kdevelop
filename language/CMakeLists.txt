@@ -1,4 +1,3 @@
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9505 )
 
 add_subdirectory(highlighting/tests)
 add_subdirectory(duchain/tests)
@@ -129,6 +128,7 @@ set(KDevPlatformLanguage_LIB_SRCS
     util/setrepository.cpp
     util/includeitem.cpp
     util/navigationtooltip.cpp
+    util/debug.cpp
 
     highlighting/colorcache.cpp
     highlighting/configurablecolors.cpp

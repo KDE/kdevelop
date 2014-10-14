@@ -17,7 +17,6 @@
 #include <KMenu>
 #include <KMessageBox>
 #include <KLocalizedString>
-#include <KDebug>
 
 #include "snippet.h"
 #include "snippetplugin.h"

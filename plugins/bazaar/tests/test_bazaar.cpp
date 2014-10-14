@@ -32,7 +32,8 @@
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QUrl>
-#include <KDebug>
+#include <QtCore/QDebug>
+
 #include <KIO/DeleteJob>
 
 #include <vcs/dvcs/dvcsjob.h>
@@ -86,7 +87,7 @@ void TestBazaar::cleanup()
 
 void TestBazaar::repoInit()
 {
-    kDebug() << "Trying to init repo";
+    qDebug() << "Trying to init repo";
     // make job that creates the local repository
     VcsJob* j = m_plugin->init(QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
@@ -97,7 +98,7 @@ void TestBazaar::repoInit()
 
 void TestBazaar::addFiles()
 {
-    kDebug() << "Adding files to the repo";
+    qDebug() << "Adding files to the repo";
 
     //we start it after repoInit, so we still have empty bazaar repo
     QFile f(bazaarTest_BaseDir + bazaarTest_FileName);
@@ -172,7 +173,7 @@ void TestBazaar::prepareWhoamiInformations()
 void TestBazaar::commitFiles()
 {
     prepareWhoamiInformations();
-    kDebug() << "Committing...";
+    qDebug() << "Committing...";
     //we start it after addFiles, so we just have to commit
     VcsJob* j = m_plugin->commit(QString("Test commit"), QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
@@ -197,7 +198,7 @@ void TestBazaar::commitFiles()
         QVERIFY(files.contains("src/" + bazaarTest_FileName3));
     }
 
-    kDebug() << "Committing one more time";
+    qDebug() << "Committing one more time";
     //let's try to change the file and test "bzr commit"
     QFile f(bazaarTest_BaseDir + bazaarTest_FileName);
 

@@ -21,8 +21,6 @@
 
 #include "filtereditem.h"
 
-#include <kdebug.h>
-
 namespace KDevelop
 {
 

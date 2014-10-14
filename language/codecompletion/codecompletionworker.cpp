@@ -22,8 +22,6 @@
 
 #include "codecompletionworker.h"
 
-#include <kdebug.h>
-
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <KLocalizedString>
@@ -31,6 +29,7 @@
 #include "../duchain/ducontext.h"
 #include "../duchain/duchainlock.h"
 #include "../duchain/duchain.h"
+#include "util/debug.h"
 #include "codecompletion.h"
 #include "codecompletionitem.h"
 #include "codecompletionmodel.h"
@@ -82,11 +81,11 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   ///@todo It's not entirely safe to pass KTextEditor::View* through a queued connection
   // We access the view/document which is not thread-safe, so we need the foreground lock
   ForegroundLock foreground;
-  
+
   //Compute the text we should complete on
   KTextEditor::Document* doc = view->document();
   if( !doc ) {
-    kDebug() << "No document for completion";
+    qCDebug(LANGUAGE) << "No document for completion";
     failed();
     return;
   }
@@ -96,17 +95,17 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   {
     QMutexLocker lock(m_mutex);
     DUChainReadLocker lockDUChain;
-    
+
     if(context) {
-      kDebug() << context->localScopeIdentifier().toString();
+      qCDebug(LANGUAGE) << context->localScopeIdentifier().toString();
       range = KTextEditor::Range(context->rangeInCurrentRevision().start(), position);
     }
-    
+
     else
       range = KTextEditor::Range(KTextEditor::Cursor(position.line(), 0), position);
 
     updateContextRange(range, view, context);
-    
+
     text = doc->text(range);
   }
 
@@ -123,11 +122,11 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   QString followingText; //followingText may contain additional text that stands for the current item. For example in the case "QString|", QString is in addedText.
   if(position < cursorPosition)
     followingText = view->document()->text( KTextEditor::Range( position, cursorPosition ) );
-  
+
   foreground.unlock();
-  
+
   computeCompletions(context, position, followingText, range, text);
-  
+
   if(!m_hasFoundDeclarations)
     failed();
 }
@@ -147,9 +146,9 @@ CodeCompletionContext* CodeCompletionWorker::createCompletionContext(KDevelop::D
 void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& contextRange, const QString& contextText)
 {
   Q_UNUSED(contextRange);
-  
-  kDebug() << "added text:" << followingText;
-  
+
+  qCDebug(LANGUAGE) << "added text:" << followingText;
+
   CodeCompletionContext::Ptr completionContext( createCompletionContext( context, contextText, followingText, CursorInRevision::castFromSimpleCursor(KTextEditor::Cursor(position)) ) );
   if (KDevelop::CodeCompletionModel* m = model())
     m->setCompletionContext(completionContext);
@@ -160,7 +159,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
 
       if (!context) {
         failed();
-        kDebug() << "Completion context disappeared before completions could be calculated";
+        qCDebug(LANGUAGE) << "Completion context disappeared before completions could be calculated";
         return;
       }
     }
@@ -170,20 +169,20 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       failed();
       return;
     }
-    
+
     QList<QExplicitlySharedDataPointer<CompletionTreeElement> > tree = computeGroups( items, completionContext );
 
     if(aborting()) {
       failed();
       return;
     }
-    
+
     tree += completionContext->ungroupedElements();
 
     foundDeclarations( tree, completionContext );
 
   } else {
-    kDebug() << "setContext: Invalid code-completion context";
+    qCDebug(LANGUAGE) << "setContext: Invalid code-completion context";
   }
 }
 

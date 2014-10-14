@@ -26,7 +26,6 @@ Boston, MA 02110-1301, USA.
 #include <QLabel>
 #include <QMenu>
 
-#include <kdebug.h>
 #include <kxmlguiclient.h>
 #include <kxmlguifactory.h>
 #include <kstandardaction.h>
@@ -55,6 +54,7 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "textdocument.h"
 #include "sessioncontroller.h"
+#include "debug.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
@@ -86,15 +86,15 @@ void MainWindowPrivate::setupStatusBar()
 
 void MainWindowPrivate::addPlugin( IPlugin *plugin )
 {
-    kDebug() << "add plugin" << plugin << plugin->componentName();
+    qCDebug(SHELL) << "add plugin" << plugin << plugin->componentName();
     Q_ASSERT( plugin );
 
     //The direct plugin client can only be added to the first mainwindow
     if(m_mainWindow == Core::self()->uiControllerInternal()->mainWindows()[0])
         m_mainWindow->guiFactory()->addClient( plugin );
-    
+
     Q_ASSERT(!m_pluginCustomClients.contains(plugin));
-    
+
     KXMLGUIClient* ownClient = plugin->createGUIForMainWindow(m_mainWindow);
     if(ownClient) {
         m_pluginCustomClients[plugin] = ownClient;
@@ -128,7 +128,7 @@ void MainWindowPrivate::removePlugin( IPlugin *plugin )
         m_pluginCustomClients.remove(plugin);
         disconnect(plugin, SIGNAL(destroyed(QObject*)), this, SLOT(pluginDestroyed(QObject*)));
     }
-    
+
     m_mainWindow->guiFactory()->removeClient( plugin );
 }
 
@@ -172,10 +172,10 @@ void MainWindowPrivate::mergeView(Sublime::View* view)
     // client, I think.
     if (lastXMLGUIClientView)
     {
-        kDebug() << "clearing last XML GUI client" << lastXMLGUIClientView;
-        
+        qCDebug(SHELL) << "clearing last XML GUI client" << lastXMLGUIClientView;
+
         m_mainWindow->guiFactory()->removeClient(dynamic_cast<KXMLGUIClient*>(lastXMLGUIClientView));
-        
+
         disconnect (lastXMLGUIClientView, SIGNAL(destroyed(QObject*)), this, 0);
 
         lastXMLGUIClientView = NULL;
@@ -187,12 +187,12 @@ void MainWindowPrivate::mergeView(Sublime::View* view)
     QWidget* viewWidget = view->widget();
     Q_ASSERT(viewWidget);
 
-    kDebug() << "changing active view to" << view << "doc" << view->document() << "mw" << m_mainWindow;
+    qCDebug(SHELL) << "changing active view to" << view << "doc" << view->document() << "mw" << m_mainWindow;
 
     // If the new view is KXMLGUIClient, add it.
     if (KXMLGUIClient* c = dynamic_cast<KXMLGUIClient*>(viewWidget))
     {
-        kDebug() << "setting new XMLGUI client" << viewWidget;
+        qCDebug(SHELL) << "setting new XMLGUI client" << viewWidget;
         lastXMLGUIClientView = viewWidget;
         m_mainWindow->guiFactory()->addClient(c);
         connect(viewWidget, SIGNAL(destroyed(QObject*)),

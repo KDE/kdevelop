@@ -24,7 +24,6 @@
 #include <QMutexLocker>
 #include <QDateTime>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <ThreadWeaver.h>
@@ -63,7 +62,7 @@ void SvnInternalUpdateJob::run()
         cli.update( svn::Targets( targets ), rev, recursive(), ignoreExternals() );
     }catch( svn::ClientException ce )
     {
-        kDebug(9510) << "Exception while updating files: "
+        qCDebug(PLUGIN_SVN) << "Exception while updating files: "
                 << m_locations
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
@@ -141,7 +140,7 @@ void SvnUpdateJob::start()
         setErrorText( i18n( "Not enough Information to execute update" ) );
     }else
     {
-        kDebug(9510) << "updating urls:" << m_job->locations();
+        qCDebug(PLUGIN_SVN) << "updating urls:" << m_job->locations();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
 }

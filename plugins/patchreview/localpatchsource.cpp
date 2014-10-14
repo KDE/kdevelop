@@ -16,7 +16,6 @@
 #include <QIcon>
 
 #include <ktemporaryfile.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <kprocess.h>
 #include <KLineEdit>
@@ -24,6 +23,7 @@
 #include <QWidget>
 
 #include "ui_localpatchwidget.h"
+#include "debug.h"
 
 LocalPatchSource::LocalPatchSource()
     : m_applied(false)
@@ -57,7 +57,7 @@ void LocalPatchSource::update()
         if( temp.open() ) {
             temp.setAutoRemove( false );
             QString filename = temp.fileName();
-            kDebug() << "temp file: " << filename;
+            qCDebug(PLUGIN_PATCHREVIEW) << "temp file: " << filename;
             temp.close();
             KProcess proc;
             proc.setWorkingDirectory( m_baseDir.toLocalFile() );
@@ -66,19 +66,19 @@ void LocalPatchSource::update()
             ///Try to apply, if it works, the patch is not applied
             proc << KShell::splitArgs( m_command );
 
-            kDebug() << "calling " << m_command;
+            qCDebug(PLUGIN_PATCHREVIEW) << "calling " << m_command;
 
             if ( proc.execute() ) {
-                kWarning() << "returned with bad exit code";
+                qWarning() << "returned with bad exit code";
                 return;
             }
             if ( !m_filename.isEmpty() ) {
                 QFile::remove( m_filename.toLocalFile() );
             }
             m_filename = QUrl::fromLocalFile( filename );
-            kDebug() << "success, diff: " << m_filename;
+            qCDebug(PLUGIN_PATCHREVIEW) << "success, diff: " << m_filename;
         }else{
-            kWarning() << "PROBLEM";
+            qWarning() << "PROBLEM";
         }
         emit patchChanged();
     }

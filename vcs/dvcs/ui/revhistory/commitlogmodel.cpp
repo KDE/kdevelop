@@ -21,7 +21,6 @@
 #include "commitlogmodel.h"
 
 #include <QtCore/QStringList>
-#include <KDebug>
 
 #include "commitView.h"
 #include <dvcs/dvcsplugin.h>

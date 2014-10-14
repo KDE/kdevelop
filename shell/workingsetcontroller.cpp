@@ -32,13 +32,13 @@
 #include <sublime/area.h>
 
 #include <util/activetooltip.h>
-#include <kdebug.h>
 
 #include "workingsets/workingset.h"
 #include "workingsets/workingsettooltipwidget.h"
 #include "workingsets/workingsetwidget.h"
 #include "workingsets/closedworkingsetswidget.h"
 #include "core.h"
+#include "debug.h"
 
 using namespace KDevelop;
 
@@ -84,9 +84,9 @@ void WorkingSetController::cleanup()
     }
 
     foreach(WorkingSet* set, m_workingSets) {
-        kDebug() << "set" << set->id() << "persistent" << set->isPersistent() << "has areas:" << set->hasConnectedAreas() << "files" << set->fileList();
+        qCDebug(SHELL) << "set" << set->id() << "persistent" << set->isPersistent() << "has areas:" << set->hasConnectedAreas() << "files" << set->fileList();
         if(!set->isPersistent() && !set->hasConnectedAreas()) {
-            kDebug() << "deleting";
+            qCDebug(SHELL) << "deleting";
             set->deleteSet(true, true);
         }
         delete set;
@@ -132,7 +132,7 @@ WorkingSet* WorkingSetController::getWorkingSet(const QString& id)
 {
     if(id.isEmpty())
         return m_emptyWorkingSet;
-    
+
     if(!m_workingSets.contains(id)) {
         WorkingSet* set = new WorkingSet(id);
         connect(set, SIGNAL(aboutToRemove(WorkingSet*)),
@@ -273,7 +273,7 @@ void WorkingSetController::areaCreated( Sublime::Area* area )
 
 void WorkingSetController::changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to)
 {
-    kDebug() << "changing working-set from" << from << "to" << to << "area" << area;
+    qCDebug(SHELL) << "changing working-set from" << from << "to" << to << "area" << area;
     if (from == to)
         return;
 
@@ -288,10 +288,10 @@ void WorkingSetController::changingWorkingSet(Sublime::Area* area, const QString
 
 void WorkingSetController::changedWorkingSet(Sublime::Area* area, const QString& from, const QString& to)
 {
-    kDebug() << "changed working-set from" << from << "to" << to << "area" << area;
+    qCDebug(SHELL) << "changed working-set from" << from << "to" << to << "area" << area;
     if (from == to || m_changingWorkingSet)
         return;
-    
+
     if (!to.isEmpty()) {
         WorkingSet* newSet = getWorkingSet(to);
         newSet->connectArea(area);
@@ -313,7 +313,7 @@ void WorkingSetController::viewAdded( Sublime::AreaIndex* , Sublime::View* )
         //Spawn a new working-set
         m_changingWorkingSet = true;
         WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet(area->objectName());
-        kDebug() << "Spawned new working-set" << set->id() << "because a view was added";
+        qCDebug(SHELL) << "Spawned new working-set" << set->id() << "because a view was added";
         set->connectArea(area);
         set->saveFromArea(area, area->rootIndex());
         area->setWorkingSet(set->id());

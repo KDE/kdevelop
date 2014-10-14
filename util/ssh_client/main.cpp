@@ -81,7 +81,7 @@ int main (int argc, char *argv[])
                          "http://kde.org",
                          "submit@bugs.kde.org");
     KCmdLineArgs::init( argc, argv, &aboutData );
-    
+
     //according to docs we should be invoked as following:
     //<command> <hostname> svnserve -t
     KCmdLineOptions k_options;
@@ -91,7 +91,7 @@ int main (int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions( k_options );
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    
+
     KApplication app;
 
     std::string username;
@@ -103,9 +103,9 @@ int main (int argc, char *argv[])
     }
     else
         host = args->arg(0).toStdString();
-    
+
     const unsigned int port = 22;
-        
+
     //QTcpSocket makes libssh2_session_startup failed with *EAGAIN
     //QTcpSocket::readReady doesn't help, since socket is used multiple times inside libssh2_session_startup
     int sock;
@@ -117,7 +117,7 @@ int main (int argc, char *argv[])
         show_error(i18n("Cannot create socket, operation aborted."));
         return 1;
     }
-    
+
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
     struct hostent *he;
@@ -135,7 +135,7 @@ int main (int argc, char *argv[])
         return 1;
     }
 
-    
+
     LIBSSH2_SESSION *session;
     if (!(session = libssh2_session_init()) )
     {
@@ -147,24 +147,24 @@ int main (int argc, char *argv[])
         shutdown_ssh(session, i18n("SSH connection failed, operation aborted."));
         return 1;
     }
-    
+
     char* auth_methods = 0;
     if (!(auth_methods = libssh2_userauth_list(session, username.c_str(), username.size()+1)))
     {
         shutdown_ssh(session, i18n("Server does not support any authentication methods for the user, operation aborted."));
         return 1;
     }
-    kDebug() << "Supported auth methods:" << auth_methods;
-    
+    qDebug() << "Supported auth methods:" << auth_methods;
+
     unsigned int auth_mask = 0;
     QStringList supported_auth_methods = QString(auth_methods).split(',');
     if (supported_auth_methods.contains("password") )
         auth_mask |= 1;
     if (supported_auth_methods.contains("publickey") )
-        auth_mask |= 2;    
-    
+        auth_mask |= 2;
+
     AuthForm *form = new AuthForm(QString(username.c_str()), AuthForm::AuthType(auth_mask));
-    
+
     KDialog *dialog = new KDialog();
     dialog->setCaption(i18n("ssh auth"));
     dialog->setButtons(KDialog::Ok);
@@ -172,10 +172,10 @@ int main (int argc, char *argv[])
     dialog->exec();
 
     username = form->username->text().toStdString();
-    const std::string passphrase = form->password_or_passphrase->text().toStdString();    
+    const std::string passphrase = form->password_or_passphrase->text().toStdString();
     const std::string pub_key_filename = form->pub_key->text().toStdString();
     const std::string private_key_filename = form->private_key->text().toStdString();
-    
+
     const uint auth_type = form->select_auth_type->itemData(form->select_auth_type->currentIndex()).toInt();
     int auth;
 
@@ -197,14 +197,14 @@ int main (int argc, char *argv[])
     if (auth)
     {
         shutdown_ssh(session, i18n("Authentication failed, operation aborted."));
-        return 1; 
+        return 1;
     }
-    
+
     LIBSSH2_CHANNEL *channel;
-    
+
     if (!(channel = libssh2_channel_open_session(session))) {
         shutdown_ssh(session, i18n("Cannot open ssh channel, operation aborted."));
-        return 1; 
+        return 1;
     }
 
     if(libssh2_channel_exec(channel, "svnserve -t") )
@@ -212,11 +212,11 @@ int main (int argc, char *argv[])
         shutdown_ssh(session, i18n("Failed to launch 'svnserve -t', operation aborted."));
         return 1;
     }
-    
+
     char remotebuf[BUFSIZ];
     char localbuf[BUFSIZ];
     int readremote, readlocal;
-    
+
     //stdin shoudn't block, since svn can wait for some data from remote server
     int flags = fcntl(0, F_GETFL, 0);
     if (fcntl(0, F_SETFL, flags | O_NONBLOCK))
@@ -227,7 +227,7 @@ int main (int argc, char *argv[])
 
 
     while ((readremote = libssh2_channel_read(channel, remotebuf, BUFSIZ)) > 0 ||
-        readremote == LIBSSH2_ERROR_EAGAIN) 
+        readremote == LIBSSH2_ERROR_EAGAIN)
     {
         //Don't block after first read, since server can wait svn sent some info.
         libssh2_channel_set_blocking(channel, 0);

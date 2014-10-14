@@ -19,7 +19,6 @@
 
 #include "projectproxymodel.h"
 #include <project/projectmodel.h>
-#include <KDebug>
 #include <KLocalizedString>
 #include <qfileinfo.h>
 #include <kmimetype.h>

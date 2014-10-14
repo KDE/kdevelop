@@ -30,6 +30,9 @@
 #include <serialization/indexedstring.h>
 #include <language/duchain/topducontext.h>
 
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(PLUGIN_PROBLEMREPORTER)
+
 namespace KTextEditor { class Document; }
 namespace KDevelop { class IDocument; class ParseJob; }
 
@@ -45,7 +48,7 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
     virtual ~ProblemReporterPlugin();
 
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
-    
+
     // KDevelop::Plugin methods
     virtual void unload();
 

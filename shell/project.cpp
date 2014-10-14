@@ -31,6 +31,7 @@
 #include <QFileInfo>
 #include <QtDBus/QtDBus>
 #include <QStandardItemModel>
+#include <QtCore/QDebug>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -41,7 +42,6 @@
 #include <kmessagebox.h>
 #include <kio/jobclasses.h>
 #include <ktemporaryfile.h>
-#include <kdebug.h>
 
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
@@ -58,6 +58,7 @@
 #include "mainwindow.h"
 #include "projectcontroller.h"
 #include "uicontroller.h"
+#include "debug.h"
 
 namespace KDevelop
 {
@@ -115,7 +116,7 @@ QString ProjectProgress::statusName() const
 
 void ProjectProgress::setBuzzy()
 {
-    kDebug() << "showing busy progress" << statusName();
+    qCDebug(SHELL) << "showing busy progress" << statusName();
     // show an indeterminate progressbar
     emit showProgress(this, 0,0,0);
     emit showMessage(this, i18nc("%1: Project name", "Loading %1", projectName));
@@ -124,7 +125,7 @@ void ProjectProgress::setBuzzy()
 
 void ProjectProgress::setDone()
 {
-    kDebug() << "showing done progress" << statusName();
+    qCDebug(SHELL) << "showing done progress" << statusName();
     // first show 100% bar for a second, then hide.
     emit showProgress(this, 0,1,1);
     m_timer->start();
@@ -294,7 +295,7 @@ public:
     KConfigGroup initKConfigObject()
     {
         // helper method for open()
-        kDebug() << "Creating KConfig object for project files" << developerTempFile << projectTempFile;
+        qCDebug(SHELL) << "Creating KConfig object for project files" << developerTempFile << projectTempFile;
         m_cfg = KSharedConfig::openConfig( developerTempFile );
         m_cfg->addConfigSources( QStringList() << projectTempFile );
         KConfigGroup projectGroup( m_cfg, "Project" );
@@ -312,7 +313,7 @@ public:
                                 i18n( "Could not load %1, a project with the same name '%2' is already open.",
                                 projectFile.pathOrUrl(), name ) );
 
-            kWarning() << "Trying to open a project with a name thats already used by another open project";
+            qWarning() << "Trying to open a project with a name thats already used by another open project";
             return true;
         }
         return false;
@@ -527,7 +528,7 @@ void Project::close()
 {
     Q_ASSERT(d->topItem);
     if (d->topItem->row() == -1) {
-        kWarning() << "Something went wrong. ProjectFolderItem detached. Project closed during reload?";
+        qWarning() << "Something went wrong. ProjectFolderItem detached. Project closed during reload?";
         return;
     }
 

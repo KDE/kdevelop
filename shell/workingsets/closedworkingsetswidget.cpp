@@ -30,6 +30,7 @@
 
 #include "workingset.h"
 #include "workingsettoolbutton.h"
+#include "../debug.h"
 
 using namespace KDevelop;
 
@@ -115,11 +116,11 @@ void ClosedWorkingSetsWidget::addWorkingSet( WorkingSet* set )
     }
 
     if (set->isEmpty()) {
-//             kDebug() << "skipping" << set->id() << "because empty";
+//             qCDebug(SHELL) << "skipping" << set->id() << "because empty";
         return;
     }
 
-//     kDebug() << "adding button for" << set->id();
+//     qCDebug(SHELL) << "adding button for" << set->id();
     WorkingSetToolButton* button = new WorkingSetToolButton(this, set);
     button->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
 

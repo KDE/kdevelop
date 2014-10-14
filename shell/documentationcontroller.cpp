@@ -1,7 +1,7 @@
 /*
    Copyright 2009 Aleix Pol Gonzalez <aleixpol@kde.org>
    Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -18,6 +18,8 @@
 */
 
 #include "documentationcontroller.h"
+#include "debug.h"
+
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentationprovider.h>
 #include <interfaces/idocumentationproviderprovider.h>
@@ -28,7 +30,6 @@
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
-#include <KDebug>
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/idocumentcontroller.h>
@@ -90,23 +91,23 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
         DocumentationViewFactory()
             : mProvidersModel(0)
         {}
-        
+
         virtual QWidget* create( QWidget *parent = 0 )
         {
             return new DocumentationView( parent, providers() );
         }
-        
+
         virtual Qt::DockWidgetArea defaultPosition() { return Qt::RightDockWidgetArea; }
         virtual QString id() const { return "org.kdevelop.DocumentationView"; }
-        
+
     private:
         ProvidersModel* providers() {
             if(!mProvidersModel)
                 mProvidersModel = new ProvidersModel;
-            
+
             return mProvidersModel;
         }
-        
+
         ProvidersModel* mProvidersModel;
 };
 
@@ -132,9 +133,9 @@ void KDevelop::DocumentationController::doShowDocumentation()
     KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
     if(!view)
       return;
-    
+
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
-    
+
     Declaration* decl = usefulDeclaration(DUChainUtils::itemUnderCursor(view->document()->url(), KTextEditor::Cursor(view->cursorPosition())));
     QExplicitlySharedDataPointer<IDocumentation> documentation = documentationForDeclaration(decl);
     if(documentation) {
@@ -148,21 +149,21 @@ Q_DECLARE_METATYPE(QExplicitlySharedDataPointer<KDevelop::IDocumentation>)
 KDevelop::ContextMenuExtension KDevelop::DocumentationController::contextMenuExtension ( Context* context )
 {
     ContextMenuExtension menuExt;
-    
+
     qRegisterMetaType<QExplicitlySharedDataPointer<KDevelop::IDocumentation> >("QExplicitlySharedDataPointer<KDevelop::IDocumentation>");
-    
+
     DeclarationContext* ctx = dynamic_cast<DeclarationContext*>(context);
     if(ctx) {
         DUChainReadLocker lock(DUChain::lock());
         if(!ctx->declaration().data())
             return menuExt;
-        
+
         QExplicitlySharedDataPointer< IDocumentation > doc = documentationForDeclaration(ctx->declaration().data());
         if(doc) {
             menuExt.addAction(ContextMenuExtension::ExtensionGroup, m_showDocumentation);;
         }
     }
-    
+
     return menuExt;
 }
 
@@ -174,10 +175,10 @@ QExplicitlySharedDataPointer< KDevelop::IDocumentation > DocumentationController
     QExplicitlySharedDataPointer<KDevelop::IDocumentation> ret;
     foreach(IDocumentationProvider* doc, documentationProviders())
     {
-        kDebug(9529) << "Documentation provider found:" << doc;
+        qCDebug(SHELL) << "Documentation provider found:" << doc;
         ret=doc->documentationForDeclaration(decl);
-        
-        kDebug(9529) << "Documentation proposed: " << ret.data();
+
+        qCDebug(SHELL) << "Documentation proposed: " << ret.data();
         if(ret)
             break;
     }
@@ -189,28 +190,28 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
 {
     QList<IPlugin*> plugins=ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IDocumentationProvider");
     QList<IPlugin*> pluginsProvider=ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IDocumentationProviderProvider");
-    
+
     QList<IDocumentationProvider*> ret;
     foreach(IPlugin* p, pluginsProvider)
     {
         IDocumentationProviderProvider *docProvider=p->extension<IDocumentationProviderProvider>();
         if (!docProvider) {
-            kWarning() << "plugin" << p << "does not implement ProviderProvider extension, rerun kbuildsycoca4";
+            qWarning() << "plugin" << p << "does not implement ProviderProvider extension, rerun kbuildsycoca4";
             continue;
         }
         ret.append(docProvider->providers());
     }
-    
+
     foreach(IPlugin* p, plugins)
     {
         IDocumentationProvider *doc=p->extension<IDocumentationProvider>();
         if (!doc) {
-            kWarning() << "plugin" << p << "does not implement Provider extension, rerun kbuildsycoca4";
+            qWarning() << "plugin" << p << "does not implement Provider extension, rerun kbuildsycoca4";
             continue;
         }
         ret.append(doc);
     }
-    
+
     return ret;
 }
 
@@ -218,13 +219,13 @@ void KDevelop::DocumentationController::showDocumentation(QExplicitlySharedDataP
 {
     QWidget* w = ICore::self()->uiController()->findToolView(i18n("Documentation"), m_factory, KDevelop::IUiController::CreateAndRaise);
     if(!w) {
-        kWarning() << "Could not add documentation toolview";
+        qWarning() << "Could not add documentation toolview";
         return;
     }
-    
+
     DocumentationView* view = dynamic_cast<DocumentationView*>(w);
     if( !view ) {
-        kWarning() << "Could not cast toolview" << w << "to DocumentationView class!";
+        qWarning() << "Could not cast toolview" << w << "to DocumentationView class!";
         return;
     }
     view->showDocumentation(doc);

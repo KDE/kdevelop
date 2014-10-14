@@ -25,7 +25,6 @@
 #include <QtCore/QMap>
 #include <QtCore/QDateTime>
 
-#include <kdebug.h>
 
 namespace KDevelop
 {

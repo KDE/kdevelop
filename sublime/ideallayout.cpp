@@ -23,7 +23,6 @@
 #include "ideallayout.h"
 #include "idealcontroller.h"
 
-#include "kdebug.h"
 #include <KConfigGroup>
 #include <KConfig>
 

@@ -24,7 +24,6 @@
 
 #include <QMutexLocker>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <ThreadWeaver.h>
@@ -69,7 +68,7 @@ void SvnInternalInfoJob::run()
         emit gotInfo( h );
     }catch( svn::ClientException ce )
     {
-        kDebug(9510) << "Exception while getting info for file: "
+        qCDebug(PLUGIN_SVN) << "Exception while getting info for file: "
                 << m_location
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );

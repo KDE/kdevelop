@@ -24,13 +24,13 @@
 #include <QMimeType>
 #include <QMimeDatabase>
 
-#include <KDebug>
 #include <KLocalizedString>
 
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idebugcontroller.h"
 #include "../../interfaces/iprojectcontroller.h"
 #include "../interfaces/isession.h"
+#include "util/debug.h"
 
 namespace KDevelop {
 
@@ -50,7 +50,7 @@ FrameStackModel::~FrameStackModel()
 
 void FrameStackModel::setThreads(const QList<ThreadItem> &threads)
 {
-    kDebug() << threads.count();
+    qCDebug(DEBUGGER) << threads.count();
 
     if (!m_threads.isEmpty()) {
         beginRemoveRows(QModelIndex(), 0, m_threads.count()-1);
@@ -234,7 +234,7 @@ QVariant FrameStackModel::headerData(int section, Qt::Orientation orientation, i
 
 void FrameStackModel::setCurrentThread(int threadNumber)
 {
-    kDebug() << threadNumber;
+    qCDebug(DEBUGGER) << threadNumber;
     if (m_currentThread != threadNumber && threadNumber != -1) {
         // FIXME: this logic means that if we switch to thread 3 and
         // then to thread 2 and then to thread 3, we'll request frames
@@ -246,11 +246,11 @@ void FrameStackModel::setCurrentThread(int threadNumber)
     }
     if (threadNumber != m_currentThread) {
         m_currentFrame = 0;
-        kDebug() << "currentFrame" << m_currentFrame;
+        qCDebug(DEBUGGER) << "currentFrame" << m_currentFrame;
         m_currentThread = threadNumber;
         emit currentFrameChanged(m_currentFrame);
     }
-    kDebug() << "currentThread: " << m_currentThread << "currentFrame: " << m_currentFrame;
+    qCDebug(DEBUGGER) << "currentThread: " << m_currentThread << "currentFrame: " << m_currentFrame;
     emit currentThreadChanged(threadNumber);
     session()->raiseEvent(IDebugSession::thread_or_frame_changed);
 }
@@ -294,7 +294,7 @@ QModelIndex FrameStackModel::currentFrameIndex() const
 
 void FrameStackModel::setCurrentFrame(int frame)
 {
-    kDebug() << frame;
+    qCDebug(DEBUGGER) << frame;
     if (frame != m_currentFrame)
     {
         m_currentFrame = frame;

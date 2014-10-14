@@ -32,8 +32,6 @@
 #include <sublime/container.h>
 #include <sublime/tooldocument.h>
 
-#include "kdebug.h"
-
 using namespace Sublime;
 
 template <class Widget>

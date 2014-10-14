@@ -1,7 +1,5 @@
 project(bazaar)
 
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=9527)
-
 set(kdevbazaar_SRCS
     diffjob.cpp
     bzrannotatejob.cpp

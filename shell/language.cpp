@@ -18,12 +18,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 #include "language.h"
+#include "debug.h"
 
 #include <QHash>
 #include <QReadWriteLock>
 #include <QThread>
-
-#include <kdebug.h>
 
 #include <language/interfaces/ilanguagesupport.h>
 
@@ -38,7 +37,7 @@ struct LanguagePrivate {
 Language::Language(ILanguageSupport *support, QObject *parent)
     : ILanguage(support->name(), parent)
 {
-    kDebug() << "creating language" << support->name();
+    qCDebug(SHELL) << "creating language" << support->name();
 
     d = new LanguagePrivate;
     d->support = support;
@@ -51,12 +50,12 @@ Language::~Language()
 
 void Language::deactivate()
 {
-    kDebug() << "deactivating language" << name();
+    qCDebug(SHELL) << "deactivating language" << name();
 }
 
 void Language::activate()
 {
-    kDebug() << "activating language" << name();
+    qCDebug(SHELL) << "activating language" << name();
 }
 
 ILanguageSupport *Language::languageSupport()

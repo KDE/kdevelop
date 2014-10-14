@@ -18,6 +18,9 @@
 #include <interfaces/icore.h>
 #include <kservice.h>
 #include "kdevkonsoleview.h"
+#include "debug.h"
+
+Q_LOGGING_CATEGORY(PLUGIN_KONSOLE, "kdevplatform.plugins.konsole")
 
 QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
 {
@@ -27,7 +30,7 @@ QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
         factory = KPluginLoader(*service.data()).factory();
     }
     if (!factory) {
-        kWarning() << "Failed to load 'konsolepart' plugin";
+        qWarning() << "Failed to load 'konsolepart' plugin";
     }
     return new KDevKonsoleViewPlugin(factory, op, args);
 }

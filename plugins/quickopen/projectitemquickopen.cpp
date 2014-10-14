@@ -17,6 +17,7 @@
 */
 
 #include "projectitemquickopen.h"
+#include "debug.h"
 
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>
@@ -250,7 +251,7 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const
             ret << QuickOpenDataPointer(new DUChainItemData(item));
         }
     } else {
-        kDebug() << "Could not find standard-context";
+        qCDebug(PLUGIN_QUICKOPEN) << "Could not find standard-context";
     }
 
     if(!ret.isEmpty()) {

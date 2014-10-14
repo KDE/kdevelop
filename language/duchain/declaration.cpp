@@ -372,7 +372,7 @@ void Declaration::allocateOwnIndex() {
   Q_ASSERT(m_indexInTopContext);
 
   if(!m_topContext->m_dynamicData->getDeclarationForIndex(m_indexInTopContext))
-    kFatal() << "Could not re-retrieve declaration" << "index:" << m_indexInTopContext;
+    qFatal("Could not re-retrieve declaration\nindex: %d", m_indexInTopContext);
 
 }
 

@@ -26,7 +26,6 @@
 
 #include <KLocalizedString>
 #include <QMimeDatabase>
-#include <KDebug>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>

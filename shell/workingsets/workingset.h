@@ -23,7 +23,6 @@
 #include <QIcon>
 #include <KConfigGroup>
 #include <QPointer>
-#include <QDebug>
 
 namespace Sublime {
 class Area;

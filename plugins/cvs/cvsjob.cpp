@@ -15,7 +15,6 @@
 #include "cvsjob.h"
 
 #include <QStringList>
-#include <KDebug>
 #include <KLocalizedString>
 
 #include <interfaces/iplugin.h>

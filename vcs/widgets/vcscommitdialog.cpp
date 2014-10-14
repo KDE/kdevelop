@@ -18,7 +18,6 @@
 #include <KTextEdit>
 #include <KComboBox>
 #include <KLocalizedString>
-#include <KDebug>
 #include <KColorScheme>
 #include <KMessageBox>
 #include <kparts/mainwindow.h>

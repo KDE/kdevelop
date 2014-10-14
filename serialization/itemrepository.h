@@ -21,10 +21,10 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QFile>
+#include <QtCore/QDebug>
 
 #include <KMessageBox>
 #include <KLocalizedString>
-#include <KDebug>
 
 #include "referencecounting.h"
 #include "abstractitemrepository.h"
@@ -62,7 +62,7 @@
 //Assertion macro that prevents warnings if debugging is disabled
 //Only use it to verify values, it should not call any functions, since else the function will even be called in release mode
 #ifdef QT_NO_DEBUG
-#define VERIFY(X) if(!(X)) {kWarning() << "Failed to verify expression" << #X;}
+#define VERIFY(X) if(!(X)) {qWarning() << "Failed to verify expression" << #X;}
 #else
 #define VERIFY(X) Q_ASSERT(X)
 #endif
@@ -218,7 +218,7 @@ class Bucket {
         KMessageBox::error(0, i18n("Failed writing to %1, probably the disk is full", file->fileName()));
         abort();
       }
-      
+
       m_changed = false;
 #ifdef DEBUG_ITEMREPOSITORY_LOADING
       {
@@ -322,15 +322,15 @@ class Bucket {
         setFollowerIndex(insertedAt, 0);
         Q_ASSERT(m_objectMap[localHash] == 0);
         m_objectMap[localHash] = insertedAt;
-        
+
         if(markForReferenceCounting)
           enableDUChainReferenceCounting(m_data, dataSize());
-        
+
         request.createItem(reinterpret_cast<Item*>(m_data + insertedAt));
-      
+
         if(markForReferenceCounting)
           disableDUChainReferenceCounting(m_data);
-        
+
         return insertedAt;
       }
 
@@ -440,12 +440,12 @@ class Bucket {
       //Last thing we do, because createItem may recursively do even more transformation of the repository
       if(markForReferenceCounting)
         enableDUChainReferenceCounting(m_data, dataSize());
-        
+
       request.createItem(reinterpret_cast<Item*>(m_data + insertedAt));
 
       if(markForReferenceCounting)
         disableDUChainReferenceCounting(m_data);
-      
+
 #ifdef DEBUG_CREATEITEM_EXTENTS
       if(m_available >= 8) {
         //If this assertion triggers, then the item writes a bigger range than it advertised in
@@ -457,8 +457,8 @@ class Bucket {
       Q_ASSERT(itemFromIndex(insertedAt)->hash() == request.hash());
       Q_ASSERT(itemFromIndex(insertedAt)->itemSize() == itemSize);
 
-      ifDebugLostSpace( if(lostSpace()) kDebug() << "lost space:" << lostSpace(); Q_ASSERT(!lostSpace()); )
-      
+      ifDebugLostSpace( if(lostSpace()) qDebug() << "lost space:" << lostSpace(); Q_ASSERT(!lostSpace()); )
+
       return insertedAt;
     }
 
@@ -504,30 +504,30 @@ class Bucket {
       const Item* result;
       uint hash, modulo;
     };
-    
+
     void countFollowerIndexLengths(uint& usedSlots, uint& lengths, uint& slotCount, uint& longestInBucketFollowerChain) {
       for(uint a = 0; a < m_objectMapSize; ++a) {
         unsigned short currentIndex = m_objectMap[a];
         ++slotCount;
         uint length = 0;
-        
+
         if(currentIndex) {
           ++usedSlots;
-          
+
           while(currentIndex) {
             ++length;
             ++lengths;
             currentIndex = followerIndex(currentIndex);
           }
           if(length > longestInBucketFollowerChain) {
-//             kDebug() << "follower-chain at" << a << ":" << length;
-            
+//             qDebug() << "follower-chain at" << a << ":" << length;
+
             longestInBucketFollowerChain = length;
           }
         }
       }
     }
-    
+
     //A version of hasClashingItem that visits all items naively without using any assumptions.
     //This was used to debug hasClashingItem, but should not be used otherwise.
     bool hasClashingItemReal(uint hash, uint modulo) {
@@ -600,15 +600,15 @@ class Bucket {
         setFollowerIndex(previousIndex, followerIndex(index));
 
       Item* item = const_cast<Item*>(itemFromIndex(index));
-      
+
       if(markForReferenceCounting)
         enableDUChainReferenceCounting(m_data, dataSize());
-        
+
       ItemRequest::destroy(item, repository);
-        
+
       if(markForReferenceCounting)
         disableDUChainReferenceCounting(m_data);
-      
+
       memset(item, 0, size); //For debugging, so we notice the data is wrong
 
       if(m_monsterBucketExtent) {
@@ -689,7 +689,7 @@ class Bucket {
         while(currentIndex) {
           //Get the follower early, so there is no problems when the current
           //index is removed
-          
+
           if(!visitor(reinterpret_cast<const Item*>(m_data+currentIndex)))
             return false;
 
@@ -698,23 +698,23 @@ class Bucket {
       }
       return true;
     }
-    
+
     ///Returns whether something was changed
     template<class Repository>
     int finalCleanup(Repository& repository) {
       int changed = 0;
-      
+
       while(m_dirty) {
         m_dirty = false;
-        
+
         for(uint a = 0; a < m_objectMapSize; ++a) {
           uint currentIndex = m_objectMap[a];
           while(currentIndex) {
             //Get the follower early, so there is no problems when the current
             //index is removed
-            
+
             const Item* item = reinterpret_cast<const Item*>(m_data+currentIndex);
-            
+
             if(!ItemRequest::persistent(item)) {
               changed += item->itemSize();
               deleteItem(currentIndex, item->hash(), repository);
@@ -800,11 +800,11 @@ class Bucket {
       m_dirty = true;
       makeDataPrivate();
     }
-    
+
     bool dirty() const {
       return m_dirty;
     }
-    
+
     ///Returns the count of following buckets that were merged onto this buckets data array
     int monsterBucketExtent() const {
       return m_monsterBucketExtent;
@@ -855,17 +855,17 @@ class Bucket {
       if(m_mappedData == m_data) {
         short unsigned int* oldObjectMap = m_objectMap;
         short unsigned int* oldNextBucketHash = m_nextBucketHash;
-        
+
         m_data = new char[ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize];
         m_objectMap = new short unsigned int[m_objectMapSize];
         m_nextBucketHash = new short unsigned int[NextBucketHashSize];
-        
+
         memcpy(m_data, m_mappedData, ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize);
         memcpy(m_objectMap, oldObjectMap, m_objectMapSize * sizeof(short unsigned int));
         memcpy(m_nextBucketHash, oldNextBucketHash, NextBucketHashSize * sizeof(short unsigned int));
       }
     }
-    
+
     ///Merges the given index item, which must have a freeSize() set, to surrounding free items, and inserts the result.
     ///The given index itself should not be in the free items chain yet.
     ///Returns whether the item was inserted somewhere.
@@ -878,11 +878,11 @@ class Bucket {
 
         while(currentIndex) {
           Q_ASSERT(currentIndex != index);
-          
+
 #ifndef QT_NO_DEBUG
           unsigned short currentFreeSize = freeSize(currentIndex);
 #endif
-          
+
           ///@todo Achieve this without iterating through all items in the bucket(This is very slow)
           //Merge behind index
           if(currentIndex == index + freeSize(index) + AdditionalSpacePerItem) {
@@ -940,7 +940,7 @@ class Bucket {
 
     ///Only inserts the item in the correct position into the free chain. index must not be in the chain yet.
     void insertToFreeChain(unsigned short index) {
-  
+
       if(!fixedItemSize) {
         ///@todo Use some kind of tree to find the correct position in the chain(This is very slow)
         //Insert the free item into the chain opened by m_largestFreeItem
@@ -957,7 +957,7 @@ class Bucket {
 
         if(currentIndex)
           Q_ASSERT(freeSize(currentIndex) <= size);
-        
+
         setFollowerIndex(index, currentIndex);
 
         if(previousIndex) {
@@ -1054,23 +1054,23 @@ class DynamicItem {
     DynamicItem(Item* i, void* start, uint size) : m_item(i), m_start(start) {
       if(markForReferenceCounting)
         enableDUChainReferenceCounting(m_start, size);
-//       kDebug() << "enabling" << i << "to" << (void*)(((char*)i)+size);
+//       qDebug() << "enabling" << i << "to" << (void*)(((char*)i)+size);
     }
-    
+
     ~DynamicItem() {
       if(m_start) {
-//         kDebug() << "destructor-disabling" << m_item;
+//         qDebug() << "destructor-disabling" << m_item;
         if(markForReferenceCounting)
           disableDUChainReferenceCounting(m_start);
       }
     }
-    
+
     DynamicItem(const DynamicItem& rhs) : m_item(rhs.m_item), m_start(rhs.m_start) {
-//         kDebug() << "stealing" << m_item;
+//         qDebug() << "stealing" << m_item;
       Q_ASSERT(rhs.m_start);
       rhs.m_start = 0;
     }
-    
+
     Item* operator->() {
       return m_item;
     }
@@ -1185,7 +1185,7 @@ class ItemRepository : public AbstractItemRepository {
         else
           Q_ASSERT(bucketPtr->hasClashingItem(hash, MyBucket::NextBucketHashSize));
 #endif
-        
+
         if(!pickedBucketInChain && bucketPtr->canAllocateItem(size)) {
           //Remember that this bucket has enough space to store the item, if it isn't already stored.
           //This gives a better structure, and saves us from cyclic follower structures.
@@ -1225,7 +1225,7 @@ class ItemRepository : public AbstractItemRepository {
       if(useBucket >= m_buckets.size()) {
           if(m_buckets.size() >= 0xfffe) { //We have reserved the last bucket index 0xffff for special purposes
           //the repository has overflown.
-          kWarning() << "Found no room for an item in" << m_repositoryName << "size of the item:" << request.itemSize();
+          qWarning() << "Found no room for an item in" << m_repositoryName << "size of the item:" << request.itemSize();
           return 0;
         }else{
           //Allocate new buckets
@@ -1390,7 +1390,7 @@ class ItemRepository : public AbstractItemRepository {
     }
     //We haven't found a bucket that already contains the item, so append it to the current bucket
 
-    kWarning() << "Found no bucket for an item in" << m_repositoryName;
+    qWarning() << "Found no bucket for an item in" << m_repositoryName;
     return 0;
   }
 
@@ -1567,7 +1567,7 @@ class ItemRepository : public AbstractItemRepository {
     }else{
       putIntoFreeList(bucket, bucketPtr);
     }
-    
+
 #ifdef DEBUG_HASH_SEQUENCES
     Q_ASSERT(*bucketHashPosition == 0 || bucketForIndex(*bucketHashPosition)->hasClashingItem(hash, bucketHashSize));
 #endif
@@ -1578,9 +1578,9 @@ class ItemRepository : public AbstractItemRepository {
   ///@param index The index. It must be valid(match an existing item), and nonzero.
   ///@warning If you use this, make sure you lock mutex() before calling,
   ///         and hold it until you're ready using/changing the data..
-  
+
   typedef DynamicItem<Item, markForReferenceCounting> MyDynamicItem;
-  
+
   MyDynamicItem dynamicItemFromIndex(unsigned int index) {
     verifyIndex(index);
 
@@ -1597,7 +1597,7 @@ class ItemRepository : public AbstractItemRepository {
     unsigned short indexInBucket = index & 0xffff;
     return MyDynamicItem(const_cast<Item*>(bucketPtr->itemFromIndex(indexInBucket)), bucketPtr->data(), bucketPtr->dataSize());
   }
-  
+
   ///This returns an editable version of the item. @warning: Never change an entry that affects the hash,
   ///or the equals(..) function. That would completely destroy the consistency.
   ///@param index The index. It must be valid(match an existing item), and nonzero.
@@ -1639,10 +1639,10 @@ class ItemRepository : public AbstractItemRepository {
     }
     bucketPtr->prepareChange();
     unsigned short indexInBucket = index & 0xffff;
-    
+
     if(markForReferenceCounting)
       enableDUChainReferenceCounting(bucketPtr->data(), bucketPtr->dataSize());
-    
+
     action(const_cast<Item&>(*bucketPtr->itemFromIndex(indexInBucket, 0)));
 
     if(markForReferenceCounting)
@@ -1669,7 +1669,7 @@ class ItemRepository : public AbstractItemRepository {
 
   struct Statistics {
     Statistics() : loadedBuckets(-1), currentBucket(-1), usedMemory(-1), loadedMonsterBuckets(-1), usedSpaceForBuckets(-1),
-                   freeSpaceInBuckets(-1), lostSpace(-1), freeUnreachableSpace(-1), hashClashedItems(-1), totalItems(-1), hashSize(-1), hashUse(-1), 
+                   freeSpaceInBuckets(-1), lostSpace(-1), freeUnreachableSpace(-1), hashClashedItems(-1), totalItems(-1), hashSize(-1), hashUse(-1),
                    averageInBucketHashSize(-1), averageInBucketUsedSlotCount(-1), averageInBucketSlotChainLength(-1), longestInBucketChain(-1), longestNextBucketChain(-1), totalBucketFollowerSlots(-1), averageNextBucketForHashSequenceLength(-1) {
     }
 
@@ -1690,7 +1690,7 @@ class ItemRepository : public AbstractItemRepository {
     uint averageInBucketUsedSlotCount;
     float averageInBucketSlotChainLength;
     uint longestInBucketChain;
-    
+
     uint longestNextBucketChain;
     uint totalBucketFollowerSlots; //Total count of used slots in the nextBucketForHash structure
     float averageNextBucketForHashSequenceLength; //Average sequence length of a nextBucketForHash sequence(If not empty)
@@ -1710,7 +1710,7 @@ class ItemRepository : public AbstractItemRepository {
       return print();
     }
   };
-  
+
   QString printStatistics() const {
     return statistics().print();
   }
@@ -1756,14 +1756,14 @@ class ItemRepository : public AbstractItemRepository {
     ret.averageNextBucketForHashSequenceLength = 0;
     ret.longestNextBucketChain = 0;
     ret.longestInBucketChain = 0;
-    
+
     for(int a = 1; a < m_currentBucket+1; ++a) {
       MyBucket* bucket = bucketForIndex(a);
       if(bucket) {
         ++bucketCount;
-        
+
         bucket->countFollowerIndexLengths(totalInBucketUsedSlotCount, totalInBucketChainLengths, totalInBucketHashSize, ret.longestInBucketChain);
-        
+
         for(uint aa = 0; aa < MyBucket::NextBucketHashSize; ++aa) {
           uint length = 0;
           uint next = bucket->nextBucketForHash(aa);
@@ -1776,11 +1776,11 @@ class ItemRepository : public AbstractItemRepository {
             }
           }
           if(length > ret.longestNextBucketChain) {
-//             kDebug() << "next-bucket-chain in" << a << aa << ":" << length;
+//             qDebug() << "next-bucket-chain in" << a << aa << ":" << length;
             ret.longestNextBucketChain = length;
           }
         }
-        
+
         uint bucketFreeSpace = bucket->totalFreeItemsSize() + bucket->available();
         freeBucketSpace += bucketFreeSpace;
         if(m_freeSpaceBuckets.indexOf(a) == -1)
@@ -1798,7 +1798,7 @@ class ItemRepository : public AbstractItemRepository {
         a += bucket->monsterBucketExtent();
       }
     }
-    
+
     if(ret.totalBucketFollowerSlots)
       ret.averageNextBucketForHashSequenceLength /= ret.totalBucketFollowerSlots;
 
@@ -1878,7 +1878,7 @@ class ItemRepository : public AbstractItemRepository {
     if(m_file) {
 
       if(!m_file->open( QFile::ReadWrite ) || !m_dynamicFile->open( QFile::ReadWrite )) {
-        kFatal() << "cannot re-open repository file for storing";
+        qFatal("cannot re-open repository file for storing");
         return;
       }
 
@@ -1944,7 +1944,7 @@ class ItemRepository : public AbstractItemRepository {
   void setMutex(QMutex* mutex) {
     m_mutex = mutex;
   }
-  
+
   virtual QString repositoryName() const {
     return m_repositoryName;
   }
@@ -2051,7 +2051,7 @@ class ItemRepository : public AbstractItemRepository {
     }
     return m_buckets[bucketNumber];
   }
-  
+
   MyBucket* bucketForIndex(short unsigned int index) const {
     MyBucket* bucketPtr = m_buckets[index];
     if(!bucketPtr) {
@@ -2066,7 +2066,7 @@ class ItemRepository : public AbstractItemRepository {
 
     close();
     m_currentOpenPath = path;
-    //kDebug() << "opening repository" << m_repositoryName << "at" << path;
+    //qDebug() << "opening repository" << m_repositoryName << "at" << path;
     QDir dir(path);
     m_file = new QFile(dir.absoluteFilePath( m_repositoryName ));
     m_dynamicFile = new QFile(dir.absoluteFilePath( m_repositoryName + "_dynamic" ));
@@ -2127,7 +2127,7 @@ class ItemRepository : public AbstractItemRepository {
       m_file->read((char*)&m_statItemCount, sizeof(uint));
 
       if(storedVersion != m_repositoryVersion || hashSize != bucketHashSize || itemRepositoryVersion != staticItemRepositoryVersion()) {
-        kDebug() << "repository" << m_repositoryName << "version mismatch in" << m_file->fileName() << ", stored: version " << storedVersion << "hashsize" << hashSize << "repository-version" << itemRepositoryVersion << " current: version" << m_repositoryVersion << "hashsize" << bucketHashSize << "repository-version" << staticItemRepositoryVersion();
+        qDebug() << "repository" << m_repositoryName << "version mismatch in" << m_file->fileName() << ", stored: version " << storedVersion << "hashsize" << hashSize << "repository-version" << itemRepositoryVersion << " current: version" << m_repositoryVersion << "hashsize" << bucketHashSize << "repository-version" << staticItemRepositoryVersion();
         delete m_file;
         m_file = 0;
         delete m_dynamicFile;
@@ -2162,7 +2162,7 @@ class ItemRepository : public AbstractItemRepository {
       if(m_fileMap){
         m_fileMapSize = m_file->size() - BucketStartOffset;
       }else{
-        kWarning() << "mapping" << m_file->fileName() << "FAILED!";
+        qWarning() << "mapping" << m_file->fileName() << "FAILED!";
       }
     }
 #endif
@@ -2245,7 +2245,7 @@ class ItemRepository : public AbstractItemRepository {
     AllItemsReachableVisitor visitor(this);
     return bucketPtr->visitAllItems(visitor);
   }
-  
+
   struct CleanupVisitor {
     bool operator()(const Item* item) {
       if(!ItemRequest::persistent(item)) {
@@ -2257,7 +2257,7 @@ class ItemRepository : public AbstractItemRepository {
 
   virtual int finalCleanup() {
     ThisLocker lock(m_mutex);
-    
+
     int changed = 0;
     for(int a = 1; a <= m_currentBucket; ++a) {
       MyBucket* bucket = bucketForIndex(a);
@@ -2266,7 +2266,7 @@ class ItemRepository : public AbstractItemRepository {
       }
       a += bucket->monsterBucketExtent(); //Skip buckets that are attached as tail to monster-buckets
     }
-    
+
     return changed;
   }
 
@@ -2285,16 +2285,17 @@ class ItemRepository : public AbstractItemRepository {
       m_buckets[bucketNumber] = new MyBucket();
 
       bool doMMapLoading = (bool)m_fileMap;
-      
+
       uint offset = ((bucketNumber-1) * MyBucket::DataSize);
       if(m_file && offset < m_fileMapSize && doMMapLoading && *reinterpret_cast<uint*>(m_fileMap + offset) == 0) {
-//         kDebug() << "loading bucket mmap:" << bucketNumber;
+//         qDebug() << "loading bucket mmap:" << bucketNumber;
         m_buckets[bucketNumber]->initializeFromMap(reinterpret_cast<char*>(m_fileMap + offset));
       } else if(m_file) {
-        //Either memory-mapping is disabled, or the item is not in the existing memory-map, 
+        //Either memory-mapping is disabled, or the item is not in the existing memory-map,
+        //Either memory-mapping is disabled, or the item is not in the existing memory-map,
         //so we have to load it the classical way.
         bool res = m_file->open( QFile::ReadOnly );
-        
+
         if(offset + BucketStartOffset < m_file->size()) {
           VERIFY(res);
           offset += BucketStartOffset;
@@ -2309,9 +2310,9 @@ class ItemRepository : public AbstractItemRepository {
         }else{
           m_buckets[bucketNumber]->initialize(0);
         }
-        
+
         m_file->close();
-        
+
       }else{
         m_buckets[bucketNumber]->initialize(0);
       }

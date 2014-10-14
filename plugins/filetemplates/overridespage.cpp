@@ -18,6 +18,7 @@
 
 #include "overridespage.h"
 #include "ui_overridevirtuals.h"
+#include "debug.h"
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/persistentsymboltable.h>
@@ -116,13 +117,13 @@ QList< DeclarationPointer > OverridesPage::selectedOverrides() const
             QTreeWidgetItem* child = item->child(j);
             if (child->checkState(ClassOrFunctionColumn) == Qt::Checked)
             {
-                kDebug() << "Adding declaration" << d->declarationMap[child]->toString();
+                qCDebug(PLUGIN_FILETEMPLATES) << "Adding declaration" << d->declarationMap[child]->toString();
                 declarations << d->declarationMap[child];
             }
         }
     }
 
-    kDebug() << declarations.size();
+    qCDebug(PLUGIN_FILETEMPLATES) << declarations.size();
     return declarations;
 }
 
@@ -179,23 +180,23 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const Decla
 {
     ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration.data());
     if (!function) {
-        kDebug() << "Declaration is not a function:" << childDeclaration->identifier().toString();
+        qCDebug(PLUGIN_FILETEMPLATES) << "Declaration is not a function:" << childDeclaration->identifier().toString();
         return;
     }
 
     if (function->accessPolicy() == Declaration::Private) {
-        kDebug() << "Declaration is private, returning:" << function->identifier().toString();
+        qCDebug(PLUGIN_FILETEMPLATES) << "Declaration is private, returning:" << function->identifier().toString();
         return;
     }
 
-    kDebug() << childDeclaration->toString();
+    qCDebug(PLUGIN_FILETEMPLATES) << childDeclaration->toString();
     if (d->overriddenFunctions.contains(childDeclaration->identifier()))
     {
         foreach (DeclarationPointer decl, d->overriddenFunctions.values(childDeclaration->identifier()))
         {
             if (decl->indexedType() == childDeclaration->indexedType())
             {
-                kDebug() << "Declaration is already shown";
+                qCDebug(PLUGIN_FILETEMPLATES) << "Declaration is already shown";
                 return;
             }
         }
@@ -251,7 +252,7 @@ void OverridesPage::deselectAll()
 
 void OverridesPage::addCustomDeclarations (const QString& category, const QList<DeclarationPointer>& declarations)
 {
-    kDebug() << category << declarations.size();
+    qCDebug(PLUGIN_FILETEMPLATES) << category << declarations.size();
     DUChainReadLocker lock(DUChain::lock());
 
     QTreeWidgetItem* item = new QTreeWidgetItem(overrideTree(), QStringList() << category);

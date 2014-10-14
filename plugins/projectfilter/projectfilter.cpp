@@ -25,7 +25,6 @@
 
 #include <QSet>
 #include <QFile>
-#include <QDebug>
 
 using namespace KDevelop;
 

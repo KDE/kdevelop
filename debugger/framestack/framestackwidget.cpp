@@ -38,13 +38,13 @@
 #include <QAction>
 
 #include <KStandardAction>
-#include <KDebug>
 #include <KLocalizedString>
 #include <KTextEditor/Cursor>
 
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/idocumentcontroller.h>
+#include "util/debug.h"
 #include "framestackmodel.h"
 
 namespace KDevelop {
@@ -109,7 +109,7 @@ FramestackWidget::~FramestackWidget() {}
 
 void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
 {
-    kDebug() << "Adding session:" << isVisible();
+    qCDebug(DEBUGGER) << "Adding session:" << isVisible();
 
     m_session = session;
 

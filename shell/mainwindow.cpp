@@ -36,7 +36,6 @@ Boston, MA 02110-1301, USA.
 #include <KLocalizedString>
 #include <ktemporaryfile.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <kshortcutsdialog.h>
@@ -55,6 +54,7 @@ Boston, MA 02110-1301, USA.
 #include "sessioncontroller.h"
 #include "sourceformattercontroller.h"
 #include "areadisplay.h"
+#include "debug.h"
 
 #include <interfaces/isession.h>
 #include <interfaces/iprojectcontroller.h>
@@ -81,8 +81,8 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WindowFlags flags )
     KConfigGroup cg = KSharedConfig::openConfig()->group( "UiSettings" );
     int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
     int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
-    kDebug() << "Bottom Left:" << bottomleft;
-    kDebug() << "Bottom Right:" << bottomright;
+    qCDebug(SHELL) << "Bottom Left:" << bottomleft;
+    qCDebug(SHELL) << "Bottom Right:" << bottomright;
 
     // 0 means vertical dock (left, right), 1 means horizontal dock( top, bottom )
     if( bottomleft == 0 )
@@ -178,14 +178,14 @@ void MainWindow::dropEvent( QDropEvent* ev )
 
 void MainWindow::loadSettings()
 {
-    kDebug() << "Loading Settings";
+    qCDebug(SHELL) << "Loading Settings";
     KConfigGroup cg = KSharedConfig::openConfig()->group( "UiSettings" );
 
     // dock widget corner layout
     int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
     int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
-    kDebug() << "Bottom Left:" << bottomleft;
-    kDebug() << "Bottom Right:" << bottomright;
+    qCDebug(SHELL) << "Bottom Left:" << bottomleft;
+    qCDebug(SHELL) << "Bottom Right:" << bottomright;
 
     // 0 means vertical dock (left, right), 1 means horizontal dock( top, bottom )
     if( bottomleft == 0 )
@@ -213,7 +213,7 @@ void MainWindow::configureShortcuts()
     ///settings into the other windows
 
 
-// We need to bring up the shortcut dialog ourself instead of 
+// We need to bring up the shortcut dialog ourself instead of
 //      Core::self()->uiControllerInternal()->mainWindows()[0]->guiFactory()->configureShortcuts();
 // so we can connect to the saved() signal to propagate changes in the editor shortcuts
 
@@ -223,7 +223,7 @@ void MainWindow::configureShortcuts()
         if(client && !client->xmlFile().isEmpty())
             dlg.addCollection( client->actionCollection() );
     }
-    
+
     connect(&dlg, SIGNAL(saved()), SLOT(shortcutsChanged()));
     dlg.configure(true);
 
@@ -235,18 +235,18 @@ void MainWindow::configureShortcuts()
             }
         }
     }
-    
+
     for(int a = 1; a < Core::self()->uiControllerInternal()->mainWindows().size(); ++a) {
         foreach(KXMLGUIClient* client, Core::self()->uiControllerInternal()->mainWindows()[a]->guiFactory()->clients()) {
             foreach(QAction* action, client->actionCollection()->actions()) {
-                kDebug() << "transferring setting shortcut for" << action->objectName();
+                qCDebug(SHELL) << "transferring setting shortcut for" << action->objectName();
                 if(shortcuts.contains(action->objectName())) {
                     action->setShortcut(shortcuts[action->objectName()]);
                 }
             }
         }
     }
-    
+
 }
 
 void MainWindow::shortcutsChanged()
@@ -272,10 +272,10 @@ void MainWindow::initialize()
 {
     KStandardAction::keyBindings(this, SLOT(configureShortcuts()), actionCollection());
     setupGUI( KXmlGuiWindow::ToolBar | KXmlGuiWindow::Create | KXmlGuiWindow::Save );
-    
+
     Core::self()->partController()->addManagedTopLevelWidget(this);
-    kDebug() << "Adding plugin-added connection";
-    
+    qCDebug(SHELL) << "Adding plugin-added connection";
+
     connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)),
              d, SLOT(addPlugin(KDevelop::IPlugin*)));
     connect( Core::self()->pluginController(), SIGNAL(pluginUnloaded(KDevelop::IPlugin*)),
@@ -284,17 +284,17 @@ void MainWindow::initialize()
         d, SLOT(activePartChanged(KParts::Part*)));
     connect( this, SIGNAL(activeViewChanged(Sublime::View*)),
         d, SLOT(changeActiveView(Sublime::View*)));
-    
+
     foreach(IPlugin* plugin, Core::self()->pluginController()->loadedPlugins())
         d->addPlugin(plugin);
-    
+
     guiFactory()->addClient(Core::self()->sessionController());
     guiFactory()->addClient(Core::self()->sourceFormatterControllerInternal());
     // Needed to re-plug the actions from the sessioncontroller as xmlguiclients don't
     // seem to remember which actions where plugged in.
     Core::self()->sessionController()->plugActions();
     d->setupGui();
-    
+
     //Queued so we process it with some delay, to make sure the rest of the UI has already adapted
     connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(updateCaption()), Qt::QueuedConnection);
     connect(Core::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(updateCaption()), Qt::QueuedConnection);

@@ -24,9 +24,9 @@ Boston, MA 02110-1301, USA.
 #include <QListWidgetItem>
 #include <QInputDialog>
 #include <QMimeDatabase>
+#include <QDebug>
 #include <KMessageBox>
 #include <KIconLoader>
-#include <KDebug>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/editor.h>
@@ -42,6 +42,7 @@ Boston, MA 02110-1301, USA.
 #include <shell/languagecontroller.h>
 
 #include "editstyledialog.h"
+#include "../debug.h"
 
 #define STYLE_ROLE (Qt::UserRole+1)
 
@@ -121,7 +122,7 @@ void SourceFormatterSettings::load()
             for ( const SourceFormatterStyle::MimeHighlightPair& item: style->mimeTypes() ) {
                 QMimeType mime = QMimeDatabase().mimeTypeForName(item.mimeType);
                 if (!mime.isValid()) {
-                    kWarning() << "plugin" << info.name() << "supports unknown mimetype entry" << item.mimeType;
+                    qWarning() << "plugin" << info.name() << "supports unknown mimetype entry" << item.mimeType;
                     continue;
                 }
                 QString languageName = item.highlightMode;
@@ -131,11 +132,11 @@ void SourceFormatterSettings::load()
             }
         }
     }
-    
+
     // Sort the languages, preferring firstly active, then loaded languages
     QList<QString> sortedLanguages;
-    
-    foreach( KDevelop::ILanguage* language, 
+
+    foreach( KDevelop::ILanguage* language,
                 KDevelop::ICore::self()->languageController()->activeLanguages() +
                 KDevelop::ICore::self()->languageController()->loadedLanguages() )
     {
@@ -147,7 +148,7 @@ void SourceFormatterSettings::load()
     foreach( const QString& name, languages.keys() )
         if( !sortedLanguages.contains( name ) )
             sortedLanguages.push_back( name );
-        
+
     foreach( const QString& name, sortedLanguages )
     {
         // Pick the first appropriate mimetype for this language
@@ -157,7 +158,7 @@ void SourceFormatterSettings::load()
             QStringList formatterAndStyleName = grp.readEntry(mimetype.name(), "").split("||", QString::KeepEmptyParts);
             FormatterMap::const_iterator formatterIter = formatters.constFind(formatterAndStyleName.first());
             if (formatterIter == formatters.constEnd()) {
-                kDebug() << "Reference to unknown formatter" << formatterAndStyleName.first();
+                qCDebug(SHELL) << "Reference to unknown formatter" << formatterAndStyleName.first();
                 Q_ASSERT(!l.formatters.empty());        // otherwise there should be no entry for 'name'
                 l.selectedFormatter = *l.formatters.begin();
                 selectAvailableStyle(l);
@@ -165,7 +166,7 @@ void SourceFormatterSettings::load()
                 l.selectedFormatter = formatterIter.value();
                 SourceFormatter::StyleMap::const_iterator styleIter = l.selectedFormatter->styles.constFind(formatterAndStyleName.at( 1 ));
                 if (styleIter == l.selectedFormatter->styles.constEnd()) {
-                    kDebug() << "No style" << formatterAndStyleName.at( 1 ) << "found for formatter" << formatterAndStyleName.first();
+                    qCDebug(SHELL) << "No style" << formatterAndStyleName.at( 1 ) << "found for formatter" << formatterAndStyleName.first();
                     selectAvailableStyle(l);
                 } else {
                     l.selectedStyle = styleIter.value();
@@ -248,9 +249,9 @@ void SourceFormatterSettings::save()
     }
     grp.writeEntry( SourceFormatterController::kateModeLineConfigKey, chkKateModelines->isChecked() );
     grp.writeEntry( SourceFormatterController::kateOverrideIndentationConfigKey, chkKateOverrideIndentation->isChecked() );
-    
+
     grp.sync();
-    
+
     Core::self()->sourceFormatterControllerInternal()->settingsChanged();
 }
 

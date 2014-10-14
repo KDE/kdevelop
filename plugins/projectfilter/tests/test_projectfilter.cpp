@@ -21,7 +21,6 @@
 
 #include "test_projectfilter.h"
 
-#include <QDebug>
 #include <QtTest/QTest>
 #include <KConfigGroup>
 

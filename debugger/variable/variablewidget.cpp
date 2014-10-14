@@ -32,7 +32,6 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <khistorycombobox.h>
-#include <kdebug.h>
 #include <klineedit.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
@@ -42,6 +41,7 @@
 #include <interfaces/idebugcontroller.h>
 #include "../interfaces/ivariablecontroller.h"
 #include "variablecollection.h"
+#include "util/debug.h"
 
 /** The variables widget is passive, and is invoked by the rest of the
     code via two main Q_SLOTS:
@@ -129,7 +129,7 @@ void VariableWidget::slotAddWatch(const QString &expression)
     if (!expression.isEmpty())
     {
         watchVarEditor_->addToHistory(expression);
-        kDebug(9012) << "Trying to add watch\n";
+        qCDebug(DEBUGGER) << "Trying to add watch\n";
         Variable* v = variablesRoot_->watches()->add(expression);
         if (v) {
             QModelIndex index = variableCollection()->indexForItem(v, 0);
@@ -175,7 +175,7 @@ VariableTree::VariableTree(IDebugController *controller,
     QModelIndex index = controller->variableCollection()->indexForItem(
         controller->variableCollection()->watches(), 0);
     setExpanded(index, true);
-    
+
     m_signalMapper = new QSignalMapper(this);
     setupActions();
 }
@@ -197,13 +197,13 @@ void VariableTree::setupActions()
     // TODO decorate this properly to make nice menu title
     m_contextMenuTitle = new QAction(this);
     m_contextMenuTitle->setEnabled(false);
-    
+
     // make Format menu action group
     m_formatMenu = new QMenu(i18n("&Format"), this);
     QActionGroup *ag= new QActionGroup(m_formatMenu);
-    
+
     QAction* act;
-    
+
     act = new QAction(i18n("&Natural"), ag);
     act->setData(Variable::Natural);
     act->setShortcut(Qt::Key_N);
@@ -213,22 +213,22 @@ void VariableTree::setupActions()
     act->setData(Variable::Binary);
     act->setShortcut(Qt::Key_B);
     m_formatMenu->addAction(act);
-       
+
     act = new QAction(i18n("&Octal"), ag);
     act->setData(Variable::Octal);
     act->setShortcut(Qt::Key_O);
     m_formatMenu->addAction(act);
-    
+
     act = new QAction(i18n("&Decimal"), ag);
     act->setData(Variable::Decimal);
     act->setShortcut(Qt::Key_D);
     m_formatMenu->addAction(act);
-    
+
     act = new QAction(i18n("&Hexadecimal"), ag);
     act->setData(Variable::Hexadecimal);
     act->setShortcut(Qt::Key_H);
     m_formatMenu->addAction(act);
-    
+
     foreach(QAction* act, m_formatMenu->actions())
     {
         act->setCheckable(true);
@@ -238,7 +238,7 @@ void VariableTree::setupActions()
         addAction(act);
     }
     connect(m_signalMapper, SIGNAL(mapped(int)), SLOT(changeVariableFormat(int)));
-    
+
     m_watchDelete = new QAction(
         QIcon::fromTheme("edit-delete"), i18n( "Remove Watch Variable" ), this);
 
@@ -272,7 +272,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
     QMenu contextMenu(this->parentWidget());
     m_contextMenuTitle->setText(selectedVariable()->expression());
     contextMenu.addAction(m_contextMenuTitle);
-    
+
     if(selectedVariable()->canSetFormat())
         contextMenu.addMenu(m_formatMenu);
 

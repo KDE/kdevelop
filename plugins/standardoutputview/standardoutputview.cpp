@@ -22,6 +22,7 @@
 #include "standardoutputview.h"
 #include "outputwidget.h"
 #include "toolviewdata.h"
+#include "debug.h"
 
 #include <QtCore/QList>
 #include <QtCore/QAbstractItemModel>
@@ -32,7 +33,6 @@
 #include <kpluginloader.h>
 #include <kaboutdata.h>
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 
@@ -43,7 +43,6 @@
 #include <sublime/area.h>
 #include <sublime/controller.h>
 #include <sublime/document.h>
-
 
 K_PLUGIN_FACTORY_WITH_JSON(StandardOutputViewFactory, "kdevstandardoutputview.json", registerPlugin<StandardOutputView>(); )
 
@@ -177,7 +176,7 @@ int StandardOutputView::registerToolView( const QString& title,
 
     // register new tool view
     const int newid = ids.isEmpty() ? 0 : (ids.last() + 1);
-    kDebug() << "Registering view" << title << "with type:" << type << "id:" << newid;
+    qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "Registering view" << title << "with type:" << type << "id:" << newid;
     ToolViewData* tvdata = new ToolViewData( this );
     tvdata->toolViewId = newid;
     tvdata->type = type;
@@ -241,7 +240,7 @@ void StandardOutputView::setModel( int outputId, QAbstractItemModel* model )
         }
     }
     if( tvid == -1 )
-        kDebug() << "Trying to set model on unknown view-id:" << outputId;
+        qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "Trying to set model on unknown view-id:" << outputId;
     else
     {
         toolviews.value( tvid )->outputdata.value( outputId )->setModel( model );
@@ -260,7 +259,7 @@ void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* deleg
         }
     }
     if( tvid == -1 )
-        kDebug() << "Trying to set model on unknown view-id:" << outputId;
+        qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "Trying to set model on unknown view-id:" << outputId;
     else
     {
         toolviews.value( tvid )->outputdata.value( outputId )->setDelegate( delegate );

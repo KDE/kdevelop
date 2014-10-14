@@ -24,7 +24,6 @@
 #include <QTextDocument>
 #include <QAbstractTextDocumentLayout>
 #include <QPainter>
-#include <kdebug.h>
 #include "expandingwidgetmodel.h"
 
 ExpandingTree::ExpandingTree(QWidget* parent) : QTreeView(parent) {
@@ -49,11 +48,11 @@ void ExpandingTree::drawRow ( QPainter * painter, const QStyleOptionViewItem & o
       ctx.clip = QRectF(0,0,rect.width(),rect.height());;
       painter->setViewTransformEnabled(true);
       painter->translate(rect.left(), rect.top());
-      
+
       m_drawText.setHtml( eModel->partialExpandText( index ) );
       m_drawText.setPageSize(QSizeF(rect.width(), rect.height()));
       m_drawText.documentLayout()->draw( painter, ctx );
-    
+
       painter->translate(-rect.left(), -rect.top());
     }
   }

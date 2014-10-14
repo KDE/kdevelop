@@ -20,7 +20,6 @@
 
 #include <QMenu>
 
-#include <kdebug.h>
 #include <kmenubar.h>
 
 #include <sublime/area.h>

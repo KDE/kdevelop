@@ -30,9 +30,9 @@ TestParseJob::TestParseJob(const IndexedString& url, ILanguageSupport* languageS
 
 void TestParseJob::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
-    kDebug() << "Running parse job for" << document().toUrl();
+    qDebug() << "Running parse job for" << document().toUrl();
     if (duration_ms) {
-        kDebug() << "waiting" << duration_ms << "ms";
+        qDebug() << "waiting" << duration_ms << "ms";
         QTest::qWait(duration_ms);
     }
 }

@@ -22,9 +22,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_TESTVIEWDEBUG_H
 #define KDEVPLATFORM_PLUGIN_TESTVIEWDEBUG_H
 
-#include <KDebug>
-
-int debugArea();
-#define debug() kDebug(debugArea())
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(PLUGIN_TESTVIEW)
 
 #endif // KDEVPLATFORM_PLUGIN_TESTVIEWDEBUG_H

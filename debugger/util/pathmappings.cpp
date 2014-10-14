@@ -20,6 +20,7 @@
 */
 
 #include "pathmappings.h"
+#include "debug.h"
 
 #include <QAbstractTableModel>
 #include <QVBoxLayout>
@@ -31,7 +32,6 @@
 #include <QIcon>
 
 #include <KLocalizedString>
-#include <KDebug>
 #include <KConfigGroup>
 
 namespace {
@@ -159,10 +159,10 @@ public:
         if (row+count > m_paths.count()) return false;
         beginRemoveRows(parent, row, row+count-1);
         for (int i=0; i<count; ++i) {
-            kDebug() << row + i;
+            qCDebug(DEBUGGER) << row + i;
             m_paths.removeAt(row + i);
         }
-        kDebug() << m_paths.count();
+        qCDebug(DEBUGGER) << m_paths.count();
         endRemoveRows();
 
         return true;
@@ -185,7 +185,7 @@ public:
 
     void saveToConfiguration(KConfigGroup config)
     {
-        kDebug() << m_paths.count();
+        qCDebug(DEBUGGER) << m_paths.count();
 
         KConfigGroup cfg = config.group(PathMappings::pathMappingsEntry);
         cfg.writeEntry("Count", m_paths.count());

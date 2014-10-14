@@ -24,13 +24,13 @@ Boston, MA 02110-1301, USA.
 #include <QMenu>
 #include <QStandardItemModel>
 #include <QPalette>
+#include <QDebug>
 
 #include <KSelectAction>
 #include <KActionMenu>
 #include <KActionCollection>
 #include <KMessageBox>
 #include <KLocalizedString>
-#include <KDebug>
 #include <KColorScheme>
 #include <kdialogjobuidelegate.h>
 
@@ -52,6 +52,7 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "launchconfiguration.h"
 #include "launchconfigurationdialog.h"
+#include "debug.h"
 #include <interfaces/isession.h>
 #include <QSignalMapper>
 #include <interfaces/contextmenuextension.h>
@@ -142,7 +143,7 @@ public:
             grp.sync();
         }
     }
-    
+
     void configureLaunches()
     {
         LaunchConfigurationDialog dlg;
@@ -164,19 +165,19 @@ public:
 
     void launchAs( int id )
     {
-        //kDebug() << "Launching id:" << id;
+        //qCDebug(SHELL) << "Launching id:" << id;
         QPair<QString,QString> info = launchAsInfo[id];
-        //kDebug() << "fetching type and mode:" << info.first << info.second;
+        //qCDebug(SHELL) << "fetching type and mode:" << info.first << info.second;
         LaunchConfigurationType* type = launchConfigurationTypeForId( info.first );
         ILaunchMode* mode = q->launchModeForId( info.second );
 
-        //kDebug() << "got mode and type:" << type << type->id() << mode << mode->id();
+        //qCDebug(SHELL) << "got mode and type:" << type << type->id() << mode << mode->id();
         if( type && mode )
         {
             ILauncher* launcher = 0;
             foreach (ILauncher *l, type->launchers())
             {
-                //kDebug() << "available launcher" << l << l->id() << l->supportedModes();
+                //qCDebug(SHELL) << "available launcher" << l << l->id() << l->supportedModes();
                 if (l->supportedModes().contains(mode->id())) {
                     launcher = l;
                     break;
@@ -189,7 +190,7 @@ public:
                 foreach (LaunchConfiguration *l, launchConfigurations) {
                     QStringList path = l->config().readEntry(ConfiguredFromProjectItemEntry, QStringList());
                     if (l->type() == type && path == itemPath) {
-                        kDebug() << "already generated ilaunch" << path;
+                        qCDebug(SHELL) << "already generated ilaunch" << path;
                         ilaunch = l;
                         break;
                     }
@@ -202,9 +203,9 @@ public:
                     LaunchConfiguration* launch = dynamic_cast<LaunchConfiguration*>( ilaunch );
                     type->configureLaunchFromItem( launch->config(), contextItem );
                     launch->config().writeEntry(ConfiguredFromProjectItemEntry, itemPath);
-                    //kDebug() << "created config, launching";
+                    //qCDebug(SHELL) << "created config, launching";
                 } else {
-                    //kDebug() << "reusing generated config, launching";
+                    //qCDebug(SHELL) << "reusing generated config, launching";
                 }
                 q->setDefaultLaunch(ilaunch);
                 q->execute( mode->id(), ilaunch );
@@ -245,7 +246,7 @@ public:
         }
         if( !currentTargetAction->currentAction() )
         {
-            kDebug() << "oops no current action, using first if list is non-empty";
+            qCDebug(SHELL) << "oops no current action, using first if list is non-empty";
             if( !currentTargetAction->actions().isEmpty() )
             {
                 currentTargetAction->actions().first()->setChecked( true );
@@ -282,7 +283,7 @@ public:
             return it.value();
         } else
         {
-            kWarning() << "couldn't find type for id:" << id << ". Known types:" << launchConfigurationTypes.keys();
+            qWarning() << "couldn't find type for id:" << id << ". Known types:" << launchConfigurationTypes.keys();
         }
         return 0;
 
@@ -376,7 +377,7 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
 {
     if( !launch )
     {
-        kDebug() << "execute called without launch config!";
+        qCDebug(SHELL) << "execute called without launch config!";
         return 0;
     }
     LaunchConfiguration *run = dynamic_cast<LaunchConfiguration*>(launch);
@@ -389,15 +390,15 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
     //    jobs.append(job);
     //}
 
-    kDebug() << "mode:" << runMode;
+    qCDebug(SHELL) << "mode:" << runMode;
     QString launcherId = run->launcherForMode( runMode );
-    kDebug() << "launcher id:" << launcherId;
+    qCDebug(SHELL) << "launcher id:" << launcherId;
 
     ILauncher* launcher = run->type()->launcherForId( launcherId );
 
     if( !launcher ) {
         KMessageBox::error(
-            qApp->activeWindow(), 
+            qApp->activeWindow(),
             i18n("The current launch configuration does not support the '%1' mode.", runMode),
             "");
         return 0;
@@ -515,7 +516,7 @@ void RunController::slotDebug()
         LaunchConfigurationDialog d;
         d.exec();
     }
-    
+
     if(!d->launchConfigurations.isEmpty())
         executeDefaultLaunch( "debug" );
 }
@@ -526,19 +527,19 @@ void RunController::slotProfile()
         LaunchConfigurationDialog d;
         d.exec();
     }
-    
+
     if(!d->launchConfigurations.isEmpty())
         executeDefaultLaunch( "profile" );
 }
 
 void RunController::slotExecute()
 {
-    
+
     if(d->launchConfigurations.isEmpty()) {
         LaunchConfigurationDialog d;
         d.exec();
     }
-    
+
     if(!d->launchConfigurations.isEmpty())
         executeDefaultLaunch( "execute" );
 }
@@ -558,7 +559,7 @@ void KDevelop::RunController::registerJob(KJob * job)
 
     if (!(job->capabilities() & KJob::Killable)) {
         // see e.g. https://bugs.kde.org/show_bug.cgi?id=314187
-        kWarning() << "non-killable job" << job << "registered - this might lead to crashes on shutdown.";
+        qWarning() << "non-killable job" << job << "registered - this might lead to crashes on shutdown.";
     }
 
     if (!d->jobs.contains(job)) {
@@ -637,7 +638,7 @@ void KDevelop::RunController::stopAllProcesses()
         if (job->capabilities() & KJob::Killable) {
             job->kill(KJob::EmitResult);
         } else {
-            kWarning() << "cannot stop non-killable job: " << job;
+            qWarning() << "cannot stop non-killable job: " << job;
         }
     }
 }
@@ -683,7 +684,7 @@ void RunController::jobDestroyed(QObject* job)
 {
     KJob* kjob = static_cast<KJob*>(job);
     if (d->jobs.contains(kjob)) {
-        kWarning() << "job destroyed without emitting finished signal!";
+        qWarning() << "job destroyed without emitting finished signal!";
         unregisterJob(kjob);
     }
 }
@@ -828,7 +829,7 @@ void KDevelop::RunController::executeDefaultLaunch(const QString& runMode)
 {
     if( !defaultLaunch() )
     {
-        kWarning() << "no default launch!";
+        qWarning() << "no default launch!";
         return;
     }
     execute( runMode, defaultLaunch() );
@@ -897,7 +898,7 @@ ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigura
         cfgName = i18n("New %1 Launcher", type->name() );
         cfgName = makeUnique(cfgName);
     }
-    
+
     launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationNameEntry, cfgName );
     launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationTypeEntry, type->id() );
     launchConfigGroup.sync();
@@ -947,7 +948,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
                         d->launchAsInfo[i] = qMakePair( type->id(), mode->id() );
                         QAction* act = new QAction( d->launchAsMapper );
                         act->setText( type->name() );
-                        kDebug() << "Setting up mapping for:" << i << "for action" << act->text() << "in mode" << mode->name();
+                        qCDebug(SHELL) << "Setting up mapping for:" << i << "for action" << act->text() << "in mode" << mode->name();
                         d->launchAsMapper->setMapping( act, i );
                         connect( act, SIGNAL(triggered()), d->launchAsMapper, SLOT(map()) );
                         menu->addAction(act);

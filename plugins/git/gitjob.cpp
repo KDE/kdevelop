@@ -21,7 +21,6 @@
 
 #include "gitjob.h"
 #include <QDir>
-#include <kdebug.h>
 
 GitJob::GitJob(const QDir& workingDir, KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
     : DVcsJob(workingDir, parent, verbosity)

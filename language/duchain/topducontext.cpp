@@ -38,6 +38,7 @@
 #include "topducontextdata.h"
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
+#include "util/debug.h"
 
 // #define DEBUG_SEARCH
 
@@ -151,7 +152,7 @@ public:
   ParsingEnvironmentFilePointer m_file;
 
   QExplicitlySharedDataPointer<IAstContainer> m_ast;
-  
+
   uint m_ownIndex;
 
   bool m_inDuChain;
@@ -171,7 +172,7 @@ public:
 
         if(!m_ctxt->usingImportsCache()) {
           removeImportedContextRecursion(top, top, 1, rebuild);
-  
+
           QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = top->m_local->m_recursiveImports;
           for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it) {
             if(m_recursiveImports.contains(it.key()) && m_recursiveImports[it.key()].second == top)
@@ -218,7 +219,7 @@ public:
 
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
     if(!m_ctxt->usingImportsCache()) {
-    
+
     removeImportedContextRecursion(context, context, 1, rebuild);
 
       QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = context->m_local->m_recursiveImports;
@@ -244,7 +245,7 @@ public:
         removeFromVector(m_importedContexts, DUContext::Import(context, m_ctxt));
 
       if(!m_ctxt->usingImportsCache()) {
-        
+
         removeImportedContextRecursion(context, context, 1, rebuild);
 
         QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = context->m_local->m_recursiveImports;
@@ -386,7 +387,7 @@ void TopDUContextData::updateImportCacheRecursion(uint baseIndex, IndexedTopDUCo
     return;
   Q_ASSERT(currentContext.index()); //The top-context must be in the repository when this is called
   if(!currentContext.data()) {
-    kDebug() << "importing invalid context";
+    qCDebug(LANGUAGE) << "importing invalid context";
     return;
   }
   visited.insert(currentContext.index());
@@ -413,7 +414,7 @@ void TopDUContextData::updateImportCacheRecursion(IndexedTopDUContext currentCon
     return;
   Q_ASSERT(currentContext.index()); //The top-context must be in the repository when this is called
   if(!currentContext.data()) {
-    kDebug() << "importing invalid context";
+    qCDebug(LANGUAGE) << "importing invalid context";
     return;
   }
   visited.insert(currentContext.index());
@@ -447,7 +448,7 @@ void TopDUContext::updateImportsCache() {
   Q_ASSERT(d_func_dynamic()->m_importsCache.contains(IndexedTopDUContext(this)));
   Q_ASSERT(usingImportsCache());
   Q_ASSERT(imports(this, CursorInRevision::invalid()));
-  
+
   if(parsingEnvironmentFile())
     parsingEnvironmentFile()->setImportsCache(d_func()->m_importsCache);
 }
@@ -585,10 +586,10 @@ void TopDUContext::deleteSelf() {
 TopDUContext::Features TopDUContext::features() const
 {
   uint ret = d_func()->m_features;
-  
+
   if(ast())
     ret |= TopDUContext::AST;
-  
+
   return (TopDUContext::Features)ret;
 }
 
@@ -608,7 +609,7 @@ void TopDUContext::setAst(QExplicitlySharedDataPointer<IAstContainer> ast)
 {
   ENSURE_CAN_WRITE
   m_local->m_ast = ast;
-  
+
   if(parsingEnvironmentFile())
     parsingEnvironmentFile()->setFeatures(features());
 }
@@ -617,7 +618,7 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file)
 {
   if(m_local->m_file) //Clear the "feature satisfaction" cache
     m_local->m_file->setFeatures(Empty);
-  
+
   //We do not enforce a duchain lock here, since this is also used while loading a top-context
   m_local->m_file = QExplicitlySharedDataPointer<ParsingEnvironmentFile>(file);
 
@@ -626,7 +627,7 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file)
     file->setTopContext(IndexedTopDUContext(ownIndex()));
     Q_ASSERT(file->indexedTopContext().isValid());
     file->setFeatures(d_func()->m_features);
-    
+
     file->setImportsCache(d_func()->m_importsCache);
   }
 }
@@ -639,7 +640,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
   bool operator() (const QualifiedIdentifier& id) {
 
 #ifdef DEBUG_SEARCH
-    kDebug() << "accepting" << id.toString();
+    qCDebug(LANGUAGE) << "accepting" << id.toString();
 #endif
 
     PersistentSymbolTable::Declarations allDecls;
@@ -669,7 +670,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
 
       if(!decl)
         continue;
-      
+
       if(!check(decl))
         continue;
 
@@ -679,7 +680,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
         if(alias->aliasedDeclaration().isValid()) {
           decl = alias->aliasedDeclaration().declaration();
         } else {
-          kDebug() << "lost aliased declaration";
+          qCDebug(LANGUAGE) << "lost aliased declaration";
         }
       }
 
@@ -688,7 +689,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
     }
 
     check.createVisibleCache = 0;
-    
+
     return !top->foundEnough(target, flags);
   }
 
@@ -705,7 +706,7 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
 #ifdef DEBUG_SEARCH
   FOREACH_ARRAY(const SearchItem::Ptr& idTree, identifiers)
       foreach(const QualifiedIdentifier &id, idTree->toList())
-        kDebug() << "searching item" << id.toString();
+        qCDebug(LANGUAGE) << "searching item" << id.toString();
 #endif
 
   DeclarationChecker check(this, position, dataType, flags);
@@ -751,7 +752,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
     if(!searches.isEmpty())
       id = searches.first();
 
-    kDebug() << "maximum apply-aliases recursion reached while searching" << id;
+    qCDebug(LANGUAGE) << "maximum apply-aliases recursion reached while searching" << id;
   }
   bool foundAlias = false;
 
@@ -760,17 +761,17 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
 
   if(!id.inRepository())
     return true; //If the qualified identifier is not in the identifier repository, it cannot be registered anywhere, so there's nothing we need to do
-  
+
   if( !identifier->next.isEmpty() || canBeNamespace ) { //If it cannot be a namespace, the last part of the scope will be ignored
 
     //Search for namespace-aliases, by using globalAliasIdentifier, which is inserted into the symbol-table by NamespaceAliasDeclaration
     QualifiedIdentifier aliasId(id);
     aliasId.push(globalIndexedAliasIdentifier());
-    
+
 #ifdef DEBUG_SEARCH
-  kDebug() << "checking" << id.toString();
+  qCDebug(LANGUAGE) << "checking" << id.toString();
 #endif
-    
+
     if(aliasId.inRepository()) {
     //This iterator efficiently filters the visible declarations out of all declarations
       PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(aliasId, recursiveImportIndices());
@@ -785,7 +786,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
           Declaration* aliasDecl = filter->data();
           if(!aliasDecl)
             continue;
-          
+
           if(!check(aliasDecl))
             continue;
 
@@ -804,7 +805,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
           QualifiedIdentifier importIdentifier = alias->importIdentifier();
 
           if(importIdentifier.isEmpty()) {
-            kDebug() << "found empty import";
+            qCDebug(LANGUAGE) << "found empty import";
             continue;
           }
 
@@ -849,7 +850,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
     importId.push(globalIndexedImportIdentifier());
 
 #ifdef DEBUG_SEARCH
-//   kDebug() << "checking imports in" << (backPointer ? id.toString() : QString("global"));
+//   qCDebug(LANGUAGE) << "checking imports in" << (backPointer ? id.toString() : QString("global"));
 #endif
 
     if(importId.inRepository()) {
@@ -864,7 +865,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
           Declaration* importDecl = filter->data();
           if(!importDecl)
             continue;
-          
+
           //We must never break or return from this loop, because else we might be creating a bad cache
           if(!check(importDecl))
             continue;
@@ -874,13 +875,13 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
           NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
 
   #ifdef DEBUG_SEARCH
-          kDebug() << "found import of" << alias->importIdentifier().toString();
+          qCDebug(LANGUAGE) << "found import of" << alias->importIdentifier().toString();
   #endif
 
           QualifiedIdentifier importIdentifier = alias->importIdentifier();
-          
+
           if(importIdentifier.isEmpty()) {
-            kDebug() << "found empty import";
+            qCDebug(LANGUAGE) << "found empty import";
             continue;
           }
 
@@ -888,7 +889,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
             continue; //This import has already been applied to this search
 
           ApplyAliasesBuddyInfo info(2, buddy, importIdentifier);
-          
+
           if(previous != importIdentifier)
             if(!applyAliases(importIdentifier, identifier, accept, importDecl->topContext() == this ? importDecl->range().start : position, canBeNamespace, &info, recursionDepth+1))
               return false;
@@ -903,7 +904,7 @@ template<class Acceptor>
 void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, Acceptor& acceptor, const CursorInRevision& position, bool canBeNamespace ) const
 {
   QualifiedIdentifier emptyId;
-  
+
   FOREACH_ARRAY(const SearchItem::Ptr& item, identifiers)
     applyAliases(emptyId, item, acceptor, position, canBeNamespace, 0, 0);
 }
@@ -1024,7 +1025,7 @@ void TopDUContext::addImportedParentContext(DUContext* context, const CursorInRe
 
   if(!dynamic_cast<TopDUContext*>(context)) {
     //We cannot do this, because of the extended way we treat top-context imports.
-    kDebug() << "tried to import a non top-context into a top-context. This is not possible.";
+    qCDebug(LANGUAGE) << "tried to import a non top-context into a top-context. This is not possible.";
     return;
   }
 

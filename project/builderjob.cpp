@@ -19,10 +19,10 @@
  ***************************************************************************/
 
 #include "builderjob.h"
+#include "debug.h"
 
 #include <kconfiggroup.h>
 #include <KLocalizedString>
-#include <KDebug>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
@@ -104,17 +104,17 @@ QString BuilderJobPrivate::buildTypeToString(BuilderJob::BuildType type) const
 void BuilderJobPrivate::addJob( BuilderJob::BuildType t, ProjectBaseItem* item )
 {
     Q_ASSERT(item);
-    kDebug() << "adding build job for item:" << item->text();
+    qCDebug(PROJECT) << "adding build job for item:" << item->text();
     Q_ASSERT(item->project());
-    kDebug() << "project for item:" << item->project()->name();
+    qCDebug(PROJECT) << "project for item:" << item->project()->name();
     Q_ASSERT(item->project()->projectItem());
-    kDebug() << "project item for the project:" << item->project()->projectItem()->text();
+    qCDebug(PROJECT) << "project item for the project:" << item->project()->projectItem()->text();
     if( !item->project()->buildSystemManager() )
     {
-        kWarning() << "no buildsystem manager for:" << item->text() << item->project()->name();
+        qWarning() << "no buildsystem manager for:" << item->text() << item->project()->name();
         return;
     }
-    kDebug() << "got build system manager";
+    qCDebug(PROJECT) << "got build system manager";
     Q_ASSERT(item->project()->buildSystemManager()->builder());
     KJob* j = 0;
     switch( t )
@@ -147,7 +147,7 @@ void BuilderJobPrivate::addJob( BuilderJob::BuildType t, ProjectBaseItem* item )
     }
 }
 
-BuilderJob::BuilderJob() 
+BuilderJob::BuilderJob()
     : d( new BuilderJobPrivate( this ) )
 {
 }

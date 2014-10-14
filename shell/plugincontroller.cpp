@@ -27,6 +27,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QTimer>
 #include <QApplication>
 #include <QAction>
+#include <QtCore/QDebug>
 
 #include <kcmdlineargs.h>
 #include <klibloader.h>
@@ -37,7 +38,6 @@ Boston, MA 02110-1301, USA.
 #include <KLocalizedString>
 #include <kxmlguiwindow.h>
 #include <assert.h>
-#include <kdebug.h>
 #include <kdialog.h>
 #include <kaction.h>
 #include <kxmlguifactory.h>
@@ -59,6 +59,7 @@ Boston, MA 02110-1301, USA.
 #include "documentationcontroller.h"
 #include "sourceformattercontroller.h"
 #include "projectcontroller.h"
+#include "debug.h"
 
 namespace {
 
@@ -164,13 +165,13 @@ public:
 
     bool canUnload( const KPluginInfo& plugin )
     {
-        kDebug() << "checking can unload for:" << plugin.name() << plugin.property(KEY_LoadMode);
+        qCDebug(SHELL) << "checking can unload for:" << plugin.name() << plugin.property(KEY_LoadMode);
         if( plugin.property( KEY_LoadMode ).toString() == KEY_AlwaysOn )
         {
             return false;
         }
         QStringList interfaces = plugin.property( KEY_Interfaces ).toStringList();
-        kDebug() << "checking dependencies:" << interfaces;
+        qCDebug(SHELL) << "checking dependencies:" << interfaces;
         foreach( const KPluginInfo& info, loadedPlugins.keys() )
         {
             if( info.pluginName() != plugin.pluginName() )
@@ -242,7 +243,7 @@ public:
 
         KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins );
         bool isEnabled = grp.readEntry( info.pluginName()+"Enabled", ShellExtension::getInstance()->defaultPlugins().isEmpty() || ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() ) );
-        //kDebug() << "read config:" << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() );
+        //qCDebug(SHELL) << "read config:" << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() );
         return isEnabled;
     }
 
@@ -264,13 +265,13 @@ PluginController::PluginController(Core *core)
             return false;
         }
     });
-    qDebug() << "Found" << newPlugins.size() << " plugins using the new search method.";
+    qCDebug(SHELL) << "Found" << newPlugins.size() << " plugins using the new search method.";
     d->plugins = KPluginInfo::fromMetaData(newPlugins);
 
-    //kDebug() << "Fetching plugin info which matches:" << QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);
+    //qCDebug(SHELL) << "Fetching plugin info which matches:" << QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);
     KPluginInfo::List oldStylePlugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QStringLiteral( "KDevelop/Plugin" ),
         QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION) ) );
-    qDebug() << "Found" << oldStylePlugins.size() << " plugins using the old search method.";
+    qCDebug(SHELL) << "Found" << oldStylePlugins.size() << " plugins using the old search method.";
     if (!oldStylePlugins.isEmpty()) {
         foreach (const KPluginInfo& info, oldStylePlugins) {
             qWarning() << "Plugin" << info.pluginName() << "still uses the old .desktop file based metadata."
@@ -287,8 +288,7 @@ PluginController::PluginController(Core *core)
 PluginController::~PluginController()
 {
     if ( d->cleanupMode != PluginControllerPrivate::CleanupDone ) {
-        kWarning(9501) << "Destructing plugin controller without going through the shutdown process! Backtrace is: "
-                       << endl << kBacktrace() << endl;
+        qCWarning(SHELL) << "Destructing plugin controller without going through the shutdown process! Backtrace is: " << endl;
     }
 
     delete d;
@@ -303,7 +303,7 @@ void PluginController::cleanup()
 {
     if(d->cleanupMode != PluginControllerPrivate::Running)
     {
-        //kDebug() << "called when not running. state =" << d->cleanupMode;
+        //qCDebug(SHELL) << "called when not running. state =" << d->cleanupMode;
         return;
     }
 
@@ -406,7 +406,7 @@ bool PluginController::unloadPlugin( const QString & pluginId )
 {
     IPlugin *thePlugin = plugin( pluginId );
     bool canUnload = d->canUnload( d->infoForId( pluginId ) );
-    kDebug() << "Unloading plugin:" << pluginId << "?" << thePlugin << canUnload;
+    qCDebug(SHELL) << "Unloading plugin:" << pluginId << "?" << thePlugin << canUnload;
     if( thePlugin && canUnload )
     {
         return unloadPlugin(thePlugin, Later);
@@ -416,7 +416,7 @@ bool PluginController::unloadPlugin( const QString & pluginId )
 
 bool PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
 {
-    kDebug() << "unloading plugin:" << plugin << pluginInfo( plugin ).name();
+    qCDebug(SHELL) << "unloading plugin:" << plugin << pluginInfo( plugin ).name();
 
     emit unloadingPlugin(plugin);
     plugin->unload();
@@ -462,7 +462,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     KPluginInfo info = infoForPluginId( pluginId );
     if ( !info.isValid() )
     {
-        kWarning(9501) << "Unable to find a plugin named '" << pluginId << "'!" ;
+        qCWarning(SHELL) << "Unable to find a plugin named '" << pluginId << "'!" ;
         return 0L;
     }
 
@@ -472,23 +472,23 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     if( !isEnabled( info ) )
     {
         // Do not load disabled plugins
-        kWarning() << "Not loading plugin named" << pluginId << "because its been disabled!";
+        qWarning() << "Not loading plugin named" << pluginId << "because its been disabled!";
         return 0;
     }
 
     if( !hasMandatoryProperties( info ) ) {
-        kWarning() << "Unable to load plugin named " << pluginId << "! Doesn't have all mandatory properties set";
+        qWarning() << "Unable to load plugin named " << pluginId << "! Doesn't have all mandatory properties set";
         return 0;
     }
 
     if( info.property(KEY_Mode) == KEY_Gui
         && Core::self()->setupFlags() == Core::NoUi )
     {
-        kDebug() << "Not loading plugin named" << pluginId << "- Running in No-Ui mode, but the plugin says it needs a GUI";
+        qCDebug(SHELL) << "Not loading plugin named" << pluginId << "- Running in No-Ui mode, but the plugin says it needs a GUI";
         return 0;
     }
 
-    kDebug() << "Attempting to load" << pluginId << "- name:" << info.name();
+    qCDebug(SHELL) << "Attempting to load" << pluginId << "- name:" << info.name();
 
     emit loadingPlugin( info.pluginName() );
     IPlugin *plugin = 0;
@@ -496,12 +496,12 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     if ( checkForDependencies( info, missingInterfaces ) ) {
 
         if (!missingInterfaces.isEmpty()) {
-            kDebug() << "Missing dependencies:" << missingInterfaces;
+            qCDebug(SHELL) << "Missing dependencies:" << missingInterfaces;
         }
 
         QString failedDependency;
         if( !loadDependencies( info, failedDependency ) ) {
-            kWarning() << "Could not load a required dependency:" << failedDependency;
+            qWarning() << "Could not load a required dependency:" << failedDependency;
             return 0;
         }
         loadOptionalDependencies( info );
@@ -511,13 +511,13 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         if (factory) {
             plugin = factory->create<IPlugin>(d->core);
         } else {
-            kWarning() << "Failed to load" << pluginId << "-" << loader.errorString();
+            qWarning() << "Failed to load" << pluginId << "-" << loader.errorString();
         }
     }
 
     if ( plugin ) {
         if ( plugin->hasError() ) {
-            kWarning() << i18n("Plugin '%1' could not be loaded correctly and was disabled.\nReason: %2.", info.name(), plugin->errorDescription());
+            qWarning() << i18n("Plugin '%1' could not be loaded correctly and was disabled.\nReason: %2.", info.name(), plugin->errorDescription());
             info.setPluginEnabled(false);
             info.save(Core::self()->activeSession()->config()->group(KEY_Plugins));
             unloadPlugin(pluginId);
@@ -526,15 +526,15 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         d->loadedPlugins.insert( info, plugin );
         info.setPluginEnabled( true );
 
-        kDebug() << "Successfully loaded plugin '" << pluginId << "'";
+        qCDebug(SHELL) << "Successfully loaded plugin '" << pluginId << "'";
         emit pluginLoaded( plugin );
     } else {
         if( !missingInterfaces.isEmpty() ) {
-            kWarning() << "Can't load plugin '" << pluginId
+            qWarning() << "Can't load plugin '" << pluginId
                     << "' some of its required dependencies could not be fulfilled:" << endl
                     << missingInterfaces.join(",") << endl;
         } else {
-            kWarning() << "Loading plugin '" << pluginId
+            qWarning() << "Loading plugin '" << pluginId
                 << "' failed.";
         }
     }
@@ -581,7 +581,7 @@ void PluginController::loadOptionalDependencies( const KPluginInfo& info )
         foreach( const QString &dep, prop.toStringList() ) {
             Dependency dependency(dep);
             if (!pluginForExtension(dependency.interface, dependency.pluginName)) {
-                kDebug() << "Couldn't load optional dependency:" << dep << info.pluginName();
+                qCDebug(SHELL) << "Couldn't load optional dependency:" << dep << info.pluginName();
             }
         }
     }
@@ -619,7 +619,7 @@ IPlugin *PluginController::pluginForExtension(const QString &extension, const QS
 
 QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extension, const QVariantMap& constraints)
 {
-    //kDebug() << "Finding all Plugins for Extension:" << extension << "|" << constraints;
+    //qCDebug(SHELL) << "Finding all Plugins for Extension:" << extension << "|" << constraints;
     QList<IPlugin*> plugins;
     d->foreachEnabledPlugin([this, &plugins] (const KPluginInfo& info) -> bool {
         if( d->loadedPlugins.contains( info ) ) {
@@ -711,7 +711,7 @@ void PluginController::updateLoadedPlugins()
             bool enabled = grp.readEntry( info.pluginName()+"Enabled", ( defaultPlugins.isEmpty() || defaultPlugins.contains( info.pluginName() ) ) ) || !isUserSelectable( info );
             if( d->loadedPlugins.contains( info ) && !enabled )
             {
-                kDebug() << "unloading" << info.pluginName();
+                qCDebug(SHELL) << "unloading" << info.pluginName();
                 if( !unloadPlugin( info.pluginName() ) )
                 {
                     grp.writeEntry( info.pluginName()+"Enabled", false );

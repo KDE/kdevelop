@@ -23,6 +23,7 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QApplication>
+#include <QDebug>
 
 #include <projectmodel.h>
 #include <path.h>
@@ -30,7 +31,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testplugincontroller.h>
 #include <QTimer>
-#include <kdebug.h>
+#include <QElapsedTimer>
 
 // Knobs to increase/decrease the amount of items being generated
 #define SMALL_DEPTH 2
@@ -68,7 +69,7 @@ ProjectModelPerformanceTest::ProjectModelPerformanceTest(QWidget* parent )
     view = new QTreeView( this );
     // This is used so the treeview layout performance is not influencing the test
     view->setUniformRowHeights( true );
-    
+
     QPushButton* b = new QPushButton( "Expand All", this );
     connect( b, SIGNAL(clicked()), view, SLOT(expandAll()) );
     l->addWidget( b, 0, 0 );
@@ -84,7 +85,7 @@ ProjectModelPerformanceTest::ProjectModelPerformanceTest(QWidget* parent )
     b = new QPushButton( "Add Big Subtree in Chunks", this );
     connect( b, SIGNAL(clicked()), SLOT(addBigTreeDelayed()) );
     l->addWidget( b, 0, 4 );
-    
+
     l->addWidget( view, 1, 0, 1, 6 );
 }
 
@@ -101,7 +102,7 @@ void ProjectModelPerformanceTest::init()
     timer.start();
 
     model = new KDevelop::ProjectModel( this );
-    
+
     qDebug() << "create model" << timer.elapsed();
     timer.start();
 
@@ -110,7 +111,7 @@ void ProjectModelPerformanceTest::init()
         generateChilds( item, INIT_WIDTH, INIT_DEPTH );
         model->appendRow( item );
     }
-    
+
     qDebug() << "init model" << timer.elapsed();
     timer.start();
 
@@ -171,7 +172,7 @@ void ProjectModelPerformanceTest::addItemDelayed()
     // else if we've reached the max width then pop, i.e go one level up
     // else the next run will add a sibling to the just-generated item
     if( currentParent.size() < BIG_DEPTH && ( currentParent.isEmpty() || currentParent.top()->rowCount() < BIG_WIDTH ) ) {
-        currentParent.push( item ); 
+        currentParent.push( item );
     } else if( !currentParent.isEmpty() && currentParent.top()->rowCount() >= BIG_WIDTH ) {
         currentParent.pop();
     }

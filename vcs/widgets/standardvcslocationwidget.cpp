@@ -20,7 +20,6 @@
 
 #include "standardvcslocationwidget.h"
 #include <QVBoxLayout>
-#include <QDebug>
 #include <KUrlRequester>
 #include <KLocalizedString>
 #include <vcs/vcslocation.h>

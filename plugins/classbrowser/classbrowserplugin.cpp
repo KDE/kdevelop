@@ -52,6 +52,7 @@
 #include <language/duchain/functiondefinition.h>
 #include <interfaces/iprojectcontroller.h>
 
+Q_LOGGING_CATEGORY(PLUGIN_CLASSBROWSER, "kdevplatform.plugins.classbrowser")
 K_PLUGIN_FACTORY_WITH_JSON(KDevClassBrowserFactory, "kdevclassbrowser.json", registerPlugin<ClassBrowserPlugin>(); )
 
 using namespace KDevelop;
@@ -87,7 +88,7 @@ ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
 {
   core()->uiController()->addToolView(i18n("Classes"), m_factory);
   setXMLFile( "kdevclassbrowser.rc" );
-  
+
   m_findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
   connect(m_findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
 }
@@ -123,7 +124,7 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
       if(!ClassTree::populatingClassBrowserContextMenu() && ICore::self()->projectController()->findProjectForUrl(decl->url().toUrl()) &&
         decl->kind() == Declaration::Type && decl->internalContext() && decl->internalContext()->type() == DUContext::Class) {
         //Currently "Find in Class Browser" seems to only work for classes, so only show it in that case
-        
+
         m_findInBrowser->setData(QVariant::fromValue(DUChainBasePointer(decl)));
         menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_findInBrowser);
       }
@@ -136,7 +137,7 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
 void ClassBrowserPlugin::findInClassBrowser()
 {
   ICore::self()->uiController()->findToolView(i18n("Classes"), m_factory, KDevelop::IUiController::CreateAndRaise);
-  
+
   Q_ASSERT(qobject_cast<QAction*>(sender()));
 
   if ( m_activeClassTree == 0 )
@@ -156,7 +157,7 @@ void ClassBrowserPlugin::findInClassBrowser()
 void ClassBrowserPlugin::showDefinition(DeclarationPointer declaration)
 {
   DUChainReadLocker readLock(DUChain::lock());
-  
+
   if ( !declaration )
     return;
 

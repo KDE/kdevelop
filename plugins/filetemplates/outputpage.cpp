@@ -18,6 +18,7 @@
 
 #include "outputpage.h"
 #include "ui_outputlocation.h"
+#include "debug.h"
 
 #include <language/codegen/sourcefiletemplate.h>
 #include <language/codegen/templaterenderer.h>
@@ -27,7 +28,6 @@
 
 #include <KUrlRequester>
 #include <KIntNumInput>
-#include <KDebug>
 #include <KFileDialog>
 
 #include <QSignalMapper>
@@ -62,7 +62,7 @@ struct OutputPagePrivate
 
 void OutputPagePrivate::updateRanges(KIntNumInput* line, KIntNumInput* column, bool enable)
 {
-    kDebug() << "Updating Ranges, file exists: " << enable;
+    qCDebug(PLUGIN_FILETEMPLATES) << "Updating Ranges, file exists: " << enable;
     line->setEnabled(enable);
     column->setEnabled(enable);
 }

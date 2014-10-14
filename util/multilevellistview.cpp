@@ -19,8 +19,6 @@
 
 #include "multilevellistview.h"
 
-#include <KDebug>
-
 #include <QHBoxLayout>
 #include <QTreeView>
 #include <QLayout>

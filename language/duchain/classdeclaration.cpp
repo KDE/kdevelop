@@ -1,7 +1,7 @@
 /* This file is part of KDevelop
     Copyright 2007 David Nolden <david.nolden@kdevelop.org>
     Copyright 2009 Lior Mualem <lior.m.kde@gmail.com>
-    
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -23,7 +23,7 @@
 #include <language/duchain/appendedlist.h>
 #include <language/duchain/duchainregister.h>
 #include "types/structuretype.h"
-
+#include "util/debug.h"
 
 namespace KDevelop {
 
@@ -93,7 +93,7 @@ Declaration* ClassDeclaration::clonePrivate() const {
 }
 
 bool isPublicBaseClassInternal( const ClassDeclaration* self, ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels, int depth, QSet<const ClassDeclaration*>* checked ) {
-  
+
   if(checked) {
     if(checked->contains(self))
       return false;
@@ -105,7 +105,7 @@ bool isPublicBaseClassInternal( const ClassDeclaration* self, ClassDeclaration* 
     QSet<const ClassDeclaration*> checkedSet;
     return isPublicBaseClassInternal(self, base, topContext, baseConversionLevels, depth, &checkedSet);
   }
-  
+
   if( baseConversionLevels )
     *baseConversionLevels = 0;
 
@@ -116,7 +116,7 @@ bool isPublicBaseClassInternal( const ClassDeclaration* self, ClassDeclaration* 
   {
     if( baseConversionLevels )
       ++ (*baseConversionLevels);
-    //kDebug(9007) << "public base of" << c->toString() << "is" << b.baseClass->toString();
+    //qCDebug(LANGUAGE) << "public base of" << c->toString() << "is" << b.baseClass->toString();
     if( b.access != KDevelop::Declaration::Private ) {
       int nextBaseConversion = 0;
       if( StructureType::Ptr c = b.baseClass.type<StructureType>() ) {

@@ -28,7 +28,6 @@
 #include <KLocalizedString>
 #include <KDialog>
 #include <KMessageBox>
-#include <KDebug>
 #include <KIO/Job>
 #include <QFile>
 #include <QDir>
@@ -41,6 +40,7 @@
 #include <vcs/vcsjob.h>
 #include "reviewpatchdialog.h"
 #include "reviewboardjobs.h"
+#include "debug.h"
 
 using namespace KDevelop;
 

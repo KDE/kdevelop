@@ -19,14 +19,15 @@
 */
 
 #include "templatesmodel.h"
+#include "util/debug.h"
 #include <interfaces/icore.h>
 
 #include <KTar>
 #include <KZip>
 #include <KComponentData>
-#include <KDebug>
 #include <KConfigGroup>
 #include <KLocalizedString>
+
 #include <QMimeType>
 #include <QMimeDatabase>
 #include <QFileInfo>
@@ -219,7 +220,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
 
     foreach (const QString &archName, templateArchives)
     {
-        kDebug() << "processing template" << archName;
+        qCDebug(LANGUAGE) << "processing template" << archName;
 
         QScopedPointer<KArchive> templateArchive;
         if (QFileInfo(archName).completeSuffix() == "zip")
@@ -284,12 +285,12 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
             }
             if (!templateEntry || !templateEntry->isFile())
             {
-                kDebug() << "template" << archName << "does not contain .kdevtemplate or .desktop file";
+                qCDebug(LANGUAGE) << "template" << archName << "does not contain .kdevtemplate or .desktop file";
                 continue;
             }
             const KArchiveFile *templateFile = static_cast<const KArchiveFile*>(templateEntry);
 
-            kDebug() << "copy template description to" << localDescriptionsDir;
+            qCDebug(LANGUAGE) << "copy template description to" << localDescriptionsDir;
             templateFile->copyTo(localDescriptionsDir);
 
             /*
@@ -317,7 +318,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
         }
         else
         {
-            kDebug() << "could not open template" << archName;
+            qCDebug(LANGUAGE) << "could not open template" << archName;
         }
     }
 }
@@ -388,11 +389,11 @@ QString TemplatesModel::loadTemplateFile(const QString& fileName)
     QString destination = saveLocation + info.baseName();
 
     QMimeType mimeType = QMimeDatabase().mimeTypeForFile(fileName);
-    kDebug() << "Loaded file" << fileName << "with type" << mimeType.name();
+    qCDebug(LANGUAGE) << "Loaded file" << fileName << "with type" << mimeType.name();
 
     if (mimeType.name() == "application/x-desktop")
     {
-        kDebug() << "Loaded desktop file" << info.absoluteFilePath() << ", compressing";
+        qCDebug(LANGUAGE) << "Loaded desktop file" << info.absoluteFilePath() << ", compressing";
 #ifdef Q_WS_WIN
         destination += ".zip";
         KZip archive(destination);
@@ -420,7 +421,7 @@ QString TemplatesModel::loadTemplateFile(const QString& fileName)
     }
     else
     {
-        kDebug() << "Copying" << fileName << "to" << saveLocation;
+        qCDebug(LANGUAGE) << "Copying" << fileName << "to" << saveLocation;
         QFile::copy(fileName, saveLocation + info.fileName());
     }
 

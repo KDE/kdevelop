@@ -21,7 +21,6 @@
 #include <QStandardItem>
 #include <QStandardItemModel>
 
-#include <kdebug.h>
 
 namespace Sublime {
 

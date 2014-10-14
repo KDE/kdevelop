@@ -23,7 +23,7 @@
 
 #include "sessioncontroller.h"
 
-#include <KDebug>
+#include <QDebug>
 #include <KLocalizedString>
 #include <KMessageBox>
 
@@ -168,7 +168,7 @@ QString SessionLock::handleLockedSession(const QString& sessionName, const QStri
             out << i18nc( "@info:shell", "made running %1 instance (PID: %2) visible", runInfo.holderApp, runInfo.holderPid ) << endl;
             return QString();
         } else {
-            kWarning() << i18nc("@info:shell", "running %1 instance (PID: %2) is apparently hung", runInfo.holderApp, runInfo.holderPid);
+            qWarning() << i18nc("@info:shell", "running %1 instance (PID: %2) is apparently hung", runInfo.holderApp, runInfo.holderPid);
         }
     }
 

@@ -17,6 +17,7 @@
 */
 
 #include "parseprojectjob.h"
+#include "util/debug.h"
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iruncontroller.h>
@@ -31,7 +32,7 @@
 using namespace KDevelop;
 
 bool ParseProjectJob::doKill() {
-    kDebug() << "stopping project parse job";
+    qCDebug(LANGUAGE) << "stopping project parse job";
     deleteLater();
     return true;
 }
@@ -96,7 +97,7 @@ void ParseProjectJob::start() {
         return;
     }
 
-    kDebug() << "starting project parse job";
+    qCDebug(LANGUAGE) << "starting project parse job";
 
     TopDUContext::Features processingLevel = m_filesToParse.size() < ICore::self()->languageController()->completionSettings()->minFilesForSimplifiedParsing() ?
                                     TopDUContext::VisibleDeclarationsAndContexts : TopDUContext::SimplifiedVisibleDeclarationsAndContexts;

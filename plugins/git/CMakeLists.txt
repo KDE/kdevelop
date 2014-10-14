@@ -2,8 +2,6 @@ project(git)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${git_SOURCE_DIR}/cmake)
 
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=9525)
-
 add_subdirectory(tests)
 add_subdirectory(icons)
 

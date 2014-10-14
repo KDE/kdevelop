@@ -60,7 +60,7 @@ void RenameFileAction::execute()
     // save document to prevent unwanted dialogs
     IDocument* doc = ICore::self()->documentController()->documentForUrl(d->m_file);
     if (!doc) {
-        kWarning() << "could find no document for url:" << d->m_file;
+        qWarning() << "could find no document for url:" << d->m_file;
         return;
     }
 

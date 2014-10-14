@@ -32,7 +32,6 @@ Boston, MA 02110-1301, USA.
 #include <kparts/mainwindow.h>
 #include <kactioncollection.h>
 #include <kpushbutton.h>
-#include <kdebug.h>
 
 #include "session.h"
 #include "core.h"
@@ -41,6 +40,7 @@ Boston, MA 02110-1301, USA.
 #include "shellextension.h"
 #include "sessionlock.h"
 #include "sessionchooserdialog.h"
+#include "debug.h"
 #include <interfaces/iprojectcontroller.h>
 #include <util/fileutils.h>
 #include <qapplication.h>
@@ -72,7 +72,7 @@ namespace KDevelop
 
 namespace {
     int argc = 0;
-    char** argv = 0; 
+    char** argv = 0;
 };
 
 void SessionController::setArguments(int _argc, char** _argv)
@@ -87,7 +87,7 @@ static QStringList standardArguments()
     for(int a = 0; a < argc; ++a)
     {
         QString arg = QString::fromLocal8Bit(argv[a]);
-        kWarning() << "ARG:" << "" + arg + "";
+        qWarning() << "ARG:" << "" + arg + "";
 /*        if(arg.startsWith("--graphicssystem=") || arg.startsWith("--style="))
         {
             ret << arg;
@@ -99,9 +99,9 @@ static QStringList standardArguments()
                 ret << QString::fromLocal8Bit(argv[a+1]);
         }
     }
-    
-    kWarning() << "ARGUMENTS: " << ret << "from" << argc;
-    
+
+    qWarning() << "ARGUMENTS: " << ret << "from" << argc;
+
     return ret;
 }
 
@@ -117,10 +117,10 @@ public:
     {
         recoveryTimer.setInterval(recoveryStorageInterval * 1000);
         connect(&recoveryTimer, SIGNAL(timeout()), SLOT(recoveryStorageTimeout()));
-        
+
         // Try the recovery only after the initialization has finished
         connect(ICore::self(), SIGNAL(initializationCompleted()), SLOT(lateInitialization()), Qt::QueuedConnection);
-        
+
         recoveryTimer.setSingleShot(false);
         recoveryTimer.start();
     }
@@ -142,11 +142,11 @@ public:
         }
         return 0;
     }
-    
+
     Session* findSessionForId(QString idString)
     {
         QUuid id(idString);
-        
+
         foreach( Session* s, sessionActions.keys() )
         {
             if( s->id() == id)
@@ -154,21 +154,21 @@ public:
         }
         return 0;
     }
-    
+
     void newSession()
     {
         qsrand(QDateTime::currentDateTime().toTime_t());
         Session* session = new Session( QUuid::createUuid().toString() );
-        
+
         KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << session->id().toString() << standardArguments());
         delete session;
-#if 0        
+#if 0
         //Terminate this instance of kdevelop if the user agrees
         foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
             window->close();
 #endif
     }
-    
+
     void configureSessions()
     {
         SessionDialog dlg(ICore::self()->uiController()-> activeMainWindow());
@@ -178,7 +178,7 @@ public:
     void deleteCurrentSession()
     {
         int choice = KMessageBox::warningContinueCancel(Core::self()->uiController()->activeMainWindow(), i18n("The current session and all contained settings will be deleted. The projects will stay unaffected. Do you really want to continue?"));
-        
+
         if(choice == KMessageBox::Continue)
         {
             q->deleteSessionFromDisk(sessionLock);
@@ -192,16 +192,16 @@ public:
         dialog.setWindowTitle(i18n("Rename Session"));
         QGroupBox box;
         QHBoxLayout layout(&box);
-        
+
         box.setTitle(i18n("New Session Name"));
         QLineEdit edit;
         layout.addWidget(&edit);
         dialog.setButtons(KDialog::Ok | KDialog::Cancel);
         edit.setText(q->activeSession()->name());
         dialog.setMainWidget(&box);
-        
+
         edit.setFocus();
-        
+
         if(dialog.exec() == QDialog::Accepted)
         {
             static_cast<Session*>(q->activeSession())->setName(edit.text());
@@ -214,7 +214,7 @@ public:
         KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << s->id().toString() << standardArguments());
         return true;
     }
-    
+
     TryLockSessionResult activateSession( Session* s )
     {
         Q_ASSERT( s );
@@ -284,12 +284,12 @@ public:
     QHash<Session*, QAction*> sessionActions;
     ISession* activeSession;
     QActionGroup* grp;
-    
+
     ISessionLock::Ptr sessionLock;
-    
+
     // Whether this process owns the recovery directory
     bool recoveryDirectoryIsOwn;
-    
+
     QTimer recoveryTimer;
     QMap<QUrl, QStringList > currentRecoveryFiles;
 
@@ -314,16 +314,16 @@ public slots:
     {
         if(currentRecoveryFiles.contains(document->url()))
         {
-            kDebug() << "deleting recovery-info for" << document->url();
+            qCDebug(SHELL) << "deleting recovery-info for" << document->url();
             foreach(const QString& recoveryFileName, currentRecoveryFiles[document->url()])
             {
                 bool result = QFile::remove(recoveryFileName);
-                kDebug() << "deleted" << recoveryFileName << result;
+                qCDebug(SHELL) << "deleted" << recoveryFileName << result;
             }
             currentRecoveryFiles.remove(document->url());
         }
     }
-    
+
 private slots:
     void lateInitialization()
     {
@@ -334,27 +334,27 @@ private slots:
 
     void performRecovery()
     {
-        kDebug() << "Checking recovery";
+        qCDebug(SHELL) << "Checking recovery";
         QDir recoveryDir(ownSessionDirectory() + "/recovery");
-        
+
         if(recoveryDir.exists())
         {
-            kDebug() << "Have recovery directory, starting recovery";
+            qCDebug(SHELL) << "Have recovery directory, starting recovery";
             QFile dateFile(recoveryDir.path() + "/date");
             dateFile.open(QIODevice::ReadOnly);
             QString date = QString::fromUtf8(dateFile.readAll());
-            
+
             QDir recoverySubDir(recoveryDir.path() + "/current");
-            
+
             if(!recoverySubDir.exists())
                 recoverySubDir = QDir(recoveryDir.path() + "/backup");
-            
+
             if(recoverySubDir.exists())
             {
-                kWarning() << "Starting recovery from " << recoverySubDir.absolutePath();
-                
+                qWarning() << "Starting recovery from " << recoverySubDir.absolutePath();
+
                 QStringList urlList;
-                
+
                 for(uint num = 0; ; ++num)
                 {
                     QFile urlFile(recoverySubDir.path() + QString("/%1_url").arg(num));
@@ -364,7 +364,7 @@ private slots:
                     QUrl originalFile = QUrl::fromLocalFile(QString::fromUtf8(urlFile.readAll()));
                     urlList << originalFile.toDisplayString(QUrl::PreferLocalFile);
                 }
-                
+
                 if(!urlList.isEmpty())
                 {
                     //Either recover, or delete the recovery directory
@@ -383,7 +383,7 @@ private slots:
                     if(choice == KMessageBox::Continue)
                     {
                         //Recover the files
-                        
+
                         for(uint num = 0; ; ++num)
                         {
                             QFile urlFile(recoverySubDir.path() + QString("/%1_url").arg(num));
@@ -401,8 +401,8 @@ private slots:
                                 KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not recover %1, the recovery file is empty", originalFile.toDisplayString(QUrl::PreferLocalFile)), i18n("Recovery"));
                                 continue;
                             }
-                            
-                            kDebug() << "opening" << originalFile << "for recovery";
+
+                            qCDebug(SHELL) << "opening" << originalFile << "for recovery";
                             KDevelop::IDocument* doc = ICore::self()->documentController()->openDocument(originalFile);
                             if(!doc || !doc->textDocument())
                             {
@@ -423,7 +423,7 @@ private slots:
                 }
             }
         }
-        
+
         recoveryDirectoryIsOwn = true;
     }
 
@@ -431,16 +431,16 @@ private slots:
     {
         sessionActions[static_cast<Session*>( s )]->setText( KStringHandler::rsqueeze(s->description()) );
     }
-    
+
     void recoveryStorageTimeout()
     {
         if(!recoveryDirectoryIsOwn)
             return;
-        
+
         currentRecoveryFiles.clear();
-        
+
         QDir recoveryDir(ownSessionDirectory() + "/recovery");
-        
+
         if(!recoveryDir.exists())
         {
             // Try "taking" the recovery directory
@@ -452,22 +452,22 @@ private slots:
         if (recoveryDir.exists("backup")) {
             // Clear the old backup recovery directory, as we will create a new one
             if (!removeDirectory(recoveryDir.absoluteFilePath("backup"))) {
-                kWarning() << "RECOVERY ERROR: Removing the old recovery backup directory failed in " << recoveryDir;
+                qWarning() << "RECOVERY ERROR: Removing the old recovery backup directory failed in " << recoveryDir;
                 return;
             }
         }
-        
+
         //Make the current recovery dir the backup dir, so we always have a recovery available
         //This may fail, because "current" might be nonexistent
         recoveryDir.rename("current", "backup");
 
         {
             recoveryDir.mkdir("current_incomplete");
-            
+
             QDir recoveryCurrentDir(recoveryDir.path() + "/current_incomplete");
 
             uint num = 0;
-            
+
             foreach(KDevelop::IDocument* document, ICore::self()->documentController()->openDocuments())
             {
                 if(document->state() == IDocument::Modified || document->state() == IDocument::DirtyAndModified)
@@ -477,7 +477,7 @@ private slots:
                     {
                         //Currently we can only back-up text documents
                         QString text = document->textDocument()->text();
-                        
+
                         if(!text.isEmpty())
                         {
                             QString urlFilePath = recoveryCurrentDir.path() + QString("/%1_url").arg(num);
@@ -485,35 +485,35 @@ private slots:
                             urlFile.open(QIODevice::WriteOnly);
                             urlFile.write(document->url().toString().toUtf8());
                             urlFile.close();
-                            
+
                             QString textFilePath = recoveryCurrentDir.path() + '/' + QString("/%1_text").arg(num);
                             QFile f(textFilePath);
                             f.open(QIODevice::WriteOnly);
                             f.write(text.toUtf8());
                             f.close();
-                            
+
                             currentRecoveryFiles[document->url()] =
                                         QStringList() <<  (recoveryDir.path() + "/current" + QString("/%1_url").arg(num))
                                                       << (recoveryDir.path() + "/current" + QString("/%1_text").arg(num));
-                            
+
                             if(urlFile.error() != QFile::NoError || f.error() != QFile::NoError)
                             {
-                                kWarning() << "RECOVERY ERROR: Failed to write recovery for" << document->url() << "to" << textFilePath;
+                                qWarning() << "RECOVERY ERROR: Failed to write recovery for" << document->url() << "to" << textFilePath;
                                 KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
                                                     i18n("Failed to write recovery copies to %1. Please make sure that your home directory is writable and not full. This application requires available space in the home directory to run stable. You may experience application crashes until you free up some space.", recoveryCurrentDir.path()),
                                                     i18n("Recovery Error"));
                                 return;
                             }
-                                                      
+
                             ++num;
                         }
                     }
                 }
             }
         }
-        
+
         recoveryDir.rename("current_incomplete", "current");
-        
+
         {
             //Write down the date of the recovery
             QFile dateFile(recoveryDir.path() + "/date");
@@ -529,7 +529,7 @@ SessionController::SessionController( QObject *parent )
 {
     setObjectName("SessionController");
     setComponentName(QStringLiteral("kdevsession"), QStringLiteral("KDevSession"));
-    
+
     setXMLFile("kdevsessionui.rc");
 
     QDBusConnection::sessionBus().registerObject( "/kdevelop/SessionController",

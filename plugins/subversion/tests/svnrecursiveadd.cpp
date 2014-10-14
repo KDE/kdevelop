@@ -22,9 +22,9 @@
 #include <QtTest/QtTest>
 #include <KTempDir>
 #include <KProcess>
-#include <kdebug.h>
 #include <kparts/part.h>
 #include <kio/netaccess.h>
+#include <QDebug>
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -51,7 +51,7 @@ const QString simpleAltText("No, foo()! It's bar()!\n");
 
 #define VERBOSE
 #if defined(VERBOSE)
-#define TRACE(X) kDebug() << X
+#define TRACE(X) qDebug() << X
 #else
 #define TRACE(X) { line = line; }
 #endif
@@ -64,14 +64,14 @@ void validatingExecJob(VcsJob* j, VcsJob::JobStatus status = VcsJob::JobSucceede
     // Print the commands in full, for easier bug location
 #if 0
     if (QLatin1String(j->metaObject()->className()) == "DVcsJob") {
-        kDebug() << "Command: \"" << ((DVcsJob*)j)->getChildproc()->program() << ((DVcsJob*)j)->getChildproc()->workingDirectory();
-        kDebug() << "Output: \"" << ((DVcsJob*)j)->output();
+        qDebug() << "Command: \"" << ((DVcsJob*)j)->getChildproc()->program() << ((DVcsJob*)j)->getChildproc()->workingDirectory();
+        qDebug() << "Output: \"" << ((DVcsJob*)j)->output();
     }
 #endif
 
     if (!j->exec()) {
         qDebug() << "ooops, no exec";
-        kDebug() << j->errorString();
+        qDebug() << j->errorString();
         // On error, wait for key in order to allow manual state inspection
 #if 0
         char c;
@@ -128,7 +128,7 @@ void SvnRecursiveAdd::test()
     QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IBasicVersionControl");
     IBasicVersionControl* vcs = NULL;
     foreach(IPlugin* p,  plugins) {
-        qDebug() << "checking plugin" << p;    
+        qDebug() << "checking plugin" << p;
         ICentralizedVersionControl* icentr = p->extension<ICentralizedVersionControl>();
         if (!icentr)
             continue;
@@ -142,17 +142,17 @@ void SvnRecursiveAdd::test()
     VcsLocation reposLoc;
     reposLoc.setRepositoryServer("file://" + reposDir.name());
     KTempDir checkoutDir;
-    kDebug() << "Checking out from " << reposLoc.repositoryServer() << " to " << checkoutLoc;
     QUrl checkoutLoc = checkoutDir.name();
+    qDebug() << "Checking out from " << reposLoc.repositoryServer() << " to " << checkoutLoc;
     qDebug() << "creating job";
     VcsJob* job = vcs->createWorkingCopy( reposLoc, checkoutLoc );
     validatingExecJob(job);
     qDebug() << "filling wc";
     fillWorkingDirectory(checkoutDir.name());
     QUrl addUrl = checkoutLoc.resolved( vcsTestDir0 );
-    kDebug() << "Recursively adding files at " << addUrl;
-    kDebug() << "Recursively reverting changes at " << addUrl;
+    qDebug() << "Recursively adding files at " << addUrl;
     validatingExecJob(vcs->add(addUrl, IBasicVersionControl::Recursive));
+    qDebug() << "Recursively reverting changes at " << addUrl;
     validatingExecJob(vcs->revert(addUrl, IBasicVersionControl::Recursive));
 }
 

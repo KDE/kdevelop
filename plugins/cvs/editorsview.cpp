@@ -13,7 +13,6 @@
 #include <QFileInfo>
 #include <QTextBrowser>
 #include <QRegExp>
-#include <KDebug>
 #include <KMessageBox>
 #include <KI18n/KLocalizedString>
 

@@ -24,7 +24,6 @@
 #include <QMutexLocker>
 
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <ThreadWeaver.h>
 
 #include "kdevsvncpp/client.hpp"
@@ -50,7 +49,7 @@ void SvnInternalAddJob::run()
             cli.add( svn::Path( ba.data() ), recursive() );
         }catch( svn::ClientException ce )
         {
-            kDebug(9510) << "Exception while adding file: "
+            qCDebug(PLUGIN_SVN) << "Exception while adding file: "
                     << url
                     << QString::fromUtf8( ce.message() );
             setErrorMessage( QString::fromUtf8( ce.message() ) );
@@ -103,7 +102,7 @@ void SvnAddJob::start()
         setErrorText( i18n( "Not enough information to add file" ) );
     }else
     {
-        kDebug(9510) << "adding urls:" << m_job->locations();
+        qCDebug(PLUGIN_SVN) << "adding urls:" << m_job->locations();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
 }

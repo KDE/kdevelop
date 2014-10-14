@@ -22,6 +22,7 @@
  */
 
 #include "configurablecolors.h"
+#include "util/debug.h"
 
 #define ifDebug(x)
 
@@ -59,7 +60,7 @@ ConfigurableHighlightingColors::ConfigurableHighlightingColors(QString highlight
     KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute); \
     a->setForeground(QColor(cache->blendGlobalColor(color_)));  \
     addAttribute(CodeHighlighting::type, a);  \
-    ifDebug(kDebug() << #type << "color: " << ((void*) color_) << "->" << a->foreground().color().name();) \
+    ifDebug(qCDebug(LANGUAGE) << #type << "color: " << ((void*) color_) << "->" << a->foreground().color().name();) \
   }
 
 CodeHighlightingColors::CodeHighlightingColors(ColorCache* cache) : ConfigurableHighlightingColors("KDev Semantic Highlighting")

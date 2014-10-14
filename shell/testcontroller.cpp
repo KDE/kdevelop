@@ -19,10 +19,10 @@
 
 #include "testcontroller.h"
 #include "interfaces/itestsuite.h"
+#include "debug.h"
 #include <interfaces/icore.h>
 
 #include <KLocalizedString>
-#include <KDebug>
 
 using namespace KDevelop;
 
@@ -107,13 +107,13 @@ QList< ITestSuite* > TestController::testSuitesForProject(IProject* project) con
 
 void TestController::notifyTestRunFinished(ITestSuite* suite, const TestResult& result)
 {
-    kDebug() << "Test run finished for suite" << suite->name();
+    qCDebug(SHELL) << "Test run finished for suite" << suite->name();
     emit testRunFinished(suite, result);
 }
 
 void TestController::notifyTestRunStarted(ITestSuite* suite, const QStringList& test_cases)
 {
-    kDebug() << "Test run started for suite" << suite->name();
+    qCDebug(SHELL) << "Test run started for suite" << suite->name();
     emit testRunStarted(suite, test_cases);
 }
 

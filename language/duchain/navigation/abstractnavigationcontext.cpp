@@ -30,13 +30,14 @@
 #include "../namespacealiasdeclaration.h"
 #include "../types/functiontype.h"
 #include "../types/structuretype.h"
+#include "util/debug.h"
 #include <interfaces/icontextbrowser.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iplugincontroller.h>
 
 
 namespace KDevelop {
-  
+
 void AbstractNavigationContext::setTopContext(KDevelop::TopDUContextPointer context) {
   m_topContext = context;
 }
@@ -91,7 +92,7 @@ QString AbstractNavigationContext::createLink(const QString& name, QString targe
     //Do not create links in shortened mode, it's only for viewing
     return typeHighlight(name.toHtmlEscaped());
   }
-  
+
   m_links[ targetId ] = action;
   m_intLinks[ m_linkCount ] = action;
   m_linkLines[ m_linkCount ] = m_currentLine;
@@ -99,7 +100,7 @@ QString AbstractNavigationContext::createLink(const QString& name, QString targe
     m_currentPositionLine = -1;
     m_selectedLink = m_linkCount;
   }
-  
+
   QString str = name.toHtmlEscaped();
   if( m_linkCount == m_selectedLink )
     str = "<font style=\"background-color:#f1f1f1;\" color=\"#880088\">" + str + "</font>";
@@ -151,7 +152,7 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
 
 
   if( !action.decl && (action.type != NavigationAction::JumpToSource || action.document.isEmpty()) ) {
-      kDebug() << "Navigation-action has invalid declaration" << endl;
+      qCDebug(LANGUAGE) << "Navigation-action has invalid declaration" << endl;
       return NavigationContextPointer(this);
   }
   qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
@@ -160,7 +161,7 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
     case NavigationAction::ExecuteKey:
       break;
     case NavigationAction::None:
-      kDebug() << "Tried to execute an invalid action in navigation-widget" << endl;
+      qCDebug(LANGUAGE) << "Tried to execute an invalid action in navigation-widget" << endl;
       break;
     case NavigationAction::NavigateDeclaration:
     {
@@ -356,10 +357,10 @@ NavigationContextPointer AbstractNavigationContext::accept(IndexedDeclaration de
 
 NavigationContextPointer AbstractNavigationContext::acceptLink(const QString& link) {
   if( !m_links.contains(link) ) {
-    kDebug() << "Executed unregistered link " << link << endl;
+    qCDebug(LANGUAGE) << "Executed unregistered link " << link << endl;
     return NavigationContextPointer(this);
   }
-  
+
   return execute(m_links[link]);
 }
 

@@ -23,11 +23,11 @@
 #include "bookmarkhandler.h"
 #include "filemanager.h"
 #include "kdevfilemanagerplugin.h"
+#include "debug.h"
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
 
 #include <kdiroperator.h>
-#include <KDebug>
 #include <KActionCollection>
 
 
@@ -41,7 +41,7 @@ BookmarkHandler::BookmarkHandler( FileManager *parent, QMenu* kpopupmenu )
 
     QUrl bookmarksPath = KDevelop::ICore::self()->activeSession()->pluginDataArea(parent->plugin());
     bookmarksPath.setPath(bookmarksPath.path() + "fsbookmarks.xml");
-    kDebug() << bookmarksPath;
+    qCDebug(PLUGIN_FILEMANAGER) << bookmarksPath;
 
     KBookmarkManager *manager = KBookmarkManager::managerForFile( bookmarksPath.toLocalFile(), "kdevplatform" );
     manager->setUpdate( true );

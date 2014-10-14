@@ -28,7 +28,6 @@
 #include <QSpinBox>
 
 #include <KLocalizedString>
-#include <KDebug>
 
 #include "../breakpoint/breakpoint.h"
 #include "../interfaces/idebugsession.h"

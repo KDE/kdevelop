@@ -23,7 +23,6 @@
 #include <QTreeView>
 #include <QtTest/QTest>
 
-#include <kdebug.h>
 #include <ktabwidget.h>
 #include <KLocalizedString>
 

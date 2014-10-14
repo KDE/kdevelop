@@ -12,7 +12,6 @@
 
 #include <KMessageBox>
 #include <KI18n/KLocalizedString>
-#include <KDebug>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
@@ -20,6 +19,7 @@
 #include "cvsplugin.h"
 #include "cvsjob.h"
 #include "cvsproxy.h"
+#include "debug.h"
 
 CheckoutDialog::CheckoutDialog(CvsPlugin* plugin, QWidget *parent)
     : KDialog(parent), Ui::CheckoutDialogBase(), m_plugin(plugin)
@@ -70,7 +70,7 @@ void CheckoutDialog::jobFinished(KJob * job)
             continue;
         } else {
             // any other line must mean that an error occurred
-            kDebug(9500) << line;
+            qCDebug(PLUGIN_CVS) << line;
             error = true;
         }
     }

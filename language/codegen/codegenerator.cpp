@@ -31,6 +31,7 @@
 
 #include <qtimer.h>
 #include "applychangeswidget.h"
+#include "util/debug.h"
 
 namespace KDevelop
 {
@@ -112,7 +113,7 @@ void CodeGeneratorBase::setErrorText(const QString & errorText)
 
 void CodeGeneratorBase::clearChangeSets()
 {
-    kDebug() << "Cleaning up all the changesets registered by the generator";
+    qCDebug(LANGUAGE) << "Cleaning up all the changesets registered by the generator";
     foreach(DUChainChangeSet * changeSet, d->duchainChanges)
         delete changeSet;
     d->duchainChanges.clear();
@@ -122,7 +123,7 @@ void CodeGeneratorBase::clearChangeSets()
 
 bool CodeGeneratorBase::execute()
 {
-    kDebug() << "Checking Preconditions for the codegenerator";
+    qCDebug(LANGUAGE) << "Checking Preconditions for the codegenerator";
 
     //Shouldn't there be a method in iDocument to get a DocumentRange as well?
 
@@ -161,7 +162,7 @@ bool CodeGeneratorBase::execute()
             QList<TopDUContext *> contexts = DUChain::self()->chainsForDocument(document);
             foreach(TopDUContext * top, contexts)
             {
-                kDebug() << "Checking top context with range: " << top->range() << " for a context";
+                qCDebug(LANGUAGE) << "Checking top context with range: " << top->range() << " for a context";
                 if((d->context = top->findContextIncluding(d->range)))
                     break;
             }
@@ -182,7 +183,7 @@ bool CodeGeneratorBase::execute()
 
     if(!d->autoGen)
     {
-        kDebug() << "Gathering user information for the codegenerator";
+        qCDebug(LANGUAGE) << "Gathering user information for the codegenerator";
         if(!gatherInformation())
         {
             setErrorText(i18n("Error Gathering user information: %1",errorText()));
@@ -190,7 +191,7 @@ bool CodeGeneratorBase::execute()
         }
     }
 
-    kDebug() << "Generating code";
+    qCDebug(LANGUAGE) << "Generating code";
     if(!process())
     {
         setErrorText(i18n("Error generating code: %1",errorText()));
@@ -199,7 +200,7 @@ bool CodeGeneratorBase::execute()
 
     if(!d->autoGen)
     {
-        kDebug() << "Submitting to the user for review";
+        qCDebug(LANGUAGE) << "Submitting to the user for review";
         return displayChanges();
     }
 

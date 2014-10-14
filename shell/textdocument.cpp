@@ -28,15 +28,14 @@
 #include <QLabel>
 #include <QLayout>
 #include <QMimeDatabase>
+#include <QDebug>
 
 #include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
 #include <kxmlguifactory.h>
 #include <kdeversion.h>
-#include <kdebug.h>
 #include <KComponentData>
-#include <KDebug>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -66,6 +65,7 @@
 #include "partcontroller.h"
 #include "plugincontroller.h"
 #include "documentcontroller.h"
+#include "debug.h"
 #include <path.h>
 
 namespace KDevelop {
@@ -122,7 +122,7 @@ struct TextDocumentPrivate {
         Q_UNUSED(document);
         m_textDocument->notifyContentChanged();
     }
-    
+
     void populateContextMenu( KTextEditor::View* v, QMenu* menu )
     {
         if (m_addedContextMenu) {
@@ -136,9 +136,9 @@ struct TextDocumentPrivate {
 
         Context* c = new EditorContext( v, v->cursorPosition() );
         QList<ContextMenuExtension> extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
-        
+
         ContextMenuExtension::populateMenu(m_addedContextMenu, extensions);
-        
+
         {
             QUrl url = v->document()->url();
             QList< ProjectBaseItem* > items = Core::self()->projectController()->projectModel()->itemsForPath( IndexedString(url) );
@@ -146,7 +146,7 @@ struct TextDocumentPrivate {
                 populateParentItemsMenu( items.front(), m_addedContextMenu );
             }
         }
-        
+
         foreach ( QAction* action, m_addedContextMenu->actions() ) {
             menu->addAction(action);
         }
@@ -367,7 +367,7 @@ bool TextDocument::isTextDocument() const
         qWarning() << "Broken text-document: " << url();
         return false;
     }
-    
+
     return true;
 }
 
@@ -454,7 +454,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
     if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view))
         cc->setAutomaticInvocationEnabled(core()->languageController()->completionSettings()->automaticCompletionEnabled());
-    
+
     if (KTextEditor::ConfigInterface *config = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
         config->setConfigValue("allow-mark-menu", false);
         config->setConfigValue("default-mark-type", KTextEditor::MarkInterface::BreakpointActive);
@@ -613,7 +613,7 @@ QString TextDocument::textWord() const
 
     if (view) {
         KTextEditor::Cursor start = view->cursorPosition();
-        kDebug() << "got start position from view:" << start.line() << start.column();
+        qCDebug(SHELL) << "got start position from view:" << start.line() << start.column();
         QString linestr = textLine();
         int startPos = qMax( qMin( start.column(), linestr.length() - 1 ), 0 );
         int endPos = startPos;
@@ -629,7 +629,7 @@ QString TextDocument::textWord() const
         }
         if( startPos != endPos )
         {
-            kDebug() << "found word" << startPos << endPos << linestr.mid( startPos+1, endPos - startPos - 1 );
+            qCDebug(SHELL) << "found word" << startPos << endPos << linestr.mid( startPos+1, endPos - startPos - 1 );
             return linestr.mid( startPos + 1, endPos - startPos - 1 );
         }
     }
@@ -711,7 +711,7 @@ QString KDevelop::TextView::viewState() const
         }
     }
     else {
-        kDebug() << "TextView's internal KTE view disappeared!";
+        qCDebug(SHELL) << "TextView's internal KTE view disappeared!";
         return QString();
     }
 }
@@ -760,7 +760,7 @@ QIcon KDevelop::TextDocument::defaultIcon() const
 }
 
 KTextEditor::View *KDevelop::TextView::textView() const
-{  
+{
     return d->view;
 }
 

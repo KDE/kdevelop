@@ -1,4 +1,3 @@
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9508 )
 
 ########### next target ###############
 
@@ -24,6 +23,7 @@ set(KDevPlatformUtil_LIB_SRCS
     placeholderitemproxymodel.cpp
     projecttestjob.cpp
     path.cpp
+    debug.cpp
 )
 
 set (KDevPlatformUtil_LIB_UI

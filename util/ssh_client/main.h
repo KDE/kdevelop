@@ -22,11 +22,11 @@
 #define KDEVPLATFORM_MAIN_H
 
 #include <KDialog>
-#include <KDebug>
 #include <KLocalizedString>
 
 #include <QtCore/QDir>
-#include <QtGui>   
+#include <QtGui>
+#include <QtCore/QDebug>
 
 class AuthForm : public QWidget
 {
@@ -39,14 +39,14 @@ public:
         PUBKEY = 2, /**< Auth using publick key */
         BOTH = 3, /**< Both PASSWORD and PUBKEY */
     };
-    
+
     AuthForm(const QString& _username = "", uint _auth_type_mask = PUBKEY, QWidget* parent = 0)
-           : QWidget(parent) 
+           : QWidget(parent)
     {
         username = new QLineEdit(_username);
         username_label = new QLabel(i18n("&Username:"));
         username_label->setBuddy(username);
-        
+
         password_or_passphrase = new QLineEdit();
         password_or_passphrase->setEchoMode(QLineEdit::Password);
         password_or_passphrase_label = new QLabel(i18n("&Password or passphrase:"));
@@ -59,7 +59,7 @@ public:
         private_key = new QLineEdit(QDir::homePath() + "/.ssh/id_rsa");
         private_key_label = new QLabel(i18n("P&rivate key:"));
         private_key_label->setBuddy(private_key);
-        
+
         select_auth_type = new QComboBox();
         if (_auth_type_mask & PASSWORD)
             select_auth_type->addItem(i18n("Password auth"), QVariant(PASSWORD));
@@ -67,34 +67,34 @@ public:
             select_auth_type->addItem(i18n("Public key auth"), QVariant(PUBKEY));
         if (_auth_type_mask == 0)
             select_auth_type->addItem(i18n("No auth type supported by server"), QVariant(0));
-        
+
         mgrid = new QGridLayout();
         mgrid->addWidget(username_label, 0,0);
         mgrid->addWidget(username, 0,1);
         mgrid->addWidget(password_or_passphrase_label, 1,0);
         mgrid->addWidget(password_or_passphrase, 1,1);
-        
+
         keys_grid = new QGridLayout();
         keys_grid->addWidget(pub_key_label, 0,0);
         keys_grid->addWidget(pub_key, 0,1);
         keys_grid->addWidget(private_key_label, 1,0);
         keys_grid->addWidget(private_key, 1,1);
-        
+
         fileBox = new QGroupBox(i18n("Select keys"));
         fileBox->setLayout(keys_grid);
-        
+
         mlayout = new QVBoxLayout();
         mlayout->addWidget(select_auth_type);
         mlayout->addLayout(mgrid);
         mlayout->addWidget(fileBox);
         setLayout(mlayout);
-        
+
         change_visibility(select_auth_type->currentIndex());
         password_or_passphrase->setFocus();
         QObject::connect(select_auth_type, SIGNAL(currentIndexChanged(int)),
                                            SLOT(change_visibility(const int)));
     }
-    
+
     QLineEdit *username;
     QLineEdit *password_or_passphrase;
     QLineEdit *pub_key;
@@ -104,7 +104,7 @@ public:
 private slots:
     void change_visibility(const int index)
     {
-    kDebug() << "index:" << index;
+    qDebug() << "index:" << index;
         if (select_auth_type->itemData(index) == QVariant(PUBKEY))
             fileBox->show();
         else
@@ -120,7 +120,7 @@ private:
     QGridLayout *keys_grid;
     QGroupBox *fileBox;
     QVBoxLayout *mlayout;
-    
+
 };
 
 

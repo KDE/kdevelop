@@ -27,7 +27,6 @@
 #include <QtCore/QMetaEnum>
 
 #include <KLocalizedString>
-#include <KDebug>
 #include <KActionCollection>
 #include <KAction>
 #include <KParts/Part>
@@ -52,6 +51,7 @@
 #include "../debugger/variable/variablewidget.h"
 #include "../debugger/framestack/framestackmodel.h"
 #include "../debugger/framestack/framestackwidget.h"
+#include "debug.h"
 #include <KXMLGUIFactory>
 
 
@@ -184,7 +184,7 @@ void DebugController::partAdded(KParts::Part* part)
         KTextEditor::MarkInterface *iface = dynamic_cast<KTextEditor::MarkInterface*>(doc);
         if( !iface )
             return;
-        
+
         iface->setMarkPixmap(KTextEditor::MarkInterface::Execution, *executionPointPixmap());
     }
 }
@@ -290,7 +290,7 @@ void DebugController::setupActions()
 
 void DebugController::addSession(IDebugSession* session)
 {
-    kDebug() << session;
+    qCDebug(SHELL) << session;
     Q_ASSERT(session->variableController());
     Q_ASSERT(session->breakpointController());
     Q_ASSERT(session->frameStackModel());
@@ -300,16 +300,16 @@ void DebugController::addSession(IDebugSession* session)
         m_currentSession.data()->stopDebugger();
     }
     m_currentSession = session;
-        
+
     connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)), SLOT(debuggerStateChanged(KDevelop::IDebugSession::DebuggerState)));
     connect(session, SIGNAL(showStepInSource(QUrl,int,QString)), SLOT(showStepInSource(QUrl,int)));
     connect(session, SIGNAL(clearExecutionPoint()), SLOT(clearExecutionPoint()));
     connect(session, SIGNAL(raiseFramestackViews()), SIGNAL(raiseFramestackViews()));
-    
+
     updateDebuggerState(session->state(), session);
-        
+
     emit currentSessionChanged(session);
-    
+
     if((Core::self()->setupFlags() & Core::NoUi)) return;
 
 
@@ -324,7 +324,7 @@ void DebugController::addSession(IDebugSession* session)
 
 void DebugController::clearExecutionPoint()
 {
-    kDebug();
+    qCDebug(SHELL);
     foreach (KDevelop::IDocument* document, KDevelop::ICore::self()->documentController()->openDocuments()) {
         KTextEditor::MarkInterface *iface = dynamic_cast<KTextEditor::MarkInterface*>(document->textDocument());
         if (!iface)
@@ -345,7 +345,7 @@ void DebugController::showStepInSource(const QUrl &url, int lineNum)
     if((Core::self()->setupFlags() & Core::NoUi)) return;
 
     clearExecutionPoint();
-    kDebug() << url << lineNum;
+    qCDebug(SHELL) << url << lineNum;
 
     Q_ASSERT(dynamic_cast<IDebugSession*>(sender()));
     QPair<QUrl,int> openUrl = static_cast<IDebugSession*>(sender())->convertToLocalUrl(qMakePair<QUrl,int>( url, lineNum ));
@@ -370,7 +370,7 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
 {
     Q_ASSERT(dynamic_cast<IDebugSession*>(sender()));
     IDebugSession* session = static_cast<IDebugSession*>(sender());
-    kDebug() << session << state << "current" << m_currentSession.data();
+    qCDebug(SHELL) << session << state << "current" << m_currentSession.data();
     if (session == m_currentSession.data()) {
         updateDebuggerState(state, session);
     }
@@ -398,28 +398,28 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
     Q_UNUSED(session);
     if((Core::self()->setupFlags() & Core::NoUi)) return;
 
-    kDebug() << state;
+    qCDebug(SHELL) << state;
     switch (state) {
         case IDebugSession::StoppedState:
         case IDebugSession::NotStartedState:
         case IDebugSession::StoppingState:
-            kDebug() << "new state: stopped";
+            qCDebug(SHELL) << "new state: stopped";
             stateChanged("stopped");
             //m_restartDebugger->setEnabled(session->restartAvailable());
             break;
         case IDebugSession::StartingState:
         case IDebugSession::PausedState:
-            kDebug() << "new state: paused";
+            qCDebug(SHELL) << "new state: paused";
             stateChanged("paused");
             //m_restartDebugger->setEnabled(session->restartAvailable());
             break;
         case IDebugSession::ActiveState:
-            kDebug() << "new state: active";
+            qCDebug(SHELL) << "new state: active";
             stateChanged("active");
             //m_restartDebugger->setEnabled(false);
             break;
         case IDebugSession::EndedState:
-            kDebug() << "new state: ended";
+            qCDebug(SHELL) << "new state: ended";
             stateChanged("ended");
             //m_restartDebugger->setEnabled(false);
             break;

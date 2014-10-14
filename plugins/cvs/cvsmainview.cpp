@@ -11,11 +11,11 @@
 #include "cvsmainview.h"
 
 #include <KLocalizedString>
-#include <KDebug>
 
 #include "cvsplugin.h"
 #include "cvsjob.h"
 #include "cvsgenericoutputview.h"
+#include "debug.h"
 
 CvsMainView::CvsMainView( CvsPlugin *plugin, QWidget* parent )
  : QWidget( parent ),
@@ -55,7 +55,7 @@ CvsMainView::~CvsMainView()
 
 void CvsMainView::slotAddTab(QWidget * tab, const QString& label)
 {
-    kDebug(9500) << "adding tab:" << label;
+    qCDebug(PLUGIN_CVS) << "adding tab:" << label;
 
     int idx = tabwidget->addTab( tab, label );
     tabwidget->setCurrentIndex(idx);

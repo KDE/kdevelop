@@ -20,7 +20,6 @@
 #define KDEVPLATFORM_MODIFICATIONREVISION_H
 
 #include <QtCore/QDateTime>
-#include <kdebug.h>
 #include <language/languageexport.h>
 #include "../backgroundparser/documentchangetracker.h"
 
@@ -39,13 +38,13 @@ KDEVPLATFORMLANGUAGE_EXPORT extern const int cacheModificationTimesForSeconds;
  * All member-functions except the IndexedString constructor directly act on the two members, without additional logic.
  *
  * Does not need a d-pointer, is only a container-class.
- * 
+ *
  * It is safe to store this class in the disk-mapped internal duchain data structures.
- * 
+ *
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
 {
-  public:	
+  public:
 	///Constructs a ModificationRevision for the file referenced by the given string, which should have been constructed using QUrl::pathOrUrl at some point
 	///This is efficient, because it uses a cache to look up the modification-revision, caching file-system stats for some time
 	static ModificationRevision revisionForFile(const IndexedString& fileName);
@@ -68,7 +67,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
 
 	uint modificationTime;  //On-disk modification-time of a document in time_t format
     int revision;        //MovingInterface revision of a document
-    
+
 private:
   friend class DocumentChangeTracker;
     static void setEditorRevisionForFile(const IndexedString& filename, int revision);
@@ -76,7 +75,5 @@ private:
 };
 
 }
-
-KDEVPLATFORMLANGUAGE_EXPORT kdbgstream& operator<< (kdbgstream& s, const KDevelop::ModificationRevision& rev);
 
 #endif

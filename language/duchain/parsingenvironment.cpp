@@ -23,6 +23,7 @@
 #include "duchain.h"
 #include "duchainlock.h"
 #include "topducontextdata.h"
+#include "util/debug.h"
 #include <language/backgroundparser/parsejob.h>
 
 #define ENSURE_READ_LOCKED   if(indexedTopContext().isValid()) { ENSURE_CHAIN_READ_LOCKED }
@@ -55,7 +56,7 @@ struct PersistentDUChainObject {
     DUChain::self()->unregisterPersistentObject(object);
     delete[] object;
   }
-  
+
   T* object;
 };
 #endif
@@ -64,7 +65,7 @@ REGISTER_DUCHAIN_ITEM(ParsingEnvironmentFile);
 
 TopDUContext::Features ParsingEnvironmentFile::features() const {
   ENSURE_READ_LOCKED
-  
+
   return d_func()->m_features;
 }
 
@@ -94,7 +95,7 @@ void ParsingEnvironmentFile::setTopContext(KDevelop::IndexedTopDUContext context
     return;
   ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_topContext = context;
-  
+
   //Enforce an update of the 'features satisfied' caches
   TopDUContext::Features oldFeatures = features();
   setFeatures(TopDUContext::Empty);
@@ -119,7 +120,7 @@ ParsingEnvironmentFile::ParsingEnvironmentFile(ParsingEnvironmentFileData& data,
 
   d_func_dynamic()->m_url = url;
   d_func_dynamic()->m_modificationTime = ModificationRevision::revisionForFile(url);
-  
+
   addModificationRevision(url, d_func_dynamic()->m_modificationTime);
   Q_ASSERT(d_func()->m_allModificationRevisions.index());
 }
@@ -129,7 +130,7 @@ ParsingEnvironmentFile::ParsingEnvironmentFile(const IndexedString& url) : DUCha
 
   d_func_dynamic()->m_url = url;
   d_func_dynamic()->m_modificationTime = ModificationRevision::revisionForFile(url);
-  
+
   addModificationRevision(url, d_func_dynamic()->m_modificationTime);
   Q_ASSERT(d_func()->m_allModificationRevisions.index());
 }
@@ -178,14 +179,14 @@ QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ParsingEnvironment
   }else{
     imp = TopDUContextDynamicData::loadImports(top.index());
   }
-  
+
   QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ret;
   foreach(const IndexedDUContext &ctx, imp) {
     QExplicitlySharedDataPointer<ParsingEnvironmentFile> item = DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
     if(item) {
       ret << item;
     }else{
-      kDebug() << url().str() << indexedTopContext().index() << ": invalid import" << ctx.topContextIndex();
+      qCDebug(LANGUAGE) << url().str() << indexedTopContext().index() << ": invalid import" << ctx.topContextIndex();
     }
   }
   return ret;
@@ -193,7 +194,7 @@ QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ParsingEnvironment
 
 QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() const {
   ENSURE_READ_LOCKED
-  
+
   QList<IndexedDUContext> imp;
   IndexedTopDUContext top = indexedTopContext();
   if(top.isLoaded()) {
@@ -203,14 +204,14 @@ QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ParsingEnvironment
   }else{
     imp = TopDUContextDynamicData::loadImporters(top.index());
   }
-  
+
   QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ret;
   foreach(const IndexedDUContext &ctx, imp) {
     QExplicitlySharedDataPointer<ParsingEnvironmentFile> f = DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
     if(f)
       ret << f;
     else
-      kDebug() << url().str() << indexedTopContext().index() << ": invalid importer context" << ctx.topContextIndex();
+      qCDebug(LANGUAGE) << url().str() << indexedTopContext().index() << ": invalid importer context" << ctx.topContextIndex();
   }
   return ret;
 }
@@ -223,17 +224,17 @@ inline bool satisfied(TopDUContext::Features features, TopDUContext::Features re
 
 ///Makes sure the file has the correct features attached, and if minimumFeatures contains AllDeclarationsContextsAndUsesForRecursive, then also checks all imports.
 bool ParsingEnvironmentFile::featuresMatch(TopDUContext::Features minimumFeatures, QSet<const ParsingEnvironmentFile*>& checked) const {
-  
+
   if(checked.contains(this))
     return true;
-  
+
   checked.insert(this);
-  
+
   TopDUContext::Features localRequired = (TopDUContext::Features) (minimumFeatures | ParseJob::staticMinimumFeatures(url()));
-  
+
   //Check other 'local' requirements
   localRequired = (TopDUContext::Features)(localRequired & (TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST));
-  
+
   if(!satisfied(features(), localRequired))
     return false;
 
@@ -247,7 +248,7 @@ bool ParsingEnvironmentFile::featuresMatch(TopDUContext::Features minimumFeature
   }else if(minimumFeatures & TopDUContext::Recursive)
   {
     QMutexLocker lock(&featureSatisfactionMutex);
-    
+
     TopDUContext::IndexedRecursiveImports recursiveImportIndices = d_func()->m_importsCache;
     if(recursiveImportIndices.isEmpty()) {
       //Unfortunately, we have to load the top-context
@@ -261,7 +262,7 @@ bool ParsingEnvironmentFile::featuresMatch(TopDUContext::Features minimumFeature
     //Use the features-cache to efficiently check the recursive satisfaction of the features
     if(satisfied(minimumFeatures, TopDUContext::AST) && !((m_staticData->ASTSatisfied & recursiveImportIndices) == recursiveImportIndices))
       return false;
-    
+
     if(satisfied(minimumFeatures, TopDUContext::AllDeclarationsContextsAndUses))
       return (m_staticData->allDeclarationsAndUsesSatisfied & recursiveImportIndices) == recursiveImportIndices;
     else if(satisfied(minimumFeatures, TopDUContext::AllDeclarationsAndContexts))
@@ -271,7 +272,7 @@ bool ParsingEnvironmentFile::featuresMatch(TopDUContext::Features minimumFeature
     else if(satisfied(minimumFeatures, TopDUContext::SimplifiedVisibleDeclarationsAndContexts))
       return (m_staticData->simplifiedVisibleDeclarationsSatisfied & recursiveImportIndices) == recursiveImportIndices;
   }
-  
+
   return true;
 }
 
@@ -280,21 +281,21 @@ void ParsingEnvironmentFile::setFeatures(TopDUContext::Features features) {
     return;
   ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_features = features;
-  
+
   if(indexedTopContext().isValid())
   {
     QMutexLocker lock(&featureSatisfactionMutex);
-    
+
     if(!satisfied(features, TopDUContext::SimplifiedVisibleDeclarationsAndContexts))
       m_staticData->simplifiedVisibleDeclarationsSatisfied.remove(indexedTopContext());
     else
       m_staticData->simplifiedVisibleDeclarationsSatisfied.insert(indexedTopContext());
-    
+
     if(!satisfied(features, TopDUContext::VisibleDeclarationsAndContexts))
       m_staticData->visibleDeclarationsSatisfied.remove(indexedTopContext());
     else
       m_staticData->visibleDeclarationsSatisfied.insert(indexedTopContext());
-    
+
     if(!satisfied(features, TopDUContext::AllDeclarationsAndContexts))
       m_staticData->allDeclarationsSatisfied.remove(indexedTopContext());
     else
@@ -346,16 +347,16 @@ void ParsingEnvironmentFile::setModificationRevision( const KDevelop::Modificati
   bool result = d_func_dynamic()->m_allModificationRevisions.removeModificationRevision(d_func()->m_url, d_func()->m_modificationTime);
   Q_ASSERT( result );
   Q_UNUSED( result );
-  
+
   #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
-  kDebug() <<  id(this) << "setting modification-revision" << rev.toString();
+  qCDebug(LANGUAGE) <<  id(this) << "setting modification-revision" << rev.toString();
   }
 #endif
   d_func_dynamic()->m_modificationTime = rev;
 #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
-  kDebug() <<  id(this) << "new modification-revision" << m_modificationTime;
+  qCDebug(LANGUAGE) <<  id(this) << "new modification-revision" << m_modificationTime;
   }
 #endif
   d_func_dynamic()->m_allModificationRevisions.addModificationRevision(d_func()->m_url, d_func()->m_modificationTime);

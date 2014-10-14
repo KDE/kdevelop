@@ -44,6 +44,7 @@
 #include "navigation/abstractdeclarationnavigationcontext.h"
 #include "navigation/abstractnavigationwidget.h"
 #include "ducontextdynamicdata.h"
+#include "util/debug.h"
 
 ///It is fine to use one global static mutex here
 
@@ -120,7 +121,7 @@ void DUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
   FOREACH_FUNCTION(const LocalIndexedDeclaration& idx, d_func()->m_localDeclarations) {
     auto declaration = idx.data(m_dynamicData->m_topContext);
     if (!declaration) {
-      kWarning() << "child declaration number" << idx.localIndex() << "of" << d_func_dynamic()->m_localDeclarationsSize() << "is invalid";
+      qWarning() << "child declaration number" << idx.localIndex() << "of" << d_func_dynamic()->m_localDeclarationsSize() << "is invalid";
       continue;
     }
     m_dynamicData->m_localDeclarations << declaration;
@@ -196,7 +197,7 @@ inline bool isContextTemporary(uint index) {
 
 void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
 {
-  // The definition may not have its identifier set when it's assigned... 
+  // The definition may not have its identifier set when it's assigned...
   // allow dupes here, TODO catch the error elsewhere
 
   //If this context is temporary, added declarations should be as well, and viceversa
@@ -300,11 +301,11 @@ void DUContextDynamicData::addImportedChildContext( DUContext * context )
 {
 //   ENSURE_CAN_WRITE
   DUContext::Import import(m_context, context);
-  
+
   if(import.isDirect()) {
     //Direct importers are registered directly within the data
     if(d_func_dynamic()->m_importersList().contains(IndexedDUContext(context))) {
-      kDebug(9505) << m_context->scopeIdentifier(true).toString() << "importer added multiple times:" << context->scopeIdentifier(true).toString();
+      qCDebug(LANGUAGE) << m_context->scopeIdentifier(true).toString() << "importer added multiple times:" << context->scopeIdentifier(true).toString();
       return;
     }
 
@@ -320,7 +321,7 @@ void DUContextDynamicData::removeImportedChildContext( DUContext * context )
 {
 //   ENSURE_CAN_WRITE
   DUContext::Import import(m_context, context);
-  
+
   if(import.isDirect()) {
     d_func_dynamic()->m_importersList().removeOne(IndexedDUContext(context));
   }else{
@@ -421,7 +422,7 @@ DUContext::~DUContext( )
       if(d->m_importers()[0].data())
         d->m_importers()[0].data()->removeImportedParentContext(this);
       else {
-        kDebug() << "importer disappeared";
+        qCDebug(LANGUAGE) << "importer disappeared";
         d->m_importersList().removeOne(d->m_importers()[0]);
       }
     }
@@ -565,7 +566,7 @@ struct Checker
       if (alias->aliasedDeclaration().isValid()) {
         declaration = alias->aliasedDeclaration().declaration();
       } else {
-        kDebug() << "lost aliased declaration";
+        qCDebug(LANGUAGE) << "lost aliased declaration";
       }
     }
 
@@ -657,10 +658,10 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
                                           SearchFlags flags, uint depth ) const
 {
   if (depth > maxParentDepth) {
-    kDebug() << "maximum depth reached in" << scopeIdentifier(true);
+    qCDebug(LANGUAGE) << "maximum depth reached in" << scopeIdentifier(true);
     return false;
   }
-  
+
   DUCHAIN_D(DUContext);
   if (d_func()->m_contextType != Namespace) {
     // If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
@@ -702,7 +703,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
         if (!context) {
           continue;
         } else if (context == this) {
-          kDebug() << "resolved self as import:" << scopeIdentifier(true);
+          qCDebug(LANGUAGE) << "resolved self as import:" << scopeIdentifier(true);
           continue;
         }
 
@@ -745,14 +746,14 @@ QList< QualifiedIdentifier > DUContext::fullyApplyAliases(const QualifiedIdentif
     SearchItem::PtrList aliasedIdentifiers;
     current->applyAliases(identifiers, aliasedIdentifiers, CursorInRevision::invalid(), true, false);
     current->applyUpwardsAliases(identifiers, source);
-    
+
     current = current->parentContext();
   }
-  
+
   QList<QualifiedIdentifier> ret;
   FOREACH_ARRAY(const SearchItem::Ptr& item, identifiers)
     ret += item->toList();
-  
+
   return ret;
 }
 
@@ -808,11 +809,11 @@ void DUContext::addImportedParentContext( DUContext * context, const CursorInRev
   ENSURE_CAN_WRITE
 
   if(context == this) {
-    kDebug() << "Tried to import self";
+    qCDebug(LANGUAGE) << "Tried to import self";
     return;
   }
   if(!context) {
-    kDebug() << "Tried to import invalid context";
+    qCDebug(LANGUAGE) << "Tried to import invalid context";
     return;
   }
 
@@ -851,10 +852,10 @@ KDevVarLengthArray<IndexedDUContext> DUContext::indexedImporters() const
   KDevVarLengthArray<IndexedDUContext> ret;
   if(owner())
     ret = Importers::self().importers(owner()->id()); //Add indirect importers to the list
-  
+
   FOREACH_FUNCTION(const IndexedDUContext& ctx, d_func()->m_importers)
     ret.append(ctx);
-   
+
   return ret;
 }
 
@@ -865,7 +866,7 @@ QVector<DUContext*> DUContext::importers() const
   QVector<DUContext*> ret;
   FOREACH_FUNCTION(const IndexedDUContext& ctx, d_func()->m_importers)
     ret << ctx.context();
-  
+
   if(owner()) {
     //Add indirect importers to the list
     KDevVarLengthArray<IndexedDUContext> indirect = Importers::self().importers(owner()->id());
@@ -944,14 +945,14 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
   ENSURE_CAN_READ
 
   if((currentDepth > 300 && currentDepth < 1000) || currentDepth > 1300) {
-    kDebug() << "too much depth";
+    qCDebug(LANGUAGE) << "too much depth";
     return;
   }
   DUCHAIN_D(DUContext);
-  
+
     if(hadContexts.contains(this) && !searchInParents)
       return;
-  
+
     if(!hadContexts.contains(this)) {
       hadContexts[this] = true;
 
@@ -981,7 +982,7 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
           break;
 
         if(context == this) {
-          kDebug() << "resolved self as import:" << scopeIdentifier(true);
+          qCDebug(LANGUAGE) << "resolved self as import:" << scopeIdentifier(true);
           continue;
         }
 
@@ -992,7 +993,7 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
         context->mergeDeclarationsInternal(definitions, CursorInRevision::invalid(), hadContexts, source, searchInParents && context->shouldSearchInParent(InImportedParentContext) &&  context->parentContext()->type() == DUContext::Helper, currentDepth+1);
       }
     }
-    
+
   ///Only respect the position if the parent-context is not a class(@todo this is language-dependent)
   if (parentContext() && searchInParents )
     parentContext()->mergeDeclarationsInternal(definitions, parentContext()->type() == DUContext::Class ? parentContext()->range().end : position, hadContexts, source, searchInParents, currentDepth+1);
@@ -1184,7 +1185,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
 
   DeclarationList imports;
   findLocalDeclarationsInternal(globalIndexedImportIdentifier(), position, AbstractType::Ptr(), imports, topContext(), DUContext::NoFiltering);
-  
+
   if(imports.isEmpty() && onlyImports) {
     identifiers = baseIdentifiers;
     return;
@@ -1206,16 +1207,16 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
             NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
             identifiers.append( SearchItem::Ptr( new SearchItem( alias->importIdentifier(), identifier ) ) ) ;
           }else{
-            kDebug() << "Declaration with namespace alias identifier has the wrong type" << importDecl->url().str() << importDecl->range().castToSimpleRange();
+            qCDebug(LANGUAGE) << "Declaration with namespace alias identifier has the wrong type" << importDecl->url().str() << importDecl->range().castToSimpleRange();
           }
         }
       }
 
       if( !identifier->isEmpty() && (identifier->hasNext() || canBeNamespace) ) {
-        
+
         DeclarationList aliases;
         findLocalDeclarationsInternal(identifier->identifier, position, AbstractType::Ptr(), imports, 0, DUContext::NoFiltering);
-        
+
         if(!aliases.isEmpty()) {
           //The first part of the identifier has been found as a namespace-alias.
           //In c++, we only need the first alias. However, just to be correct, follow them all for now.
@@ -1336,11 +1337,11 @@ void DUContext::setUseDeclaration(int useNumber, int declarationIndex)
 DUContext * DUContext::findContextAt(const CursorInRevision & position, bool includeRightBorder) const
 {
   ENSURE_CAN_READ
-  
-//   kDebug() << "searchign" << position << "in:" << scopeIdentifier(true).toString() << range() << includeRightBorder;
+
+//   qCDebug(LANGUAGE) << "searchign" << position << "in:" << scopeIdentifier(true).toString() << range() << includeRightBorder;
 
   if (!range().contains(position) && (!includeRightBorder || range().end != position)) {
-//     kDebug() << "mismatch";
+//     qCDebug(LANGUAGE) << "mismatch";
     return 0;
   }
 
@@ -1633,7 +1634,7 @@ DUContext* DUContext::Import::context(const TopDUContext* topContext, bool insta
       if (functionDecl->internalFunctionContext()) {
         return functionDecl->internalFunctionContext();
       } else {
-        kWarning() << "Import of function declaration without internal function context encountered!";
+        qWarning() << "Import of function declaration without internal function context encountered!";
       }
     }
     if(decl)

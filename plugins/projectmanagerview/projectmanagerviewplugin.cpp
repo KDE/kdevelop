@@ -26,7 +26,6 @@
 #include <QClipboard>
 #include <QUrl>
 
-#include <kdebug.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kaboutdata.h>
@@ -52,9 +51,11 @@
 #include <interfaces/iselectioncontroller.h>
 
 #include "projectmanagerview.h"
+#include "debug.h"
 
 using namespace KDevelop;
 
+Q_LOGGING_CATEGORY(PLUGIN_PROJECTMANAGERVIEW, "kdevplatform.plugins.projectmanagerview")
 K_PLUGIN_FACTORY_WITH_JSON(ProjectManagerFactory, "kdevprojectmanagerview.json", registerPlugin<ProjectManagerViewPlugin>();)
 
 class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
@@ -186,7 +187,7 @@ ProjectManagerViewPlugin::~ProjectManagerViewPlugin()
 
 void ProjectManagerViewPlugin::unload()
 {
-    kDebug() << "unloading manager view";
+    qCDebug(PLUGIN_PROJECTMANAGERVIEW) << "unloading manager view";
     core()->uiController()->removeToolView(d->factory);
 }
 
@@ -219,7 +220,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     //needsCreateFolder if there is one item and it's a folder
     needsCreateFolder &= (items.count() == 1) && (items.first()->folder());
     needsPaste = needsCreateFolder;
-    
+
     foreach( ProjectBaseItem* item, items ) {
         d->ctxProjectItemList << item->index();
         //needsBuildItems if items are limited to targets and buildfolders
@@ -437,7 +438,7 @@ void ProjectManagerViewPlugin::runTargetsFromContextMenu( )
         KDevelop::ProjectExecutableTargetItem* t=item->executable();
         if(t)
         {
-            kDebug() << "Running target: " << t->text() << t->builtUrl();
+            qCDebug(PLUGIN_PROJECTMANAGERVIEW) << "Running target: " << t->text() << t->builtUrl();
         }
     }
 }
@@ -662,7 +663,7 @@ void ProjectManagerViewPlugin::copyFromContextMenu()
             urls << item->path().toUrl();
         }
     }
-    kDebug() << urls;
+    qCDebug(PLUGIN_PROJECTMANAGERVIEW) << urls;
     if (!urls.isEmpty()) {
         QMimeData* data = new QMimeData;
         data->setUrls(urls);
@@ -681,7 +682,7 @@ void ProjectManagerViewPlugin::pasteFromContextMenu()
         return; //do nothing if the target is not a directory
 
     const QMimeData* data = qApp->clipboard()->mimeData();
-    kDebug() << data->urls();
+    qCDebug(PLUGIN_PROJECTMANAGERVIEW) << data->urls();
     const Path::List paths = toPathList(data->urls());
     bool success = destItem->project()->projectFileManager()->copyFilesAndFolders(paths, destItem->folder());
 

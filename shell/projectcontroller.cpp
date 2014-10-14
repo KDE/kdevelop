@@ -80,6 +80,7 @@ Boston, MA 02110-1301, USA.
 #include <kio/job.h>
 #include "sessioncontroller.h"
 #include "session.h"
+#include "debug.h"
 #include <QDBusConnection>
 #include <QApplication>
 #include <vcs/models/projectchangesmodel.h>
@@ -137,7 +138,7 @@ public:
         //the plugin will show up on all projects settings dialogs.
 
         QStringList pluginsForPrj = findPluginsForProject( proj );
-        kDebug() << "Using pluginlist:" << pluginsForPrj;
+        qCDebug(SHELL) << "Using pluginlist:" << pluginsForPrj;
         pluginsForPrj << "kdevplatformproject"; // for project-wide env settings.
         KSettings::Dialog cfgDlg( pluginsForPrj, m_core->uiController()->activeMainWindow() );
         cfgDlg.setKCMArguments( QStringList()
@@ -231,7 +232,7 @@ public:
         m_openConfig->setEnabled( itemctx && itemctx->items().count() == 1 );
         m_closeProject->setEnabled( itemctx && itemctx->items().count() > 0 );
     }
-    
+
     void openProjectConfig()
     {
         ProjectItemContext* ctx = dynamic_cast<ProjectItemContext*>( Core::self()->selectionController()->currentSelection() );
@@ -240,7 +241,7 @@ public:
             q->configureProject( ctx->items().at(0)->project() );
         }
     }
-    
+
     void closeSelectedProjects()
     {
         ProjectItemContext* ctx =  dynamic_cast<ProjectItemContext*>( Core::self()->selectionController()->currentSelection() );
@@ -256,9 +257,9 @@ public:
                 q->closeProject( project );
             }
         }
-    
+
     }
-    
+
     void importProject(const QUrl& url_)
     {
         QUrl url(url_);
@@ -278,9 +279,9 @@ public:
 
         if ( m_currentlyOpening.contains(url))
         {
-            kDebug() << "Already opening " << url << ". Aborting.";
-            KPassivePopup::message( i18n( "Project already being opened"), 
-                                    i18n( "Already opening %1, not opening again", 
+            qCDebug(SHELL) << "Already opening " << url << ". Aborting.";
+            KPassivePopup::message( i18n( "Project already being opened"),
+                                    i18n( "Already opening %1, not opening again",
                                         url.toDisplayString(QUrl::PreferLocalFile) ),
                                     m_core->uiController()->activeMainWindow() );
             return;
@@ -337,7 +338,7 @@ bool writeNewProjectFile( const QString& localConfigFile, const QString& name, c
 {
     KSharedConfig::Ptr cfg = KSharedConfig::openConfig( localConfigFile, KConfig::SimpleConfig );
     if (!cfg->isConfigWritable(true)) {
-        kDebug() << "can't write to configfile";
+        qCDebug(SHELL) << "can't write to configfile";
         return false;
     }
     KConfigGroup grp = cfg->group( "Project" );
@@ -367,7 +368,7 @@ bool writeProjectSettingsToConfigFile(const QUrl& projectFileUrl, const QString&
 
 bool projectFileExists( const QUrl& u )
 {
-    if( u.isLocalFile() ) 
+    if( u.isLocalFile() )
     {
         return QFileInfo( u.toLocalFile() ).exists();
     } else
@@ -393,7 +394,7 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
         return QUrl();
 
     QUrl projectFileUrl = dlg.projectFileUrl();
-    kDebug() << "selected project:" << projectFileUrl << dlg.projectName() << dlg.projectManager();
+    qCDebug(SHELL) << "selected project:" << projectFileUrl << dlg.projectName() << dlg.projectManager();
 
     // controls if existing project file should be saved
     bool writeProjectConfigToFile = true;
@@ -501,7 +502,7 @@ void ProjectController::setupActions()
                                                     "will be created." ) );
     action->setIcon(QIcon::fromTheme("project-open"));
     connect( action, SIGNAL(triggered(bool)), SLOT(openProject()) );
-    
+
     d->m_fetchProject = action = ac->addAction( "project_fetch" );
     action->setText(i18nc( "@action", "Fetch Project..." ) );
     action->setIcon( QIcon::fromTheme( "download" ) );
@@ -530,7 +531,7 @@ void ProjectController::setupActions()
     action->setText( i18n( "Open Configuration..." ) );
     action->setIcon( QIcon::fromTheme("configure") );
     action->setEnabled( false );
-    
+
     action = ac->addAction( "commit_current_project" );
     connect( action, SIGNAL(triggered(bool)), SLOT(commitCurrentProject()) );
     action->setText( i18n( "Commit Current Project..." ) );
@@ -548,7 +549,7 @@ void ProjectController::setupActions()
     d->m_recentAction->setText( i18n( "Open Recent Project" ) );
     d->m_recentAction->setWhatsThis( i18nc( "@info:whatsthis", "Opens recently opened project." ) );
     d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
-    
+
     QAction* openProjectForFileAction = new QAction( this );
     ac->addAction("project_open_for_file", openProjectForFileAction);
     openProjectForFileAction->setText(i18n("Open Project for Current File"));
@@ -605,7 +606,7 @@ void ProjectController::initialize()
     QList<QUrl> openProjects = group.readEntry( "Open Projects", QList<QUrl>() );
 
     QMetaObject::invokeMethod(this, "openProjects", Qt::QueuedConnection, Q_ARG(QList<QUrl>, openProjects));
-    
+
     connect( Core::self()->selectionController(), SIGNAL(selectionChanged(KDevelop::Context*)),
              SLOT(updateActionStates(KDevelop::Context*)) );
 }
@@ -652,7 +653,7 @@ void ProjectController::eventuallyOpenProjectFile(KIO::Job* _job, KIO::UDSEntryL
             break;
         if(!entry.isDir()) {
             QString name = entry.stringValue( KIO::UDSEntry::UDS_NAME );
-            
+
             if(name.endsWith(".kdev4")) {
                 //We have found a project-file, open it
                 openProject(Path(Path(job->url()), name).toUrl());
@@ -681,15 +682,15 @@ void ProjectController::openProjectForUrl(const QUrl& sourceUrl) {
     Q_ASSERT(!sourceUrl.isRelative());
     QUrl dirUrl = sourceUrl.adjusted(QUrl::RemoveFilename);
     QUrl testAt = dirUrl;
-    
+
     d->m_foundProjectFile = false;
-    
+
     while(!testAt.path().isEmpty()) {
         QUrl testProjectFile(testAt);
         KIO::ListJob* job = KIO::listDir(testAt);
-        
+
         connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)), SLOT(eventuallyOpenProjectFile(KIO::Job*,KIO::UDSEntryList)));
-        
+
         KIO::NetAccess::synchronousRun(job, ICore::self()->uiController()->activeMainWindow());
         if(d->m_foundProjectFile) {
             //Fine! We have directly opened the project
@@ -700,9 +701,9 @@ void ProjectController::openProjectForUrl(const QUrl& sourceUrl) {
         if(oldTest == testAt)
             break;
     }
-    
+
     QUrl askForOpen = d->dialog->askProjectConfigLocation(false, dirUrl);
-    
+
     if(askForOpen.isValid())
         openProject(askForOpen);
 }
@@ -795,7 +796,7 @@ void ProjectController::fetchProject()
 {
     QUrl url = d->dialog->askProjectConfigLocation(true);
 
-    if ( !url.isEmpty() )    
+    if ( !url.isEmpty() )
     {
         d->importProject(url);
     }
@@ -805,7 +806,7 @@ void ProjectController::projectImportingFinished( IProject* project )
 {
     if( !project )
     {
-        kWarning() << "OOOPS: 0-pointer project";
+        qWarning() << "OOOPS: 0-pointer project";
         return;
     }
     IPlugin *managerPlugin = project->managerPlugin();
@@ -855,7 +856,7 @@ void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
         if( _plugInfo.isValid() )
         {
             QString _plugName = _plugInfo.pluginName();
-            kDebug() << "about to unloading :" << _plugName;
+            qCDebug(SHELL) << "about to unloading :" << _plugName;
             Core::self()->pluginController()->unloadPlugin( _plugName );
         }
     }
@@ -891,9 +892,9 @@ void ProjectController::closeProject(IProject* proj_)
     d->m_currentlyOpening.removeAll(proj_->projectFileUrl());
 
     Project* proj = dynamic_cast<KDevelop::Project*>( proj_ );
-    if( !proj ) 
+    if( !proj )
     {
-        kWarning() << "Unknown Project subclass found!";
+        qWarning() << "Unknown Project subclass found!";
         return;
     }
     d->m_projects.removeAll(proj);
@@ -990,7 +991,7 @@ QUrl ProjectController::projectsBaseDirectory() const
 QString ProjectController::prettyFilePath(const QUrl& url, FormattingOptions format) const
 {
     IProject* project = Core::self()->projectController()->findProjectForUrl(url);
-    
+
     if(!project)
     {
         // Find a project with the correct base directory at least
@@ -1003,7 +1004,7 @@ QString ProjectController::prettyFilePath(const QUrl& url, FormattingOptions for
             }
         }
     }
-    
+
     Path parent = Path(url).parent();
     QString prefixText;
     if (project) {
@@ -1036,7 +1037,7 @@ QString ProjectController::prettyFileName(const QUrl& url, FormattingOptions for
             return project->name();
         }
     }
-    
+
     QString prefixText = prettyFilePath( url, format );
     if (format == FormatHtml) {
         return prefixText + "<b>" + url.fileName() + "</b>";
@@ -1066,7 +1067,7 @@ ProjectChangesModel* ProjectController::changesModel()
 {
     if(!d->m_changesModel)
         d->m_changesModel=new ProjectChangesModel(this);
-    
+
     return d->m_changesModel;
 }
 
@@ -1075,14 +1076,14 @@ void ProjectController::commitCurrentProject()
     IDocument* doc=ICore::self()->documentController()->activeDocument();
     if(!doc)
         return;
-    
+
     QUrl url=doc->url();
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
-    
+
     if(project && project->versionControlPlugin()) {
         IPlugin* plugin = project->versionControlPlugin();
         IBasicVersionControl* vcs=plugin->extension<IBasicVersionControl>();
-        
+
         if(vcs) {
             ICore::self()->documentController()->saveAllDocuments(KDevelop::IDocument::Silent);
 
@@ -1115,7 +1116,7 @@ QString ProjectController::mapSourceBuild( const QString& path_, bool reverse, b
                 buildDirProject = proj;
         }
     }
-    
+
     if(!reverse)
     {
         // Map-target is the build directory
@@ -1123,7 +1124,7 @@ QString ProjectController::mapSourceBuild( const QString& path_, bool reverse, b
         {
             // We're in the source, map into the build directory
             QString relativePath = sourceDirProject->path().relativePath(path);
-            
+
             Path build = sourceDirProject->buildSystemManager()->buildDirectory(sourceDirProject->projectItem());
             build.addPath(relativePath);
             while(!QFile::exists(build.path()))
@@ -1141,7 +1142,7 @@ QString ProjectController::mapSourceBuild( const QString& path_, bool reverse, b
             Path build = buildDirProject->buildSystemManager()->buildDirectory(buildDirProject->projectItem());
             // We're in the source, map into the build directory
             QString relativePath = build.relativePath(path);
-            
+
             Path source = buildDirProject->path();
             source.addPath(relativePath);
             while(!QFile::exists(source.path()))

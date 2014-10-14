@@ -26,7 +26,6 @@
 #include <QListWidget>
 #include <QToolBar>
 
-#include <kdebug.h>
 #include <kdialog.h>
 #include <KLocalizedString>
 #include <kmenubar.h>
@@ -56,6 +55,7 @@
 #include <ktexteditor/view.h>
 #include "workingsetcontroller.h"
 #include "workingsets/workingset.h"
+#include "debug.h"
 
 namespace KDevelop {
 
@@ -99,13 +99,13 @@ public:
         desired.clear();
         desired["org.kdevelop.ProjectsView"] = Sublime::Left;
         desired["org.kdevelop.PatchReview"] = Sublime::Bottom;
-        
+
         a = new Sublime::Area(m_controller, "review", i18n("Review"));
         a->setDesiredToolViews(desired);
         a->setIconName("applications-engineering");
         m_controller->addDefaultArea(a);
 
-        if(!(Core::self()->setupFlags() & Core::NoUi)) 
+        if(!(Core::self()->setupFlags() & Core::NoUi))
         {
             defaultMainWindow = new MainWindow(m_controller);
             m_controller->addMainWindow(defaultMainWindow);
@@ -292,20 +292,20 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
             return view->widget();
         }
     }
-    
+
     QWidget* ret = 0;
-    
+
     if(flags & Create)
     {
         if(!d->factoryDocuments.contains(factory))
             d->factoryDocuments[factory] = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
-        
+
         Sublime::ToolDocument *doc = d->factoryDocuments[factory];
 
         Sublime::View* view = addToolViewToArea(factory, doc, activeArea());
         if(view)
             ret = view->widget();
-        
+
         if(flags & Raise)
             findToolView(name, factory, Raise);
     }
@@ -332,7 +332,7 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory)
     if (!factory)
         return;
 
-    kDebug() ;
+    qCDebug(SHELL) ;
     Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
 
@@ -358,7 +358,7 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
     if (!factory)
         return;
 
-    kDebug() ;
+    qCDebug(SHELL) ;
     //delete the tooldocument
     Sublime::ToolDocument *doc = d->factoryDocuments[factory];
 
@@ -457,7 +457,7 @@ void UiController::showSettingsDialog()
             blacklist << info.pluginName();
         }
     }
-    kDebug() << "blacklist" << blacklist;
+    qCDebug(SHELL) << "blacklist" << blacklist;
     KSettings::Dialog cfgDlg( QStringList() << "kdevplatform",
                                         activeMainWindow() );
     cfgDlg.setMinimumSize( 550, 300 );
@@ -548,7 +548,7 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
     {
         KConfigGroup mainWindowConfig(&uiConfig,
                                       QString("Main Window %1").arg(w));
-        
+
         Sublime::MainWindow *mw = mainWindows()[w];
 
         /* We loop over default areas.  This means that if
@@ -564,14 +564,14 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
 
             KConfigGroup areaConfig(&mainWindowConfig, "Area " + type);
 
-            kDebug() << "Trying to restore area " << type;
+            qCDebug(SHELL) << "Trying to restore area " << type;
 
             /* This is just an easy check that a group exists, to
                avoid "restoring" area from empty config group, wiping
                away programmatically installed defaults.  */
             if (areaConfig.readEntry("id", "") == type)
             {
-                kDebug() << "Restoring area " << type;
+                qCDebug(SHELL) << "Restoring area " << type;
                 loadArea(area, areaConfig);
             }
 
@@ -667,7 +667,7 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
     Sublime::View* view = d->activeSublimeWindow->activeView();
     if( !view )
     {
-        kDebug() << "no active view in mainwindow";
+        qCDebug(SHELL) << "no active view in mainwindow";
         return;
     }
 

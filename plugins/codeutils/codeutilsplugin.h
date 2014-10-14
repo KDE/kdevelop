@@ -24,6 +24,8 @@
 #include <interfaces/contextmenuextension.h>
 
 #include <QtCore/QVariant>
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(PLUGIN_CODEUTILS)
 
 class CodeUtilsPlugin : public KDevelop::IPlugin
 {

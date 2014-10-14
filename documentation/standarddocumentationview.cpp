@@ -20,7 +20,7 @@
 
 #include "standarddocumentationview.h"
 #include "documentationfindwidget.h"
-#include <KDebug>
+#include "debug.h"
 
 using namespace KDevelop;
 
@@ -61,5 +61,5 @@ void StandardDocumentationView::update()
     if(m_doc)
         setHtml(m_doc->description());
     else
-        kDebug() << "calling StandardDocumentationView::update() on an unitialized view";
+        qCDebug(DOCUMENTATION) << "calling StandardDocumentationView::update() on an unitialized view";
 }

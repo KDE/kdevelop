@@ -24,7 +24,6 @@
 
 #include "ibreakpointcontroller.h"
 
-#include <KDebug>          // remove later
 #include <KNotification>
 #include <KLocalizedString>
 #include <KParts/MainWindow>
@@ -35,6 +34,7 @@
 #include "../../interfaces/idebugcontroller.h"
 #include "../breakpoint/breakpoint.h"
 #include "../../interfaces/iuicontroller.h"
+#include "util/debug.h"
 #include <KComponentData>
 
 namespace KDevelop {
@@ -111,12 +111,12 @@ void IBreakpointController::breakpointChanged(KDevelop::Breakpoint* breakpoint, 
         }
     }
 
-    kDebug() << column << m_dirty;
+    qCDebug(DEBUGGER) << column << m_dirty;
 }
 
 void IBreakpointController::breakpointDeleted(KDevelop::Breakpoint* breakpoint)
 {
-    kDebug() << breakpoint;
+    qCDebug(DEBUGGER) << breakpoint;
     sendMaybe(breakpoint);
 }
 
@@ -173,7 +173,7 @@ void IBreakpointController::error(Breakpoint* breakpoint, const QString &msg, Br
 
 void IBreakpointController::hit(KDevelop::Breakpoint* breakpoint, const QString &msg)
 {
-    kDebug() << breakpoint;
+    qCDebug(DEBUGGER) << breakpoint;
     breakpointModel()->hitEmit(breakpoint);
 
     KNotification* ev = 0;

@@ -24,7 +24,6 @@
 #include <QMutexLocker>
 
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <ThreadWeaver.h>
 
 #include "kdevsvncpp/client.hpp"
@@ -59,11 +58,11 @@ void SvnInternalCheckoutJob::run()
         QUrl destdir = QUrl::fromLocalFile(QFileInfo( destination().adjusted(QUrl::StripTrailingSlash | QUrl::RemoveFilename).toLocalFile() ).canonicalFilePath());
         destdir = destdir.resolved( destination().fileName() );
         QByteArray destba = destdir.toLocalFile().toUtf8();
-        kDebug(9510) << srcba << destba << recurse;
+        qCDebug(PLUGIN_SVN) << srcba << destba << recurse;
         cli.checkout( srcba.data(), svn::Path( destba.data() ), svn::Revision::HEAD, recurse );
     }catch( svn::ClientException ce )
     {
-        kDebug(9510) << "Exception while checking out: "
+        qCDebug(PLUGIN_SVN) << "Exception while checking out: "
                 << source().repositoryServer()
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
@@ -117,7 +116,7 @@ void SvnCheckoutJob::start()
         internalJobFailed( m_job );
         setErrorText( i18n( "Not enough information to checkout" ) );
     } else {
-        kDebug(9510) << "checking out: " << m_job->source().repositoryServer();
+        qCDebug(PLUGIN_SVN) << "checking out: " << m_job->source().repositoryServer();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
 }

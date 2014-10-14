@@ -10,6 +10,7 @@
 ***************************************************************************/
 
 #include "kdevkonsoleview.h"
+#include "debug.h"
 
 #include <QDir>
 #include <QLabel>
@@ -22,7 +23,6 @@
 
 #include <kurl.h>
 #include <kicon.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <klibloader.h>
 #include <kde_terminal_interface.h>
@@ -71,10 +71,10 @@ public:
 
             interface->showShellInDir( QString() );
             interface->sendInput( "kdevelop! -s \"" + KDevelop::ICore::self()->activeSession()->id().toString() + "\"\n" );
-            
+
         }else
         {
-            kDebug() << "Couldn't create KParts::ReadOnlyPart from konsole factory!";
+            qCDebug(PLUGIN_KONSOLE) << "Couldn't create KParts::ReadOnlyPart from konsole factory!";
         }
     }
 

@@ -76,6 +76,7 @@ set( envsettings_cfg_SRCS
   environmentwidget.cpp
   environmentgroupmodel.cpp
   environmentpreferences.cpp
+  ../debug.cpp
 )
 
 set( envsettings_cfg_UI
@@ -90,6 +91,7 @@ target_link_libraries( kcm_kdev_envsettings KF5::KCMUtils KDev::Shell KDev::Util
 set(kcm_kdevsourceformattersettings_SRCS
     editstyledialog.cpp
     sourceformattersettings.cpp
+    ../debug.cpp
 )
 
 set(kcm_kdevsourceformattersettings_UI
@@ -105,13 +107,13 @@ target_link_libraries(kcm_kdevsourceformattersettings
 
 ########## Install TARGETS/Files
 
-install( TARGETS 
-        kcm_kdev_projectsettings 
+install( TARGETS
+        kcm_kdev_projectsettings
         kcm_kdev_ccsettings
         kcm_kdev_bgsettings
         kcm_kdev_pluginsettings
-        kcm_kdev_envsettings 
-        kcm_kdev_uisettings 
+        kcm_kdev_envsettings
+        kcm_kdev_uisettings
         kcm_kdevsourceformattersettings
         DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
 
@@ -130,7 +132,7 @@ kcoreaddons_desktop_to_json(kcm_kdev_ccsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_
 configure_file(kcm_kdevsourceformattersettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevsourceformattersettings.desktop)
 kcoreaddons_desktop_to_json(kcm_kdevsourceformattersettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevsourceformattersettings.desktop)
 
-install( FILES 
+install( FILES
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_uisettings.desktop
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_pluginsettings.desktop

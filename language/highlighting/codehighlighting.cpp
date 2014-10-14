@@ -29,6 +29,7 @@
 #include "../../interfaces/ilanguagecontroller.h"
 #include "../../interfaces/icompletionsettings.h"
 #include "../../util/foregroundlock.h"
+#include "util/debug.h"
 
 #include "../duchain/declaration.h"
 #include "../duchain/types/functiontype.h"
@@ -172,10 +173,10 @@ void CodeHighlighting::highlightDUChain(ReferencedTopDUContext context)
 
   qint64 revision = context->parsingEnvironmentFile()->modificationRevision().revision;
 
-  kDebug() << "highlighting du chain" << url.toUrl();
+  qCDebug(LANGUAGE) << "highlighting du chain" << url.toUrl();
 
   if ( !m_localColorization && !m_globalColorization ) {
-    kDebug() << "highlighting disabled";
+    qCDebug(LANGUAGE) << "highlighting disabled";
     QMetaObject::invokeMethod(this, "clearHighlightingForDocument", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, url));
     return;
   }
@@ -478,7 +479,7 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
 
   if(!tracker)
   {
-    kDebug() << "no document found for the planned highlighting of" << highlighting->m_document.str();
+    qCDebug(LANGUAGE) << "no document found for the planned highlighting of" << highlighting->m_document.str();
     delete highlighting;
     return;
   }

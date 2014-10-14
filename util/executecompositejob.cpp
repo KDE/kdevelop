@@ -18,8 +18,7 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "executecompositejob.h"
-
-#include <kdebug.h>
+#include "debug.h"
 
 namespace KDevelop
 {
@@ -35,7 +34,7 @@ ExecuteCompositeJob::ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jo
     d->m_killing = false;
     setCapabilities(Killable);
 
-    qDebug() << "execute composite" << jobs;
+    qCDebug(UTIL) << "execute composite" << jobs;
     foreach(KJob* job, jobs) {
         addSubjob(job);
         if (objectName().isEmpty()) setObjectName(job->objectName());
@@ -51,7 +50,7 @@ void ExecuteCompositeJob::start()
 {
     if(hasSubjobs()) {
         auto first = subjobs().first();
-        kDebug() << "starting:" << first;
+        qCDebug(UTIL) << "starting:" << first;
         first->start();
     } else {
         emitResult();
@@ -60,17 +59,17 @@ void ExecuteCompositeJob::start()
 
 void ExecuteCompositeJob::slotResult(KJob* job)
 {
-    kDebug() << "finished: "<< job;
+    qCDebug(UTIL) << "finished: "<< job;
     if (job->error()) {
-        kDebug() << "JOB ERROR:" << job->error() << job->errorString();
+        qCDebug(UTIL) << "JOB ERROR:" << job->error() << job->errorString();
     }
 
     KCompositeJob::slotResult(job);
 
     if (hasSubjobs() && !error() && !d->m_killing) {
-        kDebug() << "remaining: " << subjobs().count() << subjobs();
+        qCDebug(UTIL) << "remaining: " << subjobs().count() << subjobs();
         KJob* nextJob = subjobs().first();
-        kDebug() << "starting:" << nextJob;
+        qCDebug(UTIL) << "starting:" << nextJob;
         nextJob->start();
     } else {
         setError(job->error());

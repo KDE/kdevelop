@@ -16,7 +16,6 @@
 #include <kpassworddialog.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
-#include <kdebug.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
@@ -55,7 +54,7 @@ KDevelop::VcsJob::JobStatus SvnJobBase::status() const
 
 void SvnJobBase::askForLogin( const QString& realm )
 {
-    kDebug( 9510 ) << "login";
+    qCDebug(PLUGIN_SVN) << "login";
     KPasswordDialog dlg( 0, KPasswordDialog::ShowUsernameLine | KPasswordDialog::ShowKeepPassword );
     dlg.setPrompt( i18n("Enter Login for: %1", realm ) );
     dlg.exec();
@@ -73,7 +72,7 @@ void SvnJobBase::showNotification( const QString& path, const QString& msg )
 
 void SvnJobBase::askForCommitMessage()
 {
-    kDebug( 9510 ) << "commit msg";
+    qCDebug(PLUGIN_SVN) << "commit msg";
     internalJob()->m_guiSemaphore.release( 1 );
 }
 
@@ -83,12 +82,12 @@ void SvnJobBase::askForSslServerTrust( const QStringList& failures, const QStrin
                                        const QString& realm )
 {
 
-    kDebug( 9510 ) << "servertrust";
+    qCDebug(PLUGIN_SVN) << "servertrust";
     SvnSSLTrustDialog dlg;
     dlg.setCertInfos( host, print, from, until, issuer, realm, failures );
     if( dlg.exec() == QDialog::Accepted )
     {
-        kDebug(9510) << "accepted with:" << dlg.useTemporarily();
+        qCDebug(PLUGIN_SVN) << "accepted with:" << dlg.useTemporarily();
         if( dlg.useTemporarily() )
         {
             internalJob()->m_trustAnswer = svn::ContextListener::ACCEPT_TEMPORARILY;
@@ -98,7 +97,7 @@ void SvnJobBase::askForSslServerTrust( const QStringList& failures, const QStrin
         }
     }else
     {
-        kDebug(9510) << "didn't accept";
+        qCDebug(PLUGIN_SVN) << "didn't accept";
         internalJob()->m_trustAnswer = svn::ContextListener::DONT_ACCEPT;
     }
     internalJob()->m_guiSemaphore.release( 1 );
@@ -107,13 +106,13 @@ void SvnJobBase::askForSslServerTrust( const QStringList& failures, const QStrin
 void SvnJobBase::askForSslClientCert( const QString& realm )
 {
     KMessageBox::information( 0, realm );
-    kDebug( 9510 ) << "clientrust";
+    qCDebug(PLUGIN_SVN) << "clientrust";
     internalJob()->m_guiSemaphore.release( 1 );
 }
 
 void SvnJobBase::askForSslClientCertPassword( const QString& )
 {
-    kDebug( 9510 ) << "clientpw";
+    qCDebug(PLUGIN_SVN) << "clientpw";
     internalJob()->m_guiSemaphore.release( 1 );
 }
 
@@ -135,7 +134,7 @@ void SvnJobBase::internalJobDone( ThreadWeaver::Job* job )
         // during that the internalJobDone gets called and triggers
         // deleteLater and eventually deletes this job
         // => havoc
-        // 
+        //
         // catching this state here works but I don't like it personally...
         return;
     }
@@ -164,7 +163,7 @@ void SvnJobBase::internalJobFailed( ThreadWeaver::Job* job )
         if( !msg.isEmpty() )
             setErrorText( i18n( "Error executing Job:\n%1", msg ) );
         outputMessage(errorText());
-        kDebug(9510) << "Job failed";
+        qCDebug(PLUGIN_SVN) << "Job failed";
         if( m_status != VcsJob::JobCanceled )
         {
             m_status = KDevelop::VcsJob::JobFailed;

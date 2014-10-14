@@ -15,6 +15,7 @@
 #include "localpatchsource.h"
 #include "patchreview.h"
 #include "standardpatchexport.h"
+#include "debug.h"
 #include <libkomparediff2/diffmodellist.h>
 #include <libkomparediff2/komparemodellist.h>
 #include <interfaces/icore.h>
@@ -39,7 +40,6 @@
 #include <QFileInfo>
 #include <QMenu>
 #include <KLocalizedString>
-#include <KDebug>
 
 using namespace KDevelop;
 
@@ -141,7 +141,7 @@ void PatchReviewToolView::fillEditFromPatch() {
     m_fileModel->setIsCheckbable( m_plugin->patch()->canSelectFiles() );
 
     if( m_customWidget ) {
-        kDebug() << "removing custom widget";
+        qCDebug(PLUGIN_PATCHREVIEW) << "removing custom widget";
         m_customWidget->hide();
         m_editPatch.contentLayout->removeWidget( m_customWidget );
     }
@@ -150,7 +150,7 @@ void PatchReviewToolView::fillEditFromPatch() {
     if( m_customWidget ) {
         m_editPatch.contentLayout->insertWidget( 0, m_customWidget );
         m_customWidget->show();
-        kDebug() << "got custom widget";
+        qCDebug(PLUGIN_PATCHREVIEW) << "got custom widget";
     }
 
     bool showTests = false;
@@ -227,7 +227,7 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.updateButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( forceUpdate() ) );
 
     connect( m_editPatch.testsButton, SIGNAL( clicked( bool ) ), this, SLOT( runTests() ) );
-    
+
     m_selectAllAction = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this );
     connect( m_selectAllAction, SIGNAL(triggered(bool)), SLOT(selectAll()) );
     m_deselectAllAction = new QAction( i18n("Deselect All"), this );
@@ -241,7 +241,7 @@ void PatchReviewToolView::customContextMenuRequested(const QPoint& )
     foreach(const QModelIndex& idx, selectionIdxs) {
         urls += idx.sibling(idx.row(), 0).data(KDevelop::VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url();
     }
-    
+
     QPointer<QMenu> menu = new QMenu(m_editPatch.filesList);
     QList<ContextMenuExtension> extensions;
     if(!urls.isEmpty()) {
@@ -261,7 +261,7 @@ void PatchReviewToolView::customContextMenuRequested(const QPoint& )
     if ( !menu->isEmpty() ) {
         menu->exec(QCursor::pos());
     }
-    
+
     delete menu;
 }
 
@@ -288,14 +288,14 @@ void PatchReviewToolView::seekFile(bool forwards)
     IDocument* current = ICore::self()->documentController()->activeDocument();
     if(!current || checkedUrls.empty())
         return;
-    kDebug() << "seeking direction" << forwards;
+    qCDebug(PLUGIN_PATCHREVIEW) << "seeking direction" << forwards;
     int currentIndex = allUrls.indexOf(current->url());
     QUrl newUrl;
     if((forwards && current->url() == checkedUrls.back()) ||
             (!forwards && current->url() == checkedUrls[0]))
     {
         newUrl = m_plugin->patch()->file();
-        kDebug() << "jumping to patch";
+        qCDebug(PLUGIN_PATCHREVIEW) << "jumping to patch";
     }
     else if(current->url() == m_plugin->patch()->file() || currentIndex == -1)
     {
@@ -303,7 +303,7 @@ void PatchReviewToolView::seekFile(bool forwards)
             newUrl = checkedUrls[0];
         else
             newUrl = checkedUrls.back();
-        kDebug() << "jumping from patch";
+        qCDebug(PLUGIN_PATCHREVIEW) << "jumping from patch";
     }
     else
     {
@@ -330,13 +330,13 @@ void PatchReviewToolView::seekFile(bool forwards)
     {
         activate( newUrl, forwards ? current : 0 );
     }else{
-        kDebug() << "found no valid target url";
+        qCDebug(PLUGIN_PATCHREVIEW) << "found no valid target url";
     }
 }
 
 void PatchReviewToolView::activate( const QUrl& url, IDocument* buddy ) const
 {
-    kDebug() << "activating url" << url;
+    qCDebug(PLUGIN_PATCHREVIEW) << "activating url" << url;
     // If the document is already open in this area, just re-activate it
     if(KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(url)) {
         foreach(Sublime::View* view, ICore::self()->uiController()->activeArea()->views())
@@ -348,7 +348,7 @@ void PatchReviewToolView::activate( const QUrl& url, IDocument* buddy ) const
             }
         }
     }
-    
+
     // If the document is not open yet, open it in the correct order
     IDocument* newDoc = ICore::self()->documentController()->openDocument(url, KTextEditor::Range(), IDocumentController::DefaultMode, "", buddy);
     KTextEditor::View* view = 0;
@@ -405,7 +405,7 @@ void PatchReviewToolView::selectAll()
 
 void PatchReviewToolView::finishReview() {
     QList<QUrl> selectedUrls = m_fileModel->checkedUrls();
-    qDebug() << "finishing review with" << selectedUrls;
+    qCDebug(PLUGIN_PATCHREVIEW) << "finishing review with" << selectedUrls;
     m_plugin->finishReview( selectedUrls );
 }
 
@@ -423,11 +423,11 @@ QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model ) {
 }
 
 void PatchReviewToolView::kompareModelChanged() {
-    
+
     QList<QUrl> oldCheckedUrls = m_fileModel->checkedUrls();
-    
+
     m_fileModel->clear();
-    
+
     if ( !m_plugin->modelList() )
         return;
 
@@ -461,14 +461,14 @@ void PatchReviewToolView::kompareModelChanged() {
         status.setState( it.value() );
         m_fileModel->updateState( status );
     }
-    
+
     if(!m_resetCheckedUrls)
         m_fileModel->setCheckedUrls(oldCheckedUrls);
     else
         m_resetCheckedUrls = false;
 
     m_editPatch.filesList->resizeColumnToContents( 0 );
-    
+
     // Eventually select the active document
     documentActivated( ICore::self()->documentController()->activeDocument() );
 }

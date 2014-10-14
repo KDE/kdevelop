@@ -25,7 +25,6 @@
 #include <interfaces/idocumentationprovider.h>
 #include <KLocalizedString>
 #include <QAbstractItemModel>
-#include <QDebug>
 #include <QTime>
 #include <QIcon>
 

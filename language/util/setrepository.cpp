@@ -12,6 +12,7 @@
  ***************************************************************************/
 
 #include "setrepository.h"
+#include "util/debug.h"
 #include <list>
 #include <QtCore/QString>
 #include <util/kdevvarlengtharray.h>
@@ -46,7 +47,7 @@ namespace Utils {
  * To achieve a maximum re-usage of nodes, we make sure that sub-nodes of a node always split at specific boundaries.
  * For each range we can compute a position where that range should be split into its child-nodes.
  * When creating a new node with 2 sub-nodes, we re-create those child-nodes if their boundaries don't represent those split-positions.
- * 
+ *
  * We pick the split-positions deterministically, they are in order of priority:
  * ((1<<31)*n, n = [0,...]
  * ((1<<30)*n, n = [0,...]
@@ -67,7 +68,7 @@ uint splitPositionForRange(uint start, uint end, uchar& splitBit) {
     splitBit = 0;
     return 0;
   }
-  
+
   while(true) {
     uint position = ((end-1) >> splitBit) << splitBit; //Round to the split-position in this interval that is smaller than end
     if(position > start && position < end)
@@ -75,7 +76,7 @@ uint splitPositionForRange(uint start, uint end, uchar& splitBit) {
     Q_ASSERT(splitBit != 0);
     --splitBit;
   }
-  
+
   return 0;
 }
 
@@ -98,14 +99,14 @@ class SetNodeDataRequest;
 struct SetRepositoryAlgorithms {
   SetRepositoryAlgorithms(SetDataRepository& _repository, BasicSetRepository* _setRepository) : repository(_repository), setRepository(_setRepository) {
   }
-  
+
   ///Expensive
   Index count(const SetNodeData* node) const;
-  
+
   void localCheck(const SetNodeData* node);
-  
+
   void check(uint node);
-  
+
   void check(const SetNodeData* node);
 
   QString shortLabel(const SetNodeData& node) const;
@@ -116,40 +117,40 @@ struct SetRepositoryAlgorithms {
   uint set_intersect(uint firstNode, uint secondNode, const SetNodeData* first, const SetNodeData* second, uchar splitBit = 31);
   bool set_contains(const SetNodeData* node, Index index);
   uint set_subtract(uint firstNode, uint secondNode, const SetNodeData* first, const SetNodeData* second, uchar splitBit = 31);
-  
+
   //Required both nodes to be split correctly
   bool set_equals(const SetNodeData* lhs, const SetNodeData* rhs);
-  
+
   QString dumpDotGraph(uint node) const;
 
     ///Finds or inserts the given ranges into the repository, and returns the set-index that represents them
     uint setForIndices(std::vector<uint>::const_iterator begin, std::vector<uint>::const_iterator end, uchar splitBit = 31) {
         Q_ASSERT(begin != end);
-        
+
         uint startIndex = *begin;
         uint endIndex = *(end-1)+1;
-        
+
         if(endIndex == startIndex+1) {
             SetNodeData data(startIndex, endIndex);
-            
+
             return repository.index( SetNodeDataRequest(&data, repository, setRepository) );
         }
-        
+
         uint split = splitPositionForRange(startIndex, endIndex, splitBit);
         Q_ASSERT(split);
-        
+
         std::vector<uint>::const_iterator splitIterator = std::lower_bound(begin, end, split);
         Q_ASSERT(*splitIterator >= split);
         Q_ASSERT(splitIterator > begin);
         Q_ASSERT(*(splitIterator-1) < split);
-        
+
         return createSetFromNodes(setForIndices(begin, splitIterator, splitBit), setForIndices(splitIterator, end, splitBit));
     }
 
-  
+
 private:
   QString dumpDotGraphInternal(uint node, bool master=false) const;
-  
+
   SetDataRepository& repository;
   BasicSetRepository* setRepository;
 };
@@ -213,7 +214,7 @@ void SetNodeDataRequest::createItem(SetNodeData* item) const {
             setRepository->itemAddedToSets(a);
     }
 }
-  
+
 bool SetNodeDataRequest::equals(const SetNodeData* item) const {
     Q_ASSERT((item->rightNode() && item->leftNode()) || (!item->rightNode() && !item->leftNode()));
     //Just compare child nodes, since data must be correctly split, this is perfectly ok
@@ -243,7 +244,7 @@ unsigned int Set::count() const {
   if(!m_repository || !m_tree)
     return 0;
   QMutexLocker lock(m_repository->m_mutex);
-  
+
   SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
   return alg.count(m_repository->dataRepository.itemFromIndex(m_tree));
 }
@@ -266,9 +267,9 @@ Set& Set::operator=(const Set& rhs) {
 QString Set::dumpDotGraph() const {
   if(!m_repository || !m_tree)
     return QString();
-  
+
   QMutexLocker lock(m_repository->m_mutex);
-  
+
   SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
   return alg.dumpDotGraph(m_tree);
 }
@@ -291,7 +292,7 @@ void SetRepositoryAlgorithms::localCheck(const SetNodeData* ifDebug(node) ) {
 void SetRepositoryAlgorithms::check(uint node) {
   if(!node)
     return;
-  
+
   check(nodeFromIndex(node));
 }
 
@@ -311,9 +312,9 @@ QString SetRepositoryAlgorithms::shortLabel(const SetNodeData& node) const {
 QString SetRepositoryAlgorithms::dumpDotGraphInternal(uint nodeIndex, bool master) const {
   if(!nodeIndex)
     return QString("empty node");
-  
+
   const SetNodeData& node(*repository.itemFromIndex(nodeIndex));
-  
+
   QString color = "blue";
   if(master)
     color = "red";
@@ -321,7 +322,7 @@ QString SetRepositoryAlgorithms::dumpDotGraphInternal(uint nodeIndex, bool maste
   QString label = QString("%1 -> %2").arg(node.start()).arg(node.end());
   if(!node.contiguous())
     label += ", with gaps";
-  
+
   QString ret = QString("%1[label=\"%2\", color=\"%3\"];\n").arg(shortLabel(node)).arg(label).arg(color);
 
   if(node.leftNode()) {
@@ -333,7 +334,7 @@ QString SetRepositoryAlgorithms::dumpDotGraphInternal(uint nodeIndex, bool maste
     ret += dumpDotGraphInternal(node.leftNode());
     ret += dumpDotGraphInternal(node.rightNode());
   }
-  
+
   return ret;
 }
 
@@ -353,16 +354,16 @@ public:
     nodeStackData.resize(nodeStackAlloc);
     nodeStack = nodeStackData.data();
   }
-  
+
   IteratorPrivate(const IteratorPrivate& rhs) : nodeStackData(rhs.nodeStackData), nodeStackSize(rhs.nodeStackSize), currentIndex(rhs.currentIndex), repository(rhs.repository) {
     nodeStack = nodeStackData.data();
   }
-  
+
   void resizeNodeStack() {
     nodeStackData.resize(nodeStackSize + 1);
     nodeStack = nodeStackData.data();
   }
-  
+
   KDevVarLengthArray<const SetNodeData*, nodeStackAlloc> nodeStackData;
   const SetNodeData** nodeStack;
   int nodeStackSize;
@@ -378,10 +379,10 @@ public:
 
     do {
       nodeStack[nodeStackSize++] = node;
-      
+
       if(nodeStackSize >= nodeStackAlloc)
           resizeNodeStack();
-      
+
       if(node->contiguous())
         break; //We need no finer granularity, because the range is contiguous
       node = Set::Iterator::getDataRepository(repository).itemFromIndex(node->leftNode());
@@ -395,13 +396,13 @@ std::set<Index> Set::stdSet() const
 {
   Set::Iterator it = iterator();
   std::set<Index> ret;
-  
+
   while(it) {
     Q_ASSERT(ret.find(*it) == ret.end());
     ret.insert(*it);
     ++it;
   }
-  
+
   return ret;
 }
 
@@ -426,39 +427,39 @@ Set::Iterator::operator bool() const {
 }
 
 Set::Iterator& Set::Iterator::operator++() {
-  
+
   Q_ASSERT(d->nodeStackSize);
-  
+
   if(d->repository->m_mutex)
     d->repository->m_mutex->lock();
-  
+
   ++d->currentIndex;
-  
+
   //const SetNodeData** currentNode = &d->nodeStack[d->nodeStackSize - 1];
   if(d->currentIndex >= d->nodeStack[d->nodeStackSize - 1]->end()) {
     //Advance to the next node
     while(d->nodeStackSize && d->currentIndex >= d->nodeStack[d->nodeStackSize - 1]->end()) {
       --d->nodeStackSize;
     }
-    
+
     if(!d->nodeStackSize) {
       //ready
     }else{
       //++d->nodeStackSize;
       //We were iterating the left slave of the node, now continue with the right.
       ifDebug( const SetNodeData& left = *d->repository->dataRepository.itemFromIndex(d->nodeStack[d->nodeStackSize - 1]->leftNode()); Q_ASSERT(left.end == d->currentIndex); )
-      
+
       const SetNodeData& right = *d->repository->dataRepository.itemFromIndex(d->nodeStack[d->nodeStackSize - 1]->rightNode());
-      
+
       d->startAtNode(&right);
     }
   }
 
   Q_ASSERT(d->nodeStackSize == 0 || d->currentIndex < d->nodeStack[0]->end());
-  
+
   if(d->repository->m_mutex)
     d->repository->m_mutex->unlock();
-  
+
   return *this;
 }
 
@@ -469,12 +470,12 @@ BasicSetRepository::Index Set::Iterator::operator*() const {
 Set::Iterator Set::iterator() const {
   if(!m_tree || !m_repository)
     return Iterator();
-  
+
   QMutexLocker lock(m_repository->m_mutex);
-  
+
   Iterator ret;
   ret.d->repository = m_repository;
-  
+
   if(m_tree)
     ret.d->startAtNode(m_repository->dataRepository.itemFromIndex(m_tree));
   return ret;
@@ -482,18 +483,18 @@ Set::Iterator Set::iterator() const {
 
 //Creates a set item with the given children., they must be valid, and they must be split around their split-position.
 uint SetRepositoryAlgorithms::createSetFromNodes(uint leftNode, uint rightNode, const SetNodeData* left, const SetNodeData* right) {
-    
+
     if(!left)
       left = nodeFromIndex(leftNode);
     if(!right)
       right = nodeFromIndex(rightNode);
-  
+
     Q_ASSERT(left->end() <= right->start());
-    
+
     SetNodeData set(left->start(), right->end(), leftNode, rightNode);
 
     Q_ASSERT(set.start() < set.end());
-    
+
     uint ret = repository.index(SetNodeDataRequest(&set, repository, setRepository));
     Q_ASSERT(set.leftNode() >= 0x10000);
     Q_ASSERT(set.rightNode() >= 0x10000);
@@ -508,37 +509,37 @@ uint SetRepositoryAlgorithms::computeSetFromNodes(uint leftNode, uint rightNode,
 {
   Q_ASSERT(left->end() <= right->start());
   uint splitPosition = splitPositionForRange(left->start(), right->end(), splitBit);
-  
+
   Q_ASSERT(splitPosition);
-  
+
   if(splitPosition < left->end()) {
     //The split-position intersects the left node
     uint leftLeftNode = left->leftNode();
     uint leftRightNode = left->rightNode();
-    
+
     const SetNodeData* leftLeft = this->getLeftNode(left);
     const SetNodeData* leftRight = this->getRightNode(left);
-    
+
     Q_ASSERT(splitPosition >= leftLeft->end() && splitPosition <= leftRight->start());
-    
+
     //Create a new set from leftLeft, and from leftRight + right. That set will have the correct split-position.
     uint newRightNode = computeSetFromNodes(leftRightNode, rightNode, leftRight, right, splitBit);
-    
+
     return createSetFromNodes(leftLeftNode, newRightNode, leftLeft);
-  
+
   }else if(splitPosition > right->start()) {
     //The split-position intersects the right node
     uint rightLeftNode = right->leftNode();
     uint rightRightNode = right->rightNode();
-    
+
     const SetNodeData* rightLeft = this->getLeftNode(right);
     const SetNodeData* rightRight = this->getRightNode(right);
-    
+
     Q_ASSERT(splitPosition >= rightLeft->end() && splitPosition <= rightRight->start());
-    
+
     //Create a new set from left + rightLeft, and from rightRight. That set will have the correct split-position.
     uint newLeftNode = computeSetFromNodes(leftNode, rightLeftNode, left, rightLeft, splitBit);
-    
+
     return createSetFromNodes(newLeftNode, rightRightNode, 0, rightRight);
   }else{
     return createSetFromNodes(leftNode, rightNode, left, right);
@@ -549,86 +550,86 @@ uint SetRepositoryAlgorithms::set_union(uint firstNode, uint secondNode, const S
 {
   if(firstNode == secondNode)
     return firstNode;
-  
+
   uint firstStart = first->start(), secondEnd = second->end();
-  
+
   if(firstStart >= secondEnd)
     return computeSetFromNodes(secondNode, firstNode, second, first, splitBit);
-        
+
   uint firstEnd = first->end(), secondStart = second->start();
-  
+
   if(secondStart >= firstEnd)
     return computeSetFromNodes(firstNode, secondNode, first, second, splitBit);
-  
+
   //The ranges of first and second do intersect
-  
+
   uint newStart = firstStart < secondStart ? firstStart : secondStart;
   uint newEnd = firstEnd > secondEnd ? firstEnd : secondEnd;
 
   //Compute the split-position for the resulting merged node
   uint splitPosition = splitPositionForRange(newStart, newEnd, splitBit);
-  
+
   //Since the ranges overlap, we can be sure that either first or second contain splitPosition.
   //The node that contains it, will also be split by it.
 
   if(splitPosition > firstStart && splitPosition < firstEnd && splitPosition > secondStart && splitPosition < secondEnd) {
     //The split-position intersect with both first and second. Continue the union on both sides of the split-position, and merge it.
-    
+
     uint firstLeftNode = first->leftNode();
     uint firstRightNode = first->rightNode();
     uint secondLeftNode = second->leftNode();
     uint secondRightNode = second->rightNode();
-    
+
     const SetNodeData* firstLeft = repository.itemFromIndex(firstLeftNode);
     const SetNodeData* firstRight = repository.itemFromIndex(firstRightNode);
     const SetNodeData* secondLeft = repository.itemFromIndex(secondLeftNode);
     const SetNodeData* secondRight = repository.itemFromIndex(secondRightNode);
-    
+
     Q_ASSERT(splitPosition >= firstLeft->end() && splitPosition <= firstRight->start());
     Q_ASSERT(splitPosition >= secondLeft->end() && splitPosition <= secondRight->start());
-    
+
     return createSetFromNodes( set_union(firstLeftNode, secondLeftNode, firstLeft, secondLeft, splitBit), set_union(firstRightNode, secondRightNode, firstRight, secondRight, splitBit) );
-    
+
   }else if(splitPosition > firstStart && splitPosition < firstEnd) {
-    
+
     uint firstLeftNode = first->leftNode();
     uint firstRightNode = first->rightNode();
-    
+
     const SetNodeData* firstLeft = repository.itemFromIndex(firstLeftNode);
     const SetNodeData* firstRight = repository.itemFromIndex(firstRightNode);
-    
+
     Q_ASSERT(splitPosition >= firstLeft->end() && splitPosition <= firstRight->start());
-    
+
     //splitPosition does not intersect second. That means that second is completely on one side of it.
     //So we only need to union that side of first with second.
-    
+
     if(secondEnd <= splitPosition) {
       return createSetFromNodes( set_union(firstLeftNode, secondNode, firstLeft, second, splitBit), firstRightNode, 0, firstRight );
     }else{
       Q_ASSERT(secondStart >= splitPosition);
       return createSetFromNodes( firstLeftNode, set_union(firstRightNode, secondNode, firstRight, second, splitBit), firstLeft );
     }
-    
+
   }else if(splitPosition > secondStart && splitPosition < secondEnd) {
-    
+
     uint secondLeftNode = second->leftNode();
     uint secondRightNode = second->rightNode();
-    
+
     const SetNodeData* secondLeft = repository.itemFromIndex(secondLeftNode);
     const SetNodeData* secondRight = repository.itemFromIndex(secondRightNode);
-    
+
     Q_ASSERT(splitPosition >= secondLeft->end() && splitPosition <= secondRight->start());
-    
+
     if(firstEnd <= splitPosition) {
       return createSetFromNodes( set_union(secondLeftNode, firstNode, secondLeft, first, splitBit), secondRightNode, 0, secondRight );
     }else{
       Q_ASSERT(firstStart >= splitPosition);
       return createSetFromNodes( secondLeftNode, set_union(secondRightNode, firstNode, secondRight, first, splitBit), secondLeft );
     }
-    
+
   }else{
     //We would have stopped earlier of first and second don't intersect
-    ifDebug( uint test = repository.findIndex(SetNodeDataRequest(first, repository, setRepository)); kDebug() << "found index:" << test; )
+    ifDebug( uint test = repository.findIndex(SetNodeDataRequest(first, repository, setRepository)); qCDebug(LANGUAGE) << "found index:" << test; )
     Q_ASSERT(0);
     return 0;
   }
@@ -646,66 +647,66 @@ uint SetRepositoryAlgorithms::set_intersect(uint firstNode, uint secondNode, con
 {
   if(firstNode == secondNode)
     return firstNode;
-  
+
   if(first->start() >= second->end())
     return 0;
-        
+
   if(second->start() >= first->end())
     return 0;
-  
+
   //The ranges of first and second do intersect
   uint firstStart = first->start(), firstEnd = first->end(), secondStart = second->start(), secondEnd = second->end();
-  
+
   uint newStart = firstStart < secondStart ? firstStart : secondStart;
   uint newEnd = firstEnd > secondEnd ? firstEnd : secondEnd;
 
   //Compute the split-position for the resulting merged node
   uint splitPosition = splitPositionForRange(newStart, newEnd, splitBit);
-  
+
   //Since the ranges overlap, we can be sure that either first or second contain splitPosition.
   //The node that contains it, will also be split by it.
 
-  
+
   if(splitPosition > firstStart && splitPosition < firstEnd && splitPosition > secondStart && splitPosition < secondEnd) {
     //The split-position intersect with both first and second. Continue the intersection on both sides
-    
+
     uint firstLeftNode = first->leftNode();
     uint firstRightNode = first->rightNode();
-    
+
     uint secondLeftNode = second->leftNode();
     uint secondRightNode = second->rightNode();
-    
+
     const SetNodeData* firstLeft = repository.itemFromIndex(firstLeftNode);
     const SetNodeData* firstRight = repository.itemFromIndex(firstRightNode);
     const SetNodeData* secondLeft = repository.itemFromIndex(secondLeftNode);
     const SetNodeData* secondRight = repository.itemFromIndex(secondRightNode);
-    
+
     Q_ASSERT(splitPosition >= firstLeft->end() && splitPosition <= firstRight->start());
     Q_ASSERT(splitPosition >= secondLeft->end() && splitPosition <= secondRight->start());
-    
+
     uint newLeftNode = set_intersect(firstLeftNode, secondLeftNode, firstLeft, secondLeft, splitBit);
     uint newRightNode = set_intersect(firstRightNode, secondRightNode, firstRight, secondRight, splitBit);
-    
+
     if(newLeftNode && newRightNode)
       return createSetFromNodes( newLeftNode, newRightNode );
     else if(newLeftNode)
       return newLeftNode;
     else
       return newRightNode;
-    
+
   }else if(splitPosition > firstStart && splitPosition < firstEnd) {
-    
+
     uint firstLeftNode = first->leftNode();
     uint firstRightNode = first->rightNode();
-    
+
     const SetNodeData* firstLeft = repository.itemFromIndex(firstLeftNode);
     const SetNodeData* firstRight = repository.itemFromIndex(firstRightNode);
-    
+
     Q_ASSERT(splitPosition >= firstLeft->end() && splitPosition <= firstRight->start());
-    
+
     //splitPosition does not intersect second. That means that second is completely on one side of it.
     //So we can completely ignore the other side of first.
-    
+
     if(secondEnd <= splitPosition) {
       return set_intersect(firstLeftNode, secondNode, firstLeft, second, splitBit);
     }else{
@@ -713,15 +714,15 @@ uint SetRepositoryAlgorithms::set_intersect(uint firstNode, uint secondNode, con
       return set_intersect(firstRightNode, secondNode, firstRight, second, splitBit);
     }
   }else if(splitPosition > secondStart && splitPosition < secondEnd) {
-    
+
     uint secondLeftNode = second->leftNode();
     uint secondRightNode = second->rightNode();
-    
+
     const SetNodeData* secondLeft = repository.itemFromIndex(secondLeftNode);
     const SetNodeData* secondRight = repository.itemFromIndex(secondRightNode);
-    
+
     Q_ASSERT(splitPosition >= secondLeft->end() && splitPosition <= secondRight->start());
-    
+
     if(firstEnd <= splitPosition) {
       return set_intersect(secondLeftNode, firstNode, secondLeft, first, splitBit);
     }else{
@@ -744,7 +745,7 @@ bool SetRepositoryAlgorithms::set_contains(const SetNodeData* node, Index index)
 
     if(node->contiguous())
       return true;
-    
+
     const SetNodeData* leftNode = nodeFromIndex(node->leftNode());
 
     if(index < leftNode->end())
@@ -754,7 +755,7 @@ bool SetRepositoryAlgorithms::set_contains(const SetNodeData* node, Index index)
       node = rightNode;
     }
   }
-  
+
   return false;
 }
 
@@ -762,96 +763,96 @@ uint SetRepositoryAlgorithms::set_subtract(uint firstNode, uint secondNode, cons
 {
   if(firstNode == secondNode)
     return 0;
-  
+
   if(first->start() >= second->end() || second->start() >= first->end())
     return firstNode;
-        
+
   //The ranges of first and second do intersect
   uint firstStart = first->start(), firstEnd = first->end(), secondStart = second->start(), secondEnd = second->end();
-  
+
   uint newStart = firstStart < secondStart ? firstStart : secondStart;
   uint newEnd = firstEnd > secondEnd ? firstEnd : secondEnd;
 
   //Compute the split-position for the resulting merged node
   uint splitPosition = splitPositionForRange(newStart, newEnd, splitBit);
-  
+
   //Since the ranges overlap, we can be sure that either first or second contain splitPosition.
   //The node that contains it, will also be split by it.
 
   if(splitPosition > firstStart && splitPosition < firstEnd && splitPosition > secondStart && splitPosition < secondEnd) {
     //The split-position intersect with both first and second. Continue the subtract on both sides of the split-position, and merge it.
-    
+
     uint firstLeftNode = first->leftNode();
     uint firstRightNode = first->rightNode();
-    
+
     uint secondLeftNode = second->leftNode();
     uint secondRightNode = second->rightNode();
-    
+
     const SetNodeData* firstLeft = repository.itemFromIndex(firstLeftNode);
     const SetNodeData* firstRight = repository.itemFromIndex(firstRightNode);
     const SetNodeData* secondLeft = repository.itemFromIndex(secondLeftNode);
     const SetNodeData* secondRight = repository.itemFromIndex(secondRightNode);
-    
-    
+
+
     Q_ASSERT(splitPosition >= firstLeft->end() && splitPosition <= firstRight->start());
     Q_ASSERT(splitPosition >= secondLeft->end() && splitPosition <= secondRight->start());
-    
+
     uint newLeftNode = set_subtract(firstLeftNode, secondLeftNode, firstLeft, secondLeft, splitBit);
     uint newRightNode = set_subtract(firstRightNode, secondRightNode, firstRight, secondRight, splitBit);
-    
+
     if(newLeftNode && newRightNode)
       return createSetFromNodes(newLeftNode, newRightNode);
     else if(newLeftNode)
       return newLeftNode;
     else
       return newRightNode;
-    
+
   }else if(splitPosition > firstStart && splitPosition < firstEnd) {
-    
+
 //    Q_ASSERT(splitPosition >= firstLeft->end() && splitPosition <= firstRight->start());
-    
+
     uint firstLeftNode = first->leftNode();
     uint firstRightNode = first->rightNode();
-    
+
     const SetNodeData* firstLeft = repository.itemFromIndex(firstLeftNode);
     const SetNodeData* firstRight = repository.itemFromIndex(firstRightNode);
-    
+
     //splitPosition does not intersect second. That means that second is completely on one side of it.
     //So we only need to subtract that side of first with second.
-    
+
     uint newLeftNode = firstLeftNode, newRightNode = firstRightNode;
-    
+
     if(secondEnd <= splitPosition) {
       newLeftNode = set_subtract(firstLeftNode, secondNode, firstLeft, second, splitBit);
     }else{
       Q_ASSERT(secondStart >= splitPosition);
       newRightNode = set_subtract(firstRightNode, secondNode, firstRight, second, splitBit);
     }
-    
+
     if(newLeftNode && newRightNode)
       return createSetFromNodes(newLeftNode, newRightNode);
     else if(newLeftNode)
       return newLeftNode;
     else
       return newRightNode;
-  
+
     }else if(splitPosition > secondStart && splitPosition < secondEnd) {
-    
+
     uint secondLeftNode = second->leftNode();
     uint secondRightNode = second->rightNode();
-    
+
     const SetNodeData* secondLeft = repository.itemFromIndex(secondLeftNode);
     const SetNodeData* secondRight = repository.itemFromIndex(secondRightNode);
-    
+
     Q_ASSERT(splitPosition >= secondLeft->end() && splitPosition <= secondRight->start());
-    
+
     if(firstEnd <= splitPosition) {
       return set_subtract(firstNode, secondLeftNode, first, secondLeft, splitBit);
     }else{
       Q_ASSERT(firstStart >= splitPosition);
       return set_subtract(firstNode, secondRightNode, first, secondRight, splitBit);
     }
-    
+
   }else{
     //We would have stopped earlier of first and second don't intersect
     Q_ASSERT(0);
@@ -866,9 +867,9 @@ Set BasicSetRepository::createSetFromIndices(const std::vector<Index>& indices) 
 
   if(indices.empty())
     return Set();
-  
+
   SetRepositoryAlgorithms alg(dataRepository, this);
-  
+
   return Set(alg.setForIndices(indices.begin(), indices.end()), this);
 }
 
@@ -880,10 +881,10 @@ Set BasicSetRepository::createSet(Index i) {
 }
 
 Set BasicSetRepository::createSet(const std::set<Index>& indices) {
-  
+
   if(indices.empty())
       return Set();
-  
+
   QMutexLocker lock(m_mutex);
 
   std::vector<Index> indicesVector;
@@ -891,7 +892,7 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices) {
 
   for( std::set<Index>::const_iterator it = indices.begin(); it != indices.end(); ++it )
     indicesVector.push_back(*it);
-  
+
   return createSetFromIndices(indicesVector);
 }
 
@@ -919,14 +920,14 @@ struct StatisticsVisitor {
 };
 
 void BasicSetRepository::printStatistics() const {
-  
+
   StatisticsVisitor stats(dataRepository);
   dataRepository.visitAllItems<StatisticsVisitor>(stats);
-  kDebug() << "count of nodes:" << stats.nodeCount << "count of nodes with bad split:" << stats.badSplitNodeCount << "count of nodes with zero reference-count:" << stats.zeroRefCountNodes;
+  qCDebug(LANGUAGE) << "count of nodes:" << stats.nodeCount << "count of nodes with bad split:" << stats.badSplitNodeCount << "count of nodes with zero reference-count:" << stats.zeroRefCountNodes;
 }
 
 BasicSetRepository::~BasicSetRepository() {
-  
+
   delete d;
 }
 
@@ -942,9 +943,9 @@ bool Set::contains(Index index) const
 {
   if(!m_tree || !m_repository)
     return false;
-  
+
   QMutexLocker lock(m_repository->m_mutex);
-  
+
   SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
   return alg.set_contains(m_repository->dataRepository.itemFromIndex(m_tree), index);
 }
@@ -955,17 +956,17 @@ Set Set::operator +(const Set& first) const
     return *this;
   else if(!m_tree || !m_repository)
     return first;
-  
+
   Q_ASSERT(m_repository == first.m_repository);
-  
+
   QMutexLocker lock(m_repository->m_mutex);
-  
+
   SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
-  
+
   uint retNode = alg.set_union(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree));
-  
+
   ifDebug(alg.check(retNode));
-  
+
   return Set(retNode, m_repository);
 }
 
@@ -977,13 +978,13 @@ Set& Set::operator +=(const Set& first) {
     m_repository = first.m_repository;
     return *this;
   }
-  
+
   QMutexLocker lock(m_repository->m_mutex);
-  
+
   SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
-  
+
   m_tree = alg.set_union(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree));
-  
+
   ifDebug(alg.check(m_tree));
   return *this;
 }
@@ -991,17 +992,17 @@ Set& Set::operator +=(const Set& first) {
 Set Set::operator &(const Set& first) const {
   if(!first.m_tree || !m_tree)
     return Set();
-  
+
   Q_ASSERT(m_repository);
-  
+
   QMutexLocker lock(m_repository->m_mutex);
-  
+
   SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
-  
+
   Set ret( alg.set_intersect(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree)), m_repository );
-  
+
   ifDebug(alg.check(ret.m_tree));
-  
+
   return ret;
 }
 
@@ -1010,13 +1011,13 @@ Set& Set::operator &=(const Set& first) {
     m_tree = 0;
     return *this;
   }
-  
+
   Q_ASSERT(m_repository);
-  
+
   QMutexLocker lock(m_repository->m_mutex);
-  
+
   SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
-  
+
   m_tree = alg.set_intersect(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree));
   ifDebug(alg.check(m_tree));
   return *this;
@@ -1027,11 +1028,11 @@ Set Set::operator -(const Set& rhs) const {
     return *this;
 
   Q_ASSERT(m_repository);
-  
+
   QMutexLocker lock(m_repository->m_mutex);
-  
+
   SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
-  
+
   Set ret( alg.set_subtract(m_tree, rhs.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(rhs.m_tree)), m_repository );
   ifDebug( alg.check(ret.m_tree) );
   return ret;
@@ -1042,11 +1043,11 @@ Set& Set::operator -=(const Set& rhs) {
     return *this;
 
   Q_ASSERT(m_repository);
-  
+
   QMutexLocker lock(m_repository->m_mutex);
-  
+
   SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
-  
+
   m_tree = alg.set_subtract(m_tree, rhs.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(rhs.m_tree));
 
   ifDebug(alg.check(m_tree));
@@ -1095,9 +1096,9 @@ void Set::unrefNode(uint current) {
 void Set::staticUnref() {
   if(!m_tree)
     return;
-  
+
     QMutexLocker lock(m_repository->m_mutex);
-    
+
     unrefNode(m_tree);
 }
 

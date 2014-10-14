@@ -19,10 +19,11 @@
  ***************************************************************************/
 
 #include "gitplugincheckinrepositoryjob.h"
+#include "debug.h"
 
-#include <KDebug>
 #include <KTextEditor/Document>
 #include <qtextcodec.h>
+
 #include <QDir>
 
 GitPluginCheckInRepositoryJob::GitPluginCheckInRepositoryJob(KTextEditor::Document* document,
@@ -79,7 +80,7 @@ GitPluginCheckInRepositoryJob::~GitPluginCheckInRepositoryJob()
 
 void GitPluginCheckInRepositoryJob::processFailed(QProcess::ProcessError err)
 {
-    kDebug() << "calling git failed with error:" << err;
+    qCDebug(PLUGIN_GIT) << "calling git failed with error:" << err;
     emit finished(false);
 }
 

@@ -17,6 +17,7 @@
 */
 
 #include "duchainchangeset.h"
+#include "util/debug.h"
 
 namespace KDevelop
 {
@@ -42,17 +43,17 @@ DUChainChangeSet & DUChainChangeSet::operator<<(DUChainChangeSet & rhs)
     //Avoid merging into self
     if(this == &rhs)
         return *this;
-    
+
     Q_ASSERT(m_topContext == rhs.m_topContext);
-    kDebug() << "Merging ChangeSets for context:" << m_topContext.data()->url().str();
-    
+    qCDebug(LANGUAGE) << "Merging ChangeSets for context:" << m_topContext.data()->url().str();
+
     m_objectRefs << rhs.m_objectRefs;
     rhs.m_objectRefs.clear();
-    
+
 #ifndef NDEBUG
     //check for possible duplicates
     std::sort(m_objectRefs.begin(), m_objectRefs.end());
-    
+
     for(QList<DUChainRef *>::iterator i = m_objectRefs.begin(); i < m_objectRefs.end() - 1; ++i  )
         Q_ASSERT(*i != *(i + 1));
 #endif

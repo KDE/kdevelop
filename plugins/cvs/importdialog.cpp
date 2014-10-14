@@ -12,7 +12,6 @@
 
 #include <KMessageBox>
 #include <KI18n/KLocalizedString>
-#include <KDebug>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
@@ -20,6 +19,7 @@
 #include "cvsplugin.h"
 #include "cvsproxy.h"
 #include "cvsjob.h"
+#include "debug.h"
 
 #include <vcs/vcslocation.h>
 
@@ -74,7 +74,7 @@ void ImportDialog::jobFinished(KJob * job)
             continue;
         } else {
             // any other line must mean that an error occurred
-            kDebug(9500) <<"ERR: "<< line;
+            qCDebug(PLUGIN_CVS) <<"ERR: "<< line;
             error = true;
         }
     }

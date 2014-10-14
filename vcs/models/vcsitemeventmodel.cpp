@@ -20,7 +20,6 @@
 
 #include "vcsitemeventmodel.h"
 
-#include <QDebug>
 #include <QIcon>
 #include <QModelIndex>
 #include <QVariant>
@@ -50,11 +49,11 @@ void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list
 {
     if(rowCount()==0)
         setColumnCount(2);
-    
+
     bool copySource = false;
     QMimeDatabase mimeDataBase;
     foreach(const KDevelop::VcsItemEvent& ev, list) {
-        
+
         KDevelop::VcsItemEvent::Actions act = ev.actions();
         QStringList actionStrings;
         if( act & KDevelop::VcsItemEvent::Added )
@@ -83,7 +82,7 @@ void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list
             }
             copySource = true;
         }
-        
+
         rowItems.first()->setData(qVariantFromValue(ev));
         appendRow(rowItems);
     }

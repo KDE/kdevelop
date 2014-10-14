@@ -22,14 +22,13 @@
 #ifndef PROJECTFILTERDEBUG_H
 #define PROJECTFILTERDEBUG_H
 
-#include <KDebug>
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(PLUGIN_PROJECTFILTER)
 
 namespace KDevelop {
 
-int projectFilterDebugArea();
+#define projectFilterDebug() qCDebug(PLUGIN_PROJECTFILTER)
 
 }
-
-#define projectFilterDebug() kDebug(projectFilterDebugArea())
 
 #endif // PROJECTFILTERDEBUG_H

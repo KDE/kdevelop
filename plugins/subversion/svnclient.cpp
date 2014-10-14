@@ -26,7 +26,6 @@
 #include <QDateTime>
 #include <QList>
 
-#include <kdebug.h>
 
 extern "C" {
 #include <svn_client.h>

@@ -28,7 +28,6 @@
 #include <KLocalizedString>
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 #include <kcombobox.h>
 #include <kurlcompletion.h>
 #include <kurlcompletion.h>

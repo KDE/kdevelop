@@ -21,7 +21,6 @@
 #include <kurlpixmapprovider.h>
 #include <kfileitem.h>
 #include <ksharedconfig.h>
-#include <kdebug.h>
 #include <kplugininfo.h>
 #include <kfilewidget.h>
 #include <KLocalizedString>

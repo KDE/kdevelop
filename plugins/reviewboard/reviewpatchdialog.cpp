@@ -22,10 +22,10 @@
 #include <Qt>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
-#include <KDebug>
 #include <KLocalizedString>
 #include "ui_reviewpatch.h"
 #include "reviewboardjobs.h"
+#include "debug.h"
 
 ReviewPatchDialog::ReviewPatchDialog(const QUrl& dirUrl, QWidget* parent)
     : KDialog(parent)
@@ -126,7 +126,7 @@ void ReviewPatchDialog::receivedProjects(KJob* job)
         if(!idxs.isEmpty()) {
             m_ui->repositories->setCurrentIndex(idxs.first().row());
         } else
-            qDebug() << "couldn't fucking find it" << m_preferredRepository;
+            qCDebug(PLUGIN_REVIEWBOARD) << "couldn't fucking find it" << m_preferredRepository;
     }
     m_ui->repositoriesBox->setEnabled(job->error()==0);
 }
@@ -247,5 +247,5 @@ void ReviewPatchDialog::initializeFromRC(const QString& filePath)
         setServer(QUrl(values["REVIEWBOARD_URL"]));
     if(values.contains("REPOSITORY"))
         setRepository(values["REPOSITORY"]);
-    kDebug() << "found:" << values;
+    qCDebug(PLUGIN_REVIEWBOARD) << "found:" << values;
 }

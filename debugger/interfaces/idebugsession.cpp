@@ -21,12 +21,12 @@
 #include "idebugsession.h"
 #include "iframestackmodel.h"
 #include "ivariablecontroller.h"
+#include "util/debug.h"
 
 #include <QApplication>
 #include <QWidget>
 #include <QFileInfo>
 
-#include <KDebug>
 
 namespace KDevelop {
 
@@ -91,7 +91,7 @@ QPair<QUrl, int> IDebugSession::convertToRemoteUrl(const QPair<QUrl, int>& local
 
 void IDebugSession::clearCurrentPosition()
 {
-    kDebug();
+    qCDebug(DEBUGGER);
     m_url.clear();
     m_addr = "";
     m_line = -1;
@@ -100,7 +100,7 @@ void IDebugSession::clearCurrentPosition()
 
 void IDebugSession::setCurrentPosition(const QUrl& url, int line, const QString& addr)
 {
-    kDebug() << url << line << addr;
+    qCDebug(DEBUGGER) << url << line << addr;
 
     if (url.isEmpty() || !QFileInfo(convertToLocalUrl(qMakePair(url,line)).first.path()).exists()) {
         clearCurrentPosition();

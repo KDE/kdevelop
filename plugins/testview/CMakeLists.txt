@@ -1,6 +1,4 @@
 
-# add_definitions( -DKDE_DEFAULT_DEBUG_AREA=95xx )
-
 ########### next target ###############
 
 set(kdevtestview_PLUGIN_SRCS

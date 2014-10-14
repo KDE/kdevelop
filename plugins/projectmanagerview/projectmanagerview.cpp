@@ -26,7 +26,6 @@
 #include <QUrl>
 
 #include <kiconloader.h>
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <kactioncollection.h>
 #include <KLineEdit>
@@ -50,6 +49,8 @@
 #include "projectmanagerviewplugin.h"
 #include "vcsoverlayproxymodel.h"
 #include "ui_projectmanagerview.h"
+#include "debug.h"
+
 
 using namespace KDevelop;
 
@@ -189,7 +190,7 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
         if( item )
             items << item;
         else
-            kDebug(9511) << "adding an unknown item";
+            qCDebug(PLUGIN_PROJECTMANAGERVIEW) << "adding an unknown item";
     }
     return items;
 }

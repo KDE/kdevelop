@@ -1,7 +1,5 @@
 project(executescript)
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9515 )
-
 include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}

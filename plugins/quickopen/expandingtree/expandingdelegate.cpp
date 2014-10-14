@@ -28,9 +28,8 @@
 #include <QTreeView>
 #include <QApplication>
 
-#include <kdebug.h>
-
 #include "expandingwidgetmodel.h"
+#include "../debug.h"
 
 ExpandingDelegate::ExpandingDelegate(ExpandingWidgetModel* model, QObject* parent)
   : QItemDelegate(parent)
@@ -52,14 +51,14 @@ if (option.showDecorationSelected && (option.state & QStyle::State_Selected)) {
         if ((value).canConvert<QBrush>())
 	    return qvariant_cast<QBrush>(value).color();
     }
-    
+
     return QApplication::palette().base().color();
 }
 
 static void dampColors(QColor& col) {
   //Reduce the colors that are less visible to the eye, because they are closer to black when it comes to contrast
   //The most significant color to the eye is green. Then comes red, and then blue, with blue _much_ less significant.
-  
+
   col.setBlue(0);
   col.setRed(col.red() / 2);
 }
@@ -76,9 +75,9 @@ void ExpandingDelegate::paint( QPainter * painter, const QStyleOptionViewItem & 
   QStyleOptionViewItem option(optionOld);
 
   m_currentIndex = index;
-  
+
   adjustStyle(index, option);
-    
+
   if( index.column() == 0 )
     model()->placeExpandingWidget(index);
 
@@ -87,11 +86,11 @@ void ExpandingDelegate::paint( QPainter * painter, const QStyleOptionViewItem & 
     m_cachedAlignment = Qt::AlignBottom;
   else
     m_cachedAlignment = Qt::AlignTop;
-  
+
   option.decorationAlignment = m_cachedAlignment;
   option.displayAlignment = m_cachedAlignment;
-  
-  //kDebug( 13035 ) << "Painting row " << index.row() << ", column " << index.column() << ", internal " << index.internalPointer() << ", drawselected " << option.showDecorationSelected << ", selected " << (option.state & QStyle::State_Selected);
+
+  //qCDebug( PLUGIN_QUICKOPEN ) << "Painting row " << index.row() << ", column " << index.column() << ", internal " << index.internalPointer() << ", drawselected " << option.showDecorationSelected << ", selected " << (option.state & QStyle::State_Selected);
 
   m_cachedHighlights.clear();
   m_backgroundColor = getUsedBackgroundColor(option, index);
@@ -101,9 +100,9 @@ void ExpandingDelegate::paint( QPainter * painter, const QStyleOptionViewItem & 
     m_cachedHighlights = createHighlighting(index, option);
   }
 
-  /*kDebug( 13035 ) << "Highlights for line:";
+  /*qCDebug( PLUGIN_QUICKOPEN ) << "Highlights for line:";
   foreach (const QTextLayout::FormatRange& fr, m_cachedHighlights)
-    kDebug( 13035 ) << fr.start << " len " << fr.length << " format ";*/
+    qCDebug( PLUGIN_QUICKOPEN ) << fr.start << " len " << fr.length << " format ";*/
 
   QItemDelegate::paint(painter, option, index);
 
@@ -146,10 +145,10 @@ void ExpandingDelegate::adjustStyle( const QModelIndex& index, QStyleOptionViewI
 
 void ExpandingDelegate::adjustRect(QRect& rect) const {
   if (!model()->indexIsItem(m_currentIndex) /*&& m_currentIndex.column() == 0*/) {
-    
+
     rect.setLeft(model()->treeView()->columnViewportPosition(0));
     int columnCount = model()->columnCount(m_currentIndex.parent());
-    
+
     if(!columnCount)
       return;
     rect.setRight(model()->treeView()->columnViewportPosition(columnCount-1) + model()->treeView()->columnWidth(columnCount-1));
@@ -167,7 +166,7 @@ void ExpandingDelegate::drawDisplay( QPainter * painter, const QStyleOptionViewI
   QList<QTextLayout::FormatRange> additionalFormats;
 
   int missingFormats = text.length();
-  
+
   for (int i = 0; i < m_cachedHighlights.count(); ++i) {
     if (m_cachedHighlights[i].start + m_cachedHighlights[i].length <= m_currentColumnStart)
       continue;
@@ -181,7 +180,7 @@ void ExpandingDelegate::drawDisplay( QPainter * painter, const QStyleOptionViewI
         additionalFormats.append(before);
       }
 
-      
+
     QTextLayout::FormatRange format;
     format.start = m_cachedHighlights[i].start - m_currentColumnStart;
     format.length = m_cachedHighlights[i].length;
@@ -201,33 +200,33 @@ void ExpandingDelegate::drawDisplay( QPainter * painter, const QStyleOptionViewI
     format.format = fm;
     additionalFormats.append(format);
   }
-  
+
   if(m_backgroundColor.isValid()) {
     QColor background = m_backgroundColor;
-//     kDebug() << text << "background:" << background.name();
+//     qCDebug(PLUGIN_QUICKOPEN) << text << "background:" << background.name();
     //Now go through the formats, and make sure the contrast background/foreground is readable
     for(int a = 0; a < additionalFormats.size(); ++a) {
       QColor currentBackground = background;
       if(additionalFormats[a].format.hasProperty(QTextFormat::BackgroundBrush))
 	       currentBackground = additionalFormats[a].format.background().color();
-      
+
       QColor currentColor = additionalFormats[a].format.foreground().color();
-      
+
       double currentContrast = readabilityContrast(currentColor, currentBackground);
       QColor invertedColor(0xffffffff-additionalFormats[a].format.foreground().color().rgb());
       double invertedContrast = readabilityContrast(invertedColor, currentBackground);
-      
-//       kDebug() << "values:" << invertedContrast << currentContrast << invertedColor.name() << currentColor.name();
-      
+
+//       qCDebug(PLUGIN_QUICKOPEN) << "values:" << invertedContrast << currentContrast << invertedColor.name() << currentColor.name();
+
       if(invertedContrast > currentContrast) {
-//         kDebug() << text << additionalFormats[a].length << "switching from" << currentColor.name() << "to" << invertedColor.name();
+//         qCDebug(PLUGIN_QUICKOPEN) << text << additionalFormats[a].length << "switching from" << currentColor.name() << "to" << invertedColor.name();
         QBrush b(additionalFormats[a].format.foreground());
         b.setColor(invertedColor);
         additionalFormats[a].format.setForeground(b);
       }
     }
   }
-  
+
   for(int a = additionalFormats.size()-1; a >= 0; --a) {
       if(additionalFormats[a].length == 0){
           additionalFormats.removeAt(a);
@@ -244,16 +243,16 @@ void ExpandingDelegate::drawDisplay( QPainter * painter, const QStyleOptionViewI
       }
   }
 
-//   kDebug( 13035 ) << "Highlights for text [" << text << "] col start " << m_currentColumnStart << ":";
+//   qCDebug( PLUGIN_QUICKOPEN ) << "Highlights for text [" << text << "] col start " << m_currentColumnStart << ":";
 //   foreach (const QTextLayout::FormatRange& fr, additionalFormats)
-//     kDebug( 13035 ) << fr.start << " len " << fr.length << "foreground" << fr.format.foreground() << "background" << fr.format.background();
+//     qCDebug( PLUGIN_QUICKOPEN ) << fr.start << " len " << fr.length << "foreground" << fr.format.foreground() << "background" << fr.format.background();
 
   layout.setAdditionalFormats(additionalFormats);
 
   QTextOption to;
-  
+
   to.setAlignment( m_cachedAlignment );
-  
+
   to.setWrapMode(QTextOption::WrapAnywhere);
   layout.setTextOption(to);
 
@@ -267,7 +266,7 @@ void ExpandingDelegate::drawDisplay( QPainter * painter, const QStyleOptionViewI
       layout.draw(painter, QPoint(rect.left(), rect.bottom() - (int)line.height()) );
   else
       layout.draw(painter, rect.topLeft() );
-  
+
   return;
 
   //if (painter->fontMetrics().width(text) > textRect.width() && !text.contains(QLatin1Char('\n')))
@@ -308,7 +307,7 @@ bool ExpandingDelegate::editorEvent ( QEvent * event, QAbstractItemModel * /*mod
   } else {
     event->ignore();
   }
-  
+
   return false;
 }
 
@@ -318,7 +317,7 @@ QList<QTextLayout::FormatRange> ExpandingDelegate::highlightingFromVariantList(c
 
     for (int i = 0; i + 2 < customHighlights.count(); i += 3) {
       if (!customHighlights[i].canConvert(QVariant::Int) || !customHighlights[i+1].canConvert(QVariant::Int) || !customHighlights[i+2].canConvert<QTextFormat>()) {
-        kWarning() << "Unable to convert triple to custom formatting.";
+        qWarning() << "Unable to convert triple to custom formatting.";
         continue;
       }
 
@@ -328,7 +327,7 @@ QList<QTextLayout::FormatRange> ExpandingDelegate::highlightingFromVariantList(c
       format.format = customHighlights[i+2].value<QTextFormat>().toCharFormat();
 
       if(!format.format.isValid())
-        kWarning() << "Format is not valid";
+        qWarning() << "Format is not valid";
 
       ret << format;
     }

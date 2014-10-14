@@ -5,6 +5,7 @@ set(kdevreviewboard_PART_SRCS
     reviewboardplugin.cpp
     reviewpatchdialog.cpp
     reviewboardjobs.cpp
+    debug.cpp
 )
 qt5_wrap_ui(kdevreviewboard_PART_SRCS reviewpatch.ui)
 

@@ -26,6 +26,8 @@
 #include <KConfigDialog>
 #include <QVBoxLayout>
 
+Q_LOGGING_CATEGORY(PLUGIN_DASHBOARD, "kdevplatform.plugins.dashboard")
+
 using namespace Plasma;
 
 Dashboard::Dashboard(DashboardCorona* corona, QWidget* parent)
@@ -33,14 +35,14 @@ Dashboard::Dashboard(DashboardCorona* corona, QWidget* parent)
 {
     m_selector=new AppletSelector("KDevelop", QStringList("webbrowser"), this);
     connect(m_selector, SIGNAL(addApplet(QString)), SLOT(addApplet(QString)));
-    
+
     setFocusPolicy(Qt::NoFocus);
-    
+
     connect(containment(), SIGNAL(showAddWidgetsInterface(QPointF)), this, SLOT(showAppletsSwitcher()));
     connect(containment(), SIGNAL(configureRequested(Plasma::Containment*)), this, SLOT(showConfigure()));
     connect(this, SIGNAL(sceneRectAboutToChange()), this, SLOT(updateView()));
     connect(corona, SIGNAL(containmentAdded(Plasma::Containment*)), SLOT(setContainment(Plasma::Containment*)));
-    
+
     setScene(corona);
 
     setScreen(0);
@@ -50,7 +52,7 @@ Dashboard::Dashboard(DashboardCorona* corona, QWidget* parent)
 Dashboard::~Dashboard()
 {
     m_selector->hide();
-    
+
     foreach (Plasma::Containment *containment, corona->containments()) {
         containment->config().deleteEntry("geometry");
         containment->config().deleteEntry("zvalue");
@@ -61,11 +63,11 @@ Dashboard::~Dashboard()
 void Dashboard::updateView()
 {
     Containment* c=containment();
-    
+
     if (c && c->size().toSize() != size()) {
         c->scene()->setSceneRect(QRectF(QPointF(0,0), size()));
         c->resize(size());
-        
+
         ensureVisible(c);
     }
 }
@@ -103,14 +105,14 @@ void Dashboard::showConfigure()
     if(!m_configDialog) {
         KConfigSkeleton *nullManager = new KConfigSkeleton(QString(), this);
         m_configDialog = new KConfigDialog(this, "", nullManager);
-        
+
         QWidget* w = 0;
         Wallpaper* wallpaper = containment()->wallpaper();
 
         if (wallpaper) {
     //         wallpaper->setRenderingMode(wallpaperInfo.second);
             KConfigGroup cfg = configurationDialog(containment(), wallpaper->name());
-    //         kDebug() << "making a" << wallpaperInfo.first << "in mode" << wallpaperInfo.second;
+    //         qCDebug(PLUGIN_DASHBOARD) << "making a" << wallpaperInfo.first << "in mode" << wallpaperInfo.second;
     //         wallpaper->restore(cfg);
             w = wallpaper->createConfigurationInterface(m_configDialog);
         }
@@ -121,7 +123,7 @@ void Dashboard::showConfigure()
 
         m_configDialog->addPage(w, i18n("Background"), "preferences-desktop-wallpaper");
     }
-    
+
     m_configDialog->show();
 }
 

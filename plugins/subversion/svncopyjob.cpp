@@ -24,7 +24,6 @@
 #include <QMutexLocker>
 
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <ThreadWeaver.h>
 
 #include "kdevsvncpp/client.hpp"
@@ -47,7 +46,7 @@ void SvnInternalCopyJob::run()
         cli.copy( svn::Path( srcba.data() ), svn::Revision(), svn::Path( dstba.data() ) );
     }catch( svn::ClientException ce )
     {
-        kDebug(9510) << "Exception while copying file: "
+        qCDebug(PLUGIN_SVN) << "Exception while copying file: "
                 << sourceLocation() << "to" << destinationLocation()
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
@@ -101,7 +100,7 @@ void SvnCopyJob::start()
         setErrorText( i18n( "Not enough information to copy file" ) );
     }else
     {
-        kDebug(9510) << "copying url:" << m_job->sourceLocation() << "to url" << m_job->destinationLocation();
+        qCDebug(PLUGIN_SVN) << "copying url:" << m_job->sourceLocation() << "to url" << m_job->destinationLocation();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
 }

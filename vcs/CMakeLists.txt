@@ -1,8 +1,6 @@
 add_subdirectory(dvcs/tests)
 add_subdirectory(models/tests)
 
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=9509)
-
 set(KDevPlatformVcs_UIS
     widgets/vcscommitdialog.ui
     widgets/vcseventwidget.ui
@@ -20,6 +18,7 @@ set(KDevPlatformVcs_LIB_SRCS
     vcsdiff.cpp
     vcsevent.cpp
     vcsstatusinfo.cpp
+    debug.cpp
     widgets/vcsimportmetadatawidget.cpp
     widgets/vcseventwidget.cpp
     widgets/vcsdiffwidget.cpp

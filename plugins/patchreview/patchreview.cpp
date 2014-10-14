@@ -26,7 +26,6 @@
 
 #include <kparts/part.h>
 #include <kparts/factory.h>
-#include <KDebug>
 #include <KLocalizedString>
 
 #include <libkomparediff2/komparemodellist.h>
@@ -51,10 +50,13 @@
 #include "patchhighlighter.h"
 #include "patchreviewtoolview.h"
 #include "localpatchsource.h"
+#include "debug.h"
 #include <ktexteditor/modificationinterface.h>
 #include <ktexteditor/movingrange.h>
 #include <KIO/NetAccess>
 #include <KActionCollection>
+
+Q_LOGGING_CATEGORY(PLUGIN_PATCHREVIEW, "kdevplatform.plugins.patchreview")
 
 using namespace KDevelop;
 
@@ -68,7 +70,7 @@ Q_DECLARE_METATYPE( const Diff2::DiffModel* )
 
 void PatchReviewPlugin::seekHunk( bool forwards, const QUrl& fileName ) {
     try {
-        kDebug() << forwards << fileName << fileName.isEmpty();
+        qCDebug(PLUGIN_PATCHREVIEW) << forwards << fileName << fileName.isEmpty();
         if ( !m_modelList )
             throw "no model";
 
@@ -81,9 +83,9 @@ void PatchReviewPlugin::seekHunk( bool forwards, const QUrl& fileName ) {
 
             if ( !fileName.isEmpty() && fileName != file )
                 continue;
-            
+
             IDocument* doc = ICore::self()->documentController()->documentForUrl( file );
-            
+
             if ( doc && m_highlighters.contains( doc->url() ) && m_highlighters[doc->url()] ) {
                 if ( doc->textDocument() ) {
                     const QList<KTextEditor::MovingRange*> ranges = m_highlighters[doc->url()]->ranges();
@@ -115,11 +117,11 @@ void PatchReviewPlugin::seekHunk( bool forwards, const QUrl& fileName ) {
             }
         }
     } catch ( const QString & str ) {
-        kDebug() << "seekHunk():" << str;
+        qCDebug(PLUGIN_PATCHREVIEW) << "seekHunk():" << str;
     } catch ( const char * str ) {
-        kDebug() << "seekHunk():" << str;
+        qCDebug(PLUGIN_PATCHREVIEW) << "seekHunk():" << str;
     }
-    kDebug() << "no matching hunk found";
+    qCDebug(PLUGIN_PATCHREVIEW) << "no matching hunk found";
 }
 
 void PatchReviewPlugin::addHighlighting( const QUrl& highlightFile, IDocument* document ) {
@@ -137,13 +139,13 @@ void PatchReviewPlugin::addHighlighting( const QUrl& highlightFile, IDocument* d
             if ( file != highlightFile )
                 continue;
 
-            kDebug() << "highlighting" << file.toDisplayString();
+            qCDebug(PLUGIN_PATCHREVIEW) << "highlighting" << file.toDisplayString();
 
             IDocument* doc = document;
             if( !doc )
                 doc = ICore::self()->documentController()->documentForUrl( file );
 
-            kDebug() << "highlighting file" << file << "with doc" << doc;
+            qCDebug(PLUGIN_PATCHREVIEW) << "highlighting file" << file << "with doc" << doc;
 
             if ( !doc || !doc->textDocument() )
                 continue;
@@ -153,9 +155,9 @@ void PatchReviewPlugin::addHighlighting( const QUrl& highlightFile, IDocument* d
             m_highlighters[file] = new PatchHighlighter( model, doc, this );
         }
     } catch ( const QString & str ) {
-        kDebug() << "highlightFile():" << str;
+        qCDebug(PLUGIN_PATCHREVIEW) << "highlightFile():" << str;
     } catch ( const char * str ) {
-        kDebug() << "highlightFile():" << str;
+        qCDebug(PLUGIN_PATCHREVIEW) << "highlightFile():" << str;
     }
 }
 
@@ -174,9 +176,9 @@ void PatchReviewPlugin::highlightPatch() {
             addHighlighting( file );
         }
     } catch ( const QString & str ) {
-        kDebug() << "highlightFile():" << str;
+        qCDebug(PLUGIN_PATCHREVIEW) << "highlightFile():" << str;
     } catch ( const char * str ) {
-        kDebug() << "highlightFile():" << str;
+        qCDebug(PLUGIN_PATCHREVIEW) << "highlightFile():" << str;
     }
 }
 
@@ -195,7 +197,7 @@ void PatchReviewPlugin::removeHighlighting( const QUrl& file ) {
 }
 
 void PatchReviewPlugin::notifyPatchChanged() {
-    kDebug() << "notifying patch change: " << m_patch->file();
+    qCDebug(PLUGIN_PATCHREVIEW) << "notifying patch change: " << m_patch->file();
     m_updateKompareTimer->start( 500 );
 }
 
@@ -215,7 +217,7 @@ void PatchReviewPlugin::updateKompareModel() {
         return;
     }
 
-    kDebug() << "updating model";
+    qCDebug(PLUGIN_PATCHREVIEW) << "updating model";
     try {
         removeHighlighting();
         m_modelList.reset( 0 );
@@ -232,7 +234,7 @@ void PatchReviewPlugin::updateKompareModel() {
         else if( m_patch->file().isValid() && !m_patch->file().isEmpty() ) {
             bool ret = KIO::NetAccess::download( m_patch->file(), patchFile, ICore::self()->uiController()->activeMainWindow() );
             if( !ret )
-                kWarning() << "Problem while downloading: " << m_patch->file();
+                qWarning() << "Problem while downloading: " << m_patch->file();
         }
 
         m_diffSettings = new DiffSettings( 0 );
@@ -309,11 +311,11 @@ PatchReviewPlugin::~PatchReviewPlugin() {
 }
 
 void PatchReviewPlugin::clearPatch( QObject* _patch ) {
-    kDebug() << "clearing patch" << _patch << "current:" << ( QObject* )m_patch;
+    qCDebug(PLUGIN_PATCHREVIEW) << "clearing patch" << _patch << "current:" << ( QObject* )m_patch;
     IPatchSource::Ptr patch( ( IPatchSource* )_patch );
 
     if( patch == m_patch ) {
-        kDebug() << "is current patch";
+        qCDebug(PLUGIN_PATCHREVIEW) << "is current patch";
         setPatch( IPatchSource::Ptr( new LocalPatchSource ) );
     }
 }
@@ -425,9 +427,9 @@ void PatchReviewPlugin::updateReview() {
     }
     futureActiveDoc->textDocument()->setReadWrite( false );
     futureActiveDoc->setPrettyName( i18n( "Overview" ) );
-    
+
     IDocument* buddyDoc = futureActiveDoc;
-    
+
     KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>( futureActiveDoc->textDocument() );
     modif->setModifiedOnDiskWarning( false );
 
@@ -444,7 +446,7 @@ void PatchReviewPlugin::updateReview() {
                 seekHunk( true, absoluteUrl ); //Jump to the first changed position
             }else{
                 // Maybe the file was deleted
-                kDebug() << "could not open" << absoluteUrl << "because it doesn't exist";
+                qCDebug(PLUGIN_PATCHREVIEW) << "could not open" << absoluteUrl << "because it doesn't exist";
             }
         }
     }
@@ -483,7 +485,7 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
     m_patch = patch;
 
     if( m_patch ) {
-        kDebug() << "setting new patch" << patch->name() << "with file" << patch->file() << "basedir" << patch->baseDir();
+        qCDebug(PLUGIN_PATCHREVIEW) << "setting new patch" << patch->name() << "with file" << patch->file() << "basedir" << patch->baseDir();
 
         connect( m_patch, SIGNAL( patchChanged() ), this, SLOT( notifyPatchChanged() ) );
     }
@@ -551,7 +553,7 @@ void PatchReviewPlugin::exporterSelected( QAction* action ) {
     IPlugin* exporter = qobject_cast<IPlugin*>( action->data().value<QObject*>() );
 
     if( exporter ) {
-        qDebug() << "exporting patch" << exporter << action->text();
+        qCDebug(PLUGIN_PATCHREVIEW) << "exporting patch" << exporter << action->text();
         exporter->extension<IPatchExporter>()->exportPatch( patch() );
     }
 }

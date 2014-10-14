@@ -1,6 +1,7 @@
 #include "filetemplatesplugin.h"
 #include "templateclassassistant.h"
 #include "templatepreviewtoolview.h"
+#include "debug.h"
 
 #include <language/codegen/templatesmodel.h>
 #include <language/interfaces/editorcontext.h>
@@ -12,7 +13,6 @@
 #include <project/projectmodel.h>
 #include <util/path.h>
 
-#include <KDebug>
 #include <KLocalizedString>
 #include <KPluginFactory>
 #include <KAboutData>
@@ -24,15 +24,7 @@
 #include <QDir>
 #include <QIcon>
 
-#define debug() kDebug(debugArea())
-
 using namespace KDevelop;
-
-int debugArea()
-{
-    static int area = KDebug::registerArea("kdevfiletemplates");
-    return area;
-}
 
 K_PLUGIN_FACTORY_WITH_JSON(FileTemplatesFactory, "kdevfiletemplates.json", registerPlugin<FileTemplatesPlugin>();)
 
@@ -228,7 +220,7 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
         filters << "*.kdevtemplate" << "*.desktop";
         foreach (const QString& entry, dir.entryList(filters))
         {
-            kDebug() << "Trying entry" << entry;
+            qCDebug(PLUGIN_FILETEMPLATES) << "Trying entry" << entry;
             /*
             * This logic is not perfect, but it works for most cases.
             *
@@ -248,7 +240,7 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
             KConfig* config = new KConfig(dir.absoluteFilePath(entry), KConfig::SimpleConfig);
             KConfigGroup group = config->group("General");
 
-            kDebug() << "General group keys:" << group.keyList();
+            qCDebug(PLUGIN_FILETEMPLATES) << "General group keys:" << group.keyList();
 
             if (!group.hasKey("Name") || !group.hasKey("Category"))
             {
@@ -257,7 +249,7 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
 
             if (group.hasKey("Files"))
             {
-                kDebug() << "Group has files " << group.readEntry("Files", QStringList());
+                qCDebug(PLUGIN_FILETEMPLATES) << "Group has files " << group.readEntry("Files", QStringList());
                 foreach (const QString& outputFile, group.readEntry("Files", QStringList()))
                 {
                     if (dir.absoluteFilePath(config->group(outputFile).readEntry("File")) == url.toLocalFile())

@@ -24,10 +24,10 @@
 #include <QtTest>
 #include <QDBusConnection>
 #include <QDBusMessage>
+#include <QtCore/QDebug>
 
 #include <kcomponentdata.h>
 #include <kprocess.h>
-#include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 
@@ -49,7 +49,7 @@ void TestPluginController::initTestCase()
     KGlobal::dirs()->addResourceDir( "module", TEST_BIN_DIR "/../../lib" );
     KGlobal::dirs()->addResourceDir( "services", TEST_BIN_DIR);
 
-    kDebug() << "module dirs:" << KGlobal::dirs()->resourceDirs("module");
+    qDebug() << "module dirs:" << KGlobal::dirs()->resourceDirs("module");
     QString kdedirs = "";
     QStringList env = QProcess::systemEnvironment();
     for( int i = 0; i < env.count(); i++ )

@@ -20,7 +20,6 @@
 #include "projectitemlineedit.h"
 
 #include <QCompleter>
-#include <KDebug>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>

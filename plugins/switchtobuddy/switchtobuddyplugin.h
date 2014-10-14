@@ -25,6 +25,8 @@
 #include <interfaces/contextmenuextension.h>
 
 #include <QVariantList>
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(PLUGIN_SWITCHTOBUDDY)
 
 /**
  * @short Implements a context menu extension in an editor context which provides

@@ -18,9 +18,9 @@
 */
 
 #include "classmemberspage.h"
+#include "debug.h"
 
 #include <KEditListWidget>
-#include <KDebug>
 #include <KLineEdit>
 #include <KLocalizedString>
 
@@ -96,7 +96,7 @@ VariableDescriptionList ClassMembersPage::members() const
                 break;
 
             default:
-                kDebug() << "Malformed class member" << item;
+                qCDebug(PLUGIN_FILETEMPLATES) << "Malformed class member" << item;
                 break;
         }
 

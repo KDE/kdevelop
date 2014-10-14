@@ -27,6 +27,7 @@
 #include "../duchain/types/functiontype.h"
 #include "../duchain/types/enumeratortype.h"
 #include "../duchain/duchainutils.h"
+#include "util/debug.h"
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
@@ -87,7 +88,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
     if(m_declaration) {
       newText = declarationName();
     } else {
-      kDebug() << "Declaration disappeared";
+      qCDebug(LANGUAGE) << "Declaration disappeared";
       return;
     }
   }
@@ -126,7 +127,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 {
   DUChainReadLocker lock(DUChain::lock(), 500);
   if(!lock.locked()) {
-    kDebug(9007) << "Failed to lock the du-chain in time";
+    qCDebug(LANGUAGE) << "Failed to lock the du-chain in time";
     return QVariant();
   }
 

@@ -27,7 +27,6 @@
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
-#include <KDebug>
 #include <kparts/mainwindow.h>
 
 #include <QApplication>
@@ -45,7 +44,7 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const QUrl& url, con
     QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
 
     if ( !KIO::NetAccess::exists(url, KIO::NetAccess::DestinationSide, window) ) {
-        kWarning() << "tried to remove non-existing url:" << url << project << isFolder;
+        qWarning() << "tried to remove non-existing url:" << url << project << isFolder;
         return true;
     }
 

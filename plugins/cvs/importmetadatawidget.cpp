@@ -12,7 +12,6 @@
 #include "importmetadatawidget.h"
 
 #include <KMessageBox>
-#include <KDebug>
 
 #include <vcs/vcslocation.h>
 
@@ -31,7 +30,7 @@ ImportMetadataWidget::ImportMetadataWidget(QWidget *parent)
     connect( m_ui->releaseTag, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( m_ui->repository, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( m_ui->vendorTag, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    
+
 }
 
 ImportMetadataWidget::~ImportMetadataWidget()

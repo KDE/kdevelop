@@ -34,7 +34,6 @@
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
 #include "icore.h"
 #include "iplugincontroller.h"
 #include "iprojectcontroller.h"

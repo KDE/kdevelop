@@ -20,7 +20,6 @@
 
 #include <QtTest/QtTest>
 
-#include <QDebug>
 #include <QThread>
 
 #include "../foregroundlock.h"

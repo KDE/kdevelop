@@ -21,9 +21,4 @@
 
 #include "externalscriptdebug.h"
 
-
-int debugArea()
-{
-  static int area = KDebug::registerArea("KDevplatform (External Script)", false);
-  return area;
-}
+Q_LOGGING_CATEGORY(PLUGIN_EXTERNALSCRIPT, "kdevplatform.plugins.externalscript")

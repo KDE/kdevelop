@@ -28,6 +28,7 @@
 #include "outputpage.h"
 #include "testcasespage.h"
 #include "defaultcreateclasshelper.h"
+#include "debug.h"
 
 #include <language/codegen/templateclassgenerator.h>
 #include <language/codegen/sourcefiletemplate.h>
@@ -54,7 +55,6 @@
 #include <QLabel>
 #include <QListWidget>
 #include <QPointer>
-#include <KDebug>
 
 #include <KIO/Global>
 
@@ -146,18 +146,18 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
             url = fileUrls.constBegin().value().adjusted(QUrl::RemoveFilename);
         }
     }
-    kDebug() << "Searching for targets with URL" << url;
+    qCDebug(PLUGIN_FILETEMPLATES) << "Searching for targets with URL" << url;
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
     if (!project || !project->buildSystemManager())
     {
-        kDebug() << "No suitable project found";
+        qCDebug(PLUGIN_FILETEMPLATES) << "No suitable project found";
         return;
     }
 
     QList<ProjectBaseItem*> items = project->itemsForUrl(url);
     if (items.isEmpty())
     {
-        kDebug() << "No suitable project items found";
+        qCDebug(PLUGIN_FILETEMPLATES) << "No suitable project items found";
         return;
     }
 
@@ -194,7 +194,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
 
     if (targets.size() == 1)
     {
-        kDebug() << "Only one candidate target," << targets.first()->text() << ", using it";
+        qCDebug(PLUGIN_FILETEMPLATES) << "Only one candidate target," << targets.first()->text() << ", using it";
         target = targets.first();
     }
     else if (targets.size() > 1)
@@ -224,19 +224,19 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
             }
             else
             {
-                kDebug() << "Did not select anything, not adding to a target";
+                qCDebug(PLUGIN_FILETEMPLATES) << "Did not select anything, not adding to a target";
                 return;
             }
         }
         else {
-            kDebug() << "Canceled select target dialog, not adding to a target";
+            qCDebug(PLUGIN_FILETEMPLATES) << "Canceled select target dialog, not adding to a target";
             return;
         }
     }
     else
     {
         // No target, not doing anything
-        kDebug() << "No possible targets for URL" << url;
+        qCDebug(PLUGIN_FILETEMPLATES) << "No possible targets for URL" << url;
         return;
     }
 
@@ -317,7 +317,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         return;
     }
 
-    kDebug() << "Selected template" << templateDescription << "of type" << d->type;
+    qCDebug(PLUGIN_FILETEMPLATES) << "Selected template" << templateDescription << "of type" << d->type;
     removePage(d->dummyPage);
 
     if (d->baseUrl.isValid())
@@ -359,7 +359,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
 
         if (!d->helper)
         {
-            kDebug() << "No class creation helper for language" << languageName;
+            qCDebug(PLUGIN_FILETEMPLATES) << "No class creation helper for language" << languageName;
             d->helper = new DefaultCreateClassHelper;
         }
 
@@ -396,7 +396,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
 
     if (d->fileTemplate.hasCustomOptions())
     {
-        kDebug() << "Class generator has custom options";
+        qCDebug(PLUGIN_FILETEMPLATES) << "Class generator has custom options";
         d->templateOptionsPageWidget = new TemplateOptionsPage(this);
         d->templateOptionsPage = insertPage(d->outputPage, d->templateOptionsPageWidget,
                                             i18n("Template Options"));
@@ -407,7 +407,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
 
 void TemplateClassAssistant::next()
 {
-    kDebug() << currentPage()->name() << currentPage()->header();
+    qCDebug(PLUGIN_FILETEMPLATES) << currentPage()->name() << currentPage()->header();
     if (currentPage() == d->templateSelectionPage)
     {
         // We have chosen the template

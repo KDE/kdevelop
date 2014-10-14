@@ -20,9 +20,9 @@ Boston, MA 02110-1301, USA.
 #include "outputexecutejob.h"
 #include "outputmodel.h"
 #include "outputdelegate.h"
+#include "debug.h"
 #include <util/environmentgrouplist.h>
 #include <util/processlinemaker.h>
-#include <KDebug>
 #include <KProcess>
 #include <KLocalizedString>
 #include <KShell>
@@ -262,7 +262,7 @@ void OutputExecuteJob::start()
     d->m_process->setProcessEnvironment( d->effectiveEnvironment() );
     d->m_process->setProgram( d->effectiveCommandLine() );
 
-    kDebug() << "Starting:" << d->m_process->program().join(" ") << "in" << d->m_process->workingDirectory();
+    qCDebug(OUTPUTVIEW) << "Starting:" << d->m_process->program().join(" ") << "in" << d->m_process->workingDirectory();
     d->m_process->start();
 }
 

@@ -29,7 +29,6 @@
 
 #include <ThreadWeaver/ThreadWeaver>
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <ThreadWeaver/threadweaver/qobjectdecorator.h>
 
 extern "C" {

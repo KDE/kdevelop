@@ -30,14 +30,14 @@
 #include <kjobtrackerinterface.h>
 #include <KIO/Job>
 #include <KMessageBox>
-#include <KDebug>
 #include <QFile>
 
 using namespace KDevelop;
 
+Q_LOGGING_CATEGORY(PLUGIN_PASTEBIN, "kdevplatform.plugins.pastebin")
 K_PLUGIN_FACTORY_WITH_JSON(KDevPastebinFactory, "kdevpastebin.json", registerPlugin<PastebinPlugin>();)
 
-PastebinPlugin::PastebinPlugin ( QObject* parent, const QVariantList& ) 
+PastebinPlugin::PastebinPlugin ( QObject* parent, const QVariantList& )
     : IPlugin ( "kdevpastebin", parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchExporter )
@@ -57,9 +57,9 @@ QByteArray urlToData(const QUrl& url)
         bool corr=f.open(QFile::ReadOnly | QFile::Text);
         Q_ASSERT(corr);
         Q_UNUSED(corr);
-        
+
         ret = f.readAll();
-        
+
     } else {
 //TODO: add downloading the data
     }
@@ -69,7 +69,7 @@ QByteArray urlToData(const QUrl& url)
 
 void PastebinPlugin::exportPatch(IPatchSource::Ptr source)
 {
-    kDebug() << "exporting patch to pastebin" << source->file();
+    qCDebug(PLUGIN_PASTEBIN) << "exporting patch to pastebin" << source->file();
     QByteArray bytearray = "api_option=paste&api_paste_private=1&api_paste_name=kdevelop-pastebin-plugin&api_paste_expire_date=1D&api_paste_format=diff&api_dev_key=0c8b6add8e0f6d53f61fe5ce870a1afa&api_paste_code="+QUrl::toPercentEncoding(urlToData(source->file()), "/");
 
     QUrl url("http://pastebin.com/api/api_post.php");
@@ -78,7 +78,7 @@ void PastebinPlugin::exportPatch(IPatchSource::Ptr source)
 
     tf->addMetaData("content-type","Content-Type: application/x-www-form-urlencoded");
     connect(tf, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(data(KIO::Job*,QByteArray)));
-    
+
     m_result.insert(tf, QByteArray());
     KIO::getJobTracker()->registerJob(tf);
 }

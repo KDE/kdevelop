@@ -24,14 +24,13 @@
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idebugcontroller.h"
 #include "../variable/variablecollection.h"
+#include "util/debug.h"
 #include "iframestackmodel.h"
-#include <KDebug>
 
-#include <KDebug>
 
 namespace KDevelop {
 
-    
+
 IVariableController::IVariableController(IDebugSession* parent)
     : QObject(parent), m_activeThread(-1), m_activeFrame(-1)
 {
@@ -93,7 +92,7 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
 
     switch (event) {
     case IDebugSession::thread_or_frame_changed:
-        kDebug() << m_autoUpdate;
+        qCDebug(DEBUGGER) << m_autoUpdate;
         if (!(m_autoUpdate & UpdateLocals)) {
             foreach (Locals *l, variableCollection()->allLocals()) {
                 if (!l->isExpanded() && !l->childCount()) {
@@ -115,7 +114,7 @@ void IVariableController::setAutoUpdate(QFlags<UpdateType> autoUpdate)
 {
     IDebugSession::DebuggerState state = session()->state();
     m_autoUpdate = autoUpdate;
-    kDebug() << m_autoUpdate;
+    qCDebug(DEBUGGER) << m_autoUpdate;
     if (m_autoUpdate != UpdateNone && state == IDebugSession::PausedState) {
         update();
     }

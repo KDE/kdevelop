@@ -23,6 +23,8 @@
 #include <QtCore/QObject>
 #include <plasma/view.h>
 #include <QPointer>
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(PLUGIN_DASHBOARD)
 
 class KConfigDialog;
 class IDashboardPlasmoidFactory;
@@ -44,14 +46,14 @@ class Dashboard : public Plasma::View
     public:
         Dashboard(DashboardCorona* corona, QWidget* parent=0);
         virtual ~Dashboard();
-        
+
         virtual void resizeEvent(QResizeEvent* event);
     private slots:
         void updateView();
         void showAppletsSwitcher();
         void addApplet(const QString& name);
         void showConfigure();
-        
+
     private:
         QPointer<KConfigDialog> m_configDialog;
         DashboardCorona* corona;

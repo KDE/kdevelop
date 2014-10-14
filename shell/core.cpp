@@ -23,7 +23,6 @@
 #include <QApplication>
 #include <QtCore/QTimer>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <KComponentData>
 
@@ -47,6 +46,7 @@
 #include "kdevplatformversion.h"
 #include "workingsetcontroller.h"
 #include "testcontroller.h"
+#include "debug.h"
 
 #include <KMessageBox>
 
@@ -61,7 +61,7 @@ void shutdownGracefully(int sig)
 {
     if ( !handlingSignal ) {
         handlingSignal = 1;
-        qDebug() << "signal " << sig << " received, shutting down gracefully";
+        qCDebug(SHELL) << "signal " << sig << " received, shutting down gracefully";
         QCoreApplication* app = QCoreApplication::instance();
         if (QApplication* guiApp = qobject_cast<QApplication*>(app)) {
             guiApp->closeAllWindows();
@@ -94,7 +94,7 @@ Core *Core::m_self = 0;
 
 KAboutData createAboutData()
 {
-    KAboutData aboutData( "kdevplatform", 
+    KAboutData aboutData( "kdevplatform",
                           i18n("KDevelop Platform"), KDEVPLATFORM_VERSION_STR,
                           i18n("Development Platform for IDE-like Applications"),
                           KAboutLicense::LGPL_V2, i18n( "Copyright 2004-2014, The KDevelop developers" ),
@@ -106,7 +106,7 @@ KAboutData createAboutData()
     aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "Co-Maintainer, CMake Support, Run Support, Kross Support" ), "aleixpol@kde.org" );
     aboutData.addAuthor( i18n("Vladimir Prus"), i18n( "GDB integration" ), "ghost@cs.msu.su" );
     aboutData.addAuthor( i18n("Hamish Rodda"), i18n( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
-    
+
     aboutData.addCredit( i18n("Matt Rogers"), QString(), "mattr@kde.org");
     aboutData.addCredit( i18n("Cédric Pasteur"), i18n("astyle and indent support"), "cedric.pasteur@free.fr" );
     aboutData.addCredit( i18n("Evgeniy Ivanov"), i18n("Distributed VCS, Git, Mercurial"), "powerfox@kde.ru" );
@@ -137,13 +137,13 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     {
         workingSetController = new WorkingSetController();
     }
-    kDebug() << "Creating ui controller";
+    qCDebug(SHELL) << "Creating ui controller";
     if( !uiController )
     {
         uiController = new UiController(m_core);
     }
     emit m_core->startupProgress(10);
-    kDebug() << "Creating plugin controller";
+    qCDebug(SHELL) << "Creating plugin controller";
 
     if( !pluginController )
     {
@@ -184,7 +184,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     }
     emit m_core->startupProgress(30);
 
-    if ( !progressController) 
+    if ( !progressController)
     {
         progressController = ProgressManager::instance();
     }
@@ -212,7 +212,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     }
     emit m_core->startupProgress(47);
 
-    kDebug() << "initializing ui controller";
+    qCDebug(SHELL) << "initializing ui controller";
 
     sessionController.data()->initialize( session );
     if( !sessionController.data()->activeSessionLock() ) {
@@ -241,7 +241,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
         tool views to a list of available tool view, and then grab
         those tool views when loading an area.  */
 
-    kDebug() << "loading session plugins";
+    qCDebug(SHELL) << "loading session plugins";
     pluginController.data()->initialize();
     emit m_core->startupProgress(78);
 
@@ -333,10 +333,10 @@ bool Core::initialize(QObject* splash, Setup mode, const QString& session )
     if( splash ) {
         QTimer::singleShot( 200, splash, SLOT(deleteLater()) );
     }
-    
+
     if(ret)
         emit m_self->initializationCompleted();
-    
+
     return ret;
 }
 
@@ -361,7 +361,7 @@ Core::Core(CorePrivate* dd, QObject* parent)
 
 Core::~Core()
 {
-    kDebug() ;
+    qCDebug(SHELL) ;
     //Cleanup already called before mass destruction of GUI
     delete d;
     m_self = 0;

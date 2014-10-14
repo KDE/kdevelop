@@ -20,7 +20,6 @@
 #include "outputformats.h"
 #include "filtereditem.h"
 
-#include <KDebug>
 #include <KLocalizedString>
 
 #include <QFileInfo>

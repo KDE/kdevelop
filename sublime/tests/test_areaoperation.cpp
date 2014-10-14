@@ -24,8 +24,8 @@
 #include <QTextEdit>
 #include <QSplitter>
 #include <QUrl>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kapplication.h>
 
 #include <sublime/view.h>
@@ -552,7 +552,7 @@ void TestAreaOperation::testAddingViewAfter()
 
     QList<View*> list(m_area3->views());
     foreach (View *view, list){
-        kDebug() << "name of view : " << view->objectName() << " , it's index : " << m_area3->views().indexOf(view);
+        qDebug() << "name of view : " << view->objectName() << " , it's index : " << m_area3->views().indexOf(view);
     }
 
 }

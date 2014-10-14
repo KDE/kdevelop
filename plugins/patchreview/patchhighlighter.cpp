@@ -17,10 +17,10 @@
 #include <libkomparediff2/diffmodel.h>
 
 #include "patchreview.h"
+#include "debug.h"
 #include <language/highlighting/colorcache.h>
 #include <interfaces/idocument.h>
 #include <util/activetooltip.h>
-#include <KDebug>
 #include <KLocalizedString>
 #include <QTextBrowser>
 #include <KParts/MainWindow>
@@ -325,8 +325,8 @@ void PatchHighlighter::textRemoved( KTextEditor::Document* doc, const KTextEdito
     if ( m_applying ) { // Do not interfere with patch application
         return;
     }
-    kDebug() << "removal range" << range;
-    kDebug() << "removed text" << oldText;
+    qCDebug(PLUGIN_PATCHREVIEW) << "removal range" << range;
+    qCDebug(PLUGIN_PATCHREVIEW) << "removed text" << oldText;
     QStringList removedLines = splitAndAddNewlines( oldText );
     int startLine = range.start().line();
     QString remainingLine = doc->line( startLine );
@@ -343,7 +343,7 @@ void PatchHighlighter::textRemoved( KTextEditor::Document* doc, const KTextEdito
 void PatchHighlighter::textInserted( KTextEditor::Document* doc, const KTextEditor::Range& range ) {
     if( range == doc->documentRange() )
     {
-        kDebug() << "re-doing";
+        qCDebug(PLUGIN_PATCHREVIEW) << "re-doing";
         //The document was loaded / reloaded
         if ( !m_model->differences() )
             return;
@@ -418,9 +418,9 @@ void PatchHighlighter::textInserted( KTextEditor::Document* doc, const KTextEdit
         if ( m_applying ) { // Do not interfere with patch application
             return;
         }
-        kDebug() << "insertion range" << range;
+        qCDebug(PLUGIN_PATCHREVIEW) << "insertion range" << range;
         QString text = doc->text( range );
-        kDebug() << "inserted text" << text;
+        qCDebug(PLUGIN_PATCHREVIEW) << "inserted text" << text;
         QStringList insertedLines = splitAndAddNewlines( text );
         int startLine = range.start().line();
         int endLine = range.end().line();
@@ -594,13 +594,13 @@ IDocument* PatchHighlighter::doc() {
 }
 
 void PatchHighlighter::documentDestroyed() {
-    kDebug() << "document destroyed";
+    qCDebug(PLUGIN_PATCHREVIEW) << "document destroyed";
     m_ranges.clear();
     m_differencesForRanges.clear();
 }
 
 void PatchHighlighter::aboutToDeleteMovingInterfaceContent( KTextEditor::Document* ) {
-    kDebug() << "about to delete";
+    qCDebug(PLUGIN_PATCHREVIEW) << "about to delete";
     clear();
 }
 

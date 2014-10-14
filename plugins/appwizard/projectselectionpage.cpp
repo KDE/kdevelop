@@ -9,13 +9,13 @@
  *                                                                         *
  ***************************************************************************/
 #include "projectselectionpage.h"
+#include "debug.h"
 
 #include <QDir>
 
 #include <klineedit.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -67,7 +67,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
              this, SLOT(templateChanged(int)) );
 
     KNS3::Button* knsButton = new KNS3::Button(i18n("Get More Templates"), "kdevappwizard.knsrc", m_listView);
-    connect (knsButton, SIGNAL(dialogFinished(KNS3::Entry::List)), 
+    connect (knsButton, SIGNAL(dialogFinished(KNS3::Entry::List)),
              this, SLOT(templatesDownloaded(KNS3::Entry::List)));
     m_listView->addWidget(0, knsButton);
 
@@ -96,7 +96,7 @@ void ProjectSelectionPage::typeChanged(const QModelIndex& idx)
 {
     if (!idx.model())
     {
-        kDebug() << "Index with no model";
+        qCDebug(PLUGIN_APPWIZARD) << "Index with no model";
         return;
     }
     int children = idx.model()->rowCount(idx);

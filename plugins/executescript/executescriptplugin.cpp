@@ -28,7 +28,6 @@
 #include <KLocalizedString>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-#include <kdebug.h>
 #include <kjob.h>
 #include <kparts/mainwindow.h>
 #include <kmessagebox.h>
@@ -42,6 +41,7 @@
 #include <util/environmentgrouplist.h>
 
 #include "scriptappconfig.h"
+#include "debug.h"
 #include <project/projectmodel.h>
 #include <project/builderjob.h>
 #include <kshell.h>
@@ -64,6 +64,7 @@ QString ExecuteScriptPlugin::outputFilteringEntry = "Output Filtering Mode";
 
 using namespace KDevelop;
 
+Q_LOGGING_CATEGORY(PLUGIN_EXECUTESCRIPT, "kdevplatform.plugins.executescript")
 K_PLUGIN_FACTORY_WITH_JSON(KDevExecuteFactory, "kdevexecutescript.json", registerPlugin<ExecuteScriptPlugin>();)
 
 ExecuteScriptPlugin::ExecuteScriptPlugin(QObject *parent, const QVariantList&)
@@ -72,7 +73,7 @@ ExecuteScriptPlugin::ExecuteScriptPlugin(QObject *parent, const QVariantList&)
     KDEV_USE_EXTENSION_INTERFACE( IExecuteScriptPlugin )
     m_configType = new ScriptAppConfigType();
     m_configType->addLauncher( new ScriptAppLauncher( this ) );
-    kDebug() << "adding script launch config";
+    qCDebug(PLUGIN_EXECUTESCRIPT) << "adding script launch config";
     core()->runController()->addConfigurationType( m_configType );
 }
 
@@ -102,7 +103,7 @@ QUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& 
     if( !script.isLocalFile() || script.isEmpty() )
     {
         err_ = i18n("No valid executable specified");
-        kWarning() << "Launch Configuration:" << cfg->name() << "no valid script set";
+        qWarning() << "Launch Configuration:" << cfg->name() << "no valid script set";
     } else
     {
         KShell::Errors err;
@@ -120,7 +121,7 @@ QUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& 
                 "script for the launch configuration '%1', "
                 "this is not supported currently. Aborting start.", cfg->name() );
             }
-            kWarning() << "Launch Configuration:" << cfg->name() << "script has meta characters";
+            qWarning() << "Launch Configuration:" << cfg->name() << "script has meta characters";
         }
     }
     return script;
@@ -135,7 +136,7 @@ QString ExecuteScriptPlugin::remoteHost(ILaunchConfiguration* cfg, QString& err)
         if (host.isEmpty()) {
             err = i18n("No remote host set for launch configuration '%1'. "
             "Aborting start.", cfg->name() );
-            kWarning() << "Launch Configuration:" << cfg->name() << "no remote host set";
+            qWarning() << "Launch Configuration:" << cfg->name() << "no remote host set";
         }
         return host;
     }
@@ -153,7 +154,7 @@ QStringList ExecuteScriptPlugin::arguments( KDevelop::ILaunchConfiguration* cfg,
     QStringList args = KShell::splitArgs( cfg->config().readEntry( ExecuteScriptPlugin::argumentsEntry, "" ), KShell::TildeExpand | KShell::AbortOnMeta, &err );
     if( err != KShell::NoError )
     {
-        
+
         if( err == KShell::BadQuoting )
         {
             err_ = i18n("There is a quoting error in the arguments for "
@@ -165,7 +166,7 @@ QStringList ExecuteScriptPlugin::arguments( KDevelop::ILaunchConfiguration* cfg,
             "this is not supported currently. Aborting start.", cfg->name() );
         }
         args = QStringList();
-        kWarning() << "Launch Configuration:" << cfg->name() << "arguments have meta characters";
+        qWarning() << "Launch Configuration:" << cfg->name() << "arguments have meta characters";
     }
     return args;
 }
@@ -176,7 +177,7 @@ QString ExecuteScriptPlugin::environmentGroup( KDevelop::ILaunchConfiguration* c
     {
         return "";
     }
-    
+
     return cfg->config().readEntry( ExecuteScriptPlugin::environmentGroupEntry, "" );
 }
 
@@ -203,7 +204,7 @@ bool ExecuteScriptPlugin::runCurrentFile(ILaunchConfiguration* cfg) const
 QString ExecuteScriptPlugin::interpreter( KDevelop::ILaunchConfiguration* cfg, QString& err ) const
 {
     QString interpreter;
-    if( !cfg ) 
+    if( !cfg )
     {
         return interpreter;
     }
@@ -214,25 +215,25 @@ QString ExecuteScriptPlugin::interpreter( KDevelop::ILaunchConfiguration* cfg, Q
     if( interpreter.isEmpty() )
     {
         err = i18n("No valid interpreter specified");
-        kWarning() << "Launch Configuration:" << cfg->name() << "no valid interpreter set";
+        qWarning() << "Launch Configuration:" << cfg->name() << "no valid interpreter set";
     } else
     {
         KShell::Errors err_;
         if( KShell::splitArgs( interpreter, KShell::TildeExpand | KShell::AbortOnMeta, &err_ ).isEmpty() || err_ != KShell::NoError )
         {
             interpreter.clear();
-            if( err_ == KShell::BadQuoting ) 
+            if( err_ == KShell::BadQuoting )
             {
                 err = i18n("There is a quoting error in the interpreter "
                 "for the launch configuration '%1'. "
                 "Aborting start.", cfg->name() );
-            } else 
-            {   
+            } else
+            {
                 err = i18n("A shell meta character was included in the "
                 "interpreter for the launch configuration '%1', "
                 "this is not supported currently. Aborting start.", cfg->name() );
             }
-            kWarning() << "Launch Configuration:" << cfg->name() << "interpreter has meta characters";
+            qWarning() << "Launch Configuration:" << cfg->name() << "interpreter has meta characters";
         }
     }
     return interpreter;
@@ -245,7 +246,7 @@ bool ExecuteScriptPlugin::useTerminal( KDevelop::ILaunchConfiguration* cfg ) con
     {
         return false;
     }
-    
+
     return cfg->config().readEntry( ExecuteScriptPlugin::useTerminalEntry, false );
 }
 */
@@ -256,7 +257,7 @@ QUrl ExecuteScriptPlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg 
     {
         return QUrl();
     }
-    
+
     return cfg->config().readEntry( ExecuteScriptPlugin::workingDirEntry, QUrl() );
 }
 

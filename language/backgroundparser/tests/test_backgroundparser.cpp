@@ -77,7 +77,7 @@ void JobPlan::parseJobCreated(ParseJob* job)
     TestParseJob* testJob = dynamic_cast<TestParseJob*>(job);
     Q_ASSERT(testJob);
 
-    kDebug() << "assigning propierties for created job" << testJob->document().toUrl();
+    qDebug() << "assigning propierties for created job" << testJob->document().toUrl();
     testJob->duration_ms = jobForUrl(testJob->document()).m_duration;
 
     m_createdJobs.append(testJob->document());
@@ -128,7 +128,7 @@ JobPrototype JobPlan::jobForUrl(const IndexedString& url)
 
 void JobPlan::updateReady(const IndexedString& url, const ReferencedTopDUContext& /*context*/)
 {
-    kDebug() << "update ready on " << url.toUrl();
+    qDebug() << "update ready on " << url.toUrl();
 
     const JobPrototype job = jobForUrl(url);
     QVERIFY(job.m_url.toUrl().isValid());

@@ -24,7 +24,6 @@
 #include <KTextEdit>
 #include <kio/global.h>
 
-#include <kdebug.h>
 
 namespace Sublime {
 

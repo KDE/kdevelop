@@ -11,8 +11,6 @@ if( ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_PATCH_VERSION} VERSION
     add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
 endif()
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9512 )
-
 ########### next target ###############
 
 set(kdevclassbrowser_PART_SRCS

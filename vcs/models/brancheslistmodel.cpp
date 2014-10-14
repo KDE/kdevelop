@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include "brancheslistmodel.h"
+#include "../debug.h"
 #include <vcs/interfaces/ibranchingversioncontrol.h>
 #include <vcs/vcsjob.h>
 #include <vcs/vcsrevision.h>
@@ -33,7 +34,6 @@
 
 #include <KMessageBox>
 #include <KLocalizedString>
-#include <KDebug>
 
 using namespace std;
 using namespace KDevelop;
@@ -41,24 +41,24 @@ using namespace KDevelop;
 class BranchItem : public QStandardItem
 {
     public:
-        BranchItem(const QString& name, bool current=false) : 
+        BranchItem(const QString& name, bool current=false) :
             QStandardItem(name)
         {
             setEditable(true);
             setCurrent(current);
         }
-        
+
         void setCurrent(bool current)
         {
             setData(current, BranchesListModel::CurrentRole);
             setIcon(QIcon::fromTheme( current ? "arrow-right" : ""));
         }
-        
+
         void setData(const QVariant& value, int role = Qt::UserRole + 1)
         {
             if(role==Qt::EditRole && value.toString()!=text()) {
                 QString newBranch = value.toString();
-                
+
                 BranchesListModel* bmodel = qobject_cast<BranchesListModel*>(model());
                 if(!bmodel->findItems(newBranch).isEmpty())
                 {
@@ -66,7 +66,7 @@ class BranchItem : public QStandardItem
                     return;
                 }
 
-                int ret = KMessageBox::messageBox(0, KMessageBox::WarningYesNo, 
+                int ret = KMessageBox::messageBox(0, KMessageBox::WarningYesNo,
                                                 i18n("Are you sure you want to rename \"%1\" to \"%2\"?", text(), newBranch));
                 if (ret == KMessageBox::No) {
                     return; // ignore event
@@ -74,7 +74,7 @@ class BranchItem : public QStandardItem
 
                 KDevelop::VcsJob *branchJob = bmodel->interface()->renameBranch(bmodel->repository(), newBranch, text());
                 ret = branchJob->exec();
-                kDebug() << "Renaming " << text() << " to " << newBranch << ':' << ret;
+                qCDebug(VCS) << "Renaming " << text() << " to " << newBranch << ':' << ret;
                 if (!ret) {
                     return; // ignore event
                 }
@@ -109,12 +109,12 @@ QHash<int, QByteArray> BranchesListModel::roleNames() const
 
 void BranchesListModel::createBranch(const QString& baseBranch, const QString& newBranch)
 {
-    kDebug() << "Creating " << baseBranch << " based on " << newBranch;
+    qCDebug(VCS) << "Creating " << baseBranch << " based on " << newBranch;
     KDevelop::VcsRevision rev;
     rev.setRevisionValue(baseBranch, KDevelop::VcsRevision::GlobalNumber);
     KDevelop::VcsJob* branchJob = dvcsplugin->branch(repo, rev, newBranch);
 
-    kDebug() << "Adding new branch";
+    qCDebug(VCS) << "Adding new branch";
     if (branchJob->exec())
         appendRow(new BranchItem(newBranch));
 }
@@ -122,8 +122,8 @@ void BranchesListModel::createBranch(const QString& baseBranch, const QString& n
 void BranchesListModel::removeBranch(const QString& branch)
 {
     KDevelop::VcsJob *branchJob = dvcsplugin->deleteBranch(repo, branch);
-    
-    kDebug() << "Removing branch:" << branch;
+
+    qCDebug(VCS) << "Removing branch:" << branch;
     if (branchJob->exec()) {
         QList< QStandardItem* > items = findItems(branch);
         foreach(QStandardItem* item, items)
@@ -147,7 +147,7 @@ void BranchesListModel::refresh()
 {
     QStringList branches = runSynchronously(dvcsplugin->branches(repo)).toStringList();
     QString curBranch = runSynchronously(dvcsplugin->currentBranch(repo)).toString();
-    
+
     foreach(const QString& branch, branches)
         appendRow(new BranchItem(branch, branch == curBranch));
 }
@@ -171,7 +171,7 @@ KDevelop::IProject* BranchesListModel::project() const
 void BranchesListModel::setProject(KDevelop::IProject* p)
 {
     if(!p || !p->versionControlPlugin()) {
-        qDebug() << "null or invalid project" << p;
+        qCDebug(VCS) << "null or invalid project" << p;
         return;
     }
 
@@ -179,7 +179,7 @@ void BranchesListModel::setProject(KDevelop::IProject* p)
     if(branching) {
         initialize(branching, p->folder());
     } else
-        qDebug() << "not a branching vcs project" << p->name();
+        qCDebug(VCS) << "not a branching vcs project" << p->name();
 }
 
 void BranchesListModel::setCurrentBranch(const QString& branch)

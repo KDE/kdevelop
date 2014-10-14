@@ -19,9 +19,9 @@
 #include "licensepage.h"
 #include <KConfigCore/ksharedconfig.h>
 #include "ui_licensechooser.h"
+#include "debug.h"
 
 #include <KLocalizedString>
-#include <KDebug>
 #include <KEMailSettings>
 #include <KComponentData>
 #include <KMessageBox>
@@ -68,7 +68,7 @@ struct LicensePagePrivate
 //! Read all the license files in the global and local config dirs
 void LicensePagePrivate::initializeLicenses()
 {
-    kDebug() << "Searching for available licenses";
+    qCDebug(PLUGIN_FILETEMPLATES) << "Searching for available licenses";
     QStringList licenseDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevcodegen/licenses", QStandardPaths::LocateDirectory);
 
     //Iterate through the possible directories that contain licenses, and load their names
@@ -81,7 +81,7 @@ void LicensePagePrivate::initializeLicenses()
             newLicense.path = it.next();
             newLicense.name = it.fileName();
 
-            kDebug() << "Found License: " << newLicense.name;
+            qCDebug(PLUGIN_FILETEMPLATES) << "Found License: " << newLicense.name;
 
             availableLicenses.push_back(newLicense);
         }
@@ -108,7 +108,7 @@ QString LicensePagePrivate::readLicense(int licenseIndex)
         //If we are dealing with the last option "other" just return a new empty string
         if(licenseIndex != (availableLicenses.size() - 1))
         {
-            kDebug() << "Reading license: " << availableLicenses[licenseIndex].name ;
+            qCDebug(PLUGIN_FILETEMPLATES) << "Reading license: " << availableLicenses[licenseIndex].name ;
             QFile newLicense(availableLicenses[licenseIndex].path);
 
             if(newLicense.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -153,7 +153,7 @@ void LicensePagePrivate::licenseComboChanged(int selectedLicense)
 
 bool LicensePagePrivate::saveLicense()
 {
-    kDebug() << "Attempting to save custom license: " << license->licenseName->text();
+    qCDebug(PLUGIN_FILETEMPLATES) << "Attempting to save custom license: " << license->licenseName->text();
 
     QString localDataDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/kdevcodegen/licenses/";
     QFile newFile(localDataDir + license->licenseName->text());
@@ -235,7 +235,7 @@ LicensePage::~LicensePage()
     }
     else
     {
-        kWarning() << "Attempted to save an invalid license number: " << index
+        qWarning() << "Attempted to save an invalid license number: " << index
                    << ". Number of licenses:" << d->availableLicenses.size();
     }
 

@@ -21,7 +21,6 @@
 
 #include "filtermodel.h"
 
-#include <QDebug>
 #include <QIcon>
 
 #include <KLocalizedString>

@@ -1,4 +1,3 @@
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9503 )
 set(KDevPlatformProject_LIB_SRCS
     projectutils.cpp
     projectmodel.cpp
@@ -8,6 +7,7 @@ set(KDevPlatformProject_LIB_SRCS
     projectbuildsetmodel.cpp
     projectitemlineedit.cpp
     helper.cpp
+    debug.cpp
     projectproxymodel.cpp
     abstractfilemanagerplugin.cpp
     filemanagerlistjob.cpp

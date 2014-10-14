@@ -22,12 +22,12 @@
 #include "executescriptplugin.h"
 
 #include <QFileInfo>
+#include <QDebug>
 
 #include <kprocess.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <ksharedconfig.h>
 #include <kparts/mainwindow.h>
 
@@ -45,19 +45,20 @@
 #include <project/projectmodel.h>
 
 #include "iexecutescriptplugin.h"
+#include "debug.h"
 
 ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfiguration* cfg)
     : KDevelop::OutputJob( parent ), proc(0)
 {
-    kDebug() << "creating script app job";
+    qCDebug(PLUGIN_EXECUTESCRIPT) << "creating script app job";
     setCapabilities(Killable);
-    
+
     IExecuteScriptPlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecuteScriptPlugin")->extension<IExecuteScriptPlugin>();
     Q_ASSERT(iface);
-        
+
     KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());
     QString envgrp = iface->environmentGroup(cfg);
-    
+
     QString err;
     QString interpreterString = iface->interpreter( cfg, err );
     // check for errors happens in the executescript plugin already
@@ -65,11 +66,11 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     QStringList interpreter = KShell::splitArgs( interpreterString, KShell::TildeExpand | KShell::AbortOnMeta, &err_ );
     if ( interpreter.isEmpty() ) {
         // This should not happen, because of the checks done in the executescript plugin
-        kWarning() << "no interpreter specified";
+        qWarning() << "no interpreter specified";
         return;
     }
-    
-    if( !err.isEmpty() ) 
+
+    if( !err.isEmpty() )
     {
         setError( -1 );
         setErrorText( err );
@@ -105,47 +106,47 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
         setErrorText( err );
         return;
     }
-    
+
     if( envgrp.isEmpty() )
     {
-        kWarning() << "Launch Configuration:" << cfg->name() << i18n("No environment group specified, looks like a broken "
+        qWarning() << "Launch Configuration:" << cfg->name() << i18n("No environment group specified, looks like a broken "
                        "configuration, please check run configuration '%1'. "
                        "Using default environment group.", cfg->name() );
         envgrp = l.defaultGroup();
     }
-    
+
     QStringList arguments = iface->arguments( cfg, err );
-    if( !err.isEmpty() ) 
+    if( !err.isEmpty() )
     {
         setError( -2 );
         setErrorText( err );
     }
-    
+
     if( error() != 0 )
     {
-        kWarning() << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
+        qWarning() << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
         return;
     }
 
     KDevelop::OutputModel::OutputFilterStrategy currentFilterMode = static_cast<KDevelop::OutputModel::OutputFilterStrategy>( iface->outputFilterModeId( cfg ) );
 
     proc = new KProcess( this );
-    
+
     lineMaker = new KDevelop::ProcessLineMaker( proc, this );
-    
+
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
     KDevelop::OutputModel* m = new KDevelop::OutputModel;
     m->setFilteringStrategy(currentFilterMode);
     setModel( m );
     setDelegate( new KDevelop::OutputDelegate );
-    
+
     connect( lineMaker, SIGNAL(receivedStdoutLines(QStringList)), model(), SLOT(appendLines(QStringList)) );
     connect( proc, SIGNAL(error(QProcess::ProcessError)), SLOT(processError(QProcess::ProcessError)) );
     connect( proc, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(processFinished(int,QProcess::ExitStatus)) );
 
     // Now setup the process parameters
-    
+
     proc->setEnvironment( l.createEnvironment( envgrp, proc->systemEnvironment()) );
     QUrl wc = iface->workingDirectory( cfg );
     if( !wc.isValid() || wc.isEmpty() )
@@ -168,19 +169,19 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     program << script.toLocalFile();
     program << arguments;
 
-    kDebug() << "setting app:" << program;
-    
+    qCDebug(PLUGIN_EXECUTESCRIPT) << "setting app:" << program;
+
     proc->setOutputChannelMode(KProcess::MergedChannels);
-    
+
     proc->setProgram( program );
-    
+
     setTitle(cfg->name());
 }
 
 
 void ScriptAppJob::start()
 {
-    kDebug() << "launching?" << proc;
+    qCDebug(PLUGIN_EXECUTESCRIPT) << "launching?" << proc;
     if( proc )
     {
         startOutput();
@@ -188,7 +189,7 @@ void ScriptAppJob::start()
         proc->start();
     } else
     {
-        kWarning() << "No process, something went wrong when creating the job";
+        qWarning() << "No process, something went wrong when creating the job";
         // No process means we've returned early on from the constructor, some bad error happened
         emitResult();
     }
@@ -220,15 +221,15 @@ void ScriptAppJob::processFinished( int exitCode , QProcess::ExitStatus status )
         appendLine( i18n("*** Crashed with return code: %1 ***", QString::number(exitCode)) );
         setError(OutputJob::FailedShownError);
     }
-    kDebug() << "Process done";
+    qCDebug(PLUGIN_EXECUTESCRIPT) << "Process done";
     emitResult();
 }
 
 void ScriptAppJob::processError( QProcess::ProcessError error )
 {
-    kDebug() << proc->readAllStandardError();
-    kDebug() << proc->readAllStandardOutput();
-    kDebug() << proc->errorString();
+    qCDebug(PLUGIN_EXECUTESCRIPT) << proc->readAllStandardError();
+    qCDebug(PLUGIN_EXECUTESCRIPT) << proc->readAllStandardOutput();
+    qCDebug(PLUGIN_EXECUTESCRIPT) << proc->errorString();
     if( error == QProcess::FailedToStart )
     {
         setError( FailedShownError );
@@ -238,7 +239,7 @@ void ScriptAppJob::processError( QProcess::ProcessError error )
         setErrorText( errmsg );
         emitResult();
     }
-    kDebug() << "Process error";
+    qCDebug(PLUGIN_EXECUTESCRIPT) << "Process error";
 }
 
 void ScriptAppJob::appendLine(const QString& l)

@@ -23,8 +23,6 @@
 
 #include <QVector>
 
-#include <KDebug>
-
 #include <interfaces/iproject.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/icore.h>
@@ -33,6 +31,7 @@
 #include "interfaces/iprojectfilterprovider.h"
 #include "interfaces/iprojectfilter.h"
 #include "interfaces/iprojectfilemanager.h"
+#include "debug.h"
 
 using namespace KDevelop;
 
@@ -117,7 +116,7 @@ void ProjectFilterManager::Private::filterChanged(IProjectFilterProvider* provid
     while(it != filters.end()) {
         if (it->provider == provider) {
             it->filter = provider->createFilter(project);
-            kDebug(9517) << "project filter changed, reloading" << project->name();
+            qCDebug(PROJECT) << "project filter changed, reloading" << project->name();
             project->projectFileManager()->reload(project->projectItem());
             return;
         }

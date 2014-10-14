@@ -20,7 +20,6 @@
 
 #include "kdevdocumentmodel.h"
 #include <KFileItem>
-#include <QtCore/qdebug.h>
 
 using namespace KDevelop;
 

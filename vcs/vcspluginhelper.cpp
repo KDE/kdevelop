@@ -91,7 +91,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     QAction* diffForRevGlobalAction;
     QAction* pushAction;
     QAction* pullAction;
-    
+
     void createActions(VcsPluginHelper* parent) {
         commitAction = new QAction(QIcon::fromTheme("svn-commit"), i18n("Commit..."), parent);
         updateAction = new QAction(QIcon::fromTheme("svn-update"), i18n("Update"), parent);
@@ -104,7 +104,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         diffForRevGlobalAction = new QAction(QIcon::fromTheme("text-x-patch"), i18n("Show Diff (all files)..."), parent);
         pushAction = new QAction(QIcon::fromTheme("arrow-up-double"), i18n("Push"), parent);
         pullAction = new QAction(QIcon::fromTheme("arrow-down-double"), i18n("Pull"), parent);
-        
+
         connect(commitAction, SIGNAL(triggered()), parent, SLOT(commit()));
         connect(addAction, SIGNAL(triggered()), parent, SLOT(add()));
         connect(updateAction, SIGNAL(triggered()), parent, SLOT(update()));
@@ -117,7 +117,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         connect(pullAction, SIGNAL(triggered()), parent, SLOT(pull()));
         connect(pushAction, SIGNAL(triggered()), parent, SLOT(push()));
     }
-    
+
     bool allLocalFiles(const QList<QUrl>& urls)
     {
         bool ret=true;
@@ -127,20 +127,20 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         }
         return ret;
     }
-    
+
     QMenu* createMenu()
     {
         bool allVersioned=true;
         foreach(const QUrl &url, ctxUrls) {
             allVersioned=allVersioned && vcs->isVersionControlled(url);
-            
+
             if(!allVersioned)
                 break;
         }
-        
+
         QMenu* menu=new QMenu(vcs->name());
         menu->setIcon(QIcon::fromTheme(ICore::self()->pluginController()->pluginInfo(plugin).icon()));
-        
+
         menu->addAction(commitAction);
         if(plugin->extension<IDistributedVersionControl>()) {
             menu->addAction(pushAction);
@@ -155,13 +155,13 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         menu->addAction(historyAction);
         menu->addAction(annotationAction);
         menu->addAction(diffToBaseAction);
-        
+
         const bool singleVersionedFile = ctxUrls.count() == 1 && allVersioned;
         historyAction->setEnabled(singleVersionedFile);
         annotationAction->setEnabled(singleVersionedFile && allLocalFiles(ctxUrls));
         diffToBaseAction->setEnabled(singleVersionedFile);
         commitAction->setEnabled(singleVersionedFile);
-        
+
         return menu;
     }
 };
@@ -260,10 +260,10 @@ void VcsPluginHelper::revert()
 {
     VcsJob* job=d->vcs->revert(d->ctxUrls);
     connect(job, SIGNAL(finished(KJob*)), SLOT(revertDone(KJob*)));
-    
+
     foreach(const QUrl &url, d->ctxUrls) {
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
-        
+
         if(doc && doc->textDocument()) {
             KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
             if (modif) {
@@ -273,7 +273,7 @@ void VcsPluginHelper::revert()
         }
     }
     job->setProperty("urls", QVariant::fromValue(d->ctxUrls));
-    
+
     d->plugin->core()->runController()->registerJob(job);
 }
 
@@ -284,7 +284,7 @@ void VcsPluginHelper::revertDone(KJob* job)
     connect(modificationTimer, SIGNAL(timeout()), SLOT(delayedModificationWarningOn()));
     connect(modificationTimer, SIGNAL(timeout()), modificationTimer, SLOT(deleteLater()));
 
-    
+
     modificationTimer->setProperty("urls", job->property("urls"));
     modificationTimer->start();
 }
@@ -293,13 +293,13 @@ void VcsPluginHelper::delayedModificationWarningOn()
 {
     QObject* timer = sender();
     QList<QUrl> urls = timer->property("urls").value<QList<QUrl>>();
-    
+
     foreach(const QUrl &url, urls) {
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
-        
+
         if(doc) {
             doc->reload();
-            
+
             KTextEditor::ModificationInterface* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
             modif->setModifiedOnDiskWarning(true);
         }
@@ -405,7 +405,7 @@ void VcsPluginHelper::annotation()
         KDevelop::VcsJob* job = iface->annotate(url);
         if( !job )
         {
-            kWarning() << "Couldn't create annotate job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
+            qWarning() << "Couldn't create annotate job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
             return;
         }
 
@@ -442,7 +442,7 @@ class CopyFunction : public AbstractFunction
     public:
         CopyFunction(const QString& tocopy)
             : m_tocopy(tocopy) {}
-        
+
         void operator()() { QApplication::clipboard()->setText(m_tocopy); }
     private:
         QString m_tocopy;
@@ -453,9 +453,9 @@ class HistoryFunction : public AbstractFunction
     public:
         HistoryFunction(VcsPluginHelper* helper, const VcsRevision& rev)
             : m_helper(helper), m_rev(rev) {}
-            
+
             void operator()() { m_helper->history(m_rev); }
-        
+
     private:
         VcsPluginHelper* m_helper;
         VcsRevision m_rev;
@@ -501,10 +501,10 @@ void VcsPluginHelper::commit()
     ICore::self()->documentController()->saveAllDocuments();
 
     QUrl url = d->ctxUrls.first();
-    
+
     // We start the commit UI no matter whether there is real differences, as it can also be used to commit untracked files
     VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(d->vcs, url));
-    
+
     bool ret = showVcsDiff(patchSource);
 
     if(!ret) {

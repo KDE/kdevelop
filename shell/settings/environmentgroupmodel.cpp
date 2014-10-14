@@ -22,7 +22,6 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QStringList>
 #include <QtCore/QModelIndex>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 namespace KDevelop

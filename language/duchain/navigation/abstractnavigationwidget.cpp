@@ -31,6 +31,7 @@
 #include "../ducontext.h"
 #include "../duchain.h"
 #include "../duchainlock.h"
+#include "util/debug.h"
 #include <qapplication.h>
 #include <qevent.h>
 
@@ -54,14 +55,14 @@ QSize AbstractNavigationWidget::sizeHint() const
     if(m_idealTextSize.height()>=300) { //make space for the scrollbar in case it's not fitting
       ret.rwidth() += 17; //m_browser->verticalScrollBar()->width() returns 100, for some reason
     }
-    
+
     if(m_currentWidget) {
       ret.setHeight( ret.height() + m_currentWidget->sizeHint().height() );
       if(m_currentWidget->sizeHint().width() > ret.width())
         ret.setWidth(m_currentWidget->sizeHint().width());
       if(ret.width() < 500) //When we embed a widget, give it some space, even if it doesn't have a large size-hint
         ret.setWidth(500);
-      
+
     }
     return ret;
   } else
@@ -71,7 +72,7 @@ QSize AbstractNavigationWidget::sizeHint() const
 void AbstractNavigationWidget::initBrowser(int height) {
   Q_UNUSED(height);
   m_browser = new QTextBrowser;
-  
+
   // since we can embed arbitrary HTML we have to make sure it stays readable by forcing a black-white palette
   QPalette p;
   p.setColor(QPalette::AlternateBase, Qt::white);
@@ -88,7 +89,7 @@ void AbstractNavigationWidget::initBrowser(int height) {
   setLayout(layout);
 
   connect( m_browser, SIGNAL(anchorClicked(QUrl)), this, SLOT(anchorClicked(QUrl)) );
-  
+
   foreach(QWidget* w, findChildren<QWidget*>())
     w->setContextMenuPolicy(Qt::NoContextMenu);
 }
@@ -96,16 +97,16 @@ void AbstractNavigationWidget::initBrowser(int height) {
 AbstractNavigationWidget::~AbstractNavigationWidget() {
   if(m_currentWidget)
     layout()->removeWidget(m_currentWidget);
-    
+
 }
 
 void AbstractNavigationWidget::setContext(NavigationContextPointer context, int initBrows)
 {
   if(m_browser == 0)
     initBrowser(initBrows);
-    
+
   if(!context) {
-    kDebug() << "no new context created";
+    qCDebug(LANGUAGE) << "no new context created";
     return;
   }
   if(context == m_context && (!context || context->alreadyComputed()))
@@ -115,10 +116,10 @@ void AbstractNavigationWidget::setContext(NavigationContextPointer context, int 
     m_startContext = m_context;
 
   bool wasInitial = (m_context == m_startContext);
-  
+
   m_context = context;
   update();
-  
+
   emit contextChanged(wasInitial, m_context == m_startContext);
   emit sizeHintChanged();
 }
@@ -131,7 +132,7 @@ void AbstractNavigationWidget::updateIdealSize() const {
       doc.setPageSize( QSize(maxNavigationWidgetWidth, 30) );
       m_idealTextSize.setWidth(maxNavigationWidgetWidth);
     }else{
-      m_idealTextSize.setWidth(doc.idealWidth());    
+      m_idealTextSize.setWidth(doc.idealWidth());
     }
     m_idealTextSize.setHeight(doc.size().height());
   }
@@ -140,13 +141,13 @@ void AbstractNavigationWidget::updateIdealSize() const {
 void AbstractNavigationWidget::update() {
   setUpdatesEnabled(false);
   Q_ASSERT( m_context );
-  
+
   QString html = m_context->html();
   if(!html.isEmpty()) {
     int scrollPos = m_browser->verticalScrollBar()->value();
-    
+
     m_browser->setHtml( html );
-    
+
     m_currentText = html;
     m_idealTextSize = QSize();
 
@@ -156,24 +157,24 @@ void AbstractNavigationWidget::update() {
     }else{
       m_browser->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     }
-    
+
     m_browser->verticalScrollBar()->setValue(scrollPos);
     m_browser->scrollToAnchor("currentPosition");
     m_browser->show();
   }else{
     m_browser->hide();
   }
-  
+
   if(m_currentWidget) {
     layout()->removeWidget(m_currentWidget);
     m_currentWidget->setParent(0);
   }
 
   m_currentWidget = m_context->widget();
-  
+
   m_browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   m_browser->setMaximumHeight(10000);
-  
+
   if(m_currentWidget) {
     if (m_currentWidget->metaObject()
           ->indexOfSignal(SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration))) != -1)
@@ -208,7 +209,7 @@ void AbstractNavigationWidget::anchorClicked(const QUrl& url) {
   QPointer<AbstractNavigationWidget> thisPtr(this);
   NavigationContextPointer oldContext = m_context;
   NavigationContextPointer nextContext = m_context->acceptLink(url.toString());
-  
+
   if(thisPtr)
     setContext( nextContext );
 }
@@ -230,11 +231,11 @@ void AbstractNavigationWidget::previous() {
 void AbstractNavigationWidget::accept() {
   DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );
-  
+
   QPointer<AbstractNavigationWidget> thisPtr(this);
   NavigationContextPointer oldContext = m_context;
   NavigationContextPointer nextContext = m_context->accept();
-  
+
   if(thisPtr)
     setContext( nextContext );
 }
@@ -245,7 +246,7 @@ void AbstractNavigationWidget::back() {
   QPointer<AbstractNavigationWidget> thisPtr(this);
   NavigationContextPointer oldContext = m_context;
   NavigationContextPointer nextContext = m_context->back();
-  
+
   if(thisPtr)
     setContext( nextContext );
 }

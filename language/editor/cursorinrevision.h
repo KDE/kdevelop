@@ -23,7 +23,7 @@
 #include <ktexteditor/cursor.h>
 
 namespace KDevelop {
-  
+
   /**
   * Represents a cursor (line-number and column-number) within a text document.
   *
@@ -55,7 +55,7 @@ public:
  bool operator<(const CursorInRevision& rhs) const {
      return line < rhs.line || (line == rhs.line && column < rhs.column);
  }
- 
+
  bool operator<=(const CursorInRevision& rhs) const {
      return line < rhs.line || (line == rhs.line && column <= rhs.column);
  }
@@ -63,7 +63,7 @@ public:
  bool operator>(const CursorInRevision& rhs) const {
      return line > rhs.line || (line == rhs.line && column > rhs.column);
  }
- 
+
  bool operator>=(const CursorInRevision& rhs) const {
      return line > rhs.line || (line == rhs.line && column >= rhs.column);
  }
@@ -71,7 +71,7 @@ public:
  bool operator ==(const CursorInRevision& rhs) const {
      return line == rhs.line && column == rhs.column;
  }
- 
+
  bool operator !=(const CursorInRevision& rhs) const {
      return !(*this == rhs);
  }
@@ -79,7 +79,7 @@ public:
  CursorInRevision operator +(const CursorInRevision& rhs) const {
      return CursorInRevision(line + rhs.line, column + rhs.column);
  }
- 
+
  /// @warning Using this is wrong in most cases! If you want
  ///  to transform this cursor to the current revision, you should do a proper
  ///  mapping instead through @ref KDevelop::DUChainBase or @ref KDevelop::RevisionReference
@@ -87,7 +87,7 @@ public:
  KTextEditor::Cursor castToSimpleCursor() const {
    return KTextEditor::Cursor(line, column);
  }
- 
+
  /// @warning Using this is wrong in most cases! If you want
  ///  to transform this cursor to the current revision, you should do a proper
  ///  mapping instead through @ref KDevelop::DUChainBase or @ref KDevelop::RevisionReference
@@ -96,7 +96,7 @@ public:
    return CursorInRevision(cursor.line(), cursor.column());
  }
 
- /// kDebug() stream operator.  Writes this cursor to the debug output in a nicely formatted way.
+ /// qDebug() stream operator.  Writes this cursor to the debug output in a nicely formatted way.
  inline friend QDebug operator<< (QDebug s, const CursorInRevision& cursor) {
    s.nospace() << "(" << cursor.line << ", " << cursor.column << ")";
    return s.space();

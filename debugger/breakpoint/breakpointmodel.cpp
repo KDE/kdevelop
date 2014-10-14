@@ -26,7 +26,6 @@
 #include <QPixmap>
 
 #include <KParts/PartManager>
-#include <KDebug>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <ktexteditor/movinginterface.h>
@@ -35,6 +34,7 @@
 #include "../interfaces/idocumentcontroller.h"
 #include "../interfaces/idocument.h"
 #include "../interfaces/ipartcontroller.h"
+#include "util/debug.h"
 #include "breakpoint.h"
 #include <KConfigCore/KSharedConfig>
 #include <KConfigGroup>
@@ -86,7 +86,7 @@ void BreakpointModel::slotPartAdded(KParts::Part* part)
         MarkInterface *iface = dynamic_cast<MarkInterface*>(doc);
         if( !iface )
             return;
-        
+
         iface->setMarkDescription((MarkInterface::MarkTypes)BreakpointMark, i18n("Breakpoint"));
         iface->setMarkPixmap((MarkInterface::MarkTypes)BreakpointMark, *breakpointPixmap());
         iface->setMarkPixmap((MarkInterface::MarkTypes)PendingBreakpointMark, *pendingBreakpointPixmap());
@@ -120,7 +120,7 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
 {
 
     int type = mark.type;
-    kDebug() << type;
+    qCDebug(DEBUGGER) << type;
 
     /* Is this a breakpoint mark, to begin with? */
     if (!(type & AllBreakpointMarks)) return;
@@ -152,13 +152,13 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
 }
 
 
-QVariant 
+QVariant
 BreakpointModel::headerData(int section, Qt::Orientation orientation,
                                  int role) const
 {
     if (orientation == Qt::Vertical)
         return QVariant();
-    
+
     if (role == Qt::DecorationRole ) {
         if (section == 0)
             return QIcon::fromTheme("dialog-ok-apply");
@@ -177,7 +177,7 @@ BreakpointModel::headerData(int section, Qt::Orientation orientation,
         if (section == 0) return i18n("Active status");
         if (section == 1) return i18n("State");
         return headerData(section, orientation, Qt::DisplayRole);
-        
+
     }
     return QVariant();
 }
@@ -190,7 +190,7 @@ Qt::ItemFlags BreakpointModel::flags(const QModelIndex &index) const
 
     if (index.column() == 0)
         return static_cast<Qt::ItemFlags>(
-            Qt::ItemIsEnabled | Qt::ItemIsSelectable 
+            Qt::ItemIsEnabled | Qt::ItemIsSelectable
             | Qt::ItemIsEditable | Qt::ItemIsUserCheckable);
 
     if (index.column() == Breakpoint::LocationColumn
@@ -217,7 +217,7 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
     for (int i=0; i < count; ++i) {
         Breakpoint *b = m_breakpoints.at(row);
         m_breakpoints.removeAt(row);
-        IF_DEBUG ( kDebug() << m_breakpoints; )
+        IF_DEBUG ( qCDebug(DEBUGGER) << m_breakpoints; )
         b->setDeleted();
         emit breakpointDeleted(b);
     }
@@ -257,8 +257,8 @@ bool KDevelop::BreakpointModel::setData(const QModelIndex& index, const QVariant
 }
 
 void BreakpointModel::markChanged(
-    KTextEditor::Document *document, 
-    KTextEditor::Mark mark, 
+    KTextEditor::Document *document,
+    KTextEditor::Mark mark,
     KTextEditor::MarkInterface::MarkChangeAction action)
 {
     int type = mark.type;
@@ -369,7 +369,7 @@ void KDevelop::BreakpointModel::updateMarks()
         KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
         if (!mark) continue;
         uint type = breakpointType(breakpoint);
-        IF_DEBUG( kDebug() << type << breakpoint->url() << mark->mark(breakpoint->line()); )
+        IF_DEBUG( qCDebug(DEBUGGER) << type << breakpoint->url() << mark->mark(breakpoint->line()); )
 
         doc->textDocument()->blockSignals(true);
         if (mark->mark(breakpoint->line()) & AllBreakpointMarks) {
@@ -391,7 +391,7 @@ void KDevelop::BreakpointModel::updateMarks()
         doc->textDocument()->blockSignals(true);
         foreach (KTextEditor::Mark *m, mark->marks()) {
             if (!(m->type & AllBreakpointMarks)) continue;
-            IF_DEBUG( kDebug() << m->line << m->type; )
+            IF_DEBUG( qCDebug(DEBUGGER) << m->line << m->type; )
             foreach (Breakpoint *breakpoint, m_breakpoints) {
                 if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
                 if (doc->url() == breakpoint->url() && m->line == breakpoint->line()) {
@@ -407,7 +407,7 @@ void KDevelop::BreakpointModel::updateMarks()
 
 void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 {
-    IF_DEBUG( kDebug(); )
+    IF_DEBUG( qCDebug(DEBUGGER); )
     foreach (Breakpoint *breakpoint, m_breakpoints) {
         if (breakpoint->movingCursor()) {
             if (breakpoint->movingCursor()->document() != doc->textDocument()) continue;

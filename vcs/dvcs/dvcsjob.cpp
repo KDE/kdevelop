@@ -25,6 +25,7 @@
  ***************************************************************************/
 
 #include "dvcsjob.h"
+#include "../debug.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
@@ -34,7 +35,6 @@
 #include <QStandardItemModel>
 #include <QUrl>
 
-#include <KDebug>
 #include <KLocalizedString>
 
 #include <interfaces/iplugin.h>
@@ -178,7 +178,7 @@ void DVcsJob::start()
         return;
     }
 
-    kDebug() << "Execute dvcs command:" << dvcsCommand();
+    qCDebug(VCS) << "Execute dvcs command:" << dvcsCommand();
 
     QString service;
     if(d->vcsplugin)
@@ -238,7 +238,7 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
         errorValue = "UnknownError";
         break;
     }
-    kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << errorValue
+    qCDebug(VCS) << "oops, found an error while running" << dvcsCommand() << ":" << errorValue
                                                      << "Exit code is:" << d->childproc->exitCode();
     displayOutput(QString::fromLocal8Bit(d->errorOutput));
     d->model->appendLine(i18n("Command finished with error %1.", errorValue));

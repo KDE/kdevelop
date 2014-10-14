@@ -43,6 +43,7 @@
 #include <duchain/use.h>
 
 #include "progressdialogs/refactoringdialog.h"
+#include "util/debug.h"
 
 #include "ui_basicrefactoring.h"
 
@@ -168,7 +169,7 @@ DocumentChangeSet::ChangeResult BasicRefactoring::applyChanges(const QString &ol
         if (use.m_declarationIndex != usedDeclarationIndex)
             continue;
         if (use.m_range.isEmpty()) {
-            kDebug() << "found empty use";
+            qCDebug(LANGUAGE) << "found empty use";
             continue;
         }
         DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(context->url(), context->transformFromLocalRevision(use.m_range), oldName, newName));
@@ -194,7 +195,7 @@ DocumentChangeSet::ChangeResult BasicRefactoring::applyChangesToDeclarations(con
         if (!declaration)
             continue;
         if (declaration->range().isEmpty())
-            kDebug() << "found empty declaration";
+            qCDebug(LANGUAGE) << "found empty declaration";
 
         TopDUContext *top = declaration->topContext();
         DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(top->url(), declaration->rangeInCurrentRevision(), oldName, newName));

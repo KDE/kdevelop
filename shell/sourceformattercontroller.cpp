@@ -25,7 +25,6 @@ Boston, MA 02110-1301, USA.
 #include <QRegExp>
 #include <QMimeDatabase>
 #include <KPluginInfo>
-#include <KDebug>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
@@ -34,6 +33,7 @@ Boston, MA 02110-1301, USA.
 #include <language/codegen/coderepresentation.h>
 #include <interfaces/isourceformatter.h>
 #include "core.h"
+#include "debug.h"
 #include <ktexteditor/view.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
@@ -140,7 +140,7 @@ ISourceFormatter* SourceFormatterController::findFirstFormatterForMimeType(const
 	static QHash<QString, ISourceFormatter*> knownFormatters;
 	if (knownFormatters.contains(mime.name()))
 		return knownFormatters[mime.name()];
-	
+
 	foreach( IPlugin* p, Core::self()->pluginController()->allPluginsForExtension( "org.kdevelop.ISourceFormatter" ) ) {
 		KPluginInfo info = Core::self()->pluginController()->pluginInfo( p );
 		ISourceFormatter *iformatter = p->extension<ISourceFormatter>();
@@ -199,7 +199,7 @@ ISourceFormatter* SourceFormatterController::formatterForMimeType(const QMimeTyp
 	QStringList formatterinfo = formatter.split( "||", QString::SkipEmptyParts );
 
 	if( formatterinfo.size() != 2 ) {
-		kDebug() << "Broken formatting entry for mime:" << mime.name() << "current value:" << formatter;
+		qCDebug(SHELL) << "Broken formatting entry for mime:" << mime.name() << "current value:" << formatter;
 		return 0;
 	}
 
@@ -228,28 +228,28 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 {
 	if( !isMimeTypeSupported(mime) )
 		return input;
-	
+
 	QRegExp kateModelineWithNewline("\\s*\\n//\\s*kate:(.*)$");
-	
+
 	// If there already is a modeline in the document, adapt it while formatting, even
 	// if "add modeline" is disabled.
-	if( !configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) && 
+	if( !configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) &&
 		      kateModelineWithNewline.indexIn( input ) == -1 )
 		return input;
 
 	ISourceFormatter* fmt = formatterForMimeType( mime );
 	ISourceFormatter::Indentation indentation = fmt->indentation(url);
-	
+
 	if( !indentation.isValid() )
 		return input;
-	
+
 	QString output;
 	QTextStream os(&output, QIODevice::WriteOnly);
 	QTextStream is(&input, QIODevice::ReadOnly);
 
 	Q_ASSERT(fmt);
 
-	
+
     QString modeline("// kate: ");
 	QString indentLength = QString::number(indentation.indentWidth);
 	QString tabLength = QString::number(indentation.indentationTabWidth);
@@ -266,17 +266,17 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 			modeline.append(QString("tab-width %1; ").arg(indentation.indentationTabWidth));
 	}
 
-	kDebug() << "created modeline: " << modeline << endl;
+	qCDebug(SHELL) << "created modeline: " << modeline << endl;
 
 	QRegExp kateModeline("^\\s*//\\s*kate:(.*)$");
-	
+
 	bool modelinefound = false;
 	QRegExp knownOptions("\\s*(indent-width|space-indent|tab-width|indent-mode|replace-tabs)");
 	while (!is.atEnd()) {
 		QString line = is.readLine();
 		// replace only the options we care about
 		if (kateModeline.indexIn(line) >= 0) { // match
-			kDebug() << "Found a kate modeline: " << line << endl;
+			qCDebug(SHELL) << "Found a kate modeline: " << line << endl;
 			modelinefound = true;
 			QString options = kateModeline.cap(1);
 			QStringList optionList = options.split(';', QString::SkipEmptyParts);
@@ -287,7 +287,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 					if(s.startsWith(' '))
 						s=s.mid(1);
 					os << s << ";";
-					kDebug() << "Found unknown option: " << s << endl;
+					qCDebug(SHELL) << "Found unknown option: " << s << endl;
 				}
 			}
 			os << endl;
@@ -329,7 +329,7 @@ void SourceFormatterController::beautifySource()
 	QMimeType mime = QMimeDatabase().mimeTypeForUrl(doc->url());
 	ISourceFormatter *formatter = formatterForMimeType(mime);
         if( !formatter ) {
-            kDebug() << "no formatter available for" << mime.name();
+            qCDebug(SHELL) << "no formatter available for" << mime.name();
             return;
         }
 
@@ -349,7 +349,7 @@ void SourceFormatterController::beautifySource()
 		if (!original.endsWith('\n')  && output.endsWith('\n'))
 			output.resize(output.length() - 1);
 		//there was a selection, so only change the part of the text related to it
-			
+
 		// We don't use KTextEditor::Document directly, because CodeRepresentation transparently works
 		// around a possible tab-replacement incompatibility between kate and kdevelop
 		DynamicCodeRepresentation::Ptr code( dynamic_cast<DynamicCodeRepresentation*>( KDevelop::createCodeRepresentation( IndexedString( doc->url() ) ).data() ) );
@@ -374,7 +374,7 @@ void SourceFormatterController::beautifyLine()
 	QMimeType mime = QMimeDatabase().mimeTypeForUrl(doc->url());
 	ISourceFormatter *formatter = formatterForMimeType(mime);
 	if( !formatter ) {
-		kDebug() << "no formatter available for" << mime.name();
+		qCDebug(SHELL) << "no formatter available for" << mime.name();
 		return;
 	}
 
@@ -382,15 +382,15 @@ void SourceFormatterController::beautifyLine()
 	const QString line = tDoc->line(cursor.line());
 	const QString prev = tDoc->text(KTextEditor::Range(0, 0, cursor.line(), 0));
 	const QString post = '\n' + tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
-	
+
 	const QString formatted = formatter->formatSource(line, doc->url(), mime, prev, post);
-	
+
 	// We don't use KTextEditor::Document directly, because CodeRepresentation transparently works
 	// around a possible tab-replacement incompatibility between kate and kdevelop
 	DynamicCodeRepresentation::Ptr code(dynamic_cast<DynamicCodeRepresentation*>( KDevelop::createCodeRepresentation( IndexedString( doc->url() ) ).data() ) );
 	Q_ASSERT( code );
 	code->replace( KTextEditor::Range(cursor.line(), 0, cursor.line(), line.length()), line, formatted );
-	
+
 	// advance cursor one line
 	view->setCursorPosition(KTextEditor::Cursor(cursor.line() + 1, 0));
 }
@@ -405,7 +405,7 @@ void SourceFormatterController::formatDocument(KDevelop::IDocument* doc, ISource
 	QString text = formatter->formatSource(code->text(), doc->url(), mime);
 	text = addModelineForCurrentLang(text, doc->url(), mime);
 	code->setText(text);
-	
+
 	doc->setCursorPosition(cursor);
 }
 
@@ -433,17 +433,17 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
 	if( !formatter  || !configuration().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey, false ) || !doc )
 		return;
 
-	kDebug() << "adapting mode for" << doc->url();
-	
+	qCDebug(SHELL) << "adapting mode for" << doc->url();
+
 	QRegExp kateModelineWithNewline("\\s*\\n//\\s*kate:(.*)$");
-	
+
 	// modelines should always take precedence
 	if( !ignoreModeline && kateModelineWithNewline.indexIn( doc->text() ) != -1 )
 	{
-		kDebug() << "ignoring because a kate modeline was found";
+		qCDebug(SHELL) << "ignoring because a kate modeline was found";
 		return;
 	}
-	
+
 	ISourceFormatter::Indentation indentation = formatter->indentation(doc->url());
 	if(indentation.isValid())
 	{
@@ -455,16 +455,16 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
 				KTextEditor::Command* command = editor->queryCommand( cmd );
 				Q_ASSERT(command);
 				QString msg;
-				kDebug() << "calling" << cmd;
+				qCDebug(SHELL) << "calling" << cmd;
 				foreach(KTextEditor::View* view, doc->views())
 					if( !command->exec( view, cmd, msg ) )
-						kWarning() << "setting indentation width failed: " << msg;
+						qWarning() << "setting indentation width failed: " << msg;
 			}
-			
+
 			KTextEditor::Document* doc;
 			KTextEditor::Editor* editor;
 		} call(doc);
-		
+
 		if( indentation.indentWidth ) // We know something about indentation-width
 			call( QString("set-indent-width %1").arg(indentation.indentWidth ) );
 
@@ -475,7 +475,7 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
 				call( QString("set-tab-width %1").arg(indentation.indentationTabWidth ) );
 		}
 	}else{
-		kDebug() << "found no valid indentation";
+		qCDebug(SHELL) << "found no valid indentation";
 	}
 }
 
@@ -520,7 +520,7 @@ void SourceFormatterController::formatFiles(QList<QUrl> &list)
 	for (int fileCount = 0; fileCount < list.size(); fileCount++) {
 		// check mimetype
 		QMimeType mime = QMimeDatabase().mimeTypeForUrl(list[fileCount]);
-		qDebug() << "Checking file " << list[fileCount] << " of mime type " << mime.name() << endl;
+		qCDebug(SHELL) << "Checking file " << list[fileCount] << " of mime type " << mime.name() << endl;
 		ISourceFormatter *formatter = formatterForMimeType(mime);
 		if (!formatter) // unsupported mime type
 			continue;
@@ -529,12 +529,12 @@ void SourceFormatterController::formatFiles(QList<QUrl> &list)
 		KDevelop::IDocumentController *docController = KDevelop::ICore::self()->documentController();
 		KDevelop::IDocument *doc = docController->documentForUrl(list[fileCount]);
 		if (doc) {
-			qDebug() << "Processing file " << list[fileCount] << "opened in editor" << endl;
+			qCDebug(SHELL) << "Processing file " << list[fileCount] << "opened in editor" << endl;
 			formatDocument(doc, formatter, mime);
 			continue;
 		}
 
-		qDebug() << "Processing file " << list[fileCount] << endl;
+		qCDebug(SHELL) << "Processing file " << list[fileCount] << endl;
 		KIO::StoredTransferJob *job = KIO::storedGet(list[fileCount]);
 		if (job->exec()) {
 			QByteArray data = job->data();

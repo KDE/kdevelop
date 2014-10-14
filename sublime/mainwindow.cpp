@@ -23,7 +23,7 @@
 #include <QDesktopWidget>
 #include <QStatusBar>
 #include <QMenuBar>
-#include <KDebug>
+
 #include <KConfig>
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -36,6 +36,9 @@
 #include "container.h"
 #include "idealcontroller.h"
 #include "holdupdates.h"
+#include "sublimedebug.h"
+
+Q_LOGGING_CATEGORY(SUBLIME, "kdevplatform.sublime")
 
 namespace Sublime {
 
@@ -69,7 +72,7 @@ QList< Area* > MainWindow::areas() const
 
 MainWindow::~MainWindow()
 {
-    kDebug() << "destroying mainwindow";
+    qCDebug(SUBLIME) << "destroying mainwindow";
     delete d;
 }
 
@@ -107,7 +110,7 @@ void MainWindow::setArea(Area *area)
        not mean those are removed from area, so prevent slotDockShown
        from recording those views as no longer shown in the area.  */
     d->ignoreDockShown = true;
-    
+
     if (d->autoAreaSettingsSave && differentArea)
         saveSettings();
 
@@ -116,16 +119,16 @@ void MainWindow::setArea(Area *area)
         clearArea();
     d->area = area;
     d->reconstruct();
-    
+
     if(d->area->activeView())
         activateView(d->area->activeView());
     else
         d->activateFirstVisibleView();
-    
+
     initializeStatusBar();
     emit areaChanged(area);
     d->ignoreDockShown = false;
-    
+
     hu.stop();
 
     loadSettings();
@@ -202,9 +205,9 @@ void MainWindow::activateView(Sublime::View* view, bool focus)
 void MainWindow::setActiveView(View *view, bool focus)
 {
     View* oldActiveView = d->activeView;
-    
+
     d->activeView = view;
-    
+
     if (focus && view && !view->widget()->hasFocus())
         view->widget()->setFocus();
 
@@ -242,7 +245,7 @@ void MainWindow::loadSettings()
 {
     HoldUpdates hu(this);
 
-    kDebug(9504) << "loading settings for " << (area() ? area()->objectName() : "");
+    qCDebug(SUBLIME) << "loading settings for " << (area() ? area()->objectName() : "");
     QString group = "MainWindow";
     if (area())
         group += '_' + area()->objectName();
@@ -324,7 +327,7 @@ void MainWindow::loadSettings()
     cg.sync();
 
     hu.stop();
-    
+
     emit settingsLoaded();
 }
 
@@ -334,7 +337,7 @@ bool MainWindow::queryClose()
     KConfigGroup config(KSharedConfig::openConfig(), "Main Window");
     saveGeometry(config);
     config.sync();
-    
+
     return KParts::MainWindow::queryClose();
 }
 
@@ -419,7 +422,7 @@ View* MainWindow::viewForPosition(QPoint globalPos) const
            return d->widgetToView[container->currentWidget()];
        }
     }
-    
+
     return 0;
 }
 

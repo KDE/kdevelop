@@ -19,13 +19,13 @@
 
 #include "templateoptionspage.h"
 #include "templateclassassistant.h"
+#include "debug.h"
 
 #include <language/codegen/templateclassgenerator.h>
 #include <language/codegen/sourcefiletemplate.h>
 
 #include <KLineEdit>
 #include <KIntNumInput>
-#include <KDebug>
 
 #include <QDomElement>
 #include <QGroupBox>
@@ -104,7 +104,7 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
             }
             else
             {
-                kDebug() << "Unrecognized option type" << entry.type;
+                qCDebug(PLUGIN_FILETEMPLATES) << "Unrecognized option type" << entry.type;
             }
             if (control)
             {
@@ -131,7 +131,7 @@ QVariantHash TemplateOptionsPage::templateOptions() const
         values.insert(entry.name, d->controls[entry.name]->property(d->typeProperties[entry.type]));
     }
 
-    kDebug() << values.size() << d->entries.size();
+    qCDebug(PLUGIN_FILETEMPLATES) << values.size() << d->entries.size();
 
     return values;
 }

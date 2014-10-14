@@ -23,7 +23,6 @@
 
 #include <QMutexLocker>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <ThreadWeaver.h>
 
@@ -64,7 +63,7 @@ void SvnInternalCatJob::run()
         emit gotContent( content );
     }catch( svn::ClientException ce )
     {
-        kDebug(9510) << "Exception while doing a diff: "
+        qCDebug(PLUGIN_SVN) << "Exception while doing a diff: "
                 << m_source.localUrl() << m_source.repositoryServer() << m_srcRevision.revisionValue()
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );

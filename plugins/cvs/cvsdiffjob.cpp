@@ -10,7 +10,6 @@
 
 #include "cvsdiffjob.h"
 
-#include <KDebug>
 #include <QRegExp>
 
 CvsDiffJob::CvsDiffJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)

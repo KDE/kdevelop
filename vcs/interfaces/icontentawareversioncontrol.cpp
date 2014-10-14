@@ -20,7 +20,6 @@
 
 #include "icontentawareversioncontrol.h"
 
-#include <QDebug>
 
 namespace KDevelop {
 

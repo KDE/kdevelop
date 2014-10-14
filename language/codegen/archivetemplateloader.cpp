@@ -26,7 +26,6 @@
 #include <KZip>
 #include <KComponentData>
 #include <KTar>
-#include <KDebug>
 
 #include <QFileInfo>
 

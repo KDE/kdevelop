@@ -32,6 +32,7 @@
 #include "../classmemberdeclaration.h"
 #include "../abstractfunctiondeclaration.h"
 #include "../functiondefinition.h"
+#include "util/debug.h"
 #include <interfaces/iuicontroller.h>
 #include <codegen/coderepresentation.h>
 #include <KLocalizedString>
@@ -66,7 +67,7 @@ void collectImporters(ImportanceChecker& checker, ParsingEnvironmentFile* curren
     if(importer.data())
       collectImporters(checker, importer.data(), visited, collected);
     else
-      kDebug() << "missing environment-file, strange";
+      qCDebug(LANGUAGE) << "missing environment-file, strange";
 }
 
 ///The returned set does not include the file itself
@@ -74,7 +75,7 @@ void collectImporters(ImportanceChecker& checker, ParsingEnvironmentFile* curren
 void allImportedFiles(ParsingEnvironmentFilePointer file, QSet<IndexedString>& set, QSet<ParsingEnvironmentFilePointer>& visited) {
   foreach(const ParsingEnvironmentFilePointer &import, file->imports()) {
     if(!import) {
-      kDebug() << "warning: missing import";
+      qCDebug(LANGUAGE) << "warning: missing import";
       continue;
     }
     if(!visited.contains(import)) {
@@ -187,7 +188,7 @@ void UsesCollector::startCollecting() {
           foreach(const IndexedDeclaration &d, allDeclarations) {
             Declaration* definition = FunctionDefinition::definition(d.data());
             if(definition) {
-                kDebug() << "adding definition";
+                qCDebug(LANGUAGE) << "adding definition";
               allDeclarations.insert(IndexedDeclaration(definition));
             }
           }
@@ -209,7 +210,7 @@ void UsesCollector::startCollecting() {
         QSet<ParsingEnvironmentFile*> visited;
         QSet<ParsingEnvironmentFile*> collected;
 
-        kDebug() << "count of source candidate top-contexts:" << candidateTopContexts.size();
+        qCDebug(LANGUAGE) << "count of source candidate top-contexts:" << candidateTopContexts.size();
 
         ///We use ParsingEnvironmentFile to collect all the relevant importers, because loading those is very cheap, compared
         ///to loading a whole TopDUContext.
@@ -232,10 +233,10 @@ void UsesCollector::startCollecting() {
         KDevelop::ParsingEnvironmentFile* file=decl->topContext()->parsingEnvironmentFile().data();
         if(!file)
           return;
-        
+
         if(checker(file))
           collected.insert(file);
-        
+
         {
           QSet<ParsingEnvironmentFile*> filteredCollected;
           QMap<IndexedString, bool> grepCache;
@@ -256,7 +257,7 @@ void UsesCollector::startCollecting() {
             if(grepCacheIt.value())
               filteredCollected << file;
           }
-          kDebug() << "Collected contexts for full re-parse, before filtering: " << collected.size() << " after filtering: " << filteredCollected.size();
+          qCDebug(LANGUAGE) << "Collected contexts for full re-parse, before filtering: " << collected.size() << " after filtering: " << filteredCollected.size();
           collected = filteredCollected;
         }
 
@@ -291,7 +292,7 @@ void UsesCollector::startCollecting() {
         m_waitForUpdate = rootFiles;
 
         foreach(const IndexedString &file, rootFiles) {
-          kDebug() << "updating root file:" << file.str();
+          qCDebug(LANGUAGE) << "updating root file:" << file.str();
           DUChain::self()->updateContextForUrl(file, TopDUContext::AllDeclarationsContextsAndUses, this);
         }
 
@@ -326,7 +327,7 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
   DUChainReadLocker lock(DUChain::lock());
 
   if(!topContext) {
-    kDebug() << "failed updating" << url.str();
+    qCDebug(LANGUAGE) << "failed updating" << url.str();
   }else{
     if(topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
       ///Use the attached content-context instead
@@ -340,7 +341,7 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
         }
       }
       if(topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
-        kDebug() << "got bad proxy-context for" << url.str();
+        qCDebug(LANGUAGE) << "got bad proxy-context for" << url.str();
         topContext = 0;
       }
 
@@ -357,7 +358,7 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
   }
 
   if(!topContext || !topContext->parsingEnvironmentFile()) {
-    kDebug() << "bad top-context";
+    qCDebug(LANGUAGE) << "bad top-context";
     return;
   }
 
@@ -369,24 +370,24 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
       ///while only one of  those was updated. We have to check here whether this file is just such an import,
       ///or whether we work on with it.
       ///@todo We will lose files that were edited right after their update here.
-      kWarning() << "WARNING: context" << topContext->url().str() << "does not have the required features!!";
+      qWarning() << "WARNING: context" << topContext->url().str() << "does not have the required features!!";
       ICore::self()->uiController()->showErrorMessage("Updating " + ICore::self()->projectController()->prettyFileName(topContext->url().toUrl(), KDevelop::IProjectController::FormatPlain) + " failed!", 5);
       return;
   }
-  
+
   if(topContext->parsingEnvironmentFile()->needsUpdate()) {
-      kWarning() << "WARNING: context" << topContext->url().str() << "is not up to date!";
+      qWarning() << "WARNING: context" << topContext->url().str() << "is not up to date!";
       ICore::self()->uiController()->showErrorMessage(i18n("%1 still needs an update!", ICore::self()->projectController()->prettyFileName(topContext->url().toUrl(), KDevelop::IProjectController::FormatPlain)), 5);
 //       return;
   }
-  
+
 
     IndexedTopDUContext indexed(topContext.data());
     if(m_checked.contains(indexed))
       return;
 
     if(!topContext.data()) {
-      kDebug() << "updated top-context is zero:" << url.str();
+      qCDebug(LANGUAGE) << "updated top-context is zero:" << url.str();
       return;
     }
 
@@ -403,7 +404,7 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
       }
     } else {
       if(!m_declaration.data()) {
-        kDebug() << "declaration has become invalid";
+        qCDebug(LANGUAGE) << "declaration has become invalid";
       }
     }
 

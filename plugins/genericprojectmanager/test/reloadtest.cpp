@@ -22,8 +22,8 @@
 #include <QtTest/QTest>
 #include <QSignalSpy>
 #include <QProcess>
-#include <KDebug>
 #include <KTempDir>
+#include <QDebug>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -228,10 +228,10 @@ void _writeRandomStructure(QString path, int files)
     if (qrand() < RAND_MAX / 5) {
         p.mkdir(name);
         path += '/' + name;
-//         kDebug() << "wrote path" << path;
+//         qDebug() << "wrote path" << path;
     } else {
         createFile(path+'/'+name);
-//         kDebug() << "wrote file" << path+"/"+name;
+//         qDebug() << "wrote file" << path+"/"+name;
     }
     files--;
     if (files > 0) {

@@ -51,9 +51,9 @@ QStandardItemModel& fakeModel() {
   */
 template <class T>
 struct CodeCompletionItemTester {
-   
+
   typedef QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > Element;
-  
+
   //Creates a CodeCompletionItemTester for the parent context
   CodeCompletionItemTester parent() {
     QExplicitlySharedDataPointer<T> parent = QExplicitlySharedDataPointer<T>(dynamic_cast<T*>(completionContext->parentContext()));
@@ -71,7 +71,7 @@ struct CodeCompletionItemTester {
   //Can be used if you already have the completion context
   CodeCompletionItemTester(QExplicitlySharedDataPointer<T> context) {
     completionContext = context;
-    
+
     init();
   }
 
@@ -94,37 +94,37 @@ struct CodeCompletionItemTester {
     }
     return false;
   }
-  
+
   QStringList names; //Names of all completion-items, not sorted
   typedef QExplicitlySharedDataPointer <KDevelop::CompletionTreeItem > Item;
   QList <Item > items; //All items retrieved, sorted by name
 
   QExplicitlySharedDataPointer <T> completionContext;
-  
+
   //Convenience-function to retrieve data from completion-items by name
   QVariant itemData(QString itemName, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) {
     return itemData(names.indexOf(itemName), column, role);
   }
-  
+
   QVariant itemData(int itemNumber, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) {
     if(itemNumber < 0 || itemNumber >= items.size())
       return QVariant();
-    
+
     return items[itemNumber]->data(fakeModel().index(0, column), role, 0);
   }
   private:
     void init() {
       if ( !completionContext->isValid() ) {
-        kDebug() << "invalid completion context";
+        qDebug() << "invalid completion context";
         return;
       }
 
       bool abort = false;
       items = completionContext->completionItems(abort);
-      
-      
+
+
       addElements(completionContext->ungroupedElements());
-      
+
       foreach(Item i, items)
         names << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
     }
@@ -146,14 +146,14 @@ struct InsertIntoDUChain
     get();
     release();
   }
-  
+
   ///The duchain must not be locked when this is called
   void release() {
     if(m_topContext) {
       DUChainWriteLocker lock;
-      
+
       m_topContext = 0;
-      
+
       QList< TopDUContext* > chains = DUChain::self()->chainsForDocument(m_insertedCode.file());
       foreach(TopDUContext* top, chains)
         DUChain::self()->removeDocumentChain(top);
@@ -164,12 +164,12 @@ struct InsertIntoDUChain
     get();
     return m_topContext.data();
   }
-  
+
   TopDUContext* tryGet() {
       DUChainReadLocker lock;
     return DUChain::self()->chainForDocument(m_insertedCode.file(), false);
   }
-  
+
   void get() {
     if(!m_topContext)
       m_topContext = tryGet();
@@ -182,11 +182,11 @@ struct InsertIntoDUChain
       return 0;
     return DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(id))).getDeclaration(topContext());
   }
-  
+
   TopDUContext* topContext() {
     return m_topContext.data();
   }
-  
+
   /**
     * Parses this inserted code as a stand-alone top-context
     * The duchain must not be locked when this is called
@@ -195,7 +195,7 @@ struct InsertIntoDUChain
     * @param update Whether the top-context should be updated if it already exists. Else it will be deleted.
     */
   void parse(uint features = TopDUContext::AllDeclarationsContextsAndUses, bool update = false) {
-    
+
     if(!update)
       release();
     m_topContext = DUChain::self()->waitForUpdate(m_insertedCode.file(), (TopDUContext::Features)features, false);
@@ -203,7 +203,7 @@ struct InsertIntoDUChain
     DUChainReadLocker lock;
     Q_ASSERT(!m_topContext->parsingEnvironmentFile()->isProxyContext());
   }
-  
+
   InsertArtificialCodeRepresentation m_insertedCode;
   ReferencedTopDUContext m_topContext;
 };

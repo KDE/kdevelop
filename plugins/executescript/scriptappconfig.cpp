@@ -20,7 +20,6 @@
 #include "scriptappconfig.h"
 
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <kicon.h>
 
 #include <QIcon>
@@ -175,7 +174,7 @@ KJob* ScriptAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     {
         return new ScriptAppJob( m_plugin, cfg);
     }
-    kWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
+    qWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return 0;
 }
 

@@ -24,12 +24,11 @@
 #include <QAction>
 #include <QPointer>
 
-#include <kdebug.h>
-
 #include "view.h"
 #include "document.h"
 #include "areaindex.h"
 #include "controller.h"
+#include "sublimedebug.h"
 
 namespace Sublime {
 
@@ -111,7 +110,7 @@ Area::Area(Controller *controller, const QString &name, const QString &title)
     d->controller = controller;
     d->iconName = "kdevelop";
     d->workingSet.clear();
-    kDebug() << "initial working-set:" << d->workingSet;
+    qCDebug(SUBLIME) << "initial working-set:" << d->workingSet;
     initialize();
 }
 
@@ -169,7 +168,7 @@ void Area::addView(View *view, AreaIndex *index, View *after)
     }
     index->add(view, after);
     connect(view, SIGNAL(positionChanged(Sublime::View*,int)), this, SLOT(positionChanged(Sublime::View*,int)));
-    kDebug() << "view added in" << this;
+    qCDebug(SUBLIME) << "view added in" << this;
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
     emit viewAdded(index, view);
 }
@@ -207,7 +206,7 @@ View* Area::removeView(View *view)
     emit aboutToRemoveView(index, view);
     index->remove(view);
     emit viewRemoved(index, view);
-    
+
     return view;
 }
 
@@ -247,7 +246,7 @@ View* Area::removeToolView(View *view)
 
     emit aboutToRemoveToolView(view, d->toolViewPositions[view]);
     QString id = view->document()->documentSpecifier();
-    kDebug() << this << "removed tool view " << id;
+    qCDebug(SUBLIME) << this << "removed tool view " << id;
     d->desiredToolViews.remove(id);
     d->toolViews.removeAll(view);
     d->toolViewPositions.remove(view);
@@ -306,7 +305,7 @@ void Area::save(KConfigGroup& group) const
         desired << i.key() + ':' + QString::number(static_cast<int>(i.value()));
     }
     group.writeEntry("desired views", desired);
-    kDebug() << "save " << this << "wrote" << group.readEntry("desired views", "");
+    qCDebug(SUBLIME) << "save " << this << "wrote" << group.readEntry("desired views", "");
     group.writeEntry("view on left", shownToolViews(Sublime::Left));
     group.writeEntry("view on right", shownToolViews(Sublime::Right));
     group.writeEntry("view on top", shownToolViews(Sublime::Top));
@@ -320,7 +319,7 @@ void Area::save(KConfigGroup& group) const
 
 void Area::load(const KConfigGroup& group)
 {
-    kDebug() << "loading areas config";
+    qCDebug(SUBLIME) << "loading areas config";
     d->desiredToolViews.clear();
     QStringList desired = group.readEntry("desired views", QStringList());
     foreach (const QString &s, desired)
@@ -395,7 +394,7 @@ void Area::setIconName(const QString& iconName)
 
 void Area::positionChanged(View *view, int newPos)
 {
-    kDebug() << view << newPos;
+    qCDebug(SUBLIME) << view << newPos;
     AreaIndex *index = indexOf(view);
     index->views().move(index->views().indexOf(view), newPos);
 }
@@ -410,7 +409,7 @@ QString Area::workingSet() const
 void Area::setWorkingSet(QString name)
 {
     if(name != d->workingSet) {
-        kDebug() << this << "setting new working-set" << name;
+        qCDebug(SUBLIME) << this << "setting new working-set" << name;
         QString oldName = d->workingSet;
         emit changingWorkingSet(this, oldName, name);
         d->workingSet = name;
@@ -426,7 +425,7 @@ bool Area::closeView(View* view, bool silent)
     if(doc && !silent)
     {
         // Do some counting to check whether we need to ask the user for feedback
-        kDebug() << "Closing view for" << view->document()->documentSpecifier() << "views" << view->document()->views().size() << "in area" << this;
+        qCDebug(SUBLIME) << "Closing view for" << view->document()->documentSpecifier() << "views" << view->document()->views().size() << "in area" << this;
         int viewsInCurrentArea = 0; // Number of views for the same document in the current area
         int viewsInOtherAreas = 0; // Number of views for the same document in other areas
         int viewsInOtherWorkingSets = 0; // Number of views for the same document in areas with different working-set

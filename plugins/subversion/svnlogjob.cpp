@@ -24,7 +24,6 @@
 #include <QMutexLocker>
 
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <ThreadWeaver.h>
 
 #include "svnclient.h"
@@ -55,7 +54,7 @@ void SvnInternalLogJob::run()
                  limit() );
     }catch( svn::ClientException ce )
     {
-        kDebug(9510) << "Exception while logging file: "
+        qCDebug(PLUGIN_SVN) << "Exception while logging file: "
                 << location()
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
@@ -137,7 +136,7 @@ void SvnLogJob::start()
     {
         connect( m_job, SIGNAL(logEvent(KDevelop::VcsEvent)),
                this, SLOT(logEventReceived(KDevelop::VcsEvent)), Qt::QueuedConnection );
-        kDebug(9510) << "logging url:" << m_job->location();
+        qCDebug(PLUGIN_SVN) << "logging url:" << m_job->location();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
 }

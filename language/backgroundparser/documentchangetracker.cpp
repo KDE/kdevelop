@@ -24,7 +24,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-#include <kdebug.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/movinginterface.h>
 
@@ -35,6 +34,7 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguage.h>
 #include "backgroundparser.h"
+#include "util/debug.h"
 #include <QApplication>
 
 // Can be used to disable the 'clever' updating logic that ignores whitespace-only changes and such.
@@ -297,7 +297,7 @@ MovingInterface* DocumentChangeTracker::documentMovingInterface() const
 void DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent ( Document* )
 {
     // Release all revisions! They must not be used any more.
-    kDebug() << "clearing all revisions";
+    qCDebug(LANGUAGE) << "clearing all revisions";
     m_revisionLocks.clear();
     m_revisionAtLastReset = RevisionReference();
     ModificationRevision::setEditorRevisionForFile(m_url, 0);
@@ -408,7 +408,7 @@ void DocumentChangeTracker::unlockRevision(qint64 revision)
     QMap< qint64, int >::iterator it = m_revisionLocks.find(revision);
     if(it == m_revisionLocks.end())
     {
-        kDebug() << "cannot unlock revision" << revision << ", probably the revisions have been cleared";
+        qCDebug(LANGUAGE) << "cannot unlock revision" << revision << ", probably the revisions have been cleared";
         return;
     }
     --(*it);

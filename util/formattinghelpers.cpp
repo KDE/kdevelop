@@ -19,8 +19,8 @@
 
 #include "formattinghelpers.h"
 #include <QString>
+#include <QDebug>
 #include <vector>
-#include <kdebug.h>
 
 namespace KDevelop
 {
@@ -31,7 +31,7 @@ int matchPrefixIgnoringWhitespace(QString text, QString prefix, QString fuzzyCha
 {
     int prefixPos = 0;
     int textPos = 0;
-    
+
     while (prefixPos < prefix.length() && textPos < text.length()) {
         skipWhiteSpace:
         while (prefixPos < prefix.length() && prefix[prefixPos].isSpace())
@@ -55,10 +55,10 @@ int matchPrefixIgnoringWhitespace(QString text, QString prefix, QString fuzzyCha
                 ++textPos;
                 skippedFuzzy = true;
             }
-            
+
             if( skippedFuzzy )
                 goto skipWhiteSpace;
-            
+
             return -1;
         }
         ++prefixPos;
@@ -71,7 +71,7 @@ static QString reverse( const QString& str ) {
   QString ret;
   for(int a = str.length()-1; a >= 0; --a)
       ret.append(str[a]);
-  
+
   return ret;
 }
 
@@ -80,23 +80,23 @@ int skipRedundantWhiteSpace( QString context, QString text, int tabWidth )
 {
     if( context.isEmpty() || !context[context.size()-1].isSpace() || text.isEmpty() || !text[0].isSpace() )
         return 0;
-    
+
     int textPosition = 0;
-    
+
     // Extract trailing whitespace in the context
     int contextPosition = context.size()-1;
     while( contextPosition > 0 && context[contextPosition-1].isSpace() )
         --contextPosition;
-    
-    
+
+
     int textWhitespaceEnd = 0;
     while(textWhitespaceEnd < text.size() && text[textWhitespaceEnd].isSpace())
         ++textWhitespaceEnd;
-    
+
     QString contextWhiteSpace = context.mid(contextPosition);
     contextPosition = 0;
     QString textWhiteSpace = text.left(textWhitespaceEnd);
-    
+
     // Step 1: Remove redundant newlines
     while(contextWhiteSpace.contains('\n') && textWhiteSpace.contains('\n'))
     {
@@ -109,7 +109,7 @@ int skipRedundantWhiteSpace( QString context, QString text, int tabWidth )
         textPosition += textOffset;
         textWhiteSpace.remove(0, textOffset);
     }
-    
+
     int contextOffset = 0;
     int textOffset = 0;
     // Skip redundant ordinary whitespace
@@ -149,20 +149,20 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
             // Try 2: Ignore the fuzzy characters while matching
             endOfLeftContext = matchPrefixIgnoringWhitespace( formattedMergedText, leftContext, fuzzyCharacters );
             if(endOfLeftContext == -1) {
-                kWarning() << "problem matching the left context";
-                return text; 
+                qWarning() << "problem matching the left context";
+                return text;
             }
         }
-        
+
         int startOfWhiteSpace = endOfLeftContext;
         // Include all leading whitespace
         while(startOfWhiteSpace > 0 && formattedMergedText[startOfWhiteSpace-1].isSpace())
             --startOfWhiteSpace;
-        
+
         formattedMergedText = formattedMergedText.mid(startOfWhiteSpace);
-        
+
         int skip = skipRedundantWhiteSpace( leftContext, formattedMergedText, tabWidth );
-        
+
         formattedMergedText = formattedMergedText.mid(skip);
     }
 
@@ -173,7 +173,7 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
             // Try 2: Ignore the fuzzy characters while matching
             endOfText = matchPrefixIgnoringWhitespace( formattedMergedText, text+' ', fuzzyCharacters );
             if(endOfText == -1) {
-                kWarning() << "problem matching the text while formatting";
+                qWarning() << "problem matching the text while formatting";
                 return text;
             }
         }

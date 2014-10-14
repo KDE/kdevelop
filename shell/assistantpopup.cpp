@@ -29,8 +29,8 @@
 #include <QDebug>
 #include <QEvent>
 #include <QTimer>
+#include <QDebug>
 
-#include <KDebug>
 #include <KLocalizedString>
 #include <KParts/MainWindow>
 #include <KTextEditor/Document>
@@ -191,7 +191,7 @@ AssistantPopup::AssistantPopup()
 
     setSource(QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevelop/assistantpopup.qml")));
     if (!rootObject()) {
-        kWarning() << "Failed to load assistant markup! The assistant will not work.";
+        qWarning() << "Failed to load assistant markup! The assistant will not work.";
     }
 
     m_updateTimer->setInterval(UPDATE_STATE_INTERVAL);

@@ -28,7 +28,6 @@
 #include "dvcsimportmetadatawidget.h"
 
 #include <KMessageBox>
-#include <KDebug>
 
 #include <vcslocation.h>
 #include "ui_dvcsimportmetadatawidget.h"
@@ -36,15 +35,15 @@
 class DvcsImportMetadataWidgetPrivate
 {
     friend class DvcsImportMetadataWidget;
-    
+
     DvcsImportMetadataWidgetPrivate(Ui::DvcsImportMetadataWidget* ui) : m_ui(ui) {}
     ~DvcsImportMetadataWidgetPrivate() { delete m_ui; }
-    
+
     Ui::DvcsImportMetadataWidget* m_ui;
 };
 
 DvcsImportMetadataWidget::DvcsImportMetadataWidget(QWidget *parent)
-    : KDevelop::VcsImportMetadataWidget(parent), 
+    : KDevelop::VcsImportMetadataWidget(parent),
     d_ptr(new DvcsImportMetadataWidgetPrivate(new Ui::DvcsImportMetadataWidget))
 {
     Q_D(DvcsImportMetadataWidget);

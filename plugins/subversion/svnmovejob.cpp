@@ -24,7 +24,6 @@
 #include <QMutexLocker>
 
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <ThreadWeaver.h>
 
 #include "kdevsvncpp/client.hpp"
@@ -47,7 +46,7 @@ void SvnInternalMoveJob::run()
         cli.move( svn::Path( srcba.data() ), svn::Revision(), svn::Path( dstba.data() ), force() );
     }catch( svn::ClientException ce )
     {
-        kDebug(9510) << "Exception while moveing file: "
+        qCDebug(PLUGIN_SVN) << "Exception while moveing file: "
                 << sourceLocation() << "to" << destinationLocation()
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
@@ -113,7 +112,7 @@ void SvnMoveJob::start()
         setErrorText( i18n( "Not enough information to move file" ) );
     }else
     {
-        kDebug(9510) << "moveing url:" << m_job->sourceLocation() << "to url" << m_job->destinationLocation();
+        qCDebug(PLUGIN_SVN) << "moveing url:" << m_job->sourceLocation() << "to url" << m_job->destinationLocation();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
 }

@@ -26,12 +26,12 @@
 #include <KJob>
 #include <KMessageBox>
 #include <KLocalizedString>
-#include <KDebug>
 
 #include "../dvcsjob.h"
 #include "../dvcsplugin.h"
 #include <vcs/models/brancheslistmodel.h>
 #include "ui_branchmanager.h"
+#include "../../debug.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
@@ -119,7 +119,7 @@ void BranchManager::deleteBranch()
         return;
     }
 
-    int ret = KMessageBox::messageBox(this, KMessageBox::WarningYesNo, 
+    int ret = KMessageBox::messageBox(this, KMessageBox::WarningYesNo,
                                       i18n("Are you sure you want to irreversibly remove the branch '%1'?", baseBranch));
     if (ret == KMessageBox::Yes)
         m_model->removeBranch(baseBranch);
@@ -145,10 +145,10 @@ void BranchManager::checkoutBranch()
         return;
     }
 
-    kDebug() << "Switching to" << branch << "in" << m_repository;
+    qCDebug(VCS) << "Switching to" << branch << "in" << m_repository;
     KDevelop::VcsJob *branchJob = m_dvcPlugin->switchBranch(QUrl::fromLocalFile(m_repository), branch);
 //     connect(branchJob, SIGNAL(finished(KJob*)), m_model, SIGNAL(resetCurrent()));
-    
+
     ICore::self()->runController()->registerJob(branchJob);
     close();
 }

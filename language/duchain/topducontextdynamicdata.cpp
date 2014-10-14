@@ -35,6 +35,7 @@
 #include "duchainregister.h"
 #include "serialization/itemrepository.h"
 #include "problem.h"
+#include "util/debug.h"
 
 //#define DEBUG_DATA_INFO
 
@@ -59,7 +60,7 @@ void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& to
 {
   if(!item.d_func()->classId) {
     //If this triggers, you have probably created an own DUChainBase based class, but haven't called setClassId(this) in the constructor.
-    kError() << QString("no class-id set for data attached to a declaration of type %1").arg(typeid(item).name());
+    qCritical() << QString("no class-id set for data attached to a declaration of type %1").arg(typeid(item).name());
     Q_ASSERT(0);
   }
 
@@ -361,7 +362,7 @@ Item TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint ind
   }
 
   if (index == 0 || index > static_cast<uint>(items.size())) {
-    kWarning() << "item index out of bounds:" << index << "count:" << items.size();
+    qWarning() << "item index out of bounds:" << index << "count:" << items.size();
     return {};
   }
   const uint realIndex = index - 1;
@@ -384,7 +385,7 @@ Item TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint ind
     if (!item) {
       //When this happens, the item has not been registered correctly.
       //We can stop here, because else we will get crashes later.
-      kError() << "Failed to load item with identity" << itemData->classId;
+      qCritical() << "Failed to load item with identity" << itemData->classId;
     }
 
     if (isSharedDataItem<Item>()) {
@@ -399,7 +400,7 @@ Item TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint ind
                                     "Potentially, the context has been deleted without deleting its children.");
     item->rebuildDynamicData(parent, index);
   } else {
-    kWarning() << "invalid item for index" << index << offsets.size() << offsets.value(realIndex).dataOffset;
+    qWarning() << "invalid item for index" << index << offsets.size() << offsets.value(realIndex).dataOffset;
   }
 
   return item;
@@ -551,18 +552,18 @@ void TopDUContextDynamicData::loadData() const {
   m_problems.loadData(file);
 
 #ifdef USE_MMAP
-  
+
   m_mappedData = file->map(file->pos(), file->size() - file->pos());
   if(m_mappedData) {
     m_mappedFile = file;
     m_mappedDataSize = file->size() - file->pos();
     file->close(); //Close the file, so there is less open file descriptors(May be problematic)
   }else{
-    kDebug() << "Failed to map" << file->fileName();
+    qCDebug(LANGUAGE) << "Failed to map" << file->fileName();
   }
-  
+
 #endif
-  
+
   if(!m_mappedFile) {
     QByteArray data = file->readAll();
     m_data.append(qMakePair(data, (uint)data.size()));
@@ -576,7 +577,7 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
   QFile file(pathForTopContext(topContextIndex));
   if(file.open(QIODevice::ReadOnly)) {
     if(file.size() == 0) {
-      kWarning() << "Top-context file is empty" << file.fileName();
+      qWarning() << "Top-context file is empty" << file.fileName();
       return 0;
     }
     QVector<ItemDataInfo> contextDataOffsets;
@@ -590,7 +591,7 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     DUChainBaseData* topData = reinterpret_cast<DUChainBaseData*>(topContextData.data());
     TopDUContext* ret = dynamic_cast<TopDUContext*>(DUChainItemSystem::self().create(topData));
     if(!ret) {
-      kWarning() << "Cannot load a top-context from file" << file.fileName() << "- the required language-support for handling ID" << topData->classId << "is probably not loaded";
+      qWarning() << "Cannot load a top-context from file" << file.fileName() << "- the required language-support for handling ID" << topData->classId << "is probably not loaded";
       return 0;
     }
 
@@ -614,7 +615,7 @@ bool TopDUContextDynamicData::isOnDisk() const {
 void TopDUContextDynamicData::deleteOnDisk() {
   if(!isOnDisk())
     return;
-  kDebug() << "deleting" << m_topContext->ownIndex() << m_topContext->url().str();
+  qCDebug(LANGUAGE) << "deleting" << m_topContext->ownIndex() << m_topContext->url().str();
 
   if(!m_dataLoaded)
     loadData();
@@ -630,7 +631,7 @@ void TopDUContextDynamicData::deleteOnDisk() {
   bool successfullyRemoved = QFile::remove(filePath());
   Q_UNUSED(successfullyRemoved);
   Q_ASSERT(successfullyRemoved);
-  kDebug() << "deletion ready";
+  qCDebug(LANGUAGE) << "deletion ready";
 }
 
 QString KDevelop::TopDUContextDynamicData::filePath() const {
@@ -645,7 +646,7 @@ bool TopDUContextDynamicData::hasChanged() const
 }
 
 void TopDUContextDynamicData::store() {
-//   kDebug() << "storing" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
+//   qCDebug(LANGUAGE) << "storing" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
 
   //Check if something has changed. If nothing has changed, don't store to disk.
   bool contentDataChanged = hasChanged();
@@ -658,7 +659,7 @@ void TopDUContextDynamicData::store() {
     ///      Then we also won't need to load the data if only the meta-data changed.
   if(!m_dataLoaded)
     loadData();
-  
+
   ///If the data is mapped, and we re-write the file, we must make sure that the data is copied out of the map,
   ///even if only metadata is changed.
   ///@todo If we split up data and metadata, we don't need to do this
@@ -715,7 +716,7 @@ void TopDUContextDynamicData::store() {
     if(file.open(QIODevice::WriteOnly)) {
 
       file.resize(0);
-      
+
       file.write((char*)&topContextDataSize, sizeof(uint));
       foreach(const ArrayWithPosition& pos, m_topContextData)
         file.write(pos.first.constData(), pos.second);
@@ -730,13 +731,13 @@ void TopDUContextDynamicData::store() {
       m_onDisk = true;
 
       if (file.size() == 0) {
-        kWarning() << "Saving zero size top ducontext data";
+        qWarning() << "Saving zero size top ducontext data";
       }
       file.close();
     } else {
-      kWarning() << "Cannot open top-context for writing";
+      qWarning() << "Cannot open top-context for writing";
     }
-//   kDebug() << "stored" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
+//   qCDebug(LANGUAGE) << "stored" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
 }
 
 TopDUContextDynamicData::ItemDataInfo TopDUContextDynamicData::writeDataInfo(const ItemDataInfo& info, const DUChainBaseData* data, uint& totalDataOffset) {

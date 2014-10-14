@@ -59,6 +59,7 @@ Boston, MA 02110-1301, USA.
 #include "uicontroller.h"
 #include "partcontroller.h"
 #include "savedialog.h"
+#include "debug.h"
 #include <kmessagebox.h>
 #include <KIO/Job>
 #include <KProtocolInfo>
@@ -114,7 +115,7 @@ struct DocumentControllerPrivate {
         QList<QUrl> urlsForDoc = documents.keys(dynamic_cast<KDevelop::IDocument*>(doc));
         foreach (const QUrl &url, urlsForDoc)
         {
-            kDebug() << "destroying document" << doc;
+            qCDebug(SHELL) << "destroying document" << doc;
             documents.remove(url);
         }
     }
@@ -143,7 +144,7 @@ struct DocumentControllerPrivate {
                 openDocumentInternal(u, QString(), KTextEditor::Range::invalid(), encoding  );
             }
         }
-        
+
     }
 
     void changeDocumentUrl(KDevelop::IDocument* document)
@@ -202,10 +203,10 @@ struct DocumentControllerPrivate {
         KTextEditor::Cursor previousActivePosition;
         if(previousActiveTextView)
             previousActivePosition = previousActiveTextView->cursorPosition();
-        
+
 
         QString _encoding = encoding;
-        
+
         QUrl url = inputUrl;
 
         if ( url.isEmpty() && (!activationParams.testFlag(IDocumentController::DoNotCreateView)) )
@@ -229,7 +230,7 @@ struct DocumentControllerPrivate {
             if ( !path.isEmpty() )
                 url = QUrl::fromLocalFile( path );
         }
-        
+
         //get a part document
         IDocument* doc = documents.value(url);
         if (!doc)
@@ -245,7 +246,7 @@ struct DocumentControllerPrivate {
                 // Exit if the url is invalid (should not happen)
                 // If the url is valid and the file does not already exist,
                 // kate creates the file and gives a message saying so
-                kDebug() << "invalid URL:" << url.url();
+                qCDebug(SHELL) << "invalid URL:" << url.url();
                 return 0;
             }
             else if (KProtocolInfo::isKnownProtocol(url.scheme()) && !KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, ICore::self()->uiController()->activeMainWindow() ))
@@ -275,7 +276,7 @@ struct DocumentControllerPrivate {
             // is the URL pointing to a directory?
             if (mimeType.inherits(QStringLiteral("inode/directory")))
             {
-                kDebug() << "cannot open directory:" << url.url();
+                qCDebug(SHELL) << "cannot open directory:" << url.url();
                 return 0;
             }
 
@@ -286,20 +287,20 @@ struct DocumentControllerPrivate {
                 constraints.insert("X-KDevelop-SupportedMimeTypes", mimeType.name());
                 Core::self()->pluginController()->pluginForExtension(QString(), QString(), constraints);
             }
-            
+
             if( IDocumentFactory* factory = factories.value(mimeType.name()))
             {
                 doc = factory->create(url, Core::self());
             }
-            
+
             if(!doc) {
-                if( !prefName.isEmpty() ) 
+                if( !prefName.isEmpty() )
                 {
                     doc = new PartDocument(url, Core::self(), prefName);
-                } else  if ( Core::self()->partControllerInternal()->isTextType(mimeType)) 
+                } else  if ( Core::self()->partControllerInternal()->isTextType(mimeType))
                 {
                     doc = new TextDocument(url, Core::self(), _encoding);
-                } else if( Core::self()->partControllerInternal()->canCreatePart(url) ) 
+                } else if( Core::self()->partControllerInternal()->canCreatePart(url) )
                 {
                     doc = new PartDocument(url, Core::self());
                 } else
@@ -313,17 +314,17 @@ struct DocumentControllerPrivate {
                 }
             }
         }
-        
+
         // The url in the document must equal the current url, else the housekeeping will get broken
         Q_ASSERT(!doc || doc->url() == url);
-        
+
         if(doc && openDocumentInternal(doc, range, activationParams, buddy))
             return doc;
         else
             return 0;
-        
+
     }
-    
+
     bool openDocumentInternal(IDocument* doc,
                                 const KTextEditor::Range& range,
                                 DocumentController::DocumentActivationParams activationParams,
@@ -334,11 +335,11 @@ struct DocumentControllerPrivate {
         KTextEditor::Cursor previousActivePosition;
         if(previousActiveTextView)
             previousActivePosition = previousActiveTextView->cursorPosition();
-        
+
         QUrl url=doc->url();
         UiController *uiController = Core::self()->uiControllerInternal();
         Sublime::Area *area = uiController->activeArea();
-        
+
         //We can't have the same url in many documents
         //so we check it's already the same if it exists
         //contains=>it's the same
@@ -352,13 +353,13 @@ struct DocumentControllerPrivate {
             return false;
         }
         //react on document deletion - we need to cleanup controller structures
-        
+
         QObject::connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), controller, SLOT(notifyDocumentClosed(Sublime::Document*)));
         //We check if it was already opened before
         bool emitOpened = !documents.contains(url);
         if(emitOpened)
             documents[url]=doc;
-        
+
         if (!activationParams.testFlag(IDocumentController::DoNotCreateView))
         {
             //find a view if there's one already opened in this area
@@ -380,7 +381,7 @@ struct DocumentControllerPrivate {
                 partView = sdoc->createView();
                 addView = true;
             }
-            
+
             if(addView) {
                 // This code is never executed when restoring session on startup,
                 // only when opening a file manually
@@ -483,7 +484,7 @@ struct DocumentControllerPrivate {
                     }
                 }
             }
-            
+
             if (!activationParams.testFlag(IDocumentController::DoNotActivate))
             {
                 uiController->activeSublimeWindow()->activateView(
@@ -721,7 +722,7 @@ void DocumentController::fileClose()
     {
         UiController *uiController = Core::self()->uiControllerInternal();
         Sublime::View *activeView = uiController->activeSublimeWindow()->activeView();
-        
+
         uiController->activeArea()->closeView(activeView);
     }
 }
@@ -741,9 +742,9 @@ void DocumentController::notifyDocumentClosed(Sublime::Document* doc_)
 {
     IDocument* doc = dynamic_cast<IDocument*>(doc_);
     Q_ASSERT(doc);
-    
+
     d->removeDocument(doc_);
-    
+
     if (d->documents.isEmpty()) {
         if (d->saveAll)
             d->saveAll->setEnabled(false);
@@ -854,7 +855,7 @@ QList< IDocument * > KDevelop::DocumentController::documentsExclusivelyInWindow(
 {
     // Gather a list of all documents which have views only in the given main window
     QList<IDocument*> checkSave;
-    
+
     foreach (IDocument* doc, openDocuments()) {
         if (Sublime::Document* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
             bool inOtherWindow = false;
@@ -923,7 +924,7 @@ void DocumentController::closeAllOtherDocuments()
         Sublime::View* activeView = mw->activeView();
 
         if (!activeView) {
-            kWarning() << "Shouldn't there always be an active view when this function is called?";
+            qWarning() << "Shouldn't there always be an active view when this function is called?";
             return;
         }
 
@@ -993,11 +994,11 @@ QStringList DocumentController::activeDocumentPaths() const
 {
     UiController *uiController = Core::self()->uiControllerInternal();
     if( !uiController->activeSublimeWindow() ) return QStringList();
-    
+
     QSet<QString> documents;
     foreach(Sublime::View* view, uiController->activeSublimeWindow()->area()->views())
         documents.insert(view->document()->documentSpecifier());
-    
+
     return documents.toList();
 }
 
@@ -1065,39 +1066,39 @@ bool DocumentController::openDocumentsSimple( QStringList urls )
     Sublime::AreaIndex* areaIndex = area->rootIndex();
 
     QList<Sublime::View*> topViews = static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->getTopViews();
-    
+
     if(Sublime::View* activeView = Core::self()->uiControllerInternal()->activeSublimeWindow()->activeView())
         areaIndex = area->indexOf(activeView);
 
-    kDebug() << "opening " << urls << " to area " << area << " index " << areaIndex << " with children " << areaIndex->first() << " " << areaIndex->second();
-    
+    qCDebug(SHELL) << "opening " << urls << " to area " << area << " index " << areaIndex << " with children " << areaIndex->first() << " " << areaIndex->second();
+
     bool isFirstView = true;
-    
+
     bool ret = openDocumentsWithSplitSeparators( areaIndex, urls, isFirstView );
-    
-    kDebug() << "area arch. after opening: " << areaIndex->print();
-    
+
+    qCDebug(SHELL) << "area arch. after opening: " << areaIndex->print();
+
     // Required because sublime sometimes doesn't update correctly when the area-index contents has been changed
     // (especially when views have been moved to other indices, through unsplit, split, etc.)
     static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->reconstructViews(topViews);
-    
+
     return ret;
 }
 
 bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* index, QStringList urlsWithSeparators, bool& isFirstView )
 {
-    kDebug() << "opening " << urlsWithSeparators << " index " << index << " with children " << index->first() << " " << index->second() << " view-count " << index->viewCount();
+    qCDebug(SHELL) << "opening " << urlsWithSeparators << " index " << index << " with children " << index->first() << " " << index->second() << " view-count " << index->viewCount();
     if(urlsWithSeparators.isEmpty())
         return true;
-    
+
     Sublime::Area* area = Core::self()->uiControllerInternal()->activeArea();
-    
+
     QList<int> topLevelSeparators; // Indices of the top-level separators (with groups skipped)
     QStringList separators = QStringList() << "/" << "-";
     QList<QStringList> groups;
-    
+
     bool ret = true;
-    
+
     {
         int parenDepth = 0;
         int groupStart = 0;
@@ -1119,12 +1120,12 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
                 if(parenDepth > 0)
                 {
                     --parenDepth;
-                    
+
                     if(parenDepth == 0)
                         groups << urlsWithSeparators.mid(groupStart, pos-groupStart);
                 }
                 else{
-                    kDebug() << "syntax error in " << urlsWithSeparators << ": parens do not match";
+                    qCDebug(SHELL) << "syntax error in " << urlsWithSeparators << ": parens do not match";
                     ret = false;
                 }
             }else if(parenDepth == 0)
@@ -1133,7 +1134,7 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
             }
         }
     }
-    
+
     if(topLevelSeparators.isEmpty())
     {
         if(urlsWithSeparators.size() > 1)
@@ -1162,11 +1163,11 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
         }
         return ret;
     }
-    
+
     // Pick a separator in the middle
-    
+
     int pickSeparator = topLevelSeparators[topLevelSeparators.size()/2];
-    
+
     bool activeViewToSecondChild = false;
     if(pickSeparator == urlsWithSeparators.size()-1)
     {
@@ -1182,32 +1183,32 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
                 separatorsAndParens.contains(urlsWithSeparators[pos-1])) )
                     activeViewToSecondChild = true;
     }
-    
+
     Qt::Orientation orientation = urlsWithSeparators[pickSeparator] == "/" ? Qt::Horizontal : Qt::Vertical;
-    
+
     if(!index->isSplit())
     {
-        kDebug() << "splitting " << index << "orientation" << orientation << "to second" << activeViewToSecondChild;
+        qCDebug(SHELL) << "splitting " << index << "orientation" << orientation << "to second" << activeViewToSecondChild;
         index->split(orientation, activeViewToSecondChild);
     }else{
         index->setOrientation(orientation);
-        kDebug() << "WARNING: Area is already split (shouldn't be)" << urlsWithSeparators;
+        qCDebug(SHELL) << "WARNING: Area is already split (shouldn't be)" << urlsWithSeparators;
     }
-    
+
     openDocumentsWithSplitSeparators( index->first(), urlsWithSeparators.mid(0, pickSeparator) , isFirstView );
     if(pickSeparator != urlsWithSeparators.size() - 1)
         openDocumentsWithSplitSeparators( index->second(), urlsWithSeparators.mid(pickSeparator+1, urlsWithSeparators.size() - (pickSeparator+1) ), isFirstView );
-    
+
     // Clean up the child-indices, because document-loading may fail
-    
+
     if(!index->first()->viewCount() && !index->first()->isSplit())
     {
-        kDebug() << "unsplitting first";
+        qCDebug(SHELL) << "unsplitting first";
         index->unsplit(index->first());
     }
     else if(!index->second()->viewCount() && !index->second()->isSplit())
     {
-        kDebug() << "unsplitting second";
+        qCDebug(SHELL) << "unsplitting second";
         index->unsplit(index->second());
     }
 

@@ -128,7 +128,7 @@ protected:
       context = contextFromNode(node);
 
     Q_ASSERT(context);
-    
+
     openContext( context );
 
     startVisiting(node);
@@ -299,7 +299,7 @@ protected:
 
       if ( contextFromNode( node ) == parent )
       {
-          kDebug() << "Error in AbstractContextBuilder::buildSubContexts(...): du-context was not replaced with new one";
+          qDebug() << "Error in AbstractContextBuilder::buildSubContexts(...): du-context was not replaced with new one";
           DUChainWriteLocker lock( DUChain::lock() );
           deleteContextOnNode( node );
       }
@@ -568,7 +568,7 @@ protected:
    * \param identifier The identifier which corresponds to the context.
    * \returns the opened context.
    */
-  
+
   virtual DUContext* openContextInternal( const RangeInRevision& range, DUContext::ContextType type, const QualifiedIdentifier& identifier )
   {
     Q_ASSERT( m_compilingContexts );

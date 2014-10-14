@@ -17,9 +17,6 @@
 #include <QTimer>
 #include <QFile>
 #include <QFileInfo>
-
-#include <KDebug>
-
 #include <QDomDocument>
 #include <QDomElement>
 
@@ -28,6 +25,7 @@
 #include <QtWidgets/QAction>
 #include <KLocalizedString>
 #include <QApplication>
+#include <QtCore/QDebug>
 
 #include <KColorScheme>
 #include <KUser>
@@ -47,7 +45,7 @@ SnippetRepository::SnippetRepository(const QString& file)
         QTimer::singleShot(0, this, SLOT(slotParseFile()));
     }
 
-    kDebug() << "created new snippet repo" << file << this;
+    qDebug() << "created new snippet repo" << file << this;
 }
 
 SnippetRepository::~SnippetRepository()

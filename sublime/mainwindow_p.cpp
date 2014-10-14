@@ -29,7 +29,6 @@
 #include <QCommonStyle>
 #include <QTimer>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 #include <kactionmenu.h>
 #include <kacceleratormanager.h>
@@ -45,6 +44,7 @@
 #include "idealcontroller.h"
 #include "holdupdates.h"
 #include "idealbuttonbarwidget.h"
+#include "sublimedebug.h"
 #include <KToolBar>
 #include <KSelectAction>
 #include <ktoggleaction.h>
@@ -60,14 +60,14 @@ class IdealToolBar : public QToolBar
             setFloatable(false);
             setObjectName(title);
             layout()->setMargin(0);
-            
+
             addWidget(m_buttons);
         }
 
         void hideWhenEmpty()
         {
             refresh();
-            
+
             QTimer* t = new QTimer(this);
             t->setInterval(100);
             t->setSingleShot(true);
@@ -213,7 +213,7 @@ void MainWindowPrivate::setBackgroundVisible(bool v)
 {
     if(!bgCentralWidget)
         return;
-    
+
     bgCentralWidget->setVisible(v);
     splitterCentralWidget->setVisible(!v);
 }
@@ -260,7 +260,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         //no splitter - we shall create it and populate with views
         if (!index->parent())
         {
-            kDebug() << "reconstructing root area";
+            qCDebug(SUBLIME) << "reconstructing root area";
             //this is root area
             splitter = d->splitterCentralWidget;
             d->m_indexSplitters[index] = splitter;
@@ -276,7 +276,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
             QSplitter *parent = d->m_indexSplitters.value(index->parent());
             splitter = new QSplitter(parent);
             d->m_indexSplitters[index] = splitter;
-            
+
             if(index == index->parent()->first())
                 parent->insertWidget(0, splitter);
             else
@@ -290,16 +290,16 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
     else
     {
         Container *container = 0;
-        
+
         while(splitter->count() && qobject_cast<QSplitter*>(splitter->widget(0)))
         {
             // After unsplitting, we might have to remove old splitters
             QWidget* widget = splitter->widget(0);
-            kDebug() << "deleting" << widget;
+            qCDebug(SUBLIME) << "deleting" << widget;
             widget->setParent(0);
             delete widget;
         }
-        
+
         if (!splitter->widget(0))
         {
             //we need to create view container
@@ -322,11 +322,11 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         int position = 0;
         bool hadActiveView = false;
         Sublime::View* activeView = d->activeView;
-        
+
         foreach (View *view, index->views())
         {
             QWidget *widget = view->widget(container);
-            
+
             if (widget)
             {
                 if(!container->hasWidget(widget))
@@ -373,7 +373,7 @@ void MainWindowPrivate::reconstruct()
 
     m_mainWindow->blockSignals(true);
 
-    kDebug() << "RECONSTRUCT" << area << "  " << area->shownToolViews(Sublime::Left) << "\n";
+    qCDebug(SUBLIME) << "RECONSTRUCT" << area << "  " << area->shownToolViews(Sublime::Left) << "\n";
     foreach (View *view, area->toolViews())
     {
         QString id = view->document()->documentSpecifier();
@@ -385,7 +385,7 @@ void MainWindowPrivate::reconstruct()
         }
     }
     m_mainWindow->blockSignals(false);
-    
+
     setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
 }
 
@@ -393,7 +393,7 @@ void MainWindowPrivate::clearArea()
 {
     if(m_leftTabbarCornerWidget)
         m_leftTabbarCornerWidget.data()->setParent(0);
-    
+
     //reparent toolview widgets to 0 to prevent their deletion together with dockwidgets
     foreach (View *view, area->toolViews())
     {
@@ -419,7 +419,7 @@ void MainWindowPrivate::clearArea()
     m_indexSplitters.clear();
     area = 0;
     viewContainers.clear();
-    
+
     setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
 }
 
@@ -481,7 +481,7 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
         {
             // Also update the orientation
             splitter->setOrientation(current->orientation());
-            
+
             for(int w = 0; w < splitter->count(); ++w)
             {
                 Container *container = qobject_cast<Sublime::Container*>(splitter->widget(w));
@@ -504,7 +504,7 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
     ViewCreator viewCreator(this);
     area->walkViews(viewCreator, index);
     emit m_mainWindow->viewAdded( view );
-    
+
     setTabBarLeftCornerWidget(m_leftTabbarCornerWidget.data());
 
     setBackgroundVisible(false);
@@ -521,16 +521,16 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         return;
 
     QSplitter *splitter = m_indexSplitters[index];
-    kDebug() << "index " << index << " root " << area->rootIndex();
-    kDebug() << "splitter " << splitter << " container " << splitter->widget(0);
-    kDebug() << "structure: " << index->print() << " whole structure: " << area->rootIndex()->print();
+    qCDebug(SUBLIME) << "index " << index << " root " << area->rootIndex();
+    qCDebug(SUBLIME) << "splitter " << splitter << " container " << splitter->widget(0);
+    qCDebug(SUBLIME) << "structure: " << index->print() << " whole structure: " << area->rootIndex()->print();
     //find the container for the view and remove the widget
     Container *container = qobject_cast<Container*>(splitter->widget(0));
     if (!container) {
-        kWarning() << "Splitter does not have a left widget!";
+        qWarning() << "Splitter does not have a left widget!";
         return;
     }
-    
+
     emit m_mainWindow->aboutToRemoveView( view );
 
     if (view->widget())
@@ -556,7 +556,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             m_leftTabbarCornerWidget.data()->hide();
             m_leftTabbarCornerWidget.data()->setParent(0);
         }
-        
+
         // We've about to remove the last view of this container.  It will
         // be empty, so have to delete it, as well.
 
@@ -568,7 +568,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         if (view->widget())
             view->widget()->setParent(0);
         else
-            kWarning() << "View does not have a widget!";
+            qWarning() << "View does not have a widget!";
 
         Q_ASSERT(container->count() == 0);
         // We can be called from signal handler of container
@@ -619,10 +619,10 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
                 parentSplitter->setSizes(sizes);
             }
 
-            kDebug() << "after deleation " << parent << " has "
+            qCDebug(SUBLIME) << "after deleation " << parent << " has "
                          << parentSplitter->count() << " elements";
 
-            
+
             //find the container somewhere to activate
             Container *containerToActivate = parentSplitter->findChild<Sublime::Container*>();
             //activate the current view there
@@ -679,7 +679,7 @@ Qt::DockWidgetArea MainWindowPrivate::positionToDockArea(Position position)
 
 void MainWindowPrivate::switchToArea(QAction *action)
 {
-    kDebug() << "for" << action;
+    qCDebug(SUBLIME) << "for" << action;
     controller->showArea(m_actionAreas[action], m_mainWindow);
 }
 
@@ -717,19 +717,19 @@ void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
         m_leftTabbarCornerWidget.clear();
     }
     m_leftTabbarCornerWidget = widget;
-    
+
     if(!widget || !area || viewContainers.isEmpty())
         return;
-    
+
     AreaIndex* putToIndex = area->rootIndex();
     QSplitter* splitter = m_indexSplitters[putToIndex];
     while(putToIndex->isSplit()) {
         putToIndex = putToIndex->first();
         splitter = m_indexSplitters[putToIndex];
     }
-    
+
 //     Q_ASSERT(splitter || putToIndex == area->rootIndex());
-    
+
     Container* c = 0;
     if(splitter) {
         c = qobject_cast<Container*>(splitter->widget(0));
@@ -737,7 +737,7 @@ void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
         c = viewContainers.values()[0];
     }
     Q_ASSERT(c);
-    
+
     c->setLeftCornerWidget(widget);
 }
 

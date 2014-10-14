@@ -23,7 +23,6 @@
 
 #include <KLocalizedString>
 #include <KConfigGroup>
-#include <KDebug>
 
 #include "breakpointmodel.h"
 #include "../../interfaces/icore.h"

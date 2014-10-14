@@ -18,6 +18,7 @@
 
 #include "stringhelpers.h"
 #include "safetycounter.h"
+#include "util/debug.h"
 
 #include <QString>
 #include <QStringList>
@@ -128,7 +129,7 @@ public:
   int m_cur;
   int m_curEnd;
   int m_end;
-  
+
   int next() const
   {
     return findCommaOrEnd( m_source, m_cur, m_parens[ 1 ] );
@@ -293,7 +294,7 @@ QString escapeFromBracketMatching(QString str) {
 void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argumentsStart ) {
   QString withStrings = escapeForBracketMatching(str);
   str = escapeForBracketMatching(clearStrings(str));
-  
+
   //Blank out everything that can confuse the bracket-matching algorithm
   QString reversed = reverse( str.left(argumentsStart) );
   QString withStringsReversed = reverse( withStrings.left(argumentsStart) );
@@ -318,7 +319,7 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
   }
 
   if( !s ) {
-    kDebug() << "skipFunctionArguments: Safety-counter triggered";
+    qCDebug(LANGUAGE) << "skipFunctionArguments: Safety-counter triggered";
   }
 
   argumentsStart -= pos;
@@ -429,31 +430,31 @@ QString clearStrings( QString str, QChar replacement ) {
       //skip the opening '
       str[pos] = replacement;
       ++pos;
-      
+
       if(str[pos] == '\\')
       {
         //Skip an escape character
         str[pos] = replacement;
         ++pos;
       }
-      
+
       //Skip the actual character
       str[pos] = replacement;
       ++pos;
-      
+
       //Skip the closing '
       if(pos < str.length() && str[pos] == '\'')
       {
         str[pos] = replacement;
       }
-      
+
       continue;
     }
-    
+
     bool intoString = false;
     if(str[pos] == '"' && !inString)
       intoString = true;
-    
+
     if(inString || intoString) {
       if(inString) {
         if(str[pos] == '"')
@@ -461,11 +462,11 @@ QString clearStrings( QString str, QChar replacement ) {
       }else{
         inString = true;
       }
-      
+
       bool skip = false;
       if(str[pos] == '\\')
         skip = true;
-        
+
       str[pos] = replacement;
       if(skip) {
         ++pos;
@@ -507,14 +508,14 @@ ParamIterator::ParamIterator( QString parens, QString source, int offset ) : d(n
 {
   d->m_source = source;
   d->m_parens = parens;
-  
+
   d->m_cur = offset;
   d->m_curEnd = offset;
   d->m_end = d->m_source.length();
 
   ///The whole search should be stopped when: A) The end-sign is found on the top-level B) A closing-brace of parameters was found
   int parenBegin = d->m_source.indexOf( parens[ 0 ], offset );
-  
+
   //Search for an interrupting end-sign that comes before the found paren-begin
   int foundEnd = -1;
   if( parens.length() > 2 ) {
@@ -522,11 +523,11 @@ ParamIterator::ParamIterator( QString parens, QString source, int offset ) : d(n
     if( foundEnd > parenBegin && parenBegin != -1 )
       foundEnd = -1;
   }
-  
+
   if( foundEnd != -1 ) {
     //We have to stop the search, because we found an interrupting end-sign before the opening-paren
     d->m_prefix = d->m_source.mid( offset, foundEnd - offset );
-    
+
     d->m_curEnd = d->m_end = d->m_cur = foundEnd;
   } else {
     if( parenBegin != -1 ) {

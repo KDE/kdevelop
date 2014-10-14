@@ -266,7 +266,7 @@ The completed duchain should allow for code refactoring, intelligent navigation,
  * For example:
  * \code
  *   for (int i = 0; i < count(); ++i) {
- *     kDebug() << i;
+ *     qDebug() << i;
  *   }
  * \endcode
  * The code which contains the debug statement will import the for conditions context, which contains the declaration

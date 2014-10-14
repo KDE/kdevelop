@@ -55,7 +55,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
     m_document( 0 ), m_url( url ), m_selectionRange( KTextEditor::Range::invalid() ),
     m_showOutput( item->showOutput() )
 {
-  debug() << "creating external script job";
+  qCDebug(PLUGIN_EXTERNALSCRIPT) << "creating external script job";
 
   setCapabilities( Killable );
   setStandardToolView( KDevelop::IOutputView::RunView );
@@ -118,7 +118,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
 
   QString command = item->command();
   QString workingDir = item->workingDirectory();
-  
+
   if(item->performParameterReplacement())
     command.replace( "%i", QString::number( QCoreApplication::applicationPid() ) );
 
@@ -197,7 +197,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
            SLOT(processFinished(int,QProcess::ExitStatus)) );
 
   // Now setup the process parameters
-  debug() << "setting command:" << command;
+  qCDebug(PLUGIN_EXTERNALSCRIPT) << "setting command:" << command;
 
   if ( m_errorMode == ExternalScriptItem::ErrorMergeOutput ) {
     m_proc->setOutputChannelMode( KProcess::MergedChannels );
@@ -211,7 +211,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
 
 void ExternalScriptJob::start()
 {
-  debug() << "launching?" << m_proc;
+  qCDebug(PLUGIN_EXTERNALSCRIPT) << "launching?" << m_proc;
 
   if ( m_proc ) {
     if ( m_showOutput ) {
@@ -251,7 +251,7 @@ void ExternalScriptJob::start()
       m_proc->closeWriteChannel();
     }
   } else {
-    kWarning() << "No process, something went wrong when creating the job";
+    qWarning() << "No process, something went wrong when creating the job";
     // No process means we've returned early on from the constructor, some bad error happened
     emitResult();
   }
@@ -352,7 +352,7 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
         appendLine( i18n( "*** Crashed with return code: %1 ***", QString::number( exitCode ) ) );
   }
 
-  debug() << "Process done";
+  qCDebug(PLUGIN_EXTERNALSCRIPT) << "Process done";
 
   emitResult();
 }
@@ -368,7 +368,7 @@ void ExternalScriptJob::processError( QProcess::ProcessError error )
     emitResult();
   }
 
-  debug() << "Process error";
+  qCDebug(PLUGIN_EXTERNALSCRIPT) << "Process error";
 }
 
 void ExternalScriptJob::appendLine( const QString& l )

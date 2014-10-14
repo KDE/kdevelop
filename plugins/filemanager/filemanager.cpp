@@ -46,6 +46,9 @@
 
 #include "kdevfilemanagerplugin.h"
 #include "bookmarkhandler.h"
+#include "debug.h"
+
+Q_LOGGING_CATEGORY(PLUGIN_FILEMANAGER, "kdevplatform.plugins.filemanager")
 
 FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     : QWidget(parent), m_plugin(plugin)

@@ -1,4 +1,5 @@
 #include "grepfindthread.h"
+#include "debug.h"
 
 #include <QDir>
 #include <QSet>
@@ -9,7 +10,7 @@
 #include <interfaces/icore.h>
 
 #include <serialization/indexedstring.h>
-#include <kdebug.h>
+
 
 using KDevelop::IndexedString;
 
@@ -77,10 +78,10 @@ static QList<QUrl> thread_findFiles(const QDir& dir, int depth, const QStringLis
                                    const QStringList& exclude, volatile bool &abort)
 {
     QFileInfoList infos = dir.entryInfoList(include, QDir::NoDotAndDotDot|QDir::Files|QDir::Readable);
-    
+
     if(!QFileInfo(dir.path()).isDir())
         infos << QFileInfo(dir.path());
-    
+
     QList<QUrl> dirFiles;
     foreach(const QFileInfo &currFile, infos)
     {
@@ -140,8 +141,8 @@ void GrepFindFilesThread::run()
     QStringList include = GrepFindFilesThread::parseInclude(m_patString);
     QStringList exclude = GrepFindFilesThread::parseExclude(m_exclString);
 
-    kDebug() << "running with start dir" << m_startDirs;
-    
+    qCDebug(PLUGIN_GREPVIEW) << "running with start dir" << m_startDirs;
+
     foreach(QUrl directory, m_startDirs)
     {
         if(m_project)

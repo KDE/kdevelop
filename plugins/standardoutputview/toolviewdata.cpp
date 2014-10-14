@@ -23,7 +23,6 @@
 #include <QAbstractItemModel>
 #include <QAbstractItemDelegate>
 
-#include <kdebug.h>
 
 OutputData::OutputData( ToolViewData* tv )
 : QObject( tv )

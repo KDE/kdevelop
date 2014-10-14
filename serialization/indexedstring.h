@@ -239,7 +239,7 @@ inline uint qHash( const KDevelop::IndexedString& str ) {
 
 
 /**
- * kDebug() stream operator.  Writes the string to the debug output.
+ * qDebug() stream operator.  Writes the string to the debug output.
  */
 KDEVPLATFORMSERIALIZATION_EXPORT QDebug operator<<(QDebug s, const KDevelop::IndexedString& string);
 

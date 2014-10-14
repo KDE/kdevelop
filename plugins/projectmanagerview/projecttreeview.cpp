@@ -23,7 +23,6 @@
 
 
 #include <QHeaderView>
-#include <QtCore/QDebug>
 #include <QMouseEvent>
 #include <QApplication>
 #include <QAbstractProxyModel>
@@ -33,7 +32,6 @@
 #include <kxmlguiwindow.h>
 #include <kglobalsettings.h>
 #include <kaction.h>
-#include <kdebug.h>
 #include <kurl.h>
 #include <KLocalizedString>
 
@@ -53,6 +51,7 @@
 #include "projectmanagerviewplugin.h"
 #include "projectmodelsaver.h"
 #include "projectmodelitemdelegate.h"
+#include "debug.h"
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/util/navigationtooltip.h>
@@ -348,7 +347,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         projectActions << projectConfig;
     }
     popupContextMenu_appendActions(menu, projectActions);
-    
+
     if(!itemlist.isEmpty())
         KDevelop::populateParentItemsMenu(itemlist.front(), &menu);
 
@@ -400,22 +399,22 @@ bool ProjectTreeView::event(QEvent* event)
     {
         QPoint p = mapFromGlobal(QCursor::pos());
         QModelIndex idxView = indexAt(p);
-        
+
         ProjectBaseItem* it = idxView.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
         QModelIndex idx;
         if(it)
             idx = it->index();
-        
+
         if((m_idx!=idx || !m_tooltip) && it && it->file())
         {
             m_idx=idx;
             ProjectFileItem* file=it->file();
             KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
             TopDUContext* top= DUChainUtils::standardContextForUrl(file->path().toUrl());
-            
+
             if(m_tooltip)
                 m_tooltip->close();
-            
+
             if(top)
             {
                 QWidget* navigationWidget = top->createNavigationWidget();
@@ -423,14 +422,14 @@ bool ProjectTreeView::event(QEvent* event)
                 {
                     m_tooltip = new KDevelop::NavigationToolTip(this, mapToGlobal(p) + QPoint(40, 0), navigationWidget);
                     m_tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
-                    kDebug() << "tooltip size" << m_tooltip->size();
+                    qCDebug(PLUGIN_PROJECTMANAGERVIEW) << "tooltip size" << m_tooltip->size();
                     ActiveToolTip::showToolTip(m_tooltip);
                     return true;
                 }
             }
         }
     }
-    
+
     return QAbstractItemView::event(event);
 }
 

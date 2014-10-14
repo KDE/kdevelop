@@ -3,6 +3,7 @@ set(KDevPlatformSerialization_LIB_SRCS
     indexedstring.cpp
     itemrepositoryregistry.cpp
     referencecounting.cpp
+    debug.cpp
 )
 
 add_library(KDevPlatformSerialization SHARED ${KDevPlatformSerialization_LIB_SRCS})

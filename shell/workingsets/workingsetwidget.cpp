@@ -18,8 +18,7 @@
 */
 
 #include "workingsetwidget.h"
-
-#include <KDebug>
+#include "../debug.h"
 
 #include <sublime/area.h>
 
@@ -63,7 +62,7 @@ void WorkingSetWidget::setVisible( bool visible )
 
 void WorkingSetWidget::changingWorkingSet( Sublime::Area* area, const QString& /*from*/, const QString& newSet)
 {
-    kDebug() << "re-creating widget" << m_area;
+    qCDebug(SHELL) << "re-creating widget" << m_area;
 
     Q_ASSERT(area == m_area);
     Q_UNUSED(area);

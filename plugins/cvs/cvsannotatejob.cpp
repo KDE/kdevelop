@@ -9,8 +9,8 @@
  ***************************************************************************/
 
 #include "cvsannotatejob.h"
+#include "debug.h"
 
-#include <KDebug>
 #include <QUrl>
 #include <QDir>
 #include <QLocale>
@@ -83,7 +83,7 @@ void CvsAnnotateJob::parseOutput(const QString& jobOutput, const QString& workin
             QUrl url = QUrl::fromLocalFile(workingDirectory + QDir::separator() + reFile.cap(1));
             annotateInfo.setLocation( url );
         } else {
-            kDebug(9500) << "Unmatched:"<<s<<endl;
+            qCDebug(PLUGIN_CVS) << "Unmatched:"<<s<<endl;
         }
     }
 }

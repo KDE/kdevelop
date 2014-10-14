@@ -26,7 +26,7 @@
 #include <ktemporaryfile.h>
 #include <qtextstream.h>
 #include <QSharedPointer>
-#include <kdebug.h>
+
 #include <interfaces/ipatchsource.h>
 #include "vcs/vcsstatusinfo.h"
 #include "vcs/vcsjob.h"

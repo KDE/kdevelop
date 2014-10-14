@@ -18,13 +18,13 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <kshell.h>
-#include <KDebug>
 
 #include "cvsjob.h"
 #include "cvsannotatejob.h"
 #include "cvslogjob.h"
 #include "cvsstatusjob.h"
 #include "cvsdiffjob.h"
+#include "debug.h"
 
 #include <interfaces/iplugin.h>
 
@@ -71,7 +71,7 @@ bool CvsProxy::prepareJob(CvsJob* job, const QString& repository, enum Requested
     // directory is not yet under CVS control
     if (op == CvsProxy::NormalOperation &&
         !isValidDirectory(QUrl::fromLocalFile(repository))) {
-        kDebug(9500) << repository << " is not a valid CVS repository";
+        qCDebug(PLUGIN_CVS) << repository << " is not a valid CVS repository";
         return false;
     }
 
@@ -151,7 +151,7 @@ QString CvsProxy::convertRevisionToPrevious(const KDevelop::VcsRevision& rev)
                     number--;
 
                 str = QString("-r") + base + '.' + QString::number(number);
-                kDebug(9500) << "Converted revision "<<orig<<" to previous revision "<<str;
+                qCDebug(PLUGIN_CVS) << "Converted revision "<<orig<<" to previous revision "<<str;
             }
             break;
 
@@ -190,7 +190,7 @@ CvsJob* CvsProxy::log(const QUrl &url, const KDevelop::VcsRevision& rev)
 }
 
 CvsJob* CvsProxy::diff(const QUrl& url,
-            const KDevelop::VcsRevision& revA, 
+            const KDevelop::VcsRevision& revA,
             const KDevelop::VcsRevision& revB,
             const QString& diffOptions)
 {
@@ -358,8 +358,8 @@ CvsJob * CvsProxy::remove(const QString& repo, const QList<QUrl>& files)
 }
 
 CvsJob * CvsProxy::update(const QString& repo, const QList<QUrl>& files,
-                          const KDevelop::VcsRevision & rev, 
-                          const QString & updateOptions, 
+                          const KDevelop::VcsRevision & rev,
+                          const QString & updateOptions,
                           bool recursive, bool pruneDirs, bool createDirs)
 {
     CvsJob* job = new CvsJob(vcsplugin);
@@ -369,7 +369,7 @@ CvsJob * CvsProxy::update(const QString& repo, const QList<QUrl>& files,
 
         if (recursive)
             *job << "-R";
-        else 
+        else
             *job << "-L";
         if (pruneDirs)
             *job << "-P";
