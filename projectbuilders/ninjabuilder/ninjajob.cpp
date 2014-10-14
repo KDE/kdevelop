@@ -21,7 +21,6 @@
 
 #include <KProcess>
 #include <QUrl>
-#include <KDebug>
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <interfaces/iproject.h>
@@ -156,7 +155,7 @@ void NinjaJob::appendLines(const QStringList& lines)
 {
     if(lines.isEmpty())
         return;
-    
+
     QStringList ret(lines);
     bool prev = false;
     for(QStringList::iterator it=ret.end(); it!=ret.begin(); ) {

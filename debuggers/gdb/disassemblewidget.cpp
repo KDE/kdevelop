@@ -26,7 +26,6 @@
 #include "gdbcommand.h"
 #include "debuggerplugin.h"
 
-#include <kdebug.h>
 #include <kdeversion.h>
 #include <ktextedit.h>
 #include <kglobalsettings.h>
@@ -51,6 +50,7 @@
 #include "debugsession.h"
 
 #include "registers/registersmanager.h"
+#include "debug.h"
 
 using namespace GDBMI;
 
@@ -64,8 +64,8 @@ SelectAddrDialog::SelectAddrDialog(QWidget* parent)
     m_ui.setupUi(widget);
     setMainWidget(widget);
     setCaption(i18n("Address Selector"));
-    
-    connect(m_ui.comboBox, SIGNAL(editTextChanged(QString)), 
+
+    connect(m_ui.comboBox, SIGNAL(editTextChanged(QString)),
             this, SLOT(validateInput()) );
     connect(m_ui.comboBox, SIGNAL(returnPressed()),
             this, SLOT(itemSelected()) );
@@ -139,7 +139,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
         m_splitter(new KDevelop::AutoOrientedSplitter(this))
 {
         QVBoxLayout* topLayout = new QVBoxLayout(this);
-    
+
         QHBoxLayout* controlsLayout = new QHBoxLayout;
 
         topLayout->addLayout(controlsLayout);
@@ -181,28 +181,28 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
         }
 
     }
-    
+
     setLayout(topLayout);
-    
+
     setWindowIcon( QIcon::fromTheme("system-run") );
     setWindowTitle(i18n("Disassemble/Registers View"));
-    
+
     KDevelop::IDebugController* pDC=KDevelop::ICore::self()->debugController();
     Q_ASSERT(pDC);
-    
-    connect(pDC, 
+
+    connect(pDC,
             SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
             SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
 
     connect(plugin, SIGNAL(reset()), this, SLOT(slotDeactivate()));
-    
+
     m_dlg = new SelectAddrDialog(this);
-    
+
     // show the data if debug session is active
     KDevelop::IDebugSession* pS = pDC->currentSession();
 
     currentSessionChanged(pS);
-    
+
     if(pS && !pS->currentAddr().isEmpty())
         slotShowStepInSource(pS->currentUrl(), pS->currentLine(), pS->currentAddr());
 }
@@ -228,7 +228,7 @@ void DisassembleWidget::runToCursor(){
 void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 {
     DebugSession *session = qobject_cast<DebugSession*>(s);
-    
+
     enableControls( session != NULL ); // disable if session closed
 
     m_registersManager->setSession(session);
@@ -277,7 +277,7 @@ bool DisassembleWidget::displayCurrent()
 
 void DisassembleWidget::slotActivate(bool activate)
 {
-    kDebug(9012) << "Disassemble widget active: " << activate;
+    qCDebug(DEBUGGERGDB) << "Disassemble widget active: " << activate;
 
     if (active_ != activate)
     {
@@ -328,7 +328,7 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
         QString cmd = (to.isEmpty())?
         QString("-s %1 -e \"%1 + 256\" -- 0").arg(from ):
         QString("-s %1 -e %2+1 -- 0").arg(from).arg(to); // if both addr set
-        
+
         s->addCommandToFront(
         new GDBCommand(DataDisassemble, cmd, this, &DisassembleWidget::disassembleMemoryHandler ) );
 
@@ -407,7 +407,7 @@ void DisassembleWidget::slotChangeAddress()
 {
     if(!m_dlg) return;
     m_dlg->updateOkState();
-    
+
     if (!m_disassembleWindow->selectedItems().isEmpty()) {
         m_dlg->setAddress(m_disassembleWindow->selectedItems().first()->text(Address));
     }

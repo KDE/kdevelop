@@ -35,6 +35,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/classdeclaration.h>
 #include "../cppduchain/qtfunctiondeclaration.h"
+#include "../debug.h"
 #include <typeutils.h>
 #include <cppduchain.h>
 #include <templatedeclaration.h>
@@ -225,7 +226,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     Cpp::QtFunctionDeclaration* classFun = dynamic_cast<Cpp::QtFunctionDeclaration*>( m_declaration.data() );
     if( !classFun ) {
-      kWarning() << "Signal/slot completion declaration is not a QtFunctionDeclaration";
+      qWarning() << "Signal/slot completion declaration is not a QtFunctionDeclaration";
       return;
     }
     executeSignalSlotCompletionItem( view, _word, classFun->isSignal(),
@@ -246,7 +247,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
             newText.prepend (parentScope.toString() + "::");
       }
     } else {
-      kDebug() << "Declaration disappeared";
+      qCDebug(CPP) << "Declaration disappeared";
       if(!alternativeText.isEmpty())
         newText = alternativeText;
       else
@@ -256,10 +257,10 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
     newText = alternativeText;
   }
   newText.prepend(prefixText);
-  
+
   // Text that will be removed in a separate editing step (so the user can undo it)
   QScopedPointer<KTextEditor::MovingRange> removeInSecondStep;
-  
+
   KTextEditor::Cursor cursor = view->cursorPosition();
   KTextEditor::Document* document = view->document();
   if(cursor != word.end())
@@ -269,19 +270,19 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
     removeInSecondStep.reset(moving->newMovingRange(KTextEditor::Range(cursor, word.end()), KTextEditor::MovingRange::DoNotExpand));
     word.setEnd(cursor);
   }
-  
+
   KTextEditor::Range nextToken = KTextEditor::Range(_word.end(), KTextEditor::Cursor(_word.end().line(), _word.end().column() + 2));
   bool followingColon = document->text(nextToken) == "::";
   bool followingBrace = document->text(nextToken).contains('{');
   document->replaceText(word, newText);
-  
+
   KTextEditor::Cursor end = word.start();
   end.setColumn(end.column() + newText.length());
-  
+
   bool jumpForbidden = false;
-  
+
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-  
+
   if(m_declaration.data())
   {
     if(declarationNeedsTemplateParameters(m_declaration.data())) {
@@ -292,7 +293,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
       view->setCursorPosition( end - KTextEditor::Cursor(0, 1) );
       lock.lock();
     }
-    
+
     if(m_declaration.data()->kind() == Declaration::Namespace) {
       CodeCompletionContext* ctx = static_cast<CodeCompletionContext*>(m_completionContext.data());
       if (ctx->accessType() != CodeCompletionContext::NamespaceAccess && !followingColon) {
@@ -309,7 +310,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
         lock.lock();
       }
     }
-      
+
     if( !useAlternativeText && m_declaration && (dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) || completionContext()->isConstructorInitialization()) ) {
       //Do some intelligent stuff for functions with the parens:
       lock.unlock();
@@ -320,7 +321,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
       }
       insertFunctionParenText(view, insertionPosition, m_declaration, jumpForbidden);
     }
-    
+
     if (removeInSecondStep) {
       //if we would remove text after the inserted text, skip that if it is a property
       //of the executed item and additionally insert a . or ->
@@ -332,7 +333,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
       }
     }
   }
-  
+
   if(removeInSecondStep)
   {
     KTextEditor::Range removeRange = removeInSecondStep->toRange();
@@ -468,25 +469,25 @@ QString NormalDeclarationCompletionItem::shortenedTypeString(KDevelop::Declarati
 {
   if(m_cachedTypeStringDecl == decl && m_cachedTypeStringLength == static_cast<uint>(desiredTypeLength))
     return m_cachedTypeString;
-  
+
   QString ret;
-  
+
   if(completionContext() && completionContext()->duContext())
     ret = Cpp::shortenedTypeString(decl.data(), completionContext()->duContext(), desiredTypeLength);
   else
     ret = KDevelop::NormalDeclarationCompletionItem::shortenedTypeString(decl, desiredTypeLength);
-  
+
   m_cachedTypeString = ret;
   m_cachedTypeStringDecl = decl;
   m_cachedTypeStringLength = desiredTypeLength;
-  
+
   return ret;
 }
 
 KDevelop::QualifiedIdentifier NormalDeclarationCompletionItem::stripPrefix() const {
   if(completionContext() && completionContext()->duContext()) {
     const TopDUContext* top = completionContext()->duContext()->topContext();
-    
+
     if(completionContext()->memberAccessContainer().allDeclarations.size())
       if( Declaration * const decl = completionContext()->memberAccessContainer().allDeclarations[0].getDeclaration(top) ) {
         AbstractType::Ptr t = decl->abstractType();
@@ -494,10 +495,10 @@ KDevelop::QualifiedIdentifier NormalDeclarationCompletionItem::stripPrefix() con
         if(idType)
           return idType->qualifiedIdentifier();
       }
-    
+
     return completionContext()->duContext()->scopeIdentifier(true);
   }
-  
+
   return QualifiedIdentifier();
 }
 
@@ -505,12 +506,12 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
   DUChainReadLocker lock(DUChain::lock(), 500);
   if(!lock.locked()) {
-    kDebug(9007) << "Failed to lock the du-chain in time";
+    qCDebug(CPP) << "Failed to lock the du-chain in time";
     return QVariant();
   }
-  
+
   if(!completionContext()) {
-    kDebug(9007) << "Missing completion-context";
+    qCDebug(CPP) << "Missing completion-context";
     return QVariant();
   }
 
@@ -560,7 +561,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
           if(m_declaration->kind() == Declaration::Namespace)
             return QString(indentation + "namespace");
-          
+
           if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(dec) ) {
             if( alias->identifier().isEmpty() ) {
               return QString(indentation + "using namespace");/* " + alias->importIdentifier().toString();*/
@@ -649,16 +650,16 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
         case CodeCompletionModel::Arguments:
         {
           QString ret;
-          
+
           if(completingTemplateParameters())
             createTemplateArgumentList(*this, ret, 0);
-          
+
           if (dec->type<FunctionType>()) {
             needCachedArgumentList();
-            
+
             return m_cachedArgumentList->text;
           }
-          
+
           return ret;
         }
         break;
@@ -695,19 +696,19 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     case CodeCompletionModel::CustomHighlight:
     if( index.column() == CodeCompletionModel::Arguments /*&& completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess*/ ) {
       needCachedArgumentList();
-      
+
       return QVariant(m_cachedArgumentList->highlighting);
     }
 //     if( index.column() == CodeCompletionModel::Name ) {
 //       //Bold
 //       QTextCharFormat boldFormat;
 //       boldFormat.setFontWeight((QFont::Normal + QFont::DemiBold)/2);
-// 
+//
 //       QList<QVariant> ret;
 //       ret << 0;
 //       ret << nameForDeclaration(dec).length();
 //       ret << QVariant(boldFormat);
-// 
+//
 //       return QVariant(ret);
 //     }
     break;
@@ -721,8 +722,8 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       //If it's a slot, remove all flags except the slot flag, because that will give a nicer icon. Access-rights are checked anyway.
       if(p & CodeCompletionModel::Slot)
         p = CodeCompletionModel::Slot;
-      
-      
+
+
       if( index.column() == CodeCompletionModel::Icon ) {
         lock.unlock();
         return DUChainUtils::iconForProperties(p);
@@ -740,10 +741,10 @@ void NormalDeclarationCompletionItem::needCachedArgumentList() const
   if(!m_cachedArgumentList)
   {
     m_cachedArgumentList = QExplicitlySharedDataPointer<CachedArgumentList>(new CachedArgumentList);
-    
+
     if(!m_declaration)
       return;
-    
+
     if(m_isTemplateCompletion || declarationNeedsTemplateParameters(m_declaration.data()))
       createTemplateArgumentList(*this, m_cachedArgumentList->text, &m_cachedArgumentList->highlighting);
 
@@ -846,17 +847,17 @@ uint MoreArgumentHintsCompletionItem::resetMaxArgumentHints(bool isAutomaticComp
 {
   uint ret = currentMaxArgumentHints;
   currentMaxArgumentHints = defaultMaxArgumentHints;
-  
+
   if(isAutomaticCompletion)
     return 1;
-  
+
   return ret;
 }
 
 void MoreArgumentHintsCompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& word)
 {
   currentMaxArgumentHints = m_oldNumber + maxArgumentHintsExtensionSteps;
-  
+
   // Restart code-completion
   KTextEditor::CodeCompletionInterface* iface = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view);
   Q_ASSERT(iface);

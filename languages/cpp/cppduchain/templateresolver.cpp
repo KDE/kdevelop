@@ -305,7 +305,7 @@ void TemplateResolver::matchTemplateParameterTypesInternal ( const AbstractType:
 {
   if (!argumentType || !parameterType)
   {
-    kWarning() << "Invalid Type Encountered";
+    qWarning() << "Invalid Type Encountered";
     res.valid = false;
     return;
   }

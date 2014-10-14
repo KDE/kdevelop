@@ -36,7 +36,6 @@
 
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
 #include <KLocalizedString>
@@ -140,7 +139,7 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     m_config(KSharedConfig::openConfig(), "GDB Debugger"), m_session(0)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IStatus )
-    
+
     core()->debugController()->initializeUi();
 
     setXMLFile("kdevgdbui.rc");
@@ -365,8 +364,8 @@ void CppDebuggerPlugin::slotExamineCore()
     emit showMessage(this, i18n("Examining core file %1", dlg.core().toLocalFile()), 1000);
 
     DebugSession* session = createSession();
-    session->examineCoreFile(dlg.binary(), dlg.core());    
-        
+    session->examineCoreFile(dlg.binary(), dlg.core());
+
     KillSessionJob *job = new KillSessionJob(session);
     job->setObjectName(i18n("Debug core file"));
     core()->runController()->registerJob(job);
@@ -397,11 +396,11 @@ void CppDebuggerPlugin::attachProcess(int pid)
 
     DebugSession* session = createSession();
     session->attachToProcess(pid);
-    
+
     KillSessionJob *job = new KillSessionJob(session);
     job->setObjectName(i18n("Debug process %1", pid));
     core()->runController()->registerJob(job);
-    job->start();    
+    job->start();
 }
 
 // Used to disable breakpoint actions when non-text document selected

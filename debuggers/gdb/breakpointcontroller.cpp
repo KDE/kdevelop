@@ -23,7 +23,6 @@
 
 #include "breakpointcontroller.h"
 
-#include <KDebug>
 #include <KLocalizedString>
 
 #include <interfaces/icore.h>
@@ -33,6 +32,7 @@
 
 #include "gdbcommand.h"
 #include "debugsession.h"
+#include "debug.h"
 
 using namespace GDBMI;
 
@@ -72,7 +72,7 @@ struct UpdateHandler : public Handler
     {
         if (r.reason == "error") {
             controller->error(breakpoint, r["msg"].literal(), m_column);
-            kWarning() << r["msg"].literal();
+            qWarning() << r["msg"].literal();
         } else {
             controller->m_errors[breakpoint].remove(m_column);
         }
@@ -92,11 +92,11 @@ struct InsertedHandler : public Handler
 
     virtual void handle(const GDBMI::ResultRecord &r)
     {
-        kDebug() << controller->m_dirty[breakpoint];
+        qCDebug(DEBUGGERGDB) << controller->m_dirty[breakpoint];
 
         if (r.reason == "error") {
             controller->error(breakpoint, r["msg"].literal(), KDevelop::Breakpoint::LocationColumn);
-            kWarning() << r["msg"].literal();
+            qWarning() << r["msg"].literal();
         } else {
             controller->m_errors[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
             if (r.hasField("bkpt")) {
@@ -111,7 +111,7 @@ struct InsertedHandler : public Handler
                 controller->m_ids[breakpoint] = r["hw-awpt"]["number"].literal();
             }
             Q_ASSERT(!controller->m_ids[breakpoint].isEmpty());
-            kDebug() << "breakpoint id" << breakpoint << controller->m_ids[breakpoint];
+            qCDebug(DEBUGGERGDB) << "breakpoint id" << breakpoint << controller->m_ids[breakpoint];
         }
         controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
         controller->breakpointStateChanged(breakpoint);
@@ -131,7 +131,7 @@ struct DeletedHandler : public Handler
         Q_UNUSED(r);
         controller->m_ids.remove(breakpoint);
         if (!breakpoint->deleted()) {
-            kDebug() << "delete finished, but was not really deleted (it was just modified)";
+            qCDebug(DEBUGGERGDB) << "delete finished, but was not really deleted (it was just modified)";
             controller->sendMaybe(breakpoint);
         } else {
             delete breakpoint;
@@ -175,7 +175,7 @@ void BreakpointController::slotEvent(IDebugSession::event_t e)
 
         case IDebugSession::connected_to_program:
         {
-            kDebug() << "connected to program";
+            qCDebug(DEBUGGERGDB) << "connected to program";
 
             //load breakpoints the user might have added through eg .gdbinit on startup
             //*before* sending, so we avoid getting duplicates
@@ -238,7 +238,7 @@ void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord
                     if (location == b->url().url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash) && line.toInt() - 1  == b->line()) {
                         updateBreakpoint = b;
                     } else {
-                        kDebug() << location << ":" << line << "!=" << b->location();
+                        qCDebug(DEBUGGERGDB) << location << ":" << line << "!=" << b->location();
                     }
                 }
                 if (updateBreakpoint) {
@@ -247,13 +247,13 @@ void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord
 
                 if (mi_b.hasField("original-location")) {
                     location = mi_b["original-location"].literal();
-                    kDebug() << "location" << location;
+                    qCDebug(DEBUGGERGDB) << "location" << location;
                     QRegExp rx("^(.+):(\\d+)$");
                     if (rx.indexIn(location) != -1) {
                         if (unquoteExpression(rx.cap(1)) == b->url().url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash) && rx.cap(2).toInt() - 1 == b->line()) {
                             updateBreakpoint = b;
                         } else {
-                            kDebug() << "!=" << b->location();
+                            qCDebug(DEBUGGERGDB) << "!=" << b->location();
                         }
                     } else if (location == b->location()) {
                         updateBreakpoint = b;
@@ -263,12 +263,12 @@ void BreakpointController::handleBreakpointListInitial(const GDBMI::ResultRecord
                         updateBreakpoint = b;
                     }
                 }else{
-                    kWarning() << "That's too bad, breakpoint doesn't contain \"original-location\" field ";
+                    qWarning() << "That's too bad, breakpoint doesn't contain \"original-location\" field ";
                 }
             }
             if (updateBreakpoint) break;
         }
-        
+
         if (updateBreakpoint) {
             update(updateBreakpoint, mi_b);
         } else {
@@ -294,14 +294,14 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         handler.
         FIXME: should handle and annotate the errors?
     */
-    kDebug() << breakpoint << breakpoint->location();
+    qCDebug(DEBUGGERGDB) << breakpoint << breakpoint->location();
     if (breakpoint->deleted())
     {
-        kDebug() << "deleted";
+        qCDebug(DEBUGGERGDB) << "deleted";
         m_dirty.remove(breakpoint);
         m_errors.remove(breakpoint);
         if (m_ids.contains(breakpoint)) { //if id is 0 breakpoint insertion is still pending, InsertedHandler will call sendMaybe again and delete it
-            kDebug() << "breakpoint id" << m_ids[breakpoint];
+            qCDebug(DEBUGGERGDB) << "breakpoint id" << m_ids[breakpoint];
             if (!m_ids[breakpoint].isEmpty()) {
                 debugSession()->addCommandToFront(
                     new GDBCommand(BreakDelete, m_ids[breakpoint],
@@ -309,16 +309,16 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                 addedCommand = true;
             }
         } else {
-            kDebug() << "breakpoint doesn't have yet an id, just delete it";
+            qCDebug(DEBUGGERGDB) << "breakpoint doesn't have yet an id, just delete it";
             delete breakpoint;
         }
     }
     else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::LocationColumn)) {
-        kDebug() << "location changed";
+        qCDebug(DEBUGGERGDB) << "location changed";
         if (m_ids.contains(breakpoint) && !m_ids[breakpoint].isEmpty()) {
             /* We already have GDB breakpoint for this, so we need to remove
             this one.  */
-            kDebug() << "We already have GDB breakpoint for this, so we need to remove this one";
+            qCDebug(DEBUGGERGDB) << "We already have GDB breakpoint for this, so we need to remove this one";
             debugSession()->addCommandToFront(
                 new GDBCommand(BreakDelete, m_ids[breakpoint],
                             new DeletedHandler(this, breakpoint)));
@@ -386,9 +386,9 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
     }
     if (addedCommand && debugSession()->state() == KDevelop::IDebugSession::ActiveState) {
         if (m_interrupted) {
-            kDebug() << "dbg is busy, already interrupting";
+            qCDebug(DEBUGGERGDB) << "dbg is busy, already interrupting";
         } else {
-            kDebug() << "dbg is busy, interrupting";
+            qCDebug(DEBUGGERGDB) << "dbg is busy, interrupting";
             m_interrupted = true;
             debugSession()->interruptDebugger();
             debugSession()->addCommand(ExecContinue); //continue right after interrupting, if other breakpoint related commands queue up they get inserted before continue (as addCommandToFront is used)
@@ -423,7 +423,7 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
     {
         const GDBMI::Value& mi_b = blist[i];
         QString id = mi_b["number"].literal();
-        
+
         KDevelop::Breakpoint* b = m_ids.key(id);
         if (!b) {
             QString type;
@@ -459,7 +459,7 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
 void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI::Value &b)
 {
     m_dontSendChanges++;
-    
+
     m_ids[breakpoint] = b["number"].literal();
 
     /* If the address is not empty, it means that the breakpoint
@@ -479,7 +479,7 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
     } else if (emptyAddress && isCodeBreakpoint && b.hasField("original-location")) {
         QRegExp rx("^(.+):(\\d+)$");
         QString location = b["original-location"].literal();
-        kDebug() << "location" << location;
+        qCDebug(DEBUGGERGDB) << "location" << location;
         if (rx.indexIn(location) != -1) {
             breakpoint->setLocation(QUrl::fromLocalFile(unquoteExpression(rx.cap(1))), rx.cap(2).toInt()-1);
         } else {
@@ -526,7 +526,7 @@ void BreakpointController::programStopped(const GDBMI::ResultRecord& r)
     if (r.hasField("reason")) {
         reason = r["reason"].literal();
     }
-    kDebug() << reason;
+    qCDebug(DEBUGGERGDB) << reason;
 
     /* This method will not do the right thing if we hit a breakpoint
         that is added in GDB outside kdevelop.  In this case we'll

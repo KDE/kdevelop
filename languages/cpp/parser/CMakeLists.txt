@@ -1,8 +1,4 @@
 
-#First remove the cpp language part default area, then set our own
-remove_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 )
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9040 )
-
 add_subdirectory(rpp)
 add_subdirectory(tests)
 #add_subdirectory(headergen)
@@ -36,7 +32,7 @@ set(kdevcppparser_LIB_SRCS
 add_library(kdevcppparser SHARED ${kdevcppparser_LIB_SRCS})
 target_link_libraries(kdevcppparser LINK_PRIVATE
   KDev::Language
-  
+
   KF5::TextEditor
   kdevcpprpp
   KDev::Interfaces

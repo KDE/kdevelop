@@ -22,7 +22,6 @@
 #include <QToolButton>
 #include <QLayout>
 
-#include <KDebug>
 #include <KLocalizedString>
 #include <KLineEdit>
 #include <KAction>
@@ -31,7 +30,6 @@
 #include <util/environmentgrouplist.h>
 #include <interfaces/iproject.h>
 
-extern int cbsDebugArea(); // from debugarea.cpp
 
 ConfigWidget::ConfigWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::ConfigWidget )
@@ -132,7 +130,7 @@ void ConfigWidget::actionExecutableChanged(const QString& txt )
     emit changed();
 }
 
-void ConfigWidget::clear()  
+void ConfigWidget::clear()
 {
     ui->buildAction->setCurrentIndex( int( CustomBuildSystemTool::Build ) );
     changeAction( ui->buildAction->currentIndex() );

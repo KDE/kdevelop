@@ -18,8 +18,6 @@
 
 #include "overloadresolutionhelper.h"
 
-#include <kdebug.h>
-
 #include <language/duchain/declaration.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/types/identifiedtype.h>
@@ -30,6 +28,7 @@
 #include "viablefunctions.h"
 #include "cppduchain.h"
 #include "adlhelper.h"
+#include "debug.h"
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -109,16 +108,16 @@ void OverloadResolutionHelper::initializeResolver(OverloadResolver& resolv)
     }
     ///If no global or class member operators found try ADL for namespaced operators
     if (m_declarations.isEmpty() && useADLForOperators) {
-      
+
       OverloadResolver::ParameterList params;
       params.parameters << m_baseType;
       params.parameters += m_knownParameters.parameters;
-      
+
       foreach( Declaration* decl, resolv.computeADLCandidates( params, m_identifierForADL ) ) {
         FunctionType::Ptr fun = decl->abstractType().cast<FunctionType>();
         if( fun && (fun->arguments().size() == 1 || fun->arguments().size() == 2) )
           m_declarations << DeclarationWithArgument( m_baseType, decl );
-      }          
+      }
     }
   }else{
     //m_declarations should already be set by setFunctions(..)
@@ -150,7 +149,7 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolveToList(bool p
   // also retrieve names by ADL if partial argument list (only used by code completion)
   // and even in strict mode if normal lookup failed
   if (partial || viableFunctions.empty() || !viableFunctions[0].isViable()) {
-    
+
     QList<Declaration*> adlDecls = resolv.computeADLCandidates( m_knownParameters, m_identifierForADL );
     if (!adlDecls.empty()) {
       QList< DeclarationWithArgument > adlDeclsWithArguments;
@@ -164,7 +163,7 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolveToList(bool p
   std::sort(viableFunctions.begin(), viableFunctions.end());
 
   QList<OverloadResolutionFunction> ret;
-  
+
   foreach( const ViableFunction& function, viableFunctions )
   {
     if( function.declaration() && function.declaration()->abstractType() )
@@ -179,7 +178,7 @@ ViableFunction OverloadResolutionHelper::resolve(bool forceInstance)
   OverloadResolver resolv( m_context, m_topContext, m_constness, forceInstance );
 
   initializeResolver(resolv);
-  
+
   ViableFunction ret = resolv.resolveListViable( m_knownParameters, m_declarations );
 
   // also retrieve names by ADL if partial argument list (only used by code completion)
@@ -199,7 +198,7 @@ ViableFunction OverloadResolutionHelper::resolve(bool forceInstance)
 
 void OverloadResolutionHelper::log(const QString& str) const
 {
-  kDebug(9007) << "OverloadResolutionHelper: " << str;
+  qCDebug(CPPDUCHAIN) << "OverloadResolutionHelper: " << str;
 }
 
 

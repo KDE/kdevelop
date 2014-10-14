@@ -19,8 +19,8 @@
  */
 
 #include "registercontroller_x86.h"
+#include "../debug.h"
 
-#include <KDebug>
 #include <KLocalizedString>
 
 namespace GDBDebugger
@@ -31,7 +31,7 @@ FlagRegister RegisterControllerGeneral_x86::m_eflags;
 
 void RegisterControllerGeneral_x86::updateValuesForRegisters(RegistersGroup* registers) const
 {
-    kDebug() << "Updating values for registers: " << registers->groupName.name();
+    qCDebug(DEBUGGERGDB) << "Updating values for registers: " << registers->groupName.name();
     if (registers->groupName == enumToGroupName(Flags)) {
         updateFlagValues(registers, m_eflags);
     } else {

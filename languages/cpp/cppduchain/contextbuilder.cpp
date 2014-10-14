@@ -39,6 +39,7 @@
 #include "debugbuilders.h"
 #include "rpp/chartools.h"
 #include "tokens.h"
+#include "debug.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -159,7 +160,7 @@ void ContextBuilder::addBaseType( KDevelop::BaseClassInstance base, BaseSpecifie
 
 void addImportedParentContextSafely(DUContext* context, DUContext* import) {
   if(import->imports(context)) {
-    kDebug() << "prevented endless recursive import";
+    qCDebug(CPPDUCHAIN) << "prevented endless recursive import";
   }else{
     context->addImportedParentContext(import);
   }
@@ -213,7 +214,7 @@ ContextBuilder::~ContextBuilder ()
 QPair<DUContext*, QualifiedIdentifier> ContextBuilder::findPrefixContext(const QualifiedIdentifier& id, KDevelop::CursorInRevision pos) {
   if(id.count() < 2)
     return qMakePair((DUContext*)0, QualifiedIdentifier());
-  
+
   QualifiedIdentifier prefixId(id);
   prefixId.pop();
 
@@ -235,11 +236,11 @@ QPair<DUContext*, QualifiedIdentifier> ContextBuilder::findPrefixContext(const Q
         if(prefixId.count() >= currentScopeId.count() && prefixId.left(currentScopeId.count()) == currentScopeId)
           prefixId = prefixId.mid(currentScopeId.count());
         else
-          kDebug() << "resolved bad prefix context. Should start with" << currentScopeId.toString() << "but is" << prefixId.toString();
+          qCDebug(CPPDUCHAIN) << "resolved bad prefix context. Should start with" << currentScopeId.toString() << "but is" << prefixId.toString();
       }
     }
   }
-  
+
   return qMakePair(import, prefixId);
 }
 
@@ -255,7 +256,7 @@ void ContextBuilder::openPrefixContext(AST* ast, const QualifiedIdentifier& id, 
   openContext(ast, DUContext::Helper, prefix.second);
 
   DUContext* import = prefix.first;
-  
+
   if(import) {
     DUChainWriteLocker lock(DUChain::lock());
     addImportedParentContextSafely(currentContext(), import);
@@ -271,7 +272,7 @@ void ContextBuilder::closePrefixContext(const QualifiedIdentifier& id) {
 void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
 
   ++m_templateDeclarationDepth;
-  
+
   if(!m_onlyComputeSimplified)
   {
     AST* first, *last;
@@ -285,7 +286,7 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
 
     visitNodes(this,ast->template_parameters);
     closeContext();
-    
+
     queueImportedContext(ctx); //Import the context into the following function-argument context(so the template-parameters can be found from there)
   }
 
@@ -297,7 +298,7 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
 KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(Cpp::EnvironmentFilePointer file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext)
 {
   Cpp::EnvironmentFile* filePtr = const_cast<Cpp::EnvironmentFile*>(file.data() );
-  
+
   filePtr->setIsProxyContext(true);
 
   TopDUContext* topLevelContext = 0;
@@ -308,14 +309,14 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(Cpp::Enviro
     CppDUContext<TopDUContext>* cppContext = 0;
 
     if (topLevelContext) {
-      kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: recompiling";
+      qCDebug(CPPDUCHAIN) << "ContextBuilder::buildProxyContextFromContent: recompiling";
 
       Q_ASSERT(dynamic_cast<CppDUContext<TopDUContext>* >(topLevelContext));
       cppContext = static_cast<CppDUContext<TopDUContext>* >(topLevelContext);
 
       DUChain::self()->updateContextEnvironment( topLevelContext, filePtr );
     } else {
-      kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: compiling";
+      qCDebug(CPPDUCHAIN) << "ContextBuilder::buildProxyContextFromContent: compiling";
 
       topLevelContext = new CppDUContext<TopDUContext>(file->url(), RangeInRevision(), filePtr);
       topLevelContext->setType(DUContext::Global);
@@ -324,12 +325,12 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(Cpp::Enviro
       cppContext = static_cast<CppDUContext<TopDUContext>* >(topLevelContext);
 
       DUChain::self()->addDocumentChain(topLevelContext);
-      
+
       topLevelContext->updateImportsCache(); //Mark that we will use a cached import-structure
     }
 
     Q_ASSERT(content);
-    
+
     cppContext->clearImportedParentContexts();
     cppContext->addImportedParentContext(content.data());
     cppContext->updateImportsCache(); //Mark that we will use a cached import-structure
@@ -348,25 +349,25 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
   {
     DUChainWriteLocker lock(DUChain::lock());
     if(updateContext && (updateContext->parsingEnvironmentFile() && updateContext->parsingEnvironmentFile()->isProxyContext())) {
-      kDebug(9007) << "updating a context " << file->url().str() << " from a proxy-context to a content-context";
+      qCDebug(CPPDUCHAIN) << "updating a context " << file->url().str() << " from a proxy-context to a content-context";
       updateContext->parsingEnvironmentFile()->setIsProxyContext(false);
     }
   }
-  
+
   ReferencedTopDUContext topLevelContext;
   {
     DUChainWriteLocker lock(DUChain::lock());
     topLevelContext = updateContext;
 
     RangeInRevision topRange = RangeInRevision(CursorInRevision(0,0), CursorInRevision(INT_MAX, INT_MAX));
-    
+
     if (topLevelContext) {
-      kDebug(9007) << "ContextBuilder::buildContexts: recompiling";
+      qCDebug(CPPDUCHAIN) << "ContextBuilder::buildContexts: recompiling";
       setRecompiling(true);
       DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::EnvironmentFile*>(file.data() ) );
       topLevelContext->setRange(topRange);
     } else {
-      kDebug(9007) << "ContextBuilder::buildContexts: compiling";
+      qCDebug(CPPDUCHAIN) << "ContextBuilder::buildContexts: compiling";
       setRecompiling(false);
 
       Q_ASSERT(compilingContexts());
@@ -375,7 +376,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
 
       topLevelContext->setType(DUContext::Global);
       DUChain::self()->addDocumentChain(topLevelContext);
-    
+
       topLevelContext->updateImportsCache(); //Mark that we will use a cached import-structure
     }
 
@@ -398,7 +399,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
 
       topLevelContext->addImportedParentContexts(realIncluded);
       topLevelContext->addImportedParentContexts(realTemporaryIncluded, true);
-      
+
       topLevelContext->updateImportsCache();
     }
   }
@@ -406,7 +407,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
   {
     DUChainReadLocker lock(DUChain::lock());
     //If we're debugging the current file, dump its preprocessed contents and the AST
-    ifDebugFile( IndexedString(file->identity().url().str()), { kDebug() << stringFromContents(editor()->parseSession()->contentsVector()); Cpp::DumpChain dump; dump.dump(node, editor()->parseSession()); } );
+    ifDebugFile( IndexedString(file->identity().url().str()), { qCDebug(CPPDUCHAIN) << stringFromContents(editor()->parseSession()->contentsVector()); Cpp::DumpChain dump; dump.dump(node, editor()->parseSession()); } );
   }
 
   if(m_computeEmpty)
@@ -423,7 +424,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
   {
     DUChainReadLocker lock(DUChain::lock());
 
-    kDebug(9007) << "built top-level context with" << topLevelContext->localDeclarations().size() << "declarations and" << topLevelContext->importedParentContexts().size() << "included files";
+    qCDebug(CPPDUCHAIN) << "built top-level context with" << topLevelContext->localDeclarations().size() << "declarations and" << topLevelContext->importedParentContexts().size() << "included files";
     //If we're debugging the current file, dump the du-chain and the smart ranges
     ifDebugFile( IndexedString(file->identity().url().str()), { DUChainDumper dumper; dumper.dump(topLevelContext); } );
   }
@@ -432,7 +433,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
 
   if (!m_importedParentContexts.isEmpty()) {
     DUChainReadLocker lock(DUChain::lock());
-    kWarning() << file->url().str() << "Previous parameter declaration context didn't get used??" ;
+    qWarning() << file->url().str() << "Previous parameter declaration context didn't get used??" ;
     m_importedParentContexts.clear();
   }
 
@@ -450,12 +451,12 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
   }
 
   size_t realStart = node->start_token;
-  
+
   if(node->namespace_name) //Move the start behind the name, the simple + hacky way
     node->start_token = node->namespace_name+1;
-  
+
   openContext(node, DUContext::Namespace, identifier);
-  
+
   node->start_token = realStart;
 
   DefaultVisitor::visitNamespace (node);
@@ -467,7 +468,7 @@ void ContextBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
 {
   if(m_onlyComputeSimplified)
     return;
-  
+
   //The created context must be unnamed if not an "enum class", so the enumerators can be found globally with the correct scope.
   //In case of an "enum class" this enum creates its own context.
   openContext(node, DUContext::Enum, node->isClass ? node->name : 0 );
@@ -509,7 +510,7 @@ void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
     if ((kind == Token_union || id.isEmpty())) {
       //It's an unnamed union context, or an unnamed struct, propagate the declarations to the parent
       DUChainWriteLocker lock(DUChain::lock());
-        
+
       if(kind == Token_enum || kind == Token_union || m_typeSpecifierWithoutInitDeclarators == node->start_token) {
         ///@todo Mark unions in the duchain in some way, instead of just representing them as a class
         currentContext()->setInSymbolTable(currentContext()->parentContext()->inSymbolTable());
@@ -517,7 +518,7 @@ void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
       }
     }
   }
-  
+
   classContextOpened(node, currentContext());
 
   DefaultVisitor::visitClassSpecifier (node);
@@ -542,19 +543,19 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
     identifierForNode(node->declarator->id, functionName);
 
     if (functionName.count() >= 2) {
-      
+
       // This is a class function definition
       DUChainReadLocker lock(DUChain::lock());
       QualifiedIdentifier currentScope = currentContext()->scopeIdentifier(true);
       QualifiedIdentifier className = currentScope + functionName;
       className.pop();
       className.setExplicitlyGlobal(true);
-      
+
       QList<Declaration*> classDeclarations = currentContext()->findDeclarations(className);
 
       if (classDeclarations.count() != 0 && classDeclarations.first()->internalContext()) {
         queueImportedContext(classDeclarations.first()->internalContext());
-        
+
         QualifiedIdentifier newFunctionName(className);
         newFunctionName.push(functionName.last());
         newFunctionName.setExplicitlyGlobal(false);
@@ -568,7 +569,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   if(!m_onlyComputeVisible) { //If we only compute the publically visible, we don't need to go into function bodies
     m_openingFunctionBody = functionName;
 
-    
+
     if (node->constructor_initializers && node->function_body) {
       //Since we put the context around the context for the compound statement, it also gets the local scope identifier.
       openContext(node->constructor_initializers, node->function_body, DUContext::Other, m_openingFunctionBody); //The constructor initializer context
@@ -585,7 +586,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       closeContext();
     }
   }
-  
+
   visit(node->win_decl_specifiers);
   // If still defined, not needed
   m_importedParentContexts.clear();
@@ -601,7 +602,7 @@ DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextTy
 {
   if (compilingContexts()) {
 #ifdef DEBUG_UPDATE_MATCHING
-    kDebug() << "opening context with text" << editor()->tokensToStrings( rangeNode->start_token, rangeNode->end_token );
+    qCDebug(CPPDUCHAIN) << "opening context with text" << editor()->tokensToStrings( rangeNode->start_token, rangeNode->end_token );
 #endif
     KDevelop::RangeInRevision range = editor()->findRangeForContext(rangeNode->start_token, rangeNode->end_token);
     range.end = range.start;
@@ -623,7 +624,7 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::RangeInRevision& 
     DUChainWriteLocker lock(DUChain::lock());
     static_cast<CppDUContext<DUContext>*>(ret)->deleteAllInstantiations();
   }
-  
+
   /**
    * @todo either remove this here and add it to the correct other places, or remove it in the over places.
    * The problem: For template-parameter contexts this needs to be imported into function-parameter contexts
@@ -644,7 +645,7 @@ void ContextBuilder::checkRanges()
 {
   for(QHash<KDevelop::DUContext*, KDevelop::RangeInRevision>::iterator it = m_contextRanges.begin(); it != m_contextRanges.end(); ) {
     if(it.key()->range() != *it) {
-      kDebug(9007) << "Range of" << it.key()->scopeIdentifier(true).toString() << "changed from" << (*it) << "to" << it.key()->range() << "at\n" << kBacktrace();
+      qCDebug(CPPDUCHAIN) << "Range of" << it.key()->scopeIdentifier(true).toString() << "changed from" << (*it) << "to" << it.key()->range() << "at\n" << kBacktrace();
       it = m_contextRanges.erase(it); //Remove it so we see each change only once
     }else{
       ++it;
@@ -673,7 +674,7 @@ void ContextBuilder::preVisitSimpleDeclaration(SimpleDeclarationAST * node) {
 void ContextBuilder::visitSimpleDeclaration(SimpleDeclarationAST *node)
 {
   preVisitSimpleDeclaration(node);
-  
+
   DefaultVisitor::visitSimpleDeclaration(node);
 
   // Didn't get claimed if it was still set
@@ -765,7 +766,7 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
     visit(node->declaration);
     return;
   }
-  
+
   DUContext::ContextType type;
   {
     DUChainReadLocker lock(DUChain::lock());
@@ -791,7 +792,7 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
         iv.parse(node->expression);*/
         IdentifierVerifier iv(this, CursorInRevision(editor()->findPosition(node->start_token)));
         iv.visit(node->expression);
-        //kDebug(9007) << editor()->findPosition(node->start_token) << "IdentifierVerifier returned" << iv.result;
+        //qCDebug(CPPDUCHAIN) << editor()->findPosition(node->start_token) << "IdentifierVerifier returned" << iv.result;
         node->expressionChosen = iv.result;
       }
 
@@ -879,9 +880,9 @@ void ContextBuilder::visitParameterDeclarationClause(ParameterDeclarationClauseA
   //Don't assign the initializer to parameter-declarations
   InitializerAST* oldCurrentInitializer = m_currentInitializer;
   m_currentInitializer = 0;
-  
+
   DefaultVisitor::visitParameterDeclarationClause(node);
-  
+
   m_currentInitializer = oldCurrentInitializer;
 }
 
@@ -892,7 +893,7 @@ void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)
     //Build a prefix-context for external variable-definitions
     CursorInRevision pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
     identifierForNode(node->declarator->id, id);
-    
+
     openPrefixContext(node, id, pos);
   }
 
@@ -902,12 +903,12 @@ void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)
   if(node->initializer)
     visitInitializer(node->initializer);
   m_currentInitializer = 0;
-  
+
   closePrefixContext(id);
 }
 
 void ContextBuilder::visitDeclarator(DeclaratorAST *node) {
-  
+
   //BEGIN Copied from default visitor
   visit(node->sub_declarator);
   visitNodes(this, node->ptr_ops);
@@ -1030,7 +1031,7 @@ void ContextBuilder::visitSwitchStatement(SwitchStatementAST* node)
 void ContextBuilder::visitDoStatement(DoStatementAST *node)
 {
   if(!node->statement) {
-    kWarning() << "error, no statement"; //Warning instead of crashing here
+    qWarning() << "error, no statement"; //Warning instead of crashing here
     return;
   }
   //We don't need to create a context for compound-statements, since those create a context by themselves
@@ -1085,7 +1086,7 @@ void ContextBuilder::visitCatchStatement(CatchStatementAST *node)
 
   if (node->condition) {
     DUContext* secondParentContext = openContext(node->condition, DUContext::Other);
-    
+
     {
       DUChainReadLocker lock(DUChain::lock());
       contextsToImport.append(DUContext::Import(secondParentContext, 0));
@@ -1138,7 +1139,7 @@ bool ContextBuilder::createContextIfNeeded(AST* node, DUContext* importedParentC
     DUChainReadLocker lock(DUChain::lock());
     imports << DUContext::Import(importedParentContext, 0);
   }
-  
+
   return createContextIfNeeded(node, imports);
 }
 

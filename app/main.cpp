@@ -33,7 +33,6 @@
 #include <kcmdlineargs.h>
 #include <KLocalizedString>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 #include <ksplashscreen.h>
 #include <kmessagebox.h>
 #include <ktexteditor/cursor.h>
@@ -45,6 +44,9 @@
 #include <QTextStream>
 #include <QDBusInterface>
 #include <QDBusReply>
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(APP)
+Q_LOGGING_CATEGORY(APP, "kdevelop.app")
 
 #include <shell/core.h>
 #include <shell/mainwindow.h>
@@ -347,20 +349,20 @@ int main( int argc, char *argv[] )
             if( (!si.name.isEmpty() || !si.projects.isEmpty() || args->isSet("pid")) &&
                 (!args->isSet("pid") || KDevelop::SessionController::isSessionRunning(si.uuid.toString())))
                 candidates << si;
-        
+
         if(candidates.size() == 0)
         {
             qerr << "no session available" << endl;
             return 1;
         }
-        
+
         if(candidates.size() == 1 && args->isSet("pid"))
         {
             session = candidates[0].uuid.toString();
         }else{
             for(int i = 0; i < candidates.size(); ++i)
                 qerr << "[" << i << "]: " << candidates[i].description << endl;
-            
+
             int chosen;
             std::cin >> chosen;
             if(std::cin.good() && (chosen >= 0 && chosen < candidates.size()))
@@ -372,7 +374,7 @@ int main( int argc, char *argv[] )
             }
         }
     }
-    
+
     if(args->isSet("ps"))
     {
         bool onlyRunning = args->isSet("pid");
@@ -439,13 +441,13 @@ int main( int argc, char *argv[] )
 
     if(args->isSet("pid")) {
         if( !sessionData ) {
-            kError() << "session not given or does not exist";
+            qCritical() << "session not given or does not exist";
             return 5;
         }
 
         KDevelop::SessionRunInfo sessionInfo = KDevelop::SessionController::sessionRunInfo( sessionData->uuid.toString() );
         if (!sessionInfo.isRunning) {
-            kError() << session << sessionData->name << "is not running";
+            qCritical() << session << sessionData->name << "is not running";
             return 5;
         } else {
             // Print the PID and we're ready
@@ -500,9 +502,9 @@ int main( int argc, char *argv[] )
         QString launchName = debugeeName;
 
         KDevelop::LaunchConfiguration* launch = 0;
-        kDebug() << launchName;
+        qCDebug(APP) << launchName;
         foreach (KDevelop::LaunchConfiguration *l, core->runControllerInternal()->launchConfigurationsInternal()) {
-            kDebug() << l->name();
+            qCDebug(APP) << l->name();
             if (l->name() == launchName) {
                 launch = l;
             }
@@ -510,7 +512,7 @@ int main( int argc, char *argv[] )
 
         KDevelop::LaunchConfigurationType *type = 0;
         foreach (KDevelop::LaunchConfigurationType *t, core->runController()->launchConfigurationTypes()) {
-            kDebug() << t->id();
+            qCDebug(APP) << t->id();
             if (t->id() == "Native Application") {
                 type = t;
                 break;
@@ -525,7 +527,7 @@ int main( int argc, char *argv[] )
         if (launch && launch->type()->id() != "Native Application") launch = 0;
         if (launch && launch->launcherForMode("debug") != args->getOption("debug")) launch = 0;
         if (!launch) {
-            kDebug() << launchName << "not found, creating a new one";
+            qCDebug(APP) << launchName << "not found, creating a new one";
             QPair<QString,QString> launcher;
             launcher.first = "debug";
             foreach (KDevelop::ILauncher *l, type->launchers()) {
@@ -552,7 +554,7 @@ int main( int argc, char *argv[] )
     } else {
         foreach ( const File& file, initialFiles ) {
             if(!core->documentController()->openDocument(file.first, KTextEditor::Cursor(file.second, 0))) {
-                kWarning() << i18n("Could not open %1", file.first.toDisplayString(QUrl::PreferLocalFile));
+                qWarning() << i18n("Could not open %1", file.first.toDisplayString(QUrl::PreferLocalFile));
             }
         }
     }

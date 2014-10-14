@@ -20,6 +20,7 @@
 #include "test_custombuildsystemplugin.h"
 
 #include <QtTest/QtTest>
+#include <QDebug>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -28,7 +29,6 @@
 #include <kio/netaccess.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/isession.h>
-#include <KDebug>
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
@@ -65,7 +65,7 @@ void TestCustomBuildSystemPlugin::loadSimpleProject()
     ICore::self()->projectController()->openProject( projecturl );
     // Wait for the project to be opened
     if( !projectSpy->wait( 20000 ) ) {
-        kFatal() << "Expected project to be loaded within 20 seconds, but this didn't happen";
+        qFatal("Expected project to be loaded within 20 seconds, but this didn't happen");
     }
     IProject* project = ICore::self()->projectController()->findProjectByName( "SimpleProject" );
     QVERIFY( project );
@@ -81,11 +81,11 @@ void TestCustomBuildSystemPlugin::buildDirProject()
     ICore::self()->projectController()->openProject( projecturl );
     // Wait for the project to be opened
     if( !projectSpy->wait( 20000 ) ) {
-        kFatal() << "Expected project to be loaded within 20 seconds, but this didn't happen";
+        qFatal("Expected project to be loaded within 20 seconds, but this didn't happen");
     }
     IProject* project = ICore::self()->projectController()->findProjectByName( "BuilddirProject" );
     QVERIFY( project );
-   
+
     Path currentBuilddir = project->buildSystemManager()->buildDirectory( project->projectItem() );
 
     QCOMPARE( currentBuilddir, Path( projecturl ).parent() );
@@ -99,7 +99,7 @@ void TestCustomBuildSystemPlugin::loadMultiPathProject()
     ICore::self()->projectController()->openProject( projecturl );
     // Wait for the project to be opened
     if( !projectSpy->wait( 20000 ) ) {
-        kFatal() << "Expected project to be loaded within 20 seconds, but this didn't happen";
+        qFatal("Expected project to be loaded within 20 seconds, but this didn't happen");
     }
     IProject* project = ICore::self()->projectController()->findProjectByName( "MultiPathProject" );
     QVERIFY( project );

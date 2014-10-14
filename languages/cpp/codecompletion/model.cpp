@@ -22,8 +22,6 @@
 
 #include "model.h"
 
-#include <kdebug.h>
-
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/codecompletioninterface.h>
@@ -38,6 +36,7 @@
 #include "worker.h"
 #include "context.h"
 #include "../cppduchain/typeconversion.h"
+#include "../debug.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -102,35 +101,35 @@ void CodeCompletionModel::parseJobFinished(ParseJob* job)
 }
 
 bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted, bool userInsertion, const KTextEditor::Cursor& position) {
-  kDebug() << inserted;
+  qCDebug(CPP) << inserted;
   QString insertedTrimmed = inserted.trimmed();
-  
+
   TypeConversion::startCache();
 
   QString lineText = view->document()->text(KTextEditor::Range(position.line(), 0, position.line(), position.column()));
-  
+
   if(lineText.startsWith("#") && lineText.contains("include") && inserted.endsWith("/"))
     return true; //Directory-content completion
-  
+
   if(insertedTrimmed.endsWith('\"'))
     return false; //Never start completion behind a string literal
-    
+
   if(useArgumentHintInAutomaticCompletion())
     if(insertedTrimmed.endsWith( '(' ) || insertedTrimmed.endsWith(',') || insertedTrimmed.endsWith('<') || insertedTrimmed.endsWith(":") )
       return true;
-  
+
   //Start automatic completion behind '::'
   if(insertedTrimmed.endsWith(":") && position.column() > 1 && lineText.right(2) == "::")
     return true;
-  
+
   return KDevelop::CodeCompletionModel::shouldStartCompletion(view, inserted, userInsertion, position);
 }
 
 void CodeCompletionModel::aborted(KTextEditor::View* view) {
-    kDebug() << "aborting";
+    qCDebug(CPP) << "aborting";
     worker()->abortCurrentCompletion();
     TypeConversion::stopCache();
-    
+
     KDevelop::CodeCompletionModel::aborted(view);
 }
 
@@ -154,7 +153,7 @@ bool CodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const K
     }
     return false;
   }
-  
+
   static const QRegExp allowedText("^\\~?(\\w*)");
   return !allowedText.exactMatch(currentCompletion);
 }
@@ -172,7 +171,7 @@ Range CodeCompletionModel::updateCompletionRange(View* view, const KTextEditor::
     if(completionContext()->ungroupedElements().size()) {
       //Update the ungrouped elements, since they may have changed their text
       int row = rowCount() - completionContext()->ungroupedElements().size();
-      
+
       foreach(KDevelop::CompletionTreeElementPointer item, completionContext()->ungroupedElements()) {
         KDevelop::CompletionCustomGroupNode* group = dynamic_cast<KDevelop::CompletionCustomGroupNode*>(item.data());
         if(group) {
@@ -180,7 +179,7 @@ Range CodeCompletionModel::updateCompletionRange(View* view, const KTextEditor::
           foreach(KDevelop::CompletionTreeElementPointer item, group->children) {
             if(item->asItem() && item->asItem()->dataChangedWithInput()) {
 //               dataChanged(index(subRow, Name, parent), index(subRow, Name, parent));
-              kDebug() << "doing dataChanged";
+              qCDebug(CPP) << "doing dataChanged";
               ///@todo This is very expensive, but kate doesn't listen for dataChanged(..). Find a cheaper way to achieve this.
               beginResetModel();
               endResetModel();
@@ -190,10 +189,10 @@ Range CodeCompletionModel::updateCompletionRange(View* view, const KTextEditor::
             ++subRow;
           }
         }
-        
+
         if(didReset)
           break;
-        
+
         if(item->asItem() && item->asItem()->dataChangedWithInput()) {
           beginResetModel();
           endResetModel();
@@ -205,7 +204,7 @@ Range CodeCompletionModel::updateCompletionRange(View* view, const KTextEditor::
 //       dataChanged(index(rowCount() - completionContext()->ungroupedElements().size(), 0), index(rowCount()-1, columnCount()-1 ));
     }
   }
-  
+
   QString line = view->document()->line(range.start().line()).trimmed();
   if(line.startsWith("#include")) {
     //Skip over all characters that are allowed in a filename but usually not in code-completion
@@ -220,7 +219,7 @@ Range CodeCompletionModel::updateCompletionRange(View* view, const KTextEditor::
         break;
       }
     }
-    kDebug() << "new range:" << newRange;
+    qCDebug(CPP) << "new range:" << newRange;
     return newRange;
   }
 

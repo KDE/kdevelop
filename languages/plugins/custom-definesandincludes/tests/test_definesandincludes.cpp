@@ -22,8 +22,6 @@
 
 #include <QtTest/QtTest>
 
-#include <KDebug>
-
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>

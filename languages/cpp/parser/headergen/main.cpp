@@ -28,8 +28,8 @@
 #include <QMapIterator>
 #include <QSet>
 #include <QUrl>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <KLocalizedString>
@@ -200,12 +200,12 @@ void visitBlock(rpp::MacroBlock* block, int indent = 0, bool elseBlock = false)
 
   ++indent;
   if (FileBlock* fb = dynamic_cast<FileBlock*>(block))
-    kDebug(9007) << QString(indent * 2, QChar(' ')) << "Block for file [" << fb->file << "]";
+    qDebug() << QString(indent * 2, QChar(' ')) << "Block for file [" << fb->file << "]";
   else
-    kDebug(9007) << QString(indent * 2, QChar(' ')) << "Block, condition" << (elseBlock ? " else" : "") << "[" << block->condition << "]";
+    qDebug() << QString(indent * 2, QChar(' ')) << "Block, condition" << (elseBlock ? " else" : "") << "[" << block->condition << "]";
 
   foreach (rpp::pp_macro* macro, block->macros)
-    kDebug(9007) << QString((indent + 1) * 2, QChar(' ')) << "Macro" << macro->name.str() << ", defined" << macro->defined;
+    qDebug() << QString((indent + 1) * 2, QChar(' ')) << "Macro" << macro->name.str() << ", defined" << macro->defined;
 
   foreach (rpp::MacroBlock* child, block->childBlocks)
     visitBlock(child, indent);
@@ -263,14 +263,14 @@ HeaderGenerator::HeaderGenerator()
   QDir includeDir(kdeIncludes.toLocalFile());
 
   if (!includeDir.exists()) {
-    kWarning() << "KDE includes directory must be set, and point to an existing directory; please use --includes <path>" ;
+    qWarning() << "KDE includes directory must be set, and point to an existing directory; please use --includes <path>" ;
     status = -1;
     return;
   }
 
   if (!includeDir.exists("KDE"))
     if (!includeDir.mkdir("KDE")) {
-      kWarning() << "KDE includes directory must be writable" ;
+      qWarning() << "KDE includes directory must be writable" ;
       status = -1;
       return;
     }
@@ -282,14 +282,14 @@ HeaderGenerator::HeaderGenerator()
 
   QFile buildInfoFile(args->getOption("buildinfo"));
   if (!buildInfoFile.open(QIODevice::ReadOnly)) {
-    kWarning() << "Could not open build information file \"" << args->getOption("buildinfo") << "\", please check that it exists and is readable." ;
+    qWarning() << "Could not open build information file \"" << args->getOption("buildinfo") << "\", please check that it exists and is readable." ;
     status = -1;
     return;
   }
 
   QString errorMsg; int errorLine, errorColumn;
   if (!buildInfoXml.setContent(buildInfoFile.readAll(), false, &errorMsg, &errorLine, &errorColumn)) {
-    kWarning() << "Build information parse error \"" << errorMsg << "\" at line" << errorLine << ", column" << errorColumn ;
+    qWarning() << "Build information parse error \"" << errorMsg << "\" at line" << errorLine << ", column" << errorColumn ;
     status = -1;
     return;
   }
@@ -349,13 +349,13 @@ HeaderGenerator::HeaderGenerator()
 
 QString HeaderGenerator::preprocess(const QUrl &url, int sourceLine)
 {
-  //kDebug(9007) << url;
+  //qDebug() << url;
 
   preprocessing.push(url);
 
   QFile sourceToParse(url.toLocalFile());
   if (!sourceToParse.open(QIODevice::ReadOnly)) {
-    kWarning() << "Could not open install file" << url ;
+    qWarning() << "Could not open install file" << url ;
     return QByteArray();
   }
 
@@ -376,7 +376,7 @@ QString HeaderGenerator::preprocess(const QUrl &url, int sourceLine)
 
 rpp::Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type*/, int sourceLine, bool skipCurrentPath)
 {
-  //kDebug(9007) << fileName << "from" << preprocessing.top();
+  //qDebug() << fileName << "from" << preprocessing.top();
 
   QList<QUrl> toTry;
 
@@ -416,19 +416,19 @@ rpp::Stream* HeaderGenerator::sourceNeeded(QString& fileName, IncludeType /*type
     }
   }
 
-  kWarning() << "Did not find include" << fileName;//<< "in urls" << toTry << endl;//" in the following directories:" ;
+  qWarning() << "Did not find include" << fileName;//<< "in urls" << toTry << endl;//" in the following directories:" ;
   /*QDomNodeList include = folderElement.elementsByTagName("include");
   for (int i = 0; i < include.count(); ++i)
-    kDebug(9007) << "" << include.at(i).toElement().text();*/
+    qDebug() << "" << include.at(i).toElement().text();*/
 
   return 0;
 }
 
 void printMacros(rpp::Environment* environment)
 {
-  kDebug(9007) << "Macros for environment:";
+  qDebug() << "Macros for environment:";
   foreach (rpp::pp_macro* macro, environment->allMacros())
-    kDebug(9007) << "Macro [" << macro->name.str() << "]" << (macro->defined ? " [" : "undefined") << QString::fromUtf8(stringFromContents(macro->definition(), macro->definitionSize())) << (macro->defined ? "]" : "");
+    qDebug() << "Macro [" << macro->name.str() << "]" << (macro->defined ? " [" : "undefined") << QString::fromUtf8(stringFromContents(macro->definition(), macro->definitionSize())) << (macro->defined ? "]" : "");
 }
 
 void HeaderGenerator::run()
@@ -440,7 +440,7 @@ void HeaderGenerator::run()
 
   QFile kdelibsExport(kdeIncludes.toLocalFile(QUrl::AddTrailingSlash) + "kdelibs_export.h");
   if (!kdelibsExport.open(QIODevice::ReadOnly)) {
-    kWarning() << "Could not open kdelibs_export.h in kde includes directory.  Are you sure you have installed kdelibs?" ;
+    qWarning() << "Could not open kdelibs_export.h in kde includes directory.  Are you sure you have installed kdelibs?" ;
     status = -1;
     return;
   }
@@ -458,7 +458,7 @@ void HeaderGenerator::run()
       for (QDomElement source = install.firstChildElement(sourceElementName); !source.isNull(); source = source.nextSiblingElement(sourceElementName)) {
         //if (source.text().endsWith("kkeydialog.h"))
           //continue;
-          //kDebug(9007) << "Parsing" << source.text();
+          //qDebug() << "Parsing" << source.text();
 
         preprocessor.environment()->clear();
         preprocessor.environment()->visitBlock(topBlock);
@@ -466,7 +466,7 @@ void HeaderGenerator::run()
         QByteArray contents = preprocess(source.text()).toLatin1();
 
         if (contents.isEmpty()) {
-          kWarning() << "Contents empty for" << source.text() ;
+          qWarning() << "Contents empty for" << source.text() ;
           continue;
         }
 
@@ -484,7 +484,7 @@ void HeaderGenerator::run()
         hg.visit(ast);
 
         if (hg.m_classes.isEmpty()) {
-          kWarning() << "Parse problem in" << source.text() << ": no classes found!" ;
+          qWarning() << "Parse problem in" << source.text() << ": no classes found!" ;
 
           //hg.m_classes.append(source.text().mid(source.text().lastIndexOf('/')).replace('.', '_'));
 
@@ -492,11 +492,11 @@ void HeaderGenerator::run()
 
           //printMacros(headerMacros[source.text()]);
 
-          //kFatal() << "bye :)";
+          //qFatal() << "bye :)";
         }
 
         if (false && source.text().endsWith("kkeydialog.h")) {
-          kDebug(9007) << "Parse" << source.text() << ":" << hg.m_classes.count() << "classes found:" << hg.m_classes << "lines" << contents.count('\n') << endl
+          qDebug() << "Parse" << source.text() << ":" << hg.m_classes.count() << "classes found:" << hg.m_classes << "lines" << contents.count('\n') << endl
           << QString::fromUtf8(contents) << endl;
 
 #if 0
@@ -504,13 +504,13 @@ void HeaderGenerator::run()
           dt.dump(ast, session.token_stream);
 
           for (int i = 0; i < control.problemCount(); ++i)
-            kWarning() << "Parse problem in" << source.text() << ":" << control.problem(i).message() << ", line" << control.problem(i).line() ;
+            qWarning() << "Parse problem in" << source.text() << ":" << control.problem(i).message() << ", line" << control.problem(i).line() ;
 #endif
 
           visitBlock(headerMacros[source.text()]);
           printMacros(preprocessor.environment());
 
-          //kFatal() << "bye :)";
+          //qFatal() << "bye :)";
         }
 
         foreach (const QString& className, hg.m_classes) {
@@ -527,7 +527,7 @@ void HeaderGenerator::run()
                 goto success;
             }
 
-            kWarning() << "Could not open forwarding header file" << forwardingHeaderPath ;
+            qWarning() << "Could not open forwarding header file" << forwardingHeaderPath ;
             continue;
           }
 
@@ -591,7 +591,7 @@ void HeaderGenerator::run()
               goto success2;
           }
 
-          kWarning() << "Could not open forwarding header file" << forwardingHeaderPath ;
+          qWarning() << "Could not open forwarding header file" << forwardingHeaderPath ;
           continue;
         }
 
@@ -612,7 +612,7 @@ void HeaderGenerator::run()
 
   QFile cmakelist(outputDirectory.toLocalFile(QUrl::AddTrailingSlash) + "CMakeLists.txt");
   if (!cmakelist.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-    kWarning() << "Could not open cmake list file for writing." ;
+    qWarning() << "Could not open cmake list file for writing." ;
     status = -1;
     return;
   }
@@ -644,5 +644,5 @@ void HeaderGenerator::run()
     }
   }
 
-  kDebug(9007) << "Finished parsing" << fileCount << "files.";
+  qDebug() << "Finished parsing" << fileCount << "files.";
 }

@@ -17,6 +17,7 @@
 */
 
 #include "adaptsignatureaction.h"
+#include "../debug.h"
 
 #include <language/assistant/renameaction.h>
 #include <language/codegen/documentchangeset.h>
@@ -111,7 +112,7 @@ void AdaptSignatureAction::execute() {
   lock.unlock();
   m_otherSideTopContext = DUChain::self()->waitForUpdate(url, TopDUContext::AllDeclarationsContextsAndUses);
   if(!m_otherSideTopContext) {
-    kDebug() << "failed to update" << url.str();
+    qCDebug(CPP) << "failed to update" << url.str();
     return;
   }
 
@@ -119,18 +120,18 @@ void AdaptSignatureAction::execute() {
 
   Declaration* otherSide = m_otherSideId.getDeclaration(m_otherSideTopContext.data());
   if(!otherSide) {
-    kDebug() << "could not find definition";
+    qCDebug(CPP) << "could not find definition";
     return;
   }
 
   DUContext* functionContext = DUChainUtils::getFunctionContext(otherSide);
   if(!functionContext) {
-    kDebug() << "no function context";
+    qCDebug(CPP) << "no function context";
     return;
   }
 
   if(!functionContext || functionContext->type() != DUContext::Function) {
-    kDebug() << "no correct function context";
+    qCDebug(CPP) << "no correct function context";
     return;
   }
 

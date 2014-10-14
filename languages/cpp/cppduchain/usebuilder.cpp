@@ -27,6 +27,7 @@
 
 #include "expressionvisitor.h"
 #include "typeconversion.h"
+#include "debug.h"
 #include <parsesession.h>
 
 #include <KLocalizedString>
@@ -165,7 +166,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
       if(m_dumpProblems)
         Cpp::ExpressionVisitor::problem(node, str);
 /*      else
-        kDebug(9007) << "problem";*/
+        qCDebug(CPPDUCHAIN) << "problem";*/
     }
 
     UseBuilder* m_builder;
@@ -177,7 +178,7 @@ void UseBuilder::visitExpression(AST* node) {
   UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
   if( !node->ducontext )
     node->ducontext = currentContext();
-  
+
   visitor.parse( node );
 }
 
@@ -197,7 +198,7 @@ void UseBuilder::buildUsesForName(NameAST* name) {
     if(name) {
       if( !name->ducontext )
         name->ducontext = currentContext();
-      
+
       visitor.parse( name );
     }
   }
@@ -211,16 +212,16 @@ void UseBuilder::visitMemInitializer(MemInitializerAST * node)
 {
   if( !node->ducontext )
     node->ducontext = currentContext();
-  
+
   UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
-    
+
   visitor.parse( node );
 }
 
 void UseBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
 {
   UseBuilderBase::visitElaboratedTypeSpecifier(node);
-  
+
   if(!node->isDeclaration) {
     UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
     if( !node->ducontext ) {
@@ -229,7 +230,7 @@ void UseBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
       else
         node->ducontext = currentContext();
     }
-    
+
     visitor.parse( node );
   }
 }
@@ -248,9 +249,9 @@ void UseBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
       else
         node->ducontext = currentContext();
     }
-    
+
     visitor.parse( node );
-    
+
     // Build uses for the name-prefixes of init declarators
     const ListNode<InitDeclaratorAST*>
       *it = node->init_declarators->toFront(),
@@ -267,14 +268,14 @@ void UseBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
       it = it->next;
     } while (it != end);
   }else{
-    DefaultVisitor::visitSimpleDeclaration(node);    
+    DefaultVisitor::visitSimpleDeclaration(node);
   }
 }
 
 void UseBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
 {
   UseBuilderBase::visitSimpleTypeSpecifier(node);
-  
+
   UseExpressionVisitor visitor( editor()->parseSession(), this, false, m_mapAst );
   if( !node->ducontext ) {
     if(lastContext() && lastContext()->type() == DUContext::Template && lastContext()->parentContext() == currentContext())
@@ -282,7 +283,7 @@ void UseBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
     else
       node->ducontext = currentContext();
   }
-  
+
   visitor.parse( node );
 }
 
@@ -319,7 +320,7 @@ void UseBuilder::visitTypeId(TypeIdAST* node) {
 
     visitor.parse( node );
   }
-  
+
   UseBuilderBase::visitTypeId(node);
 }
 

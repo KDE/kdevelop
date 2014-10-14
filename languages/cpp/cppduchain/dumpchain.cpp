@@ -22,7 +22,6 @@
 #include <QtCore/QString>
 #include <QTextStream>
 
-#include <kdebug.h>
 #include <ktexteditor/range.h>
 
 #include <language/duchain/types/identifiedtype.h>
@@ -37,6 +36,7 @@
 #include "parser/parsesession.h"
 #include "parser/rpp/chartools.h"
 #include "parser/dumptree.h"
+#include "debug.h"
 
 using namespace Cpp;
 using namespace KDevelop;
@@ -71,11 +71,11 @@ void DumpChain::visit(AST *node)
       if( !nodeText.isEmpty() ) nodeText = "\"" + nodeText + "\"";
 
 
-      kDebug(9007) << indentation <<  "\\" << names[node->kind]
+      qCDebug(CPPDUCHAIN) << indentation <<  "\\" << names[node->kind]
               << "[(" << node->start_token << ")" << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge).castToSimpleCursor() << /*", "
               << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) <<*/ "]" << nodeText << endl;
     } else
-      kDebug(9007) << indentation << "\\" << names[node->kind]
+      qCDebug(CPPDUCHAIN) << indentation << "\\" << names[node->kind]
               << "[" << node->start_token << "," << node->end_token << "]" << endl;
   }
 
@@ -87,13 +87,13 @@ void DumpChain::visit(AST *node)
   {
     if (m_editor)
     {
-      kDebug(9007) << indentation << "/" << names[node->kind]
+      qCDebug(CPPDUCHAIN) << indentation << "/" << names[node->kind]
               << "[("  << node->end_token << ") "/*<< m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << ", "*/
               << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge).castToSimpleCursor() << "]" << endl;
     }
     else
     {
-      kDebug(9007) << indentation << "/" << names[node->kind]
+      qCDebug(CPPDUCHAIN) << indentation << "/" << names[node->kind]
               << "[" << node->start_token << "," << node->end_token << ']' << endl;
     }
   }

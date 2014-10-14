@@ -25,7 +25,6 @@
 #include <QTemporaryFile>
 #include <QHelpContentModel>
 
-#include <KDebug>
 #include <QStandardPaths>
 
 #include <language/duchain/duchain.h>
@@ -34,6 +33,7 @@
 #include <language/duchain/parsingenvironment.h>
 
 #include "qthelpdocumentation.h"
+#include "debug.h"
 
 QtHelpProviderAbstract::QtHelpProviderAbstract(QObject *parent, const QString &collectionFileName, const QVariantList &args)
     : QObject(parent)
@@ -41,7 +41,7 @@ QtHelpProviderAbstract::QtHelpProviderAbstract(QObject *parent, const QString &c
 {
     Q_UNUSED(args);
     if( !m_engine.setupData() ) {
-        kWarning() << "Couldn't setup QtHelp Collection file";
+        qWarning() << "Couldn't setup QtHelp Collection file";
     }
 }
 
@@ -70,7 +70,7 @@ QExplicitlySharedDataPointer< KDevelop::IDocumentation > QtHelpProviderAbstract:
         if(!idParts.isEmpty()) {
             QMap<QString, QUrl> links=m_engine.linksForIdentifier(id);
 
-            kDebug() << "doc_found" << id << links;
+            qCDebug(QTHELP) << "doc_found" << id << links;
             if(!links.isEmpty())
                 return KDevelop::IDocumentation::Ptr(new QtHelpDocumentation(id, links));
         }

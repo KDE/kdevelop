@@ -21,7 +21,6 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QXmlStreamReader>
-#include <QDebug>
 #include <vcs/vcslocation.h>
 
 static const QUrl kdeProjectsUrl("https://projects.kde.org/kde_projects.xml");
@@ -41,10 +40,10 @@ QString readText(QXmlStreamReader* xml)
 {
     QString ret;
     QXmlStreamReader::TokenType token;
-    
+
     for(int opened=1; opened>0 && !xml->atEnd(); ) {
         token=xml->readNext();
-        
+
         if(token==QXmlStreamReader::StartElement)
             opened++;
         else if(token==QXmlStreamReader::EndElement)
@@ -62,16 +61,16 @@ void KDEProjectsReader::downloadFinished(QNetworkReply* reply)
         emit downloadDone();
         return;
     }
-    
+
     QByteArray data = reply->readAll();
     QXmlStreamReader xml(data);
-    
+
     while (!xml.atEnd()) {
         QXmlStreamReader::TokenType token = xml.readNext();
-        
+
         if(token==QXmlStreamReader::StartElement) {
             QStringRef name = xml.name();
-            
+
             if(name == "project" || name == "module")
             {
                 m_current.push(Source());

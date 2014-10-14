@@ -33,8 +33,8 @@
 #include "debugsession.h"
 #include "stringhelpers.h"
 #include "gdbvariable.h"
+#include "debug.h"
 
-#include <KDebug>
 #include <KTextEditor/Document>
 
 using namespace GDBDebugger;
@@ -68,7 +68,7 @@ void VariableController::programStopped(const GDBMI::ResultRecord& r)
 
 void VariableController::update()
 {
-    kDebug() << autoUpdate();
+    qCDebug(DEBUGGERGDB) << autoUpdate();
     if (autoUpdate() & UpdateWatches) {
         variableCollection()->watches()->reinstall();
     }
@@ -236,7 +236,7 @@ void VariableController::addWatchpoint(const GDBMI::ResultRecord& r)
 }
 
 KDevelop::Variable* VariableController::
-createVariable(TreeModel* model, TreeItem* parent, 
+createVariable(TreeModel* model, TreeItem* parent,
                const QString& expression, const QString& display)
 {
     return new GdbVariable(model, parent, expression, display);

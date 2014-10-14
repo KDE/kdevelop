@@ -24,7 +24,6 @@
 #include <QAbstractItemView>
 #include <QSharedPointer>
 
-#include <KDebug>
 #include <KSharedPtr>
 #include <KSharedConfig>
 

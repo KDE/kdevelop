@@ -22,13 +22,13 @@
 
 #include "gdb.h"
 #include "debugsession.h"
+#include "debug.h"
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KMessageBox>
 #include <KShell>
 #include <KLocalizedString>
-#include <kdebug.h>
 
 #include <QApplication>
 #include <QFileInfo>
@@ -39,6 +39,8 @@
 #include <signal.h>
 
 // #define DEBUG_NO_TRY //to get a backtrace to where the exception was thrown
+
+Q_LOGGING_CATEGORY(DEBUGGERGDB, "kdevelop.debuggers.gdb")
 
 using namespace GDBDebugger;
 
@@ -87,7 +89,7 @@ void GDB::start(KConfigGroup& config)
     QUrl shell = config.readEntry(GDBDebugger::debuggerShellEntry, QUrl());
     if( !shell.isEmpty() )
     {
-        kDebug(9012) << "have shell" << shell;
+        qCDebug(DEBUGGERGDB) << "have shell" << shell;
         QString shell_without_args = shell.toLocalFile().split(QChar(' ')).first();
 
         QFileInfo info( shell_without_args );
@@ -117,7 +119,7 @@ void GDB::start(KConfigGroup& config)
 
     process_->start();
 
-    kDebug(9012) << "STARTING GDB\n";
+    qCDebug(DEBUGGERGDB) << "STARTING GDB\n";
     emit userCommandOutput(shell.toLocalFile() + ' ' + gdbBinary_
                            + " --interpreter=mi2 -quiet\n" );
 }
@@ -128,8 +130,8 @@ void GDB::execute(GDBCommand* command)
     currentCmd_ = command;
     QString commandText = currentCmd_->cmdToSend();
 
-    kDebug(9012) << "SEND:" << commandText;
-    
+    qCDebug(DEBUGGERGDB) << "SEND:" << commandText;
+
     isRunning_ = false;
     receivedReply_ = false;
 
@@ -197,10 +199,10 @@ void GDB::readyReadStandardError()
 
 void GDB::processLine(const QByteArray& line)
 {
-    kDebug(9012) << "GDB output: " << line;
+    qCDebug(DEBUGGERGDB) << "GDB output: " << line;
     if(!currentCmd_)
     {
-        kDebug(9012) << "No current command\n";
+        qCDebug(DEBUGGERGDB) << "No current command\n";
         return;
     }
 
@@ -212,7 +214,7 @@ void GDB::processLine(const QByteArray& line)
     if (!r)
     {
         // FIXME: Issue an error!
-        kDebug(9012) << "Invalid MI message:" << line;
+        qCDebug(DEBUGGERGDB) << "Invalid MI message:" << line;
         // We don't consider the current command done.
         // So, if a command results in unparseable reply,
         // we'll just wait for the "right" reply, which might
@@ -237,7 +239,7 @@ void GDB::processLine(const QByteArray& line)
    }
    else
    {
-       
+
        #ifndef DEBUG_NO_TRY
        try
        {
@@ -249,17 +251,17 @@ void GDB::processLine(const QByteArray& line)
                GDBMI::ResultRecord& result = static_cast<GDBMI::ResultRecord&>(*r);
 
                emit internalCommandOutput(QString::fromUtf8(line) + '\n');
-               
+
                // FIXME: the code below should be reviewed to consider result record
                // subtype when doing all decisions.
-               
+
                if (result.subkind == GDBMI::ResultRecord::GeneralNotification)
                {
-                   kDebug(9012) << "General notification";
+                   qCDebug(DEBUGGERGDB) << "General notification";
                    emit notification(result);
                    return;
                }
-               
+
                if (result.reason == "stopped")
                {
                    //stopped is *not* a reply, wait for ^running or ^done (running before stopped, done after stopped)
@@ -284,12 +286,12 @@ void GDB::processLine(const QByteArray& line)
                }
                else if (result.reason == "error")
                {
-                   kDebug(9012) << "Handling error";
+                   qCDebug(DEBUGGERGDB) << "Handling error";
                    // Some commands want to handle errors themself.
                    if (currentCmd_->handlesError() &&
                        currentCmd_->invokeHandler(result))
                    {
-                       kDebug(9012) << "Invoked custom handler\n";
+                       qCDebug(DEBUGGERGDB) << "Invoked custom handler\n";
                        // Done, nothing more needed
                    }
                    else
@@ -353,7 +355,7 @@ void GDB::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     Q_UNUSED(exitCode);
     Q_UNUSED(exitStatus);
-    kDebug(9012) << "GDB FINISHED\n";
+    qCDebug(DEBUGGERGDB) << "GDB FINISHED\n";
     /* FIXME: return the status? */
     emit gdbExited();
 
@@ -379,7 +381,7 @@ void GDB::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 
 void GDB::processErrored(QProcess::ProcessError error)
 {
-    kDebug(9012) << "GDB ERRORED" << error;
+    qCDebug(DEBUGGERGDB) << "GDB ERRORED" << error;
     if( error == QProcess::FailedToStart )
     {
         KMessageBox::information(

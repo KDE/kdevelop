@@ -19,6 +19,7 @@
 #include "qtfunctiondeclaration.h"
 #include "declarationbuilder.h"
 #include "templateparameterdeclaration.h"
+#include "debug.h"
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/stringhelpers.h>
 
@@ -28,14 +29,14 @@ using namespace KDevelop;
 int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) const {
   if(lineNumber == -1)
     lineNumber = 1000000;
-  
+
   if(lineNumber > 300)
     lineNumber = 300; //Don't do too much processing
-  
+
     int checkLines = m_codeRepresentation->lines() < lineNumber ? m_codeRepresentation->lines() : lineNumber;
-  
+
     int chosen = -1;
-  
+
     //Add some whitespace so we always have some comment clearing done, in every line
     QString allText = "         \n";
     // we've added a line, hence increase our limit as well
@@ -43,7 +44,7 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
     for(int a = 0; a < checkLines; ++a)
       allText += m_codeRepresentation->line(a) + "         \n";
     allText = KDevelop::clearComments(allText, '$');
-    
+
     QStringList lines = allText.split('\n');
     if(lines.count() < checkLines)
       checkLines = lines.count();
@@ -63,7 +64,7 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
         chosen = -1;
         continue;
       }
-      
+
       if(trimmedLine.isEmpty() && chosen == -1)
         chosen = a;
       if(!trimmedLine.isEmpty())
@@ -90,13 +91,13 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
 QString zeroIndentation(QString str, int fromLine = 0) {
   QStringList lines = str.split('\n');
   QStringList ret;
-  
+
   if(fromLine < lines.size()) {
     ret = lines.mid(0, fromLine);
     lines = lines.mid(fromLine);
   }
-    
-  
+
+
   QRegExp nonWhiteSpace("\\S");
   int minLineStart = 10000;
   foreach(const QString& line, lines) {
@@ -104,7 +105,7 @@ QString zeroIndentation(QString str, int fromLine = 0) {
     if(lineStart < minLineStart)
       minLineStart = lineStart;
   }
-  
+
   foreach(const QString& line, lines)
     ret << line.mid(minLineStart);
 
@@ -125,26 +126,26 @@ void KDevelop::SourceCodeInsertion::setContext(KDevelop::DUContext* context) {
 
 void KDevelop::SourceCodeInsertion::setSubScope(KDevelop::QualifiedIdentifier scope) {
   m_scope = scope;
-  
+
   DUContext* context = m_topContext;
   if(m_context)
     context = m_context;
-  
+
   if(!context)
     return;
-  
+
     QStringList needNamespace = m_scope.toStringList();
-    
+
     bool foundChild = true;
     while(!needNamespace.isEmpty() && foundChild) {
       foundChild = false;
-      
+
       foreach(DUContext* child, context->childContexts()) {
-        kDebug() << "checking child" << child->localScopeIdentifier().toString() << "against" << needNamespace.first();
+        qCDebug(CPPDUCHAIN) << "checking child" << child->localScopeIdentifier().toString() << "against" << needNamespace.first();
         if(child->localScopeIdentifier().toString() == needNamespace.first()
             && child->type() == DUContext::Namespace
             && (child->rangeInCurrentRevision().start() < m_insertBefore || !m_insertBefore.isValid())) {
-          kDebug() << "taking";
+          qCDebug(CPPDUCHAIN) << "taking";
           context = child;
           foundChild = true;
           needNamespace.pop_front();
@@ -152,7 +153,7 @@ void KDevelop::SourceCodeInsertion::setSubScope(KDevelop::QualifiedIdentifier sc
         }
       }
     }
-  
+
     m_context = context;
     m_scope  = Cpp::stripPrefixes(context, QualifiedIdentifier(needNamespace.join("::")));
 }
@@ -166,10 +167,10 @@ QString KDevelop::SourceCodeInsertion::applySubScope(QString decl) const {
     scopeType = "struct";
     scopeClose =  ";";
   }
-  
+
   foreach(const QString& scope, m_scope.toStringList())
     ret += scopeType + " " + scope + " {\n";
-  
+
   ret += decl;
 
   ret += QString("}" + scopeClose + "\n").repeated(m_scope.count());
@@ -186,7 +187,7 @@ KDevelop::SourceCodeInsertion::SourceCodeInsertion(KDevelop::TopDUContext* topCo
     m_codeRepresentation(KDevelop::createCodeRepresentation(m_topContext->url()))
 {
   if(m_topContext->parsingEnvironmentFile() && m_topContext->parsingEnvironmentFile()->isProxyContext()) {
-    kWarning() << "source-code manipulation on proxy-context is wrong!!!" << m_topContext->url().toUrl();
+    qWarning() << "source-code manipulation on proxy-context is wrong!!!" << m_topContext->url().toUrl();
   }
   m_insertBefore = KTextEditor::Cursor::invalid();
 }
@@ -209,27 +210,27 @@ QString KDevelop::SourceCodeInsertion::accessString() const {
 
 QString KDevelop::SourceCodeInsertion::indentation() const {
   if(!m_codeRepresentation || !m_context || m_context->localDeclarations(m_topContext).size() == 0) {
-    kDebug() << "cannot do indentation";
+    qCDebug(CPPDUCHAIN) << "cannot do indentation";
     return QString();
   }
-  
+
   foreach(Declaration* decl, m_context->localDeclarations(m_topContext)) {
     if(decl->range().isEmpty() || decl->range().start.column == 0)
       continue; //Skip declarations with empty range, that were expanded from macros
     int spaces = 0;
-    
+
     QString textLine = m_codeRepresentation->line(decl->range().start.line);
-    
+
     for(int a = 0; a < textLine.size(); ++a) {
       if(textLine.at(a).isSpace())
         ++spaces;
       else
         break;
     }
-    
+
     return textLine.left(spaces);
   }
-  
+
   return QString();
 }
 
@@ -253,7 +254,7 @@ QString makeSignatureString(QList<SourceCodeInsertion::SignatureItem> signature,
       ret += ", ";
     AbstractType::Ptr type = TypeUtils::removeConstants(item.type, context->topContext());
     ret += Cpp::simplifiedTypeString(type, context);
-    
+
     if(!item.name.isEmpty())
       ret += " " + item.name;
   }
@@ -282,14 +283,14 @@ KTextEditor::Range SourceCodeInsertion::insertionRange(int line)
 bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifier name, AbstractType::Ptr returnType, QList<SignatureItem> signature, bool isConstant, QString body) {
   if(!m_context)
     return false;
-  
+
   returnType = TypeUtils::removeConstants(returnType, m_topContext);
-  
+
   QString decl = (returnType ? (Cpp::simplifiedTypeString(returnType, m_context) + " ") : QString()) + name.toString() + "(" + makeSignatureString(signature, m_context) + ")";
-  
+
   if(isConstant)
     decl += " const";
-  
+
   if(body.isEmpty())
     decl += ";";
   else {
@@ -298,11 +299,11 @@ bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifi
     }
     decl += zeroIndentation(body);
   }
-  
+
   InsertionPoint insertion = findInsertionPoint(m_access, Function);
-  
+
   decl = "\n" + applyIndentation(applySubScope(insertion.prefix +decl));
-  
+
   return m_changeSet.addChange(DocumentChange(m_context->url(), insertionRange(insertion.line), QString(), decl));
 }
 
@@ -310,15 +311,15 @@ bool KDevelop::SourceCodeInsertion::insertVariableDeclaration(KDevelop::Identifi
 
   if(!m_context)
     return false;
-  
+
   type = TypeUtils::removeConstants(type, m_topContext);
-  
+
   QString decl = Cpp::simplifiedTypeString(type, m_context) + " " + name.toString() + ";";
-  
+
   InsertionPoint insertion = findInsertionPoint(m_access, Variable);
-  
+
   decl = "\n" + applyIndentation(applySubScope(insertion.prefix + decl));
-  
+
   return m_changeSet.addChange(DocumentChange(m_context->url(), insertionRange(insertion.line), QString(), decl));
 }
 
@@ -332,25 +333,25 @@ KTextEditor::Cursor SourceCodeInsertion::end() const
     ret.setColumn(m_codeRepresentation->line(ret.line()).size());
   }
   return ret;
-  
+
 }
 
 SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDevelop::Declaration::AccessPolicy policy, InsertionKind kind) const {
   Q_UNUSED(policy);
   InsertionPoint ret;
   ret.line = end().line();
-  
+
     bool behindExistingItem = false;
-    
+
     //Try twice, in the second run, only match the "access"
     for(int anyMatch = 0; anyMatch <= 1 && !behindExistingItem; ++anyMatch) {
-    
+
       foreach(Declaration* decl, m_context->localDeclarations()) {
         ClassMemberDeclaration* classMem = dynamic_cast<ClassMemberDeclaration*>(decl);
         if(m_context->type() != DUContext::Class || (classMem && classMem->accessPolicy() == m_access)) {
-          
+
           Cpp::QtFunctionDeclaration* qtFunction = dynamic_cast<Cpp::QtFunctionDeclaration*>(decl);
-          
+
           if( (kind != Slot && anyMatch) || //Only allow anyMatch if not searching a slot, since else it may end up in a wrong section, not being a slot at all
               (kind == Slot && qtFunction && qtFunction->isSlot()) ||
               (kind == Function && dynamic_cast<AbstractFunctionDeclaration*>(decl)) ||
@@ -363,9 +364,9 @@ SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDev
         }
       }
     }
-    kDebug() << ret.line << m_context->scopeIdentifier(true) << m_context->rangeInCurrentRevision() << behindExistingItem << m_context->url().toUrl() << m_context->parentContext();
-    kDebug() << "is proxy:" << m_context->topContext()->parsingEnvironmentFile()->isProxyContext() << "count of declarations:" << m_context->topContext()->localDeclarations().size();
-    
+    qCDebug(CPPDUCHAIN) << ret.line << m_context->scopeIdentifier(true) << m_context->rangeInCurrentRevision() << behindExistingItem << m_context->url().toUrl() << m_context->parentContext();
+    qCDebug(CPPDUCHAIN) << "is proxy:" << m_context->topContext()->parsingEnvironmentFile()->isProxyContext() << "count of declarations:" << m_context->topContext()->localDeclarations().size();
+
     if(!behindExistingItem) {
       ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(m_context->owner());
       if(kind != Slot && m_access == Declaration::Public && classDecl && classDecl->classType() == ClassDeclarationData::Struct) {
@@ -377,38 +378,38 @@ SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDev
         ret.prefix += ":\n";
       }
     }
-    
-    
+
+
   return ret;
 }
 
 bool Cpp::SourceCodeInsertion::insertSlot(QString name, QString normalizedSignature) {
     if(!m_context || !m_codeRepresentation)
       return false;
-  
+
     InsertionPoint insertion = findInsertionPoint(m_access, Slot);
-    
+
     QString add = insertion.prefix;
-    
+
     QString sig;
     add += "void " + name + "(" + normalizedSignature + ");";
-    
+
     if(insertion.line > m_codeRepresentation->lines())
       return false;
 
     add = "\n" + applyIndentation(add);
-    
+
     return m_changeSet.addChange(DocumentChange(m_context->url(), insertionRange(insertion.line), QString(), add));
 }
 
 bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* decl) {
   setSubScope(decl->context()->scopeIdentifier(true));
-  
+
   if(!m_context) {
-    kDebug() << "no context";
+    qCDebug(CPPDUCHAIN) << "no context";
     return false;
   }
-  
+
     QString forwardDeclaration;
     if(decl->kind() == Declaration::Instance) {
       //A simple variable declaration
@@ -417,10 +418,10 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
       forwardDeclaration = "enum " + decl->identifier().toString() + ";";
     }else if(decl->isTypeAlias()) {
       if(!decl->abstractType()) {
-        kDebug() << "no type";
+        qCDebug(CPPDUCHAIN) << "no type";
         return false;
       }
-      
+
       forwardDeclaration = "typedef " + Cpp::simplifiedTypeString(decl->abstractType(), m_context) + " " + decl->identifier().toString() + ";";
     }else{
       DUContext* templateContext = getTemplateContext(decl);
@@ -436,24 +437,24 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
           }else{
             first = false;
           }
-          
+
           CppTemplateParameterType::Ptr templParamType = paramDecl->type<CppTemplateParameterType>();
           if(templParamType) {
             forwardDeclaration += "class ";
           }else if(paramDecl->abstractType()) {
             forwardDeclaration += Cpp::simplifiedTypeString(paramDecl->abstractType(), m_context) + " ";
           }
-          
+
           forwardDeclaration += paramDecl->identifier().toString();
-          
+
           if(!paramDecl->defaultParameter().isEmpty()) {
             forwardDeclaration += " = " + paramDecl->defaultParameter().toString();
           }
         }
-        
+
         forwardDeclaration += " >\n";
       }
-      
+
       ClassDeclaration * classDecl = dynamic_cast<ClassDeclaration *>(decl);
       if(classDecl) {
         forwardDeclaration += classDecl->toString() + ";";
@@ -461,19 +462,19 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
         forwardDeclaration += "class " + decl->identifier().toString() + ";";
       }
     }
-    
+
     //Put declarations to the end, and namespaces to the begin
     KTextEditor::Cursor position;
-    
+
     bool needNewLine = true;
-    
+
     if(!m_scope.isEmpty() || (m_insertBefore.isValid() && m_context->rangeInCurrentRevision().end() > m_insertBefore)) {
       //To the begin
       position = m_context->rangeInCurrentRevision().start();
-      
+
       if(m_context->type() == DUContext::Namespace) {
           position += KTextEditor::Cursor(0, 1); //Skip over the opening '{' paren
-        
+
         //Put the newline to the beginning instead of the end
         forwardDeclaration = "\n" + forwardDeclaration;
         if(forwardDeclaration.endsWith("\n"))
@@ -481,7 +482,7 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
       }
     } else{
       //To the end
-      
+
       position = end();
       if(position.column() != 0 && m_context->type() == DUContext::Namespace) {
         position -= KTextEditor::Cursor(0, 1);
@@ -494,13 +495,13 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
       position.setLine(firstValidLine);
       position.setColumn(0);
     }
-    
+
     forwardDeclaration = applySubScope(forwardDeclaration);
     if(needNewLine)
       forwardDeclaration = "\n" + forwardDeclaration;
-    
-    kDebug() << "inserting at" << position << forwardDeclaration;
-    
+
+    qCDebug(CPPDUCHAIN) << "inserting at" << position << forwardDeclaration;
+
     return m_changeSet.addChange(DocumentChange(m_context->url(), KTextEditor::Range(position.line(), position.column(), position.line(), position.column()), QString(), forwardDeclaration));
 }
 

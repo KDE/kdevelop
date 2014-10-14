@@ -30,15 +30,15 @@
 #include <outputview/outputmodel.h>
 #include <execute/iexecuteplugin.h>
 #include "debugsession.h"
+#include "debug.h"
 
-#include <KDebug>
 #include <QFileInfo>
 #include <KI18n/KLocalizedString>
 
 using namespace GDBDebugger;
 using namespace KDevelop;
 
-DebugJob::DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, IExecutePlugin* execute, QObject* parent) 
+DebugJob::DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, IExecutePlugin* execute, QObject* parent)
     : KDevelop::OutputJob(parent)
     , m_launchcfg( launchcfg )
     , m_execute( execute )
@@ -49,7 +49,7 @@ DebugJob::DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfigur
     connect(m_session, SIGNAL(applicationStandardOutputLines(QStringList)), SLOT(stderrReceived(QStringList)));
     connect(m_session, SIGNAL(applicationStandardErrorLines(QStringList)), SLOT(stdoutReceived(QStringList)));
     connect(m_session, SIGNAL(finished()), SLOT(done()) );
-    
+
     setObjectName(launchcfg->name());
 }
 
@@ -60,7 +60,7 @@ void DebugJob::start()
     Q_ASSERT(m_execute);
     QString err;
     QString executable = m_execute->executable( m_launchcfg, err ).toLocalFile();
-    
+
     if( !err.isEmpty() )
     {
         setError( -1 );
@@ -68,7 +68,7 @@ void DebugJob::start()
         emitResult();
         return;
     }
-    
+
     if(!QFileInfo(executable).isExecutable()){
         setError( -1 );
         setErrorText(QString("'%1' is not an executable").arg(executable));
@@ -109,7 +109,7 @@ void DebugJob::start()
 
 bool DebugJob::doKill()
 {
-    kDebug();
+    qCDebug(DEBUGGERGDB);
     m_session->stopDebugger();
     return true;
 }

@@ -20,7 +20,6 @@
 
 #include "cmakedocumentation.h"
 #include "cmakeutils.h"
-#include <KDebug>
 #include <QString>
 #include <QTextDocument>
 #include <QStringListModel>
@@ -36,6 +35,7 @@
 #include "cmakeparserutils.h"
 #include "cmakehelpdocumentation.h"
 #include "cmakedoc.h"
+#include "debug.h"
 
 K_PLUGIN_FACTORY(CMakeSupportDocFactory, registerPlugin<CMakeDocumentation>(); )
 // K_EXPORT_PLUGIN(CMakeSupportDocFactory(KAboutData("kdevcmakedocumentation","kdevcmake", ki18n("CMake Documentation"), "1.0", ki18n("Support for CMake documentation"), KAboutData::License_GPL)))
@@ -76,7 +76,7 @@ void CMakeDocumentation::delayedInitialization()
     for(int i=0; i<=Property; i++) {
         collectIds(QString(args[i])+"-list", (Type) i);
     }
-    
+
     m_index->setStringList(m_typeForName.keys());
 }
 
@@ -118,7 +118,7 @@ QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::descr
         return QExplicitlySharedDataPointer<KDevelop::IDocumentation>();
     }
 
-    kDebug() << "seeking documentation for " << identifier;
+    qCDebug(CMAKE) << "seeking documentation for " << identifier;
     QString desc;
 
     if(m_typeForName.contains(identifier)) {
@@ -128,7 +128,7 @@ QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::descr
     } else if(m_typeForName.contains(identifier.toUpper())) {
         desc=descriptionForIdentifier(identifier, m_typeForName[identifier.toUpper()]);
     }
-    
+
     KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(file);
     ICMakeManager* m=0;
     if(p)
@@ -138,11 +138,11 @@ QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::descr
         QPair<QString, QString> entry = m->cacheValue(p, identifier);
         if(!entry.first.isEmpty())
             desc += i18n("<br /><em>Cache Value:</em> %1\n", entry.first);
-        
+
         if(!entry.second.isEmpty())
             desc += i18n("<br /><em>Cache Documentation:</em> %1\n", entry.second);
     }
-    
+
     if(desc.isEmpty())
         return QExplicitlySharedDataPointer<KDevelop::IDocumentation>();
     else
@@ -187,7 +187,7 @@ void CMakeDocumentation::initializeModel() const
 {
     if(!m_typeForName.isEmpty())
         return;
-    
+
     QMetaObject::invokeMethod(const_cast<CMakeDocumentation*>(this), "delayedInitialization", Qt::QueuedConnection);
 }
 

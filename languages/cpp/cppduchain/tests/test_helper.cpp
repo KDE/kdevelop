@@ -96,7 +96,7 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
   m_ctlflowGraph.clear();
 
   if (dump)
-    kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
+    qDebug() << "==== Beginning new test case...:" << endl << unit;
 
   //If the AST flag is set, then the parse session needs to be owned by a shared pointer
   ParseSession::Ptr session(new ParseSession());
@@ -111,7 +111,7 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
   ast->session = session.data();
 
   if (dump & DumpAST) {
-    kDebug(9007) << "===== AST:";
+    qDebug() << "===== AST:";
     cppDumper.dump(ast, session.data());
   }
 
@@ -122,7 +122,7 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
   Cpp::EnvironmentFilePointer file( new Cpp::EnvironmentFile( url, 0 ) );
 
   //HACK Should actually use DUChain::updateContextForUrl
-  kDebug() << "update->features & TopDUContext::AST: " << (update ? update->features() & TopDUContext::AST : 0);
+  qDebug() << "update->features & TopDUContext::AST: " << (update ? update->features() & TopDUContext::AST : 0);
   if(keepAst) {
     definitionBuilder.setMapAst(true);
     if (update) {
@@ -142,15 +142,15 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
   UseBuilder useBuilder(session.data());
   useBuilder.setMapAst(keepAst);
   useBuilder.buildUses(ast);
-  
+
   UseDecoratorVisitor visit(session.data(), &m_modifications);
   visit.run(ast);
-  
+
   ControlFlowGraphBuilder flowvisitor(ReferencedTopDUContext(top), session.data(), &m_ctlflowGraph);
   flowvisitor.run(ast);
 
   if (dump & DumpDUChain) {
-    kDebug(9007) << "===== DUChain:";
+    qDebug() << "===== DUChain:";
 
     DUChainWriteLocker lock(DUChain::lock());
     DUChainDumper dumper;
@@ -158,7 +158,7 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
   }
 
   if (dump)
-    kDebug(9007) << "===== Finished test case.";
+    qDebug() << "===== Finished test case.";
 
   return top;
 }
@@ -178,7 +178,7 @@ QByteArray readCodeFile(const QString& file)
   QFile f(QFileInfo(__FILE__).absolutePath() + QLatin1String("/data/") + file);
   qDebug() << f.fileName();
   if (!f.open(QIODevice::ReadOnly)) {
-    kWarning() << "Could not open test file" << file;
+    qWarning() << "Could not open test file" << file;
     return QByteArray();
   }
   return f.readAll();

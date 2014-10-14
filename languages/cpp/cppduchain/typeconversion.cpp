@@ -20,6 +20,7 @@
 #include "cppduchain/typeutils.h"
 #include "cppduchain/cpptypes.h"
 #include "overloadresolution.h"
+#include "debug.h"
 #include <language/duchain/ducontext.h>
 #include <language/duchain/topducontext.h>
 #include <typeinfo>
@@ -40,7 +41,7 @@ using namespace TypeUtils;
 struct ImplicitConversionParams {
   IndexedType from, to;
   bool fromLValue, noUserDefinedConversion;
-  
+
   bool operator==(const ImplicitConversionParams& rhs) const {
     return from == rhs.from && to == rhs.to && fromLValue == rhs.fromLValue && noUserDefinedConversion == rhs.noUserDefinedConversion;
   }
@@ -132,19 +133,19 @@ uint TypeConversion::implicitConversion( const IndexedType& _from, const Indexed
   m_baseConversionLevels = 0;
 
   int conv = 0;
-  
+
   ImplicitConversionParams params;
   params.from = _from;
   params.to = _to;
   params.fromLValue = fromLValue;
   params.noUserDefinedConversion = noUserDefinedConversion;
-  
+
   if(m_cache) {
     QHash<ImplicitConversionParams, int>::const_iterator it = m_cache->m_implicitConversionResults.constFind(params);
     if(it != m_cache->m_implicitConversionResults.constEnd())
       return *it;
   }
-  
+
   AbstractType::Ptr to = unAliasedType(_to.abstractType());
   AbstractType::Ptr from = unAliasedType(_from.abstractType());
   // we need the 'real' types for the below checks to work properly, esp.
@@ -156,7 +157,7 @@ uint TypeConversion::implicitConversion( const IndexedType& _from, const Indexed
     from->setModifiers(from->modifiers() | AbstractType::ConstModifier);
   }
 
-  ifDebug(qDebug() << "Checking conversion from " << (from ? from->toString() : "<notype>") << " to " << (to ? to->toString() : "<notype>"););
+  ifDebug(qCDebug(CPPDUCHAIN) << "Checking conversion from " << (from ? from->toString() : "<notype>") << " to " << (to ? to->toString() : "<notype>"););
 
   if( !from || !to ) {
     problem( from, to, "one type is invalid" );
@@ -236,10 +237,10 @@ uint TypeConversion::implicitConversion( const IndexedType& _from, const Indexed
   }
 
   ready:
-  
+
   if(m_cache)
     m_cache->m_implicitConversionResults.insert(params, conv);
-  
+
   return conv;
 }
 
@@ -265,15 +266,15 @@ int TypeConversion::baseConversionLevels() const {
   ConversionRank worseRank( ConversionRank rank1, ConversionRank rank2 ) {
     return rank1 > rank2 ? rank2 : rank1;
   }
-  
+
 ConversionRank TypeConversion::pointerConversion( PointerType::Ptr from, PointerType::Ptr to ) {
-  
+
   //We can convert non-const -> const, but not const -> non-const
 //   if(to->modifiers() & AbstractType::ConstModifier || !(from->modifiers()& AbstractType::ConstModifier)) {
 
     if(!from || !to)
       return NoMatch;
- 
+
     AbstractType::Ptr nextFrom = unAliasedType(from->baseType());
     AbstractType::Ptr nextTo = unAliasedType(to->baseType());
 
@@ -282,31 +283,31 @@ ConversionRank TypeConversion::pointerConversion( PointerType::Ptr from, Pointer
 
     if((nextFrom->modifiers() & AbstractType::ConstModifier) && !(nextTo->modifiers() & AbstractType::ConstModifier))
       return NoMatch; //Cannot convert const -> non-const
-    
+
     PointerType::Ptr pointerFrom = nextFrom.cast<PointerType>();
     PointerType::Ptr pointerTo = nextTo.cast<PointerType>();
     if(pointerFrom && pointerTo)
       return pointerConversion(pointerFrom, pointerTo);
-    
+
     CppClassType::Ptr fromClass = nextFrom.cast<CppClassType>();
     CppClassType::Ptr toClass = nextTo.cast<CppClassType>();
     if( toClass && fromClass )
       if(toClass->modifiers() & AbstractType::ConstModifier || !(fromClass->modifiers()& AbstractType::ConstModifier))
         if( isPublicBaseClass( fromClass, toClass, m_topContext, &m_baseConversionLevels ) )
           return ((toClass->modifiers() & AbstractType::ConstModifier) != (fromClass->modifiers() & AbstractType::ConstModifier)) ? Conversion : ExactMatch;
-    
+
     bool changed = false;
     //Change the constness matches, so they are equal if compatible
     if(nextTo->modifiers() & AbstractType::ConstModifier) {
       nextFrom->setModifiers(nextFrom->modifiers() | AbstractType::ConstModifier);
       changed = true;
     }
-    
+
     if(identityConversion(nextFrom, nextTo))
       return changed ? Conversion : ExactMatch;
-    
+
 //   }
-  
+
   return NoMatch;
 }
 
@@ -352,7 +353,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
 
   if(!from || !to)
     return NoMatch;
-  
+
   ConversionRank bestRank = NoMatch;
 
   ///Try lvalue-transformation category
@@ -360,13 +361,13 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
 
     if( isReferenceType(from) ) {
       ///Transform lvalue to rvalue. Iso c++ draft 4.1 modeled roughly
-      
+
       AbstractType::Ptr fromNonConstant = realType(from, m_topContext)->indexed().abstractType();
 
       //When copying, the type becomes non-constant
       if(fromNonConstant && fromNonConstant->modifiers() & AbstractType::ConstModifier)
         fromNonConstant->setModifiers(fromNonConstant->modifiers() & ~(AbstractType::ConstModifier));
-      
+
       ConversionRank ret = standardConversion( fromNonConstant, to, removeCategories(categories,LValueTransformationCategory), maxCategories-1 );
       maximizeRank( bestRank, ret );
     }else if( ArrayType::Ptr array = realType(from, m_topContext).cast<ArrayType>() ) { //realType(from) is used here so reference-to-array can be transformed to a pointer. This does not exactly follow the standard I think, check that.
@@ -397,7 +398,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
 
 //   if( categories & QualificationAdjustmentCategory ) {
 //     PointerType::Ptr pnt = from.cast<PointerType>();
-// 
+//
 //     ///@todo iso c++ 4.4.2 etc: pointer to member
 //   }
 
@@ -511,10 +512,10 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
 }
 
 bool TypeConversion::identityConversion( AbstractType::Ptr from, AbstractType::Ptr to ) {
-  
+
   from = TypeUtils::unAliasedType(from);
   to = TypeUtils::unAliasedType(to);
-  
+
   if( !from && !to )
     return true;
   else if( !from || !to )

@@ -26,7 +26,6 @@
 #include <kpluginloader.h>
 #include <util/environmentgrouplist.h>
 #include <KAboutData>
-#include <KDebug>
 
 #include "ui_makeconfig.h"
 #include "makebuilderconfig.h"
@@ -76,9 +75,9 @@ void MakeBuilderPreferences::save()
 
 void MakeBuilderPreferences::defaults()
 {
-    kDebug() << "setting to defaults";
+    qDebug() << "setting to defaults";
     KConfigSkeletonItem* item = MakeBuilderSettings::self()->findItem("makeBinary");
-    if( item ) 
+    if( item )
     {
         bool sig = m_prefsUi->makeBinary->blockSignals( true );
         item->swapDefault();

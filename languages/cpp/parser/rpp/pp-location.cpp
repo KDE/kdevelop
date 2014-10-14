@@ -21,9 +21,9 @@
 
 #include <pp-location.h>
 #include <QStringList>
-#include <kdebug.h>
 #include <serialization/indexedstring.h>
 #include "chartools.h"
+#include "debug.h"
 
 using namespace rpp;
 
@@ -148,7 +148,7 @@ LocationTable::AnchorInTable LocationTable::anchorForOffset(std::size_t offset, 
   }
 
   m_currentOffset = m_offsetTable.lowerBound(offset);
-  //kDebug() << k_funcinfo << offset << "found" << m_currentOffset.key();
+  //qCDebug(RPP) << k_funcinfo << offset << "found" << m_currentOffset.key();
   if (m_currentOffset == constEnd)
     --m_currentOffset;
 
@@ -180,10 +180,10 @@ LocationTable::AnchorInTable LocationTable::anchorForOffset(std::size_t offset, 
 void LocationTable::dump() const
 {
   QMapIterator<std::size_t, Anchor> it = m_offsetTable;
-  qDebug() << "Location Table:";
+  qCDebug(RPP) << "Location Table:";
   while (it.hasNext()) {
     it.next();
-    qDebug() << it.key() << " => " << it.value().castToSimpleCursor();
+    qCDebug(RPP) << it.key() << " => " << it.value().castToSimpleCursor();
   }
 }
 

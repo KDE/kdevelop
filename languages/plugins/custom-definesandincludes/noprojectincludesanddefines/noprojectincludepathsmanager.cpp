@@ -25,7 +25,6 @@
 #include <QDir>
 #include <QFileInfo>
 
-#include <KDebug>
 #include <KLocalizedString>
 
 #include <interfaces/icore.h>
@@ -135,7 +134,7 @@ void NoProjectIncludePathsManager::openConfigurationDialog(const QString& path)
 
     if (cip.exec() == QDialog::Accepted) {
         if (!writeIncludePaths(cip.storageDirectory(), cip.customIncludePaths())) {
-            kWarning() << i18n("Failed to save custom include paths in directory: %1", cip.storageDirectory());
+            qWarning() << i18n("Failed to save custom include paths in directory: %1", cip.storageDirectory());
         }
         KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument(KDevelop::IndexedString(path));
     }

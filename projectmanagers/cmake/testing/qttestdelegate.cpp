@@ -19,7 +19,6 @@
 
 #include "qttestdelegate.h"
 
-#include <KDebug>
 
 QtTestDelegate::QtTestDelegate(QObject* parent) : QItemDelegate(parent),
 passBrush(KColorScheme::View, KColorScheme::PositiveText),

@@ -23,10 +23,9 @@
 
 ///@todo Better splitting of input and output functionality
 
-#include <kdebug.h>
-
 #include "pp-location.h"
 #include "chartools.h"
+#include "debug.h"
 #include <serialization/indexedstring.h>
 
 using namespace rpp;
@@ -38,7 +37,7 @@ const unsigned int deepLine(indexFromCharacter('_'));
 // bool shouldMergeTo(uint previous) {
 //   return !isCharacter(previous) || previous == deepLine || isLetter(previous);
 // }
-// 
+//
 // bool shouldMerge(uint follower) {
 //   return !isCharacter(follower) || follower == deepLine || isLetterOrNumber(follower);
 // }
@@ -176,7 +175,7 @@ void Stream::seek(int offset)
         m_inputLineStartedAt += (1-KDevelop::IndexedString::lengthFromIndex(m_string->at(a)));
     }
   }
-  
+
   c = m_string->constData() + offset;
   m_pos = offset;
   if (c > end) {
@@ -189,19 +188,19 @@ Stream & Stream::operator<< ( const unsigned int& c )
 {
   // Keep in sync with below
   if (!m_isNull) {
-    
+
 /*    if(m_pos > 0) {
       unsigned int& previous( (*m_string)[m_pos-1] );
       if(shouldMergeTo(previous)) {
         if(shouldMerge(c)) {
           //We have to merge with the previous character, so we get a correct tokenization. This should not happen too often.
           previous = KDevelop::IndexedString(KDevelop::IndexedString(previous).byteArray() + KDevelop::IndexedString(c).byteArray()).index();
-          kDebug() << "merging" << KDevelop::IndexedString(previous).str() << "and" << KDevelop::IndexedString(c).str();
+          qCDebug(RPP) << "merging" << KDevelop::IndexedString(previous).str() << "and" << KDevelop::IndexedString(c).str();
           return *this;
         }
       }
     }*/
-    
+
     ++m_pos;
 
     if (c == newline) {
@@ -233,23 +232,23 @@ Stream& Stream::operator<< ( const Stream& input )
 
   // Keep in sync with above
   if (!m_isNull) {
-    
+
 /*    if(m_pos > 0) {
       unsigned int& previous( (*m_string)[m_pos-1] );
       if(shouldMergeTo(previous)) {
         if(shouldMerge(c)) {
           //We have to merge with the previous character, so we get a correct tokenization. This should not happen too often.
           previous = KDevelop::IndexedString(KDevelop::IndexedString(previous).byteArray() + KDevelop::IndexedString(c).byteArray()).index();
-          kDebug() << "merging" << KDevelop::IndexedString(previous).str() << "and" << KDevelop::IndexedString(c).str();
+          qCDebug(RPP) << "merging" << KDevelop::IndexedString(previous).str() << "and" << KDevelop::IndexedString(c).str();
           return *this;
         }
       }
     }*/
-    
+
     ++m_pos;
 
     m_string->append(c);
-    
+
     if (c == newline) {
       Anchor inputPosition = input.inputPosition();
       ++m_inputLine;
@@ -264,9 +263,9 @@ Stream& Stream::operator<< ( const Stream& input )
 Stream& Stream::appendString( const Anchor& inputPosition, const PreprocessedContents & string )
 {
   if (!isNull()) {
-    
+
 //     uint offset = 0;
-    
+
 /*    if(m_pos > 0 && string.size()) {
       //Eventually merge the tokens. This shouldn't happen too often
       int size = string.size();
@@ -277,22 +276,22 @@ Stream& Stream::appendString( const Anchor& inputPosition, const PreprocessedCon
             //We have to merge with the previous character, so we get a correct tokenization. This should not happen too often.
             previous = KDevelop::IndexedString(KDevelop::IndexedString(previous).byteArray() + KDevelop::IndexedString(string[a]).byteArray()).index();
             ++offset;
-            kDebug() << "merging" << KDevelop::IndexedString(previous).str() << "and" << KDevelop::IndexedString(string[a]).str();
+            qCDebug(RPP) << "merging" << KDevelop::IndexedString(previous).str() << "and" << KDevelop::IndexedString(string[a]).str();
             continue;
           }
         }
         break;
       }
     }*/
-    
+
    // if(!offset) ///@todo think about his. We lose the input position, but on the other hand the merging should only happen when ## was used
       mark(inputPosition);
-    
+
     *m_string+= string;
 
     int extraLines = 0;
     for (int i = 0; i < string.size(); ++i) {
-      
+
       if (string.at(i) == newline) {
         m_pos += i + 1; //Move the current offset to that position, so the marker is set correctly
         if(!inputPosition.collapsed)
@@ -313,7 +312,7 @@ Stream& Stream::appendString( const Anchor& inputPosition, const KDevelop::Index
 {
 
   if (!isNull()) {
-    
+
 /*    if(m_pos > 0) {
       //Eventually merge
       unsigned int& previous( (*m_string)[m_pos-1] );
@@ -321,12 +320,12 @@ Stream& Stream::appendString( const Anchor& inputPosition, const KDevelop::Index
         if(shouldMerge(string.index())) {
           //We have to merge with the previous character, so we get a correct tokenization. This should not happen too often.
           previous = KDevelop::IndexedString(KDevelop::IndexedString(previous).byteArray() + string.byteArray()).index();
-          kDebug() << "merging" << KDevelop::IndexedString(previous).str() << "and" << string.str();
+          qCDebug(RPP) << "merging" << KDevelop::IndexedString(previous).str() << "and" << string.str();
           return *this; ///We lose the input-position, but on the other hand we would lose it anyway on another level
         }
       }
     }*/
-    
+
     mark(inputPosition);
     m_string->append(string.index());
 
@@ -405,7 +404,7 @@ QByteArray rpp::Stream::stringFrom(int offset) const
   QByteArray ret;
   for(int a = offset; a < m_pos; ++a)
     ret += KDevelop::IndexedString::fromIndex((*m_string)[a]).byteArray();
-  
+
   return ret;
 }
 

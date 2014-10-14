@@ -16,12 +16,12 @@
 #include "cmakecondition.h"
 #include "cmakeprojectvisitor.h"
 #include <language/duchain/declaration.h>
-#include <KDebug>
 #include <QFileInfo>
 #include <QDateTime>
 
 #include "astfactory.h"
 #include "cmakeparserutils.h"
+#include "../debug.h"
 #include <QtCore/QRegExp>
 
 QMap<QString, CMakeCondition::conditionToken> initNameToToken()
@@ -55,13 +55,13 @@ static int compareVersions(const QList<int>& v1, const QList<int>& v2)
 {
     QList<int>::const_iterator it1=v1.constBegin(), it2=v2.constBegin();
     QList<int>::const_iterator itEnd1=v1.constEnd(), itEnd2=v2.constEnd();
-    
+
     int dif=0;
     for(; it1!=itEnd1 && it2!=itEnd2 && !dif; ++it1, ++it2) { dif=*it1-*it2; }
-    
+
     if(dif==0 && it1!=itEnd1) ++dif;
     if(dif==0 && it2!=itEnd2) --dif;
-    
+
     return dif;
 }
 
@@ -79,7 +79,7 @@ CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
 {
     if(nameToToken.contains(_name))
         return nameToToken[_name];
-    else 
+    else
         return variable;
 }
 
@@ -94,7 +94,7 @@ bool CMakeCondition::isTrue(const QStringList::const_iterator& it)
     QString val = *it;
     QString valUpper = val.toUpper();
     bool ret;
-//     qDebug() << "+++++++ isTrue: " << val;
+//     qCDebug(CMAKE) << "+++++++ isTrue: " << val;
 //         Documentation currently say
 //         * if(<constant>)
 //         *    True if the constant is 1, ON, YES, TRUE, Y, or a non-zero number. False if the constant is 0, OFF, NO, FALSE, N, IGNORE, "", or ends in the suffix '-NOTFOUND'. Named boolean constants are case-insensitive.
@@ -116,7 +116,7 @@ bool CMakeCondition::isTrue(const QStringList::const_iterator& it)
         int n = val.toInt(&ok);
         ret = ok && n!=0;
     }
-    else 
+    else
     {
         QString value;
         if(m_vars->contains(val))
@@ -124,13 +124,13 @@ bool CMakeCondition::isTrue(const QStringList::const_iterator& it)
             //         A variable is expanded (dereferenced) and then checked if it equals one of the above
             //         FALSE constants.
             value = m_vars->value(*it).join(";").toUpper();
-    //         kDebug(9042) << "Checking" << varName << "is true ? >>>" << m_vars->value(varName) << "<<<";
+    //         qCDebug(CMAKE) << "Checking" << varName << "is true ? >>>" << m_vars->value(varName) << "<<<";
         }
         else if(m_cache->contains(val))
         {
             value = m_cache->value(*it).value.toUpper();
         }
-        
+
         if(!value.isEmpty()) {
             m_varUses.append(it);
             ret = !s_falseDefinitions.contains(value) && !value.endsWith("-NOTFOUND");
@@ -165,16 +165,16 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
     {
         return isTrue(itBegin);
     }
-    
+
     bool last = false, done=false;
     last = isTrue(prevOperator(itEnd, itBegin)+1);
     while(!done && itBegin!=itEnd)
     {
         QStringList::const_iterator it2 = prevOperator(itEnd, itBegin);
-        
+
         done=(itBegin==it2);
         conditionToken c = typeName(*it2);
-        
+
         switch(c)
         {
             case NOT:
@@ -189,9 +189,9 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             {
                 last=false;
                 QString v=value(it2+1);
-                
+
                 if(v.isEmpty())
-                    kDebug(9042) << "error: no parameter to exist";
+                    qCDebug(CMAKE) << "error: no parameter to exist";
                 else if(v.startsWith("/.."))
                     last=false;
                 else
@@ -222,11 +222,11 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 break;
             case AND:
                 CHECK_PREV(it2);
-//                 qDebug() << "AND" << last;
+//                 qCDebug(CMAKE) << "AND" << last;
                 return evaluateCondition(itBegin, it2-1) && last;
             case OR:
                 CHECK_PREV(it2);
-//                 qDebug() << "OR" << last;
+//                 qCDebug(CMAKE) << "OR" << last;
                 return evaluateCondition(itBegin, it2-1) || last;
             case MATCHES: {
                 CHECK_PREV(it2);
@@ -285,9 +285,9 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 CHECK_NEXT(it2);
                 QString strA=value(it2-1);
                 QString strB=value(it2+1);
-                
+
                 last= (strA==strB);
-                
+
                 itEnd=it2-1;
             }   break;
             case IS_NEWER_THAN: {
@@ -295,7 +295,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 CHECK_NEXT(it2);
                 QFileInfo pathA(*(it2-1));
                 QFileInfo pathB(*(it2+1));
-//                 kDebug(9042) << "newer" << strA << strB;
+//                 qCDebug(CMAKE) << "newer" << strA << strB;
                 last= (pathA.lastModified()>pathB.lastModified());
                 itEnd=it2-1;
             }   break;
@@ -333,7 +333,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 {
                     if(*itL=="(") ind--;
                     else if(*itL==")") ind++;
-                    
+
                     if(ind==0)
                         break;
                     --itL;
@@ -345,23 +345,23 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 last = isTrue(it2);
                 break;
             default:
-                kWarning(9042) << "no support for operator:" << *it2;
+                qCWarning(CMAKE) << "no support for operator:" << *it2;
                 break;
         }
     }
-    
+
     return last;
 }
 
 bool CMakeCondition::condition(const QStringList &expression)
 {
-    if( expression.isEmpty() ) 
+    if( expression.isEmpty() )
     {
         return false;
     }
     QStringList::const_iterator it = expression.constBegin(), itEnd=expression.constEnd();
     conditionBegin=it;
-    
+
     bool ret = evaluateCondition(it, itEnd-1);
     uint i=0;
     m_argUses.clear();
@@ -370,8 +370,8 @@ bool CMakeCondition::condition(const QStringList &expression)
         if(m_varUses.contains(it))
             m_argUses.append(i);
     }
-    
-//     kDebug(9042) << "condition" << expression << "=>" << ret;
+
+//     qCDebug(CMAKE) << "condition" << expression << "=>" << ret;
     return ret;
 }
 

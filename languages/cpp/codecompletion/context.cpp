@@ -49,8 +49,8 @@
 #include "../cppduchain/templatedeclaration.h"
 #include "../cpplanguagesupport.h"
 #include "../cpputils.h"
-#include "../cppduchain/environmentmanager.h"
-#include "../cppduchain/cppduchain.h"
+#include "../debug.h"
+
 
 #include "cppdebughelper.h"
 #include "missingincludeitem.h"
@@ -85,7 +85,7 @@ const int CONTEXT_LINES = 20;
 ///Maximum number of parent contexts
 const int MAX_DEPTH = 10;
 
-/** 
+/**
  * ACCESS_STRINGS are used to determine the special properties of the context.
  * Any alphanum_ word not appearing in ACCESS_STRINGS will be considered an expression.
  * Expressions that fail evaluation invalidate their context and have no completions.
@@ -154,7 +154,7 @@ void MainThreadHelper::replaceCurrentAccess(const QUrl &url, const QString& oldA
         static QUrl lastUrl;
         static KTextEditor::Cursor lastPos;
         if(lastUrl == url && lastPos == cursor) {
-          kDebug() << "Not doing the same access replacement twice at" << lastUrl << lastPos;
+          qCDebug(CPP) << "Not doing the same access replacement twice at" << lastUrl << lastPos;
           return;
         }
         lastUrl = url;
@@ -236,7 +236,7 @@ QString getEndingFromSet( const QString &str, const QSet<QString> &set, int maxM
       return end;
   }
 
-  return QString();  
+  return QString();
 }
 
 QString getEndFunctionOperator( const QString &str ) {
@@ -495,7 +495,7 @@ CodeCompletionContext( KDevelop::DUContextPointer context, const QString& text,
 
     if ( m_accessType == BinaryOpFunctionCallAccess )
       m_operator = getEndFunctionOperator( accessStr );
- 
+
     if( !m_expression.isEmpty() && !m_expressionResult.isValid() )
       m_functionName = m_expression; //set m_functionName for Missing Include Completion
   }
@@ -784,7 +784,7 @@ bool CodeCompletionContext::doConstructorCompletion() {
 
   QStringList hadItems;
 
-  ifDebug( kDebug() << "text:" << text; )
+  ifDebug( qCDebug(CPP) << "text:" << text; )
 
   //Jump over all initializers
   while(!text.isEmpty() && text.endsWith(',')) {
@@ -792,72 +792,72 @@ bool CodeCompletionContext::doConstructorCompletion() {
     //Skip initializer expression
     int start_expr = expressionBefore( text, text.length() );
     QString skip = text.mid(start_expr, text.length() - start_expr);
-    
+
     if(skip.contains('('))
       hadItems << skip.left(skip.indexOf('(')).trimmed();
-    
+
     text = text.left(start_expr).trimmed();
   }
-  
+
   if(!text.trimmed().endsWith(':'))
     return false;
 
   text = text.left(text.length()-1).trimmed();
   //Now we have the declaration in text
-  ifDebug( kDebug() << "should be decl.:" << text; )
+  ifDebug( qCDebug(CPP) << "should be decl.:" << text; )
   if(!text.endsWith(')'))
     return false;
-  
+
   int argumentsStart = text.length()-1;
   QStringList arguments;
   skipFunctionArguments(text, arguments, argumentsStart);
   if(argumentsStart <= 0)
     return false;
-  
+
   int identifierStart = expressionBefore( text, argumentsStart-1 );
   if(identifierStart < 0 || identifierStart == argumentsStart)
     return false;
-  
+
   m_text = QString();
-  
+
   QualifiedIdentifier id(text.mid(identifierStart, argumentsStart-1-identifierStart));
   if(id.isEmpty())
     return false;
   id = id.left(id.count()-1);
-  
+
   DUContext* container = 0;
-  
+
   if(!id.isEmpty()) {
     //Find the class
     QList< KDevelop::Declaration* > decls = m_duContext->findDeclarations(id);
     if(decls.isEmpty()) {
-      ifDebug( kDebug() << "did not find class declaration for" << id.toString(); )
+      ifDebug( qCDebug(CPP) << "did not find class declaration for" << id.toString(); )
       return false;
     }
     container = decls[0]->logicalInternalContext(m_duContext->topContext());
   }else if(m_duContext->parentContext() && m_duContext->parentContext()->type() == DUContext::Class && m_duContext->parentContext()->owner()) {
     container = m_duContext->parentContext();
   }
-  
+
   if(!container)
     return false;
-  
+
   m_onlyShow = ShowVariables;
   m_isConstructorCompletion = true;
   m_accessType = MemberAccess;
   m_doAccessFiltering = false;
-  
+
   QSet<QString> hadItemsSet = hadItems.toSet();
-  
+
   QList<CompletionTreeItemPointer> items;
-  
+
   int pos = 1000;
   bool initializedNormalItems = false;
-  
+
   //Pre-compute the items
   foreach(Declaration* decl, container->localDeclarations(m_duContext->topContext())) {
     ClassMemberDeclaration* classMem = dynamic_cast<ClassMemberDeclaration*>(decl);
-    
+
     if(decl->kind() == Declaration::Instance && !decl->isFunctionDeclaration() && classMem && !classMem->isStatic()) {
       if(!hadItemsSet.contains(decl->identifier().toString())) {
         items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(decl), KDevelop::CodeCompletionContext::Ptr(this), pos ));
@@ -879,10 +879,10 @@ bool CodeCompletionContext::doConstructorCompletion() {
       }
     }
   }
-  
-  
+
+
   eventuallyAddGroup(i18n("Initialize"), 0, items);
-  
+
   return true;
   ///Step 1: Skip to the ':', to find the back of the function declaration. On the way, all expressions need to be constructor decls.
 }
@@ -977,7 +977,7 @@ findExpressionAndPrefix(QString& expression, QString& expressionPrefix, bool &is
   }
 
   //Add reference and dereference operators to expression
-  QString op; 
+  QString op;
   while ( true ) {
     op = getUnaryOperator(expressionPrefix);
     if (op == "*" || op == "&") {
@@ -1056,7 +1056,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
     helper.setOperator(OverloadResolver::Parameter(m_expressionResult.type.abstractType(), m_expressionResult.isLValue()));
 
     m_functionName = "operator"+m_operator;
-    
+
   } else {
     ///Simply take all the declarations that were found by the expression-parser
 
@@ -1071,7 +1071,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
 
   if( m_accessType == BinaryOpFunctionCallAccess || m_expression == m_functionName )
     helper.setFunctionNameForADL( QualifiedIdentifier(m_functionName) );
-  
+
   OverloadResolver::ParameterList knownParameters;
   foreach( const ExpressionEvaluationResult &result, m_knownArgumentTypes )
     knownParameters.parameters << OverloadResolver::Parameter( result.type.abstractType(), result.isLValue() );
@@ -1109,8 +1109,8 @@ bool CodeCompletionContext::doIncludeCompletion()
 
   //Strip away #include
   line = line.mid(endOfInclude).trimmed();
-  
-  kDebug(9007) << "trimmed include line: " << line;
+
+  qCDebug(CPP) << "trimmed include line: " << line;
 
   if(!line.startsWith('<') && !line.startsWith('"'))
     return true; //We are not behind the beginning of a path-specification
@@ -1118,14 +1118,14 @@ bool CodeCompletionContext::doIncludeCompletion()
   const bool local = line.startsWith('"');
   line = line.mid(1);
 
-  kDebug(9007) << "extract prefix from " << line;
+  qCDebug(CPP) << "extract prefix from " << line;
   //Extract the prefix-path
 
   QString prefixPath;
   if(line.contains('/')) {
     prefixPath = Path(line).parent().toLocalFile();
   }
-  kDebug(9007) << "extracted prefix " << prefixPath;
+  qCDebug(CPP) << "extracted prefix " << prefixPath;
 
 #ifndef TEST_COMPLETION
   m_includeItems = CppUtils::allFilesInIncludePath(m_duContext->url().str(), local, prefixPath);
@@ -1187,21 +1187,21 @@ QSet<DUContext*> CodeCompletionContext::memberAccessContainers() const {
           ret.insert(ctx);
       }else {
         //Print some debug-output
-        kDebug(9007) << "Could not get internal context from" << m_expressionResult.type.abstractType()->toString();
-        kDebug(9007) << "Declaration" << idDecl->toString() << idDecl->isForwardDeclaration();
+        qCDebug(CPP) << "Could not get internal context from" << m_expressionResult.type.abstractType()->toString();
+        qCDebug(CPP) << "Declaration" << idDecl->toString() << idDecl->isForwardDeclaration();
         if( Cpp::TemplateDeclaration* tempDeclaration = dynamic_cast<Cpp::TemplateDeclaration*>(idDecl) ) {
           if( tempDeclaration->instantiatedFrom() ) {
-            kDebug(9007) << "instantiated from" << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->toString() << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->isForwardDeclaration();
-            kDebug(9007) << "internal context" << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->internalContext();
+            qCDebug(CPP) << "instantiated from" << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->toString() << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->isForwardDeclaration();
+            qCDebug(CPP) << "internal context" << dynamic_cast<Declaration*>(tempDeclaration->instantiatedFrom())->internalContext();
           }
         }
 
       }
     }
   }
-  
+
 //   foreach(DUContext* context, ret) {
-//     kDebug() << "member-access container:" << context->url().str() << context->range() << context->scopeIdentifier(true).toString();
+//     qCDebug(CPP) << "member-access container:" << context->url().str() << context->range() << context->scopeIdentifier(true).toString();
 //   }
 
   return ret;
@@ -1224,7 +1224,7 @@ bool CodeCompletionContext::isValidPosition() {
 
   if( markedText[markedText.length()-1] == '$' ) {
     //We are within a comment or string
-    kDebug(9007) << "code-completion position is invalid, marked text: \n\"" << markedText << "\"\n unmarked text:\n" << m_text << "\n";
+    qCDebug(CPP) << "code-completion position is invalid, marked text: \n\"" << markedText << "\"\n unmarked text:\n" << m_text << "\n";
     return false;
   }
   return true;
@@ -1254,7 +1254,7 @@ static TopDUContext* proxyContextForUrl(QUrl url)
     if(language->languageSupport())
       return language->languageSupport()->standardContext(url, true);
   }
-  
+
   return 0;
 }
 
@@ -1288,7 +1288,7 @@ CodeCompletionContext* CodeCompletionContext::parentContext() const {
 void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer >& overridable, CodeCompletionContext::Ptr completionContext, int depth = 0) {
   if(!current)
     return;
-  
+
   foreach(Declaration* decl, current->localDeclarations()) {
     ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
     // one can only override the direct parent's ctor
@@ -1329,10 +1329,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::memberAccessCompletionIt
     typeIsConst = true;
 
   QSet<DUContext*> containers = memberAccessContainers();
-  ifDebug( kDebug() << "got" << containers.size() << "member-access containers"; )
+  ifDebug( qCDebug(CPP) << "got" << containers.size() << "member-access containers"; )
   if (containers.isEmpty())
   {
-    ifDebug( kDebug() << "missing-include completion for" << m_expression << m_expressionResult.toString(); )
+    ifDebug( qCDebug(CPP) << "missing-include completion for" << m_expression << m_expressionResult.toString(); )
     lock.unlock();
     eventuallyAddGroup(i18n("Not Included"), 700, missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext, 0, true ));
   }
@@ -1343,7 +1343,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::memberAccessCompletionIt
   foreach(DUContext* ctx, containers) {
     if (shouldAbort)
       return items;
-    ifDebug( kDebug() << "container:" << ctx->scopeIdentifier(true).toString(); )
+    ifDebug( qCDebug(CPP) << "container:" << ctx->scopeIdentifier(true).toString(); )
 
     QList<DeclarationDepthPair> decls = ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false );
     decls += namespaceItems(ctx, ctx->range().end, false, containers);
@@ -1598,7 +1598,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::signalSlotAccessCompleti
     if(parentContext() && parentContext()->m_knownArgumentTypes.count() > 1 && parentContext()->m_knownArgumentTypes[0].type.isValid()) {
       StructureType::Ptr signalContainerType = TypeUtils::targetType(parentContext()->m_knownArgumentTypes[0].type.abstractType(), m_duContext->topContext()).cast<StructureType>();
       if(signalContainerType) {
-//             kDebug() << "searching signal in container" << signalContainerType->toString() << m_connectedSignalIdentifier.toString();
+//             qCDebug(CPP) << "searching signal in container" << signalContainerType->toString() << m_connectedSignalIdentifier.toString();
           Declaration* signalContainer = signalContainerType->declaration(m_duContext->topContext());
         if(signalContainer && signalContainer->internalContext()) {
           IndexedString signature(m_connectedSignalNormalizedSignature);
@@ -1839,7 +1839,7 @@ QList<DeclarationDepthPair> CodeCompletionContext::namespaceItems(DUContext* duC
     if(aliasDecl) {
       ids.insert(aliasDecl->importIdentifier());
     }else{
-      kDebug() << "Import is not based on NamespaceAliasDeclaration";
+      qCDebug(CPP) << "Import is not based on NamespaceAliasDeclaration";
     }
   }
 
@@ -1885,7 +1885,7 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
 
   QList<DeclarationDepthPair> oldDecls = decls;
   decls.clear();
-  
+
   //Remove pure function-definitions before doing overload-resolution, so they don't hide their own declarations.
   foreach( const DeclarationDepthPair& decl, oldDecls )
     if(!dynamic_cast<FunctionDefinition*>(decl.first) || !static_cast<FunctionDefinition*>(decl.first)->hasDeclaration()) {
@@ -1893,7 +1893,7 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
         QualifiedIdentifier id = decl.first->qualifiedIdentifier();
         if(hadNamespaceDeclarations.contains(id))
           continue;
-        
+
         hadNamespaceDeclarations.insert(id);
       }
 
@@ -1901,7 +1901,7 @@ QList< CompletionTreeItemPointer > CodeCompletionContext::standardAccessCompleti
         decls << decl;
       }
     }
-    
+
   decls = Cpp::hideOverloadedDeclarations(decls, typeIsConst);
 
   foreach( const DeclarationDepthPair& decl, decls ) {
@@ -2174,7 +2174,7 @@ bool CodeCompletionContext::visibleFromWithin(Declaration* decl, DUContext* curr
     return false;
   if(currentContext->imports(decl->context()))
     return true;
-  
+
   return visibleFromWithin(decl, currentContext->parentContext());
 }
 
@@ -2250,16 +2250,16 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
 
   if(dynamic_cast<TemplateParameterDeclaration*>(decl) && !visibleFromWithin(decl, m_duContext.data()))
     return false;
-  
+
   static const IndexedIdentifier friendIdentifier(Identifier("friend"));
-  
+
   if(decl->indexedIdentifier().isEmpty()) //Filter out nameless declarations
     return false;
 
   if(decl->indexedIdentifier() == friendIdentifier || decl->indexedIdentifier() == Cpp::unnamedNamespaceIdentifier()
      || decl->indexedIdentifier() == globalIndexedImportIdentifier())
     return false;
-  
+
   if(excludeReservedIdentifiers)
   {
     //Exclude identifiers starting with "__" or "_Uppercase"
@@ -2286,20 +2286,20 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   if(m_onlyShow == ShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace
      && decl->kind() != Declaration::NamespaceAlias )
     return false;
-  
+
   if(m_onlyShow == ShowVariables && (decl->kind() != Declaration::Instance || decl->isFunctionDeclaration()))
     return false;
-  
+
   if(m_onlyShow == ShowImplementationHelpers)
     return false; //Implementation helpers don't come here
-    
+
   if(m_onlyShow == ShowSignals || m_onlyShow == ShowSlots) {
     Cpp::QtFunctionDeclaration* qtFunction = dynamic_cast<Cpp::QtFunctionDeclaration*>(decl);
     if(!qtFunction || (m_onlyShow == ShowSignals && !qtFunction->isSignal())
                    || (m_onlyShow == ShowSlots && !qtFunction->isSlot()))
       return false;
   }
-  
+
   if(dynamic && decl->context()->type() == DUContext::Class) {
     ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl);
     if(classMember)
@@ -2356,15 +2356,15 @@ QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeItem > > CodeComple
   #endif
   #define ADD_TYPED_TOKEN_S(X, type) ret << CompletionTreeItemPointer( new TypeConversionCompletionItem(X, type, 0, QExplicitlySharedDataPointer<Cpp::CodeCompletionContext>(this)) )
   #define ADD_TYPED_TOKEN(X, type) ADD_TYPED_TOKEN_S(#X, type)
-  
+
   #define ADD_TOKEN(X) ADD_TYPED_TOKEN(X, KDevelop::IndexedType())
   #define ADD_TOKEN_S(X) ADD_TYPED_TOKEN_S(X, KDevelop::IndexedType())
 
   bool restrictedItems = (m_onlyShow == ShowSignals) ||
-                         (m_onlyShow == ShowSlots) || 
+                         (m_onlyShow == ShowSlots) ||
                          (m_onlyShow == ShowTypes) ||
                          (m_onlyShow == ShowImplementationHelpers);
-  
+
   if(!restrictedItems || m_onlyShow == ShowTypes) {
     ADD_TOKEN(bool);
     ADD_TOKEN(char);
@@ -2389,10 +2389,10 @@ QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeItem > > CodeComple
     ADD_TOKEN(volatile);
     ADD_TOKEN(wchar_t);
   }
-  
+
   if(restrictedItems && (m_duContext->type() == DUContext::Other || m_duContext->type() == DUContext::Function))
     return ret;
-  
+
   if(m_duContext->type() == DUContext::Class) {
     ADD_TOKEN_S("Q_OBJECT");
     ADD_TOKEN(private);
@@ -2404,7 +2404,7 @@ QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeItem > > CodeComple
     ADD_TOKEN(friend);
     ADD_TOKEN(explicit);
   }
-  
+
   if(m_duContext->type() == DUContext::Other) {
     ADD_TOKEN(break);
     ADD_TOKEN(case);
@@ -2444,13 +2444,13 @@ QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeItem > > CodeComple
   }else{
     ADD_TOKEN(inline);
   }
-  
+
   if(m_duContext->type() == DUContext::Global) {
     ADD_TOKEN(export);
     ADD_TOKEN(extern);
     ADD_TOKEN(namespace);
   }
-  
+
   ADD_TOKEN(auto);
   ADD_TOKEN(class);
   ADD_TOKEN(operator);
@@ -2462,14 +2462,14 @@ QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeItem > > CodeComple
 
   ConstantIntegralType::Ptr trueType(new ConstantIntegralType(IntegralType::TypeBoolean));
   trueType->setValue<bool>(true);
-  
+
   ADD_TYPED_TOKEN(true, trueType->indexed());
 
   ConstantIntegralType::Ptr falseType(new ConstantIntegralType(IntegralType::TypeBoolean));
   falseType->setValue<bool>(false);
 
   ADD_TYPED_TOKEN(false, falseType->indexed());
-  
+
   return ret;
 }
 

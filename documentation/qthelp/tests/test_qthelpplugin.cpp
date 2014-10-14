@@ -32,8 +32,6 @@
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>
 
-#include <kdebug.h>
-
 #include "testqthelpconfig.h"
 
 const QString VALID1 = QTHELP_FILES + QString("/valid1.qch");

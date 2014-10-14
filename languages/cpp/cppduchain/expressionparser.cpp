@@ -33,6 +33,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/identifier.h>
 #include "expressionvisitor.h"
+#include "debug.h"
 #include <parser/rpp/chartools.h>
 
 
@@ -125,7 +126,7 @@ bool tryDirectLookup(const QByteArray& unit)
 ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& unit, DUContextPointer context, const TopDUContext* source, bool forceExpression ) {
 
   if( m_debug )
-    kDebug(9007) << "==== .Evaluating ..:" << endl << unit;
+    qCDebug(CPPDUCHAIN) << "==== .Evaluating ..:" << endl << unit;
 
   // fast path for common built-in types
   static const QHash<QByteArray, ExpressionEvaluationResult> staticLookupTable = buildStaticLookupTable();
@@ -165,19 +166,19 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
   ast = parser.parseTypeOrExpression(&session, forceExpression);
 
   if(!ast) {
-    kDebug(9007) << "Failed to parse \"" << unit << "\"";
+    qCDebug(CPPDUCHAIN) << "Failed to parse \"" << unit << "\"";
     return ExpressionEvaluationResult();
   }
 
   if (m_debug) {
-    kDebug(9007) << "===== AST:";
+    qCDebug(CPPDUCHAIN) << "===== AST:";
     dumper.dump(ast, &session);
   }
 
   ast->ducontext = context.data();
 
   if(!ast->ducontext) {
-    kDebug() << "context disappeared";
+    qCDebug(CPPDUCHAIN) << "context disappeared";
     return ExpressionEvaluationResult();
   }
 
@@ -194,7 +195,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSessio
 {
   if (m_debug) {
     DumpChain dumper;
-    kDebug(9007) << "===== AST:";
+    qCDebug(CPPDUCHAIN) << "===== AST:";
     dumper.dump(ast, session);
   }
 

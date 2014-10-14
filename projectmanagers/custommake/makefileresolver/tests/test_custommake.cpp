@@ -23,7 +23,7 @@
 
 #include <QFile>
 #include <QTextStream>
-#include <KDebug>
+#include <QDebug>
 #include <KTempDir>
 
 #include <tests/autotestshell.h>
@@ -40,7 +40,7 @@ void createFile( QFile& file )
 {
     file.remove();
     if ( !file.open( QIODevice::ReadWrite ) ) {
-        kFatal() << "Cannot create the file " << file.fileName();
+        qFatal("Cannot create the file %s", file.fileName().toUtf8().data());
     }
 }
 }

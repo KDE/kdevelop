@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include "commentparser.h"
-// #include <kdebug.h>
+#include "debug.h"
 
 Comment::Comment( uint token, int line ) : m_line(line), m_token( token ) {
 }
@@ -43,7 +43,7 @@ Comment CommentStore::takeComment( int line ) {
     if( it != m_comments.end() ) {
         Comment ret = *it;
         m_comments.erase( it );
-/*        kDebug() << "Took comment in line" << line << "new count:" << m_comments.size();*/
+/*        qCDebug(CPPPARSER) << "Took comment in line" << line << "new count:" << m_comments.size();*/
         return ret;
     } else {
         return Comment();
@@ -62,7 +62,7 @@ Comment CommentStore::takeCommentInRange( int end, int start ) {
     if( it != m_comments.end() && (*it).line() >= start && (*it).line() <= end ) {
         Comment ret = *it;
         m_comments.erase( it );
-/*        kDebug() << "Took comment in line" << (*it).line() << "new count:" << m_comments.size();*/
+/*        qCDebug(CPPPARSER) << "Took comment in line" << (*it).line() << "new count:" << m_comments.size();*/
         return ret;
     } else {
         return Comment();
@@ -80,9 +80,9 @@ void CommentStore::addComment( Comment comment ) {
         //m_comments.erase( it );
     }
 
-/*    kDebug() << "size" << m_comments.size();*/
+/*    qCDebug(CPPPARSER) << "size" << m_comments.size();*/
     m_comments.insert( comment );
-/*    kDebug() << "added comment in line" << comment.line() << "token" << comment.token() << "new count" << m_comments.size();*/
+/*    qCDebug(CPPPARSER) << "added comment in line" << comment.line() << "token" << comment.token() << "new count" << m_comments.size();*/
 }
 
 ///Does not delete the comment
@@ -98,7 +98,7 @@ Comment CommentStore::takeFirstComment() {
     if( it == m_comments.end() ) return Comment();
     Comment ret = *it;
     m_comments.erase(it);
-/*    kDebug() << "taken first comment in line" << (*it).line() << "new count:" << m_comments.size();*/
+/*    qCDebug(CPPPARSER) << "taken first comment in line" << (*it).line() << "new count:" << m_comments.size();*/
     return ret;
 }
 

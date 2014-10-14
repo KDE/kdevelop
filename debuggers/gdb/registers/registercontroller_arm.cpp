@@ -19,8 +19,8 @@
  */
 
 #include "registercontroller_arm.h"
+#include "../debug.h"
 
-#include <KDebug>
 #include <KLocalizedString>
 
 namespace GDBDebugger
@@ -31,7 +31,7 @@ FlagRegister RegisterController_Arm::m_cpsr;
 
 void  RegisterController_Arm::updateValuesForRegisters(RegistersGroup* registers) const
 {
-    kDebug() << "Updating values for registers: " << registers->groupName.name();
+    qCDebug(DEBUGGERGDB) << "Updating values for registers: " << registers->groupName.name();
     if (registers->groupName == enumToGroupName(Flags)) {
         updateFlagValues(registers, m_cpsr);
     } else {

@@ -18,14 +18,12 @@
 
 #include "builtinoperators.h"
 
-#include <KDebug>
-
 #include <language/duchain/types/constantintegraltype.h>
 
 #include "cpptypes.h"
 #include "parser/tokens.h"
+#include "debug.h"
 
-#include <KDebug>
 
 using namespace KDevelop;
 
@@ -63,7 +61,7 @@ struct ConstantBinaryExpressionEvaluator {
         if(right->ConstantIntegralType::value<Type>())
           endValue = left->ConstantIntegralType::value<Type>() / right->ConstantIntegralType::value<Type>();
         else
-          kDebug() << "bad division operator" << left->ConstantIntegralType::value<Type>() << "/" << right->ConstantIntegralType::value<Type>();
+          qCDebug(CPPDUCHAIN) << "bad division operator" << left->ConstantIntegralType::value<Type>() << "/" << right->ConstantIntegralType::value<Type>();
       break;
       case '=':
         endValue = right->ConstantIntegralType::value<Type>();
@@ -102,7 +100,7 @@ struct ConstantBinaryExpressionEvaluator {
         if(right->ConstantIntegralType::value<Type>())
           endValue = left->ConstantIntegralType::value<Type>() % right->ConstantIntegralType::value<Type>();
         else
-          kDebug() << "bad modulo operator" << left->ConstantIntegralType::value<Type>() << "%" << right->ConstantIntegralType::value<Type>();
+          qCDebug(CPPDUCHAIN) << "bad modulo operator" << left->ConstantIntegralType::value<Type>() << "%" << right->ConstantIntegralType::value<Type>();
       break;
       case '^':
         endValue = left->ConstantIntegralType::value<Type>() ^ right->ConstantIntegralType::value<Type>();

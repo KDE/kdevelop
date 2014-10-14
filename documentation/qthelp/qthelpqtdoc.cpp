@@ -20,6 +20,7 @@
 */
 
 #include "qthelpqtdoc.h"
+#include "debug.h"
 
 #include <QDir>
 #include <QIcon>
@@ -27,7 +28,6 @@
 
 #include <KLocalizedString>
 #include <KProcess>
-#include <KDebug>
 
 #include <algorithm>
 
@@ -68,9 +68,9 @@ void QtHelpQtDoc::lookupDone(int code)
 {
     if(code==0) {
         KProcess* p = qobject_cast<KProcess*>(sender());
-        
+
         QString path = QDir::fromNativeSeparators(QString::fromLatin1(p->readAllStandardOutput().trimmed()));
-        kDebug() << "Detected doc path:" << path;
+        qCDebug(QTHELP) << "Detected doc path:" << path;
 
         if (!path.isEmpty()) {
             loadDirectory(path);
@@ -84,21 +84,21 @@ void QtHelpQtDoc::loadDirectory(const QString& path)
 {
     QDir d(path);
     if(path.isEmpty() || !d.exists()) {
-        kDebug() << "no QtHelp found at all";
+        qCDebug(QTHELP) << "no QtHelp found at all";
         return;
     }
-    
+
     foreach(const QString& file, d.entryList(QDir::Files)) {
         QString fileName=path+'/'+file;
         QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
-        
+
         if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
-            kDebug() << "loading doc" << fileName << fileNamespace;
+            qCDebug(QTHELP) << "loading doc" << fileName << fileNamespace;
             if(!m_engine.registerDocumentation(fileName))
-                kDebug() << "error >> " << fileName << m_engine.error();
+                qCDebug(QTHELP) << "error >> " << fileName << m_engine.error();
         }
     }
-    kDebug() << "registered" << m_engine.error() << m_engine.registeredDocumentations();
+    qCDebug(QTHELP) << "registered" << m_engine.error() << m_engine.registeredDocumentations();
 }
 
 QIcon QtHelpQtDoc::icon() const

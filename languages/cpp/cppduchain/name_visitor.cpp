@@ -28,9 +28,9 @@
 #include "tokens.h"
 #include "expressionparser.h"
 #include "expressionvisitor.h"
+#include "debug.h"
 #include <language/duchain/duchainlock.h>
 
-#include <QtCore/qdebug.h>
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
@@ -119,14 +119,14 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
         if(createUse)
           m_visitor->newUse(node, node->id, node->id+1, DeclarationPointer());
       }
-      
+
       if( m_debug )
-        kDebug( 9007 ) << "failed to find " << m_currentIdentifier << " as part of " << m_session->stringForNode(node) << ", searched in " << m_find.describeLastContext();
+        qCDebug(CPPDUCHAIN) << "failed to find " << m_currentIdentifier << " as part of " << m_session->stringForNode(node) << ", searched in " << m_find.describeLastContext();
     }
   }
 
   _M_name.push(m_currentIdentifier);
-  
+
   if(!m_find.lastDeclarations().isEmpty()) {
     m_foundSomething = m_find.lastDeclarations().first();
   }
@@ -149,7 +149,7 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
 {
   if(m_stopSearch)
     return ExpressionEvaluationResult();
-  
+
   ExpressionEvaluationResult res;
   bool opened = false;
   if( node->expression ) {
@@ -165,7 +165,7 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
 
     if( m_visitor->lastType() ) {
       LOCKDUCHAIN;
-      
+
       res.type = m_visitor->lastType()->indexed();
       foreach(const DeclarationPointer &decl, m_visitor->lastDeclarations())
         if(decl)
@@ -177,16 +177,16 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
 
       m_find.openQualifiedIdentifier(res);
       opened = true;
-        
+
     }else if( m_debug ) {
-      kDebug(9007) << "Failed to resolve template-argument " << m_session->stringForNode(node->expression);
+      qCDebug(CPPDUCHAIN) << "Failed to resolve template-argument " << m_session->stringForNode(node->expression);
     }
-    
+
     if(ownVisitor) {
       delete m_visitor;
       m_visitor = 0;
     }
-    
+
   } else if( node->type_id )
   {
     TypeASTVisitor v( m_session, m_visitor, m_localContext, m_source, m_localContext, m_debug );
@@ -196,15 +196,15 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
       m_stopSearch = true;
       return ExpressionEvaluationResult();
     }
-    
+
     res.type = v.type()->indexed();
-    
+
     if( res.type ) {
       LOCKDUCHAIN;
       foreach(const DeclarationPointer &decl, v.declarations())
         if(decl)
           res.allDeclarationsList().append(decl->id());
-      
+
       m_find.openQualifiedIdentifier(res);
       opened = true;
     }
@@ -241,7 +241,7 @@ void NameASTVisitor::run(UnqualifiedNameAST *node, bool skipThisName)
   m_find.openQualifiedIdentifier(false);
   m_typeSpecifier = 0;
   _M_name.clear();
-  
+
   if(skipThisName)
     DefaultVisitor::visitUnqualifiedName(node);
   else
@@ -249,10 +249,10 @@ void NameASTVisitor::run(UnqualifiedNameAST *node, bool skipThisName)
 
   if(m_stopSearch)
     return;
-  
+
   LOCKDUCHAIN;
   m_find.closeQualifiedIdentifier();
-  
+
   if(m_find.lastDeclarations().isEmpty() && (m_flags & DUContext::NoUndefinedTemplateParams)) {
     m_stopSearch = true;
     return;
@@ -283,7 +283,7 @@ void NameASTVisitor::run(NameAST *node, bool skipLastNamePart)
 
   if(m_stopSearch)
     return;
-  
+
   _M_name.setExplicitlyGlobal( node->global );
   LOCKDUCHAIN;
   m_find.closeQualifiedIdentifier();

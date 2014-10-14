@@ -20,8 +20,6 @@ Boston, MA 02110-1301, USA.
 */
 #include "astyle_preferences.h"
 
-#include <KDebug>
-
 #include "astyle_formatter.h"
 #include "astyle_plugin.h"
 

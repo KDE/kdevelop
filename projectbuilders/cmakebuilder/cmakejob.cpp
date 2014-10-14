@@ -32,11 +32,11 @@
 #include <interfaces/iproject.h>
 
 #include <kshell.h>
-#include <kdebug.h>
 #include <kjob.h>
 #include <klocalizedstring.h>
 
 #include "cmakeutils.h"
+#include "debug.h"
 
 using namespace KDevelop;
 
@@ -54,7 +54,7 @@ CMakeJob::CMakeJob(QObject* parent)
 
 void CMakeJob::start()
 {
-    kDebug(9037) << "Configuring cmake" << workingDirectory();
+    qCDebug(CMAKEBUILDER) << "Configuring cmake" << workingDirectory();
 
     if( !m_project ) {
         setError(NoProjectError);
@@ -77,7 +77,7 @@ QString CMakeJob::cmakeBinary( KDevelop::IProject* project )
 QUrl CMakeJob::workingDirectory() const
 {
     KDevelop::Path path = CMake::currentBuildDir( m_project );
-    kDebug(9042) << "builddir: " << path;
+    qCDebug(CMAKEBUILDER) << "builddir: " << path;
     Q_ASSERT(path.isValid()); //We cannot get the project folder as a build directory!
     return path.toUrl();
 }
@@ -98,7 +98,7 @@ QStringList CMakeJob::commandLine() const
     {
         args << QString("-DCMAKE_BUILD_TYPE=%1").arg(buildType);
     }
-    
+
     //if we are creating a new build directory, we'll want to specify the generator
     QDir builddir(CMake::currentBuildDir( m_project ).toLocalFile());
     if(!builddir.exists() || builddir.count()==2) {
@@ -112,11 +112,11 @@ QStringList CMakeJob::commandLine() const
         if( err == KShell::NoError ) {
             args += tmp;
         } else {
-            kWarning() << "Ignoring cmake Extra arguments";
+            qWarning() << "Ignoring cmake Extra arguments";
             if( err == KShell::BadQuoting ) {
-                kWarning() << "CMake arguments badly quoted:" << cmakeargs;
+                qWarning() << "CMake arguments badly quoted:" << cmakeargs;
             } else {
-                kWarning() << "CMake arguments had meta character:" << cmakeargs;
+                qWarning() << "CMake arguments had meta character:" << cmakeargs;
             }
         }
     }
@@ -133,7 +133,7 @@ QString CMakeJob::environmentProfile() const
 void CMakeJob::setProject(KDevelop::IProject* project)
 {
     m_project = project;
-    
+
     if (m_project)
         setJobName( i18n("CMake: %1", m_project->name()) );
 }

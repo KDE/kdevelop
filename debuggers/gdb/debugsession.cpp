@@ -32,7 +32,6 @@
 #include <QRegExp>
 #include <QStandardPaths>
 
-#include <KDebug>
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KToolBar>
@@ -59,6 +58,7 @@
 #include "gdbcommandqueue.h"
 #include "stty.h"
 #include "gdbframestackmodel.h"
+#include "debug.h"
 
 using namespace KDevelop;
 
@@ -98,7 +98,7 @@ DebugSession::DebugSession()
 // shutdown.
 DebugSession::~DebugSession()
 {
-    kDebug();
+    qCDebug(DEBUGGERGDB);
 
     if (!stateIsOn(s_dbgNotStarted)) {
         stopDebugger();
@@ -116,7 +116,7 @@ KDevelop::IDebugSession::DebuggerState DebugSession::state() const {
 #define ENUM_NAME(o,e,v) (o::staticMetaObject.enumerator(o::staticMetaObject.indexOfEnumerator(#e)).valueToKey((v)))
 void DebugSession::setSessionState(DebuggerState state)
 {
-    kDebug() << "STATE CHANGED" << this << state << ENUM_NAME(IDebugSession, DebuggerState, state);
+    qCDebug(DEBUGGERGDB) << "STATE CHANGED" << this << state << ENUM_NAME(IDebugSession, DebuggerState, state);
     if (state != m_sessionState) {
         m_sessionState = state;
         emit stateChanged(state);
@@ -222,7 +222,7 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
     }
 
     // And now? :-)
-    kDebug(9012) << "state: " << newState << message;
+    qCDebug(DEBUGGERGDB) << "state: " << newState << message;
 
     if (!message.isEmpty())
         emit showMessage(message, 3000);
@@ -254,7 +254,7 @@ void DebugSession::examineCoreFile(const QUrl& debugee, const QUrl& coreFile)
 
 void DebugSession::attachToProcess(int pid)
 {
-    kDebug() << pid;
+    qCDebug(DEBUGGERGDB) << pid;
 
     setStateOff(s_appNotStarted|s_programExited);
     setStateOn(s_attached);
@@ -316,18 +316,18 @@ void DebugSession::stopDebugger()
 {
     commandQueue_->clear();
 
-    kDebug(9012) << "DebugSession::slotStopDebugger() called";
+    qCDebug(DEBUGGERGDB) << "DebugSession::slotStopDebugger() called";
     if (stateIsOn(s_shuttingDown) || !m_gdb)
         return;
 
     setStateOn(s_shuttingDown);
-    kDebug(9012) << "DebugSession::slotStopDebugger() executing";
+    qCDebug(DEBUGGERGDB) << "DebugSession::slotStopDebugger() executing";
 
     // Get gdb's attention if it's busy. We need gdb to be at the
     // command line so we can stop it.
     if (!m_gdb.data()->isReady())
     {
-        kDebug(9012) << "gdb busy on shutdown - interruping";
+        qCDebug(DEBUGGERGDB) << "gdb busy on shutdown - interruping";
         m_gdb.data()->interrupt();
     }
 
@@ -558,7 +558,7 @@ void DebugSession::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
 
     commandQueue_->enqueue(cmd, queue_where);
 
-    kDebug(9012) << "QUEUE: " << cmd->initialString() << (stateReloadInProgress_ ? "(state reloading)" : "");
+    qCDebug(DEBUGGERGDB) << "QUEUE: " << cmd->initialString() << (stateReloadInProgress_ ? "(state reloading)" : "");
 
     bool varCommandWithContext= (cmd->type() >= GDBMI::VarAssign
                                  && cmd->type() <= GDBMI::VarUpdate
@@ -570,10 +570,10 @@ void DebugSession::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
     if (varCommandWithContext || stackCommandWithContext)
     {
         if (cmd->thread() == -1)
-            kDebug(9012) << "\t--thread will be added on execution";
+            qCDebug(DEBUGGERGDB) << "\t--thread will be added on execution";
 
         if (cmd->frame() == -1)
-            kDebug(9012) << "\t--frame will be added on execution";
+            qCDebug(DEBUGGERGDB) << "\t--frame will be added on execution";
     }
 
     setStateOn(s_dbgBusy);
@@ -623,12 +623,12 @@ bool DebugSession::executeCmd()
         // it.
         if (SentinelCommand* sc = dynamic_cast<SentinelCommand*>(currentCmd))
         {
-            kDebug(9012) << "SEND: sentinel command, not sending";
+            qCDebug(DEBUGGERGDB) << "SEND: sentinel command, not sending";
             sc->invokeHandler();
         }
         else
         {
-            kDebug(9012) << "SEND: command " << currentCmd->initialString()
+            qCDebug(DEBUGGERGDB) << "SEND: command " << currentCmd->initialString()
                           << "changed its mind, not sending";
         }
 
@@ -704,10 +704,10 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
         state_reload_needed = false;
         return;
     }
-    
+
     //Indicates if program state should be reloaded immediately.
     bool updateState = false;
-    
+
     if (reason == "signal-received")
     {
         QString name = r["signal-name"].literal();
@@ -732,7 +732,7 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
             setStateOff(s_explicitBreakInto);
             // Will show the source line in the code
             // handling non-special stop kinds, below.
-            
+
             //If program is interrupted by breakpointcontroller reloadProgramState() won't be called, because the last command in queue'll be ExecContinue.
             updateState = true;
         }
@@ -770,7 +770,7 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
 
             updateState = true;
         }
-   
+
         if (updateState) {
             reloadProgramState();
         }
@@ -793,7 +793,7 @@ void DebugSession::reloadProgramState()
 // all other commands are disabled.
 void DebugSession::programNoApp(const QString& msg)
 {
-    kDebug() << msg;
+    qCDebug(DEBUGGERGDB) << msg;
 
     setState(s_appNotStarted|s_programExited|(state_&s_shuttingDown));
 
@@ -859,10 +859,10 @@ void DebugSession::parseStreamRecord(const GDBMI::StreamRecord& s)
 
 bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
 {
-    kDebug(9012) << "Starting debugger controller";
+    qCDebug(DEBUGGERGDB) << "Starting debugger controller";
 
     if(m_gdb) {
-        kWarning() << "m_gdb object still existed";
+        qWarning() << "m_gdb object still existed";
         delete m_gdb.data();
         m_gdb.clear();
     }
@@ -932,7 +932,7 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     queueCmd(new GDBCommand(GDBMI::SignalHandle, "SIG41 pass nostop noprint"));
     queueCmd(new GDBCommand(GDBMI::SignalHandle, "SIG42 pass nostop noprint"));
     queueCmd(new GDBCommand(GDBMI::SignalHandle, "SIG43 pass nostop noprint"));
-    
+
     queueCmd(new GDBCommand(GDBMI::EnablePrettyPrinting));
 
     queueCmd(new GDBCommand(GDBMI::GdbSet, "charset UTF-8"));
@@ -958,7 +958,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
             return false;
 
     if (stateIsOn(s_shuttingDown)) {
-        kDebug() << "Tried to run when debugger shutting down";
+        qCDebug(DEBUGGERGDB) << "Tried to run when debugger shutting down";
         return false;
     }
 
@@ -970,7 +970,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
     QString envgrp = iface->environmentGroup( cfg );
     if( envgrp.isEmpty() )
     {
-        kWarning() << i18n("No environment group specified, looks like a broken "
+        qWarning() << i18n("No environment group specified, looks like a broken "
             "configuration, please check run configuration '%1'. "
             "Using default environment group.", cfg->name() );
         envgrp = l.defaultGroup();
@@ -998,7 +998,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
     QUrl config_configGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbConfigEntry, QUrl() );
     QUrl config_runShellScript_ = grp.readEntry( GDBDebugger::remoteGdbShellEntry, QUrl() );
     QUrl config_runGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbRunEntry, QUrl() );
-    
+
     Q_ASSERT(iface);
     bool config_useExternalTerminal = iface->useTerminal( cfg );
     QString config_externalTerminal = iface->terminal( cfg );
@@ -1036,7 +1036,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
     {
         dir = QUrl::fromLocalFile(QFileInfo(executable).absolutePath());
     }
-    
+
     queueCmd(new GDBCommand(GDBMI::EnvironmentCd, KShell::quoteArg(dir.toLocalFile())));
 
     // Set the run arguments
@@ -1076,7 +1076,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
         arguments << "-c" << KShell::quoteArg(config_runShellScript_.toLocalFile()) +
             ' ' + KShell::quoteArg(executable) + QString::fromLatin1( options );
 
-        kDebug() << "starting sh" << arguments;
+        qCDebug(DEBUGGERGDB) << "starting sh" << arguments;
         proc->start("sh", arguments);
         //PORTING TODO QProcess::DontCare);
     }
@@ -1089,7 +1089,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
         // Future: the shell script should be able to pass info (like pid)
         // to the gdb script...
 
-        kDebug(9012) << "Running gdb script " << KShell::quoteArg(config_runGdbScript_.toLocalFile());
+        qCDebug(DEBUGGERGDB) << "Running gdb script " << KShell::quoteArg(config_runGdbScript_.toLocalFile());
         queueCmd(new GDBCommand(GDBMI::NonMI, "source " + KShell::quoteArg(config_runGdbScript_.toLocalFile())));
 
         // Note: script could contain "run" or "continue"
@@ -1132,7 +1132,7 @@ void DebugSession::slotKillGdb()
 {
     if (!stateIsOn(s_programExited) && stateIsOn(s_shuttingDown))
     {
-        kDebug(9012) << "gdb not shutdown - killing";
+        qCDebug(DEBUGGERGDB) << "gdb not shutdown - killing";
         m_gdb.data()->kill();
 
         setState(s_dbgNotStarted | s_appNotStarted);
@@ -1253,7 +1253,7 @@ void DebugSession::gdbReady()
 
         if (state_reload_needed)
         {
-            kDebug(9012) << "Finishing program stop\n";
+            qCDebug(DEBUGGERGDB) << "Finishing program stop\n";
             // Set to false right now, so that if 'actOnProgramPauseMI_part2'
             // sends some commands, we won't call it again when handling replies
             // from that commands.
@@ -1261,7 +1261,7 @@ void DebugSession::gdbReady()
             reloadProgramState();
         }
 
-        kDebug(9012) << "No more commands\n";
+        qCDebug(DEBUGGERGDB) << "No more commands\n";
         setStateOff(s_dbgBusy);
         raiseEvent(debugger_ready);
     }
@@ -1269,7 +1269,7 @@ void DebugSession::gdbReady()
 
 void DebugSession::gdbExited()
 {
-    kDebug();
+    qCDebug(DEBUGGERGDB);
     /* Technically speaking, GDB is likely not to kill the application, and
        we should have some backup mechanism to make sure the application is
        killed by KDevelop.  But even if application stays around, we no longer
@@ -1292,7 +1292,7 @@ void DebugSession::raiseEvent(event_t e)
     if (e == program_state_changed)
     {
         stateReloadInProgress_ = true;
-        kDebug(9012) << "State reload in progress\n";
+        qCDebug(DEBUGGERGDB) << "State reload in progress\n";
     }
 
     IDebugSession::raiseEvent(e);
@@ -1419,7 +1419,7 @@ void DebugSession::debugStateChange(DBGStateFlags oldState, DBGStateFlags newSta
 
             }
         }
-        kDebug(9012) << out;
+        qCDebug(DEBUGGERGDB) << out;
     }
 }
 
@@ -1431,7 +1431,7 @@ void DebugSession::programRunning()
 
 void DebugSession::handleVersion(const QStringList& s)
 {
-    kDebug() << s.first();
+    qCDebug(DEBUGGERGDB) << s.first();
     // minimal version is 7.0,0
     QRegExp rx("([7-9]+)\\.([0-9]+)(\\.([0-9]+))?");
     int idx = rx.indexIn(s.first());
@@ -1482,11 +1482,11 @@ void DebugSession::lastInferiorHandler(const QStringList& l)
 
     for (int i = 2 ; i < l.size(); i++) {
         if (!rx.exactMatch(l[i])) {
-            kDebug() << "Still running: " << l[i];
+            qCDebug(DEBUGGERGDB) << "Still running: " << l[i];
             return;
         }
     }
-    kDebug() << "Exiting";
+    qCDebug(DEBUGGERGDB) << "Exiting";
     programNoApp(m_inferiorExitCode);
     state_reload_needed = false;
 }

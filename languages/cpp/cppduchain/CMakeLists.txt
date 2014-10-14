@@ -1,9 +1,5 @@
 ########### next target ###############
 
-#First remove the cpp language part default area, then set our own
-remove_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 )
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9041 )
-
 add_subdirectory(tests)
 
 include_directories(
@@ -14,7 +10,7 @@ include_directories(
 ########### next target ###############
 
 set(kdevcppduchain_LIB_SRCS
-    adlhelper.cpp 
+    adlhelper.cpp
     sourcemanipulation.cpp
     missingdeclarationtype.cpp
     missingdeclarationproblem.cpp
@@ -47,12 +43,12 @@ set(kdevcppduchain_LIB_SRCS
     type_visitor.cpp
     builtinoperators.cpp
     expressionevaluationresult.cpp
-    usedecoratorvisitor.cpp 
+    usedecoratorvisitor.cpp
     navigation/navigationwidget.cpp
     navigation/declarationnavigationcontext.cpp
     navigation/includenavigationcontext.cpp
     navigation/macronavigationcontext.cpp
-    
+
     controlflowgraphbuilder.cpp
 )
 
@@ -62,11 +58,11 @@ set(kdevcppduchain_LIB_SRCS
 
 add_library(kdevcppduchain SHARED ${kdevcppduchain_LIB_SRCS})
 target_link_libraries(kdevcppduchain LINK_PRIVATE
-		KDev::Language 
-		KDev::Interfaces 
-		KDev::Util 
+		KDev::Language
+		KDev::Interfaces
+		KDev::Util
 		kdevcppparser
-		KF5::TextEditor 
+		KF5::TextEditor
 		kdevcpprpp)
 generate_export_header(kdevcppduchain EXPORT_FILE_NAME cppduchainexport.h)
 install(TARGETS kdevcppduchain ${INSTALL_TARGETS_DEFAULT_ARGS})

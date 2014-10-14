@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
@@ -37,8 +37,10 @@
 #include "cppducontext.h"
 #include <language/duchain/use.h>
 #include "templateparameterdeclaration.h"
+#include "debug.h"
 #include <language/duchain/classdeclaration.h>
 
+Q_LOGGING_CATEGORY(CPPDUCHAIN, "kdevelop.languages.cpp.duchain")
 
 using namespace Cpp;
 using namespace KDevelop;
@@ -51,17 +53,17 @@ KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDev
   QList<Declaration*> ret;
 
   if(depth > maxParentDepth) {
-    kDebug() << "maximum parent depth reached on" << context->scopeIdentifier(true);
+    qCDebug(CPPDUCHAIN) << "maximum parent depth reached on" << context->scopeIdentifier(true);
     return ret;
   }
-  
+
   ret += context->findLocalDeclarations( identifier, CursorInRevision::invalid(), topContext );
   if( !ret.isEmpty() )
     return ret;
 
   if( context->type() != DUContext::Class )
     return ret;
-  
+
   QVector<DUContext::Import> bases = context->importedParentContexts();
   for( QVector<DUContext::Import>::const_iterator it = bases.constBegin(); it != bases.constEnd(); ++it ) {
     if( it->context(topContext) )
@@ -84,11 +86,11 @@ uint buildIdentifierForType(AbstractType::Ptr type, IndexedTypeIdentifier& id, u
     id.setIsReference(true);
     if(refType->modifiers() & AbstractType::ConstModifier)
       id.setIsConstant(true);
-    
+
     return buildIdentifierForType(refType->baseType(), id, pointerLevel, top);
   }
   TypePtr< PointerType > pointerType = type.cast<PointerType>();
-  
+
   if(pointerType) {
     ++pointerLevel;
     uint maxPointerLevel = buildIdentifierForType(pointerType->baseType(), id, pointerLevel, top);
@@ -96,10 +98,10 @@ uint buildIdentifierForType(AbstractType::Ptr type, IndexedTypeIdentifier& id, u
       id.setIsConstPointer(maxPointerLevel - pointerLevel, true);
     if(static_cast<uint>(id.pointerDepth()) < pointerLevel)
       id.setPointerDepth(pointerLevel);
-    
+
     return maxPointerLevel;
   }
-  
+
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
   if(idType) {
     Declaration* decl = idType->declaration(top);
@@ -175,7 +177,7 @@ QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair
   }
 
   QList< QPair<Declaration*, int> > ret;
-    
+
   ///Only keep the declarations of each name on the lowest inheritance-level, or that are not forward-declarations
   foreach( const Pair& decl, declarations ) {
     if( depthHash[nearestDeclaration[decl.first->identifier()]] == decl.second ) {
@@ -217,7 +219,7 @@ QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* con
 KDevelop::QualifiedIdentifier namespaceScopeComponentFromContext(QualifiedIdentifier prefix, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source)
 {
   const DUContext* classContext = 0;
-  
+
   if(context->type() == DUContext::Helper) {
     //This is a prefix-context for an external class-definition like "class A::B {..};"
     if(context->importedParentContexts().size())
@@ -234,23 +236,23 @@ KDevelop::QualifiedIdentifier namespaceScopeComponentFromContext(QualifiedIdenti
     if(!prefix.isEmpty())
       prefix.pop();
   }
-  
+
   if(classContext) {
     while(!prefix.isEmpty() && classContext && classContext->type() == DUContext::Class) {
       Q_ASSERT(!prefix.isEmpty());
       prefix.pop();
-      
+
       //This way we can correctly resolve the namespace-component for multiple externally defined classes,
       //see testDeclareStructInNamespace() in test_duchain.cpp
       if(classContext->parentContext() && classContext->parentContext()->type() == DUContext::Helper && !context->importedParentContexts().isEmpty()) {
         classContext = context->importedParentContexts()[0].context(source);
         continue;
       }
-      
+
       break;
     }
   }
-  
+
   return prefix;
 }
 
@@ -258,19 +260,19 @@ Declaration* localClassFromCodeContext(const DUContext* context)
 {
   if(!context)
     return 0;
-  
+
   while( context->parentContext() && context->type() == DUContext::Other && context->parentContext()->type() == DUContext::Other )
   { //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.
     context = context->parentContext();
   }
-  
+
   if(context->type() == DUContext::Class)
     return context->owner();
-  
+
   //For function declarations, this is the solution.
   if(context->parentContext() && context->parentContext()->type() == DUContext::Class)
     return context->parentContext()->owner();
-  
+
   if(context->type() == DUContext::Other) {
     //Jump from code-context to function-context
     foreach(const DUContext::Import& import, context->importedParentContexts()) {
@@ -282,7 +284,7 @@ Declaration* localClassFromCodeContext(const DUContext* context)
       }
     }
   }
-  
+
   //For external function definitions, find the class-context by following the import-structure
   if(context->type() == DUContext::Function) {
     foreach(const DUContext::Import& import, context->importedParentContexts()) {
@@ -290,7 +292,7 @@ Declaration* localClassFromCodeContext(const DUContext* context)
       if(ctx && ctx->type() == DUContext::Class && ctx->owner())
         return ctx->owner();
     }
-    
+
     if(!context->importers().isEmpty())
       context = context->importers().first();
   }
@@ -362,25 +364,25 @@ KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* fromContext, ClassMemberDecla
   }
 
   ClassMemberDeclaration::AccessPolicy effectiveAccessPolicy = declaration->accessPolicy();
-  
+
   if(effectiveAccessPolicy == ClassMemberDeclaration::Public)
     return true;
-  
+
   if(!fromContext)
     return false;
-  
+
   if(fromContext->type() == DUContext::Other || fromContext->type() == DUContext::Function) {
     Declaration* classDecl = localClassFromCodeContext(fromContext);
     if(!classDecl || !classDecl->internalContext()) {
       return false;
     }
-    
+
     return isAccessible(classDecl->internalContext(), declaration, source, declarationContext);
   }
-  
+
   if(fromContext->type() != DUContext::Class)
     return false;
-  
+
   if(effectiveAccessPolicy == ClassMemberDeclaration::Protected) {
     if(fromContext->imports( declaration->context() )) {
       return true;
@@ -389,15 +391,15 @@ KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* fromContext, ClassMemberDecla
     if(fromContext == declaration->context())
       return true;
   }
-  
+
   if(isFriend(declaration->context()->owner(), fromContext->owner()))
     return true;
-  
+
   DUContext* parent = logicalParentContext(fromContext, fromContext->topContext());
-  
+
   if(parent && parent->type() == DUContext::Class)
     return isAccessible(parent, declaration, source, declarationContext);
-  
+
   return false;
 }
 
@@ -405,10 +407,10 @@ KDevelop::DUContext* logicalParentContext(KDevelop::DUContext* context, KDevelop
 {
   if(!context->parentContext())
     return 0;
-  
+
   if(context->parentContext()->type() == DUContext::Helper && !context->parentContext()->importedParentContexts().isEmpty())
     return context->parentContext()->importedParentContexts()[0].context(source);
-   
+
   return context->parentContext();
 }
 
@@ -442,15 +444,15 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line, Q
   }
 
   QString ret = QString::fromUtf8(stringFromContents(pp.processFile("anonymous", text.toUtf8())));
-  
+
   return ret;
 }
 
 QPair<KDevelop::Identifier, QByteArray> qtFunctionSignature(QByteArray fullFunction) {
-  
+
   if(fullFunction.startsWith('"') && fullFunction.endsWith('"'))
     fullFunction = fullFunction.mid(1, fullFunction.length()-2);
-  
+
   int parenBegin = fullFunction.indexOf('(');
   int parenEnd = fullFunction.lastIndexOf(')');
   Identifier id;
@@ -460,7 +462,7 @@ QPair<KDevelop::Identifier, QByteArray> qtFunctionSignature(QByteArray fullFunct
     signature = QMetaObject::normalizedSignature(fullFunction.mid(parenBegin, parenEnd-parenBegin+1).data());
     signature = signature.mid(1, signature.length()-2);
   }
-  
+
   return qMakePair(id, signature);
 }
 
@@ -476,7 +478,7 @@ KDevelop::Identifier exchangeQualifiedIdentifier(KDevelop::Identifier id, KDevel
 KDevelop::IndexedTypeIdentifier exchangeQualifiedIdentifier(KDevelop::IndexedTypeIdentifier id, KDevelop::QualifiedIdentifier replace, KDevelop::QualifiedIdentifier replaceWith) {
   KDevelop::IndexedTypeIdentifier ret(id);
   QualifiedIdentifier oldId(id.identifier().identifier());
-  
+
   QualifiedIdentifier qid;
 
   if(oldId == replace) {
@@ -510,7 +512,7 @@ IndexedTypeIdentifier removeTemplateParameters(IndexedTypeIdentifier identifier,
 
 Identifier removeTemplateParameters(Identifier id, int behindPosition) {
   Identifier ret(id);
-  
+
   ret.clearTemplateIdentifiers();
   for(unsigned int a = 0; a < id.templateIdentifiersCount(); ++a) {
     IndexedTypeIdentifier replacement = removeTemplateParameters(id.templateIdentifier(a), behindPosition);
@@ -526,10 +528,10 @@ Identifier removeTemplateParameters(Identifier id, int behindPosition) {
 
 IndexedTypeIdentifier removeTemplateParameters(IndexedTypeIdentifier identifier, int behindPosition) {
   IndexedTypeIdentifier ret(identifier);
-  
+
   QualifiedIdentifier oldId(identifier.identifier().identifier());
   QualifiedIdentifier qid;
-  
+
   for(int a = 0; a < oldId.count(); ++a)
     qid.push(removeTemplateParameters(oldId.at(a), behindPosition));
 
@@ -553,12 +555,12 @@ KDevelop::IndexedTypeIdentifier stripPrefixIdentifiers(KDevelop::IndexedTypeIden
 
   QualifiedIdentifier oldId(id.identifier().identifier());
   QualifiedIdentifier qid;
-  
+
   int commonPrefix = 0;
   for(;commonPrefix < oldId.count()-1 && commonPrefix < strip.count(); ++commonPrefix)
     if(strip.at(commonPrefix).toString() != oldId.at(commonPrefix).toString())
       break;
-  
+
   for(int a = commonPrefix; a < oldId.count(); ++a)
     qid.push( stripPrefixIdentifiers(oldId.at(a), strip) );
 
@@ -573,7 +575,7 @@ int reservedIdentifierCount(QString name) {
   foreach(const QString& s, l)
     if(s.startsWith('_'))
       ++ret;
-    
+
   return ret;
 }
 
@@ -582,9 +584,9 @@ AbstractType::Ptr shortenTypeForViewing(AbstractType::Ptr type) {
     virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
       if(!type)
         return type;
-      
+
       KDevelop::AbstractType::Ptr newType( type->clone() );
-      
+
       KDevelop::TypeAliasType::Ptr alias = type.cast<KDevelop::TypeAliasType>();
       if(alias) {
         //If the aliased type has less involved template arguments, prefer it
@@ -594,13 +596,13 @@ AbstractType::Ptr shortenTypeForViewing(AbstractType::Ptr type) {
           return shortenedTarget;
         }
       }
-      
+
       newType->exchangeTypes(this);
-      
+
       return newType;
     }
   };
-  
+
   ShortenAliasExchanger exchanger;
   type = exchanger.exchange(type);
   return type;
@@ -612,27 +614,27 @@ AbstractType::Ptr shortenTypeForViewing(AbstractType::Ptr type) {
 AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
   if(!type)
     return AbstractType::Ptr();
-  
+
   struct ShortenTemplateDefaultParameter : public KDevelop::TypeExchanger {
     DUContext* ctx;
     ShortenTemplateDefaultParameter(DUContext* _ctx) : ctx(_ctx) {
       Q_ASSERT(ctx);
     }
-    
+
     virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
       if(!type)
         return type;
-      
+
       KDevelop::AbstractType::Ptr newType( type->clone() );
-      
+
       if(const KDevelop::IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(type.data())) {
         KDevelop::Declaration* decl = idType->declaration(ctx->topContext());
         if(!decl)
           return type;
-        
+
         QualifiedIdentifier newTypeName;
-        
-        if(TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(decl)) 
+
+        if(TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(decl))
         {
           if(decl->context()->type() == DUContext::Class && decl->context()->owner()) {
           //Strip template default-parameters from the parent class
@@ -643,30 +645,30 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
           }
           if(newTypeName.isEmpty())
             newTypeName = decl->context()->scopeIdentifier(true);
-          
+
           Identifier currentId;
           if(!idType->qualifiedIdentifier().isEmpty())
             currentId = idType->qualifiedIdentifier().last();
           currentId.clearTemplateIdentifiers();
-          
+
           KDevelop::InstantiationInformation instantiationInfo = tempDecl->instantiatedWith().information();
           KDevelop::InstantiationInformation newInformation(instantiationInfo);
           newInformation.templateParametersList().clear();
-          
+
           for(uint neededParameters = 0; neededParameters < instantiationInfo.templateParametersSize(); ++neededParameters) {
             newInformation.templateParametersList().append(instantiationInfo.templateParameters()[neededParameters]);
             AbstractType::Ptr niceParam = stripType(instantiationInfo.templateParameters()[neededParameters].abstractType(), ctx);
             if(niceParam) {
               currentId.appendTemplateIdentifier(IndexedTypeIdentifier(niceParam->toString(), true));
-//               kDebug() << "testing param" << niceParam->toString();
+//               qCDebug(CPPDUCHAIN) << "testing param" << niceParam->toString();
             }
-            
+
             if(tempDecl->instantiate(newInformation, ctx->topContext()) == decl) {
-//               kDebug() << "got full instantiation";
+//               qCDebug(CPPDUCHAIN) << "got full instantiation";
               break;
             }
           }
-          
+
           newTypeName.push(currentId);
         }else{
           newTypeName = decl->qualifiedIdentifier();
@@ -684,19 +686,19 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
         }
         if(newTypeName == decl->qualifiedIdentifier())
           return type;
-        
+
         DelayedType::Ptr ret(new KDevelop::DelayedType);
         IndexedTypeIdentifier ti(newTypeName);
         ti.setIsConstant(type->modifiers() & AbstractType::ConstModifier);
         ret->setIdentifier(ti);
         return ret.cast<AbstractType>();
-      }      
+      }
       newType->exchangeTypes(this);
-      
+
       return newType;
     }
   };
-  
+
   ShortenTemplateDefaultParameter exchanger(ctx);
   type = exchanger.exchange(type);
   return type;
@@ -749,9 +751,9 @@ IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext*
     type = stripType(type, ctx);
   if(!type)
     return IndexedTypeIdentifier();
-  
+
   IndexedTypeIdentifier identifier = identifierForType(type, ctx ? ctx->topContext() : 0);
-  
+
   if(type.cast<DelayedType>())
     identifier = type.cast<DelayedType>()->identifier();
   identifier = stripPrefixIdentifiers(identifier, stripPrefix);
@@ -760,12 +762,12 @@ IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext*
     identifier.setIsReference(true);
   if(isRValue)
     identifier.setIsRValue(true);
-  
+
 //   if(identifier.toString().length() > desiredLength)
 //     identifier = Cpp::unTypedefType(decl, identifier);
-  
+
   int removeTemplateParametersFrom = 10;
-  
+
   while(identifier.toString().length() > desiredLength * 3 && removeTemplateParametersFrom >= 0) {
     --removeTemplateParametersFrom;
     identifier = removeTemplateParameters(identifier, removeTemplateParametersFrom);
@@ -776,31 +778,31 @@ IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext*
 bool isFriend(KDevelop::Declaration* _class, KDevelop::Declaration* _friend) {
   if(!_class || !_friend)
     return false;
-  
+
   DUContext* classInternal = _class->internalContext();
-  
+
   if(!classInternal)
     return false;
-  
+
   static IndexedIdentifier friendIdentifier(Identifier("friend"));
-  
+
   ///@todo Make this more efficient
   QList<Declaration*> decls = classInternal->findLocalDeclarations(friendIdentifier.identifier());
-  
+
   foreach(Declaration* decl, decls)
     if(decl->indexedType() == _friend->indexedType())
       return true;
-  
+
   return false;
 }
 
 DUContext* getTemplateContext(DUContext* internal, const TopDUContext* source) {
   if(internal->type() == DUContext::Template)
     return internal;
-  
+
   if(!source)
     source = internal->topContext();
-  
+
   foreach( const DUContext::Import &ctx, internal->importedParentContexts() ) {
     DUContext* c = ctx.context(source);
     if( c ) {
@@ -819,7 +821,7 @@ DUContext* getTemplateContext(Declaration* decl, const TopDUContext* source) {
   DUContext* internal = decl->internalContext();
   if( !internal )
     return 0;
-  
+
   return getTemplateContext(internal, source);
 }
 
@@ -831,12 +833,12 @@ QualifiedIdentifier stripPrefixes(DUContext* ctx, QualifiedIdentifier id)
   QList<QualifiedIdentifier> imports = ctx->fullyApplyAliases(QualifiedIdentifier(), ctx->topContext());
   if(imports.contains(id))
     return QualifiedIdentifier(); ///The id is a namespace that is imported into the current context
-  
+
   QList< Declaration* > basicDecls = ctx->findDeclarations(id, CursorInRevision::invalid(), AbstractType::Ptr(), 0, (DUContext::SearchFlags)(DUContext::NoSelfLookUp | DUContext::NoFiltering));
-  
+
   if(basicDecls.isEmpty())
     return id;
-  
+
   QualifiedIdentifier newId = id.mid(1);
   while(!newId.isEmpty())
   {

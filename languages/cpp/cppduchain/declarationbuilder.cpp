@@ -58,6 +58,7 @@
 #include "cppdebughelper.h"
 #include "name_visitor.h"
 #include "usebuilder.h"
+#include "debug.h"
 
 #include "overloadresolutionhelper.h"
 #include "expressionparser.h"
@@ -101,13 +102,13 @@ ReferencedTopDUContext DeclarationBuilder::buildDeclarations(Cpp::EnvironmentFil
 }
 
 void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
-  
+
   //Backup and zero the parameter declaration, because we will handle it here directly, and don't want a normal one to be created
-  
+
   m_ignoreDeclarators = true;
   DeclarationBuilderBase::visitTemplateParameter(ast);
   m_ignoreDeclarators = false;
-  
+
   if( ast->type_parameter || ast->parameter_declaration ) {
     ///@todo deal with all the other stuff the AST may contain
     TemplateParameterDeclaration* decl;
@@ -121,7 +122,7 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
     if( type.cast<CppTemplateParameterType>() ) {
       type.cast<CppTemplateParameterType>()->setDeclaration(decl);
     } else {
-      kDebug(9007) << "bad last type";
+      qCDebug(CPPDUCHAIN) << "bad last type";
     }
     decl->setAbstractType(type);
 
@@ -170,17 +171,17 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
   parseComments(node->comments);
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
-  
+
   //Used to map to the top level function node once the Declaration is built
   if(m_mapAst)
     m_mappedNodes.push(node);
-  
+
   m_functionDefinedStack.push(node->start_token);
 
   DeclarationBuilderBase::visitFunctionDeclaration(node);
 
   m_functionDefinedStack.pop();
-  
+
   if(m_mapAst)
     m_mappedNodes.pop();
 
@@ -213,33 +214,33 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
     //Decide whether the parameter-declaration clause is valid
     DUChainWriteLocker lock(DUChain::lock());
     CursorInRevision pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
-    
+
     QualifiedIdentifier id;
-    identifierForNode(node->declarator->id, id);    
+    identifierForNode(node->declarator->id, id);
     DUContext* previous = currentContext();
 
     DUContext* previousLast = lastContext();
     QVector<KDevelop::DUContext::Import> importedParentContexts = m_importedParentContexts;
-    
+
     openPrefixContext(node, id, pos); //We create a temporary prefix-context to search from within the right scope
-    
+
     DUContext* tempContext = currentContext();
     if (currentContext()->type() != DUContext::Class)
       parameter_is_initializer = !checkParameterDeclarationClause(node->declarator->parameter_declaration_clause);
     closePrefixContext(id);
 
     if(tempContext != previous) {
-      
+
       //We remove all of its traces from the AST using ClearDUContextVisitor.
       ClearDUContextVisitor clear;
       clear.visit(node);
 
       ///@todo We don't delete the tempContext, as that may cause crashes. Problem: This leaves garbage in the duchain
       ///@todo Solve the redundancy issue once and for all, properly, using a SimpleDeclarationOrFunctionDeclarationAST or similar.
-      
+
       //Since we don't delete the temporary context, at least collapse its range.
       tempContext->setRange(RangeInRevision(tempContext->range().start, tempContext->range().end));
-      
+
       setLastContext(previousLast);
       m_importedParentContexts = importedParentContexts;
     }
@@ -343,13 +344,13 @@ void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 
   if(m_mapAst)
     m_mappedNodes.push(node);
-  
+
   m_functionDefinedStack.push(0);
 
   DeclarationBuilderBase::visitSimpleDeclaration(node);
 
   m_functionDefinedStack.pop();
-  
+
   if(m_mapAst)
     m_mappedNodes.pop();
 
@@ -413,14 +414,14 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
   m_collectQtFunctionSignature = !m_accessPolicyStack.isEmpty() && ((m_accessPolicyStack.top() & FunctionIsSlot) || (m_accessPolicyStack.top() & FunctionIsSignal));
   m_qtFunctionSignature = QByteArray();
-  
+
   // pretty ugly but seems to work for now...
   bool isFuncPtr = node->parameter_declaration_clause && !node->id && node->sub_declarator && node->sub_declarator->ptr_ops;
   if (node->parameter_declaration_clause && !isFuncPtr) {
 
     if(m_collectQtFunctionSignature) //We need to do this just to collect the signature
       checkParameterDeclarationClause(node->parameter_declaration_clause);
-    
+
     Declaration* decl = openFunctionDeclaration(node->id, node);
     ///Create mappings iff the AST feature is specified
     if(m_mapAst && !m_mappedNodes.empty())
@@ -621,7 +622,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
     //If this is an operator thing, build the type first. Since it's part of the name, the type-builder doesn't catch it normally
     if(name->unqualified_name && name->unqualified_name->operator_id)
       visit(name->unqualified_name->operator_id);
-    
+
     QualifiedIdentifier id;
     identifierForNode(name, id);
 
@@ -650,7 +651,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
         TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(dec);
         if(templateDecl)
           templateDecl->deleteAllInstantiations(); //Delete all instantiations so we have a fresh start
-        
+
         declaration = dynamic_cast<T*>(dec);
         break;
       }
@@ -661,7 +662,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
       foreach( Declaration* dec, decls ) {
         if( wasEncountered(dec) )
           continue;
-        
+
         if ((localId == dec->identifier() || (localId.isUnique() && dec->identifier().isUnique())) &&
             typeid(*dec) == typeid(T)
           )
@@ -676,9 +677,9 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   }
 #ifdef DEBUG_UPDATE_MATCHING
   if(declaration)
-    kDebug() << "found match for" << localId.toString();
+    qCDebug(CPPDUCHAIN) << "found match for" << localId.toString();
   else
-    kDebug() << "nothing found for" << localId.toString();
+    qCDebug(CPPDUCHAIN) << "nothing found for" << localId.toString();
 #endif
 
   if (!declaration) {
@@ -719,12 +720,12 @@ ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AST* ra
   DUChainWriteLocker lock(DUChain::lock());
   ret->setDeclarationIsDefinition(true);
   ret->clearBaseClasses();
-  
+
   if(m_accessPolicyStack.isEmpty())
     ret->setAccessPolicy(KDevelop::Declaration::Public);
   else
     ret->setAccessPolicy(currentAccessPolicy());
-  
+
   ret->setClassType(classType);
   return ret;
 }
@@ -732,7 +733,7 @@ ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AST* ra
 Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, bool collapseRange)
 {
   Declaration* ret = openNormalDeclaration(name, rangeNode, KDevelop::Identifier(), collapseRange);
-  
+
   ///Create mappings iff the AST feature is specified
   if(m_mapAst && !m_mappedNodes.empty())
     editor()->parseSession()->mapAstDuChain(m_mappedNodes.top(), KDevelop::DeclarationPointer(ret));
@@ -780,7 +781,7 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
       qtFun->setIsSignal(m_accessPolicyStack.top() & FunctionIsSignal);
       QByteArray temp(QMetaObject::normalizedSignature("(" + m_qtFunctionSignature + ")"));
       IndexedString signature(temp.mid(1, temp.length()-2));
-//       kDebug() << "normalized signature:" << signature.str() << "from:" << QString::fromUtf8(m_qtFunctionSignature);
+//       qCDebug(CPPDUCHAIN) << "normalized signature:" << signature.str() << "from:" << QString::fromUtf8(m_qtFunctionSignature);
       qtFun->setNormalizedSignature(signature);
     }
     Q_ASSERT(fun);
@@ -814,7 +815,7 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
 {
   {
     DUChainWriteLocker lock(DUChain::lock());
-      
+
     if (lastType()) {
 
       AbstractType::Ptr type = typeForCurrentDeclaration();
@@ -851,7 +852,7 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
         deleteInstantiationsOf = dynamic_cast<TemplateDeclaration*>(templateDecl->specializedFrom().data());
       else
         deleteInstantiationsOf = templateDecl;
-      
+
       if(deleteInstantiationsOf) {
         CppDUContext<DUContext>* ctx = dynamic_cast<CppDUContext<DUContext>*>(dynamic_cast<Declaration*>(deleteInstantiationsOf)->internalContext());
         deleteInstantiationsOf->deleteAllInstantiations();
@@ -870,7 +871,7 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
       eventuallyAssignInternalContext();
   }
 
-  ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "closing declaration" << currentDeclaration()->toString() << "type" << (currentDeclaration()->abstractType() ? currentDeclaration()->abstractType()->toString() : QString("notype")) << "last:" << (lastType() ? lastType()->toString() : QString("(notype)")); )
+  ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); qCDebug(CPPDUCHAIN) << "closing declaration" << currentDeclaration()->toString() << "type" << (currentDeclaration()->abstractType() ? currentDeclaration()->abstractType()->toString() : QString("notype")) << "last:" << (lastType() ? lastType()->toString() : QString("(notype)")); )
 
   m_lastDeclaration = m_declarationStack.pop();
 }
@@ -913,17 +914,17 @@ struct TemplateTypeExchanger : public KDevelop::TypeExchanger {
       Declaration* decl = templateParamType->declaration(m_top);
       if(decl) {
         DelayedType::Ptr newType(new DelayedType());
-        
+
         IndexedTypeIdentifier id(QualifiedIdentifier(decl->identifier()));
-        
+
         if(type->modifiers() & AbstractType::ConstModifier)
             id.setIsConstant(true);
         if(type->modifiers() & AbstractType::VolatileModifier)
             id.setIsVolatile(true);
-           
+
         newType->setIdentifier(id);
         newType->setKind(KDevelop::DelayedType::Delayed);
-        
+
         return newType.cast<AbstractType>();
       }
     }
@@ -934,7 +935,7 @@ struct TemplateTypeExchanger : public KDevelop::TypeExchanger {
 };
 
 Cpp::InstantiationInformation DeclarationBuilder::createSpecializationInformation(const Cpp::InstantiationInformation& base, UnqualifiedNameAST* name, KDevelop::DUContext* templateContext) {
-    if(name->template_arguments || base.isValid()) 
+    if(name->template_arguments || base.isValid())
     {
       //Append a scope part
       InstantiationInformation newCurrent;
@@ -948,14 +949,14 @@ Cpp::InstantiationInformation DeclarationBuilder::createSpecializationInformatio
         NameASTVisitor visitor(editor()->parseSession(), 0, templateContext, currentContext()->topContext(), templateContext, templateContext->range().end/*, DUContext::NoUndefinedTemplateParams*/);
         ExpressionEvaluationResult res = visitor.processTemplateArgument(current->element);
         AbstractType::Ptr type = res.type.abstractType();
-        
+
         TemplateTypeExchanger exchanger(currentContext()->topContext());
-        
+
         if(type) {
           type = exchanger.exchange(type);
           type->exchangeTypes(&exchanger);
         }
-        
+
         newCurrent.addTemplateParameter(type);
 
         current = current->next;
@@ -1011,12 +1012,12 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
     decl->setAbstractType(enumeratorType.cast<AbstractType>());
   }else if(!lastType().cast<DelayedType>()){ //If it's in a template, it may be DelayedType
     AbstractType::Ptr type = lastType();
-    kWarning() << "not assigned enumerator type:" << typeid(*type.data()).name() << type->toString();
+    qWarning() << "not assigned enumerator type:" << typeid(*type.data()).name() << type->toString();
   }
 }
 
 void DeclarationBuilder::classContextOpened(ClassSpecifierAST* /*node*/, DUContext* context) {
-  
+
   //We need to set this early, so we can do correct search while building
   DUChainWriteLocker lock(DUChain::lock());
   currentDeclaration()->setInternalContext(context);
@@ -1027,7 +1028,7 @@ void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
   RangeInRevision range;
   {
     Identifier id;
-    
+
     if(ast->namespace_name)
     {
       id = Identifier(editor()->tokensToStrings(ast->namespace_name, ast->namespace_name+1));
@@ -1042,14 +1043,14 @@ void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
     DUChainWriteLocker lock(DUChain::lock());
 
     Declaration * declaration = openDeclarationReal<Declaration>(0, 0, id, false, false, &range);
-    
+
     ///Create mappings iff the AST feature is specified
     if(m_mapAst)
       editor()->parseSession()->mapAstDuChain(ast, KDevelop::DeclarationPointer(declaration));
   }
-  
+
   DeclarationBuilderBase::visitNamespace(ast);
-  
+
   QualifiedIdentifier qid;
   {
     DUChainWriteLocker lock(DUChain::lock());
@@ -1111,7 +1112,7 @@ void DeclarationBuilder::copyTemplateDefaultsFromForward(Identifier searchId, co
 void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
   PushValue<bool> setNotInTypedef(m_inTypedef, false);
-  
+
   /**Open helper contexts around the class, so the qualified identifier matches.
    * Example: "class MyClass::RealClass{}"
    * Will create one helper-context named "MyClass" around RealClass
@@ -1120,7 +1121,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   CursorInRevision pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
 
   IndexedInstantiationInformation specializedWith;
-  
+
   QualifiedIdentifier id;
   if( node->name ) {
     identifierForNode(node->name, id);
@@ -1128,7 +1129,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   }
 
   int kind = editor()->parseSession()->token_stream->kind(node->class_key);
-  
+
   ClassDeclaration * declaration = openClassDefinition(node->name, node, node->name == 0, classTypeFromTokenKind(kind));
 
   if (kind == Token_struct || kind == Token_union)
@@ -1147,11 +1148,11 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   }
 
   closeDeclaration();
-  
+
   ///Create mappings iff the AST feature is specified
   if(m_mapAst)
     editor()->parseSession()->mapAstDuChain(node, KDevelop::DeclarationPointer(declaration));
-  
+
   if(node->name)
     closePrefixContext(id);
 
@@ -1194,7 +1195,7 @@ void DeclarationBuilder::visitBaseSpecifier(BaseSpecifierAST *node) {
 
       currentClass->addBaseClass(instance);
     }else{
-      kWarning() << "base-specifier without class declaration";
+      qWarning() << "base-specifier without class declaration";
     }
   }
   addBaseType(instance, node);
@@ -1221,10 +1222,10 @@ QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const Qualifi
       }
     }
   }
-  
+
   if( contexts.isEmpty() ) {
     //Failed to resolve namespace
-    kDebug(9007) << "Failed to resolve namespace \"" << identifier << "\"";
+    qCDebug(CPPDUCHAIN) << "Failed to resolve namespace \"" << identifier << "\"";
     QualifiedIdentifier ret = identifier;
     ret.setExplicitlyGlobal(false);
     Q_ASSERT(ret.count());
@@ -1256,7 +1257,7 @@ void DeclarationBuilder::visitUsing(UsingAST * node)
     if(!declarations.isEmpty()) {
       decl->setAliasedDeclaration(declarations[0]);
     }else{
-      kDebug(9007) << "Aliased declaration not found:" << id.toString();
+      qCDebug(CPPDUCHAIN) << "Aliased declaration not found:" << id.toString();
     }
 
     if(m_accessPolicyStack.isEmpty())
@@ -1300,7 +1301,7 @@ void DeclarationBuilder::visitTypeId(TypeIdAST * typeId)
 {
   //TypeIdAST contains a declarator, but that one does not declare anything
   PushValue<bool> disableDeclarators(m_ignoreDeclarators, true);
-  
+
   DeclarationBuilderBase::visitTypeId(typeId);
 }
 
@@ -1312,7 +1313,7 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
     DUChainReadLocker lock(DUChain::lock());
     if( currentContext()->type() != DUContext::Namespace && currentContext()->type() != DUContext::Global ) {
       ///@todo report problem
-      kDebug(9007) << "Namespace-alias used in non-global scope";
+      qCDebug(CPPDUCHAIN) << "Namespace-alias used in non-global scope";
     }
   }
 
@@ -1332,7 +1333,7 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
 void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
 {
   PushValue<bool> setNotInTypedef(m_inTypedef, false);
-  
+
   int kind = editor()->parseSession()->token_stream->kind(node->type);
 
   if( kind == Token_typename ) {
@@ -1340,7 +1341,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
     DeclarationBuilderBase::visitElaboratedTypeSpecifier(node);
     return;
   }
-  
+
   bool isFriendDeclaration = !m_storageSpecifiers.isEmpty() && (m_storageSpecifiers.top() & ClassMemberDeclaration::FriendSpecifier);
 
   bool openedDeclaration = false;
@@ -1372,14 +1373,14 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
         declarations = currentContext()->findDeclarations( id, pos);
 
         forwardDeclarationGlobal = true;
-        
+
         //If a good declaration has been found, use its type. Else, create a new forward-declaration.
         foreach(Declaration* decl, declarations)
         {
           if((decl->topContext() != currentContext()->topContext() || wasEncountered(decl)) && decl->abstractType())
           {
             setLastType(declarations.first()->abstractType());
-            
+
             if( isFriendDeclaration ) {
               lock.unlock();
               createFriendDeclaration(node);
@@ -1436,7 +1437,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
       static_cast<ForwardDeclaration*>(currentDeclaration())->setResolved(idType->declaration());*/
     closeDeclaration();
   }
-  
+
   if( isFriendDeclaration )
     createFriendDeclaration(node);
 }
@@ -1478,13 +1479,13 @@ void DeclarationBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
       it = it->next;
     } while (it != end);
   }
-  
+
   if(isSignal)
     setAccessPolicy((KDevelop::Declaration::AccessPolicy)(currentAccessPolicy() | FunctionIsSignal));
 
   if(isSlot)
     setAccessPolicy((KDevelop::Declaration::AccessPolicy)(currentAccessPolicy() | FunctionIsSlot));
-  
+
 
   DeclarationBuilderBase::visitAccessSpecifier(node);
 }
@@ -1558,15 +1559,15 @@ void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node
 {
   if(m_mapAst)
     m_mappedNodes.push(node);
-  
+
   // arguments of a function pointer typedef are not typedefs themselves
   PushValue<bool> setNotInTypedef(m_inTypedef, false);
   DeclarationBuilderBase::visitParameterDeclaration(node);
-  
+
   AbstractFunctionDeclaration* function = currentDeclaration<AbstractFunctionDeclaration>();
 
   if( function ) {
-    
+
     if( node->expression ) {
       DUChainWriteLocker lock(DUChain::lock());
       //Fill default-parameters
@@ -1580,7 +1581,7 @@ void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node
       closeDeclaration();
     }
   }
-  
+
   if(m_mapAst)
     m_mappedNodes.pop();
 }
@@ -1637,7 +1638,7 @@ void DeclarationBuilder::applyFunctionSpecifiers()
   AbstractFunctionDeclaration* function = dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration());
   if(!function)
     return;
-  
+
   if (!m_functionSpecifiers.isEmpty() && m_functionSpecifiers.top() != 0) {
 
     function->setFunctionSpecifiers(m_functionSpecifiers.top());
@@ -1676,7 +1677,7 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
       if(ast) {
         if(m_collectQtFunctionSignature) {
           uint endToken = ast->end_token;
-          
+
           if(ast->type_specifier)
             endToken = ast->type_specifier->end_token;
           if(ast->declarator) {
@@ -1685,10 +1686,10 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
             else
               endToken = ast->declarator->end_token;
           }
-          
+
           if(!m_qtFunctionSignature.isEmpty())
             m_qtFunctionSignature += ", ";
-          
+
           m_qtFunctionSignature += editor()->tokensToByteArray(ast->start_token, endToken);
           ret = true;
         }else{
@@ -1736,11 +1737,11 @@ void DeclarationBuilder::eventuallyAssignInternalContext()
     if( dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()) )
       Q_ASSERT( !static_cast<ClassFunctionDeclaration*>(currentDeclaration())->isConstructor() || currentDeclaration()->context()->type() == DUContext::Class );
 
-    if(TypeBuilder::lastContext() && 
-      (TypeBuilder::lastContext()->type() == DUContext::Class || 
-        TypeBuilder::lastContext()->type() == DUContext::Other || 
-        TypeBuilder::lastContext()->type() == DUContext::Function || 
-        TypeBuilder::lastContext()->type() == DUContext::Template || 
+    if(TypeBuilder::lastContext() &&
+      (TypeBuilder::lastContext()->type() == DUContext::Class ||
+        TypeBuilder::lastContext()->type() == DUContext::Other ||
+        TypeBuilder::lastContext()->type() == DUContext::Function ||
+        TypeBuilder::lastContext()->type() == DUContext::Template ||
         TypeBuilder::lastContext()->type() == DUContext::Enum ||
         (TypeBuilder::lastContext()->type() == DUContext::Namespace && currentDeclaration()->kind() == Declaration::Namespace)
         ) )

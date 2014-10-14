@@ -24,7 +24,6 @@
 #include "gdboutputwidget.h"
 
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <KLocalizedString>
 #include <kmenu.h>
@@ -48,6 +47,7 @@
 #include "gdbglobal.h"
 #include "debuggerplugin.h"
 #include "debugsession.h"
+#include "debug.h"
 
 namespace GDBDebugger
 {
@@ -104,7 +104,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     connect( &updateTimer_, SIGNAL(timeout()),
              this,  SLOT(flushPending()));
 
-    connect(KDevelop::ICore::self()->debugController(), 
+    connect(KDevelop::ICore::self()->debugController(),
             SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
             SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
 
@@ -176,7 +176,7 @@ void GDBOutputWidget::slotInternalCommandStdout(const QString& line)
 
 void GDBOutputWidget::slotUserCommandStdout(const QString& line)
 {
-    kDebug(9012) << "User command stdout: " << line;
+    qCDebug(DEBUGGERGDB) << "User command stdout: " << line;
     newStdoutLine(line, false);
 }
 

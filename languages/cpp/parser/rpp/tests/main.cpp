@@ -20,9 +20,8 @@
 
 #include "pp-engine.h"
 
-#include <kdebug.h>
-
 #include <QCoreApplication>
+#include <QDebug>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
@@ -38,7 +37,7 @@ int main (int argc, char **argv)
   QCoreApplication app(argc, argv);
   if (app.arguments().count() < 2)
     {
-      kDebug(9007) << "usage: pp file.cpp";
+      qDebug() << "usage: pp file.cpp";
       return EXIT_FAILURE;
     }
   const QString filename = app.arguments().at(1);
@@ -61,9 +60,9 @@ int main (int argc, char **argv)
     qDebug() << i << ":" << resultLines[i];
 
   preprocess.environment()->locationTable()->dump();
-  
+
   /*foreach (const Preprocessor::MacroItem& macro, p.macros())
-    kDebug(9007) << "Macro '" << macro.name << "' param (" << macro.parameters << ") def (" << macro.definition << ") isFnLike (" << macro.isFunctionLike << ") filename (" << macro.fileName << ")";*/
+    qDebug() << "Macro '" << macro.name << "' param (" << macro.parameters << ") def (" << macro.definition << ") isFnLike (" << macro.isFunctionLike << ") filename (" << macro.fileName << ")";*/
 
   return EXIT_SUCCESS;
 }

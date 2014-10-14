@@ -65,7 +65,6 @@
 // Qt
 #include <QVBoxLayout>
 
-#include <kdebug.h>
 
 namespace KDevelop
 {

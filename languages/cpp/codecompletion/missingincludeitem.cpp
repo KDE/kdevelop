@@ -39,6 +39,7 @@
 #include "../cppduchain/expressionevaluationresult.h"
 
 #include "../cpputils.h"
+#include "../debug.h"
 
 #include "model.h"
 #include "helpers.h"
@@ -148,7 +149,7 @@ QList<KDevelop::CompletionTreeItemPointer> itemsForFile(const QString& displayTe
   //We have found a potential declaration. Now find the shortest include path.
   QString shortestDirective;
   bool isRelativeToCurrentDir = false;
-  
+
   if(isSource(file))
     return ret;
 
@@ -158,10 +159,10 @@ QList<KDevelop::CompletionTreeItemPointer> itemsForFile(const QString& displayTe
     QString relative = includePath.relativePath( canonicalFile );
     if(relative.startsWith("./"))
       relative = relative.mid(2);
-    
+
     if(shortestDirective.isEmpty() || (relative.length() < shortestDirective.length() && (allowDotDot || !relative.startsWith(".."))) || (shortestDirective.startsWith("..") && !relative.startsWith(".."))) {
       shortestDirective = relative;
-      
+
       isRelativeToCurrentDir = includePath == currentPath;
     }
   }
@@ -170,10 +171,10 @@ QList<KDevelop::CompletionTreeItemPointer> itemsForFile(const QString& displayTe
       shortestDirective = "\"" + shortestDirective + "\"";
     else
       shortestDirective = "<" + shortestDirective + ">";
-    
+
     if(!directives.contains(shortestDirective))
       ret << KDevelop::CompletionTreeItemPointer(new MissingIncludeCompletionItem(shortestDirective, file, displayTextPrefix, decl, (int)argumentHintDepth));
-    
+
     directives.insert(shortestDirective);
   }
   return ret;
@@ -193,7 +194,7 @@ QStringList candidateIncludeFiles(Declaration* decl) {
   QStringList ret;
 
   bool inBlacklistDir = isBlacklistedInclude(decl->url().toUrl());
-  
+
   foreach(KDevelop::ParsingEnvironmentFilePointer ptr, decl->topContext()->parsingEnvironmentFile()->importers()) {
     if(ptr->imports().count() == 1 || inBlacklistDir) {
       if(isBlacklistedInclude(ptr->url().toUrl()))
@@ -203,15 +204,15 @@ QStringList candidateIncludeFiles(Declaration* decl) {
       //Forwarders must be completely empty
       if(ptr->topContext()->localDeclarations().count())
         continue;
-      
+
       QString file(ptr->url().toUrl().toLocalFile());
       ret << file;
     }
   }
-  
+
   if(!inBlacklistDir)
     ret << decl->url().toUrl().toLocalFile();
-  
+
   return ret;
 }
 
@@ -286,14 +287,14 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
     if(aliasDecl) {
       prefixes.insert(aliasDecl->importIdentifier());
     }else{
-      kDebug() << "Import is not based on NamespaceAliasDeclaration";
+      qCDebug(CPP) << "Import is not based on NamespaceAliasDeclaration";
     }
   }
-  
+
   QualifiedIdentifier namespaceScope = context->scopeIdentifier(false);
   for(int a = 1; a <= namespaceScope.count(); ++a)
     prefixes << namespaceScope.left(a); //Also search within enclosing namespaces
-  
+
   QList<KDevelop::CompletionTreeItemPointer> ret;
   QList<KDevelop::CompletionTreeItemPointer> blacklistRet;
 
@@ -309,12 +310,12 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
     }
   }else{
     //expression probably contains a part that needs to be resolved
-    
+
     if(expression.contains(".") || expression.contains("->")) {
       ///@todo Check if parts of the expression are unresolved, like in "unresolvedClass.callFunction"
-      kDebug() << "doing nothing with expression" << expression;
+      qCDebug(CPP) << "doing nothing with expression" << expression;
     }else{
-      kDebug() << "looking up" << expression << "as qualified identifier";
+      qCDebug(CPP) << "looking up" << expression << "as qualified identifier";
       identifier = removeTemplateParameters(QualifiedIdentifier(expression));
       QList<Declaration*> visibleDecls = context->findDeclarations(identifier);
       foreach(Declaration* decl, visibleDecls) {
@@ -323,30 +324,30 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
       }
     }
   }
-  
+
   if(identifier.isEmpty()) {
     return ret;
   }
-  
+
   QUrl currentUrl = context->topContext()->url().toUrl();
   const auto currentPath = Path(currentUrl).parent();
 
   Cpp::EnvironmentFilePointer env(dynamic_cast<Cpp::EnvironmentFile*>(context->topContext()->parsingEnvironmentFile().data()));
   if(!env)
     return ret;
-  
-  
+
+
   Path::List includePaths;
-  
+
   foreach(const IndexedString& path, env->includePaths())
     includePaths << Path(path.toUrl());
-  
+
   includePaths.prepend(currentPath);
-  
+
   QSet<QString> directives;
-  
+
   QSet<DeclarationId> haveForwardDeclarationItems;
-  
+
   ///Search the persistent symbol table
   foreach(QualifiedIdentifier prefix, prefixes) {
     prefix.setExplicitlyGlobal(false);
@@ -358,19 +359,19 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
 
     if(declarationCount >  maxDeclarationCount)
       declarationCount = maxDeclarationCount;
-    
+
     for(uint a = 0; a < declarationCount; ++a) {
       KDevelop::ParsingEnvironmentFilePointer env = DUChain::self()->environmentFileForDocument(declarations[a].indexedTopContext());
       if(!env || !dynamic_cast<Cpp::EnvironmentFile*>(env.data()))
         continue;
-      
+
       Declaration* decl = declarations[a].declaration();
-      
+
       if(!decl)
         continue;
       if(dynamic_cast<KDevelop::AliasDeclaration*>(decl))
         continue;
-      
+
       if(!isSource(context->url().str())) {
         if(decl && (decl->context()->type() == DUContext::Namespace || decl->context()->type() == DUContext::Global) && !needInstance && (decl->type<CppClassType>() || decl->type<KDevelop::EnumerationType>()) ) {
           if(!haveForwardDeclarationItems.contains(decl->id()))
@@ -378,16 +379,16 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
           haveForwardDeclarationItems.insert(decl->id());
         }
       }
-      
+
       if(decl && !decl->isForwardDeclaration()) {
         if(context->topContext()->imports(decl->topContext(), CursorInRevision::invalid()))
           continue;
-        
+
         QString file(decl->url().toUrl().toLocalFile());
-        
+
         bool inBlacklistDir = isBlacklistedInclude(decl->url().toUrl());
         auto candidateFiles = candidateIncludeFiles(decl);
-        kDebug() << "candidates from DUChain:" << candidateFiles;
+        qCDebug(CPP) << "candidates from DUChain:" << candidateFiles;
         for (const QString& file : candidateFiles) {
           ret += itemsForFile(displayTextPrefix, file, includePaths, currentPath, decl, argumentHintDepth, directives);
         }
@@ -408,19 +409,19 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
     return ret;
 
   auto candidateFiles = candidateIncludeFilesFromNameMatcher(includeItems, identifier);
-  kDebug() << "candidates from name matching:" << candidateFiles;
+  qCDebug(CPP) << "candidates from name matching:" << candidateFiles;
   for (const QString& file : candidateFiles) {
     ret += itemsForFile(displayTextPrefix, file, includePaths, currentPath, IndexedDeclaration(), argumentHintDepth, directives);
   }
 
   if(ret.isEmpty())
     ret += blacklistRet;
-  
+
   {
     //If there is non-relative include directives, remove the relative ones
     QList<KDevelop::CompletionTreeItemPointer> relativeIncludes;
     QList<KDevelop::CompletionTreeItemPointer> nonRelativeIncludes;
-    
+
     for(QList<KDevelop::CompletionTreeItemPointer>::iterator it = ret.begin(); it != ret.end(); ) {
       MissingIncludeCompletionItem* currentItem = dynamic_cast<MissingIncludeCompletionItem*>(it->data());
       if(currentItem) {
@@ -431,7 +432,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
       }
       ++it;
     }
-    
+
     if(!nonRelativeIncludes.isEmpty()) {
       foreach(KDevelop::CompletionTreeItemPointer relative, relativeIncludes)
         ret.removeAll(relative);
@@ -439,7 +440,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(const Q
   }
 
   std::sort(ret.begin(), ret.end(), DirectiveShorterThan());
-  
+
   return ret;
 }
 
@@ -459,20 +460,20 @@ MissingIncludeCompletionItem::MissingIncludeCompletionItem(const QString& addedI
 QVariant MissingIncludeCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
   DUChainReadLocker lock(DUChain::lock(), 500);
   if(!lock.locked()) {
-    kDebug(9007) << "Failed to lock the du-chain in time";
+    qCDebug(CPP) << "Failed to lock the du-chain in time";
     return QVariant();
   }
   if(role == Qt::DecorationRole)
     if(index.column() == KTextEditor::CodeCompletionModel::Icon)
       RETURN_CACHED_ICON("CTparents")
-  
+
   switch (role) {
     case KTextEditor::CodeCompletionModel::IsExpandable:
       return QVariant(true);
     case KTextEditor::CodeCompletionModel::ExpandingWidget: {
       if(!m_decl.data())
         return QVariant();
-      
+
       Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(DeclarationPointer(m_decl.data()), TopDUContextPointer(m_decl.data()->topContext()));
       model->addNavigationWidget(this, nav);
 
@@ -569,9 +570,9 @@ QVariant ForwardDeclarationItem::data(const QModelIndex& index, int role, const 
   if(role == Qt::DecorationRole && index.column() == KTextEditor::CodeCompletionModel::Icon) {
     RETURN_CACHED_ICON("dialog-ok"); ///@todo Better icon for the create-forward declaration action
   }
-  
+
   QVariant ret = NormalDeclarationCompletionItem::data(index, role, model);
-  
+
   if(role == Qt::DisplayRole && index.column() == KTextEditor::CodeCompletionModel::Name) {
     //Add some text behind the item, so we get some more info in minimal completion mode
     DUChainReadLocker lock(DUChain::lock());
@@ -580,7 +581,7 @@ QVariant ForwardDeclarationItem::data(const QModelIndex& index, int role, const 
     return ret;
 //     return m_displayTextPrefix + ": " + i18n("Add Forward-Declaration");
   }
-  
+
   return ret;
 }
 
@@ -591,15 +592,15 @@ void ForwardDeclarationItem::execute(KTextEditor::View* view, const KTextEditor:
     if(!top)
       return;
     Cpp::SourceCodeInsertion insertion(top);
-    
+
     insertion.setInsertBefore(KTextEditor::Cursor(word.start()));
-    
+
     insertion.insertForwardDeclaration(m_declaration.data());
-    
+
     lock.unlock();
-    
+
     insertion.changes().setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
-    
+
     if(!insertion.changes().applyAllChanges())
       return;
   }

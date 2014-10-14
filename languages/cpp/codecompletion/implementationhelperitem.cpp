@@ -21,6 +21,7 @@
 #include <language/duchain/duchainutils.h>
 #include "context.h"
 #include "helpers.h"
+#include "../debug.h"
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <qtfunctiondeclaration.h>
@@ -174,7 +175,7 @@ QString ImplementationHelperItem::insertionText(QUrl url, KTextEditor::Cursor po
         newText += signaturePart(true);
         newText += ";";
       } else {
-        kDebug() << "Declaration disappeared";
+        qCDebug(CPP) << "Declaration disappeared";
         return QString();
       }
     }else{
@@ -411,7 +412,7 @@ void ImplementationHelperItem::execute(KTextEditor::View* view, const KTextEdito
     KDevelop::ReferencedTopDUContext updated( DUChain::self()->waitForUpdate(doc, TopDUContext::AllDeclarationsAndContexts) );
 
     if(!updated) {
-      kDebug() << "not creating slot because failed to update" << doc.str();
+      qCDebug(CPP) << "not creating slot because failed to update" << doc.str();
       return;
     }
     lock.lock();
@@ -441,7 +442,7 @@ void ImplementationHelperItem::execute(KTextEditor::View* view, const KTextEdito
     lock.unlock();
 
     if(!insertion.changes().applyAllChanges()) {
-      kDebug() << "failed";
+      qCDebug(CPP) << "failed";
       return;
     }
 

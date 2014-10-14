@@ -19,9 +19,9 @@
 */
 #include "plasmoidexecutionconfig.h"
 #include "plasmoidexecutionjob.h"
+#include "debug.h"
 
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -65,30 +65,30 @@ PlasmoidExecutionConfig::PlasmoidExecutionConfig( QWidget* parent )
 {
     setupUi(this);
     connect( identifier->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    
+
     QProcess pPlasmoids;
     pPlasmoids.start("plasmoidviewer", QStringList("--list"), QIODevice::ReadOnly);
-    
+
     QProcess pThemes;
     pThemes.start("plasmoidviewer", QStringList("--list-themes"), QIODevice::ReadOnly);
     pThemes.waitForFinished();
     pPlasmoids.waitForFinished();
-    
+
     foreach(const QString& plasmoid, readProcess(&pPlasmoids)) {
         identifier->addItem(plasmoid);
     }
-    
+
     themes->addItem(QString());
     foreach(const QString& theme, readProcess(&pThemes)) {
         themes->addItem(theme);
     }
-    
+
     addDependency->setIcon( QIcon::fromTheme("list-add") );
     removeDependency->setIcon( QIcon::fromTheme("list-remove") );
     moveDepUp->setIcon( QIcon::fromTheme("go-up") );
     moveDepDown->setIcon( QIcon::fromTheme("go-down") );
     browseProject->setIcon(QIcon::fromTheme("folder-document"));
-    
+
     connect( addDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );
     connect( removeDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );
     connect( moveDepDown, SIGNAL(clicked(bool)), SIGNAL(changed()) );
@@ -114,7 +114,7 @@ void PlasmoidExecutionConfig::saveToConfiguration( KConfigGroup cfg, KDevelop::I
         args += themes->currentText();
     }
     cfg.writeEntry("Arguments", args);
-    
+
     QVariantList deps;
     for( int i = 0; i < dependencies->count(); i++ )
     {
@@ -128,16 +128,16 @@ void PlasmoidExecutionConfig::loadFromConfiguration(const KConfigGroup& cfg, KDe
     bool b = blockSignals( true );
     identifier->lineEdit()->setText(cfg.readEntry("PlasmoidIdentifier", ""));
     blockSignals( b );
-    
+
     QStringList arguments = cfg.readEntry("Arguments", QStringList());
     int idxFormFactor = arguments.indexOf("--formfactor")+1;
     if(idxFormFactor>0)
         formFactor->setCurrentIndex(formFactor->findText(arguments[idxFormFactor]));
-    
+
     int idxTheme = arguments.indexOf("--theme")+1;
     if(idxTheme>0)
         themes->setCurrentIndex(themes->findText(arguments[idxTheme]));
-    
+
     QVariantList deps = KDevelop::stringToQVariant( cfg.readEntry( "Dependencies", QString() ) ).toList();
     QStringList strDeps;
     foreach( const QVariant& dep, deps ) {
@@ -147,7 +147,7 @@ void PlasmoidExecutionConfig::loadFromConfiguration(const KConfigGroup& cfg, KDe
         QIcon icon;
         if(pitem)
             icon=QIcon(pitem->iconName());
-        
+
         QListWidgetItem* item = new QListWidgetItem(icon, KDevelop::joinWithEscaping( deplist, '/', '\\' ), dependencies );
         item->setData( Qt::UserRole, dep );
     }
@@ -190,7 +190,7 @@ KJob* PlasmoidLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
     {
         return 0;
     }
-    
+
     if( launchMode == "execute" )
     {
         KJob* depsJob = dependencies(cfg);
@@ -201,14 +201,14 @@ KJob* PlasmoidLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
 
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), jobs );
     }
-    kWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
+    qWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return 0;
 }
 
 KJob* PlasmoidLauncher::calculateDependencies(KDevelop::ILaunchConfiguration* cfg)
 {
     QVariantList deps = KDevelop::stringToQVariant( cfg->config().readEntry( "Dependencies", QString() ) ).toList();
-    if( !deps.isEmpty() ) 
+    if( !deps.isEmpty() )
     {
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
         QList<KDevelop::ProjectBaseItem*> items;
@@ -333,7 +333,7 @@ QMenu* PlasmoidExecutionConfigType::launcherSuggestions()
             }
         }
     }
-    
+
     QMenu *m = 0;
     if(!found.isEmpty()) {
         m = new QMenu(i18n("Plasmoids"));
@@ -347,9 +347,9 @@ void PlasmoidExecutionConfigType::suggestionTriggered()
     QAction* action = qobject_cast<QAction*>(sender());
     KDevelop::IProject* p = action->property("project").value<KDevelop::IProject*>();
     QString relUrl = action->property("url").toString();
-    
+
     QPair<QString,QString> launcher = qMakePair( launchers().at( 0 )->supportedModes().at(0), launchers().at( 0 )->id() );
-    
+
     QString name = relUrl.mid(relUrl.lastIndexOf('/')+1);
     KDevelop::ILaunchConfiguration* config = KDevelop::ICore::self()->runController()->createLaunchConfiguration(this, launcher, p, name);
     KConfigGroup cfg = config->config();
@@ -392,7 +392,7 @@ void PlasmoidExecutionConfig::removeDep()
         Q_ASSERT( list.count() == 1 );
         int row = dependencies->row( list.at(0) );
         delete dependencies->takeItem( row );
-        
+
         dependencies->selectionModel()->select( dependencies->model()->index( row - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
     }
 }
@@ -400,17 +400,17 @@ void PlasmoidExecutionConfig::removeDep()
 void PlasmoidExecutionConfig::checkActions(const QItemSelection& selected, const QItemSelection& deselected)
 {
     Q_UNUSED( deselected );
-    kDebug() << "checkActions";
+    qCDebug(EXECUTEPLASMOID) << "checkActions";
     if( !selected.indexes().isEmpty() )
     {
-        kDebug() << "have selection";
+        qCDebug(EXECUTEPLASMOID) << "have selection";
         Q_ASSERT( selected.indexes().count() == 1 );
         QModelIndex idx = selected.indexes().at( 0 );
-        kDebug() << "index" << idx;
+        qCDebug(EXECUTEPLASMOID) << "index" << idx;
         moveDepUp->setEnabled( idx.row() > 0 );
         moveDepDown->setEnabled( idx.row() < dependencies->count() - 1 );
         removeDependency->setEnabled( true );
-    } else 
+    } else
     {
         removeDependency->setEnabled( false );
         moveDepUp->setEnabled( false );

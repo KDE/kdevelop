@@ -23,8 +23,8 @@
 #include "cmakeprojectvisitor.h"
 #include "astfactory.h"
 #include "cmake-test-paths.h"
+#include "../debug.h"
 
-#include <KDebug>
 #include <KProcess>
 #include <QFile>
 #include <KStandardDirs>
@@ -50,7 +50,7 @@ QString executeProcess(const QString& execName, const QStringList& args=QStringL
 
     if(!p.waitForFinished())
     {
-        kDebug(9032) << "failed to execute:" << execName;
+        qCDebug(CMAKE) << "failed to execute:" << execName;
     }
 
     QByteArray b = p.readAllStandardOutput();
@@ -63,7 +63,7 @@ QString executeProcess(const QString& execName, const QStringList& args=QStringL
 void CMakeCompliance::testEnumerate()
 {
     QFETCH( QString, exe);
-    
+
     QStringList commands=executeProcess(exe, QStringList("--help-command-list")).split("\n");
     commands.erase(commands.begin());
     commands.sort();
@@ -83,7 +83,7 @@ void CMakeCompliance::testEnumerate_data()
     QTest::addColumn<QString>( "exe" );
     QStringList cmakes;
     KStandardDirs::findAllExe(cmakes, "cmake");
-    
+
     foreach(const QString& path, cmakes)
     {
         QTest::newRow( qPrintable(path) ) << (path);
@@ -94,7 +94,7 @@ CMakeProjectVisitor CMakeCompliance::parseFile( const QString& sourcefile )
 {
     CMakeProjectVisitor::setMessageCallback(CMakeCompliance::addOutput);
     QString projectfile = sourcefile;
-    
+
     CMakeFileContent code=CMakeListsParser::readCMakeFile(projectfile);
 
     static QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
@@ -102,18 +102,18 @@ CMakeProjectVisitor CMakeCompliance::parseFile( const QString& sourcefile )
     data.vm = initials.first;
     QString sourcedir=sourcefile.left(sourcefile.lastIndexOf('/'));
     data.vm.insert("CMAKE_SOURCE_DIR", QStringList(sourcedir));
-    
+
     KDevelop::ReferencedTopDUContext buildstrapContext=new TopDUContext(IndexedString("buildstrap"), RangeInRevision(0,0, 0,0));
     DUChain::self()->addDocumentChain(buildstrapContext);
     ReferencedTopDUContext ref=buildstrapContext;
     QStringList modulesPath = data.vm["CMAKE_MODULE_PATH"];
-    
+
     foreach(const QString& script, initials.second)
     {
         ref = CMakeParserUtils::includeScript(CMakeProjectVisitor::findFile(script, modulesPath, QStringList()),
                                               ref, &data, sourcedir, QMap<QString,QString>());
     }
-    
+
     data.vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(sourcedir));
     data.vm.insert("CMAKE_CURRENT_LIST_FILE", QStringList(projectfile));
     data.vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
@@ -136,9 +136,9 @@ void CMakeCompliance::testCMakeTests()
     QFETCH(QString, file);
 
     CMakeProjectVisitor v = parseFile(file);
-    
+
     QString ret=executeProcess(exe, QStringList("-P") << file);
-    
+
     QStringList outputList = output.split('\n'), cmakeList=ret.split('\n');
     for(int i=0; i<outputList.size(); i++) {
         QCOMPARE(outputList[i], cmakeList[i]);
@@ -149,12 +149,12 @@ void CMakeCompliance::testCMakeTests_data()
 {
     QTest::addColumn<QString>("exe");
     QTest::addColumn<QString>("file");
-    
+
     QStringList files=QStringList()
 //         << "/CMakeTests/IfTest.cmake.in"
         << "/CMakeTests/ListTest.cmake.in"
     ;
-    
+
     QStringList cmakes;
     KStandardDirs::findAllExe(cmakes, "cmake");
     foreach(const QString& exe, cmakes) {

@@ -25,6 +25,7 @@
 #include "cmakeprojectdata.h"
 #include "duchain/cmakeparsejob.h"
 #include "cmakeimportjsonjob.h"
+#include "debug.h"
 #include <projectmanagers/custommake/makefileresolver/makefileresolver.h>
 
 #include <QDir>
@@ -88,7 +89,7 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     m_highlight = new KDevelop::CodeHighlighting(this);
 
 //     new CodeCompletion(this, new CMakeCodeCompletionModel(this), name());
-    
+
     connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)), SLOT(projectClosing(KDevelop::IProject*)));
 
 //     m_fileSystemChangeTimer = new QTimer(this);
@@ -143,7 +144,7 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
     // create the JSON file if it doesn't exist
     auto commandsFile = CMake::commandsFile(project);
     if (!QFileInfo(commandsFile.toLocalFile()).exists()) {
-        qDebug() << "couldn't find commands file:" << commandsFile << "- now trying to reconfigure";
+        qCDebug(CMAKE) << "couldn't find commands file:" << commandsFile << "- now trying to reconfigure";
         jobs << builder()->configure(project);
     }
 
@@ -194,7 +195,7 @@ KDevelop::IProjectBuilder * CMakeManager::builder() const
 
 bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 {
-    kDebug() << "reloading" << folder->path();
+    qCDebug(CMAKE) << "reloading" << folder->path();
 
     IProject* project = folder->project();
     if (!project->isReady())
@@ -214,11 +215,11 @@ void CMakeManager::importFinished(KJob* j)
 
     auto project = job->project();
     if (job->error() != 0) {
-        kDebug() << "Import failed for project" << project->name() << job->errorText();
+        qCDebug(CMAKE) << "Import failed for project" << project->name() << job->errorText();
         m_projects.remove(project);
     }
 
-    kDebug() << "Successfully imported project" << project->name();
+    qCDebug(CMAKE) << "Successfully imported project" << project->name();
 
     CMakeProjectData data;
     data.watcher->addPath(CMake::currentBuildDir(project).toLocalFile());
@@ -681,7 +682,7 @@ QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, co
 //         project=m_projectsData.keys().first();
 //     }
 //
-// //     kDebug() << "cache value " << id << project << (m_projectsData.contains(project) && m_projectsData[project].cache.contains(id));
+// //     qCDebug(CMAKE) << "cache value " << id << project << (m_projectsData.contains(project) && m_projectsData[project].cache.contains(id));
 //     CMakeProjectData* data = m_projectsData[project];
 //     if(data && data->cache.contains(id))
 //     {
@@ -700,7 +701,7 @@ void CMakeManager::projectClosing(IProject* p)
 //
 //     m_filter->remove(p);
 //
-//     kDebug(9042) << "Project closed" << p;
+//     qCDebug(CMAKE) << "Project closed" << p;
 }
 //
 // QStringList CMakeManager::processGeneratorExpression(const QStringList& expr, IProject* project, ProjectTargetItem* target) const
@@ -734,7 +735,7 @@ void CMakeManager::addWatcher(IProject* p, const QString& path)
     if (QFileSystemWatcher* watcher = m_watchers.value(p)) {
         watcher->addPath(path);
     } else {
-        kWarning() << "Could not find a watcher for project" << p << p->name() << ", path " << path;
+        qWarning() << "Could not find a watcher for project" << p << p->name() << ", path " << path;
         Q_ASSERT(false);
     }
 }*/
@@ -757,7 +758,7 @@ ProjectFilterManager* CMakeManager::filterManager() const
 
 void CMakeManager::dirtyFile(const QString& path)
 {
-    qDebug() << "dirty!" << path;
+    qCDebug(CMAKE) << "dirty!" << path;
 
     //we initialize again hte project that sent the signal
     for(QHash<IProject*, CMakeProjectData>::const_iterator it = m_projects.constBegin(), itEnd = m_projects.constEnd(); it!=itEnd; ++it) {

@@ -25,7 +25,6 @@
 
 #include <QtCore/QFileInfo>
 
-#include <KDebug>
 #include <KShell>
 #include <KConfig>
 #include <KConfigGroup>
@@ -38,6 +37,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 
 #include "makebuilder.h"
+#include "debug.h"
 
 using namespace KDevelop;
 
@@ -71,7 +71,7 @@ MakeJob::~MakeJob()
 void MakeJob::start()
 {
     ProjectBaseItem* it = item();
-    kDebug(9037) << "Building with make" << m_command << m_overrideTargets.join(" ");
+    qCDebug(MAKEBUILDER) << "Building with make" << m_command << m_overrideTargets.join(" ");
     if (!it)
     {
         setError(ItemNoLongerValidError);

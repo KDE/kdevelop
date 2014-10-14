@@ -27,10 +27,13 @@
 #include "parsesession.h"
 #include "commentformatter.h"
 #include "memorypool.h"
+#include "debug.h"
 
 #include <cstdlib>
 #include <iostream>
 #include "rpp/chartools.h"
+
+Q_LOGGING_CATEGORY(CPPPARSER, "kdevelop.languages.cpp.parser")
 
 #define ADVANCE(tk, descr) \
 { \
@@ -75,7 +78,7 @@ inline _Tp *CreateNode(MemoryPool *memory_pool)
 
 void Parser::addComment( CommentAST* ast, const Comment& comment ) {
   if( comment ) {
-/*    kDebug() << "Adding but leaving comment" << session->token_stream->token(comment.token()).symbol();*/
+/*    qCDebug(CPPPARSER) << "Adding but leaving comment" << session->token_stream->token(comment.token()).symbol();*/
     ast->comments = snoc(ast->comments, comment.token(), session->mempool);
   }
 }
@@ -84,7 +87,7 @@ void Parser::moveComments( CommentAST* ast ) {
   while( m_commentStore.hasComment() ) {
     uint token = m_commentStore.takeFirstComment().token();
 
-/*    kDebug() << "Moving comment" << session->token_stream->token(token).symbol();*/
+/*    qCDebug(CPPPARSER) << "Moving comment" << session->token_stream->token(token).symbol();*/
 
     ast->comments = snoc(ast->comments, token, session->mempool);
   }
@@ -355,7 +358,7 @@ void Parser::tokenRequiredError(int token)
   err += "\' found \'";
   err += token_name(session->token_stream->lookAhead());
   err += '\'';
-  
+
   if(token == '}' || token == '{')
     _M_hadMismatchingCompoundTokens = true;
 
@@ -611,7 +614,7 @@ bool Parser::parseName(NameAST*& node, ParseNameAcceptTemplate acceptTemplateId)
         return false;
       }
 
-      if (!ast) 
+      if (!ast)
         ast = CreateNode<NameAST>(session->mempool);
 
       if (session->token_stream->lookAhead() == Token_scope &&
@@ -633,7 +636,7 @@ bool Parser::parseName(NameAST*& node, ParseNameAcceptTemplate acceptTemplateId)
       else
         {
           Q_ASSERT(n != 0);
-      
+
           if (acceptTemplateId == DontAcceptTemplate ||
             //Eventually only accept template parameters as primary expression if the expression is followed by a function call
             //or by a braced init list
@@ -666,9 +669,9 @@ bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
 {
   clear();
 
-/*  kDebug() << "tokens:";
+/*  qCDebug(CPPPARSER) << "tokens:";
   for(uint a = 0; a < session->token_stream->size(); ++a)
-    kDebug() << token_name(session->token_stream->token(a).kind) << session->token_stream->token(a).symbolString();*/
+    qCDebug(CPPPARSER) << token_name(session->token_stream->token(a).kind) << session->token_stream->token(a).symbolString();*/
 
   uint start = session->token_stream->cursor();
   TranslationUnitAST *ast = CreateNode<TranslationUnitAST>(session->mempool);
@@ -702,9 +705,9 @@ bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
-  
+
   ast->hadMissingCompoundTokens = _M_hadMismatchingCompoundTokens;
-  
+
   return true;
 }
 
@@ -1475,7 +1478,7 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
          && session->token_stream->lookAhead() != Token_rightshift && session->token_stream->lookAhead() != Token_ellipsis ))
     {
       rewind(start);
-      
+
       if (!parseConditionalExpression(expr, true))
         return false;
     }
@@ -1509,7 +1512,7 @@ bool Parser::parseTypeSpecifier(TypeSpecifierAST *&node)
 
   const ListNode<uint> *cv = 0;
   parseCvQualify(cv);
-  
+
   TypeSpecifierAST *ast = 0;
   if (!parseElaboratedTypeSpecifier(ast) && !parseSimpleTypeSpecifier(ast))
     {
@@ -1520,7 +1523,7 @@ bool Parser::parseTypeSpecifier(TypeSpecifierAST *&node)
   parseCvQualify(cv);
   ast->cv = cv;
   UPDATE_POS(ast, start, _M_last_valid_token+1);
-  
+
   node = ast;
 
   return true;
@@ -3583,7 +3586,7 @@ bool Parser::parseIfStatement(StatementAST *&node)
       reportError(("Condition expected"));
       return false;
     }
-    
+
   ADVANCE(')', ")");
 
   StatementAST *stmt = 0;
@@ -4184,7 +4187,7 @@ bool Parser::parseTryBlockStatement(StatementAST *&node)
   while (session->token_stream->lookAhead() == Token_catch)
     {
       uint catchStart = session->token_stream->cursor();
-      
+
       advance();
       ADVANCE('(', "(");
       ConditionAST *cond = 0;
@@ -4549,7 +4552,7 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
     sub_expressions = snoc(sub_expressions, expr, session->mempool);
     expr = 0;
   }
-  
+
   ExpressionAST *sub_expression = 0;
   while (parsePostfixExpressionInternal(sub_expression))
     {
@@ -4857,7 +4860,7 @@ bool Parser::parseCastExpression(ExpressionAST *&node)
                   CastExpressionAST *ast = CreateNode<CastExpressionAST>(session->mempool);
                   ast->type_id = typeIdAst;
                   ast->expression = castExpressionAst;
-                  
+
                   UPDATE_POS(ast, start, _M_last_valid_token+1);
                   node = ast;
 

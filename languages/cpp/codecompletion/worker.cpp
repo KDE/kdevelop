@@ -23,8 +23,7 @@
 #include "worker.h"
 
 #include "context.h"
-
-#include <kdebug.h>
+#include "../debug.h"
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
@@ -58,7 +57,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
 {
   KTextEditor::Range contextRange(_contextRange);
   QString contextText(_contextText);
-  
+
   TopDUContextPointer topContext;
   {
     DUChainReadLocker lock(DUChain::lock());
@@ -67,11 +66,11 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     if(!topContext)
       return;
     if(!topContext->parsingEnvironmentFile() || topContext->parsingEnvironmentFile()->language() != IndexedString("C++")) {
-      kDebug() << "top-context has wrong language:";
+      qCDebug(CPP) << "top-context has wrong language:";
       return;
     }
   }
-  
+
   Cpp::TypeConversionCacheEnabler enableConversionCache;
 
   KDevelop::CodeCompletionWorker::computeCompletions(context, position, followingText, contextRange, contextText);

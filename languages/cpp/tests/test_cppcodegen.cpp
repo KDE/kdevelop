@@ -2,7 +2,7 @@
    This file is part of KDevelop
    Copyright 2009 Ramon Zarazua <killerfox512+kde@gmail.com>
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -65,7 +65,7 @@ void TestCppCodegen::initTestCase()
   DUChain::self()->disablePersistentStorage();
   Core::self()->sourceFormatterController()->disableSourceFormatting(true);
   CodeRepresentation::setDiskChangesForbidden(true);
-  
+
   globalTestLock = new ForegroundLock;
 }
 
@@ -85,9 +85,9 @@ void TestCppCodegen::cleanup()
 void dumpAST(InsertIntoDUChain& code)
 {
     DUChainReadLocker lock;
-    
+
     Q_ASSERT(!code->parsingEnvironmentFile()->isProxyContext());
-    
+
     ParseSession::Ptr session(dynamic_cast<ParseSession*>(code->ast().data()));
     Q_ASSERT(session);
     Cpp::DumpChain dump;
@@ -164,9 +164,9 @@ void TestCppCodegen::testUpdateIndices()
   {
     InsertIntoDUChain code1("duchaintest_1.h", "class QW{}; struct A { struct Member2; struct Member1; }; class Oq{};");
     InsertIntoDUChain code3("duchaintest_3.h", "#include <duchaintest_1.h>\n struct C : public A { Member1 m1; Member2 m2; A test(int arg) { int v1; \n{}\n { int v2, *v3; }} int test(); };");
-    kWarning() << "********************* Parsing step 1";
+    qWarning() << "********************* Parsing step 1";
     code3.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
-    
+
     DUChainReadLocker lock;
 
     IndexedDeclaration CDecl = code3.getDeclaration("C");
@@ -178,26 +178,26 @@ void TestCppCodegen::testUpdateIndices()
     QVERIFY(C_m1.isValid());
     IndexedDeclaration C_m2 = code3.getDeclaration("C::m2");
     QVERIFY(C_m2.isValid());
-    
+
     QVERIFY(CDecl.declaration()->internalContext());
     QCOMPARE(CDecl.declaration()->internalContext()->localDeclarations().size(), 4);
-    
+
     IndexedDeclaration C_test = CDecl.declaration()->internalContext()->localDeclarations()[2];
     QVERIFY(C_test.isValid());
     DUContext* testCtx = C_test.data()->internalContext();
     QVERIFY(testCtx);
     QCOMPARE(testCtx->localDeclarations().size(), 1);
-    
+
     IndexedDeclaration C_test_v1 = testCtx->localDeclarations()[0];
-    
+
     QCOMPARE(testCtx->childContexts().size(), 2);
     DUContext* child = testCtx->childContexts()[1];
-    
+
     QCOMPARE(child->localDeclarations().size(), 2);
-    
+
     IndexedDeclaration C_test_v2 = child->localDeclarations()[0];
     IndexedDeclaration C_test_v3 = child->localDeclarations()[1];
-    
+
     QCOMPARE(C_test_v1.declaration()->identifier(), Identifier("v1"));
     QCOMPARE(C_test_v2.declaration()->identifier(), Identifier("v2"));
     QCOMPARE(C_test_v3.declaration()->identifier(), Identifier("v3"));
@@ -206,12 +206,12 @@ void TestCppCodegen::testUpdateIndices()
     QCOMPARE(C_test.declaration()->identifier(), Identifier("test"));
     QCOMPARE(CDecl.declaration()->identifier(), Identifier("C"));
     QCOMPARE(ADecl.declaration()->identifier(), Identifier("A"));
-    
+
     lock.unlock();
     code1.m_insertedCode.setText("struct A { struct Member2; struct Member1; };");
     code3.m_insertedCode.setText("#include <duchaintest_1.h>\n class Q{}; struct C : public A { Member2 m2; int c; A test(int arg) { int w1; int v1;\n\n { int     *v3; }} int test(); };");
     code3.parse(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdateRecursive, true);
-    
+
     lock.lock();
     QVERIFY(ADecl.declaration());
     QCOMPARE(ADecl.declaration()->identifier(), Identifier("A"));
@@ -227,7 +227,7 @@ void TestCppCodegen::testUpdateIndices()
     QVERIFY(!C_test_v2.declaration());
     QVERIFY(C_test_v3.declaration());
     QCOMPARE(C_test_v3.declaration()->identifier(), Identifier("v3"));
-  }  
+  }
 }
 
 void TestCppCodegen::testSimplifiedUpdating()
@@ -245,9 +245,9 @@ void TestCppCodegen::testSimplifiedUpdating()
   {
     InsertIntoDUChain code1("duchaintest_1.h", "struct A { struct Member2; struct Member1; };");
     InsertIntoDUChain code3("duchaintest_3.h", "#include <duchaintest_1.h>\n struct C : public A { Member1 m1; Member2 m2; };");
-    kWarning() << "********************* Parsing step 1";
+    qWarning() << "********************* Parsing step 1";
     code3.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
-    
+
     DUChainReadLocker lock;
 
     QCOMPARE(code3->localDeclarations().size(), 1);
@@ -257,14 +257,14 @@ void TestCppCodegen::testSimplifiedUpdating()
     QVERIFY(code3->childContexts()[0]->localDeclarations()[1]->abstractType().cast<StructureType>());
     QCOMPARE(code3->childContexts()[0]->importedParentContexts().size(), 1);
     QCOMPARE(code1->childContexts().size(), 1);
-  }  
+  }
   {
     InsertIntoDUChain code1("duchaintest_1.h", "struct A { struct Member1; };");
     InsertIntoDUChain code2("duchaintest_2.h", "template<class T> struct B : public T{ struct Member2; };");
     InsertIntoDUChain code3("duchaintest_3.h", "#include <duchaintest_2.h>\n #include <duchaintest_1.h>\n struct C : public B<A> { Member1 m1; Member2 m2; };");
-    kWarning() << "********************* Parsing step 1";
+    qWarning() << "********************* Parsing step 1";
     code3.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
-    
+
     DUChainReadLocker lock;
 
     QCOMPARE(code3->localDeclarations().size(), 1);
@@ -274,19 +274,19 @@ void TestCppCodegen::testSimplifiedUpdating()
     QVERIFY(code3->childContexts()[0]->localDeclarations()[1]->abstractType().cast<StructureType>());
     QCOMPARE(code3->childContexts()[0]->importedParentContexts().size(), 1);
     QCOMPARE(code1->childContexts().size(), 1);
-    
+
     QCOMPARE(code2->localDeclarations().size(), 1);
     ClassDeclaration* BClass = dynamic_cast<ClassDeclaration*>(code2->localDeclarations()[0]);
     QVERIFY(BClass);
     QCOMPARE(BClass->baseClassesSize(), 1u);
     QCOMPARE(BClass->baseClasses()[0].baseClass.abstractType()->toString(), QString("T"));
-    
+
     QCOMPARE(code3->childContexts()[0]->importedParentContexts().size(), 1);
-    
+
     DUContext* BAContext = code3->childContexts()[0]->importedParentContexts()[0].context(code3.topContext());
     QVERIFY(BAContext);
     QVERIFY(!BAContext->inSymbolTable());
-    
+
     //2 contexts are imported: The template-context and the parent-class context
     QCOMPARE(BAContext->importedParentContexts().size(), 2);
     QCOMPARE(BAContext->importedParentContexts()[1].context(code3.topContext()), code1->childContexts()[0]);
@@ -294,11 +294,11 @@ void TestCppCodegen::testSimplifiedUpdating()
     QVERIFY(classDecl);
     QCOMPARE(classDecl->baseClassesSize(), 1u);
     QCOMPARE(classDecl->baseClasses()[0].baseClass.index(), code1->localDeclarations()[0]->indexedType().index());
-    
+
     lock.unlock();
-    kWarning() << "********************* Parsing step 2";
+    qWarning() << "********************* Parsing step 2";
     code3.parse(TopDUContext::AllDeclarationsContextsUsesAndAST | TopDUContext::ForceUpdateRecursive, true);
-    
+
     lock.lock();
     QCOMPARE(code3->localDeclarations().size(), 1);
     QCOMPARE(code3->childContexts().size(), 1);
@@ -307,7 +307,7 @@ void TestCppCodegen::testSimplifiedUpdating()
 
     QVERIFY(code3->childContexts()[0]->localDeclarations()[0]->abstractType().cast<StructureType>());
     QVERIFY(code3->childContexts()[0]->localDeclarations()[1]->abstractType().cast<StructureType>());
-    
+
     //BClass should have been updated, not deleted
     QVERIFY(BClass == dynamic_cast<ClassDeclaration*>(code2->localDeclarations()[0]));
     QCOMPARE(BClass->baseClassesSize(), 1u);
@@ -315,11 +315,11 @@ void TestCppCodegen::testSimplifiedUpdating()
 
     //The template-instantiation context "B<A>" should have been deleted
     DUContext* BAContext2 = code3->childContexts()[0]->importedParentContexts()[0].context(code3.topContext());
-//     kDebug() << "BAContexts" << BAContext << BAContext2;
+//     qDebug() << "BAContexts" << BAContext << BAContext2;
 //     QVERIFY(BAContext != BAContext2);
     QCOMPARE(BAContext2->importedParentContexts().size(), 2);
     QCOMPARE(BAContext2->importedParentContexts()[1].context(code3.topContext()), code1->childContexts()[0]);
-    
+
     classDecl = dynamic_cast<ClassDeclaration*>(BAContext2->owner());
     QVERIFY(classDecl);
     QCOMPARE(classDecl->baseClassesSize(), 1u);
@@ -329,9 +329,9 @@ void TestCppCodegen::testSimplifiedUpdating()
     InsertIntoDUChain code1("duchaintest_1.h", "struct A { struct Member1; };");
     InsertIntoDUChain code2("duchaintest_2.h", "template<class T> struct B : public T{ struct Member2; };");
     InsertIntoDUChain code3("duchaintest_3.h", "#include <duchaintest_2.h>\n #include <duchaintest_1.h>\n typedef B<A> Parent; struct C : public Parent { Member1 m1; Member2 m2; };");
-    
+
     code3.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
-    
+
     DUChainReadLocker lock;
 
     QCOMPARE(code3->localDeclarations().size(), 2);
@@ -339,10 +339,10 @@ void TestCppCodegen::testSimplifiedUpdating()
     QCOMPARE(code3->childContexts()[0]->localDeclarations().size(), 2);
     QVERIFY(code3->childContexts()[0]->localDeclarations()[0]->abstractType().cast<StructureType>());
     QVERIFY(code3->childContexts()[0]->localDeclarations()[1]->abstractType().cast<StructureType>());
-    
+
     lock.unlock();
     code3.parse(TopDUContext::AllDeclarationsContextsUsesAndAST | TopDUContext::ForceUpdateRecursive, true);
-    
+
     lock.lock();
     QCOMPARE(code3->localDeclarations().size(), 2);
     QCOMPARE(code3->childContexts().size(), 1);
@@ -350,14 +350,14 @@ void TestCppCodegen::testSimplifiedUpdating()
     QVERIFY(code3->childContexts()[0]->localDeclarations()[0]->abstractType().cast<StructureType>());
     QVERIFY(code3->childContexts()[0]->localDeclarations()[1]->abstractType().cast<StructureType>());
   }
-  
+
   {
     QString text = "class C { class D d; };";
-    
+
     InsertIntoDUChain code("testsimplified.cpp", text);
-    
+
     code.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
-    
+
     DUChainReadLocker lock;
 
     dumpAST(code);
@@ -369,34 +369,34 @@ void TestCppCodegen::testSimplifiedUpdating()
     QCOMPARE(code->childContexts()[0]->localDeclarations().size(), 1);
     QVERIFY(code->childContexts()[0]->localDeclarations()[0]->abstractType().cast<StructureType>());
     QCOMPARE(code->childContexts()[0]->localDeclarations()[0]->abstractType()->toString(), QString("D"));
-    
+
     lock.unlock();
-    
+
     code.parse(TopDUContext::AllDeclarationsContextsUsesAndAST | TopDUContext::ForceUpdate, true);
     lock.lock();
-    
+
     QCOMPARE(code->localDeclarations().size(), 2);
-    
+
     //Verify that an update has happened, rather than recreating everything
     QCOMPARE(code->localDeclarations()[0], classDecl);
-    
+
     QCOMPARE(code->childContexts().size(), 1);
     QCOMPARE(code->childContexts()[0]->localDeclarations().size(), 1);
     QVERIFY(code->childContexts()[0]->localDeclarations()[0]->abstractType().cast<StructureType>());
     QCOMPARE(code->childContexts()[0]->localDeclarations()[0]->abstractType()->toString(), QString("D"));
   }
-  
+
   {
     QString text = "class C {int test(); int mem; }; void test(int a); int i;";
-    
+
     InsertIntoDUChain code("testsimplified.cpp", text);
-    
+
     code.parse(TopDUContext::SimplifiedVisibleDeclarationsAndContexts | TopDUContext::AST);
-    
+
     DUChainReadLocker lock;
 
     dumpAST(code);
-    
+
     QCOMPARE(code->localDeclarations().size(), 3);
     QCOMPARE(code->childContexts().size(), 1);
     QCOMPARE(code->childContexts()[0]->localDeclarations().size(), 2);
@@ -409,11 +409,11 @@ void TestCppCodegen::testSimplifiedUpdating()
     QVERIFY(code->localDeclarations()[1]->kind() == Declaration::Instance);
     QVERIFY(!code->localDeclarations()[2]->abstractType());
     QVERIFY(code->localDeclarations()[2]->kind() == Declaration::Instance);
-    
+
     {
       uint count;
       const KDevelop::CodeModelItem* items;
-      
+
       KDevelop::CodeModel::self().items(code->url(), count, items);
       for(uint a = 0; a < count; ++a) {
         if(items[a].id == code->localDeclarations()[0]->qualifiedIdentifier()) {
@@ -422,13 +422,13 @@ void TestCppCodegen::testSimplifiedUpdating()
       }
     }
   }
-  
+
   {
     InsertIntoDUChain codeA("A.h", "#ifndef A_H\n #define A_H\n class A{}; \n#endif");
     InsertIntoDUChain codeB("B.h", "#include <A.h>\n class B{};");
-    
+
     codeB.parse(TopDUContext::SimplifiedVisibleDeclarationsAndContexts | TopDUContext::AST | TopDUContext::Recursive);
-    
+
     DUChainReadLocker lock;
 
     //This is not only for debug-output, but also verifies that the AST is there as requesed
@@ -438,12 +438,12 @@ void TestCppCodegen::testSimplifiedUpdating()
     QCOMPARE(codeA->localDeclarations().size(), 1);
     QVERIFY(codeA->parsingEnvironmentFile()->featuresSatisfied((TopDUContext::Features)(TopDUContext::SimplifiedVisibleDeclarationsAndContexts | TopDUContext::AST | TopDUContext::Recursive)));
     QVERIFY(codeB->parsingEnvironmentFile()->featuresSatisfied((TopDUContext::Features)(TopDUContext::SimplifiedVisibleDeclarationsAndContexts | TopDUContext::AST | TopDUContext::Recursive)));
-    
+
     lock.unlock();
 
     //Update with more features
     codeB.parse(TopDUContext::AllDeclarationsContextsUsesAndAST | TopDUContext::Recursive, true);
-    
+
     lock.lock();
     QCOMPARE(codeB->importedParentContexts().size(), 1);
     QCOMPARE(codeA->localDeclarations().size(), 1);
@@ -454,9 +454,9 @@ void TestCppCodegen::testSimplifiedUpdating()
     ///Test whether "empty" files work
     InsertIntoDUChain codeA("Q.h", "");
     InsertIntoDUChain codeB("B.h", "#include <Q.h>\n class B{};");
-    
+
     codeB.parse(TopDUContext::SimplifiedVisibleDeclarationsAndContexts | TopDUContext::AST | TopDUContext::Recursive);
-    
+
     DUChainReadLocker lock;
 
     QCOMPARE(codeB->importedParentContexts().size(), 1);
@@ -467,25 +467,25 @@ void TestCppCodegen::testSimplifiedUpdating()
     ///Test the 'ignoring' of header-guards
     InsertIntoDUChain codeA("A.h", "#ifndef A_H\n #define A_H\n class A{};\n #ifdef HONK\n class Honk {};\n #endif\n \n#endif \n");
     InsertIntoDUChain codeB("B.h", "#define A_H\n \n #include <A.h>\n class B{};");
-    
+
     QVERIFY(!codeA.tryGet());
-    
+
     codeB.parse(TopDUContext::SimplifiedVisibleDeclarationsAndContexts | TopDUContext::AST | TopDUContext::Recursive);
-    
+
     DUChainReadLocker lock;
 
     //This is not only for debug-output, but also verifies that the AST is there as requesed
     dumpAST(codeA);
-    
+
     QCOMPARE(codeA->localDeclarations().size(), 1);
     QCOMPARE(codeB->importedParentContexts().size(), 1);
-    
+
     lock.unlock();
-    
+
     codeB.parse(TopDUContext::SimplifiedVisibleDeclarationsAndContexts | TopDUContext::AST | TopDUContext::ForceUpdateRecursive | TopDUContext::Recursive);
-    
+
     lock.lock();
-    
+
     QCOMPARE(codeA->localDeclarations().size(), 1);
     QCOMPARE(codeB->importedParentContexts().size(), 1);
   }
@@ -499,7 +499,7 @@ void TestCppCodegen::testAstDuChainMapping()
     code.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
 
     DUChainReadLocker lock;
-    
+
     //----ClassA.h----
     ParseSession::Ptr session(dynamic_cast<ParseSession*>(code->ast().data()));
     QVERIFY(session);
@@ -507,7 +507,7 @@ void TestCppCodegen::testAstDuChainMapping()
     QVERIFY(ast);
     QVERIFY(ast->declarations);
     QCOMPARE(ast->declarations->count(), 1);
-    
+
     QVERIFY(AstUtils::childNode<SimpleDeclarationAST>(ast, 0));
     QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(ast, 0)->type_specifier,
               session->astNodeFromDeclaration(code->localDeclarations()[0]));
@@ -516,59 +516,59 @@ void TestCppCodegen::testAstDuChainMapping()
     ClassSpecifierAST * classAst = AstUtils::node_cast<ClassSpecifierAST>
                                   (AstUtils::childNode<SimpleDeclarationAST>(ast, 0)->type_specifier);
     QVERIFY(classAst);
-    
+
     DUContext * cont = code->localDeclarations()[0]->internalContext();
     QVERIFY(cont);
-    
+
     QCOMPARE(classAst->member_specs->count(), 6);
     QCOMPARE(cont->localDeclarations().size(), 6);
-    
+
     //ClassA()
     QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 1),
              session->astNodeFromDeclaration(cont->localDeclarations()[0]));
-    //int i         
+    //int i
     QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 3),
              session->astNodeFromDeclaration(cont->localDeclarations()[1]));
-    //float f         
+    //float f
     QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 4),
              session->astNodeFromDeclaration(cont->localDeclarations()[2]));
-    //float j, part of the same declaration as above        
+    //float j, part of the same declaration as above
     QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 4),
              session->astNodeFromDeclaration(cont->localDeclarations()[3]));
     //struct ContainedStruct
     QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 5)->type_specifier,
              session->astNodeFromDeclaration(cont->localDeclarations()[4]));
-    //ContainedStruct structVar, part of the same declaration as above         
+    //ContainedStruct structVar, part of the same declaration as above
     QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 5),
              session->astNodeFromDeclaration(cont->localDeclarations()[5]));
   }
 
   {
     //----ClassA.cpp----
-    
+
     InsertIntoDUChain codeH("ClassA.h", "class ClassA { public: ClassA(); private: int i;  float f, j;\
                                                         struct ContainedStruct { int i; ClassA * p;  } structVar; };");
-    
+
     InsertIntoDUChain code("ClassA.cpp", "#include<ClassA.h> \n ClassA::ClassA() : i(0), j(0.0) {structVar.i = 0; ContainedStruct testStruct; }");
     code.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
 
     DUChainReadLocker lock;
-    
+
     ParseSession::Ptr session(dynamic_cast<ParseSession*>(code->ast().data()));
     QVERIFY(session);
     TranslationUnitAST * ast = session->topAstNode();
     QVERIFY(ast);
     QVERIFY(ast->declarations);
     QCOMPARE(ast->declarations->count(), 1);
-    
+
     QVERIFY(AstUtils::childNode<FunctionDefinitionAST>(ast, 0));
     QCOMPARE(AstUtils::childNode<FunctionDefinitionAST>(ast, 0),
               session->astNodeFromDeclaration(KDevelop::DeclarationPointer(code->localDeclarations()[0])));
     QCOMPARE(code->localDeclarations()[0]->context()->importedParentContexts().size(), 1);
     QVERIFY(code->localDeclarations()[0]->context()->importedParentContexts()[0].context(code.m_topContext) != code.m_topContext);
   }
-  
-  
+
+
   {
     InsertIntoDUChain code("AbstractClass.h", "class AbstractClass { public: virtual ~AbstractClass();\
                                                        virtual void pureVirtual() = 0; virtual const int constPure(const int &) const = 0; \
@@ -583,7 +583,7 @@ void TestCppCodegen::testAstDuChainMapping()
     QVERIFY(ast);
     QVERIFY(ast->declarations);
     QCOMPARE(ast->declarations->count(), 1);
-    
+
     QVERIFY(AstUtils::childNode<SimpleDeclarationAST>(ast, 0));
     QCOMPARE(session->astNodeFromDeclaration(code->localDeclarations()[0]),
             AstUtils::childNode<SimpleDeclarationAST>(ast, 0)->type_specifier);
@@ -591,18 +591,18 @@ void TestCppCodegen::testAstDuChainMapping()
     ClassSpecifierAST * classAst = AstUtils::node_cast<ClassSpecifierAST>
                                   (AstUtils::childNode<SimpleDeclarationAST>(ast, 0)->type_specifier);
     QVERIFY(classAst);
-    
+
     DUContext * cont = code->localDeclarations()[0]->internalContext();
     QVERIFY(cont);
-    
+
     //~AbstractClass()
     QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 1),
              session->astNodeFromDeclaration(cont->localDeclarations()[0]));
-    
+
     //pureVirtual()
     QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 2),
              session->astNodeFromDeclaration(cont->localDeclarations()[1]));
-    
+
     //constPure()
     SimpleDeclarationAST * func = AstUtils::childNode<SimpleDeclarationAST>(classAst, 3);
     QCOMPARE(func,
@@ -613,11 +613,11 @@ void TestCppCodegen::testAstDuChainMapping()
     QVERIFY(AstUtils::parameterAtIndex(AstUtils::childInitDeclarator(func, 0)->declarator, 0));
     QCOMPARE(AstUtils::parameterAtIndex(AstUtils::childInitDeclarator(func, 0)->declarator, 0),
              session->astNodeFromDeclaration(cont->localDeclarations()[2]->internalContext()->localDeclarations()[0]));
-    
+
     //regularVirtual()
     QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 4),
              session->astNodeFromDeclaration(cont->localDeclarations()[3]));
-    
+
     //constPure()
     func = AstUtils::childNode<SimpleDeclarationAST>(classAst, 5);
     QCOMPARE(func,

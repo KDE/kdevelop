@@ -28,8 +28,8 @@
 
 #include "../gdbcommand.h"
 #include "../debugsession.h"
+#include "../debug.h"
 
-#include <KDebug>
 
 
 namespace GDBDebugger
@@ -91,7 +91,7 @@ RegistersManager::RegistersManager(QWidget* parent)
 
 void RegistersManager::architectureParsedSlot(Architecture arch)
 {
-    kDebug() << " Current controller: " << m_registerController << "Current arch " << m_currentArchitecture;
+    qCDebug(DEBUGGERGDB) << " Current controller: " << m_registerController << "Current arch " << m_currentArchitecture;
 
     if (m_registerController || m_currentArchitecture != undefined) {
         return;
@@ -100,19 +100,19 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
     switch (arch) {
     case x86:
         m_registerController.reset(new RegisterController_x86(m_debugSession)) ;
-        kDebug() << "Found x86 architecture";
+        qCDebug(DEBUGGERGDB) << "Found x86 architecture";
         break;
     case x86_64:
         m_registerController.reset(new RegisterController_x86_64(m_debugSession));
-        kDebug() << "Found x86_64 architecture";
+        qCDebug(DEBUGGERGDB) << "Found x86_64 architecture";
         break;
     case arm:
         m_registerController.reset(new RegisterController_Arm(m_debugSession));
-        kDebug() << "Found Arm architecture";
+        qCDebug(DEBUGGERGDB) << "Found Arm architecture";
         break;
     default:
         m_registerController.reset();
-        kWarning() << "Unsupported architecture. Registers won't be available.";
+        qWarning() << "Unsupported architecture. Registers won't be available.";
         break;
     }
 
@@ -127,13 +127,13 @@ void RegistersManager::architectureParsedSlot(Architecture arch)
 
 void RegistersManager::setSession(DebugSession* debugSession)
 {
-    kDebug() << "Change session " << debugSession;
+    qCDebug(DEBUGGERGDB) << "Change session " << debugSession;
     m_debugSession = debugSession;
     if (m_registerController) {
         m_registerController->setSession(debugSession);
     }
     if (!m_debugSession) {
-        kDebug() << "Will reparse arch";
+        qCDebug(DEBUGGERGDB) << "Will reparse arch";
         m_needToCheckArch = true;
         setController(0);
     }
@@ -145,7 +145,7 @@ void RegistersManager::updateRegisters()
         return;
     }
 
-    kDebug() << "Updating registers";
+    qCDebug(DEBUGGERGDB) << "Updating registers";
     if (m_needToCheckArch) {
         m_needToCheckArch = false;
         m_currentArchitecture = undefined;
@@ -158,7 +158,7 @@ void RegistersManager::updateRegisters()
     if (m_registerController) {
         m_registersView->updateRegisters();
     } else {
-        kDebug() << "No registerController, yet?";
+        qCDebug(DEBUGGERGDB) << "No registerController, yet?";
     }
 }
 

@@ -23,7 +23,6 @@
 #include <QtTest/QtTest>
 #include <KSharedConfig>
 
-#include <KDebug>
 #include <KTempDir>
 #include <KParts/MainWindow>
 #include <KTextEditor/View>

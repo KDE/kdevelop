@@ -23,8 +23,6 @@
 
 #include "pp-environment.h"
 
-#include <kdebug.h>
-
 #include "pp-macro.h"
 #include "pp-engine.h"
 #include "pp-location.h"

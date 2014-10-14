@@ -13,7 +13,6 @@
 
 #include "environmentmanager.h"
 #include <QFileInfo>
-#include <kdebug.h>
 #include "rpp/pp-macro.h"
 #include "rpp/pp-environment.h"
 #include <language/duchain/problem.h>
@@ -22,10 +21,10 @@
 #include <language/editor/modificationrevision.h>
 #include "parser/rpp/macrorepository.h"
 #include "cppdebughelper.h"
+#include "debug.h"
 #include <language/duchain/duchainregister.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
-#include "cpppreprocessenvironment.h"
 
 using namespace KDevelop;
 
@@ -36,7 +35,7 @@ using namespace KDevelop;
 DEFINE_LIST_MEMBER_HASH(IncludePathListItem, m_includePaths, KDevelop::IndexedString)
 
 struct IncludePathListItem {
-  
+
     IncludePathListItem() {
       initializeAppendedLists(true);
       m_refCount = 0;
@@ -49,34 +48,34 @@ struct IncludePathListItem {
     ~IncludePathListItem() {
       freeAppendedLists();
     }
-    
+
     bool persistent() const {
       return (bool)m_refCount;
     }
-    
+
     bool operator==(const IncludePathListItem& rhs) const {
       return listsEqual(rhs);
     }
-  
+
     uint hash() const {
       uint ret = 0;
       for(uint a = 0; a < m_includePathsSize(); ++a)
         ret = (m_includePaths()[a].hash() + ret) * 17;
-      
+
       return ret;
     }
-    
+
     uint itemSize() const {
       return dynamicSize();
     }
-    
+
     uint classSize() const {
       return sizeof(*this);
     }
-  
+
     uint m_refCount;
     START_APPENDED_LISTS(IncludePathListItem);
-    
+
     APPENDED_LIST_FIRST(IncludePathListItem, IndexedString, m_includePaths);
     END_APPENDED_LISTS(IncludePathListItem, m_includePaths);
   private:
@@ -153,7 +152,7 @@ QString print(const Cpp::ReferenceCountedStringSet& set) {
     if(!first)
       ret += ", ";
     first = false;
-    
+
     ret += (*it).str();
     ++it;
   }
@@ -168,7 +167,7 @@ QString print(const Cpp::ReferenceCountedMacroSet& set) {
     if(!first)
       ret += ", ";
     first = false;
-    
+
     ret += it.ref().toString();
     ++it;
   }
@@ -208,20 +207,20 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
 
   if( cppEnvironment->identityOffsetRestrictionEnabled() && cppEnvironment->identityOffsetRestriction() != identityOffset() ) {
 #ifdef DEBUG_LEXERCACHE
-    kDebug( 9007 ) << "file" << url().str() << "does not match branching hash. Restriction:" << cppEnvironment->identityOffsetRestriction() << "Actual:" << identityOffset();
+    qCDebug(CPPDUCHAIN) << "file" << url().str() << "does not match branching hash. Restriction:" << cppEnvironment->identityOffsetRestriction() << "Actual:" << identityOffset();
 #endif
     return false;
   }
-  
+
   if(EnvironmentManager::self()->matchingLevel() == EnvironmentManager::Disabled)
     return true;
-  
+
   //Consider files that are out-guarded by the header-guard as a match, without looking into their content
   ///@todo Pick the version that is already in the environment if there is multiple
   if(EnvironmentManager::self()->matchingLevel() == EnvironmentManager::Naive)
     if(cppEnvironment->macroNameSet().contains(headerGuard())) {
 #ifdef DEBUG_LEXERCACHE
-      kDebug( 9007 ) << "file" << url().str() << "environment contains the header-guard, returning true";
+      qCDebug(CPPDUCHAIN) << "file" << url().str() << "environment contains the header-guard, returning true";
 #endif
       return true;
     }
@@ -236,40 +235,40 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
     }
     rpp::pp_macro* m = cppEnvironment->retrieveStoredMacro( *it );
     if(m && !m->isUndef()) {
-      
+
 #ifdef DEBUG_LEXERCACHE
       if(debugging()) {
-        kDebug(9007) << "The environment contains a macro that can affect the cached file, but that should not exist:" << m->name.str();
+        qCDebug(CPPDUCHAIN) << "The environment contains a macro that can affect the cached file, but that should not exist:" << m->name.str();
       }
 #endif
       return false;
     }
   }
-  
+
   //Make sure that all external macros used by the file now exist too
 
   ///@todo find out why this assertion sometimes triggers, maybe different macros with the same name were used?
   //ifDebug( Q_ASSERT(m_usedMacros.set().count() == m_usedMacroNames.set().count()) );
-  ifDebug( kDebug(9007) << "Count of used macros that need to be verified:" << d_func()->m_usedMacros.set().count() );
+  ifDebug( qCDebug(CPPDUCHAIN) << "Count of used macros that need to be verified:" << d_func()->m_usedMacros.set().count() );
 
   for ( ReferenceCountedMacroSet::Iterator it( d_func()->m_usedMacros.iterator() ); it; ++it ) {
     rpp::pp_macro* m = cppEnvironment->retrieveStoredMacro( it.ref().name );
     if ( !m || !(*m == it.ref()) ) {
       if( !m && it.ref().isUndef() ) {
-        ifDebug( kDebug( 9007 ) << "Undef-macro" << it.ref().name.str() << "is ok" << m );
+        ifDebug( qCDebug(CPPDUCHAIN) << "Undef-macro" << it.ref().name.str() << "is ok" << m );
         //It is okay, we did not find a macro, but the used macro is an undef macro
         //Q_ASSERT(0); //Undef-macros should not be marked as used
       } else {
-        ifDebug( kDebug( 9007 ) << "The cached file " << url().str() << " used a macro called \"" << it.ref().name.str() << "\"(from" << it.ref().file.str() << "), but the environment" << (m ? "contains differing macro of that name" : "does not contain that macro") << ", the cached file is not used"  );
-        ifDebug( if(m) { kDebug() << "Used macro: " << it.ref().toString()  << "from" << it.ref().file.str() << "found:" << m->toString() << "from" << m->file.str(); } );
+        ifDebug( qCDebug(CPPDUCHAIN) << "The cached file " << url().str() << " used a macro called \"" << it.ref().name.str() << "\"(from" << it.ref().file.str() << "), but the environment" << (m ? "contains differing macro of that name" : "does not contain that macro") << ", the cached file is not used"  );
+        ifDebug( if(m) { qCDebug(CPPDUCHAIN) << "Used macro: " << it.ref().toString()  << "from" << it.ref().file.str() << "found:" << m->toString() << "from" << m->file.str(); } );
         return false;
       }
     }else{
-      ifDebug( kDebug( 9007 ) << it.ref().name.str() << "match" );
+      ifDebug( qCDebug(CPPDUCHAIN) << it.ref().name.str() << "match" );
     }
   }
 
-  ifDebug( kDebug( 9007 ) << "Using cached file " << url().str() );  
+  ifDebug( qCDebug(CPPDUCHAIN) << "Using cached file " << url().str() );
   return true;
 }
 
@@ -288,12 +287,12 @@ void Cpp::EnvironmentFile::setIncludePathDependencies(const KDevelop::Modificati
 bool EnvironmentFile::needsUpdate(const ParsingEnvironment* environment) const {
   ENSURE_READ_LOCKED
   const CppPreprocessEnvironment* cppEnvironment = dynamic_cast<const CppPreprocessEnvironment*>(environment);
-  
+
   //When in naive matching mode, we even use the non-guarded version when inappropriate. We must make sure not to update it in such
   //a situation, else it will end up empty
   if(cppEnvironment && EnvironmentManager::self()->matchingLevel() <= EnvironmentManager::Naive && !headerGuard().isEmpty() && cppEnvironment->macroNameSet().contains(headerGuard()))
     return false;
-  
+
   return ParsingEnvironmentFile::needsUpdate(environment) || d_func()->m_includePathDependencies.needsUpdate();
 }
 
@@ -301,13 +300,13 @@ EnvironmentFile::EnvironmentFile( const IndexedString& url, TopDUContext* topCon
 
   d_func_dynamic()->setClassId(this);
   setLanguage(IndexedString("C++"));
-  
+
   d_func_dynamic()->m_topContext = IndexedTopDUContext(topContext);
-  
+
   d_func_dynamic()->m_url = url;
 
-//   ifDebug( kDebug(9007) << "created for" << url.str() << "modification-time:" << d_func_dynamic()->m_modificationTime );
-  
+//   ifDebug( qCDebug(CPPDUCHAIN) << "created for" << url.str() << "modification-time:" << d_func_dynamic()->m_modificationTime );
+
   clearModificationRevisions();
 }
 
@@ -332,7 +331,7 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp
   ENSURE_WRITE_LOCKED
 #ifdef DEBUG_LEXERCACHE
   if(debugging()) {
-  kDebug( 9007 )  << id(this) << "defined macro" << macro.name.str();
+  qCDebug(CPPDUCHAIN)  << id(this) << "defined macro" << macro.name.str();
   }
 #endif
   if( previousOfSameName && d_func()->m_definedMacros.contains(*previousOfSameName) )
@@ -345,18 +344,18 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp
       if( macro.name == it.ref().name )
         d_func_dynamic()->m_definedMacros.remove(it.ref());
   }
-  
+
   if(macro.isUndef()) {
     d_func_dynamic()->m_definedMacroNames.remove( macro.name );
-    
+
     d_func_dynamic()->m_unDefinedMacroNames.insert( macro.name );
   } else {
     d_func_dynamic()->m_unDefinedMacroNames.remove( macro.name );
     d_func_dynamic()->m_definedMacroNames.insert( macro.name );
-    
+
     d_func_dynamic()->m_definedMacros.insert( macro );
   }
-  
+
   //State: If it is an undef macro, it is not in m_definedMacroNames not in m_definedMacros, and it is in m_unDefinedMacroNames
   //       If  it is a normal macro, it is in m_definedMacroNames, it is in m_definedMacros, and it is not in m_unDefinedMacroNames
 }
@@ -366,11 +365,11 @@ void EnvironmentFile::usingMacro( const rpp::pp_macro& macro ) {
   if ( !d_func()->m_definedMacroNames.contains( macro.name ) && !d_func()->m_unDefinedMacroNames.contains( macro.name ) && !macro.isUndef() ) {
 #ifdef DEBUG_LEXERCACHE
   if(debugging()) {
-    kDebug( 9007 ) << id(this) << "used macro" << macro.name.str() << "from" << macro.file.str();
+    qCDebug(CPPDUCHAIN) << id(this) << "used macro" << macro.name.str() << "from" << macro.file.str();
   }
 #endif
     d_func_dynamic()->m_usedMacros.insert( macro );
-  
+
     d_func_dynamic()->m_usedMacroNames.insert( macro.name );
   }
 }
@@ -419,7 +418,7 @@ const QList<IndexedString> EnvironmentFile::includePaths() const {
   QList<IndexedString> ret;
   if(d_func()->m_includePaths) {
     const IncludePathListItem* item = includePathsRepository().itemFromIndex(d_func()->m_includePaths);
-    
+
     FOREACH_FUNCTION(const IndexedString& include, item->m_includePaths)
       ret << include;
   }
@@ -428,9 +427,9 @@ const QList<IndexedString> EnvironmentFile::includePaths() const {
 
 void EnvironmentFile::setIncludePaths( const QList<IndexedString>& paths ) {
   ENSURE_WRITE_LOCKED
-  
+
   QMutexLocker lock(includePathsRepository().mutex());
-  
+
   if(d_func()->m_includePaths) {
     KDevelop::DynamicItem<IncludePathListItem, true> item = includePathsRepository().dynamicItemFromIndex(d_func()->m_includePaths);
     --item->m_refCount;
@@ -493,46 +492,46 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   ENSURE_WRITE_LOCKED
   //We have to read the other file
   ENSURE_FILE_READ_LOCKED(file)
-  
+
 #ifdef DEBUG_LEXERCACHE
   if(debugging()) {
-  kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in macros this:" << print(d_func()->m_definedMacroNames)  << "defined macros in other:" << print(file.d_func()->m_definedMacroNames) << "undefined macros in other:" << print(file.d_func()->m_unDefinedMacroNames) << "strings in other:" << print(file.strings());
+  qCDebug(CPPDUCHAIN) <<  id(this) << ": merging" << id(&file)  << "defined in macros this:" << print(d_func()->m_definedMacroNames)  << "defined macros in other:" << print(file.d_func()->m_definedMacroNames) << "undefined macros in other:" << print(file.d_func()->m_unDefinedMacroNames) << "strings in other:" << print(file.strings());
   }
 #endif
   d_func_dynamic()->m_strings = (d_func()->m_strings + (file.d_func()->m_strings - d_func()->m_definedMacroNames)) - d_func()->m_unDefinedMacroNames;
-  
-  ///@todo Probably it's more efficient having 2 sets m_changedMacroNames and m_unDefinedMacroNames, where m_unDefinedMacroNames is a subset of m_changedMacroNames.  
+
+  ///@todo Probably it's more efficient having 2 sets m_changedMacroNames and m_unDefinedMacroNames, where m_unDefinedMacroNames is a subset of m_changedMacroNames.
   //Only add macros to the usedMacros-set that were not defined locally
   d_func_dynamic()->m_usedMacroNames += (file.d_func()->m_usedMacroNames - d_func()->m_definedMacroNames) - d_func()->m_unDefinedMacroNames;
 
   ///Merge those used macros that were not defined within this environment
   //This is slightly inefficient, would be nicer to have a fast mechanism for this.
   //This is not tragic since usually only few macros are used, and thus few need to be iterated.
-  
+
   {
     Utils::Set definedMacroNamesSet = d_func()->m_definedMacroNames.set();
     Utils::Set unDefinedMacroNamesSet = d_func()->m_unDefinedMacroNames.set();
-    
+
     std::set<uint> addUsedMacros;
-    
+
     ReferenceCountedMacroSet backup = file.d_func()->m_usedMacros;
     Q_ASSERT(backup.set().setIndex() == file.d_func()->m_usedMacros.set().setIndex());
-    
+
     for(ReferenceCountedMacroSet::Iterator it( file.d_func()->m_usedMacros.iterator() ); it; ++it) {
       const rpp::pp_macro& macro(it.ref());
       if( !definedMacroNamesSet.contains(macro.name.index()) && !unDefinedMacroNamesSet.contains(macro.name.index()) )
         addUsedMacros.insert(it.index());
     }
-    
+
     //Must not happen, since we hold the locks
     Q_ASSERT(backup.set().setIndex() == file.d_func()->m_usedMacros.set().setIndex());
-    
+
     if(!addUsedMacros.empty())
       d_func_dynamic()->m_usedMacros += ReferenceCountedMacroSet( addUsedMacros );
   }
-  
+
   ifDebug( Q_ASSERT(d_func()->m_usedMacroNames.set().count() == d_func()->m_usedMacros.set().count()) );
-  
+
   ///Add defined macros from the merged file.
 
   {
@@ -558,7 +557,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
       }
     }else
     #endif
-      
+
     if(!affectedMacros.isEmpty()) {
       //We have to iterate through all potentially removed macros
       for( ReferenceCountedMacroSet::Iterator it( potentiallyRemoveMacros.iterator() ); it; ++it ) {
@@ -567,13 +566,13 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
           removeDefinedMacros.insert(it.index());
       }
     }
-    
+
     if(!removeDefinedMacros.empty())
       d_func_dynamic()->m_definedMacros -= ReferenceCountedMacroSet( removeDefinedMacros );
   }
 
   //Now merge in the new defined macros
-  
+
   d_func_dynamic()->m_unDefinedMacroNames += file.d_func()->m_unDefinedMacroNames;
   d_func_dynamic()->m_unDefinedMacroNames -= file.d_func()->m_definedMacroNames;
   d_func_dynamic()->m_definedMacroNames -= file.d_func()->m_unDefinedMacroNames;
@@ -583,17 +582,17 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   ///Merge include-files, problems and other stuff
 //   m_includeFiles += file.m_includeFiles.set();
   d_func_dynamic()->m_missingIncludeFiles += file.d_func()->m_missingIncludeFiles;
-  
+
   addModificationRevisions(file.allModificationRevisions());
 
 #ifdef DEBUG_LEXERCACHE
   if(debugging()) {
-  kDebug( 9007 ) << id(this) << ": defined macro names in this after merge:" << d_func()->m_definedMacroNames.set().count() << print(d_func()->m_definedMacroNames);
-  kDebug( 9007 ) << id(this) << ": defined in this after merge:" << d_func()->m_definedMacros.set().count() << print(d_func()->m_definedMacros);
+  qCDebug(CPPDUCHAIN) << id(this) << ": defined macro names in this after merge:" << d_func()->m_definedMacroNames.set().count() << print(d_func()->m_definedMacroNames);
+  qCDebug(CPPDUCHAIN) << id(this) << ": defined in this after merge:" << d_func()->m_definedMacros.set().count() << print(d_func()->m_definedMacros);
   ifDebug( Q_ASSERT(d_func()->m_definedMacros.set().count() == d_func()->m_definedMacroNames.set().count()) );
-  kDebug( 9007 ) << id(this) << ": undefined in this after merge:" << print(d_func()->m_unDefinedMacroNames);
-  kDebug( 9007 ) << id(this) << ": strings in this after merge:" << print(strings());
-  kDebug( 9007 ) << id(this) << ": macros used in this after merge:" << print(d_func()->m_usedMacroNames);
+  qCDebug(CPPDUCHAIN) << id(this) << ": undefined in this after merge:" << print(d_func()->m_unDefinedMacroNames);
+  qCDebug(CPPDUCHAIN) << id(this) << ": strings in this after merge:" << print(strings());
+  qCDebug(CPPDUCHAIN) << id(this) << ": macros used in this after merge:" << print(d_func()->m_usedMacroNames);
   }
 #endif
 }

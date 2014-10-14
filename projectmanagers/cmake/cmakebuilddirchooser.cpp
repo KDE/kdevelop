@@ -20,12 +20,12 @@
 
 #include "cmakebuilddirchooser.h"
 #include <QDir>
-#include <KDebug>
 #include <KProcess>
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include "ui_cmakebuilddirchooser.h"
+#include "debug.h"
 
 #include <KColorScheme>
 
@@ -60,7 +60,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
 {
     setDefaultButton(KDialog::Ok);
     setCaption(i18n("Configure a build directory"));
-    
+
 //     QWidget* w= new QWidget(this);
     m_chooserUi = new Ui::CMakeBuildDirChooser;
     m_chooserUi->setupUi(mainWidget());
@@ -111,7 +111,7 @@ QString CMakeBuildDirChooser::buildDirProject(const Path &srcDir)
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        kWarning(9032) << "Something really strange happened reading" << cachePath;
+        qCWarning(CMAKE) << "Something really strange happened reading" << cachePath;
         return QString();
     }
 
@@ -128,7 +128,7 @@ QString CMakeBuildDirChooser::buildDirProject(const Path &srcDir)
             ret=line.mid(pLine.count());
         }
     }
-    kDebug(9042) << "The source directory for " << file.fileName() << "is" << ret;
+    qCDebug(CMAKE) << "The source directory for " << file.fileName() << "is" << ret;
     return ret;
 }
 
@@ -177,11 +177,11 @@ void CMakeBuildDirChooser::updated()
                 }
                 else
                 {
-                    kWarning(9042) << "maybe you are trying a damaged CMakeCache.txt file. Proper: ";
+                    qCWarning(CMAKE) << "maybe you are trying a damaged CMakeCache.txt file. Proper: ";
                 }
             }
         }
-        
+
         if(m_alreadyUsed.contains(chosenBuildFolder.toLocalFile())) {
             st=DirAlreadyCreated;
         }
@@ -191,8 +191,8 @@ void CMakeBuildDirChooser::updated()
         setStatus(i18n("You need to specify a build directory."), false);
         return;
     }
-    
-    
+
+
     if(st & (BuildDirCreated | CorrectBuildDir))
     {
         setStatus(i18n("Using an already created build directory."), true);
@@ -202,7 +202,7 @@ void CMakeBuildDirChooser::updated()
     else
     {
         bool correct = (dirEmpty || !dirExists) && !(st & DirAlreadyCreated) && !dirRelative;
-        
+
         if(correct)
         {
             st |= CorrectBuildDir;
@@ -228,24 +228,24 @@ void CMakeBuildDirChooser::updated()
 }
 
 void CMakeBuildDirChooser::setCMakeBinary(const Path& path)
-{ 
+{
     m_chooserUi->cmakeBin->setUrl(path.toUrl());
     updated();
 }
 
 void CMakeBuildDirChooser::setInstallPrefix(const Path& path)
-{ 
+{
     m_chooserUi->installPrefix->setUrl(path.toUrl());
     updated();
 }
 
 void CMakeBuildDirChooser::setBuildFolder(const Path& path)
-{ 
+{
     m_chooserUi->buildFolder->setUrl(path.toUrl());
     updated();
 }
 
-void CMakeBuildDirChooser::setBuildType(const QString& s) 
+void CMakeBuildDirChooser::setBuildType(const QString& s)
 {
     m_chooserUi->buildType->addItem(s);
     m_chooserUi->buildType->setCurrentIndex(m_chooserUi->buildType->findText(s));

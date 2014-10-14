@@ -21,6 +21,7 @@
 #include "cmakeparsejob.h"
 #include "declarationbuilder.h"
 #include "usebuilder.h"
+#include "../debug.h"
 #include <cmakelistsparser.h>
 #include <cmakemanager.h>
 #include <language/backgroundparser/urlparselock.h>
@@ -74,7 +75,7 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
             }
 
             if (!parentCtx) {
-                qDebug() << "waiting for..." << parentFile << document();
+                qCDebug(CMAKE) << "waiting for..." << parentFile << document();
                 //FIXME: Currently dead-locks
                 //parentCtx = DUChain::self()->waitForUpdate(parentFile, TopDUContext::AllDeclarationsAndContexts);
             }

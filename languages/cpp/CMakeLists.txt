@@ -7,8 +7,6 @@ include_directories(
     ${KDevelop_SOURCE_DIR}/languages/plugins
 )
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 )
-
 add_subdirectory(parser)
 add_subdirectory(cppduchain)
 add_subdirectory(tests)
@@ -23,7 +21,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     cpputils.cpp
     setuphelpers.cpp
     quickopen.cpp
-    
+
     codecompletion/model.cpp
     codecompletion/worker.cpp
     codecompletion/context.cpp
@@ -56,7 +54,7 @@ target_link_libraries(kdevcpplanguagesupport
     KDev::Project
     KDev::Util
     ${KDE4_THREADWEAVER_LIBRARIES}
-    
+
     KF5::TextEditor
 )
 

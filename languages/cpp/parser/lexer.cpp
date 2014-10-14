@@ -26,7 +26,6 @@
 #include <cctype>
 #include <util/kdevvarlengtharray.h>
 
-#include <kdebug.h>
 #include <klocalizedstring.h>
 
 void TokenStream::splitRightShift(uint index)
@@ -355,13 +354,13 @@ void Lexer::tokenize(ParseSession* _session)
 
     if(!m_leaveSize)
       current_token->size = cursor.offsetIn( session->contents() ) - current_token->position;
-    
+
     Q_ASSERT(m_leaveSize || (cursor.current == session->contents() + current_token->position + current_token->size));
     Q_ASSERT(current_token->position + current_token->size <= (uint)session->contentsVector().size());
     Q_ASSERT(previousIndex == index-1 || previousIndex == index); //Never parse more than 1 token, because that won't be initialized correctly
 
     m_leaveSize = false;
-    
+
     if(previousIndex != index)
       m_firstInLine = false;
     else // skipped index, remove last appended token again
@@ -631,20 +630,20 @@ void Lexer::scan_identifier_or_keyword()
 {
   if(!(cursor < endCursor))
     return;
-  
+
   //We have to merge symbols tokenized separately, they may have been contracted using ##
   SpecialCursor nextCursor(cursor);
   ++nextCursor;
-  
+
   while(nextCursor < endCursor && (!isCharacter(*(nextCursor.current)) || isLetterOrNumber(*nextCursor.current) || characterFromIndex(*nextCursor.current) == '_')) {
     //Fortunately this shouldn't happen too often, only when ## is used within the preprocessor
     KDevelop::IndexedString mergedSymbol(KDevelop::IndexedString::fromIndex(*(cursor.current)).byteArray() + KDevelop::IndexedString::fromIndex(*(nextCursor.current)).byteArray());
-    
+
     (*cursor.current) = mergedSymbol.index();
     (*nextCursor.current) = 0;
     ++nextCursor;
   }
-  
+
   uint bucket = (*cursor.current) % index_size;
 
   //A very simple lookup table: First level contains all pairs grouped by with (index % index_size), then there is a simple list
@@ -663,7 +662,7 @@ void Lexer::scan_identifier_or_keyword()
     (*session->token_stream)[index].size = 1;
     (*session->token_stream)[index++].kind = Token_identifier;
   }
-  
+
   cursor = nextCursor;
 }
 
@@ -890,11 +889,11 @@ void Lexer::scan_divide()
 
           //Only allow appending to comments that are behind a newline, because else they may belong to the item on their left side.
           //If index is 1, this comment is the first token, which should be the translation-unit comment. So do not merge following comments.
-          if(m_firstInLine && index != 1) 
+          if(m_firstInLine && index != 1)
             m_canMergeComment = true;
           else
             m_canMergeComment = false;
-          
+
           (*session->token_stream)[index++].kind = Token_comment;
           (*session->token_stream)[index-1].size = (size_t)(cursor - commentBegin);
           (*session->token_stream)[index-1].position = commentBegin.offsetIn( session->contents() );

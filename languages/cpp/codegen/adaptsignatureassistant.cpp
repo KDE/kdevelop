@@ -32,6 +32,7 @@
 
 #include "cppduchain.h"
 #include "qtfunctiondeclaration.h"
+#include "../debug.h"
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -115,7 +116,7 @@ void AdaptSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
 
   DUChainReadLocker lock(DUChain::lock(), 300);
   if(!lock.locked()) {
-    kDebug() << "failed to lock duchain in time";
+    qCDebug(CPP) << "failed to lock duchain in time";
     return;
   }
 

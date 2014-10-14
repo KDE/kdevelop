@@ -31,8 +31,8 @@
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
+#include <QDebug>
 
-#include <KDebug>
 
 using namespace KDevelop;
 
@@ -45,7 +45,7 @@ IProject* loadProject( const QString& projectFile, const QString& projectName )
     ICore::self()->projectController()->openProject( QUrl::fromLocalFile(projectFile) );
 
     if( !projectSpy->wait( 5000 ) ) {
-        kFatal() << "Expected project to be loaded within 5 seconds, but this didn't happen";
+        qFatal("Expected project to be loaded within 5 seconds, but this didn't happen");
     }
     IProject* project = ICore::self()->projectController()->findProjectByName( projectName );
 
@@ -56,7 +56,7 @@ void createFile( QFile& file )
 {
     file.remove();
     if ( !file.open( QIODevice::ReadWrite ) ) {
-        kFatal() << "Cannot create the file " << file.fileName();
+        qFatal("Cannot create the file %s", file.fileName().toUtf8().constData());
     }
 }
 }

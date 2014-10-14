@@ -21,6 +21,7 @@
 #include "navigation/declarationnavigationcontext.h"
 #include "navigation/includenavigationcontext.h"
 #include "navigation/macronavigationcontext.h"
+#include "debug.h"
 #include <language/duchain/duchainregister.h>
 #include <language/duchain/topducontextdata.h>
 #include <language/duchain/forwarddeclaration.h>
@@ -46,7 +47,7 @@ QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, 
     i.name = path.lastPathSegment();
     i.isDirectory = false;
     i.basePath = path.parent().toUrl();
-    
+
     return new NavigationWidget( i, TopDUContextPointer(topContext ? topContext : this->topContext()), htmlPrefix, htmlSuffix );
   } else {
     return new NavigationWidget( DeclarationPointer(decl), TopDUContextPointer(topContext ? topContext : this->topContext()), htmlPrefix, htmlSuffix );
@@ -111,15 +112,15 @@ Declaration* FindDeclaration::instantiateDeclaration( Declaration* decl, const I
 {
   if( !templateArguments.isValid() )
     return decl;
-  
+
   TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(decl);
   if( !templateDecl ) {
-    ifDebug( kDebug(9007) << "Tried to instantiate a non-template declaration" << decl->toString(); )
+    ifDebug( qCDebug(CPPDUCHAIN) << "Tried to instantiate a non-template declaration" << decl->toString(); )
     return 0;
   }
   InstantiationInformation info(templateArguments);
   CppDUContext<DUContext>* context = dynamic_cast<CppDUContext<DUContext>*>(decl->context());
-  
+
   if(context && context->instantiatedWith().isValid())
     info.previousInstantiationInformation = context->instantiatedWith();
 
@@ -157,12 +158,12 @@ void FindDeclaration::closeQualifiedIdentifier() {
 bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
   State& s = *m_states.back();
   QualifiedIdentifier lookup = s.identifier;
-  
+
   DUContext::SearchItem::PtrList allIdentifiers;
   allIdentifiers.append( DUContext::SearchItem::Ptr( new DUContext::SearchItem(lookup) ) );
-  
+
   Q_ASSERT(m_source);
-  
+
   ///Search a Declaration of the identifier
 
   DUContext* scopeContext = 0;
@@ -170,19 +171,19 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
   if( !s.result.isEmpty() && lookup.count() == 1 ) { //When we are searching within a scope-context, no namespaces are involved any more, so we look up exactly one item at a time.
 
     bool searchInNamespace = false;
-    
+
     //Eventually extract a scope context
     foreach( const DeclarationPointer &decl, s.result ) {
       if( !decl )
         continue;
-      
+
       if(!scopeContext && decl->kind() == Declaration::Namespace) {
         searchInNamespace = true;
         break;
       }
-      
+
       scopeContext = decl->logicalInternalContext(topContext());
-      
+
 
       if( !scopeContext || scopeContext->type() == DUContext::Template ) {
         AbstractType::Ptr t = decl->abstractType();
@@ -195,22 +196,22 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
       }
 
 #ifdef DEBUG
-        kDebug(9007) << decl->toString() << ": scope-context" << scopeContext;
+        qCDebug(CPPDUCHAIN) << decl->toString() << ": scope-context" << scopeContext;
         if(scopeContext)
-          kDebug(9007) << "scope-context-type" << scopeContext->type();
+          qCDebug(CPPDUCHAIN) << "scope-context-type" << scopeContext->type();
 #endif
 
       if( scopeContext && scopeContext->type() == DUContext::Class )
         break;
     }
-    
+
     if(!searchInNamespace) {
       if( scopeContext && scopeContext->owner() && scopeContext->owner()->isForwardDeclaration() ) {
-        kDebug(9007) << "Tried to search in forward-declaration of " << scopeContext->owner()->identifier().toString();
+        qCDebug(CPPDUCHAIN) << "Tried to search in forward-declaration of " << scopeContext->owner()->identifier().toString();
         m_lastScopeContext = DUContextPointer(scopeContext);
         scopeContext = 0;
       }
-      
+
       if( !scopeContext ) {
         s.result.clear();
         m_lastDeclarations.clear();
@@ -220,27 +221,27 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
   }
 
   m_lastScopeContext = DUContextPointer(scopeContext);
-  
+
   /// Look up Declarations
 
   DUContext::SearchFlags basicFlags = isFinalIdentifier ? m_flags : DUContext::OnlyContainerTypes;
-  
+
   DUContext::DeclarationList tempDecls;
   if( !scopeContext ) {
     m_context->findDeclarationsInternal( allIdentifiers, m_position, m_dataType, tempDecls, m_source, basicFlags | DUContext::DirectQualifiedLookup, 0 );
     if( tempDecls.isEmpty() && m_source != m_context && !s.identifier.explicitlyGlobal() ) {
       //To simulate a search starting at searchContext->scopIdentifier, we must search the identifier with all partial scopes prepended
       //If we have a trace, walk the trace up so we're able to find the item in earlier imported contexts.
-      
+
       QualifiedIdentifier prepend = m_context->scopeIdentifier(false);
       if(!prepend.isEmpty()) {
         prepend.setExplicitlyGlobal(true);
         DUContext::SearchItem::Ptr newItem(new DUContext::SearchItem(prepend));
         newItem->addToEachNode(allIdentifiers);
-        
+
         allIdentifiers.append(newItem);
       }
-      
+
       DUContext::DeclarationList decls;
       ///@todo do correct tracing for correct visibility
       ///@todo Create a test that depends on this behavior
@@ -252,23 +253,23 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
   } else { //Create a new trace, so template-parameters can be resolved globally
     scopeContext->findDeclarationsInternal( allIdentifiers, scopeContext->url() == m_context->url() ? m_position : scopeContext->range().end, m_dataType, tempDecls, topContext(), basicFlags | DUContext::DontSearchInParent | DUContext::DirectQualifiedLookup, 0 );
   }
-  
+
   s.result.clear();
-  
+
   //instantiate template declarations
   FOREACH_ARRAY(Declaration* decl, tempDecls) {
-    
+
     if(decl->isForwardDeclaration() && scopeContext && scopeContext->type() == DUContext::Class) {
       //We found a forward-declaration within a class. Resolve it with its real declaration.
       Declaration* resolution = dynamic_cast<ForwardDeclaration*>(decl)->resolve(m_source);
       if(resolution)
         decl = resolution;
     }
-    
+
     if(basicFlags & DUContext::NoUndefinedTemplateParams && isTemplateDependent(decl)) {
       return false;
     }
-    
+
     if( !s.templateParameters.isValid() ) {
       s.result << DeclarationPointer(decl);
     }else{
@@ -277,7 +278,7 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
         s.result << DeclarationPointer(dec);
     }
   }
-  
+
   s.templateParameters = InstantiationInformation();
 
   ///Namespace-aliases are treated elsewhere, and should not screw our search, so simply ignore them
@@ -305,7 +306,7 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
   }
 
   m_lastDeclarations = s.result;
-  
+
   return true;
 }
 }

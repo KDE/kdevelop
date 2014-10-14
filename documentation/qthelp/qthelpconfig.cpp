@@ -26,7 +26,6 @@
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KAboutData>
-#include <KDebug>
 #include <KSettings/Dispatcher>
 #include <knewstuff3/knewstuffbutton.h>
 #include <qhelpenginecore.h>
@@ -35,6 +34,7 @@
 #include "ui_qthelpconfig.h"
 #include "ui_qthelpconfigeditdialog.h"
 #include "qthelp_config_shared.h"
+#include "debug.h"
 
 K_PLUGIN_FACTORY(QtHelpConfigFactory, registerPlugin<QtHelpConfig>();)
 //K_EXPORT_PLUGIN(QtHelpConfigFactory("kdevqthelp_config"))
@@ -351,7 +351,7 @@ void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
                     item->setText(GhnsColumn, "1");
                     m_configWidget->qchTable->setCurrentItem(item);
                 } else {
-                    kDebug() << "namespace error";
+                    qCDebug(QTHELP) << "namespace error";
                 }
             }
         } else if(e.status() ==  KNS3::Entry::Deleted) {

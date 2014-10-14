@@ -20,7 +20,6 @@
 #include "ninjajob.h"
 #include <KAboutData>
 #include <KPluginFactory>
-#include <KDebug>
 #include <KConfigGroup>
 #include <KShell>
 #include <project/projectmodel.h>
@@ -28,7 +27,10 @@
 #include <project/builderjob.h>
 #include <interfaces/iproject.h>
 #include <QFile>
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(NINJABUILDER)
 
+Q_LOGGING_CATEGORY(NINJABUILDER, "kdevelop.projectbuilders.ninjabuilder")
 K_PLUGIN_FACTORY(NinjaBuilderFactory, registerPlugin<KDevNinjaBuilderPlugin>(); )
 // K_EXPORT_PLUGIN(NinjaBuilderFactory(KAboutData("kdevninja", "kdevninja", ki18n("Ninja Builder"), "0.1", ki18n("Support for building Ninja projects"), KAboutData::License_GPL)))
 
@@ -37,7 +39,7 @@ KDevNinjaBuilderPlugin::KDevNinjaBuilderPlugin(QObject* parent, const QVariantLi
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     if(hasError())
-        kWarning() << "Ninja plugin installed but ninja is not installed.";
+        qWarning() << "Ninja plugin installed but ninja is not installed.";
 }
 
 bool KDevNinjaBuilderPlugin::hasError() const
@@ -98,7 +100,7 @@ NinjaJob* KDevNinjaBuilderPlugin::runNinja(KDevelop::ProjectBaseItem* item, cons
     foreach (NinjaJob* ninjaJob, m_activeNinjaJobs.data())
     {
         if(item && ninjaJob->item() && ninjaJob->item()->project() == item->project() ) {
-            kDebug() << "killing running ninja job, due to new started build on same project:" << ninjaJob;
+            qCDebug(NINJABUILDER) << "killing running ninja job, due to new started build on same project:" << ninjaJob;
             ninjaJob->kill(KJob::EmitResult);
         }
     }

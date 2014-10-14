@@ -19,11 +19,11 @@
 */
 
 #include "chartools.h"
+#include "debug.h"
 #include <QString>
 #include <QVector>
 #include <util/kdevvarlengtharray.h>
 #include <serialization/indexedstring.h>
-#include <kdebug.h>
 
 QByteArray stringFromContents(const PreprocessedContents& contents, int offset, int count) {
   QByteArray ret;
@@ -65,8 +65,8 @@ PreprocessedContents convertFromByteArray(const QByteArray& array) {
   const char* data = array.constData();
   const char* dataEnd = data + array.size();
   unsigned int* target = to.data();
-  
-  
+
+
   while(data < dataEnd) {
     *target = indexFromCharacter(*data);
     ++data;
@@ -82,20 +82,20 @@ PreprocessedContents tokenizeFromByteArray(const QByteArray& array) {
   const char* data = array.constData();
   const char* dataEnd = data + array.size();
   //unsigned int* target = to.data();
-  
+
   KDevVarLengthArray<char, 100> identifier;
-  
+
   KDevelop::IndexedString::RunningHash hash;
 
   bool tokenizing = false;
-  
+
   while(data < dataEnd) {
-    
+
     if(!tokenizing) {
       if(isLetter(*data) || *data == '_')
         tokenizing = true;
     }
-    
+
     if(tokenizing) {
       if(isValidMacroIdentifierToken(*data)) {
         hash.append(*data);
@@ -103,25 +103,25 @@ PreprocessedContents tokenizeFromByteArray(const QByteArray& array) {
       }else{
         //End of token
         to.append( KDevelop::IndexedString::indexForString(identifier.constData(), identifier.size(), hash.hash) );
-        //kDebug() << "word" << "\"" + KDevelop::IndexedString(to.back()).str() + "\"";
+        //qCDebug(RPP) << "word" << "\"" + KDevelop::IndexedString(to.back()).str() + "\"";
         hash.clear();
         identifier.clear();
         tokenizing = false;
       }
     }
-    
+
     if(!tokenizing)
       to.append( indexFromCharacter(*data) );
     ++data;
   }
-  
+
   if(tokenizing)
     to.append( KDevelop::IndexedString::indexForString(identifier.constData(), identifier.size(), hash.hash) );
-  
-  
-/*  kDebug() << QString::fromUtf8(stringFromContents(to));
-  kDebug() << QString::fromUtf8(array);
+
+
+/*  qCDebug(RPP) << QString::fromUtf8(stringFromContents(to));
+  qCDebug(RPP) << QString::fromUtf8(array);
   Q_ASSERT(stringFromContents(to) == array);*/
-  to.squeeze(); 
+  to.squeeze();
   return to;
 }

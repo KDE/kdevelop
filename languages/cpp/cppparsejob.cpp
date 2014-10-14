@@ -39,7 +39,6 @@
 #include <QReadWriteLock>
 #include <QReadLocker>
 
-#include <KDebug>
 #include <KLocalizedString>
 
 #include <ThreadWeaver/Thread>
@@ -50,6 +49,7 @@
 #include "cppduchain/usebuilder.h"
 #include "preprocessjob.h"
 #include "environmentmanager.h"
+#include "debug.h"
 
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>
@@ -215,22 +215,22 @@ void CPPParseJob::mergeDefines(CppPreprocessEnvironment& env) const
 {
   //m_includePathsComputed is filled when includePaths() is called
   masterJob()->indexedIncludePaths();
-  
+
   if(ICore::self()->shuttingDown())
     return; //If the system is shutting down, include-paths were not computed properly
-  
+
   Q_ASSERT(masterJob()->m_includePathsComputed);
-  
+
   QHash<QString, QString> defines = masterJob()->m_includePathsComputed->defines();
-  
+
   ///@todo Most probably, the same macro-sets will be calculated again and again.
   ///           One ReferenceCountedMacroSet would be enough.
-  
+
   for(QHash<QString, QString>::const_iterator it = defines.constBegin(); it != defines.constEnd(); ++it)
   {
     rpp::pp_macro* m = new rpp::pp_macro(IndexedString(it.key()));
     m->setDefinitionText( *it );
-    
+
     //Call rpp::Environment::setMacro directly, so we don't add the macro to the environment-file.
     //It should be only part of the environment.
     env.rpp::Environment::setMacro(m);
@@ -241,7 +241,7 @@ const QList<IndexedString>& CPPParseJob::indexedIncludePaths() const {
     //If a lock was held here, we would get deadlocks
     if( ICore::self()->shuttingDown() )
       return m_includePaths;
-    
+
     if( masterJob() == this ) {
         if( !m_includePathsComputed ) {
             Q_ASSERT(!DUChain::lock()->currentThreadHasReadLock() && !DUChain::lock()->currentThreadHasWriteLock());
@@ -377,7 +377,7 @@ LineContextPair contentFromProxy(LineContextPair ctx) {
           ReferencedTopDUContext ref(ctx.context);
         }
         if(ctx.context->importedParentContexts().isEmpty()) {
-          kWarning() << "proxy-context for" << ctx.context->url().str() << "has no imports!" << ctx.context->ownIndex();
+          qWarning() << "proxy-context for" << ctx.context->url().str() << "has no imports!" << ctx.context->ownIndex();
           ///@todo Find out how this can happen
 //           Q_ASSERT(0);
           return LineContextPair(0, 0);
@@ -415,7 +415,7 @@ void CPPInternalParseJob::highlightIfNeeded()
     DUChainReadLocker l(DUChain::lock());
     ReferencedTopDUContext standardContext = DUChainUtils::standardContextForUrl(parentJob()->document().toUrl());
 
-    kDebug( 9007 ) << "Highlighting" << parentJob()->document().str();
+    qCDebug(CPP) << "Highlighting" << parentJob()->document().str();
     //If the document has a smart-range, at least re-do the highlighting
     l.unlock();
     if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
@@ -430,34 +430,34 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
 
     if (!parentJob()->cpp())
       return;
-    
+
     //If we have a parent, the parse-mutex is already locked
     QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
     if(!ICore::self()->languageController()->language("C++")->languageSupport())
       return;
-    
+
     initialize();
 
     if(updatingContentContext)
       parentJob()->translateDUChainToRevision(updatingContentContext.data());
-    
+
     if(updatingProxyContext)
       parentJob()->translateDUChainToRevision(updatingProxyContext.data());
-    
+
     UrlParseLock urlLock(parentJob()->document());
 
     if(!parentJob()->needsUpdate()) {
       parentJob()->processDelayedImports();
-      kDebug( 9007 ) << "===-- ALREADY UP TO DATE --===> " << parentJob()->document().str();
+      qCDebug(CPP) << "===-- ALREADY UP TO DATE --===> " << parentJob()->document().str();
       highlightIfNeeded();
       return;
     }
     if(!parentJob()->contentEnvironmentFile()) {
       //May happen when the file could not be opened or similar
-      kDebug( 9007 ) << "===-- Problem: Preprocessor did not create environment-file, skipping --===> " << parentJob()->document().str();
+      qCDebug(CPP) << "===-- Problem: Preprocessor did not create environment-file, skipping --===> " << parentJob()->document().str();
       return;
     }
-    kDebug( 9007 ) << "===-- PARSING --===> "
+    qCDebug(CPP) << "===-- PARSING --===> "
     << parentJob()->document().str();
 
 
@@ -546,7 +546,7 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
         newFeatures = (TopDUContext::Features)(newFeatures | contentContext->features());
 
       if(newFeatures & TopDUContext::ForceUpdate)
-        kDebug() << "update enforced";
+        qCDebug(CPP) << "update enforced";
 
       ///At some point, we have to give up on features again, else processing will be just too slow.
       ///Simple solution for now: Always go down to the minimum required level.
@@ -554,10 +554,10 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
         newFeatures = parentJob()->minimumFeatures();
 
       bool keepAST = newFeatures & TopDUContext::AST;
-      
+
       //Remove update-flags like 'Recursive' or 'ForceUpdate', and the AST flag
       newFeatures = (TopDUContext::Features)(newFeatures & TopDUContext::AllDeclarationsContextsAndUses);
-      
+
       TranslationUnitAST* ast = 0L;
 
       Control control;
@@ -575,7 +575,7 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
           if((updatingContentContext->features() & parentJob()->minimumFeatures()) ==  parentJob()->minimumFeatures() &&
             isOpenInEditor &&
               updatingContentContext->parsingEnvironmentFile()->modificationRevision().modificationTime == ModificationRevision::revisionForFile(updatingContentContext->url()).modificationTime && CppLanguageSupport::self()->codeHighlighting()->hasHighlighting(parentJob()->document())) {
-            kDebug() << "not processing" << updatingContentContext->url().str() << "because of missing compound tokens";
+            qCDebug(CPP) << "not processing" << updatingContentContext->url().str() << "because of missing compound tokens";
             ICore::self()->uiController()->showErrorMessage(i18n("Not updating duchain for %1", parentJob()->document().toUrl().fileName()), 1);
             l.unlock();
             doNotChangeDUChain = true;
@@ -598,7 +598,7 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
         }
       }
 
-      kDebug( 9007 ) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document().str();
+      qCDebug(CPP) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document().str();
 
       uint oldItemCount = 0;
       if(contentContext) {
@@ -616,9 +616,9 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
       {
         declarationBuilder.setOnlyComputeVisible(true);
         declarationBuilder.setComputeSimplified(true);
-        kDebug() << "computing simplified";
+        qCDebug(CPP) << "computing simplified";
       }else if(newFeatures == TopDUContext::Empty) {
-        kDebug() << "computing empty";
+        qCDebug(CPP) << "computing empty";
         declarationBuilder.setComputeEmpty(true);
       }
 
@@ -642,7 +642,7 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
           ///      While searching, always use the perspective of the proxy. Even better: Change the context-system so proxy-contexts become completely valid contexts from the outside perspective,
           ///      that import all their imports, and that share all their content except the imports/environment-information with all the other proxy contexts for that file, and with one content-context.
           ///      Main problem: Contained Declarations/DUContexts point at their parent top-context. Which proxy-context should they point at?
-          //kDebug() << "A significant change was recorded, all following contexts will be updated";
+          //qCDebug(CPP) << "A significant change was recorded, all following contexts will be updated";
           //parentJob()->masterJob()->setNeedUpdateEverything(true);
         }
 
@@ -654,7 +654,7 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
           if(contentContext->childContexts().size() + contentContext->localDeclarations().size() == 0) {
             if(oldItemCount != 0) {
               //To catch some problems
-              kDebug(9007) << "All items in" << parentJob()->document().str() << "have been extincted, previous count:" << oldItemCount << "current identity offset:" << contentEnvironmentFile->identityOffset();
+              qCDebug(CPP) << "All items in" << parentJob()->document().str() << "have been extincted, previous count:" << oldItemCount << "current identity offset:" << contentEnvironmentFile->identityOffset();
             }
           }
         }
@@ -693,7 +693,7 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
             foreach(const DUContext::Import &ctx, imports) {
                 if(ctx.context(0) && !encounteredIncludeUrls.contains(ctx.context(0)->url()) && contentEnvironmentFile->missingIncludeFiles().set().count() == 0 && (!proxyEnvironmentFile || proxyEnvironmentFile->missingIncludeFiles().set().count() == 0)) {
                     contentContext->removeImportedParentContext(ctx.context(0));
-                    kDebug( 9007 ) << "removing not encountered import " << ctx.context(0)->url().str();
+                    qCDebug(CPP) << "removing not encountered import " << ctx.context(0)->url().str();
                 }
             }
         }
@@ -720,14 +720,14 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
           }
         }
       }
-      
+
       if (!parentJob()->abortRequested() && isOpenInEditor) {
         if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
         {
           parentJob()->cpp()->codeHighlighting()->highlightDUChain( contentContext );
         }
       }
-      
+
 
       ///Now mark the context as not being updated. This MUST be done or we will be waiting forever in a loop
       {
@@ -739,7 +739,7 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
         //Now that the Ast is fully built, add it to the TopDUContext if requested
         if(keepAST)
         {
-          kDebug() << "AST Is being kept for" << parentJob()->document().toUrl();
+          qCDebug(CPP) << "AST Is being kept for" << parentJob()->document().toUrl();
           contentContext->setAst(IAstContainer::Ptr( parentJob()->parseSession().data() ));
           parentJob()->parseSession()->setASTNodeParents();
         }
@@ -757,7 +757,7 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
         if(proxyContext && contentContext)
           proxyContext->setFeatures(contentContext->features());
       }
-      kDebug() << "keeping duchain";
+      qCDebug(CPP) << "keeping duchain";
       highlightIfNeeded();
     }
 
@@ -782,7 +782,7 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
           continue;
         Q_ASSERT(context.context);
         if(!contentContext->imports(context.context.data(), CursorInRevision::invalid())) {
-          kWarning() << "Context should be imported, but is not:" << contentContext->url().str() << " <- " << context.context->url().str();
+          qWarning() << "Context should be imported, but is not:" << contentContext->url().str() << " <- " << context.context->url().str();
         }
       }
     }
@@ -862,16 +862,16 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
     if ( !parentJob()->parentPreprocessor() ) {
             DUChainReadLocker lock(DUChain::lock());
 #ifdef DUMP_DUCHAIN
-        kDebug( 9007 ) << "================== duchain ==================";
+        qCDebug(CPP) << "================== duchain ==================";
         DUChainDumper dumper;
         dumper.dump(contentContext);
 #endif
 
         //KDevelop::DumpDotGraph dumpGraph;
-        //kDebug(9007) << "Dot-graph:\n" << dumpGraph.dotGraph(topContext, true);
+        //qCDebug(CPP) << "Dot-graph:\n" << dumpGraph.dotGraph(topContext, true);
     }
 
-    kDebug( 9007 ) << "===-- Parsing finished --===>" << parentJob()->document().str();
+    qCDebug(CPP) << "===-- Parsing finished --===>" << parentJob()->document().str();
 
     parentJob()->processDelayedImports();
 }
@@ -952,7 +952,7 @@ TopDUContext::Features CPPParseJob::slaveMinimumFeatures() const
       slaveMinimumFeatures = (TopDUContext::Features)(minimumFeatures() & (~TopDUContext::ForceUpdate));
     else if((minimumFeatures() & TopDUContext::VisibleDeclarationsAndContexts) == TopDUContext::VisibleDeclarationsAndContexts)
       slaveMinimumFeatures = TopDUContext::VisibleDeclarationsAndContexts;
-    
+
     if((minimumFeatures() & TopDUContext::ForceUpdateRecursive) == TopDUContext::ForceUpdateRecursive)
       slaveMinimumFeatures = (TopDUContext::Features)(slaveMinimumFeatures | TopDUContext::ForceUpdateRecursive);
 

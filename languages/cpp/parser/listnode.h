@@ -19,8 +19,6 @@
 #ifndef LISTNODE_H
 #define LISTNODE_H
 
-#include <kdebug.h>
-
 #include <memorypool.h>
 
 /**

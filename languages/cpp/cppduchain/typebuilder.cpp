@@ -41,6 +41,7 @@
 #include <language/duchain/types/typealiastype.h>
 #include <util/pushvalue.h>
 #include "typeutils.h"
+#include "debug.h"
 #include <functional>
 
 using namespace KDevelop;
@@ -81,7 +82,7 @@ void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     return;
   }
   PushValue<bool> setNotInTypedef(m_inTypedef, false);
-  
+
   /*int kind = */editor()->parseSession()->token_stream->kind(node->class_key);
   CppClassType::Ptr classType = CppClassType::Ptr(new CppClassType());
 
@@ -99,7 +100,7 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
   if(m_onlyComputeSimplified) {
     return;
   }
-  
+
   if (node->name) {
     DUChainReadLocker lock(DUChain::lock());
 
@@ -110,7 +111,7 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
     } else { //A case for the problem-reporter
       QualifiedIdentifier id;
       identifierForNode(node->name, id);
-      kDebug(9007) << "Could not find base declaration for" << id;
+      qCDebug(CPPDUCHAIN) << "Could not find base declaration for" << id;
     }
   }
 
@@ -123,7 +124,7 @@ void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
     ContextBuilder::visitEnumSpecifier(node);
     return;
   }
-  
+
   m_currentEnumeratorValue = 0;
 
   openType(EnumerationType::Ptr(new EnumerationType()));
@@ -139,7 +140,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
     ContextBuilder::visitEnumerator(node);
     return;
   }
-  
+
   bool openedType = false;
 
   if(node->expression) {
@@ -231,7 +232,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
   if(m_onlyComputeSimplified) {
     return;
   }
-  
+
   PushValue<bool> setInTypedef(m_inTypedef, false);
 
   m_lastTypeWasInstance = false;
@@ -247,7 +248,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
     if(openedType)
       closeType();
-    
+
     return;
   }
 
@@ -299,7 +300,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   if(m_onlyComputeSimplified) {
     return;
   }
-  
+
   bool openedType = false;
   m_lastTypeWasInstance = false;
   m_lastTypeWasAuto = false;
@@ -407,7 +408,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     integral->setModifiers(modifiers);
     openedType = true;
     openType(integral);
-    
+
   } else if (node->name) {
     openedType = openTypeFromName(node->name, parseConstVolatile(editor()->parseSession(), node->cv));
   }
@@ -545,20 +546,20 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
   if(!delay) {
     CursorInRevision pos = editor()->findPosition(name->start_token, CppEditorIntegrator::FrontEdge);
     DUChainReadLocker lock(DUChain::lock());
-    ifDebug( kDebug() << "searching" << id.toString(); )
-    ifDebugCurrentFile( kDebug() << "searching" << id.toString(); )
+    ifDebug( qCDebug(CPPDUCHAIN) << "searching" << id.toString(); )
+    ifDebugCurrentFile( qCDebug(CPPDUCHAIN) << "searching" << id.toString(); )
 
     QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
-    ifDebug( kDebug() << "found" << dec.count() <<  (dec.count() ? dec[0]->toString() : QString()); )
-    ifDebugCurrentFile( kDebug() << "found" << dec.count() <<  (dec.count() ? dec[0]->toString() : QString()); )
+    ifDebug( qCDebug(CPPDUCHAIN) << "found" << dec.count() <<  (dec.count() ? dec[0]->toString() : QString()); )
+    ifDebugCurrentFile( qCDebug(CPPDUCHAIN) << "found" << dec.count() <<  (dec.count() ? dec[0]->toString() : QString()); )
     if ( dec.isEmpty() ) {
-      ifDebug( kDebug(9007) << "opening delayed:"<< id.toString() ; )
+      ifDebug( qCDebug(CPPDUCHAIN) << "opening delayed:"<< id.toString() ; )
       delay = true;
     }
 
     if(!delay) {
-      
-      ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times"; )
+
+      ifDebug( if( dec.count() > 1 ) qCDebug(CPPDUCHAIN) << id.toString() << "was found" << dec.count() << "times"; )
 
       // see section 3.4.1-7 in the cpp spec on unqualified name lookup
       // and https://bugs.kde.org/show_bug.cgi?id=273658 for a bug report
@@ -574,7 +575,7 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
           continue;
 
         if (decl->abstractType()) {
-          //kDebug(9007) << "found for" << id.toString() << ":" << decl->toString() << "type:" << decl->abstractType()->toString() << "context:" << decl->context();
+          //qCDebug(CPPDUCHAIN) << "found for" << id.toString() << ":" << decl->toString() << "type:" << decl->abstractType()->toString() << "context:" << decl->context();
 
           const int quality = decl->qualifiedIdentifier().count();
           if (matchQuality < quality) {
@@ -606,14 +607,14 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
    IndexedTypeIdentifier typeId(id);
    typeId.setIsConstant(modifiers & AbstractType::ConstModifier);
    typeId.setIsVolatile(modifiers & AbstractType::VolatileModifier);
-   
+
    openDelayedType(typeId, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
 
-   ifDebug( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext(); )
-   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext(); )
+   ifDebug( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) qCDebug(CPPDUCHAIN) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext(); )
+   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) qCDebug(CPPDUCHAIN) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext(); )
   }
 
-  ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "opened type" << (currentAbstractType() ? currentAbstractType()->toString() : QString("(no type)")); )
+  ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); qCDebug(CPPDUCHAIN) << "opened type" << (currentAbstractType() ? currentAbstractType()->toString() : QString("(no type)")); )
 
   return openedType;
 }
@@ -629,15 +630,15 @@ DUContext* TypeBuilder::searchContext() const {
     if( DUContext* ctx = m_importedParentContexts.last().context(topContext()) )
       if(ctx->type() == DUContext::Template)
         return m_importedParentContexts.last().context(topContext());
-  } 
-    
+  }
+
   return currentContext();
 }
 
 void TypeBuilder::visitTypedef(TypedefAST* node)
 {
   PushValue<bool> setInTypedef(m_inTypedef, true);
-  
+
 //   openType(KDevelop::TypeAliasType::Ptr(new KDevelop::TypeAliasType()));
 
   ContextBuilder::visitTypedef(node);
@@ -649,7 +650,7 @@ AbstractType::Ptr TypeBuilder::typeForCurrentDeclaration()
 {
   if(m_onlyComputeSimplified)
     return AbstractType::Ptr();
-  
+
   if(m_inTypedef) {
     KDevelop::TypeAliasType::Ptr alias(new KDevelop::TypeAliasType());
     alias->setType(lastType());
@@ -672,7 +673,7 @@ void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
   clearLastType();
-  
+
   preVisitSimpleDeclaration(node);
 
   // Reimplement default visitor
@@ -705,7 +706,7 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
   if(m_onlyComputeSimplified) {
     return;
   }
-  
+
   bool typeOpened = false;
   if (node->op) {
     const QString op = editor()->tokenToString(node->op);
@@ -796,7 +797,7 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
   if(m_onlyComputeSimplified) {
     return;
   }
-  
+
   bool typeOpened = false;
 
   Cpp::ExpressionParser parser;
@@ -862,12 +863,12 @@ void TypeBuilder::visitTemplateParameter(TemplateParameterAST *ast)
   if(m_onlyComputeSimplified) {
     return;
   }
-  
+
 //   if(!ast->parameter_declaration)
     openType(CppTemplateParameterType::Ptr(new CppTemplateParameterType()));
 
   ContextBuilder::visitTemplateParameter(ast);
-  
+
 //   if(!ast->parameter_declaration)
     closeType();
 }
@@ -935,7 +936,7 @@ bool TypeBuilder::openTypeFromName(QualifiedIdentifier id, AST* typeNode, bool n
     openedType = true;
     openDelayedType(id, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
 
-    ifDebug( if(templateDeclarationDepth() == 0) kDebug() << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
+    ifDebug( if(templateDeclarationDepth() == 0) qCDebug(CPPDUCHAIN) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
     }*/
     return openedType;
 }

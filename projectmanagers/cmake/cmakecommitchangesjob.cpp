@@ -24,6 +24,7 @@
 #include "cmakemodelitems.h"
 #include "cmakeutils.h"
 #include "cmakemanager.h"
+#include "debug.h"
 #include <cmakeparserutils.h>
 #include <project/projectfiltermanager.h>
 #include <project/interfaces/iprojectfilter.h>
@@ -129,10 +130,10 @@ static void processDependencies(ProcessedTarget &target, const QString& dep, con
     if(dep.isEmpty() || alreadyProcessed.contains(dep))
         return;
     alreadyProcessed.insert(dep);
-//     kDebug() << "processing..." << target.target.name << dep;
+//     qCDebug(CMAKE) << "processing..." << target.target.name << dep;
     QMap<QString, QStringList> depData = data.properties.value(TargetProperty).value(dep);
     if(depData.isEmpty()) {
-        kDebug() << "error: couldn't find dependency " << dep << data.properties.value(TargetProperty).keys();
+        qCDebug(CMAKE) << "error: couldn't find dependency " << dep << data.properties.value(TargetProperty).keys();
         return;
     }
 
@@ -147,7 +148,7 @@ Path::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
     m_projectDataAdded = true;
     Path::List ret;
     m_tests = data.testSuites;
-    
+
     QSet<QString> alreadyAdded;
     foreach(const Subdirectory& subf, data.subdirectories) {
         if(subf.name.isEmpty() || alreadyAdded.contains(subf.name)) //empty case would not be necessary if we didn't process the wrong lines
@@ -185,7 +186,7 @@ Path::List CMakeCommitChangesJob::addProjectData(const CMakeProjectData& data)
         target.includes = targetProps["INCLUDE_DIRECTORIES"];
         target.outputName = targetProps.value("OUTPUT_NAME", QStringList(t.name)).join(QString());
         target.location = CMake::resolveSystemDirs(m_project, targetProps["LOCATION"]).first();
-        
+
         QSet<QString> dependencies;
         foreach(const QString& dep, targetProps["PRIVATE_LINK_LIBRARIES"]) {
             processDependencies(target, dep, data, dependencies);
@@ -234,7 +235,7 @@ void CMakeCommitChangesJob::makeChanges()
     foreach(const Subdirectory& subf, m_subdirectories)
     {
         const Path path(m_path, subf.name);
-        
+
         if (!m_manager->filterManager()->isValid(path, true, m_project)) {
             continue;
         }
@@ -275,7 +276,7 @@ void CMakeCommitChangesJob::makeChanges()
     foreach ( const ProcessedTarget& pt, m_targets)
     {
         const Target& t = pt.target;
-        
+
         KDevelop::ProjectTargetItem* targetItem = folder->targetNamed(t.type, t.name);
         if (targetItem)
             deletableTargets.remove(targetItem);
@@ -297,7 +298,7 @@ void CMakeCommitChangesJob::makeChanges()
         if(duchainAtt) {
             duchainAtt->setDeclaration(t.declaration);
         }
-        
+
         DescriptorAttatched* descAtt=dynamic_cast<DescriptorAttatched*>(targetItem);
         if(descAtt)
             descAtt->setDescriptor(t.desc);
@@ -307,7 +308,7 @@ void CMakeCommitChangesJob::makeChanges()
             incAtt->setIncludeDirectories(resolvePaths(m_path, pt.includes));
             incAtt->addDefinitions(pt.defines);
         }
-        
+
         Path::List tfiles;
         foreach( const QString & sFile, t.files)
         {
@@ -317,14 +318,14 @@ void CMakeCommitChangesJob::makeChanges()
             const Path sourceFile(m_path, sFile);
 
             if(!sourceFile.isValid() || !QFile::exists(sourceFile.toLocalFile())) {
-                kDebug(9042) << "..........Skipping non-existing source file:" << sourceFile << sFile << m_path;
+                qCDebug(CMAKE) << "..........Skipping non-existing source file:" << sourceFile << sFile << m_path;
                 continue;
             }
 
             tfiles += sourceFile;
-            kDebug(9042) << "..........Adding:" << sourceFile << sFile << m_path;
+            qCDebug(CMAKE) << "..........Adding:" << sourceFile << sFile << m_path;
         }
-        
+
         setTargetFiles(targetItem, tfiles);
     }
     qDeleteAll(deletableTargets);
@@ -340,7 +341,7 @@ void CMakeCommitChangesJob::setTargetFiles(ProjectTargetItem* target, const Path
         if(!files.contains(file->path()))
             delete file;
     }
-    
+
     tfiles = target->fileList(); //We need to recreate the list without the removed items
     foreach(const Path& file, files) {
         ProjectFileItem* f = containsFile(file, tfiles);
@@ -353,7 +354,7 @@ void CMakeCommitChangesJob::reloadFiles(ProjectFolderItem* item)
 {
     QDir d(item->path().toLocalFile());
     if(!d.exists()) {
-        kDebug() << "Trying to return a directory that doesn't exist:" << item->path();
+        qCDebug(CMAKE) << "Trying to return a directory that doesn't exist:" << item->path();
         return;
     }
 
@@ -362,23 +363,23 @@ void CMakeCommitChangesJob::reloadFiles(ProjectFolderItem* item)
     const QFileInfoList entriesL = d.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot);
     QSet<QString> entries = filterFiles(entriesL, folderPath, item->project(), m_manager->filterManager());
 
-    kDebug() << "Reloading Directory!" << folderPath;
-    
+    qCDebug(CMAKE) << "Reloading Directory!" << folderPath;
+
     //We look for removed elements
     foreach(ProjectBaseItem* it, item->children())
     {
         if(it->type()==ProjectBaseItem::Target || it->type()==ProjectBaseItem::ExecutableTarget || it->type()==ProjectBaseItem::LibraryTarget)
             continue;
-        
+
         QString current=it->text();
         const Path filePath(folderPath, current);
-        
+
         if(!entries.contains(current))
             delete it;
         else if(it->path() != filePath)
             it->setPath(filePath);
     }
-    
+
     //We look for new elements
     QList<ProjectBaseItem*> newItems;
     foreach( const QString& entry, entries )
@@ -391,7 +392,7 @@ void CMakeCommitChangesJob::reloadFiles(ProjectFolderItem* item)
         if( QFileInfo( filePath.toLocalFile() ).isDir() )
         {
             ProjectFolderItem* pendingfolder = m_manager->takePending(filePath);
-            
+
             if(pendingfolder) {
                 newItems += pendingfolder;
             } else if(isCorrectFolder(filePath, item->project())) {

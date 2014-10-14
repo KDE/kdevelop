@@ -25,6 +25,7 @@
 
 #include "ast.h"
 #include "parsesession.h"
+#include "debug.h"
 #include <rpp/chartools.h>
 
 using namespace KDevelop;
@@ -37,10 +38,10 @@ CppEditorIntegrator::CppEditorIntegrator( ParseSession* session )
 CursorInRevision CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) const
 {
   if(token == 0) {
-    kDebug() << "Searching position of invalid token";
+    qCDebug(CPPDUCHAIN) << "Searching position of invalid token";
     return CursorInRevision();
     }
-  
+
   const Token& t = m_session->token_stream->token(token);
   return findPosition(t, edge);
 }
@@ -72,7 +73,7 @@ RangeInRevision CppEditorIntegrator::findRange( AST * node, RangeEdge edge )
 RangeInRevision CppEditorIntegrator::findRangeForContext( size_t start_token, size_t end_token )
 {
   if(start_token == 0 || end_token == 0) {
-    kDebug() << "Searching position of invalid token";
+    qCDebug(CPPDUCHAIN) << "Searching position of invalid token";
     return RangeInRevision();
   }
   const Token& tStart = m_session->token_stream->token(start_token);
@@ -82,7 +83,7 @@ RangeInRevision CppEditorIntegrator::findRangeForContext( size_t start_token, si
   rpp::Anchor end = m_session->positionAt(tEnd.position, true);
   if(!end.collapsed)
     end.column += m_session->token_stream->symbolLength(tEnd); //We want the back edge
-  
+
   if(start.macroExpansion.isValid() && start.macroExpansion == end.macroExpansion)
     return RangeInRevision(start.macroExpansion, start.macroExpansion);
   else

@@ -27,6 +27,7 @@
 #include "typebuilder.h"
 #include "parser/rpp/chartools.h"
 #include "ptrtomembertype.h"
+#include "debug.h"
 
 #include <language/duchain/duchainlock.h>
 
@@ -53,7 +54,7 @@ void TypeASTVisitor::run(TypeIdAST *node)
   if(node->declarator && m_type) {
     if( m_type ) {
       LOCKDUCHAIN;
-      
+
       if( node->declarator && node->declarator->ptr_ops ) {
         //Apply pointer operators
         const ListNode<PtrOperatorAST*> *it = node->declarator->ptr_ops->toFront(), *end = it;
@@ -111,7 +112,7 @@ void TypeASTVisitor::run(TypeSpecifierAST *node)
   _M_cv.clear();
 
   visit(node);
-  
+
   if (node && node->cv && m_type) {
       LOCKDUCHAIN;
       m_type->setModifiers((AbstractType::CommonModifiers)(m_type->modifiers() | TypeBuilder::parseConstVolatile(m_session, node->cv)));
@@ -149,7 +150,7 @@ QList<KDevelop::DeclarationPointer> TypeASTVisitor::declarations() const
 {
   if(m_stopSearch)
     return QList<KDevelop::DeclarationPointer>();
-  
+
   return m_declarations;
 }
 
@@ -158,10 +159,10 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
   if(m_stopSearch)
     return;
-  
+
   Cpp::FindDeclaration find( m_context, m_source, m_flags, m_context->range().end );
   find.openQualifiedIdentifier(false);
-  
+
   // Don't forget the modifiers!
   uint modifiers = AbstractType::NoModifiers;
   if (node->cv) {
@@ -177,13 +178,13 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
           modifiers |= AbstractType::VolatileModifier;
           break;
         default:
-          //kDebug() << "Unknown modifier token" << kind;
+          //qCDebug(CPPDUCHAIN) << "Unknown modifier token" << kind;
           break;
       }
       it = it->next;
     } while (it != end);
   }
-  
+
   if (node->integrals)
     {
       uint type = IntegralType::TypeNone;
@@ -245,9 +246,9 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 
       KDevelop::IntegralType::Ptr integral ( new KDevelop::IntegralType(type) );
       integral->setModifiers(modifiers);
-      
+
       m_type = integral.cast<AbstractType>();
-      
+
       m_typeId = QualifiedIdentifier(integral->toString());
     }
   else if (node->isTypeof || node->isDecltype)
@@ -295,7 +296,7 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     if(!m_declarations.isEmpty() && m_declarations[0])
       m_type = m_declarations[0]->abstractType();
   }
-  
+
   visit(node->name);
 }
 
@@ -303,16 +304,16 @@ void TypeASTVisitor::visitName(NameAST *node)
 {
   if(m_stopSearch)
     return;
-  
+
   NameASTVisitor name_cc(m_session, m_visitor, m_context, m_source, m_localContext, m_position, m_flags, m_debug);
   name_cc.run(node);
   if(name_cc.stoppedSearch()) {
     m_stopSearch = true;
     return;
   }
-  
+
   LOCKDUCHAIN;
-  
+
   m_typeId = name_cc.identifier();
   m_declarations = name_cc.declarations();
   if(!m_declarations.isEmpty() && m_declarations[0])
@@ -323,7 +324,7 @@ QStringList TypeASTVisitor::cvString() const
 {
   if(m_stopSearch)
     return QStringList();
-  
+
   QStringList lst;
 
   foreach (int q, cv())
@@ -341,7 +342,7 @@ bool TypeASTVisitor::isConstant() const
 {
   if(m_stopSearch)
     return false;
-  
+
     return _M_cv.contains(Token_const);
 }
 
@@ -349,7 +350,7 @@ bool TypeASTVisitor::isVolatile() const
 {
   if(m_stopSearch)
     return false;
-  
+
     return _M_cv.contains(Token_volatile);
 }
 
@@ -357,7 +358,7 @@ QualifiedIdentifier TypeASTVisitor::identifier() const
 {
   if(m_stopSearch)
     return QualifiedIdentifier();
-  
+
   return m_typeId;
 }
 

@@ -21,6 +21,7 @@
 #include "simplerefactoring.h"
 
 #include "../cpputils.h"
+#include "../debug.h"
 
 #include <QAction>
 #include <KMessageBox>
@@ -131,7 +132,7 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
     return i18n("Declaration lost while updating.");
   }
 
-  kDebug() << "moving" << decl->qualifiedIdentifier();
+  qCDebug(CPP) << "moving" << decl->qualifiedIdentifier();
   AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
   FunctionType::Ptr funType = decl->type<FunctionType>();
 
@@ -160,7 +161,7 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
       } else {
         int lastNewline = prefixText.lastIndexOf('\n', i - 1);
         headerRange.start().setColumn(i - lastNewline - 1);
-        kWarning() << "UNSUPPORTED" << headerRange.start().column() << lastNewline << i << prefixText;
+        qWarning() << "UNSUPPORTED" << headerRange.start().column() << lastNewline << i << prefixText;
       }
     } else {
       headerRange.start().setColumn(headerRange.start().column() - 1);
@@ -181,10 +182,10 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
     signature.append(item);
   }
 
-  kDebug() << "qualified id:" << decl->qualifiedIdentifier() << "from mid:" << decl->qualifiedIdentifier().mid(namespaceIdentifier.count()) << namespaceIdentifier.count();
+  qCDebug(CPP) << "qualified id:" << decl->qualifiedIdentifier() << "from mid:" << decl->qualifiedIdentifier().mid(namespaceIdentifier.count()) << namespaceIdentifier.count();
 
   Identifier id(IndexedString(decl->qualifiedIdentifier().mid(namespaceIdentifier.count()).toString()));
-  kDebug() << "id:" << id;
+  qCDebug(CPP) << "id:" << id;
 
   if(!ins.insertFunctionDeclaration(id, funType->returnType(), signature, funType->modifiers() & AbstractType::ConstModifier, body)) {
     return i18n("Insertion failed");
@@ -221,7 +222,7 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
       KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), error);
     }
   }else{
-    kWarning() << "strange problem";
+    qWarning() << "strange problem";
   }
 
 }

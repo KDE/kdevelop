@@ -1,6 +1,4 @@
 project(makebuilder)
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9037 )
-
 
 
 ########### next target ###############
@@ -13,7 +11,7 @@ set(kdevmakebuilder_LIB_SRCS
 
 add_library(kdevmakebuilder MODULE ${kdevmakebuilder_LIB_SRCS})
 target_link_libraries(kdevmakebuilder
-        
+
         KF5::TextEditor
         KDev::Interfaces
         KDev::Project

@@ -30,6 +30,7 @@
 #include "ast.h"
 #include "dumptree.h"
 #include "parentvisitor.h"
+#include "debug.h"
 
 ParseSession::ParseSession()
   : mempool(new MemoryPool)
@@ -66,7 +67,7 @@ void ParseSession::mapAstDuChain (AST * node , KDevelop::DeclarationPointer decl
 
   // NOTE: Don't call declaration->toString() here. It seems that you cannot
   //        assume at this point that the DUChain is at least locked for reading.
-  //kDebug() << "Mapping AST node: " << names[node->kind] <<
+  //qCDebug(CPPPARSER) << "Mapping AST node: " << names[node->kind] <<
   //            "With Declaration: " << declaration->toString();
 
   m_AstToDuchain[node] = declaration;
@@ -77,7 +78,7 @@ void ParseSession::mapAstUse(AST *node, const SimpleUse& use)
 {
   //Duplicates shouldn't exist(? Same for uses?)
   if(m_AstToUse.contains(node) && m_AstToUse[node] != use)
-    kWarning() << "Found dupplicate use mapping for node" << node;
+    qWarning() << "Found dupplicate use mapping for node" << node;
 
   m_AstToUse[node] = use;
   m_UseToAst[use] = node;

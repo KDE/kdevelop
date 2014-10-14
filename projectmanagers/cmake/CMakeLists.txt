@@ -8,7 +8,7 @@ add_subdirectory(icons)
 # the debug visitor prints out the Ast for the CMakeLists.txt file.
 #add_definitions( -DCMAKEDEBUGVISITOR )
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9042 -DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
+add_definitions( -DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
 set( cmakecommon_SRCS
   parser/cmListFileLexer.cpp
@@ -28,7 +28,8 @@ set( cmakecommon_SRCS
   cmakeutils.cpp
   cmakebuilddirchooser.cpp
 #   cmakemodelitems.cpp
- 
+  debug.cpp
+
  )
 
 set( cmakecommon_UI
@@ -52,6 +53,7 @@ set( cmakemanager_SRCS
 #   cmakecommitchangesjob.cpp
 #   cmakeimportjob.cpp
 #   cmakeedit.cpp
+  debug.cpp
 )
 
 set( cmakemanager_UI
@@ -62,6 +64,7 @@ set( cmakesettings_SRCS
   settings/cmakepreferences.cpp
   settings/cmakecachemodel.cpp
   settings/cmakecachedelegate.cpp
+  debug.cpp
 )
 
 set( cmakesettings_UI
@@ -81,7 +84,7 @@ remove_definitions( -DQT_NO_STL )
 
 qt5_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
 add_library( kdevcmakecommon SHARED ${cmakecommon_SRCS} )
-target_link_libraries( kdevcmakecommon LINK_PRIVATE 
+target_link_libraries( kdevcmakecommon LINK_PRIVATE
                         KF5::TextEditor KDev::Interfaces KDev::Project KDev::Util
                         ${QT_QTSCRIPT_LIBRARY} KDev::Language
                         )
@@ -93,7 +96,7 @@ target_link_libraries( kdevcmakemanager  KF5::KIOWidgets KDev::Util
                         KDev::Interfaces kdevcmakecommon
                         KDev::Project KDev::Language
                         KDev::OutputView KF5::TextEditor Qt5::Concurrent)
-                        
+
 add_library(kdevcmakedocumentation MODULE ${cmakedoc_SRCS} )
 target_link_libraries( kdevcmakedocumentation
                         KDev::Interfaces kdevcmakecommon

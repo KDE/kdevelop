@@ -35,6 +35,7 @@
 #include "cppducontext.h"
 #include "expressionparser.h"
 #include "templateresolver.h"
+#include "debug.h"
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/duchainregister.h>
 #include <util/pushvalue.h>
@@ -220,7 +221,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger
     ThreadLocalData& data = threadDataLocal();
     PushValue<uint> inc(data.delayedDepth, data.delayedDepth + 1);
     if( data.delayedDepth > 30 ) {
-      kDebug(9007) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
+      qCDebug(CPPDUCHAIN) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
       return type;
     }
     DelayedType::Ptr delayedType = type.cast<DelayedType>();
@@ -325,14 +326,14 @@ Declaration* TemplateDeclaration::specialize(const IndexedInstantiationInformati
     return dynamic_cast<Declaration*>(this);
   else {
     InstantiationInformation information = IndexedInstantiationInformation( specialization ).information();
-    
+
     //Add empty elements until the specified depth
     for(int a = 0; a < upDistance; ++a) {
       InstantiationInformation nextInformation;
       nextInformation.previousInstantiationInformation = information.indexed();
       information = nextInformation;
     }
-    
+
     return instantiate(information, topContext);
   }
 }
@@ -384,7 +385,7 @@ TemplateDeclaration* TemplateDeclaration::instantiatedFrom() const {
 }
 
 void TemplateDeclaration::setSpecializedFrom(TemplateDeclaration* other) {
-  
+
   if(other && other->instantiatedFrom()) {
     setSpecializedFrom(other->instantiatedFrom());
     return;
@@ -393,11 +394,11 @@ void TemplateDeclaration::setSpecializedFrom(TemplateDeclaration* other) {
     setSpecializedFrom(dynamic_cast<TemplateDeclaration*>(other->specializedFrom().data()));
     return;
   }
-  
+
   IndexedDeclaration indexedSelf(dynamic_cast<Declaration*>(this));
   IndexedDeclaration indexedOther(dynamic_cast<Declaration*>(other));
   Q_ASSERT(indexedSelf.data());
-  
+
   if( TemplateDeclaration* tplDec = dynamic_cast<TemplateDeclaration*>(specializedFrom().data()) )
     tplDec->removeSpecializationInternal(indexedSelf);
 
@@ -421,7 +422,7 @@ void TemplateDeclaration::reserveInstantiation(const IndexedInstantiationInforma
 void updateIdentifierTemplateParameters( Identifier& identifier, Declaration* basicDeclaration, const TopDUContext* top )
 {
   identifier.clearTemplateIdentifiers();
-  
+
   TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(basicDeclaration);
   if(tempDecl) {
     InstantiationInformation specializedWith(tempDecl->specializedWith().information());
@@ -580,7 +581,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
           if( instantiatedDeclaration )
             tempDecl->setTemplateParameterContext( ctx );
           else
-            kDebug(9007) << "instantiated declaration is not a template declaration";
+            qCDebug(CPPDUCHAIN) << "instantiated declaration is not a template declaration";
         }
       }
       else
@@ -614,7 +615,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
               newInstance.baseClass = newType->indexed();
               klass->replaceBaseClass( num, newInstance );
             } else {
-              kWarning(9007) << "Resolved bad base-class" << delayed->toString() << (newType ? newType->toString() : QString());
+              qWarning() << "Resolved bad base-class" << delayed->toString() << (newType ? newType->toString() : QString());
             }
           }
           ++num;
@@ -645,7 +646,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
           ThreadLocalData& data = threadDataLocal();
           PushValue<uint> safety(data.aliasDepth, data.delayedDepth + 1);
           if(data.aliasDepth > 30) {
-            kWarning() << "depth-limit reached while resolving alias-declaration" << alias->identifier().toString() << "within" << parentContext->scopeIdentifier(true).toString();
+            qWarning() << "depth-limit reached while resolving alias-declaration" << alias->identifier().toString() << "within" << parentContext->scopeIdentifier(true).toString();
           }else {
             ///For alias declaration, we resolve the declaration that is aliased instead of a type.
             ///For this reason, template alias-declarations have a DelayedType assigned
@@ -659,7 +660,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
         }else{
           TemplateDeclaration* instantiatedTemplate = dynamic_cast<TemplateDeclaration*>(instantiatedDeclaration);
           InstantiationInformation globalTemplateArguments = templateArguments;
-          
+
           if(instantiatedTemplate) {
             //Update the "specializedWith" information
             InstantiationInformation oldSpecializedWith = instantiatedTemplate->specializedWith().information();
@@ -673,7 +674,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
               globalTemplateArguments = newSpecializedWith;
             }
           }
-          
+
           ///Resolve all involved delayed types
           AbstractType::Ptr t(instantiatedDeclaration->abstractType());
           IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.data());
@@ -687,12 +688,12 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
 
             IdentifiedType* changedIdType = dynamic_cast<IdentifiedType*>(changedType.data());
             if( changedIdType ) {
-              
+
               DeclarationId base = instantiatedFrom->id();
-              
+
               if(instantiatedFromTemplate && instantiatedFromTemplate->specializedFrom().data())
                 base = instantiatedFromTemplate->specializedFrom().data()->id();
-              
+
               base.setSpecialization(globalTemplateArguments.indexed());
               changedIdType->setDeclarationId(base);
             }
@@ -750,7 +751,7 @@ void TemplateDeclaration::deleteAllInstantiations()
     m_defaultParameterInstantiations.clear();
     m_instantiations.clear();
   }
-  
+
   foreach( TemplateDeclaration* decl, instantiations ) {
     Q_ASSERT(decl);
     decl->m_instantiatedFrom = 0;
@@ -878,7 +879,7 @@ TemplateDeclaration* TemplateDeclaration::instantiateSpecialization(const Instan
     else
       return dynamic_cast<TemplateDeclaration*>(specialization->instantiate(specializationInstantiationInfo, source, true));
   }
-  
+
   return 0;
 }
 
@@ -963,7 +964,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
       if(it != m_defaultParameterInstantiations.constEnd())
         templateArguments = (*it).information();
     }
-  
+
     InstantiationsHash::const_iterator it;
     it = m_instantiations.constFind( templateArguments.indexed() );
     if( it != m_instantiations.constEnd() ) {
@@ -972,37 +973,37 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
       }else{
         ///@todo What if the same thing is instantiated twice in parralel? Then this may trigger as well, altough one side should wait
         ///We are currently instantiating this declaration with the same template arguments. This would lead to an assertion.
-        kDebug() << "tried to recursively instantiate" << dynamic_cast<Declaration*>(this)->toString() << "with" << templateArguments.toString();
+        qCDebug(CPPDUCHAIN) << "tried to recursively instantiate" << dynamic_cast<Declaration*>(this)->toString() << "with" << templateArguments.toString();
         ///Maybe problematic, because the returned declaration is not in the correct context etc.
         return 0;
       }
     }
   }
-  
+
   if(!source)
     return 0;
-  
+
   if (m_instantiationDepth > 5) {
-      kWarning() << "depth-limit reached while instantiating template declaration with" << _templateArguments.toString();
+      qWarning() << "depth-limit reached while instantiating template declaration with" << _templateArguments.toString();
       return 0;
   }
   PushValue<int> depthCounter(m_instantiationDepth, m_instantiationDepth + 1);
 
   DUContext* surroundingContext = dynamic_cast<const Declaration*>(this)->context();
   if(!surroundingContext) {
-    kDebug() << "Declaration has no context:" << dynamic_cast<Declaration*>(this)->qualifiedIdentifier().toString() << dynamic_cast<Declaration*>(this)->toString();
+    qCDebug(CPPDUCHAIN) << "Declaration has no context:" << dynamic_cast<Declaration*>(this)->qualifiedIdentifier().toString() << dynamic_cast<Declaration*>(this)->toString();
     return dynamic_cast<Declaration*>(this);
-  }  
-  
+  }
+
   Declaration* decl = dynamic_cast<Declaration*>(this);
-  
+
   Q_ASSERT(decl);
   Q_ASSERT(decl->topContext());
-  
-  
+
+
   DUContext* templateContext = getTemplateContext(dynamic_cast<Declaration*>(this), source);
-  
-//   kDebug() << decl->qualifiedIdentifier().toString() << "got template-context" << templateContext << templateArguments.toString();
+
+//   qCDebug(CPPDUCHAIN) << decl->qualifiedIdentifier().toString() << "got template-context" << templateContext << templateArguments.toString();
 
   if(!forceLocal) {
     if(templateContext) {
@@ -1013,46 +1014,46 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
     ///Generally, resolve all type-aliases that are part of a template-class, and keep the others
     {
       InstantiationInformation newTemplateArguments = templateArguments;
-      
+
       newTemplateArguments.templateParametersList().clear();
 
       struct UnAliasExchanger : public KDevelop::TypeExchanger {
         UnAliasExchanger(const TopDUContext* _source) : source(_source) {
         }
-        
+
         const TopDUContext* source;
-        
+
         virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
 
           KDevelop::AbstractType::Ptr check = type;
-          
+
           KDevelop::TypeAliasType::Ptr alias = type.cast<KDevelop::TypeAliasType>();
           if(alias) {
             //We exchange type-aliases with their real types only of the type-alias is in a template
             //class. In that case, we cannot be sure that it's not used for meta-programming.
             //All other aliases can be kept, for user-friendliness, even if it's not 100% C++ correct
             Declaration* decl = alias->declaration(source);
-            
+
             if(!decl || dynamic_cast<TemplateDeclaration*>(decl)) {
               return exchange(alias->type());
             }
           }
-          
+
           if(check)
             check->exchangeTypes(this);
-          
+
           return check;
         }
       };
-    
+
       UnAliasExchanger exchanger(source);
-      
+
       for(uint a = 0; a < templateArguments.templateParametersSize(); ++a)
         newTemplateArguments.templateParametersList().append(exchanger.exchange(templateArguments.templateParameters()[a].abstractType())->indexed());
-      
+
       templateArguments = newTemplateArguments;
     }
-    
+
     if(!(templateArguments == _templateArguments)) {
       QMutexLocker l(&instantiationsMutex);
       m_defaultParameterInstantiations[_templateArguments.indexed()] = templateArguments.indexed();
@@ -1082,7 +1083,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
 
   //We have reserved the instantiation, so it must have stayed untouched
   Q_ASSERT(m_instantiations[templateArguments.indexed()] == 0);
-  
+
   if(instantiatedSpecialization) {
     //A specialization has been chosen and instantiated. Just register it here, and return it.
     instantiatedSpecialization->setInstantiatedFrom(this, templateArguments);
@@ -1097,7 +1098,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
       if(surroundingCandidate)
         surroundingContext = surroundingCandidate;
       else
-        kDebug() << "could not instantiate surrounding context for" << dynamic_cast<Declaration*>(this)->qualifiedIdentifier().toString();
+        qCDebug(CPPDUCHAIN) << "could not instantiate surrounding context for" << dynamic_cast<Declaration*>(this)->qualifiedIdentifier().toString();
     }
   }
 
@@ -1177,7 +1178,7 @@ Declaration* SpecialTemplateDeclaration<ForwardDeclaration>::resolve(const TopDU
       }
     }else{
       //TODO: report this in the problem reporter?
-      kWarning(9007) << "Problem in template forward-declaration";
+      qWarning() << "Problem in template forward-declaration";
       return 0;
     }
   }else{

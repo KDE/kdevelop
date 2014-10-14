@@ -22,12 +22,12 @@
 
 #include "modelsmanager.h"
 #include "converters.h"
+#include "../debug.h"
 
 #include <QMenu>
 #include <QContextMenuEvent>
 #include <QSignalMapper>
 
-#include <KDebug>
 #include <KLocalizedString>
 
 namespace GDBDebugger
@@ -181,7 +181,7 @@ void RegistersView::enable(bool enabled)
 
 void RegistersView::setNameForTable(int idx, const QString& name)
 {
-    kDebug() << name << " " << idx;
+    qCDebug(DEBUGGERGDB) << name << " " << idx;
     const QString text = tabWidget->tabText(idx);
     if (!text.contains(name)) {
         tabWidget->setTabText(idx, text.isEmpty() ? name : text + '/' + name);

@@ -20,9 +20,10 @@
 
 #include "cmakedebugvisitor.h"
 #include "astfactory.h"
-#include <kdebug.h>
+#include "../debug.h"
 
-#define WRITEOUT kDebug(9042) << ast->line()
+
+#define WRITEOUT qCDebug(CMAKE) << ast->line()
 
 enum RecursivityType { No, Yes, End };
 
@@ -272,55 +273,55 @@ CMakeAstDebugVisitor::CMakeAstDebugVisitor( )
 
 int CMakeAstDebugVisitor::walk(const QString& filename, const CMakeFileContent & fc, int line)
 {
-    kDebug(9042) << "-----------------------------------------------------------";
-    kDebug(9042) << "Walking file:" << filename;
+    qCDebug(CMAKE) << "-----------------------------------------------------------";
+    qCDebug(CMAKE) << "Walking file:" << filename;
     CMakeFileContent::const_iterator it=fc.constBegin()+line, itEnd=fc.constEnd();
     for(; it!=itEnd; )
     {
         Q_ASSERT( line<fc.count() );
         Q_ASSERT( line>=0 );
-//         kDebug(9042) << "@" << line;
-//         kDebug(9042) << it->writeBack() << "==" << fc[line].writeBack();
+//         qCDebug(CMAKE) << "@" << line;
+//         qCDebug(CMAKE) << it->writeBack() << "==" << fc[line].writeBack();
         Q_ASSERT( *it == fc[line] );
-//         kDebug(9042) << "At line" << line << "/" << fc.count();
+//         qCDebug(CMAKE) << "At line" << line << "/" << fc.count();
         CMakeAst* element = AstFactory::self()->createAst(it->name);
 
         if(!element)
         {
             element = new MacroCallAst;
         }
-        
+
         CMakeFunctionDesc func = *it;
-        
+
         QString funcName=func.name;
         bool correct = element->parseFunctionInfo(func);
         if(!correct)
         {
-            kDebug(9042) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl <<
+            qCDebug(CMAKE) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl <<
                     " at" << func.filePath << ":" << func.line << endl;
             //FIXME: Should avoid to run
         }
-        
+
         RecursivityType r = recursivity(funcName);
         if(r==End)
         {
-//             kDebug(9042) << "Found an end." << func.writeBack();
+//             qCDebug(CMAKE) << "Found an end." << func.writeBack();
             delete element;
             return line;
         }
         if(element->isDeprecated())
-            kDebug(9042) << "Warning: Using the function: " << funcName << " which is deprecated by cmake.";
+            qCDebug(CMAKE) << "Warning: Using the function: " << funcName << " which is deprecated by cmake.";
         element->setContent(fc, line);
 
-        
+
         int lines=element->accept(this);
-        
+
         line+=lines;
         it+=lines;
         delete element;
     }
-    kDebug(9042) << "Walk stopped @" << line;
-    kDebug(9042) << "-----------------------------------------------------------";
+    qCDebug(CMAKE) << "Walk stopped @" << line;
+    qCDebug(CMAKE) << "-----------------------------------------------------------";
     return line;
 }
 

@@ -30,6 +30,7 @@
 #include <custom-definesandincludes/idefinesandincludesmanager.h>
 
 #include "cppduchain/environmentmanager.h"
+#include "debug.h"
 
 #include <KLocalizedString>
 #include <QThread>
@@ -58,7 +59,7 @@ void IncludePathComputer::computeForeground()
   }
 
   if (m_source.isEmpty()) {
-    kDebug() << "cannot compute include-paths without source-file";
+    qCDebug(CPP) << "cannot compute include-paths without source-file";
     return;
   }
 
@@ -99,7 +100,7 @@ void IncludePathComputer::computeForeground()
     }
     m_defines = idm->defines(file);
 
-    kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";
+    qCDebug(CPP) << "Got " << dirs.count() << " include-paths from build-manager";
     foreach (const Path& dir, dirs) {
       addInclude(dir);
     }
@@ -137,7 +138,7 @@ void IncludePathComputer::computeBackground()
         foreach(const IndexedString& path, envFile->includePaths()) {
           addInclude(Path(path.toUrl()));
         }
-        kDebug(9007) << "Took include-path for" << m_source << "from a random parsed duchain-version of it";
+        qCDebug(CPP) << "Took include-path for" << m_source << "from a random parsed duchain-version of it";
         break;
       }
     }

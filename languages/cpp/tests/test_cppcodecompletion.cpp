@@ -342,7 +342,7 @@ void TestCppCodeCompletion::testInvalidContexts()
 
   CompletionItemTester invalidExp6(top->childContexts()[ctxt], "asdf &&");
   QVERIFY(!invalidExp6.completionContext->parentContext()->isValid());
-  CompletionItemTester invalidExp7(top->childContexts()[ctxt], "void "); 
+  CompletionItemTester invalidExp7(top->childContexts()[ctxt], "void ");
   QVERIFY(!invalidExp7.completionContext->isValid());
   CompletionItemTester invalidExp71(top->childContexts()[ctxt], "int* ");
   QVERIFY(!invalidExp71.completionContext->isValid());
@@ -715,18 +715,18 @@ void TestCppCodeCompletion::testDeclarationIsInitialization()
 
 void TestCppCodeCompletion::testNoMemberAccess() {
   QByteArray test = "class MyClass{ public:\n int myint; };\n\n";
-  
+
   TopDUContext* context = parse(test, DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
   QCOMPARE(context->childContexts().count(), 1);
-  
+
   CompletionItemTester testCase(context, "void "); //NoMemberAccess with non-empty valid-type expression
   QVERIFY(testCase.completionContext->isValid());
   QCOMPARE(testCase.names, QStringList()); //Valid, but should not offer any completions in this case
-  
+
   CompletionItemTester testCase1(context, "asdf "); //NoMemberAccess with non-empty invalid-type expression
   QVERIFY(!testCase1.completionContext->isValid());
-  
+
   CompletionItemTester testCase2(context, " "); //NoMemberAccess with empty expression
   QVERIFY(testCase2.completionContext->isValid());
   QCOMPARE(testCase.names, QStringList()); //Theoretically should have "MyClass", but global completions aren't included
@@ -747,15 +747,15 @@ void TestCppCodeCompletion::testFunctionImplementation() {
   //__hidden1 and _Hidden2 should not be visible in the code-completion, as their identifiers are reserved to C++ implementations and standard libraries.
   addInclude("/myclass.h", "namespace mynamespace { class myclass { void students(); }; }; class __hidden1; int _Hidden2; ");
   QByteArray test = "#include \"myclass.h\"\nnamespace mynamespace { }";
-  
+
   TopDUContext* context = parse(test, DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
   QCOMPARE(context->childContexts().count(), 1);
-  
+
   CompletionItemTester testCase(context->childContexts()[0]);
   QVERIFY(testCase.completionContext->isValid());
   QCOMPARE(testCase.names, QStringList() << "mynamespace" << "myclass");
-  
+
   //TODO: If it ever becomes possible to test implementationhelpers, here it should be done
   release(context);
 }
@@ -763,15 +763,15 @@ void TestCppCodeCompletion::testFunctionImplementation() {
 void TestCppCodeCompletion::testAliasDeclarationAccessPolicy() {
   QByteArray test = "namespace Base { int One; int Two; int Three };\
   class List { public: using Base::One; protected: using Base::Two; private: using Base::Three; }; int main(List a) {}";
-  
+
   TopDUContext* context = parse(test, DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
   QCOMPARE(context->childContexts().count(), 4);
-  
+
   CompletionItemTester testCase(context->childContexts()[3], "a.");
   QVERIFY(testCase.completionContext->isValid());
   QCOMPARE(testCase.names, QStringList() << "One");
-  
+
   AliasDeclaration* aliasDeclOne = dynamic_cast<AliasDeclaration*>(context->childContexts()[1]->localDeclarations()[0]);
   AliasDeclaration* aliasDeclTwo = dynamic_cast<AliasDeclaration*>(context->childContexts()[1]->localDeclarations()[1]);
   AliasDeclaration* aliasDeclThree = dynamic_cast<AliasDeclaration*>(context->childContexts()[1]->localDeclarations()[2]);
@@ -779,7 +779,7 @@ void TestCppCodeCompletion::testAliasDeclarationAccessPolicy() {
   QVERIFY(aliasDeclOne->accessPolicy() == KDevelop::Declaration::Public);
   QVERIFY(aliasDeclTwo->accessPolicy() == KDevelop::Declaration::Protected);
   QVERIFY(aliasDeclThree->accessPolicy() == KDevelop::Declaration::Private);
-  
+
   release(context);
 }
 
@@ -969,17 +969,17 @@ void TestCppCodeCompletion::testMacrosInCodeCompletion()
   QByteArray test = "#define test foo\n #define testfunction(X) x\n #define test2 fee\n struct A {int mem;}; void fun() { A foo; A* fee;\n }";
   TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
-  
+
   QCOMPARE(context->childContexts().size(), 3);
-  
+
   QCOMPARE(CompletionItemTester(context->childContexts()[2], "foo.", QString(), CursorInRevision(3, 0)).names, QStringList() << "mem");
   QCOMPARE(CompletionItemTester(context->childContexts()[2], "test.", QString(), CursorInRevision(3, 0)).names, QStringList() << "mem");
-  
+
   QCOMPARE(CompletionItemTester(context->childContexts()[2], "fee->", QString(), CursorInRevision(3, 0)).names, QStringList() << "mem");
   QCOMPARE(CompletionItemTester(context->childContexts()[2], "test2->", QString(), CursorInRevision(3, 0)).names, QStringList() << "mem");
   QCOMPARE(CompletionItemTester(context->childContexts()[2], "testfunction2(", QString(), CursorInRevision(4, 0)).names.toSet(), QSet<QString>() << "testfunction2(" << "A" << "foo" << "fee");
   QCOMPARE(CompletionItemTester(context->childContexts()[2], "testfunction(", QString(), CursorInRevision(4, 0)).names.toSet(), QSet<QString>() << "testfunction(" << "A" << "foo" << "fee");
-  
+
   release(context);
 }
 
@@ -990,30 +990,30 @@ void TestCppCodeCompletion::testConstructorCompletion() {
     //74
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
-    
+
     {
-      kDebug() << "TEST 2";
+      qDebug() << "TEST 2";
       CompletionItemTester tester(context, "class Class { Class(); int m_1; float m_2; char m_3; }; Class::Class(int m1, float m2, char m3) : m_1(1), m_2(m2), ");
-      
+
       //At first, only the members should be shown
-      kDebug() << tester.names;
+      qDebug() << tester.names;
       QCOMPARE(tester.names, QStringList() << "m_3"); //m_1 should not be shown, because it is already initialized
       ///@todo Make sure that the item also inserts parens
     }
 
     {
       CompletionItemTester tester(context, "Class::Class(int m1, float m2, char m3) : ");
-      
+
       //At first, only the members should be shown
-      kDebug() << tester.names;
+      qDebug() << tester.names;
       QCOMPARE(tester.names, QStringList() << "A" <<  "m_1" << "m_2" << "m_3");
       ///@todo Make sure that the item also inserts parens
     }
 
     {
-      kDebug() << "TEST 3";
+      qDebug() << "TEST 3";
       CompletionItemTester tester(context, "Class::Class(int m1, float m2, char m3) : m_1(");
-      
+
       //At first, only the members should be shown
       QVERIFY(tester.names.size());
       QVERIFY(tester.completionContext->parentContext()); //There must be a type-hinting context
@@ -1023,7 +1023,7 @@ void TestCppCodeCompletion::testConstructorCompletion() {
       QVERIFY(tester.completionContext->parentContext()->accessType() == Cpp::CodeCompletionContext::FunctionCallAccess);
       QVERIFY(tester.completionContext->parentContext()->parentContext()->isConstructorInitialization());
     }
-    
+
     release(context);
   }
 }
@@ -1121,7 +1121,7 @@ void TestCppCodeCompletion::testParentConstructor_data()
   // Last check
   QTest::newRow("ComplexCase") << "class A { A(int i, double d, char c) {} A(int i, double d, long l) {} };"
     "class B { B(double d, int j) {} B(char c) {} };"
-    "class C { };" 
+    "class C { };"
     "class D : public A, public B, public C { D(short a1, double a2, long a3, int a4); };" <<
     "D::D(short int a1, double a2, long int a3, int a4): A(a4, a2, a3), B(a2, a4) { }";
 }
@@ -1202,9 +1202,9 @@ void TestCppCodeCompletion::testOverrideDeleted()
 void TestCppCodeCompletion::testSignalSlotCompletion() {
     // By processing qobjectdefs.h, we make sure that the qt-specific macros are defined in the duchain through overriding (see setuphelpers.cpp)
     addInclude("/qobjectdefs.h", "#define signals\n#define slots\n#define Q_SIGNALS\n#define Q_SLOTS\n#define Q_PRIVATE_SLOT\n#define SIGNAL\n#define SLOT\n int n;\n");
-  
+
     addInclude("/QObject.h", "#include \"/qobjectdefs.h\"\n class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); };");
-    
+
     QByteArray test("#include \"QObject.h\"\n class TE; class A : public QObject { public slots: void slot1(); void slot2(TE*); signals: void signal1(TE*, char);void signal2(); public: void test() { } private: Q_PRIVATE_SLOT(d,void slot3(TE*))  };");
 
     TopDUContext* context = parse( test, DumpAll );
@@ -1214,14 +1214,14 @@ void TestCppCodeCompletion::testSignalSlotCompletion() {
     CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, ");
     QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, ").names.toSet(), (QStringList() << "connect" << "signal1" << "signal2").toSet());
     QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(").names.toSet(), (QStringList() << "connect" << "signal1" << "signal2").toSet());
-    kDebug() << "ITEMS:" << CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, SLOT(").names;
+    qDebug() << "ITEMS:" << CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, SLOT(").names;
     QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, ").names.toSet(), (QStringList() << "connect" << "signal1" << "signal2" << "slot1" << "slot2" << "slot3" << "Connect to A::signal2 ()").toSet());
     QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, SIGNAL(").names.toSet(), (QStringList() << "connect" << "signal1" << "signal2" << "Connect to A::signal2 ()").toSet());
     QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, SLOT(").names.toSet(), (QStringList() << "connect" << "slot1" << "slot2" << "slot3" << "Connect to A::signal2 ()" << "signal2").toSet());
     QVERIFY(((QStringList() << "connect" << "signal1" << "signal2" << "slot1" << "slot2" << "slot3" << "Connect to A::signal2 ()").toSet() - CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), ").names.toSet()).isEmpty());
     QVERIFY(((QStringList() << "connect" << "signal1" << "signal2" << "Connect to A::signal2 ()").toSet() - CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), SIGNAL(").names.toSet()).isEmpty());
     QVERIFY(((QStringList() << "connect" << "slot1" << "slot2" << "slot3"<< "Connect to A::signal2 ()").toSet() - CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), SLOT(").names.toSet()).isEmpty());
-    
+
     Declaration* decl = context->childContexts().last()->findDeclarations(Identifier("slot3")).first();
     QVERIFY(decl);
     QVERIFY(dynamic_cast<ClassFunctionDeclaration*>(decl));
@@ -1341,7 +1341,7 @@ void TestCppCodeCompletion::testAssistant() {
     {
       QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
       QVERIFY(mdp);
-      kDebug() << "problem:" << mdp->description();
+      qDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
       QCOMPARE(mdp->type->identifier().toString(), QString("member"));
       QVERIFY(mdp->type->assigned.type.isValid());
@@ -1358,7 +1358,7 @@ void TestCppCodeCompletion::testAssistant() {
     {
       QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
       QVERIFY(mdp);
-      kDebug() << "problem:" << mdp->description();
+      qDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
       QCOMPARE(mdp->type->identifier().toString(), QString("value"));
       QVERIFY(mdp->type->assigned.type.isValid());
@@ -1369,7 +1369,7 @@ void TestCppCodeCompletion::testAssistant() {
       ///@todo Make this work as well
 /*      QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[1].data()) );
       QVERIFY(mdp);
-      kDebug() << "problem:" << mdp->description();
+      qDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
       QCOMPARE(mdp->type->identifier().toString(), QString("value2"));
       QVERIFY(!mdp->type->assigned.type.isValid());
@@ -1380,7 +1380,7 @@ void TestCppCodeCompletion::testAssistant() {
     {
       QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[2].data()) );
       QVERIFY(mdp);
-      kDebug() << "problem:" << mdp->description();
+      qDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
       QCOMPARE(mdp->type->identifier().toString(), QString("value3"));
       QVERIFY(!mdp->type->assigned.type.isValid());
@@ -1399,7 +1399,7 @@ void TestCppCodeCompletion::testAssistant() {
     {
       QExplicitlySharedDataPointer<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
       QVERIFY(mdp);
-      kDebug() << "problem:" << mdp->description();
+      qDebug() << "problem:" << mdp->description();
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
       QCOMPARE(mdp->type->identifier().toString(), QString("functionName"));
       QVERIFY(!mdp->type->assigned.type.isValid());
@@ -1409,7 +1409,7 @@ void TestCppCodeCompletion::testAssistant() {
       QCOMPARE(context->childContexts().count(), 3);
     }
     release(context);
-  }  
+  }
 }
 
 void TestCppCodeCompletion::testImportTypedef() {
@@ -1447,13 +1447,13 @@ void TestCppCodeCompletion::testImportTypedef() {
     QVERIFY(typeDef);
     QVERIFY(typeDef->isTypeAlias());
     QVERIFY(typeDef->type<KDevelop::TypeAliasType>());
-    
+
     Declaration* BDecl = findDeclaration(context, QualifiedIdentifier("B"));
     QVERIFY(BDecl);
     QCOMPARE(BDecl->internalContext()->importedParentContexts().size(), 1);
     QVERIFY(BDecl->internalContext()->importedParentContexts()[0].context(context));
   }
-  
+
 }
 
 void TestCppCodeCompletion::testPrivateVariableCompletion() {
@@ -1474,9 +1474,9 @@ void TestCppCodeCompletion::testPrivateVariableCompletion() {
   QVERIFY(testContext->owner());
   QCOMPARE(testContext->localScopeIdentifier(), QualifiedIdentifier("test"));
   lock.unlock();
-  
+
   CompletionItemTester tester(testContext);
-  kDebug() << "names:" << tester.names;
+  qDebug() << "names:" << tester.names;
   QCOMPARE(tester.names.toSet(), (QStringList() << "C" << "i" << "test" << "this").toSet());
 
   lock.lock();
@@ -1496,14 +1496,14 @@ void TestCppCodeCompletion::testCompletionPrefix() {
     QVERIFY(CompletionItemTester(top->childContexts()[2], ";for(int a = 0; a <  ").names.contains("t2"));
     //Make sure that only types are shown as template parameters
     QVERIFY(!CompletionItemTester(top->childContexts()[2], "Test<").names.contains("t2"));
-    
+
     QCOMPARE(CompletionItemTester(top->childContexts()[2], "if((t).").names, QStringList() << "m");
     QCOMPARE(CompletionItemTester(top->childContexts()[2], "Test t(&t2->").names, QStringList() << "Test(" << "m");
 
     QCOMPARE(CompletionItemTester(top->childContexts()[2], "Test(\"(\").").names, QStringList() << "m");
-    
+
     QCOMPARE(CompletionItemTester(top->childContexts()[2], "Test(\" \\\" quotedText( \\\" \").").names, QStringList() << "m");
-    
+
     QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i = ").completionContext->parentContext());
     QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i ( ").completionContext->parentContext());
     bool abort = false;
@@ -1521,7 +1521,7 @@ void TestCppCodeCompletion::testStringProblem() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().count(), 2);
     CompletionItemTester tester(top->childContexts()[1],QString("bla url('\\\"');"));
-    
+
     QCOMPARE(tester.names.toSet(), (QStringList() << "i" << "test").toSet());;
     release(top);
   }
@@ -1531,7 +1531,7 @@ void TestCppCodeCompletion::testStringProblem() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().count(), 2);
     CompletionItemTester tester(top->childContexts()[1],QString("bla url(\"http://wwww.bla.de/\");"));
-    
+
     QCOMPARE(tester.names.toSet(), (QStringList() << "i" << "test").toSet());;
     release(top);
   }
@@ -1555,7 +1555,7 @@ void TestCppCodeCompletion::testInheritanceVisibility() {
   QCOMPARE(CompletionItemTester(top->childContexts()[1], "A::").names, QStringList() << "AMyClass");
   QCOMPARE(CompletionItemTester(top->childContexts()[1]).names.toSet(), QSet<QString>() << "BMyClass" << "AMyClass" << "A" << "B" );
   QCOMPARE(CompletionItemTester(top, "A::").names, QStringList() << "AMyClass");
-  kDebug() << "list:" << CompletionItemTester(top, "B::").names << CompletionItemTester(top, "A::").names.size();
+  qDebug() << "list:" << CompletionItemTester(top, "B::").names << CompletionItemTester(top, "A::").names.size();
   QCOMPARE(CompletionItemTester(top, "B::").names, QStringList() << "BMyClass");
   QCOMPARE(CompletionItemTester(top->childContexts()[2]).names.toSet(), QSet<QString>() << "CMyClass" << "BMyClass" << "AMyClass" << "C" << "B" << "A");
   QCOMPARE(CompletionItemTester(top, "C::").names.toSet(), QSet<QString>() << "CMyClass");
@@ -1574,9 +1574,9 @@ void TestCppCodeCompletion::testConstVisibility() {
 
   QCOMPARE(top->childContexts().count(), 5);
 
-  kDebug() << "list:" << CompletionItemTester(top->childContexts()[2], "a.").names << CompletionItemTester(top->childContexts()[2], "a.").names.size();
+  qDebug() << "list:" << CompletionItemTester(top->childContexts()[2], "a.").names << CompletionItemTester(top->childContexts()[2], "a.").names.size();
   QCOMPARE(CompletionItemTester(top->childContexts()[2], "a.").names.toSet(), QSet<QString>() << "e");
-  kDebug() << "list:" << CompletionItemTester(top->childContexts()[4], "").names << CompletionItemTester(top->childContexts()[4], "").names.size();
+  qDebug() << "list:" << CompletionItemTester(top->childContexts()[4], "").names << CompletionItemTester(top->childContexts()[4], "").names.size();
   QCOMPARE(CompletionItemTester(top->childContexts()[4], "").names.toSet(), QSet<QString>() << "e" << "test" << "main" << "this");
 }
 
@@ -1658,7 +1658,7 @@ void TestCppCodeCompletion::testLocalUsingNamespace() {
     QVERIFY(top->childContexts()[1]->localDeclarations()[1]->uses().size());
     QVERIFY(top->childContexts()[3]->findLocalDeclarations(KDevelop::globalImportIdentifier(), KDevelop::CursorInRevision::invalid(), 0, KDevelop::AbstractType::Ptr(), KDevelop::DUContext::NoFiltering).size());
   //   QVERIFY(top->childContexts()[2]->findDeclarations(KDevelop::globalImportIdentifier).size());
-    
+
     QVERIFY(CompletionItemTester(top->childContexts()[3]).names.contains("test"));
     QVERIFY(CompletionItemTester(top->childContexts()[3]).names.contains("test0"));
 //     QVERIFY(CompletionItemTester(top->childContexts()[3], "Foo::").names.contains("test0"));
@@ -1684,7 +1684,7 @@ void TestCppCodeCompletion::testTemplateFunction() {
       QVERIFY(item->completingTemplateParameters());
     }
     {
-      kDebug() << "second test";
+      qDebug() << "second test";
       CompletionItemTester tester1(top->childContexts()[3], "test<int>(");
       QVERIFY(tester1.completionContext->parentContext());
       CompletionItemTester tester2 = tester1.parent();
@@ -1695,7 +1695,7 @@ void TestCppCodeCompletion::testTemplateFunction() {
       QVERIFY(tester2.completionContext->matchTypes().size() == 1);
       QVERIFY(tester2.completionContext->matchTypes()[0].type<IntegralType>());
     }
-    
+
     release(top);
 }
 
@@ -1706,17 +1706,17 @@ void TestCppCodeCompletion::testTemplateArguments() {
     DUChainWriteLocker lock(DUChain::lock());
 
     QCOMPARE(top->childContexts().count(), 3);
-    
+
     QVERIFY(findDeclaration(top, QualifiedIdentifier("II")));
-    
+
     Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test<II>::t"));
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     QVERIFY(decl->type<TypeAliasType>());
-    
+
     //Since II is not template-dependent, the type should have stayed a TypeAliasType
     QCOMPARE(Identifier(decl->abstractType()->toString()), Identifier("II"));
-    
+
     release(top);
 }
 
@@ -1732,12 +1732,12 @@ void TestCppCodeCompletion::testCompletionBehindTypedeffedConstructor() {
     // NOTE: constructor A is not listed, as you can't call the constructor in this way
     QCOMPARE(CompletionItemTester(top->childContexts()[3], "A<int>().").names.toSet(), (QStringList() << QString("m")).toSet());
     QCOMPARE(CompletionItemTester(top->childContexts()[3], "TInt().").names.toSet(), (QStringList() << QString("m")).toSet());
-    
+
     //Argument-hints
-    kDebug() << CompletionItemTester(top->childContexts()[3], "TInt(").parent().names;
+    qDebug() << CompletionItemTester(top->childContexts()[3], "TInt(").parent().names;
     QVERIFY(CompletionItemTester(top->childContexts()[3], "TInt(").parent().names.contains("A"));
     QVERIFY(CompletionItemTester(top->childContexts()[3], "TInt ti(").parent().names.contains("A"));
-    
+
     release(top);
 }
 
@@ -1774,7 +1774,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
     QCOMPARE(specializationString, QString("<int>"));
     QCOMPARE(top->localDeclarations()[3]->abstractType()->toString().remove(' '), QString("Test<int>::It"));
     QCOMPARE(TypeUtils::unAliasedType(top->localDeclarations()[3]->abstractType())->toString().remove(' '), QString("I<int>"));
-    
+
     lock.unlock();
     parse(method, DumpNone, 0, QUrl(), top);
     lock.lock();
@@ -1782,7 +1782,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
     QCOMPARE(top->localDeclarations().count(), 4);
     QVERIFY(top->localDeclarations()[3]->abstractType());
     QCOMPARE(TypeUtils::unAliasedType(top->localDeclarations()[3]->abstractType())->toString().remove(' '), QString("I<int>"));
-    
+
     release(top);
   }
   {
@@ -1806,7 +1806,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
 }
 
 void TestCppCodeCompletion::testNamespaceCompletion() {
-  
+
   QByteArray method("namespace A { class m; namespace Q {}; }; namespace A { class n; int q; }");
   TopDUContext* top = parse(method, DumpNone);
 
@@ -1822,7 +1822,7 @@ void TestCppCodeCompletion::testNamespaceCompletion() {
   QVERIFY(!top->localDeclarations()[1]->abstractType());
   QCOMPARE(top->localDeclarations()[0]->internalContext(), top->childContexts()[0]);
   QCOMPARE(top->localDeclarations()[1]->internalContext(), top->childContexts()[1]);
-  
+
   QCOMPARE(CompletionItemTester(top).names, QStringList() << "A");
 
   QCOMPARE(CompletionItemTester(top->childContexts()[1], "A::").names.toSet(), QSet<QString>() << "m" << "n" << "Q");
@@ -1831,16 +1831,16 @@ void TestCppCodeCompletion::testNamespaceCompletion() {
 }
 
 void TestCppCodeCompletion::testNamespaceAliasCompletion() {
-  
+
   QByteArray method("namespace A { class C_A1; class C_A2; namespace Q { class C_Q1; class C_Q2; }; }; "
                     "namespace B = A; " // direct import of a namespace
                     "namespace C = B; " // indirect import through another alias
                     );
 
   TopDUContext* top = parse(method, DumpNone);
-  
+
   DUChainWriteLocker lock(DUChain::lock());
-  
+
   QCOMPARE(top->localDeclarations().count(), 3);
   QCOMPARE(top->childContexts().count(), 1);
   QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("A"));
@@ -1853,9 +1853,9 @@ void TestCppCodeCompletion::testNamespaceAliasCompletion() {
   QVERIFY(!top->localDeclarations()[1]->abstractType());
   QVERIFY(!top->localDeclarations()[2]->abstractType());
   QCOMPARE(top->localDeclarations()[0]->internalContext(), top->childContexts()[0]);
-  
+
   QCOMPARE(CompletionItemTester(top).names.toSet(), QSet<QString>() << "A" << "B" << "C");
-  
+
   QCOMPARE(CompletionItemTester(top->childContexts()[0], "A::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
   QCOMPARE(CompletionItemTester(top->childContexts()[0], "B::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
   QCOMPARE(CompletionItemTester(top->childContexts()[0], "C::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
@@ -1864,14 +1864,14 @@ void TestCppCodeCompletion::testNamespaceAliasCompletion() {
 }
 
 void TestCppCodeCompletion::testNamespaceAliasCycleCompletion() {
-  
+
   QByteArray method("namespace A { class C_A1; class C_A2; namespace Q { class C_Q1; class C_Q2; }; }; "
                     "namespace B = A; namespace A = B; ");
-  
+
   TopDUContext* top = parse(method, DumpNone);
-  
+
   DUChainWriteLocker lock(DUChain::lock());
-  
+
   QCOMPARE(top->localDeclarations().count(), 3);
   QCOMPARE(top->childContexts().count(), 1);
   QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("A"));
@@ -1884,9 +1884,9 @@ void TestCppCodeCompletion::testNamespaceAliasCycleCompletion() {
   QVERIFY(!top->localDeclarations()[1]->abstractType());
   QVERIFY(!top->localDeclarations()[2]->abstractType());
   QCOMPARE(top->localDeclarations()[0]->internalContext(), top->childContexts()[0]);
-  
+
   QCOMPARE(CompletionItemTester(top).names.toSet(), QSet<QString>() << "A" << "B");
-  
+
   QCOMPARE(CompletionItemTester(top->childContexts()[0], "A::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
   QCOMPARE(CompletionItemTester(top->childContexts()[0], "B::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
   QCOMPARE(CompletionItemTester(top).itemData("A", KTextEditor::CodeCompletionModel::Prefix).toString(), QString("namespace"));
@@ -1911,7 +1911,7 @@ void TestCppCodeCompletion::testIndirectImports()
   {
     addInclude("/testIndirectImportsHeader1.h", "class C {};");
     addInclude("/testIndirectImportsHeader2.h", "template<class T> class D : public T {};");
-    
+
     QByteArray method("#include \"testIndirectImportsHeader2.h\"\n#include \"testIndirectImportsHeader1.h\"\n typedef D<C> Base; class MyClass : public C, public Base {}; ");
 
     TopDUContext* top = parse(method, DumpNone);
@@ -1942,7 +1942,7 @@ void TestCppCodeCompletion::testIndirectImports()
 void TestCppCodeCompletion::testSameNamespace() {
   {
     addInclude("/testSameNamespaceClassHeader.h", "namespace A {\n class B\n {\n \n};\n \n}");
-    
+
     QByteArray method("#include \"testSameNamespaceClassHeader.h\"\n namespace A {\n namespace AA {\n};\n };\n");
 
     TopDUContext* top = parse(method, DumpNone);
@@ -1954,11 +1954,11 @@ void TestCppCodeCompletion::testSameNamespace() {
     QCOMPARE(top->childContexts().count(), 1);
     QCOMPARE(top->childContexts()[0]->childContexts().count(), 1);
     {
-      kDebug() << CompletionItemTester(top->childContexts()[0]).names;
+      qDebug() << CompletionItemTester(top->childContexts()[0]).names;
       QCOMPARE(CompletionItemTester(top->childContexts()[0]).names.toSet(), QSet<QString>() << "B" << "A" << "AA");
       QCOMPARE(CompletionItemTester(top->childContexts()[0]->childContexts()[0]).names.toSet(), QSet<QString>() << "B" << "A" << "AA");
     }
-    
+
     release(top);
   }
 
@@ -1980,12 +1980,12 @@ void TestCppCodeCompletion::testSameNamespace() {
 
   //   lock.unlock();
     {
-      kDebug() << CompletionItemTester(top->childContexts()[1]->childContexts()[2]).names;
+      qDebug() << CompletionItemTester(top->childContexts()[1]->childContexts()[2]).names;
       QCOMPARE(CompletionItemTester(top->childContexts()[1]->childContexts()[2]).names.toSet(), QSet<QString>() << "C" << "A");
       QCOMPARE(CompletionItemTester(top->childContexts()[1]).names.toSet(), QSet<QString>() << "C" << "A");
       QCOMPARE(CompletionItemTester(top->childContexts()[1]->childContexts()[1]).names.toSet(), QSet<QString>() << "C" << "test2" << "test" << "A");
     }
-    
+
     release(top);
   }
 }
@@ -2004,7 +2004,7 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 4);
   QCOMPARE(top->localDeclarations().count(), 3);
-  kDebug() << top->localDeclarations()[0]->range().castToSimpleRange();
+  qDebug() << top->localDeclarations()[0]->range().castToSimpleRange();
   QCOMPARE(top->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(0, 10, 0, 10));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("a")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("b")));
@@ -2019,15 +2019,15 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
     Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(top), "; ", QString(), top->range().end) );
     bool abort = false;
     typedef CompletionTreeItemPointer Item;
-    
+
     QList <Item > items = cptr->completionItems(abort);
     foreach(Item i, items) {
       Cpp::NormalDeclarationCompletionItem* decItem  = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(i.data());
       QVERIFY(decItem);
-      kDebug() << decItem->declaration()->toString();
-      kDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+      qDebug() << decItem->declaration()->toString();
+      qDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
     }
-    
+
     //Have been filtered out, because only types are shown from the global scope
     QCOMPARE(items.count(), 0); //C, test, and i
   }
@@ -2035,18 +2035,18 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
     Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(top->childContexts()[3]), "; ", QString(), top->range().end) );
     bool abort = false;
     typedef KDevelop::CompletionTreeItemPointer Item;
-    
+
     QList <Item > items = cptr->completionItems(abort);
     foreach(Item i, items) {
       Cpp::NormalDeclarationCompletionItem* decItem  = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(i.data());
       QVERIFY(decItem);
-      kDebug() << decItem->declaration()->toString();
-      kDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+      qDebug() << decItem->declaration()->toString();
+      qDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
     }
-    
+
     QCOMPARE(items.count(), 3); //b, a, and test
   }
-  
+
 //   lock.lock();
   release(top);
 }
@@ -2086,7 +2086,7 @@ void TestCppCodeCompletion::testCompletionContext() {
 
     lock.lock();
     for( Cpp::CodeCompletionContext::FunctionList::const_iterator it = function->functions().begin(); it != function->functions().end(); ++it )
-      kDebug(9007) << (*it).function.declaration()->toString() << ((*it).function.isViable() ? QString("(viable)") : QString("(not viable)")) ;
+      qDebug() << (*it).function.declaration()->toString() << ((*it).function.isViable() ? QString("(viable)") : QString("(not viable)")) ;
     lock.unlock();
 
     QCOMPARE(function->functions().size(), 4);
@@ -2190,14 +2190,14 @@ void TestCppCodeCompletion::testTypeConversion() {
 }
 
 KDevelop::IndexedType toReference(IndexedType t) {
-  
+
   ReferenceType::Ptr refType( new ReferenceType);
   refType->setBaseType(t.abstractType());
   return refType->indexed();
 }
 
 KDevelop::IndexedType toPointer(IndexedType t) {
-  
+
   PointerType::Ptr refType( new PointerType);
   refType->setBaseType(t.abstractType());
   return refType->indexed();
@@ -2217,8 +2217,8 @@ void TestCppCodeCompletion::testTypeConversion2() {
     classFun = dynamic_cast<ClassFunctionDeclaration*>(context->localDeclarations()[1]->internalContext()->localDeclarations()[1]);
     QVERIFY(classFun);
     QVERIFY(classFun->isExplicit());
-    
-    
+
+
     Cpp::TypeConversion conv(context);
     QVERIFY( !conv.implicitConversion(context->localDeclarations()[2]->indexedType(), context->localDeclarations()[0]->indexedType()) );
     QVERIFY( conv.implicitConversion(context->localDeclarations()[2]->indexedType(), context->localDeclarations()[1]->indexedType()) );
@@ -2237,7 +2237,7 @@ void TestCppCodeCompletion::testTypeConversion2() {
     QVERIFY( !conv.implicitConversion(toPointer(context->localDeclarations()[1]->indexedType()), toPointer(context->localDeclarations()[2]->indexedType()) ));
     QVERIFY( !conv.implicitConversion(toPointer(context->localDeclarations()[1]->indexedType()), toPointer(context->localDeclarations()[0]->indexedType()) ));
     QVERIFY( !conv.implicitConversion(toPointer(context->localDeclarations()[0]->indexedType()), toPointer(context->localDeclarations()[1]->indexedType()) ));
-    
+
     release(context);
   }
   {
@@ -2262,10 +2262,10 @@ void TestCppCodeCompletion::testTypeConversion2() {
     QVERIFY( !conv.implicitConversion(context->localDeclarations()[3]->indexedType(), context->localDeclarations()[1]->indexedType()) );
     QVERIFY( conv.implicitConversion(context->localDeclarations()[4]->indexedType(), context->localDeclarations()[5]->indexedType()) );
     QVERIFY( conv.implicitConversion(context->localDeclarations()[5]->indexedType(), context->localDeclarations()[4]->indexedType()) );
-    
+
     release(context);
   }
-  
+
   {
     QByteArray test = "class A {}; class C {}; enum M { Em }; template<class T> class B{ public:B(T t); }; ";
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
@@ -2275,18 +2275,18 @@ void TestCppCodeCompletion::testTypeConversion2() {
     Cpp::TypeConversion conv(context);
     Declaration* decl = findDeclaration(context, QualifiedIdentifier("B<A>"));
     QVERIFY(decl);
-    kDebug() << decl->toString();
-    
+    qDebug() << decl->toString();
+
     QVERIFY( conv.implicitConversion(context->localDeclarations()[0]->indexedType(), decl->indexedType()) );
-    
+
     decl = findDeclaration(context, QualifiedIdentifier("B<M>"));
     QVERIFY(decl);
-    kDebug() << decl->toString();
+    qDebug() << decl->toString();
     QCOMPARE(context->childContexts()[2]->localDeclarations().size(), 1);
-    QVERIFY( conv.implicitConversion(context->childContexts()[2]->localDeclarations()[0]->indexedType(), decl->indexedType()) );    
-    
+    QVERIFY( conv.implicitConversion(context->childContexts()[2]->localDeclarations()[0]->indexedType(), decl->indexedType()) );
+
     release(context);
-  }  
+  }
 }
 
 void TestCppCodeCompletion::testInclude() {
@@ -2300,7 +2300,7 @@ void TestCppCodeCompletion::testInclude() {
   DUChainWriteLocker lock(DUChain::lock());
 
   QVERIFY(c->topContext()->usingImportsCache());
-  
+
   Declaration* decl = findDeclaration(c, QualifiedIdentifier("globalHeinz"));
   QVERIFY(decl);
   QVERIFY(decl->abstractType());
@@ -2421,10 +2421,10 @@ void TestCppCodeCompletion::testUpdateChain() {
     IndexedDeclaration decl(top->childContexts()[1]->childContexts()[1]->childContexts()[1]->localDeclarations()[0]);
     QVERIFY(decl.data());
     QCOMPARE(decl.data()->identifier().toString(), QString("i"));
-    
+
     parse(text, DumpNone, 0, QUrl(), top);
     QVERIFY(decl.data()); //Make sure the declaration has been updated, and not deleted
-    
+
     release(top);
 }
 }
@@ -2504,7 +2504,7 @@ void TestCppCodeCompletion::testUsesThroughMacros() {
     ///2 uses of x, that go through the macro TEST(..), and effectively are in line 2 column 5.
     QByteArray method("int x;\n#define TEST(X) void test() { int z = X; int q = X; }\nTEST(x)");
 
-    kDebug() << method;
+    qDebug() << method;
     DUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
@@ -2538,7 +2538,7 @@ void TestCppCodeCompletion::testMacroIncludeDirectives()
 
     release(top);
   }
-  
+
   {
     QByteArray method("#define TEST \"macroincludedirectivetest1.h\" \n #include TEST\n");
 
@@ -2611,17 +2611,17 @@ void TestCppCodeCompletion::testAcrossHeaderReferences()
 void TestCppCodeCompletion::testAcrossHeaderTemplateResolution() {
   addInclude("/acrossheaderresolution1.h", "class C {}; namespace std { template<class T> class A {  }; }");
   addInclude("/acrossheaderresolution2.h", "namespace std { template<class T> class B { typedef A<T> Type; }; }");
-  
+
   QByteArray method("#include \"acrossheaderresolution1.h\"\n#include \"acrossheaderresolution2.h\"\n std::B<C>::Type t;");
-  
+
   DUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
-  
+
   Declaration* decl = findDeclaration(top, QualifiedIdentifier("t"), top->range().end);
   QVERIFY(decl);
   QCOMPARE(QualifiedIdentifier(TypeUtils::unAliasedType(decl->abstractType())->toString()), QualifiedIdentifier("std::A<C>"));
-  
+
   release(top);
 }
 
@@ -2637,7 +2637,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
 
 
   {
-    kDebug() << "top is" << top;
+    qDebug() << "top is" << top;
     Declaration* decl = findDeclaration(top, QualifiedIdentifier("Dummy"), top->range().end);
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
@@ -2743,18 +2743,18 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
-  kDebug() << ctx->localDeclarations()[0]->range().castToSimpleRange();
-  //kDebug() << ctx->localDeclarations()[1]->range().castToSimpleRange();
+  qDebug() << ctx->localDeclarations()[0]->range().castToSimpleRange();
+  //qDebug() << ctx->localDeclarations()[1]->range().castToSimpleRange();
   QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(1, 7, 1, 7)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
   //  QCOMPARE(ctx->localDeclarations()[1]->range().castToSimpleRange(), KTextEditor::Range(1, 10, 1, 11));
-  //kDebug() << "Range:" << ctx->localDeclarations()[0]->range().castToSimpleRange();
+  //qDebug() << "Range:" << ctx->localDeclarations()[0]->range().castToSimpleRange();
 }
 {
   QString test("#define A(X) bbbbbb\nint A(0);\n");
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
-  kDebug() << ctx->localDeclarations()[0]->range().castToSimpleRange();
+  qDebug() << ctx->localDeclarations()[0]->range().castToSimpleRange();
   QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange(), KTextEditor::Range(1, 8, 1, 8)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
 }
 {
@@ -2824,7 +2824,7 @@ void TestCppCodeCompletion::testNaiveMatching() {
     {
       addInclude("/recursive_test_1.h", "#include \"recursive_test_2.h\"\nint i1;\n");
       addInclude("/recursive_test_2.h", "#include \"recursive_test_1.h\"\nint i2;\n");
-      
+
       TopDUContext* test1 = parse(QByteArray("#include \"recursive_test_1.h\"\n"), DumpNone);
       DUChainWriteLocker l(DUChain::lock());
       QCOMPARE(test1->recursiveImportIndices().count(), 3u);
@@ -2886,7 +2886,7 @@ void TestCppCodeCompletion::testHeaderGuards() {
 void TestCppCodeCompletion::testEnvironmentMatching() {
     {
       CppPreprocessEnvironment::setRecordOnlyImportantString(false);
-      
+
       addInclude("/deep2.h", "#ifdef WANT_DEEP\nint x;\n#undef WANT_DEEP\n#endif\n");
       addInclude("/deep1.h", "#define WANT_DEEP\n#include \"deep2.h\"\n");
       TopDUContext* test1 = parse(QByteArray("#include \"deep1.h\""), DumpNone);
@@ -2931,7 +2931,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QVERIFY(top->parsingEnvironmentFile());
         Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(top->parsingEnvironmentFile().data());
         QVERIFY(envFile);
-        kDebug() << "url" << envFile->url().str();
+        qDebug() << "url" << envFile->url().str();
         QCOMPARE(envFile->usedMacros().set().count(), 0u);
         QCOMPARE(toStringList(envFile->strings()), splitSorted("String1\ns1\ns2")); //The #undef protects String2, so it cannot be affected from outside
       }
@@ -2968,7 +2968,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QCOMPARE(envFile->definedMacros().set().count(), 0u);
         QCOMPARE(envFile->usedMacros().set().count(), 0u);
         //String1 is shadowed by the macro-definition, so it is not a string that can be affected from outside.
-        kDebug() << toStringList(envFile->strings()) << splitSorted("s1\ns2");
+        qDebug() << toStringList(envFile->strings()) << splitSorted("s1\ns2");
         QCOMPARE(toStringList(envFile->strings()), splitSorted("s1\ns2"));
         QCOMPARE(toStringList(envFile->usedMacroNames()), QStringList()); //No macros from outside were used
 
@@ -2996,7 +2996,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QCOMPARE(envFile->usedMacros().set().count(), 0u);
         QCOMPARE(envFile->usedMacroNames().set().count(), 0u);
 
-        kDebug() << toStringList(envFile->strings()) ;
+        qDebug() << toStringList(envFile->strings()) ;
         QCOMPARE(envFile->strings().count(), 3u); //meh, m, int
 
         QCOMPARE(top->importedParentContexts().count(), 1);
@@ -3008,7 +3008,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QCOMPARE(envFile2->unDefinedMacroNames().set().count(), 1u);
         QCOMPARE(envFile2->usedMacros().set().count(), 1u);
         QCOMPARE(envFile2->usedMacroNames().set().count(), 1u);
-        kDebug() << toStringList(envFile2->strings()) ;
+        qDebug() << toStringList(envFile2->strings()) ;
         QCOMPARE(envFile2->strings().count(), 3u); //meh(from macro), MACRO, m
       }
     }
@@ -3034,17 +3034,17 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
 
 void TestCppCodeCompletion::testPreprocessor() {
   TEST_FILE_PARSE_ONLY
-  
+
   IncludeFileList includes;
 
   {
     QString a = "#define Q(c) c; char* q = #c; \n Q(int i;\n char* c = \"a\";)\n";
     QString preprocessed = preprocess(IndexedString(), a, includes);
-    kDebug() << "preprocessed:" << preprocessed;
+    qDebug() << "preprocessed:" << preprocessed;
     QVERIFY(preprocessed.contains("\"int i;\\n char* c = \\\"a\\\";")); //The newline must have been escaped correctly, and the string as well
     TopDUContext* top = parse(a.toLocal8Bit(), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
-    kDebug() << top->localDeclarations()[0]->identifier().toString();
+    qDebug() << top->localDeclarations()[0]->identifier().toString();
     QCOMPARE(top->localDeclarations().count(), 3);
     QCOMPARE(top->localDeclarations()[0]->range().start.line, 1);
     QCOMPARE(top->localDeclarations()[1]->range().start.line, 2);
@@ -3053,20 +3053,20 @@ void TestCppCodeCompletion::testPreprocessor() {
   {
     QString a = "#undef __attribute__\n__attribute__((visibility(\"default\")))";
     QString preprocessed = preprocess(IndexedString(), a, includes);
-    kDebug() << "preprocessed:" << preprocessed;
+    qDebug() << "preprocessed:" << preprocessed;
     QVERIFY(!preprocessed.contains ("__attribute__"));
   }
   {
     QString a = "#ifdef __attribute__\npassed\n#else\nfailed\n#endif";
     QString preprocessed = preprocess(IndexedString(), a, includes);
-    kDebug() << "preprocessed: " << preprocessed;
+    qDebug() << "preprocessed: " << preprocessed;
     QVERIFY(!preprocessed.contains("failed"));
     QVERIFY(preprocessed.contains("passed"));
   }
   {
     QString a = "#define Q(c) c ## ULL \n void test() {int i = Q(0x5);}";
     QString preprocessed = preprocess(IndexedString(), a, includes);
-    kDebug() << "preprocessed:" << preprocessed;
+    qDebug() << "preprocessed:" << preprocessed;
     TopDUContext* top = parse(a.toLocal8Bit(), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().count(), 2);
@@ -3075,7 +3075,7 @@ void TestCppCodeCompletion::testPreprocessor() {
   {
     QString a = "#define MA(x) T<x> a\n #define MB(x) T<x>\n #define MC(X) int\n #define MD(X) c\n template <typename P1> struct A {}; template <typename P2> struct T {}; int main(int argc, char ** argv) { MA(A<int>); A<MB(int)> b; MC(a)MD(b); MC(a)d; }";
     QString preprocessed = preprocess(IndexedString(), a, includes);
-    kDebug() << "preprocessed:" << preprocessed;
+    qDebug() << "preprocessed:" << preprocessed;
     TopDUContext* top = parse(a.toUtf8(), DumpAll);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().count(), 6);
@@ -3085,7 +3085,7 @@ void TestCppCodeCompletion::testPreprocessor() {
     //Not working yet
   {//No macro-expansion should happen on the first layer of a macro-call
   QString preprocessed = preprocess(IndexedString(), "#define VAL_KIND A \n#define DO_CAT_I(a, b) a ## b \n#define DO_CAT(a, b) DO_CAT_I(a, b) \nint DO_CAT(Value_, VAL_KIND); \nint DO_CAT_I(Value_, VAL_KIND);\n int VAL_KIND;\nint DO_CAT(VAL_KIND, _Value);\nint DO_CAT(VAL_KIND, _Value);\n", includes);
-  kDebug() << preprocessed;
+  qDebug() << preprocessed;
     TopDUContext* top = parse(preprocessed.toUtf8(), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 5);
@@ -3098,7 +3098,7 @@ void TestCppCodeCompletion::testPreprocessor() {
   #endif
   {//Test macro redirection
     QString test = preprocess(IndexedString(), "#define M1(X) X ## _m1 \n#define M2(X) M ## X\n#define M3 M2\n#define M4 M3 \nM4(1)(hallo)", includes);
-    kDebug() << test;
+    qDebug() << test;
     QCOMPARE(test.trimmed(), QString("hallo_m1"));
   }
   {//Test replacement of merged preprocessor function calls
@@ -3110,7 +3110,7 @@ void TestCppCodeCompletion::testPreprocessor() {
   {//Test merging
     TopDUContext* top = parse(QByteArray("#define D(X,Y) X ## Y \nint D(a,ba);"), DumpNone);
     IncludeFileList includes;
-    kDebug() << preprocess(IndexedString("somefile"), "#define D(X,Y) X ## Y \nint D(a,ba);", includes);
+    qDebug() << preprocess(IndexedString("somefile"), "#define D(X,Y) X ## Y \nint D(a,ba);", includes);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("aba"));
@@ -3155,7 +3155,7 @@ void TestCppCodeCompletion::testPreprocessor() {
   {//Test merging
     TopDUContext* top = parse(QByteArray("#define D(X,Y) X ## Y \nint D(a,ba);"), DumpNone);
     IncludeFileList includes;
-    kDebug() << preprocess(IndexedString("somefile"), "#define D(X,Y) X ## Y \nint D(a,ba);", includes);
+    qDebug() << preprocess(IndexedString("somefile"), "#define D(X,Y) X ## Y \nint D(a,ba);", includes);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("aba"));
@@ -3445,7 +3445,7 @@ void TestCppCodeCompletion::testExecuteKeepWord()
   QExplicitlySharedDataPointer<CompletionTreeItem> item;
   qDebug() << "FOO" << top->childContexts().last() << complCtx.items.length();
   for(int i=0; i<complCtx.items.length(); ++i) {
-    kDebug() << complCtx.itemData(i).toString();
+    qDebug() << complCtx.itemData(i).toString();
     if (complCtx.itemData(i).toString()=="f") {
       item = complCtx.items.at(i);
     }
@@ -3479,10 +3479,10 @@ public:
   {
     QMap<QString,QString>::const_iterator it = cc->fakeIncludes.constFind(fileName);
     if( it != cc->fakeIncludes.constEnd() || !pp ) {
-      kDebug(9007) << "parsing included file \"" << fileName << "\"";
+      qDebug() << "parsing included file \"" << fileName << "\"";
       included << LineContextPair( dynamic_cast<TopDUContext*>(cc->parse( (*it).toUtf8(), TestCppCodeCompletion::DumpNone, pp, QUrl::fromLocalFile(it.key()))), sourceLine );
     } else {
-      kDebug(9007) << "could not find include-file \"" << fileName << "\"";
+      qDebug() << "could not find include-file \"" << fileName << "\"";
     }
     return 0;
   }
@@ -3497,7 +3497,7 @@ public:
     if(stopAfterHeaders)
       stream.toEnd();
   }
-  
+
   virtual void foundHeaderGuard(rpp::Stream& /*stream*/, KDevelop::IndexedString guardName) {
     environmentFile->setHeaderGuard(guardName);
   }
@@ -3552,7 +3552,7 @@ QString TestCppCodeCompletion::preprocess( const IndexedString& url, const QStri
 TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, rpp::pp* parent, QUrl _identity, TopDUContext* update)
 {
   if (dump)
-    kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
+    qDebug() << "==== Beginning new test case...:" << endl << unit;
 
   ParseSession* session = new ParseSession();
    ;
@@ -3586,7 +3586,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
           }
         }
       } else {
-        kDebug(9007) << "PROBLEM";
+        qDebug() << "PROBLEM";
       }
     }
 
@@ -3595,7 +3595,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
   ast->session = session;
 
   if (dump & DumpAST) {
-    kDebug(9007) << "===== AST:";
+    qDebug() << "===== AST:";
     cppDumper.dump(ast, session);
   }
 
@@ -3611,7 +3611,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
   }
 
   if (dump & DumpDUChain) {
-    kDebug(9007) << "===== DUChain:";
+    qDebug() << "===== DUChain:";
 
     DUChainWriteLocker lock(DUChain::lock());
     DUChainDumper dumper;
@@ -3626,13 +3626,13 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
       foreach( DUContext* context, temporaryIncluded )
         top->removeImportedParentContext( context );
     } else {
-      kDebug(9007) << "PROBLEM";
+      qDebug() << "PROBLEM";
     }
   }
 
 
   if (dump)
-    kDebug(9007) << "===== Finished test case.";
+    qDebug() << "===== Finished test case.";
 
   delete session;
 
@@ -3707,7 +3707,7 @@ void TestCppCodeCompletion::testNoQuadrupleColon()
   TopDUContext* top = parse(code, DumpNone);
   DUChainWriteLocker lock;
   QVERIFY(top->problems().isEmpty());
-  
+
   CompletionItemTester tester(top->childContexts().last());
   QVERIFY(tester.completionContext->isValid());
   QExplicitlySharedDataPointer<CompletionTreeItem> item;
@@ -3717,7 +3717,7 @@ void TestCppCodeCompletion::testNoQuadrupleColon()
       }
   }
   QVERIFY( item );
-  
+
   KTextEditor::Editor* editor = KTextEditor::Editor::instance();
   QVERIFY(editor);
   KTextEditor::Document* doc = editor->createDocument(this);
@@ -3726,7 +3726,7 @@ void TestCppCodeCompletion::testNoQuadrupleColon()
   // verify it adds the "::" when the doc is empty
   doc->setText("");
   KTextEditor::View* v = doc->createView(0);
-  
+
   KTextEditor::Document::EditingTransaction t(doc);
   KTextEditor::Cursor c( 0, 0 );
   v->setCursorPosition( c );

@@ -29,7 +29,6 @@
 #include <KLocalizedString>
 #include <kconfiggroup.h>
 #include <kparts/mainwindow.h>
-#include <kdebug.h>
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
@@ -41,6 +40,7 @@
 #include "icmakedocumentation.h"
 #include "cmakebuilddirchooser.h"
 #include "settings/cmakecachemodel.h"
+#include "debug.h"
 
 namespace Config
 {
@@ -128,7 +128,7 @@ void writeProjectParameter( KDevelop::IProject* project, const QString& key, con
 
     else
     {
-        kWarning() << "cannot write key" << key << "(" << value << ")" << "when no builddir is set!";
+        qWarning() << "cannot write key" << key << "(" << value << ")" << "when no builddir is set!";
     }
 }
 
@@ -166,7 +166,7 @@ KDevelop::Path::List resolveSystemDirs(KDevelop::IProject* project, const QStrin
             dir = KDevelop::Path(s);
         }
 
-//         kDebug(9042) << "resolved" << s << "to" << d;
+//         qCDebug(CMAKE) << "resolved" << s << "to" << d;
 
         if (!newList.contains(dir))
         {
@@ -183,11 +183,11 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
     if( !builddir.isValid() )
     {
         CMakeBuildDirChooser bd;
-        
+
         KDevelop::Path folder = project->path();
         QString relative=CMake::projectRootRelative(project);
         folder.cd(relative);
-        
+
         bd.setSourceFolder( folder );
         bd.setAlreadyUsed( CMake::allBuildDirs(project) );
         bd.setCMakeBinary( currentCMakeBinary(project) );
@@ -202,13 +202,13 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
 
         // Initialize the kconfig items with the values from the dialog, this ensures the settings
         // end up in the config file once the changes are saved
-        kDebug( 9042 ) << "adding to cmake config: new builddir index" << addedBuildDirIndex;
-        kDebug( 9042 ) << "adding to cmake config: builddir path " << bd.buildFolder();
-        kDebug( 9042 ) << "adding to cmake config: installdir " << bd.installPrefix();
-        kDebug( 9042 ) << "adding to cmake config: extra args" << bd.extraArguments();
-        kDebug( 9042 ) << "adding to cmake config: build type " << bd.buildType();
-        kDebug( 9042 ) << "adding to cmake config: cmake binary " << bd.cmakeBinary();
-        kDebug( 9042 ) << "adding to cmake config: environment <null>";
+        qCDebug(CMAKE) << "adding to cmake config: new builddir index" << addedBuildDirIndex;
+        qCDebug(CMAKE) << "adding to cmake config: builddir path " << bd.buildFolder();
+        qCDebug(CMAKE) << "adding to cmake config: installdir " << bd.installPrefix();
+        qCDebug(CMAKE) << "adding to cmake config: extra args" << bd.extraArguments();
+        qCDebug(CMAKE) << "adding to cmake config: build type " << bd.buildType();
+        qCDebug(CMAKE) << "adding to cmake config: cmake binary " << bd.cmakeBinary();
+        qCDebug(CMAKE) << "adding to cmake config: environment <null>";
         CMake::setBuildDirCount( project, addedBuildDirIndex + 1 );
         CMake::setCurrentBuildDirIndex( project, addedBuildDirIndex );
         CMake::setCurrentBuildDir( project, bd.buildFolder() );
@@ -364,7 +364,7 @@ void removeBuildDirConfig( KDevelop::IProject* project )
     int buildDirIndex = currentBuildDirIndex( project );
     if ( !buildDirGroupExists( project, buildDirIndex ) )
     {
-        kWarning() << "build directory config" << buildDirIndex << "to be removed but does not exist";
+        qWarning() << "build directory config" << buildDirIndex << "to be removed but does not exist";
         return;
     }
 
@@ -420,7 +420,7 @@ void attemptMigrate( KDevelop::IProject* project )
 {
     if ( !baseGroup(project).hasKey( Config::Old::projectBuildDirs ) )
     {
-        kDebug() << "CMake settings migration: already done, exiting";
+        qCDebug(CMAKE) << "CMake settings migration: already done, exiting";
         return;
     }
 
@@ -444,16 +444,16 @@ void attemptMigrate( KDevelop::IProject* project )
     }
     int buildDirsCount = existingBuildDirs.count();
 
-    kDebug() << "CMake settings migration: existing build directories" << existingBuildDirs;
-    kDebug() << "CMake settings migration: build directory count" << buildDirsCount;
-    kDebug() << "CMake settings migration: current build directory" << buildDir << "(index" << buildDirIndex << ")";
+    qCDebug(CMAKE) << "CMake settings migration: existing build directories" << existingBuildDirs;
+    qCDebug(CMAKE) << "CMake settings migration: build directory count" << buildDirsCount;
+    qCDebug(CMAKE) << "CMake settings migration: current build directory" << buildDir << "(index" << buildDirIndex << ")";
 
     baseGrp.writeEntry( Config::buildDirCountKey, buildDirsCount );
     baseGrp.writeEntry( Config::buildDirIndexKey, buildDirIndex );
 
     for (int i = 0; i < buildDirsCount; ++i)
     {
-        kDebug() << "CMake settings migration: writing group" << i << ": path" << existingBuildDirs.at(i);
+        qCDebug(CMAKE) << "CMake settings migration: writing group" << i << ": path" << existingBuildDirs.at(i);
 
         KConfigGroup buildDirGrp = buildDirGroup( project, i );
         buildDirGrp.writeEntry( Config::Specific::buildDirPathKey, existingBuildDirs.at(i) );
@@ -488,8 +488,8 @@ void removeOverrideBuildDirIndex( KDevelop::IProject* project, bool writeToMainI
 ICMakeDocumentation* cmakeDocumentation()
 {
     ICMakeDocumentation* p=KDevelop::ICore::self()->pluginController()->extensionForPlugin<ICMakeDocumentation>("org.kdevelop.ICMakeDocumentation");
-    
-    if( !p ) 
+
+    if( !p )
     {
         return 0;
     }
@@ -510,7 +510,7 @@ QStringList allBuildDirs(KDevelop::IProject* project)
 QString executeProcess(const QString& execName, const QStringList& args)
 {
     Q_ASSERT(!execName.isEmpty());
-    kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
+    qCDebug(CMAKE) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
 
     QProcess p;
     QTemporaryDir tmp("kdevcmakemanager");
@@ -519,7 +519,7 @@ QString executeProcess(const QString& execName, const QStringList& args)
 
     if(!p.waitForFinished())
     {
-        kDebug() << "failed to execute:" << execName;
+        qCDebug(CMAKE) << "failed to execute:" << execName;
     }
 
     QByteArray b = p.readAllStandardOutput();

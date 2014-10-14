@@ -19,6 +19,7 @@
 
 #include "ctestfindjob.h"
 #include "ctestsuite.h"
+#include "../debug.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/itestcontroller.h>
@@ -34,20 +35,20 @@ CTestFindJob::CTestFindJob(CTestSuite* suite, QObject* parent)
 : KJob(parent)
 , m_suite(suite)
 {
-    kDebug() << "Created a CTestFindJob";
+    qCDebug(CMAKE) << "Created a CTestFindJob";
     setObjectName(i18n("Parse test suite %1", suite->name()));
     setCapabilities(Killable);
 }
 
 void CTestFindJob::start()
 {
-    kDebug();
+    qCDebug(CMAKE);
     QMetaObject::invokeMethod(this, "findTestCases", Qt::QueuedConnection);
 }
 
 void CTestFindJob::findTestCases()
 {
-    kDebug();
+    qCDebug(CMAKE);
 
     if (!m_suite->arguments().isEmpty())
     {
@@ -57,7 +58,7 @@ void CTestFindJob::findTestCases()
     }
 
     m_pendingFiles = m_suite->sourceFiles();
-    kDebug() << "Source files to update:" << m_pendingFiles;
+    qCDebug(CMAKE) << "Source files to update:" << m_pendingFiles;
 
     if (m_pendingFiles.isEmpty())
     {
@@ -74,7 +75,7 @@ void CTestFindJob::findTestCases()
 
 void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context)
 {
-    kDebug() << m_pendingFiles << document.str();
+    qCDebug(CMAKE) << m_pendingFiles << document.str();
     m_suite->loadDeclarations(document, context);
     m_pendingFiles.removeAll(document.str());
 

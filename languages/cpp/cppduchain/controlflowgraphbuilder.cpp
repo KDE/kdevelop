@@ -17,6 +17,7 @@
 */
 
 #include "controlflowgraphbuilder.h"
+#include "debug.h"
 #include <language/checks/controlflownode.h>
 #include <language/checks/controlflowgraph.h>
 #include <language/duchain/topducontext.h>
@@ -86,7 +87,7 @@ void ControlFlowGraphBuilder::createCompoundStatementFrom(ControlFlowNode* start
   startNode->setStartCursor(startcursor);
   m_currentNode = startNode;
   visit(node);
-  
+
   if(!m_currentNode->next()) {
     m_currentNode->setNext(next);
     m_currentNode->setEndCursor(cursorForToken(node->end_token));
@@ -97,17 +98,17 @@ void ControlFlowGraphBuilder::visitFunctionDefinition(FunctionDefinitionAST* nod
 {
   if(!node->function_body || !node->function_body->ducontext) //means its ducontext hasn't been built, we probably don't need the flow diagram
     return;
-  
+
   PushValue<ControlFlowNode*> currentNode(m_currentNode);
   m_returnNode = new ControlFlowNode;
-  
+
   Declaration* d;
   {
     KDevelop::DUChainReadLocker lock;
     d=node->function_body->ducontext->owner();
-//     qDebug() << "lalala" << nodeToString(m_session, node) << node->function_body->ducontext->owner() << node->function_body;
+//     qCDebug(CPPDUCHAIN) << "lalala" << nodeToString(m_session, node) << node->function_body->ducontext->owner() << node->function_body;
   }
-  
+
   if(d)
     m_graph->addEntry(d, createCompoundStatement(node->function_body, m_returnNode));
   else
@@ -129,13 +130,13 @@ void ControlFlowGraphBuilder::visitIfStatement(IfStatementAST* node)
   ControlFlowNode* previous = m_currentNode;
   m_currentNode->setEndCursor(cursorForToken(node->condition->end_token));
   visit(node->condition);
-  
+
   ControlFlowNode* nextNode = new ControlFlowNode;
-  
+
   previous->setConditionRange(nodeRange(node->condition));
   previous->setNext(createCompoundStatement(node->statement, nextNode));
   previous->setAlternative(node->else_statement ? createCompoundStatement(node->else_statement, nextNode) : nextNode);
-  
+
   nextNode->setStartCursor(cursorForToken(node->end_token));
   m_currentNode = nextNode;
 }
@@ -145,19 +146,19 @@ void ControlFlowGraphBuilder::visitWhileStatement(WhileStatementAST* node)
   //TODO:   m_currentNode->m_conditionRange = rangeBetween(node->condition->start_token, node->condition->end_token);
   m_currentNode->setEndCursor(cursorForToken(node->start_token));
   ControlFlowNode* previous = m_currentNode;
-  
+
   ControlFlowNode* nextNode = new ControlFlowNode;
   ControlFlowNode* conditionNode = createCompoundStatement(node->condition, 0);
-  
+
   PushValue<ControlFlowNode*> pushBreak(m_breakNode, nextNode);
   PushValue<ControlFlowNode*> pushContinue(m_continueNode, conditionNode);
   ControlFlowNode* bodyNode = createCompoundStatement(node->statement, conditionNode);
-  
+
   previous->setNext(conditionNode);
   conditionNode->setConditionRange(nodeRange(node->condition));
   conditionNode->setNext(bodyNode);
   conditionNode->setAlternative(nextNode);
-  
+
   nextNode->setStartCursor(cursorForToken(node->end_token));
   m_currentNode = nextNode;
 }
@@ -168,19 +169,19 @@ void ControlFlowGraphBuilder::visitForStatement(ForStatementAST* node)
   visit(node->init_statement);
   m_currentNode->setEndCursor(cursorForToken(flownode ? flownode->start_token : node->init_statement->end_token));
   ControlFlowNode* previous = m_currentNode;
-  
+
   ControlFlowNode* nextNode = new ControlFlowNode;
   ControlFlowNode* conditionNode = createCompoundStatement(flownode, nextNode);
   ControlFlowNode* endCondition = m_currentNode;
   ControlFlowNode* incNode = createCompoundStatement(node->expression, conditionNode);
-  
+
   PushValue<ControlFlowNode*> pushBreak(m_breakNode, nextNode);
   PushValue<ControlFlowNode*> pushContinue(m_continueNode, incNode);
   ControlFlowNode* bodyNode = createCompoundStatement(node->statement, incNode);
-  
+
   endCondition->setAlternative(bodyNode);
   endCondition->setConditionRange(nodeRange(flownode));
-  
+
   previous->setNext(conditionNode);
   nextNode->setStartCursor(cursorForToken(node->end_token));
   m_currentNode = nextNode;
@@ -191,15 +192,15 @@ void ControlFlowGraphBuilder::visitConditionalExpression(ConditionalExpressionAS
   visit(node->condition);
   m_currentNode->setEndCursor(cursorForToken(node->condition->end_token));
   ControlFlowNode* previous = m_currentNode;
-  
+
   ControlFlowNode* nextNode = new ControlFlowNode;
   ControlFlowNode* trueNode = createCompoundStatement(node->left_expression, nextNode);
   ControlFlowNode* elseNode = createCompoundStatement(node->right_expression, nextNode);
-  
+
   previous->setNext(trueNode);
   previous->setAlternative(elseNode);
   previous->setConditionRange(nodeRange(node->condition));
-  
+
   nextNode->setStartCursor(cursorForToken(node->end_token));
   m_currentNode = nextNode;
 }
@@ -208,18 +209,18 @@ void ControlFlowGraphBuilder::visitDoStatement(DoStatementAST* node)
 {
   m_currentNode->setEndCursor(cursorForToken(node->start_token));
   ControlFlowNode* previous = m_currentNode;
-  
+
   ControlFlowNode* nextNode = new ControlFlowNode;
   ControlFlowNode* condNode = createCompoundStatement(node->expression, nextNode);
-  
+
   PushValue<ControlFlowNode*> pushBreak(m_breakNode, nextNode);
   PushValue<ControlFlowNode*> pushContinue(m_continueNode, condNode);
   ControlFlowNode* bodyNode = createCompoundStatement(node->statement, condNode);
-  
+
   previous->setNext(bodyNode);
   condNode->setAlternative(bodyNode);
   condNode->setConditionRange(nodeRange(node->expression));
-  
+
   nextNode->setStartCursor(cursorForToken(node->end_token));
   m_currentNode = nextNode;
 }
@@ -244,7 +245,7 @@ void ControlFlowGraphBuilder::visitJumpStatement(JumpStatementAST* node)
       m_currentNode->setNext(m_breakNode);
       break;
     case Token_goto: {
-//       qDebug() << "goto!";
+//       qCDebug(CPPDUCHAIN) << "goto!";
       IndexedString tag = m_session->token_stream->symbol(node->identifier);
       QMap< IndexedString, ControlFlowNode* >::const_iterator tagIt = m_taggedNodes.constFind(tag);
       if(tagIt!=m_taggedNodes.constEnd())
@@ -255,7 +256,7 @@ void ControlFlowGraphBuilder::visitJumpStatement(JumpStatementAST* node)
       }
     } break;
   }
-  
+
   //here we create a node with the dead code
   ControlFlowNode* deadNode = new ControlFlowNode;
   deadNode->setStartCursor(m_currentNode->nodeRange().end);
@@ -269,11 +270,11 @@ void ControlFlowGraphBuilder::visitSwitchStatement(SwitchStatementAST* node)
   visit(node->condition);
   m_currentNode->setEndCursor(cursorForToken(node->condition->end_token));
 //   ControlFlowNode* previous = m_currentNode;
-  
+
   ControlFlowNode* nextNode = new ControlFlowNode;
   PushValue<ControlFlowNode*> pushBreak(m_breakNode, nextNode);
   PushValue<ControlFlowNode*> pushDefault(m_defaultNode, nextNode);
-  
+
   ControlFlowNode* switchNode = m_currentNode;
   switchNode->setNext(nextNode);
   PushValue<QList< QPair<ControlFlowNode*, ControlFlowNode*> > > pushCases(m_caseNodes, QList<QPair<ControlFlowNode*,ControlFlowNode*> > ());
@@ -288,40 +289,40 @@ void ControlFlowGraphBuilder::visitSwitchStatement(SwitchStatementAST* node)
 void ControlFlowGraphBuilder::visitLabeledStatement(LabeledStatementAST* node)
 {
   visit(node->expression);
-  
+
   int token = m_session->token_stream->token(node->start_token).kind;
-  
+
   if(token==Token_default || token==Token_case) {
     ControlFlowNode* condNode = new ControlFlowNode;
     condNode->setStartCursor(cursorForToken(node->start_token));
     condNode->setEndCursor(cursorForToken(node->end_token));
-    
+
     condNode->setNext(createCompoundStatement(node->statement, 0));
-    
+
     if(!m_caseNodes.isEmpty()) {
       m_caseNodes.last().first->setAlternative(condNode);
       if(!m_caseNodes.last().second->next())
         m_caseNodes.last().second->setNext(condNode->next());
     }
-    
+
     m_caseNodes+=qMakePair(condNode, m_currentNode);
-    
+
     if(token==Token_default)
       m_defaultNode = condNode;
-    
+
   } else { //it is a goto tag
     m_currentNode->setEndCursor(cursorForToken(node->start_token));
-    
+
     ControlFlowNode* nextNode = new ControlFlowNode;
     nextNode->setStartCursor(cursorForToken(node->start_token));
     if(!m_currentNode->next()) m_currentNode->setNext(nextNode);
-    
+
     IndexedString tag = m_session->token_stream->symbol(node->label);
     m_taggedNodes.insert(tag, nextNode);
     QList< ControlFlowNode* > pendingNodes = m_pendingGotoNodes.take(tag);
     foreach(ControlFlowNode* pending, pendingNodes)
       pending->setNext(nextNode);
-    
+
     m_currentNode = nextNode;
     visit(node->statement);
   }

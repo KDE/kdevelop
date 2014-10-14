@@ -25,7 +25,7 @@ While construction:
 - Within template-contexts, do not resolve any types. Instead create "virtual types" that will resolve the types when template-parameters are given.
  (DelayedType) - ready
 
- 
+
  Later:
  - Searching instantiated template-class:
         - return virtual declaration
@@ -41,7 +41,7 @@ While construction:
 
  - How template-parameters are resolved:
     - The DUContext's with type DUContext::Template get their template-parameter declarations instantiated and added locally. Then they will be found when resolving virtual types.
-    - 
+    -
 
 */
 
@@ -91,7 +91,7 @@ extern QMutex cppDuContextInstantiationsMutex;
           s->result.clear();
           foreach(const DeclarationId& decl, result.allDeclarations)
           s->result << DeclarationPointer( decl.getDeclaration(const_cast<TopDUContext*>(topContext())) );
-          
+
           m_states << s;
         }
 
@@ -125,7 +125,7 @@ extern QMutex cppDuContextInstantiationsMutex;
 
         /**
          * Returns the Declarations found for the last closed qualified identifier.
-         * 
+         *
          * */
         QList<DeclarationPointer> lastDeclarations() const {
           return m_lastDeclarations;
@@ -134,7 +134,7 @@ extern QMutex cppDuContextInstantiationsMutex;
         const TopDUContext* topContext() const {
           return m_source;
         }
-        
+
         uint currentLength() const {
           return m_states.size();
         }
@@ -143,7 +143,7 @@ extern QMutex cppDuContextInstantiationsMutex;
 
         ///Uses the instantiation-information from the context of decl as parent of templateArguments.
         Declaration* instantiateDeclaration( Declaration* decl, const InstantiationInformation& templateArguments ) const;
-        
+
         struct State : public QSharedData {
           State() {
           }
@@ -154,9 +154,9 @@ extern QMutex cppDuContextInstantiationsMutex;
           QList<DeclarationPointer> result;
           ExpressionEvaluationResult expressionResult;
         };
-        
+
         typedef QExplicitlySharedDataPointer<State> StatePtr;
-        
+
         QStack<StatePtr> m_states;
         const DUContext* m_context;
         const TopDUContext* m_source;
@@ -194,7 +194,7 @@ class CppDUContext : public BaseContext {
     CppDUContext( const Param1& p1, const Param2& p2) : BaseContext(p1, p2), m_instantiatedFrom(0) {
       static_cast<DUChainBase*>(this)->d_func_dynamic()->setClassId(this);
     }
-    
+
     ///Matches the qualified identifier represented by the search item to the tail of the context's scope identfier
     ///Also matches searches without template-parameters to fully instantiated contexts
     ///Returns true if they match
@@ -207,19 +207,19 @@ class CppDUContext : public BaseContext {
           else
             break;
         }
-        
+
         while(ctx && !items.isEmpty()) {
           QualifiedIdentifier localId = ctx->localScopeIdentifier();
-          
+
           if(localId.isEmpty())
             return false;
-        
+
           int matchPos = localId.count()-1;
           while(!items.isEmpty() && matchPos >= 0) {
             const auto id = items.back()->identifier.identifier();
             if(id.templateIdentifiersCount())
               return false; //Don't match when there is template parameters, as that needs other mechanisms
-            
+
             if(id == localId.at(matchPos) || id.identifier() == localId.at(matchPos).identifier()) {
               --matchPos;
               items.resize(items.size()-1);
@@ -227,13 +227,13 @@ class CppDUContext : public BaseContext {
               return false;
             }
           }
-          
+
           if(items.isEmpty())
             return true;
-          
+
           ctx = ctx->parentContext();
         }
-        
+
         return false;
     }
 
@@ -267,19 +267,19 @@ class CppDUContext : public BaseContext {
                 }
               }
             }
-            
+
             ret << this->owner();
             return true;
           }
         }
       }
-      
+
       if( basicFlags & BaseContext::DirectQualifiedLookup ) {
-        //ifDebug( kDebug(9007) << "redirecting findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
+        //ifDebug( qDebug() << "redirecting findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
         //We use DirectQualifiedLookup to signal that we don't need to do the whole scope-search, template-resolution etc. logic.
         return BaseContext::findDeclarationsInternal(identifiers, position, dataType, ret, source, basicFlags, depth );
       }
-      
+
       FOREACH_ARRAY( const DUContext::SearchItem::Ptr& item, identifiers )
         foreach( const QualifiedIdentifier& id, item->toList() )
           if(!findDeclarationsInternal(id, position, dataType, ret, source, basicFlags))
@@ -289,7 +289,7 @@ class CppDUContext : public BaseContext {
 
       bool haveForwardDeclaration = false;
       bool haveNonForwardDeclaration = false;
-      
+
       for(int a = 0; a < ret.size(); ++a) {
         if(ret[a]->isForwardDeclaration())
           haveForwardDeclaration = true;
@@ -309,7 +309,7 @@ class CppDUContext : public BaseContext {
 
     bool findDeclarationsInternal(const QualifiedIdentifier& identifier, const CursorInRevision& position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags basicFlags) const
     {
-      ifDebug( kDebug(9007) << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
+      ifDebug( qDebug() << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
 
       FindDeclaration find( this, source, basicFlags, position, dataType );
 
@@ -323,7 +323,7 @@ class CppDUContext : public BaseContext {
           current.clearTemplateIdentifiers();
           find.openIdentifier(current);
         }
-        
+
         {
           Identifier currentIdentifier = identifier.at(num);
 
@@ -340,20 +340,20 @@ class CppDUContext : public BaseContext {
             if( !qid.isEmpty() ) {
               DelayedType::Ptr delayed( new DelayedType() );
               delayed->setIdentifier( i );
-              
+
               res.type = Cpp::resolveDelayedTypes( delayed.cast<AbstractType>(), this, source, basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams ? DUContext::NoUndefinedTemplateParams : DUContext::NoSearchFlags )->indexed();
-              
+
               if( basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) {
                 AbstractType::Ptr targetTypePtr = TypeUtils::unAliasedType(TypeUtils::targetType(res.type.abstractType(), 0));
                 if (targetTypePtr.cast<CppTemplateParameterType>() || (targetTypePtr.cast<DelayedType>() && targetTypePtr.cast<DelayedType>()->kind() == DelayedType::Delayed)) {
-                  ifDebug( kDebug() << "stopping because the type" << targetTypePtr->toString() << "of" << i.toString() << "is bad"; )
+                  ifDebug( qDebug() << "stopping because the type" << targetTypePtr->toString() << "of" << i.toString() << "is bad"; )
                   return false;
                 }
               }
 
-              ifDebug( if( !res.isValid() ) kDebug(9007) << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifier(a).toString() << "\" in \"" << identifier.toString() << "resolved:" << res.toString(); )
+              ifDebug( if( !res.isValid() ) qDebug() << "Could not resolve template-parameter \"" << currentIdentifier.templateIdentifier(a).toString() << "\" in \"" << identifier.toString() << "resolved:" << res.toString(); )
             }
-          
+
             find.openQualifiedIdentifier( res );
             find.closeQualifiedIdentifier();
           }
@@ -363,10 +363,10 @@ class CppDUContext : public BaseContext {
           return false;
       }
       find.closeQualifiedIdentifier();
-      
+
       foreach( const DeclarationPointer& decl, find.lastDeclarations() )
         ret.append(decl.data());
-      
+
       return true;
     }
 
@@ -377,8 +377,8 @@ class CppDUContext : public BaseContext {
                                                 const TopDUContext* source,
                                                 typename BaseContext::SearchFlags flags ) const override
     {
-      ifDebug( kDebug(9007) << "findLocalDeclarationsInternal in " << this << "with parent" << this->parentContext() << "(" << this->scopeIdentifier() <<") for \"" << identifier.identifier() << "\""; )
-      ifDebug( if( BaseContext::owner() && BaseContext::owner() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->toString(); )
+      ifDebug( qDebug() << "findLocalDeclarationsInternal in " << this << "with parent" << this->parentContext() << "(" << this->scopeIdentifier() <<") for \"" << identifier.identifier() << "\""; )
+      ifDebug( if( BaseContext::owner() && BaseContext::owner() ) qDebug() << "in declaration: " << "(" << BaseContext::owner()->toString(); )
       /**
         - When searching local declarations:
          - Check whether they are already in the instantiated context, if yes return them
@@ -390,49 +390,49 @@ class CppDUContext : public BaseContext {
       * */
 
         int retCount = ret.size();
-      
+
         BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, ret, source, flags );
 
-        ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position.castToSimpleCursor(); )
+        ifDebug( qDebug() << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position.castToSimpleCursor(); )
 
         if( !(flags & DUContext::NoFiltering) ) {
           //Filter out constructors and if needed unresolved template-params
           for(int a = 0; a < ret.size(); ) {
-            
+
             AbstractType::Ptr retAbstractTypePtr = ret[a]->abstractType();
             if( ( (flags & KDevelop::DUContext::NoUndefinedTemplateParams) && retAbstractTypePtr.cast<CppTemplateParameterType>() )
                 || ( (!(flags & BaseContext::OnlyFunctions)) &&  (dynamic_cast<ClassFunctionDeclaration*>(ret[a]) && static_cast<ClassFunctionDeclaration*>(ret[a])->isConstructor() ) ) ) { //Maybe this filtering should be done in the du-chain?
 
               ret.removeAt(a);
-              //kDebug(9007) << "filtered out 1 declaration";
+              //qDebug() << "filtered out 1 declaration";
             } else {
               ++a;
             }
           }
         }
 
-        ifDebug( if( BaseContext::owner() && BaseContext::owner() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->toString(); )
-        ifDebug( kDebug(9007) << "instantiated from:" << m_instantiatedFrom; )
-        
+        ifDebug( if( BaseContext::owner() && BaseContext::owner() ) qDebug() << "in declaration: " << "(" << BaseContext::owner()->toString(); )
+        ifDebug( qDebug() << "instantiated from:" << m_instantiatedFrom; )
+
         if( m_instantiatedFrom && ret.size() == retCount ) {
           ///Search in the context this one was instantiated from
           DUContext::DeclarationList decls;
-          ifDebug( kDebug(9007) << "searching base"; )
+          ifDebug( qDebug() << "searching base"; )
           m_instantiatedFrom->findLocalDeclarationsInternal( identifier, position, dataType, decls, source, flags );
-          
-          ifDebug( if( BaseContext::owner() && BaseContext::owner() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->toString(); )
-          ifDebug( kDebug(9007) << "found" << decls.count() << "in base"; )
-          
+
+          ifDebug( if( BaseContext::owner() && BaseContext::owner() ) qDebug() << "in declaration: " << "(" << BaseContext::owner()->toString(); )
+          ifDebug( qDebug() << "found" << decls.count() << "in base"; )
+
           InstantiationInformation memberInstantiationInformation;
           memberInstantiationInformation.previousInstantiationInformation = m_instantiatedWith;
-          
+
           FOREACH_ARRAY( Declaration* decl, decls ) {
             TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(decl);
             if(!templateDecl) {
-              kDebug() << "problem";
+              qDebug() << "problem";
             } else {
               Declaration* copy;
-              
+
               DUContext* current = decl->context();
               while(current != m_instantiatedFrom && current)
               {
@@ -447,7 +447,7 @@ class CppDUContext : public BaseContext {
               copy = templateDecl->instantiate(memberInstantiationInformation, source);
               //This can happen in case of explicit specializations
 //               if(copy->context() != this)
-//                 kWarning() << "serious problem: Instatiation is in wrong context, should be in this one";
+//                 qWarning() << "serious problem: Instatiation is in wrong context, should be in this one";
 
               if(copy)
                 ret.append(copy);
@@ -455,16 +455,16 @@ class CppDUContext : public BaseContext {
           }
         }
     }
-    
+
     virtual void visit(DUChainVisitor& visitor) override
     {
       QMutexLocker l(&cppDuContextInstantiationsMutex);
       foreach(CppDUContext<BaseContext>* ctx, m_instatiations)
         ctx->visit(visitor);
-      
+
       BaseContext::visit(visitor);
     }
-    
+
     virtual void deleteUses() override
     {
       QMutexLocker l(&cppDuContextInstantiationsMutex);
@@ -472,12 +472,12 @@ class CppDUContext : public BaseContext {
         ctx->deleteUses();
       BaseContext::deleteUses();
     }
-    
+
     virtual bool foundEnough( const DUContext::DeclarationList& decls, DUContext::SearchFlags flags ) const override
     {
       if(flags & DUContext::NoFiltering)
         return false;
-      
+
       if( decls.isEmpty() )
         return false;
 
@@ -498,12 +498,12 @@ class CppDUContext : public BaseContext {
         return;
       }
       QMutexLocker l(&cppDuContextInstantiationsMutex);
-      
+
       if( m_instantiatedFrom ) {
         Q_ASSERT(m_instantiatedFrom->m_instatiations[m_instantiatedWith] == this);
         m_instantiatedFrom->m_instatiations.remove( m_instantiatedWith );
       }
-      
+
       m_instantiatedWith = templateArguments.indexed();
       if(context) {
         //Change the identifier so it contains the template-parameters
@@ -513,7 +513,7 @@ class CppDUContext : public BaseContext {
           id = totalId.last();
           totalId.pop();
         }
-        
+
         id.clearTemplateIdentifiers();
         FOREACH_FUNCTION(const IndexedType& arg, templateArguments.templateParameters) {
           AbstractType::Ptr type(arg.abstractType());
@@ -527,41 +527,41 @@ class CppDUContext : public BaseContext {
         }
 
         totalId.push(id);
-        
+
         this->setLocalScopeIdentifier(totalId);
       }
-      
+
       m_instantiatedFrom = context;
       Q_ASSERT(m_instantiatedFrom != this);
       if(m_instantiatedFrom) {
         if(!m_instantiatedFrom->m_instatiations.contains(m_instantiatedWith)) {
           m_instantiatedFrom->m_instatiations.insert( m_instantiatedWith, this );
         }else{
-          kDebug(9007) << "created orphaned instantiation for" << context->m_instatiations[m_instantiatedWith]->scopeIdentifier(true).toString();
+          qDebug() << "created orphaned instantiation for" << context->m_instatiations[m_instantiatedWith]->scopeIdentifier(true).toString();
           m_instantiatedFrom = 0;
         }
       }
     }
-    
+
     virtual void applyUpwardsAliases(DUContext::SearchItem::PtrList& identifiers, const TopDUContext* source) const override
     {
       BaseContext::applyUpwardsAliases(identifiers, source);
-      ///@see Iso C++ 3.4.1 : Unqualified name lookup: 
+      ///@see Iso C++ 3.4.1 : Unqualified name lookup:
       ///We need to make sure that when leaving a function definition, the namespace components are searched
       DUContext::ContextType type = BaseContext::type();
-      
+
       if(type == DUContext::Function || type == DUContext::Other || type == DUContext::Helper)
       {
         QualifiedIdentifier prefix = BaseContext::localScopeIdentifier();
         if(prefix.count() > 1) {
           prefix = Cpp::namespaceScopeComponentFromContext(prefix, this, source);
-          
+
           if(!prefix.isEmpty()) {
             prefix.setExplicitlyGlobal(true);
-            
+
             DUContext::SearchItem::Ptr newItem(new DUContext::SearchItem(prefix));
             newItem->addToEachNode(identifiers);
-            
+
             if(!newItem->next.isEmpty()) //Can happen if the identifier was explicitly global
               identifiers.insert(0, newItem);
           }
@@ -580,11 +580,11 @@ class CppDUContext : public BaseContext {
       ///There must be no changes from the moment m_instantiatedFrom is set, because then it can be found as an instantiation by other threads
       return m_instantiatedFrom || BaseContext::inDUChain();
     }
-    
+
     IndexedInstantiationInformation instantiatedWith() const {
       return m_instantiatedWith;
     }
-    
+
     virtual bool shouldSearchInParent(typename BaseContext::SearchFlags flags) const override
     {
       //If the parent context is a class context, we should even search it from an import
@@ -598,14 +598,14 @@ class CppDUContext : public BaseContext {
         return this;
       else {
         InstantiationInformation information = specialization.information();
-        
+
         //Add empty elements until the specified depth
         for(int a = 0; a < upDistance; ++a) {
           InstantiationInformation nextInformation;
           nextInformation.previousInstantiationInformation = information.indexed();
           information = nextInformation;
         }
-        
+
         return instantiate(information, topContext);
       }
     }
@@ -617,13 +617,13 @@ class CppDUContext : public BaseContext {
 
       if(m_instantiatedFrom)
         return m_instantiatedFrom->instantiate(info, source);
-      
+
       {
         typename QHash<IndexedInstantiationInformation, CppDUContext<BaseContext>* >::const_iterator it = m_instatiations.constFind(info.indexed());
         if(it != m_instatiations.constEnd())
           return *it;
       }
-      
+
       if(this->owner()) {
         TemplateDeclaration* templ = dynamic_cast<TemplateDeclaration*>(this->owner());
         if(templ) {
@@ -633,7 +633,7 @@ class CppDUContext : public BaseContext {
           return instantiatedDecl->internalContext();
         }
       }
-      
+
       DUContext* surroundingContext = this->parentContext();
       Q_ASSERT(surroundingContext);
       {
@@ -642,19 +642,19 @@ class CppDUContext : public BaseContext {
         if(parent)
           surroundingContext = parent->instantiate(info.previousInstantiationInformation.information(), source);
       }
-      
+
       if(!surroundingContext)
         return 0;
-      
+
       return instantiateDeclarationAndContext( surroundingContext, source, this, info, 0, 0 );
     }
-    
+
     virtual QWidget* createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const override;
-    
+
     enum {
       Identity = BaseContext::Identity + 50
     };
-    
+
     ///Duchain must be write-locked
     void deleteAllInstantiations() {
       //Specializations will be destroyed the same time this is destroyed
@@ -663,24 +663,24 @@ class CppDUContext : public BaseContext {
       while(!m_instatiations.isEmpty()) {
         CppDUContext<BaseContext>* first = 0;
         first = *m_instatiations.begin();
-        
+
         Q_ASSERT(first != oldFirst);
         Q_UNUSED(oldFirst);
         oldFirst = first;
-        
+
         l.unlock();
-        
+
         ///TODO: anonymous contexts should get deleted but that is crashy
         ///      see also declarationbuilder which also encountered this
         ///      issue before and also removed the context deletion...
         Q_ASSERT(first->m_instantiatedFrom == this);
         first->setInstantiatedFrom(0, InstantiationInformation());
         Q_ASSERT(first->m_instantiatedFrom == 0);
-        
+
         l.relock();
-      }      
+      }
     }
-    
+
     //Overridden to instantiate all not yet instantiated local declarations
     virtual QVector<Declaration*> localDeclarations(const TopDUContext* source) const override
     {
@@ -696,20 +696,20 @@ class CppDUContext : public BaseContext {
           if(tempDecl) {
             tempDecl->instantiate(inf, source);
           }else{
-            kDebug() << "Strange: non-template within template context";
+            qDebug() << "Strange: non-template within template context";
           }
         }
       }
-        
+
         return BaseContext::localDeclarations(source);
     }
-    
+
   private:
     ~CppDUContext() {
 
       if(m_instantiatedFrom)
         setInstantiatedFrom(0, InstantiationInformation());
-      
+
       deleteAllInstantiations();
     }
 
@@ -718,27 +718,27 @@ class CppDUContext : public BaseContext {
                                            bool searchInParents, int currentDepth) const override
     {
       Q_ASSERT(source);
-//       kDebug() << "checking in" << this->scopeIdentifier(true).toString();
+//       qDebug() << "checking in" << this->scopeIdentifier(true).toString();
       if( m_instantiatedFrom )
       {
         //We need to make sure that all declarations from the specialization-base are instantiated, so they are returned.
 
         //This requests all declarations, so they all will be instantiated and instances of them added into this context.
         //DUContext::mergeDeclarationsInternal will then get them.
-        
+
         //Calling localDeclarations() instantiates all not yet instantiated member declarations
         localDeclarations(source);
-        
-//         kDebug() << "final count of local declarations:" << this->localDeclarations().count();
-        
+
+//         qDebug() << "final count of local declarations:" << this->localDeclarations().count();
+
         //Instantiate up-propagating child-contexts with the correct same instantiation-information
         //This for examples makes unnamed enums accessible
         InstantiationInformation inf;
         inf.previousInstantiationInformation = m_instantiatedWith;
-        
+
         foreach(DUContext* child, m_instantiatedFrom->childContexts()) {
-//           kDebug() << "checking child-context" << child->isPropagateDeclarations();
-          
+//           qDebug() << "checking child-context" << child->isPropagateDeclarations();
+
           if(child->isPropagateDeclarations())
             static_cast<CppDUContext<BaseContext>*>(static_cast<CppDUContext<BaseContext>*>(child)->instantiate(inf, source))->mergeDeclarationsInternal(definitions, position, hadContexts, source, searchInParents, currentDepth);
         }

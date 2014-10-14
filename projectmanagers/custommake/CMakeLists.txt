@@ -1,5 +1,4 @@
 project(custommakemanager)
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9025 )
 
 include_directories(
     ${makebuilder_SOURCE_DIR}

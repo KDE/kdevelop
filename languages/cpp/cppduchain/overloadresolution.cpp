@@ -30,6 +30,7 @@
 #include <QtAlgorithms>
 #include "adlhelper.h"
 #include "typeconversion.h"
+#include "debug.h"
 #include <language/duchain/persistentsymboltable.h>
 
 using namespace Cpp;
@@ -98,15 +99,15 @@ Declaration* OverloadResolver::resolve( const ParameterList& params, const Quali
 
   if (!resolvedDecl && functionName.count() == 1) {
     // start ADL lookup
-    
+
     QList<Declaration*> adlDecls = computeADLCandidates( params, functionName );
-    
+
     resolvedDecl = resolveList( params, adlDecls, noUserDefinedConversion );
 #ifdef DEBUG_ADL
     if (resolvedDecl)
-      kDebug() << "ADL found " << resolvedDecl->toString();
+      qCDebug(CPPDUCHAIN) << "ADL found " << resolvedDecl->toString();
     else
-      kDebug() << "ADL failed";
+      qCDebug(CPPDUCHAIN) << "ADL failed";
 #endif
   }
   return resolvedDecl;
@@ -199,14 +200,14 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
   for ( QSet<Declaration*>::const_iterator it = newDeclarations.constBegin(); it != newDeclarations.constEnd(); ++it )
   {
     Declaration* decl = applyImplicitTemplateParameters( params, *it );
-    ifDebugOverloadResolution(qDebug() << (*it)->toString() << decl; )
+    ifDebugOverloadResolution(qCDebug(CPPDUCHAIN) << (*it)->toString() << decl; )
     if ( !decl )
       continue;
 
     ViableFunction viable( m_topContext.data(), decl, m_constness, noUserDefinedConversion );
     viable.matchParameters( params );
 
-    ifDebugOverloadResolution(qDebug() << decl->toString() << viable.isBetter(bestViableFunction); )
+    ifDebugOverloadResolution(qCDebug(CPPDUCHAIN) << decl->toString() << viable.isBetter(bestViableFunction); )
     if ( viable.isBetter( bestViableFunction ) )
     {
       bestViableFunction = viable;
@@ -240,9 +241,9 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
   {
     ParameterList mergedParams = it.value();
     mergedParams.parameters += params.parameters;
-    
+
     Declaration* decl = applyImplicitTemplateParameters( mergedParams, it.key() );
-    ifDebugOverloadResolution(qDebug() << it.key()->toString() << decl; )
+    ifDebugOverloadResolution(qCDebug(CPPDUCHAIN) << it.key()->toString() << decl; )
     if ( !decl )
       continue;
 
@@ -265,7 +266,7 @@ ViableFunction OverloadResolver::resolveListViable( const ParameterList& params,
   if ( !m_context || !m_topContext )
     return ViableFunction();
 
-  ifDebugOverloadResolution(qDebug() << "resolveListViable" << params; )
+  ifDebugOverloadResolution(qCDebug(CPPDUCHAIN) << "resolveListViable" << params; )
   ///Iso c++ draft 13.3.3
   m_worstConversionRank = ExactMatch;
 
@@ -280,16 +281,16 @@ ViableFunction OverloadResolver::resolveListViable( const ParameterList& params,
   {
     ParameterList mergedParams = it.value();
     mergedParams.parameters += params.parameters;
-    
+
     Declaration* decl = applyImplicitTemplateParameters( mergedParams, it.key() );
-    ifDebugOverloadResolution(qDebug() << it.key()->toString() << decl; )
+    ifDebugOverloadResolution(qCDebug(CPPDUCHAIN) << it.key()->toString() << decl; )
     if ( !decl )
       continue;
-    
+
     ViableFunction viable( m_topContext.data(), decl, m_constness );
     viable.matchParameters( mergedParams, partial );
 
-    ifDebugOverloadResolution(qDebug() << decl->toString() << viable.isBetter(bestViableFunction); )
+    ifDebugOverloadResolution(qCDebug(CPPDUCHAIN) << decl->toString() << viable.isBetter(bestViableFunction); )
     if ( viable.isBetter( bestViableFunction ) )
     {
       bestViableFunction = viable;
@@ -316,7 +317,7 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
   FunctionType::Ptr functionType = declaration->type<FunctionType>();
   if ( !functionType )
   {
-    kDebug( 9007 ) << "Template function has no function type";
+    qCDebug(CPPDUCHAIN) << "Template function has no function type";
     return declaration;
   }
 
@@ -391,7 +392,7 @@ uint OverloadResolver::matchParameterTypes( const AbstractType::Ptr& argumentTyp
   if ( !argumentType || !parameterType )
     return 0;
 
-  ifDebugOverloadResolution( kDebug() << "matching" << argumentType->toString() << "to" << parameterType->toString(); )
+  ifDebugOverloadResolution( qCDebug(CPPDUCHAIN) << "matching" << argumentType->toString() << "to" << parameterType->toString(); )
 
   if ( instantiatedTypes.isEmpty() )
     return 1;
@@ -499,13 +500,13 @@ QList<Declaration *> OverloadResolver::computeADLCandidates( const ParameterList
   // because then we cannot get a proper match as to ViableFunction anyway
   foreach( const Parameter & param, params.parameters ) {
       if( fastCast<DelayedType*>(param.type.data()) ) {
-          ifDebugOverloadResolution(qDebug() << "Skipping ADL due to delayed types" << identifier << params; )
+          ifDebugOverloadResolution(qCDebug(CPPDUCHAIN) << "Skipping ADL due to delayed types" << identifier << params; )
           return QList<Declaration *>();
       }
   }
-  
+
   ADLHelper adlHelper( m_context, m_topContext );
-  
+
   foreach( const Parameter & param, params.parameters )
     adlHelper.addArgument( param );
 
@@ -514,33 +515,33 @@ QList<Declaration *> OverloadResolver::computeADLCandidates( const ParameterList
 #ifdef DEBUG_ADL
   foreach( QualifiedIdentifier ns, adlNamespaces )
   {
-    kDebug() << "  ADL found namespace: " << ns.toString();
+    qCDebug(CPPDUCHAIN) << "  ADL found namespace: " << ns.toString();
   }
 #endif
 
   QList<Declaration*> adlDecls;
 
 #ifdef DEBUG_ADL
-    kDebug() << "  ADL candidates for: " << identifier << params << params.parameters.size();
+    qCDebug(CPPDUCHAIN) << "  ADL candidates for: " << identifier << params << params.parameters.size();
 #endif
 
   foreach( QualifiedIdentifier adlFunctionName, adlNamespaces )
   {
     adlFunctionName += identifier;
-    
+
     // By using DeclarationId, we prevent a lot of complex logic which we don't require, as we
     // already have the fully qualified scope.
     PersistentSymbolTable::FilteredDeclarationIterator decls =
         PersistentSymbolTable::self().getFilteredDeclarations(IndexedQualifiedIdentifier(adlFunctionName), m_topContext->recursiveImportIndices());
-    
+
     for(; decls; ++decls)
     {
       Declaration* decl = decls->data();
       if(decl && decl->isFunctionDeclaration()) {
       adlDecls << decl;
 #ifdef DEBUG_ADL
-    kDebug() << "    ADL candidate: " << adlFunctionName << decl->toString();
-#endif      
+    qCDebug(CPPDUCHAIN) << "    ADL candidate: " << adlFunctionName << decl->toString();
+#endif
       }
     }
   }
@@ -573,7 +574,7 @@ AbstractType::Ptr getContainerType( AbstractType::Ptr type, int depth, TopDUCont
 
 uint OverloadResolver::matchParameterTypes( AbstractType::Ptr argumentType, const IndexedTypeIdentifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue ) const
 {
-  ifDebugOverloadResolution( kDebug() << "1 matching" << argumentType->toString() << "to" << parameterType.toString() << parameterType.pointerDepth(); )
+  ifDebugOverloadResolution( qCDebug(CPPDUCHAIN) << "1 matching" << argumentType->toString() << "to" << parameterType.toString() << parameterType.pointerDepth(); )
   if ( !argumentType )
     return 1;
   if ( instantiatedTypes.isEmpty() )
@@ -627,7 +628,7 @@ uint OverloadResolver::matchParameterTypes( AbstractType::Ptr argumentType, cons
 
 uint OverloadResolver::matchParameterTypes( AbstractType::Ptr argumentType, const Identifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue ) const
 {
-  ifDebugOverloadResolution( kDebug() << "2 matching" << argumentType->toString() << "to" << parameterType.toString(); )
+  ifDebugOverloadResolution( qCDebug(CPPDUCHAIN) << "2 matching" << argumentType->toString() << "to" << parameterType.toString(); )
 
   if ( !argumentType )
     return 1;
@@ -673,7 +674,7 @@ uint OverloadResolver::matchParameterTypes( AbstractType::Ptr argumentType, cons
     }
     else
     {
-      kDebug( 9007 ) << "Template-declaration missing template-parameter context";
+      qCDebug(CPPDUCHAIN) << "Template-declaration missing template-parameter context";
     }
   }
 

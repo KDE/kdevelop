@@ -20,6 +20,7 @@
 */
 
 #include "makebuilder.h"
+#include "debug.h"
 
 #include <project/projectmodel.h>
 #include <project/builderjob.h>
@@ -28,9 +29,9 @@
 
 #include <KPluginFactory>
 #include <KAboutData>
-#include <KDebug>
 #include <KConfigGroup>
 
+Q_LOGGING_CATEGORY(MAKEBUILDER, "kdevelop.projectbuilders.makebuilder")
 K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
 // K_EXPORT_PLUGIN(MakeBuilderFactory(KAboutData("kdevmakebuilder","kdevmakebuilder", ki18n("Make Builder"), "0.1", ki18n("Support for building Make projects"), KAboutData::License_GPL)))
 
@@ -125,7 +126,7 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
     foreach (MakeJob* makeJob, m_activeMakeJobs.data())
     {
         if(item && makeJob->item() && makeJob->item()->project() == item->project()) {
-            kDebug() << "killing running ninja job, due to new started build on same project:" << makeJob;
+            qCDebug(MAKEBUILDER) << "killing running ninja job, due to new started build on same project:" << makeJob;
             makeJob->kill(KJob::EmitResult);
         }
     }

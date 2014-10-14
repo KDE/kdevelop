@@ -28,7 +28,6 @@
 #include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
 #include <kparts/mainwindow.h>
 
 #include <interfaces/ilaunchconfiguration.h>
@@ -52,7 +51,7 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, ILaunch
     : OutputJob( iface )
 {
     QString identifier = cfg->config().readEntry("PlasmoidIdentifier", "");
-    
+
     Q_ASSERT(!identifier.isEmpty());
     setToolTitle(i18n("Plasmoid Viewer"));
     setCapabilities(Killable);
@@ -64,7 +63,7 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, ILaunch
     m_process = new CommandExecutor(executable(cfg), this);
     m_process->setArguments( arguments(cfg) );
     m_process->setWorkingDirectory(workingDirectory(cfg));
-    
+
     OutputModel* model = new OutputModel(QUrl::fromLocalFile(m_process->workingDirectory()), this);
     model->setFilteringStrategy(OutputModel::CompilerFilter);
     setModel( model );
@@ -73,7 +72,7 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, ILaunch
             SLOT(appendLines(QStringList)) );
     connect(m_process, SIGNAL(receivedStandardOutput(QStringList)), model,
             SLOT(appendLines(QStringList)) );
-    
+
     connect( m_process, SIGNAL(failed(QProcess::ProcessError)), SLOT(slotFailed(QProcess::ProcessError)) );
     connect( m_process, SIGNAL(completed(int)), SLOT(slotCompleted(int)) );
 }

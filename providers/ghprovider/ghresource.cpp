@@ -18,12 +18,12 @@
  */
 
 
-#include <KDebug>
 #include <QUrl>
 #include <kio/scheduler.h>
 #include <kio/transferjob.h>
 #include <kio/storedtransferjob.h>
 #include <QtCore/QJsonDocument>
+#include <QtCore/QDebug>
 
 #include <ghresource.h>
 #include <ghprovidermodel.h>
@@ -149,11 +149,11 @@ void Resource::slotAuthenticate(KJob *job)
 void Resource::slotRepos(KIO::Job *job, const QByteArray &data)
 {
     if (!job) {
-        kWarning() << "NULL job returned!";
+        qWarning() << "NULL job returned!";
         return;
     }
     if (job->error()) {
-        kWarning() << "Job error: " << job->errorString();
+        qWarning() << "Job error: " << job->errorString();
         return;
     }
 
@@ -169,12 +169,12 @@ void Resource::slotOrgs(KIO::Job *job, const QByteArray &data)
     QList<QString> res;
 
     if (!job) {
-        kWarning() << "NULL job returned!";
+        qWarning() << "NULL job returned!";
         emit orgsUpdated(res);
         return;
     }
     if (job->error()) {
-        kWarning() << "Job error: " << job->errorString();
+        qWarning() << "Job error: " << job->errorString();
         emit orgsUpdated(res);
         return;
     }

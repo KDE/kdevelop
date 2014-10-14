@@ -25,7 +25,6 @@
 #include <QTextStream>
 
 #include <kurl.h>
-#include <kdebug.h>
 
 #include "pp-stream.h"
 #include "pp-engine.h"
@@ -40,11 +39,11 @@ Preprocessor::~Preprocessor()
 // QString Preprocessor::processString(const QString& string)
 // {
 //     pp proc(this);
-// 
+//
 //     QString ret = QString::fromUtf8(proc.processFile("anonymous", string.toUtf8()));
-// 
+//
 //     proc.environment()->cleanup();
-// 
+//
 //     return ret;
 // }
 

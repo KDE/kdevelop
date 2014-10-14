@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License    *
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
-#include <kdebug.h>
 
-int cbsDebugArea() {
-    static int s_area = KDebug::registerArea("kdevelop (custom buildsystem)");
-    return s_area;
-}
+#include "debug.h"
+
+Q_LOGGING_CATEGORY(CUSTOMBUILDSYSTEM, "kdevelop.projectmanagers.custombuildsystem")

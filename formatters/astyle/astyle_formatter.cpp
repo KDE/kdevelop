@@ -24,11 +24,11 @@ Boston, MA 02110-1301, USA.
 #include <QSpinBox>
 #include <QCheckBox>
 #include <QString>
-#include <KDebug>
 
 #include <interfaces/isourceformatter.h>
 #include <util/formattinghelpers.h>
 #include "astyle_stringiterator.h"
+#include "debug.h"
 
 AStyleFormatter::AStyleFormatter()
 : ASFormatter()
@@ -71,7 +71,7 @@ void AStyleFormatter::setOption(const QString &key, const QVariant &value)
 
 void AStyleFormatter::updateFormatter()
 {
-    kDebug() << "Updating option with: " << KDevelop::ISourceFormatter::optionMapToString(m_options) << endl;
+    qCDebug(ASTYLE) << "Updating option with: " << KDevelop::ISourceFormatter::optionMapToString(m_options) << endl;
     // fill
     int wsCount = m_options["FillCount"].toInt();
     if(m_options["Fill"].toString() == "Tabs") {
@@ -320,7 +320,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
 QVariant AStyleFormatter::option(const QString &key)
 {
     if(!m_options.contains(key))
-        kDebug() << "Missing option name " << key << endl;
+        qCDebug(ASTYLE) << "Missing option name " << key << endl;
     return m_options[key];
 }
 
@@ -365,7 +365,7 @@ QString AStyleFormatter::saveStyle()
 //     group.writeEntry(name, options);
 //     group.writeEntry("Extensions", m_extensions.join(","));
 //     group.sync();
-//     kDebug() << "Saving config to" << name << " : "<< options << endl;
+//     qCDebug(ASTYLE) << "Saving config to" << name << " : "<< options << endl;
 }
 
 void AStyleFormatter::setTabIndentation(int length, bool forceTabs)

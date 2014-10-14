@@ -22,7 +22,6 @@
 
 #include <QString>
 #include <QFile>
-#include <KDebug>
 #include <QUrl>
 
 void CacheLine::readLine(const QString& line)

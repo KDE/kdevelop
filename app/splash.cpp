@@ -20,7 +20,6 @@
 
 #include "splash.h"
 
-#include <KDebug>
 #include <KIconLoader>
 
 #include <KStandardDirs>
@@ -30,6 +29,7 @@
 #include <QQuickItem>
 #include <qscreen.h>
 #include <QStandardPaths>
+#include <QDebug>
 
 #include "config.h"
 
@@ -53,7 +53,7 @@ KDevSplashScreen::KDevSplashScreen()
     QString splashScript = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevelop/splash.qml");
     setSource(QUrl::fromLocalFile(splashScript));
     if ( !rootObject() ) {
-        kWarning() << "Could not find KDevelop splash screen: kdevelop/splash.qml" << splashScript;
+        qWarning() << "Could not find KDevelop splash screen: kdevelop/splash.qml" << splashScript;
     }
 }
 

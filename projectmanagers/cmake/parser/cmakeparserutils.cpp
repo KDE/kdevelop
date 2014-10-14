@@ -24,12 +24,12 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qtemporarydir.h>
-#include <kdebug.h>
 #include "variablemap.h"
 #include <kprocess.h>
 #include "cmakeprojectvisitor.h"
 #include "cmakeprojectdata.h"
 #include "cmakecachereader.h"
+#include "../debug.h"
 #include <util/path.h>
 #include <ktempdir.h>
 
@@ -77,12 +77,12 @@ namespace CMakeParserUtils
             return ret;
         }
         QString cmakeCmd=QStandardPaths::findExecutable("cmake");
-        
+
         QString systeminfo=executeProcess(cmakeCmd, QStringList("--system-information"));
-        
+
         VariableMap varsDef;
         QStringList modulePathDef=QStringList(CMakeParserUtils::valueFromSystemInfo( "CMAKE_ROOT", systeminfo ) + "/Modules");
-        kDebug(9042) << "found module path is" << modulePathDef;
+        qCDebug(CMAKE) << "found module path is" << modulePathDef;
         varsDef.insertGlobal("CMAKE_BINARY_DIR", QStringList("#[bin_dir]"));
         varsDef.insertGlobal("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]"));
         varsDef.insertGlobal("CMAKE_COMMAND", QStringList(cmakeCmd));
@@ -91,7 +91,7 @@ namespace CMakeParserUtils
         varsDef.insertGlobal("CMAKE_PATCH_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_PATCH_VERSION", systeminfo)));
         varsDef.insertGlobal("CMAKE_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_VERSION", systeminfo)));
         varsDef.insertGlobal("CMAKE_INCLUDE_CURRENT_DIR", QStringList("OFF"));
-        
+
         QStringList cmakeInitScripts;
         #ifdef Q_OS_WIN
             cmakeInitScripts << "CMakeMinGWFindMake.cmake";
@@ -105,10 +105,10 @@ namespace CMakeParserUtils
         cmakeInitScripts << "CMakeSystemSpecificInformation.cmake";
         cmakeInitScripts << "CMakeDetermineCCompiler.cmake";
         cmakeInitScripts << "CMakeDetermineCXXCompiler.cmake";
-        
+
         varsDef.insertGlobal("CMAKE_MODULE_PATH", modulePathDef);
         varsDef.insertGlobal("CMAKE_ROOT", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_ROOT", systeminfo)));
-        
+
         //Defines the behaviour that can't be identified on initialization scripts
         #ifdef Q_OS_WIN32
             varsDef.insertGlobal("WIN32", QStringList("1"));
@@ -129,7 +129,7 @@ namespace CMakeParserUtils
     void printSubdirectories(const QList<Subdirectory>& subs)
     {
         Q_FOREACH(const Subdirectory& s, subs) {
-            qDebug() << "lala " << s.name;
+            qCDebug(CMAKE) << "lala " << s.name;
         }
     }
 
@@ -143,10 +143,10 @@ namespace CMakeParserUtils
         }
         return binDir;
     }
-    
+
     KDevelop::ReferencedTopDUContext includeScript(const QString& file, const KDevelop::ReferencedTopDUContext& parent, CMakeProjectData* data, const QString& sourcedir, const QMap<QString, QString>& env)
     {
-        kDebug(9042) << "Running cmake script: " << file;
+        qCDebug(CMAKE) << "Running cmake script: " << file;
 
         CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
         data->vm.insertGlobal("CMAKE_CURRENT_LIST_FILE", QStringList(file));
@@ -157,7 +157,7 @@ namespace CMakeParserUtils
 
         data->vm.insertGlobal("CMAKE_CURRENT_BINARY_DIR", QStringList(binaryPath(sourcedir, projectSourceDir, projectBinDir)));
         data->vm.insertGlobal("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
-        
+
         CMakeProjectVisitor v(file, parent);
         v.setCacheValues(&data->cache);
         v.setVariableMap(&data->vm);
@@ -167,7 +167,7 @@ namespace CMakeParserUtils
         v.setProperties(data->properties);
         v.setDefinitions(data->definitions);
         v.walk(f, 0, true);
-        
+
         data->projectName=v.projectName();
         data->subdirectories=v.subdirectories();
         data->targets=v.targets();
@@ -175,29 +175,29 @@ namespace CMakeParserUtils
         data->testSuites=v.testSuites();
         data->targetAlias=v.targetAlias();
         data->definitions=v.definitions();
-        
+
         //printSubdirectories(data->subdirectories);
-        
+
         data->vm.remove("CMAKE_CURRENT_LIST_FILE");
         data->vm.remove("CMAKE_CURRENT_LIST_DIR");
         data->vm.remove("CMAKE_CURRENT_SOURCE_DIR");
         data->vm.remove("CMAKE_CURRENT_BINARY_DIR");
-        
+
         return v.context();
     }
-    
+
     CacheValues readCache(const KDevelop::Path &path)
     {
         QFile file(path.toLocalFile());
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            kDebug() << "error. Could not find the file" << path;
+            qCDebug(CMAKE) << "error. Could not find the file" << path;
             return CacheValues();
         }
 
         CacheValues ret;
         QTextStream in(&file);
-        kDebug(9042) << "Reading cache:" << path;
+        qCDebug(CMAKE) << "Reading cache:" << path;
         QStringList currentComment;
         while (!in.atEnd())
         {
@@ -210,7 +210,7 @@ namespace CMakeParserUtils
                     ret[c.name()]=CacheEntry(c.value(), currentComment.join("\n"));
                     currentComment.clear();
                 }
-    //             kDebug(9042) << "Cache line" << line << c.name();
+    //             qCDebug(CMAKE) << "Cache line" << line << c.name();
             }
             else if(line.startsWith("//"))
                 currentComment += line.right(line.count()-2);

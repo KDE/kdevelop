@@ -21,6 +21,7 @@
  */
 
 #include "cppclasshelper.h"
+#include "../debug.h"
 #include <codecompletion/missingincludeitem.h>
 #include <language/duchain/declaration.h>
 #include <language/codegen/documentchangeset.h>
@@ -183,11 +184,11 @@ QVariantHash CppTemplateNewClass::extraVariables()
         {
             continue;
         }
-        kDebug() << "Looking for includes for class" << base->identifier().toString();
+        qCDebug(CPP) << "Looking for includes for class" << base->identifier().toString();
         QExplicitlySharedDataPointer<Cpp::MissingIncludeCompletionItem> item = Cpp::includeDirectiveFromUrl(sourceUrl, IndexedDeclaration(base.data()));
         if(item)
         {
-            kDebug() << "Found one in" << item->m_canonicalPath;
+            qCDebug(CPP) << "Found one in" << item->m_canonicalPath;
             includedFiles << item->m_addedInclude;
         }
     }

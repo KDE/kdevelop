@@ -1,6 +1,7 @@
 set(test_astyle_SRCS test_astyle.cpp
   ../astyle_formatter.cpp
   ../astyle_stringiterator.cpp
+  ../debug.cpp
   ../lib/ASFormatter.cpp
   ../lib/ASResource.cpp
   ../lib/ASEnhancer.cpp

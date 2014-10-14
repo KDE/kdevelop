@@ -25,8 +25,7 @@
 #include <QDate>
 #include <QTime>
 
-#include <kdebug.h>
-#include <KLocalizedString> 
+#include <KLocalizedString>
 
 #include <language/duchain/problem.h>
 #include <serialization/indexedstring.h>
@@ -37,6 +36,7 @@
 #include "pp-location.h"
 #include "preprocessor.h"
 #include "chartools.h"
+#include "debug.h"
 
 const int maxMacroExpansionDepth = 70;
 
@@ -67,9 +67,9 @@ void trim(QVector<uint>& array) {
   for(; lastValid >= 0; --lastValid)
     if(array[lastValid] != indexFromCharacter(' '))
       break;
-  
+
   array.resize(lastValid+1);
-  
+
   int firstValid = 0;
   for(; firstValid < array.size(); ++firstValid)
     if(array[firstValid] != indexFromCharacter(' '))
@@ -77,7 +77,7 @@ void trim(QVector<uint>& array) {
   array = array.mid(firstValid);
 }
 
-using namespace rpp;              
+using namespace rpp;
 
 pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<pp_actual>& __actuals)
   : depth(0)
@@ -103,7 +103,7 @@ pp_actual pp_macro_expander::resolve_formal(const IndexedString& name, Stream& i
     m_engine->problemEncountered(problem);
     return pp_actual();
   }
-  
+
   for (uint index = 0; index < formalsSize; ++index) {
     if (name.index() == formals[index].index()) {
       if (index < (uint)m_frame->actuals.size()) {
@@ -122,7 +122,7 @@ pp_actual pp_macro_expander::resolve_formal(const IndexedString& name, Stream& i
   return pp_actual();
 }
 
-#define RETURN_IF_INPUT_BROKEN    if(input.atEnd()) { kDebug() << "too early end while expanding" << macro->name.str(); return; }
+#define RETURN_IF_INPUT_BROKEN    if(input.atEnd()) { qCDebug(RPP) << "too early end while expanding" << macro->name.str(); return; }
 
 
 pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame, bool inHeaderSection)
@@ -153,7 +153,7 @@ pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame, bool inHeaderS
 
 struct EnableMacroExpansion {
   EnableMacroExpansion(Stream& _input, const KDevelop::CursorInRevision& expansionPosition) : input(_input), hadMacroExpansion(_input.macroExpansion().isValid()) {
-    
+
     if(!hadMacroExpansion)
       _input.setMacroExpansion(expansionPosition);
   }
@@ -169,7 +169,7 @@ struct EnableMacroExpansion {
 class MacroHider {
   public:
   MacroHider(pp_macro* macro, Environment* environment) : m_macro(macro), m_environment(environment) {
-    
+
     m_hideMacro.name = macro->name;
     m_hideMacro.hidden = true;
     environment->insertMacro(&m_hideMacro);
@@ -214,21 +214,21 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
       {
         Q_ASSERT(isCharacter(input.current()));
         Q_ASSERT(IndexedString::fromIndex(input.current()).str() == "#");
-        
+
         ++input;
-        
+
         // search for the paste token
         if(input == '#') {
           ++input;
           skip_blanks (input, devnull());
-          
+
           // Need to extract previous identifier in case there are spaces in front of current output position
           // May happen if parameter to the left of ## was expanded to an empty string
           IndexedString previous;
           if (output.offset() > 0) {
             previous = IndexedString::fromIndex(output.popLastOutput()); //Previous already has been expanded
             while(output.offset() > 0 && isSpace(previous.index()))
-              previous = IndexedString::fromIndex(output.popLastOutput());   
+              previous = IndexedString::fromIndex(output.popLastOutput());
           }
           output.appendString(output.currentOutputAnchor(), previous);
           // OK to put the merged tokens into stream separately, because the stream in character-based
@@ -243,7 +243,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
           output.mark(input.inputPosition());
           continue;
         }
-        
+
         skip_blanks(input, output);
 
         IndexedString identifier = IndexedString::fromIndex( skip_identifier(input) );
@@ -251,7 +251,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
         Anchor inputPosition = input.inputPosition();
         KDevelop::CursorInRevision originalInputPosition = input.originalInputPosition();
         PreprocessedContents formal = resolve_formal(identifier, input).sourceText;
-        
+
         //Escape so we don't break on '"'
         for(int a = formal.count()-1; a >= 0; --a) {
           if(formal[a] == indexFromCharacter('\"') || formal[a] == indexFromCharacter('\\'))
@@ -261,7 +261,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
               formal[a] = indexFromCharacter('n');
               formal.insert(a, indexFromCharacter('\\'));
             }
-              
+
         }
         Stream is(&formal, inputPosition);
         is.setOriginalInputPosition(originalInputPosition);
@@ -280,13 +280,13 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
       else if (input == '\"')
       {
         check_header_section
-        
+
         skip_string_literal(input, output);
       }
       else if (input == '\'')
       {
         check_header_section
-        
+
         skip_char_literal(input, output);
       }
       else if (isSpace(input.current()))
@@ -302,17 +302,17 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
       else if (isNumber(input.current()))
       {
         check_header_section
-        
+
         skip_number (input, output);
       }
       else if (isLetter(input.current()) || input == '_' || !isCharacter(input.current()))
       {
         check_header_section
-        
+
         Anchor inputPosition = input.inputPosition();
         int offset = input.offset();
         IndexedString name = IndexedString::fromIndex(skip_identifier (input));
-        
+
         // peek forward to check for ##
         int start = input.offset();
         skip_blanks(input, devnull());
@@ -341,7 +341,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
         pp_actual actual = resolve_formal(name, input);
         if (actual.isValid()) {
           Q_ASSERT(actual.text.size() == actual.inputPosition.size());
-          
+
           QList<PreprocessedContents>::const_iterator textIt = actual.text.constBegin();
           QList<Anchor>::const_iterator cursorIt = actual.inputPosition.constBegin();
 
@@ -350,18 +350,18 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
             output.appendString(*cursorIt, *textIt);
           }
           output << ' '; //Insert a whitespace to omit implicit token merging
-            
+
             }else{
             output.appendString(inputPosition, name);
           }
-          
+
           continue;
         }
 
         // TODO handle inbuilt "defined" etc functions
 
         pp_macro* macro = m_engine->environment()->retrieveMacro(name, false);
-        
+
         if (!macro || !macro->defined || macro->hidden || macro->function_like || m_engine->hideNextMacro())
         {
           static const IndexedString definedIndex = IndexedString("defined");
@@ -399,13 +399,13 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
           }
           continue;
         }
-        
+
         EnableMacroExpansion enable(output, input.inputPosition()); //Configure the output-stream so it marks all stored input-positions as transformed through a macro
 
           if (macro->definitionSize()) {
             //Hide the expanded macro to prevent endless expansion
             MacroHider hideMacro(macro, m_engine->environment());
-            
+
             pp_macro_expander expand_macro(m_engine);
             ///@todo UGLY conversion
             Stream ms((uint*)macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
@@ -430,7 +430,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
         }else if(input == '(' && !substitute) {
 
         //Eventually execute a function-macro
-          
+
         IndexedString previous = IndexedString::fromIndex(indexFromCharacter(' ')); //Previous already has been expanded
         uint stepsBack = 0;
         while(isSpace(previous.index()) && output.peekLastOutput(stepsBack)) {
@@ -443,14 +443,14 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
           ++input;
           continue;
         }
-        
+
         //In case expansion fails, we can skip back to this position
         int openingPosition = input.offset();
         Anchor openingPositionCursor = input.inputPosition();
-        
+
         QList<pp_actual> actuals;
         ++input; // skip '('
-        
+
         if(input.atEnd())
         {
           // If the input has ended too early, seek back, and flush the input into the output
@@ -461,8 +461,8 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
             output << input;
             ++input;
           }
-          
-          kDebug() << "too early end while expanding" << macro->name.str();
+
+          qCDebug(RPP) << "too early end while expanding" << macro->name.str();
           return;
         }
 
@@ -472,7 +472,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
         while (!input.atEnd() && input == ',')
         {
           ++input; // skip ','
-          
+
           if(input.atEnd())
           {
             // If the input has ended too early, seek back, and flush the input into the output
@@ -483,11 +483,11 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
               output << input;
               ++input;
             }
-            
-            kDebug() << "too early end while expanding" << macro->name.str();
+
+            qCDebug(RPP) << "too early end while expanding" << macro->name.str();
             return;
           }
-          
+
           skip_actual_parameter(input, *macro, actuals, expand_actual);
         }
 
@@ -500,20 +500,20 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
           //Move one character into the output, so we don't get an endless loop
           output << input;
           ++input;
-          
+
           continue;
         }
-        
+
         //Remove the name of the called macro
         while(stepsBack) {
           --stepsBack;
           output.popLastOutput();
         }
-        
+
         //Q_ASSERT(!input.atEnd() && input == ')');
 
         ++input; // skip ')'
-        
+
 #if 0 // ### enable me
         assert ((macro->variadics && macro->formals.size () >= actuals.size ())
                     || macro->formals.size() == actuals.size());
@@ -523,20 +523,20 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
         pp_frame frame(macro, actuals);
         if(m_frame)
           frame.depth = m_frame->depth + 1;
-        
-        if(frame.depth >= maxMacroExpansionDepth) 
+
+        if(frame.depth >= maxMacroExpansionDepth)
         {
-          kDebug() << "reached maximum macro-expansion depth while expanding" << macro->name.str();
+          qCDebug(RPP) << "reached maximum macro-expansion depth while expanding" << macro->name.str();
           RETURN_IF_INPUT_BROKEN
-          
+
           output << input;
           ++input;
         }else{
           pp_macro_expander expand_macro(m_engine, &frame);
-          
+
           //Hide the expanded macro to prevent endless expansion
           MacroHider hideMacro(macro, m_engine->environment());
-          
+
           ///@todo UGLY conversion
           Stream ms((uint*)macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
 

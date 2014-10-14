@@ -24,7 +24,6 @@
 #include <QString>
 #include <QStringList>
 
-#include <kdebug.h>
 #include <parser/rpp/chartools.h>
 #include <parser/rpp/macrorepository.h>
 
@@ -79,19 +78,19 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       m.formalsList().append(IndexedString("param"));
       insertMacro( macros, m );
     }
-    
+
     /// The following macros are required for qt only. That's why we set them to become active only when their
     /// 'real' versions become defined in qobjectdefs.h. A slight problem is that they are 'fixed', so they will block
     /// any other macros with the same names.
     {
       rpp::pp_macro m("Q_SLOTS");
       m.setDefinitionText( "__qt_slots__" );
-      
+
       m.defined = false;
       m.defineOnOverride = true;
       m.file = IndexedString("/qobjectdefs.h"); // Only define the macro if it is overriden in this file
       m.fixed = true;
-      
+
       insertMacro( macros, m );
 
       m.name = IndexedString("Q_PRIVATE_SLOT");
@@ -100,7 +99,7 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       m.function_like = true;
       m.setDefinitionText( "private slots: sig{ d; }; private:" );
       insertMacro( macros, m );
-      
+
       m.name = IndexedString("slots");
       m.setDefinitionText("__qt_slots__");
       m.formalsList().clear();
@@ -121,7 +120,7 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       m.setDefinitionText("__qt_signal__");
       m.formalsList().clear();
       insertMacro( macros, m );
-      
+
       m.name = IndexedString("SLOT");
       m.setDefinitionText("__qt_slot__");
       m.formalsList().clear();
@@ -132,7 +131,7 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       m.formalsList().clear();
       insertMacro( macros, m );
     }
-    
+
     {
       // We don't provide a real implementation of offsetof, but at least provide a stub that allows correct use-building for the member.
       rpp::pp_macro m("__builtin_offsetof");

@@ -68,9 +68,9 @@
 #include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <kapplication.h>
-#include <kdebug.h>
 
 #include "stty.h"
+#include "debug.h"
 
 #define PTY_FILENO 3
 #define BASE_CHOWN "konsole_grantpty"
@@ -322,7 +322,7 @@ bool STTY::findExternalTTY(const QString& termApp)
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
             usleep(8000);
         } else {
-            kDebug() << "Received terminal output(tty)";
+            qCDebug(DEBUGGERGDB) << "Received terminal output(tty)";
             break;
         }
     }

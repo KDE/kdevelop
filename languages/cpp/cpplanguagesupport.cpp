@@ -31,7 +31,6 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 
-#include <kdebug.h>
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <kaboutdata.h>
@@ -84,6 +83,7 @@
 #include "codegen/simplerefactoring.h"
 // #include "codegen/cppclasshelper.h"
 #include "includepathcomputer.h"
+#include "debug.h"
 
 //#include <valgrind/callgrind.h>
 
@@ -295,7 +295,7 @@ TopDUContext* CppLanguageSupport::standardContext(const QUrl &url, bool proxyCon
   top = KDevelop::DUChain::self()->chainForDocument(url, env, Cpp::EnvironmentManager::self()->isSimplifiedMatching() || proxyContext);
 
   if( !top ) {
-    //kDebug(9007) << "Could not find perfectly matching version of " << url << " for completion";
+    //qCDebug(CPP) << "Could not find perfectly matching version of " << url << " for completion";
     //Preferably pick a context that is not empty
     QList<TopDUContext*> candidates = DUChain::self()->chainsForDocument(url);
     foreach(TopDUContext* candidate, candidates)
@@ -310,7 +310,7 @@ TopDUContext* CppLanguageSupport::standardContext(const QUrl &url, bool proxyCon
     top = DUChainUtils::contentContextFromProxyContext(top);
     if(!top)
     {
-      kDebug(9007) << "WARNING: Proxy-context had invalid content-context";
+      qCDebug(CPP) << "WARNING: Proxy-context had invalid content-context";
     }
   }
 
@@ -495,7 +495,7 @@ QPair<TopDUContextPointer, KTextEditor::Range> CppLanguageSupport::importedConte
   //Since this is called by the editor while editing, use a fast timeout so the editor stays responsive
   DUChainReadLocker lock(DUChain::lock(), 100);
   if(!lock.locked()) {
-    kDebug(9007) << "Failed to lock the du-chain in time";
+    qCDebug(CPP) << "Failed to lock the du-chain in time";
     return qMakePair(TopDUContextPointer(), KTextEditor::Range::invalid());
   }
 
@@ -504,7 +504,7 @@ QPair<TopDUContextPointer, KTextEditor::Range> CppLanguageSupport::importedConte
     return qMakePair(TopDUContextPointer(), KTextEditor::Range::invalid());
 
   if((ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext())) {
-    kDebug() << "Strange: standard-context for" << ctx->url() << "is a proxy-context";
+    qCDebug(CPP) << "Strange: standard-context for" << ctx->url() << "is a proxy-context";
     return qMakePair(TopDUContextPointer(), KTextEditor::Range::invalid());
   }
 
@@ -539,7 +539,7 @@ QPair<KTextEditor::Range, const rpp::pp_macro*> CppLanguageSupport::usedMacroFor
   //Since this is called by the editor while editing, use a fast timeout so the editor stays responsive
   DUChainReadLocker lock(DUChain::lock(), 100);
   if(!lock.locked()) {
-    kDebug(9007) << "Failed to lock the du-chain in time";
+    qCDebug(CPP) << "Failed to lock the du-chain in time";
     return qMakePair(KTextEditor::Range::invalid(), (const rpp::pp_macro*)0);
   }
 
@@ -649,7 +649,7 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const QUrl &u
       if(ctx) {
         Cpp::EnvironmentFile* p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
         if(p) {
-          kDebug() << "preprocessing" << text;
+          qCDebug(CPP) << "preprocessing" << text;
           preprocessedBody = Cpp::preprocess(text, p, position.line()+1);
         }
       }
@@ -709,7 +709,7 @@ void UIBlockTester::lockup() {
 #ifdef CALLGRIND_TRACE_UI_LOCKUP
     CALLGRIND_START_INSTRUMENTATION
 #else
-    kDebug() << "ui is blocking";
+    qCDebug(CPP) << "ui is blocking";
 #endif
  }
 

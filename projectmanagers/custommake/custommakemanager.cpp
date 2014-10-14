@@ -31,9 +31,11 @@
 #include <QReadLocker>
 #include <QWriteLocker>
 #include <QUrl>
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(CUSTOMMAKE)
+Q_LOGGING_CATEGORY(CUSTOMMAKE, "kdevelop.projectmanagers.custommake")
 
 #include <KLocalizedString>
-#include <kdebug.h>
 #include <KDirWatch>
 
 #include <algorithm>
@@ -244,7 +246,7 @@ KDevelop::ProjectFolderItem* CustomMakeManager::import(KDevelop::IProject *proje
     if( project->path().isRemote() )
     {
         //FIXME turn this into a real warning
-        kWarning(9025) << project->path() << "not a local file. Custom make support doesn't handle remote projects";
+        qCWarning(CUSTOMMAKE) << project->path() << "not a local file. Custom make support doesn't handle remote projects";
         return 0;
     }
 
@@ -269,7 +271,7 @@ QStringList CustomMakeManager::parseCustomMakeFile( const Path &makefile )
     QFile f( makefile.toLocalFile() );
     if ( !f.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
-        kDebug(9025) << "could not open" << makefile;
+        qCDebug(CUSTOMMAKE) << "could not open" << makefile;
         return ret;
     }
 

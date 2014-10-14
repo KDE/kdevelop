@@ -21,7 +21,6 @@
 #include "cmakehelpdocumentation.h"
 #include <QTreeView>
 #include <KLocalizedString>
-#include <QDebug>
 #include "cmakedoc.h"
 #include "icmakedocumentation.h"
 #include "cmakedocumentation.h"
@@ -51,7 +50,7 @@ QWidget* CMakeHomeDocumentation::documentationWidget(KDevelop::DocumentationFind
 {
     QTreeView* contents=new QTreeView(parent);
     contents->header()->setVisible(false);
-    
+
     CMakeContentsModel* model=new CMakeContentsModel(contents);
     contents->setModel(model);
     QObject::connect(contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
@@ -72,7 +71,7 @@ QModelIndex CMakeContentsModel::index(int row, int column, const QModelIndex& pa
         return QModelIndex();
     if(!parent.isValid() && row==ICMakeDocumentation::EOType)
         return QModelIndex();
-    
+
     return createIndex(row,column, int(parent.isValid() ? parent.row() : -1));
 }
 
@@ -107,7 +106,7 @@ void CMakeContentsModel::showItem(const QModelIndex& idx)
         QString desc=CMakeDoc::s_provider->descriptionForIdentifier(idx.data().toString(),
                                                                     (ICMakeDocumentation::Type) idx.parent().row());
         CMakeDoc::Ptr doc(new CMakeDoc(idx.data().toString(), desc));
-        
+
         KDevelop::ICore::self()->documentationController()->showDocumentation(doc);
     }
 }

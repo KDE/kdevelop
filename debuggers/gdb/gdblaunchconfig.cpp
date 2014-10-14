@@ -24,12 +24,13 @@
 
 #include "gdblaunchconfig.h"
 
+#include <QDebug>
+
 #include <kconfiggroup.h>
 #include <KLocalizedString>
 #include <kshell.h>
 #include <kmessagebox.h>
 #include <kparts/mainwindow.h>
-#include <KDebug>
 
 #include <outputview/outputmodel.h>
 #include <interfaces/ilaunchconfiguration.h>
@@ -150,14 +151,14 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
         Q_ASSERT(m_execute);
         QString err;
         KJob* depjob = m_execute->dependecyJob(cfg);
-        if( depjob ) 
+        if( depjob )
         {
             l << depjob;
         }
         l << new GDBDebugger::DebugJob( m_plugin, cfg, m_execute );
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
     }
-    kWarning() << "Unknown launch mode" << launchMode << "for config:" << cfg->name();
+    qWarning() << "Unknown launch mode" << launchMode << "for config:" << cfg->name();
     return 0;
 }
 

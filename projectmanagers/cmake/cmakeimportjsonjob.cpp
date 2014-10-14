@@ -23,6 +23,7 @@
 #include "cmakeutils.h"
 #include "cmakeprojectdata.h"
 #include "cmakemodelitems.h"
+#include "debug.h"
 
 #include <projectmanagers/custommake/makefileresolver/makefileresolver.h>
 #include <language/duchain/duchain.h>
@@ -45,21 +46,21 @@ CMakeJsonData import(const Path& commandsFile)
     QFile f(commandsFile.toLocalFile());
     bool r = f.open(QFile::ReadOnly|QFile::Text);
     if(!r) {
-        kDebug() << "Couldn't open commands file" << commandsFile;
+        qCDebug(CMAKE) << "Couldn't open commands file" << commandsFile;
         return {};
     }
 
-    kDebug() << "Found commands file" << commandsFile;
+    qCDebug(CMAKE) << "Found commands file" << commandsFile;
 
     CMakeJsonData data;
     QJsonParseError error;
     const QJsonDocument document = QJsonDocument::fromJson(f.readAll(), &error);
     if (error.error) {
-        qDebug() << "Failed to parse JSON in commands file:" << error.errorString() << commandsFile;
+        qCDebug(CMAKE) << "Failed to parse JSON in commands file:" << error.errorString() << commandsFile;
         data.isValid = false;
         return data;
     } else if (!document.isArray()) {
-        qDebug() << "JSON document in commands file is not an array: " << commandsFile;
+        qCDebug(CMAKE) << "JSON document in commands file is not an array: " << commandsFile;
         data.isValid = false;
         return data;
     }
@@ -70,12 +71,12 @@ CMakeJsonData import(const Path& commandsFile)
     static const QString KEY_FILE = QStringLiteral("file");
     foreach(const QJsonValue& value, document.array()) {
         if (!value.isObject()) {
-            qDebug() << "JSON command file entry is not an object:" << value;
+            qCDebug(CMAKE) << "JSON command file entry is not an object:" << value;
             continue;
         }
         const QJsonObject entry = value.toObject();
         if (!entry.contains(KEY_FILE) || !entry.contains(KEY_COMMAND) || !entry.contains(KEY_DIRECTORY)) {
-            qDebug() << "JSON command file entry does not contain required keys:" << entry;
+            qCDebug(CMAKE) << "JSON command file entry does not contain required keys:" << entry;
             continue;
         }
 
@@ -131,7 +132,7 @@ void CMakeImportJob::importFinished()
 
     m_data = data;
 
-    kDebug() << "Done importing, found" << m_data.files.count() << "entries for" << project()->path();
+    qCDebug(CMAKE) << "Done importing, found" << m_data.files.count() << "entries for" << project()->path();
     emitResult();
 }
 

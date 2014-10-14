@@ -36,7 +36,6 @@
 #include <documentation/standarddocumentationview.h>
 #include "qthelpnetwork.h"
 #include "qthelpproviderabstract.h"
-#include "kdebug.h"
 
 QtHelpProviderAbstract* QtHelpDocumentation::s_provider=0;
 

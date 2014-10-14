@@ -43,6 +43,7 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguage.h>
 #include "cpputils.h"
+#include "debug.h"
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -61,7 +62,7 @@ void collectImporters( QSet<IndexedString>& importers, DUContext* ctx )
 {
   if( importers.contains( ctx->url() ) )
     return;
-  
+
   importers.insert( ctx->url() );
 
   foreach( DUContext* ctx, ctx->importers() )
@@ -87,19 +88,19 @@ bool IncludeFileData::execute( QString& filterText ) {
     //Change the filter-text to match the sub-directory
     // Line number not expected for directory
     QUrl u = QUrl::fromLocalFile( filterText );
-//     kDebug() << "filter-text:" << u;
+//     qCDebug(CPP) << "filter-text:" << u;
     QString addName = m_item.name;
     if(addName.contains('/'))
       addName = addName.split('/').last();
     u = u.adjusted(QUrl::RemoveFilename);
     u.setPath(u.path() +  addName );
-//     kDebug() << "with added:" << u;
+//     qCDebug(CPP) << "with added:" << u;
     filterText = u.toLocalFile() + '/';
-//     kDebug() << "new:" << filterText;
+//     qCDebug(CPP) << "new:" << filterText;
     return false;
   } else {
     QUrl u = m_item.url();
-    
+
     IDocument* doc = ICore::self()->documentController()->openDocument( u );
     if (hasLineNumber) {
       doc->setCursorPosition(KTextEditor::Cursor(lineNumber - 1, 0));
@@ -113,23 +114,23 @@ QList<QVariant> IncludeFileData::highlighting() const {
   QTextCharFormat boldFormat;
   boldFormat.setFontWeight(QFont::Bold);
   QTextCharFormat normalFormat;
-  
+
   QString txt = text();
-  
+
   QList<QVariant> ret;
 
   QUrl url = QUrl::fromLocalFile(m_item.name);
   int fileNameLength = url.fileName().length();
   if(m_item.isDirectory)
     ++fileNameLength;
-  
+
   ret << 0;
   ret << txt.length() - fileNameLength;
   ret << QVariant(normalFormat);
   ret << txt.length() - fileNameLength;
   ret << fileNameLength;
   ret << QVariant(boldFormat);
-    
+
   return ret;
 }
 
@@ -153,10 +154,10 @@ bool IncludeFileData::isExpandable() const {
 }
 
 QWidget* IncludeFileData::expandingWidget() const {
-  
+
   DUChainReadLocker lock( DUChain::lock() );
   QString htmlPrefix, htmlSuffix;
-  
+
   QList<QUrl> inclusionPath; //Here, store the shortest way of intermediate includes to the included file.
 
   if( m_item.pathNumber == -1 ) {
@@ -164,20 +165,20 @@ QWidget* IncludeFileData::expandingWidget() const {
   } else {
     if( !inclusionPath.isEmpty() )
       inclusionPath.pop_back(); //Remove the file itself from the list
-    
+
     htmlSuffix = "<br/>" + i18n( "In include path %1", m_item.pathNumber );
   }
-  
+
   foreach( const QUrl &u, inclusionPath )
     htmlPrefix += i18n("Included through %1 <br/>", QString("KDEV_FILE_LINK{%1}").arg(u.toDisplayString(QUrl::PreferLocalFile)) );
-  
+
   return new NavigationWidget( m_item, getCurrentTopDUContext(), htmlPrefix, htmlSuffix );
 }
 
 QString IncludeFileData::htmlDescription() const
 {
   QUrl path = m_item.url();
-  
+
   if( m_item.isDirectory ) {
     return QString( i18n("Directory %1", path.toDisplayString(QUrl::PreferLocalFile)) );
   }
@@ -195,12 +196,12 @@ void allIncludedRecursion( QSet<const DUContext*>& used, QMap<IndexedString, Inc
 
   if( ret.contains(ctx->url()) )
     return;
-  
+
   if( used.contains(ctx.data() ) )
     return;
 
   used.insert(ctx.data());
-  
+
   foreach( const DUContext::Import &ctx2, ctx->importedParentContexts() ) {
     TopDUContextPointer d( dynamic_cast<TopDUContext*>(ctx2.context(0)) );
     allIncludedRecursion( used, ret, d, prefixPath );
@@ -212,7 +213,7 @@ void allIncludedRecursion( QSet<const DUContext*>& used, QMap<IndexedString, Inc
 
   if( !prefixPath.isEmpty() && !i.name.contains(prefixPath) )
     return;
-  
+
   ret[ctx->url()] = i;
 }
 
@@ -237,7 +238,7 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
   {
     QStringList addIncludePaths;
     QList<IncludeItem> allIncludeItems = m_baseItems;
-    
+
     bool explicitPath = false;
     if(text.startsWith('/')) {
       addIncludePaths << QString("/");
@@ -262,7 +263,7 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
       text = text.mid(2);
       explicitPath = true;
     }
-    
+
     QString prefixPath;
     if (!explicitPath || !text.isEmpty()) {
       QUrl u = QUrl::fromLocalFile( text );
@@ -273,14 +274,14 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
 
     if( explicitPath || (prefixPath != m_lastSearchedPrefix && !prefixPath.isEmpty()) )
     {
-      kDebug(9007) << "extracted prefix " << prefixPath;
+      qCDebug(CPP) << "extracted prefix " << prefixPath;
 
       if( m_allowPossibleImports || explicitPath )
         allIncludeItems += CppUtils::allFilesInIncludePath( m_baseUrl.toLocalFile(), true, prefixPath, addIncludePaths, explicitPath, true, true );
 
       if( m_allowImports )
         allIncludeItems += getAllIncludedItems( m_duContext, prefixPath );
-      
+
         setItems( allIncludeItems );
 
       m_lastSearchedPrefix = prefixPath;
@@ -302,7 +303,7 @@ void IncludeFileDataProvider::reset()
   m_duContext = TopDUContextPointer();
   m_baseUrl = QUrl();
   m_importers.clear();
-  
+
   IDocument* doc = ICore::self()->documentController()->activeDocument();
 
   if( doc )
@@ -322,7 +323,7 @@ void IncludeFileDataProvider::reset()
       }
     }
   }
-  
+
   QList<IncludeItem> allIncludeItems;
 
   if( m_allowPossibleImports )
@@ -330,7 +331,7 @@ void IncludeFileDataProvider::reset()
 
   if( m_allowImports )
     allIncludeItems += getAllIncludedItems( m_duContext );
-  
+
   foreach( const IndexedString &u, m_importers ) {
     IncludeItem i;
     i.isDirectory = false;
@@ -338,9 +339,9 @@ void IncludeFileDataProvider::reset()
     i.pathNumber = -1; //We mark this as an importer by putting pathNumber to -1
     allIncludeItems << i;
   }
-  
+
   m_baseItems = allIncludeItems;
-  
+
   clearFilter();
 }
 

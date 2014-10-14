@@ -23,7 +23,6 @@
 #include <cmakeparserutils.h>
 #include <QString>
 #include <QThread>
-#include <kdebug.h>
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>
@@ -69,7 +68,7 @@ CMakeDefinitions CompilationDataAttached::definitions(CMakeFolderItem* parentFol
 {
     CMakeDefinitions result = m_defines;
 
-    // This goes up recursively through the hierarchy of cmake-parent-dirs 
+    // This goes up recursively through the hierarchy of cmake-parent-dirs
     // and fetches their definitions too. This makes sure that defines set in a parent CMakeLists.txt
     // are also applied in this subdirectory.
     //

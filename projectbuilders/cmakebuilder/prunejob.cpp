@@ -25,7 +25,6 @@
 #include <KLocalizedString>
 #include <kio/deletejob.h>
 #include <QDir>
-#include <QDebug>
 
 using namespace KDevelop;
 
@@ -45,7 +44,7 @@ void PruneJob::start()
     OutputModel* output = new OutputModel(this);
     setModel(output);
     startOutput();
-    
+
     Path builddir = CMake::currentBuildDir( m_project );
     if( builddir.isEmpty() )
     {

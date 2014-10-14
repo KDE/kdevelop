@@ -8,6 +8,7 @@ set(test_qthelpplugin_SRCS
     ../qthelpdocumentation.cpp
     ../qthelpqtdoc.cpp
     ../qthelp_config_shared.cpp
+    ../debug.cpp
 )
 
 ecm_add_test(${test_qthelpplugin_SRCS}

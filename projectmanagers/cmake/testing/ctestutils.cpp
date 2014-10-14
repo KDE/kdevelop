@@ -24,6 +24,7 @@
 #include "ctestutils.h"
 #include "ctestsuite.h"
 #include "ctestfindjob.h"
+#include "../debug.h"
 
 #include <interfaces/iproject.h>
 #include <interfaces/itestcontroller.h>
@@ -34,7 +35,6 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 #include <QFileInfo>
-#include <KDebug>
 
 using namespace KDevelop;
 
@@ -58,7 +58,7 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolder
             if (exeTgt && (exeTgt->text() == test.executable || exeTgt->text()==targetName))
             {
                 exe = exeTgt->builtUrl().toLocalFile();
-                kDebug(9042) << "Found proper test target path" << test.executable << "->" << exe;
+                qCDebug(CMAKE) << "Found proper test target path" << test.executable << "->" << exe;
                 foreach(ProjectFileItem* file, exeTgt->fileList()) {
                     files += file->url();
                 }

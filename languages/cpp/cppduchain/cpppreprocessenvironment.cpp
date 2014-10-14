@@ -12,6 +12,7 @@
  ***************************************************************************/
 
 #include "cpppreprocessenvironment.h"
+#include "debug.h"
 #include <language/duchain/problem.h>
 #include <parser/rpp/macrorepository.h>
 
@@ -62,7 +63,7 @@ rpp::pp_macro* CppPreprocessEnvironment::retrieveMacro(const KDevelop::IndexedSt
     if( !m_environmentFile || (onlyRecordImportantMacroUses && !isImportant) )
         return rpp::Environment::retrieveMacro(name, isImportant);
 
-  //kDebug() << "retrieving macro" << name.str();
+  //qCDebug(CPPDUCHAIN) << "retrieving macro" << name.str();
 
     rpp::pp_macro* ret = rpp::Environment::retrieveMacro(name, isImportant);
 
@@ -109,10 +110,10 @@ void CppPreprocessEnvironment::merge( const Cpp::ReferenceCountedMacroSet& macro
 
 void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file, bool mergeEnvironment ) {
     Cpp::ReferenceCountedMacroSet addedMacros = file->definedMacros() - m_environmentFile->definedMacros();
-    
+
     if(mergeEnvironment)
       m_environmentFile->merge(*file);
-    
+
     for( Cpp::ReferenceCountedMacroSet::Iterator it(addedMacros.iterator()); it; ++it )
       rpp::Environment::setMacro(const_cast<rpp::pp_macro*>(&it.ref())); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
 
@@ -136,7 +137,7 @@ void CppPreprocessEnvironment::setMacro(rpp::pp_macro* macro) {
     if(hadMacro && hadMacro->fixed) {
       if(hadMacro->defineOnOverride && (hadMacro->file.isEmpty() ||
           (macro->file.length() >= hadMacro->file.length() &&
-           memcmp(macro->file.c_str() + (macro->file.length() - hadMacro->file.length()), 
+           memcmp(macro->file.c_str() + (macro->file.length() - hadMacro->file.length()),
                          hadMacro->file.c_str(),
                          hadMacro->file.length()) == 0)))
       {
@@ -154,7 +155,7 @@ void CppPreprocessEnvironment::setMacro(rpp::pp_macro* macro) {
       }
     }
 
-  //kDebug() << "setting macro" << macro->name.str() << "with body" << macro->definition << "is undef:" << macro->isUndef();
+  //qCDebug(CPPDUCHAIN) << "setting macro" << macro->name.str() << "with body" << macro->definition << "is undef:" << macro->isUndef();
     //Note defined macros
     if( m_environmentFile )
       m_environmentFile->addDefinedMacro(*macro, hadMacro);

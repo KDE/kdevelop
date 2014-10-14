@@ -1,0 +1,7 @@
+#ifndef KDEVELOP_ASTYLE_DEBUG_H
+#define KDEVELOP_ASTYLE_DEBUG_H
+
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(ASTYLE)
+
+#endif

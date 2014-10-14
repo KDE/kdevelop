@@ -86,8 +86,8 @@ public:
     CodeGenerator cg(lastSession);
     cg.visit(ast);
     if (flags & PrintCode) {
-      kDebug() << unit;
-      kDebug() << cg.output();
+      qDebug() << unit;
+      qDebug() << cg.output();
     }
 
     parseGenerated( cg.output().toUtf8() );

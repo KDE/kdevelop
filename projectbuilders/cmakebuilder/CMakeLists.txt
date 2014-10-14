@@ -1,5 +1,4 @@
 project(cmakebuilder)
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9032 )
 include_directories(
     ${cmakebuilder_SOURCE_DIR}
     ${KDevelop_SOURCE_DIR}/projectmanagers/cmake
@@ -20,7 +19,7 @@ target_link_libraries(
     kdevcmakebuilder
     kdevcmakecommon
         KF5::KIOWidgets
-        
+
         KDev::Interfaces
         KDev::OutputView
         KDev::Util

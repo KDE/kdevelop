@@ -19,11 +19,11 @@
  */
 
 #include "cmakecachedelegate.h"
+#include "../debug.h"
 
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QEvent>
-#include <KDebug>
 #include <KUrlRequester>
 #include <QtCore/QUrl>
 
@@ -59,15 +59,15 @@ QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionV
             else
                 r->setMode(KFile::Directory | KFile::ExistingOnly);
             emit const_cast<CMakeCacheDelegate*>(this)->sizeHintChanged ( index );
-            kDebug() << "EMITINT!" << index;
+            qCDebug(CMAKE) << "EMITINT!" << index;
             ret=r;
         }
         else
         {
             ret=QItemDelegate::createEditor(parent, option, index);
         }
-        
-        if(!ret) kDebug(9032) << "Did not recognize type " << type;
+
+        if(!ret) qCDebug(CMAKE) << "Did not recognize type " << type;
     }
     return ret;
 }
@@ -95,7 +95,7 @@ void CMakeCacheDelegate::setEditorData(QWidget * editor, const QModelIndex & ind
         }
     }
     else
-        kDebug(9032) << "Error. trying to edit a read-only field";
+        qCDebug(CMAKE) << "Error. trying to edit a read-only field";
 }
 
 void CMakeCacheDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const
@@ -123,7 +123,7 @@ void CMakeCacheDelegate::setModelData(QWidget * editor, QAbstractItemModel * mod
         model->setData(index, value, Qt::DisplayRole);
     }
     else
-        kDebug(9032) << "Error. trying to edit a read-only field";
+        qCDebug(CMAKE) << "Error. trying to edit a read-only field";
 }
 
 void CMakeCacheDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
@@ -140,7 +140,7 @@ void CMakeCacheDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
 
 QSize CMakeCacheDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-//     kDebug(9042) << "calculant" << index << bool(option.state & QStyle::State_Editing);
+//     qCDebug(CMAKE) << "calculant" << index << bool(option.state & QStyle::State_Editing);
     QSize ret=QItemDelegate::sizeHint(option, index);
     if(index.column()==2 && option.state & QStyle::State_Editing)
     {
@@ -169,7 +169,7 @@ void CMakeCacheDelegate::closingEditor(QWidget * editor, QAbstractItemDelegate::
 {
     Q_UNUSED(editor);
     Q_UNUSED(hint);
-    kDebug() << "closing...";
+    qCDebug(CMAKE) << "closing...";
 }
 
 // void CMakeCacheDelegate::updateEditorGeometry ( QWidget * editor, const QStyleOptionViewItem & option,

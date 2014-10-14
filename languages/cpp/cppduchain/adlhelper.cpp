@@ -21,6 +21,7 @@
 #include <language/duchain/classdeclaration.h>
 #include "templatedeclaration.h"
 #include "typeutils.h"
+#include "debug.h"
 
 // uncomment to get debugging info on ADL - very expensive on parsing
 //#define DEBUG_ADL
@@ -107,7 +108,7 @@ void ADLTypeVisitor::endVisit(const FunctionType * /*type*/)
         Declaration * declaration = m_helper.m_possibleFunctionName.data();
 
 #ifdef DEBUG_ADL
-        kDebug() << "    function name = " << declaration->toString() << " ; identifier = " << declaration->qualifiedIdentifier().toString();
+        qCDebug(CPPDUCHAIN) << "    function name = " << declaration->toString() << " ; identifier = " << declaration->qualifiedIdentifier().toString();
 #endif
 
         // start going towards the global scope until we match an interesting name
@@ -180,11 +181,11 @@ void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
 {
     if(m_alreadyProcessed.contains(typePtr.data()))
       return;
-    
+
     if (typePtr)
     {
 #ifdef DEBUG_ADL
-        kDebug() << "    added argument type " << typePtr->toString() << " to ADL lookup";
+        qCDebug(CPPDUCHAIN) << "    added argument type " << typePtr->toString() << " to ADL lookup";
 #endif
         // the enumeration and enumerator types are not part of the TypeVisitor interface
         switch (typePtr->whichType())
@@ -222,7 +223,7 @@ void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
             typePtr->accept(&m_typeVisitor);
         }
     }
-    
+
     m_alreadyProcessed.insert(typePtr.data());
 }
 
@@ -243,9 +244,9 @@ void ADLHelper::addAssociatedClass(Declaration * declaration)
 
     if(m_alreadyProcessed.contains(declaration))
       return;
-    
+
     m_alreadyProcessed.insert(declaration);
-    
+
     addDeclarationScopeIdentifier(declaration);
 
     /*
@@ -303,7 +304,7 @@ void ADLHelper::addDeclarationScopeIdentifier(Declaration * decl)
 void ADLHelper::addAssociatedNamespace(const KDevelop::QualifiedIdentifier& identifier)
 {
 #ifdef DEBUG_ADL
-        kDebug() << "    adding namespace " << identifier.identifier().toString();
+        qCDebug(CPPDUCHAIN) << "    adding namespace " << identifier.identifier().toString();
 #endif
     if(identifier.count())
       m_associatedNamespaces.insert(identifier);

@@ -5,6 +5,7 @@ set(kdevastyle_PART_SRCS
     astyle_preferences.cpp
     astyle_formatter.cpp
     astyle_stringiterator.cpp
+    debug.cpp
     lib/ASBeautifier.cpp
     lib/ASEnhancer.cpp
     lib/ASFormatter.cpp
@@ -18,8 +19,8 @@ set(astyle_preferences_UI
 qt5_wrap_ui(kdevastyle_PART_SRCS ${astyle_preferences_UI} )
 add_library(kdevastyle MODULE ${kdevastyle_PART_SRCS})
 target_link_libraries(kdevastyle
-    
-    
+
+
     KF5::Parts
     KF5::KIOWidgets
     KF5::TextEditor

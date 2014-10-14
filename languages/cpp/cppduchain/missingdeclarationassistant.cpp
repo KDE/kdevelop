@@ -29,6 +29,7 @@
 #include <language/duchain/duchainutils.h>
 #include <interfaces/idocumentcontroller.h>
 #include "cppduchain.h"
+#include "debug.h"
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <QTextDocument>
@@ -156,7 +157,7 @@ public:
           Cpp::SourceCodeInsertion::SignatureItem item;
           item.type = type(arg.type);
           item.name = QString("arg%1").arg(num);
-          kDebug() << "have declaration: " << arg.declaration.data();
+          qCDebug(CPPDUCHAIN) << "have declaration: " << arg.declaration.data();
 
           if(arg.declaration.data())
           {
@@ -315,7 +316,7 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(const MissingDeclaratio
   DUChainReadLocker lock;
   if(p->type->identifier().identifier().identifier().isEmpty())
     return;
-  kDebug() << "creating assistant for" << type->toString() << "assigned:" << type->assigned.toString();
+  qCDebug(CPPDUCHAIN) << "creating assistant for" << type->toString() << "assigned:" << type->assigned.toString();
 
   DUContext* searchFrom = type->searchStartContext.data();
   if (!searchFrom) {

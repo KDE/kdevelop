@@ -19,9 +19,9 @@
  */
 
 #include "generationexpressionsolver.h"
+#include "../debug.h"
 #include <QString>
 #include <QStringList>
-#include <KDebug>
 
 QHash<QString, QString> GenerationExpressionSolver::s_vars;
 QSet<QString> GenerationExpressionSolver::s_neededValues;
@@ -141,7 +141,7 @@ QString GenerationExpressionSolver::calculate(const QString& pre, const QString&
     } else {
         QString ret = s_vars.value(pre);
         if(ret.isEmpty()) {
-            kDebug() << "unknown expression" << pre << post;
+            qCDebug(CMAKE) << "unknown expression" << pre << post;
         }
         return ret;
     }

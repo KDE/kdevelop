@@ -41,11 +41,12 @@
 #include "missingdeclarationproblem.h"
 #include "dumpchain.h"
 #include "ptrtomembertype.h"
+#include "debug.h"
 
 //If this is enabled and a type is not found, it is searched again with verbose debug output.
 //#define DEBUG_RESOLUTION_PROBLEMS
 
-//If this is enabled, all encounterd problems will be dumped to kDebug
+//If this is enabled, all encounterd problems will be dumped to qDebug
 // #define DUMP_PROBLEMS
 
 //If this is enabled, problems will be created when no overloaded function was found for a function-call. This is expensive,
@@ -218,9 +219,9 @@ QList<ProblemPointer> ExpressionVisitor::realProblems() const {
 
 void ExpressionVisitor::problem( AST* node, const QString& str ) {
 #ifdef DUMP_PROBLEMS
-  kDebug(9007) << "Cpp::ExpressionVisitor problem:" << str;
+  qCDebug(CPPDUCHAIN) << "Cpp::ExpressionVisitor problem:" << str;
 
-  kDebug(9007) << "Cpp::ExpressionVisitor dumping the node that created the problem";
+  qCDebug(CPPDUCHAIN) << "Cpp::ExpressionVisitor dumping the node that created the problem";
   Cpp::DumpChain d;
 
   d.dump(node, m_session);
@@ -322,8 +323,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
         PointerType::Ptr pnt = realType(m_lastType, topContext()).cast<PointerType>();
         if( pnt ) {
-/*          kDebug(9007) << "got type:" << pnt->toString();
-          kDebug(9007) << "base-type:" << pnt->baseType()->toString();*/
+/*          qCDebug(CPPDUCHAIN) << "got type:" << pnt->toString();
+          qCDebug(CPPDUCHAIN) << "base-type:" << pnt->baseType()->toString();*/
 
           isConst = isConstant(pnt.cast<AbstractType>());
           //It is a pointer, reduce the pointer-depth by one
@@ -428,7 +429,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     const DUContext* searchInContext = m_currentContext;
 
     m_hadMemberAccess = m_memberAccess;
-    
+
     CursorInRevision position = m_session->positionAt( m_session->token_stream->position(node->start_token) );
     if( m_currentContext->url() != m_session->m_url ) //.equals( m_session->m_url, QUrl::CompareWithoutTrailingSlash ) )
       position = position.invalid();
@@ -510,7 +511,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
           ProblemPointer problem(new Cpp::MissingDeclarationProblem(missing));
           problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
           CppEditorIntegrator editor(session());
-          
+
           problem->setFinalLocation(DocumentRange(m_currentContext->url(), editor.findRange(node).castToSimpleRange()));
           if(!problem->range().isEmpty() && !editor.findRangeForContext(node->start_token, node->end_token).isEmpty())
             m_problems << problem;
@@ -531,7 +532,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
         if (m_propagateConstness && isConst && m_lastType && !isConstant(m_lastType)) {
           m_lastType->setModifiers(m_lastType->modifiers() | AbstractType::ConstModifier);
         }
-        //kDebug(9007) << "found declaration: " << m_lastDeclarations.first()->toString();
+        //qCDebug(CPPDUCHAIN) << "found declaration: " << m_lastDeclarations.first()->toString();
 
         ///If the found declaration declares a type, this is a type-expression and m_lastInstance should be zero.
         ///The declaration declares a type if its abstractType's declaration is that declaration. Else it is an insantiation, and m_lastType should be filled.
@@ -786,10 +787,10 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
   void ExpressionVisitor::visitPostfixExpression(PostfixExpressionAST* node)
   {
     clearLast();
-    
+
     //First evaluate the primary expression, or the type-specifier,
     //and then pass the result from sub-expression to sub-expression through m_lastType
-    
+
     if( node->type_specifier )
       visit( node->type_specifier );
 
@@ -917,7 +918,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         m_parameterNodes.append(node->left_expression);
 
         //LOCKDUCHAIN;
-        //kDebug(9007) << "Adding parameter from left: " << (leftType.data() ? leftType->toString() : QString("<notype>"));
+        //qCDebug(CPPDUCHAIN) << "Adding parameter from left: " << (leftType.data() ? leftType->toString() : QString("<notype>"));
       } else {
         //If neither leftType nor leftInstance are true, the expression was probably another binary
         //expression that has put the types/instances into m_parameters and returns nothing.
@@ -930,7 +931,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           m_parameters << OverloadResolver::Parameter(AbstractType::Ptr(), false);
           m_parameterNodes.append(node->left_expression);
           //LOCKDUCHAIN;
-          //kDebug(9007) << "Adding empty from left";
+          //qCDebug(CPPDUCHAIN) << "Adding empty from left";
         }
       }
     }
@@ -947,7 +948,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         m_parameters << OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ), rightInstance.declaration.data() );
         m_parameterNodes.append(node->right_expression);
         //LOCKDUCHAIN;
-        //kDebug(9007) << "Adding parameter from right: " << (rightType.data() ? rightType->toString() : QString("<notype>"));
+        //qCDebug(CPPDUCHAIN) << "Adding parameter from right: " << (rightType.data() ? rightType->toString() : QString("<notype>"));
       } else {
         //If neither leftType nor leftInstance are true, the expression was probably another binary
         //expression that has put the types/instances into m_parameters and returns nothing.
@@ -959,7 +960,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
           m_parameters << OverloadResolver::Parameter(AbstractType::Ptr(), false);
           m_parameterNodes.append(node->right_expression);
-          //kDebug(9007) << "Adding empty from right";
+          //qCDebug(CPPDUCHAIN) << "Adding empty from right";
         }
       }
 
@@ -1900,7 +1901,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     helper.setConstness(TypeUtils::isConstant(oldLastType) ? OverloadResolver::Const : OverloadResolver::NonConst);
 
     MissingDeclarationType::Ptr missing;
-    
+
     Declaration* dec = declarations.isEmpty() ? 0 : declarations.first().data();
     if( !dec ) {
       missing = oldLastType.cast<Cpp::MissingDeclarationType>();
@@ -1917,7 +1918,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if(!m_hadMemberAccess)
         helper.setFunctionNameForADL(QualifiedIdentifier(dec->identifier()));
     }
-    
+
     ViableFunction viable;
 
     //Resolve functions normally
@@ -1929,7 +1930,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if(viable.isValid())
         chosenFunction = viable.declaration();
     }
-    
+
     if( !chosenFunction && constructedType )
     {
       //Default-constructor is used
@@ -1946,7 +1947,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       m_parameters = oldParams;
       return;
     }
-    
+
     if( !chosenFunction && !m_strict ) {
       //Because we do not want to rely too much on our understanding of the code, we take the first function instead of totally failing.
 #ifdef DEBUG_FUNCTION_CALLS
@@ -1974,7 +1975,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       //Since not all parameters could be evaluated, Choose the first function
       chosenFunction = declarations.front();
     }
-    
+
     if(missing && viable.isValid())
     {
       // Remove the MissingDeclarationProblem which has been created alongside MissingDeclarationType
@@ -1989,7 +1990,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         }
       }
     }
-    
+
     clearLast();
 
     if( constructedType ) {
@@ -2009,7 +2010,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if(missing)
         m_lastType = missing.cast<AbstractType>(); // Forward the MissingType, as it will be used for assistants.
     }
-    
+
     if(chosenFunction)
       if(m_mapAst) session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
 

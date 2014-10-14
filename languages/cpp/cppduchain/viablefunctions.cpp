@@ -24,6 +24,7 @@
 #include <language/duchain/abstractfunctiondeclaration.h>
 #include "templatedeclaration.h"
 #include "typeconversion.h"
+#include "debug.h"
 
 #define ifDebug(x)
 // #define ifDebug(x) x
@@ -67,14 +68,14 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
   if( !isValid() || !m_topContext )
     return;
   Q_ASSERT(m_funDecl);
-  
+
   uint functionArgumentCount = m_type->indexedArgumentsSize();
   bool hasVarArgs = false;
   if (functionArgumentCount) {
     hasVarArgs = TypeUtils::isVarArgs(m_type->indexedArguments()[functionArgumentCount-1].abstractType());
   }
 
-  ifDebug(qDebug() << "matchParameters" << params << " to " << m_type->toString() << "partial:" << partial << "varargs" << hasVarArgs;)
+  ifDebug(qCDebug(CPPDUCHAIN) << "matchParameters" << params << " to " << m_type->toString() << "partial:" << partial << "varargs" << hasVarArgs;)
 
   if (!hasVarArgs) {
     if( params.parameters.size() + m_funDecl->defaultParametersSize() < functionArgumentCount && !partial ) {
@@ -91,7 +92,7 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
   const IndexedType* argumentIt = arguments;
 
   TypeConversion conv(m_topContext.data());
-  
+
   for( QList<OverloadResolver::Parameter>::const_iterator it = params.parameters.begin(); it != params.parameters.end(); ++it )  {
     ParameterConversion c;
     c.rank = conv.implicitConversion( (*it).type->indexed(), *argumentIt, (*it).lValue, m_noUserDefinedConversion );

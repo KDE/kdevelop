@@ -24,13 +24,13 @@
 #include <kpluginloader.h>
 #include <KAboutData>
 #include <KSettings/Dispatcher>
-#include <KDebug>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <QDirIterator>
 #include "qthelpprovider.h"
 #include "qthelpqtdoc.h"
 #include "qthelp_config_shared.h"
+#include "debug.h"
 
 QtHelpPlugin *QtHelpPlugin::s_plugin = 0;
 
@@ -87,13 +87,13 @@ void QtHelpPlugin::searchHelpDirectory(QStringList& pathList, QStringList& nameL
         return;
     }
 
-    kDebug() << "Searching qch files in: " << searchDir;
+    qCDebug(QTHELP) << "Searching qch files in: " << searchDir;
     QDirIterator dirIt(searchDir, QStringList() << "*.qch", QDir::Files, QDirIterator::Subdirectories);
     const QString logo("qtlogo");
     while(dirIt.hasNext() == true)
     {
         dirIt.next();
-        kDebug() << "qch found: " << dirIt.filePath();
+        qCDebug(QTHELP) << "qch found: " << dirIt.filePath();
         pathList.append(dirIt.filePath());
         nameList.append(dirIt.fileInfo().baseName());
         iconList.append(logo);

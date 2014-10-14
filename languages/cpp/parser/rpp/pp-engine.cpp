@@ -25,7 +25,6 @@
 #include <QFile>
 #include <QTextStream>
 
-#include <kdebug.h>
 #include <KLocalizedString>
 
 #include <language/duchain/duchain.h>
@@ -36,10 +35,13 @@
 #include "pp-location.h"
 #include "chartools.h"
 #include "macrorepository.h"
+#include "debug.h"
+
+Q_LOGGING_CATEGORY(RPP, "kdevelop.languages.cpp.parser.rpp")
 
 using namespace rpp;
 
-#define RETURN_ON_FAIL(x) if(!(x)) { ++input; kDebug(9007) << "Preprocessor: Condition not satisfied"; return; }
+#define RETURN_ON_FAIL(x) if(!(x)) { ++input; qCDebug(RPP) << "Preprocessor: Condition not satisfied"; return; }
 
 pp::pp(Preprocessor* preprocessor)
   : m_environment(new Environment)
@@ -70,7 +72,7 @@ PreprocessedContents pp::processFile(const QString& fileName)
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly))
     {
-        kWarning(9007) << "file '" << fileName << "' not found!" ;
+        qCWarning(RPP) << "file '" << fileName << "' not found!" ;
         return PreprocessedContents();
     }
 
@@ -127,7 +129,7 @@ void pp::handle_directive(uint directive, Stream& input, Stream& output)
     guardCandidate = KDevelop::IndexedString();
     checkGuardEnd = false;
   }
-  
+
   if(directive == defineDirective)
       if (! skipping ())
         return handle_define(input);
@@ -194,7 +196,7 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
           if(index != indexFromCharacter(' '))
             filteredIncludeString.push_back(index);
     }
-    
+
     Stream newInput(&filteredIncludeString, inputPosition);
     newInput.setOriginalInputPosition(originalInputPosition);
     handle_include(skip_current_path, newInput, output);
@@ -283,7 +285,7 @@ void pp::operator () (Stream& input, Stream& output)
       if(checkGuardEnd) {
         expand.startSignificantContentSearch();
       }
-      
+
       expand (input, output);
       if(checkGuardEnd) {
         if(expand.foundSignificantContent() || !input.atEnd()) {
@@ -293,7 +295,7 @@ void pp::operator () (Stream& input, Stream& output)
       }
     }
   }
-  
+
   if(!guardCandidate.isEmpty())
     preprocessor()->foundHeaderGuard(input, guardCandidate);
 
@@ -921,7 +923,7 @@ void pp::handle_elif(Stream& input)
 {
   if(iflevel == 1)
     guardCandidate = KDevelop::IndexedString();
-  
+
   RETURN_ON_FAIL(iflevel > 0);
 
   if (iflevel == 0 && !skipping())
@@ -1006,7 +1008,7 @@ void pp::handle_ifdef (bool check_undefined, Stream& input)
   }
 
   hadGuardCandidate = true;
-  
+
   if (test_if_level())
   {
     pp_macro* macro = m_environment->retrieveMacro(macro_name, true);
@@ -1231,7 +1233,7 @@ int pp::next_token (Stream& input)
       }
   }
 
-  //kDebug(9007) << "Next token '" << ch << ch2 << "'" << nextToken << "txt" << token_text << "val" << token_value;
+  //qCDebug(RPP) << "Next token '" << ch << ch2 << "'" << nextToken << "txt" << token_text << "val" << token_value;
 
   haveNextToken = true;
   return nextToken;

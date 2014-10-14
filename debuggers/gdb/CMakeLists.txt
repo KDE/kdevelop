@@ -20,8 +20,6 @@ endif()
 add_subdirectory(unittests)
 add_subdirectory(printers)
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9012 )
-
 include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
 #add_subdirectory(tests)

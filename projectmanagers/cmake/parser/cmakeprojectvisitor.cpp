@@ -24,6 +24,7 @@
 #include "astfactory.h"
 #include "cmakeduchaintypes.h"
 #include "cmakeparserutils.h"
+#include "../debug.h"
 
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>
@@ -36,7 +37,6 @@
 
 #include <KProcess>
 #include <KLocalizedString>
-#include <KDebug>
 #include <QHash>
 #include <QQueue>
 #include <QFile>
@@ -49,7 +49,7 @@
 
 using namespace KDevelop;
 
-static void debugMsgs(const QString& message) { kDebug(9032) << "message:" << message; }
+static void debugMsgs(const QString& message) { qCDebug(CMAKE) << "message:" << message; }
 
 
 static bool isGenerated(const QString& name)
@@ -73,8 +73,8 @@ QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName) const
         env = *it;
     else
         env = QString::fromLatin1(qgetenv(varName.toLatin1()));
-    
-//     kDebug(9042) << ".......resolving env:" << varName << "=" << QProcess::systemEnvironment() << env;
+
+//     qCDebug(CMAKE) << ".......resolving env:" << varName << "=" << QProcess::systemEnvironment() << env;
     if(!env.isEmpty())
     {
         QChar separator;
@@ -83,12 +83,12 @@ QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName) const
 #else
         separator = ':';
 #endif
-        kDebug(9042) << "resolving env:" << varName << "=" << env;
+        qCDebug(CMAKE) << "resolving env:" << varName << "=" << env;
         return env.split(separator);
     }
     else
     {
-        kDebug(9032) << "warning:" << varName << " not found";
+        qCDebug(CMAKE) << "warning:" << varName << " not found";
         return QStringList();
     }
 }
@@ -152,7 +152,7 @@ QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& the
     QString type=exp.mid(dollar+1, thecase.first-dollar-1);
     QString var=exp.mid(thecase.first+1, thecase.second-thecase.first-1);
     QStringList value;
-//     kDebug() << "lalalallalala" << exp << thecase.print();
+//     qCDebug(CMAKE) << "lalalallalala" << exp << thecase.print();
     if(type.isEmpty())
     {
         value=variableValue(var);
@@ -162,16 +162,16 @@ QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& the
         value=envVarDirectories(var);
     }
     else
-        kDebug() << "error: I do not understand the key: " << type;
+        qCDebug(CMAKE) << "error: I do not understand the key: " << type;
 
-//     kDebug() << "solving: " << var << vars << exp;
+//     qCDebug(CMAKE) << "solving: " << var << vars << exp;
     return value;
 }
 
 static QString replaceOne(const QString& var, const QString& id, const QString& value, int dollar)
 {
-//     kDebug() << "ooo" << var << value << id << var[dollar+id.size()-1] << (dollar+id.size());
-//     kDebug() << "kkkk" << var.mid(0, dollar) << value << var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
+//     qCDebug(CMAKE) << "ooo" << var << value << id << var[dollar+id.size()-1] << (dollar+id.size());
+//     qCDebug(CMAKE) << "kkkk" << var.mid(0, dollar) << value << var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
     return var.mid(0, dollar)+value+var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
 }
 
@@ -180,14 +180,14 @@ QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>&
     QString var=exp;
     QList<IntPair> invars;
     invars += poss[desired];
-    //kDebug() << ">>>>>" << exp << desired << poss.count();
+    //qCDebug(CMAKE) << ">>>>>" << exp << desired << poss.count();
     for(; desired+1<poss.size() && poss[desired].level>1; desired++)
     {
         invars+=poss[desired+1];
-        //kDebug() << "poss@"<< desired+1 << "="<< poss[desired+1].print();
+        //qCDebug(CMAKE) << "poss@"<< desired+1 << "="<< poss[desired+1].print();
     }
 
-    //kDebug() << ";;;;;" << invars.count();
+    //qCDebug(CMAKE) << ";;;;;" << invars.count();
     if(invars.count()>1)
     {
         QList<IntPair>::const_iterator itConstEnd=invars.constEnd();
@@ -227,12 +227,12 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
             ++it;
 
         const IntPair& p=*it;
-//         kDebug () << "reeeeeet" << ret << exp.value << p.print();
+//         qCDebug(CMAKE) << "reeeeeet" << ret << exp.value << p.print();
         int dollar=exp.value.lastIndexOf('$', p.first);
         QString pre=exp.value.mid(last.second+1, dollar-last.second-1);
 
         QStringList vars = value(exp.value, var, i);
-//         kDebug() << "aaaaaaaaaA" << pre << vars;
+//         qCDebug(CMAKE) << "aaaaaaaaaA" << pre << vars;
 
         if(!vars.isEmpty())
         {
@@ -241,8 +241,8 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
         ret.last()+=pre;
         ret += vars;
         last=p;
-        
-//         kDebug() << "yaaaaaaa" << ret;
+
+//         qCDebug(CMAKE) << "yaaaaaaa" << ret;
 //         i++;
     }
     ret.last().append(exp.value.mid(last.second+1, exp.value.count()-last.second));
@@ -252,7 +252,7 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
     } else if(ret.size()==1 && ret.first().isEmpty()) {
         ret.clear();
     }
-    
+
     return ret;
 }
 
@@ -264,11 +264,11 @@ bool CMakeProjectVisitor::hasMacro(const QString& name) const
 
 int CMakeProjectVisitor::visit(const CMakeAst *ast)
 {
-    kDebug(9042) << "error! function not implemented" << ast->content()[ast->line()].name;
+    qCDebug(CMAKE) << "error! function not implemented" << ast->content()[ast->line()].name;
     foreach(const CMakeFunctionArgument& arg, ast->outputArguments())
     {
         //NOTE: this is a workaround, but fixes some issues.
-        kDebug(9042) << "reseting: " << arg.value;
+        qCDebug(CMAKE) << "reseting: " << arg.value;
         m_vars->insert(arg.value, QStringList());
     }
     return 1;
@@ -292,7 +292,7 @@ int CMakeProjectVisitor::visit( const AddTestAst * test)
         t.executable.chop(4);
     }
 
-    kDebug(9042) << "AddTestAst" << t.executable;
+    qCDebug(CMAKE) << "AddTestAst" << t.executable;
     m_testSuites << t;
     return 1;
 }
@@ -312,7 +312,7 @@ int CMakeProjectVisitor::visit(const ProjectAst *project)
 
 int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
 {
-    kDebug(9042) << "setting target props for " << targetProps->targets() << targetProps->properties();
+    qCDebug(CMAKE) << "setting target props for " << targetProps->targets() << targetProps->properties();
     foreach(const QString& _tname, targetProps->targets())
     {
         QString tname = m_targetAlias.value(_tname, _tname);
@@ -325,9 +325,9 @@ int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
 }
 
 int CMakeProjectVisitor::visit( const SetDirectoryPropsAst * dirProps)
-{   
+{
     QString dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
-    kDebug(9042) << "setting directory props for " << dirProps->properties() << dir;
+    qCDebug(CMAKE) << "setting directory props for " << dirProps->properties() << dir;
     QMap<QString, QStringList>& dprops = m_props[DirectoryProperty][dir];
     foreach(const SetDirectoryPropsAst::PropPair& t, dirProps->properties())
     {
@@ -339,9 +339,9 @@ int CMakeProjectVisitor::visit( const SetDirectoryPropsAst * dirProps)
 int CMakeProjectVisitor::visit( const GetTargetPropAst * prop)
 {
     QString targetName = prop->target();
-    kDebug(9042) << "getting target " << targetName << " prop " << prop->property() << prop->variableName();
+    qCDebug(CMAKE) << "getting target " << targetName << " prop " << prop->property() << prop->variableName();
     QStringList value;
-    
+
     CategoryType& category = m_props[TargetProperty];
     CategoryType::iterator itTarget = category.find(m_targetAlias.value(targetName, targetName));
     if(itTarget!=category.end()) {
@@ -354,15 +354,15 @@ int CMakeProjectVisitor::visit( const GetTargetPropAst * prop)
     }
     if(value.isEmpty())
         value += QString(prop->variableName()+"-NOTFOUND");
-    
+
     m_vars->insert(prop->variableName(), value);
-//     kDebug(9042) << "goooooot" << m_vars->value(prop->variableName());
+//     qCDebug(CMAKE) << "goooooot" << m_vars->value(prop->variableName());
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const AddSubdirectoryAst *subd)
 {
-    kDebug(9042) << "adding subdirectory" << subd->sourceDir();
+    qCDebug(CMAKE) << "adding subdirectory" << subd->sourceDir();
 
     VisitorState p=stackTop();
 
@@ -370,23 +370,23 @@ int CMakeProjectVisitor::visit(const AddSubdirectoryAst *subd)
     d.name=subd->sourceDir();
     d.build_dir=subd->binaryDir().isEmpty() ? d.name : subd->binaryDir();
     d.desc=p.code->at(p.line);
-    
+
     m_subdirectories += d;
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const SubdirsAst *sdirs)
 {
-    kDebug(9042) << "adding subdirectories" << sdirs->directories() << sdirs->exluceFromAll();
+    qCDebug(CMAKE) << "adding subdirectories" << sdirs->directories() << sdirs->exluceFromAll();
     VisitorState p=stackTop();
     CMakeFunctionDesc desc=p.code->at(p.line);
-    
+
     foreach(const QString& dir, sdirs->directories() + sdirs->exluceFromAll()) {
         Subdirectory d;
         d.name=dir;
         d.build_dir=dir;
         d.desc=desc;
-        
+
         m_subdirectories += d;
     }
     return 1;
@@ -395,13 +395,13 @@ int CMakeProjectVisitor::visit(const SubdirsAst *sdirs)
 void CMakeProjectVisitor::printBacktrace(const QStack<VisitorState> &backtrace)
 {
     int i=0;
-    kDebug() << "backtrace" << backtrace.count();
+    qCDebug(CMAKE) << "backtrace" << backtrace.count();
     foreach(const VisitorState& v, backtrace)
     {
         if(v.code->count()>v.line)
-          kDebug(9042) << i << ": ";//           << v.code->at(v.line).name;
+          qCDebug(CMAKE) << i << ": ";//           << v.code->at(v.line).name;
         else
-          kDebug(9042) << i << ": ------------------------";
+          qCDebug(CMAKE) << i << ": ------------------------";
         i++;
     }
 }
@@ -425,9 +425,9 @@ CMakeProjectVisitor::VisitorState CMakeProjectVisitor::stackTop() const
 void CMakeProjectVisitor::defineTarget(const QString& _id, const QStringList& sources, Target::Type t)
 {
     QString id = _id.isEmpty() ? "<wrong-target>" : _id;
-    kDebug(9042) << "Defining target" << id;
+    qCDebug(CMAKE) << "Defining target" << id;
     if (m_targetForId.contains(id))
-        kDebug(9032) << "warning! there already was a target called" << id;
+        qCDebug(CMAKE) << "warning! there already was a target called" << id;
 
     VisitorState p=stackTop();
 
@@ -462,7 +462,7 @@ void CMakeProjectVisitor::defineTarget(const QString& _id, const QStringList& so
     if(locationDir.isEmpty()) {
         locationDir = m_vars->value("CMAKE_CURRENT_BINARY_DIR").join(QString());
     }
-    
+
     Target target;
     target.name=id;
     target.declaration=IndexedDeclaration(d);
@@ -470,7 +470,7 @@ void CMakeProjectVisitor::defineTarget(const QString& _id, const QStringList& so
     target.type=t;
     target.desc=p.code->at(p.line);
     m_targetForId[target.name]=target;
-    
+
     if(CMakeCondition::textIsTrue(m_vars->value("CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE").join(QString())))
         targetProps["INTERFACE_INCLUDE_DIRECTORIES"] = (m_vars->value("CMAKE_CURRENT_BINARY_DIR") + m_vars->value("CMAKE_CURRENT_SOURCE_DIR"));
     targetProps["OUTPUT_NAME"] = QStringList(exe);
@@ -482,8 +482,8 @@ int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
     if(!exec->isImported())
         defineTarget(exec->executable(), exec->sourceLists(), Target::Executable);
     else
-        kDebug(9042) << "imported executable" << exec->executable();
-    kDebug(9042) << "exec:" << exec->executable() << "->" << m_targetForId.contains(exec->executable())
+        qCDebug(CMAKE) << "imported executable" << exec->executable();
+    qCDebug(CMAKE) << "exec:" << exec->executable() << "->" << m_targetForId.contains(exec->executable())
         << "imported" << exec->isImported();
     return 1;
 }
@@ -494,7 +494,7 @@ int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
         m_targetAlias[lib->libraryName()] = lib->aliasTarget();
     else if(!lib->isImported())
         defineTarget(lib->libraryName(), lib->sourceLists(), Target::Library);
-    kDebug(9042) << "lib:" << lib->libraryName();
+    qCDebug(CMAKE) << "lib:" << lib->libraryName();
     return 1;
 }
 
@@ -508,12 +508,12 @@ int CMakeProjectVisitor::visit(const SetAst *set)
             values = itCache->value.split(';');
         else
             values = set->values();
-        
+
         m_vars->insertGlobal(set->variableName(), values);
     } else
         m_vars->insert(set->variableName(), set->values(), set->parentScope());
-    
-//     kDebug(9042) << "setting variable:" << set->variableName() << set->parentScope()
+
+//     qCDebug(CMAKE) << "setting variable:" << set->variableName() << set->parentScope()
 //         << "to" << m_vars->value(set->variableName()) << set->storeInCache()
 //         ;
     return 1;
@@ -522,20 +522,20 @@ int CMakeProjectVisitor::visit(const SetAst *set)
 int CMakeProjectVisitor::visit(const UnsetAst* unset)
 {
     if(unset->env()) {
-        kDebug(9032) << "error! can't unset the env var: " << unset->variableName();
+        qCDebug(CMAKE) << "error! can't unset the env var: " << unset->variableName();
     } else {
         m_vars->remove(unset->variableName());
         if(unset->cache()) {
-            kDebug(9032) << "error! can't unset the cached var: " << unset->variableName();
+            qCDebug(CMAKE) << "error! can't unset the cached var: " << unset->variableName();
         }
     }
-    kDebug(9042) << "unset variable:" << unset->variableName();
+    qCDebug(CMAKE) << "unset variable:" << unset->variableName();
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
 {
-    kDebug(9042) << "adding include directories" << dirs->includedDirectories();
+    qCDebug(CMAKE) << "adding include directories" << dirs->includedDirectories();
     IncludeDirectoriesAst::IncludeType t = dirs->includeType();
 
     QStringList toInclude = dirs->includedDirectories();
@@ -555,7 +555,7 @@ int CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
     else {
         v = toInclude + v;
     }
-    kDebug(9042) << "done." << v;
+    qCDebug(CMAKE) << "done." << v;
     return 1;
 }
 
@@ -585,7 +585,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
         QUrl afile(mpath);
         afile = afile.adjusted(QUrl::StripTrailingSlash);
         afile.setPath(afile.path() + '/' + file);
-        kDebug(9042) << "Trying:" << mpath << '.' << file;
+        qCDebug(CMAKE) << "Trying:" << mpath << '.' << file;
         QFileInfo f(afile.toLocalFile());
         if(f.exists() && f.isFile())
         {
@@ -596,7 +596,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
             break;
         }
     }
-    //kDebug(9042) << "find file" << file << "into:" << folders << "found at:" << path;
+    //qCDebug(CMAKE) << "find file" << file << "into:" << folders << "found at:" << path;
     return path.adjusted(QUrl::StripTrailingSlash).toLocalFile();
 }
 
@@ -604,7 +604,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
 {
     Q_ASSERT(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"));
     const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath + m_vars->value("CMAKE_CURRENT_SOURCE_DIR");
-    kDebug(9042) << "Include:" << inc->includeFile() << "@" << modulePath << " into ";
+    qCDebug(CMAKE) << "Include:" << inc->includeFile() << "@" << modulePath << " into ";
 
     QString possib=inc->includeFile();
     QString path;
@@ -624,14 +624,14 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
         CMakeFileContent include = CMakeListsParser::readCMakeFile(path);
         if ( !include.isEmpty() )
         {
-            kDebug(9042) << "including:" << path;
+            qCDebug(CMAKE) << "including:" << path;
             walk(include, 0, true);
             m_hitReturn = false;
         }
         else
         {
             //FIXME: Put here the error.
-            kDebug(9042) << "Include. Parsing error.";
+            qCDebug(CMAKE) << "Include. Parsing error.";
         }
         Q_ASSERT(m_vars->value("CMAKE_CURRENT_LIST_FILE")==QStringList(path));
         m_vars->removeMulti("CMAKE_CURRENT_LIST_FILE");
@@ -641,7 +641,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
     {
         if(!inc->optional())
         {
-            kDebug(9032) << "error!! Could not find" << inc->includeFile() << "=" << possib << "into" << modulePath;
+            qCDebug(CMAKE) << "error!! Could not find" << inc->includeFile() << "=" << possib << "into" << modulePath;
         }
     }
 
@@ -652,14 +652,14 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
             result=path;
         m_vars->insert(inc->resultVariable(), QStringList(result));
     }
-    kDebug(9042) << "include of" << inc->includeFile() << "done.";
+    qCDebug(CMAKE) << "include of" << inc->includeFile() << "done.";
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const FindPackageAst *pack)
 {
     m_vars->remove(pack->name()+"-NOTFOUND");
-    kDebug(9042) << "Find:" << pack->name() << "package." << pack->version() << m_modulePath << "No module: " << pack->noModule();
+    qCDebug(CMAKE) << "Find:" << pack->name() << "package." << pack->version() << m_modulePath << "No module: " << pack->noModule();
 
     QStringList possibleModuleNames;
     if(!pack->noModule()) //TODO Also implied by a whole slew of additional options.
@@ -740,7 +740,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             break;
         }
     }
-    
+
     if (path.isEmpty()) {
         foreach(const QString& possib, possibleModuleNames)
         {
@@ -767,18 +767,18 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         if(version.size()>=3) m_vars->insert(pack->name()+"_FIND_VERSION_PATCH", QStringList(version[2]));
         if(version.size()>=4) m_vars->insert(pack->name()+"_FIND_VERSION_TWEAK", QStringList(version[3]));
         m_vars->insert(pack->name()+"_FIND_VERSION_COUNT", QStringList(QString::number(version.size())));
-        
+
         CMakeFileContent package=CMakeListsParser::readCMakeFile( path );
         if ( !package.isEmpty() )
         {
             path=QUrl(path).pathOrUrl();
-            kDebug(9042) << "================== Found" << path << "===============";
+            qCDebug(CMAKE) << "================== Found" << path << "===============";
             walk(package, 0, true);
             m_hitReturn = false;
         }
         else
         {
-            kDebug(9032) << "error: find_package. Parsing error." << path;
+            qCDebug(CMAKE) << "error: find_package. Parsing error." << path;
         }
 
         if(pack->noModule())
@@ -787,7 +787,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         }
         m_vars->removeMulti("CMAKE_CURRENT_LIST_FILE");
         m_vars->removeMulti("CMAKE_CURRENT_LIST_DIR");
-        
+
         if(isConfig) {
             m_vars->insert(pack->name()+"_FOUND", QStringList("TRUE"));
             m_vars->insert(pack->name().toUpper()+"_FOUND", QStringList("TRUE"));
@@ -797,11 +797,11 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     {
         if(pack->isRequired()) {
             //FIXME: Put here the error.
-            kDebug(9032) << "error: Could not find" << pack->name() << "into" << modulePath;
+            qCDebug(CMAKE) << "error: Could not find" << pack->name() << "into" << modulePath;
         }
         m_vars->insertGlobal(QString("%1_DIR").arg(pack->name()), QStringList(QString("%1_DIR-NOTFOUND").arg(pack->name())));
     }
-    kDebug(9042) << "Exit. Found:" << pack->name() << m_vars->value(pack->name()+"_FOUND");
+    qCDebug(CMAKE) << "Exit. Found:" << pack->name() << m_vars->value(pack->name()+"_FOUND");
 
     return 1;
 }
@@ -811,7 +811,7 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const Indexe
 {
     DUChainWriteLocker lock(DUChain::lock());
     KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(idxpath);
-    
+
     if(topctx)
     {
         if(isClean) {
@@ -819,7 +819,7 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const Indexe
             topctx->deleteChildContextsRecursively();
             topctx->deleteUses();
         }
-        
+
         foreach(DUContext* importer, topctx->importers())
             importer->removeImportedParentContext(topctx);
         topctx->clearImportedParentContexts();
@@ -833,19 +833,19 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const Indexe
 
         Q_ASSERT(DUChain::self()->chainForDocument(idxpath));
     }
-    
+
     //Clean the re-used top-context. This is problematic since it may affect independent projects, but it's better then letting things accumulate.
     ///@todo This is problematic when the same file is used from within multiple CMakeLists.txts,
     ///      for example a standard import like FindKDE4.cmake, because it creates a cross-dependency
     ///      between the topducontext's of independent projects, like for example kdebase and kdevplatform
     ///@todo Solve that by creating unique versions of all used top-context on a per-project basis using ParsingEnvironmentFile for disambiguation.
-    
+
     topctx->addImportedParentContext(aux);
 
     /// @todo should we check for NULL or assert?
     if (aux)
       aux->addImportedParentContext(topctx);
-    
+
     return topctx;
 }
 
@@ -853,7 +853,7 @@ bool CMakeProjectVisitor::haveToFind(const QString &varName)
 {
     if(m_vars->contains(varName+"_FOUND"))
         return false;
-    
+
     m_vars->remove(varName+"-NOTFOUND");
     return true;
 }
@@ -864,7 +864,7 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
         return 1;
     if(m_cache->contains(fprog->variableName()))
     {
-        kDebug(9042) << "FindProgram: cache" << fprog->variableName() << m_cache->value(fprog->variableName()).value;
+        qCDebug(CMAKE) << "FindProgram: cache" << fprog->variableName() << m_cache->value(fprog->variableName()).value;
         return 1;
     }
 
@@ -872,12 +872,12 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
 #ifdef Q_OS_WIN
     if(!fprog->noSystemEnvironmentPath() && !fprog->noDefaultPath())
         modulePath += envVarDirectories("Path");
-    kDebug() << "added Path env for program finding" << envVarDirectories("Path");
+    qCDebug(CMAKE) << "added Path env for program finding" << envVarDirectories("Path");
 #else
     if(!fprog->noSystemEnvironmentPath() && !fprog->noDefaultPath())
         modulePath += envVarDirectories("PATH");
 #endif
-    kDebug(9042) << "Find:" << fprog->variableName() << fprog->filenames() << "program into" << modulePath<<":"<< fprog->path();
+    qCDebug(CMAKE) << "Find:" << fprog->variableName() << fprog->filenames() << "program into" << modulePath<<":"<< fprog->path();
     QString path;
     foreach(const QString& filename, fprog->filenames())
     {
@@ -891,7 +891,7 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
     else
         m_vars->insertGlobal(fprog->variableName()+"-NOTFOUND", QStringList());
 
-    kDebug(9042) << "FindProgram:" << fprog->variableName() << "=" << m_vars->value(fprog->variableName()) << modulePath;
+    qCDebug(CMAKE) << "FindProgram:" << fprog->variableName() << "=" << m_vars->value(fprog->variableName()) << modulePath;
     return 1;
 }
 
@@ -901,7 +901,7 @@ QString CMakeProjectVisitor::findExecutable(const QString& file,
     QString path;
     QStringList suffixes=m_vars->value("CMAKE_EXECUTABLE_SUFFIX");
     suffixes.prepend(QString());
-    kDebug() << "finding executable, using suffixes" << suffixes;
+    qCDebug(CMAKE) << "finding executable, using suffixes" << suffixes;
 
     foreach(const QString& suffix, suffixes)
     {
@@ -918,7 +918,7 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
         return 1;
     if(m_cache->contains(fpath->variableName()))
     {
-        kDebug() << "FindPath: cache" << fpath->variableName();
+        qCDebug(CMAKE) << "FindPath: cache" << fpath->variableName();
         return 1;
     }
 
@@ -935,7 +935,7 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
         locationOptions += pp;
         locationOptions += envVarDirectories("CMAKE_INCLUDE_PATH") + m_vars->value("CMAKE_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
-        
+
         pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
         foreach(const QString& path, pp) {
             locationOptions += path+"/include";
@@ -944,13 +944,13 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
         locationOptions += m_vars->value("CMAKE_SYSTEM_FRAMEWORK_PATH");
     }
 
-    kDebug(9042) << "Find:" << /*locationOptions << "@" <<*/ fpath->variableName() << /*"=" << files <<*/ " path.";
+    qCDebug(CMAKE) << "Find:" << /*locationOptions << "@" <<*/ fpath->variableName() << /*"=" << files <<*/ " path.";
     foreach(const QString& p, files)
     {
         QString p1=findFile(p, locationOptions, suffixes, true);
         if(p1.isEmpty())
         {
-            kDebug(9042) << p << "not found";
+            qCDebug(CMAKE) << p << "not found";
         }
         else
         {
@@ -964,9 +964,9 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     }
     else
     {
-        kDebug(9042) << "Path not found";
+        qCDebug(CMAKE) << "Path not found";
     }
-    kDebug(9042) << "Find path: " << fpath->variableName() << m_vars->value(fpath->variableName());
+    qCDebug(CMAKE) << "Find path: " << fpath->variableName() << m_vars->value(fpath->variableName());
 //     m_vars->insert(fpath->variableName()+"-NOTFOUND", QStringList());
     return 1;
 }
@@ -977,7 +977,7 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
         return 1;
     if(m_cache->contains(flib->variableName()))
     {
-        kDebug(9042) << "FindLibrary: cache" << flib->variableName();
+        qCDebug(CMAKE) << "FindLibrary: cache" << flib->variableName();
         return 1;
     }
 
@@ -994,15 +994,15 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
 
         locationOptions += envVarDirectories("CMAKE_LIBRARY_PATH") + m_vars->value("CMAKE_LIBRARY_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
-        
+
         locationOptions += m_vars->value("CMAKE_SYSTEM_LIBRARY_PATH");
         locationOptions += m_vars->value("CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES");
-        
+
         opt=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
         foreach(const QString& s, opt)
             locationOptions.append(s+"/lib");
     }
-    
+
     foreach(const QString& p, files)
     {
         foreach(const QString& prefix, m_vars->value("CMAKE_FIND_LIBRARY_PREFIXES"))
@@ -1012,7 +1012,7 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
                 QString p1=findFile(prefix+p+suffix, locationOptions, flib->pathSuffixes());
                 if(p1.isEmpty())
                 {
-                    kDebug(9042) << p << "not found";
+                    qCDebug(CMAKE) << p << "not found";
                 }
                 else
                 {
@@ -1032,9 +1032,9 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
         m_vars->insertGlobal(flib->variableName(), QStringList(path));
     }
     else
-        kDebug(9032) << "error. Library" << flib->filenames() << "not found";
+        qCDebug(CMAKE) << "error. Library" << flib->filenames() << "not found";
 //     m_vars->insert(fpath->variableName()+"-NOTFOUND", QStringList());
-    kDebug(9042) << "Find Library:" << flib->filenames() << m_vars->value(flib->variableName());
+    qCDebug(CMAKE) << "Find Library:" << flib->filenames() << m_vars->value(flib->variableName());
     return 1;
 }
 
@@ -1044,7 +1044,7 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
         return 1;
     if(m_cache->contains(ffile->variableName()))
     {
-        kDebug(9042) << "FindFile: cache" << ffile->variableName();
+        qCDebug(CMAKE) << "FindFile: cache" << ffile->variableName();
         return 1;
     }
 
@@ -1058,7 +1058,7 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
         locationOptions += pp;
         locationOptions += envVarDirectories("CMAKE_INCLUDE_PATH") + m_vars->value("CMAKE_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
-        
+
         pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
         foreach(const QString& path, pp) {
             locationOptions += path+"/include";
@@ -1066,16 +1066,16 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
         locationOptions += m_vars->value("CMAKE_SYSTEM_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_SYSTEM_FRAMEWORK_PATH");
     }
-    
+
     QStringList path, files=ffile->filenames();
 
-    kDebug(9042) << "Find File:" << ffile->filenames();
+    qCDebug(CMAKE) << "Find File:" << ffile->filenames();
     foreach(const QString& p, files)
     {
         QString p1=findFile(p, locationOptions, ffile->pathSuffixes());
         if(p1.isEmpty())
         {
-            kDebug(9042) << p << "not found";
+            qCDebug(CMAKE) << p << "not found";
         }
         else
         {
@@ -1088,7 +1088,7 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
         m_vars->insertGlobal(ffile->variableName(), QStringList(path));
     }
     else
-        kDebug(9032) << "error. File" << ffile->filenames() << "not found";
+        qCDebug(CMAKE) << "error. File" << ffile->filenames() << "not found";
 //     m_vars->insert(fpath->variableName()+"-NOTFOUND", QStringList());
     return 1;
 }
@@ -1096,24 +1096,24 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
 
 int CMakeProjectVisitor::visit(const TryCompileAst *tca)
 {
-    kDebug(9042) << "try_compile" << tca->resultName() << tca->binDir() << tca->source()
+    qCDebug(CMAKE) << "try_compile" << tca->resultName() << tca->binDir() << tca->source()
             << "cmakeflags" << tca->cmakeFlags() << "outputvar" << tca->outputName();
     if(m_projectName.isEmpty())
     {
-        kDebug(9042) << "file compile" << tca->compileDefinitions() << tca->copyFile();
+        qCDebug(CMAKE) << "file compile" << tca->compileDefinitions() << tca->copyFile();
     }
     else
     {
-        kDebug(9042) << "project compile" << tca->projectName() << tca->targetName();
+        qCDebug(CMAKE) << "project compile" << tca->projectName() << tca->targetName();
     }
-    
+
     QString value;
     CacheValues::const_iterator it=m_cache->constFind(tca->resultName());
     if(it!=m_cache->constEnd())
         value=it->value;
     else
         value="TRUE";
-    
+
     m_vars->insert(tca->resultName(), QStringList(value));
     return 1;
 }
@@ -1121,7 +1121,7 @@ int CMakeProjectVisitor::visit(const TryCompileAst *tca)
 
 int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *tll)
 {
-    kDebug(9042) << "target_link_libraries";
+    qCDebug(CMAKE) << "target_link_libraries";
     QHash<QString, Target>::iterator target = m_targetForId.find(tll->target());
     //TODO: we can add a problem if the target is not found
     if(target != m_targetForId.end()) {
@@ -1162,13 +1162,13 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
     if(def.arguments.isEmpty() || end.arguments.isEmpty())
         return;
     QString id=def.arguments.first().value.toLower();
-    
+
     Identifier identifier(id);
     RangeInRevision sr=def.arguments.first().range();
     RangeInRevision endsr=end.arguments.first().range();
     DUChainWriteLocker lock;
     QList<Declaration*> decls=m_topctx->findDeclarations(identifier);
-    
+
     //Only consider declarations in a CMake file
     IndexedString cmakeName("cmake");
     for(QList<Declaration*>::iterator it=decls.begin(); it!=decls.end(); ) {
@@ -1204,23 +1204,23 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
 
 int CMakeProjectVisitor::visit(const MacroAst *macro)
 {
-    kDebug(9042) << "Adding macro:" << macro->macroName();
+    qCDebug(CMAKE) << "Adding macro:" << macro->macroName();
     Macro m;
     m.name = macro->macroName();
     m.knownArgs=macro->knownArgs();
     m.isFunction=false;
-    
+
     return declareFunction(m, macro->content(), macro->line(), "endmacro");
 }
 
 int CMakeProjectVisitor::visit(const FunctionAst *func)
 {
-    kDebug(9042) << "Adding function:" << func->name();
+    qCDebug(CMAKE) << "Adding function:" << func->name();
     Macro m;
     m.name = func->name();
     m.knownArgs=func->knownArgs();
     m.isFunction=true;
-    
+
     return declareFunction(m, func->content(), func->line(), "endfunction");
 }
 
@@ -1254,11 +1254,11 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
     if(m_macros->contains(call->name()))
     {
         const Macro code=m_macros->value(call->name());
-        kDebug(9042) << "Running macro:" << call->name() << "params:" << call->arguments() << "=" << code.knownArgs << "for" << code.code.count() << "lines";
-        
+        qCDebug(CMAKE) << "Running macro:" << call->name() << "params:" << call->arguments() << "=" << code.knownArgs << "for" << code.code.count() << "lines";
+
         if(code.knownArgs.count() > call->arguments().count())
         {
-            kDebug(9032) << "error: more parameters needed when calling" << call->name();
+            qCDebug(CMAKE) << "error: more parameters needed when calling" << call->name();
         }
         else
         {
@@ -1283,7 +1283,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
                 m_vars->insertMulti(QString("ARGV%1").arg(i), QStringList(*cit));
                 if(mit!=code.knownArgs.constEnd())
                 {
-                    kDebug(9042) << "param:" << *mit << "=" << *cit;
+                    qCDebug(CMAKE) << "param:" << *mit << "=" << *cit;
                     m_vars->insertMulti(*mit, QStringList(*cit));
                     mit++;
                 }
@@ -1297,14 +1297,14 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             m_vars->insertMulti("ARGN", argn);
             m_vars->insertMulti("ARGV", call->arguments());
             m_vars->insertMulti("ARGC", QStringList(QString::number(call->arguments().count())));
-            kDebug(9042) << "argn=" << m_vars->value("ARGN");
+            qCDebug(CMAKE) << "argn=" << m_vars->value("ARGN");
 
             bool isfunc = code.isFunction;
             if(isfunc)
                 m_vars->pushScope();
             //Executing
             int len = walk(code.code, 1);
-            kDebug(9042) << "visited!" << call->name()  <<
+            qCDebug(CMAKE) << "visited!" << call->name()  <<
                 m_vars->value("ARGV") << "_" << m_vars->value("ARGN") << "..." << len;
 
             m_hitReturn = false;
@@ -1327,9 +1327,9 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
     }
     else
     {
-        kDebug(9032) << "error: Did not find the macro:" << call->name() << call->content()[call->line()].writeBack();
+        qCDebug(CMAKE) << "error: Did not find the macro:" << call->name() << call->content()[call->line()].writeBack();
     }
-    
+
     return 1;
 }
 
@@ -1363,7 +1363,7 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
     if( ifast->condition().isEmpty() )
     {
         const CMakeFunctionDesc d = ifast->content().at( ifast->line() );
-        kDebug() << "error: couldn't parse condition of an IF in file:" << ifast->condition() << d.filePath << d.line;
+        qCDebug(CMAKE) << "error: couldn't parse condition of an IF in file:" << ifast->condition() << d.filePath << d.line;
     }
 
     int inside=0;
@@ -1373,21 +1373,21 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
     {
         const CMakeFunctionDesc funcDesc = ifast->content().at(lines);
         QString funcName=funcDesc.name;
-//         kDebug(9032) << "looking @" << lines << it->writeBack() << ">>" << inside << visited;
+//         qCDebug(CMAKE) << "looking @" << lines << it->writeBack() << ">>" << inside << visited;
         if(funcName=="if")
         {
             inside++;
         }
         else if(funcName=="endif")
         {
-            inside--; 
+            inside--;
             if(inside<=0) {
 //                 Q_ASSERT(!ini.isEmpty());
                 if(!funcDesc.arguments.isEmpty())
                     usesForArguments(ifast->condition(), ini, m_topctx, funcDesc);
                 break;
             }
-//                 kDebug(9042) << "found an endif at:" << lines << "but" << inside;
+//                 qCDebug(CMAKE) << "found an endif at:" << lines << "but" << inside;
         }
 
         if(inside==1)
@@ -1407,7 +1407,7 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
                 else
                 {
                     if(!myIf.parseFunctionInfo(resolveVariables(funcDesc)))
-                        kDebug(9042) << "uncorrect condition correct" << funcDesc.writeBack();
+                        qCDebug(CMAKE) << "uncorrect condition correct" << funcDesc.writeBack();
                     condition=myIf.condition();
                 }
                 result=cond.condition(condition);
@@ -1420,34 +1420,34 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
                     ini=cond.variableArguments();
 
                 usesForArguments(condition, cond.variableArguments(), m_topctx, funcDesc);
-                kDebug(9042) << ">> " << funcName << condition << result;
+                qCDebug(CMAKE) << ">> " << funcName << condition << result;
             }
             else if(funcName=="else")
             {
-                kDebug(9042) << ">> else";
+                qCDebug(CMAKE) << ">> else";
                 result=true;
                 usesForArguments(ifast->condition(), ini, m_topctx, funcDesc);
             }
 
             if(!visited && result)
             {
-                kDebug(9042) << "About to visit " << funcName << "?" << result;
+                qCDebug(CMAKE) << "About to visit " << funcName << "?" << result;
                 lines = walk(ifast->content(), lines+1)-1;
                 visited=true;
-//                 kDebug(9042) << "Visited. now in" << it->name;
+//                 qCDebug(CMAKE) << "Visited. now in" << it->name;
             }
         }
     }
 
     if(lines >= ifast->content().size())
     {
-        kDebug() << "error. found an unfinished endif";
+        qCDebug(CMAKE) << "error. found an unfinished endif";
         return ifast->content().size()-ifast->line();
     }
     else
     {
-//     kDebug() << "finish" << "<>" << ifast->condition() << '|' << lines-ifast->line() << " to " << lines << '<' << ifast->content().size();
-//     kDebug(9042) << "endif==" << ifast->content()[lines].writeBack();
+//     qCDebug(CMAKE) << "finish" << "<>" << ifast->condition() << '|' << lines-ifast->line() << " to " << lines << '<' << ifast->content().size();
+//     qCDebug(CMAKE) << "endif==" << ifast->content()[lines].writeBack();
         return lines-ifast->line()+1;
     }
 }
@@ -1467,7 +1467,7 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
         }
         args += arg.split(' ');
     }
-    kDebug(9042) << "Executing:" << execName << "::" << args << "in" << exec->workingDirectory();
+    qCDebug(CMAKE) << "Executing:" << execName << "::" << args << "in" << exec->workingDirectory();
 
     KProcess p;
     if(!exec->workingDirectory().isEmpty())
@@ -1478,12 +1478,12 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
 
     if(!p.waitForFinished())
     {
-        kDebug(9032) << "error: failed to execute:" << execName << "error:" << p.error() << p.exitCode();
+        qCDebug(CMAKE) << "error: failed to execute:" << execName << "error:" << p.error() << p.exitCode();
     }
 
     if(!exec->returnValue().isEmpty())
     {
-        kDebug(9042) << "execution returned: " << exec->returnValue() << " = " << p.exitCode();
+        qCDebug(CMAKE) << "execution returned: " << exec->returnValue() << " = " << p.exitCode();
         m_vars->insert(exec->returnValue(), QStringList(QString::number(p.exitCode())));
     }
 
@@ -1493,20 +1493,20 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
         QString t;
         t.prepend(b.trimmed());
         m_vars->insert(exec->outputVariable(), QStringList(t.trimmed()));
-        kDebug(9042) << "executed" << execName << "<" << t;
+        qCDebug(CMAKE) << "executed" << execName << "<" << t;
     }
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
 {
-    kDebug(9042) << "executing... " << exec->commands();
+    qCDebug(CMAKE) << "executing... " << exec->commands();
     QList<KProcess*> procs;
     foreach(const QStringList& _args, exec->commands())
     {
         if(_args.isEmpty())
         {
-            kDebug(9032) << "Error: trying to execute empty command";
+            qCDebug(CMAKE) << "Error: trying to execute empty command";
             break;
         }
         else
@@ -1537,7 +1537,7 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
         p->setProgram(execName, args);
         p->start();
         procs.append(p);
-        kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
+        qCDebug(CMAKE) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
 
         if(prev)
         {
@@ -1549,13 +1549,13 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
     {
         if(!p->waitForFinished())
         {
-            kDebug(9042) << "error: failed to execute:" << p;
+            qCDebug(CMAKE) << "error: failed to execute:" << p;
         }
     }
-    
+
     if(!procs.isEmpty() && !exec->resultVariable().isEmpty())
     {
-        kDebug(9042) << "execution returned: " << exec->resultVariable() << " = " << procs.last()->exitCode();
+        qCDebug(CMAKE) << "execution returned: " << exec->resultVariable() << " = " << procs.last()->exitCode();
         m_vars->insert(exec->resultVariable(), QStringList(QString::number(procs.last()->exitCode())));
     }
 
@@ -1566,7 +1566,7 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
         QString t;
         t.prepend(b.trimmed());
         m_vars->insert(exec->outputVariable(), QStringList(t.trimmed().replace("\\", "\\\\")));
-        kDebug(9042) << "executed " << exec->outputVariable() << "=" << t;
+        qCDebug(CMAKE) << "executed " << exec->outputVariable() << "=" << t;
     }
     qDeleteAll(procs);
     return 1;
@@ -1579,16 +1579,16 @@ int CMakeProjectVisitor::visit(const FileAst *file)
     switch(file->type()) //TODO
     {
         case FileAst::Write:
-            kDebug(9042) << "(ni) File write: " << file->path() << file->message();
+            qCDebug(CMAKE) << "(ni) File write: " << file->path() << file->message();
             break;
         case FileAst::Append:
-            kDebug(9042) << "(ni) File append: " << file->path() << file->message();
+            qCDebug(CMAKE) << "(ni) File append: " << file->path() << file->message();
             break;
         case FileAst::Read:
         {
             QUrl filename =file->path();
             QFileInfo ifile(filename.toLocalFile());
-            kDebug(9042) << "FileAst: reading " << file->path() << ifile.isFile();
+            qCDebug(CMAKE) << "FileAst: reading " << file->path() << ifile.isFile();
             if(!ifile.isFile())
                 return 1;
             QFile f(filename.toLocalFile());
@@ -1596,7 +1596,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                 return 1;
             QString output=f.readAll();
             m_vars->insert(file->variable(), QStringList(output));
-            kDebug(9042) << "FileAst: read ";
+            qCDebug(CMAKE) << "FileAst: read ";
         }
             break;
         case FileAst::Glob:
@@ -1609,10 +1609,10 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                 QString pathPrefix;
                 if (QDir::isRelativePath(expr) && pathPrefix.isEmpty())
                     pathPrefix = m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
-                
+
                 matches.append(traverseGlob(pathPrefix, expr, file->type() == FileAst::GlobRecurse, file->isFollowingSymlinks()));
             }
-            
+
             if (!file->path().isEmpty())
             {
                 // RELATIVE was specified, so we need to make all paths relative to file->path()
@@ -1624,8 +1624,8 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                 }
             }
             m_vars->insert(file->variable(), matches);
-            
-            kDebug(9042) << "glob. recurse:" << (file->type() == FileAst::GlobRecurse)
+
+            qCDebug(CMAKE) << "glob. recurse:" << (file->type() == FileAst::GlobRecurse)
                          << "RELATIVE: " << file->path()
                          << "FOLLOW_SYMLINKS: " << file->isFollowingSymlinks()
                          << ", " << file->globbingExpressions() << ": " << matches;
@@ -1633,14 +1633,14 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             break;
         case FileAst::Remove:
         case FileAst::RemoveRecurse:
-            kDebug(9042) << "warning. file-remove or remove_recurse. KDevelop won't remove anything.";
+            qCDebug(CMAKE) << "warning. file-remove or remove_recurse. KDevelop won't remove anything.";
             break;
         case FileAst::MakeDirectory:
-            kDebug(9042) << "warning. file-make_directory. KDevelop won't create anything.";
+            qCDebug(CMAKE) << "warning. file-make_directory. KDevelop won't create anything.";
             break;
         case FileAst::RelativePath:
             m_vars->insert(file->variable(), QStringList(QUrl::relativePath(file->directory(), file->path())));
-            kDebug(9042) << "file relative_path" << file->directory() << file->path();
+            qCDebug(CMAKE) << "file relative_path" << file->directory() << file->path();
             break;
         case FileAst::ToCmakePath:
 #ifdef Q_OS_WIN
@@ -1648,25 +1648,25 @@ int CMakeProjectVisitor::visit(const FileAst *file)
 #else
             m_vars->insert(file->variable(), file->path().split(':'));
 #endif
-            kDebug(9042) << "file TO_CMAKE_PATH variable:" << file->variable() << "="
+            qCDebug(CMAKE) << "file TO_CMAKE_PATH variable:" << file->variable() << "="
                     << m_vars->value(file->variable()) << "path:" << file->path();
             break;
         case FileAst::ToNativePath:
             m_vars->insert(file->variable(), QStringList(file->path().replace('/', QDir::separator())));
-            kDebug(9042) << "file TO_NATIVE_PATH variable:" << file->variable() << "="
+            qCDebug(CMAKE) << "file TO_NATIVE_PATH variable:" << file->variable() << "="
                     << m_vars->value(file->variable()) << "path:" << file->path();
             break;
         case FileAst::Strings: {
             QUrl filename =file->path();
             QFileInfo ifile(filename.toLocalFile());
-            kDebug(9042) << "FileAst: reading " << file->path() << ifile.isFile();
+            qCDebug(CMAKE) << "FileAst: reading " << file->path() << ifile.isFile();
             if(!ifile.isFile())
                 return 1;
             QFile f(filename.toLocalFile());
             if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
                 return 1;
             QStringList output=QString(f.readAll()).split('\n');
-            
+
             if(!file->regex().isEmpty()) {
                 QRegExp rx(file->regex());
                 for(QStringList::iterator it=output.begin(); it!=output.end(); ) {
@@ -1676,11 +1676,11 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                         it = output.erase(it);
                 }
             }
-            
+
             m_vars->insert(file->variable(), output);
         }   break;
         default:
-            kDebug(9032) << "error: not implemented. file:" << file->type() <<
+            qCDebug(CMAKE) << "error: not implemented. file:" << file->type() <<
                 "variable:" << file->variable() << "file:" << file->path() << file->content()[file->line()].arguments[0].value;
             break;
     }
@@ -1700,9 +1700,9 @@ int CMakeProjectVisitor::visit(const MathAst *math)
 
     if (result.isError())
     {
-        kDebug(9032) << "error: found an error while calculating" << math->expression();
+        qCDebug(CMAKE) << "error: found an error while calculating" << math->expression();
     }
-    kDebug(9042) << "math. " << math->expression() << "=" << result.toInteger();
+    qCDebug(CMAKE) << "math. " << math->expression() << "=" << result.toInteger();
     m_vars->insert(math->outputVariable(), QStringList(QString::number(result.toInteger())));
     return 1;
 }
@@ -1738,25 +1738,25 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
             val=fi.baseName();
             break;
         case GetFilenameComponentAst::Program:
-            kDebug(9042) << "error: filenamecopmonent PROGRAM not implemented"; //TODO: <<
+            qCDebug(CMAKE) << "error: filenamecopmonent PROGRAM not implemented"; //TODO: <<
             break;
     }
     m_vars->insert(filecomp->variableName(), QStringList(val));
-    kDebug(9042) << "filename component" << filecomp->variableName() << "= "
+    qCDebug(CMAKE) << "filename component" << filecomp->variableName() << "= "
             << filecomp->fileName() << "=" << val << endl;
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const GetSourceFilePropAst* prop)
 {
-    kDebug(9042) << "not supported yet :::" << prop->variableName();
+    qCDebug(CMAKE) << "not supported yet :::" << prop->variableName();
     m_vars->insert(prop->variableName(), QStringList());
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const OptionAst *opt)
 {
-    kDebug(9042) << "option" << opt->variableName() << "-" << opt->description();
+    qCDebug(CMAKE) << "option" << opt->variableName() << "-" << opt->description();
     if(!m_vars->contains(opt->variableName()) && !m_cache->contains(opt->variableName()))
     {
         m_vars->insert(opt->variableName(), QStringList(opt->defaultValue()));
@@ -1767,13 +1767,13 @@ int CMakeProjectVisitor::visit(const OptionAst *opt)
 int CMakeProjectVisitor::visit(const ListAst *list)
 {
     QString output = list->output();
-    
+
     QStringList theList = m_vars->value(list->list());
     switch(list->type())
     {
         case ListAst::Length:
             m_vars->insert(output, QStringList(QString::number(theList.count())));
-            kDebug(9042) << "List length" << m_vars->value(output);
+            qCDebug(CMAKE) << "List length" << m_vars->value(output);
             break;
         case ListAst::Get: {
             bool contains = m_vars->contains(list->list());
@@ -1782,7 +1782,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
                 foreach(int idx, list->index())
                 {
                     if(idx>=theList.count() || (-idx)>theList.count())
-                        kDebug(9032) << "error! trying to GET an element that doesn't exist!" << idx;
+                        qCDebug(CMAKE) << "error! trying to GET an element that doesn't exist!" << idx;
                     else if(idx>=0)
                         indices += theList[idx];
                     else
@@ -1791,7 +1791,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             } else
                 indices += "NOTFOUND";
             m_vars->insert(output, indices);
-            kDebug(9042) << "List: Get" << list->list() << theList << list->output() << list->index();
+            qCDebug(CMAKE) << "List: Get" << list->list() << theList << list->output() << list->index();
         }   break;
         case ListAst::Append:
             theList += list->elements();
@@ -1805,7 +1805,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
                 idx=theList.indexOf(element);
             }
             m_vars->insert(list->output(), QStringList(QString::number(idx)));
-            kDebug(9042) << "List: Find" << theList << list->output() << list->elements() << idx;
+            qCDebug(CMAKE) << "List: Find" << theList << list->output() << list->elements() << idx;
         }   break;
         case ListAst::Insert: {
             int p=list->index().first();
@@ -1817,7 +1817,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             m_vars->insert(list->list(), theList);
         }   break;
         case ListAst::RemoveItem:
-            kDebug(9042) << "list remove item: " << theList << list->elements();
+            qCDebug(CMAKE) << "list remove item: " << theList << list->elements();
             foreach(const QString& elem, list->elements())
             {
                 theList.removeAll(elem);
@@ -1829,7 +1829,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             QList<int> indices=list->index();
             std::sort(indices.begin(), indices.end());
             QList<int>::const_iterator it=indices.constEnd();
-            kDebug(9042) << "list remove: " << theList << indices;
+            qCDebug(CMAKE) << "list remove: " << theList << indices;
             do
             {
                 --it;
@@ -1857,7 +1857,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             m_vars->insert(list->list(), noduplicates);
         }   break;
     }
-    kDebug(9042) << "List!!" << list->output() << '='<< m_vars->value(list->output()) << " -> " << m_vars->value(list->list());
+    qCDebug(CMAKE) << "List!!" << list->output() << '='<< m_vars->value(list->output()) << " -> " << m_vars->value(list->list());
     return 1;
 }
 
@@ -1884,7 +1884,7 @@ static int toCommandEnd(const CMakeAst* fea)
 
 int CMakeProjectVisitor::visit(const ForeachAst *fea)
 {
-    kDebug(9042) << "foreach>" << fea->loopVar() << "=" << fea->arguments() << "range=" << fea->type();
+    qCDebug(CMAKE) << "foreach>" << fea->loopVar() << "=" << fea->arguments() << "range=" << fea->type();
     int end = -1;
     switch(fea->type()) {
         case ForeachAst::Range:
@@ -1902,7 +1902,7 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
             foreach(const QString& s, args)
             {
                 m_vars->insert(fea->loopVar(), QStringList(s));
-                kDebug(9042) << "looping" << fea->loopVar() << "=" << m_vars->value(fea->loopVar());
+                qCDebug(CMAKE) << "looping" << fea->loopVar() << "=" << m_vars->value(fea->loopVar());
                 end=walk(fea->content(), fea->line()+1);
                 if(m_hitBreak)
                     break;
@@ -1915,7 +1915,7 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
                 foreach(const QString& s, list)
                 {
                     m_vars->insert(fea->loopVar(), QStringList(s));
-                    kDebug(9042) << "looping" << fea->loopVar() << "=" << m_vars->value(fea->loopVar());
+                    qCDebug(CMAKE) << "looping" << fea->loopVar() << "=" << m_vars->value(fea->loopVar());
                     end=walk(fea->content(), fea->line()+1);
                     if(m_hitBreak)
                         break;
@@ -1923,20 +1923,20 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
             }
         }   break;
     }
-    
+
     if(end<0)
         end = toCommandEnd(fea);
     else
         end++;
-    
+
     m_hitBreak=false;
-    kDebug(9042) << "EndForeach" << fea->loopVar();
+    qCDebug(CMAKE) << "EndForeach" << fea->loopVar();
     return end-fea->line();
 }
 
 int CMakeProjectVisitor::visit(const StringAst *sast)
 {
-    kDebug(9042) << "String to" /*<< sast->input()*/ << sast->outputVariable();
+    qCDebug(CMAKE) << "String to" /*<< sast->input()*/ << sast->outputVariable();
     switch(sast->type())
     {
         case StringAst::Regex:
@@ -1976,13 +1976,13 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                 }
                     break;
                 default:
-                    kDebug(9032) << "ERROR String: Not a regex. " << sast->cmdType();
+                    qCDebug(CMAKE) << "ERROR String: Not a regex. " << sast->cmdType();
                     break;
             }
             for(int i=1; i<rx.captureCount()+1 && i<10; i++) {
                 m_vars->insert(QString("CMAKE_MATCH_%1").arg(i), QStringList(rx.cap(i)));
             }
-            kDebug() << "regex" << sast->outputVariable() << "=" << sast->regex() << res;
+            qCDebug(CMAKE) << "regex" << sast->outputVariable() << "=" << sast->regex() << res;
             m_vars->insert(sast->outputVariable(), res);
         }
             break;
@@ -1994,7 +1994,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                 QString aux=in.replace(sast->regex(), sast->replace());
                 out += aux.split(';'); //FIXME: HUGE ugly hack
             }
-            kDebug(9042) << "string REPLACE" << sast->input() << "=>" << out;
+            qCDebug(CMAKE) << "string REPLACE" << sast->input() << "=>" << out;
             m_vars->insert(sast->outputVariable(), out);
         }   break;
         case StringAst::Compare:
@@ -2016,7 +2016,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                         res = "FALSE";
                     break;
                 default:
-                    kDebug(9042) << "String: Not a compare. " << sast->cmdType();
+                    qCDebug(CMAKE) << "String: Not a compare. " << sast->cmdType();
             }
             m_vars->insert(sast->outputVariable(), QStringList(res));
         }
@@ -2033,7 +2033,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
         }   break;
         case StringAst::Configure:
             //This is not up to the cmake support
-            kDebug(9032) << "warning! String configure is not supported!" << sast->content()[sast->line()].writeBack();
+            qCDebug(CMAKE) << "warning! String configure is not supported!" << sast->content()[sast->line()].writeBack();
             break;
         case StringAst::ToUpper:
             m_vars->insert(sast->outputVariable(), QStringList(sast->input().join(QChar(';')).toUpper()));
@@ -2063,7 +2063,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             m_vars->insert(sast->outputVariable(), QStringList(result));
         }   break;
     }
-    kDebug(9042) << "String " << m_vars->value(sast->outputVariable());
+    qCDebug(CMAKE) << "String " << m_vars->value(sast->outputVariable());
     return 1;
 }
 
@@ -2074,7 +2074,7 @@ int CMakeProjectVisitor::visit(const GetCMakePropertyAst *past)
     switch(past->type())
     {
         case GetCMakePropertyAst::Variables:
-            kDebug(9042) << "get cmake prop: variables:" << m_vars->size();
+            qCDebug(CMAKE) << "get cmake prop: variables:" << m_vars->size();
             output = m_vars->keys();
             break;
         case GetCMakePropertyAst::CacheVariables:
@@ -2094,7 +2094,7 @@ int CMakeProjectVisitor::visit(const GetCMakePropertyAst *past)
 
 int CMakeProjectVisitor::visit(const CustomCommandAst *ccast)
 {
-    kDebug(9042) << "CustomCommand" << ccast->outputs();
+    qCDebug(CMAKE) << "CustomCommand" << ccast->outputs();
     if(ccast->isForTarget())
     {
         //TODO: implement me
@@ -2104,7 +2104,7 @@ int CMakeProjectVisitor::visit(const CustomCommandAst *ccast)
         foreach(const QString& out, ccast->outputs())
         {
             m_generatedFiles[out] = QStringList(ccast->mainDependency())/*+ccast->otherDependencies()*/;
-            kDebug(9042) << "Have to generate:" << out << "with" << m_generatedFiles[out];
+            qCDebug(CMAKE) << "Have to generate:" << out << "with" << m_generatedFiles[out];
         }
     }
     return 1;
@@ -2112,8 +2112,8 @@ int CMakeProjectVisitor::visit(const CustomCommandAst *ccast)
 
 int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
 {
-    kDebug(9042) << "custom_target " << ctar->target() << ctar->dependencies() << ", " << ctar->commandArgs();
-    kDebug(9042) << ctar->content()[ctar->line()].writeBack();
+    qCDebug(CMAKE) << "custom_target " << ctar->target() << ctar->dependencies() << ", " << ctar->commandArgs();
+    qCDebug(CMAKE) << ctar->content()[ctar->line()].writeBack();
 
     defineTarget(ctar->target(), ctar->dependencies() + ctar->sourceLists(), Target::Custom);
     return 1;
@@ -2121,7 +2121,7 @@ int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
 
 int CMakeProjectVisitor::visit(const AddDefinitionsAst *addDef)
 {
-//     kDebug(9042) << "Adding defs: " << addDef->definitions();
+//     qCDebug(CMAKE) << "Adding defs: " << addDef->definitions();
     CMakeParserUtils::addDefinitions(addDef->definitions(), &m_defs, true);
     return 1;
 }
@@ -2134,7 +2134,7 @@ int CMakeProjectVisitor::visit(const RemoveDefinitionsAst *remDef)
 
 int CMakeProjectVisitor::visit(const MarkAsAdvancedAst *maa)
 {
-    kDebug(9042) << "Mark As Advanced" << maa->advancedVars();
+    qCDebug(CMAKE) << "Mark As Advanced" << maa->advancedVars();
     return 1;
 }
 
@@ -2165,8 +2165,8 @@ int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
         default:
             break;
     }
-    kDebug() << "setprops" << setp->type() << args << setp->name() << setp->values();
-    
+    qCDebug(CMAKE) << "setprops" << setp->type() << args << setp->name() << setp->values();
+
     CategoryType& cm=m_props[setp->type()];
     if(setp->append()) {
         foreach(const QString &it, args) {
@@ -2211,13 +2211,13 @@ int CMakeProjectVisitor::visit(const GetPropertyAst* getp)
         retv = m_props[getp->type()][catn][getp->name()];
     }
     m_vars->insert(getp->outputVariable(), retv);
-    kDebug() << "getprops" << getp->type() << getp->name() << getp->typeName() << getp->outputVariable() << "=" << retv;
+    qCDebug(CMAKE) << "getprops" << getp->type() << getp->name() << getp->typeName() << getp->outputVariable() << "=" << retv;
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const GetDirPropertyAst* getdp)
 {
-    kDebug() << "getprops";
+    qCDebug(CMAKE) << "getprops";
     QStringList retv;
     QString dir=getdp->directory();
     if(dir.isEmpty()) {
@@ -2228,10 +2228,10 @@ int CMakeProjectVisitor::visit(const GetDirPropertyAst* getdp)
         u.setPath(u.path() + '/' + dir);
         dir=u.path();
     }
-    
+
     retv=m_props[DirectoryProperty][dir][getdp->propName()];
     m_vars->insert(getdp->outputVariable(), retv);
-    
+
     return 1;
 }
 
@@ -2254,27 +2254,27 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
     bool result=cond.condition(whileast->condition());
     usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, whileast->content()[whileast->line()]);
 
-    kDebug(9042) << "Visiting While" << whileast->condition() << "?" << result;
+    qCDebug(CMAKE) << "Visiting While" << whileast->condition() << "?" << result;
     int end = toCommandEnd(whileast);
 
     if(end<whileast->content().size())
     {
         usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, whileast->content()[end]);
-        
+
         if(result)
         {
             walk(whileast->content(), whileast->line()+1);
-            
+
             if(m_hitBreak) {
-                kDebug() << "break found. leaving loop";
+                qCDebug(CMAKE) << "break found. leaving loop";
                 m_hitBreak=false;
             } else
                 walk(whileast->content(), whileast->line());
         }
     }
-    
-    kDebug(9042) << "endwhile" << whileast->condition() /*<< whileast->content()[end]*/;
-    
+
+    qCDebug(CMAKE) << "endwhile" << whileast->condition() /*<< whileast->content()[end]*/;
+
     return end-whileast->line();
 }
 
@@ -2315,14 +2315,14 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
 {
     if(fc.isEmpty())
         return 0;
-    
+
     ReferencedTopDUContext aux=m_topctx;
 
     IndexedString url(fc.first().filePath);
-    
+
     if(!m_topctx || m_topctx->url()!=url)
     {
-        kDebug(9042) << "Creating a context for" << url;
+        qCDebug(CMAKE) << "Creating a context for" << url;
         m_topctx=createContext(url, aux ? aux : m_parentCtx, fc.last().endLine-1, fc.last().endColumn-1, isClean);
         if(!aux)
             aux=m_topctx;
@@ -2346,31 +2346,31 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
         {
             m_backtrace.pop();
             m_topctx=aux;
-            
+
             if(r==Break)
                 m_hitBreak=true;
             if(r==Return)
                 m_hitReturn=true;
             return line;
         }
-        
+
         CMakeAst* element = AstFactory::self()->createAst(it->name);
 
         createUses(*it);
-//         kDebug(9042) << "resolving:" << it->writeBack();
-            
+//         qCDebug(CMAKE) << "resolving:" << it->writeBack();
+
         CMakeFunctionDesc func = resolveVariables(*it); //FIXME not correct in while case
         bool correct = element->parseFunctionInfo(func);
-//         kDebug(9042) << "resolved:" << func.writeBack() << correct;
+//         qCDebug(CMAKE) << "resolved:" << func.writeBack() << correct;
         if(!correct)
         {
-            kDebug(9042) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl
+            qCDebug(CMAKE) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl
                 << " at" << url << ":" << func.line << endl;
             //FIXME: Should avoid to run?
         }
-        
+
         if(element->isDeprecated()) {
-            kDebug(9032) << "Warning: Using the function: " << func.name << " which is deprecated by cmake.";
+            qCDebug(CMAKE) << "Warning: Using the function: " << func.name << " which is deprecated by cmake.";
             DUChainWriteLocker lock(DUChain::lock());
             Problem::Ptr p(new Problem);
             p->setDescription(i18n("%1 is a deprecated command and should not be used", func.name));
@@ -2388,23 +2388,23 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
         m_backtrace.top().line = line;
         m_backtrace.top().context = m_topctx;
         delete element;
-        
+
         if(line>fc.count()) {
             Problem::Ptr p(new Problem);
             p->setDescription(i18n("Unfinished function. "));
             p->setRange(it->nameRange());
             p->setFinalLocation(DocumentRange(url, KDevelop::RangeInRevision(fc.first().range().start, fc.last().range().end).castToSimpleRange()));
-            
+
             DUChainWriteLocker lock(DUChain::lock());
             m_topctx->addProblem(p);
             break;
         }
-        
+
         it+=lines;
     }
     m_backtrace.pop();
     m_topctx=aux;
-    kDebug(9042) << "Walk stopped @" << line;
+    qCDebug(CMAKE) << "Walk stopped @" << line;
     return line;
 }
 
@@ -2412,7 +2412,7 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
 {
     if(!m_topctx)
         return;
-    
+
     foreach(const CMakeFunctionArgument &arg, ast->outputArguments())
     {
         if(!arg.isCorrect())
@@ -2449,10 +2449,10 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
         for(it=var.constBegin(); it!=itEnd; ++it)
         {
             QString var=arg.value.mid(it->first+1, it->second-it->first-1);
-            
+
             DUChainWriteLocker lock;
             QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var));
-            
+
             if(!decls.isEmpty())
             {
                 int idx=m_topctx->indexForUsedDeclaration(decls.first());
@@ -2494,9 +2494,9 @@ QStringList CMakeProjectVisitor::resolveDependencies(const QStringList & files) 
     {
         if(isGenerated(s))
         {
-            kDebug(9042) << "Generated:" << s;
+            qCDebug(CMAKE) << "Generated:" << s;
             QStringList gen = dependees(s);
-            
+
             foreach(const QString& file, gen)
             {
                 if(!ret.contains(file))
@@ -2513,7 +2513,7 @@ QStringList CMakeProjectVisitor::resolveDependencies(const QStringList & files) 
 
 QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QString& expression, bool recursive, bool followSymlinks)
 {
-    kDebug(9042) << "Starting from (" << startPath << ", " << expression << "," << recursive << ", " << followSymlinks << ")";
+    qCDebug(CMAKE) << "Starting from (" << startPath << ", " << expression << "," << recursive << ", " << followSymlinks << ")";
     QString expr = expression;
     int firstSlash = expr.indexOf('/');
     int slashShift = 0;
@@ -2526,7 +2526,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
     if (firstSlash == -1)
     {
         //We're in place. Lets match files from startPath dir.
-        kDebug(9042) << "Matching files in " << startPath << " with glob " << expr;
+        qCDebug(CMAKE) << "Matching files in " << startPath << " with glob " << expr;
         QStringList dirsToSearch;
         if (recursive)
         {
@@ -2539,7 +2539,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
             while (!dirsToExpand.empty())
             {
                 QString dir = dirsToExpand.dequeue();
-                kDebug(9042) << "Enqueueing " << dir;
+                qCDebug(CMAKE) << "Enqueueing " << dir;
                 dirsToSearch << dir;
                 QDir d(dir);
                 QStringList dirNames = d.entryList(dirFilters);
@@ -2572,7 +2572,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
     QStringList matchedDirs;
     if (dirGlob.contains('*') || dirGlob.contains('?') || dirGlob.contains('['))
     {
-        kDebug(9042) << "Got a dir glob " << dirGlob;
+        qCDebug(CMAKE) << "Got a dir glob " << dirGlob;
         if (startPath.isEmpty())
             return QStringList();
         //it's really a glob, not just dir name
@@ -2581,7 +2581,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
     else
     {
         //just a directory name. Add it as a match.
-        kDebug(9042) << "Got a simple folder " << dirGlob;
+        qCDebug(CMAKE) << "Got a simple folder " << dirGlob;
         matchedDirs << dirGlob;
     }
     QStringList matches;
@@ -2590,7 +2590,7 @@ QStringList CMakeProjectVisitor::traverseGlob(const QString& startPath, const QS
         path += '/';
     foreach(const QString& dirName, matchedDirs)
     {
-        kDebug(9042) << "Going resursive into " << path + dirName << " and glob " << rightExpression;
+        qCDebug(CMAKE) << "Going resursive into " << path + dirName << " and glob " << rightExpression;
         matches.append(traverseGlob(path + dirName, rightExpression, recursive, followSymlinks));
     }
     return matches;

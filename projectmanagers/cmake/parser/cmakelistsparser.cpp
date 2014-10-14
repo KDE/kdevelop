@@ -22,9 +22,9 @@
 #include "cmakelistsparser.h"
 // #include "cmakeprojectvisitor.h"
 #include "astfactory.h"
+#include "../debug.h"
 
 #include <QStack>
-#include <KDebug>
 #include <QDir>
 
 QMap<QChar, QChar> whatToScape()
@@ -47,7 +47,7 @@ QString CMakeFunctionArgument::unescapeValue(const QString& value)
     {
         return value;
     }
-    
+
     QString newValue;
     int last=0;
     QMap<QChar, QChar>::const_iterator itEnd = scapings.constEnd();
@@ -56,7 +56,7 @@ QString CMakeFunctionArgument::unescapeValue(const QString& value)
         newValue+=value.mid(last, i-last);
         const QChar current=value[i+1];
         QMap<QChar, QChar>::const_iterator it = scapings.constFind(current);
-        
+
         if(it!=itEnd)
             newValue += *it;
         else
@@ -65,7 +65,7 @@ QString CMakeFunctionArgument::unescapeValue(const QString& value)
         last=i+2;
     }
     newValue+=value.mid(last, value.size());
-//     qDebug() << "escapiiiiiiiiing" << value << newValue;
+//     qCDebug(CMAKE) << "escapiiiiiiiiing" << value << newValue;
     return newValue;
 }
 
@@ -105,7 +105,7 @@ CMakeFileContent readCMakeFile(const QString & _fileName)
     if ( !lexer )
         return CMakeFileContent();
     if ( !cmListFileLexer_SetFileName( lexer, qPrintable( _fileName ) ) ) {
-        kDebug(9042) << "cmake read error. could not read " << _fileName;
+        qCDebug(CMAKE) << "cmake read error. could not read " << _fileName;
         cmListFileLexer_Delete(lexer);
         return CMakeFileContent();
     }
@@ -140,7 +140,7 @@ CMakeFileContent readCMakeFile(const QString & _fileName)
 
                 if(readError)
                 {
-                    kDebug(9032) << "Error while parsing:" << function.name << "at" << function.line;
+                    qCDebug(CMAKE) << "Error while parsing:" << function.name << "at" << function.line;
                 }
             }
         }
@@ -225,7 +225,7 @@ bool CMakeFunctionDesc::operator==(const CMakeFunctionDesc & other) const
 {
     if(other.arguments.count()!=arguments.count() || name!=other.name)
         return false;
-    
+
     QList<CMakeFunctionArgument>::const_iterator it=arguments.constBegin();
     QList<CMakeFunctionArgument>::const_iterator itOther=other.arguments.constBegin();
     for(;it!=arguments.constEnd(); ++it, ++itOther)

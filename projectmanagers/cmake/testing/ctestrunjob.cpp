@@ -20,6 +20,7 @@
 #include "ctestrunjob.h"
 #include "ctestsuite.h"
 #include "qttestdelegate.h"
+#include "../debug.h"
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/icore.h>
@@ -35,7 +36,6 @@
 
 #include <KConfigGroup>
 #include <KProcess>
-#include <KDebug>
 #include <KLocalizedString>
 #include <KCompositeJob>
 
@@ -64,13 +64,13 @@ KJob* createTestJob(QString launchModeId, QStringList arguments )
     LaunchConfigurationType* type = ICore::self()->runController()->launchConfigurationTypeForId( "Native Application" );
     ILaunchMode* mode = ICore::self()->runController()->launchModeForId( launchModeId );
 
-    kDebug() << "got mode and type:" << type << type->id() << mode << mode->id();
+    qCDebug(CMAKE) << "got mode and type:" << type << type->id() << mode << mode->id();
     Q_ASSERT(type && mode);
 
     ILauncher* launcher = 0;
     foreach (ILauncher *l, type->launchers())
     {
-        //kDebug() << "avaliable launcher" << l << l->id() << l->supportedModes();
+        //qCDebug(CMAKE) << "avaliable launcher" << l << l->id() << l->supportedModes();
         if (l->supportedModes().contains(mode->id())) {
             launcher = l;
             break;
@@ -92,9 +92,9 @@ KJob* createTestJob(QString launchModeId, QStringList arguments )
                                                 0, //TODO add project
                                                 i18n("CTest") );
         ilaunch->config().writeEntry("ConfiguredByCTest", true);
-        //kDebug() << "created config, launching";
+        //qCDebug(CMAKE) << "created config, launching";
     } else {
-        //kDebug() << "reusing generated config, launching";
+        //qCDebug(CMAKE) << "reusing generated config, launching";
     }
     type->configureLaunchFromCmdLineArguments( ilaunch->config(), arguments );
     return ICore::self()->runController()->execute(launchModeId, ilaunch);
@@ -105,7 +105,7 @@ void CTestRunJob::start()
 //     if (!m_suite->cases().isEmpty())
 //     {
         // TODO: Find a better way of determining whether QTestLib is used by this test
-//         kDebug() << "Setting a QtTestDelegate";
+//         qCDebug(CMAKE) << "Setting a QtTestDelegate";
 //         setDelegate(new QtTestDelegate);
 //     }
 //     setStandardToolView(IOutputView::RunView);
@@ -137,7 +137,7 @@ void CTestRunJob::start()
         connect(m_outputJob->model(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(rowsInserted(QModelIndex,int,int)));
     }
     connect(m_job, SIGNAL(finished(KJob*)), SLOT(processFinished(KJob*)));
-    
+
     ICore::self()->testController()->notifyTestRunStarted(m_suite, cases_selected);
 }
 
@@ -168,7 +168,7 @@ void CTestRunJob::processFinished(KJob* job)
         setErrorText("Child job was killed.");
     }
 
-    kDebug() << result.suiteResult << result.testCaseResults;
+    qCDebug(CMAKE) << result.suiteResult << result.testCaseResults;
     ICore::self()->testController()->notifyTestRunFinished(m_suite, result);
     emitResult();
 }

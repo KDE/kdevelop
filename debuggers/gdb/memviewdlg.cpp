@@ -22,7 +22,6 @@
 #include <kglobalsettings.h>
 #include <KLocalizedString>
 #include <kdeversion.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 
 #include <QLabel>
@@ -129,7 +128,7 @@ namespace GDBDebugger
         if (isOk())
             slotEnableOrDisable();
 
-        connect(KDevelop::ICore::self()->debugController(), 
+        connect(KDevelop::ICore::self()->debugController(),
                 SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
                 SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
     }

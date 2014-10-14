@@ -23,14 +23,15 @@
 #include "executeplasmoidplugin.h"
 #include "plasmoidexecutionconfig.h"
 #include "plasmoidexecutionjob.h"
+#include "debug.h"
 #include <kpluginfactory.h>
-#include <KDebug>
 #include <KAboutData>
 #include <QUrl>
 #include <interfaces/icore.h>
 
 using namespace KDevelop;
 
+Q_LOGGING_CATEGORY(EXECUTEPLASMOID, "kdevelop.kdeintegration.executeplasmoid")
 K_PLUGIN_FACTORY(KDevExecutePlasmoidFactory, registerPlugin<ExecutePlasmoidPlugin>(); )
 // K_EXPORT_PLUGIN(KDevExecutePlasmoidFactory(KAboutData("kdevexecuteplasmoid", "kdevexecuteplasmoid", ki18n("Execute plasmoid support"), "55.2",
 //                                                       ki18n("Allows running of plasmoids"), KAboutData::License_GPL)
@@ -43,7 +44,7 @@ ExecutePlasmoidPlugin::ExecutePlasmoidPlugin(QObject *parent, const QVariantList
     KDEV_USE_EXTENSION_INTERFACE( IExecutePlugin )
     m_configType = new PlasmoidExecutionConfigType();
     m_configType->addLauncher( new PlasmoidLauncher( this ) );
-    kDebug() << "adding plasmoid launch config";
+    qCDebug(EXECUTEPLASMOID) << "adding plasmoid launch config";
     core()->runController()->addConfigurationType( m_configType );
 }
 

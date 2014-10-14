@@ -21,6 +21,7 @@
 #include "setuphelpers.h"
 #include "parser/rpp/preprocessor.h"
 #include "includepathcomputer.h"
+#include "debug.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -40,6 +41,8 @@
 #include <QThread>
 #include <QCoreApplication>
 
+Q_LOGGING_CATEGORY(CPP, "kdevelop.languages.cpp")
+
 template<class T>
 static QList<T> makeListUnique(const QList<T>& list)
 {
@@ -54,7 +57,7 @@ static QList<T> makeListUnique(const QList<T>& list)
       set.insert(item);
     }
   }
-  
+
   return ret;
 }
 
@@ -69,19 +72,19 @@ using namespace KDevelop;
 
 namespace CppUtils
 {
-  
+
 int findEndOfInclude(QString line)
 {
   QString tmp = line;
   tmp = tmp.trimmed();
   if(!tmp.startsWith("#"))
     return -1;
-  
+
   tmp = tmp.mid(1).trimmed();
 
   if(!tmp.startsWith("include"))
     return -1;
-  
+
   return line.indexOf("include") + 7;
 }
 
@@ -96,7 +99,7 @@ QString sourceOrHeaderCandidate( const QString &path_, bool fast )
     return QString();
   // extract the base path (full path without '.' and extension)
   QString base = path.left( path.length() - ext.length() - 1 );
-  //kDebug( 9007 ) << "base: " << base << ", ext: " << ext << endl;
+  //qCDebug(CPP) << "base: " << base << ", ext: " << ext << endl;
   // just the filename without the extension
   QString fileNameWoExt = fi.fileName();
   if ( !ext.isEmpty() )
@@ -135,10 +138,10 @@ QString sourceOrHeaderCandidate( const QString &path_, bool fast )
   QStringList::ConstIterator it;
   for ( it = candidates.constBegin(); it != candidates.constEnd(); ++it )
   {
-//     kDebug( 9007 ) << "Trying " << ( *it ) << endl;
+//     qCDebug(CPP) << "Trying " << ( *it ) << endl;
     if ( QFileInfo( *it ).exists() )
     {
-//       kDebug( 9007 ) << "using: " << *it << endl;
+//       qCDebug(CPP) << "using: " << *it << endl;
       return * it;
     }
   }
@@ -146,7 +149,7 @@ QString sourceOrHeaderCandidate( const QString &path_, bool fast )
   if(fast)
     return QString();
 
-  //kDebug( 9007 ) << "Now searching in project files." << endl;
+  //qCDebug(CPP) << "Now searching in project files." << endl;
   // Our last resort: search the project file list for matching files
 
   QFileInfo candidateFileWoExt;
@@ -157,7 +160,7 @@ QString sourceOrHeaderCandidate( const QString &path_, bool fast )
       if (project->inProject(file)) {
         foreach(const IndexedString& otherFile, project->fileSet()) {
           candidateFileWoExt.setFile(otherFile.str());
-          //kDebug( 9007 ) << "candidate file: " << otherFile.str() << endl;
+          //qCDebug(CPP) << "candidate file: " << otherFile.str() << endl;
           if( !candidateFileWoExt.suffix().isEmpty() )
             candidateFileWoExtString = candidateFileWoExt.fileName().replace( "." + candidateFileWoExt.suffix(), "" );
 
@@ -165,7 +168,7 @@ QString sourceOrHeaderCandidate( const QString &path_, bool fast )
           {
             if ( possibleExts.contains( candidateFileWoExt.suffix() ) || candidateFileWoExt.suffix().isEmpty() )
             {
-              //kDebug( 9007 ) << "checking if " << url << " exists" << endl;
+              //qCDebug(CPP) << "checking if " << url << " exists" << endl;
               return otherFile.str();
             }
           }
@@ -184,7 +187,7 @@ bool isHeader(const QUrl &url) {
   QString ext = fi.suffix();
   if ( ext.isEmpty() )
     return true;
-  
+
   return headerExtensions().contains(ext);
 }
 
@@ -199,15 +202,15 @@ QPair<Path, Path> findInclude(const Path::List& includePaths, const Path& localP
                               const Path& skipPath, bool quiet){
     QPair<Path, Path> ret;
 #ifdef DEBUG
-    kDebug(9007) << "searching for include-file" << includeName;
+    qCDebug(CPP) << "searching for include-file" << includeName;
     if( !skipPath.isEmpty() )
-        kDebug(9007) << "skipping path" << skipPath;
+        qCDebug(CPP) << "skipping path" << skipPath;
 #endif
 
     if (includeName.startsWith('/')) {
         QFileInfo info(includeName);
         if (info.exists() && info.isReadable() && info.isFile()) {
-            //kDebug(9007) << "found include file:" << info.absoluteFilePath();
+            //qCDebug(CPP) << "found include file:" << info.absoluteFilePath();
             ret.first = Path(info.canonicalFilePath());
             ret.second = Path("/");
             return ret;
@@ -218,7 +221,7 @@ QPair<Path, Path> findInclude(const Path::List& includePaths, const Path& localP
         Path check(localPath, includeName);
         QFileInfo info(check.toLocalFile());
         if (info.exists() && info.isReadable() && info.isFile()) {
-            //kDebug(9007) << "found include file:" << info.absoluteFilePath();
+            //qCDebug(CPP) << "found include file:" << info.absoluteFilePath();
             ret.first = check;
             ret.second = localPath;
             return ret;
@@ -241,7 +244,7 @@ restart:
         QFileInfo info(check.toLocalFile());
 
         if (info.exists() && info.isReadable() && info.isFile()) {
-            //kDebug(9007) << "found include file:" << info.absoluteFilePath();
+            //qCDebug(CPP) << "found include file:" << info.absoluteFilePath();
             ret.first = check;
             ret.second = path;
             return ret;
@@ -267,13 +270,13 @@ restart:
         if(!includeName.isNull() && artificialCodeRepresentationExists(IndexedString(includeName)))
         {
             ret.first = Path(CodeRepresentation::artificialPath(includeName));
-            kDebug() << "Utilizing Artificial code for include: " << includeName;
+            qCDebug(CPP) << "Utilizing Artificial code for include: " << includeName;
         }
         else if(!quiet ) {
-            kDebug() << "FAILED to find include-file" << includeName << "in paths:" << includePaths;
+            qCDebug(CPP) << "FAILED to find include-file" << includeName << "in paths:" << includePaths;
         }
     }
-    
+
     return ret;
 }
 
@@ -388,7 +391,7 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const QString& source, bool l
             QString suffix = dirContent.fileInfo().suffix();
             if(!dirContent.fileInfo().suffix().isEmpty() && !headerExtensions().contains(suffix) && (!allowSourceFiles || !sourceExtensions().contains(suffix)))
               continue;
-            
+
             QString fullPath = dirContent.fileInfo().canonicalFilePath();
             if (hadIncludePaths.contains(fullPath)) {
               continue;
@@ -401,7 +404,7 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const QString& source, bool l
             } else {
               item.basePath = QUrl::fromLocalFile(searchPath);
             }
-            
+
             item.isDirectory = dirContent.fileInfo().isDir();
             item.pathNumber = pathNumber;
 

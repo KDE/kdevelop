@@ -23,11 +23,11 @@
 #include <qmath.h>
 #include <QRegExp>
 
-#include <KDebug>
 
 #include "../debugsession.h"
 #include "../gdbcommand.h"
 #include "../mi/gdbmi.h"
+#include "../debug.h"
 #include "converters.h"
 
 namespace GDBDebugger
@@ -45,7 +45,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
     }
 
     if (m_pendingGroups.contains(group)) {
-        kDebug() << "Already updating " << group.name();
+        qCDebug(DEBUGGERGDB) << "Already updating " << group.name();
         return;
     }
 
@@ -55,7 +55,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
         }
         return;
     } else {
-        kDebug() << "Updating: " << group.name();
+        qCDebug(DEBUGGERGDB) << "Updating: " << group.name();
         m_pendingGroups << group;
     }
 
@@ -101,7 +101,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
 
     //Not initialized yet. They'll be updated afterwards.
     if (registers.contains("-1")) {
-        kDebug() << "Will update later";
+        qCDebug(DEBUGGERGDB) << "Will update later";
         m_pendingGroups.clear();
         return;
     }
@@ -229,7 +229,7 @@ void IRegisterController::setFlagRegister(const Register& reg, const FlagRegiste
         setGeneralRegister(Register(flag.registerName, QString("0x%1").arg(flagsValue, 0, 16)), flag.groupName);
     } else {
         updateRegisters(flag.groupName);
-        kDebug() << reg.name << ' ' << reg.value << "is incorrect flag name/value";
+        qCDebug(DEBUGGERGDB) << reg.name << ' ' << reg.value << "is incorrect flag name/value";
     }
 }
 
@@ -240,7 +240,7 @@ void IRegisterController::setGeneralRegister(const Register& reg, const GroupsNa
     }
 
     const QString command = QString("set var $%1=%2").arg(reg.name).arg(reg.value);
-    kDebug() << "Setting register: " << command;
+    qCDebug(DEBUGGERGDB) << "Setting register: " << command;
 
     m_debugSession->addCommand(new GDBCommand(GDBMI::NonMI, command));
     updateRegisters(group);

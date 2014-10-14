@@ -20,10 +20,10 @@
 
 #include "cmakecachemodel.h"
 #include <QFile>
-#include <KDebug>
 #include <KLocalizedString>
 
 #include "cmakecachereader.h"
+#include "../debug.h"
 
 //4 columns: name, type, value, comment
 //name:type=value - comment
@@ -56,7 +56,7 @@ void CMakeCacheModel::read()
     QFile file(m_filePath.toLocalFile());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        kDebug(9032) << "error. Could not find the file";
+        qCDebug(CMAKE) << "error. Could not find the file";
         return;
     }
 
@@ -73,11 +73,11 @@ void CMakeCacheModel::read()
         {
             CacheLine c;
             c.readLine(line);
-            
+
             if(c.isCorrect())
             {
                 QString name=c.name(), flag=c.flag();
-                
+
                 QString type=c.type();
                 QString value=c.value();
 
@@ -108,10 +108,10 @@ void CMakeCacheModel::read()
                     }
                     else
                     {
-                        kDebug(9032) << "Flag for an unknown variable";
+                        qCDebug(CMAKE) << "Flag for an unknown variable";
                     }
                 }
-                
+
                 if(!flag.isEmpty())
                 {
                     lineItems[0]->setText(lineItems[0]->text()+'-'+flag);
@@ -125,22 +125,22 @@ void CMakeCacheModel::read()
         else if(line.startsWith('#') && line.contains("INTERNAL"))
         {
             m_internalBegin=currentIdx;
-//                 kDebug(9032) << "Comment: " << line << " -.- " << currentIdx;
+//                 qCDebug(CMAKE) << "Comment: " << line << " -.- " << currentIdx;
         }
         else if(!line.startsWith('#') && !line.isEmpty())
         {
-            kDebug(9032) << "unrecognized cache line: " << line;
+            qCDebug(CMAKE) << "unrecognized cache line: " << line;
         }
     }
 }
 
 bool CMakeCacheModel::writeBack(const KDevelop::Path &path) const
 {
-    kDebug(9042) << "writing CMakeCache.txt at " << path;
+    qCDebug(CMAKE) << "writing CMakeCache.txt at " << path;
     QFile file(path.toLocalFile());
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        kDebug(9032) << "Could not open " << path << " the file for writing";
+        qCDebug(CMAKE) << "Could not open " << path << " the file for writing";
         return false;
     }
 
@@ -169,7 +169,7 @@ bool CMakeCacheModel::writeBack(const KDevelop::Path &path) const
             out << "# INTERNAL cache entries" << endl;
             out << "########################" << endl << endl;
         }
-        
+
         QStandardItem* name = item(i, 0);
         QStandardItem* type = item(i, 1);
         QStandardItem* valu = item(i, 2);
@@ -220,7 +220,7 @@ bool CMakeCacheModel::isAdvanced(int i) const
         p=item(i, 1);
         isAdv = p->text()=="INTERNAL" || p->text()=="STATIC";
     }
-    
+
     if(!isAdv)
     {
         m_internal.contains(item(i,0)->text());

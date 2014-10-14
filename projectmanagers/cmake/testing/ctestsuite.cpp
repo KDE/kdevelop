@@ -19,9 +19,9 @@
 
 #include "ctestsuite.h"
 #include "ctestrunjob.h"
+#include "../debug.h"
 
 #include <KProcess>
-#include <KDebug>
 #include <QFileInfo>
 
 #include <interfaces/itestcontroller.h>
@@ -51,7 +51,7 @@ m_expectFail(expectFail)
 {
     m_executable.cleanPath();
     Q_ASSERT(project);
-    kDebug() << m_name << m_executable << m_project->name();
+    qCDebug(CMAKE) << m_name << m_executable << m_project->name();
 }
 
 CTestSuite::~CTestSuite()
@@ -65,7 +65,7 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
     TopDUContext* topContext = DUChainUtils::contentContextFromProxyContext(ref.data());
     if (!topContext)
     {
-        kDebug() << "No top context in" << document.str();
+        qCDebug(CMAKE) << "No top context in" << document.str();
         return;
     }
 
@@ -75,15 +75,15 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
     {
         if (declaration->isDefinition())
         {
-            kDebug() << "Found a definition for a function 'main()' ";
+            qCDebug(CMAKE) << "Found a definition for a function 'main()' ";
             FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(declaration);
             DUContext* main = def->internalContext();
             foreach (Declaration* mainDeclaration, main->localDeclarations(topContext))
             {
                 if (mainDeclaration->identifier() == testCaseIdentifier)
                 {
-                    kDebug() << "Found tc declaration in main:" << mainDeclaration->identifier().toString();
-                    kDebug() << "Its type is" << mainDeclaration->abstractType()->toString();
+                    qCDebug(CMAKE) << "Found tc declaration in main:" << mainDeclaration->identifier().toString();
+                    qCDebug(CMAKE) << "Its type is" << mainDeclaration->abstractType()->toString();
                     if (StructureType::Ptr type = mainDeclaration->abstractType().cast<StructureType>())
                     {
                         testClass = type->declaration(topContext);
@@ -95,7 +95,7 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
 
     if (!testClass || !testClass->internalContext())
     {
-        kDebug() << "No test class found or internal context missing in " << document.str();
+        qCDebug(CMAKE) << "No test class found or internal context missing in " << document.str();
         return;
     }
 
@@ -106,25 +106,25 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
 
     foreach (Declaration* decl, testClass->internalContext()->localDeclarations(topContext))
     {
-        kDebug() << "Found declaration" << decl->toString() << decl->identifier().identifier().byteArray();
+        qCDebug(CMAKE) << "Found declaration" << decl->toString() << decl->identifier().identifier().byteArray();
         if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(decl))
         {
             if (function->accessPolicy() == Declaration::Private && function->isSlot())
             {
                 QString name = function->qualifiedIdentifier().last().toString();
-                kDebug() << "Found private slot in test" << name; 
+                qCDebug(CMAKE) << "Found private slot in test" << name;
 
                 if (name.endsWith("_data"))
                 {
                     continue;
                 }
 
-                if (name != "initTestCase" && name != "cleanupTestCase" 
+                if (name != "initTestCase" && name != "cleanupTestCase"
                     && name != "init" && name != "cleanup")
                 {
                     m_cases << name;
                 }
-                kDebug() << "Found test case function declaration" << function->identifier().toString();
+                qCDebug(CMAKE) << "Found test case function declaration" << function->identifier().toString();
 
                 FunctionDefinition* def = FunctionDefinition::definition(decl);
                 m_declarations[name] = def ? IndexedDeclaration(def) : IndexedDeclaration(function);
@@ -140,8 +140,8 @@ KJob* CTestSuite::launchCase(const QString& testCase, TestJobVerbosity verbosity
 
 KJob* CTestSuite::launchCases(const QStringList& testCases, ITestSuite::TestJobVerbosity verbosity)
 {
-    kDebug() << "Launching test run" << m_name << "with cases" << testCases;
-    
+    qCDebug(CMAKE) << "Launching test run" << m_name << "with cases" << testCases;
+
     OutputJob::OutputJobVerbosity outputVerbosity = (verbosity == Verbose) ? OutputJob::Verbose : OutputJob::Silent;
     return new CTestRunJob(this, testCases, outputVerbosity, m_expectFail);
 }

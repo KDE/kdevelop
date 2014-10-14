@@ -17,11 +17,9 @@
 */
 
 #include "dumptypes.h"
+#include "debug.h"
 
 #include <language/duchain/types/alltypes.h>
-#include <kdebug.h>
-
-#include <KDebug>
 
 using namespace KDevelop;
 
@@ -43,7 +41,7 @@ void DumpTypes::dump(const AbstractType * type)
 bool DumpTypes::preVisit(const AbstractType * type)
 {
   ++indent;
-  kDebug(9007) << QString(indent*2, ' ') << type->toString();
+  qCDebug(CPPDUCHAIN) << QString(indent*2, ' ') << type->toString();
   return true;
 }
 

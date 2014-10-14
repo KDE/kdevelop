@@ -14,7 +14,6 @@
 // **************************************************************************
 
 #include "gdbparser.h"
-#include <kdebug.h>
 
 #include <QRegExp>
 #include <QByteArray>
@@ -117,7 +116,7 @@ QString GDBParser::undecorateValue(DataType type, const QString& s)
         // type as well. This is not necessary for kdevelop -- after
         // all, there's separate column with value type. But that behaviour
         // is not configurable. The only way to change it is to explicitly
-        // pass the 'x' format specifier to the 'print' command. 
+        // pass the 'x' format specifier to the 'print' command.
         //
         // We probably can achieve that by sending an 'print in hex' request
         // as soon as we know the type of variable, but that would be complex
@@ -151,7 +150,7 @@ QString GDBParser::undecorateValue(DataType type, const QString& s)
 
     if (value.indexOf("Cannot access memory") == 0)
         value = "(inaccessible)";
-  
+
     return value.trimmed();
 }
 
@@ -174,7 +173,7 @@ DataType pointerOrValue(const char *buf)
         else
             break;
     }
-    
+
     return typePointer;
 }
 

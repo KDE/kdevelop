@@ -1,4 +1,3 @@
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9045 )
 include_directories(${Qt5Help_INCLUDE_DIRS})
 
 set(kdevqthelp_SRCS
@@ -8,6 +7,7 @@ set(kdevqthelp_SRCS
     qthelpdocumentation.cpp
     qthelpqtdoc.cpp
     qthelp_config_shared.cpp
+    debug.cpp
 )
 
 add_library(kdevqthelp MODULE ${kdevqthelp_SRCS})
@@ -25,6 +25,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp.desktop DESTINATION ${SERVI
 set(kdevqthelp_config_SRCS
     qthelpconfig.cpp
     qthelp_config_shared.cpp
+    debug.cpp
 )
 
 qt5_wrap_ui(kdevqthelp_config_SRCS
@@ -34,7 +35,7 @@ qt5_wrap_ui(kdevqthelp_config_SRCS
 
 add_library(kdevqthelp_config MODULE ${kdevqthelp_config_SRCS} )
 
-target_link_libraries( kdevqthelp_config 
+target_link_libraries( kdevqthelp_config
  KF5::KIOWidgets Qt5::Help KF5::NewStuff KF5::KCMUtils KF5::I18n KF5::KDELibs4Support)
 
 install(TARGETS kdevqthelp_config DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)

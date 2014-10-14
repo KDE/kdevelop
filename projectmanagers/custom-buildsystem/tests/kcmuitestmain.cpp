@@ -27,12 +27,12 @@
 #include <qtextstream.h>
 #include <qdir.h>
 #include <kpushbutton.h>
-#include <kdebug.h>
 #include <QStandardPaths>
 
 #include <tests/testproject.h>
 
 #include "custombuildsystemconfigwidget.h"
+#include "../debug.h"
 
 static const char description[] =
     I18N_NOOP("CustomBuildSystem Config Ui Test App");
@@ -72,8 +72,6 @@ private:
     KDevelop::IProject* project;
 };
 
-extern int cbsDebugArea(); // from debugarea.cpp
-
 int main(int argc, char **argv)
 {
     K4AboutData about("kcm_uitest", 0, ki18n("kcm_uitest"), version, ki18n(description),
@@ -87,7 +85,7 @@ int main(int argc, char **argv)
 
     KTempDir tempdir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"/kdev-custom-uitest");
 
-    kDebug(cbsDebugArea()) << "created tempdir:" << tempdir.name();
+    qCDebug(CUSTOMBUILDSYSTEM) << "created tempdir:" << tempdir.name();
 
     KConfig projkcfg( tempdir.name() + "/kdev-custom-uitest.kdev4" );
 
@@ -98,14 +96,14 @@ int main(int argc, char **argv)
     projdir.mkpath("subtree/deeptree");
     projdir.mkpath("subtree/deeptree/includedir");
 
-    kDebug(cbsDebugArea()) << "project config:" << projkcfg.name();
+    qCDebug(CUSTOMBUILDSYSTEM) << "project config:" << projkcfg.name();
 
     KDialog dlg;
     dlg.setButtons( KDialog::Ok | KDialog::Apply | KDialog::Cancel );
 
     KDevelop::TestProject proj;
     proj.setPath( KDevelop::Path(projkcfg.name()));
-    
+
     CustomBuildSystemConfigWidget widget(nullptr);
     widget.loadFrom(&projkcfg);
     dlg.setMainWidget(&widget);
@@ -118,9 +116,9 @@ int main(int argc, char **argv)
     State state(&dlg, &widget, &projkcfg, &proj );
 
     dlg.resize(800, 600);
-    
+
     dlg.show();
-    
+
     return app.exec();
 
 }
