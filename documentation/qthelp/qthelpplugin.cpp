@@ -23,7 +23,6 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <KAboutData>
-#include <ksettings/dispatcher.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <QDirIterator>
@@ -31,10 +30,11 @@
 #include "qthelpqtdoc.h"
 #include "qthelp_config_shared.h"
 #include "debug.h"
+#include "qthelpconfig.h"
 
 QtHelpPlugin *QtHelpPlugin::s_plugin = 0;
 
-K_PLUGIN_FACTORY_DEFINITION(QtHelpFactory, registerPlugin<QtHelpPlugin>(); )
+K_PLUGIN_FACTORY_DEFINITION(QtHelpFactory, registerPlugin<QtHelpPlugin>();)
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     : KDevelop::IPlugin("kdevqthelp", parent)
@@ -45,8 +45,6 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
 
     Q_UNUSED(args);
     s_plugin = this;
-    KSettings::Dispatcher::registerComponent( "kdevqthelp_config",
-                                                    this, "readConfig" );
     connect(this, &QtHelpPlugin::changedProvidersList, KDevelop::ICore::self()->documentationController(), &KDevelop::IDocumentationController::changedDocumentationProviders);
     QMetaObject::invokeMethod(this, "readConfig", Qt::QueuedConnection);
 }
@@ -164,3 +162,17 @@ QList<QtHelpProvider*> QtHelpPlugin::qtHelpProviderLoaded()
 bool QtHelpPlugin::qtHelpQtDocLoaded(){
     return m_qtDoc;
 }
+
+KDevelop::ConfigPage* QtHelpPlugin::configPage(int number, QWidget* parent)
+{
+    if (number == 0) {
+        return new QtHelpConfig(this, parent);
+    }
+    return nullptr;
+}
+
+int QtHelpPlugin::configPages() const
+{
+    return 1;
+}
+

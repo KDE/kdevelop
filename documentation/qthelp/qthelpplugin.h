@@ -43,6 +43,9 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
         QList<QtHelpProvider*> qtHelpProviderLoaded();
         bool qtHelpQtDocLoaded();
 
+        virtual int configPages() const override;
+        virtual KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
+
     public slots:
         void readConfig();
     signals:
@@ -57,6 +60,6 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
         QtHelpQtDoc* m_qtDoc;
 };
 
-K_PLUGIN_FACTORY_DECLARATION(QtHelpFactory)
+K_PLUGIN_FACTORY_DECLARATION_WITH_BASEFACTORY_JSON(QtHelpFactory, KPluginFactory, "kdevqthelp.json")
 
 #endif // QTHELPPLUGIN_H

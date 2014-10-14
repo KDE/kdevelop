@@ -21,6 +21,7 @@ target_link_libraries(kcm_kdev_ninjabuilder
 	KF5::KIOWidgets
 	KDev::Interfaces
 	KDev::Project
+	KDev::Shell
 	KDev::Util)
 
 install(TARGETS kcm_kdev_ninjabuilder DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)

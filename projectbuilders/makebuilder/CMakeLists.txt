@@ -34,7 +34,7 @@ set( makebuilder_cfg_UI
 ki18n_wrap_ui( makebuilder_cfg_SRCS ${makebuilder_cfg_UI} )
 kconfig_add_kcfg_files( makebuilder_cfg_SRCS makebuilderconfig.kcfgc )
 add_library(kcm_kdev_makebuilder MODULE ${makebuilder_cfg_SRCS} )
-target_link_libraries( kcm_kdev_makebuilder KF5::KIOWidgets KDev::Interfaces KDev::Project KDev::Util )
+target_link_libraries(kcm_kdev_makebuilder KF5::KIOWidgets KDev::Interfaces KDev::Project KDev::Util KDev::Shell)
 
 install(TARGETS kcm_kdev_makebuilder DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
 

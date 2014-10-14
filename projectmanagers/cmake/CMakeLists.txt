@@ -108,7 +108,7 @@ target_link_libraries( kdevcmakedocumentation
 ki18n_wrap_ui( cmakesettings_SRCS ${cmakesettings_UI} )
 add_library(kcm_kdevcmake_settings MODULE ${cmakesettings_SRCS} )
 target_link_libraries( kcm_kdevcmake_settings KF5::KIOWidgets KF5::KDELibs4Support
-                       KDev::Interfaces KDev::Project KDev::Util
+                       KDev::Interfaces KDev::Project KDev::Util KDev::Shell
                        kdevcmakecommon )
 
 install(TARGETS kdevcmakemanager DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )

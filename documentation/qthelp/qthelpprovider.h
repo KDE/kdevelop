@@ -27,7 +27,7 @@
 class QtHelpProvider : public QtHelpProviderAbstract
 {
     Q_OBJECT
-    Q_INTERFACES( KDevelop::IDocumentationProvider )
+    //Q_INTERFACES( KDevelop::IDocumentationProvider )
 public:
     QtHelpProvider(QObject *parent, const QString &fileName, const QString &name, const QString &iconName, const QVariantList & args);
 
