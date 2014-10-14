@@ -28,7 +28,12 @@ class ConfigPage;
 class IPlugin;
 
 /**
- * This class is meant to be used to show the global config dialog and the per-project config dialog
+ * This class is meant to be used to show the global config dialog and the per-project config dialog.
+ *
+ * This used to be handled by KSettings::Dialog, but since we are no longer using KCMs for config widgets,
+ * we use this class instead.
+ *
+ * TODO: check if we can share this with Kate
  */
 class ConfigDialog : public KPageDialog
 {

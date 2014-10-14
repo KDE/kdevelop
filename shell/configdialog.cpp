@@ -22,7 +22,6 @@
 
 #include <QPushButton>
 #include <QCloseEvent>
-#include <QDebug>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -58,7 +57,6 @@ KDevelop::ConfigDialog::ConfigDialog(QList<ConfigPage*> pages, QWidget* parent, 
         auto page = qobject_cast<ConfigPage*>(currentPage()->widget());
         Q_ASSERT(page);
         page->defaults();
-        qDebug("Restored defaults");
     });
 
     connect(this, &KPageDialog::currentPageChanged, this, &ConfigDialog::checkForUnsavedChanges);
@@ -80,7 +78,6 @@ KPageWidgetItem* KDevelop::ConfigDialog::itemForPage(ConfigPage* page) const
 
 int KDevelop::ConfigDialog::checkForUnsavedChanges(KPageWidgetItem* current, KPageWidgetItem* before)
 {
-    qDebug() << "Check for unsaved changes: before =" << before << (before ? before->name() : QString()) << ", current = " << current << (current ? current->name() : QString());
     Q_UNUSED(current);
     if (m_currentPageHasChanges) {
         // before must be non-null, because if we change from nothing to a new page m_currentPageHasChanges must also be false!
@@ -107,12 +104,10 @@ int KDevelop::ConfigDialog::checkForUnsavedChanges(KPageWidgetItem* current, KPa
 
 void KDevelop::ConfigDialog::closeEvent(QCloseEvent* event)
 {
-    // only close dialog if the user doesn't click cancel
     if (checkForUnsavedChanges(currentPage(), currentPage()) == KMessageBox::Cancel) {
-        qDebug("Not closing");
+        // if the user clicked cancel he wants to continue editing the current page -> don't close
         event->ignore();
     } else {
-        qDebug("closing");
         event->accept();
     }
 }
@@ -130,9 +125,6 @@ void KDevelop::ConfigDialog::removeConfigPage(ConfigPage* page)
 void KDevelop::ConfigDialog::removePagesForPlugin(KDevelop::IPlugin* plugin)
 {
     Q_ASSERT(plugin);
-    qDebug("Plugin %s (%p) is about to be unloaded.",
-            qPrintable(ICore::self()->pluginController()->pluginInfo(plugin).pluginName()), plugin);
-    qDebug() << m_pages.size() << "pages before:" << m_pages;
     for (auto it = m_pages.begin(); it != m_pages.end(); ++it) {
         auto item = *it;
         if (!item) {
@@ -140,15 +132,13 @@ void KDevelop::ConfigDialog::removePagesForPlugin(KDevelop::IPlugin* plugin)
         }
         auto page = qobject_cast<ConfigPage*>(item->widget());
         if (page && page->plugin() == plugin) {
-            qDebug("Removing page %s (%s) (%p) because associated plugin (%p) is unloading.",
-                    qPrintable(page->name()), qPrintable(page->fullName()), item.data(), page->plugin());
+            // qDebug("Removing page %s (%s) (%p) because associated plugin (%p) is unloading.",
+            //      qPrintable(page->name()), qPrintable(page->fullName()), item.data(), page->plugin());
             removePage(item); // this also deletes the config page -> QPointer is set to null
         }
     };
-    qDebug() << m_pages.size() << "Pages before after:" << m_pages;
     // also remove all items that were deleted because a parent KPageWidgetItem was removed
     m_pages.removeAll(QPointer<KPageWidgetItem>());
-    qDebug() << m_pages.size() << "Pages before after null removal:" << m_pages;
 }
 
 void KDevelop::ConfigDialog::addConfigPage(ConfigPage* page, ConfigPage* previous)
@@ -209,6 +199,5 @@ void KDevelop::ConfigDialog::applyChanges(ConfigPage* page)
     m_currentlyApplyingChanges = false;
     Q_ASSERT(!m_currentPageHasChanges);
     button(QDialogButtonBox::Apply)->setEnabled(false);
-    qDebug("Applied changes to page '%s'", qPrintable(page->name()));
     emit configSaved(page);
 }
