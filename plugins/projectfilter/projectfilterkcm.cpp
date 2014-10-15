@@ -79,7 +79,7 @@ ProjectFilterKCM::ProjectFilterKCM(ProjectFilterProvider* provider, const Projec
 
     connect(m_ui->filters->selectionModel(), &QItemSelectionModel::currentChanged,
             this, &ProjectFilterKCM::selectionChanged);
-    connect(this, static_cast<void(ProjectFilterKCM::*)(bool)>(&ProjectFilterKCM::changed), this, &ProjectFilterKCM::selectionChanged);
+    connect(this, &ProjectFilterKCM::changed, this, &ProjectFilterKCM::selectionChanged);
     connect(m_model, &FilterModel::dataChanged, this, &ProjectFilterKCM::emitChanged);
     connect(m_model, &FilterModel::rowsInserted, this, &ProjectFilterKCM::emitChanged);
     connect(m_model, &FilterModel::rowsRemoved, this, &ProjectFilterKCM::emitChanged);

@@ -50,6 +50,7 @@ set(KDevPlatformShell_LIB_SRCS
     projectsourcepage.cpp
     debug.cpp
     configdialog.cpp
+    editorconfigpage.cpp
 
     progresswidget/progressmanager.cpp
     progresswidget/statusbarprogresswidget.cpp

@@ -26,9 +26,10 @@
 #include <QListWidget>
 #include <QToolBar>
 #include <QMenuBar>
-#include <QVBoxLayout>
-
 #include <QDialog>
+#include <QVBoxLayout>
+#include <QPushButton>
+
 #include <KAboutData>
 #include <KLocalizedString>
 #include <kxmlguifactory.h>
@@ -43,6 +44,7 @@
 #include "configpage.h"
 #include "configdialog.h"
 #include "debug.h"
+#include "editorconfigpage.h"
 #include "shellextension.h"
 #include "partcontroller.h"
 #include "plugincontroller.h"
@@ -53,11 +55,6 @@
 #include "assistantpopup.h"
 #include <kactioncollection.h>
 #include <ktexteditor/view.h>
-#include <KConfigGroup>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <KTextEditor/Editor>
 #include "workingsetcontroller.h"
 #include "workingsets/workingset.h"
 #include "settings/uipreferences.h"
@@ -212,97 +209,6 @@ private Q_SLOTS:
 
 private:
     MainWindow *m_mw;
-};
-
-class KTextEditorConfigPageAdapter : public ConfigPage
-{
-    Q_OBJECT
-
-public:
-    explicit KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent = nullptr)
-            : ConfigPage(nullptr, nullptr, parent), m_page(page)
-    {
-        page->setParent(this);
-        QVBoxLayout* layout = new QVBoxLayout(this);
-        layout->addWidget(page);
-        this->setLayout(layout);
-    }
-    virtual ~KTextEditorConfigPageAdapter() {}
-
-    virtual QString name() const override
-    {
-        return m_page->name();
-    }
-    virtual QIcon icon() const override
-    {
-        return m_page->icon();
-    }
-    virtual QString fullName() const override
-    {
-        return m_page->fullName();
-    }
-public Q_SLOTS:
-    virtual void apply() override
-    {
-        m_page->apply();
-    }
-    virtual void defaults() override
-    {
-        m_page->defaults();
-    }
-    virtual void reset() override
-    {
-        m_page->reset();
-    }
-
-private:
-    KTextEditor::ConfigPage* m_page;
-};
-
-
-class EditorConfigPage : public ConfigPage
-{
-    Q_OBJECT
-
-public:
-    EditorConfigPage(QWidget* parent)
-            : ConfigPage(nullptr, nullptr, parent)
-    {
-        setObjectName("editorconfig");
-    }
-    virtual ~EditorConfigPage() {};
-
-    virtual QString name() const override
-    {
-        return i18n("Editor");
-    }
-    virtual QIcon icon() const override
-    {
-        return QIcon::fromTheme(QStringLiteral("accessories-text-editor"));
-    }
-    virtual QString fullName() const override
-    {
-        return i18n("Configure Text editor");
-    }
-
-    virtual int childPages() const override
-    {
-        return KTextEditor::Editor::instance()->configPages();
-    }
-
-    virtual ConfigPage* childPage(int number) override
-    {
-        auto page = KTextEditor::Editor::instance()->configPage(number, this);
-        if (page) {
-            return new KTextEditorConfigPageAdapter(page, this);
-        }
-        return nullptr;
-    }
-
-public Q_SLOTS:
-    virtual void apply() override {};
-    virtual void reset() override {};
-    virtual void defaults() override {};
 };
 
 UiController::UiController(Core *core)

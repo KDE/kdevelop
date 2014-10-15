@@ -49,7 +49,6 @@ Boston, MA 02110-1301, USA.
 #include <kactionmenu.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
-#include <kio/netaccess.h>
 
 #include <sublime/area.h>
 #include <interfaces/iplugin.h>
