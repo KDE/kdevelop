@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef MAKEBUILDERPREFERENCES_H
-#define MAKEBUILDERPREFERENCES_H
+#ifndef NINJABUILDERPREFERENCES_H
+#define NINJABUILDERPREFERENCES_H
 
 #include <project/projectconfigpage.h>
 
