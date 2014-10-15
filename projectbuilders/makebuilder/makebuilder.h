@@ -75,6 +75,9 @@ public:
     KJob* runMake( KDevelop::ProjectBaseItem*, MakeJob::CommandType, const QStringList& = QStringList(),
                    const MakeVariables& variables = MakeVariables() );
 
+    virtual int perProjectConfigPages() const override;
+    virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
+
 Q_SIGNALS:
     void built( KDevelop::ProjectBaseItem* );
     void failed( KDevelop::ProjectBaseItem* );

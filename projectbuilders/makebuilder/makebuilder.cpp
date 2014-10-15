@@ -21,6 +21,7 @@
 
 #include "makebuilder.h"
 #include "debug.h"
+#include "makebuilderpreferences.h"
 
 #include <project/projectmodel.h>
 #include <project/builderjob.h>
@@ -135,6 +136,19 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
 
     connect(job, &MakeJob::finished, this, &MakeBuilder::jobFinished);
     return job;
+}
+
+int MakeBuilder::perProjectConfigPages() const
+{
+    return 1;
+}
+
+KDevelop::ConfigPage* MakeBuilder::perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+{
+    if (number == 0) {
+        return new MakeBuilderPreferences(this, options, parent);
+    }
+    return nullptr;
 }
 
 #include "makebuilder.moc"
