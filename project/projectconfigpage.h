@@ -51,12 +51,12 @@ struct ProjectConfigOptions {
 template<typename T>
 class ProjectConfigPage : public KDevelop::ConfigPage
 {
-    static_assert(std::is_base_of<KDevelop::ProjectConfigSkeleton, T>::value, "T must inherit from KDevelop::ProjectConfigSkeleton");
 public:
     ProjectConfigPage(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
         : KDevelop::ConfigPage(plugin, initConfigSkeleton(options), parent)
         , m_project(options.project)
     {
+        static_assert(std::is_base_of<KDevelop::ProjectConfigSkeleton, T>::value, "T must inherit from KDevelop::ProjectConfigSkeleton");
         KDevelop::ProjectConfigSkeleton* conf = T::self();
         conf->setDeveloperTempFile(options.developerTempFile);
         conf->setDeveloperFile(options.developerFile);
