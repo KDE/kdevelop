@@ -16,9 +16,11 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
+#include <QVBoxLayout>
+#include <QIcon>
+
 #include <KPluginFactory>
 #include <KAboutData>
-#include <QVBoxLayout>
 
 #include "projectpathswidget.h"
 #include "customdefinesandincludes.h"
@@ -34,7 +36,7 @@
 #include <interfaces/idocument.h>
 #include <serialization/indexedstring.h>
 
-#include "kcm_customdefinesandincludes.h"
+#include "definesandincludesconfigpage.h"
 
 namespace
 {
@@ -49,30 +51,21 @@ ICompilerProvider* compilerProvider()
 }
 }
 
-K_PLUGIN_FACTORY(DefinesAndIncludesFactory, registerPlugin<DefinesAndIncludes>(); )
-
-DefinesAndIncludes::DefinesAndIncludes( QWidget* parent, const QVariantList& args )
-    : ProjectKCModule<CustomDefinesAndIncludes>(KAboutData::pluginData("kcm_kdevcustomdefinesandincludes"), parent, args)
+DefinesAndIncludesConfigPage::DefinesAndIncludesConfigPage(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+    : ProjectConfigPage<CustomDefinesAndIncludes>(plugin, options, parent)
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
     configWidget = new ProjectPathsWidget( this );
     configWidget->setProject( project() );
-    connect( configWidget, &ProjectPathsWidget::changed, this, &DefinesAndIncludes::dataChanged );
+    connect(configWidget, &ProjectPathsWidget::changed, this, &DefinesAndIncludesConfigPage::changed);
     layout->addWidget( configWidget );
-
-    addConfig( CustomDefinesAndIncludes::self(), configWidget );
 }
 
-void DefinesAndIncludes::dataChanged()
-{
-    emit changed(true);
-}
-
-DefinesAndIncludes::~DefinesAndIncludes()
+DefinesAndIncludesConfigPage::~DefinesAndIncludesConfigPage()
 {
 }
 
-void DefinesAndIncludes::loadFrom( KConfig* cfg )
+void DefinesAndIncludesConfigPage::loadFrom( KConfig* cfg )
 {
     configWidget->clear();
     auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
@@ -85,7 +78,7 @@ void DefinesAndIncludes::loadFrom( KConfig* cfg )
     }
 }
 
-void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
+void DefinesAndIncludesConfigPage::saveTo(KConfig* cfg, KDevelop::IProject*)
 {
     auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
     auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( iadm );
@@ -119,16 +112,29 @@ void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
     }
 }
 
-void DefinesAndIncludes::load()
+void DefinesAndIncludesConfigPage::reset()
 {
-   KCModule::load();
-   loadFrom( CustomDefinesAndIncludes::self()->config() );
+   ProjectConfigPage::reset();
+   loadFrom(CustomDefinesAndIncludes::self()->config());
 }
 
-void DefinesAndIncludes::save()
+void DefinesAndIncludesConfigPage::apply()
 {
-    KCModule::save();
-    saveTo( CustomDefinesAndIncludes::self()->config(), project() );
+    ProjectConfigPage::apply();
+    saveTo(CustomDefinesAndIncludes::self()->config(), project());
 }
 
-#include "kcm_customdefinesandincludes.moc"
+QString DefinesAndIncludesConfigPage::name() const
+{
+    return i18n("Custom Defines And Includes");
+}
+
+QString DefinesAndIncludesConfigPage::fullName() const
+{
+    return i18n("Configure which macros and include directories/files will be added to the parser during project parsing.");
+}
+
+QIcon DefinesAndIncludesConfigPage::icon() const
+{
+    return QIcon::fromTheme("kdevelop");
+}

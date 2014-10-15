@@ -1,11 +1,3 @@
-include_directories(
-    
-    ${KDEVPLATFORM_INCLUDE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/..
-)
-
-add_subdirectory(kcm_widget)
 add_subdirectory(tests)
 add_subdirectory(compilerprovider)
 add_subdirectory(noprojectincludesanddefines)
@@ -13,7 +5,26 @@ add_subdirectory(noprojectincludesanddefines)
 set( kdevdefinesandincludesmanager_SRCS
         definesandincludesmanager.cpp
         debugarea.cpp
+        kcm_widget/projectpathsmodel.cpp
+        kcm_widget/definesmodel.cpp
+        kcm_widget/includesmodel.cpp
+        kcm_widget/includeswidget.cpp
+        kcm_widget/defineswidget.cpp
+        kcm_widget/projectpathswidget.cpp
+        kcm_widget/definesandincludesconfigpage.cpp
+        kcm_widget/compilersmodel.cpp
+        kcm_widget/compilerswidget.cpp
+        compilerprovider/icompiler.cpp # TODO: is this really neccessary
     )
+
+ki18n_wrap_ui(kdevdefinesandincludesmanager_SRCS
+    kcm_widget/batchedit.ui
+    kcm_widget/includeswidget.ui
+    kcm_widget/defineswidget.ui
+    kcm_widget/projectpathswidget.ui
+    kcm_widget/compilerswidget.ui
+)
+kconfig_add_kcfg_files( kdevdefinesandincludesmanager_SRCS kcm_widget/customdefinesandincludes.kcfgc)
 
 add_library(kdevdefinesandincludessettings settingsmanager.cpp compilerprovider/icompiler.cpp)
 target_link_libraries( kdevdefinesandincludessettings LINK_PRIVATE

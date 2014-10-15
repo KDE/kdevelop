@@ -68,6 +68,10 @@ public :
     // NOTE: Part of a fix for build failures on <GCC-4.7
     virtual ~DefinesAndIncludesManager() Q_DECL_NOEXCEPT;
 
+    virtual int perProjectConfigPages() const override;
+
+    virtual ConfigPage* perProjectConfigPage(int number, const ProjectConfigOptions& options, QWidget* parent) override;
+
 private:
     QVector<Provider*> m_providers;
     QVector<BackgroundProvider*> m_backgroundProviders;

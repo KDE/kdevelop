@@ -1,3 +1,5 @@
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
+
 set(test_definesandincludes_SRCS
     test_definesandincludes.cpp
     projectsgenerator.cpp)

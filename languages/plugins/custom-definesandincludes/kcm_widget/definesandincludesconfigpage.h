@@ -19,25 +19,27 @@
 #ifndef KCM_CUSTOMBUILDSYSTEM_H
 #define KCM_CUSTOMBUILDSYSTEM_H
 
-#include <project/projectkcmodule.h>
+#include <project/projectconfigpage.h>
 
 class CustomDefinesAndIncludes;
 
-class DefinesAndIncludes : public ProjectKCModule<CustomDefinesAndIncludes>
+class DefinesAndIncludesConfigPage : public ProjectConfigPage<CustomDefinesAndIncludes>
 {
     Q_OBJECT
 public:
-    DefinesAndIncludes( QWidget* parent, const QVariantList& args = QVariantList() );
-    virtual ~DefinesAndIncludes();
+    DefinesAndIncludesConfigPage(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
+    virtual ~DefinesAndIncludesConfigPage();
 
-    virtual void load() override;
-    virtual void save() override;
+    virtual QString name() const;
+    virtual QString fullName() const;
+    virtual QIcon icon() const;
+
+    virtual void apply() override;
+    virtual void reset() override;
 private:
     class ProjectPathsWidget* configWidget;
     void loadFrom( KConfig* cfg );
     void saveTo( KConfig* cfg, KDevelop::IProject* );
-public slots:
-    void dataChanged();
 };
 
 #endif
