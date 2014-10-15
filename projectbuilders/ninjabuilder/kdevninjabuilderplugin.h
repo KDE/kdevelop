@@ -41,6 +41,9 @@ class KDevNinjaBuilderPlugin : public KDevelop::IPlugin, KDevelop::IProjectBuild
         
         NinjaJob* runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal);
 
+        virtual int perProjectConfigPages() const override;
+        virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
+
     Q_SIGNALS:
         void built( KDevelop::ProjectBaseItem* item);
         void failed( KDevelop::ProjectBaseItem* item);
