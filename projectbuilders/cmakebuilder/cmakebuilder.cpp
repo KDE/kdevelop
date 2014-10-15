@@ -49,6 +49,7 @@ Q_LOGGING_CATEGORY(CMAKEBUILDER, "kdevelop.projectbuilders.cmakebuilder")
 
 #include "cmakejob.h"
 #include "prunejob.h"
+#include "cmakebuilderpreferences.h"
 #include "cmakeutils.h"
 #include <cmakemodelitems.h>
 
@@ -249,5 +250,19 @@ QList< KDevelop::IProjectBuilder* > CMakeBuilder::additionalBuilderPlugins( KDev
         ret << b;
     return ret;
 }
+
+int CMakeBuilder::configPages() const
+{
+    return 1;
+}
+
+KDevelop::ConfigPage* CMakeBuilder::configPage(int number, QWidget* parent)
+{
+    if (number == 0) {
+        return new CMakeBuilderPreferences(this, parent);
+    }
+    return nullptr;
+}
+
 
 #include "cmakebuilder.moc"

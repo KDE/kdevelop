@@ -22,18 +22,14 @@
 
 #include <QVBoxLayout>
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
-#include <KAboutData>
+
 #include "ui_cmakebuildersettings.h"
 #include "cmakebuilderconfig.h"
 
-K_PLUGIN_FACTORY(CMakeBuilderPreferencesFactory, registerPlugin<CMakeBuilderPreferences>(); )
-
-CMakeBuilderPreferences::CMakeBuilderPreferences(QWidget* parent, const QVariantList& args)
-    : KCModule( KAboutData::pluginData("kcm_kdev_ninjabuilder"), parent, args)
+CMakeBuilderPreferences::CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWidget* parent)
+    : KDevelop::ConfigPage(plugin, CMakeBuilderSettings::self(), parent)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
@@ -62,26 +58,43 @@ CMakeBuilderPreferences::~CMakeBuilderPreferences()
 void CMakeBuilderPreferences::defaults()
 {
     m_prefsUi->generator->setCurrentIndex(0);
-    KCModule::defaults();
+    KDevelop::ConfigPage::defaults();
 }
 
-void CMakeBuilderPreferences::save()
+void CMakeBuilderPreferences::apply()
 {
     CMakeBuilderSettings::setGenerator(m_prefsUi->generator->currentText());
-    KCModule::save();
-    CMakeBuilderSettings::self()->writeConfig();
+    KDevelop::ConfigPage::apply();
+    CMakeBuilderSettings::self()->save();
 }
 
-void CMakeBuilderPreferences::load()
+void CMakeBuilderPreferences::reset()
 {
     int idx = m_prefsUi->generator->findText(CMakeBuilderSettings::self()->generator());
     m_prefsUi->generator->setCurrentIndex(idx);
-    KCModule::load();
+    KDevelop::ConfigPage::reset();
 }
 
 void CMakeBuilderPreferences::generatorChanged(const QString& generator)
 {
-    emit changed(CMakeBuilderSettings::self()->generator()!=generator);
+    if (CMakeBuilderSettings::self()->generator() != generator) {
+        emit changed();
+    }
+}
+
+QString CMakeBuilderPreferences::name() const
+{
+    return i18n("CMake");
+}
+
+QString CMakeBuilderPreferences::fullName() const
+{
+    return i18n("Configure global CMake settings");
+}
+
+QIcon CMakeBuilderPreferences::icon() const
+{
+    return QIcon::fromTheme("cmake");
 }
 
 #include "cmakebuilderpreferences.moc"
