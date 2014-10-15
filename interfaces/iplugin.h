@@ -249,7 +249,7 @@ public:
 
 
     /** This is implemented to do nothing, so that we can inherit from KTextEditor::Plugin */
-    virtual QObject* createView(KTextEditor::MainWindow*) override final { return nullptr; };
+    virtual QObject* createView(KTextEditor::MainWindow*) override final;
 
 protected:
     void addExtension( const QString& );
