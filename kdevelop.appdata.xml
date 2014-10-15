@@ -21,6 +21,7 @@
   <name xml:lang="sv">KDevelop</name>
   <name xml:lang="uk">KDevelop</name>
   <name xml:lang="x-test">xxKDevelopxx</name>
+  <name xml:lang="zh-CN">KDevelop</name>
   <summary>It is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.</summary>
   <summary xml:lang="ca">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
   <summary xml:lang="de">KDevelop ist eine leistungsfähige integrierte Entwicklungsumgebung (IDE) für C/C++ und andere Programmiersprachen, die durch Module erweitert werden kann.</summary>
@@ -38,6 +39,7 @@
   <summary xml:lang="sv">Det är en funktionsrik, integrerad utvecklingsmiljö för C/C++ och andra programspråk, med utökningsmöjligheter via insticksmoduler.</summary>
   <summary xml:lang="uk">Це повноцінне, розширюване за допомогою додатків комплексне середовище розробки мовами C/C++ та іншими мовами програмування.</summary>
   <summary xml:lang="x-test">xxIt is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.xx</summary>
+  <summary xml:lang="zh-CN">全功能，可扩展的支持 C/C++ 和其他语言的集成开发环境。</summary>
   <description>
     <p>Free and Open Source Integrated Development Environment for your different software projects.</p>
     <p xml:lang="ca">És un entorn de desenvolupament integrat lliure i de codi obert per als vostres diferents projectes de programari.</p>
@@ -56,6 +58,7 @@
     <p xml:lang="sv">Fri integrerad utvecklingsmiljö med öppen källkod för olika programvaruprojekt.</p>
     <p xml:lang="uk">Вільне комплексне середовище розробки з відкритим кодом, призначене для ваших різноманітних проектів з розробки програмного коду.</p>
     <p xml:lang="x-test">xxFree and Open Source Integrated Development Environment for your different software projects.xx</p>
+    <p xml:lang="zh-CN">可用于您的不同软件项目的自由和开源的集成开发环境</p>
   </description>
   <url type="homepage">http://kdevelop.org</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kdevelop</url>
