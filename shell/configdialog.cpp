@@ -132,8 +132,6 @@ void KDevelop::ConfigDialog::removePagesForPlugin(KDevelop::IPlugin* plugin)
         }
         auto page = qobject_cast<ConfigPage*>(item->widget());
         if (page && page->plugin() == plugin) {
-            // qDebug("Removing page %s (%s) (%p) because associated plugin (%p) is unloading.",
-            //      qPrintable(page->name()), qPrintable(page->fullName()), item.data(), page->plugin());
             removePage(item); // this also deletes the config page -> QPointer is set to null
         }
     };
