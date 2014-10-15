@@ -26,6 +26,7 @@
 #include "duchain/cmakeparsejob.h"
 #include "cmakeimportjsonjob.h"
 #include "debug.h"
+#include "settings/cmakepreferences.h"
 #include <projectmanagers/custommake/makefileresolver/makefileresolver.h>
 #include "cmakecodecompletionmodel.h"
 #include "cmakenavigationwidget.h"
@@ -779,6 +780,19 @@ ProjectFolderItem* CMakeManager::createFolderItem(IProject* project, const Path&
         return new KDevelop::ProjectBuildFolderItem( project, path, parent );
     else
         return KDevelop::AbstractFileManagerPlugin::createFolderItem(project, path, parent);
+}
+
+int CMakeManager::perProjectConfigPages() const
+{
+    return 1;
+}
+
+ConfigPage* CMakeManager::perProjectConfigPage(int number, const ProjectConfigOptions& options, QWidget* parent)
+{
+    if (number == 0) {
+        return new CMakePreferences(this, options, parent);
+    }
+    return nullptr;
 }
 
 #include "cmakemanager.moc"

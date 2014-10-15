@@ -88,7 +88,7 @@ QString MakeBuilderPreferences::fullName() const
 
 QIcon MakeBuilderPreferences::icon() const
 {
-    return QIcon::fromTheme("kdevelop");
+    return QIcon::fromTheme("run-build");
 }
 
 

@@ -137,6 +137,9 @@ public:
 
     static KDevelop::IndexedString languageName();
 
+    virtual int perProjectConfigPages() const override;
+    virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
+
 signals:
     void folderRenamed(const KDevelop::Path& oldFolder, KDevelop::ProjectFolderItem* newFolder);
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);

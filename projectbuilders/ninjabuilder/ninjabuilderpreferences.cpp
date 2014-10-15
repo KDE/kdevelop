@@ -60,7 +60,7 @@ QString NinjaBuilderPreferences::fullName() const
 
 QIcon NinjaBuilderPreferences::icon() const
 {
-    return QIcon::fromTheme("kdevelop");
+    return QIcon::fromTheme("run-build");
 }
 
 #include "ninjabuilderpreferences.moc"
