@@ -563,9 +563,9 @@ void UiController::showSettingsDialog()
     ConfigDialog cfgDlg(configPages, activeMainWindow());
 
     auto addPluginPages = [&](IPlugin* plugin) {
-        for (int i = 0; i < plugin->configPages(); ++i) {
+        for (int i = 0, numPages = plugin->configPages(); i < numPages; ++i) {
             // insert them before the editor config page
-            cfgDlg.addConfigPage(plugin->configPage(i, activeMainWindow()), editorConfigPage);
+            cfgDlg.addConfigPage(plugin->configPage(i, &cfgDlg), editorConfigPage);
         }
     };
     for (IPlugin* plugin : ICore::self()->pluginController()->loadedPlugins()) {
@@ -573,8 +573,9 @@ void UiController::showSettingsDialog()
     }
     // TODO: only load settings if a UI related page was changed?
     connect(&cfgDlg, &ConfigDialog::configSaved, activeSublimeWindow(), &Sublime::MainWindow::loadSettings);
-    // make sure that pages get added whenever a new plugin is loaded
-    connect(ICore::self()->pluginController(), &IPluginController::pluginLoaded, addPluginPages);
+    // make sure that pages get added whenever a new plugin is loaded (probably from the plugin selection dialog)
+    // removal on plugin unload is already handled in ConfigDialog
+    connect(ICore::self()->pluginController(), &IPluginController::pluginLoaded, &cfgDlg, addPluginPages);
     cfgDlg.exec();
 }
 
