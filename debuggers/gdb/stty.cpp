@@ -160,7 +160,7 @@ int STTY::findTTY()
 
 #ifdef __sgi__
     ptyfd = open("/dev/ptmx",O_RDWR);
-#else if defined(Q_OS_MAC)
+#elif defined(Q_OS_MAC)
     ptyfd = posix_openpt(O_RDWR);
 #endif
 #if defined(__sgi__) || defined(Q_OS_MAC)
