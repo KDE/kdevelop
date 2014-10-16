@@ -44,7 +44,7 @@
 using namespace GDBDebugger;
 
 GDB::GDB(QObject* parent)
-: QObject(parent), process_(0), sawPrompt_(false), currentCmd_(0), receivedReply_(false), isRunning_(false)
+: QObject(parent), process_(0), sawPrompt_(false), currentCmd_(0), receivedReply_(false), isRunning_(false), childPid_(0)
 {
 }
 
@@ -157,8 +157,11 @@ void GDB::interrupt()
 {
     //TODO:win32 Porting needed
     int pid = process_->pid();
-    if (pid != 0)
+    if (childPid_) {
+        ::kill(childPid_, SIGINT);
+    } else if (pid != 0) {
         ::kill(pid, SIGINT);
+    }
 }
 
 GDBCommand* GDB::currentCommand() const
@@ -250,7 +253,24 @@ void GDB::processLine(const QByteArray& line)
                GDBMI::ResultRecord& result = static_cast<GDBMI::ResultRecord&>(*r);
 
                emit internalCommandOutput(QString::fromUtf8(line) + '\n');
-               
+
+               if (result.reason == "thread-group-started") {
+                   receivedReply_ = true;
+                   //     (gdb) -exec-run
+                   //     =thread-group-started,id="i1",pid="16768"
+                   if (line.contains("pid=\"")) {
+                       QList<ByteArray> splitLine = line.split(',');
+                       if (splitLine.size() > 2) {
+                           QByteArray pidStr = splitLine[2];
+                           pidStr.chop(1);
+                           childPid_ = pidStr.mid(5).toULong();
+                           if (childPid_ == 0) {
+                               kDebug() << "line=" << line << "pidStr=" << pidStr << pidStr.mid(5) << "pid=" << childPid_;
+                           }
+                       }
+                   }
+               }
+
                // FIXME: the code below should be reviewed to consider result record
                // subtype when doing all decisions.
                

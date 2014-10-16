@@ -133,6 +133,7 @@ private:
     QString gdbBinary_;
     KProcess* process_;
     bool sawPrompt_;
+    unsigned long childPid_;
 
     GDBCommand* currentCmd_;
 
