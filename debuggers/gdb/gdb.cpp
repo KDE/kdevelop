@@ -259,7 +259,7 @@ void GDB::processLine(const QByteArray& line)
                    //     (gdb) -exec-run
                    //     =thread-group-started,id="i1",pid="16768"
                    if (line.contains("pid=\"")) {
-                       QList<ByteArray> splitLine = line.split(',');
+                       QList<QByteArray> splitLine = line.split(',');
                        if (splitLine.size() > 2) {
                            QByteArray pidStr = splitLine[2];
                            pidStr.chop(1);
