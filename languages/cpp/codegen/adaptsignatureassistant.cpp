@@ -94,7 +94,7 @@ void AdaptSignatureAssistant::reset()
   m_otherSideId = {};
   m_otherSideTopContext = {};
   m_otherSideContext = {};
-  m_oldSignature = {};
+  m_oldSignature = Signature();
   m_document = {};
   m_view.clear();
 }
