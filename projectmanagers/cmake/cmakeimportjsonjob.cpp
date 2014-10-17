@@ -40,7 +40,7 @@ using namespace KDevelop;
 
 namespace {
 
-CMakeJsonData import(const Path& commandsFile)
+CMakeJsonData import(const Path& commandsFile, const Path& projectTargetsFile)
 {
     // NOTE: to get compile_commands.json, you need -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     QFile f(commandsFile.toLocalFile());
@@ -87,8 +87,22 @@ CMakeJsonData import(const Path& commandsFile)
         ret.defines = result.defines;
         data.files[Path(entry["file"].toString())] = ret;
     }
-
     data.isValid = true;
+
+//     import targets
+    if (!projectTargetsFile.isEmpty()) {
+        QFile f(projectTargetsFile.toLocalFile());
+        bool r = f.open(QFile::ReadOnly|QFile::Text);
+        if(!r) {
+            qCWarning(CMAKE) << "Couldn't open targets file" << projectTargetsFile;
+            return data;
+        }
+        data.targetsData = QJsonDocument::fromJson(f.readAll(), &error).object().value("targets").toArray();
+        if (error.error) {
+            qCWarning(CMAKE) << "JSON error when loading project targets file" << error.errorString();
+        }
+    }
+
     return data;
 }
 
@@ -112,7 +126,7 @@ void CMakeImportJob::start()
         return;
     }
 
-    auto future = QtConcurrent::run(import, commandsFile);
+    auto future = QtConcurrent::run(import, commandsFile, CMake::projectTargetsFile(project()));
     m_futureWatcher->setFuture(future);
 }
 

@@ -151,6 +151,7 @@ private slots:
 //     void directoryChanged(const QString& dir);
 //     void filesystemBuffererTimeout();
     void importFinished(KJob* job);
+    void importPopulateFinished(KJob* job);
 
 private:
     QHash<KDevelop::IProject*, CMakeProjectData> m_projects;

@@ -59,6 +59,12 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT KDevelop::Path commandsFile( KDevelop::IProject* project );
 
     /**
+     * @returns the path to the 'compile_commands.json' file in the current builddir for the given project
+     * or an empty url if none has been set by the user.
+     */
+    KDEVCMAKECOMMON_EXPORT KDevelop::Path projectTargetsFile( KDevelop::IProject* project );
+
+    /**
      * @returns the current build type for the given project or "Release" as default value.
      */
     KDEVCMAKECOMMON_EXPORT QString currentBuildType( KDevelop::IProject* project );

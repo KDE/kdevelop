@@ -26,6 +26,7 @@
 #include "duchain/cmakeparsejob.h"
 #include "cmakeimportjsonjob.h"
 #include "debug.h"
+#include "cmakemodelitems.h"
 #include <projectmanagers/custommake/makefileresolver/makefileresolver.h>
 
 #include <QDir>
@@ -154,7 +155,10 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
     jobs << job;
 
     // generate the file system listing
-    jobs << KDevelop::AbstractFileManagerPlugin::createImportJob(item);
+    KJob* fetch = KDevelop::AbstractFileManagerPlugin::createImportJob(item);
+    fetch->setProperty("project", QVariant::fromValue(project));
+    connect(fetch, SIGNAL(result(KJob*)), SLOT(importPopulateFinished(KJob*)));
+    jobs << fetch;
 
     return new ExecuteCompositeJob(this, jobs);
 }
@@ -213,7 +217,7 @@ void CMakeManager::importFinished(KJob* j)
     CMakeImportJob* job = qobject_cast<CMakeImportJob*>(j);
     Q_ASSERT(job);
 
-    auto project = job->project();
+    KDevelop::IProject* project = job->project();
     if (job->error() != 0) {
         qCDebug(CMAKE) << "Import failed for project" << project->name() << job->errorText();
         m_projects.remove(project);
@@ -224,9 +228,72 @@ void CMakeManager::importFinished(KJob* j)
     CMakeProjectData data;
     data.watcher->addPath(CMake::currentBuildDir(project).toLocalFile());
     data.jsonData = job->jsonData();
+
     connect(data.watcher.data(), SIGNAL(fileChanged(QString)), SLOT(dirtyFile(QString)));
     connect(data.watcher.data(), SIGNAL(directoryChanged(QString)), SLOT(dirtyFile(QString)));
-    m_projects[job->project()] = data;
+    m_projects[project] = data;
+}
+
+static QUrl findSourceDir(const QJsonArray& array)
+{
+    for(const QJsonValue &val: array) {
+        QString path = val.toString();
+        bool inProject = path.contains(QLatin1String("/CMakeLists.txt:"));
+        if (inProject) {
+            return QUrl::fromLocalFile(path.mid(0, path.lastIndexOf('/')));
+        }
+    }
+    return QUrl();
+}
+
+static void populateTargets(ProjectFolderItem* folder, const QHash<QUrl, QHash<QString, QJsonObject>>& targets)
+{
+    QList<ProjectTargetItem*> oldTargets = folder->targetList();
+    QHash<QString, QJsonObject> dirTargets = targets[folder->url()];
+    if (dirTargets.isEmpty())
+        qWarning() << "fucking empty" << targets.keys() << folder->url();
+
+    for(ProjectTargetItem* item: oldTargets) {
+        QHash<QString, QJsonObject>::iterator it = dirTargets.find(item->text());
+        if(it == dirTargets.end()) {
+            delete item;
+            continue;
+        }
+        CMakeJsonItem* cmakeItem = dynamic_cast<CMakeJsonItem*>(item);
+        cmakeItem->setObject(*it);
+        dirTargets.erase(it);
+    }
+
+    for(const QJsonObject& obj : dirTargets) {
+        QString type = obj.value("type").toString();
+        if (type == "SHARED_LIBRARY") {
+            new CMakeLibraryItem(obj, folder);
+        } else if (type == "EXECUTABLE") {
+            new CMakeExecutableItem(obj, folder);
+        }
+    }
+
+    for(ProjectFolderItem* children : folder->folderList()) {
+        populateTargets(children, targets);
+    }
+}
+
+void CMakeManager::importPopulateFinished(KJob* job)
+{
+    IProject* project = job->property("project").value<IProject*>();
+    CMakeProjectData data = m_projects[project];
+
+    QHash<QUrl, QHash<QString, QJsonObject>> foundTargets;
+    for(const QJsonValue& v : data.jsonData.targetsData) {
+        Q_ASSERT(v.isObject());
+        QJsonObject obj = v.toObject();
+        if (!obj.contains("backtrace"))
+            continue;
+
+        QUrl dir = findSourceDir(obj.value("backtrace").toArray());
+        foundTargets[dir][obj.value("name").toString()] = obj;
+    }
+    populateTargets(project->projectItem(), foundTargets);
 }
 
 // void CMakeManager::deletedWatchedDirectory(IProject* p, const QUrl &dir)

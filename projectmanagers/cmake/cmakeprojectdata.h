@@ -24,6 +24,7 @@
 #include <QSharedPointer>
 #include <QStringList>
 #include <QFileSystemWatcher>
+#include <QJsonArray>
 #include "cmaketypes.h"
 #include <util/path.h>
 
@@ -47,6 +48,7 @@ inline QDebug &operator<<(QDebug debug, const CMakeFile& file)
 struct CMakeJsonData
 {
     QHash<KDevelop::Path, CMakeFile> files;
+    QJsonArray targetsData;
     bool isValid = false;
 };
 

@@ -86,7 +86,7 @@ QStringList CMakeJob::commandLine() const
 {
     QStringList args;
     args << CMake::currentCMakeBinary( m_project ).toLocalFile();
-    args << "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON";
+    args << "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON" << "-DCMAKE_EXPORT_PROJECT_METADATA=1.0";
 
     QString installDir = CMake::currentInstallDir( m_project ).toLocalFile();
     if( !installDir.isEmpty() )
