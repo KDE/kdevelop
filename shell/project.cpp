@@ -484,7 +484,7 @@ Path Project::path() const
 
 void Project::reloadModel()
 {
-    qDebug() << "reload!!!!!!!" << d->loading;
+    kDebug() << d->loading;
     if (d->loading) {
         d->scheduleReload = true;
         return;
