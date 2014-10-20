@@ -16,7 +16,7 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#include "projectfilterkcm.h"
+#include "projectfilterconfigpage.h"
 
 #include <QLayout>
 #include <QStandardItemModel>
@@ -41,7 +41,7 @@
 
 using namespace KDevelop;
 
-ProjectFilterKCM::ProjectFilterKCM(ProjectFilterProvider* provider, const ProjectConfigOptions& options, QWidget* parent)
+ProjectFilterConfigPage::ProjectFilterConfigPage(ProjectFilterProvider* provider, const ProjectConfigOptions& options, QWidget* parent)
     : ProjectConfigPage<ProjectFilterSettings>(provider, options, parent)
     , m_model(new FilterModel(this))
     , m_projectFilterProvider(provider)
@@ -92,30 +92,30 @@ ProjectFilterKCM::ProjectFilterKCM(ProjectFilterProvider* provider, const Projec
     connect(m_ui->moveDown, &QPushButton::clicked, this, &ProjectFilterKCM::moveDown);
 }
 
-ProjectFilterKCM::~ProjectFilterKCM()
+ProjectFilterConfigPage::~ProjectFilterConfigPage()
 {
 }
 
-void ProjectFilterKCM::apply()
+void ProjectFilterConfigPage::apply()
 {
     ProjectConfigPage::apply();
     writeFilters(m_model->filters(), project()->projectConfiguration());
     m_projectFilterProvider->updateProjectFilters(project());
 }
 
-void ProjectFilterKCM::reset()
+void ProjectFilterConfigPage::reset()
 {
     ProjectConfigPage::reset();
     m_model->setFilters(readFilters(project()->projectConfiguration()));
 }
 
-void ProjectFilterKCM::defaults()
+void ProjectFilterConfigPage::defaults()
 {
     ProjectConfigPage::defaults();
     m_model->setFilters(defaultFilters());
 }
 
-bool ProjectFilterKCM::eventFilter(QObject* object, QEvent* event)
+bool ProjectFilterConfigPage::eventFilter(QObject* object, QEvent* event)
 {
     Q_ASSERT(object == m_ui->filters);
     Q_UNUSED(object);
@@ -136,7 +136,7 @@ bool ProjectFilterKCM::eventFilter(QObject* object, QEvent* event)
     return false;
 }
 
-void ProjectFilterKCM::selectionChanged()
+void ProjectFilterConfigPage::selectionChanged()
 {
     bool hasSelection = m_ui->filters->currentIndex().isValid();
     int row = -1;
@@ -149,7 +149,7 @@ void ProjectFilterKCM::selectionChanged()
     m_ui->moveUp->setEnabled(hasSelection && row != 0);
 }
 
-void ProjectFilterKCM::add()
+void ProjectFilterConfigPage::add()
 {
     m_model->insertRows(m_model->rowCount(), 1);
     const QModelIndex index = m_model->index(m_model->rowCount() - 1, FilterModel::Pattern, QModelIndex());
@@ -157,19 +157,19 @@ void ProjectFilterKCM::add()
     m_ui->filters->edit(index);
 }
 
-void ProjectFilterKCM::remove()
+void ProjectFilterConfigPage::remove()
 {
     Q_ASSERT(m_ui->filters->currentIndex().isValid());
     m_model->removeRows(m_ui->filters->currentIndex().row(), 1);
 }
 
-void ProjectFilterKCM::moveUp()
+void ProjectFilterConfigPage::moveUp()
 {
     Q_ASSERT(m_ui->filters->currentIndex().isValid());
     m_model->moveFilterUp(m_ui->filters->currentIndex().row());
 }
 
-void ProjectFilterKCM::moveDown()
+void ProjectFilterConfigPage::moveDown()
 {
     Q_ASSERT(m_ui->filters->currentIndex().isValid());
     m_model->moveFilterDown(m_ui->filters->currentIndex().row());
@@ -183,7 +183,7 @@ static void addError(const QString& message, QWidget* parent)
     parent->layout()->addWidget(widget);
 }
 
-void ProjectFilterKCM::emitChanged()
+void ProjectFilterConfigPage::emitChanged()
 {
     qDeleteAll(m_ui->messages->findChildren<KMessageWidget*>());
 
@@ -201,19 +201,17 @@ void ProjectFilterKCM::emitChanged()
     emit changed();
 }
 
-QString ProjectFilterKCM::fullName() const
+QString ProjectFilterConfigPage::fullName() const
 {
     return i18n("Configure which files and folders inside the project folder should be included or excluded.");
 }
 
-QIcon ProjectFilterKCM::icon() const
+QIcon ProjectFilterConfigPage::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("view-filter"));
 }
 
-QString ProjectFilterKCM::name() const
+QString ProjectFilterConfigPage::name() const
 {
     return i18n("Project Filter");
 }
-
-#include "projectfilterkcm.moc"

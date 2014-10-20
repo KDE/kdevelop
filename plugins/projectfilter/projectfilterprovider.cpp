@@ -39,7 +39,7 @@
 #include <interfaces/iuicontroller.h>
 
 #include "projectfilterdebug.h"
-#include "projectfilterkcm.h"
+#include "projectfilterconfigpage.h"
 #include <project/projectmodel.h>
 
 using namespace KDevelop;
@@ -162,7 +162,7 @@ int ProjectFilterProvider::perProjectConfigPages() const
 
 ConfigPage* ProjectFilterProvider::perProjectConfigPage(int i, const ProjectConfigOptions& options, QWidget* parent)
 {
-    return i == 0 ? new ProjectFilterKCM(this, options, parent) : nullptr;
+    return i == 0 ? new ProjectFilterConfigPage(this, options, parent) : nullptr;
 }
 
 #include "projectfilterprovider.moc"

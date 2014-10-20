@@ -7,7 +7,7 @@ set( projectfilter_SRCS
     projectfilter.cpp
     projectfilterdebug.cpp
     filter.cpp
-    projectfilterkcm.cpp
+    projectfilterconfigpage.cpp
     projectfilterdebug.cpp
     filter.cpp
     filtermodel.cpp

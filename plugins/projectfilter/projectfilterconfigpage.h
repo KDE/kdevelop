@@ -17,8 +17,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-#ifndef KDEVPLATFORM_PLUGIN_PROJECTFILTERKCM_H
-#define KDEVPLATFORM_PLUGIN_PROJECTFILTERKCM_H
+#ifndef KDEVPLATFORM_PLUGIN_PROJECTFILTERCONFIGPAGE_H
+#define KDEVPLATFORM_PLUGIN_PROJECTFILTERCONFIGPAGE_H
 
 #include <project/projectconfigpage.h>
 
@@ -35,12 +35,12 @@ namespace KDevelop
 class FilterModel;
 class ProjectFilterProvider;
 
-class ProjectFilterKCM : public ProjectConfigPage<ProjectFilterSettings>
+class ProjectFilterConfigPage : public ProjectConfigPage<ProjectFilterSettings>
 {
     Q_OBJECT
 public:
-    ProjectFilterKCM(ProjectFilterProvider* provider, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
-    virtual ~ProjectFilterKCM();
+    ProjectFilterConfigPage(ProjectFilterProvider* provider, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
+    virtual ~ProjectFilterConfigPage();
 
     virtual QString name() const;
     virtual QIcon icon() const;
