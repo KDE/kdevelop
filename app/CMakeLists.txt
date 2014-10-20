@@ -16,14 +16,13 @@ set(kdevelop_SRCS  main.cpp kdevideextension.cpp splash.cpp)
 add_executable(kdevelop ${kdevelop_SRCS} )
 
 target_link_libraries(kdevelop
-    
     KDev::Interfaces
     KDev::Shell
 
     KF5::KDELibs4Support
     KF5::Declarative
 
-    Qt5::QuickWidgets
+    Qt5::Quick
 )
 
 install(TARGETS kdevelop ${INSTALL_TARGETS_DEFAULT_ARGS} )
