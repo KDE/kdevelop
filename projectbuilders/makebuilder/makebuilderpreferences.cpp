@@ -51,7 +51,7 @@ void MakeBuilderPreferences::reset()
 void MakeBuilderPreferences::apply()
 {
     MakeBuilderSettings::self()->setMakeBinary(m_prefsUi->makeBinary->text());
-    MakeBuilderSettings::self()->writeConfig(); // TODO: is this needed? KConfigDialogManager should end up calling it
+    MakeBuilderSettings::self()->save(); // TODO: is this needed? KConfigDialogManager should end up calling it
     ProjectConfigPage::apply();
 }
 
