@@ -1,12 +1,14 @@
 project(gdb)
 
 # TODO KF5 figure out how to get the process selection widget (ksysguardprocesslist.h)
+if(NOT APPLE)
 # macro_optional_find_package( KDE4Workspace 4.2.0 )
 
 # macro_log_feature( KDE4WORKSPACE_FOUND
 # "KDE 4 Workspace" "KDE 4 Workspace libraries" "kdebase/workspace" FALSE
 # "" "Required for building the process selection dialog for attaching GDB to a running process."
 # )
+endif(NOT APPLE)
 
 if(KDE4WORKSPACE_FOUND)
     include_directories(
