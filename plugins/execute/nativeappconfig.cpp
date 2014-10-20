@@ -49,11 +49,9 @@
 #include <QMenu>
 #include <QDebug>
 
-#include <KCModuleProxy>
 #include <KConfigDialog>
 #include <KLineEdit>
 #include <KShell>
-#include <kcmoduleinfo.h>
 
 using namespace KDevelop;
 
