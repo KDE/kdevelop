@@ -46,7 +46,7 @@ CMakeJsonData import(const Path& commandsFile)
     QFile f(commandsFile.toLocalFile());
     bool r = f.open(QFile::ReadOnly|QFile::Text);
     if(!r) {
-        qCDebug(CMAKE) << "Couldn't open commands file" << commandsFile;
+        qCWarning(CMAKE) << "Couldn't open commands file" << commandsFile;
         return {};
     }
 
@@ -56,11 +56,11 @@ CMakeJsonData import(const Path& commandsFile)
     QJsonParseError error;
     const QJsonDocument document = QJsonDocument::fromJson(f.readAll(), &error);
     if (error.error) {
-        qCDebug(CMAKE) << "Failed to parse JSON in commands file:" << error.errorString() << commandsFile;
+        qCWarning(CMAKE) << "Failed to parse JSON in commands file:" << error.errorString() << commandsFile;
         data.isValid = false;
         return data;
     } else if (!document.isArray()) {
-        qCDebug(CMAKE) << "JSON document in commands file is not an array: " << commandsFile;
+        qCWarning(CMAKE) << "JSON document in commands file is not an array: " << commandsFile;
         data.isValid = false;
         return data;
     }
@@ -71,12 +71,12 @@ CMakeJsonData import(const Path& commandsFile)
     static const QString KEY_FILE = QStringLiteral("file");
     foreach(const QJsonValue& value, document.array()) {
         if (!value.isObject()) {
-            qCDebug(CMAKE) << "JSON command file entry is not an object:" << value;
+            qCWarning(CMAKE) << "JSON command file entry is not an object:" << value;
             continue;
         }
         const QJsonObject entry = value.toObject();
         if (!entry.contains(KEY_FILE) || !entry.contains(KEY_COMMAND) || !entry.contains(KEY_DIRECTORY)) {
-            qCDebug(CMAKE) << "JSON command file entry does not contain required keys:" << entry;
+            qCWarning(CMAKE) << "JSON command file entry does not contain required keys:" << entry;
             continue;
         }
 
