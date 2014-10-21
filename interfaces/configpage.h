@@ -83,6 +83,12 @@ public:
      */
     KCoreConfigSkeleton* configSkeleton();
 
+    /**
+     * Sets the config skeleton to @p skel and will create a KConfigDialogManager if needed.
+     * This can be used if the KCoreConfigSkeleton* doesn't exist yet when calling the base class constructor.
+     */
+    void setConfigSkeleton(KCoreConfigSkeleton* skel);
+
 private:
     QScopedPointer<ConfigPagePrivate> d;
 };

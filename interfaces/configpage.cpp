@@ -83,6 +83,20 @@ KCoreConfigSkeleton* ConfigPage::configSkeleton()
     return d->configSkeleton;
 }
 
+void ConfigPage::setConfigSkeleton(KCoreConfigSkeleton* skel)
+{
+    if (d->configSkeleton == skel || !skel) {
+        return;
+    }
+    d->configSkeleton = skel;
+    // create the config dialog manager if it didn't exist or recreate it.
+    // This is needed because the used config skeleton has changed
+    // and no setter for that exists in KConfigDialogManager
+    d->configManager.reset(new KConfigDialogManager(this, d->configSkeleton));
+    connect(d->configManager.data(), &KConfigDialogManager::widgetModified, this, &ConfigPage::changed);
+}
+
+
 int ConfigPage::childPages() const
 {
     return 0;
