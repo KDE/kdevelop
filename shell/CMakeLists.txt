@@ -63,10 +63,16 @@ set(KDevPlatformShell_LIB_SRCS
     settings/pluginpreferences.cpp
     settings/sourceformattersettings.cpp
     settings/editstyledialog.cpp
+    settings/projectpreferences.cpp
 
 )
 
-set(KDevPlatformShell_UI
+kconfig_add_kcfg_files(KDevPlatformShell_LIB_SRCS
+    settings/uiconfig.kcfgc
+    settings/projectconfig.kcfgc
+)
+
+ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
     sessiondialog.ui
     projectinfopage.ui
     launchconfigurationdialog.ui
@@ -74,10 +80,8 @@ set(KDevPlatformShell_UI
     settings/uiconfig.ui
     settings/editstyledialog.ui
     settings/sourceformattersettings.ui
+    settings/projectsettings.ui
 )
-
-ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS ${KDevPlatformShell_UI})
-kconfig_add_kcfg_files(KDevPlatformShell_LIB_SRCS settings/uiconfig.kcfgc)
 
 add_library(KDevPlatformShell ${KDevPlatformShell_LIB_SRCS})
 add_library(KDev::Shell ALIAS KDevPlatformShell)

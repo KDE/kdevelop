@@ -33,21 +33,14 @@
 namespace KDevelop
 {
 
-K_PLUGIN_FACTORY_WITH_JSON(ProjectPreferencesFactory, "kcm_kdev_projectsettings.json", registerPlugin<ProjectPreferences>();)
-
-ProjectPreferences::ProjectPreferences( QWidget *parent, const QVariantList &args )
-    : KCModule( KAboutData::pluginData("kcm_kdev_projectsettings"), parent, args )
+ProjectPreferences::ProjectPreferences(QWidget* parent)
+    : ConfigPage(nullptr, ProjectSettings::self(), parent)
 {
-
     QVBoxLayout * l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
     preferencesDialog = new Ui::ProjectSettings;
     preferencesDialog->setupUi( w );
     l->addWidget( w );
-
-    addConfig( ProjectSettings::self(), w );
-
-    load();
 }
 
 ProjectPreferences::~ProjectPreferences( )
@@ -55,16 +48,31 @@ ProjectPreferences::~ProjectPreferences( )
     delete preferencesDialog;
 }
 
-void ProjectPreferences::save()
+void ProjectPreferences::apply()
 {
-    KCModule::save();
+    ConfigPage::apply();
 
     Core::self()->projectControllerInternal()->loadSettings(false);
 }
 
 void ProjectPreferences::slotSettingsChanged()
 {
-    emit changed( true );
+    emit changed();
+}
+
+QString ProjectPreferences::name() const
+{
+    return i18n("Projects");
+}
+
+QString ProjectPreferences::fullName() const
+{
+    return i18n("Configure Projects");
+}
+
+QIcon ProjectPreferences::icon() const
+{
+    return QIcon::fromTheme(QStringLiteral("project-open"));
 }
 
 }

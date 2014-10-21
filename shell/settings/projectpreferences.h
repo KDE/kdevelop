@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_PROJECTPREFERENCES_H
 #define KDEVPLATFORM_PROJECTPREFERENCES_H
 
-#include <kcmodule.h>
+#include <interfaces/configpage.h>
 
 namespace Ui
 {
@@ -31,14 +31,18 @@ class ProjectSettings;
 namespace KDevelop
 {
 
-class ProjectPreferences : public KCModule
+class ProjectPreferences : public ConfigPage
 {
     Q_OBJECT
 public:
-    ProjectPreferences( QWidget *parent, const QVariantList &args );
+    ProjectPreferences(QWidget *parent);
     virtual ~ProjectPreferences();
 
-    virtual void save();
+    virtual QString name() const override;
+    virtual QString fullName() const override;
+    virtual QIcon icon() const override;
+
+    virtual void apply() override;
 
 private slots:
     void slotSettingsChanged();

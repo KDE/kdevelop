@@ -59,6 +59,7 @@
 #include "workingsets/workingset.h"
 #include "settings/uipreferences.h"
 #include "settings/pluginpreferences.h"
+#include "settings/projectpreferences.h"
 #include "settings/sourceformattersettings.h"
 
 namespace KDevelop {
@@ -466,6 +467,7 @@ void UiController::showSettingsDialog()
         << new UiPreferences(activeMainWindow())
         << new PluginPreferences(activeMainWindow())
         << new SourceFormatterSettings(activeMainWindow())
+        << new ProjectPreferences(activeMainWindow())
         << editorConfigPage;
 
     ConfigDialog cfgDlg(configPages, activeMainWindow());
