@@ -27,23 +27,16 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/itemplateprovider.h>
 
-#include <KPluginFactory>
-#include <KCoreAddons/KAboutData>
 #include <KLocalizedString>
 
-K_PLUGIN_FACTORY_WITH_JSON(TemplateConfigFactory, "kdevtemplatemanager_config.json", registerPlugin<TemplateConfig>();)
-
-TemplateConfig::TemplateConfig(QWidget* parent, const QVariantList& args)
-    : KCModule(new KAboutData("kdevtemplates_config", i18n("Template Provider"), QString()
-        ), parent, args)
+TemplateConfig::TemplateConfig(QWidget* parent)
+    : ConfigPage(nullptr, nullptr, parent)
 {
     ui = new Ui::TemplateConfig;
     ui->setupUi(this);
 
-    foreach (KDevelop::IPlugin* plugin, KDevelop::ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.ITemplateProvider"))
-    {
-        if (KDevelop::ITemplateProvider* provider = plugin->extension<KDevelop::ITemplateProvider>())
-        {
+    foreach (KDevelop::IPlugin* plugin, KDevelop::ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.ITemplateProvider")) {
+        if (KDevelop::ITemplateProvider* provider = plugin->extension<KDevelop::ITemplateProvider>()) {
             ui->ktabwidget->addTab(new TemplatePage(provider), provider->icon(), provider->name());
         }
     }
@@ -52,6 +45,21 @@ TemplateConfig::TemplateConfig(QWidget* parent, const QVariantList& args)
 TemplateConfig::~TemplateConfig()
 {
     delete ui;
+}
+
+QString TemplateConfig::name() const
+{
+    return i18n("Templates");
+}
+
+QString TemplateConfig::fullName() const
+{
+    return i18n("Configure Templates");
+}
+
+QIcon TemplateConfig::icon() const
+{
+    return QIcon::fromTheme(QStringLiteral("project-development-new-template"));
 }
 
 #include "templateconfig.moc"

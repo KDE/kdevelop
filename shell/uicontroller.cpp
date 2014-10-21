@@ -64,6 +64,7 @@
 #include "settings/projectpreferences.h"
 #include "settings/sourceformattersettings.h"
 #include "settings/uipreferences.h"
+#include "settings/templateconfig.h"
 
 namespace KDevelop {
 
@@ -474,6 +475,7 @@ void UiController::showSettingsDialog()
         << new EnvironmentPreferences(activeMainWindow())
         << new CCPreferences(activeMainWindow())
         << new BGPreferences(activeMainWindow())
+        << new TemplateConfig(activeMainWindow())
         << editorConfigPage;
 
     ConfigDialog cfgDlg(configPages, activeMainWindow());

@@ -18,22 +18,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVPLATFORM_PLUGIN_TEMPLATECONFIG_H
-#define KDEVPLATFORM_PLUGIN_TEMPLATECONFIG_H
+#ifndef KDEVPLATFORM_TEMPLATECONFIG_H
+#define KDEVPLATFORM_TEMPLATECONFIG_H
 
-#include <kcmodule.h>
+#include <interfaces/configpage.h>
 
 namespace Ui
 {
     class TemplateConfig;
 }
 
-class TemplateConfig : public KCModule
+class TemplateConfig : public KDevelop::ConfigPage
 {
     Q_OBJECT
 public:
-    explicit TemplateConfig (QWidget* parent = 0, const QVariantList& args = QVariantList());
+    explicit TemplateConfig(QWidget* parent = 0);
     virtual ~TemplateConfig();
+
+    virtual QString name() const override;
+    virtual QString fullName() const override;
+    virtual QIcon icon() const override;
 
 private:
     Ui::TemplateConfig* ui;

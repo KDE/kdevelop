@@ -25,10 +25,10 @@
 
 #include <QFileDialog>
 #include <KNS3/DownloadDialog>
+#include <KNS3/UploadDialog>
 #include <KArchive>
 #include <KZip>
 #include <KTar>
-#include <kns3/uploaddialog.h>
 #include <QUrl>
 
 TemplatePage::TemplatePage (KDevelop::ITemplateProvider* provider, QWidget* parent) : QWidget (parent),

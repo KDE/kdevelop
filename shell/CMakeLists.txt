@@ -68,6 +68,8 @@ set(KDevPlatformShell_LIB_SRCS
     settings/environmentpreferences.cpp
     settings/ccpreferences.cpp
     settings/bgpreferences.cpp
+    settings/templateconfig.cpp
+    settings/templatepage.cpp
 
 )
 
@@ -90,6 +92,8 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
     settings/environmentwidget.ui
     settings/ccsettings.ui
     settings/bgsettings.ui
+    settings/templateconfig.ui
+    settings/templatepage.ui
 )
 
 add_library(KDevPlatformShell ${KDevPlatformShell_LIB_SRCS})
@@ -120,6 +124,8 @@ LINK_PRIVATE
     KF5::ItemViews
     KF5::WindowSystem
     KF5::KCMUtils #for KPluginSelector, not sure why it is in kcmutils
+    KF5::NewStuff # template config page
+    KF5::Archive # template config page
 
     KDev::Project
     KDev::Vcs
