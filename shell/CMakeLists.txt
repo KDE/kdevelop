@@ -61,6 +61,9 @@ set(KDevPlatformShell_LIB_SRCS
 
     settings/uipreferences.cpp
     settings/pluginpreferences.cpp
+    settings/sourceformattersettings.cpp
+    settings/editstyledialog.cpp
+
 )
 
 set(KDevPlatformShell_UI
@@ -69,6 +72,8 @@ set(KDevPlatformShell_UI
     launchconfigurationdialog.ui
     projectsourcepage.ui
     settings/uiconfig.ui
+    settings/editstyledialog.ui
+    settings/sourceformattersettings.ui
 )
 
 ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS ${KDevPlatformShell_UI})

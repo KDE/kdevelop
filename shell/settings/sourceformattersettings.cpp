@@ -46,8 +46,6 @@ Boston, MA 02110-1301, USA.
 
 #define STYLE_ROLE (Qt::UserRole+1)
 
-K_PLUGIN_FACTORY_WITH_JSON(SourceFormatterSettingsFactory, "kcm_kdevsourceformattersettings.json", registerPlugin<SourceFormatterSettings>();)
-
 using KDevelop::Core;
 using KDevelop::ISourceFormatter;
 using KDevelop::SourceFormatterStyle;
@@ -60,8 +58,8 @@ LanguageSettings::LanguageSettings()
     : selectedFormatter(0), selectedStyle(0) {
 }
 
-SourceFormatterSettings::SourceFormatterSettings(QWidget *parent, const QVariantList &args)
-    : KCModule(KAboutData::pluginData("kcm_kdevsourceformattersettings"), parent, args)
+SourceFormatterSettings::SourceFormatterSettings(QWidget* parent)
+    : KDevelop::ConfigPage(nullptr, nullptr, parent)
 {
     setupUi(this);
     connect( cbLanguages, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &SourceFormatterSettings::selectLanguage );
@@ -103,7 +101,7 @@ void selectAvailableStyle(LanguageSettings& lang) {
     lang.selectedStyle = *lang.selectedFormatter->styles.begin();
 }
 
-void SourceFormatterSettings::load()
+void SourceFormatterSettings::reset()
 {
     SourceFormatterController* fmtctrl = Core::self()->sourceFormatterControllerInternal();
     foreach( KDevelop::IPlugin* plugin, KDevelop::ICore::self()->pluginController()->allPluginsForExtension( "org.kdevelop.ISourceFormatter" ) )
@@ -215,7 +213,7 @@ void SourceFormatterSettings::load()
     chkKateOverrideIndentation->blockSignals( b );
 }
 
-void SourceFormatterSettings::save()
+void SourceFormatterSettings::apply()
 {
     KConfigGroup grp = Core::self()->sourceFormatterControllerInternal()->configuration();
 
@@ -293,7 +291,7 @@ void SourceFormatterSettings::selectLanguage( int idx )
     cbFormatters->setCurrentIndex(cbFormatters->findData(l.selectedFormatter->formatter->name()));
     cbFormatters->blockSignals(b);
     selectFormatter( cbFormatters->currentIndex() );
-    emit changed( true );
+    emit changed();
 }
 
 void SourceFormatterSettings::selectFormatter( int idx )
@@ -329,7 +327,7 @@ void SourceFormatterSettings::selectFormatter( int idx )
         styleList->setCurrentRow(0);
     }
     enableStyleButtons();
-    emit changed( true );
+    emit changed();
 }
 
 void SourceFormatterSettings::selectStyle( int row )
@@ -344,7 +342,7 @@ void SourceFormatterSettings::selectStyle( int row )
     l.selectedStyle = l.selectedFormatter->styles[styleList->item( row )->data( STYLE_ROLE ).toString()];
     enableStyleButtons();
     updatePreview();
-    emit changed( true );
+    emit changed();
 }
 
 void SourceFormatterSettings::deleteStyle()
@@ -378,7 +376,7 @@ void SourceFormatterSettings::deleteStyle()
         selectAvailableStyle(*lang);
     }
     updatePreview();
-    emit changed( true );
+    emit changed();
 }
 
 void SourceFormatterSettings::editStyle()
@@ -396,7 +394,7 @@ void SourceFormatterSettings::editStyle()
             l.selectedStyle->setContent(dlg.content());
         }
         updatePreview();
-        emit changed( true );
+        emit changed();
     }
 }
 
@@ -428,7 +426,7 @@ void SourceFormatterSettings::newStyle()
     QListWidgetItem* newitem = addStyle( *s );
     selectStyle( styleList->row( newitem ) );
     styleList->editItem( newitem );
-    emit changed( true );
+    emit changed();
 }
 
 void SourceFormatterSettings::styleNameChanged( QListWidgetItem* item )
@@ -439,7 +437,7 @@ void SourceFormatterSettings::styleNameChanged( QListWidgetItem* item )
 
     LanguageSettings& l = languages[ cbLanguages->currentText() ];
     l.selectedStyle->setCaption( item->text() );
-    emit changed( true );
+    emit changed();
 }
 
 QListWidgetItem* SourceFormatterSettings::addStyle( const SourceFormatterStyle& s )
@@ -512,7 +510,23 @@ void SourceFormatterSettings::somethingChanged()
     // Widgets are managed manually, so we have to explicitly tell KCModule
     // that we have some changes, otherwise it won't call "save" and/or will not activate
     // "Appy"
-    unmanagedWidgetChangeState(true);
+    emit changed();
 }
+
+QString SourceFormatterSettings::name() const
+{
+    return i18n("Source Formatter");
+}
+
+QString SourceFormatterSettings::fullName() const
+{
+    return i18n("Configure Source Formatter");
+}
+
+QIcon SourceFormatterSettings::icon() const
+{
+    return QIcon::fromTheme(QStringLiteral("text-field"));
+}
+
 
 #include "sourceformattersettings.moc"

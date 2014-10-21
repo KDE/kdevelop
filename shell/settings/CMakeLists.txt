@@ -65,24 +65,6 @@ ki18n_wrap_ui( envsettings_cfg_SRCS ${envsettings_cfg_UI} )
 add_library( kcm_kdev_envsettings MODULE ${envsettings_cfg_SRCS} )
 target_link_libraries( kcm_kdev_envsettings KF5::KCMUtils KDev::Shell KDev::Util)
 
-########## Formatter Settings
-set(kcm_kdevsourceformattersettings_SRCS
-    editstyledialog.cpp
-    sourceformattersettings.cpp
-    ../debug.cpp
-)
-
-set(kcm_kdevsourceformattersettings_UI
-    editstyledialog.ui
-    sourceformattersettings.ui
-)
-
-ki18n_wrap_ui(kcm_kdevsourceformattersettings_SRCS ${kcm_kdevsourceformattersettings_UI} )
-add_library(kcm_kdevsourceformattersettings MODULE ${kcm_kdevsourceformattersettings_SRCS})
-target_link_libraries(kcm_kdevsourceformattersettings
-    KF5::TextEditor KF5::Parts
-    KDev::Shell KDev::Util KDev::Language)
-
 ########## Install TARGETS/Files
 
 install( TARGETS
@@ -90,7 +72,6 @@ install( TARGETS
         kcm_kdev_ccsettings
         kcm_kdev_bgsettings
         kcm_kdev_envsettings 
-        kcm_kdevsourceformattersettings
         DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
 configure_file(kcm_kdev_envsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop)
 kcoreaddons_desktop_to_json(kcm_kdev_envsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop)
@@ -100,13 +81,10 @@ configure_file(kcm_kdev_bgsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm
 kcoreaddons_desktop_to_json(kcm_kdev_bgsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_bgsettings.desktop)
 configure_file(kcm_kdev_ccsettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_ccsettings.desktop)
 kcoreaddons_desktop_to_json(kcm_kdev_ccsettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_ccsettings.desktop)
-configure_file(kcm_kdevsourceformattersettings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevsourceformattersettings.desktop)
-kcoreaddons_desktop_to_json(kcm_kdevsourceformattersettings ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevsourceformattersettings.desktop)
 
 install( FILES 
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_envsettings.desktop
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_projectsettings.desktop
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_bgsettings.desktop
         ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdev_ccsettings.desktop
-        ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevsourceformattersettings.desktop
         DESTINATION ${SERVICES_INSTALL_DIR} )

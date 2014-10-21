@@ -59,6 +59,7 @@
 #include "workingsets/workingset.h"
 #include "settings/uipreferences.h"
 #include "settings/pluginpreferences.h"
+#include "settings/sourceformattersettings.h"
 
 namespace KDevelop {
 
@@ -464,6 +465,7 @@ void UiController::showSettingsDialog()
     auto configPages = QList<KDevelop::ConfigPage*>()
         << new UiPreferences(activeMainWindow())
         << new PluginPreferences(activeMainWindow())
+        << new SourceFormatterSettings(activeMainWindow())
         << editorConfigPage;
 
     ConfigDialog cfgDlg(configPages, activeMainWindow());

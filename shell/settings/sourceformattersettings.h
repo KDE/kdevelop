@@ -21,10 +21,11 @@ Boston, MA 02110-1301, USA.
 #define KDEVPLATFORM_SOURCEFORMATTERSETTINGS_H
 
 #include <QHash>
-#include <KCModule>
 #include <QMimeType>
 
-#include <shell/sourceformattercontroller.h>
+#include <interfaces/configpage.h>
+
+#include "sourceformattercontroller.h"
 
 #include "ui_sourceformattersettings.h"
 
@@ -55,17 +56,21 @@ struct LanguageSettings {
 * It supports predefined and custom styles. A live preview of the style
 * is shown on the right side of the page.s
 */
-class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSettingsUI
+class SourceFormatterSettings : public KDevelop::ConfigPage, public Ui::SourceFormatterSettingsUI
 {
 Q_OBJECT
 
 public:
-    SourceFormatterSettings( QWidget *parent, const QVariantList &args );
+    explicit SourceFormatterSettings(QWidget* parent = 0);
     virtual ~SourceFormatterSettings();
 
+    virtual QString name() const override;
+    virtual QString fullName() const override;
+    virtual QIcon icon() const override;
+
 public slots:
-    virtual void load();
-    virtual void save();
+    virtual void reset() override;
+    virtual void apply() override;
 private slots:
     void deleteStyle();
     void editStyle();
