@@ -57,10 +57,11 @@
 #include <ktexteditor/view.h>
 #include "workingsetcontroller.h"
 #include "workingsets/workingset.h"
-#include "settings/uipreferences.h"
+#include "settings/environmentpreferences.h"
 #include "settings/pluginpreferences.h"
 #include "settings/projectpreferences.h"
 #include "settings/sourceformattersettings.h"
+#include "settings/uipreferences.h"
 
 namespace KDevelop {
 
@@ -468,6 +469,7 @@ void UiController::showSettingsDialog()
         << new PluginPreferences(activeMainWindow())
         << new SourceFormatterSettings(activeMainWindow())
         << new ProjectPreferences(activeMainWindow())
+        << new EnvironmentPreferences(activeMainWindow())
         << editorConfigPage;
 
     ConfigDialog cfgDlg(configPages, activeMainWindow());

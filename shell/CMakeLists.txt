@@ -64,6 +64,9 @@ set(KDevPlatformShell_LIB_SRCS
     settings/sourceformattersettings.cpp
     settings/editstyledialog.cpp
     settings/projectpreferences.cpp
+    settings/environmentwidget.cpp
+    settings/environmentgroupmodel.cpp
+    settings/environmentpreferences.cpp
 
 )
 
@@ -81,6 +84,7 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
     settings/editstyledialog.ui
     settings/sourceformattersettings.ui
     settings/projectsettings.ui
+    settings/environmentwidget.ui
 )
 
 add_library(KDevPlatformShell ${KDevPlatformShell_LIB_SRCS})

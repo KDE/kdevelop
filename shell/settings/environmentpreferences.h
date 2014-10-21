@@ -20,25 +20,25 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_ENVIRONMENTPREFERENCES_H
 #define KDEVPLATFORM_ENVIRONMENTPREFERENCES_H
 
-#include <kcmodule.h>
-#include <QtCore/QVariant>
+#include <interfaces/configpage.h>
 
 namespace KDevelop
 {
 
-class EnvironmentPreferences : public KCModule
+class EnvironmentPreferences : public ConfigPage
 {
     Q_OBJECT
 public:
-    explicit EnvironmentPreferences( QWidget *parent, const QVariantList &args = QVariantList() );
+    explicit EnvironmentPreferences(QWidget* parent);
     virtual ~EnvironmentPreferences();
 
-    virtual void save();
-    virtual void load();
-    virtual void defaults();
+    virtual QString name() const override;
+    virtual QString fullName() const override;
+    virtual QIcon icon() const override;
 
-private slots:
-    void settingsChanged();
+    virtual void apply() override;
+    virtual void reset() override;
+    virtual void defaults() override;
 
 private:
     class EnvironmentPreferencesPrivate *const d;

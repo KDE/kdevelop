@@ -20,13 +20,10 @@ Boston, MA 02110-1301, USA.
 
 #include <QVBoxLayout>
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <KSharedConfig>
 #include <KConfigSkeleton>
-#include <kconfiggroup.h>
-#include <kaboutdata.h>
-#include <kconfig.h>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KSharedConfig>
 
 #include "environmentwidget.h"
 
@@ -41,26 +38,25 @@ public:
     QString activeGroup;
 };
 
-K_PLUGIN_FACTORY_WITH_JSON(PreferencesFactory, "kcm_kdev_envsettings.json", registerPlugin<EnvironmentPreferences>();)
-
-EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QVariantList &args )
-    : KCModule( KAboutData::pluginData("kcm_kdev_envsettings"), parent, args )
-    , d( new EnvironmentPreferencesPrivate )
+EnvironmentPreferences::EnvironmentPreferences(QWidget* parent)
+    : ConfigPage(nullptr, nullptr, parent), d(new EnvironmentPreferencesPrivate)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     d->preferencesDialog = new EnvironmentWidget( this );
     l->addWidget( d->preferencesDialog );
 
-    connect( d->preferencesDialog, &EnvironmentWidget::changed,
-             this, &EnvironmentPreferences::settingsChanged );
-
+    connect(d->preferencesDialog, &EnvironmentWidget::changed,
+            this, &EnvironmentPreferences::changed);
 
     d->skel = new KConfigSkeleton(KSharedConfig::openConfig());
-    addConfig( d->skel, d->preferencesDialog );
+    setConfigSkeleton(d->skel);
 
+#pragma message("TODO: what is this doing? how to port?")
+#if 0
     if (!args.isEmpty() && args.first().canConvert<QString>()) {
         d->activeGroup = args.first().toString();
     }
+#endif
 }
 
 EnvironmentPreferences::~EnvironmentPreferences( )
@@ -68,28 +64,38 @@ EnvironmentPreferences::~EnvironmentPreferences( )
     delete d;
 }
 
-void EnvironmentPreferences::save()
+void EnvironmentPreferences::apply()
 {
-    d->preferencesDialog->saveSettings( d->skel->config() );
-    KCModule::save();
+    d->preferencesDialog->saveSettings(d->skel->config());
+    ConfigPage::apply();
 }
 
-void EnvironmentPreferences::load()
+void EnvironmentPreferences::reset()
 {
-    d->preferencesDialog->loadSettings( d->skel->config() );
-    d->preferencesDialog->setActiveGroup( d->activeGroup );
-    KCModule::load();
+    d->preferencesDialog->loadSettings(d->skel->config());
+    d->preferencesDialog->setActiveGroup(d->activeGroup);
+    ConfigPage::reset();
 }
 
 void EnvironmentPreferences::defaults()
 {
-    d->preferencesDialog->defaults( d->skel->config() );
-    KCModule::defaults();
+    d->preferencesDialog->defaults(d->skel->config());
+    ConfigPage::defaults();
 }
 
-void EnvironmentPreferences::settingsChanged()
+QString EnvironmentPreferences::name() const
 {
-    unmanagedWidgetChangeState( true );
+    return i18n("Environment");
+}
+
+QString EnvironmentPreferences::fullName() const
+{
+    return i18n("Configure Environment Variables");
+}
+
+QIcon EnvironmentPreferences::icon() const
+{
+    return QIcon::fromTheme(QStringLiteral("utilities-terminal"));
 }
 
 }
