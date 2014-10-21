@@ -21,9 +21,6 @@
 
 #include <QVBoxLayout>
 
-#include <kaboutdata.h>
-#include <KPluginFactory>
-
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
 
@@ -36,28 +33,21 @@
 namespace KDevelop
 {
 
-K_PLUGIN_FACTORY_WITH_JSON(BGPreferencesFactory, "kcm_kdev_bgsettings.json", registerPlugin<BGPreferences>();)
 
-
-BGPreferences::BGPreferences( QWidget *parent, const QVariantList &args )
-    : KCModule( KAboutData::pluginData("kcm_kdev_bgsettings"), parent, args )
+BGPreferences::BGPreferences(QWidget* parent)
+    : ConfigPage(nullptr, BGSettings::self(), parent)
 {
-
     QVBoxLayout * l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
     preferencesDialog = new Ui::BGSettings;
     preferencesDialog->setupUi( w );
 
     l->addWidget( w );
-
-    addConfig( BGSettings::self(), w );
-
-    load();
 }
 
-void BGPreferences::load()
+void BGPreferences::reset()
 {
-    KCModule::load();
+    ConfigPage::reset();
 
     // stay backwards compatible
     Q_ASSERT(ICore::self()->activeSession());
@@ -76,9 +66,9 @@ BGPreferences::~BGPreferences( )
     delete preferencesDialog;
 }
 
-void BGPreferences::save()
+void BGPreferences::apply()
 {
-    KCModule::save();
+    ConfigPage::apply();
 
     if ( preferencesDialog->kcfg_enable->isChecked() )
         Core::self()->languageController()->backgroundParser()->enableProcessing();
@@ -88,6 +78,21 @@ void BGPreferences::save()
     Core::self()->languageController()->backgroundParser()->setDelay( preferencesDialog->kcfg_delay->value() );
     Core::self()->languageController()->backgroundParser()->setThreadCount( preferencesDialog->kcfg_threads->value() );
 
+}
+
+QString BGPreferences::name() const
+{
+    return i18n("Background Parser");
+}
+
+QString BGPreferences::fullName() const
+{
+    return i18n("Configure Background Parser");
+}
+
+QIcon BGPreferences::icon() const
+{
+    return QIcon::fromTheme(QStringLiteral("code-context"));
 }
 
 }

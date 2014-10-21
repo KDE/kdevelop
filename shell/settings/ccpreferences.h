@@ -36,7 +36,7 @@ class CCPreferences : public ConfigPage
 {
     Q_OBJECT
 public:
-    CCPreferences(QWidget* parent);
+    explicit CCPreferences(QWidget* parent);
     virtual ~CCPreferences();
 
     virtual QString name() const override;

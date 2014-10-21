@@ -1,5 +1,4 @@
 
-add_subdirectory(settings)
 add_subdirectory(tests)
 
 set(KDevPlatformShell_LIB_SRCS
@@ -68,6 +67,7 @@ set(KDevPlatformShell_LIB_SRCS
     settings/environmentgroupmodel.cpp
     settings/environmentpreferences.cpp
     settings/ccpreferences.cpp
+    settings/bgpreferences.cpp
 
 )
 
@@ -75,6 +75,7 @@ kconfig_add_kcfg_files(KDevPlatformShell_LIB_SRCS
     settings/uiconfig.kcfgc
     settings/projectconfig.kcfgc
     settings/ccconfig.kcfgc
+    settings/bgconfig.kcfgc
 )
 
 ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
@@ -88,6 +89,7 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
     settings/projectsettings.ui
     settings/environmentwidget.ui
     settings/ccsettings.ui
+    settings/bgsettings.ui
 )
 
 add_library(KDevPlatformShell ${KDevPlatformShell_LIB_SRCS})

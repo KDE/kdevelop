@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_BGPREFERENCES_H
 #define KDEVPLATFORM_BGPREFERENCES_H
 
-#include <kcmodule.h>
+#include <interfaces/configpage.h>
 
 namespace Ui
 {
@@ -32,15 +32,19 @@ class BGSettings;
 namespace KDevelop
 {
 
-class BGPreferences : public KCModule
+class BGPreferences : public ConfigPage
 {
     Q_OBJECT
 public:
-    BGPreferences( QWidget *parent, const QVariantList &args );
+    explicit BGPreferences(QWidget* parent);
     virtual ~BGPreferences();
 
-    virtual void save();
-    virtual void load();
+    virtual QString name() const override;
+    virtual QString fullName() const override;
+    virtual QIcon icon() const override;
+
+    virtual void apply() override;
+    virtual void reset() override;
 
 private:
     Ui::BGSettings *preferencesDialog;

@@ -35,7 +35,7 @@ class ProjectPreferences : public ConfigPage
 {
     Q_OBJECT
 public:
-    ProjectPreferences(QWidget *parent);
+    explicit ProjectPreferences(QWidget *parent);
     virtual ~ProjectPreferences();
 
     virtual QString name() const override;

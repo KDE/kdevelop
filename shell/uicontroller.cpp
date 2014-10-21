@@ -57,6 +57,7 @@
 #include <ktexteditor/view.h>
 #include "workingsetcontroller.h"
 #include "workingsets/workingset.h"
+#include "settings/bgpreferences.h"
 #include "settings/ccpreferences.h"
 #include "settings/environmentpreferences.h"
 #include "settings/pluginpreferences.h"
@@ -472,6 +473,7 @@ void UiController::showSettingsDialog()
         << new ProjectPreferences(activeMainWindow())
         << new EnvironmentPreferences(activeMainWindow())
         << new CCPreferences(activeMainWindow())
+        << new BGPreferences(activeMainWindow())
         << editorConfigPage;
 
     ConfigDialog cfgDlg(configPages, activeMainWindow());
