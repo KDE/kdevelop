@@ -144,6 +144,7 @@ private:
     
     bool receivedReply_;
     bool isRunning_;
+    unsigned long childPid_;
 };
 }
 

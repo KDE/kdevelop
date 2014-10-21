@@ -312,9 +312,7 @@ void Lexer::tokenize(ParseSession* _session)
     size_t previousIndex = index;
 
     {
-    Token token;
-    token.position = cursor.offsetIn( session->contents() );
-    token.size = 0;
+    Token token{cursor.offsetIn(session->contents()), 0, Token_EOF};
     stream->append(token);
     }
     Token* current_token = &(session->token_stream->last());

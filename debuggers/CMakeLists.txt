@@ -1,4 +1,4 @@
-if(NOT WIN32 AND NOT APPLE)
+if(NOT WIN32)
   add_subdirectory(gdb)
-endif(NOT WIN32 AND NOT APPLE )
+endif(NOT WIN32)
 

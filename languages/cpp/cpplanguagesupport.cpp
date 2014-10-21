@@ -81,7 +81,7 @@
 #include "quickopen.h"
 #include "cppdebughelper.h"
 #include "codegen/simplerefactoring.h"
-// #include "codegen/cppclasshelper.h"
+#include "codegen/cppclasshelper.h"
 #include "includepathcomputer.h"
 #include "debug.h"
 
@@ -269,9 +269,7 @@ BasicRefactoring* CppLanguageSupport::refactoring() const
 
 ICreateClassHelper* CppLanguageSupport::createClassHelper() const
 {
-#pragma message("waiting for Grantlee port")
-//     return new CppClassHelper;
-    return 0;
+    return new CppClassHelper;
 }
 
 

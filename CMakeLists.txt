@@ -30,7 +30,7 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent WebKitWidgets QuickWidgets Script Test)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick WebKitWidgets Script Test)
 find_package(KF5 REQUIRED COMPONENTS
   Config
   I18n
