@@ -49,16 +49,12 @@ void BGPreferences::reset()
 {
     ConfigPage::reset();
 
-    // stay backwards compatible
     Q_ASSERT(ICore::self()->activeSession());
     KConfigGroup config(ICore::self()->activeSession()->config(), "Background Parser");
-    KConfigGroup oldConfig(KSharedConfig::openConfig(), "Background Parser");
-#define BACKWARDS_COMPATIBLE_ENTRY(entry, default) \
-config.readEntry(entry, oldConfig.readEntry(entry, default))
 
-    preferencesDialog->kcfg_delay->setValue( BACKWARDS_COMPATIBLE_ENTRY("Delay", 500) );
-    preferencesDialog->kcfg_threads->setValue( BACKWARDS_COMPATIBLE_ENTRY("Number of Threads", 2) );
-    preferencesDialog->kcfg_enable->setChecked( BACKWARDS_COMPATIBLE_ENTRY("Enabled", true) );
+    preferencesDialog->kcfg_delay->setValue(config.readEntry("Delay", 500));
+    preferencesDialog->kcfg_threads->setValue(config.readEntry("Number of Threads", 2));
+    preferencesDialog->kcfg_enable->setChecked(config.readEntry("Enabled", true));
 }
 
 BGPreferences::~BGPreferences( )
