@@ -202,7 +202,6 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
         return false;
 
     KJob *job = createImportJob(folder);
-    connect(job, SIGNAL(result(KJob*)), SLOT(importFinished(KJob*)));
     project->setReloadJob(job);
     ICore::self()->runController()->registerJob( job );
     return true;
