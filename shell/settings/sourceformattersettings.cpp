@@ -253,6 +253,12 @@ void SourceFormatterSettings::apply()
     Core::self()->sourceFormatterControllerInternal()->settingsChanged();
 }
 
+void SourceFormatterSettings::defaults()
+{
+    // do nothing
+}
+
+
 void SourceFormatterSettings::enableStyleButtons()
 {
     bool userEntry = styleList->currentItem()

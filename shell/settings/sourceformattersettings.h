@@ -71,6 +71,7 @@ public:
 public slots:
     virtual void reset() override;
     virtual void apply() override;
+    virtual void defaults() override;
 private slots:
     void deleteStyle();
     void editStyle();
