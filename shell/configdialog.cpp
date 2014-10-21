@@ -154,9 +154,10 @@ void KDevelop::ConfigDialog::addConfigPageInternal(KPageWidgetItem* item, Config
 {
     item->setHeader(page->fullName());
     item->setIcon(page->icon());
-    connect(page, &ConfigPage::changed, this, &ConfigDialog::onPageChanged);
     page->initConfigManager();
     page->reset(); // make sure all widgets are in the correct state
+    // make sure that we only connect to changed after calling reset()
+    connect(page, &ConfigPage::changed, this, &ConfigDialog::onPageChanged);
     m_pages.append(item);
     for (int i = 0; i < page->childPages(); ++i) {
         auto child = page->childPage(i);
