@@ -75,7 +75,6 @@ void ConfigPage::initConfigManager()
 {
     if (d->configManager) {
         d->configManager->addWidget(this);
-        d->configManager->updateWidgets();
     }
 }
 
