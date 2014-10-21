@@ -35,7 +35,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/adaptsignatureassistant.cpp
     codegen/adaptsignatureaction.cpp
     codegen/unresolvedincludeassistant.cpp
-#     codegen/cppclasshelper.cpp #TODO reenable when grantlee is ported
+    codegen/cppclasshelper.cpp
 #     codegen/makeimplementationprivate.cpp
 )
 

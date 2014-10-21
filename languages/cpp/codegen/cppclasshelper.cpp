@@ -175,7 +175,7 @@ QVariantHash CppTemplateNewClass::extraVariables()
     {
         // includeDirectiveFromUrl() expects a header URL
         sourceUrl = baseUrl();
-        sourceUrl.addPath(name().toLower() + ".h");
+        sourceUrl.setPath(sourceUrl.path() + '/' + ".h");
     }
 
     foreach (const DeclarationPointer& base, directBaseClasses())
