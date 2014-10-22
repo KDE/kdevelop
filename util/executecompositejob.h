@@ -35,11 +35,14 @@ public:
     ~ExecuteCompositeJob();
 
     virtual void start();
+    void setAbortOnError(bool abort);
 
 public Q_SLOTS:
     virtual void slotResult(KJob* job);
+
 protected:
     virtual bool doKill();
+
 private:
     class ExecuteCompositeJobPrivate* const d;
 };
