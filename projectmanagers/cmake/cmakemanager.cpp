@@ -250,7 +250,7 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<QUrl, QHash<Q
     QList<ProjectTargetItem*> oldTargets = folder->targetList();
     QHash<QString, QJsonObject> dirTargets = targets[folder->url()];
     if (dirTargets.isEmpty())
-        qWarning() << "fucking empty" << targets.keys() << folder->url();
+        qWarning() << "empty targets tuple" << targets.keys() << folder->url();
 
     for(ProjectTargetItem* item: oldTargets) {
         QHash<QString, QJsonObject>::iterator it = dirTargets.find(item->text());
@@ -265,6 +265,7 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<QUrl, QHash<Q
 
     for(const QJsonObject& obj : dirTargets) {
         QString type = obj.value("type").toString();
+
         if (type == "SHARED_LIBRARY") {
             new CMakeLibraryItem(obj, folder);
         } else if (type == "EXECUTABLE") {

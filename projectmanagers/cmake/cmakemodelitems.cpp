@@ -20,6 +20,23 @@
 
 #include "cmakemodelitems.h"
 
+#include <QJsonObject>
+#include <QJsonArray>
+
+CMakeLibraryItem::CMakeLibraryItem(const QJsonObject& object, KDevelop::ProjectBaseItem* parent)
+    : ProjectLibraryTargetItem(parent->project(), object.value(QString("name")).toString(), parent)
+    , CMakeJsonItem(object)
+{
+    adoptObject();
+}
+
+CMakeExecutableItem::CMakeExecutableItem(const QJsonObject& object, KDevelop::ProjectBaseItem* parent)
+    : ProjectExecutableTargetItem(parent->project(), object.value(QString("name")).toString(), parent)
+    , CMakeJsonItem(object)
+{
+    adoptObject();
+}
+
 QUrl CMakeExecutableItem::builtUrl() const
 {
     return QUrl::fromLocalFile(m_object["location"].toString());
@@ -29,3 +46,37 @@ QUrl CMakeExecutableItem::installedUrl() const
 {
     return QUrl();
 }
+
+#include <QDebug>
+
+void adoptObjectInTarget(const QJsonObject& m_object, KDevelop::ProjectTargetItem* item)
+{
+    QJsonArray jsonSources = m_object["configs"].toArray().first().toObject()["sources"].toArray();
+    QStringList sources;
+    for(const QJsonValue& s: jsonSources) {
+        sources += s.toString();
+    }
+
+    QList<KDevelop::ProjectFileItem*> files = item->fileList();
+    for(KDevelop::ProjectFileItem* file : files) {
+        int count = sources.removeAll(file->fileName());
+        if(count == 0) {
+            delete file;
+        }
+    }
+
+    for(const QString& s: sources) {
+        new KDevelop::ProjectFileItem(s, item);
+    }
+}
+
+void CMakeExecutableItem::adoptObject()
+{
+    adoptObjectInTarget(m_object, this);
+}
+
+void CMakeLibraryItem::adoptObject()
+{
+    adoptObjectInTarget(m_object, this);
+}
+

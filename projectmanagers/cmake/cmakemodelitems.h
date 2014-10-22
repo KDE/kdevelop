@@ -35,30 +35,27 @@ public:
     void setObject(const QJsonObject &obj) { m_object = obj; }
 
 protected:
+    virtual void adoptObject() = 0;
+
     QJsonObject m_object;
 };
 
 class CMakeExecutableItem : public KDevelop::ProjectExecutableTargetItem, public CMakeJsonItem
 {
 public:
-    CMakeExecutableItem(const QJsonObject& object, KDevelop::ProjectBaseItem* parent = 0)
-    : ProjectExecutableTargetItem(parent->project(), object.value(QString("name")).toString(), parent)
-    , CMakeJsonItem(object)
-    {
-    }
+    CMakeExecutableItem(const QJsonObject& object, KDevelop::ProjectBaseItem* parent = 0);
 
     virtual QUrl builtUrl() const;
     virtual QUrl installedUrl() const;
+    virtual void adoptObject();
 };
 
 class CMakeLibraryItem : public KDevelop::ProjectLibraryTargetItem, public CMakeJsonItem
 {
 public:
-    CMakeLibraryItem(const QJsonObject& object, KDevelop::ProjectBaseItem* parent = 0)
-    : ProjectLibraryTargetItem(parent->project(), object.value(QString("name")).toString(), parent)
-    , CMakeJsonItem(object)
-    {
-    }
+    CMakeLibraryItem(const QJsonObject& object, KDevelop::ProjectBaseItem* parent = 0);
+
+    virtual void adoptObject();
 };
 
 #endif
