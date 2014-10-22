@@ -27,24 +27,16 @@ namespace KDevelop {
 
 class ConfigPagePrivate {
 public:
-    ConfigPagePrivate(IPlugin* plugin, KCoreConfigSkeleton* config)
-        : configSkeleton(config), plugin(plugin)
-        {
-        }
+    ConfigPagePrivate(IPlugin* plugin) : plugin(plugin) {}
     QScopedPointer<KConfigDialogManager> configManager;
-    KCoreConfigSkeleton* configSkeleton;
+    KCoreConfigSkeleton* configSkeleton = nullptr;
     IPlugin* plugin;
 };
 
 ConfigPage::ConfigPage(IPlugin* plugin, KCoreConfigSkeleton* config, QWidget* parent)
-        : KTextEditor::ConfigPage(parent), d(new ConfigPagePrivate(plugin, config))
+        : KTextEditor::ConfigPage(parent), d(new ConfigPagePrivate(plugin))
 {
-    if (d->configSkeleton) {
-        d->configManager.reset(new KConfigDialogManager(parent, d->configSkeleton));
-        connect(d->configManager.data(), &KConfigDialogManager::widgetModified, this, &ConfigPage::changed);
-        // d->configManager->addWidget(this) must be called from the config dialog,
-        // since the widget tree is not complete yet when calling this constructor
-    }
+    setConfigSkeleton(config);
 }
 
 ConfigPage::~ConfigPage()
@@ -102,6 +94,8 @@ void ConfigPage::setConfigSkeleton(KCoreConfigSkeleton* skel)
     // and no setter for that exists in KConfigDialogManager
     d->configManager.reset(new KConfigDialogManager(this, d->configSkeleton));
     connect(d->configManager.data(), &KConfigDialogManager::widgetModified, this, &ConfigPage::changed);
+    // d->configManager->addWidget(this) must be called from the config dialog,
+    // since the widget tree is probably not complete when calling this function
 }
 
 
