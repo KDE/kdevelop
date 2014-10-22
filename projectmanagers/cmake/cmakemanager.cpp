@@ -138,7 +138,6 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
 {
     auto project = item->project();
 
-    KJob* job = 0;
     QList<KJob*> jobs;
 
     // create the JSON file if it doesn't exist
@@ -149,14 +148,17 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
     }
 
     // parse the JSON file
-    job = new CMakeImportJob(project, this);
+    CMakeImportJob* job = new CMakeImportJob(project, this);
     connect(job, SIGNAL(result(KJob*)), SLOT(importFinished(KJob*)));
     jobs << job;
 
     // generate the file system listing
     jobs << KDevelop::AbstractFileManagerPlugin::createImportJob(item);
 
-    return new ExecuteCompositeJob(this, jobs);
+    ExecuteCompositeJob* composite = new ExecuteCompositeJob(this, jobs);
+//     even if the cmake call failed, we want to load the project so that the project can be worked on
+    composite->setAbortOnError(false);
+    return composite;
 }
 
 // QList<ProjectFolderItem*> CMakeManager::parse(ProjectFolderItem*)

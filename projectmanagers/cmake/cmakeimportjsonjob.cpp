@@ -106,8 +106,7 @@ void CMakeImportJob::start()
 {
     auto commandsFile = CMake::commandsFile(project());
     if (!QFileInfo(commandsFile.toLocalFile()).exists()) {
-        setError(FileMissingError);
-        setErrorText(tr("Could not import CMake project ('compile_commands.json' missing)"));
+        qCWarning(CMAKE) << "Could not import CMake project ('compile_commands.json' missing)";
         emitResult();
         return;
     }
@@ -124,8 +123,7 @@ void CMakeImportJob::importFinished()
     auto future = m_futureWatcher->future();
     auto data = future.result();
     if (!data.isValid) {
-        setError(ReadError);
-        setErrorText(tr("Could not import CMake project ('compile_commands.json' invalid)"));
+        qCWarning(CMAKE) << "Could not import CMake project ('compile_commands.json' invalid)";
         emitResult();
         return;
     }
