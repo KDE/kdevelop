@@ -61,6 +61,7 @@ private slots:
     void testRemoveEmptyFolderInFolder();
     void testRemoveUnindexedFile();
     void testRemoveFolderContainingUnversionedFiles();
+    void testDiff();
 
 private:
     GitPlugin* m_plugin;

@@ -420,6 +420,25 @@ void GitInitTest::removeTempDirs()
     }
 }
 
+void GitInitTest::testDiff()
+{
+    repoInit();
+    addFiles();
+    commitFiles();
+
+    QVERIFY(writeFile(gitTest_BaseDir + gitTest_FileName, "something else"));
+
+    VcsRevision srcrev = VcsRevision::createSpecialRevision(VcsRevision::Base);
+    VcsRevision dstrev = VcsRevision::createSpecialRevision(VcsRevision::Working);
+    VcsJob* j = m_plugin->diff(QUrl::fromLocalFile(gitTest_BaseDir), srcrev, dstrev, VcsDiff::DiffUnified, IBasicVersionControl::Recursive);
+    VERIFYJOB(j);
+
+    KDevelop::VcsDiff d = j->fetchResults().value<KDevelop::VcsDiff>();
+    QVERIFY(d.baseDiff().isLocalFile());
+    QString path = d.baseDiff().toLocalFile();
+    QVERIFY(QDir().exists(path+"/.git"));
+}
+
 QTEST_MAIN(GitInitTest)
 
 // #include "gittest.moc"
