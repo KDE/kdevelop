@@ -82,6 +82,7 @@ Comment[ru]=Настраивает глобальные параметры CMake
 Comment[sk]=Konfigurovať globálne nastavenia CMake
 Comment[sl]=Nastavite splošne možnosti za CMake
 Comment[sv]=Anpassa globala inställningar för CMake
+Comment[tr]=Genel CMake ayarlarını yapılandır
 Comment[uk]=Налаштування загальних параметрів CMake
 Comment[x-test]=xxConfigure global CMake settingsxx
 Comment[zh_CN]=配置全局 CMake 设置
