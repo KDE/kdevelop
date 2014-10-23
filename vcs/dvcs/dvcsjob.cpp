@@ -36,6 +36,7 @@
 #include <QUrl>
 
 #include <KLocalizedString>
+#include <KShell>
 
 #include <interfaces/iplugin.h>
 #include <outputview/outputmodel.h>
@@ -178,19 +179,20 @@ void DVcsJob::start()
         return;
     }
 
-    qCDebug(VCS) << "Execute dvcs command:" << dvcsCommand();
+    QString commandDisplay = KShell::joinArgs(dvcsCommand());
+    qCDebug(VCS) << "Execute dvcs command:" << commandDisplay;
 
     QString service;
     if(d->vcsplugin)
         service = d->vcsplugin->objectName();
-    setObjectName(service+": "+dvcsCommand().join(" "));
+    setObjectName(service+": "+commandDisplay);
 
     d->status = JobRunning;
     d->childproc->setOutputChannelMode(KProcess::SeparateChannels);
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
     d->childproc->start();
 
-    d->model->appendLine(directory().path() + "> " + dvcsCommand().join(" "));
+    d->model->appendLine(directory().path() + "> " + commandDisplay);
 }
 
 void DVcsJob::setCommunicationMode(KProcess::OutputChannelMode comm)
@@ -211,7 +213,8 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
 
     d->errorOutput = d->childproc->readAllStandardError();
 
-    QString completeErrorText = i18n("Process '%1' exited with status %2\n%3", d->childproc->program().join(" "), d->childproc->exitCode(), QString::fromLocal8Bit(d->errorOutput) );
+    QString displayCommand = KShell::joinArgs(dvcsCommand());
+    QString completeErrorText = i18n("Process '%1' exited with status %2\n%3", displayCommand, d->childproc->exitCode(), QString::fromLocal8Bit(d->errorOutput) );
     setErrorText( completeErrorText );
 
     QString errorValue;
@@ -238,7 +241,7 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
         errorValue = "UnknownError";
         break;
     }
-    qCDebug(VCS) << "oops, found an error while running" << dvcsCommand() << ":" << errorValue
+    qCDebug(VCS) << "oops, found an error while running" << displayCommand << ":" << errorValue
                                                      << "Exit code is:" << d->childproc->exitCode();
     displayOutput(QString::fromLocal8Bit(d->errorOutput));
     d->model->appendLine(i18n("Command finished with error %1.", errorValue));
