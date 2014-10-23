@@ -48,6 +48,20 @@ const QString gitTest_FileName3("bar");
 
 using namespace KDevelop;
 
+bool writeFile(const QString &path, const QString& content, QIODevice::OpenModeFlag mode = QIODevice::WriteOnly)
+{
+    QFile f(path);
+
+    if (!f.open(mode)) {
+        return false;
+    }
+
+    QTextStream input(&f);
+    input << content;
+
+    return true;
+}
+
 void GitInitTest::initTestCase()
 {
     AutoTestShell::init();
@@ -106,22 +120,8 @@ void GitInitTest::addFiles()
     qDebug() << "Adding files to the repo";
 
     //we start it after repoInit, so we still have empty git repo
-    QFile f(gitTest_BaseDir + gitTest_FileName);
-
-    if (f.open(QIODevice::WriteOnly)) {
-        QTextStream input(&f);
-        input << "HELLO WORLD";
-    }
-
-    f.close();
-    f.setFileName(gitTest_BaseDir + gitTest_FileName2);
-
-    if (f.open(QIODevice::WriteOnly)) {
-        QTextStream input(&f);
-        input << "No, bar()!";
-    }
-
-    f.close();
+    QVERIFY(writeFile(gitTest_BaseDir + gitTest_FileName, "HELLO WORLD"));
+    QVERIFY(writeFile(gitTest_BaseDir + gitTest_FileName2, "No, bar()!"));
 
     //test git-status exitCode (see DVcsJob::setExitCode).
     VcsJob* j = m_plugin->status(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
@@ -131,14 +131,7 @@ void GitInitTest::addFiles()
     j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir + gitTest_FileName));
     VERIFYJOB(j);
 
-    f.setFileName(gitSrcDir + gitTest_FileName3);
-
-    if (f.open(QIODevice::WriteOnly)) {
-        QTextStream input(&f);
-        input << "No, foo()! It's bar()!";
-    }
-
-    f.close();
+    QVERIFY(writeFile(gitSrcDir + gitTest_FileName3, "No, foo()! It's bar()!"));
 
     //test git-status exitCode again
     j = m_plugin->status(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
@@ -157,11 +150,7 @@ void GitInitTest::addFiles()
     QStringList files = QStringList() << "file1" << "file2" << "la la";
     QList<QUrl> multipleFiles;
     foreach(const QString& file, files) {
-        QFile f(gitTest_BaseDir + file);
-        QVERIFY(f.open(QIODevice::WriteOnly));
-        QTextStream input(&f);
-        input << file;
-        f.close();
+        QVERIFY(writeFile(gitTest_BaseDir + file, file));
         multipleFiles << QUrl::fromLocalFile(gitTest_BaseDir + file);
     }
     j = m_plugin->add(multipleFiles);
@@ -209,14 +198,7 @@ void GitInitTest::commitFiles()
 
     qDebug() << "Committing one more time";
     //let's try to change the file and test "git commit -a"
-    QFile f(gitTest_BaseDir + gitTest_FileName);
-
-    if (f.open(QIODevice::WriteOnly)) {
-        QTextStream input(&f);
-        input << "Just another HELLO WORLD\n";
-    }
-
-    f.close();
+    QVERIFY(writeFile(gitTest_BaseDir + gitTest_FileName, "Just another HELLO WORLD\n"));
 
     //add changes
     j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir + gitTest_FileName));
@@ -343,11 +325,7 @@ void GitInitTest::testAnnotation()
     commitFiles();
 
     // called after commitFiles
-    QFile f(gitTest_BaseDir + gitTest_FileName);
-    QVERIFY(f.open(QIODevice::Append));
-    QTextStream input(&f);
-    input << "An appended line";
-    f.close();
+    QVERIFY(writeFile(gitTest_BaseDir + gitTest_FileName, "An appended line", QIODevice::Append));
 
     VcsJob* j = m_plugin->commit(QString("KDevelop's Test commit3"), QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
@@ -401,11 +379,7 @@ void GitInitTest::testRemoveUnindexedFile()
 {
     repoInit();
 
-    QFile f(gitTest_BaseDir + gitTest_FileName);
-    QVERIFY(f.open(QIODevice::Append));
-    QTextStream input(&f);
-    input << "An appended line";
-    f.close();
+    QVERIFY(writeFile(gitTest_BaseDir + gitTest_FileName, "An appended line", QIODevice::Append));
 
     VcsJob* j = m_plugin->remove(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir + gitTest_FileName));
     if (j) VERIFYJOB(j);
@@ -420,25 +394,13 @@ void GitInitTest::testRemoveFolderContainingUnversionedFiles()
     QDir d(gitTest_BaseDir);
     d.mkdir("dir");
 
-    {
-        QFile f(gitTest_BaseDir + "dir/foo");
-        QVERIFY(f.open(QIODevice::Append));
-        QTextStream input(&f);
-        input << "An appended line";
-        f.close();
-    }
+    QVERIFY(writeFile(gitTest_BaseDir + "dir/foo", "An appended line", QIODevice::Append));
     VcsJob* j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir+"dir"));
     VERIFYJOB(j);
     j = m_plugin->commit("initial commit", QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
 
-    {
-        QFile f(gitTest_BaseDir + "dir/bar");
-        QVERIFY(f.open(QIODevice::Append));
-        QTextStream input(&f);
-        input << "An appended line";
-        f.close();
-    }
+    QVERIFY(writeFile(gitTest_BaseDir + "dir/bar", "An appended line", QIODevice::Append));
 
     j = m_plugin->remove(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir + "dir"));
     if (j) VERIFYJOB(j);
