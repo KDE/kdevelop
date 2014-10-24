@@ -29,7 +29,7 @@ class EnvironmentPreferences : public ConfigPage
 {
     Q_OBJECT
 public:
-    explicit EnvironmentPreferences(QWidget* parent);
+    explicit EnvironmentPreferences(const QString& activeGroup = QString(), QWidget* parent = nullptr);
     virtual ~EnvironmentPreferences();
 
     virtual QString name() const override;

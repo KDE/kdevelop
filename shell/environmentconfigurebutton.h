@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_ENVIRONMENTCONFIGUREBUTTON_H
 #define KDEVPLATFORM_ENVIRONMENTCONFIGUREBUTTON_H
 
-#include "utilexport.h"
+#include "shellexport.h"
 #include <QPushButton>
 
 namespace KDevelop
@@ -35,7 +35,7 @@ class EnvironmentSelectionWidget;
  * that one along. This button will automatically update the selection widget
  * if required then.
  */
-class KDEVPLATFORMUTIL_EXPORT EnvironmentConfigureButton : public QPushButton
+class KDEVPLATFORMSHELL_EXPORT EnvironmentConfigureButton : public QPushButton
 {
     Q_OBJECT
 public:
@@ -54,8 +54,6 @@ signals:
 private:
     class EnvironmentConfigureButtonPrivate* const d;
     friend class EnvironmentConfigureButtonPrivate;
-
-    Q_PRIVATE_SLOT(d, void showDialog())
 };
 
 }

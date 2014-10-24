@@ -38,7 +38,7 @@ public:
     QString activeGroup;
 };
 
-EnvironmentPreferences::EnvironmentPreferences(QWidget* parent)
+EnvironmentPreferences::EnvironmentPreferences(const QString& activeGroup, QWidget* parent)
     : ConfigPage(nullptr, nullptr, parent), d(new EnvironmentPreferencesPrivate)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
@@ -51,12 +51,7 @@ EnvironmentPreferences::EnvironmentPreferences(QWidget* parent)
     d->skel = new KConfigSkeleton(KSharedConfig::openConfig());
     setConfigSkeleton(d->skel);
 
-#pragma message("TODO: what is this doing? how to port?")
-#if 0
-    if (!args.isEmpty() && args.first().canConvert<QString>()) {
-        d->activeGroup = args.first().toString();
-    }
-#endif
+    d->activeGroup = activeGroup;
 }
 
 EnvironmentPreferences::~EnvironmentPreferences( )

@@ -50,6 +50,7 @@ set(KDevPlatformShell_LIB_SRCS
     debug.cpp
     configdialog.cpp
     editorconfigpage.cpp
+    environmentconfigurebutton.cpp
 
     progresswidget/progressmanager.cpp
     progresswidget/statusbarprogresswidget.cpp
@@ -156,6 +157,7 @@ install(FILES
     selectioncontroller.h
     runcontroller.h
     launchconfiguration.h
+    environmentconfigurebutton.h
     ${CMAKE_CURRENT_BINARY_DIR}/shellexport.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell COMPONENT Devel
 )
