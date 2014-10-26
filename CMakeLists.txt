@@ -74,6 +74,7 @@ find_package(KF5Service 5.3 REQUIRED)
 # TODO KF5: Remove Grantlee found check as soon there is an official version of Grantlee for Qt5
 find_package(Grantlee5)
 set_package_properties(Grantlee5 PROPERTIES
+    TYPE REQUIRED
     PURPOSE "Grantlee templating library, needed for file templates"
     URL "http://www.grantlee.org/")
 
@@ -131,9 +132,7 @@ add_subdirectory(debugger)
 add_subdirectory(documentation)
 add_subdirectory(serialization)
 
-if (Grantlee5_FOUND)
-    add_subdirectory(template)
-endif()
+add_subdirectory(template)
 add_subdirectory(tests)
 
 add_subdirectory(plugins)
