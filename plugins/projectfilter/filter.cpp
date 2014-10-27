@@ -77,7 +77,7 @@ SerializedFilters defaultFilters()
     // common vcs folders which we want to hide
     static const QVector<QString> invalidFolders = QVector<QString>()
         << ".git" << "CVS" << ".svn" << "_svn"
-        << "SCCS" << "_darcs" << ".hg" << ".bzr";
+        << "SCCS" << "_darcs" << ".hg" << ".bzr" << "__pycache__";
     foreach(const QString& folder, invalidFolders) {
         ret << SerializedFilter(folder, Filter::Folders);
     }
@@ -91,7 +91,7 @@ SerializedFilters defaultFilters()
         // backup files
         << "*~" << ".*.kate-swp" << ".*.swp"
         // python cache and object files
-        << "*.pyc" << "*.pyo" << "__pycache__";
+        << "*.pyc" << "*.pyo";
     foreach(const QString& filePattern, filePatterns) {
         ret << SerializedFilter(filePattern, Filter::Files);
     }
