@@ -59,5 +59,3 @@ endif()
 # endif()
 
 ecm_optional_add_subdirectory(reviewboard)
-
-feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
