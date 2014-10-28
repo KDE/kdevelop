@@ -19,7 +19,7 @@
 #include <QToolButton>
 
 #include <KLocalizedString>
-#include <KPushButton>
+#include <QPushButton>
 #include <KMimeTypeTrader>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>

@@ -27,7 +27,7 @@
 #include <KLocalizedString>
 #include <klineedit.h>
 #include <kcombobox.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <QTabWidget>
 #include <kmessagebox.h>
 

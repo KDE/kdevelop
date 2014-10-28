@@ -69,14 +69,14 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="KPushButton" name="selectAllPushButton">
+         <widget class="QPushButton" name="selectAllPushButton">
           <property name="text">
            <string>Select &amp;All</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="KPushButton" name="deselectAllPushButton">
+         <widget class="QPushButton" name="deselectAllPushButton">
           <property name="text">
            <string>&amp;Deselect All</string>
           </property>
@@ -94,7 +94,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>

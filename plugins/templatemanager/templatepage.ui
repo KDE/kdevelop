@@ -21,7 +21,7 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="KPushButton" name="loadButton">
+      <widget class="QPushButton" name="loadButton">
        <property name="text">
         <string>Load Template From File</string>
        </property>
@@ -33,7 +33,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="getNewButton">
+      <widget class="QPushButton" name="getNewButton">
        <property name="text">
         <string>Get More Templates</string>
        </property>
@@ -45,7 +45,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="shareButton">
+      <widget class="QPushButton" name="shareButton">
        <property name="text">
         <string>Share Templates</string>
        </property>
@@ -57,7 +57,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="extractButton">
+      <widget class="QPushButton" name="extractButton">
        <property name="text">
         <string>Clone Template</string>
        </property>
@@ -85,7 +85,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>

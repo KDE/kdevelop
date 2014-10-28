@@ -48,7 +48,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="setAsDefaultBtn">
+      <widget class="QPushButton" name="setAsDefaultBtn">
        <property name="text">
         <string>Set As Default Group</string>
        </property>
@@ -81,7 +81,7 @@
    <item row="1" column="1">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="KPushButton" name="deleteButton">
+      <widget class="QPushButton" name="deleteButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -94,7 +94,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="newMultipleButton">
+      <widget class="QPushButton" name="newMultipleButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -130,7 +130,7 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>

@@ -99,7 +99,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="5" column="5">
-    <widget class="KPushButton" name="syncButton">
+    <widget class="QPushButton" name="syncButton">
      <property name="toolTip">
       <string>Quickly select location from a set of directories</string>
      </property>
@@ -452,7 +452,7 @@ p, li { white-space: pre-wrap; }
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>

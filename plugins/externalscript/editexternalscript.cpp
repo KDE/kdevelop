@@ -24,7 +24,7 @@
 #include "externalscriptitem.h"
 
 #include <KLocalizedString>
-#include <KPushButton>
+#include <QPushButton>
 #include <KShell>
 
 #include <QAction>

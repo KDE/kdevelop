@@ -31,7 +31,7 @@
 #include <kcomponentdata.h>
 #include <kaboutdata.h>
 #include <KWidgetItemDelegate>
-#include <KPushButton>
+#include <QPushButton>
 #include <KIconLoader>
 #include <k4aboutdata.h>
 #include <kaboutapplicationdialog.h>
@@ -111,7 +111,7 @@ public:
 
     LoadedPluginsDelegate(QAbstractItemView *itemView, QObject *parent = 0)
         : KWidgetItemDelegate(itemView, parent)
-        , pushButton(new KPushButton)
+        , pushButton(new QPushButton)
     {
         pushButton->setIcon(QIcon::fromTheme("dialog-information")); // only for getting size matters
     }
@@ -189,7 +189,7 @@ public:
 
     QList<QWidget*> createItemWidgets() const
     {
-        KPushButton *button = new KPushButton();
+        QPushButton *button = new QPushButton();
         button->setIcon(QIcon::fromTheme("dialog-information"));
         setBlockedEventTypes(button, QList<QEvent::Type>() << QEvent::MouseButtonPress
                              << QEvent::MouseButtonRelease << QEvent::MouseButtonDblClick);
@@ -208,7 +208,7 @@ public:
             qDebug() << "Fixme: missing button?";
             return;
         }
-        KPushButton *aboutPushButton = static_cast<KPushButton*>(widgets[0]);
+        QPushButton *aboutPushButton = static_cast<QPushButton*>(widgets[0]);
         QSize aboutPushButtonSizeHint = aboutPushButton->sizeHint();
         aboutPushButton->resize(aboutPushButtonSizeHint);
         aboutPushButton->move(dependantLayoutValue(option.rect.width() - MARGIN - aboutPushButtonSizeHint.width(), aboutPushButtonSizeHint.width(), option.rect.width()), option.rect.height() / 2 - aboutPushButtonSizeHint.height() / 2);
@@ -262,7 +262,7 @@ public:
     virtual ~PluginsView()
     {
         // explicitly delete the delegate here since otherwise
-        // we get spammed by warnings that the KPushButton we return
+        // we get spammed by warnings that the QPushButton we return
         // in createItemWidgets is deleted before the delegate
         // *sigh* - even dfaure says KWidgetItemDelegate is a crude hack
         delete itemDelegate();

@@ -32,7 +32,7 @@
 #include <QLayout>
 #include <QSplitter>
 #include <QLabel>
-#include <KPushButton>
+#include <QPushButton>
 #include "coderepresentation.h"
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>

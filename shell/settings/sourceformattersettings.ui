@@ -176,21 +176,21 @@
       <item row="2" column="1">
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <widget class="KPushButton" name="btnNewStyle">
+         <widget class="QPushButton" name="btnNewStyle">
           <property name="text">
            <string>New</string>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="KPushButton" name="btnEditStyle">
+         <widget class="QPushButton" name="btnEditStyle">
           <property name="text">
            <string>Edit...</string>
           </property>
          </widget>
         </item>
         <item row="0" column="2">
-         <widget class="KPushButton" name="btnDelStyle">
+         <widget class="QPushButton" name="btnDelStyle">
           <property name="text">
            <string>Delete</string>
           </property>
@@ -220,7 +220,7 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>

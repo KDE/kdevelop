@@ -31,7 +31,7 @@ Boston, MA 02110-1301, USA.
 #include <kio/netaccess.h>
 #include <kparts/mainwindow.h>
 #include <kactioncollection.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 
 #include "session.h"
 #include "core.h"

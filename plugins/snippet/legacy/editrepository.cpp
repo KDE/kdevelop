@@ -15,7 +15,7 @@
 
 #include <KLocalizedString>
 
-#include <KPushButton>
+#include <QPushButton>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>

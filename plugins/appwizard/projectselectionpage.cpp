@@ -71,7 +71,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
              this, SLOT(templatesDownloaded(KNS3::Entry::List)));
     m_listView->addWidget(0, knsButton);
 
-    KPushButton* loadButton = new KPushButton(m_listView);
+    QPushButton* loadButton = new QPushButton(m_listView);
     loadButton->setText(i18n("Load Template From File"));
     loadButton->setIcon(QIcon::fromTheme("application-x-archive"));
     connect (loadButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));

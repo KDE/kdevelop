@@ -25,7 +25,7 @@
 #include "core.h"
 
 #include <KLineEdit>
-#include <KPushButton>
+#include <QPushButton>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <QListView>
@@ -43,7 +43,7 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* 
     connect(view, SIGNAL(doubleClicked(QModelIndex)), SLOT(doubleClicked(QModelIndex)));
     connect(view, SIGNAL(entered(QModelIndex)), SLOT(itemEntered(QModelIndex)));
 
-    m_deleteButton = new KPushButton(view->viewport());
+    m_deleteButton = new QPushButton(view->viewport());
     m_deleteButton->setIcon(QIcon::fromTheme("edit-delete"));
     m_deleteButton->setToolTip(i18nc("@info", "Delete session"));
     m_deleteButton->hide();
