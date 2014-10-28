@@ -27,7 +27,7 @@
 
 #include <interfaces/idocument.h>
 
-#include <kicon.h>
+#include <QIcon>
 
 class KDevDocumentItem;
 class KDevCategoryItem;

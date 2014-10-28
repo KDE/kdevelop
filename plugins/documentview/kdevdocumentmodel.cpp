@@ -38,13 +38,13 @@ QIcon KDevDocumentItem::icon() const
     switch(m_documentState)
     {
     case IDocument::Clean:
-        return  KIcon(m_fileIcon);
+        return QIcon::fromTheme(m_fileIcon);
     case IDocument::Modified:
-        return KIcon("document-save");
+        return QIcon::fromTheme("document-save");
     case IDocument::Dirty:
-        return KIcon("document-revert");
+        return QIcon::fromTheme("document-revert");
     case IDocument::DirtyAndModified:
-        return KIcon("edit-delete");
+        return QIcon::fromTheme("edit-delete");
     default:
         return QIcon();
     }

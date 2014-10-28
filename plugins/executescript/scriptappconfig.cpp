@@ -20,7 +20,7 @@
 #include "scriptappconfig.h"
 
 #include <KLocalizedString>
-#include <kicon.h>
+#include <QIcon>
 
 #include <QIcon>
 #include <QMimeDatabase>

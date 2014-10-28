@@ -20,7 +20,7 @@
 #include "nativeappconfig.h"
 
 #include <KLocalizedString>
-#include <kicon.h>
+#include <QIcon>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>

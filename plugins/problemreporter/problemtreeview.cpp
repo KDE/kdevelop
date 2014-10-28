@@ -31,7 +31,7 @@
 #include <QAction>
 #include <kactionmenu.h>
 #include <KLocalizedString>
-#include <kicon.h>
+#include <QIcon>
 #include <KMenu>
 
 #include <interfaces/icore.h>

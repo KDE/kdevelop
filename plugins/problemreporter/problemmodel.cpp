@@ -40,22 +40,22 @@
 #include "problemreporterplugin.h"
 #include "watcheddocumentset.h"
 
-#include <KIcon>
+#include <QIcon>
 
 using namespace KDevelop;
 
 namespace {
-KIcon iconForSeverity(ProblemData::Severity severity)
+QIcon iconForSeverity(ProblemData::Severity severity)
 {
     switch (severity) {
     case ProblemData::Hint:
-        return KIcon("dialog-information");
+        return QIcon::fromTheme("dialog-information");
     case ProblemData::Warning:
-        return KIcon("dialog-warning");
+        return QIcon::fromTheme("dialog-warning");
     case ProblemData::Error:
-        return KIcon("dialog-error");
+        return QIcon::fromTheme("dialog-error");
     }
-    return KIcon();
+    return QIcon();
 }
 
 }

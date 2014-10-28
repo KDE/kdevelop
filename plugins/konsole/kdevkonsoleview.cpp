@@ -22,7 +22,7 @@
 #include <QUuid>
 
 #include <kurl.h>
-#include <kicon.h>
+#include <QIcon>
 #include <KLocalizedString>
 #include <klibloader.h>
 #include <kde_terminal_interface.h>

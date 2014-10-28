@@ -29,7 +29,7 @@
 #include <QToolButton>
 #include <language/duchain/declaration.h>
 #include <language/duchain/use.h>
-#include <kicon.h>
+#include <QIcon>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>

@@ -22,7 +22,7 @@
 #include <KLocalizedString>
 #include <qfileinfo.h>
 #include <kmimetype.h>
-#include <kicon.h>
+#include <QIcon>
 
 ProjectProxyModel::ProjectProxyModel(QObject * parent)
     : QSortFilterProxyModel(parent)

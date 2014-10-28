@@ -38,7 +38,7 @@
 #include <QAction>
 #include <ktoggleaction.h>
 #include <KLocalizedString>
-#include <kicon.h>
+#include <QIcon>
 #include <QTabWidget>
 #include <kstandardaction.h>
 #include <klineedit.h>
