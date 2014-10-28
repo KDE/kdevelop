@@ -27,6 +27,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QTimer>
 #include <QApplication>
 #include <QAction>
+#include <QMap>
 #include <QtCore/QDebug>
 
 #include <kcmdlineargs.h>
@@ -466,8 +467,8 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return 0L;
     }
 
-    if ( d->loadedPlugins.contains( info ) )
-        return d->loadedPlugins[ info ];
+    if ( IPlugin* plugin = d->loadedPlugins.value( info ) )
+        return plugin;
 
     if( !isEnabled( info ) )
     {
@@ -606,9 +607,8 @@ IPlugin *PluginController::pluginForExtension(const QString &extension, const QS
 {
     IPlugin* plugin = nullptr;
     d->foreachEnabledPlugin([this, &plugin] (const KPluginInfo& info) -> bool {
-        if( d->loadedPlugins.contains( info ) ) {
-            plugin = d->loadedPlugins[ info ];
-        } else {
+        plugin = d->loadedPlugins.value( info );
+        if( !plugin ) {
             plugin = loadPluginInternal( info.pluginName() );
         }
         return !plugin;
@@ -622,11 +622,11 @@ QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extensio
     //qCDebug(SHELL) << "Finding all Plugins for Extension:" << extension << "|" << constraints;
     QList<IPlugin*> plugins;
     d->foreachEnabledPlugin([this, &plugins] (const KPluginInfo& info) -> bool {
-        if( d->loadedPlugins.contains( info ) ) {
-            plugins << d->loadedPlugins[ info ];
-        } else if (auto plugin = loadPluginInternal( info.pluginName() )) {
-            plugins << plugin;
+        IPlugin* plugin = d->loadedPlugins.value( info );
+        if( !plugin) {
+            plugin = loadPluginInternal( info.pluginName() );
         }
+        plugins << plugin;
         return true;
     }, extension, constraints);
     return plugins;
@@ -655,9 +655,9 @@ QStringList PluginController::allPluginNames()
 QList<ContextMenuExtension> PluginController::queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const
 {
     QList<ContextMenuExtension> exts;
-    Q_FOREACH( const KPluginInfo& info, d->loadedPlugins.keys() )
+    for( auto it=d->loadedPlugins.constBegin(), itEnd = d->loadedPlugins.constEnd(); it!=itEnd; ++it )
     {
-        IPlugin* plug = d->loadedPlugins[info];
+        IPlugin* plug = it.value();
         exts << plug->contextMenuExtension( context );
     }
     exts << Core::self()->debugControllerInternal()->contextMenuExtension( context );
@@ -709,14 +709,15 @@ void PluginController::updateLoadedPlugins()
         if( isGlobalPlugin( info ) )
         {
             bool enabled = grp.readEntry( info.pluginName()+"Enabled", ( defaultPlugins.isEmpty() || defaultPlugins.contains( info.pluginName() ) ) ) || !isUserSelectable( info );
-            if( d->loadedPlugins.contains( info ) && !enabled )
+            bool loaded = d->loadedPlugins.contains( info );
+            if( loaded && !enabled )
             {
                 qCDebug(SHELL) << "unloading" << info.pluginName();
                 if( !unloadPlugin( info.pluginName() ) )
                 {
                     grp.writeEntry( info.pluginName()+"Enabled", false );
                 }
-            } else if( !d->loadedPlugins.contains( info ) && enabled )
+            } else if( !loaded && enabled )
             {
                 loadPluginInternal( info.pluginName() );
             }
