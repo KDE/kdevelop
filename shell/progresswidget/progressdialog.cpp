@@ -32,7 +32,7 @@
 #include "progressdialog.h"
 #include "progressmanager.h"
 
-#include <KHBox>
+#include <QHBoxLayout>
 #include <KLocalizedString>
 #include <KStandardGuiItem>
 
@@ -48,6 +48,7 @@
 #include <QScrollBar>
 #include <QTimer>
 #include <QToolButton>
+#include <QVBoxLayout>
 
 namespace KDevelop {
 
@@ -60,7 +61,9 @@ TransactionItemView::TransactionItemView( QWidget *parent, const char *name )
 {
     setObjectName( name );
     setFrameStyle( NoFrame );
-    mBigBox = new KVBox( this );
+    mBigBox = new QWidget( this );
+    auto layout = new QVBoxLayout(mBigBox);
+    layout->setMargin(0);
     setWidget( mBigBox );
     setWidgetResizable( true );
     setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
@@ -151,8 +154,10 @@ TransactionItem::TransactionItem( QWidget *parent,
     setStretchFactor( mFrame, 3 );
     layout()->addWidget( mFrame );
 
-    KHBox *h = new KHBox( this );
-    h->setSpacing( 5 );
+    QWidget *h = new QWidget( this );
+    auto hboxLayout = new QHBoxLayout(h);
+    hboxLayout->setMargin(0);
+    hboxLayout->setSpacing( 5 );
     layout()->addWidget( h );
 
     mItemLabel =
@@ -161,23 +166,28 @@ TransactionItem::TransactionItem( QWidget *parent,
     h->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
 
     mProgress = new QProgressBar( h );
+    hboxLayout->addWidget(mProgress);
     mProgress->setMaximum( 100 );
     mProgress->setValue( item->progress() );
     h->layout()->addWidget( mProgress );
 
     if ( item->canBeCanceled() ) {
         mCancelButton = new QPushButton( QIcon::fromTheme( "dialog-cancel" ), QString(), h );
+        hboxLayout->addWidget(mCancelButton);
         mCancelButton->setToolTip( i18n( "Cancel this operation." ) );
         connect ( mCancelButton, SIGNAL(clicked()),
                   this, SLOT(slotItemCanceled()));
         h->layout()->addWidget( mCancelButton );
     }
 
-    h = new KHBox( this );
-    h->setSpacing( 5 );
+    h = new QWidget( this );
+    hboxLayout = new QHBoxLayout(h);
+    hboxLayout->setMargin(0);
+    hboxLayout->setSpacing( 5 );
     h->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
     layout()->addWidget( h );
     mItemStatus = new QLabel( h );
+    hboxLayout->addWidget(mItemStatus);
     mItemStatus->setTextFormat( Qt::RichText );
     mItemStatus->setText(
                 fontMetrics().elidedText( item->status(), Qt::ElideRight, MAX_LABEL_WIDTH ) );

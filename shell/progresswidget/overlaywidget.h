@@ -22,6 +22,8 @@
 
 #include <KHBox>
 
+#include <QHBoxLayout>
+
 class QResizeEvent;
 class QEvent;
 

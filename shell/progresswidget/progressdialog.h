@@ -24,10 +24,11 @@
 
 #include "overlaywidget.h"
 
+#include <KVBox>
 
 #include <QScrollArea>
 #include <QMap>
-#include <KVBox>
+#include <QVBoxLayout>
 
 class QProgressBar;
 class QFrame;
@@ -58,7 +59,7 @@ protected:
     virtual void resizeEvent ( QResizeEvent *event );
 
 private:
-    KVBox *mBigBox;
+    QWidget *mBigBox;
 };
 
 class TransactionItem : public KVBox
