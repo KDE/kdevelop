@@ -36,7 +36,7 @@ class QTreeView;
 class QStackedWidget;
 class QToolButton;
 class QItemSelection;
-class KTabWidget;
+class QTabWidget;
 
 namespace Ui
 {

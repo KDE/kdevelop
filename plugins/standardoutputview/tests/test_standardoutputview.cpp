@@ -23,7 +23,7 @@
 #include <QTreeView>
 #include <QtTest/QTest>
 
-#include <ktabwidget.h>
+#include <QTabWidget>
 #include <KLocalizedString>
 
 #include <tests/testcore.h>

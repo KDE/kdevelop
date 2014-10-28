@@ -28,7 +28,7 @@
 #include <klineedit.h>
 #include <kcombobox.h>
 #include <kpushbutton.h>
-#include <ktabwidget.h>
+#include <QTabWidget>
 #include <kmessagebox.h>
 
 #include <interfaces/launchconfigurationpage.h>
@@ -900,10 +900,10 @@ LaunchConfigPagesContainer::LaunchConfigPagesContainer( const QList<LaunchConfig
     setLayout( new QVBoxLayout( this ) );
     layout()->setContentsMargins( 0, 0, 0, 0 );
     QWidget* parentwidget = this;
-    KTabWidget* tab = 0;
+    QTabWidget* tab = 0;
     if( factories.count() > 1 )
     {
-        tab = new KTabWidget( this );
+        tab = new QTabWidget( this );
         parentwidget = tab;
         layout()->addWidget( tab );
     }

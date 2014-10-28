@@ -22,7 +22,7 @@ class CvsGenericOutputView;
 
 /**
  * This class is the main output view of KDevelop's CVS plugin.
- * It only constists out of a KTabWidget.
+ * It only constists out of a QTabWidget.
  *
  * When created, a CvsGenericOutputView will be inserted.
  *
@@ -41,14 +41,14 @@ public:
 
 public slots:
     /**
-     * Inserts @p tag into the KTabWidget and calls it @p label .
+     * Inserts @p tag into the QTabWidget and calls it @p label .
      * This slot gets connected to CvsPlugin::addNewTabToMainView().
      */
     void slotAddTab(QWidget* tab, const QString& label);
 
     /**
      * When this slot gets called, the output of the job will be written to
-     * the default outputview of the KTabWidget.
+     * the default outputview of the QTabWidget.
      * This slot gets connected to CvsPlugin::jobFinished().
      */
     void slotJobFinished(KJob* job);

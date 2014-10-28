@@ -39,7 +39,7 @@ class QWidgetAction;
 class QSortFilterProxyModel;
 class QModelIndex;
 class ToolViewData;
-class KTabWidget;
+class QTabWidget;
 class KToggleAction;
 class QAction;
 class KAction;
@@ -109,7 +109,7 @@ private:
     QMap<QTreeView*, DelayData> m_scrollDelay;
     QMap<int, QSortFilterProxyModel*> proxyModels;
     QMap<int, QString> filters;
-    KTabWidget* tabwidget;
+    QTabWidget* tabwidget;
     QStackedWidget* stackwidget;
     const ToolViewData* data;
     QToolButton* m_closeButton;

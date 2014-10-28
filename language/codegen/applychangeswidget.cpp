@@ -24,7 +24,7 @@
 
 #include <kparts/part.h>
 
-#include <KTabWidget>
+#include <QTabWidget>
 #include <KMimeTypeTrader>
 #include <QMimeType>
 #include <QMimeDatabase>
@@ -61,7 +61,7 @@ public:
     QList<KParts::ReadWritePart*> m_editParts;
     QList<KTemporaryFile * > m_temps;
     QList<IndexedString > m_files;
-    KTabWidget * m_documentTabs;
+    QTabWidget * m_documentTabs;
     QLabel* m_info;
 };
 
@@ -75,7 +75,7 @@ ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
 
     QWidget* w=new QWidget(this);
     d->m_info=new QLabel(w);
-    d->m_documentTabs = new KTabWidget(w);
+    d->m_documentTabs = new QTabWidget(w);
     connect(d->m_documentTabs, SIGNAL(currentChanged(int)),
             this, SLOT(indexChanged(int)));
 

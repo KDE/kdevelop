@@ -23,13 +23,13 @@
     <number>0</number>
    </property>
    <item row="0" column="0" >
-    <widget class="KTabWidget" name="tabwidget" />
+    <widget class="QTabWidget" name="tabwidget" />
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KTabWidget</class>
+   <class>QTabWidget</class>
    <extends>QTabWidget</extends>
    <header>ktabwidget.h</header>
    <container>1</container>

@@ -39,7 +39,7 @@
 #include <ktoggleaction.h>
 #include <KLocalizedString>
 #include <kicon.h>
-#include <ktabwidget.h>
+#include <QTabWidget>
 #include <kstandardaction.h>
 #include <klineedit.h>
 #include <kactioncollection.h>
@@ -73,7 +73,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     layout->setMargin(0);
     if( data->type & KDevelop::IOutputView::MultipleView )
     {
-        tabwidget = new KTabWidget(this);
+        tabwidget = new QTabWidget(this);
         layout->addWidget( tabwidget );
         m_closeButton = new QToolButton( this );
         connect( m_closeButton, SIGNAL(clicked()), SLOT(closeActiveView()) );
