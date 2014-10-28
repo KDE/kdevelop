@@ -391,7 +391,7 @@ void AssistantPopup::updateState()
     foreach (IAssistantAction::Ptr action, m_assistant->actions()) {
         items << action->toKAction();
         items.last()->setParent(this);
-        //For some reason, KAction's setShortcut does nothing, so we manage with QShortcut
+        //For some reason, QAction's setShortcut does nothing, so we manage with QShortcut
         if (++curShortcut != m_shortcuts.constEnd()) {
             connect(*curShortcut, SIGNAL(activated()), items.last(), SLOT(trigger()));
         }

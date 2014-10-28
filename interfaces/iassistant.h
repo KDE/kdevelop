@@ -41,7 +41,7 @@ public:
 
     virtual ~IAssistantAction();
 
-    ///Creates a KAction that represents this exact assistant action.
+    ///Creates a QAction that represents this exact assistant action.
     ///The caller owns the action, and is responsible for deleting it.
     virtual QAction* toKAction() const;
 

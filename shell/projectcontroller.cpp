@@ -33,7 +33,7 @@ Boston, MA 02110-1301, USA.
 #include <QBoxLayout>
 #include <QLabel>
 
-#include <kaction.h>
+#include <QAction>
 #include <kconfig.h>
 #include <KLocalizedString>
 #include <kpassivepopup.h>

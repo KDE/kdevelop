@@ -26,7 +26,7 @@
 
 #include <QVBoxLayout>
 
-#include <kaction.h>
+#include <QAction>
 #include <KLocalizedString>
 #include <kmimetype.h>
 #include <kaboutdata.h>

@@ -26,7 +26,7 @@
 #include <QClipboard>
 #include <QUrl>
 
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <kaboutdata.h>
 #include <KLocalizedString>

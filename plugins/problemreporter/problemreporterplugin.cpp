@@ -51,7 +51,7 @@
 #include <language/duchain/duchainutils.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iassistant.h>
-#include <kaction.h>
+#include <QAction>
 
 Q_LOGGING_CATEGORY(PLUGIN_PROBLEMREPORTER, "kdevplatform.plugins.problemreporter")
 K_PLUGIN_FACTORY_WITH_JSON(KDevProblemReporterFactory, "kdevproblemreporter.json", registerPlugin<ProblemReporterPlugin>();)

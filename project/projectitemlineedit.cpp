@@ -28,7 +28,7 @@
 #include <QValidator>
 #include <interfaces/iproject.h>
 #include <KLocalizedString>
-#include <kaction.h>
+#include <QAction>
 #include <QMenu>
 #include <KDialog>
 #include <QTreeView>

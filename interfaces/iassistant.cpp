@@ -54,7 +54,7 @@ QAction* IAssistantAction::toKAction() const
     QAction* ret = new QAction(icon(), removeHtmlFromString(description()), 0);
     ret->setToolTip(toolTip());
 
-    //Add the data as a QExplicitlySharedDataPointer to the action, so this assistant stays alive at least as long as the KAction
+    //Add the data as a QExplicitlySharedDataPointer to the action, so this assistant stays alive at least as long as the QAction
     ret->setData(QVariant::fromValue(QExplicitlySharedDataPointer<IAssistantAction>(const_cast<IAssistantAction*>(this))));
 
     connect(ret, SIGNAL(triggered(bool)), SLOT(execute()));

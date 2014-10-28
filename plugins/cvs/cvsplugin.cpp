@@ -22,7 +22,7 @@
 #include <KPluginLoader>
 #include <KActionCollection>
 #include <KMessageBox>
-#include <KAction>
+#include <QAction>
 #include <KAboutData>
 #include <KLocalizedString>
 
@@ -198,17 +198,17 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
     QMenu* menu = d->m_common->commonActions();
     menu->addSeparator();
 
-    KAction *action;
+    QAction *action;
     // Just add actions which are not covered by the cvscommon plugin
-    action = new KAction(i18n("Edit"), this);
+    action = new QAction(i18n("Edit"), this);
     connect(action, SIGNAL(triggered()), this, SLOT(ctxEdit()));
     menu->addAction(action);
 
-    action = new KAction(i18n("Unedit"), this);
+    action = new QAction(i18n("Unedit"), this);
     connect(action, SIGNAL(triggered()), this, SLOT(ctxUnEdit()));
     menu->addAction(action);
 
-    action = new KAction(i18n("Show Editors"), this);
+    action = new QAction(i18n("Show Editors"), this);
     connect(action, SIGNAL(triggered()), this, SLOT(ctxEditors()));
     menu->addAction(action);
 

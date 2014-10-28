@@ -28,7 +28,7 @@ Boston, MA 02110-1301, USA.
 #include <QContextMenuEvent>
 #include <QSortFilterProxyModel>
 
-#include <kaction.h>
+#include <QAction>
 #include <KLocalizedString>
 #include <kurl.h>
 #include <kiconloader.h>

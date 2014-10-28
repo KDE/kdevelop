@@ -20,7 +20,7 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <ktexteditor/annotationinterface.h>
 #include <ktexteditor/view.h>

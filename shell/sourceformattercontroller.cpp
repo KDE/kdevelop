@@ -43,7 +43,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/contextmenuextension.h>
 
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 #include <KLocalizedString>
 #include <KIOCore/KIO/StoredTransferJob>
 #include <interfaces/idocument.h>

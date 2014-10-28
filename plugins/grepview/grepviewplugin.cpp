@@ -30,7 +30,7 @@
 #include <kactioncollection.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
-#include <kaction.h>
+#include <QAction>
 #include <ktexteditor/document.h>
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/view.h>

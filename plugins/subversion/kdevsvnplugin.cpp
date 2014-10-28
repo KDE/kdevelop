@@ -26,7 +26,7 @@
 #include <kpluginloader.h>
 #include <KLocalizedString>
 #include <kurlrequester.h>
-#include <kaction.h>
+#include <QAction>
 #include <kurlrequesterdialog.h>
 #include <kfile.h>
 #include <QTemporaryFile>

@@ -34,7 +34,7 @@
 #include <kaboutdata.h>
 #include <KLocalizedString>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>

@@ -28,7 +28,7 @@
 
 #include <KLocalizedString>
 #include <KActionCollection>
-#include <KAction>
+#include <QAction>
 #include <KParts/Part>
 #include <KParts/PartManager>
 #include <KTextEditor/Document>

@@ -31,7 +31,7 @@
 
 #include <kxmlguiwindow.h>
 #include <kglobalsettings.h>
-#include <kaction.h>
+#include <QAction>
 #include <kurl.h>
 #include <KLocalizedString>
 

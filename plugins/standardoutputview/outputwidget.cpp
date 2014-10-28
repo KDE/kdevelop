@@ -35,7 +35,7 @@
 #include <QClipboard>
 #include <QWidgetAction>
 #include <QSortFilterProxyModel>
-#include <kaction.h>
+#include <QAction>
 #include <ktoggleaction.h>
 #include <KLocalizedString>
 #include <kicon.h>

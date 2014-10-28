@@ -23,7 +23,7 @@
 
 #include <QWidget>
 
-#include <KAction>
+#include <QAction>
 
 #include <interfaces/context.h>
 

@@ -30,7 +30,7 @@
 #include <kpluginloader.h>
 #include <kaboutdata.h>
 #include <KLocalizedString>
-#include <kaction.h>
+#include <QAction>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <project/projectmodel.h>

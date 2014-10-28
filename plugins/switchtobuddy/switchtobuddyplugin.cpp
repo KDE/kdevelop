@@ -26,7 +26,7 @@
 #include <KPluginLoader>
 #include <KAboutData>
 #include <KActionCollection>
-#include <KAction>
+#include <QAction>
 #include <QFile>
 #include <QSignalMapper>
 #include <QMimeDatabase>

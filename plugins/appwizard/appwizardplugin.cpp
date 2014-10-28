@@ -26,7 +26,7 @@
 #include <ktar.h>
 #include <kzip.h>
 #include <KLocalizedString>
-#include <kaction.h>
+#include <QAction>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>

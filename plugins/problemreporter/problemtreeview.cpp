@@ -28,7 +28,7 @@
 #include <QSignalMapper>
 #include <QHeaderView>
 
-#include <kaction.h>
+#include <QAction>
 #include <kactionmenu.h>
 #include <KLocalizedString>
 #include <kicon.h>

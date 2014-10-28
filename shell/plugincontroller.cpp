@@ -39,7 +39,7 @@ Boston, MA 02110-1301, USA.
 #include <kxmlguiwindow.h>
 #include <assert.h>
 #include <kdialog.h>
-#include <kaction.h>
+#include <QAction>
 #include <kxmlguifactory.h>
 #include <kpluginloader.h>
 #include <kpluginmetadata.h>
