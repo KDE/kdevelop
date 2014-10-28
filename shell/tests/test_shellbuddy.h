@@ -20,7 +20,7 @@
 #define KDEVPLATFORM_TEST_SHELLBUDDY_H
 
 #include <QObject>
-#include <KTempDir>
+#include <QTemporaryDir>
 #include <sublime/view.h>
 #include "../documentcontroller.h"
 #include "../uicontroller.h"
@@ -44,7 +44,7 @@ private slots:
     void testsplitViewBuddies();
 
 private:
-    void createFile(const KTempDir& dir, const QString& filename);
+    void createFile(const QTemporaryDir& dir, const QString& filename);
     void enableBuddies(bool enable = true);
     void enableOpenAfterCurrent(bool enable = true);
 

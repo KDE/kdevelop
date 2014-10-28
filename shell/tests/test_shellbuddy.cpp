@@ -110,9 +110,9 @@ void TestShellBuddy::cleanupTestCase()
         QVERIFY(urlDoc->url().toLocalFile().endsWith(endOfFilename)); \
     }
 
-void TestShellBuddy::createFile(const KTempDir& dir, const QString& filename)
+void TestShellBuddy::createFile(const QTemporaryDir& dir, const QString& filename)
 {
-    QFile file(dir.name() + filename);
+    QFile file(dir.path() + '/' + filename);
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
     file.close();
 }
@@ -151,7 +151,7 @@ void TestShellBuddy::testDeclarationDefinitionOrder()
     enableBuddies();
     enableOpenAfterCurrent();
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
     createFile(dirA, "a.r.txt");
     createFile(dirA, "b.r.txt");
     createFile(dirA, "c.r.txt");
@@ -159,12 +159,12 @@ void TestShellBuddy::testDeclarationDefinitionOrder()
     createFile(dirA, "b.l.txt");
     createFile(dirA, "c.l.txt");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.r.txt"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "b.l.txt"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "c.r.txt"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "b.r.txt"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.l.txt"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "c.l.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "a.r.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "b.l.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "c.r.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "b.r.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "a.l.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "c.l.txt"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());
@@ -192,16 +192,16 @@ void TestShellBuddy::testActivation()
     enableBuddies();
     enableOpenAfterCurrent();
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
     createFile(dirA, "a.l.txt");
     createFile(dirA, "a.r.txt");
     createFile(dirA, "b.r.txt");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.r.txt"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.l.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "a.r.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "a.l.txt"));
     verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "a.l.txt");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "b.r.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "b.r.txt"));
     verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "b.r.txt");
 
     QCOMPARE(m_documentController->openDocuments().count(), 3);
@@ -224,13 +224,13 @@ void TestShellBuddy::testDisableBuddies()
     enableBuddies(false);
     enableOpenAfterCurrent();
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
     createFile(dirA, "a.l.txt");
     createFile(dirA, "a.r.txt");
     createFile(dirA, "b.r.txt");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.r.txt"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.l.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "a.r.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "a.l.txt"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());
@@ -243,7 +243,7 @@ void TestShellBuddy::testDisableBuddies()
     //activate a.cpp => new doc should be opened right next to it
     m_uiController->activeSublimeWindow()->activateView(areaIndex->views().value(0));
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "b.r.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "b.r.txt"));
     verifyFilename(areaIndex->views().value(0), "a.r.txt");
     verifyFilename(areaIndex->views().value(1), "b.r.txt");
     verifyFilename(areaIndex->views().value(2), "a.l.txt");
@@ -269,15 +269,15 @@ void TestShellBuddy::testDisableOpenAfterCurrent()
     enableBuddies();
     enableOpenAfterCurrent(false);
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
     createFile(dirA, "foo.l.txt");
     createFile(dirA, "bar.r.txt");
     createFile(dirA, "foo.r.txt");
     createFile(dirA, "x.r.txt");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "foo.l.txt"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "bar.r.txt"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "foo.r.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "foo.l.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "bar.r.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "foo.r.txt"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());
@@ -287,7 +287,7 @@ void TestShellBuddy::testDisableOpenAfterCurrent()
     verifyFilename(areaIndex->views().value(2), "bar.r.txt");
     verifyFilename(m_uiController->activeSublimeWindow()->activeView(), "foo.r.txt");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "x.r.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "x.r.txt"));
     verifyFilename(areaIndex->views().value(0), "foo.l.txt");
     verifyFilename(areaIndex->views().value(1), "foo.r.txt");
     verifyFilename(areaIndex->views().value(2), "bar.r.txt");
@@ -313,22 +313,22 @@ void TestShellBuddy::testDisableAll()
     enableBuddies(false);
     enableOpenAfterCurrent(false);
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
     createFile(dirA, "foo.l.txt");
     createFile(dirA, "foo.r.txt");
     createFile(dirA, "bar.l.txt");
     createFile(dirA, "bar.r.txt");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "foo.r.txt"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "bar.l.txt"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "foo.l.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "foo.r.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "bar.l.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "foo.l.txt"));
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(m_uiController->activeSublimeWindow()->activeView());
 
     //activate bar.l.txt
     m_uiController->activeSublimeWindow()->activateView(areaIndex->views().value(1));
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "bar.r.txt"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "bar.r.txt"));
 
     verifyFilename(areaIndex->views().value(0), "foo.r.txt");
     verifyFilename(areaIndex->views().value(1), "bar.l.txt");
@@ -352,7 +352,7 @@ void TestShellBuddy::testsplitViewBuddies()
     enableBuddies();
     enableOpenAfterCurrent();
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
 
     createFile(dirA, "classA.r.txt");
     createFile(dirA, "classA.l.txt");
@@ -361,7 +361,7 @@ void TestShellBuddy::testsplitViewBuddies()
     Sublime::Area *pCodeArea = m_uiController->activeArea();
     QVERIFY(pCodeArea);
 
-    IDocument *pClassAHeader = m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "classA.l.txt"));
+    IDocument *pClassAHeader = m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "classA.l.txt"));
     QVERIFY(pClassAHeader);
     Sublime::View *pClassAHeaderView = pMainWindow->activeView();
     pClassAHeaderView->setObjectName("classA.l.txt");
@@ -391,7 +391,7 @@ void TestShellBuddy::testsplitViewBuddies()
     QVERIFY(pRightContainer->count() == 1 && pRightContainer->hasWidget(pClassAHeaderSplitView->widget()));
 
     // now open the correponding definition file, classA.r.txt
-    IDocument *pClassAImplem = m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "classA.r.txt"));
+    IDocument *pClassAImplem = m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "classA.r.txt"));
     QVERIFY(pClassAImplem);
     pMainWindow->activeView()->setObjectName("classA.r.txt");
 
@@ -403,7 +403,7 @@ void TestShellBuddy::testsplitViewBuddies()
     pMainWindow->activateView(pClassAHeaderView);
 
     // open another file
-    IDocument *pLeftSideCpp = m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "foo.txt"));
+    IDocument *pLeftSideCpp = m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "foo.txt"));
     QVERIFY(pLeftSideCpp);
     pMainWindow->activeView()->setObjectName("foo.txt");
 

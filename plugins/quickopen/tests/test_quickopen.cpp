@@ -21,7 +21,7 @@
 #include "test_quickopen.h"
 #include <interfaces/idocumentcontroller.h>
 
-#include <KTempDir>
+#include <QTemporaryDir>
 #include <QtTest/QTest>
 #include <QTemporaryFile>
 
@@ -208,8 +208,8 @@ void TestQuickOpen::testSorting_data()
 
 void TestQuickOpen::testProjectFileFilter()
 {
-    KTempDir dir;
-    TestProject* project = new TestProject(Path(dir.name()));
+    QTemporaryDir dir;
+    TestProject* project = new TestProject(Path(dir.path()));
     ProjectFolderItem* foo = createChild<ProjectFolderItem>(project->projectItem(), "foo");
     createChild<ProjectFileItem>(foo, "bar");
     createChild<ProjectFileItem>(foo, "asdf");
@@ -218,7 +218,7 @@ void TestQuickOpen::testProjectFileFilter()
     createChild<ProjectFileItem>(asdf, "bar");
 
     QTemporaryFile tmpFile;
-    tmpFile.setFileName(dir.name() + "aaaa");
+    tmpFile.setFileName(dir.path() + "aaaa");
     QVERIFY(tmpFile.open());
     ProjectFileItem* aaaa = new ProjectFileItem("aaaa", project->projectItem());
     QCOMPARE(project->fileSet().size(), 5);
@@ -283,7 +283,7 @@ void TestQuickOpen::testProjectFileFilter()
     QCOMPARE(items(provider), original);
 
     // allow filtering by path to project
-    provider.setFilterText(dir.name());
+    provider.setFilterText(dir.path());
     QCOMPARE(items(provider), original);
 
     Path buildFolderItem(project->path().parent(), ".build/generated.h");

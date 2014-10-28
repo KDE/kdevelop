@@ -20,7 +20,7 @@
 class QMenu;
 class QUrl;
 class SvnStatusHolder;
-class KTempDir;
+class QTemporaryDir;
 class SvnCommitDialog;
 
 namespace KDevelop

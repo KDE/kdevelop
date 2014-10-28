@@ -61,7 +61,7 @@ void TestGenerationTest::cleanupTestCase()
 
 void TestGenerationTest::init()
 {
-    dir.reset(new KTempDir);
+    dir.reset(new QTemporaryDir);
     baseUrl = QUrl::fromLocalFile(dir->name());
 }
 

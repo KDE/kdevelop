@@ -22,7 +22,7 @@
 #include <QtTest/QTest>
 #include <QSignalSpy>
 #include <QProcess>
-#include <KTempDir>
+#include <QTemporaryDir>
 #include <QDebug>
 
 #include <tests/autotestshell.h>
@@ -85,7 +85,7 @@ void ProjectLoadTest::init()
 struct TestProject
 {
     // temp directory of project
-    KTempDir* dir;
+    QTemporaryDir* dir;
     // name of the project (random)
     QString name;
     // project file (*.kdev4)
@@ -102,8 +102,8 @@ struct TestProject
 TestProject makeProject()
 {
     TestProject ret;
-    ret.dir = new KTempDir();
-    QFileInfo dir(ret.dir->name().left(ret.dir->name().length() - 1));
+    ret.dir = new QTemporaryDir();
+    QFileInfo dir(ret.dir->path());
     Q_ASSERT(dir.exists());
     ret.name = dir.fileName();
 
@@ -120,8 +120,8 @@ TestProject makeProject()
     projectFile.close();
     ret.file = projecturl;
 
-    Q_ASSERT(ret.dir->exists());
-    Q_ASSERT(projecturl.adjusted(QUrl::RemoveFilename).toLocalFile() == ret.dir->name());
+    Q_ASSERT(ret.dir->isValid());
+    Q_ASSERT(projecturl.adjusted(QUrl::RemoveFilename).toLocalFile() == ret.dir->path() + '/');
 
     return ret;
 }
@@ -130,7 +130,7 @@ void ProjectLoadTest::addRemoveFiles()
 {
     const TestProject p = makeProject();
 
-    QFile f(p.dir->name()+"/sdf");
+    QFile f(p.dir->path()+"/sdf");
     f.open(QIODevice::WriteOnly);
     f.close();
 
@@ -142,23 +142,23 @@ void ProjectLoadTest::addRemoveFiles()
 
     //KDirWatch adds/removes the file automatically
     for (int i=0; i<100; ++i) {
-        QFile f2(p.dir->name()+"/blub"+QString::number(i));
+        QFile f2(p.dir->path()+"/blub"+QString::number(i));
         f2.open(QIODevice::WriteOnly);
         f2.close();
     }
     for (int i=0; i<50; ++i) {
-        QFile f2(p.dir->name()+"/blub"+QString::number(i));
+        QFile f2(p.dir->path()+"/blub"+QString::number(i));
         QVERIFY(f2.exists());
         f2.remove();
     }
     QTest::qWait(500);
 
-    QUrl url = QUrl::fromLocalFile(p.dir->name()+"/blub"+QString::number(50)).adjusted(QUrl::NormalizePathSegments);
+    QUrl url = QUrl::fromLocalFile(p.dir->path()+"/blub"+QString::number(50)).adjusted(QUrl::NormalizePathSegments);
     QCOMPARE(project->filesForPath(IndexedString(url)).count(), 1);
     ProjectFileItem* file = project->filesForPath(IndexedString(url)).first();
     project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file ); //message box has to be accepted manually :(
     for (int i=51; i<100; ++i) {
-        QFile f2(p.dir->name()+"/blub"+QString::number(i));
+        QFile f2(p.dir->path()+"/blub"+QString::number(i));
         f2.remove();
     }
 
@@ -171,14 +171,14 @@ void ProjectLoadTest::removeDirRecursive()
     const TestProject p = makeProject();
 
     {
-        QFile f(p.dir->name()+"/sdf");
+        QFile f(p.dir->path()+"/sdf");
         f.open(QIODevice::WriteOnly);
         f.close();
     }
     {
-        QDir(p.dir->name()).mkdir("blub");
+        QDir(p.dir->path()).mkdir("blub");
         for (int i=0; i<10; ++i) {
-            QFile f(p.dir->name()+"/blub/file"+QString::number(i));
+            QFile f(p.dir->path()+"/blub/file"+QString::number(i));
             f.open(QIODevice::WriteOnly);
             f.close();
         }
@@ -199,7 +199,7 @@ void ProjectLoadTest::removeDirRecursive()
     QCOMPARE(project->projectFile().toUrl(), p.file);
 
     for (int i=0; i<1; ++i) {
-        QUrl url = QUrl::fromLocalFile(p.dir->name()+"/blub").adjusted(QUrl::NormalizePathSegments);
+        QUrl url = QUrl::fromLocalFile(p.dir->path()+"/blub").adjusted(QUrl::NormalizePathSegments);
         QCOMPARE(project->foldersForPath(IndexedString(url)).count(), 1);
 
         ProjectFolderItem* file = project->foldersForPath(IndexedString(url)).first();
@@ -243,8 +243,8 @@ void fillProject(int filesPerDir, int dirs, const TestProject& project, bool wai
 {
     for(int i=0; i < dirs; ++i) {
         const QString name = "foox" + QString::number(i);
-        QDir(project.dir->name()).mkdir(name);
-        _writeRandomStructure(project.dir->name() + name, filesPerDir);
+        QDir(project.dir->path()).mkdir(name);
+        _writeRandomStructure(project.dir->path() + name, filesPerDir);
         if (wait) {
             QTest::qWait(100);
         }
@@ -297,11 +297,11 @@ void ProjectLoadTest::raceJob()
     // - list dir foo/bar containing lots of files
     // - remove dir foo while listjob is still running
     TestProject p = makeProject();
-    QDir dir(p.dir->name());
+    QDir dir(p.dir->path());
     QVERIFY(dir.mkpath("test/zzzzz"));
     for(int i = 0; i < 1000; ++i) {
-        createFile(QString(p.dir->name() + "/test/zzzzz/%1").arg(i));
-        createFile(QString(p.dir->name() + "/test/%1").arg(i));
+        createFile(QString(p.dir->path() + "/test/zzzzz/%1").arg(i));
+        createFile(QString(p.dir->path() + "/test/%1").arg(i));
     }
 
     ICore::self()->projectController()->openProject(p.file);
@@ -339,11 +339,11 @@ void ProjectLoadTest::addDuringImport()
     // to trigger this we create a big project, import it and then call filesForPath during
     // the import action
     TestProject p = makeProject();
-    QDir dir(p.dir->name());
+    QDir dir(p.dir->path());
     QVERIFY(dir.mkpath("test/zzzzz"));
     for(int i = 0; i < 1000; ++i) {
-        createFile(QString(p.dir->name() + "/test/zzzzz/%1").arg(i));
-        createFile(QString(p.dir->name() + "/test/%1").arg(i));
+        createFile(QString(p.dir->path() + "/test/zzzzz/%1").arg(i));
+        createFile(QString(p.dir->path() + "/test/%1").arg(i));
     }
 
     QSignalSpy spy(ICore::self()->projectController(),

@@ -22,7 +22,7 @@
 #include <QtTest/QtTest>
 #include <QDebug>
 
-#include <KTempDir>
+#include <QTemporaryDir>
 #include <KProcess>
 #include <kparts/part.h>
 #include <kio/netaccess.h>
@@ -97,58 +97,58 @@ void SvnImport::cleanupTestCase()
 
 void SvnImport::testBasic()
 {
-    KTempDir reposDir;
+    QTemporaryDir reposDir;
     VcsLocation reposLoc;
-    setupLocalRepository( reposDir.name(), reposLoc );
+    setupLocalRepository( reposDir.path(), reposLoc );
 
-    KTempDir projectDir;
+    QTemporaryDir projectDir;
     QString origcontent = "This is a Test";
-    setupSampleProject( projectDir.name(), origcontent );
+    setupSampleProject( projectDir.path(), origcontent );
 
-    VcsJob* job = vcs->import( "import test", QUrl::fromLocalFile( projectDir.name() ), reposLoc );
+    VcsJob* job = vcs->import( "import test", QUrl::fromLocalFile( projectDir.path() ), reposLoc );
     validatingExecJob(job);
 
-    KTempDir checkoutDir;
+    QTemporaryDir checkoutDir;
     validateImport( reposLoc.repositoryServer(), checkoutDir, origcontent );
 }
 
 void SvnImport::testImportWithMissingDirs()
 {
-    KTempDir reposDir;
+    QTemporaryDir reposDir;
     VcsLocation reposLoc;
-    setupLocalRepository( reposDir.name(), reposLoc );
+    setupLocalRepository( reposDir.path(), reposLoc );
 
-    KTempDir projectDir;
+    QTemporaryDir projectDir;
     QString origcontent = "This is a Test";
-    setupSampleProject( projectDir.name(), origcontent );
+    setupSampleProject( projectDir.path(), origcontent );
 
-    reposLoc.setRepositoryServer( reposLoc.repositoryServer() + "/foobar/" + QDir( projectDir.name() ).dirName() );
-    VcsJob* job = vcs->import( "import test", QUrl::fromLocalFile( projectDir.name() ), reposLoc );
+    reposLoc.setRepositoryServer( reposLoc.repositoryServer() + "/foobar/" + QDir( projectDir.path() ).dirName() );
+    VcsJob* job = vcs->import( "import test", QUrl::fromLocalFile( projectDir.path() ), reposLoc );
     validatingExecJob(job);
 
-    KTempDir checkoutDir;
+    QTemporaryDir checkoutDir;
     validateImport( reposLoc.repositoryServer(), checkoutDir, origcontent );
 }
 
 void SvnImport::testImportIntoDir()
 {
-    KTempDir reposDir;
+    QTemporaryDir reposDir;
     VcsLocation reposLoc;
-    setupLocalRepository( reposDir.name(), reposLoc );
+    setupLocalRepository( reposDir.path(), reposLoc );
 
-    KTempDir projectDir;
+    QTemporaryDir projectDir;
     QString origcontent = "This is a Test";
-    setupSampleProject( projectDir.name(), origcontent );
+    setupSampleProject( projectDir.path(), origcontent );
 
-    reposLoc.setRepositoryServer( reposLoc.repositoryServer() + '/' + QDir( projectDir.name() ).dirName() );
-    VcsJob* job = vcs->import( "import test", QUrl::fromLocalFile( projectDir.name() ), reposLoc );
+    reposLoc.setRepositoryServer( reposLoc.repositoryServer() + '/' + QDir( projectDir.path() ).dirName() );
+    VcsJob* job = vcs->import( "import test", QUrl::fromLocalFile( projectDir.path() ), reposLoc );
     validatingExecJob(job);
 
-    KTempDir checkoutDir;
+    QTemporaryDir checkoutDir;
     validateImport( reposLoc.repositoryServer(), checkoutDir, origcontent );
 }
 
-void SvnImport::validateImport( const QString& repourl, KTempDir& checkoutdir, const QString& origcontent )
+void SvnImport::validateImport( const QString& repourl, QTemporaryDir& checkoutdir, const QString& origcontent )
 {
     VcsLocation reposLoc;
     reposLoc.setRepositoryServer( repourl );

@@ -43,7 +43,7 @@
 #include <KComponentData>
 #include <KFileDialog>
 #include <KConfigGroup>
-#include <KTempDir>
+#include <QTemporaryDir>
 #include <KTextEditor/Document>
 
 using namespace KDevelop;
@@ -100,8 +100,8 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
     TemplatePreviewRenderer renderer;
     renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
 
-    KTempDir dir;
-    QUrl base = QUrl::fromLocalFile(dir.name());
+    QTemporaryDir dir;
+    QUrl base = QUrl::fromLocalFile(dir.path());
     QHash<QString, QUrl> fileUrls;
     foreach(const SourceFileTemplate::OutputFile& out, fileTemplate.outputFiles()) {
         QUrl url = base.resolved(QUrl(renderer.render(out.outputName)));

@@ -21,7 +21,7 @@
 #define KDEVPLATFORM_PLUGIN_SVNIMPORT_H
 #include <QtCore/QObject>
 
-class KTempDir;
+class QTemporaryDir;
 namespace KDevelop
 {
 class TestCore;
@@ -39,7 +39,7 @@ private slots:
     void testImportIntoDir();
     void testImportWithMissingDirs();
 private:
-    void validateImport( const QString& repo, KTempDir& checkout, const QString& origcontent );
+    void validateImport( const QString& repo, QTemporaryDir& checkout, const QString& origcontent );
     KDevelop::TestCore* core;
     KDevelop::ICentralizedVersionControl* vcs;
 };

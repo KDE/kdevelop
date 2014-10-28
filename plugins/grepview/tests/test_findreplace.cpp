@@ -14,7 +14,7 @@
 #include <QRegExp>
 
 #include <ktemporaryfile.h>
-#include <ktempdir.h>
+#include <QTemporaryDir>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
@@ -149,8 +149,8 @@ void FindReplaceTest::testReplace()
     QFETCH(QString,  replaceTemplate);
     QFETCH(FileList, result);
 
-    KTempDir tempDir;
-    QDir     dir(tempDir.name());  // we need some convenience functions that are not in KTempDir
+    QTemporaryDir tempDir;
+    QDir     dir(tempDir.path());  // we need some convenience functions that are not in QTemporaryDir
 
     foreach(File fileData, subject)
     {
@@ -188,7 +188,7 @@ void FindReplaceTest::testReplace()
         QCOMPARE(QString(file.readAll()), fileData.second);
         file.close();
     }
-    tempDir.unlink();
+    tempDir.remove();
 }
 
 

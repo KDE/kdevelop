@@ -20,7 +20,7 @@
 
 #include "svnrecursiveadd.h"
 #include <QtTest/QtTest>
-#include <KTempDir>
+#include <QTemporaryDir>
 #include <KProcess>
 #include <kparts/part.h>
 #include <kio/netaccess.h>
@@ -120,10 +120,10 @@ void SvnRecursiveAdd::cleanupTestCase()
 
 void SvnRecursiveAdd::test()
 {
-    KTempDir reposDir;
+    QTemporaryDir reposDir;
     KProcess cmd;
-    cmd.setWorkingDirectory(reposDir.name());
-    cmd << "svnadmin" << "create" << reposDir.name();
+    cmd.setWorkingDirectory(reposDir.path());
+    cmd << "svnadmin" << "create" << reposDir.path();
     QCOMPARE(cmd.execute(10000), 0);
     QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IBasicVersionControl");
     IBasicVersionControl* vcs = NULL;
@@ -140,15 +140,15 @@ void SvnRecursiveAdd::test()
     qDebug() << "ok, got vcs" << vcs;
     QVERIFY(vcs);
     VcsLocation reposLoc;
-    reposLoc.setRepositoryServer("file://" + reposDir.name());
-    KTempDir checkoutDir;
-    QUrl checkoutLoc = checkoutDir.name();
+    reposLoc.setRepositoryServer("file://" + reposDir.path());
+    QTemporaryDir checkoutDir;
+    QUrl checkoutLoc = checkoutDir.path();
     qDebug() << "Checking out from " << reposLoc.repositoryServer() << " to " << checkoutLoc;
     qDebug() << "creating job";
     VcsJob* job = vcs->createWorkingCopy( reposLoc, checkoutLoc );
     validatingExecJob(job);
     qDebug() << "filling wc";
-    fillWorkingDirectory(checkoutDir.name());
+    fillWorkingDirectory(checkoutDir.path());
     QUrl addUrl = checkoutLoc.resolved( vcsTestDir0 );
     qDebug() << "Recursively adding files at " << addUrl;
     validatingExecJob(vcs->add(addUrl, IBasicVersionControl::Recursive));

@@ -20,13 +20,13 @@
 #include <QTextStream>
 #include <QDirIterator>
 #include <QStandardPaths>
+#include <QTemporaryDir>
 #include <QDebug>
 
 #include <ktar.h>
 #include <kzip.h>
 #include <KLocalizedString>
 #include <kaction.h>
-#include <ktempdir.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
@@ -134,7 +134,7 @@ ICentralizedVersionControl* toCVCS(IPlugin* plugin)
 }
 
 /*! Trouble while initializing version control. Show failure message to user. */
-void vcsError(const QString &errorMsg, KTempDir &tmpdir, const QUrl &dest, const QString &details = QString())
+void vcsError(const QString &errorMsg, QTemporaryDir &tmpdir, const QUrl &dest, const QString &details = QString())
 {
     QString displayDetails = details;
     if (displayDetails.isEmpty())
@@ -143,11 +143,11 @@ void vcsError(const QString &errorMsg, KTempDir &tmpdir, const QUrl &dest, const
     }
     KMessageBox::detailedError(0, errorMsg, displayDetails, i18n("Version Control System Error"));
     KIO::NetAccess::del(dest, 0);
-    tmpdir.unlink();
+    tmpdir.remove();
 }
 
 /*! Setup distributed version control for a new project defined by @p info. Use @p scratchArea for temporary files  */
-bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& info, KTempDir& scratchArea)
+bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& info, QTemporaryDir& scratchArea)
 {
     Q_ASSERT(dvcs);
     qCDebug(PLUGIN_APPWIZARD) << "DVCS system is used, just initializing DVCS";
@@ -180,13 +180,13 @@ bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& inf
 }
 
 /*! Setup version control for a new project defined by @p info. Use @p scratchArea for temporary files  */
-bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& info, KTempDir& scratchArea)
+bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& info, QTemporaryDir& scratchArea)
 {
     Q_ASSERT(cvcs);
 
     qCDebug(PLUGIN_APPWIZARD) << "Importing" << info.sourceLocation << "to"
              << info.repository.repositoryServer();
-    VcsJob* job = cvcs->import( info.importCommitMessage, QUrl::fromLocalFile(scratchArea.name()), info.repository);
+    VcsJob* job = cvcs->import( info.importCommitMessage, QUrl::fromLocalFile(scratchArea.path()), info.repository);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded )
     {
         vcsError(i18n("Could not import project"), scratchArea, QUrl::fromUserInput(info.repository.repositoryServer()));
@@ -262,8 +262,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     }
     if (arch->open(QIODevice::ReadOnly))
     {
-        KTempDir tmpdir;
-        QString unpackDir = tmpdir.name(); //the default value for all Centralized VCS
+        QTemporaryDir tmpdir;
+        QString unpackDir = tmpdir.path(); //the default value for all Centralized VCS
         IPlugin* plugin = core()->pluginController()->loadPlugin( info.vcsPluginName );
         if( info.vcsPluginName.isEmpty() || ( plugin && plugin->extension<KDevelop::IDistributedVersionControl>() ) )
         {
@@ -295,7 +295,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
                 // Red Alert, serious program corruption.
                 // This should never happen, the vcs dialog presented a list of vcs
                 // systems and now the chosen system doesn't exist anymore??
-                tmpdir.unlink();
+                tmpdir.remove();
                 return QString();
             }
 
@@ -320,7 +320,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
             }
             if (!success) return QString();
         }
-        tmpdir.unlink();
+        tmpdir.remove();
     }else
     {
         qCDebug(PLUGIN_APPWIZARD) << "failed to open template archive";
@@ -383,7 +383,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
     //and replace the macros is to use a tempdir and copy the file (and
     //replacing while copying). This also allows to easily remove all files, by
     //just unlinking the tempdir
-    KTempDir tdir;
+    QTemporaryDir tdir;
 
     bool ret = true;
 
@@ -404,9 +404,9 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
         else if (dir->entry(entry)->isFile())
         {
             const KArchiveFile *file = (KArchiveFile *)dir->entry(entry);
-            file->copyTo(tdir.name());
+            file->copyTo(tdir.path());
             QString destName = dest + '/' + file->name();
-            if (!copyFileAndExpandMacros(QDir::cleanPath(tdir.name()+'/'+file->name()),
+            if (!copyFileAndExpandMacros(QDir::cleanPath(tdir.path()+'/'+file->name()),
                     KMacroExpander::expandMacros(destName, m_variables)))
             {
                 KMessageBox::sorry(0, i18n("The file %1 cannot be created.", dest));
@@ -414,7 +414,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
             }
         }
     }
-    tdir.unlink();
+    tdir.remove();
     return ret;
 }
 

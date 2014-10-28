@@ -51,8 +51,8 @@ void TestDocumentController::init()
     Core::self()->documentControllerInternal()->initialize();
 
     // create temp files
-    m_file1.setPrefix(m_tempDir.name());
-    m_file2.setPrefix(m_tempDir.name());
+    m_file1.setPrefix(m_tempDir.path());
+    m_file2.setPrefix(m_tempDir.path());
     m_file1.setSuffix(".txt");
     m_file2.setSuffix(".txt");
     if(!m_file1.open() || !m_file2.open()) {
@@ -78,7 +78,7 @@ void TestDocumentController::cleanup()
 void TestDocumentController::cleanupTestCase()
 {
     TestCore::shutdown();
-    m_tempDir.unlink();
+    m_tempDir.remove();
 }
 
 void TestDocumentController::testSetEncoding()
@@ -120,7 +120,7 @@ void TestDocumentController::testOpeningDocumentFromUrl()
 void TestDocumentController::testSaveSomeDocuments()
 {
     // create documents
-    KTempDir dir;
+    QTemporaryDir dir;
     IDocument *document1 = m_subject->openDocument(createFile(dir, "foo"));
     IDocument *document2 = m_subject->openDocument(createFile(dir, "bar"));
     QCOMPARE(document1->state(), IDocument::Clean);
@@ -141,7 +141,7 @@ void TestDocumentController::testSaveSomeDocuments()
 void TestDocumentController::testSaveAllDocuments()
 {
     // create documents
-    KTempDir dir;
+    QTemporaryDir dir;
     IDocument *document1 = m_subject->openDocument(createFile(dir, "foo"));
     IDocument *document2 = m_subject->openDocument(createFile(dir, "bar"));
     QCOMPARE(document1->state(), IDocument::Clean);
@@ -173,17 +173,17 @@ void TestDocumentController::testCloseAllDocuments()
 
 
 
-QUrl TestDocumentController::createFile(const KTempDir& dir, const QString& filename)
+QUrl TestDocumentController::createFile(const QTemporaryDir& dir, const QString& filename)
 {
-    QFile file(dir.name() + filename);
+    QFile file(dir.path() + filename);
     bool success = file.open(QIODevice::WriteOnly | QIODevice::Text);
     if(!success)
     {
-        QWARN(QString("Failed to create file: " + dir.name() + filename).toLatin1().data());
+        QWARN(QString("Failed to create file: " + dir.path() + filename).toLatin1().data());
         return QUrl();
     }
     file.close();
-    return QUrl::fromLocalFile(dir.name() + filename);
+    return QUrl::fromLocalFile(dir.path() + filename);
 }
 
 void TestDocumentController::testEmptyUrl()

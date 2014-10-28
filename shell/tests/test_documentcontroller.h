@@ -23,7 +23,7 @@
 
 #include <QtCore/QObject>
 #include <KTemporaryFile>
-#include <KTempDir>
+#include <QTemporaryDir>
 #include <QUrl>
 
 namespace KDevelop
@@ -52,10 +52,10 @@ private slots :
     void testEmptyUrl();
 
 private :
-    QUrl createFile(const KTempDir& dir, const QString& filename);
+    QUrl createFile(const QTemporaryDir& dir, const QString& filename);
 
     IDocumentController* m_subject;
-    KTempDir m_tempDir;
+    QTemporaryDir m_tempDir;
     KTemporaryFile m_file1;
     KTemporaryFile m_file2;
 };
