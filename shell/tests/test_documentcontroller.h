@@ -22,7 +22,7 @@
 #define KDEVPLATFORM_TEST_DOCUMENTCONTROLLER_H
 
 #include <QtCore/QObject>
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 #include <QTemporaryDir>
 #include <QUrl>
 
@@ -56,8 +56,8 @@ private :
 
     IDocumentController* m_subject;
     QTemporaryDir m_tempDir;
-    KTemporaryFile m_file1;
-    KTemporaryFile m_file2;
+    QTemporaryFile m_file1;
+    QTemporaryFile m_file2;
 };
 
 #endif // KDEVPLATFORM_TEST_DOCUMENTCONTROLLER_H

@@ -30,11 +30,12 @@ Boston, MA 02110-1301, USA.
 #include <QMenuBar>
 #include <QUrl>
 #include <QtDBus/QDBusConnection>
+#include <QMimeData>
+#include <QTemporaryFile>
 
 #include <KApplication>
 #include <KActionCollection>
 #include <KLocalizedString>
-#include <ktemporaryfile.h>
 #include <kactioncollection.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>

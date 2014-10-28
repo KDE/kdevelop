@@ -13,7 +13,7 @@
 #include <QTest>
 #include <QRegExp>
 
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <QTemporaryDir>
 
 #include <tests/testcore.h>
@@ -72,7 +72,7 @@ void FindReplaceTest::testFind()
     QFETCH(QRegExp,   search);
     QFETCH(MatchList, matches);
 
-    KTemporaryFile file;
+    QTemporaryFile file;
     QVERIFY(file.open());
     file.write(subject.toUtf8());
     file.close();

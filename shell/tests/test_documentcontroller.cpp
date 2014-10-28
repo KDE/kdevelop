@@ -51,10 +51,8 @@ void TestDocumentController::init()
     Core::self()->documentControllerInternal()->initialize();
 
     // create temp files
-    m_file1.setPrefix(m_tempDir.path());
-    m_file2.setPrefix(m_tempDir.path());
-    m_file1.setSuffix(".txt");
-    m_file2.setSuffix(".txt");
+    m_file1.setFileTemplate(m_tempDir.path() + "/tmp_XXXXXX.txt");
+    m_file2.setFileTemplate(m_tempDir.path() + "/tmp_XXXXXX.txt");
     if(!m_file1.open() || !m_file2.open()) {
         QFAIL("Can't create temp files");
     }

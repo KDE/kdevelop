@@ -29,7 +29,7 @@
 #include <kaction.h>
 #include <kurlrequesterdialog.h>
 #include <kfile.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 

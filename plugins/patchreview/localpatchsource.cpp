@@ -15,7 +15,7 @@
 
 #include <QIcon>
 
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <KLocalizedString>
 #include <kprocess.h>
 #include <KLineEdit>
@@ -52,8 +52,7 @@ QIcon LocalPatchSource::icon() const
 void LocalPatchSource::update()
 {
     if( !m_command.isEmpty() ) {
-        KTemporaryFile temp;
-        temp.setSuffix( ".diff" );
+        QTemporaryFile temp(QDir::tempPath() + QLatin1String("/patchreview_XXXXXX.diff"));
         if( temp.open() ) {
             temp.setAutoRemove( false );
             QString filename = temp.fileName();

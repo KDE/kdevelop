@@ -23,7 +23,7 @@
 #ifndef KDEVPLATFORM_VCSDIFFPATCHSOURCES_H
 #define KDEVPLATFORM_VCSDIFFPATCHSOURCES_H
 
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <qtextstream.h>
 #include <QSharedPointer>
 

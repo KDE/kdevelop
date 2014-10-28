@@ -41,7 +41,7 @@
 #include <kio/global.h>
 #include <kmessagebox.h>
 #include <kio/jobclasses.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
@@ -284,7 +284,7 @@ public:
             if( !statJob->exec() || !KIO::NetAccess::download( developerFile.toUrl(), developerTempFile,
                 Core::self()->uiController()->activeMainWindow() ) )
             {
-                KTemporaryFile tmp;
+                QTemporaryFile tmp;
                 tmp.open();
                 developerTempFile = tmp.fileName();
             }

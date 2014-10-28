@@ -17,6 +17,7 @@
 */
 
 #include "vcsdiffpatchsources.h"
+
 #include <qboxlayout.h>
 #include <qlabel.h>
 #include <kglobalsettings.h>
@@ -33,6 +34,8 @@
 #include <KTextEdit>
 #include <interfaces/isession.h>
 #include <interfaces/ibasicversioncontrol.h>
+
+#include <QDir>
 
 using namespace KDevelop;
 
@@ -169,8 +172,7 @@ void VCSDiffPatchSource::updateFromDiff(VcsDiff vcsdiff)
 {
     if(!m_file.isValid())
     {
-        KTemporaryFile temp2;
-        temp2.setSuffix("2.patch");
+        QTemporaryFile temp2(QDir::tempPath() + QLatin1String("/kdevelop_XXXXXX.patch"));
         temp2.setAutoRemove(false);
         temp2.open();
         QTextStream t2(&temp2);

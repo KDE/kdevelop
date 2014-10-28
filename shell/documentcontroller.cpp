@@ -35,7 +35,7 @@ Boston, MA 02110-1301, USA.
 #include <kactioncollection.h>
 #include <KLocalizedString>
 #include <krecentfilesaction.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kplugininfo.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -88,7 +88,7 @@ struct DocumentControllerPrivate {
     ~DocumentControllerPrivate()
     {
         //delete temporary files so they are removed from disk
-        foreach (KTemporaryFile *temp, tempFiles)
+        foreach (QTemporaryFile *temp, tempFiles)
             delete temp;
     }
 
@@ -98,7 +98,7 @@ struct DocumentControllerPrivate {
     QHash< QUrl, IDocument* > documents;
 
     QHash< QString, IDocumentFactory* > factories;
-    QList<KTemporaryFile*> tempFiles;
+    QList<QTemporaryFile*> tempFiles;
 
     struct HistoryEntry
     {

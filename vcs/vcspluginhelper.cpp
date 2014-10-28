@@ -57,7 +57,7 @@
 #include <language/interfaces/editorcontext.h>
 
 #include <interfaces/ipatchsource.h>
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 #include <qtextedit.h>
 #include "vcsstatusinfo.h"
 #include <qboxlayout.h>

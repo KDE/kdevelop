@@ -25,16 +25,15 @@
 #include "interfaces/icore.h"
 #include "interfaces/iruncontroller.h"
 
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 #include <QTextStream>
 
 StashPatchSource::StashPatchSource(const QString& stashName, GitPlugin* plugin, const QDir & baseDir)
  : m_stashName(stashName), m_plugin(plugin), m_baseDir(baseDir)
 {
-    KTemporaryFile tempFile;
+    QTemporaryFile tempFile;
 
     tempFile.setAutoRemove(false);
-    tempFile.setSuffix(".diff");
     tempFile.open();
     m_patchFile = QUrl::fromLocalFile(tempFile.fileName());
 

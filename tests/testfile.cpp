@@ -22,7 +22,7 @@
 
 #include "testproject.h"
 
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 #include <QTime>
 #include <QTest>
 
@@ -92,10 +92,9 @@ TestFile::TestFile(const QString& contents, const QString& fileExtension,
                    TestProject* project, const QString& dir)
 : d(new TestFilePrivate())
 {
-    KTemporaryFile file;
     d->suffix = '.' + fileExtension;
-    file.setSuffix(d->suffix);
-    file.setPrefix(dir);
+
+    QTemporaryFile file((!dir.isEmpty() ? dir : QDir::tempPath()) + "/testfile_XXXXXX" + d->suffix);
     file.setAutoRemove(false);
     file.open();
     Q_ASSERT(file.isOpen());

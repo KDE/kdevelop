@@ -42,7 +42,7 @@ Boston, MA 02110-1301, USA.
 #include <kmessagebox.h>
 #include <kxmlguiwindow.h>
 #include <kactioncollection.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kservicetypetrader.h>
 #include <krecentfilesaction.h>
 #include <kactionmenu.h>
@@ -351,7 +351,7 @@ bool writeNewProjectFile( const QString& localConfigFile, const QString& name, c
 bool writeProjectSettingsToConfigFile(const QUrl& projectFileUrl, const QString& projectName, const QString& projectManager)
 {
     if ( !projectFileUrl.isLocalFile() ) {
-        KTemporaryFile tmp;
+        QTemporaryFile tmp;
         if ( !tmp.open() ) {
             return false;
         }

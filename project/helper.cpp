@@ -20,7 +20,7 @@
 #include "helper.h"
 #include "path.h"
 
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 #include <KIO/NetAccess>
 #include <kio/job.h>
 #include <kio/copyjob.h>
@@ -85,7 +85,7 @@ bool KDevelop::createFile(const QUrl& file)
     }
 
     {
-        KTemporaryFile temp;
+        QTemporaryFile temp;
         if ( !temp.open() || temp.write("\n") == -1 ) {
             KMessageBox::error( QApplication::activeWindow(),
                                 i18n( "Cannot create temporary file to create <i>%1</i>.", file.toDisplayString(QUrl::PreferLocalFile) ) );

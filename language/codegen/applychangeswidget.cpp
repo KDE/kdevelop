@@ -24,6 +24,7 @@
 
 #include <kparts/part.h>
 
+#include <QDir>
 #include <QTabWidget>
 #include <KMimeTypeTrader>
 #include <QMimeType>
@@ -36,7 +37,7 @@
 #include "coderepresentation.h"
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 #include <KActionCollection>
 #include <QAction>
 
@@ -59,7 +60,7 @@ public:
     ApplyChangesWidget * const parent;
     int m_index;
     QList<KParts::ReadWritePart*> m_editParts;
-    QList<KTemporaryFile * > m_temps;
+    QList<QTemporaryFile * > m_temps;
     QList<IndexedString > m_files;
     QTabWidget * m_documentTabs;
     QLabel* m_info;
@@ -170,8 +171,8 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
     CodeRepresentation::Ptr repr = createCodeRepresentation(file);
     if(!repr->fileExists())
     {
-        KTemporaryFile * temp(new KTemporaryFile);
-        temp->setSuffix(url.fileName().split('.').last());
+        const auto templateName = QDir::tempPath() + QLatin1Char('/') + url.fileName().split('.').last();
+        QTemporaryFile * temp(new QTemporaryFile(templateName));
         temp->open();
         temp->write(repr->text().toUtf8());
         temp->close();
