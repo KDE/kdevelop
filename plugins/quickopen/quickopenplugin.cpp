@@ -33,7 +33,6 @@
 #include <QMetaObject>
 #include <QWidgetAction>
 
-#include <kbuttongroup.h>
 #include <KLocalizedString>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
