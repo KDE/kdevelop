@@ -33,7 +33,7 @@
 #include <QIcon>
 
 #include <KActionCollection>
-#include <KMenu>
+#include <QMenu>
 #include <KLocalizedString>
 
 #include "vcschangesviewplugin.h"
@@ -60,7 +60,7 @@ VcsChangesView::VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* par
     connect(this, SIGNAL(doubleClicked(QModelIndex)), SLOT(openSelected(QModelIndex)));
 }
 
-static void appendActions(KMenu* menu, const QList<QAction*>& actions)
+static void appendActions(QMenu* menu, const QList<QAction*>& actions)
 {
     menu->addSeparator();
     menu->addActions(actions);
@@ -84,7 +84,7 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
         }
     }
 
-    QPointer<KMenu> menu = new KMenu;
+    QPointer<QMenu> menu = new QMenu;
     QAction* refreshAction = menu->addAction(QIcon::fromTheme("view-refresh"), i18n("Refresh"));
     QList<ContextMenuExtension> extensions;
     if(!urls.isEmpty()) {

@@ -32,7 +32,7 @@
 #include <kactionmenu.h>
 #include <KLocalizedString>
 #include <QIcon>
-#include <KMenu>
+#include <QMenu>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -247,8 +247,8 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event) {
                     title = KDevelop::htmlToPlainText(title);
                     title.replace("&apos;", "\'");
 
-                    QPointer<KMenu> m = new KMenu(this);
-                    m->addTitle(title);
+                    QPointer<QMenu> m = new QMenu(this);
+                    m->addSection(title);
                     m->addActions(actions);
                     m->exec(event->globalPos());
                     delete m;
