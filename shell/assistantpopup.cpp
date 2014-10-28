@@ -30,6 +30,7 @@
 #include <QEvent>
 #include <QTimer>
 #include <QDebug>
+#include <QStandardPaths>
 
 #include <KLocalizedString>
 #include <KParts/MainWindow>

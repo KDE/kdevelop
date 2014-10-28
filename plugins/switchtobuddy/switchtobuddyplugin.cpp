@@ -30,6 +30,7 @@
 #include <QFile>
 #include <QSignalMapper>
 #include <QMimeDatabase>
+#include <QMimeType>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -73,7 +74,8 @@ Declaration* definitionForCursorDeclaration(const KTextEditor::Cursor& cursor, c
 
 QString findSwitchCandidate(const QUrl& docUrl)
 {
-    IBuddyDocumentFinder* finder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(docUrl)->name());
+    QMimeDatabase db;
+    IBuddyDocumentFinder* finder = IBuddyDocumentFinder::finderForMimeType(db.mimeTypeForUrl(docUrl).name());
     if (finder) {
         // get the first entry that exists, use that as candidate
         foreach(const QUrl& buddyUrl, finder->getPotentialBuddies(docUrl)) {

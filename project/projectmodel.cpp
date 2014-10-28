@@ -21,8 +21,6 @@
 
 #include "projectmodel.h"
 
-#include <kmimetype.h>
-
 #include <QApplication>
 #include <QPalette>
 #include <QBrush>

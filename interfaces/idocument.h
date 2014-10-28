@@ -22,17 +22,20 @@
 #define KDEVPLATFORM_IDOCUMENT_H
 
 #include <QUrl>
-#include <kmimetype.h>
+
 #include <KTextEditor/Cursor>
 #include <KTextEditor/Range>
 
 #include "interfacesexport.h"
+
 namespace KParts { class Part; class MainWindow; }
 namespace KTextEditor {
     class Document;
     class View;
 }
 namespace Sublime{ class View; }
+
+class QMimeType;
 
 namespace KDevelop {
 class ICore;

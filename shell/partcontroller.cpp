@@ -32,7 +32,6 @@
 #include <QDebug>
 
 #include <KLocalizedString>
-#include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <KMessageBox>
 

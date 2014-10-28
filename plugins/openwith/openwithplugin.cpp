@@ -35,7 +35,6 @@
 #include <interfaces/context.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
-#include <kmimetype.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kmimetypetrader.h>

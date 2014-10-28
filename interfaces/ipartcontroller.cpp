@@ -22,7 +22,6 @@
 #include <kservice.h>
 #include <kmimetypetrader.h>
 #include <kparts/factory.h>
-#include <kmimetype.h>
 #include <kparts/part.h>
 #include <kparts/readonlypart.h>
 

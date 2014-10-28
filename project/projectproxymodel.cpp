@@ -21,7 +21,6 @@
 #include <project/projectmodel.h>
 #include <KLocalizedString>
 #include <qfileinfo.h>
-#include <kmimetype.h>
 #include <QIcon>
 
 ProjectProxyModel::ProjectProxyModel(QObject * parent)

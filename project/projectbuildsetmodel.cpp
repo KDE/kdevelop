@@ -34,7 +34,6 @@
 #include "projectmodel.h"
 #include <util/kdevstringhandler.h>
 #include <QIcon>
-#include <kmimetype.h>
 
 namespace KDevelop
 {

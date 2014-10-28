@@ -28,7 +28,6 @@
 
 #include <QAction>
 #include <KLocalizedString>
-#include <kmimetype.h>
 #include <kaboutdata.h>
 #include <kgenericfactory.h>
 

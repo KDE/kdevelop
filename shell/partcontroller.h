@@ -28,7 +28,6 @@
 #include <QtCore/QPointer>
 #include <QUrl>
 
-#include <kmimetype.h>
 #include <KSharedConfig>
 
 #include "core.h"
@@ -47,6 +46,8 @@ class Document;
 class Editor;
 class View;
 }
+
+class QMimeType;
 
 Q_DECLARE_METATYPE(KSharedConfig::Ptr)
 
