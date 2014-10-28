@@ -67,12 +67,7 @@ set( cmakesettings_SRCS
   settings/cmakecachedelegate.cpp
   debug.cpp
 )
-qt5_wrap_ui(cmakesettings_SRCS ${cmakesettings_UI} )
-
-
-set( cmakesettings_UI
-  settings/cmakebuildsettings.ui
-)
+qt5_wrap_ui(cmakesettings_SRCS settings/cmakebuildsettings.ui)
 
 set( cmakedoc_SRCS
   cmakedocumentation.cpp
