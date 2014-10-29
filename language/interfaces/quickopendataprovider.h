@@ -24,8 +24,8 @@
 #include <QtCore/QList>
 #include <QtCore/QObject>
 #include <QtCore/QSet>
+#include <QExplicitlySharedDataPointer>
 
-#include <ksharedptr.h>
 #include <language/languageexport.h>
 
 class QString;

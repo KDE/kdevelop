@@ -22,15 +22,6 @@
 #include <QExplicitlySharedDataPointer>
 #include <QtCore/QObject>
 
-/**
- * Wrapper around QSharedData for use with KSharedPtr when the object is based on QObject as well.
- * Instead of deleting the object once the reference-count reaches zero, QObject::deleteLater() is called.
- * This prevents a possible crash when the reference-count reaches zero during event-processing while the queue
- * contains events to be delivered to that object.
- *
- * Notice however that the object will not be deleted immediately, which may lead to unintended behavior.
- */
-
 namespace KDevelop {
 
 struct FakeAtomic {
@@ -63,6 +54,14 @@ struct FakeAtomic {
     QSharedData& m_real;
 };
 
+/**
+ * Wrapper around QSharedData for use with KSharedPtr when the object is based on QObject as well.
+ * Instead of deleting the object once the reference-count reaches zero, QObject::deleteLater() is called.
+ * This prevents a possible crash when the reference-count reaches zero during event-processing while the queue
+ * contains events to be delivered to that object.
+ *
+ * Notice however that the object will not be deleted immediately, which may lead to unintended behavior.
+ */
 struct KSharedObject : public QSharedData {
   inline KSharedObject(QObject& object) : ref(object, *this) {
   }

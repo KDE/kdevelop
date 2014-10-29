@@ -32,8 +32,6 @@
 #include <serialization/indexedstring.h>
 #include <language/interfaces/ilanguagesupport.h>
 
-#include <ksharedptr.h>
-
 namespace KTextEditor
 {
 class Document;

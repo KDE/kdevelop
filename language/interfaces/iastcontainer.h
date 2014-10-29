@@ -18,9 +18,9 @@
 #ifndef KDEVPLATFORM_IASTCONTAINER_H
 #define KDEVPLATFORM_IASTCONTAINER_H
 
-#include <ksharedptr.h>
-
 #include <language/languageexport.h>
+
+#include <QExplicitlySharedDataPointer>
 
 namespace KDevelop
 {

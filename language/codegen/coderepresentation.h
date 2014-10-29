@@ -25,7 +25,6 @@
 #include <ktexteditor/configinterface.h>
 #include <ktexteditor/document.h>
 
-#include <ksharedptr.h>
 #include <memory>
 
 class QString;

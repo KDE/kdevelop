@@ -22,7 +22,6 @@
 #ifndef KDEVPLATFORM_KDEV_CODECOMPLETIONITEM_H
 #define KDEVPLATFORM_KDEV_CODECOMPLETIONITEM_H
 
-#include <ksharedptr.h>
 #include <ktexteditor/codecompletionmodel.h>
 
 #include "../duchain/duchainpointer.h"

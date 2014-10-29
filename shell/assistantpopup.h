@@ -25,7 +25,6 @@
 #include <QDeclarativeView>
 #include <QShortcut>
 #include <interfaces/iassistant.h>
-#include <ksharedptr.h>
 
 namespace KTextEditor
 {

@@ -21,8 +21,6 @@
 
 #include <QtCore/QString>
 
-#include <ksharedptr.h>
-
 #include <serialization/indexedstring.h>
 
 #include <language/languageexport.h>

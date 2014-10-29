@@ -21,7 +21,7 @@
 
 #include <QtCore/QMetaType>
 #include <QtCore/QList>
-#include <ksharedptr.h>
+#include <QExplicitlySharedDataPointer>
 #include <language/languageexport.h>
 
 //krazy:excludeall=dpointer

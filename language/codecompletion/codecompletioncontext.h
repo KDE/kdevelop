@@ -19,8 +19,6 @@
 #ifndef KDEVPLATFORM_CODECOMPLETIONCONTEXT_H
 #define KDEVPLATFORM_CODECOMPLETIONCONTEXT_H
 
-#include <ksharedptr.h>
-
 #include "../duchain/duchainpointer.h"
 #include <language/languageexport.h>
 #include "../editor/cursorinrevision.h"
