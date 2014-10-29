@@ -29,8 +29,6 @@
 #include <sublime/view.h>
 #include <sublime/area.h>
 
-#include <qtest_kde.h>
-
 using namespace Sublime;
 
 void TestController::documentDeletion()

@@ -27,7 +27,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <qtest_kde.h>
+#include <QtTest>
 
 using namespace KDevelop;
 
