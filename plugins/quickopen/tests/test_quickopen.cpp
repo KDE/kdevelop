@@ -218,7 +218,7 @@ void TestQuickOpen::testProjectFileFilter()
     createChild<ProjectFileItem>(asdf, "bar");
 
     QTemporaryFile tmpFile;
-    tmpFile.setFileName(dir.path() + "aaaa");
+    tmpFile.setFileName(dir.path() + "/aaaa");
     QVERIFY(tmpFile.open());
     ProjectFileItem* aaaa = new ProjectFileItem("aaaa", project->projectItem());
     QCOMPARE(project->fileSet().size(), 5);
