@@ -29,7 +29,7 @@
 class ClassBrowserPlugin;
 class ClassTree;
 class ClassModel;
-class KLineEdit;
+class QLineEdit;
 
 /// The class browser widget
 class ClassWidget : public QWidget
@@ -44,7 +44,7 @@ private:
   ClassBrowserPlugin* m_plugin;
   ClassModel* m_model;
   ClassTree* m_tree;
-  KLineEdit* m_searchLine;
+  QLineEdit* m_searchLine;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_CLASSWIDGET_H

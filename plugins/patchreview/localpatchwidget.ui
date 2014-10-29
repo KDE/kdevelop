@@ -29,7 +29,7 @@
       </item>
       <item row="0" column="1">
        <widget class="KUrlRequester" name="baseDir">
-        <property name="clickMessage">
+        <property name="placeholderText">
          <string>Patch base...</string>
         </property>
        </widget>
@@ -46,7 +46,7 @@
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="KUrlRequester" name="filename">
-            <property name="clickMessage">
+            <property name="placeholderText">
              <string>Patch location...</string>
             </property>
            </widget>

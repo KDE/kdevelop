@@ -23,7 +23,7 @@ class KConfig;
 class KUrlRequester;
 class QPushButton;
 class GrepViewPlugin;
-class KLineEdit;
+class QLineEdit;
 
 class GrepDialog : public QDialog, private Ui::GrepWidget
 {

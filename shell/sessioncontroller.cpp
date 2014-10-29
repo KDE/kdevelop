@@ -50,7 +50,7 @@ Boston, MA 02110-1301, USA.
 #include <QLineEdit>
 #include <KMessageBox>
 #include <KAboutData>
-#include <KLineEdit>
+#include <QLineEdit>
 #include <KStringHandler>
 #include <QGroupBox>
 #include <QBoxLayout>
@@ -798,9 +798,9 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
 {
     ///FIXME: move this code into sessiondialog.cpp
     QListView* view = new QListView;
-    KLineEdit* filter = new KLineEdit;
-    filter->setClearButtonShown( true );
-    filter->setClickMessage(i18n("Search"));
+    QLineEdit* filter = new QLineEdit;
+    filter->setClearButtonEnabled( true );
+    filter->setPlaceholderText(i18n("Search"));
 
     QStandardItemModel* model = new QStandardItemModel(view);
 

@@ -67,7 +67,7 @@
       <item row="2" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="KLineEdit" name="identifierLineEdit"/>
+         <widget class="QLineEdit" name="identifierLineEdit"/>
         </item>
        </layout>
       </item>
@@ -83,7 +83,7 @@
    <header>keditlistwidget.h</header>
   </customwidget>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>

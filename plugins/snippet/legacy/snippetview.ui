@@ -24,7 +24,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="KLineEdit" name="filterText">
+      <widget class="QLineEdit" name="filterText">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -34,7 +34,7 @@
        <property name="toolTip">
         <string>Define filter here</string>
        </property>
-       <property name="clickMessage">
+       <property name="placeholderText">
         <string>Filter...</string>
        </property>
        <property name="showClearButton" stdset="0">
@@ -52,7 +52,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>

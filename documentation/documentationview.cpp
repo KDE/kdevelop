@@ -29,7 +29,7 @@
 #include <QLayout>
 #include <QTextBrowser>
 
-#include <KLineEdit>
+#include <QLineEdit>
 #include <KLocalizedString>
 
 #include <interfaces/icore.h>
@@ -75,8 +75,8 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* m)
     mProviders=new QComboBox(mActions);
     mProviders->setFocusPolicy(Qt::NoFocus);
 
-    mIdentifiers=new KLineEdit(mActions);
-    mIdentifiers->setClearButtonShown(true);
+    mIdentifiers=new QLineEdit(mActions);
+    mIdentifiers->setClearButtonEnabled(true);
     mIdentifiers->setCompleter(new QCompleter(mIdentifiers));
 //     mIdentifiers->completer()->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     mIdentifiers->completer()->setCaseSensitivity(Qt::CaseInsensitive);

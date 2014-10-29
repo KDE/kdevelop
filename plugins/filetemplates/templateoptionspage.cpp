@@ -24,7 +24,7 @@
 #include <language/codegen/templateclassgenerator.h>
 #include <language/codegen/sourcefiletemplate.h>
 
-#include <KLineEdit>
+#include <QLineEdit>
 #include <KIntNumInput>
 
 #include <QDomElement>
@@ -81,7 +81,7 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
             const QString type = entry.type;
             if (type == "String")
             {
-                control = new KLineEdit(entry.value.toString(), box);
+                control = new QLineEdit(entry.value.toString(), box);
             }
             else if (type == "Int")
             {

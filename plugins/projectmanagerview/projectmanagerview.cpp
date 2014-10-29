@@ -28,7 +28,7 @@
 #include <kiconloader.h>
 #include <KLocalizedString>
 #include <kactioncollection.h>
-#include <KLineEdit>
+#include <QLineEdit>
 
 #include <interfaces/iselectioncontroller.h>
 #include <interfaces/context.h>

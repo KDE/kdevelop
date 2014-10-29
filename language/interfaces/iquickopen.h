@@ -21,7 +21,7 @@
 
 #include <QtCore/QSet>
 
-#include <KLineEdit>
+#include <QLineEdit>
 
 #include <language/languageexport.h>
 
@@ -33,7 +33,7 @@ namespace KDevelop
 class QuickOpenDataProviderBase;
 class IndexedString;
 
-class KDEVPLATFORMLANGUAGE_EXPORT IQuickOpenLine : public KLineEdit
+class KDEVPLATFORMLANGUAGE_EXPORT IQuickOpenLine : public QLineEdit
 {
     Q_OBJECT
 public:

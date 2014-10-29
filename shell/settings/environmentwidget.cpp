@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 #include <QProcess>
 
 #include <kdialog.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <ktextedit.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -162,7 +162,7 @@ void EnvironmentWidget::newMultipleButtonClicked()
 
     KTextEdit *edit = new KTextEdit( main );
     layout->addWidget( edit );
-    edit->setClickMessage("VARIABLE1=VALUE1\nVARIABLE2=VALUE2");
+    edit->setPlaceholderText("VARIABLE1=VALUE1\nVARIABLE2=VALUE2");
     edit->setFocus();
     dialog->setMainWidget( main );
 

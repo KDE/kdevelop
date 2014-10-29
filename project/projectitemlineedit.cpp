@@ -142,14 +142,14 @@ QValidator::State ProjectItemValidator::validate(QString& input, int& pos) const
 }
 
 ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
-    : KLineEdit(parent), 
+    : QLineEdit(parent),
       m_base(0), 
       m_completer( new ProjectItemCompleter( this ) ), 
       m_validator( new ProjectItemValidator( this ) )
 {
     setCompleter( m_completer );
     setValidator( m_validator );
-    setClickMessage( i18n("Enter the path to an item from the projects tree" ) );
+    setPlaceholderText( i18n("Enter the path to an item from the projects tree" ) );
     
     QAction* selectItemAction = new QAction(QIcon::fromTheme("folder-document"), i18n("Select..."), this);
     connect(selectItemAction, SIGNAL(triggered()), SLOT(selectItemDialog()));

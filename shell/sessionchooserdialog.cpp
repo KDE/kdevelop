@@ -24,7 +24,7 @@
 #include "sessioncontroller.h"
 #include "core.h"
 
-#include <KLineEdit>
+#include <QLineEdit>
 #include <QPushButton>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -33,7 +33,7 @@
 
 using namespace KDevelop;
 
-SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* model, KLineEdit* filter)
+SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* model, QLineEdit* filter)
     : m_view(view), m_model(model), m_filter(filter), m_deleteCandidateRow(-1)
 {
     m_updateStateTimer.setInterval(5000);

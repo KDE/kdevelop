@@ -43,7 +43,7 @@ class QTabWidget;
 class KToggleAction;
 class QAction;
 class QAction;
-class KLineEdit;
+class QLineEdit;
 class StandardOutputViewTest;
 
 class OutputWidget : public QWidget
@@ -118,7 +118,7 @@ private:
     QAction* previousAction;
     KToggleAction* activateOnSelect;
     KToggleAction* focusOnSelect;
-    KLineEdit *filterInput;
+    QLineEdit *filterInput;
     QWidgetAction* filterAction;
 };
 

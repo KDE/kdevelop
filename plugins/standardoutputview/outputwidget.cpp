@@ -41,7 +41,7 @@
 #include <QIcon>
 #include <QTabWidget>
 #include <kstandardaction.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kactioncollection.h>
 
 #include <outputview/ioutputviewmodel.h>
@@ -129,11 +129,11 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     if( data->option & KDevelop::IOutputView::AddFilterAction )
     {
         addAction(separator);
-        filterInput = new KLineEdit();
+        filterInput = new QLineEdit();
         filterInput->setMaximumWidth(150);
         filterInput->setMinimumWidth(100);
-        filterInput->setClickMessage(i18n("Search..."));
-        filterInput->setClearButtonShown(true);
+        filterInput->setPlaceholderText(i18n("Search..."));
+        filterInput->setClearButtonEnabled(true);
         filterInput->setToolTip(i18n("Enter a wild card string to filter the output view"));
         filterAction = new QWidgetAction(this);
         filterAction->setDefaultWidget(filterInput);

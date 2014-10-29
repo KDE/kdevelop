@@ -117,7 +117,7 @@
           <property name="enabled">
            <bool>false</bool>
           </property>
-          <property name="clickMessage" stdset="0">
+          <property name="placeholderText" stdset="0">
            <string>Enter the absolute path to the script to run</string>
           </property>
          </widget>
@@ -150,14 +150,14 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KLineEdit" name="arguments">
+       <widget class="QLineEdit" name="arguments">
         <property name="toolTip">
          <string>Enter arguments to give to the executable</string>
         </property>
         <property name="placeholderText">
          <string/>
         </property>
-        <property name="clickMessage" stdset="0">
+        <property name="placeholderText" stdset="0">
          <string>Enter arguments to give to the executable</string>
         </property>
        </widget>
@@ -177,7 +177,7 @@
         <property name="toolTip">
          <string>Select a working directory for the executable</string>
         </property>
-        <property name="clickMessage" stdset="0">
+        <property name="placeholderText" stdset="0">
          <string>Select a working directory for the executable</string>
         </property>
        </widget>
@@ -271,11 +271,11 @@
          </widget>
         </item>
         <item>
-         <widget class="KLineEdit" name="remoteHost">
+         <widget class="QLineEdit" name="remoteHost">
           <property name="enabled">
            <bool>false</bool>
           </property>
-          <property name="clickMessage" stdset="0">
+          <property name="placeholderText" stdset="0">
            <string>Enter a remote host (user@example.com)</string>
           </property>
          </widget>
@@ -307,7 +307,7 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>

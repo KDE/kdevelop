@@ -38,11 +38,11 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KLineEdit" name="basedir">
+       <widget class="QLineEdit" name="basedir">
         <property name="text">
          <string>/</string>
         </property>
-        <property name="clickMessage">
+        <property name="placeholderText">
          <string>Where this project was checked out from</string>
         </property>
        </widget>
@@ -67,8 +67,8 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KLineEdit" name="username">
-        <property name="clickMessage">
+       <widget class="QLineEdit" name="username">
+        <property name="placeholderText">
          <string>User name in the specified service</string>
         </property>
        </widget>
@@ -81,9 +81,9 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KLineEdit" name="password">
-        <property name="passwordMode">
-         <bool>true</bool>
+       <widget class="QLineEdit" name="password">
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
         </property>
        </widget>
       </item>
@@ -146,11 +146,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>

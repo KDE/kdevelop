@@ -43,7 +43,7 @@
     </widget>
    </item>
    <item row="1" column="1" >
-    <widget class="KLineEdit" name="repository" />
+    <widget class="QLineEdit" name="repository" />
    </item>
    <item row="2" column="0" >
     <widget class="QLabel" name="moduleLabel" >
@@ -65,7 +65,7 @@
     </widget>
    </item>
    <item row="2" column="1" >
-    <widget class="KLineEdit" name="module" />
+    <widget class="QLineEdit" name="module" />
    </item>
    <item row="3" column="0" >
     <widget class="QLabel" name="vendorLabel" >
@@ -87,7 +87,7 @@
     </widget>
    </item>
    <item row="3" column="1" >
-    <widget class="KLineEdit" name="vendorTag" >
+    <widget class="QLineEdit" name="vendorTag" >
      <property name="text" >
       <string>vendor</string>
      </property>
@@ -113,7 +113,7 @@
     </widget>
    </item>
    <item row="4" column="1" >
-    <widget class="KLineEdit" name="releaseTag" >
+    <widget class="QLineEdit" name="releaseTag" >
      <property name="text" >
       <string>start</string>
      </property>
@@ -145,7 +145,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>

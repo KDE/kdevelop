@@ -57,7 +57,7 @@ ClassIdentifierPage::~ClassIdentifierPage()
 
 QString ClassIdentifierPage::identifier() const
 {
-    return d->classid->identifierLineEdit->userText();
+    return d->classid->identifierLineEdit->text();
 }
 
 void ClassIdentifierPage::checkIdentifier()

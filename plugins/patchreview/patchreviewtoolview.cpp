@@ -34,7 +34,7 @@
 #include <sublime/view.h>
 #include <sublime/document.h>
 #include <sublime/mainwindow.h>
-#include <KLineEdit>
+#include <QLineEdit>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <QFileInfo>

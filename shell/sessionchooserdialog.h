@@ -28,7 +28,7 @@
 
 class QModelIndex;
 class QListView;
-class KLineEdit;
+class QLineEdit;
 class QAbstractItemModel;
 
 namespace KDevelop {
@@ -37,7 +37,7 @@ class SessionChooserDialog : public KDialog
 {
     Q_OBJECT
 public:
-    SessionChooserDialog(QListView* view, QAbstractItemModel* model, KLineEdit* filter);
+    SessionChooserDialog(QListView* view, QAbstractItemModel* model, QLineEdit* filter);
     bool eventFilter(QObject* object, QEvent* event);
 
 public Q_SLOTS:
@@ -53,7 +53,7 @@ private Q_SLOTS:
 private:
     QListView* m_view;
     QAbstractItemModel* m_model;
-    KLineEdit* m_filter;
+    QLineEdit* m_filter;
     QTimer m_updateStateTimer;
 
     QPushButton* m_deleteButton;

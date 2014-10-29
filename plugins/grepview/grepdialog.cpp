@@ -31,7 +31,7 @@
 #include <kcombobox.h>
 #include <kurlcompletion.h>
 #include <kurlcompletion.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <KCompletion/kcompletion.h>
 
 #include <interfaces/icore.h>

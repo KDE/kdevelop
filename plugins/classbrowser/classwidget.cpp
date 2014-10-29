@@ -30,7 +30,7 @@
 
 #include <KLocalizedString>
 #include <KIconLoader>
-#include <KLineEdit>
+#include <QLineEdit>
 
 #include "classmodel.h"
 #include "classtree.h"
@@ -43,7 +43,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   , m_plugin(plugin)
   , m_model(new ClassModel())
   , m_tree(new ClassTree(this, plugin))
-  , m_searchLine(new KLineEdit(this))
+  , m_searchLine(new QLineEdit(this))
 {
   setObjectName("Class Browser Tree");
   setWindowTitle(i18n("Classes"));
@@ -64,7 +64,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
           m_model, SLOT(expanded(QModelIndex)));
 
   // Init search box
-  m_searchLine->setClearButtonShown( true );
+  m_searchLine->setClearButtonEnabled( true );
   connect(m_searchLine, SIGNAL(textChanged(QString)), m_model, SLOT(updateFilterString(QString)));
   QLabel *searchLabel = new QLabel( i18n("S&earch:"), this );
   searchLabel->setBuddy( m_searchLine );

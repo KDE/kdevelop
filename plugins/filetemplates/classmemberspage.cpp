@@ -21,7 +21,7 @@
 #include "debug.h"
 
 #include <KEditListWidget>
-#include <KLineEdit>
+#include <QLineEdit>
 #include <KLocalizedString>
 
 #include <QVBoxLayout>

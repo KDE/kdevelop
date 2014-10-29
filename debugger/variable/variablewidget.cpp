@@ -32,7 +32,7 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <khistorycombobox.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kdeversion.h>
 #include <kiconloader.h>
 #include <KLocalizedString>

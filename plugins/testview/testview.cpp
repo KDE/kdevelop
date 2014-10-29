@@ -41,7 +41,7 @@
 #include <KLocalizedString>
 #include <KJob>
 #include <KRecursiveFilterProxyModel>
-#include <KLineEdit>
+#include <QLineEdit>
 #include <KConfigGroup>
 
 #include <QAction>
@@ -73,9 +73,9 @@ TestViewFilterAction::TestViewFilterAction(  const QString &initialFilter, QObje
 
 QWidget* TestViewFilterAction::createWidget( QWidget* parent )
 {
-    KLineEdit* edit = new KLineEdit(parent);
-    edit->setClickMessage(i18n("Filter..."));
-    edit->setClearButtonShown(true);
+    QLineEdit* edit = new QLineEdit(parent);
+    edit->setPlaceholderText(i18n("Filter..."));
+    edit->setClearButtonEnabled(true);
     connect(edit, SIGNAL(textChanged(QString)), this, SIGNAL(filterChanged(QString)));
     if (!m_intialFilter.isEmpty()) {
         edit->setText(m_intialFilter);

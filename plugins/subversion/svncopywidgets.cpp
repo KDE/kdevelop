@@ -12,7 +12,7 @@
 #include "svnrevisionwidget.h"
 #include <QUrl>
 #include <kurlrequester.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <QCheckBox>
 #include <QRadioButton>
 

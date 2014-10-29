@@ -31,12 +31,12 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="KLineEdit" name="nameEdit">
+    <widget class="QLineEdit" name="nameEdit">
      <property name="toolTip">
       <string>&lt;p&gt;The name will also be used as the identifier during code completion.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; No spaces allowed.&lt;/p&gt;</string>
      </property>
-     <property name="clickMessage">
+     <property name="placeholderText">
       <string>please insert a name</string>
      </property>
     </widget>
@@ -55,8 +55,8 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="KLineEdit" name="commandEdit">
-     <property name="clickMessage">
+    <widget class="QLineEdit" name="commandEdit">
+     <property name="placeholderText">
       <string>please insert a command to execute</string>
      </property>
     </widget>
@@ -281,7 +281,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>

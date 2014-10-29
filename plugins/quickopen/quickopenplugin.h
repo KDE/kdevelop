@@ -149,7 +149,7 @@ class QuickOpenWidget : public QMenu {
   void setPreselectedText(const QString &text);
     void prepareShow();
 
-  void setAlternativeSearchField(KLineEdit* alterantiveSearchField);
+  void setAlternativeSearchField(QLineEdit* alterantiveSearchField);
     
   //Shows OK + Cancel. By default they are hidden  
   void showStandardButtons(bool show);
@@ -219,7 +219,7 @@ class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
     
     virtual void setDefaultText(const QString& text) {
       m_defaultText = text;
-      setClickMessage(m_defaultText);
+      setPlaceholderText(m_defaultText);
     }
   private slots:
     void activate() ;

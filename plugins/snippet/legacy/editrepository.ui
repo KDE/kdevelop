@@ -34,7 +34,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KLineEdit" name="repoNameEdit">
+       <widget class="QLineEdit" name="repoNameEdit">
         <property name="toolTip">
          <string>The name of the repository. Must not be empty or contain forward slashes (/).</string>
         </property>
@@ -51,7 +51,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KLineEdit" name="repoNamespaceEdit">
+       <widget class="QLineEdit" name="repoNamespaceEdit">
         <property name="toolTip">
          <string>&lt;p&gt;If non-empty this will be used as a prefix for all snippets in this repository during code completion.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; No spaces allowed.&lt;/p&gt;</string>
@@ -82,7 +82,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="KLineEdit" name="repoAuthorsEdit"/>
+       <widget class="QLineEdit" name="repoAuthorsEdit"/>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="repoFileTypesLabel">
@@ -111,7 +111,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>

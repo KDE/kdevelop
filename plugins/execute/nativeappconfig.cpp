@@ -51,6 +51,7 @@
 
 #include <KCModuleProxy>
 #include <KConfigDialog>
+#include <KLineEdit>
 #include <KShell>
 #include <kcmoduleinfo.h>
 
@@ -89,7 +90,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
         projectTargetRadio->setChecked( true );
     }
 
-    arguments->setClearButtonShown( true );
+    arguments->setClearButtonEnabled( true );
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, QUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, QString() ) );

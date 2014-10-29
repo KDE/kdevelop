@@ -366,7 +366,7 @@ void QuickOpenWidget::showEvent(QShowEvent* e)
     o.list->setColumnWidth( 0, 20 );
 }
 
-void QuickOpenWidget::setAlternativeSearchField(KLineEdit* alterantiveSearchField)
+void QuickOpenWidget::setAlternativeSearchField(QLineEdit* alterantiveSearchField)
 {
     o.searchLine = alterantiveSearchField;
     o.searchLine->installEventFilter( this );

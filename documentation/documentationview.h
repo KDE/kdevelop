@@ -32,7 +32,7 @@ namespace KDevelop {
 }
 
 class QModelIndex;
-class KLineEdit;
+class QLineEdit;
 class ProvidersModel;
 class QComboBox;
 
@@ -64,7 +64,7 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationView : public QWidget
         QAction* mForward;
         QAction* mBack;
         QAction* mFind;
-        KLineEdit* mIdentifiers;
+        QLineEdit* mIdentifiers;
         QList< QExplicitlySharedDataPointer< KDevelop::IDocumentation > > mHistory;
         QList< QExplicitlySharedDataPointer< KDevelop::IDocumentation > >::iterator mCurrent;
         QComboBox* mProviders;

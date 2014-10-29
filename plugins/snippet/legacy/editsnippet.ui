@@ -46,7 +46,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KLineEdit" name="snippetNameEdit">
+      <widget class="QLineEdit" name="snippetNameEdit">
        <property name="toolTip">
         <string>&lt;p&gt;The name will also be used as the identifier during code completion.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; No spaces allowed.&lt;/p&gt;</string>
@@ -64,7 +64,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KLineEdit" name="snippetPrefixEdit">
+      <widget class="QLineEdit" name="snippetPrefixEdit">
        <property name="toolTip">
         <string>The display prefix will be shown during code completion.</string>
        </property>
@@ -81,7 +81,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="KLineEdit" name="snippetArgumentsEdit">
+      <widget class="QLineEdit" name="snippetArgumentsEdit">
        <property name="toolTip">
         <string>The arguments will be shown during code completion.</string>
        </property>
@@ -98,7 +98,7 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="KLineEdit" name="snippetPostfixEdit">
+      <widget class="QLineEdit" name="snippetPostfixEdit">
        <property name="toolTip">
         <string>The postfix will be shown during code completion.</string>
        </property>
@@ -137,7 +137,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>

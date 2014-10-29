@@ -25,7 +25,7 @@
 #include <QToolButton>
 
 #include <KLocalizedString>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kcombobox.h>
 #include <QPushButton>
 #include <QTabWidget>

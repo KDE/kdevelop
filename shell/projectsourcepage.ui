@@ -46,7 +46,7 @@
       </item>
       <item>
        <widget class="KUrlRequester" name="workingDir">
-        <property name="clickMessage">
+        <property name="placeholderText">
          <string>Select the directory to use...</string>
         </property>
        </widget>

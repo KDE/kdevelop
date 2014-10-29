@@ -42,6 +42,7 @@
 #include <util/executecompositejob.h>
 #include <kparts/mainwindow.h>
 #include <KFileDialog>
+#include <KLineEdit>
 #include <KShell>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentcontroller.h>

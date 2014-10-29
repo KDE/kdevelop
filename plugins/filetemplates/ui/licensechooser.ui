@@ -60,14 +60,8 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="KLineEdit" name="licenseName">
+          <widget class="QLineEdit" name="licenseName">
            <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="urlDropsEnabled">
-            <bool>false</bool>
-           </property>
-           <property name="showClearButton" stdset="0">
             <bool>false</bool>
            </property>
           </widget>
@@ -105,11 +99,6 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
   </customwidget>
   <customwidget>
    <class>KTextEdit</class>

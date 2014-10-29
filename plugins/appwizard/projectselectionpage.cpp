@@ -13,7 +13,7 @@
 
 #include <QDir>
 
-#include <klineedit.h>
+#include <KLineEdit>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 
