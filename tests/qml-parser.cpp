@@ -18,7 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include <K4AboutData>
+#include <KAboutData>
 
 #include <language/util/debuglanguageparserhelper.h>
 
@@ -95,9 +95,9 @@ private:
 
 int main(int argc, char* argv[])
 {
-    K4AboutData aboutData("cpp-parser", 0, ki18n( "cpp-parser" ),
-                          "1", ki18n("KDevelop CPP parser debugging utility"), K4AboutData::License_GPL,
-                          ki18n( "2011 Milian Wolff" ), KLocalizedString(), "http://www.kdevelop.org" );
+    KAboutData aboutData("cpp-parser", i18n( "cpp-parser" ),
+                         "1", i18n("KDevelop CPP parser debugging utility"), KAboutLicense::GPL,
+                         i18n( "2011 Milian Wolff" ), QString(), "http://www.kdevelop.org" );
 
     return KDevelopUtils::initAndRunParser<QmlParser>(aboutData, argc, argv);
 }
