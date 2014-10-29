@@ -6,8 +6,6 @@ set(kdevswitchtobuddy_PART_SRCS
     switchtobuddyplugin.cpp
 )
 
-include_directories(CMAKE_CURRENT_BINARY_DIR)
-
 add_library(kdevswitchtobuddy MODULE ${kdevswitchtobuddy_PART_SRCS})
 
 target_link_libraries(kdevswitchtobuddy
