@@ -27,7 +27,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="addIncludePath">
+      <widget class="QPushButton" name="addIncludePath">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -45,7 +45,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="removeIncludePath">
+      <widget class="QPushButton" name="removeIncludePath">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -88,7 +88,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>

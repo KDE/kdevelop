@@ -21,7 +21,7 @@
 #include "kdeproviderwidget.h"
 #include <QVBoxLayout>
 #include <QListView>
-#include <KPushButton>
+#include <QPushButton>
 #include <KConfigDialog>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>

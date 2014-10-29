@@ -29,7 +29,7 @@
         </widget>
        </item>
        <item>
-        <widget class="KPushButton" name="addPath">
+        <widget class="QPushButton" name="addPath">
          <property name="toolTip">
           <string>Add a new sub-project path entry.</string>
          </property>
@@ -44,7 +44,7 @@
         </widget>
        </item>
        <item>
-        <widget class="KPushButton" name="removePath">
+        <widget class="QPushButton" name="removePath">
          <property name="enabled">
           <bool>false</bool>
          </property>
@@ -222,7 +222,7 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>

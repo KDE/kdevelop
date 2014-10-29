@@ -38,7 +38,7 @@ IncludesWidget::IncludesWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
-    // Hack to workaround broken setIcon(QIcon) overload in KPushButton, the function does not set the icon at all
+    // Hack to workaround broken setIcon(QIcon) overload in QPushButton, the function does not set the icon at all
     // So need to explicitly use the QIcon overload
     ui->addIncludePath->setIcon(QIcon::fromTheme("list-add"));
     ui->removeIncludePath->setIcon(QIcon::fromTheme("list-remove"));

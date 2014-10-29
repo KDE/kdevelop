@@ -91,35 +91,35 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="KPushButton" name="addButton">
+           <widget class="QPushButton" name="addButton">
             <property name="text">
              <string>Add</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="KPushButton" name="editButton">
+           <widget class="QPushButton" name="editButton">
             <property name="text">
              <string>Modify</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="KPushButton" name="removeButton">
+           <widget class="QPushButton" name="removeButton">
             <property name="text">
              <string>Remove</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="KPushButton" name="upButton">
+           <widget class="QPushButton" name="upButton">
             <property name="text">
              <string>Move Up</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="KPushButton" name="downButton">
+           <widget class="QPushButton" name="downButton">
             <property name="text">
              <string>Move Down</string>
             </property>
@@ -176,7 +176,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>
