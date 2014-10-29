@@ -17,11 +17,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 #include "ipartcontroller.h"
-#include <klibloader.h>
+
 #include <QFile>
 #include <kservice.h>
 #include <kmimetypetrader.h>
-#include <kparts/factory.h>
 #include <kparts/part.h>
 #include <kparts/readonlypart.h>
 

@@ -27,8 +27,7 @@
  Boston, MA 02110-1301, USA.
 */
 #include "iplugin.h"
-#include <kglobalsettings.h>
-#include <kcomponentdata.h>
+
 #include <kiconloader.h>
 #include <kmainwindow.h>
 #include <kxmlguiwindow.h>
@@ -79,8 +78,6 @@ public:
     ICore *core;
     KIconLoader* iconLoader;
     QStringList m_extensions;
-    // TODO KF5: Get rid off KComponentData
-    QString m_componentData;
 };
 
 IPlugin::IPlugin( const QString &componentName, QObject *parent )
@@ -96,7 +93,6 @@ IPlugin::IPlugin( const QString &componentName, QObject *parent )
     d->core = static_cast<KDevelop::ICore*>(parent);
 
     setComponentName(componentName, componentName);
-    d->m_componentData = componentName;
 
     foreach (KMainWindow* mw, KMainWindow::memberList()) {
         KXmlGuiWindow* guiWindow = qobject_cast<KXmlGuiWindow*>(mw);
@@ -128,9 +124,9 @@ void IPlugin::unload()
 KIconLoader *IPlugin::iconLoader() const
 {
     if ( d->iconLoader == 0 ) {
-        d->iconLoader = new KIconLoader(d->m_componentData);
+        d->iconLoader = new KIconLoader(componentName());
         d->iconLoader->addAppDir( "kdevelop" );
-        connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)),
+        connect(d->iconLoader, SIGNAL(iconChanged(int)),
                 this, SLOT(newIconLoader()));
     }
 
@@ -140,7 +136,7 @@ KIconLoader *IPlugin::iconLoader() const
 void IPlugin::newIconLoader() const
 {
     if (d->iconLoader) {
-        d->iconLoader->reconfigure(d->m_componentData);
+        d->iconLoader->reconfigure(componentName());
     }
 }
 
@@ -183,7 +179,7 @@ class CustomXmlGUIClient : public KXMLGUIClient {
 
 KXMLGUIClient* KDevelop::IPlugin::createGUIForMainWindow(Sublime::MainWindow* window)
 {
-    CustomXmlGUIClient* ret = new CustomXmlGUIClient(d->m_componentData);
+    CustomXmlGUIClient* ret = new CustomXmlGUIClient(componentName());
     QString file;
     createActionsForMainWindow(window, file, *ret->actionCollection());
 
@@ -210,11 +206,5 @@ QString KDevelop::IPlugin::errorDescription() const
 {
     return QString();
 }
-
-KComponentData KDevelop::IPlugin::componentData() const
-{
-    return KComponentData(componentName().toLatin1());
-}
-
 
 #include "moc_iplugin.cpp"

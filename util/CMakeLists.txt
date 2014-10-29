@@ -49,6 +49,7 @@ LINK_PUBLIC
     KF5::ItemModels
 LINK_PRIVATE
     KF5::KCMUtils
+    KF5::KDELibs4Support
     KDev::Interfaces
 )
 target_include_directories(KDevPlatformUtil INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kdevplatform>")

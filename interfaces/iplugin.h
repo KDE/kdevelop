@@ -181,8 +181,6 @@ public:
         return 0;
     }
 
-    KComponentData componentData() const;
-    
     /**
      * Ask the plugin for a ContextActionContainer, which contains actions
      * that will be merged into the context menu.

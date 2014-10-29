@@ -41,10 +41,12 @@
 
 #define MARGIN 5
 
+#if 0
 bool sortPlugins(KDevelop::IPlugin* l, KDevelop::IPlugin* r)
 {
     return l->componentData().aboutData()->programName() < r->componentData().aboutData()->programName();
 }
+#endif
 
 class PluginsModel : public QAbstractListModel
 {
@@ -56,7 +58,7 @@ public:
         : QAbstractListModel(parent)
     {
         m_plugins = KDevelop::Core::self()->pluginControllerInternal()->loadedPlugins();
-        std::sort(m_plugins.begin(), m_plugins.end(), sortPlugins);
+        //std::sort(m_plugins.begin(), m_plugins.end(), sortPlugins);
     }
 
     KDevelop::IPlugin *plugin(const QModelIndex& index) const
@@ -75,12 +77,16 @@ public:
         switch (role) {
             case Qt::DisplayRole:
             {
-                QString name(p->componentData().aboutData()->programName());
-                if (name.isEmpty()) name = p->componentData().componentName();
-                return name;
+                // TODO: KF5: How to retrieve the information?
+                return p->componentName();
+                //QString name(p->componentData().aboutData()->programName());
+                //if (name.isEmpty()) name = p->componentData().componentName();
+                //return name;
             }
             case CommentRole:
-                return p->componentData().aboutData()->shortDescription();
+                // TODO: KF5: How to retrieve the information?
+                return QString();
+                //return p->componentData().aboutData()->shortDescription();
             case Qt::DecorationRole:
             {
                 KPluginInfo pi = KDevelop::Core::self()->pluginControllerInternal()->pluginInfo(p);

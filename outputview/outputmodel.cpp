@@ -33,9 +33,7 @@
 #include <QThread>
 #include <QFont>
 #include <QApplication>
-
-#include <KGlobalSettings>
-
+#include <QFontDatabase>
 
 #include <set>
 
@@ -250,7 +248,7 @@ QVariant OutputModel::data(const QModelIndex& idx , int role ) const
                 return static_cast<int>(d->m_filteredItems.at( idx.row() ).type);
                 break;
             case Qt::FontRole:
-                return KGlobalSettings::fixedFont();
+                return QFontDatabase::systemFont(QFontDatabase::FixedFont);
                 break;
             default:
                 break;

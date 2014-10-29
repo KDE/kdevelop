@@ -11,8 +11,8 @@
 
 #include "kdevkonsoleviewplugin.h"
 
-#include <kgenericfactory.h>
 #include <kaboutdata.h>
+#include <klocale.h>
 
 #include <interfaces/iuicontroller.h>
 #include <interfaces/icore.h>

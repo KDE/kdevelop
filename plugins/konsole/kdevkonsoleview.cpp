@@ -24,10 +24,10 @@
 #include <kurl.h>
 #include <QIcon>
 #include <KLocalizedString>
-#include <klibloader.h>
 #include <kde_terminal_interface.h>
 #include <kparts/part.h>
 #include <kparts/readonlypart.h>
+#include <kpluginfactory.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
