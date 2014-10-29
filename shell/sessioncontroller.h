@@ -51,7 +51,7 @@ struct SessionRunInfo
     // if this is true, this session is currently running in an external process
     bool isRunning;
     // if the session is running, this contains the PID of its process
-    int holderPid;
+    qint64 holderPid;
     // if the session is running, this contains the name of its process
     QString holderApp;
     // if the session is running, this contains the host name where the process runs

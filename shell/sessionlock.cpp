@@ -46,12 +46,6 @@ QString dBusServiceNameForSession( const QString& id )
     return QString( "org.kdevelop.kdevplatform-lock-" ) + QString( id ).mid( 1, id.size() - 2 );
 }
 
-/// Tries to own the lock-file and returns result
-KLockFile::LockResult attemptRelock(QSharedPointer<KLockFile> lockFile)
-{
-    return lockFile->lock( KLockFile::ForceFlag | KLockFile::NoBlockFlag );
-}
-
 /// Force-removes the lock-file.
 void forceRemoveLockfile(const QString& lockFilename)
 {
@@ -71,7 +65,7 @@ TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool 
 
     /*
      * We've got two locking mechanisms here: D-Bus unique service name (based on the session id)
-     * and a plain lockfile (KLockFile).
+     * and a plain lockfile (QLockFile).
      * The latter is required to get the appname/pid of the locking instance
      * in case if it's stale/hanging/crashed (to make user know which PID he needs to kill).
      * D-Bus mechanism is the primary one.
@@ -83,7 +77,7 @@ TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool 
     QDBusConnectionInterface* connectionInterface = connection.interface();
 
     const QString lockFilename = lockFileForSession( sessionId );
-    QSharedPointer<KLockFile> lockFile(new KLockFile( lockFilename ));
+    QSharedPointer<QLockFile> lockFile(new QLockFile( lockFilename ));
 
     bool canLockDBus = !connectionInterface->isServiceRegistered( service );
     bool lockedDBus = false;
@@ -94,23 +88,23 @@ TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool 
     }
 
     // Attempt to lock file, despite the possibility to do so and presence of the request (doLocking)
-    // This is required as KLockFile::getLockInfo() works only after KLockFile::lock() is called
-    KLockFile::LockResult lockResult = attemptRelock(lockFile);
+    // This is required as QLockFile::getLockInfo() works only after QLockFile::lock() is called
+    bool lockResult = lockFile->tryLock();
     SessionRunInfo runInfo;
-    if( lockResult == KLockFile::LockOK ) {
+    if (lockResult) {
         // Unlock immediately if we shouldn't have locked it
         if( !lockedDBus ) {
             lockFile->unlock();
         }
     } else {
         // If locking failed, retrieve the lock's metadata
-        lockFile->getLockInfo( runInfo.holderPid, runInfo.holderHostname, runInfo.holderApp );
+        lockFile->getLockInfo(&runInfo.holderPid, &runInfo.holderHostname, &runInfo.holderApp );
 
         if( lockedDBus ) {
             // Since the lock-file is secondary, try to force-lock it if D-Bus locking succeeded
             forceRemoveLockfile(lockFilename);
-            lockResult = attemptRelock(lockFile);
-            Q_ASSERT(lockResult == KLockFile::LockOK);
+            lockResult = lockFile->tryLock();
+            Q_ASSERT(lockResult);
         }
     }
 
@@ -128,7 +122,7 @@ QString SessionLock::id()
     return m_sessionId;
 }
 
-SessionLock::SessionLock(const QString& sessionId, const QSharedPointer<KLockFile>& lockFile)
+SessionLock::SessionLock(const QString& sessionId, const QSharedPointer<QLockFile>& lockFile)
 : m_sessionId(sessionId)
 , m_lockFile(lockFile)
 {

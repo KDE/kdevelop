@@ -23,7 +23,7 @@
 #define SESSIONLOCK_H
 
 #include <interfaces/isessionlock.h>
-#include <KLockFile>
+#include <QLockFile>
 
 namespace KDevelop {
 
@@ -53,9 +53,9 @@ public:
     virtual ~SessionLock();
 
 private:
-    SessionLock(const QString& sessionId, const QSharedPointer<KLockFile>& lockFile);
+    SessionLock(const QString& sessionId, const QSharedPointer<QLockFile>& lockFile);
     QString m_sessionId;
-    QSharedPointer<KLockFile> m_lockFile;
+    QSharedPointer<QLockFile> m_lockFile;
 };
 
 }
