@@ -234,5 +234,3 @@ void GrepViewPlugin::jobFinished(KJob* job)
         m_currentJob = 0;
     }
 }
-
-#include "grepviewplugin.moc"

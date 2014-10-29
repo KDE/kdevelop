@@ -30,5 +30,3 @@ void KDevplatformDeclarativePlugin::registerTypes(const char* uri)
 
     qmlRegisterType<KDevelop::IProject>();
 }
-
-#include "kdevelopdashboarddeclarativeplugin.moc"

@@ -1441,7 +1441,3 @@ CheckInRepositoryJob* GitPlugin::isInRepository(KTextEditor::Document* document)
     job->start();
     return job;
 }
-
-
-
-#include "gitplugin.moc"

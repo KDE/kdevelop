@@ -99,5 +99,3 @@ void AppWizardDialog::next()
         KAssistantDialog::next();
     }
 }
-
-#include "appwizarddialog.moc"

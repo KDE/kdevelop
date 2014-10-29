@@ -360,5 +360,3 @@ void TestBazaar::removeTempDirs()
 }
 
 QTEST_MAIN(TestBazaar)
-
-#include "test_bazaar.moc"

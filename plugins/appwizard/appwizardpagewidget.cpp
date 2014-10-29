@@ -32,6 +32,3 @@ bool AppWizardPageWidget::shouldContinue()
 {
     return true;
 }
-
-#include "appwizardpagewidget.moc"
-

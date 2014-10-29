@@ -348,5 +348,3 @@ QString BazaarPlugin::errorDescription() const
 {
     return m_errorDescription;
 }
-
-#include "bazaarplugin.moc"

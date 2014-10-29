@@ -539,5 +539,3 @@ void TestPath::QUrl_acceptance()
     const QUrl baseRemote = QUrl("http://foo.org/asdf/foo/asdf");
     QCOMPARE(baseRemote.resolved(relative), QUrl("http://foo.org/asdf/foo/bar.h"));
 }
-
-#include "test_path.moc"

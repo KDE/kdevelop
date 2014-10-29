@@ -80,5 +80,3 @@ void TestObjectList::testBehaviorOnDestruction()
     }
     QVERIFY(!p);
 }
-
-#include "test_objectlist.moc"

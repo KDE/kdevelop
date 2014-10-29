@@ -238,5 +238,3 @@ static struct StaticLock {
         unlockForegroundMutexInternal(true);
     }
 } staticLock;
-
-#include "foregroundlock.moc"

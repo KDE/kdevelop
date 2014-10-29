@@ -264,6 +264,3 @@ void OverridesPage::addCustomDeclarations (const QString& category, const QList<
     overrideTree()->expandAll();
     overrideTree()->header()->resizeSections(QHeaderView::ResizeToContents);
 }
-
-
-#include "overridespage.moc"
