@@ -28,7 +28,7 @@
 
 #include <kdialog.h>
 #include <KLocalizedString>
-#include <kmenubar.h>
+#include <QMenuBar>
 #include <kcomponentdata.h>
 #include <KCMUtils/ksettings/dispatcher.h>
 #include <ksettings/dialog.h>
