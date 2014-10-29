@@ -25,6 +25,8 @@
 
 #include <language/duchain/types/indexedtype.h>
 
+#include <KDebug>
+
 namespace {
 /**
  * Find the cursor that cursor @p cursor references

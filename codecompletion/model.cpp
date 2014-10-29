@@ -35,6 +35,8 @@
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
 
+#include <KDebug>
+
 using namespace KDevelop;
 
 namespace {

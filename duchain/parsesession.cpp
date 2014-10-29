@@ -35,10 +35,11 @@
 #include <language/duchain/duchain.h>
 
 #include <KLocale>
-#include <KMimeType>
 
 #include <QDir>
 #include <QFileInfo>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 using namespace KDevelop;
 
@@ -63,7 +64,8 @@ QVector<const char*> argsForSession(const QString& path, ParseSessionData::Optio
         return pchArgs;
     }
 
-    QString mimeType = KMimeType::findByPath(path)->name();
+    QMimeDatabase db;
+    QString mimeType = db.mimeTypeForFile(path).name();
     auto res = mimeToArgs.find(mimeType);
 
     if (res != mimeToArgs.end()) {

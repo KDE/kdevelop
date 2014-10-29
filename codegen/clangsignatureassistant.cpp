@@ -26,7 +26,6 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/topducontext.h>
 #include <serialization/indexedstring.h>
-#include <QUrl>
 
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/codegen/documentchangeset.h>
@@ -42,6 +41,12 @@
 #include "../util/clangdebug.h"
 #include "../util/clangutils.h"
 #include "../util/clangtypes.h"
+
+#include <KDebug>
+
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QUrl>
 
 using namespace KDevelop;
 
@@ -152,7 +157,8 @@ QUrl findCompanionFile(const QUrl &fileUrl, const KTextEditor::Cursor& sc, const
     static QStringList headerMime({"text/x-c++hdr", "text/x-chdr"});
     static QStringList srcMime({"text/x-c++src", "text/x-csrc"});
 
-    QString me = KMimeType::findByUrl(fileUrl)->name();
+    QMimeDatabase db;
+    QString me = db.mimeTypeForUrl(fileUrl).name();
     QStringList targetTypes;
     if (headerMime.contains(me)) {
         targetTypes = srcMime;
@@ -163,13 +169,13 @@ QUrl findCompanionFile(const QUrl &fileUrl, const KTextEditor::Cursor& sc, const
         return QUrl();
     }
 
-    IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(KMimeType::findByUrl(fileUrl)->name());
+    IBuddyDocumentFinder* buddyFinder = IBuddyDocumentFinder::finderForMimeType(db.mimeTypeForUrl(fileUrl).name());
     if (!buddyFinder) {
         clangDebug() << "Could not create buddy finder for " << fileUrl;
         return QUrl();
     }
     foreach (QUrl potentialUrl, buddyFinder->getPotentialBuddies(fileUrl)) {
-        QString potentialMime = KMimeType::findByUrl(potentialUrl)->name();
+        QString potentialMime = db.mimeTypeForUrl(potentialUrl).name();
         if (!QFile::exists(potentialUrl.toLocalFile()) || !targetTypes.contains(potentialMime)) {
             continue;
         }

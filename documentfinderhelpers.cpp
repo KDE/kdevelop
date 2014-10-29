@@ -31,10 +31,12 @@
 
 #include <KDesktopFile>
 #include <KConfigGroup>
-#include <KMimeType>
+
 
 #include <QSet>
 #include <QStandardPaths>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 using namespace KDevelop;
 
@@ -43,14 +45,14 @@ using namespace KDevelop;
  */
 QSet<QString> getExtensionsByMimeType(const QString& mimeType)
 {
-    auto ptr = KMimeType::mimeType(mimeType);
-
-    if (!ptr) {
+    QMimeDatabase db;
+    auto mime = db.mimeTypeForName(mimeType);
+    if (!mime.isValid()) {
         return {};
     }
 
     QSet<QString> extensions;
-    foreach(const QString& pattern, ptr->patterns()) {
+    foreach(const auto& pattern, mime.globPatterns()) {
         if (pattern.startsWith("*.")) {
             extensions << pattern.mid(2);
         }

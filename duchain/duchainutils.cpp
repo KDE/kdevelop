@@ -26,6 +26,8 @@
 #include <language/duchain/functiondefinition.h>
 #include <language/codegen/coderepresentation.h>
 
+#include <KDebug>
+
 using namespace KDevelop;
 
 namespace ClangIntegration {

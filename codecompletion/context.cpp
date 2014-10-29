@@ -44,6 +44,7 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
+#include <KDebug>
 #include <KIcon>
 
 using namespace KDevelop;
