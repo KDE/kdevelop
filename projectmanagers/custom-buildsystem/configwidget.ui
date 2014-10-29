@@ -29,7 +29,7 @@ If this is the same as the source directory you can leave it empty.</string>
        <property name="mode">
         <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
        </property>
-       <property name="clickMessage">
+       <property name="placeholderText">
         <string>The directory where the tools are executed</string>
        </property>
        <property name="text">

@@ -18,7 +18,7 @@
 #include "gdbglobal.h"
 
 #include <kaction.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <kglobalsettings.h>
 #include <KLocalizedString>
 #include <kdeversion.h>
@@ -61,8 +61,8 @@ namespace GDBDebugger
     class MemoryRangeSelector : public QWidget
     {
     public:
-        KLineEdit* startAddressLineEdit;
-        KLineEdit* amountLineEdit;
+        QLineEdit* startAddressLineEdit;
+        QLineEdit* amountLineEdit;
         QPushButton* okButton;
         QPushButton* cancelButton;
 
@@ -78,13 +78,13 @@ namespace GDBDebugger
             QLabel* l1 = new QLabel(i18n("Start"), this);
             gl->addWidget(l1, 0, 1);
 
-            startAddressLineEdit = new KLineEdit(this);
+            startAddressLineEdit = new QLineEdit(this);
             gl->addWidget(startAddressLineEdit, 0, 3);
 
             QLabel* l2 = new QLabel(i18n("Amount"), this);
             gl->addWidget(l2, 2, 1);
 
-            amountLineEdit = new KLineEdit(this);
+            amountLineEdit = new QLineEdit(this);
             gl->addWidget(amountLineEdit, 2, 3);
 
             l->addSpacing(2);

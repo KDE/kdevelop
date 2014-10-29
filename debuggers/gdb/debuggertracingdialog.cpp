@@ -24,7 +24,7 @@
 
 #include <QLabel>
 #include <QCheckBox>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <keditlistbox.h>
 #include <kmessagebox.h>
 

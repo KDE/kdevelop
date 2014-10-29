@@ -21,7 +21,7 @@
        <property name="toolTip">
         <string>Add the currently displayed URL to the list of includes if it is not in the list yet.</string>
        </property>
-       <property name="clickMessage">
+       <property name="placeholderText">
         <string>A new include path/file to use for parsing files under given directory</string>
        </property>
       </widget>
