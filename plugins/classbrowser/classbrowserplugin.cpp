@@ -42,6 +42,7 @@
 #include "language/duchain/declaration.h"
 #include <serialization/indexedstring.h>
 
+#include "debug.h"
 #include "classmodel.h"
 #include "classtree.h"
 #include "classwidget.h"

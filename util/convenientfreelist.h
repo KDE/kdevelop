@@ -24,7 +24,6 @@
 
 #include "embeddedfreetree.h"
 #include "kdevvarlengtharray.h"
-#include "debug.h"
 
 namespace KDevelop {
 

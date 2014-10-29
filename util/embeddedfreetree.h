@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <QtCore/QPair>
 #include "kdevvarlengtharray.h"
-#include "debug.h"
+
 #include <iostream>
 
 //Uncomment this to search for tree-inconsistencies, however it's very expensive
