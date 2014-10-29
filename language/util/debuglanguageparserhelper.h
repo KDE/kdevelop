@@ -175,9 +175,9 @@ int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
 
     parser.addPositionalArgument("files", i18n("files or - to read from STDIN, the latter is the default if nothing is provided"), "[FILE...]");
 
-    parser.addOption({QStringList{"a", "print-ast"}, i18n("print generated AST tree")});
-    parser.addOption({QStringList{"t", "print-tokens"}, i18n("print generated token stream")});
-    parser.addOption({QStringList{"c", "code"}, i18n("code to parse"), "code"});
+    parser.addOption(QCommandLineOption{QStringList{"a", "print-ast"}, i18n("print generated AST tree")});
+    parser.addOption(QCommandLineOption{QStringList{"t", "print-tokens"}, i18n("print generated token stream")});
+    parser.addOption(QCommandLineOption{QStringList{"c", "code"}, i18n("code to parse"), "code"});
 
     parser.process(app);
     aboutData.processCommandLine(&parser);

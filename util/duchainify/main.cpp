@@ -271,19 +271,19 @@ int main(int argc, char** argv)
 
     parser.addPositionalArgument("paths", i18n("file or directory"), "[PATH...]");
 
-    parser.addOption({QStringList{"w", "warnings"}, i18n("Show warnings")});
-    parser.addOption({QStringList{"V", "verbose"}, i18n("Show warnings and debug output")});
-    parser.addOption({QStringList{"u", "force-update"}, i18n("Enforce an update of the top-contexts corresponding to the given files")});
-    parser.addOption({QStringList{"r", "force-update-recursive"}, i18n("Enforce an update of the top-contexts corresponding to the given files and all included files")});
-    parser.addOption({QStringList{"t", "threads"}, i18n("Number of threads to use"), "count"});
-    parser.addOption({QStringList{"f", "features"}, i18n("Features to build. Options: empty, simplified-visible-declarations, visible-declarations (default), all-declarations, all-declarations-and-uses, all-declarations-and-uses-and-AST"), "features"});
+    parser.addOption(QCommandLineOption{QStringList{"w", "warnings"}, i18n("Show warnings")});
+    parser.addOption(QCommandLineOption{QStringList{"V", "verbose"}, i18n("Show warnings and debug output")});
+    parser.addOption(QCommandLineOption{QStringList{"u", "force-update"}, i18n("Enforce an update of the top-contexts corresponding to the given files")});
+    parser.addOption(QCommandLineOption{QStringList{"r", "force-update-recursive"}, i18n("Enforce an update of the top-contexts corresponding to the given files and all included files")});
+    parser.addOption(QCommandLineOption{QStringList{"t", "threads"}, i18n("Number of threads to use"), "count"});
+    parser.addOption(QCommandLineOption{QStringList{"f", "features"}, i18n("Features to build. Options: empty, simplified-visible-declarations, visible-declarations (default), all-declarations, all-declarations-and-uses, all-declarations-and-uses-and-AST"), "features"});
 
-    parser.addOption({QStringList{"dump-context"}, i18n("Print complete Definition-Use Chain on successful parse")});
-    parser.addOption({QStringList{"dump-definitions"}, i18n("Print complete DUChain Definitions repository on successful parse")});
-    parser.addOption({QStringList{"dump-symboltable"}, i18n("Print complete DUChain PersistentSymbolTable repository on successful parse")});
-    parser.addOption({QStringList{"depth"}, i18n("Number defining the maximum depth where declaration details are printed"), "depth"});
-    parser.addOption({QStringList{"dump-graph"}, i18n("Dump DUChain graph (in .dot format)")});
-    parser.addOption({QStringList{"d", "dump-errors"}, i18n("Print problems encountered during parsing")});
+    parser.addOption(QCommandLineOption{QStringList{"dump-context"}, i18n("Print complete Definition-Use Chain on successful parse")});
+    parser.addOption(QCommandLineOption{QStringList{"dump-definitions"}, i18n("Print complete DUChain Definitions repository on successful parse")});
+    parser.addOption(QCommandLineOption{QStringList{"dump-symboltable"}, i18n("Print complete DUChain PersistentSymbolTable repository on successful parse")});
+    parser.addOption(QCommandLineOption{QStringList{"depth"}, i18n("Number defining the maximum depth where declaration details are printed"), "depth"});
+    parser.addOption(QCommandLineOption{QStringList{"dump-graph"}, i18n("Dump DUChain graph (in .dot format)")});
+    parser.addOption(QCommandLineOption{QStringList{"d", "dump-errors"}, i18n("Print problems encountered during parsing")});
 
     parser.process(app);
 
