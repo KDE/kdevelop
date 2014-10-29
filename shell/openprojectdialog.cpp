@@ -135,8 +135,13 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url )
     {
         setAppropriate( projectInfoPage, true );
         m_url = url;
-        if( !isDir ) {
-             m_url = m_url.adjusted(QUrl::StripTrailingSlash | QUrl::RemoveFilename);
+        if( isDir )
+        {
+            m_url = m_url.adjusted(QUrl::StripTrailingSlash );
+        }
+        else
+        {
+            m_url = m_url.adjusted(QUrl::StripTrailingSlash | QUrl::RemoveFilename);
         }
         ProjectInfoPage* page = qobject_cast<ProjectInfoPage*>( projectInfoPage->widget() );
         if( page )
