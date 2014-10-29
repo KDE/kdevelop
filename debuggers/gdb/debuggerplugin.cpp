@@ -34,7 +34,7 @@
 #include <QSignalMapper>
 #include <QDBusServiceWatcher>
 
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
@@ -198,7 +198,7 @@ void CppDebuggerPlugin::setupActions()
 {
     KActionCollection* ac = actionCollection();
 
-    KAction* action = new KAction(QIcon::fromTheme("core"), i18n("Examine Core File..."), this);
+    QAction * action = new QAction(QIcon::fromTheme("core"), i18n("Examine Core File..."), this);
     action->setToolTip( i18n("Examine core file") );
     action->setWhatsThis( i18n("<b>Examine core file</b><p>"
                                "This loads a core file, which is typically created "
@@ -210,7 +210,7 @@ void CppDebuggerPlugin::setupActions()
     ac->addAction("debug_core", action);
 
     #ifdef KDEV_ENABLE_GDB_ATTACH_DIALOG
-    action = new KAction(QIcon::fromTheme("connect_creating"), i18n("Attach to Process"), this);
+    action = new QAction(QIcon::fromTheme("connect_creating"), i18n("Attach to Process"), this);
     action->setToolTip( i18n("Attach to process...") );
     action->setWhatsThis(i18n("<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotAttachProcess()));

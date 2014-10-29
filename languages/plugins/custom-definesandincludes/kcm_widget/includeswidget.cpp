@@ -18,7 +18,7 @@
 
 #include "includeswidget.h"
 
-#include <KAction>
+#include <QAction>
 #include <KLocalizedString>
 #include <kfiledialog.h>
 

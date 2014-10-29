@@ -19,7 +19,7 @@
 #include "defineswidget.h"
 
 #include <KLocalizedString>
-#include <KAction>
+#include <QAction>
 
 #include "ui_defineswidget.h"
 #include "definesmodel.h"

@@ -14,7 +14,7 @@
 #include <kconfigdialog.h>
 #include <kstatusbar.h>
 
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 
@@ -57,7 +57,7 @@ void kde4app::setupActions()
     KStandardAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
     // custom menu and menu item - the slot is in the class kde4appView
-    KAction *custom = new KAction(KIcon("colorize"), i18n("Swi&tch Colors"), this);
+    QAction *custom = new QAction(KIcon("colorize"), i18n("Swi&tch Colors"), this);
     actionCollection()->addAction( QLatin1String("switch_action"), custom );
     connect(custom, SIGNAL(triggered(bool)), m_view, SLOT(switchColors()));
 }

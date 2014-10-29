@@ -17,7 +17,7 @@
 #include "gdbcommand.h"
 #include "gdbglobal.h"
 
-#include <kaction.h>
+#include <QAction>
 #include <QLineEdit>
 #include <kglobalsettings.h>
 #include <KLocalizedString>
@@ -475,7 +475,7 @@ namespace GDBDebugger
         setWindowIcon(QIcon::fromTheme("debugger"));
         setWindowTitle(i18n("Memory viewer"));
 
-        KAction* newMemoryViewerAction = new KAction(this);
+        QAction * newMemoryViewerAction = new QAction(this);
         newMemoryViewerAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         newMemoryViewerAction->setText(i18n("New memory viewer"));
         newMemoryViewerAction->setToolTip(i18nc("@info:tooltip", "Open a new memory viewer."));

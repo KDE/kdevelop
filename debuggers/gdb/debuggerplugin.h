@@ -43,7 +43,7 @@ class KDialog;
 class ProcessWidget;
 
 class KToolBar;
-class KAction;
+class QAction;
 
 namespace KDevelop {
 class Context;
