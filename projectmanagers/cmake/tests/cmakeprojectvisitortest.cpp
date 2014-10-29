@@ -35,7 +35,7 @@
 #include <astfactory.h>
 #include <cmakeprojectdata.h>
 #include <KTempDir>
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 
 QTEST_GUILESS_MAIN(CMakeProjectVisitorTest)
 
@@ -44,11 +44,11 @@ using namespace KDevelop;
 #undef TRUE //krazy:exclude=captruefalse
 #undef FALSE //krazy:exclude=captruefalse
 
-static QSharedPointer<KTemporaryFile> prepareVisitoTestScript(const QString &scriptContent)
+static QSharedPointer<QTemporaryFile> prepareVisitoTestScript(const QString &scriptContent)
 {
-    QSharedPointer<KTemporaryFile> file(new KTemporaryFile);
+    QSharedPointer<QTemporaryFile> file(new QTemporaryFile);
     if ( !file->open() )
-        return QSharedPointer<KTemporaryFile>();
+        return QSharedPointer<QTemporaryFile>();
 
     QTextStream out(file.data());
     out << scriptContent;
@@ -530,7 +530,7 @@ void CMakeProjectVisitorTest::testRun()
     QFETCH(QList<StringPair>, cache);
     QFETCH(QList<StringPair>, results);
 
-    QSharedPointer<KTemporaryFile> file = prepareVisitoTestScript(input);
+    QSharedPointer<QTemporaryFile> file = prepareVisitoTestScript(input);
     QVERIFY(!file.isNull());
     CMakeFileContent code=CMakeListsParser::readCMakeFile(file->fileName());
     QVERIFY(code.count() != 0);
@@ -605,7 +605,7 @@ void CMakeProjectVisitorTest::testFinder()
     QFETCH(QString, args);
     testFinder_init();
 
-    QSharedPointer<KTemporaryFile> file = prepareVisitoTestScript(QString("find_package(%1 REQUIRED %2)\n").arg(module).arg(args));
+    QSharedPointer<QTemporaryFile> file = prepareVisitoTestScript(QString("find_package(%1 REQUIRED %2)\n").arg(module).arg(args));
     QVERIFY(!file.isNull());
     CMakeFileContent code=CMakeListsParser::readCMakeFile(file->fileName());
     QVERIFY(code.count() != 0);
@@ -855,7 +855,7 @@ void CMakeProjectVisitorTest::testGlobs()
             ("Failed to create a link: " + dir.name() + pair.second).toLatin1());
     }
 
-    QSharedPointer<KTemporaryFile> file = prepareVisitoTestScript(input);
+    QSharedPointer<QTemporaryFile> file = prepareVisitoTestScript(input);
     QVERIFY(!file.isNull());
     CMakeFileContent code = CMakeListsParser::readCMakeFile(file->fileName());
     QVERIFY(code.count() != 0);
@@ -976,7 +976,7 @@ void CMakeProjectVisitorTest::testTargetProperties()
     QFETCH(QString, target);
     QFETCH(QList<StringPair>, results);
 
-    QSharedPointer<KTemporaryFile> file = prepareVisitoTestScript(input);
+    QSharedPointer<QTemporaryFile> file = prepareVisitoTestScript(input);
     QVERIFY(!file.isNull());
     CMakeFileContent code=CMakeListsParser::readCMakeFile(file->fileName());
     QVERIFY(code.count() != 0);
@@ -1062,7 +1062,7 @@ void CMakeProjectVisitorTest::testBug335803()
     QFETCH(QString, input);
     QFETCH(QStringList, targetNames);
 
-    QSharedPointer<KTemporaryFile> file = prepareVisitoTestScript(input);
+    QSharedPointer<QTemporaryFile> file = prepareVisitoTestScript(input);
     QVERIFY(!file.isNull());
     CMakeFileContent code = CMakeListsParser::readCMakeFile(file->fileName());
     QVERIFY(code.count() != 0);
@@ -1114,7 +1114,7 @@ void CMakeProjectVisitorTest::testSetProperty()
     QFETCH(QString, name);
     QFETCH(QStringList, value);
 
-    QSharedPointer<KTemporaryFile> file = prepareVisitoTestScript(input);
+    QSharedPointer<QTemporaryFile> file = prepareVisitoTestScript(input);
     QVERIFY(!file.isNull());
     CMakeFileContent code = CMakeListsParser::readCMakeFile(file->fileName());
     QVERIFY(code.count() != 0);

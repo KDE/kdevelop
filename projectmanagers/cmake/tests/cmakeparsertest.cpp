@@ -20,7 +20,7 @@
 
 #include "cmakeparsertest.h"
 
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 #include "cmListFileLexer.h"
 #include "cmakelistsparser.h"
 #include "cmakeast.h"
