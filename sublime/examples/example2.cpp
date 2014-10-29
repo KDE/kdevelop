@@ -17,28 +17,18 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include <QUrl>
-
-#include <k4aboutdata.h>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
-#include <KLocalizedString>
-
 #include <sublime/area.h>
 #include <sublime/urldocument.h>
 #include <sublime/controller.h>
+
+#include <QApplication>
+#include <QUrl>
 
 #include "example2main.h"
 
 int main(int argc, char **argv)
 {
-    static const char description[] = "Sublime UI Library: Splitting Example";
-    K4AboutData aboutData("example2", 0, ki18n("Example 2"),
-                         "1.0", ki18n(description), K4AboutData::License_LGPL,
-                         ki18n("(c) 2007, Alexander Dymo"), KLocalizedString(), "http://www.kdevelop.org" );
-
-    KCmdLineArgs::init(argc, argv, &aboutData);
-    KApplication app;
+    QApplication app(argc, argv);
 
     Sublime::Controller *controller = new Sublime::Controller(&app);
     Sublime::Area *area = new Sublime::Area(controller, "Area");

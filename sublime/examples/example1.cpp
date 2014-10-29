@@ -16,22 +16,14 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#include <k4aboutdata.h>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
-#include <KLocalizedString>
+
+#include <QApplication>
 
 #include "example1main.h"
 
 int main(int argc, char **argv)
 {
-    static const char description[] = "Sublime UI Library: Area Example";
-    K4AboutData aboutData("example1", 0, ki18n("Example 1"),
-                         "1.0", ki18n(description), K4AboutData::License_LGPL,
-                         ki18n("(c) 2007, Alexander Dymo"), KLocalizedString(), "http://www.kdevelop.org" );
-
-    KCmdLineArgs::init(argc, argv, &aboutData);
-    KApplication app;
+    QApplication app(argc, argv);
 
     Example1Main *m = new Example1Main();
     m->show();
