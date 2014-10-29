@@ -38,10 +38,6 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <KApplication>
-#include <KCmdLineArgs>
-#include <k4aboutdata.h>
-
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>
 #include <QtCore/QFile>
@@ -49,6 +45,11 @@
 #include <QtCore/QDirIterator>
 
 #include <stdio.h>
+#include <QApplication>
+#include <KAboutData>
+#include <KLocalizedString>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 
 bool verbose=false, warnings=false;
 
@@ -77,14 +78,14 @@ void messageOutput(QtMsgType type, const QMessageLogContext& context, const QStr
 }
 
 
-Manager::Manager(KCmdLineArgs* args) : m_total(0), m_args(args), m_allFilesAdded(0)
+Manager::Manager(QCommandLineParser* args) : m_total(0), m_args(args), m_allFilesAdded(0)
 {
 }
 
 void Manager::init()
 {
     QList<QUrl> includes;
-    if(m_args->count() == 0) {
+    if(m_args->positionalArguments().isEmpty()) {
         std::cerr << "Need file or directory to duchainify" << std::endl;
         QCoreApplication::exit(1);
     }
@@ -92,7 +93,7 @@ void Manager::init()
     uint features = TopDUContext::VisibleDeclarationsAndContexts;
     if(m_args->isSet("features"))
     {
-        QString featuresStr = m_args->getOption("features");
+        QString featuresStr = m_args->value("features");
         if(featuresStr == "visible-declarations")
         {
             features = TopDUContext::VisibleDeclarationsAndContexts;
@@ -131,7 +132,7 @@ void Manager::init()
     if(m_args->isSet("threads"))
     {
         bool ok = false;
-        int count = m_args->getOption("threads").toInt(&ok);
+        int count = m_args->value("threads").toInt(&ok);
         ICore::self()->languageController()->backgroundParser()->setThreadCount(count);
         if(!ok) {
             std::cerr << "bad thread count\n";
@@ -147,9 +148,8 @@ void Manager::init()
     // and quit when it's emitted
     connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(hideProgress(KDevelop::IStatus*)), this, SLOT(finish()));
 
-    for(int i=0; i<m_args->count(); i++)
-    {
-        addToBackgroundParser(m_args->arg(i), (TopDUContext::Features)features);
+    foreach (const auto& file, m_args->positionalArguments()) {
+        addToBackgroundParser(file, (TopDUContext::Features)features);
     }
     m_allFilesAdded = 1;
 
@@ -201,7 +201,7 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
         features |= DUChainDumper::DumpProblems;
     }
 
-    if (auto depth = m_args->getOption("dump-depth").toInt()) {
+    if (auto depth = m_args->value("dump-depth").toInt()) {
         DUChainReadLocker lock;
         std::cerr << "Context:" << std::endl;
         DUChainDumper dumpChain(features);
@@ -253,40 +253,49 @@ void Manager::finish()
 }
 
 using namespace KDevelop;
+
 int main(int argc, char** argv)
 {
-    K4AboutData aboutData( "duchainify", 0, ki18n( "duchainify" ),
-                          "1", ki18n("DUChain builder application"), K4AboutData::License_GPL,
-                          ki18n( "(c) 2009 David Nolden" ), KLocalizedString(), "http://www.kdevelop.org" );
-    KCmdLineArgs::init( argc, argv, &aboutData, KCmdLineArgs::CmdLineArgNone );
-    KCmdLineOptions options;
-    options.add("+path", ki18n("file or directory"));
+    KAboutData aboutData( "duchainify", i18n( "duchainify" ),
+                          "1", i18n("DUChain builder application"), KAboutLicense::GPL,
+                          i18n( "(c) 2009 David Nolden" ), QString(), "http://www.kdevelop.org" );
 
-    options.add("w").add("warnings", ki18n("Show warnings"));
-    options.add("V").add("verbose", ki18n("Show warnings and debug output"));
-    options.add("u").add("force-update", ki18n("Enforce an update of the top-contexts corresponding to the given files"));
-    options.add("r").add("force-update-recursive", ki18n("Enforce an update of the top-contexts corresponding to the given files and all included files"));
-    options.add("t").add("threads <count>", ki18n("Number of threads to use"));
-    options.add("f").add("features <features>", ki18n("Features to build. Options: empty, simplified-visible-declarations, visible-declarations (default), all-declarations, all-declarations-and-uses, all-declarations-and-uses-and-AST"));
-    options.add("dump-context", ki18n("Print complete Definition-Use Chain on successful parse"));
-    options.add("dump-definitions", ki18n("Print complete DUChain Definitions repository on successful parse"));
-    options.add("dump-symboltable", ki18n("Print complete DUChain PersistentSymbolTable repository on successful parse"));
-    options.add("dump-depth <depth>", ki18n("Number defining the maximum depth where declaration details are printed"));
-    options.add("dump-graph", ki18n("Dump DUChain graph (in .dot format)"));
-    options.add("d").add("dump-errors", ki18n("Print problems encountered during parsing"));
-    KCmdLineArgs::addCmdLineOptions( options );
+    QApplication app(argc, argv);
+    KAboutData::setApplicationData(aboutData);
 
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    QCommandLineParser parser;
+    aboutData.setupCommandLine(&parser);
 
-    verbose = args->isSet("verbose");
-    warnings = args->isSet("warnings");
+    parser.addVersionOption();
+    parser.addHelpOption();
+
+    parser.addPositionalArgument("paths", i18n("file or directory"), "[PATH...]");
+
+    parser.addOption({QStringList{"w", "warnings"}, i18n("Show warnings")});
+    parser.addOption({QStringList{"V", "verbose"}, i18n("Show warnings and debug output")});
+    parser.addOption({QStringList{"u", "force-update"}, i18n("Enforce an update of the top-contexts corresponding to the given files")});
+    parser.addOption({QStringList{"r", "force-update-recursive"}, i18n("Enforce an update of the top-contexts corresponding to the given files and all included files")});
+    parser.addOption({QStringList{"t", "threads"}, i18n("Number of threads to use"), "count"});
+    parser.addOption({QStringList{"f", "features"}, i18n("Features to build. Options: empty, simplified-visible-declarations, visible-declarations (default), all-declarations, all-declarations-and-uses, all-declarations-and-uses-and-AST"), "features"});
+
+    parser.addOption({QStringList{"dump-context"}, i18n("Print complete Definition-Use Chain on successful parse")});
+    parser.addOption({QStringList{"dump-definitions"}, i18n("Print complete DUChain Definitions repository on successful parse")});
+    parser.addOption({QStringList{"dump-symboltable"}, i18n("Print complete DUChain PersistentSymbolTable repository on successful parse")});
+    parser.addOption({QStringList{"depth"}, i18n("Number defining the maximum depth where declaration details are printed"), "depth"});
+    parser.addOption({QStringList{"dump-graph"}, i18n("Dump DUChain graph (in .dot format)")});
+    parser.addOption({QStringList{"d", "dump-errors"}, i18n("Print problems encountered during parsing")});
+
+    parser.process(app);
+
+    aboutData.processCommandLine(&parser);
+
+    verbose = parser.isSet("verbose");
+    warnings = parser.isSet("warnings");
     qInstallMessageHandler(messageOutput);
-
-    KApplication app(false);
 
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi, "duchainify");
-    Manager manager(args);
+    Manager manager(&parser);
 
     QTimer::singleShot(0, &manager, SLOT(init()));
     int ret = app.exec();

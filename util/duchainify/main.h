@@ -30,18 +30,18 @@ namespace KDevelop {
 class ParseJob;
 }
 
-class KCmdLineArgs;
+class QCommandLineParser;
 
 class Manager : public QObject {
     Q_OBJECT
     public:
-        Manager(KCmdLineArgs* args);
+        Manager(QCommandLineParser* args);
         void addToBackgroundParser(QString path, KDevelop::TopDUContext::Features features);
         QSet<QUrl> waiting();
     private:
         QSet<QUrl> m_waiting;
         uint m_total;
-        KCmdLineArgs* m_args;
+        QCommandLineParser* m_args;
         QAtomicInt m_allFilesAdded;
 
     public slots:

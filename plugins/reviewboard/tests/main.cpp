@@ -25,6 +25,7 @@
 #include <KAboutData>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <QCommandLineParser>
 
 #include "reviewpatchdialog.h"
 #include "reviewboardjobs.h"

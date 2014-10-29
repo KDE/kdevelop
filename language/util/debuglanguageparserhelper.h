@@ -19,19 +19,22 @@
 #ifndef KDEVPLATFORM_DEBUGLANGUAGEPARSERHELPER_H
 #define KDEVPLATFORM_DEBUGLANGUAGEPARSERHELPER_H
 
-#include <QTextStream>
-
 #include <cstdlib>
 #include <cstdio>
-#include <k4aboutdata.h>
-#include <KCmdLineArgs>
-#include <KApplication>
 
 #include <tests/autotestshell.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/problem.h>
 #include <language/codegen/coderepresentation.h>
 #include <tests/testcore.h>
+
+#include <KAboutData>
+#include <KLocalizedString>
+
+#include <QApplication>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
+#include <QTextStream>
 
 namespace KDevelopUtils {
 
@@ -155,31 +158,33 @@ private:
 
 /// call this after setting up @p aboutData in your @c main() function.
 template<class ParserT>
-int initAndRunParser(const K4AboutData& aboutData, int argc, char* argv[])
+int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
 {
     qout.setCodec("UTF-8");
     qerr.setCodec("UTF-8");
     qin.setCodec("UTF-8");
 
-    KCmdLineArgs::init( argc, argv, &aboutData, KCmdLineArgs::CmdLineArgNone );
-    KCmdLineOptions options;
-    options.add("a").add("print-ast", ki18n("print generated AST tree"));
-    options.add("t").add("print-tokens", ki18n("print generated token stream"));
-    options.add("c").add("code <code>", ki18n("code to parse"));
-    options.add("+files", ki18n("files or - to read from STDIN, the latter is the default if nothing is provided"));
-    KCmdLineArgs::addCmdLineOptions( options );
+    QApplication app(argc, argv);
 
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    QCommandLineParser parser;
+    KAboutData::setApplicationData(aboutData);
+    parser.addVersionOption();
+    parser.addHelpOption();
 
-    KApplication app(false);
+    aboutData.setupCommandLine(&parser);
 
-    QStringList files;
-    for ( int i = 0; i < args->count(); ++i ) {
-        files << args->arg(i);
-    }
+    parser.addPositionalArgument("files", i18n("files or - to read from STDIN, the latter is the default if nothing is provided"), "[FILE...]");
 
-    bool printAst = args->isSet("print-ast");
-    bool printTokens = args->isSet("print-tokens");
+    parser.addOption({QStringList{"a", "print-ast"}, i18n("print generated AST tree")});
+    parser.addOption({QStringList{"t", "print-tokens"}, i18n("print generated token stream")});
+    parser.addOption({QStringList{"c", "code"}, i18n("code to parse"), "code"});
+
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
+
+    QStringList files = parser.positionalArguments();
+    bool printAst = parser.isSet("print-ast");
+    bool printTokens = parser.isSet("print-tokens");
 
     KDevelop::AutoTestShell::init();
     KDevelop::TestCore::initialize(KDevelop::Core::NoUi);
@@ -187,11 +192,11 @@ int initAndRunParser(const K4AboutData& aboutData, int argc, char* argv[])
     KDevelop::DUChain::self()->disablePersistentStorage();
     KDevelop::CodeRepresentation::setDiskChangesForbidden(true);
 
-    ParserT parser(printAst, printTokens);
+    ParserT parserT(printAst, printTokens);
 
-    if ( args->isSet("code") ) {
-        parser.parseCode( args->getOption("code") );
-    } else if ( files.isEmpty() ) {
+    if (parser.isSet("code")) {
+        parserT.parseCode(parser.value("code"));
+    } else if (files.isEmpty()) {
         files << "-";
     }
 
@@ -201,9 +206,9 @@ int initAndRunParser(const K4AboutData& aboutData, int argc, char* argv[])
                 qerr << "no STDIN given" << endl;
                 return 255;
             }
-            parser.parseCode( qin.readAll().toUtf8() );
+            parserT.parseCode( qin.readAll().toUtf8() );
         } else {
-            parser.parseFile(fileName);
+            parserT.parseFile(fileName);
         }
 
     }
