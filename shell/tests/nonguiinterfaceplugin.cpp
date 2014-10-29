@@ -21,10 +21,7 @@
 
 #include "nonguiinterfaceplugin.h"
 
-#include <kaboutdata.h>
-#include <kcomponentdata.h>
 #include <kpluginfactory.h>
-#include <kpluginloader.h>
 
 K_PLUGIN_FACTORY(KDevNonGuiInterfacePluginFactory, registerPlugin<NonGuiInterfacePlugin>(); )
 
