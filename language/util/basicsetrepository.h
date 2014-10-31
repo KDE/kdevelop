@@ -17,6 +17,7 @@
 #include <set>
 #include <vector>
 #include <language/languageexport.h>
+#include <language/util/kdevhash.h>
 #include <serialization/itemrepository.h>
 
 /**
@@ -67,8 +68,6 @@ private:
   //Rule: (left != 0 && right != 0) || (left == 0 && right == 0)
   uint m_leftNode, m_rightNode;
 
-  ///NOTE: keep the first four uints together and at the start - see calculateHash
-
   // cached hash of this node data - it only includes the first four data members,
   // i.e. m_start, m_end, m_leftNode and m_rightNode
   uint m_hash;
@@ -90,7 +89,10 @@ public:
     return m_hash;
   }
 
-  uint calculateHash() const;
+  uint calculateHash() const
+  {
+      return KDevHash() << m_start << m_end << m_leftNode << m_rightNode;
+  }
 
   inline short unsigned int itemSize() const {
     return sizeof(SetNodeData);

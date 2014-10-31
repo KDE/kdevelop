@@ -25,8 +25,6 @@
 
 //#define DEBUG
 
-#include "somehash.cpp"
-
 #ifdef DEBUG
 #define ifDebug(X) X
 #else
@@ -79,12 +77,6 @@ uint splitPositionForRange(uint start, uint end, uchar& splitBit) {
 
   return 0;
 }
-
-uint SetNodeData::calculateHash() const {
-  //A hash to reduce the amount of clashes
-  return hashlittle(this, sizeof(uint)*4, 1748231);
-}
-
 
 uint splitPositionForRange(uint start, uint end) {
   uchar splitBit = 31;
