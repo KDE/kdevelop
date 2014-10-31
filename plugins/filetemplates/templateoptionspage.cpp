@@ -25,8 +25,7 @@
 #include <language/codegen/sourcefiletemplate.h>
 
 #include <QLineEdit>
-#include <KIntNumInput>
-
+#include <QSpinBox>
 #include <QDomElement>
 #include <QGroupBox>
 #include <QVBoxLayout>
@@ -85,7 +84,8 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
             }
             else if (type == "Int")
             {
-                KIntNumInput* input = new KIntNumInput(entry.value.toInt(), box);
+                auto input = new QSpinBox(box);
+                input->setValue(entry.value.toInt());
                 if (!entry.minValue.isEmpty())
                 {
                     input->setMinimum(entry.minValue.toInt());

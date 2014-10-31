@@ -27,9 +27,9 @@
 #include <KI18n/KLocalizedString>
 
 #include <KUrlRequester>
-#include <KIntNumInput>
 #include <KFileDialog>
 
+#include <QSpinBox>
 #include <QSignalMapper>
 #include <QLabel>
 
@@ -46,21 +46,21 @@ struct OutputPagePrivate
     QSignalMapper urlChangedMapper;
 
     QHash<QString, KUrlRequester*> outputFiles;
-    QHash<QString, KIntNumInput*> outputLines;
-    QHash<QString, KIntNumInput*> outputColumns;
+    QHash<QString, QSpinBox*> outputLines;
+    QHash<QString, QSpinBox*> outputColumns;
     QList<QLabel*> labels;
 
     QHash<QString, QUrl> defaultUrls;
     QHash<QString, QUrl> lowerCaseUrls;
     QStringList fileIdentifiers;
 
-    void updateRanges(KIntNumInput* line, KIntNumInput* column, bool enable);
+    void updateRanges(QSpinBox* line, QSpinBox* column, bool enable);
     void updateFileRange(const QString& field);
     void updateFileNames();
     void validate();
 };
 
-void OutputPagePrivate::updateRanges(KIntNumInput* line, KIntNumInput* column, bool enable)
+void OutputPagePrivate::updateRanges(QSpinBox* line, QSpinBox* column, bool enable)
 {
     qCDebug(PLUGIN_FILETEMPLATES) << "Updating Ranges, file exists: " << enable;
     line->setEnabled(enable);
@@ -200,13 +200,13 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
         d->labels << label;
         QHBoxLayout* layout = new QHBoxLayout(this);
 
-        KIntNumInput* line = new KIntNumInput(this);
+        auto line = new QSpinBox(this);
         line->setPrefix(i18n("Line: "));
         line->setValue(0);
         line->setMinimum(0);
         layout->addWidget(line);
 
-        KIntNumInput* column = new KIntNumInput(this);
+        auto column = new QSpinBox(this);
         column->setPrefix(i18n("Column: "));
         column->setValue(0);
         column->setMinimum(0);
