@@ -39,7 +39,7 @@
 #include <KPluginLoader>
 #include <KAboutData>
 #include <QUrl>
-#include <KAction>
+#include <QAction>
 #include <KMessageBox>
 #include <ktexteditor/document.h>
 
@@ -387,7 +387,7 @@ KDevelop::ICodeHighlighting* CMakeManager::codeHighlighting() const
 //     ContextMenuExtension menuExt;
 //     if(items.count()==1 && dynamic_cast<DUChainAttatched*>(items.first()))
 //     {
-//         KAction* action = new KAction( i18n( "Jump to Target Definition" ), this );
+//         QAction * action = new QAction( i18n( "Jump to Target Definition" ), this );
 //         connect( action, SIGNAL(triggered()), this, SLOT(jumpToDeclaration()) );
 //         menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
 //     }

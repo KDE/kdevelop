@@ -37,14 +37,14 @@
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="addConfig">
+      <widget class="QPushButton" name="addConfig">
        <property name="text">
         <string>Add</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="removeConfig">
+      <widget class="QPushButton" name="removeConfig">
        <property name="text">
         <string>Remove</string>
        </property>
@@ -73,7 +73,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>

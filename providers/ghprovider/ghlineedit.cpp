@@ -26,7 +26,7 @@
 namespace gh
 {
 
-LineEdit::LineEdit(QWidget *parent) : KLineEdit(parent)
+LineEdit::LineEdit(QWidget *parent) : QLineEdit(parent)
 {
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
@@ -46,7 +46,7 @@ void LineEdit::keyPressEvent(QKeyEvent *e)
         return;
     }
     m_timer->start(500);
-    KLineEdit::keyPressEvent(e);
+    QLineEdit::keyPressEvent(e);
 }
 
 void LineEdit::timeOut()

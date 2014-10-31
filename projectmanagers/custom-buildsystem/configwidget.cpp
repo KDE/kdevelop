@@ -24,7 +24,7 @@
 
 #include <KLocalizedString>
 #include <KLineEdit>
-#include <KAction>
+#include <QAction>
 
 #include "ui_configwidget.h"
 #include <util/environmentgrouplist.h>

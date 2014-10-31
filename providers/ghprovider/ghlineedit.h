@@ -22,7 +22,7 @@
 #define GH_LINEEDIT_H
 
 
-#include <KLineEdit>
+#include <QLineEdit>
 
 
 namespace gh
@@ -32,12 +32,12 @@ namespace gh
  * @class LineEdit
  *
  * This class is the Line Edit used in the gh::ProviderWidget. It's basically
- * the same as the KLineEdit class but it emits the returnPressed() signal
+ * the same as the QLineEdit class but it emits the returnPressed() signal
  * when the return key has been pressed. Moreover, it also implements an
  * internal timer that emits the returnPressed signal when 0.5 seconds have
  * passed since the user pressed a key.
  */
-class LineEdit : public KLineEdit
+class LineEdit : public QLineEdit
 {
     Q_OBJECT
 
@@ -48,7 +48,7 @@ public:
     /// Destructor.
     virtual ~LineEdit();
 
-    /// Overridden from KLineEdit.
+    /// Overridden from QLineEdit.
     void keyPressEvent(QKeyEvent *e) override;
 
 signals:

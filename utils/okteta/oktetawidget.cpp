@@ -59,7 +59,7 @@
 #include <sublime/view.h>
 // KDE
 #include <KLocalizedString>
-#include <KAction>
+#include <QAction>
 #include <KStandardAction>
 #include <KActionCollection>
 // Qt

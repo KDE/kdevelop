@@ -29,7 +29,7 @@
 #include <QMimeDatabase>
 #include <QReadWriteLock>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>

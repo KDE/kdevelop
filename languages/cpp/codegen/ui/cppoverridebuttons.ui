@@ -11,21 +11,21 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" >
    <item>
-    <widget class="KPushButton" name="kpushbutton_3" >
+    <widget class="QPushButton" name="kpushbutton_3" >
      <property name="text" >
       <string>Public</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="KPushButton" name="kpushbutton_4" >
+    <widget class="QPushButton" name="kpushbutton_4" >
      <property name="text" >
       <string>Protected</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="KPushButton" name="kpushbutton_5" >
+    <widget class="QPushButton" name="kpushbutton_5" >
      <property name="text" >
       <string>Private</string>
      </property>
@@ -48,14 +48,14 @@
     </spacer>
    </item>
    <item>
-    <widget class="KPushButton" name="kpushbutton_6" >
+    <widget class="QPushButton" name="kpushbutton_6" >
      <property name="text" >
       <string>Slot</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="KPushButton" name="kpushbutton_7" >
+    <widget class="QPushButton" name="kpushbutton_7" >
      <property name="text" >
       <string>Signal</string>
      </property>
@@ -65,7 +65,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KPushButton</class>
+   <class>QPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
   </customwidget>

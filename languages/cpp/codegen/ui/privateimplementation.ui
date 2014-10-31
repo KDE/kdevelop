@@ -13,7 +13,7 @@
   <property name="whatsThis">
    <string>Options &amp; settings to move the private data fields of a class into a private structure</string>
   </property>
-  <widget class="KLineEdit" name="structureName">
+  <widget class="QLineEdit" name="structureName">
    <property name="geometry">
     <rect>
      <x>160</x>
@@ -130,7 +130,7 @@ p, li { white-space: pre-wrap; }
     <string>Pointer name:</string>
    </property>
   </widget>
-  <widget class="KLineEdit" name="pointerName">
+  <widget class="QLineEdit" name="pointerName">
    <property name="geometry">
     <rect>
      <x>160</x>
@@ -155,7 +155,7 @@ p, li { white-space: pre-wrap; }
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>

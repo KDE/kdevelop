@@ -122,7 +122,7 @@
           <property name="toolTip">
            <string>Enter a dependency to add to the list</string>
           </property>
-          <property name="clickMessage">
+          <property name="placeholderText">
            <string>Enter a dependency to add to the list</string>
           </property>
           <property name="showClearButton" stdset="0">
@@ -147,7 +147,7 @@
          </widget>
         </item>
         <item row="1" column="0" rowspan="4" colspan="2">
-         <widget class="KListWidget" name="dependencies">
+         <widget class="QListWidget" name="dependencies">
           <property name="toolTip">
            <string>List of indirect dependent targets.</string>
           </property>
@@ -236,18 +236,18 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>KListWidget</class>
+   <class>QListWidget</class>
    <extends>QListWidget</extends>
    <header>klistwidget.h</header>
   </customwidget>
   <customwidget>
    <class>ProjectItemLineEdit</class>
-   <extends>KLineEdit</extends>
+   <extends>QLineEdit</extends>
    <header>project/projectitemlineedit.h</header>
   </customwidget>
  </customwidgets>

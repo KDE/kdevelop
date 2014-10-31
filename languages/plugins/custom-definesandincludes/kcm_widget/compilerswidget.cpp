@@ -23,10 +23,10 @@
 
 #include "compilerswidget.h"
 
-#include <KAction>
+#include <QAction>
 #include <KLocalizedString>
 #include <QFileDialog>
-#include <KShortcut>
+#include <QKeySequence>
 #include <QMenu>
 #include <QSignalMapper>
 
@@ -79,8 +79,8 @@ CompilersWidget::CompilersWidget(QWidget* parent)
 
     connect(m_ui->removeButton, SIGNAL(clicked()), SLOT(deleteCompiler()));
 
-    auto delAction = new KAction( i18n("Delete compiler"), this );
-    delAction->setShortcut( KShortcut( "Del" ) );
+    auto delAction = new QAction( i18n("Delete compiler"), this );
+    delAction->setShortcut( QKeySequence( "Del" ) );
     delAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
     m_ui->compilers->addAction( delAction );
     connect( delAction, SIGNAL(triggered()), SLOT(deleteCompiler()) );

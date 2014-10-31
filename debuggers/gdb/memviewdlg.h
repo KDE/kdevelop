@@ -28,7 +28,7 @@ namespace KDevelop {
 class IDebugSession;
 }
 
-class KLineEdit;
+class QLineEdit;
 class QToolBox;
 
 namespace GDBDebugger

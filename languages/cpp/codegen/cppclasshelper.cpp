@@ -27,7 +27,7 @@
 #include <language/codegen/documentchangeset.h>
 #include <language/codegen/codedescription.h>
 
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 
 using namespace KDevelop;
 
@@ -48,8 +48,7 @@ TemplateClassGenerator* CppClassHelper::createGenerator(const QUrl& baseUrl)
 
 QList<DeclarationPointer> CppClassHelper::defaultMethods(const QString& name) const
 {
-    KTemporaryFile file;
-    file.setSuffix( ".cpp" );
+    QTemporaryFile file(QDir::tempPath() + QLatin1String("/class_XXXXXX") + QLatin1String(".cpp"));
     file.setAutoRemove(false);
     file.open();
     QTextStream stream(&file);

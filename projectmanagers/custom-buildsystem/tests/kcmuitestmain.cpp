@@ -26,7 +26,7 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qdir.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <QStandardPaths>
 
 #include <tests/testproject.h>

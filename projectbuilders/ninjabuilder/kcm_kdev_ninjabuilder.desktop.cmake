@@ -64,6 +64,7 @@ Comment[pt_BR]=Configure as opções do Ninja
 Comment[sk]=Konfigurovať nastavenia Ninja
 Comment[sl]=Nastavite možnosti za Ninja
 Comment[sv]=Anpassa inställningar för Ninja
+Comment[tr]=Ninja ayarlarını yapılandır
 Comment[uk]=Налаштувати параметри Ninja
 Comment[x-test]=xxConfigure Ninja settingsxx
 Comment[zh_TW]=設定 Ninja

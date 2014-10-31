@@ -68,7 +68,7 @@
     </spacer>
    </item>
    <item row="4" column="0" colspan="3" >
-    <widget class="KLineEdit" name="customFormat" >
+    <widget class="QLineEdit" name="customFormat" >
      <property name="enabled" >
       <bool>false</bool>
      </property>
@@ -112,7 +112,7 @@ If custom format string is not enabled, names and values of all expressions will
    <header>keditlistbox.h</header>
   </customwidget>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>

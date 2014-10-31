@@ -21,7 +21,7 @@
 #include "processselection.h"
 #include "ksysguard/ksysguardprocesslist.h"
 #include "ksysguard/process.h"
-#include <KPushButton>
+#include <QPushButton>
 #include <QAbstractItemView>
 #include <QVBoxLayout>
 #include <QLabel>

@@ -42,11 +42,11 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="KLineEdit" name="qchName">
+    <widget class="QLineEdit" name="qchName">
      <property name="toolTip">
       <string>Select a name</string>
      </property>
-     <property name="clickMessage">
+     <property name="placeholderText">
       <string>Select a name</string>
      </property>
     </widget>
@@ -72,7 +72,7 @@
      <property name="filter">
       <string notr="true">*.qch|Qt Compressed Help (.qch)</string>
      </property>
-     <property name="clickMessage">
+     <property name="placeholderText">
       <string>Select a QtHelp file...</string>
      </property>
     </widget>
@@ -96,7 +96,7 @@
    <header>KIconThemes/KIconButton</header>
   </customwidget>
   <customwidget>
-   <class>KLineEdit</class>
+   <class>QLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>
