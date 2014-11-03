@@ -205,7 +205,7 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
         break;
       }
     case NavigationAction::ShowDocumentation: {
-        QExplicitlySharedDataPointer<IDocumentation> doc=ICore::self()->documentationController()->documentationForDeclaration(action.decl.data());
+        auto doc = ICore::self()->documentationController()->documentationForDeclaration(action.decl.data());
         ICore::self()->documentationController()->showDocumentation(doc);
       }
       break;

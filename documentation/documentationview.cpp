@@ -106,9 +106,9 @@ void DocumentationView::initialize()
 {
     mProviders->setModel(mProvidersModel);
     connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
-    foreach(KDevelop::IDocumentationProvider* p, mProvidersModel->providers()) {
-        connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(QExplicitlySharedDataPointer<KDevelop::IDocumentation>)),
-                SLOT(addHistory(QExplicitlySharedDataPointer<KDevelop::IDocumentation>)));
+    foreach (IDocumentationProvider* p, mProvidersModel->providers()) {
+        connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(KDevelop::IDocumentation::ptr)),
+                this, SLOT(addHistory(KDevelop::IDocumentation::Ptr)));
     }
     connect(mProvidersModel, SIGNAL(providersChanged()), this, SLOT(emptyHistory()));
 
@@ -136,7 +136,7 @@ void DocumentationView::browseForward()
 
 void DocumentationView::showHome()
 {
-    KDevelop::IDocumentationProvider* prov=mProvidersModel->provider(mProviders->currentIndex());
+    auto prov = mProvidersModel->provider(mProviders->currentIndex());
 
     showDocumentation(prov->homePage());
 }
@@ -148,16 +148,16 @@ void DocumentationView::changedSelection()
 
 void DocumentationView::changeProvider(const QModelIndex& idx)
 {
-    if(idx.isValid())
-    {
-        KDevelop::IDocumentationProvider* prov=mProvidersModel->provider(mProviders->currentIndex());
-        QExplicitlySharedDataPointer<KDevelop::IDocumentation> doc=prov->documentationForIndex(idx);
-        if(doc)
+    if (idx.isValid()) {
+        IDocumentationProvider* prov = mProvidersModel->provider(mProviders->currentIndex());
+        auto doc = prov->documentationForIndex(idx);
+        if (doc) {
             showDocumentation(doc);
+        }
     }
 }
 
-void DocumentationView::showDocumentation(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc)
+void DocumentationView::showDocumentation(const IDocumentation::Ptr& doc)
 {
     qCDebug(DOCUMENTATION) << "showing" << doc->name();
 
@@ -165,7 +165,7 @@ void DocumentationView::showDocumentation(QExplicitlySharedDataPointer< KDevelop
     updateView();
 }
 
-void DocumentationView::addHistory(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc)
+void DocumentationView::addHistory(const IDocumentation::Ptr& doc)
 {
     mBack->setEnabled( !mHistory.isEmpty() );
     mForward->setEnabled(false);
@@ -270,7 +270,7 @@ QVariant ProvidersModel::data(const QModelIndex& index, int role) const
     return ret;
 }
 
-void ProvidersModel::unloaded(KDevelop::IPlugin* p)
+void ProvidersModel::unloaded(IPlugin* p)
 {
     IDocumentationProvider* prov=p->extension<IDocumentationProvider>();
     int idx=-1;

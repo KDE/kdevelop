@@ -35,26 +35,26 @@ class Declaration;
 class KDEVPLATFORMINTERFACES_EXPORT IDocumentationController: public QObject
 {
     Q_OBJECT
-    public:
-        IDocumentationController();
-        virtual ~IDocumentationController();
+public:
+    IDocumentationController();
+    virtual ~IDocumentationController();
 
-        /** Return the documentation provider plugin instances. */
-        virtual QList<IDocumentationProvider*> documentationProviders() const=0;
-        
-        /** Return the corresponding documentation instance for a determinate declaration. */
-        virtual QExplicitlySharedDataPointer<IDocumentation> documentationForDeclaration(Declaration* declaration)=0;
-        
-        /** Show the documentation specified by @p doc. */
-        virtual void showDocumentation(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc)=0;
+    /** Return the documentation provider plugin instances. */
+    virtual QList<IDocumentationProvider*> documentationProviders() const = 0;
 
-    public Q_SLOTS:
-        /** Emit signal when the documentation providers list changed. */
-        virtual void changedDocumentationProviders() = 0;
+    /** Return the corresponding documentation instance for a determinate declaration. */
+    virtual IDocumentation::Ptr documentationForDeclaration(Declaration* declaration) = 0;
 
-    Q_SIGNALS:
-        /** Emitted when providers list changed */
-        void providersChanged();
+    /** Show the documentation specified by @p doc. */
+    virtual void showDocumentation(const IDocumentation::Ptr& doc) = 0;
+
+public Q_SLOTS:
+    /** Emit signal when the documentation providers list changed. */
+    virtual void changedDocumentationProviders() = 0;
+
+Q_SIGNALS:
+    /** Emitted when providers list changed */
+    void providersChanged();
 };
 
 }
