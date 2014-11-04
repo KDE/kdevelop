@@ -20,9 +20,9 @@
 #ifndef KDEVPLATFORM_IDOCUMENTATIONPROVIDER_H
 #define KDEVPLATFORM_IDOCUMENTATIONPROVIDER_H
 
-#include <QExplicitlySharedDataPointer>
 #include <QtCore/QObject>
 #include "interfacesexport.h"
+#include "idocumentation.h"
 
 class QIcon;
 class QModelIndex;
@@ -30,33 +30,32 @@ class QAbstractListModel;
 namespace KDevelop
 {
 class Declaration;
-class IDocumentation;
 
 class KDEVPLATFORMINTERFACES_EXPORT IDocumentationProvider
 {
-    public:
-        virtual ~IDocumentationProvider();
-        
-        /** @returns an IDocument instance for the specified declaration or a null pointer if none could be found.*/
-        virtual QExplicitlySharedDataPointer<IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration) const=0;
-        
-        /** @returns an instance of an interface to create an index for all the items provided by this class. */
-        virtual QAbstractListModel* indexModel() const=0;
-        
-        /** @returns the documentation information related to the index in the model. */
-        virtual QExplicitlySharedDataPointer<IDocumentation> documentationForIndex(const QModelIndex& idx) const=0;
+public:
+    virtual ~IDocumentationProvider();
     
-        /** @returns some icon associated to the provider. */
-        virtual QIcon icon() const=0;
-        
-        /** @returns a name to identify the provider to the user. */
-        virtual QString name() const=0;
-        
-        /** @returns a documentation item where we can show some home page information such a context index. */
-        virtual QExplicitlySharedDataPointer<IDocumentation> homePage() const=0;
-        
-    Q_SIGNALS:
-        virtual void addHistory(const QExplicitlySharedDataPointer<IDocumentation>& doc) const=0;
+    /** @returns an IDocument instance for the specified declaration or a null pointer if none could be found.*/
+    virtual IDocumentation::Ptr documentationForDeclaration(KDevelop::Declaration* declaration) const = 0;
+
+    /** @returns an instance of an interface to create an index for all the items provided by this class. */
+    virtual QAbstractListModel* indexModel() const = 0;
+
+    /** @returns the documentation information related to the index in the model. */
+    virtual IDocumentation::Ptr documentationForIndex(const QModelIndex& idx) const = 0;
+
+    /** @returns some icon associated to the provider. */
+    virtual QIcon icon() const = 0;
+
+    /** @returns a name to identify the provider to the user. */
+    virtual QString name() const = 0;
+
+    /** @returns a documentation item where we can show some home page information such a context index. */
+    virtual IDocumentation::Ptr homePage() const = 0;
+
+Q_SIGNALS:
+    virtual void addHistory(const IDocumentation::Ptr& doc) const = 0;
 };
 
 }

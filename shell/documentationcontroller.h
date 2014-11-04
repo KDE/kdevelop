@@ -29,32 +29,32 @@ class QAction;
 namespace KDevelop
 {
 
-class IDocumentationProvider;
 class Core;
 class Context;
 class ContextMenuExtension;
 
-class DocumentationController : public KDevelop::IDocumentationController
+class DocumentationController : public IDocumentationController
 {
-        Q_OBJECT
-    public:
-        DocumentationController(Core* core);
+    Q_OBJECT
+public:
+    DocumentationController(Core* core);
 
-        void initialize();
+    void initialize();
 
-        virtual QList<IDocumentationProvider*> documentationProviders() const;
-        virtual QExplicitlySharedDataPointer< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
-        virtual void showDocumentation(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc);
-        ContextMenuExtension contextMenuExtension( Context* context );
+    virtual QList<IDocumentationProvider*> documentationProviders() const override;
+    virtual IDocumentation::Ptr documentationForDeclaration(Declaration* declaration) override;
+    virtual void showDocumentation(const IDocumentation::Ptr& doc) override;
+    ContextMenuExtension contextMenuExtension( Context* context );
 
-    public slots:
-        virtual void changedDocumentationProviders();
-    private slots:
-        void doShowDocumentation();
-    private:
-        DocumentationViewFactory* m_factory;
+public slots:
+    virtual void changedDocumentationProviders() override;
 
-        QAction* m_showDocumentation;
+private slots:
+    void doShowDocumentation();
+
+private:
+    DocumentationViewFactory* m_factory;
+    QAction* m_showDocumentation;
 };
 
 }

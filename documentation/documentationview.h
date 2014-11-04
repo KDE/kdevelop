@@ -39,61 +39,60 @@ class QComboBox;
 class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationView : public QWidget
 {
     Q_OBJECT
-    public:
-        DocumentationView(QWidget* parent, ProvidersModel* m);
+public:
+    DocumentationView(QWidget* parent, ProvidersModel* m);
 
-        void showDocumentation(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc);
+    void showDocumentation(const KDevelop::IDocumentation::Ptr& doc);
 
-    public slots:
-        void initialize();
+public slots:
+    void initialize();
 
-        void addHistory(QExplicitlySharedDataPointer< KDevelop::IDocumentation > doc);
-        void emptyHistory();
+    void addHistory(const KDevelop::IDocumentation::Ptr& doc);
+    void emptyHistory();
 
-        void browseForward();
-        void browseBack();
-        void changedSelection();
-        void changedProvider(int);
-        void changeProvider(const QModelIndex &);
-        void showHome();
+    void browseForward();
+    void browseBack();
+    void changedSelection();
+    void changedProvider(int);
+    void changeProvider(const QModelIndex &);
+    void showHome();
 
-    private:
-        void updateView();
+private:
+    void updateView();
 
-        KToolBar* mActions;
-        QAction* mForward;
-        QAction* mBack;
-        QAction* mFind;
-        QLineEdit* mIdentifiers;
-        QList< QExplicitlySharedDataPointer< KDevelop::IDocumentation > > mHistory;
-        QList< QExplicitlySharedDataPointer< KDevelop::IDocumentation > >::iterator mCurrent;
-        QComboBox* mProviders;
-        ProvidersModel* mProvidersModel;
-        KDevelop::DocumentationFindWidget* mFindDoc;
+    KToolBar* mActions;
+    QAction* mForward;
+    QAction* mBack;
+    QAction* mFind;
+    QLineEdit* mIdentifiers;
+    QList< KDevelop::IDocumentation::Ptr > mHistory;
+    QList< KDevelop::IDocumentation::Ptr >::iterator mCurrent;
+    QComboBox* mProviders;
+    ProvidersModel* mProvidersModel;
+    KDevelop::DocumentationFindWidget* mFindDoc;
 };
 
 class KDEVPLATFORMDOCUMENTATION_EXPORT ProvidersModel : public QAbstractListModel
 {
     Q_OBJECT
-    public:
+public:
+    ProvidersModel(QObject* parent = 0);
 
-        ProvidersModel(QObject* parent = 0);
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex& idx = QModelIndex()) const;
+    QList<KDevelop::IDocumentationProvider*> providers();
+    KDevelop::IDocumentationProvider* provider(int pos) const;
+    int rowForProvider(KDevelop::IDocumentationProvider* provider);
 
-        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-        virtual int rowCount(const QModelIndex& idx = QModelIndex()) const;
-        QList<KDevelop::IDocumentationProvider*> providers();
-        KDevelop::IDocumentationProvider* provider(int pos) const;
-        int rowForProvider(KDevelop::IDocumentationProvider* provider);
+public slots:
+    void unloaded(KDevelop::IPlugin* p);
+    void loaded(KDevelop::IPlugin* p);
+    void reloadProviders();
 
-    public slots:
-        void unloaded(KDevelop::IPlugin* p);
-        void loaded(KDevelop::IPlugin* p);
-        void reloadProviders();
-
-    private:
-        QList<KDevelop::IDocumentationProvider*> mProviders;
+private:
+    QList<KDevelop::IDocumentationProvider*> mProviders;
 signals:
-        void providersChanged();
+    void providersChanged();
 };
 
 #endif // KDEVPLATFORM_DOCUMENTATIONVIEW_H
