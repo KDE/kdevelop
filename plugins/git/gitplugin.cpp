@@ -1195,7 +1195,14 @@ void GitPlugin::parseGitVersionOutput(DVcsJob* job)
     foreach(int num, minimumVersion) {
         QString curr = versionString.takeFirst();
         int valcurr = curr.toInt();
-        m_oldVersion |= valcurr<num;
+        if (valcurr < num) {
+            m_oldVersion = true;
+            break;
+        }
+        if (valcurr > num) {
+            m_oldVersion = false;
+            break;
+        }
     }
     qCDebug(PLUGIN_GIT) << "the current git version is old: " << m_oldVersion;
 }
