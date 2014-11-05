@@ -36,6 +36,7 @@
 #include "icore.h"
 #include "iplugincontroller.h"
 #include "iprojectcontroller.h"
+#include "iproject.h"
 #include "contextmenuextension.h"
 
 namespace KDevelop
@@ -53,16 +54,16 @@ public:
         delete iconLoader;
     }
 
-    void _k_guiClientAdded(KXMLGUIClient *client)
+    void guiClientAdded(KXMLGUIClient *client)
     {
 	if (client != q)
 	    return;
 
 	q->initializeGuiState();
-	_k_updateState();
+	updateState();
     }
 
-    void _k_updateState()
+    void updateState()
     {
 	const int projectCount =
 	    ICore::self()->projectController()->projectCount();
@@ -94,22 +95,21 @@ IPlugin::IPlugin( const QString &componentName, QObject *parent )
 
     setComponentName(componentName, componentName);
 
+    auto clientAdded = [=] (KXMLGUIClient* client) { d->guiClientAdded(client); };
     foreach (KMainWindow* mw, KMainWindow::memberList()) {
         KXmlGuiWindow* guiWindow = qobject_cast<KXmlGuiWindow*>(mw);
         if (! guiWindow)
             continue;
 
-        connect(guiWindow->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
-		this, SLOT(_k_guiClientAdded(KXMLGUIClient*)));
+        connect(guiWindow->guiFactory(), &KXMLGUIFactory::clientAdded,
+                this, clientAdded);
     }
 
-    connect(ICore::self()->projectController(),
-	    SIGNAL(projectOpened(KDevelop::IProject*)),
-	    this, SLOT(_k_updateState()));
-
-    connect(ICore::self()->projectController(),
-	    SIGNAL(projectClosed(KDevelop::IProject*)),
-	    this, SLOT(_k_updateState()));
+    auto updateState = [=] { d->updateState(); };
+    connect(ICore::self()->projectController(), &IProjectController::projectOpened,
+            this, updateState);
+    connect(ICore::self()->projectController(), &IProjectController::projectClosed,
+            this, updateState);
 }
 
 IPlugin::~IPlugin()
@@ -126,18 +126,11 @@ KIconLoader *IPlugin::iconLoader() const
     if ( d->iconLoader == 0 ) {
         d->iconLoader = new KIconLoader(componentName());
         d->iconLoader->addAppDir( "kdevelop" );
-        connect(d->iconLoader, SIGNAL(iconChanged(int)),
-                this, SLOT(newIconLoader()));
+        connect(d->iconLoader, &KIconLoader::iconChanged,
+                this, [=] { d->iconLoader->reconfigure(componentName()); });
     }
 
     return d->iconLoader;
-}
-
-void IPlugin::newIconLoader() const
-{
-    if (d->iconLoader) {
-        d->iconLoader->reconfigure(componentName());
-    }
 }
 
 ICore *IPlugin::core() const

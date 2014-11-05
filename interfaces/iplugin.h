@@ -225,12 +225,6 @@ public:
      */
     virtual QString errorDescription() const;
 
-private Q_SLOTS:
-    /**
-     * Re-initialize the global icon loader
-     */
-    void newIconLoader() const;
-
 protected:
     void addExtension( const QString& );
 
@@ -240,9 +234,6 @@ protected:
     virtual void initializeGuiState();
 
 private:
-    Q_PRIVATE_SLOT(d, void _k_guiClientAdded(KXMLGUIClient *))
-    Q_PRIVATE_SLOT(d, void _k_updateState())
-
     friend class IPluginPrivate;
     class IPluginPrivate* const d;
 };

@@ -80,7 +80,6 @@ signals:
 private:
     OutputModelPrivate* const d;
     friend struct OutputModelPrivate;
-    Q_PRIVATE_SLOT(d, void linesParsed(const QVector<KDevelop::FilteredItem>& lines));
 };
 
 }

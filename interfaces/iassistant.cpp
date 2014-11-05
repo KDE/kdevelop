@@ -57,7 +57,7 @@ QAction* IAssistantAction::toKAction() const
     //Add the data as a QExplicitlySharedDataPointer to the action, so this assistant stays alive at least as long as the QAction
     ret->setData(QVariant::fromValue(QExplicitlySharedDataPointer<IAssistantAction>(const_cast<IAssistantAction*>(this))));
 
-    connect(ret, SIGNAL(triggered(bool)), SLOT(execute()));
+    connect(ret, &QAction::triggered, this, &IAssistantAction::execute);
     return ret;
 }
 

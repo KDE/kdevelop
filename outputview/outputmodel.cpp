@@ -68,7 +68,7 @@ public:
     {
         m_timer->setInterval(BATCH_AGGREGATE_TIME_DELAY);
         m_timer->setSingleShot(true);
-        connect(m_timer, SIGNAL(timeout()), SLOT(process()));
+        connect(m_timer, &QTimer::timeout, this, &ParseWorker::process);
     }
 
 public slots:
@@ -203,9 +203,10 @@ OutputModelPrivate::OutputModelPrivate( OutputModel* model_, const QUrl& builddi
     qRegisterMetaType<QVector<KDevelop::FilteredItem> >();
     qRegisterMetaType<KDevelop::IFilterStrategy*>();
     s_parsingThread->addWorker(worker);
-    model->connect(worker, SIGNAL(parsedBatch(QVector<KDevelop::FilteredItem>)),
-                   model, SLOT(linesParsed(QVector<KDevelop::FilteredItem>)));
-    model->connect(worker, SIGNAL(allDone()), model, SIGNAL(allDone()));
+    model->connect(worker, &ParseWorker::parsedBatch,
+                   model, [=] (const QVector<KDevelop::FilteredItem>& items) { linesParsed(items); });
+    model->connect(worker, &ParseWorker::allDone,
+                   model, &OutputModel::allDone);
 }
 
 bool OutputModelPrivate::isValidIndex( const QModelIndex& idx, int currentRowCount ) const
