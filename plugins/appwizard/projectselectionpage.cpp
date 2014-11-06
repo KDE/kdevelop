@@ -46,12 +46,12 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
 
     ui->locationValidLabel->setText(QString(" "));
 
-    connect( ui->locationUrl->lineEdit(), SIGNAL(textEdited(QString)),
-             this, SLOT(urlEdited()));
-    connect( ui->locationUrl, SIGNAL(urlSelected(QUrl)),
-             this, SLOT(urlEdited()));
-    connect( ui->appNameEdit, SIGNAL(textEdited(QString)),
-             this, SLOT(nameChanged()) );
+    connect( ui->locationUrl->lineEdit(), &KLineEdit::textEdited,
+             this, &ProjectSelectionPage::urlEdited);
+    connect( ui->locationUrl, &KUrlRequester::urlSelected,
+             this, &ProjectSelectionPage::urlEdited);
+    connect( ui->appNameEdit, &QLineEdit::textEdited,
+             this, &ProjectSelectionPage::nameChanged );
 
     m_listView = new KDevelop::MultiLevelListView(this);
     m_listView->setLevels(2);
@@ -59,22 +59,22 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     m_listView->setModel(templatesModel);
     m_listView->setLastModelsFilterBehavior(KSelectionProxyModel::ChildrenOfExactSelection);
     m_listView->setContentsMargins(0, 0, 0, 0);
-    connect (m_listView, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)), SLOT(typeChanged(QModelIndex)));
+    connect (m_listView, &KDevelop::MultiLevelListView::currentIndexChanged, this, &ProjectSelectionPage::typeChanged);
     ui->gridLayout->addWidget(m_listView, 0, 0, 1, 1);
     typeChanged(m_listView->currentIndex());
 
-    connect( ui->templateType, SIGNAL(currentIndexChanged(int)),
-             this, SLOT(templateChanged(int)) );
+    connect( ui->templateType, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+             this, &ProjectSelectionPage::templateChanged );
 
     KNS3::Button* knsButton = new KNS3::Button(i18n("Get More Templates"), "kdevappwizard.knsrc", m_listView);
-    connect (knsButton, SIGNAL(dialogFinished(KNS3::Entry::List)),
-             this, SLOT(templatesDownloaded(KNS3::Entry::List)));
+    connect (knsButton, &KNS3::Button::dialogFinished,
+             this, &ProjectSelectionPage::templatesDownloaded);
     m_listView->addWidget(0, knsButton);
 
     QPushButton* loadButton = new QPushButton(m_listView);
     loadButton->setText(i18n("Load Template From File"));
     loadButton->setIcon(QIcon::fromTheme("application-x-archive"));
-    connect (loadButton, SIGNAL(clicked(bool)), this, SLOT(loadFileClicked()));
+    connect (loadButton, &QPushButton::clicked, this, &ProjectSelectionPage::loadFileClicked);
     m_listView->addWidget(0, loadButton);
 
     m_wizardDialog = wizardDialog;

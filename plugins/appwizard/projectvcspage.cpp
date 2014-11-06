@@ -60,10 +60,10 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
             }
         }
     }
-    connect( m_ui->vcsTypes, SIGNAL(activated(int)),
-             m_ui->vcsImportOptions, SLOT(setCurrentIndex(int)) );
-    connect( m_ui->vcsTypes, SIGNAL(activated(int)),
-             this, SLOT(vcsTypeChanged(int)) );
+    connect( m_ui->vcsTypes, static_cast<void(KComboBox::*)(int)>(&KComboBox::activated),
+             m_ui->vcsImportOptions, &QStackedWidget::setCurrentIndex );
+    connect( m_ui->vcsTypes, static_cast<void(KComboBox::*)(int)>(&KComboBox::activated),
+             this, &ProjectVcsPage::vcsTypeChanged );
     validateData();
 }
 
@@ -72,10 +72,10 @@ void ProjectVcsPage::vcsTypeChanged( int idx )
 {
     validateData();
     int widgetidx = idx - 1;
-    disconnect( this, SLOT(validateData()) );
+    disconnect( this, static_cast<void(ProjectVcsPage::*)()>(nullptr), this, &ProjectVcsPage::validateData );
     if ( widgetidx < 0 || widgetidx >= importWidgets.size())
         return;
-    connect( importWidgets[widgetidx], SIGNAL(changed()), this, SLOT(validateData()) );
+    connect( importWidgets[widgetidx], &KDevelop::VcsImportMetadataWidget::changed, this, &ProjectVcsPage::validateData );
 }
 
 void ProjectVcsPage::validateData()

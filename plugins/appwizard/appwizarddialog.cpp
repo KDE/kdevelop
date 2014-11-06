@@ -30,8 +30,8 @@ AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, 
     m_selectionPage = new ProjectSelectionPage(templatesModel, this);
     m_vcsPage = new ProjectVcsPage( pluginController, this );
     m_vcsPage->setSourceLocation( m_selectionPage->location() );
-    connect( m_selectionPage, SIGNAL(locationChanged(QUrl)),
-             m_vcsPage, SLOT(setSourceLocation(QUrl)) );
+    connect( m_selectionPage, &ProjectSelectionPage::locationChanged,
+             m_vcsPage, &ProjectVcsPage::setSourceLocation );
     m_pageItems[m_selectionPage] = addPage(m_selectionPage, i18nc("Page for general configuration options", "General"));
 
     m_pageItems[m_vcsPage] = addPage(m_vcsPage, i18nc("Page for version control options", "Version Control") );
@@ -45,14 +45,14 @@ AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, 
     m_validMapper->setMapping(m_selectionPage, m_selectionPage);
     m_validMapper->setMapping(m_vcsPage, m_vcsPage);
 
-    connect( m_selectionPage, SIGNAL(invalid()), m_invalidMapper, SLOT(map()) );
-    connect( m_selectionPage, SIGNAL(valid()), m_validMapper, SLOT(map()) );
+    connect( m_selectionPage, &ProjectSelectionPage::invalid, m_invalidMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map) );
+    connect( m_selectionPage, &ProjectSelectionPage::valid, m_validMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map) );
 
-    connect( m_vcsPage, SIGNAL(invalid()), m_invalidMapper, SLOT(map()) );
-    connect( m_vcsPage, SIGNAL(valid()), m_validMapper, SLOT(map()) );
+    connect( m_vcsPage, &ProjectVcsPage::invalid, m_invalidMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map) );
+    connect( m_vcsPage, &ProjectVcsPage::valid, m_validMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map) );
 
-    connect( m_validMapper, SIGNAL(mapped(QWidget*)), this, SLOT(pageValid(QWidget*)) );    
-    connect( m_invalidMapper, SIGNAL(mapped(QWidget*)), this, SLOT(pageInValid(QWidget*)) );
+    connect( m_validMapper, static_cast<void(QSignalMapper::*)(QWidget*)>(&QSignalMapper::mapped), this, &AppWizardDialog::pageValid );    
+    connect( m_invalidMapper, static_cast<void(QSignalMapper::*)(QWidget*)>(&QSignalMapper::mapped), this, &AppWizardDialog::pageInValid );
 }
 
 ApplicationInfo AppWizardDialog::appInfo() const
