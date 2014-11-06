@@ -163,7 +163,9 @@ K_EXPORT_PLUGIN( CompilerProviderFactory( KAboutData( "kdevcompilerprovider",
 CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
     : IPlugin( "kdevcompilerprovider", parent )
 {
-    KDEV_USE_EXTENSION_INTERFACE( ICompilerProvider );
+    /// FIXME: cleanup the code base here, don't make the provider a plugin but a static library or similar.
+    ///        simplify the code in generel, less interfaces/virtuals!
+    static_cast<DefinesAndIncludesManager*>( IDefinesAndIncludesManager::manager() )->setProvider(this);
 
     m_factories.append(CompilerFactoryPointer(new GccFactory()));
     m_factories.append(CompilerFactoryPointer(new ClangFactory()));
@@ -196,6 +198,9 @@ CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
 
     //Add a provider for files without project
     addPoject( nullptr, checkCompilerExists({}));
+    for (auto project : ICore::self()->projectController()->projects()) {
+        projectOpened( project );
+    }
 }
 
 QVector< CompilerPointer > CompilerProvider::compilers() const
