@@ -38,26 +38,26 @@ m_provider(provider)
     ui->setupUi(this);
 
     ui->getNewButton->setVisible(!m_provider->knsConfigurationFile().isEmpty());
-    connect(ui->getNewButton, SIGNAL(clicked(bool)),
-            this, SLOT(getMoreTemplates()));
+    connect(ui->getNewButton, &QPushButton::clicked,
+            this, &TemplatePage::getMoreTemplates);
 
     ui->shareButton->setVisible(!m_provider->knsConfigurationFile().isEmpty());
-    connect(ui->shareButton, SIGNAL(clicked(bool)),
-            this, SLOT(shareTemplates()));
+    connect(ui->shareButton, &QPushButton::clicked,
+            this, &TemplatePage::shareTemplates);
 
     ui->loadButton->setVisible(!m_provider->supportedMimeTypes().isEmpty());
-    connect(ui->loadButton, SIGNAL(clicked(bool)),
-            this, SLOT(loadFromFile()));
+    connect(ui->loadButton, &QPushButton::clicked,
+            this, &TemplatePage::loadFromFile);
 
     ui->extractButton->setEnabled(false);
-    connect(ui->extractButton, SIGNAL(clicked(bool)),
-            this, SLOT(extractTemplate()));
+    connect(ui->extractButton, &QPushButton::clicked,
+            this, &TemplatePage::extractTemplate);
 
     provider->reload();
 
     ui->treeView->setModel(provider->templatesModel());
     ui->treeView->expandAll();
-    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(currentIndexChanged(QModelIndex)));
+    connect(ui->treeView->selectionModel(), &QItemSelectionModel::currentChanged, this, &TemplatePage::currentIndexChanged);
 }
 
 TemplatePage::~TemplatePage()
