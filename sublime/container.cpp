@@ -233,7 +233,6 @@ Container::Container(QWidget *parent)
     connect(d->tabBar, SIGNAL(tabCloseRequested(int)), this, SLOT(requestClose(int)));
     connect(d->tabBar, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
     connect(d->tabBar, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
-    connect(d->tabBar, SIGNAL(mouseMiddleClick(int)), this, SLOT(requestClose(int))); //FIXME: should move this to the style, probably
     connect(d->tabBar, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(doubleClickTriggered(int)));
     connect(d->documentListMenu, SIGNAL(triggered(QAction*)), this, SLOT(documentListActionTriggered(QAction*)));
 

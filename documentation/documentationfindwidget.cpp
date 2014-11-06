@@ -33,9 +33,12 @@ DocumentationFindWidget::DocumentationFindWidget(QWidget* parent)
     m_ui->nextButton->setIcon(QIcon::fromTheme("go-down-search"));
     m_ui->previousButton->setIcon(QIcon::fromTheme("go-up-search"));
 
-    connect(m_ui->findText, SIGNAL(returnPressed(QString)), SLOT(searchNext()));
-    connect(m_ui->nextButton, SIGNAL(clicked(bool)), SLOT(searchNext()));
-    connect(m_ui->previousButton, SIGNAL(clicked(bool)), SLOT(searchPrevious()));
+    connect(m_ui->findText, &QLineEdit::returnPressed,
+            this, &DocumentationFindWidget::searchNext);
+    connect(m_ui->nextButton, &QPushButton::clicked,
+            this, &DocumentationFindWidget::searchNext);
+    connect(m_ui->previousButton, &QPushButton::clicked,
+            this, &DocumentationFindWidget::searchPrevious);
 }
 
 DocumentationFindWidget::~DocumentationFindWidget()
