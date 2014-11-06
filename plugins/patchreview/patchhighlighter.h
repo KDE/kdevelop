@@ -37,6 +37,7 @@ namespace KTextEditor
 {
 class Document;
 class Range;
+class Cursor;
 class Mark;
 class MovingRange;
 }
@@ -75,7 +76,7 @@ public slots:
     bool isRemoval( Diff2::Difference* );
     bool isInsertion( Diff2::Difference* );
     void markClicked( KTextEditor::Document*, const KTextEditor::Mark&, bool& );
-    void textInserted( KTextEditor::Document* doc, const KTextEditor::Range& range );
+    void textInserted(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor, const QString& text);
     void textRemoved( KTextEditor::Document*, const KTextEditor::Range&, const QString& oldText );
 };
 

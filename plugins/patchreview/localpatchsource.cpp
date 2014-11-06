@@ -94,21 +94,21 @@ LocalPatchWidget::LocalPatchWidget(LocalPatchSource* lpatch, QWidget* parent)
     , m_ui(new Ui::LocalPatchWidget)
 {
     m_ui->setupUi(this);
-    connect( m_ui->applied, SIGNAL( stateChanged( int ) ), SLOT( updatePatchFromEdit() ) );
-    connect( m_ui->filename, SIGNAL( textChanged( QString ) ), SLOT( updatePatchFromEdit() ) );
+    connect( m_ui->applied, &QCheckBox::stateChanged, this, &LocalPatchWidget::updatePatchFromEdit );
+    connect( m_ui->filename, &KUrlRequester::textChanged, this, &LocalPatchWidget::updatePatchFromEdit );
 
     m_ui->baseDir->setMode( KFile::Directory );
 
-    connect( m_ui->command, SIGNAL( textChanged( QString ) ), this, SLOT( updatePatchFromEdit() ) );
+    connect( m_ui->command, &QLineEdit::textChanged, this, &LocalPatchWidget::updatePatchFromEdit );
     //   connect( commandToFile, SIGNAL(clicked(bool)), this, SLOT(slotToFile()) );
 
-    connect( m_ui->filename->lineEdit(), SIGNAL( returnPressed() ), this, SLOT( updatePatchFromEdit() ) );
-    connect( m_ui->filename->lineEdit(), SIGNAL( editingFinished() ), this, SLOT( updatePatchFromEdit() ) );
-    connect( m_ui->filename, SIGNAL( urlSelected( QUrl ) ), this, SLOT( updatePatchFromEdit() ) );
-    connect( m_ui->command, SIGNAL( textChanged( QString ) ), this, SLOT( updatePatchFromEdit() ) );
+    connect( m_ui->filename->lineEdit(), &KLineEdit::returnPressed, this, &LocalPatchWidget::updatePatchFromEdit );
+    connect( m_ui->filename->lineEdit(), &KLineEdit::editingFinished, this, &LocalPatchWidget::updatePatchFromEdit );
+    connect( m_ui->filename, &KUrlRequester::urlSelected, this, &LocalPatchWidget::updatePatchFromEdit );
+    connect( m_ui->command, &QLineEdit::textChanged, this, &LocalPatchWidget::updatePatchFromEdit );
     //     connect( commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
 
-    connect(m_lpatch, SIGNAL(patchChanged()), SLOT(syncPatch()));
+    connect(m_lpatch, &LocalPatchSource::patchChanged, this, &LocalPatchWidget::syncPatch);
 }
 
 void LocalPatchWidget::syncPatch()

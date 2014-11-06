@@ -83,14 +83,14 @@ PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* pl
     m_resetCheckedUrls( true ),
     m_plugin( plugin )
 {
-    connect( m_plugin->finishReviewAction(), SIGNAL(triggered(bool)), this, SLOT( finishReview() ) );
+    connect( m_plugin->finishReviewAction(), &QAction::triggered, this, &PatchReviewToolView::finishReview );
 
-    connect( plugin, SIGNAL( patchChanged() ), SLOT( patchChanged() ) );
-    connect( plugin, SIGNAL( startingNewReview() ), SLOT( startingNewReview() ) );
-    connect( ICore::self()->documentController(), SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
+    connect( plugin, &PatchReviewPlugin::patchChanged, this, &PatchReviewToolView::patchChanged );
+    connect( plugin, &PatchReviewPlugin::startingNewReview, this, &PatchReviewToolView::startingNewReview );
+    connect( ICore::self()->documentController(), &IDocumentController::documentActivated, this, &PatchReviewToolView::documentActivated );
 
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
-    connect(w, SIGNAL(areaChanged(Sublime::Area*)), m_plugin, SLOT(areaChanged(Sublime::Area*)));
+    connect(w, &Sublime::MainWindow::areaChanged, m_plugin, &PatchReviewPlugin::areaChanged);
 
     showEditDialog();
     patchChanged();
@@ -186,8 +186,8 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.filesList->header()->hide();
     m_editPatch.filesList->setRootIsDecorated( false );
     m_editPatch.filesList->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(m_editPatch.filesList, SIGNAL(customContextMenuRequested(QPoint)), SLOT(customContextMenuRequested(QPoint)));
-    connect(m_fileModel, SIGNAL(itemChanged(QStandardItem*)), SLOT(fileItemChanged(QStandardItem*)));
+    connect(m_editPatch.filesList, &QTreeView::customContextMenuRequested, this, &PatchReviewToolView::customContextMenuRequested);
+    connect(m_fileModel, &PatchFilesModel::itemChanged, this, &PatchReviewToolView::fileItemChanged);
 
     m_editPatch.previousFile->setIcon( QIcon::fromTheme( "arrow-left" ) );
     m_editPatch.previousHunk->setIcon( QIcon::fromTheme( "arrow-up" ) );
@@ -201,7 +201,7 @@ void PatchReviewToolView::showEditDialog() {
     QMenu* exportMenu = new QMenu( m_editPatch.exportReview );
     StandardPatchExport* stdactions = new StandardPatchExport( m_plugin, this );
     stdactions->addActions( exportMenu );
-    connect( exportMenu, SIGNAL( triggered( QAction* ) ), m_plugin, SLOT( exporterSelected( QAction* ) ) );
+    connect(exportMenu, &QMenu::triggered, m_plugin, &PatchReviewPlugin::exporterSelected);
 
     IPluginController* pluginManager = ICore::self()->pluginController();
     foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IPatchExporter" ) )
@@ -213,25 +213,25 @@ void PatchReviewToolView::showEditDialog() {
 
     m_editPatch.exportReview->setMenu( exportMenu );
 
-    connect( m_editPatch.previousHunk, SIGNAL( clicked( bool ) ), this, SLOT( prevHunk() ) );
-    connect( m_editPatch.nextHunk, SIGNAL( clicked( bool ) ), this, SLOT( nextHunk() ) );
-    connect( m_editPatch.previousFile, SIGNAL( clicked( bool ) ), this, SLOT( prevFile() ) );
-    connect( m_editPatch.nextFile, SIGNAL( clicked( bool ) ), this, SLOT( nextFile() ) );
-    connect( m_editPatch.filesList, SIGNAL( activated ( QModelIndex ) ), this, SLOT( fileDoubleClicked( QModelIndex ) ) );
+    connect( m_editPatch.previousHunk, &QToolButton::clicked, this, &PatchReviewToolView::prevHunk );
+    connect( m_editPatch.nextHunk, &QToolButton::clicked, this, &PatchReviewToolView::nextHunk );
+    connect( m_editPatch.previousFile, &QToolButton::clicked, this, &PatchReviewToolView::prevFile );
+    connect( m_editPatch.nextFile, &QToolButton::clicked, this, &PatchReviewToolView::nextFile );
+    connect( m_editPatch.filesList, &QTreeView::activated , this, &PatchReviewToolView::fileDoubleClicked );
 
-    connect( m_editPatch.cancelReview, SIGNAL( clicked( bool ) ), m_plugin, SLOT( cancelReview() ) );
+    connect( m_editPatch.cancelReview, &QPushButton::clicked, m_plugin, &PatchReviewPlugin::cancelReview );
     //connect( m_editPatch.cancelButton, SIGNAL(pressed()), this, SLOT(slotEditCancel()) );
 
     //connect( this, SIGNAL(finished(int)), this, SLOT(slotEditDialogFinished(int)) );
 
-    connect( m_editPatch.updateButton, SIGNAL( clicked( bool ) ), m_plugin, SLOT( forceUpdate() ) );
+    connect( m_editPatch.updateButton, &QPushButton::clicked, m_plugin, &PatchReviewPlugin::forceUpdate );
 
-    connect( m_editPatch.testsButton, SIGNAL( clicked( bool ) ), this, SLOT( runTests() ) );
+    connect( m_editPatch.testsButton, &QPushButton::clicked, this, &PatchReviewToolView::runTests );
 
     m_selectAllAction = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this );
-    connect( m_selectAllAction, SIGNAL(triggered(bool)), SLOT(selectAll()) );
+    connect( m_selectAllAction, &QAction::triggered, this, &PatchReviewToolView::selectAll );
     m_deselectAllAction = new QAction( i18n("Deselect All"), this );
-    connect( m_deselectAllAction, SIGNAL(triggered(bool)), SLOT(deselectAll()) );
+    connect( m_deselectAllAction, &QAction::triggered, this, &PatchReviewToolView::deselectAll );
 }
 
 void PatchReviewToolView::customContextMenuRequested(const QPoint& )
@@ -515,8 +515,8 @@ void PatchReviewToolView::runTests()
     m_editPatch.testProgressBar->show();
 
     ProjectTestJob* job = new ProjectTestJob(project, this);
-    connect (job, SIGNAL(finished(KJob*)), SLOT(testJobResult(KJob*)));
-    connect (job, SIGNAL(percent(KJob*,ulong)), SLOT(testJobPercent(KJob*,ulong)));
+    connect (job, &ProjectTestJob::finished, this, &PatchReviewToolView::testJobResult);
+    connect (job, static_cast<void(ProjectTestJob::*)(KJob*,unsigned long)>(&ProjectTestJob::percent), this, &PatchReviewToolView::testJobPercent);
     ICore::self()->runController()->registerJob(job);
 }
 

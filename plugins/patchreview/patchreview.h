@@ -129,6 +129,8 @@ private:
     QScopedPointer< Diff2::KompareModelList > m_modelList;
     typedef QMap< QUrl, QPointer< PatchHighlighter > > HighlightMap;
     HighlightMap m_highlighters;
+
+    friend class PatchReviewToolView; // to access slot exporterSelected();
 };
 
 #endif

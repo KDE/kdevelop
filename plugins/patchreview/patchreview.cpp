@@ -475,7 +475,7 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
     }
 
     if( m_patch ) {
-        disconnect( m_patch, SIGNAL( patchChanged() ), this, SLOT( notifyPatchChanged() ) );
+        disconnect( m_patch.data(), &IPatchSource::patchChanged, this, &PatchReviewPlugin::notifyPatchChanged );
         if ( qobject_cast<LocalPatchSource*>( m_patch ) ) {
             // make sure we don't leak this
             // TODO: what about other patch sources?
@@ -487,7 +487,7 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
     if( m_patch ) {
         qCDebug(PLUGIN_PATCHREVIEW) << "setting new patch" << patch->name() << "with file" << patch->file() << "basedir" << patch->baseDir();
 
-        connect( m_patch, SIGNAL( patchChanged() ), this, SLOT( notifyPatchChanged() ) );
+        connect( m_patch.data(), &IPatchSource::patchChanged, this, &PatchReviewPlugin::notifyPatchChanged );
     }
     QString finishText = i18n( "Finish Review" );
     if( m_patch && !m_patch->finishReviewCustomText().isEmpty() )
@@ -506,13 +506,13 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     core()->uiController()->addToolView( i18n( "Patch Review" ), m_factory );
     setXMLFile( "kdevpatchreview.rc" );
 
-    connect( ICore::self()->documentController(), SIGNAL( documentClosed( KDevelop::IDocument* ) ), this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
-    connect( ICore::self()->documentController(), SIGNAL( textDocumentCreated( KDevelop::IDocument* ) ), this, SLOT( textDocumentCreated( KDevelop::IDocument* ) ) );
-    connect( ICore::self()->documentController(), SIGNAL( documentSaved( KDevelop::IDocument* ) ), this, SLOT( documentSaved( KDevelop::IDocument* ) ) );
+    connect( ICore::self()->documentController(), &IDocumentController::documentClosed, this, &PatchReviewPlugin::documentClosed );
+    connect( ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this, &PatchReviewPlugin::textDocumentCreated );
+    connect( ICore::self()->documentController(), &IDocumentController::documentSaved, this, &PatchReviewPlugin::documentSaved );
 
     m_updateKompareTimer = new QTimer( this );
     m_updateKompareTimer->setSingleShot( true );
-    connect( m_updateKompareTimer, SIGNAL( timeout() ), this, SLOT( updateKompareModel() ) );
+    connect( m_updateKompareTimer, &QTimer::timeout, this, &PatchReviewPlugin::updateKompareModel );
 
     m_finishReview = new QAction(this);
     m_finishReview->setIcon( QIcon::fromTheme( "dialog-ok" ) );

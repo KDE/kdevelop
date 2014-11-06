@@ -27,6 +27,7 @@
 #include <KIconEffect>
 #include <KColorScheme>
 #include <KTextEditor/View>
+#include <KTextEditor/Cursor>
 #include <KMessageBox>
 #include <ktexteditor/movinginterface.h>
 #include <ktexteditor/markinterface.h>
@@ -340,7 +341,8 @@ void PatchHighlighter::textRemoved( KTextEditor::Document* doc, const KTextEdito
     performContentChange( doc, removedLines, QStringList() << remainingLine, startLine + 1 );
 }
 
-void PatchHighlighter::textInserted( KTextEditor::Document* doc, const KTextEditor::Range& range ) {
+void PatchHighlighter::textInserted(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor, const QString& text) {
+    KTextEditor::Range range(cursor, text.size());
     if( range == doc->documentRange() )
     {
         qCDebug(PLUGIN_PATCHREVIEW) << "re-doing";
@@ -439,21 +441,30 @@ void PatchHighlighter::textInserted( KTextEditor::Document* doc, const KTextEdit
 PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin ) throw( QString )
     : m_doc( kdoc ), m_plugin( plugin ), m_model( model ), m_applying( false ) {
 //     connect( kdoc, SIGNAL(destroyed(QObject*)), this, SLOT(documentDestroyed()) );
-    connect( kdoc->textDocument(), SIGNAL( textInserted( KTextEditor::Document*, KTextEditor::Range ) ), this, SLOT( textInserted( KTextEditor::Document*, KTextEditor::Range ) ) );
-    connect( kdoc->textDocument(), SIGNAL( textRemoved( KTextEditor::Document*, KTextEditor::Range, QString ) ), this, SLOT( textRemoved( KTextEditor::Document*, KTextEditor::Range, QString ) ) );
-    connect( kdoc->textDocument(), SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
+    connect(kdoc->textDocument(), &KTextEditor::Document::textInserted, this, &PatchHighlighter::textInserted);
+    connect(kdoc->textDocument(), &KTextEditor::Document::textRemoved, this, &PatchHighlighter::textRemoved);
+    connect(kdoc->textDocument(), &KTextEditor::Document::destroyed, this, &PatchHighlighter::documentDestroyed);
 
     KTextEditor::Document* doc = kdoc->textDocument();
     if ( doc->lines() == 0 )
         return;
 
-    connect( doc, SIGNAL( markToolTipRequested( KTextEditor::Document*, KTextEditor::Mark, QPoint, bool & ) ), this, SLOT( markToolTipRequested( KTextEditor::Document*, KTextEditor::Mark, QPoint, bool & ) ) );
-    connect( doc, SIGNAL( markClicked( KTextEditor::Document*, KTextEditor::Mark, bool & ) ), this, SLOT( markClicked( KTextEditor::Document*, KTextEditor::Mark, bool & ) ) );
-    connect( doc, SIGNAL( aboutToDeleteMovingInterfaceContent( KTextEditor::Document* ) ), this, SLOT( aboutToDeleteMovingInterfaceContent( KTextEditor::Document* ) ) );
-    connect( doc, SIGNAL( aboutToInvalidateMovingInterfaceContent( KTextEditor::Document* ) ),
-             this, SLOT( aboutToDeleteMovingInterfaceContent( KTextEditor::Document* ) ) );
+    if (qobject_cast<KTextEditor::MarkInterface*>(doc)) {
+        //can't use new signal/slot syntax here, MarkInterface is not a QObject
+        connect(doc, SIGNAL(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)),
+                this, SLOT(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool &)));
+        connect(doc, SIGNAL(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)),
+                this, SLOT(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)));
+    }
+    if (qobject_cast<KTextEditor::MovingInterface*>(doc)) {
+        //can't use new signal/slot syntax here, MovingInterface is not a QObject
+        connect(doc, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)),
+                this, SLOT( aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
+        connect(doc, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
+                this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
+    }
 
-    textInserted( kdoc->textDocument(), kdoc->textDocument()->documentRange() );
+    textInserted(kdoc->textDocument(), kdoc->textDocument()->documentRange().start(), kdoc->textDocument()->text());
 }
 
 void PatchHighlighter::removeLineMarker( KTextEditor::MovingRange* range ) {
