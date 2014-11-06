@@ -28,6 +28,7 @@
 #include "debug.h"
 #include "cmakemodelitems.h"
 #include <projectmanagers/custommake/makefileresolver/makefileresolver.h>
+#include "cmakecodecompletionmodel.h"
 
 #include <QDir>
 #include <QThread>
@@ -70,7 +71,7 @@ Q_DECLARE_METATYPE(KDevelop::IProject*);
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
-// K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmake", ki18n("CMake Manager"), "0.1", ki18n("Support for managing CMake projects"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(CMakeSupportFactory("kdevcmakemanager"))
 
 const QString DIALOG_CAPTION = i18n("KDevelop - CMake Support");
 
@@ -89,7 +90,7 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
 
     m_highlight = new KDevelop::CodeHighlighting(this);
 
-//     new CodeCompletion(this, new CMakeCodeCompletionModel(this), name());
+    new CodeCompletion(this, new CMakeCodeCompletionModel(this), name());
 
     connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)), SLOT(projectClosing(KDevelop::IProject*)));
 

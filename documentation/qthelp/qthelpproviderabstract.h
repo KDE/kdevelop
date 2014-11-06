@@ -36,15 +36,14 @@ class QtHelpProviderAbstract : public QObject, public KDevelop::IDocumentationPr
     Q_INTERFACES( KDevelop::IDocumentationProvider )
 public:
     QtHelpProviderAbstract(QObject *parent, const QString &collectionFileName, const QVariantList & args);
-    virtual QExplicitlySharedDataPointer< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration*) const;
+    virtual KDevelop::IDocumentation::Ptr documentationForDeclaration (KDevelop::Declaration*) const override;
 
-    virtual QExplicitlySharedDataPointer< KDevelop::IDocumentation > documentationForIndex(const QModelIndex& idx) const;
-    virtual QAbstractListModel* indexModel() const;
+    virtual KDevelop::IDocumentation::Ptr documentationForIndex(const QModelIndex& idx) const override;
+    virtual QAbstractListModel* indexModel() const override;
 
     virtual QIcon icon() const = 0;
-    virtual QString name() const = 0;
 
-    virtual QExplicitlySharedDataPointer< KDevelop::IDocumentation > homePage() const;
+    virtual KDevelop::IDocumentation::Ptr homePage() const override;
 
     /// @return False in case we failed to load any documentation files, else true
     bool isValid() const;
@@ -53,7 +52,7 @@ public:
 public slots:
     void jumpedTo(const QUrl& newUrl) const;
 signals:
-    void addHistory(const QExplicitlySharedDataPointer< KDevelop::IDocumentation >& doc) const;
+    void addHistory(const KDevelop::IDocumentation::Ptr& doc) const;
 protected:
     QHelpEngine m_engine;
 };

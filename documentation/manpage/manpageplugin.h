@@ -35,25 +35,25 @@ class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationP
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDocumentationProvider )
-    public:
-        ManPagePlugin(QObject *parent, const QVariantList & args= QVariantList());
-        virtual ~ManPagePlugin();
-        virtual QExplicitlySharedDataPointer< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration* dec) const;
-        virtual QAbstractListModel* indexModel() const;
-        virtual QExplicitlySharedDataPointer< KDevelop::IDocumentation > documentationForIndex(const QModelIndex& index) const;
-        virtual QIcon icon() const;
-        virtual QString name() const;
-        virtual QExplicitlySharedDataPointer< KDevelop::IDocumentation > homePage() const;
-        void deleteProgressBar();
+public:
+    ManPagePlugin(QObject *parent, const QVariantList & args= QVariantList());
+    virtual ~ManPagePlugin();
+    virtual KDevelop::IDocumentation::Ptr documentationForDeclaration (KDevelop::Declaration* dec) const override;
+    virtual QAbstractListModel* indexModel() const override;
+    virtual KDevelop::IDocumentation::Ptr documentationForIndex(const QModelIndex& index) const override;
+    virtual QIcon icon() const override;
+    virtual QString name() const override;
+    virtual KDevelop::IDocumentation::Ptr homePage() const override;
+    void deleteProgressBar();
 
-        ManPageModel* model() const;
-        QProgressBar* progressBar() const;
+    ManPageModel* model() const;
+    QProgressBar* progressBar() const;
 
-    signals:
-        void addHistory( const QExplicitlySharedDataPointer< KDevelop::IDocumentation >& doc ) const;
+signals:
+    void addHistory(const KDevelop::IDocumentation::Ptr& doc ) const override;
 
-    private:
-        ManPageModel *m_model;
+private:
+    ManPageModel *m_model;
 };
 
 #endif // MANPAGEPLUGIN_H

@@ -22,9 +22,9 @@
 #ifndef DEBUGAREA_H
 #define DEBUGAREA_H
 
-#include <QDebug>
 #include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(DEFINESANDINCLUDES)
 
-#define definesAndIncludesDebug() qCDebug(QLoggingCategory("kdevdefinesandincludes"))
+#define definesAndIncludesDebug() qCDebug(DEFINESANDINCLUDES)
 
 #endif // DEBUGAREA_H

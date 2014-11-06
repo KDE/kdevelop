@@ -31,6 +31,7 @@
 #include <language/duchain/types/delayedtype.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
+#include <kio/global.h>
 #include <KLocalizedString>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
@@ -108,7 +109,7 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
         QString tocomplete=d->text(Range(start, range.end()-Cursor(0,1)));
         
         int lastdir=tocomplete.lastIndexOf('/');
-        QString path = QUrl(d->url()).upUrl().path(QUrl::AddTrailingSlash);
+        QString path = KIO::upUrl(QUrl(d->url())).adjusted(QUrl::StripTrailingSlash).toLocalFile()+'/';
         QString basePath;
         if(lastdir>=0) {
             basePath=tocomplete.mid(0, lastdir);

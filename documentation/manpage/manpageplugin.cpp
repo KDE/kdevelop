@@ -51,7 +51,7 @@ K_PLUGIN_FACTORY(ManPageFactory, registerPlugin<ManPagePlugin>(); )
 ManPagePlugin::ManPagePlugin(QObject* parent, const QVariantList& args)
     : IPlugin("kdevmanpage", parent)
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
+    KDEV_USE_EXTENSION_INTERFACE( IDocumentationProvider )
     Q_UNUSED(args);
     ManPageDocumentation::s_provider = this;
     m_model = new ManPageModel(this);
@@ -77,42 +77,42 @@ ManPageModel* ManPagePlugin::model() const{
     return m_model;
 }
 
-QExplicitlySharedDataPointer< IDocumentation > ManPagePlugin::documentationForDeclaration( Declaration* dec ) const
+IDocumentation::Ptr ManPagePlugin::documentationForDeclaration( Declaration* dec ) const
 {
     Q_ASSERT(dec);
     Q_ASSERT(dec->topContext());
     Q_ASSERT(dec->topContext()->parsingEnvironmentFile());
-    static const KDevelop::IndexedString cppLanguage("C++");
+    static const IndexedString cppLanguage("C++");
     if (dec->topContext()->parsingEnvironmentFile()->language() != cppLanguage) {
-        return QExplicitlySharedDataPointer<IDocumentation>();
+        return {};
     }
     
     // Don't show man-page documentation for files that are part of our project
     if(core()->projectController()->findProjectForUrl(dec->topContext()->url().toUrl()))
-        return QExplicitlySharedDataPointer<IDocumentation>();
+        return {};
 
     // Don't show man-page documentation for files that are not in /usr/include, because then we
     // most probably will be confusing the global function-name with a local one
     if(!dec->topContext()->url().str().startsWith("/usr/"))
-        return QExplicitlySharedDataPointer<IDocumentation>();
+        return {};
     
     ///@todo Do more verification to make sure that we're showing the correct documentation for the declaration
 
     QString identifier = dec->identifier().toString();
     if(m_model->containsIdentifier(identifier)){
-        KDevelop::DUChainReadLocker lock;
-        KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
+        DUChainReadLocker lock;
+        QualifiedIdentifier qid = dec->qualifiedIdentifier();
         if(qid.count() == 1){
             if(m_model->identifierInSection(identifier, "3")){
-                return QExplicitlySharedDataPointer<IDocumentation>(new ManPageDocumentation(identifier, QUrl("man:(3)/"+identifier)));
+                return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:(3)/"+identifier)));
             } else if(m_model->identifierInSection(identifier, "2")){
-                return QExplicitlySharedDataPointer<IDocumentation>(new ManPageDocumentation(identifier, QUrl("man:(2)/"+identifier)));
+                return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:(2)/"+identifier)));
             } else {
-                return QExplicitlySharedDataPointer<IDocumentation>(new ManPageDocumentation(identifier, QUrl("man:"+identifier)));
+                return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:"+identifier)));
             }
         }
     }
-    return  QExplicitlySharedDataPointer<IDocumentation>();
+    return  {};
 }
 
 QAbstractListModel* ManPagePlugin::indexModel() const
@@ -120,15 +120,15 @@ QAbstractListModel* ManPagePlugin::indexModel() const
     return m_model->indexList();
 }
 
-QExplicitlySharedDataPointer< IDocumentation > ManPagePlugin::documentationForIndex(const QModelIndex& index) const
+IDocumentation::Ptr ManPagePlugin::documentationForIndex(const QModelIndex& index) const
 {
     QString name = index.data().toString();
-    return QExplicitlySharedDataPointer<IDocumentation>(new ManPageDocumentation(name, QUrl("man:"+name)));
+    return IDocumentation::Ptr(new ManPageDocumentation(name, QUrl("man:"+name)));
 }
 
-QExplicitlySharedDataPointer< IDocumentation > ManPagePlugin::homePage() const
+IDocumentation::Ptr ManPagePlugin::homePage() const
 {
-    return QExplicitlySharedDataPointer<KDevelop::IDocumentation>(new ManPageHomeDocumentation);
+    return IDocumentation::Ptr(new ManPageHomeDocumentation);
 }
 
 #include "manpageplugin.moc"

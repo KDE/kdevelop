@@ -20,8 +20,5 @@
  */
 
 #include "debugarea.h"
-#include <QLoggingCategory>
 
-namespace KDevelop {
-
-}
+Q_LOGGING_CATEGORY(DEFINESANDINCLUDES, "kdevelop.definesandincludes")

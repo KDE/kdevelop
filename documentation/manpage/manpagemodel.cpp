@@ -177,16 +177,16 @@ void ManPageModel::showItem(const QModelIndex& idx)
     if (idx.isValid() && idx.internalId() != INVALID_ID) {
         QString sectionUrl = m_sectionList.at(idx.internalId()).first;
         QString page = manPage(sectionUrl, idx.row());
-        QExplicitlySharedDataPointer<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(page, QUrl(sectionUrl + '/' + page)));
-        KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
+        IDocumentation::Ptr newDoc(new ManPageDocumentation(page, QUrl(sectionUrl + '/' + page)));
+        ICore::self()->documentationController()->showDocumentation(newDoc);
     }
 }
 
 void ManPageModel::showItemFromUrl(const QUrl& url)
 {
     if (url.toString().startsWith("man")) {
-        QExplicitlySharedDataPointer<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(url.path(), QUrl(url)));
-        KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
+        IDocumentation::Ptr newDoc(new ManPageDocumentation(url.path(), QUrl(url)));
+        ICore::self()->documentationController()->showDocumentation(newDoc);
     }
 }
 
