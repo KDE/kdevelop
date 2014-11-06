@@ -51,7 +51,13 @@ const QString compilerTypeKey = QLatin1String( "Type" );
 }
 
 SettingsManager::SettingsManager()
+    : m_provider(nullptr)
 {
+}
+
+void SettingsManager::setProvider(const ICompilerProvider* provider)
+{
+    m_provider = provider;
 }
 
 namespace
@@ -135,15 +141,6 @@ QList<ConfigEntry> convertedPaths( KConfig* cfg )
     return paths;
 }
 
-ICompilerProvider* currentCompilerProvider()
-{
-    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
-    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
-        return {};
-    }
-
-    return compilerProvider->extension<ICompilerProvider>();
-}
 }
 
 void SettingsManager::writePaths( KConfig* cfg, const QList< ConfigEntry >& paths )
@@ -175,13 +172,15 @@ QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
 
 CompilerPointer SettingsManager::currentCompiler( KConfig* cfg, const CompilerPointer& defaultCompiler ) const
 {
+    Q_ASSERT(m_provider);
+
     auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup ).group("Compiler");
     auto name = grp.readEntry( ConfigConstants::compilerNameKey, QString() );
     if (name.isEmpty()) {
         return {};
     }
 
-    for (auto c : currentCompilerProvider()->compilers()) {
+    for (auto c : m_provider->compilers()) {
         if (c->name() == name) {
             return c;
         }
@@ -190,7 +189,7 @@ CompilerPointer SettingsManager::currentCompiler( KConfig* cfg, const CompilerPo
     auto path = grp.readEntry( ConfigConstants::compilerPathKey, QString() );
     auto type = grp.readEntry( ConfigConstants::compilerTypeKey, QString() );
 
-    auto cf = currentCompilerProvider()->compilerFactories();
+    auto cf = m_provider->compilerFactories();
     for (auto f : cf) {
         if (f->name() == type) {
             return f->createCompiler(name, path, true);
@@ -241,6 +240,8 @@ void SettingsManager::writeUserDefinedCompilers(const QVector< CompilerPointer >
 
 QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
 {
+    Q_ASSERT(m_provider);
+
     QVector< CompilerPointer > compilers;
 
     KConfigGroup config = KGlobal::config()->group(ConfigConstants::compilersGroup);
@@ -252,7 +253,7 @@ QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
         auto path = grp.readEntry(ConfigConstants::compilerPathKey, QString());
         auto type = grp.readEntry(ConfigConstants::compilerTypeKey, QString());
 
-        auto cf = currentCompilerProvider()->compilerFactories();
+        auto cf = m_provider->compilerFactories();
         for (auto f : cf) {
             if (f->name() == type) {
                 compilers.append(f->createCompiler(name, path));

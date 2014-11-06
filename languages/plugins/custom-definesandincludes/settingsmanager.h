@@ -34,10 +34,14 @@ namespace KDevelop
 class IProject;
 }
 
+class ICompilerProvider;
 class KDEVDEFINESANDINCLUDESMANAGER_EXPORT SettingsManager
 {
 public:
     SettingsManager();
+    ~SettingsManager(){}
+
+    void setProvider(const ICompilerProvider* provider);
 
     QList<KDevelop::ConfigEntry> readPaths(KConfig* cfg) const;
 
@@ -55,7 +59,8 @@ public:
 
     bool needToReparseCurrentProject( KConfig* cfg ) const;
 
-    ~SettingsManager(){}
+private:
+    const ICompilerProvider* m_provider;
 };
 
 #endif // SETTINGSMANAGER_H
