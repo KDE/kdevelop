@@ -74,11 +74,11 @@ TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args)
     Q_UNUSED(args)
 
     QAction* runAll = new QAction( QIcon::fromTheme("system-run"), i18n("Run All Tests"), this );
-    connect(runAll, SIGNAL(triggered(bool)), SLOT(runAllTests()));
+    connect(runAll, &QAction::triggered, this, &TestViewPlugin::runAllTests);
     actionCollection()->addAction("run_all_tests", runAll);
     
     QAction* stopTest = new QAction( QIcon::fromTheme("process-stop"), i18n("Stop Running Tests"), this );
-    connect(stopTest, SIGNAL(triggered(bool)), SLOT(stopRunningTests()));
+    connect(stopTest, &QAction::triggered, this, &TestViewPlugin::stopRunningTests);
     actionCollection()->addAction("stop_running_tests", stopTest);
 
     setXMLFile("kdevtestview.rc");
@@ -86,8 +86,8 @@ TestViewPlugin::TestViewPlugin(QObject* parent, const QVariantList& args)
     m_viewFactory = new TestToolViewFactory(this);
     core()->uiController()->addToolView(i18n("Unit Tests"), m_viewFactory);
     
-    connect(core()->runController(),SIGNAL(jobRegistered(KJob*)), this, SLOT(jobStateChanged()));
-    connect(core()->runController(),SIGNAL(jobUnregistered(KJob*)), this, SLOT(jobStateChanged()));
+    connect(core()->runController(),&IRunController::jobRegistered, this, &TestViewPlugin::jobStateChanged);
+    connect(core()->runController(),&IRunController::jobUnregistered, this, &TestViewPlugin::jobStateChanged);
     
     jobStateChanged();
 }

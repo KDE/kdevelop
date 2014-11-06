@@ -76,7 +76,7 @@ QWidget* TestViewFilterAction::createWidget( QWidget* parent )
     QLineEdit* edit = new QLineEdit(parent);
     edit->setPlaceholderText(i18n("Filter..."));
     edit->setClearButtonEnabled(true);
-    connect(edit, SIGNAL(textChanged(QString)), this, SIGNAL(filterChanged(QString)));
+    connect(edit, &QLineEdit::textChanged, this, &TestViewFilterAction::filterChanged);
     if (!m_intialFilter.isEmpty()) {
         edit->setText(m_intialFilter);
     }
@@ -111,18 +111,18 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     m_tree->setSelectionMode(QTreeView::SingleSelection);
     m_tree->setExpandsOnDoubleClick(false);
     m_tree->sortByColumn(0, Qt::AscendingOrder);
-    connect(m_tree, SIGNAL(activated(QModelIndex)), SLOT(doubleClicked(QModelIndex)));
+    connect(m_tree, &QTreeView::activated, this, &TestView::doubleClicked);
 
     m_model = new QStandardItemModel(this);
     m_filter->setSourceModel(m_model);
     m_tree->setModel(m_filter);
 
     QAction* showSource = new QAction( QIcon::fromTheme("code-context"), i18n("Show Source"), this );
-    connect (showSource, SIGNAL(triggered(bool)), SLOT(showSource()));
+    connect (showSource, &QAction::triggered, this, &TestView::showSource);
     m_contextMenuActions << showSource;
 
     QAction* runSelected = new QAction( QIcon::fromTheme("system-run"), i18n("Run Selected Tests"), this );
-    connect (runSelected, SIGNAL(triggered(bool)), SLOT(runSelectedTests()));
+    connect (runSelected, &QAction::triggered, this, &TestView::runSelectedTests);
     m_contextMenuActions << runSelected;
 
     addAction(plugin->actionCollection()->action("run_all_tests"));
@@ -136,22 +136,22 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     }
 
     TestViewFilterAction* filterAction = new TestViewFilterAction(filterText, this);
-    connect(filterAction, SIGNAL(filterChanged(QString)),
-            m_filter, SLOT(setFilterFixedString(QString)));
+    connect(filterAction, &TestViewFilterAction::filterChanged,
+            m_filter, &QSortFilterProxyModel::setFilterFixedString);
     addAction(filterAction);
 
     IProjectController* pc = ICore::self()->projectController();
-    connect (pc, SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(removeProject(KDevelop::IProject*)));
+    connect (pc, &IProjectController::projectClosed, this, &TestView::removeProject);
 
     ITestController* tc = ICore::self()->testController();
-    connect (tc, SIGNAL(testSuiteAdded(KDevelop::ITestSuite*)),
-             SLOT(addTestSuite(KDevelop::ITestSuite*)));
-    connect (tc, SIGNAL(testSuiteRemoved(KDevelop::ITestSuite*)),
-             SLOT(removeTestSuite(KDevelop::ITestSuite*)));
-    connect (tc, SIGNAL(testRunFinished(KDevelop::ITestSuite*, KDevelop::TestResult)),
-             SLOT(updateTestSuite(KDevelop::ITestSuite*, KDevelop::TestResult)));
-    connect (tc, SIGNAL(testRunStarted(KDevelop::ITestSuite*, QStringList)),
-             SLOT(notifyTestCaseStarted(KDevelop::ITestSuite*, QStringList)));
+    connect (tc, &ITestController::testSuiteAdded,
+             this, &TestView::addTestSuite);
+    connect (tc, &ITestController::testSuiteRemoved,
+             this, &TestView::removeTestSuite);
+    connect (tc, &ITestController::testRunFinished,
+             this, &TestView::updateTestSuite);
+    connect (tc, &ITestController::testRunStarted,
+             this, &TestView::notifyTestCaseStarted);
 
     foreach (ITestSuite* suite, tc->testSuites())
     {
