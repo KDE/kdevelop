@@ -71,7 +71,7 @@ QString ManPageDocumentation::description() const
 QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent )
 {
     KDevelop::StandardDocumentationView* view = new KDevelop::StandardDocumentationView(findWidget, parent);
-    view->setDocumentation(QExplicitlySharedDataPointer<IDocumentation>(this));
+    view->setDocumentation(IDocumentation::Ptr(this));
 
     // apply custom style-sheet to normalize look of the page
     const QString cssFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kdevmanpage/manpagedocumentation.css");

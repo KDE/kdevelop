@@ -37,6 +37,8 @@
 #include "qthelpnetwork.h"
 #include "qthelpproviderabstract.h"
 
+using namespace KDevelop;
+
 QtHelpProviderAbstract* QtHelpDocumentation::s_provider=0;
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)
@@ -189,13 +191,13 @@ void QtHelpDocumentation::setUserStyleSheet(QWebView* view, const QUrl& url)
     m_lastStyleSheet = file;
 }
 
-QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent)
+QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findWidget, QWidget* parent)
 {
     QWidget* ret;
     if(m_info.isEmpty()) { //QtHelp sometimes has empty info maps. e.g. availableaudioeffects i 4.5.2
         ret=new QLabel(i18n("Could not find any documentation for '%1'", m_name), parent);
     } else {
-        KDevelop::StandardDocumentationView* view=new KDevelop::StandardDocumentationView(findWidget, parent);
+        StandardDocumentationView* view = new StandardDocumentationView(findWidget, parent);
         view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(m_provider->engine(), 0));
         view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
         view->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -213,7 +215,7 @@ QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWid
 
 void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
 {
-    KDevelop::StandardDocumentationView* view = qobject_cast<KDevelop::StandardDocumentationView*>(sender());
+    StandardDocumentationView* view = qobject_cast<StandardDocumentationView*>(sender());
     if (!view)
         return;
 
@@ -246,7 +248,7 @@ void QtHelpDocumentation::jumpedTo(const QUrl& newUrl)
     lastView->load(newUrl);
 }
 
-KDevelop::IDocumentationProvider* QtHelpDocumentation::provider() const
+IDocumentationProvider* QtHelpDocumentation::provider() const
 {
     return m_provider;
 }
@@ -259,15 +261,15 @@ QtHelpAlternativeLink::QtHelpAlternativeLink(const QString& name, const QtHelpDo
 
 void QtHelpAlternativeLink::showUrl()
 {
-    QExplicitlySharedDataPointer<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(mName, mDoc->info(), mName));
-    KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
+    IDocumentation::Ptr newDoc(new QtHelpDocumentation(mName, mDoc->info(), mName));
+    ICore::self()->documentationController()->showDocumentation(newDoc);
 }
 
 HomeDocumentation::HomeDocumentation() : m_provider(QtHelpDocumentation::s_provider)
 {
 }
 
-QWidget* HomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget*, QWidget* parent)
+QWidget* HomeDocumentation::documentationWidget(DocumentationFindWidget*, QWidget* parent)
 {
     QTreeView* w=new QTreeView(parent);
     w->header()->setVisible(false);
@@ -284,8 +286,8 @@ void HomeDocumentation::clicked(const QModelIndex& idx)
     QMap<QString, QUrl> info;
     info.insert(it->title(), it->url());
 
-    QExplicitlySharedDataPointer<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(it->title(), info));
-    KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
+    IDocumentation::Ptr newDoc(new QtHelpDocumentation(it->title(), info));
+    ICore::self()->documentationController()->showDocumentation(newDoc);
 }
 
 QString HomeDocumentation::name() const
@@ -293,7 +295,7 @@ QString HomeDocumentation::name() const
     return i18n("QtHelp Home Page");
 }
 
-KDevelop::IDocumentationProvider* HomeDocumentation::provider() const
+IDocumentationProvider* HomeDocumentation::provider() const
 {
     return m_provider;
 }
