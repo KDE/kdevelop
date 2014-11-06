@@ -26,12 +26,12 @@ CvsMainView::CvsMainView( CvsPlugin *plugin, QWidget* parent )
     setWindowTitle(i18n("CVS"));
 
     // CvsPlugin will notify when a job finished
-    connect(m_plugin, SIGNAL(jobFinished(KJob*)),
-            this, SLOT(slotJobFinished(KJob*)));
+    connect(m_plugin, &CvsPlugin::jobFinished,
+            this, &CvsMainView::slotJobFinished);
 
     // allow appending of new views
-    connect(m_plugin, SIGNAL(addNewTabToMainView(QWidget*,QString)),
-            this, SLOT(slotAddTab(QWidget*,QString)) );
+    connect(m_plugin, &CvsPlugin::addNewTabToMainView,
+            this, &CvsMainView::slotAddTab );
 
     // create a default output view
     m_mainview = new CvsGenericOutputView;
@@ -44,8 +44,8 @@ CvsMainView::CvsMainView( CvsPlugin *plugin, QWidget* parent )
     m_closeButton->setAutoRaise(true);
     m_closeButton->setEnabled(false);
     tabwidget->setCornerWidget( m_closeButton );
-    connect(m_closeButton, SIGNAL(clicked()),
-            this, SLOT(slotTabClose()));
+    connect(m_closeButton, &QToolButton::clicked,
+            this, &CvsMainView::slotTabClose);
 }
 
 CvsMainView::~CvsMainView()

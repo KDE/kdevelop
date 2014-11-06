@@ -42,8 +42,8 @@ void CheckoutDialog::accept()
                     "",
                     tag->text());
     if (job) {
-        connect(job, SIGNAL(result(KJob*)),
-                this, SLOT(jobFinished(KJob*)));
+        connect(job, &CvsJob::result,
+                this, &CheckoutDialog::jobFinished);
         KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }

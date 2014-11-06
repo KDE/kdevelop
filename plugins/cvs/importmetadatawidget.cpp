@@ -23,13 +23,13 @@ ImportMetadataWidget::ImportMetadataWidget(QWidget *parent)
     m_ui->sourceLoc->setEnabled( false );
     m_ui->sourceLoc->setMode( KFile::Directory );
 
-    connect( m_ui->sourceLoc, SIGNAL(textChanged(QString)), SIGNAL(changed()) );
-    connect( m_ui->sourceLoc, SIGNAL(urlSelected(QUrl)), SIGNAL(changed()) );
-    connect( m_ui->comment, SIGNAL(textChanged()), SIGNAL(changed()) );
-    connect( m_ui->module, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( m_ui->releaseTag, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( m_ui->repository, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( m_ui->vendorTag, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
+    connect( m_ui->sourceLoc, &KUrlRequester::textChanged, this, &ImportMetadataWidget::changed );
+    connect( m_ui->sourceLoc, &KUrlRequester::urlSelected, this, &ImportMetadataWidget::changed );
+    connect( m_ui->comment, &KTextEdit::textChanged, this, &ImportMetadataWidget::changed );
+    connect( m_ui->module, &QLineEdit::textEdited, this, &ImportMetadataWidget::changed );
+    connect( m_ui->releaseTag, &QLineEdit::textEdited, this, &ImportMetadataWidget::changed );
+    connect( m_ui->repository, &QLineEdit::textEdited, this, &ImportMetadataWidget::changed );
+    connect( m_ui->vendorTag, &QLineEdit::textEdited, this, &ImportMetadataWidget::changed );
 
 }
 

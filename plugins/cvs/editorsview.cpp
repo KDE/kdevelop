@@ -27,8 +27,8 @@ EditorsView::EditorsView(CvsJob* job, QWidget *parent)
     Ui::EditorsViewBase::setupUi(this);
 
     if (job) {
-        connect(job, SIGNAL(result(KJob*)),
-                this, SLOT(slotJobFinished(KJob*)));
+        connect(job, &CvsJob::result,
+                this, &EditorsView::slotJobFinished);
     }
 }
 

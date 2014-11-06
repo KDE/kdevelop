@@ -120,15 +120,15 @@ void CvsPlugin::setupActions()
 
     action = actionCollection()->addAction("cvs_import");
     action->setText(i18n("Import Directory..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotImport()));
+    connect(action, &QAction::triggered, this, &CvsPlugin::slotImport);
 
     action = actionCollection()->addAction("cvs_checkout");
     action->setText(i18n("Checkout..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCheckout()));
+    connect(action, &QAction::triggered, this, &CvsPlugin::slotCheckout);
 
     action = actionCollection()->addAction("cvs_status");
     action->setText(i18n("Status..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStatus()));
+    connect(action, &QAction::triggered, this, &CvsPlugin::slotStatus);
 }
 
 const QUrl CvsPlugin::urlFocusedDocument() const
@@ -201,15 +201,15 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
     QAction *action;
     // Just add actions which are not covered by the cvscommon plugin
     action = new QAction(i18n("Edit"), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxEdit()));
+    connect(action, &QAction::triggered, this, &CvsPlugin::ctxEdit);
     menu->addAction(action);
 
     action = new QAction(i18n("Unedit"), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxUnEdit()));
+    connect(action, &QAction::triggered, this, &CvsPlugin::ctxUnEdit);
     menu->addAction(action);
 
     action = new QAction(i18n("Show Editors"), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxEditors()));
+    connect(action, &QAction::triggered, this, &CvsPlugin::ctxEditors);
     menu->addAction(action);
 
     KDevelop::ContextMenuExtension menuExt;
@@ -226,8 +226,8 @@ void CvsPlugin::ctxEdit()
     KDevelop::VcsJob* j = edit(urls.front());
     CvsJob* job = dynamic_cast<CvsJob*>(j);
     if (job) {
-        connect(job, SIGNAL(result(KJob*)),
-                this, SIGNAL(jobFinished(KJob*)));
+        connect(job, &CvsJob::result,
+                this, &CvsPlugin::jobFinished);
         KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
@@ -240,8 +240,8 @@ void CvsPlugin::ctxUnEdit()
     KDevelop::VcsJob* j = unedit(urls.front());
     CvsJob* job = dynamic_cast<CvsJob*>(j);
     if (job) {
-        connect(job, SIGNAL(result(KJob*)),
-                this, SIGNAL(jobFinished(KJob*)));
+        connect(job, &CvsJob::result,
+                this, &CvsPlugin::jobFinished);
         KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
