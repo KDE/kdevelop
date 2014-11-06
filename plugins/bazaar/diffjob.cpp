@@ -60,7 +60,7 @@ void DiffJob::start()
     if (m_status != KDevelop::VcsJob::JobNotStarted)
         return;
     if (m_job) {
-        connect(m_job.data(), SIGNAL(finished(KJob*)), this, SLOT(prepareResult(KJob*)));
+        connect(m_job.data(), &KDevelop::DVcsJob::finished, this, &DiffJob::prepareResult);
         m_status = KDevelop::VcsJob::JobRunning;
         m_job->start();
     }

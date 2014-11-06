@@ -58,7 +58,7 @@ void CopyJob::start()
     if (m_status != KDevelop::VcsJob::JobNotStarted)
         return;
     KIO::CopyJob* job = KIO::copy(m_source, m_destination, KIO::HideProgressInfo);
-    connect(job, SIGNAL(copyingDone(KIO::Job*, QUrl, QUrl, time_t, bool, bool)), this, SLOT(addToVcs(KIO::Job*, QUrl, QUrl, time_t, bool, bool)));
+    connect(job, &KIO::CopyJob::copyingDone, this, &CopyJob::addToVcs);
     m_status = KDevelop::VcsJob::JobRunning;
     m_job = job;
     job->start();
@@ -73,7 +73,7 @@ bool CopyJob::doKill()
         return true;
 }
 
-void CopyJob::addToVcs(KIO::Job* job, const QUrl& from, const QUrl& to, time_t mtime, bool directory, bool renamed)
+void CopyJob::addToVcs(KIO::Job* job, const QUrl& from, const QUrl& to, const QDateTime& mtime, bool directory, bool renamed)
 {
     Q_UNUSED(job);
     Q_UNUSED(from);
@@ -83,7 +83,7 @@ void CopyJob::addToVcs(KIO::Job* job, const QUrl& from, const QUrl& to, time_t m
     if (m_status != KDevelop::VcsJob::JobRunning)
         return;
     KDevelop::VcsJob* job2 = m_plugin->add(QList<QUrl>() << to, KDevelop::IBasicVersionControl::Recursive);
-    connect(job2, SIGNAL(result(KJob*)), this, SLOT(finish(KJob*)));
+    connect(job2, &KDevelop::VcsJob::result, this, &CopyJob::finish);
     m_job = job2;
     job2->start();
 }

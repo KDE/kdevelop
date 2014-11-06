@@ -159,7 +159,7 @@ VcsJob* BazaarPlugin::log(const QUrl& localLocation, const VcsRevision& rev, lon
     DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocation), this);
     job->setType(VcsJob::Log);
     *job << "bzr" << "log" << "--long" << "-v" << localLocation << BazaarUtils::getRevisionSpecRange(rev) << "-l" << QString::number(limit);
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseBzrLog(KDevelop::DVcsJob*)));
+    connect(job, &DVcsJob::readyForParsing, this, &BazaarPlugin::parseBzrLog);
     return job;
 }
 
@@ -168,7 +168,7 @@ VcsJob* BazaarPlugin::log(const QUrl& localLocation, const VcsRevision& rev, con
     DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocation), this);
     job->setType(VcsJob::Log);
     *job << "bzr" << "log" << "--long" << "-v" << localLocation << BazaarUtils::getRevisionSpecRange(limit, rev);
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseBzrLog(KDevelop::DVcsJob*)));
+    connect(job, &DVcsJob::readyForParsing, this, &BazaarPlugin::parseBzrLog);
     return job;
 }
 
@@ -231,7 +231,7 @@ VcsJob* BazaarPlugin::repositoryLocation(const QUrl& localLocation)
     DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocation), this);
     job->setType(VcsJob::JobType::Unknown);
     *job << "bzr" << "root" << localLocation;   // It is only to make sure
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseBzrRoot(KDevelop::DVcsJob*)));
+    connect(job, &DVcsJob::readyForParsing, this, &BazaarPlugin::parseBzrRoot);
     return job;
 }
 
@@ -266,7 +266,7 @@ VcsJob* BazaarPlugin::status(const QList<QUrl>& localLocations, IBasicVersionCon
     DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocations[0]), this);
     job->setType(VcsJob::Status);
     *job << "bzr" << "status" << "--short" << "--no-pending" << "--no-classify" << localLocations;
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseBzrStatus(KDevelop::DVcsJob*)));
+    connect(job, &DVcsJob::readyForParsing, this, &BazaarPlugin::parseBzrStatus);
     return job;
 }
 

@@ -51,7 +51,7 @@ protected:
 
 private slots:
     void finish(KJob*);
-    void addToVcs(KIO::Job* job, const QUrl& from, const QUrl& to, time_t mtime, bool directory, bool renamed);
+    void addToVcs(KIO::Job* job, const QUrl& from, const QUrl& to, const QDateTime& mtime, bool directory, bool renamed);
 
 private:
     BazaarPlugin* m_plugin;
