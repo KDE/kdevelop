@@ -40,7 +40,7 @@ bool KDevSignalSpy::wait(int timeout)
 
     m_emitted = false;
     if (timeout > 0) {
-        connect(m_timer, SIGNAL(timeout()), m_loop, SLOT(quit()));
+        connect(m_timer, &QTimer::timeout, m_loop, &QEventLoop::quit);
         m_timer->setSingleShot(true);
         m_timer->start(timeout);
     }
