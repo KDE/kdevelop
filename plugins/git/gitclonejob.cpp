@@ -24,7 +24,7 @@ GitCloneJob::GitCloneJob(const QDir& d, KDevelop::IPlugin* parent, OutputJobVerb
     : DVcsJob(d, parent, verbosity)
     , m_steps(0)
 {
-    connect(this, SIGNAL(resultsReady(KDevelop::VcsJob*)), SLOT(processResult()));
+    connect(this, &GitCloneJob::resultsReady, this, &GitCloneJob::processResult);
 }
 void GitCloneJob::processResult()
 {

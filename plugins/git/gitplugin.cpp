@@ -197,12 +197,12 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
 
     DVcsJob* versionJob = new DVcsJob(QDir::tempPath(), this, KDevelop::OutputJob::Silent);
     *versionJob << "git" << "--version";
-    connect(versionJob, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitVersionOutput(KDevelop::DVcsJob*)));
+    connect(versionJob, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitVersionOutput);
     ICore::self()->runController()->registerJob(versionJob);
 
     m_watcher = new KDirWatch(this);
-    connect(m_watcher, SIGNAL(dirty(QString)), SLOT(fileChanged(QString)));
-    connect(m_watcher, SIGNAL(created(QString)), SLOT(fileChanged(QString)));
+    connect(m_watcher, &KDirWatch::dirty, this, &GitPlugin::fileChanged);
+    connect(m_watcher, &KDirWatch::created, this, &GitPlugin::fileChanged);
 }
 
 GitPlugin::~GitPlugin()
@@ -341,11 +341,11 @@ KDevelop::VcsJob* GitPlugin::status(const QList<QUrl>& localLocations, KDevelop:
 
     if(m_oldVersion) {
         *job << "git" << "ls-files" << "-t" << "-m" << "-c" << "-o" << "-d" << "-k" << "--directory";
-        connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitStatusOutput_old(KDevelop::DVcsJob*)));
+        connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitStatusOutput_old);
     } else {
         *job << "git" << "status" << "--porcelain";
         job->setIgnoreError(true);
-        connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitStatusOutput(KDevelop::DVcsJob*)));
+        connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitStatusOutput);
     }
     *job << "--" << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
 
@@ -378,7 +378,7 @@ VcsJob* GitPlugin::diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision
         *job << preventRecursion(QList<QUrl>() << fileOrDirectory);
     }
 
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitDiffOutput(KDevelop::DVcsJob*)));
+    connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitDiffOutput);
     return job;
 }
 
@@ -527,7 +527,7 @@ VcsJob* GitPlugin::log(const QUrl& localLocation,
     if(!rev.isEmpty())
         *job << rev;
     *job << "--" << localLocation;
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitLogOutput(KDevelop::DVcsJob*)));
+    connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitLogOutput);
     return job;
 }
 
@@ -544,7 +544,7 @@ VcsJob* GitPlugin::log(const QUrl& localLocation, const KDevelop::VcsRevision& r
         *job << QString("-%1").arg(limit);
 
     *job << "--" << localLocation;
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitLogOutput(KDevelop::DVcsJob*)));
+    connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitLogOutput);
     return job;
 }
 
@@ -554,7 +554,7 @@ KDevelop::VcsJob* GitPlugin::annotate(const QUrl &localLocation, const KDevelop:
     job->setType(VcsJob::Annotate);
     *job << "git" << "blame" << "--porcelain" << "-w";
     *job << "--" << localLocation;
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitBlameOutput(KDevelop::DVcsJob*)));
+    connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitBlameOutput);
     return job;
 }
 
@@ -671,7 +671,7 @@ VcsJob* GitPlugin::deleteBranch(const QUrl& repository, const QString& branchNam
 {
     DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
     *job << "git" << "branch" << "-D" << branchName;
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitCurrentBranch(KDevelop::DVcsJob*)));
+    connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitCurrentBranch);
     return job;
 }
 
@@ -679,7 +679,7 @@ VcsJob* GitPlugin::renameBranch(const QUrl& repository, const QString& oldBranch
 {
     DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
     *job << "git" << "branch" << "-m" << newBranchName << oldBranchName;
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitCurrentBranch(KDevelop::DVcsJob*)));
+    connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitCurrentBranch);
     return job;
 }
 
@@ -688,7 +688,7 @@ VcsJob* GitPlugin::currentBranch(const QUrl& repository)
     DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
     job->setIgnoreError(true);
     *job << "git" << "symbolic-ref" << "-q" << "--short" << "HEAD";
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitCurrentBranch(KDevelop::DVcsJob*)));
+    connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitCurrentBranch);
     return job;
 }
 
@@ -703,7 +703,7 @@ VcsJob* GitPlugin::branches(const QUrl &repository)
 {
     DVcsJob* job=new DVcsJob(urlDir(repository));
     *job << "git" << "branch" << "-a";
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitBranchOutput(KDevelop::DVcsJob*)));
+    connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitBranchOutput);
     return job;
 }
 
@@ -1283,7 +1283,7 @@ StandardJob::StandardJob(IPlugin* parent, KJob* job,
 
 void StandardJob::start()
 {
-    connect(m_job, SIGNAL(result(KJob*)), SLOT(result(KJob*)));
+    connect(m_job, &KJob::result, this, &StandardJob::result);
     m_job->start();
     m_status=JobRunning;
 }
@@ -1332,7 +1332,7 @@ VcsJob* GitPlugin::repositoryLocation(const QUrl& localLocation)
     DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
     //Probably we should check first if origin is the proper remote we have to use but as a first attempt it works
     *job << "git" << "config" << "remote.origin.url";
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitRepoLocationOutput(KDevelop::DVcsJob*)));
+    connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitRepoLocationOutput);
     return job;
 }
 

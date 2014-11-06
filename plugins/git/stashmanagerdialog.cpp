@@ -43,12 +43,12 @@ StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, Q
     StashModel* m = new StashModel(stashed, plugin, this);
     m_ui->stashView->setModel(m);
     
-    connect(m_ui->show,   SIGNAL(clicked(bool)), SLOT(showStash()));
-    connect(m_ui->apply,  SIGNAL(clicked(bool)), SLOT(applyClicked()));
-    connect(m_ui->branch, SIGNAL(clicked(bool)), SLOT(branchClicked()));
-    connect(m_ui->pop,    SIGNAL(clicked(bool)), SLOT(popClicked()));
-    connect(m_ui->drop,   SIGNAL(clicked(bool)), SLOT(dropClicked()));
-    connect(m, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(stashesFound()));
+    connect(m_ui->show,   &QPushButton::clicked, this, &StashManagerDialog::showStash);
+    connect(m_ui->apply,  &QPushButton::clicked, this, &StashManagerDialog::applyClicked);
+    connect(m_ui->branch, &QPushButton::clicked, this, &StashManagerDialog::branchClicked);
+    connect(m_ui->pop,    &QPushButton::clicked, this, &StashManagerDialog::popClicked);
+    connect(m_ui->drop,   &QPushButton::clicked, this, &StashManagerDialog::dropClicked);
+    connect(m, &StashModel::rowsInserted, this, &StashManagerDialog::stashesFound);
     
     setMainWidget(w);
     w->setEnabled(false); //we won't enable it until we have the model with data and selection
@@ -76,7 +76,7 @@ QString StashManagerDialog::selection() const
 void StashManagerDialog::runStash(const QStringList& arguments)
 {
     KDevelop::VcsJob* job = m_plugin->gitStash(m_dir, arguments, KDevelop::OutputJob::Verbose);
-    connect(job, SIGNAL(result(KJob*)), SLOT(accept()));
+    connect(job, &KDevelop::VcsJob::result, this, &StashManagerDialog::accept);
     
     mainWidget()->setEnabled(false);
     
@@ -125,7 +125,7 @@ StashModel::StashModel(const QDir& dir, GitPlugin* git, QObject* parent)
     : QStandardItemModel(parent)
 {
     KDevelop::VcsJob* job=git->gitStash(dir, QStringList("list"), KDevelop::OutputJob::Silent);
-    connect(job, SIGNAL(finished(KJob*)), SLOT(stashListReady(KJob*)));
+    connect(job, &KDevelop::VcsJob::finished, this, &StashModel::stashListReady);
     
     KDevelop::ICore::self()->runController()->registerJob(job);
 }
