@@ -42,8 +42,8 @@ void AllClassesFolder::nodeCleared()
 {
   DocumentClassesFolder::nodeCleared();
   
-  disconnect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), this, SLOT(projectOpened(KDevelop::IProject*)));
-  disconnect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)), this, SLOT(projectClosing(KDevelop::IProject*)));
+  disconnect(ICore::self()->projectController(), &IProjectController::projectOpened, this, &AllClassesFolder::projectOpened);
+  disconnect(ICore::self()->projectController(), &IProjectController::projectClosing, this, &AllClassesFolder::projectClosing);
 }
 
 void AllClassesFolder::populateNode()
@@ -51,8 +51,8 @@ void AllClassesFolder::populateNode()
   DocumentClassesFolder::populateNode();
 
   // Get notification for future project addition / removal.
-  connect (ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), this, SLOT(projectOpened(KDevelop::IProject*)));
-  connect (ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)), this, SLOT(projectClosing(KDevelop::IProject*)));
+  connect (ICore::self()->projectController(), &IProjectController::projectOpened, this, &AllClassesFolder::projectOpened);
+  connect (ICore::self()->projectController(), &IProjectController::projectClosing, this, &AllClassesFolder::projectClosing);
 
   // Parse each existing project file
   foreach(IProject* project, ICore::self()->projectController()->projects())

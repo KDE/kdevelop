@@ -51,10 +51,10 @@ ClassModel::ClassModel()
   m_allClassesNode = new FilteredAllClassesFolder(this);
   m_topNode->addNode( m_allClassesNode );
 
-  connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
-          this, SLOT(removeProjectNode(KDevelop::IProject*)));
-  connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
-          this, SLOT(addProjectNode(KDevelop::IProject*)));
+  connect(ICore::self()->projectController(), &IProjectController::projectClosing,
+          this, &ClassModel::removeProjectNode);
+  connect(ICore::self()->projectController(), &IProjectController::projectOpened,
+          this, &ClassModel::addProjectNode);
 
   foreach ( IProject* project, ICore::self()->projectController()->projects() ) {
     addProjectNode(project);

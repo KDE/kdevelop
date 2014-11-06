@@ -85,7 +85,7 @@ DocumentClassesFolder::DocumentClassesFolder(const QString& a_displayName, Nodes
   : DynamicFolderNode(a_displayName, a_model)
   , m_updateTimer( new QTimer(this) )
 {
-  connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(updateChangedFiles()));
+  connect( m_updateTimer, &QTimer::timeout, this, &DocumentClassesFolder::updateChangedFiles);
 }
 
 void DocumentClassesFolder::updateChangedFiles()

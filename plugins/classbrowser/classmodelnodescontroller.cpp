@@ -36,7 +36,7 @@ ClassModelNodesController::ClassModelNodesController()
   : m_updateTimer( new QTimer(this) )
 {
   m_updateTimer->setSingleShot(true);
-  connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(updateChangedFiles()));
+  connect( m_updateTimer, &QTimer::timeout, this, &ClassModelNodesController::updateChangedFiles);
 }
 
 ClassModelNodesController::~ClassModelNodesController()

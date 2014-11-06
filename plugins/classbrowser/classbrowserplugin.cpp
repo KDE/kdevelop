@@ -91,7 +91,7 @@ ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
   setXMLFile( "kdevclassbrowser.rc" );
 
   m_findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
-  connect(m_findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
+  connect(m_findInBrowser, &QAction::triggered, this, &ClassBrowserPlugin::findInClassBrowser);
 }
 
 ClassBrowserPlugin::~ClassBrowserPlugin()
