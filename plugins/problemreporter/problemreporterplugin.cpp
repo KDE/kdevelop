@@ -92,9 +92,9 @@ ProblemReporterPlugin::ProblemReporterPlugin(QObject *parent, const QVariantList
   core()->uiController()->addToolView(i18n("Problems"), m_factory);
   setXMLFile( "kdevproblemreporter.rc" );
 
-  connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
-  connect(ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)));
-  connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)), Qt::DirectConnection);
+  connect(ICore::self()->documentController(), &IDocumentController::documentClosed, this, &ProblemReporterPlugin::documentClosed);
+  connect(ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this, &ProblemReporterPlugin::textDocumentCreated);
+  connect(ICore::self()->languageController()->backgroundParser(), &BackgroundParser::parseJobFinished, this, &ProblemReporterPlugin::parseJobFinished, Qt::DirectConnection);
 }
 
 ProblemReporterPlugin::~ProblemReporterPlugin()

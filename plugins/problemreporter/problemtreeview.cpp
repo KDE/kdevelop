@@ -66,7 +66,7 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, ProblemReporterPlugin* plugin)
     fullUpdateAction->setText(i18n("Force Full Update"));
     fullUpdateAction->setToolTip(i18nc("@info:tooltip", "Re-parse all watched documents"));
     fullUpdateAction->setIcon(QIcon::fromTheme("view-refresh"));
-    connect(fullUpdateAction, SIGNAL(triggered(bool)), model(), SLOT(forceFullUpdate()));
+    connect(fullUpdateAction, &QAction::triggered, model(), &ProblemModel::forceFullUpdate);
     addAction(fullUpdateAction);
 
     QAction* showImportsAction = new QAction(this);
@@ -76,7 +76,7 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, ProblemReporterPlugin* plugin)
     showImportsAction->setText(i18n("Show Imports"));
     showImportsAction->setToolTip(i18nc("@info:tooltip", "Display problems in imported files"));
     this->model()->setShowImports(false);
-    connect(showImportsAction, SIGNAL(triggered(bool)), this->model(), SLOT(setShowImports(bool)));
+    connect(showImportsAction, &QAction::triggered, this->model(), &ProblemModel::setShowImports);
 
     KActionMenu* scopeMenu = new KActionMenu(this);
     scopeMenu->setDelayed(false);
@@ -116,11 +116,11 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, ProblemReporterPlugin* plugin)
     scopeMapper->setMapping(openDocumentsAction, ProblemModel::OpenDocuments);
     scopeMapper->setMapping(currentProjectAction, ProblemModel::CurrentProject);
     scopeMapper->setMapping(allProjectAction, ProblemModel::AllProjects);
-    connect(currentDocumentAction, SIGNAL(triggered()), scopeMapper, SLOT(map()));
-    connect(openDocumentsAction, SIGNAL(triggered()), scopeMapper, SLOT(map()));
-    connect(currentProjectAction, SIGNAL(triggered()), scopeMapper, SLOT(map()));
-    connect(allProjectAction, SIGNAL(triggered()), scopeMapper, SLOT(map()));
-    connect(scopeMapper, SIGNAL(mapped(int)), model(), SLOT(setScope(int)));
+    connect(currentDocumentAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+    connect(openDocumentsAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+    connect(currentProjectAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+    connect(allProjectAction, &QAction::triggered, scopeMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+    connect(scopeMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(), &ProblemModel::setScope);
 
     KActionMenu* severityMenu = new KActionMenu(i18n("Severity"), this);
     severityMenu->setDelayed(false);
@@ -150,12 +150,12 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, ProblemReporterPlugin* plugin)
     severityMapper->setMapping(errorSeverityAction, ProblemData::Error);
     severityMapper->setMapping(warningSeverityAction, ProblemData::Warning);
     severityMapper->setMapping(hintSeverityAction, ProblemData::Hint);
-    connect(errorSeverityAction, SIGNAL(triggered()), severityMapper, SLOT(map()));
-    connect(warningSeverityAction, SIGNAL(triggered()), severityMapper, SLOT(map()));
-    connect(hintSeverityAction, SIGNAL(triggered()), severityMapper, SLOT(map()));
-    connect(severityMapper, SIGNAL(mapped(int)), model(), SLOT(setSeverity(int)));
+    connect(errorSeverityAction, &QAction::triggered, severityMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+    connect(warningSeverityAction, &QAction::triggered, severityMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+    connect(hintSeverityAction, &QAction::triggered, severityMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+    connect(severityMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), model(), &ProblemModel::setSeverity);
 
-    connect(this, SIGNAL(activated(QModelIndex)), SLOT(itemActivated(QModelIndex)));
+    connect(this, &ProblemTreeView::activated, this, &ProblemTreeView::itemActivated);
 }
 
 ProblemTreeView::~ProblemTreeView()

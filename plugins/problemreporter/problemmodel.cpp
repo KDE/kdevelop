@@ -66,15 +66,15 @@ ProblemModel::ProblemModel(ProblemReporterPlugin * parent)
     m_minTimer = new QTimer(this);
     m_minTimer->setInterval(MinTimeout);
     m_minTimer->setSingleShot(true);
-    connect(m_minTimer, SIGNAL(timeout()), SLOT(timerExpired()));
+    connect(m_minTimer, &QTimer::timeout, this, &ProblemModel::timerExpired);
     m_maxTimer = new QTimer(this);
     m_maxTimer->setInterval(MaxTimeout);
     m_maxTimer->setSingleShot(true);
-    connect(m_maxTimer, SIGNAL(timeout()), SLOT(timerExpired()));
+    connect(m_maxTimer, &QTimer::timeout, this, &ProblemModel::timerExpired);
     setScope(CurrentDocument);
-    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(setCurrentDocument(KDevelop::IDocument*)));
+    connect(ICore::self()->documentController(), &IDocumentController::documentActivated, this, &ProblemModel::setCurrentDocument);
     // CompletionSettings include a list of todo markers we care for, so need to update
-    connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)), SLOT(forceFullUpdate()));
+    connect(ICore::self()->languageController()->completionSettings(), &ICompletionSettings::settingsChanged, this, &ProblemModel::forceFullUpdate);
 
     if (ICore::self()->documentController()->activeDocument()) {
         setCurrentDocument(ICore::self()->documentController()->activeDocument());
@@ -328,7 +328,7 @@ void ProblemModel::setScope(int scope)
             m_documentSet = new AllProjectSet(this);
             break;
         }
-        connect(m_documentSet, SIGNAL(changed()), this, SLOT(documentSetChanged()));
+        connect(m_documentSet, &WatchedDocumentSet::changed, this, &ProblemModel::documentSetChanged);
         rebuildProblemList();
     }
 }

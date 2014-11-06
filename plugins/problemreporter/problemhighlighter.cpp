@@ -70,14 +70,18 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
     foreach(KTextEditor::View* view, m_document->views())
         viewCreated(document, view);
 
-    connect(m_document, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)));
-    connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)), this, SLOT(settingsChanged()));
-    connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
-            this, SLOT(aboutToInvalidateMovingInterfaceContent()));
+    connect(m_document.data(), &Document::viewCreated, this, &ProblemHighlighter::viewCreated);
+    connect(ICore::self()->languageController()->completionSettings(), &ICompletionSettings::settingsChanged, this, &ProblemHighlighter::settingsChanged);
+    connect(m_document.data(), &Document::reloaded,
+            this, &ProblemHighlighter::documentReloaded);
+    if (qobject_cast<MovingInterface*>(m_document)) {
+        // can't use new signal/slot syntax here, MovingInterface is not a QObject
+        connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
+                this, SLOT(aboutToInvalidateMovingInterfaceContent()));
+    }
+    // TODO: this depends on m_document being a KateDocument, should we rely on internals here?
     connect(m_document, SIGNAL(aboutToRemoveText(KTextEditor::Range)),
             this, SLOT(aboutToRemoveText(KTextEditor::Range)));
-    connect(m_document, SIGNAL(reloaded(KTextEditor::Document*)),
-            this, SLOT(documentReloaded()));
 }
 
 void ProblemHighlighter::settingsChanged()

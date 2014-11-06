@@ -78,8 +78,8 @@ OpenDocumentSet::OpenDocumentSet(ProblemModel* parent)
     foreach (KDevelop::IDocument* doc, docs) {
         m_documents.insert(KDevelop::IndexedString(doc->url()));
     }
-    connect(model()->plugin()->core()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
-    connect(model()->plugin()->core()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(documentCreated(KDevelop::IDocument*)));
+    connect(model()->plugin()->core()->documentController(), &IDocumentController::documentClosed, this, &OpenDocumentSet::documentClosed);
+    connect(model()->plugin()->core()->documentController(), &IDocumentController::textDocumentCreated, this, &OpenDocumentSet::documentCreated);
 }
 
 void OpenDocumentSet::documentClosed(KDevelop::IDocument* doc)
@@ -131,6 +131,7 @@ void ProjectSet::trackProjectFiles(const IProject* project)
         // The implementation should derive from QObject somehow
         QObject* fileManager = dynamic_cast<QObject*>(project->projectFileManager());
         if (fileManager) {
+            // can't use new signal/slot syntax here, IProjectFileManager is no a QObject
             connect(fileManager, SIGNAL(fileAdded(KDevelop::ProjectFileItem*)),
                     this, SLOT(fileAdded(KDevelop::ProjectFileItem*)));
             connect(fileManager, SIGNAL(fileRemoved(KDevelop::ProjectFileItem*)),
