@@ -135,31 +135,31 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     configureEnvironment->setSelectionWidget(environment);
 
     //connect signals to changed signal
-    connect( projectTarget, SIGNAL(currentIndexChanged(QString)), SIGNAL(changed()) );
-    connect( projectTargetRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
-    connect( executableRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
-    connect( executablePath->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( executablePath, SIGNAL(urlSelected(QUrl)), SIGNAL(changed()) );
-    connect( arguments, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( workingDirectory, SIGNAL(urlSelected(QUrl)), SIGNAL(changed()) );
-    connect( workingDirectory->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( environment, SIGNAL(currentProfileChanged(QString)), SIGNAL(changed()) );
-    connect( addDependency, SIGNAL(clicked(bool)), SLOT(addDep()) );
-    connect( addDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );
-    connect( removeDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );
-    connect( removeDependency, SIGNAL(clicked(bool)), SLOT(removeDep()) );
-    connect( moveDepDown, SIGNAL(clicked(bool)), SIGNAL(changed()) );
-    connect( moveDepUp, SIGNAL(clicked(bool)), SIGNAL(changed()) );
-    connect( moveDepDown, SIGNAL(clicked(bool)), SLOT(moveDependencyDown()) );
-    connect( moveDepUp, SIGNAL(clicked(bool)), SLOT(moveDependencyUp()) );
-    connect( dependencies->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(checkActions(QItemSelection,QItemSelection)) );
-    connect( dependencyAction, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
-    connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
-    connect( terminal, SIGNAL(editTextChanged(QString)), SIGNAL(changed()) );
-    connect( terminal, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
-    connect( dependencyAction, SIGNAL(currentIndexChanged(int)), SLOT(activateDeps(int)) );
-    connect( targetDependency, SIGNAL(textChanged(QString)), SLOT(depEdited(QString)));
-    connect( browseProject, SIGNAL(clicked(bool)), SLOT(selectItemDialog()));
+    connect( projectTarget, static_cast<void(ProjectTargetsComboBox::*)(const QString&)>(&ProjectTargetsComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
+    connect( projectTargetRadio, &QRadioButton::toggled, this, &NativeAppConfigPage::changed );
+    connect( executableRadio, &QRadioButton::toggled, this, &NativeAppConfigPage::changed );
+    connect( executablePath->lineEdit(), &KLineEdit::textEdited, this, &NativeAppConfigPage::changed );
+    connect( executablePath, &KUrlRequester::urlSelected, this, &NativeAppConfigPage::changed );
+    connect( arguments, &QLineEdit::textEdited, this, &NativeAppConfigPage::changed );
+    connect( workingDirectory, &KUrlRequester::urlSelected, this, &NativeAppConfigPage::changed );
+    connect( workingDirectory->lineEdit(), &KLineEdit::textEdited, this, &NativeAppConfigPage::changed );
+    connect( environment, &KDevelop::EnvironmentSelectionWidget::currentProfileChanged, this, &NativeAppConfigPage::changed );
+    connect( addDependency, &QPushButton::clicked, this, &NativeAppConfigPage::addDep );
+    connect( addDependency, &QPushButton::clicked, this, &NativeAppConfigPage::changed );
+    connect( removeDependency, &QPushButton::clicked, this, &NativeAppConfigPage::changed );
+    connect( removeDependency, &QPushButton::clicked, this, &NativeAppConfigPage::removeDep );
+    connect( moveDepDown, &QPushButton::clicked, this, &NativeAppConfigPage::changed );
+    connect( moveDepUp, &QPushButton::clicked, this, &NativeAppConfigPage::changed );
+    connect( moveDepDown, &QPushButton::clicked, this, &NativeAppConfigPage::moveDependencyDown );
+    connect( moveDepUp, &QPushButton::clicked, this, &NativeAppConfigPage::moveDependencyUp );
+    connect( dependencies->selectionModel(), &QItemSelectionModel::selectionChanged, this, &NativeAppConfigPage::checkActions );
+    connect( dependencyAction, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
+    connect( runInTerminal, &QCheckBox::toggled, this, &NativeAppConfigPage::changed );
+    connect( terminal, &KComboBox::editTextChanged, this, &NativeAppConfigPage::changed );
+    connect( terminal, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
+    connect( dependencyAction, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::activateDeps );
+    connect( targetDependency, &ProjectItemLineEdit::textChanged, this, &NativeAppConfigPage::depEdited);
+    connect( browseProject, &QPushButton::clicked, this, &NativeAppConfigPage::selectItemDialog);
 }
 
 
@@ -461,7 +461,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
                         path.removeFirst();
                         act->setText(path.join("/"));
                         act->setIcon(QIcon::fromTheme("system-run"));
-                        connect(act, SIGNAL(triggered(bool)), SLOT(suggestionTriggered()));
+                        connect(act, &QAction::triggered, this, &NativeAppConfigType::suggestionTriggered);
                         targetsContainer[target->parent()].append(act);
                     }
                 }

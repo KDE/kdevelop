@@ -99,9 +99,9 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     setModel(m);
     setDelegate( new KDevelop::OutputDelegate );
 
-    connect( lineMaker, SIGNAL(receivedStdoutLines(QStringList)), model(), SLOT(appendLines(QStringList)) );
-    connect( proc, SIGNAL(error(QProcess::ProcessError)), SLOT(processError(QProcess::ProcessError)) );
-    connect( proc, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(processFinished(int,QProcess::ExitStatus)) );
+    connect( lineMaker, &ProcessLineMaker::receivedStdoutLines, model(), &OutputModel::appendLines );
+    connect( proc, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error), this, &NativeAppJob::processError );
+    connect( proc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &NativeAppJob::processFinished );
 
     // Now setup the process parameters
 
@@ -169,7 +169,7 @@ void NativeAppJob::processFinished( int exitCode , QProcess::ExitStatus status )
         return;
     }
 
-    connect(model(), SIGNAL(allDone()), SLOT(outputDone()));
+    connect(model(), &OutputModel::allDone, this, &NativeAppJob::outputDone);
     lineMaker->flushBuffers();
 
     if (exitCode == 0 && status == QProcess::NormalExit) {

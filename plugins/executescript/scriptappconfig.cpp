@@ -108,13 +108,13 @@ ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
 
     //connect signals to changed signal
-    connect( interpreter->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( executablePath->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( executablePath, SIGNAL(urlSelected(QUrl)), SIGNAL(changed()) );
-    connect( arguments, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( workingDirectory, SIGNAL(urlSelected(QUrl)), SIGNAL(changed()) );
-    connect( workingDirectory->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
-    connect( environment, SIGNAL(currentProfileChanged(QString)), SIGNAL(changed()) );
+    connect( interpreter->lineEdit(), &QLineEdit::textEdited, this, &ScriptAppConfigPage::changed );
+    connect( executablePath->lineEdit(), &KLineEdit::textEdited, this, &ScriptAppConfigPage::changed );
+    connect( executablePath, &KUrlRequester::urlSelected, this, &ScriptAppConfigPage::changed );
+    connect( arguments, &QLineEdit::textEdited, this, &ScriptAppConfigPage::changed );
+    connect( workingDirectory, &KUrlRequester::urlSelected, this, &ScriptAppConfigPage::changed );
+    connect( workingDirectory->lineEdit(), &KLineEdit::textEdited, this, &ScriptAppConfigPage::changed );
+    connect( environment, &KDevelop::EnvironmentSelectionWidget::currentProfileChanged, this, &ScriptAppConfigPage::changed );
     //connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
 }
 
