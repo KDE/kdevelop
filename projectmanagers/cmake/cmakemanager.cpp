@@ -28,6 +28,8 @@
 #include "debug.h"
 #include <projectmanagers/custommake/makefileresolver/makefileresolver.h>
 #include "cmakecodecompletionmodel.h"
+#include "cmakenavigationwidget.h"
+#include "icmakedocumentation.h"
 
 #include <QDir>
 #include <QThread>
@@ -629,51 +631,50 @@ bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &_files, Pro
 // }
 
 QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position)
-{ return 0; }
-// {
-//     KDevelop::TopDUContextPointer top= TopDUContextPointer(KDevelop::DUChain::self()->chainForDocument(url));
-//     Declaration *decl=0;
-//     if(top)
-//     {
-//         int useAt=top->findUseAt(top->transformToLocalRevision(position));
-//         if(useAt>=0)
-//         {
-//             Use u=top->uses()[useAt];
-//             decl=u.usedDeclaration(top->topContext());
-//         }
-//     }
-//
-//     CMakeNavigationWidget* doc=0;
-//     if(decl)
-//     {
-//         doc=new CMakeNavigationWidget(top, decl);
-//     }
-//     else
-//     {
-//         const IDocument* d=ICore::self()->documentController()->documentForUrl(url);
-//         const KTextEditor::Document* e=d->textDocument();
-//         KTextEditor::Cursor start=position, end=position, step(0,1);
-//         for(QChar i=e->characterAt(start); i.isLetter() || i=='_'; i=e->characterAt(start-=step))
-//         {}
-//         start+=step;
-//
-//         for(QChar i=e->characterAt(end); i.isLetter() || i=='_'; i=e->characterAt(end+=step))
-//         {}
-//
-//         QString id=e->text(KTextEditor::Range(start, end));
-//         ICMakeDocumentation* docu=CMake::cmakeDocumentation();
-//         if( docu )
-//         {
-//             QExplicitlySharedDataPointer<IDocumentation> desc=docu->description(id, url);
-//             if(!desc)
-//             {
-//                 doc=new CMakeNavigationWidget(top, desc);
-//             }
-//         }
-//     }
-//
-//     return doc;
-// }
+{
+    KDevelop::TopDUContextPointer top= TopDUContextPointer(KDevelop::DUChain::self()->chainForDocument(url));
+    Declaration *decl=0;
+    if(top)
+    {
+        int useAt=top->findUseAt(top->transformToLocalRevision(position));
+        if(useAt>=0)
+        {
+            Use u=top->uses()[useAt];
+            decl=u.usedDeclaration(top->topContext());
+        }
+    }
+
+    CMakeNavigationWidget* doc=0;
+    if(decl)
+    {
+        doc=new CMakeNavigationWidget(top, decl);
+    }
+    else
+    {
+        const IDocument* d=ICore::self()->documentController()->documentForUrl(url);
+        const KTextEditor::Document* e=d->textDocument();
+        KTextEditor::Cursor start=position, end=position, step(0,1);
+        for(QChar i=e->characterAt(start); i.isLetter() || i=='_'; i=e->characterAt(start-=step))
+        {}
+        start+=step;
+
+        for(QChar i=e->characterAt(end); i.isLetter() || i=='_'; i=e->characterAt(end+=step))
+        {}
+
+        QString id=e->text(KTextEditor::Range(start, end));
+        ICMakeDocumentation* docu=CMake::cmakeDocumentation();
+        if( docu )
+        {
+            IDocumentation::Ptr desc=docu->description(id, url);
+            if(desc)
+            {
+                doc=new CMakeNavigationWidget(top, desc);
+            }
+        }
+    }
+
+    return doc;
+}
 
 QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, const QString& id) const
 { return QPair<QString, QString>(); }

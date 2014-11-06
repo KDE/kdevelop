@@ -487,15 +487,7 @@ void removeOverrideBuildDirIndex( KDevelop::IProject* project, bool writeToMainI
 
 ICMakeDocumentation* cmakeDocumentation()
 {
-    ICMakeDocumentation* p=KDevelop::ICore::self()->pluginController()->extensionForPlugin<ICMakeDocumentation>("org.kdevelop.ICMakeDocumentation");
-
-    if( !p )
-    {
-        return 0;
-    }
-
-    Q_ASSERT(p);
-    return p;
+    return KDevelop::ICore::self()->pluginController()->extensionForPlugin<ICMakeDocumentation>("org.kdevelop.ICMakeDocumentation");
 }
 
 QStringList allBuildDirs(KDevelop::IProject* project)
