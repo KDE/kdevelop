@@ -138,14 +138,14 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     templateEdit->setEditable(true);
     templateEdit->setCompletionMode(KCompletion::CompletionPopup);
     KCompletion* comp = templateEdit->completionObject();
-    connect(templateEdit, SIGNAL(returnPressed(QString)), comp, SLOT(addItem(QString)));
+    connect(templateEdit, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::returnPressed), comp, static_cast<void(KCompletion::*)(const QString&)>(&KCompletion::addItem));
     for(int i=0; i<templateEdit->count(); i++)
         comp->addItem(templateEdit->itemText(i));
     replacementTemplateEdit->addItems( cg.readEntry("LastUsedReplacementTemplateString", repl_template) );
     replacementTemplateEdit->setEditable(true);
     replacementTemplateEdit->setCompletionMode(KCompletion::CompletionPopup);
     comp = replacementTemplateEdit->completionObject();
-    connect(replacementTemplateEdit, SIGNAL(returnPressed(QString)), comp, SLOT(addItem(QString)));
+    connect(replacementTemplateEdit, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::returnPressed), comp, static_cast<void(KCompletion::*)(const QString&)>(&KCompletion::addItem));
     for(int i=0; i<replacementTemplateEdit->count(); i++)
         comp->addItem(replacementTemplateEdit->itemText(i));
     
@@ -170,17 +170,17 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     filesCombo->addItems(cg.readEntry("file_patterns", filepatterns));
     excludeCombo->addItems(cg.readEntry("exclude_patterns", excludepatterns) );
 
-    connect(templateTypeCombo, SIGNAL(activated(int)),
-            this, SLOT(templateTypeComboActivated(int)));
-    connect(patternCombo, SIGNAL(editTextChanged(QString)),
-            this, SLOT(patternComboEditTextChanged(QString)));
+    connect(templateTypeCombo, static_cast<void(KComboBox::*)(int)>(&KComboBox::activated),
+            this, &GrepDialog::templateTypeComboActivated);
+    connect(patternCombo, &QComboBox::editTextChanged,
+            this, &GrepDialog::patternComboEditTextChanged);
     patternComboEditTextChanged( patternCombo->currentText() );
     patternCombo->setFocus();
     
-    connect(searchPaths, SIGNAL(activated(QString)), this, SLOT(setSearchLocations(QString)));
+    connect(searchPaths, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::activated), this, &GrepDialog::setSearchLocations);
 
     directorySelector->setIcon(QIcon::fromTheme("document-open"));
-    connect(directorySelector, SIGNAL(clicked(bool)), this, SLOT(selectDirectoryDialog()) );
+    connect(directorySelector, &QPushButton::clicked, this, &GrepDialog::selectDirectoryDialog );
     directoryChanged(directorySelector->text());
 }
 
@@ -198,14 +198,14 @@ void GrepDialog::addUrlToMenu(QMenu* menu, const QUrl& url)
 {
     QAction* action = menu->addAction(m_plugin->core()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain));
     action->setData(QVariant(url.toString()));
-    connect(action, SIGNAL(triggered(bool)), SLOT(synchronizeDirActionTriggered(bool)));
+    connect(action, &QAction::triggered, this, &GrepDialog::synchronizeDirActionTriggered);
 }
 
 void GrepDialog::addStringToMenu(QMenu* menu, QString string)
 {
     QAction* action = menu->addAction(string);
     action->setData(QVariant(string));
-    connect(action, SIGNAL(triggered(bool)), SLOT(synchronizeDirActionTriggered(bool)));
+    connect(action, &QAction::triggered, this, &GrepDialog::synchronizeDirActionTriggered);
 }
 
 void GrepDialog::synchronizeDirActionTriggered(bool)
@@ -455,18 +455,17 @@ void GrepDialog::startSearch()
                                findToolView(i18n("Find/Replace in Files"), m_plugin->toolViewFactory(), IUiController::CreateAndRaise);
     GrepOutputModel* outputModel = toolView->renewModel(patternString(), description);
 
-    connect(job, SIGNAL(showErrorMessage(QString,int)),
-            toolView, SLOT(showErrorMessage(QString)));
+    connect(job, &GrepJob::showErrorMessage,
+            toolView, &GrepOutputView::showErrorMessage);
     //the GrepOutputModel gets the 'showMessage' signal to store it and forward
     //it to toolView
-    connect(job, SIGNAL(showMessage(KDevelop::IStatus*,QString,int)),
-            outputModel, SLOT(showMessageSlot(KDevelop::IStatus*,QString)));
-    connect(outputModel, SIGNAL(showMessage(KDevelop::IStatus*,QString)),
-            toolView, SLOT(showMessage(KDevelop::IStatus*,QString)));
+    connect(job, &GrepJob::showMessage,
+            outputModel, &GrepOutputModel::showMessageSlot);
+    connect(outputModel, &GrepOutputModel::showMessage,
+            toolView, &GrepOutputView::showMessage);
 
 
-    connect(toolView, SIGNAL(outputViewIsClosed()),
-            job, SLOT(kill()));
+    connect(toolView, &GrepOutputView::outputViewIsClosed, [=]() { job->kill(); });
 
     job->setOutputModel(outputModel);
     job->setPatternString(patternString());

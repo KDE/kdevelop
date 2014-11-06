@@ -164,8 +164,8 @@ GrepOutputModel::GrepOutputModel( QObject *parent )
     : QStandardItemModel( parent ), m_regExp(), m_replacement(), m_replacementTemplate(), m_finalReplacement(),
       m_finalUpToDate(false), m_rootItem(0), m_fileCount(0), m_matchCount(0), m_itemsCheckable(false)
 {
-    connect(this, SIGNAL(itemChanged(QStandardItem*)),
-              this, SLOT(updateCheckState(QStandardItem*)));
+    connect(this, &GrepOutputModel::itemChanged,
+            this, &GrepOutputModel::updateCheckState);
 }
 
 GrepOutputModel::~GrepOutputModel()
@@ -404,7 +404,7 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
 void GrepOutputModel::updateCheckState(QStandardItem* item)
 {
     // if we don't disconnect the SIGNAL, the setCheckState will call it in loop
-    disconnect(SIGNAL(itemChanged(QStandardItem*)));
+    disconnect(this, &GrepOutputModel::itemChanged, nullptr, nullptr);
     
     // try to update checkstate on non checkable items would make a checkbox appear
     if(item->isCheckable())
@@ -414,8 +414,8 @@ void GrepOutputModel::updateCheckState(QStandardItem* item)
         it->refreshState();
     }
 
-    connect(this, SIGNAL(itemChanged(QStandardItem*)),
-              this, SLOT(updateCheckState(QStandardItem*)));
+    connect(this, &GrepOutputModel::itemChanged,
+            this, &GrepOutputModel::updateCheckState);
 }
 
 void GrepOutputModel::doReplacements()

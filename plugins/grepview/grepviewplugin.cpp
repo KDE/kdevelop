@@ -90,7 +90,7 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     QAction*action = actionCollection()->addAction("edit_grep");
     action->setText(i18n("Find/Replace in Fi&les..."));
     actionCollection()->setDefaultShortcut( action, QKeySequence("Ctrl+Alt+F") );
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialogFromMenu()));
+    connect(action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromMenu);
     action->setToolTip( i18n("Search for expressions over several files") );
     action->setWhatsThis( i18n("Opens the 'Find/Replace in files' dialog. There you "
                                "can enter a regular expression which is then "
@@ -135,7 +135,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
             QAction* action = new QAction( i18n( "Find/Replace in This Folder" ), this );
             action->setIcon(QIcon::fromTheme("edit-find"));
             m_contextMenuDirectory = items.at(0)->folder()->path().toLocalFile();
-            connect( action, SIGNAL(triggered()), this, SLOT(showDialogFromProject()));
+            connect( action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromProject);
             extension.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, action );
         }
     }
@@ -144,7 +144,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
         if ( econtext->view()->selection() ) {
             QAction* action = new QAction(QIcon::fromTheme("edit-find"), i18n("&Find/Replace in Files"), this);
-            connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialogFromMenu()));
+            connect(action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromMenu);
             extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
         }
     }
@@ -158,7 +158,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
             QAction* action = new QAction( i18n( "Find/Replace in This Folder" ), this );
             action->setIcon(QIcon::fromTheme("edit-find"));
             m_contextMenuDirectory = fcontext->urls().first().toLocalFile();
-            connect( action, SIGNAL(triggered()), this, SLOT(showDialogFromProject()));
+            connect( action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromProject);
             extension.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, action );
         }
     }
@@ -218,7 +218,7 @@ GrepJob* GrepViewPlugin::newGrepJob()
         m_currentJob->kill();
     }
     m_currentJob = new GrepJob();
-    connect(m_currentJob, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
+    connect(m_currentJob, &GrepJob::finished, this, &GrepViewPlugin::jobFinished);
     return m_currentJob;
 }
 

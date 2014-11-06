@@ -99,7 +99,7 @@ GrepJob::GrepJob( QObject* parent )
     setCapabilities(Killable);
     KDevelop::ICore::self()->uiController()->registerStatus(this);
     
-    connect(this, SIGNAL(result(KJob*)), this, SLOT(testFinishState(KJob*)));
+    connect(this, &GrepJob::result, this, &GrepJob::testFinishState);
 }
 
 QString GrepJob::statusName() const
@@ -188,7 +188,7 @@ void GrepJob::slotWork()
         case WorkCollectFiles:
             m_findThread = new GrepFindFilesThread(this, m_directoryChoice, m_depthValue, m_filesString, m_excludeString, m_useProjectFilesFlag);
             emit showMessage(this, i18n("Collecting files..."));
-            connect(m_findThread, SIGNAL(finished()), this, SLOT(slotFindFinished()));
+            connect(m_findThread.data(), &GrepFindFilesThread::finished, this, &GrepJob::slotFindFinished);
             m_findThread->start();
             break;
         case WorkGrep:
@@ -240,8 +240,8 @@ void GrepJob::start()
     m_outputModel->clear();
 
     qRegisterMetaType<GrepOutputItem::List>();
-    connect(this, SIGNAL(foundMatches(QString,GrepOutputItem::List)),
-            m_outputModel, SLOT(appendOutputs(QString,GrepOutputItem::List)), Qt::QueuedConnection);
+    connect(this, &GrepJob::foundMatches,
+            m_outputModel, &GrepOutputModel::appendOutputs, Qt::QueuedConnection);
 
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
 }

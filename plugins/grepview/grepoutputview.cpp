@@ -30,6 +30,7 @@
 #include <QWidgetAction>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iplugincontroller.h>
+#include <outputview/ioutputview.h>
 
 using namespace KDevelop;
 
@@ -102,37 +103,40 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
 
     modelSelector->setEditable(false);
     modelSelector->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(modelSelector, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(modelSelectorContextMenu(QPoint)));
-    connect(modelSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(changeModel(int)));
+    connect(modelSelector, &KComboBox::customContextMenuRequested,
+            this, &GrepOutputView::modelSelectorContextMenu);
+    connect(modelSelector, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &GrepOutputView::changeModel);
 
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
     resultsTreeView->setHeaderHidden(true);
     resultsTreeView->setUniformRowHeights(false);
     resultsTreeView->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-    connect(m_prev, SIGNAL(triggered(bool)), this, SLOT(selectPreviousItem()));
-    connect(m_next, SIGNAL(triggered(bool)), this, SLOT(selectNextItem()));
-    connect(m_collapseAll, SIGNAL(triggered(bool)), this, SLOT(collapseAllItems()));
-    connect(m_expandAll, SIGNAL(triggered(bool)), this, SLOT(expandAllItems()));
-    connect(applyButton, SIGNAL(clicked()),  this, SLOT(onApply()));
-    connect(m_clearSearchHistory, SIGNAL(triggered(bool)), this, SLOT(clearSearchHistory()));
-    connect(resultsTreeView, SIGNAL(collapsed(QModelIndex)), this, SLOT(updateScrollArea(QModelIndex)));
-    connect(resultsTreeView, SIGNAL(expanded(QModelIndex)), this, SLOT(updateScrollArea(QModelIndex)));
+    connect(m_prev, &QAction::triggered, this, &GrepOutputView::selectPreviousItem);
+    connect(m_next, &QAction::triggered, this, &GrepOutputView::selectNextItem);
+    connect(m_collapseAll, &QAction::triggered, this, &GrepOutputView::collapseAllItems);
+    connect(m_expandAll, &QAction::triggered, this, &GrepOutputView::expandAllItems);
+    connect(applyButton, &QPushButton::clicked,  this, &GrepOutputView::onApply);
+    connect(m_clearSearchHistory, &QAction::triggered, this, &GrepOutputView::clearSearchHistory);
+    connect(resultsTreeView, &QTreeView::collapsed, this, &GrepOutputView::updateScrollArea);
+    connect(resultsTreeView, &QTreeView::expanded, this, &GrepOutputView::updateScrollArea);
 
     IPlugin *outputView = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
-    connect(outputView, SIGNAL(selectPrevItem()), this, SLOT(selectPreviousItem()));
-    connect(outputView, SIGNAL(selectNextItem()), this, SLOT(selectNextItem()));
+    if (qobject_cast<IOutputView*>(outputView)) {
+        // can't use new signal/slot syntax here, IOutputView is not a QObject
+        connect(outputView, SIGNAL(selectPrevItem()), this, SLOT(selectPreviousItem()));
+        connect(outputView, SIGNAL(selectNextItem()), this, SLOT(selectNextItem()));
+    }
 
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
     replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
     applyButton->setIcon(QIcon::fromTheme("dialog-ok-apply"));
 
-    connect(replacementCombo, SIGNAL(editTextChanged(QString)), SLOT(replacementTextChanged(QString)));
-    connect(replacementCombo, SIGNAL(returnPressed()), SLOT(onApply()));
+    connect(replacementCombo, &KComboBox::editTextChanged, this, &GrepOutputView::replacementTextChanged);
+    connect(replacementCombo, static_cast<void(KComboBox::*)()>(&KComboBox::returnPressed), this, &GrepOutputView::onApply);
 
-    connect(newSearchAction, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
+    connect(newSearchAction, &QAction::triggered, this, &GrepOutputView::showDialog);
 
     updateCheckable();
 }
@@ -169,12 +173,12 @@ GrepOutputModel* GrepOutputView::renewModel(QString name, QString descriptionOrU
     applyButton->setEnabled(false);
     // text may be already present
     newModel->setReplacement(replacementCombo->currentText());
-    connect(newModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            this, SLOT(rowsRemoved()));
-    connect(resultsTreeView, SIGNAL(activated(QModelIndex)), newModel, SLOT(activate(QModelIndex)));
-    connect(replacementCombo, SIGNAL(editTextChanged(QString)), newModel, SLOT(setReplacement(QString)));
-    connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandElements(QModelIndex)));
-    connect(newModel, SIGNAL(showErrorMessage(QString,int)), this, SLOT(showErrorMessage(QString)));
+    connect(newModel, &GrepOutputModel::rowsRemoved,
+            this, &GrepOutputView::rowsRemoved);
+    connect(resultsTreeView, &QTreeView::activated, newModel, &GrepOutputModel::activate);
+    connect(replacementCombo, &KComboBox::editTextChanged, newModel, &GrepOutputModel::setReplacement);
+    connect(newModel, &GrepOutputModel::rowsInserted, this, &GrepOutputView::expandElements);
+    connect(newModel, &GrepOutputModel::showErrorMessage, this, &GrepOutputView::showErrorMessage);
 
     QString prettyUrl = descriptionOrUrl;
     if(descriptionOrUrl.startsWith('/'))
@@ -200,10 +204,10 @@ GrepOutputModel* GrepOutputView::model()
 void GrepOutputView::changeModel(int index)
 {
     if (model()) {
-        disconnect(model(), SIGNAL(showMessage(KDevelop::IStatus*,QString)),
-                   this, SLOT(showMessage(KDevelop::IStatus*,QString)));
-        disconnect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-                   this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
+        disconnect(model(), &GrepOutputModel::showMessage,
+                   this, &GrepOutputView::showMessage);
+        disconnect(model(), &GrepOutputModel::dataChanged,
+                   this, &GrepOutputView::updateApplyState);
     }
 
     replacementCombo->clearEditText();
@@ -215,10 +219,10 @@ void GrepOutputView::changeModel(int index)
         GrepOutputModel *resultModel = static_cast<GrepOutputModel *>(qvariant_cast<QObject*>(var));
         resultsTreeView->setModel(resultModel);
 
-        connect(model(), SIGNAL(showMessage(KDevelop::IStatus*,QString)),
-                this, SLOT(showMessage(KDevelop::IStatus*,QString)));
-        connect(model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-                this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
+        connect(model(), &GrepOutputModel::showMessage,
+                this, &GrepOutputView::showMessage);
+        connect(model(), &GrepOutputModel::dataChanged,
+                this, &GrepOutputView::updateApplyState);
         model()->showMessageEmit();
         applyButton->setEnabled(model()->hasResults() &&
                                 model()->getRootItem() &&
