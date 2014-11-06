@@ -51,10 +51,10 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
     : QTreeView( parent ),
         m_plugin( plugin )
 {
-    connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
-            SLOT(updateProjectPaths()));
-    connect(KDevelop::ICore::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)),
-            SLOT(updateProjectPaths()));
+    connect(KDevelop::ICore::self()->projectController(), &KDevelop::IProjectController::projectOpened,
+            this, &KDevDocumentView::updateProjectPaths);
+    connect(KDevelop::ICore::self()->projectController(), &KDevelop::IProjectController::projectClosed,
+            this, &KDevDocumentView::updateProjectPaths);
 
     m_documentModel = new KDevDocumentModel(this);
 
@@ -211,7 +211,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
         
         appendActions(ctxMenu, extensionActions);
         
-        connect(ctxMenu, SIGNAL(aboutToHide()), ctxMenu, SLOT(deleteLater()));
+        connect(ctxMenu, &QMenu::aboutToHide, ctxMenu, &QMenu::deleteLater);
         ctxMenu->popup( event->globalPos() );
     }
 }

@@ -48,23 +48,23 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
             foreach(KDevelop::IDocument* doc, docController->openDocuments()) {
                 view->opened( doc );
             }
-            QObject::connect( docController, SIGNAL(documentActivated(KDevelop::IDocument*)),
-                    view, SLOT(activated(KDevelop::IDocument*)) );
-            QObject::connect( docController, SIGNAL(documentSaved(KDevelop::IDocument*)),
-                    view, SLOT(saved(KDevelop::IDocument*)) );
-            QObject::connect( docController, SIGNAL(documentOpened(KDevelop::IDocument*)),
-                    view, SLOT(opened(KDevelop::IDocument*)) );
-            QObject::connect( docController, SIGNAL(documentClosed(KDevelop::IDocument*)),
-                    view, SLOT(closed(KDevelop::IDocument*)) );
+            QObject::connect( docController, &KDevelop::IDocumentController::documentActivated,
+                    view, &KDevDocumentView::activated );
+            QObject::connect( docController, &KDevelop::IDocumentController::documentSaved,
+                    view, &KDevDocumentView::saved );
+            QObject::connect( docController, &KDevelop::IDocumentController::documentOpened,
+                    view, &KDevDocumentView::opened );
+            QObject::connect( docController, &KDevelop::IDocumentController::documentClosed,
+                    view, &KDevDocumentView::closed );
             QObject::connect( docController,
-                    SIGNAL(documentContentChanged(KDevelop::IDocument*)),
-                    view, SLOT(contentChanged(KDevelop::IDocument*)) );
+                    &KDevelop::IDocumentController::documentContentChanged,
+                    view, &KDevDocumentView::contentChanged );
             QObject::connect( docController,
-                    SIGNAL(documentStateChanged(KDevelop::IDocument*)),
-                    view, SLOT(stateChanged(KDevelop::IDocument*)) );
+                    &KDevelop::IDocumentController::documentStateChanged,
+                    view, &KDevDocumentView::stateChanged );
             QObject::connect( docController,
-                    SIGNAL(documentUrlChanged(KDevelop::IDocument*)),
-                    view, SLOT(documentUrlChanged(KDevelop::IDocument*)) );
+                    &KDevelop::IDocumentController::documentUrlChanged,
+                    view, &KDevDocumentView::documentUrlChanged );
             return view;
         }
         virtual Qt::DockWidgetArea defaultPosition()

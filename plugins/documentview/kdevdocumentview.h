@@ -90,6 +90,8 @@ private:
     QHash< KDevelop::IDocument*, KDevFileItem* > m_doc2index;
     QList<QUrl> m_selectedDocs; // used for ctx menu
     QList<QUrl> m_unselectedDocs; // used for ctx menu
+
+    friend class KDevDocumentViewPluginFactory; // to connect to the private slots stateChanged and documentUrlChanged
 };
 
 #endif // KDEVPLATFORM_PLUGIN_KDEVDOCUMENTVIEW_H

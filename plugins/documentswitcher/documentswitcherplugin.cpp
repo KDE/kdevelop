@@ -62,7 +62,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     setXMLFile("kdevdocumentswitcher.rc");
     qCDebug(PLUGIN_DOCUMENTSWITCHER) << "Adding active mainwindow from constructor" << KDevelop::ICore::self()->uiController()->activeMainWindow();
     addMainWindow( qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() ) );
-    connect( KDevelop::ICore::self()->uiController()->controller(), SIGNAL(mainWindowAdded(Sublime::MainWindow*)), SLOT(addMainWindow(Sublime::MainWindow*)) );
+    connect( KDevelop::ICore::self()->uiController()->controller(), &Sublime::Controller::mainWindowAdded, this, &DocumentSwitcherPlugin::addMainWindow );
 
     forwardAction = actionCollection()->addAction ( "last_used_views_forward" );
     forwardAction->setText( i18n( "Last Used Views" ) );
@@ -70,7 +70,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     actionCollection()->setDefaultShortcut( forwardAction, Qt::CTRL | Qt::Key_Tab );
     forwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views." ) );
     forwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
-    connect( forwardAction, SIGNAL(triggered()), SLOT(walkForward()) );
+    connect( forwardAction, &QAction::triggered, this, &DocumentSwitcherPlugin::walkForward );
 
     backwardAction = actionCollection()->addAction ( "last_used_views_backward" );
     backwardAction->setText( i18n( "Last Used Views (Reverse)" ) );
@@ -78,7 +78,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     actionCollection()->setDefaultShortcut( backwardAction, Qt::CTRL | Qt::SHIFT | Qt::Key_Tab );
     backwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views in reverse." ) );
     backwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
-    connect( backwardAction, SIGNAL(triggered()), SLOT(walkBackward()) );
+    connect( backwardAction, &QAction::triggered, this, &DocumentSwitcherPlugin::walkBackward );
 
     view = new DocumentSwitcherTreeView( this );
     view->setSelectionBehavior( QAbstractItemView::SelectRows );
@@ -88,8 +88,8 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     view->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     view->addAction( forwardAction );
     view->addAction( backwardAction );
-    connect( view, SIGNAL(pressed(QModelIndex)), SLOT(switchToClicked(QModelIndex)) );
-    connect( view, SIGNAL(activated(QModelIndex)), SLOT(itemActivated(QModelIndex)) );
+    connect( view, &QListView::pressed, this, &DocumentSwitcherPlugin::switchToClicked );
+    connect( view, &QListView::activated, this, &DocumentSwitcherPlugin::itemActivated );
 
     model = new QStandardItemModel( view );
     view->setModel( model );
@@ -276,11 +276,11 @@ void DocumentSwitcherPlugin::addMainWindow( Sublime::MainWindow* mainwindow )
     qCDebug(PLUGIN_DOCUMENTSWITCHER) << "storing all views from area:" << mainwindow->area()->title() << mainwindow->area();
     storeAreaViewList( mainwindow, mainwindow->area() );
     qCDebug(PLUGIN_DOCUMENTSWITCHER) << "connecting signals on mainwindow";
-    connect( mainwindow, SIGNAL(areaChanged(Sublime::Area*)), SLOT(changeArea(Sublime::Area*)) );
-    connect( mainwindow, SIGNAL(activeViewChanged(Sublime::View*)), SLOT(changeView(Sublime::View*)) );
-    connect( mainwindow, SIGNAL(viewAdded(Sublime::View*)), SLOT(addView(Sublime::View*)) );
-    connect( mainwindow, SIGNAL(aboutToRemoveView(Sublime::View*)), SLOT(removeView(Sublime::View*)) );
-    connect( mainwindow, SIGNAL(destroyed(QObject*)), SLOT(removeMainWindow(QObject*)));
+    connect( mainwindow, &Sublime::MainWindow::areaChanged, this, &DocumentSwitcherPlugin::changeArea );
+    connect( mainwindow, &Sublime::MainWindow::activeViewChanged, this, &DocumentSwitcherPlugin::changeView );
+    connect( mainwindow, &Sublime::MainWindow::viewAdded, this, &DocumentSwitcherPlugin::addView );
+    connect( mainwindow, &Sublime::MainWindow::aboutToRemoveView, this, &DocumentSwitcherPlugin::removeView );
+    connect( mainwindow, &Sublime::MainWindow::destroyed, this, &DocumentSwitcherPlugin::removeMainWindow);
     mainwindow->installEventFilter( this );
 }
 
