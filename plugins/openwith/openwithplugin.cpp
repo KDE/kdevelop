@@ -95,7 +95,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     }
 
     m_actionMap.reset(new QSignalMapper( this ));
-    connect( m_actionMap.data(), SIGNAL(mapped(QString)), SLOT(open(QString)) );
+    connect( m_actionMap.data(), static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped), this, &OpenWithPlugin::open );
 
     // Ok, lets fetch the mimetype for the !!first!! url and the relevant services
     // TODO: Think about possible alternatives to using the mimetype of the first url.
@@ -127,7 +127,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
 
     QAction* openAction = new QAction( i18n( "Open" ), this );
     openAction->setIcon( QIcon::fromTheme( "document-open" ) );
-    connect( openAction, SIGNAL(triggered()), SLOT(openDefault()) );
+    connect( openAction, &QAction::triggered, this, &OpenWithPlugin::openDefault );
 
     KDevelop::ContextMenuExtension ext;
     ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
@@ -178,7 +178,7 @@ QList<QAction*> OpenWithPlugin::actionsForServiceType( const QString& serviceTyp
             font.setBold(true);
             act->setFont(font);
         }
-        connect(act, SIGNAL(triggered()), m_actionMap.data(), SLOT(map()));
+        connect(act, &QAction::triggered, m_actionMap.data(), static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
         m_actionMap->setMapping( act, svc->storageId() );
         actions << act;
         if ( isTextEditor(svc) ) {

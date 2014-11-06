@@ -63,8 +63,8 @@ WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & projects, QWidget*
     if(!errors().isEmpty()) {
         qWarning() << "welcomepage errors:" << errors();
     }
-    connect(Core::self()->uiControllerInternal()->activeSublimeWindow(), SIGNAL(areaChanged(Sublime::Area*)),
-        this, SLOT(areaChanged(Sublime::Area*)));
+    connect(Core::self()->uiControllerInternal()->activeSublimeWindow(), &Sublime::MainWindow::areaChanged,
+        this, &WelcomePageWidget::areaChanged);
 }
 
 void WelcomePageWidget::areaChanged(Sublime::Area* area)

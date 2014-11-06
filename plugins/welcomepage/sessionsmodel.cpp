@@ -24,7 +24,7 @@ SessionsModel::SessionsModel(QObject* parent)
     : QAbstractListModel(parent)
     , m_sessions(KDevelop::SessionController::availableSessionInfo())
 {
-    connect(KDevelop::Core::self()->sessionController(), SIGNAL(sessionDeleted(QString)), SLOT(sessionDeleted(QString)));
+    connect(KDevelop::Core::self()->sessionController(), &KDevelop::SessionController::sessionDeleted, this, &SessionsModel::sessionDeleted);
 }
 
 QHash< int, QByteArray > SessionsModel::roleNames() const

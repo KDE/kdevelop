@@ -133,10 +133,10 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context)
         }
 
         QAction* action = new QAction(i18n("Switch to '%1'", url.fileName()), this);
-        connect(action, SIGNAL(triggered()), m_signalMapper, SLOT(map()), Qt::QueuedConnection);
+        connect(action, &QAction::triggered, m_signalMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map), Qt::QueuedConnection);
         m_signalMapper->setMapping(action, url.toLocalFile());
-        connect(m_signalMapper, SIGNAL(mapped(const QString&)),
-                this, SLOT(switchToBuddy(const QString&)), Qt::QueuedConnection);
+        connect(m_signalMapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped),
+                this, &SwitchToBuddyPlugin::switchToBuddy, Qt::QueuedConnection);
         extension.addAction(ContextMenuExtension::ExtensionGroup, action);
     }
 
@@ -150,7 +150,7 @@ void SwitchToBuddyPlugin::createActionsForMainWindow(Sublime::MainWindow* window
     QAction* switchDefinitionDeclaration = actions.addAction("switch_definition_declaration");
     switchDefinitionDeclaration->setText( i18n("&Switch Definition/Declaration") );
     actions.setDefaultShortcut( switchDefinitionDeclaration, Qt::CTRL | Qt::SHIFT | Qt::Key_C );
-    connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
+    connect(switchDefinitionDeclaration, &QAction::triggered, this, &SwitchToBuddyPlugin::switchDefinitionDeclaration);
 }
 
 void SwitchToBuddyPlugin::switchToBuddy(const QString& url)
