@@ -55,7 +55,7 @@ public:
     virtual IDocumentation::Ptr homePage() const = 0;
 
 Q_SIGNALS:
-    virtual void addHistory(const IDocumentation::Ptr& doc) const = 0;
+    virtual void addHistory(const KDevelop::IDocumentation::Ptr& doc) const = 0;
 };
 
 }

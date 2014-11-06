@@ -107,7 +107,7 @@ void DocumentationView::initialize()
     mProviders->setModel(mProvidersModel);
     connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
     foreach (IDocumentationProvider* p, mProvidersModel->providers()) {
-        connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(KDevelop::IDocumentation::ptr)),
+        connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(KDevelop::IDocumentation::Ptr)),
                 this, SLOT(addHistory(KDevelop::IDocumentation::Ptr)));
     }
     connect(mProvidersModel, SIGNAL(providersChanged()), this, SLOT(emptyHistory()));
