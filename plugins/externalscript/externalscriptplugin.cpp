@@ -111,10 +111,10 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
 
   core()->uiController()->addToolView( i18n( "External Scripts" ), m_factory );
 
-  connect( m_model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-           this, SLOT(rowsRemoved(QModelIndex,int,int)) );
-  connect( m_model, SIGNAL(rowsInserted(QModelIndex,int,int)),
-           this, SLOT(rowsInserted(QModelIndex,int,int)) );
+  connect( m_model, &QStandardItemModel::rowsRemoved,
+           this, &ExternalScriptPlugin::rowsRemoved );
+  connect( m_model, &QStandardItemModel::rowsInserted,
+           this, &ExternalScriptPlugin::rowsInserted );
 
   const bool firstUse = config.readEntry( "firstUse", true );
   if ( firstUse ) {
@@ -213,7 +213,7 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
 
       QAction* scriptAction = new QAction( item->text(), this );
       scriptAction->setData( QVariant::fromValue<ExternalScriptItem*>( item ));
-      connect( scriptAction, SIGNAL( triggered() ), SLOT( executeScriptFromContextMenu() ) );
+      connect( scriptAction, &QAction::triggered, this, &ExternalScriptPlugin::executeScriptFromContextMenu );
       menu->addAction( scriptAction );
     }
 

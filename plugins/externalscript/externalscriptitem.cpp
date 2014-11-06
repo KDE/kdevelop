@@ -119,8 +119,8 @@ QAction* ExternalScriptItem::action()
     m_action = new QAction( QString("executeScript%1").arg(actionCount), ExternalScriptPlugin::self() );
     m_action->setData( QVariant::fromValue<ExternalScriptItem*>(this) );
     ExternalScriptPlugin::self()->connect(
-      m_action, SIGNAL(triggered()),
-      ExternalScriptPlugin::self(), SLOT(executeScriptFromActionData())
+      m_action, &QAction::triggered,
+      ExternalScriptPlugin::self(), &ExternalScriptPlugin::executeScriptFromActionData
     );
     m_action->setShortcut( QKeySequence() );
     // action needs to be added to a widget before it can work...

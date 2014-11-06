@@ -101,8 +101,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
 
     m_document = view->document();
 
-    connect( m_document, SIGNAL(aboutToClose(KTextEditor::Document*)),
-             this, SLOT(kill()) );
+    connect(m_document, &KTextEditor::Document::aboutToClose, this, [this]() { kill(); });
 
     m_selectionRange = view->selectionRange();
     m_cursorPosition = view->cursorPosition();
@@ -183,18 +182,18 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
     m_proc->setWorkingDirectory( workingDir );
   }
   m_lineMaker = new KDevelop::ProcessLineMaker( m_proc, this );
-  connect( m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)),
-           model, SLOT(appendLines(QStringList)) );
-  connect( m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)),
-           this, SLOT(receivedStdoutLines(QStringList)) );
-  connect( m_lineMaker, SIGNAL(receivedStderrLines(QStringList)),
-           model, SLOT(appendLines(QStringList)) );
-  connect( m_lineMaker, SIGNAL(receivedStderrLines(QStringList)),
-           this, SLOT(receivedStderrLines(QStringList)) );
-  connect( m_proc, SIGNAL(error(QProcess::ProcessError)),
-           SLOT(processError(QProcess::ProcessError)) );
-  connect( m_proc, SIGNAL(finished(int,QProcess::ExitStatus)),
-           SLOT(processFinished(int,QProcess::ExitStatus)) );
+  connect( m_lineMaker, &KDevelop::ProcessLineMaker::receivedStdoutLines,
+           model, &KDevelop::OutputModel::appendLines );
+  connect( m_lineMaker, &KDevelop::ProcessLineMaker::receivedStdoutLines,
+           this, &ExternalScriptJob::receivedStdoutLines );
+  connect( m_lineMaker, &KDevelop::ProcessLineMaker::receivedStderrLines,
+           model, &KDevelop::OutputModel::appendLines );
+  connect( m_lineMaker, &KDevelop::ProcessLineMaker::receivedStderrLines,
+           this, &ExternalScriptJob::receivedStderrLines );
+  connect( m_proc, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
+           this, &ExternalScriptJob::processError );
+  connect( m_proc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
+           this, &ExternalScriptJob::processFinished );
 
   // Now setup the process parameters
   qCDebug(PLUGIN_EXTERNALSCRIPT) << "setting command:" << command;

@@ -44,28 +44,28 @@ ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* p
   m_model->setSourceModel( m_plugin->model() );
   m_model->setDynamicSortFilter( true );
   m_model->sort( 0 );
-  connect( filterText, SIGNAL(textEdited(QString)),
-           m_model, SLOT(setFilterWildcard(QString)) );
+  connect( filterText, &QLineEdit::textEdited,
+           m_model, &QSortFilterProxyModel::setFilterWildcard );
 
   scriptTree->setModel( m_model );
   scriptTree->setContextMenuPolicy( Qt::CustomContextMenu );
   scriptTree->viewport()->installEventFilter( this );
   scriptTree->header()->hide();
-  connect(scriptTree, SIGNAL(customContextMenuRequested(QPoint)),
-          this, SLOT(contextMenu(QPoint)));
+  connect(scriptTree, &QTreeView::customContextMenuRequested,
+          this, &ExternalScriptView::contextMenu);
 
   m_addScriptAction = new QAction(QIcon::fromTheme("document-new"), i18n("Add External Script"), this);
-  connect(m_addScriptAction, SIGNAL(triggered()), this, SLOT(addScript()));
+  connect(m_addScriptAction, &QAction::triggered, this, &ExternalScriptView::addScript);
   addAction(m_addScriptAction);
   m_editScriptAction = new QAction(QIcon::fromTheme("document-edit"), i18n("Edit External Script"), this);
-  connect(m_editScriptAction, SIGNAL(triggered()), this, SLOT(editScript()));
+  connect(m_editScriptAction, &QAction::triggered, this, &ExternalScriptView::editScript);
   addAction(m_editScriptAction);
   m_removeScriptAction = new QAction(QIcon::fromTheme("document-close"), i18n("Remove External Script"), this);
-  connect(m_removeScriptAction, SIGNAL(triggered()), this, SLOT(removeScript()));
+  connect(m_removeScriptAction, &QAction::triggered, this, &ExternalScriptView::removeScript);
   addAction(m_removeScriptAction);
 
-  connect(scriptTree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-          this, SLOT(validateActions()));
+  connect(scriptTree->selectionModel(), &QItemSelectionModel::selectionChanged,
+          this, &ExternalScriptView::validateActions);
 
   validateActions();
 }

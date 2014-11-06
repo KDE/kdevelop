@@ -134,11 +134,11 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
 
   nameEdit->setFocus();
 
-  connect(this, SIGNAL(okClicked()), this, SLOT(save()));
-  connect(this, SIGNAL(applyClicked()), this, SLOT(save()));
+  connect(this, &EditExternalScript::okClicked, this, &EditExternalScript::save);
+  connect(this, &EditExternalScript::applyClicked, this, &EditExternalScript::save);
 
-  connect(nameEdit, SIGNAL(textEdited(QString)), this, SLOT(validate()));
-  connect(commandEdit, SIGNAL(textEdited(QString)), this, SLOT(validate()));
+  connect(nameEdit, &QLineEdit::textEdited, this, &EditExternalScript::validate);
+  connect(commandEdit, &QLineEdit::textEdited, this, &EditExternalScript::validate);
 }
 
 EditExternalScript::~EditExternalScript()
