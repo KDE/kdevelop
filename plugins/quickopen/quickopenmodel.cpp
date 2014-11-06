@@ -34,7 +34,7 @@ QuickOpenModel::QuickOpenModel( QWidget* parent ) : ExpandingWidgetModel( parent
 {
     m_resetTimer = new QTimer(this);
     m_resetTimer->setSingleShot(true);
-    connect(m_resetTimer, SIGNAL(timeout()), this, SLOT(resetTimer()));
+    connect(m_resetTimer, &QTimer::timeout, this, &QuickOpenModel::resetTimer);
 }
 
 void QuickOpenModel::setExpandingWidgetHeightIncrease(int pixels)
@@ -71,7 +71,7 @@ void QuickOpenModel::registerProvider( const QStringList& scopes, const QStringL
 
   m_providers << e; //.insert( types, e );
 
-  connect( provider, SIGNAL(destroyed(QObject*)), this, SLOT(destroyed(QObject*)) );
+  connect( provider, &QuickOpenDataProviderBase::destroyed, this, &QuickOpenModel::destroyed );
 
   restart(true);
 }
@@ -82,7 +82,7 @@ bool QuickOpenModel::removeProvider( KDevelop::QuickOpenDataProviderBase* provid
   for( ProviderList::iterator it = m_providers.begin(); it != m_providers.end(); ++it ) {
     if( (*it).provider == provider ) {
       m_providers.erase( it );
-      disconnect( provider, SIGNAL(destroyed(QObject*)), this, SLOT(destroyed(QObject*)) );
+      disconnect( provider, &QuickOpenDataProviderBase::destroyed, this, &QuickOpenModel::destroyed );
       ret = true;
       break;
     }

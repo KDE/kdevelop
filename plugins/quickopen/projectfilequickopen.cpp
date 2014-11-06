@@ -229,10 +229,10 @@ QuickOpenDataPointer BaseFileDataProvider::data(uint row) const
 
 ProjectFileDataProvider::ProjectFileDataProvider()
 {
-    connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
-            this, SLOT(projectClosing(KDevelop::IProject*)));
-    connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
-            this, SLOT(projectOpened(KDevelop::IProject*)));
+    connect(ICore::self()->projectController(), &IProjectController::projectClosing,
+            this, &ProjectFileDataProvider::projectClosing);
+    connect(ICore::self()->projectController(), &IProjectController::projectOpened,
+            this, &ProjectFileDataProvider::projectOpened);
 }
 
 void ProjectFileDataProvider::projectClosing( IProject* project )
@@ -255,10 +255,10 @@ void ProjectFileDataProvider::projectOpened( IProject* project )
         }
     }
 
-    connect(project, SIGNAL(fileAddedToSet(KDevelop::ProjectFileItem*)),
-            this, SLOT(fileAddedToSet(KDevelop::ProjectFileItem*)));
-    connect(project, SIGNAL(fileRemovedFromSet(KDevelop::ProjectFileItem*)),
-            this, SLOT(fileRemovedFromSet(KDevelop::ProjectFileItem*)));
+    connect(project, &IProject::fileAddedToSet,
+            this, &ProjectFileDataProvider::fileAddedToSet);
+    connect(project, &IProject::fileRemovedFromSet,
+            this, &ProjectFileDataProvider::fileRemovedFromSet);
 }
 
 void ProjectFileDataProvider::fileAddedToSet( ProjectFileItem* file )
