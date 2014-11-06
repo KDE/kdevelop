@@ -29,9 +29,6 @@
 #include <QAction>
 #include <QAbstractItemDelegate>
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kaboutdata.h>
 #include <KLocalizedString>
 #include <kactioncollection.h>
 #include <QAction>
@@ -43,9 +40,6 @@
 #include <sublime/area.h>
 #include <sublime/controller.h>
 #include <sublime/document.h>
-
-K_PLUGIN_FACTORY_WITH_JSON(StandardOutputViewFactory, "kdevstandardoutputview.json", registerPlugin<StandardOutputView>(); )
-
 
 class OutputViewFactory : public KDevelop::IToolViewFactory{
 public:
@@ -84,16 +78,16 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
     action->setText(i18n("Jump to Next Outputmark"));
     actionCollection()->setDefaultShortcut( action, QKeySequence(Qt::Key_F4) );
     action->setIcon(QIcon::fromTheme("arrow-right"));
-    connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectNextItem()));
+    connect(action, &QAction::triggered, this, &StandardOutputView::selectNextItem);
 
     action = actionCollection()->addAction("prev_error");
     action->setText(i18n("Jump to Previous Outputmark"));
     actionCollection()->setDefaultShortcut( action, QKeySequence(Qt::SHIFT | Qt::Key_F4) );
     action->setIcon(QIcon::fromTheme("arrow-left"));
-    connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectPrevItem()));
+    connect(action, &QAction::triggered, this, &StandardOutputView::selectPrevItem);
 
-    connect(KDevelop::ICore::self()->uiController()->controller(), SIGNAL(aboutToRemoveView(Sublime::View*)),
-            this, SLOT(removeSublimeView(Sublime::View*)));
+    connect(KDevelop::ICore::self()->uiController()->controller(), &Sublime::Controller::aboutToRemoveView,
+            this, &StandardOutputView::removeSublimeView);
 
 }
 

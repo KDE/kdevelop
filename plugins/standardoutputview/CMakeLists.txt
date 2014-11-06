@@ -7,6 +7,7 @@ set(standardoutputview_LIB_SRCS
     standardoutputview.cpp
     outputwidget.cpp
     toolviewdata.cpp
+    standardoutputviewmetadata.cpp
 )
 
 add_library(kdevstandardoutputview MODULE ${standardoutputview_LIB_SRCS})

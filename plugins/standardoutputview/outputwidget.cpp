@@ -76,12 +76,12 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         tabwidget = new QTabWidget(this);
         layout->addWidget( tabwidget );
         m_closeButton = new QToolButton( this );
-        connect( m_closeButton, SIGNAL(clicked()), SLOT(closeActiveView()) );
+        connect( m_closeButton, &QToolButton::clicked, this, &OutputWidget::closeActiveView );
         m_closeButton->setIcon( QIcon::fromTheme("tab-close") );
         m_closeButton->setToolTip( i18n( "Close the currently active output view") );
 
         m_closeOthersAction = new QAction( this );
-        connect(m_closeOthersAction, SIGNAL(triggered(bool)), SLOT(closeOtherViews()));
+        connect(m_closeOthersAction, &QAction::triggered, this, &OutputWidget::closeOtherViews);
         m_closeOthersAction->setIcon(QIcon::fromTheme("tab-close-other"));
         m_closeOthersAction->setToolTip( i18n( "Close all other output views" ) );
         m_closeOthersAction->setText( m_closeOthersAction->toolTip() );
@@ -94,10 +94,10 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         layout->addWidget( stackwidget );
 
         previousAction = new QAction( QIcon::fromTheme( "go-previous" ), i18n("Previous"), this );
-        connect(previousAction, SIGNAL(triggered()), this, SLOT(previousOutput()));
+        connect(previousAction, &QAction::triggered, this, &OutputWidget::previousOutput);
         addAction(previousAction);
         nextAction = new QAction( QIcon::fromTheme( "go-next" ), i18n("Next"), this );
-        connect(nextAction, SIGNAL(triggered()), this, SLOT(nextOutput()));
+        connect(nextAction, &QAction::triggered, this, &OutputWidget::nextOutput);
         addAction(nextAction);
     }
 
@@ -139,29 +139,29 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         filterAction->setDefaultWidget(filterInput);
         addAction(filterAction);
 
-        connect(filterInput, SIGNAL(textEdited(QString)),
-                this, SLOT(outputFilter(QString)) );
+        connect(filterInput, &QLineEdit::textEdited,
+                this, &OutputWidget::outputFilter );
         if( data->type & KDevelop::IOutputView::MultipleView )
         {
-            connect(tabwidget, SIGNAL(currentChanged(int)),
-                    this, SLOT(updateFilter(int)));
+            connect(tabwidget, &QTabWidget::currentChanged,
+                    this, &OutputWidget::updateFilter);
         } else if ( data->type == KDevelop::IOutputView::HistoryView )
         {
-            connect(stackwidget, SIGNAL(currentChanged(int)),
-                    this, SLOT(updateFilter(int)));
+            connect(stackwidget, &QStackedWidget::currentChanged,
+                    this, &OutputWidget::updateFilter);
         }
     }
 
     addActions(data->actionList);
 
-    connect( data, SIGNAL(outputAdded(int)),
-             this, SLOT(addOutput(int)) );
+    connect( data, &ToolViewData::outputAdded,
+             this, &OutputWidget::addOutput );
 
-    connect( this, SIGNAL(outputRemoved(int,int)),
-             data->plugin, SIGNAL(outputRemoved(int,int)) );
+    connect( this, &OutputWidget::outputRemoved,
+             data->plugin, &StandardOutputView::outputRemoved );
 
-    connect( data->plugin, SIGNAL(selectNextItem()), this, SLOT(selectNextItem()) );
-    connect( data->plugin, SIGNAL(selectPrevItem()), this, SLOT(selectPrevItem()) );
+    connect( data->plugin, &StandardOutputView::selectNextItem, this, &OutputWidget::selectNextItem );
+    connect( data->plugin, &StandardOutputView::selectPrevItem, this, &OutputWidget::selectPrevItem );
 
     foreach( int id, data->outputdata.keys() )
     {
@@ -175,8 +175,8 @@ void OutputWidget::addOutput( int id )
 {
     QTreeView* listview = createListView(id);
     setCurrentWidget( listview );
-    connect( data->outputdata.value(id), SIGNAL(modelChanged(int)), this, SLOT(changeModel(int)));
-    connect( data->outputdata.value(id), SIGNAL(delegateChanged(int)), this, SLOT(changeDelegate(int)));
+    connect( data->outputdata.value(id), &OutputData::modelChanged, this, &OutputWidget::changeModel);
+    connect( data->outputdata.value(id), &OutputData::delegateChanged, this, &OutputWidget::changeDelegate);
 
     enableActions();
 }
@@ -211,12 +211,12 @@ void OutputWidget::changeModel( int id )
         if (!od->model)
             return;
 
-        disconnect( od->model,SIGNAL(rowsInserted(QModelIndex,int,int)), this,
-                    SLOT(rowsInserted(QModelIndex,int,int)) );
+        disconnect( od->model,&QAbstractItemModel::rowsInserted, this,
+                    &OutputWidget::rowsInserted );
         if( od->behaviour & KDevelop::IOutputView::AutoScroll )
         {
-            connect( od->model,SIGNAL(rowsInserted(QModelIndex,int,int)),
-                     SLOT(rowsInserted(QModelIndex,int,int)) );
+            connect( od->model,&QAbstractItemModel::rowsInserted,
+                     this, &OutputWidget::rowsInserted );
         }
     }
     else
@@ -264,8 +264,8 @@ void OutputWidget::removeOutput( int id )
                 filters.remove( 0 );
             }
         }
-        disconnect( data->outputdata.value( id )->model,SIGNAL(rowsInserted(QModelIndex,int,int)),
-                    this, SLOT(rowsInserted(QModelIndex,int,int)) );
+        disconnect( data->outputdata.value( id )->model,&QAbstractItemModel::rowsInserted,
+                    this, &OutputWidget::rowsInserted );
 
         views.remove( id );
         m_scrollDelay.remove( view );
@@ -460,10 +460,10 @@ QTreeView* OutputWidget::createListView(int id)
             listview = createFocusedTreeView(this);
 
             views[id] = listview;
-            connect( listview, SIGNAL(activated(QModelIndex)),
-                     this, SLOT(activate(QModelIndex)));
-            connect( listview, SIGNAL(clicked(QModelIndex)),
-                     this, SLOT(activate(QModelIndex)));
+            connect( listview, &QTreeView::activated,
+                     this, &OutputWidget::activate);
+            connect( listview, &QTreeView::clicked,
+                     this, &OutputWidget::activate);
 
             if( data->type & KDevelop::IOutputView::MultipleView )
             {
@@ -480,10 +480,10 @@ QTreeView* OutputWidget::createListView(int id)
                 listview = createFocusedTreeView(this);
 
                 layout()->addWidget( listview );
-                connect( listview, SIGNAL(activated(QModelIndex)),
-                         this, SLOT(activate(QModelIndex)));
-                connect( listview, SIGNAL(clicked(QModelIndex)),
-                         this, SLOT(activate(QModelIndex)));
+                connect( listview, &QTreeView::activated,
+                         this, &OutputWidget::activate);
+                connect( listview, &QTreeView::clicked,
+                         this, &OutputWidget::activate);
             } else
             {
                 listview = views.begin().value();
@@ -498,7 +498,7 @@ QTreeView* OutputWidget::createListView(int id)
             timer->setInterval(300);
             timer->setProperty("view", QVariant::fromValue(listview));
             m_scrollDelay[listview] = {timer, -1, -1};
-            connect(timer, SIGNAL(timeout()), SLOT(delayedScroll()));
+            connect(timer, &QTimer::timeout, this, static_cast<void(OutputWidget::*)()>(&OutputWidget::delayedScroll));
         }
 
         changeModel( id );
