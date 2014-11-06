@@ -135,7 +135,7 @@ void HttpCall::start()
     else
         m_reply=m_manager.post(r, m_post);
 
-    connect(m_reply, SIGNAL(finished()), SLOT(finished()));
+    connect(m_reply, &QNetworkReply::finished, this, &HttpCall::onFinished);
 
     qDebug() << "starting..." << m_requrl << m_post;
 }
@@ -146,7 +146,7 @@ QVariant HttpCall::result() const
     return m_result;
 }
 
-void HttpCall::finished()
+void HttpCall::onFinished()
 {
     QByteArray receivedData = m_reply->readAll();
     QJsonParseError error;
@@ -172,7 +172,7 @@ NewRequest::NewRequest(const QUrl& server, const QString& projectPath, QObject* 
     : ReviewRequest(server, 0, parent), m_project(projectPath)
 {
     m_newreq = new HttpCall(this->server(), "/api/review-requests/", QList<QPair<QString,QString> >(), "repository="+projectPath.toLatin1(), false, this);
-    connect(m_newreq, SIGNAL(finished(KJob*)), SLOT(done()));
+    connect(m_newreq, &HttpCall::finished, this, &NewRequest::done);
 }
 
 void NewRequest::start()
@@ -204,7 +204,7 @@ SubmitPatchRequest::SubmitPatchRequest(const QUrl& server, const QUrl& patch, co
     vals += QPair<QString, QVariant>("path", qVariantFromValue<QUrl>(m_patch));
 
     m_uploadpatch = new HttpCall(this->server(), "/api/review-requests/"+requestId()+"/diffs/", QList<QPair<QString,QString> >(), multipartFormData(vals), true, this);
-    connect(m_uploadpatch, SIGNAL(finished(KJob*)), SLOT(done()));
+    connect(m_uploadpatch, &HttpCall::finished, this, &SubmitPatchRequest::done);
 }
 
 void SubmitPatchRequest::start()
@@ -247,7 +247,7 @@ void ProjectsListRequest::requestRepositoryList(int startIndex)
     repositoriesParameters << qMakePair<QString,QString>("start", QString("%1").arg(startIndex));
 
     HttpCall* repositoriesCall = new HttpCall(m_server, "/api/repositories/", repositoriesParameters, "", false, this);
-    connect(repositoriesCall, SIGNAL(finished(KJob*)), SLOT(done(KJob*)));
+    connect(repositoriesCall, &HttpCall::finished, this, &ProjectsListRequest::done);
 
     repositoriesCall->start();
 }
@@ -294,7 +294,7 @@ void ReviewListRequest::requestReviewList(int startIndex)
     reviewParameters << qMakePair<QString,QString>("status", m_reviewStatus);
 
     HttpCall* reviewsCall = new HttpCall(m_server, "/api/review-requests/", reviewParameters, "", false, this);
-    connect(reviewsCall, SIGNAL(finished(KJob*)), SLOT(done(KJob*)));
+    connect(reviewsCall, &HttpCall::finished, this, &ReviewListRequest::done);
 
     reviewsCall->start();
 }

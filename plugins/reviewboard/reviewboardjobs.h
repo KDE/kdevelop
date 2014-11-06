@@ -48,7 +48,7 @@ namespace ReviewBoard
             QVariant result() const;
 
         private slots:
-            void finished();
+            void onFinished();
 
         private:
             QVariant m_result;

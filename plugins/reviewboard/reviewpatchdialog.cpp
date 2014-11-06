@@ -35,8 +35,8 @@ ReviewPatchDialog::ReviewPatchDialog(const QUrl& dirUrl, QWidget* parent)
     m_ui->setupUi(w);
     setMainWidget(w);
 
-    connect(m_ui->server, SIGNAL(textChanged(QString)), SLOT(serverChanged()));
-    connect(m_ui->reviewCheckbox, SIGNAL(stateChanged(int)), SLOT(reviewCheckboxChanged(int)));
+    connect(m_ui->server, &KUrlRequester::textChanged, this, &ReviewPatchDialog::serverChanged);
+    connect(m_ui->reviewCheckbox, &QCheckBox::stateChanged, this, &ReviewPatchDialog::reviewCheckboxChanged);
     enableButtonOk(false);
 
     if (dirUrl.isLocalFile()) {
@@ -98,7 +98,7 @@ void ReviewPatchDialog::serverChanged()
     m_ui->repositories->clear();
     //TODO reviewboards with private repositories don't work. Use user/pass if set.
     ReviewBoard::ProjectsListRequest* repo = new ReviewBoard::ProjectsListRequest(m_ui->server->url(), this);
-    connect(repo, SIGNAL(finished(KJob*)), SLOT(receivedProjects(KJob*)));
+    connect(repo, &ReviewBoard::ProjectsListRequest::finished, this, &ReviewPatchDialog::receivedProjects);
     repo->start();
 }
 
@@ -115,7 +115,7 @@ void ReviewPatchDialog::receivedProjects(KJob* job)
         m_ui->repositories->addItem(repoMap["name"].toString(), repoMap["path"]);
     }
 
-    connect(m_ui->repositories, SIGNAL(currentIndexChanged(int)), SLOT(repositoryChanged(int)));
+    connect(m_ui->repositories, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ReviewPatchDialog::repositoryChanged);
 
     QAbstractItemModel* model = m_ui->repositories->model();
     if(!m_preferredRepository.isEmpty()) {
@@ -149,16 +149,16 @@ void ReviewPatchDialog::reviewCheckboxChanged(int status)
 {
     if (status == Qt::Checked) {
         m_ui->reviews->setEnabled(true);
-        connect(m_ui->username, SIGNAL(editingFinished()), SLOT(updateReviews()));
-        connect(m_ui->password, SIGNAL(editingFinished()), SLOT(updateReviews()));
-        connect(m_ui->server, SIGNAL(returnPressed()), SLOT(updateReviews()));
-        connect(m_ui->repositories, SIGNAL(currentIndexChanged(int)), SLOT(updateReviewsList()));
+        connect(m_ui->username, &QLineEdit::editingFinished, this, &ReviewPatchDialog::updateReviews);
+        connect(m_ui->password, &QLineEdit::editingFinished, this, &ReviewPatchDialog::updateReviews);
+        connect(m_ui->server, static_cast<void(KUrlRequester::*)()>(&KUrlRequester::returnPressed), this, &ReviewPatchDialog::updateReviews);
+        connect(m_ui->repositories, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ReviewPatchDialog::updateReviewsList);
     } else {
         m_ui->reviews->setEnabled(false);
-        disconnect(m_ui->username, SIGNAL(editingFinished()), this, SLOT(updateReviews()));
-        disconnect(m_ui->password, SIGNAL(editingFinished()), this, SLOT(updateReviews()));
-        disconnect(m_ui->server, SIGNAL(returnPressed()), this, SLOT(updateReviews()));
-        disconnect(m_ui->repositories, SIGNAL(currentIndexChanged(int)), this, SLOT(updateReviewsList()));
+        disconnect(m_ui->username, &QLineEdit::editingFinished, this, &ReviewPatchDialog::updateReviews);
+        disconnect(m_ui->password, &QLineEdit::editingFinished, this, &ReviewPatchDialog::updateReviews);
+        disconnect(m_ui->server, static_cast<void(KUrlRequester::*)()>(&KUrlRequester::returnPressed), this, &ReviewPatchDialog::updateReviews);
+        disconnect(m_ui->repositories, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ReviewPatchDialog::updateReviewsList);
     }
     updateReviews();
 }
@@ -188,7 +188,7 @@ void ReviewPatchDialog::updateReviews()
         //TODO: reviewboards with private reviews don't work. Use user/pass if set.
         if (!m_ui->server->text().isEmpty() && !m_ui->username->text().isEmpty()) {
             ReviewBoard::ReviewListRequest* repo = new ReviewBoard::ReviewListRequest(m_ui->server->url(), username(), "pending", this);
-            connect(repo, SIGNAL(finished(KJob*)), SLOT(receivedReviews(KJob*)));
+            connect(repo, &ReviewBoard::ReviewListRequest::finished, this, &ReviewPatchDialog::receivedReviews);
             repo->start();
         }
     } else {

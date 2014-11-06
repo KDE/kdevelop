@@ -77,11 +77,11 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
         KJob* job;
         if (d.isUpdateReview()) {
             job=new ReviewBoard::SubmitPatchRequest(d.server(), source->file(), d.baseDir(), d.review());
-            connect(job, SIGNAL(finished(KJob*)), SLOT(reviewDone(KJob*)));
+            connect(job, &KJob::finished, this, &ReviewBoardPlugin::reviewDone);
         } else {
             m_baseDir = d.baseDir();
             job=new ReviewBoard::NewRequest(d.server(), d.repository());
-            connect(job, SIGNAL(finished(KJob*)), SLOT(reviewCreated(KJob*)));
+            connect(job, &KJob::finished, this, &ReviewBoardPlugin::reviewCreated);
         }
 
         job->start();
@@ -123,7 +123,7 @@ void ReviewBoardPlugin::reviewCreated(KJob* j)
     if (j->error()==0) {
         ReviewBoard::NewRequest const * job = qobject_cast<ReviewBoard::NewRequest*>(j);
         ReviewBoard::SubmitPatchRequest* submitPatchJob=new ReviewBoard::SubmitPatchRequest(job->server(), m_source->file(), m_baseDir, job->requestId());
-        connect(submitPatchJob, SIGNAL(finished(KJob*)), SLOT(reviewDone(KJob*)));
+        connect(submitPatchJob, &ReviewBoard::SubmitPatchRequest::finished, this, &ReviewBoardPlugin::reviewDone);
         submitPatchJob->start();
     } else {
         KMessageBox::error(0, j->errorText());
