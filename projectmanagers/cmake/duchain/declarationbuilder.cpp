@@ -19,6 +19,7 @@
  */
 
 #include "declarationbuilder.h"
+#include <cmakeduchaintypes.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/delayedtype.h>
 
@@ -33,7 +34,8 @@ void DeclarationBuilder::startVisiting(CMakeContentIterator* node)
             CMakeFunctionArgument arg = func.arguments.first();
 
             DUChainWriteLocker lock;
-            openDeclaration<ForwardDeclaration>(QualifiedIdentifier(arg.value), arg.range(), DeclarationIsDefinition);
+            Declaration* decl = openDeclaration<Declaration>(QualifiedIdentifier(arg.value), arg.range(), DeclarationIsDefinition);
+            decl->setAbstractType(AbstractType::Ptr(new TargetType));
             closeDeclaration();
         } else if(func.name == "macro" || func.name == "function") {
             CMakeFunctionArgument arg = func.arguments.first();

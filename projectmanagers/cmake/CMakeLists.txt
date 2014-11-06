@@ -21,6 +21,7 @@ set( cmakecommon_SRCS
 #   parser/cmakedebugvisitor.cpp
   parser/cmakecachereader.cpp
   parser/cmakelistsparser.cpp
+  parser/cmakeduchaintypes.cpp
 #   parser/cmakeparserutils.cpp
 #   parser/cmakeduchaintypes.cpp
 #   parser/generationexpressionsolver.cpp
@@ -49,7 +50,7 @@ set( cmakemanager_SRCS
   duchain/usebuilder.cpp
   duchain/declarationbuilder.cpp
   duchain/contextbuilder.cpp
-#   cmakecodecompletionmodel.cpp
+  cmakecodecompletionmodel.cpp
 #   cmakecommitchangesjob.cpp
 #   cmakeimportjob.cpp
 #   cmakeedit.cpp
