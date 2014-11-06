@@ -51,10 +51,10 @@ ProjectFilterProvider::ProjectFilterProvider( QObject* parent, const QVariantLis
 {
     KDEV_USE_EXTENSION_INTERFACE( IProjectFilterProvider )
 
-    connect(core()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
-            SLOT(projectClosing(KDevelop::IProject*)));
-    connect(core()->projectController(), SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)),
-            SLOT(projectAboutToBeOpened(KDevelop::IProject*)));
+    connect(core()->projectController(), &IProjectController::projectClosing,
+            this, &ProjectFilterProvider::projectClosing);
+    connect(core()->projectController(), &IProjectController::projectAboutToBeOpened,
+            this, &ProjectFilterProvider::projectAboutToBeOpened);
 
     updateProjectFilters();
 
@@ -94,7 +94,7 @@ ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* contex
                                         "Exclude Items From Project",
                                         items.size()), this);
     action->setData(QVariant::fromValue(items));
-    connect(action, SIGNAL(triggered(bool)), SLOT(addFilterFromContextMenu()));
+    connect(action, &QAction::triggered, this, &ProjectFilterProvider::addFilterFromContextMenu);
     ret.addAction(ContextMenuExtension::FileGroup, action);
     return ret;
 }

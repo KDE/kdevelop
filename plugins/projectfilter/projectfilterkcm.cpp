@@ -81,19 +81,19 @@ ProjectFilterKCM::ProjectFilterKCM(QWidget* parent, const QVariantList& args)
     load();
     selectionChanged();
 
-    connect(m_ui->filters->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-            SLOT(selectionChanged()));
-    connect(this, SIGNAL(changed(bool)), SLOT(selectionChanged()));
-    connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(emitChanged()));
-    connect(m_model, SIGNAL(rowsInserted(QModelIndex, int, int)), SLOT(emitChanged()));
-    connect(m_model, SIGNAL(rowsRemoved(QModelIndex, int, int)), SLOT(emitChanged()));
-    connect(m_model, SIGNAL(modelReset()), SLOT(emitChanged()));
-    connect(m_model, SIGNAL(rowsMoved(QModelIndex, int, int, QModelIndex, int)), SLOT(emitChanged()));
+    connect(m_ui->filters->selectionModel(), &QItemSelectionModel::currentChanged,
+            this, &ProjectFilterKCM::selectionChanged);
+    connect(this, static_cast<void(ProjectFilterKCM::*)(bool)>(&ProjectFilterKCM::changed), this, &ProjectFilterKCM::selectionChanged);
+    connect(m_model, &FilterModel::dataChanged, this, &ProjectFilterKCM::emitChanged);
+    connect(m_model, &FilterModel::rowsInserted, this, &ProjectFilterKCM::emitChanged);
+    connect(m_model, &FilterModel::rowsRemoved, this, &ProjectFilterKCM::emitChanged);
+    connect(m_model, &FilterModel::modelReset, this, &ProjectFilterKCM::emitChanged);
+    connect(m_model, &FilterModel::rowsMoved, this, &ProjectFilterKCM::emitChanged);
 
-    connect(m_ui->add, SIGNAL(clicked(bool)), SLOT(add()));
-    connect(m_ui->remove, SIGNAL(clicked(bool)), SLOT(remove()));
-    connect(m_ui->moveUp, SIGNAL(clicked(bool)), SLOT(moveUp()));
-    connect(m_ui->moveDown, SIGNAL(clicked(bool)), SLOT(moveDown()));
+    connect(m_ui->add, &QPushButton::clicked, this, &ProjectFilterKCM::add);
+    connect(m_ui->remove, &QPushButton::clicked, this, &ProjectFilterKCM::remove);
+    connect(m_ui->moveUp, &QPushButton::clicked, this, &ProjectFilterKCM::moveUp);
+    connect(m_ui->moveDown, &QPushButton::clicked, this, &ProjectFilterKCM::moveDown);
 }
 
 ProjectFilterKCM::~ProjectFilterKCM()
