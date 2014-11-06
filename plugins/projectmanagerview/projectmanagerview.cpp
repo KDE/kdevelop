@@ -45,6 +45,7 @@
 #include "../openwith/iopenwith.h"
 
 #include <sublime/mainwindow.h>
+#include <sublime/area.h>
 
 #include "projectmanagerviewplugin.h"
 #include "vcsoverlayproxymodel.h"
@@ -95,7 +96,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     m_syncAction->setToolTip(i18n("Locates the current document in the project tree and selects it."));
     m_syncAction->setIcon(QIcon::fromTheme("dirsync"));
     m_syncAction->setShortcut(Qt::ControlModifier + Qt::Key_Less);
-    connect(m_syncAction, SIGNAL(triggered(bool)), this, SLOT(locateCurrentDocument()));
+    connect(m_syncAction, &QAction::triggered, this, &ProjectManagerView::locateCurrentDocument);
     addAction(m_syncAction);
     updateSyncAction();
 
@@ -103,7 +104,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     addAction(plugin->actionCollection()->action("project_install"));
     addAction(plugin->actionCollection()->action("project_clean"));
 
-    connect(m_ui->projectTreeView, SIGNAL(activate(KDevelop::Path)), this, SLOT(open(KDevelop::Path)));
+    connect(m_ui->projectTreeView, &ProjectTreeView::activate, this, &ProjectManagerView::open);
 
     m_ui->buildSetView->setProjectView( this );
 
@@ -114,14 +115,14 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 
     m_ui->projectTreeView->setModel( m_overlayProxy );
 
-    connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-             this, SLOT(selectionChanged()) );
-    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)),
-             SLOT(updateSyncAction()));
-    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
-             SLOT(updateSyncAction()));
-    connect( qobject_cast<Sublime::MainWindow*>(KDevelop::ICore::self()->uiController()->activeMainWindow()), SIGNAL(areaChanged(Sublime::Area*)),
-             SLOT(updateSyncAction()));
+    connect( m_ui->projectTreeView->selectionModel(), &QItemSelectionModel::selectionChanged,
+             this, &ProjectManagerView::selectionChanged );
+    connect( KDevelop::ICore::self()->documentController(), &IDocumentController::documentClosed,
+             this, &ProjectManagerView::updateSyncAction);
+    connect( KDevelop::ICore::self()->documentController(), &IDocumentController::documentActivated,
+             this, &ProjectManagerView::updateSyncAction);
+    connect( qobject_cast<Sublime::MainWindow*>(KDevelop::ICore::self()->uiController()->activeMainWindow()), &Sublime::MainWindow::areaChanged,
+             this, &ProjectManagerView::updateSyncAction);
     selectionChanged();
 
     //Update the "sync" button after the initialization has completed, to see whether there already is some open documents

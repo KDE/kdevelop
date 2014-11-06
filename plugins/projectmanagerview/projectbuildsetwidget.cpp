@@ -57,32 +57,32 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
     m_ui->setupUi( this );
 
     m_ui->addItemButton->setIcon( QIcon::fromTheme( "list-add" ) );
-    connect( m_ui->addItemButton, SIGNAL(clicked()),
-             this, SLOT(addItems()) );
+    connect( m_ui->addItemButton, &QToolButton::clicked,
+             this, &ProjectBuildSetWidget::addItems );
 
     m_ui->removeItemButton->setIcon( QIcon::fromTheme( "list-remove" ) );
-    connect( m_ui->removeItemButton, SIGNAL(clicked()),
-             this, SLOT(removeItems()) );
+    connect( m_ui->removeItemButton, &QToolButton::clicked,
+             this, &ProjectBuildSetWidget::removeItems );
 
     m_ui->upButton->setIcon( QIcon::fromTheme( "go-up" ) );
-    connect( m_ui->upButton, SIGNAL(clicked()),
-             SLOT(moveUp()) );
+    connect( m_ui->upButton, &QToolButton::clicked,
+             this, &ProjectBuildSetWidget::moveUp );
 
     m_ui->downButton->setIcon( QIcon::fromTheme( "go-down" ) );
-    connect( m_ui->downButton, SIGNAL(clicked()),
-             SLOT(moveDown()) );
+    connect( m_ui->downButton, &QToolButton::clicked,
+             this, &ProjectBuildSetWidget::moveDown );
 
     m_ui->topButton->setIcon( QIcon::fromTheme( "go-top" ) );
-    connect( m_ui->topButton, SIGNAL(clicked()),
-             SLOT(moveToTop()) );
+    connect( m_ui->topButton, &QToolButton::clicked,
+             this, &ProjectBuildSetWidget::moveToTop );
 
     m_ui->bottomButton->setIcon( QIcon::fromTheme( "go-bottom" ) );
-    connect( m_ui->bottomButton, SIGNAL(clicked()),
-             SLOT(moveToBottom()) );
+    connect( m_ui->bottomButton, &QToolButton::clicked,
+             this, &ProjectBuildSetWidget::moveToBottom );
 
     m_ui->itemView->setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( m_ui->itemView, SIGNAL(customContextMenuRequested(QPoint)),
-             SLOT(showContextMenu(QPoint)) );
+    connect( m_ui->itemView, &QTreeView::customContextMenuRequested,
+             this, &ProjectBuildSetWidget::showContextMenu );
     layout()->setMargin(0);
 }
 
@@ -90,8 +90,8 @@ void ProjectBuildSetWidget::setProjectView( ProjectManagerView* view )
 {
     m_view = view;
     m_ui->itemView->setModel( KDevelop::ICore::self()->projectController()->buildSetModel() );
-    connect( m_ui->itemView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-             this, SLOT(selectionChanged()) );
+    connect( m_ui->itemView->selectionModel(), &QItemSelectionModel::selectionChanged,
+             this, &ProjectBuildSetWidget::selectionChanged );
 }
 
 void ProjectBuildSetWidget::selectionChanged()

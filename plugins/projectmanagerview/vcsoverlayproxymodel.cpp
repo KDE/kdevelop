@@ -38,10 +38,10 @@ Q_DECLARE_METATYPE(SafeProjectPointer)
 
 VcsOverlayProxyModel::VcsOverlayProxyModel(QObject* parent): QIdentityProxyModel(parent)
 {
-    connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
-                                              SLOT(addProject(KDevelop::IProject*)));
-    connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
-                                              SLOT(removeProject(KDevelop::IProject*)));
+    connect(ICore::self()->projectController(), &IProjectController::projectOpened,
+                                              this, &VcsOverlayProxyModel::addProject);
+    connect(ICore::self()->projectController(), &IProjectController::projectClosing,
+                                              this, &VcsOverlayProxyModel::removeProject);
 }
 
 QVariant VcsOverlayProxyModel::data(const QModelIndex& proxyIndex, int role) const
@@ -63,6 +63,7 @@ void VcsOverlayProxyModel::addProject(IProject* p)
     if(branchingExtension) {
         const QUrl url = p->path().toUrl();
         branchingExtension->registerRepositoryForCurrentBranchChanges(url);
+        //can't use new signal/slot syntax here, IBranchingVersionControl is not a QObject
         connect(plugin, SIGNAL(repositoryBranchChanged(QUrl)), SLOT(repositoryBranchChanged(QUrl)));
         repositoryBranchChanged(url);
     }
@@ -78,7 +79,7 @@ void VcsOverlayProxyModel::repositoryBranchChanged(const QUrl& url)
             IBranchingVersionControl* branching = v->extension<IBranchingVersionControl>();
             Q_ASSERT(branching);
             VcsJob* job = branching->currentBranch(url);
-            connect(job, SIGNAL(resultsReady(KDevelop::VcsJob*)), SLOT(branchNameReady(KDevelop::VcsJob*)));
+            connect(job, &VcsJob::resultsReady, this, &VcsOverlayProxyModel::branchNameReady);
             job->setProperty("project", QVariant::fromValue<SafeProjectPointer>(project));
             ICore::self()->runController()->registerJob(job);
         }

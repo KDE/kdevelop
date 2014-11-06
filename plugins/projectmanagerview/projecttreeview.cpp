@@ -79,15 +79,15 @@ ProjectTreeView::ProjectTreeView( QWidget *parent )
     setAutoExpandDelay(300);
     setItemDelegate(new ProjectModelItemDelegate(this));
 
-    connect( this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(popupContextMenu(QPoint)) );
-    connect( this, SIGNAL(activated(QModelIndex)), this, SLOT(slotActivated(QModelIndex)) );
+    connect( this, &ProjectTreeView::customContextMenuRequested, this, &ProjectTreeView::popupContextMenu );
+    connect( this, &ProjectTreeView::activated, this, &ProjectTreeView::slotActivated );
 
-    connect( ICore::self(), SIGNAL(aboutToShutdown()),
-             this, SLOT(aboutToShutdown()));
-    connect( ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
-             this, SLOT(restoreState(KDevelop::IProject*)) );
-    connect( ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
-             this, SLOT(saveState()) );
+    connect( ICore::self(), &ICore::aboutToShutdown,
+             this, &ProjectTreeView::aboutToShutdown);
+    connect( ICore::self()->projectController(), &IProjectController::projectOpened,
+             this, &ProjectTreeView::restoreState );
+    connect( ICore::self()->projectController(), &IProjectController::projectClosing,
+             this, &ProjectTreeView::saveState );
 
     restoreState();
 }
@@ -343,7 +343,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
     {
         QAction* projectConfig = new QAction(i18n("Open Configuration..."), this);
         projectConfig->setIcon(QIcon::fromTheme("configure"));
-        connect( projectConfig, SIGNAL(triggered()), this, SLOT(openProjectConfig()) );
+        connect( projectConfig, &QAction::triggered, this, &ProjectTreeView::openProjectConfig );
         projectActions << projectConfig;
     }
     popupContextMenu_appendActions(menu, projectActions);
@@ -388,8 +388,8 @@ void ProjectTreeView::restoreState(IProject* project)
 void ProjectTreeView::aboutToShutdown()
 {
     // save all projects, not just the last one that is closed
-    disconnect( ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
-                this, SLOT(saveState()) );
+    disconnect( ICore::self()->projectController(), &IProjectController::projectClosing,
+                this, &ProjectTreeView::saveState );
     saveState();
 }
 
