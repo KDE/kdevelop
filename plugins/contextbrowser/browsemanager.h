@@ -41,7 +41,7 @@ namespace KDevelop {
     class IDocument;
 }
 
-class EditorViewWatcher : QObject {
+class EditorViewWatcher : public QObject {
     Q_OBJECT
 public:
     ///@param sameWindow If this is true, only views that are child of the same window as the given widget are registered
