@@ -38,7 +38,7 @@
 #include "debug.h"
 
 K_PLUGIN_FACTORY(CMakeSupportDocFactory, registerPlugin<CMakeDocumentation>(); )
-// K_EXPORT_PLUGIN(CMakeSupportDocFactory(KAboutData("kdevcmakedocumentation","kdevcmake", ki18n("CMake Documentation"), "1.0", ki18n("Support for CMake documentation"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(CMakeSupportDocFactory("kdevcmakedocumentation"))
 
 CMakeDocumentation* CMakeDoc::s_provider=0;
 KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider; }
@@ -82,7 +82,7 @@ void CMakeDocumentation::delayedInitialization()
 
 void CMakeDocumentation::collectIds(const QString& param, Type type)
 {
-    QStringList ids=CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(param)).split('\n');
+    QStringList ids=CMake::executeProcess(mCMakeCmd, QStringList(param)).split('\n');
     ids.takeFirst();
     foreach(const QString& name, ids)
     {
@@ -99,7 +99,7 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
 {
     QString desc;
     if(args[t]) {
-        desc = CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(args[t]) << id.simplified()).toHtmlEscaped();
+        desc = CMake::executeProcess(mCMakeCmd, QStringList(args[t]) << id.simplified()).toHtmlEscaped();
         int firstLine = desc.indexOf('\n');
         firstLine = desc.indexOf('\n', firstLine+1);
         if(firstLine>=0)
@@ -118,7 +118,6 @@ QExplicitlySharedDataPointer<KDevelop::IDocumentation> CMakeDocumentation::descr
         return QExplicitlySharedDataPointer<KDevelop::IDocumentation>();
     }
 
-    qCDebug(CMAKE) << "seeking documentation for " << identifier;
     QString desc;
 
     if(m_typeForName.contains(identifier)) {
