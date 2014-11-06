@@ -181,6 +181,12 @@ static int getRunningSessionPid()
 
 int main( int argc, char *argv[] )
 {
+    // Don't show any debug output by default.
+    // If you need to enable additional logging for debugging use a rules file
+    // as explained in the QLoggingCategory documentation:
+    // http://qt-project.org/doc/qt-5/qloggingcategory.html#logging-rules
+    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\n"));
+
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     K4AboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ), QByteArray(VERSION), ki18n(description), K4AboutData::License_GPL,
