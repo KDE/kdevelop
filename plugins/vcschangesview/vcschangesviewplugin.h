@@ -48,6 +48,8 @@ class VcsProjectIntegrationPlugin : public KDevelop::IPlugin
         
     private:
         KDevelop::ProjectChangesModel* m_model;
+
+        friend class VCSProjectToolViewFactory; // to access activated() slot
 };
 
 #endif

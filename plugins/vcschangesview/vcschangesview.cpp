@@ -50,14 +50,14 @@ VcsChangesView::VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* par
     setTextElideMode(Qt::ElideLeft);
     setWordWrap(true);
     
-    connect(this, SIGNAL(customContextMenuRequested(QPoint)), SLOT(popupContextMenu(QPoint)));
+    connect(this, &VcsChangesView::customContextMenuRequested, this, &VcsChangesView::popupContextMenu);
     
     foreach(QAction* action, plugin->actionCollection()->actions())
         addAction(action);
     
     QAction* action = plugin->actionCollection()->action("locate_document");
-    connect(action, SIGNAL(triggered(bool)), SLOT(selectCurrentDocument()));
-    connect(this, SIGNAL(doubleClicked(QModelIndex)), SLOT(openSelected(QModelIndex)));
+    connect(action, &QAction::triggered, this, &VcsChangesView::selectCurrentDocument);
+    connect(this, &VcsChangesView::doubleClicked, this, &VcsChangesView::openSelected);
 }
 
 static void appendActions(QMenu* menu, const QList<QAction*>& actions)
@@ -159,7 +159,7 @@ void VcsChangesView::selectCurrentDocument()
 
 void VcsChangesView::setModel(QAbstractItemModel* model)
 {
-    connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expand(QModelIndex)));
+    connect(model, &QAbstractItemModel::rowsInserted, this, &VcsChangesView::expand);
     QTreeView::setModel(model);
 }
 

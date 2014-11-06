@@ -55,9 +55,9 @@ public:
     {
         VcsChangesView* modif = new VcsChangesView(m_plugin, parent);
         modif->setModel(m_plugin->model());
-        QObject::connect(modif, SIGNAL(reload(QList<KDevelop::IProject*>)), m_plugin->model(), SLOT(reload(QList<KDevelop::IProject*>)));
-        QObject::connect(modif, SIGNAL(reload(QList<QUrl>)), m_plugin->model(), SLOT(reload(QList<QUrl>)));
-        QObject::connect(modif, SIGNAL(activated(QModelIndex)), m_plugin, SLOT(activated(QModelIndex)));
+        QObject::connect(modif, static_cast<void(VcsChangesView::*)(const QList<KDevelop::IProject*>&)>(&VcsChangesView::reload), m_plugin->model(), static_cast<void(ProjectChangesModel::*)(const QList<KDevelop::IProject*>&)>(&ProjectChangesModel::reload));
+        QObject::connect(modif, static_cast<void(VcsChangesView::*)(const QList<KDevelop::IProject*>&)>(&VcsChangesView::reload), m_plugin->model(), static_cast<void(ProjectChangesModel::*)(const QList<KDevelop::IProject*>&)>(&ProjectChangesModel::reload));
+        QObject::connect(modif, &VcsChangesView::activated, m_plugin, &VcsProjectIntegrationPlugin::activated);
         return modif;
     }
 
@@ -101,7 +101,7 @@ ProjectChangesModel* VcsProjectIntegrationPlugin::model()
 {
     if(!m_model) {
         m_model = ICore::self()->projectController()->changesModel();
-        connect(actionCollection()->action("reload_view"), SIGNAL(triggered(bool)), m_model, SLOT(reloadAll()));
+        connect(actionCollection()->action("reload_view"), &QAction::triggered, m_model, &ProjectChangesModel::reloadAll);
     }
     
     return m_model;
