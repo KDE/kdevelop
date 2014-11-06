@@ -122,14 +122,14 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* p
     m_declarationMenuButton = new QToolButton();
     m_declarationMenuButton->setIcon(QIcon::fromTheme("code-class"));
     m_declarationMenuButton->setToolTip(i18n("Declaration menu"));
-    connect(m_declarationMenuButton, SIGNAL(clicked(bool)), SLOT(declarationMenu()));
+    connect(m_declarationMenuButton, &QToolButton::clicked, this, &ContextBrowserView::declarationMenu);
     m_buttons->addWidget(m_declarationMenuButton);
     m_lockButton = new QToolButton();
     m_lockButton->setCheckable(true);
     m_lockButton->setChecked(false);
     m_lockButton->setToolTip(i18n("Lock current view"));
     updateLockIcon(m_lockButton->isChecked());
-    connect(m_lockButton, SIGNAL(toggled(bool)), SLOT(updateLockIcon(bool)));
+    connect(m_lockButton, &QToolButton::toggled, this, &ContextBrowserView::updateLockIcon);
     m_buttons->addWidget(m_lockButton);
 
     m_layout = new QVBoxLayout;
@@ -236,7 +236,9 @@ void ContextBrowserView::updateMainWidget(QWidget* widget)
         m_layout->insertWidget(1, widget, 1);
         m_allowLockedUpdate = false;
         setUpdatesEnabled(true);
-        connect(widget, SIGNAL(contextChanged(bool,bool)), this, SLOT(navigationContextChanged(bool,bool)));
+        if (widget->metaObject()->indexOfSignal(SIGNAL(contextChanged(bool,bool))) != -1) {
+            connect(widget, SIGNAL(contextChanged(bool,bool)), this, SLOT(navigationContextChanged(bool,bool)));
+        }
     }
 }
 

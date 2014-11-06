@@ -49,7 +49,7 @@ using namespace KTextEditor;
 EditorViewWatcher::EditorViewWatcher(QObject* parent)
     : QObject(parent)
 {
-    connect(ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(documentCreated(KDevelop::IDocument*)));
+    connect(ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this, &EditorViewWatcher::documentCreated);
     foreach(KDevelop::IDocument* document, ICore::self()->documentController()->openDocuments())
         documentCreated(document);
 }
@@ -57,7 +57,7 @@ EditorViewWatcher::EditorViewWatcher(QObject* parent)
 void EditorViewWatcher::documentCreated( KDevelop::IDocument* document ) {
     KTextEditor::Document* textDocument = document->textDocument();
     if(textDocument) {
-        connect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)));
+        connect(textDocument, &Document::viewCreated, this, &EditorViewWatcher::viewCreated);
         foreach(KTextEditor::View* view, textDocument->views()) {
             Q_ASSERT(view->parentWidget());
             addViewInternal(view);
@@ -68,7 +68,7 @@ void EditorViewWatcher::documentCreated( KDevelop::IDocument* document ) {
 void EditorViewWatcher::addViewInternal(KTextEditor::View* view) {
     m_views << view;
     viewAdded(view);
-    connect(view, SIGNAL(destroyed(QObject*)), this, SLOT(viewDestroyed(QObject*)));
+    connect(view, &View::destroyed, this, &EditorViewWatcher::viewDestroyed);
 }
 
 void EditorViewWatcher::viewAdded(KTextEditor::View*) {
@@ -96,7 +96,7 @@ BrowseManager::BrowseManager(ContextBrowserPlugin* controller) : QObject(control
     m_delayedBrowsingTimer = new QTimer(this);
     m_delayedBrowsingTimer->setSingleShot(true);
 
-    connect(m_delayedBrowsingTimer, SIGNAL(timeout()), this, SLOT(eventuallyStartDelayedBrowsing()));
+    connect(m_delayedBrowsingTimer, &QTimer::timeout, this, &BrowseManager::eventuallyStartDelayedBrowsing);
 
     foreach(KTextEditor::View* view, m_watcher.allViews())
         viewAdded(view);
@@ -306,6 +306,8 @@ void BrowseManager::viewAdded(KTextEditor::View* view) {
     //We need to listen for cursorPositionChanged, to clear the shift-detector. The problem: Kate listens for the arrow-keys using shortcuts,
     //so those keys are not passed to the event-filter
 
+    // can't use new signal/slot syntax here, these signals are only defined in KateView
+    // TODO: should we really depend on kate internals here?
     connect(view, SIGNAL(navigateLeft()), m_plugin, SLOT(navigateLeft()));
     connect(view, SIGNAL(navigateRight()), m_plugin, SLOT(navigateRight()));
     connect(view, SIGNAL(navigateUp()), m_plugin, SLOT(navigateUp()));

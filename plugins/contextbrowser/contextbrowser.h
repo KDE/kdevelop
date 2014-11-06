@@ -132,7 +132,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void hideToolTip();
     void findUses();
     
-    void textInserted(KTextEditor::Document*, KTextEditor::Range);
+    void textInserted(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor, const QString& text);
     void selectionChanged(KTextEditor::View*);
 
     void historyNext();

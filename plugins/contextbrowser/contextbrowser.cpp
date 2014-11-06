@@ -163,7 +163,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
 
     m_browseManager = new BrowseManager(this);
 
-    connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)));
+    connect(ICore::self()->documentController(), &IDocumentController::documentJumpPerformed, this, &ContextBrowserPlugin::documentJumpPerformed);
 
     m_previousButton = new QToolButton();
     m_previousButton->setToolTip(i18n("Go back in context history"));
@@ -173,8 +173,8 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     m_previousButton->setFocusPolicy(Qt::NoFocus);
     m_previousMenu = new QMenu();
     m_previousButton->setMenu(m_previousMenu);
-    connect(m_previousButton, SIGNAL(clicked(bool)), this, SLOT(historyPrevious()));
-    connect(m_previousMenu, SIGNAL(aboutToShow()), this, SLOT(previousMenuAboutToShow()));
+    connect(m_previousButton.data(), &QToolButton::clicked, this, &ContextBrowserPlugin::historyPrevious);
+    connect(m_previousMenu.data(), &QMenu::aboutToShow, this, &ContextBrowserPlugin::previousMenuAboutToShow);
 
     m_nextButton = new QToolButton();
     m_nextButton->setToolTip(i18n("Go forward in context history"));
@@ -184,8 +184,8 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     m_nextButton->setFocusPolicy(Qt::NoFocus);
     m_nextMenu = new QMenu();
     m_nextButton->setMenu(m_nextMenu);
-    connect(m_nextButton, SIGNAL(clicked(bool)), this, SLOT(historyNext()));
-    connect(m_nextMenu, SIGNAL(aboutToShow()), this, SLOT(nextMenuAboutToShow()));
+    connect(m_nextButton.data(), &QToolButton::clicked, this, &ContextBrowserPlugin::historyNext);
+    connect(m_nextMenu.data(), &QMenu::aboutToShow, this, &ContextBrowserPlugin::nextMenuAboutToShow);
 
     m_browseButton = new QToolButton();
     m_browseButton->setIcon(QIcon::fromTheme("games-hint"));
@@ -194,7 +194,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     m_browseButton->setCheckable(true);
     m_browseButton->setFocusPolicy(Qt::NoFocus);
 
-    connect(m_browseButton, SIGNAL(clicked(bool)), m_browseManager, SLOT(setBrowsing(bool)));
+    connect(m_browseButton.data(), &QToolButton::clicked, m_browseManager, &BrowseManager::setBrowsing);
 
     IQuickOpen* quickOpen = KDevelop::ICore::self()->pluginController()->extensionForPlugin<IQuickOpen>("org.kdevelop.IQuickOpen");
 
@@ -204,10 +204,10 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
       m_outlineLine->setToolTip(i18n("Navigate outline of active document, click to browse."));
     }
 
-    connect(m_browseManager, SIGNAL(startDelayedBrowsing(KTextEditor::View*)),
-            this, SLOT(startDelayedBrowsing(KTextEditor::View*)));
-    connect(m_browseManager, SIGNAL(stopDelayedBrowsing()),
-            this, SLOT(stopDelayedBrowsing()));
+    connect(m_browseManager, &BrowseManager::startDelayedBrowsing,
+            this, &ContextBrowserPlugin::startDelayedBrowsing);
+    connect(m_browseManager, &BrowseManager::stopDelayedBrowsing,
+            this, &ContextBrowserPlugin::stopDelayedBrowsing);
 
     m_toolbarWidget = toolbarWidgetForMainWindow(window);
     m_toolbarWidgetLayout = new QHBoxLayout;
@@ -226,9 +226,9 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     if(m_toolbarWidget->children().isEmpty())
         m_toolbarWidget->setLayout(m_toolbarWidgetLayout);
 
-    connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), m_outlineLine, SLOT(clear()));
-    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
-      this, SLOT(documentActivated(KDevelop::IDocument*)));
+    connect(ICore::self()->documentController(), &IDocumentController::documentClosed, m_outlineLine.data(), &IQuickOpenLine::clear);
+    connect(ICore::self()->documentController(), &IDocumentController::documentActivated,
+      this, &ContextBrowserPlugin::documentActivated);
 
     return ret;
 }
@@ -242,25 +242,25 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
     previousContext->setText( i18n("&Previous Visited Context") );
     previousContext->setIcon( QIcon::fromTheme("go-previous-context" ) );
     actions.setDefaultShortcut( previousContext, Qt::META | Qt::Key_Left );
-    QObject::connect(previousContext, SIGNAL(triggered(bool)), this, SLOT(previousContextShortcut()));
+    QObject::connect(previousContext, &QAction::triggered, this, &ContextBrowserPlugin::previousContextShortcut);
 
     QAction* nextContext = actions.addAction("next_context");
     nextContext->setText( i18n("&Next Visited Context") );
     nextContext->setIcon( QIcon::fromTheme("go-next-context" ) );
     actions.setDefaultShortcut( nextContext, Qt::META | Qt::Key_Right );
-    QObject::connect(nextContext, SIGNAL(triggered(bool)), this, SLOT(nextContextShortcut()));
+    QObject::connect(nextContext, &QAction::triggered, this, &ContextBrowserPlugin::nextContextShortcut);
 
     QAction* previousUse = actions.addAction("previous_use");
     previousUse->setText( i18n("&Previous Use") );
     previousUse->setIcon( QIcon::fromTheme("go-previous-use") );
     actions.setDefaultShortcut( previousUse, Qt::META | Qt::SHIFT |  Qt::Key_Left );
-    QObject::connect(previousUse, SIGNAL(triggered(bool)), this, SLOT(previousUseShortcut()));
+    QObject::connect(previousUse, &QAction::triggered, this, &ContextBrowserPlugin::previousUseShortcut);
 
     QAction* nextUse = actions.addAction("next_use");
     nextUse->setText( i18n("&Next Use") );
     nextUse->setIcon( QIcon::fromTheme("go-next-use") );
     actions.setDefaultShortcut( nextUse, Qt::META | Qt::SHIFT | Qt::Key_Right );
-    QObject::connect(nextUse, SIGNAL(triggered(bool)), this, SLOT(nextUseShortcut()));
+    QObject::connect(nextUse, &QAction::triggered, this, &ContextBrowserPlugin::nextUseShortcut);
 
     QWidgetAction* outline = new QWidgetAction(this);
     outline->setText(i18n("Context Browser"));
@@ -295,19 +295,19 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
 
   core()->uiController()->addToolView(i18n("Code Browser"), m_viewFactory);
 
-  connect( core()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)) );
-  connect( core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
+  connect( core()->documentController(), &IDocumentController::textDocumentCreated, this, &ContextBrowserPlugin::textDocumentCreated );
+  connect( core()->languageController()->backgroundParser(), &BackgroundParser::parseJobFinished, this, &ContextBrowserPlugin::parseJobFinished);
 
-  connect( DUChain::self(), SIGNAL(declarationSelected(KDevelop::DeclarationPointer)),
-           this, SLOT(declarationSelectedInUI(KDevelop::DeclarationPointer)) );
+  connect( DUChain::self(), &DUChain::declarationSelected,
+           this, &ContextBrowserPlugin::declarationSelectedInUI );
 
   m_updateTimer = new QTimer(this);
   m_updateTimer->setSingleShot(true);
-  connect( m_updateTimer, SIGNAL(timeout()), this, SLOT(updateViews()) );
+  connect( m_updateTimer, &QTimer::timeout, this, &ContextBrowserPlugin::updateViews );
 
   //Needed global action for the context-menu extensions
   m_findUses = new QAction(i18n("Find Uses"), this);
-  connect(m_findUses, SIGNAL(triggered(bool)), this, SLOT(findUses()));
+  connect(m_findUses, &QAction::triggered, this, &ContextBrowserPlugin::findUses);
 }
 
 ContextBrowserPlugin::~ContextBrowserPlugin()
@@ -461,7 +461,8 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
   {
     DUChainReadLocker lock(DUChain::lock());
     foreach( ILanguage* language, languages) {
-      navigationWidget = language->languageSupport()->specialLanguageObjectNavigationWidget(viewUrl, KTextEditor::Cursor(position));
+      auto widget = language->languageSupport()->specialLanguageObjectNavigationWidget(viewUrl, KTextEditor::Cursor(position));
+      navigationWidget = qobject_cast<AbstractNavigationWidget*>(widget);
       if(navigationWidget)
         break;
     }
@@ -505,11 +506,11 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
     ActiveToolTip::showToolTip(tooltip);
 
     if ( ! navigationWidget->property("DoNotCloseOnCursorMove").toBool() ) {
-      connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
-              this, SLOT(hideToolTip()), Qt::UniqueConnection);
+      connect(view, &View::cursorPositionChanged,
+              this, &ContextBrowserPlugin::hideToolTip, Qt::UniqueConnection);
     } else {
-      disconnect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
-                 this, SLOT(hideToolTip()));
+      disconnect(view, &View::cursorPositionChanged,
+                 this, &ContextBrowserPlugin::hideToolTip);
     }
   }else{
     qCDebug(PLUGIN_CONTEXTBROWSER) << "not showing tooltip, no navigation-widget";
@@ -757,7 +758,7 @@ void ContextBrowserPlugin::textDocumentCreated( KDevelop::IDocument* document )
 {
   Q_ASSERT(document->textDocument());
 
-  connect( document->textDocument(), SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)) );
+  connect( document->textDocument(), &KTextEditor::Document::viewCreated, this, &ContextBrowserPlugin::viewCreated );
 
   foreach( View* view, document->textDocument()->views() )
     viewCreated( document->textDocument(), view );
@@ -803,20 +804,21 @@ void ContextBrowserPlugin::cursorPositionChanged( View* view, const KTextEditor:
   m_updateTimer->start(highlightingTimeout/2); // triggers updateViews()
 }
 
-void ContextBrowserPlugin::textInserted(KTextEditor::Document* doc, KTextEditor::Range range)
+void ContextBrowserPlugin::textInserted(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor, const QString& text)
 {
   m_lastInsertionDocument = doc;
-  m_lastInsertionPos = range.end();
+#pragma message("TODO: is this the correct way to port this?")
+  m_lastInsertionPos = cursor + KTextEditor::Cursor(0, text.size());
 }
 
 void ContextBrowserPlugin::viewCreated( KTextEditor::Document* , View* v )
 {
-  disconnect( v, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)) ); ///Just to make sure that multiple connections don't happen
-  connect( v, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)) );
-  connect( v, SIGNAL(destroyed(QObject*)), this, SLOT(viewDestroyed(QObject*)) );
-  disconnect( v->document(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), this, SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
-  connect( v->document(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), this, SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
-  disconnect( v, SIGNAL(selectionChanged(KTextEditor::View*)), this, SLOT(selectionChanged(KTextEditor::View*)));
+  disconnect( v, &View::cursorPositionChanged, this, &ContextBrowserPlugin::cursorPositionChanged ); ///Just to make sure that multiple connections don't happen
+  connect( v, &View::cursorPositionChanged, this, &ContextBrowserPlugin::cursorPositionChanged );
+  connect( v, &View::destroyed, this, &ContextBrowserPlugin::viewDestroyed );
+  disconnect( v->document(), &KTextEditor::Document::textInserted, this, &ContextBrowserPlugin::textInserted);
+  connect(v->document(), &KTextEditor::Document::textInserted, this, &ContextBrowserPlugin::textInserted);
+  disconnect(v, &View::selectionChanged, this, &ContextBrowserPlugin::selectionChanged);
 
   KTextEditor::TextHintInterface *iface = dynamic_cast<KTextEditor::TextHintInterface*>(v);
   if( !iface )
@@ -1106,11 +1108,11 @@ void ContextBrowserPlugin::openDocument(int historyIndex) {
     DocumentCursor c = m_history[historyIndex].computePosition();
     if (c.isValid() && !c.document.str().isEmpty()) {
 
-        disconnect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)), this,      SLOT(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)));
+        disconnect(ICore::self()->documentController(), &IDocumentController::documentJumpPerformed, this,      &ContextBrowserPlugin::documentJumpPerformed);
 
         ICore::self()->documentController()->openDocument(c.document.toUrl(), c);
 
-        connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*,KTextEditor::Cursor,KDevelop::IDocument*,KTextEditor::Cursor)));
+        connect(ICore::self()->documentController(), &IDocumentController::documentJumpPerformed, this, &ContextBrowserPlugin::documentJumpPerformed);
 
         KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
         updateDeclarationListBox(m_history[historyIndex].context.data());
@@ -1173,7 +1175,7 @@ void ContextBrowserPlugin::fillHistoryPopup(QMenu* menu, const QList<int>& histo
         QAction* action = new QAction(actionTextFor(index), menu);
         action->setData(index);
         menu->addAction(action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(actionTriggered()));
+        connect(action, &QAction::triggered, this, &ContextBrowserPlugin::actionTriggered);
     }
 }
 
