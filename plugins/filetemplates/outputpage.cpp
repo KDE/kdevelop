@@ -137,10 +137,10 @@ OutputPage::OutputPage(QWidget* parent)
     d->output->setupUi(this);
     d->output->messageWidget->setVisible(false);
 
-    connect(&d->urlChangedMapper, SIGNAL(mapped(QString)),
-            SLOT(updateFileRange(QString)));
-    connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)),
-            this, SLOT(updateFileNames()));
+    connect(&d->urlChangedMapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped),
+            this, [&](const QString& field) { d->updateFileRange(field); });
+    connect(d->output->lowerFilenameCheckBox, &QCheckBox::stateChanged,
+            this, [&]() { this->d->updateFileNames(); });
 }
 
 OutputPage::~OutputPage()
@@ -191,7 +191,7 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
         requester->setMode( KFile::File | KFile::LocalOnly );
 
         d->urlChangedMapper.setMapping(requester, file.identifier);
-        connect(requester, SIGNAL(textChanged(QString)), &d->urlChangedMapper, SLOT(map()));
+        connect(requester, &KUrlRequester::textChanged, &d->urlChangedMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
 
         d->output->urlFormLayout->addRow(label, requester);
         d->outputFiles.insert(file.identifier, requester);

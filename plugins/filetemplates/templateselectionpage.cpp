@@ -193,8 +193,8 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     d->ui->view->setHeaderLabels(QStringList() << i18n("Language") << i18n("Framework") << i18n("Template"));
     d->ui->view->setModel(d->model);
 
-    connect(d->ui->view, SIGNAL(currentIndexChanged(QModelIndex,QModelIndex)),
-            SLOT(currentTemplateChanged(QModelIndex)));
+    connect(d->ui->view, &MultiLevelListView::currentIndexChanged,
+            this, [&](const QModelIndex& index) { d->currentTemplateChanged(index); });
 
     QModelIndex templateIndex = d->model->index(0, 0);
 
@@ -226,11 +226,11 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     d->ui->view->setCurrentIndex(templateIndex);
 
     KNS3::Button* getMoreButton = new KNS3::Button(i18n("Get More Templates..."), "kdevfiletemplates.knsrc", d->ui->view);
-    connect (getMoreButton, SIGNAL(dialogFinished(KNS3::Entry::List)), SLOT(getMoreClicked()));
+    connect (getMoreButton, &KNS3::Button::dialogFinished, this, [&]() { d->getMoreClicked(); });
     d->ui->view->addWidget(0, getMoreButton);
 
     QPushButton* loadButton = new QPushButton(QIcon::fromTheme("application-x-archive"), i18n("Load Template From File"), d->ui->view);
-    connect (loadButton, SIGNAL(clicked(bool)), SLOT(loadFileClicked()));
+    connect (loadButton, &QPushButton::clicked, this, [&]() { d->loadFileClicked(); });
     d->ui->view->addWidget(0, loadButton);
 
     d->ui->view->setContentsMargins(0, 0, 0, 0);

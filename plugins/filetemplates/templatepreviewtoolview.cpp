@@ -58,16 +58,16 @@ TemplatePreviewToolView::TemplatePreviewToolView(FileTemplatesPlugin* plugin, QW
         documentActivated(dc->activeDocument());
     }
 
-    connect(ui->projectRadioButton, SIGNAL(toggled(bool)),
-            SLOT(selectedRendererChanged()));
-    connect(ui->emptyLinesPolicyComboBox, SIGNAL(currentIndexChanged(int)),
-            SLOT(selectedRendererChanged()));
+    connect(ui->projectRadioButton, &QRadioButton::toggled,
+            this, &TemplatePreviewToolView::selectedRendererChanged);
+    connect(ui->emptyLinesPolicyComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+            this, &TemplatePreviewToolView::selectedRendererChanged);
     selectedRendererChanged();
 
-    connect(dc, SIGNAL(documentActivated(KDevelop::IDocument*)),
-            SLOT(documentActivated(KDevelop::IDocument*)));
-    connect(dc, SIGNAL(documentClosed(KDevelop::IDocument*)),
-            SLOT(documentClosed(KDevelop::IDocument*)));
+    connect(dc, &IDocumentController::documentActivated,
+            this, &TemplatePreviewToolView::documentActivated);
+    connect(dc, &IDocumentController::documentClosed,
+            this, &TemplatePreviewToolView::documentClosed);
 }
 
 TemplatePreviewToolView::~TemplatePreviewToolView()
@@ -92,15 +92,15 @@ void TemplatePreviewToolView::documentChanged(KTextEditor::Document* document)
 
 
     if (m_original) {
-        disconnect(m_original, SIGNAL(textChanged(KTextEditor::Document*)),
-                   this, SLOT(documentChanged(KTextEditor::Document*)));
+        disconnect(m_original, &KTextEditor::Document::textChanged,
+                   this, &TemplatePreviewToolView::documentChanged);
     }
     m_original = document;
 
     FileTemplatesPlugin::TemplateType type = FileTemplatesPlugin::NoTemplate;
     if (m_original) {
-        connect(m_original, SIGNAL(textChanged(KTextEditor::Document*)),
-                this, SLOT(documentChanged(KTextEditor::Document*)));
+        connect(m_original, &KTextEditor::Document::textChanged,
+                this, &TemplatePreviewToolView::documentChanged);
         type = m_plugin->determineTemplateType(document->url());
     }
 

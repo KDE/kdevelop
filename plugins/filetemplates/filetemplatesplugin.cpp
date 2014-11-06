@@ -70,7 +70,7 @@ FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& ar
     action->setIcon( QIcon::fromTheme( "code-class" ) );
     action->setWhatsThis( i18n( "Allows you to create new source code files, such as classes or unit tests, using templates." ) );
     action->setStatusTip( i18n( "Create new files from a template" ) );
-    connect (action, SIGNAL(triggered(bool)), SLOT(createFromTemplate()));
+    connect (action, &QAction::triggered, this, &FileTemplatesPlugin::createFromTemplate);
 
     m_toolView = new TemplatePreviewFactory(this);
     core()->uiController()->addToolView(i18n("Template Preview"), m_toolView);
@@ -115,7 +115,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
             QAction* action = new QAction(i18n("Create From Template"), this);
             action->setIcon(QIcon::fromTheme("code-class"));
             action->setData(url);
-            connect(action, SIGNAL(triggered(bool)), SLOT(createFromTemplate()));
+            connect(action, &QAction::triggered, this, &FileTemplatesPlugin::createFromTemplate);
             ext.addAction(ContextMenuExtension::FileGroup, action);
         }
 
@@ -135,7 +135,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
         QAction* action = new QAction(i18n("Show Template Preview"), this);
         action->setIcon(QIcon::fromTheme("document-preview"));
         action->setData(fileUrl);
-        connect(action, SIGNAL(triggered(bool)), SLOT(previewTemplate()));
+        connect(action, &QAction::triggered, this, &FileTemplatesPlugin::previewTemplate);
         ext.addAction(ContextMenuExtension::ExtensionGroup, action);
     }
 

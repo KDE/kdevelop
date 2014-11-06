@@ -95,8 +95,8 @@ OverridesPage::OverridesPage(QWidget* parent)
     d->overrides = new Ui::OverridesDialog;
     d->overrides->setupUi(this);
 
-    connect(d->overrides->selectAllPushButton, SIGNAL(pressed()), this, SLOT(selectAll()));
-    connect(d->overrides->deselectAllPushButton, SIGNAL(pressed()), this, SLOT(deselectAll()));
+    connect(d->overrides->selectAllPushButton, &QPushButton::pressed, this, &OverridesPage::selectAll);
+    connect(d->overrides->deselectAllPushButton, &QPushButton::pressed, this, &OverridesPage::deselectAll);
 }
 
 OverridesPage::~OverridesPage()

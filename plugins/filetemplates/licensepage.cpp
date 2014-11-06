@@ -204,10 +204,10 @@ LicensePage::LicensePage(QWidget* parent)
     d->license = new Ui::LicenseChooserDialog;
     d->license->setupUi(this);
 
-    connect(d->license->licenseComboBox, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(licenseComboChanged(int)));
-    connect(d->license->saveLicense, SIGNAL(clicked(bool)),
-            d->license->licenseName, SLOT(setEnabled(bool)));
+    connect(d->license->licenseComboBox, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+            this, [&](int selectedLicense) { this->d->licenseComboChanged(selectedLicense); });
+    connect(d->license->saveLicense, &QCheckBox::clicked,
+            d->license->licenseName, &QLineEdit::setEnabled);
 
     // Read all the available licenses from the standard dirs
     d->initializeLicenses();

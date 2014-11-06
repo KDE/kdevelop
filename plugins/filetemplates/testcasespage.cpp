@@ -45,7 +45,7 @@ TestCasesPage::TestCasesPage(QWidget* parent, Qt::WindowFlags f)
     d->ui->keditlistwidget->setContentsMargins(0, 0, 0, 0);
     d->ui->keditlistwidget->layout()->setContentsMargins(0, 0, 0, 0);
     
-    connect(d->ui->identifierLineEdit, SIGNAL(textChanged(QString)), SLOT(identifierChanged(QString)));
+    connect(d->ui->identifierLineEdit, &QLineEdit::textChanged, this, &TestCasesPage::identifierChanged);
 }
 
 TestCasesPage::~TestCasesPage()

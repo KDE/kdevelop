@@ -44,7 +44,7 @@ ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)
 
     d->classid->inheritanceLabel->setBuddy(d->classid->keditlistwidget->lineEdit());
 
-    connect(d->classid->identifierLineEdit, SIGNAL(textChanged(QString)), this, SLOT(checkIdentifier()));
+    connect(d->classid->identifierLineEdit, &QLineEdit::textChanged, this, &ClassIdentifierPage::checkIdentifier);
 
     emit isValid(false);
 }

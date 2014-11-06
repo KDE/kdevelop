@@ -297,7 +297,7 @@ void TemplateClassAssistant::setup()
     }
 
     d->templateSelectionPageWidget = new TemplateSelectionPage(this);
-    connect(this, SIGNAL(accepted()), d->templateSelectionPageWidget, SLOT(saveConfig()));
+    connect(this, &TemplateClassAssistant::accepted, d->templateSelectionPageWidget, &TemplateSelectionPage::saveConfig);
     d->templateSelectionPage = addPage(d->templateSelectionPageWidget, i18n("Language and Template"));
     d->templateSelectionPage->setIcon(QIcon::fromTheme("project-development-new-template"));
 
@@ -336,7 +336,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         d->classIdentifierPageWidget = new ClassIdentifierPage(this);
         d->classIdentifierPage = addPage(d->classIdentifierPageWidget, i18n("Class Basics"));
         d->classIdentifierPage->setIcon(QIcon::fromTheme("classnew"));
-        connect(d->classIdentifierPageWidget, SIGNAL(isValid(bool)), SLOT(setCurrentPageValid(bool)));
+        connect(d->classIdentifierPageWidget, &ClassIdentifierPage::isValid, this, &TemplateClassAssistant::setCurrentPageValid);
         setValid(d->classIdentifierPage, false);
 
         d->overridesPageWidget = new OverridesPage(this);
@@ -374,7 +374,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         {
             d->testCasesPageWidget = new TestCasesPage(this);
             d->testCasesPage = addPage(d->testCasesPageWidget, i18n("Test Cases"));
-            connect(d->testCasesPageWidget, SIGNAL(isValid(bool)), SLOT(setCurrentPageValid(bool)));
+            connect(d->testCasesPageWidget, &TestCasesPage::isValid, this, &TemplateClassAssistant::setCurrentPageValid);
             setValid(d->testCasesPage, false);
         }
 
@@ -391,7 +391,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
     d->outputPageWidget->prepareForm(d->fileTemplate);
     d->outputPage = addPage(d->outputPageWidget, i18n("Output"));
     d->outputPage->setIcon(QIcon::fromTheme("document-save"));
-    connect(d->outputPageWidget, SIGNAL(isValid(bool)), SLOT(setCurrentPageValid(bool)));
+    connect(d->outputPageWidget, &OutputPage::isValid, this, &TemplateClassAssistant::setCurrentPageValid);
     setValid(d->outputPage, false);
 
     if (d->fileTemplate.hasCustomOptions())
