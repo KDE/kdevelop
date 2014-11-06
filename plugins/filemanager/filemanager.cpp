@@ -62,16 +62,16 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     l->setSpacing(0);
     KFilePlacesModel* model = new KFilePlacesModel( this );
     urlnav = new KUrlNavigator(model, QUrl::fromLocalFile(QDir::homePath()), this );
-    connect(urlnav, SIGNAL(urlChanged(QUrl)), SLOT(gotoUrl(QUrl)));
+    connect(urlnav, &KUrlNavigator::urlChanged, this, &FileManager::gotoUrl);
     l->addWidget(urlnav);
     dirop = new KDirOperator(QUrl::fromLocalFile(QDir::homePath()), this);
     dirop->setView( KFile::Tree );
     dirop->setupMenu( KDirOperator::SortActions | KDirOperator::FileActions | KDirOperator::NavActions | KDirOperator::ViewActions );
-    connect(dirop, SIGNAL(urlEntered(QUrl)), SLOT(updateNav(QUrl)));
-    connect(dirop, SIGNAL(contextMenuAboutToShow(KFileItem,QMenu*)), SLOT(fillContextMenu(KFileItem,QMenu*)));
+    connect(dirop, &KDirOperator::urlEntered, this, &FileManager::updateNav);
+    connect(dirop, &KDirOperator::contextMenuAboutToShow, this, &FileManager::fillContextMenu);
     l->addWidget(dirop);
 
-    connect( dirop, SIGNAL(fileSelected(KFileItem)), this, SLOT(openFile(KFileItem)) );
+    connect( dirop, &KDirOperator::fileSelected, this, &FileManager::openFile );
 
 
     // includes some actions, but not hooked into the shortcut dialog atm
@@ -81,8 +81,8 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     setupActions();
 
     // Connect the bookmark handler
-    connect(m_bookmarkHandler, SIGNAL(openUrl(QUrl)), this, SLOT(gotoUrl(QUrl)));
-    connect(m_bookmarkHandler, SIGNAL(openUrl(QUrl)), this, SLOT(updateNav(QUrl)));
+    connect(m_bookmarkHandler, &BookmarkHandler::openUrl, this, &FileManager::gotoUrl);
+    connect(m_bookmarkHandler, &BookmarkHandler::openUrl, this, &FileManager::updateNav);
 }
 
 void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
@@ -132,7 +132,7 @@ void FileManager::setupActions()
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     action->setText(i18n("Current Document Directory"));
     action->setIcon(QIcon::fromTheme("dirsync"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(syncCurrentDocumentDirectory()));
+    connect(action, &QAction::triggered, this, &FileManager::syncCurrentDocumentDirectory);
     tbActions << (dirop->actionCollection()->action("back"));
     tbActions << (dirop->actionCollection()->action("up"));
     tbActions << (dirop->actionCollection()->action("home"));
@@ -146,7 +146,7 @@ void FileManager::setupActions()
     newFileAction = new QAction(this);
     newFileAction->setText(i18n("New File..."));
     newFileAction->setIcon(QIcon::fromTheme("document-new"));
-    connect(newFileAction, SIGNAL(triggered()), this, SLOT(createNewFile()));
+    connect(newFileAction, &QAction::triggered, this, &FileManager::createNewFile);
 }
 
 void FileManager::createNewFile()
