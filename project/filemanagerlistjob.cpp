@@ -91,14 +91,14 @@ void FileManagerListJob::slotResult(KJob* job)
     entryList.clear();
 
     if( job->error() ) {
-        qCDebug(PROJECT) << "error in list job:" << job->error() << job->errorString();
+        qCDebug(FILEMANAGER) << "error in list job:" << job->error() << job->errorString();
     }
 
     if( m_listQueue.isEmpty() ) {
         emitResult();
 
 #ifdef TIME_IMPORT_JOB
-        qCDebug(PROJECT) << "TIME FOR LISTJOB:" << m_timer.elapsed();
+        qCDebug(FILEMANAGER) << "TIME FOR LISTJOB:" << m_timer.elapsed();
 #endif
     } else {
         emit nextJob();

@@ -110,7 +110,7 @@ void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
         // make sure the import job does not live longer than the project
         // see also addLotsOfFiles test
         foreach( FileManagerListJob* job, m_projectJobs[project] ) {
-            qCDebug(PROJECT) << "killing project job:" << job;
+            qCDebug(FILEMANAGER) << "killing project job:" << job;
             job->abort();
         }
         m_projectJobs.remove(project);
@@ -124,7 +124,7 @@ KIO::Job* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolde
 {
     FileManagerListJob* listJob = new FileManagerListJob( item, forceRecursion );
     m_projectJobs[ item->project() ] << listJob;
-    qCDebug(PROJECT) << "adding job" << listJob << item << item->path() << "for project" << item->project();
+    qCDebug(FILEMANAGER) << "adding job" << listJob << item << item->path() << "for project" << item->project();
 
     q->connect( listJob, SIGNAL(finished(KJob*)),
                 q, SLOT(jobFinished(KJob*)) );
@@ -139,7 +139,7 @@ void AbstractFileManagerPlugin::Private::jobFinished(KJob* job)
 {
     FileManagerListJob* gmlJob = qobject_cast<FileManagerListJob*>(job);
     if (gmlJob) {
-        ifDebug(qCDebug(PROJECT) << job << gmlJob << gmlJob->item();)
+        ifDebug(qCDebug(FILEMANAGER) << job << gmlJob << gmlJob->item();)
         m_projectJobs[ gmlJob->item()->project() ].removeOne( gmlJob );
     } else {
         // job emitted its finished signal from its destructor
@@ -161,7 +161,7 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
         return;
     }
 
-    qCDebug(PROJECT) << "reading entries of" << baseItem->path();
+    qCDebug(FILEMANAGER) << "reading entries of" << baseItem->path();
 
     // build lists of valid files and folders with paths relative to the project folder
     Path::List files;
@@ -195,8 +195,8 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
         }
     }
 
-    ifDebug(qCDebug(PROJECT) << "valid folders:" << folders;)
-    ifDebug(qCDebug(PROJECT) << "valid files:" << files;)
+    ifDebug(qCDebug(FILEMANAGER) << "valid folders:" << folders;)
+    ifDebug(qCDebug(FILEMANAGER) << "valid files:" << files;)
 
     // remove obsolete rows
     for ( int j = 0; j < baseItem->rowCount(); ++j ) {
@@ -221,7 +221,7 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
             int index = files.indexOf( f->path() );
             if ( index == -1 ) {
                 // file got removed or is now invalid
-                ifDebug(qCDebug(PROJECT) << "removing file:" << f << f->path();)
+                ifDebug(qCDebug(FILEMANAGER) << "removing file:" << f << f->path();)
                 baseItem->removeRow( j );
                 --j;
             } else {
@@ -250,7 +250,7 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
 
 void AbstractFileManagerPlugin::Private::created(const QString &path_)
 {
-    qCDebug(PROJECT) << "created:" << path_;
+    qCDebug(FILEMANAGER) << "created:" << path_;
     QFileInfo info(path_);
 
     ///FIXME: share memory with parent
@@ -272,7 +272,7 @@ void AbstractFileManagerPlugin::Private::created(const QString &path_)
             foreach ( ProjectFolderItem* folder, p->foldersForPath(indexedPath) ) {
                 // exists already in this project, happens e.g. when we restart the dirwatcher
                 // or if we delete and remove folders consecutively https://bugs.kde.org/show_bug.cgi?id=260741
-                qCDebug(PROJECT) << "force reload of" << path << folder;
+                qCDebug(FILEMANAGER) << "force reload of" << path << folder;
                 eventuallyReadFolder( folder, true );
                 found = true;
             }
@@ -312,7 +312,7 @@ void AbstractFileManagerPlugin::Private::deleted(const QString &path_)
             return;
         }
     }
-    qCDebug(PROJECT) << "deleted:" << path_;
+    qCDebug(FILEMANAGER) << "deleted:" << path_;
 
     const Path path(path_);
     const IndexedString indexed(path.pathOrUrl());
@@ -336,7 +336,7 @@ void AbstractFileManagerPlugin::Private::deleted(const QString &path_)
         }
         foreach ( ProjectFileItem* item, p->filesForPath(indexed) ) {
             emit q->fileRemoved(item);
-            ifDebug(qCDebug(PROJECT) << "removing file" << item;)
+            ifDebug(qCDebug(FILEMANAGER) << "removing file" << item;)
             item->parent()->removeRow(item->row());
         }
     }
@@ -415,10 +415,10 @@ bool isChildItem(ProjectBaseItem* parent, ProjectBaseItem* child)
 
 void AbstractFileManagerPlugin::Private::removeFolder(ProjectFolderItem* folder)
 {
-    ifDebug(qCDebug(PROJECT) << "removing folder:" << folder << folder->path();)
+    ifDebug(qCDebug(FILEMANAGER) << "removing folder:" << folder << folder->path();)
     foreach(FileManagerListJob* job, m_projectJobs[folder->project()]) {
         if (isChildItem(folder, job->item())) {
-            qCDebug(PROJECT) << "killing list job for removed folder" << job << folder->path();
+            qCDebug(FILEMANAGER) << "killing list job for removed folder" << job << folder->path();
             job->abort();
             Q_ASSERT(!m_projectJobs.value(folder->project()).contains(job));
         } else {
@@ -458,7 +458,7 @@ IProjectFileManager::Features AbstractFileManagerPlugin::features() const
 QList<ProjectFolderItem*> AbstractFileManagerPlugin::parse( ProjectFolderItem *item )
 {
     // we are async, can't return anything here
-    qCDebug(PROJECT) << "note: parse will always return an empty list";
+    qCDebug(FILEMANAGER) << "note: parse will always return an empty list";
     Q_UNUSED(item);
     return QList<ProjectFolderItem*>();
 }
@@ -467,7 +467,7 @@ ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
 {
     ProjectFolderItem *projectRoot = createFolderItem( project, project->path(), 0 );
     emit folderAdded( projectRoot );
-    qCDebug(PROJECT) << "imported new project" << project->name() << "at" << projectRoot->path();
+    qCDebug(FILEMANAGER) << "imported new project" << project->name() << "at" << projectRoot->path();
 
     ///TODO: check if this works for remote files when something gets changed through another KDE app
     if ( project->path().isLocalFile() ) {
@@ -493,7 +493,7 @@ KJob* AbstractFileManagerPlugin::createImportJob(ProjectFolderItem* item)
 
 bool AbstractFileManagerPlugin::reload( ProjectFolderItem* item )
 {
-    qCDebug(PROJECT) << "reloading item" << item->path();
+    qCDebug(FILEMANAGER) << "reloading item" << item->path();
     d->eventuallyReadFolder( item->folder(), true );
     return true;
 }
@@ -501,7 +501,7 @@ bool AbstractFileManagerPlugin::reload( ProjectFolderItem* item )
 ProjectFolderItem* AbstractFileManagerPlugin::addFolder( const Path& folder,
         ProjectFolderItem * parent )
 {
-    qCDebug(PROJECT) << "adding folder" << folder << "to" << parent->path();
+    qCDebug(FILEMANAGER) << "adding folder" << folder << "to" << parent->path();
     ProjectFolderItem* created = 0;
     d->stopWatcher(parent);
     if ( createFolder(folder.toUrl()) ) {
@@ -518,7 +518,7 @@ ProjectFolderItem* AbstractFileManagerPlugin::addFolder( const Path& folder,
 ProjectFileItem* AbstractFileManagerPlugin::addFile( const Path& file,
         ProjectFolderItem * parent )
 {
-    qCDebug(PROJECT) << "adding file" << file << "to" << parent->path();
+    qCDebug(FILEMANAGER) << "adding file" << file << "to" << parent->path();
     ProjectFileItem* created = 0;
     d->stopWatcher(parent);
     if ( createFile(file.toUrl()) ) {
@@ -533,13 +533,13 @@ ProjectFileItem* AbstractFileManagerPlugin::addFile( const Path& file,
 
 bool AbstractFileManagerPlugin::renameFolder(ProjectFolderItem* folder, const Path& newPath)
 {
-    qCDebug(PROJECT) << "trying to rename a folder:" << folder->path() << newPath;
+    qCDebug(FILEMANAGER) << "trying to rename a folder:" << folder->path() << newPath;
     return d->rename(folder, newPath);
 }
 
 bool AbstractFileManagerPlugin::renameFile(ProjectFileItem* file, const Path& newPath)
 {
-    qCDebug(PROJECT) << "trying to rename a file:" << file->path() << newPath;
+    qCDebug(FILEMANAGER) << "trying to rename a file:" << file->path() << newPath;
     return d->rename(file, newPath);
 }
 
