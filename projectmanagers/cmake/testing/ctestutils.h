@@ -30,7 +30,7 @@ class ProjectFolderItem;
 
 namespace CTestUtils
 {
-    void createTestSuites(const QVector<Test>& testSuites, KDevelop::ProjectFolderItem* folder);
+    void createTestSuites(KDevelop::ProjectFolderItem* folder);
 }
 
 #endif // CTESTUTILS_H

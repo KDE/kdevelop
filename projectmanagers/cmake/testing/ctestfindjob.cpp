@@ -26,6 +26,7 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <language/duchain/duchain.h>
 #include <language/backgroundparser/backgroundparser.h>
+#include <util/path.h>
 
 #include <QFileInfo>
 #include <KProcess>
@@ -58,7 +59,6 @@ void CTestFindJob::findTestCases()
     }
 
     m_pendingFiles = m_suite->sourceFiles();
-    qCDebug(CMAKE) << "Source files to update:" << m_pendingFiles;
 
     if (m_pendingFiles.isEmpty())
     {
@@ -67,17 +67,16 @@ void CTestFindJob::findTestCases()
         return;
     }
 
-    foreach (const QUrl &file, m_pendingFiles)
+    foreach (const KDevelop::Path &file, m_pendingFiles)
     {
-        KDevelop::DUChain::self()->updateContextForUrl(KDevelop::IndexedString(file), KDevelop::TopDUContext::AllDeclarationsAndContexts, this);
+        KDevelop::DUChain::self()->updateContextForUrl(KDevelop::IndexedString(file.toUrl()), KDevelop::TopDUContext::AllDeclarationsAndContexts, this);
     }
 }
 
 void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context)
 {
-    qCDebug(CMAKE) << m_pendingFiles << document.str();
     m_suite->loadDeclarations(document, context);
-    m_pendingFiles.removeAll(document.str());
+    m_pendingFiles.removeAll(KDevelop::Path(document.toUrl()));
 
     if (m_pendingFiles.isEmpty())
     {

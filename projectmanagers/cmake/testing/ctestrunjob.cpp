@@ -38,6 +38,7 @@
 #include <KProcess>
 #include <KLocalizedString>
 #include <KCompositeJob>
+#include <QFile>
 
 using namespace KDevelop;
 
@@ -59,12 +60,12 @@ CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob:
 }
 
 
-KJob* createTestJob(QString launchModeId, QStringList arguments )
+KJob* createTestJob(const QString &launchModeId, const QStringList &arguments, IProject* p)
 {
     LaunchConfigurationType* type = ICore::self()->runController()->launchConfigurationTypeForId( "Native Application" );
     ILaunchMode* mode = ICore::self()->runController()->launchModeForId( launchModeId );
 
-    qCDebug(CMAKE) << "got mode and type:" << type << type->id() << mode << mode->id();
+    qCDebug(CMAKE) << "got mode and type:" << type << type->id() << mode << mode->id() << "for" << arguments;
     Q_ASSERT(type && mode);
 
     ILauncher* launcher = 0;
@@ -89,7 +90,7 @@ KJob* createTestJob(QString launchModeId, QStringList arguments )
     if (!ilaunch) {
         ilaunch = ICore::self()->runController()->createLaunchConfiguration( type,
                                                 qMakePair( mode->id(), launcher->id() ),
-                                                0, //TODO add project
+                                                p,
                                                 i18n("CTest") );
         ilaunch->config().writeEntry("ConfiguredByCTest", true);
         //qCDebug(CMAKE) << "created config, launching";
@@ -118,24 +119,23 @@ void CTestRunJob::start()
 
     QStringList cases_selected = arguments;
     arguments.prepend(m_suite->executable().toLocalFile());
-    m_job = createTestJob("execute", arguments);
+    Q_ASSERT(QFile::exists(m_suite->executable().toLocalFile()));
+    m_job = createTestJob("execute", arguments, m_suite->project());
 
-    if (ExecuteCompositeJob* cjob = qobject_cast<ExecuteCompositeJob*>(m_job)) {
-        m_outputJob = qobject_cast<OutputJob*>(cjob->subjobs().last());
-        Q_ASSERT(m_outputJob);
-        m_outputJob->setVerbosity(m_verbosity);
+    m_outputJob = m_job->findChild<OutputJob*>(QString(), Qt::FindDirectChildrenOnly);
+    Q_ASSERT(m_outputJob);
 
-        QString testName = arguments.value(0).split('/').last();
-        QString title;
-        if (cases_selected.count() == 1)
-            title = i18nc("running test %1, %2 test case", "CTest %1: %2", testName, cases_selected.value(0));
-        else
-            title = i18ncp("running test %1, %2 number of test cases", "CTest %2 (%1)", "CTest %2 (%1)", cases_selected.count(), testName);
+    m_outputJob->setVerbosity(m_verbosity);
 
-        m_outputJob->setTitle(title);
+    QString testName = arguments.value(0).split('/').last();
+    QString title;
+    if (cases_selected.count() == 1)
+        title = i18nc("running test %1, %2 test case", "CTest %1: %2", testName, cases_selected.value(0));
+    else
+        title = i18ncp("running test %1, %2 number of test cases", "CTest %2 (%1)", "CTest %2 (%1)", cases_selected.count(), testName);
 
-        connect(m_outputJob->model(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(rowsInserted(QModelIndex,int,int)));
-    }
+    m_outputJob->setTitle(title);
+    connect(m_outputJob->model(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(rowsInserted(QModelIndex,int,int)));
     connect(m_job, SIGNAL(finished(KJob*)), SLOT(processFinished(KJob*)));
 
     ICore::self()->testController()->notifyTestRunStarted(m_suite, cases_selected);

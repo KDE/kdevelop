@@ -31,6 +31,7 @@
 #include "cmakecodecompletionmodel.h"
 #include "cmakenavigationwidget.h"
 #include "icmakedocumentation.h"
+#include "testing/ctestutils.h"
 
 #include <QDir>
 #include <QThread>
@@ -117,18 +118,15 @@ CMakeManager::~CMakeManager()
 
 Path CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 {
-//     CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
-//     Path ret;
-//     ProjectBaseItem* parent = fi ? fi->formerParent() : item->parent();
-//     if (parent)
-//         ret=buildDirectory(parent);
-//     else
-//         ret=Path(CMake::currentBuildDir(item->project()));
-//
-//     if(fi)
-//         ret.addPath(fi->buildDir());
-//     return ret;
-    return Path(CMake::currentBuildDir(item->project()));
+    Path ret;
+    ProjectBaseItem* parent = item->parent();
+    if (parent) {
+        ret=buildDirectory(parent);
+        ret.addPath(item->text());
+    } else
+        ret=Path(CMake::currentBuildDir(item->project()));
+
+    return ret;
 }
 
 KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
@@ -235,6 +233,7 @@ void CMakeManager::importFinished(KJob* j)
 
     connect(data.watcher.data(), SIGNAL(fileChanged(QString)), SLOT(dirtyFile(QString)));
     connect(data.watcher.data(), SIGNAL(directoryChanged(QString)), SLOT(dirtyFile(QString)));
+
     m_projects[project] = data;
 }
 
@@ -299,6 +298,8 @@ void CMakeManager::importPopulateFinished(KJob* job)
         foundTargets[dir][obj.value("name").toString()] = obj;
     }
     populateTargets(project->projectItem(), foundTargets);
+
+    CTestUtils::createTestSuites(project->projectItem());
 }
 
 // void CMakeManager::deletedWatchedDirectory(IProject* p, const QUrl &dir)

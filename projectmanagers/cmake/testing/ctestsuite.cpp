@@ -37,11 +37,12 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/types/structuretype.h>
 #include <project/projectmodel.h>
+#include <util/path.h>
 
 
 using namespace KDevelop;
 
-CTestSuite::CTestSuite(const QString& name, const QUrl &executable, const QList<QUrl>& files, IProject* project, const QStringList& args, bool expectFail):
+CTestSuite::CTestSuite(const QString& name, const QUrl &executable, const QList<KDevelop::Path>& files, IProject* project, const QStringList& args, bool expectFail):
 m_executable(executable),
 m_name(name),
 m_args(args),
@@ -49,9 +50,7 @@ m_files(files),
 m_project(project),
 m_expectFail(expectFail)
 {
-    m_executable.cleanPath();
     Q_ASSERT(project);
-    qCDebug(CMAKE) << m_name << m_executable << m_project->name();
 }
 
 CTestSuite::~CTestSuite()
@@ -191,10 +190,7 @@ void CTestSuite::setTestCases(const QStringList& cases)
     m_cases = cases;
 }
 
-QList<QUrl> CTestSuite::sourceFiles() const
+QList<Path> CTestSuite::sourceFiles() const
 {
     return m_files;
 }
-
-
-

@@ -71,7 +71,7 @@ struct CMakeFunctionArgument
 Q_DECLARE_METATYPE( CMakeFunctionArgument )
 
 
-class KDEVCMAKECOMMON_EXPORT CMakeFunctionDesc
+class CMakeFunctionDesc
 {
 public:
     CMakeFunctionDesc();
@@ -111,6 +111,13 @@ public:
     bool operator==(const CMakeFunctionDesc &other) const;
     void addArguments( const QStringList&, bool addEvenIfEmpty=true );
     QString writeBack() const;
+    QStringList argsList() const {
+        QStringList ret;
+        foreach(const CMakeFunctionArgument& arg, arguments) {
+            ret += arg.value;
+        }
+        return ret;
+    }
 };
 Q_DECLARE_METATYPE( CMakeFunctionDesc )
 

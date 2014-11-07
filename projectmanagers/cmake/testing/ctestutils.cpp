@@ -24,6 +24,7 @@
 #include "ctestutils.h"
 #include "ctestsuite.h"
 #include "ctestfindjob.h"
+#include "parser/cmakelistsparser.h"
 #include "../debug.h"
 
 #include <interfaces/iproject.h>
@@ -38,7 +39,37 @@
 
 using namespace KDevelop;
 
-void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolderItem* folder)
+namespace
+{
+
+QList<Path> filesToUrls(const QList<ProjectFileItem*>& files)
+{
+    QList<Path> ret;
+    for(ProjectFileItem* f : files) {
+        ret += f->path();
+    }
+    return ret;
+}
+
+QList<Path> filesForExecutable(ProjectFolderItem* folder, const QUrl& builtUrl)
+{
+    for(ProjectTargetItem* target : folder->targetList()) {
+        ProjectExecutableTargetItem* exe = target->executable();
+        if (exe && exe->builtUrl() == builtUrl) {
+            return filesToUrls(exe->fileList());
+        }
+    }
+    for(ProjectFolderItem* f : folder->folderList()) {
+        QList<Path> urls = filesForExecutable(f, builtUrl);
+        if (!urls.isEmpty())
+            return urls;
+    }
+    return QList<Path>();
+}
+
+}
+
+void CTestUtils::createTestSuites(ProjectFolderItem* folder)
 {
     IProject* project = folder->project();
     IBuildSystemManager* bsm = project->buildSystemManager();
@@ -46,35 +77,20 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, ProjectFolder
     const Path currentBinDir = bsm->buildDirectory(folder);
     const Path currentSourceDir = folder->path();
 
-    foreach (const Test& test, testSuites)
+    CMakeFileContent fileContents = CMakeListsParser::readCMakeFile(currentBinDir.toLocalFile()+"/CTestTestfile.cmake");
+    for(const CMakeFunctionDesc& func : fileContents)
     {
-        QList<QUrl> files;
-        QString exe = test.executable;
-        QString targetName = QFileInfo(exe).fileName();
-        QList<ProjectTargetItem*> items = bsm->targets(folder);
-        foreach (ProjectTargetItem* item, items)
-        {
-            ProjectExecutableTargetItem * exeTgt = item->executable();
-            if (exeTgt && (exeTgt->text() == test.executable || exeTgt->text()==targetName))
-            {
-                exe = exeTgt->builtUrl().toLocalFile();
-                qCDebug(CMAKE) << "Found proper test target path" << test.executable << "->" << exe;
-                foreach(ProjectFileItem* file, exeTgt->fileList()) {
-                    files += file->url();
-                }
-                break;
-            }
-        }
-        exe.replace("#[bin_dir]", binDir);
-        const Path exePath(currentBinDir, exe);
+        if (func.name.compare("add_test", Qt::CaseInsensitive) != 0)
+            continue;
+        QStringList args = func.argsList();
+        QString testName = args.takeFirst();
+        QUrl exePath = QUrl::fromLocalFile(args.takeFirst());
 
-        QStringList args = test.arguments;
-        for (QStringList::iterator it = args.begin(), end = args.end(); it != end; ++it)
-        {
-            it->replace("#[bin_dir]", binDir);
-        }
-
-        CTestSuite* suite = new CTestSuite(test.name, exePath.toUrl(), files, project, args, test.properties.value("WILL_FAIL", "FALSE") == "TRUE");
+        CTestSuite* suite = new CTestSuite(testName, exePath, filesForExecutable(folder, exePath), project, args, false /*expect fail*/);
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
+    }
+
+    for(ProjectFolderItem* item : folder->folderList()) {
+        createTestSuites(item);
     }
 }
