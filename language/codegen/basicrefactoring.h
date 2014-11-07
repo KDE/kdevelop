@@ -30,6 +30,8 @@
 #include <language/duchain/navigation/useswidget.h>
 
 
+class CppLanguageSupport;
+
 namespace KDevelop
 {
 class ContextMenuExtension;
@@ -149,8 +151,10 @@ protected:
      */
     virtual bool acceptForContextMenu(const Declaration *decl);
 
-private slots:
+protected slots:
     void executeRenameAction();
+
+    friend class ::CppLanguageSupport;
 };
 
 } // End of namespace KDevelop
