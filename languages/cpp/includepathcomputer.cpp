@@ -95,13 +95,17 @@ void IncludePathComputer::computeForeground()
 
     m_projectName = project->name();
 
-    for (const auto& dir : idm->includes(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined | IDefinesAndIncludesManager::CompilerSpecific))){
+    for (const auto& dir : idm->includes(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::UserDefined))){
       addInclude(dir);
     }
     m_defines = idm->defines(file);
 
     qCDebug(CPP) << "Got " << dirs.count() << " include-paths from build-manager";
     foreach (const Path& dir, dirs) {
+      addInclude(dir);
+    }
+
+    for (const auto& dir : idm->includes(file, IDefinesAndIncludesManager::Type(IDefinesAndIncludesManager::CompilerSpecific))){
       addInclude(dir);
     }
   }
