@@ -53,9 +53,9 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, QWidget* parent)
         m_ui->sources->addItem(QIcon::fromTheme(pluginManager->pluginInfo(p).icon()), p->extension<IProjectProvider>()->name());
     }
     
-    connect(m_ui->workingDir, SIGNAL(textChanged(QString)), SLOT(reevaluateCorrection()));
-    connect(m_ui->sources, SIGNAL(currentIndexChanged(int)), SLOT(setSourceIndex(int)));
-    connect(m_ui->get, SIGNAL(clicked()), SLOT(checkoutVcsProject()));
+    connect(m_ui->workingDir, &KUrlRequester::textChanged, this, &ProjectSourcePage::reevaluateCorrection);
+    connect(m_ui->sources, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ProjectSourcePage::setSourceIndex);
+    connect(m_ui->get, &QPushButton::clicked, this, &ProjectSourcePage::checkoutVcsProject);
     
     emit isCorrect(false);
 
@@ -87,7 +87,7 @@ void ProjectSourcePage::setSourceIndex(int index)
     if(vcIface) {
         found=true;
         m_locationWidget=vcIface->vcsLocation(m_ui->sourceBox);
-        connect(m_locationWidget, SIGNAL(changed()), SLOT(locationChanged()));
+        connect(m_locationWidget, &VcsLocationWidget::changed, this, &ProjectSourcePage::locationChanged);
         
         remoteWidgetLayout->addWidget(m_locationWidget);
     } else {
@@ -95,7 +95,7 @@ void ProjectSourcePage::setSourceIndex(int index)
         if(providerIface) {
             found=true;
             m_providerWidget=providerIface->providerWidget(m_ui->sourceBox);
-            connect(m_providerWidget, SIGNAL(changed(QString)), SLOT(projectChanged(QString)));
+            connect(m_providerWidget, &IProjectProviderWidget::changed, this, &ProjectSourcePage::projectChanged);
             
             remoteWidgetLayout->addWidget(m_providerWidget);   
         }
@@ -160,9 +160,9 @@ void ProjectSourcePage::checkoutVcsProject()
     m_ui->workingDir->setEnabled(false);
     m_ui->get->setEnabled(false);
     m_ui->creationProgress->setValue(m_ui->creationProgress->minimum());
-    connect(job, SIGNAL(result(KJob*)), SLOT(projectReceived(KJob*)));
-    connect(job, SIGNAL(percent(KJob*,ulong)), SLOT(progressChanged(KJob*,ulong)));
-    connect(job, SIGNAL(infoMessage(KJob*,QString,QString)), SLOT(infoMessage(KJob*,QString,QString)));
+    connect(job, &VcsJob::result, this, &ProjectSourcePage::projectReceived);
+    connect(job, static_cast<void(VcsJob::*)(KJob*,unsigned long)>(&VcsJob::percent), this, &ProjectSourcePage::progressChanged);
+    connect(job, &VcsJob::infoMessage, this, &ProjectSourcePage::infoMessage);
     ICore::self()->runController()->registerJob(job);
 }
 

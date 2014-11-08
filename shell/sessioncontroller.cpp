@@ -116,10 +116,10 @@ public:
         , recoveryDirectoryIsOwn(false)
     {
         recoveryTimer.setInterval(recoveryStorageInterval * 1000);
-        connect(&recoveryTimer, SIGNAL(timeout()), SLOT(recoveryStorageTimeout()));
+        connect(&recoveryTimer, &QTimer::timeout, this, &SessionControllerPrivate::recoveryStorageTimeout);
 
         // Try the recovery only after the initialization has finished
-        connect(ICore::self(), SIGNAL(initializationCompleted()), SLOT(lateInitialization()), Qt::QueuedConnection);
+        connect(ICore::self(), &ICore::initializationCompleted, this, &SessionControllerPrivate::lateInitialization, Qt::QueuedConnection);
 
         recoveryTimer.setSingleShot(false);
         recoveryTimer.start();
@@ -275,7 +275,7 @@ public:
         q->unplugActionList( "available_sessions" );
         q->plugActionList( "available_sessions", grp->actions() );
 
-        connect( s, SIGNAL(sessionUpdated(KDevelop::ISession*)), SLOT(sessionUpdated(KDevelop::ISession*)) );
+        connect( s, &Session::sessionUpdated, this, &SessionControllerPrivate::sessionUpdated );
         sessionUpdated( s );
     }
 
@@ -328,8 +328,8 @@ private slots:
     void lateInitialization()
     {
         performRecovery();
-        connect(Core::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), SLOT(documentSavedOrClosed(KDevelop::IDocument*)));
-        connect(Core::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(documentSavedOrClosed(KDevelop::IDocument*)));
+        connect(Core::self()->documentController(), &IDocumentController::documentSaved, this, &SessionControllerPrivate::documentSavedOrClosed);
+        connect(Core::self()->documentController(), &IDocumentController::documentClosed, this, &SessionControllerPrivate::documentSavedOrClosed);
     }
 
     void performRecovery()
@@ -563,7 +563,7 @@ SessionController::SessionController( QObject *parent )
     #endif
 
     d->grp = new QActionGroup( this );
-    connect( d->grp, SIGNAL(triggered(QAction*)), this, SLOT(loadSessionFromAction(QAction*)) );
+    connect( d->grp, &QActionGroup::triggered, this, [&] (QAction* a) { d->loadSessionFromAction(a); } );
 }
 
 SessionController::~SessionController()
@@ -808,7 +808,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     proxy->setSourceModel(model);
     proxy->setFilterKeyColumn( 1 );
     proxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
-    connect(filter, SIGNAL(textChanged(QString)), proxy, SLOT(setFilterFixedString(QString)));
+    connect(filter, &QLineEdit::textChanged, proxy, &QSortFilterProxyModel::setFilterFixedString);
 
     SessionChooserDialog dialog(view, proxy, filter);
     view->setEditTriggers(QAbstractItemView::NoEditTriggers);

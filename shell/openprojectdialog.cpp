@@ -52,14 +52,14 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget*
 
     if( fetch ) {
         sourcePageWidget = new ProjectSourcePage( start, this );
-        connect( sourcePageWidget, SIGNAL(isCorrect(bool)), this, SLOT(validateSourcePage(bool)) );
+        connect( sourcePageWidget, &ProjectSourcePage::isCorrect, this, &OpenProjectDialog::validateSourcePage );
         sourcePage = addPage( sourcePageWidget, i18n("Select Source") );
         currentPage = sourcePage;
     }
     
     openPageWidget = new OpenProjectPage( start, this );
-    connect( openPageWidget, SIGNAL(urlSelected(QUrl)), this, SLOT(validateOpenUrl(QUrl)) );
-    connect( openPageWidget, SIGNAL(accepted()), this, SLOT(openPageAccepted()) );
+    connect( openPageWidget, &OpenProjectPage::urlSelected, this, &OpenProjectDialog::validateOpenUrl );
+    connect( openPageWidget, &OpenProjectPage::accepted, this, &OpenProjectDialog::openPageAccepted );
     openPage = addPage( openPageWidget, i18n("Select a build system setup file, existing KDevelop project, "
                                              "or any folder to open as a project") );
     
@@ -68,8 +68,8 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget*
     }
 
     ProjectInfoPage* page = new ProjectInfoPage( this );
-    connect( page, SIGNAL(projectNameChanged(QString)), this, SLOT(validateProjectName(QString)) );
-    connect( page, SIGNAL(projectManagerChanged(QString)), this, SLOT(validateProjectManager(QString)) );
+    connect( page, &ProjectInfoPage::projectNameChanged, this, &OpenProjectDialog::validateProjectName );
+    connect( page, &ProjectInfoPage::projectManagerChanged, this, &OpenProjectDialog::validateProjectManager );
     projectInfoPage = addPage( page, i18n("Project Information") );
     
     setValid( sourcePage, false );
@@ -158,8 +158,8 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url )
                 if( isDir ) {
                     // If a dir was selected fetch all files in it
                     KIO::ListJob* job = KIO::listDir( m_url );
-                    connect( job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)), 
-                                  SLOT(storeFileList(KIO::Job*,KIO::UDSEntryList)));
+                    connect( job, &KIO::ListJob::entries, 
+                                  this, &OpenProjectDialog::storeFileList);
                     KIO::NetAccess::synchronousRun( job, Core::self()->uiController()->activeMainWindow() );
                 } else {
                     // Else we'lll just take the given file

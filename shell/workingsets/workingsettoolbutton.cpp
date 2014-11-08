@@ -47,7 +47,7 @@ WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set)
     setWorkingSet(set);
     setAutoRaise(true);
 
-    connect(this, SIGNAL(clicked(bool)), SLOT(buttonTriggered()));
+    connect(this, &WorkingSetToolButton::clicked, this, &WorkingSetToolButton::buttonTriggered);
 }
 
 WorkingSet* WorkingSetToolButton::workingSet() const

@@ -67,20 +67,20 @@ OpenProjectPage::OpenProjectPage( const QUrl& startUrl, QWidget* parent )
 
     layout->addWidget( fileWidget );
 
-    QWidget* ops= fileWidget->findChild<QWidget*>( "KFileWidget::ops" );
+    KDirOperator* ops = fileWidget->dirOperator();
     // Emitted for changes in the places view, the url navigator and when using the back/forward/up buttons
-    connect( ops, SIGNAL(urlEntered(QUrl)), SLOT(opsEntered(QUrl)));
+    connect(ops, &KDirOperator::urlEntered, this, &OpenProjectPage::opsEntered);
 
     // Emitted when selecting an entry from the "Name" box or editing in there
-    connect( fileWidget->locationEdit(), SIGNAL(editTextChanged(QString)),
-             SLOT(comboTextChanged(QString)));
+    connect( fileWidget->locationEdit(), &KUrlComboBox::editTextChanged,
+             this, &OpenProjectPage::comboTextChanged);
 
     // Emitted when clicking on a file in the fileview area
-    connect( fileWidget, SIGNAL(fileHighlighted(QString)), SLOT(highlightFile(QString)) );
+    connect( fileWidget, &KFileWidget::fileHighlighted, this, &OpenProjectPage::highlightFile );
 
-    connect( fileWidget->dirOperator()->dirLister(), SIGNAL(completed(QUrl)), SLOT(dirChanged(QUrl)));
+    connect( fileWidget->dirOperator()->dirLister(), static_cast<void(KDirLister::*)(const QUrl&)>(&KDirLister::completed), this, &OpenProjectPage::dirChanged);
 
-    connect( fileWidget, SIGNAL(accepted()), SIGNAL(accepted()));
+    connect( fileWidget, &KFileWidget::accepted, this, &OpenProjectPage::accepted);
 }
 
 QUrl OpenProjectPage::getAbsoluteUrl( const QString& file ) const
@@ -115,14 +115,14 @@ void OpenProjectPage::showEvent(QShowEvent* ev)
     QWidget::showEvent(ev);
 }
 
-void OpenProjectPage::highlightFile( const QString& file )
+void OpenProjectPage::highlightFile(const QUrl& file)
 {
-    emit urlSelected( getAbsoluteUrl( file ) );
+    emit urlSelected(file);
 }
 
-void OpenProjectPage::opsEntered( const QUrl& url )
+void OpenProjectPage::opsEntered(const QUrl& url)
 {
-    emit urlSelected( getAbsoluteUrl( url.url() ) );
+    emit urlSelected(url);
 }
 
 void OpenProjectPage::comboTextChanged( const QString& file )

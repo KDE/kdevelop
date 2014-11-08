@@ -187,16 +187,16 @@ SessionDialog::SessionDialog( QWidget* parent )
     setCaption( i18n( "Configure Sessions" ) );
     m_ui->setupUi( mainWidget() );
     m_ui->sessionList->setModel( m_model );
-    connect( m_ui->newButton, SIGNAL(clicked()), this, SLOT(createSession()) );
-    connect( m_ui->deleteButton, SIGNAL(clicked()), this, SLOT(deleteSession()) );
-    connect( m_ui->activateButton, SIGNAL(clicked()), this, SLOT(activateSession()) );
-    connect( m_ui->cloneButton, SIGNAL(clicked()), this, SLOT(cloneSession()) );
-    connect( m_ui->sessionList->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), 
-             this, SLOT(enableButtons(QItemSelection,QItemSelection)) );
-    connect( m_ui->sessionList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-             this, SLOT(enableButtons(QModelIndex,QModelIndex)) );
-    connect( m_model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-             this, SLOT(enableButtons()) );
+    connect( m_ui->newButton, &QPushButton::clicked, this, &SessionDialog::createSession );
+    connect( m_ui->deleteButton, &QPushButton::clicked, this, &SessionDialog::deleteSession );
+    connect( m_ui->activateButton, &QPushButton::clicked, this, &SessionDialog::activateSession );
+    connect( m_ui->cloneButton, &QPushButton::clicked, this, &SessionDialog::cloneSession );
+    connect( m_ui->sessionList->selectionModel(), &QItemSelectionModel::selectionChanged, 
+             this, static_cast<void(SessionDialog::*)(const QItemSelection&,const QItemSelection&)>(&SessionDialog::enableButtons) );
+    connect( m_ui->sessionList->selectionModel(), &QItemSelectionModel::currentChanged,
+             this, static_cast<void(SessionDialog::*)(const QModelIndex&,const QModelIndex&)>(&SessionDialog::enableButtons) );
+    connect( m_model, &SessionModel::rowsRemoved,
+             this, static_cast<void(SessionDialog::*)()>(&SessionDialog::enableButtons) );
     enableButtons( m_ui->sessionList->selectionModel()->selection(), QItemSelection() );
     enableButtons();
 }

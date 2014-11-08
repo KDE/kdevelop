@@ -305,8 +305,8 @@ public:
         m_core->pluginControllerInternal()->loadProjectPlugins();
 
         Project* project = new Project();
-        QObject::connect(project, SIGNAL(aboutToOpen(KDevelop::IProject*)),
-                         q, SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)));
+        QObject::connect(project, &Project::aboutToOpen,
+                         q, &ProjectController::projectAboutToBeOpened);
         if ( !project->open( Path(url) ) )
         {
             m_currentlyOpening.removeAll(url);
@@ -501,7 +501,7 @@ void ProjectController::setupActions()
                                                     "not yet have a KDevelop4 project file, the file "
                                                     "will be created." ) );
     action->setIcon(QIcon::fromTheme("project-open"));
-    connect( action, SIGNAL(triggered(bool)), SLOT(openProject()) );
+    connect(action, &QAction::triggered, this, [&]() { openProject(); });
 
     d->m_fetchProject = action = ac->addAction( "project_fetch" );
     action->setText(i18nc( "@action", "Fetch Project..." ) );
@@ -510,7 +510,7 @@ void ProjectController::setupActions()
     action->setWhatsThis( i18nc( "@info:whatsthis", "Guides the user through the project fetch "
                                                     "and then imports it into KDevelop 4." ) );
 //     action->setIcon(QIcon::fromTheme("project-open"));
-    connect( action, SIGNAL(triggered(bool)), SLOT(fetchProject()) );
+    connect( action, &QAction::triggered, this, &ProjectController::fetchProject );
 
 //    action = ac->addAction( "project_close" );
 //    action->setText( i18n( "C&lose Project" ) );
@@ -520,25 +520,25 @@ void ProjectController::setupActions()
 //    action->setEnabled( false );
 
     d->m_closeProject = action = ac->addAction( "project_close" );
-    connect( action, SIGNAL(triggered(bool)), SLOT(closeSelectedProjects()) );
+    connect( action, &QAction::triggered, this, [&] { d->closeSelectedProjects(); } );
     action->setText( i18nc( "@action", "Close Project(s)" ) );
     action->setIcon( QIcon::fromTheme( "project-development-close" ) );
     action->setToolTip( i18nc( "@info:tooltip", "Closes all currently selected projects" ) );
     action->setEnabled( false );
 
     d->m_openConfig = action = ac->addAction( "project_open_config" );
-    connect( action, SIGNAL(triggered(bool)), SLOT(openProjectConfig()) );
+    connect( action, &QAction::triggered, this, [&] { d->openProjectConfig(); } );
     action->setText( i18n( "Open Configuration..." ) );
     action->setIcon( QIcon::fromTheme("configure") );
     action->setEnabled( false );
 
     action = ac->addAction( "commit_current_project" );
-    connect( action, SIGNAL(triggered(bool)), SLOT(commitCurrentProject()) );
+    connect( action, &QAction::triggered, this, &ProjectController::commitCurrentProject );
     action->setText( i18n( "Commit Current Project..." ) );
     action->setIconText( i18n( "Commit..." ) );
     action->setIcon( QIcon::fromTheme("svn-commit") );
-    connect(d->m_core->uiControllerInternal()->defaultMainWindow(), SIGNAL(areaChanged(Sublime::Area*)),
-            SLOT(areaChanged(Sublime::Area*)));
+    connect(d->m_core->uiControllerInternal()->defaultMainWindow(), &MainWindow::areaChanged,
+            this, [&] (Sublime::Area* area) { d->areaChanged(area); });
     d->m_core->uiControllerInternal()->area(0, "code")->addAction(action);
 
     KSharedConfig * config = KSharedConfig::openConfig().data();
@@ -553,7 +553,7 @@ void ProjectController::setupActions()
     QAction* openProjectForFileAction = new QAction( this );
     ac->addAction("project_open_for_file", openProjectForFileAction);
     openProjectForFileAction->setText(i18n("Open Project for Current File"));
-    connect( openProjectForFileAction, SIGNAL(triggered(bool)), SLOT(openProjectForUrlSlot(bool)));
+    connect( openProjectForFileAction, &QAction::triggered, this, &ProjectController::openProjectForUrlSlot);
 }
 
 ProjectController::~ProjectController()
@@ -583,12 +583,12 @@ void ProjectController::initialize()
 {
     d->buildset = new ProjectBuildSetModel( this );
     buildSetModel()->loadFromSession( Core::self()->activeSession() );
-    connect( this, SIGNAL(projectOpened(KDevelop::IProject*)),
-             d->buildset, SLOT(loadFromProject(KDevelop::IProject*)) );
-    connect( this, SIGNAL(projectClosing(KDevelop::IProject*)),
-             d->buildset, SLOT(saveToProject(KDevelop::IProject*)) );
-    connect( this, SIGNAL(projectClosed(KDevelop::IProject*)),
-             d->buildset, SLOT(projectClosed(KDevelop::IProject*)) );
+    connect( this, &ProjectController::projectOpened,
+             d->buildset, &ProjectBuildSetModel::loadFromProject );
+    connect( this, &ProjectController::projectClosing,
+             d->buildset, &ProjectBuildSetModel::saveToProject );
+    connect( this, &ProjectController::projectClosed,
+             d->buildset, &ProjectBuildSetModel::projectClosed );
 
     d->selectionModel = new QItemSelectionModel(d->model);
 
@@ -607,8 +607,8 @@ void ProjectController::initialize()
 
     QMetaObject::invokeMethod(this, "openProjects", Qt::QueuedConnection, Q_ARG(QList<QUrl>, openProjects));
 
-    connect( Core::self()->selectionController(), SIGNAL(selectionChanged(KDevelop::Context*)),
-             SLOT(updateActionStates(KDevelop::Context*)) );
+    connect( Core::self()->selectionController(), &ISelectionController::selectionChanged,
+             this, [&] (Context* ctx) { d->updateActionStates(ctx); } );
 }
 
 void ProjectController::openProjects(const QList<QUrl>& projects)
@@ -689,7 +689,7 @@ void ProjectController::openProjectForUrl(const QUrl& sourceUrl) {
         QUrl testProjectFile(testAt);
         KIO::ListJob* job = KIO::listDir(testAt);
 
-        connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)), SLOT(eventuallyOpenProjectFile(KIO::Job*,KIO::UDSEntryList)));
+        connect(job, &KIO::ListJob::entries, this, &ProjectController::eventuallyOpenProjectFile);
 
         KIO::NetAccess::synchronousRun(job, ICore::self()->uiController()->activeMainWindow());
         if(d->m_foundProjectFile) {
@@ -878,7 +878,7 @@ void ProjectController::initializePluginCleanup(IProject* proj)
     // Unloading (and thus deleting) these plugins is not a good idea just yet
     // as we're being called by the view part and it gets deleted when we unload the plugin(s)
     // TODO: find a better place to unload
-    connect(proj, SIGNAL(destroyed(QObject*)), this, SLOT(unloadAllProjectPlugins()));
+    connect(proj, &IProject::destroyed, this, [&] { this->d->unloadAllProjectPlugins(); });
 }
 
 void ProjectController::closeProject(IProject* proj_)

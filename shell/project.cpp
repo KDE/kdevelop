@@ -102,7 +102,7 @@ ProjectProgress::ProjectProgress()
     m_timer = new QTimer(this);
     m_timer->setSingleShot( true );
     m_timer->setInterval( 1000 );
-    connect(m_timer, SIGNAL(timeout()),SLOT(slotClean()));
+    connect(m_timer, &QTimer::timeout,this, &ProjectProgress::slotClean);
 }
 
 ProjectProgress::~ProjectProgress()
@@ -489,7 +489,7 @@ void Project::setReloadJob(KJob* job)
     d->loading = true;
     d->fullReload = false;
     d->progress->setBuzzy();
-    connect(job, SIGNAL(finished(KJob*)), SLOT(reloadDone(KJob*)));
+    connect(job, &KJob::finished, this, [&] (KJob* job) { d->reloadDone(job); });
 }
 
 bool Project::open( const Path& projectFile )
@@ -519,7 +519,7 @@ bool Project::open( const Path& projectFile )
     d->loadVersionControlPlugin(projectGroup);
     d->progress->setBuzzy();
     KJob* importJob = iface->createImportJob(d->topItem );
-    connect( importJob, SIGNAL(result(KJob*)), this, SLOT(importDone(KJob*)) );
+    connect( importJob, &KJob::result, this, [&] (KJob* job) { d->importDone(job); } );
     Core::self()->runController()->registerJob( importJob );
     return true;
 }

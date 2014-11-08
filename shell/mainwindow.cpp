@@ -225,7 +225,7 @@ void MainWindow::configureShortcuts()
             dlg.addCollection( client->actionCollection() );
     }
 
-    connect(&dlg, SIGNAL(saved()), SLOT(shortcutsChanged()));
+    connect(&dlg, &KShortcutsDialog::saved, this, &MainWindow::shortcutsChanged);
     dlg.configure(true);
 
     QMap<QString, QKeySequence> shortcuts;
@@ -277,14 +277,14 @@ void MainWindow::initialize()
     Core::self()->partController()->addManagedTopLevelWidget(this);
     qCDebug(SHELL) << "Adding plugin-added connection";
 
-    connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)),
-             d, SLOT(addPlugin(KDevelop::IPlugin*)));
-    connect( Core::self()->pluginController(), SIGNAL(pluginUnloaded(KDevelop::IPlugin*)),
-             d, SLOT(removePlugin(KDevelop::IPlugin*)));
-    connect( Core::self()->partController(), SIGNAL(activePartChanged(KParts::Part*)),
-        d, SLOT(activePartChanged(KParts::Part*)));
-    connect( this, SIGNAL(activeViewChanged(Sublime::View*)),
-        d, SLOT(changeActiveView(Sublime::View*)));
+    connect( Core::self()->pluginController(), &IPluginController::pluginLoaded,
+             d, &MainWindowPrivate::addPlugin);
+    connect( Core::self()->pluginController(), &IPluginController::pluginUnloaded,
+             d, &MainWindowPrivate::removePlugin);
+    connect( Core::self()->partController(), &IPartController::activePartChanged,
+        d, &MainWindowPrivate::activePartChanged);
+    connect( this, &MainWindow::activeViewChanged,
+        d, &MainWindowPrivate::changeActiveView);
 
     foreach(IPlugin* plugin, Core::self()->pluginController()->loadedPlugins())
         d->addPlugin(plugin);
@@ -297,11 +297,11 @@ void MainWindow::initialize()
     d->setupGui();
 
     //Queued so we process it with some delay, to make sure the rest of the UI has already adapted
-    connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(updateCaption()), Qt::QueuedConnection);
-    connect(Core::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(updateCaption()), Qt::QueuedConnection);
-    connect(Core::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), SLOT(updateCaption()), Qt::QueuedConnection);
+    connect(Core::self()->documentController(), &IDocumentController::documentActivated, this, &MainWindow::updateCaption, Qt::QueuedConnection);
+    connect(Core::self()->documentController(), &IDocumentController::documentClosed, this, &MainWindow::updateCaption, Qt::QueuedConnection);
+    connect(Core::self()->documentController(), &IDocumentController::documentUrlChanged, this, &MainWindow::updateCaption, Qt::QueuedConnection);
 
-    connect(Core::self()->sessionController()->activeSession(), SIGNAL(sessionUpdated(KDevelop::ISession*)), SLOT(updateCaption()));
+    connect(Core::self()->sessionController()->activeSession(), &ISession::sessionUpdated, this, &MainWindow::updateCaption);
 
     updateCaption();
 }

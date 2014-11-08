@@ -60,8 +60,8 @@ void EditStyleDialog::init()
 		QVBoxLayout *layout = new QVBoxLayout(m_ui.settingsWidgetParent);
 		layout->addWidget(m_settingsWidget);
 		m_ui.settingsWidgetParent->setLayout(layout);
-		connect(m_settingsWidget, SIGNAL(previewTextChanged(QString)),
-			this, SLOT(updatePreviewText(QString)));
+		connect(m_settingsWidget, &SettingsWidget::previewTextChanged,
+			this, &EditStyleDialog::updatePreviewText);
 	}
 
 	m_document = KTextEditor::Editor::instance()->createDocument(this);

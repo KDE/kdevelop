@@ -178,22 +178,22 @@ ProgressItem *ProgressManager::createProgressItemImpl( ProgressItem *parent,
             }
         }
         // connect all signals
-        connect ( t, SIGNAL(progressItemCompleted(KDevelop::ProgressItem*)),
-                  this, SLOT(slotTransactionCompleted(KDevelop::ProgressItem*)) );
-        connect ( t, SIGNAL(progressItemProgress(KDevelop::ProgressItem*,uint)),
-                  this, SIGNAL(progressItemProgress(KDevelop::ProgressItem*,uint)) );
-        connect ( t, SIGNAL(progressItemAdded(KDevelop::ProgressItem*)),
-                  this, SIGNAL(progressItemAdded(KDevelop::ProgressItem*)) );
-        connect ( t, SIGNAL(progressItemCanceled(KDevelop::ProgressItem*)),
-                  this, SIGNAL(progressItemCanceled(KDevelop::ProgressItem*)) );
-        connect ( t, SIGNAL(progressItemStatus(KDevelop::ProgressItem*,QString)),
-                  this, SIGNAL(progressItemStatus(KDevelop::ProgressItem*,QString)) );
-        connect ( t, SIGNAL(progressItemLabel(KDevelop::ProgressItem*,QString)),
-                  this, SIGNAL(progressItemLabel(KDevelop::ProgressItem*,QString)) );
-        connect ( t, SIGNAL(progressItemUsesCrypto(KDevelop::ProgressItem*,bool)),
-                  this, SIGNAL(progressItemUsesCrypto(KDevelop::ProgressItem*,bool)) );
-        connect ( t, SIGNAL(progressItemUsesBusyIndicator(KDevelop::ProgressItem*,bool)),
-                  this, SIGNAL(progressItemUsesBusyIndicator(KDevelop::ProgressItem*,bool)) );
+        connect ( t, &ProgressItem::progressItemCompleted,
+                  this, &ProgressManager::slotTransactionCompleted );
+        connect ( t, &ProgressItem::progressItemProgress,
+                  this, &ProgressManager::progressItemProgress );
+        connect ( t, &ProgressItem::progressItemAdded,
+                  this, &ProgressManager::progressItemAdded );
+        connect ( t, &ProgressItem::progressItemCanceled,
+                  this, &ProgressManager::progressItemCanceled );
+        connect ( t, &ProgressItem::progressItemStatus,
+                  this, &ProgressManager::progressItemStatus );
+        connect ( t, &ProgressItem::progressItemLabel,
+                  this, &ProgressManager::progressItemLabel );
+        connect ( t, &ProgressItem::progressItemUsesCrypto,
+                  this, &ProgressManager::progressItemUsesCrypto );
+        connect ( t, &ProgressItem::progressItemUsesBusyIndicator,
+                  this, &ProgressManager::progressItemUsesBusyIndicator );
 
         emit progressItemAdded( t );
     } else {

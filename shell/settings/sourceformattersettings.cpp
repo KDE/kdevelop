@@ -64,15 +64,15 @@ SourceFormatterSettings::SourceFormatterSettings(QWidget *parent, const QVariant
     : KCModule(KAboutData::pluginData("kcm_kdevsourceformattersettings"), parent, args)
 {
     setupUi(this);
-    connect( cbLanguages, SIGNAL(currentIndexChanged(int)), SLOT(selectLanguage(int)) );
-    connect( cbFormatters, SIGNAL(currentIndexChanged(int)), SLOT(selectFormatter(int)) );
-    connect( chkKateModelines, SIGNAL(toggled(bool)), SLOT(somethingChanged()) );
-    connect( chkKateOverrideIndentation, SIGNAL(toggled(bool)), SLOT(somethingChanged()) );
-    connect( styleList, SIGNAL(currentRowChanged(int)), SLOT(selectStyle(int)) );
-    connect( btnDelStyle, SIGNAL(clicked()), SLOT(deleteStyle()) );
-    connect( btnNewStyle, SIGNAL(clicked()), SLOT(newStyle()) );
-    connect( btnEditStyle, SIGNAL(clicked()), SLOT(editStyle()) );
-    connect( styleList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(styleNameChanged(QListWidgetItem*)) );
+    connect( cbLanguages, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &SourceFormatterSettings::selectLanguage );
+    connect( cbFormatters, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &SourceFormatterSettings::selectFormatter );
+    connect( chkKateModelines, &QCheckBox::toggled, this, &SourceFormatterSettings::somethingChanged );
+    connect( chkKateOverrideIndentation, &QCheckBox::toggled, this, &SourceFormatterSettings::somethingChanged );
+    connect( styleList, &QListWidget::currentRowChanged, this, &SourceFormatterSettings::selectStyle );
+    connect( btnDelStyle, &QPushButton::clicked, this, &SourceFormatterSettings::deleteStyle );
+    connect( btnNewStyle, &QPushButton::clicked, this, &SourceFormatterSettings::newStyle );
+    connect( btnEditStyle, &QPushButton::clicked, this, &SourceFormatterSettings::editStyle );
+    connect( styleList, &QListWidget::itemChanged, this, &SourceFormatterSettings::styleNameChanged );
 
     m_document = KTextEditor::Editor::instance()->createDocument(this);
     m_document->setReadWrite(false);

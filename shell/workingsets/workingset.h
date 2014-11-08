@@ -104,7 +104,6 @@ public:
     void deleteSet(bool force, bool silent = false);
 
 private slots:
-    void deleteSet();
     void areaViewAdded(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/);
     void areaViewRemoved(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/);
 

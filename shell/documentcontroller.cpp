@@ -354,7 +354,7 @@ struct DocumentControllerPrivate {
         }
         //react on document deletion - we need to cleanup controller structures
 
-        QObject::connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), controller, SLOT(notifyDocumentClosed(Sublime::Document*)));
+        QObject::connect(sdoc, &Sublime::Document::aboutToDelete, controller, &DocumentController::notifyDocumentClosed);
         //We check if it was already opened before
         bool emitOpened = !documents.contains(url);
         if(emitOpened)
@@ -528,8 +528,8 @@ struct DocumentControllerPrivate {
             emit controller->documentJumpPerformed(doc, activePosition, previousActiveDocument, previousActivePosition);
 
         if ( doc->textDocument() ) {
-            QObject::connect(doc->textDocument(), SIGNAL(reloaded(KTextEditor::Document*)), controller,
-                             SLOT(reloaded(KTextEditor::Document*)));
+            QObject::connect(doc->textDocument(), &KTextEditor::Document::reloaded, controller,
+                             &DocumentController::reloaded);
         }
 
         return true;
@@ -565,7 +565,7 @@ DocumentController::DocumentController( QObject *parent )
     QDBusConnection::sessionBus().registerObject( "/org/kdevelop/DocumentController",
         this, QDBusConnection::ExportScriptableSlots );
 
-    connect(this, SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(changeDocumentUrl(KDevelop::IDocument*)));
+    connect(this, &DocumentController::documentUrlChanged, this, [&] (IDocument* document) { d->changeDocumentUrl(document); });
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 }
@@ -600,7 +600,7 @@ void DocumentController::setupActions()
     action->setIcon(QIcon::fromTheme("document-open"));
     ac->setDefaultShortcut(action, Qt::CTRL + Qt::Key_O );
     action->setText(i18n( "&Open..." ) );
-    connect( action, SIGNAL(triggered(bool)), SLOT(chooseDocument()) );
+    connect( action, &QAction::triggered, this, [&] { d->chooseDocument(); } );
     action->setToolTip( i18n( "Open file" ) );
     action->setWhatsThis( i18n( "Opens a file for editing." ) );
 
@@ -612,7 +612,7 @@ void DocumentController::setupActions()
     action = d->saveAll = ac->addAction( "file_save_all" );
     action->setIcon(QIcon::fromTheme("document-save"));
     action->setText(i18n( "Save Al&l" ) );
-    connect( action, SIGNAL(triggered(bool)), SLOT(slotSaveAllDocuments()) );
+    connect( action, &QAction::triggered, this, &DocumentController::slotSaveAllDocuments );
     action->setToolTip( i18n( "Save all open documents" ) );
     action->setWhatsThis( i18n( "Save all open documents, prompting for additional information when necessary." ) );
     ac->setDefaultShortcut(action, QKeySequence(Qt::CTRL + Qt::Key_L) );
@@ -621,7 +621,7 @@ void DocumentController::setupActions()
     action = d->revertAll = ac->addAction( "file_revert_all" );
     action->setIcon(QIcon::fromTheme("document-revert"));
     action->setText(i18n( "Reload All" ) );
-    connect( action, SIGNAL(triggered(bool)), SLOT(reloadAllDocuments()) );
+    connect( action, &QAction::triggered, this, &DocumentController::reloadAllDocuments );
     action->setToolTip( i18n( "Revert all open documents" ) );
     action->setWhatsThis( i18n( "Revert all open documents, returning to the previously saved state." ) );
     action->setEnabled(false);
@@ -630,7 +630,7 @@ void DocumentController::setupActions()
     action->setIcon(QIcon::fromTheme("window-close"));
     ac->setDefaultShortcut(action, Qt::CTRL + Qt::Key_W );
     action->setText( i18n( "&Close" ) );
-    connect( action, SIGNAL(triggered(bool)), SLOT(fileClose()) );
+    connect( action, &QAction::triggered, this, &DocumentController::fileClose );
     action->setToolTip( i18n( "Close file" ) );
     action->setWhatsThis( i18n( "Closes current file." ) );
     action->setEnabled(false);
@@ -638,7 +638,7 @@ void DocumentController::setupActions()
     action = d->closeAll = ac->addAction( "file_close_all" );
     action->setIcon(QIcon::fromTheme("window-close"));
     action->setText(i18n( "Clos&e All" ) );
-    connect( action, SIGNAL(triggered(bool)), SLOT(closeAllDocuments()) );
+    connect( action, &QAction::triggered, this, &DocumentController::closeAllDocuments );
     action->setToolTip( i18n( "Close all open documents" ) );
     action->setWhatsThis( i18n( "Close all open documents, prompting for additional information when necessary." ) );
     action->setEnabled(false);
@@ -647,13 +647,13 @@ void DocumentController::setupActions()
     action->setIcon(QIcon::fromTheme("window-close"));
     ac->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_W );
     action->setText(i18n( "Close All Ot&hers" ) );
-    connect( action, SIGNAL(triggered(bool)), SLOT(closeAllOtherDocuments()) );
+    connect( action, &QAction::triggered, this, &DocumentController::closeAllOtherDocuments );
     action->setToolTip( i18n( "Close all other documents" ) );
     action->setWhatsThis( i18n( "Close all open documents, with the exception of the currently active document." ) );
     action->setEnabled(false);
 
     action = ac->addAction( "vcsannotate_current_document" );
-    connect( action, SIGNAL(triggered(bool)), SLOT(vcsAnnotateCurrentDocument()) );
+    connect( action, &QAction::triggered, this, &DocumentController::vcsAnnotateCurrentDocument );
     action->setText( i18n( "Show Annotate on current document") );
     action->setIconText( i18n( "Annotate" ) );
     action->setIcon( QIcon::fromTheme("user-properties") );
@@ -1224,8 +1224,10 @@ void DocumentController::vcsAnnotateCurrentDocument()
         IBasicVersionControl* iface = 0;
         iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
         auto helper = new VcsPluginHelper(project->versionControlPlugin(), iface);
-        connect(doc->textDocument(), SIGNAL(aboutToClose(KTextEditor::Document*)),
-                helper, SLOT(disposeEventually(KTextEditor::Document*)));
+        connect(doc->textDocument(), &KTextEditor::Document::aboutToClose,
+                helper, static_cast<void(VcsPluginHelper::*)(KTextEditor::Document*)>(&VcsPluginHelper::disposeEventually));
+        Q_ASSERT(qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->activeTextView()));
+        // can't use new signal slot syntax here, AnnotationViewInterface is not a QObject
         connect(doc->activeTextView(), SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
                 helper, SLOT(disposeEventually(View*, bool)));
         helper->addContextDocument(url);

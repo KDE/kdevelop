@@ -327,6 +327,7 @@ bool Core::initialize(QObject* splash, Setup mode, const QString& session )
 
     m_self = new Core();
     if (splash) {
+        // can't use new signal/slot syntax here, we don't know the class that splash has at runtime
         connect(m_self, SIGNAL(startupProgress(int)), splash, SLOT(progress(int)));
     }
     bool ret = m_self->d->initialize(mode, session);
@@ -350,13 +351,13 @@ Core::Core(QObject *parent)
 {
     d = new CorePrivate(this);
 
-    connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(shutdown()));
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &Core::shutdown);
 }
 
 Core::Core(CorePrivate* dd, QObject* parent)
 : ICore(parent), d(dd)
 {
-    connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(shutdown()));
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &Core::shutdown);
 }
 
 Core::~Core()

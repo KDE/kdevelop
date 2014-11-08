@@ -42,8 +42,8 @@ WorkingSet* getWorkingSet(const QString& id)
 ClosedWorkingSetsWidget::ClosedWorkingSetsWidget( MainWindow* window )
     : QWidget(0), m_mainWindow(window)
 {
-    connect(window, SIGNAL(areaChanged(Sublime::Area*)),
-            this, SLOT(areaChanged(Sublime::Area*)));
+    connect(window, &MainWindow::areaChanged,
+            this, &ClosedWorkingSetsWidget::areaChanged);
 
     m_layout = new QHBoxLayout(this);
     m_layout->setMargin(0);
@@ -52,23 +52,23 @@ ClosedWorkingSetsWidget::ClosedWorkingSetsWidget( MainWindow* window )
         areaChanged(window->area());
     }
 
-    connect(Core::self()->workingSetControllerInternal(), SIGNAL(aboutToRemoveWorkingSet(WorkingSet*)),
-            this, SLOT(removeWorkingSet(WorkingSet*)));
+    connect(Core::self()->workingSetControllerInternal(), &WorkingSetController::aboutToRemoveWorkingSet,
+            this, &ClosedWorkingSetsWidget::removeWorkingSet);
 
-    connect(Core::self()->workingSetControllerInternal(), SIGNAL(workingSetAdded(WorkingSet*)),
-            this, SLOT(addWorkingSet(WorkingSet*)));
+    connect(Core::self()->workingSetControllerInternal(), &WorkingSetController::workingSetAdded,
+            this, &ClosedWorkingSetsWidget::addWorkingSet);
 }
 
 void ClosedWorkingSetsWidget::areaChanged( Sublime::Area* area )
 {
     if (m_connectedArea) {
-        disconnect(area, SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)),
-                   this, SLOT(changedWorkingSet(Sublime::Area*,QString,QString)));
+        disconnect(area, &Sublime::Area::changedWorkingSet,
+                   this, &ClosedWorkingSetsWidget::changedWorkingSet);
     }
 
     m_connectedArea = area;
-    connect(m_connectedArea, SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)),
-            this, SLOT(changedWorkingSet(Sublime::Area*,QString,QString)));
+    connect(m_connectedArea.data(), &Sublime::Area::changedWorkingSet,
+            this, &ClosedWorkingSetsWidget::changedWorkingSet);
 
     // clear layout
     qDeleteAll(m_buttons.values());

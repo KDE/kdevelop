@@ -112,7 +112,7 @@ public:
     KTextEditor::Range initialRange() const;
 
 private:
-    class TextViewPrivate* const d;
+    struct TextViewPrivate* const d;
 
     Q_PRIVATE_SLOT(d, void sendStatusChanged());
 };

@@ -80,8 +80,8 @@ PluginPreferences::PluginPreferences( QWidget *parent, const QVariantList &args 
                               Core::self()->activeSession()->config() );
         ++it;
     }
-    connect( selector, SIGNAL(changed(bool)), this, SLOT(changed()) );
-    connect( selector, SIGNAL(configCommitted(QByteArray)), this, SLOT(reparseConfig(QByteArray)) );
+    connect( selector, &KPluginSelector::changed, this, static_cast<void(PluginPreferences::*)()>(&PluginPreferences::changed) );
+    connect( selector, &KPluginSelector::configCommitted, this, &PluginPreferences::reparseConfig );
     selector->load();
 }
 

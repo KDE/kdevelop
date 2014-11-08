@@ -189,7 +189,7 @@ public:
     NewToolViewListWidget(MainWindow *mw, QWidget* parent = 0)
         :QListWidget(parent), m_mw(mw)
     {
-        connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(addNewToolViewByDoubleClick(QModelIndex)));
+        connect(this, &NewToolViewListWidget::doubleClicked, this, &NewToolViewListWidget::addNewToolViewByDoubleClick);
     }
 
 Q_SIGNALS:
@@ -218,9 +218,8 @@ UiController::UiController(Core *core)
     if (!defaultMainWindow() || (Core::self()->setupFlags() & Core::NoUi))
         return;
 
-    connect( QApplication::instance(),
-             SIGNAL(focusChanged(QWidget*,QWidget*)),
-            this, SLOT(widgetChanged(QWidget*,QWidget*)) );
+    connect(qApp, &QApplication::focusChanged,
+            this, [this](QWidget* old, QWidget* now) { d->widgetChanged(old, now); } );
 
     setupActions();
 }
@@ -427,7 +426,7 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
     }
 
     list->setFocus();
-    connect(list, SIGNAL(addNewToolView(MainWindow*,QListWidgetItem*)), this, SLOT(addNewToolView(MainWindow*,QListWidgetItem*)));
+    connect(list, &NewToolViewListWidget::addNewToolView, this, &UiController::addNewToolView);
     dia->setMainWidget(list);
     if (dia->exec() == QDialog::Accepted)
     {
@@ -627,8 +626,8 @@ Sublime::View* UiController::addToolViewToArea(IToolViewFactory* factory,
         view,
         p == Sublime::AllPositions ? Sublime::dockAreaToPosition(factory->defaultPosition()) : p);
 
-    connect(view, SIGNAL(raise(Sublime::View*)),
-            SLOT(raiseToolView(Sublime::View*)));
+    connect(view, &Sublime::View::raise,
+            this, static_cast<void(UiController::*)(Sublime::View*)>(&UiController::raiseToolView));
 
     factory->viewCreated(view);
     return view;

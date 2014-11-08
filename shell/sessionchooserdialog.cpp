@@ -39,24 +39,24 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* 
     m_updateStateTimer.setInterval(5000);
     m_updateStateTimer.setSingleShot(false);
     m_updateStateTimer.start();
-    connect(&m_updateStateTimer, SIGNAL(timeout()), SLOT(updateState()));
-    connect(view, SIGNAL(doubleClicked(QModelIndex)), SLOT(doubleClicked(QModelIndex)));
-    connect(view, SIGNAL(entered(QModelIndex)), SLOT(itemEntered(QModelIndex)));
+    connect(&m_updateStateTimer, &QTimer::timeout, this, &SessionChooserDialog::updateState);
+    connect(view, &QListView::doubleClicked, this, &SessionChooserDialog::doubleClicked);
+    connect(view, &QListView::entered, this, &SessionChooserDialog::itemEntered);
 
     m_deleteButton = new QPushButton(view->viewport());
     m_deleteButton->setIcon(QIcon::fromTheme("edit-delete"));
     m_deleteButton->setToolTip(i18nc("@info", "Delete session"));
     m_deleteButton->hide();
-    connect(m_deleteButton, SIGNAL(clicked(bool)), SLOT(deleteButtonPressed()));
+    connect(m_deleteButton, &QPushButton::clicked, this, &SessionChooserDialog::deleteButtonPressed);
 
     m_deleteButtonTimer.setInterval(500);
     m_deleteButtonTimer.setSingleShot(true);
-    connect(&m_deleteButtonTimer, SIGNAL(timeout()), SLOT(showDeleteButton()));
+    connect(&m_deleteButtonTimer, &QTimer::timeout, this, &SessionChooserDialog::showDeleteButton);
 
     view->setMouseTracking(true);
     view->installEventFilter(this);
     filter->installEventFilter(this);
-    connect(filter, SIGNAL(textChanged(QString)), SLOT(filterTextChanged()));
+    connect(filter, &QLineEdit::textChanged, this, &SessionChooserDialog::filterTextChanged);
 
     setCaption(i18n("Pick a Session"));
     setButtons(KDialog::Ok | KDialog::Close);

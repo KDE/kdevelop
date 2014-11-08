@@ -60,7 +60,7 @@ AreaDisplay::AreaDisplay(KDevelop::MainWindow* parent)
     m_button->setPopupMode(QToolButton::InstantPopup);
     layout()->addWidget(m_button);
 
-    connect(parent, SIGNAL(areaChanged(Sublime::Area*)), SLOT(newArea(Sublime::Area*)));
+    connect(parent, &MainWindow::areaChanged, this, &AreaDisplay::newArea);
 }
 
 void AreaDisplay::newArea(Sublime::Area* area)

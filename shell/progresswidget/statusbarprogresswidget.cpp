@@ -93,28 +93,28 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
     mode = None;
     setMode();
 
-    connect( m_pButton, SIGNAL(clicked()),
-             progressDialog, SLOT(slotToggleVisibility()) );
+    connect( m_pButton, &QPushButton::clicked,
+             progressDialog, &ProgressDialog::slotToggleVisibility );
 
-    connect ( ProgressManager::instance(), SIGNAL(progressItemAdded(KDevelop::ProgressItem*)),
-              this, SLOT(slotProgressItemAdded(KDevelop::ProgressItem*)) );
-    connect ( ProgressManager::instance(), SIGNAL(progressItemCompleted(KDevelop::ProgressItem*)),
-              this, SLOT(slotProgressItemCompleted(KDevelop::ProgressItem*)) );
-    connect ( ProgressManager::instance(), SIGNAL(progressItemUsesBusyIndicator(KDevelop::ProgressItem*,bool)),
-              this, SLOT(updateBusyMode()) );
+    connect ( ProgressManager::instance(), &ProgressManager::progressItemAdded,
+              this, &StatusbarProgressWidget::slotProgressItemAdded );
+    connect ( ProgressManager::instance(), &ProgressManager::progressItemCompleted,
+              this, &StatusbarProgressWidget::slotProgressItemCompleted );
+    connect ( ProgressManager::instance(), &ProgressManager::progressItemUsesBusyIndicator,
+              this, &StatusbarProgressWidget::updateBusyMode );
 
-    connect ( progressDialog, SIGNAL(visibilityChanged(bool)),
-              this, SLOT(slotProgressDialogVisible(bool)) );
+    connect ( progressDialog, &ProgressDialog::visibilityChanged,
+              this, &StatusbarProgressWidget::slotProgressDialogVisible );
 
     mDelayTimer = new QTimer( this );
     mDelayTimer->setSingleShot( true );
-    connect ( mDelayTimer, SIGNAL(timeout()),
-              this, SLOT(slotShowItemDelayed()) );
+    connect ( mDelayTimer, &QTimer::timeout,
+              this, &StatusbarProgressWidget::slotShowItemDelayed );
 
     mCleanTimer = new QTimer( this );
     mCleanTimer->setSingleShot( true );
-    connect ( mCleanTimer, SIGNAL(timeout()),
-              this, SLOT(slotClean()) );
+    connect ( mCleanTimer, &QTimer::timeout,
+              this, &StatusbarProgressWidget::slotClean );
 }
 
 // There are three cases: no progressitem, one progressitem (connect to it directly),
@@ -132,8 +132,8 @@ void StatusbarProgressWidget::updateBusyMode()
     } else { // N items
         if ( !mBusyTimer ) {
             mBusyTimer = new QTimer( this );
-            connect( mBusyTimer, SIGNAL(timeout()),
-                     this, SLOT(slotBusyIndicator()) );
+            connect( mBusyTimer, &QTimer::timeout,
+                     this, &StatusbarProgressWidget::slotBusyIndicator );
             mDelayTimer->start( 1000 );
         }
     }
@@ -170,14 +170,14 @@ void StatusbarProgressWidget::slotProgressItemCompleted( ProgressItem *item )
 void StatusbarProgressWidget::connectSingleItem()
 {
     if ( mCurrentItem ) {
-        disconnect ( mCurrentItem, SIGNAL(progressItemProgress(KDevelop::ProgressItem*,uint)),
-                     this, SLOT(slotProgressItemProgress(KDevelop::ProgressItem*,uint)) );
+        disconnect ( mCurrentItem, &ProgressItem::progressItemProgress,
+                     this, &StatusbarProgressWidget::slotProgressItemProgress );
         mCurrentItem = 0;
     }
     mCurrentItem = ProgressManager::instance()->singleItem();
     if ( mCurrentItem ) {
-        connect ( mCurrentItem, SIGNAL(progressItemProgress(KDevelop::ProgressItem*,uint)),
-                  this, SLOT(slotProgressItemProgress(KDevelop::ProgressItem*,uint)) );
+        connect ( mCurrentItem, &ProgressItem::progressItemProgress,
+                  this, &StatusbarProgressWidget::slotProgressItemProgress );
     }
 }
 

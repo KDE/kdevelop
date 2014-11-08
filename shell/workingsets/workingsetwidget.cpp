@@ -44,8 +44,8 @@ WorkingSetWidget::WorkingSetWidget(Sublime::Area* area, QWidget* parent)
     , m_area(area)
 {
     //Queued connect so the change is already applied to the area when we start processing
-    connect(m_area, SIGNAL(changingWorkingSet(Sublime::Area*,QString,QString)), this,
-            SLOT(changingWorkingSet(Sublime::Area*,QString,QString)), Qt::QueuedConnection);
+    connect(m_area.data(), &Sublime::Area::changingWorkingSet, this,
+            &WorkingSetWidget::changingWorkingSet, Qt::QueuedConnection);
 
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
 
@@ -68,16 +68,16 @@ void WorkingSetWidget::changingWorkingSet( Sublime::Area* area, const QString& /
     Q_UNUSED(area);
 
     if (workingSet()) {
-        disconnect(workingSet(), SIGNAL(setChangedSignificantly()),
-                   this, SLOT(setChangedSignificantly()));
+        disconnect(workingSet(), &WorkingSet::setChangedSignificantly,
+                   this, &WorkingSetWidget::setChangedSignificantly);
     }
 
     WorkingSet* set = getSet(newSet);
     setWorkingSet(set);
 
     if (set) {
-        connect(set, SIGNAL(setChangedSignificantly()),
-                     SLOT(setChangedSignificantly()));
+        connect(set, &WorkingSet::setChangedSignificantly,
+                     this, &WorkingSetWidget::setChangedSignificantly);
     }
     setVisible(set && !set->isEmpty());
 }

@@ -206,11 +206,11 @@ struct TextDocumentPrivate {
         if ( !req ) {
             return;
         }
-        QObject::connect(req, SIGNAL(finished(bool)),
-                         m_textDocument, SLOT(repositoryCheckFinished(bool)));
+        QObject::connect(req, &CheckInRepositoryJob::finished,
+                         m_textDocument, [&] (bool canRecreate) { m_textDocument->d->repositoryCheckFinished(canRecreate); });
         // Abort the request when the user edits the document
-        QObject::connect(m_textDocument->textDocument(), SIGNAL(textChanged(KTextEditor::Document*)),
-                         req, SLOT(abort()));
+        QObject::connect(m_textDocument->textDocument(), &KTextEditor::Document::textChanged,
+                         req, &CheckInRepositoryJob::abort);
     }
 
     void repositoryCheckFinished(bool canRecreate) {
@@ -385,9 +385,9 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         d->document = Core::self()->partControllerInternal()->createTextPart(Core::self()->documentController()->encoding());
 
         // Connect to the first text changed signal, it occurs before the completed() signal
-        connect(d->document, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(slotDocumentLoaded()));
+        connect(d->document.data(), &KTextEditor::Document::textChanged, this, [&] { d->slotDocumentLoaded(); });
         // Also connect to the completed signal, sometimes the first text changed signal is missed because the part loads too quickly (? TODO - confirm this is necessary)
-        connect(d->document, SIGNAL(completed()), this, SLOT(slotDocumentLoaded()));
+        connect(d->document.data(), static_cast<void(KTextEditor::Document::*)()>(&KTextEditor::Document::completed), this, [&] { d->slotDocumentLoaded(); });
 
         // Set encoding passed via constructor
         // Needs to be done before openUrl, else katepart won't use the encoding
@@ -409,21 +409,24 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
         d->loadSessionConfig();
 
-        connect(d->document, SIGNAL(modifiedChanged(KTextEditor::Document*)),
-                 this, SLOT(newDocumentStatus(KTextEditor::Document*)));
-        connect(d->document, SIGNAL(textChanged(KTextEditor::Document*)),
-                 this, SLOT(textChanged(KTextEditor::Document*)));
-        connect(d->document, SIGNAL(documentUrlChanged(KTextEditor::Document*)),
-                 this, SLOT(documentUrlChanged(KTextEditor::Document*)));
-        connect(d->document, SIGNAL(documentSavedOrUploaded(KTextEditor::Document*,bool)),
-                 this, SLOT(documentSaved(KTextEditor::Document*,bool)));
-        connect(d->document, SIGNAL(marksChanged(KTextEditor::Document*)),
-                 this, SLOT(saveSessionConfig()));
+        connect(d->document.data(), &KTextEditor::Document::modifiedChanged,
+                 this, [&] (KTextEditor::Document* document) { d->newDocumentStatus(document); });
+        connect(d->document.data(), &KTextEditor::Document::textChanged,
+                 this, [&] (KTextEditor::Document* document) { d->textChanged(document); });
+        connect(d->document.data(), &KTextEditor::Document::documentUrlChanged,
+                 this, [&] (KTextEditor::Document* document) { d->documentUrlChanged(document); });
+        connect(d->document.data(), &KTextEditor::Document::documentSavedOrUploaded,
+                 this, [&] (KTextEditor::Document* document, bool saveAs) { d->documentSaved(document, saveAs); });
 
-        KTextEditor::ModificationInterface *iface = qobject_cast<KTextEditor::ModificationInterface*>(d->document);
-        if (iface)
-        {
+        if (qobject_cast<KTextEditor::MarkInterface*>(d->document)) {
+            // can't use new signal/slot syntax here, MarkInterface is not a QObject
+            connect(d->document, SIGNAL(marksChanged(KTextEditor::Document*)),
+                    this, SLOT(saveSessionConfig()));
+        }
+
+        if (auto iface = qobject_cast<KTextEditor::ModificationInterface*>(d->document)) {
             iface->setModifiedOnDiskWarning(true);
+            // can't use new signal/slot syntax here, ModificationInterface is not a QObject
             connect(d->document, SIGNAL(modifiedOnDisk(KTextEditor::Document*,bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)),
                 this, SLOT(modifiedOnDisk(KTextEditor::Document*,bool,KTextEditor::ModificationInterface::ModifiedOnDiskReason)));
         }
@@ -434,7 +437,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
     view = d->document->createView(parent);
 
     if (view) {
-        connect(view, SIGNAL(contextMenuAboutToShow(KTextEditor::View*,QMenu*)), this, SLOT(populateContextMenu(KTextEditor::View*,QMenu*)));
+        connect(view, &KTextEditor::View::contextMenuAboutToShow, this, [&] (KTextEditor::View* v, QMenu* menu) { d->populateContextMenu(v, menu); });
 
         //in KDE >= 4.4 we can use KXMLGuiClient::replaceXMLFile to provide
         //katepart with our own restructured UI configuration
@@ -690,8 +693,8 @@ QWidget * KDevelop::TextView::createWidget(QWidget * parent)
     d->view = qobject_cast<KTextEditor::View*>(widget);
     Q_ASSERT(d->view);
     if (d->view) {
-        connect(d->view, SIGNAL(cursorPositionChanged(KTextEditor::View*, KTextEditor::Cursor)),
-                this, SLOT(sendStatusChanged()));
+        connect(d->view.data(), &KTextEditor::View::cursorPositionChanged,
+                this, [&] { d->sendStatusChanged(); });
     }
     return widget;
 }

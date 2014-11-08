@@ -135,8 +135,8 @@ WorkingSet* WorkingSetController::getWorkingSet(const QString& id)
 
     if(!m_workingSets.contains(id)) {
         WorkingSet* set = new WorkingSet(id);
-        connect(set, SIGNAL(aboutToRemove(WorkingSet*)),
-                this, SIGNAL(aboutToRemoveWorkingSet(WorkingSet*)));
+        connect(set, &WorkingSet::aboutToRemove,
+                this, &WorkingSetController::aboutToRemoveWorkingSet);
         m_workingSets[id] = set;
         emit workingSetAdded(set);
     }
@@ -196,7 +196,7 @@ void WorkingSetController::showToolTip(WorkingSet* set, const QPoint& pos)
     layout->addWidget(widget);
     m_tooltip->resize( m_tooltip->sizeHint() );
 
-    connect(widget, SIGNAL(shouldClose()), m_tooltip, SLOT(close()));
+    connect(widget, &WorkingSetToolTipWidget::shouldClose, m_tooltip.data(), &ActiveToolTip::close);
 
     ActiveToolTip::showToolTip(m_tooltip);
 }
@@ -208,10 +208,10 @@ void WorkingSetController::showGlobalToolTip()
     showToolTip(getWorkingSet(window->area()->workingSet()),
                               window->mapToGlobal(window->geometry().topRight()));
 
-    connect(m_hideToolTipTimer, SIGNAL(timeout()),  m_tooltip, SLOT(deleteLater()));
+    connect(m_hideToolTipTimer, &QTimer::timeout,  m_tooltip.data(), &ActiveToolTip::deleteLater);
     m_hideToolTipTimer->start();
-    connect(m_tooltip, SIGNAL(mouseIn()), m_hideToolTipTimer, SLOT(stop()));
-    connect(m_tooltip, SIGNAL(mouseOut()), m_hideToolTipTimer, SLOT(start()));
+    connect(m_tooltip.data(), &ActiveToolTip::mouseIn, m_hideToolTipTimer, &QTimer::stop);
+    connect(m_tooltip.data(), &ActiveToolTip::mouseOut, m_hideToolTipTimer, static_cast<void(QTimer::*)()>(&QTimer::start));
 }
 
 void WorkingSetController::nextDocument()
@@ -248,7 +248,7 @@ void WorkingSetController::previousDocument()
 
 void WorkingSetController::initializeController( UiController* controller )
 {
-  connect( controller, SIGNAL(areaCreated(Sublime::Area*)), this, SLOT(areaCreated(Sublime::Area*)) );
+  connect( controller, &UiController::areaCreated, this, &WorkingSetController::areaCreated );
 }
 
 QList< WorkingSet* > WorkingSetController::allWorkingSets() const
@@ -263,12 +263,12 @@ void WorkingSetController::areaCreated( Sublime::Area* area )
         set->connectArea( area );
     }
 
-    connect(area, SIGNAL(changingWorkingSet(Sublime::Area*,QString,QString)),
-            this, SLOT(changingWorkingSet(Sublime::Area*,QString,QString)));
-    connect(area, SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)),
-            this, SLOT(changedWorkingSet(Sublime::Area*,QString,QString)));
-    connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)),
-            this, SLOT(viewAdded(Sublime::AreaIndex*,Sublime::View*)));
+    connect(area, &Sublime::Area::changingWorkingSet,
+            this, &WorkingSetController::changingWorkingSet);
+    connect(area, &Sublime::Area::changedWorkingSet,
+            this, &WorkingSetController::changedWorkingSet);
+    connect(area, &Sublime::Area::viewAdded,
+            this, &WorkingSetController::viewAdded);
 }
 
 void WorkingSetController::changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to)

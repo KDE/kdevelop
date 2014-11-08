@@ -117,7 +117,7 @@ DocumentationController::DocumentationController(Core* core)
     m_showDocumentation = core->uiController()->activeMainWindow()->actionCollection()->addAction("showDocumentation");
     m_showDocumentation->setText(i18n("Show Documentation"));
     m_showDocumentation->setIcon(QIcon::fromTheme("documentation"));
-    connect(m_showDocumentation, SIGNAL(triggered(bool)), SLOT(doShowDocumentation()));
+    connect(m_showDocumentation, &QAction::triggered, this, &DocumentationController::doShowDocumentation);
 }
 
 void DocumentationController::initialize()

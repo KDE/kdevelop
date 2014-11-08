@@ -24,10 +24,10 @@ ProjectInfoPage::ProjectInfoPage( QWidget* parent )
 {
     page_ui = new Ui::ProjectInfoPage;
     page_ui->setupUi( this );
-    connect( page_ui->nameEdit, SIGNAL(textEdited(QString)), 
-             this, SIGNAL(projectNameChanged(QString)) );
-    connect( page_ui->managerCombo, SIGNAL(activated(int)),
-             this, SLOT(changeProjectManager(int)) );
+    connect( page_ui->nameEdit, &QLineEdit::textEdited, 
+             this, &ProjectInfoPage::projectNameChanged );
+    connect( page_ui->managerCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+             this, &ProjectInfoPage::changeProjectManager );
     foreach( const KPluginInfo& info, Core::self()->pluginControllerInternal()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
     {
         page_ui->managerCombo->addItem( QIcon::fromTheme(info.icon()), info.name(), info.pluginName() );

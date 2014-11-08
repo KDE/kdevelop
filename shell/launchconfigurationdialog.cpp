@@ -88,10 +88,10 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     }
 
     tree->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect( tree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(doTreeContextMenu(QPoint)) );
-    connect( deleteConfig, SIGNAL(clicked()), this, SLOT(deleteConfiguration()));
-    connect( model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(modelChanged(QModelIndex,QModelIndex)) );
-    connect( tree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
+    connect( tree, &QTreeView::customContextMenuRequested, this, &LaunchConfigurationDialog::doTreeContextMenu );
+    connect( deleteConfig, &QToolButton::clicked, this, &LaunchConfigurationDialog::deleteConfiguration);
+    connect( model, &LaunchConfigurationsModel::dataChanged, this, &LaunchConfigurationDialog::modelChanged );
+    connect( tree->selectionModel(), &QItemSelectionModel::selectionChanged, this, &LaunchConfigurationDialog::selectionChanged);
     QModelIndex idx = model->indexForConfig( Core::self()->runControllerInternal()->defaultLaunch() );
     qCDebug(SHELL) << "selecting index:" << idx;
     if( !idx.isValid() )
@@ -149,7 +149,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     std::sort(types.begin(), types.end(), launchConfigGreaterThan); //we want it in reverse order
     foreach(LaunchConfigurationType* type, types)
     {
-        connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));
+        connect(type, &LaunchConfigurationType::signalAddLaunchConfiguration, this, &LaunchConfigurationDialog::addConfiguration);
         QMenu* suggestionsMenu = type->launcherSuggestions();
 
         if(suggestionsMenu) {
@@ -174,7 +174,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     foreach(LaunchConfigurationType* type, types) {
         QAction* action = new QAction(type->icon(), type->name(), m);
         action->setProperty("configtype", qVariantFromValue<QObject*>(type));
-        connect(action, SIGNAL(triggered(bool)), SLOT(createEmptyLauncher()));
+        connect(action, &QAction::triggered, this, &LaunchConfigurationDialog::createEmptyLauncher);
 
         if(!m->actions().isEmpty())
             m->insertAction(m->actions().first(), action);
@@ -183,10 +183,10 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     }
     addConfig->setMenu(m);
 
-    connect(debugger, SIGNAL(currentIndexChanged(int)), SLOT(launchModeChanged(int)));
+    connect(debugger, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &LaunchConfigurationDialog::launchModeChanged);
 
-    connect( this, SIGNAL(okClicked()), SLOT(saveConfig()) );
-    connect( this, SIGNAL(applyClicked()), SLOT(saveConfig()) );
+    connect( this, &LaunchConfigurationDialog::okClicked, this, static_cast<void(LaunchConfigurationDialog::*)()>(&LaunchConfigurationDialog::saveConfig) );
+    connect( this, &LaunchConfigurationDialog::applyClicked, this, static_cast<void(LaunchConfigurationDialog::*)()>(&LaunchConfigurationDialog::saveConfig) );
 
     setInitialSize( QSize(qMax(700, sizeHint().width()), qMax(500, sizeHint().height())) );
 }
@@ -200,8 +200,8 @@ void LaunchConfigurationDialog::doTreeContextMenu(QPoint point)
             QMenu menu;
             QAction* rename = new QAction(QIcon::fromTheme("edit-rename"), i18n("Rename configuration"), &menu);
             QAction* delete_ = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete configuration"), &menu);
-            connect(rename, SIGNAL(triggered(bool)), this, SLOT(renameSelected()));
-            connect(delete_, SIGNAL(triggered(bool)), this, SLOT(deleteConfiguration()));
+            connect(rename, &QAction::triggered, this, &LaunchConfigurationDialog::renameSelected);
+            connect(delete_, &QAction::triggered, this, &LaunchConfigurationDialog::deleteConfiguration);
             menu.addAction(rename);
             menu.addAction(delete_);
             menu.exec(tree->mapToGlobal(point));
@@ -250,7 +250,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
         LaunchConfiguration* l = model->configForIndex( deselected.indexes().first() );
         if( l )
         {
-            disconnect(l, SIGNAL(nameChanged(LaunchConfiguration*)), this,  SLOT(updateNameLabel(LaunchConfiguration*)));
+            disconnect(l, &LaunchConfiguration::nameChanged, this,  &LaunchConfigurationDialog::updateNameLabel);
             if( currentPageChanged )
             {
                 if( KMessageBox::questionYesNo( this, i18n("Selected Launch Configuration has unsaved changes. Do you want to save it?"), i18n("Unsaved Changes") ) == KMessageBox::Yes )
@@ -285,7 +285,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
         {
             updateNameLabel( l );
             tree->expand( model->indexForConfig( l ) );
-            connect( l, SIGNAL(nameChanged(LaunchConfiguration*)), SLOT(updateNameLabel(LaunchConfiguration*)) );
+            connect( l, &LaunchConfiguration::nameChanged, this, &LaunchConfigurationDialog::updateNameLabel );
             if( lm )
             {
                 bool b = debugger->blockSignals(true);
@@ -313,7 +313,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
                         QList<KDevelop::LaunchConfigurationPageFactory*> pages = launcher->configPages();
                         if(!pages.isEmpty()) {
                             tab = new LaunchConfigPagesContainer( launcher->configPages(), stack );
-                            connect( tab, SIGNAL(changed()), SLOT(pageChanged()) );
+                            connect( tab, &LaunchConfigPagesContainer::changed, this, &LaunchConfigurationDialog::pageChanged );
                             stack->addWidget( tab );
                         }
                     }
@@ -350,7 +350,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
                 if( !tab )
                 {
                     tab = new LaunchConfigPagesContainer( type->configPages(), stack );
-                    connect( tab, SIGNAL(changed()), SLOT(pageChanged()) );
+                    connect( tab, &LaunchConfigPagesContainer::changed, this, &LaunchConfigurationDialog::pageChanged );
                     stack->addWidget( tab );
                 }
                 qCDebug(SHELL) << "created pages, setting config up";
@@ -914,7 +914,7 @@ LaunchConfigPagesContainer::LaunchConfigPagesContainer( const QList<LaunchConfig
             page->layout()->setContentsMargins( 0, 0, 0, 0 );
         }
         pages.append( page );
-        connect( page, SIGNAL(changed()), SIGNAL(changed()) );
+        connect( page, &LaunchConfigurationPage::changed, this, &LaunchConfigPagesContainer::changed );
         if( tab ) {
             tab->addTab( page, page->icon(), page->title() );
         } else

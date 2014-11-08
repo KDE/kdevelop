@@ -148,9 +148,9 @@ void DebugController::initializeUi()
     foreach(KParts::Part* p, KDevelop::ICore::self()->partController()->parts())
         partAdded(p);
     connect(KDevelop::ICore::self()->partController(),
-            SIGNAL(partAdded(KParts::Part*)),
+            &IPartController::partAdded,
             this,
-            SLOT(partAdded(KParts::Part*)));
+            &DebugController::partAdded);
 
 
     ICore::self()->uiController()->activeMainWindow()->guiFactory()->addClient(this);
@@ -205,7 +205,7 @@ void DebugController::setupActions()
                                "has been halted by the debugger (i.e. a breakpoint has "
                                "been activated or the interrupt was pressed).") );
     ac->addAction("debug_continue", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(run()));
+    connect(action, &QAction::triggered, this, &DebugController::run);
 
     #if 0
     m_restartDebugger = action = new QAction(QIcon::fromTheme("media-seek-backward"), i18n("&Restart"), this);
@@ -219,20 +219,20 @@ void DebugController::setupActions()
     m_interruptDebugger = action = new QAction(QIcon::fromTheme("media-playback-pause"), i18n("Interrupt"), this);
     action->setToolTip( i18n("Interrupt application") );
     action->setWhatsThis(i18n("Interrupts the debugged process or current debugger command."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(interruptDebugger()));
+    connect(action, &QAction::triggered, this, &DebugController::interruptDebugger);
     ac->addAction("debug_pause", action);
 
     m_runToCursor = action = new QAction(QIcon::fromTheme("debug-run-cursor"), i18n("Run to &Cursor"), this);
     action->setToolTip( i18n("Run to cursor") );
     action->setWhatsThis(i18n("Continues execution until the cursor position is reached."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(runToCursor()));
+    connect(action, &QAction::triggered, this, &DebugController::runToCursor);
     ac->addAction("debug_runtocursor", action);
 
 
     m_jumpToCursor = action = new QAction(QIcon::fromTheme("debug-execute-to-cursor"), i18n("Set E&xecution Position to Cursor"), this);
     action->setToolTip( i18n("Jump to cursor") );
     action->setWhatsThis(i18n("Continue execution from the current cursor position."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(jumpToCursor()));
+    connect(action, &QAction::triggered, this, &DebugController::jumpToCursor);
     ac->addAction("debug_jumptocursor", action);
 
     m_stepOver = action = new QAction(QIcon::fromTheme("debug-step-over"), i18n("Step &Over"), this);
@@ -242,14 +242,14 @@ void DebugController::setupActions()
                                "If the source line is a call to a function the whole "
                                "function is executed and the app will stop at the line "
                                "following the function call.") );
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(stepOver()));
+    connect(action, &QAction::triggered, this, &DebugController::stepOver);
     ac->addAction("debug_stepover", action);
 
 
     m_stepOverInstruction = action = new QAction(QIcon::fromTheme("debug-step-instruction"), i18n("Step over Ins&truction"), this);
     action->setToolTip( i18n("Step over instruction") );
     action->setWhatsThis(i18n("Steps over the next assembly instruction."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(stepOverInstruction()));
+    connect(action, &QAction::triggered, this, &DebugController::stepOverInstruction);
     ac->addAction("debug_stepoverinst", action);
 
 
@@ -259,14 +259,14 @@ void DebugController::setupActions()
     action->setWhatsThis( i18n("Executes exactly one line of source. If the source line "
                                "is a call to a function then execution will stop after "
                                "the function has been entered.") );
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(stepInto()));
+    connect(action, &QAction::triggered, this, &DebugController::stepInto);
     ac->addAction("debug_stepinto", action);
 
 
     m_stepIntoInstruction = action = new QAction(QIcon::fromTheme("debug-step-into-instruction"), i18n("Step into I&nstruction"), this);
     action->setToolTip( i18n("Step into instruction") );
     action->setWhatsThis(i18n("Steps into the next assembly instruction."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(stepIntoInstruction()));
+    connect(action, &QAction::triggered, this, &DebugController::stepIntoInstruction);
     ac->addAction("debug_stepintoinst", action);
 
     m_stepOut = action = new QAction(QIcon::fromTheme("debug-step-out"), i18n("Step O&ut"), this);
@@ -277,14 +277,14 @@ void DebugController::setupActions()
                                "the line after the original call to that function. If "
                                "program execution is in the outermost frame (i.e. in "
                                "main()) then this operation has no effect.") );
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(stepOut()));
+    connect(action, &QAction::triggered, this, &DebugController::stepOut);
     ac->addAction("debug_stepout", action);
 
     m_toggleBreakpoint = action = new QAction(QIcon::fromTheme("script-error"), i18n("Toggle Breakpoint"), this);
     ac->setDefaultShortcut( action, i18n("Ctrl+Alt+B") );
     action->setToolTip(i18n("Toggle breakpoint"));
     action->setWhatsThis(i18n("Toggles the breakpoint at the current line in editor."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleBreakpoint()));
+    connect(action, &QAction::triggered, this, &DebugController::toggleBreakpoint);
     ac->addAction("debug_toggle_breakpoint", action);
 }
 
@@ -301,10 +301,10 @@ void DebugController::addSession(IDebugSession* session)
     }
     m_currentSession = session;
 
-    connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)), SLOT(debuggerStateChanged(KDevelop::IDebugSession::DebuggerState)));
-    connect(session, SIGNAL(showStepInSource(QUrl,int,QString)), SLOT(showStepInSource(QUrl,int)));
-    connect(session, SIGNAL(clearExecutionPoint()), SLOT(clearExecutionPoint()));
-    connect(session, SIGNAL(raiseFramestackViews()), SIGNAL(raiseFramestackViews()));
+    connect(session, &IDebugSession::stateChanged, this, &DebugController::debuggerStateChanged);
+    connect(session, &IDebugSession::showStepInSource, this, &DebugController::showStepInSource);
+    connect(session, &IDebugSession::clearExecutionPoint, this, &DebugController::clearExecutionPoint);
+    connect(session, &IDebugSession::raiseFramestackViews, this, &DebugController::raiseFramestackViews);
 
     updateDebuggerState(session->state(), session);
 
@@ -318,7 +318,7 @@ void DebugController::addSession(IDebugSession* session)
         QString workingSet = mainWindow->area()->workingSet();
         ICore::self()->uiController()->switchToArea("debug", IUiController::ThisWindow);
         mainWindow->area()->setWorkingSet(workingSet);
-        connect(mainWindow, SIGNAL(areaChanged(Sublime::Area*)), SLOT(areaChanged(Sublime::Area*)));
+        connect(mainWindow, &Sublime::MainWindow::areaChanged, this, &DebugController::areaChanged);
     }
 }
 

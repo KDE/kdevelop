@@ -30,20 +30,20 @@ public:
     void setUrl(const QUrl& url);
 
 signals:
-    void urlSelected( const QUrl& );
+    void urlSelected(const QUrl&);
     void accepted();
 
 protected:
     virtual void showEvent(QShowEvent*);
 
 private slots:
-    void highlightFile(const QString&);
-    void opsEntered(const QUrl& item );
-    void comboTextChanged(const QString& );
+    void highlightFile(const QUrl&);
+    void opsEntered(const QUrl& item);
+    void comboTextChanged(const QString&);
     void dirChanged(const QUrl& url);
 
 private:
-    QUrl getAbsoluteUrl( const QString& ) const;
+    QUrl getAbsoluteUrl(const QString&) const;
     KFileWidget* fileWidget;
     QMap<QString,QStringList> m_projectFilters;
 };

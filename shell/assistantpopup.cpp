@@ -197,7 +197,7 @@ AssistantPopup::AssistantPopup()
 
     m_updateTimer->setInterval(UPDATE_STATE_INTERVAL);
     m_updateTimer->setSingleShot(true);
-    connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(updateState()));
+    connect(m_updateTimer, &QTimer::timeout, this, &AssistantPopup::updateState);
 
     for (int i = Qt::Key_0; i <= Qt::Key_9; ++i) {
         m_shortcuts.append(new QShortcut(ASSISTANT_MODIFIER + i, this));
@@ -224,14 +224,14 @@ void AssistantPopup::setView(KTextEditor::View* view)
 
     if (m_view) {
         m_view->removeEventFilter(this);
-        disconnect(m_view, SIGNAL(verticalScrollPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
-                  this, SLOT(updatePosition(KTextEditor::View*,KTextEditor::Cursor)));
+        disconnect(m_view.data(), &KTextEditor::View::verticalScrollPositionChanged,
+                  this, &AssistantPopup::updatePosition);
     }
     m_view = view;
     if (m_view) {
         m_view->installEventFilter(this);
-        connect(m_view, SIGNAL(verticalScrollPositionChanged(KTextEditor::View*,KTextEditor::Cursor)),
-                this, SLOT(updatePosition(KTextEditor::View*,KTextEditor::Cursor)));
+        connect(m_view.data(), &KTextEditor::View::verticalScrollPositionChanged,
+                this, &AssistantPopup::updatePosition);
     }
 }
 
@@ -242,13 +242,13 @@ void AssistantPopup::setAssistant(const IAssistant::Ptr& assistant)
     }
 
     if (m_assistant) {
-        disconnect(m_assistant.data(), SIGNAL(actionsChanged()), m_updateTimer, SLOT(start()));
-        disconnect(m_assistant.data(), SIGNAL(hide()), this, SLOT(hideAssistant()));
+        disconnect(m_assistant.data(), &IAssistant::actionsChanged, m_updateTimer, static_cast<void(QTimer::*)()>(&QTimer::start));
+        disconnect(m_assistant.data(), &IAssistant::hide, this, &AssistantPopup::hideAssistant);
     }
     m_assistant = assistant;
     if (m_assistant) {
-        connect(m_assistant.data(), SIGNAL(actionsChanged()), m_updateTimer, SLOT(start()));
-        connect(m_assistant.data(), SIGNAL(hide()), this, SLOT(hideAssistant()));
+        connect(m_assistant.data(), &IAssistant::actionsChanged, m_updateTimer, static_cast<void(QTimer::*)()>(&QTimer::start));
+        connect(m_assistant.data(), &IAssistant::hide, this, &AssistantPopup::hideAssistant);
     }
 }
 
@@ -385,16 +385,17 @@ void AssistantPopup::updateState()
 
     auto curShortcut = m_shortcuts.constBegin();
     auto hideAction = new QAction(i18n("Hide"), this);
-    connect(*curShortcut, SIGNAL(activated()), hideAction, SLOT(trigger()));
-    connect(hideAction, SIGNAL(triggered()), this, SLOT(executeHideAction()));
+    connect(*curShortcut, &QShortcut::activated, hideAction, &QAction::trigger);
+    connect(hideAction, &QAction::triggered, this, &AssistantPopup::executeHideAction);
 
     QList<QObject*> items;
     foreach (IAssistantAction::Ptr action, m_assistant->actions()) {
-        items << action->toKAction();
-        items.last()->setParent(this);
+        QAction* asQAction = action->toKAction();
+        items << asQAction;
+        asQAction->setParent(this);
         //For some reason, QAction's setShortcut does nothing, so we manage with QShortcut
         if (++curShortcut != m_shortcuts.constEnd()) {
-            connect(*curShortcut, SIGNAL(activated()), items.last(), SLOT(trigger()));
+            connect(*curShortcut, &QShortcut::activated, asQAction, &QAction::trigger);
         }
     }
     items << hideAction;

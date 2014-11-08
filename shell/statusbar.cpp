@@ -49,15 +49,15 @@ StatusBar::StatusBar(QWidget* parent)
     , m_errorRemovalMapper(new QSignalMapper(this))
 {
     m_timer->setSingleShot(true);
-    connect(m_timer, SIGNAL(timeout()), SLOT(slotTimeout()));
-    connect(Core::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)), SLOT(pluginLoaded(KDevelop::IPlugin*)));
+    connect(m_timer, &QTimer::timeout, this, &StatusBar::slotTimeout);
+    connect(Core::self()->pluginController(), &IPluginController::pluginLoaded, this, &StatusBar::pluginLoaded);
 
     foreach (IPlugin* plugin, Core::self()->pluginControllerInternal()->allPluginsForExtension("IStatus"))
         registerStatus(plugin);
 
     registerStatus(Core::self()->languageController()->backgroundParser());
 
-    connect(m_errorRemovalMapper, SIGNAL(mapped(QWidget*)), SLOT(removeError(QWidget*)));
+    connect(m_errorRemovalMapper, static_cast<void(QSignalMapper::*)(QWidget*)>(&QSignalMapper::mapped), this, &StatusBar::removeError);
 
     m_progressController = Core::self()->progressController();
     m_progressDialog = new ProgressDialog(this, parent); // construct this first, then progressWidget
@@ -81,7 +81,7 @@ void StatusBar::viewChanged(Sublime::View* view)
     m_currentView = view;
 
     if (view) {
-        connect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(viewStatusChanged(Sublime::View*)));
+        connect(view, &Sublime::View::statusChanged, this, &StatusBar::viewStatusChanged);
         QStatusBar::showMessage(view->viewStatus(), 0);
 
     }
@@ -101,6 +101,7 @@ void StatusBar::pluginLoaded(IPlugin* plugin)
 void StatusBar::registerStatus(QObject* status)
 {
     Q_ASSERT(qobject_cast<IStatus*>(status));
+    // can't convert this to new signal slot syntax, IStatus is not a QObject
     connect(status, SIGNAL(clearMessage(KDevelop::IStatus*)),
             SLOT(clearMessage(KDevelop::IStatus*)),
             Qt::QueuedConnection);
@@ -140,7 +141,7 @@ QTimer* StatusBar::errorTimeout(QWidget* error, int timeout)
     timer->setSingleShot(true);
     timer->setInterval(1000*timeout);
     m_errorRemovalMapper->setMapping(timer, error);
-    connect(timer, SIGNAL(timeout()), m_errorRemovalMapper, SLOT(map()));
+    connect(timer, &QTimer::timeout, m_errorRemovalMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
     return timer;
 }
 

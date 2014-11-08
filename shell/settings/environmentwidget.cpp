@@ -56,7 +56,7 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     PlaceholderItemProxyModel* topProxyModel  = new PlaceholderItemProxyModel(this);
     topProxyModel->setSourceModel(proxyModel);
     topProxyModel->setColumnHint(0, i18n("Enter variable ..."));
-    connect(topProxyModel, SIGNAL(dataInserted(int, QVariant)), SLOT(handleVariableInserted(int, QVariant)));
+    connect(topProxyModel, &PlaceholderItemProxyModel::dataInserted, this, &EnvironmentWidget::handleVariableInserted);
 
     ui.variableTable->setModel( topProxyModel );
     ui.variableTable->horizontalHeader()->setSectionResizeMode( 1, QHeaderView::Stretch );
@@ -66,26 +66,26 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     ui.deleteButton->setShortcut(Qt::Key_Delete);
     ui.newMultipleButton->setIcon(QIcon::fromTheme("format-list-unordered"));
 
-    connect( ui.deleteButton, SIGNAL(clicked()),
-             SLOT(deleteButtonClicked()) );
-    connect( ui.newMultipleButton, SIGNAL(clicked()),
-             SLOT(newMultipleButtonClicked()) );
+    connect( ui.deleteButton, &QPushButton::clicked,
+             this, &EnvironmentWidget::deleteButtonClicked );
+    connect( ui.newMultipleButton, &QPushButton::clicked,
+             this, &EnvironmentWidget::newMultipleButtonClicked );
 
-    connect( ui.addgrpBtn, SIGNAL(clicked()), SLOT(addGroupClicked()) );
-    connect( ui.addgrpBtn, SIGNAL(clicked()), SIGNAL(changed()) );
-    connect( ui.removegrpBtn, SIGNAL(clicked()), SLOT(removeGroupClicked()) );
-    connect( ui.removegrpBtn, SIGNAL(clicked()), SIGNAL(changed()) );
-    connect( ui.setAsDefaultBtn, SIGNAL(clicked()), SLOT(setAsDefault()) );
-    connect( ui.setAsDefaultBtn, SIGNAL(clicked()), SIGNAL(changed()) );
-    connect( ui.activeCombo, SIGNAL(currentIndexChanged(int)),
-             SLOT(activeGroupChanged(int)) );
-    connect( ui.activeCombo, SIGNAL(editTextChanged(QString)), SLOT(enableButtons(QString)));
-    connect( groupModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
-    connect( groupModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
-    connect( groupModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
-    connect( groupModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(enableDeleteButton()) );
-    connect( groupModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(enableDeleteButton()) );
-    connect( groupModel, SIGNAL(modelReset()), SLOT(enableDeleteButton()) );
+    connect( ui.addgrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::addGroupClicked );
+    connect( ui.addgrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::changed );
+    connect( ui.removegrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::removeGroupClicked );
+    connect( ui.removegrpBtn, &QPushButton::clicked, this, &EnvironmentWidget::changed );
+    connect( ui.setAsDefaultBtn, &QPushButton::clicked, this, &EnvironmentWidget::setAsDefault );
+    connect( ui.setAsDefaultBtn, &QPushButton::clicked, this, &EnvironmentWidget::changed );
+    connect( ui.activeCombo, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+             this, &EnvironmentWidget::activeGroupChanged );
+    connect( ui.activeCombo, &KComboBox::editTextChanged, this, &EnvironmentWidget::enableButtons);
+    connect( groupModel, &EnvironmentGroupModel::dataChanged, this, &EnvironmentWidget::changed );
+    connect( groupModel, &EnvironmentGroupModel::rowsRemoved, this, &EnvironmentWidget::changed );
+    connect( groupModel, &EnvironmentGroupModel::rowsInserted, this, &EnvironmentWidget::changed );
+    connect( groupModel, &EnvironmentGroupModel::rowsRemoved, this, &EnvironmentWidget::enableDeleteButton );
+    connect( groupModel, &EnvironmentGroupModel::rowsInserted, this, &EnvironmentWidget::enableDeleteButton );
+    connect( groupModel, &EnvironmentGroupModel::modelReset, this, &EnvironmentWidget::enableDeleteButton );
 }
 
 void EnvironmentWidget::setActiveGroup( const QString& group )

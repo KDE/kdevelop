@@ -78,28 +78,28 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 	m_formatTextAction->setText(i18n("&Reformat Source"));
 	m_formatTextAction->setToolTip(i18n("Reformat source using AStyle"));
 	m_formatTextAction->setWhatsThis(i18n("Source reformatting functionality using <b>astyle</b> library."));
-	connect(m_formatTextAction, SIGNAL(triggered()), this, SLOT(beautifySource()));
+	connect(m_formatTextAction, &QAction::triggered, this, &SourceFormatterController::beautifySource);
 
 	m_formatLine = actionCollection()->addAction("edit_reformat_line");
 	m_formatLine->setText(i18n("Reformat Line"));
 	m_formatLine->setToolTip(i18n("Reformat current line using AStyle"));
 	m_formatLine->setWhatsThis(i18n("Source reformatting of line under cursor using <b>astyle</b> library."));
-	connect(m_formatLine, SIGNAL(triggered()), this, SLOT(beautifyLine()));
+	connect(m_formatLine, &QAction::triggered, this, &SourceFormatterController::beautifyLine);
 
 	m_formatFilesAction = actionCollection()->addAction("tools_astyle");
 	m_formatFilesAction->setText(i18n("Format Files"));
 	m_formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
 	m_formatFilesAction->setWhatsThis(i18n("Formatting functionality using <b>astyle</b> library."));
-	connect(m_formatFilesAction, SIGNAL(triggered()), this, SLOT(formatFiles()));
+	connect(m_formatFilesAction, &QAction::triggered, this, static_cast<void(SourceFormatterController::*)()>(&SourceFormatterController::formatFiles));
 
 	m_formatTextAction->setEnabled(false);
 	m_formatFilesAction->setEnabled(true);
 
-	connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
-	        this, SLOT(activeDocumentChanged(KDevelop::IDocument*)));
+	connect(Core::self()->documentController(), &IDocumentController::documentActivated,
+	        this, &SourceFormatterController::activeDocumentChanged);
 	// Use a queued connection, because otherwise the view is not yet fully set up
-	connect(Core::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)),
-	        this, SLOT(documentLoaded(KDevelop::IDocument*)), Qt::QueuedConnection);
+	connect(Core::self()->documentController(), &IDocumentController::documentLoaded,
+	        this, &SourceFormatterController::documentLoaded, Qt::QueuedConnection);
 
 	activeDocumentChanged(Core::self()->documentController()->activeDocument());
 }

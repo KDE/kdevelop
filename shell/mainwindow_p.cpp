@@ -98,7 +98,7 @@ void MainWindowPrivate::addPlugin( IPlugin *plugin )
     KXMLGUIClient* ownClient = plugin->createGUIForMainWindow(m_mainWindow);
     if(ownClient) {
         m_pluginCustomClients[plugin] = ownClient;
-        connect(plugin, SIGNAL(destroyed(QObject*)), SLOT(pluginDestroyed(QObject*)));
+        connect(plugin, &IPlugin::destroyed, this, &MainWindowPrivate::pluginDestroyed);
         m_mainWindow->guiFactory()->addClient(ownClient);
     }
 }
@@ -126,7 +126,7 @@ void MainWindowPrivate::removePlugin( IPlugin *plugin )
         m_mainWindow->guiFactory()->removeClient( m_pluginCustomClients[plugin] );
         delete m_pluginCustomClients[plugin];
         m_pluginCustomClients.remove(plugin);
-        disconnect(plugin, SIGNAL(destroyed(QObject*)), this, SLOT(pluginDestroyed(QObject*)));
+        disconnect(plugin, &IPlugin::destroyed, this, &MainWindowPrivate::pluginDestroyed);
     }
 
     m_mainWindow->guiFactory()->removeClient( plugin );
@@ -176,7 +176,7 @@ void MainWindowPrivate::mergeView(Sublime::View* view)
 
         m_mainWindow->guiFactory()->removeClient(dynamic_cast<KXMLGUIClient*>(lastXMLGUIClientView));
 
-        disconnect (lastXMLGUIClientView, SIGNAL(destroyed(QObject*)), this, 0);
+        disconnect (lastXMLGUIClientView, &QWidget::destroyed, this, 0);
 
         lastXMLGUIClientView = NULL;
     }
@@ -195,8 +195,8 @@ void MainWindowPrivate::mergeView(Sublime::View* view)
         qCDebug(SHELL) << "setting new XMLGUI client" << viewWidget;
         lastXMLGUIClientView = viewWidget;
         m_mainWindow->guiFactory()->addClient(c);
-        connect(viewWidget, SIGNAL(destroyed(QObject*)),
-                this, SLOT(xmlguiclientDestroyed(QObject*)));
+        connect(viewWidget, &QWidget::destroyed,
+                this, &MainWindowPrivate::xmlguiclientDestroyed);
     }
 }
 
@@ -218,7 +218,7 @@ void MainWindowPrivate::xmlguiclientDestroyed(QObject* obj)
 
 void MainWindowPrivate::setupActions()
 {
-    connect(Core::self()->sessionController(), SIGNAL(quitSession()), SLOT(quitAll()));
+    connect(Core::self()->sessionController(), &SessionController::quitSession, this, &MainWindowPrivate::quitAll);
 
     QAction* action;
 
@@ -246,7 +246,7 @@ void MainWindowPrivate::setupActions()
 
     action = actionCollection()->addAction( "view_next_window" );
     action->setText( i18n( "&Next Window" ) );
-    connect( action, SIGNAL(triggered(bool)), SLOT(gotoNextWindow()) );
+    connect( action, &QAction::triggered, this, &MainWindowPrivate::gotoNextWindow );
     actionCollection()->setDefaultShortcut(action, Qt::ALT + Qt::SHIFT + Qt::Key_Right );
     action->setToolTip( i18nc( "@info:tooltip", "Next window" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the next window." ) );
@@ -254,7 +254,7 @@ void MainWindowPrivate::setupActions()
 
     action = actionCollection()->addAction( "view_previous_window" );
     action->setText( i18n( "&Previous Window" ) );
-    connect( action, SIGNAL(triggered(bool)), SLOT(gotoPreviousWindow()) );
+    connect( action, &QAction::triggered, this, &MainWindowPrivate::gotoPreviousWindow );
     actionCollection()->setDefaultShortcut(action, Qt::ALT + Qt::SHIFT + Qt::Key_Left );
     action->setToolTip( i18nc( "@info:tooltip", "Previous window" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the previous window." ) );
@@ -264,7 +264,7 @@ void MainWindowPrivate::setupActions()
     action->setIcon(QIcon::fromTheme( "view-split-top-bottom" ));
     action->setText( i18n( "Split View &Top/Bottom" ) );
     actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_T );
-    connect( action, SIGNAL(triggered(bool)), SLOT(splitHorizontal()) );
+    connect( action, &QAction::triggered, this, &MainWindowPrivate::splitHorizontal );
     action->setToolTip( i18nc( "@info:tooltip", "Split horizontal" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Splits the current view horizontally." ) );
 
@@ -272,13 +272,13 @@ void MainWindowPrivate::setupActions()
     action->setIcon(QIcon::fromTheme( "view-split-left-right" ));
     action->setText( i18n( "Split View &Left/Right" ) );
     actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_L );
-    connect( action, SIGNAL(triggered(bool)), SLOT(splitVertical()) );
+    connect( action, &QAction::triggered, this, &MainWindowPrivate::splitVertical );
     action->setToolTip( i18nc( "@info:tooltip", "Split vertical" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Splits the current view vertically." ) );
 
     action = actionCollection()->addAction( "view_next_split" );
     action->setText( i18n( "&Next Split View" ) );
-    connect( action, SIGNAL(triggered(bool)), SLOT(gotoNextSplit()) );
+    connect( action, &QAction::triggered, this, &MainWindowPrivate::gotoNextSplit );
     actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_N );
     action->setToolTip( i18nc( "@info:tooltip", "Next split view" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the next split view." ) );
@@ -286,7 +286,7 @@ void MainWindowPrivate::setupActions()
 
     action = actionCollection()->addAction( "view_previous_split" );
     action->setText( i18n( "&Previous Split View" ) );
-    connect( action, SIGNAL(triggered(bool)), SLOT(gotoPreviousSplit()) );
+    connect( action, &QAction::triggered, this, &MainWindowPrivate::gotoPreviousSplit );
     actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_P );
     action->setToolTip( i18nc( "@info:tooltip", "Previous split view" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the previous split view." ) );
@@ -299,7 +299,7 @@ void MainWindowPrivate::setupActions()
     actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::Key_N );
     action->setText( i18n( "&New" ) );
     action->setIconText( i18nc( "Shorter Text for 'New File' shown in the toolbar", "New") );
-    connect( action, SIGNAL(triggered(bool)), SLOT(fileNew()) );
+    connect( action, &QAction::triggered, this, &MainWindowPrivate::fileNew );
     action->setToolTip( i18nc( "@info:tooltip", "New file" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Creates an empty file." ) );
 
@@ -307,7 +307,7 @@ void MainWindowPrivate::setupActions()
     action->setIcon(QIcon::fromTheme("window-new"));
     actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_V );
     action->setText( i18n( "&Add Tool View..." ) );
-    connect( action, SIGNAL(triggered(bool)),  SLOT(viewAddNewToolView()) );
+    connect( action, &QAction::triggered,  this, &MainWindowPrivate::viewAddNewToolView );
     action->setToolTip( i18nc( "@info:tooltip", "Add tool view" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Adds a new tool view to this window." ) );
 }
@@ -348,22 +348,22 @@ void MainWindowPrivate::tabContextMenuRequested(Sublime::View* view, QMenu* menu
     QAction* action;
 
     action = menu->addAction(QIcon::fromTheme("view-split-top-bottom"), i18n("Split View Top/Bottom"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(contextMenuSplitHorizontal()));
+    connect(action, &QAction::triggered, this, &MainWindowPrivate::contextMenuSplitHorizontal);
 
     action = menu->addAction(QIcon::fromTheme("view-split-left-right"), i18n("Split View Left/Right"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(contextMenuSplitVertical()));
+    connect(action, &QAction::triggered, this, &MainWindowPrivate::contextMenuSplitVertical);
     menu->addSeparator();
 
     action = menu->addAction(QIcon::fromTheme("document-new"), i18n("New File"));
 
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(contextMenuFileNew()));
+    connect(action, &QAction::triggered, this, &MainWindowPrivate::contextMenuFileNew);
 
     if ( TextDocument* doc = dynamic_cast<TextDocument*>(view->document()) ) {
         action = menu->addAction(QIcon::fromTheme("view-refresh"), i18n("Reload"));
-        connect(action, SIGNAL(triggered(bool)), doc, SLOT(reload()));
+        connect(action, &QAction::triggered, doc, &TextDocument::reload);
 
         action = menu->addAction(QIcon::fromTheme("view-refresh"), i18n("Reload All"));
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(reloadAll()));
+        connect(action, &QAction::triggered, this, &MainWindowPrivate::reloadAll);
     }
 }
 

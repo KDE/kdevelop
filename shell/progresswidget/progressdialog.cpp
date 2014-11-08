@@ -175,8 +175,8 @@ TransactionItem::TransactionItem( QWidget *parent,
         mCancelButton = new QPushButton( QIcon::fromTheme( "dialog-cancel" ), QString(), h );
         hboxLayout->addWidget(mCancelButton);
         mCancelButton->setToolTip( i18n( "Cancel this operation." ) );
-        connect ( mCancelButton, SIGNAL(clicked()),
-                  this, SLOT(slotItemCanceled()));
+        connect ( mCancelButton, &QPushButton::clicked,
+                  this, &TransactionItem::slotItemCanceled);
         h->layout()->addWidget( mCancelButton );
     }
 
@@ -269,20 +269,20 @@ ProgressDialog::ProgressDialog( QWidget *alignWidget, QWidget *parent, const cha
    * appearing and vanishing items.
    */
     ProgressManager *pm = ProgressManager::instance();
-    connect ( pm, SIGNAL(progressItemAdded(KDevelop::ProgressItem*)),
-              this, SLOT(slotTransactionAdded(KDevelop::ProgressItem*)) );
-    connect ( pm, SIGNAL(progressItemCompleted(KDevelop::ProgressItem*)),
-              this, SLOT(slotTransactionCompleted(KDevelop::ProgressItem*)) );
-    connect ( pm, SIGNAL(progressItemProgress(KDevelop::ProgressItem*,uint)),
-              this, SLOT(slotTransactionProgress(KDevelop::ProgressItem*,uint)) );
-    connect ( pm, SIGNAL(progressItemStatus(KDevelop::ProgressItem*,QString)),
-              this, SLOT(slotTransactionStatus(KDevelop::ProgressItem*,QString)) );
-    connect ( pm, SIGNAL(progressItemLabel(KDevelop::ProgressItem*,QString)),
-              this, SLOT(slotTransactionLabel(KDevelop::ProgressItem*,QString)) );
-    connect ( pm, SIGNAL(progressItemUsesBusyIndicator(KDevelop::ProgressItem*,bool)),
-              this, SLOT(slotTransactionUsesBusyIndicator(KDevelop::ProgressItem*,bool)) );
-    connect ( pm, SIGNAL(showProgressDialog()),
-              this, SLOT(slotShow()) );
+    connect ( pm, &ProgressManager::progressItemAdded,
+              this, &ProgressDialog::slotTransactionAdded );
+    connect ( pm, &ProgressManager::progressItemCompleted,
+              this, &ProgressDialog::slotTransactionCompleted );
+    connect ( pm, &ProgressManager::progressItemProgress,
+              this, &ProgressDialog::slotTransactionProgress );
+    connect ( pm, &ProgressManager::progressItemStatus,
+              this, &ProgressDialog::slotTransactionStatus );
+    connect ( pm, &ProgressManager::progressItemLabel,
+              this, &ProgressDialog::slotTransactionLabel );
+    connect ( pm, &ProgressManager::progressItemUsesBusyIndicator,
+              this, &ProgressDialog::slotTransactionUsesBusyIndicator );
+    connect ( pm, &ProgressManager::showProgressDialog,
+              this, &ProgressDialog::slotShow );
 }
 
 void ProgressDialog::closeEvent( QCloseEvent *e )
@@ -327,8 +327,8 @@ void ProgressDialog::slotTransactionCompleted( ProgressItem *item )
         ti->setItemComplete();
         QTimer::singleShot( 3000, ti, SLOT(deleteLater()) );
         // see the slot for comments as to why that works
-        connect ( ti, SIGNAL(destroyed()),
-                  mScrollView, SLOT(slotLayoutFirstItem()) );
+        connect ( ti, &TransactionItem::destroyed,
+                  mScrollView, &TransactionItemView::slotLayoutFirstItem );
     }
     // This was the last item, hide.
     if ( mTransactionsToListviewItems.empty() ) {

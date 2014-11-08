@@ -359,12 +359,12 @@ void RunController::initialize()
     foreach (IProject* project, Core::self()->projectController()->projects()) {
         slotProjectOpened(project);
     }
-    connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
-            this, SLOT(slotProjectOpened(KDevelop::IProject*)));
-    connect(Core::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
-            this, SLOT(slotProjectClosing(KDevelop::IProject*)));
-    connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged(KDevelop::IProject*)),
-             this, SLOT(slotRefreshProject(KDevelop::IProject*)));
+    connect(Core::self()->projectController(), &IProjectController::projectOpened,
+            this, &RunController::slotProjectOpened);
+    connect(Core::self()->projectController(), &IProjectController::projectClosing,
+            this, &RunController::slotProjectClosing);
+    connect(Core::self()->projectController(), &IProjectController::projectConfigurationChanged,
+             this, &RunController::slotRefreshProject);
 
     if( (Core::self()->setupFlags() & Core::NoUi) == 0 )
     {
@@ -421,7 +421,7 @@ void RunController::setupActions()
     action->setStatusTip(i18n("Open Launch Configuration Dialog"));
     action->setToolTip(i18nc("@info:tooltip", "Open Launch Configuration Dialog"));
     action->setWhatsThis(i18nc("@info:whatsthis", "Opens a dialog to setup new launch configurations, or to change the existing ones."));
-    connect(action, SIGNAL(triggered(bool)), SLOT(configureLaunches()));
+    connect(action, &QAction::triggered, this, [&] { d->configureLaunches(); });
 
     d->runAction = new QAction( QIcon::fromTheme("system-run"), i18n("Execute Launch"), this);
     d->runAction->setIconText( i18nc("Short text for 'Execute launch' used in the toolbar", "Execute") );
@@ -430,7 +430,7 @@ void RunController::setupActions()
     d->runAction->setStatusTip(i18n("Execute current launch"));
     d->runAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration."));
     ac->addAction("run_execute", d->runAction);
-    connect(d->runAction, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
+    connect(d->runAction, &QAction::triggered, this, &RunController::slotExecute);
 
     d->dbgAction = new QAction( QIcon::fromTheme("debug-run"), i18n("Debug Launch"), this);
     ac->setDefaultShortcut( d->dbgAction, Qt::Key_F9);
@@ -439,7 +439,7 @@ void RunController::setupActions()
     d->dbgAction->setStatusTip(i18n("Debug current launch"));
     d->dbgAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Debugger."));
     ac->addAction("run_debug", d->dbgAction);
-    connect(d->dbgAction, SIGNAL(triggered(bool)), this, SLOT(slotDebug()));
+    connect(d->dbgAction, &QAction::triggered, this, &RunController::slotDebug);
     Core::self()->uiControllerInternal()->area(0, "code")->addAction(d->dbgAction);
 
 //     TODO: at least get a profile target, it's sad to have the menu entry without a profiler
@@ -458,7 +458,7 @@ void RunController::setupActions()
     action->setWhatsThis(i18nc("@info:whatsthis", "Requests that all running jobs are stopped."));
     action->setEnabled(false);
     ac->addAction("run_stop_all", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(stopAllProcesses()));
+    connect(action, &QAction::triggered, this, &RunController::stopAllProcesses);
     Core::self()->uiControllerInternal()->area(0, "debug")->addAction(action);
 
     action = d->stopJobsMenu = new KActionMenu( QIcon::fromTheme("process-stop"), i18n("Stop"), this);
@@ -568,15 +568,15 @@ void KDevelop::RunController::registerJob(KJob * job)
             stopJobAction = new QAction(job->objectName().isEmpty() ? i18n("<%1> Unnamed job", job->staticMetaObject.className()) : job->objectName(), this);
             stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
             d->stopJobsMenu->addAction(stopJobAction);
-            connect (stopJobAction, SIGNAL(triggered(bool)), SLOT(slotKillJob()));
+            connect (stopJobAction, &QAction::triggered, this, &RunController::slotKillJob);
 
             job->setUiDelegate( new KDialogJobUiDelegate() );
         }
 
         d->jobs.insert(job, stopJobAction);
 
-        connect( job, SIGNAL(finished(KJob*)), SLOT(finished(KJob*)) );
-        connect( job, SIGNAL(destroyed(QObject*)), SLOT(jobDestroyed(QObject*)) );
+        connect( job, &KJob::finished, this, &RunController::finished );
+        connect( job, &KJob::destroyed, this, &RunController::jobDestroyed );
 
         IRunController::registerJob(job);
 
@@ -788,7 +788,7 @@ void KDevelop::RunController::addLaunchConfiguration(KDevelop::LaunchConfigurati
                 d->currentTargetAction->actions().first()->setChecked( true );
             }
         }
-        connect( l, SIGNAL(nameChanged(LaunchConfiguration*)), SLOT(launchChanged(LaunchConfiguration*)) );
+        connect( l, &LaunchConfiguration::nameChanged, this, &RunController::launchChanged );
     }
 }
 
@@ -920,7 +920,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
 {
     delete d->launchAsMapper;
     d->launchAsMapper = new QSignalMapper( this );
-    connect( d->launchAsMapper, SIGNAL(mapped(int)), SLOT(launchAs(int)) );
+    connect( d->launchAsMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), this, [&] (int id) { d->launchAs(id); } );
     d->launchAsInfo.clear();
     d->contextItem = 0;
     ContextMenuExtension ext;
@@ -950,7 +950,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
                         act->setText( type->name() );
                         qCDebug(SHELL) << "Setting up mapping for:" << i << "for action" << act->text() << "in mode" << mode->name();
                         d->launchAsMapper->setMapping( act, i );
-                        connect( act, SIGNAL(triggered()), d->launchAsMapper, SLOT(map()) );
+                        connect( act, &QAction::triggered, d->launchAsMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map) );
                         menu->addAction(act);
                         i++;
                     }

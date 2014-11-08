@@ -52,14 +52,14 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     layout->setMargin(0);
 
     connect(static_cast<Sublime::MainWindow*>(mainwindow)->area(),
-            SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)), SLOT(updateFileButtons()),
+            &Sublime::Area::viewAdded, this, &WorkingSetToolTipWidget::updateFileButtons,
             Qt::QueuedConnection);
     connect(static_cast<Sublime::MainWindow*>(mainwindow)->area(),
-            SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)), SLOT(updateFileButtons()),
+            &Sublime::Area::viewRemoved, this, &WorkingSetToolTipWidget::updateFileButtons,
             Qt::QueuedConnection);
 
-    connect(Core::self()->workingSetControllerInternal(), SIGNAL(workingSetSwitched()),
-            SLOT(updateFileButtons()));
+    connect(Core::self()->workingSetControllerInternal(), &WorkingSetController::workingSetSwitched,
+            this, &WorkingSetToolTipWidget::updateFileButtons);
 
     // title bar
     {
@@ -96,8 +96,8 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         m_deleteButton->setText(i18n("Delete"));
         m_deleteButton->setToolTip(i18n("Remove this working set. The contained documents are not affected."));
         m_deleteButton->setFlat(true);
-        connect(m_deleteButton, SIGNAL(clicked(bool)), m_set, SLOT(deleteSet()));
-        connect(m_deleteButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
+        connect(m_deleteButton, &QPushButton::clicked, m_set, [this]() { m_set->deleteSet(false); });
+        connect(m_deleteButton, &QPushButton::clicked, this, &WorkingSetToolTipWidget::shouldClose);
         topLayout->addWidget(m_deleteButton);
         layout->addLayout(topLayout);
         // horizontal line
@@ -131,7 +131,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         m_mergeButton->setText(i18n("Add All"));
         m_mergeButton->setToolTip(i18n("Add all documents that are part of this working set to the currently active working set."));
         m_mergeButton->setFlat(true);
-        connect(m_mergeButton, SIGNAL(clicked(bool)), m_setButton, SLOT(mergeSet()));
+        connect(m_mergeButton, &QPushButton::clicked, m_setButton, &WorkingSetToolButton::mergeSet);
         actionsLayout->addWidget(m_mergeButton);
 
         m_subtractButton = new QPushButton;
@@ -139,7 +139,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         m_subtractButton->setText(i18n("Remove All"));
         m_subtractButton->setToolTip(i18n("Remove all documents that are part of this working set from the currently active working set."));
         m_subtractButton->setFlat(true);
-        connect(m_subtractButton, SIGNAL(clicked(bool)), m_setButton, SLOT(subtractSet()));
+        connect(m_subtractButton, &QPushButton::clicked, m_setButton, &WorkingSetToolButton::subtractSet);
         actionsLayout->addWidget(m_subtractButton);
         bodyLayout->addLayout(actionsLayout);
     }
@@ -188,15 +188,15 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         m_fileWidgets.insert(file, widget);
         m_orderedFileWidgets.push_back(widget);
 
-        connect(plusButton, SIGNAL(clicked(bool)), this, SLOT(buttonClicked(bool)));
-        connect(fileLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
+        connect(plusButton, &QToolButton::clicked, this, &WorkingSetToolTipWidget::buttonClicked);
+        connect(fileLabel, &WorkingSetFileLabel::clicked, this, &WorkingSetToolTipWidget::labelClicked);
     }
 
     bodyLayout->addLayout(filesLayout);
 
     updateFileButtons();
-    connect(set, SIGNAL(setChangedSignificantly()), SLOT(updateFileButtons()));
-    connect(mainwindow->area(), SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)), SLOT(updateFileButtons()), Qt::QueuedConnection);
+    connect(set, &WorkingSet::setChangedSignificantly, this, &WorkingSetToolTipWidget::updateFileButtons);
+    connect(mainwindow->area(), &Sublime::Area::changedWorkingSet, this, &WorkingSetToolTipWidget::updateFileButtons, Qt::QueuedConnection);
 
     QMetaObject::invokeMethod(this, "updateFileButtons");
 }
@@ -310,15 +310,15 @@ void WorkingSetToolTipWidget::updateFileButtons()
     m_documentsLabel->setHidden(m_mergeButton->isHidden() && m_subtractButton->isHidden() && m_deleteButton->isHidden());
 
     if(currentWorkingSet == m_set) {
-        disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
-        connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
-        connect(m_openButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
+        disconnect(m_openButton, &QPushButton::clicked, m_setButton, &WorkingSetToolButton::loadSet);
+        connect(m_openButton, &QPushButton::clicked, m_setButton, &WorkingSetToolButton::closeSet);
+        connect(m_openButton, &QPushButton::clicked, this, &WorkingSetToolTipWidget::shouldClose);
         m_openButton->setIcon(QIcon::fromTheme("project-development-close"));
         m_openButton->setText(i18n("Stash"));
     }else{
-        disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
-        connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
-        disconnect(m_openButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
+        disconnect(m_openButton, &QPushButton::clicked, m_setButton, &WorkingSetToolButton::closeSet);
+        connect(m_openButton, &QPushButton::clicked, m_setButton, &WorkingSetToolButton::loadSet);
+        disconnect(m_openButton, &QPushButton::clicked, this, &WorkingSetToolTipWidget::shouldClose);
         m_openButton->setIcon(QIcon::fromTheme("project-open"));
         m_openButton->setText(i18n("Load"));
     }

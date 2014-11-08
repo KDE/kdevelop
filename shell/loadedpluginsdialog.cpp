@@ -200,7 +200,7 @@ public:
         setBlockedEventTypes(button, QList<QEvent::Type>() << QEvent::MouseButtonPress
                              << QEvent::MouseButtonRelease << QEvent::MouseButtonDblClick);
 
-        connect(button, SIGNAL(clicked(bool)), this, SLOT(info()));
+        connect(button, &QPushButton::clicked, this, &LoadedPluginsDelegate::info);
         return QList<QWidget*>()
             << button;
     }
