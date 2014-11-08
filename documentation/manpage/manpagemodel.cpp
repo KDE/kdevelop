@@ -108,8 +108,8 @@ void ManPageModel::initModel()
     m_sectionList.clear();
     m_manMap.clear();
     auto list = KIO::listDir(QUrl("man://"), KIO::HideProgressInfo);
-    connect(list, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)), SLOT(indexEntries(KIO::Job*, KIO::UDSEntryList)));
-    connect(list, SIGNAL(result(KJob*)), this, SLOT(indexLoaded()));
+    connect(list, &KIO::ListJob::entries, this, &ManPageModel::indexEntries);
+    connect(list, &KIO::ListJob::result, this, &ManPageModel::indexLoaded);
 }
 
 void ManPageModel::indexEntries(KIO::Job* /*job*/, const KIO::UDSEntryList& entries)
@@ -136,8 +136,8 @@ void ManPageModel::initSection()
     const QString sectionUrl = iterator->peekNext().first;
     m_manMap[sectionUrl].clear();
     auto list = KIO::listDir(QUrl(sectionUrl), KIO::HideProgressInfo);
-    connect(list, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)), SLOT(sectionEntries(KIO::Job*, KIO::UDSEntryList)));
-    connect(list, SIGNAL(result(KJob*)), SLOT(sectionLoaded()));
+    connect(list, &KIO::ListJob::entries, this, &ManPageModel::sectionEntries);
+    connect(list, &KIO::ListJob::result, this, &ManPageModel::sectionLoaded);
 }
 
 void ManPageModel::sectionEntries(KIO::Job* /*job*/, const KIO::UDSEntryList& entries)

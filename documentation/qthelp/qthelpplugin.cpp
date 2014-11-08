@@ -48,7 +48,7 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     s_plugin = this;
     KSettings::Dispatcher::registerComponent( "kdevqthelp_config",
                                                     this, "readConfig" );
-    connect(this, SIGNAL(changedProvidersList()), KDevelop::ICore::self()->documentationController(), SLOT(changedDocumentationProviders()));
+    connect(this, &QtHelpPlugin::changedProvidersList, KDevelop::ICore::self()->documentationController(), &KDevelop::IDocumentationController::changedDocumentationProviders);
     QMetaObject::invokeMethod(this, "readConfig", Qt::QueuedConnection);
 }
 

@@ -201,9 +201,9 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
         view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(m_provider->engine(), 0));
         view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
         view->setContextMenuPolicy(Qt::CustomContextMenu);
-        connect(view, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(viewContextMenuRequested(QPoint)));
+        connect(view, &StandardDocumentationView::customContextMenuRequested, this, &QtHelpDocumentation::viewContextMenuRequested);
 
-        QObject::connect(view, SIGNAL(linkClicked(QUrl)), SLOT(jumpedTo(QUrl)));
+        QObject::connect(view, &StandardDocumentationView::linkClicked, this, &QtHelpDocumentation::jumpedTo);
 
         setUserStyleSheet(view, m_current.value());
         view->load(m_current.value());
@@ -256,7 +256,7 @@ IDocumentationProvider* QtHelpDocumentation::provider() const
 QtHelpAlternativeLink::QtHelpAlternativeLink(const QString& name, const QtHelpDocumentation* doc, QObject* parent)
     : QAction(name, parent), mDoc(doc), mName(name)
 {
-    connect(this, SIGNAL(triggered()), SLOT(showUrl()));
+    connect(this, &QtHelpAlternativeLink::triggered, this, &QtHelpAlternativeLink::showUrl);
 }
 
 void QtHelpAlternativeLink::showUrl()
@@ -275,7 +275,7 @@ QWidget* HomeDocumentation::documentationWidget(DocumentationFindWidget*, QWidge
     w->header()->setVisible(false);
     w->setModel(m_provider->engine()->contentModel());
 
-    connect(w, SIGNAL(clicked(QModelIndex)), SLOT(clicked(QModelIndex)));
+    connect(w, &QTreeView::clicked, this, &HomeDocumentation::clicked);
     return w;
 }
 

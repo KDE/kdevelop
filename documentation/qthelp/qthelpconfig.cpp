@@ -103,17 +103,17 @@ QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     m_configWidget = new Ui::QtHelpConfigUI;
     m_configWidget->setupUi( w );
     m_configWidget->addButton->setIcon(QIcon::fromTheme("list-add"));
-    connect(m_configWidget->addButton, SIGNAL(clicked(bool)), this, SLOT(add()));
+    connect(m_configWidget->addButton, &QPushButton::clicked, this, &QtHelpConfig::add);
     m_configWidget->editButton->setIcon(QIcon::fromTheme("document-edit"));
-    connect(m_configWidget->editButton, SIGNAL(clicked(bool)), this, SLOT(modify()));
+    connect(m_configWidget->editButton, &QPushButton::clicked, this, &QtHelpConfig::modify);
     m_configWidget->removeButton->setIcon(QIcon::fromTheme("list-remove"));
-    connect(m_configWidget->removeButton, SIGNAL(clicked(bool)), this, SLOT(remove()));
+    connect(m_configWidget->removeButton, &QPushButton::clicked, this, &QtHelpConfig::remove);
     m_configWidget->upButton->setIcon(QIcon::fromTheme("arrow-up"));
-    connect(m_configWidget->upButton, SIGNAL(clicked(bool)), this, SLOT(up()));
+    connect(m_configWidget->upButton, &QPushButton::clicked, this, &QtHelpConfig::up);
     m_configWidget->downButton->setIcon(QIcon::fromTheme("arrow-down"));
-    connect(m_configWidget->downButton, SIGNAL(clicked(bool)), this, SLOT(down()));
+    connect(m_configWidget->downButton, &QPushButton::clicked, this, &QtHelpConfig::down);
     // Table
-    connect(m_configWidget->qchTable, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
+    connect(m_configWidget->qchTable, &QTreeWidget::itemSelectionChanged, this, &QtHelpConfig::selectionChanged);
     m_configWidget->qchTable->setColumnHidden(IconColumn, true);
     m_configWidget->qchTable->setColumnHidden(GhnsColumn, true);
     m_configWidget->qchTable->header()->setStretchLastSection(true);
@@ -121,10 +121,10 @@ QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     // Add GHNS button
     KNS3::Button *knsButton = new KNS3::Button(i18nc("Allow user to get some API documentation with GHNS", "Get New Documentation"), "kdevelop-qthelp.knsrc", m_configWidget->qchManage);
     m_configWidget->verticalLayout->insertWidget(1, knsButton);
-    connect(knsButton, SIGNAL(dialogFinished(KNS3::Entry::List)), SLOT(knsUpdate(KNS3::Entry::List)));
-    connect(m_configWidget->loadQtDocsCheckBox, SIGNAL(toggled(bool)), this, SLOT(changed()));
-    connect(m_configWidget->qchSearchDirButton, SIGNAL(clicked(bool)), this, SLOT(chooseSearchDir()));
-    connect(m_configWidget->qchSearchDir,SIGNAL(textChanged(QString)), this, SLOT(searchDirChanged()));
+    connect(knsButton, &KNS3::Button::dialogFinished, this, &QtHelpConfig::knsUpdate);
+    connect(m_configWidget->loadQtDocsCheckBox, &QCheckBox::toggled, this, static_cast<void(QtHelpConfig::*)()>(&QtHelpConfig::changed));
+    connect(m_configWidget->qchSearchDirButton, &QPushButton::clicked, this, &QtHelpConfig::chooseSearchDir);
+    connect(m_configWidget->qchSearchDir,&QLineEdit::textChanged, this, &QtHelpConfig::searchDirChanged);
     l->addWidget( w );
     load();
     selectionChanged();
