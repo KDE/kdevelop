@@ -163,6 +163,7 @@ K_EXPORT_PLUGIN( CompilerProviderFactory( KAboutData( "kdevcompilerprovider",
 CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
     : IPlugin( "kdevcompilerprovider", parent )
 {
+    KDEV_USE_EXTENSION_INTERFACE( ICompilerProvider );
     /// FIXME: cleanup the code base here, don't make the provider a plugin but a static library or similar.
     ///        simplify the code in generel, less interfaces/virtuals!
     static_cast<DefinesAndIncludesManager*>( IDefinesAndIncludesManager::manager() )->setProvider(this);
