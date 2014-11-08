@@ -23,11 +23,10 @@
 
 namespace KDevelop {
 
-NavigationToolTip::NavigationToolTip(QWidget* parent, const QPoint& point, QWidget* navigationWidget) : ActiveToolTip(parent, point) {
+NavigationToolTip::NavigationToolTip(QWidget* parent, const QPoint& point, QWidget* navigationWidget) : ActiveToolTip(parent, point), m_navigationWidget(nullptr) {
     Q_ASSERT(parent);
     setBackgroundRole(QPalette::Window);
     setNavigationWidget(navigationWidget);
-    connect(navigationWidget, SIGNAL(sizeHintChanged()), this, SLOT(sizeHintChanged()));
 }
 
 void NavigationToolTip::sizeHintChanged() {
@@ -42,11 +41,20 @@ void NavigationToolTip::sizeHintChanged() {
 }
 
 void NavigationToolTip::setNavigationWidget(QWidget* widget) {
+    if (!widget) {
+        return;
+    }
     QVBoxLayout* layout = new QVBoxLayout;
     setLayout(layout);
     layout->addWidget(widget);
     layout->setMargin(0);
+    if (auto oldWidget = qobject_cast<AbstractNavigationWidget*>(m_navigationWidget)) {
+        disconnect(oldWidget, &AbstractNavigationWidget::sizeHintChanged, this, &NavigationToolTip::sizeHintChanged);
+    }
     m_navigationWidget = widget;
+    if (auto newWidget = qobject_cast<AbstractNavigationWidget*>(widget)) {
+        connect(newWidget, &AbstractNavigationWidget::sizeHintChanged, this, &NavigationToolTip::sizeHintChanged);
+    }
 }
 
 }

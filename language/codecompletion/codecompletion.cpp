@@ -45,10 +45,10 @@ CodeCompletion::CodeCompletion(QObject *parent, KTextEditor::CodeCompletionModel
   KDevelop::CodeCompletionModel* kdevModel = dynamic_cast<KDevelop::CodeCompletionModel*>(aModel);
   if(kdevModel)
     kdevModel->initialize();
-  connect(KDevelop::ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)),
-          SLOT(textDocumentCreated(KDevelop::IDocument*)));
-  connect( ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)),
-           SLOT(documentUrlChanged(KDevelop::IDocument*)) );
+  connect(KDevelop::ICore::self()->documentController(), &IDocumentController::textDocumentCreated,
+          this, &CodeCompletion::textDocumentCreated);
+  connect( ICore::self()->documentController(), &IDocumentController::documentUrlChanged,
+           this, &CodeCompletion::documentUrlChanged );
   aModel->setParent(this);
 
   // prevent deadlock
@@ -101,7 +101,7 @@ void CodeCompletion::unregisterDocument(Document* textDocument)
     if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view))
       cc->unregisterCompletionModel(m_model);
 
-  disconnect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)));
+  disconnect(textDocument, &Document::viewCreated, this, &CodeCompletion::viewCreated);
 }
 
 void CodeCompletion::checkDocument(Document* textDocument)
@@ -123,7 +123,7 @@ void CodeCompletion::checkDocument(Document* textDocument)
   foreach (KTextEditor::View* view, textDocument->views())
     viewCreated(textDocument, view);
 
-  connect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)));
+  connect(textDocument, &Document::viewCreated, this, &CodeCompletion::viewCreated);
 }
 
 

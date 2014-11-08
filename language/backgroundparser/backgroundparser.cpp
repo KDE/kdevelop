@@ -31,6 +31,7 @@
 #include <QMutexLocker>
 #include <QThread>
 #include <QPointer>
+#include <QCoreApplication>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -42,19 +43,20 @@
 #include <ThreadWeaver/ThreadWeaver>
 #include <ThreadWeaver/DebuggingAids>
 
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguage.h>
+#include <interfaces/ilanguagesupport.h>
+#include <interfaces/isession.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 
-#include "../interfaces/ilanguagesupport.h"
 #include "util/debug.h"
 
 #include "parsejob.h"
 #include <editor/modificationrevisionset.h>
-#include <interfaces/icore.h>
-#include <qcoreapplication.h>
-#include <interfaces/idocumentcontroller.h>
-#include <interfaces/isession.h>
-#include <interfaces/iprojectcontroller.h>
+
 
 const bool separateThreadForHighPriority = true;
 
@@ -129,7 +131,7 @@ public:
 
         ThreadWeaver::setDebugLevel(true, 1);
 
-        QObject::connect(&m_timer, SIGNAL(timeout()), m_parser, SLOT(parseDocuments()));
+        QObject::connect(&m_timer, &QTimer::timeout, m_parser, &BackgroundParser::parseDocuments);
     }
 
     void startTimerThreadSafe() {
@@ -284,12 +286,12 @@ public:
 
             ThreadWeaver::QObjectDecorator* decorator = new ThreadWeaver::QObjectDecorator(job);
 
-            QObject::connect(decorator, SIGNAL(done(ThreadWeaver::JobPointer)),
-                             m_parser, SLOT(parseComplete(ThreadWeaver::JobPointer)));
-            QObject::connect(decorator, SIGNAL(failed(ThreadWeaver::JobPointer)),
-                             m_parser, SLOT(parseComplete(ThreadWeaver::JobPointer)));
-            QObject::connect(job, SIGNAL(progress(KDevelop::ParseJob*,float,QString)),
-                             m_parser, SLOT(parseProgress(KDevelop::ParseJob*,float,QString)), Qt::QueuedConnection);
+            QObject::connect(decorator, &ThreadWeaver::QObjectDecorator::done,
+                             m_parser, &BackgroundParser::parseComplete);
+            QObject::connect(decorator, &ThreadWeaver::QObjectDecorator::failed,
+                             m_parser, &BackgroundParser::parseComplete);
+            QObject::connect(job, &ParseJob::progress,
+                             m_parser, &BackgroundParser::parseProgress, Qt::QueuedConnection);
 
             m_parseJobs.insert(url, decorator);
 
@@ -461,22 +463,22 @@ BackgroundParser::BackgroundParser(ILanguageController *languageController)
     : QObject(languageController), d(new BackgroundParserPrivate(this, languageController))
 {
     Q_ASSERT(ICore::self()->documentController());
-    connect(ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)), this, SLOT(documentLoaded(KDevelop::IDocument*)));
-    connect(ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(documentUrlChanged(KDevelop::IDocument*)));
-    connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
-    connect(ICore::self(), SIGNAL(aboutToShutdown()), this, SLOT(aboutToQuit()));
+    connect(ICore::self()->documentController(), &IDocumentController::documentLoaded, this, &BackgroundParser::documentLoaded);
+    connect(ICore::self()->documentController(), &IDocumentController::documentUrlChanged, this, &BackgroundParser::documentUrlChanged);
+    connect(ICore::self()->documentController(), &IDocumentController::documentClosed, this, &BackgroundParser::documentClosed);
+    connect(ICore::self(), &ICore::aboutToShutdown, this, &BackgroundParser::aboutToQuit);
 
     bool connected = QObject::connect(ICore::self()->projectController(),
-                                      SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)),
-                                      this, SLOT(projectAboutToBeOpened(KDevelop::IProject*)));
+                                      &IProjectController::projectAboutToBeOpened,
+                                      this, &BackgroundParser::projectAboutToBeOpened);
     Q_ASSERT(connected);
     connected = QObject::connect(ICore::self()->projectController(),
-                                 SIGNAL(projectOpened(KDevelop::IProject*)),
-                                 this, SLOT(projectOpened(KDevelop::IProject*)));
+                                 &IProjectController::projectOpened,
+                                 this, &BackgroundParser::projectOpened);
     Q_ASSERT(connected);
     connected = QObject::connect(ICore::self()->projectController(),
-                                 SIGNAL(projectOpeningAborted(KDevelop::IProject*)),
-                                 this, SLOT(projectOpeningAborted(KDevelop::IProject*)));
+                                 &IProjectController::projectOpeningAborted,
+                                 this, &BackgroundParser::projectOpeningAborted);
     Q_ASSERT(connected);
     Q_UNUSED(connected);
 }

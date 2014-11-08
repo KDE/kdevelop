@@ -39,9 +39,9 @@ RefactoringProgressDialog::RefactoringProgressDialog(const QString& action, KDev
     m_rd.progressBar->setMinimum(0);
     m_rd.progressBar->setMaximum(0);
     m_rd.renameLabel->setText(action);
-    connect(m_collector, SIGNAL(processUsesSignal(KDevelop::ReferencedTopDUContext)), this, SLOT(processUses(KDevelop::ReferencedTopDUContext)));
-    connect(m_collector, SIGNAL(progressSignal(uint, uint)), this, SLOT(progress(uint, uint)));
-    connect(m_collector, SIGNAL(maximumProgressSignal(uint)), this, SLOT(maximumProgress(uint)));
+    connect(m_collector, &UsesCollector::processUsesSignal, this, &RefactoringProgressDialog::processUses);
+    connect(m_collector, &UsesCollector::progressSignal, this, &RefactoringProgressDialog::progress);
+    connect(m_collector, &UsesCollector::maximumProgressSignal, this, &RefactoringProgressDialog::maximumProgress);
 }
 
 void RefactoringProgressDialog::progress(uint done, uint max)

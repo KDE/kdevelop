@@ -64,8 +64,8 @@ CodeHighlighting::CodeHighlighting( QObject * parent )
 
   adaptToColorChanges();
 
-  connect(ColorCache::self(), SIGNAL(colorsGotChanged()),
-           this, SLOT(adaptToColorChanges()));
+  connect(ColorCache::self(), &ColorCache::colorsGotChanged,
+           this, &CodeHighlighting::adaptToColorChanges);
 }
 
 CodeHighlighting::~CodeHighlighting( )
@@ -462,7 +462,7 @@ void CodeHighlighting::clearHighlightingForDocument(IndexedString document)
   DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(document);
   if(m_highlights.contains(tracker))
   {
-    disconnect(tracker, SIGNAL(destroyed(QObject*)), this, SLOT(trackerDestroyed(QObject*)));
+    disconnect(tracker, &DocumentChangeTracker::destroyed, this, &CodeHighlighting::trackerDestroyed);
     qDeleteAll(m_highlights[tracker]->m_highlightedRanges);
     delete m_highlights[tracker];
     m_highlights.remove(tracker);
@@ -492,11 +492,13 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
     delete m_highlights[tracker];
   }else{
     // we newly add this tracker, so add the connection
-    connect(tracker, SIGNAL(destroyed(QObject*)), SLOT(trackerDestroyed(QObject*)));
+    // This can't use new style connect syntax since MovingInterface is not a QObject
     connect(tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
             this, SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+#pragma message("TODO: this depends on the implemenation of katedocument.h, is that okay?")
     connect(tracker->document(), SIGNAL(aboutToRemoveText(KTextEditor::Range)),
             this, SLOT(aboutToRemoveText(KTextEditor::Range)));
+    connect(tracker, &DocumentChangeTracker::destroyed, this, &CodeHighlighting::trackerDestroyed);
   }
 
   m_highlights[tracker] = highlighting;

@@ -1105,10 +1105,10 @@ DUChain::DUChain()
 {
   Q_ASSERT(ICore::self());
 
-  connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
-  connect(ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(documentRenamed(KDevelop::IDocument*)));
-  connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), this, SLOT(documentActivated(KDevelop::IDocument*)));
-  connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
+  connect(ICore::self()->documentController(), &IDocumentController::documentLoadedPrepare, this, &DUChain::documentLoadedPrepare);
+  connect(ICore::self()->documentController(), &IDocumentController::documentUrlChanged, this, &DUChain::documentRenamed);
+  connect(ICore::self()->documentController(), &IDocumentController::documentActivated, this, &DUChain::documentActivated);
+  connect(ICore::self()->documentController(), &IDocumentController::documentClosed, this, &DUChain::documentClosed);
 }
 
 DUChain::~DUChain()

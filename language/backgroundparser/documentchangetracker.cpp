@@ -80,15 +80,16 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
         }
     }
 
-    connect(document, SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Cursor,QString)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Cursor,QString)));
-    connect(document, SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)));
-    connect(document, SIGNAL(destroyed(QObject*)), SLOT(documentDestroyed(QObject*)));
-    connect(document, SIGNAL(documentSavedOrUploaded(KTextEditor::Document*,bool)), SLOT(documentSavedOrUploaded(KTextEditor::Document*,bool)));
+    connect(document, &Document::textInserted, this, &DocumentChangeTracker::textInserted);
+    connect(document, &Document::textRemoved, this, &DocumentChangeTracker::textRemoved);
+    connect(document, &Document::destroyed, this, &DocumentChangeTracker::documentDestroyed);
+    connect(document, &Document::documentSavedOrUploaded, this, &DocumentChangeTracker::documentSavedOrUploaded);
 
     m_moving = dynamic_cast<KTextEditor::MovingInterface*>(document);
     Q_ASSERT(m_moving);
     m_changedRange = m_moving->newMovingRange(KTextEditor::Range(), KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
 
+    // can't use new connect syntax here, MovingInterface is not a QObject
     connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
 
     ModificationRevision::setEditorRevisionForFile(m_url, m_moving->revision());

@@ -23,6 +23,8 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <backgroundparser/backgroundparser.h>
 
+#include <KTextEditor/Document>
+
 void KDevelop::PersistentMovingRangePrivate::connectTracker()
 {
   Q_ASSERT(m_tracker == 0);
@@ -36,6 +38,7 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
     m_movingRange = m_tracker->documentMovingInterface()->newMovingRange(m_range);
     if (m_shouldExpand)
       m_movingRange->setInsertBehaviors(KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
+    // can't use new connect syntax here, MovingInterface is not a QObject
     connect(m_tracker->document(), SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToDeleteMovingInterfaceContent()));
     connect(m_tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent()));
     m_movingRange->setAttribute(m_attribte);
@@ -48,6 +51,7 @@ void KDevelop::PersistentMovingRangePrivate::disconnectTracker()
 {
   Q_ASSERT(m_tracker);
   Q_ASSERT(m_movingRange);
+  // can't use new connect syntax here, MovingInterface is not a QObject
   disconnect(m_tracker->document(), SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToDeleteMovingInterfaceContent()));
   disconnect(m_tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent()));
   

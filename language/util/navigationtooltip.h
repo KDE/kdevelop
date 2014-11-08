@@ -19,12 +19,13 @@
 #ifndef KDEVPLATFORM_NAVIGATIONTOOLTIP_H
 #define KDEVPLATFORM_NAVIGATIONTOOLTIP_H
 
-#include "../../util/activetooltip.h"
-#include <language/languageexport.h>
+#include <QPointer>
+
+#include <util/activetooltip.h>
+
+#include "languageexport.h"
 
 namespace KDevelop {
-
-class AbstractNavigationWidget;
 
 ///A tooltip that just emebed the given widget.
 ///
@@ -42,7 +43,7 @@ public:
         void sizeHintChanged();
     private:
         void setNavigationWidget(QWidget*);
-        QWidget* m_navigationWidget;
+        QPointer<QWidget> m_navigationWidget;
 };
 
 }

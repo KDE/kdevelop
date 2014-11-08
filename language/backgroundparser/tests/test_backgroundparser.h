@@ -79,6 +79,8 @@ private slots:
     void parseJobCreated(KDevelop::ParseJob*);
 
 private:
+    friend class TestBackgroundparser;
+
     QVector<JobPrototype> m_jobs;
     QVector<IndexedString> m_finishedJobs;
     QVector<IndexedString> m_createdJobs;

@@ -107,7 +107,7 @@ void BasicRefactoring::fillContextMenu(ContextMenuExtension &extension, Context 
             QAction *action = new QAction(i18n("Rename \"%1\"...", declaration->qualifiedIdentifier().toString()), 0);
             action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
             action->setIcon(QIcon::fromTheme("edit-rename"));
-            connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
+            connect(action, &QAction::triggered, this, &BasicRefactoring::executeRenameAction);
             extension.addAction(ContextMenuExtension::RefactorGroup, action);
         }
     }
@@ -283,7 +283,7 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(const
     QWidget *navigationWidget = declaration->context()->createNavigationWidget(declaration.data());
     AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);
     if (abstractNavigationWidget)
-        connect(&uses, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)), abstractNavigationWidget, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
+        connect(&uses, &UsesWidget::navigateDeclaration, abstractNavigationWidget, &AbstractNavigationWidget::navigateDeclaration);
 
     QString declarationName = declaration->toString();
     dialog.setWindowTitle(i18nc("Renaming some declaration", "Rename \"%1\"", declarationName));

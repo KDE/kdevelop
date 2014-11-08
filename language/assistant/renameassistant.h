@@ -49,8 +49,6 @@ public:
 private:
     struct Private;
     QScopedPointer<Private> const d;
-
-    Q_PRIVATE_SLOT(d, void reset());
 };
 
 }

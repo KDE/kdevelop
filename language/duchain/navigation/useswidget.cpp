@@ -113,7 +113,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
   m_icon = new QLabel(this);
   m_icon->setPixmap(QIcon::fromTheme("code-function").pixmap(16));
 
-  connect(m_label, SIGNAL(linkActivated(QString)), this, SLOT(jumpTo()));
+  connect(m_label, &QLabel::linkActivated, this, &OneUseWidget::jumpTo);
 
   DUChainReadLocker lock(DUChain::lock());
   QString text = "<a href='open'>" + i18nc("refers to a line in source code", "Line <b>%1</b>:", range.start().line()) + QString("</a>");
@@ -363,7 +363,7 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<Index
                                           + headerText.toHtmlEscaped() + "</a>: "));
     addHeaderItem(headerLabel);
     setUpdatesEnabled(true);
-    connect(headerLabel, SIGNAL(linkActivated(QString)), this, SLOT(linkWasActivated(QString)));
+    connect(headerLabel, &QLabel::linkActivated, this, &ContextUsesWidget::linkWasActivated);
 }
 
 void ContextUsesWidget::linkWasActivated(QString link) {
@@ -429,7 +429,7 @@ TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, QList
 
     m_toggleButton->setText("&nbsp;&nbsp; <a href='toggleCollapsed'>[" + i18nc("Refers to closing a UI element", "Collapse") + "]</a>");
 
-    connect(m_toggleButton, SIGNAL(linkActivated(QString)), this, SLOT(labelClicked()));
+    connect(m_toggleButton, &QLabel::linkActivated, this, &TopContextUsesWidget::labelClicked);
     addHeaderItem(headerWidget);
     setUpdatesEnabled(true);
 }
@@ -510,7 +510,7 @@ UsesWidget::UsesWidget(const IndexedDeclaration& declaration, QSharedPointer<Use
 
     m_headerLine = new QLabel;
     redrawHeaderLine();
-    connect(m_headerLine, SIGNAL(linkActivated(QString)), this, SLOT(headerLinkActivated(QString)));
+    connect(m_headerLine, &QLabel::linkActivated, this, &UsesWidget::headerLinkActivated);
     m_layout->insertWidget(0, m_headerLine, 0, Qt::AlignTop);
 
     m_layout->setAlignment(Qt::AlignTop);

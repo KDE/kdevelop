@@ -55,8 +55,8 @@ struct StaticAssistantsManager::Private
     void checkAssistantForProblems(KDevelop::TopDUContext* top);
 
     void documentLoaded(KDevelop::IDocument*);
-    void textInserted(KTextEditor::Document*, const KTextEditor::Range&);
-    void textRemoved(KTextEditor::Document*, const KTextEditor::Range&, const QString& removedText);
+    void textInserted(Document* document, const Cursor& cursor, const QString& text);
+    void textRemoved(Document* document, const Range& cursor, const QString& removedText);
     void parseJobFinished(KDevelop::ParseJob*);
     void documentActivated(KDevelop::IDocument*);
     void cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&);
@@ -75,6 +75,7 @@ struct StaticAssistantsManager::Private
     SafeDocumentPointer m_eventualDocument;
     KTextEditor::Range m_eventualRange;
     QString m_eventualRemovedText;
+    QMetaObject::Connection m_cursorPositionChangeConnection;
 };
 
 StaticAssistantsManager::StaticAssistantsManager(QObject* parent)
@@ -84,14 +85,14 @@ StaticAssistantsManager::StaticAssistantsManager(QObject* parent)
     d->m_timer = new QTimer(this);
     d->m_timer->setSingleShot(true);
     d->m_timer->setInterval(400);
-    connect(d->m_timer, SIGNAL(timeout()), SLOT(timeout()));
+    connect(d->m_timer, &QTimer::timeout, this, [&]() { d->timeout(); });
 
     connect(KDevelop::ICore::self()->documentController(),
-            SIGNAL(documentLoaded(KDevelop::IDocument*)),
-            SLOT(documentLoaded(KDevelop::IDocument*)));
+            &IDocumentController::documentLoaded,
+            this, [&](IDocument* document) { d->documentLoaded(document); });
     connect(KDevelop::ICore::self()->documentController(),
-            SIGNAL(documentActivated(KDevelop::IDocument*)),
-            SLOT(documentActivated(KDevelop::IDocument*)));
+            &IDocumentController::documentActivated,
+            this, [&](IDocument* doc) { d->documentActivated(doc); });
 
     foreach (IDocument* document, ICore::self()->documentController()->openDocuments()) {
         d->documentLoaded(document);
@@ -129,11 +130,11 @@ void StaticAssistantsManager::Private::documentLoaded(IDocument* document)
 {
     if (document->textDocument()) {
         connect(document->textDocument(),
-                SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), q,
-                SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
+                &Document::textInserted, q,
+                [&](Document* document, const Cursor& cursor, const QString& text) { textInserted(document, cursor, text); });
         connect(document->textDocument(),
-                SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)), q,
-                SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range,QString)));
+                &Document::textRemoved, q,
+                [&](Document* document, const Range& range, const QString& removedText) { textRemoved(document, range, removedText); });
     }
 }
 
@@ -143,10 +144,11 @@ void StaticAssistantsManager::hideAssistant()
     d->m_activeProblemAssistant = false;
 }
 
-void StaticAssistantsManager::Private::textInserted(Document* document, const Range& range)
+void StaticAssistantsManager::Private::textInserted(Document* document, const Cursor& cursor, const QString& text)
 {
     m_eventualDocument = document;
-    m_eventualRange = range;
+#pragma message("TODO: is this correct, I don't know much about KTextEditor")
+    m_eventualRange = Range(cursor, text.size());
     m_eventualRemovedText.clear();
     QMetaObject::invokeMethod(q, "eventuallyStartAssistant", Qt::QueuedConnection);
 }
@@ -208,7 +210,7 @@ void StaticAssistantsManager::Private::startAssistant(IAssistant::Ptr assistant)
 
     m_activeAssistant = assistant;
     if (m_activeAssistant) {
-        connect(m_activeAssistant.data(), SIGNAL(hide()), q, SLOT(hideAssistant()), Qt::UniqueConnection);
+        connect(m_activeAssistant.data(), &IAssistant::hide, q, &StaticAssistantsManager::hideAssistant, Qt::UniqueConnection);
         ICore::self()->uiController()->popUpAssistant(IAssistant::Ptr(m_activeAssistant.data()));
 
         m_assistantStartedAt =  m_currentView.data()->cursorPosition();
@@ -257,23 +259,21 @@ void StaticAssistantsManager::Private::documentActivated(IDocument* doc)
     }
 
     connect(KDevelop::ICore::self()->languageController()->backgroundParser(),
-            SIGNAL(parseJobFinished(KDevelop::ParseJob*)), q,
-            SLOT(parseJobFinished(KDevelop::ParseJob*)),
+            &BackgroundParser::parseJobFinished, q,
+            [&](ParseJob* job) { q->d->parseJobFinished(job); },
             Qt::UniqueConnection);
 
     if (m_currentView) {
-        disconnect(m_currentView.data(),
-                   SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), q,
-                   SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
+        QObject::disconnect(m_cursorPositionChangeConnection);
         m_currentView.clear();
     }
 
     m_currentView = ICore::self()->documentController()->activeTextDocumentView();
 
     if (m_currentView) {
-        connect(m_currentView.data(),
-                SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), q,
-                SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
+        m_cursorPositionChangeConnection = connect(m_currentView.data(),
+                &View::cursorPositionChanged, q,
+                [&](View* v, const Cursor& pos) { cursorPositionChanged(v, pos); });
     }
 }
 

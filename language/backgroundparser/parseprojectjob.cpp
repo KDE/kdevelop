@@ -49,7 +49,7 @@ ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate)
     , m_forceUpdate(forceUpdate)
     , m_project(project)
 {
-    connect(project, SIGNAL(destroyed(QObject*)), SLOT(deleteNow()));
+    connect(project, &IProject::destroyed, this, &ParseProjectJob::deleteNow);
 
     if (!ICore::self()->projectController()->parseAllProjectSources()) {
         // In case we don't want to parse the whole project, still add all currently open files that belong to the project to the background-parser

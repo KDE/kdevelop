@@ -77,8 +77,8 @@ ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
     QWidget* w=new QWidget(this);
     d->m_info=new QLabel(w);
     d->m_documentTabs = new QTabWidget(w);
-    connect(d->m_documentTabs, SIGNAL(currentChanged(int)),
-            this, SLOT(indexChanged(int)));
+    connect(d->m_documentTabs, &QTabWidget::currentChanged,
+            this, &ApplyChangesWidget::indexChanged);
 
     QVBoxLayout* l = new QVBoxLayout(w);
     l->addWidget(d->m_info);

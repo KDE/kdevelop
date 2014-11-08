@@ -633,7 +633,7 @@ public slots:
     QThread* thread = new QThread;
     TestWorker* worker = new TestWorker;
     connect(thread, SIGNAL(started()), worker, workerSlot);
-    connect(thread, SIGNAL(finished()), worker, SLOT(deleteLater()));
+    connect(thread, &QThread::finished, worker, &TestWorker::deleteLater);
     worker->moveToThread(thread);
     return QSharedPointer<QThread>(thread);
   }

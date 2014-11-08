@@ -164,8 +164,8 @@ void TestBackgroundparser::initTestCase()
   langController->backgroundParser()->setThreadCount(4);
 
   TestLanguageSupport* testLang = new TestLanguageSupport();
-  connect(testLang, SIGNAL(parseJobCreated(KDevelop::ParseJob*)),
-          &m_jobPlan, SLOT(parseJobCreated(KDevelop::ParseJob*)));
+  connect(testLang, &TestLanguageSupport::parseJobCreated,
+          &m_jobPlan, &JobPlan::parseJobCreated);
   langController->addTestLanguage(testLang, QStringList() << "text/plain");
 
   const auto languages = langController->languagesForUrl(QUrl::fromLocalFile("/foo.txt"));

@@ -88,7 +88,7 @@ void AbstractNavigationWidget::initBrowser(int height) {
   layout->setMargin(0);
   setLayout(layout);
 
-  connect( m_browser, SIGNAL(anchorClicked(QUrl)), this, SLOT(anchorClicked(QUrl)) );
+  connect( m_browser.data(), &QTextBrowser::anchorClicked, this, &AbstractNavigationWidget::anchorClicked );
 
   foreach(QWidget* w, findChildren<QWidget*>())
     w->setContextMenuPolicy(Qt::NoContextMenu);

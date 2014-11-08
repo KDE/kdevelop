@@ -69,15 +69,6 @@ public slots:
 private:
     struct Private;
     QScopedPointer<Private> const d;
-
-    Q_PRIVATE_SLOT(d, void documentLoaded(KDevelop::IDocument*));
-    Q_PRIVATE_SLOT(d, void textInserted(KTextEditor::Document*, const KTextEditor::Range&));
-    Q_PRIVATE_SLOT(d, void textRemoved(KTextEditor::Document*, const KTextEditor::Range&, const QString& removedText));
-    Q_PRIVATE_SLOT(d, void parseJobFinished(KDevelop::ParseJob*));
-    Q_PRIVATE_SLOT(d, void documentActivated(KDevelop::IDocument*));
-    Q_PRIVATE_SLOT(d, void cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&));
-    Q_PRIVATE_SLOT(d, void timeout());
-    Q_PRIVATE_SLOT(d, void eventuallyStartAssistant());
 };
 
 }

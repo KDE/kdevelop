@@ -273,7 +273,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     if(comment.isEmpty() && doc) {
       comment = doc->description();
       if(!comment.isEmpty()) {
-        connect(doc.data(), SIGNAL(descriptionChanged()), this, SIGNAL(contentsChanged()));
+        connect(doc.data(), &IDocumentation::descriptionChanged, this, &AbstractDeclarationNavigationContext::contentsChanged);
         modifyHtml() += "<br />" + commentHighlight(comment);
       }
     } else if(!comment.isEmpty()) {
