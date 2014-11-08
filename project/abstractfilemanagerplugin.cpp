@@ -443,7 +443,7 @@ AbstractFileManagerPlugin::AbstractFileManagerPlugin( const QString& componentNa
     KDEV_USE_EXTENSION_INTERFACE( IProjectFileManager )
 
     connect(core()->projectController(), &IProjectController::projectClosing,
-            this, [&](IProject* project) { d->projectClosing(project); });
+            this, [&] (IProject* project) { d->projectClosing(project); });
 }
 
 AbstractFileManagerPlugin::~AbstractFileManagerPlugin()
@@ -475,9 +475,9 @@ ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
         d->m_watchers[project] = new KDirWatch( project );
 
         connect(d->m_watchers[project], &KDirWatch::created,
-                this, [&](const QString& path_) { d->created(path_); });
+                this, [&] (const QString& path_) { d->created(path_); });
         connect(d->m_watchers[project], &KDirWatch::deleted,
-                this, [&](const QString& path_) { d->deleted(path_); });
+                this, [&] (const QString& path_) { d->deleted(path_); });
 
         d->m_watchers[project]->addDir(project->path().toLocalFile(), KDirWatch::WatchSubDirs | KDirWatch:: WatchFiles );
     }

@@ -41,19 +41,18 @@ void NavigationToolTip::sizeHintChanged() {
 }
 
 void NavigationToolTip::setNavigationWidget(QWidget* widget) {
-    if (!widget) {
-        return;
-    }
-    QVBoxLayout* layout = new QVBoxLayout;
-    setLayout(layout);
-    layout->addWidget(widget);
-    layout->setMargin(0);
     if (auto oldWidget = qobject_cast<AbstractNavigationWidget*>(m_navigationWidget)) {
         disconnect(oldWidget, &AbstractNavigationWidget::sizeHintChanged, this, &NavigationToolTip::sizeHintChanged);
     }
     m_navigationWidget = widget;
     if (auto newWidget = qobject_cast<AbstractNavigationWidget*>(widget)) {
         connect(newWidget, &AbstractNavigationWidget::sizeHintChanged, this, &NavigationToolTip::sizeHintChanged);
+    }
+    QVBoxLayout* layout = new QVBoxLayout;
+    setLayout(layout);
+    layout->setMargin(0);
+    if (m_navigationWidget) {
+        layout->addWidget(m_navigationWidget);
     }
 }
 

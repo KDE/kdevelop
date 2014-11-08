@@ -85,14 +85,14 @@ StaticAssistantsManager::StaticAssistantsManager(QObject* parent)
     d->m_timer = new QTimer(this);
     d->m_timer->setSingleShot(true);
     d->m_timer->setInterval(400);
-    connect(d->m_timer, &QTimer::timeout, this, [&]() { d->timeout(); });
+    connect(d->m_timer, &QTimer::timeout, this, [&] { d->timeout(); });
 
     connect(KDevelop::ICore::self()->documentController(),
             &IDocumentController::documentLoaded,
-            this, [&](IDocument* document) { d->documentLoaded(document); });
+            this, [&] (IDocument* document) { d->documentLoaded(document); });
     connect(KDevelop::ICore::self()->documentController(),
             &IDocumentController::documentActivated,
-            this, [&](IDocument* doc) { d->documentActivated(doc); });
+            this, [&] (IDocument* doc) { d->documentActivated(doc); });
 
     foreach (IDocument* document, ICore::self()->documentController()->openDocuments()) {
         d->documentLoaded(document);
@@ -131,10 +131,10 @@ void StaticAssistantsManager::Private::documentLoaded(IDocument* document)
     if (document->textDocument()) {
         connect(document->textDocument(),
                 &Document::textInserted, q,
-                [&](Document* document, const Cursor& cursor, const QString& text) { textInserted(document, cursor, text); });
+                [&] (Document* document, const Cursor& cursor, const QString& text) { textInserted(document, cursor, text); });
         connect(document->textDocument(),
                 &Document::textRemoved, q,
-                [&](Document* document, const Range& range, const QString& removedText) { textRemoved(document, range, removedText); });
+                [&] (Document* document, const Range& range, const QString& removedText) { textRemoved(document, range, removedText); });
     }
 }
 
@@ -260,7 +260,7 @@ void StaticAssistantsManager::Private::documentActivated(IDocument* doc)
 
     connect(KDevelop::ICore::self()->languageController()->backgroundParser(),
             &BackgroundParser::parseJobFinished, q,
-            [&](ParseJob* job) { q->d->parseJobFinished(job); },
+            [&] (ParseJob* job) { q->d->parseJobFinished(job); },
             Qt::UniqueConnection);
 
     if (m_currentView) {
@@ -273,7 +273,7 @@ void StaticAssistantsManager::Private::documentActivated(IDocument* doc)
     if (m_currentView) {
         m_cursorPositionChangeConnection = connect(m_currentView.data(),
                 &View::cursorPositionChanged, q,
-                [&](View* v, const Cursor& pos) { cursorPositionChanged(v, pos); });
+                [&] (View* v, const Cursor& pos) { cursorPositionChanged(v, pos); });
     }
 }
 

@@ -134,9 +134,9 @@ ProjectFilterManager::ProjectFilterManager(QObject* parent)
     d->q = this;
 
     connect(ICore::self()->pluginController(), &IPluginController::pluginLoaded,
-            this, [&](IPlugin* plugin) { d->pluginLoaded(plugin); });
+            this, [&] (IPlugin* plugin) { d->pluginLoaded(plugin); });
     connect(ICore::self()->pluginController(), &IPluginController::unloadingPlugin,
-            this, [&](IPlugin* plugin) { d->unloadingPlugin(plugin); });
+            this, [&] (IPlugin* plugin) { d->unloadingPlugin(plugin); });
 
     foreach(IPlugin* plugin, ICore::self()->pluginController()->loadedPlugins()) {
         d->pluginLoaded(plugin);

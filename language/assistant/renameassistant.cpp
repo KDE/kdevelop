@@ -214,7 +214,7 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
     } else {
         action =new RenameAction(d->m_oldDeclarationName, d->m_newDeclarationName, d->m_oldDeclarationUses);
     }
-    connect(action.data(), &IAssistantAction::executed, this, [&]() { d->reset(); });
+    connect(action.data(), &IAssistantAction::executed, this, [&] { d->reset(); });
     addAction(action);
     emit actionsChanged();
 }
