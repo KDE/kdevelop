@@ -34,8 +34,8 @@ namespace KDevelop {
 IVariableController::IVariableController(IDebugSession* parent)
     : QObject(parent), m_activeThread(-1), m_activeFrame(-1)
 {
-    connect(parent, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
-            SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
+    connect(parent, &IDebugSession::stateChanged,
+            this, &IVariableController::stateChanged);
 }
 
 VariableCollection* IVariableController::variableCollection()

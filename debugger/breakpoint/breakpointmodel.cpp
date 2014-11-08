@@ -50,25 +50,25 @@ BreakpointModel::BreakpointModel(QObject* parent)
     : QAbstractTableModel(parent),
       m_dontUpdateMarks(false)
 {
-    connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(updateMarks()));
+    connect(this, &BreakpointModel::dataChanged, this, &BreakpointModel::updateMarks);
 
     if (KDevelop::ICore::self()->partController()) { //TODO remove if
         foreach(KParts::Part* p, KDevelop::ICore::self()->partController()->parts())
             slotPartAdded(p);
         connect(KDevelop::ICore::self()->partController(),
-                SIGNAL(partAdded(KParts::Part*)),
+                &IPartController::partAdded,
                 this,
-                SLOT(slotPartAdded(KParts::Part*)));
+                &BreakpointModel::slotPartAdded);
     }
 
 
     connect (KDevelop::ICore::self()->documentController(),
-             SIGNAL(textDocumentCreated(KDevelop::IDocument*)),
+             &IDocumentController::textDocumentCreated,
              this,
-             SLOT(textDocumentCreated(KDevelop::IDocument*)));
+             &BreakpointModel::textDocumentCreated);
     connect (KDevelop::ICore::self()->documentController(),
-                SIGNAL(documentSaved(KDevelop::IDocument*)),
-                SLOT(documentSaved(KDevelop::IDocument*)));
+                &IDocumentController::documentSaved,
+                this, &BreakpointModel::documentSaved);
     load();
 }
 
@@ -102,8 +102,9 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
     KTextEditor::MarkInterface *iface =
         qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
 
-    if( iface ) {
-        connect (doc->textDocument(), SIGNAL(
+    if (iface) {
+        // can't use new signal slot syntax here, MarkInterface is not a QObject
+        connect(doc->textDocument(), SIGNAL(
                      markChanged(KTextEditor::Document*,
                                  KTextEditor::Mark,
                                  KTextEditor::MarkInterface::MarkChangeAction)),
@@ -276,6 +277,7 @@ void BreakpointModel::markChanged(
         KTextEditor::MovingInterface *moving = qobject_cast<KTextEditor::MovingInterface*>(document);
         if (moving) {
             KTextEditor::MovingCursor* cursor = moving->newMovingCursor(KTextEditor::Cursor(mark.line, 0));
+            // can't use new signal/slot syntax here, MovingInterface is not a QObject
             connect(document, SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)),
                     this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), Qt::UniqueConnection);
             breakpoint->setMovingCursor(cursor);

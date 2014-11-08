@@ -44,8 +44,8 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     layout->setContentsMargins(11, 0, 0, 11);
 
     status_ = new QLabel(this);
-    connect(status_, SIGNAL(linkActivated(QString)),
-            this, SLOT(showExplanation(QString)));
+    connect(status_, &QLabel::linkActivated,
+            this, &BreakpointDetails::showExplanation);
     layout->addWidget(status_);
 
     QGridLayout* hitsLayout = new QGridLayout();
@@ -67,7 +67,7 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     ignore_ = new QSpinBox(this);
     hitsLayout->addWidget(ignore_, 2, 1);
     ignore_->setRange(0, 99999);
-    connect(ignore_, SIGNAL(valueChanged(int)), SLOT(setIgnoreHits(int)));
+    connect(ignore_, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &BreakpointDetails::setIgnoreHits);
 
     QLabel *l3 = new QLabel(i18n("next hits"), this);
     hitsLayout->addWidget(l3, 2, 2);

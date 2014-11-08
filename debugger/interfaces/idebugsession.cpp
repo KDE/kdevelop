@@ -34,7 +34,7 @@ namespace KDevelop {
 IDebugSession::IDebugSession()
     : m_breakpointController(0), m_variableController(0), m_frameStackModel(0)
 {
-    connect(this, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)), SLOT(slotStateChanged(KDevelop::IDebugSession::DebuggerState)));
+    connect(this, &IDebugSession::stateChanged, this, &IDebugSession::slotStateChanged);
 }
 
 IDebugSession::~IDebugSession()

@@ -96,8 +96,8 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
     topLayout->addWidget(watchVarEditor_);
     topLayout->setMargin(0);
 
-    connect(watchVarEditor_, SIGNAL(returnPressed(QString)),
-            this, SLOT(slotAddWatch(QString)));
+    connect(watchVarEditor_, static_cast<void(KHistoryComboBox::*)(const QString&)>(&KHistoryComboBox::returnPressed),
+            this, &VariableWidget::slotAddWatch);
 
     //TODO
     //connect(plugin, SIGNAL(raiseVariableViews()), this, SIGNAL(requestRaise()));
@@ -234,10 +234,10 @@ void VariableTree::setupActions()
         act->setCheckable(true);
         act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         m_signalMapper->setMapping(act, act->data().toInt());
-        connect(act, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+        connect(act, &QAction::triggered, m_signalMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
         addAction(act);
     }
-    connect(m_signalMapper, SIGNAL(mapped(int)), SLOT(changeVariableFormat(int)));
+    connect(m_signalMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), this, &VariableTree::changeVariableFormat);
 
     m_watchDelete = new QAction(
         QIcon::fromTheme("edit-delete"), i18n( "Remove Watch Variable" ), this);
@@ -245,15 +245,15 @@ void VariableTree::setupActions()
     m_watchDelete->setShortcut(Qt::Key_Delete);
     m_watchDelete->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(m_watchDelete);
-    connect(m_watchDelete, SIGNAL(triggered(bool)), SLOT(watchDelete()));
+    connect(m_watchDelete, &QAction::triggered, this, &VariableTree::watchDelete);
 
     m_copyVariableValue = new QAction(i18n("&Copy Value"), this);
     m_copyVariableValue->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     m_copyVariableValue->setShortcut(QKeySequence::Copy);
-    connect(m_copyVariableValue, SIGNAL(triggered(bool)), SLOT(copyVariableValue()));
+    connect(m_copyVariableValue, &QAction::triggered, this, &VariableTree::copyVariableValue);
 
     m_stopOnChange = new QAction(i18n("&Stop on Change"), this);
-    connect(m_stopOnChange, SIGNAL(triggered(bool)), SLOT(stopOnChange()));
+    connect(m_stopOnChange, &QAction::triggered, this, &VariableTree::stopOnChange);
 }
 
 Variable* VariableTree::selectedVariable() const

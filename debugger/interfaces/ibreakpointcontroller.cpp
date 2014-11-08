@@ -43,13 +43,13 @@ IBreakpointController::IBreakpointController(KDevelop::IDebugSession* parent)
     : QObject(parent), m_dontSendChanges(0)
 {
     connect(breakpointModel(),
-            SIGNAL(breakpointChanged(KDevelop::Breakpoint*,KDevelop::Breakpoint::Column)),
-            SLOT(breakpointChanged(KDevelop::Breakpoint*,KDevelop::Breakpoint::Column)));
-    connect(breakpointModel(), SIGNAL(breakpointDeleted(KDevelop::Breakpoint*)),
-            SLOT(breakpointDeleted(KDevelop::Breakpoint*)));
+            &BreakpointModel::breakpointChanged,
+            this, &IBreakpointController::breakpointChanged);
+    connect(breakpointModel(), &BreakpointModel::breakpointDeleted,
+            this, &IBreakpointController::breakpointDeleted);
 
-    connect(parent, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
-             SLOT(debuggerStateChanged(KDevelop::IDebugSession::DebuggerState)));
+    connect(parent, &IDebugSession::stateChanged,
+             this, &IBreakpointController::debuggerStateChanged);
 }
 
 IDebugSession* IBreakpointController::debugSession() const

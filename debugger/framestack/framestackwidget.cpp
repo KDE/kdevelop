@@ -53,8 +53,10 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
     : AutoOrientedSplitter(Qt::Horizontal, parent), m_session(0)
 {
     connect(controller,
-            SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
-            SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
+            &IDebugController::currentSessionChanged,
+            this, &FramestackWidget::currentSessionChanged);
+
+    //TODO: shouldn't this signal be in IDebugController? Otherwise we are effectively depending on it being a DebugController here
     connect(controller, SIGNAL(raiseFramestackViews()), SIGNAL(requestRaise()));
 
     setWhatsThis(i18n("<b>Frame stack</b>"
@@ -80,16 +82,16 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
     QAction* selectAllAction = KStandardAction::selectAll(m_frames);
     selectAllAction->setShortcut(QKeySequence()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
     selectAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    connect(selectAllAction, SIGNAL(triggered()), SLOT(selectAll()));
+    connect(selectAllAction, &QAction::triggered, this, &FramestackWidget::selectAll);
     m_framesContextMenu->addAction(selectAllAction);
 
     QAction* copyAction = KStandardAction::copy(m_frames);
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    connect(copyAction, SIGNAL(triggered()), SLOT(copySelection()));
+    connect(copyAction, &QAction::triggered, this, &FramestackWidget::copySelection);
     m_framesContextMenu->addAction(copyAction);
     addAction(copyAction);
 
-    connect(m_frames, SIGNAL(customContextMenuRequested(QPoint)), SLOT(frameContextMenuRequested(QPoint)));
+    connect(m_frames, &QTreeView::customContextMenuRequested, this, &FramestackWidget::frameContextMenuRequested);
 
     m_threadsWidget->setLayout(new QVBoxLayout());
     m_threadsWidget->layout()->addWidget(new QLabel(i18n("Threads:")));
@@ -99,10 +101,10 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
     addWidget(m_frames);
 
     setStretchFactor(1, 3);
-    connect(m_frames->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(checkFetchMoreFrames()));
+    connect(m_frames->verticalScrollBar(), &QScrollBar::valueChanged, this, &FramestackWidget::checkFetchMoreFrames);
 
     // Show the selected frame when clicked, even if it has previously been selected
-    connect(m_frames, SIGNAL(clicked(QModelIndex)), SLOT(frameSelectionChanged(QModelIndex)));
+    connect(m_frames, &QTreeView::clicked, this, &FramestackWidget::frameSelectionChanged);
 }
 
 FramestackWidget::~FramestackWidget() {}
@@ -117,23 +119,23 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
     m_frames->setModel(session ? session->frameStackModel() : 0);
 
     if (session) {
-        connect(session->frameStackModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-                this, SLOT(checkFetchMoreFrames()));
-        connect(session->frameStackModel(), SIGNAL(currentThreadChanged(int)),
-                SLOT(currentThreadChanged(int)));
+        connect(session->frameStackModel(), &IFrameStackModel::dataChanged,
+                this, &FramestackWidget::checkFetchMoreFrames);
+        connect(session->frameStackModel(), &IFrameStackModel::currentThreadChanged,
+                this, &FramestackWidget::currentThreadChanged);
         currentThreadChanged(session->frameStackModel()->currentThread());
-        connect(session->frameStackModel(), SIGNAL(currentFrameChanged(int)),
-                SLOT(currentFrameChanged(int)));
+        connect(session->frameStackModel(), &IFrameStackModel::currentFrameChanged,
+                this, &FramestackWidget::currentFrameChanged);
         currentFrameChanged(session->frameStackModel()->currentFrame());
-        connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
-                SLOT(sessionStateChanged(KDevelop::IDebugSession::DebuggerState)));
+        connect(session, &IDebugSession::stateChanged,
+                this, &FramestackWidget::sessionStateChanged);
 
-        connect(m_threads->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                this, SLOT(setThreadShown(QModelIndex)));
+        connect(m_threads->selectionModel(), &QItemSelectionModel::currentChanged,
+                this, &FramestackWidget::setThreadShown);
 
         // Show the selected frame, independent of the means by which it has been selected
-        connect(m_frames->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                this, SLOT(frameSelectionChanged(QModelIndex)));
+        connect(m_frames->selectionModel(), &QItemSelectionModel::currentChanged,
+                this, &FramestackWidget::frameSelectionChanged);
     }
 
     if (isVisible()) {

@@ -412,17 +412,20 @@ VariableCollection::VariableCollection(IDebugController* controller)
     //new ModelTest(this);
 
     connect (ICore::self()->documentController(),
-         SIGNAL(textDocumentCreated(KDevelop::IDocument*)),
+         &IDocumentController::textDocumentCreated,
          this,
-         SLOT(textDocumentCreated(KDevelop::IDocument*)) );
+         &VariableCollection::textDocumentCreated );
 
-    connect(controller, SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
-             SLOT(updateAutoUpdate(KDevelop::IDebugSession*)));
+    connect(controller, &IDebugController::currentSessionChanged,
+             this, &VariableCollection::updateAutoUpdate);
 
-    connect(locals(), SIGNAL(expanded()), SLOT(updateAutoUpdate()));
-    connect(locals(), SIGNAL(collapsed()), SLOT(updateAutoUpdate()));
-    connect(watches(), SIGNAL(expanded()), SLOT(updateAutoUpdate()));
-    connect(watches(), SIGNAL(collapsed()), SLOT(updateAutoUpdate()));
+    // Qt5 signal slot syntax does not support default arguments
+    auto callUpdateAutoUpdate = [this]() { updateAutoUpdate(); };
+
+    connect(locals(), &Locals::expanded, this, callUpdateAutoUpdate);
+    connect(locals(), &Locals::collapsed, this, callUpdateAutoUpdate);
+    connect(watches(), &Watches::expanded, this, callUpdateAutoUpdate);
+    connect(watches(), &Watches::collapsed, this, callUpdateAutoUpdate);
 }
 
 void VariableCollection::variableWidgetHidden()
@@ -460,8 +463,8 @@ VariableCollection::~ VariableCollection()
 void VariableCollection::textDocumentCreated(IDocument* doc)
 {
   connect( doc->textDocument(),
-       SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)),
-       this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)) );
+       &KTextEditor::Document::viewCreated,
+       this, &VariableCollection::viewCreated );
 
   foreach( KTextEditor::View* view, doc->textDocument()->views() )
     viewCreated( doc->textDocument(), view );

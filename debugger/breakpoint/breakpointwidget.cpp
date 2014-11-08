@@ -81,26 +81,26 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     proxyModel->setColumnHint(Breakpoint::LocationColumn, i18n("New code breakpoint ..."));
     proxyModel->setColumnHint(Breakpoint::ConditionColumn, i18n("Enter condition ..."));
     m_breakpointsView->setModel(proxyModel);
-    connect(proxyModel, SIGNAL(dataInserted(int, QVariant)), SLOT(slotDataInserted(int, QVariant)));
+    connect(proxyModel, &PlaceholderItemProxyModel::dataInserted, this, &BreakpointWidget::slotDataInserted);
     m_proxyModel = proxyModel;
 
-    connect(m_breakpointsView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotOpenFile(QModelIndex)));
-    connect(m_breakpointsView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotOpenFile(QModelIndex)));
+    connect(m_breakpointsView, &QTableView::clicked, this, &BreakpointWidget::slotOpenFile);
+    connect(m_breakpointsView->selectionModel(), &QItemSelectionModel::currentChanged, this, &BreakpointWidget::slotOpenFile);
 
-    connect(m_breakpointsView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotUpdateBreakpointDetail()));
-    connect(m_debugController->breakpointModel(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotUpdateBreakpointDetail()));
-    connect(m_debugController->breakpointModel(), SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(slotUpdateBreakpointDetail()));
-    connect(m_debugController->breakpointModel(), SIGNAL(modelReset()), SLOT(slotUpdateBreakpointDetail()));
-    connect(m_debugController->breakpointModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(slotUpdateBreakpointDetail()));
+    connect(m_breakpointsView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &BreakpointWidget::slotUpdateBreakpointDetail);
+    connect(m_debugController->breakpointModel(), &BreakpointModel::rowsInserted, this, &BreakpointWidget::slotUpdateBreakpointDetail);
+    connect(m_debugController->breakpointModel(), &BreakpointModel::rowsRemoved, this, &BreakpointWidget::slotUpdateBreakpointDetail);
+    connect(m_debugController->breakpointModel(), &BreakpointModel::modelReset, this, &BreakpointWidget::slotUpdateBreakpointDetail);
+    connect(m_debugController->breakpointModel(), &BreakpointModel::dataChanged, this, &BreakpointWidget::slotUpdateBreakpointDetail);
 
-
-    connect(m_debugController->breakpointModel(),
-            SIGNAL(hit(KDevelop::Breakpoint*)),
-            SLOT(breakpointHit(KDevelop::Breakpoint*)));
 
     connect(m_debugController->breakpointModel(),
-            SIGNAL(error(KDevelop::Breakpoint*,QString,int)),
-            SLOT(breakpointError(KDevelop::Breakpoint*,QString,int)));
+            &BreakpointModel::hit,
+            this, &BreakpointWidget::breakpointHit);
+
+    connect(m_debugController->breakpointModel(),
+            &BreakpointModel::error,
+            this, &BreakpointWidget::breakpointError);
 
     setupPopupMenu();
 }
@@ -146,7 +146,7 @@ void BreakpointWidget::setupPopupMenu()
     breakpointEnableAll_ = popup_->addAction(i18n("&Enable All"), this, SLOT(slotEnableAllBreakpoints()));
     breakpointRemoveAll_ = popup_->addAction(i18n("&Remove All"), this, SLOT(slotRemoveAllBreakpoints()));
 
-    connect(popup_,SIGNAL(aboutToShow()), this, SLOT(slotPopupMenuAboutToShow()));
+    connect(popup_,&QMenu::aboutToShow, this, &BreakpointWidget::slotPopupMenuAboutToShow);
 }
 
 

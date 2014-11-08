@@ -159,7 +159,7 @@ QModelIndex TreeModel::indexForItem(TreeItem *item, int column) const
 void TreeModel::expanded(const QModelIndex &index)
 {
     TreeItem* item = itemForIndex(index);
-    QObject::connect(item, SIGNAL(allChildrenFetched()), this, SIGNAL(itemChildrenReady()));
+    QObject::connect(item, &TreeItem::allChildrenFetched, this, &TreeModel::itemChildrenReady);
     if (item->hasMore() && item->childCount() == 1)
         item->fetchMoreChildren();
     else

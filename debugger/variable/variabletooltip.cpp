@@ -121,9 +121,9 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
 
     itemHeight_ = view_->indexRowSizeHint(model_->indexForItem(var_, 0));
     connect(view_->verticalScrollBar(),
-            SIGNAL(rangeChanged(int,int)),
+            &QScrollBar::rangeChanged,
             this,
-            SLOT(slotRangeChanged(int,int)));
+            &VariableToolTip::slotRangeChanged);
 
     selection_ = view_->selectionModel();
     selection_->select(model_->indexForItem(var_, 0), 
@@ -138,11 +138,11 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
     buttonBox->addWidget(stopOnChangeButton);
 
     QSignalMapper* mapper = new QSignalMapper(this);
-    connect(watchThisButton, SIGNAL(clicked(bool)), mapper, SLOT(map()));
+    connect(watchThisButton, &QPushButton::clicked, mapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
     mapper->setMapping(watchThisButton, "add_watch");
-    connect(stopOnChangeButton, SIGNAL(clicked(bool)), mapper, SLOT(map()));
+    connect(stopOnChangeButton, &QPushButton::clicked, mapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
     mapper->setMapping(stopOnChangeButton, "add_watchpoint");
-    connect(mapper, SIGNAL(mapped(QString)), this, SLOT(slotLinkActivated(QString)));
+    connect(mapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped), this, &VariableToolTip::slotLinkActivated);
 
     QHBoxLayout* inner = new QHBoxLayout();
     l->addLayout(inner);

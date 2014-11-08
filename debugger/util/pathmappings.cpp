@@ -220,16 +220,16 @@ PathMappingsWidget::PathMappingsWidget(QWidget* parent): QWidget(parent)
     verticalLayout->addWidget(m_pathMappingTable);
 
     m_pathMappingTable->setModel(new PathMappingModel());
-    connect(m_pathMappingTable->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()));
-    connect(m_pathMappingTable->model(), SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()));
-    connect(m_pathMappingTable->model(), SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()));
+    connect(m_pathMappingTable->model(), &QAbstractItemModel::dataChanged, this, &PathMappingsWidget::changed);
+    connect(m_pathMappingTable->model(), &QAbstractItemModel::rowsRemoved, this, &PathMappingsWidget::changed);
+    connect(m_pathMappingTable->model(), &QAbstractItemModel::rowsInserted, this, &PathMappingsWidget::changed);
 
     QAction* deletePath = new QAction(
         QIcon::fromTheme("edit-delete"),
         i18n( "Delete" ),
         this
     );
-    connect(deletePath, SIGNAL(triggered(bool)), SLOT(deletePath()));
+    connect(deletePath, &QAction::triggered, this, &PathMappingsWidget::deletePath);
     deletePath->setShortcut(Qt::Key_Delete);
     deletePath->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     m_pathMappingTable->addAction(deletePath);

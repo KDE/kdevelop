@@ -41,7 +41,7 @@ FrameStackModel::FrameStackModel(IDebugSession *session)
     , m_subsequentFrameFetchOperations(0)
     , m_updateCurrentFrameOnNextFetch(false)
 {
-    connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)), SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
+    connect(session, &IDebugSession::stateChanged, this, &FrameStackModel::stateChanged);
 }
 
 FrameStackModel::~FrameStackModel()
