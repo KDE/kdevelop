@@ -71,19 +71,19 @@ ProjectModelPerformanceTest::ProjectModelPerformanceTest(QWidget* parent )
     view->setUniformRowHeights( true );
 
     QPushButton* b = new QPushButton( "Expand All", this );
-    connect( b, SIGNAL(clicked()), view, SLOT(expandAll()) );
+    connect( b, &QPushButton::clicked, view, &QTreeView::expandAll );
     l->addWidget( b, 0, 0 );
     b = new QPushButton( "Collapse All", this );
-    connect( b, SIGNAL(clicked()), view, SLOT(collapseAll()) );
+    connect( b, &QPushButton::clicked, view, &QTreeView::collapseAll );
     l->addWidget( b, 0, 1 );
     b = new QPushButton( "Add Small Subtree", this );
-    connect( b, SIGNAL(clicked()), SLOT(addSmallTree()) );
+    connect( b, &QPushButton::clicked, this, &ProjectModelPerformanceTest::addSmallTree );
     l->addWidget( b, 0, 2 );
     b = new QPushButton( "Add Big Subtree", this );
-    connect( b, SIGNAL(clicked()), SLOT(addBigTree()) );
+    connect( b, &QPushButton::clicked, this, &ProjectModelPerformanceTest::addBigTree );
     l->addWidget( b, 0, 3 );
     b = new QPushButton( "Add Big Subtree in Chunks", this );
-    connect( b, SIGNAL(clicked()), SLOT(addBigTreeDelayed()) );
+    connect( b, &QPushButton::clicked, this, &ProjectModelPerformanceTest::addBigTreeDelayed );
     l->addWidget( b, 0, 4 );
 
     l->addWidget( view, 1, 0, 1, 6 );

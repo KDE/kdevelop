@@ -152,11 +152,11 @@ ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     setPlaceholderText( i18n("Enter the path to an item from the projects tree" ) );
     
     QAction* selectItemAction = new QAction(QIcon::fromTheme("folder-document"), i18n("Select..."), this);
-    connect(selectItemAction, SIGNAL(triggered()), SLOT(selectItemDialog()));
+    connect(selectItemAction, &QAction::triggered, this, &ProjectItemLineEdit::selectItemDialog);
     addAction(selectItemAction);
     
     setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(this, SIGNAL(customContextMenuRequested(QPoint)), SLOT(showCtxMenu(QPoint)));
+    connect(this, &ProjectItemLineEdit::customContextMenuRequested, this, &ProjectItemLineEdit::showCtxMenu);
 }
 
 void ProjectItemLineEdit::showCtxMenu(const QPoint& p)

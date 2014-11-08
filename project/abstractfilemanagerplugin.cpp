@@ -126,11 +126,12 @@ KIO::Job* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolde
     m_projectJobs[ item->project() ] << listJob;
     qCDebug(FILEMANAGER) << "adding job" << listJob << item << item->path() << "for project" << item->project();
 
-    q->connect( listJob, SIGNAL(finished(KJob*)),
-                q, SLOT(jobFinished(KJob*)) );
+    q->connect( listJob, &FileManagerListJob::finished,
+                q, [&] (KJob* job) { jobFinished(job); } );
 
-    q->connect( listJob, SIGNAL(entries(FileManagerListJob*,ProjectFolderItem*,KIO::UDSEntryList,bool)),
-                q, SLOT(addJobItems(FileManagerListJob*,ProjectFolderItem*,KIO::UDSEntryList,bool)) );
+    q->connect( listJob, &FileManagerListJob::entries,
+                q, [&] (FileManagerListJob* job, ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries, bool forceRecursion) {
+                    addJobItems(job, baseItem, entries, forceRecursion); } );
 
     return listJob;
 }
@@ -441,8 +442,8 @@ AbstractFileManagerPlugin::AbstractFileManagerPlugin( const QString& componentNa
 {
     KDEV_USE_EXTENSION_INTERFACE( IProjectFileManager )
 
-    connect(core()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
-            this, SLOT(projectClosing(KDevelop::IProject*)));
+    connect(core()->projectController(), &IProjectController::projectClosing,
+            this, [&](IProject* project) { d->projectClosing(project); });
 }
 
 AbstractFileManagerPlugin::~AbstractFileManagerPlugin()
@@ -473,10 +474,10 @@ ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
     if ( project->path().isLocalFile() ) {
         d->m_watchers[project] = new KDirWatch( project );
 
-        connect(d->m_watchers[project], SIGNAL(created(QString)),
-                this, SLOT(created(QString)));
-        connect(d->m_watchers[project], SIGNAL(deleted(QString)),
-                this, SLOT(deleted(QString)));
+        connect(d->m_watchers[project], &KDirWatch::created,
+                this, [&](const QString& path_) { d->created(path_); });
+        connect(d->m_watchers[project], &KDirWatch::deleted,
+                this, [&](const QString& path_) { d->deleted(path_); });
 
         d->m_watchers[project]->addDir(project->path().toLocalFile(), KDirWatch::WatchSubDirs | KDirWatch:: WatchFiles );
     }

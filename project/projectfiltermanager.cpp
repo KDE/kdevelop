@@ -133,10 +133,10 @@ ProjectFilterManager::ProjectFilterManager(QObject* parent)
 {
     d->q = this;
 
-    connect(ICore::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)),
-            SLOT(pluginLoaded(KDevelop::IPlugin*)));
-    connect(ICore::self()->pluginController(), SIGNAL(unloadingPlugin(KDevelop::IPlugin*)),
-            SLOT(unloadingPlugin(KDevelop::IPlugin*)));
+    connect(ICore::self()->pluginController(), &IPluginController::pluginLoaded,
+            this, [&](IPlugin* plugin) { d->pluginLoaded(plugin); });
+    connect(ICore::self()->pluginController(), &IPluginController::unloadingPlugin,
+            this, [&](IPlugin* plugin) { d->unloadingPlugin(plugin); });
 
     foreach(IPlugin* plugin, ICore::self()->pluginController()->loadedPlugins()) {
         d->pluginLoaded(plugin);

@@ -34,7 +34,7 @@ FileManagerListJob::FileManagerListJob(ProjectFolderItem* item, const bool force
     /* the following line is not an error in judgment, apparently starting a
      * listJob while the previous one hasn't self-destructed takes a lot of time,
      * so we give the job a chance to selfdestruct first */
-    connect( this, SIGNAL(nextJob()), SLOT(startNextJob()), Qt::QueuedConnection );
+    connect( this, &FileManagerListJob::nextJob, this, &FileManagerListJob::startNextJob, Qt::QueuedConnection );
 
     addSubDir(item);
 
@@ -76,9 +76,9 @@ void FileManagerListJob::startNextJob()
     m_item = m_listQueue.dequeue();
     KIO::ListJob* job = KIO::listDir( m_item->path().toUrl(), KIO::HideProgressInfo );
     job->setParentJob( this );
-    connect( job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
-             this, SLOT(slotEntries(KIO::Job*,KIO::UDSEntryList)) );
-    connect( job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)) );
+    connect( job, &KIO::ListJob::entries,
+             this, &FileManagerListJob::slotEntries );
+    connect( job, &KIO::ListJob::result, this, &FileManagerListJob::slotResult );
 }
 
 void FileManagerListJob::slotResult(KJob* job)

@@ -64,8 +64,8 @@ ImportProjectJob::ImportProjectJob(ProjectFolderItem *folder, IProjectFileManage
     d->m_project = folder->project();
 
     setObjectName(i18n("Project Import: %1", d->m_project->name()));
-    connect(ICore::self(), SIGNAL(aboutToShutdown()),
-            this, SLOT(aboutToShutdown()));
+    connect(ICore::self(), &ICore::aboutToShutdown,
+            this, &ImportProjectJob::aboutToShutdown);
 }
 
 ImportProjectJob::~ImportProjectJob()
@@ -76,8 +76,8 @@ ImportProjectJob::~ImportProjectJob()
 void ImportProjectJob::start()
 {
     d->m_watcher = new QFutureWatcher<void>();
-    connect(d->m_watcher, SIGNAL(finished()), SLOT(importDone()));
-    connect(d->m_watcher, SIGNAL(canceled()), SLOT(importCanceled()));
+    connect(d->m_watcher, &QFutureWatcher<void>::finished, this, &ImportProjectJob::importDone);
+    connect(d->m_watcher, &QFutureWatcher<void>::canceled, this, &ImportProjectJob::importCanceled);
     QFuture<void> f = QtConcurrent::run(d, &ImportProjectJobPrivate::import, d->m_folder);
     d->m_watcher->setFuture(f);
 }

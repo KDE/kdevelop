@@ -44,15 +44,15 @@ public:
     , m_pos(pos)
     , m_text(text)
     {
-        connect(action, SIGNAL(destroyed(QObject*)), SLOT(deleteLater()));
-        connect(action, SIGNAL(triggered(bool)), SLOT(populate()));
+        connect(action, &QAction::destroyed, this, &Populator::deleteLater);
+        connect(action, &QAction::triggered, this, &Populator::populate);
     }
 
 public Q_SLOTS:
     void populate()
     {
         QMenu* menu = new QMenu(m_text);
-        connect(menu, SIGNAL(aboutToHide()), menu, SLOT(deleteLater()));
+        connect(menu, &QMenu::aboutToHide, menu, &QMenu::deleteLater);
         menu->addAction(QIcon::fromTheme(m_item->iconName()), m_text)->setEnabled(false);
         ProjectItemContext context(QList< ProjectBaseItem* >() << m_item);
         QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
