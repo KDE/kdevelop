@@ -134,10 +134,8 @@ protected:
     virtual QWidget *createViewWidget(QWidget *parent = 0) = 0;
     /** Closes all views associated to this document */
     virtual void closeViews();
-    
-private:
-    Q_PRIVATE_SLOT(d, void removeView(QObject*))
 
+private:
     struct DocumentPrivate *const d;
 
     friend struct DocumentPrivate;

@@ -50,21 +50,21 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow):
     QObject(mainWindow), m_mainWindow(mainWindow)
 {
     leftBarWidget = new IdealButtonBarWidget(Qt::LeftDockWidgetArea, this, m_mainWindow);
-    connect(leftBarWidget, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(slotDockBarContextMenuRequested(QPoint)));
+    connect(leftBarWidget, &IdealButtonBarWidget::customContextMenuRequested,
+            this, &IdealController::slotDockBarContextMenuRequested);
 
     rightBarWidget = new IdealButtonBarWidget(Qt::RightDockWidgetArea, this, m_mainWindow);
-    connect(rightBarWidget, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(slotDockBarContextMenuRequested(QPoint)));
+    connect(rightBarWidget, &IdealButtonBarWidget::customContextMenuRequested,
+            this, &IdealController::slotDockBarContextMenuRequested);
 
     bottomBarWidget = new IdealButtonBarWidget(Qt::BottomDockWidgetArea, this, m_mainWindow);
     bottomStatusBarLocation = bottomBarWidget->corner();
-    connect(bottomBarWidget, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(slotDockBarContextMenuRequested(QPoint)));
+    connect(bottomBarWidget, &IdealButtonBarWidget::customContextMenuRequested,
+            this, &IdealController::slotDockBarContextMenuRequested);
 
     topBarWidget = new IdealButtonBarWidget(Qt::TopDockWidgetArea, this, m_mainWindow);
-    connect(topBarWidget, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(slotDockBarContextMenuRequested(QPoint)));
+    connect(topBarWidget, &IdealButtonBarWidget::customContextMenuRequested,
+            this, &IdealController::slotDockBarContextMenuRequested);
 
     m_docks = qobject_cast<KActionMenu*>(mainWindow->action("docks_submenu"));
 
@@ -73,7 +73,7 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow):
     m_showBottomDock = qobject_cast<QAction*>(m_mainWindow->action("show_bottom_dock"));
     m_showTopDock = qobject_cast<QAction*>(m_mainWindow->action("show_top_dock"));
 
-    connect(m_mainWindow, SIGNAL(settingsLoaded()), this, SLOT(loadSettings()));
+    connect(m_mainWindow, &MainWindow::settingsLoaded, this, &IdealController::loadSettings);
 
 }
 
@@ -127,10 +127,10 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
         m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
 
         m_docks->addAction(action);
-        connect(dock, SIGNAL(closeRequested()), action, SLOT(toggle()));
+        connect(dock, &IdealDockWidget::closeRequested, action, &QAction::toggle);
     }
 
-    connect(dock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)));
+    connect(dock, &IdealDockWidget::dockLocationChanged, this, &IdealController::dockLocationChanged);
 
     dock->hide();
 

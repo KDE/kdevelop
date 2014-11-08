@@ -128,21 +128,21 @@ Area::Area(const Area &area)
 
 void Area::initialize()
 {
-    connect(this, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)),
-            d->controller, SLOT(notifyViewAdded(Sublime::AreaIndex*,Sublime::View*)));
-    connect(this, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*,Sublime::View*)),
-            d->controller, SLOT(notifyViewRemoved(Sublime::AreaIndex*,Sublime::View*)));
-    connect(this, SIGNAL(toolViewAdded(Sublime::View*,Sublime::Position)),
-            d->controller, SLOT(notifyToolViewAdded(Sublime::View*,Sublime::Position)));
-    connect(this, SIGNAL(aboutToRemoveToolView(Sublime::View*,Sublime::Position)),
-            d->controller, SLOT(notifyToolViewRemoved(Sublime::View*,Sublime::Position)));
-    connect(this, SIGNAL(toolViewMoved(Sublime::View*,Sublime::Position)),
-            d->controller, SIGNAL(toolViewMoved(Sublime::View*)));
+    connect(this, &Area::viewAdded,
+            d->controller, &Controller::notifyViewAdded);
+    connect(this, &Area::aboutToRemoveView,
+            d->controller, &Controller::notifyViewRemoved);
+    connect(this, &Area::toolViewAdded,
+            d->controller, &Controller::notifyToolViewAdded);
+    connect(this, &Area::aboutToRemoveToolView,
+            d->controller, &Controller::notifyToolViewRemoved);
+    connect(this, &Area::toolViewMoved,
+            d->controller, &Controller::toolViewMoved);
 
     /* In theory, ownership is passed to us, so should not bother detecting
     deletion outside.  */
-    connect(this, SIGNAL(destroyed(QObject*)),
-            d->controller, SLOT(removeArea(QObject*)));
+    connect(this, &Area::destroyed, d->controller,
+            [this] (QObject* obj) { d->controller->removeArea(static_cast<Area*>(obj)); });
 }
 
 Area::~Area()
@@ -167,9 +167,9 @@ void Area::addView(View *view, AreaIndex *index, View *after)
         after = activeView();
     }
     index->add(view, after);
-    connect(view, SIGNAL(positionChanged(Sublime::View*,int)), this, SLOT(positionChanged(Sublime::View*,int)));
+    connect(view, &View::positionChanged, this, &Area::positionChanged);
     qCDebug(SUBLIME) << "view added in" << this;
-    connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
+    connect(this, &Area::destroyed, view, &View::deleteLater);
     emit viewAdded(index, view);
 }
 
@@ -195,7 +195,7 @@ void Area::addView(View* view, AreaIndex* indexToSplit, Qt::Orientation orientat
 {
     indexToSplit->split(view, orientation);
     emit viewAdded(indexToSplit, view);
-    connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
+    connect(this, &Area::destroyed, view, &View::deleteLater);
 }
 
 View* Area::removeView(View *view)
@@ -470,7 +470,7 @@ QList<QAction*> Area::actions() const
 
 void Area::addAction(QAction* action)
 {
-    connect(action, SIGNAL(destroyed(QObject*)), SLOT(actionDestroyed(QObject*)));
+    connect(action, &QAction::destroyed, this, &Area::actionDestroyed);
     d->m_actions.append(action);
 }
 

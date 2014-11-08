@@ -29,9 +29,9 @@ namespace Sublime {
 struct DocumentPrivate {
     DocumentPrivate(Document *doc): m_document(doc) {}
 
-    void removeView(QObject *obj)
+    void removeView(Sublime::View* view)
     {
-        views.removeAll(reinterpret_cast<Sublime::View*>(obj));
+        views.removeAll(view);
         emit m_document->viewNumberChanged(m_document);
         //no need to keep empty document - we need to remove it
         if (views.count() == 0)
@@ -59,7 +59,8 @@ Document::Document(const QString &title, Controller *controller)
     setObjectName(title);
     d->controller = controller;
     d->controller->addDocument(this);
-    connect(this, SIGNAL(destroyed(QObject*)), d->controller, SLOT(removeDocument(QObject*)));
+    connect(this, &Document::destroyed, d->controller,
+            [this] (QObject* obj) { d->controller->removeDocument(static_cast<Document*>(obj)); });
 }
 
 Document::~Document()
@@ -75,7 +76,7 @@ Controller *Document::controller() const
 View *Document::createView()
 {
     View *view = newView(this);
-    connect(view, SIGNAL(destroyed(QObject*)), this, SLOT(removeView(QObject*)));
+    connect(view, &View::destroyed, this, [&] (QObject* obj) { d->removeView(static_cast<View*>(obj)); });
     d->views.append(view);
     return view;
 }

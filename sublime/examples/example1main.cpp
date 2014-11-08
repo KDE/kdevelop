@@ -81,17 +81,17 @@ Example1Main::Example1Main()
     areaMenu->addAction("Area 1", this, SLOT(selectArea1()));
     areaMenu->addAction("Area 2", this, SLOT(selectArea2()));
     QPushButton *b1 = new QPushButton("Area 1", this);
-    connect(b1, SIGNAL(clicked()), this, SLOT(selectArea1()));
+    connect(b1, &QPushButton::clicked, this, &Example1Main::selectArea1);
     l->addWidget(b1);
     QPushButton *b2 = new QPushButton("Area 2", this);
-    connect(b2, SIGNAL(clicked()), this, SLOT(selectArea2()));
+    connect(b2, &QPushButton::clicked, this, &Example1Main::selectArea2);
     l->addWidget(b2);
 }
 
 void Example1Main::selectArea1()
 {
     Sublime::MainWindow *main = new Sublime::MainWindow(m_controller);
-    connect(main, SIGNAL(areaChanged(Sublime::Area*)), this, SLOT(updateTitle(Sublime::Area*)));
+    connect(main, &Sublime::MainWindow::areaChanged, this, &Example1Main::updateTitle);
     m_controller->showArea(m_area1, main);
     main->show();
 }
@@ -99,7 +99,7 @@ void Example1Main::selectArea1()
 void Example1Main::selectArea2()
 {
     Sublime::MainWindow *main = new Sublime::MainWindow(m_controller);
-    connect(main, SIGNAL(areaChanged(Sublime::Area*)), this, SLOT(updateTitle(Sublime::Area*)));
+    connect(main, &Sublime::MainWindow::areaChanged, this, &Example1Main::updateTitle);
     m_controller->showArea(m_area2, main);
     main->show();
 }

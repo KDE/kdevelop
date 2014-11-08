@@ -48,14 +48,14 @@ IdealDockWidget::IdealDockWidget(IdealController *controller, Sublime::MainWindo
 {
     setAutoFillBackground(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(contextMenuRequested(QPoint)));
+    connect(this, &IdealDockWidget::customContextMenuRequested,
+            this, &IdealDockWidget::contextMenuRequested);
 
     QAbstractButton *closeButton = findChild<QAbstractButton *>(QLatin1String("qt_dockwidget_closebutton"));
     if (closeButton) {
-    disconnect(closeButton, SIGNAL(clicked()), 0, 0);
+    disconnect(closeButton, &QAbstractButton::clicked, 0, 0);
 
-    connect(closeButton, SIGNAL(clicked(bool)), SIGNAL(closeRequested()));
+    connect(closeButton, &QAbstractButton::clicked, this, &IdealDockWidget::closeRequested);
     }
 
     setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
@@ -157,8 +157,8 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             QVBoxLayout* dialogLayout = new QVBoxLayout(dialog);
             dialogLayout->addWidget(w);
             QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel , dialog);
-            connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
-            connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
+            connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
+            connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
 
             if (dialog->exec() == QDialog::Accepted) {
                 m_controller->actionForView(m_view)->setShortcuts(w->shortcut());

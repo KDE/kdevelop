@@ -77,16 +77,6 @@ struct ControllerPrivate {
     {
     }
 
-    void removeArea(QObject *obj)
-    {
-        areas.removeAll(reinterpret_cast<Area*>(obj));
-    }
-
-    void removeDocument(QObject *obj)
-    {
-        documents.removeAll(reinterpret_cast<Document*>(obj));
-    }
-
     QList<Document*> documents;
     QList<Area*> areas;
     QList<Area*> allAreas;
@@ -143,6 +133,17 @@ void Controller::showAreaInternal(Area* area, MainWindow *mainWindow)
        if showAreaInternal is called with the same area as is current
        now, we don't want to connect the same signals twice.  */
     MainWindowOperator::setArea(mainWindow, area);
+}
+
+
+void Controller::removeArea(Area *obj)
+{
+    d->areas.removeAll(obj);
+}
+
+void Controller::removeDocument(Document *obj)
+{
+    d->documents.removeAll(obj);
 }
 
 void Controller::showArea(const QString& areaTypeId, MainWindow *mainWindow)

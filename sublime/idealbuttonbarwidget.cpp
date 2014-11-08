@@ -198,10 +198,10 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             _widgets[action]->setWindowTitle(action->text());
 
             layout()->addWidget(button);
-            connect(action, SIGNAL(toggled(bool)), SLOT(showWidget(bool)));
-            connect(button, SIGNAL(clicked(bool)), SLOT(buttonPressed(bool)));
-            connect(button, SIGNAL(customContextMenuRequested(QPoint)),
-                    _widgets[action], SLOT(contextMenuRequested(QPoint)));
+            connect(action, &QAction::toggled, this, static_cast<void(IdealButtonBarWidget::*)(bool)>(&IdealButtonBarWidget::showWidget));
+            connect(button, &IdealToolButton::clicked, this, &IdealButtonBarWidget::buttonPressed);
+            connect(button, &IdealToolButton::customContextMenuRequested,
+                    _widgets[action], &IdealDockWidget::contextMenuRequested);
         }
     } break;
 

@@ -45,7 +45,7 @@ namespace Sublime {
 MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
 : KParts::MainWindow(0, flags), d(new MainWindowPrivate(this, controller))
 {
-    connect(this, SIGNAL(destroyed()), controller, SLOT(areaReleased()));
+    connect(this, &MainWindow::destroyed, controller, static_cast<void(Controller::*)()>(&Controller::areaReleased));
 
     loadGeometry(KSharedConfig::openConfig()->group("Main Window"));
 
@@ -132,21 +132,20 @@ void MainWindow::setArea(Area *area)
     hu.stop();
 
     loadSettings();
-
-    connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)),
-        this, SLOT(viewAdded(Sublime::AreaIndex*,Sublime::View*)));
-    connect(area, SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)),
-        this, SLOT(viewRemovedInternal(Sublime::AreaIndex*,Sublime::View*)));
-    connect(area, SIGNAL(requestToolViewRaise(Sublime::View*)),
-        this, SLOT(raiseToolView(Sublime::View*)));
-    connect(area, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*,Sublime::View*)),
-        this, SLOT(aboutToRemoveView(Sublime::AreaIndex*,Sublime::View*)));
-    connect(area, SIGNAL(toolViewAdded(Sublime::View*,Sublime::Position)),
-        this, SLOT(toolViewAdded(Sublime::View*,Sublime::Position)));
-    connect(area, SIGNAL(aboutToRemoveToolView(Sublime::View*,Sublime::Position)),
-        this, SLOT(aboutToRemoveToolView(Sublime::View*,Sublime::Position)));
-    connect(area, SIGNAL(toolViewMoved(Sublime::View*,Sublime::Position)),
-        this, SLOT(toolViewMoved(Sublime::View*,Sublime::Position)));
+    connect(area, &Area::viewAdded,
+        this, [&] (AreaIndex*, View* v) { viewAdded(v); });
+    connect(area, &Area::viewRemoved,
+        this, [&] (AreaIndex* index, View* view) { d->viewRemovedInternal(index, view); });
+    connect(area, &Area::requestToolViewRaise,
+        this, [&] (View* view) { d->raiseToolView(view); });
+    connect(area, &Area::aboutToRemoveView,
+        this, [&] (AreaIndex*, View* view) { aboutToRemoveView(view); });
+    connect(area, &Area::toolViewAdded,
+        this, [&] (View* toolView, Position position) { d->toolViewAdded(toolView, position); });
+    connect(area, &Area::aboutToRemoveToolView,
+        this, [&] (View* toolView, Position position) { d->aboutToRemoveToolView(toolView, position); });
+    connect(area, &Area::toolViewMoved,
+        this, [&] (View* toolView, Position position) { d->toolViewMoved(toolView, position); });
 }
 
 void MainWindow::initializeStatusBar()

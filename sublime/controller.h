@@ -179,8 +179,9 @@ Q_SIGNALS:
 
 private:
     void init();
-    Q_PRIVATE_SLOT(d, void removeArea(QObject*))
-    Q_PRIVATE_SLOT(d, void removeDocument(QObject*))
+
+    void removeArea(Sublime::Area*); // called by Sublime::Area
+    void removeDocument(Sublime::Document*); // called by Sublime::Document
 
     /**Adds the document to the controller, used by Document class.
     @todo adymo: refactor*/

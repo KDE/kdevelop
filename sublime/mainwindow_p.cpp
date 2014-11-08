@@ -71,9 +71,9 @@ class IdealToolBar : public QToolBar
             QTimer* t = new QTimer(this);
             t->setInterval(100);
             t->setSingleShot(true);
-            connect(t, SIGNAL(timeout()), SLOT(refresh()));
-            connect(this, SIGNAL(visibilityChanged(bool)), t, SLOT(start()));
-            connect(m_buttons, SIGNAL(emptyChanged()), t, SLOT(start()));
+            connect(t, &QTimer::timeout, this, &IdealToolBar::refresh);
+            connect(this, &IdealToolBar::visibilityChanged, t, static_cast<void(QTimer::*)()>(&QTimer::start));
+            connect(m_buttons, &Sublime::IdealButtonBarWidget::emptyChanged, t, static_cast<void(QTimer::*)()>(&QTimer::start));
         }
 
     public slots:
@@ -99,42 +99,42 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     QAction* action = new QAction(i18n("Show Left Dock"), this);
     action->setCheckable(true);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_L);
-    connect(action, SIGNAL(toggled(bool)), SLOT(showLeftDock(bool)));
+    connect(action, &QAction::toggled, this, &MainWindowPrivate::showLeftDock);
 
     ac->addAction("show_left_dock", action);
 
     action = new QAction(i18n("Show Right Dock"), this);
     action->setCheckable(true);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_R);
-    connect(action, SIGNAL(toggled(bool)), SLOT(showRightDock(bool)));
+    connect(action, &QAction::toggled, this, &MainWindowPrivate::showRightDock);
     ac->addAction("show_right_dock", action);
 
     action = new QAction(i18n("Show Bottom Dock"), this);
     action->setCheckable(true);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_B);
-    connect(action, SIGNAL(toggled(bool)), SLOT(showBottomDock(bool)));
+    connect(action, &QAction::toggled, this, &MainWindowPrivate::showBottomDock);
     ac->addAction("show_bottom_dock", action);
 
     action = new QAction(i18nc("@action", "Focus Editor"), this);
     ac->setDefaultShortcuts(action, QList<QKeySequence>() << (Qt::META | Qt::CTRL | Qt::Key_E) << Qt::META + Qt::Key_C);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(focusEditor()));
+    connect(action, &QAction::triggered, this, &MainWindowPrivate::focusEditor);
     ac->addAction("focus_editor", action);
 
     action = new QAction(i18n("Hide/Restore Docks"), this);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_H);
-    connect(action, SIGNAL(triggered(bool)), SLOT(toggleDocksShown()));
+    connect(action, &QAction::triggered, this, &MainWindowPrivate::toggleDocksShown);
     ac->addAction("hide_all_docks", action);
 
     action = new QAction(i18n("Next Tool View"), this);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_N);
     action->setIcon(QIcon::fromTheme("go-next"));
-    connect(action, SIGNAL(triggered(bool)), SLOT(selectNextDock()));
+    connect(action, &QAction::triggered, this, &MainWindowPrivate::selectNextDock);
     ac->addAction("select_next_dock", action);
 
     action = new QAction(i18n("Previous Tool View"), this);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_P);
     action->setIcon(QIcon::fromTheme("go-previous"));
-    connect(action, SIGNAL(triggered(bool)), SLOT(selectPreviousDock()));
+    connect(action, &QAction::triggered, this, &MainWindowPrivate::selectPreviousDock);
     ac->addAction("select_previous_dock", action);
 
     action = new KActionMenu(i18n("Tool Views"), this);
@@ -165,17 +165,17 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     m_mainWindow->setCentralWidget(centralWidget);
 
     connect(idealController,
-            SIGNAL(dockShown(Sublime::View*,Sublime::Position,bool)),
+            &IdealController::dockShown,
             this,
-            SLOT(slotDockShown(Sublime::View*,Sublime::Position,bool)));
+            &MainWindowPrivate::slotDockShown);
 
     connect(idealController,
-            SIGNAL(widgetResized(Qt::DockWidgetArea,int)),
+            &IdealController::widgetResized,
             this,
-            SLOT(widgetResized(Qt::DockWidgetArea,int)));
+            &MainWindowPrivate::widgetResized);
 
-   connect(idealController, SIGNAL(dockBarContextMenuRequested(Qt::DockWidgetArea,QPoint)),
-            m_mainWindow, SLOT(dockBarContextMenuRequested(Qt::DockWidgetArea,QPoint)));
+   connect(idealController, &IdealController::dockBarContextMenuRequested,
+            m_mainWindow, &MainWindow::dockBarContextMenuRequested);
 }
 
 
@@ -304,15 +304,16 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         {
             //we need to create view container
             container = new Container(splitter);
-            connect(container, SIGNAL(activateView(Sublime::View*)), d->m_mainWindow, SLOT(activateView(Sublime::View*)));
-            connect(container, SIGNAL(tabDoubleClicked(Sublime::View*)),
-                    d->m_mainWindow, SLOT(tabDoubleClicked(Sublime::View*)));
-            connect(container, SIGNAL(tabContextMenuRequested(Sublime::View*,QMenu*)),
-                    d->m_mainWindow, SLOT(tabContextMenuRequested(Sublime::View*,QMenu*)));
-            connect(container, SIGNAL(tabToolTipRequested(Sublime::View*,Sublime::Container*,int)),
-                    d->m_mainWindow, SLOT(tabToolTipRequested(Sublime::View*,Sublime::Container*,int)));
-            connect(container, SIGNAL(requestClose(QWidget*)),
-                    d, SLOT(widgetCloseRequest(QWidget*)), Qt::QueuedConnection);
+            connect(container, &Container::activateView,
+                    d->m_mainWindow, [this](Sublime::View* v) { d->m_mainWindow->activateView(v, true); });
+            connect(container, &Container::tabDoubleClicked,
+                    d->m_mainWindow, &MainWindow::tabDoubleClicked);
+            connect(container, &Container::tabContextMenuRequested,
+                    d->m_mainWindow, &MainWindow::tabContextMenuRequested);
+            connect(container, &Container::tabToolTipRequested,
+                    d->m_mainWindow, &MainWindow::tabToolTipRequested);
+            connect(container, static_cast<void(Container::*)(QWidget*)>(&Container::requestClose),
+                    d, &MainWindowPrivate::widgetCloseRequest, Qt::QueuedConnection);
             splitter->addWidget(container);
         }
         else
@@ -584,7 +585,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
                delete container -- per above comment, we'll delete it later.  */
             QCommonStyle* tmpStyle = new QCommonStyle; // temp style since container uses it's parents style, which gets zeroed
             container->setStyle(tmpStyle);
-            connect(container, SIGNAL(destroyed(QObject*)), tmpStyle, SLOT(deleteLater()));
+            connect(container, &Container::destroyed, tmpStyle, &QCommonStyle::deleteLater);
             container->setParent(0);
             m_indexSplitters.remove(index);
             delete splitter;

@@ -229,12 +229,14 @@ Container::Container(QWidget *parent)
     d->stack = new QStackedWidget(this);
     l->addWidget(d->stack);
 
-    connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
-    connect(d->tabBar, SIGNAL(tabCloseRequested(int)), this, SLOT(requestClose(int)));
-    connect(d->tabBar, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
-    connect(d->tabBar, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
-    connect(d->tabBar, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(doubleClickTriggered(int)));
-    connect(d->documentListMenu, SIGNAL(triggered(QAction*)), this, SLOT(documentListActionTriggered(QAction*)));
+    connect(d->tabBar, &ContainerTabBar::currentChanged, this, &Container::widgetActivated);
+    connect(d->tabBar, &ContainerTabBar::tabCloseRequested, this, static_cast<void(Container::*)(int)>(&Container::requestClose));
+    connect(d->tabBar, &ContainerTabBar::tabMoved, this, &Container::tabMoved);
+    connect(d->tabBar, &ContainerTabBar::customContextMenuRequested, this, &Container::contextMenu);
+#pragma message("TODO: port from KTabBar::mouseMiddleClick to the equivalent Qt5 version")
+    //connect(d->tabBar, &ContainerTabBar::mouseMiddleClick, this, static_cast<void(Container::*)(int)>(&Container::requestClose)); //FIXME: should move this to the style, probably
+    connect(d->tabBar, &ContainerTabBar::tabBarDoubleClicked, this, &Container::doubleClickTriggered);
+    connect(d->documentListMenu, &QMenu::triggered, this, &Container::documentListActionTriggered);
 
     KConfigGroup group = KSharedConfig::openConfig()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
@@ -307,9 +309,9 @@ void Container::addWidget(View *view, int position)
     // The problem could only be fixed by closing/opening another view.
     d->tabBar->setMinimumHeight(d->tabBar->sizeHint().height());
 
-    connect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
-    connect(view->document(), SIGNAL(statusIconChanged(Sublime::Document*)), this, SLOT(statusIconChanged(Sublime::Document*)));
-    connect(view->document(), SIGNAL(titleChanged(Sublime::Document*)), this, SLOT(documentTitleChanged(Sublime::Document*)));
+    connect(view, &View::statusChanged, this, &Container::statusChanged);
+    connect(view->document(), &Document::statusIconChanged, this, &Container::statusIconChanged);
+    connect(view->document(), &Document::titleChanged, this, &Container::documentTitleChanged);
 }
 
 void Container::statusChanged(Sublime::View* view)
@@ -425,9 +427,9 @@ void Sublime::Container::removeWidget(QWidget *w)
         View* view = d->viewForWidget.take(w);
         if (view)
         {
-            disconnect(view->document(), SIGNAL(titleChanged(Sublime::Document*)), this, SLOT(documentTitleChanged(Sublime::Document*)));
-            disconnect(view->document(), SIGNAL(statusIconChanged(Sublime::Document*)), this, SLOT(statusIconChanged(Sublime::Document*)));
-            disconnect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
+            disconnect(view->document(), &Document::titleChanged, this, &Container::documentTitleChanged);
+            disconnect(view->document(), &Document::statusIconChanged, this, &Container::statusIconChanged);
+            disconnect(view, &View::statusChanged, this, &Container::statusChanged);
 
             // Update document list context menu
             Q_ASSERT(d->documentListActionForView.contains(view));

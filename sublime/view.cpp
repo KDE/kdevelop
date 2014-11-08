@@ -74,7 +74,7 @@ QWidget *View::widget(QWidget *parent)
     if (!d->widget)
     {
         d->widget = createWidget(parent);
-        connect(d->widget, SIGNAL(destroyed()), this, SLOT(unsetWidget()));
+        connect(d->widget, &QWidget::destroyed, this, [&] { d->unsetWidget(); });
     }
     return d->widget;
 }
