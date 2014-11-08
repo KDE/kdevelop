@@ -52,7 +52,7 @@ CMakeBuilderPreferences::CMakeBuilderPreferences(QWidget* parent, const QVariant
     if(hasNinja)
         m_prefsUi->generator->addItem("Ninja");
     
-    connect(m_prefsUi->generator, SIGNAL(currentIndexChanged(QString)), SLOT(generatorChanged(QString)));
+    connect(m_prefsUi->generator, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged), this, &CMakeBuilderPreferences::generatorChanged);
 }
 
 CMakeBuilderPreferences::~CMakeBuilderPreferences()

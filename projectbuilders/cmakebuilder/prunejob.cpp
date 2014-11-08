@@ -68,7 +68,7 @@ void PruneJob::start()
     output->appendLine(i18n("%1> rm -rf %2", m_project->path().pathOrUrl(), builddir.toLocalFile()));
     m_job = KIO::del( urls );
     m_job->start();
-    connect(m_job, SIGNAL(finished(KJob*)), SLOT(jobFinished(KJob*)));
+    connect(m_job, &KJob::finished, this, &PruneJob::jobFinished);
 }
 
 bool PruneJob::doKill()

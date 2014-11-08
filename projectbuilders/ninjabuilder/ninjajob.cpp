@@ -62,7 +62,7 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments
         title = i18n("Ninja (%1)", item->text());
     setJobName( title );
 
-    connect(this, SIGNAL(finished(KJob*)), SLOT(emitProjectBuilderSignal(KJob*)));
+    connect(this, &NinjaJob::finished, this, &NinjaJob::emitProjectBuilderSignal);
 }
 
 void NinjaJob::setIsInstalling( bool isInstalling )

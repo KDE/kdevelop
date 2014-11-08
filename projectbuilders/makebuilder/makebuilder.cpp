@@ -134,7 +134,7 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
     MakeJob* job = new MakeJob(this, item, c, overrideTargets, variables);
     m_activeMakeJobs.append(job);
 
-    connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
+    connect(job, &MakeJob::finished, this, &MakeBuilder::jobFinished);
     return job;
 }
 

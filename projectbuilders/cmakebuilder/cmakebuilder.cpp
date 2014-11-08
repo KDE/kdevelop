@@ -80,7 +80,7 @@ void CMakeBuilder::addBuilder(const QString& neededfile, const QStringList& gene
             foreach(const QString& gen, generators) {
                 m_buildersForGenerator[gen] = b;
             }
-
+            // can't use new signal/slot syntax here, IProjectBuilder is not a QObject
             connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SIGNAL(built(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SIGNAL(failed(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)), this, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)));

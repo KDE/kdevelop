@@ -41,8 +41,8 @@ MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QVariantLi
     QWidget* w = new QWidget;
     m_prefsUi = new Ui::MakeConfig;
     m_prefsUi->setupUi( w );
-    connect( m_prefsUi->makeBinary, SIGNAL(textChanged(QString)), SLOT(changed()) );
-    connect( m_prefsUi->makeBinary, SIGNAL(urlSelected(QUrl)), SLOT(changed()) );
+    connect( m_prefsUi->makeBinary, &KUrlRequester::textChanged, this, static_cast<void(MakeBuilderPreferences::*)()>(&MakeBuilderPreferences::changed) );
+    connect( m_prefsUi->makeBinary, &KUrlRequester::urlSelected, this, static_cast<void(MakeBuilderPreferences::*)()>(&MakeBuilderPreferences::changed) );
     l->addWidget( w );
 
     m_prefsUi->configureEnvironment->setSelectionWidget( m_prefsUi->kcfg_environmentProfile );
