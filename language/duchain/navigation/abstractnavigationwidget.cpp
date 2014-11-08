@@ -177,7 +177,7 @@ void AbstractNavigationWidget::update() {
 
   if(m_currentWidget) {
     if (m_currentWidget->metaObject()
-          ->indexOfSignal(SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration))) != -1)
+          ->indexOfSignal(QMetaObject::normalizedSignature("navigateDeclaration(KDevelop::IndexedDeclaration)")) != -1)
     {
       connect(m_currentWidget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),
               this, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
