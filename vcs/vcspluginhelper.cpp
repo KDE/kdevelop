@@ -105,17 +105,17 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         pushAction = new QAction(QIcon::fromTheme("arrow-up-double"), i18n("Push"), parent);
         pullAction = new QAction(QIcon::fromTheme("arrow-down-double"), i18n("Pull"), parent);
 
-        connect(commitAction, SIGNAL(triggered()), parent, SLOT(commit()));
-        connect(addAction, SIGNAL(triggered()), parent, SLOT(add()));
-        connect(updateAction, SIGNAL(triggered()), parent, SLOT(update()));
-        connect(diffToBaseAction, SIGNAL(triggered()), parent, SLOT(diffToBase()));
-        connect(revertAction, SIGNAL(triggered()), parent, SLOT(revert()));
-        connect(historyAction, SIGNAL(triggered()), parent, SLOT(history()));
-        connect(annotationAction, SIGNAL(triggered()), parent, SLOT(annotation()));
-        connect(diffForRevAction, SIGNAL(triggered()), parent, SLOT(diffForRev()));
-        connect(diffForRevGlobalAction, SIGNAL(triggered()), parent, SLOT(diffForRevGlobal()));
-        connect(pullAction, SIGNAL(triggered()), parent, SLOT(pull()));
-        connect(pushAction, SIGNAL(triggered()), parent, SLOT(push()));
+        connect(commitAction, &QAction::triggered, parent, &VcsPluginHelper::commit);
+        connect(addAction, &QAction::triggered, parent, &VcsPluginHelper::add);
+        connect(updateAction, &QAction::triggered, parent, &VcsPluginHelper::update);
+        connect(diffToBaseAction, &QAction::triggered, parent, &VcsPluginHelper::diffToBase);
+        connect(revertAction, &QAction::triggered, parent, &VcsPluginHelper::revert);
+        connect(historyAction, &QAction::triggered, parent, [&] { parent->history(); });
+        connect(annotationAction, &QAction::triggered, parent, &VcsPluginHelper::annotation);
+        connect(diffForRevAction, &QAction::triggered, parent, static_cast<void(VcsPluginHelper::*)()>(&VcsPluginHelper::diffForRev));
+        connect(diffForRevGlobalAction, &QAction::triggered, parent, &VcsPluginHelper::diffForRevGlobal);
+        connect(pullAction, &QAction::triggered, parent, &VcsPluginHelper::pull);
+        connect(pushAction, &QAction::triggered, parent, &VcsPluginHelper::push);
     }
 
     bool allLocalFiles(const QList<QUrl>& urls)
@@ -259,7 +259,7 @@ QMenu* VcsPluginHelper::commonActions()
 void VcsPluginHelper::revert()
 {
     VcsJob* job=d->vcs->revert(d->ctxUrls);
-    connect(job, SIGNAL(finished(KJob*)), SLOT(revertDone(KJob*)));
+    connect(job, &VcsJob::finished, this, &VcsPluginHelper::revertDone);
 
     foreach(const QUrl &url, d->ctxUrls) {
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
@@ -281,8 +281,8 @@ void VcsPluginHelper::revertDone(KJob* job)
 {
     QTimer* modificationTimer = new QTimer;
     modificationTimer->setInterval(100);
-    connect(modificationTimer, SIGNAL(timeout()), SLOT(delayedModificationWarningOn()));
-    connect(modificationTimer, SIGNAL(timeout()), modificationTimer, SLOT(deleteLater()));
+    connect(modificationTimer, &QTimer::timeout, this, &VcsPluginHelper::delayedModificationWarningOn);
+    connect(modificationTimer, &QTimer::timeout, modificationTimer, &QTimer::deleteLater);
 
 
     modificationTimer->setProperty("urls", job->property("urls"));
@@ -369,7 +369,7 @@ void VcsPluginHelper::diffForRev(const QUrl& url)
     VcsRevision prev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Previous);
     KDevelop::VcsJob* job = d->vcs->diff(url, prev, rev );
 
-    connect(job, SIGNAL(finished(KJob*)), this, SLOT(diffJobFinished(KJob*)));
+    connect(job, &VcsJob::finished, this, &VcsPluginHelper::diffJobFinished);
     d->plugin->core()->runController()->registerJob(job);
 }
 
@@ -424,6 +424,7 @@ void VcsPluginHelper::annotation()
                                                                                    foreground, background);
             annotateiface->setAnnotationModel(model);
             viewiface->setAnnotationBorderVisible(true);
+            // can't use new signal slot syntax here, AnnotationInterface is not a QObject
             connect(doc->activeTextView(),
                     SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
                     this, SLOT(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)));

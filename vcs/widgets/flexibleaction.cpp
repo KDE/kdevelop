@@ -22,7 +22,7 @@ FlexibleAction::FlexibleAction(const QIcon& icon, const QString& text, AbstractF
     : QAction(icon, text, parent)
     , m_function(function)
 {
-    connect(this, SIGNAL(triggered(bool)), SLOT(actionTriggered(bool)));
+    connect(this, &FlexibleAction::triggered, this, &FlexibleAction::actionTriggered);
 }
 
 void FlexibleAction::actionTriggered(bool)

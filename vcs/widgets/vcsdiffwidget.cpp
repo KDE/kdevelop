@@ -87,8 +87,8 @@ VcsDiffWidget::VcsDiffWidget( KDevelop::VcsJob* job, QWidget* parent )
     d->m_job = job;
     d->m_ui = new Ui::VcsDiffWidget();
     d->m_ui->setupUi( this );
-    connect( d->m_job, SIGNAL(resultsReady(KDevelop::VcsJob*)),
-             this, SLOT(diffReady(KDevelop::VcsJob*)) );
+    connect( d->m_job, &VcsJob::resultsReady,
+             this, [&] (VcsJob* job) { this->d->diffReady(job); } );
     ICore::self()->runController()->registerJob( d->m_job );
 }
 

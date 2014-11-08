@@ -63,16 +63,16 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     }
 
     m_ui->newButton->setIcon(QIcon::fromTheme("list-add"));
-    connect(m_ui->newButton, SIGNAL(clicked()), this, SLOT(createBranch()));
+    connect(m_ui->newButton, &QPushButton::clicked, this, &BranchManager::createBranch);
     m_ui->deleteButton->setIcon(QIcon::fromTheme("list-remove"));
-    connect(m_ui->deleteButton, SIGNAL(clicked()), this, SLOT(deleteBranch()));
+    connect(m_ui->deleteButton, &QPushButton::clicked, this, &BranchManager::deleteBranch);
     m_ui->renameButton->setIcon(QIcon::fromTheme("edit-rename"));
-    connect(m_ui->renameButton, SIGNAL(clicked()), this, SLOT(renameBranch()));
+    connect(m_ui->renameButton, &QPushButton::clicked, this, &BranchManager::renameBranch);
     m_ui->checkoutButton->setIcon(QIcon::fromTheme("dialog-ok-apply"));
-    connect(m_ui->checkoutButton, SIGNAL(clicked()), this, SLOT(checkoutBranch()));
+    connect(m_ui->checkoutButton, &QPushButton::clicked, this, &BranchManager::checkoutBranch);
 
     // checkout branch on double-click
-    connect(m_ui->branchView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(checkoutBranch()));
+    connect(m_ui->branchView, &QListView::doubleClicked, this, &BranchManager::checkoutBranch);
 }
 
 BranchManager::~BranchManager()

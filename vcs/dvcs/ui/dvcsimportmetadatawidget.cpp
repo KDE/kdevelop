@@ -51,8 +51,8 @@ DvcsImportMetadataWidget::DvcsImportMetadataWidget(QWidget *parent)
 
     d->m_ui->sourceLoc->setEnabled( false );
     d->m_ui->sourceLoc->setMode( KFile::Directory );
-    connect( d->m_ui->sourceLoc, SIGNAL(textChanged(QString)), this, SIGNAL(changed()) );
-    connect( d->m_ui->sourceLoc, SIGNAL(urlSelected(QUrl)), this, SIGNAL(changed()) );
+    connect( d->m_ui->sourceLoc, &KUrlRequester::textChanged, this, &DvcsImportMetadataWidget::changed );
+    connect( d->m_ui->sourceLoc, &KUrlRequester::urlSelected, this, &DvcsImportMetadataWidget::changed );
 }
 
 DvcsImportMetadataWidget::~DvcsImportMetadataWidget()

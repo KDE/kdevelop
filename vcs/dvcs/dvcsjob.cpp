@@ -76,13 +76,13 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     setModel(d->model);
     setCapabilities(Killable);
 
-    connect(d->childproc, SIGNAL(finished(int,QProcess::ExitStatus)),
-            SLOT(slotProcessExited(int,QProcess::ExitStatus)));
-    connect(d->childproc, SIGNAL(error(QProcess::ProcessError)),
-            SLOT(slotProcessError(QProcess::ProcessError)));
+    connect(d->childproc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
+            this, &DVcsJob::slotProcessExited);
+    connect(d->childproc, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
+            this, &DVcsJob::slotProcessError);
 
-    connect(d->childproc, SIGNAL(readyReadStandardOutput()),
-                SLOT(slotReceivedStdout()));
+    connect(d->childproc, &KProcess::readyReadStandardOutput,
+                this, &DVcsJob::slotReceivedStdout);
 
 }
 

@@ -185,6 +185,6 @@ void BranchesListModel::setProject(KDevelop::IProject* p)
 void BranchesListModel::setCurrentBranch(const QString& branch)
 {
     KDevelop::VcsJob* job = dvcsplugin->switchBranch(repo, branch);
-    connect(job, SIGNAL(finished(KJob*)), SIGNAL(currentBranchChanged()));
+    connect(job, &VcsJob::finished, this, &BranchesListModel::currentBranchChanged);
     KDevelop::ICore::self()->runController()->registerJob(job);
 }

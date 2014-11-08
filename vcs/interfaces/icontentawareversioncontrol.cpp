@@ -35,7 +35,7 @@ CheckInRepositoryJob::CheckInRepositoryJob(KTextEditor::Document* document)
     : KJob()
     , d(new CheckInRepositoryJobPrivate(document))
 {
-    connect(this, SIGNAL(finished(bool)), SLOT(deleteLater()));
+    connect(this, &CheckInRepositoryJob::finished, this, &CheckInRepositoryJob::deleteLater);
     setCapabilities(Killable);
 };
 

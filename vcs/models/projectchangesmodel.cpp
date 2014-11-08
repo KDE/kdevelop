@@ -49,17 +49,17 @@ ProjectChangesModel::ProjectChangesModel(QObject* parent)
     foreach(IProject* p, ICore::self()->projectController()->projects())
         addProject(p);
     
-    connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
-                                              SLOT(addProject(KDevelop::IProject*)));
-    connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
-                                              SLOT(removeProject(KDevelop::IProject*)));
+    connect(ICore::self()->projectController(), &IProjectController::projectOpened,
+                                              this, &ProjectChangesModel::addProject);
+    connect(ICore::self()->projectController(), &IProjectController::projectClosing,
+                                              this, &ProjectChangesModel::removeProject);
     
-    connect(ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)),
-                                                SLOT(documentSaved(KDevelop::IDocument*)));
-    connect(ICore::self()->projectController()->projectModel(), SIGNAL(rowsInserted(QModelIndex,int,int)),
-                                                SLOT(itemsAdded(QModelIndex,int,int)));
+    connect(ICore::self()->documentController(), &IDocumentController::documentSaved,
+                                                this, &ProjectChangesModel::documentSaved);
+    connect(ICore::self()->projectController()->projectModel(), &ProjectModel::rowsInserted,
+                                                this, &ProjectChangesModel::itemsAdded);
     
-    connect(ICore::self()->runController(), SIGNAL(jobUnregistered(KJob*)), SLOT(jobUnregistered(KJob*)));
+    connect(ICore::self()->runController(), &IRunController::jobUnregistered, this, &ProjectChangesModel::jobUnregistered);
 }
 
 ProjectChangesModel::~ProjectChangesModel()
@@ -83,6 +83,7 @@ void ProjectChangesModel::addProject(IProject* p)
         if(branchingExtension) {
             const auto pathUrl = p->path().toUrl();
             branchingExtension->registerRepositoryForCurrentBranchChanges(pathUrl);
+            // can't use new signal slot syntax here, IBranchingVersionControl is not a QObject
             connect(plugin, SIGNAL(repositoryBranchChanged(QUrl)), this, SLOT(repositoryBranchChanged(QUrl)));
             repositoryBranchChanged(pathUrl);
         }
@@ -134,7 +135,7 @@ void ProjectChangesModel::changes(IProject* project, const QList<QUrl>& urls, IB
         job->setProperty("urls", qVariantFromValue<QList<QUrl>>(urls));
         job->setProperty("mode", qVariantFromValue<int>(mode));
         job->setProperty("project", qVariantFromValue(project));
-        connect(job, SIGNAL(finished(KJob*)), SLOT(statusReady(KJob*)));
+        connect(job, &VcsJob::finished, this, &ProjectChangesModel::statusReady);
         
         ICore::self()->runController()->registerJob(job);
     }
@@ -259,7 +260,7 @@ void ProjectChangesModel::repositoryBranchChanged(const QUrl& url)
         IBranchingVersionControl* branching = v->extension<IBranchingVersionControl>();
         Q_ASSERT(branching);
         VcsJob* job = branching->currentBranch(url);
-        connect(job, SIGNAL(resultsReady(KDevelop::VcsJob*)), SLOT(branchNameReady(KDevelop::VcsJob*)));
+        connect(job, &VcsJob::resultsReady, this, &ProjectChangesModel::branchNameReady);
         job->setProperty("project", QVariant::fromValue<QObject*>(project));
         ICore::self()->runController()->registerJob(job);
     }

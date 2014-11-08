@@ -61,14 +61,14 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
         m_oldMessages->addItem(message, message);
     m_oldMessages->setMaximumWidth(200);
 
-    connect(m_oldMessages, SIGNAL(currentIndexChanged(QString)), this, SLOT(oldMessageChanged(QString)));
+    connect(m_oldMessages, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::currentIndexChanged), this, &VCSCommitDiffPatchSource::oldMessageChanged);
 
     titleLayout->addWidget(m_oldMessages);
 
     layout->addLayout(titleLayout);
     layout->addWidget(m_commitMessageEdit.data());
-    connect(this, SIGNAL(reviewCancelled(QString)), SLOT(addMessageToHistory(QString)));
-    connect(this, SIGNAL(reviewFinished(QString,QList<QUrl>)), SLOT(addMessageToHistory(QString)));
+    connect(this, &VCSCommitDiffPatchSource::reviewCancelled, this, &VCSCommitDiffPatchSource::addMessageToHistory);
+    connect(this, &VCSCommitDiffPatchSource::reviewFinished, this, &VCSCommitDiffPatchSource::addMessageToHistory);
 }
 
 QStringList VCSCommitDiffPatchSource::oldMessages() const
@@ -265,8 +265,8 @@ bool VCSCommitDiffPatchSource::finishReview(QList< QUrl > selection) {
         return false;
     }
 
-    connect (job, SIGNAL(finished(KJob*)),
-             this, SLOT(jobFinished(KJob*)));
+    connect (job, &VcsJob::finished,
+             this, &VCSCommitDiffPatchSource::jobFinished);
     ICore::self()->runController()->registerJob(job);
     return true;
 }

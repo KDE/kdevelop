@@ -59,7 +59,7 @@ public:
     {
         m_copyAction = new QAction(QIcon::fromTheme("edit-copy"), i18n("Copy revision number"), q);
         m_copyAction->setShortcut(Qt::ControlModifier+Qt::Key_C);
-        QObject::connect(m_copyAction, SIGNAL(triggered(bool)), q, SLOT(copyRevision()));
+        QObject::connect(m_copyAction, &QAction::triggered, q, [&] { copyRevision(); });
     }
 
     Ui::VcsEventWidget* m_ui;
@@ -141,7 +141,7 @@ void VcsEventWidgetPrivate::diffToPrevious()
     widget->setRevisions( prev, ev.revision() );
     KDialog* dlg = new KDialog( q );
 
-    widget->connect(widget, SIGNAL(destroyed(QObject*)), dlg, SLOT(deleteLater()));
+    widget->connect(widget, &VcsDiffWidget::destroyed, dlg, &KDialog::deleteLater);
 
     dlg->setCaption( i18n("Difference To Previous") );
     dlg->setButtons( KDialog::Ok );
@@ -160,7 +160,7 @@ void VcsEventWidgetPrivate::diffRevisions()
     widget->setRevisions( ev1.revision(), ev2.revision() );
     KDialog* dlg = new KDialog( q );
 
-    widget->connect(widget, SIGNAL(destroyed(QObject*)), dlg, SLOT(deleteLater()));
+    widget->connect(widget, &VcsDiffWidget::destroyed, dlg, &KDialog::deleteLater);
 
     dlg->setCaption( i18n("Difference between Revisions") );
     dlg->setButtons( KDialog::Ok );
@@ -189,12 +189,12 @@ VcsEventWidget::VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelo
     d->m_detailModel = new VcsItemEventModel(this);
     d->m_ui->itemEventView->setModel( d->m_detailModel );
 
-    connect( d->m_ui->eventView, SIGNAL(clicked(QModelIndex)),
-             this, SLOT(eventViewClicked(QModelIndex)) );
-    connect( d->m_ui->eventView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
-             this, SLOT(currentRowChanged(QModelIndex,QModelIndex)));
-    connect( d->m_ui->eventView, SIGNAL(customContextMenuRequested(QPoint)),
-             this, SLOT(eventViewCustomContextMenuRequested(QPoint)) );
+    connect( d->m_ui->eventView, &QTreeView::clicked,
+             this, [&] (const QModelIndex& index) { d->eventViewClicked(index); } );
+    connect( d->m_ui->eventView->selectionModel(), &QItemSelectionModel::currentRowChanged,
+             this, [&] (const QModelIndex& start, const QModelIndex& end) { d->currentRowChanged(start, end); });
+    connect( d->m_ui->eventView, &QTreeView::customContextMenuRequested,
+             this, [&] (const QPoint& point) { d->eventViewCustomContextMenuRequested(point); } );
 }
 
 VcsEventWidget::~VcsEventWidget()
