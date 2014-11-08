@@ -217,7 +217,7 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
     Q_ASSERT(row >= 0 && row < d->children.size());
 
     if( model() ) {
-        QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", Qt::DirectConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
+        model()->beginRemoveRows(index(), row, row);
     }
     ProjectBaseItem* olditem = d->children.takeAt( row );
     olditem->d_func()->parent = 0;
@@ -230,7 +230,7 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
     }
 
     if( model() ) {
-        QMetaObject::invokeMethod( model(), "rowsRemoved", Qt::DirectConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
+        model()->endRemoveRows();
     }
     return olditem;
 }
@@ -250,7 +250,7 @@ void ProjectBaseItem::removeRows(int row, int count)
     Q_ASSERT(row >= 0 && row + count <= d->children.size());
 
     if( model() ) {
-        QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", Qt::DirectConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row + count - 1) );
+        model()->beginRemoveRows(index(), row, row + count - 1);
     }
 
     //NOTE: we unset parent, row and model manually to speed up the deletion
@@ -278,7 +278,7 @@ void ProjectBaseItem::removeRows(int row, int count)
     }
 
     if( model() ) {
-        QMetaObject::invokeMethod( model(), "rowsRemoved", Qt::DirectConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row + count - 1) );
+        model()->endRemoveRows();
     }
 }
 
@@ -440,14 +440,14 @@ void ProjectBaseItem::appendRow( ProjectBaseItem* item )
     int startrow,endrow;
     if( model() ) {
         startrow = endrow = d->children.count();
-        QMetaObject::invokeMethod( model(), "rowsAboutToBeInserted", Qt::DirectConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, startrow), Q_ARG(int, endrow) );
+        model()->beginInsertRows(index(), startrow, endrow);
     }
     d->children.append( item );
     item->setRow( d->children.count() - 1 );
     item->d_func()->parent = this;
     item->setModel( model() );
     if( model() ) {
-        QMetaObject::invokeMethod( model(), "rowsInserted", Qt::DirectConnection, Q_ARG( QModelIndex, index() ), Q_ARG( int, startrow ), Q_ARG( int, endrow ) );
+        model()->endInsertRows();
     }
 }
 
