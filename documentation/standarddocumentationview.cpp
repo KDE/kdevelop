@@ -28,7 +28,7 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
     : QWebView (parent)
 {
     findWidget->setEnabled(true);
-    connect(findWidget, SIGNAL(newSearch(QString,KDevelop::DocumentationFindWidget::FindOptions)), SLOT(search(QString,KDevelop::DocumentationFindWidget::FindOptions)));
+    connect(findWidget, &DocumentationFindWidget::newSearch, this, &StandardDocumentationView::search);
 }
 
 void StandardDocumentationView::search ( const QString& text, DocumentationFindWidget::FindOptions options )
@@ -53,7 +53,7 @@ void StandardDocumentationView::setDocumentation(const IDocumentation::Ptr& doc)
     m_doc = doc;
     update();
     if(m_doc)
-        connect(m_doc.data(), SIGNAL(descriptionChanged()), SLOT(update()));
+        connect(m_doc.data(), &IDocumentation::descriptionChanged, this, &StandardDocumentationView::update);
 }
 
 void StandardDocumentationView::update()

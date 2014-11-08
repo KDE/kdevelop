@@ -83,16 +83,16 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* m)
 
     /* vertical size policy should be left to the style. */
     mIdentifiers->setSizePolicy(QSizePolicy::Expanding, mIdentifiers->sizePolicy().verticalPolicy());
-    connect(mIdentifiers, SIGNAL(returnPressed()), SLOT(changedSelection()));
-    connect(mIdentifiers->completer(), SIGNAL(activated(QModelIndex)), SLOT(changeProvider(QModelIndex)));
+    connect(mIdentifiers, &QLineEdit::returnPressed, this, &DocumentationView::changedSelection);
+    connect(mIdentifiers->completer(), static_cast<void(QCompleter::*)(const QModelIndex&)>(&QCompleter::activated), this, &DocumentationView::changeProvider);
 
     mActions->addWidget(mProviders);
     mActions->addWidget(mIdentifiers);
 
     mBack->setEnabled(false);
     mForward->setEnabled(false);
-    connect(mBack, SIGNAL(triggered()), this, SLOT(browseBack()));
-    connect(mForward, SIGNAL(triggered()), this, SLOT(browseForward()));
+    connect(mBack, &QAction::triggered, this, &DocumentationView::browseBack);
+    connect(mForward, &QAction::triggered, this, &DocumentationView::browseForward);
     mCurrent=mHistory.end();
 
     layout()->addWidget(mActions);
@@ -105,12 +105,14 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* m)
 void DocumentationView::initialize()
 {
     mProviders->setModel(mProvidersModel);
+    connect(mProviders, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &DocumentationView::changedProvider);
     connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
     foreach (IDocumentationProvider* p, mProvidersModel->providers()) {
+        // can't use new signal/slot syntax here, IDocumentation is not a QObject
         connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(KDevelop::IDocumentation::Ptr)),
                 this, SLOT(addHistory(KDevelop::IDocumentation::Ptr)));
     }
-    connect(mProvidersModel, SIGNAL(providersChanged()), this, SLOT(emptyHistory()));
+    connect(mProvidersModel, &ProvidersModel::providersChanged, this, &DocumentationView::emptyHistory);
 
     if(mProvidersModel->rowCount()>0)
         changedProvider(0);
@@ -242,9 +244,9 @@ ProvidersModel::ProvidersModel(QObject* parent)
     : QAbstractListModel(parent)
     , mProviders(ICore::self()->documentationController()->documentationProviders())
 {
-    connect(ICore::self()->pluginController(), SIGNAL(pluginUnloaded(KDevelop::IPlugin*)), SLOT(unloaded(KDevelop::IPlugin*)));
-    connect(ICore::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)), SLOT(loaded(KDevelop::IPlugin*)));
-    connect(ICore::self()->documentationController(), SIGNAL(providersChanged()), SLOT(reloadProviders()));
+    connect(ICore::self()->pluginController(), &IPluginController::pluginUnloaded, this, &ProvidersModel::unloaded);
+    connect(ICore::self()->pluginController(), &IPluginController::pluginLoaded, this, &ProvidersModel::loaded);
+    connect(ICore::self()->documentationController(), &IDocumentationController::providersChanged, this, &ProvidersModel::reloadProviders);
 }
 
 void ProvidersModel::reloadProviders()
