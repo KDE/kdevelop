@@ -21,7 +21,7 @@ namespace KDevelop {
     
 FocusedTreeView::FocusedTreeView(QWidget* parent) : QTreeView(parent) {
     setVerticalScrollMode(ScrollPerItem);
-    connect(verticalScrollBar(), SIGNAL(valueChanged(int)), SLOT(resizeColumnsToContents()));
+    connect(verticalScrollBar(), &QScrollBar::valueChanged, this, &FocusedTreeView::resizeColumnsToContents);
 }
 
 int FocusedTreeView::sizeHintForColumn(int column) const {

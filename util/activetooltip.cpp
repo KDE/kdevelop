@@ -311,7 +311,7 @@ void ActiveToolTip::showToolTip(KDevelop::ActiveToolTip* tooltip, float priority
 
     registeredToolTips.insert(priority, qMakePair(QPointer<KDevelop::ActiveToolTip>(tooltip), uniqueId));
 
-    connect(tooltip, SIGNAL(resized()), &manager, SLOT(doVisibility()));
+    connect(tooltip, &ActiveToolTip::resized, &manager, &ActiveToolTipManager::doVisibility);
     QMetaObject::invokeMethod(&manager, "doVisibility", Qt::QueuedConnection);
 }
 

@@ -28,8 +28,6 @@ struct ObjectListTracker::Private
     /// List of tracked objects (contains unique items only)
     QList<QObject*> m_list;
     CleanupBehavior m_cleanupBehavior;
-
-    void objectDestroyed(QObject* object);
 };
 
 ObjectListTracker::ObjectListTracker(CleanupBehavior behavior, QObject* parent)
@@ -50,9 +48,9 @@ const QList<QObject*>& ObjectListTracker::data() const
     return d->m_list;
 }
 
-void ObjectListTracker::Private::objectDestroyed(QObject* object)
+void ObjectListTracker::objectDestroyed(QObject* object)
 {
-    bool success = m_list.removeOne(object);
+    bool success = d->m_list.removeOne(object);
     Q_ASSERT(success);
     Q_UNUSED(success);
 }
@@ -64,7 +62,7 @@ void ObjectListTracker::append(QObject* object)
     }
 
     d->m_list.append(object);
-    connect(object, SIGNAL(destroyed(QObject*)), this, SLOT(objectDestroyed(QObject*)));
+    connect(object, &QObject::destroyed, this, &ObjectListTracker::objectDestroyed);
 }
 
 bool ObjectListTracker::remove(QObject* object)
@@ -73,7 +71,7 @@ bool ObjectListTracker::remove(QObject* object)
         return false;
     }
 
-    disconnect(object, SIGNAL(destroyed(QObject *)), this, SLOT(objectDestroyed(QObject*)));
+    disconnect(object, &QObject::destroyed, this, &ObjectListTracker::objectDestroyed);
     return d->m_list.removeOne(object);
 }
 

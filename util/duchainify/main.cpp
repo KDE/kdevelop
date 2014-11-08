@@ -146,7 +146,7 @@ void Manager::init()
     // when everything is done and when bgparser is suspended
     // later doesn't happen in duchain, so just rely on hideProgress()
     // and quit when it's emitted
-    connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(hideProgress(KDevelop::IStatus*)), this, SLOT(finish()));
+    connect(ICore::self()->languageController()->backgroundParser(), &KDevelop::BackgroundParser::hideProgress, this, &Manager::finish);
 
     foreach (const auto& file, m_args->positionalArguments()) {
         addToBackgroundParser(file, (TopDUContext::Features)features);

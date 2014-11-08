@@ -73,8 +73,8 @@ EnvironmentConfigureButton::EnvironmentConfigureButton(QWidget* parent)
     setIcon(QIcon::fromTheme("configure"));
     setToolTip(i18n("Configure environment variables"));
 
-    connect(this, SIGNAL(clicked(bool)),
-            this, SLOT(showDialog()));
+    connect(this, &EnvironmentConfigureButton::clicked,
+            this, [&] { d->showDialog(); });
 }
 
 EnvironmentConfigureButton::~EnvironmentConfigureButton()
@@ -84,8 +84,8 @@ EnvironmentConfigureButton::~EnvironmentConfigureButton()
 
 void EnvironmentConfigureButton::setSelectionWidget(EnvironmentSelectionWidget* widget)
 {
-    connect(this, SIGNAL(environmentConfigured()),
-            widget, SLOT(reconfigure()));
+    connect(this, &EnvironmentConfigureButton::environmentConfigured,
+            widget, &EnvironmentSelectionWidget::reconfigure);
     d->selectionWidget = widget;
 }
 

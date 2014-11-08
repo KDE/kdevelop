@@ -94,8 +94,8 @@ ProjectTestJob::ProjectTestJob(IProject* project, QObject* parent)
     setObjectName(i18n("Run all tests in %1", project->name()));
 
     d->m_suites = ICore::self()->testController()->testSuitesForProject(project);
-    connect(ICore::self()->testController(), SIGNAL(testRunFinished(KDevelop::ITestSuite*,KDevelop::TestResult)),
-            SLOT(gotResult(KDevelop::ITestSuite*,KDevelop::TestResult)));
+    connect(ICore::self()->testController(), &ITestController::testRunFinished,
+            this, [&] (ITestSuite* suite, const TestResult& result) { d->gotResult(suite, result); });
 }
 
 ProjectTestJob::~ProjectTestJob()

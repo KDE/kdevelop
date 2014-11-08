@@ -330,12 +330,12 @@ void MultiLevelListView::setLevels(int levels)
         }
 
         // view->setModel creates the selection model
-        connect(view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                this, SLOT(viewSelectionChanged(QModelIndex,QModelIndex)));
+        connect(view->selectionModel(), &QItemSelectionModel::currentChanged,
+                this, [&] (const QModelIndex& current, const QModelIndex& previous) { d->viewSelectionChanged(current, previous); });
 
         if (i + 1 == d->levels) {
-            connect(view->model(), SIGNAL(rowsInserted(QModelIndex, int, int)),
-                    SLOT(lastViewsContentsChanged()));
+            connect(view->model(), &QAbstractItemModel::rowsInserted,
+                    this, [&] { d->lastViewsContentsChanged(); });
         }
 
         view->setSortingEnabled(true);

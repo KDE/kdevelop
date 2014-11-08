@@ -82,10 +82,11 @@ public:
     const QList<QObject*>& data() const;
 
 private:
+    void objectDestroyed(QObject*);
+
+private:
     struct Private;
     QScopedPointer<Private> const d;
-
-    Q_PRIVATE_SLOT(d, void objectDestroyed(QObject*));
 };
 
 /**
