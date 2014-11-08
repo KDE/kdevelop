@@ -48,15 +48,15 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     KFilterProxySearchLine* filterLine = new KFilterProxySearchLine(this);
     KDEProjectsModel* model = new KDEProjectsModel(this);
     KDEProjectsReader* reader = new KDEProjectsReader(model, model);
-    connect(reader, SIGNAL(downloadDone()), reader, SLOT(deleteLater()));
-    connect(m_projects, SIGNAL(clicked(QModelIndex)), this, SLOT(projectIndexChanged(QModelIndex)));
+    connect(reader, &KDEProjectsReader::downloadDone, reader, &KDEProjectsReader::deleteLater);
+    connect(m_projects, &QListView::clicked, this, &KDEProviderWidget::projectIndexChanged);
 
     topLayout->addWidget(filterLine);
 
     
     QPushButton* settings=new QPushButton(QIcon::fromTheme("configure"), i18n("Settings"), this);
     settings->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
-    connect(settings, SIGNAL(clicked()), SLOT(showSettings()));
+    connect(settings, &QPushButton::clicked, this, &KDEProviderWidget::showSettings);
 
     topLayout->addWidget(settings);
     
