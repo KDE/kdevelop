@@ -194,7 +194,7 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     d->ui->view->setModel(d->model);
 
     connect(d->ui->view, &MultiLevelListView::currentIndexChanged,
-            this, [&](const QModelIndex& index) { d->currentTemplateChanged(index); });
+            this, [&] (const QModelIndex& index) { d->currentTemplateChanged(index); });
 
     QModelIndex templateIndex = d->model->index(0, 0);
 
@@ -226,11 +226,11 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
     d->ui->view->setCurrentIndex(templateIndex);
 
     KNS3::Button* getMoreButton = new KNS3::Button(i18n("Get More Templates..."), "kdevfiletemplates.knsrc", d->ui->view);
-    connect (getMoreButton, &KNS3::Button::dialogFinished, this, [&]() { d->getMoreClicked(); });
+    connect (getMoreButton, &KNS3::Button::dialogFinished, this, [&] { d->getMoreClicked(); });
     d->ui->view->addWidget(0, getMoreButton);
 
     QPushButton* loadButton = new QPushButton(QIcon::fromTheme("application-x-archive"), i18n("Load Template From File"), d->ui->view);
-    connect (loadButton, &QPushButton::clicked, this, [&]() { d->loadFileClicked(); });
+    connect (loadButton, &QPushButton::clicked, this, [&] { d->loadFileClicked(); });
     d->ui->view->addWidget(0, loadButton);
 
     d->ui->view->setContentsMargins(0, 0, 0, 0);

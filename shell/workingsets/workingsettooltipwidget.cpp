@@ -96,7 +96,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         m_deleteButton->setText(i18n("Delete"));
         m_deleteButton->setToolTip(i18n("Remove this working set. The contained documents are not affected."));
         m_deleteButton->setFlat(true);
-        connect(m_deleteButton, &QPushButton::clicked, m_set, [this]() { m_set->deleteSet(false); });
+        connect(m_deleteButton, &QPushButton::clicked, m_set, [&] { m_set->deleteSet(false); });
         connect(m_deleteButton, &QPushButton::clicked, this, &WorkingSetToolTipWidget::shouldClose);
         topLayout->addWidget(m_deleteButton);
         layout->addLayout(topLayout);

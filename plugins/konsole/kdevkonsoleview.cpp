@@ -53,7 +53,7 @@ public:
 
         if ( ( konsolepart = factory->create<KParts::ReadOnlyPart>( m_view ) ) )
         {
-            QObject::connect(konsolepart, &KParts::ReadOnlyPart::destroyed, m_view, [&]() { _k_slotTerminalClosed(); });
+            QObject::connect(konsolepart, &KParts::ReadOnlyPart::destroyed, m_view, [&] { _k_slotTerminalClosed(); });
 
             konsolepart->widget() ->setFocusPolicy( Qt::WheelFocus );
             konsolepart->widget() ->setFocus();

@@ -219,7 +219,7 @@ UiController::UiController(Core *core)
         return;
 
     connect(qApp, &QApplication::focusChanged,
-            this, [this](QWidget* old, QWidget* now) { d->widgetChanged(old, now); } );
+            this, [&] (QWidget* old, QWidget* now) { d->widgetChanged(old, now); } );
 
     setupActions();
 }

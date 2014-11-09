@@ -420,7 +420,7 @@ VariableCollection::VariableCollection(IDebugController* controller)
              this, &VariableCollection::updateAutoUpdate);
 
     // Qt5 signal slot syntax does not support default arguments
-    auto callUpdateAutoUpdate = [this]() { updateAutoUpdate(); };
+    auto callUpdateAutoUpdate = [&] { updateAutoUpdate(); };
 
     connect(locals(), &Locals::expanded, this, callUpdateAutoUpdate);
     connect(locals(), &Locals::collapsed, this, callUpdateAutoUpdate);

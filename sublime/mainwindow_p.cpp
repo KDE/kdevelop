@@ -305,7 +305,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
             //we need to create view container
             container = new Container(splitter);
             connect(container, &Container::activateView,
-                    d->m_mainWindow, [this](Sublime::View* v) { d->m_mainWindow->activateView(v, true); });
+                    d->m_mainWindow, [&] (Sublime::View* v) { d->m_mainWindow->activateView(v, true); });
             connect(container, &Container::tabDoubleClicked,
                     d->m_mainWindow, &MainWindow::tabDoubleClicked);
             connect(container, &Container::tabContextMenuRequested,

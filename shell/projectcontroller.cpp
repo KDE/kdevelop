@@ -501,7 +501,7 @@ void ProjectController::setupActions()
                                                     "not yet have a KDevelop4 project file, the file "
                                                     "will be created." ) );
     action->setIcon(QIcon::fromTheme("project-open"));
-    connect(action, &QAction::triggered, this, [&]() { openProject(); });
+    connect(action, &QAction::triggered, this, [&] { openProject(); });
 
     d->m_fetchProject = action = ac->addAction( "project_fetch" );
     action->setText(i18nc( "@action", "Fetch Project..." ) );
@@ -878,7 +878,7 @@ void ProjectController::initializePluginCleanup(IProject* proj)
     // Unloading (and thus deleting) these plugins is not a good idea just yet
     // as we're being called by the view part and it gets deleted when we unload the plugin(s)
     // TODO: find a better place to unload
-    connect(proj, &IProject::destroyed, this, [&] { this->d->unloadAllProjectPlugins(); });
+    connect(proj, &IProject::destroyed, this, [&] { d->unloadAllProjectPlugins(); });
 }
 
 void ProjectController::closeProject(IProject* proj_)

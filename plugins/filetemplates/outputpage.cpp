@@ -138,9 +138,9 @@ OutputPage::OutputPage(QWidget* parent)
     d->output->messageWidget->setVisible(false);
 
     connect(&d->urlChangedMapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped),
-            this, [&](const QString& field) { d->updateFileRange(field); });
+            this, [&] (const QString& field) { d->updateFileRange(field); });
     connect(d->output->lowerFilenameCheckBox, &QCheckBox::stateChanged,
-            this, [&]() { this->d->updateFileNames(); });
+            this, [&] { d->updateFileNames(); });
 }
 
 OutputPage::~OutputPage()

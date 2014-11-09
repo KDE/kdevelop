@@ -101,7 +101,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
 
     m_document = view->document();
 
-    connect(m_document, &KTextEditor::Document::aboutToClose, this, [this]() { kill(); });
+    connect(m_document, &KTextEditor::Document::aboutToClose, this, [&] { kill(); });
 
     m_selectionRange = view->selectionRange();
     m_cursorPosition = view->cursorPosition();
