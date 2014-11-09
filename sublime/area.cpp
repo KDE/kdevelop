@@ -141,8 +141,11 @@ void Area::initialize()
 
     /* In theory, ownership is passed to us, so should not bother detecting
     deletion outside.  */
-    connect(this, &Area::destroyed, d->controller,
-            [this] (QObject* obj) { d->controller->removeArea(static_cast<Area*>(obj)); });
+    // Functor will be called after destructor has run -> capture controller pointer by value
+    // otherwise we crash because we access the already freed pointer this->d
+    auto controller = d->controller;
+    connect(this, &Area::destroyed, controller,
+            [controller] (QObject* obj) { controller->removeArea(static_cast<Area*>(obj)); });
 }
 
 Area::~Area()

@@ -59,8 +59,10 @@ Document::Document(const QString &title, Controller *controller)
     setObjectName(title);
     d->controller = controller;
     d->controller->addDocument(this);
+    // Functor will be called after destructor has run -> capture controller pointer by value
+    // otherwise we crash because we access the already freed pointer this->d
     connect(this, &Document::destroyed, d->controller,
-            [this] (QObject* obj) { d->controller->removeDocument(static_cast<Document*>(obj)); });
+            [controller] (QObject* obj) { controller->removeDocument(static_cast<Document*>(obj)); });
 }
 
 Document::~Document()
