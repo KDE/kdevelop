@@ -25,8 +25,6 @@
 
 #include <KLocale>
 
-#include "../compilerprovider/icompilerprovider.h"
-
 namespace
 {
 enum Columns {

@@ -20,6 +20,8 @@
 
 #include <klocale.h>
 
+using namespace KDevelop;
+
 DefinesModel::DefinesModel( QObject* parent )
     : QAbstractTableModel( parent )
 {
@@ -133,22 +135,23 @@ Qt::ItemFlags DefinesModel::flags( const QModelIndex& index ) const
     return Qt::ItemFlags( Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled );
 }
 
-QHash<QString,QVariant> DefinesModel::defines() const
+Defines DefinesModel::defines() const
 {
-    typedef QPair<QString, QVariant> DefinePair;
-    QHash<QString,QVariant> tmp;
-    foreach(const DefinePair& pair, m_defines) {
-        tmp[pair.first] = pair.second;
+    Defines ret;
+    ret.reserve(m_defines.size());
+    for (const auto& pair : m_defines) {
+        ret[pair.first] = pair.second.toString();
     }
-    return tmp;
+    return ret;
 }
 
-void DefinesModel::setDefines(const QHash<QString,QVariant>& includes )
+void DefinesModel::setDefines(const Defines& includes )
 {
     beginResetModel();
     m_defines.clear();
-    foreach( const QString& k, includes.keys() ) {
-        m_defines << qMakePair<QString,QVariant>( k, includes[k] );
+    m_defines.reserve(includes.size());
+    for ( auto it = includes.begin(); it != includes.end(); ++it ) {
+        m_defines << qMakePair<QString,QVariant>( it.key(), it.value() );
     }
     endResetModel();
 }

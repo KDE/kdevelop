@@ -24,16 +24,13 @@
 
 #include <language/interfaces/idefinesandincludesmanager.h>
 
-using KDevelop::ConfigEntry;
-using KDevelop::Defines;
-
 class DefinesModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:
     DefinesModel( QObject* parent = 0 );
-    void setDefines( const Defines&  );
-    Defines defines() const;
+    void setDefines( const KDevelop::Defines& defines );
+    KDevelop::Defines defines() const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);

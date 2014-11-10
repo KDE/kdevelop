@@ -29,32 +29,32 @@
 
 #include <language/interfaces/idefinesandincludesmanager.h>
 
-#include "settingsmanager.h"
+#include "compilerprovider/settingsmanager.h"
 
-namespace KDevelop
-{
+class CompilerProvider;
+
 /// @brief: Class for retrieving custom defines and includes.
-class DefinesAndIncludesManager : public IPlugin, public IDefinesAndIncludesManager, public SettingsManager
+class DefinesAndIncludesManager : public KDevelop::IPlugin, public KDevelop::IDefinesAndIncludesManager
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDefinesAndIncludesManager )
-public :
+
+public:
     explicit DefinesAndIncludesManager( QObject* parent, const QVariantList& args = QVariantList() );
-    ///@return list of all custom defines for @p item
-    QHash<QString, QString> defines( ProjectBaseItem* item, Type type ) const override;
-
-    ///@return list of all custom includes for @p item
-    Path::List includes( ProjectBaseItem* item, Type type  ) const override;
-
-    virtual void registerProvider( Provider* provider ) override;
-
-    virtual bool unregisterProvider( Provider* provider ) override;
-
     // NOTE: Part of a fix for build failures on <GCC-4.7
     virtual ~DefinesAndIncludesManager() noexcept;
 
+    ///@return list of all custom defines for @p item
+    KDevelop::Defines defines( KDevelop::ProjectBaseItem* item, Type type ) const override;
+    ///@return list of all custom includes for @p item
+    KDevelop::Path::List includes( KDevelop::ProjectBaseItem* item, Type type  ) const override;
+
+    virtual void registerProvider( Provider* provider ) override;
+    virtual bool unregisterProvider( Provider* provider ) override;
+
 private:
     QVector<Provider*> m_providers;
+    SettingsManager m_settings;
 };
-}
+
 #endif // CUSTOMDEFINESANDINCLUDESMANAGER_H

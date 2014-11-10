@@ -24,9 +24,6 @@
 #include <qabstractitemmodel.h>
 #include <language/interfaces/idefinesandincludesmanager.h>
 
-using KDevelop::ConfigEntry;
-using KDevelop::Defines;
-
 class KFileDialog;
 class KUrlRequester;
 namespace Ui
@@ -47,10 +44,10 @@ class DefinesWidget : public QWidget
 Q_OBJECT
 public:
     DefinesWidget( QWidget* parent = 0 );
-    void setDefines( const Defines& );
+    void setDefines( const KDevelop::Defines& defines );
     void clear();
 signals:
-    void definesChanged( const Defines& );
+    void definesChanged( const KDevelop::Defines& defines );
 private slots:
     // Forward defines model changes
     void definesChanged();

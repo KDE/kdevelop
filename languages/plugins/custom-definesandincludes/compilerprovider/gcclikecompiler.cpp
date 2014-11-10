@@ -35,7 +35,9 @@
 #define NULL_DEVICE "/dev/null"
 #endif
 
-QHash<QString, QString> GccLikeCompiler::defines() const
+using namespace KDevelop;
+
+Defines GccLikeCompiler::defines() const
 {
     if (!m_definesIncludes.definedMacros.isEmpty() ) {
         return m_definesIncludes.definedMacros;

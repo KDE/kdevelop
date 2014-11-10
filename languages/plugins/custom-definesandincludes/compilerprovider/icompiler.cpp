@@ -23,6 +23,8 @@
 
 #include "icompiler.h"
 
+using namespace KDevelop;
+
 ICompiler::ICompiler(const QString& name, const QString& path, const QString& factoryName, bool editable):
     m_editable(editable),
     m_name(name),

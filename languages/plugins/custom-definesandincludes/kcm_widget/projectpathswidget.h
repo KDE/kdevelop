@@ -23,11 +23,8 @@
 
 #include <qabstractitemmodel.h>
 
-#include <language/interfaces/idefinesandincludesmanager.h>
 #include "../compilerprovider/icompiler.h"
-
-using KDevelop::ConfigEntry;
-using KDevelop::Defines;
+#include "../compilerprovider/settingsmanager.h"
 
 class KUrlRequester;
 namespace Ui
@@ -75,7 +72,7 @@ private slots:
     void includesChanged( const QStringList& includes );
 
     // Forward defines model changes into the pathsModel
-    void definesChanged( const Defines& defines );
+    void definesChanged( const KDevelop::Defines& defines );
 private:
     Ui::ProjectPathsWidget* ui;
     ProjectPathsModel* pathsModel;

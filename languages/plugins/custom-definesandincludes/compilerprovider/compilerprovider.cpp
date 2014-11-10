@@ -26,6 +26,7 @@
 #include "../debugarea.h"
 
 #include "compilerfactories.h"
+#include "settingsmanager.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
@@ -37,7 +38,6 @@
 #include <KStandardDirs>
 
 using namespace KDevelop;
-using KDevelop::Path;
 
 namespace
 {
@@ -58,6 +58,45 @@ public:
         return {};
     }
 };
+}
+
+CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
+    : QObject( parent )
+    , m_settings(settings)
+{
+    m_factories.append(CompilerFactoryPointer(new GccFactory()));
+    m_factories.append(CompilerFactoryPointer(new ClangFactory()));
+#ifdef _WIN32
+    m_factories.append(CompilerFactoryPointer(new MsvcFactory()));
+#endif
+
+    if (!KStandardDirs::findExe( "gcc" ).isEmpty()) {
+        registerCompiler( m_factories[0]->createCompiler("GCC", "gcc", false) );
+    }
+    if (!KStandardDirs::findExe( "clang" ).isEmpty()) {
+        registerCompiler( m_factories[1]->createCompiler("Clang", "clang", false) );
+    }
+#ifdef _WIN32
+    if (!KStandardDirs::findExe("cl.exe").isEmpty()) {
+        registerCompiler(m_factories[2]->createCompiler("MSVC", "cl.exe", false));
+    }
+#endif
+
+    registerCompiler(CompilerPointer(new NoCompiler()));
+    retrieveUserDefinedCompilers();
+
+    connect( ICore::self()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ), SLOT( projectOpened( KDevelop::IProject* ) ) );
+    connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( KDevelop::IProject* ) ) );
+
+    //Add a provider for files without project
+    addPoject( nullptr, checkCompilerExists({}));
+    for (auto project : ICore::self()->projectController()->projects()) {
+        projectOpened( project );
+    }
+}
+
+CompilerProvider::~CompilerProvider() noexcept
+{
 }
 
 CompilerPointer CompilerProvider::compilerForItem(ProjectBaseItem* item) const
@@ -98,11 +137,6 @@ void CompilerProvider::removePoject( IProject* project )
     m_projects.remove( project );
 }
 
-CompilerProvider::~CompilerProvider() noexcept
-{
-    IDefinesAndIncludesManager::manager()->unregisterProvider( this );
-}
-
 CompilerPointer CompilerProvider::checkCompilerExists( const CompilerPointer& compiler ) const
 {
     //This may happen for opened for the first time projects
@@ -137,15 +171,14 @@ void CompilerProvider::setCompiler( IProject* project, const CompilerPointer& co
 void CompilerProvider::projectOpened( KDevelop::IProject* project )
 {
     definesAndIncludesDebug() << "Adding project: " << project->name();
-    auto settings = static_cast<DefinesAndIncludesManager*>( IDefinesAndIncludesManager::manager() );
     auto projectConfig =  project->projectConfiguration().data();
 
-    auto compiler = settings->currentCompiler( projectConfig, CompilerPointer(new NoCompiler()) );
+    auto compiler = m_settings->currentCompiler( projectConfig, CompilerPointer(new NoCompiler()) );
     auto name = compiler ? compiler->name() : QString();
     compiler = checkCompilerExists( compiler );
 
     if ( compiler && ( compiler->name() != name ) ) {
-        settings->writeCurrentCompiler(projectConfig, compiler);
+        m_settings->writeCurrentCompiler(projectConfig, compiler);
     }
     definesAndIncludesDebug() << " compiler is: " << compiler->name();
 
@@ -156,54 +189,6 @@ void CompilerProvider::projectClosed( KDevelop::IProject* project )
 {
     removePoject( project );
     definesAndIncludesDebug() << "Removed project: " << project->name();
-}
-
-K_PLUGIN_FACTORY( CompilerProviderFactory, registerPlugin<CompilerProvider>(); )
-K_EXPORT_PLUGIN( CompilerProviderFactory( KAboutData( "kdevcompilerprovider",
-            "kdevcompilerprovider", ki18n( "Compiler Provider" ), "0.1", ki18n( "" ),
-            KAboutData::License_GPL ) ) )
-
-CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
-    : IPlugin( CompilerProviderFactory::componentData(), parent )
-{
-    KDEV_USE_EXTENSION_INTERFACE( ICompilerProvider );
-    /// FIXME: cleanup the code base here, don't make the provider a plugin but a static library or similar.
-    ///        simplify the code in generel, less interfaces/virtuals!
-    static_cast<DefinesAndIncludesManager*>( IDefinesAndIncludesManager::manager() )->setProvider(this);
-
-    m_factories.append(CompilerFactoryPointer(new GccFactory()));
-    m_factories.append(CompilerFactoryPointer(new ClangFactory()));
-#ifdef _WIN32
-    m_factories.append(CompilerFactoryPointer(new MsvcFactory()));
-#endif
-
-    if (!KStandardDirs::findExe( "gcc" ).isEmpty()) {
-        registerCompiler( m_factories[0]->createCompiler("GCC", "gcc", false) );
-    }
-    if (!KStandardDirs::findExe( "clang" ).isEmpty()) {
-        registerCompiler( m_factories[1]->createCompiler("Clang", "clang", false) );
-    }
-#ifdef _WIN32
-    if (!KStandardDirs::findExe("cl.exe").isEmpty()) {
-        registerCompiler(m_factories[2]->createCompiler("MSVC", "cl.exe", false));
-    }
-#endif
-
-    registerCompiler(CompilerPointer(new NoCompiler()));
-
-    ///NOTE: this is required to stop endless recursion
-    QMetaObject::invokeMethod(this, "retrieveUserDefinedCompilers", Qt::QueuedConnection);
-
-    IDefinesAndIncludesManager::manager()->registerProvider( this );
-
-    connect( ICore::self()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ), SLOT( projectOpened( KDevelop::IProject* ) ) );
-    connect( ICore::self()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ), SLOT( projectClosed( KDevelop::IProject* ) ) );
-
-    //Add a provider for files without project
-    addPoject( nullptr, checkCompilerExists({}));
-    for (auto project : ICore::self()->projectController()->projects()) {
-        projectOpened( project );
-    }
 }
 
 QVector< CompilerPointer > CompilerProvider::compilers() const
@@ -260,8 +245,7 @@ QVector< CompilerFactoryPointer > CompilerProvider::compilerFactories() const
 
 void CompilerProvider::retrieveUserDefinedCompilers()
 {
-    auto settings = static_cast<DefinesAndIncludesManager*>(IDefinesAndIncludesManager::manager());
-    auto compilers = settings->userDefinedCompilers();
+    auto compilers = m_settings->userDefinedCompilers();
     for (auto c : compilers) {
         registerCompiler(c);
     }

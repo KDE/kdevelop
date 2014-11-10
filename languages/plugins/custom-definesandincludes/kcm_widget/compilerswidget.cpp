@@ -30,24 +30,10 @@
 #include "ui_compilerswidget.h"
 #include "compilersmodel.h"
 #include "debugarea.h"
+#include "../compilerprovider/settingsmanager.h"
+#include "../compilerprovider/compilerprovider.h"
 
-#include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
-
-#include "../compilerprovider/icompilerprovider.h"
-
-namespace
-{
-ICompilerProvider* compilerProvider()
-{
-    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
-    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
-        return {};
-    }
-
-    return compilerProvider->extension<ICompilerProvider>();
-}
-}
+using namespace KDevelop;
 
 CompilersWidget::CompilersWidget(QWidget* parent)
     : QDialog(parent), m_ui(new Ui::CompilersWidget)
@@ -63,16 +49,16 @@ CompilersWidget::CompilersWidget(QWidget* parent)
 
     m_addMenu->clear();
 
-    if (auto cp = compilerProvider()) {
-        foreach (const auto& factory, cp->compilerFactories()) {
-            QAction* action = new QAction(m_addMenu);
-            action->setText(factory->name());
-            connect(action, SIGNAL(triggered()), m_mapper, SLOT(map()));
-            m_mapper->setMapping(action, factory->name());
-            m_addMenu->addAction(action);
-        }
-        m_ui->addButton->setMenu(m_addMenu);
+    auto settings = SettingsManager::globalInstance();
+    auto provider = settings->provider();
+    foreach (const auto& factory, provider->compilerFactories()) {
+        QAction* action = new QAction(m_addMenu);
+        action->setText(factory->name());
+        connect(action, SIGNAL(triggered()), m_mapper, SLOT(map()));
+        m_mapper->setMapping(action, factory->name());
+        m_addMenu->addAction(action);
     }
+    m_ui->addButton->setMenu(m_addMenu);
 
     connect(m_ui->removeButton, SIGNAL(clicked()), SLOT(deleteCompiler()));
 
@@ -104,7 +90,9 @@ void CompilersWidget::deleteCompiler()
 
 void CompilersWidget::addCompiler(const QString& factoryName)
 {
-   foreach (const auto& factory, compilerProvider()->compilerFactories()) {
+    auto settings = SettingsManager::globalInstance();
+    auto provider = settings->provider();
+    foreach (const auto& factory, provider->compilerFactories()) {
         if (factoryName == factory->name()) {
             //add compiler without any information, the user will fill the data in later
             m_compilersModel->addCompiler(factory->createCompiler(QString(), QString()));

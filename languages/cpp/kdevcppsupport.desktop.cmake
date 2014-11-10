@@ -126,5 +126,6 @@ X-KDevelop-Language=C++
 X-KDevelop-Args=CPP
 X-KDevelop-Interfaces=ILanguageSupport
 X-KDevelop-SupportedMimeTypes=text/x-chdr,text/x-c++hdr,text/x-csrc,text/x-c++src
+X-KDevelop-IRequired=org.kdevelop.IDefinesAndIncludesManager
 X-KDevelop-Mode=NoGUI
 X-KDevelop-LoadMode=AlwaysOn

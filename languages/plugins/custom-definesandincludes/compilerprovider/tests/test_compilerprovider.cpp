@@ -27,93 +27,109 @@
 
 #include <qtest_kde.h>
 
-#include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <language/interfaces/idefinesandincludesmanager.h>
-#include "../icompilerprovider.h"
+#include "../compilerprovider.h"
+#include "../settingsmanager.h"
 
-using KDevelop::ICore;
-using KDevelop::TestCore;
-using KDevelop::AutoTestShell;
-using KDevelop::IDefinesAndIncludesManager;
-
-ICompilerProvider* compilerProvider()
-{
-    auto cp = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
-    if (!cp || !cp->extension<ICompilerProvider>()) {
-        return {};
-    }
-
-    return cp->extension<ICompilerProvider>();
-}
-
-
-void TestCompilerProvider::cleanupTestCase()
-{
-    if (compilerProvider()) {
-        for (auto c : compilerProvider()->compilers()) {
-            compilerProvider()->unregisterCompiler(c);
-        }
-    }
-
-    TestCore::shutdown();
-}
+using namespace KDevelop;
 
 void TestCompilerProvider::initTestCase()
 {
     AutoTestShell::init();
-    TestCore::initialize(KDevelop::Core::NoUi);
+    TestCore::initialize(Core::NoUi);
+}
+
+void TestCompilerProvider::cleanupTestCase()
+{
+    TestCore::shutdown();
 }
 
 void TestCompilerProvider::testRegisterCompiler()
 {
-    if (!compilerProvider()) {
-        return;
-    }
-
-    auto cp = compilerProvider();
-    auto cf = compilerProvider()->compilerFactories();
+    SettingsManager settings;
+    auto provider = settings.provider();
+    auto cf = provider->compilerFactories();
     for (int i = 0 ; i < cf.size(); ++i) {
         auto compiler = cf[i]->createCompiler(QString::number(i), QString::number(i));
-        QVERIFY(cp->registerCompiler(compiler));
-        QVERIFY(!cp->registerCompiler(compiler));
-        QVERIFY(cp->compilers().contains(compiler));
+        QVERIFY(provider->registerCompiler(compiler));
+        QVERIFY(!provider->registerCompiler(compiler));
+        QVERIFY(provider->compilers().contains(compiler));
     }
-    QVERIFY(!cp->registerCompiler({}));
+    QVERIFY(!provider->registerCompiler({}));
 }
 
 void TestCompilerProvider::testSetCompiler()
 {
-    if (!compilerProvider()) {
-        return;
-    }
+    SettingsManager settings;
+    auto provider = settings.provider();
+    provider->setCompiler(nullptr, {});
+    QVERIFY(provider->currentCompiler(nullptr));
 
-    compilerProvider()->setCompiler(nullptr, {});
-    QVERIFY(compilerProvider()->currentCompiler(nullptr));
-
-    for (auto c : compilerProvider()->compilers()) {
-        compilerProvider()->setCompiler(nullptr, c);
-        QCOMPARE(compilerProvider()->currentCompiler(nullptr), c);
+    for (auto c : provider->compilers()) {
+        provider->setCompiler(nullptr, c);
+        QCOMPARE(provider->currentCompiler(nullptr), c);
     }
 }
 
 void TestCompilerProvider::testCompilerIncludesAndDefines()
 {
-    if (!compilerProvider()) {
-        return;
-    }
-
-    for (auto c : compilerProvider()->compilers()) {
+    SettingsManager settings;
+    auto provider = settings.provider();
+    for (auto c : provider->compilers()) {
         if (!c->editable() && !c->path().isEmpty()) {
-            compilerProvider()->setCompiler(nullptr, c);
+            provider->setCompiler(nullptr, c);
             QVERIFY(!c->defines().isEmpty());
             QVERIFY(!c->includes().isEmpty());
-            QCOMPARE(dynamic_cast<IDefinesAndIncludesManager::Provider*>(compilerProvider())->defines(nullptr), c->defines());
-            QCOMPARE(dynamic_cast<IDefinesAndIncludesManager::Provider*>(compilerProvider())->includes(nullptr), c->includes());
+            QCOMPARE(provider->defines(nullptr), c->defines());
+            QCOMPARE(provider->includes(nullptr), c->includes());
         }
     }
+}
+
+void TestCompilerProvider::testStorageBackwardsCompatible()
+{
+    SettingsManager settings;
+    QTemporaryFile file;
+    QVERIFY(file.open());
+    QTextStream stream(&file);
+    stream << "[Buildset]\n" <<
+      "BuildItems=@Variant(\\x00\\x00\\x00\\t\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x0b\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x1a\\x00S\\x00i\\x00m\\x00p\\x00l\\x00e\\x00P\\x00r\\x00o\\x00j\\x00e\\x00c\\x00t)\n" <<
+      "[CustomBuildSystem]\n" << "CurrentConfiguration=BuildConfig0\n" <<
+      "[CustomDefinesAndIncludes][ProjectPath0]\n" <<
+      "Defines=\\x00\\x00\\x00\\x02\\x00\\x00\\x00\\x0c\\x00_\\x00D\\x00E\\x00B\\x00U\\x00G\\x00\\x00\\x00\\n\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x10\\x00V\\x00A\\x00R\\x00I\\x00A\\x00B\\x00L\\x00E\\x00\\x00\\x00\\n\\x00\\x00\\x00\\x00\\n\\x00V\\x00A\\x00L\\x00U\\x00E\n" <<
+      "Includes=\\x00\\x00\\x00\\x01\\x00\\x00\\x00$\\x00/\\x00u\\x00s\\x00r\\x00/\\x00i\\x00n\\x00c\\x00l\\x00u\\x00d\\x00e\\x00/\\x00m\\x00y\\x00d\\x00i\\x00r\n" <<
+      "Path=/\n";
+    file.close();
+    KConfig config(file.fileName());
+    auto entries = settings.readPaths(&config);
+    QCOMPARE(entries.size(), 1);
+    auto entry = entries.first();
+    Defines defines;
+    defines["VARIABLE"] = "VALUE";
+    defines["_DEBUG"] = QString();
+    QCOMPARE(entry.defines, defines);
+    QStringList includes = QStringList() << "/usr/include/mydir";
+    QCOMPARE(entry.includes, includes);
+    QCOMPARE(entry.path, QString("/"));
+
+    ConfigEntry otherEntry;
+    otherEntry.defines["TEST"] = "lalal";
+    otherEntry.includes = QStringList() << "/foo";
+    otherEntry.path = "test";
+    entries << otherEntry;
+    settings.writePaths(&config, entries);
+
+    auto readWriteEntries = settings.readPaths(&config);
+    QCOMPARE(readWriteEntries.size(), 2);
+    QCOMPARE(readWriteEntries.at(0).path, entry.path);
+    QCOMPARE(readWriteEntries.at(0).defines, entry.defines);
+    QCOMPARE(readWriteEntries.at(0).includes, entry.includes);
+
+    QCOMPARE(readWriteEntries.at(1).path, otherEntry.path);
+    QCOMPARE(readWriteEntries.at(1).defines, otherEntry.defines);
+    QCOMPARE(readWriteEntries.at(1).includes, otherEntry.includes);
 }
 
 QTEST_KDEMAIN(TestCompilerProvider, NoGUI)

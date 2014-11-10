@@ -21,8 +21,7 @@
 
 #include "projectpathswidget.h"
 #include "customdefinesandincludes.h"
-#include "definesandincludesmanager.h"
-#include "../compilerprovider/icompilerprovider.h"
+#include "../compilerprovider/compilerprovider.h"
 
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
@@ -35,21 +34,10 @@
 
 #include "kcm_customdefinesandincludes.h"
 
-namespace
-{
-ICompilerProvider* compilerProvider()
-{
-    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
-    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
-        return {};
-    }
-
-    return compilerProvider->extension<ICompilerProvider>();
-}
-}
-
 K_PLUGIN_FACTORY(DefinesAndIncludesFactory, registerPlugin<DefinesAndIncludes>(); )
 K_EXPORT_PLUGIN(DefinesAndIncludesFactory("kcm_kdevcustomdefinesandincludes", "kdevcustomdefinesandincludes"))
+
+using namespace KDevelop;
 
 DefinesAndIncludes::DefinesAndIncludes( QWidget* parent, const QVariantList& args )
     : ProjectKCModule<CustomDefinesAndIncludes>( DefinesAndIncludesFactory::componentData(), parent, args )
@@ -75,32 +63,26 @@ DefinesAndIncludes::~DefinesAndIncludes()
 void DefinesAndIncludes::loadFrom( KConfig* cfg )
 {
     configWidget->clear();
-    auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
-    auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( iadm );
+
+    auto settings = SettingsManager::globalInstance();
     configWidget->setPaths( settings->readPaths( cfg ) );
 
-    if (auto cp = compilerProvider()) {
-        configWidget->setCompilers(cp->compilers());
-        configWidget->setCurrentCompiler(cp->currentCompiler(project())->name());
-    }
+    auto provider = settings->provider();
+    configWidget->setCompilers(provider->compilers());
+    configWidget->setCurrentCompiler(provider->currentCompiler(project())->name());
 }
 
 void DefinesAndIncludes::saveTo(KConfig* cfg, KDevelop::IProject*)
 {
-    auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
-    auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( iadm );
+    auto settings = SettingsManager::globalInstance();
     settings->writePaths( cfg, configWidget->paths() );
 
-    if (auto cp = compilerProvider()) {
-        settings->writeCurrentCompiler(cfg ,configWidget->currentCompiler());
-
-        cp->setCompiler(project(), settings->currentCompiler(cfg));
-
-        settings->writeUserDefinedCompilers(configWidget->compilers());
-    }
+    auto provider = settings->provider();
+    settings->writeCurrentCompiler(cfg, configWidget->currentCompiler());
+    provider->setCompiler(project(), settings->currentCompiler(cfg));
+    settings->writeUserDefinedCompilers(configWidget->compilers());
 
     if ( settings->needToReparseCurrentProject( cfg ) ) {
-        using namespace KDevelop;
         ICore::self()->projectController()->reparseProject(project(), true);
 
         //TODO: BackgroundParser should check whether a document is currently opened and prioritize it then. The _focused_ one should be prioritized even further.

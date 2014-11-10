@@ -27,7 +27,7 @@
 #include "icompiler.h"
 
 /// Interface that represents a factory for creating compilers
-class ICompilerFactory
+class KDEVCOMPILERPROVIDER_EXPORT ICompilerFactory
 {
 public:
     virtual QString name() const = 0;

@@ -21,7 +21,7 @@
 
 #include "definesandincludesmanager.h"
 
-#include "settingsmanager.h"
+#include "compilerprovider/compilerprovider.h"
 
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
@@ -33,7 +33,7 @@
 #include <QThread>
 #include <QCoreApplication>
 
-using KDevelop::ConfigEntry;
+using namespace KDevelop;
 
 namespace
 {
@@ -66,19 +66,7 @@ static ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const KDev
     return ret;
 }
 
-KDevelop::IDefinesAndIncludesManager::Provider* compilerProvider(QVector<KDevelop::IDefinesAndIncludesManager::Provider*> providers)
-{
-    for (auto provider : providers) {
-        if (provider->type() & KDevelop::IDefinesAndIncludesManager::CompilerSpecific) {
-            return provider;
-        }
-    }
-    return {};
 }
-}
-
-namespace KDevelop
-{
 
 K_PLUGIN_FACTORY(DefinesAndIncludesManagerFactory, registerPlugin<DefinesAndIncludesManager>(); )
 K_EXPORT_PLUGIN(DefinesAndIncludesManagerFactory(KAboutData("kdevdefinesandincludesmanager",
@@ -87,17 +75,21 @@ KAboutData::License_GPL)))
 
 DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
     : IPlugin( DefinesAndIncludesManagerFactory::componentData(), parent )
+    , m_settings(true)
 {
     KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
+    registerProvider(m_settings.provider());
 }
+
+// NOTE: Part of a fix for build failures on <GCC-4.7
+DefinesAndIncludesManager::~DefinesAndIncludesManager() noexcept = default;
 
 QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* item, Type type  ) const
 {
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
     if (!item) {
-        auto cp = compilerProvider(m_providers);
-        return cp ? cp->defines(nullptr) : QHash<QString, QString>();
+        return m_settings.provider()->defines(nullptr);
     }
 
     QHash<QString, QString> defines;
@@ -125,9 +117,9 @@ QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* ite
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
 
-        const auto result = findConfigForItem(readPaths(cfg), item).defines;
+        const auto result = findConfigForItem(m_settings.readPaths(cfg), item).defines;
         for (auto it = result.constBegin(); it != result.constEnd(); it++) {
-            defines[it.key()] = it.value().toString();
+            defines[it.key()] = it.value();
         }
     }
 
@@ -139,8 +131,7 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
     if (!item) {
-        auto cp = compilerProvider(m_providers);
-        return cp ? cp->includes(nullptr) : Path::List();
+        return m_settings.provider()->includes(nullptr);
     }
 
     Path::List includes;
@@ -148,7 +139,7 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
 
-        includes += KDevelop::toPathList(findConfigForItem(readPaths(cfg), item).includes);
+        includes += KDevelop::toPathList(findConfigForItem(m_settings.readPaths(cfg), item).includes);
     }
 
     if ( type & ProjectSpecific ) {
@@ -188,7 +179,4 @@ void DefinesAndIncludesManager::registerProvider(IDefinesAndIncludesManager::Pro
     m_providers.push_back(provider);
 }
 
-// NOTE: Part of a fix for build failures on <GCC-4.7
-DefinesAndIncludesManager::~DefinesAndIncludesManager() noexcept = default;
-
-}
+#include "definesandincludesmanager.moc"

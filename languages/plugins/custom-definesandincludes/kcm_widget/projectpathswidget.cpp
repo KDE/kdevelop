@@ -29,7 +29,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 
-#include "../compilerprovider/icompilerprovider.h"
+#include "../compilerprovider/compilerprovider.h"
 
 #include "compilerswidget.h"
 
@@ -38,18 +38,7 @@
 #include "projectpathsmodel.h"
 #include "debugarea.h"
 
-namespace
-{
-ICompilerProvider* compilerProvider()
-{
-    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
-    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
-        return {};
-    }
-
-    return compilerProvider->extension<ICompilerProvider>();
-}
-}
+using namespace KDevelop;
 
 ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     : QWidget(parent),
@@ -104,7 +93,7 @@ void ProjectPathsWidget::setPaths( const QList<ConfigEntry>& paths )
 void ProjectPathsWidget::definesChanged( const Defines& defines )
 {
     definesAndIncludesDebug() << "defines changed";
-    updatePathsModel( defines, ProjectPathsModel::DefinesDataRole );
+    updatePathsModel( QVariant::fromValue(defines), ProjectPathsModel::DefinesDataRole );
 }
 
 void ProjectPathsWidget::includesChanged( const QStringList& includes )
@@ -132,7 +121,7 @@ void ProjectPathsWidget::projectPathSelected( int index )
     Q_ASSERT(index >= 0);
     const QModelIndex midx = pathsModel->index( index, 0 );
     ui->includesWidget->setIncludes( pathsModel->data( midx, ProjectPathsModel::IncludesDataRole ).toStringList() );
-    ui->definesWidget->setDefines( pathsModel->data( midx, ProjectPathsModel::DefinesDataRole ).toHash() );
+    ui->definesWidget->setDefines( pathsModel->data( midx, ProjectPathsModel::DefinesDataRole ).value<Defines>() );
     updateEnablements();
 }
 
@@ -201,7 +190,7 @@ void ProjectPathsWidget::batchEdit()
         auto defines = pathsModel->data(midx, ProjectPathsModel::DefinesDataRole).value<Defines>();
 
         for (auto it = defines.constBegin(); it != defines.constEnd(); it++) {
-            be.textEdit->append(it.key() + "=" + it.value().toString());
+            be.textEdit->append(it.key() + "=" + it.value());
         }
 
         dialog.setWindowTitle(i18n("Edit defined macros"));
@@ -232,7 +221,7 @@ void ProjectPathsWidget::batchEdit()
             defines[r.cap(1).trimmed()] = r.cap(3).trimmed();
         }
 
-        pathsModel->setData(midx, defines, ProjectPathsModel::DefinesDataRole);
+        pathsModel->setData(midx, QVariant::fromValue(defines), ProjectPathsModel::DefinesDataRole);
     }
 
     projectPathSelected(index);
@@ -277,23 +266,25 @@ void ProjectPathsWidget::configureCompilers()
         return;
     }
 
-    auto compilers = compilerProvider()->compilers();
+    auto settings = SettingsManager::globalInstance();
+    auto provider = settings->provider();
+    auto compilers = provider->compilers();
 
     for (auto c: cw.compilers()) {
         if (!compilers.contains(c)) {
-            compilerProvider()->registerCompiler(c);
+            provider->registerCompiler(c);
         }
     }
 
-    compilers = compilerProvider()->compilers();
+    compilers = provider->compilers();
     for (auto c: compilers) {
         if (!cw.compilers().contains(c)) {
-            compilerProvider()->unregisterCompiler(c);
+            provider->unregisterCompiler(c);
         }
     }
 
-    setCompilers(compilerProvider()->compilers());
-    setCurrentCompiler(compilerProvider()->currentCompiler(m_project)->name());
+    setCompilers(provider->compilers());
+    setCurrentCompiler(provider->currentCompiler(m_project)->name());
     emit changed();
 }
 

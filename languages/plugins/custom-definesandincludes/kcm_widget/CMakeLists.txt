@@ -1,4 +1,4 @@
-include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} ../)
+include_directories(../)
 
 set( kcm_customdefinesandincludes_SRCS
         projectpathsmodel.cpp
@@ -9,7 +9,6 @@ set( kcm_customdefinesandincludes_SRCS
         projectpathswidget.cpp
         kcm_customdefinesandincludes.cpp
         ../debugarea.cpp
-        ../compilerprovider/icompiler.cpp
         compilersmodel.cpp
         compilerswidget.cpp
    )
@@ -30,7 +29,7 @@ target_link_libraries( kcm_kdevcustomdefinesandincludes LINK_PRIVATE
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
         ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-        kdev4includesdefinessettings )
+        kdevcompilerprovider )
 
 install( TARGETS kcm_kdevcustomdefinesandincludes
          DESTINATION ${PLUGIN_INSTALL_DIR} )

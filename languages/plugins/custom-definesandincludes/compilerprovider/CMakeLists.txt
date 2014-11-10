@@ -4,24 +4,20 @@ set( compilerprovider_SRCS
         gcclikecompiler.cpp
         msvccompiler.cpp
         compilerfactories.cpp
+        settingsmanager.cpp
         ../debugarea.cpp
     )
 
-kde4_add_plugin( kdevcompilerprovider
+kde4_add_library( kdevcompilerprovider SHARED
         ${compilerprovider_SRCS})
 
 target_link_libraries( kdevcompilerprovider LINK_PRIVATE
         ${KDEVPLATFORM_PROJECT_LIBRARIES}
         ${KDEVPLATFORM_UTIL_LIBRARIES}
-        ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-        kdev4includesdefinessettings )
+        ${KDEVPLATFORM_LANGUAGE_LIBRARIES})
 
 install( TARGETS kdevcompilerprovider
-         DESTINATION ${PLUGIN_INSTALL_DIR} )
-
-configure_file(kdevcompilerprovider.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcompilerprovider.desktop)
-
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcompilerprovider.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+         DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 option(BUILD_kdev_msvcdefinehelper "Build the msvcdefinehelper tool for retrieving msvc standard macro definitions" OFF)
 
