@@ -37,15 +37,7 @@ namespace KDevelop
 class ProjectBaseItem;
 class IProject;
 
-typedef QHash<QString, QVariant> Defines;
-struct ConfigEntry
-{
-    QString path;
-    QStringList includes;
-    Defines defines;
-
-    ConfigEntry( const QString& path = QString() ) : path( path ) {}
-};
+using Defines = QHash<QString, QString>;
 
 /** An interface that provides language plugins with include directories/files and defines.
 * Call IDefinesAndIncludesManager::manager() to get the instance of the plugin.
@@ -69,7 +61,7 @@ public:
     public:
         virtual ~Provider() = default;
 
-        virtual QHash<QString, QString> defines( ProjectBaseItem* item ) const = 0;
+        virtual Defines defines( ProjectBaseItem* item ) const = 0;
 
         virtual Path::List includes( ProjectBaseItem* item ) const = 0;
 
@@ -80,7 +72,7 @@ public:
     ///@param item project item, use nullptr for files without project
     ///@return list of defines for @p item
     ///NOTE: call it from the foreground thread only.
-    virtual QHash<QString, QString> defines( ProjectBaseItem* item, Type type = All ) const = 0;
+    virtual Defines defines( ProjectBaseItem* item, Type type = All ) const = 0;
 
     ///@param item project item, use nullptr for files without project
     ///@return list of include directories/files for @p item
@@ -104,6 +96,7 @@ public:
 };
 }
 
+Q_DECLARE_METATYPE( KDevelop::Defines );
 Q_DECLARE_INTERFACE( KDevelop::IDefinesAndIncludesManager, "org.kdevelop.IDefinesAndIncludesManager" )
 
 #endif
