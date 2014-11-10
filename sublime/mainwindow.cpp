@@ -133,13 +133,13 @@ void MainWindow::setArea(Area *area)
 
     loadSettings();
     connect(area, &Area::viewAdded,
-        this, [&] (AreaIndex*, View* v) { viewAdded(v); });
+        this, [&] (AreaIndex* index, View* v) { d->viewAdded(index, v); });
     connect(area, &Area::viewRemoved,
         this, [&] (AreaIndex* index, View* view) { d->viewRemovedInternal(index, view); });
     connect(area, &Area::requestToolViewRaise,
         this, [&] (View* view) { d->raiseToolView(view); });
     connect(area, &Area::aboutToRemoveView,
-        this, [&] (AreaIndex*, View* view) { aboutToRemoveView(view); });
+        this, [&] (AreaIndex* index, View* view) { d->aboutToRemoveView(index, view); });
     connect(area, &Area::toolViewAdded,
         this, [&] (View* toolView, Position position) { d->toolViewAdded(toolView, position); });
     connect(area, &Area::aboutToRemoveToolView,
