@@ -146,6 +146,8 @@ public: // FIXME?
 
     /**Reimplemented to save settings.*/
     virtual bool queryClose();
+    /** Allow connecting to activateView without the need for a lambda for the default parameter */
+    void activateViewAndFocus(Sublime::View *view) { activateView(view, true); }
 
 private:
     
