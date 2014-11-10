@@ -132,20 +132,13 @@ void MainWindow::setArea(Area *area)
     hu.stop();
 
     loadSettings();
-    connect(area, &Area::viewAdded,
-        this, [&] (AreaIndex* index, View* v) { d->viewAdded(index, v); });
-    connect(area, &Area::viewRemoved,
-        this, [&] (AreaIndex* index, View* view) { d->viewRemovedInternal(index, view); });
-    connect(area, &Area::requestToolViewRaise,
-        this, [&] (View* view) { d->raiseToolView(view); });
-    connect(area, &Area::aboutToRemoveView,
-        this, [&] (AreaIndex* index, View* view) { d->aboutToRemoveView(index, view); });
-    connect(area, &Area::toolViewAdded,
-        this, [&] (View* toolView, Position position) { d->toolViewAdded(toolView, position); });
-    connect(area, &Area::aboutToRemoveToolView,
-        this, [&] (View* toolView, Position position) { d->aboutToRemoveToolView(toolView, position); });
-    connect(area, &Area::toolViewMoved,
-        this, [&] (View* toolView, Position position) { d->toolViewMoved(toolView, position); });
+    connect(area, &Area::viewAdded, d, &MainWindowPrivate::viewAdded);
+    connect(area, &Area::viewRemoved, d, &MainWindowPrivate::viewRemovedInternal);
+    connect(area, &Area::requestToolViewRaise, d, &MainWindowPrivate::raiseToolView);
+    connect(area, &Area::aboutToRemoveView, d, &MainWindowPrivate::aboutToRemoveView);
+    connect(area, &Area::toolViewAdded, d, &MainWindowPrivate::toolViewAdded);
+    connect(area, &Area::aboutToRemoveToolView, d, &MainWindowPrivate::aboutToRemoveToolView);
+    connect(area, &Area::toolViewMoved, d, &MainWindowPrivate::toolViewMoved);
 }
 
 void MainWindow::initializeStatusBar()
