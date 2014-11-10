@@ -27,6 +27,8 @@
 
 #include "bazaarplugin.h"
 
+using namespace KDevelop;
+
 DiffJob::DiffJob(const QDir& workingDir, const QString& revisionSpecRange,
                  const QUrl& fileOrDirectory, BazaarPlugin* parent,
                  KDevelop::OutputJob::OutputJobVerbosity verbosity)
@@ -60,7 +62,7 @@ void DiffJob::start()
     if (m_status != KDevelop::VcsJob::JobNotStarted)
         return;
     if (m_job) {
-        connect(m_job.data(), &KDevelop::DVcsJob::finished, this, &DiffJob::prepareResult);
+        connect(m_job.data(), &DVcsJob::finished, this, &DiffJob::prepareResult);
         m_status = KDevelop::VcsJob::JobRunning;
         m_job->start();
     }

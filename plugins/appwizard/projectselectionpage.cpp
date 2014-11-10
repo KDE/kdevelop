@@ -29,8 +29,9 @@
 #include <KNS3/KNewStuffButton>
 #include <KTar>
 #include <KZip>
-#include <KI18n/KLocalizedString>
-#include <KDELibs4Support/kpushbutton.h>
+#include <KLocalizedString>
+
+using namespace KDevelop;
 
 ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel, AppWizardDialog *wizardDialog)
     : AppWizardPageWidget(wizardDialog), m_templatesModel(templatesModel)
@@ -59,7 +60,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     m_listView->setModel(templatesModel);
     m_listView->setLastModelsFilterBehavior(KSelectionProxyModel::ChildrenOfExactSelection);
     m_listView->setContentsMargins(0, 0, 0, 0);
-    connect (m_listView, &KDevelop::MultiLevelListView::currentIndexChanged, this, &ProjectSelectionPage::typeChanged);
+    connect (m_listView, &MultiLevelListView::currentIndexChanged, this, &ProjectSelectionPage::typeChanged);
     ui->gridLayout->addWidget(m_listView, 0, 0, 1, 1);
     typeChanged(m_listView->currentIndex());
 

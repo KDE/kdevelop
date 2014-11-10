@@ -47,6 +47,8 @@
 #include <project/projectmodel.h>
 #include <util/path.h>
 
+using namespace KDevelop;
+
 ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url, ExternalScriptPlugin* parent )
     : KDevelop::OutputJob( parent ),
     m_proc( 0 ), m_lineMaker( 0 ),
@@ -181,14 +183,14 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
   if ( !workingDir.isEmpty() ) {
     m_proc->setWorkingDirectory( workingDir );
   }
-  m_lineMaker = new KDevelop::ProcessLineMaker( m_proc, this );
-  connect( m_lineMaker, &KDevelop::ProcessLineMaker::receivedStdoutLines,
-           model, &KDevelop::OutputModel::appendLines );
-  connect( m_lineMaker, &KDevelop::ProcessLineMaker::receivedStdoutLines,
+  m_lineMaker = new ProcessLineMaker( m_proc, this );
+  connect( m_lineMaker, &ProcessLineMaker::receivedStdoutLines,
+           model, &OutputModel::appendLines );
+  connect( m_lineMaker, &ProcessLineMaker::receivedStdoutLines,
            this, &ExternalScriptJob::receivedStdoutLines );
-  connect( m_lineMaker, &KDevelop::ProcessLineMaker::receivedStderrLines,
-           model, &KDevelop::OutputModel::appendLines );
-  connect( m_lineMaker, &KDevelop::ProcessLineMaker::receivedStderrLines,
+  connect( m_lineMaker, &ProcessLineMaker::receivedStderrLines,
+           model, &OutputModel::appendLines );
+  connect( m_lineMaker, &ProcessLineMaker::receivedStderrLines,
            this, &ExternalScriptJob::receivedStderrLines );
   connect( m_proc, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
            this, &ExternalScriptJob::processError );

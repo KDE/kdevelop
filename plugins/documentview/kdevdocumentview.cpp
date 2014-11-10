@@ -47,13 +47,15 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/context.h>
 #include <interfaces/idocument.h>
 
+using namespace KDevelop;
+
 KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *parent )
     : QTreeView( parent ),
         m_plugin( plugin )
 {
-    connect(KDevelop::ICore::self()->projectController(), &KDevelop::IProjectController::projectOpened,
+    connect(ICore::self()->projectController(), &IProjectController::projectOpened,
             this, &KDevDocumentView::updateProjectPaths);
-    connect(KDevelop::ICore::self()->projectController(), &KDevelop::IProjectController::projectClosed,
+    connect(ICore::self()->projectController(), &IProjectController::projectClosed,
             this, &KDevDocumentView::updateProjectPaths);
 
     m_documentModel = new KDevDocumentModel(this);

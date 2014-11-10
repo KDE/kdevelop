@@ -47,6 +47,8 @@
 #include "iexecutescriptplugin.h"
 #include "debug.h"
 
+using namespace KDevelop;
+
 ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfiguration* cfg)
     : KDevelop::OutputJob( parent ), proc(0)
 {
@@ -141,7 +143,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     setModel( m );
     setDelegate( new KDevelop::OutputDelegate );
 
-    connect( lineMaker, &KDevelop::ProcessLineMaker::receivedStdoutLines, model(), &KDevelop::OutputModel::appendLines );
+    connect( lineMaker, &ProcessLineMaker::receivedStdoutLines, model(), &OutputModel::appendLines );
     connect( proc, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error), this, &ScriptAppJob::processError );
     connect( proc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &ScriptAppJob::processFinished );
 

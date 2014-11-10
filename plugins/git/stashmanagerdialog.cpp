@@ -30,6 +30,8 @@
 #include <vcs/dvcs/dvcsjob.h>
 #include <KLocalizedString>
 
+using namespace KDevelop;
+
 StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, QWidget* parent)
     : KDialog(parent), m_plugin(plugin), m_dir(stashed)
 {
@@ -75,18 +77,18 @@ QString StashManagerDialog::selection() const
 
 void StashManagerDialog::runStash(const QStringList& arguments)
 {
-    KDevelop::VcsJob* job = m_plugin->gitStash(m_dir, arguments, KDevelop::OutputJob::Verbose);
-    connect(job, &KDevelop::VcsJob::result, this, &StashManagerDialog::accept);
+    VcsJob* job = m_plugin->gitStash(m_dir, arguments, OutputJob::Verbose);
+    connect(job, &VcsJob::result, this, &StashManagerDialog::accept);
     
     mainWidget()->setEnabled(false);
     
-    KDevelop::ICore::self()->runController()->registerJob(job);
+    ICore::self()->runController()->registerJob(job);
 }
 
 void StashManagerDialog::showStash()
 {
-    KDevelop::IPatchReview * review = KDevelop::ICore::self()->pluginController()->extensionForPlugin<KDevelop::IPatchReview>();
-    KDevelop::IPatchSource::Ptr stashPatch(new StashPatchSource(selection(), m_plugin, m_dir));
+    IPatchReview * review = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>();
+    IPatchSource::Ptr stashPatch(new StashPatchSource(selection(), m_plugin, m_dir));
 
     review->startReview(stashPatch);
     accept();
@@ -124,15 +126,15 @@ void StashManagerDialog::branchClicked()
 StashModel::StashModel(const QDir& dir, GitPlugin* git, QObject* parent)
     : QStandardItemModel(parent)
 {
-    KDevelop::VcsJob* job=git->gitStash(dir, QStringList("list"), KDevelop::OutputJob::Silent);
-    connect(job, &KDevelop::VcsJob::finished, this, &StashModel::stashListReady);
+    VcsJob* job=git->gitStash(dir, QStringList("list"), OutputJob::Silent);
+    connect(job, &VcsJob::finished, this, &StashModel::stashListReady);
     
-    KDevelop::ICore::self()->runController()->registerJob(job);
+    ICore::self()->runController()->registerJob(job);
 }
 
 void StashModel::stashListReady(KJob* _job)
 {
-    KDevelop::DVcsJob* job = qobject_cast<KDevelop::DVcsJob*>(_job);
+    DVcsJob* job = qobject_cast<DVcsJob*>(_job);
     QList< QByteArray > output = job->rawOutput().split('\n');
     
     foreach(const QByteArray& line, output) {

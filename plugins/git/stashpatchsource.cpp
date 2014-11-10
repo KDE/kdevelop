@@ -28,6 +28,8 @@
 #include <QTemporaryFile>
 #include <QTextStream>
 
+using namespace KDevelop;
+
 StashPatchSource::StashPatchSource(const QString& stashName, GitPlugin* plugin, const QDir & baseDir)
  : m_stashName(stashName), m_plugin(plugin), m_baseDir(baseDir)
 {
@@ -39,7 +41,7 @@ StashPatchSource::StashPatchSource(const QString& stashName, GitPlugin* plugin, 
 
     KDevelop::DVcsJob * job = m_plugin->gitStash(m_baseDir, QStringList() << "show" << "-u" << m_stashName, KDevelop::OutputJob::Silent);
 
-    connect(job, &KDevelop::DVcsJob::resultsReady, this, &StashPatchSource::updatePatchFile);
+    connect(job, &DVcsJob::resultsReady, this, &StashPatchSource::updatePatchFile);
     KDevelop::ICore::self()->runController()->registerJob(job);
 }
 

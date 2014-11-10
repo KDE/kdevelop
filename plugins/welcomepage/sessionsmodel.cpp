@@ -20,11 +20,13 @@
 #include <shell/core.h>
 #include <shell/sessioncontroller.h>
 
+using namespace KDevelop;
+
 SessionsModel::SessionsModel(QObject* parent)
     : QAbstractListModel(parent)
     , m_sessions(KDevelop::SessionController::availableSessionInfo())
 {
-    connect(KDevelop::Core::self()->sessionController(), &KDevelop::SessionController::sessionDeleted, this, &SessionsModel::sessionDeleted);
+    connect(Core::self()->sessionController(), &SessionController::sessionDeleted, this, &SessionsModel::sessionDeleted);
 }
 
 QHash< int, QByteArray > SessionsModel::roleNames() const

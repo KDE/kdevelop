@@ -29,6 +29,8 @@
 
 #include "bazaarplugin.h"
 
+using namespace KDevelop;
+
 CopyJob::CopyJob(const QUrl& localLocationSrc, const QUrl& localLocationDstn, BazaarPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
     : VcsJob(parent, verbosity), m_plugin(parent), m_source(localLocationSrc),
       m_destination(localLocationDstn), m_status(KDevelop::VcsJob::JobNotStarted)
@@ -83,7 +85,7 @@ void CopyJob::addToVcs(KIO::Job* job, const QUrl& from, const QUrl& to, const QD
     if (m_status != KDevelop::VcsJob::JobRunning)
         return;
     KDevelop::VcsJob* job2 = m_plugin->add(QList<QUrl>() << to, KDevelop::IBasicVersionControl::Recursive);
-    connect(job2, &KDevelop::VcsJob::result, this, &CopyJob::finish);
+    connect(job2, &VcsJob::result, this, &CopyJob::finish);
     m_job = job2;
     job2->start();
 }

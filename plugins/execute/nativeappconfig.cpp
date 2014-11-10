@@ -55,6 +55,8 @@
 #include <KShell>
 #include <kcmoduleinfo.h>
 
+using namespace KDevelop;
+
 QIcon NativeAppConfigPage::icon() const
 {
     return QIcon::fromTheme("system-run");
@@ -143,7 +145,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     connect( arguments, &QLineEdit::textEdited, this, &NativeAppConfigPage::changed );
     connect( workingDirectory, &KUrlRequester::urlSelected, this, &NativeAppConfigPage::changed );
     connect( workingDirectory->lineEdit(), &KLineEdit::textEdited, this, &NativeAppConfigPage::changed );
-    connect( environment, &KDevelop::EnvironmentSelectionWidget::currentProfileChanged, this, &NativeAppConfigPage::changed );
+    connect( environment, &EnvironmentSelectionWidget::currentProfileChanged, this, &NativeAppConfigPage::changed );
     connect( addDependency, &QPushButton::clicked, this, &NativeAppConfigPage::addDep );
     connect( addDependency, &QPushButton::clicked, this, &NativeAppConfigPage::changed );
     connect( removeDependency, &QPushButton::clicked, this, &NativeAppConfigPage::changed );

@@ -31,6 +31,8 @@
 #include <vcs/vcsrevision.h>
 #include <interfaces/iplugin.h>
 
+using namespace KDevelop;
+
 BzrAnnotateJob::BzrAnnotateJob(const QDir& workingDir, const QString& revisionSpec, const QUrl& localLocation, KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
     : VcsJob(parent, verbosity), m_workingDir(workingDir), m_revisionSpec(revisionSpec), m_localLocation(localLocation), m_vcsPlugin(parent), m_status(KDevelop::VcsJob::JobNotStarted)
 {
@@ -51,10 +53,10 @@ void BzrAnnotateJob::start()
 {
     if (m_status != KDevelop::VcsJob::JobNotStarted)
         return;
-    KDevelop::DVcsJob* job = new KDevelop::DVcsJob(m_workingDir, m_vcsPlugin, KDevelop::OutputJob::Silent);
+    DVcsJob* job = new KDevelop::DVcsJob(m_workingDir, m_vcsPlugin, KDevelop::OutputJob::Silent);
     *job << "bzr" << "annotate" << "--all" << m_revisionSpec << m_localLocation;
-    connect(job, &KDevelop::DVcsJob::readyForParsing, this, &BzrAnnotateJob::parseBzrAnnotateOutput);
-    m_status = KDevelop::VcsJob::JobRunning;
+    connect(job, &DVcsJob::readyForParsing, this, &BzrAnnotateJob::parseBzrAnnotateOutput);
+    m_status = VcsJob::JobRunning;
     m_job = job;
     job->start();
 }
@@ -115,7 +117,7 @@ void BzrAnnotateJob::prepareCommitInfo(std::size_t revision)
     KDevelop::DVcsJob* job = new KDevelop::DVcsJob(m_workingDir, m_vcsPlugin, KDevelop::OutputJob::Silent);
     job->setType(KDevelop::VcsJob::Log);
     *job << "bzr" << "log" << "--long" << "-r" << QString::number(revision);
-    connect(job, &KDevelop::DVcsJob::readyForParsing, this, &BzrAnnotateJob::parseBzrLog);
+    connect(job, &DVcsJob::readyForParsing, this, &BzrAnnotateJob::parseBzrLog);
     m_job = job;
     job->start();
 }

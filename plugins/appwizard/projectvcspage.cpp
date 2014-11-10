@@ -33,6 +33,8 @@
 #include <vcs/widgets/vcsimportmetadatawidget.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
+using namespace KDevelop;
+
 ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget * parent )
     : AppWizardPageWidget( parent ), m_ui( new Ui::ProjectVcsPage )
 {
@@ -75,7 +77,7 @@ void ProjectVcsPage::vcsTypeChanged( int idx )
     disconnect( this, static_cast<void(ProjectVcsPage::*)()>(nullptr), this, &ProjectVcsPage::validateData );
     if ( widgetidx < 0 || widgetidx >= importWidgets.size())
         return;
-    connect( importWidgets[widgetidx], &KDevelop::VcsImportMetadataWidget::changed, this, &ProjectVcsPage::validateData );
+    connect( importWidgets[widgetidx], &VcsImportMetadataWidget::changed, this, &ProjectVcsPage::validateData );
 }
 
 void ProjectVcsPage::validateData()

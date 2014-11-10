@@ -34,6 +34,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 
+using namespace KDevelop;
+
 K_PLUGIN_FACTORY_WITH_JSON(KDevDocumentViewFactory, "kdevdocumentview.json", registerPlugin<KDevDocumentViewPlugin>();)
 
 class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
@@ -48,22 +50,22 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
             foreach(KDevelop::IDocument* doc, docController->openDocuments()) {
                 view->opened( doc );
             }
-            QObject::connect( docController, &KDevelop::IDocumentController::documentActivated,
+            QObject::connect( docController, &IDocumentController::documentActivated,
                     view, &KDevDocumentView::activated );
-            QObject::connect( docController, &KDevelop::IDocumentController::documentSaved,
+            QObject::connect( docController, &IDocumentController::documentSaved,
                     view, &KDevDocumentView::saved );
-            QObject::connect( docController, &KDevelop::IDocumentController::documentOpened,
+            QObject::connect( docController, &IDocumentController::documentOpened,
                     view, &KDevDocumentView::opened );
-            QObject::connect( docController, &KDevelop::IDocumentController::documentClosed,
+            QObject::connect( docController, &IDocumentController::documentClosed,
                     view, &KDevDocumentView::closed );
             QObject::connect( docController,
-                    &KDevelop::IDocumentController::documentContentChanged,
+                    &IDocumentController::documentContentChanged,
                     view, &KDevDocumentView::contentChanged );
             QObject::connect( docController,
-                    &KDevelop::IDocumentController::documentStateChanged,
+                    &IDocumentController::documentStateChanged,
                     view, &KDevDocumentView::stateChanged );
             QObject::connect( docController,
-                    &KDevelop::IDocumentController::documentUrlChanged,
+                    &IDocumentController::documentUrlChanged,
                     view, &KDevDocumentView::documentUrlChanged );
             return view;
         }

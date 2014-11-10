@@ -51,6 +51,8 @@
 #include <util/environmentgrouplist.h>
 #include <project/projectitemlineedit.h>
 
+using namespace KDevelop;
+
 static const QString interpreterForUrl(const QUrl& url) {
     auto mimetype = QMimeDatabase().mimeTypeForUrl(url);
     static QHash<QString, QString> knownMimetypes;
@@ -114,7 +116,7 @@ ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
     connect( arguments, &QLineEdit::textEdited, this, &ScriptAppConfigPage::changed );
     connect( workingDirectory, &KUrlRequester::urlSelected, this, &ScriptAppConfigPage::changed );
     connect( workingDirectory->lineEdit(), &KLineEdit::textEdited, this, &ScriptAppConfigPage::changed );
-    connect( environment, &KDevelop::EnvironmentSelectionWidget::currentProfileChanged, this, &ScriptAppConfigPage::changed );
+    connect( environment, &EnvironmentSelectionWidget::currentProfileChanged, this, &ScriptAppConfigPage::changed );
     //connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
 }
 
