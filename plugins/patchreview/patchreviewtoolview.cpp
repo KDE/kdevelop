@@ -515,8 +515,8 @@ void PatchReviewToolView::runTests()
     m_editPatch.testProgressBar->show();
 
     ProjectTestJob* job = new ProjectTestJob(project, this);
-    connect (job, &ProjectTestJob::finished, this, &PatchReviewToolView::testJobResult);
-    connect (job, static_cast<void(ProjectTestJob::*)(KJob*,unsigned long)>(&ProjectTestJob::percent), this, &PatchReviewToolView::testJobPercent);
+    connect(job, &ProjectTestJob::finished, this, &PatchReviewToolView::testJobResult);
+    connect(job, SIGNAL(percent(KJob*,ulong)), this, SLOT(testJobPercent(KJob*,ulong)));
     ICore::self()->runController()->registerJob(job);
 }
 
