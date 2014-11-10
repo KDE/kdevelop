@@ -483,6 +483,8 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         auto factory = loader.factory();
         if (factory) {
             plugin = factory->create<IPlugin>(d->core);
+        } else {
+            kWarning() << "Could not obtain factory to load plugin" << pluginId << loader.errorString();
         }
     }
 
@@ -505,8 +507,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
                     << "' some of its required dependencies could not be fulfilled:" << endl
                     << missingInterfaces.join(",") << endl;
         } else {
-            kWarning() << "Loading plugin '" << pluginId
-                << "' failed.";
+            kWarning() << "Loading plugin '" << pluginId << "' failed.";
         }
     }
 
