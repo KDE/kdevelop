@@ -49,7 +49,7 @@ Comment[pt_BR]=Configura quais macros e arquivos/pastas incluídos serão adicio
 Comment[sk]=Nastaviť, ktoré makrá a zahrnuté adresáre/súbory sa pridajú do spracovača počas spracovania projektu.
 Comment[sl]=Nastavite, kateri makri in mape oz. datoteke z vključitvami bodo dodane razčlenjevalniku med razčlenjevanjem projekta.
 Comment[sv]=Anpassa vilka makron och filer eller kataloger att inkludera som läggs till i tolken under projekttolkning.
-Comment[tr]=Projeyi ayrıştırma sırasında eklenecek dizinler/dosyalar ve makroları yapılandır.
+Comment[tr]=Proje ayrışırken ki ayrıştırıcı için eklenmiş olacak dizinler/dosyalar ve macroları yapılandır.
 Comment[uk]=Налаштуйте які макроси та включені каталоги або файли буде додано для обробника під час обробки проекту.
 Comment[x-test]=xxConfigure which macros and include directories/files will be added to the parser during project parsing.xx
 
