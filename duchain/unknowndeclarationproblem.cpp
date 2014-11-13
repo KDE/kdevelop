@@ -438,8 +438,13 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
         }
     }
 
-    const auto includepaths = includePaths( file );
     const auto includefiles = includeFiles( identifier, file, docrange );
+    if (includefiles.isEmpty()) {
+        // return early as the computation of the include paths is quite expensive
+        return fixits;
+    }
+
+    const auto includepaths = includePaths( file );
 
     /* create fixits for candidates */
     for( const auto& includeFile : includefiles ) {
