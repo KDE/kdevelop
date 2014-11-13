@@ -28,6 +28,8 @@
 #include "dvcsplugin.h"
 
 #include <QMenu>
+#include <QDialog>
+#include <QVBoxLayout>
 #include <QtCore/QFileInfo>
 #include <QtCore/QString>
 
@@ -145,14 +147,21 @@ void DistributedVersionControlPlugin::ctxRevHistory()
     QList<QUrl> const & ctxUrlList = d->m_common->contextUrlList();
     Q_ASSERT(!ctxUrlList.isEmpty());
     
-    KDialog d;
+    QDialog d;
+    QVBoxLayout* layout = new QVBoxLayout(&d);
+    d.setLayout(layout);
 
     CommitLogModel* model = new CommitLogModel(this, ctxUrlList.first().toLocalFile(), &d);
     CommitView *revTree = new CommitView(&d);
     revTree->setModel(model);
+    layout->addWidget(revTree);
 
-    d.setButtons(KDialog::Close);
-    d.setMainWidget(revTree);
+    QDialogButtonBox* dbox = new QDialogButtonBox(&d);
+    dbox->setStandardButtons(QDialogButtonBox::Close);
+    connect(dbox, &QDialogButtonBox::accepted, &d, &QDialog::accept);
+    connect(dbox, &QDialogButtonBox::rejected, &d, &QDialog::reject);
+    layout->addWidget(dbox);
+
     d.exec();
 }
 
