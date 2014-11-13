@@ -147,7 +147,6 @@ void StaticAssistantsManager::hideAssistant()
 void StaticAssistantsManager::Private::textInserted(Document* document, const Cursor& cursor, const QString& text)
 {
     m_eventualDocument = document;
-#pragma message("TODO: is this correct, I don't know much about KTextEditor")
     m_eventualRange = Range(cursor, text.size());
     m_eventualRemovedText.clear();
     QMetaObject::invokeMethod(q, "eventuallyStartAssistant", Qt::QueuedConnection);
