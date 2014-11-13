@@ -72,6 +72,11 @@ class ContainerTabBar : public QTabBar {
     virtual void mousePressEvent(QMouseEvent* event) {
         if (event->button() == Qt::MidButton) {
             // just close on midbutton, drag can still be done with left mouse button
+            
+            int tab = tabAt(mapFromGlobal(QCursor::pos()));
+            if (tab != -1) {
+                emit tabCloseRequested(tab);
+            }
             return;
         }
         QTabBar::mousePressEvent(event);
@@ -233,8 +238,6 @@ Container::Container(QWidget *parent)
     connect(d->tabBar, &ContainerTabBar::tabCloseRequested, this, static_cast<void(Container::*)(int)>(&Container::requestClose));
     connect(d->tabBar, &ContainerTabBar::tabMoved, this, &Container::tabMoved);
     connect(d->tabBar, &ContainerTabBar::customContextMenuRequested, this, &Container::contextMenu);
-#pragma message("TODO: port from KTabBar::mouseMiddleClick to the equivalent Qt5 version")
-    //connect(d->tabBar, &ContainerTabBar::mouseMiddleClick, this, static_cast<void(Container::*)(int)>(&Container::requestClose)); //FIXME: should move this to the style, probably
     connect(d->tabBar, &ContainerTabBar::tabBarDoubleClicked, this, &Container::doubleClickTriggered);
     connect(d->documentListMenu, &QMenu::triggered, this, &Container::documentListActionTriggered);
 
