@@ -88,6 +88,6 @@ configure_file(kdevclangsupport.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcl
 install( FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevclangsupport.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(TARGETS kdevclangsupport DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
-install(FILES kdevclangsupport.rc DESTINATION ${DATA_INSTALL_DIR}/kdevclangsupport)
+install(FILES kdevclangsupport.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclangsupport)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
