@@ -39,7 +39,7 @@ public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
 private:
-    QList<QPair<QString,QVariant> > m_defines;
+    QList<QPair<QString,QString> > m_defines;
 };
 
 #endif // DEFINESMODEL_H

@@ -100,7 +100,7 @@ bool DefinesModel::setData( const QModelIndex& index, const QVariant& value, int
     if( index.row() == m_defines.count() ) {
         if( index.column() == 0 && !value.toString().isEmpty() ) {
             beginInsertRows( QModelIndex(), m_defines.count(), m_defines.count() );
-            m_defines << qMakePair<QString,QVariant>( value.toString(), "" );
+            m_defines << qMakePair<QString,QString>( value.toString(), "" );
             endInsertRows();
         }
     } else {
@@ -109,7 +109,7 @@ bool DefinesModel::setData( const QModelIndex& index, const QVariant& value, int
             m_defines[ index.row() ].first = value.toString();
             break;
         case 1:
-            m_defines[ index.row() ].second = QVariant( value.toString() );
+            m_defines[ index.row() ].second = value.toString();
             break;
         default:
             Q_ASSERT_X( 0, "DefinesModel::setData", "Invalid column requested" );
@@ -140,7 +140,7 @@ Defines DefinesModel::defines() const
     Defines ret;
     ret.reserve(m_defines.size());
     for (const auto& pair : m_defines) {
-        ret[pair.first] = pair.second.toString();
+        ret[pair.first] = pair.second;
     }
     return ret;
 }
@@ -151,7 +151,7 @@ void DefinesModel::setDefines(const Defines& includes )
     m_defines.clear();
     m_defines.reserve(includes.size());
     for ( auto it = includes.begin(); it != includes.end(); ++it ) {
-        m_defines << qMakePair<QString,QVariant>( it.key(), it.value() );
+        m_defines << qMakePair<QString,QString>( it.key(), it.value() );
     }
     endResetModel();
 }
