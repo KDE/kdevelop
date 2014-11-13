@@ -1,15 +1,3 @@
-function(add_debuggable_executable target)
-    cmake_parse_arguments(add_debuggable_executable "" "" "SRCS" ${ARGN})
-    add_executable(${target} ${add_debuggable_executable_SRCS})
-    # force debug symbols for our debuggees, disable optimizations
-    if (WIN32)
-        set(_flags "/0d")
-    else()
-        set(_flags "-O0")
-    endif()
-    set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} ${_flags}")
-endfunction()
-
 configure_file(qtprintersconfig.h.in qtprintersconfig.h)
 
 add_debuggable_executable(qstring SRCS qstring.cpp)
