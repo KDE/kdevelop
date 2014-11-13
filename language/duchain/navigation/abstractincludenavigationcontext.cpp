@@ -82,7 +82,7 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
 
   QUrl u = m_item.url();
   NavigationAction action(u, KTextEditor::Cursor(0,0));
-  makeLink(u.toString(), u.toString(), action);
+  makeLink(u.toDisplayString(QUrl::PreferLocalFile), u.toString(), action);
   modifyHtml() += "<br />";
   
   QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);
