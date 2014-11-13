@@ -1,8 +1,10 @@
-# force debug symbols for our debugees
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-  set(CMAKE_BUILD_TYPE debugfull)
+# force debug symbols for our debugees, disable optimizations
+if (DEFINED CMAKE_CXX_FLAGS_DEBUGFULL)
+    set(CMAKE_BUILD_TYPE "debugfull")
 else()
-  set(CMAKE_BUILD_TYPE Debug)
+    # FIXME: this will probably lead to failures in the unit tests
+    message(WARNING "The GDB unit tests may fail when no debugfull configuration is available.")
+    set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
 add_executable(debugee debugee.cpp)

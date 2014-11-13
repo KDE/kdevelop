@@ -1,72 +1,69 @@
-function(add_debuggable_executable target)
-    cmake_parse_arguments(add_debuggable_executable "" "" "SRCS" ${ARGN})
-    add_executable(${target} ${add_debuggable_executable_SRCS})
-    # force debug symbols for our debuggees, disable optimizations
-    if (WIN32)
-        set(_flags "/0d")
-    else()
-        set(_flags "-O0")
-    endif()
-    set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} ${_flags}")
-endfunction()
+# force debug symbols for our debugees, disable optimizations
+if (DEFINED CMAKE_CXX_FLAGS_DEBUGFULL)
+    set(CMAKE_BUILD_TYPE "debugfull")
+else()
+    # FIXME: this will probably lead to failures in the unit tests
+    message(WARNING "The GDB unit tests may fail when no debugfull configuration is available.")
+    set(CMAKE_BUILD_TYPE "Debug")
+endif()
 
 configure_file(qtprintersconfig.h.in qtprintersconfig.h)
 
-add_debuggable_executable(qstring SRCS qstring.cpp)
+add_executable(qstring qstring.cpp)
 target_link_libraries(qstring ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qbytearray SRCS qbytearray.cpp)
+add_executable(qbytearray qbytearray.cpp)
 target_link_libraries(qbytearray ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qlistcontainer SRCS qlistcontainer.cpp)
+add_executable(qlistcontainer qlistcontainer.cpp)
 target_link_libraries(qlistcontainer ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qmapint SRCS qmapint.cpp)
+add_executable(qmapint qmapint.cpp)
 target_link_libraries(qmapint ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qmapstring SRCS qmapstring.cpp)
+add_executable(qmapstring qmapstring.cpp)
 target_link_libraries(qmapstring ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qmapstringbool SRCS qmapstringbool.cpp)
+add_executable(qmapstringbool qmapstringbool.cpp)
 target_link_libraries(qmapstringbool ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qdate SRCS qdate.cpp)
+add_executable(qdate qdate.cpp)
 target_link_libraries(qdate ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qtime SRCS qtime.cpp)
+add_executable(qtime qtime.cpp)
 target_link_libraries(qtime ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qdatetime SRCS qdatetime.cpp)
+add_executable(qdatetime qdatetime.cpp)
 target_link_libraries(qdatetime ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qurl SRCS qurl.cpp)
+add_executable(qurl qurl.cpp)
 target_link_libraries(qurl ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qhashint SRCS qhashint.cpp)
+add_executable(qhashint qhashint.cpp)
 target_link_libraries(qhashint ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qhashstring SRCS qhashstring.cpp)
+add_executable(qhashstring qhashstring.cpp)
 target_link_libraries(qhashstring ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qsetint SRCS qsetint.cpp)
+add_executable(qsetint qsetint.cpp)
 target_link_libraries(qsetint ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qsetstring SRCS qsetstring.cpp)
+add_executable(qsetstring qsetstring.cpp)
 target_link_libraries(qsetstring ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qchar SRCS qchar.cpp)
+add_executable(qchar qchar.cpp)
 target_link_libraries(qchar ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(quuid SRCS quuid.cpp)
+add_executable(quuid quuid.cpp)
 target_link_libraries(quuid ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(qlistpod SRCS qlistpod.cpp)
+add_executable(qlistpod qlistpod.cpp)
 target_link_libraries(qlistpod ${QT_QTCORE_LIBRARY})
 
-add_debuggable_executable(ktexteditortypes SRCS ktexteditortypes.cpp)
+add_executable(ktexteditortypes ktexteditortypes.cpp)
 target_link_libraries(ktexteditortypes ${QT_QTCORE_LIBRARY} ${KDE4_KTEXTEDITOR_LIBS})
 
-add_debuggable_executable(kdeveloptypes SRCS kdeveloptypes.cpp)
+add_executable(kdeveloptypes kdeveloptypes.cpp)
 target_link_libraries(kdeveloptypes ${QT_QTCORE_LIBRARY} ${KDEVPLATFORM_UTIL_LIBRARIES})
 
 kde4_add_unit_test(qtprinters qtprinters.cpp)
