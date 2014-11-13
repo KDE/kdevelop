@@ -103,7 +103,7 @@ QList<View*> MainWindow::getTopViews() const
 void MainWindow::setArea(Area *area)
 {
     if (d->area)
-        disconnect(d->area, 0, this, 0);
+        disconnect(d->area, 0, d, 0);
 
     bool differentArea = (area != d->area);
     /* All views will be removed from dock area now.  However, this does
