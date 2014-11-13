@@ -147,13 +147,13 @@ int sharedPathLevel(const QString& a, const QString& b)
 }
 
 /**
-* Try to find a proper include position from the DUChain:
-*
-* look at existing imports (i.e. #include's) and find a fitting
-* file with the same/similar path to the new include file and use that
-*
-* TODO: Implement a fallback scheme
-*/
+ * Try to find a proper include position from the DUChain:
+ *
+ * look at existing imports (i.e. #include's) and find a fitting
+ * file with the same/similar path to the new include file and use that
+ *
+ * TODO: Implement a fallback scheme
+ */
 KDevelop::DocumentRange includeDirectivePosition(const KDevelop::Path& source, const QString& includeFile)
 {
     DUChainReadLocker lock;
