@@ -42,6 +42,7 @@ public:
     KDevKonsoleView* m_view;
     KParts::ReadOnlyPart *konsolepart;
     QVBoxLayout *m_vbox;
+    // TODO: remove this once we can depend on a Qt version that includes https://codereview.qt-project.org/#/c/83800/
     QMetaObject::Connection m_partDestroyedConnection;
 
     void _k_slotTerminalClosed();
