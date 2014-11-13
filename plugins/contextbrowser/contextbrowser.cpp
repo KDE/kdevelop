@@ -807,7 +807,6 @@ void ContextBrowserPlugin::cursorPositionChanged( View* view, const KTextEditor:
 void ContextBrowserPlugin::textInserted(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor, const QString& text)
 {
   m_lastInsertionDocument = doc;
-#pragma message("TODO: is this the correct way to port this?")
   m_lastInsertionPos = cursor + KTextEditor::Cursor(0, text.size());
 }
 
