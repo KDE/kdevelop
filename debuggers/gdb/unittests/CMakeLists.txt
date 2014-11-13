@@ -13,4 +13,4 @@ add_debuggable_executable(debugeeqt SRCS debugeeqt.cpp)
 target_link_libraries(debugeeqt ${QT_QTCORE_LIBRARY})
 
 add_debuggable_executable(debugeeexception SRCS debugeeexception.cpp)
-set_property(TARGET debugeeexception APPEND PROPERTY CMAKE_CXX_FLAGS "${KDE4_ENABLE_EXCEPTIONS}")
+set_target_properties(debugeeexception PROPERTIES COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}")
