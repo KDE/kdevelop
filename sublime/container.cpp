@@ -278,8 +278,9 @@ void Container::widgetActivated(int idx)
     if (idx < 0)
         return;
     if (QWidget* w = d->stack->widget(idx)) {
-        if(d->viewForWidget.contains(w))
-            emit activateView(d->viewForWidget[w]);
+        Sublime::View* view = d->viewForWidget.value(w);
+        if(view)
+            emit activateView(view);
     }
 }
 
