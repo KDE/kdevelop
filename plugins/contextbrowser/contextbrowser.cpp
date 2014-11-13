@@ -823,6 +823,7 @@ void ContextBrowserPlugin::viewCreated( KTextEditor::Document* , View* v )
   if( !iface )
       return;
 
+  iface->setTextHintDelay(highlightingTimeout);
   iface->registerTextHintProvider(new ContextBrowserHintProvider(this));
 }
 
