@@ -433,6 +433,9 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
 
     for( const auto& fixit : forwardDeclarations(identifier, file) ) {
         fixits << fixit;
+        if (fixits.size() == maxSuggestions) {
+            return fixits;
+        }
     }
 
     const auto includepaths = includePaths( file );
@@ -447,10 +450,10 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
         }
 
         fixits << fixit;
-    }
 
-    if( fixits.size() > maxSuggestions ) {
-        fixits.resize( maxSuggestions );
+        if (fixits.size() == maxSuggestions) {
+            return fixits;
+        }
     }
 
     return fixits;
