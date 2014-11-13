@@ -68,7 +68,7 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     connect( ui->compiler, SIGNAL(activated(QString)), SIGNAL(changed()) );
 
     connect( ui->includesWidget, SIGNAL(includesChanged(QStringList)), SLOT(includesChanged(QStringList)) );
-    connect( ui->definesWidget, SIGNAL(definesChanged(Defines)), SLOT(definesChanged(Defines)) );
+    connect( ui->definesWidget, SIGNAL(definesChanged(KDevelop::Defines)), SLOT(definesChanged(KDevelop::Defines)) );
 
     connect(ui->configureCompilers, SIGNAL(clicked(bool)), SLOT(configureCompilers()));
 }

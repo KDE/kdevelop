@@ -111,7 +111,7 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
         pathConfig.includes = value.toStringList();
         break;
     case DefinesDataRole:
-        pathConfig.setDefines(value.toHash());
+        pathConfig.defines = value.value<Defines>();
         break;
     case Qt::EditRole:
         pathConfig.path = sanitizePath( value.toString(), false );
