@@ -42,6 +42,7 @@ public:
     KDevKonsoleView* m_view;
     KParts::ReadOnlyPart *konsolepart;
     QVBoxLayout *m_vbox;
+    QMetaObject::Connection m_partDestroyedConnection;
 
     void _k_slotTerminalClosed();
 
@@ -53,7 +54,9 @@ public:
 
         if ( ( konsolepart = factory->create<KParts::ReadOnlyPart>( m_view ) ) )
         {
-            QObject::connect(konsolepart, &KParts::ReadOnlyPart::destroyed, m_view, [&] { _k_slotTerminalClosed(); });
+            QObject::disconnect(m_partDestroyedConnection);
+            m_partDestroyedConnection = QObject::connect(konsolepart, &KParts::ReadOnlyPart::destroyed,
+                                                         m_view, [&] { _k_slotTerminalClosed(); });
 
             konsolepart->widget() ->setFocusPolicy( Qt::WheelFocus );
             konsolepart->widget() ->setFocus();
@@ -78,6 +81,10 @@ public:
         }
     }
 
+    ~KDevKonsoleViewPrivate()
+    {
+        QObject::disconnect(m_partDestroyedConnection);
+    }
 };
 
 void KDevKonsoleViewPrivate::_k_slotTerminalClosed()
