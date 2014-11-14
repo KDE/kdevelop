@@ -110,7 +110,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         connect(updateAction, &QAction::triggered, parent, &VcsPluginHelper::update);
         connect(diffToBaseAction, &QAction::triggered, parent, &VcsPluginHelper::diffToBase);
         connect(revertAction, &QAction::triggered, parent, &VcsPluginHelper::revert);
-        connect(historyAction, &QAction::triggered, parent, [&] { parent->history(); });
+        connect(historyAction, &QAction::triggered, parent, [=] { parent->history(); });
         connect(annotationAction, &QAction::triggered, parent, &VcsPluginHelper::annotation);
         connect(diffForRevAction, &QAction::triggered, parent, static_cast<void(VcsPluginHelper::*)()>(&VcsPluginHelper::diffForRev));
         connect(diffForRevGlobalAction, &QAction::triggered, parent, &VcsPluginHelper::diffForRevGlobal);
