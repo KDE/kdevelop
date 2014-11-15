@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_STASHMANAGERDIALOG_H
 #define KDEVPLATFORM_PLUGIN_STASHMANAGERDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 #include <QStandardItemModel>
 #include <QDir>
 
@@ -30,7 +30,7 @@ namespace Ui { class StashManager; }
 
 class GitPlugin;
 
-class StashManagerDialog : public KDialog
+class StashManagerDialog : public QDialog
 {
     Q_OBJECT
     public:
@@ -50,6 +50,7 @@ class StashManagerDialog : public KDialog
         void runStash(const QStringList& arguments);
         
         Ui::StashManager* m_ui;
+        QWidget* m_mainWidget;
         GitPlugin* m_plugin;
         QDir m_dir;
 };

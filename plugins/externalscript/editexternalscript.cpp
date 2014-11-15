@@ -28,13 +28,17 @@
 #include <KShell>
 
 #include <QAction>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
 
 EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* parent, Qt::WindowFlags flags )
-    : KDialog( parent, flags ), m_item( item )
+    : QDialog( parent, flags ), m_item( item )
 {
-  setButtons( /*Reset | */Apply | Cancel | Ok );
-  setupUi( mainWidget() );
-  mainWidget()->layout()->setMargin(0);
+  setupUi(this);
+
+  connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+  connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
   shortcutWidget->layout()->setMargin(0);
 
   //BEGIN setup tooltips
@@ -134,8 +138,8 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
 
   nameEdit->setFocus();
 
-  connect(this, &EditExternalScript::okClicked, this, &EditExternalScript::save);
-  connect(this, &EditExternalScript::applyClicked, this, &EditExternalScript::save);
+  connect(buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), this, SLOT(save()));
+  connect(buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(save()));
 
   connect(nameEdit, &QLineEdit::textEdited, this, &EditExternalScript::validate);
   connect(commandEdit, &QLineEdit::textEdited, this, &EditExternalScript::validate);
@@ -186,8 +190,8 @@ void EditExternalScript::validate()
     valid = errors == KShell::NoError;
   }
 
-  button(Ok)->setEnabled(valid);
-  button(Apply)->setEnabled(valid);
+  buttonBox->button(QDialogButtonBox::Ok)->setEnabled(valid);
+  buttonBox->button(QDialogButtonBox::Apply)->setEnabled(valid);
 }
 
 

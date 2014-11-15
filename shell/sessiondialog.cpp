@@ -23,6 +23,10 @@ Boston, MA 02110-1301, USA.
 #include <KLocalizedString>
 #include <kcolorscheme.h>
 #include <kglobalsettings.h>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 #include "core.h"
 #include "sessioncontroller.h"
@@ -181,11 +185,11 @@ void SessionModel::cloneSession( const QModelIndex& idx )
 }
 
 SessionDialog::SessionDialog( QWidget* parent )
-    : KDialog( parent ), m_ui( new Ui::SessionDialog ), m_model( new SessionModel( this ) )
+    : QDialog( parent ), m_ui( new Ui::SessionDialog ), m_model( new SessionModel( this ) )
 {
-    setButtons( KDialog::Close );
-    setCaption( i18n( "Configure Sessions" ) );
-    m_ui->setupUi( mainWidget() );
+    setWindowTitle( i18n( "Configure Sessions" ) );
+
+    m_ui->setupUi(this);
     m_ui->sessionList->setModel( m_model );
     connect( m_ui->newButton, &QPushButton::clicked, this, &SessionDialog::createSession );
     connect( m_ui->deleteButton, &QPushButton::clicked, this, &SessionDialog::deleteSession );

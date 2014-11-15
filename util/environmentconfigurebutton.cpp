@@ -24,12 +24,17 @@
 #include "environmentgrouplist.h"
 
 #include <KLocalizedString>
-#include <KDialog>
+#include <QDialog>
 #include <KCModuleProxy>
 #include <KCModuleInfo>
 
 #include <QApplication>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <QIcon>
+#include <QVBoxLayout>
+
+#include <KConfigGroup>
 
 namespace KDevelop {
 
@@ -43,18 +48,26 @@ public:
 
     void showDialog()
     {
-        KDialog dlg(qApp->activeWindow());
+        QDialog dlg(qApp->activeWindow());
         QStringList selected;
         if (selectionWidget) {
             selected << selectionWidget->effectiveProfileName();
         }
 
         KCModuleProxy proxy("kcm_kdev_envsettings", 0, selected);
-        dlg.setMainWidget(&proxy);
+
+        auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
+                                     | QDialogButtonBox::Cancel);
+        QObject::connect(buttonBox, SIGNAL(accepted()), &dlg, SLOT(accept()));
+        QObject::connect(buttonBox, SIGNAL(rejected()), &dlg, SLOT(reject()));
+        auto layout = new QVBoxLayout;
+        layout->addWidget(&proxy);
+        layout->addWidget(buttonBox);
+        dlg.setLayout(layout);
         dlg.setWindowTitle(proxy.moduleInfo().moduleName());
         dlg.setWindowIcon(QIcon::fromTheme(proxy.moduleInfo().icon()));
         dlg.resize(480, 320);
-        if (dlg.exec() == KDialog::Accepted) {
+        if (dlg.exec() == QDialog::Accepted) {
             proxy.save();
             emit q->environmentConfigured();
         }

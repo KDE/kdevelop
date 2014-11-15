@@ -22,13 +22,13 @@
 #ifndef KDEVPLATFORM_PLUGIN_EDITEXTERNALSCRIPT_H
 #define KDEVPLATFORM_PLUGIN_EDITEXTERNALSCRIPT_H
 
-#include <KDialog>
+#include <QDialog>
 
 #include "ui_editexternalscript.h"
 
 class ExternalScriptItem;
 
-class EditExternalScript : public KDialog, private Ui::EditExternalScriptBase
+class EditExternalScript : public QDialog, private Ui::EditExternalScriptBase
 {
   Q_OBJECT
 

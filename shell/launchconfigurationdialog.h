@@ -25,7 +25,7 @@
 #include <QtCore/QList>
 #include <QItemEditorCreatorBase>
 
-#include <kdialog.h>
+#include <QDialog>
 #include <kcombobox.h>
 #include <qitemeditorfactory.h>
 
@@ -138,7 +138,7 @@ private:
     QList<LaunchConfigurationPage*> pages;
 };
 
-class LaunchConfigurationDialog : public KDialog, public Ui::LaunchConfigurationDialog
+class LaunchConfigurationDialog : public QDialog, public Ui::LaunchConfigurationDialog
 {
 Q_OBJECT
 public:

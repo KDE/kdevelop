@@ -20,9 +20,9 @@
 #ifndef KDEVPLATFORM_LOADEDPLUGINSDIALOG_H
 #define KDEVPLATFORM_LOADEDPLUGINSDIALOG_H
 
-#include <kdialog.h>
+#include <QDialog>
 
-class LoadedPluginsDialog : public KDialog
+class LoadedPluginsDialog : public QDialog
 {
     Q_OBJECT
 public:

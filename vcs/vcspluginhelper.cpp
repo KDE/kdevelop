@@ -71,6 +71,10 @@
 #include <QApplication>
 #include <ktexteditor/modificationinterface.h>
 #include <QTimer>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 namespace KDevelop
 {
@@ -376,13 +380,21 @@ void VcsPluginHelper::diffForRev(const QUrl& url)
 void VcsPluginHelper::history(const VcsRevision& rev)
 {
     SINGLEURL_SETUP_VARS
-    KDialog* dlg = new KDialog(ICore::self()->uiController()->activeMainWindow());
+    QDialog* dlg = new QDialog(ICore::self()->uiController()->activeMainWindow());
     dlg->setAttribute(Qt::WA_DeleteOnClose);
-    dlg->setButtons(KDialog::Close);
-    dlg->setCaption(i18nc("%1: path or URL, %2: name of a version control system",
+    dlg->setWindowTitle(i18nc("%1: path or URL, %2: name of a version control system",
                           "%2 History (%1)", url.toDisplayString(QUrl::PreferLocalFile), iface->name()));
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(dlg);
+
     KDevelop::VcsEventWidget* logWidget = new KDevelop::VcsEventWidget(url, rev, iface, dlg);
-    dlg->setMainWidget(logWidget);
+    mainLayout->addWidget(logWidget);
+
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+    dlg->connect(buttonBox, SIGNAL(accepted()), dlg, SLOT(accept()));
+    dlg->connect(buttonBox, SIGNAL(rejected()), dlg, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
+
     dlg->show();
 }
 

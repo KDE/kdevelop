@@ -76,6 +76,7 @@
 #include <language/util/navigationtooltip.h>
 #include <interfaces/contextmenuextension.h>
 #include <language/interfaces/codecontext.h>
+#include <KConfigGroup>
 
 Q_LOGGING_CATEGORY(PLUGIN_QUICKOPEN, "kdevplatform.plugins.quickopen")
 
@@ -425,7 +426,6 @@ QuickOpenWidgetDialog::QuickOpenWidgetDialog(QString title, QuickOpenModel* mode
   // the QMenu might close on esc and we want to close the whole dialog then
   connect( m_widget, &QuickOpenWidget::aboutToHide, this, &QuickOpenWidgetDialog::deleteLater );
 
-  //KDialog always sets the focus on the "OK" button, so we use QDialog
   m_dialog = new QDialog( ICore::self()->uiController()->activeMainWindow() );
   m_dialog->resize(QSize(800, 400));
 

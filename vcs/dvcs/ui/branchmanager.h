@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_BRANCH_MANAGER_H
 #define KDEVPLATFORM_BRANCH_MANAGER_H
 
-#include <KDialog>
+#include <QDialog>
 
 class KJob;
 
@@ -33,7 +33,7 @@ class BranchesListModel;
 class DistributedVersionControlPlugin;
 }
 
-class BranchManager : public KDialog
+class BranchManager : public QDialog
 {
     Q_OBJECT
 public:

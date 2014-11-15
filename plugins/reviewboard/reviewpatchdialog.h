@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_REVIEWPATCHDIALOG_H
 #define KDEVPLATFORM_PLUGIN_REVIEWPATCHDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 #include <QUrl>
 
 class QItemSelection;
@@ -33,7 +33,7 @@ namespace Ui {
     class ReviewPatch;
 }
 
-class ReviewPatchDialog : public KDialog
+class ReviewPatchDialog : public QDialog
 {
     Q_OBJECT
     public:

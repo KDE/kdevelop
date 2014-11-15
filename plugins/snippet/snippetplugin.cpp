@@ -31,6 +31,7 @@
 #include <interfaces/idocumentcontroller.h>
 #include <language/codecompletion/codecompletion.h>
 #include <language/interfaces/editorcontext.h>
+#include <KConfigGroup>
 
 #include "legacy/snippetview.h"
 #include "legacy/snippetcompletionmodel.h"
@@ -215,7 +216,7 @@ void SnippetPlugin::createSnippetFromSelection()
     EditSnippet dlg(match, 0, view);
     dlg.setSnippetText(view->selectionText());
     int status = dlg.exec();
-    if ( created && status != KDialog::Accepted ) {
+    if ( created && status != QDialog::Accepted ) {
         // cleanup
         match->remove();
     }

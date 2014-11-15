@@ -28,11 +28,15 @@
 #include <QClipboard>
 
 #include <KLocalizedString>
-#include <kdialog.h>
+#include <QDialog>
 
 #include <interfaces/iplugin.h>
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 #include "ui_vcseventwidget.h"
 #include "vcsdiffwidget.h"
@@ -139,13 +143,25 @@ void VcsEventWidgetPrivate::diffToPrevious()
 
     VcsDiffWidget* widget = new VcsDiffWidget( job );
     widget->setRevisions( prev, ev.revision() );
-    KDialog* dlg = new KDialog( q );
+    QDialog* dlg = new QDialog( q );
 
-    widget->connect(widget, &VcsDiffWidget::destroyed, dlg, &KDialog::deleteLater);
+    widget->connect(widget, &VcsDiffWidget::destroyed, dlg, &QDialog::deleteLater);
 
-    dlg->setCaption( i18n("Difference To Previous") );
-    dlg->setButtons( KDialog::Ok );
-    dlg->setMainWidget( widget );
+    dlg->setWindowTitle( i18n("Difference To Previous") );
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+    auto mainWidget = new QWidget;
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    dlg->setLayout(mainLayout);
+    mainLayout->addWidget(mainWidget);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    dlg->connect(buttonBox, SIGNAL(accepted()), dlg, SLOT(accept()));
+    dlg->connect(buttonBox, SIGNAL(rejected()), dlg, SLOT(reject()));
+    mainLayout->addWidget(widget);
+    mainLayout->addWidget(buttonBox);
+
     dlg->show();
 }
 
@@ -158,13 +174,21 @@ void VcsEventWidgetPrivate::diffRevisions()
 
     VcsDiffWidget* widget = new VcsDiffWidget( job );
     widget->setRevisions( ev1.revision(), ev2.revision() );
-    KDialog* dlg = new KDialog( q );
 
-    widget->connect(widget, &VcsDiffWidget::destroyed, dlg, &KDialog::deleteLater);
+    auto dlg = new QDialog( q );
+    dlg->setWindowTitle( i18n("Difference between Revisions") );
 
-    dlg->setCaption( i18n("Difference between Revisions") );
-    dlg->setButtons( KDialog::Ok );
-    dlg->setMainWidget( widget );
+    widget->connect(widget, &VcsDiffWidget::destroyed, dlg, &QDialog::deleteLater);
+
+    auto mainLayout = new QVBoxLayout(dlg);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+    auto okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    dlg->connect(buttonBox, SIGNAL(accepted()), dlg, SLOT(accept()));
+    dlg->connect(buttonBox, SIGNAL(rejected()), dlg, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
+    mainLayout->addWidget(widget);
     dlg->show();
 }
 

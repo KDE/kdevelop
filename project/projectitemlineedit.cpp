@@ -30,13 +30,17 @@
 #include <KLocalizedString>
 #include <QAction>
 #include <QMenu>
-#include <KDialog>
+#include <QDialog>
 #include <QTreeView>
 #include "projectproxymodel.h"
 #include <QBoxLayout>
 #include <QLayout>
 #include <QLabel>
 #include <QHeaderView>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 static const QChar sep = '/';
 static const QChar escape = '\\';
@@ -181,13 +185,23 @@ bool ProjectItemLineEdit::selectItemDialog()
     w->layout()->addWidget(new QLabel(i18n("Select the item you want to get the path from.")));
     w->layout()->addWidget(view);
     
-    QScopedPointer<KDialog> dialog(new KDialog);
-    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
-    dialog->setCaption(i18n("Select an item..."));
-    dialog->setMainWidget(w);
-    int res = dialog->exec();
+    QDialog dialog;
+    dialog.setWindowTitle(i18n("Select an item..."));
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(&dialog);
+    mainLayout->addWidget(w);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
+
+    int res = dialog.exec();
     
-    if(res==KDialog::Accepted && view->selectionModel()->hasSelection()) {
+    if(res==QDialog::Accepted && view->selectionModel()->hasSelection()) {
         QModelIndex idx=proxymodel->mapToSource(view->selectionModel()->selectedIndexes().first());
         
         setText(KDevelop::joinWithEscaping(model->pathFromIndex(idx), sep, escape));

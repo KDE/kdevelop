@@ -35,6 +35,8 @@
 #include <KIconLoader>
 #include <k4aboutdata.h>
 #include <kaboutapplicationdialog.h>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
 
 #include "core.h"
 #include "plugincontroller.h"
@@ -283,19 +285,23 @@ public:
 };
 
 LoadedPluginsDialog::LoadedPluginsDialog( QWidget* parent )
-    : KDialog( parent )
+    : QDialog( parent )
 {
-    setPlainCaption(i18n("Loaded Plugins"));
-    setButtons(KDialog::Close);
-    setDefaultButton(KDialog::Close);
+    setWindowTitle(i18n("Loaded Plugins"));
 
-    QVBoxLayout* vbox = new QVBoxLayout(mainWidget());
+    QVBoxLayout* vbox = new QVBoxLayout(this);
 
     KTitleWidget* title = new KTitleWidget(this);
     title->setPixmap(QIcon::fromTheme(KComponentData::mainComponent().aboutData()->programIconName()), KTitleWidget::ImageLeft);
     title->setText(i18n("<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>", KComponentData::mainComponent().aboutData()->programName()));
     vbox->addWidget(title);
     vbox->addWidget(new PluginsView());
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    buttonBox->button(QDialogButtonBox::Close)->setDefault(true);
+    vbox->addWidget(buttonBox);
 }
 
 #include "moc_loadedpluginsdialog.cpp"

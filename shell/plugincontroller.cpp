@@ -26,7 +26,6 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
 #include <QApplication>
-#include <QAction>
 #include <QMap>
 #include <QtCore/QDebug>
 
@@ -39,11 +38,10 @@ Boston, MA 02110-1301, USA.
 #include <KLocalizedString>
 #include <kxmlguiwindow.h>
 #include <assert.h>
-#include <kdialog.h>
-#include <QAction>
 #include <kxmlguifactory.h>
 #include <kpluginloader.h>
 #include <kpluginmetadata.h>
+#include <KConfigGroup>
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iplugin.h>

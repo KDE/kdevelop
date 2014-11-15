@@ -40,6 +40,9 @@
 #include <QTemporaryFile>
 #include <KActionCollection>
 #include <QAction>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
 
 namespace KDevelop
 {
@@ -67,12 +70,17 @@ public:
 };
 
 ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
-    : KDialog(parent), d(new ApplyChangesWidgetPrivate(this))
+    : QDialog(parent), d(new ApplyChangesWidgetPrivate(this))
 {
     setSizeGripEnabled(true);
-    setInitialSize(QSize(800, 400));
 
-    KDialog::setButtons(KDialog::Ok | KDialog::Cancel);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    auto mainLayout = new QVBoxLayout(this);
+    auto okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     QWidget* w=new QWidget(this);
     d->m_info=new QLabel(w);
@@ -84,7 +92,10 @@ ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
     l->addWidget(d->m_info);
     l->addWidget(d->m_documentTabs);
 
-    setMainWidget(w);
+    mainLayout->addWidget(w);
+    mainLayout->addWidget(buttonBox);
+
+    resize(QSize(800, 400));
 }
 
 ApplyChangesWidget::~ApplyChangesWidget()

@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_SAVEDIALOG_H
 #define KDEVPLATFORM_SAVEDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 
 class QListWidget;
 
@@ -29,7 +29,7 @@ namespace KDevelop {
 
 class IDocument;
 
-class KSaveSelectDialog : public KDialog
+class KSaveSelectDialog : public QDialog
 {
     Q_OBJECT
 

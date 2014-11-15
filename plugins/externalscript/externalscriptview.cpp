@@ -32,6 +32,7 @@
 #include <QMouseEvent>
 #include <KMessageBox>
 #include <QMenu>
+#include <KConfigGroup>
 
 ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* parent )
     : QWidget( parent ), m_plugin( plugin )
@@ -133,7 +134,7 @@ void ExternalScriptView::addScript()
   ExternalScriptItem* item = new ExternalScriptItem;
   EditExternalScript dlg( item, this );
   int ret = dlg.exec();
-  if ( ret == KDialog::Accepted || ret == KDialog::Apply ) {
+  if ( ret == QDialog::Accepted) {
     m_plugin->model()->appendRow( item );
   } else {
     delete item;
@@ -168,7 +169,7 @@ void ExternalScriptView::editScript()
 
   EditExternalScript dlg( item, this );
   int ret = dlg.exec();
-  if ( ret == KDialog::Accepted || ret == KDialog::Apply ) {
+  if (ret == QDialog::Accepted) {
     item->save();
   }
 }

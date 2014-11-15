@@ -47,6 +47,9 @@
 #include <QLayout>
 #include <QMenu>
 #include <QLabel>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
 
 namespace KDevelop
 {
@@ -57,15 +60,18 @@ bool launchConfigGreaterThan(KDevelop::LaunchConfigurationType* a, KDevelop::Lau
 }
 
 //TODO: Maybe use KPageDialog instead, might make the model stuff easier and the default-size stuff as well
-LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(parent), currentPageChanged( false )
+LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
+    : QDialog(parent)
+    , currentPageChanged(false)
 {
-    setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply );
-    setButtonFocus( KDialog::Ok );
     setWindowTitle( i18n( "Launch Configurations" ) );
-    button( KDialog::Apply )->setEnabled( false );
 
-    setupUi( mainWidget() );
-    mainWidget()->layout()->setContentsMargins( 0, 0, 0, 0 );
+    QWidget *mainWidget = new QWidget(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(mainWidget);
+
+    setupUi(mainWidget);
+    mainLayout->setContentsMargins( 0, 0, 0, 0 );
     splitter->setSizes(QList<int>() << 260 << 620);
 
     addConfig->setIcon( QIcon::fromTheme("list-add") );
@@ -185,10 +191,13 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
 
     connect(debugger, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &LaunchConfigurationDialog::launchModeChanged);
 
-    connect( this, &LaunchConfigurationDialog::okClicked, this, static_cast<void(LaunchConfigurationDialog::*)()>(&LaunchConfigurationDialog::saveConfig) );
-    connect( this, &LaunchConfigurationDialog::applyClicked, this, static_cast<void(LaunchConfigurationDialog::*)()>(&LaunchConfigurationDialog::saveConfig) );
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), SLOT(saveConfig()) );
+    connect(buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), SLOT(saveConfig()) );
+    mainLayout->addWidget(buttonBox);
 
-    setInitialSize( QSize(qMax(700, sizeHint().width()), qMax(500, sizeHint().height())) );
+    resize( QSize(qMax(700, sizeHint().width()), qMax(500, sizeHint().height())) );
 }
 
 void LaunchConfigurationDialog::doTreeContextMenu(QPoint point)
@@ -225,7 +234,7 @@ void LaunchConfigurationDialog::renameSelected()
 
 QSize LaunchConfigurationDialog::sizeHint() const
 {
-    QSize s = KDialog::sizeHint();
+    QSize s = QDialog::sizeHint();
     return s.expandedTo(QSize(880, 520));
 }
 
@@ -259,7 +268,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
                 } else {
                     LaunchConfigPagesContainer* tab = qobject_cast<LaunchConfigPagesContainer*>( stack->currentWidget() );
                     tab->setLaunchConfiguration( l );
-                    button( KDialog::Apply )->setEnabled( false );
+                    buttonBox->button(QDialogButtonBox::Apply)->setEnabled( false );
                     currentPageChanged = false;
                 }
             }
@@ -392,7 +401,7 @@ void LaunchConfigurationDialog::saveConfig( const QModelIndex& idx )
     if( tab )
     {
         tab->save();
-        button( KDialog::Apply )->setEnabled( false );
+        buttonBox->button(QDialogButtonBox::Apply)->setEnabled( false );
         currentPageChanged = false;
     }
 }
@@ -409,7 +418,7 @@ void LaunchConfigurationDialog::saveConfig()
 void LaunchConfigurationDialog::pageChanged()
 {
     currentPageChanged = true;
-    button( KDialog::Apply )->setEnabled( true );
+    buttonBox->button(QDialogButtonBox::Apply)->setEnabled( true );
 }
 
 void LaunchConfigurationDialog::modelChanged(QModelIndex topLeft, QModelIndex bottomRight)

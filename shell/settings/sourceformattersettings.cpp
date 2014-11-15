@@ -33,6 +33,7 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/configinterface.h>
 #include <KCoreAddons/KAboutData>
 #include <KI18n/KLocalizedString>
+#include <KConfigGroup>
 
 #include <interfaces/iplugin.h>
 #include <interfaces/ilanguage.h>

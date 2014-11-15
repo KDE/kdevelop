@@ -26,7 +26,7 @@
 #include <QListWidget>
 #include <QToolBar>
 
-#include <kdialog.h>
+#include <QDialog>
 #include <KLocalizedString>
 #include <QMenuBar>
 #include <kcomponentdata.h>
@@ -53,6 +53,10 @@
 #include "assistantpopup.h"
 #include <kactioncollection.h>
 #include <ktexteditor/view.h>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 #include "workingsetcontroller.h"
 #include "workingsets/workingset.h"
 #include "debug.h"
@@ -406,9 +410,12 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
 {
     if (!mw || !mw->area())
         return;
-    KDialog *dia = new KDialog(mw);
-    dia->setCaption(i18n("Select Tool View to Add"));
-    dia->setButtons(KDialog::Ok | KDialog::Cancel);
+
+    QDialog *dia = new QDialog(mw);
+    dia->setWindowTitle(i18n("Select Tool View to Add"));
+
+    auto mainLayout = new QVBoxLayout(dia);
+
     NewToolViewListWidget *list = new NewToolViewListWidget(mw, dia);
 
     list->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -427,7 +434,16 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
 
     list->setFocus();
     connect(list, &NewToolViewListWidget::addNewToolView, this, &UiController::addNewToolView);
-    dia->setMainWidget(list);
+    mainLayout->addWidget(list);
+
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    auto okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    dia->connect(buttonBox, SIGNAL(accepted()), dia, SLOT(accept()));
+    dia->connect(buttonBox, SIGNAL(rejected()), dia, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
+
     if (dia->exec() == QDialog::Accepted)
     {
         foreach (QListWidgetItem* item, list->selectedItems())

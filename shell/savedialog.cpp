@@ -28,6 +28,10 @@
 #include <KLocalizedString>
 
 #include <interfaces/idocument.h>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <KGuiItem>
 
 using namespace KDevelop;
 
@@ -50,37 +54,32 @@ private:
 };
 
 KSaveSelectDialog::KSaveSelectDialog( const QList<IDocument*>& files, QWidget * parent )
-    : KDialog( parent )
+    : QDialog( parent )
 {
-    setCaption( i18n("Save Modified Files?") );
-    setButtons( Ok | User1 | Cancel );
+    setWindowTitle( i18n("Save Modified Files?") );
 
-    QWidget* mainWidget = new QWidget(this);
-    setMainWidget( mainWidget );
-    connect( this, &KSaveSelectDialog::okClicked, this, &KSaveSelectDialog::save );
+    auto mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(new QLabel( i18n("The following files have been modified. Save them?"), this ));
 
-    QVBoxLayout* layout = new QVBoxLayout(mainWidget);
-    mainWidget->setLayout(layout);
-
-    layout->addWidget(new QLabel( i18n("The following files have been modified. Save them?"), this ));
-
-    m_listWidget = new QListWidget( this );
-    layout->addWidget(m_listWidget);
+    m_listWidget = new QListWidget(this);
+    mainLayout->addWidget(m_listWidget);
 //     m_listWidget->addColumn( "" );
 //     m_listWidget->header()->hide();
 //     m_listWidget->setSectionResizeMode( QListView::LastColumn );
 
-    setButtonGuiItem( Ok, KGuiItem(i18n("Save &Selected"), QIcon::fromTheme("document-save-all"), i18nc("@info:tooltip", "Saves all selected files")) );
-    setButtonText( User1, i18n("Save &None") );
-    setButtonToolTip( User1, i18n("Discard all modifications") );
-    setDefaultButton( Ok );
-    setButtonFocus( Ok );
-
     foreach (IDocument* doc, files)
         new DocumentItem( doc, m_listWidget );
 
-    connect( this, &KSaveSelectDialog::okClicked, this, &KSaveSelectDialog::save );
-    connect( this, &KSaveSelectDialog::user1Clicked, this, &KSaveSelectDialog::accept );
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Save|QDialogButtonBox::Cancel);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Save);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(save()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    auto user1Button = buttonBox->addButton(i18n("Save &None" ), QDialogButtonBox::ActionRole);
+    user1Button->setToolTip(i18n("Discard all modifications" ));
+    connect(user1Button, SIGNAL(clicked()), this, SLOT(accept()));
+    mainLayout->addWidget(buttonBox);
 }
 
 KSaveSelectDialog::~KSaveSelectDialog()

@@ -12,7 +12,7 @@
 #ifndef KDEVPLATFORM_VCS_COMMITDIALOG_H
 #define KDEVPLATFORM_VCS_COMMITDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 
 #include "vcsexport.h"
 
@@ -22,7 +22,7 @@ namespace KDevelop
 class VcsStatusInfo;
 class IPatchSource;
 
-class KDEVPLATFORMVCS_EXPORT VcsCommitDialog : public KDialog
+class KDEVPLATFORMVCS_EXPORT VcsCommitDialog : public QDialog
 {
     Q_OBJECT
 public:

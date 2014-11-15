@@ -39,6 +39,10 @@
 #include "ui_vcscommitdialog.h"
 #include <KComponentData>
 #include <vcspluginhelper.h>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 namespace KDevelop
 {
@@ -52,22 +56,26 @@ public:
 };
 
 VcsCommitDialog::VcsCommitDialog( IPatchSource *patchSource, QWidget *parent )
-    : KDialog( parent ), d(new VcsCommitDialogPrivate())
+    : QDialog( parent ), d(new VcsCommitDialogPrivate())
 {
-    d->ui.setupUi( mainWidget() );
+    auto mainWidget = new QWidget(this);
+    d->ui.setupUi(mainWidget);
+
     QWidget *customWidget = patchSource->customWidget();
     if( customWidget )
     {
         d->ui.gridLayout->addWidget( customWidget, 0, 0, 1, 2 );
     }
 
-    setButtons( KDialog::Ok | KDialog::Cancel );
+    auto okButton = d->ui.buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(d->ui.buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(d->ui.buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     d->m_patchSource = patchSource;
     d->m_model = new VcsFileChangesModel( this, true );
     d->ui.files->setModel( d->m_model );
-    connect(this, &VcsCommitDialog::okClicked, this, &VcsCommitDialog::ok );
-    connect(this, &VcsCommitDialog::cancelClicked, this, &VcsCommitDialog::cancel );
 }
 
 VcsCommitDialog::~VcsCommitDialog()

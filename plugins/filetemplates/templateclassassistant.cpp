@@ -47,7 +47,6 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
-#include <KDELibs4Support/KDE/KDialog>
 
 #include <KLocalizedString>
 #include <KConfig>
@@ -57,6 +56,10 @@
 #include <QPointer>
 
 #include <KIO/Global>
+#include <KConfigGroup>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
 #define REMOVE_PAGE(name)       \
 if (d->name##Page)              \
@@ -200,21 +203,26 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
     else if (targets.size() > 1)
     {
         // More than one candidate target, show the chooser dialog
-        QPointer<KDialog> d = new KDialog;
-        QWidget* w = new QWidget(d);
-        w->setLayout(new QVBoxLayout);
-        w->layout()->addWidget(new QLabel(i18n("Choose one target to add the file or cancel if you do not want to do so.")));
-        QListWidget* targetsWidget = new QListWidget(w);
+        QPointer<QDialog> d = new QDialog;
+
+        auto mainLayout = new QVBoxLayout(d);
+        mainLayout->addWidget(new QLabel(i18n("Choose one target to add the file or cancel if you do not want to do so.")));
+
+        QListWidget* targetsWidget = new QListWidget(d);
         targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
         foreach(ProjectTargetItem* target, targets) {
             targetsWidget->addItem(target->text());
         }
-        w->layout()->addWidget(targetsWidget);
-
         targetsWidget->setCurrentRow(0);
-        d->setButtons( KDialog::Ok | KDialog::Cancel);
-        d->enableButtonOk(true);
-        d->setMainWidget(w);
+        mainLayout->addWidget(targetsWidget);
+
+        QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+        QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+        okButton->setDefault(true);
+        okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+        d->connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
+        d->connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
+        mainLayout->addWidget(buttonBox);
 
         if(d->exec() == QDialog::Accepted)
         {
@@ -302,7 +310,7 @@ void TemplateClassAssistant::setup()
     d->templateSelectionPage->setIcon(QIcon::fromTheme("project-development-new-template"));
 
     d->dummyPage = addPage(new QWidget(this), QLatin1String("Dummy Page"));
-//     showButton(KDialog::Help, false);
+//     showButton(QDialog::Help, false);
 }
 
 void TemplateClassAssistant::templateChosen(const QString& templateDescription)

@@ -27,10 +27,12 @@ Boston, MA 02110-1301, USA.
 #include <QHeaderView>
 #include <QMap>
 #include <QProcess>
-
-#include <kdialog.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QPushButton>
 #include <QLineEdit>
-#include <ktextedit.h>
+#include <QTextEdit>
+
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <kconfigdialogmanager.h>
@@ -152,19 +154,22 @@ void EnvironmentWidget::handleVariableInserted(int /*column*/, const QVariant& v
 
 void EnvironmentWidget::newMultipleButtonClicked()
 {
-    KDialog * dialog = new KDialog( this );
-    dialog->setCaption( i18n( "New Environment Variables" ) );
-    dialog->setButtons( KDialog::Ok | KDialog::Cancel );
-    dialog->setDefaultButton( KDialog::Ok );
+    QDialog * dialog = new QDialog( this );
+    dialog->setWindowTitle( i18n( "New Environment Variables" ) );
 
-    QWidget *main = new QWidget( dialog );
-    QVBoxLayout *layout = new QVBoxLayout( main );
+    QVBoxLayout *layout = new QVBoxLayout(dialog);
 
-    KTextEdit *edit = new KTextEdit( main );
-    layout->addWidget( edit );
+    QTextEdit *edit = new QTextEdit;
     edit->setPlaceholderText("VARIABLE1=VALUE1\nVARIABLE2=VALUE2");
-    edit->setFocus();
-    dialog->setMainWidget( main );
+    layout->addWidget( edit );
+
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    auto okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    dialog->connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
+    dialog->connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
+    layout->addWidget(buttonBox);
 
     if ( dialog->exec() != QDialog::Accepted ) {
         return;

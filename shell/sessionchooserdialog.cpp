@@ -30,6 +30,9 @@
 #include <KMessageBox>
 #include <QListView>
 #include <QKeyEvent>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
 
 using namespace KDevelop;
 
@@ -58,17 +61,28 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* 
     filter->installEventFilter(this);
     connect(filter, &QLineEdit::textChanged, this, &SessionChooserDialog::filterTextChanged);
 
-    setCaption(i18n("Pick a Session"));
-    setButtons(KDialog::Ok | KDialog::Close);
-    button(Ok)->setText(i18n("Run"));
-    button(Ok)->setIcon(QIcon::fromTheme("media-playback-start"));
+    setWindowTitle(i18n("Pick a Session"));
+
+    m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Close);
+    auto mainLayout = new QVBoxLayout(this);
+    m_mainWidget = new QWidget(this);
+    mainLayout->addWidget(m_mainWidget);
+
+    QPushButton *okButton = m_buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::Key_Return);
+    connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(m_buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(m_buttonBox);
+    okButton->setText(i18n("Run"));
+    okButton->setIcon(QIcon::fromTheme("media-playback-start"));
 }
 
 void SessionChooserDialog::filterTextChanged()
 {
     m_view->selectionModel()->setCurrentIndex(m_model->index(0, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     bool enabled = m_view->model()->rowCount(QModelIndex())>0;
-    button(KDialog::Ok)->setEnabled(enabled);
+    m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(enabled);
     m_deleteButton->setVisible(false);
 }
 
@@ -142,22 +156,31 @@ bool SessionChooserDialog::eventFilter(QObject* object, QEvent* event)
     }
     if(object == m_filter && event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-        if(keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down) {
+        if(keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down || keyEvent->key() == Qt::Key_Return) {
             QModelIndex currentIndex = m_view->selectionModel()->currentIndex();
             int selectRow = -1;
-            if(keyEvent->key() == Qt::Key_Up) {
+            switch (keyEvent->key()) {
+            case Qt::Key_Up:
                 if(!currentIndex.isValid()) {
                     selectRow = m_model->rowCount()-1;
                 } else if(currentIndex.row()-1 >= 0) {
                     selectRow = currentIndex.row()-1;
                 }
-            } else if(keyEvent->key() == Qt::Key_Down) {
+                break;
+            case Qt::Key_Down:
                 if(!currentIndex.isValid()) {
                     selectRow = 0;
                 } else if(currentIndex.row()+1 < m_model->rowCount()) {
                     selectRow = currentIndex.row()+1;
                 }
+                break;
+            case Qt::Key_Return:
+                accept();
+                return false;
+            default:
+                return false;
             }
+
             if (selectRow != -1) {
                     m_view->selectionModel()->setCurrentIndex(m_model->index(selectRow, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
             }
@@ -168,6 +191,10 @@ bool SessionChooserDialog::eventFilter(QObject* object, QEvent* event)
     return false;
 }
 
+QWidget* SessionChooserDialog::mainWidget() const
+{
+    return m_mainWidget;
+}
 
 void SessionChooserDialog::deleteButtonPressed()
 {

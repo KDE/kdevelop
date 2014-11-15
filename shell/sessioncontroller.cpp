@@ -64,6 +64,7 @@ Boston, MA 02110-1301, USA.
 #include <QAction>
 #include <QSortFilterProxyModel>
 #include <QDBusConnectionInterface>
+#include <KConfigGroup>
 
 const int recoveryStorageInterval = 10; ///@todo Make this configurable
 
@@ -188,18 +189,27 @@ public:
 
     void renameSession()
     {
-        KDialog dialog;
+        QDialog dialog;
         dialog.setWindowTitle(i18n("Rename Session"));
+
+        auto mainLayout = new QVBoxLayout(&dialog);
+
         QGroupBox box;
         QHBoxLayout layout(&box);
-
         box.setTitle(i18n("New Session Name"));
         QLineEdit edit;
         layout.addWidget(&edit);
-        dialog.setButtons(KDialog::Ok | KDialog::Cancel);
-        edit.setText(q->activeSession()->name());
-        dialog.setMainWidget(&box);
+        mainLayout->addWidget(&box);
 
+        auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+        auto okButton = buttonBox->button(QDialogButtonBox::Ok);
+        okButton->setDefault(true);
+        okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+        connect(buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+        connect(buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
+        mainLayout->addWidget(buttonBox);
+
+        edit.setText(q->activeSession()->name());
         edit.setFocus();
 
         if(dialog.exec() == QDialog::Accepted)
@@ -872,7 +882,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     view->selectionModel()->setCurrentIndex(proxy->mapFromSource(defaultSessionIndex), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     view->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     ///@todo We need a way to get a proper size-hint from the view, but unfortunately, that only seems possible after the view was shown.
-    dialog.setInitialSize(QSize(900, 600));
+    dialog.resize(QSize(900, 600));
 
     if(dialog.exec() != QDialog::Accepted)
     {

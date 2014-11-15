@@ -20,7 +20,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_SESSIONDIALOG_H
 #define KDEVPLATFORM_SESSIONDIALOG_H
 
-#include <kdialog.h>
+#include <QDialog>
 #include <QtCore/QAbstractListModel>
 
 namespace Ui
@@ -52,7 +52,7 @@ public:
     void cloneSession( const QModelIndex& );
 };
 
-class SessionDialog : public KDialog
+class SessionDialog : public QDialog
 {
     Q_OBJECT
 public:

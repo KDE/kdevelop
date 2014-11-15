@@ -35,21 +35,33 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 using namespace KDevelop;
 
 BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent)
-    : KDialog(parent)
+    : QDialog(parent)
     , m_repository(repository)
     , m_dvcPlugin(executor)
 {
-    setButtons(KDialog::Close);
     setWindowTitle(i18n("Branch Manager"));
+
+    QWidget *mainWidget = new QWidget(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(mainWidget);
 
     m_ui = new Ui::BranchDialogBase;
     QWidget* w = new QWidget(this);
     m_ui->setupUi(w);
-    setMainWidget(w);
+    mainLayout->addWidget(w);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
 
     m_model = new BranchesListModel(this);
     m_model->initialize(m_dvcPlugin, QUrl::fromLocalFile(repository));

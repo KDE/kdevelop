@@ -26,7 +26,7 @@
 #include <KPluginLoader>
 #include <KAboutData>
 #include <KLocalizedString>
-#include <KDialog>
+#include <QDialog>
 #include <KMessageBox>
 #include <KIO/Job>
 #include <QFile>
@@ -38,6 +38,7 @@
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/interfaces/ipatchsource.h>
 #include <vcs/vcsjob.h>
+#include <KConfigGroup>
 #include "reviewpatchdialog.h"
 #include "reviewboardjobs.h"
 #include "debug.h"
@@ -73,7 +74,7 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
     }
 
     int ret = d.exec();
-    if(ret==KDialog::Accepted) {
+    if(ret==QDialog::Accepted) {
         KJob* job;
         if (d.isUpdateReview()) {
             job=new ReviewBoard::SubmitPatchRequest(d.server(), source->file(), d.baseDir(), d.review());

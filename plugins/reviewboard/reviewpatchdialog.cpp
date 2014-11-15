@@ -19,25 +19,30 @@
  */
 
 #include "reviewpatchdialog.h"
-#include <Qt>
+
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 #include <KLocalizedString>
+#include <KConfigGroup>
 #include "ui_reviewpatch.h"
 #include "reviewboardjobs.h"
 #include "debug.h"
 
 ReviewPatchDialog::ReviewPatchDialog(const QUrl& dirUrl, QWidget* parent)
-    : KDialog(parent)
+    : QDialog(parent)
 {
     m_ui = new Ui::ReviewPatch;
+
     QWidget* w = new QWidget(this);
     m_ui->setupUi(w);
-    setMainWidget(w);
+
+    connect(m_ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(m_ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     connect(m_ui->server, &KUrlRequester::textChanged, this, &ReviewPatchDialog::serverChanged);
     connect(m_ui->reviewCheckbox, &QCheckBox::stateChanged, this, &ReviewPatchDialog::reviewCheckboxChanged);
-    enableButtonOk(false);
 
     if (dirUrl.isLocalFile()) {
         QDir d(dirUrl.toLocalFile());
@@ -142,7 +147,7 @@ QString ReviewPatchDialog::repository() const
 
 void ReviewPatchDialog::repositoryChanged(int index)
 {
-    enableButtonOk((!isUpdateReview() && index > 0) || m_ui->reviews->currentIndex() != -1);
+    m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled((!isUpdateReview() && index > 0) || m_ui->reviews->currentIndex() != -1);
 }
 
 void ReviewPatchDialog::reviewCheckboxChanged(int status)
@@ -193,7 +198,7 @@ void ReviewPatchDialog::updateReviews()
         }
     } else {
         // Clear reviews combobox and enable OK Button if a repository is selected.
-        enableButtonOk(m_ui->repositories->currentIndex() != -1);
+        m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(m_ui->repositories->currentIndex() != -1);
     }
 }
 
@@ -222,7 +227,7 @@ void ReviewPatchDialog::updateReviewsList()
         }
     }
 
-    enableButtonOk(m_ui->reviews->currentIndex() != -1);
+    m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(m_ui->reviews->currentIndex() != -1);
 }
 
 void ReviewPatchDialog::initializeFromRC(const QString& filePath)

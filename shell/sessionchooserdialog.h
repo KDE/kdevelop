@@ -23,9 +23,10 @@
 #ifndef SESSIONCHOOSERDIALOG_H
 #define SESSIONCHOOSERDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 #include <QTimer>
 
+class QDialogButtonBox;
 class QModelIndex;
 class QListView;
 class QLineEdit;
@@ -33,12 +34,15 @@ class QAbstractItemModel;
 
 namespace KDevelop {
 
-class SessionChooserDialog : public KDialog
+class SessionChooserDialog : public QDialog
 {
     Q_OBJECT
 public:
     SessionChooserDialog(QListView* view, QAbstractItemModel* model, QLineEdit* filter);
+
     bool eventFilter(QObject* object, QEvent* event);
+
+    QWidget* mainWidget() const;
 
 public Q_SLOTS:
     void updateState();
@@ -56,6 +60,8 @@ private:
     QLineEdit* m_filter;
     QTimer m_updateStateTimer;
 
+    QDialogButtonBox* m_buttonBox;
+    QWidget* m_mainWidget;
     QPushButton* m_deleteButton;
     QTimer m_deleteButtonTimer;
     int m_deleteCandidateRow;

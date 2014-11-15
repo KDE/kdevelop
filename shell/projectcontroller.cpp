@@ -32,6 +32,7 @@ Boston, MA 02110-1301, USA.
 #include <QRadioButton>
 #include <QBoxLayout>
 #include <QLabel>
+#include <QPushButton>
 
 #include <QAction>
 #include <kconfig.h>
@@ -86,6 +87,7 @@ Boston, MA 02110-1301, USA.
 #include <vcs/models/projectchangesmodel.h>
 #include <vcs/widgets/vcsdiffpatchsources.h>
 #include <vcs/widgets/vcscommitdialog.h>
+#include <KConfigGroup>
 
 namespace KDevelop
 {
@@ -744,13 +746,11 @@ void ProjectController::openProject( const QUrl &projectFile )
     }
 
     if ( ! existingSessions.isEmpty() ) {
-        KDialog dialog(Core::self()->uiControllerInternal()->activeMainWindow());
-        dialog.setButtons(KDialog::Ok | KDialog::Cancel);
+        QDialog dialog(Core::self()->uiControllerInternal()->activeMainWindow());
         dialog.setWindowTitle(i18n("Project Already Open"));
 
-        QWidget contents;
-        contents.setLayout(new QVBoxLayout);
-        contents.layout()->addWidget(new QLabel(i18n("The project you're trying to open is already open in at least one "
+        auto mainLayout = new QVBoxLayout(&dialog);
+        mainLayout->addWidget(new QLabel(i18n("The project you're trying to open is already open in at least one "
                                                      "other session.<br>What do you want to do?")));
         QGroupBox sessions;
         sessions.setLayout(new QVBoxLayout);
@@ -763,9 +763,16 @@ void ProjectController::openProject( const QUrl &projectFile )
             sessions.layout()->addWidget(button);
         }
         sessions.layout()->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
-        contents.layout()->addWidget(&sessions);
+        mainLayout->addWidget(&sessions);
 
-        dialog.setMainWidget(&contents);
+        auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Abort);
+        auto okButton = buttonBox->button(QDialogButtonBox::Ok);
+        okButton->setDefault(true);
+        okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+        connect(buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+        connect(buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
+        mainLayout->addWidget(buttonBox);
+
         bool success = dialog.exec();
         if (!success)
             return;

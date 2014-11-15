@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_APPLYCHANGESWIDGET_H
 #define KDEVPLATFORM_APPLYCHANGESWIDGET_H
 
-#include <KDialog>
+#include <QDialog>
 #include <language/languageexport.h>
 
 namespace KTextEditor {
@@ -33,7 +33,7 @@ namespace KDevelop
 class IndexedString;
 class ApplyChangesWidgetPrivate;
 
-class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public KDialog
+class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public QDialog
 {
     Q_OBJECT
     public:

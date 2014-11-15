@@ -32,6 +32,7 @@
 #include <QVBoxLayout>
 #include <QtCore/QFileInfo>
 #include <QtCore/QString>
+#include <QVBoxLayout>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -51,6 +52,8 @@
 #include "ui/revhistory/commitlogmodel.h"
 #include "ui/revhistory/commitView.h"
 #include <vcs/vcspluginhelper.h>
+
+#include <KConfigGroup>
 
 namespace KDevelop
 {

@@ -26,7 +26,7 @@
 #include <kio/jobuidelegate.h>
 #include <KJobWidgets/KJobWidgets>
 
-#include <KDialog>
+#include <QDialog>
 
 #include "core.h"
 #include "uicontroller.h"
@@ -34,6 +34,7 @@
 #include "shellextension.h"
 #include "projectsourcepage.h"
 #include <interfaces/iprojectcontroller.h>
+#include <KConfigGroup>
 
 namespace KDevelop
 {
@@ -76,8 +77,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget*
     setValid( openPage, false );
     setValid( projectInfoPage, false);
     setAppropriate( projectInfoPage, false );
-//     showButton( KDialog::Help, false );
-    
+
     setCurrentPage( currentPage );
     setWindowTitle(i18n("Open Project"));
 }

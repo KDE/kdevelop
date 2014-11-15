@@ -21,7 +21,7 @@ Boston, MA 02110-1301, USA.
 #define KDEVPLATFORM_EDITSTYLEDIALOG_H
 
 #include <QMimeType>
-#include <KDialog>
+#include <QDialog>
 #include <interfaces/isourceformatter.h>
 #include "ui_editstyledialog.h"
 
@@ -39,7 +39,7 @@ namespace KDevelop
 
 /** \short A simple dialog to add preview around a \ref SettingsWidget
 */
-class EditStyleDialog : public KDialog
+class EditStyleDialog : public QDialog
 {
 		Q_OBJECT
 

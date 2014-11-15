@@ -27,7 +27,7 @@
 #include "view.h"
 
 #include <KLocalizedString>
-#include <KDialog>
+#include <QDialog>
 #include <KShortcutWidget>
 #include <KSharedConfig>
 
@@ -36,6 +36,7 @@
 #include <QVBoxLayout>
 #include <qdialogbuttonbox.h>
 #include <QMenu>
+#include <KConfigGroup>
 
 using namespace Sublime;
 
@@ -150,7 +151,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             slotRemove();
             return;
         } else if ( triggered == setShortcut ) {
-            QDialog* dialog(new KDialog(this));
+            QDialog* dialog(new QDialog(this));
             dialog->setWindowTitle(i18n("Assign Shortcut For '%1' Tool View", m_view->document()->title()));
             KShortcutWidget *w = new KShortcutWidget(dialog);
             w->setShortcut(m_controller->actionForView(m_view)->shortcuts());

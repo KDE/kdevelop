@@ -19,6 +19,7 @@ Boston, MA 02110-1301, USA.
 */
 #include "editstyledialog.h"
 
+#include <QPushButton>
 #include <QVBoxLayout>
 #include <QUrl>
 #include <KMessageBox>
@@ -29,6 +30,7 @@ Boston, MA 02110-1301, USA.
 #include <KI18n/KLocalizedString>
 
 #include <interfaces/isourceformatter.h>
+#include <KConfigGroup>
 
 using KDevelop::ISourceFormatter;
 using KDevelop::SettingsWidget;
@@ -36,11 +38,20 @@ using KDevelop::SourceFormatterStyle;
 
 EditStyleDialog::EditStyleDialog(ISourceFormatter* formatter, const QMimeType& mime,
         const SourceFormatterStyle& style, QWidget* parent)
-		: KDialog(parent), m_sourceFormatter(formatter), m_mimeType(mime), m_style( style )
+		: QDialog(parent), m_sourceFormatter(formatter), m_mimeType(mime), m_style( style )
 {
 	m_content = new QWidget();
 	m_ui.setupUi(m_content);
-	setMainWidget(m_content);
+
+	QVBoxLayout *mainLayout = new QVBoxLayout(this);
+	mainLayout->addWidget(m_content);
+
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    auto okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
 
 	m_settingsWidget = m_sourceFormatter->editStyleWidget(mime);
 	init();

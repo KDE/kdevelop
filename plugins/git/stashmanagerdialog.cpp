@@ -29,18 +29,21 @@
 #include <QInputDialog>
 #include <vcs/dvcs/dvcsjob.h>
 #include <KLocalizedString>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 using namespace KDevelop;
 
 StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, QWidget* parent)
-    : KDialog(parent), m_plugin(plugin), m_dir(stashed)
+    : QDialog(parent), m_plugin(plugin), m_dir(stashed)
 {
-    setWindowTitle(KDialog::makeStandardCaption(i18n("Stash Manager")));
-    setButtons(KDialog::Close);
-    
-    QWidget* w = new QWidget(this);
+    setWindowTitle(i18n("Stash Manager"));
+
+    m_mainWidget = new QWidget(this);
     m_ui = new Ui::StashManager;
-    m_ui->setupUi(w);
+    m_ui->setupUi(m_mainWidget);
     
     StashModel* m = new StashModel(stashed, plugin, this);
     m_ui->stashView->setModel(m);
@@ -52,8 +55,9 @@ StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, Q
     connect(m_ui->drop,   &QPushButton::clicked, this, &StashManagerDialog::dropClicked);
     connect(m, &StashModel::rowsInserted, this, &StashManagerDialog::stashesFound);
     
-    setMainWidget(w);
-    w->setEnabled(false); //we won't enable it until we have the model with data and selection
+    connect(m_ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    m_mainWidget->setEnabled(false); //we won't enable it until we have the model with data and selection
 }
 
 StashManagerDialog::~StashManagerDialog()
@@ -65,7 +69,7 @@ void StashManagerDialog::stashesFound()
 {
     QModelIndex firstIdx=m_ui->stashView->model()->index(0, 0);
     m_ui->stashView->setCurrentIndex(firstIdx);
-    mainWidget()->setEnabled(true);
+    m_mainWidget->setEnabled(true);
 }
 
 QString StashManagerDialog::selection() const
@@ -80,7 +84,7 @@ void StashManagerDialog::runStash(const QStringList& arguments)
     VcsJob* job = m_plugin->gitStash(m_dir, arguments, OutputJob::Verbose);
     connect(job, &VcsJob::result, this, &StashManagerDialog::accept);
     
-    mainWidget()->setEnabled(false);
+    m_mainWidget->setEnabled(false);
     
     ICore::self()->runController()->registerJob(job);
 }
