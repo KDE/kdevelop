@@ -106,12 +106,15 @@ void GdbTest::init()
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
 {
 public:
-    TestLaunchConfiguration(KUrl executable = findExecutable("debugee") ) {
+    TestLaunchConfiguration(const KUrl& executable = findExecutable("debugee"),
+                            const KUrl& workingDirectory = KUrl())
+    {
         c = new KConfig();
         c->deleteGroup("launch");
         cfg = c->group("launch");
         cfg.writeEntry("isExecutable", true);
         cfg.writeEntry("Executable", executable);
+        cfg.writeEntry("Working Directory", workingDirectory);
     }
     ~TestLaunchConfiguration() {
         delete c;
@@ -1827,6 +1830,23 @@ void GdbTest::testDebugInExternalTerminal()
         session->run();
         WAIT_FOR_STATE(session, DebugSession::EndedState);
     }
+}
+
+// see: https://bugs.kde.org/show_bug.cgi?id=339231
+void GdbTest::testPathWithSpace()
+{
+    TestDebugSession* session = new TestDebugSession;
+
+    auto debugee = findExecutable("path with space/spacedebugee");
+    TestLaunchConfiguration c(debugee, debugee.upUrl());
+    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint("spacedebugee.cpp:30");
+    QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::NotStartedState);
+    session->startProgram(&c, m_iface);
+
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::CleanState);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,

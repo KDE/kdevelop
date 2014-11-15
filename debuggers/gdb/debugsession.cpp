@@ -1036,7 +1036,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
         dir = QFileInfo(executable).absolutePath();
     }
     
-    queueCmd(new GDBCommand(GDBMI::EnvironmentCd, KShell::quoteArg(dir)));
+    queueCmd(new GDBCommand(GDBMI::EnvironmentCd, '"' + dir + '"'));
 
     // Set the run arguments
     if (!arguments.isEmpty())

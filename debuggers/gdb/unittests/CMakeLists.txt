@@ -14,3 +14,5 @@ target_link_libraries(debugeeqt ${QT_QTCORE_LIBRARY})
 
 add_debuggable_executable(debugeeexception SRCS debugeeexception.cpp)
 set_target_properties(debugeeexception PROPERTIES COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}")
+
+add_subdirectory("path with space")
