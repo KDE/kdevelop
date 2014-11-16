@@ -51,9 +51,6 @@ typedef CodeCompletionItemTester<Cpp::CodeCompletionContext> CompletionItemTeste
 
 void TestSpecialCompletion::initTestCase()
 {
-    K4AboutData aboutData( QByteArray("test_specialcompletion"), QByteArray(), ki18n("KDE Test Program"), QByteArray("version") );
-    KComponentData cData(&aboutData);
-
     AutoTestShell::init(QStringList() << "kdevcppsupport");
     TestCore::initialize(Core::NoUi);
     TestCore* core = dynamic_cast<TestCore*>(TestCore::self());
