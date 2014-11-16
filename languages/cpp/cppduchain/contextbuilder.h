@@ -31,7 +31,6 @@
 #include <language/duchain/identifier.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/classdeclaration.h>
-#include <ksharedptr.h>
 #include "cppduchainexport.h"
 #include "cppeditorintegrator.h"
 

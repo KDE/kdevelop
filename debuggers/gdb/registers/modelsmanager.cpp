@@ -24,7 +24,6 @@
 #include <QAbstractItemView>
 #include <QSharedPointer>
 
-#include <KSharedPtr>
 #include <KSharedConfig>
 
 namespace GDBDebugger

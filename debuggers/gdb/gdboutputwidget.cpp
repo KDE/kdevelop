@@ -26,7 +26,6 @@
 #include <kcombobox.h>
 #include <kiconloader.h>
 #include <KLocalizedString>
-#include <kmenu.h>
 #include <kcolorscheme.h>
 
 #include <QLabel>

@@ -36,15 +36,11 @@
 
 #include <QAction>
 #include <kactioncollection.h>
-#include <kfiledialog.h>
-#include <kiconloader.h>
 #include <KLocalizedString>
 #include <kmainwindow.h>
-#include <kstatusbar.h>
 #include <kparts/part.h>
 #include <kparts/mainwindow.h>
 #include <kmessagebox.h>
-#include <kapplication.h>
 #include <kpluginfactory.h>
 #include <kaboutdata.h>
 #include <KToolBar>

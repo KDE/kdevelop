@@ -37,8 +37,6 @@
 #include "codecompletion/helpers.h"
 
 #include <QTest>
-#include <KComponentData>
-#include <k4aboutdata.h>
 #include <KTextEditor/Editor>
 #include <QTemporaryDir>
 

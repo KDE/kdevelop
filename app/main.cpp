@@ -28,14 +28,15 @@
 
 #include <config.h>
 
-#include <k4aboutdata.h>
-#include <kapplication.h>
-
 #include <KLocalizedString>
 
+#include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <ktexteditor/cursor.h>
 
+#include <QApplication>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 #include <QFileInfo>
 #include <QDir>
 #include <QProcess>
@@ -65,8 +66,6 @@ Q_LOGGING_CATEGORY(APP, "kdevelop.app")
 #include "kdevideextension.h"
 
 #include <iostream>
-#include <QCommandLineParser>
-#include <QCommandLineOption>
 
 #include "splash.h"
 

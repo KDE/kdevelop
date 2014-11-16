@@ -67,7 +67,7 @@
 
 #include <KLocalizedString>
 
-#include <kapplication.h>
+#include <QCoreApplication>
 #include <QStandardPaths>
 
 #include "stty.h"

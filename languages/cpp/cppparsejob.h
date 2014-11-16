@@ -29,7 +29,6 @@
 #include <QStringList>
 #include <QWaitCondition>
 
-#include <KSharedPtr>
 #include <KTextEditor/Range>
 
 #include "parser/parsesession.h"

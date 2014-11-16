@@ -20,7 +20,6 @@
 
 #include <QAction>
 #include <KLocalizedString>
-#include <kfiledialog.h>
 
 #include <QFileInfo>
 

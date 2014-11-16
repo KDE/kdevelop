@@ -24,8 +24,6 @@
 #include <QFile>
 #include <QTextStream>
 
-#include <kurl.h>
-
 #include "pp-stream.h"
 #include "pp-engine.h"
 #include "pp-environment.h"

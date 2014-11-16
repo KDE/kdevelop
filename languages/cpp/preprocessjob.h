@@ -23,7 +23,6 @@
 #ifndef PREPROCESSJOB_H
 #define PREPROCESSJOB_H
 
-#include <ksharedptr.h>
 #include <threadweaver/job.h>
 
 #include "parser/rpp/preprocessor.h"

@@ -24,7 +24,6 @@
 #include <QtCore/QString>
 
 #include <cppparserexport.h>
-#include <ksharedptr.h>
 #include "rpp/anchor.h"
 
 #include <serialization/indexedstring.h>

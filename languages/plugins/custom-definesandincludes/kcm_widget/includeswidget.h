@@ -23,7 +23,6 @@
 
 #include <qabstractitemmodel.h>
 
-class KFileDialog;
 class KUrlRequester;
 namespace Ui
 {

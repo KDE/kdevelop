@@ -18,8 +18,6 @@
 #include <QtCore/QMap>
 #include <QMutex>
 
-#include <ksharedptr.h>
-
 #include <language/duchain/parsingenvironment.h>
 #include <language/editor/modificationrevision.h>
 
