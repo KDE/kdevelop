@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-class KTempDir;
+class QTemporaryDir;
 
 namespace Sublime {
 class View;
@@ -54,7 +54,7 @@ private slots:
 
 private:
     void verifyFilename(Sublime::View *view, const QString& endOfFilename);
-    void createFile(const KTempDir& dir, const QString& filename);
+    void createFile(const QTemporaryDir& dir, const QString& filename);
     void enableBuddies(bool enable = true);
     void enableOpenAfterCurrent(bool enable = true);
 

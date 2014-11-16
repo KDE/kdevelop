@@ -40,7 +40,7 @@
 #include <KComponentData>
 #include <k4aboutdata.h>
 #include <KTextEditor/Editor>
-#include <KTempDir>
+#include <QTemporaryDir>
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -184,12 +184,12 @@ void TestSpecialCompletion::testIncludeGrouping()
     TestProject* project = new TestProject;
     m_projects->addProject(project);
 
-    KTempDir dir1;
-    QVERIFY(dir1.exists());
-    const QString dir1Name = QFileInfo(dir1.name()).dir().dirName() + "/";
-    KTempDir dir2;
-    QVERIFY(dir2.exists());
-    const QString dir2Name = QFileInfo(dir2.name()).dir().dirName() + "/";
+    QTemporaryDir dir1;
+    QVERIFY(dir1.isValid());
+    const QString dir1Name = QFileInfo(dir1.path()).dir().dirName() + "/";
+    QTemporaryDir dir2;
+    QVERIFY(dir2.isValid());
+    const QString dir2Name = QFileInfo(dir2.path()).dir().dirName() + "/";
 
     TestFile includeA("class A {};", "h", project, dir1Name);
     includeA.parse(TopDUContext::AllDeclarationsAndContexts);
@@ -200,9 +200,9 @@ void TestSpecialCompletion::testIncludeGrouping()
     TestFile includeC("class C {};", "h", project, dir1Name);
     includeC.parse(TopDUContext::AllDeclarationsAndContexts);
 
-    QVERIFY(QFile::exists(dir1.name() + includeA.url().toUrl().fileName()));
-    QVERIFY(QFile::exists(dir2.name() + includeB.url().toUrl().fileName()));
-    QVERIFY(QFile::exists(dir2.name() + includeD.url().toUrl().fileName()));
+    QVERIFY(QFile::exists(dir1.path() + '/' + includeA.url().toUrl().fileName()));
+    QVERIFY(QFile::exists(dir2.path() + '/' + includeB.url().toUrl().fileName()));
+    QVERIFY(QFile::exists(dir2.path() + '/' + includeD.url().toUrl().fileName()));
 
     TestFile active("#include \"" + dir1Name + includeA.url().toUrl().fileName() + "\"\n"
                     "#include \"" + dir2Name + includeB.url().toUrl().fileName() + "\"\n"

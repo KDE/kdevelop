@@ -24,7 +24,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
-#include <KTempDir>
+#include <QTemporaryDir>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -58,18 +58,18 @@ void TestCustomMake::cleanupTestCase()
 
 void TestCustomMake::testIncludeDirectories()
 {
-    KTempDir tempDir;
+    QTemporaryDir tempDir;
     {
-        QFile file( tempDir.name() + "Makefile" );
+        QFile file( tempDir.path() + "/Makefile" );
         createFile( file );
-        QFile testfile( tempDir.name() + "testfile.cpp" );
+        QFile testfile( tempDir.path() + "/testfile.cpp" );
         createFile(testfile);
         QTextStream stream1( &file );
         stream1 << "testfile.o:\n\t g++ testfile.cpp -I/testFile1 -I /testFile2 -isystem /testFile3 --include-dir=/testFile4 -o testfile";
     }
 
     MakeFileResolver mf;
-    auto result = mf.resolveIncludePath(tempDir.name() + "testfile.cpp");
+    auto result = mf.resolveIncludePath(tempDir.path() + "/testfile.cpp");
     if (!result.success) {
       qDebug() << result.errorMessage << result.longErrorMessage;
       QFAIL("Failed to resolve include path.");

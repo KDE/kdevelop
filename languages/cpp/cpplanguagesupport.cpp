@@ -30,6 +30,7 @@
 #include <QReadWriteLock>
 #include <kactioncollection.h>
 #include <QAction>
+#include <QStandardPaths>
 
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
@@ -86,8 +87,6 @@
 #include "debug.h"
 
 //#include <valgrind/callgrind.h>
-#include <QStandardPaths>
-
 
 // #define CALLGRIND_TRACE_UI_LOCKUP
 

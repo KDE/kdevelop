@@ -22,7 +22,7 @@
 #include <kcmdlineargs.h>
 #include <KLocalizedString>
 #include <kdialog.h>
-#include <ktempdir.h>
+#include <QTemporaryDir>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qdir.h>
@@ -83,13 +83,13 @@ int main(int argc, char **argv)
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
 
-    KTempDir tempdir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"/kdev-custom-uitest");
+    QTemporaryDir tempdir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"/kdev-custom-uitest");
 
-    qCDebug(CUSTOMBUILDSYSTEM) << "created tempdir:" << tempdir.name();
+    qCDebug(CUSTOMBUILDSYSTEM) << "created tempdir:" << tempdir.path();
 
-    KConfig projkcfg( tempdir.name() + "/kdev-custom-uitest.kdev4" );
+    KConfig projkcfg( tempdir.path() + "/kdev-custom-uitest.kdev4" );
 
-    QDir projdir(tempdir.name());
+    QDir projdir(tempdir.path());
     projdir.mkdir("includedir");
     projdir.mkdir("subtree");
     projdir.mkpath("subtree/includedir");
