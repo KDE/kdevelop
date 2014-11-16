@@ -33,6 +33,7 @@
 #include <KConfigGroup>
 #include <QUrl>
 #include <KStringHandler>
+#include <QStandardPaths>
 
 K_EXPORT_PLASMA_RUNNER(kdevelopsessions, KDevelopSessions)
 

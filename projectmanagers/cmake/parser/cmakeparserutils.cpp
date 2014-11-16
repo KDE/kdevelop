@@ -32,6 +32,7 @@
 #include "../debug.h"
 #include <util/path.h>
 #include <ktempdir.h>
+#include <QStandardPaths>
 
 namespace CMakeParserUtils
 {

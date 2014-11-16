@@ -35,6 +35,7 @@
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KLocalizedString>
+#include <QStandardPaths>
 
 using namespace KDevelop;
 using KDevelop::Path;

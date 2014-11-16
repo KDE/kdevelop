@@ -44,6 +44,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
+#include <QStandardPaths>
 
 using namespace KDevelop;
 

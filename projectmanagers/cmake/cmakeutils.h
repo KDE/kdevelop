@@ -25,6 +25,7 @@
 
 #include <QStringList>
 #include <util/path.h>
+#include <QStandardPaths>
 
 namespace KDevelop
 {

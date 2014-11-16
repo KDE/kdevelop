@@ -31,6 +31,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
+#include <QStandardPaths>
 #include "cmakemanager.h"
 #include "cmakeparserutils.h"
 #include "cmakehelpdocumentation.h"

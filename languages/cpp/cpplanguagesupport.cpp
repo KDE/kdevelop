@@ -86,6 +86,7 @@
 #include "debug.h"
 
 //#include <valgrind/callgrind.h>
+#include <QStandardPaths>
 
 
 // #define CALLGRIND_TRACE_UI_LOCKUP

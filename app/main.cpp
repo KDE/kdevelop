@@ -32,7 +32,7 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <KLocalizedString>
-#include <kstandarddirs.h>
+
 #include <ksplashscreen.h>
 #include <kmessagebox.h>
 #include <ktexteditor/cursor.h>

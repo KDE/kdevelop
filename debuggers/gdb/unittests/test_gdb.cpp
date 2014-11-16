@@ -49,6 +49,7 @@
 #include "gdbframestackmodel.h"
 #include <mi/milexer.h>
 #include <mi/miparser.h>
+#include <QStandardPaths>
 
 using KDevelop::AutoTestShell;
 

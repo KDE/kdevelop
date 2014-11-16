@@ -27,7 +27,7 @@
 
 #include <KProcess>
 #include <QFile>
-#include <KStandardDirs>
+
 #include <cmakeparserutils.h>
 #include <language/duchain/duchain.h>
 #include <tests/autotestshell.h>

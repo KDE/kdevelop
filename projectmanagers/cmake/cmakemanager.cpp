@@ -66,6 +66,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/use.h>
 #include <language/duchain/duchain.h>
+#include <QStandardPaths>
 
 Q_DECLARE_METATYPE(KDevelop::IProject*);
 
