@@ -26,8 +26,8 @@
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KAboutData>
-#include <KSettings/Dispatcher>
-#include <knewstuff3/knewstuffbutton.h>
+#include <ksettings/dispatcher.h>
+#include <kns3/button.h>
 #include <qhelpenginecore.h>
 #include <QFileDialog>
 

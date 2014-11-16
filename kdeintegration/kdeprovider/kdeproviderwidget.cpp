@@ -34,7 +34,6 @@
 #include <QSortFilterProxyModel>
 #include <KFilterProxySearchLine>
 #include <KMessageBox>
-#include <KDialog>
 #include <KLocalizedString>
 
 using namespace KDevelop;

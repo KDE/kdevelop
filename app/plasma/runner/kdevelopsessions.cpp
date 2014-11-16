@@ -18,10 +18,11 @@
  */
 
 #include "kdevelopsessions.h"
+
 #include <QtCore/QCollator>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QDir>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 
 #include <QDebug>

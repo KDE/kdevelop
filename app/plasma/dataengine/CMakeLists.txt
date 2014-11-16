@@ -4,7 +4,7 @@ set(kdevelopsessionsengine_SRCS
 )
 
 add_library(plasma_engine_kdevelopsessions MODULE ${kdevelopsessionsengine_SRCS})
-target_link_libraries(plasma_engine_kdevelopsessions KF5::Plasma KF5::KIOWidgets KF5::KDELibs4Support)
+target_link_libraries(plasma_engine_kdevelopsessions KF5::Plasma KF5::KIOWidgets)
 
 kservice_desktop_to_json(plasma_engine_kdevelopsessions plasma-dataengine-kdevelopsessions.desktop)
 

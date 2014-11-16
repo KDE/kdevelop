@@ -7,7 +7,7 @@ add_library(kdev4makefileresolver STATIC
 )
 target_link_libraries(kdev4makefileresolver
   KDev::Interfaces KDev::Project
-  Qt5::Core Qt5::Gui KF5::KDELibs4Support KDev::Language
+  Qt5::Core Qt5::Gui KDev::Language
   KDev::Tests
 )
 set_target_properties(kdev4makefileresolver PROPERTIES POSITION_INDEPENDENT_CODE ON)
