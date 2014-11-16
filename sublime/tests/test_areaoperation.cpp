@@ -26,7 +26,7 @@
 #include <QUrl>
 #include <QDebug>
 
-#include <kapplication.h>
+#include <KSharedConfig>
 
 #include <sublime/view.h>
 #include <sublime/area.h>

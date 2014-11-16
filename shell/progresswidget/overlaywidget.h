@@ -20,9 +20,7 @@
 #ifndef KDEVPLATFORM_OVERLAYWIDGET_H
 #define KDEVPLATFORM_OVERLAYWIDGET_H
 
-#include <KHBox>
-
-#include <QHBoxLayout>
+#include <QWidget>
 
 class QResizeEvent;
 class QEvent;
@@ -33,10 +31,8 @@ namespace KDevelop {
  * This is a widget that can align itself with another one, without using a layout,
  * so that it can actually be on top of other widgets.
  * Currently the only supported type of alignment is "right aligned, on top of the other widget".
- *
- * OverlayWidget inherits KHBox for convenience purposes (layout, and frame)
  */
-class OverlayWidget : public KHBox
+class OverlayWidget : public QWidget
 {
     Q_OBJECT
 

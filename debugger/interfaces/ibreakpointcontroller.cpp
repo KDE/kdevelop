@@ -35,7 +35,6 @@
 #include "../breakpoint/breakpoint.h"
 #include "../../interfaces/iuicontroller.h"
 #include "util/debug.h"
-#include <KComponentData>
 
 namespace KDevelop {
 
@@ -194,7 +193,8 @@ void IBreakpointController::hit(KDevelop::Breakpoint* breakpoint, const QString 
     }
     if (ev) {
         ev->setPixmap(QIcon::fromTheme("script-error").pixmap(QSize(22,22)));
-        ev->setComponentName(ICore::self()->aboutData().componentName());
+        // TODO: Port
+        //ev->setComponentName(ICore::self()->aboutData().componentName());
         ev->sendEvent();
     }
 }

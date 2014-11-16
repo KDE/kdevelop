@@ -10,11 +10,9 @@ add_library(KDevPlatformSerialization SHARED ${KDevPlatformSerialization_LIB_SRC
 add_library(KDev::Serialization ALIAS KDevPlatformSerialization)
 
 generate_export_header(KDevPlatformSerialization EXPORT_FILE_NAME serializationexport.h)
-
 target_link_libraries(KDevPlatformSerialization
 LINK_PUBLIC
     KDev::Interfaces
-    KF5::KDELibs4Support
 LINK_PRIVATE
     KDev::Util
 )

@@ -22,9 +22,9 @@
 #include "util/debug.h"
 #include <interfaces/icore.h>
 
+#include <KConfig>
 #include <KTar>
 #include <KZip>
-#include <KComponentData>
 #include <KConfigGroup>
 #include <KLocalizedString>
 

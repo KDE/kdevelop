@@ -27,10 +27,10 @@
 #include <QToolBar>
 
 #include <QDialog>
+#include <KAboutData>
 #include <KLocalizedString>
 #include <QMenuBar>
-#include <kcomponentdata.h>
-#include <KCMUtils/ksettings/dispatcher.h>
+#include <ksettings/dispatcher.h>
 #include <ksettings/dialog.h>
 #include <ksettings/dispatcher.h>
 #include <kcmultidialog.h>
@@ -259,7 +259,7 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
     // FIXME: what this is supposed to do?
     // Answer: Its notifying the mainwindow to reload its settings when one of
     // the KCM's changes its settings and it works
-    KSettings::Dispatcher::registerComponent( KComponentData::mainComponent().componentName(), main, "loadSettings" );
+    KSettings::Dispatcher::registerComponent( QCoreApplication::applicationName(), main, "loadSettings" );
     KSettings::Dispatcher::registerComponent( Core::self()->aboutData().componentName(), main, "loadSettings" );
 
     addMainWindow(main);
@@ -508,7 +508,7 @@ void UiController::loadArea(Sublime::Area * area, const KConfigGroup & group)
     }
 }
 
-void UiController::saveAllAreas(KSharedConfig::Ptr config)
+void UiController::saveAllAreas(KSharedConfigPtr config)
 {
     KConfigGroup uiConfig(config, "User Interface");
     int wc = mainWindows().size();
@@ -534,7 +534,7 @@ void UiController::saveAllAreas(KSharedConfig::Ptr config)
     uiConfig.sync();
 }
 
-void UiController::loadAllAreas(KSharedConfig::Ptr config)
+void UiController::loadAllAreas(KSharedConfigPtr config)
 {
     KConfigGroup uiConfig(config, "User Interface");
     int wc = uiConfig.readEntry("Main Windows Count", 1);

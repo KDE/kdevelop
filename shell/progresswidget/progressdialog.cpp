@@ -140,25 +140,25 @@ void TransactionItemView::slotLayoutFirstItem()
 
 TransactionItem::TransactionItem( QWidget *parent,
                                   ProgressItem *item, bool first )
-    : KVBox( parent ), mCancelButton( 0 ), mItem( item )
-
+    : QWidget( parent ), mCancelButton( 0 ), mItem( item )
 {
-    setSpacing( 2 );
-    setMargin( 2 );
+    auto vbox = new QVBoxLayout(this);
+    vbox->setSpacing( 2 );
+    vbox->setMargin( 2 );
     setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
 
     mFrame = new QFrame( this );
     mFrame->setFrameShape( QFrame::HLine );
     mFrame->setFrameShadow( QFrame::Raised );
     mFrame->show();
-    setStretchFactor( mFrame, 3 );
-    layout()->addWidget( mFrame );
+    vbox->setStretchFactor( mFrame, 3 );
+    vbox->addWidget( mFrame );
 
     QWidget *h = new QWidget( this );
     auto hboxLayout = new QHBoxLayout(h);
     hboxLayout->setMargin(0);
     hboxLayout->setSpacing( 5 );
-    layout()->addWidget( h );
+    vbox->addWidget( h );
 
     mItemLabel =
             new QLabel( fontMetrics().elidedText( item->label(), Qt::ElideRight, MAX_LABEL_WIDTH ), h );
@@ -185,7 +185,7 @@ TransactionItem::TransactionItem( QWidget *parent,
     hboxLayout->setMargin(0);
     hboxLayout->setSpacing( 5 );
     h->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
-    layout()->addWidget( h );
+    vbox->addWidget( h );
     mItemStatus = new QLabel( h );
     hboxLayout->addWidget(mItemStatus);
     mItemStatus->setTextFormat( Qt::RichText );
@@ -243,8 +243,6 @@ void TransactionItem::addSubTransaction( ProgressItem *item )
 ProgressDialog::ProgressDialog( QWidget *alignWidget, QWidget *parent, const char *name )
     : OverlayWidget( alignWidget, parent, name ), mWasLastShown( false )
 {
-    setFrameStyle( QFrame::Panel | QFrame::Sunken ); // QFrame
-
     setAutoFillBackground( true );
 
     mScrollView = new TransactionItemView( this, "ProgressScrollView" );

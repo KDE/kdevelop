@@ -46,6 +46,7 @@ add_library(KDev::Interfaces ALIAS KDevPlatformInterfaces)
 generate_export_header(KDevPlatformInterfaces EXPORT_FILE_NAME interfacesexport.h)
 target_link_libraries(KDevPlatformInterfaces
 LINK_PUBLIC
+    KF5::ConfigCore
     KF5::Parts
     KF5::TextEditor
     KF5::I18n

@@ -84,8 +84,8 @@ struct SerializedFilter
 typedef QVector<SerializedFilter> SerializedFilters;
 
 SerializedFilters defaultFilters();
-SerializedFilters readFilters(const KSharedConfig::Ptr& config);
-void writeFilters(const SerializedFilters& filters, KSharedConfig::Ptr config);
+SerializedFilters readFilters(const KSharedConfigPtr& config);
+void writeFilters(const SerializedFilters& filters, KSharedConfigPtr config);
 Filters deserialize(const SerializedFilters& filters);
 
 }

@@ -15,6 +15,7 @@
 
 #include "variablewidget.h"
 
+#include <QApplication>
 #include <QLabel>
 #include <QLayout>
 #include <QPainter>
@@ -29,12 +30,9 @@
 #include <QPoint>
 #include <QClipboard>
 
-#include <kapplication.h>
 #include <kmessagebox.h>
 #include <khistorycombobox.h>
 #include <QLineEdit>
-#include <kdeversion.h>
-#include <kiconloader.h>
 #include <KLocalizedString>
 
 #include "../../interfaces/icore.h"

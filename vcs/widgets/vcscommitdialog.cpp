@@ -37,7 +37,6 @@
 #include "../models/vcsfilechangesmodel.h"
 
 #include "ui_vcscommitdialog.h"
-#include <KComponentData>
 #include <vcspluginhelper.h>
 #include <KConfigGroup>
 #include <QDialogButtonBox>

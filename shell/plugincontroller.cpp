@@ -29,8 +29,6 @@ Boston, MA 02110-1301, USA.
 #include <QMap>
 #include <QtCore/QDebug>
 
-#include <kcmdlineargs.h>
-#include <klibloader.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kmessagebox.h>
@@ -726,7 +724,7 @@ void PluginController::updateLoadedPlugins()
 
 void PluginController::resetToDefaults()
 {
-    KSharedConfig::Ptr cfg = Core::self()->activeSession()->config();
+    KSharedConfigPtr cfg = Core::self()->activeSession()->config();
     cfg->deleteGroup( KEY_Plugins );
     cfg->sync();
     KConfigGroup grp = cfg->group( KEY_Plugins );

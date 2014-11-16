@@ -34,8 +34,6 @@
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
 #include <kxmlguifactory.h>
-#include <kdeversion.h>
-#include <KComponentData>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -441,7 +439,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
         //in KDE >= 4.4 we can use KXMLGuiClient::replaceXMLFile to provide
         //katepart with our own restructured UI configuration
-        const QString uiFile = KComponentData::mainComponent().componentName() + "/katepartui.rc";
+        const QString uiFile = QCoreApplication::applicationName() + "/katepartui.rc";
         QStringList katePartUIs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, uiFile);
         if (!katePartUIs.isEmpty()) {
             const QString katePartUI = katePartUIs.last();

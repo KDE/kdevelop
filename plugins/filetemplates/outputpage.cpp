@@ -27,7 +27,6 @@
 #include <KI18n/KLocalizedString>
 
 #include <KUrlRequester>
-#include <KFileDialog>
 
 #include <QSpinBox>
 #include <QSignalMapper>

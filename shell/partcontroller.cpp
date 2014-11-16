@@ -36,7 +36,6 @@
 #include <KMessageBox>
 
 #include <kparts/part.h>
-#include <kparts/factory.h>
 #include <kparts/partmanager.h>
 #include <kparts/browserextension.h>
 

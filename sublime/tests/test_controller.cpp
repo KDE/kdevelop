@@ -22,8 +22,6 @@
 #include <QtTest/QtTest>
 #include <QDebug>
 
-#include <kapplication.h>
-
 #include <sublime/controller.h>
 #include <sublime/tooldocument.h>
 #include <sublime/view.h>

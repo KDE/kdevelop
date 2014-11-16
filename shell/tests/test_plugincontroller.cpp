@@ -26,7 +26,6 @@
 #include <QDBusMessage>
 #include <QtCore/QDebug>
 
-#include <kcomponentdata.h>
 #include <kprocess.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>

@@ -25,9 +25,9 @@
 #include <QBrush>
 
 #include <ktexteditor/codecompletionmodel.h>
-#include <kiconloader.h>
 #include <ktextedit.h>
-#include "kcolorutils.h"
+#include <kiconloader.h>
+#include <kcolorutils.h>
 
 #include "expandingdelegate.h"
 #include <qapplication.h>

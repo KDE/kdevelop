@@ -166,11 +166,10 @@ target_link_libraries(KDevPlatformLanguage LINK_PUBLIC
         KDev::Interfaces
         KDev::Serialization
 LINK_PRIVATE
+        KF5::GuiAddons
         KF5::TextEditor
         KF5::Parts
-        KF5::NewStuff
         KF5::Archive
-        KF5::KDELibs4Support
         KDev::Util
         KDev::Project
 )

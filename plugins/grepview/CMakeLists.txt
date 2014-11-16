@@ -26,6 +26,7 @@ target_link_libraries(kdevgrepview
     KF5::TextEditor
     KF5::Completion
     KF5::TextEditor
+    KF5::KDELibs4Support
     KDev::Interfaces
     KDev::OutputView
     KDev::Project

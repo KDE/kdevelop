@@ -26,8 +26,6 @@
 #include <sublime/controller.h>
 #include <sublime/urldocument.h>
 
-#include <kapplication.h>
-
 #include "areaprinter.h"
 
 using namespace Sublime;

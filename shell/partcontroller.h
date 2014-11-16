@@ -49,7 +49,7 @@ class View;
 
 class QMimeType;
 
-Q_DECLARE_METATYPE(KSharedConfig::Ptr)
+Q_DECLARE_METATYPE(KSharedConfigPtr)
 
 namespace KDevelop
 {

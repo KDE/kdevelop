@@ -110,7 +110,7 @@ QUrl Session::pluginDataArea( const IPlugin* p )
     return d->pluginArea( p );
 }
 
-KSharedConfig::Ptr Session::config()
+KSharedConfigPtr Session::config()
 {
     return d->info.config;
 }

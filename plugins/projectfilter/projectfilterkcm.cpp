@@ -22,11 +22,11 @@
 #include <QStandardItemModel>
 #include <QKeyEvent>
 
-#include <kgenericfactory.h>
 #include <KConfigDialogManager>
-#include <KSettings/Dispatcher>
+#include <ksettings/dispatcher.h>
 #include <KCoreAddons/KAboutData>
 #include <KMessageWidget>
+#include <KLocalizedString>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>

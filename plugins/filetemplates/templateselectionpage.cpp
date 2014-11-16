@@ -37,11 +37,9 @@
 
 #include "ui_templateselection.h"
 
-#include <KNS3/DownloadDialog>
-#include <KNS3/KNewStuffButton>
+#include <kns3/button.h>
 #include <KLocalizedString>
-#include <KComponentData>
-#include <KFileDialog>
+#include <QFileDialog>
 #include <KConfigGroup>
 #include <QTemporaryDir>
 #include <KTextEditor/Document>
@@ -146,7 +144,7 @@ void TemplateSelectionPagePrivate::getMoreClicked()
 void TemplateSelectionPagePrivate::loadFileClicked()
 {
     QString filter = "application/x-desktop application/x-bzip-compressed-tar application/zip";
-    QString fileName = KFileDialog::getOpenFileName(QUrl("kfiledialog:///kdevclasstemplate"), filter, page);
+    QString fileName = QFileDialog::getOpenFileName(page, QString(), QString(), filter);
 
     if (!fileName.isEmpty())
     {
@@ -162,7 +160,7 @@ void TemplateSelectionPagePrivate::loadFileClicked()
 
 void TemplateSelectionPage::saveConfig()
 {
-    KSharedConfig::Ptr config;
+    KSharedConfigPtr config;
     if (IProject* project = ICore::self()->projectController()->findProjectForUrl(d->assistant->baseUrl()))
     {
         config = project->projectConfiguration();
@@ -203,7 +201,7 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
         templateIndex = templateIndex.child(0, 0);
     }
 
-    KSharedConfig::Ptr config;
+    KSharedConfigPtr config;
     if (IProject* project = ICore::self()->projectController()->findProjectForUrl(d->assistant->baseUrl()))
     {
         config = project->projectConfiguration();

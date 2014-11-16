@@ -23,8 +23,6 @@
 #include "configurablecolors.h"
 
 #include <KColorScheme>
-#include <KColorUtils>
-#include <KGlobalSettings>
 
 #include "../../interfaces/icore.h"
 #include "../../interfaces/ilanguagecontroller.h"
@@ -37,6 +35,7 @@
 #include "../duchain/duchainlock.h"
 #include "util/debug.h"
 
+#include <KColorUtils>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/ConfigInterface>

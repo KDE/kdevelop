@@ -99,7 +99,7 @@ SerializedFilters defaultFilters()
     return ret;
 }
 
-SerializedFilters readFilters(const KSharedConfig::Ptr& config)
+SerializedFilters readFilters(const KSharedConfigPtr& config)
 {
     if (!config->hasGroup("Filters")) {
         return defaultFilters();
@@ -128,7 +128,7 @@ SerializedFilters readFilters(const KSharedConfig::Ptr& config)
     return filters;
 }
 
-void writeFilters(const SerializedFilters& filters, KSharedConfig::Ptr config)
+void writeFilters(const SerializedFilters& filters, KSharedConfigPtr config)
 {
     // clear existing
     config->deleteGroup("Filters");

@@ -24,7 +24,6 @@
 
 #include <interfaces/icore.h>
 
-#include <KComponentData>
 #include <KArchive>
 #include <KZip>
 #include <KTar>

@@ -37,7 +37,7 @@ struct SessionInfo
     QString description;
     QList<QUrl> projects;
     QString path;
-    KSharedConfig::Ptr config;
+    KSharedConfigPtr config;
 };
 
 class KDEVPLATFORMSHELL_EXPORT Session : public ISession
@@ -53,7 +53,7 @@ public:
     virtual ~Session();
 
     virtual QUrl pluginDataArea( const IPlugin* );
-    virtual KSharedConfig::Ptr config();
+    virtual KSharedConfigPtr config();
 
     virtual QList<QUrl> containedProjects() const;
     virtual void setContainedProjects( const QList<QUrl>& projects );

@@ -17,16 +17,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+
 #include "pluginpreferences.h"
 
+#include <QDebug>
 #include <QVBoxLayout>
 
-#include <kgenericfactory.h>
 #include <kaboutdata.h>
 #include <kpluginselector.h>
 #include <kplugininfo.h>
 #include <ksettings/dispatcher.h>
-#include <kcomponentdata.h> // kdelibs4support
+#include <KLocalizedString>
 
 #include <interfaces/isession.h>
 

@@ -24,7 +24,6 @@
 #include <QtCore/QTimer>
 
 #include <KLocalizedString>
-#include <KComponentData>
 
 #include <language/duchain/duchain.h>
 

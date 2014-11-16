@@ -23,9 +23,9 @@
 #include <QtCore/QMetaObject>
 #include <QScrollBar>
 #include <QBoxLayout>
+#include <QTextBrowser>
 
 #include <KLocalizedString>
-#include <ktextbrowser.h>
 
 #include "../declaration.h"
 #include "../ducontext.h"

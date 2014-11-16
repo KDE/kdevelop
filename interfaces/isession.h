@@ -54,7 +54,7 @@ public:
     virtual QList<QUrl> containedProjects() const = 0;
     virtual void setContainedProjects( const QList<QUrl>& projects ) = 0;
     virtual QUrl pluginDataArea( const IPlugin* ) = 0;
-    virtual KSharedConfig::Ptr config() = 0;
+    virtual KSharedConfigPtr config() = 0;
     virtual QUuid id() const = 0;
 
     /**

@@ -21,8 +21,8 @@
 
 #include <QVBoxLayout>
 
-#include <kgenericfactory.h>
 #include <kaboutdata.h>
+#include <KPluginFactory>
 
 #include "projectconfig.h"
 #include "../core.h"

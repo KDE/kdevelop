@@ -129,7 +129,7 @@ public:
     virtual Path projectFile() const = 0;
     /** Get the url of the project file.*/
     KDEVPLATFORMINTERFACES_DEPRECATED Q_SCRIPTABLE virtual QUrl projectFileUrl() const = 0;
-    virtual KSharedConfig::Ptr projectConfiguration() const = 0;
+    virtual KSharedConfigPtr projectConfiguration() const = 0;
 
     virtual void addToFileSet( ProjectFileItem* item ) = 0;
     virtual void removeFromFileSet( ProjectFileItem* item ) = 0;

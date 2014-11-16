@@ -36,6 +36,7 @@ add_library(kdevcvs MODULE ${kdevcvs_PART_SRCS})
 target_link_libraries(kdevcvs
     KF5::KIOWidgets
     KF5::Parts
+    KF5::KDELibs4Support
     KDev::Util
     KDev::Interfaces
     KDev::Vcs

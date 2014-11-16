@@ -19,7 +19,8 @@
  */
 
 #include "standardpatchexport.h"
-#include <KFileDialog>
+
+#include <QFileDialog>
 #include <KIO/CopyJob>
 #include <KLocalizedString>
 #include <KToolInvocation>
@@ -43,7 +44,7 @@ public:
 class KIOExport : public StandardExporter
 {
     virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) {
-        QUrl dest = KFileDialog::getSaveUrl();
+        QUrl dest = QFileDialog::getSaveFileUrl();
         if( !dest.isEmpty() ) { //We let KDE do the rest of the job including the notification
             KIO::CopyJob* job = KIO::copy( source->file(), dest );
             KIO::getJobTracker()->registerJob( job );

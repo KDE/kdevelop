@@ -343,7 +343,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     if( ! QFileInfo( projectFileName ).exists() )
     {
         qCDebug(PLUGIN_APPWIZARD) << "creating .kdev4 file";
-        KSharedConfig::Ptr cfg = KSharedConfig::openConfig( projectFileName, KConfig::SimpleConfig );
+        KSharedConfigPtr cfg = KSharedConfig::openConfig( projectFileName, KConfig::SimpleConfig );
         KConfigGroup project = cfg->group( "Project" );
         project.writeEntry( "Name", info.name );
         QString manager = "KDevGenericManager";

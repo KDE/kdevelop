@@ -338,7 +338,7 @@ ProjectDialogProvider::~ProjectDialogProvider()
 
 bool writeNewProjectFile( const QString& localConfigFile, const QString& name, const QString& manager )
 {
-    KSharedConfig::Ptr cfg = KSharedConfig::openConfig( localConfigFile, KConfig::SimpleConfig );
+    KSharedConfigPtr cfg = KSharedConfig::openConfig( localConfigFile, KConfig::SimpleConfig );
     if (!cfg->isConfigWritable(true)) {
         qCDebug(SHELL) << "can't write to configfile";
         return false;
@@ -381,7 +381,7 @@ bool projectFileExists( const QUrl& u )
 
 bool equalProjectFile( const QString& configPath, OpenProjectDialog* dlg )
 {
-    KSharedConfig::Ptr cfg = KSharedConfig::openConfig( configPath, KConfig::SimpleConfig );
+    KSharedConfigPtr cfg = KSharedConfig::openConfig( configPath, KConfig::SimpleConfig );
     KConfigGroup grp = cfg->group( "Project" );
     QString defaultName = dlg->projectFileUrl().adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).fileName();
     return (grp.readEntry( "Name", QString() ) == dlg->projectName() || dlg->projectName() == defaultName) &&
@@ -603,7 +603,7 @@ void ProjectController::initialize()
     QDBusConnection::sessionBus().registerObject( "/org/kdevelop/ProjectController",
         this, QDBusConnection::ExportScriptableSlots );
 
-    KSharedConfig::Ptr config = Core::self()->activeSession()->config();
+    KSharedConfigPtr config = Core::self()->activeSession()->config();
     KConfigGroup group = config->group( "General Options" );
     QList<QUrl> openProjects = group.readEntry( "Open Projects", QList<QUrl>() );
 

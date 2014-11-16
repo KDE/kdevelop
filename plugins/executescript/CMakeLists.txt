@@ -21,7 +21,6 @@ set(kdevexecutescript_PART_SRCS
 qt5_wrap_ui( kdevexecutescript_PART_SRCS ${kdevexecutescript_PART_UIS} )
 add_library(kdevexecutescript MODULE ${kdevexecutescript_PART_SRCS})
 target_link_libraries(kdevexecutescript
-    KF5::KDELibs4Support
     KDev::Interfaces
     KDev::Util
     KDev::Project

@@ -31,7 +31,6 @@ Boston, MA 02110-1301, USA.
 #include <QAction>
 #include <KLocalizedString>
 #include <kurl.h>
-#include <kiconloader.h>
 #include <kstandardaction.h>
 #include <klocalizedstring.h>
 

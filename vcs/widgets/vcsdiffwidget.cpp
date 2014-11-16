@@ -22,7 +22,7 @@
 
 #include <QLabel>
 
-#include <KLocale>
+#include <KLocalizedString>
 #include <ktextedit.h>
 
 #include <interfaces/icore.h>

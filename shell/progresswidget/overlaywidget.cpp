@@ -29,14 +29,19 @@
  */
 
 #include "overlaywidget.h"
+
+#include <QHBoxLayout>
 #include <QResizeEvent>
 #include <QEvent>
 
 using namespace KDevelop;
 
 OverlayWidget::OverlayWidget( QWidget* alignWidget, QWidget* parent, const char* name )
-    : KHBox( parent ), mAlignWidget( 0 )
+    : QWidget( parent ), mAlignWidget( 0 )
 {
+    auto hboxHBoxLayout = new QHBoxLayout(this);
+    hboxHBoxLayout->setMargin(0);
+
     setObjectName(name);
     setAlignWidget( alignWidget );
 }
@@ -84,12 +89,12 @@ bool OverlayWidget::eventFilter( QObject* o, QEvent* e)
          ( e->type() == QEvent::Move || e->type() == QEvent::Resize ) ) {
         reposition();
     }
-    return QFrame::eventFilter(o,e);
+    return QWidget::eventFilter(o,e);
 }
 
 void OverlayWidget::resizeEvent( QResizeEvent* ev )
 {
     reposition();
-    QFrame::resizeEvent( ev );
+    QWidget::resizeEvent( ev );
 }
 

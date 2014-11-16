@@ -25,7 +25,6 @@
 #include <QKeyEvent>
 #include <QUrl>
 
-#include <kiconloader.h>
 #include <KLocalizedString>
 #include <kactioncollection.h>
 #include <QLineEdit>

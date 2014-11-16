@@ -14,8 +14,11 @@ set(kdevprojectmanagerview_PLUGIN_SRCS
 qt5_wrap_ui( kdevprojectmanagerview_PLUGIN_SRCS projectbuildsetwidget.ui projectmanagerview.ui )
 
 add_library(kdevprojectmanagerview MODULE ${kdevprojectmanagerview_PLUGIN_SRCS})
-target_link_libraries(kdevprojectmanagerview KF5::TextEditor
-                      KDev::Interfaces KDev::Project KDev::Language KDev::Util KDev::Vcs KDev::Sublime KF5::ThreadWeaver)
+target_link_libraries(kdevprojectmanagerview
+    KF5::TextEditor
+    KF5::ThreadWeaver
+    KF5::KDELibs4Support
+    KDev::Interfaces KDev::Project KDev::Language KDev::Util KDev::Vcs KDev::Sublime )
 
 install(TARGETS kdevprojectmanagerview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 

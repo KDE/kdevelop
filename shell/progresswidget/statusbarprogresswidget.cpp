@@ -39,7 +39,6 @@
 #include "progressmanager.h"
 
 #include <KLocalizedString>
-#include <KIconLoader>
 
 #include <QEvent>
 #include <QFrame>

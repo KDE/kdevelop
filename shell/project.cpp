@@ -149,7 +149,7 @@ public:
     QPointer<IPlugin> vcsPlugin;
     ProjectFolderItem* topItem;
     QString name;
-    KSharedConfig::Ptr m_cfg;
+    KSharedConfigPtr m_cfg;
     IProject *project;
     QSet<KDevelop::IndexedString> fileSet;
     bool loading;
@@ -438,7 +438,7 @@ QString Project::projectTempFile() const
     return d->projectTempFile;
 }
 
-KSharedConfig::Ptr Project::projectConfiguration() const
+KSharedConfigPtr Project::projectConfiguration() const
 {
     return d->m_cfg;
 }

@@ -78,18 +78,21 @@ LINK_PUBLIC
     KDev::OutputView
     KDev::Debugger
     KDev::Interfaces
-    KF5::KDELibs4Support
 LINK_PRIVATE
     Qt5::Declarative
 
+    KF5::GuiAddons
     KF5::KIOWidgets
     KF5::KCMUtils
     KF5::Parts
+    KF5::Notifications
     KF5::NotifyConfig
     KF5::TextEditor
     KF5::ThreadWeaver
     KF5::JobWidgets
     KF5::ItemViews
+    KF5::WindowSystem
+    KF5::KDELibs4Support
 
     KDev::Project
     KDev::Vcs

@@ -46,8 +46,6 @@
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
 #include <vcs/widgets/standardvcslocationwidget.h>
-#include <KIO/CopyJob>
-#include <KIO/NetAccess>
 #include "gitclonejob.h"
 #include <interfaces/contextmenuextension.h>
 #include <QMenu>
@@ -57,6 +55,7 @@
 #include <KTextEdit>
 #include <KDirWatch>
 #include <KTextEditor/Document>
+#include <kio/copyjob.h>
 #include "gitjob.h"
 #include "gitmessagehighlighter.h"
 #include "gitplugincheckinrepositoryjob.h"
@@ -491,14 +490,17 @@ VcsJob* GitPlugin::remove(const QList<QUrl>& files)
                 //if it's an unversioned file we are done, don't use git rm on it
                 i.remove();
             }
-            KIO::NetAccess::synchronousRun(KIO::trash(otherFiles), 0);
+
+            auto trashJob = KIO::trash(otherFiles);
+            trashJob->exec();
             qCDebug(PLUGIN_GIT) << "other files" << otherFiles;
         }
 
         if (fileInfo.isDir()) {
             if (isEmptyDirStructure(QDir(file.toLocalFile()))) {
                 //remove empty folders, git doesn't do that
-                KIO::NetAccess::synchronousRun(KIO::trash(file), 0);
+                auto trashJob = KIO::trash(file);
+                trashJob->exec();
                 qCDebug(PLUGIN_GIT) << "empty folder, removing" << file;
                 //we already deleted it, don't use git rm on it
                 i.remove();

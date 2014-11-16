@@ -43,7 +43,7 @@ ProjectConfigSkeleton::ProjectConfigSkeleton( const QString & configname )
     d->m_developerTempFile = configname;
 }
 
-ProjectConfigSkeleton::ProjectConfigSkeleton( KSharedConfig::Ptr config )
+ProjectConfigSkeleton::ProjectConfigSkeleton( KSharedConfigPtr config )
         : KConfigSkeleton( config ), d( new ProjectConfigSkeletonPrivate )
 {
 }

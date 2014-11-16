@@ -24,7 +24,7 @@
 #include <KPluginLoader>
 #include <KPluginFactory>
 #include <KAboutData>
-#include <KSettings/Dispatcher>
+#include <ksettings/dispatcher.h>
 #include <KMessageBox>
 #include <KParts/MainWindow>
 #include <KLocalizedString>

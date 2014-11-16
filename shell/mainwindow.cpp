@@ -33,7 +33,6 @@ Boston, MA 02110-1301, USA.
 #include <QMimeData>
 #include <QTemporaryFile>
 
-#include <KApplication>
 #include <KActionCollection>
 #include <KLocalizedString>
 #include <kactioncollection.h>

@@ -21,11 +21,10 @@ Boston, MA 02110-1301, USA.
 */
 
 #include <kconfiggroup.h>
-#include <kapplication.h>
-#include <KXmlGui/kaboutapplicationdialog.h>
+#include <kaboutdata.h>
+#include <kaboutapplicationdialog.h>
 #include <knotifyconfigwidget.h>
 #include <ktogglefullscreenaction.h>
-#include <kcomponentdata.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -39,8 +38,6 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "loadedpluginsdialog.h"
 #include <interfaces/ipartcontroller.h>
-
-#include <KAboutApplicationDialog>
 
 namespace KDevelop {
 

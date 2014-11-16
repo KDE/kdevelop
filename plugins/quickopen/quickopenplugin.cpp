@@ -44,7 +44,6 @@
 #include <KConfigCore/KConfigGroup>
 #include <kactioncollection.h>
 #include <QAction>
-#include <kshortcut.h>
 
 #include <interfaces/ilanguage.h>
 #include <interfaces/icore.h>

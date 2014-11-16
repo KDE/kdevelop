@@ -21,6 +21,7 @@
 
 #include <QFile>
 #include <QSignalSpy>
+#include <kaboutdata.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kcomponentdata.h>

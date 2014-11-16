@@ -32,7 +32,7 @@ add_library(KDev::Sublime ALIAS KDevPlatformSublime)
 generate_export_header(KDevPlatformSublime EXPORT_FILE_NAME sublimeexport.h)
 target_link_libraries(KDevPlatformSublime
         LINK_PRIVATE KF5::KIOWidgets
-        LINK_PUBLIC KF5::Parts KF5::KDELibs4Support)
+        LINK_PUBLIC KF5::Parts)
 set_target_properties(KDevPlatformSublime PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Sublime)
 install(TARGETS KDevPlatformSublime EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

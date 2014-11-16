@@ -65,7 +65,7 @@ public:
     void reloadModel() { }
     Path projectFile() const;
     KDEVPLATFORMTESTS_DEPRECATED QUrl projectFileUrl() const;
-    KSharedConfig::Ptr projectConfiguration() const { return m_projectConfiguration; }
+    KSharedConfigPtr projectConfiguration() const { return m_projectConfiguration; }
     void addToFileSet( ProjectFileItem* file);
     void removeFromFileSet( ProjectFileItem* file);
     QSet<IndexedString> fileSet() const { return m_fileSet; }
@@ -83,7 +83,7 @@ private:
     QSet<IndexedString> m_fileSet;
     Path m_path;
     ProjectFolderItem* m_root;
-    KSharedConfig::Ptr m_projectConfiguration;
+    KSharedConfigPtr m_projectConfiguration;
 };
 
 /**

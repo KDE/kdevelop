@@ -28,8 +28,7 @@
 
 #include <QAction>
 #include <KLocalizedString>
-#include <kaboutdata.h>
-#include <kgenericfactory.h>
+#include <KPluginFactory>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>

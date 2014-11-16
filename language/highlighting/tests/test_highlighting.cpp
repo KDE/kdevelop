@@ -27,7 +27,6 @@
 #include <language/duchain/duchain.h>
 #include <language/codegen/coderepresentation.h>
 #include <language/highlighting/codehighlighting.h>
-#include <KColorUtils>
 
 QTEST_MAIN(TestHighlighting)
 

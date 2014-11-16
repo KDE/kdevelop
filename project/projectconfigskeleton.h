@@ -63,7 +63,7 @@ private:
      * this constructor is used and see if we need to add appropriate API to
      * kdelibs
      */
-     ProjectConfigSkeleton( KSharedConfig::Ptr config );
+     ProjectConfigSkeleton( KSharedConfigPtr config );
      struct ProjectConfigSkeletonPrivate * const d;
 };
 

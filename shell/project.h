@@ -77,7 +77,7 @@ public:
     virtual void reloadModel();
     virtual KDEVPLATFORMSHELL_DEPRECATED QUrl projectFileUrl() const;
     virtual Path projectFile() const;
-    virtual KSharedConfig::Ptr projectConfiguration() const;
+    virtual KSharedConfigPtr projectConfiguration() const;
 
     virtual void addToFileSet( ProjectFileItem* file );
     virtual void removeFromFileSet( ProjectFileItem* file );

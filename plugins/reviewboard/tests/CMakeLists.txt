@@ -10,6 +10,6 @@ set(reviewboardtest_SRCS
 qt5_wrap_ui(reviewboardtest_SRCS ../reviewpatch.ui)
 
 add_executable(reviewboardtest ${reviewboardtest_SRCS})
-target_link_libraries(reviewboardtest KDev::Interfaces KF5::KIOWidgets KF5::KDELibs4Support)
+target_link_libraries(reviewboardtest KDev::Interfaces KF5::KIOWidgets)
 
 

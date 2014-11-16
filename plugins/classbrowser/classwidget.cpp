@@ -29,7 +29,6 @@
 #include <QHeaderView>
 
 #include <KLocalizedString>
-#include <KIconLoader>
 #include <QLineEdit>
 
 #include "classmodel.h"

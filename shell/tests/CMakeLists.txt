@@ -32,7 +32,7 @@ add_library( kdevnonguiinterfaceplugin MODULE ${plugincontrollertest_plugin_SRCS
 target_link_libraries( kdevnonguiinterfaceplugin Qt5::Core KDev::Interfaces )
 
 ecm_add_test(test_plugincontroller.cpp
-    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell KDev::Interfaces KDev::Sublime)
+    LINK_LIBRARIES Qt5::Test KF5::KDELibs4Support KDev::Tests KDev::Shell KDev::Interfaces KDev::Sublime)
 
 ecm_add_test(test_testcontroller.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests)

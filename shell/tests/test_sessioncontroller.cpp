@@ -52,7 +52,7 @@ void verifySessionDir( const QString& sessiondir, const QString& name, bool exis
         QVERIFY( QFileInfo( sessiondir ).exists() );
         QVERIFY( QFileInfo( sessiondir ).isDir() );
         QVERIFY( QFileInfo( sessiondir+"/sessionrc" ).exists() );
-        KSharedConfig::Ptr cfg = KSharedConfig::openConfig( sessiondir+"/sessionrc" );
+        KSharedConfigPtr cfg = KSharedConfig::openConfig( sessiondir+"/sessionrc" );
         QCOMPARE( name, cfg->group("").readEntry( Session::cfgSessionNameEntry, "" ) );
     } else {
         qDebug() << "checking not-existing dir: " << sessiondir;

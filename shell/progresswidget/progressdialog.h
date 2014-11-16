@@ -24,7 +24,7 @@
 
 #include "overlaywidget.h"
 
-#include <KVBox>
+#include <QVBoxLayout>
 
 #include <QScrollArea>
 #include <QMap>
@@ -62,7 +62,7 @@ private:
     QWidget *mBigBox;
 };
 
-class TransactionItem : public KVBox
+class TransactionItem : public QWidget
 {
     Q_OBJECT
 public:

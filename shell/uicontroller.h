@@ -79,9 +79,9 @@ public:
 
     void mainWindowDeleted(MainWindow* mw);
 
-    void saveAllAreas(KSharedConfig::Ptr config);
+    void saveAllAreas(KSharedConfigPtr config);
     void saveArea(Sublime::Area* area, KConfigGroup & group);
-    void loadAllAreas(KSharedConfig::Ptr config);
+    void loadAllAreas(KSharedConfigPtr config);
     void loadArea(Sublime::Area* area, const KConfigGroup & group);
 
     /*! @p status must implement KDevelop::IStatus */

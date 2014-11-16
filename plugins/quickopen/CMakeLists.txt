@@ -23,7 +23,7 @@ set (
 
 qt5_wrap_ui(kdevquickopen_PART_SRCS ${kdevquickopen_UI})
 add_library(kdevquickopen MODULE ${kdevquickopen_PART_SRCS})
-target_link_libraries(kdevquickopen KDev::Language KDev::Interfaces KDev::Project KF5::TextEditor KDev::Util)
+target_link_libraries(kdevquickopen KF5::IconThemes KF5::GuiAddons KF5::TextEditor KDev::Language KDev::Interfaces KDev::Project KDev::Util)
 
 install(TARGETS kdevquickopen DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 

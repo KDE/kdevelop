@@ -24,8 +24,8 @@
 
 #include <QVBoxLayout>
 
-#include <kgenericfactory.h>
 #include <kaboutdata.h>
+#include <KPluginFactory>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>

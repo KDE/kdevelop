@@ -23,7 +23,6 @@
 
 #include <KLocalizedString>
 #include <KEMailSettings>
-#include <KComponentData>
 #include <KMessageBox>
 #include <KConfigGroup>
 

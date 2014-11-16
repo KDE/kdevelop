@@ -29,6 +29,7 @@ target_link_libraries(KDevPlatformDebugger LINK_PUBLIC
     KDev::Util
 LINK_PRIVATE
     Qt5::Core
+    KF5::Notifications
     KF5::TextEditor
     KDev::Sublime
 )
