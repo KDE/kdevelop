@@ -64,7 +64,7 @@ struct LanguageControllerPrivate {
     LanguageControllerPrivate(LanguageController *controller)
         : dataMutex(QMutex::Recursive)
         , backgroundParser(new BackgroundParser(controller))
-        , staticAssistantsManager(new StaticAssistantsManager(controller))
+        , staticAssistantsManager(nullptr)
         , m_cleanedUp(false)
         , m_controller(controller)
     {}
@@ -161,6 +161,7 @@ LanguageController::~LanguageController()
 void LanguageController::initialize()
 {
     d->backgroundParser->loadSettings();
+    d->staticAssistantsManager = new StaticAssistantsManager(this);
 
     // make sure the DUChain is setup before we try to access it from different threads at the same time
     DUChain::self();

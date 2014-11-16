@@ -48,6 +48,10 @@ struct StaticAssistantsManager::Private
     Private(StaticAssistantsManager* qq)
         : q(qq)
     {
+        connect(KDevelop::ICore::self()->languageController()->backgroundParser(),
+                &BackgroundParser::parseJobFinished, q, [this] (ParseJob* job) {
+                    parseJobFinished(job);
+                });
     }
 
     void eventuallyStartAssistant();
@@ -256,11 +260,6 @@ void StaticAssistantsManager::Private::documentActivated(IDocument* doc)
     if (doc) {
         m_currentDocument = IndexedString(doc->url());
     }
-
-    connect(KDevelop::ICore::self()->languageController()->backgroundParser(),
-            &BackgroundParser::parseJobFinished, q,
-            [&] (ParseJob* job) { q->d->parseJobFinished(job); },
-            Qt::UniqueConnection);
 
     if (m_currentView) {
         QObject::disconnect(m_cursorPositionChangeConnection);
