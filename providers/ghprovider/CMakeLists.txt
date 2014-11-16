@@ -17,6 +17,7 @@ set(kdevghprovider_PART_SRCS
 add_library(kdevghprovider MODULE ${kdevghprovider_PART_SRCS})
 target_link_libraries(kdevghprovider
   KF5::KIOWidgets
+  KF5::KDELibs4Support
   KDev::Interfaces
   KDev::Vcs
   KDev::Language

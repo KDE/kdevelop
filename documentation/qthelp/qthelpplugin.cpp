@@ -23,7 +23,7 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <KAboutData>
-#include <KSettings/Dispatcher>
+#include <ksettings/dispatcher.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <QDirIterator>
