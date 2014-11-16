@@ -35,7 +35,6 @@
 #include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <kactioncollection.h>
-#include <kmimetype.h>
 #include <kparts/mainwindow.h>
 #include <kio/copyjob.h>
 #include <kio/netaccess.h>
@@ -52,6 +51,7 @@
 #include <vcs/vcsjob.h>
 #include <vcs/interfaces/icentralizedversioncontrol.h>
 #include <vcs/interfaces/idistributedversioncontrol.h>
+#include <util/mimetype.h>
 
 #include "appwizarddialog.h"
 #include "projectselectionpage.h"
@@ -59,13 +59,7 @@
 #include "projecttemplatesmodel.h"
 #include "debug.h"
 
-using KDevelop::IBasicVersionControl;
-using KDevelop::ICentralizedVersionControl;
-using KDevelop::IDistributedVersionControl;
-using KDevelop::IPlugin;
-using KDevelop::VcsJob;
-using KDevelop::VcsLocation;
-using KDevelop::ICore;
+using namespace KDevelop;
 
 Q_LOGGING_CATEGORY(PLUGIN_APPWIZARD, "kdevplatform.plugins.appwizard")
 K_PLUGIN_FACTORY_WITH_JSON(AppWizardFactory, "kdevappwizard.json", registerPlugin<AppWizardPlugin>();)
@@ -421,8 +415,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
 bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QString &dest)
 {
     qCDebug(PLUGIN_APPWIZARD) << "copy:" << source << "to" << dest;
-    // TODO: KF5 replacement? it just checks if the first 32 bytes contain non-ascii data
-    if( KMimeType::isBinaryData(source) )
+    if( MimeType::isBinaryData(source) )
     {
         KIO::CopyJob* job = KIO::copy( QUrl::fromUserInput(source), QUrl::fromUserInput(dest), KIO::HideProgressInfo );
         if( !job->exec() )
