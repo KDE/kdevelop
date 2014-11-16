@@ -241,11 +241,6 @@
    <header>klineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>QListWidget</class>
-   <extends>QListWidget</extends>
-   <header>klistwidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>ProjectItemLineEdit</class>
    <extends>QLineEdit</extends>
    <header>project/projectitemlineedit.h</header>

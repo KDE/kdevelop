@@ -1,5 +1,7 @@
 #include "test.h"
 
+#include <QtTest>
+
 void KdeTest::initTestCase()
 {
 

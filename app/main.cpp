@@ -33,7 +33,6 @@
 #include <kcmdlineargs.h>
 #include <KLocalizedString>
 
-#include <ksplashscreen.h>
 #include <kmessagebox.h>
 #include <ktexteditor/cursor.h>
 
@@ -45,6 +44,7 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QLoggingCategory>
+
 Q_DECLARE_LOGGING_CATEGORY(APP)
 Q_LOGGING_CATEGORY(APP, "kdevelop.app")
 

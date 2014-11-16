@@ -23,7 +23,6 @@
 #include <icmakemanager.h>
 
 #include <qtest.h>
-#include <qtest_kde.h>
 
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
