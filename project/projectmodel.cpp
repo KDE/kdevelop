@@ -37,7 +37,8 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <kio/udsentry.h>
-#include <kio/netaccess.h>
+#include <kio/statjob.h>
+#include <KJobWidgets>
 #include <QMetaClassInfo>
 #include <QThread>
 
@@ -148,7 +149,8 @@ public:
         newPath.setLastPathSegment(newName);
 
         KIO::UDSEntry entry;
-        if( KIO::NetAccess::stat(newPath.toUrl(), entry, 0) ) {
+        auto job = KIO::stat(newPath.toUrl(), KIO::StatJob::SourceSide, 0);
+        if (job->exec()) {
             // file/folder exists already
             return ProjectBaseItem::ExistingItemSameName;
         }

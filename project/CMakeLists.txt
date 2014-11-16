@@ -30,7 +30,6 @@ target_include_directories(KDevPlatformProject PRIVATE "${CMAKE_CURRENT_BINARY_D
 target_link_libraries(KDevPlatformProject LINK_PUBLIC
     KDev::Interfaces
     KDev::Util # util/path.h
-    KF5::KDELibs4Support
 )
 target_link_libraries(KDevPlatformProject LINK_PRIVATE
     KDev::Interfaces

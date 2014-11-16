@@ -21,13 +21,13 @@
 #include "path.h"
 
 #include <QTemporaryFile>
-#include <KIO/NetAccess>
 #include <kio/job.h>
 #include <kio/copyjob.h>
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <kparts/mainwindow.h>
+#include <KJobWidgets>
 
 #include <QApplication>
 #include <QFileInfo>
@@ -43,7 +43,9 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const QUrl& url, con
 {
     QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
 
-    if ( !KIO::NetAccess::exists(url, KIO::NetAccess::DestinationSide, window) ) {
+    auto job = KIO::stat(url, KIO::StatJob::DestinationSide, 0);
+    KJobWidgets::setWindow(job, window);
+    if (job->exec()) {
         qWarning() << "tried to remove non-existing url:" << url << project << isFolder;
         return true;
     }
@@ -62,7 +64,9 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const QUrl& url, con
     }
 
     //if we didn't find a VCS, we remove using KIO (if the file still exists, the vcs plugin might have simply deleted the url without returning a job
-    if ( !KIO::NetAccess::del( url, window ) && url.isLocalFile() && (QFileInfo(url.toLocalFile())).exists() ) {
+    auto deleteJob = KIO::file_delete(url);
+    KJobWidgets::setWindow(deleteJob, window);
+    if (!deleteJob->exec() && url.isLocalFile() && (QFileInfo(url.toLocalFile())).exists()) {
         KMessageBox::error( window,
             isFolder ? i18n( "Cannot remove folder <i>%1</i>.", url.toDisplayString(QUrl::PreferLocalFile) )
                         : i18n( "Cannot remove file <i>%1</i>.", url.toDisplayString(QUrl::PreferLocalFile) ) );
@@ -78,20 +82,18 @@ bool KDevelop::removePath(const KDevelop::IProject* project, const KDevelop::Pat
 
 bool KDevelop::createFile(const QUrl& file)
 {
-    if (KIO::NetAccess::exists( file, KIO::NetAccess::DestinationSide, QApplication::activeWindow() )) {
+    auto statJob = KIO::stat(file, KIO::StatJob::DestinationSide, 0);
+    KJobWidgets::setWindow(statJob, QApplication::activeWindow());
+    if (statJob->exec()) {
         KMessageBox::error( QApplication::activeWindow(),
                             i18n( "The file <i>%1</i> already exists.", file.toDisplayString(QUrl::PreferLocalFile) ) );
         return false;
     }
 
     {
-        QTemporaryFile temp;
-        if ( !temp.open() || temp.write("\n") == -1 ) {
-            KMessageBox::error( QApplication::activeWindow(),
-                                i18n( "Cannot create temporary file to create <i>%1</i>.", file.toDisplayString(QUrl::PreferLocalFile) ) );
-            return false;
-        }
-        if ( !KIO::NetAccess::upload( temp.fileName(), file, QApplication::activeWindow() ) ) {
+        auto uploadJob = KIO::storedPut(QByteArray("\n"), file, -1);
+        KJobWidgets::setWindow(uploadJob, QApplication::activeWindow());
+        if (uploadJob->exec()) {
             KMessageBox::error( QApplication::activeWindow(),
                                 i18n( "Cannot create file <i>%1</i>.", file.toDisplayString(QUrl::PreferLocalFile) ) );
             return false;
@@ -107,7 +109,9 @@ bool KDevelop::createFile(const KDevelop::Path& file)
 
 bool KDevelop::createFolder(const QUrl& folder)
 {
-    if ( !KIO::NetAccess::mkdir( folder, QApplication::activeWindow() ) ) {
+    auto mkdirJob = KIO::mkdir(folder);
+    KJobWidgets::setWindow(mkdirJob, QApplication::activeWindow());
+    if (!mkdirJob->exec()) {
         KMessageBox::error( QApplication::activeWindow(), i18n( "Cannot create folder <i>%1</i>.", folder.toDisplayString(QUrl::PreferLocalFile) ) );
         return false;
     }
@@ -177,9 +181,10 @@ bool KDevelop::copyUrl(const KDevelop::IProject* project, const QUrl& source, co
             }
         }
     }
+
     // Fallback for the case of no vcs, or not-vcs-managed file/folder
-    KIO::CopyJob* job=KIO::copy(source, target);
-    return KIO::NetAccess::synchronousRun(job, 0);
+    auto job = KIO::copy(source, target);
+    return job->exec();
 }
 
 bool KDevelop::copyPath(const KDevelop::IProject* project, const KDevelop::Path& source, const KDevelop::Path& target)

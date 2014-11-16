@@ -30,7 +30,6 @@
 
 #include <util/path.h>
 
-class KComponentData;
 class QWidget;
 class QStringList;
 

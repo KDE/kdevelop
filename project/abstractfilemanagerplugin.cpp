@@ -31,7 +31,6 @@
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KDirWatch>
-#include <KIO/NetAccess>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
@@ -598,7 +597,7 @@ bool AbstractFileManagerPlugin::moveFilesAndFolders(const QList< ProjectBaseItem
             // reload first level synchronously, deeper levels will run async
             // this is required for code that expects the new item to exist after
             // this method finished
-            KIO::NetAccess::synchronousRun(readJob, 0);
+            readJob->exec();
         }
 
         d->continueWatcher(oldParent);
@@ -622,7 +621,7 @@ bool AbstractFileManagerPlugin::copyFilesAndFolders(const Path::List& items, Pro
             // reload first level synchronously, deeper levels will run async
             // this is required for code that expects the new item to exist after
             // this method finished
-            KIO::NetAccess::synchronousRun(readJob, 0);
+            readJob->exec();
         }
 
         d->continueWatcher(newParent);

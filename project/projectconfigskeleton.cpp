@@ -22,15 +22,13 @@ Boston, MA 02110-1301, USA.
 #include "debug.h"
 
 #include <interfaces/iproject.h>
-
 #include <util/path.h>
 
-#include <kio/netaccess.h>
+#include <kio/copyjob.h>
 
-namespace KDevelop
-{
+using namespace KDevelop;
 
-struct ProjectConfigSkeletonPrivate
+struct KDevelop::ProjectConfigSkeletonPrivate
 {
     QString m_developerTempFile;
     QString m_projectTempFile;
@@ -158,7 +156,8 @@ bool ProjectConfigSkeleton::writeConfig()
 
     readConfig();
 
-    KIO::NetAccess::upload( d->m_developerTempFile, d->m_developerFile.toUrl(), 0 );
+    auto copyJob = KIO::copy(QUrl::fromLocalFile(d->m_developerTempFile), d->m_developerFile.toUrl());
+    copyJob ->exec();
 
     emit configChanged();
     return true;
@@ -168,6 +167,3 @@ ProjectConfigSkeleton::~ProjectConfigSkeleton()
 {
     delete d;
 }
-
-}
-
