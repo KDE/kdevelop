@@ -54,7 +54,6 @@ enable_testing()
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 include_directories(
-    ${KDE4_INCLUDES}
     ${KDEVELOP_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}

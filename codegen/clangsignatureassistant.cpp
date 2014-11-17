@@ -42,8 +42,6 @@
 #include "../util/clangutils.h"
 #include "../util/clangtypes.h"
 
-#include <KDebug>
-
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QUrl>
@@ -63,12 +61,12 @@ ParseSessionData::Ptr getSession(const QUrl &url)
     DUChainReadLocker lock;
     auto top = DUChainUtils::standardContextForUrl(url);
     if (!top) {
-        kWarning() << "No context found for" << url;
+        qWarning() << "No context found for" << url;
         return {};
     }
     auto session = ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(top->ast().data()));
     if (!session) {
-        kWarning() << "No parse session / AST attached to context for url" << url;
+        qWarning() << "No parse session / AST attached to context for url" << url;
         return {};
     }
     return session;

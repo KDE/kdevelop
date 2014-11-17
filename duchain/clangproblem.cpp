@@ -27,7 +27,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/codegen/documentchangeset.h>
 
-#include <KLocale>
+#include <KLocalizedString>
 
 using namespace KDevelop;
 

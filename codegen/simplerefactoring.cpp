@@ -21,13 +21,12 @@
 #include "simplerefactoring.h"
 
 #include <QAction>
+#include <QIcon>
 
 #include <interfaces/contextmenuextension.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/interfaces/codecontext.h>
-
-#include <KIcon>
 
 using namespace KDevelop;
 
@@ -51,7 +50,7 @@ void SimpleRefactoring::fillContextMenu(ContextMenuExtension& extension, Context
             if (fileInfo.isWritable()) {
                 QAction* action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
                 action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
-                action->setIcon(KIcon("edit-rename"));
+                action->setIcon(QIcon::fromTheme("edit-rename"));
                 connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
 
                 extension.addAction(ContextMenuExtension::RefactorGroup, action);

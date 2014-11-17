@@ -25,8 +25,6 @@
 
 #include <language/duchain/types/indexedtype.h>
 
-#include <KDebug>
-
 namespace {
 /**
  * Find the cursor that cursor @p cursor references
@@ -434,7 +432,7 @@ AbstractType *TUDUChain::makeType(CXType type, CXCursor parent)
     case CXType_Invalid:
         return nullptr;
     default:
-        kWarning() << "Unhandled type:" << type.kind << ClangString(clang_getTypeSpelling(type));
+        qWarning() << "Unhandled type:" << type.kind << ClangString(clang_getTypeSpelling(type));
         return nullptr;
     }
 }

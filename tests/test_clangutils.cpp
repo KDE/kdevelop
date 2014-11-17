@@ -31,7 +31,7 @@
 
 #include <clang-c/Index.h>
 
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 
 #include <QDebug>
 #include <QtTest>
@@ -69,7 +69,7 @@ void parse(const QByteArray& code, CXTranslationUnit* unit, QString* fileName = 
 {
     Q_ASSERT(unit);
 
-    KTemporaryFile tempFile;
+    QTemporaryFile tempFile;
     QVERIFY(tempFile.open());
     tempFile.write(code);
     tempFile.flush();

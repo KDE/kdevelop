@@ -44,9 +44,6 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
-#include <KDebug>
-#include <KIcon>
-
 using namespace KDevelop;
 
 namespace {
@@ -113,7 +110,7 @@ public:
     {
         if (role == Qt::DecorationRole) {
             if (index.column() == KTextEditor::CodeCompletionModel::Icon) {
-                static QIcon icon(KIcon("CTparents"));
+                static const QIcon icon = QIcon::fromTheme("CTparents");
                 return icon;
             }
         }
@@ -138,7 +135,7 @@ public:
     {
         if (role == Qt::DecorationRole) {
             if (index.column() == KTextEditor::CodeCompletionModel::Icon) {
-                static QIcon icon(KIcon("CTsuppliers"));
+                static const QIcon icon = QIcon::fromTheme("CTsuppliers");
                 return icon;
             }
         }
@@ -360,7 +357,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         }
 
         if (!m_results) {
-            kWarning() << "Something went wrong during 'clang_codeCompleteAt' for file" << file.toString();
+            qWarning() << "Something went wrong during 'clang_codeCompleteAt' for file" << file.toString();
         }
     }
 

@@ -60,15 +60,12 @@
 #include <language/duchain/use.h>
 #include <language/editor/documentcursor.h>
 
-#include <KAction>
 #include <KActionCollection>
 
+#include <QAction>
 #include <QRegExp>
 
 K_PLUGIN_FACTORY(KDevClangSupportFactory, registerPlugin<ClangSupport>(); )
-//K_EXPORT_PLUGIN(KDevClangSupportFactory(
-//    KAboutData("kdevclangsupport", 0, ki18n("Clang Plugin"), "0.1",
-//    ki18n("Support for C, C++ and Objective-C languages."), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 

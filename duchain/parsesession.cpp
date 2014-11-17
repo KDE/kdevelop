@@ -34,8 +34,6 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 
-#include <KLocale>
-
 #include <QDir>
 #include <QFileInfo>
 #include <QMimeDatabase>

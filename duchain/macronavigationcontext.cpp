@@ -22,8 +22,6 @@
 #include "util/clangdebug.h"
 #include "util/clangutils.h"
 
-#include <KLocale>
-
 #include <KTextEditor/Editor>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>

@@ -46,8 +46,6 @@
 #include <QDir>
 #include <QProcess>
 
-#include <KLocale>
-
 #include <algorithm>
 
 using namespace KDevelop;
