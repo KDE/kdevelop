@@ -46,9 +46,9 @@ DebugJob::DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfigur
     setCapabilities(Killable);
 
     m_session = p->createSession();
-    connect(m_session, SIGNAL(applicationStandardOutputLines(QStringList)), SLOT(stderrReceived(QStringList)));
-    connect(m_session, SIGNAL(applicationStandardErrorLines(QStringList)), SLOT(stdoutReceived(QStringList)));
-    connect(m_session, SIGNAL(finished()), SLOT(done()) );
+    connect(m_session, &DebugSession::applicationStandardOutputLines, this, &DebugJob::stderrReceived);
+    connect(m_session, &DebugSession::applicationStandardErrorLines, this, &DebugJob::stdoutReceived);
+    connect(m_session, &DebugSession::finished, this, &DebugJob::done );
 
     setObjectName(launchcfg->name());
 }
@@ -142,7 +142,7 @@ void DebugJob::done()
 
 KillSessionJob::KillSessionJob(DebugSession *session, QObject* parent): KJob(parent), m_session(session)
 {
-    connect(m_session, SIGNAL(finished()), SLOT(sessionFinished()));
+    connect(m_session, &DebugSession::finished, this, &KillSessionJob::sessionFinished);
     setCapabilities(Killable);
 }
 

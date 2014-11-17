@@ -58,15 +58,15 @@ GdbConfigPage::GdbConfigPage( QWidget* parent )
 {
     ui->setupUi( this );
     ui->kcfg_gdbPath->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
-    connect(ui->kcfg_asmDemangle, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
-    connect(ui->kcfg_configGdbScript, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
+    connect(ui->kcfg_asmDemangle, &QCheckBox::toggled, this, &GdbConfigPage::changed);
+    connect(ui->kcfg_configGdbScript, &KUrlRequester::textChanged, this, &GdbConfigPage::changed);
     //connect(ui->kcfg_dbgTerminal, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
-    connect(ui->kcfg_debuggingShell, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
-    connect(ui->kcfg_displayStaticMembers, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
-    connect(ui->kcfg_gdbPath, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
-    connect(ui->kcfg_runGdbScript, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
-    connect(ui->kcfg_runShellScript, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
-    connect(ui->kcfg_startWith, SIGNAL(currentIndexChanged(int)), this, SIGNAL(changed()));
+    connect(ui->kcfg_debuggingShell, &KUrlRequester::textChanged, this, &GdbConfigPage::changed);
+    connect(ui->kcfg_displayStaticMembers, &QCheckBox::toggled, this, &GdbConfigPage::changed);
+    connect(ui->kcfg_gdbPath, &KUrlRequester::textChanged, this, &GdbConfigPage::changed);
+    connect(ui->kcfg_runGdbScript, &KUrlRequester::textChanged, this, &GdbConfigPage::changed);
+    connect(ui->kcfg_runShellScript, &KUrlRequester::textChanged, this, &GdbConfigPage::changed);
+    connect(ui->kcfg_startWith, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &GdbConfigPage::changed);
 
     //Setup data info for combobox
     ui->kcfg_startWith->setItemData(0, "ApplicationOutput" );

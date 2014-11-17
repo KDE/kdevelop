@@ -81,7 +81,7 @@ QString ModelsManager::addView(QAbstractItemView* view)
             view->setModel(m);
 
             if (group.type() == flag) {
-                connect(view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(flagChanged(QModelIndex)), Qt::UniqueConnection);
+                connect(view, &QAbstractItemView::doubleClicked, this, &ModelsManager::flagChanged, Qt::UniqueConnection);
             }
 
             name = group.name();
@@ -101,7 +101,7 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
         return;
     }
 
-    disconnect(model, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(itemChanged(QStandardItem*)));
+    disconnect(model, &QStandardItemModel::itemChanged, this, &ModelsManager::itemChanged);
 
     model->setRowCount(group.registers.count());
     model->setColumnCount(group.registers.first().value.split(' ').size() + 1);
@@ -139,7 +139,7 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
         }
     }
 
-    connect(model, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(itemChanged(QStandardItem*)));
+    connect(model, &QStandardItemModel::itemChanged, this, &ModelsManager::itemChanged);
 }
 
 void ModelsManager::flagChanged(const QModelIndex& idx)
@@ -247,9 +247,9 @@ void ModelsManager::setController(IRegisterController* rc)
     if (!m_controller) {
         m_models->clear();
     } else {
-        connect(this, SIGNAL(registerChanged(Register)), m_controller, SLOT(setRegisterValue(Register)));
+        connect(this, &ModelsManager::registerChanged, m_controller, &IRegisterController::setRegisterValue);
 
-        connect(m_controller, SIGNAL(registersChanged(RegistersGroup)), this, SLOT(updateModelForGroup(RegistersGroup)));
+        connect(m_controller, &IRegisterController::registersChanged, this, &ModelsManager::updateModelForGroup);
     }
 }
 

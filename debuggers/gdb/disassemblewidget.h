@@ -119,11 +119,11 @@ public Q_SLOTS:
     void slotChangeAddress();
     ///Disassembles code at @p address and updates registers
     void update(const QString &address);
+    void jumpToCursor();
+    void runToCursor();
 
 private Q_SLOTS:
     void currentSessionChanged(KDevelop::IDebugSession* session);
-    void jumpToCursor();
-    void runToCursor();
 
 protected:
     virtual void showEvent(QShowEvent*);

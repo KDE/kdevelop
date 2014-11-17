@@ -95,19 +95,19 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
 
     slotStateChanged(s_none, s_dbgNotStarted);
 
-    connect( m_userGDBCmdEditor, SIGNAL(returnPressed()), SLOT(slotGDBCmd()) );
-    connect( m_Interrupt,        SIGNAL(clicked()),       SIGNAL(breakInto()));
+    connect(m_userGDBCmdEditor, static_cast<void(KHistoryComboBox::*)()>(&KHistoryComboBox::returnPressed),
+            this, &GDBOutputWidget::slotGDBCmd);
+    connect(m_Interrupt, &QToolButton::clicked, this, &GDBOutputWidget::breakInto);
 
     updateTimer_.setSingleShot(true);
-    connect( &updateTimer_, SIGNAL(timeout()),
-             this,  SLOT(flushPending()));
+    connect(&updateTimer_, &QTimer::timeout,
+             this, &GDBOutputWidget::flushPending);
 
-    connect(KDevelop::ICore::self()->debugController(),
-            SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
-            SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
+    connect(KDevelop::ICore::self()->debugController(), &KDevelop::IDebugController::currentSessionChanged,
+            this, &GDBOutputWidget::currentSessionChanged);
 
-    connect(plugin, SIGNAL(reset()), this, SLOT(clear()));
-    connect(plugin, SIGNAL(raiseGdbConsoleViews()), SIGNAL(requestRaise()));
+    connect(plugin, &CppDebuggerPlugin::reset, this, &GDBOutputWidget::clear);
+    connect(plugin, &CppDebuggerPlugin::raiseGdbConsoleViews, this, &GDBOutputWidget::requestRaise);
 
     currentSessionChanged(KDevelop::ICore::self()->debugController()->currentSession());
 
@@ -129,18 +129,18 @@ void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 {
     DebugSession *session = qobject_cast<DebugSession*>(s);
     if (!session) return;
-     connect( this,       SIGNAL(userGDBCmd(QString)),
-             session, SLOT(slotUserGDBCmd(QString)));
-     connect( this,       SIGNAL(breakInto()),
-             session, SLOT(interruptDebugger()));
+     connect(this, &GDBOutputWidget::userGDBCmd,
+             session, &DebugSession::slotUserGDBCmd);
+     connect(this, &GDBOutputWidget::breakInto,
+             session, &DebugSession::interruptDebugger);
 
-     connect( session, SIGNAL(gdbInternalCommandStdout(QString)),
-             this,       SLOT(slotInternalCommandStdout(QString)) );
-     connect( session, SIGNAL(gdbUserCommandStdout(QString)),
-             this,       SLOT(slotUserCommandStdout(QString)) );
+     connect(session, &DebugSession::gdbInternalCommandStdout,
+             this, &GDBOutputWidget::slotInternalCommandStdout);
+     connect(session, &DebugSession::gdbUserCommandStdout,
+             this, &GDBOutputWidget::slotUserCommandStdout);
 
-     connect( session, SIGNAL(gdbStateChanged(DBGStateFlags,DBGStateFlags)),
-             this,       SLOT(slotStateChanged(DBGStateFlags,DBGStateFlags)));
+     connect(session, &DebugSession::gdbStateChanged,
+             this, &GDBOutputWidget::slotStateChanged);
 
      slotStateChanged(s_none, session->debuggerState());
 }

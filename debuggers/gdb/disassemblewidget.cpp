@@ -64,11 +64,11 @@ SelectAddrDialog::SelectAddrDialog(QWidget* parent)
     setMainWidget(widget);
     setCaption(i18n("Address Selector"));
 
-    connect(m_ui.comboBox, SIGNAL(editTextChanged(QString)),
-            this, SLOT(validateInput()) );
-    connect(m_ui.comboBox, SIGNAL(returnPressed()),
-            this, SLOT(itemSelected()) );
-    connect(this, SIGNAL(okClicked()), this, SLOT(itemSelected()) );
+    connect(m_ui.comboBox, &KHistoryComboBox::editTextChanged,
+            this, &SelectAddrDialog::validateInput );
+    connect(m_ui.comboBox, static_cast<void(KHistoryComboBox::*)()>(&KHistoryComboBox::returnPressed),
+            this, &SelectAddrDialog::itemSelected );
+    connect(this, &SelectAddrDialog::okClicked, this, &SelectAddrDialog::itemSelected );
 }
 
 bool SelectAddrDialog::hasValidAddress() const
@@ -104,15 +104,15 @@ DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
     /*context menu commands */{
     m_selectAddrAction = new QAction(i18n("Change &address"), this);
     m_selectAddrAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    connect(m_selectAddrAction, SIGNAL(triggered()), widget, SLOT(slotChangeAddress()));
+    connect(m_selectAddrAction, &QAction::triggered, widget, &DisassembleWidget::slotChangeAddress);
 
     m_jumpToLocation = new QAction(QIcon::fromTheme("debug-execute-to-cursor"), i18n("&Jump to Cursor"), this);
     m_jumpToLocation->setWhatsThis(i18n("Sets the execution pointer to the current cursor position."));
-    connect(m_jumpToLocation,SIGNAL(triggered()), widget, SLOT(jumpToCursor()));
+    connect(m_jumpToLocation,&QAction::triggered, widget, &DisassembleWidget::jumpToCursor);
 
     m_runUntilCursor = new QAction(QIcon::fromTheme("debug-run-cursor"), i18n("&Run to Cursor"), this);
     m_runUntilCursor->setWhatsThis(i18n("Continues execution until the cursor position is reached."));
-    connect(m_runUntilCursor,SIGNAL(triggered()), widget, SLOT(runToCursor()));
+    connect(m_runUntilCursor,&QAction::triggered, widget, &DisassembleWidget::runToCursor);
     }
 }
 
@@ -190,10 +190,10 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
     Q_ASSERT(pDC);
 
     connect(pDC,
-            SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
-            SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
+            &KDevelop::IDebugController::currentSessionChanged,
+            this, &DisassembleWidget::currentSessionChanged);
 
-    connect(plugin, SIGNAL(reset()), this, SLOT(slotDeactivate()));
+    connect(plugin, &CppDebuggerPlugin::reset, this, &DisassembleWidget::slotDeactivate);
 
     m_dlg = new SelectAddrDialog(this);
 
@@ -233,9 +233,9 @@ void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
     m_registersManager->setSession(session);
 
     if (session) {
-        connect(session, SIGNAL(showStepInSource(QUrl,int,QString)),
-                SLOT(slotShowStepInSource(QUrl,int,QString)));
-        connect(session,SIGNAL(showStepInDisassemble(QString)),SLOT(update(QString)));
+        connect(session, &DebugSession::showStepInSource,
+                this, &DisassembleWidget::slotShowStepInSource);
+        connect(session,&DebugSession::showStepInDisassemble,this, &DisassembleWidget::update);
     }
 }
 

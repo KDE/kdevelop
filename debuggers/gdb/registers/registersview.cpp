@@ -44,9 +44,9 @@ RegistersView::RegistersView(QWidget* p)
 
     setupActions();
 
-    connect(m_mapper, SIGNAL(mapped(QString)), this, SLOT(menuTriggered(QString)));
+    connect(m_mapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped), this, &RegistersView::menuTriggered);
 
-    connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(updateRegisters()));
+    connect(tabWidget, &QTabWidget::currentChanged, this, &RegistersView::updateRegisters);
 }
 
 void RegistersView::contextMenuEvent(QContextMenuEvent* e)
@@ -211,7 +211,7 @@ void RegistersView::setupActions()
     updateAction->setShortcut(Qt::Key_U);
     updateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     updateAction->setText(i18n("Update"));
-    connect(updateAction, SIGNAL(triggered()), this, SLOT(updateRegisters()));
+    connect(updateAction, &QAction::triggered, this, &RegistersView::updateRegisters);
     addAction(updateAction);
     m_menu->addAction(updateAction);
 
@@ -244,7 +244,7 @@ void RegistersView::insertAction(const QString& name, Qt::Key k)
     addAction(a);
 
     m_mapper->setMapping(a, a->text());
-    connect(a, SIGNAL(triggered()), m_mapper, SLOT(map()));
+    connect(a, &QAction::triggered, m_mapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
 }
 
 }
