@@ -24,7 +24,6 @@
 #define KDEVCPPCODECOMPLETIONMODEL_H
 
 #include <language/codecompletion/codecompletionmodel.h>
-#include <ksharedptr.h>
 #include <language/duchain/duchainpointer.h>
 #include <serialization/indexedstring.h>
 #include <language/codecompletion/codecompletioncontext.h>

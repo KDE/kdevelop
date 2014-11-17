@@ -44,6 +44,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
+#include <QStandardPaths>
 
 using namespace KDevelop;
 
@@ -68,13 +69,13 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, ILaunch
     model->setFilteringStrategy(OutputModel::CompilerFilter);
     setModel( model );
 
-    connect(m_process, SIGNAL(receivedStandardError(QStringList)), model,
-            SLOT(appendLines(QStringList)) );
-    connect(m_process, SIGNAL(receivedStandardOutput(QStringList)), model,
-            SLOT(appendLines(QStringList)) );
+    connect(m_process, &CommandExecutor::receivedStandardError, model,
+            &OutputModel::appendLines );
+    connect(m_process, &CommandExecutor::receivedStandardOutput, model,
+            &OutputModel::appendLines );
 
-    connect( m_process, SIGNAL(failed(QProcess::ProcessError)), SLOT(slotFailed(QProcess::ProcessError)) );
-    connect( m_process, SIGNAL(completed(int)), SLOT(slotCompleted(int)) );
+    connect( m_process, &CommandExecutor::failed, this, &PlasmoidExecutionJob::slotFailed );
+    connect( m_process, &CommandExecutor::completed, this, &PlasmoidExecutionJob::slotCompleted );
 }
 
 

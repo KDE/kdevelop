@@ -46,6 +46,7 @@
 #include <KAboutData>
 #include <util/environmentgrouplist.h>
 #include <KLocalizedString>
+#include <QStandardPaths>
 
 K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
 // K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))

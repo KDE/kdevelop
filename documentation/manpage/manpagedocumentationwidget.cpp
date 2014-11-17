@@ -35,19 +35,19 @@ ManPageDocumentationWidget::ManPageDocumentationWidget(QWidget *parent)
     ManPageModel* model = ManPageDocumentation::s_provider->model();
     m_treeView = new QTreeView(this);
     m_treeView->header()->setVisible(false);
-    connect(m_treeView, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
+    connect(m_treeView, &QTreeView::clicked, model, &ManPageModel::showItem);
     addWidget(m_treeView);
     if(!model->isLoaded()){
         m_loadingWidget = new QWidget(this);
         m_progressBar = new QProgressBar(m_loadingWidget);
         QLabel* label = new QLabel(i18n("Loading man pages ..."));
         if(model->sectionCount() == 0){
-            connect(model, SIGNAL(sectionListUpdated()), this, SLOT(sectionListUpdated()) );
+            connect(model, &ManPageModel::sectionListUpdated, this, &ManPageDocumentationWidget::sectionListUpdated );
         } else {
             sectionListUpdated();
         }
-        connect(model, SIGNAL(sectionParsed()), this, SLOT(sectionParsed()) );
-        connect(model, SIGNAL(manPagesLoaded()), this, SLOT(manIndexLoaded()));
+        connect(model, &ManPageModel::sectionParsed, this, &ManPageDocumentationWidget::sectionParsed );
+        connect(model, &ManPageModel::manPagesLoaded, this, &ManPageDocumentationWidget::manIndexLoaded);
         label->setAlignment(Qt::AlignHCenter);
         QVBoxLayout* layout = new QVBoxLayout();
         layout->addWidget(label);

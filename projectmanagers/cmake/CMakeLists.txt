@@ -85,8 +85,8 @@ remove_definitions( -DQT_NO_STL )
 
 qt5_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
 add_library( kdevcmakecommon SHARED ${cmakecommon_SRCS} )
-target_link_libraries( kdevcmakecommon LINK_PRIVATE
-                        KF5::TextEditor KDev::Interfaces KDev::Project KDev::Util
+target_link_libraries( kdevcmakecommon
+                        KF5::TextEditor KF5::KDELibs4Support KDev::Interfaces KDev::Project KDev::Util
                         ${QT_QTSCRIPT_LIBRARY} KDev::Language
                         )
 generate_export_header(kdevcmakecommon EXPORT_FILE_NAME cmakecommonexport.h)
@@ -96,7 +96,7 @@ add_library(kdevcmakemanager MODULE ${cmakemanager_SRCS} ../custommake/makefiler
 target_link_libraries( kdevcmakemanager  KF5::KIOWidgets KDev::Util
                         KDev::Interfaces kdevcmakecommon
                         KDev::Project KDev::Language
-                        KDev::OutputView KF5::TextEditor Qt5::Concurrent)
+                        KDev::OutputView KF5::TextEditor KF5::KDELibs4Support Qt5::Concurrent)
 
 add_library(kdevcmakedocumentation MODULE ${cmakedoc_SRCS} )
 target_link_libraries( kdevcmakedocumentation
@@ -107,7 +107,7 @@ target_link_libraries( kdevcmakedocumentation
 
 qt5_wrap_ui( cmakesettings_SRCS ${cmakesettings_UI} )
 add_library(kcm_kdevcmake_settings MODULE ${cmakesettings_SRCS} )
-target_link_libraries( kcm_kdevcmake_settings KF5::KIOWidgets
+target_link_libraries( kcm_kdevcmake_settings KF5::KIOWidgets KF5::KDELibs4Support
                        KDev::Interfaces KDev::Project KDev::Util
                        kdevcmakecommon )
 

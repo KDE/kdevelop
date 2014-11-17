@@ -18,10 +18,11 @@
  */
 
 #include "kdevelopsessions.h"
+
 #include <QtCore/QCollator>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QDir>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 
 #include <QDebug>
@@ -33,6 +34,7 @@
 #include <KConfigGroup>
 #include <QUrl>
 #include <KStringHandler>
+#include <QStandardPaths>
 
 K_EXPORT_PLASMA_RUNNER(kdevelopsessions, KDevelopSessions)
 

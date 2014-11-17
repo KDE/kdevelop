@@ -26,6 +26,7 @@ add_library( kcm_kdevcustomdefinesandincludes MODULE
         ${kcm_customdefinesandincludes_SRCS} )
 
 target_link_libraries( kcm_kdevcustomdefinesandincludes LINK_PRIVATE
+        KF5::KDELibs4Support
         KDev::Interfaces
         KDev::Project
         KDev::Util

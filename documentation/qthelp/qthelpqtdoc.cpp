@@ -60,7 +60,7 @@ void QtHelpQtDoc::registerDocumentations()
         p->setOutputChannelMode(KProcess::MergedChannels);
         p->setProgram(qmake, QStringList("-query") << "QT_INSTALL_DOCS");
         p->start();
-        connect(p, SIGNAL(finished(int)), SLOT(lookupDone(int)));
+        connect(p, static_cast<void(KProcess::*)(int)>(&KProcess::finished), this, &QtHelpQtDoc::lookupDone);
     }
 }
 

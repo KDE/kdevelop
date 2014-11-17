@@ -19,7 +19,6 @@
 #ifndef CODECOMPLETIONCONTEXT_H
 #define CODECOMPLETIONCONTEXT_H
 
-#include <ksharedptr.h>
 #include <language/duchain/duchainpointer.h>
 #include "../cppduchain/typeconversion.h"
 #include "../cppduchain/expressionevaluationresult.h"

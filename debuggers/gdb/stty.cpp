@@ -66,8 +66,9 @@
 #include <QTemporaryFile>
 
 #include <KLocalizedString>
-#include <kstandarddirs.h>
-#include <kapplication.h>
+
+#include <QCoreApplication>
+#include <QStandardPaths>
 
 #include "stty.h"
 #include "debug.h"

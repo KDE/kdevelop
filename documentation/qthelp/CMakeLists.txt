@@ -36,7 +36,7 @@ qt5_wrap_ui(kdevqthelp_config_SRCS
 add_library(kdevqthelp_config MODULE ${kdevqthelp_config_SRCS} )
 
 target_link_libraries( kdevqthelp_config
- KF5::KIOWidgets Qt5::Help KF5::NewStuff KF5::KCMUtils KF5::I18n KF5::KDELibs4Support)
+    KF5::IconThemes KF5::KIOWidgets Qt5::Help KF5::NewStuff KF5::KCMUtils KF5::I18n)
 
 install(TARGETS kdevqthelp_config DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
 configure_file(kdevqthelp_config.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp_config.desktop)

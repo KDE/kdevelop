@@ -63,7 +63,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <KTempDir>
+#include <QTemporaryDir>
 #include <KTextEditor/Editor>
 #include <KTextEditor/View>
 
@@ -3641,15 +3641,15 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
 
 void TestCppCodeCompletion::testCompletedIncludeFilePath()
 {
-  KTempDir tempDir;
-  QDir dir(tempDir.name());
+  QTemporaryDir tempDir;
+  QDir dir(tempDir.path());
   QString innerDirName = "directoryabcde";
   dir.mkdir(innerDirName);
-  QDir innerDir(tempDir.name() + innerDirName);
+  QDir innerDir(tempDir.path() + '/' + innerDirName);
   QString filename = "xxxxx.h";
   QFile file(innerDir.absoluteFilePath(filename));
   QVERIFY(file.open(QIODevice::ReadWrite));
-  QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(QString(tempDir.name() + "source.cpp"), true, innerDirName, QStringList() << tempDir.name());
+  QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(QString(tempDir.path() + "/source.cpp"), true, innerDirName, QStringList() << tempDir.path() + '/');
   QCOMPARE(includeItems.size(), 1);
   QCOMPARE(includeItems[0].basePath, QUrl::fromLocalFile(innerDir.absolutePath()));
 }
@@ -3659,17 +3659,17 @@ void TestCppCodeCompletion::testCompletedIncludeFilePath()
  */
 void TestCppCodeCompletion::testMultipleIncludeCompletionItems()
 {
-  KTempDir tempDir;
-  QDir dir(tempDir.name());
+  QTemporaryDir tempDir;
+  QDir dir(tempDir.path());
   QString innerDirName1 = "directory1abcde";
   dir.mkdir(innerDirName1);
   QString innerDirName2 = "directory2abcde";
   dir.mkdir(innerDirName2);
-  QDir innerDir1(tempDir.name() + innerDirName1);
+  QDir innerDir1(tempDir.path() + innerDirName1);
   QString filename = "xxxxx.h";
   QFile file(innerDir1.absoluteFilePath(filename));
   QVERIFY(file.open(QIODevice::ReadWrite));
-  QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(innerDir1.absoluteFilePath("source.cpp"), true, QString("../" + innerDirName1), QStringList() << QString(tempDir.name() + innerDirName1) << QString(tempDir.name() + innerDirName2));
+  QList<IncludeItem> includeItems = CppUtils::allFilesInIncludePath(innerDir1.absoluteFilePath("source.cpp"), true, QString("../" + innerDirName1), QStringList() << QString(tempDir.path() + '/' + innerDirName1) << QString(tempDir.path() + '/' + innerDirName2));
   QCOMPARE(includeItems.size(), 1);
   QCOMPARE(includeItems[0].basePath, QUrl::fromLocalFile(innerDir1.absolutePath()));
 }

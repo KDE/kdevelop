@@ -31,6 +31,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <QFile>
+#include <QStandardPaths>
 
 NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments, const QByteArray& signal, KDevNinjaBuilderPlugin* parent)
     : OutputExecuteJob(parent)
@@ -62,7 +63,7 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, const QStringList& arguments
         title = i18n("Ninja (%1)", item->text());
     setJobName( title );
 
-    connect(this, SIGNAL(finished(KJob*)), SLOT(emitProjectBuilderSignal(KJob*)));
+    connect(this, &NinjaJob::finished, this, &NinjaJob::emitProjectBuilderSignal);
 }
 
 void NinjaJob::setIsInstalling( bool isInstalling )
@@ -101,7 +102,7 @@ QStringList NinjaJob::privilegedExecutionCommand() const
     KDevelop::ProjectBaseItem* it = item();
     if(!it)
         return QStringList();
-    KSharedConfig::Ptr configPtr = it->project()->projectConfiguration();
+    KSharedConfigPtr configPtr = it->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "NinjaBuilder" );
 
     bool runAsRoot = builderGroup.readEntry( "Install As Root", false );

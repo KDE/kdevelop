@@ -19,7 +19,7 @@
 #include "test_cppassistants.h"
 
 #include <QtTest/QtTest>
-#include <KTempDir>
+#include <QTemporaryDir>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -75,10 +75,10 @@ void TestCppAssistants::cleanupTestCase()
 
 static QUrl createFile(const QString& fileContents)
 {
-  static KTempDir dirA;
+  static QTemporaryDir dirA;
   static int i = 0;
   ++i;
-  QFile file(dirA.name() + QString::number(i) + ".cpp");
+  QFile file(dirA.path() + '/' + QString::number(i) + ".cpp");
   file.open(QIODevice::WriteOnly | QIODevice::Text);
   file.write(fileContents.toUtf8());
   file.close();

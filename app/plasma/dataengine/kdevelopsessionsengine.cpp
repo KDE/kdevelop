@@ -26,6 +26,7 @@
 #include <KConfig>
 #include <QFileInfo>
 #include <QDir>
+#include <QStandardPaths>
 
 KDevelopSessionsEngine::KDevelopSessionsEngine(QObject *parent, const QVariantList &args)
     : Plasma::DataEngine(parent, args),

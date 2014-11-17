@@ -36,7 +36,7 @@
 using namespace KDevelop;
 
 namespace {
-KSharedConfig::Ptr openConfigFile(const QString& configFile)
+KSharedConfigPtr openConfigFile(const QString& configFile)
 {
     return KSharedConfig::openConfig(configFile, KConfig::SimpleConfig);
 }

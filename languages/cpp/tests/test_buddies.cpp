@@ -23,7 +23,7 @@
 #include <QtTest/QtTest>
 #include <KSharedConfig>
 
-#include <KTempDir>
+#include <QTemporaryDir>
 #include <KParts/MainWindow>
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
@@ -74,9 +74,9 @@ void TestBuddies::verifyFilename(Sublime::View *view, const QString& endOfFilena
 }
 
 
-void TestBuddies::createFile(const KTempDir& dir, const QString& filename)
+void TestBuddies::createFile(const QTemporaryDir& dir, const QString& filename)
 {
-    QFile file(dir.name() + filename);
+    QFile file(dir.path() + '/' + filename);
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
     file.close();
 }
@@ -115,7 +115,7 @@ void TestBuddies::testDeclarationDefinitionOrder()
     enableBuddies();
     enableOpenAfterCurrent();
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
     createFile(dirA, "a.cpp");
     createFile(dirA, "b.cpp");
     createFile(dirA, "c.cpp");
@@ -123,12 +123,12 @@ void TestBuddies::testDeclarationDefinitionOrder()
     createFile(dirA, "b.h");
     createFile(dirA, "c.h");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.cpp"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "b.h"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "c.cpp"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "b.cpp"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.h"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "c.h"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/a.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/b.h"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/c.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/b.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/a.h"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/c.h"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(toSublimeWindow(m_uiController->activeMainWindow())->activeView());
@@ -156,16 +156,16 @@ void TestBuddies::testMultiDotFilenames()
     enableBuddies();
     enableOpenAfterCurrent();
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
     createFile(dirA, "a.cpp");
     createFile(dirA, "lots.of.dots.cpp");
     createFile(dirA, "b.cpp");
     createFile(dirA, "lots.of.dots.h");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.cpp"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "lots.of.dots.cpp"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "b.cpp"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "lots.of.dots.h"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/a.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/lots.of.dots.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/b.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/lots.of.dots.h"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(toSublimeWindow(m_uiController->activeMainWindow())->activeView());
@@ -192,16 +192,16 @@ void TestBuddies::testActivation()
     enableBuddies();
     enableOpenAfterCurrent();
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
     createFile(dirA, "a.h");
     createFile(dirA, "a.cpp");
     createFile(dirA, "b.cpp");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.cpp"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.h"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/a.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/a.h"));
     verifyFilename(toSublimeWindow(m_uiController->activeMainWindow())->activeView(), "a.h");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "b.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/b.cpp"));
     verifyFilename(toSublimeWindow(m_uiController->activeMainWindow())->activeView(), "b.cpp");
 
     QCOMPARE(m_documentController->openDocuments().count(), 3);
@@ -224,13 +224,13 @@ void TestBuddies::testDisableBuddies()
     enableBuddies(false);
     enableOpenAfterCurrent();
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
     createFile(dirA, "a.h");
     createFile(dirA, "a.cpp");
     createFile(dirA, "b.cpp");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.cpp"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.h"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/a.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/a.h"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(toSublimeWindow(m_uiController->activeMainWindow())->activeView());
@@ -243,7 +243,7 @@ void TestBuddies::testDisableBuddies()
     //activate a.cpp => new doc should be opened right next to it
     toSublimeWindow(m_uiController->activeMainWindow())->activateView(areaIndex->views().value(0));
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "b.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/b.cpp"));
     verifyFilename(areaIndex->views().value(0), "a.cpp");
     verifyFilename(areaIndex->views().value(1), "b.cpp");
     verifyFilename(areaIndex->views().value(2), "a.h");
@@ -269,15 +269,15 @@ void TestBuddies::testDisableOpenAfterCurrent()
     enableBuddies();
     enableOpenAfterCurrent(false);
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
     createFile(dirA, "foo.h");
     createFile(dirA, "bar.cpp");
     createFile(dirA, "foo.cpp");
     createFile(dirA, "x.cpp");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "foo.h"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "bar.cpp"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "foo.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/foo.h"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/bar.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/foo.cpp"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(toSublimeWindow(m_uiController->activeMainWindow())->activeView());
@@ -287,7 +287,7 @@ void TestBuddies::testDisableOpenAfterCurrent()
     verifyFilename(areaIndex->views().value(2), "bar.cpp");
     verifyFilename(toSublimeWindow(m_uiController->activeMainWindow())->activeView(), "foo.cpp");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "x.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/x.cpp"));
     verifyFilename(areaIndex->views().value(0), "foo.h");
     verifyFilename(areaIndex->views().value(1), "foo.cpp");
     verifyFilename(areaIndex->views().value(2), "bar.cpp");
@@ -313,22 +313,22 @@ void TestBuddies::testDisableAll()
     enableBuddies(false);
     enableOpenAfterCurrent(false);
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
     createFile(dirA, "foo.h");
     createFile(dirA, "foo.cpp");
     createFile(dirA, "bar.h");
     createFile(dirA, "bar.cpp");
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "foo.cpp"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "bar.h"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "foo.h"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/foo.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/bar.h"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/foo.h"));
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(toSublimeWindow(m_uiController->activeMainWindow())->activeView());
 
     //activate bar.h
     toSublimeWindow(m_uiController->activeMainWindow())->activateView(areaIndex->views().value(1));
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "bar.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/bar.cpp"));
 
     verifyFilename(areaIndex->views().value(0), "foo.cpp");
     verifyFilename(areaIndex->views().value(1), "bar.h");
@@ -354,15 +354,15 @@ void TestBuddies::testMultipleFolders()
     enableBuddies();
     enableOpenAfterCurrent();
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
     createFile(dirA, "a.cpp");
     createFile(dirA, "x.cpp");
-    KTempDir dirB;
+    QTemporaryDir dirB;
     createFile(dirB, "a.h");  // different folder => not dirA/a.cpp's buddy!
 
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "a.cpp"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "x.cpp"));
-    m_documentController->openDocument(QUrl::fromLocalFile(dirB.name() + "a.h"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/a.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/x.cpp"));
+    m_documentController->openDocument(QUrl::fromLocalFile(dirB.path() + "/a.h"));
 
     Sublime::Area *area = m_uiController->activeArea();
     Sublime::AreaIndex* areaIndex = area->indexOf(toSublimeWindow(m_uiController->activeMainWindow())->activeView());
@@ -388,7 +388,7 @@ void TestBuddies::testsplitViewBuddies()
     enableBuddies();
     enableOpenAfterCurrent();
 
-    KTempDir dirA;
+    QTemporaryDir dirA;
 
     createFile(dirA, "classA.cpp");
     createFile(dirA, "classA.h");
@@ -396,7 +396,7 @@ void TestBuddies::testsplitViewBuddies()
     Sublime::Area *pCodeArea = m_uiController->activeArea();
     QVERIFY(pCodeArea);
 
-    IDocument *pClassAHeader = m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "classA.h"));
+    IDocument *pClassAHeader = m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/classA.h"));
     QVERIFY(pClassAHeader);
     pMainWindow->activeView()->setObjectName("classA.h");
 
@@ -423,7 +423,7 @@ void TestBuddies::testsplitViewBuddies()
     QVERIFY(pContainer->count() == 1 && pContainer->hasWidget(pNewView->widget()));
 
     // now open the correponding definition file, classA.cpp
-    IDocument *pClassAImplem = m_documentController->openDocument(QUrl::fromLocalFile(dirA.name() + "classA.cpp"));
+    IDocument *pClassAImplem = m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "/classA.cpp"));
     QVERIFY(pClassAImplem);
     pMainWindow->activeView()->setObjectName("classA.cpp");
 

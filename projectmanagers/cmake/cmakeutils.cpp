@@ -36,6 +36,7 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iplugincontroller.h>
+#include <QStandardPaths>
 
 #include "icmakedocumentation.h"
 #include "cmakebuilddirchooser.h"

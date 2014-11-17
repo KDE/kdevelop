@@ -26,7 +26,6 @@
 #include "gdbcommand.h"
 #include "debuggerplugin.h"
 
-#include <kdeversion.h>
 #include <ktextedit.h>
 #include <kglobalsettings.h>
 

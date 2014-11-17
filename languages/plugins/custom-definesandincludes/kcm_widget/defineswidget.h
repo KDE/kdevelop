@@ -27,7 +27,6 @@
 using KDevelop::ConfigEntry;
 using KDevelop::Defines;
 
-class KFileDialog;
 class KUrlRequester;
 namespace Ui
 {

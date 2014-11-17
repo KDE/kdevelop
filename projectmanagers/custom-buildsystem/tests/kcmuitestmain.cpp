@@ -17,12 +17,9 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#include <kapplication.h>
-#include <k4aboutdata.h>
-#include <kcmdlineargs.h>
 #include <KLocalizedString>
 #include <kdialog.h>
-#include <ktempdir.h>
+#include <QTemporaryDir>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qdir.h>
@@ -30,6 +27,9 @@
 #include <QStandardPaths>
 
 #include <tests/testproject.h>
+#include <QApplication>
+#include <KAboutData>
+#include <QCommandLineParser>
 
 #include "custombuildsystemconfigwidget.h"
 #include "../debug.h"
@@ -74,22 +74,25 @@ private:
 
 int main(int argc, char **argv)
 {
-    K4AboutData about("kcm_uitest", 0, ki18n("kcm_uitest"), version, ki18n(description),
-                     K4AboutData::License_GPL, ki18n("(C) 2012 Andreas Pakulat"), KLocalizedString(), 0, "apaku@gmx.de");
-    about.addAuthor( ki18n("Andreas Pakulat"), KLocalizedString(), "apaku@gmx.de" );
-    KCmdLineArgs::init(argc, argv, &about);
+    KAboutData aboutData("kcm_uitest", i18n("kcm_uitest"), version, i18n(description),
+                     KAboutLicense::GPL, i18n("(C) 2012 Andreas Pakulat"));
+    aboutData.addAuthor( i18n("Andreas Pakulat"), QString(), "apaku@gmx.de" );
+    QApplication app(argc, argv);
+    QCommandLineParser parser;
+    KAboutData::setApplicationData(aboutData);
+    parser.addVersionOption();
+    parser.addHelpOption();
+    aboutData.setupCommandLine(&parser);
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
 
-    KCmdLineOptions options;
-    KCmdLineArgs::addCmdLineOptions(options);
-    KApplication app;
+    QTemporaryDir tempdir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"/kdev-custom-uitest");
 
-    KTempDir tempdir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"/kdev-custom-uitest");
+    qCDebug(CUSTOMBUILDSYSTEM) << "created tempdir:" << tempdir.path();
 
-    qCDebug(CUSTOMBUILDSYSTEM) << "created tempdir:" << tempdir.name();
+    KConfig projkcfg( tempdir.path() + "/kdev-custom-uitest.kdev4" );
 
-    KConfig projkcfg( tempdir.name() + "/kdev-custom-uitest.kdev4" );
-
-    QDir projdir(tempdir.name());
+    QDir projdir(tempdir.path());
     projdir.mkdir("includedir");
     projdir.mkdir("subtree");
     projdir.mkpath("subtree/includedir");

@@ -28,15 +28,15 @@
 
 #include <config.h>
 
-#include <k4aboutdata.h>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
 #include <KLocalizedString>
-#include <kstandarddirs.h>
-#include <ksplashscreen.h>
+
+#include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <ktexteditor/cursor.h>
 
+#include <QApplication>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 #include <QFileInfo>
 #include <QDir>
 #include <QProcess>
@@ -45,6 +45,7 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QLoggingCategory>
+
 Q_DECLARE_LOGGING_CATEGORY(APP)
 Q_LOGGING_CATEGORY(APP, "kdevelop.app")
 
@@ -70,10 +71,16 @@ Q_LOGGING_CATEGORY(APP, "kdevelop.app")
 
 using namespace KDevelop;
 
-class KDevelopApplication: public KApplication {
+class KDevelopApplication: public QApplication
+{
 public:
-    explicit KDevelopApplication(bool GUIenabled = true): KApplication(GUIenabled) {}
+    explicit KDevelopApplication(int &argc, char **argv, bool GUIenabled = true)
+        : QApplication(argc, argv, GUIenabled)
+        {
+            connect(this, &QGuiApplication::saveStateRequest, this, &KDevelopApplication::saveState);
+        }
 
+private Q_SLOTS:
     void saveState( QSessionManager& sm ) {
         if (KDevelop::Core::self() && KDevelop::Core::self()->sessionController()) {
             QString x11SessionId = QString("%1_%2").arg(sm.sessionId()).arg(sm.sessionKey());
@@ -81,8 +88,6 @@ public:
 
             sm.setRestartCommand(QStringList() << QCoreApplication::applicationFilePath() << "-session" << x11SessionId << "-s" << kdevelopSessionId);
         }
-
-        KApplication::saveState(sm);
     }
 };
 
@@ -189,65 +194,65 @@ int main( int argc, char *argv[] )
 
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
-    K4AboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ), QByteArray(VERSION), ki18n(description), K4AboutData::License_GPL,
-                          ki18n( "Copyright 1999-2014, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org/" );
-    aboutData.addAuthor( ki18n("Andreas Pakulat"), ki18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
-    aboutData.addAuthor( ki18n("Alexander Dymo"), ki18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
-    aboutData.addAuthor( ki18n("David Nolden"), ki18n( "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding Assistance, Refactoring" ), "david.nolden.kdevelop@art-master.de" );
-    aboutData.addAuthor( ki18n("Aleix Pol Gonzalez"), ki18n( "Co-Maintainer, CMake Support, Run Support, Kross Support" ), "aleixpol@gmail.com" );
-    aboutData.addAuthor( ki18n("Vladimir Prus"), ki18n( "GDB integration" ), "ghost@cs.msu.su" );
-    aboutData.addAuthor( ki18n("Hamish Rodda"), ki18n( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
-    aboutData.addAuthor( ki18n("Amilcar do Carmo Lucas"), ki18n( "Website admin, API documentation, Doxygen and autoproject patches" ), "amilcar@kdevelop.org" );
-    aboutData.addAuthor( ki18n("Niko Sams"), ki18n( "GDB integration, Webdevelopment Plugins" ), "niko.sams@gmail.com" );
-    aboutData.addAuthor( ki18n("Milian Wolff"), ki18n( "Co-Maintainer, Generic manager, Webdevelopment Plugins, Snippets, Performance" ), "mail@milianw.de" );
-    aboutData.addAuthor( ki18n("Sven Brauch"), ki18n( "Python Support, User Interface improvements" ), "svenbrauch@gmail.com" );
+    KAboutData aboutData( "kdevelop", i18n( "KDevelop" ), QByteArray(VERSION), i18n(description), KAboutLicense::GPL,
+                          i18n("Copyright 1999-2014, The KDevelop developers"), QString(), "http://www.kdevelop.org/");
+    aboutData.addAuthor( i18n("Andreas Pakulat"), i18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
+    aboutData.addAuthor( i18n("Alexander Dymo"), i18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
+    aboutData.addAuthor( i18n("David Nolden"), i18n( "Definition-Use Chain, C++ Support, Code Navigation, Code Completion, Coding Assistance, Refactoring" ), "david.nolden.kdevelop@art-master.de" );
+    aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "Co-Maintainer, CMake Support, Run Support, Kross Support" ), "aleixpol@gmail.com" );
+    aboutData.addAuthor( i18n("Vladimir Prus"), i18n( "GDB integration" ), "ghost@cs.msu.su" );
+    aboutData.addAuthor( i18n("Hamish Rodda"), i18n( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
+    aboutData.addAuthor( i18n("Amilcar do Carmo Lucas"), i18n( "Website admin, API documentation, Doxygen and autoproject patches" ), "amilcar@kdevelop.org" );
+    aboutData.addAuthor( i18n("Niko Sams"), i18n( "GDB integration, Webdevelopment Plugins" ), "niko.sams@gmail.com" );
+    aboutData.addAuthor( i18n("Milian Wolff"), i18n( "Co-Maintainer, Generic manager, Webdevelopment Plugins, Snippets, Performance" ), "mail@milianw.de" );
+    aboutData.addAuthor( i18n("Sven Brauch"), i18n( "Python Support, User Interface improvements" ), "svenbrauch@gmail.com" );
 
-    aboutData.addCredit( ki18n("Matt Rogers"), KLocalizedString(), "mattr@kde.org");
-    aboutData.addCredit( ki18n("Cédric Pasteur"), ki18n("astyle and indent support"), "cedric.pasteur@free.fr" );
-    aboutData.addCredit( ki18n("Evgeniy Ivanov"), ki18n("Distributed VCS, Git, Mercurial"), "powerfox@kde.ru" );
+    aboutData.addCredit( i18n("Matt Rogers"), QString(), "mattr@kde.org");
+    aboutData.addCredit( i18n("Cédric Pasteur"), i18n("astyle and indent support"), "cedric.pasteur@free.fr" );
+    aboutData.addCredit( i18n("Evgeniy Ivanov"), i18n("Distributed VCS, Git, Mercurial"), "powerfox@kde.ru" );
     // QTest integration is separate in playground currently.
-    //aboutData.addCredit( ki18n("Manuel Breugelmanns"), ki18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
-    aboutData.addCredit( ki18n("Robert Gruber") , ki18n( "SnippetPart, debugger and usability patches" ), "rgruber@users.sourceforge.net" );
-    aboutData.addCredit( ki18n("Dukju Ahn"), ki18n( "Subversion plugin, Custom Make Manager, Overall improvements" ), "dukjuahn@gmail.com" );
-    aboutData.addCredit( ki18n("Harald Fernengel"), ki18n( "Ported to Qt 3, patches, valgrind, diff and perforce support" ), "harry@kdevelop.org" );
-    aboutData.addCredit( ki18n("Roberto Raggi"), ki18n( "C++ parser" ), "roberto@kdevelop.org" );
-    aboutData.addCredit( ki18n("The KWrite authors"), ki18n( "Kate editor component" ), "kwrite-devel@kde.org" );
-    aboutData.addCredit( ki18n("Nokia Corporation/Qt Software"), ki18n( "Designer code" ), "qt-info@nokia.com" );
+    //aboutData.addCredit( i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
+    aboutData.addCredit( i18n("Robert Gruber") , i18n( "SnippetPart, debugger and usability patches" ), "rgruber@users.sourceforge.net" );
+    aboutData.addCredit( i18n("Dukju Ahn"), i18n( "Subversion plugin, Custom Make Manager, Overall improvements" ), "dukjuahn@gmail.com" );
+    aboutData.addCredit( i18n("Harald Fernengel"), i18n( "Ported to Qt 3, patches, valgrind, diff and perforce support" ), "harry@kdevelop.org" );
+    aboutData.addCredit( i18n("Roberto Raggi"), i18n( "C++ parser" ), "roberto@kdevelop.org" );
+    aboutData.addCredit( i18n("The KWrite authors"), i18n( "Kate editor component" ), "kwrite-devel@kde.org" );
+    aboutData.addCredit( i18n("Nokia Corporation/Qt Software"), i18n( "Designer code" ), "qt-info@nokia.com" );
 
-    aboutData.addCredit( ki18n("Contributors to older versions:"), KLocalizedString(), "" );
-    aboutData.addCredit( ki18n("Bernd Gehrmann"), ki18n( "Initial idea, basic architecture, much initial source code" ), "bernd@kdevelop.org" );
-    aboutData.addCredit( ki18n("Caleb Tennis"), ki18n( "KTabBar, bugfixes" ), "caleb@aei-tech.com" );
-    aboutData.addCredit( ki18n("Richard Dale"), ki18n( "Java & Objective C support" ), "Richard_Dale@tipitina.demon.co.uk" );
-    aboutData.addCredit( ki18n("John Birch"), ki18n( "Debugger frontend" ), "jbb@kdevelop.org" );
-    aboutData.addCredit( ki18n("Sandy Meier"), ki18n( "PHP support, context menu stuff" ), "smeier@kdevelop.org" );
-    aboutData.addCredit( ki18n("Kurt Granroth"), ki18n( "KDE application templates" ), "kurth@granroth.org" );
-    aboutData.addCredit( ki18n("Ian Reinhart Geiser"), ki18n( "Dist part, bash support, application templates" ), "geiseri@yahoo.com" );
-    aboutData.addCredit( ki18n("Matthias Hoelzer-Kluepfel"), ki18n( "Several components, htdig indexing" ), "hoelzer@kde.org" );
-    aboutData.addCredit( ki18n("Victor Roeder"), ki18n( "Help with Automake manager and persistent class store" ), "victor_roeder@gmx.de" );
-    aboutData.addCredit( ki18n("Simon Hausmann"), ki18n( "Help with KParts infrastructure" ), "hausmann@kde.org" );
-    aboutData.addCredit( ki18n("Oliver Kellogg"), ki18n( "Ada support" ), "okellogg@users.sourceforge.net" );
-    aboutData.addCredit( ki18n("Jakob Simon-Gaarde"), ki18n( "QMake projectmanager" ), "jsgaarde@tdcspace.dk" );
-    aboutData.addCredit( ki18n("Falk Brettschneider"), ki18n( "MDI modes, QEditor, bugfixes" ), "falkbr@kdevelop.org" );
-    aboutData.addCredit( ki18n("Mario Scalas"), ki18n( "PartExplorer, redesign of CvsPart, patches, bugs(fixes)" ), "mario.scalas@libero.it" );
-    aboutData.addCredit( ki18n("Jens Dagerbo"), ki18n( "Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and patches" ), "jens.dagerbo@swipnet.se" );
-    aboutData.addCredit( ki18n("Julian Rockey"), ki18n( "Filecreate part and other bits and patches" ), "linux@jrockey.com" );
-    aboutData.addCredit( ki18n("Ajay Guleria"), ki18n( "ClearCase support" ), "ajay_guleria@yahoo.com" );
-    aboutData.addCredit( ki18n("Marek Janukowicz"), ki18n( "Ruby support" ), "child@t17.ds.pwr.wroc.pl" );
-    aboutData.addCredit( ki18n("Robert Moniot"), ki18n( "Fortran documentation" ), "moniot@fordham.edu" );
-    aboutData.addCredit( ki18n("Ka-Ping Yee"), ki18n( "Python documentation utility" ), "ping@lfw.org" );
-    aboutData.addCredit( ki18n("Dimitri van Heesch"), ki18n( "Doxygen wizard" ), "dimitri@stack.nl" );
-    aboutData.addCredit( ki18n("Hugo Varotto"), ki18n( "Fileselector component" ), "hugo@varotto-usa.com" );
-    aboutData.addCredit( ki18n("Matt Newell"), ki18n( "Fileselector component" ), "newellm@proaxis.com" );
-    aboutData.addCredit( ki18n("Daniel Engelschalt"), ki18n( "C++ code completion, persistent class store" ), "daniel.engelschalt@gmx.net" );
-    aboutData.addCredit( ki18n("Stephane Ancelot"), ki18n( "Patches" ), "sancelot@free.fr" );
-    aboutData.addCredit( ki18n("Jens Zurheide"), ki18n( "Patches" ), "jens.zurheide@gmx.de" );
-    aboutData.addCredit( ki18n("Luc Willems"), ki18n( "Help with Perl support" ), "Willems.luc@pandora.be" );
-    aboutData.addCredit( ki18n("Marcel Turino"), ki18n( "Documentation index view" ), "M.Turino@gmx.de" );
-    aboutData.addCredit( ki18n("Yann Hodique"), ki18n( "Patches" ), "Yann.Hodique@lifl.fr" );
-    aboutData.addCredit( ki18n("Tobias Gl\303\244\303\237er") , ki18n( "Documentation Finder,  qmake projectmanager patches, usability improvements, bugfixes ... " ), "tobi.web@gmx.de" );
-    aboutData.addCredit( ki18n("Andreas Koepfle") , ki18n( "QMake project manager patches" ), "koepfle@ti.uni-mannheim.de" );
-    aboutData.addCredit( ki18n("Sascha Cunz") , ki18n( "Cleanup and bugfixes for qEditor, AutoMake and much other stuff" ), "mail@sacu.de" );
-    aboutData.addCredit( ki18n("Zoran Karavla"), ki18n( "Artwork for the ruby language" ), "webmaster@the-error.net", "http://the-error.net" );
+    aboutData.addCredit( i18n("Contributors to older versions:"), QString(), "" );
+    aboutData.addCredit( i18n("Bernd Gehrmann"), i18n( "Initial idea, basic architecture, much initial source code" ), "bernd@kdevelop.org" );
+    aboutData.addCredit( i18n("Caleb Tennis"), i18n( "KTabBar, bugfixes" ), "caleb@aei-tech.com" );
+    aboutData.addCredit( i18n("Richard Dale"), i18n( "Java & Objective C support" ), "Richard_Dale@tipitina.demon.co.uk" );
+    aboutData.addCredit( i18n("John Birch"), i18n( "Debugger frontend" ), "jbb@kdevelop.org" );
+    aboutData.addCredit( i18n("Sandy Meier"), i18n( "PHP support, context menu stuff" ), "smeier@kdevelop.org" );
+    aboutData.addCredit( i18n("Kurt Granroth"), i18n( "KDE application templates" ), "kurth@granroth.org" );
+    aboutData.addCredit( i18n("Ian Reinhart Geiser"), i18n( "Dist part, bash support, application templates" ), "geiseri@yahoo.com" );
+    aboutData.addCredit( i18n("Matthias Hoelzer-Kluepfel"), i18n( "Several components, htdig indexing" ), "hoelzer@kde.org" );
+    aboutData.addCredit( i18n("Victor Roeder"), i18n( "Help with Automake manager and persistent class store" ), "victor_roeder@gmx.de" );
+    aboutData.addCredit( i18n("Simon Hausmann"), i18n( "Help with KParts infrastructure" ), "hausmann@kde.org" );
+    aboutData.addCredit( i18n("Oliver Kellogg"), i18n( "Ada support" ), "okellogg@users.sourceforge.net" );
+    aboutData.addCredit( i18n("Jakob Simon-Gaarde"), i18n( "QMake projectmanager" ), "jsgaarde@tdcspace.dk" );
+    aboutData.addCredit( i18n("Falk Brettschneider"), i18n( "MDI modes, QEditor, bugfixes" ), "falkbr@kdevelop.org" );
+    aboutData.addCredit( i18n("Mario Scalas"), i18n( "PartExplorer, redesign of CvsPart, patches, bugs(fixes)" ), "mario.scalas@libero.it" );
+    aboutData.addCredit( i18n("Jens Dagerbo"), i18n( "Replace, Bookmarks, FileList and CTags2 plugins. Overall improvements and patches" ), "jens.dagerbo@swipnet.se" );
+    aboutData.addCredit( i18n("Julian Rockey"), i18n( "Filecreate part and other bits and patches" ), "linux@jrockey.com" );
+    aboutData.addCredit( i18n("Ajay Guleria"), i18n( "ClearCase support" ), "ajay_guleria@yahoo.com" );
+    aboutData.addCredit( i18n("Marek Janukowicz"), i18n( "Ruby support" ), "child@t17.ds.pwr.wroc.pl" );
+    aboutData.addCredit( i18n("Robert Moniot"), i18n( "Fortran documentation" ), "moniot@fordham.edu" );
+    aboutData.addCredit( i18n("Ka-Ping Yee"), i18n( "Python documentation utility" ), "ping@lfw.org" );
+    aboutData.addCredit( i18n("Dimitri van Heesch"), i18n( "Doxygen wizard" ), "dimitri@stack.nl" );
+    aboutData.addCredit( i18n("Hugo Varotto"), i18n( "Fileselector component" ), "hugo@varotto-usa.com" );
+    aboutData.addCredit( i18n("Matt Newell"), i18n( "Fileselector component" ), "newellm@proaxis.com" );
+    aboutData.addCredit( i18n("Daniel Engelschalt"), i18n( "C++ code completion, persistent class store" ), "daniel.engelschalt@gmx.net" );
+    aboutData.addCredit( i18n("Stephane Ancelot"), i18n( "Patches" ), "sancelot@free.fr" );
+    aboutData.addCredit( i18n("Jens Zurheide"), i18n( "Patches" ), "jens.zurheide@gmx.de" );
+    aboutData.addCredit( i18n("Luc Willems"), i18n( "Help with Perl support" ), "Willems.luc@pandora.be" );
+    aboutData.addCredit( i18n("Marcel Turino"), i18n( "Documentation index view" ), "M.Turino@gmx.de" );
+    aboutData.addCredit( i18n("Yann Hodique"), i18n( "Patches" ), "Yann.Hodique@lifl.fr" );
+    aboutData.addCredit( i18n("Tobias Gl\303\244\303\237er") , i18n( "Documentation Finder,  qmake projectmanager patches, usability improvements, bugfixes ... " ), "tobi.web@gmx.de" );
+    aboutData.addCredit( i18n("Andreas Koepfle") , i18n( "QMake project manager patches" ), "koepfle@ti.uni-mannheim.de" );
+    aboutData.addCredit( i18n("Sascha Cunz") , i18n( "Cleanup and bugfixes for qEditor, AutoMake and much other stuff" ), "mail@sacu.de" );
+    aboutData.addCredit( i18n("Zoran Karavla"), i18n( "Artwork for the ruby language" ), "webmaster@the-error.net", "http://the-error.net" );
 
 
     //we can't use KCmdLineArgs as it doesn't allow arguments for the debugee
@@ -276,41 +281,37 @@ int main( int argc, char *argv[] )
         }
     }
 
-    KCmdLineArgs::init( argc, argv, &aboutData );
-    KCmdLineOptions options;
-    options.add("n")
-           .add("new-session <name>", ki18n("Open KDevelop with a new session using the given name."));
-    options.add("s")
-           .add("open-session <session>", ki18n("Open KDevelop with the given session.\n"
-                                           "You can pass either hash or the name of the session." ));
-    options.add("ps").add("pick-session", ki18n("Shows all available sessions and lets you select one to open." ));
-    options.add("pss").add("pick-session-shell", ki18n("List all available sessions on shell and lets you select one to open." ));
-    options.add("l")
-           .add("list-sessions", ki18n( "List available sessions and quit." ));
-    options.add("p")
-           .add("project <project>", ki18n( "Open KDevelop and load the given project." ));
-    options.add("d")
-           .add("debug <debugger>",
-                ki18n( "Start debugging an application in KDevelop with the given debugger.\n"
-                       "The binary that should be debugged must follow - including arguments.\n"
-                       "Example: kdevelop --debug gdb myapp --foo bar"));
+    KDevelopApplication app(argc, argv);
+    QCommandLineParser parser;
+    KAboutData::setApplicationData(aboutData);
+    parser.addVersionOption();
+    parser.addHelpOption();
+    aboutData.setupCommandLine(&parser);
 
-    options.add("pid");
+    parser.addOption(QCommandLineOption{QStringList{"n", "new-session"}, i18n("Open KDevelop with a new session using the given name."), "name"});
+    parser.addOption(QCommandLineOption{QStringList{"s", "open-session"}, i18n("Open KDevelop with the given session.\n"
+                     "You can pass either hash or the name of the session." ), "session"});
+    parser.addOption(QCommandLineOption{QStringList{"ps", "pick-session"}, i18n("Shows all available sessions and lets you select one to open.")});
+    parser.addOption(QCommandLineOption{QStringList{"pss", "pick-session-shell"}, i18n("List all available sessions on shell and lets you select one to open.")});
+    parser.addOption(QCommandLineOption{QStringList{"l", "list-sessions"}, i18n("List available sessions and quit.")});
+    parser.addOption(QCommandLineOption{QStringList{"p", "project"}, i18n("Open KDevelop and load the given project."), "project"});
+    parser.addOption(QCommandLineOption{QStringList{"d", "debug"},
+                     i18n("Start debugging an application in KDevelop with the given debugger.\n"
+                     "The binary that should be debugged must follow - including arguments.\n"
+                     "Example: kdevelop --debug gdb myapp --foo bar"), "debugger"});
 
-    options.add("+files", ki18n( "Files to load" ));
+    // TODO: What does that do?
+    parser.addOption(QCommandLineOption{QStringList{"pid"}});
 
-    options.add(":", ki18n("Deprecated options:"));
-    options.add("sessions", ki18n( "Same as -l / --list-sessions" ));
-    options.add("cs <name>", ki18n( "Same as -n / --new-session" ));
-
-    KCmdLineArgs::addCmdLineOptions( options );
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-    KDevelopApplication app;
+    parser.addPositionalArgument("files", i18n( "Files to load" ), "[FILE...]");
 
     // The session-controller needs to arguments to eventually pass them to newly opened sessions
     KDevelop::SessionController::setArguments(argc, argv);
 
-    if(args->isSet("sessions") || args->isSet("list-sessions"))
+    parser.process(app);
+    aboutData.processCommandLine(&parser);
+
+    if(parser.isSet("list-sessions"))
     {
         QTextStream qout(stdout);
         qout << endl << ki18n("Available sessions (use '-s HASH' or '-s NAME' to open a specific one):").toString() << endl << endl;
@@ -332,10 +333,10 @@ int main( int argc, char *argv[] )
 
     // Handle extra arguments, which stand for files to open
     QVector<File> initialFiles;
-    for ( int i = 0; i < args->count(); i++ ) {
-        initialFiles.append(parseFilename(args->arg(i)));
+    foreach (const QString &file, parser.positionalArguments()) {
+        initialFiles.append(parseFilename(file));
     }
-    if ( ! initialFiles.isEmpty() && ! args->isSet("open-session") && ! args->isSet("new-session") )
+    if ( ! initialFiles.isEmpty() && ! parser.isSet("open-session") && ! parser.isSet("new-session") )
     {
         int pid = getRunningSessionPid();
         if ( pid > 0 ) {
@@ -347,13 +348,13 @@ int main( int argc, char *argv[] )
     // if empty, restart kdevelop with last active session, see SessionController::defaultSessionId
     QString session;
 
-    if(args->isSet("pss"))
+    if(parser.isSet("pss"))
     {
         QTextStream qerr(stderr);
         QList<KDevelop::SessionInfo> candidates;
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
-            if( (!si.name.isEmpty() || !si.projects.isEmpty() || args->isSet("pid")) &&
-                (!args->isSet("pid") || KDevelop::SessionController::isSessionRunning(si.uuid.toString())))
+            if( (!si.name.isEmpty() || !si.projects.isEmpty() || parser.isSet("pid")) &&
+                (!parser.isSet("pid") || KDevelop::SessionController::isSessionRunning(si.uuid.toString())))
                 candidates << si;
 
         if(candidates.size() == 0)
@@ -362,7 +363,7 @@ int main( int argc, char *argv[] )
             return 1;
         }
 
-        if(candidates.size() == 1 && args->isSet("pid"))
+        if(candidates.size() == 1 && parser.isSet("pid"))
         {
             session = candidates[0].uuid.toString();
         }else{
@@ -381,15 +382,15 @@ int main( int argc, char *argv[] )
         }
     }
 
-    if(args->isSet("ps"))
+    if(parser.isSet("ps"))
     {
-        bool onlyRunning = args->isSet("pid");
+        bool onlyRunning = parser.isSet("pid");
         session = KDevelop::SessionController::showSessionChooserDialog(i18n("Select the session you would like to use"), onlyRunning);
         if(session.isEmpty())
             return 1;
     }
 
-    if ( args->isSet("debug") ) {
+    if ( parser.isSet("debug") ) {
         if ( debugArgs.isEmpty() ) {
             QTextStream qerr(stderr);
             qerr << endl << i18nc("@info:shell", "Specify the binary you want to debug.") << endl;
@@ -397,9 +398,9 @@ int main( int argc, char *argv[] )
         }
         debugeeName = i18n("Debug %1", QUrl( debugArgs.first() ).fileName());
         session = debugeeName;
-    } else if ( args->isSet("cs") || args->isSet("new-session") )
+    } else if ( parser.isSet("new-session") )
     {
-        session = args->isSet("cs") ? args->getOption("cs") : args->getOption("new-session");
+        session = parser.value("new-session");
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
         {
             if ( session == si.name ) {
@@ -409,8 +410,8 @@ int main( int argc, char *argv[] )
             }
         }
         // session doesn't exist, we can create it
-    } else if ( args->isSet("open-session") ) {
-        session = args->getOption("open-session");
+    } else if ( parser.isSet("open-session") ) {
+        session = parser.value("open-session");
         //If there is a session and a project with the same name, always open the session
         //regardless of the order encountered
         QString projectAsSession;
@@ -445,7 +446,7 @@ int main( int argc, char *argv[] )
     QList<KDevelop::SessionInfo> sessions = KDevelop::SessionController::availableSessionInfo();
     const KDevelop::SessionInfo* sessionData = findSessionInList( sessions, session );
 
-    if(args->isSet("pid")) {
+    if(parser.isSet("pid")) {
         if( !sessionData ) {
             qCritical() << "session not given or does not exist";
             return 5;
@@ -480,7 +481,7 @@ int main( int argc, char *argv[] )
         core->pluginController()->loadPlugin("KDevWelcomePage");
     }
 
-    QStringList projectNames = args->getOptionList("project");
+    QStringList projectNames = parser.values("project");
     if(!projectNames.isEmpty())
     {
         foreach(const QString& p, projectNames)
@@ -503,7 +504,7 @@ int main( int argc, char *argv[] )
         }
     }
 
-    if ( args->isSet("debug") ) {
+    if ( parser.isSet("debug") ) {
         Q_ASSERT( !debugeeName.isEmpty() );
         QString launchName = debugeeName;
 
@@ -531,13 +532,13 @@ int main( int argc, char *argv[] )
         }
 
         if (launch && launch->type()->id() != "Native Application") launch = 0;
-        if (launch && launch->launcherForMode("debug") != args->getOption("debug")) launch = 0;
+        if (launch && launch->launcherForMode("debug") != parser.value("debug")) launch = 0;
         if (!launch) {
             qCDebug(APP) << launchName << "not found, creating a new one";
             QPair<QString,QString> launcher;
             launcher.first = "debug";
             foreach (KDevelop::ILauncher *l, type->launchers()) {
-                if (l->id() == args->getOption("debug")) {
+                if (l->id() == parser.value("debug")) {
                     if (l->supportedModes().contains("debug")) {
                         launcher.second = l->id();
                     }
@@ -545,7 +546,7 @@ int main( int argc, char *argv[] )
             }
             if (launcher.second.isEmpty()) {
                 QTextStream qerr(stderr);
-                qerr << endl << i18n("Cannot find launcher %1", args->getOption("debug")) << endl;
+                qerr << endl << i18n("Cannot find launcher %1", parser.value("debug")) << endl;
                 return 1;
             }
             KDevelop::ILaunchConfiguration* ilaunch = core->runController()->createLaunchConfiguration(type, launcher, 0, launchName);

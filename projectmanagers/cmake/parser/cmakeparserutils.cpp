@@ -31,7 +31,8 @@
 #include "cmakecachereader.h"
 #include "../debug.h"
 #include <util/path.h>
-#include <ktempdir.h>
+#include <QTemporaryDir>
+#include <QStandardPaths>
 
 namespace CMakeParserUtils
 {

@@ -227,12 +227,6 @@
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>QTabWidget</class>
-   <extends>QTabWidget</extends>
-   <header>ktabwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>DefinesWidget</class>
    <extends>QWidget</extends>
    <header>defineswidget.h</header>

@@ -34,7 +34,7 @@
 #include <tests/testcore.h>
 #include <astfactory.h>
 #include <cmakeprojectdata.h>
-#include <KTempDir>
+#include <QTemporaryDir>
 #include <QTemporaryFile>
 
 QTEST_GUILESS_MAIN(CMakeProjectVisitorTest)
@@ -833,10 +833,10 @@ void CMakeProjectVisitorTest::testGlobs()
     QFETCH(QList<StringPair>, symlinks);
     QFETCH(QStringList, expectedFiles);
 
-    KTempDir dir;
+    QTemporaryDir dir;
     foreach(QString relativeFilePath, files)
     {
-        QString fileName = dir.name() + relativeFilePath;
+        QString fileName = dir.path() + '/' + relativeFilePath;
         QFile file(fileName);
         QDir fileDir(fileName.left(fileName.lastIndexOf('/')));
         if (!fileDir.exists())
@@ -848,11 +848,11 @@ void CMakeProjectVisitorTest::testGlobs()
     }
     foreach(StringPair pair, symlinks)
     {
-        QFile file(dir.name() + pair.first);
+        QFile file(dir.path() + '/' + pair.first);
         QVERIFY2(file.exists(),
             ("File doesn't exist: " + file.fileName()).toLatin1());
-        QVERIFY2(file.link(dir.name() + pair.second),
-            ("Failed to create a link: " + dir.name() + pair.second).toLatin1());
+        QVERIFY2(file.link(dir.path() + '/' + pair.second),
+            ("Failed to create a link: " + dir.path() + '/' + pair.second).toLatin1());
     }
 
     QSharedPointer<QTemporaryFile> file = prepareVisitoTestScript(input);
@@ -864,7 +864,7 @@ void CMakeProjectVisitorTest::testGlobs()
     VariableMap vm;
     CacheValues val;
 
-    vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(dir.name()));
+    vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(dir.path()));
 
     CMakeProjectVisitor v(file->fileName(), fakeContext);
     v.setVariableMap(&vm);
@@ -875,7 +875,7 @@ void CMakeProjectVisitorTest::testGlobs()
     VariableMap::const_iterator it = v.variables()->constFind("RESULT");
     QVERIFY2(it != v.variables()->constEnd(), "RESULT variable doesn't exist");
     QStringList filesFound = it.value();
-    QDir baseDir(dir.name());
+    QDir baseDir(dir.path());
     for (int i = 0; i < filesFound.size(); i++)
     {
         QString file = filesFound[i];

@@ -28,6 +28,7 @@
 #include "debug.h"
 
 #include <KColorScheme>
+#include <QStandardPaths>
 
 using namespace KDevelop;
 

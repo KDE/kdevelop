@@ -22,7 +22,7 @@
 
 #include <KIconLoader>
 
-#include <KStandardDirs>
+
 #include <QQuickView>
 #include <QQmlEngine>
 #include <QQmlContext>

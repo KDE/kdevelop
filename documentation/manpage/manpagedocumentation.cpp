@@ -43,7 +43,7 @@ ManPageDocumentation::ManPageDocumentation(const QString& name, const QUrl& url)
     : m_url(url), m_name(name)
 {
     KIO::StoredTransferJob* transferJob = KIO::storedGet(m_url, KIO::NoReload, KIO::HideProgressInfo);
-    connect( transferJob, SIGNAL(finished(KJob*)), SLOT(finished(KJob*)));
+    connect( transferJob, &KIO::StoredTransferJob::finished, this, &ManPageDocumentation::finished);
     transferJob->start();
 }
 
@@ -79,7 +79,7 @@ QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWi
     settings->setUserStyleSheetUrl(QUrl::fromLocalFile(cssFile));
 
     view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-    QObject::connect(view, SIGNAL(linkClicked(QUrl)), ManPageDocumentation::s_provider->model(), SLOT(showItemFromUrl(QUrl)));
+    QObject::connect(view, &KDevelop::StandardDocumentationView::linkClicked, ManPageDocumentation::s_provider->model(), &ManPageModel::showItemFromUrl);
     return view;
 }
 

@@ -64,7 +64,7 @@ PlasmoidExecutionConfig::PlasmoidExecutionConfig( QWidget* parent )
     : LaunchConfigurationPage( parent )
 {
     setupUi(this);
-    connect( identifier->lineEdit(), SIGNAL(textEdited(QString)), SIGNAL(changed()) );
+    connect( identifier->lineEdit(), &QLineEdit::textEdited, this, &PlasmoidExecutionConfig::changed );
 
     QProcess pPlasmoids;
     pPlasmoids.start("plasmoidviewer", QStringList("--list"), QIODevice::ReadOnly);
@@ -89,17 +89,17 @@ PlasmoidExecutionConfig::PlasmoidExecutionConfig( QWidget* parent )
     moveDepDown->setIcon( QIcon::fromTheme("go-down") );
     browseProject->setIcon(QIcon::fromTheme("folder-document"));
 
-    connect( addDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );
-    connect( removeDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );
-    connect( moveDepDown, SIGNAL(clicked(bool)), SIGNAL(changed()) );
-    connect( moveDepUp, SIGNAL(clicked(bool)), SIGNAL(changed()) );
-    connect( browseProject, SIGNAL(clicked(bool)), targetDependency, SLOT(selectItemDialog()));
-    connect( addDependency, SIGNAL(clicked(bool)), SLOT(addDep()) );
-    connect( removeDependency, SIGNAL(clicked(bool)), SLOT(removeDep()) );
-    connect( moveDepDown, SIGNAL(clicked(bool)), SLOT(moveDependencyDown()) );
-    connect( moveDepUp, SIGNAL(clicked(bool)), SLOT(moveDependencyUp()) );
-    connect( dependencies->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(checkActions(QItemSelection,QItemSelection)) );
-    connect( targetDependency, SIGNAL(textChanged(QString)), SLOT(depEdited(QString)));
+    connect( addDependency, &QPushButton::clicked, this, &PlasmoidExecutionConfig::changed );
+    connect( removeDependency, &QPushButton::clicked, this, &PlasmoidExecutionConfig::changed );
+    connect( moveDepDown, &QPushButton::clicked, this, &PlasmoidExecutionConfig::changed );
+    connect( moveDepUp, &QPushButton::clicked, this, &PlasmoidExecutionConfig::changed );
+    connect( browseProject, &QPushButton::clicked, targetDependency, &ProjectItemLineEdit::selectItemDialog);
+    connect( addDependency, &QPushButton::clicked, this, &PlasmoidExecutionConfig::addDep );
+    connect( removeDependency, &QPushButton::clicked, this, &PlasmoidExecutionConfig::removeDep );
+    connect( moveDepDown, &QPushButton::clicked, this, &PlasmoidExecutionConfig::moveDependencyDown );
+    connect( moveDepUp, &QPushButton::clicked, this, &PlasmoidExecutionConfig::moveDependencyUp );
+    connect( dependencies->selectionModel(), &QItemSelectionModel::selectionChanged, this, &PlasmoidExecutionConfig::checkActions );
+    connect( targetDependency, &ProjectItemLineEdit::textChanged, this, &PlasmoidExecutionConfig::depEdited);
 }
 
 void PlasmoidExecutionConfig::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project ) const
@@ -328,7 +328,7 @@ QMenu* PlasmoidExecutionConfigType::launcherSuggestions()
                 QAction* action = new QAction(relUrl, this);
                 action->setProperty("url", relUrl);
                 action->setProperty("project", qVariantFromValue<KDevelop::IProject*>(p));
-                connect(action, SIGNAL(triggered(bool)), SLOT(suggestionTriggered()));
+                connect(action, &QAction::triggered, this, &PlasmoidExecutionConfigType::suggestionTriggered);
                 found.append(action);
             }
         }

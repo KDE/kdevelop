@@ -17,6 +17,7 @@ set( kdevdefinesandincludesmanager_SRCS
 
 add_library(kdevdefinesandincludessettings settingsmanager.cpp compilerprovider/icompiler.cpp)
 target_link_libraries( kdevdefinesandincludessettings LINK_PRIVATE
+        KF5::KDELibs4Support
         KDev::Project
         KDev::Util )
 generate_export_header(kdevdefinesandincludessettings EXPORT_FILE_NAME definesandincludessettingsexport.h)
@@ -24,6 +25,7 @@ generate_export_header(kdevdefinesandincludessettings EXPORT_FILE_NAME definesan
 add_library(kdevdefinesandincludesmanager MODULE
         ${kdevdefinesandincludesmanager_SRCS} )
 target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
+        KF5::KDELibs4Support
         KDev::Project
         KDev::Util
         KDev::Language

@@ -19,10 +19,7 @@
 
 #include <QAction>
 #include <QLineEdit>
-#include <kglobalsettings.h>
 #include <KLocalizedString>
-#include <kdeversion.h>
-#include <kiconloader.h>
 
 #include <QLabel>
 #include <QLayout>

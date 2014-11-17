@@ -29,9 +29,6 @@ Boston, MA 02110-1301, USA.
 
 #include "astyle.h"
 
-class KSharedConfig;
-template<class T> class KSharedPtr;
-
 class AStyleFormatter : public astyle::ASFormatter
 {
     public:
