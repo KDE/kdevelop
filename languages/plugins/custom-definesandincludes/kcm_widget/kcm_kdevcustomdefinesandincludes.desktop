@@ -24,6 +24,7 @@ Name[pt_BR]=Definições e inclusões personalizadas
 Name[sk]=Vlastné definície a zahrnutia
 Name[sl]=Določitve in vključitve po meri
 Name[sv]=Egna definitioner och inkluderingar
+Name[tr]=Özel Tanımlamalar ve İçermeler
 Name[uk]=Нетипові визначення і включення
 Name[x-test]=xxCustom Defines And Includesxx
 
@@ -43,5 +44,6 @@ Comment[pt_BR]=Configura quais macros e arquivos/pastas incluídos serão adicio
 Comment[sk]=Nastaviť, ktoré makrá a zahrnuté adresáre/súbory sa pridajú do spracovača počas spracovania projektu.
 Comment[sl]=Nastavite, kateri makri in mape oz. datoteke z vključitvami bodo dodane razčlenjevalniku med razčlenjevanjem projekta.
 Comment[sv]=Anpassa vilka makron och filer eller kataloger att inkludera som läggs till i tolken under projekttolkning
+Comment[tr]=Proje ayrıştırılırken hangi makroların ve içerme dizinlerinin/dosyaların ayrıştırıcıya ekleneceğini yapılandırın.
 Comment[uk]=Налаштувати макроси і включені каталоги або файли, які буде додано під час обробки проекту.
 Comment[x-test]=xxConfigure which macros and include directories/files will be added to the parser during project parsing.xx

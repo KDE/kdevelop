@@ -60,6 +60,7 @@ Comment[ru]=Графическое приложение для Qt4 и CMake. С�
 Comment[sk]=Ústredná aplikácia Qt4 CMake Gui. Generuje GUI aplikáciu založenú na CMake/Qt4 (cross-platformovo kompatibilné)
 Comment[sl]=Program z uporabniškim vmesnikom Qt4 CMake. Ustvari program temelječ na CMake/Qt4 (združljiv z več okolji)
 Comment[sv]=Qt4 CMake-program med grafiskt användargränssnitt. Skapa ett CMake/Qt4-baserat program med grafiskt användargränssnitt (som fungerar på flera plattformar)
+Comment[tr]=Qt4 CMake Gui uygulaması. CMake/Qt4 tabanlı GUI uygulaması oluştur (çapraz platform uyumlu)
 Comment[uk]=Програма Qt4 з графічним інтерфейсом і системою збирання CMake. Створити графічну програму, засновану на CMake/Qt4 (сумісну з декількома платформами)
 Comment[x-test]=xxQt4 CMake Gui application. Generate a CMake/Qt4 based GUI application (crossplatform compatible)xx
 Comment[zh_CN]=生成基于 CMake/Qt4 的图形应用程序(跨平台兼容)

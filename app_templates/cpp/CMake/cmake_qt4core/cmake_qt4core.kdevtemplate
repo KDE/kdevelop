@@ -61,6 +61,7 @@ Comment[ru]=Основа приложения для Qt4 и CMake. Создаё�
 Comment[sk]=Ústredná aplikácia Qt4 CMake. Generuje aplikáciu založenú na CMake/Qt4 (cross-platformovo kompatibilné)
 Comment[sl]=Jedrni program Qt4 CMake. Ustvari program temelječ na CMake/Qt4 (združljiv z več okolji)
 Comment[sv]=Qt4 CMake-kärnprogram. Skapa ett CMake/Qt4-baserat program (som fungerar på flera plattformar)
+Comment[tr]=Qt4 CMake Çekirdek uygulaması. CMake/Qt4 tabanlı uygulama oluştur (çapraz platform uyumlu)
 Comment[uk]=Основна програма Qt4 з системою збирання CMake. Створити програму, засновану на CMake/Qt4 (сумісну з декількома платформами)
 Comment[x-test]=xxQt4 CMake Core application. Generate a CMake/Qt4 based application (crossplatform compatible)xx
 Comment[zh_CN]=生成基于 CMake/Qt4 的应用程序(跨平台兼容)
