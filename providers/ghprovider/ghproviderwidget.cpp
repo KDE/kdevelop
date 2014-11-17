@@ -48,7 +48,7 @@ ProviderWidget::ProviderWidget(QWidget *parent)
 {
     setLayout(new QVBoxLayout());
     m_projects = new QListView(this);
-    connect(m_projects, SIGNAL(clicked(QModelIndex)), this, SLOT(projectIndexChanged(QModelIndex)));
+    connect(m_projects, &QListView::clicked, this, &ProviderWidget::projectIndexChanged);
 
     m_waiting = new QLabel(i18n("Waiting for response"), this);
     m_waiting->setAlignment(Qt::AlignCenter);
@@ -59,25 +59,25 @@ ProviderWidget::ProviderWidget(QWidget *parent)
     m_projects->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_resource = new Resource(this, model);
     m_account = new Account(m_resource);
-    connect(m_resource, SIGNAL(reposUpdated()), m_waiting, SLOT(hide()));
+    connect(m_resource, &Resource::reposUpdated, m_waiting, &QLabel::hide);
 
     QHBoxLayout *topLayout = new QHBoxLayout();
     m_edit = new LineEdit(this);
     m_edit->setPlaceholderText(i18n("Search"));
     m_edit->setToolTip(i18n("You can press the Return key if you don't want to wait"));
-    connect(m_edit, SIGNAL(returnPressed()), this, SLOT(searchRepo()));
+    connect(m_edit, &LineEdit::returnPressed, this, &ProviderWidget::searchRepo);
     topLayout->addWidget(m_edit);
 
     m_combo = new QComboBox(this);
     m_combo->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
-    connect(m_combo, SIGNAL(currentIndexChanged(int)), SLOT(searchRepo()));
+    connect(m_combo, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ProviderWidget::searchRepo);
     fillCombo();
     topLayout->addWidget(m_combo);
 
     QPushButton *settings = new QPushButton(QIcon::fromTheme("configure"), "", this);
     settings->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     settings->setToolTip(i18n("Click this button to configure your Github account"));
-    connect(settings, SIGNAL(clicked()), SLOT(showSettings()));
+    connect(settings, &QPushButton::clicked, this, &ProviderWidget::showSettings);
     topLayout->addWidget(settings);
 
     layout()->addItem(topLayout);
@@ -135,7 +135,7 @@ void ProviderWidget::projectIndexChanged(const QModelIndex &currentIndex)
 void ProviderWidget::showSettings()
 {
     Dialog *dialog = new Dialog(this, m_account);
-    connect(dialog, SIGNAL(shouldUpdate()), SLOT(fillCombo()));
+    connect(dialog, &Dialog::shouldUpdate, this, &ProviderWidget::fillCombo);
     dialog->show();
 }
 

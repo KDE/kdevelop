@@ -51,16 +51,16 @@ Dialog::Dialog(QWidget *parent, Account *account) : KDialog(parent)
         setButtons(KDialog::User2 | KDialog::User3);
         setButtonText(KDialog::User2, i18n("Log out"));
         setButtonIcon(KDialog::User2, QIcon::fromTheme("dialog-cancel"));
-        connect(this, SIGNAL(user2Clicked()), SLOT(revokeAccess()));
+        connect(this, &Dialog::user2Clicked, this, &Dialog::revokeAccess);
         setButtonIcon(KDialog::User3, QIcon::fromTheme("view-refresh"));
         setButtonText(KDialog::User3, i18n("Force sync"));
-        connect(this, SIGNAL(user3Clicked()), SLOT(syncUser()));
+        connect(this, &Dialog::user3Clicked, this, &Dialog::syncUser);
     } else {
         m_text = new QLabel(i18n(INVALID_ACCOUNT), this);
         setButtons(KDialog::User1 | KDialog::Cancel);
         setButtonText(KDialog::User1, i18n("Authorize"));
         setButtonIcon(KDialog::User1, QIcon::fromTheme("dialog-ok"));
-        connect(this, SIGNAL(user1Clicked()), SLOT(authorizeClicked()));
+        connect(this, &Dialog::user1Clicked, this, &Dialog::authorizeClicked);
     }
 
     m_text->setWordWrap(true);
@@ -82,8 +82,8 @@ void Dialog::authorizeClicked()
     m_account->setName(dlg.username());
     Resource *rs = m_account->resource();
     rs->authenticate(dlg.username(), dlg.password());
-    connect(rs, SIGNAL(authenticated(QByteArray, QByteArray)),
-            SLOT(authorizeResponse(QByteArray, QByteArray)));
+    connect(rs, &Resource::authenticated,
+            this, &Dialog::authorizeResponse);
 }
 
 void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token)
@@ -103,8 +103,8 @@ void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token)
 void Dialog::syncUser()
 {
     Resource *rs = m_account->resource();
-    connect(rs, SIGNAL(orgsUpdated(QStringList)),
-            SLOT(updateOrgs(QStringList)));
+    connect(rs, &Resource::orgsUpdated,
+            this, &Dialog::updateOrgs);
     m_text->setAlignment(Qt::AlignCenter);
     m_text->setText(i18n("Waiting for response"));
     rs->getOrgs(m_account->token());

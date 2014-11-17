@@ -95,35 +95,35 @@ void AStylePreferences::init()
         item->setCheckState(Qt::Checked);
     }
 
-    connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged()));
+    connect(tabWidget, &QTabWidget::currentChanged, this, &AStylePreferences::currentTabChanged);
 
-    connect(cbIndentType, SIGNAL(currentIndexChanged(int)), this, SLOT(indentChanged()));
-    connect(inpNuberSpaces, SIGNAL(valueChanged(int)), this, SLOT(indentChanged()));
-    connect(chkConvertTabs, SIGNAL(stateChanged(int)), this, SLOT(indentChanged()));
-    connect(chkFillEmptyLines, SIGNAL(stateChanged(int)), this, SLOT(indentChanged()));
+    connect(cbIndentType, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &AStylePreferences::indentChanged);
+    connect(inpNuberSpaces, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &AStylePreferences::indentChanged);
+    connect(chkConvertTabs, &QCheckBox::stateChanged, this, &AStylePreferences::indentChanged);
+    connect(chkFillEmptyLines, &QCheckBox::stateChanged, this, &AStylePreferences::indentChanged);
 
-    connect(listIdentObjects, SIGNAL(itemChanged(QListWidgetItem*)),
-             this, SLOT(indentObjectsChanged(QListWidgetItem*)));
+    connect(listIdentObjects, &QListWidget::itemChanged,
+             this, &AStylePreferences::indentObjectsChanged);
 
-    connect(inpMaxStatement, SIGNAL(valueChanged(int)), this, SLOT(minMaxValuesChanged()));
-    connect(inpMinConditional, SIGNAL(valueChanged(int)), this, SLOT(minMaxValuesChanged()));
+    connect(inpMaxStatement, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &AStylePreferences::minMaxValuesChanged);
+    connect(inpMinConditional, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &AStylePreferences::minMaxValuesChanged);
 
-    connect(cbBrackets, SIGNAL(currentIndexChanged(int)), this, SLOT(bracketsChanged()));
-    connect(chkBracketsCloseHeaders, SIGNAL(stateChanged(int)), this, SLOT(bracketsChanged()));
+    connect(cbBrackets, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &AStylePreferences::bracketsChanged);
+    connect(chkBracketsCloseHeaders, &QCheckBox::stateChanged, this, &AStylePreferences::bracketsChanged);
 
-    connect(chkBlockBreak, SIGNAL(stateChanged(int)), this, SLOT(blocksChanged()));
-    connect(chkBlockBreakAll, SIGNAL(stateChanged(int)), this, SLOT(blocksChanged()));
-    connect(chkBlockIfElse, SIGNAL(stateChanged(int)), this, SLOT(blocksChanged()));
+    connect(chkBlockBreak, &QCheckBox::stateChanged, this, &AStylePreferences::blocksChanged);
+    connect(chkBlockBreakAll, &QCheckBox::stateChanged, this, &AStylePreferences::blocksChanged);
+    connect(chkBlockIfElse, &QCheckBox::stateChanged, this, &AStylePreferences::blocksChanged);
 
-    connect(cbParenthesisPadding, SIGNAL(currentIndexChanged(int)), this, SLOT(paddingChanged()));
-    connect(chkPadParenthesisHeader, SIGNAL(stateChanged(int)), this, SLOT(paddingChanged()));
-    connect(chkPadOperators, SIGNAL(stateChanged(int)), this, SLOT(paddingChanged()));
+    connect(cbParenthesisPadding, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &AStylePreferences::paddingChanged);
+    connect(chkPadParenthesisHeader, &QCheckBox::stateChanged, this, &AStylePreferences::paddingChanged);
+    connect(chkPadOperators, &QCheckBox::stateChanged, this, &AStylePreferences::paddingChanged);
 
-    connect(chkKeepStatements, SIGNAL(stateChanged(int)), this, SLOT(onelinersChanged()));
-    connect(chkKeepBlocks, SIGNAL(stateChanged(int)), this, SLOT(onelinersChanged()));
+    connect(chkKeepStatements, &QCheckBox::stateChanged, this, &AStylePreferences::onelinersChanged);
+    connect(chkKeepBlocks, &QCheckBox::stateChanged, this, &AStylePreferences::onelinersChanged);
 
-    connect(cbPointerAlign, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(pointerAlignChanged()));
+    connect(cbPointerAlign, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+            this, &AStylePreferences::pointerAlignChanged);
 }
 
 void AStylePreferences::load(const KDevelop::SourceFormatterStyle &style)
