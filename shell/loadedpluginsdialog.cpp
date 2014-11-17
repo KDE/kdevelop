@@ -28,7 +28,6 @@
 
 #include <KLocalizedString>
 #include <ktitlewidget.h>
-#include <kcomponentdata.h>
 #include <kaboutdata.h>
 #include <KWidgetItemDelegate>
 #include <QPushButton>
@@ -43,12 +42,25 @@
 
 #define MARGIN 5
 
-#if 0
+namespace {
+
+KPluginInfo pluginInfo(KDevelop::IPlugin* plugin)
+{
+    return KDevelop::Core::self()->pluginControllerInternal()->pluginInfo(plugin);
+};
+
+QString displayName(KDevelop::IPlugin* plugin)
+{
+    const auto name = pluginInfo(plugin).name();
+    return !name.isEmpty() ? name : plugin->componentName();
+}
+
 bool sortPlugins(KDevelop::IPlugin* l, KDevelop::IPlugin* r)
 {
-    return l->componentData().aboutData()->programName() < r->componentData().aboutData()->programName();
+    return displayName(l) < displayName(r);
 }
-#endif
+
+}
 
 class PluginsModel : public QAbstractListModel
 {
@@ -60,10 +72,10 @@ public:
         : QAbstractListModel(parent)
     {
         m_plugins = KDevelop::Core::self()->pluginControllerInternal()->loadedPlugins();
-        //std::sort(m_plugins.begin(), m_plugins.end(), sortPlugins);
+        std::sort(m_plugins.begin(), m_plugins.end(), sortPlugins);
     }
 
-    KDevelop::IPlugin *plugin(const QModelIndex& index) const
+    KDevelop::IPlugin *pluginForIndex(const QModelIndex& index) const
     {
         if (!index.isValid()) return 0;
         if (index.parent().isValid()) return 0;
@@ -74,28 +86,19 @@ public:
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const
     {
-        KDevelop::IPlugin *p = plugin(index);
-        if (!p) return QVariant();
+        KDevelop::IPlugin* plugin = pluginForIndex(index);
+        if (!plugin)
+            return QVariant();
+
         switch (role) {
-            case Qt::DisplayRole:
-            {
-                // TODO: KF5: How to retrieve the information?
-                return p->componentName();
-                //QString name(p->componentData().aboutData()->programName());
-                //if (name.isEmpty()) name = p->componentData().componentName();
-                //return name;
-            }
-            case CommentRole:
-                // TODO: KF5: How to retrieve the information?
-                return QString();
-                //return p->componentData().aboutData()->shortDescription();
-            case Qt::DecorationRole:
-            {
-                KPluginInfo pi = KDevelop::Core::self()->pluginControllerInternal()->pluginInfo(p);
-                return pi.icon();
-            }
-            default:
-                return QVariant();
+        case Qt::DisplayRole:
+            return displayName(plugin);
+        case CommentRole:
+            return pluginInfo(plugin).comment();
+        case Qt::DecorationRole:
+            return pluginInfo(plugin).icon();
+        default:
+            return QVariant();
         };
     }
 
@@ -241,7 +244,7 @@ private Q_SLOTS:
     void info()
     {
         PluginsModel *m = static_cast<PluginsModel*>(itemView()->model());
-        KDevelop::IPlugin *p = m->plugin(focusedIndex());
+        KDevelop::IPlugin *p = m->pluginForIndex(focusedIndex());
         if (p) {
 //             TODO KF5: Port
 //             const K4AboutData *aboutData = p->componentData().aboutData();
@@ -292,8 +295,10 @@ LoadedPluginsDialog::LoadedPluginsDialog( QWidget* parent )
     QVBoxLayout* vbox = new QVBoxLayout(this);
 
     KTitleWidget* title = new KTitleWidget(this);
-    title->setPixmap(QIcon::fromTheme(KComponentData::mainComponent().aboutData()->programIconName()), KTitleWidget::ImageLeft);
-    title->setText(i18n("<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>", KComponentData::mainComponent().aboutData()->programName()));
+    title->setPixmap(QIcon::fromTheme(KAboutData::applicationData().programIconName()),
+                     KTitleWidget::ImageLeft);
+    title->setText(i18n("<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>",
+                        KAboutData::applicationData().displayName()));
     vbox->addWidget(title);
     vbox->addWidget(new PluginsView());
 
