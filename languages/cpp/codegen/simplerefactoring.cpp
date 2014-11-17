@@ -77,7 +77,7 @@ void SimpleRefactoring::fillContextMenu(KDevelop::ContextMenuExtension& extensio
         QAction* action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
         action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
         action->setIcon(QIcon::fromTheme("edit-rename"));
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
+        connect(action, &QAction::triggered, this, &SimpleRefactoring::executeRenameAction);
 
         extension.addAction(ContextMenuExtension::RefactorGroup, action);
 
@@ -89,7 +89,7 @@ void SimpleRefactoring::fillContextMenu(KDevelop::ContextMenuExtension& extensio
             QAction* action = new QAction(i18n("Create separate definition for %1", declaration->qualifiedIdentifier().toString()), this);
             action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
 //           action->setIcon(QIcon::fromTheme("arrow-right"));
-            connect(action, SIGNAL(triggered(bool)), this, SLOT(executeMoveIntoSourceAction()));
+            connect(action, &QAction::triggered, this, &SimpleRefactoring::executeMoveIntoSourceAction);
             extension.addAction(ContextMenuExtension::RefactorGroup, action);
           }
         }

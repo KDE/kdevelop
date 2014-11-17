@@ -37,7 +37,7 @@ NoProjectCustomIncludePaths::NoProjectCustomIncludePaths(QWidget* parent)
 
     setWindowTitle(i18n("Setup Custom Include Paths"));
 
-    connect(m_ui->directorySelector, SIGNAL(clicked()), this, SLOT(openAddIncludeDirectoryDialog()));
+    connect(m_ui->directorySelector, &QPushButton::clicked, this, &NoProjectCustomIncludePaths::openAddIncludeDirectoryDialog);
 }
 
 void NoProjectCustomIncludePaths::setStorageDirectory(const QString& path)

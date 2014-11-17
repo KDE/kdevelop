@@ -56,8 +56,8 @@ CodeCompletionModel::CodeCompletionModel( QObject * parent )
   Q_ASSERT(!s_self);
   s_self = this;
 
-  connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
-          this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
+  connect(ICore::self()->languageController()->backgroundParser(), &BackgroundParser::parseJobFinished,
+          this, &CodeCompletionModel::parseJobFinished);
 }
 
 CodeCompletionModel::~CodeCompletionModel()

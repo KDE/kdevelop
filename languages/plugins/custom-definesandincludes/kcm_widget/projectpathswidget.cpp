@@ -53,25 +53,25 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     ui->addPath->setFixedHeight( ui->projectPaths->sizeHint().height() );
     ui->removePath->setFixedHeight( ui->projectPaths->sizeHint().height() );
 
-    connect( ui->addPath, SIGNAL(clicked(bool)), SLOT(addProjectPath()) );
-    connect( ui->removePath, SIGNAL(clicked(bool)), SLOT(deleteProjectPath()) );
-    connect( ui->batchEdit, SIGNAL(clicked(bool)), SLOT(batchEdit()) );
+    connect( ui->addPath, &QPushButton::clicked, this, &ProjectPathsWidget::addProjectPath );
+    connect( ui->removePath, &QPushButton::clicked, this, &ProjectPathsWidget::deleteProjectPath );
+    connect( ui->batchEdit, &QPushButton::clicked, this, &ProjectPathsWidget::batchEdit );
 
     ui->projectPaths->setModel( pathsModel );
-    connect( ui->projectPaths, SIGNAL(currentIndexChanged(int)), SLOT(projectPathSelected(int)) );
-    connect( pathsModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
-    connect( pathsModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
-    connect( pathsModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
-    connect( ui->compiler, SIGNAL(activated(QString)), SIGNAL(changed()) );
+    connect( ui->projectPaths, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &ProjectPathsWidget::projectPathSelected );
+    connect( pathsModel, &ProjectPathsModel::dataChanged, this, &ProjectPathsWidget::changed );
+    connect( pathsModel, &ProjectPathsModel::rowsInserted, this, &ProjectPathsWidget::changed );
+    connect( pathsModel, &ProjectPathsModel::rowsRemoved, this, &ProjectPathsWidget::changed );
+    connect( ui->compiler, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &ProjectPathsWidget::changed );
 
-    connect(ui->compilersWidget, SIGNAL(compilerChanged()), SIGNAL(changed()));
+    connect(ui->compilersWidget, &CompilersWidget::compilerChanged, this, &ProjectPathsWidget::changed);
 
-    connect( ui->includesWidget, SIGNAL(includesChanged(QStringList)), SLOT(includesChanged(QStringList)) );
-    connect( ui->definesWidget, SIGNAL(definesChanged(Defines)), SLOT(definesChanged(Defines)) );
+    connect( ui->includesWidget, static_cast<void(IncludesWidget::*)(const QStringList&)>(&IncludesWidget::includesChanged), this, &ProjectPathsWidget::includesChanged );
+    connect( ui->definesWidget, static_cast<void(DefinesWidget::*)(const KDevelop::Defines&)>(&DefinesWidget::definesChanged), this, &ProjectPathsWidget::definesChanged );
 
-    connect(ui->compilersWidget, SIGNAL(compilerChanged()), SLOT(compilersChanged()));
+    connect(ui->compilersWidget, &CompilersWidget::compilerChanged, this, &ProjectPathsWidget::compilersChanged);
 
-    connect(ui->languageParameters, SIGNAL(currentChanged(int)), SLOT(tabChanged(int)));
+    connect(ui->languageParameters, &QTabWidget::currentChanged, this, &ProjectPathsWidget::tabChanged);
 }
 
 QList<ConfigEntry> ProjectPathsWidget::paths() const

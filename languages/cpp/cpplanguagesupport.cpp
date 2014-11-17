@@ -219,12 +219,12 @@ void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*wind
     renameDeclarationAction->setText( i18n("Rename Declaration") );
     renameDeclarationAction->setIcon(QIcon::fromTheme("edit-rename"));
     actions.setDefaultShortcut(renameDeclarationAction, Qt::CTRL | Qt::ALT | Qt::Key_R);
-    connect(renameDeclarationAction, SIGNAL(triggered(bool)), m_refactoring, SLOT(executeRenameAction()));
+    connect(renameDeclarationAction, &QAction::triggered, m_refactoring, &SimpleRefactoring::executeRenameAction);
 
     QAction* moveIntoSourceAction = actions.addAction("code_move_definition");
     moveIntoSourceAction->setText( i18n("Move into Source") );
     actions.setDefaultShortcut(moveIntoSourceAction, Qt::CTRL | Qt::ALT | Qt::Key_S);
-    connect(moveIntoSourceAction, SIGNAL(triggered(bool)), m_refactoring, SLOT(executeMoveIntoSourceAction()));
+    connect(moveIntoSourceAction, &QAction::triggered, m_refactoring, &SimpleRefactoring::executeMoveIntoSourceAction);
 }
 
 CppLanguageSupport::~CppLanguageSupport()
@@ -683,7 +683,7 @@ UIBlockTester::UIBlockTester( uint milliseconds, QObject* parent )
 {
          m_timer = new QTimer( this );
          m_timer->start( milliseconds/10 );
-         connect( m_timer, SIGNAL(timeout()), this, SLOT(timer()) );
+         connect( m_timer, &QTimer::timeout, this, &UIBlockTester::timer );
          timer();
          m_thread.start();
  }
