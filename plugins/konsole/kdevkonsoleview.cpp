@@ -21,7 +21,6 @@
 #include <QApplication>
 #include <QUuid>
 
-#include <kurl.h>
 #include <QIcon>
 #include <KLocalizedString>
 #include <kde_terminal_interface.h>
