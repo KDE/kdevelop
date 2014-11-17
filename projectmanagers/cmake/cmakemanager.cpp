@@ -94,7 +94,7 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
 
     new CodeCompletion(this, new CMakeCodeCompletionModel(this), name());
 
-    connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)), SLOT(projectClosing(KDevelop::IProject*)));
+    connect(ICore::self()->projectController(), &IProjectController::projectClosing, this, &CMakeManager::projectClosing);
 
 //     m_fileSystemChangeTimer = new QTimer(this);
 //     m_fileSystemChangeTimer->setSingleShot(true);
@@ -153,7 +153,7 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
 
     // parse the JSON file
     CMakeImportJob* job = new CMakeImportJob(project, this);
-    connect(job, SIGNAL(result(KJob*)), SLOT(importFinished(KJob*)));
+    connect(job, &CMakeImportJob::result, this, &CMakeManager::importFinished);
     jobs << job;
 
     // generate the file system listing
@@ -229,8 +229,8 @@ void CMakeManager::importFinished(KJob* j)
     CMakeProjectData data;
     data.watcher->addPath(CMake::currentBuildDir(project).toLocalFile());
     data.jsonData = job->jsonData();
-    connect(data.watcher.data(), SIGNAL(fileChanged(QString)), SLOT(dirtyFile(QString)));
-    connect(data.watcher.data(), SIGNAL(directoryChanged(QString)), SLOT(dirtyFile(QString)));
+    connect(data.watcher.data(), &QFileSystemWatcher::fileChanged, this, &CMakeManager::dirtyFile);
+    connect(data.watcher.data(), &QFileSystemWatcher::directoryChanged, this, &CMakeManager::dirtyFile);
     m_projects[job->project()] = data;
 }
 

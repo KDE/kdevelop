@@ -48,7 +48,7 @@ QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionV
         if(type=="BOOL")
         {
             QCheckBox* box=new QCheckBox(parent);
-            connect(box, SIGNAL(toggled(bool)), this, SLOT(checkboxToggled()));
+            connect(box, &QCheckBox::toggled, this, &CMakeCacheDelegate::checkboxToggled);
             ret = box;
         }
         else if(type=="PATH" || type=="FILEPATH")

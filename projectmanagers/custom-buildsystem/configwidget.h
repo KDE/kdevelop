@@ -48,7 +48,7 @@ private slots:
     void changeAction( int );
     void toggleActionEnablement( bool );
     void actionArgumentsEdited( const QString& );
-    void actionEnvironmentChanged( int );
+    void actionEnvironmentChanged(const QString&);
     void actionExecutableChanged( const QUrl& );
     void actionExecutableChanged( const QString& );
 private:

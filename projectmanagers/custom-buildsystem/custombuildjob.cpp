@@ -34,6 +34,8 @@
 #include "custombuildsystemplugin.h"
 #include "configconstants.h"
 
+using namespace KDevelop;
+
 CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBaseItem* item, CustomBuildSystemTool::ActionType t )
     : OutputJob( plugin )
     , type( t )
@@ -127,11 +129,11 @@ void CustomBuildJob::start()
         exec->setWorkingDirectory( builddir );
 
         
-        connect( exec, SIGNAL(completed(int)), SLOT(procFinished(int)) );
-        connect( exec, SIGNAL(failed( QProcess::ProcessError )), SLOT(procError( QProcess::ProcessError )) );
+        connect( exec, &CommandExecutor::completed, this, &CustomBuildJob::procFinished );
+        connect( exec, &CommandExecutor::failed, this, &CustomBuildJob::procError );
 
-        connect( exec, SIGNAL(receivedStandardError(QStringList)), model, SLOT(appendLines(QStringList)) );
-        connect( exec, SIGNAL(receivedStandardOutput(QStringList)), model, SLOT(appendLines(QStringList)) );
+        connect( exec, &CommandExecutor::receivedStandardError, model, &OutputModel::appendLines );
+        connect( exec, &CommandExecutor::receivedStandardOutput, model, &OutputModel::appendLines );
 
         model->appendLine( QString("%1>%2 %3").arg( builddir ).arg( cmd ).arg( arguments ) );
         exec->start();

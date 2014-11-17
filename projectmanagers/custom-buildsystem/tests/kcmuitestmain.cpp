@@ -46,10 +46,10 @@ public:
     State( KDialog* dlg, CustomBuildSystemConfigWidget* cfgWidget, KConfig* config, KDevelop::IProject* proj )
         : dialog(dlg), configWidget(cfgWidget), cfg(config), project(proj)
     {
-        connect(dlg, SIGNAL(applyClicked()), SLOT(apply()));
-        connect(dlg, SIGNAL(okClicked()), SLOT(ok()));
-        connect(dlg, SIGNAL(cancelClicked()), qApp, SLOT(quit()));
-        connect(configWidget, SIGNAL(changed()), SLOT(configChanged()));
+        connect(dlg, &KDialog::applyClicked, this, &State::apply);
+        connect(dlg, &KDialog::okClicked, this, &State::ok);
+        connect(dlg, &KDialog::cancelClicked, qApp, &QApplication::quit);
+        connect(configWidget, &CustomBuildSystemConfigWidget::changed, this, &State::configChanged);
     }
 public slots:
     void apply() {

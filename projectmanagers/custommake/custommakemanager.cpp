@@ -113,11 +113,11 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args 
     m_builder = i->extension<IMakeBuilder>();
     Q_ASSERT(m_builder);
 
-    connect(this, SIGNAL(reloadedFileItem(KDevelop::ProjectFileItem*)),
-            this, SLOT(reloadMakefile(KDevelop::ProjectFileItem*)));
+    connect(this, &CustomMakeManager::reloadedFileItem,
+            this, &CustomMakeManager::reloadMakefile);
 
-    connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
-            this, SLOT(projectClosing(KDevelop::IProject*)));
+    connect(ICore::self()->projectController(), &IProjectController::projectClosing,
+            this, &CustomMakeManager::projectClosing);
 
 
     IDefinesAndIncludesManager::manager()->registerBackgroundProvider(m_provider.data());

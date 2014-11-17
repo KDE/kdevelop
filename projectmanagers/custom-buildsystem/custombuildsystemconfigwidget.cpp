@@ -61,14 +61,14 @@ CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
     ui->addConfig->setFixedHeight( ui->currentConfig->sizeHint().height() );
     ui->removeConfig->setFixedHeight( ui->currentConfig->sizeHint().height() );
 
-    connect( ui->currentConfig, SIGNAL(activated(int)), SLOT(changeCurrentConfig(int)));
-    connect( ui->configWidget, SIGNAL(changed()), SLOT(configChanged()) );
+    connect( ui->currentConfig, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &CustomBuildSystemConfigWidget::changeCurrentConfig);
+    connect( ui->configWidget, &ConfigWidget::changed, this, &CustomBuildSystemConfigWidget::configChanged );
 
-    connect( ui->addConfig, SIGNAL(clicked(bool)), SLOT(addConfig()));
-    connect( ui->removeConfig, SIGNAL(clicked(bool)), SLOT(removeConfig()));
-    connect( ui->currentConfig, SIGNAL(editTextChanged(QString)), SLOT(renameCurrentConfig(QString)) );
+    connect( ui->addConfig, &QPushButton::clicked, this, &CustomBuildSystemConfigWidget::addConfig);
+    connect( ui->removeConfig, &QPushButton::clicked, this, &CustomBuildSystemConfigWidget::removeConfig);
+    connect( ui->currentConfig, &QComboBox::editTextChanged, this, &CustomBuildSystemConfigWidget::renameCurrentConfig );
 
-    connect( this, SIGNAL(changed()), SLOT(verify()) );
+    connect( this, &CustomBuildSystemConfigWidget::changed, this, &CustomBuildSystemConfigWidget::verify );
 }
 
 void CustomBuildSystemConfigWidget::loadDefaults()

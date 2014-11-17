@@ -99,7 +99,7 @@ CMakeImportJob::CMakeImportJob(IProject* project, QObject* parent)
     , m_project(project)
     , m_futureWatcher(new QFutureWatcher<CMakeJsonData>)
 {
-    connect(m_futureWatcher, SIGNAL(finished()), SLOT(importFinished()));
+    connect(m_futureWatcher, &QFutureWatcher<CMakeJsonData>::finished, this, &CMakeImportJob::importFinished);
 }
 
 void CMakeImportJob::start()

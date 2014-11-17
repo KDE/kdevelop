@@ -38,7 +38,7 @@ KDevProjectOpen::KDevProjectOpen(QObject* parent)
     TestCore::initialize();
 
     cleanup();
-    connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(projectDone(KDevelop::IProject*)));
+    connect(ICore::self()->projectController(), &IProjectController::projectOpened, this, &KDevProjectOpen::projectDone);
 }
 
 void KDevProjectOpen::cleanup()
