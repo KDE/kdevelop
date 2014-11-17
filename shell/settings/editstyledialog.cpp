@@ -86,6 +86,7 @@ void EditStyleDialog::init()
     QVBoxLayout* layout2 = new QVBoxLayout(m_ui.textEditor);
     layout2->addWidget(m_view);
     m_ui.textEditor->setLayout(layout2);
+    m_view->setStatusBarEnabled(false);
     m_view->show();
 
     KTextEditor::ConfigInterface* iface =
