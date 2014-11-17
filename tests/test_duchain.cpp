@@ -38,9 +38,9 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <util/kdevstringhandler.h>
 
-#include <duchain/clangparsingenvironmentfile.h>
-#include <duchain/clangparsingenvironment.h>
-#include <duchain/parsesession.h>
+#include "duchain/clangparsingenvironmentfile.h"
+#include "duchain/clangparsingenvironment.h"
+#include "duchain/parsesession.h"
 
 #include <custom-definesandincludes/idefinesandincludesmanager.h>
 

@@ -25,12 +25,14 @@
 #include <tests/autotestshell.h>
 #include <tests/testfile.h>
 
-#include <duchain/parsesession.h>
-#include <util/clangtypes.h>
+#include "duchain/parsesession.h"
+#include "util/clangtypes.h"
+
 #include <language/codecompletion/codecompletiontesthelper.h>
-#include <codecompletion/completionhelper.h>
-#include <codecompletion/context.h>
-#include <codecompletion/includepathcompletioncontext.h>
+
+#include "codecompletion/completionhelper.h"
+#include "codecompletion/context.h"
+#include "codecompletion/includepathcompletioncontext.h"
 
 QTEST_GUILESS_MAIN(TestCodeCompletion);
 
