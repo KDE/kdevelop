@@ -22,7 +22,7 @@
 #ifndef INCLUDEPATHCOMPLETIONCONTEXT_H
 #define INCLUDEPATHCOMPLETIONCONTEXT_H
 
-#include <duchain/parsesession.h>
+#include "duchain/parsesession.h"
 
 #include <language/codecompletion/codecompletioncontext.h>
 #include <language/util/includeitem.h>

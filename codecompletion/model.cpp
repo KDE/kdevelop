@@ -23,7 +23,7 @@
 #include "context.h"
 #include "includepathcompletioncontext.h"
 
-#include <duchain/parsesession.h>
+#include "duchain/parsesession.h"
 
 #include <language/codecompletion/codecompletionworker.h>
 #include <language/duchain/topducontext.h>

@@ -32,8 +32,8 @@ LINK_PRIVATE
     kdevclangutil
 LINK_PUBLIC
     KDev::Language
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
+    KDev::Project
+    KDev::Util
     ${CLANG_CLANG_LIB}
 )
 

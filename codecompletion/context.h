@@ -22,7 +22,7 @@
 #ifndef CLANGCODECOMPLETIONCONTEXT_H
 #define CLANGCODECOMPLETIONCONTEXT_H
 
-#include <duchain/parsesession.h>
+#include "duchain/parsesession.h"
 
 #include <language/codecompletion/codecompletioncontext.h>
 
