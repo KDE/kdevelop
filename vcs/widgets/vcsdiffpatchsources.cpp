@@ -21,7 +21,6 @@
 #include <qboxlayout.h>
 #include <qlabel.h>
 #include <QFontDatabase>
-#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>

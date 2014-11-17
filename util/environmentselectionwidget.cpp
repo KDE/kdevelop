@@ -21,7 +21,6 @@ Boston, MA 02110-1301, USA.
 #include "environmentselectionmodel.h"
 #include <ksettings/dispatcher.h>
 #include <interfaces/icore.h>
-#include <kcomponentdata.h>
 #include <QBoxLayout>
 #include <QLayout>
 #include <KLocalizedString>

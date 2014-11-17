@@ -30,8 +30,6 @@
 #include <QDebug>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
-#include <kiconloader.h>
-
 
 #include "../duchain/declaration.h"
 #include "../duchain/classfunctiondeclaration.h"

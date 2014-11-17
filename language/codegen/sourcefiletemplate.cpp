@@ -25,10 +25,10 @@
 #include <interfaces/icore.h>
 
 #include <KArchive>
+#include <KConfig>
 #include <KZip>
 #include <KTar>
 #include <KConfigGroup>
-#include <kcomponentdata.h>
 
 #include <QFileInfo>
 #include <QDomDocument>
