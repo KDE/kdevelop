@@ -43,9 +43,7 @@ TemplateEngine* TemplateEngine::self()
 TemplateEngine::TemplateEngine()
 : d(new TemplateEnginePrivate)
 {
-#if WITH_SMART_TRIM
     d->engine.setSmartTrimEnabled(true);
-#endif
 
     addTemplateDirectories(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "kdevcodegen/templates", QStandardPaths::LocateDirectory));
 

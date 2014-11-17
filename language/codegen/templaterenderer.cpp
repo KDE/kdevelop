@@ -119,43 +119,9 @@ QVariantHash TemplateRenderer::variables() const
 
 QString TemplateRenderer::render(const QString& content, const QString& name) const
 {
-#if WITH_SMART_TRIM
     Template t = d->engine->newTemplate(content, name);
-#else
-    /*
-     * This code re-implements the functionality of Grantlee's smart trim feature, which was added in 0.1.8
-     * It follows the description from http://www.grantlee.org/apidox/classGrantlee_1_1Engine.html#smart_trim
-     * and passes the unit tests.
-     */
-    const QStringList lines = content.split('\n');
 
-    QStringList trimmedLines;
-    trimmedLines << QString();
-
-    for (QStringList::const_iterator it = lines.constBegin(); it != lines.constEnd(); ++it)
-    {
-        QString s = (*it);
-        const QString t = s.trimmed();
-        if ( (t.startsWith("{%") && t.endsWith("%}") && t.count('{') == 1 && t.count('}') == 1)
-            || (t.startsWith("{{") && t.endsWith("}}") && t.count('{') == 2 && t.count('}') == 2)
-            || (t.startsWith("{#") && t.endsWith("#}") && t.count('{') == 1 && t.count('}') == 1) )
-        {
-            trimmedLines.last() += t;
-        }
-        else
-        {
-            trimmedLines << (*it);
-        }
-    }
-
-    if (trimmedLines.first().isEmpty())
-    {
-        trimmedLines.removeFirst();
-    }
-    Template t = d->engine->newTemplate(trimmedLines.join("\n"), name);
-#endif
     QString output;
-
     QTextStream textStream(&output);
     NoEscapeStream stream(&textStream);
     t->render(&stream, &d->context);

@@ -25,8 +25,6 @@
 #include <grantlee/engine.h>
 
 #include <grantlee/grantlee_version.h>
-#include <kdeversion.h>
-#define WITH_SMART_TRIM KDE_MAKE_VERSION(GRANTLEE_VERSION_MAJOR, GRANTLEE_VERSION_MINOR, GRANTLEE_VERSION_PATCH) >= 0x000200
 
 namespace KDevelop {
 
