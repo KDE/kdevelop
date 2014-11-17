@@ -1,6 +1,3 @@
-# Ignore copied-in code, by matching it with an empty formatting command
-plugins/patchreview/libdiff2/* plugins/patchreview/settings/* plugins/quickopen/expandingtree/* :
-
 # 2-space indentation
 plugins/classbrowser/*.cpp plugins/classbrowser/*.h plugins/contextbrowser/*.cpp plugins/contextbrowser/*.h plugins/quickopen/*.cpp plugins/quickopen/*.h language/*.h language/*.cpp : uncrustify -l CPP -f $TMPFILE -c format.config.uncrustify.2_spaces -o $TMPFILE
 
