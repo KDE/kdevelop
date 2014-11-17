@@ -32,7 +32,6 @@
 #include <QAction>
 #include <QStandardPaths>
 
-#include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <kaboutdata.h>
 #include <ktexteditor/document.h>
