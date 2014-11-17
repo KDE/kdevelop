@@ -72,7 +72,6 @@ find_package(KF5 REQUIRED COMPONENTS
 find_package(KF5XmlGui 5.1 REQUIRED)
 find_package(KF5Service 5.3 REQUIRED)
 
-# TODO KF5: Remove Grantlee found check as soon there is an official version of Grantlee for Qt5
 find_package(Grantlee5 REQUIRED)
 set_package_properties(Grantlee5 PROPERTIES
     PURPOSE "Grantlee templating library, needed for file templates"
