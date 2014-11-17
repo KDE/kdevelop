@@ -181,18 +181,18 @@ void TestSpecialCompletion::testIncludeGrouping()
 
     QTemporaryDir dir1;
     QVERIFY(dir1.isValid());
-    const QString dir1Name = QFileInfo(dir1.path()).dir().dirName() + "/";
+    const QString dir1Name = QFileInfo(dir1.path() + '/').dir().dirName() + "/";
     QTemporaryDir dir2;
     QVERIFY(dir2.isValid());
-    const QString dir2Name = QFileInfo(dir2.path()).dir().dirName() + "/";
+    const QString dir2Name = QFileInfo(dir2.path() + '/').dir().dirName() + "/";
 
-    TestFile includeA("class A {};", "h", project, dir1Name);
+    TestFile includeA("class A {};", "h", project, dir1.path());
     includeA.parse(TopDUContext::AllDeclarationsAndContexts);
-    TestFile includeB("class B {};", "h", project, dir2Name);
+    TestFile includeB("class B {};", "h", project, dir2.path());
     includeB.parse(TopDUContext::AllDeclarationsAndContexts);
-    TestFile includeD("class D {};", "h", project, dir2Name);
+    TestFile includeD("class D {};", "h", project, dir2.path());
     includeD.parse(TopDUContext::AllDeclarationsAndContexts);
-    TestFile includeC("class C {};", "h", project, dir1Name);
+    TestFile includeC("class C {};", "h", project, dir1.path());
     includeC.parse(TopDUContext::AllDeclarationsAndContexts);
 
     QVERIFY(QFile::exists(dir1.path() + '/' + includeA.url().toUrl().fileName()));
