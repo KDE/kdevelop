@@ -10,8 +10,6 @@ add_subdirectory(documentview)
 add_subdirectory(quickopen)
 add_subdirectory(executescript)
 add_subdirectory(contextbrowser)
-# TODO KF5: Re-enable at some point? TemplateInterface* is no longer installed by KTE
-#add_subdirectory(snippet)
 ecm_optional_add_subdirectory(cvs)
 add_subdirectory(problemreporter)
 add_subdirectory(execute)

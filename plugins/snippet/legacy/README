@@ -1,4 +1,0 @@
-snippet implementation moved to katepart, this implementation is left for older karteparts.
-Any changes made here *must* get merged into kate/part/snippet
-
-TODO: delete everything here
