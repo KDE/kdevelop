@@ -23,7 +23,7 @@
 #ifndef CLANGPROBLEM_H
 #define CLANGPROBLEM_H
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 
 #include <language/duchain/problem.h>
 #include <interfaces/iassistant.h>

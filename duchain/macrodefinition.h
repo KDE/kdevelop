@@ -21,7 +21,7 @@
 #ifndef MACRODEFINITION_H
 #define MACRODEFINITION_H
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 
 #include <language/duchain/declaration.h>
 #include <serialization/indexedstring.h>

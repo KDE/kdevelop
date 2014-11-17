@@ -22,7 +22,7 @@
 #ifndef CLANGDIAGNOSTICEVALUATOR_H
 #define CLANGDIAGNOSTICEVALUATOR_H
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 
 #include <clang-c/Index.h>
 

@@ -25,7 +25,7 @@
 #include <util/path.h>
 #include <language/duchain/parsingenvironment.h>
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 
 class KDEVCLANGDUCHAIN_EXPORT ClangParsingEnvironment : public KDevelop::ParsingEnvironment
 {

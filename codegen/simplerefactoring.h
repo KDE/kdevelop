@@ -21,8 +21,6 @@
 #ifndef SIMPLEREFACTORING_H
 #define SIMPLEREFACTORING_H
 
-#include "codegenexport.h"
-
 #include <interfaces/context.h>
 #include <language/codegen/basicrefactoring.h>
 
@@ -31,7 +29,7 @@ class ContextMenuExtension;
 class Declaration;
 }
 
-class KDEVCLANGCODEGEN_EXPORT SimpleRefactoring : public KDevelop::BasicRefactoring
+class SimpleRefactoring : public KDevelop::BasicRefactoring
 {
   Q_OBJECT
 

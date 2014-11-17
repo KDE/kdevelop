@@ -23,7 +23,7 @@
 #ifndef NAVIGATIONWIDGET_H
 #define NAVIGATIONWIDGET_H
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 
 #include "macrodefinition.h"
 

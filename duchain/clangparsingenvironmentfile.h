@@ -25,7 +25,7 @@
 
 #include <language/duchain/parsingenvironment.h>
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 
 class ClangParsingEnvironment;
 class ClangParsingEnvironmentFileData;

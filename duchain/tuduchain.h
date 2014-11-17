@@ -22,7 +22,7 @@
 #ifndef TUDUCHAIN_H
 #define TUDUCHAIN_H
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 #include "templatehelpers.h"
 #include "cursorkindtraits.h"
 #include "clanghelpers.h"

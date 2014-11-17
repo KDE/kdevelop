@@ -22,7 +22,7 @@
 #ifndef TODOEXTRACTOR_H
 #define TODOEXTRACTOR_H
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 
 #include <language/duchain/problem.h>
 

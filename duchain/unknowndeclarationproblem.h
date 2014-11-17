@@ -24,7 +24,7 @@
 #ifndef UNKNOWNDECLARATION_H
 #define UNKNOWNDECLARATION_H
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 #include "clangproblem.h"
 
 #include <language/duchain/identifier.h>

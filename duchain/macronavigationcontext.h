@@ -20,7 +20,7 @@
 #ifndef MACRONAVIGATIONCONTEXT_H
 #define MACRONAVIGATIONCONTEXT_H
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 
 #include "macrodefinition.h"
 

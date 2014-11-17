@@ -23,6 +23,7 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
+generate_export_header(kdevclangduchain EXPORT_FILE_NAME clangduchainexport.h)
 target_link_libraries(kdevclangduchain
 LINK_PRIVATE
     Qt5::Core

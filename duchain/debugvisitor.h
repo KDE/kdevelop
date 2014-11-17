@@ -23,7 +23,7 @@
 #define DEBUGVISITOR_H
 
 #include "parsesession.h"
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 
 class KDEVCLANGDUCHAIN_EXPORT DebugVisitor
 {

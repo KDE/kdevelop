@@ -22,7 +22,7 @@
 #ifndef CLANGINDEX_H
 #define CLANGINDEX_H
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 
 #include <util/path.h>
 

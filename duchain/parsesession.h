@@ -34,7 +34,7 @@
 #include <language/interfaces/iastcontainer.h>
 #include <util/path.h>
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 #include "clangparsingenvironment.h"
 
 class ClangIndex;

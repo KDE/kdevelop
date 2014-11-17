@@ -26,7 +26,7 @@
 #include <language/duchain/duchainpointer.h>
 #include <language/duchain/topducontext.h>
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 
 class ParseSession;
 

@@ -21,7 +21,7 @@
 #ifndef DUCHAINUTILS_H
 #define DUCHAINUTILS_H
 
-#include "duchainexport.h"
+#include <duchain/clangduchainexport.h>
 
 namespace KTextEditor {
 class Range;
