@@ -384,5 +384,3 @@ void TestCodeCompletion::testIncludePathCompletion()
     QVERIFY(items.contains(header.url().toUrl().fileName()));
     QVERIFY(!items.contains("iostream"));
 }
-
-#include "test_codecompletion.moc"

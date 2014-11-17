@@ -312,6 +312,3 @@ void TestProblems::testTodoProblems_data()
         << "/* TODO: 例えば */"
         << ExpectedTodos{{"TODO: 例えば", {0, 3}, {0, 12}}};
 }
-
-
-#include "test_problems.moc"

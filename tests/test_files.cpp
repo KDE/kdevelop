@@ -82,5 +82,3 @@ void TestFiles::testFiles()
     top->visit(validator);
     QVERIFY(validator.testsPassed());
 }
-
-#include "test_files.moc"

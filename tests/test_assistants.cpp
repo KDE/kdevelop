@@ -360,5 +360,3 @@ void TestAssistants::testSignatureAssistant()
     QCOMPARE(testbed.documentText(Testbed::HeaderDoc), finalHeaderContents);
     QCOMPARE(testbed.documentText(Testbed::CppDoc), finalCppContents);
 }
-
-#include "test_assistants.moc"

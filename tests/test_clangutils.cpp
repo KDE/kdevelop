@@ -208,6 +208,3 @@ void TestClangUtils::testGetRawContents_data()
         << KTextEditor::Range(0, 5, 0, 17)
         << " int         ";
 }
-
-
-#include "test_clangutils.moc"

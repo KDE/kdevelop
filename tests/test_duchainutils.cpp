@@ -79,5 +79,3 @@ void TestDUChainUtils::getFunctionSignatureRange_data()
         << KTextEditor::Range(0, 0, 2, 2);
 
 }
-
-#include "test_duchainutils.moc"

@@ -838,5 +838,3 @@ void TestDUChain::testMacrosRanges()
     QCOMPARE(macroDefinition->uses().size(), 1);
     QCOMPARE(macroDefinition->uses().begin()->first(), RangeInRevision(1,0,1,11));
 }
-
-#include "test_duchain.moc"

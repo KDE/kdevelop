@@ -513,5 +513,3 @@ void TestBuddies::testDUChainBuddyVote()
 }
 
 QTEST_MAIN(TestBuddies)
-
-#include "test_buddies.moc"
