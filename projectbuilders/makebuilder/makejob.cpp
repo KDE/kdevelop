@@ -138,7 +138,7 @@ QStringList MakeJob::privilegedExecutionCommand() const
     ProjectBaseItem* it = item();
     if(!it)
         return QStringList();
-    KSharedConfig::Ptr configPtr = it->project()->projectConfiguration();
+    KSharedConfigPtr configPtr = it->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
 
     bool runAsRoot = builderGroup.readEntry( "Install As Root", false );
@@ -168,7 +168,7 @@ QStringList MakeJob::commandLine() const
         return QStringList();
     QStringList cmdline;
 
-    KSharedConfig::Ptr configPtr = it->project()->projectConfiguration();
+    KSharedConfigPtr configPtr = it->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
 
 #ifdef _MSC_VER
@@ -236,7 +236,7 @@ QString MakeJob::environmentProfile() const
     ProjectBaseItem* it = item();
     if(!it)
         return QString();
-    KSharedConfig::Ptr configPtr = it->project()->projectConfiguration();
+    KSharedConfigPtr configPtr = it->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
     return builderGroup.readEntry( "Default Make Environment Profile", QString() );
 }

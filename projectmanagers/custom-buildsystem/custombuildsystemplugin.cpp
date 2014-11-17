@@ -22,7 +22,6 @@
 #include <KPluginFactory>
 #include <KLocalizedString>
 #include <KAboutData>
-#include <KComponentData>
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>

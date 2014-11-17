@@ -58,7 +58,7 @@ KJob* MakeBuilder::clean( KDevelop::ProjectBaseItem *dom )
 
 KJob* MakeBuilder::install( KDevelop::ProjectBaseItem *dom )
 {
-    KSharedConfig::Ptr configPtr = dom->project()->projectConfiguration();
+    KSharedConfigPtr configPtr = dom->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
     bool installAsRoot = builderGroup.readEntry("Install As Root", false);
     if(installAsRoot) {

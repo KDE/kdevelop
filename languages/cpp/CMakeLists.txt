@@ -55,6 +55,7 @@ target_link_libraries(kdevcpplanguagesupport
     KDev::Util
     ${KDE4_THREADWEAVER_LIBRARIES}
 
+    KF5::IconThemes
     KF5::TextEditor
 )
 

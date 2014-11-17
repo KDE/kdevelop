@@ -102,7 +102,7 @@ QStringList NinjaJob::privilegedExecutionCommand() const
     KDevelop::ProjectBaseItem* it = item();
     if(!it)
         return QStringList();
-    KSharedConfig::Ptr configPtr = it->project()->projectConfiguration();
+    KSharedConfigPtr configPtr = it->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "NinjaBuilder" );
 
     bool runAsRoot = builderGroup.readEntry( "Install As Root", false );

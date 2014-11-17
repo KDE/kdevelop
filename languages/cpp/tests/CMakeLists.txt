@@ -26,6 +26,21 @@ set(test_common_SRCS
 
   ${setuphelpers_SRCS}
 )
+set(test_common_LIBS
+    kdevcppduchain
+    kdevcpprpp
+    kdevcppparser
+    KDev::Interfaces
+    KDev::Project
+    KDev::Language
+    KDev::Tests
+
+    KF5::IconThemes
+    KF5::ThreadWeaver
+    KF5::TextEditor
+
+    Qt5::Test
+)
 
 ecm_add_test(test_buddies.cpp
 LINK_LIBRARIES
@@ -40,25 +55,13 @@ LINK_LIBRARIES
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
 ecm_add_test(test_cppfiles.cpp
 LINK_LIBRARIES
-    Qt5::Test
-    Qt5::Core
-    KDev::Language
-    KDev::Tests
+    ${test_common_LIBS}
     KDev::JsonTests
-    kdevcppduchain
-    kdevcppparser
 )
 
 ecm_add_test(test_specialcompletion.cpp ${test_common_SRCS} TEST_NAME test_specialcompletion
 LINK_LIBRARIES
-    kdevcppduchain
-    kdevcpprpp
-    kdevcppparser
-    Qt5::Test
-    Qt5::Core
-    KDev::Language
-    KDev::Project
-    KDev::Tests
+    ${test_common_LIBS}
 )
 
 ########### next target ###############
@@ -73,17 +76,7 @@ set(test_cppassistants_SRCS
 
 ecm_add_test(${test_cppassistants_SRCS} TEST_NAME test_cppassistants
 LINK_LIBRARIES
-    Qt5::Test
-    kdevcppduchain
-    kdevcpprpp
-    kdevcppparser
-    KDev::Interfaces
-    KDev::Project
-    KDev::Language
-    KDev::Tests
-
-    KF5::ThreadWeaver
-    KF5::TextEditor
+    ${test_common_LIBS}
 )
 
 add_definitions(-DTEST_COMPLETION)
@@ -106,33 +99,14 @@ add_definitions(-DBUILD_TESTS)
 
 ecm_add_test(${test_cppcodecompletion_SRCS} TEST_NAME test_cppcodecompletion
 LINK_LIBRARIES
-    Qt5::Test
-    kdevcppduchain
-    kdevcpprpp
-    kdevcppparser
-    KDev::Interfaces
-    KDev::Project
-    KDev::Language
-    KDev::Tests
-
-    KF5::ThreadWeaver
-    KF5::TextEditor
+    ${test_common_LIBS}
 )
 
 ecm_add_test(${test_cppcodegen_SRCS} TEST_NAME test_cppcodegen
 LINK_LIBRARIES
-    kdevcppduchain
-    kdevcpprpp
-    kdevcppparser
-    Qt5::Test
-    Qt5::Core
-    KDev::Language
-    KDev::Project
-    KDev::Tests
+    ${test_common_LIBS}
 )
 
 add_executable( cpp-parser cpp-parser.cpp )
 ecm_mark_as_test(cpp-parser)
-target_link_libraries(cpp-parser
-    Qt5::Core KDev::Tests KDev::Language
-    kdevcppparser kdevcppduchain kdevcpprpp)
+target_link_libraries(cpp-parser  ${test_common_LIBS})

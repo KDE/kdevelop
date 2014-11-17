@@ -25,7 +25,7 @@
 #include "ast.h"
 #include "tokens.h"
 
-#include <k4aboutdata.h>
+#include <kaboutdata.h>
 
 #include <language/util/debuglanguageparserhelper.h>
 

@@ -24,7 +24,6 @@
 #include "gdboutputwidget.h"
 
 #include <kcombobox.h>
-#include <kiconloader.h>
 #include <KLocalizedString>
 #include <kcolorscheme.h>
 
