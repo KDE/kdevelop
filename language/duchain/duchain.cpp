@@ -1522,7 +1522,7 @@ void DUChain::documentRenamed(KDevelop::IDocument* doc)
 
   if(!doc->url().isValid()) {
     ///Maybe this happens when a file was deleted?
-    qWarning() << "Strange, url of renamed document is invalid!";
+    qCWarning(LANGUAGE) << "Strange, url of renamed document is invalid!";
   }else{
     ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(doc->url()), (TopDUContext::Features)(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate));
   }
@@ -1598,7 +1598,7 @@ uint DUChain::newTopContextIndex() {
       sdDUChainPrivate->m_availableTopContextIndices.pop_back();
       if(TopDUContextDynamicData::fileExists(ret))
       {
-        qWarning() << "Problem in the management of availalbe top-context indices";
+        qCWarning(LANGUAGE) << "Problem in the management of availalbe top-context indices";
         return newTopContextIndex();
       }
       return ret;
@@ -1623,7 +1623,7 @@ bool DUChain::deleted() {
 void DUChain::refCountDown(TopDUContext* top) {
   QMutexLocker l(&sdDUChainPrivate->m_referenceCountsMutex);
   if(!sdDUChainPrivate->m_referenceCounts.contains(top)) {
-    //qWarning() << "tried to decrease reference-count for" << top->url().str() << "but this top-context is not referenced";
+    //qCWarning(LANGUAGE) << "tried to decrease reference-count for" << top->url().str() << "but this top-context is not referenced";
     return;
   }
   --sdDUChainPrivate->m_referenceCounts[top];

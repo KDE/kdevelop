@@ -18,8 +18,10 @@
 
 #include "codecompletioncontext.h"
 
-#include <util/pushvalue.h>
 #include "codecompletionitem.h"
+#include "util/debug.h"
+
+#include <util/pushvalue.h>
 #include <language/duchain/ducontext.h>
 
 #include <QtCore/QDebug>
@@ -45,13 +47,13 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   IntPusher( completionRecursionDepth, completionRecursionDepth+1 );
 
   if( depth > 10 ) {
-    qWarning() << "too much recursion";
+    qCWarning(LANGUAGE) << "too much recursion";
     m_valid = false;
     return;
   }
 
   if( completionRecursionDepth > 10 ) {
-    qWarning() << "too much recursion";
+    qCWarning(LANGUAGE) << "too much recursion";
     m_valid = false;
     return;
   }

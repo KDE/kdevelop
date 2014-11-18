@@ -19,6 +19,8 @@
 
 #include "renamefileaction.h"
 
+#include "util/debug.h"
+
 #include <language/codegen/documentchangeset.h>
 #include <language/codegen/basicrefactoring.h>
 
@@ -60,7 +62,7 @@ void RenameFileAction::execute()
     // save document to prevent unwanted dialogs
     IDocument* doc = ICore::self()->documentController()->documentForUrl(d->m_file);
     if (!doc) {
-        qWarning() << "could find no document for url:" << d->m_file;
+        qCWarning(LANGUAGE) << "could find no document for url:" << d->m_file;
         return;
     }
 

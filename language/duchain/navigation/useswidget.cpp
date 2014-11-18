@@ -593,7 +593,7 @@ void UsesWidget::UsesWidgetCollector::maximumProgress(uint max) {
     m_widget->m_progressBar->setMinimum(0);
     m_widget->m_progressBar->setValue(0);
   }else{
-    qWarning() << "maximumProgress called twice";
+    qCWarning(LANGUAGE) << "maximumProgress called twice";
   }
 }
 
@@ -615,7 +615,7 @@ void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
       m_widget->setUpdatesEnabled(true);
     }
   }else{
-    qWarning() << "progress() called too often";
+    qCWarning(LANGUAGE) << "progress() called too often";
   }
 }
 

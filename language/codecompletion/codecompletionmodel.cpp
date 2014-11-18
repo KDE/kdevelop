@@ -234,7 +234,7 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
   Q_UNUSED(invocationType)
 
   if (!worker()) {
-    qWarning() << "Completion invoked on a completion model which has no code completion worker assigned!";
+    qCWarning(LANGUAGE) << "Completion invoked on a completion model which has no code completion worker assigned!";
   }
 
   beginResetModel();
@@ -352,7 +352,7 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   }
 
   if(!treeElement.asItem()) {
-    qWarning() << "Error in completion model";
+    qCWarning(LANGUAGE) << "Error in completion model";
     return QVariant();
   }
 

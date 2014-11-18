@@ -169,7 +169,7 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
 
     if (archiveFileName.isEmpty() || !QFileInfo(archiveFileName).exists())
     {
-        qWarning() << "Could not find a template archive for description" << templateDescription;
+        qCWarning(LANGUAGE) << "Could not find a template archive for description" << templateDescription;
         d->archive = 0;
     }
     else

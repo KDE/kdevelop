@@ -362,7 +362,7 @@ Item TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint ind
   }
 
   if (index == 0 || index > static_cast<uint>(items.size())) {
-    qWarning() << "item index out of bounds:" << index << "count:" << items.size();
+    qCWarning(LANGUAGE) << "item index out of bounds:" << index << "count:" << items.size();
     return {};
   }
   const uint realIndex = index - 1;
@@ -400,7 +400,7 @@ Item TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint ind
                                     "Potentially, the context has been deleted without deleting its children.");
     item->rebuildDynamicData(parent, index);
   } else {
-    qWarning() << "invalid item for index" << index << offsets.size() << offsets.value(realIndex).dataOffset;
+    qCWarning(LANGUAGE) << "invalid item for index" << index << offsets.size() << offsets.value(realIndex).dataOffset;
   }
 
   return item;
@@ -577,7 +577,7 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
   QFile file(pathForTopContext(topContextIndex));
   if(file.open(QIODevice::ReadOnly)) {
     if(file.size() == 0) {
-      qWarning() << "Top-context file is empty" << file.fileName();
+      qCWarning(LANGUAGE) << "Top-context file is empty" << file.fileName();
       return 0;
     }
     QVector<ItemDataInfo> contextDataOffsets;
@@ -591,7 +591,7 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     DUChainBaseData* topData = reinterpret_cast<DUChainBaseData*>(topContextData.data());
     TopDUContext* ret = dynamic_cast<TopDUContext*>(DUChainItemSystem::self().create(topData));
     if(!ret) {
-      qWarning() << "Cannot load a top-context from file" << file.fileName() << "- the required language-support for handling ID" << topData->classId << "is probably not loaded";
+      qCWarning(LANGUAGE) << "Cannot load a top-context from file" << file.fileName() << "- the required language-support for handling ID" << topData->classId << "is probably not loaded";
       return 0;
     }
 
@@ -731,11 +731,11 @@ void TopDUContextDynamicData::store() {
       m_onDisk = true;
 
       if (file.size() == 0) {
-        qWarning() << "Saving zero size top ducontext data";
+        qCWarning(LANGUAGE) << "Saving zero size top ducontext data";
       }
       file.close();
     } else {
-      qWarning() << "Cannot open top-context for writing";
+      qCWarning(LANGUAGE) << "Cannot open top-context for writing";
     }
 //   qCDebug(LANGUAGE) << "stored" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
 }

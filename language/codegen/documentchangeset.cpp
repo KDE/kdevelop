@@ -234,10 +234,10 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
                 }
             } else {
                 //TODO: do it outside the project management?
-                qWarning() << "tried to rename file not tracked by project - not implemented";
+                qCWarning(LANGUAGE) << "tried to rename file not tracked by project - not implemented";
             }
         } else {
-            qWarning() << "tried to rename a file outside of a project - not implemented";
+            qCWarning(LANGUAGE) << "tried to rename a file outside of a project - not implemented";
         }
     }
 
@@ -327,7 +327,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
                     .arg(change.m_newText);
 
                 if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
-                    qWarning() << warningString;
+                    qCWarning(LANGUAGE) << warningString;
                 } else if(replacePolicy == DocumentChangeSet::StopOnFailedChange) {
                     return DocumentChangeSet::ChangeResult(warningString);
                 }
@@ -342,7 +342,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
         QString warningString = QString("Could not replace text in the document: %1")
             .arg(sortedChangesList.begin()->data()->m_document.str());
         if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
-            qWarning() << warningString;
+            qCWarning(LANGUAGE) << warningString;
         }
 
         return DocumentChangeSet::ChangeResult(warningString);
@@ -455,7 +455,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
             if(replacePolicy == DocumentChangeSet::IgnoreFailedChange) {
                 //Just don't do the replacement
             } else if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
-                qWarning() << warningString;
+                qCWarning(LANGUAGE) << warningString;
             } else {
                 return DocumentChangeSet::ChangeResult(warningString, sortedChanges[pos]);
             }
@@ -563,7 +563,7 @@ void DocumentChangeSetPrivate::updateFiles()
         // Eventually update _all_ affected files
         foreach(const IndexedString &file, changes.keys()) {
             if(!file.toUrl().isValid()) {
-                qWarning() << "Trying to apply changes to an invalid document";
+                qCWarning(LANGUAGE) << "Trying to apply changes to an invalid document";
                 continue;
             }
 

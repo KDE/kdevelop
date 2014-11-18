@@ -21,6 +21,7 @@
 
 #include "renameaction.h"
 #include "renamefileaction.h"
+#include "util/debug.h"
 #include "../codegen/basicrefactoring.h"
 #include "../codegen/documentchangeset.h"
 #include "../duchain/duchain.h"
@@ -125,7 +126,7 @@ void RenameAssistant::textChanged(KTextEditor::View* view, const KTextEditor::Ra
     clearActions();
 
     if (!supportedLanguage()->refactoring()) {
-        qWarning() << "Refactoring not supported. Aborting.";
+        qCWarning(LANGUAGE) << "Refactoring not supported. Aborting.";
         return;
     }
 

@@ -28,6 +28,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
+#include "util/debug.h"
 #include "../duchain/declaration.h"
 #include "../duchain/duchainutils.h"
 
@@ -109,7 +110,7 @@ int CompletionTreeElement::rowInParent() const {
 void CompletionTreeItem::execute(KTextEditor::View* view, const KTextEditor::Range& word) {
   Q_UNUSED(view)
   Q_UNUSED(word)
-  qWarning() << "doing nothing";
+  qCWarning(LANGUAGE) << "doing nothing";
 }
 
 QVariant CompletionTreeItem::data(const QModelIndex& index, int role, const CodeCompletionModel* model) const {

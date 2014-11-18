@@ -103,7 +103,7 @@ inline bool isValidURL(const KDevelop::IndexedString& url)
     }
     QUrl original = url.toUrl();
     if (!original.isValid() || original.isRelative() || original.fileName().isEmpty()) {
-        qWarning() << "INVALID URL ENCOUNTERED:" << url << original;
+        qCWarning(LANGUAGE) << "INVALID URL ENCOUNTERED:" << url << original;
         return false;
     }
     QUrl cleaned = original.adjusted(QUrl::NormalizePathSegments);
@@ -268,11 +268,11 @@ public:
         QList<ILanguage*> languages = m_languageController->languagesForUrl(qUrl);
         foreach (ILanguage* language, languages) {
             if(!language) {
-                qWarning() << "got zero language for" << qUrl;
+                qCWarning(LANGUAGE) << "got zero language for" << qUrl;
                 continue;
             }
             if(!language->languageSupport()) {
-                qWarning() << "language has no language support assigned:" << language->name();
+                qCWarning(LANGUAGE) << "language has no language support assigned:" << language->name();
                 continue;
             }
             ParseJob* job = language->languageSupport()->createParseJob(url);

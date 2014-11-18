@@ -370,13 +370,13 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
       ///while only one of  those was updated. We have to check here whether this file is just such an import,
       ///or whether we work on with it.
       ///@todo We will lose files that were edited right after their update here.
-      qWarning() << "WARNING: context" << topContext->url().str() << "does not have the required features!!";
+      qCWarning(LANGUAGE) << "WARNING: context" << topContext->url().str() << "does not have the required features!!";
       ICore::self()->uiController()->showErrorMessage("Updating " + ICore::self()->projectController()->prettyFileName(topContext->url().toUrl(), KDevelop::IProjectController::FormatPlain) + " failed!", 5);
       return;
   }
 
   if(topContext->parsingEnvironmentFile()->needsUpdate()) {
-      qWarning() << "WARNING: context" << topContext->url().str() << "is not up to date!";
+      qCWarning(LANGUAGE) << "WARNING: context" << topContext->url().str() << "is not up to date!";
       ICore::self()->uiController()->showErrorMessage(i18n("%1 still needs an update!", ICore::self()->projectController()->prettyFileName(topContext->url().toUrl(), KDevelop::IProjectController::FormatPlain)), 5);
 //       return;
   }

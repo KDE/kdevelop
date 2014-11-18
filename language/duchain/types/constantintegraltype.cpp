@@ -23,6 +23,7 @@
 
 #include <QDebug>
 
+#include "util/debug.h"
 #include "typesystemdata.h"
 #include "typeregister.h"
 
@@ -154,7 +155,7 @@ template<>
 KDEVPLATFORMLANGUAGE_EXPORT
 void ConstantIntegralType::setValueInternal<qint64>(qint64 value) {
   if((modifiers() & UnsignedModifier)) {
-    qWarning() << "setValue(signed) called on unsigned type";
+    qCWarning(LANGUAGE) << "setValue(signed) called on unsigned type";
   }
   d_func_dynamic()->m_value = value;
 }
@@ -163,7 +164,7 @@ template<>
 KDEVPLATFORMLANGUAGE_EXPORT
 void ConstantIntegralType::setValueInternal<quint64>(quint64 value) {
   if(!(modifiers() & UnsignedModifier)) {
-    qWarning() << "setValue(unsigned) called on not unsigned type";
+    qCWarning(LANGUAGE) << "setValue(unsigned) called on not unsigned type";
   }
   d_func_dynamic()->m_value = (qint64)value;
 }
@@ -172,7 +173,7 @@ template<>
 KDEVPLATFORMLANGUAGE_EXPORT
 void ConstantIntegralType::setValueInternal<float>(float value) {
   if(dataType() != TypeFloat) {
-    qWarning() << "setValue(float) called on non-float type";
+    qCWarning(LANGUAGE) << "setValue(float) called on non-float type";
   }
   memcpy(&d_func_dynamic()->m_value, &value, sizeof(float));
 }
@@ -181,7 +182,7 @@ template<>
 KDEVPLATFORMLANGUAGE_EXPORT
 void ConstantIntegralType::setValueInternal<double>(double value) {
   if(dataType() != TypeDouble) {
-    qWarning() << "setValue(double) called on non-double type";
+    qCWarning(LANGUAGE) << "setValue(double) called on non-double type";
   }
   memcpy(&d_func_dynamic()->m_value, &value, sizeof(double));
 }

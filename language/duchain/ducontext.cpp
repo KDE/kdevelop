@@ -121,7 +121,7 @@ void DUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
   FOREACH_FUNCTION(const LocalIndexedDeclaration& idx, d_func()->m_localDeclarations) {
     auto declaration = idx.data(m_dynamicData->m_topContext);
     if (!declaration) {
-      qWarning() << "child declaration number" << idx.localIndex() << "of" << d_func_dynamic()->m_localDeclarationsSize() << "is invalid";
+      qCWarning(LANGUAGE) << "child declaration number" << idx.localIndex() << "of" << d_func_dynamic()->m_localDeclarationsSize() << "is invalid";
       continue;
     }
     m_dynamicData->m_localDeclarations << declaration;
@@ -1634,7 +1634,7 @@ DUContext* DUContext::Import::context(const TopDUContext* topContext, bool insta
       if (functionDecl->internalFunctionContext()) {
         return functionDecl->internalFunctionContext();
       } else {
-        qWarning() << "Import of function declaration without internal function context encountered!";
+        qCWarning(LANGUAGE) << "Import of function declaration without internal function context encountered!";
       }
     }
     if(decl)
