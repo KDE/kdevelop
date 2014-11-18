@@ -20,7 +20,6 @@
 #include <KLocalizedString>
 #include <KColorScheme>
 
-#include <kio/netaccess.h>
 #include <kio/udsentry.h>
 #include <kio/job.h>
 #include <kio/jobuidelegate.h>
@@ -160,7 +159,8 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url )
                     KIO::ListJob* job = KIO::listDir( m_url );
                     connect( job, &KIO::ListJob::entries, 
                                   this, &OpenProjectDialog::storeFileList);
-                    KIO::NetAccess::synchronousRun( job, Core::self()->uiController()->activeMainWindow() );
+                    KJobWidgets::setWindow(job, Core::self()->uiController()->activeMainWindow());
+                    job->exec();
                 } else {
                     // Else we'lll just take the given file
                     m_fileList << url.fileName();

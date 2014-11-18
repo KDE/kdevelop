@@ -22,9 +22,9 @@ Boston, MA 02110-1301, USA.
 
 #include <KLocalizedString>
 #include <kcolorscheme.h>
-#include <kglobalsettings.h>
 #include <KConfigGroup>
 #include <QDialogButtonBox>
+#include <QFontDatabase>
 #include <QPushButton>
 #include <QVBoxLayout>
 
@@ -70,7 +70,7 @@ QVariant SessionModel::data( const QModelIndex& idx, int role ) const
         return s->name();
     } else if( role == Qt::FontRole )
     {
-        QFont f = KGlobalSettings::generalFont();
+        QFont f = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
         if( Core::self()->activeSession()->name() == s->name() )
         {
             f.setBold( true );

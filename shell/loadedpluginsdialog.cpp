@@ -32,7 +32,6 @@
 #include <KWidgetItemDelegate>
 #include <QPushButton>
 #include <KIconLoader>
-#include <k4aboutdata.h>
 #include <kaboutapplicationdialog.h>
 #include <KConfigGroup>
 #include <QDialogButtonBox>

@@ -30,7 +30,6 @@ Boston, MA 02110-1301, USA.
 #include <QtDBus/QtDBus>
 #include <QApplication>
 
-#include <kio/netaccess.h>
 #include <kencodingfiledialog.h>
 #include <kactioncollection.h>
 #include <KLocalizedString>
@@ -63,6 +62,7 @@ Boston, MA 02110-1301, USA.
 #include <kmessagebox.h>
 #include <KIO/Job>
 #include <KProtocolInfo>
+#include <KJobWidgets>
 #include "workingsetcontroller.h"
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/models/vcsannotationmodel.h>
@@ -235,6 +235,12 @@ struct DocumentControllerPrivate {
         IDocument* doc = documents.value(url);
         if (!doc)
         {
+            auto existJob = [](const QUrl& url) {
+                auto job = KIO::stat(url, KIO::StatJob::SourceSide, 0);
+                KJobWidgets::setWindow(job, ICore::self()->uiController()->activeMainWindow());
+                return job;
+            };
+
             QMimeType mimeType;
 
             if (DocumentController::isEmptyDocumentUrl(url))
@@ -249,7 +255,7 @@ struct DocumentControllerPrivate {
                 qCDebug(SHELL) << "invalid URL:" << url.url();
                 return 0;
             }
-            else if (KProtocolInfo::isKnownProtocol(url.scheme()) && !KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, ICore::self()->uiController()->activeMainWindow() ))
+            else if (KProtocolInfo::isKnownProtocol(url.scheme()) && !existJob(url)->exec())
             {
                 //Don't create a new file if we are not in the code mode.
                 if (static_cast<KDevelop::MainWindow*>(ICore::self()->uiController()->activeMainWindow())->area()->objectName() != "code") {

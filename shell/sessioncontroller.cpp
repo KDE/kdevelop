@@ -25,10 +25,8 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 
-#include <kcmdlineargs.h>
 #include <kconfiggroup.h>
 #include <KLocalizedString>
-#include <kio/netaccess.h>
 #include <kparts/mainwindow.h>
 #include <kactioncollection.h>
 #include <QPushButton>
@@ -46,7 +44,6 @@ Boston, MA 02110-1301, USA.
 #include <qapplication.h>
 #include <kprocess.h>
 #include <sublime/mainwindow.h>
-#include <KApplication>
 #include <QLineEdit>
 #include <KMessageBox>
 #include <KAboutData>
@@ -59,7 +56,9 @@ Boston, MA 02110-1301, USA.
 #include <QHeaderView>
 #include <interfaces/idocumentcontroller.h>
 #include <serialization/itemrepositoryregistry.h>
+#include <kio/copyjob.h>
 #include <ktexteditor/document.h>
+#include <KJobWidgets>
 #include <QLabel>
 #include <QAction>
 #include <QSortFilterProxyModel>
@@ -305,7 +304,8 @@ public:
 
     static QString sessionBaseDirectory()
     {
-        return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ KComponentData::mainComponent().componentName() + "/sessions/";
+        return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
+            +'/'+ qApp->applicationName() + "/sessions/";
     }
 
     QString ownSessionDirectory() const
@@ -754,9 +754,11 @@ QString SessionController::cloneSession( const QString& nameOrid )
     Session* origSession = session( nameOrid );
     qsrand(QDateTime::currentDateTime().toTime_t());
     QUuid id = QUuid::createUuid();
-    KIO::NetAccess::dircopy( QUrl::fromLocalFile(sessionDirectory( origSession->id().toString() )),
-                             QUrl::fromLocalFile(sessionDirectory( id.toString() )),
-                             Core::self()->uiController()->activeMainWindow() );
+    auto copyJob = KIO::copy(QUrl::fromLocalFile(sessionDirectory(origSession->id().toString())),
+                             QUrl::fromLocalFile(sessionDirectory( id.toString())));
+    KJobWidgets::setWindow(copyJob, Core::self()->uiController()->activeMainWindow());
+    copyJob->exec();
+
     Session* newSession = new Session( id.toString() );
     newSession->setName( i18n( "Copy of %1", origSession->name() ) );
     d->addSession(newSession);

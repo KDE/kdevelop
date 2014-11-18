@@ -30,7 +30,6 @@
 #include "plugincontroller.h"
 #include <kdiroperator.h>
 #include <kactioncollection.h>
-#include <KIO/NetAccess>
 
 namespace KDevelop
 {

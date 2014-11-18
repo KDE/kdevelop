@@ -36,11 +36,12 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <KLocalizedString>
+#include <KJobWidgets>
 #include <kio/job.h>
-#include <kio/netaccess.h>
 #include <kio/global.h>
 #include <kmessagebox.h>
 #include <kio/jobclasses.h>
+#include <kio/copyjob.h>
 #include <QTemporaryFile>
 
 #include <project/interfaces/iprojectfilemanager.h>
@@ -144,7 +145,7 @@ public:
     Path projectFile;
     Path developerFile;
     QString developerTempFile;
-    QString projectTempFile;
+    QTemporaryFile projectTempFile;
     IPlugin* manager;
     QPointer<IPlugin> vcsPlugin;
     ProjectFolderItem* topItem;
@@ -229,6 +230,7 @@ public:
 
     bool initProjectFiles()
     {
+        qDebug() << "FOO" << projectFile.toUrl();
         KIO::StatJob* statJob = KIO::stat( projectFile.toUrl(), KIO::HideProgressInfo );
         if ( !statJob->exec() ) //be sync for right now
         {
@@ -266,9 +268,13 @@ public:
             }
         }
 
-        if( !KIO::NetAccess::download( projectFile.toUrl(), projectTempFile,
-                        Core::self()->uiController()->activeMainWindow() ) )
+        projectTempFile.open();
+        auto copyJob = KIO::file_copy(projectFile.toUrl(), QUrl::fromLocalFile(projectTempFile.fileName()), -1, KIO::Overwrite);
+        KJobWidgets::setWindow(copyJob, Core::self()->uiController()->activeMainWindow());
+        if (!copyJob->exec())
         {
+            qCDebug(SHELL) << "Job failed:" << copyJob->errorString();
+
             KMessageBox::sorry( Core::self()->uiController()->activeMainWindow(),
                             i18n("Unable to get project file: %1",
                             projectFile.pathOrUrl() ) );
@@ -280,14 +286,13 @@ public:
             developerTempFile = developerFile.toLocalFile();
         }
         else {
-            statJob = KIO::stat( developerFile.toUrl(), KIO::HideProgressInfo );
-            if( !statJob->exec() || !KIO::NetAccess::download( developerFile.toUrl(), developerTempFile,
-                Core::self()->uiController()->activeMainWindow() ) )
-            {
-                QTemporaryFile tmp;
-                tmp.open();
-                developerTempFile = tmp.fileName();
-            }
+            QTemporaryFile tmp;
+            tmp.open();
+            developerTempFile = tmp.fileName();
+
+            auto job = KIO::file_copy(developerFile.toUrl(), QUrl::fromLocalFile(developerTempFile), -1, KIO::HideProgressInfo | KIO::Overwrite);
+            KJobWidgets::setWindow(job, Core::self()->uiController()->activeMainWindow());
+            job->exec();
         }
         return true;
     }
@@ -295,9 +300,9 @@ public:
     KConfigGroup initKConfigObject()
     {
         // helper method for open()
-        qCDebug(SHELL) << "Creating KConfig object for project files" << developerTempFile << projectTempFile;
+        qCDebug(SHELL) << "Creating KConfig object for project files" << developerTempFile << projectTempFile.fileName();
         m_cfg = KSharedConfig::openConfig( developerTempFile );
-        m_cfg->addConfigSources( QStringList() << projectTempFile );
+        m_cfg->addConfigSources( QStringList() << projectTempFile.fileName() );
         KConfigGroup projectGroup( m_cfg, "Project" );
         return projectGroup;
     }
@@ -435,7 +440,7 @@ QString Project::developerTempFile() const
 
 QString Project::projectTempFile() const
 {
-    return d->projectTempFile;
+    return d->projectTempFile.fileName();
 }
 
 KSharedConfigPtr Project::projectConfiguration() const
@@ -534,13 +539,17 @@ void Project::close()
 
     Core::self()->projectController()->projectModel()->removeRow( d->topItem->row() );
 
-    if( !d->developerFile.isLocalFile() && !KIO::NetAccess::upload( d->developerTempFile, d->developerFile.toUrl(),
-                Core::self()->uiController()->activeMainWindow() ) )
+    if (!d->developerFile.isLocalFile())
     {
-        KMessageBox::sorry( Core::self()->uiController()->activeMainWindow(),
-                    i18n("Could not store developer specific project configuration.\n"
-                         "Attention: The project settings you changed will be lost."
-                    ) );
+        auto copyJob = KIO::file_copy(QUrl::fromLocalFile(d->developerTempFile), d->developerFile.toUrl());
+        KJobWidgets::setWindow(copyJob, Core::self()->uiController()->activeMainWindow());
+        if (!copyJob->exec()) {
+            qCDebug(SHELL) << "Job failed:" << copyJob->errorString();
+
+            KMessageBox::sorry(Core::self()->uiController()->activeMainWindow(),
+                               i18n("Could not store developer specific project configuration.\n"
+                                    "Attention: The project settings you changed will be lost."));
+        }
     }
 }
 

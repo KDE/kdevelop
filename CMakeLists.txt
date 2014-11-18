@@ -136,12 +136,6 @@ add_subdirectory(tests)
 
 add_subdirectory(plugins)
 
-write_basic_config_version_file(${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake
-    VERSION ${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_MINOR}.${KDEVPLATFORM_VERSION_PATCH}
-    COMPATIBILITY AnyNewerVersion)
-configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfig.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake" @ONLY )
-configure_file( "${KDevPlatform_SOURCE_DIR}/kdevplatformversion.h.cmake" "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h" @ONLY )
-
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KDevPlatform")
 
 ecm_configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfig.cmake.in"
@@ -149,10 +143,14 @@ ecm_configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfi
                               INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
 )
 
+ecm_setup_version(${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_MINOR}.${KDEVPLATFORM_VERSION_PATCH}
+                  VARIABLE_PREFIX KDEVPLATFORM
+                  VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kdevplatform_version.h"
+                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfigVersion.cmake"
+                  SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
+
 install( FILES
-        "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h"
-        DESTINATION "${INCLUDE_INSTALL_DIR}/kdevplatform" )
-install( FILES
+        "${KDevPlatform_BINARY_DIR}/kdevplatform_version.h"
         "${KDevPlatform_BINARY_DIR}/config-kdevplatform.h"
         DESTINATION "${INCLUDE_INSTALL_DIR}/kdevplatform" )
 install( FILES

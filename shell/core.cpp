@@ -42,7 +42,7 @@
 #include "progresswidget/progressmanager.h"
 #include "selectioncontroller.h"
 #include "debugcontroller.h"
-#include "kdevplatformversion.h"
+#include "kdevplatform_version.h"
 #include "workingsetcontroller.h"
 #include "testcontroller.h"
 #include "debug.h"
@@ -94,7 +94,7 @@ Core *Core::m_self = 0;
 KAboutData createAboutData()
 {
     KAboutData aboutData( "kdevplatform",
-                          i18n("KDevelop Platform"), KDEVPLATFORM_VERSION_STR,
+                          i18n("KDevelop Platform"), KDEVPLATFORM_VERSION_STRING,
                           i18n("Development Platform for IDE-like Applications"),
                           KAboutLicense::LGPL_V2, i18n( "Copyright 2004-2014, The KDevelop developers" ),
                           QString(), "http://www.kdevelop.org" );
@@ -569,7 +569,7 @@ WorkingSetController* Core::workingSetControllerInternal()
 
 QString Core::version()
 {
-    return KDEVPLATFORM_VERSION_STR;
+    return KDEVPLATFORM_VERSION_STRING;
 }
 
 }

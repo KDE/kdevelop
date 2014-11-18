@@ -82,6 +82,8 @@ LINK_PRIVATE
     Qt5::Declarative
 
     KF5::GuiAddons
+    KF5::IconThemes
+    KF5::KIOFileWidgets
     KF5::KIOWidgets
     KF5::KCMUtils
     KF5::Parts
@@ -92,7 +94,6 @@ LINK_PRIVATE
     KF5::JobWidgets
     KF5::ItemViews
     KF5::WindowSystem
-    KF5::KDELibs4Support
 
     KDev::Project
     KDev::Vcs

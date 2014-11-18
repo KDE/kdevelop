@@ -50,8 +50,6 @@ Boston, MA 02110-1301, USA.
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <ksettings/dialog.h>
-#include <kio/netaccess.h>
-
 #include <ksettings/dispatcher.h>
 
 #include <sublime/area.h>
@@ -79,6 +77,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iruncontroller.h>
 #include <language/backgroundparser/parseprojectjob.h>
 #include <kio/job.h>
+#include <KJobWidgets>
 #include "sessioncontroller.h"
 #include "session.h"
 #include "debug.h"
@@ -362,7 +361,10 @@ bool writeProjectSettingsToConfigFile(const QUrl& projectFileUrl, const QString&
         }
         // explicitly close file before uploading it, see also: https://bugs.kde.org/show_bug.cgi?id=254519
         tmp.close();
-        return KIO::NetAccess::upload( tmp.fileName(), projectFileUrl, Core::self()->uiControllerInternal()->defaultMainWindow() );
+
+        auto uploadJob = KIO::file_copy(QUrl::fromLocalFile(tmp.fileName()), projectFileUrl);
+        KJobWidgets::setWindow(uploadJob, Core::self()->uiControllerInternal()->defaultMainWindow());
+        return uploadJob->exec();
     }
     return writeNewProjectFile( projectFileUrl.toLocalFile(),projectName, projectManager );
 }
@@ -375,7 +377,9 @@ bool projectFileExists( const QUrl& u )
         return QFileInfo( u.toLocalFile() ).exists();
     } else
     {
-        return KIO::NetAccess::exists( u, KIO::NetAccess::DestinationSide, Core::self()->uiControllerInternal()->activeMainWindow() );
+        auto statJob = KIO::stat(u, KIO::StatJob::DestinationSide, 0);
+        KJobWidgets::setWindow(statJob, Core::self()->uiControllerInternal()->activeMainWindow());
+        return statJob->exec();
     }
 }
 
@@ -408,12 +412,15 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
         {
             shouldAsk = !equalProjectFile( projectFileUrl.toLocalFile(), &dlg );
         } else {
-            QString tmpFile;
-            if ( KIO::NetAccess::download( projectFileUrl, tmpFile, qApp->activeWindow() ) ) {
-                shouldAsk = !equalProjectFile( tmpFile, &dlg );
-                QFile::remove(tmpFile);
-            } else {
-                shouldAsk = false;
+            shouldAsk = false;
+
+            QTemporaryFile tmpFile;
+            if (tmpFile.open()) {
+                auto downloadJob = KIO::file_copy(projectFileUrl, QUrl::fromLocalFile(tmpFile.fileName()));
+                KJobWidgets::setWindow(downloadJob, qApp->activeWindow());
+                if (downloadJob->exec()) {
+                    shouldAsk = !equalProjectFile(tmpFile.fileName(), &dlg);
+                }
             }
         }
 
@@ -692,8 +699,8 @@ void ProjectController::openProjectForUrl(const QUrl& sourceUrl) {
         KIO::ListJob* job = KIO::listDir(testAt);
 
         connect(job, &KIO::ListJob::entries, this, &ProjectController::eventuallyOpenProjectFile);
-
-        KIO::NetAccess::synchronousRun(job, ICore::self()->uiController()->activeMainWindow());
+        KJobWidgets::setWindow(job, ICore::self()->uiController()->activeMainWindow());
+        job->exec();
         if(d->m_foundProjectFile) {
             //Fine! We have directly opened the project
             d->m_foundProjectFile = false;
