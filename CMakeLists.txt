@@ -30,10 +30,6 @@ enable_testing()
 
 include_directories(${KDEVELOP_INCLUDE_DIR})
 
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-endif()
-
 add_subdirectory(qmakebuilder)
 add_subdirectory(app_templates)
 
