@@ -31,7 +31,6 @@
 #include "cmakebuilderconfig.h"
 
 K_PLUGIN_FACTORY(CMakeBuilderPreferencesFactory, registerPlugin<CMakeBuilderPreferences>(); )
-// K_EXPORT_PLUGIN(CMakeBuilderPreferencesFactory("kcm_kdev_cmakebuilder"))
 
 CMakeBuilderPreferences::CMakeBuilderPreferences(QWidget* parent, const QVariantList& args)
     : KCModule( KAboutData::pluginData("kcm_kdev_ninjabuilder"), parent, args)

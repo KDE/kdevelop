@@ -52,7 +52,6 @@ using namespace KDevelop;
 static QPointer<CustomScriptPlugin> indentPluginSingleton;
 
 K_PLUGIN_FACTORY(CustomScriptFactory, registerPlugin<CustomScriptPlugin>();)
-// K_EXPORT_PLUGIN(CustomScriptFactory(KAboutData("kdevcustomscript","kdevformatters", ki18n("Custom Script Formatter"), "0.2", ki18n("A formatter using custom scripts"), KAboutData::License_GPL)))
 
 // Replaces ${KEY} in command with variables[KEY]
 static QString replaceVariables( QString command, QMap<QString, QString> variables )

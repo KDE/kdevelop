@@ -31,7 +31,6 @@
 #include "makebuilderconfig.h"
 
 K_PLUGIN_FACTORY(MakeBuilderPreferencesFactory, registerPlugin<MakeBuilderPreferences>(); )
-// K_EXPORT_PLUGIN(MakeBuilderPreferencesFactory("kcm_kdev_makebuilder"))
 
 MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QVariantList& args)
     : ProjectKCModule<MakeBuilderSettings>( KAboutData::pluginData("kcm_kdev_makebuilder"),

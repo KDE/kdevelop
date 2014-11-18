@@ -157,9 +157,6 @@ void CompilerProvider::projectClosed( KDevelop::IProject* project )
 }
 
 K_PLUGIN_FACTORY( CompilerProviderFactory, registerPlugin<CompilerProvider>(); )
-K_EXPORT_PLUGIN( CompilerProviderFactory( KAboutData( "kdevcompilerprovider",
-            "kdevcompilerprovider", ki18n( "Compiler Provider" ), "0.1", ki18n( "" ),
-            KAboutData::License_GPL ) ) )
 
 CompilerProvider::CompilerProvider( QObject* parent, const QVariantList& )
     : IPlugin( "kdevcompilerprovider", parent )

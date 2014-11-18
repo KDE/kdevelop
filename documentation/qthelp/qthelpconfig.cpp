@@ -37,7 +37,6 @@
 #include "debug.h"
 
 K_PLUGIN_FACTORY(QtHelpConfigFactory, registerPlugin<QtHelpConfig>();)
-//K_EXPORT_PLUGIN(QtHelpConfigFactory("kdevqthelp_config"))
 
 enum Column
 {

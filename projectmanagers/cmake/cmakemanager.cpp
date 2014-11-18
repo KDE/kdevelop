@@ -73,7 +73,6 @@ Q_DECLARE_METATYPE(KDevelop::IProject*);
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
-K_EXPORT_PLUGIN(CMakeSupportFactory("kdevcmakemanager"))
 
 const QString DIALOG_CAPTION = i18n("KDevelop - CMake Support");
 

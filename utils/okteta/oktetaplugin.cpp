@@ -65,7 +65,6 @@
 #include <QAction>
 
 K_PLUGIN_FACTORY(OktetaPluginFactory, registerPlugin<KDevelop::OktetaPlugin>(); )
-//K_EXPORT_PLUGIN( OktetaPluginFactory( KAboutData( "kdevokteta","kdevokteta", ki18n("Okteta Plugin for KDevelop"), "0.1", ki18n("Provides simple Hex Editing"), KAboutData::License_GPL).setProgramIconName("okteta")))
 
 namespace KDevelop
 {

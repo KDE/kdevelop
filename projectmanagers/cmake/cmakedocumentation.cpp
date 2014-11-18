@@ -39,7 +39,6 @@
 #include "debug.h"
 
 K_PLUGIN_FACTORY(CMakeSupportDocFactory, registerPlugin<CMakeDocumentation>(); )
-//K_EXPORT_PLUGIN(CMakeSupportDocFactory("kdevcmakedocumentation"))
 
 CMakeDocumentation* CMakeDoc::s_provider=0;
 KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider; }

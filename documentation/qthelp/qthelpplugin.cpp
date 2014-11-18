@@ -35,7 +35,6 @@
 QtHelpPlugin *QtHelpPlugin::s_plugin = 0;
 
 K_PLUGIN_FACTORY_DEFINITION(QtHelpFactory, registerPlugin<QtHelpPlugin>(); )
-// K_EXPORT_PLUGIN(QtHelpFactory(KAboutData("kdevqthelp","kdevqthelp", ki18n("QtHelp"), "0.1", ki18n("Check Qt Help documentation"), KAboutData::License_GPL)))
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     : KDevelop::IPlugin("kdevqthelp", parent)
