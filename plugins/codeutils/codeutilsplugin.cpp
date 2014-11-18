@@ -31,7 +31,6 @@
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
-#include <KTextEditor/TemplateInterface>
 #include <QApplication>
 #include <QStandardPaths>
 
@@ -59,7 +58,7 @@ Q_LOGGING_CATEGORY(PLUGIN_CODEUTILS, "kdevplatform.plugins.codeutils")
 using namespace KDevelop;
 using namespace KTextEditor;
 
-K_PLUGIN_FACTORY_WITH_JSON(CodeUtilsPluginFactory, registerPlugin<CodeUtilsPlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(CodeUtilsPluginFactory, "kdevcodeutils.json", registerPlugin<CodeUtilsPlugin>(); )
 
 CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
     : IPlugin ( "kdevcodeutils", parent )
@@ -85,16 +84,13 @@ void CodeUtilsPlugin::documentDeclaration()
     if ( !view ) {
         return;
     }
-    TemplateInterface* tplIface = qobject_cast< TemplateInterface* >( view );
-    if ( !tplIface ) {
-        return;
-    }
 
     DUChainReadLocker lock;
     TopDUContext* topCtx = DUChainUtils::standardContextForUrl(view->document()->url());
     if ( !topCtx ) {
         return;
     }
+
     Declaration* dec = DUChainUtils::declarationInLine( KTextEditor::Cursor( view->cursorPosition() ),
                                                         topCtx );
     if ( !dec || dec->isForwardDeclaration() ) {
@@ -104,7 +100,6 @@ void CodeUtilsPlugin::documentDeclaration()
     int line = dec->range().start.line;
     Cursor insertPos( line, 0 );
 
-#if 0 //FIXME: KF5 porting, template does weird things
     TemplateRenderer renderer;
     renderer.addVariable("brief", i18n( "..." ));
 
@@ -130,7 +125,7 @@ void CodeUtilsPlugin::documentDeclaration()
 
     // TODO: Choose the template based on the language
     QString templateName = "doxygen_cpp";
-    QList<ILanguage*> languages = core()->languageController()->languagesForUrl(doc->url());
+    QList<ILanguage*> languages = core()->languageController()->languagesForUrl(view->document()->url());
     if (!languages.isEmpty())
     {
         QString languageName = languages.first()->name();
@@ -154,8 +149,7 @@ void CodeUtilsPlugin::documentDeclaration()
     }
 
     const QString comment = renderer.renderFile(QUrl::fromLocalFile(fileName));
-    tplIface->insertTemplateText(insertPos, comment, QMap<QString, QString>());
-#endif
+    view->insertTemplate(insertPos, comment);
 }
 
 CodeUtilsPlugin::~CodeUtilsPlugin()
