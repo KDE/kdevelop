@@ -5,8 +5,6 @@ configure_file(qmaketestconfig.h.in ${CMAKE_CURRENT_BINARY_DIR}/qmaketestconfig.
 include_directories( 
     ${QMakeManager_SOURCE_DIR}/parser
     ${QMakeManager_BINARY_DIR}/parser
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 set(qmakefiletest_SRCS test_qmakefile.cpp
