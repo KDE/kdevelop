@@ -23,7 +23,7 @@
 #include <QtCore/QHash>
 #include <QtCore/QPair>
 #include <QtCore/QList>
-#include <QtGui/QStandardItem>
+#include <QStandardItem>
 
 #include "qmakeprojectfile.h"
 
@@ -60,12 +60,12 @@ QMakeTargetItem::~QMakeTargetItem()
 {
 }
 
-KUrl QMakeTargetItem::builtUrl() const
+QUrl QMakeTargetItem::builtUrl() const
 {
     return m_pro->outPwd().append('/' + text());
 }
 
-KUrl QMakeTargetItem::installedUrl() const
+QUrl QMakeTargetItem::installedUrl() const
 {
-    return KUrl();
+    return QUrl();
 }

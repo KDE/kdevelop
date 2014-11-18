@@ -45,8 +45,8 @@ public:
                      const QString& s, KDevelop::ProjectBaseItem* parent );
     ~QMakeTargetItem();
 
-    virtual KUrl builtUrl() const;
-    virtual KUrl installedUrl() const;
+    virtual QUrl builtUrl() const;
+    virtual QUrl installedUrl() const;
 
 private:
     QMakeProjectFile *m_pro;

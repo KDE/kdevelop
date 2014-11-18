@@ -17,20 +17,24 @@ set(qmakefiletest_SRCS test_qmakefile.cpp
 set(qmakeprojecttest_SRCS test_qmakeproject.cpp
     ../qmakeconfig.cpp )
 
-kde4_add_unit_test(qmakefiletest ${qmakefiletest_SRCS})
-kde4_add_unit_test(qmakeprojecttest ${qmakeprojecttest_SRCS})
+add_executable(qmakefiletest ${qmakefiletest_SRCS})
+add_test(qmakefiletest qmakefiletest)
+ecm_mark_as_test(qmakefiletest)
+add_executable(qmakeprojecttest ${qmakeprojecttest_SRCS})
+add_test(qmakeprojecttest qmakeprojecttest)
+ecm_mark_as_test(qmakeprojecttest)
 
 target_link_libraries(qmakefiletest
-    ${QT_QTTEST_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    Qt5::Test
+    KF5::KDELibs4Support
+    KDev::Tests
     kdev4qmakeparser
     )
 
 target_link_libraries(qmakeprojecttest
-    ${QT_QTTEST_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
+    Qt5::Test
+    KF5::KDELibs4Support
+    KDev::Tests
+    KDev::Util
     kdev4qmakeparser
     )

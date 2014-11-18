@@ -8,47 +8,51 @@ include_directories(
 )
 
 set(parsetest_SRCS parsetest.cpp )
-
-kde4_add_unit_test(qmake-parsetest ${parsetest_SRCS})
-target_link_libraries(qmake-parsetest
-    ${QT_QTTEST_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
+add_executable(qmakeparsetest ${parsetest_SRCS})
+add_test(qmakeparsetest qmakeparsetest)
+ecm_mark_as_test(qmakeparsetest)
+target_link_libraries(qmakeparsetest
+    Qt5::Test
+    KF5::KDELibs4Support
     kdev4qmakeparser
-    )
+)
 
 set(assignmenttest_SRCS assignmenttest.cpp)
-
-kde4_add_unit_test(qmake-assignmenttest ${assignmenttest_SRCS})
-target_link_libraries(qmake-assignmenttest
-    ${QT_QTTEST_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
+add_executable(qmakeassignmenttest ${assignmenttest_SRCS})
+add_test(qmakeassignmenttest qmakeassignmenttest)
+ecm_mark_as_test(qmakeassignmenttest)
+target_link_libraries(qmakeassignmenttest
+    Qt5::Test
+    KF5::KDELibs4Support
     kdev4qmakeparser
-    )
+)
 
 set(functionscopetest_SRCS functionscopetest.cpp testhelpers.cpp)
-
-kde4_add_unit_test(qmake-functionscopetest ${functionscopetest_SRCS})
-target_link_libraries(qmake-functionscopetest
-    ${QT_QTTEST_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
+add_executable(qmakefunctionscopetest ${functionscopetest_SRCS})
+add_test(qmakefunctionscopetest qmakefunctionscopetest)
+ecm_mark_as_test(qmakefunctionscopetest)
+target_link_libraries(qmakefunctionscopetest
+    Qt5::Test
+    KF5::KDELibs4Support
     kdev4qmakeparser
-    )
+)
 
 set(scopetest_SRCS scopetest.cpp testhelpers.cpp)
-
-kde4_add_unit_test(qmake-scopetest ${scopetest_SRCS})
-target_link_libraries(qmake-scopetest
-    ${QT_QTTEST_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
+add_executable(qmakescopetest ${scopetest_SRCS})
+add_test(qmakescopetest qmakescopetest)
+ecm_mark_as_test(qmakescopetest)
+target_link_libraries(qmakescopetest
+    Qt5::Test
+    KF5::KDELibs4Support
     kdev4qmakeparser
-    )
+)
 
 set(lexertest_SRCS lexertest.cpp)
-
-kde4_add_unit_test(qmake-lexertest ${lexertest_SRCS})
-target_link_libraries(qmake-lexertest
-    ${QT_QTTEST_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
+add_executable(qmakelexertest ${lexertest_SRCS})
+add_test(qmakelexertest qmakelexertest)
+ecm_mark_as_test(qmakelexertest)
+target_link_libraries(qmakelexertest
+    Qt5::Test
+    KF5::KDELibs4Support
     kdev4qmakeparser
-    )
-
+)

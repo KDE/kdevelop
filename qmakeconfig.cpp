@@ -23,7 +23,7 @@
 #include <QFileInfo>
 
 #include <KConfigGroup>
-#include <KStandardDirs>
+#include <kstandarddirs.h>
 #include <KDebug>
 #include <KProcess>
 

@@ -20,7 +20,10 @@
  ***************************************************************************/
 
 #include "qmakebuilddirchooserdialog.h"
+
 #include <KDebug>
+#include <KLocalizedString>
+
 #include "qmakeconfig.h"
 
 #include <interfaces/iproject.h>

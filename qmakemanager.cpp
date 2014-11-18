@@ -25,7 +25,7 @@
 #include <QtCore/QHash>
 #include <QtCore/QList>
 
-#include <QtGui/QAction>
+#include <QAction>
 
 #include <KUrl>
 #include <KIO//Job>
@@ -45,7 +45,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iplugincontroller.h>
 #include <project/projectmodel.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include "iqmakebuilder.h"
 
@@ -89,7 +89,7 @@ QMakeProjectManager* QMakeProjectManager::self()
 }
 
 QMakeProjectManager::QMakeProjectManager( QObject* parent, const QVariantList& )
-        : AbstractFileManagerPlugin( QMakeSupportFactory::componentData(), parent ),
+        : AbstractFileManagerPlugin("kdevqmakemanager", parent),
           IBuildSystemManager(),
           m_builder(0),
           m_runQmake(0)

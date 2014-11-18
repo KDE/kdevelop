@@ -11,16 +11,14 @@ set(qmakebuilder_LIB_SRCS
     ../qmakeconfig.cpp
 )
 
-
-kde4_add_plugin(kdevqmakebuilder ${qmakebuilder_LIB_SRCS})
-target_link_libraries(
-    kdevqmakebuilder
-        ${KDE4_KDEUI_LIBS}
-        ${QT_QTDESIGNER_LIBRARY}
-        ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
-        ${KDEVPLATFORM_UTIL_LIBRARIES}
-        ${KDEVPLATFORM_PROJECT_LIBRARIES}
+add_library(kdevqmakebuilder MODULE ${qmakebuilder_LIB_SRCS})
+target_link_libraries(kdevqmakebuilder
+    ${QT_QTDESIGNER_LIBRARY}
+    KF5::KDELibs4Support
+    KDev::Interfaces
+    KDev::OutputView
+    KDev::Util
+    KDev::Project
 )
 
 install(TARGETS kdevqmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
@@ -38,11 +36,16 @@ set( qmakebuilder_cfg_UI
     ../qmakebuilddirchooser.ui
 )
 
-
-kde4_add_ui_files( qmakebuilder_cfg_SRCS ${qmakebuilder_cfg_UI} )
-kde4_add_kcfg_files( qmakebuilder_cfg_SRCS qmakebuilderconfig.kcfgc )
-kde4_add_plugin( kcm_kdev_qmakebuilder ${qmakebuilder_cfg_SRCS} )
-target_link_libraries( kcm_kdev_qmakebuilder ${KDE4_KIO_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
+qt5_wrap_ui(qmakebuilder_cfg_SRCS ${qmakebuilder_cfg_UI})
+kconfig_add_kcfg_files(qmakebuilder_cfg_SRCS qmakebuilderconfig.kcfgc)
+add_library(kcm_kdev_qmakebuilder MODULE ${qmakebuilder_cfg_SRCS})
+target_link_libraries(kcm_kdev_qmakebuilder
+    KF5::KIOWidgets
+    KF5::KDELibs4Support
+    KDev::Interfaces
+    KDev::Project
+    KDev::Util
+)
 
 ########### install files ###############
 configure_file(kdevqmakebuilder.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqmakebuilder.desktop)

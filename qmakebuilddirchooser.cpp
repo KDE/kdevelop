@@ -24,7 +24,10 @@
 
 #include <KStandardDirs>
 #include <KDebug>
+#include <KLocalizedString>
 #include <KMessageWidget>
+
+#include <QUrl>
 
 #include <util/path.h>
 
@@ -172,17 +175,17 @@ QString QMakeBuildDirChooser::extraArgs() const
 
 void QMakeBuildDirChooser::setQmakeBin(const QString& binary)
 {
-    kcfg_qmakeBin->setUrl(KUrl::fromPath(binary));
+    kcfg_qmakeBin->setUrl(QUrl::fromLocalFile(binary));
 }
 
 void QMakeBuildDirChooser::setBuildDir(const QString& buildDir)
 {
-    kcfg_buildDir->setUrl(KUrl::fromPath(buildDir));
+    kcfg_buildDir->setUrl(QUrl::fromLocalFile(buildDir));
 }
 
 void QMakeBuildDirChooser::setInstallPrefix(const QString& prefix)
 {
-    kcfg_installPrefix->setUrl(KUrl::fromPath(prefix));
+    kcfg_installPrefix->setUrl(QUrl::fromLocalFile(prefix));
 }
 
 void QMakeBuildDirChooser::setBuildType(int type)

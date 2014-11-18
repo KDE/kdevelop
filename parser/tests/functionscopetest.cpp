@@ -356,6 +356,3 @@ ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, missingBrace,
               "eval(SOMETHINGELSE){\n" )
-
-#include "functionscopetest.moc"
-

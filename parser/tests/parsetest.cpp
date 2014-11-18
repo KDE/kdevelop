@@ -110,7 +110,3 @@ void ParseTest::cleanup()
     ast = 0;
     QVERIFY( ast == 0 );
 }
-
-
-#include "parsetest.moc"
-

@@ -24,6 +24,8 @@
 
 #include "ui_qmakebuilddirchooser.h"
 
+#include <KConfigGroup>
+
 namespace KDevelop {
     class IProject;
 }

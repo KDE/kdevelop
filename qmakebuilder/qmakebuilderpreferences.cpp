@@ -20,13 +20,16 @@
 
 #include "qmakebuilderpreferences.h"
 
+#include <QIcon>
 #include <QVBoxLayout>
 
+#include <KIO/NetAccess>
+#include <kaboutdata.h>
+#include <kdebug.h>
+#include <klocalizedstring.h>
 #include <kpluginfactory.h>
-#include <kpluginloader.h>
 #include <kurlrequester.h>
 #include <KMessageBox>
-#include <KIO/NetAccess>
 
 #include "ui_qmakeconfig.h"
 #include "../qmakebuilddirchooser.h"
@@ -37,11 +40,9 @@
 #include <interfaces/iproject.h>
 
 K_PLUGIN_FACTORY(QMakeBuilderPreferencesFactory, registerPlugin<QMakeBuilderPreferences>(); )
-K_EXPORT_PLUGIN(QMakeBuilderPreferencesFactory("kcm_kdev_qmakebuilder"))
-
 
 QMakeBuilderPreferences::QMakeBuilderPreferences(QWidget* parent, const QVariantList& args)
-    : ProjectKCModule<QMakeBuilderSettings>( QMakeBuilderPreferencesFactory::componentData(), parent, args)
+    : ProjectKCModule<QMakeBuilderSettings>(KAboutData::pluginData("kcm_kdev_qmakebuilder"), parent, args)
 {
 //     Q_ASSERT( args.count() > 0 );
 //     QMakeBuilderSettings::instance( args.first() );
@@ -52,9 +53,9 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(QWidget* parent, const QVariant
     m_prefsUi->setupUi( w );
 
     // display icons instead of text
-    m_prefsUi->addButton->setIcon(KIcon( "list-add" ));
+    m_prefsUi->addButton->setIcon(QIcon::fromTheme("list-add"));
     m_prefsUi->addButton->setText(QString());
-    m_prefsUi->removeButton->setIcon(KIcon( "list-remove" ));
+    m_prefsUi->removeButton->setIcon(QIcon::fromTheme("list-remove"));
     m_prefsUi->removeButton->setText(QString());
 
     m_chooserUi = new QMakeBuildDirChooser(m_prefsUi->groupBox, project());
@@ -189,9 +190,11 @@ void QMakeBuilderPreferences::removeBuildConfig()
                     "Do you want KDevelop to remove it in the file system as well?", removed));
         if(ret==KMessageBox::Yes)
         {
-            bool correct=KIO::NetAccess::del(KUrl(removed), this);
+            bool correct=KIO::NetAccess::del(QUrl::fromLocalFile(removed), this);
             if(!correct)
                 KMessageBox::error(this, i18n("Could not remove: %1.", removed));
         }
     }
 }
+
+#include "qmakebuilderpreferences.moc"

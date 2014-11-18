@@ -137,6 +137,3 @@ void ScopeTest::strangeScopeNames()
     bool ret = d.parse( &ast );
     QVERIFY( ret );
 }
-
-#include "scopetest.moc"
-

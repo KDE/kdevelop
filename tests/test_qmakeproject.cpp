@@ -29,7 +29,7 @@
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
-#include <language/duchain/indexedstring.h>
+#include <serialization/indexedstring.h>
 
 #include <QTest>
 #include <qtest_kde.h>
@@ -38,7 +38,7 @@
 #include <KDebug>
 #include <kio/deletejob.h>
 
-QTEST_KDEMAIN(TestQMakeProject, GUI);
+QTEST_MAIN(TestQMakeProject);
 
 using namespace KDevelop;
 
