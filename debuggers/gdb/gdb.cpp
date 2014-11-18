@@ -53,8 +53,8 @@ GDB::~GDB()
 {
     // prevent Qt warning: QProcess: Destroyed while process is still running.
     if (process_ && process_->state() == QProcess::Running) {
-        disconnect(process_, SIGNAL(error(QProcess::ProcessError)),
-                    this, SLOT(processErrored(QProcess::ProcessError)));
+        disconnect(process_, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
+                    this, &GDB::processErrored);
         process_->kill();
         process_->waitForFinished(10);
     }
@@ -72,15 +72,15 @@ void GDB::start(KConfigGroup& config)
     }
     process_ = new KProcess(this);
     process_->setOutputChannelMode( KProcess::SeparateChannels );
-    connect(process_, SIGNAL(readyReadStandardOutput()),
-            SLOT(readyReadStandardOutput()));
-    connect(process_, SIGNAL(readyReadStandardError()),
-            SLOT(readyReadStandardError()));
+    connect(process_, &KProcess::readyReadStandardOutput,
+            this, &GDB::readyReadStandardOutput);
+    connect(process_, &KProcess::readyReadStandardError,
+            this, &GDB::readyReadStandardError);
     connect(process_,
-            SIGNAL(finished(int,QProcess::ExitStatus)),
-            SLOT(processFinished(int,QProcess::ExitStatus)));
-    connect(process_, SIGNAL(error(QProcess::ProcessError)),
-            SLOT(processErrored(QProcess::ProcessError)));
+            static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
+            this, &GDB::processFinished);
+    connect(process_, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
+            this, &GDB::processErrored);
 
 
     QStringList arguments;

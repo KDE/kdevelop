@@ -495,7 +495,7 @@ CustomScriptPreferences::CustomScriptPreferences()
 {
     m_updateTimer = new QTimer ( this );
     m_updateTimer->setSingleShot ( true );
-    connect ( m_updateTimer, SIGNAL (timeout()), SLOT (updateTimeout()) );
+    connect ( m_updateTimer, &QTimer::timeout, this, &CustomScriptPreferences::updateTimeout );
     m_vLayout = new QVBoxLayout ( this );
     m_captionLabel = new QLabel;
     m_vLayout->addWidget ( m_captionLabel );
@@ -519,12 +519,12 @@ CustomScriptPreferences::CustomScriptPreferences()
 			   "<br />"
                "If you add <b>$TMPFILE</b> into the command, then <br />"
                "a temporary file is used for transferring the code." ) );
-    connect ( m_commandEdit, SIGNAL (textEdited(QString)), SLOT (textEdited(QString)) );
+    connect ( m_commandEdit, &QLineEdit::textEdited, this, &CustomScriptPreferences::textEdited );
 
 	m_vLayout->addSpacing ( 10 );
 
 	m_moreVariablesButton = new QPushButton( i18n("More Variables") );
-	connect( m_moreVariablesButton, SIGNAL(clicked(bool)), SLOT(moreVariablesClicked(bool)) );
+	connect( m_moreVariablesButton, &QPushButton::clicked, this, &CustomScriptPreferences::moreVariablesClicked );
 	m_vLayout->addWidget( m_moreVariablesButton );
 
 }

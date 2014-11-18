@@ -76,14 +76,14 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     m_prefsUi->cacheList->horizontalHeader()->setStretchLastSection(true);
     m_prefsUi->cacheList->verticalHeader()->hide();
 
-    connect(m_prefsUi->buildDirs, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(buildDirChanged(int)));
-    connect(m_prefsUi->showInternal, SIGNAL(stateChanged(int)),
-            this, SLOT(showInternal(int)));
-    connect(m_prefsUi->addBuildDir, SIGNAL(pressed()), this, SLOT(createBuildDir()));
-    connect(m_prefsUi->removeBuildDir, SIGNAL(pressed()), this, SLOT(removeBuildDir()));
-    connect(m_prefsUi->showAdvanced, SIGNAL(toggled(bool)), this, SLOT(showAdvanced(bool)));
-    connect(m_prefsUi->environment, SIGNAL(currentProfileChanged(QString)), this, SLOT(changed()));
+    connect(m_prefsUi->buildDirs, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+            this, &CMakePreferences::buildDirChanged);
+    connect(m_prefsUi->showInternal, &QCheckBox::stateChanged,
+            this, &CMakePreferences::showInternal);
+    connect(m_prefsUi->addBuildDir, &QPushButton::pressed, this, &CMakePreferences::createBuildDir);
+    connect(m_prefsUi->removeBuildDir, &QPushButton::pressed, this, &CMakePreferences::removeBuildDir);
+    connect(m_prefsUi->showAdvanced, &QPushButton::toggled, this, &CMakePreferences::showAdvanced);
+    connect(m_prefsUi->environment, &KDevelop::EnvironmentSelectionWidget::currentProfileChanged, this, static_cast<void(CMakePreferences::*)()>(&CMakePreferences::changed));
 
     showInternal(m_prefsUi->showInternal->checkState());
     m_subprojFolder = KDevelop::Path(args[1].toString()).parent();
@@ -207,16 +207,16 @@ void CMakePreferences::updateCache(const KDevelop::Path &newBuildDir)
         m_currentModel->deleteLater();
         m_currentModel=new CMakeCacheModel(this, file);
         configureCacheView();
-        connect(m_currentModel, SIGNAL(itemChanged(QStandardItem*)),
-                this, SLOT(cacheEdited(QStandardItem*)));
-        connect(m_currentModel, SIGNAL(modelReset()),
-                this, SLOT(configureCacheView()));
-        connect(m_prefsUi->cacheList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-                this, SLOT(listSelectionChanged(QModelIndex,QModelIndex)));
+        connect(m_currentModel, &CMakeCacheModel::itemChanged,
+                this, &CMakePreferences::cacheEdited);
+        connect(m_currentModel, &CMakeCacheModel::modelReset,
+                this, &CMakePreferences::configureCacheView);
+        connect(m_prefsUi->cacheList->selectionModel(), &QItemSelectionModel::currentChanged,
+                this, &CMakePreferences::listSelectionChanged);
     }
     else
     {
-        disconnect(m_prefsUi->cacheList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, 0);
+        disconnect(m_prefsUi->cacheList->selectionModel(), &QItemSelectionModel::currentChanged, this, 0);
         m_currentModel->deleteLater();
         m_currentModel=0;
         configureCacheView();
@@ -355,12 +355,12 @@ void CMakePreferences::configure()
     KDevelop::IProjectBuilder *b=m_project->buildSystemManager()->builder();
     KJob* job=b->configure(m_project);
     if( m_currentModel ) {
-        connect(job, SIGNAL(finished(KJob*)), m_currentModel, SLOT(reset()));
+        connect(job, &KJob::finished, m_currentModel, &CMakeCacheModel::reset);
     } else {
-        connect(job, SIGNAL(finished(KJob*)), SLOT(cacheUpdated()));
+        connect(job, &KJob::finished, this, &CMakePreferences::cacheUpdated);
     }
 
-    connect(job, SIGNAL(finished(KJob*)), m_project, SLOT(reloadModel()));
+    connect(job, &KJob::finished, m_project, &KDevelop::IProject::reloadModel);
     KDevelop::ICore::self()->runController()->registerJob(job);
 }
 

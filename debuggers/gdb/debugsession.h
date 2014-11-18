@@ -78,6 +78,7 @@ public:
 
     virtual bool restartAvaliable() const;
 
+    using IDebugSession::event;
 Q_SIGNALS:
     void applicationStandardOutputLines(const QStringList& lines);
     void applicationStandardErrorLines(const QStringList& lines);
@@ -278,8 +279,6 @@ private Q_SLOTS:
 
     void configure();
 
-    void slotUserGDBCmd(const QString&);
-
     // Pops up a dialog box with some hopefully
     // detailed information about which state debugger
     // is in, which commands were sent and so on.
@@ -293,6 +292,7 @@ private Q_SLOTS:
 
 public Q_SLOTS:
     void slotKill();
+    void slotUserGDBCmd(const QString&);
 
 Q_SIGNALS:
     void rawGDBMemoryDump     (char *buf);

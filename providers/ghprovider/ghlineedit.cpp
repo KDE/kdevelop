@@ -29,7 +29,7 @@ namespace gh
 LineEdit::LineEdit(QWidget *parent) : QLineEdit(parent)
 {
     m_timer = new QTimer(this);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
+    connect(m_timer, &QTimer::timeout, this, &LineEdit::timeOut);
 }
 
 LineEdit::~LineEdit()

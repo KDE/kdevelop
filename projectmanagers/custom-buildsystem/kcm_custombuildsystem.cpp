@@ -34,7 +34,7 @@ CustomBuildSystemKCModule::CustomBuildSystemKCModule( QWidget* parent, const QVa
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
     configWidget = new CustomBuildSystemConfigWidget( this );
-    connect( configWidget, SIGNAL(changed()), SLOT(dataChanged()) );
+    connect( configWidget, &CustomBuildSystemConfigWidget::changed, this, &CustomBuildSystemKCModule::dataChanged );
     layout->addWidget( configWidget );
 
     addConfig( CustomBuildSystemSettings::self(), configWidget );

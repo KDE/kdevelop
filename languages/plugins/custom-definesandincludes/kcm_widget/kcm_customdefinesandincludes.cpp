@@ -58,7 +58,7 @@ DefinesAndIncludes::DefinesAndIncludes( QWidget* parent, const QVariantList& arg
     QVBoxLayout* layout = new QVBoxLayout( this );
     configWidget = new ProjectPathsWidget( this );
     configWidget->setProject( project() );
-    connect( configWidget, SIGNAL(changed()), SLOT(dataChanged()) );
+    connect( configWidget, &ProjectPathsWidget::changed, this, &DefinesAndIncludes::dataChanged );
     layout->addWidget( configWidget );
 
     addConfig( CustomDefinesAndIncludes::self(), configWidget );

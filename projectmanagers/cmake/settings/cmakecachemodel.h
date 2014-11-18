@@ -49,7 +49,7 @@ class CMakeCacheModel : public QStandardItemModel
         KDevelop::Path filePath() const;
         void read();
         
-    private slots:
+    public slots:
         void reset();
         
     private:

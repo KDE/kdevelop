@@ -62,7 +62,7 @@ CompilersWidget::CompilersWidget(QWidget* parent)
 
     m_addMenu = new QMenu(m_ui->addButton);
     m_mapper = new QSignalMapper(m_addMenu);
-    connect(m_mapper, SIGNAL(mapped(QString)), this, SLOT(addCompiler(QString)));
+    connect(m_mapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped), this, &CompilersWidget::addCompiler);
 
     m_addMenu->clear();
 
@@ -70,29 +70,29 @@ CompilersWidget::CompilersWidget(QWidget* parent)
         foreach (const auto& factory, cp->compilerFactories()) {
             QAction* action = new QAction(m_addMenu);
             action->setText(factory->name());
-            connect(action, SIGNAL(triggered()), m_mapper, SLOT(map()));
+            connect(action, &QAction::triggered, m_mapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
             m_mapper->setMapping(action, factory->name());
             m_addMenu->addAction(action);
         }
         m_ui->addButton->setMenu(m_addMenu);
     }
 
-    connect(m_ui->removeButton, SIGNAL(clicked()), SLOT(deleteCompiler()));
+    connect(m_ui->removeButton, &QPushButton::clicked, this, &CompilersWidget::deleteCompiler);
 
     auto delAction = new QAction( i18n("Delete compiler"), this );
     delAction->setShortcut( QKeySequence( "Del" ) );
     delAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
     m_ui->compilers->addAction( delAction );
-    connect( delAction, SIGNAL(triggered()), SLOT(deleteCompiler()) );
+    connect( delAction, &QAction::triggered, this, &CompilersWidget::deleteCompiler );
 
-    connect(m_ui->compilers->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(compilerSelected(QModelIndex)));
+    connect(m_ui->compilers->selectionModel(), &QItemSelectionModel::currentChanged, this, &CompilersWidget::compilerSelected);
 
-    connect(m_ui->compilerName, SIGNAL(editingFinished()), SLOT(compilerEdited()));
-    connect(m_ui->compilerPath, SIGNAL(editingFinished()), SLOT(compilerEdited()));
+    connect(m_ui->compilerName, &QLineEdit::editingFinished, this, &CompilersWidget::compilerEdited);
+    connect(m_ui->compilerPath, &QLineEdit::editingFinished, this, &CompilersWidget::compilerEdited);
 
-    connect(m_ui->compilerSelector, SIGNAL(clicked()), this, SLOT(selectCompilerPathDialog()));
+    connect(m_ui->compilerSelector, &QPushButton::clicked, this, &CompilersWidget::selectCompilerPathDialog);
 
-    connect(m_compilersModel, SIGNAL(compilerChanged()), SIGNAL(compilerChanged()));
+    connect(m_compilersModel, &CompilersModel::compilerChanged, this, &CompilersWidget::compilerChanged);
 
     enableItems(false);
 }

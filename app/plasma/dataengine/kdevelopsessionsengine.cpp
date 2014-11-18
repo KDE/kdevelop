@@ -48,7 +48,7 @@ void KDevelopSessionsEngine::init()
     for ( int i = 0; i < sessionDirs.count(); ++i )
         m_dirWatch->addDir( sessionDirs[i], KDirWatch::WatchSubDirs );
 
-    connect(m_dirWatch, SIGNAL(dirty(QString)), this, SLOT(updateSessions()));
+    connect(m_dirWatch, &KDirWatch::dirty, this, &KDevelopSessionsEngine::updateSessions);
 
     updateSessions();
 }

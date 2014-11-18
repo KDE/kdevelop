@@ -83,7 +83,7 @@ void ArchitectureParser::determineArchitecture(DebugSession* debugSession)
 RegistersManager::RegistersManager(QWidget* parent)
 : QObject(parent), m_registersView(new RegistersView(parent)), m_registerController(0), m_architectureParser(new ArchitectureParser(this)), m_debugSession(0), m_modelsManager(new ModelsManager(this)), m_currentArchitecture(undefined), m_needToCheckArch(false)
 {
-    connect(m_architectureParser, SIGNAL(architectureParsed(Architecture)), this, SLOT(architectureParsedSlot(Architecture)));
+    connect(m_architectureParser, &ArchitectureParser::architectureParsed, this, &RegistersManager::architectureParsedSlot);
 
     m_registersView->setModel(m_modelsManager);
     setController(0);

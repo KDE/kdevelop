@@ -1,7 +1,6 @@
 
 add_subdirectory(rpp)
 add_subdirectory(tests)
-#add_subdirectory(headergen)
 
 ########### next target ###############
 

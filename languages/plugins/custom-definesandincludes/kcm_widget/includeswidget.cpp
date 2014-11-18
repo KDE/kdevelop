@@ -48,25 +48,25 @@ IncludesWidget::IncludesWidget( QWidget* parent )
 
     ui->errorLabel->setHidden(true);
 
-    connect( ui->addIncludePath, SIGNAL(clicked(bool)), SLOT(addIncludePath()) );
-    connect( ui->removeIncludePath, SIGNAL(clicked(bool)), SLOT(deleteIncludePath()) );
+    connect( ui->addIncludePath, &QPushButton::clicked, this, &IncludesWidget::addIncludePath );
+    connect( ui->removeIncludePath, &QPushButton::clicked, this, &IncludesWidget::deleteIncludePath );
 
     // also let user choose a file as include path. This file will be "automatically included" in all files. See also -include command line option of clang/gcc
     ui->includePathRequester->setMode( KFile::File | KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly );
 
     ui->includePaths->setModel( includesModel );
-    connect( ui->includePaths->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(includePathSelected(QModelIndex)) );
-    connect( ui->includePathRequester, SIGNAL(textChanged(QString)), SLOT(includePathEdited()) );
-    connect( ui->includePathRequester, SIGNAL(urlSelected(QUrl)), SLOT(includePathUrlSelected(QUrl)) );
-    connect( includesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(includesChanged()) );
-    connect( includesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(includesChanged())  );
-    connect( includesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(includesChanged())  );
+    connect( ui->includePaths->selectionModel(), &QItemSelectionModel::currentChanged, this, &IncludesWidget::includePathSelected );
+    connect( ui->includePathRequester, &KUrlRequester::textChanged, this, &IncludesWidget::includePathEdited );
+    connect( ui->includePathRequester, &KUrlRequester::urlSelected, this, &IncludesWidget::includePathUrlSelected );
+    connect( includesModel, &IncludesModel::dataChanged, this, static_cast<void(IncludesWidget::*)()>(&IncludesWidget::includesChanged) );
+    connect( includesModel, &IncludesModel::rowsInserted, this, static_cast<void(IncludesWidget::*)()>(&IncludesWidget::includesChanged)  );
+    connect( includesModel, &IncludesModel::rowsRemoved, this, static_cast<void(IncludesWidget::*)()>(&IncludesWidget::includesChanged)  );
 
     QAction* delIncAction = new QAction( i18n("Delete Include Path"), this );
     delIncAction->setShortcut( QKeySequence( Qt::Key_Delete ) );
     delIncAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
     ui->includePaths->addAction( delIncAction );
-    connect( delIncAction, SIGNAL(triggered()), SLOT(deleteIncludePath()) );
+    connect( delIncAction, &QAction::triggered, this, &IncludesWidget::deleteIncludePath );
 }
 
 void IncludesWidget::setIncludes( const QStringList& paths )

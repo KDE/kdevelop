@@ -84,10 +84,10 @@ DebugSession::DebugSession()
 
     m_procLineMaker = new KDevelop::ProcessLineMaker(this);
 
-    connect( m_procLineMaker, SIGNAL(receivedStdoutLines(QStringList)),
-             this, SIGNAL(applicationStandardOutputLines(QStringList)));
-    connect( m_procLineMaker, SIGNAL(receivedStderrLines(QStringList)),
-             this, SIGNAL(applicationStandardErrorLines(QStringList)) );
+    connect(m_procLineMaker, &ProcessLineMaker::receivedStdoutLines,
+            this, &DebugSession::applicationStandardOutputLines);
+    connect(m_procLineMaker, &ProcessLineMaker::receivedStderrLines,
+            this, &DebugSession::applicationStandardErrorLines);
     setupController();
 }
 
@@ -135,10 +135,10 @@ void DebugSession::setupController()
 //              gdbBreakpointWidget,   SLOT(slotToggleWatchpoint(QString)));
 
     // controller -> procLineMaker
-    connect( this,            SIGNAL(ttyStdout(QByteArray)),
-             m_procLineMaker,         SLOT(slotReceivedStdout(QByteArray)));
-    connect( this,            SIGNAL(ttyStderr(QByteArray)),
-             m_procLineMaker,         SLOT(slotReceivedStderr(QByteArray)));
+    connect(this, &DebugSession::ttyStdout,
+            m_procLineMaker, &ProcessLineMaker::slotReceivedStdout);
+    connect(this, &DebugSession::ttyStderr,
+            m_procLineMaker, &ProcessLineMaker::slotReceivedStderr);
 
 //     connect(statusBarIndicator, SIGNAL(doubleClicked()),
 //             controller, SLOT(explainDebuggerStatus()));
@@ -881,22 +881,22 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     connect(gdb, SIGNAL(applicationOutput(QString)),
             this, SIGNAL(ttyStdout(QString)));
 #endif
-    connect(gdb, SIGNAL(userCommandOutput(QString)), this,
-            SIGNAL(gdbUserCommandStdout(QString)));
-    connect(gdb, SIGNAL(internalCommandOutput(QString)), this,
-            SIGNAL(gdbInternalCommandStdout(QString)));
+    connect(gdb, &GDB::userCommandOutput, this,
+            &DebugSession::gdbUserCommandStdout);
+    connect(gdb, &GDB::internalCommandOutput, this,
+            &DebugSession::gdbInternalCommandStdout);
 
-    connect(gdb, SIGNAL(ready()), this, SLOT(gdbReady()));
-    connect(gdb, SIGNAL(gdbExited()), this, SLOT(gdbExited()));
-    connect(gdb, SIGNAL(programStopped(GDBMI::ResultRecord)),
-            this, SLOT(slotProgramStopped(GDBMI::ResultRecord)));
-    connect(gdb, SIGNAL(programStopped(GDBMI::ResultRecord)),
-            this, SIGNAL(programStopped(GDBMI::ResultRecord)));
-    connect(gdb, SIGNAL(programRunning()),
-            this, SLOT(programRunning()));
+    connect(gdb, &GDB::ready, this, &DebugSession::gdbReady);
+    connect(gdb, &GDB::gdbExited, this, &DebugSession::gdbExited);
+    connect(gdb, &GDB::programStopped,
+            this, &DebugSession::slotProgramStopped);
+    connect(gdb, &GDB::programStopped,
+            this, &DebugSession::programStopped);
+    connect(gdb, &GDB::programRunning,
+            this, &DebugSession::programRunning);
 
-    connect(gdb, SIGNAL(streamRecord(GDBMI::StreamRecord)),
-            this, SLOT(parseStreamRecord(GDBMI::StreamRecord)));
+    connect(gdb, &GDB::streamRecord,
+            this, &DebugSession::parseStreamRecord);
 
     // Start gdb. Do this after connecting all signals so that initial
     // GDB output, and important events like "GDB died" are reported.
@@ -1010,8 +1010,8 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
     m_tty.reset(new STTY(config_useExternalTerminal, config_externalTerminal));
     if (!config_useExternalTerminal)
     {
-        connect( m_tty.data(), SIGNAL(OutOutput(QByteArray)), SIGNAL(ttyStdout(QByteArray)) );
-        connect( m_tty.data(), SIGNAL(ErrOutput(QByteArray)), SIGNAL(ttyStderr(QByteArray)) );
+        connect( m_tty.data(), &STTY::OutOutput, this, &DebugSession::ttyStdout );
+        connect( m_tty.data(), &STTY::ErrOutput, this, &DebugSession::ttyStderr );
     }
 
     QString tty(m_tty->getSlave());

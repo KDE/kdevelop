@@ -30,6 +30,7 @@
 #include <util/environmentgrouplist.h>
 #include <interfaces/iproject.h>
 
+using namespace KDevelop;
 
 ConfigWidget::ConfigWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::ConfigWidget )
@@ -42,13 +43,13 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     ui->buildAction->insertItem( CustomBuildSystemTool::Clean, i18n("Clean"), QVariant() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Prune, i18n("Prune"), QVariant() );
 
-    connect( ui->buildAction, SIGNAL(activated(int)), SLOT(changeAction(int)) );
+    connect( ui->buildAction, static_cast<void(KComboBox::*)(int)>(&KComboBox::activated), this, &ConfigWidget::changeAction );
 
-    connect( ui->enableAction, SIGNAL(toggled(bool)), SLOT(toggleActionEnablement(bool)) );
-    connect( ui->actionArguments, SIGNAL(textEdited(QString)), SLOT(actionArgumentsEdited(QString)) );
-    connect( ui->actionEnvironment, SIGNAL(activated(int)), SLOT(actionEnvironmentChanged(int)) );
-    connect( ui->actionExecutable, SIGNAL(urlSelected(QUrl)), SLOT(actionExecutableChanged(QUrl)) );
-    connect( ui->actionExecutable->lineEdit(), SIGNAL(textEdited(QString)), SLOT(actionExecutableChanged(QString)) );
+    connect( ui->enableAction, &QCheckBox::toggled, this, &ConfigWidget::toggleActionEnablement );
+    connect( ui->actionArguments, &QLineEdit::textEdited, this, &ConfigWidget::actionArgumentsEdited );
+    connect( ui->actionEnvironment, &EnvironmentSelectionWidget::currentProfileChanged, this, &ConfigWidget::actionEnvironmentChanged );
+    connect( ui->actionExecutable, &KUrlRequester::urlSelected, this, static_cast<void(ConfigWidget::*)(const QUrl&)>(&ConfigWidget::actionExecutableChanged) );
+    connect( ui->actionExecutable->lineEdit(), &KLineEdit::textEdited, this, static_cast<void(ConfigWidget::*)(const QString&)>(&ConfigWidget::actionExecutableChanged) );
 }
 
 CustomBuildSystemConfig ConfigWidget::config() const
@@ -112,9 +113,9 @@ void ConfigWidget::actionArgumentsEdited( const QString& txt )
     emit changed();
 }
 
-void ConfigWidget::actionEnvironmentChanged( int )
+void ConfigWidget::actionEnvironmentChanged(const QString& profile)
 {
-    m_tools[ ui->buildAction->currentIndex() ].envGrp = ui->actionEnvironment->currentProfile();
+    m_tools[ui->buildAction->currentIndex()].envGrp = profile;
     emit changed();
 }
 

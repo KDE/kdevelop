@@ -43,15 +43,15 @@ Resource::Resource(QObject *parent, ProviderModel *model)
 void Resource::searchRepos(const QString &uri, const QString &token)
 {
     KIO::TransferJob *job = getTransferJob(uri, token);
-    connect(job, SIGNAL(data(KIO::Job *, const QByteArray &)),
-            this, SLOT(slotRepos(KIO::Job *, const QByteArray &)));
+    connect(job, &KIO::TransferJob::data,
+            this, &Resource::slotRepos);
 }
 
 void Resource::getOrgs(const QString &token)
 {
     KIO::TransferJob *job = getTransferJob("/user/orgs", token);
-    connect(job, SIGNAL(data(KIO::Job *, QByteArray)),
-            this, SLOT(slotOrgs(KIO::Job *, const QByteArray &)));
+    connect(job, &KIO::TransferJob::data,
+            this, &Resource::slotOrgs);
 }
 
 void Resource::authenticate(const QString &name, const QString &password)
@@ -62,7 +62,7 @@ void Resource::authenticate(const QString &name, const QString &password)
     QByteArray data = "{ \"scopes\": [\"repo\"], \"note\": \"KDevelop Github Provider\" }";
     KIO::StoredTransferJob *job = KIO::storedHttpPost(data, url, KIO::HideProgressInfo);
     job->addMetaData("customHTTPHeader", "Authorization: Basic " + QString (name + ':' + password).toUtf8().toBase64());
-    connect(job, SIGNAL(result(KJob *)), SLOT(slotAuthenticate(KJob *)));
+    connect(job, &KIO::StoredTransferJob::result, this, &Resource::slotAuthenticate);
     job->start();
 }
 

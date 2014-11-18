@@ -53,7 +53,7 @@ QWidget* CMakeHomeDocumentation::documentationWidget(KDevelop::DocumentationFind
 
     CMakeContentsModel* model=new CMakeContentsModel(contents);
     contents->setModel(model);
-    QObject::connect(contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
+    QObject::connect(contents, &QTreeView::clicked, model, &CMakeContentsModel::showItem);
     return contents;
 }
 

@@ -32,9 +32,9 @@ DefinesWidget::DefinesWidget( QWidget* parent )
     ui->setupUi( this );
     ui->defines->setModel( definesModel );
     ui->defines->horizontalHeader()->setSectionResizeMode( QHeaderView::Stretch );
-    connect( definesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(definesChanged()) );
-    connect( definesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(definesChanged()) );
-    connect( definesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(definesChanged()) );
+    connect( definesModel, &DefinesModel::dataChanged, this, static_cast<void(DefinesWidget::*)()>(&DefinesWidget::definesChanged) );
+    connect( definesModel, &DefinesModel::rowsInserted, this, static_cast<void(DefinesWidget::*)()>(&DefinesWidget::definesChanged) );
+    connect( definesModel, &DefinesModel::rowsRemoved, this, static_cast<void(DefinesWidget::*)()>(&DefinesWidget::definesChanged) );
 
     QAction* delDefAction = new QAction( i18n("Delete Define"), this );
     delDefAction->setShortcut( QKeySequence(Qt::Key_Delete) );
@@ -42,7 +42,7 @@ DefinesWidget::DefinesWidget( QWidget* parent )
     delDefAction->setIcon( QIcon::fromTheme("list-remove") );
     ui->defines->addAction( delDefAction );
     ui->defines->setContextMenuPolicy( Qt::ActionsContextMenu );
-    connect( delDefAction, SIGNAL(triggered()), SLOT(deleteDefine()) );
+    connect( delDefAction, &QAction::triggered, this, &DefinesWidget::deleteDefine );
 }
 
 void DefinesWidget::setDefines( const Defines& defines )

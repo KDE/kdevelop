@@ -58,9 +58,9 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     foreach (const QString &dir, sessiondirs) {
         historyWatch->addDir(dir);
     }
-    connect(historyWatch,SIGNAL(dirty(QString)),this,SLOT(loadSessions()));
-    connect(historyWatch,SIGNAL(created(QString)),this,SLOT(loadSessions()));
-    connect(historyWatch,SIGNAL(deleted(QString)),this,SLOT(loadSessions()));
+    connect(historyWatch, &KDirWatch::dirty, this, &KDevelopSessions::loadSessions);
+    connect(historyWatch, &KDirWatch::created, this, &KDevelopSessions::loadSessions);
+    connect(historyWatch, &KDirWatch::deleted, this, &KDevelopSessions::loadSessions);
 
     Plasma::RunnerSyntax s(QLatin1String(":q:"), i18n("Finds KDevelop sessions matching :q:."));
     s.addExampleQuery(QLatin1String("kdevelop :q:"));

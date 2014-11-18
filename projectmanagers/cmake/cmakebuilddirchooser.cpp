@@ -77,13 +77,13 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     m_chooserUi->extraArguments->addItems(lastExtraArguments);
     m_chooserUi->extraArguments->setInsertPolicy(QComboBox::InsertAtTop);
     KCompletion *comp = m_chooserUi->extraArguments->completionObject();
-    connect(m_chooserUi->extraArguments, SIGNAL(returnPressed(QString)), comp, SLOT(addItem(QString)));
+    connect(m_chooserUi->extraArguments, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::returnPressed), comp, static_cast<void(KCompletion::*)(const QString&)>(&KCompletion::addItem));
     comp->insertItems(lastExtraArguments);
 
-    connect(m_chooserUi->cmakeBin, SIGNAL(textChanged(QString)), this, SLOT(updated()));
-    connect(m_chooserUi->buildFolder, SIGNAL(textChanged(QString)), this, SLOT(updated()));
-    connect(m_chooserUi->buildType, SIGNAL(currentIndexChanged(QString)), this, SLOT(updated()));
-    connect(m_chooserUi->extraArguments, SIGNAL(editTextChanged(QString)), this, SLOT(updated()));
+    connect(m_chooserUi->cmakeBin, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);
+    connect(m_chooserUi->buildFolder, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);
+    connect(m_chooserUi->buildType, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged), this, &CMakeBuildDirChooser::updated);
+    connect(m_chooserUi->extraArguments, &KComboBox::editTextChanged, this, &CMakeBuildDirChooser::updated);
     updated();
 }
 

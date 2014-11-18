@@ -202,7 +202,7 @@ void CppDebuggerPlugin::setupActions()
                                "segmentation fault. The core file contains an "
                                "image of the program memory at the time it crashed, "
                                "allowing you to do a post-mortem analysis.</p>") );
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotExamineCore()));
+    connect(action, &QAction::triggered, this, &CppDebuggerPlugin::slotExamineCore);
     ac->addAction("debug_core", action);
 
     #ifdef KDEV_ENABLE_GDB_ATTACH_DIALOG
@@ -217,17 +217,17 @@ void CppDebuggerPlugin::setupActions()
 void CppDebuggerPlugin::setupDBus()
 {
     m_drkonqiMap = new QSignalMapper(this);
-    connect(m_drkonqiMap, SIGNAL(mapped(QObject*)), this, SLOT(slotDebugExternalProcess(QObject*)));
+    connect(m_drkonqiMap, static_cast<void(QSignalMapper::*)(QObject*)>(&QSignalMapper::mapped), this, &CppDebuggerPlugin::slotDebugExternalProcess);
 
     QDBusConnectionInterface* dbusInterface = QDBusConnection::sessionBus().interface();
     foreach (const QString& service, dbusInterface->registeredServiceNames().value())
         slotDBusServiceRegistered(service);
 
     QDBusServiceWatcher* watcher = new QDBusServiceWatcher(this);
-    connect(watcher, SIGNAL(serviceRegistered(QString)),
-            this, SLOT(slotDBusServiceRegistered(QString)));
-    connect(watcher, SIGNAL(serviceUnregistered(QString)),
-            this, SLOT(slotDBusServiceUnregistered(QString)));
+    connect(watcher, &QDBusServiceWatcher::serviceRegistered,
+            this, &CppDebuggerPlugin::slotDBusServiceRegistered);
+    connect(watcher, &QDBusServiceWatcher::serviceUnregistered,
+            this, &CppDebuggerPlugin::slotDBusServiceUnregistered);
 }
 
 void CppDebuggerPlugin::slotDBusServiceRegistered( const QString& service )
@@ -314,12 +314,12 @@ KDevelop::ContextMenuExtension CppDebuggerPlugin::contextMenuExtension( KDevelop
         // PORTING TODO
         //QString squeezed = KStringHandler::csqueeze(m_contextIdent, 30);
         QAction* action = new QAction( i18n("Evaluate: %1", m_contextIdent), this);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(contextEvaluate()));
+        connect(action, &QAction::triggered, this, &CppDebuggerPlugin::contextEvaluate);
         action->setWhatsThis(i18n("<b>Evaluate expression</b><p>Shows the value of the expression under the cursor.</p>"));
         menuExt.addAction( KDevelop::ContextMenuExtension::DebugGroup, action);
 
         action = new QAction( i18n("Watch: %1", m_contextIdent), this);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(contextWatch()));
+        connect(action, &QAction::triggered, this, &CppDebuggerPlugin::contextWatch);
         action->setWhatsThis(i18n("<b>Watch expression</b><p>Adds an expression under the cursor to the Variables/Watch list.</p>"));
         menuExt.addAction( KDevelop::ContextMenuExtension::DebugGroup, action);
     }
@@ -341,10 +341,10 @@ DebugSession* CppDebuggerPlugin::createSession()
 {
     DebugSession *session = new DebugSession();
     KDevelop::ICore::self()->debugController()->addSession(session);
-    connect(session, SIGNAL(showMessage(QString,int)), SLOT(controllerMessage(QString,int)));
-    connect(session, SIGNAL(reset()), SIGNAL(reset()));
-    connect(session, SIGNAL(finished()), SLOT(slotFinished()));
-    connect(session, SIGNAL(raiseGdbConsoleViews()), SIGNAL(raiseGdbConsoleViews()));
+    connect(session, &DebugSession::showMessage, this, &CppDebuggerPlugin::controllerMessage);
+    connect(session, &DebugSession::reset, this, &CppDebuggerPlugin::reset);
+    connect(session, &DebugSession::finished, this, &CppDebuggerPlugin::slotFinished);
+    connect(session, &DebugSession::raiseGdbConsoleViews, this, &CppDebuggerPlugin::raiseGdbConsoleViews);
     return session;
 }
 
