@@ -64,7 +64,8 @@ GenericName[uk]=Підтримка QML
 GenericName[x-test]=xxQML Supportxx
 ServiceTypes=KDevelop/Plugin
 Icon=text-x-qml
-X-KDE-Library=kdevqmljslanguagesupport
+
+X-KDE-Library=kdevplatform/@KDEV_PLUGIN_VERSION@/kdevqmljslanguagesupport
 X-KDevelop-Version=@KDEV_PLUGIN_VERSION@
 X-KDevelop-Language=QML/JS
 X-KDevelop-Interfaces=ILanguageSupport
