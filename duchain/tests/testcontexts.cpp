@@ -141,5 +141,3 @@ void TestContexts::testQMLContext()
     QCOMPARE(child2Ctx->range(), RangeInRevision(5, 8, 7, 2));
     QCOMPARE(child2Ctx->childContexts().size(), 0);
 }
-
-#include "testcontexts.moc"

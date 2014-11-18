@@ -116,5 +116,3 @@ void TestFiles::parseAndCheck(const QString& fileName, bool check)
     QVERIFY(validator.testsPassed());
   }
 }
-
-#include "test_files.moc"

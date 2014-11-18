@@ -51,5 +51,3 @@ CodeHighlightingInstance* QmlJsHighlighting::createInstance() const
 {
     return new HighlightingInstance(this);
 }
-
-#include "qmljshighlighting.moc"

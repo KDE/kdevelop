@@ -236,5 +236,3 @@ void TestDeclarations::testProperty()
     QCOMPARE(foo->abstractType()->toString(), QString("int"));
     QCOMPARE(QString::fromUtf8(foo->comment()), QString("some comment"));
 }
-
-#include "testdeclarations.moc"
