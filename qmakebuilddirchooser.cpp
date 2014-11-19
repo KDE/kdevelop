@@ -22,7 +22,7 @@
 #include "qmakebuilddirchooser.h"
 #include "qmakeconfig.h"
 
-#include <KStandardDirs>
+
 #include <KDebug>
 #include <KLocalizedString>
 #include <KMessageWidget>

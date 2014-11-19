@@ -21,9 +21,9 @@
 #include <QMutex>
 #include <QDebug>
 #include <QFileInfo>
+#include <QStandardPaths>
 
 #include <KConfigGroup>
-#include <kstandarddirs.h>
 #include <KDebug>
 #include <KProcess>
 
@@ -81,13 +81,13 @@ QString QMakeConfig::qmakeBinary(const IProject* project)
         }
     }
     if (exe.isEmpty()) {
-        exe = KStandardDirs::findExe("qmake-qt4");
+        exe = QStandardPaths::findExecutable("qmake-qt4");
     }
     if (exe.isEmpty()) {
-        exe = KStandardDirs::findExe("qmake-qt5");
+        exe = QStandardPaths::findExecutable("qmake-qt5");
     }
     if (exe.isEmpty()) {
-        exe = KStandardDirs::findExe("qmake");
+        exe = QStandardPaths::findExecutable("qmake");
     }
     Q_ASSERT(!exe.isEmpty());
     return exe;
