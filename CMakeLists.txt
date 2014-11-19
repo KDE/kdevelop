@@ -80,7 +80,7 @@ target_link_libraries( kdevqmakemanager
     KDev::Util
     KDev::OutputView
     KDev::Serialization
-    kdev4qmakeparser )
+    kdevqmakeparser)
 
 ########### install files ###############
 

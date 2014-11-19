@@ -12,7 +12,7 @@ ecm_mark_as_test(qmakeparsetest)
 target_link_libraries(qmakeparsetest
     Qt5::Test
     KF5::KDELibs4Support
-    kdev4qmakeparser
+    kdevqmakeparser
 )
 
 set(assignmenttest_SRCS assignmenttest.cpp)
@@ -22,7 +22,7 @@ ecm_mark_as_test(qmakeassignmenttest)
 target_link_libraries(qmakeassignmenttest
     Qt5::Test
     KF5::KDELibs4Support
-    kdev4qmakeparser
+    kdevqmakeparser
 )
 
 set(functionscopetest_SRCS functionscopetest.cpp testhelpers.cpp)
@@ -32,7 +32,7 @@ ecm_mark_as_test(qmakefunctionscopetest)
 target_link_libraries(qmakefunctionscopetest
     Qt5::Test
     KF5::KDELibs4Support
-    kdev4qmakeparser
+    kdevqmakeparser
 )
 
 set(scopetest_SRCS scopetest.cpp testhelpers.cpp)
@@ -42,7 +42,7 @@ ecm_mark_as_test(qmakescopetest)
 target_link_libraries(qmakescopetest
     Qt5::Test
     KF5::KDELibs4Support
-    kdev4qmakeparser
+    kdevqmakeparser
 )
 
 set(lexertest_SRCS lexertest.cpp)
@@ -52,5 +52,5 @@ ecm_mark_as_test(qmakelexertest)
 target_link_libraries(qmakelexertest
     Qt5::Test
     KF5::KDELibs4Support
-    kdev4qmakeparser
+    kdevqmakeparser
 )
