@@ -642,5 +642,3 @@ void TestQMakeFile::benchGlobbingNoPattern()
 
     QCOMPARE(found, 1);
 }
-
-#include "test_qmakefile.moc"
