@@ -46,7 +46,6 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(ManPageFactory, registerPlugin<ManPagePlugin>(); )
-// K_EXPORT_PLUGIN(ManPageFactory(KAboutData("kdevmanpage","kdevmanpage", ki18n("ManPage"), "1", ki18n("Check Man Page documentation"), KAboutData::License_GPL)))
 
 ManPagePlugin::ManPagePlugin(QObject* parent, const QVariantList& args)
     : IPlugin("kdevmanpage", parent)

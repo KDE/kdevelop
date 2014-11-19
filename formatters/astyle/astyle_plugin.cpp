@@ -38,7 +38,6 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(AStyleFactory, registerPlugin<AStylePlugin>();)
-// K_EXPORT_PLUGIN(AStyleFactory(KAboutData("kdevastyle","kdevformatters", ki18n("Astyle Formatter"), "0.1", ki18n("A formatting tool using astyle"), KAboutData::License_GPL)))
 
 AStylePlugin::AStylePlugin(QObject *parent, const QVariantList&)
     : IPlugin("kdevastyle", parent)

@@ -49,8 +49,6 @@
 #include <QStandardPaths>
 
 K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
-// K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))
-
 
 CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     : KCModule(KAboutData::pluginData("kcm_kdevcmake_settings"), parent, args), m_currentModel(0)

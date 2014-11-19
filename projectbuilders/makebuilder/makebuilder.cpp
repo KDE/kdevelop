@@ -33,7 +33,6 @@
 
 Q_LOGGING_CATEGORY(MAKEBUILDER, "kdevelop.projectbuilders.makebuilder")
 K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
-// K_EXPORT_PLUGIN(MakeBuilderFactory(KAboutData("kdevmakebuilder","kdevmakebuilder", ki18n("Make Builder"), "0.1", ki18n("Support for building Make projects"), KAboutData::License_GPL)))
 
 MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin("kdevmakebuilder", parent)

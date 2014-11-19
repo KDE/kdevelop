@@ -32,7 +32,6 @@ Q_DECLARE_LOGGING_CATEGORY(NINJABUILDER)
 
 Q_LOGGING_CATEGORY(NINJABUILDER, "kdevelop.projectbuilders.ninjabuilder")
 K_PLUGIN_FACTORY(NinjaBuilderFactory, registerPlugin<KDevNinjaBuilderPlugin>(); )
-// K_EXPORT_PLUGIN(NinjaBuilderFactory(KAboutData("kdevninja", "kdevninja", ki18n("Ninja Builder"), "0.1", ki18n("Support for building Ninja projects"), KAboutData::License_GPL)))
 
 KDevNinjaBuilderPlugin::KDevNinjaBuilderPlugin(QObject* parent, const QVariantList& )
     : KDevelop::IPlugin("kdevninja", parent)

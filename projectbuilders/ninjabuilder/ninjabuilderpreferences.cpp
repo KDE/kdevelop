@@ -31,7 +31,6 @@
 #include "ninjabuilderconfig.h"
 
 K_PLUGIN_FACTORY(NinjaBuilderPreferencesFactory, registerPlugin<NinjaBuilderPreferences>(); )
-K_EXPORT_PLUGIN(NinjaBuilderPreferencesFactory("kcm_kdev_ninjabuilder"))
 
 NinjaBuilderPreferences::NinjaBuilderPreferences(QWidget* parent, const QVariantList& args)
     : ProjectKCModule<NinjaBuilderSettings>( KAboutData::pluginData("kcm_kdev_ninjabuilder"),

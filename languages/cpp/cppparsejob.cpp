@@ -428,12 +428,9 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
     if(ICore::self()->shuttingDown() || !ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
       return;
 
-    if (!parentJob()->cpp())
-      return;
-
     //If we have a parent, the parse-mutex is already locked
     QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
-    if(!ICore::self()->languageController()->language("C++")->languageSupport())
+    if(!ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
       return;
 
     initialize();

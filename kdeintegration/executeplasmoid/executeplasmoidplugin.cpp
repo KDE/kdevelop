@@ -33,10 +33,6 @@ using namespace KDevelop;
 
 Q_LOGGING_CATEGORY(EXECUTEPLASMOID, "kdevelop.kdeintegration.executeplasmoid")
 K_PLUGIN_FACTORY(KDevExecutePlasmoidFactory, registerPlugin<ExecutePlasmoidPlugin>(); )
-// K_EXPORT_PLUGIN(KDevExecutePlasmoidFactory(KAboutData("kdevexecuteplasmoid", "kdevexecuteplasmoid", ki18n("Execute plasmoid support"), "55.2",
-//                                                       ki18n("Allows running of plasmoids"), KAboutData::License_GPL)
-//     .addAuthor(ki18n("Aleix Pol Gonzalez"), ki18n("Author"), "aleixpol@kde.org", "http://kdevelop.org")
-// ))
 
 ExecutePlasmoidPlugin::ExecutePlasmoidPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin("kdevexecuteplasmoid", parent)

@@ -57,6 +57,7 @@ void TestManPageModel::testDocumentation()
 
     const QString description = documentation.description();
     if (!description.isEmpty()) {
+        qDebug() << description;
         // check that we've found the correct page by checking some references
         QVERIFY(description.contains("dlclose"));
         QVERIFY(description.contains("dlerror"));

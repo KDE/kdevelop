@@ -83,9 +83,6 @@ namespace KDevelop
 {
 
 K_PLUGIN_FACTORY(DefinesAndIncludesManagerFactory, registerPlugin<DefinesAndIncludesManager>(); )
-//K_EXPORT_PLUGIN(DefinesAndIncludesManagerFactory(KAboutData("kdevdefinesandincludesmanager",
-//"kdevdefinesandincludesmanager", ki18n("Custom Defines and Includes Manager"), "0.1", ki18n(""),
-//KAboutData::License_GPL)))
 
 DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
     : IPlugin("kdevdefinesandincludesmanager", parent )

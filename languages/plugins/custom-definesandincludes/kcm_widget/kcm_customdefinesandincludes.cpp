@@ -50,7 +50,6 @@ ICompilerProvider* compilerProvider()
 }
 
 K_PLUGIN_FACTORY(DefinesAndIncludesFactory, registerPlugin<DefinesAndIncludes>(); )
-//K_EXPORT_PLUGIN(DefinesAndIncludesFactory("kcm_kdevcustomdefinesandincludes", "kdevcustomdefinesandincludes"))
 
 DefinesAndIncludes::DefinesAndIncludes( QWidget* parent, const QVariantList& args )
     : ProjectKCModule<CustomDefinesAndIncludes>(KAboutData::pluginData("kcm_kdevcustomdefinesandincludes"), parent, args)
