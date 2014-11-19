@@ -17,7 +17,7 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "reloadtest.h"
+#include "test_projectload.h"
 
 #include <QtTest/QTest>
 #include <QSignalSpy>
@@ -39,7 +39,7 @@
 
 #include <KIO/Global>
 
-QTEST_MAIN(ProjectLoadTest)
+QTEST_MAIN(TestProjectLoad)
 
 Q_DECLARE_METATYPE(KDevelop::IProject*);
 
@@ -56,7 +56,7 @@ void exec(const QString &cmd)
     Q_ASSERT(proc.exitStatus() == 0);
 }
 
-void ProjectLoadTest::initTestCase()
+void TestProjectLoad::initTestCase()
 {
     AutoTestShell::init();
     TestCore::initialize();
@@ -69,12 +69,12 @@ void ProjectLoadTest::initTestCase()
     }
 }
 
-void ProjectLoadTest::cleanupTestCase()
+void TestProjectLoad::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void ProjectLoadTest::init()
+void TestProjectLoad::init()
 {
     foreach(IProject* p, ICore::self()->projectController()->projects()) {
         ICore::self()->projectController()->closeProject(p);
@@ -126,7 +126,7 @@ TestProject makeProject()
     return ret;
 }
 
-void ProjectLoadTest::addRemoveFiles()
+void TestProjectLoad::addRemoveFiles()
 {
     const TestProject p = makeProject();
 
@@ -166,7 +166,7 @@ void ProjectLoadTest::addRemoveFiles()
     QCOMPARE(project->projectItem()->fileList().count(), 1);
 }
 
-void ProjectLoadTest::removeDirRecursive()
+void TestProjectLoad::removeDirRecursive()
 {
     const TestProject p = makeProject();
 
@@ -251,7 +251,7 @@ void fillProject(int filesPerDir, int dirs, const TestProject& project, bool wai
     }
 }
 
-void ProjectLoadTest::addLotsOfFiles()
+void TestProjectLoad::addLotsOfFiles()
 {
     TestProject p = makeProject();
 
@@ -267,7 +267,7 @@ void ProjectLoadTest::addLotsOfFiles()
     QTest::qWait(2000);
 }
 
-void ProjectLoadTest::addMultipleJobs()
+void TestProjectLoad::addMultipleJobs()
 {
     const TestProject p1 = makeProject();
     fillProject(10, 25, p1, false);
@@ -290,7 +290,7 @@ void ProjectLoadTest::addMultipleJobs()
     QCOMPARE(ICore::self()->projectController()->projects().size(), 2);
 }
 
-void ProjectLoadTest::raceJob()
+void TestProjectLoad::raceJob()
 {
     // our goal here is to try to reproduce https://bugs.kde.org/show_bug.cgi?id=260741
     // my idea is that this can be triggered by the following:
@@ -332,7 +332,7 @@ void ProjectLoadTest::raceJob()
     QCOMPARE(testItem->baseName(), QString("test2"));
 }
 
-void ProjectLoadTest::addDuringImport()
+void TestProjectLoad::addDuringImport()
 {
     // our goal here is to try to reproduce an issue in the optimized filesForPath implementation
     // which requires the project to be associated to the model to function properly

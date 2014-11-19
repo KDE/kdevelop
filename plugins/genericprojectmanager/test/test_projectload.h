@@ -27,7 +27,7 @@ namespace KDevelop
 class TestCore;
 }
 
-class ProjectLoadTest : public QObject
+class TestProjectLoad : public QObject
 {
 Q_OBJECT
 
