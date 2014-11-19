@@ -23,6 +23,7 @@
 #include <QTemporaryFile>
 #include <kio/job.h>
 #include <kio/copyjob.h>
+#include <kio/deletejob.h>
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
@@ -64,7 +65,7 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const QUrl& url, con
     }
 
     //if we didn't find a VCS, we remove using KIO (if the file still exists, the vcs plugin might have simply deleted the url without returning a job
-    auto deleteJob = KIO::file_delete(url);
+    auto deleteJob = KIO::del(url);
     KJobWidgets::setWindow(deleteJob, window);
     if (!deleteJob->exec() && url.isLocalFile() && (QFileInfo(url.toLocalFile())).exists()) {
         KMessageBox::error( window,
