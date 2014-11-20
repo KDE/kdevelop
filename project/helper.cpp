@@ -94,7 +94,7 @@ bool KDevelop::createFile(const QUrl& file)
     {
         auto uploadJob = KIO::storedPut(QByteArray("\n"), file, -1);
         KJobWidgets::setWindow(uploadJob, QApplication::activeWindow());
-        if (uploadJob->exec()) {
+        if (!uploadJob->exec()) {
             KMessageBox::error( QApplication::activeWindow(),
                                 i18n( "Cannot create file <i>%1</i>.", file.toDisplayString(QUrl::PreferLocalFile) ) );
             return false;
