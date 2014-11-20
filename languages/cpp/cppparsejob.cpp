@@ -377,7 +377,7 @@ LineContextPair contentFromProxy(LineContextPair ctx) {
           ReferencedTopDUContext ref(ctx.context);
         }
         if(ctx.context->importedParentContexts().isEmpty()) {
-          qWarning() << "proxy-context for" << ctx.context->url().str() << "has no imports!" << ctx.context->ownIndex();
+          qCWarning(CPP) << "proxy-context for" << ctx.context->url().str() << "has no imports!" << ctx.context->ownIndex();
           ///@todo Find out how this can happen
 //           Q_ASSERT(0);
           return LineContextPair(0, 0);
@@ -779,7 +779,7 @@ void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Th
           continue;
         Q_ASSERT(context.context);
         if(!contentContext->imports(context.context.data(), CursorInRevision::invalid())) {
-          qWarning() << "Context should be imported, but is not:" << contentContext->url().str() << " <- " << context.context->url().str();
+          qCWarning(CPP) << "Context should be imported, but is not:" << contentContext->url().str() << " <- " << context.context->url().str();
         }
       }
     }

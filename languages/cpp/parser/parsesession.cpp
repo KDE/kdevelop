@@ -78,7 +78,7 @@ void ParseSession::mapAstUse(AST *node, const SimpleUse& use)
 {
   //Duplicates shouldn't exist(? Same for uses?)
   if(m_AstToUse.contains(node) && m_AstToUse[node] != use)
-    qWarning() << "Found dupplicate use mapping for node" << node;
+    qCWarning(CPPPARSER) << "Found dupplicate use mapping for node" << node;
 
   m_AstToUse[node] = use;
   m_UseToAst[use] = node;

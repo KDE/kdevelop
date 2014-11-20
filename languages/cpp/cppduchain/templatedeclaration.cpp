@@ -615,7 +615,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
               newInstance.baseClass = newType->indexed();
               klass->replaceBaseClass( num, newInstance );
             } else {
-              qWarning() << "Resolved bad base-class" << delayed->toString() << (newType ? newType->toString() : QString());
+              qCWarning(CPPDUCHAIN) << "Resolved bad base-class" << delayed->toString() << (newType ? newType->toString() : QString());
             }
           }
           ++num;
@@ -646,7 +646,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
           ThreadLocalData& data = threadDataLocal();
           PushValue<uint> safety(data.aliasDepth, data.delayedDepth + 1);
           if(data.aliasDepth > 30) {
-            qWarning() << "depth-limit reached while resolving alias-declaration" << alias->identifier().toString() << "within" << parentContext->scopeIdentifier(true).toString();
+            qCWarning(CPPDUCHAIN) << "depth-limit reached while resolving alias-declaration" << alias->identifier().toString() << "within" << parentContext->scopeIdentifier(true).toString();
           }else {
             ///For alias declaration, we resolve the declaration that is aliased instead of a type.
             ///For this reason, template alias-declarations have a DelayedType assigned
@@ -984,7 +984,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
     return 0;
 
   if (m_instantiationDepth > 5) {
-      qWarning() << "depth-limit reached while instantiating template declaration with" << _templateArguments.toString();
+      qCWarning(CPPDUCHAIN) << "depth-limit reached while instantiating template declaration with" << _templateArguments.toString();
       return 0;
   }
   PushValue<int> depthCounter(m_instantiationDepth, m_instantiationDepth + 1);
@@ -1178,7 +1178,7 @@ Declaration* SpecialTemplateDeclaration<ForwardDeclaration>::resolve(const TopDU
       }
     }else{
       //TODO: report this in the problem reporter?
-      qWarning() << "Problem in template forward-declaration";
+      qCWarning(CPPDUCHAIN) << "Problem in template forward-declaration";
       return 0;
     }
   }else{

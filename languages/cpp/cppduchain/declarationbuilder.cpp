@@ -1012,7 +1012,7 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
     decl->setAbstractType(enumeratorType.cast<AbstractType>());
   }else if(!lastType().cast<DelayedType>()){ //If it's in a template, it may be DelayedType
     AbstractType::Ptr type = lastType();
-    qWarning() << "not assigned enumerator type:" << typeid(*type.data()).name() << type->toString();
+    qCWarning(CPPDUCHAIN) << "not assigned enumerator type:" << typeid(*type.data()).name() << type->toString();
   }
 }
 
@@ -1195,7 +1195,7 @@ void DeclarationBuilder::visitBaseSpecifier(BaseSpecifierAST *node) {
 
       currentClass->addBaseClass(instance);
     }else{
-      qWarning() << "base-specifier without class declaration";
+      qCWarning(CPPDUCHAIN) << "base-specifier without class declaration";
     }
   }
   addBaseType(instance, node);

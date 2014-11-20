@@ -384,7 +384,7 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
                 filesToUpdate << constructor->url();
         }
         else
-            qWarning() << "A correct AST node for constructor: " << constructor->toString() << " was not found.";
+            qCWarning(CPP) << "A correct AST node for constructor: " << constructor->toString() << " was not found.";
     }
 
     //TODO Handle assignment operator here as well, and check selection logic
@@ -496,7 +496,7 @@ void MakeImplementationPrivate::addDeclarationsToPrivate(CppNewClass & classGene
             documentChangeSet().addChange(removeDeclarations);
         }
         else
-            qWarning() << "Did not find an AST node mapped for declarationn: " << decl->toString();
+            qCWarning(CPP) << "Did not find an AST node mapped for declarationn: " << decl->toString();
     }
 
     //Remove all the declarations now, so they don't interfere later

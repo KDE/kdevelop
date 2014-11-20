@@ -17,6 +17,8 @@
 */
 
 #include "templateresolver.h"
+
+#include "debug.h"
 #include "cpptypes.h"
 #include "templatedeclaration.h"
 #include "templateparameterdeclaration.h"
@@ -305,7 +307,7 @@ void TemplateResolver::matchTemplateParameterTypesInternal ( const AbstractType:
 {
   if (!argumentType || !parameterType)
   {
-    qWarning() << "Invalid Type Encountered";
+    qCWarning(CPPDUCHAIN) << "Invalid Type Encountered";
     res.valid = false;
     return;
   }

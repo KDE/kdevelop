@@ -447,7 +447,7 @@ class CppDUContext : public BaseContext {
               copy = templateDecl->instantiate(memberInstantiationInformation, source);
               //This can happen in case of explicit specializations
 //               if(copy->context() != this)
-//                 qWarning() << "serious problem: Instatiation is in wrong context, should be in this one";
+//                 qCWarning(CPPDUCHAIN) << "serious problem: Instatiation is in wrong context, should be in this one";
 
               if(copy)
                 ret.append(copy);
