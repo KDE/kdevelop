@@ -68,7 +68,7 @@ Sublime::MainWindow* toSublimeWindow(KParts::MainWindow* window)
 void TestBuddies::initTestCase()
 {
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
-    AutoTestShell::init();
+    AutoTestShell::init({QStringLiteral("kdevclangsupport")});
     TestCore::initialize();
     m_documentController = ICore::self()->documentController();
     m_uiController = ICore::self()->uiController();
