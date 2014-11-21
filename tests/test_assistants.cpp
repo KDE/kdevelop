@@ -22,15 +22,23 @@
 #include <QtTest/QtTest>
 #include <QTemporaryDir>
 
+#include <ktexteditor/view.h>
+#include <ktexteditor/document.h>
+
+#include <kparts/mainwindow.h>
+
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+
 #include <util/foregroundlock.h>
+
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/isourceformattercontroller.h>
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/ilanguage.h>
+
 #include <language/assistant/staticassistant.h>
 #include <language/assistant/staticassistantsmanager.h>
 #include <language/assistant/renameaction.h>
@@ -38,8 +46,8 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainutils.h>
 #include <language/codegen/coderepresentation.h>
+
 #include <shell/documentcontroller.h>
-#include <interfaces/ilanguage.h>
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -121,7 +129,7 @@ public:
         else {
             document = m_headerDocument;
         }
-        KTextEditor::View* view = document.textDoc->createView(nullptr);
+        KTextEditor::View* view = document.textDoc->createView(ICore::self()->uiController()->activeMainWindow());
         view->setSelection(where);
         view->removeSelectionText();
         view->setCursorPosition(where.start());
