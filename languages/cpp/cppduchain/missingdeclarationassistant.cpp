@@ -313,8 +313,13 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(const MissingDeclaratio
 {
   bool actionAdded = false;
   DUChainReadLocker lock;
-  if(p->type->identifier().identifier().identifier().isEmpty())
+
+  // support for namespaced types/variable names is broken atm, so just rather disable it
+  // i.e. writing 'foo::bar()' will just add 'bar' to the container
+  auto qualifiedIdentifier = p->type->identifier().identifier().identifier();
+  if (qualifiedIdentifier.isEmpty() || qualifiedIdentifier.count() > 1)
     return;
+
   kDebug() << "creating assistant for" << type->toString() << "assigned:" << type->assigned.toString();
 
   DUContext* searchFrom = type->searchStartContext.data();
