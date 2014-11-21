@@ -60,7 +60,7 @@ StaticAssistantsManager *staticAssistantsManager() { return Core::self()->langua
 void TestAssistants::initTestCase()
 {
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
-    AutoTestShell::init();
+    AutoTestShell::init({QStringLiteral("kdevclangsupport")});
     TestCore::initialize();
     DUChain::self()->disablePersistentStorage();
     Core::self()->languageController()->backgroundParser()->setDelay(0);
