@@ -8,7 +8,8 @@ QTEST_MAIN(TestPool)
 
 
 PoolObject::PoolObject() { foo = 3; }
-PoolObject::~PoolObject() { foo = 0; }
+// Prevent compiler from optimizing out call to dtor, at least true for GCC 4.9.1 and -O2
+PoolObject::~PoolObject() { *static_cast<volatile int*>(&foo) = 0; }
 
 TestPool::TestPool()
 {
