@@ -188,7 +188,6 @@ void CompilerProvider::projectOpened( KDevelop::IProject* project )
 void CompilerProvider::projectClosed( KDevelop::IProject* project )
 {
     removePoject( project );
-    definesAndIncludesDebug() << "Removed project: " << project->name();
 }
 
 QVector< CompilerPointer > CompilerProvider::compilers() const
