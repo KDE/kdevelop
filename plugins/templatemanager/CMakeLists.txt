@@ -4,7 +4,7 @@ set(kdevtemplatemanager_config_SRCS
     templatepage.cpp 
 )
 
-qt5_wrap_ui(kdevtemplatemanager_config_SRCS templateconfig.ui templatepage.ui)
+ki18n_wrap_ui(kdevtemplatemanager_config_SRCS templateconfig.ui templatepage.ui)
 
 add_library( kdevtemplatemanager_config MODULE ${kdevtemplatemanager_config_SRCS} )
 

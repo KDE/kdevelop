@@ -18,7 +18,7 @@ set(kdevexecutescript_PART_SRCS
     scriptappjob.cpp
 )
 
-qt5_wrap_ui( kdevexecutescript_PART_SRCS ${kdevexecutescript_PART_UIS} )
+ki18n_wrap_ui( kdevexecutescript_PART_SRCS ${kdevexecutescript_PART_UIS} )
 add_library(kdevexecutescript MODULE ${kdevexecutescript_PART_SRCS})
 target_link_libraries(kdevexecutescript
     KDev::Interfaces

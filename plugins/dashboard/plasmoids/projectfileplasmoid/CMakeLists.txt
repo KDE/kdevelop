@@ -2,7 +2,7 @@ project(projectitemelement)
 
 set(projectfileelement_SRCS projectfileelement.cpp)
 
-qt5_wrap_ui(projectfileelement_SRCS config.ui)
+ki18n_wrap_ui(projectfileelement_SRCS config.ui)
 add_library(plasma_kdev_projectfileelement MODULE ${projectfileelement_SRCS})
 target_link_libraries(plasma_kdev_projectfileelement KF5::Plasma KF5::KDELibs4Support)
 

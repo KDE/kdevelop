@@ -46,7 +46,7 @@ set(KDevPlatformVcs_LIB_SRCS
     interfaces/ipatchsource.cpp
 )
 
-qt5_wrap_ui(KDevPlatformVcs_LIB_SRCS ${KDevPlatformVcs_UIS})
+ki18n_wrap_ui(KDevPlatformVcs_LIB_SRCS ${KDevPlatformVcs_UIS})
 add_library(KDevPlatformVcs ${KDevPlatformVcs_LIB_SRCS})
 add_library(KDev::Vcs ALIAS KDevPlatformVcs)
 generate_export_header(KDevPlatformVcs EXPORT_FILE_NAME vcsexport.h)

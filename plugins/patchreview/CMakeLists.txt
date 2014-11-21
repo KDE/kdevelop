@@ -11,7 +11,7 @@ set(patchreview_PART_SRCS
     standardpatchexport.cpp
 )
 
-qt5_wrap_ui(patchreview_PART_SRCS patchreview.ui localpatchwidget.ui)
+ki18n_wrap_ui(patchreview_PART_SRCS patchreview.ui localpatchwidget.ui)
 
 
 add_library(kdevpatchreview MODULE ${patchreview_PART_SRCS})

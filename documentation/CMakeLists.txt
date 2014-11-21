@@ -9,7 +9,7 @@ set(KDevPlatformDocumentation_LIB_SRCS
     documentationview.cpp
 )
 
-qt5_wrap_ui(KDevPlatformDocumentation_LIB_SRCS documentationfindwidget.ui)
+ki18n_wrap_ui(KDevPlatformDocumentation_LIB_SRCS documentationfindwidget.ui)
 add_library(KDevPlatformDocumentation ${KDevPlatformDocumentation_LIB_SRCS})
 add_library(KDev::Documentation ALIAS KDevPlatformDocumentation)
 generate_export_header(KDevPlatformDocumentation EXPORT_FILE_NAME documentationexport.h)

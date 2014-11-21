@@ -65,7 +65,7 @@ set(KDevPlatformShell_UI
     projectsourcepage.ui
 )
 
-qt5_wrap_ui( KDevPlatformShell_LIB_SRCS ${KDevPlatformShell_UI} )
+ki18n_wrap_ui( KDevPlatformShell_LIB_SRCS ${KDevPlatformShell_UI} )
 add_library(KDevPlatformShell ${KDevPlatformShell_LIB_SRCS})
 add_library(KDev::Shell ALIAS KDevPlatformShell)
 

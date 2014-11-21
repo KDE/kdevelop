@@ -76,7 +76,7 @@ set(kdevsubversion_PART_UI
     ui/checkoutmetadatawidget.ui
 )
 
-qt5_wrap_ui(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})
+ki18n_wrap_ui(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})
 add_library(kdevsubversion MODULE ${kdevsubversion_PART_SRCS} ${kdevsubversion_JOB_SRCS} ${kdevsubversion_WRAPPER_SRCS})
 
 target_link_libraries(kdevsubversion

@@ -11,7 +11,7 @@ set(kdevprojectmanagerview_PLUGIN_SRCS
     projectmodelitemdelegate.cpp
 )
 
-qt5_wrap_ui( kdevprojectmanagerview_PLUGIN_SRCS projectbuildsetwidget.ui projectmanagerview.ui )
+ki18n_wrap_ui( kdevprojectmanagerview_PLUGIN_SRCS projectbuildsetwidget.ui projectmanagerview.ui )
 
 add_library(kdevprojectmanagerview MODULE ${kdevprojectmanagerview_PLUGIN_SRCS})
 target_link_libraries(kdevprojectmanagerview

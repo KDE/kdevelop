@@ -39,7 +39,7 @@ add_subdirectory(duchainify)
 
 add_subdirectory(tests)
 
-qt5_wrap_ui(KDevPlatformUtil_LIB_SRCS ${KDevPlatformUtil_LIB_US})
+ki18n_wrap_ui(KDevPlatformUtil_LIB_SRCS ${KDevPlatformUtil_LIB_US})
 add_library(KDevPlatformUtil ${KDevPlatformUtil_LIB_SRCS})
 add_library(KDev::Util ALIAS KDevPlatformUtil)
 

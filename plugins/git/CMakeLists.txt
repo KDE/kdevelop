@@ -16,7 +16,7 @@ set(kdevgit_PART_SRCS
     gitplugincheckinrepositoryjob.cpp
 )
 
-qt5_wrap_ui(kdevgit_PART_SRCS stashmanagerdialog.ui)
+ki18n_wrap_ui(kdevgit_PART_SRCS stashmanagerdialog.ui)
 add_library(kdevgit MODULE ${kdevgit_PART_SRCS})
 
 configure_file(kdevgit.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgit.desktop)

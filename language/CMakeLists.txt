@@ -151,7 +151,7 @@ if (Grantlee5_FOUND)
     list(APPEND KDevPlatformLanguage_LIB_SRCS ${grantlee_LIB_SRCS})
 endif()
 
-qt5_wrap_ui(KDevPlatformLanguage_LIB_SRCS
+ki18n_wrap_ui(KDevPlatformLanguage_LIB_SRCS
     codegen/basicrefactoring.ui
     codegen/progressdialogs/refactoringdialog.ui)
 

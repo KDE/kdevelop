@@ -19,7 +19,7 @@ set(kdevgrepview_PART_UI
     grepoutputview.ui
 )
 
-qt5_wrap_ui(kdevgrepview_PART_SRCS ${kdevgrepview_PART_UI})
+ki18n_wrap_ui(kdevgrepview_PART_SRCS ${kdevgrepview_PART_UI})
 add_library(kdevgrepview MODULE ${kdevgrepview_PART_SRCS})
 target_link_libraries(kdevgrepview
     KF5::Parts

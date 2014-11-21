@@ -14,7 +14,7 @@ set(kdevgrepview_PART_UI
     ../grepoutputview.ui
 )
 
-qt5_wrap_ui(findReplaceTest_SRCS ${kdevgrepview_PART_UI})
+ki18n_wrap_ui(findReplaceTest_SRCS ${kdevgrepview_PART_UI})
 ecm_add_test(${findReplaceTest_SRCS}
     TEST_NAME test_findreplace
     LINK_LIBRARIES Qt5::Test KF5::KDELibs4Support KDev::Language KDev::Project KDev::Util KDev::Tests

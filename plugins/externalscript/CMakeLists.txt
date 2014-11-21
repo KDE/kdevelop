@@ -14,7 +14,7 @@ set(kdevexternalscript_PART_UI
     editexternalscript.ui
 )
 
-qt5_wrap_ui(kdevexternalscript_PART_SRCS ${kdevexternalscript_PART_UI})
+ki18n_wrap_ui(kdevexternalscript_PART_SRCS ${kdevexternalscript_PART_UI})
 
 add_library(kdevexternalscript MODULE ${kdevexternalscript_PART_SRCS})
 

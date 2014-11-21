@@ -16,7 +16,7 @@ set(kdevfiletemplates_PART_SRCS
     debug.cpp
 )
 
-qt5_wrap_ui(kdevfiletemplates_PART_SRCS
+ki18n_wrap_ui(kdevfiletemplates_PART_SRCS
     templatepreviewtoolview.ui
     ui/licensechooser.ui
     ui/newclass.ui

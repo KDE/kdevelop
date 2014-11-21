@@ -30,7 +30,7 @@ set(kdevcvs_PART_UI
     checkoutdialog.ui
 )
 
-qt5_wrap_ui(kdevcvs_PART_SRCS ${kdevcvs_PART_UI})
+ki18n_wrap_ui(kdevcvs_PART_SRCS ${kdevcvs_PART_UI})
 add_library(kdevcvs MODULE ${kdevcvs_PART_SRCS})
 
 target_link_libraries(kdevcvs

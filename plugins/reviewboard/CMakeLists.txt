@@ -7,7 +7,7 @@ set(kdevreviewboard_PART_SRCS
     reviewboardjobs.cpp
     debug.cpp
 )
-qt5_wrap_ui(kdevreviewboard_PART_SRCS reviewpatch.ui)
+ki18n_wrap_ui(kdevreviewboard_PART_SRCS reviewpatch.ui)
 
 add_library(kdevreviewboard MODULE ${kdevreviewboard_PART_SRCS})
 # FIXME: needs to be added for utilexport.h (needed because iproject MUST include util/path.h or moc breaks)

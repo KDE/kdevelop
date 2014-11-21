@@ -16,7 +16,7 @@ set(kdevappwizard_PART_UI
     projectvcspage.ui
 )
 
-qt5_wrap_ui(kdevappwizard_PART_SRCS ${kdevappwizard_PART_UI})
+ki18n_wrap_ui(kdevappwizard_PART_SRCS ${kdevappwizard_PART_UI})
 
 add_library(kdevappwizard MODULE ${kdevappwizard_PART_SRCS})
 target_link_libraries(kdevappwizard

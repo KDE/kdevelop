@@ -7,7 +7,7 @@ preferences.cpp
 set( documentview_config_UI
 settingswidget.ui
 )
-qt5_wrap_ui( documentview_config_SRC ${documentview_config_UI} )
+ki18n_wrap_ui( documentview_config_SRC ${documentview_config_UI} )
 
 kconfig_add_kcfg_files(documentview_config_SRC config.kcfgc )
 add_library(kcm_documentview_settings MODULE ${documentview_config_SRC})

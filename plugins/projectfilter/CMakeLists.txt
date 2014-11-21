@@ -35,7 +35,7 @@ set( projectfilterkcm_UI
     projectfiltersettings.ui
 )
 
-qt5_wrap_ui( projectfilterkcm_SRCS ${projectfilterkcm_UI} )
+ki18n_wrap_ui( projectfilterkcm_SRCS ${projectfilterkcm_UI} )
 kconfig_add_kcfg_files( projectfilterkcm_SRCS projectfiltersettings.kcfgc )
 add_library( kcm_kdevprojectfilter MODULE ${projectfilterkcm_SRCS} )
 target_link_libraries( kcm_kdevprojectfilter
