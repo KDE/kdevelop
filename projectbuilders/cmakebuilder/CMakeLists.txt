@@ -40,7 +40,7 @@ set( cmakebuilder_cfg_UI
 )
 
 
-qt5_wrap_ui( cmakebuilder_cfg_SRCS ${cmakebuilder_cfg_UI} )
+ki18n_wrap_ui( cmakebuilder_cfg_SRCS ${cmakebuilder_cfg_UI} )
 kconfig_add_kcfg_files( cmakebuilder_cfg_SRCS cmakebuilderconfig.kcfgc )
 
 add_library(kcm_kdev_cmakebuilder MODULE ${cmakebuilder_cfg_SRCS} )

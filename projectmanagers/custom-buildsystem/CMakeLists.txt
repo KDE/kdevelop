@@ -20,7 +20,7 @@ set( custom_kcm_SRCS
         kcm_custombuildsystem.cpp
         debugarea.cpp
    )
-qt5_wrap_ui( custom_kcm_SRCS 
+ki18n_wrap_ui( custom_kcm_SRCS 
                         configwidget.ui
                         custombuildsystemconfigwidget.ui
                  )

@@ -14,7 +14,7 @@ set( kcm_customdefinesandincludes_SRCS
         compilerswidget.cpp
    )
 
-qt5_wrap_ui( kcm_customdefinesandincludes_SRCS
+ki18n_wrap_ui( kcm_customdefinesandincludes_SRCS
         batchedit.ui
         includeswidget.ui
         defineswidget.ui

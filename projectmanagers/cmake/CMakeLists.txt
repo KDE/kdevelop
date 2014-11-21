@@ -83,7 +83,7 @@ remove_definitions( -DQT_NO_STL )
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
 
-qt5_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
+ki18n_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
 add_library( kdevcmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdevcmakecommon
                         KF5::TextEditor KF5::KDELibs4Support KDev::Interfaces KDev::Project KDev::Util
@@ -91,7 +91,7 @@ target_link_libraries( kdevcmakecommon
                         )
 generate_export_header(kdevcmakecommon EXPORT_FILE_NAME cmakecommonexport.h)
 
-qt5_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
+ki18n_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
 add_library(kdevcmakemanager MODULE ${cmakemanager_SRCS} ../custommake/makefileresolver/makefileresolver.cpp)
 target_link_libraries( kdevcmakemanager  KF5::KIOWidgets KDev::Util
                         KDev::Interfaces kdevcmakecommon
@@ -105,7 +105,7 @@ target_link_libraries( kdevcmakedocumentation
                         KDev::Documentation
                         KF5::TextEditor Qt5::WebKitWidgets)
 
-qt5_wrap_ui( cmakesettings_SRCS ${cmakesettings_UI} )
+ki18n_wrap_ui( cmakesettings_SRCS ${cmakesettings_UI} )
 add_library(kcm_kdevcmake_settings MODULE ${cmakesettings_SRCS} )
 target_link_libraries( kcm_kdevcmake_settings KF5::KIOWidgets KF5::KDELibs4Support
                        KDev::Interfaces KDev::Project KDev::Util

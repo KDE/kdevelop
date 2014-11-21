@@ -3,7 +3,7 @@ set( noprojectincludesanddefines_SRCS
         noprojectincludepathsmanager.cpp
    )
 
-qt5_wrap_ui( noprojectincludesanddefines_SRCS
+ki18n_wrap_ui( noprojectincludesanddefines_SRCS
         noprojectcustomincludepaths.ui )
 
 add_library(kdev4noprojectincludesanddefines STATIC

@@ -14,7 +14,7 @@ install(TARGETS kdevninja DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_
 
 ########### configurator ##############
 
-qt5_wrap_ui(ninjabuilder_cfg_SRCS ninjaconfig.ui)
+ki18n_wrap_ui(ninjabuilder_cfg_SRCS ninjaconfig.ui)
 kconfig_add_kcfg_files(ninjabuilder_cfg_SRCS ninjabuilderconfig.kcfgc)
 add_library(kcm_kdev_ninjabuilder MODULE ninjabuilderpreferences.cpp ${ninjabuilder_cfg_SRCS})
 target_link_libraries(kcm_kdev_ninjabuilder

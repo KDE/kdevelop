@@ -17,7 +17,7 @@ set(kdevexecuteplasmoid_PART_SRCS
     plasmoidexecutionjob.cpp
 )
 
-qt5_wrap_ui( kdevexecuteplasmoid_PART_SRCS ${kdevexecuteplasmoid_PART_UIS} )
+ki18n_wrap_ui( kdevexecuteplasmoid_PART_SRCS ${kdevexecuteplasmoid_PART_UIS} )
 add_library(kdevexecuteplasmoid MODULE ${kdevexecuteplasmoid_PART_SRCS}  )
 target_link_libraries(kdevexecuteplasmoid
     KDev::Language

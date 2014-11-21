@@ -28,7 +28,7 @@ set(kdevqthelp_config_SRCS
     debug.cpp
 )
 
-qt5_wrap_ui(kdevqthelp_config_SRCS
+ki18n_wrap_ui(kdevqthelp_config_SRCS
     qthelpconfig.ui
     qthelpconfigeditdialog.ui
 )
