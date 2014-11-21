@@ -24,8 +24,8 @@ import QtQuick 1.0
 Rectangle {
     id: root
 
-    width: flow.width + 16
-    height: flow.height + 7
+    width: mainFlow.width + 16
+    height: mainFlow.height + 10
 
     border.width: 1
     border.color: Qt.lighter(config.foreground)
@@ -34,39 +34,51 @@ Rectangle {
         GradientStop { position: 1.0; color: config.background }
     }
 
-    // Layout for the buttons and the title
     Flow {
-        id: flow
-        anchors.centerIn: parent
+        id: mainFlow
+
+        anchors {
+            centerIn: parent
+        }
+
         flow: config.useVerticalLayout ? Flow.TopToBottom : Flow.LeftToRight
-        spacing: 8
+        spacing: config.useVerticalLayout ? 4 : 8
 
         Text {
             id: title
+
             anchors.verticalCenter: parent.flow == Flow.LeftToRight ? parent.verticalCenter : undefined
             anchors.verticalCenterOffset: 1
+
             color: config.foreground
             font.bold: true
             text: config.title
         }
 
-        Repeater {
-            id: items
-            objectName: "items"
+        // Layout for the buttons
+        Flow {
+            id: buttonsFlow
 
-            y: 5
-            model: config.model
+            spacing: 8
 
-            AssistantButton {
-                text: modelData.text
-                highlighted: config.active
-                // what is displayed in the hotkey field of the button
-                button: index == items.model.length - 1 ? 0 : index + 1
-                foreground: config.foreground
-                background: config.background
-                highlight: config.highlight
+            Repeater {
+                id: items
+                objectName: "items"
 
-                onTriggered: { modelData.trigger() }
+                y: 5
+                model: config.model
+
+                AssistantButton {
+                    text: modelData.text
+                    highlighted: config.active
+                    // what is displayed in the hotkey field of the button
+                    button: index == items.model.length - 1 ? 0 : index + 1
+                    foreground: config.foreground
+                    background: config.background
+                    highlight: config.highlight
+
+                    onTriggered: { modelData.trigger() }
+                }
             }
         }
     }
