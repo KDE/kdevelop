@@ -60,22 +60,21 @@ Boston, MA 02110-1301, USA.
 
 namespace {
 
-// TODO kf5: use QStringLiteral
-const QString KEY_Plugins = "Plugins";
+const QString KEY_Plugins = QStringLiteral("Plugins");
 
-const QString KEY_LoadMode = "X-KDevelop-LoadMode";
-const QString KEY_Category = "X-KDevelop-Category";
-const QString KEY_Mode = "X-KDevelop-Mode";
-const QString KEY_Version = "X-KDevelop-Version";
-const QString KEY_Interfaces = "X-KDevelop-Interfaces";
-const QString KEY_Required = "X-KDevelop-IRequired";
-const QString KEY_Optional = "X-KDevelop-IOptional";
+const QString KEY_LoadMode = QStringLiteral("X-KDevelop-LoadMode");
+const QString KEY_Category = QStringLiteral("X-KDevelop-Category");
+const QString KEY_Mode = QStringLiteral("X-KDevelop-Mode");
+const QString KEY_Version = QStringLiteral("X-KDevelop-Version");
+const QString KEY_Interfaces = QStringLiteral("X-KDevelop-Interfaces");
+const QString KEY_Required = QStringLiteral("X-KDevelop-IRequired");
+const QString KEY_Optional = QStringLiteral("X-KDevelop-IOptional");
 
-const QString KEY_Global = "Global";
-const QString KEY_Project = "Project";
-const QString KEY_Gui = "GUI";
-const QString KEY_AlwaysOn = "AlwaysOn";
-const QString KEY_UserSelectable = "UserSelectable";
+const QString KEY_Global = QStringLiteral("Global");
+const QString KEY_Project = QStringLiteral("Project");
+const QString KEY_Gui = QStringLiteral("GUI");
+const QString KEY_AlwaysOn = QStringLiteral("AlwaysOn");
+const QString KEY_UserSelectable = QStringLiteral("UserSelectable");
 
 bool isUserSelectable( const KPluginInfo& info )
 {
