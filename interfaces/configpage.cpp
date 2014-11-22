@@ -53,7 +53,11 @@ ConfigPage::~ConfigPage()
 
 void ConfigPage::apply()
 {
-    Q_ASSERT(d->configManager); // if null, this method must be overriden
+    // if d->configManager is null, this method must be overriden
+    Q_ASSERT_X(d->configManager, metaObject()->className(),
+               "Config page does not use a KConfigSkeleton, but doesn't override apply()");
+
+    QSignalBlocker blockSigs(this); // we don't want to emit changed() while calling apply()
     d->configManager->updateSettings();
     d->configSkeleton->load();
     d->configManager->updateWidgets();
@@ -61,13 +65,17 @@ void ConfigPage::apply()
 
 void ConfigPage::defaults()
 {
-    Q_ASSERT(d->configManager); // if null, this method must be overriden
+    // if d->configManager is null, this method must be overriden
+    Q_ASSERT_X(d->configManager, metaObject()->className(),
+               "Config page does not use a KConfigSkeleton, but doesn't override defaults()");
     d->configManager->updateWidgetsDefault();
 }
 
 void ConfigPage::reset()
 {
-    Q_ASSERT(d->configManager); // if null, this method must be overriden
+    // if d->configManager is null, this method must be overriden
+    Q_ASSERT_X(d->configManager, metaObject()->className(),
+               "Config page does not use a KConfigSkeleton, but doesn't override reset()");
     d->configManager->updateWidgets();
 }
 
