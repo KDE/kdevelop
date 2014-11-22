@@ -34,7 +34,8 @@ public:
 };
 
 ConfigPage::ConfigPage(IPlugin* plugin, KCoreConfigSkeleton* config, QWidget* parent)
-        : KTextEditor::ConfigPage(parent), d(new ConfigPagePrivate(plugin))
+        : KTextEditor::ConfigPage(parent)
+        , d(new ConfigPagePrivate(plugin))
 {
     setConfigSkeleton(config);
 }
@@ -78,7 +79,7 @@ void ConfigPage::initConfigManager()
     }
 }
 
-KCoreConfigSkeleton* ConfigPage::configSkeleton()
+KCoreConfigSkeleton* ConfigPage::configSkeleton() const
 {
     return d->configSkeleton;
 }
@@ -110,7 +111,7 @@ ConfigPage* ConfigPage::childPage(int number)
     return nullptr;
 }
 
-IPlugin* ConfigPage::plugin()
+IPlugin* ConfigPage::plugin() const
 {
     return d->plugin;
 }

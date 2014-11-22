@@ -202,7 +202,7 @@ KDevelop::ConfigPage* KDevelop::IPlugin::configPage (int, QWidget*)
 
 QObject* KDevelop::IPlugin::createView(KTextEditor::MainWindow*)
 {
-    Q_ASSERT_X(false, Q_FUNC_INFO, "This should never be called!");
+    Q_UNREACHABLE();
     return nullptr;
 }
 

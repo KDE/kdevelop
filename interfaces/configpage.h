@@ -62,7 +62,7 @@ public:
     /**
      * @return the plugin that this config page was created by or nullptr if it was not created by a plugin.
      */
-    IPlugin* plugin();
+    IPlugin* plugin() const;
 
 public Q_SLOTS:
     virtual void apply() override;
@@ -81,7 +81,7 @@ public:
      * @return the KCoreConfigSkeleton used to store the settings for this page or @c nullptr
      * if settings are managed differently
      */
-    KCoreConfigSkeleton* configSkeleton();
+    KCoreConfigSkeleton* configSkeleton() const;
 
     /**
      * Sets the config skeleton to @p skel and will create a KConfigDialogManager if needed.
