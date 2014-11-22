@@ -78,18 +78,18 @@ ProjectFilterConfigPage::ProjectFilterConfigPage(ProjectFilterProvider* provider
     selectionChanged();
 
     connect(m_ui->filters->selectionModel(), &QItemSelectionModel::currentChanged,
-            this, &ProjectFilterKCM::selectionChanged);
-    connect(this, &ProjectFilterKCM::changed, this, &ProjectFilterKCM::selectionChanged);
-    connect(m_model, &FilterModel::dataChanged, this, &ProjectFilterKCM::emitChanged);
-    connect(m_model, &FilterModel::rowsInserted, this, &ProjectFilterKCM::emitChanged);
-    connect(m_model, &FilterModel::rowsRemoved, this, &ProjectFilterKCM::emitChanged);
-    connect(m_model, &FilterModel::modelReset, this, &ProjectFilterKCM::emitChanged);
-    connect(m_model, &FilterModel::rowsMoved, this, &ProjectFilterKCM::emitChanged);
+            this, &ProjectFilterConfigPage::selectionChanged);
+    connect(this, &ProjectFilterConfigPage::changed, this, &ProjectFilterConfigPage::selectionChanged);
+    connect(m_model, &FilterModel::dataChanged, this, &ProjectFilterConfigPage::emitChanged);
+    connect(m_model, &FilterModel::rowsInserted, this, &ProjectFilterConfigPage::emitChanged);
+    connect(m_model, &FilterModel::rowsRemoved, this, &ProjectFilterConfigPage::emitChanged);
+    connect(m_model, &FilterModel::modelReset, this, &ProjectFilterConfigPage::emitChanged);
+    connect(m_model, &FilterModel::rowsMoved, this, &ProjectFilterConfigPage::emitChanged);
 
-    connect(m_ui->add, &QPushButton::clicked, this, &ProjectFilterKCM::add);
-    connect(m_ui->remove, &QPushButton::clicked, this, &ProjectFilterKCM::remove);
-    connect(m_ui->moveUp, &QPushButton::clicked, this, &ProjectFilterKCM::moveUp);
-    connect(m_ui->moveDown, &QPushButton::clicked, this, &ProjectFilterKCM::moveDown);
+    connect(m_ui->add, &QPushButton::clicked, this, &ProjectFilterConfigPage::add);
+    connect(m_ui->remove, &QPushButton::clicked, this, &ProjectFilterConfigPage::remove);
+    connect(m_ui->moveUp, &QPushButton::clicked, this, &ProjectFilterConfigPage::moveUp);
+    connect(m_ui->moveDown, &QPushButton::clicked, this, &ProjectFilterConfigPage::moveDown);
 }
 
 ProjectFilterConfigPage::~ProjectFilterConfigPage()
