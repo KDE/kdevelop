@@ -22,22 +22,36 @@
 
 #include <QApplication>
 #include <QDir>
+#include <QHeaderView>
 
-#include <KIO/NetAccess>
+#include <kio/statjob.h>
 #include <KTextEditor/Document>
 #include <KTextEditor/MovingInterface>
 
-#include <KDebug>
-#include <kconfiggroup.h>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KJobUiDelegate>
+#include <KJobWidgets>
+
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 
-#include <QHeaderView>
-
+#include "debug.h"
 #include "cppcheckitemsimpl.h"
 #include "models/cppcheckmodel.h"
 #include "models/cppcheck_file_item.h"
 #include "models/cppcheck_severity_item.h"
+
+namespace {
+
+bool exists(const QUrl& url, QWidget* parent)
+{
+    auto job = KIO::stat(url, KIO::StatJob::SourceSide, 0);
+    KJobWidgets::setWindow(job, parent);
+    return job->exec();
+}
+
+}
 
 namespace cppcheck
 {       
@@ -66,8 +80,8 @@ cppcheck::Model* CppcheckView::model(void)
 void CppcheckView::openDocument(const QModelIndex& index)
 {
     if (cppcheck::CppcheckFrame* frame = dynamic_cast<cppcheck::CppcheckFrame*>(static_cast<cppcheck::CppcheckModel*>(model())->itemForIndex(index))) {
-        KUrl doc = frame->url();
-        if (doc.isValid() && KIO::NetAccess::exists(doc, KIO::NetAccess::SourceSide, qApp->activeWindow())) {
+        QUrl doc = frame->url();
+        if (doc.isValid() && exists(doc, qApp->activeWindow())) {
             KDevelop::ICore::self()->documentController()->openDocument(doc, KTextEditor::Cursor(qMax(0, frame->line - 1), 0));
         }
     }
@@ -95,7 +109,7 @@ void CppcheckView::doubleClicked(const QModelIndex& index)
 
         FileName = item->ProjectPath + QDir::separator() +  item->ErrorFile;
         LineNumber = item->ErrorLine;
-        kDebug() << "(row: " << row << ") data: " << FileName << "=> " << QString().setNum(LineNumber);
+        qCDebug(KDEV_CPPCHECK) << "(row: " << row << ") data: " << FileName << "=> " << QString().setNum(LineNumber);
     }
     else if (OutputViewMode == cppcheck::CppcheckView::groupedBySeverityOutputMode) {
         CppcheckSeverityItem *item = static_cast<CppcheckSeverityItem*>(index.internalPointer());
@@ -104,22 +118,23 @@ void CppcheckView::doubleClicked(const QModelIndex& index)
 
         FileName = item->ProjectPath + QDir::separator() +  item->ErrorFile;
         LineNumber = item->ErrorLine;
-        kDebug() << "(row: " << row << ") data: " << FileName << "=> " << QString().setNum(LineNumber);
+        qCDebug(KDEV_CPPCHECK) << "(row: " << row << ") data: " << FileName << "=> " << QString().setNum(LineNumber);
     }
 
-    kDebug() << "double clicked: (row: " << row << ") " << ClickedCellContent << "=> " << ProjectPath + FileName << ":" << LineNumber ;
+    qCDebug(KDEV_CPPCHECK) << "double clicked: (row: " << row << ") " << ClickedCellContent << "=> " << ProjectPath + FileName << ":" << LineNumber ;
     if (LineNumber > -1) {
         // go there
-        KUrl doc = KUrl(ProjectPath + FileName);
-        if (doc.isValid() && KIO::NetAccess::exists(doc, KIO::NetAccess::SourceSide, qApp->activeWindow())) {
+        // TODO: Check
+        QUrl doc = QUrl(ProjectPath + FileName);
+        if (doc.isValid() && exists(doc, qApp->activeWindow())) {
 
             // check ifts open (all files check)
             if (KDevelop::ICore::self()->documentController()->documentForUrl(doc) == 0) {
                 // not open
-                kDebug() << "file not open, open it";
+                qCDebug(KDEV_CPPCHECK) << "file not open, open it";
                 KDevelop::ICore::self()->documentController()->openDocument(doc, KTextEditor::Cursor(qMax(0, LineNumber - 1), 0));
             } else {
-                kDebug() << "file already open";
+                qCDebug(KDEV_CPPCHECK) << "file already open";
                 // open
                 KDevelop::ICore::self()->documentController()->openDocument(doc, KTextEditor::Cursor(qMax(0, LineNumber - 1), 0));
             }
@@ -128,5 +143,3 @@ void CppcheckView::doubleClicked(const QModelIndex& index)
 }
 
 }
-
-#include "cppcheckview.moc"

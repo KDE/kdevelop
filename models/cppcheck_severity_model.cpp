@@ -22,16 +22,16 @@
 #include "cppcheck_severity_model.h"
 
 #include <QApplication>
+#include <QFontDatabase>
 
-#include <kdebug.h>
 #include <kmessagebox.h>
-#include <klocale.h>
-#include <kglobalsettings.h>
+#include <klocalizedstring.h>
 
 #include <models/cppcheckitemsimpl.h>
 #include <cppcheck_severity_item.h>
 #include <cppcheck_severity_model.h>
 
+#include "debug.h"
 #include "modelwrapper.h"
 
 namespace cppcheck
@@ -51,16 +51,16 @@ CppcheckSeverityModel::~ CppcheckSeverityModel()
 
 void CppcheckSeverityModel::newItem(ModelItem *i)
 {
-    //kDebug() << "start";
+    //qCDebug(KDEV_CPPCHECK) << "start";
     if (!i) {
-        kDebug() << "invalid item -> model changed";
+        qCDebug(KDEV_CPPCHECK) << "invalid item -> model changed";
         emit static_cast<ModelEvents *>(m_modelWrapper)->modelChanged();
         return;
     }
     CppcheckSeverityItem *m = dynamic_cast<CppcheckSeverityItem *>(i);
     Q_ASSERT(m);
 
-    //kDebug() << "ErrorLine: " << m->ErrorLine<< ", Message: " << m->Message;
+    //qCDebug(KDEV_CPPCHECK) << "ErrorLine: " << m->ErrorLine<< ", Message: " << m->Message;
     int ErrorLine = m->ErrorLine;
     QString ErrorFile = m->ErrorFile;
     QString Message = m->Message;
@@ -71,9 +71,9 @@ void CppcheckSeverityModel::newItem(ModelItem *i)
     bool severityAlreadyInList = false;
     for (int x=0; x < m_rootItem->childCount(); x++) {
         CppcheckSeverityItem *current = m_rootItem->child(x) ;
-        //kDebug() << "elem at " << x << ", current->Severity: " << current->Severity << ", current->ErrorFile: " << current->ErrorFile << ", ErrorFile: " << ErrorFile;
+        //qCDebug(KDEV_CPPCHECK) << "elem at " << x << ", current->Severity: " << current->Severity << ", current->ErrorFile: " << current->ErrorFile << ", ErrorFile: " << ErrorFile;
         if (current->Severity == Severity) {
-           kDebug() << "adding at " << x << ", ErrorLine: " << ErrorLine << ", Message: " << Message;
+           qCDebug(KDEV_CPPCHECK) << "adding at " << x << ", ErrorLine: " << ErrorLine << ", Message: " << Message;
            severityAlreadyInList = true;
            m->setParent(current);
            m->setIsChild(true);
@@ -82,7 +82,7 @@ void CppcheckSeverityModel::newItem(ModelItem *i)
         }
    }
     if (!severityAlreadyInList) {
-        kDebug() << "adding new , ErrorLine: " << m->ErrorLine << ", Message: " << m->Message;
+        qCDebug(KDEV_CPPCHECK) << "adding new , ErrorLine: " << m->ErrorLine << ", Message: " << m->Message;
         CppcheckSeverityItem *m2 = new CppcheckSeverityItem(true);
         m2->ErrorLine = m->ErrorLine;
         m2->ErrorFile = m->ErrorFile;
@@ -183,7 +183,7 @@ QVariant CppcheckSeverityModel::data(const QModelIndex & index, int role) const
             return item->data(index.column(), role);
         }
         case Qt::FontRole: {
-            QFont f = KGlobalSettings::generalFont();
+            QFont f = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
             if ((static_cast<CppcheckSeverityItem*>(index.internalPointer()))->parent() == m_rootItem)
                 f.setBold(true);
             return f;
@@ -247,5 +247,3 @@ void CppcheckSeverityModel::incomingData(QString, QString, int, QString, QString
 }
 
 }
-
-#include "cppcheck_severity_model.moc"

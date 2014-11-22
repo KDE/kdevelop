@@ -34,10 +34,7 @@
 #include "imodel.h"
 
 class KJob;
-class KUrl;
 class QTreeView;
-
-
 
 namespace cppcheck
 {

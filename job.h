@@ -27,18 +27,17 @@
 
 #include <QProcess>
 #include <QTcpSocket>
-#include <KLocale>
-#include <KUrl>
 #include <QFileInfo>
 #include <QTimer>
 #include <QBuffer>
+#include <QUrl>
 
 #include <outputview/outputjob.h>
 
 #include "iparser.h"
 
 class KJob;
-class KProcess;
+class KConfigGroup;
 class QXmlInputSource;
 class QXmlSimpleReader;
 class QTcpServer;
@@ -100,8 +99,8 @@ protected:
 
 protected:
 
-    KProcess* m_process;
-    KUrl m_workingDir;
+    QProcess* m_process;
+    QUrl m_workingDir;
     int m_pid;
 
     cppcheck::Model* m_model;
@@ -132,14 +131,15 @@ class KProcessOutputToParser : public QObject
 public:
     KProcessOutputToParser(Parser* inst);
     ~KProcessOutputToParser();
-    int execute(QString execPath, QStringList args);
+
+    bool execute(QString execPath, QStringList args);
 
 private slots:
     void  newDataFromStdOut();
     void  processEnded(int returnCode, QProcess::ExitStatus status);
 
 private:
-    KProcess*  m_process;
+    QProcess*  m_process;
     QIODevice* m_device;
     Parser*    m_parser;
 

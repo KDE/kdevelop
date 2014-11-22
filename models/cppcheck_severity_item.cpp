@@ -19,9 +19,10 @@
 */
 
 #include "cppcheck_severity_item.h"
-#include <KDebug>
+
 #include <QDir>
 #include <QFont>
+#include <QUrl>
 
 #include <kglobalsettings.h>
 #include <kiconloader.h>
@@ -187,15 +188,15 @@ int CppcheckSeverityItem::row() const
     return 0;
 }
 
-KUrl CppcheckSeverityItem::url() const
+QUrl CppcheckSeverityItem::url() const
 {
     if (m_dir.isEmpty() && m_file.isEmpty())
-        return KUrl();
+        return QUrl();
 
-    KUrl base = KUrl::fromPath(m_dir);
-    base.adjustPath(KUrl::AddTrailingSlash);
-    KUrl url(base, m_file);
-    url.cleanPath();
+    QUrl base = QUrl::fromLocalFile(m_dir);
+    base.setPath(base.path() + '/');
+    QUrl url = QUrl(base).resolved(QUrl(m_file));
+    url = QDir::cleanPath(url.path());
     return url;
 }
 

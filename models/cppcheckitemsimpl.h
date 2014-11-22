@@ -23,7 +23,6 @@
 #ifndef _CPPCHECKITEMIMPL_H_
 #define _CPPCHECKITEMIMPL_H_
 
-#include <KUrl>
 #include <QHash>
 #include <QList>
 #include <QStack>
@@ -122,7 +121,7 @@ public:
 
     void incomingData(QString name, QString value, int ErrorLine, QString ErrorFile, QString Message, QString MessageVerbose, QString ProjectPath, QString Severity);
 
-    KUrl url() const;
+    QUrl url() const;
 
 public:
     CppcheckStack* m_parent;

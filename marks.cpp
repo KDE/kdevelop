@@ -25,10 +25,12 @@
 #include <KTextEditor/MarkInterface>
 #include <QAbstractItemModel>
 #include <QDir>
+#include <QUrl>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
+#include "debug.h"
 #include "marks.h"
 #include "cppcheckmodel.h"
 #include "cppcheck_file_model.h"
@@ -38,8 +40,6 @@
 #include "plugin.h"
 #include "modelwrapper.h"
 #include "cppcheckview.h"
-
-
 
 namespace cppcheck
 {
@@ -66,11 +66,12 @@ void Marks::newModel(cppcheck::Model* model)
 void Marks::modelChanged()
 {
     // parse model to display errors in the editor
-    KTextEditor::Editor* editor = KTextEditor::editor("katepart");
+
+    auto editor = KTextEditor::Editor::instance();
     QList<KTextEditor::Document*> docList = editor->documents();
-//     kDebug() << "docList: ";
+//     qCDebug(KDEV_CPPCHECK) << "docList: ";
 //     for (int i = 0; i < docList.size(); ++i)
-//         kDebug() << "\t" << docList.at(i)->documentName() << ", (" << docList.at(i)->url() << ")";
+//         qCDebug(KDEV_CPPCHECK) << "\t" << docList.at(i)->documentName() << ", (" << docList.at(i)->url() << ")";
     
     for (int i = 0; i < docList.size(); i++)
         if (KTextEditor::MarkInterface *iface = qobject_cast<KTextEditor::MarkInterface*>(docList.at(i)))
@@ -99,7 +100,7 @@ void Marks::modelChanged()
             if (itemModel->hasChildren()) {
                 childCount = itemModel->rowCount(myIndex);
                 FileName = item->ProjectPath + item->ErrorFile;
-                kDebug() << "child count of " << FileName << ": " << childCount;
+                qCDebug(KDEV_CPPCHECK) << "child count of " << FileName << ": " << childCount;
                 if (FileName == "")
                     continue;
             }
@@ -109,7 +110,7 @@ void Marks::modelChanged()
             if (itemModel->hasChildren()) {
                 childCount = itemModel->rowCount(myIndex);
                 CppcheckSeverityItem *item = static_cast<CppcheckSeverityItem*>(myIndex.internalPointer());
-                kDebug() << "child count of " << item->Severity << ": " << childCount;
+                qCDebug(KDEV_CPPCHECK) << "child count of " << item->Severity << ": " << childCount;
             }
         }
 
@@ -129,15 +130,15 @@ void Marks::modelChanged()
                     LineNumber = childitem->ErrorLine;
                 }
             }
-            //kDebug() << "row[" << row << "]: filename: " << FileName <<  ", line: " << LineNumber;
+            //qCDebug(KDEV_CPPCHECK) << "row[" << row << "]: filename: " << FileName <<  ", line: " << LineNumber;
             if (FileName.isEmpty() )
                 continue;
             for (int i = 0; i < docList.size(); ++i) {
-                    //kDebug() << "doc: " << docList.at(i)->url() << " <=> " << KUrl(FileName);
-                if (docList.at(i)->url() == KUrl(FileName) ) {
+                    //qCDebug(KDEV_CPPCHECK) << "doc: " << docList.at(i)->url() << " <=> " << KUrl(FileName);
+                if (docList.at(i)->url() == QUrl::fromLocalFile(FileName) ) {
                     if (KTextEditor::MarkInterface *iface = qobject_cast<KTextEditor::MarkInterface*>(docList.at(i))) {
                         iface->addMark(LineNumber - 1, KTextEditor::MarkInterface::markType07);
-                        kDebug() << "adding mark at: " << docList.at(i)->url() << ":" << LineNumber;
+                        qCDebug(KDEV_CPPCHECK) << "adding mark at: " << docList.at(i)->url() << ":" << LineNumber;
                     }
                 }
             }
@@ -146,5 +147,3 @@ void Marks::modelChanged()
 }
 
 }
-
-#include "marks.moc"

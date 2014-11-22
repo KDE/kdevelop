@@ -21,9 +21,10 @@
 #define CPPCHECKGENERICCONFIGPAGE_H_
 
 #include <QObject>
+
 #include <KCModule>
-#include <KSharedConfig>
-class KIcon;
+
+class QIcon;
 
 namespace cppcheck
 {
@@ -43,7 +44,7 @@ public:
     GenericConfigPage(QWidget* parent, const QVariantList& args = QVariantList());
     ~GenericConfigPage();
 
-    KIcon icon() const;
+    QIcon icon() const;
     QString title() const;
 
 signals:

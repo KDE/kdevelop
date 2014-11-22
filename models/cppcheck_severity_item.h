@@ -24,7 +24,6 @@
 #include <QString>
 #include <QMap>
 #include <QStringList>
-#include <KUrl>
 
 #include "imodel.h"
 
@@ -68,7 +67,7 @@ public:
     int row() const;
     CppcheckSeverityItem *parent() const;
 
-    KUrl url() const;
+    QUrl url() const;
     int getLine() const;
 
 private:
@@ -77,8 +76,6 @@ private:
 
     int m_line;
     QString m_dir, m_file;
-
-
 
     // use by the model
     QList<CppcheckSeverityItem*> m_childItems;

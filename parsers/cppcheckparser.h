@@ -22,9 +22,6 @@
 
 #include <QXmlStreamReader>
 #include <QApplication>
-#include <KDebug>
-#include <KMessageBox>
-#include <KLocale>
 
 #include "cppcheckitems.h"
 #include "cppcheckmodel.h"

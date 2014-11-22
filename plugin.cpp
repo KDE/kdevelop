@@ -20,6 +20,7 @@
 
 #include <unistd.h>
 
+#include <QAction>
 #include <QRegExp>
 #include <QFile>
 #include <QTreeView>
@@ -28,19 +29,10 @@
 #include <QDomElement>
 #include <QApplication>
 
-#include <kiconloader.h>
-#include <klocale.h>
-#include <kaction.h>
-#include <kprocess.h>
-#include <kmessagebox.h>
-#include <kfiledialog.h>
-#include <kdebug.h>
-#include <kicon.h>
 #include <kactioncollection.h>
-#include <kcmultidialog.h>
+#include <klocalizedstring.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-#include <kaboutdata.h>
 
 #include <execute/iexecuteplugin.h>
 
@@ -54,6 +46,7 @@
 
 #include <language/interfaces/editorcontext.h>
 
+#include "debug.h"
 #include "plugin.h"
 #include "marks.h"
 #include "cppcheckmodel.h"
@@ -66,7 +59,6 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(CppcheckFactory, registerPlugin<cppcheck::Plugin>();)
-K_EXPORT_PLUGIN(CppcheckFactory(KAboutData("kdevcppcheck", "kdevcppcheck", ki18n("Cppcheck"), "0.1", ki18n("Support for running Cppcheck"), KAboutData::License_GPL)))
 
 namespace cppcheck
 {
@@ -93,21 +85,21 @@ QString WidgetFactory::id() const
 
 
 Plugin::Plugin(QObject *parent, const QVariantList&)
-    : IPlugin(CppcheckFactory::componentData(), parent)
+    : IPlugin("kdevcppcheck", parent)
     , m_factory(new cppcheck::WidgetFactory(this))
     , m_marks(new cppcheck::Marks(this))
 {
 
-    kDebug() << "setting cppcheck rc file";
+    qCDebug(KDEV_CPPCHECK) << "setting cppcheck rc file";
     setXMLFile("kdevcppcheck.rc");
 
     core()->uiController()->addToolView(i18n("Cppcheck"), m_factory);
-    KAction* act_checkfile;
+    QAction* act_checkfile;
     act_checkfile = actionCollection()->addAction("cppcheck_file", this, SLOT(runCppcheckFile()));
     act_checkfile->setStatusTip(i18n("Launches Cppcheck for current file"));
     act_checkfile->setText(i18n("Cppcheck"));
 
-    KAction* act_check_all_files;
+    QAction* act_check_all_files;
     act_check_all_files = actionCollection()->addAction("cppcheck_all", this, SLOT(runCppcheckAll()));
     act_check_all_files->setStatusTip(i18n("Launches Cppcheck for all files"));
     act_check_all_files->setText(i18n("Cppcheck (all Files)"));
@@ -168,7 +160,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
     KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
 
     if ( context->type() == KDevelop::Context::EditorContext ) {
-        QAction* action = new QAction(KIcon("document-new"), i18n("Cppcheck for current file"), this);
+        QAction* action = new QAction(QIcon::fromTheme("document-new"), i18n("Cppcheck for current file"), this);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(runCppcheckFile()));
         extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
     }

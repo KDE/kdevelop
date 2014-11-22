@@ -17,13 +17,16 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <KDebug>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
-#include <QDir>
-#include <kdeversion.h>
 
+#include <QDir>
+
+#include <KLocalizedString>
+#include <KMessageBox>
+
+#include "debug.h"
 #include "cppcheckparser.h"
 
 namespace cppcheck {
@@ -57,7 +60,7 @@ bool CppcheckParser::startElement()
     m_buffer.clear();
     State newState = Unknown;
 
-    kDebug() << "CppcheckParser::startElement: elem: " << qPrintable(name().toString());
+    qCDebug(KDEV_CPPCHECK) << "CppcheckParser::startElement: elem: " << qPrintable(name().toString());
 
 
     if (name() == "results")
@@ -75,7 +78,7 @@ bool CppcheckParser::startElement()
             /* get project path */
             ProjectPath = "";
             for (int i = 0; i < KDevelop::ICore::self()->projectController()->projects().count(); i++) {
-                if (KDevelop::ICore::self()->projectController()->findProjectForUrl(KUrl(ErrorFile)) != 0) {
+                if (KDevelop::ICore::self()->projectController()->findProjectForUrl(QUrl::fromLocalFile(ErrorFile)) != 0) {
                     ProjectPath = KDevelop::ICore::self()->projectController()->projects().at(i)->folder().toLocalFile();
                 }
             }
@@ -111,18 +114,18 @@ bool CppcheckParser::startElement()
 
 bool CppcheckParser::endElement()
 {
-    kDebug() << "CppcheckParser::endElement: elem: " << qPrintable(name().toString());
+    qCDebug(KDEV_CPPCHECK) << "CppcheckParser::endElement: elem: " << qPrintable(name().toString());
     State state = m_stateStack.pop();
     switch (state) {
     case CppCheck:
         if (attributes().hasAttribute("version"))
-            kDebug() << "CppCheck report version: " << attributes().value("version");
+            qCDebug(KDEV_CPPCHECK) << "CppCheck report version: " << attributes().value("version");
         break;
     case Errors:
         // errors finished
         break;
     case Error:
-        kDebug() << "CppcheckParser::endElement: new error elem: line: " << ErrorLine << " at " << ErrorFile << ", msg: " << Message;
+        qCDebug(KDEV_CPPCHECK) << "CppcheckParser::endElement: new error elem: line: " << ErrorLine << " at " << ErrorFile << ", msg: " << Message;
         if (dynamic_cast<cppcheck::CppcheckModel *>(m_model))
             emit newData(cppcheck::CppcheckModel::error, name().toString(), m_buffer, ErrorLine, ErrorFile, Message, MessageVerbose, ProjectPath, Severity);
         else if (dynamic_cast<cppcheck::CppcheckFileModel *>(m_model)) {
@@ -151,7 +154,7 @@ bool CppcheckParser::endElement()
 
 void CppcheckParser::parse()
 {
-    kDebug() << "CppcheckParser::parse!";
+    qCDebug(KDEV_CPPCHECK) << "CppcheckParser::parse!";
 
 
 
@@ -171,12 +174,12 @@ void CppcheckParser::parse()
             m_buffer += text().toString();
             break;
         default:
-            kDebug() << "CppcheckParser::startElement: case: " << readNextVal;
+            qCDebug(KDEV_CPPCHECK) << "CppcheckParser::startElement: case: " << readNextVal;
             break;
         }
     }
     emit newItem(NULL);
-    kDebug() << "CppcheckParser::parse: end";
+    qCDebug(KDEV_CPPCHECK) << "CppcheckParser::parse: end";
 
     if (hasError()) {
         switch (error()) {
@@ -193,5 +196,3 @@ void CppcheckParser::parse()
 }
 
 }
-
-#include "cppcheckparser.moc"

@@ -19,7 +19,7 @@
 */
 
 #include "cppcheck_file_item.h"
-#include <KDebug>
+
 #include <QDir>
 #include <QFont>
 
@@ -214,15 +214,15 @@ int CppcheckFileItem::row() const
     return 0;
 }
 
-KUrl CppcheckFileItem::url() const
+QUrl CppcheckFileItem::url() const
 {
     if (m_dir.isEmpty() && m_file.isEmpty())
-        return KUrl();
+        return QUrl();
 
-    KUrl base = KUrl::fromPath(m_dir);
-    base.adjustPath(KUrl::AddTrailingSlash);
-    KUrl url(base, m_file);
-    url.cleanPath();
+    QUrl base = QUrl::fromLocalFile(m_dir);
+    base.setPath(base.path() + '/');
+    QUrl url = QUrl(base).resolved(QUrl(m_file));
+    url = QDir::cleanPath(url.path());
     return url;
 }
 
@@ -242,5 +242,3 @@ bool CppcheckFileItem::isChild()
 }
 
 }
-
-

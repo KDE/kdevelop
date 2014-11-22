@@ -80,5 +80,3 @@ ModelEvents::~ModelEvents()
 
 
 }
-
-#include "modelwrapper.moc"

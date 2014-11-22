@@ -22,16 +22,17 @@
 #include "cppcheck_file_model.h"
 
 #include <QApplication>
+#include <QFontDatabase>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kglobalsettings.h>
 
 #include <models/cppcheckitemsimpl.h>
 #include <cppcheck_file_item.h>
 #include <cppcheck_file_model.h>
 
+#include "debug.h"
 #include "modelwrapper.h"
 
 namespace cppcheck
@@ -51,16 +52,16 @@ CppcheckFileModel::~ CppcheckFileModel()
 
 void CppcheckFileModel::newItem(ModelItem *i)
 {
-    //kDebug() << "start";
+    //qCDebug(KDEV_CPPCHECK) << "start";
     if (!i) {
-        kDebug() << "invalid item -> model changed";
+        qCDebug(KDEV_CPPCHECK) << "invalid item -> model changed";
         emit static_cast<ModelEvents *>(m_modelWrapper)->modelChanged();
         return;
     }
     CppcheckFileItem *m = dynamic_cast<CppcheckFileItem *>(i);
     Q_ASSERT(m);
 
-    //kDebug() << "ErrorLine: " << m->ErrorLine<< ", Message: " << m->Message;
+    //qCDebug(KDEV_CPPCHECK) << "ErrorLine: " << m->ErrorLine<< ", Message: " << m->Message;
     int ErrorLine = m->ErrorLine;
     QString ErrorFile = m->ErrorFile;
     QString Message = m->Message;
@@ -71,9 +72,9 @@ void CppcheckFileModel::newItem(ModelItem *i)
     bool fileAlreadyInList = false;
     for (int x=0; x < m_rootItem->childCount(); x++) {
         CppcheckFileItem *current = m_rootItem->child(x) ;
-        //kDebug() << "elem at " << x << ", current->ProjectPath: " << current->ProjectPath << ", ProjectPath: " << ProjectPath << ", current->ErrorFile: " << current->ErrorFile << ", ErrorFile: " << ErrorFile;
+        //qCDebug(KDEV_CPPCHECK) << "elem at " << x << ", current->ProjectPath: " << current->ProjectPath << ", ProjectPath: " << ProjectPath << ", current->ErrorFile: " << current->ErrorFile << ", ErrorFile: " << ErrorFile;
         if (current->ProjectPath == ProjectPath && current->ErrorFile == ErrorFile) {
-           kDebug() << "adding at " << x << ", ErrorLine: " << ErrorLine << ", Message: " << Message;
+           qCDebug(KDEV_CPPCHECK) << "adding at " << x << ", ErrorLine: " << ErrorLine << ", Message: " << Message;
            fileAlreadyInList = true;
            m->setParent(current);
            m->setIsChild(true);
@@ -82,7 +83,7 @@ void CppcheckFileModel::newItem(ModelItem *i)
         }
    }
     if (!fileAlreadyInList) {
-        kDebug() << "adding new , ErrorLine: " << m->ErrorLine << ", Message: " << m->Message;
+        qCDebug(KDEV_CPPCHECK) << "adding new , ErrorLine: " << m->ErrorLine << ", Message: " << m->Message;
         CppcheckFileItem *m2 = new CppcheckFileItem(true);
         m2->ErrorLine = m->ErrorLine;
         m2->ErrorFile = m->ErrorFile;
@@ -184,7 +185,7 @@ QVariant CppcheckFileModel::data(const QModelIndex & index, int role) const
             return item->data(index.column(), role);
         }
     case Qt::FontRole: {
-            QFont f = KGlobalSettings::generalFont();
+            QFont f = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
             if ((static_cast<CppcheckFileItem*>(index.internalPointer()))->parent() == m_rootItem)
                 f.setBold(true);
             return f;
@@ -251,5 +252,3 @@ void CppcheckFileModel::incomingData(QString, QString, int, QString, QString, QS
 }
 
 }
-
-#include "cppcheck_file_model.moc"

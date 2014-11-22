@@ -32,10 +32,8 @@
 #include <QBuffer>
 #include <QFileInfo>
 
-#include <KLocale>
-#include <KDebug>
+#include <KLocalizedString>
 #include <KMessageBox>
-#include <KProcess>
 #include <KShell>
 
 #include <util/processlinemaker.h>
@@ -60,7 +58,7 @@
 #include "cppcheckparser.h"
 #include "cppcheckview.h"
 
-
+#include "debug.h"
 #include "plugin.h"
 #include "modelwrapper.h"
 
@@ -119,7 +117,7 @@ void ModelParserFactoryPrivate::make(const QString& tool, cppcheck::Model*& m_mo
 
 Job::Job(cppcheck::Plugin* inst, bool allFiles, QObject* parent)
     : KDevelop::OutputJob(parent)
-    , m_process(new KProcess(this))
+    , m_process(new QProcess(this))
     , m_pid(0)
     , m_model(0)
     , m_parser(0)
@@ -129,7 +127,7 @@ Job::Job(cppcheck::Plugin* inst, bool allFiles, QObject* parent)
     , allFiles(allFiles)
 {
     setCapabilities(KJob::Killable);
-    m_process->setOutputChannelMode(KProcess::SeparateChannels);
+    m_process->setProcessChannelMode(QProcess::SeparateChannels);
     connect(m_process,  SIGNAL(readyReadStandardOutput()),
             SLOT(readyReadStandardOutput()));
     connect(m_process,  SIGNAL(readyReadStandardError()),
@@ -249,10 +247,10 @@ QStringList Job::buildCommandLine() const
         args.append("--enable=missingInclude");
 
     if (allFiles == false) {
-        kDebug() << "checking file: " << m_plugin->core()->documentController()->activeDocument()->url().toLocalFile() << "(" << "" << ")";
+        qCDebug(KDEV_CPPCHECK) << "checking file: " << m_plugin->core()->documentController()->activeDocument()->url().toLocalFile() << "(" << "" << ")";
         args.append(m_plugin->core()->documentController()->activeDocument()->url().toLocalFile());
     } else {
-        kDebug() << "checking all files";
+        qCDebug(KDEV_CPPCHECK) << "checking all files";
         // project path
         for (int i = 0; i < KDevelop::ICore::self()->projectController()->projects().count(); i++) {
             args.append(KDevelop::ICore::self()->projectController()->projects().at(i)->folder().toLocalFile());
@@ -269,9 +267,9 @@ QStringList Job::buildCommandLine() const
 void Job::start()
 {
     KConfig config("kdevcppcheckrc");
-    KConfigGroup grp = config.group("cppcheck");    KDevelop::EnvironmentGroupList l(KGlobal::config());
+    KConfigGroup grp = config.group("cppcheck");    KDevelop::EnvironmentGroupList l(KSharedConfig::openConfig());
 
-    KUrl cppcheckExecutable(grp.readEntry("CppcheckExecutable", KUrl("/usr/bin/cppcheck")));
+    QUrl cppcheckExecutable(grp.readEntry("CppcheckExecutable", QUrl::fromLocalFile("/usr/bin/cppcheck")));
 
     QString err;
 
@@ -291,8 +289,9 @@ void Job::start()
     QStringList cppcheckArgs;
 
     cppcheckArgs = buildCommandLine();
-    kDebug() << "executing:" << cppcheckExecutable.toLocalFile() << cppcheckArgs;
-    m_process->setProgram(cppcheckExecutable.toLocalFile(), cppcheckArgs);
+    qCDebug(KDEV_CPPCHECK) << "executing:" << cppcheckExecutable.toLocalFile() << cppcheckArgs;
+    m_process->setProgram(cppcheckExecutable.toLocalFile());
+    m_process->setArguments(cppcheckArgs);
 
     m_process->start();
     m_pid = m_process->pid();
@@ -357,7 +356,7 @@ void Job::processErrored(QProcess::ProcessError e)
 
 void Job::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    kDebug() << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
+    qCDebug(KDEV_CPPCHECK) << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
 
     QString tabname = i18n("cppcheck finished (pid=%1,exit=%2)", m_pid, exitCode);
 
@@ -373,10 +372,10 @@ void Job::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
         ** most cases.
         */
 
-        kDebug() << "cppcheck failed, output: ";
-        kDebug() << stdout_output;
-        kDebug() << "cppcheck failed, error output: ";
-        kDebug() << stderr_output;
+        qCDebug(KDEV_CPPCHECK) << "cppcheck failed, output: ";
+        qCDebug(KDEV_CPPCHECK) << stdout_output;
+        qCDebug(KDEV_CPPCHECK) << "cppcheck failed, error output: ";
+        qCDebug(KDEV_CPPCHECK) << stderr_output;
 
         const QString& s = stdout_output;
         QStringList err = s.split("\n");
@@ -445,20 +444,22 @@ KProcessOutputToParser::~KProcessOutputToParser()
         delete m_process;
 }
 
-int KProcessOutputToParser::execute(QString execPath, QStringList args)
+bool KProcessOutputToParser::execute(QString execPath, QStringList args)
 {
-    m_process = new KProcess();
-    m_process->setOutputChannelMode(KProcess::SeparateChannels);
-    m_process->setProgram(execPath, args);
+    m_process = new QProcess();
+    m_process->setProcessChannelMode(QProcess::SeparateChannels);
+    m_process->setProgram(execPath);
+    m_process->setArguments(args);
     QObject::connect(m_process, SIGNAL(readyReadStandardOutput()), this, SLOT(newDataFromStdOut()));
     QObject::connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(processEnded(int, QProcess::ExitStatus)));
     //execute and wait the end of the program
-    return m_process->execute();
+    m_process->start();
+    return m_process->waitForFinished();
 }
 
 void KProcessOutputToParser::processEnded(int , QProcess::ExitStatus status)
 {
-    kDebug() << status;
+    qCDebug(KDEV_CPPCHECK) << status;
     if (status == QProcess::NormalExit) {
 
         m_device->close();
@@ -473,6 +474,3 @@ void KProcessOutputToParser::newDataFromStdOut()
 
 
 }
-
-
-#include "job.moc"

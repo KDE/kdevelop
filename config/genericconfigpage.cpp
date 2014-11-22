@@ -17,25 +17,25 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <KDebug>
 #include <KPluginFactory>
 
+#include "debug.h"
 #include "genericconfigpage.h"
 #include "plugin.h"
 
 #include "ui_genericconfig.h"
 
-K_PLUGIN_FACTORY(CppcheckPreferencesFactory, registerPlugin<cppcheck::GenericConfigPage>();)
-K_EXPORT_PLUGIN(CppcheckPreferencesFactory("kcm_kdev_cppcheck"));
+#include <KAboutData>
+#include <KConfig>
+#include <KConfigGroup>
 
+K_PLUGIN_FACTORY(CppcheckPreferencesFactory, registerPlugin<cppcheck::GenericConfigPage>();)
 
 namespace cppcheck
 {
 
-
-
 GenericConfigPage::GenericConfigPage(QWidget* parent, const QVariantList& args)
-    : KCModule(CppcheckPreferencesFactory::componentData(), parent, args)
+    : KCModule(KAboutData::pluginData("kcm_kdev_cppcheck"), parent, args)
 {
 
     ui = new Ui::GenericConfig();
@@ -51,19 +51,19 @@ GenericConfigPage::~GenericConfigPage(void)
     delete ui;
 }
 
-KIcon GenericConfigPage::icon() const
+QIcon GenericConfigPage::icon() const
 {
-    return KIcon("fork");
+    return QIcon::fromTheme("fork");
 }
 
 void GenericConfigPage::load()
 {
-    kDebug() << "load config";
+    qCDebug(KDEV_CPPCHECK) << "load config";
     bool wasBlocked = signalsBlocked();
     blockSignals(true);
     KConfig config("kdevcppcheckrc");
     KConfigGroup cfg = config.group("cppcheck");
-    ui->cppcheckExecutable->setUrl(cfg.readEntry("CppcheckExecutable", KUrl("/usr/bin/cppcheck")));
+    ui->cppcheckExecutable->setUrl(cfg.readEntry("CppcheckExecutable", QUrl::fromLocalFile("/usr/bin/cppcheck")));
     ui->cppcheckParameters->setText(cfg.readEntry("cppcheckParameters", QString("")));
     ui->OutputViewModeComboBox->setCurrentIndex(cfg.readEntry("OutputViewMode", "0").toInt());
     ui->styleCheckBox->setChecked(cfg.readEntry("AdditionalCheckStyle", false));
@@ -78,7 +78,7 @@ void GenericConfigPage::load()
 
 void GenericConfigPage::save()
 {
-    kDebug() << "save config";
+    qCDebug(KDEV_CPPCHECK) << "save config";
     KConfig config("kdevcppcheckrc");
     KConfigGroup cfg = config.group("cppcheck");
     cfg.writeEntry("CppcheckExecutable", ui->cppcheckExecutable->url());
@@ -99,3 +99,5 @@ QString GenericConfigPage::title() const
 }
 
 }
+
+#include "genericconfigpage.moc"

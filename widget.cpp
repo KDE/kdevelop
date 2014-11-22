@@ -21,10 +21,7 @@
 
 #include "widget.h"
 
-#include <KIcon>
-#include <KLocale>
-#include <KDebug>
-
+#include "debug.h"
 #include "plugin.h"
 #include "job.h"
 #include "imodel.h"
@@ -32,6 +29,8 @@
 #include "cppcheckmodel.h"
 #include "cppcheck_file_model.h"
 #include "cppcheck_severity_model.h"
+
+#include <KLocalizedString>
 
 #include <QResizeEvent>
 
@@ -52,7 +51,7 @@ cppcheck::IView * ViewFactoryPrivate::make(cppcheck::Model * m)
         return new cppcheck::CppcheckView();
     if (dynamic_cast<cppcheck::CppcheckSeverityModel *>(m))
         return new cppcheck::CppcheckView();
-    kDebug() << "view not yet implemented";
+    qCDebug(KDEV_CPPCHECK) << "view not yet implemented";
     return 0;
 }
 
@@ -60,7 +59,7 @@ Widget::Widget(cppcheck::Plugin * plugin, QWidget * parent)
     : QTabWidget(parent)
     , m_plugin(plugin)
 {
-    setWindowIcon(KIcon("fork"));
+    setWindowIcon(QIcon::fromTheme("fork"));
     setWindowTitle(i18n("Cppcheck Output"));
 
     setWhatsThis(i18n("<b>Cppcheck</b><p>Shows the output of cppcheck.</p>"));
@@ -136,5 +135,3 @@ void Widget::resizeEvent( QResizeEvent *event )
 }
 
 }
-
-#include "widget.moc"

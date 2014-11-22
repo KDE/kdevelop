@@ -24,7 +24,8 @@
 #include "cppcheckitemsimpl.h"
 #include "cppcheckmodel.h"
 
-#include <KDebug>
+#include <QDir>
+#include <QUrl>
 
 ///////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
@@ -186,15 +187,15 @@ void CppcheckFrame::incomingData(QString name, QString value, int ErrorLine, QSt
     this->Severity = Severity;
 }
 
-KUrl CppcheckFrame::url() const
+QUrl CppcheckFrame::url() const
 {
     if (dir.isEmpty() && file.isEmpty())
-        return KUrl();
+        return QUrl();
 
-    KUrl base = KUrl::fromPath(dir);
-    base.adjustPath(KUrl::AddTrailingSlash);
-    KUrl url(base, file);
-    url.cleanPath();
+    QUrl base = QUrl::fromLocalFile(dir);
+    base = base.path() + '/';
+    QUrl url = QUrl(base).resolved(QUrl(file));
+    url = QDir::cleanPath(url.path());
     return url;
 }
 

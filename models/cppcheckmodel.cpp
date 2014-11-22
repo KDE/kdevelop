@@ -24,14 +24,13 @@
 #include "cppcheckitemsimpl.h"
 #include "cppcheckmodel.h"
 
+#include <KIconLoader>
+#include <KLocalizedString>
+
 #include <QApplication>
 #include <QDir>
+#include <QPixmap>
 
-#include <KDebug>
-#include <kmessagebox.h>
-#include <KLocale>
-#include <KGlobalSettings>
-#include <KIconLoader>
 #include <iostream>
 
 #include <interfaces/icore.h>
@@ -311,7 +310,7 @@ int CppcheckModel::rowCount(const QModelIndex& p) const
     if (p.column() != 0)
         return 0;
 
-//     kDebug() << "rowCount 1: " << p.model()->rowCount();
+//     qCDebug(KDEV_CPPCHECK) << "rowCount 1: " << p.model()->rowCount();
 //         return p.model()->rowCount();
 
     CppcheckItem* parent = itemForIndex(p);
@@ -320,7 +319,7 @@ int CppcheckModel::rowCount(const QModelIndex& p) const
         int ret = 0;
         foreach (const CppcheckStack * stack, e->getStack())
             ret += stack->getFrames().count();
-//         kDebug() << "rowCount: " << ret;
+//         qCDebug(KDEV_CPPCHECK) << "rowCount: " << ret;
         return ret;
     }
     return 0;
@@ -410,6 +409,3 @@ QAbstractItemModel*  CppcheckModel::getQAbstractItemModel(int) {
     }
 
 }
-
-#include "cppcheckmodel.moc"
-
