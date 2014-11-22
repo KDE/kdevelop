@@ -71,9 +71,8 @@ Signature getDeclarationSignature(const Declaration *functionDecl, const DUConte
 AdaptSignatureAssistant::AdaptSignatureAssistant(ILanguageSupport* supportedLanguage)
     : StaticAssistant(supportedLanguage)
 {
-    connect(ICore::self()->languageController()->backgroundParser(),
-            SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
-            SLOT(parseJobFinished(KDevelop::ParseJob*)));
+    connect(ICore::self()->languageController()->backgroundParser(), &BackgroundParser::parseJobFinished,
+            this, &AdaptSignatureAssistant::parseJobFinished);
 }
 
 QString AdaptSignatureAssistant::title() const

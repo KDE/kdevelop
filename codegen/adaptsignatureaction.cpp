@@ -36,12 +36,15 @@
 
 using namespace KDevelop;
 
-QString makeSignatureString(const DeclarationId& definitionId, const Signature& signature,
-                            TopDUContext* visibilityFrom)
+QString makeSignatureString(const Declaration* functionDecl, const Signature& signature)
 {
-    Q_ASSERT(visibilityFrom);
+    Q_ASSERT(functionDecl);
+    if (!functionDecl || !functionDecl->internalContext()) {
+        return {};
+    }
+    const auto visibilityFrom = functionDecl->internalContext()->parentContext();
     if (!visibilityFrom) {
-        return QString();
+        return {};
     }
 
     QString ret = CodegenHelper::simplifiedTypeString(signature.returnType.abstractType(),
@@ -49,8 +52,7 @@ QString makeSignatureString(const DeclarationId& definitionId, const Signature& 
 
     ret += ' ';
 
-    const Declaration* functionDecl = definitionId.getDeclaration(visibilityFrom);
-    QualifiedIdentifier namespaceIdentifier = functionDecl->internalContext()->parentContext()->scopeIdentifier(false);
+    QualifiedIdentifier namespaceIdentifier = visibilityFrom->scopeIdentifier(false);
     Identifier id(IndexedString(functionDecl->qualifiedIdentifier().mid(namespaceIdentifier.count()).toString()));
     ret += functionDecl->identifier().toString();
 
@@ -124,17 +126,11 @@ QString AdaptSignatureAction::description() const
 QString AdaptSignatureAction::toolTip() const
 {
     DUChainReadLocker lock;
-    return i18n("Update %1\nfrom: %2(%3)%4\nto: %2(%5)%6",
+    auto declaration = m_otherSideId.getDeclaration(m_otherSideTopContext.data());
+    return i18n("Update %1 signature\nfrom: %2\nto: %3",
                 m_editingDefinition ? i18n("declaration") : i18n("definition"),
-                m_otherSideId.qualifiedIdentifier().toString(),
-                makeSignatureString(m_otherSideId,
-                                    m_oldSignature,
-                                    m_otherSideTopContext.data()),
-                m_oldSignature.isConst ? " const" : "",
-                makeSignatureString(m_otherSideId,
-                                    m_newSignature,
-                                    m_otherSideTopContext.data()),
-                m_newSignature.isConst ? " const" : "");
+                makeSignatureString(declaration, m_oldSignature),
+                makeSignatureString(declaration, m_newSignature));
 }
 
 void AdaptSignatureAction::execute()
@@ -167,9 +163,7 @@ void AdaptSignatureAction::execute()
 
     DocumentChangeSet changes;
     KTextEditor::Range parameterRange = ClangIntegration::DUChainUtils::functionSignatureRange(otherSide);
-    QString newText = makeSignatureString(m_otherSideId,
-                                          m_newSignature,
-                                          m_otherSideTopContext.data());
+    QString newText = makeSignatureString(otherSide, m_newSignature);
     if (!m_editingDefinition) {
         // append a newline after the method signature in case the method definition follows
         newText += "\n";

@@ -25,8 +25,6 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
-#include <kparts/mainwindow.h>
-
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
@@ -36,7 +34,6 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/isourceformattercontroller.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/ilanguage.h>
 
 #include <language/assistant/staticassistant.h>
@@ -129,7 +126,13 @@ public:
         else {
             document = m_headerDocument;
         }
-        KTextEditor::View* view = document.textDoc->createView(ICore::self()->uiController()->activeMainWindow());
+        // we must activate the document, otherwise we cannot find the correct active view
+        auto kdevdoc = ICore::self()->documentController()->documentForUrl(document.url);
+        QVERIFY(kdevdoc);
+        ICore::self()->documentController()->activateDocument(kdevdoc);
+        auto view = ICore::self()->documentController()->activeTextDocumentView();
+        QCOMPARE(view->document(), document.textDoc);
+
         view->setSelection(where);
         view->removeSelectionText();
         view->setCursorPosition(where.start());
@@ -304,28 +307,28 @@ void TestAssistants::testSignatureAssistant_data()
     QTest::addColumn<QString>("finalHeaderContents");
     QTest::addColumn<QString>("finalCppContents");
 
-    QTest::newRow("Change Argument Type")
+    QTest::newRow("change_argument_type")
       << "class Foo {\nint bar(int a, char* b, int c = 10); \n};"
       << "int Foo::bar(int a, char* b, int c)\n{ a = c; b = new char; return a + *b; }"
       << (QList<StateChange>() << StateChange(Testbed::HeaderDoc, Range(1,8,1,11), "char", SHOULD_ASSIST))
       << "class Foo {\nint bar(char a, char* b, int c = 10); \n};"
       << "int Foo::bar(char a, char* b, int c)\n{ a = c; b = new char; return a + *b; }";
 
-    QTest::newRow("Change Default Parameter")
+    QTest::newRow("change_default_parameter")
         << "class Foo {\nint bar(int a, char* b, int c = 10); \n};"
         << "int Foo::bar(int a, char* b, int c)\n{ a = c; b = new char; return a + *b; }"
         << (QList<StateChange>() << StateChange(Testbed::HeaderDoc, Range(1,29,1,34), "", NO_ASSIST))
         << "class Foo {\nint bar(int a, char* b, int c); \n};"
         << "int Foo::bar(int a, char* b, int c)\n{ a = c; b = new char; return a + *b; }";
 
-    QTest::newRow("Change Function Type")
+    QTest::newRow("change_function_type")
         << "class Foo {\nint bar(int a, char* b, int c = 10); \n};"
         << "int Foo::bar(int a, char* b, int c)\n{ a = c; b = new char; return a + *b; }"
         << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,0,0,3), "char", SHOULD_ASSIST))
         << "class Foo {\nchar bar(int a, char* b, int c = 10); \n};"
         << "char Foo::bar(int a, char* b, int c)\n{ a = c; b = new char; return a + *b; }";
 
-    QTest::newRow("Swap Args Definition Side")
+    QTest::newRow("swap_args_definition_side")
         << "class Foo {\nint bar(int a, char* b, int c = 10); \n};"
         << "int Foo::bar(int a, char* b, int c)\n{ a = c; b = new char; return a + *b; }"
         << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,13,0,28), "char* b, int a,", SHOULD_ASSIST))
@@ -334,7 +337,7 @@ void TestAssistants::testSignatureAssistant_data()
 
     // see https://bugs.kde.org/show_bug.cgi?id=299393
     // actually related to the whitespaces in the header...
-    QTest::newRow("Change Function Constness")
+    QTest::newRow("change_function_constness")
         << "class Foo {\nvoid bar(const Foo&) const;\n};"
         << "void Foo::bar(const Foo&) const\n{}"
         << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,25,0,31), "", SHOULD_ASSIST))
@@ -355,12 +358,12 @@ void TestAssistants::testSignatureAssistant()
 
         if (stateChange.result == SHOULD_ASSIST) {
             QVERIFY(staticAssistantsManager()->activeAssistant());
-            QVERIFY(staticAssistantsManager()->activeAssistant()->actions().size());
+            QVERIFY(!staticAssistantsManager()->activeAssistant()->actions().isEmpty());
         } else {
-            QVERIFY(!staticAssistantsManager()->activeAssistant() || !staticAssistantsManager()->activeAssistant()->actions().size());
+            QVERIFY(!staticAssistantsManager()->activeAssistant() || staticAssistantsManager()->activeAssistant()->actions().isEmpty());
         }
     }
-    if (staticAssistantsManager()->activeAssistant() && staticAssistantsManager()->activeAssistant()->actions().size())
+    if (staticAssistantsManager()->activeAssistant() && !staticAssistantsManager()->activeAssistant()->actions().isEmpty())
         staticAssistantsManager()->activeAssistant()->actions().first()->execute();
 
     QFETCH(QString, finalHeaderContents);
