@@ -22,7 +22,7 @@
 #ifndef KDEVPLATFORM_CCPREFERENCES_H
 #define KDEVPLATFORM_CCPREFERENCES_H
 
-#include <kcmodule.h>
+#include <interfaces/configpage.h>
 
 namespace Ui
 {
@@ -32,14 +32,18 @@ class CCSettings;
 namespace KDevelop
 {
 
-class CCPreferences : public KCModule
+class CCPreferences : public ConfigPage
 {
     Q_OBJECT
 public:
-    CCPreferences( QWidget *parent, const QVariantList &args );
+    CCPreferences(QWidget* parent);
     virtual ~CCPreferences();
 
-    virtual void save();
+    virtual QString name() const override;
+    virtual QString fullName() const override;
+    virtual QIcon icon() const override;
+
+    virtual void apply() override;
 
     void notifySettingsChanged();
 

@@ -24,34 +24,27 @@
 
 #include <QVBoxLayout>
 
-#include <kaboutdata.h>
-#include <KPluginFactory>
+#include <KTextEditor/View>
+#include <KTextEditor/Document>
+#include <KTextEditor/CodeCompletionInterface>
 
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/codecompletioninterface.h>
-
-#include "../core.h"
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/idocument.h>
-
-#include "ccconfig.h"
-
-#include "ui_ccsettings.h"
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icompletionsettings.h>
 
 #include "../completionsettings.h"
+#include "../core.h"
+#include "ccconfig.h"
+#include "ui_ccsettings.h"
 
 using namespace KTextEditor;
 
 namespace KDevelop
 {
 
-K_PLUGIN_FACTORY_WITH_JSON(CCPreferencesFactory, "kcm_kdev_ccsettings.json", registerPlugin<CCPreferences>();)
-
-CCPreferences::CCPreferences( QWidget *parent, const QVariantList &args )
-    : KCModule( KAboutData::pluginData("kcm_kdev_ccsettings"), parent, args )
+CCPreferences::CCPreferences(QWidget* parent)
+    : ConfigPage(nullptr, CCSettings::self(), parent)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
@@ -59,10 +52,6 @@ CCPreferences::CCPreferences( QWidget *parent, const QVariantList &args )
     preferencesDialog->setupUi( w );
 
     l->addWidget( w );
-
-    addConfig( CCSettings::self(), w );
-
-    load();
 }
 
 void CCPreferences::notifySettingsChanged()
@@ -77,17 +66,35 @@ CCPreferences::~CCPreferences( )
     delete preferencesDialog;
 }
 
-void CCPreferences::save()
+void CCPreferences::apply()
 {
-    KCModule::save();
+    ConfigPage::apply();
 
-    foreach (KDevelop::IDocument* doc, Core::self()->documentController()->openDocuments())
-        if (Document* textDoc = doc->textDocument())
-            foreach (View* view, textDoc->views())
-                if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view))
+    foreach (KDevelop::IDocument* doc, Core::self()->documentController()->openDocuments()) {
+        if (Document* textDoc = doc->textDocument()) {
+            foreach (View* view, textDoc->views()) {
+                if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
                     cc->setAutomaticInvocationEnabled(preferencesDialog->kcfg_automaticInvocation->isChecked());
-
+                }
+            }
+        }
+    }
     notifySettingsChanged();
+}
+
+QString CCPreferences::name() const
+{
+    return i18n("Language Support");
+}
+
+QString CCPreferences::fullName() const
+{
+    return i18n("Configure code-completion and semantic highlighting");
+}
+
+QIcon CCPreferences::icon() const
+{
+    return QIcon::fromTheme(QStringLiteral("page-zoom"));
 }
 
 }

@@ -67,12 +67,14 @@ set(KDevPlatformShell_LIB_SRCS
     settings/environmentwidget.cpp
     settings/environmentgroupmodel.cpp
     settings/environmentpreferences.cpp
+    settings/ccpreferences.cpp
 
 )
 
 kconfig_add_kcfg_files(KDevPlatformShell_LIB_SRCS
     settings/uiconfig.kcfgc
     settings/projectconfig.kcfgc
+    settings/ccconfig.kcfgc
 )
 
 ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
@@ -85,6 +87,7 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
     settings/sourceformattersettings.ui
     settings/projectsettings.ui
     settings/environmentwidget.ui
+    settings/ccsettings.ui
 )
 
 add_library(KDevPlatformShell ${KDevPlatformShell_LIB_SRCS})
