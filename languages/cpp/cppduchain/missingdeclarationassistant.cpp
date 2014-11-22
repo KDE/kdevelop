@@ -208,7 +208,7 @@ public:
     DUChainReadLocker lock;
     DUContext* container = targetContext();
     if(container)
-      return container->scopeIdentifier(false).toString();
+      return container->scopeIdentifier(true).toString();
     else
       return QString();
   }
