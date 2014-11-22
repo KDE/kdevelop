@@ -175,6 +175,10 @@ void StaticAssistantsManager::Private::eventuallyStartAssistant()
     if (!view) {
         return;
     }
+    if (view->document() != m_eventualDocument) {
+        qWarning(LANGUAGE) << "Active view does not belong to document of last observed change!";
+        return;
+    }
 
     ILanguage* language = ICore::self()->languageController()->languagesForUrl(m_eventualDocument.data()->url()).value(0);
     if (!language) {
