@@ -36,12 +36,12 @@ public:
     SvnRemoveJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    SvnInternalJobBase* internalJob() const;
+    QSharedPointer<SvnInternalJobBase> internalJob() const;
 
     void setLocations( const QList<QUrl>& locations );
     void setForce( bool force );
 private:
-    SvnInternalRemoveJob* m_job;
+    QSharedPointer<SvnInternalRemoveJob> m_job;
 
 };
 

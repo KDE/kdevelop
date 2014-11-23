@@ -46,7 +46,7 @@ public:
     SvnDiffJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    SvnInternalJobBase* internalJob() const;
+    QSharedPointer<SvnInternalJobBase> internalJob() const override;
 
     void setSource( const KDevelop::VcsLocation& );
     void setDestination( const KDevelop::VcsLocation& );
@@ -65,7 +65,7 @@ public slots:
     void addLeftText( KDevelop::VcsJob* job );
     void removeJob( KJob* job );
 private:
-    SvnInternalDiffJob* m_job;
+    QSharedPointer<SvnInternalDiffJob> m_job;
     KDevelop::VcsDiff m_diff;
     KDevelop::VcsDiff::Type m_diffType;
     QMap<KDevelop::VcsJob*, KDevelop::VcsLocation> m_catJobMap;

@@ -38,11 +38,11 @@ public:
     SvnCheckoutJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    SvnInternalJobBase* internalJob() const;
+    QSharedPointer<SvnInternalJobBase> internalJob() const override;
 
     void setMapping( const KDevelop::VcsLocation & sourceRepository, const QUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
 private:
-    SvnInternalCheckoutJob* m_job;
+    QSharedPointer<SvnInternalCheckoutJob> m_job;
 
 };
 

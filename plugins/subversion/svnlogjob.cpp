@@ -37,7 +37,7 @@ SvnInternalLogJob::SvnInternalLogJob( SvnJobBase* parent )
     m_limit = 0;
 }
 
-void SvnInternalLogJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalLogJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     initBeforeRun();
 
@@ -113,7 +113,9 @@ SvnLogJob::SvnLogJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Log );
-    m_job = new SvnInternalLogJob( this );
+    m_job = QSharedPointer<SvnInternalLogJob>::create( this );
+    connect( m_job.data(), &SvnInternalLogJob::logEvent,
+             this, &SvnLogJob::logEventReceived, Qt::QueuedConnection );
 
     setObjectName(i18n("Subversion Log"));
 }
@@ -133,14 +135,12 @@ void SvnLogJob::start()
         setErrorText( i18n( "Not enough information to log location" ) );
     }else
     {
-        connect( m_job, SIGNAL(logEvent(KDevelop::VcsEvent)),
-               this, SLOT(logEventReceived(KDevelop::VcsEvent)), Qt::QueuedConnection );
         qCDebug(PLUGIN_SVN) << "logging url:" << m_job->location();
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
-SvnInternalJobBase* SvnLogJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnLogJob::internalJob() const
 {
     return m_job;
 }

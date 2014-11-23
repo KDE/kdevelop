@@ -25,7 +25,6 @@
 
 #include <KLocalizedString>
 
-
 #include "kdevsvncpp/client.hpp"
 #include "kdevsvncpp/path.hpp"
 #include "kdevsvncpp/targets.hpp"
@@ -36,7 +35,7 @@ SvnInternalRevertJob::SvnInternalRevertJob( SvnJobBase* parent )
 {
 }
 
-void SvnInternalRevertJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalRevertJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     initBeforeRun();
 
@@ -88,7 +87,7 @@ SvnRevertJob::SvnRevertJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
-    m_job = new SvnInternalRevertJob( this );
+    m_job = QSharedPointer<SvnInternalRevertJob>::create( this );
     setObjectName(i18n("Subversion Revert"));
 }
 
@@ -105,11 +104,11 @@ void SvnRevertJob::start()
         setErrorText( i18n( "Not enough information to execute revert" ) );
     }else
     {
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
-SvnInternalJobBase* SvnRevertJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnRevertJob::internalJob() const
 {
     return m_job;
 }

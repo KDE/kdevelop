@@ -95,11 +95,8 @@ bool SvnInternalCommitJob::keepLock() const
 }
 
 
-void SvnInternalCommitJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalCommitJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
-    Q_UNUSED(self);
-    Q_UNUSED(thread);
-
     initBeforeRun();
     svn::Client cli(m_ctxt);
     std::vector<svn::Path> targets;
@@ -125,17 +122,12 @@ SvnCommitJob::SvnCommitJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Verbose )
 {
     setType( KDevelop::VcsJob::Commit );
-    m_job = new SvnInternalCommitJob( this );
+    m_job = QSharedPointer<SvnInternalCommitJob>::create( this );
 }
 
 QVariant SvnCommitJob::fetchResults()
 {
     return QVariant();
-}
-
-SvnInternalJobBase* SvnCommitJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnCommitJob::start()
@@ -155,8 +147,13 @@ void SvnCommitJob::start()
         m->appendRow(new QStandardItem(errorText()));
     }else
     {
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw(m_job);
+        m_part->jobQueue()->stream() << m_job;
     }
+}
+
+QSharedPointer<SvnInternalJobBase> SvnCommitJob::internalJob() const
+{
+    return m_job;
 }
 
 void SvnCommitJob::setCommitMessage( const QString& msg )
@@ -183,7 +180,3 @@ void SvnCommitJob::setRecursive( bool recursive )
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setRecursive( recursive );
 }
-
-
-
-#include "svncommitjob.moc"

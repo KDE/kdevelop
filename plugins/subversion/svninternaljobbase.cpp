@@ -55,12 +55,12 @@ SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
 {
     m_ctxt->setListener(this);
 
-    QObject::connect( m_decorator, SIGNAL(failed(ThreadWeaver::Job*)),
-             parent, SLOT(internalJobFailed(ThreadWeaver::Job*)), Qt::QueuedConnection );
-    QObject::connect( m_decorator, SIGNAL(done(ThreadWeaver::Job*)),
-             parent, SLOT(internalJobDone(ThreadWeaver::Job*)), Qt::QueuedConnection );
-    QObject::connect( m_decorator, SIGNAL(started(ThreadWeaver::Job*)),
-             parent, SLOT(internalJobStarted(ThreadWeaver::Job*)), Qt::QueuedConnection );
+    QObject::connect( m_decorator, &ThreadWeaver::QObjectDecorator::failed,
+             parent, &SvnJobBase::internalJobFailed, Qt::QueuedConnection );
+    QObject::connect( m_decorator, &ThreadWeaver::QObjectDecorator::done,
+             parent, &SvnJobBase::internalJobDone, Qt::QueuedConnection );
+    QObject::connect( m_decorator, &ThreadWeaver::QObjectDecorator::started,
+             parent, &SvnJobBase::internalJobStarted, Qt::QueuedConnection );
 }
 
 SvnInternalJobBase::~SvnInternalJobBase()

@@ -34,7 +34,7 @@ SvnInternalInfoJob::SvnInternalInfoJob( SvnJobBase* parent )
 {
 }
 
-void SvnInternalInfoJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalInfoJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     initBeforeRun();
     svn::Client cli(m_ctxt);
@@ -90,9 +90,9 @@ SvnInfoJob::SvnInfoJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Silent ), m_provideInfo( SvnInfoJob::AllInfo )
 {
     setType( KDevelop::VcsJob::Add );
-    m_job = new SvnInternalInfoJob( this );
-    connect( m_job, SIGNAL(gotInfo(SvnInfoHolder)),
-             this, SLOT(setInfo(SvnInfoHolder)), Qt::QueuedConnection );
+    m_job = QSharedPointer<SvnInternalInfoJob>::create( this );
+    connect( m_job.data(), &SvnInternalInfoJob::gotInfo,
+             this, &SvnInfoJob::setInfo, Qt::QueuedConnection );
     setObjectName(i18n("Subversion Info"));
 }
 
@@ -130,11 +130,11 @@ void SvnInfoJob::start()
         setErrorText( i18n( "Not enough information to execute info job" ) );
     }else
     {
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
-SvnInternalJobBase* SvnInfoJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnInfoJob::internalJob() const
 {
     return m_job;
 }

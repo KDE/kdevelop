@@ -43,7 +43,7 @@ public:
     SvnCatJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    SvnInternalJobBase* internalJob() const;
+    QSharedPointer<SvnInternalJobBase> internalJob() const override;
 
     void setSource( const KDevelop::VcsLocation& );
     void setPegRevision( const KDevelop::VcsRevision& );
@@ -52,7 +52,7 @@ public:
 public slots:
     void setContent( const QString& );
 private:
-    SvnInternalCatJob* m_job;
+    QSharedPointer<SvnInternalCatJob> m_job;
     QString m_content;
 };
 

@@ -25,7 +25,6 @@
 
 #include <KLocalizedString>
 
-
 #include "kdevsvncpp/client.hpp"
 #include "kdevsvncpp/path.hpp"
 #include "kdevsvncpp/targets.hpp"
@@ -36,7 +35,7 @@ SvnInternalRemoveJob::SvnInternalRemoveJob( SvnJobBase* parent )
 {
 }
 
-void SvnInternalRemoveJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalRemoveJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     initBeforeRun();
 
@@ -90,7 +89,7 @@ SvnRemoveJob::SvnRemoveJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
-    m_job = new SvnInternalRemoveJob( this );
+    m_job = QSharedPointer<SvnInternalRemoveJob>::create( this );
     setObjectName(i18n("Subversion Remove"));
 }
 
@@ -108,11 +107,11 @@ void SvnRemoveJob::start()
     }else
     {
         qCDebug(PLUGIN_SVN) << "removing urls:" << m_job->locations();
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
-SvnInternalJobBase* SvnRemoveJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnRemoveJob::internalJob() const
 {
     return m_job;
 }
@@ -122,7 +121,6 @@ void SvnRemoveJob::setLocations( const QList<QUrl>& urls )
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setLocations( urls );
 }
-
 
 void SvnRemoveJob::setForce( bool force )
 {

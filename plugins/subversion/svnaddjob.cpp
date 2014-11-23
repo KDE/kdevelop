@@ -35,7 +35,7 @@ SvnInternalAddJob::SvnInternalAddJob( SvnJobBase* parent )
 {
 }
 
-void SvnInternalAddJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalAddJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     initBeforeRun();
 
@@ -85,7 +85,7 @@ SvnAddJob::SvnAddJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
-    m_job = new SvnInternalAddJob( this );
+    m_job = QSharedPointer<SvnInternalAddJob>::create( this );
     setObjectName(i18n("Subversion Add"));
 }
 
@@ -103,11 +103,11 @@ void SvnAddJob::start()
     }else
     {
         qCDebug(PLUGIN_SVN) << "adding urls:" << m_job->locations();
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
-SvnInternalJobBase* SvnAddJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnAddJob::internalJob() const
 {
     return m_job;
 }
@@ -123,6 +123,3 @@ void SvnAddJob::setRecursive( bool recursive )
     if( status() == KDevelop::VcsJob::JobNotStarted )
         m_job->setRecursive( recursive );
 }
-
-
-#include "svnaddjob.moc"

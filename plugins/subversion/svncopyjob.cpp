@@ -33,7 +33,7 @@ SvnInternalCopyJob::SvnInternalCopyJob( SvnJobBase* parent )
 {
 }
 
-void SvnInternalCopyJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalCopyJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     initBeforeRun();
 
@@ -82,7 +82,7 @@ SvnCopyJob::SvnCopyJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Copy );
-    m_job = new SvnInternalCopyJob( this );
+    m_job = QSharedPointer<SvnInternalCopyJob>::create( this );
     setObjectName(i18n("Subversion Copy"));
 }
 
@@ -100,11 +100,11 @@ void SvnCopyJob::start()
     }else
     {
         qCDebug(PLUGIN_SVN) << "copying url:" << m_job->sourceLocation() << "to url" << m_job->destinationLocation();
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
-SvnInternalJobBase* SvnCopyJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnCopyJob::internalJob() const
 {
     return m_job;
 }

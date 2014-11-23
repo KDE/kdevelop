@@ -39,7 +39,7 @@ SvnInternalCatJob::SvnInternalCatJob( SvnJobBase* parent )
                                     KDevelop::VcsRevision::Special );
 }
 
-void SvnInternalCatJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalCatJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     initBeforeRun();
 
@@ -106,7 +106,9 @@ SvnCatJob::SvnCatJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Cat );
-    m_job = new SvnInternalCatJob( this );
+    m_job = QSharedPointer<SvnInternalCatJob>::create( this );
+    connect(m_job.data(), &SvnInternalCatJob::gotContent,
+            this, &SvnCatJob::setContent, Qt::QueuedConnection);
     setObjectName(i18n("Subversion Cat"));
 }
 
@@ -117,20 +119,15 @@ QVariant SvnCatJob::fetchResults()
 
 void SvnCatJob::start()
 {
-    if( !m_job->source().isValid() )
-    {
+    if( !m_job->source().isValid() ) {
         internalJobFailed( m_job );
         setErrorText( i18n( "Not enough information to execute cat" ) );
-    }else
-    {
-        connect( m_job, SIGNAL(gotContent(QString)),
-                 this, SLOT(setContent(QString)),
-                 Qt::QueuedConnection );
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+    } else {
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
-SvnInternalJobBase* SvnCatJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnCatJob::internalJob() const
 {
     return m_job;
 }

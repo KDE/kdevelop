@@ -46,7 +46,7 @@ bool SvnInternalCheckoutJob::isValid() const
     return m_sourceRepository.isValid() && m_destinationDirectory.isLocalFile() && QFileInfo(KIO::upUrl(m_destinationDirectory).toLocalFile()).exists();
 }
 
-void SvnInternalCheckoutJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalCheckoutJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     initBeforeRun();
 
@@ -102,7 +102,7 @@ SvnCheckoutJob::SvnCheckoutJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Import );
-    m_job = new SvnInternalCheckoutJob( this );
+    m_job = QSharedPointer<SvnInternalCheckoutJob>::create( this );
     setObjectName(i18n("Subversion Checkout"));
 }
 
@@ -118,11 +118,11 @@ void SvnCheckoutJob::start()
         setErrorText( i18n( "Not enough information to checkout" ) );
     } else {
         qCDebug(PLUGIN_SVN) << "checking out: " << m_job->source().repositoryServer();
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
-SvnInternalJobBase* SvnCheckoutJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnCheckoutJob::internalJob() const
 {
     return m_job;
 }

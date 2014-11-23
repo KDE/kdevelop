@@ -33,7 +33,7 @@ SvnInternalMoveJob::SvnInternalMoveJob( SvnJobBase* parent )
 {
 }
 
-void SvnInternalMoveJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalMoveJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     initBeforeRun();
 
@@ -94,7 +94,7 @@ SvnMoveJob::SvnMoveJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Move );
-    m_job = new SvnInternalMoveJob( this );
+    m_job = QSharedPointer<SvnInternalMoveJob>::create( this );
     setObjectName(i18n("Subversion Move"));
 }
 
@@ -112,11 +112,11 @@ void SvnMoveJob::start()
     }else
     {
         qCDebug(PLUGIN_SVN) << "moveing url:" << m_job->sourceLocation() << "to url" << m_job->destinationLocation();
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
-SvnInternalJobBase* SvnMoveJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnMoveJob::internalJob() const
 {
     return m_job;
 }

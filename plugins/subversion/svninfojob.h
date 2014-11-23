@@ -74,7 +74,7 @@ public:
     SvnInfoJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    SvnInternalJobBase* internalJob() const;
+    QSharedPointer<SvnInternalJobBase> internalJob() const override;
 
     void setLocation( const QUrl &location );
     void setProvideInformation( ProvideInformationType );
@@ -82,7 +82,7 @@ public:
 public slots:
     void setInfo( const SvnInfoHolder& );
 private:
-    SvnInternalInfoJob* m_job;
+    QSharedPointer<SvnInternalInfoJob> m_job;
     SvnInfoHolder m_info;
     ProvideInformationType m_provideInfo;
     KDevelop::VcsRevision::RevisionType m_provideRevisionType;

@@ -71,7 +71,7 @@ void setupSampleProject( const QString& name, const QString& content )
 
 void SvnImport::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({QStringLiteral("kdevsubversion")});
     TestCore::initialize();
 
     QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IBasicVersionControl");

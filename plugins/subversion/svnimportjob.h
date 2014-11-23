@@ -33,12 +33,12 @@ public:
     SvnImportJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    SvnInternalJobBase* internalJob() const;
+    QSharedPointer<SvnInternalJobBase> internalJob() const override;
 
     void setMapping( const QUrl &sourceDirectory, const KDevelop::VcsLocation & destinationRepository);
     void setMessage( const QString& );
 private:
-    SvnImportInternalJob* m_job;
+    QSharedPointer<SvnImportInternalJob> m_job;
 
 };
 

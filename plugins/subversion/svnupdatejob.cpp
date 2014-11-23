@@ -38,7 +38,7 @@ SvnInternalUpdateJob::SvnInternalUpdateJob( SvnJobBase* parent )
 {
 }
 
-void SvnInternalUpdateJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalUpdateJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     initBeforeRun();
 
@@ -122,7 +122,7 @@ SvnUpdateJob::SvnUpdateJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Verbose )
 {
     setType( KDevelop::VcsJob::Add );
-    m_job = new SvnInternalUpdateJob( this );
+    m_job = QSharedPointer<SvnInternalUpdateJob>::create( this );
     setObjectName(i18n("Subversion Update"));
 }
 
@@ -140,11 +140,11 @@ void SvnUpdateJob::start()
     }else
     {
         qCDebug(PLUGIN_SVN) << "updating urls:" << m_job->locations();
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
-SvnInternalJobBase* SvnUpdateJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnUpdateJob::internalJob() const
 {
     return m_job;
 }

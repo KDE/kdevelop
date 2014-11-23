@@ -38,7 +38,7 @@ SvnInternalBlameJob::SvnInternalBlameJob( SvnJobBase* parent )
                                     KDevelop::VcsRevision::Special );
 }
 
-void SvnInternalBlameJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalBlameJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     initBeforeRun();
 
@@ -143,7 +143,9 @@ SvnBlameJob::SvnBlameJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Annotate );
-    m_job = new SvnInternalBlameJob( this );
+    m_job = QSharedPointer<SvnInternalBlameJob>::create( this );
+    connect(m_job.data(), &SvnInternalBlameJob::blameLine,
+            this, &SvnBlameJob::blameLineReceived);
     setObjectName(i18n("Subversion Annotate"));
 }
 
@@ -162,14 +164,12 @@ void SvnBlameJob::start()
         setErrorText( i18n( "Not enough information to blame location" ) );
     }else
     {
-        connect( m_job, SIGNAL(blameLine(KDevelop::VcsAnnotationLine)),
-                 this, SLOT(blameLineReceived(KDevelop::VcsAnnotationLine)) );
-        qCDebug(PLUGIN_SVN) << "blameging url:" << m_job->location();
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+        qCDebug(PLUGIN_SVN) << "blaming url:" << m_job->location();
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
-SvnInternalJobBase* SvnBlameJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnBlameJob::internalJob() const
 {
     return m_job;
 }

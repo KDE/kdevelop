@@ -50,7 +50,6 @@ KDevelop::VcsJob::JobStatus SvnJobBase::status() const
     return m_status;
 }
 
-
 void SvnJobBase::askForLogin( const QString& realm )
 {
     qCDebug(PLUGIN_SVN) << "login";
@@ -115,14 +114,14 @@ void SvnJobBase::askForSslClientCertPassword( const QString& )
     internalJob()->m_guiSemaphore.release( 1 );
 }
 
-void SvnJobBase::internalJobStarted( ThreadWeaver::Job* job )
+void SvnJobBase::internalJobStarted( ThreadWeaver::JobPointer job )
 {
     if( internalJob() == job ) {
         m_status = KDevelop::VcsJob::JobRunning;
     }
 }
 
-void SvnJobBase::internalJobDone( ThreadWeaver::Job* job )
+void SvnJobBase::internalJobDone( ThreadWeaver::JobPointer job )
 {
     if ( m_status == VcsJob::JobFailed ) {
         // see: https://bugs.kde.org/show_bug.cgi?id=273759
@@ -152,7 +151,7 @@ void SvnJobBase::internalJobDone( ThreadWeaver::Job* job )
     }
 }
 
-void SvnJobBase::internalJobFailed( ThreadWeaver::Job* job )
+void SvnJobBase::internalJobFailed( ThreadWeaver::JobPointer job )
 {
     if( internalJob() == job )
     {

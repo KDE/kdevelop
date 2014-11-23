@@ -96,7 +96,7 @@ bool SvnInternalStatusJob::recursive() const
     return m_recursive;
 }
 
-void SvnInternalStatusJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalStatusJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     qCDebug(PLUGIN_SVN) << "Running internal status job with urls:" << m_locations;
     initBeforeRun();
@@ -130,7 +130,9 @@ SvnStatusJob::SvnStatusJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Status );
-    m_job = new SvnInternalStatusJob( this );
+    m_job = QSharedPointer<SvnInternalStatusJob>::create( this );
+    connect(m_job.data(), &SvnInternalStatusJob::gotNewStatus,
+            this, &SvnStatusJob::addToStats, Qt::QueuedConnection);
     setObjectName(i18n("Subversion Status"));
 }
 
@@ -141,7 +143,7 @@ QVariant SvnStatusJob::fetchResults()
     return QVariant(temp);
 }
 
-SvnInternalJobBase* SvnStatusJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnStatusJob::internalJob() const
 {
     return m_job;
 }
@@ -155,10 +157,7 @@ void SvnStatusJob::start()
     }else
     {
         qCDebug(PLUGIN_SVN) << "Starting status job";
-        connect( m_job, SIGNAL(gotNewStatus(KDevelop::VcsStatusInfo)),
-            this, SLOT(addToStats(KDevelop::VcsStatusInfo)),
-                        Qt::QueuedConnection );
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
@@ -186,5 +185,3 @@ void SvnStatusJob::addToStats( const KDevelop::VcsStatusInfo& info )
         qCDebug(PLUGIN_SVN) << "Already have this info:";
     }
 }
-
-#include "svnstatusjob.moc"

@@ -91,7 +91,7 @@ SvnInternalDiffJob::SvnInternalDiffJob( SvnJobBase* parent )
                                     KDevelop::VcsRevision::Special );
 }
 
-void SvnInternalDiffJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnInternalDiffJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     initBeforeRun();
 
@@ -262,7 +262,9 @@ SvnDiffJob::SvnDiffJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
-    m_job = new SvnInternalDiffJob( this );
+    m_job = QSharedPointer<SvnInternalDiffJob>::create( this );
+    connect( m_job.data(), &SvnInternalDiffJob::gotDiff,
+                this, &SvnDiffJob::setDiff, Qt::QueuedConnection );
 
     setObjectName(i18n("Subversion Diff"));
 }
@@ -274,8 +276,6 @@ QVariant SvnDiffJob::fetchResults()
 
 void SvnDiffJob::start()
 {
-
-    disconnect( m_job, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(internalJobDone(ThreadWeaver::Job*)) );
     if( !m_job->source().isValid()
          || ( !m_job->destination().isValid() &&
                 ( m_job->srcRevision().revisionType() == KDevelop::VcsRevision::Invalid
@@ -284,16 +284,12 @@ void SvnDiffJob::start()
     {
         internalJobFailed( m_job );
         setErrorText( i18n( "Not enough information given to execute diff" ) );
-    }else
-    {
-        connect( m_job, SIGNAL(gotDiff(QString)),
-                 this, SLOT(setDiff(QString)),
-                 Qt::QueuedConnection );
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+    } else {
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
-SvnInternalJobBase* SvnDiffJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnDiffJob::internalJob() const
 {
     return m_job;
 }

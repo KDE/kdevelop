@@ -41,9 +41,11 @@ public:
     void setKeepLock( bool );
     void setUrls( const QList<QUrl>& urls );
     void setRecursive( bool );
-    SvnInternalJobBase* internalJob() const;
+
+    QSharedPointer<SvnInternalJobBase> internalJob() const override;
+
 private:
-    SvnInternalCommitJob* m_job;
+    QSharedPointer<SvnInternalCommitJob> m_job;
 };
 
 #endif

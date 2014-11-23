@@ -38,7 +38,7 @@ SvnImportInternalJob::SvnImportInternalJob( SvnJobBase* parent )
 {
 }
 
-void SvnImportInternalJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
+void SvnImportInternalJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)
 {
     initBeforeRun();
 
@@ -97,7 +97,7 @@ SvnImportJob::SvnImportJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Import );
-    m_job = new SvnImportInternalJob( this );
+    m_job = QSharedPointer<SvnImportInternalJob>::create( this );
     setObjectName(i18n("Subversion Import"));
 }
 
@@ -115,11 +115,11 @@ void SvnImportJob::start()
     }else
     {
         qCDebug(PLUGIN_SVN) << "importing:" << m_job->source();
-        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
+        m_part->jobQueue()->stream() << m_job;
     }
 }
 
-SvnInternalJobBase* SvnImportJob::internalJob() const
+QSharedPointer<SvnInternalJobBase> SvnImportJob::internalJob() const
 {
     return m_job;
 }

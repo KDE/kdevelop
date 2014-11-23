@@ -39,7 +39,7 @@ public:
     SvnLogJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    SvnInternalJobBase* internalJob() const;
+    QSharedPointer<SvnInternalJobBase> internalJob() const override;
 
     void setLocation( const QUrl &location );
     void setLimit( int limit );
@@ -48,7 +48,7 @@ public:
 private slots:
     void logEventReceived( const KDevelop::VcsEvent& );
 private:
-    SvnInternalLogJob* m_job;
+    QSharedPointer<SvnInternalLogJob> m_job;
     QList<QVariant> m_eventList;
 
 };

@@ -41,7 +41,7 @@ class SvnJobBase : public KDevelop::VcsJob
 public:
     SvnJobBase( KDevSvnPlugin*, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose );
     virtual ~SvnJobBase();
-    virtual SvnInternalJobBase* internalJob() const = 0;
+    virtual QSharedPointer<SvnInternalJobBase> internalJob() const = 0;
     KDevelop::VcsJob::JobStatus status() const;
     KDevelop::IPlugin* vcsPlugin() const;
 public slots:
@@ -55,14 +55,14 @@ public slots:
     void askForSslClientCertPassword( const QString& );
 
 protected slots:
-    void internalJobStarted( ThreadWeaver::Job* job );
-    void internalJobDone( ThreadWeaver::Job* job );
-    void internalJobFailed( ThreadWeaver::Job* job );
+    friend class SvnInternalJobBase;
+    void internalJobStarted( ThreadWeaver::JobPointer job );
+    void internalJobDone( ThreadWeaver::JobPointer job );
+    void internalJobFailed( ThreadWeaver::JobPointer job );
 
 protected:
     virtual bool doKill();
     KDevSvnPlugin* m_part;
-
 private:
     void outputMessage(const QString &message);
     KDevelop::VcsJob::JobStatus m_status;

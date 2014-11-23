@@ -36,14 +36,14 @@ public:
     SvnUpdateJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    SvnInternalJobBase* internalJob() const;
+    QSharedPointer<SvnInternalJobBase> internalJob() const override;
 
     void setLocations( const QList<QUrl>& locations );
     void setRecursive( bool );
     void setRevision( const KDevelop::VcsRevision& );
     void setIgnoreExternals( bool );
 private:
-    SvnInternalUpdateJob* m_job;
+    QSharedPointer<SvnInternalUpdateJob> m_job;
 
 };
 

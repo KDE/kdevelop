@@ -39,11 +39,12 @@ public:
 
     void setLocations( const QList<QUrl>& locations );
     void setRecursive( bool );
-    SvnInternalJobBase* internalJob() const;
+    QSharedPointer<SvnInternalJobBase> internalJob() const override;
+
 public slots:
     void addToStats( const KDevelop::VcsStatusInfo& );
 private:
-    SvnInternalStatusJob* m_job;
+    QSharedPointer<SvnInternalStatusJob> m_job;
     QList<QVariant> m_stats;
 };
 
