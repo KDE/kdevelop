@@ -17,7 +17,7 @@ set(kdevgit_PART_SRCS
 )
 
 ki18n_wrap_ui(kdevgit_PART_SRCS stashmanagerdialog.ui)
-kdevplatform_add_plugin(kdevgit JSON kdevgit.json.cmake SOURCES ${kdevgit_PART_SRCS})
+kdevplatform_add_plugin(kdevgit JSON kdevgit.json SOURCES ${kdevgit_PART_SRCS})
 
 target_link_libraries(kdevgit
     KDev::Util
@@ -26,6 +26,3 @@ target_link_libraries(kdevgit
     KDev::Project
     KF5::SonnetUi
 )
-
-########### install files ###############
-install(TARGETS kdevgit DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})

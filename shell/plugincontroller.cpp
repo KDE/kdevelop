@@ -91,10 +91,22 @@ bool isGlobalPlugin( const KPluginInfo& info )
 bool hasMandatoryProperties( const KPluginInfo& info )
 {
     QVariant mode = info.property( KEY_Mode );
-    QVariant version = info.property( KEY_Version );
+    if (!mode.isValid() || !mode.canConvert<QString>()) {
+        return false;
+    }
 
-    return mode.isValid() && mode.canConvert( QVariant::String )
-           && version.isValid() && version.canConvert( QVariant::String );
+    // when the plugin is installed into the versioned plugin path, it's good to go
+    if (info.libraryPath().contains(QLatin1String("/kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION) "/"))) {
+        return true;
+    }
+
+    // the version property is only required when the plugin is not installed into the right directory
+    QVariant version = info.property( KEY_Version );
+    if (version.isValid() && version.value<int>() == KDEVELOP_PLUGIN_VERSION) {
+        return true;
+    }
+
+    return false;
 }
 
 bool constraintsMatch( const KPluginInfo& info, const QVariantMap& constraints)

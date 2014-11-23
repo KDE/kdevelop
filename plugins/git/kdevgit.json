@@ -92,6 +92,5 @@
     "X-KDevelop-Mode": "GUI",
     "X-KDevelop-Interfaces": [
         "org.kdevelop.IBasicVersionControl", "org.kdevelop.IDistributedVersionControl"
-    ],
-    "X-KDevelop-Version": "@KDEV_PLUGIN_VERSION@"
+    ]
 }

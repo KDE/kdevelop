@@ -97,8 +97,7 @@ function(kdevplatform_add_plugin plugin)
     set(multiValueArgs SOURCES)
     cmake_parse_arguments(KDEV_ADD_PLUGIN "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-    string(REGEX REPLACE "\\.cmake$" "" json_out ${KDEV_ADD_PLUGIN_JSON})
-    configure_file(${KDEV_ADD_PLUGIN_JSON} ${CMAKE_CURRENT_BINARY_DIR}/${json_out})
+    get_filename_component(json "${KDEV_ADD_PLUGIN_JSON}" REALPATH)
 
     # ensure we recompile the corresponding object files when the json file changes
     set(dependent_sources )
@@ -115,8 +114,10 @@ function(kdevplatform_add_plugin plugin)
         # fallback to all sources - better safe than sorry...
         set(dependent_sources ${KDEV_ADD_PLUGIN_SOURCES})
     endif()
-    set_property(SOURCE ${dependent_sources} APPEND PROPERTY OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${json_out})
+    set_property(SOURCE ${dependent_sources} APPEND PROPERTY OBJECT_DEPENDS ${json})
 
     add_library(${plugin} MODULE ${KDEV_ADD_PLUGIN_SOURCES})
-    set_property(TARGET ${plugin} APPEND PROPERTY AUTOGEN_TARGET_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${json_out})
+    set_property(TARGET ${plugin} APPEND PROPERTY AUTOGEN_TARGET_DEPENDS ${json})
+
+    install(TARGETS ${plugin} DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 endfunction()
