@@ -17,10 +17,7 @@ set(kdevgit_PART_SRCS
 )
 
 ki18n_wrap_ui(kdevgit_PART_SRCS stashmanagerdialog.ui)
-add_library(kdevgit MODULE ${kdevgit_PART_SRCS})
-
-configure_file(kdevgit.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgit.desktop)
-kcoreaddons_desktop_to_json(kdevgit ${CMAKE_CURRENT_BINARY_DIR}/kdevgit.desktop)
+kdevplatform_add_plugin(kdevgit JSON kdevgit.json.cmake SOURCES ${kdevgit_PART_SRCS})
 
 target_link_libraries(kdevgit
     KDev::Util
