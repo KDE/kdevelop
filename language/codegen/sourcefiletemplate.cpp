@@ -146,42 +146,31 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
     d->descriptionFileName = templateDescription;
     QString archiveFileName;
 
-    QStringList templateFiles;
     const QString templateBaseName = QFileInfo(templateDescription).baseName();
 
     d->searchLocations.append(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "/kdevfiletemplates/templates/", QStandardPaths::LocateDirectory));
 
     foreach(const QString& dir, d->searchLocations) {
-        foreach(const QString& file, QDir(dir).entryList(QDir::Files)) {
-            templateFiles += dir + file;
+        qDebug() << "search in:" << dir << "look for:" << templateBaseName;
+        foreach(const auto& entry, QDir(dir).entryInfoList(QDir::Files)) {
+            qDebug() << entry.baseName();
+            if (entry.baseName() == templateBaseName) {
+                archiveFileName = entry.absoluteFilePath();
+                qCDebug(LANGUAGE) << "Found template archive" << archiveFileName;
+                break;
+            }
         }
     }
 
-    foreach (const QString& file, templateFiles)
-    {
-        qCDebug(LANGUAGE) << "Found template archive" << file;
-        if (QFileInfo(file).baseName() == templateBaseName)
-        {
-            archiveFileName = file;
-            break;
-        }
-    }
-
-    if (archiveFileName.isEmpty() || !QFileInfo(archiveFileName).exists())
-    {
-        qCWarning(LANGUAGE) << "Could not find a template archive for description" << templateDescription;
+    if (archiveFileName.isEmpty() || !QFileInfo(archiveFileName).exists()) {
+        qCWarning(LANGUAGE) << "Could not find a template archive for description" << templateDescription << ", archive file" << archiveFileName;
         d->archive = 0;
-    }
-    else
-    {
+    } else {
         QFileInfo info(archiveFileName);
 
-        if (info.suffix() == ".zip")
-        {
+        if (info.suffix() == ".zip") {
             d->archive = new KZip(archiveFileName);
-        }
-        else
-        {
+        } else {
             d->archive = new KTar(archiveFileName);
         }
         d->archive->open(QIODevice::ReadOnly);

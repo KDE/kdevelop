@@ -20,7 +20,6 @@ target_link_libraries(kdevcodeutils
 )
 
 add_subdirectory(doc_templates)
-add_subdirectory(tests)
 
 install(TARGETS kdevcodeutils DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 

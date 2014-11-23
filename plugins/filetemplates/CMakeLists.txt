@@ -94,3 +94,5 @@ target_link_libraries(testfiletemplates
     KDev::Tests
     KF5::NewStuff
 )
+
+add_subdirectory(tests)
