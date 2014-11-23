@@ -19,13 +19,13 @@
 #include "outputfilteringstrategies.h"
 #include "outputformats.h"
 #include "filtereditem.h"
+#include <util/path.h>
 
 #include <KLocalizedString>
 
 #include <QFileInfo>
 
 #include <algorithm>
-
 
 namespace KDevelop
 {
@@ -81,14 +81,14 @@ FilteredItem NoFilterStrategy::errorInLine(const QString& line)
 struct CompilerFilterStrategyPrivate
 {
     CompilerFilterStrategyPrivate(const QUrl& buildDir);
-    QUrl urlForFile( const QString& ) const;
+    Path pathForFile( const QString& ) const;
     bool isMultiLineCase(ErrorFormat curErrFilter) const;
-    void putDirAtEnd(const QString& );
+    void putDirAtEnd(const Path& pathToInsert);
 
-    QVector<QString> m_currentDirs;
-    QUrl m_buildDir;
+    QVector<Path> m_currentDirs;
+    Path m_buildDir;
 
-    typedef QMap<QString, int> PositionMap;
+    using PositionMap = QHash<Path, int>;
     PositionMap m_positionInCurrentDirs;
 };
 
@@ -195,29 +195,29 @@ const QVector<ActionFormat> ACTION_FILTERS {
 }
 
 CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(const QUrl& buildDir)
-: m_buildDir(buildDir)
+    : m_buildDir(buildDir)
 {
 }
 
-QUrl CompilerFilterStrategyPrivate::urlForFile(const QString& filename) const
+Path CompilerFilterStrategyPrivate::pathForFile(const QString& filename) const
 {
     QFileInfo fi( filename );
-    QUrl currentUrl;
+    Path currentPath;
     if( fi.isRelative() ) {
         if( m_currentDirs.isEmpty() ) {
-            return m_buildDir.resolved( QUrl(filename) );
+            return Path(m_buildDir, filename );
         }
 
-        QVector<QString>::const_iterator it = m_currentDirs.constEnd() - 1;
+        auto it = m_currentDirs.constEnd() - 1;
         do {
-            currentUrl = QUrl::fromLocalFile( *it ).resolved( QUrl(filename) );
-        } while( (it-- !=  m_currentDirs.constBegin()) && !QFileInfo(currentUrl.toLocalFile()).exists() );
+            currentPath = Path(*it, filename);
+        } while( (it-- !=  m_currentDirs.constBegin()) && !QFileInfo(currentPath.toLocalFile()).exists() );
 
-        return currentUrl;
+        return currentPath;
     } else {
-        currentUrl = QUrl::fromLocalFile( filename );
+        currentPath = Path(filename);
     }
-    return currentUrl;
+    return currentPath;
 }
 
 bool CompilerFilterStrategyPrivate::isMultiLineCase(KDevelop::ErrorFormat curErrFilter) const
@@ -228,16 +228,16 @@ bool CompilerFilterStrategyPrivate::isMultiLineCase(KDevelop::ErrorFormat curErr
     return false;
 }
 
-void CompilerFilterStrategyPrivate::putDirAtEnd(const QString& dirNameToInsert)
+void CompilerFilterStrategyPrivate::putDirAtEnd(const Path& pathToInsert)
 {
-    CompilerFilterStrategyPrivate::PositionMap::iterator it = m_positionInCurrentDirs.find( dirNameToInsert );
+    CompilerFilterStrategyPrivate::PositionMap::iterator it = m_positionInCurrentDirs.find( pathToInsert );
     // Encountered new build directory?
     if (it == m_positionInCurrentDirs.end()) {
-        m_currentDirs.push_back( dirNameToInsert );
-        m_positionInCurrentDirs.insert( dirNameToInsert, m_currentDirs.size() - 1 );
+        m_currentDirs.push_back( pathToInsert );
+        m_positionInCurrentDirs.insert( pathToInsert, m_currentDirs.size() - 1 );
     } else {
         // Build dir already in currentDirs, but move it to back of currentDirs list
-        // (this gives us most-recently-used semantics in urlForFile)
+        // (this gives us most-recently-used semantics in pathForFile)
         std::rotate(m_currentDirs.begin() + it.value(), m_currentDirs.begin() + it.value() + 1, m_currentDirs.end() );
         it.value() = m_currentDirs.size() - 1;
     }
@@ -253,9 +253,14 @@ CompilerFilterStrategy::~CompilerFilterStrategy()
     delete d;
 }
 
-QVector< QString > CompilerFilterStrategy::getCurrentDirs()
+QVector<QString> CompilerFilterStrategy::getCurrentDirs()
 {
-    return d->m_currentDirs;
+    QVector<QString> ret;
+    ret.reserve(d->m_currentDirs.size());
+    for (const auto& path : d->m_currentDirs) {
+        ret << path.pathOrUrl();
+    }
+    return ret;
 }
 
 FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
@@ -274,17 +279,17 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             }
             if( curActFilter.action == cd )
             {
-                d->m_currentDirs.push_back( regEx.cap( curActFilter.fileGroup ) );
-                d->m_positionInCurrentDirs.insert( regEx.cap( curActFilter.fileGroup ) , d->m_currentDirs.size() - 1 );
+                const Path path(regEx.cap(curActFilter.fileGroup));
+                d->m_currentDirs.push_back( path );
+                d->m_positionInCurrentDirs.insert( path , d->m_currentDirs.size() - 1 );
             }
 
             // Special case for cmake: we parse the "Compiling <objectfile>" expression
             // and use it to find out about the build paths encountered during a build.
-            // They are later searched by urlForFile to find source files corresponding to
+            // They are later searched by pathForFile to find source files corresponding to
             // compiler errors.
             if ( curActFilter.action == compiling && curActFilter.tool == "cmake") {
-                QUrl url = d->m_buildDir.resolved(QUrl(regEx.cap( curActFilter.fileGroup )));
-                d->putDirAtEnd(url.toLocalFile());
+                d->putDirAtEnd(Path(d->m_buildDir, regEx.cap( curActFilter.fileGroup ).mid(1)));
             }
             break;
         }
@@ -301,10 +306,10 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
             if(curErrFilter.fileGroup > 0) {
                 if( curErrFilter.compiler == "cmake" ) { // Unfortunately we cannot know if an error or an action comes first in cmake, and therefore we need to do this
                     if( d->m_currentDirs.empty() ) {
-                        d->putDirAtEnd( d->m_buildDir.adjusted(QUrl::RemoveFilename).toLocalFile() );
+                        d->putDirAtEnd( d->m_buildDir.parent() );
                     }
                 }
-                item.url = d->urlForFile( regEx.cap( curErrFilter.fileGroup ) );
+                item.url = d->pathForFile( regEx.cap( curErrFilter.fileGroup ) ).toUrl();
             }
             item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
             if(curErrFilter.columnGroup >= 0) {

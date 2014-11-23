@@ -53,6 +53,7 @@ inline char* toString(const KDevelop::FilteredItem::FilteredOutputItemType& type
 
 namespace KDevelop
 {
+
 void FilteringStrategyTest::testNoFilterStrategy_data()
 {
     QTest::addColumn<QString>("line");
@@ -132,7 +133,7 @@ void FilteringStrategyTest::testCompilerFilterStrategy()
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedAction);
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QUrl projecturl = QUrl::fromLocalFile( projectPath() );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.errorInLine(line);
     QCOMPARE(item1.type, expectedError);
@@ -165,7 +166,7 @@ void FilteringStrategyTest::testCompilerFilterstrategyMultipleKeywords()
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedAction);
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QUrl projecturl = QUrl::fromLocalFile( projectPath() );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.errorInLine(line);
     QCOMPARE(item1.type, expectedError);
@@ -199,7 +200,7 @@ void FilteringStrategyTest::testCompilerFilterStrategyShortenedText()
     QFETCH(QString, line);
     QFETCH(QString, expectedShortenedText);
 
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QUrl projecturl = QUrl::fromLocalFile( projectPath() );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item = testee.actionInLine(line);
     QCOMPARE(item.shortenedText, expectedShortenedText);
@@ -327,7 +328,7 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy_data()
 void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
 {
     // Test that url's are extracted correctly as well
-    QString referencePath( PROJECTS_SOURCE_DIR"/onefileproject/main.cpp" ); 
+    QString referencePath = projectPath() + "main.cpp";
 
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
@@ -345,23 +346,22 @@ void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<QString>("expectedLastDir");
-    QString basepath( PROJECTS_SOURCE_DIR"/onefileproject/" );
-
+    QString basepath = projectPath();
 
     QTest::newRow("cmake-line1")
-    << "[ 25%] Building CXX object /path/to/one/CMakeFiles/file.o" << QString( basepath + "path/to/one/" );
+    << "[ 25%] Building CXX object /path/to/one/CMakeFiles/file.o" << QString( basepath + "/path/to/one" );
     QTest::newRow("cmake-line2")
-    << "[ 26%] Building CXX object /path/to/two/CMakeFiles/file.o" << QString( basepath + "path/to/two/");
+    << "[ 26%] Building CXX object /path/to/two/CMakeFiles/file.o" << QString( basepath + "/path/to/two");
     QTest::newRow("cmake-line3")
-    << "[ 26%] Building CXX object /path/to/three/CMakeFiles/file.o" << QString( basepath + "path/to/three/");
+    << "[ 26%] Building CXX object /path/to/three/CMakeFiles/file.o" << QString( basepath + "/path/to/three");
     QTest::newRow("cmake-line4")
-    << "[ 26%] Building CXX object /path/to/four/CMakeFiles/file.o" << QString( basepath + "path/to/four/");
+    << "[ 26%] Building CXX object /path/to/four/CMakeFiles/file.o" << QString( basepath + "/path/to/four");
     QTest::newRow("cmake-line5")
-    << "[ 26%] Building CXX object /path/to/two/CMakeFiles/file.o" << QString( basepath + "path/to/two/");
+    << "[ 26%] Building CXX object /path/to/two/CMakeFiles/file.o" << QString( basepath + "/path/to/two");
     QTest::newRow("cd-line6")
-    << QString("make[4]: Entering directory '" + basepath + "path/to/one/'") << QString( basepath + "path/to/one/");
+    << QString("make[4]: Entering directory '" + basepath + "/path/to/one/'") << QString( basepath + "/path/to/one");
     QTest::newRow("waf-cd")
-    << QString("Waf: Entering directory `" + basepath + "path/to/two/'") << QString( basepath + "path/to/two/");
+    << QString("Waf: Entering directory `" + basepath + "/path/to/two/'") << QString( basepath + "/path/to/two");
     QTest::newRow("cmake-line7")
     << QString("[ 50%] Building CXX object CMakeFiles/testdeque.dir/RingBuffer.cpp.o") << QString( basepath);
 }
@@ -370,7 +370,7 @@ void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction()
 {
     QFETCH(QString, line);
     QFETCH(QString, expectedLastDir);
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QUrl projecturl = QUrl::fromLocalFile( projectPath() );
     static CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.actionInLine(line);
     QCOMPARE(testee.getCurrentDirs().last(), expectedLastDir);
@@ -378,7 +378,7 @@ void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction()
 
 void FilteringStrategyTest::benchMarkCompilerFilterAction()
 {
-    QString projecturl( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    QString projecturl = projectPath();
     QStringList outputlines;
     const int numLines(10000);
     int j(0), k(0), l(0), m(0);
@@ -440,16 +440,16 @@ void FilteringStrategyTest::testExtractionOfLineAndColumn_data()
         << "/path/to/file.cpp" << 122 << 0 << FilteredItem::ErrorItem;
     QTest::newRow("fortcom")
         << "fortcom: Error: Ogive8.f90, line 123: ..."
-        << "./Ogive8.f90" << 122 << 0 << FilteredItem::ErrorItem;
+        << QString(projectPath() + "/Ogive8.f90") << 122 << 0 << FilteredItem::ErrorItem;
     QTest::newRow("fortcomError")
         << "fortcom: Error: ./Ogive8.f90, line 123: ..."
-        << "././Ogive8.f90" << 122 << 0 << FilteredItem::ErrorItem;
+        << QString(projectPath() + "/Ogive8.f90") << 122 << 0 << FilteredItem::ErrorItem;
     QTest::newRow("fortcomWarning")
         << "fortcom: Warning: /path/Ogive8.f90, line 123: ..."
         << "/path/Ogive8.f90" << 122 << 0 << FilteredItem::WarningItem;
     QTest::newRow("fortcomInfo")
         << "fortcom: Info: Ogive8.f90, line 123: ..."
-        << "./Ogive8.f90" << 122 << 0 << FilteredItem::InformationItem;
+        << QString(projectPath() + "/Ogive8.f90") << 122 << 0 << FilteredItem::InformationItem;
     QTest::newRow("libtool")
         << "libtool: link: warning: ..."
         << "" << -1 << 0  << FilteredItem::WarningItem;
@@ -468,7 +468,7 @@ void FilteringStrategyTest::testExtractionOfLineAndColumn()
     QFETCH(int, lineNr);
     QFETCH(int, column);
     QFETCH(FilteredItem::FilteredOutputItemType, itemtype);
-    QUrl projecturl = QUrl::fromLocalFile( "./" );
+    QUrl projecturl = QUrl::fromLocalFile( projectPath() );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.errorInLine(line);
     QCOMPARE(item1.type , itemtype);

@@ -20,64 +20,60 @@
 
 #include <QUrl>
 #include <QString>
+#include <QFileInfo>
+
+#define PROJECTS_SOURCE_DIR
 
 namespace KDevelop
 {
 
-QString buildCppCheckErrorLine()
+static QString projectPath()
 {
     /// Use existing directory with one file
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
+    return QFileInfo(__FILE__).absolutePath() + QLatin1String("/onefileproject");
+}
 
+QString buildCppCheckErrorLine()
+{
     /// Test CPP check output
     QString outputline("[");
-    outputline.append(projecturl.path());
+    outputline.append(projectPath());
     outputline.append("main.cpp:26]: (error) Memory leak: str");
     return outputline;
 }
 
 QString buildKrazyErrorLine()
 {
-    /// Use existing directory with one file
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
-
     /// Test krazy2 output
     QString outputline("\t");
-    outputline.append(projecturl.path());
+    outputline.append(projectPath());
     outputline.append("main.cpp: line#22 (1)");
     return outputline;
 }
 
 QString buildKrazyErrorLine2()
 {
-    /// Use existing directory with one file
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
     /// Test krazy2 output
     QString outputline("\t");
-    outputline.append(projecturl.path());
+    outputline.append(projectPath());
     outputline.append("main.cpp: missing tags: email address line#2  (1)");
     return outputline;
 }
 
 QString buildKrazyErrorLine3()
 {
-    /// Use existing directory with one file
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
     /// Test krazy2 output
     QString outputline("\t");
-    outputline.append(projecturl.path());
+    outputline.append(projectPath());
     outputline.append("main.cpp: non-const ref iterator line#451 (1)");
     return outputline;
 }
 
 QString buildKrazyErrorLineNoLineInfo()
 {
-    /// Use existing directory with one file
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
-
     /// Test krazy2 output
     QString outputline("\t");
-    outputline.append(projecturl.path());
+    outputline.append(projectPath());
     outputline.append("main.cpp: missing license");
     return outputline;
 }
@@ -85,45 +81,40 @@ QString buildKrazyErrorLineNoLineInfo()
 QString buildCompilerLine()
 {
     /// Test with compiler output
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
     QString outputline;
-    outputline.append(projecturl.path());
+    outputline.append(projectPath());
     outputline.append(">make");
     return outputline;
 }
 
 QString buildCompilerErrorLine()
 {
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
     QString outputline;
-    outputline.append(projecturl.path());
+    outputline.append(projectPath());
     outputline.append("main.cpp:5:5: error: ‘RingBuffer’ was not declared in this scope");
     return outputline;
 }
 
 QString buildCompilerInformationLine()
 {
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
     QString outputline;
-    outputline.append(projecturl.path());
+    outputline.append(projectPath());
     outputline.append("main.cpp:6:14: instantiated from here");
     return outputline;
 }
 
 QString buildInfileIncludedFromFirstLine()
 {
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
     QString outputline("In file included from ");
-    outputline.append(projecturl.path());
+    outputline.append(projectPath());
     outputline.append("PriorityFactory.h:52:0,");
     return outputline;
 }
 
 QString buildInfileIncludedFromSecondLine()
 {
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
     QString outputline("    from ");
-    outputline.append(projecturl.path());
+    outputline.append(projectPath());
     outputline.append("PatchBasedInpainting.hxx:29,");
     return outputline;
 }
@@ -135,9 +126,8 @@ QString buildCompilerActionLine()
 
 QString buildCmakeConfigureMultiLine()
 {
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
     QString outputline;
-    outputline.append(projecturl.path());
+    outputline.append(projectPath());
     outputline.append("CMakeLists.txt:10:");
     return outputline;
 }
@@ -150,9 +140,8 @@ QString buildLinkerErrorLine()
 
 QString buildPythonErrorLine()
 {
-    QUrl projecturl = QUrl::fromLocalFile( PROJECTS_SOURCE_DIR"/onefileproject/" );
     QString outputline("File \"");
-    outputline.append(projecturl.path());
+    outputline.append(projectPath());
     outputline.append("pythonExample.py\", line 10");
     return outputline;
 }
