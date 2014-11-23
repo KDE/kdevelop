@@ -28,7 +28,6 @@
 */
 #include "iplugin.h"
 
-#include <kiconloader.h>
 #include <kmainwindow.h>
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
@@ -46,12 +45,11 @@ class IPluginPrivate
 {
 public:
     IPluginPrivate(IPlugin *q)
-        : q(q), iconLoader(0)
+        : q(q)
     {}
 
     ~IPluginPrivate()
     {
-        delete iconLoader;
     }
 
     void guiClientAdded(KXMLGUIClient *client)
@@ -77,7 +75,6 @@ public:
 
     IPlugin *q;
     ICore *core;
-    KIconLoader* iconLoader;
     QStringList m_extensions;
 };
 
@@ -119,18 +116,6 @@ IPlugin::~IPlugin()
 
 void IPlugin::unload()
 {
-}
-
-KIconLoader *IPlugin::iconLoader() const
-{
-    if ( d->iconLoader == 0 ) {
-        d->iconLoader = new KIconLoader(componentName());
-        d->iconLoader->addAppDir( "kdevelop" );
-        connect(d->iconLoader, &KIconLoader::iconChanged,
-                this, [=] { d->iconLoader->reconfigure(componentName()); });
-    }
-
-    return d->iconLoader;
 }
 
 ICore *IPlugin::core() const

@@ -31,7 +31,6 @@
 #include "interfacesexport.h"
 
 class KComponentData;
-class KIconLoader;
 class QAction;
 
 namespace Sublime {
@@ -159,12 +158,6 @@ public:
      * Signal the plugin that it should cleanup since it will be unloaded soon.
      */
     Q_SCRIPTABLE virtual void unload();
-
-    /**
-     * Provides access to the global icon loader
-     * @return the plugin's icon loader
-     */
-    Q_SCRIPTABLE KIconLoader* iconLoader() const;
 
     /**
      * Provides access to the ICore implementation
