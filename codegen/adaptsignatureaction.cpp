@@ -38,7 +38,6 @@ using namespace KDevelop;
 
 QString makeSignatureString(const Declaration* functionDecl, const Signature& signature)
 {
-    Q_ASSERT(functionDecl);
     if (!functionDecl || !functionDecl->internalContext()) {
         return {};
     }
@@ -127,6 +126,9 @@ QString AdaptSignatureAction::toolTip() const
 {
     DUChainReadLocker lock;
     auto declaration = m_otherSideId.getDeclaration(m_otherSideTopContext.data());
+    if (!declaration) {
+        return {};
+    }
     return i18n("Update %1 signature\nfrom: %2\nto: %3",
                 m_editingDefinition ? i18n("declaration") : i18n("definition"),
                 makeSignatureString(declaration, m_oldSignature),
