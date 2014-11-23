@@ -29,6 +29,7 @@
 
 #include "../core.h"
 #include "../plugincontroller.h"
+#include "../debug.h"
 
 
 namespace KDevelop
@@ -88,9 +89,9 @@ void PluginPreferences::defaults()
 void PluginPreferences::apply()
 {
     selector->save();
-    qDebug() << "Plugins before apply: " << Core::self()->pluginControllerInternal()->allPluginNames();
+    qCDebug(SHELL) << "Plugins before apply: " << Core::self()->pluginControllerInternal()->allPluginNames();
     Core::self()->pluginControllerInternal()->updateLoadedPlugins();
-    qDebug() << "Plugins after apply: " << Core::self()->pluginControllerInternal()->allPluginNames();
+    qCDebug(SHELL) << "Plugins after apply: " << Core::self()->pluginControllerInternal()->allPluginNames();
     selector->load(); // Some plugins may have failed to load, they must be unchecked.
 }
 
