@@ -42,9 +42,9 @@ public:
     ProjectFilterConfigPage(ProjectFilterProvider* provider, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
     virtual ~ProjectFilterConfigPage();
 
-    virtual QString name() const;
-    virtual QIcon icon() const;
-    virtual QString fullName() const;
+    virtual QString name() const override;
+    virtual QIcon icon() const override;
+    virtual QString fullName() const override;
 
 protected:
     virtual bool eventFilter(QObject* object, QEvent* event);

@@ -79,8 +79,9 @@ public:
 };
 
 IPlugin::IPlugin( const QString &componentName, QObject *parent )
-        : KTextEditor::Plugin(parent),
-	  KXMLGUIClient(), d( new IPluginPrivate(this) )
+    : KTextEditor::Plugin(parent)
+    , KXMLGUIClient()
+    , d(new IPluginPrivate(this))
 {
     // The following cast is safe, there's no component in KDevPlatform that
     // creates plugins except the plugincontroller. The controller passes

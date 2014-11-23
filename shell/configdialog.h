@@ -40,7 +40,7 @@ class ConfigDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    explicit ConfigDialog(QList<ConfigPage*> pages, QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    explicit ConfigDialog(const QVector<ConfigPage*>& pages, QWidget* parent = 0, Qt::WindowFlags flags = 0);
 
 public Q_SLOTS:
     /**
@@ -72,7 +72,7 @@ private:
 private:
     // we have to use QPointer since KPageDialog::removePage() also removes all child pages
     QVector<QPointer<KPageWidgetItem>> m_pages;
-    bool m_currentPageHasChanges = false; // TODO: QHash
+    bool m_currentPageHasChanges = false;
     bool m_currentlyApplyingChanges = false;
 };
 

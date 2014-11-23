@@ -467,16 +467,17 @@ void UiController::showSettingsDialog()
 {
     auto editorConfigPage = new EditorConfigPage(activeMainWindow());
 
-    auto configPages = QList<KDevelop::ConfigPage*>()
-        << new UiPreferences(activeMainWindow())
-        << new PluginPreferences(activeMainWindow())
-        << new SourceFormatterSettings(activeMainWindow())
-        << new ProjectPreferences(activeMainWindow())
-        << new EnvironmentPreferences(QString(), activeMainWindow())
-        << new CCPreferences(activeMainWindow())
-        << new BGPreferences(activeMainWindow())
-        << new TemplateConfig(activeMainWindow())
-        << editorConfigPage;
+    auto configPages = QVector<KDevelop::ConfigPage*> {
+        new UiPreferences(activeMainWindow()),
+        new PluginPreferences(activeMainWindow()),
+        new SourceFormatterSettings(activeMainWindow()),
+        new ProjectPreferences(activeMainWindow()),
+        new EnvironmentPreferences(QString(), activeMainWindow()),
+        new CCPreferences(activeMainWindow()),
+        new BGPreferences(activeMainWindow()),
+        new TemplateConfig(activeMainWindow()),
+        editorConfigPage
+    };
 
     ConfigDialog cfgDlg(configPages, activeMainWindow());
 

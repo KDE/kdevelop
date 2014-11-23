@@ -28,29 +28,36 @@
 
 #include <KTextEditor/Editor>
 
-class KTextEditorConfigPageAdapter : public KDevelop::ConfigPage
+using namespace KDevelop;
+
+namespace {
+
+class KTextEditorConfigPageAdapter : public ConfigPage
 {
     Q_OBJECT
 
 public:
     explicit KTextEditorConfigPageAdapter(KTextEditor::ConfigPage* page, QWidget* parent = nullptr)
-            : KDevelop::ConfigPage(nullptr, nullptr, parent), m_page(page)
+        : ConfigPage(nullptr, nullptr, parent), m_page(page)
     {
         page->setParent(this);
         QVBoxLayout* layout = new QVBoxLayout(this);
         layout->addWidget(page);
-        this->setLayout(layout);
+        setLayout(layout);
     }
+
     virtual ~KTextEditorConfigPageAdapter() {}
 
     virtual QString name() const override
     {
         return m_page->name();
     }
+
     virtual QIcon icon() const override
     {
         return m_page->icon();
     }
+
     virtual QString fullName() const override
     {
         return m_page->fullName();
@@ -74,35 +81,37 @@ private:
     KTextEditor::ConfigPage* m_page;
 };
 
-KDevelop::EditorConfigPage::EditorConfigPage(QWidget* parent)
-        : ConfigPage(nullptr, nullptr, parent)
+}
+
+EditorConfigPage::EditorConfigPage(QWidget* parent)
+    : ConfigPage(nullptr, nullptr, parent)
 {
     setObjectName("editorconfig");
 }
 
-KDevelop::EditorConfigPage::~EditorConfigPage() {};
+EditorConfigPage::~EditorConfigPage() {};
 
-QString KDevelop::EditorConfigPage::name() const
+QString EditorConfigPage::name() const
 {
     return i18n("Editor");
 }
 
-QIcon KDevelop::EditorConfigPage::icon() const
+QIcon EditorConfigPage::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("accessories-text-editor"));
 }
 
-QString KDevelop::EditorConfigPage::fullName() const
+QString EditorConfigPage::fullName() const
 {
     return i18n("Configure Text editor");
 }
 
-int KDevelop::EditorConfigPage::childPages() const
+int EditorConfigPage::childPages() const
 {
     return KTextEditor::Editor::instance()->configPages();
 }
 
-KDevelop::ConfigPage* KDevelop::EditorConfigPage::childPage(int number)
+ConfigPage* EditorConfigPage::childPage(int number)
 {
     auto page = KTextEditor::Editor::instance()->configPage(number, this);
     if (page) {

@@ -51,6 +51,7 @@ signals:
 
 public slots:
     void updateProjectFilters(KDevelop::IProject* project);
+
 private slots:
     void projectClosing(KDevelop::IProject*);
     void projectAboutToBeOpened(KDevelop::IProject*);

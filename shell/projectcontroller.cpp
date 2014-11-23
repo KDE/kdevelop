@@ -134,7 +134,7 @@ public:
         if( !proj )
             return;
 
-        QList<KDevelop::ConfigPage*> configPages;
+        QVector<KDevelop::ConfigPage*> configPages;
         auto mainWindow = m_core->uiController()->activeMainWindow();
 
         ProjectConfigOptions options;
@@ -152,7 +152,7 @@ public:
         Q_ASSERT(!m_configuringProject);
         m_configuringProject = proj;
         KDevelop::ConfigDialog cfgDlg(configPages, mainWindow);
-        QObject::connect(&cfgDlg, &ConfigDialog::configSaved, [this](ConfigPage* page) {
+        QObject::connect(&cfgDlg, &ConfigDialog::configSaved, &cfgDlg, [this](ConfigPage* page) {
             Q_UNUSED(page)
             Q_ASSERT_X(m_configuringProject, Q_FUNC_INFO,
                     "ConfigDialog signalled project config change, but no project set for configuring!");
@@ -192,11 +192,11 @@ public:
         }
     }
 
-    QList<IPlugin*> findPluginsForProject( IProject* project )
+    QVector<IPlugin*> findPluginsForProject( IProject* project )
     {
         QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
-        QList<IPlugin*> projectPlugins;
-        QList< IProjectBuilder* > buildersForKcm;
+        QVector<IPlugin*> projectPlugins;
+        QList<IProjectBuilder*> buildersForKcm;
         // Important to also include the "top" builder for the project, so
         // projects with only one such builder are kept working. Otherwise the project config
         // dialog is empty for such cases.
@@ -205,9 +205,7 @@ public:
             collectBuilders( buildersForKcm, buildSystemManager->builder(), project );
         }
 
-        for( QList<IPlugin*>::iterator it = plugins.begin(); it != plugins.end(); ++it )
-        {
-            IPlugin* plugin = *it;
+        for(auto plugin : plugins) {
             const KPluginInfo info = m_core->pluginController()->pluginInfo( plugin );
             if (info.property("X-KDevelop-Category").toString() != "Project") {
                 continue;

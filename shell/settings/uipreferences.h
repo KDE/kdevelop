@@ -43,7 +43,7 @@ public:
     virtual QIcon icon() const override;
 
 public Q_SLOTS:
-    // need to customze behaviour
+    // need to customize behaviour
     virtual void apply() override;
 private:
     Ui::UiConfig* m_uiconfigUi;

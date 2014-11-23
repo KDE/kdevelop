@@ -223,7 +223,7 @@ public:
 
     /**
      * Get the number of available config pages for per project settings.
-     * @return number of per project config pages, default implementation says 0
+     * @return number of per project config pages. The default implementation returns zero.
      * @see perProjectConfigPage()
      */
     virtual int perProjectConfigPages() const;
@@ -237,6 +237,7 @@ public:
      * @param parent parent widget for config page
      * @return newly created config page or NULL, if the number is out of bounds, default implementation returns NULL.
      * This config page should inherit from ProjectConfigPage, but it is not a strict requirement.
+     * The default implementation returns @c nullptr.
      * @see perProjectConfigPages(), ProjectConfigPage
      */
     virtual ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent);

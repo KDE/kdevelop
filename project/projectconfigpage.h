@@ -36,7 +36,8 @@ class QStringList;
 namespace KDevelop {
 
 /** This is needed because IProject does not expose these methods */
-struct ProjectConfigOptions {
+struct ProjectConfigOptions
+{
     QString developerTempFile;
     Path developerFile;
     QString projectTempFile;

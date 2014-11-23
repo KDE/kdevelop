@@ -25,17 +25,18 @@
 
 namespace KDevelop {
 
-class ConfigPagePrivate {
-public:
-    ConfigPagePrivate(IPlugin* plugin) : plugin(plugin) {}
+struct ConfigPagePrivate {
+    ConfigPagePrivate(IPlugin* plugin)
+        : plugin(plugin)
+    {}
     QScopedPointer<KConfigDialogManager> configManager;
     KCoreConfigSkeleton* configSkeleton = nullptr;
     IPlugin* plugin;
 };
 
 ConfigPage::ConfigPage(IPlugin* plugin, KCoreConfigSkeleton* config, QWidget* parent)
-        : KTextEditor::ConfigPage(parent)
-        , d(new ConfigPagePrivate(plugin))
+    : KTextEditor::ConfigPage(parent)
+    , d(new ConfigPagePrivate(plugin))
 {
     setConfigSkeleton(config);
 }
@@ -86,10 +87,14 @@ KCoreConfigSkeleton* ConfigPage::configSkeleton() const
 
 void ConfigPage::setConfigSkeleton(KCoreConfigSkeleton* skel)
 {
-    if (d->configSkeleton == skel || !skel) {
+    if (d->configSkeleton == skel) {
         return;
     }
     d->configSkeleton = skel;
+    if (!skel) {
+        d->configManager.reset();
+        return;
+    }
     // create the config dialog manager if it didn't exist or recreate it.
     // This is needed because the used config skeleton has changed
     // and no setter for that exists in KConfigDialogManager

@@ -33,8 +33,12 @@
 #include <icore.h>
 #include <iplugincontroller.h>
 
-KDevelop::ConfigDialog::ConfigDialog(QList<ConfigPage*> pages, QWidget* parent, Qt::WindowFlags flags)
-        : KPageDialog(parent, flags), m_currentPageHasChanges(false)
+using namespace KDevelop;
+
+//FIXME: unit test this code!
+
+ConfigDialog::ConfigDialog(const QVector<ConfigPage*>& pages, QWidget* parent, Qt::WindowFlags flags)
+    : KPageDialog(parent, flags), m_currentPageHasChanges(false)
 {
     setWindowTitle(i18n("Configure"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
@@ -45,7 +49,7 @@ KDevelop::ConfigDialog::ConfigDialog(QList<ConfigPage*> pages, QWidget* parent, 
         addConfigPage(page);
     }
 
-    auto onApplyClicked = [this]() {
+    auto onApplyClicked = [this] {
         auto page = qobject_cast<ConfigPage*>(currentPage()->widget());
         Q_ASSERT(page);
         applyChanges(page);
@@ -66,7 +70,7 @@ KDevelop::ConfigDialog::ConfigDialog(QList<ConfigPage*> pages, QWidget* parent, 
 }
 
 
-KPageWidgetItem* KDevelop::ConfigDialog::itemForPage(ConfigPage* page) const
+KPageWidgetItem* ConfigDialog::itemForPage(ConfigPage* page) const
 {
     for (auto item : m_pages) {
         if (item->widget() == page) {
@@ -76,33 +80,36 @@ KPageWidgetItem* KDevelop::ConfigDialog::itemForPage(ConfigPage* page) const
     return nullptr;
 }
 
-int KDevelop::ConfigDialog::checkForUnsavedChanges(KPageWidgetItem* current, KPageWidgetItem* before)
+int ConfigDialog::checkForUnsavedChanges(KPageWidgetItem* current, KPageWidgetItem* before)
 {
     Q_UNUSED(current);
-    if (m_currentPageHasChanges) {
-        // before must be non-null, because if we change from nothing to a new page m_currentPageHasChanges must also be false!
-        auto oldPage = qobject_cast<ConfigPage*>(before->widget());
-        Q_ASSERT(oldPage);
-        auto dialogResult = KMessageBox::warningYesNoCancel(this, i18n("The settings of the current module have changed.\n"
-                "Do you want to apply the changes or discard them?"), i18n("Apply Settings"), KStandardGuiItem::apply(),
-                KStandardGuiItem::discard(), KStandardGuiItem::cancel());
-        if (dialogResult == KMessageBox::No) {
-            oldPage->reset();
-            m_currentPageHasChanges = false;
-            button(QDialogButtonBox::Apply)->setEnabled(false);
-        } else if (dialogResult == KMessageBox::Yes) {
-            applyChanges(oldPage);
-        } else if (dialogResult == KMessageBox::Cancel) {
-            // restore old state
-            QSignalBlocker block(this); // prevent recursion
-            setCurrentPage(before);
-        }
-        return dialogResult;
+
+    if (!m_currentPageHasChanges) {
+        return KMessageBox::Yes;
     }
-    return KMessageBox::Yes;
+
+    // before must be non-null, because if we change from nothing to a new page m_currentPageHasChanges must also be false!
+    Q_ASSERT(before);
+    auto oldPage = qobject_cast<ConfigPage*>(before->widget());
+    Q_ASSERT(oldPage);
+    auto dialogResult = KMessageBox::warningYesNoCancel(this, i18n("The settings of the current module have changed.\n"
+            "Do you want to apply the changes or discard them?"), i18n("Apply Settings"), KStandardGuiItem::apply(),
+            KStandardGuiItem::discard(), KStandardGuiItem::cancel());
+    if (dialogResult == KMessageBox::No) {
+        oldPage->reset();
+        m_currentPageHasChanges = false;
+        button(QDialogButtonBox::Apply)->setEnabled(false);
+    } else if (dialogResult == KMessageBox::Yes) {
+        applyChanges(oldPage);
+    } else if (dialogResult == KMessageBox::Cancel) {
+        // restore old state
+        QSignalBlocker block(this); // prevent recursion
+        setCurrentPage(before);
+    }
+    return dialogResult;
 }
 
-void KDevelop::ConfigDialog::closeEvent(QCloseEvent* event)
+void ConfigDialog::closeEvent(QCloseEvent* event)
 {
     if (checkForUnsavedChanges(currentPage(), currentPage()) == KMessageBox::Cancel) {
         // if the user clicked cancel he wants to continue editing the current page -> don't close
@@ -112,7 +119,7 @@ void KDevelop::ConfigDialog::closeEvent(QCloseEvent* event)
     }
 }
 
-void KDevelop::ConfigDialog::removeConfigPage(ConfigPage* page)
+void ConfigDialog::removeConfigPage(ConfigPage* page)
 {
     auto item = itemForPage(page);
     Q_ASSERT(item);
@@ -122,11 +129,10 @@ void KDevelop::ConfigDialog::removeConfigPage(ConfigPage* page)
     m_pages.removeAll(QPointer<KPageWidgetItem>());
 }
 
-void KDevelop::ConfigDialog::removePagesForPlugin(KDevelop::IPlugin* plugin)
+void ConfigDialog::removePagesForPlugin(IPlugin* plugin)
 {
     Q_ASSERT(plugin);
-    for (auto it = m_pages.begin(); it != m_pages.end(); ++it) {
-        auto item = *it;
+    for (auto&& item : m_pages) {
         if (!item) {
             continue;
         }
@@ -139,7 +145,7 @@ void KDevelop::ConfigDialog::removePagesForPlugin(KDevelop::IPlugin* plugin)
     m_pages.removeAll(QPointer<KPageWidgetItem>());
 }
 
-void KDevelop::ConfigDialog::addConfigPage(ConfigPage* page, ConfigPage* previous)
+void ConfigDialog::addConfigPage(ConfigPage* page, ConfigPage* previous)
 {
     if (previous) {
         auto previousItem = itemForPage(previous);
@@ -150,7 +156,7 @@ void KDevelop::ConfigDialog::addConfigPage(ConfigPage* page, ConfigPage* previou
     }
 }
 
-void KDevelop::ConfigDialog::addConfigPageInternal(KPageWidgetItem* item, ConfigPage* page)
+void ConfigDialog::addConfigPageInternal(KPageWidgetItem* item, ConfigPage* page)
 {
     item->setHeader(page->fullName());
     item->setIcon(page->icon());
@@ -165,7 +171,7 @@ void KDevelop::ConfigDialog::addConfigPageInternal(KPageWidgetItem* item, Config
     }
 }
 
-void KDevelop::ConfigDialog::onPageChanged()
+void ConfigDialog::onPageChanged()
 {
     QObject* from = sender();
     if (from && from != currentPage()->widget()) {
@@ -185,7 +191,7 @@ void KDevelop::ConfigDialog::onPageChanged()
 }
 
 
-void KDevelop::ConfigDialog::applyChanges(ConfigPage* page)
+void ConfigDialog::applyChanges(ConfigPage* page)
 {
     // must set this to false before calling apply, otherwise we get the confirmation dialog
     // whenever we enable/disable plugins.

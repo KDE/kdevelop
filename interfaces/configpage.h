@@ -31,7 +31,7 @@
 namespace KDevelop {
 class IPlugin;
 
-class ConfigPagePrivate;
+struct ConfigPagePrivate;
 
 class KDEVPLATFORMINTERFACES_EXPORT ConfigPage : public KTextEditor::ConfigPage
 {
@@ -51,11 +51,13 @@ public:
     /**
      * Get the number of subpages of this page
      * @return The number of child pages or an integer < 1 if there are none.
+     * The default implementation returns zero.
      */
     virtual int childPages() const;
 
     /**
      * @return the child config page for index @p number or @c nullptr if there is none.
+     * The default implementation returns @c nullptr.
      */
     virtual ConfigPage* childPage(int number);
 
@@ -64,12 +66,6 @@ public:
      */
     IPlugin* plugin() const;
 
-public Q_SLOTS:
-    virtual void apply() override;
-    virtual void defaults() override;
-    virtual void reset() override;
-
-public:
     /**
      * Initializes the KConfigDialogManager.
      * Must be called explicitly since not all child widgets are available at the end of the constructor.
@@ -88,6 +84,11 @@ public:
      * This can be used if the KCoreConfigSkeleton* doesn't exist yet when calling the base class constructor.
      */
     void setConfigSkeleton(KCoreConfigSkeleton* skel);
+
+public Q_SLOTS:
+    virtual void apply() override;
+    virtual void defaults() override;
+    virtual void reset() override;
 
 private:
     QScopedPointer<ConfigPagePrivate> d;
