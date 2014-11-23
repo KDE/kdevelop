@@ -230,7 +230,6 @@ public:
 
     bool initProjectFiles()
     {
-        qDebug() << "FOO" << projectFile.toUrl();
         KIO::StatJob* statJob = KIO::stat( projectFile.toUrl(), KIO::HideProgressInfo );
         if ( !statJob->exec() ) //be sync for right now
         {
