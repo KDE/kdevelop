@@ -25,7 +25,6 @@
 
 #include <KLocalizedString>
 
-#include <ThreadWeaver.h>
 
 #include "kdevsvncpp/client.hpp"
 #include "kdevsvncpp/path.hpp"
@@ -37,7 +36,7 @@ SvnInternalRemoveJob::SvnInternalRemoveJob( SvnJobBase* parent )
 {
 }
 
-void SvnInternalRemoveJob::run()
+void SvnInternalRemoveJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     initBeforeRun();
 
@@ -109,7 +108,7 @@ void SvnRemoveJob::start()
     }else
     {
         qCDebug(PLUGIN_SVN) << "removing urls:" << m_job->locations();
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
     }
 }
 

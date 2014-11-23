@@ -37,7 +37,7 @@ public:
     QUrl destination() const;
     KDevelop::IBasicVersionControl::RecursionMode recursion() const;
 protected:
-    void run();
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 private:
     KDevelop::VcsLocation m_sourceRepository;
     QUrl m_destinationDirectory;

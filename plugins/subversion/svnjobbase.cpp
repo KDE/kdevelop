@@ -24,7 +24,6 @@
 
 #include "svninternaljobbase.h"
 #include "svnssldialog.h"
-#include "kdevsvnplugin.h"
 
 SvnJobBase::SvnJobBase( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
     : VcsJob( parent, verbosity ), m_part( parent ),
@@ -118,8 +117,7 @@ void SvnJobBase::askForSslClientCertPassword( const QString& )
 
 void SvnJobBase::internalJobStarted( ThreadWeaver::Job* job )
 {
-    if( internalJob() == job )
-    {
+    if( internalJob() == job ) {
         m_status = KDevelop::VcsJob::JobRunning;
     }
 }

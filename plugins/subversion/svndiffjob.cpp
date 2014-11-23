@@ -28,7 +28,6 @@
 #include <QFileInfo>
 
 #include <KLocalizedString>
-#include <ThreadWeaver.h>
 
 #include <vcs/vcsrevision.h>
 
@@ -40,7 +39,6 @@
 
 #include "svnclient.h"
 #include "svncatjob.h"
-#include "debug.h"
 
 ///@todo The subversion library returns borked diffs, where the headers are at the end. This function
 ///           takes those headers, and moves them into the correct place to create a valid working diff.
@@ -93,7 +91,7 @@ SvnInternalDiffJob::SvnInternalDiffJob( SvnJobBase* parent )
                                     KDevelop::VcsRevision::Special );
 }
 
-void SvnInternalDiffJob::run()
+void SvnInternalDiffJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     initBeforeRun();
 
@@ -291,7 +289,7 @@ void SvnDiffJob::start()
         connect( m_job, SIGNAL(gotDiff(QString)),
                  this, SLOT(setDiff(QString)),
                  Qt::QueuedConnection );
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
     }
 }
 

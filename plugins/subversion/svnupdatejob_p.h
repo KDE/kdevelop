@@ -38,7 +38,7 @@ public:
     KDevelop::VcsRevision revision() const;
     bool ignoreExternals() const;
 protected:
-    void run();
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 private:
     QList<QUrl> m_locations;
     bool m_recursive;

@@ -45,14 +45,15 @@ if(Boost_FOUND)
     ecm_optional_add_subdirectory(classbrowser)
 endif()
 
-# find_package(SubversionLibrary)
-# set_package_properties(SubversionLibrary PROPERTIES
-#     PURPOSE "Support for Subversion integration"
-#     URL "http://subversion.tigris.org"
-#     TYPE OPTIONAL)
-#
-# if(SUBVERSION_FOUND)
-#     ecm_optional_add_subdirectory(subversion)
-# endif()
+find_package(Subversion)
+set_package_properties(Subversion PROPERTIES
+    PURPOSE "Support for Subversion integration"
+    URL "http://subversion.tigris.org"
+    TYPE OPTIONAL)
+
+if(SUBVERSION_FOUND)
+# FIXME: make sure this actually works
+#    ecm_optional_add_subdirectory(subversion)
+endif()
 
 ecm_optional_add_subdirectory(reviewboard)

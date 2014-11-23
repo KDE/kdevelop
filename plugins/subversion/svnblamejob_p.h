@@ -48,7 +48,7 @@ public:
 signals:
     void blameLine( const KDevelop::VcsAnnotationLine& );
 protected:
-    void run();
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 private:
     QUrl m_location;
     KDevelop::VcsRevision m_startRevision;

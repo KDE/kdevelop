@@ -13,7 +13,6 @@
 
 #include <kdialog.h>
 
-
 class SvnSSLTrustDialog: public KDialog
 {
     Q_OBJECT

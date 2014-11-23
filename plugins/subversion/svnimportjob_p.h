@@ -36,7 +36,7 @@ public:
     bool isValid() const;
     QUrl source() const;
 protected:
-    void run();
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 private:
     QUrl m_sourceDirectory;
     KDevelop::VcsLocation m_destinationRepository;

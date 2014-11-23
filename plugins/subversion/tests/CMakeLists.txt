@@ -1,15 +1,9 @@
-macro(SVN_CREATE_TEST name)
-    add_executable(${name} ${ARGN})
-    ecm_mark_as_test(${name})
-    target_link_libraries(${name}
-                              Qt5::Test
-                              Qt5::Gui
-                              KDev::Tests
-                              KDev::Util
-                              KDev::Vcs
-                         )
-endmacro(SVN_CREATE_TEST)
+ecm_add_test(svnrecursiveadd.cpp LINK_LIBRARIES
+    Qt5::Test Qt5::Gui
+    KDev::Tests KDev::Util KDev::Vcs
+)
 
-svn_create_test(svnrecursiveadd svnrecursiveadd.cpp)
-
-svn_create_test(svnimport svnimport.cpp)
+ecm_add_test(svnimport.cpp LINK_LIBRARIES
+    Qt5::Test Qt5::Gui
+    KDev::Tests KDev::Util KDev::Vcs
+)

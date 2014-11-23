@@ -35,7 +35,7 @@ public:
 signals:
     void gotInfo( const SvnInfoHolder& );
 protected:
-    void run();
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 private:
     QUrl m_location;
 };

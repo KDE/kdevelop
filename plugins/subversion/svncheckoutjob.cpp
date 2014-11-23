@@ -24,12 +24,14 @@
 #include <QMutexLocker>
 
 #include <KLocalizedString>
-#include <ThreadWeaver.h>
+#include <KIO/Global>
 
 #include "kdevsvncpp/client.hpp"
 #include "kdevsvncpp/path.hpp"
 
 #include <vcs/vcslocation.h>
+#include <util/path.h>
+
 #include <QFileInfo>
 
 SvnInternalCheckoutJob::SvnInternalCheckoutJob( SvnJobBase* parent )
@@ -41,10 +43,10 @@ SvnInternalCheckoutJob::SvnInternalCheckoutJob( SvnJobBase* parent )
 bool SvnInternalCheckoutJob::isValid() const
 {
     QMutexLocker l( m_mutex );
-    return m_sourceRepository.isValid() && m_destinationDirectory.isLocalFile() && QFileInfo(m_destinationDirectory.upUrl().toLocalFile()).exists();
+    return m_sourceRepository.isValid() && m_destinationDirectory.isLocalFile() && QFileInfo(KIO::upUrl(m_destinationDirectory).toLocalFile()).exists();
 }
 
-void SvnInternalCheckoutJob::run()
+void SvnInternalCheckoutJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     initBeforeRun();
 
@@ -55,8 +57,7 @@ void SvnInternalCheckoutJob::run()
         QUrl desturl = QUrl( source().repositoryServer() ).adjusted(QUrl::StripTrailingSlash | QUrl::NormalizePathSegments  );
 
         QByteArray srcba = desturl.toEncoded();
-        QUrl destdir = QUrl::fromLocalFile(QFileInfo( destination().adjusted(QUrl::StripTrailingSlash | QUrl::RemoveFilename).toLocalFile() ).canonicalFilePath());
-        destdir = destdir.resolved( destination().fileName() );
+        KDevelop::Path destdir(KDevelop::Path(destination()).parent().parent(), destination().fileName());
         QByteArray destba = destdir.toLocalFile().toUtf8();
         qCDebug(PLUGIN_SVN) << srcba << destba << recurse;
         cli.checkout( srcba.data(), svn::Path( destba.data() ), svn::Revision::HEAD, recurse );
@@ -117,7 +118,7 @@ void SvnCheckoutJob::start()
         setErrorText( i18n( "Not enough information to checkout" ) );
     } else {
         qCDebug(PLUGIN_SVN) << "checking out: " << m_job->source().repositoryServer();
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
     }
 }
 

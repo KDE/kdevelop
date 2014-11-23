@@ -41,7 +41,7 @@ public:
 signals:
     void gotNewStatus( const KDevelop::VcsStatusInfo& );
 protected:
-    void run();
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 private:
     QList<QUrl> m_locations;
     bool m_recursive;

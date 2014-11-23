@@ -44,7 +44,7 @@ public:
 signals:
     void logEvent( const KDevelop::VcsEvent& );
 protected:
-    void run();
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 private:
     QUrl m_location;
     int m_limit;

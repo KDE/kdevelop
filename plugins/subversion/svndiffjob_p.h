@@ -53,7 +53,7 @@ public:
 signals:
     void gotDiff( const QString& );
 protected:
-    void run();
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 private:
     KDevelop::VcsLocation m_source;
     KDevelop::VcsLocation m_destination;

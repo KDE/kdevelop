@@ -24,7 +24,6 @@
 #include <QMutexLocker>
 
 #include <KLocalizedString>
-#include <ThreadWeaver.h>
 
 #include "kdevsvncpp/client.hpp"
 #include "kdevsvncpp/path.hpp"
@@ -34,7 +33,7 @@ SvnInternalCopyJob::SvnInternalCopyJob( SvnJobBase* parent )
 {
 }
 
-void SvnInternalCopyJob::run()
+void SvnInternalCopyJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     initBeforeRun();
 
@@ -101,7 +100,7 @@ void SvnCopyJob::start()
     }else
     {
         qCDebug(PLUGIN_SVN) << "copying url:" << m_job->sourceLocation() << "to url" << m_job->destinationLocation();
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
     }
 }
 

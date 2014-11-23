@@ -24,7 +24,6 @@
 #include <QMutexLocker>
 
 #include <KLocalizedString>
-#include <ThreadWeaver.h>
 
 #include <vcs/vcsrevision.h>
 
@@ -40,7 +39,7 @@ SvnInternalCatJob::SvnInternalCatJob( SvnJobBase* parent )
                                     KDevelop::VcsRevision::Special );
 }
 
-void SvnInternalCatJob::run()
+void SvnInternalCatJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     initBeforeRun();
 
@@ -127,7 +126,7 @@ void SvnCatJob::start()
         connect( m_job, SIGNAL(gotContent(QString)),
                  this, SLOT(setContent(QString)),
                  Qt::QueuedConnection );
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
     }
 }
 

@@ -23,6 +23,11 @@ class SvnStatusHolder;
 class QTemporaryDir;
 class SvnCommitDialog;
 
+namespace ThreadWeaver
+{
+    class Queue;
+}
+
 namespace KDevelop
 {
 class VcsCommitDialog;
@@ -132,6 +137,8 @@ public:
 
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context*);
 
+    ThreadWeaver::Queue* jobQueue() const;
+
 public Q_SLOTS:
 
     // invoked by context-menu
@@ -146,6 +153,7 @@ private:
     QScopedPointer<KDevelop::VcsPluginHelper> m_common;
     QAction* copy_action;
     QAction* move_action;
+    ThreadWeaver::Queue* m_jobQueue;
 };
 #endif
 

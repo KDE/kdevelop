@@ -24,7 +24,6 @@
 #include <QMutexLocker>
 
 #include <KLocalizedString>
-#include <ThreadWeaver.h>
 
 #include "svnclient.h"
 
@@ -38,7 +37,7 @@ SvnInternalLogJob::SvnInternalLogJob( SvnJobBase* parent )
     m_limit = 0;
 }
 
-void SvnInternalLogJob::run()
+void SvnInternalLogJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     initBeforeRun();
 
@@ -137,7 +136,7 @@ void SvnLogJob::start()
         connect( m_job, SIGNAL(logEvent(KDevelop::VcsEvent)),
                this, SLOT(logEventReceived(KDevelop::VcsEvent)), Qt::QueuedConnection );
         qCDebug(PLUGIN_SVN) << "logging url:" << m_job->location();
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
     }
 }
 

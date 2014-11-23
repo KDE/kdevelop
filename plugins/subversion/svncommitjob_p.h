@@ -44,7 +44,7 @@ public:
     bool keepLock() const;
 
 protected:
-    void run();
+    void run(ThreadWeaver::JobPointer job, ThreadWeaver::Thread* thread) override;
 private:
     QList<QUrl> m_urls;
     bool m_recursive;

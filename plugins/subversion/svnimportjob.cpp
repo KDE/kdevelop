@@ -25,19 +25,20 @@
 #include <QFileInfo>
 
 #include <KLocalizedString>
-#include <ThreadWeaver.h>
 
 #include "kdevsvncpp/client.hpp"
 #include "kdevsvncpp/path.hpp"
 
 #include <vcs/vcslocation.h>
+#include <util/path.h>
+
 
 SvnImportInternalJob::SvnImportInternalJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
 {
 }
 
-void SvnImportInternalJob::run()
+void SvnImportInternalJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     initBeforeRun();
 
@@ -47,11 +48,10 @@ void SvnImportInternalJob::run()
         QMutexLocker l( m_mutex );
         QString srcdir = QFileInfo( m_sourceDirectory.toLocalFile() ).canonicalFilePath();
         QByteArray srcba = srcdir.toUtf8();
-        QUrl desturl = QUrl::fromUserInput( m_destinationRepository.repositoryServer() );
-        desturl.cleanPath(QUrl::SimplifyDirSeparators);
-        QByteArray destba = desturl.url( QUrl::StripTrailingSlash ).toUtf8();
+        KDevelop::Path dest( m_destinationRepository.repositoryServer() );
+        QByteArray destba = dest.pathOrUrl().toUtf8();
         QByteArray msg = m_message.toUtf8();
-        qDebug() << "Importing" << srcba << "into" << destba;
+        qCDebug(PLUGIN_SVN) << "Importing" << srcba << "into" << destba;
         cli.import( svn::Path( srcba.data() ), destba.data(), msg.data(), true );
     }catch( svn::ClientException ce )
     {
@@ -115,7 +115,7 @@ void SvnImportJob::start()
     }else
     {
         qCDebug(PLUGIN_SVN) << "importing:" << m_job->source();
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
     }
 }
 

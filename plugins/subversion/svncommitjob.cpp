@@ -30,7 +30,6 @@
 #include <kparts/mainwindow.h>
 #include <KLocalizedString>
 
-
 #include <vector>
 
 #include "kdevsvncpp/client.hpp"
@@ -96,8 +95,11 @@ bool SvnInternalCommitJob::keepLock() const
 }
 
 
-void SvnInternalCommitJob::run()
+void SvnInternalCommitJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
+    Q_UNUSED(self);
+    Q_UNUSED(thread);
+
     initBeforeRun();
     svn::Client cli(m_ctxt);
     std::vector<svn::Path> targets;
@@ -153,7 +155,7 @@ void SvnCommitJob::start()
         m->appendRow(new QStandardItem(errorText()));
     }else
     {
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw(m_job);
     }
 }
 

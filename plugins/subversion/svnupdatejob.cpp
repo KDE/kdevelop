@@ -26,11 +26,10 @@
 
 #include <KLocalizedString>
 
-#include <ThreadWeaver.h>
-
 #include "kdevsvncpp/client.hpp"
 #include "kdevsvncpp/path.hpp"
 #include "kdevsvncpp/targets.hpp"
+
 
 SvnInternalUpdateJob::SvnInternalUpdateJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
@@ -39,7 +38,7 @@ SvnInternalUpdateJob::SvnInternalUpdateJob( SvnJobBase* parent )
 {
 }
 
-void SvnInternalUpdateJob::run()
+void SvnInternalUpdateJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     initBeforeRun();
 
@@ -141,7 +140,7 @@ void SvnUpdateJob::start()
     }else
     {
         qCDebug(PLUGIN_SVN) << "updating urls:" << m_job->locations();
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
     }
 }
 

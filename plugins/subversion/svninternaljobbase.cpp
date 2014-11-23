@@ -43,13 +43,17 @@ extern "C" {
 #include "kdevsvncpp/revision.hpp"
 
 SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
-    : QObject(parent), m_ctxt( new svn::Context() ),
-      m_guiSemaphore( 0 ), m_mutex( new QMutex() ), m_killMutex( new QMutex() ),
-      m_success( true ), sendFirstDelta( false ), killed( false ),
-      m_decorator(new ThreadWeaver::QObjectDecorator(this, parent))
+    : QObject(parent)
+    , m_ctxt( new svn::Context() )
+    , m_guiSemaphore( 0 )
+    , m_mutex( new QMutex() )
+    , m_killMutex( new QMutex() )
+    , m_success( true )
+    , sendFirstDelta( false )
+    , killed( false )
+    , m_decorator(new ThreadWeaver::QObjectDecorator(this, parent))
 {
     m_ctxt->setListener(this);
-
 
     QObject::connect( m_decorator, SIGNAL(failed(ThreadWeaver::Job*)),
              parent, SLOT(internalJobFailed(ThreadWeaver::Job*)), Qt::QueuedConnection );

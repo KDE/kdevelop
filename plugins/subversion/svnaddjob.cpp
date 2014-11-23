@@ -24,10 +24,10 @@
 #include <QMutexLocker>
 
 #include <KLocalizedString>
-#include <ThreadWeaver.h>
 
 #include "kdevsvncpp/client.hpp"
 #include "kdevsvncpp/path.hpp"
+
 
 SvnInternalAddJob::SvnInternalAddJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
@@ -35,7 +35,7 @@ SvnInternalAddJob::SvnInternalAddJob( SvnJobBase* parent )
 {
 }
 
-void SvnInternalAddJob::run()
+void SvnInternalAddJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     initBeforeRun();
 
@@ -103,7 +103,7 @@ void SvnAddJob::start()
     }else
     {
         qCDebug(PLUGIN_SVN) << "adding urls:" << m_job->locations();
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
     }
 }
 

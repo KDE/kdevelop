@@ -26,8 +26,6 @@
 
 #include <KLocalizedString>
 
-#include <ThreadWeaver.h>
-
 #include "kdevsvncpp/client.hpp"
 #include "kdevsvncpp/info.hpp"
 
@@ -36,7 +34,7 @@ SvnInternalInfoJob::SvnInternalInfoJob( SvnJobBase* parent )
 {
 }
 
-void SvnInternalInfoJob::run()
+void SvnInternalInfoJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     initBeforeRun();
     svn::Client cli(m_ctxt);
@@ -132,7 +130,7 @@ void SvnInfoJob::start()
         setErrorText( i18n( "Not enough information to execute info job" ) );
     }else
     {
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
     }
 }
 

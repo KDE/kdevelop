@@ -41,7 +41,7 @@ public:
 signals:
     void gotContent( const QString& );
 protected:
-    void run();
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 private:
     KDevelop::VcsLocation m_source;
     KDevelop::VcsRevision m_srcRevision;

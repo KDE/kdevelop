@@ -25,7 +25,6 @@
 
 #include <KLocalizedString>
 
-#include <ThreadWeaver.h>
 
 #include "kdevsvncpp/client.hpp"
 #include "kdevsvncpp/path.hpp"
@@ -37,7 +36,7 @@ SvnInternalRevertJob::SvnInternalRevertJob( SvnJobBase* parent )
 {
 }
 
-void SvnInternalRevertJob::run()
+void SvnInternalRevertJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     initBeforeRun();
 
@@ -106,7 +105,7 @@ void SvnRevertJob::start()
         setErrorText( i18n( "Not enough information to execute revert" ) );
     }else
     {
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
     }
 }
 

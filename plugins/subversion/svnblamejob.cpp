@@ -25,7 +25,6 @@
 #include <QMutexLocker>
 
 #include <KLocalizedString>
-#include <ThreadWeaver.h>
 
 #include "svnclient.h"
 #include <QDateTime>
@@ -39,7 +38,7 @@ SvnInternalBlameJob::SvnInternalBlameJob( SvnJobBase* parent )
                                     KDevelop::VcsRevision::Special );
 }
 
-void SvnInternalBlameJob::run()
+void SvnInternalBlameJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     initBeforeRun();
 
@@ -166,7 +165,7 @@ void SvnBlameJob::start()
         connect( m_job, SIGNAL(blameLine(KDevelop::VcsAnnotationLine)),
                  this, SLOT(blameLineReceived(KDevelop::VcsAnnotationLine)) );
         qCDebug(PLUGIN_SVN) << "blameging url:" << m_job->location();
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
     }
 }
 

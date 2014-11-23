@@ -26,7 +26,6 @@
 #include <QUrl>
 
 #include <KLocalizedString>
-#include <ThreadWeaver.h>
 
 extern "C"
 {
@@ -97,7 +96,7 @@ bool SvnInternalStatusJob::recursive() const
     return m_recursive;
 }
 
-void SvnInternalStatusJob::run()
+void SvnInternalStatusJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
     qCDebug(PLUGIN_SVN) << "Running internal status job with urls:" << m_locations;
     initBeforeRun();
@@ -159,7 +158,7 @@ void SvnStatusJob::start()
         connect( m_job, SIGNAL(gotNewStatus(KDevelop::VcsStatusInfo)),
             this, SLOT(addToStats(KDevelop::VcsStatusInfo)),
                         Qt::QueuedConnection );
-        ThreadWeaver::Weaver::instance()->enqueue( m_job );
+        m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw( m_job );
     }
 }
 

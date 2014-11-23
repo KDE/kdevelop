@@ -25,7 +25,7 @@
 
 #include <QDateTime>
 #include <QList>
-
+#include <QStandardPaths>
 
 extern "C" {
 #include <svn_client.h>
@@ -33,7 +33,6 @@ extern "C" {
 }
 #include "kdevsvncpp/targets.hpp"
 #include "kdevsvncpp/pool.hpp"
-#include <QStandardPaths>
 
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsannotation.h>
@@ -99,7 +98,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& srcRev,
     const char* errfileName = 0;
     apr_file_t* errfile = 0;
 
-    QByteArray ba = QString(QStandardPaths::writableLocation(QStandardItem::TempLocation)+"/kdevelop_svn_diff" ).toUtf8();
+    QByteArray ba = QString(QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"/kdevelop_svn_diff" ).toUtf8();
     
     error = svn_io_open_unique_file( &outfile, &outfileName, ba.data(), ".tmp", false, pool );
 
@@ -177,7 +176,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& pegRev,
     const char* errfileName = 0;
     apr_file_t* errfile = 0;
 
-    QByteArray ba = QStandardPaths::writableLocation("tmp").toUtf8();
+    QByteArray ba = QStandardPaths::writableLocation(QStandardPaths::TempLocation).toUtf8();
 
     error = svn_io_open_unique_file( &outfile, &outfileName, ba.data(), ".tmp", false, pool );
 

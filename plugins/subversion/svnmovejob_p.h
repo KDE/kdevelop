@@ -36,7 +36,7 @@ public:
     QUrl destinationLocation() const;
     bool force() const;
 protected:
-    void run();
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 private:
     QUrl m_sourceLocation;
     QUrl m_destinationLocation;

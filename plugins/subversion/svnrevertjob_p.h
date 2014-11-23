@@ -34,7 +34,7 @@ public:
     bool recursive() const;
     QList<QUrl> locations() const;
 protected:
-    void run();
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 private:
     QList<QUrl> m_locations;
     bool m_recursive;

@@ -23,7 +23,6 @@
 #include <QTemporaryDir>
 #include <KProcess>
 #include <kparts/part.h>
-#include <kio/netaccess.h>
 #include <QDebug>
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
@@ -142,18 +141,18 @@ void SvnRecursiveAdd::test()
     VcsLocation reposLoc;
     reposLoc.setRepositoryServer("file://" + reposDir.path());
     QTemporaryDir checkoutDir;
-    QUrl checkoutLoc = checkoutDir.path();
+    QUrl checkoutLoc = QUrl::fromLocalFile(checkoutDir.path());
     qDebug() << "Checking out from " << reposLoc.repositoryServer() << " to " << checkoutLoc;
     qDebug() << "creating job";
     VcsJob* job = vcs->createWorkingCopy( reposLoc, checkoutLoc );
     validatingExecJob(job);
     qDebug() << "filling wc";
     fillWorkingDirectory(checkoutDir.path());
-    QUrl addUrl = checkoutLoc.resolved( vcsTestDir0 );
+    QUrl addUrl = QUrl::fromLocalFile( checkoutDir.path() + '/' + vcsTestDir0 );
     qDebug() << "Recursively adding files at " << addUrl;
-    validatingExecJob(vcs->add(addUrl, IBasicVersionControl::Recursive));
+    validatingExecJob(vcs->add({addUrl}, IBasicVersionControl::Recursive));
     qDebug() << "Recursively reverting changes at " << addUrl;
-    validatingExecJob(vcs->revert(addUrl, IBasicVersionControl::Recursive));
+    validatingExecJob(vcs->revert({addUrl}, IBasicVersionControl::Recursive));
 }
 
 QTEST_MAIN(SvnRecursiveAdd)

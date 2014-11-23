@@ -14,6 +14,10 @@
 #include <vcs/vcsjob.h>
 
 #include "kdevsvncpp/context_listener.hpp"
+#include "kdevsvnplugin.h"
+#include "debug.h"
+
+#include <ThreadWeaver/Queueing>
 
 extern "C"
 {

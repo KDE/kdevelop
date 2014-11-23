@@ -25,7 +25,6 @@
 #include <QTemporaryDir>
 #include <KProcess>
 #include <kparts/part.h>
-#include <kio/netaccess.h>
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -152,10 +151,10 @@ void SvnImport::validateImport( const QString& repourl, QTemporaryDir& checkoutd
 {
     VcsLocation reposLoc;
     reposLoc.setRepositoryServer( repourl );
-    VcsJob* job = vcs->createWorkingCopy( reposLoc, checkoutdir.name() );
+    VcsJob* job = vcs->createWorkingCopy( reposLoc, QUrl::fromLocalFile(checkoutdir.path()) );
     validatingExecJob(job);
 
-    QFile newfile( checkoutdir.name() + "/sample.file" );
+    QFile newfile( checkoutdir.path() + "/sample.file" );
     QVERIFY(newfile.exists());
     QVERIFY(newfile.open(QIODevice::ReadOnly));
     QCOMPARE(QString::fromUtf8( newfile.readAll() ), origcontent);

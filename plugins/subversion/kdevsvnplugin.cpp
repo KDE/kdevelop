@@ -32,6 +32,10 @@
 #include <QTemporaryFile>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
+#include <KIO/Global>
+#include <KDialog>
+
+#include <ThreadWeaver/Queue>
 
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -80,8 +84,10 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevSvnFactory, "kdevsubversion.json", registerPlugin
 
 KDevSvnPlugin::KDevSvnPlugin(QObject *parent, const QVariantList &)
         : KDevelop::IPlugin("kdevsubversion", parent)
-        , m_common(new KDevelop::VcsPluginHelper(this, this)),
-        copy_action( 0 ), move_action( 0 )
+        , m_common(new KDevelop::VcsPluginHelper(this, this))
+        , copy_action( 0 )
+        , move_action( 0 )
+        , m_jobQueue(new ThreadWeaver::Queue(this))
 {
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::IBasicVersionControl)
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::ICentralizedVersionControl)
@@ -326,7 +332,7 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
 
     bool hasVersionControlledEntries = false;
     foreach(const QUrl &url, ctxUrlList) {
-        if (isVersionControlled(url) || isVersionControlled(url.upUrl())) {
+        if (isVersionControlled(url) || isVersionControlled(KIO::upUrl(url))) {
             hasVersionControlledEntries = true;
             break;
         }
@@ -390,11 +396,11 @@ void KDevSvnPlugin::ctxCopy()
     QUrl source = ctxUrlList.first();
 
     if (source.isLocalFile()) {
-        QString dir = source.toLocalFile();
+        QUrl dir = source;
         bool isFile = QFileInfo(source.toLocalFile()).isFile();
 
         if (isFile) {
-            dir = source.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path();
+            dir = dir.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash);
         }
 
         KUrlRequesterDialog dlg(dir, i18n("Destination file/directory"), 0);
@@ -426,11 +432,11 @@ void KDevSvnPlugin::ctxMove()
     QUrl source = ctxUrlList.first();
 
     if (source.isLocalFile()) {
-        QString dir = source.toLocalFile();
+        QUrl dir = source;
         bool isFile = QFileInfo(source.toLocalFile()).isFile();
 
         if (isFile) {
-            dir = source.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path();
+            dir = source.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash);
         }
 
         KUrlRequesterDialog dlg(dir, i18n("Destination file/directory"), 0);
@@ -503,8 +509,7 @@ void KDevSvnPlugin::ctxCheckout()
 
     dlg.setCaption(i18n("Checkout from Subversion repository"));
     SvnCheckoutMetadataWidget* widget = new SvnCheckoutMetadataWidget(&dlg);
-    QUrl tmp = ctxUrlList.first();
-    tmp.cd("..");
+    QUrl tmp = KIO::upUrl(ctxUrlList.first());
     widget->setDestinationLocation(tmp);
     dlg.setMainWidget(widget);
 
@@ -516,6 +521,11 @@ void KDevSvnPlugin::ctxCheckout()
 KDevelop::VcsLocationWidget* KDevSvnPlugin::vcsLocation(QWidget* parent) const
 {
     return new SvnLocationWidget(parent);
+}
+
+ThreadWeaver::Queue* KDevSvnPlugin::jobQueue() const
+{
+    return m_jobQueue;
 }
 
 #include "kdevsvnplugin.moc"

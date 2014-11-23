@@ -50,7 +50,7 @@ namespace svn
 class SvnJobBase;
 class QMutex;
 class QSemaphore;
-class SvnInternalJobBase : public ThreadWeaver::Job, public svn::ContextListener
+class SvnInternalJobBase : public QObject, public ThreadWeaver::Job, public svn::ContextListener
 {
     Q_OBJECT
 public:
