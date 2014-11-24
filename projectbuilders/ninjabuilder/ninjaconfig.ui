@@ -227,7 +227,7 @@
   <customwidget>
    <class>KDevelop::EnvironmentConfigureButton</class>
    <extends>QToolButton</extends>
-   <header>util/environmentconfigurebutton.h</header>
+   <header>shell/environmentconfigurebutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

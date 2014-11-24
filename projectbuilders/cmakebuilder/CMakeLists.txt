@@ -25,6 +25,7 @@ target_link_libraries(
         KDev::Interfaces
         KDev::OutputView
         KDev::Util
+        KDev::Shell
         KDev::Project
 )
 

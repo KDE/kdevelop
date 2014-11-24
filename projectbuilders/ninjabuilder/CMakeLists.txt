@@ -10,6 +10,7 @@ target_link_libraries(kdevninja
     KDev::Project
     KDev::Language
     KDev::OutputView
+    KDev::Shell
     KDev::Util
     KDev::Shell
 )
