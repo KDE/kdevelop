@@ -22,12 +22,10 @@
 #ifndef CMAKEPREFERENCES_H
 #define CMAKEPREFERENCES_H
 
-#include <project/projectkcmodule.h>
 #include "cmakecachemodel.h"
 
+#include <project/projectconfigpage.h>
 #include <util/path.h>
-
-#include <KSharedConfig>
 
 class QItemSelection;
 class CMakeSettings;
@@ -38,20 +36,25 @@ namespace Ui { class CMakeBuildSettings; }
  * @author Matt Rogers <mattr@kde.org>
  * @author Aleix Pol <aleixpol@gmail.com>
  */
-class CMakePreferences : public KCModule
+class CMakePreferences : public KDevelop::ConfigPage
 {
     Q_OBJECT
     public:
-        explicit CMakePreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
+        explicit CMakePreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = 0);
         ~CMakePreferences();
 
+        virtual QString name() const override;
+        virtual QString fullName() const override;
+        virtual QIcon icon() const override;
+
+        virtual void apply() override;
+        virtual void reset() override;
+        virtual void defaults() override;
+
     private slots:
-        virtual void load();
-        virtual void save();
-        virtual void defaults();
         void listSelectionChanged ( const QModelIndex& current, const QModelIndex& );
         void showInternal(int state);
-        void cacheEdited(QStandardItem * ) { emit changed(true); }
+        void cacheEdited(QStandardItem * ) { emit changed(); }
         void buildDirChanged(int index);
         void cacheUpdated();
         void createBuildDir();

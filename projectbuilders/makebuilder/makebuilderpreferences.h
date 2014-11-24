@@ -21,25 +21,27 @@
 #ifndef MAKEBUILDERPREFERENCES_H
 #define MAKEBUILDERPREFERENCES_H
 
-#include <QUrl>
-
-#include <project/projectkcmodule.h>
+#include <project/projectconfigpage.h>
 
 class QWidget;
 class QStringList;
 class MakeBuilderSettings;
 namespace Ui { class MakeConfig; }
 
-class MakeBuilderPreferences : public ProjectKCModule<MakeBuilderSettings>
+class MakeBuilderPreferences : public ProjectConfigPage<MakeBuilderSettings>
 {
     Q_OBJECT
 
 public:
-    explicit MakeBuilderPreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
+    explicit MakeBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = 0);
     ~MakeBuilderPreferences();
-    void load();
-    void save();
-    void defaults();
+    void reset() override;
+    void apply() override;
+    void defaults() override;
+
+    virtual QString name() const override;
+    virtual QString fullName() const override;
+    virtual QIcon icon() const override;
 
     static QString standardMakeComannd();
 

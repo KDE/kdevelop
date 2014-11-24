@@ -433,7 +433,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
 
   if (!m_importedParentContexts.isEmpty()) {
     DUChainReadLocker lock(DUChain::lock());
-    qWarning() << file->url().str() << "Previous parameter declaration context didn't get used??" ;
+    qCWarning(CPPDUCHAIN) << file->url().str() << "Previous parameter declaration context didn't get used??" ;
     m_importedParentContexts.clear();
   }
 
@@ -1031,7 +1031,7 @@ void ContextBuilder::visitSwitchStatement(SwitchStatementAST* node)
 void ContextBuilder::visitDoStatement(DoStatementAST *node)
 {
   if(!node->statement) {
-    qWarning() << "error, no statement"; //Warning instead of crashing here
+    qCWarning(CPPDUCHAIN) << "error, no statement"; //Warning instead of crashing here
     return;
   }
   //We don't need to create a context for compound-statements, since those create a context by themselves

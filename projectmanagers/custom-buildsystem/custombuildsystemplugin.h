@@ -78,6 +78,11 @@ public:
     QList<KDevelop::ProjectTargetItem*> targets( KDevelop::ProjectFolderItem* ) const;
     KConfigGroup configuration( KDevelop::IProject* ) const;
     KConfigGroup findMatchingPathGroup( const KConfigGroup& cfg, KDevelop::ProjectBaseItem* item ) const;
+
+// IPlugin API
+public:
+    virtual int perProjectConfigPages() const override;
+    virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
 };
 
 #endif

@@ -60,6 +60,9 @@ public:
 
 //     bool updateConfig( KDevelop::IProject* project );
 
+    virtual int configPages() const override;
+    virtual KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
+
 Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
     void failed(KDevelop::ProjectBaseItem*);

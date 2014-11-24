@@ -357,7 +357,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
 
         if(content && content->parsingEnvironmentFile()->isProxyContext())
         {
-          qWarning() << "Got proxy-context as content-context for file" << content->url().str() << ", not updating";
+          qCWarning(CPP) << "Got proxy-context as content-context for file" << content->url().str() << ", not updating";
           content = KDevelop::ReferencedTopDUContext();
         }
 

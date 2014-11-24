@@ -20,8 +20,9 @@
 #ifndef KCM_CUSTOMBUILDSYSTEM_H
 #define KCM_CUSTOMBUILDSYSTEM_H
 
-#include <project/projectkcmodule.h>
+#include <project/projectconfigpage.h>
 #include "custombuildsystemplugin.h"
+#include "kcfg_custombuildsystemconfig.h"
 
 class CustomBuildSystemSettings;
 namespace Ui
@@ -29,20 +30,22 @@ namespace Ui
 class CustomBuildSystemConfig;
 }
 
-class CustomBuildSystemKCModule : public ProjectKCModule<CustomBuildSystemSettings>
+class CustomBuildSystemKCModule : public ProjectConfigPage<CustomBuildSystemSettings>
 {
 Q_OBJECT
 public:
-    CustomBuildSystemKCModule( QWidget* parent, const QVariantList& args = QVariantList() );
+    CustomBuildSystemKCModule(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
     virtual ~CustomBuildSystemKCModule();
 
-    virtual void defaults();
-    virtual void load();
-    virtual void save();
+    virtual QString name() const;
+    virtual QString fullName() const;
+    virtual QIcon icon() const;
+public Q_SLOTS:
+    virtual void defaults() override;
+    virtual void reset() override;
+    virtual void apply() override;
 private:
     class CustomBuildSystemConfigWidget* configWidget;
-public slots:
-    void dataChanged();
 };
 
 #endif

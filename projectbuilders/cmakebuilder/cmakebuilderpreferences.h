@@ -21,26 +21,28 @@
 #ifndef MAKEBUILDERPREFERENCES_H
 #define MAKEBUILDERPREFERENCES_H
 
-#include <QUrl>
-
-#include <kcmodule.h>
+#include <interfaces/configpage.h>
 
 class QWidget;
 class QStringList;
 class CMakeBuilderSettings;
 namespace Ui { class CMakeBuilderConfig; }
 
-class CMakeBuilderPreferences : public KCModule
+class CMakeBuilderPreferences : public KDevelop::ConfigPage
 {
     Q_OBJECT
 
 public:
-    explicit CMakeBuilderPreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
+    explicit CMakeBuilderPreferences(KDevelop::IPlugin* plugin, QWidget* parent = nullptr);
     ~CMakeBuilderPreferences();
-    
-    virtual void save();
-    virtual void load();
-    virtual void defaults();
+
+    virtual QString name() const override;
+    virtual QString fullName() const override;
+    virtual QIcon icon() const override;
+
+    virtual void apply() override;
+    virtual void reset() override;
+    virtual void defaults() override;
 
 public slots:
     void generatorChanged(const QString& generator);

@@ -23,53 +23,58 @@
 #include <KAboutData>
 #include <QVBoxLayout>
 
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+
 #include "custombuildsystemconfigwidget.h"
-#include "kcfg_custombuildsystemconfig.h"
 
-K_PLUGIN_FACTORY(CustomBuildSystemKCModuleFactory, registerPlugin<CustomBuildSystemKCModule>(); )
-
-CustomBuildSystemKCModule::CustomBuildSystemKCModule( QWidget* parent, const QVariantList& args )
-    : ProjectKCModule<CustomBuildSystemSettings>( KAboutData::pluginData("kcm_kdevcustombuildsystem"), parent, args )
+CustomBuildSystemKCModule::CustomBuildSystemKCModule(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+    : ProjectConfigPage<CustomBuildSystemSettings>(plugin, options, parent)
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
     configWidget = new CustomBuildSystemConfigWidget( this );
-    connect( configWidget, &CustomBuildSystemConfigWidget::changed, this, &CustomBuildSystemKCModule::dataChanged );
+    connect(configWidget, &CustomBuildSystemConfigWidget::changed, this, &ConfigPage::changed);
     layout->addWidget( configWidget );
-
-    addConfig( CustomBuildSystemSettings::self(), configWidget );
 }
-
-void CustomBuildSystemKCModule::dataChanged()
-{
-    emit changed(true);
-}
-
 
 CustomBuildSystemKCModule::~CustomBuildSystemKCModule()
 {
 }
 
-void CustomBuildSystemKCModule::load()
+void CustomBuildSystemKCModule::reset()
 {
-    KCModule::load();
-    configWidget->loadFrom( CustomBuildSystemSettings::self()->config() );
+    ProjectConfigPage::reset();
+    configWidget->loadFrom(CustomBuildSystemSettings::self()->config());
 }
 
-void CustomBuildSystemKCModule::save()
+void CustomBuildSystemKCModule::apply()
 {
-    configWidget->saveTo( CustomBuildSystemSettings::self()->config(), project() );
-    KCModule::save();
-
-    if ( KDevelop::IProjectController::parseAllProjectSources()) {
+    configWidget->saveTo(CustomBuildSystemSettings::self()->config(), project());
+    ProjectConfigPage::apply();
+    if (KDevelop::IProjectController::parseAllProjectSources()) {
         KDevelop::ICore::self()->projectController()->reparseProject(project());
     }
 }
 
 void CustomBuildSystemKCModule::defaults()
 {
-    KCModule::defaults();
+    ProjectConfigPage::defaults();
     configWidget->loadDefaults();
 }
 
-#include "kcm_custombuildsystem.moc"
+QString CustomBuildSystemKCModule::name() const
+{
+    return i18n("Custom BuildSystem");
+}
 
+QString CustomBuildSystemKCModule::fullName() const
+{
+    return i18n("Configure a projects custom build tool and includes/defines for the language support.");
+}
+
+QIcon CustomBuildSystemKCModule::icon() const
+{
+    return QIcon::fromTheme("kdevelop");
+}
+
+#include "kcm_custombuildsystem.moc"

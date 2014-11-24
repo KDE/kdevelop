@@ -21,7 +21,7 @@
 #include <KLocalizedString>
 #include <QAction>
 
-#include "ui_defineswidget.h"
+#include "../ui_defineswidget.h"
 #include "definesmodel.h"
 #include "debugarea.h"
 

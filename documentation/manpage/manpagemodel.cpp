@@ -31,7 +31,7 @@
 
 namespace {
 
-const int INVALID_ID = std::numeric_limits<quintptr>::max();
+const quintptr INVALID_ID = std::numeric_limits<quintptr>::max();
 
 }
 

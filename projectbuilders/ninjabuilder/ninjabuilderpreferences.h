@@ -18,25 +18,27 @@
  * 02110-1301, USA.
  */
 
-#ifndef MAKEBUILDERPREFERENCES_H
-#define MAKEBUILDERPREFERENCES_H
+#ifndef NINJABUILDERPREFERENCES_H
+#define NINJABUILDERPREFERENCES_H
 
-#include <QUrl>
-
-#include <project/projectkcmodule.h>
+#include <project/projectconfigpage.h>
 
 class QWidget;
 class QStringList;
 class NinjaBuilderSettings;
 namespace Ui { class NinjaConfig; }
 
-class NinjaBuilderPreferences : public ProjectKCModule<NinjaBuilderSettings>
+class NinjaBuilderPreferences : public ProjectConfigPage<NinjaBuilderSettings>
 {
     Q_OBJECT
 
 public:
-    explicit NinjaBuilderPreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
-    ~NinjaBuilderPreferences();
+    explicit NinjaBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = 0);
+    virtual ~NinjaBuilderPreferences();
+
+    virtual QString name() const override;
+    virtual QString fullName() const override;
+    virtual QIcon icon() const override;
 
 private:
     Ui::NinjaConfig* m_prefsUi;

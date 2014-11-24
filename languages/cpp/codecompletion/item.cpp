@@ -226,7 +226,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::View* view, const KTe
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     Cpp::QtFunctionDeclaration* classFun = dynamic_cast<Cpp::QtFunctionDeclaration*>( m_declaration.data() );
     if( !classFun ) {
-      qWarning() << "Signal/slot completion declaration is not a QtFunctionDeclaration";
+      qCWarning(CPP) << "Signal/slot completion declaration is not a QtFunctionDeclaration";
       return;
     }
     executeSignalSlotCompletionItem( view, _word, classFun->isSignal(),

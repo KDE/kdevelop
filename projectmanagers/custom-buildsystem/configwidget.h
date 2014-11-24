@@ -52,6 +52,9 @@ private slots:
     void actionExecutableChanged( const QUrl& );
     void actionExecutableChanged( const QString& );
 private:
+    template<typename F>
+    void applyChange(F toolChanger);
+
     Ui::ConfigWidget* ui;
     QVector<CustomBuildSystemTool> m_tools;
     void setTool( const CustomBuildSystemTool& tool );

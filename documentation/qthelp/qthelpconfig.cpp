@@ -21,22 +21,18 @@
 
 #include "qthelpconfig.h"
 
+#include <QHelpEngineCore>
+#include <QFileDialog>
+
 #include <KMessageBox>
 #include <KLocalizedString>
-#include <KPluginFactory>
-#include <KPluginLoader>
-#include <KAboutData>
-#include <ksettings/dispatcher.h>
-#include <kns3/button.h>
-#include <qhelpenginecore.h>
-#include <QFileDialog>
+#include <KNS3/Button>
 
 #include "ui_qthelpconfig.h"
 #include "ui_qthelpconfigeditdialog.h"
 #include "qthelp_config_shared.h"
 #include "debug.h"
-
-K_PLUGIN_FACTORY(QtHelpConfigFactory, registerPlugin<QtHelpConfig>();)
+#include "qthelpplugin.h"
 
 enum Column
 {
@@ -93,8 +89,8 @@ void QtHelpConfigEditDialog::accept()
     QDialog::accept();
 }
 
-QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
-    : KCModule(parent, args)
+QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
+    : KDevelop::ConfigPage(plugin, nullptr, parent)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
 
@@ -125,7 +121,7 @@ QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     connect(m_configWidget->qchSearchDirButton, &QPushButton::clicked, this, &QtHelpConfig::chooseSearchDir);
     connect(m_configWidget->qchSearchDir,&QLineEdit::textChanged, this, &QtHelpConfig::searchDirChanged);
     l->addWidget( w );
-    load();
+    reset();
     selectionChanged();
 }
 
@@ -134,7 +130,7 @@ QtHelpConfig::~QtHelpConfig()
     delete m_configWidget;
 }
 
-void QtHelpConfig::save()
+void QtHelpConfig::apply()
 {
     QStringList iconList, nameList, pathList, ghnsList;
     for (int i = 0; i < m_configWidget->qchTable->topLevelItemCount(); i++) {
@@ -148,15 +144,12 @@ void QtHelpConfig::save()
     bool loadQtDoc = m_configWidget->loadQtDocsCheckBox->isChecked();
 
     qtHelpWriteConfig(iconList, nameList, pathList, ghnsList, searchDir, loadQtDoc);
-
-    KSettings::Dispatcher::reparseConfiguration( componentData().componentName() );
-
-    emit changed(false);
+    static_cast<QtHelpPlugin*>(plugin())->readConfig();
 }
 
-void QtHelpConfig::load()
+void QtHelpConfig::reset()
 {
-    m_configWidget->qchTable->clear();;
+    m_configWidget->qchTable->clear();
 
     QStringList iconList, nameList, pathList, ghnsList;
     QString searchDir;
@@ -175,7 +168,7 @@ void QtHelpConfig::load()
     m_configWidget->qchSearchDir->setText(searchDir);
     m_configWidget->loadQtDocsCheckBox->setChecked(loadQtDoc);
 
-    emit changed(false);
+    emit changed();
 }
 
 void QtHelpConfig::defaults()
@@ -189,7 +182,7 @@ void QtHelpConfig::defaults()
         m_configWidget->loadQtDocsCheckBox->setChecked(true);
         change = true;
     }
-    emit changed(change);
+    emit changed();
 }
 
 void QtHelpConfig::selectionChanged()
@@ -238,7 +231,7 @@ void QtHelpConfig::add()
     item->setText(IconColumn, dialog.qchIcon->icon());
     item->setText(GhnsColumn, "0");
     m_configWidget->qchTable->setCurrentItem(item);
-    emit changed(true);
+    emit changed();
 }
 
 void QtHelpConfig::modify()
@@ -267,7 +260,7 @@ void QtHelpConfig::modify()
     if(item->text(GhnsColumn) == "0") {
         item->setText(PathColumn, dialog.qchRequester->text());
     }
-    emit changed(true);
+    emit changed();
 }
 
 bool QtHelpConfig::checkNamespace(const QString& filename, QTreeWidgetItem* modifiedItem)
@@ -299,7 +292,7 @@ void QtHelpConfig::remove()
         return;
 
     delete selectedItem;
-    emit changed(true);
+    emit changed();
 }
 
 void QtHelpConfig::up()
@@ -365,7 +358,7 @@ void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
             }
         }
     }
-    emit changed(true);
+    emit changed();
 }
 
 void QtHelpConfig::chooseSearchDir()
@@ -376,8 +369,19 @@ void QtHelpConfig::chooseSearchDir()
 
 void QtHelpConfig::searchDirChanged()
 {
-    emit changed(true);
+    emit changed();
 }
+
+QString QtHelpConfig::name() const
+{
+    return i18n("QtHelp Documentation");
+}
+
+QIcon QtHelpConfig::icon() const
+{
+    return QIcon::fromTheme(QStringLiteral("qtlogo"));
+}
+
 
 
 #include "qthelpconfig.moc"

@@ -29,7 +29,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include "configconstants.h"
-
+#include "kcm_custombuildsystem.h"
 #include "config.h"
 
 #include "custombuildjob.h"
@@ -171,6 +171,19 @@ KConfigGroup CustomBuildSystem::configuration( IProject* project ) const
         return grp.group( grp.readEntry( ConfigConstants::currentConfigKey ) );
     else
         return KConfigGroup();
+}
+
+int CustomBuildSystem::perProjectConfigPages() const
+{
+    return 1;
+}
+
+KDevelop::ConfigPage* CustomBuildSystem::perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+{
+    if (number == 0) {
+        return new CustomBuildSystemKCModule(this, options, parent);
+    }
+    return nullptr;
 }
 
 #include "custombuildsystemplugin.moc"

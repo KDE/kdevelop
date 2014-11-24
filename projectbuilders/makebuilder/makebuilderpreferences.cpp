@@ -22,70 +22,44 @@
 
 #include <QVBoxLayout>
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
 #include <util/environmentgrouplist.h>
-#include <KAboutData>
 
 #include "ui_makeconfig.h"
 #include "makebuilderconfig.h"
 
-K_PLUGIN_FACTORY(MakeBuilderPreferencesFactory, registerPlugin<MakeBuilderPreferences>(); )
-
-MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QVariantList& args)
-    : ProjectKCModule<MakeBuilderSettings>( KAboutData::pluginData("kcm_kdev_makebuilder"),
-                parent, args)
+MakeBuilderPreferences::MakeBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+    : ProjectConfigPage<MakeBuilderSettings>(plugin, options, parent)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
     m_prefsUi = new Ui::MakeConfig;
     m_prefsUi->setupUi( w );
-    connect( m_prefsUi->makeBinary, &KUrlRequester::textChanged, this, static_cast<void(MakeBuilderPreferences::*)()>(&MakeBuilderPreferences::changed) );
-    connect( m_prefsUi->makeBinary, &KUrlRequester::urlSelected, this, static_cast<void(MakeBuilderPreferences::*)()>(&MakeBuilderPreferences::changed) );
+    connect(m_prefsUi->makeBinary, &KUrlRequester::textChanged, this, &MakeBuilderPreferences::changed);
+    connect(m_prefsUi->makeBinary, &KUrlRequester::urlSelected, this, &MakeBuilderPreferences::changed);
     l->addWidget( w );
 
     m_prefsUi->configureEnvironment->setSelectionWidget( m_prefsUi->kcfg_environmentProfile );
-
-    addConfig( MakeBuilderSettings::self(), w );
 }
 
-void MakeBuilderPreferences::load()
+void MakeBuilderPreferences::reset()
 {
-    KConfigSkeletonItem* item = MakeBuilderSettings::self()->findItem("makeBinary");
-    if( item )
-    {
-        bool tmp = m_prefsUi->makeBinary->blockSignals( true );
-        m_prefsUi->makeBinary->setText( item->property().toString() );
-        m_prefsUi->makeBinary->blockSignals( tmp );
-    }
-    ProjectKCModule<MakeBuilderSettings>::load();
+    ProjectConfigPage::reset();
+    QSignalBlocker sigBlock(this); // don't emit changed signal from m_prefsUi->makeBinary
+    m_prefsUi->makeBinary->setText(MakeBuilderSettings::self()->makeBinary());
 }
 
-void MakeBuilderPreferences::save()
+void MakeBuilderPreferences::apply()
 {
-    KConfigSkeletonItem* item = MakeBuilderSettings::self()->findItem("makeBinary");
-    if( item && !item->isEqual( QVariant( m_prefsUi->makeBinary->text() ) ) )
-    {
-        item->setProperty( m_prefsUi->makeBinary->text() );
-        MakeBuilderSettings::self()->writeConfig();
-    }
-    ProjectKCModule<MakeBuilderSettings>::save();
+    MakeBuilderSettings::self()->setMakeBinary(m_prefsUi->makeBinary->text());
+    MakeBuilderSettings::self()->save(); // TODO: is this needed? KConfigDialogManager should end up calling it
+    ProjectConfigPage::apply();
 }
 
 void MakeBuilderPreferences::defaults()
 {
-    qDebug() << "setting to defaults";
-    KConfigSkeletonItem* item = MakeBuilderSettings::self()->findItem("makeBinary");
-    if( item )
-    {
-        bool sig = m_prefsUi->makeBinary->blockSignals( true );
-        item->swapDefault();
-        m_prefsUi->makeBinary->setText( item->property().toString() );
-        item->swapDefault();
-        m_prefsUi->makeBinary->blockSignals( sig );
-        unmanagedWidgetChangeState(true);
-    }
-    ProjectKCModule<MakeBuilderSettings>::defaults();
+    MakeBuilderSettings::self()->setDefaults();
+    m_prefsUi->makeBinary->setText(MakeBuilderSettings::self()->makeBinary());
+    ProjectConfigPage::defaults();
 }
 
 MakeBuilderPreferences::~MakeBuilderPreferences()
@@ -101,6 +75,22 @@ QString MakeBuilderPreferences::standardMakeComannd()
     return QLatin1String("make");
 #endif
 }
+
+QString MakeBuilderPreferences::name() const
+{
+    return i18n("Make");
+}
+
+QString MakeBuilderPreferences::fullName() const
+{
+    return i18n("Configure Make settings");
+}
+
+QIcon MakeBuilderPreferences::icon() const
+{
+    return QIcon::fromTheme("run-build");
+}
+
 
 #include "makebuilderpreferences.moc"
 

@@ -8,39 +8,22 @@ set(kdevqthelp_SRCS
     qthelpqtdoc.cpp
     qthelp_config_shared.cpp
     debug.cpp
+    qthelpconfig.cpp # Configuration module for QtHelp plugin
 )
 
-add_library(kdevqthelp MODULE ${kdevqthelp_SRCS})
-target_link_libraries(kdevqthelp
-    KF5::KCMUtils KF5::I18n KF5::KIOWidgets KF5::TextEditor Qt5::Help Qt5::WebKitWidgets
-    KDev::Language KDev::Documentation KDev::Interfaces)
-
-install(TARGETS kdevqthelp DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
-
-configure_file(kdevqthelp.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-
-### Configuration module for QtHelp plugin
-
-set(kdevqthelp_config_SRCS
-    qthelpconfig.cpp
-    qthelp_config_shared.cpp
-    debug.cpp
-)
-
-qt5_wrap_ui(kdevqthelp_config_SRCS
+ki18n_wrap_ui(kdevqthelp_SRCS
     qthelpconfig.ui
     qthelpconfigeditdialog.ui
 )
 
-add_library(kdevqthelp_config MODULE ${kdevqthelp_config_SRCS} )
+add_library(kdevqthelp MODULE ${kdevqthelp_SRCS})
+target_link_libraries(kdevqthelp
+    KF5::KCMUtils KF5::I18n KF5::KIOWidgets KF5::TextEditor KF5::IconThemes Qt5::Help Qt5::WebKitWidgets KF5::NewStuff
+    KDev::Language KDev::Documentation KDev::Interfaces)
 
-target_link_libraries( kdevqthelp_config
-    KF5::IconThemes KF5::KIOWidgets Qt5::Help KF5::NewStuff KF5::KCMUtils KF5::I18n)
-
-install(TARGETS kdevqthelp_config DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm)
-configure_file(kdevqthelp_config.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp_config.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp_config.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+configure_file(kdevqthelp.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp.desktop)
+kcoreaddons_desktop_to_json(kdevqthelp ${CMAKE_CURRENT_BINARY_DIR}/kdevqthelp.desktop)
+install(TARGETS kdevqthelp DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 install(FILES kdevelop-qthelp.knsrc DESTINATION ${CONFIG_INSTALL_DIR})
 
 add_subdirectory(tests)

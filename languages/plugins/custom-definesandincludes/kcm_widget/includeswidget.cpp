@@ -25,7 +25,7 @@
 
 #include <interfaces/iproject.h>
 
-#include "ui_includeswidget.h"
+#include "../ui_includeswidget.h"
 #include "includesmodel.h"
 #include "debugarea.h"
 #include <QtWidgets/QShortcut>

@@ -22,6 +22,7 @@
 #include "definesandincludesmanager.h"
 
 #include "settingsmanager.h"
+#include "kcm_widget/definesandincludesconfigpage.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -260,6 +261,19 @@ void DefinesAndIncludesManager::registerBackgroundProvider(IDefinesAndIncludesMa
     }
 
     m_backgroundProviders.push_back(provider);
+}
+
+int DefinesAndIncludesManager::perProjectConfigPages() const
+{
+    return 1;
+}
+
+ConfigPage* DefinesAndIncludesManager::perProjectConfigPage(int number, const ProjectConfigOptions& options, QWidget* parent)
+{
+    if (number == 0) {
+        return new DefinesAndIncludesConfigPage(this, options, parent);
+    }
+    return nullptr;
 }
 
 }

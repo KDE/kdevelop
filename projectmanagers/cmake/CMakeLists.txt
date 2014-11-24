@@ -67,10 +67,7 @@ set( cmakesettings_SRCS
   settings/cmakecachedelegate.cpp
   debug.cpp
 )
-
-set( cmakesettings_UI
-  settings/cmakebuildsettings.ui
-)
+qt5_wrap_ui(cmakesettings_SRCS settings/cmakebuildsettings.ui)
 
 set( cmakedoc_SRCS
   cmakedocumentation.cpp
@@ -83,7 +80,7 @@ remove_definitions( -DQT_NO_STL )
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
 
-qt5_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
+ki18n_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
 add_library( kdevcmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdevcmakecommon
                         KF5::TextEditor KF5::KDELibs4Support KDev::Interfaces KDev::Project KDev::Util
@@ -91,11 +88,11 @@ target_link_libraries( kdevcmakecommon
                         )
 generate_export_header(kdevcmakecommon EXPORT_FILE_NAME cmakecommonexport.h)
 
-qt5_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
-add_library(kdevcmakemanager MODULE ${cmakemanager_SRCS} ../custommake/makefileresolver/makefileresolver.cpp)
+ki18n_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
+add_library(kdevcmakemanager MODULE ${cmakemanager_SRCS} ${cmakesettings_SRCS} ../custommake/makefileresolver/makefileresolver.cpp)
 target_link_libraries( kdevcmakemanager  KF5::KIOWidgets KDev::Util
                         KDev::Interfaces kdevcmakecommon
-                        KDev::Project KDev::Language
+                        KDev::Project KDev::Language KDev::Shell
                         KDev::OutputView KF5::TextEditor KF5::KDELibs4Support Qt5::Concurrent)
 
 add_library(kdevcmakedocumentation MODULE ${cmakedoc_SRCS} )
@@ -105,19 +102,10 @@ target_link_libraries( kdevcmakedocumentation
                         KDev::Documentation
                         KF5::TextEditor Qt5::WebKitWidgets)
 
-qt5_wrap_ui( cmakesettings_SRCS ${cmakesettings_UI} )
-add_library(kcm_kdevcmake_settings MODULE ${cmakesettings_SRCS} )
-target_link_libraries( kcm_kdevcmake_settings KF5::KIOWidgets KF5::KDELibs4Support
-                       KDev::Interfaces KDev::Project KDev::Util
-                       kdevcmakecommon )
-
 install(TARGETS kdevcmakemanager DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 install(TARGETS kdevcmakedocumentation DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-install(TARGETS kcm_kdevcmake_settings DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}/kcm )
 install(TARGETS kdevcmakecommon ${INSTALL_TARGETS_DEFAULT_ARGS} )
 configure_file(kdevcmakemanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakemanager.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 configure_file(kdevcmakedocumentation.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-configure_file(kcm_kdevcmake_settings.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevcmake_settings.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kcm_kdevcmake_settings.desktop DESTINATION ${SERVICES_INSTALL_DIR})

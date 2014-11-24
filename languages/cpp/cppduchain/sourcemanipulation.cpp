@@ -187,7 +187,7 @@ KDevelop::SourceCodeInsertion::SourceCodeInsertion(KDevelop::TopDUContext* topCo
     m_codeRepresentation(KDevelop::createCodeRepresentation(m_topContext->url()))
 {
   if(m_topContext->parsingEnvironmentFile() && m_topContext->parsingEnvironmentFile()->isProxyContext()) {
-    qWarning() << "source-code manipulation on proxy-context is wrong!!!" << m_topContext->url().toUrl();
+    qCWarning(CPPDUCHAIN) << "source-code manipulation on proxy-context is wrong!!!" << m_topContext->url().toUrl();
   }
   m_insertBefore = KTextEditor::Cursor::invalid();
 }

@@ -27,6 +27,8 @@
 #include <util/environmentgrouplist.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iproject.h>
+#include <klocalizedstring.h>
 #include <outputview/outputmodel.h>
 #include <execute/iexecuteplugin.h>
 #include "debugsession.h"
@@ -50,7 +52,11 @@ DebugJob::DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfigur
     connect(m_session, &DebugSession::applicationStandardErrorLines, this, &DebugJob::stdoutReceived);
     connect(m_session, &DebugSession::finished, this, &DebugJob::done );
 
-    setObjectName(launchcfg->name());
+    if (launchcfg->project()) {
+        setObjectName(i18nc("ProjectName: run configuration name", "%1: %2", launchcfg->project()->name(), launchcfg->name()));
+    } else {
+        setObjectName(launchcfg->name());
+    }
 }
 
 void DebugJob::start()

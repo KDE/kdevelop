@@ -30,7 +30,7 @@
 #include <QMenu>
 #include <QSignalMapper>
 
-#include "ui_compilerswidget.h"
+#include "../ui_compilerswidget.h"
 #include "compilersmodel.h"
 #include "debugarea.h"
 

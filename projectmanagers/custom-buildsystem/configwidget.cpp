@@ -103,39 +103,54 @@ void ConfigWidget::changeAction( int idx )
 
 void ConfigWidget::toggleActionEnablement( bool enable )
 {
-    m_tools[ ui->buildAction->currentIndex() ].enabled = enable;
-    emit changed();
+    applyChange([=] (CustomBuildSystemTool* tool) {
+        tool->enabled = enable;
+    });
 }
 
 void ConfigWidget::actionArgumentsEdited( const QString& txt )
 {
-    m_tools[ ui->buildAction->currentIndex() ].arguments = txt;
-    emit changed();
+    applyChange([=] (CustomBuildSystemTool* tool) {
+        tool->arguments = txt;
+    });
 }
 
 void ConfigWidget::actionEnvironmentChanged(const QString& profile)
 {
-    m_tools[ui->buildAction->currentIndex()].envGrp = profile;
-    emit changed();
+    applyChange([=] (CustomBuildSystemTool* tool) {
+        tool->envGrp = profile;
+    });
 }
 
 void ConfigWidget::actionExecutableChanged( const QUrl &url )
 {
-    m_tools[ ui->buildAction->currentIndex() ].executable = url;
-    emit changed();
+    applyChange([=] (CustomBuildSystemTool* tool) {
+        tool->executable = url;
+    });
 }
 
 void ConfigWidget::actionExecutableChanged(const QString& txt )
 {
-    m_tools[ ui->buildAction->currentIndex() ].executable = QUrl::fromLocalFile(txt);
-    emit changed();
+    applyChange([=] (CustomBuildSystemTool* tool) {
+        tool->executable = QUrl::fromLocalFile(txt);
+    });
 }
 
 void ConfigWidget::clear()
 {
     ui->buildAction->setCurrentIndex( int( CustomBuildSystemTool::Build ) );
     changeAction( ui->buildAction->currentIndex() );
-    ui->buildDir->setText("");
+    ui->buildDir->setText({});
 }
 
-
+template<typename F>
+void ConfigWidget::applyChange(F toolChanger)
+{
+    const auto idx = ui->buildAction->currentIndex();
+    if (idx < 0 || idx >= m_tools.count()) {
+        // happens for the empty tool
+        return;
+    }
+    toolChanger(&m_tools[idx]);
+    emit changed();
+}

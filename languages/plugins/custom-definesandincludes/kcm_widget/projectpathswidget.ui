@@ -229,17 +229,17 @@
   <customwidget>
    <class>DefinesWidget</class>
    <extends>QWidget</extends>
-   <header>defineswidget.h</header>
+   <header>kcm_widget/defineswidget.h</header>
   </customwidget>
   <customwidget>
    <class>IncludesWidget</class>
    <extends>QWidget</extends>
-   <header>includeswidget.h</header>
+   <header>kcm_widget/includeswidget.h</header>
   </customwidget>
   <customwidget>
    <class>CompilersWidget</class>
    <extends>QWidget</extends>
-   <header>compilerswidget.h</header>
+   <header>kcm_widget/compilerswidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

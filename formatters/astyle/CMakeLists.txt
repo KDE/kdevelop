@@ -16,7 +16,7 @@ set(astyle_preferences_UI
     astyle_preferences.ui
 )
 
-qt5_wrap_ui(kdevastyle_PART_SRCS ${astyle_preferences_UI} )
+ki18n_wrap_ui(kdevastyle_PART_SRCS ${astyle_preferences_UI} )
 add_library(kdevastyle MODULE ${kdevastyle_PART_SRCS})
 target_link_libraries(kdevastyle
 

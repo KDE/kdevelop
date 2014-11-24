@@ -30,11 +30,9 @@
 #include "ui_ninjaconfig.h"
 #include "ninjabuilderconfig.h"
 
-K_PLUGIN_FACTORY(NinjaBuilderPreferencesFactory, registerPlugin<NinjaBuilderPreferences>(); )
-
-NinjaBuilderPreferences::NinjaBuilderPreferences(QWidget* parent, const QVariantList& args)
-    : ProjectKCModule<NinjaBuilderSettings>( KAboutData::pluginData("kcm_kdev_ninjabuilder"),
-                parent, args)
+NinjaBuilderPreferences::NinjaBuilderPreferences(KDevelop::IPlugin* plugin,
+        const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+    : ProjectConfigPage<NinjaBuilderSettings>(plugin, options, parent)
 {
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
@@ -43,8 +41,6 @@ NinjaBuilderPreferences::NinjaBuilderPreferences(QWidget* parent, const QVariant
     l->addWidget( w );
 
     m_prefsUi->configureEnvironment->setSelectionWidget( m_prefsUi->kcfg_environmentProfile );
-
-    addConfig( NinjaBuilderSettings::self(), w );
 }
 
 NinjaBuilderPreferences::~NinjaBuilderPreferences()
@@ -52,5 +48,19 @@ NinjaBuilderPreferences::~NinjaBuilderPreferences()
     delete m_prefsUi;
 }
 
-#include "ninjabuilderpreferences.moc"
+QString NinjaBuilderPreferences::name() const
+{
+    return i18n("Ninja");
+}
 
+QString NinjaBuilderPreferences::fullName() const
+{
+    return i18n("Configure Ninja settings");
+}
+
+QIcon NinjaBuilderPreferences::icon() const
+{
+    return QIcon::fromTheme("run-build");
+}
+
+#include "ninjabuilderpreferences.moc"

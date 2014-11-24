@@ -7,7 +7,7 @@ set(kdevkdeprovider_PART_SRCS kdeprojectsmodel.cpp
     kdeprojectsreader.cpp
 )
 kconfig_add_kcfg_files(kdevkdeprovider_PART_SRCS kdeconfig.kcfgc)
-qt5_wrap_ui(kdevkdeprovider_PART_SRCS kdeconfig.ui)
+ki18n_wrap_ui(kdevkdeprovider_PART_SRCS kdeconfig.ui)
 
 add_library(kdevkdeprovider MODULE ${kdevkdeprovider_PART_SRCS})
 target_link_libraries(kdevkdeprovider KF5::ItemViews KDev::Interfaces KDev::Vcs)

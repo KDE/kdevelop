@@ -12,7 +12,7 @@ set( kcm_uitest_SRCS kcmuitestmain.cpp
                      ../debugarea.cpp
    )
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
-qt5_wrap_ui( kcm_uitest_SRCS
+ki18n_wrap_ui( kcm_uitest_SRCS
                         ../configwidget.ui
                         ../custombuildsystemconfigwidget.ui
                  )

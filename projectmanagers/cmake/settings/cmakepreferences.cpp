@@ -23,8 +23,7 @@
 
 #include <interfaces/icore.h>
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
+#include <KLocalizedString>
 #include <KMessageBox>
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
@@ -48,16 +47,9 @@
 #include <KLocalizedString>
 #include <QStandardPaths>
 
-K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
-
-CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
-    : KCModule(KAboutData::pluginData("kcm_kdevcmake_settings"), parent, args), m_currentModel(0)
+CMakePreferences::CMakePreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+    : KDevelop::ConfigPage(plugin, nullptr, parent), m_project(options.project), m_currentModel(0)
 {
-    Q_ASSERT( args.count() > 3 );
-
-    QString projectName = args.at(4).toString();
-    m_project = KDevelop::ICore::self()->projectController()->findProjectByName( projectName );
-
     QVBoxLayout* l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
     m_prefsUi = new Ui::CMakeBuildSettings;
@@ -84,9 +76,9 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     connect(m_prefsUi->environment, &KDevelop::EnvironmentSelectionWidget::currentProfileChanged, this, static_cast<void(CMakePreferences::*)()>(&CMakePreferences::changed));
 
     showInternal(m_prefsUi->showInternal->checkState());
-    m_subprojFolder = KDevelop::Path(args[1].toString()).parent();
+    m_subprojFolder = KDevelop::Path(options.projectTempFile).parent();
 
-    qCDebug(CMAKE) << "Source folder: " << m_srcFolder << args[1].toString();
+    qCDebug(CMAKE) << "Source folder: " << m_srcFolder << options.projectTempFile;
 //     foreach(const QVariant &v, args)
 //     {
 //         qCDebug(CMAKE) << "arg: " << v.toString();
@@ -96,6 +88,7 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
 
     m_prefsUi->showAdvanced->setChecked(false);
     showAdvanced(false);
+    reset(); // load the initial values
 }
 
 CMakePreferences::~CMakePreferences()
@@ -104,10 +97,8 @@ CMakePreferences::~CMakePreferences()
     delete m_prefsUi;
 }
 
-void CMakePreferences::load()
+void CMakePreferences::reset()
 {
-    KCModule::load();
-
     qCDebug(CMAKE) << "********loading";
     m_prefsUi->buildDirs->clear();
     m_prefsUi->buildDirs->addItems( CMake::allBuildDirs(m_project) );
@@ -123,7 +114,7 @@ void CMakePreferences::load()
 //     qCDebug(CMAKE) << "cmakedir" << cmDir;
 }
 
-void CMakePreferences::save()
+void CMakePreferences::apply()
 {
     qCDebug(CMAKE) << "*******saving";
 
@@ -131,11 +122,8 @@ void CMakePreferences::save()
     // We won't rewrite it here based on the data from m_prefsUi->buildDirs.
     CMake::removeOverrideBuildDirIndex( m_project, true ); // save current selection
     int savedBuildDir = CMake::currentBuildDirIndex(m_project);
-    if( savedBuildDir < 0 )
-    {
+    if (savedBuildDir < 0) {
         // no build directory exists: skip any writing to config file as well as configuring
-        qCDebug(CMAKE) << "doing real save from KCModule";
-        KCModule::save();
         return;
     }
 
@@ -152,7 +140,6 @@ void CMakePreferences::save()
     }
 
     CMake::setCurrentEnvironment( m_project, m_prefsUi->environment->currentProfile() );
-    KCModule::save();
 
     qCDebug(CMAKE) << "writing to cmake config: using builddir " << CMake::currentBuildDirIndex(m_project);
     qCDebug(CMAKE) << "writing to cmake config: builddir path " << CMake::currentBuildDir(m_project);
@@ -169,8 +156,7 @@ void CMakePreferences::save()
 
 void CMakePreferences::defaults()
 {
-    KCModule::defaults();
-//     qCDebug(CMAKE) << "*********defaults!";
+    // do nothing
 }
 
 void CMakePreferences::configureCacheView()
@@ -194,7 +180,6 @@ void CMakePreferences::configureCacheView()
     }
 
     showInternal(m_prefsUi->showInternal->checkState());
-    emit changed(false);
 }
 
 void CMakePreferences::updateCache(const KDevelop::Path &newBuildDir)
@@ -221,7 +206,7 @@ void CMakePreferences::updateCache(const KDevelop::Path &newBuildDir)
     }
 
     if( !m_currentModel )
-        emit changed(true);
+        emit changed();
 }
 
 void CMakePreferences::listSelectionChanged(const QModelIndex & index, const QModelIndex& )
@@ -255,7 +240,7 @@ void CMakePreferences::buildDirChanged(int index)
     m_prefsUi->environment->setCurrentProfile( CMake::currentEnvironment( m_project ) );
     updateCache(buildDir);
     qCDebug(CMAKE) << "builddir Changed" << buildDir;
-    emit changed(true);
+    emit changed();
 }
 
 void CMakePreferences::cacheUpdated()
@@ -306,7 +291,7 @@ void CMakePreferences::createBuildDir()
         CMake::setCurrentEnvironment( m_project, QString() );
 
         qCDebug(CMAKE) << "Emitting changed signal for cmake kcm";
-        emit changed(true);
+        emit changed();
     }
     //TODO: Save it for next runs
 }
@@ -345,7 +330,7 @@ void CMakePreferences::removeBuildDir()
     if(m_prefsUi->buildDirs->count()==0)
         m_prefsUi->removeBuildDir->setEnabled(false);
 
-    emit changed(true);
+    emit changed();
 }
 
 void CMakePreferences::configure()
@@ -368,5 +353,20 @@ void CMakePreferences::showAdvanced(bool v)
     m_prefsUi->advancedBox->setHidden(!v);
 }
 
+
+QString CMakePreferences::name() const
+{
+    return i18n("CMake");
+}
+
+QString CMakePreferences::fullName() const
+{
+    return i18n("Configure CMake settings");
+}
+
+QIcon CMakePreferences::icon() const
+{
+    return QIcon::fromTheme("cmake");
+}
 
 #include "cmakepreferences.moc"

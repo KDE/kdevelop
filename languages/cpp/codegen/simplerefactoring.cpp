@@ -161,7 +161,7 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
       } else {
         int lastNewline = prefixText.lastIndexOf('\n', i - 1);
         headerRange.start().setColumn(i - lastNewline - 1);
-        qWarning() << "UNSUPPORTED" << headerRange.start().column() << lastNewline << i << prefixText;
+        qCWarning(CPP) << "UNSUPPORTED" << headerRange.start().column() << lastNewline << i << prefixText;
       }
     } else {
       headerRange.start().setColumn(headerRange.start().column() - 1);
@@ -222,7 +222,7 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
       KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), error);
     }
   }else{
-    qWarning() << "strange problem";
+    qCWarning(CPP) << "strange problem";
   }
 
 }

@@ -184,13 +184,47 @@ static int getRunningSessionPid()
     return KDevelop::SessionController::sessionRunInfo(sessionUuid).holderPid;
 }
 
+static QString findSessionId(const QString& session)
+{
+    //If there is a session and a project with the same name, always open the session
+    //regardless of the order encountered
+    QString projectAsSession;
+    foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
+    {
+        if ( session == si.name || session == si.uuid.toString() ) {
+            return si.uuid.toString();
+        } else if (projectAsSession.isEmpty()) {
+            foreach(const QUrl& k, si.projects) {
+                QString fn(k.fileName());
+                fn = fn.left(fn.indexOf('.'));
+                if ( session == fn ) {
+                    projectAsSession = si.uuid.toString();
+                }
+            }
+        }
+    }
+
+    if (projectAsSession.isEmpty())  {
+        QTextStream qerr(stderr);
+        qerr << endl << i18n("Cannot open unknown session %1. See --sessions switch for available sessions or use -cs to create a new one.",
+                             session) << endl;
+    }
+    return projectAsSession;
+}
+
+static qint64 findSessionPid(const QString &sessionId)
+{
+    KDevelop::SessionRunInfo sessionInfo = KDevelop::SessionController::sessionRunInfo( sessionId );
+    return sessionInfo.holderPid;
+}
+
 int main( int argc, char *argv[] )
 {
     // Don't show any debug output by default.
     // If you need to enable additional logging for debugging use a rules file
     // as explained in the QLoggingCategory documentation:
     // http://qt-project.org/doc/qt-5/qloggingcategory.html#logging-rules
-    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\n"));
+    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\n"));
 
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
@@ -336,9 +370,19 @@ int main( int argc, char *argv[] )
     foreach (const QString &file, parser.positionalArguments()) {
         initialFiles.append(parseFilename(file));
     }
-    if ( ! initialFiles.isEmpty() && ! parser.isSet("open-session") && ! parser.isSet("new-session") )
+    if ( ! initialFiles.isEmpty() && ! parser.isSet("new-session") )
     {
-        int pid = getRunningSessionPid();
+        int pid = -1;
+        if (parser.isSet("open-session")) {
+            const QString session = findSessionId(parser.value("open-session"));
+            if (session.isEmpty()) {
+                return 1;
+            } else if (KDevelop::SessionController::isSessionRunning(session)) {
+                pid = findSessionPid(session);
+            }
+        } else {
+            pid = getRunningSessionPid();
+        }
         if ( pid > 0 ) {
             return openFilesInRunningInstance(initialFiles, pid);
         }
@@ -411,35 +455,9 @@ int main( int argc, char *argv[] )
         }
         // session doesn't exist, we can create it
     } else if ( parser.isSet("open-session") ) {
-        session = parser.value("open-session");
-        //If there is a session and a project with the same name, always open the session
-        //regardless of the order encountered
-        QString projectAsSession;
-        bool found = false;
-        foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
-        {
-            if ( session == si.name || session == si.uuid.toString() ) {
-                found = true;
-                break;
-            }
-            else if (projectAsSession.isEmpty()) {
-                foreach(const QUrl& k, si.projects)
-                {
-                    QString fn(k.fileName());
-                    fn = fn.left(fn.indexOf('.'));
-                    if ( session == fn )
-                        projectAsSession = si.uuid.toString();
-                }
-            }
-        }
-        if ( !found ) {
-            if ( projectAsSession.isEmpty() ) {
-                QTextStream qerr(stderr);
-                qerr << endl << i18n("Cannot open unknown session %1. See --sessions switch for available sessions or use -cs to create a new one.", session) << endl;
-                return 1;
-            }
-            else
-                session = projectAsSession;
+        session = findSessionId(parser.value("open-session"));
+        if (session.isEmpty()) {
+            return 1;
         }
     }
 
@@ -452,14 +470,14 @@ int main( int argc, char *argv[] )
             return 5;
         }
 
-        KDevelop::SessionRunInfo sessionInfo = KDevelop::SessionController::sessionRunInfo( sessionData->uuid.toString() );
-        if (!sessionInfo.isRunning) {
-            qCritical() << session << sessionData->name << "is not running";
-            return 5;
-        } else {
+        const auto pid = findSessionPid(sessionData->uuid.toString());
+        if (pid > 0) {
             // Print the PID and we're ready
-            std::cout << sessionInfo.holderPid << std::endl;
+            std::cout << pid << std::endl;
             return 0;
+        } else {
+            qCritical() << sessionData->uuid.toString() << sessionData->name << "is not running";
+            return 5;
         }
     }
 
@@ -473,6 +491,9 @@ int main( int argc, char *argv[] )
 
     if(!Core::initialize(splash, Core::Default, session))
         return 5;
+
+    // register a DBUS service for this process, so that we can open files in it from other invocations
+    QDBusConnection::sessionBus().registerService(QString("org.kdevelop.kdevelop-%1").arg(app.applicationPid()));
 
 //     TODO: port to kf5
 //     KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );

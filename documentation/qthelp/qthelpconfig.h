@@ -22,30 +22,31 @@
 #ifndef QTHELPCONFIG_H
 #define QTHELPCONFIG_H
 
-#include <KCModule>
-#include <kns3/entry.h>
+#include <kdevplatform/interfaces/configpage.h>
+
+#include <KNS3/Entry>
 
 class QTreeWidgetItem;
+class QtHelpPlugin;
 
 namespace Ui
 {
     class QtHelpConfigUI;
 }
 
-class QtHelpConfig : public KCModule
+class QtHelpConfig : public KDevelop::ConfigPage
 {
 public:
     Q_OBJECT
 
     public:
-      explicit QtHelpConfig(QWidget *parent = 0, const QVariantList &args = QVariantList());
+      explicit QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent = 0);
       virtual ~QtHelpConfig();
 
-      virtual void save();
-      virtual void load();
-      virtual void defaults();
-
       bool checkNamespace(const QString &filename, QTreeWidgetItem* modifiedItem);
+
+      virtual QString name() const override;
+      virtual QIcon icon() const override;
 
     private slots:
       void add();
@@ -58,6 +59,10 @@ public:
       void chooseSearchDir();
       void searchDirChanged();
 
+    public Q_SLOTS:
+      virtual void apply() override;
+      virtual void defaults() override;
+      virtual void reset() override;
     private:
       Ui::QtHelpConfigUI* m_configWidget;
 };

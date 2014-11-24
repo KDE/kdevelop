@@ -82,7 +82,7 @@ set(kdevgdb_UI
     registers/registersview.ui
 )
 
-qt5_wrap_ui(kdevgdb_SRCS ${kdevgdb_UI})
+ki18n_wrap_ui(kdevgdb_SRCS ${kdevgdb_UI})
 add_library(kdevgdb MODULE ${kdevgdb_SRCS})
 target_link_libraries(kdevgdb
     KDev::Sublime

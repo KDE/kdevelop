@@ -18,6 +18,7 @@
 
 #include "kdevninjabuilderplugin.h"
 #include "ninjajob.h"
+#include "ninjabuilderpreferences.h"
 #include <KAboutData>
 #include <KPluginFactory>
 #include <KConfigGroup>
@@ -166,5 +167,19 @@ KJob* KDevNinjaBuilderPlugin::install(KDevelop::ProjectBaseItem* item)
         return installJob;
     }
 }
+
+int KDevNinjaBuilderPlugin::perProjectConfigPages() const
+{
+    return 1;
+}
+
+KDevelop::ConfigPage* KDevNinjaBuilderPlugin::perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+{
+    if (number == 0) {
+        return new NinjaBuilderPreferences(this, options, parent);
+    }
+    return nullptr;
+}
+
 
 #include "kdevninjabuilderplugin.moc"
