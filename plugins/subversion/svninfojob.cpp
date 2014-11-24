@@ -87,11 +87,10 @@ QUrl SvnInternalInfoJob::location() const
 }
 
 SvnInfoJob::SvnInfoJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Silent ), m_provideInfo( SvnInfoJob::AllInfo )
+    : SvnJobBaseImpl( new SvnInternalInfoJob(this), parent, KDevelop::OutputJob::Silent ), m_provideInfo( SvnInfoJob::AllInfo )
 {
     setType( KDevelop::VcsJob::Add );
-    m_job = QSharedPointer<SvnInternalInfoJob>::create( this );
-    connect( m_job.data(), &SvnInternalInfoJob::gotInfo,
+    connect( m_job, &SvnInternalInfoJob::gotInfo,
              this, &SvnInfoJob::setInfo, Qt::QueuedConnection );
     setObjectName(i18n("Subversion Info"));
 }
@@ -124,19 +123,12 @@ QVariant SvnInfoJob::fetchResults()
 
 void SvnInfoJob::start()
 {
-    if( !m_job->location().isValid() )
-    {
-        internalJobFailed( m_job );
+    if (!m_job->location().isValid()) {
+        internalJobFailed();
         setErrorText( i18n( "Not enough information to execute info job" ) );
-    }else
-    {
-        m_part->jobQueue()->stream() << m_job;
+    } else {
+        startInternalJob();
     }
-}
-
-QSharedPointer<SvnInternalJobBase> SvnInfoJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnInfoJob::setLocation( const QUrl &url )

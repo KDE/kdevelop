@@ -61,7 +61,7 @@ public:
 
 /// This is an svn internal class, it shouldn't be used outside of the svn
 /// plugin
-class SvnInfoJob : public SvnJobBase
+class SvnInfoJob : public SvnJobBaseImpl<SvnInternalInfoJob>
 {
     Q_OBJECT
 public:
@@ -74,15 +74,12 @@ public:
     SvnInfoJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    QSharedPointer<SvnInternalJobBase> internalJob() const override;
-
     void setLocation( const QUrl &location );
     void setProvideInformation( ProvideInformationType );
     void setProvideRevisionType( KDevelop::VcsRevision::RevisionType );
 public slots:
     void setInfo( const SvnInfoHolder& );
 private:
-    QSharedPointer<SvnInternalInfoJob> m_job;
     SvnInfoHolder m_info;
     ProvideInformationType m_provideInfo;
     KDevelop::VcsRevision::RevisionType m_provideRevisionType;

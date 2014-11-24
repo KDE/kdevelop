@@ -79,10 +79,9 @@ QUrl SvnInternalCopyJob::sourceLocation() const
 }
 
 SvnCopyJob::SvnCopyJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( new SvnInternalCopyJob(this), parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Copy );
-    m_job = QSharedPointer<SvnInternalCopyJob>::create( this );
     setObjectName(i18n("Subversion Copy"));
 }
 
@@ -93,20 +92,13 @@ QVariant SvnCopyJob::fetchResults()
 
 void SvnCopyJob::start()
 {
-    if( m_job->sourceLocation().isEmpty() || m_job->destinationLocation().isEmpty() )
-    {
-        internalJobFailed( m_job );
+    if ( m_job->sourceLocation().isEmpty() || m_job->destinationLocation().isEmpty() ) {
+        internalJobFailed();
         setErrorText( i18n( "Not enough information to copy file" ) );
-    }else
-    {
+    } else {
         qCDebug(PLUGIN_SVN) << "copying url:" << m_job->sourceLocation() << "to url" << m_job->destinationLocation();
-        m_part->jobQueue()->stream() << m_job;
+        startInternalJob();
     }
-}
-
-QSharedPointer<SvnInternalJobBase> SvnCopyJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnCopyJob::setDestinationLocation( const QUrl &url )

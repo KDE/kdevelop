@@ -27,9 +27,7 @@
 
 #include <iostream>
 
-#include <ThreadWeaver/ThreadWeaver>
 #include <KLocalizedString>
-#include <ThreadWeaver/threadweaver/qobjectdecorator.h>
 
 extern "C" {
 #include <svn_auth.h>
@@ -43,7 +41,7 @@ extern "C" {
 #include "kdevsvncpp/revision.hpp"
 
 SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
-    : QObject(parent)
+    : QObject(nullptr)
     , m_ctxt( new svn::Context() )
     , m_guiSemaphore( 0 )
     , m_mutex( new QMutex() )
@@ -51,23 +49,31 @@ SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
     , m_success( true )
     , sendFirstDelta( false )
     , killed( false )
-    , m_decorator(new ThreadWeaver::QObjectDecorator(this, parent))
 {
     m_ctxt->setListener(this);
-
-    QObject::connect( m_decorator, &ThreadWeaver::QObjectDecorator::failed,
-             parent, &SvnJobBase::internalJobFailed, Qt::QueuedConnection );
-    QObject::connect( m_decorator, &ThreadWeaver::QObjectDecorator::done,
-             parent, &SvnJobBase::internalJobDone, Qt::QueuedConnection );
-    QObject::connect( m_decorator, &ThreadWeaver::QObjectDecorator::started,
-             parent, &SvnJobBase::internalJobStarted, Qt::QueuedConnection );
 }
 
 SvnInternalJobBase::~SvnInternalJobBase()
 {
+    qDebug() << "BYE BYE" << this;
     m_ctxt->setListener(0);
     delete m_ctxt;
     m_ctxt = 0;
+}
+
+void SvnInternalJobBase::defaultBegin(const ThreadWeaver::JobPointer& self, ThreadWeaver::Thread *thread)
+{
+    emit started();
+    ThreadWeaver::Job::defaultBegin(self, thread);
+}
+
+void SvnInternalJobBase::defaultEnd(const ThreadWeaver::JobPointer& self, ThreadWeaver::Thread *thread)
+{
+    ThreadWeaver::Job::defaultEnd(self, thread);
+    if (!self->success()) {
+        emit failed();
+    }
+    emit done();
 }
 
 bool SvnInternalJobBase::contextGetLogin( const std::string& realm,

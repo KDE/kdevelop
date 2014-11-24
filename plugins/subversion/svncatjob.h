@@ -36,15 +36,13 @@ namespace KDevelop
 
 class SvnInternalCatJob;
 
-class SvnCatJob : public SvnJobBase
+class SvnCatJob : public SvnJobBaseImpl<SvnInternalCatJob>
 {
     Q_OBJECT
 public:
     SvnCatJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    QSharedPointer<SvnInternalJobBase> internalJob() const override;
-
     void setSource( const KDevelop::VcsLocation& );
     void setPegRevision( const KDevelop::VcsRevision& );
     void setSrcRevision( const KDevelop::VcsRevision& );
@@ -52,7 +50,6 @@ public:
 public slots:
     void setContent( const QString& );
 private:
-    QSharedPointer<SvnInternalCatJob> m_job;
     QString m_content;
 };
 

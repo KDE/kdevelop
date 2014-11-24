@@ -259,11 +259,10 @@ KDevelop::VcsRevision SvnInternalDiffJob::pegRevision() const
 }
 
 SvnDiffJob::SvnDiffJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( new SvnInternalDiffJob(this), parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
-    m_job = QSharedPointer<SvnInternalDiffJob>::create( this );
-    connect( m_job.data(), &SvnInternalDiffJob::gotDiff,
+    connect( m_job, &SvnInternalDiffJob::gotDiff,
                 this, &SvnDiffJob::setDiff, Qt::QueuedConnection );
 
     setObjectName(i18n("Subversion Diff"));
@@ -282,16 +281,11 @@ void SvnDiffJob::start()
                  || m_job->dstRevision().revisionType() == KDevelop::VcsRevision::Invalid ) )
       )
     {
-        internalJobFailed( m_job );
+        internalJobFailed();
         setErrorText( i18n( "Not enough information given to execute diff" ) );
     } else {
-        m_part->jobQueue()->stream() << m_job;
+        startInternalJob();
     }
-}
-
-QSharedPointer<SvnInternalJobBase> SvnDiffJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnDiffJob::setSource( const KDevelop::VcsLocation& source )
@@ -362,7 +356,7 @@ void SvnDiffJob::setDiff( const QString& diff )
     }
 
     if (paths.isEmpty()) {
-        internalJobDone( m_job );
+        internalJobDone();
         emit resultsReady( this );
         return;
     }
@@ -414,7 +408,7 @@ void SvnDiffJob::addLeftText( KDevelop::VcsJob* job )
     }
     if( m_catJobMap.isEmpty() )
     {
-        internalJobDone( m_job );
+        internalJobDone();
         emit resultsReady( this );
     }
 }
@@ -436,7 +430,7 @@ void SvnDiffJob::removeJob( KJob* job )
 
     if( m_catJobMap.isEmpty() )
     {
-        internalJobDone( m_job );
+        internalJobDone();
         emit resultsReady( this );
     }
 }

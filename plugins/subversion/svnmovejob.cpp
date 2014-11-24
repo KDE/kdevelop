@@ -91,10 +91,9 @@ void SvnInternalMoveJob::setForce( bool force )
 }
 
 SvnMoveJob::SvnMoveJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( new SvnInternalMoveJob(this), parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Move );
-    m_job = QSharedPointer<SvnInternalMoveJob>::create( this );
     setObjectName(i18n("Subversion Move"));
 }
 
@@ -105,20 +104,13 @@ QVariant SvnMoveJob::fetchResults()
 
 void SvnMoveJob::start()
 {
-    if( m_job->sourceLocation().isEmpty() || m_job->destinationLocation().isEmpty() )
-    {
-        internalJobFailed( m_job );
+    if ( m_job->sourceLocation().isEmpty() || m_job->destinationLocation().isEmpty() ) {
+        internalJobFailed();
         setErrorText( i18n( "Not enough information to move file" ) );
-    }else
-    {
+    } else {
         qCDebug(PLUGIN_SVN) << "moveing url:" << m_job->sourceLocation() << "to url" << m_job->destinationLocation();
-        m_part->jobQueue()->stream() << m_job;
+        startInternalJob();
     }
-}
-
-QSharedPointer<SvnInternalJobBase> SvnMoveJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnMoveJob::setDestinationLocation( const QUrl &url )

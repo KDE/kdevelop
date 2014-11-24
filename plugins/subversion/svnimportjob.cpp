@@ -31,8 +31,8 @@
 
 #include <vcs/vcslocation.h>
 
-SvnImportInternalJob::SvnImportInternalJob( SvnJobBase* parent )
-    : SvnInternalJobBase( parent )
+SvnImportInternalJob::SvnImportInternalJob()
+    : SvnInternalJobBase()
 {
 }
 
@@ -59,6 +59,8 @@ void SvnImportInternalJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
         setErrorMessage( QString::fromUtf8( ce.message() ) );
         m_success = false;
     }
+
+    qDebug() << "finished";
 }
 
 bool SvnImportInternalJob::isValid() const
@@ -92,10 +94,9 @@ QString SvnImportInternalJob::message() const
 }
 
 SvnImportJob::SvnImportJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( new SvnImportInternalJob, parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Import );
-    m_job = QSharedPointer<SvnImportInternalJob>::create( this );
     setObjectName(i18n("Subversion Import"));
 }
 
@@ -108,18 +109,13 @@ void SvnImportJob::start()
 {
     if( !m_job->isValid() )
     {
-        internalJobFailed( m_job );
+        internalJobFailed();
         setErrorText( i18n( "Not enough information to import" ) );
     }else
     {
         qCDebug(PLUGIN_SVN) << "importing:" << m_job->source();
-        m_part->jobQueue()->stream() << m_job;
+        startInternalJob();
     }
-}
-
-QSharedPointer<SvnInternalJobBase> SvnImportJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnImportJob::setMapping( const QUrl &sourceDirectory, const KDevelop::VcsLocation & destinationRepository)

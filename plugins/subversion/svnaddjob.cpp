@@ -82,10 +82,9 @@ bool SvnInternalAddJob::recursive() const
 }
 
 SvnAddJob::SvnAddJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( new SvnInternalAddJob(this), parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
-    m_job = QSharedPointer<SvnInternalAddJob>::create( this );
     setObjectName(i18n("Subversion Add"));
 }
 
@@ -96,20 +95,13 @@ QVariant SvnAddJob::fetchResults()
 
 void SvnAddJob::start()
 {
-    if( m_job->locations().isEmpty() )
-    {
-        internalJobFailed( m_job );
+    if ( m_job->locations().isEmpty() ) {
+        internalJobFailed();
         setErrorText( i18n( "Not enough information to add file" ) );
-    }else
-    {
+    } else {
         qCDebug(PLUGIN_SVN) << "adding urls:" << m_job->locations();
-        m_part->jobQueue()->stream() << m_job;
+        startInternalJob();
     }
-}
-
-QSharedPointer<SvnInternalJobBase> SvnAddJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnAddJob::setLocations( const QList<QUrl>& urls )

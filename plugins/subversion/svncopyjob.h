@@ -29,20 +29,15 @@
 
 class SvnInternalCopyJob;
 
-class SvnCopyJob : public SvnJobBase
+class SvnCopyJob : public SvnJobBaseImpl<SvnInternalCopyJob>
 {
     Q_OBJECT
 public:
     SvnCopyJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    QSharedPointer<SvnInternalJobBase> internalJob() const override;
-
     void setSourceLocation( const QUrl &location );
     void setDestinationLocation( const QUrl &location );
-private:
-    QSharedPointer<SvnInternalCopyJob> m_job;
-
 };
 
 

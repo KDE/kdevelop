@@ -28,7 +28,7 @@
 
 class SvnInternalStatusJob;
 
-class SvnStatusJob : public SvnJobBase
+class SvnStatusJob : public SvnJobBaseImpl<SvnInternalStatusJob>
 {
     Q_OBJECT
 public:
@@ -39,12 +39,10 @@ public:
 
     void setLocations( const QList<QUrl>& locations );
     void setRecursive( bool );
-    QSharedPointer<SvnInternalJobBase> internalJob() const override;
 
 public slots:
     void addToStats( const KDevelop::VcsStatusInfo& );
 private:
-    QSharedPointer<SvnInternalStatusJob> m_job;
     QList<QVariant> m_stats;
 };
 

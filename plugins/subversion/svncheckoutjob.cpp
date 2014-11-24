@@ -94,10 +94,9 @@ QUrl SvnInternalCheckoutJob::destination() const
 }
 
 SvnCheckoutJob::SvnCheckoutJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( new SvnInternalCheckoutJob(this), parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Import );
-    m_job = QSharedPointer<SvnInternalCheckoutJob>::create( this );
     setObjectName(i18n("Subversion Checkout"));
 }
 
@@ -109,17 +108,12 @@ QVariant SvnCheckoutJob::fetchResults()
 void SvnCheckoutJob::start()
 {
     if (!m_job->isValid() ) {
-        internalJobFailed( m_job );
+        internalJobFailed();
         setErrorText( i18n( "Not enough information to checkout" ) );
     } else {
         qCDebug(PLUGIN_SVN) << "checking out: " << m_job->source().repositoryServer();
-        m_part->jobQueue()->stream() << m_job;
+        startInternalJob();
     }
-}
-
-QSharedPointer<SvnInternalJobBase> SvnCheckoutJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnCheckoutJob::setMapping( const KDevelop::VcsLocation & sourceRepository, const QUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion )

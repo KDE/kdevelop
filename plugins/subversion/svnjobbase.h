@@ -41,9 +41,10 @@ class SvnJobBase : public KDevelop::VcsJob
 public:
     SvnJobBase( KDevSvnPlugin*, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose );
     virtual ~SvnJobBase();
-    virtual QSharedPointer<SvnInternalJobBase> internalJob() const = 0;
+    virtual SvnInternalJobBase* internalJob() const = 0;
     KDevelop::VcsJob::JobStatus status() const;
     KDevelop::IPlugin* vcsPlugin() const;
+
 public slots:
     void askForLogin( const QString& );
     void showNotification( const QString&, const QString& );
@@ -55,17 +56,38 @@ public slots:
     void askForSslClientCertPassword( const QString& );
 
 protected slots:
-    friend class SvnInternalJobBase;
-    void internalJobStarted( ThreadWeaver::JobPointer job );
-    void internalJobDone( ThreadWeaver::JobPointer job );
-    void internalJobFailed( ThreadWeaver::JobPointer job );
+    void internalJobStarted();
+    void internalJobDone();
+    void internalJobFailed();
 
 protected:
+    void startInternalJob();
     virtual bool doKill();
     KDevSvnPlugin* m_part;
 private:
     void outputMessage(const QString &message);
     KDevelop::VcsJob::JobStatus m_status;
+};
+
+template<typename InternalJobClass>
+class SvnJobBaseImpl : public SvnJobBase
+{
+public:
+    SvnJobBaseImpl(InternalJobClass* internalJob, KDevSvnPlugin* plugin,
+                   KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose)
+        : SvnJobBase(plugin, verbosity)
+        , m_job(internalJob)
+    {
+        m_job->setParent(this);
+    }
+
+    SvnInternalJobBase* internalJob() const override
+    {
+        return m_job;
+    }
+
+protected:
+    InternalJobClass* m_job;
 };
 
 #endif

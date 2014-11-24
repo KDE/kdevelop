@@ -30,7 +30,7 @@
 class SvnInternalCommitJob;
 class SvnCommitDialog;
 
-class SvnCommitJob : public SvnJobBase
+class SvnCommitJob : public SvnJobBaseImpl<SvnInternalCommitJob>
 {
     Q_OBJECT
 public:
@@ -41,11 +41,6 @@ public:
     void setKeepLock( bool );
     void setUrls( const QList<QUrl>& urls );
     void setRecursive( bool );
-
-    QSharedPointer<SvnInternalJobBase> internalJob() const override;
-
-private:
-    QSharedPointer<SvnInternalCommitJob> m_job;
 };
 
 #endif

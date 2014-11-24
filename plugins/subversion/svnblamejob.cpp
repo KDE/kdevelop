@@ -140,11 +140,10 @@ void SvnInternalBlameJob::setEndRevision( const KDevelop::VcsRevision& rev )
 }
 
 SvnBlameJob::SvnBlameJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( new SvnInternalBlameJob(this), parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Annotate );
-    m_job = QSharedPointer<SvnInternalBlameJob>::create( this );
-    connect(m_job.data(), &SvnInternalBlameJob::blameLine,
+    connect(m_job, &SvnInternalBlameJob::blameLine,
             this, &SvnBlameJob::blameLineReceived);
     setObjectName(i18n("Subversion Annotate"));
 }
@@ -158,20 +157,13 @@ QVariant SvnBlameJob::fetchResults()
 
 void SvnBlameJob::start()
 {
-    if( !m_job->location().isValid() )
-    {
-        internalJobFailed( m_job );
+    if ( !m_job->location().isValid() ) {
+        internalJobFailed();
         setErrorText( i18n( "Not enough information to blame location" ) );
-    }else
-    {
+    } else {
         qCDebug(PLUGIN_SVN) << "blaming url:" << m_job->location();
-        m_part->jobQueue()->stream() << m_job;
+        startInternalJob();
     }
-}
-
-QSharedPointer<SvnInternalJobBase> SvnBlameJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnBlameJob::setLocation( const QUrl &url )

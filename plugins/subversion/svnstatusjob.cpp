@@ -127,11 +127,10 @@ void SvnInternalStatusJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
 }
 
 SvnStatusJob::SvnStatusJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( new SvnInternalStatusJob(this), parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Status );
-    m_job = QSharedPointer<SvnInternalStatusJob>::create( this );
-    connect(m_job.data(), &SvnInternalStatusJob::gotNewStatus,
+    connect(m_job, &SvnInternalStatusJob::gotNewStatus,
             this, &SvnStatusJob::addToStats, Qt::QueuedConnection);
     setObjectName(i18n("Subversion Status"));
 }
@@ -143,21 +142,14 @@ QVariant SvnStatusJob::fetchResults()
     return QVariant(temp);
 }
 
-QSharedPointer<SvnInternalJobBase> SvnStatusJob::internalJob() const
-{
-    return m_job;
-}
-
 void SvnStatusJob::start()
 {
-    if( m_job->locations().isEmpty() )
-    {
-        internalJobFailed( m_job );
+    if( m_job->locations().isEmpty() ) {
+        internalJobFailed();
         setErrorText( i18n( "Not enough information to execute status job" ) );
-    }else
-    {
+    } else {
         qCDebug(PLUGIN_SVN) << "Starting status job";
-        m_part->jobQueue()->stream() << m_job;
+        startInternalJob();
     }
 }
 

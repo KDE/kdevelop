@@ -26,20 +26,15 @@
 
 class SvnImportInternalJob;
 
-class SvnImportJob : public SvnJobBase
+class SvnImportJob : public SvnJobBaseImpl<SvnImportInternalJob>
 {
     Q_OBJECT
 public:
     SvnImportJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    QSharedPointer<SvnInternalJobBase> internalJob() const override;
-
     void setMapping( const QUrl &sourceDirectory, const KDevelop::VcsLocation & destinationRepository);
     void setMessage( const QString& );
-private:
-    QSharedPointer<SvnImportInternalJob> m_job;
-
 };
 
 

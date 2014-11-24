@@ -28,20 +28,15 @@
 
 class SvnInternalRevertJob;
 
-class SvnRevertJob : public SvnJobBase
+class SvnRevertJob : public SvnJobBaseImpl<SvnInternalRevertJob>
 {
     Q_OBJECT
 public:
     SvnRevertJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    QSharedPointer<SvnInternalJobBase> internalJob() const override;
-
     void setLocations( const QList<QUrl>& locations );
     void setRecursive( bool );
-private:
-    QSharedPointer<SvnInternalRevertJob> m_job;
-
 };
 
 #endif

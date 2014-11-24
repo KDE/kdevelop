@@ -31,19 +31,14 @@ class VcsLocation;
 
 class SvnInternalCheckoutJob;
 
-class SvnCheckoutJob : public SvnJobBase
+class SvnCheckoutJob : public SvnJobBaseImpl<SvnInternalCheckoutJob>
 {
     Q_OBJECT
 public:
     SvnCheckoutJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    QSharedPointer<SvnInternalJobBase> internalJob() const override;
-
     void setMapping( const KDevelop::VcsLocation & sourceRepository, const QUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
-private:
-    QSharedPointer<SvnInternalCheckoutJob> m_job;
-
 };
 
 

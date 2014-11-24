@@ -29,20 +29,15 @@
 
 class SvnInternalRemoveJob;
 
-class SvnRemoveJob : public SvnJobBase
+class SvnRemoveJob : public SvnJobBaseImpl<SvnInternalRemoveJob>
 {
     Q_OBJECT
 public:
     SvnRemoveJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    QSharedPointer<SvnInternalJobBase> internalJob() const;
-
     void setLocations( const QList<QUrl>& locations );
     void setForce( bool force );
-private:
-    QSharedPointer<SvnInternalRemoveJob> m_job;
-
 };
 
 #endif

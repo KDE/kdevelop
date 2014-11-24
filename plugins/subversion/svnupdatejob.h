@@ -29,22 +29,18 @@
 
 class SvnInternalUpdateJob;
 
-class SvnUpdateJob : public SvnJobBase
+class SvnUpdateJob : public SvnJobBaseImpl<SvnInternalUpdateJob>
 {
     Q_OBJECT
 public:
     SvnUpdateJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    QSharedPointer<SvnInternalJobBase> internalJob() const override;
 
     void setLocations( const QList<QUrl>& locations );
     void setRecursive( bool );
     void setRevision( const KDevelop::VcsRevision& );
     void setIgnoreExternals( bool );
-private:
-    QSharedPointer<SvnInternalUpdateJob> m_job;
-
 };
 
 #endif

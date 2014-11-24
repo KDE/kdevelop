@@ -26,10 +26,6 @@
 #include <QEvent>
 #include <QSemaphore>
 
-namespace ThreadWeaver {
-class QObjectDecorator;
-}
-
 extern "C" {
 #include <svn_wc.h>
 }
@@ -103,16 +99,28 @@ signals:
     void needSslClientCert( const QString& );
     void needSslClientCertPassword( const QString& );
 
+    /** This signal is emitted when this job is being processed by a thread. */
+    void started();
+    /** This signal is emitted when the job has been finished (no matter if it succeeded or not). */
+    void done();
+    /** This job has failed.
+     *
+     * This signal is emitted when success() returns false after the job is executed. */
+    void failed();
+
 protected:
+    void defaultBegin(const ThreadWeaver::JobPointer& job, ThreadWeaver::Thread *thread) Q_DECL_OVERRIDE;
+    void defaultEnd(const ThreadWeaver::JobPointer& job, ThreadWeaver::Thread *thread) Q_DECL_OVERRIDE;
+
     QMutex* m_mutex;
     QMutex* m_killMutex;
     bool m_success;
     void setErrorMessage( const QString& );
+
 private:
     bool sendFirstDelta;
     bool killed;
     QString m_errorMessage;
-    ThreadWeaver::QObjectDecorator* m_decorator;
 };
 
 

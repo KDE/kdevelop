@@ -33,15 +33,13 @@
 
 class SvnInternalBlameJob;
 
-class SvnBlameJob : public SvnJobBase
+class SvnBlameJob : public SvnJobBaseImpl<SvnInternalBlameJob>
 {
     Q_OBJECT
 public:
     SvnBlameJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    QSharedPointer<SvnInternalJobBase> internalJob() const override;
-
     void setLocation( const QUrl &location );
     void setEndRevision( const KDevelop::VcsRevision& rev );
     void setStartRevision( const KDevelop::VcsRevision& rev );
@@ -49,7 +47,6 @@ private slots:
     void blameLineReceived( const KDevelop::VcsAnnotationLine& );
 
 private:
-    QSharedPointer<SvnInternalBlameJob> m_job;
     QList<QVariant> m_annotations;
 
 };

@@ -103,11 +103,10 @@ KDevelop::VcsRevision SvnInternalCatJob::pegRevision() const
 }
 
 SvnCatJob::SvnCatJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( new SvnInternalCatJob(this), parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Cat );
-    m_job = QSharedPointer<SvnInternalCatJob>::create( this );
-    connect(m_job.data(), &SvnInternalCatJob::gotContent,
+    connect(m_job, &SvnInternalCatJob::gotContent,
             this, &SvnCatJob::setContent, Qt::QueuedConnection);
     setObjectName(i18n("Subversion Cat"));
 }
@@ -120,16 +119,11 @@ QVariant SvnCatJob::fetchResults()
 void SvnCatJob::start()
 {
     if( !m_job->source().isValid() ) {
-        internalJobFailed( m_job );
+        internalJobFailed();
         setErrorText( i18n( "Not enough information to execute cat" ) );
     } else {
-        m_part->jobQueue()->stream() << m_job;
+        startInternalJob();
     }
-}
-
-QSharedPointer<SvnInternalJobBase> SvnCatJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnCatJob::setSource( const KDevelop::VcsLocation& source )

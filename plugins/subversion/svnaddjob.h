@@ -29,20 +29,16 @@
 
 class SvnInternalAddJob;
 
-class SvnAddJob : public SvnJobBase
+class SvnAddJob : public SvnJobBaseImpl<SvnInternalAddJob>
 {
     Q_OBJECT
 public:
     SvnAddJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    QSharedPointer<SvnInternalJobBase> internalJob() const override;
 
     void setLocations( const QList<QUrl>& locations );
     void setRecursive( bool );
-private:
-    QSharedPointer<SvnInternalAddJob> m_job;
-
 };
 
 #endif

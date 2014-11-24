@@ -119,10 +119,10 @@ void SvnInternalCommitJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
 }
 
 SvnCommitJob::SvnCommitJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Verbose )
+    : SvnJobBaseImpl( new SvnInternalCommitJob(this), parent, KDevelop::OutputJob::Verbose )
 {
     setType( KDevelop::VcsJob::Commit );
-    m_job = QSharedPointer<SvnInternalCommitJob>::create( this );
+    setObjectName(i18n("Subversion Commit"));
 }
 
 QVariant SvnCommitJob::fetchResults()
@@ -140,20 +140,13 @@ void SvnCommitJob::start()
     m->setColumnCount(1);
     m->appendRow(new QStandardItem(i18n("Committing...")));
 
-    if( m_job->urls().isEmpty() )
-    {
-        internalJobFailed( m_job );
+    if( m_job->urls().isEmpty() ) {
+        internalJobFailed();
         setErrorText( i18n( "Not enough information to execute commit" ) );
         m->appendRow(new QStandardItem(errorText()));
-    }else
-    {
-        m_part->jobQueue()->stream() << m_job;
+    } else {
+        startInternalJob();
     }
-}
-
-QSharedPointer<SvnInternalJobBase> SvnCommitJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnCommitJob::setCommitMessage( const QString& msg )

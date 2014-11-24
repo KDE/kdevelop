@@ -86,10 +86,9 @@ bool SvnInternalRemoveJob::force() const
 }
 
 SvnRemoveJob::SvnRemoveJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( new SvnInternalRemoveJob(this), parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
-    m_job = QSharedPointer<SvnInternalRemoveJob>::create( this );
     setObjectName(i18n("Subversion Remove"));
 }
 
@@ -100,20 +99,13 @@ QVariant SvnRemoveJob::fetchResults()
 
 void SvnRemoveJob::start()
 {
-    if( m_job->locations().isEmpty() )
-    {
-        internalJobFailed( m_job );
+    if( m_job->locations().isEmpty() ) {
+        internalJobFailed();
         setErrorText( i18n( "Not enough information to execute remove job" ) );
-    }else
-    {
+    } else {
         qCDebug(PLUGIN_SVN) << "removing urls:" << m_job->locations();
-        m_part->jobQueue()->stream() << m_job;
+        startInternalJob();
     }
-}
-
-QSharedPointer<SvnInternalJobBase> SvnRemoveJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnRemoveJob::setLocations( const QList<QUrl>& urls )

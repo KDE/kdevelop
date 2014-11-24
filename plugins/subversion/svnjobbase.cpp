@@ -17,6 +17,8 @@
 #include <KLocalizedString>
 #include <kmessagebox.h>
 
+#include <ThreadWeaver/QObjectDecorator>
+
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iplugin.h>
@@ -35,6 +37,18 @@ SvnJobBase::SvnJobBase( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVer
 
 SvnJobBase::~SvnJobBase()
 {
+}
+
+void SvnJobBase::startInternalJob()
+{
+    auto job = internalJob();
+    connect( job, &SvnInternalJobBase::failed,
+             this, &SvnJobBase::internalJobFailed, Qt::QueuedConnection );
+    connect( job, &SvnInternalJobBase::done,
+             this, &SvnJobBase::internalJobDone, Qt::QueuedConnection );
+    connect( job, &SvnInternalJobBase::started,
+             this, &SvnJobBase::internalJobStarted, Qt::QueuedConnection );
+    m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw(job);
 }
 
 bool SvnJobBase::doKill()
@@ -114,15 +128,15 @@ void SvnJobBase::askForSslClientCertPassword( const QString& )
     internalJob()->m_guiSemaphore.release( 1 );
 }
 
-void SvnJobBase::internalJobStarted( ThreadWeaver::JobPointer job )
+void SvnJobBase::internalJobStarted()
 {
-    if( internalJob() == job ) {
-        m_status = KDevelop::VcsJob::JobRunning;
-    }
+    qDebug() << "job started" << static_cast<void*>(internalJob());
+    m_status = KDevelop::VcsJob::JobRunning;
 }
 
-void SvnJobBase::internalJobDone( ThreadWeaver::JobPointer job )
+void SvnJobBase::internalJobDone()
 {
+    qDebug() << "job done" << internalJob();
     if ( m_status == VcsJob::JobFailed ) {
         // see: https://bugs.kde.org/show_bug.cgi?id=273759
         // this gets also called when the internal job failed
@@ -136,39 +150,34 @@ void SvnJobBase::internalJobDone( ThreadWeaver::JobPointer job )
         return;
     }
 
-    if( internalJob() == job )
-    {
-        outputMessage(i18n("Completed"));
-        if( m_status != VcsJob::JobCanceled )
-        {
-            m_status = KDevelop::VcsJob::JobSucceeded;
-        }
+    outputMessage(i18n("Completed"));
+    if( m_status != VcsJob::JobCanceled ) {
+        m_status = KDevelop::VcsJob::JobSucceeded;
     }
+
     emitResult();
-    if( m_status == VcsJob::JobCanceled )
-    {
+    if( m_status == VcsJob::JobCanceled ) {
         deleteLater();
     }
 }
 
-void SvnJobBase::internalJobFailed( ThreadWeaver::JobPointer job )
+void SvnJobBase::internalJobFailed()
 {
-    if( internalJob() == job )
+    qDebug() << "job failed" << internalJob();
+
+    setError( 255 );
+    QString msg = internalJob()->errorMessage();
+    if( !msg.isEmpty() )
+        setErrorText( i18n( "Error executing Job:\n%1", msg ) );
+    outputMessage(errorText());
+    qCDebug(PLUGIN_SVN) << "Job failed";
+    if( m_status != VcsJob::JobCanceled )
     {
-        setError( 255 );
-        QString msg = internalJob()->errorMessage();
-        if( !msg.isEmpty() )
-            setErrorText( i18n( "Error executing Job:\n%1", msg ) );
-        outputMessage(errorText());
-        qCDebug(PLUGIN_SVN) << "Job failed";
-        if( m_status != VcsJob::JobCanceled )
-        {
-            m_status = KDevelop::VcsJob::JobFailed;
-        }
-        emitResult();
+        m_status = KDevelop::VcsJob::JobFailed;
     }
-    if( m_status == VcsJob::JobCanceled )
-    {
+    emitResult();
+
+    if( m_status == VcsJob::JobCanceled ) {
         deleteLater();
     }
 }

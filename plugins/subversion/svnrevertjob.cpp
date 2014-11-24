@@ -84,10 +84,9 @@ bool SvnInternalRevertJob::recursive() const
 }
 
 SvnRevertJob::SvnRevertJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
+    : SvnJobBaseImpl( new SvnInternalRevertJob(this), parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
-    m_job = QSharedPointer<SvnInternalRevertJob>::create( this );
     setObjectName(i18n("Subversion Revert"));
 }
 
@@ -98,19 +97,12 @@ QVariant SvnRevertJob::fetchResults()
 
 void SvnRevertJob::start()
 {
-    if( m_job->locations().isEmpty() )
-    {
-        internalJobFailed( m_job );
+    if (m_job->locations().isEmpty()) {
+        internalJobFailed();
         setErrorText( i18n( "Not enough information to execute revert" ) );
-    }else
-    {
-        m_part->jobQueue()->stream() << m_job;
+    } else {
+        startInternalJob();
     }
-}
-
-QSharedPointer<SvnInternalJobBase> SvnRevertJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnRevertJob::setLocations( const QList<QUrl>& urls )

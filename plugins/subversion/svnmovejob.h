@@ -28,21 +28,16 @@
 
 class SvnInternalMoveJob;
 
-class SvnMoveJob : public SvnJobBase
+class SvnMoveJob : public SvnJobBaseImpl<SvnInternalMoveJob>
 {
     Q_OBJECT
 public:
     SvnMoveJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
-    QSharedPointer<SvnInternalJobBase> internalJob() const override;
-
     void setSourceLocation( const QUrl &location );
     void setDestinationLocation( const QUrl &location );
     void setForce( bool );
-private:
-    QSharedPointer<SvnInternalMoveJob> m_job;
-
 };
 
 

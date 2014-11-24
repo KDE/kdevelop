@@ -119,10 +119,9 @@ bool SvnInternalUpdateJob::recursive() const
 }
 
 SvnUpdateJob::SvnUpdateJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent, KDevelop::OutputJob::Verbose )
+    : SvnJobBaseImpl( new SvnInternalUpdateJob(this), parent, KDevelop::OutputJob::Verbose )
 {
     setType( KDevelop::VcsJob::Add );
-    m_job = QSharedPointer<SvnInternalUpdateJob>::create( this );
     setObjectName(i18n("Subversion Update"));
 }
 
@@ -135,18 +134,13 @@ void SvnUpdateJob::start()
 {
     if( m_job->locations().isEmpty() )
     {
-        internalJobFailed( m_job );
+        internalJobFailed();
         setErrorText( i18n( "Not enough Information to execute update" ) );
     }else
     {
         qCDebug(PLUGIN_SVN) << "updating urls:" << m_job->locations();
-        m_part->jobQueue()->stream() << m_job;
+        startInternalJob();
     }
-}
-
-QSharedPointer<SvnInternalJobBase> SvnUpdateJob::internalJob() const
-{
-    return m_job;
 }
 
 void SvnUpdateJob::setLocations( const QList<QUrl>& urls )
