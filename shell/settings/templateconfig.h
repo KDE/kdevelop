@@ -39,6 +39,9 @@ public:
     virtual QString fullName() const override;
     virtual QIcon icon() const override;
 
+    virtual void reset() override;
+    virtual void apply() override;
+    virtual void defaults() override;
 private:
     Ui::TemplateConfig* ui;
 };

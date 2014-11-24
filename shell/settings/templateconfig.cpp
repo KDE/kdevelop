@@ -62,4 +62,17 @@ QIcon TemplateConfig::icon() const
     return QIcon::fromTheme(QStringLiteral("project-development-new-template"));
 }
 
+void TemplateConfig::apply()
+{
+}
+
+void TemplateConfig::defaults()
+{
+}
+
+void TemplateConfig::reset()
+{
+}
+
+
 #include "templateconfig.moc"
