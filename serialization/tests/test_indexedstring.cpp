@@ -24,6 +24,7 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
+#include <language/util/kdevhash.h>
 #include <serialization/indexedstring.h>
 #include <QtTest/QTest>
 
@@ -75,7 +76,7 @@ static QVector<QString> generateData()
   return data;
 }
 
-void TestIndexedString::index()
+void TestIndexedString::bench_index()
 {
   QVector<QString> data = generateData();
   QBENCHMARK {
@@ -98,7 +99,7 @@ static QVector<uint> setupTest()
   return indices;
 }
 
-void TestIndexedString::length()
+void TestIndexedString::bench_length()
 {
   QVector<uint> indices = setupTest();
   QBENCHMARK {
@@ -109,7 +110,7 @@ void TestIndexedString::length()
   }
 }
 
-void TestIndexedString::qstring()
+void TestIndexedString::bench_qstring()
 {
   QVector<uint> indices = setupTest();
   QBENCHMARK {
@@ -120,7 +121,7 @@ void TestIndexedString::qstring()
   }
 }
 
-void TestIndexedString::kurl()
+void TestIndexedString::bench_kurl()
 {
   QVector<uint> indices = setupTest();
   QBENCHMARK {
@@ -131,27 +132,67 @@ void TestIndexedString::kurl()
   }
 }
 
-void TestIndexedString::hashString()
+void TestIndexedString::bench_qhashQString()
 {
   QVector<QString> data = generateData();
+  quint64 sum = 0;
   QBENCHMARK {
-    foreach(const QString& item, data) {
-      (void)qHash(item);
+    for (const auto& string : data) {
+      sum += qHash(string);
     }
   }
+  QVERIFY(sum > 0);
 }
 
-void TestIndexedString::hashIndexed()
+void TestIndexedString::bench_qhashIndexedString()
 {
   QVector<uint> indices = setupTest();
+  quint64 sum = 0;
   QBENCHMARK {
     foreach(uint index, indices) {
-      qHash(IndexedString::fromIndex(index));
+      sum += qHash(IndexedString::fromIndex(index));
     }
   }
+  QVERIFY(sum > 0);
 }
 
-void TestIndexedString::qSet()
+void TestIndexedString::bench_hashString()
+{
+  QVector<QString> strings = generateData();
+  QVector<QByteArray> byteArrays;
+  byteArrays.reserve(strings.size());
+  for (const auto& string : strings) {
+    byteArrays << string.toUtf8();
+  }
+
+  quint64 sum = 0;
+  QBENCHMARK {
+    for (const auto& array : byteArrays) {
+      sum += IndexedString::hashString(array.constData(), array.length());
+    }
+  }
+  QVERIFY(sum > 0);
+}
+
+void TestIndexedString::bench_kdevhash()
+{
+  QVector<QString> strings = generateData();
+  QVector<QByteArray> byteArrays;
+  byteArrays.reserve(strings.size());
+  for (const auto& string : strings) {
+    byteArrays << string.toUtf8();
+  }
+
+  quint64 sum = 0;
+  QBENCHMARK {
+    for (const auto& array : byteArrays) {
+      sum += KDevHash::hash(array.constData(), array.length());
+    }
+  }
+  QVERIFY(sum > 0);
+}
+
+void TestIndexedString::bench_qSet()
 {
   QVector<uint> indices = setupTest();
   QSet<IndexedString> set;

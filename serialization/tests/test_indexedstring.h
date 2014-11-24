@@ -34,13 +34,15 @@ private slots:
     void testUrl_data();
     void testUrl();
 
-    void index();
-    void length();
-    void qstring();
-    void kurl();
-    void hashString();
-    void hashIndexed();
-    void qSet();
+    void bench_index();
+    void bench_length();
+    void bench_qstring();
+    void bench_kurl();
+    void bench_qhashQString();
+    void bench_qhashIndexedString();
+    void bench_hashString();
+    void bench_kdevhash();
+    void bench_qSet();
 
     void test();
     void test_data();

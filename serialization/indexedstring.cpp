@@ -307,7 +307,8 @@ QByteArray IndexedString::byteArray() const {
     return arrayFromItem(getGlobalIndexedStringRepository()->itemFromIndex(m_index));
 }
 
-unsigned int IndexedString::hashString(const char* str, unsigned short length) {
+unsigned int IndexedString::hashString(const char* str, unsigned short length)
+{
   RunningHash running;
   for(int a = length-1; a >= 0; --a) {
     running.append(*str);

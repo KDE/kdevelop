@@ -23,27 +23,40 @@
 class KDevHash
 {
 public:
-  KDevHash() : m_hash(2166136261u) {}
-  KDevHash(unsigned int hash) : m_hash(hash) {}
-  operator unsigned int()
+  enum {
+      DEFAULT_SEED = 2166136261u
+  };
+
+  KDevHash(unsigned int hash = DEFAULT_SEED)
+    : m_hash(hash)
+  {}
+
+  KDevHash(const KDevHash&) = delete;
+  KDevHash operator=(const KDevHash&) = delete;
+
+  operator unsigned int() const
   {
     return m_hash;
   }
+
   template<typename T>
   KDevHash& operator<<(T addition)
   {
-    const char *_data = (const char*)&addition;
-    for (unsigned int i = 0; i < sizeof(T); ++i)
-    {
-      m_hash += _data[i];
-      m_hash += ( m_hash << 10 );
-      m_hash ^= ( m_hash >> 6 );
-    }
+    m_hash = hash(reinterpret_cast<const char*>(&addition), sizeof(T), m_hash);
     return *this;
   }
+
+  static unsigned int hash(const char* const data, const unsigned int size, unsigned int seed = DEFAULT_SEED)
+  {
+    for (unsigned int i = 0; i < size; ++i) {
+      seed += data[i];
+      seed += ( seed << 10 );
+      seed ^= ( seed >> 6 );
+    }
+    return seed;
+  }
+
 private:
-  KDevHash(const KDevHash&);
-  KDevHash operator=(const KDevHash&);
   unsigned int m_hash;
 };
 
