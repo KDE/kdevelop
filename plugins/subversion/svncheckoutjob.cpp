@@ -51,21 +51,16 @@ void SvnInternalCheckoutJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver
     initBeforeRun();
 
     svn::Client cli(m_ctxt);
-    try
-    {
+    try {
         bool recurse = ( recursion() == KDevelop::IBasicVersionControl::Recursive );
         QUrl desturl = QUrl( source().repositoryServer() ).adjusted(QUrl::StripTrailingSlash | QUrl::NormalizePathSegments  );
-
-        QByteArray srcba = desturl.toEncoded();
-        KDevelop::Path destdir(KDevelop::Path(destination()).parent().parent(), destination().fileName());
+        const QByteArray srcba = desturl.url().toUtf8();
+        KDevelop::Path destdir(KDevelop::Path(destination()).parent(), destination().fileName());
         QByteArray destba = destdir.toLocalFile().toUtf8();
         qCDebug(PLUGIN_SVN) << srcba << destba << recurse;
         cli.checkout( srcba.data(), svn::Path( destba.data() ), svn::Revision::HEAD, recurse );
-    }catch( svn::ClientException ce )
-    {
-        qCDebug(PLUGIN_SVN) << "Exception while checking out: "
-                << source().repositoryServer()
-                << QString::fromUtf8( ce.message() );
+    } catch( svn::ClientException ce ) {
+        qCDebug(PLUGIN_SVN) << "Exception while checking out: " << source().repositoryServer() << ce.message();
         setErrorMessage( QString::fromUtf8( ce.message() ) );
         m_success = false;
     }

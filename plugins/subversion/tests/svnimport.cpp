@@ -71,6 +71,7 @@ void setupSampleProject( const QString& name, const QString& content )
 
 void SvnImport::initTestCase()
 {
+    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevplatform.plugins.svn.debug=true\n"));
     AutoTestShell::init({QStringLiteral("kdevsubversion")});
     TestCore::initialize();
 

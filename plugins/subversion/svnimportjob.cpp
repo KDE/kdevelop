@@ -30,8 +30,6 @@
 #include "kdevsvncpp/path.hpp"
 
 #include <vcs/vcslocation.h>
-#include <util/path.h>
-
 
 SvnImportInternalJob::SvnImportInternalJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
@@ -48,16 +46,16 @@ void SvnImportInternalJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
         QMutexLocker l( m_mutex );
         QString srcdir = QFileInfo( m_sourceDirectory.toLocalFile() ).canonicalFilePath();
         QByteArray srcba = srcdir.toUtf8();
-        KDevelop::Path dest( m_destinationRepository.repositoryServer() );
-        QByteArray destba = dest.pathOrUrl().toUtf8();
+        QUrl dest = QUrl::fromUserInput( m_destinationRepository.repositoryServer() );
+        QByteArray destba = dest.url(QUrl::NormalizePathSegments).toUtf8();
         QByteArray msg = m_message.toUtf8();
         qCDebug(PLUGIN_SVN) << "Importing" << srcba << "into" << destba;
         cli.import( svn::Path( srcba.data() ), destba.data(), msg.data(), true );
     }catch( svn::ClientException ce )
     {
-        qCDebug(PLUGIN_SVN) << "Exception while importing: "
+        qCWarning(PLUGIN_SVN) << "Exception while importing: "
                 << m_sourceDirectory
-                << QString::fromUtf8( ce.message() );
+                << ce.message();
         setErrorMessage( QString::fromUtf8( ce.message() ) );
         m_success = false;
     }
