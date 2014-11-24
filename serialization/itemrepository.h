@@ -931,8 +931,10 @@ class Bucket {
 
           previousIndex = currentIndex;
           currentIndex = followerIndex(currentIndex);
+#ifndef QT_NO_DEBUG
           if(currentIndex)
             Q_ASSERT(freeSize(currentIndex) <= currentFreeSize);
+#endif
         }
       }
       insertToFreeChain(index);
