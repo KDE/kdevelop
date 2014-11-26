@@ -147,7 +147,7 @@ QString MacroNavigationContext::html(bool shorten)
     return currentHtml();
 }
 
-QString MacroNavigationContext::retrievePreprocessedBody(const DocumentCursor& expansionLocation) const
+QString MacroNavigationContext::retrievePreprocessedBody(const DocumentCursor& /*expansionLocation*/) const
 {
     const TopDUContext* topContext = m_macro->topContext();
     if (!topContext) {

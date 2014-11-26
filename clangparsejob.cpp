@@ -159,7 +159,7 @@ ClangSupport* ClangParseJob::clang() const
     return static_cast<ClangSupport*>(languageSupport());
 }
 
-void ClangParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread)
+void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread */*thread*/)
 {
     QReadLocker parseLock(languageSupport()->language()->parseLock());
 
