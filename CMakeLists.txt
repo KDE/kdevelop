@@ -86,7 +86,7 @@ install(TARGETS kdevcppcheck DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 configure_file(kdevcppcheck.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcppcheck.desktop)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcppcheck.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES kdevcppcheck.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcppcheck )
+install(FILES kdevcppcheck.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcppcheck)
 
 #preferences-plugin
 set(cppcheckpreferences_PART_SRCS 
