@@ -69,7 +69,7 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     m_breakpointsView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_breakpointsView->setSelectionMode(QAbstractItemView::SingleSelection);
     m_breakpointsView->horizontalHeader()->setHighlightSections(false);
-    m_breakpointsView->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+    m_breakpointsView->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     details_ = new BreakpointDetails(s);
 
     s->setStretchFactor(0, 2);
