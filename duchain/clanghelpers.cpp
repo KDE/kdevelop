@@ -238,13 +238,33 @@ RangeInRevision ClangHelpers::cursorSpellingNameRange(CXCursor cursor, const Ide
 
 QStringList ClangHelpers::headerExtensions()
 {
-    static const QStringList headerExtensions = {"h", "H", "hh", "hxx", "hpp", "tlh", "h++"};
+    static const QStringList headerExtensions = {
+            QStringLiteral("h"),
+            QStringLiteral("H"),
+            QStringLiteral("hh"),
+            QStringLiteral("hxx"),
+            QStringLiteral("hpp"),
+            QStringLiteral("tlh"),
+            QStringLiteral("h++"),
+    };
     return headerExtensions;
 }
 
 QStringList ClangHelpers::sourceExtensions()
 {
-    static const QStringList sourceExtensions = {"c", "cc", "cpp", "c++", "cxx", "C", "m", "mm", "M", "inl", "_impl.h"};
+    static const QStringList sourceExtensions = {
+        QStringLiteral("c"),
+        QStringLiteral("cc"),
+        QStringLiteral("cpp"),
+        QStringLiteral("c++"),
+        QStringLiteral("cxx"),
+        QStringLiteral("C"),
+        QStringLiteral("m"),
+        QStringLiteral("mm"),
+        QStringLiteral("M"),
+        QStringLiteral("inl"),
+        QStringLiteral("_impl.h"),
+    };
     return sourceExtensions;
 }
 

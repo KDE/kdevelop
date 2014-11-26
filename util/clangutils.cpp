@@ -30,9 +30,7 @@
 
 #include <clang-c/Index.h>
 
-#include <QDir>
-#include <QProcess>
-#include <QVector>
+#include <QTextStream>
 
 using namespace KDevelop;
 
@@ -129,11 +127,11 @@ QVector<QString> ClangUtils::getDefaultArguments(CXCursor cursor, DefaultArgumen
         clang_visitChildren(arg, paramVisitor, &info);
 
         //Clang includes the equal sign sometimes, but not other times.
-        if (!info.stringParts.isEmpty() && info.stringParts.first() == QString('=')) {
+        if (!info.stringParts.isEmpty() && info.stringParts.first() == QLatin1String("=")) {
             info.stringParts.removeFirst();
         }
         //Clang seems to include the , or ) at the end of the param, so delete that
-        if (!info.stringParts.isEmpty() && (info.stringParts.last() == QString(",") || info.stringParts.last() == QString(")"))) {
+        if (!info.stringParts.isEmpty() && (info.stringParts.last() == QLatin1String(",") || info.stringParts.last() == QLatin1String(")"))) {
             info.stringParts.removeLast();
         }
 
@@ -200,58 +198,73 @@ QString ClangUtils::getScope(CXCursor cursor)
     return scope.join("::");
 }
 
-QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, QVector<QString> defaultArgs)
+QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, const QVector<QString>& defaultArgs)
 {
     CXCursorKind kind = clang_getCursorKind(cursor);
     //Get the return type
-    QStringList parts;
+    QString ret;
+    ret.reserve(128);
+    QTextStream stream(&ret);
     if (kind != CXCursor_Constructor && kind != CXCursor_Destructor) {
-        parts.append(ClangString(clang_getTypeSpelling(clang_getCursorResultType(cursor))).toString());
-        parts.append(" ");
+        stream << ClangString(clang_getTypeSpelling(clang_getCursorResultType(cursor))).toString()
+               << ' ';
     }
 
     //Build the function name, with scope and parameters
     if (!scope.isEmpty()) {
-        parts.append(scope);
-        parts.append("::");
+        stream << scope << "::";
     }
 
     QString functionName = ClangString(clang_getCursorSpelling(cursor)).toString();
     if (functionName.contains('<')) {
-        functionName = functionName.left(functionName.indexOf('<'));
+        stream << functionName.left(functionName.indexOf('<'));
+    } else {
+        stream << functionName;
     }
-    parts.append(functionName);
 
     //Add the parameters and such
-    parts.append(QString('('));
+    stream << '(';
     int numArgs = clang_Cursor_getNumArguments(cursor);
     for (int i = 0; i < numArgs; i++) {
         CXCursor arg = clang_Cursor_getArgument(cursor, i);
-        QString id = ClangString(clang_getCursorDisplayName(arg)).toString();
-        QString type = ClangString(clang_getTypeSpelling(clang_getCursorType(arg))).toString();
 
         //Clang formats pointer types as "t *x" and reference types as "t &x", while
         //KDevelop formats them as "t* x" and "t& x". Make that adjustment.
-        if (type.length() > 2 && type.at(type.length()-2) == QChar(' ') &&
-            (type.at(type.length()-1) == QChar('*') || type.at(type.length()-1) == QChar('&')))
-        {
-            type = type.left(type.length() - 2) + type.at(type.length()-1);
+        const QString type = ClangString(clang_getTypeSpelling(clang_getCursorType(arg))).toString();
+        if (type.endsWith(QLatin1String(" *")) || type.endsWith(QLatin1String(" &"))) {
+            stream << type.left(type.length() - 2) << type.at(type.length() - 1);
+        } else {
+            stream << type;
         }
-        QString defaultArg = (i < defaultArgs.count() && !defaultArgs.at(i).isEmpty()) ? " = " + defaultArgs.at(i) : QString();
-        parts.append(type + (id.isEmpty() ? QString() : ' ' + id) + defaultArg + (i < numArgs - 1 ? ", " : ""));
+
+        const QString id = ClangString(clang_getCursorDisplayName(arg)).toString();
+        if (!id.isEmpty()) {
+            stream << ' ' << id;
+        }
+
+        if (i < defaultArgs.count() && !defaultArgs.at(i).isEmpty()) {
+            stream << " = " << defaultArgs.at(i);
+        }
+
+        if (i < numArgs - 1) {
+            stream << ", ";
+        }
     }
 
     if (clang_Cursor_isVariadic(cursor)) {
-        parts.append(numArgs > 0 ? ", ..." : "...");
+        if (numArgs > 0) {
+            stream << ", ";
+        }
+        stream << "...";
     }
 
-    parts.append(QString(')'));
+    stream << ')';
 
     if (isConstMethod(cursor)) {
-        parts.append(" const");
+        stream << " const";
     }
 
-    return parts.join(QString());
+    return ret;
 }
 
 QByteArray ClangUtils::getRawContents(CXTranslationUnit unit, CXSourceRange range)

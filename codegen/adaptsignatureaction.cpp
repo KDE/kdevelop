@@ -73,17 +73,17 @@ QString makeSignatureString(const Declaration* functionDecl, const Signature& si
             type = arrayType->elementType();
             //note: we have to prepend since we iterate from outside, i.e. from right to left.
             if (arrayType->dimension()) {
-                arrayAppendix.prepend(QString("[%1]").arg(arrayType->dimension()));
+                arrayAppendix.prepend(QStringLiteral("[%1]").arg(arrayType->dimension()));
             } else {
                 // dimensionless
-                arrayAppendix.prepend("[]");
+                arrayAppendix.prepend(QStringLiteral("[]"));
             }
         }
         ret += CodegenHelper::simplifiedTypeString(type,
                                                    visibilityFrom);
 
         if (!item.second.isEmpty()) {
-            ret += " " + item.second;
+            ret += ' ' + item.second;
         }
         ret += arrayAppendix;
         if (signature.defaultParams.size() > pos && !signature.defaultParams[pos].isEmpty()) {

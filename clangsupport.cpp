@@ -169,7 +169,7 @@ QPair<TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const 
     auto includeName = line.mid(wordRange.start().column(), wordRange.end().column() - wordRange.start().column());
 
     if (!includeName.isEmpty()) {
-        if (includeName.startsWith(".")) {
+        if (includeName.startsWith('.')) {
             const Path dir = Path(url).parent();
             includeName = Path(dir, includeName).toLocalFile();
         }

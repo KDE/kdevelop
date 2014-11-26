@@ -51,7 +51,7 @@ QSharedPointer<const ClangPCH> ClangIndex::pch(const ClangParsingEnvironment& en
 
     UrlParseLock pchLock(IndexedString(pchInclude.pathOrUrl()));
 
-    static const QString pchExt = QString::fromLatin1(".pch");
+    static const QString pchExt = QStringLiteral(".pch");
 
     if (QFile::exists(pchInclude.toLocalFile() + pchExt)) {
         QReadLocker lock(&m_pchLock);

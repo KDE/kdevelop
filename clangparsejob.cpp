@@ -57,8 +57,6 @@ using namespace KDevelop;
 
 namespace {
 
-static const QString pchIncludeFilename = QString::fromLatin1(".kdev_pch_include");
-
 QString findConfigFile(const QString& forFile, const QString& configFileName)
 {
     QDir dir = QFileInfo(forFile).dir();
@@ -100,6 +98,7 @@ Path::List readPathListFile(const QString& filepath)
  */
 Path userDefinedPchIncludeForFile(const QString& sourcefile)
 {
+    static const QString pchIncludeFilename = QStringLiteral(".kdev_pch_include");
     const auto paths = readPathListFile(findConfigFile(sourcefile, pchIncludeFilename));
     return paths.isEmpty() ? Path() : paths.first();
 }

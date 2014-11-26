@@ -37,8 +37,6 @@ using namespace KDevelop;
 
 namespace
 {
-//TODO: Try to reuse ClangHelpers::headerExtensions() instead
-static const QStringList headerExtensions = {"h", "H", "hh", "hxx", "hpp", "tlh", "h++"};
 
 struct IncludePathProperties
 {
@@ -101,12 +99,12 @@ QList<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const IncludePa
             KDevelop::IncludeItem item;
             item.name = dirIterator.fileName();
 
-            if (item.name.startsWith('.') || item.name.endsWith("~")) { //filter out ".", "..", hidden files, and backups
+            if (item.name.startsWith('.') || item.name.endsWith('~')) { //filter out ".", "..", hidden files, and backups
                 continue;
             }
 
             const auto suffix = dirIterator.fileInfo().suffix();
-            if (!suffix.isEmpty() && !headerExtensions.contains(suffix)) {
+            if (!suffix.isEmpty() && !ClangHelpers::headerExtensions().contains(suffix)) {
                 continue;
             }
 

@@ -81,7 +81,7 @@ namespace ClangUtils
      * @param scope The scope of the cursor (e.g. "SomeNS::SomeClass")
      * @return A QString of the function's signature
      */
-    QString getCursorSignature(CXCursor cursor, const QString& scope, QVector<QString> defaultArgs = QVector<QString>());
+    QString getCursorSignature(CXCursor cursor, const QString& scope, const QVector<QString>& defaultArgs = QVector<QString>());
 
     /**
      * Extract the raw contents of the range @p range
