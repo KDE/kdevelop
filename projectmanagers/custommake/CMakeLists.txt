@@ -13,9 +13,9 @@ set(kdevcustommakemanager_PART_SRCS
 )
 
 add_library(kdevcustommakemanager MODULE ${kdevcustommakemanager_PART_SRCS})
-target_link_libraries( kdevcustommakemanager
-                     KF5::KIOWidgets KDev::Interfaces KDev::Project KDev::Util KDev::Language
-                    kdev4makefileresolver
+target_link_libraries(kdevcustommakemanager
+    KF5::KIOWidgets KDev::Interfaces KDev::Project KDev::Util KDev::Language
+    kdevmakefileresolver
 )
 
 install(TARGETS kdevcustommakemanager DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
