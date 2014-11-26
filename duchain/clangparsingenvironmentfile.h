@@ -56,6 +56,9 @@ public:
         Identity = 142
     };
 
+    static void registerItem();
+    static void unregisterItem();
+
 private:
     DUCHAIN_DECLARE_DATA(ClangParsingEnvironmentFile)
 };

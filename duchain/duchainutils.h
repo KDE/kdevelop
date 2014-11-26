@@ -32,10 +32,14 @@ class Declaration;
 }
 
 namespace ClangIntegration {
-
 namespace DUChainUtils
 {
-    KDEVCLANGDUCHAIN_EXPORT KTextEditor::Range functionSignatureRange(const KDevelop::Declaration* decl);
+
+KDEVCLANGDUCHAIN_EXPORT KTextEditor::Range functionSignatureRange(const KDevelop::Declaration* decl);
+
+KDEVCLANGDUCHAIN_EXPORT void registerDUChainItems();
+KDEVCLANGDUCHAIN_EXPORT void unregisterDUChainItems();
+
 };
 
 }

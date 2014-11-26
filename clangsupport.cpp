@@ -47,6 +47,7 @@
 #include "duchain/navigationwidget.h"
 #include "duchain/macrodefinition.h"
 #include "duchain/clangparsingenvironmentfile.h"
+#include "duchain/duchainutils.h"
 
 #include <language/assistant/staticassistantsmanager.h>
 #include <language/assistant/renameassistant.h>
@@ -208,12 +209,18 @@ QPair<TopDUContextPointer, Use> macroExpansionForPosition(const QUrl &url, const
 ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
     : IPlugin( "kdevclangsupport", parent )
     , ILanguageSupport()
-    , m_highlighting(new KDevelop::CodeHighlighting(this))
-    , m_refactoring(new SimpleRefactoring(this))
-    , m_index(new ClangIndex)
+    , m_highlighting(nullptr)
+    , m_refactoring(nullptr)
+    , m_index(nullptr)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
     setXMLFile( "kdevclangsupport.rc" );
+
+    ClangIntegration::DUChainUtils::registerDUChainItems();
+
+    m_highlighting = new KDevelop::CodeHighlighting(this);
+    m_refactoring = new SimpleRefactoring(this);
+    m_index.reset(new ClangIndex);
 
     new KDevelop::CodeCompletion( this, new ClangCodeCompletionModel(this), name() );
     for(const auto& type : DocumentFinderHelpers::mimeTypesList()){
@@ -237,6 +244,8 @@ ClangSupport::~ClangSupport()
     for(const auto& type : DocumentFinderHelpers::mimeTypesList()) {
         KDevelop::IBuddyDocumentFinder::removeFinder(type);
     }
+
+    ClangIntegration::DUChainUtils::unregisterDUChainItems();
 }
 
 ParseJob* ClangSupport::createParseJob(const IndexedString& url)

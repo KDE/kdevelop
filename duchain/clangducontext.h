@@ -44,9 +44,12 @@ public:
     enum {
         Identity = IdentityT
     };
+
+    static void registerItem();
+    static void unregisterItem();
 };
 
-typedef ClangDUContext<KDevelop::TopDUContext, 140> ClangTopDUContext;
-typedef ClangDUContext<KDevelop::DUContext, 141> ClangNormalDUContext;
+using ClangTopDUContext = ClangDUContext<KDevelop::TopDUContext, 140>;
+using ClangNormalDUContext = ClangDUContext<KDevelop::DUContext, 141>;
 
 #endif // CLANGDUCONTEXT_H

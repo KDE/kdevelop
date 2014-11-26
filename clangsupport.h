@@ -76,7 +76,7 @@ public:
     //END IBuddyDocumentFinder
 
 private:
-    KDevelop::ICodeHighlighting *const m_highlighting;
+    KDevelop::ICodeHighlighting *m_highlighting;
     SimpleRefactoring *m_refactoring;
     QScopedPointer<ClangIndex> m_index;
 };

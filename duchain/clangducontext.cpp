@@ -29,8 +29,29 @@
 
 using namespace KDevelop;
 
-REGISTER_DUCHAIN_ITEM_WITH_DATA(ClangTopDUContext, TopDUContextData);
-REGISTER_DUCHAIN_ITEM_WITH_DATA(ClangNormalDUContext, DUContextData);
+template<>
+void ClangTopDUContext::registerItem()
+{
+    DUChainItemSystem::self().registerTypeClass<ClangTopDUContext, TopDUContextData>();
+}
+
+template<>
+void ClangTopDUContext::unregisterItem()
+{
+    DUChainItemSystem::self().unregisterTypeClass<ClangTopDUContext, TopDUContextData>();
+}
+
+template<>
+void ClangNormalDUContext::registerItem()
+{
+    DUChainItemSystem::self().registerTypeClass<ClangNormalDUContext, DUContextData>();
+}
+
+template<>
+void ClangNormalDUContext::unregisterItem()
+{
+    DUChainItemSystem::self().unregisterTypeClass<ClangNormalDUContext, DUContextData>();
+}
 
 template<>
 QWidget* ClangTopDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,

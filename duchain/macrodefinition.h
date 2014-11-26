@@ -84,6 +84,9 @@ public:
         Identity = 143
     };
 
+    static void registerItem();
+    static void unregisterItem();
+
 private:
     DUCHAIN_DECLARE_DATA(MacroDefinition);
 };

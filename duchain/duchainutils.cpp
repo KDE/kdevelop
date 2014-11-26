@@ -25,6 +25,10 @@
 #include <language/duchain/ducontext.h>
 #include <language/duchain/functiondefinition.h>
 
+#include "macrodefinition.h"
+#include "clangducontext.h"
+#include "clangparsingenvironmentfile.h"
+
 using namespace KDevelop;
 
 namespace ClangIntegration {
@@ -46,6 +50,29 @@ KTextEditor::Range DUChainUtils::functionSignatureRange(const Declaration* decl)
     const auto start = functionContext->rangeInCurrentRevision().start();
     const auto end = childContexts[0]->rangeInCurrentRevision().start();
     return {start, end};
+}
+
+void DUChainUtils::registerDUChainItems()
+{
+    ClangTopDUContext::registerItem();
+    ClangNormalDUContext::registerItem();
+    ClangParsingEnvironmentFile::registerItem();
+    MacroDefinition::registerItem();
+}
+
+void DUChainUtils::unregisterDUChainItems()
+{
+    /// FIXME: this is currently not supported by the DUChain code...
+    /// When the items are unregistered on plugin destruction, we'll get hit by
+    /// assertions later on when the DUChain is finalized. There, when the data is getting cleaned up,
+    /// we try to load all kinds of items again which would fail to find our items if we unregister.
+    /// So let's not do it...
+/*
+    MacroDefinition::unregisterItem();
+    ClangParsingEnvironmentFile::unregisterItem();
+    ClangNormalDUContext::unregisterItem();
+    ClangTopDUContext::unregisterItem();
+*/
 }
 
 }

@@ -56,8 +56,14 @@ public:
     END_APPENDED_LISTS(MacroDefinitionData, parameters);
 };
 
-namespace KDevelop {
-REGISTER_DUCHAIN_ITEM(MacroDefinition);
+void MacroDefinition::registerItem()
+{
+    DUChainItemSystem::self().registerTypeClass<MacroDefinition, MacroDefinitionData>();
+}
+
+void MacroDefinition::unregisterItem()
+{
+    DUChainItemSystem::self().unregisterTypeClass<MacroDefinition, MacroDefinitionData>();
 }
 
 MacroDefinition::MacroDefinition(const MacroDefinition& rhs)

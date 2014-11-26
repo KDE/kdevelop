@@ -31,7 +31,15 @@
 
 using namespace KDevelop;
 
-REGISTER_DUCHAIN_ITEM(ClangParsingEnvironmentFile);
+void ClangParsingEnvironmentFile::registerItem()
+{
+    DUChainItemSystem::self().registerTypeClass<ClangParsingEnvironmentFile, ClangParsingEnvironmentFileData>();
+}
+
+void ClangParsingEnvironmentFile::unregisterItem()
+{
+    DUChainItemSystem::self().unregisterTypeClass<ClangParsingEnvironmentFile, ClangParsingEnvironmentFileData>();
+}
 
 class ClangParsingEnvironmentFileData : public ParsingEnvironmentFileData
 {
