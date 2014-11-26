@@ -45,9 +45,9 @@ private Q_SLOTS:
     void setIgnoreHits(int ignoreHits);
 
 private:
-    QLabel* status_;
-    QLabel* hits_;
-    QSpinBox* ignore_;
+    QLabel* m_status;
+    QLabel* m_hits;
+    QSpinBox* m_ignore;
     Breakpoint* m_currentBreakpoint;
 };
 

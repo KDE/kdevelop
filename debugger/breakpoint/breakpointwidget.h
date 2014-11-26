@@ -72,13 +72,13 @@ private Q_SLOTS:
 private:
     QSplitter* m_splitter;
     QTableView* m_breakpointsView;
-    BreakpointDetails* details_;
-    QMenu* popup_;
+    BreakpointDetails* m_details;
+    QMenu* m_popup;
     bool m_firstShow;
     IDebugController *m_debugController;
-    QAction* breakpointDisableAll_;
-    QAction* breakpointEnableAll_;
-    QAction* breakpointRemoveAll_;
+    QAction* m_breakpointDisableAllAction;
+    QAction* m_breakpointEnableAllAction;
+    QAction* m_breakpointRemoveAll;
     QAbstractProxyModel* m_proxyModel;
 };
 
