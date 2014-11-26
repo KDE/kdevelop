@@ -6,10 +6,11 @@ add_library(kdevclangcodegen STATIC
     codegenhelper.cpp
 )
 target_link_libraries(kdevclangcodegen
-    LINK_PRIVATE
-        KF5::TextEditor
-        KF5::ThreadWeaver
-        KDev::Language
+LINK_PRIVATE
+    KF5::TextEditor
+    KF5::ThreadWeaver
+    KDev::Language
+    kdevclangduchain
 )
 set_target_properties(kdevclangcodegen PROPERTIES
     POSITION_INDEPENDENT_CODE TRUE)

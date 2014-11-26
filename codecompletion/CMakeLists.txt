@@ -8,6 +8,7 @@ target_link_libraries(kdevclangcodecompletion
 LINK_PRIVATE
     KF5::TextEditor
     KDev::Language
+    kdevclangduchain
 )
 set_target_properties(kdevclangcodecompletion PROPERTIES
     POSITION_INDEPENDENT_CODE TRUE)

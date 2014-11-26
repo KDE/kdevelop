@@ -24,7 +24,6 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/functiondefinition.h>
-#include <language/codegen/coderepresentation.h>
 
 using namespace KDevelop;
 

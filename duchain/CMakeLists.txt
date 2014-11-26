@@ -1,4 +1,4 @@
-add_library(kdevclangduchain SHARED
+add_library(kdevclangduchain STATIC
     parsesession.cpp
     clangdiagnosticevaluator.cpp
     clangducontext.cpp
@@ -36,5 +36,3 @@ LINK_PUBLIC
     KDev::Util
     ${CLANG_CLANG_LIB}
 )
-
-install(TARGETS kdevclangduchain ${INSTALL_TARGETS_DEFAULT_ARGS})

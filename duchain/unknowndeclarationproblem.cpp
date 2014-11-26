@@ -37,7 +37,6 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
-#include <language/codegen/documentchangeset.h>
 #include <custom-definesandincludes/idefinesandincludesmanager.h>
 
 #include <project/projectmodel.h>

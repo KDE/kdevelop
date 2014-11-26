@@ -66,7 +66,7 @@ add_subdirectory(codegen)
 add_subdirectory(util)
 add_subdirectory(tests)
 
-add_library(kdevclangsupport SHARED
+add_library(kdevclangsupport MODULE
     clangparsejob.cpp
     clangsupport.cpp
     documentfinderhelpers.cpp
