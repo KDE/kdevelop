@@ -22,24 +22,12 @@
 
 #include "clangparsingenvironmentfile.h"
 
-#include <language/duchain/duchainregister.h>
-
 #include "parsesession.h"
 #include "clangparsingenvironment.h"
 
 #include "../util/clangdebug.h"
 
 using namespace KDevelop;
-
-void ClangParsingEnvironmentFile::registerItem()
-{
-    DUChainItemSystem::self().registerTypeClass<ClangParsingEnvironmentFile, ClangParsingEnvironmentFileData>();
-}
-
-void ClangParsingEnvironmentFile::unregisterItem()
-{
-    DUChainItemSystem::self().unregisterTypeClass<ClangParsingEnvironmentFile, ClangParsingEnvironmentFileData>();
-}
 
 class ClangParsingEnvironmentFileData : public ParsingEnvironmentFileData
 {
@@ -142,3 +130,5 @@ bool ClangParsingEnvironmentFile::isSystemHeader() const
 {
     return d_func()->isSystemHeader;
 }
+
+DUCHAIN_DEFINE_TYPE(ClangParsingEnvironmentFile)

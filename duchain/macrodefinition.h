@@ -24,6 +24,7 @@
 #include <duchain/clangduchainexport.h>
 
 #include <language/duchain/declaration.h>
+#include <language/duchain/duchainregister.h>
 #include <serialization/indexedstring.h>
 
 class MacroDefinitionData;
@@ -84,11 +85,10 @@ public:
         Identity = 143
     };
 
-    static void registerItem();
-    static void unregisterItem();
-
 private:
     DUCHAIN_DECLARE_DATA(MacroDefinition);
 };
+
+DUCHAIN_DECLARE_TYPE(MacroDefinition)
 
 #endif // MACRODEFINITION_H

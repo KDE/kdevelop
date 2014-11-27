@@ -21,6 +21,7 @@
 #ifndef CLANGDUCONTEXT_H
 #define CLANGDUCONTEXT_H
 
+#include <language/duchain/duchainregister.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/topducontext.h>
 
@@ -44,12 +45,12 @@ public:
     enum {
         Identity = IdentityT
     };
-
-    static void registerItem();
-    static void unregisterItem();
 };
 
 using ClangTopDUContext = ClangDUContext<KDevelop::TopDUContext, 140>;
 using ClangNormalDUContext = ClangDUContext<KDevelop::DUContext, 141>;
+
+DUCHAIN_DECLARE_TYPE(ClangTopDUContext)
+DUCHAIN_DECLARE_TYPE(ClangNormalDUContext)
 
 #endif // CLANGDUCONTEXT_H

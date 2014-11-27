@@ -54,10 +54,10 @@ KTextEditor::Range DUChainUtils::functionSignatureRange(const Declaration* decl)
 
 void DUChainUtils::registerDUChainItems()
 {
-    ClangTopDUContext::registerItem();
-    ClangNormalDUContext::registerItem();
-    ClangParsingEnvironmentFile::registerItem();
-    MacroDefinition::registerItem();
+    duchainRegisterType<ClangTopDUContext>();
+    duchainRegisterType<ClangParsingEnvironmentFile>();
+    duchainRegisterType<ClangNormalDUContext>();
+    duchainRegisterType<MacroDefinition>();
 }
 
 void DUChainUtils::unregisterDUChainItems()
@@ -68,10 +68,10 @@ void DUChainUtils::unregisterDUChainItems()
     /// we try to load all kinds of items again which would fail to find our items if we unregister.
     /// So let's not do it...
 /*
-    MacroDefinition::unregisterItem();
-    ClangParsingEnvironmentFile::unregisterItem();
-    ClangNormalDUContext::unregisterItem();
-    ClangTopDUContext::unregisterItem();
+    duchainUnregisterType<ClangTopDUContext>();
+    duchainUnregisterType<ClangParsingEnvironmentFile>();
+    duchainUnregisterType<ClangNormalDUContext>();
+    duchainUnregisterType<MacroDefinition>();
 */
 }
 

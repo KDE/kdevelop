@@ -23,35 +23,10 @@
 #include "duchain/navigationwidget.h"
 #include "../util/clangdebug.h"
 
-#include <language/duchain/duchainregister.h>
 #include <language/duchain/topducontextdata.h>
 #include <language/util/includeitem.h>
 
 using namespace KDevelop;
-
-template<>
-void ClangTopDUContext::registerItem()
-{
-    DUChainItemSystem::self().registerTypeClass<ClangTopDUContext, TopDUContextData>();
-}
-
-template<>
-void ClangTopDUContext::unregisterItem()
-{
-    DUChainItemSystem::self().unregisterTypeClass<ClangTopDUContext, TopDUContextData>();
-}
-
-template<>
-void ClangNormalDUContext::registerItem()
-{
-    DUChainItemSystem::self().registerTypeClass<ClangNormalDUContext, DUContextData>();
-}
-
-template<>
-void ClangNormalDUContext::unregisterItem()
-{
-    DUChainItemSystem::self().unregisterTypeClass<ClangNormalDUContext, DUContextData>();
-}
 
 template<>
 QWidget* ClangTopDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,
@@ -81,3 +56,6 @@ QWidget* ClangNormalDUContext::createNavigationWidget(Declaration* decl, TopDUCo
     }
     return new ClangNavigationWidget(DeclarationPointer(decl));
 }
+
+DUCHAIN_DEFINE_TYPE_WITH_DATA(ClangNormalDUContext, DUContextData)
+DUCHAIN_DEFINE_TYPE_WITH_DATA(ClangTopDUContext, TopDUContextData)

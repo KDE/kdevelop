@@ -23,6 +23,7 @@
 #ifndef CLANGPARSINGENVIRONMENTFILE_H
 #define CLANGPARSINGENVIRONMENTFILE_H
 
+#include <language/duchain/duchainregister.h>
 #include <language/duchain/parsingenvironment.h>
 
 #include <duchain/clangduchainexport.h>
@@ -56,11 +57,10 @@ public:
         Identity = 142
     };
 
-    static void registerItem();
-    static void unregisterItem();
-
 private:
     DUCHAIN_DECLARE_DATA(ClangParsingEnvironmentFile)
 };
+
+DUCHAIN_DECLARE_TYPE(ClangParsingEnvironmentFile)
 
 #endif // CLANGPARSINGENVIRONMENTFILE_H

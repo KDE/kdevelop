@@ -22,7 +22,6 @@
 
 #include <language/duchain/appendedlist.h>
 #include <language/duchain/declarationdata.h>
-#include <language/duchain/duchainregister.h>
 
 using namespace KDevelop;
 
@@ -55,16 +54,6 @@ public:
     APPENDED_LIST_FIRST(MacroDefinitionData, IndexedString, parameters);
     END_APPENDED_LISTS(MacroDefinitionData, parameters);
 };
-
-void MacroDefinition::registerItem()
-{
-    DUChainItemSystem::self().registerTypeClass<MacroDefinition, MacroDefinitionData>();
-}
-
-void MacroDefinition::unregisterItem()
-{
-    DUChainItemSystem::self().unregisterTypeClass<MacroDefinition, MacroDefinitionData>();
-}
 
 MacroDefinition::MacroDefinition(const MacroDefinition& rhs)
     : Declaration(*new MacroDefinitionData(*rhs.d_func()))
@@ -128,3 +117,5 @@ void MacroDefinition::clearParameters()
 {
     d_func_dynamic()->parametersList().clear();
 }
+
+DUCHAIN_DEFINE_TYPE(MacroDefinition)
