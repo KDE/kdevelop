@@ -332,7 +332,7 @@ void AStylePreferences::bracketsChanged()
         case BRACKET_NOCHANGE: m_formatter->setBracketFormatMode(astyle::NONE_MODE); break;
         case BRACKET_ATTACH: m_formatter->setBracketFormatMode(astyle::ATTACH_MODE); break;
         case BRACKET_BREAK: m_formatter->setBracketFormatMode(astyle::BREAK_MODE); break;
-        case BRACKET_LINUX: m_formatter->setBracketFormatMode(astyle::BDAC_MODE); break;
+        case BRACKET_LINUX: m_formatter->setBracketFormatMode(astyle::LINUX_MODE); break;
         case BRACKET_STROUSTRUP: m_formatter->setBracketFormatMode(astyle::STROUSTRUP_MODE); break;
         case BRACKET_RUNINMODE: m_formatter->setBracketFormatMode(astyle::RUN_IN_MODE); break;
     }

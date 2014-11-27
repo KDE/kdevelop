@@ -112,7 +112,7 @@ void AStyleFormatter::updateFormatter()
     else if(s == "Attach")
         AStyleFormatter::setBracketFormatMode(astyle::ATTACH_MODE);
     else if(s == "Linux")
-        AStyleFormatter::setBracketFormatMode(astyle::BDAC_MODE);
+        AStyleFormatter::setBracketFormatMode(astyle::LINUX_MODE);
     else if(s == "Stroustrup")
         AStyleFormatter::setBracketFormatMode(astyle::STROUSTRUP_MODE);
     else if(s == "Horstmann" || s == "RunInMode")
@@ -205,7 +205,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         resetStyle();
         setBracketIndent(false);
         setSpaceIndentation(8);
-        setBracketFormatMode(astyle::BDAC_MODE);
+        setBracketFormatMode(astyle::LINUX_MODE);
         setClassIndent(false);
         setSwitchIndent(false);
         setNamespaceIndent(false);
@@ -434,7 +434,7 @@ void AStyleFormatter::setNamespaceIndent(bool on)
 void AStyleFormatter::setPreprocessorIndent(bool on)
 {
     m_options["IndentPreprocessors"] = on;
-    ASFormatter::setPreprocessorIndent(on);
+    ASFormatter::setPreprocDefineIndent(on);
 }
 
 void AStyleFormatter::setSwitchIndent(bool on)
@@ -468,7 +468,7 @@ void AStyleFormatter::setBracketFormatMode(astyle::BracketMode mode)
     case astyle::BREAK_MODE:
         m_options["Brackets"] = "Break";
         break;
-    case astyle::BDAC_MODE:
+    case astyle::LINUX_MODE:
         m_options["Brackets"] = "Linux";
         break;
     case astyle::STROUSTRUP_MODE:
