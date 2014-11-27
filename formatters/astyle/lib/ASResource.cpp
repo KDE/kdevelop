@@ -142,6 +142,10 @@ const string ASResource::AS_COLON = string(":");
 const string ASResource::AS_COMMA = string(",");
 const string ASResource::AS_SEMICOLON = string(";");
 
+const string ASResource::AS_QFOREACH = string("Q_FOREACH");
+const string ASResource::AS_QFOREVER = string("Q_FOREVER");
+const string ASResource::AS_FOREVER = string("forever");
+
 const string ASResource::AS_FOREACH = string("foreach");
 const string ASResource::AS_LOCK = string("lock");
 const string ASResource::AS_UNSAFE = string("unsafe");
@@ -245,6 +249,11 @@ void ASResource::buildHeaders(vector<const string*>* headers, int fileType, bool
 	headers->push_back(&AS_DEFAULT);
 	headers->push_back(&AS_TRY);
 	headers->push_back(&AS_CATCH);
+
+	headers->push_back(&AS_QFOREACH);
+	headers->push_back(&AS_QFOREVER);
+	headers->push_back(&AS_FOREVER);
+	headers->push_back(&AS_FOREACH);
 
 	if (fileType == C_TYPE)
 	{

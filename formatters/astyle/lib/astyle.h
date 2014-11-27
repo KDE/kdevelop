@@ -257,6 +257,7 @@ class ASResource
 		static const string AS_NOT, AS_BIT_XOR, AS_BIT_OR, AS_BIT_AND, AS_BIT_NOT;
 		static const string AS_QUESTION, AS_COLON, AS_SEMICOLON, AS_COMMA;
 		static const string AS_ASM, AS__ASM__, AS_MS_ASM, AS_MS__ASM;
+		static const string AS_QFOREACH, AS_QFOREVER, AS_FOREVER;
 		static const string AS_FOREACH, AS_LOCK, AS_UNSAFE, AS_FIXED;
 		static const string AS_GET, AS_SET, AS_ADD, AS_REMOVE;
 		static const string AS_DELEGATE, AS_UNCHECKED;

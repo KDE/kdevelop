@@ -2596,7 +2596,11 @@ bool ASFormatter::isPointerOrReference() const
 	        || isCharImmediatelyPostReturn
 	        || isInTemplate
 	        || isCharImmediatelyPostTemplate
-	        || currentHeader == &AS_CATCH)
+	        || currentHeader == &AS_CATCH
+	        || currentHeader == &AS_FOREACH
+	        || currentHeader == &AS_FOREVER
+	        || currentHeader == &AS_QFOREACH
+	        || currentHeader == &AS_QFOREVER)
 		return true;
 
 	if (isBracketType(bracketTypeStack->back(), ARRAY_TYPE)
@@ -5273,6 +5277,9 @@ bool ASFormatter::addBracketsToStatement()
 	        && currentHeader != &AS_FOR
 	        && currentHeader != &AS_WHILE
 	        && currentHeader != &AS_DO
+	        && currentHeader != &AS_QFOREACH
+	        && currentHeader != &AS_QFOREVER
+	        && currentHeader != &AS_FOREVER
 	        && currentHeader != &AS_FOREACH)
 		return false;
 
