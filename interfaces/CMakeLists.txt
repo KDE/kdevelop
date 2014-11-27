@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 set(KDevPlatformInterfaces_LIB_SRCS
     iassistant.cpp
     context.cpp

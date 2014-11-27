@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevgenericprojectmanager\")
 
 add_subdirectory(test)
 

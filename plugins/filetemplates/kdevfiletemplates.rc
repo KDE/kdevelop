@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevFileTemplates" version="1">
+<kpartgui name="KDevFileTemplates" version="2" translationDomain="kdevfiletemplates">
   <MenuBar>
     <Menu name="file">
       <Action name="new_from_template" group="new_merge"/>

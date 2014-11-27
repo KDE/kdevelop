@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kdevgrepview" version="7">
+<kpartgui name="kdevgrepview" version="8" translationDomain="kdevgrepview">
 <MenuBar>
   <Menu name="edit">
    <Text context="@title:menu">Edit</Text>

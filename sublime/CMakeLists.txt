@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 add_subdirectory(examples)
 add_subdirectory(tests)
 

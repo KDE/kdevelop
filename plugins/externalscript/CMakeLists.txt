@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevexternalscript\")
 ########### next target ###############
 
 set(kdevexternalscript_PART_SRCS

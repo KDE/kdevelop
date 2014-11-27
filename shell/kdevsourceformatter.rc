@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevsourceformatter" version="3">
+<kpartgui name="kdevsourceformatter" version="4" translationDomain="kdevplatform">
 <MenuBar>
  <Menu name="edit">
   <Text context="@title:menu">Edit</Text>

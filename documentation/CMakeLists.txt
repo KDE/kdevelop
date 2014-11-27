@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
+
 set_package_properties(Qt5WebKitWidgets PROPERTIES
     PURPOSE "QtWebKit, for integrated documentation"
     URL "http://qt-project.org/"

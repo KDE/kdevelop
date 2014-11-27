@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 add_subdirectory(tests)
 
 set(KDevPlatformShell_LIB_SRCS

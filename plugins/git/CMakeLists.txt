@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevgit\")
 project(git)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${git_SOURCE_DIR}/cmake)

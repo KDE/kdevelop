@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevopenwith\")
 set(kdevopenwith_PART_SRCS
     openwithplugin.cpp
 )

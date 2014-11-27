@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="kdevtestview" library="libkdevtestview" version="7">
+<kpartplugin name="kdevtestview" library="libkdevtestview" version="8" translationDomain="kdevtestview">
 <MenuBar>
  <Menu name="run">
   <Text context="@title:menu">Run</Text>

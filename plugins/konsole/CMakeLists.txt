@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevkonsole\")
 ########### next target ###############
 
 set(kdevkonsoleview_PART_SRCS

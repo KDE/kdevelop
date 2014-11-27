@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevprojectmanagerview\")
 ########### next target ###############
 
 set(kdevprojectmanagerview_PLUGIN_SRCS

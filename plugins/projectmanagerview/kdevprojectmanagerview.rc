@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="kdevprojectmanagerview" library="libkdevprojectmanagerview" version="7">
+<kpartplugin name="kdevprojectmanagerview" library="libkdevprojectmanagerview" version="8" translationDomain="kdevprojectmanagerview">
 <MenuBar>
  <Menu name="project">
   <Text context="@title:menu">Run</Text>

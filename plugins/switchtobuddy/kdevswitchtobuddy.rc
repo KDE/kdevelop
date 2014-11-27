@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevSwitchToBuddy" version="6">
+<kpartgui name="KDevSwitchToBuddy" version="7" translationDomain="kdevswitchtobuddy">
 <MenuBar>
   <Menu name="navigation">
     <text context="@title:menu">Navigation</text>

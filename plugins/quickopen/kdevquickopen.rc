@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevQuickopen" version="9">
+<kpartgui name="KDevQuickopen" version="10" translationDomain="kdevquickopen">
 <MenuBar>
   <Menu name="navigation">
     <Action name="quick_open"

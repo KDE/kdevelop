@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 
 set( outputviewinterfaces_LIB_SRCS
     outputdelegate.cpp

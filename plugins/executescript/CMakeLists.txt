@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevexecutescript\")
 project(executescript)
 
 include_directories(

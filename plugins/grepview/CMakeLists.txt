@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevgrepview\")
 project(grepview)
 
 ########### next target ###############

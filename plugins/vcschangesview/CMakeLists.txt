@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevvcsprojectintegration\")
 project(vcschangesview)
 
 set(vcschangesview_SRCS

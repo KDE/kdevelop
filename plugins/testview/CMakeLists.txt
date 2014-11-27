@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevtestview\")
 ########### next target ###############
 
 set(kdevtestview_PLUGIN_SRCS

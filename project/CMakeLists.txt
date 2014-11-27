@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
+
 set(KDevPlatformProject_LIB_SRCS
     projectutils.cpp
     projectmodel.cpp

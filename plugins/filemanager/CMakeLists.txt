@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevfilemanager\")
 ########### next target ###############
 
 set(kdevfilemanager_PART_SRCS

@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevreviewboard\")
 add_subdirectory(icons)
 add_subdirectory(tests)
 

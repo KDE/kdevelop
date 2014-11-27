@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevContextBrowser" version="10">
+<kpartgui name="KDevContextBrowser" version="11" translationDomain="kdevcontextbrowser">
 <MenuBar>
   <Menu name="navigation">
     <text context="@title:menu">Navigation</text>

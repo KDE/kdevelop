@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevsessionui" library="kdevsession" version="5">
+<kpartgui name="kdevsessionui" library="kdevsession" version="6" translationDomain="kdevplatform">
     <MenuBar>
         <Menu name="session">
             <text context="@title:menu">Session</text>

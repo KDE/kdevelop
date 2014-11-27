@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevAppWizard" version="3">
+<kpartgui name="KDevAppWizard" version="4" translationDomain="kdevappwizard">
 <MenuBar>
   <Menu name="project" >
     <text context="@title:menu">Project</text>

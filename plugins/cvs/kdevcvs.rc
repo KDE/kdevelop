@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCvs" version="1">
+<kpartgui name="KDevCvs" version="2" translationDomain="kdevcvs">
 
   <Menu name="cvs_popup">
     <text context="@title:menu">CVS</text>

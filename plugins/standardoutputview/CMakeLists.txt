@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevstandardoutputview\")
 add_subdirectory(tests)
 
 ########### next target ###############

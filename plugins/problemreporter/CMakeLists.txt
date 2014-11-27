@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevproblemreporter\")
 
 ########### next target ###############
 

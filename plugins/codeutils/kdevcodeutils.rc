@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kdevcodeutils" version="6">
+<kpartgui name="kdevcodeutils" version="7" translationDomain="kdevcodeutils">
 <MenuBar>
   <Menu name="code">
     <Text context="@title:menu">Code</Text>

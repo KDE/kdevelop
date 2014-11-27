@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevquickopen\")
 add_subdirectory( tests )
 
 ########### next target ###############

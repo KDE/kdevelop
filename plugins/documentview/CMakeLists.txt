@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevdocumentview\")
 project(documentview)
 #add_subdirectory(settings)
 

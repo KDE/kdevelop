@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevDocumentSwitcher" version="5">
+<kpartgui name="KDevDocumentSwitcher" version="6" translationDomain="kdevdocumentswitcher">
 <MenuBar>
   <Menu name="navigation">
     <Action name="last_used_views_forward" group="navigation_file"/>

@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevexecute\")
 ########### next target ###############
 
 set(kdevexecute_PART_UIS

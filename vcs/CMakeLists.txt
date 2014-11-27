@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
+
 add_subdirectory(dvcs/tests)
 add_subdirectory(models/tests)
 

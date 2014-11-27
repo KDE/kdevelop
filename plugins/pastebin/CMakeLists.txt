@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevpastebin\")
 set(kdevpastebin_PART_SRCS
     pastebinplugin.cpp
 )

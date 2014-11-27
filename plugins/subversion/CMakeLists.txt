@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevsubversion\")
 project(KDevSubversionPlugin)
 
 add_subdirectory(tests)

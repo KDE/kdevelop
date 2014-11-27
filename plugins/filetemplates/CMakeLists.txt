@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevfiletemplates\")
 set(kdevfiletemplates_PART_SRCS
     templatepreview.cpp
     templatepreviewtoolview.cpp

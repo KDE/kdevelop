@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 
 add_subdirectory(highlighting/tests)
 add_subdirectory(duchain/tests)
