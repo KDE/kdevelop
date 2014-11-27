@@ -191,7 +191,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
             range.end() = KTextEditor::Cursor(m_document->endOfLine(m_document->lines()-1));
 
         if(range.isEmpty()) {
-            range.end().setColumn(range.end().column() + 1);
+            range.setEnd(range.end() + KTextEditor::Cursor(0, 1));
         }
 
         KTextEditor::MovingRange* problemRange = iface->newMovingRange(range);
