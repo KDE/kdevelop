@@ -159,6 +159,31 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemSystem {
     QVector<uint> m_dataClassSizes;
 };
 
+template<typename T>
+struct DUChainType {};
+
+/// Use this in the header to declare DUChainType<YourTypeClass>
+#define DUCHAIN_DECLARE_TYPE(Type) \
+  namespace KDevelop { \
+    template<> struct DUChainType<Type> { \
+      static void registerType(); \
+      static void unregisterType(); \
+    }; \
+  }
+/// Use this in the source file to define functions in DUChainType<YourTypeClass>
+#define DUCHAIN_DEFINE_TYPE_WITH_DATA(Type, Data) \
+  void KDevelop::DUChainType<Type>::registerType() { DUChainItemSystem::self().registerTypeClass<Type, Data>(); } \
+  void KDevelop::DUChainType<Type>::unregisterType() { DUChainItemSystem::self().unregisterTypeClass<Type, Data>(); }
+#define DUCHAIN_DEFINE_TYPE(Type) \
+  DUCHAIN_DEFINE_TYPE_WITH_DATA(Type, Type##Data)
+
+/// Register @param T to DUChainItemSystem
+template<typename T>
+void duchainRegisterType() { DUChainType<T>::registerType(); }
+/// Unregister @param T to DUChainItemSystem
+template<typename T>
+void duchainUnregisterType() { DUChainType<T>::unregisterType(); }
+
 /// Helper class to register an DUChainBase subclass.
 ///
 /// Just use the REGISTER_TYPE(YourTypeClass) macro in your code, and you're done.
