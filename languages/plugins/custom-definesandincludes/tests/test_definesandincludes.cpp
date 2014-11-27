@@ -27,6 +27,7 @@
 #include <project/projectmodel.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <tests/testhelpers.h>
 
 #include <serialization/indexedstring.h>
 
