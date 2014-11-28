@@ -27,7 +27,6 @@
 
 namespace KTextEditor {
 class Cursor;
-class Document;
 class Range;
 }
 
@@ -38,9 +37,7 @@ class IndexedString;
 class ParseJob;
 class ILanguage;
 class TopDUContext;
-class DocumentRange;
 class ICodeHighlighting;
-class DocumentChangeTracker;
 class ICreateClassHelper;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ILanguageSupport {
@@ -79,11 +76,6 @@ public:
       * Should return a BasicRefactoring instance that controls the language-agnostic refactoring rules, or zero
       */
     virtual BasicRefactoring* refactoring() const;
-
-    /**
-     * Should return a document change-tracker for this language that tracks the changes in the given document
-     * */
-    virtual DocumentChangeTracker* createChangeTrackerForDocument(KTextEditor::Document* document) const;
 
     /**
      * Should return a class creating helper for this language, or zero.
