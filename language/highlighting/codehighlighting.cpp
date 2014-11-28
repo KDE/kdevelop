@@ -163,6 +163,9 @@ void CodeHighlighting::highlightDUChain(ReferencedTopDUContext context)
 
   {
     DUChainReadLocker lock;
+    if (!context)
+        return;
+
     url = context->url();
   }
 

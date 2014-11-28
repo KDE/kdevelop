@@ -84,9 +84,7 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
     connect(proxyModel, &PlaceholderItemProxyModel::dataInserted, this, &BreakpointWidget::slotDataInserted);
     m_proxyModel = proxyModel;
 
-    connect(m_breakpointsView, &QTableView::clicked, this, &BreakpointWidget::slotOpenFile);
-    connect(m_breakpointsView->selectionModel(), &QItemSelectionModel::currentChanged, this, &BreakpointWidget::slotOpenFile);
-
+    connect(m_breakpointsView, &QTableView::activated, this, &BreakpointWidget::slotOpenFile);
     connect(m_breakpointsView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &BreakpointWidget::slotUpdateBreakpointDetail);
     connect(m_debugController->breakpointModel(), &BreakpointModel::rowsInserted, this, &BreakpointWidget::slotUpdateBreakpointDetail);
     connect(m_debugController->breakpointModel(), &BreakpointModel::rowsRemoved, this, &BreakpointWidget::slotUpdateBreakpointDetail);
