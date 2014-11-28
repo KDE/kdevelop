@@ -23,43 +23,47 @@ Boston, MA 02110-1301, USA.
 #include "astyle_formatter.h"
 #include "astyle_plugin.h"
 
-#define STYLE_CUSTOM 0
-#define STYLE_ANSI 1
-#define STYLE_GNU 2
-#define STYLE_JAVA 3
-#define STYLE_KR 4
-#define STYLE_LINUX 5
+namespace {
 
-#define INDENT_BLOCK 0
-#define INDENT_BRACKET 1
-#define INDENT_CASE 2
-#define INDENT_CLASS 3
-#define INDENT_LABEL 4
-#define INDENT_NAMESPACE 5
-#define INDENT_PREPROCESSOR 6
-#define INDENT_SWITCH 7
+const int STYLE_CUSTOM = 0;
+const int STYLE_ANSI = 1;
+const int STYLE_GNU = 2;
+const int STYLE_JAVA = 3;
+const int STYLE_KR = 4;
+const int STYLE_LINUX = 5;
 
-#define PADDING_NOCHANGE 0
-#define PADDING_NO 1
-#define PADDING_IN 2
-#define PADDING_OUT 3
-#define PADDING_INOUT 4
+const int INDENT_BLOCK = 0;
+const int INDENT_BRACKET = 1;
+const int INDENT_CASE = 2;
+const int INDENT_CLASS = 3;
+const int INDENT_LABEL = 4;
+const int INDENT_NAMESPACE = 5;
+const int INDENT_PREPROCESSOR = 6;
+const int INDENT_SWITCH = 7;
 
-#define INDENT_TABS 0
-#define INDENT_TABSFORCE 1
-#define INDENT_SPACES 2
+const int PADDING_NOCHANGE = 0;
+const int PADDING_NO = 1;
+const int PADDING_IN = 2;
+const int PADDING_OUT = 3;
+const int PADDING_INOUT = 4;
 
-#define BRACKET_NOCHANGE 0
-#define BRACKET_ATTACH 1
-#define BRACKET_BREAK 2
-#define BRACKET_LINUX 3
-#define BRACKET_STROUSTRUP 4
-#define BRACKET_RUNINMODE 5
+const int INDENT_TABS = 0;
+const int INDENT_TABSFORCE = 1;
+const int INDENT_SPACES = 2;
 
-#define POINTERALIGN_NOCHANGE 0
-#define POINTERALIGN_NAME 1
-#define POINTERALIGN_MIDDLE 2
-#define POINTERALIGN_TYPE 3
+const int BRACKET_NOCHANGE = 0;
+const int BRACKET_ATTACH = 1;
+const int BRACKET_BREAK = 2;
+const int BRACKET_LINUX = 3;
+const int BRACKET_STROUSTRUP = 4;
+const int BRACKET_RUNINMODE = 5;
+
+const int POINTERALIGN_NOCHANGE = 0;
+const int POINTERALIGN_NAME = 1;
+const int POINTERALIGN_MIDDLE = 2;
+const int POINTERALIGN_TYPE = 3;
+
+}
 
 AStylePreferences::AStylePreferences(Language lang, QWidget *parent)
     : KDevelop::SettingsWidget(parent)
@@ -332,7 +336,7 @@ void AStylePreferences::bracketsChanged()
         case BRACKET_NOCHANGE: m_formatter->setBracketFormatMode(astyle::NONE_MODE); break;
         case BRACKET_ATTACH: m_formatter->setBracketFormatMode(astyle::ATTACH_MODE); break;
         case BRACKET_BREAK: m_formatter->setBracketFormatMode(astyle::BREAK_MODE); break;
-        case BRACKET_LINUX: m_formatter->setBracketFormatMode(astyle::BDAC_MODE); break;
+        case BRACKET_LINUX: m_formatter->setBracketFormatMode(astyle::LINUX_MODE); break;
         case BRACKET_STROUSTRUP: m_formatter->setBracketFormatMode(astyle::STROUSTRUP_MODE); break;
         case BRACKET_RUNINMODE: m_formatter->setBracketFormatMode(astyle::RUN_IN_MODE); break;
     }

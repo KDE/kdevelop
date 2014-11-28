@@ -27,6 +27,8 @@ Boston, MA 02110-1301, USA.
 
 #include "astyle.h"
 
+#include <string>
+
 class AStyleStringIterator : public astyle::ASSourceIterator
 {
     public:
@@ -35,8 +37,8 @@ class AStyleStringIterator : public astyle::ASSourceIterator
         virtual ~AStyleStringIterator();
 
         virtual bool hasMoreLines() const;
-        virtual string nextLine(bool emptyLineWasDeleted = false);
-        virtual string peekNextLine();
+        virtual std::string nextLine(bool emptyLineWasDeleted = false);
+        virtual std::string peekNextLine();
         virtual void peekReset();
 
     private:

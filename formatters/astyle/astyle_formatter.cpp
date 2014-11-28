@@ -112,7 +112,7 @@ void AStyleFormatter::updateFormatter()
     else if(s == "Attach")
         AStyleFormatter::setBracketFormatMode(astyle::ATTACH_MODE);
     else if(s == "Linux")
-        AStyleFormatter::setBracketFormatMode(astyle::BDAC_MODE);
+        AStyleFormatter::setBracketFormatMode(astyle::LINUX_MODE);
     else if(s == "Stroustrup")
         AStyleFormatter::setBracketFormatMode(astyle::STROUSTRUP_MODE);
     else if(s == "Horstmann" || s == "RunInMode")
@@ -205,7 +205,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         resetStyle();
         setBracketIndent(false);
         setSpaceIndentation(8);
-        setBracketFormatMode(astyle::BDAC_MODE);
+        setBracketFormatMode(astyle::LINUX_MODE);
         setClassIndent(false);
         setSwitchIndent(false);
         setNamespaceIndent(false);
@@ -329,23 +329,8 @@ QString AStyleFormatter::indentString()
     return QString(getIndentString().c_str());
 }
 
-//     name, "BlockBreak=0,BlockBreakAll=0,BlockIfElse=0,"
-//     "Brackets=Break,BracketsCloseHeaders=0,FStyle=,Fill=Tabs,"
-//     "FillCount=4,FillEmptyLines=0,FillForce=0,IndentBlocks=0,"
-//     "IndentBrackets=0,IndentCases=0,IndentClasses=1,IndentLabels=1,"
-//     "IndentNamespaces=1,IndentPreprocessors=0,IndentSwitches=1,"
-//     "KeepBlocks=1,KeepStatements=1,MaxStatement=40,"
-//     "MinConditional=-1,PadOperators=0,PadParenthesesIn=1,"
-//     "PadParenthesesOut=1,PadParenthesesUn=1,");
-
 void AStyleFormatter::loadStyle(const QString &content)
 {
-//     QStringList pairs = options.split(',', QString::SkipEmptyParts );
-//     QStringList::Iterator it;
-//     for ( it = pairs.begin(); it != pairs.end(); ++it ) {
-//         QStringList bits = (*it).split('=');
-//         m_options[bits[0]] = bits[1];
-//     }
     m_options = KDevelop::ISourceFormatter::stringToOptionMap(content);
     updateFormatter();
 }
@@ -353,19 +338,6 @@ void AStyleFormatter::loadStyle(const QString &content)
 QString AStyleFormatter::saveStyle()
 {
     return KDevelop::ISourceFormatter::optionMapToString(m_options);
-//     QMap<QString, QVariant>::const_iterator it = m_options.constBegin();
-//     for(; it != m_options.constEnd(); it++) {
-//         options += it.key();
-//         options += '=';
-//         options += it.value().toString();
-//         options += ',';
-//     }
-
-//     KConfigGroup group = config->group("AStyle");
-//     group.writeEntry(name, options);
-//     group.writeEntry("Extensions", m_extensions.join(","));
-//     group.sync();
-//     qCDebug(ASTYLE) << "Saving config to" << name << " : "<< options << endl;
 }
 
 void AStyleFormatter::setTabIndentation(int length, bool forceTabs)
@@ -434,7 +406,7 @@ void AStyleFormatter::setNamespaceIndent(bool on)
 void AStyleFormatter::setPreprocessorIndent(bool on)
 {
     m_options["IndentPreprocessors"] = on;
-    ASFormatter::setPreprocessorIndent(on);
+    ASFormatter::setPreprocDefineIndent(on);
 }
 
 void AStyleFormatter::setSwitchIndent(bool on)
@@ -468,7 +440,7 @@ void AStyleFormatter::setBracketFormatMode(astyle::BracketMode mode)
     case astyle::BREAK_MODE:
         m_options["Brackets"] = "Break";
         break;
-    case astyle::BDAC_MODE:
+    case astyle::LINUX_MODE:
         m_options["Brackets"] = "Linux";
         break;
     case astyle::STROUSTRUP_MODE:

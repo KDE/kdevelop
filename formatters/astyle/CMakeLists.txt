@@ -10,6 +10,7 @@ set(kdevastyle_PART_SRCS
     lib/ASEnhancer.cpp
     lib/ASFormatter.cpp
     lib/ASResource.cpp
+    lib/ASLocalizer.cpp
 )
 
 set(astyle_preferences_UI

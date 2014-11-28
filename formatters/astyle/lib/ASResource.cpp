@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *   ASResource.cpp
  *
- *   Copyright (C) 2006-2011 by Jim Pattee <jimp03@email.com>
+ *   Copyright (C) 2006-2013 by Jim Pattee <jimp03@email.com>
  *   Copyright (C) 1998-2002 by Tal Davidson
  *   <http://www.gnu.org/licenses/lgpl-3.0.html>
  *
@@ -29,8 +29,8 @@
 #include <algorithm>
 
 
-namespace astyle
-{
+namespace astyle {
+
 const string ASResource::AS_IF = string("if");
 const string ASResource::AS_ELSE = string("else");
 const string ASResource::AS_FOR = string("for");
@@ -45,6 +45,8 @@ const string ASResource::AS_STRUCT = string("struct");
 const string ASResource::AS_UNION = string("union");
 const string ASResource::AS_INTERFACE = string("interface");
 const string ASResource::AS_NAMESPACE = string("namespace");
+const string ASResource::AS_END = string("end");
+const string ASResource::AS_SELECTOR = string("selector");
 const string ASResource::AS_EXTERN = string("extern");
 const string ASResource::AS_ENUM = string("enum");
 const string ASResource::AS_PUBLIC = string("public");
@@ -117,11 +119,11 @@ const string ASResource::AS_LS_EQUAL = string("<=");
 const string ASResource::AS_LS_LS = string("<<");
 const string ASResource::AS_LS_LS_LS = string("<<<");
 const string ASResource::AS_QUESTION_QUESTION = string("??");
-const string ASResource::AS_EQUAL_GR = string("=>");            // C# lambda expression arrow
+const string ASResource::AS_LAMBDA = string("=>");            // C# lambda expression arrow
 const string ASResource::AS_ARROW = string("->");
 const string ASResource::AS_AND = string("&&");
 const string ASResource::AS_OR = string("||");
-const string ASResource::AS_COLON_COLON = string("::");
+const string ASResource::AS_SCOPE_RESOLUTION = string("::");
 
 const string ASResource::AS_PLUS = string("+");
 const string ASResource::AS_MINUS = string("-");
@@ -140,6 +142,10 @@ const string ASResource::AS_COLON = string(":");
 const string ASResource::AS_COMMA = string(",");
 const string ASResource::AS_SEMICOLON = string(";");
 
+const string ASResource::AS_QFOREACH = string("Q_FOREACH");
+const string ASResource::AS_QFOREVER = string("Q_FOREVER");
+const string ASResource::AS_FOREVER = string("forever");
+
 const string ASResource::AS_FOREACH = string("foreach");
 const string ASResource::AS_LOCK = string("lock");
 const string ASResource::AS_UNSAFE = string("unsafe");
@@ -156,6 +162,8 @@ const string ASResource::AS_DYNAMIC_CAST = string("dynamic_cast");
 const string ASResource::AS_REINTERPRET_CAST = string("reinterpret_cast");
 const string ASResource::AS_STATIC_CAST = string("static_cast");
 
+const string ASResource::AS_NS_DURING = string("NS_DURING");
+const string ASResource::AS_NS_HANDLER = string("NS_HANDLER");
 
 /**
  * Sort comparison function.
@@ -242,16 +250,16 @@ void ASResource::buildHeaders(vector<const string*>* headers, int fileType, bool
 	headers->push_back(&AS_TRY);
 	headers->push_back(&AS_CATCH);
 
+	headers->push_back(&AS_QFOREACH);
+	headers->push_back(&AS_QFOREVER);
+	headers->push_back(&AS_FOREVER);
+	headers->push_back(&AS_FOREACH);
+
 	if (fileType == C_TYPE)
 	{
 		headers->push_back(&_AS_TRY);		// __try
 		headers->push_back(&_AS_FINALLY);	// __finally
 		headers->push_back(&_AS_EXCEPT);	// __except
-
-		//BEGIN KDEVELOP
-		// see: https://git.reviewboard.kde.org/r/106032
-		headers->push_back(&AS_FOREACH);
-		//END KDEVELOP
 	}
 	if (fileType == JAVA_TYPE)
 	{
@@ -320,7 +328,7 @@ void ASResource::buildNonAssignmentOperators(vector<const string*>* nonAssignmen
 	nonAssignmentOperators->push_back(&AS_ARROW);
 	nonAssignmentOperators->push_back(&AS_AND);
 	nonAssignmentOperators->push_back(&AS_OR);
-	nonAssignmentOperators->push_back(&AS_EQUAL_GR);
+	nonAssignmentOperators->push_back(&AS_LAMBDA);
 
 	sort(nonAssignmentOperators->begin(), nonAssignmentOperators->end(), sortOnLength);
 }
@@ -405,11 +413,11 @@ void ASResource::buildOperators(vector<const string*>* operators, int fileType)
 	operators->push_back(&AS_LS_LS_LS);
 	operators->push_back(&AS_LS_LS);
 	operators->push_back(&AS_QUESTION_QUESTION);
-	operators->push_back(&AS_EQUAL_GR);
+	operators->push_back(&AS_LAMBDA);
 	operators->push_back(&AS_ARROW);
 	operators->push_back(&AS_AND);
 	operators->push_back(&AS_OR);
-	operators->push_back(&AS_COLON_COLON);
+	operators->push_back(&AS_SCOPE_RESOLUTION);
 	operators->push_back(&AS_PLUS);
 	operators->push_back(&AS_MINUS);
 	operators->push_back(&AS_MULT);
@@ -527,7 +535,7 @@ void ASResource::buildPreDefinitionHeaders(vector<const string*>* preDefinitionH
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *                             ASBase Funtions
+ *                             ASBase Functions
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 // check if a specific line position contains a keyword.
