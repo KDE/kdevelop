@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevkdeprovider\")
 add_subdirectory(tests)
 
 set(kdevkdeprovider_PART_SRCS kdeprojectsmodel.cpp

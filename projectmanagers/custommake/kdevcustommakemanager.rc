@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<gui name="kdevcustommakemanager" library="libkdevcustommakemanager" version="4">
+<gui name="kdevcustommakemanager" library="libkdevcustommakemanager" version="5" translationDomain="kdevcustommake">
   <MenuBar>
   <Menu name="run">
    <text context="@title:menu">Run</text>

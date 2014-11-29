@@ -1,4 +1,5 @@
 project(cmakemanager)
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevcmake\")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/parser)
 
 add_subdirectory(tests)

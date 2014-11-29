@@ -1,5 +1,5 @@
 project(gdb)
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevgdb\")
 # TODO KF5 figure out how to get the process selection widget (ksysguardprocesslist.h)
 if(NOT APPLE)
 # macro_optional_find_package( KDE4Workspace 4.2.0 )

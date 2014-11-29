@@ -1,3 +1,4 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevqthelp\")
 include_directories(${Qt5Help_INCLUDE_DIRS})
 
 set(kdevqthelp_SRCS

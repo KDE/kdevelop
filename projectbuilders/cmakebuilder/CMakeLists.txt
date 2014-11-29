@@ -1,4 +1,5 @@
 project(cmakebuilder)
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevcmakebuilder\")
 include_directories(
     ${cmakebuilder_SOURCE_DIR}
     ${KDevelop_SOURCE_DIR}/projectmanagers/cmake

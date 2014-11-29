@@ -1,4 +1,5 @@
 project(cpp)
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevcpp\")
 include(CppBuildConfig.cmake)
 
 include_directories(
