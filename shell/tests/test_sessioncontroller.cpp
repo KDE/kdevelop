@@ -269,4 +269,4 @@ void TestSessionController::tryLockSession()
     QCOMPARE(final.runInfo, SessionRunInfo());
 }
 
-QTEST_MAIN(TestSessionController)
+QTEST_GUILESS_MAIN(TestSessionController)
