@@ -36,7 +36,7 @@ class CompilerProvider : public QObject, public KDevelop::IDefinesAndIncludesMan
 
 public:
     explicit CompilerProvider( SettingsManager* settings, QObject* parent = nullptr );
-    ~CompilerProvider() Q_DECL_NOEXCEPT;
+    ~CompilerProvider();
 
     KDevelop::Defines defines( KDevelop::ProjectBaseItem* item ) const override;
     KDevelop::Path::List includes( KDevelop::ProjectBaseItem* item ) const override;

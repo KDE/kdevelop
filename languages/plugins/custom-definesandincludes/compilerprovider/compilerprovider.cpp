@@ -98,9 +98,7 @@ CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
     }
 }
 
-CompilerProvider::~CompilerProvider() Q_DECL_NOEXCEPT
-{
-}
+CompilerProvider::~CompilerProvider() = default;
 
 CompilerPointer CompilerProvider::compilerForItem(ProjectBaseItem* item) const
 {
