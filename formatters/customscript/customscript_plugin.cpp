@@ -222,7 +222,7 @@ QString CustomScriptPlugin::formatSource(const QString& text, const QUrl &url, c
 static QList<SourceFormatterStyle> stylesFromLanguagePlugins() {
 	QList<KDevelop::SourceFormatterStyle> styles;
 	for ( ILanguage* lang: ICore::self()->languageController()->loadedLanguages() ) {
-		SourceFormatterItemList languageStyles = lang->languageSupport()->sourceFormatterItems();
+		const SourceFormatterItemList& languageStyles = lang->languageSupport()->sourceFormatterItems();
 		for ( const SourceFormatterStyleItem& item: languageStyles ) {
 			if ( item.engine == "customscript" ) {
 				styles << item.style;
