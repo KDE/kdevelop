@@ -207,9 +207,6 @@ public:
 
         for(auto plugin : plugins) {
             const KPluginInfo info = m_core->pluginController()->pluginInfo( plugin );
-            if (info.property("X-KDevelop-Category").toString() != "Project") {
-                continue;
-            }
             IProjectFileManager* manager = plugin->extension<KDevelop::IProjectFileManager>();
             if( manager && manager != project->projectFileManager() )
             {
