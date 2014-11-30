@@ -86,7 +86,13 @@ CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
     registerCompiler(CompilerPointer(new NoCompiler()));
     retrieveUserDefinedCompilers();
 
+    // NOTE: we connect to both, projectAboutToBeOpened as well as projectOpened.
+    // The former to be sure we get called as soon as possible, the latter to prevent
+    // a race condition, where this plugin gets initialized but a project just emitted that
+    // it is about to be opened, but did not open yet.
     connect( ICore::self()->projectController(), &IProjectController::projectAboutToBeOpened,
+             this, &CompilerProvider::projectOpened );
+    connect( ICore::self()->projectController(), &IProjectController::projectOpened,
              this, &CompilerProvider::projectOpened );
     connect( ICore::self()->projectController(), &IProjectController::projectClosed,
              this, &CompilerProvider::projectClosed);
