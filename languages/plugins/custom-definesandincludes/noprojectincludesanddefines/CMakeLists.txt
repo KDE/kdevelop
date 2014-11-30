@@ -6,15 +6,15 @@ set( noprojectincludesanddefines_SRCS
 ki18n_wrap_ui( noprojectincludesanddefines_SRCS
         noprojectcustomincludepaths.ui )
 
-add_library(kdev4noprojectincludesanddefines STATIC
+add_library(kdevnoprojectincludesanddefines STATIC
         ${noprojectincludesanddefines_SRCS}
     )
 
-target_link_libraries( kdev4noprojectincludesanddefines 
+target_link_libraries( kdevnoprojectincludesanddefines
 LINK_PRIVATE
     KDev::Util
     KDev::Language
     ${KDE4_THREADWEAVER_LIBRARIES}
 )
 
-set_target_properties(kdev4noprojectincludesanddefines PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(kdevnoprojectincludesanddefines PROPERTIES POSITION_INDEPENDENT_CODE ON)

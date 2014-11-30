@@ -21,8 +21,9 @@
 
 #include "definesandincludesmanager.h"
 
-#include "settingsmanager.h"
 #include "kcm_widget/definesandincludesconfigpage.h"
+#include "compilerprovider/compilerprovider.h"
+#include "noprojectincludesanddefines/noprojectincludepathsmanager.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -36,7 +37,7 @@
 #include <QThread>
 #include <QCoreApplication>
 
-using KDevelop::ConfigEntry;
+using namespace KDevelop;
 
 namespace
 {
@@ -69,38 +70,30 @@ static ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const KDev
     return ret;
 }
 
-KDevelop::IDefinesAndIncludesManager::Provider* compilerProvider(QVector<KDevelop::IDefinesAndIncludesManager::Provider*> providers)
-{
-    for (auto provider : providers) {
-        if (provider->type() & KDevelop::IDefinesAndIncludesManager::CompilerSpecific) {
-            return provider;
-        }
-    }
-    return {};
 }
-}
-
-namespace KDevelop
-{
 
 K_PLUGIN_FACTORY(DefinesAndIncludesManagerFactory, registerPlugin<DefinesAndIncludesManager>(); )
 
 DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
     : IPlugin("kdevdefinesandincludesmanager", parent )
+    , m_settings(true)
     , m_noProjectIPM(new NoProjectIncludePathsManager())
 {
     KDEV_USE_EXTENSION_INTERFACE(IDefinesAndIncludesManager);
+    registerProvider(m_settings.provider());
 }
 
-QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* item, Type type  ) const
+DefinesAndIncludesManager::~DefinesAndIncludesManager() = default;
+
+Defines DefinesAndIncludesManager::defines( ProjectBaseItem* item, Type type  ) const
 {
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
     if (!item) {
-        return defines(QString());
+        return m_settings.provider()->defines(nullptr);
     }
 
-    QHash<QString, QString> defines;
+    Defines defines;
 
     for (auto provider : m_providers) {
         if (provider->type() & type) {
@@ -125,9 +118,9 @@ QHash<QString, QString> DefinesAndIncludesManager::defines( ProjectBaseItem* ite
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
 
-        const auto result = findConfigForItem(readPaths(cfg), item).defines;
+        const auto result = findConfigForItem(m_settings.readPaths(cfg), item).defines;
         for (auto it = result.constBegin(); it != result.constEnd(); it++) {
-            defines[it.key()] = it.value().toString();
+            defines[it.key()] = it.value();
         }
     }
 
@@ -139,16 +132,15 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
     if (!item) {
-        return includes(QString());;
+        return m_settings.provider()->includes(nullptr);
     }
 
     Path::List includes;
 
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
-        foreach (const QString& inc, findConfigForItem(readPaths(cfg), item).includes) {
-            includes += Path(inc);
-        }
+
+        includes += KDevelop::toPathList(findConfigForItem(m_settings.readPaths(cfg), item).includes);
     }
 
     if ( type & ProjectSpecific ) {
@@ -188,21 +180,14 @@ void DefinesAndIncludesManager::registerProvider(IDefinesAndIncludesManager::Pro
     m_providers.push_back(provider);
 }
 
-QHash< QString, QString > DefinesAndIncludesManager::defines(const QString&) const
+Defines DefinesAndIncludesManager::defines(const QString&) const
 {
-    auto cp = compilerProvider(m_providers);
-    return cp ? cp->defines(nullptr) : QHash<QString, QString>();
+    return m_settings.provider()->defines(nullptr);
 }
 
 Path::List DefinesAndIncludesManager::includes(const QString& path) const
 {
-    Path::List includes;
-    auto cp = compilerProvider(m_providers);
-    if (cp) {
-        includes += cp->includes(nullptr);
-    }
-    includes += m_noProjectIPM->includes(path);
-    return includes;
+    return m_settings.provider()->includes(nullptr) + m_noProjectIPM->includes(path);
 }
 
 void DefinesAndIncludesManager::openConfigurationDialog(const QString& pathToFile)
@@ -225,10 +210,7 @@ Path::List DefinesAndIncludesManager::includesInBackground(const QString& path) 
     return includes;
 }
 
-// NOTE: Part of a fix for build failures on <GCC-4.7
-DefinesAndIncludesManager::~DefinesAndIncludesManager() Q_DECL_NOEXCEPT = default;
-
-QHash< QString, QString > DefinesAndIncludesManager::definesInBackground(const QString& path) const
+Defines DefinesAndIncludesManager::definesInBackground(const QString& path) const
 {
     QHash<QString, QString> defines;
 
@@ -274,8 +256,6 @@ ConfigPage* DefinesAndIncludesManager::perProjectConfigPage(int number, const Pr
         return new DefinesAndIncludesConfigPage(this, options, parent);
     }
     return nullptr;
-}
-
 }
 
 #include "definesandincludesmanager.moc"

@@ -85,15 +85,15 @@ TupleValue::~TupleValue()
 
 bool TupleValue::hasField(const QString& variable) const
 {
-    return results_by_name.count(variable);
+    return results_by_name.contains(variable);
 }
 
 const Value& TupleValue::operator[](const QString& variable) const
-{ 
-    if (results_by_name.count(variable))
-        return *results_by_name[variable]->value;
-    else 
+{
+    Result* result = results_by_name.value(variable);
+    if (!result)
         throw type_error();
+    return *result->value;
 }
 
 ListValue::~ListValue()

@@ -1031,13 +1031,12 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
 
     QStringList arguments = iface->arguments(cfg, err);
     // Change the "Working directory" to the correct one
-    QUrl dir = iface->workingDirectory(cfg);
-    if (dir.isEmpty() || !dir.isValid())
-    {
-        dir = QUrl::fromLocalFile(QFileInfo(executable).absolutePath());
+    QString dir = iface->workingDirectory(cfg).toLocalFile();
+    if (dir.isEmpty()) {
+        dir = QFileInfo(executable).absolutePath();
     }
 
-    queueCmd(new GDBCommand(GDBMI::EnvironmentCd, KShell::quoteArg(dir.toLocalFile())));
+    queueCmd(new GDBCommand(GDBMI::EnvironmentCd, '"' + dir + '"'));
 
     // Set the run arguments
     if (!arguments.isEmpty())

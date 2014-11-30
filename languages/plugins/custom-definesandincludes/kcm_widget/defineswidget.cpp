@@ -25,6 +25,8 @@
 #include "definesmodel.h"
 #include "debugarea.h"
 
+using namespace KDevelop;
+
 DefinesWidget::DefinesWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::DefinesWidget )
     , definesModel( new DefinesModel( this ) )
@@ -61,7 +63,7 @@ void DefinesWidget::definesChanged()
 
 void DefinesWidget::clear()
 {
-    definesModel->setDefines( QHash<QString,QVariant>() );
+    definesModel->setDefines( {} );
 }
 
 void DefinesWidget::deleteDefine()

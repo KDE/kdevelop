@@ -29,6 +29,7 @@
 
 #include <KSharedConfig>
 #include <KProcess>
+#include <KIO/Global>
 
 #include <tests/testcore.h>
 #include <shell/shellextension.h>
@@ -104,13 +105,15 @@ void GdbTest::init()
 class TestLaunchConfiguration : public KDevelop::ILaunchConfiguration
 {
 public:
-    TestLaunchConfiguration(QUrl executable = findExecutable("debugee") ) {
+    TestLaunchConfiguration(const QUrl& executable = findExecutable("debugee"),
+                            const QUrl& workingDirectory = QUrl()) {
         qDebug() << "FIND" << executable;
         c = new KConfig();
         c->deleteGroup("launch");
         cfg = c->group("launch");
         cfg.writeEntry("isExecutable", true);
         cfg.writeEntry("Executable", executable);
+        cfg.writeEntry("Working Directory", workingDirectory);
     }
     ~TestLaunchConfiguration() {
         delete c;
@@ -831,7 +834,7 @@ void GdbTest::testAttach()
     if (canRun.exists()) {
         QVERIFY(canRun.open(QIODevice::ReadOnly));
         if (canRun.read(1).toInt() != 0) {
-            QSKIP("ptrace attaching not allows, skipping test. To enable it, set /proc/sys/kernel/yama/ptrace_scope to 0.", SkipAll);
+            QSKIP("ptrace attaching not allowed, skipping test. To enable it, set /proc/sys/kernel/yama/ptrace_scope to 0.", SkipAll);
         }
     }
 
@@ -1823,6 +1826,23 @@ void GdbTest::testDebugInExternalTerminal()
         session->run();
         WAIT_FOR_STATE(session, DebugSession::EndedState);
     }
+}
+
+// see: https://bugs.kde.org/show_bug.cgi?id=339231
+void GdbTest::testPathWithSpace()
+{
+    TestDebugSession* session = new TestDebugSession;
+
+    auto debugee = findExecutable("path with space/spacedebugee");
+    TestLaunchConfiguration c(debugee, KIO::upUrl(debugee));
+    KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint("spacedebugee.cpp:30");
+    QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::NotStartedState);
+    session->startProgram(&c, m_iface);
+
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::CleanState);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,

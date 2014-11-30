@@ -32,9 +32,11 @@
 
 #include "../debugarea.h"
 
-QHash<QString, QString> MsvcCompiler::defines() const
+using namespace KDevelop;
+
+Defines MsvcCompiler::defines() const
 {
-    QHash<QString, QString> ret;
+    Defines ret;
     //Get standard macros from kdevmsvcdefinehelpers
     KProcess proc;
     proc.setOutputChannelMode( KProcess::MergedChannels );

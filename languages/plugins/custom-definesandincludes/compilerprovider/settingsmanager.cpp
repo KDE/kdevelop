@@ -29,9 +29,9 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 
-#include "compilerprovider/icompilerprovider.h"
+#include "compilerprovider.h"
 
-using KDevelop::ConfigEntry;
+using namespace KDevelop;
 
 namespace ConfigConstants
 {
@@ -48,16 +48,6 @@ const QString compilersGroup = QLatin1String( "Compilers" );
 const QString compilerNameKey = QLatin1String( "Name" );
 const QString compilerPathKey = QLatin1String( "Path" );
 const QString compilerTypeKey = QLatin1String( "Type" );
-}
-
-SettingsManager::SettingsManager()
-    : m_provider(nullptr)
-{
-}
-
-void SettingsManager::setProvider(const ICompilerProvider* provider)
-{
-    m_provider = provider;
 }
 
 namespace
@@ -79,7 +69,13 @@ void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
             QByteArray tmp;
             QDataStream s( &tmp, QIODevice::WriteOnly );
             s.setVersion( QDataStream::Qt_4_5 );
-            s << path.defines;
+            // backwards compatible writing
+            QHash<QString, QVariant> defines;
+            defines.reserve(path.defines.size());
+            for (auto it = path.defines.begin(); it != path.defines.end(); ++it) {
+                defines[it.key()] = it.value();
+            }
+            s << defines;
             pathgrp.writeEntry( ConfigConstants::definesKey, tmp );
         }
     }
@@ -100,7 +96,10 @@ QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
                 QByteArray tmp = pathgrp.readEntry( ConfigConstants::definesKey, QByteArray() );
                 QDataStream s( tmp );
                 s.setVersion( QDataStream::Qt_4_5 );
-                s >> path.defines;
+                // backwards compatible reading
+                QHash<QString, QVariant> defines;
+                s >> defines;
+                path.setDefines(defines);
             }
 
             {
@@ -143,6 +142,49 @@ QList<ConfigEntry> convertedPaths( KConfig* cfg )
 
 }
 
+void ConfigEntry::setDefines(const QHash<QString, QVariant>& newDefines)
+{
+    defines.clear();
+    defines.reserve(newDefines.size());
+    for (auto it = newDefines.begin(); it != newDefines.end(); ++it) {
+        defines[it.key()] = it.value().toString();
+    }
+}
+
+SettingsManager* SettingsManager::s_globalInstance = nullptr;
+
+SettingsManager::SettingsManager(bool globalInstance)
+  : m_provider(this)
+{
+    if (globalInstance) {
+        Q_ASSERT(!s_globalInstance);
+        s_globalInstance = this;
+    }
+}
+
+SettingsManager::~SettingsManager()
+{
+    if (s_globalInstance == this) {
+        s_globalInstance = nullptr;
+    }
+}
+
+SettingsManager* SettingsManager::globalInstance()
+{
+    Q_ASSERT(s_globalInstance);
+    return s_globalInstance;
+}
+
+CompilerProvider* SettingsManager::provider()
+{
+    return &m_provider;
+}
+
+const CompilerProvider* SettingsManager::provider() const
+{
+    return &m_provider;
+}
+
 void SettingsManager::writePaths( KConfig* cfg, const QList< ConfigEntry >& paths )
 {
     KConfigGroup grp = cfg->group( ConfigConstants::configKey );
@@ -172,15 +214,13 @@ QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
 
 CompilerPointer SettingsManager::currentCompiler( KConfig* cfg, const CompilerPointer& defaultCompiler ) const
 {
-    Q_ASSERT(m_provider);
-
     auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup ).group("Compiler");
     auto name = grp.readEntry( ConfigConstants::compilerNameKey, QString() );
     if (name.isEmpty()) {
         return {};
     }
 
-    for (auto c : m_provider->compilers()) {
+    for (auto c : m_provider.compilers()) {
         if (c->name() == name) {
             return c;
         }
@@ -189,7 +229,7 @@ CompilerPointer SettingsManager::currentCompiler( KConfig* cfg, const CompilerPo
     auto path = grp.readEntry( ConfigConstants::compilerPathKey, QString() );
     auto type = grp.readEntry( ConfigConstants::compilerTypeKey, QString() );
 
-    auto cf = m_provider->compilerFactories();
+    auto cf = m_provider.compilerFactories();
     for (auto f : cf) {
         if (f->name() == type) {
             return f->createCompiler(name, path, true);
@@ -240,8 +280,6 @@ void SettingsManager::writeUserDefinedCompilers(const QVector< CompilerPointer >
 
 QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
 {
-    Q_ASSERT(m_provider);
-
     QVector< CompilerPointer > compilers;
 
     KConfigGroup config = KSharedConfig::openConfig()->group(ConfigConstants::compilersGroup);
@@ -253,7 +291,7 @@ QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
         auto path = grp.readEntry(ConfigConstants::compilerPathKey, QString());
         auto type = grp.readEntry(ConfigConstants::compilerTypeKey, QString());
 
-        auto cf = m_provider->compilerFactories();
+        auto cf = m_provider.compilerFactories();
         for (auto f : cf) {
             if (f->name() == type) {
                 compilers.append(f->createCompiler(name, path));

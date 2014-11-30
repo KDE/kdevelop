@@ -33,12 +33,7 @@
 
 #include "idefinesandincludesmanager.h"
 
-using KDevelop::ICore;
-using KDevelop::IDefinesAndIncludesManager;
-using KDevelop::IProject;
-using KDevelop::TestCore;
-using KDevelop::AutoTestShell;
-using KDevelop::Path;
+using namespace KDevelop;
 
 static IProject* s_currentProject = nullptr;
 
@@ -63,15 +58,19 @@ void TestDefinesAndIncludes::loadSimpleProject()
     s_currentProject = ProjectsGenerator::GenerateSimpleProject();
     QVERIFY( s_currentProject );
 
-    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
+    auto manager = IDefinesAndIncludesManager::manager();
     QVERIFY( manager );
-    Path::List includes = manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined );
+    const auto actualIncludes = manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined );
+    const auto actualDefines = manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined );
 
-    QHash<QString,QString> defines;
+    qDebug() << actualDefines << actualIncludes;
+
+    QCOMPARE( actualIncludes, Path::List() << Path( "/usr/include/mydir") );
+
+    Defines defines;
     defines.insert( "_DEBUG", "" );
     defines.insert( "VARIABLE", "VALUE" );
-    QCOMPARE( includes, Path::List() << Path( "/usr/include/mydir") );
-    QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
+    QCOMPARE( actualDefines, defines );
 }
 
 void TestDefinesAndIncludes::loadMultiPathProject()
@@ -79,7 +78,7 @@ void TestDefinesAndIncludes::loadMultiPathProject()
     s_currentProject = ProjectsGenerator::GenerateMultiPathProject();
     QVERIFY( s_currentProject );
 
-    auto manager = KDevelop::IDefinesAndIncludesManager::manager();
+    auto manager = IDefinesAndIncludesManager::manager();
     QVERIFY( manager );
     Path::List includes = Path::List() << Path("/usr/include/otherdir");
 
@@ -90,7 +89,7 @@ void TestDefinesAndIncludes::loadMultiPathProject()
     QCOMPARE( manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), includes );
     QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
 
-    KDevelop::ProjectBaseItem* mainfile = 0;
+    ProjectBaseItem* mainfile = 0;
     for (const auto& file: s_currentProject->fileSet() ) {
         for (auto i: s_currentProject->filesForPath(file)) {
             if( i->text() == "main.cpp" ) {
@@ -129,5 +128,3 @@ void TestDefinesAndIncludes::testNoProjectIncludeDirectories()
 }
 
 QTEST_MAIN(TestDefinesAndIncludes)
-
-#include "test_definesandincludes.moc"

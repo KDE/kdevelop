@@ -24,8 +24,7 @@
 
 #include "projectpathswidget.h"
 #include "customdefinesandincludes.h"
-#include "definesandincludesmanager.h"
-#include "../compilerprovider/icompilerprovider.h"
+#include "../compilerprovider/compilerprovider.h"
 
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
@@ -37,19 +36,6 @@
 #include <serialization/indexedstring.h>
 
 #include "definesandincludesconfigpage.h"
-
-namespace
-{
-ICompilerProvider* compilerProvider()
-{
-    auto compilerProvider = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.ICompilerProvider");
-    if (!compilerProvider || !compilerProvider->extension<ICompilerProvider>()) {
-        return {};
-    }
-
-    return compilerProvider->extension<ICompilerProvider>();
-}
-}
 
 DefinesAndIncludesConfigPage::DefinesAndIncludesConfigPage(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
     : ProjectConfigPage<CustomDefinesAndIncludes>(plugin, options, parent)
@@ -68,42 +54,36 @@ DefinesAndIncludesConfigPage::~DefinesAndIncludesConfigPage()
 void DefinesAndIncludesConfigPage::loadFrom( KConfig* cfg )
 {
     configWidget->clear();
-    auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
-    auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( iadm );
+
+    auto settings = SettingsManager::globalInstance();
     configWidget->setPaths( settings->readPaths( cfg ) );
 
-    if (auto cp = compilerProvider()) {
-        configWidget->setCompilers(cp->compilers());
-        configWidget->setCurrentCompiler(cp->currentCompiler(project())->name());
-    }
+    auto provider = settings->provider();
+    configWidget->setCompilers(provider->compilers());
+    configWidget->setCurrentCompiler(provider->currentCompiler(project())->name());
 }
 
 void DefinesAndIncludesConfigPage::saveTo(KConfig* cfg, KDevelop::IProject*)
 {
-    auto iadm = KDevelop::IDefinesAndIncludesManager::manager();
-    auto settings = static_cast<KDevelop::DefinesAndIncludesManager*>( iadm );
+    auto settings = SettingsManager::globalInstance();
     settings->writePaths( cfg, configWidget->paths() );
 
-    if (auto cp = compilerProvider()) {
-        settings->writeUserDefinedCompilers(configWidget->compilers());
+    auto provider = settings->provider();
+    settings->writeUserDefinedCompilers(configWidget->compilers());
+    settings->writeCurrentCompiler(cfg, configWidget->currentCompiler());
+    provider->setCompiler(project(), settings->currentCompiler(cfg));
 
-        settings->writeCurrentCompiler(cfg, configWidget->currentCompiler());
-
-        cp->setCompiler(project(), settings->currentCompiler(cfg));
-
-        auto compilers = compilerProvider()->compilers();
-
-        for (auto c: configWidget->compilers()) {
-            if (!compilers.contains(c)) {
-                compilerProvider()->registerCompiler(c);
-            }
+    const auto& providerCompilers = provider->compilers();
+    const auto& widgetCompilers = configWidget->compilers();
+    for (auto compiler: providerCompilers) {
+        if (!widgetCompilers.contains(compiler)) {
+            provider->unregisterCompiler(compiler);
         }
+    }
 
-        compilers = compilerProvider()->compilers();
-        for (auto compiler: compilers) {
-            if (!configWidget->compilers().contains(compiler)) {
-                compilerProvider()->unregisterCompiler(compiler);
-            }
+    for (auto compiler: widgetCompilers) {
+        if (!providerCompilers.contains(compiler)) {
+            provider->registerCompiler(compiler);
         }
     }
 

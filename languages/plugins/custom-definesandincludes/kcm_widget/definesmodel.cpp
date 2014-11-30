@@ -20,6 +20,8 @@
 
 #include <KLocalizedString>
 
+using namespace KDevelop;
+
 DefinesModel::DefinesModel( QObject* parent )
     : QAbstractTableModel( parent )
 {
@@ -98,7 +100,7 @@ bool DefinesModel::setData( const QModelIndex& index, const QVariant& value, int
     if( index.row() == m_defines.count() ) {
         if( index.column() == 0 && !value.toString().isEmpty() ) {
             beginInsertRows( QModelIndex(), m_defines.count(), m_defines.count() );
-            m_defines << qMakePair<QString,QVariant>( value.toString(), "" );
+            m_defines << qMakePair<QString,QString>( value.toString(), "" );
             endInsertRows();
         }
     } else {
@@ -107,7 +109,7 @@ bool DefinesModel::setData( const QModelIndex& index, const QVariant& value, int
             m_defines[ index.row() ].first = value.toString();
             break;
         case 1:
-            m_defines[ index.row() ].second = QVariant( value.toString() );
+            m_defines[ index.row() ].second = value.toString();
             break;
         default:
             Q_ASSERT_X( 0, "DefinesModel::setData", "Invalid column requested" );
@@ -133,22 +135,23 @@ Qt::ItemFlags DefinesModel::flags( const QModelIndex& index ) const
     return Qt::ItemFlags( Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled );
 }
 
-QHash<QString,QVariant> DefinesModel::defines() const
+Defines DefinesModel::defines() const
 {
-    typedef QPair<QString, QVariant> DefinePair;
-    QHash<QString,QVariant> tmp;
-    foreach(const DefinePair& pair, m_defines) {
-        tmp[pair.first] = pair.second;
+    Defines ret;
+    ret.reserve(m_defines.size());
+    for (const auto& pair : m_defines) {
+        ret[pair.first] = pair.second;
     }
-    return tmp;
+    return ret;
 }
 
-void DefinesModel::setDefines(const QHash<QString,QVariant>& includes )
+void DefinesModel::setDefines(const Defines& includes )
 {
     beginResetModel();
     m_defines.clear();
-    foreach( const QString& k, includes.keys() ) {
-        m_defines << qMakePair<QString,QVariant>( k, includes[k] );
+    m_defines.reserve(includes.size());
+    for ( auto it = includes.begin(); it != includes.end(); ++it ) {
+        m_defines << qMakePair<QString,QString>( it.key(), it.value() );
     }
     endResetModel();
 }

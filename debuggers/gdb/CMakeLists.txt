@@ -1,6 +1,19 @@
 project(gdb)
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevgdb\")
 # TODO KF5 figure out how to get the process selection widget (ksysguardprocesslist.h)
+
+function(add_debuggable_executable target)
+    cmake_parse_arguments(add_debuggable_executable "" "" "SRCS" ${ARGN})
+    add_executable(${target} ${add_debuggable_executable_SRCS})
+    # force debug symbols for our debuggees, disable optimizations
+    if (WIN32)
+        set(_flags "/0d")
+    else()
+        set(_flags "-O0")
+    endif()
+    set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} ${_flags}")
+endfunction()
+
 if(NOT APPLE)
 # macro_optional_find_package( KDE4Workspace 4.2.0 )
 

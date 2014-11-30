@@ -24,9 +24,7 @@
 
 #include <QUrl>
 
-#include "idefinesandincludesmanager.h"
-
-using KDevelop::ConfigEntry;
+#include "../compilerprovider/settingsmanager.h"
 
 namespace KDevelop
 {
