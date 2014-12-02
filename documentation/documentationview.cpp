@@ -106,7 +106,6 @@ void DocumentationView::initialize()
 {
     mProviders->setModel(mProvidersModel);
     connect(mProviders, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &DocumentationView::changedProvider);
-    connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
     foreach (IDocumentationProvider* p, mProvidersModel->providers()) {
         // can't use new signal/slot syntax here, IDocumentation is not a QObject
         connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(KDevelop::IDocumentation::Ptr)),
