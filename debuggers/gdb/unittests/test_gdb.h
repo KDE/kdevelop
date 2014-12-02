@@ -91,6 +91,7 @@ private Q_SLOTS:
     void testRegularExpressionBreakpoint();
     void testChangeBreakpointWhileRunning();
     void testDebugInExternalTerminal();
+    void testPathWithSpace();
 
 private:
     void waitForState(GDBDebugger::DebugSession *session,

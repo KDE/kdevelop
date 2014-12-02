@@ -28,9 +28,7 @@
 #include <QString>
 #include <QSharedPointer>
 
-#include <util/path.h>
-
-using KDevelop::Path;
+#include "../idefinesandincludesmanager.h"
 
 /// An interface that represents a compiler. Compiler provides standard include directories and standard defined macros.
 class ICompiler
@@ -45,10 +43,10 @@ public:
     ICompiler( const QString& name, const QString& path, const QString& factoryName, bool editable );
 
     /// @return list of defined macros for the compiler
-    virtual QHash<QString, QString> defines() const = 0;
+    virtual KDevelop::Defines defines() const = 0;
 
     /// @return list of include directories for the compiler
-    virtual Path::List includes() const = 0;
+    virtual KDevelop::Path::List includes() const = 0;
 
     void setPath( const QString &path );
 
@@ -70,8 +68,8 @@ public:
 
 protected:
     struct DefinesIncludes {
-        QHash<QString, QString> definedMacros;
-        Path::List includePaths;
+        KDevelop::Defines definedMacros;
+        KDevelop::Path::List includePaths;
     };
     // list of defines/includes for the compiler. Use it for caching purposes
     mutable DefinesIncludes m_definesIncludes;
@@ -84,6 +82,6 @@ protected:
 
 typedef QSharedPointer<ICompiler> CompilerPointer;
 
-Q_DECLARE_METATYPE(CompilerPointer)
+Q_DECLARE_METATYPE(CompilerPointer);
 
 #endif // ICOMPILER_H

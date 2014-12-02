@@ -225,7 +225,7 @@ int main( int argc, char *argv[] )
     // as explained in the QLoggingCategory documentation:
     // http://qt-project.org/doc/qt-5/qloggingcategory.html#logging-rules
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\n"));
-
+    KLocalizedString::setApplicationDomain("kdevelop");
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( "kdevelop", i18n( "KDevelop" ), QByteArray(VERSION), i18n(description), KAboutLicense::GPL,

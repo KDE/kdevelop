@@ -24,54 +24,47 @@
 #ifndef COMPILERSPROVIDER_H
 #define COMPILERSPROVIDER_H
 
-#include "icompilerprovider.h"
+#include "icompilerfactory.h"
 
-#include "../definesandincludesmanager.h"
-
-#include <QVariantList>
 #include <QVector>
 
-#include <interfaces/iplugin.h>
+class SettingsManager;
 
-#include <util/path.h>
-
-#include <QScopedPointer>
-
-class CompilerProvider : public KDevelop::IPlugin, public ICompilerProvider, public KDevelop::IDefinesAndIncludesManager::Provider
+class CompilerProvider : public QObject, public KDevelop::IDefinesAndIncludesManager::Provider
 {
     Q_OBJECT
-    Q_INTERFACES( ICompilerProvider )
 
-public :
-    explicit CompilerProvider( QObject* parent, const QVariantList& args = QVariantList() );
+public:
+    explicit CompilerProvider( SettingsManager* settings, QObject* parent = nullptr );
+    ~CompilerProvider();
 
-    ~CompilerProvider() Q_DECL_NOEXCEPT;
+    KDevelop::Defines defines( KDevelop::ProjectBaseItem* item ) const override;
+    KDevelop::Path::List includes( KDevelop::ProjectBaseItem* item ) const override;
+    KDevelop::IDefinesAndIncludesManager::Type type() const override;
 
-    virtual QHash<QString, QString> defines( KDevelop::ProjectBaseItem* item ) const override;
+    /// @return current compiler for the @P project
+    CompilerPointer currentCompiler( KDevelop::IProject* project ) const;
+    /// Select the @p compiler that provides standard includes/defines for the @p project
+    void setCompiler( KDevelop::IProject* project, const CompilerPointer& compiler );
 
-    virtual Path::List includes( KDevelop::ProjectBaseItem* item ) const override;
+    /// @return list of all available compilers
+    QVector<CompilerPointer> compilers() const;
+    /**
+     * Adds compiler to the list of available compilers
+     * @return true on success (if there is no compiler with the same name registered).
+     */
+    bool registerCompiler(const CompilerPointer& compiler);
+    /// Removes compiler from the list of available compilers
+    void unregisterCompiler( const CompilerPointer& compiler );
 
-    virtual KDevelop::IDefinesAndIncludesManager::Type type() const override;
-
-    virtual void setCompiler( KDevelop::IProject* project, const CompilerPointer& compiler ) override;
-
-    virtual QVector<CompilerPointer> compilers() const override;
-
-    virtual CompilerPointer currentCompiler( KDevelop::IProject* project ) const override;
-
-    virtual bool registerCompiler(const CompilerPointer& compiler) override;
-
-    virtual void unregisterCompiler( const CompilerPointer& compiler ) override;
-
-    virtual QVector<CompilerFactoryPointer> compilerFactories() const override;
+    /// @return All available factories
+    QVector<CompilerFactoryPointer> compilerFactories() const;
 
 private:
     CompilerPointer compilerForItem( KDevelop::ProjectBaseItem* item ) const;
-
     CompilerPointer checkCompilerExists( const CompilerPointer& compiler ) const;
 
     void addPoject( KDevelop::IProject* project, const CompilerPointer& compiler );
-
     void removePoject( KDevelop::IProject* project );
 
 private Q_SLOTS:
@@ -84,6 +77,8 @@ private:
     QHash<KDevelop::IProject*, CompilerPointer> m_projects;
     QVector<CompilerPointer> m_compilers;
     QVector<CompilerFactoryPointer> m_factories;
+
+    SettingsManager* m_settings;
 };
 
 #endif // COMPILERSPROVIDER_H

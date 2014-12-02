@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kde4app" version="1">
+<kpartgui name="kde4app" version="2" translationDomain="kdevcmake">
 <MenuBar>
   <Menu name="move"><text>&amp;Move</text>
     <Action name="switch_action" />

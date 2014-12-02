@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevmanpage\")
 set(kdevmanpage_SRCS
     manpagedocumentation.cpp
     manpageplugin.cpp

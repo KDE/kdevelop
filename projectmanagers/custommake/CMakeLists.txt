@@ -1,5 +1,5 @@
 project(custommakemanager)
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevcustommake\")
 include_directories(
     ${makebuilder_SOURCE_DIR}
     )

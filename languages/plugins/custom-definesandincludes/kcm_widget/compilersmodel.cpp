@@ -26,9 +26,6 @@
 #include <KLocalizedString>
 #include <QVariant>
 
-#include "../compilerprovider/icompilerprovider.h"
-
-
 //Represents a single row in the table
 class TreeItem
 {

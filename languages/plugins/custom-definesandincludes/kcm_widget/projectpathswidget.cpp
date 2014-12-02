@@ -30,7 +30,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 
-#include "../compilerprovider/icompiler.h"
+#include "../compilerprovider/compilerprovider.h"
 
 #include "compilerswidget.h"
 
@@ -38,6 +38,8 @@
 #include "ui_batchedit.h"
 #include "projectpathsmodel.h"
 #include "debugarea.h"
+
+using namespace KDevelop;
 
 ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     : QWidget(parent),
@@ -69,7 +71,8 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     connect( ui->includesWidget, static_cast<void(IncludesWidget::*)(const QStringList&)>(&IncludesWidget::includesChanged), this, &ProjectPathsWidget::includesChanged );
     connect( ui->definesWidget, static_cast<void(DefinesWidget::*)(const KDevelop::Defines&)>(&DefinesWidget::definesChanged), this, &ProjectPathsWidget::definesChanged );
 
-    connect(ui->compilersWidget, &CompilersWidget::compilerChanged, this, &ProjectPathsWidget::compilersChanged);
+    connect(ui->compilersWidget, &CompilersWidget::compilerChanged,
+            this, &ProjectPathsWidget::compilerChanged);
 
     connect(ui->languageParameters, &QTabWidget::currentChanged, this, &ProjectPathsWidget::tabChanged);
 }
@@ -94,7 +97,7 @@ void ProjectPathsWidget::setPaths( const QList<ConfigEntry>& paths )
 void ProjectPathsWidget::definesChanged( const Defines& defines )
 {
     definesAndIncludesDebug() << "defines changed";
-    updatePathsModel( defines, ProjectPathsModel::DefinesDataRole );
+    updatePathsModel( QVariant::fromValue(defines), ProjectPathsModel::DefinesDataRole );
 }
 
 void ProjectPathsWidget::includesChanged( const QStringList& includes )
@@ -122,7 +125,7 @@ void ProjectPathsWidget::projectPathSelected( int index )
     Q_ASSERT(index >= 0);
     const QModelIndex midx = pathsModel->index( index, 0 );
     ui->includesWidget->setIncludes( pathsModel->data( midx, ProjectPathsModel::IncludesDataRole ).toStringList() );
-    ui->definesWidget->setDefines( pathsModel->data( midx, ProjectPathsModel::DefinesDataRole ).toHash() );
+    ui->definesWidget->setDefines( pathsModel->data( midx, ProjectPathsModel::DefinesDataRole ).value<Defines>() );
     updateEnablements();
 }
 
@@ -191,7 +194,7 @@ void ProjectPathsWidget::batchEdit()
         auto defines = pathsModel->data(midx, ProjectPathsModel::DefinesDataRole).value<Defines>();
 
         for (auto it = defines.constBegin(); it != defines.constEnd(); it++) {
-            be.textEdit->append(it.key() + "=" + it.value().toString());
+            be.textEdit->append(it.key() + "=" + it.value());
         }
 
         dialog.setWindowTitle(i18n("Edit defined macros"));
@@ -222,7 +225,7 @@ void ProjectPathsWidget::batchEdit()
             defines[r.cap(1).trimmed()] = r.cap(3).trimmed();
         }
 
-        pathsModel->setData(midx, defines, ProjectPathsModel::DefinesDataRole);
+        pathsModel->setData(midx, QVariant::fromValue(defines), ProjectPathsModel::DefinesDataRole);
     }
 
     projectPathSelected(index);
@@ -266,7 +269,8 @@ QVector< CompilerPointer > ProjectPathsWidget::compilers() const
     return ui->compilersWidget->compilers();
 }
 
-void ProjectPathsWidget::compilersChanged() {
+void ProjectPathsWidget::compilerChanged()
+{
     auto current = currentCompiler()->name();
     setCompilers(ui->compilersWidget->compilers(), false);
     setCurrentCompiler(current);

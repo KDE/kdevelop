@@ -23,12 +23,14 @@
 #include <serialization/indexedstring.h>
 #include <util/path.h>
 
+using namespace KDevelop;
+
 ProjectPathsModel::ProjectPathsModel( QObject* parent )
     : QAbstractListModel( parent ), project( 0 )
 {
 }
 
-void ProjectPathsModel::setProject(KDevelop::IProject* w_project)
+void ProjectPathsModel::setProject(IProject* w_project)
 {
     project = w_project;
 }
@@ -45,7 +47,7 @@ QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const
         return pathConfig.includes;
         break;
     case DefinesDataRole:
-        return pathConfig.defines;
+        return QVariant::fromValue(pathConfig.defines);
         break;
     case Qt::EditRole:
         return sanitizePath( pathConfig.path, true, false );
@@ -99,7 +101,7 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
         pathConfig.includes = value.toStringList();
         break;
     case DefinesDataRole:
-        pathConfig.defines = value.toHash();
+        pathConfig.defines = value.value<Defines>();
         break;
     case Qt::EditRole:
         pathConfig.path = sanitizePath( value.toString(), false );
@@ -206,7 +208,7 @@ QString ProjectPathsModel::sanitizeUrl( QUrl url, bool needRelative ) const
 QString ProjectPathsModel::sanitizePath( const QString& path, bool expectRelative, bool needRelative ) const
 {
     Q_ASSERT( project );
-    Q_ASSERT( expectRelative || project->inProject(KDevelop::IndexedString(path)) );
+    Q_ASSERT( expectRelative || project->inProject(IndexedString(path)) );
 
     QUrl url;
     if( expectRelative ) {

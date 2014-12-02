@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="136" name="kdevelop" >
+<kpartgui version="137" name="kdevelop" translationDomain="kdevelop">
 <MenuBar>
 
   <Menu name="session" append="first_menu">
@@ -156,6 +156,7 @@
   </Menu>
 
   <Menu name="help">
+    <text context="@title:menu">Help</text>
     <Action name="loaded_plugins" append="about_merge" />
     <Action name="about_platform" append="about_merge" />
   </Menu>

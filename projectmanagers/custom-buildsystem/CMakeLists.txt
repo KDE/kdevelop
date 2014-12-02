@@ -1,5 +1,5 @@
 project(kdevelop4-custom-buildsystem)
-
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevcustombuildsystem\")
 ## Unittests
 add_subdirectory( tests )
 
