@@ -157,8 +157,8 @@ void VcsEventWidgetPrivate::diffToPrevious()
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    dlg->connect(buttonBox, SIGNAL(accepted()), dlg, SLOT(accept()));
-    dlg->connect(buttonBox, SIGNAL(rejected()), dlg, SLOT(reject()));
+    dlg->connect(buttonBox, &QDialogButtonBox::accepted, dlg, &QDialog::accept);
+    dlg->connect(buttonBox, &QDialogButtonBox::rejected, dlg, &QDialog::reject);
     mainLayout->addWidget(widget);
     mainLayout->addWidget(buttonBox);
 
@@ -185,8 +185,8 @@ void VcsEventWidgetPrivate::diffRevisions()
     auto okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    dlg->connect(buttonBox, SIGNAL(accepted()), dlg, SLOT(accept()));
-    dlg->connect(buttonBox, SIGNAL(rejected()), dlg, SLOT(reject()));
+    dlg->connect(buttonBox, &QDialogButtonBox::accepted, dlg, &QDialog::accept);
+    dlg->connect(buttonBox, &QDialogButtonBox::rejected, dlg, &QDialog::reject);
     mainLayout->addWidget(buttonBox);
     mainLayout->addWidget(widget);
     dlg->show();

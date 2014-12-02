@@ -74,11 +74,11 @@ KSaveSelectDialog::KSaveSelectDialog( const QList<IDocument*>& files, QWidget * 
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Save);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(save()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &KSaveSelectDialog::save);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &KSaveSelectDialog::reject);
     auto user1Button = buttonBox->addButton(i18n("Save &None" ), QDialogButtonBox::ActionRole);
     user1Button->setToolTip(i18n("Discard all modifications" ));
-    connect(user1Button, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(user1Button, &QPushButton::clicked, this, &KSaveSelectDialog::accept);
     mainLayout->addWidget(buttonBox);
 }
 

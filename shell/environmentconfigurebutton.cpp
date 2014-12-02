@@ -58,8 +58,8 @@ public:
         EnvironmentPreferences prefs(selected, q);
         auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
                                      | QDialogButtonBox::Cancel);
-        QObject::connect(buttonBox, SIGNAL(accepted()), &dlg, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), &dlg, SLOT(reject()));
+        QObject::connect(buttonBox, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
+        QObject::connect(buttonBox, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
         auto layout = new QVBoxLayout;
         layout->addWidget(&prefs);
         layout->addWidget(buttonBox);

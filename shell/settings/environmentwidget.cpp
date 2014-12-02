@@ -167,8 +167,8 @@ void EnvironmentWidget::newMultipleButtonClicked()
     auto okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    dialog->connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
-    dialog->connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
+    dialog->connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
+    dialog->connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
     layout->addWidget(buttonBox);
 
     if ( dialog->exec() != QDialog::Accepted ) {

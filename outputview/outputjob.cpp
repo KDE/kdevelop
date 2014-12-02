@@ -73,8 +73,10 @@ void OutputJob::startOutput()
 
             view->setDelegate(m_outputId, m_outputDelegate);
 
-            if (m_killJobOnOutputClose)
+            if (m_killJobOnOutputClose) {
+                // can't use qt5 signal slot syntax here, IOutputView is no a QObject
                 connect(i, SIGNAL(outputRemoved(int,int)), this, SLOT(outputViewRemoved(int,int)));
+            }
 
             if (m_verbosity == OutputJob::Verbose)
                 view->raiseOutput(m_outputId);

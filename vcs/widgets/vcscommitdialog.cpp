@@ -69,8 +69,8 @@ VcsCommitDialog::VcsCommitDialog( IPatchSource *patchSource, QWidget *parent )
     auto okButton = d->ui.buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    connect(d->ui.buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(d->ui.buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(d->ui.buttonBox, &QDialogButtonBox::accepted, this, &VcsCommitDialog::accept);
+    connect(d->ui.buttonBox, &QDialogButtonBox::rejected, this, &VcsCommitDialog::reject);
 
     d->m_patchSource = patchSource;
     d->m_model = new VcsFileChangesModel( this, true );

@@ -71,8 +71,8 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* 
     QPushButton *okButton = m_buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::Key_Return);
-    connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(m_buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &SessionChooserDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &SessionChooserDialog::reject);
     mainLayout->addWidget(m_buttonBox);
     okButton->setText(i18n("Run"));
     okButton->setIcon(QIcon::fromTheme("media-playback-start"));

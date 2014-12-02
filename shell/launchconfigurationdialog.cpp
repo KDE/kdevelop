@@ -191,10 +191,10 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
 
     connect(debugger, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &LaunchConfigurationDialog::launchModeChanged);
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    connect(buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), SLOT(saveConfig()) );
-    connect(buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), SLOT(saveConfig()) );
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &LaunchConfigurationDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &LaunchConfigurationDialog::reject);
+    connect(buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, static_cast<void(LaunchConfigurationDialog::*)()>(&LaunchConfigurationDialog::saveConfig) );
+    connect(buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, static_cast<void(LaunchConfigurationDialog::*)()>(&LaunchConfigurationDialog::saveConfig) );
     mainLayout->addWidget(buttonBox);
 
     resize( QSize(qMax(700, sizeHint().width()), qMax(500, sizeHint().height())) );

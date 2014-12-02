@@ -55,7 +55,7 @@ StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, Q
     connect(m_ui->drop,   &QPushButton::clicked, this, &StashManagerDialog::dropClicked);
     connect(m, &StashModel::rowsInserted, this, &StashManagerDialog::stashesFound);
     
-    connect(m_ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(m_ui->buttonBox, &QDialogButtonBox::rejected, this, &StashManagerDialog::reject);
 
     m_mainWidget->setEnabled(false); //we won't enable it until we have the model with data and selection
 }

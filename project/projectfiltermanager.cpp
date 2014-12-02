@@ -69,6 +69,7 @@ void ProjectFilterManager::Private::pluginLoaded(IPlugin* plugin)
     IProjectFilterProvider* filterProvider = plugin->extension<IProjectFilterProvider>();
     if (filterProvider) {
         m_filterProvider << filterProvider;
+        // can't use qt5 signal slot syntax here, IProjectFilterProvider is not a QObject
         QObject::connect(plugin, SIGNAL(filterChanged(KDevelop::IProjectFilterProvider*, KDevelop::IProject*)),
                          q, SLOT(filterChanged(KDevelop::IProjectFilterProvider*, KDevelop::IProject*)));
         QHash< IProject*, QVector< Filter > >::iterator it = m_filters.begin();

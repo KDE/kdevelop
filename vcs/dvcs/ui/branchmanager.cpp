@@ -59,8 +59,8 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     mainLayout->addWidget(w);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &BranchManager::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &BranchManager::reject);
     mainLayout->addWidget(buttonBox);
 
     m_model = new BranchesListModel(this);

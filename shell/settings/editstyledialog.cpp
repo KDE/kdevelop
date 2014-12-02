@@ -51,8 +51,8 @@ EditStyleDialog::EditStyleDialog(ISourceFormatter* formatter, const QMimeType& m
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     auto okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &EditStyleDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &EditStyleDialog::reject);
     mainLayout->addWidget(buttonBox);
 
     m_settingsWidget = m_sourceFormatter->editStyleWidget(mime);

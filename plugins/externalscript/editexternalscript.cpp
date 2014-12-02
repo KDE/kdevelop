@@ -37,8 +37,8 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
 {
   setupUi(this);
 
-  connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-  connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+  connect(buttonBox, &QDialogButtonBox::accepted, this, &EditExternalScript::accept);
+  connect(buttonBox, &QDialogButtonBox::rejected, this, &EditExternalScript::reject);
   shortcutWidget->layout()->setMargin(0);
 
   //BEGIN setup tooltips
@@ -138,8 +138,8 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
 
   nameEdit->setFocus();
 
-  connect(buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), this, SLOT(save()));
-  connect(buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(save()));
+  connect(buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &EditExternalScript::save);
+  connect(buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &EditExternalScript::save);
 
   connect(nameEdit, &QLineEdit::textEdited, this, &EditExternalScript::validate);
   connect(commandEdit, &QLineEdit::textEdited, this, &EditExternalScript::validate);

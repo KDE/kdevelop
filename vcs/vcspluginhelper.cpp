@@ -391,8 +391,8 @@ void VcsPluginHelper::history(const VcsRevision& rev)
     mainLayout->addWidget(logWidget);
 
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
-    dlg->connect(buttonBox, SIGNAL(accepted()), dlg, SLOT(accept()));
-    dlg->connect(buttonBox, SIGNAL(rejected()), dlg, SLOT(reject()));
+    dlg->connect(buttonBox, &QDialogButtonBox::accepted, dlg, &QDialog::accept);
+    dlg->connect(buttonBox, &QDialogButtonBox::rejected, dlg, &QDialog::reject);
     mainLayout->addWidget(buttonBox);
 
     dlg->show();

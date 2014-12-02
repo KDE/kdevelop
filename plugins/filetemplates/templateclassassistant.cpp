@@ -220,8 +220,8 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
         QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
         okButton->setDefault(true);
         okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-        d->connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
-        d->connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
+        d->connect(buttonBox, &QDialogButtonBox::accepted, d.data(), &QDialog::accept);
+        d->connect(buttonBox, &QDialogButtonBox::rejected, d.data(), &QDialog::reject);
         mainLayout->addWidget(buttonBox);
 
         if(d->exec() == QDialog::Accepted)

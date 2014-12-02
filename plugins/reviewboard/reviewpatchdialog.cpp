@@ -38,8 +38,8 @@ ReviewPatchDialog::ReviewPatchDialog(const QUrl& dirUrl, QWidget* parent)
     QWidget* w = new QWidget(this);
     m_ui->setupUi(w);
 
-    connect(m_ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(m_ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(m_ui->buttonBox, &QDialogButtonBox::accepted, this, &ReviewPatchDialog::accept);
+    connect(m_ui->buttonBox, &QDialogButtonBox::rejected, this, &ReviewPatchDialog::reject);
 
     connect(m_ui->server, &KUrlRequester::textChanged, this, &ReviewPatchDialog::serverChanged);
     connect(m_ui->reviewCheckbox, &QCheckBox::stateChanged, this, &ReviewPatchDialog::reviewCheckboxChanged);
