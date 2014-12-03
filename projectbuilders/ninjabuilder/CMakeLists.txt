@@ -16,3 +16,5 @@ target_link_libraries(kdevninja
 )
 
 install(TARGETS kdevninja DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
+configure_file(kdevninja.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevninja.desktop)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevninja.desktop DESTINATION ${SERVICES_INSTALL_DIR})
