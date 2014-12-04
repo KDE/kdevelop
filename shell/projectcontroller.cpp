@@ -478,7 +478,10 @@ void ProjectController::setDialogProvider(IProjectDialogProvider* dialog)
 ProjectController::ProjectController( Core* core )
         : IProjectController( core ), d( new ProjectControllerPrivate( this ) )
 {
+    qRegisterMetaType<QList<QUrl>>();
+
     setObjectName("ProjectController");
+
     d->m_core = core;
     d->model = new ProjectModel();
 
