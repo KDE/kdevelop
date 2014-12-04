@@ -30,6 +30,12 @@ if(KDE4WORKSPACE_FOUND)
     )
 endif(KDE4WORKSPACE_FOUND)
 
+if (CMAKE_GENERATOR MATCHES "Ninja" AND CMAKE_VERSION VERSION_GREATER "2.9")
+    set(HAVE_PATH_WITH_SPACES_TEST TRUE)
+else()
+    message(WARNING "Disabling 'path with spaces' test, this CMake version would create a faulty build.ninja file. Upgrade to 3.0")
+endif()
+
 add_subdirectory(unittests)
 add_subdirectory(printers)
 
@@ -167,6 +173,9 @@ target_link_libraries(gdbtest
     ${KDE4WORKSPACE_PROCESSUI_LIBS}
 )
 
+if (HAVE_PATH_WITH_SPACES_TEST)
+    set_target_properties(gdbtest PROPERTIES COMPILE_FLAGS "-DHAVE_PATH_WITH_SPACES_TEST")
+endif()
 
 ########### install files ###############
 
