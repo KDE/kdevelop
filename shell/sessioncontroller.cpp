@@ -87,11 +87,6 @@ static QStringList standardArguments()
     for(int a = 0; a < argc; ++a)
     {
         QString arg = QString::fromLocal8Bit(argv[a]);
-        qWarning() << "ARG:" << "" + arg + "";
-/*        if(arg.startsWith("--graphicssystem=") || arg.startsWith("--style="))
-        {
-            ret << arg;
-        }else */
         if(arg.startsWith("-graphicssystem") || arg.startsWith("-style"))
         {
             ret << '-' + arg;
@@ -99,9 +94,6 @@ static QStringList standardArguments()
                 ret << QString::fromLocal8Bit(argv[a+1]);
         }
     }
-
-    qWarning() << "ARGUMENTS: " << ret << "from" << argc;
-
     return ret;
 }
 
