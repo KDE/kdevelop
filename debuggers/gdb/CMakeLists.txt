@@ -137,7 +137,7 @@ ecm_add_test(${test_gdb_SRCS}
 )
 
 if (HAVE_PATH_WITH_SPACES_TEST)
-    set_target_properties(gdbtest PROPERTIES COMPILE_FLAGS "-DHAVE_PATH_WITH_SPACES_TEST")
+    set_target_properties(test_gdb PROPERTIES COMPILE_FLAGS "-DHAVE_PATH_WITH_SPACES_TEST")
 endif()
 
 ########### install files ###############
