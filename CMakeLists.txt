@@ -46,7 +46,8 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
     PURPOSE "Qt5 QuickWidgets library (part of Qt >=5.3). Required for the Welcome Page plugin."
 )
 
-find_package(KF5 REQUIRED COMPONENTS
+set(KF5_DEP_VERSION "5.3.0")
+find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Archive
   Config
   GuiAddons
@@ -60,18 +61,17 @@ find_package(KF5 REQUIRED COMPONENTS
   NewStuff
   NotifyConfig
   Parts
+  Service
   Sonnet
   TextEditor
   ThreadWeaver
   WindowSystem
   Declarative
+  XmlGui
 
   # TODO KF5: Port away from this
   KDELibs4Support
 )
-
-find_package(KF5XmlGui 5.1 REQUIRED)
-find_package(KF5Service 5.3 REQUIRED)
 
 find_package(Grantlee5 REQUIRED)
 set_package_properties(Grantlee5 PROPERTIES
