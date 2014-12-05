@@ -31,7 +31,8 @@ include(KDECMakeSettings)
 include(KDECompilerSettings)
 
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick WebKitWidgets Script Test)
-find_package(KF5 REQUIRED COMPONENTS
+set(KF5_DEP_VERSION "5.3.0")
+find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Config
   I18n
   ItemModels
@@ -45,12 +46,12 @@ find_package(KF5 REQUIRED COMPONENTS
   Service
   TextEditor
   ThreadWeaver
+  XmlGui
   WindowSystem
 
   # TODO KF5: Port away from this
   KDELibs4Support
 )
-find_package(KF5XmlGui 5.1 REQUIRED)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQT_NO_URL_CAST_FROM_STRING)
