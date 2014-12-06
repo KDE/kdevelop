@@ -44,17 +44,17 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
         virtual bool hasError() const;
         virtual QString errorDescription() const;
 
-        QExplicitlySharedDataPointer<KDevelop::IDocumentation> description(const QString& identifier, const QUrl &file) const;
-        QExplicitlySharedDataPointer<KDevelop::IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration) const;
+        KDevelop::IDocumentation::Ptr description(const QString& identifier, const QUrl &file) const;
+        KDevelop::IDocumentation::Ptr documentationForDeclaration(KDevelop::Declaration* declaration) const;
         
         QStringList names(Type t) const;
         
         QAbstractListModel* indexModel() const;
-        QExplicitlySharedDataPointer<KDevelop::IDocumentation> documentationForIndex(const QModelIndex& idx) const;
+        KDevelop::IDocumentation::Ptr documentationForIndex(const QModelIndex& idx) const;
         
         virtual QIcon icon() const;
         virtual QString name() const;
-        virtual QExplicitlySharedDataPointer<KDevelop::IDocumentation> homePage() const;
+        virtual KDevelop::IDocumentation::Ptr homePage() const;
         
         QString descriptionForIdentifier(const QString& identifier, Type t) const;
     public slots:
