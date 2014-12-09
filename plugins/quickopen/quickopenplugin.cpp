@@ -1356,7 +1356,11 @@ bool QuickOpenLineEdit::insideThis(QObject* object) {
 void QuickOpenLineEdit::widgetDestroyed(QObject* obj)
 {
   Q_UNUSED(obj);
-  deactivate();
+  // need to use a queued connection here, because this function is called in ~QWidget!
+  // => QuickOpenWidget instance is half-destructed => connections are not yet cleared
+  // => clear() will trigger signals which will operate on the invalid QuickOpenWidget
+  // So, just wait until properly destructed
+  QMetaObject::invokeMethod(this, "deactivate", Qt::QueuedConnection);
 }
 
 void QuickOpenLineEdit::showWithWidget(QuickOpenWidget* widget)
