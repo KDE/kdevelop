@@ -156,6 +156,7 @@ class TestDebugSession : public DebugSession
 public:
     TestDebugSession() : DebugSession()
     {
+        setTesting(true);
         KDevelop::ICore::self()->debugController()->addSession(this);
     }
 

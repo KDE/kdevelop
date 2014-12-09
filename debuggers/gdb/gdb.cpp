@@ -60,7 +60,7 @@ GDB::~GDB()
     }
 }
 
-void GDB::start(KConfigGroup& config)
+void GDB::start(KConfigGroup& config, const QStringList& extraArguments)
 {
     // FIXME: verify that default value leads to something sensible
     QUrl gdbUrl = config.readEntry(GDBDebugger::gdbPathEntry, QUrl());
@@ -83,7 +83,7 @@ void GDB::start(KConfigGroup& config)
             this, &GDB::processErrored);
 
 
-    QStringList arguments;
+    QStringList arguments = extraArguments;
     arguments << "--interpreter=mi2" << "-quiet";
 
     QUrl shell = config.readEntry(GDBDebugger::debuggerShellEntry, QUrl());

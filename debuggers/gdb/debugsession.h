@@ -113,6 +113,13 @@ public Q_SLOTS:
      */
     void attachToProcess(int pid);
 
+protected:
+    /**
+     * Testing mode affects a (very!) limited number of settings in an attempt to create
+     * a cleaner and more reproducible environment for unit tests.
+     */
+    void setTesting(bool testing);
+
 Q_SIGNALS:
     void raiseGdbConsoleViews();
 
@@ -132,8 +139,7 @@ private:
     bool justRestarted_;
     KConfigGroup m_config;
     QPointer<GDB> m_gdb;
-
-
+    bool m_testing;
 
 
 public:

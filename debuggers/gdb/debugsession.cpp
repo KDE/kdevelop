@@ -69,6 +69,7 @@ DebugSession::DebugSession()
       m_sessionState(NotStartedState),
       justRestarted_(false),
       m_config(KSharedConfig::openConfig(), "GDB Debugger"),
+      m_testing(false),
       commandQueue_(new CommandQueue),
       m_tty(0),
       state_(s_dbgNotStarted|s_appNotStarted),
@@ -107,6 +108,11 @@ DebugSession::~DebugSession()
     }
 
     delete commandQueue_;
+}
+
+void DebugSession::setTesting(bool testing)
+{
+    m_testing = testing;
 }
 
 KDevelop::IDebugSession::DebuggerState DebugSession::state() const {
@@ -896,18 +902,23 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     // Start gdb. Do this after connecting all signals so that initial
     // GDB output, and important events like "GDB died" are reported.
 
+    {
+        QStringList extraArguments;
+        if (m_testing)
+            extraArguments << "--nx"; // do not load any .gdbinit files
 
-    if (cfg)
-    {
-        KConfigGroup config = cfg->config();
-        m_gdb.data()->start(config);
-    }
-    else
-    {
-        // FIXME: this is hack, I am not sure there's any way presently
-        // to edit this via GUI.
-        KConfigGroup config(KSharedConfig::openConfig(), "GDB Debugger");
-        m_gdb.data()->start(config);
+        if (cfg)
+        {
+            KConfigGroup config = cfg->config();
+            m_gdb.data()->start(config, extraArguments);
+        }
+        else
+        {
+            // FIXME: this is hack, I am not sure there's any way presently
+            // to edit this via GUI.
+            KConfigGroup config(KSharedConfig::openConfig(), "GDB Debugger");
+            m_gdb.data()->start(config, extraArguments);
+        }
     }
 
     setStateOff(s_dbgNotStarted);

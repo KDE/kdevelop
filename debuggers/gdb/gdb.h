@@ -45,7 +45,7 @@ public:
 
     /** Starts GDB.  This should be done after connecting to all
         signals the client is interested in.  */
-    void start(KConfigGroup& config);
+    void start(KConfigGroup& config, const QStringList& extraArguments = {});
 
     /** Executes a command.  This method may be called at
         most once each time 'ready' is emitted.  When the
