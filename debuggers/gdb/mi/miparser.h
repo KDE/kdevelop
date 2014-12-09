@@ -20,6 +20,8 @@
 #ifndef MIPARSER_H
 #define MIPARSER_H
 
+#include <memory>
+
 #include "milexer.h"
 #include "gdbmi.h"
 
@@ -34,12 +36,12 @@ public:
     MIParser();
     ~MIParser();
 
-    GDBMI::Record *parse(FileSymbol *file);
+    std::unique_ptr<GDBMI::Record> parse(FileSymbol *file);
 
 protected: // rules
-    bool parseResultRecord(GDBMI::Record *&record);
-    bool parsePrompt(GDBMI::Record *&record);
-    bool parseStreamRecord(GDBMI::Record *&record);
+    std::unique_ptr<GDBMI::Record> parseResultOrAsyncRecord();
+    std::unique_ptr<GDBMI::Record> parsePrompt();
+    std::unique_ptr<GDBMI::Record> parseStreamRecord();
 
     bool parseResult(GDBMI::Result *&result);
     bool parseValue(GDBMI::Value *&value);

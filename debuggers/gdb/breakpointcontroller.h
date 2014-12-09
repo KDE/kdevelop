@@ -32,6 +32,7 @@
 class QModelIndex;
 
 namespace GDBMI {
+struct AsyncRecord;
 struct ResultRecord;
 struct Value;
 }
@@ -58,7 +59,7 @@ public:
 
 private slots:
     void slotEvent(IDebugSession::event_t);
-    void programStopped(const GDBMI::ResultRecord &r);
+    void programStopped(const GDBMI::AsyncRecord &r);
 
 private:
     DebugSession* debugSession() const;

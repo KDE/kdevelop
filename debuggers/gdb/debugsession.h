@@ -84,7 +84,7 @@ Q_SIGNALS:
     void applicationStandardErrorLines(const QStringList& lines);
     void showMessage(const QString& message, int timeout);
     void reset();
-    void programStopped(const GDBMI::ResultRecord& mi_record);
+    void programStopped(const GDBMI::AsyncRecord& mi_record);
 
 public Q_SLOTS:
     /**
@@ -254,7 +254,7 @@ private Q_SLOTS:
 
     void gdbExited();
 
-    void slotProgramStopped(const GDBMI::ResultRecord& mi_record);
+    void slotProgramStopped(const GDBMI::AsyncRecord& mi_record);
 
     /** Parses the CLI output line, and catches interesting messages
         like "Program exited". This is intended to allow using console

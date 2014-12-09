@@ -1673,8 +1673,8 @@ void GdbTest::parseBug304730()
 
     MIParser parser;
 
-    QScopedPointer<GDBMI::Record> record(parser.parse(&file));
-    QVERIFY(!record.isNull());
+    std::unique_ptr<GDBMI::Record> record(parser.parse(&file));
+    QVERIFY(record.get() != nullptr);
 }
 
 void GdbTest::testMultipleLocationsBreakpoint()

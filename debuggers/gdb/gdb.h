@@ -82,7 +82,7 @@ Q_SIGNALS:
 
     /** Emitted when GDB reports stop, with 'r' being the
         data provided by GDB. */
-    void programStopped(const GDBMI::ResultRecord& r);
+    void programStopped(const GDBMI::AsyncRecord& r);
     
     /** Emitted when GDB believes that the program is running.  */
     void programRunning();
@@ -94,9 +94,6 @@ Q_SIGNALS:
     */
     void streamRecord(const GDBMI::StreamRecord& s);
 
-    /** FIXME: temporary, to be eliminated.  */
-    void resultRecord(const GDBMI::ResultRecord& s);
-    
     /** Reports a general MI notification.  */
     void notification(const GDBMI::ResultRecord& n);
     
@@ -128,11 +125,11 @@ private Q_SLOTS:
 
 private:
     void processLine(const QByteArray& line);
+    void processNotification(const GDBMI::AsyncRecord & async);
 
 private:
     QString gdbBinary_;
     KProcess* process_;
-    bool sawPrompt_;
 
     GDBCommand* currentCmd_;
 
@@ -141,8 +138,7 @@ private:
     /** The unprocessed output from gdb. Output is
         processed as soon as we see newline. */
     QByteArray buffer_;
-    
-    bool receivedReply_;
+
     bool isRunning_;
     unsigned long childPid_;
 };

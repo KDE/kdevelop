@@ -346,19 +346,42 @@ namespace GDBMI
         virtual ~Record() {}
         virtual QString toString() const { Q_ASSERT( 0 ); return QString::null; }
 
-        enum { Prompt, Stream, Result } kind;
+        enum { Prompt, Stream, Result, Async } kind;
     };
 
-    struct ResultRecord : public Record, public TupleValue
+    struct TupleRecord : public Record, public TupleValue
     {
-        ResultRecord()
-            : subkind(CommandResult)
+    };
+
+    struct ResultRecord : public TupleRecord
+    {
+        ResultRecord(const QString & reason_)
+            : token(0)
+            , reason(reason_)
         {
             Record::kind = Result;
         }
         
-        enum { CommandResult, ExecNotification, StatusNotification, GeneralNotification } subkind;
+        uint32_t token;
+        QString reason;
+    };
 
+    struct AsyncRecord : public TupleRecord
+    {
+        enum Subkind {
+            Exec,
+            Status,
+            Notify
+        };
+
+        AsyncRecord(Subkind subkind_, const QString & reason_)
+            : subkind(subkind_)
+            , reason(reason_)
+        {
+            Record::kind = Async;
+        }
+
+        Subkind subkind;
         QString reason;
     };
 

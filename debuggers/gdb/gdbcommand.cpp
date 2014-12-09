@@ -21,19 +21,19 @@ namespace GDBDebugger
 {
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, const QString &command)
-: type_(type), command_(command), handler_method(0), commandHandler_(0),
+: type_(type), token_(0), command_(command), handler_method(0), commandHandler_(0),
   stateReloading_(false), handlesError_(false), m_thread(-1), m_frame(-1)
 {
 }
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, int index)
-: type_(type), command_(QString::number(index)), handler_method(0), commandHandler_(0),
+: type_(type), token_(0), command_(QString::number(index)), handler_method(0), commandHandler_(0),
   stateReloading_(false), handlesError_(false), m_thread(-1), m_frame(-1)
 {
 }
 
 GDBCommand::GDBCommand(CommandType type, const QString& arguments, GDBCommandHandler* handler)
-: type_(type), command_(arguments), handler_method(0), commandHandler_(handler),
+: type_(type), token_(0), command_(arguments), handler_method(0), commandHandler_(handler),
   stateReloading_(false), m_thread(-1), m_frame(-1)
 {
     handlesError_ = handler->handlesError();
@@ -46,11 +46,13 @@ QString GDBCommand::cmdToSend()
 
 QString GDBCommand::initialString() const
 {
-    if (type() == NonMI)
-        return command_;
-    else
+    QString result = QString::number(token());
+
+    if (type() == NonMI) {
+        result += command_;
+    } else
     {
-        QString result = gdbCommand();
+        result += gdbCommand();
 
         if (m_thread != -1)
             result = result + QString(" --thread %1").arg(m_thread);
@@ -59,9 +61,9 @@ QString GDBCommand::initialString() const
 
         if (!command_.isEmpty())
             result += ' ' + command_;
-        
-        return result;
     }
+
+    return result;
 }
 
 bool GDBCommand::isUserCommand() const

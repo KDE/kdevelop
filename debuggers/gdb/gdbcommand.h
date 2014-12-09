@@ -72,6 +72,17 @@ public:
     QString gdbCommand() const;
 
     /**
+     * Returns the MI token with which the command is sent, allowing the parser to match up
+     * the result message with the command.
+     */
+    uint32_t token() const {return token_;}
+
+    /**
+     * Set the MI token. This is done by \ref GDBCommandQueue.
+     */
+    void setToken(uint32_t token) {token_ = token;}
+
+    /**
      * Returns the thread that needs to be currently selected when this command is executed,
      * or -1 if there is no requirement.
      */
@@ -143,6 +154,7 @@ public:
 
 private:
     GDBMI::CommandType type_;
+    uint32_t token_;
     QString command_;
     QPointer<QObject> handler_this;
     typedef void (QObject::* handler_t)(const GDBMI::ResultRecord&);
@@ -293,6 +305,7 @@ GDBCommand::GDBCommand(
     void (Handler::* handler_method)(const GDBMI::ResultRecord&),
     bool handlesError)
 : type_(type),
+  token_(0),
   command_(QString::number(index)),
   handler_this(handler_this),
   handler_method(static_cast<handler_t>(handler_method)),

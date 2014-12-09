@@ -21,7 +21,6 @@
  ***************************************************************************/
 #include "miparser.h"
 #include "tokens.h"
-#include <memory>
 
 using namespace GDBMI;
 
@@ -46,11 +45,9 @@ MIParser::~MIParser()
 {
 }
 
-Record *MIParser::parse(FileSymbol *file)
+std::unique_ptr<Record> MIParser::parse(FileSymbol *file)
 {
     m_lex = 0;
-
-    Record *record = 0;
 
     TokenStream *tokenStream = m_lexer.tokenize(file);
     if (!tokenStream)
@@ -58,47 +55,56 @@ Record *MIParser::parse(FileSymbol *file)
 
     m_lex = file->tokenStream = tokenStream;
 
+    uint32_t token = 0;
+    if (m_lex->lookAhead() == Token_number_literal) {
+        token = QString::fromUtf8(m_lex->currentTokenText()).toUInt();
+        m_lex->nextToken();
+    }
+
+    std::unique_ptr<Record> record;
+
     switch (m_lex->lookAhead()) {
         case '~':
         case '@':
         case '&':
-            parseStreamRecord(record);
+            record = parseStreamRecord();
             break;
         case '(':
-            parsePrompt(record);
+            record = parsePrompt();
             break;
         case '^':
-            parseResultRecord(record);
-            break;
         case '*':
-            // Same as result, only differs in start
-            // marker.
-            parseResultRecord(record);
-            break;
         case '=':
-            parseResultRecord(record);
+        case '+':
+            record = parseResultOrAsyncRecord();
             break;
         default:
             break;
     }
 
+    if (record && record->kind == Record::Result) {
+        ResultRecord * result = static_cast<ResultRecord *>(record.get());
+        result->token = token;
+    } else {
+        Q_ASSERT(token == 0);
+    }
+
     return record;
 }
 
-bool MIParser::parsePrompt(Record *&record)
+std::unique_ptr<Record> MIParser::parsePrompt()
 {
     ADVANCE('(');
     MATCH(Token_identifier);
     if (m_lex->currentTokenText() != "gdb")
-        return false;
+        return {};
     m_lex->nextToken();
     ADVANCE(')');
 
-    record = new PromptRecord;
-    return true;
+    return std::unique_ptr<Record>(new PromptRecord);
 }
 
-bool MIParser::parseStreamRecord(Record *&record)
+std::unique_ptr<Record> MIParser::parseStreamRecord()
 {
     std::unique_ptr<StreamRecord> stream(new StreamRecord);
 
@@ -110,53 +116,49 @@ bool MIParser::parseStreamRecord(Record *&record)
             m_lex->nextToken();
             MATCH(Token_string_literal);
             stream->message = parseStringLiteral();
-            record = stream.release();
+            return std::move(stream);
         }
-        return true;
 
         default:
             break;
     }
 
-    return false;
+    return {};
 }
 
-bool MIParser::parseResultRecord(Record *&record)
+std::unique_ptr<Record> MIParser::parseResultOrAsyncRecord()
 {
-    char c = m_lex->lookAhead();
-    if (c != '^' && c != '*' && c != '=' && c != '+')
-        return false;
-    m_lex->nextToken();
+    std::unique_ptr<TupleRecord> result;
 
+    char c = m_lex->lookAhead();
+    m_lex->nextToken();
     MATCH(Token_identifier);
     QString reason = m_lex->currentTokenText();
     m_lex->nextToken();
 
-    std::unique_ptr<ResultRecord> res(new ResultRecord);
-    res->reason = reason;
-    if (c == '^')
-        res->subkind = ResultRecord::CommandResult;
-    else if (c == '*')
-        res->subkind = ResultRecord::ExecNotification;
-    else if (c == '+')
-        res->subkind = ResultRecord::StatusNotification;
-    else {
-        Q_ASSERT(c == '=');
-        res->subkind = ResultRecord::GeneralNotification;        
-    }
-                
-    if (m_lex->lookAhead() != ',') {
-        record = res.release();
-        return true;
+    if (c == '^') {
+        result.reset(new ResultRecord(reason));
+    } else {
+        AsyncRecord::Subkind subkind;
+        switch (c) {
+        case '*': subkind = AsyncRecord::Exec; break;
+        case '=': subkind = AsyncRecord::Notify; break;
+        case '+': subkind = AsyncRecord::Status; break;
+        default:
+            Q_ASSERT(false);
+            return {};
+        }
+        result.reset(new AsyncRecord(subkind, reason));
     }
 
-    m_lex->nextToken();
-    
-    if (!parseCSV(*res))
-        return false;
+    if (m_lex->lookAhead() == ',') {
+        m_lex->nextToken();
 
-    record = res.release();
-    return true;
+        if (!parseCSV(*result))
+            return {};
+    }
+
+    return std::move(result);
 }
 
 bool MIParser::parseResult(Result *&result)

@@ -664,7 +664,7 @@ void DebugSession::destroyCmds()
 }
 
 
-void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
+void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
 {
     /* By default, reload all state on program stop.  */
     state_reload_needed = true;
