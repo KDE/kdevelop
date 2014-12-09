@@ -135,13 +135,6 @@ public:
 
     const QStringList& allStreamOutput() const;
 
-    // True if this command run then target for
-    // unspecified period of time -- that is either 'run' or
-    // 'continue'.
-    bool isRun() const;
-
-    void setRun(bool run);
-
     QString command() const;
 
     void setStateReloading(bool f);
@@ -156,7 +149,6 @@ private:
     handler_t handler_method;
     GDBCommandHandler *commandHandler_;
     QStringList lines;
-    bool run;
     bool stateReloading_;
 
 protected: // FIXME: should be private, after I kill the first ctor
@@ -286,7 +278,6 @@ GDBCommand::GDBCommand(
   handler_this(handler_this),
   handler_method(static_cast<handler_t>(handler_method)),
   commandHandler_(0),
-  run(false),
   stateReloading_(false),
   handlesError_(handlesError),
   m_thread(-1),
@@ -306,7 +297,6 @@ GDBCommand::GDBCommand(
   handler_this(handler_this),
   handler_method(static_cast<handler_t>(handler_method)),
   commandHandler_(0),
-  run(false),
   stateReloading_(false),
   handlesError_(handlesError),
   m_thread(-1),

@@ -41,15 +41,6 @@ void GDBDebugger::CommandQueue::enqueue(GDBCommand * command, QueuePosition inse
         case QueueAtEnd:
             m_commandList.append(command);
             break;
-
-        case QueueWhileInterrupted: {
-            int i;
-            for (i = 0; i < m_commandList.count(); ++i)
-                if (m_commandList.at(i)->isRun())
-                    break;
-
-            m_commandList.insert(i, command);
-        }
     }
 
     rationalizeQueue(command);

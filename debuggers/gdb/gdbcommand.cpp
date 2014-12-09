@@ -22,19 +22,19 @@ namespace GDBDebugger
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, const QString &command)
 : type_(type), command_(command), handler_method(0), commandHandler_(0),
-  run(false), stateReloading_(false), handlesError_(false), m_thread(-1), m_frame(-1)
+  stateReloading_(false), handlesError_(false), m_thread(-1), m_frame(-1)
 {
 }
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, int index)
 : type_(type), command_(QString::number(index)), handler_method(0), commandHandler_(0),
-  run(false), stateReloading_(false), handlesError_(false), m_thread(-1), m_frame(-1)
+  stateReloading_(false), handlesError_(false), m_thread(-1), m_frame(-1)
 {
 }
 
 GDBCommand::GDBCommand(CommandType type, const QString& arguments, GDBCommandHandler* handler)
 : type_(type), command_(arguments), handler_method(0), commandHandler_(handler),
-  run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
+  stateReloading_(false), m_thread(-1), m_frame(-1)
 {
     handlesError_ = handler->handlesError();
 }
@@ -105,16 +105,6 @@ bool GDBCommand::handlesError() const
 
 GDBCommand::~GDBCommand()
 {
-}
-
-bool GDBCommand::isRun() const
-{
-    return run;
-}
-
-void GDBCommand::setRun(bool run)
-{
-    this->run = run;
 }
 
 

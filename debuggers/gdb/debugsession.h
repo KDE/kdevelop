@@ -195,12 +195,6 @@ public:
     */
     void addCommandToFront(GDBCommand* cmd);
 
-    /* If current command queue has any command
-       for which isRun is true, inserts 'cmd'
-       before the first such command. Otherwise,
-       works the same as addCommand. */
-    void addCommandBeforeRun(GDBCommand* cmd);
-
     bool stateIsOn(DBGStateFlags state) const;
     DBGStateFlags debuggerState() const;
 

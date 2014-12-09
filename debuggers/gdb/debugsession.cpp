@@ -530,11 +530,6 @@ void DebugSession::addCommandToFront(GDBCommand* cmd)
     queueCmd(cmd, QueueAtFront);
 }
 
-void DebugSession::addCommandBeforeRun(GDBCommand* cmd)
-{
-    queueCmd(cmd, QueueWhileInterrupted);
-}
-
 // Fairly obvious that we'll add whatever command you give me to a queue
 // If you tell me to, I'll put it at the head of the queue so it'll run ASAP
 // Not quite so obvious though is that if we are going to run again. then any
