@@ -202,11 +202,6 @@ void GDB::readyReadStandardError()
 void GDB::processLine(const QByteArray& line)
 {
     qCDebug(DEBUGGERGDB) << "GDB output: " << line;
-    if(!currentCmd_)
-    {
-        qCDebug(DEBUGGERGDB) << "No current command\n";
-        return;
-    }
 
     FileSymbol file;
     file.contents = line;
@@ -317,15 +312,17 @@ void GDB::processLine(const QByteArray& line)
 
             GDBMI::StreamRecord& s = dynamic_cast<GDBMI::StreamRecord&>(*r);
 
-            if (s.reason == '@')
+            if (s.reason == '@') {
                 emit applicationOutput(s.message);
+            } else {
+                if (currentCmd_ && currentCmd_->isUserCommand())
+                    emit userCommandOutput(s.message);
+                else
+                    emit internalCommandOutput(s.message);
 
-            if (currentCmd_->isUserCommand())
-                emit userCommandOutput(s.message);
-            else
-                emit internalCommandOutput(s.message);
-
-            currentCmd_->newOutput(s.message);
+                if (currentCmd_)
+                    currentCmd_->newOutput(s.message);
+            }
 
             emit streamRecord(s);
 
