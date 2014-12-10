@@ -536,7 +536,9 @@ void PatchReviewPlugin::documentSaved( IDocument* doc ) {
 }
 
 void PatchReviewPlugin::textDocumentCreated( IDocument* doc ) {
-    addHighlighting( doc->url(), doc );
+    if (m_patch) {
+        addHighlighting( doc->url(), doc );
+    }
 }
 
 void PatchReviewPlugin::unload() {
@@ -569,4 +571,4 @@ void PatchReviewPlugin::areaChanged(Sublime::Area* area)
 
 #include "patchreview.moc"
 
-// kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on
+// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on
