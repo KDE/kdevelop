@@ -864,6 +864,38 @@ void GdbTest::testAttach()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testManualAttach()
+{
+    // if on linux, ensure we can actually attach
+    QFile canRun("/proc/sys/kernel/yama/ptrace_scope");
+    if (canRun.exists()) {
+        QVERIFY(canRun.open(QIODevice::ReadOnly));
+        if (canRun.read(1).toInt() != 0) {
+            QSKIP("ptrace attaching not allowed, skipping test. To enable it, set /proc/sys/kernel/yama/ptrace_scope to 0.", SkipAll);
+        }
+    }
+
+    QString fileName = findSourceFile("debugeeslow.cpp");
+
+    KProcess debugeeProcess;
+    debugeeProcess << "nice" << findExecutable("debugeeslow").toLocalFile();
+    debugeeProcess.start();
+    QVERIFY(debugeeProcess.waitForStarted());
+    QTest::qWait(100);
+
+    TestDebugSession *session = new TestDebugSession;
+
+    TestLaunchConfiguration cfg;
+    cfg.config().writeEntry(GDBDebugger::remoteGdbRunEntry, QUrl::fromLocalFile(findSourceFile("gdb_script_empty")));
+    QVERIFY(session->startProgram(&cfg, m_iface));
+
+    session->addCommand(GDBMI::NonMI, QString("attach %0").arg(debugeeProcess.pid()));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
 void GdbTest::testCoreFile()
 {
     QFile f("core");

@@ -136,7 +136,6 @@ private:
     KDevelop::ProcessLineMaker *m_procLineMaker;
     KDevelop::ProcessLineMaker *m_gdbLineMaker;
     DebuggerState m_sessionState;
-    bool justRestarted_;
     KConfigGroup m_config;
     QPointer<GDB> m_gdb;
     bool m_testing;
@@ -261,6 +260,9 @@ private Q_SLOTS:
 
     /**Triggered every time program begins/continues it's execution.*/
     void programRunning();
+
+    /** Handle MI async notifications. */
+    void processNotification(const GDBMI::AsyncRecord& n);
 
     // All of these slots are entered in the controller's thread, as they use queued connections or are called internally
     void queueCmd(GDBCommand *cmd, QueuePosition queue_where = QueueAtEnd);

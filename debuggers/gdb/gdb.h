@@ -94,8 +94,8 @@ Q_SIGNALS:
     */
     void streamRecord(const GDBMI::StreamRecord& s);
 
-    /** Reports a general MI notification.  */
-    void notification(const GDBMI::ResultRecord& n);
+    /** Reports an async notification record.  */
+    void notification(const GDBMI::AsyncRecord& n);
     
     /** Emitted for error that is not handled by the
         command being executed. */
@@ -125,7 +125,6 @@ private Q_SLOTS:
 
 private:
     void processLine(const QByteArray& line);
-    void processNotification(const GDBMI::AsyncRecord & async);
 
 private:
     QString gdbBinary_;
@@ -140,7 +139,6 @@ private:
     QByteArray buffer_;
 
     bool isRunning_;
-    unsigned long childPid_;
 };
 }
 

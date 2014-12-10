@@ -67,7 +67,6 @@ namespace GDBDebugger {
 DebugSession::DebugSession()
     : KDevelop::IDebugSession(),
       m_sessionState(NotStartedState),
-      justRestarted_(false),
       m_config(KSharedConfig::openConfig(), "GDB Debugger"),
       m_testing(false),
       commandQueue_(new CommandQueue),
@@ -158,73 +157,46 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
 {
     QString message;
 
+    DebuggerState oldSessionState = state();
+    DebuggerState newSessionState = oldSessionState;
     DBGStateFlags changedState = oldState ^ newState;
 
-    if (changedState & s_dbgNotStarted) {
-        if (newState & s_dbgNotStarted) {
+    if (newState & s_dbgNotStarted) {
+        if (changedState & s_dbgNotStarted) {
             message = i18n("Debugger stopped");
-
-        } else {
-            setSessionState(StartingState);
+            emit finished();
         }
-
-        //core()->running(this, false);
-        // TODO enable/disable tool views as applicable
-    }
-
-    // As soon as debugger clears 's_appNotStarted' flag, we
-    // set 'justRestarted' variable.
-    // The other approach would be to set justRestarted in slotRun, slotCore
-    // and slotAttach.
-    // Note that setting this var in startDebugger is not OK, because the
-    // initial state of debugger is exactly the same as state after pause,
-    // so we'll always show varaibles view.
-    if (changedState & s_appNotStarted) {
+        if (oldSessionState != NotStartedState) {
+            newSessionState = EndedState;
+        }
+    } else {
         if (newState & s_appNotStarted) {
-            setSessionState(StoppedState);
-            justRestarted_ = false;
-
+            if (oldSessionState == NotStartedState || oldSessionState == StartingState) {
+                newSessionState = StartingState;
+            } else {
+                newSessionState = StoppedState;
+            }
+        } else if (newState & s_programExited) {
+            if (changedState & s_programExited) {
+                message = i18n("Process exited");
+            }
+            newSessionState = StoppedState;
+        } else if (newState & s_appRunning) {
+            if (changedState & s_appRunning) {
+                message = i18n("Application is running");
+            }
+            newSessionState = ActiveState;
         } else {
-            justRestarted_ = true;
+            if (changedState & s_appRunning) {
+                message = i18n("Application is paused");
+            }
+            newSessionState = PausedState;
         }
     }
 
-    if (changedState & s_explicitBreakInto)
+    if (changedState & s_explicitBreakInto) {
         if (!(newState & s_explicitBreakInto))
             message = i18n("Application interrupted");
-
-    if (changedState & s_programExited) {
-        if (newState & s_programExited) {
-            message = i18n("Process exited");
-            setSessionState(StoppedState);
-        }
-    }
-
-    if (changedState & s_appRunning) {
-        if (newState & s_appRunning) {
-            message = i18n("Application is running");
-            setSessionState(ActiveState);
-        }
-        else
-        {
-            if (!(newState & s_appNotStarted)) {
-                message = i18n("Application is paused");
-                setSessionState(PausedState);
-
-                // On the first stop, show the variables view.
-                // We do it on first stop, and not at debugger start, because
-                // a program might just successfully run till completion. If we show
-                // the var views on start and hide on stop, this will look like flicker.
-                // On the other hand, if application is paused, it's very
-                // likely that the user wants to see variables.
-                if (justRestarted_)
-                {
-                    justRestarted_ = false;
-                    //mainWindow()->setViewAvailable(variableWidget, true);
-                    //FIXME: emit raiseVariableViews();
-                }
-            }
-        }
     }
 
     // And now? :-)
@@ -233,21 +205,18 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
     if (!message.isEmpty())
         emit showMessage(message, 3000);
 
-    if (!(oldState & s_dbgNotStarted) && (newState & s_dbgNotStarted))
-    {
-        emit finished();
-        setSessionState(EndedState); //this will delete the DebugSession, so do it last
-    }
-
     emit gdbStateChanged(oldState, newState);
+
+    // must be last, since it can lead to deletion of the DebugSession
+    if (newSessionState != oldSessionState) {
+        setSessionState(newSessionState);
+    }
 }
 
 void DebugSession::examineCoreFile(const QUrl& debugee, const QUrl& coreFile)
 {
     if (stateIsOn(s_dbgNotStarted))
       startDebugger(0);
-
-    setStateOff(s_appNotStarted);
 
     // TODO support non-local URLs
     queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, debugee.toLocalFile()));
@@ -277,14 +246,13 @@ void DebugSession::attachToProcess(int pid)
 {
     qCDebug(DEBUGGERGDB) << pid;
 
-    setStateOff(s_appNotStarted|s_programExited);
+    if (stateIsOn(s_dbgNotStarted))
+      startDebugger(0);
+
     setStateOn(s_attached);
 
     //set current state to running, after attaching we will get *stopped response
     setStateOn(s_appRunning);
-
-    if (stateIsOn(s_dbgNotStarted))
-      startDebugger(0);
 
     // Currently, we always start debugger with a name of binary,
     // we might be connecting to a different binary completely,
@@ -794,6 +762,17 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
 }
 
 
+void DebugSession::processNotification(const GDBMI::AsyncRecord & async)
+{
+    if (async.reason == "thread-group-started") {
+        setStateOff(s_appNotStarted | s_programExited);
+    } else if (async.reason == "thread-group-exited") {
+        setStateOn(s_programExited);
+    } else {
+        qCDebug(DEBUGGERGDB) << "Unhandled notification: " << async.reason;
+    }
+}
+
 void DebugSession::reloadProgramState()
 {
     raiseEvent(program_state_changed);
@@ -891,6 +870,8 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
             this, &DebugSession::programStopped);
     connect(gdb, &GDB::programRunning,
             this, &DebugSession::programRunning);
+    connect(gdb, &GDB::notification,
+            this, &DebugSession::processNotification);
 
     // Start gdb. Do this after connecting all signals so that initial
     // GDB output, and important events like "GDB died" are reported.
@@ -1102,8 +1083,6 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
         queueCmd(new GDBCommand(GDBMI::ExecRun));
     }
 
-    setStateOff(s_appNotStarted|s_programExited);
-
     {
         QString startWith = grp.readEntry(GDBDebugger::startWithEntry, QString("ApplicationOutput"));
         if (startWith == "GdbConsole") {
@@ -1155,8 +1134,6 @@ void DebugSession::slotKill()
     // The -exec-abort is not implemented in gdb
     // queueCmd(new GDBCommand(GDBMI::ExecAbort));
     queueCmd(new GDBCommand(GDBMI::NonMI, "kill"));
-
-    setStateOn(s_appNotStarted);
 }
 
 // **************************************************************************

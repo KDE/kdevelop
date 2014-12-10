@@ -45,7 +45,7 @@ Q_LOGGING_CATEGORY(DEBUGGERGDB, "kdevelop.debuggers.gdb")
 using namespace GDBDebugger;
 
 GDB::GDB(QObject* parent)
-: QObject(parent), process_(0), currentCmd_(0), isRunning_(false), childPid_(0)
+: QObject(parent), process_(0), currentCmd_(0), isRunning_(false)
 {
 }
 
@@ -157,9 +157,7 @@ void GDB::interrupt()
 {
     //TODO:win32 Porting needed
     int pid = process_->pid();
-    if (childPid_) {
-        ::kill(childPid_, SIGINT);
-    } else if (pid != 0) {
+    if (pid != 0) {
         ::kill(pid, SIGINT);
     }
 }
@@ -292,7 +290,7 @@ void GDB::processLine(const QByteArray& line)
 
             case GDBMI::AsyncRecord::Notify: {
                 // Prefix '='; supplementary information that we should handle (new breakpoint etc.)
-                processNotification(async);
+                emit notification(async);
                 break;
             }
 
@@ -348,17 +346,6 @@ void GDB::processLine(const QByteArray& line)
         isRunning_ = false;
     }
     #endif
-}
-
-void GDB::processNotification(const GDBMI::AsyncRecord & async)
-{
-    if (async.reason == "thread-group-started") {
-        //     (gdb) -exec-run
-        //     =thread-group-started,id="i1",pid="16768"
-        childPid_ = async["pid"].toInt();
-    } else {
-        qCDebug(DEBUGGERGDB) << "Unhandled notification: " << async.reason;
-    }
 }
 
 // **************************************************************************

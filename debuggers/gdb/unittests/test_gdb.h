@@ -60,6 +60,7 @@ private Q_SLOTS:
     void testStackDeactivateAndActive();
     void testStackSwitchThread();
     void testAttach();
+    void testManualAttach();
     void testCoreFile();
     void testVariablesLocals();
     void testVariablesLocalsStruct();
