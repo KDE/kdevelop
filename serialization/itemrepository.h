@@ -138,6 +138,8 @@ class Bucket {
       , m_freeItemCount(0)
       , m_nextBucketHash(0)
       , m_dirty(false)
+      , m_changed(false)
+      , m_lastUsed(0)
     {
     }
     ~Bucket() {
