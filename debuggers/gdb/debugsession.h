@@ -277,6 +277,7 @@ private Q_SLOTS:
     void handleVersion(const QStringList& s);
     void handleFileExecAndSymbols(const GDBMI::ResultRecord& r);
     void handleTargetAttach(const GDBMI::ResultRecord& r);
+    void handleCoreFile(const GDBMI::ResultRecord& r);
 
 public Q_SLOTS:
     void slotKill();

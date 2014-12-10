@@ -244,18 +244,33 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
 
 void DebugSession::examineCoreFile(const QUrl& debugee, const QUrl& coreFile)
 {
-    setStateOff(s_programExited|s_appNotStarted);
-    setStateOn(s_core);
-
     if (stateIsOn(s_dbgNotStarted))
       startDebugger(0);
 
+    setStateOff(s_appNotStarted);
+
     // TODO support non-local URLs
     queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, debugee.toLocalFile()));
-    queueCmd(new GDBCommand(GDBMI::NonMI, "core " + coreFile.toLocalFile()));
+    queueCmd(new GDBCommand(GDBMI::NonMI, "core " + coreFile.toLocalFile(), this, &DebugSession::handleCoreFile, true));
 
     raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
+}
+
+void DebugSession::handleCoreFile(const GDBMI::ResultRecord& r)
+{
+    if (r.reason != "error") {
+        setStateOn(s_programExited|s_core);
+    } else {
+        KMessageBox::information(
+            qApp->activeWindow(),
+            i18n("<b>Failed to load core file</b>"
+                "<p>Debugger reported the following error:"
+                "<p><tt>%1", r["msg"].literal()),
+            i18n("Debugger error"));
+
+        // How should we proceed at this point? Stop the debugger?
+    }
 }
 
 void DebugSession::attachToProcess(int pid)

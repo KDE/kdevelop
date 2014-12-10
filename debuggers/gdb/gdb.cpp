@@ -233,8 +233,8 @@ void GDB::processLine(const QByteArray& line)
 
             emit internalCommandOutput(QString::fromUtf8(line) + '\n');
 
-            // GDB doc: "running" is a legacy status code that is equivalent to "done"
-            if (result.reason == "done" || result.reason == "running")
+            // GDB doc: "running" and "exit" are status codes equivalent to "done"
+            if (result.reason == "done" || result.reason == "running" || result.reason == "exit")
             {
                 if (!currentCmd_) {
                     qCDebug(DEBUGGERGDB) << "Received a result without a pending command";
