@@ -395,9 +395,21 @@ namespace GDBMI
 
     struct StreamRecord : public Record
     {
-        inline StreamRecord() : reason(0) { Record::kind = Stream; }
+        enum Subkind {
+            /// Console stream: usual CLI output of GDB in response to non-MI commands
+            Console,
 
-        char reason;
+            /// Target output stream (stdout/stderr of the inferior process, only in some
+            /// scenarios - usually we get stdout/stderr via other means)
+            Target,
+
+            /// Log stream: GDB internal messages that should be displayed as part of an error log
+            Log
+        };
+
+        StreamRecord(Subkind subkind_) : subkind(subkind_) { Record::kind = Stream; }
+
+        Subkind subkind;
         QString message;
     };
 }

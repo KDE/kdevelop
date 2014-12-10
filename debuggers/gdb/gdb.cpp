@@ -312,7 +312,7 @@ void GDB::processLine(const QByteArray& line)
 
             GDBMI::StreamRecord& s = dynamic_cast<GDBMI::StreamRecord&>(*r);
 
-            if (s.reason == '@') {
+            if (s.subkind == GDBMI::StreamRecord::Target) {
                 emit applicationOutput(s.message);
             } else {
                 if (currentCmd_ && currentCmd_->isUserCommand())

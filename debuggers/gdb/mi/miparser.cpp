@@ -106,24 +106,23 @@ std::unique_ptr<Record> MIParser::parsePrompt()
 
 std::unique_ptr<Record> MIParser::parseStreamRecord()
 {
-    std::unique_ptr<StreamRecord> stream(new StreamRecord);
+    StreamRecord::Subkind subkind;
 
     switch (m_lex->lookAhead()) {
-        case '~':
-        case '@':
-        case '&': {
-            stream->reason = m_lex->lookAhead();
-            m_lex->nextToken();
-            MATCH(Token_string_literal);
-            stream->message = parseStringLiteral();
-            return std::move(stream);
-        }
-
-        default:
-            break;
+    case '~': subkind = StreamRecord::Console; break;
+    case '@': subkind = StreamRecord::Target; break;
+    case '&': subkind = StreamRecord::Log; break;
+    default:
+        Q_ASSERT(false);
+        return {};
     }
 
-    return {};
+    std::unique_ptr<StreamRecord> stream(new StreamRecord(subkind));
+
+    m_lex->nextToken();
+    MATCH(Token_string_literal);
+    stream->message = parseStringLiteral();
+    return std::move(stream);
 }
 
 std::unique_ptr<Record> MIParser::parseResultOrAsyncRecord()

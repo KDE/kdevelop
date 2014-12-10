@@ -841,7 +841,7 @@ void DebugSession::programFinished(const QString& msg)
 
 void DebugSession::parseStreamRecord(const GDBMI::StreamRecord& s)
 {
-    if (s.reason == '~')
+    if (s.subkind == GDBMI::StreamRecord::Console)
     {
         QString line = s.message;
         if (line.startsWith("Program terminated")) {
