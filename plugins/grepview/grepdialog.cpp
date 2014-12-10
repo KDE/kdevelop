@@ -464,8 +464,7 @@ void GrepDialog::startSearch()
     connect(outputModel, &GrepOutputModel::showMessage,
             toolView, &GrepOutputView::showMessage);
 
-
-    connect(toolView, &GrepOutputView::outputViewIsClosed, [=]() { job->kill(); });
+    connect(toolView, &GrepOutputView::outputViewIsClosed, job, [=]() {job->kill();});
 
     job->setOutputModel(outputModel);
     job->setPatternString(patternString());

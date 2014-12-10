@@ -141,7 +141,7 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
 QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     const GrepOutputModel *model = dynamic_cast<const GrepOutputModel *>(index.model());
-    const GrepOutputItem  *item  = dynamic_cast<const GrepOutputItem *>(model->itemFromIndex(index));
+    const GrepOutputItem  *item  = model ? dynamic_cast<const GrepOutputItem *>(model->itemFromIndex(index)) : nullptr;
 
     QSize ret = QStyledItemDelegate::sizeHint(option, index);
 
