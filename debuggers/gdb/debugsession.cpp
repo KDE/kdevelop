@@ -839,25 +839,6 @@ void DebugSession::programFinished(const QString& msg)
 }
 
 
-void DebugSession::parseStreamRecord(const GDBMI::StreamRecord& s)
-{
-    if (s.subkind == GDBMI::StreamRecord::Console)
-    {
-        QString line = s.message;
-        if (line.startsWith("Program terminated")) {
-            //when examining core file
-            setStateOff(s_appRunning);
-            setStateOn(s_appNotStarted|s_programExited);
-        } else if (line.startsWith("The program no longer exists")
-                   || line.startsWith("Program exited")) {
-            programNoApp(line);
-        } else if (!line.isEmpty() && line.at(0) == '[' && line.contains(QRegExp("^\\[Inferior \\d+ \\(.*process|target.*\\) exited .*\\]"))) {
-            m_inferiorExitCode = line;
-            addCommand(new CliCommand(GDBMI::NonMI, "info inferiors", this,  &DebugSession::lastInferiorHandler));
-        }
-    }
-}
-
 bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
 {
     qCDebug(DEBUGGERGDB) << "Starting debugger controller";
@@ -895,9 +876,6 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
             this, &DebugSession::programStopped);
     connect(gdb, &GDB::programRunning,
             this, &DebugSession::programRunning);
-
-    connect(gdb, &GDB::streamRecord,
-            this, &DebugSession::parseStreamRecord);
 
     // Start gdb. Do this after connecting all signals so that initial
     // GDB output, and important events like "GDB died" are reported.
@@ -1478,22 +1456,6 @@ void DebugSession::handleTargetAttach(const GDBMI::ResultRecord& r)
             i18n("Startup error"));
         stopDebugger();
     }
-}
-
-void DebugSession::lastInferiorHandler(const QStringList& l)
-{
-    //* 1    <null>
-    QRegExp rx("^\\*?\\s+\\d+\\s+\\<null\\>\\s.*$");
-
-    for (int i = 2 ; i < l.size(); i++) {
-        if (!rx.exactMatch(l[i])) {
-            qCDebug(DEBUGGERGDB) << "Still running: " << l[i];
-            return;
-        }
-    }
-    qCDebug(DEBUGGERGDB) << "Exiting";
-    programNoApp(m_inferiorExitCode);
-    state_reload_needed = false;
 }
 
 }

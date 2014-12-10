@@ -245,9 +245,6 @@ private:
 
     bool startDebugger(KDevelop::ILaunchConfiguration* cfg);
 
-    ///Checks if exited inferior is the last one, if so ends the debug session.
-    void lastInferiorHandler(const QStringList& l);
-
 private Q_SLOTS:
 
     void gdbReady();
@@ -255,15 +252,6 @@ private Q_SLOTS:
     void gdbExited();
 
     void slotProgramStopped(const GDBMI::AsyncRecord& mi_record);
-
-    /** Parses the CLI output line, and catches interesting messages
-        like "Program exited". This is intended to allow using console
-        commands in the gdb window despite the fact that GDB does not
-        produce right MI notification for CLI commands. I.e. if you
-        run "continue" there will be no MI message if the application has
-        exited.
-    */
-    void parseStreamRecord(const GDBMI::StreamRecord& s);
 
     /** Default handler for errors.
         Tries to guess is the error message is telling that target is
