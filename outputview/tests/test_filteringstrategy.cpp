@@ -16,14 +16,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "filteringstrategytest.h"
+#include "test_filteringstrategy.h"
 #include "testlinebuilderfunctions.h"
 
 #include <outputview/outputfilteringstrategies.h>
 #include <outputview/filtereditem.h>
 #include <language/interfaces/quickopenfilter.h>
 
-QTEST_GUILESS_MAIN(KDevelop::FilteringStrategyTest)
+QTEST_GUILESS_MAIN(KDevelop::TestFilteringStrategy)
 
 namespace QTest {
 
@@ -54,7 +54,7 @@ inline char* toString(const KDevelop::FilteredItem::FilteredOutputItemType& type
 namespace KDevelop
 {
 
-void FilteringStrategyTest::testNoFilterStrategy_data()
+void TestFilteringStrategy::testNoFilterStrategy_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expected");
@@ -75,7 +75,7 @@ void FilteringStrategyTest::testNoFilterStrategy_data()
     << buildPythonErrorLine() << FilteredItem::InvalidItem;
 }
 
-void FilteringStrategyTest::testNoFilterStrategy()
+void TestFilteringStrategy::testNoFilterStrategy()
 {
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expected);
@@ -86,7 +86,7 @@ void FilteringStrategyTest::testNoFilterStrategy()
     QCOMPARE(item1.type, expected);
 }
 
-void FilteringStrategyTest::testCompilerFilterStrategy_data()
+void TestFilteringStrategy::testCompilerFilterStrategy_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedError");
@@ -128,7 +128,7 @@ void FilteringStrategyTest::testCompilerFilterStrategy_data()
     << buildPythonErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
 }
 
-void FilteringStrategyTest::testCompilerFilterStrategy()
+void TestFilteringStrategy::testCompilerFilterStrategy()
 {
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
@@ -141,7 +141,7 @@ void FilteringStrategyTest::testCompilerFilterStrategy()
     QCOMPARE(item1.type, expectedAction);
 }
 
-void FilteringStrategyTest::testCompilerFilterstrategyMultipleKeywords_data()
+void TestFilteringStrategy::testCompilerFilterstrategyMultipleKeywords_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedError");
@@ -161,7 +161,7 @@ void FilteringStrategyTest::testCompilerFilterstrategyMultipleKeywords_data()
     << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
 }
 
-void FilteringStrategyTest::testCompilerFilterstrategyMultipleKeywords()
+void TestFilteringStrategy::testCompilerFilterstrategyMultipleKeywords()
 {
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
@@ -174,7 +174,7 @@ void FilteringStrategyTest::testCompilerFilterstrategyMultipleKeywords()
     QCOMPARE(item1.type, expectedAction);
 }
 
-void FilteringStrategyTest::testCompilerFilterStrategyShortenedText_data()
+void TestFilteringStrategy::testCompilerFilterStrategyShortenedText_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<QString>("expectedShortenedText");
@@ -195,7 +195,7 @@ void FilteringStrategyTest::testCompilerFilterStrategyShortenedText_data()
     << "mpicc main.cpp -o main" << "linking main (mpicc)";
 }
 
-void FilteringStrategyTest::testCompilerFilterStrategyShortenedText()
+void TestFilteringStrategy::testCompilerFilterStrategyShortenedText()
 {
     QFETCH(QString, line);
     QFETCH(QString, expectedShortenedText);
@@ -206,7 +206,7 @@ void FilteringStrategyTest::testCompilerFilterStrategyShortenedText()
     QCOMPARE(item.shortenedText, expectedShortenedText);
 }
 
-void FilteringStrategyTest::testScriptErrorFilterStrategy_data()
+void TestFilteringStrategy::testScriptErrorFilterStrategy_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedError");
@@ -226,7 +226,7 @@ void FilteringStrategyTest::testScriptErrorFilterStrategy_data()
     << buildPythonErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
 }
 
-void FilteringStrategyTest::testScriptErrorFilterStrategy()
+void TestFilteringStrategy::testScriptErrorFilterStrategy()
 {
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
@@ -238,7 +238,7 @@ void FilteringStrategyTest::testScriptErrorFilterStrategy()
     QCOMPARE(item1.type, expectedAction);
 }
 
-void FilteringStrategyTest::testNativeAppErrorFilterStrategy_data()
+void TestFilteringStrategy::testNativeAppErrorFilterStrategy_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<QString>("file");
@@ -282,7 +282,7 @@ void FilteringStrategyTest::testNativeAppErrorFilterStrategy_data()
         << -1 << -1 << FilteredItem::InvalidItem;
 }
 
-void FilteringStrategyTest::testNativeAppErrorFilterStrategy()
+void TestFilteringStrategy::testNativeAppErrorFilterStrategy()
 {
     QFETCH(QString, line);
     QFETCH(QString, file);
@@ -297,7 +297,7 @@ void FilteringStrategyTest::testNativeAppErrorFilterStrategy()
     QCOMPARE(item.type , itemtype);
 }
 
-void FilteringStrategyTest::testStaticAnalysisFilterStrategy_data()
+void TestFilteringStrategy::testStaticAnalysisFilterStrategy_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedError");
@@ -325,7 +325,7 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy_data()
     << buildPythonErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
 }
 
-void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
+void TestFilteringStrategy::testStaticAnalysisFilterStrategy()
 {
     // Test that url's are extracted correctly as well
     QString referencePath = projectPath() + "main.cpp";
@@ -342,7 +342,7 @@ void FilteringStrategyTest::testStaticAnalysisFilterStrategy()
     QCOMPARE(item1.type, expectedAction);
 }
 
-void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction_data()
+void TestFilteringStrategy::testCompilerFilterstrategyUrlFromAction_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<QString>("expectedLastDir");
@@ -366,7 +366,7 @@ void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction_data()
     << QString("[ 50%] Building CXX object CMakeFiles/testdeque.dir/RingBuffer.cpp.o") << QString( basepath);
 }
 
-void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction()
+void TestFilteringStrategy::testCompilerFilterstrategyUrlFromAction()
 {
     QFETCH(QString, line);
     QFETCH(QString, expectedLastDir);
@@ -376,7 +376,7 @@ void FilteringStrategyTest::testCompilerFilterstrategyUrlFromAction()
     QCOMPARE(testee.getCurrentDirs().last(), expectedLastDir);
 }
 
-void FilteringStrategyTest::benchMarkCompilerFilterAction()
+void TestFilteringStrategy::benchMarkCompilerFilterAction()
 {
     QString projecturl = projectPath();
     QStringList outputlines;
@@ -424,7 +424,7 @@ void FilteringStrategyTest::benchMarkCompilerFilterAction()
     QVERIFY(avgDirectoryInsertion < 2);
 }
 
-void FilteringStrategyTest::testExtractionOfLineAndColumn_data()
+void TestFilteringStrategy::testExtractionOfLineAndColumn_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<QString>("file");
@@ -461,7 +461,7 @@ void FilteringStrategyTest::testExtractionOfLineAndColumn_data()
         << "/path/flib.f90" << 3566 << 21 << FilteredItem::ErrorItem;
 }
 
-void FilteringStrategyTest::testExtractionOfLineAndColumn()
+void TestFilteringStrategy::testExtractionOfLineAndColumn()
 {
     QFETCH(QString, line);
     QFETCH(QString, file);

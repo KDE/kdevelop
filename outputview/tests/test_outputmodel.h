@@ -16,8 +16,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef KDEVPLATFORM_OUTPUTMODELTEST_H
-#define KDEVPLATFORM_OUTPUTMODELTEST_H
+#ifndef KDEVPLATFORM_TEST_OUTPUTMODEL_H
+#define KDEVPLATFORM_TEST_OUTPUTMODEL_H
 
 #include <QObject>
 
@@ -25,11 +25,11 @@ namespace KDevelop
 {
 class OutputModel;
 
-class OutputModelTest : public QObject
+class TestOutputModel : public QObject
 {
 Q_OBJECT
 public:
-    explicit OutputModelTest(QObject* parent = 0);
+    explicit TestOutputModel(QObject* parent = 0);
 
 private slots:
     void bench();
@@ -37,4 +37,4 @@ private slots:
 };
 
 }
-#endif // KDEVPLATFORM_OUTPUTMODELTEST_H
+#endif // KDEVPLATFORM_TEST_OUTPUTMODEL_H

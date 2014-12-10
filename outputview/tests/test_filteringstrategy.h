@@ -15,15 +15,15 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef KDEVPLATFORM_FILTERINGSTRATEGYTEST_H
-#define KDEVPLATFORM_FILTERINGSTRATEGYTEST_H
+#ifndef KDEVPLATFORM_TEST_FILTERINGSTRATEGY_H
+#define KDEVPLATFORM_TEST_FILTERINGSTRATEGY_H
 
 #include <QtTest/QtTest>
 
 namespace KDevelop
 {
 
-class FilteringStrategyTest : public QObject
+class TestFilteringStrategy : public QObject
 {
     Q_OBJECT
 private slots:
@@ -51,4 +51,4 @@ private slots:
 
 }
 
-#endif // KDEVPLATFORM_FILTERINGSTRATEGYTEST_H
+#endif // KDEVPLATFORM_TEST_FILTERINGSTRATEGY_H

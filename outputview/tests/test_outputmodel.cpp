@@ -16,18 +16,18 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "outputmodeltest.h"
+#include "test_outputmodel.h"
 #include "testlinebuilderfunctions.h"
 #include "../outputmodel.h"
 
 #include <QTest>
 
-QTEST_MAIN(KDevelop::OutputModelTest)
+QTEST_MAIN(KDevelop::TestOutputModel)
 
 namespace KDevelop
 {
 
-OutputModelTest::OutputModelTest(QObject* parent): QObject(parent)
+TestOutputModel::TestOutputModel(QObject* parent): QObject(parent)
 {
 }
 
@@ -65,7 +65,7 @@ QStringList generateLongLine()
     return QStringList() << line;
 }
 
-void OutputModelTest::bench()
+void TestOutputModel::bench()
 {
     QFETCH(KDevelop::OutputModel::OutputFilterStrategy, strategy);
     QFETCH(QStringList, lines);
@@ -93,7 +93,7 @@ void OutputModelTest::bench()
     QVERIFY(avgUiLockup < 200);
 }
 
-void OutputModelTest::bench_data()
+void TestOutputModel::bench_data()
 {
     QTest::addColumn<KDevelop::OutputModel::OutputFilterStrategy>("strategy");
     QTest::addColumn<QStringList>("lines");
