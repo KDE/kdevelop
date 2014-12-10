@@ -937,9 +937,10 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
         emit showMessage(i18n("Running program"), 1000);
     }
 
-    if (stateIsOn(s_dbgNotStarted))
+    if (stateIsOn(s_dbgNotStarted)) {
         if (!startDebugger(cfg))
             return false;
+    }
 
     if (stateIsOn(s_shuttingDown)) {
         qCDebug(DEBUGGERGDB) << "Tried to run when debugger shutting down";
