@@ -173,12 +173,61 @@ public:
 
 };
 
+class TestWaiter
+{
+public:
+    TestWaiter(DebugSession * session_, const char * condition_, const char * file_, int line_)
+        : session(session_)
+        , condition(condition_)
+        , file(file_)
+        , line(line_)
+    {
+        stopWatch.start();
+    }
+
+    bool waitUnless(bool ok)
+    {
+        if (ok) {
+            qDebug() << "Condition " << condition << " reached in " << file << ':' << line;
+            return false;
+        }
+
+        if (stopWatch.elapsed() > 5000) {
+            QTest::qFail(qPrintable(QString("Timeout before reaching condition %0").arg(condition)),
+                file, line);
+            return false;
+        }
+
+        QTest::qWait(100);
+
+        if (!session) {
+            QTest::qFail(qPrintable(QString("Session ended without reaching condition %0").arg(condition)),
+                file, line);
+            return false;
+        }
+
+        return true;
+    }
+
+private:
+    QTime stopWatch;
+    QPointer<DebugSession> session;
+    const char * condition;
+    const char * file;
+    int line;
+};
 
 #define WAIT_FOR_STATE(session, state) \
     waitForState((session), (state), __FILE__, __LINE__)
 
 #define WAIT_FOR_STATE_FAIL(session, state) \
     waitForState((session), (state), __FILE__, __LINE__, true)
+
+#define WAIT_FOR(session, condition) \
+    do { \
+        TestWaiter w((session), #condition, __FILE__, __LINE__); \
+        while (w.waitUnless((condition))) /* nothing */ ; \
+    } while(0)
 
 #define COMPARE_DATA(index, expected) \
     compareData((index), (expected), __FILE__, __LINE__)
@@ -387,18 +436,19 @@ void GdbTest::testIgnoreHitsBreakpoint()
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 21);
-    b->setIgnoreHits(1);
+    KDevelop::Breakpoint * b1 = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 21);
+    b1->setIgnoreHits(1);
 
-    b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 22);
+    KDevelop::Breakpoint * b2 = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 22);
 
     session->startProgram(&cfg, m_iface);
 
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QTest::qWait(100);
-    b->setIgnoreHits(1);
+    //WAIT_FOR_STATE(session, DebugSession::PausedState);
+    WAIT_FOR(session, session->state() == DebugSession::PausedState && b2->hitCount() == 1);
+    b2->setIgnoreHits(1);
     session->run();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    //WAIT_FOR_STATE(session, DebugSession::PausedState);
+    WAIT_FOR(session, session->state() == DebugSession::PausedState && b1->hitCount() == 1);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
