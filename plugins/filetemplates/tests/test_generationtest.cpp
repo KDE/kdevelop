@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "testgenerationtest.h"
+#include "test_generationtest.h"
 #include "tests_config.h"
 
 #include <tests/testcore.h>
