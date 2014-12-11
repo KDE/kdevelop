@@ -931,7 +931,6 @@ void GdbTest::testManualAttach()
     debugeeProcess << "nice" << findExecutable("debugeeslow").toLocalFile();
     debugeeProcess.start();
     QVERIFY(debugeeProcess.waitForStarted());
-    QTest::qWait(100);
 
     TestDebugSession *session = new TestDebugSession;
 
@@ -943,6 +942,7 @@ void GdbTest::testManualAttach()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
     session->run();
+    QTest::qWait(2000); // give the slow inferior some extra time to run
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
