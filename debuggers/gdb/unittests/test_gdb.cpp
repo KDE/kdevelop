@@ -221,9 +221,6 @@ private:
     waitForState((session), (state), __FILE__, __LINE__)
 
 #define WAIT_FOR_STATE_AND_IDLE(session, state) \
-    waitForState((session), (state), __FILE__, __LINE__, false, true)
-
-#define WAIT_FOR_STATE_FAIL(session, state) \
     waitForState((session), (state), __FILE__, __LINE__, true)
 
 #define WAIT_FOR(session, condition) \
@@ -1932,7 +1929,7 @@ void GdbTest::testPathWithSpace()
 }
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
-                            const char *file, int line, bool expectFail, bool waitForIdle)
+                            const char *file, int line, bool waitForIdle)
 {
     QPointer<GDBDebugger::DebugSession> s(session); //session can get deleted in DebugController
     QTime stopWatch;
@@ -1940,20 +1937,16 @@ void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::Deb
     while (s.data()->state() != state || (waitForIdle && s->stateIsOn(s_dbgBusy))) {
         if (stopWatch.elapsed() > 5000) {
             qWarning() << "current state" << s.data()->state() << "waiting for" << state;
-            if (!expectFail) {
-                QTest::qFail(qPrintable(QString("Timeout before reaching state %0").arg(state)),
-                    file, line);
-            }
+            QTest::qFail(qPrintable(QString("Timeout before reaching state %0").arg(state)),
+                file, line);
             return;
         }
         QTest::qWait(20);
         if (!s) {
             if (state == DebugSession::EndedState)
                 break;
-            if (!expectFail) {
-                QTest::qFail(qPrintable(QString("Session ended before reaching state %0").arg(state)),
-                    file, line);
-            }
+            QTest::qFail(qPrintable(QString("Session ended before reaching state %0").arg(state)),
+                file, line);
             return;
         }
     }

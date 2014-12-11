@@ -98,7 +98,6 @@ private:
     void waitForState(GDBDebugger::DebugSession *session,
                       KDevelop::IDebugSession::DebuggerState state,
                       const char *file, int line,
-                      bool expectFail = false,
                       bool waitForIdle = false);
     IExecutePlugin* m_iface;
 };
