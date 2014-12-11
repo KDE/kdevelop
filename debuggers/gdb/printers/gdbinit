@@ -1,6 +1,4 @@
 python
-import sys
-sys.path.insert(0, '${DATA_INSTALL_DIR}/kdevgdb/printers')
 
 from qt4 import register_qt4_printers
 register_qt4_printers (None)
