@@ -778,8 +778,21 @@ void KDevelop::TextViewPrivate::sendStatusChanged()
 
 KTextEditor::View* KDevelop::TextDocument::activeTextView() const
 {
-    QList<Sublime::View*> textViews = views();
-    return textViews.isEmpty() ? 0 : qobject_cast<TextView*>(textViews.first())->textView();
+    KTextEditor::View* fallback = nullptr;
+    for (auto view : views()) {
+        auto textView = qobject_cast<TextView*>(view)->textView();
+        if (!textView) {
+            continue;
+        }
+        if (textView->hasFocus()) {
+            return textView;
+        } else if (textView->isVisible()) {
+            fallback = textView;
+        } else if (!fallback) {
+            fallback = textView;
+        }
+    }
+    return fallback;
 }
 
 #include "moc_textdocument.cpp"
