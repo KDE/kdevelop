@@ -87,11 +87,13 @@ void OpenProjectDialog::validateSourcePage(bool valid)
     openPageWidget->setUrl(sourcePageWidget->workingDir());
 }
 
-void OpenProjectDialog::validateOpenUrl( const QUrl& url )
+void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
 {
     bool isDir = false;
     QString extension;
     bool isValid = false;
+
+    const QUrl url = url_.adjusted(QUrl::StripTrailingSlash);
 
     if( url.isLocalFile() )
     {
@@ -101,7 +103,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url )
             isDir = info.isDir();
             extension = info.suffix();
         }
-    } else
+    } else if ( url.isValid() )
     {
         KIO::StatJob* statJob = KIO::stat( url, KIO::HideProgressInfo );
         KJobWidgets::setWindow(statJob, Core::self()->uiControllerInternal()->defaultMainWindow() );
@@ -134,12 +136,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url )
     {
         setAppropriate( projectInfoPage, true );
         m_url = url;
-        if( isDir )
-        {
-            m_url = m_url.adjusted(QUrl::StripTrailingSlash );
-        }
-        else
-        {
+        if( !isDir ) {
             m_url = m_url.adjusted(QUrl::StripTrailingSlash | QUrl::RemoveFilename);
         }
         ProjectInfoPage* page = qobject_cast<ProjectInfoPage*>( projectInfoPage->widget() );
