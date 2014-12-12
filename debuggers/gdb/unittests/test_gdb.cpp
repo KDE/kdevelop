@@ -71,6 +71,30 @@ QString findSourceFile(const QString& name)
     return info.canonicalFilePath();
 }
 
+static bool isAttachForbidden(const char * file, int line)
+{
+    // if on linux, ensure we can actually attach
+    QFile canRun("/proc/sys/kernel/yama/ptrace_scope");
+    if (canRun.exists()) {
+        if (!canRun.open(QIODevice::ReadOnly)) {
+            QTest::qFail("Something is wrong: /proc/sys/kernel/yama/ptrace_scope exists but cannot be read", file, line);
+            return true;
+        }
+        if (canRun.read(1).toInt() != 0) {
+            QTest::qSkip("ptrace attaching not allowed, skipping test. To enable it, set /proc/sys/kernel/yama/ptrace_scope to 0.", file, line);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+#define SKIP_IF_ATTACH_FORBIDDEN() \
+    do { \
+        if (isAttachForbidden(__FILE__, __LINE__)) \
+            return; \
+    } while(0)
+
 void GdbTest::initTestCase()
 {
     AutoTestShell::init();
@@ -878,14 +902,7 @@ void GdbTest::testStackSwitchThread()
 
 void GdbTest::testAttach()
 {
-    // if on linux, ensure we can actually attach
-    QFile canRun("/proc/sys/kernel/yama/ptrace_scope");
-    if (canRun.exists()) {
-        QVERIFY(canRun.open(QIODevice::ReadOnly));
-        if (canRun.read(1).toInt() != 0) {
-            QSKIP("ptrace attaching not allowed, skipping test. To enable it, set /proc/sys/kernel/yama/ptrace_scope to 0.", SkipAll);
-        }
-    }
+    SKIP_IF_ATTACH_FORBIDDEN();
 
     QString fileName = findSourceFile("debugeeslow.cpp");
 
@@ -914,14 +931,7 @@ void GdbTest::testAttach()
 
 void GdbTest::testManualAttach()
 {
-    // if on linux, ensure we can actually attach
-    QFile canRun("/proc/sys/kernel/yama/ptrace_scope");
-    if (canRun.exists()) {
-        QVERIFY(canRun.open(QIODevice::ReadOnly));
-        if (canRun.read(1).toInt() != 0) {
-            QSKIP("ptrace attaching not allowed, skipping test. To enable it, set /proc/sys/kernel/yama/ptrace_scope to 0.", SkipAll);
-        }
-    }
+    SKIP_IF_ATTACH_FORBIDDEN();
 
     QString fileName = findSourceFile("debugeeslow.cpp");
 
