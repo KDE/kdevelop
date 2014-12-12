@@ -355,9 +355,9 @@ namespace GDBMI
 
     struct ResultRecord : public TupleRecord
     {
-        ResultRecord(const QString & reason_)
+        ResultRecord(const QString& reason)
             : token(0)
-            , reason(reason_)
+            , reason(reason)
         {
             Record::kind = Result;
         }
@@ -374,9 +374,9 @@ namespace GDBMI
             Notify
         };
 
-        AsyncRecord(Subkind subkind_, const QString & reason_)
-            : subkind(subkind_)
-            , reason(reason_)
+        AsyncRecord(Subkind subkind, const QString& reason)
+            : subkind(subkind)
+            , reason(reason)
         {
             Record::kind = Async;
         }
@@ -407,7 +407,11 @@ namespace GDBMI
             Log
         };
 
-        StreamRecord(Subkind subkind_) : subkind(subkind_) { Record::kind = Stream; }
+        StreamRecord(Subkind subkind)
+            : subkind(subkind)
+        {
+            Record::kind = Stream;
+        }
 
         Subkind subkind;
         QString message;
