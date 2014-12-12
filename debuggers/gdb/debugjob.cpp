@@ -110,7 +110,9 @@ void DebugJob::start()
 
     startOutput();
 
-    m_session->startProgram( m_launchcfg, m_execute );
+    if (!m_session->startProgram( m_launchcfg, m_execute )) {
+        done();
+    }
 }
 
 bool DebugJob::doKill()
