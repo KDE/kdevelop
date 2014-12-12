@@ -769,6 +769,8 @@ void DebugSession::processNotification(const GDBMI::AsyncRecord & async)
         setStateOff(s_appNotStarted | s_programExited);
     } else if (async.reason == "thread-group-exited") {
         setStateOn(s_programExited);
+    } else if (async.reason == "library-loaded") {
+        // do nothing
     } else {
         qCDebug(DEBUGGERGDB) << "Unhandled notification: " << async.reason;
     }
