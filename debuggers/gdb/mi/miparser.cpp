@@ -132,7 +132,7 @@ std::unique_ptr<Record> MIParser::parseStreamRecord()
     std::unique_ptr<StreamRecord> stream(new StreamRecord(subkind));
 
     m_lex->nextToken();
-    MATCH(Token_string_literal);
+    MATCH_PTR(Token_string_literal);
     stream->message = parseStringLiteral();
     return std::move(stream);
 }
@@ -143,7 +143,7 @@ std::unique_ptr<Record> MIParser::parseResultOrAsyncRecord()
 
     char c = m_lex->lookAhead();
     m_lex->nextToken();
-    MATCH(Token_identifier);
+    MATCH_PTR(Token_identifier);
     QString reason = m_lex->currentTokenText();
     m_lex->nextToken();
 
