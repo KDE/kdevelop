@@ -36,6 +36,18 @@ using namespace GDBMI;
       m_lex->nextToken(); \
   } while (0)
 
+#define MATCH_PTR(tok) \
+  do { \
+      if (m_lex->lookAhead(0) != (tok)) \
+          return {}; \
+  } while (0)
+
+#define ADVANCE_PTR(tok) \
+  do { \
+      MATCH_PTR(tok); \
+      m_lex->nextToken(); \
+  } while (0)
+
 MIParser::MIParser()
     : m_lex(0)
 {
@@ -94,12 +106,12 @@ std::unique_ptr<Record> MIParser::parse(FileSymbol *file)
 
 std::unique_ptr<Record> MIParser::parsePrompt()
 {
-    ADVANCE('(');
-    MATCH(Token_identifier);
+    ADVANCE_PTR('(');
+    MATCH_PTR(Token_identifier);
     if (m_lex->currentTokenText() != "gdb")
         return {};
     m_lex->nextToken();
-    ADVANCE(')');
+    ADVANCE_PTR(')');
 
     return std::unique_ptr<Record>(new PromptRecord);
 }
