@@ -67,13 +67,11 @@ protected:
     IDebugSession *debugSession() const;
     BreakpointModel *breakpointModel() const;
 
+    void updateState(int row, Breakpoint::BreakpointState state);
     void updateHitCount(int row, int hitCount);
     void updateErrorText(int row, const QString& errorText);
 
     // Review the entire API below
-public:
-    Breakpoint::BreakpointState breakpointState(const Breakpoint *breakpoint) const;
-
 protected:
     void breakpointStateChanged(Breakpoint* breakpoint);
     void setHitCount(Breakpoint* breakpoint, int count);

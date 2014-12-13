@@ -56,6 +56,11 @@ BreakpointModel* IBreakpointController::breakpointModel() const
     return ICore::self()->debugController()->breakpointModel();
 }
 
+void IBreakpointController::updateState(int row, Breakpoint::BreakpointState state)
+{
+    breakpointModel()->updateState(row, state);
+}
+
 void IBreakpointController::updateHitCount(int row, int hitCount)
 {
     breakpointModel()->updateHitCount(row, hitCount);
@@ -96,21 +101,19 @@ void IBreakpointController::debuggerStateChanged(IDebugSession::DebuggerState st
     if (!model)
         return;
 
-    if (state == IDebugSession::StartingState || state == IDebugSession::EndedState) {
-        //breakpoint state changes when session started or stopped
-        foreach (Breakpoint *breakpoint, model->breakpoints()) {
-            if (state == IDebugSession::StartingState) {
-                //when starting everything is dirty
-                m_dirty[breakpoint].insert(Breakpoint::LocationColumn);
-                if (!breakpoint->condition().isEmpty()) {
-                    m_dirty[breakpoint].insert(Breakpoint::ConditionColumn);
-                }
-                if (!breakpoint->enabled()) {
-                	m_dirty[breakpoint].insert(KDevelop::Breakpoint::EnableColumn);
-                }
+    //breakpoint state changes when session started or stopped
+    foreach (Breakpoint *breakpoint, model->breakpoints()) {
+        if (state == IDebugSession::StartingState) {
+            //when starting everything is dirty
+            m_dirty[breakpoint].insert(Breakpoint::LocationColumn);
+            if (!breakpoint->condition().isEmpty()) {
+                m_dirty[breakpoint].insert(Breakpoint::ConditionColumn);
             }
-            breakpointStateChanged(breakpoint);
+            if (!breakpoint->enabled()) {
+                m_dirty[breakpoint].insert(KDevelop::Breakpoint::EnableColumn);
+            }
         }
+        breakpointStateChanged(breakpoint);
     }
 }
 
@@ -133,27 +136,27 @@ void IBreakpointController::breakpointAboutToBeDeleted(int row)
     sendMaybe(breakpoint);
 }
 
-Breakpoint::BreakpointState IBreakpointController::breakpointState(const Breakpoint* breakpoint) const
-{
-    if (debugSession()->state() != IDebugSession::ActiveState
-        && debugSession()->state() != IDebugSession::PausedState
-    ) {
-        return Breakpoint::NotStartedState;
-    }
-    if (!m_dirty.contains(breakpoint) || m_dirty[breakpoint].isEmpty()) {
-        if (m_pending.contains(breakpoint)) {
-            return Breakpoint::PendingState;
-        }
-        return Breakpoint::CleanState;
-    }
-    return Breakpoint::DirtyState;
-}
-
 void IBreakpointController::breakpointStateChanged(Breakpoint* breakpoint)
 {
     if (breakpoint->deleted()) return;
+
+    Breakpoint::BreakpointState newState = Breakpoint::NotStartedState;
+    if (debugSession()->state() != IDebugSession::EndedState &&
+        debugSession()->state() != IDebugSession::NotStartedState)
+    {
+        if (m_dirty.value(breakpoint).isEmpty()) {
+            if (m_pending.contains(breakpoint)) {
+                newState = Breakpoint::PendingState;
+            } else {
+                newState = Breakpoint::CleanState;
+            }
+        } else {
+            newState = Breakpoint::DirtyState;
+        }
+    }
+
     m_dontSendChanges++;
-    breakpoint->reportChange(Breakpoint::StateColumn);
+    updateState(breakpointModel()->breakpointIndex(breakpoint, 0).row(), newState);
     m_dontSendChanges--;
 }
 
@@ -166,7 +169,7 @@ void IBreakpointController::setHitCount(Breakpoint* breakpoint, int count)
 
 void IBreakpointController::error(Breakpoint* breakpoint, const QString &msg, Breakpoint::Column column)
 {
-    BreakpointModel * breakpointModel = this->breakpointModel();
+    BreakpointModel* breakpointModel = this->breakpointModel();
     int row = breakpointModel->breakpointIndex(breakpoint, 0).row();
 
     m_dontSendChanges++;

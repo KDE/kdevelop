@@ -51,7 +51,9 @@ static Breakpoint::BreakpointKind stringToKind(const QString& kindString)
 
 Breakpoint::Breakpoint(BreakpointModel *model, BreakpointKind kind)
     : m_model(model), m_enabled(true)
-    , m_deleted(false), m_kind(kind)
+    , m_deleted(false)
+    , m_state(NotStartedState)
+    , m_kind(kind)
     , m_line(-1)
     , m_movingCursor(0)
     , m_hitCount(0)
@@ -65,6 +67,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, BreakpointKind kind)
 Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
     : m_model(model), m_enabled(true)
     , m_deleted(false)
+    , m_state(NotStartedState)
     , m_line(-1)
     , m_movingCursor(0)
     , m_hitCount(0)
@@ -332,12 +335,7 @@ QString Breakpoint::expression() const
 
 Breakpoint::BreakpointState Breakpoint::state() const
 {
-    IDebugSession* session = ICore::self()->debugController()->currentSession();
-    if (session) {
-        return session->breakpointController()->breakpointState(this);
-    } else {
-        return NotStartedState;
-    }
+    return m_state;
 }
 
 QString Breakpoint::errorText() const

@@ -126,6 +126,7 @@ protected:
     BreakpointModel *m_model;
     bool m_enabled;
     bool m_deleted;
+    BreakpointState m_state;
     BreakpointKind m_kind;
     /* For watchpoints, the address it is set at.  */
     QString m_address;
