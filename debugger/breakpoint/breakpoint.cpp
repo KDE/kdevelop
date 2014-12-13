@@ -135,7 +135,7 @@ QVariant Breakpoint::data(int column, int role) const
     if (column == StateColumn)
     {
         if (role == Qt::DecorationRole) {
-            if (!errors().isEmpty()) {
+            if (!errorText().isEmpty()) {
                 return QIcon::fromTheme("dialog-warning");
             }
             switch (state()) {
@@ -149,7 +149,7 @@ QVariant Breakpoint::data(int column, int role) const
                     return QIcon::fromTheme("dialog-ok-apply");
             }
         } else if (role == Qt::ToolTipRole) {
-            if (!errors().isEmpty()) {
+            if (!errorText().isEmpty()) {
                 return i18nc("@info:tooltip", "Error");
             }
             switch (state()) {
@@ -171,17 +171,6 @@ QVariant Breakpoint::data(int column, int role) const
     if (column == TypeColumn && role == Qt::DisplayRole)
     {
         return BREAKPOINT_KINDS[m_kind];
-    }
-
-    if (role == Qt::DecorationRole)
-    {
-        if ((column == LocationColumn && errors().contains(LocationColumn))
-            || (column == ConditionColumn && errors().contains(ConditionColumn)))
-        {
-            /* FIXME: does this leak? Is this efficient? */
-            return QIcon::fromTheme("dialog-warning");
-        }
-        return QVariant();
     }
 
     if (column == ConditionColumn && (role == Qt::DisplayRole || role == Qt::EditRole)) {
@@ -351,25 +340,9 @@ Breakpoint::BreakpointState Breakpoint::state() const
     }
 }
 
-QSet<Breakpoint::Column> Breakpoint::errors() const
-{
-    IDebugSession* session = ICore::self()->debugController()->currentSession();
-    if (session) {
-        return session->breakpointController()->breakpointErrors(this);
-    } else {
-        return QSet<Breakpoint::Column>();
-    }
-
-}
-
 QString Breakpoint::errorText() const
 {
-    IDebugSession* session = ICore::self()->debugController()->currentSession();
-    if (session) {
-        return session->breakpointController()->breakpointErrorText(this);
-    } else {
-        return QString();
-    }
+    return m_errorText;
 }
 
 void KDevelop::Breakpoint::reportChange(Column c)

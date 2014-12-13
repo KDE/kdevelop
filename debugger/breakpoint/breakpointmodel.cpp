@@ -279,6 +279,17 @@ void BreakpointModel::updateHitCount(int row, int hitCount)
     reportChange(breakpoint, Breakpoint::HitCountColumn);
 }
 
+void BreakpointModel::updateErrorText(int row, const QString& errorText)
+{
+    Breakpoint * breakpoint = m_breakpoints.at(row);
+    breakpoint->m_errorText = errorText;
+    reportChange(breakpoint, Breakpoint::StateColumn);
+
+    if (!errorText.isEmpty()) {
+        emit error(row, errorText);
+    }
+}
+
 void BreakpointModel::markChanged(
     KTextEditor::Document *document,
     KTextEditor::Mark mark,

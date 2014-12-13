@@ -109,7 +109,7 @@ void BreakpointDetails::setItem(Breakpoint *b)
     m_hits->show();
     m_ignore->setEnabled(true);
 
-    if (b->errors().isEmpty()) {
+    if (b->errorText().isEmpty()) {
         switch (b->state()) {
             case Breakpoint::NotStartedState:
                 Q_ASSERT(0);

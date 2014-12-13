@@ -111,7 +111,6 @@ public:
 
     BreakpointState state() const;
     QString errorText() const;
-    QSet<Column> errors() const;
 
 protected:
     friend class BreakpointModel;
@@ -137,6 +136,7 @@ protected:
     int m_hitCount;
     int m_ignoreHits;
     QString m_expression;
+    QString m_errorText;
 
     void reportChange(Column c);
 };

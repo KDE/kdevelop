@@ -261,16 +261,15 @@ void BreakpointWidget::breakpointHit(KDevelop::Breakpoint* b)
         | QItemSelectionModel::ClearAndSelect);
 }
 
-void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& msg, int column)
+void BreakpointWidget::breakpointError(int row, const QString& msg)
 {
-    IF_DEBUG( qCDebug(DEBUGGER) << b << msg << column; )
-
     // FIXME: we probably should prevent this error notification during
     // initial setting of breakpoint, to avoid a cloud of popups.
     if (!m_breakpointsView->isVisible())
         return;
 
-    const QModelIndex index = m_proxyModel->mapFromSource(m_debugController->breakpointModel()->breakpointIndex(b, column));
+    const QModelIndex index = m_proxyModel->mapFromSource(
+        m_debugController->breakpointModel()->index(row, BreakpointModel::LocationColumn));
     QPoint p = m_breakpointsView->visualRect(index).topLeft();
     p = m_breakpointsView->mapToGlobal(p);
 

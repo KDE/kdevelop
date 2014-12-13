@@ -61,6 +61,11 @@ void IBreakpointController::updateHitCount(int row, int hitCount)
     breakpointModel()->updateHitCount(row, hitCount);
 }
 
+void IBreakpointController::updateErrorText(int row, const QString& errorText)
+{
+    breakpointModel()->updateErrorText(row, errorText);
+}
+
 
 // Temporary: implement old-style behavior to ease transition through API changes
 void IBreakpointController::breakpointModelChanged(int row, BreakpointModel::ColumnFlags columns)
@@ -161,12 +166,12 @@ void IBreakpointController::setHitCount(Breakpoint* breakpoint, int count)
 
 void IBreakpointController::error(Breakpoint* breakpoint, const QString &msg, Breakpoint::Column column)
 {
+    BreakpointModel * breakpointModel = this->breakpointModel();
+    int row = breakpointModel->breakpointIndex(breakpoint, 0).row();
+
     m_dontSendChanges++;
-    m_errorText.insert(breakpoint, msg);
     m_errors[breakpoint].insert(column);
-    breakpoint->reportChange(column);
-    breakpoint->reportChange(Breakpoint::StateColumn);
-    breakpointModel()->errorEmit(breakpoint, msg, Breakpoint::LocationColumn);
+    updateErrorText(row, msg);
     m_dontSendChanges--;
 }
 
@@ -198,20 +203,6 @@ void IBreakpointController::hit(KDevelop::Breakpoint* breakpoint, const QString 
         ev->sendEvent();
     }
 }
-
-QSet<Breakpoint::Column> IBreakpointController::breakpointErrors(const Breakpoint* breakpoint) const
-{
-    if (!m_errors.contains(breakpoint)) return QSet<Breakpoint::Column>();
-    return m_errors[breakpoint];
-}
-
-QString IBreakpointController::breakpointErrorText(const KDevelop::Breakpoint* breakpoint) const
-{
-    if (!m_errorText.contains(breakpoint)) return QString();
-    return m_errorText[breakpoint];
-}
-
-
 
 }
 
