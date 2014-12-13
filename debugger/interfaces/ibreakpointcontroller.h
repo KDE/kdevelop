@@ -71,7 +71,7 @@ protected:
     void updateHitCount(int row, int hitCount);
     void updateErrorText(int row, const QString& errorText);
 
-    // Review the entire API below
+    // The API below is obsolete and will be removed soon
 protected:
     void breakpointStateChanged(Breakpoint* breakpoint);
     void setHitCount(Breakpoint* breakpoint, int count);
