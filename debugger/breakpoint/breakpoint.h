@@ -114,6 +114,7 @@ public:
     QSet<Column> errors() const;
 
 protected:
+    friend class BreakpointModel;
     friend class IBreakpointController;
     
     /**

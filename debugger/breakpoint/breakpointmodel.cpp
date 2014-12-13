@@ -223,12 +223,19 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
     if (count < 1 || (row < 0) || (row + count) > rowCount(parent))
         return false;
 
+    IDebugSession* session = debugController()->currentSession();
+    IBreakpointController* breakpointController = session ? session->breakpointController() : nullptr;
+
     beginRemoveRows(parent, row, row+count-1);
     for (int i=0; i < count; ++i) {
         Breakpoint *b = m_breakpoints.at(row);
+        b->m_deleted = true;
+        if (breakpointController)
+            breakpointController->breakpointAboutToBeDeleted(row);
         m_breakpoints.removeAt(row);
-        b->setDeleted();
-        emit breakpointDeleted(b);
+        b->m_model = 0;
+        // To be changed: the controller is currently still responsible for deleting the breakpoint
+        // object
     }
     endRemoveRows();
     updateMarks();

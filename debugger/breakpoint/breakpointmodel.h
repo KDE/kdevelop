@@ -119,13 +119,6 @@ private:
 
     IDebugController * debugController();
 
-Q_SIGNALS:
-    /**
-     * A breakpoint has been deleted by the user. The breakpoint object
-     * still exists as is has eventualle be deleted from the debugger engine.
-     */
-    void breakpointDeleted(KDevelop::Breakpoint *breakpoint);
-
 private Q_SLOTS:
 
     void updateMarks();

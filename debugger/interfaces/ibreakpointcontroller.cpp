@@ -41,9 +41,6 @@ namespace KDevelop {
 IBreakpointController::IBreakpointController(KDevelop::IDebugSession* parent)
     : QObject(parent), m_dontSendChanges(0)
 {
-    connect(breakpointModel(), &BreakpointModel::breakpointDeleted,
-            this, &IBreakpointController::breakpointDeleted);
-
     connect(parent, &IDebugSession::stateChanged,
              this, &IBreakpointController::debuggerStateChanged);
 }
@@ -117,9 +114,11 @@ void IBreakpointController::sendMaybeAll()
     }
 }
 
-void IBreakpointController::breakpointDeleted(KDevelop::Breakpoint* breakpoint)
+// Temporary implementation to ease the API transition
+void IBreakpointController::breakpointAboutToBeDeleted(int row)
 {
-    qCDebug(DEBUGGER) << breakpoint;
+    Breakpoint * breakpoint = breakpointModel()->breakpoint(row);
+    qCDebug(DEBUGGER) << "breakpointAboutToBeDeleted(" << row << "): " << breakpoint;
     sendMaybe(breakpoint);
 }
 

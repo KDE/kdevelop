@@ -49,6 +49,11 @@ public:
      */
     virtual void breakpointModelChanged(int row, BreakpointModel::ColumnFlags columns);
 
+    /**
+     * Called when a breakpoint is about to be deleted from the model.
+     */
+    virtual void breakpointAboutToBeDeleted(int row);
+
     Breakpoint::BreakpointState breakpointState(const Breakpoint *breakpoint) const;
     int breakpointHitCount(const Breakpoint *breakpoint) const;
     QSet<Breakpoint::Column> breakpointErrors(const Breakpoint *breakpoint) const;
@@ -75,7 +80,6 @@ protected:
     int m_dontSendChanges;
 
 private Q_SLOTS:
-    void breakpointDeleted(KDevelop::Breakpoint *breakpoint);
     void debuggerStateChanged(KDevelop::IDebugSession::DebuggerState);
 };
 
