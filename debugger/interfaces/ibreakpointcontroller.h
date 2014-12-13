@@ -63,15 +63,18 @@ public:
      */
     virtual void debuggerStateChanged(KDevelop::IDebugSession::DebuggerState);
 
+protected:
+    IDebugSession *debugSession() const;
+    BreakpointModel *breakpointModel() const;
+
+    // Review the entire API below
+public:
     Breakpoint::BreakpointState breakpointState(const Breakpoint *breakpoint) const;
     int breakpointHitCount(const Breakpoint *breakpoint) const;
     QSet<Breakpoint::Column> breakpointErrors(const Breakpoint *breakpoint) const;
     QString breakpointErrorText(const Breakpoint *breakpoint) const;
 
 protected:
-    IDebugSession *debugSession() const;
-    BreakpointModel *breakpointModel() const;
-
     void breakpointStateChanged(Breakpoint* breakpoint);
     void setHitCount(Breakpoint* breakpoint, int count);
 

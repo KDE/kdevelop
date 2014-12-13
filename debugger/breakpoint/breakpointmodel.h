@@ -46,25 +46,60 @@ class KDEVPLATFORMDEBUGGER_EXPORT BreakpointModel : public QAbstractTableModel
 
 public:
     enum Column {
+        /**
+         * Whether the breakpoint is active or not (settable by user): value is Qt::Checked
+         * or Qt::Unchecked.
+         */
         EnableColumn,
+
+        /**
+         * Synchronization state of the breakpoint (not settable by user): value is one of the
+         * BreakpointState enum values.
+         */
         StateColumn,
-        TypeColumn,
+
+        /**
+         * Kind/type of breakpoint (never changes): value is one of the BreakpointKind
+         * enum values.
+         */
+        KindColumn,
+
+        /**
+         * Location of the breakpoint (modifiable by user); value is a string describing the
+         * location; note that the formatting of retrieved data can be affected by a custom
+         * BreakpointRole.
+         */
         LocationColumn,
+
+        /**
+         * Condition for conditional breakpoints (modifiable by user).
+         */
         ConditionColumn,
+
+        /**
+         * The number of times this breakpoint has been hit (cannot be modified by the user).
+         */
         HitCountColumn,
+
+        /**
+         * How many hits of the breakpoint will be ignored before the breakpoint actually stops
+         * the program (can be modified by the user and is updated by the debugger backend).
+         */
         IgnoreHitsColumn,
 
         NumColumns
     };
-    enum ColumnFlags {
+
+    enum ColumnFlag {
         EnableColumnFlag = 1 << EnableColumn,
         StateColumnFlag = 1 << StateColumn,
-        TypeColumnFlag = 1 << TypeColumn,
+        KindColumnFlag = 1 << KindColumn,
         LocationColumnFlag = 1 << LocationColumn,
         ConditionColumnFlag = 1 << ConditionColumn,
         HitCountColumnFlag = 1 << HitCountColumn,
         IgnoreHitsColumnFlag = 1 << IgnoreHitsColumn
     };
+    Q_DECLARE_FLAGS(ColumnFlags, ColumnFlag)
 
     BreakpointModel(QObject* parent);
     virtual ~BreakpointModel();
@@ -158,7 +193,8 @@ private:
     QList<Breakpoint*> m_breakpoints;
 };
 
-
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::BreakpointModel::ColumnFlags)
 
 #endif
