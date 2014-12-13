@@ -54,6 +54,15 @@ public:
      */
     virtual void breakpointAboutToBeDeleted(int row);
 
+    /**
+     * Called when the debugger state changed.
+     *
+     * Note: this method exists to ease the API transition; it should probably go away eventually,
+     * since controller implementations that do want to listen to debugger state changes probably
+     * have better ways to do so.
+     */
+    virtual void debuggerStateChanged(KDevelop::IDebugSession::DebuggerState);
+
     Breakpoint::BreakpointState breakpointState(const Breakpoint *breakpoint) const;
     int breakpointHitCount(const Breakpoint *breakpoint) const;
     QSet<Breakpoint::Column> breakpointErrors(const Breakpoint *breakpoint) const;
@@ -78,9 +87,6 @@ protected:
     QMap<const Breakpoint*, QSet<Breakpoint::Column> > m_errors;
     QMap<const Breakpoint*, QString > m_errorText; ///< message of the last error
     int m_dontSendChanges;
-
-private Q_SLOTS:
-    void debuggerStateChanged(KDevelop::IDebugSession::DebuggerState);
 };
 
 }
