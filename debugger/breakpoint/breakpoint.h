@@ -134,6 +134,7 @@ protected:
     int m_line;
     QString m_condition;
     KTextEditor::MovingCursor *m_movingCursor;
+    int m_hitCount;
     int m_ignoreHits;
     QString m_expression;
 

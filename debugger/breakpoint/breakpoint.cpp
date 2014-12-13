@@ -53,7 +53,9 @@ Breakpoint::Breakpoint(BreakpointModel *model, BreakpointKind kind)
     : m_model(model), m_enabled(true)
     , m_deleted(false), m_kind(kind)
     , m_line(-1)
-    , m_movingCursor(0), m_ignoreHits(0)
+    , m_movingCursor(0)
+    , m_hitCount(0)
+    , m_ignoreHits(0)
 {
     if (model) {
         model->registerBreakpoint(this);
@@ -64,7 +66,9 @@ Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
     : m_model(model), m_enabled(true)
     , m_deleted(false)
     , m_line(-1)
-    , m_movingCursor(0), m_ignoreHits(0)
+    , m_movingCursor(0)
+    , m_hitCount(0)
+    , m_ignoreHits(0)
 {
     if (model) {
         model->registerBreakpoint(this);
@@ -281,12 +285,7 @@ QString Breakpoint::address() const
 
 int Breakpoint::hitCount() const
 {
-    IDebugSession* session = ICore::self()->debugController()->currentSession();
-    if (session) {
-        return session->breakpointController()->breakpointHitCount(this);
-    } else {
-        return -1;
-    }
+    return m_hitCount;
 }
 
 bool Breakpoint::deleted() const

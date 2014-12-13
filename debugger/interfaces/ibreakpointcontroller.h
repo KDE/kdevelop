@@ -67,10 +67,11 @@ protected:
     IDebugSession *debugSession() const;
     BreakpointModel *breakpointModel() const;
 
+    void updateHitCount(int row, int hitCount);
+
     // Review the entire API below
 public:
     Breakpoint::BreakpointState breakpointState(const Breakpoint *breakpoint) const;
-    int breakpointHitCount(const Breakpoint *breakpoint) const;
     QSet<Breakpoint::Column> breakpointErrors(const Breakpoint *breakpoint) const;
     QString breakpointErrorText(const Breakpoint *breakpoint) const;
 
@@ -86,7 +87,6 @@ protected:
 
     QMap<const Breakpoint*, QSet<Breakpoint::Column> > m_dirty;
     QSet<const Breakpoint*> m_pending;
-    QMap<const Breakpoint*, int> m_hitCount;
     QMap<const Breakpoint*, QSet<Breakpoint::Column> > m_errors;
     QMap<const Breakpoint*, QString > m_errorText; ///< message of the last error
     int m_dontSendChanges;

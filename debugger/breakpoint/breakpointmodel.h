@@ -182,6 +182,9 @@ private:
 
 private:
     friend class Breakpoint;
+    friend class IBreakpointController;
+
+    void updateHitCount(int row, int hitCount);
 
     void registerBreakpoint(Breakpoint* breakpoint);
 

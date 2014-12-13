@@ -272,6 +272,13 @@ bool KDevelop::BreakpointModel::setData(const QModelIndex& index, const QVariant
     return false;
 }
 
+void BreakpointModel::updateHitCount(int row, int hitCount)
+{
+    Breakpoint * breakpoint = m_breakpoints.at(row);
+    breakpoint->m_hitCount = hitCount;
+    reportChange(breakpoint, Breakpoint::HitCountColumn);
+}
+
 void BreakpointModel::markChanged(
     KTextEditor::Document *document,
     KTextEditor::Mark mark,

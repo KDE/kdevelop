@@ -56,6 +56,12 @@ BreakpointModel* IBreakpointController::breakpointModel() const
     return ICore::self()->debugController()->breakpointModel();
 }
 
+void IBreakpointController::updateHitCount(int row, int hitCount)
+{
+    breakpointModel()->updateHitCount(row, hitCount);
+}
+
+
 // Temporary: implement old-style behavior to ease transition through API changes
 void IBreakpointController::breakpointModelChanged(int row, BreakpointModel::ColumnFlags columns)
 {
@@ -138,14 +144,6 @@ Breakpoint::BreakpointState IBreakpointController::breakpointState(const Breakpo
     return Breakpoint::DirtyState;
 }
 
-int IBreakpointController::breakpointHitCount(const KDevelop::Breakpoint* breakpoint) const
-{
-    if (m_hitCount.contains(breakpoint)) {
-        return m_hitCount[breakpoint];
-    }
-    return 0;
-}
-
 void IBreakpointController::breakpointStateChanged(Breakpoint* breakpoint)
 {
     if (breakpoint->deleted()) return;
@@ -156,9 +154,8 @@ void IBreakpointController::breakpointStateChanged(Breakpoint* breakpoint)
 
 void IBreakpointController::setHitCount(Breakpoint* breakpoint, int count)
 {
-    m_hitCount[breakpoint] = count;
     m_dontSendChanges++;
-    breakpoint->reportChange(Breakpoint::HitCountColumn);
+    updateHitCount(breakpointModel()->breakpointIndex(breakpoint, 0).row(), count);
     m_dontSendChanges--;
 }
 
