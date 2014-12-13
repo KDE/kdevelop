@@ -57,6 +57,8 @@ class BreakpointController : public IBreakpointController
 public:
     BreakpointController(DebugSession* parent);
 
+    using IBreakpointController::breakpointModel;
+
 private slots:
     void slotEvent(IDebugSession::event_t);
     void programStopped(const GDBMI::AsyncRecord &r);
