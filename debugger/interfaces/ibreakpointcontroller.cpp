@@ -41,9 +41,6 @@ namespace KDevelop {
 IBreakpointController::IBreakpointController(KDevelop::IDebugSession* parent)
     : QObject(parent), m_dontSendChanges(0)
 {
-    connect(breakpointModel(),
-            &BreakpointModel::breakpointChanged,
-            this, &IBreakpointController::breakpointChanged);
     connect(breakpointModel(), &BreakpointModel::breakpointDeleted,
             this, &IBreakpointController::breakpointDeleted);
 
@@ -60,6 +57,29 @@ BreakpointModel* IBreakpointController::breakpointModel() const
 {
     if (!ICore::self()) return 0;
     return ICore::self()->debugController()->breakpointModel();
+}
+
+// Temporary: implement old-style behavior to ease transition through API changes
+void IBreakpointController::breakpointModelChanged(int row, BreakpointModel::ColumnFlags columns)
+{
+    if (m_dontSendChanges)
+        return;
+
+    if ((columns & ~BreakpointModel::StateColumnFlag) != 0) {
+        Breakpoint * breakpoint = breakpointModel()->breakpoint(row);
+        for (int column = 0; column < BreakpointModel::NumColumns; ++column) {
+            if (columns & (1 << column)) {
+                m_dirty[breakpoint].insert(Breakpoint::Column(column));
+                if (m_errors.contains(breakpoint)) {
+                    m_errors[breakpoint].remove(Breakpoint::Column(column));
+                }
+            }
+        }
+        breakpointStateChanged(breakpoint);
+        if (debugSession()->isRunning()) {
+            sendMaybe(breakpoint);
+        }
+    }
 }
 
 void IBreakpointController::debuggerStateChanged(IDebugSession::DebuggerState state)
@@ -95,22 +115,6 @@ void IBreakpointController::sendMaybeAll()
     foreach (Breakpoint *breakpoint, model->breakpoints()) {
         sendMaybe(breakpoint);
     }
-}
-
-void IBreakpointController::breakpointChanged(KDevelop::Breakpoint* breakpoint, KDevelop::Breakpoint::Column column)
-{
-    if (m_dontSendChanges) return;
-
-    if (column != Breakpoint::StateColumn) {
-        m_dirty[breakpoint].insert(column);
-        if (m_errors.contains(breakpoint)) m_errors[breakpoint].remove(column);
-        breakpointStateChanged(breakpoint);
-        if (debugSession()->isRunning()) {
-            sendMaybe(breakpoint);
-        }
-    }
-
-    qCDebug(DEBUGGER) << column << m_dirty;
 }
 
 void IBreakpointController::breakpointDeleted(KDevelop::Breakpoint* breakpoint)

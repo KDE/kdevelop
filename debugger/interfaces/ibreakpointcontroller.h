@@ -31,11 +31,10 @@
 
 #include "idebugsession.h"
 #include "../breakpoint/breakpoint.h"
+#include "../breakpoint/breakpointmodel.h"
 
 class QModelIndex;
 namespace KDevelop {
-class BreakpointModel;
-class Breakpoint;
 class IDebugSession;
 
 class KDEVPLATFORMDEBUGGER_EXPORT IBreakpointController : public QObject
@@ -43,7 +42,13 @@ class KDEVPLATFORMDEBUGGER_EXPORT IBreakpointController : public QObject
     Q_OBJECT
 public:
     IBreakpointController(IDebugSession* parent);
-    
+
+    /**
+     * Implementors must handle changes to the breakpoint model, which are signaled via
+     * this method, by forwarding the changes to the backend debugger.
+     */
+    virtual void breakpointModelChanged(int row, BreakpointModel::ColumnFlags columns);
+
     Breakpoint::BreakpointState breakpointState(const Breakpoint *breakpoint) const;
     int breakpointHitCount(const Breakpoint *breakpoint) const;
     QSet<Breakpoint::Column> breakpointErrors(const Breakpoint *breakpoint) const;
@@ -70,7 +75,6 @@ protected:
     int m_dontSendChanges;
 
 private Q_SLOTS:
-    void breakpointChanged(KDevelop::Breakpoint* breakpoint, KDevelop::Breakpoint::Column column);
     void breakpointDeleted(KDevelop::Breakpoint *breakpoint);
     void debuggerStateChanged(KDevelop::IDebugSession::DebuggerState);
 };

@@ -66,6 +66,7 @@ public:
 
     void save(KConfigGroup& config);
 
+    // Moved to BreakpointModel; temporarily left here to ease API transition
     enum Column {
         EnableColumn,
         StateColumn,

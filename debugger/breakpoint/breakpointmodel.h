@@ -36,6 +36,7 @@ class Cursor;
 
 namespace KDevelop
 {
+class IDebugController;
 class IDocument;
 class Breakpoint;
 
@@ -44,6 +45,27 @@ class KDEVPLATFORMDEBUGGER_EXPORT BreakpointModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
+    enum Column {
+        EnableColumn,
+        StateColumn,
+        TypeColumn,
+        LocationColumn,
+        ConditionColumn,
+        HitCountColumn,
+        IgnoreHitsColumn,
+
+        NumColumns
+    };
+    enum ColumnFlags {
+        EnableColumnFlag = 1 << EnableColumn,
+        StateColumnFlag = 1 << StateColumn,
+        TypeColumnFlag = 1 << TypeColumn,
+        LocationColumnFlag = 1 << LocationColumn,
+        ConditionColumnFlag = 1 << ConditionColumn,
+        HitCountColumnFlag = 1 << HitCountColumn,
+        IgnoreHitsColumnFlag = 1 << IgnoreHitsColumn
+    };
+
     BreakpointModel(QObject* parent);
     virtual ~BreakpointModel();
 
@@ -95,13 +117,14 @@ private:
         AllBreakpointMarks = BreakpointMark | ReachedBreakpointMark | DisabledBreakpointMark | PendingBreakpointMark
     };
 
+    IDebugController * debugController();
+
 Q_SIGNALS:
     /**
      * A breakpoint has been deleted by the user. The breakpoint object
      * still exists as is has eventualle be deleted from the debugger engine.
      */
     void breakpointDeleted(KDevelop::Breakpoint *breakpoint);
-    void breakpointChanged(KDevelop::Breakpoint *breakpoint, KDevelop::Breakpoint::Column column);
 
 private Q_SLOTS:
 

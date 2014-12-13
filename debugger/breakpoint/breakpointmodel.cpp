@@ -31,9 +31,12 @@
 #include <ktexteditor/movinginterface.h>
 
 #include "../interfaces/icore.h"
+#include "../interfaces/idebugcontroller.h"
 #include "../interfaces/idocumentcontroller.h"
 #include "../interfaces/idocument.h"
 #include "../interfaces/ipartcontroller.h"
+#include <interfaces/idebugsession.h>
+#include <interfaces/ibreakpointcontroller.h>
 #include "util/debug.h"
 #include "breakpoint.h"
 #include <KConfigCore/KSharedConfig>
@@ -77,6 +80,12 @@ BreakpointModel::~BreakpointModel()
     save();
 
     qDeleteAll(m_breakpoints);
+}
+
+IDebugController* BreakpointModel::debugController()
+{
+    KDevelop::ICore * core = KDevelop::ICore::self();
+    return core ? core->debugController() : nullptr;
 }
 
 void BreakpointModel::slotPartAdded(KParts::Part* part)
@@ -218,7 +227,6 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
     for (int i=0; i < count; ++i) {
         Breakpoint *b = m_breakpoints.at(row);
         m_breakpoints.removeAt(row);
-        IF_DEBUG ( qCDebug(DEBUGGER) << m_breakpoints; )
         b->setDeleted();
         emit breakpointDeleted(b);
     }
@@ -342,7 +350,14 @@ void BreakpointModel::reportChange(Breakpoint* breakpoint, Breakpoint::Column co
         Q_ASSERT(idx.isValid()); // make sure we don't pass invalid indices to dataChanged()
         emit dataChanged(idx, idx);
     }
-    emit breakpointChanged(breakpoint, column);
+
+    IDebugController * controller = this->debugController();
+    IDebugSession * session = controller ? controller->currentSession() : nullptr;
+    if (session) {
+        int row = m_breakpoints.indexOf(breakpoint);
+        Q_ASSERT(row != -1);
+        session->breakpointController()->breakpointModelChanged(row, ColumnFlags(1 << column));
+    }
 }
 
 uint BreakpointModel::breakpointType(Breakpoint *breakpoint)
