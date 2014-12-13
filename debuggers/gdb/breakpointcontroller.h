@@ -59,7 +59,7 @@ public:
 
     using IBreakpointController::breakpointModel;
 
-private slots:
+private Q_SLOTS:
     void slotEvent(IDebugSession::event_t);
     void programStopped(const GDBMI::AsyncRecord &r);
 
