@@ -136,10 +136,6 @@ KDevelop::IFrameStackModel* DebugSession::createFrameStackModel()
 
 void DebugSession::setupController()
 {
-    // variableTree -> gdbBreakpointWidget
-//     connect( variableTree,          SIGNAL(toggleWatchpoint(QString)),
-//              gdbBreakpointWidget,   SLOT(slotToggleWatchpoint(QString)));
-
     // controller -> procLineMaker
     connect(this, &DebugSession::ttyStdout,
             m_procLineMaker, &ProcessLineMaker::slotReceivedStdout);
