@@ -70,6 +70,7 @@ protected:
     void updateState(int row, Breakpoint::BreakpointState state);
     void updateHitCount(int row, int hitCount);
     void updateErrorText(int row, const QString& errorText);
+    void notifyHit(int row, const QString & msg);
 
     // The API below is obsolete and will be removed soon
 protected:

@@ -131,11 +131,9 @@ public:
     Breakpoint *breakpoint(int row);
     QList<Breakpoint*> breakpoints() const;
 
-    void hitEmit(Breakpoint *b) { emit hit(b); }
-
 Q_SIGNALS:
     void error(int row, const QString& errorText);
-    void hit(KDevelop::Breakpoint *b);
+    void hit(int row);
 
 public Q_SLOTS:
     void save();
@@ -186,6 +184,7 @@ private:
     void updateState(int row, Breakpoint::BreakpointState state);
     void updateHitCount(int row, int hitCount);
     void updateErrorText(int row, const QString& errorText);
+    void notifyHit(int row);
 
     void registerBreakpoint(Breakpoint* breakpoint);
 

@@ -251,10 +251,9 @@ void BreakpointWidget::slotUpdateBreakpointDetail()
     }
 }
 
-void BreakpointWidget::breakpointHit(KDevelop::Breakpoint* b)
+void BreakpointWidget::breakpointHit(int row)
 {
-    IF_DEBUG( qCDebug(DEBUGGER) << b; )
-    const QModelIndex index = m_proxyModel->mapFromSource(m_debugController->breakpointModel()->breakpointIndex(b, 0));
+    const QModelIndex index = m_proxyModel->mapFromSource(m_debugController->breakpointModel()->index(row, 0));
     m_breakpointsView->selectionModel()->select(
         index,
         QItemSelectionModel::Rows

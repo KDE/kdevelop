@@ -71,6 +71,38 @@ void IBreakpointController::updateErrorText(int row, const QString& errorText)
     breakpointModel()->updateErrorText(row, errorText);
 }
 
+void IBreakpointController::notifyHit(int row, const QString& msg)
+{
+    BreakpointModel * breakpointModel = this->breakpointModel();
+    breakpointModel->notifyHit(row);
+
+    // This is a slightly odd place to issue this notification,
+    // but then again it's not clear which place would be more natural
+    Breakpoint * breakpoint = breakpointModel->breakpoint(row);
+    KNotification* ev = 0;
+    switch(breakpoint->kind()) {
+        case Breakpoint::CodeBreakpoint:
+            ev = new KNotification("BreakpointHit", ICore::self()->uiController()->activeMainWindow());
+            ev->setText(i18n("Breakpoint hit: %1", breakpoint->location()) + msg);
+            break;
+        case Breakpoint::WriteBreakpoint:
+        case Breakpoint::ReadBreakpoint:
+        case Breakpoint::AccessBreakpoint:
+            ev = new KNotification("WatchpointHit", ICore::self()->uiController()->activeMainWindow());
+            ev->setText(i18n("Watchpoint hit: %1", breakpoint->location()) + msg);
+            break;
+        default:
+            Q_ASSERT(0);
+            break;
+    }
+    if (ev) {
+        ev->setPixmap(QIcon::fromTheme("script-error").pixmap(QSize(22,22)));
+        // TODO: Port
+        //ev->setComponentName(ICore::self()->aboutData().componentName());
+        ev->sendEvent();
+    }
+}
+
 
 // Temporary: implement old-style behavior to ease transition through API changes
 void IBreakpointController::breakpointModelChanged(int row, BreakpointModel::ColumnFlags columns)
@@ -180,31 +212,8 @@ void IBreakpointController::error(Breakpoint* breakpoint, const QString &msg, Br
 
 void IBreakpointController::hit(KDevelop::Breakpoint* breakpoint, const QString &msg)
 {
-    qCDebug(DEBUGGER) << breakpoint;
-    breakpointModel()->hitEmit(breakpoint);
-
-    KNotification* ev = 0;
-    switch(breakpoint->kind()) {
-        case Breakpoint::CodeBreakpoint:
-            ev = new KNotification("BreakpointHit", ICore::self()->uiController()->activeMainWindow());
-            ev->setText(i18n("Breakpoint hit: %1", breakpoint->location()) + msg);
-            break;
-        case Breakpoint::WriteBreakpoint:
-        case Breakpoint::ReadBreakpoint:
-        case Breakpoint::AccessBreakpoint:
-            ev = new KNotification("WatchpointHit", ICore::self()->uiController()->activeMainWindow());
-            ev->setText(i18n("Watchpoint hit: %1", breakpoint->location()) + msg);
-            break;
-        default:
-            Q_ASSERT(0);
-            break;
-    }
-    if (ev) {
-        ev->setPixmap(QIcon::fromTheme("script-error").pixmap(QSize(22,22)));
-        // TODO: Port
-        //ev->setComponentName(ICore::self()->aboutData().componentName());
-        ev->sendEvent();
-    }
+    int row = breakpointModel()->breakpointIndex(breakpoint, 0).row();
+    notifyHit(row, msg);
 }
 
 }

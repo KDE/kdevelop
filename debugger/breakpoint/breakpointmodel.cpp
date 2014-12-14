@@ -301,6 +301,11 @@ void BreakpointModel::updateErrorText(int row, const QString& errorText)
     }
 }
 
+void BreakpointModel::notifyHit(int row)
+{
+    emit hit(row);
+}
+
 void BreakpointModel::markChanged(
     KTextEditor::Document *document,
     KTextEditor::Mark mark,

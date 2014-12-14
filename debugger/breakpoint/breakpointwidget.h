@@ -64,7 +64,7 @@ private Q_SLOTS:
     void slotDataInserted(int column, const QVariant& value);
     void slotOpenFile(const QModelIndex& breakpointIdx);
     void breakpointError(int row, const QString& msg);
-    void breakpointHit(KDevelop::Breakpoint *b);
+    void breakpointHit(int row);
     void slotDisableAllBreakpoints();
     void slotEnableAllBreakpoints();
     void slotRemoveAllBreakpoints();
