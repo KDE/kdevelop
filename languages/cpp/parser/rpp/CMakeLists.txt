@@ -1,4 +1,3 @@
-
 add_subdirectory( tests )
 
 ########### next target ###############
@@ -27,17 +26,3 @@ target_link_libraries(kdev4cpprpp LINK_PRIVATE
   ${KDE4_KTEXTEDITOR_LIBS}
 )
 install(TARGETS kdev4cpprpp ${INSTALL_TARGETS_DEFAULT_ARGS} )
-
-########### install files ###############
-
-# install(FILES
-#     pp-engine.h
-#     pp-internal.h
-#     pp-macro-expander.h
-#     pp-macro.h
-#     pp-scanner.h
-#     pp-stream.h
-#     pp-environment.h
-#     preprocessor.h
-#     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/rpp
-# )
