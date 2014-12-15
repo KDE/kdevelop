@@ -22,6 +22,7 @@
 
 #include <QPushButton>
 #include <QCloseEvent>
+#include <QDebug>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -175,7 +176,8 @@ void ConfigDialog::onPageChanged()
 {
     QObject* from = sender();
     if (from && from != currentPage()->widget()) {
-        qFatal("Settings in a different page changed, this case is not handled yet");
+        qWarning() << "Settings in config page" << from << "changed, while" << currentPage()->widget() << "is currently selected. This case is not implemented yet.";
+        return;
         // TODO: add a QHash<ConfigPage*, bool> as a member to make sure the apply button is always correct
 
         // TODO: when pressing okay show confirm dialog if other pages have changed or just silently apply every page? "Items on other pages have changed, do you wish to review those changes? + list with changed pages."
