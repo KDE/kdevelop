@@ -65,7 +65,7 @@ predefined set of steps:
 
    - Once there are no commands in queue, and "reload_program_state" flag is
      set, we raise the 'program_state_changed' event. All widgets react to
-     that by queueing commands for realoding their state.
+     that by queueing commands for reloading their state.
 
      
 

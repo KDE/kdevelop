@@ -31,6 +31,7 @@
 using namespace KDevelop;
 
 namespace GDBMI {
+struct AsyncRecord;
 struct ResultRecord;
 struct Value;
 }
@@ -56,7 +57,7 @@ public:
     virtual void update();
 
 private slots:
-    void programStopped(const GDBMI::ResultRecord &r);
+    void programStopped(const GDBMI::AsyncRecord &r);
     void stateChanged(KDevelop::IDebugSession::DebuggerState);
 
 private:

@@ -141,14 +141,8 @@ private:
 
     QString m_contextIdent;
 
-    // Set to true after each debugger restart
-    // Currently used to auto-show variables view
-    // on the first pause.
-    bool justRestarted_;
-
     KConfigGroup m_config;
 
-    DebugSession* m_session;
     DebuggerToolFactory< DisassembleWidget >* disassemblefactory;
     DebuggerToolFactory< GDBOutputWidget >* gdbfactory;
     DebuggerToolFactory< MemoryViewerWidget >* memoryviewerfactory;

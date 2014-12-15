@@ -22,6 +22,8 @@
 #include "gdbframestackmodel.h"
 #include "gdbcommand.h"
 
+#include <KLocalizedString>
+
 using namespace KDevelop;
 
 QString getFunctionOrAddress(const GDBMI::Value &frame)
@@ -67,8 +69,13 @@ void GdbFrameStackModel::handleThreadInfo(const GDBMI::ResultRecord& r)
     int gidx = threads.size()-1;
     for (; gidx >= 0; --gidx) {
         KDevelop::FrameStackModel::ThreadItem i;
-        i.nr = threads[gidx]["id"].toInt();
-        i.name = getFunctionOrAddress(threads[gidx]["frame"]);
+        const GDBMI::Value & threadMI = threads[gidx];
+        i.nr = threadMI["id"].toInt();
+        if (threadMI["state"].literal() == "stopped") {
+            i.name = getFunctionOrAddress(threads[gidx]["frame"]);
+        } else {
+            i.name = i18n("(running)");
+        }
         threadsList << i;
     }
     setThreads(threadsList);

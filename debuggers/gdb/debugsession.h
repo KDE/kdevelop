@@ -84,7 +84,7 @@ Q_SIGNALS:
     void applicationStandardErrorLines(const QStringList& lines);
     void showMessage(const QString& message, int timeout);
     void reset();
-    void programStopped(const GDBMI::ResultRecord& mi_record);
+    void programStopped(const GDBMI::AsyncRecord& mi_record);
 
 public Q_SLOTS:
     /**
@@ -113,6 +113,13 @@ public Q_SLOTS:
      */
     void attachToProcess(int pid);
 
+protected:
+    /**
+     * Testing mode affects a (very!) limited number of settings in an attempt to create
+     * a cleaner and more reproducible environment for unit tests.
+     */
+    void setTesting(bool testing);
+
 Q_SIGNALS:
     void raiseGdbConsoleViews();
 
@@ -129,11 +136,9 @@ private:
     KDevelop::ProcessLineMaker *m_procLineMaker;
     KDevelop::ProcessLineMaker *m_gdbLineMaker;
     DebuggerState m_sessionState;
-    bool justRestarted_;
     KConfigGroup m_config;
     QPointer<GDB> m_gdb;
-
-
+    bool m_testing;
 
 
 public:
@@ -195,12 +200,6 @@ public:
     */
     void addCommandToFront(GDBCommand* cmd);
 
-    /* If current command queue has any command
-       for which isRun is true, inserts 'cmd'
-       before the first such command. Otherwise,
-       works the same as addCommand. */
-    void addCommandBeforeRun(GDBCommand* cmd);
-
     bool stateIsOn(DBGStateFlags state) const;
     DBGStateFlags debuggerState() const;
 
@@ -245,25 +244,13 @@ private:
 
     bool startDebugger(KDevelop::ILaunchConfiguration* cfg);
 
-    ///Checks if exited inferior is the last one, if so ends the debug session.
-    void lastInferiorHandler(const QStringList& l);
-
 private Q_SLOTS:
 
     void gdbReady();
 
     void gdbExited();
 
-    void slotProgramStopped(const GDBMI::ResultRecord& mi_record);
-
-    /** Parses the CLI output line, and catches interesting messages
-        like "Program exited". This is intended to allow using console
-        commands in the gdb window despite the fact that GDB does not
-        produce right MI notification for CLI commands. I.e. if you
-        run "continue" there will be no MI message if the application has
-        exited.
-    */
-    void parseStreamRecord(const GDBMI::StreamRecord& s);
+    void slotProgramStopped(const GDBMI::AsyncRecord& mi_record);
 
     /** Default handler for errors.
         Tries to guess is the error message is telling that target is
@@ -273,6 +260,9 @@ private Q_SLOTS:
 
     /**Triggered every time program begins/continues it's execution.*/
     void programRunning();
+
+    /** Handle MI async notifications. */
+    void processNotification(const GDBMI::AsyncRecord& n);
 
     // All of these slots are entered in the controller's thread, as they use queued connections or are called internally
     void queueCmd(GDBCommand *cmd, QueuePosition queue_where = QueueAtEnd);
@@ -289,6 +279,7 @@ private Q_SLOTS:
     void handleVersion(const QStringList& s);
     void handleFileExecAndSymbols(const GDBMI::ResultRecord& r);
     void handleTargetAttach(const GDBMI::ResultRecord& r);
+    void handleCoreFile(const GDBMI::ResultRecord& r);
 
 public Q_SLOTS:
     void slotKill();

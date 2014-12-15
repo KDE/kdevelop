@@ -33,6 +33,7 @@
 #include <kparts/mainwindow.h>
 
 #include <outputview/outputmodel.h>
+#include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <util/environmentgrouplist.h>
 #include <interfaces/iproject.h>
@@ -147,9 +148,18 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
     }
     if( launchMode == "debug" )
     {
-        QList<KJob*> l;
         Q_ASSERT(m_execute);
-        QString err;
+
+        if (KDevelop::ICore::self()->debugController()->currentSession() != nullptr) {
+            KMessageBox::ButtonCode answer = KMessageBox::warningYesNo(
+                nullptr,
+                i18n("A program is already being debugged. Do you want to abort the "
+                     "currently running debug session and continue with the launch?"));
+            if (answer == KMessageBox::No)
+                return nullptr;
+        }
+
+        QList<KJob*> l;
         KJob* depjob = m_execute->dependecyJob(cfg);
         if( depjob )
         {

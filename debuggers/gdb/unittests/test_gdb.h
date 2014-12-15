@@ -60,6 +60,7 @@ private Q_SLOTS:
     void testStackDeactivateAndActive();
     void testStackSwitchThread();
     void testAttach();
+    void testManualAttach();
     void testCoreFile();
     void testVariablesLocals();
     void testVariablesLocalsStruct();
@@ -97,7 +98,7 @@ private:
     void waitForState(GDBDebugger::DebugSession *session,
                       KDevelop::IDebugSession::DebuggerState state,
                       const char *file, int line,
-                      bool expectFail = false);
+                      bool waitForIdle = false);
     IExecutePlugin* m_iface;
 };
 

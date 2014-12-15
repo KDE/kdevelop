@@ -49,6 +49,7 @@ private:
     void removeVariableUpdates();
   
     QList<GDBCommand*> m_commandList;
+    uint32_t m_tokenCounter;
 };
 
 }

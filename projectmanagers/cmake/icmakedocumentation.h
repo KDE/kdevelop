@@ -29,7 +29,7 @@ public:
     enum Type { Command, Variable, Module, Property, Policy, EOType };
     
     virtual ~ICMakeDocumentation() {}
-    virtual QExplicitlySharedDataPointer<KDevelop::IDocumentation> description(const QString& identifier, const QUrl &file) const=0;
+    virtual KDevelop::IDocumentation::Ptr description(const QString& identifier, const QUrl &file) const=0;
     virtual QStringList names(Type t) const=0;
 };
 

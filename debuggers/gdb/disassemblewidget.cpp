@@ -320,7 +320,7 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
 
     //only get $pc
     if (from.isEmpty()){
-        s->addCommandToFront(
+        s->addCommand(
                     new GDBCommand(DataDisassemble, "-s \"$pc\" -e \"$pc+1\" -- 0", this, &DisassembleWidget::updateExecutionAddressHandler ) );
     }else{
 
@@ -328,9 +328,8 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
         QString("-s %1 -e \"%1 + 256\" -- 0").arg(from ):
         QString("-s %1 -e %2+1 -- 0").arg(from).arg(to); // if both addr set
 
-        s->addCommandToFront(
-        new GDBCommand(DataDisassemble, cmd, this, &DisassembleWidget::disassembleMemoryHandler ) );
-
+        s->addCommand(
+            new GDBCommand(DataDisassemble, cmd, this, &DisassembleWidget::disassembleMemoryHandler ) );
    }
 }
 

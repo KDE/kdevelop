@@ -23,13 +23,14 @@
 
 #include <language/duchain/navigation/abstractnavigationcontext.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
+#include <interfaces/idocumentation.h>
 
 namespace KDevelop { class IDocumentation; }
 
 class CMakeNavigationWidget : public KDevelop::AbstractNavigationWidget
 {
     public:
-        CMakeNavigationWidget(KDevelop::TopDUContextPointer top, const QExplicitlySharedDataPointer<KDevelop::IDocumentation>& doc);
+        CMakeNavigationWidget(KDevelop::TopDUContextPointer top, const KDevelop::IDocumentation::Ptr doc);
         CMakeNavigationWidget(KDevelop::TopDUContextPointer top, KDevelop::Declaration* decl);
         
     private:

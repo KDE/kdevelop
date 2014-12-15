@@ -10,11 +10,11 @@ set( compilerprovider_SRCS
 
 add_library(kdevcompilerprovider STATIC
         ${compilerprovider_SRCS})
-
 target_link_libraries( kdevcompilerprovider LINK_PRIVATE
         KDev::Project
         KDev::Util
         KDev::Language )
+set_target_properties(kdevcompilerprovider PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 option(BUILD_kdev_msvcdefinehelper "Build the msvcdefinehelper tool for retrieving msvc standard macro definitions" OFF)
 

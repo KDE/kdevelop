@@ -45,7 +45,7 @@ public:
 
     /** Starts GDB.  This should be done after connecting to all
         signals the client is interested in.  */
-    void start(KConfigGroup& config);
+    void start(KConfigGroup& config, const QStringList& extraArguments = {});
 
     /** Executes a command.  This method may be called at
         most once each time 'ready' is emitted.  When the
@@ -82,7 +82,7 @@ Q_SIGNALS:
 
     /** Emitted when GDB reports stop, with 'r' being the
         data provided by GDB. */
-    void programStopped(const GDBMI::ResultRecord& r);
+    void programStopped(const GDBMI::AsyncRecord& r);
     
     /** Emitted when GDB believes that the program is running.  */
     void programRunning();
@@ -94,11 +94,8 @@ Q_SIGNALS:
     */
     void streamRecord(const GDBMI::StreamRecord& s);
 
-    /** FIXME: temporary, to be eliminated.  */
-    void resultRecord(const GDBMI::ResultRecord& s);
-    
-    /** Reports a general MI notification.  */
-    void notification(const GDBMI::ResultRecord& n);
+    /** Reports an async notification record.  */
+    void notification(const GDBMI::AsyncRecord& n);
     
     /** Emitted for error that is not handled by the
         command being executed. */
@@ -132,7 +129,6 @@ private:
 private:
     QString gdbBinary_;
     KProcess* process_;
-    bool sawPrompt_;
 
     GDBCommand* currentCmd_;
 
@@ -141,10 +137,8 @@ private:
     /** The unprocessed output from gdb. Output is
         processed as soon as we see newline. */
     QByteArray buffer_;
-    
-    bool receivedReply_;
+
     bool isRunning_;
-    unsigned long childPid_;
 };
 }
 

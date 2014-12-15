@@ -72,6 +72,17 @@ public:
     QString gdbCommand() const;
 
     /**
+     * Returns the MI token with which the command is sent, allowing the parser to match up
+     * the result message with the command.
+     */
+    uint32_t token() const {return token_;}
+
+    /**
+     * Set the MI token. This is done by \ref GDBCommandQueue.
+     */
+    void setToken(uint32_t token) {token_ = token;}
+
+    /**
      * Returns the thread that needs to be currently selected when this command is executed,
      * or -1 if there is no requirement.
      */
@@ -135,13 +146,6 @@ public:
 
     const QStringList& allStreamOutput() const;
 
-    // True if this command run then target for
-    // unspecified period of time -- that is either 'run' or
-    // 'continue'.
-    bool isRun() const;
-
-    void setRun(bool run);
-
     QString command() const;
 
     void setStateReloading(bool f);
@@ -150,13 +154,13 @@ public:
 
 private:
     GDBMI::CommandType type_;
+    uint32_t token_;
     QString command_;
     QPointer<QObject> handler_this;
     typedef void (QObject::* handler_t)(const GDBMI::ResultRecord&);
     handler_t handler_method;
     GDBCommandHandler *commandHandler_;
     QStringList lines;
-    bool run;
     bool stateReloading_;
 
 protected: // FIXME: should be private, after I kill the first ctor
@@ -286,7 +290,6 @@ GDBCommand::GDBCommand(
   handler_this(handler_this),
   handler_method(static_cast<handler_t>(handler_method)),
   commandHandler_(0),
-  run(false),
   stateReloading_(false),
   handlesError_(handlesError),
   m_thread(-1),
@@ -302,11 +305,11 @@ GDBCommand::GDBCommand(
     void (Handler::* handler_method)(const GDBMI::ResultRecord&),
     bool handlesError)
 : type_(type),
+  token_(0),
   command_(QString::number(index)),
   handler_this(handler_this),
   handler_method(static_cast<handler_t>(handler_method)),
   commandHandler_(0),
-  run(false),
   stateReloading_(false),
   handlesError_(handlesError),
   m_thread(-1),

@@ -346,19 +346,42 @@ namespace GDBMI
         virtual ~Record() {}
         virtual QString toString() const { Q_ASSERT( 0 ); return QString::null; }
 
-        enum { Prompt, Stream, Result } kind;
+        enum { Prompt, Stream, Result, Async } kind;
     };
 
-    struct ResultRecord : public Record, public TupleValue
+    struct TupleRecord : public Record, public TupleValue
     {
-        ResultRecord()
-            : subkind(CommandResult)
+    };
+
+    struct ResultRecord : public TupleRecord
+    {
+        ResultRecord(const QString& reason)
+            : token(0)
+            , reason(reason)
         {
             Record::kind = Result;
         }
         
-        enum { CommandResult, ExecNotification, StatusNotification, GeneralNotification } subkind;
+        uint32_t token;
+        QString reason;
+    };
 
+    struct AsyncRecord : public TupleRecord
+    {
+        enum Subkind {
+            Exec,
+            Status,
+            Notify
+        };
+
+        AsyncRecord(Subkind subkind, const QString& reason)
+            : subkind(subkind)
+            , reason(reason)
+        {
+            Record::kind = Async;
+        }
+
+        Subkind subkind;
         QString reason;
     };
 
@@ -372,9 +395,25 @@ namespace GDBMI
 
     struct StreamRecord : public Record
     {
-        inline StreamRecord() : reason(0) { Record::kind = Stream; }
+        enum Subkind {
+            /// Console stream: usual CLI output of GDB in response to non-MI commands
+            Console,
 
-        char reason;
+            /// Target output stream (stdout/stderr of the inferior process, only in some
+            /// scenarios - usually we get stdout/stderr via other means)
+            Target,
+
+            /// Log stream: GDB internal messages that should be displayed as part of an error log
+            Log
+        };
+
+        StreamRecord(Subkind subkind)
+            : subkind(subkind)
+        {
+            Record::kind = Stream;
+        }
+
+        Subkind subkind;
         QString message;
     };
 }

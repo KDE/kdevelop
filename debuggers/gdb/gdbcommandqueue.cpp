@@ -24,6 +24,7 @@ using namespace GDBDebugger;
 using namespace GDBMI;
 
 CommandQueue::CommandQueue()
+    : m_tokenCounter(0)
 {
 }
 
@@ -34,6 +35,11 @@ CommandQueue::~CommandQueue()
 
 void GDBDebugger::CommandQueue::enqueue(GDBCommand * command, QueuePosition insertPosition)
 {
+    ++m_tokenCounter;
+    if (m_tokenCounter == 0)
+        m_tokenCounter = 1;
+    command->setToken(m_tokenCounter);
+
     switch (insertPosition) {
         case QueueAtFront:
             m_commandList.prepend(command);
@@ -41,15 +47,6 @@ void GDBDebugger::CommandQueue::enqueue(GDBCommand * command, QueuePosition inse
         case QueueAtEnd:
             m_commandList.append(command);
             break;
-
-        case QueueWhileInterrupted: {
-            int i;
-            for (i = 0; i < m_commandList.count(); ++i)
-                if (m_commandList.at(i)->isRun())
-                    break;
-
-            m_commandList.insert(i, command);
-        }
     }
 
     rationalizeQueue(command);

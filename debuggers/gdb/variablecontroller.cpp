@@ -53,7 +53,7 @@ DebugSession *VariableController::debugSession() const
     return static_cast<DebugSession*>(const_cast<QObject*>(QObject::parent()));
 }
 
-void VariableController::programStopped(const GDBMI::ResultRecord& r)
+void VariableController::programStopped(const GDBMI::AsyncRecord& r)
 {
     if (debugSession()->stateIsOn(s_shuttingDown)) return;
 
