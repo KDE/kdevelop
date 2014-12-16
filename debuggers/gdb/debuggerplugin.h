@@ -51,7 +51,6 @@ class ProcessLineMaker;
 
 namespace GDBDebugger
 {
-class FramestackWidget;
 class DisassembleWidget;
 class Breakpoint;
 class GDBOutputWidget;
