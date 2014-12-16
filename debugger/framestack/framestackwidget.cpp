@@ -96,7 +96,6 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
     m_threadsWidget->setLayout(new QVBoxLayout());
     m_threadsWidget->layout()->addWidget(new QLabel(i18n("Threads:")));
     m_threadsWidget->layout()->addWidget(m_threads);
-    m_threadsWidget->hide();
     addWidget(m_threadsWidget);
     addWidget(m_frames);
 
@@ -105,14 +104,16 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
 
     // Show the selected frame when clicked, even if it has previously been selected
     connect(m_frames, &QTreeView::clicked, this, &FramestackWidget::frameSelectionChanged);
+
+    currentSessionChanged(controller->currentSession());
 }
 
-FramestackWidget::~FramestackWidget() {}
+FramestackWidget::~FramestackWidget()
+{
+}
 
 void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
 {
-    qCDebug(DEBUGGER) << "Adding session:" << isVisible();
-
     m_session = session;
 
     m_threads->setModel(session ? session->frameStackModel() : 0);
@@ -136,21 +137,9 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
         // Show the selected frame, independent of the means by which it has been selected
         connect(m_frames->selectionModel(), &QItemSelectionModel::currentChanged,
                 this, &FramestackWidget::frameSelectionChanged);
+
+        sessionStateChanged(session->state());
     }
-
-    if (isVisible()) {
-        showEvent(0);
-    }
-}
-
-void FramestackWidget::hideEvent(QHideEvent* e)
-{
-    QWidget::hideEvent(e);
-}
-
-void FramestackWidget::showEvent(QShowEvent* e)
-{
-    QWidget::showEvent(e);
 }
 
 void FramestackWidget::setThreadShown(const QModelIndex& current)

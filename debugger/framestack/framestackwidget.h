@@ -44,9 +44,6 @@ class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public AutoOrientedSplitter
         virtual ~FramestackWidget();
     Q_SIGNALS:
         void requestRaise();
-    protected:
-        virtual void showEvent(QShowEvent* );
-        virtual void hideEvent(QHideEvent* );
     private Q_SLOTS:
         void currentSessionChanged(KDevelop::IDebugSession* session);
 
