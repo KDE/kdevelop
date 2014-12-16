@@ -13,7 +13,6 @@ generate_export_header(KDevPlatformSerialization EXPORT_FILE_NAME serializatione
 target_link_libraries(KDevPlatformSerialization
 LINK_PUBLIC
     KDev::Interfaces
-LINK_PRIVATE
     KDev::Util
 )
 
