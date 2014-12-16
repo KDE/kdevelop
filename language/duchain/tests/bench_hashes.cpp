@@ -33,7 +33,7 @@
 
 // similar to e.g. modificationrevision.cpp
 struct DataT {
-  timeval a;
+  QDateTime a;
   QDateTime b;
 };
 

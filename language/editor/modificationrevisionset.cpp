@@ -22,11 +22,9 @@
 #include <serialization/itemrepository.h>
 #include <serialization/indexedstring.h>
 #include <util/setrepository.h>
-#include <time.h>
 
 //When uncommented, the reason for needed updates is printed
 // #define DEBUG_NEEDSUPDATE
-#include <sys/time.h>
 
 namespace KDevelop {
 
@@ -103,7 +101,7 @@ void initModificationRevisionSetRepository() {
   fileModificationPairRepository();
 }
 
-QHash<uint, std::pair<timeval, bool> > needsUpdateCache;
+QHash<uint, std::pair<QDateTime, bool> > needsUpdateCache;
 
 void ModificationRevisionSet::clearCache() {
   QMutexLocker lock(&modificationRevisionSetMutex);
@@ -213,16 +211,11 @@ static bool nodeNeedsUpdate(uint index) {
   if(!index)
     return false;
 
-  timeval currentTime;
-  gettimeofday(&currentTime, 0);
+  const auto currentTime = QDateTime::currentDateTime();
 
-  QHash<uint, std::pair<timeval, bool> >::const_iterator cached = needsUpdateCache.constFind(index);
+  auto cached = needsUpdateCache.constFind(index);
   if(cached != needsUpdateCache.constEnd()) {
-
-    timeval  age;
-    timersub(&currentTime, &(*cached).first, &age);
-
-    if( age.tv_sec < cacheModificationTimesForSeconds )
+    if((*cached).first.secsTo(currentTime) < cacheModificationTimesForSeconds )
     {
       return cached->second;
     }

@@ -19,8 +19,6 @@
 #ifndef KDEVPLATFORM_MODIFICATIONREVISIONSET_H
 #define KDEVPLATFORM_MODIFICATIONREVISIONSET_H
 
-#include <sys/types.h>
-#include <language/util/basicsetrepository.h>
 #include "modificationrevision.h"
 
 namespace KDevelop {

@@ -20,8 +20,6 @@
 #include "duchain.h"
 #include "duchainlock.h"
 
-#include <unistd.h>
-
 #include <QtCore/QCoreApplication>
 #include <QApplication>
 #include <QtCore/QHash>
@@ -563,7 +561,7 @@ public:
         while(m_loading.contains(index)) {
           l.unlock();
           qCDebug(LANGUAGE) << "waiting for another thread to load index" << index;
-          usleep(50000);
+          QThread::usleep(50000);
           l.relock();
         }
         loaded.insert(index);
@@ -748,7 +746,7 @@ public:
         //Eventually give other threads a chance to access the duchain
         writeLock.unlock();
         //Sleep to give the other threads a realistic chance to get a read-lock in between
-        usleep(500);
+        QThread::usleep(500);
         writeLock.lock();
       }
     }
@@ -809,7 +807,7 @@ public:
             //Eventually give other threads a chance to access the duchain
             writeLock.unlock();
             //Sleep to give the other threads a realistic chance to get a read-lock in between
-            usleep(500);
+            QThread::usleep(500);
             writeLock.lock();
           }
         }
@@ -1652,7 +1650,7 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
 
     QMetaObject::invokeMethod(ICore::self()->languageController()->backgroundParser(), "parseDocuments");
     QApplication::processEvents();
-    usleep(1000);
+    QThread::usleep(1000);
   }
 
   if(!proxyContext) {

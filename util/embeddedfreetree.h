@@ -19,13 +19,13 @@
 #ifndef EMBEDDED_FREE_TREE
 #define EMBEDDED_FREE_TREE
 
-#include <sys/types.h>
-#include <limits>
-#include <stdlib.h>
-#include <QtCore/QPair>
 #include "kdevvarlengtharray.h"
 
+#include <QtCore/QPair>
+
 #include <iostream>
+#include <stdlib.h>
+#include <limits>
 
 //Uncomment this to search for tree-inconsistencies, however it's very expensive
 // #define DEBUG_FREEITEM_COUNT debugFreeItemCount(); verifyTreeConsistent(*m_centralFreeItem, 0, m_itemCount);

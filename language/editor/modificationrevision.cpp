@@ -25,7 +25,6 @@
 
 #include <serialization/indexedstring.h>
 #include "modificationrevisionset.h"
-#include <sys/time.h>
 
 /// @todo Listen to filesystem changes (together with the project manager)
 /// and call fileModificationCache().clear(...) when a file has changed
@@ -38,7 +37,7 @@ QMutex fileModificationTimeCacheMutex(QMutex::Recursive);
 
 struct FileModificationCache
 {
-  timeval m_readTime;
+  QDateTime m_readTime;
   QDateTime m_modificationTime;
 };
 
@@ -60,15 +59,12 @@ OpenDocumentRevisionsMap& openDocumentsRevisionMap()
 
 QDateTime fileModificationTimeCached( const IndexedString& fileName )
 {
-  timeval currentTime;
-  gettimeofday(&currentTime, 0);
+  const auto currentTime = QDateTime::currentDateTime();
 
-  FileModificationMap::const_iterator it = fileModificationCache().constFind( fileName );
+  auto it = fileModificationCache().constFind( fileName );
   if ( it != fileModificationCache().constEnd() ) {
     ///Use the cache for X seconds
-    timeval age;
-    timersub(&currentTime, &it.value().m_readTime, &age);
-    if ( age.tv_sec < cacheModificationTimesForSeconds ) {
+    if (it.value().m_readTime.secsTo(currentTime) < cacheModificationTimesForSeconds ) {
       return it.value().m_modificationTime;
     }
   }

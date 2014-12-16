@@ -19,9 +19,6 @@
  ***************************************************************************/
 
 #include "partcontroller.h"
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 
 #include <QFile>
 #include <QTimer>

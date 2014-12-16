@@ -22,8 +22,6 @@
 #include "duchainlock.h"
 #include "duchain.h"
 
-#include <unistd.h>
-
 #include <QThread>
 #include <QThreadStorage>
 #include <QElapsedTimer>
@@ -81,10 +79,6 @@ DUChainLock::~DUChainLock()
   delete d;
 }
 
-inline uint toMilliSeconds(timeval v) {
-  return v.tv_sec * 1000 + v.tv_usec / 1000;
-}
-
 bool DUChainLock::lockForRead(unsigned int timeout)
 {
   ///Step 1: Increase the own reader-recursion. This will make sure no further write-locks will succeed
@@ -103,7 +97,7 @@ bool DUChainLock::lockForRead(unsigned int timeout)
 
     while (d->m_writer.loadAcquire()) {
       if (!timeout || t.elapsed() < timeout) {
-        usleep(uSleepTime);
+        QThread::usleep(uSleepTime);
       } else {
         //Fail!
         d->changeOwnReaderRecursion(-1);
@@ -158,7 +152,7 @@ bool DUChainLock::lockForWrite(uint timeout)
     }
 
     if (!timeout || t.elapsed() < timeout) {
-      usleep(uSleepTime);
+      QThread::usleep(uSleepTime);
     } else {
       //Fail!
       return false;
