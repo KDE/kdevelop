@@ -23,7 +23,8 @@
 #ifndef KDEVPLATFORM_BREAKPOINTWIDGET_H
 #define KDEVPLATFORM_BREAKPOINTWIDGET_H
 
-#include <QWidget>
+#include <util/autoorientedsplitter.h>
+
 #include "debuggerexport.h"
 
 class QAbstractProxyModel;
@@ -38,7 +39,7 @@ class IDebugController;
 class Breakpoint;
 class BreakpointDetails;
 
-class KDEVPLATFORMDEBUGGER_EXPORT BreakpointWidget : public QWidget
+class KDEVPLATFORMDEBUGGER_EXPORT BreakpointWidget : public AutoOrientedSplitter
 {
     Q_OBJECT
 public:
@@ -70,7 +71,6 @@ private Q_SLOTS:
     void slotPopupMenuAboutToShow();
     
 private:
-    QSplitter* m_splitter;
     QTableView* m_breakpointsView;
     BreakpointDetails* m_details;
     QMenu* m_popup;

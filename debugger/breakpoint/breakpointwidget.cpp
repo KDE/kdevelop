@@ -48,7 +48,7 @@
 using namespace KDevelop;
 
 BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent)
-: QWidget(parent), m_firstShow(true), m_debugController(controller),
+: AutoOrientedSplitter(parent), m_firstShow(true), m_debugController(controller),
   m_breakpointDisableAllAction(0), m_breakpointEnableAllAction(0), m_breakpointRemoveAll(0)
 {
     setWindowTitle(i18nc("@title:window", "Debugger Breakpoints"));
@@ -59,20 +59,14 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
                                           "to the source in the editor window."));
     setWindowIcon( QIcon::fromTheme("process-stop") );
 
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setMargin(0);
-    QSplitter *s = new AutoOrientedSplitter(this);
-    layout->addWidget(s);
-    m_splitter = s;
-
-    m_breakpointsView = new QTableView(s);
+    m_breakpointsView = new QTableView(this);
     m_breakpointsView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_breakpointsView->setSelectionMode(QAbstractItemView::SingleSelection);
     m_breakpointsView->horizontalHeader()->setHighlightSections(false);
     m_breakpointsView->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    m_details = new BreakpointDetails(s);
+    m_details = new BreakpointDetails(this);
 
-    s->setStretchFactor(0, 2);
+    setStretchFactor(0, 2);
 
     m_breakpointsView->verticalHeader()->hide();
 
