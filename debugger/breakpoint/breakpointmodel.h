@@ -36,7 +36,6 @@ class Cursor;
 
 namespace KDevelop
 {
-class IDebugController;
 class IDocument;
 class Breakpoint;
 
@@ -148,8 +147,6 @@ private:
 
         AllBreakpointMarks = BreakpointMark | ReachedBreakpointMark | DisabledBreakpointMark | PendingBreakpointMark
     };
-
-    IDebugController * debugController();
 
 private Q_SLOTS:
 

@@ -73,12 +73,12 @@ void IBreakpointController::updateErrorText(int row, const QString& errorText)
 
 void IBreakpointController::notifyHit(int row, const QString& msg)
 {
-    BreakpointModel * breakpointModel = this->breakpointModel();
-    breakpointModel->notifyHit(row);
+    BreakpointModel* model = breakpointModel();
+    model->notifyHit(row);
 
     // This is a slightly odd place to issue this notification,
     // but then again it's not clear which place would be more natural
-    Breakpoint * breakpoint = breakpointModel->breakpoint(row);
+    Breakpoint* breakpoint = model->breakpoint(row);
     KNotification* ev = 0;
     switch(breakpoint->kind()) {
         case Breakpoint::CodeBreakpoint:
@@ -134,15 +134,17 @@ void IBreakpointController::debuggerStateChanged(IDebugSession::DebuggerState st
         return;
 
     //breakpoint state changes when session started or stopped
-    foreach (Breakpoint *breakpoint, model->breakpoints()) {
+    foreach (Breakpoint* breakpoint, model->breakpoints()) {
         if (state == IDebugSession::StartingState) {
+            auto& dirty = m_dirty[breakpoint];
+
             //when starting everything is dirty
-            m_dirty[breakpoint].insert(Breakpoint::LocationColumn);
+            dirty.insert(Breakpoint::LocationColumn);
             if (!breakpoint->condition().isEmpty()) {
-                m_dirty[breakpoint].insert(Breakpoint::ConditionColumn);
+                dirty.insert(Breakpoint::ConditionColumn);
             }
             if (!breakpoint->enabled()) {
-                m_dirty[breakpoint].insert(KDevelop::Breakpoint::EnableColumn);
+                dirty.insert(KDevelop::Breakpoint::EnableColumn);
             }
         }
         breakpointStateChanged(breakpoint);
@@ -163,7 +165,7 @@ void IBreakpointController::sendMaybeAll()
 // Temporary implementation to ease the API transition
 void IBreakpointController::breakpointAboutToBeDeleted(int row)
 {
-    Breakpoint * breakpoint = breakpointModel()->breakpoint(row);
+    Breakpoint* breakpoint = breakpointModel()->breakpoint(row);
     qCDebug(DEBUGGER) << "breakpointAboutToBeDeleted(" << row << "): " << breakpoint;
     sendMaybe(breakpoint);
 }
@@ -201,8 +203,8 @@ void IBreakpointController::setHitCount(Breakpoint* breakpoint, int count)
 
 void IBreakpointController::error(Breakpoint* breakpoint, const QString &msg, Breakpoint::Column column)
 {
-    BreakpointModel* breakpointModel = this->breakpointModel();
-    int row = breakpointModel->breakpointIndex(breakpoint, 0).row();
+    BreakpointModel* model = breakpointModel();
+    int row = model->breakpointIndex(breakpoint, 0).row();
 
     m_dontSendChanges++;
     m_errors[breakpoint].insert(column);

@@ -49,6 +49,24 @@
 using namespace KDevelop;
 using namespace KTextEditor;
 
+namespace {
+
+IBreakpointController* breakpointController()
+{
+    KDevelop::ICore* core = KDevelop::ICore::self();
+    if (!core) {
+        return nullptr;
+    }
+    IDebugController* controller = core->debugController();
+    if (!controller) {
+        return nullptr;
+    }
+    IDebugSession* session = controller->currentSession();
+    return session ? session->breakpointController() : nullptr;
+}
+
+} // anonymous namespace
+
 BreakpointModel::BreakpointModel(QObject* parent)
     : QAbstractTableModel(parent),
       m_dontUpdateMarks(false)
@@ -80,12 +98,6 @@ BreakpointModel::~BreakpointModel()
     save();
 
     qDeleteAll(m_breakpoints);
-}
-
-IDebugController* BreakpointModel::debugController()
-{
-    KDevelop::ICore * core = KDevelop::ICore::self();
-    return core ? core->debugController() : nullptr;
 }
 
 void BreakpointModel::slotPartAdded(KParts::Part* part)
@@ -223,15 +235,14 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
     if (count < 1 || (row < 0) || (row + count) > rowCount(parent))
         return false;
 
-    IDebugSession* session = debugController()->currentSession();
-    IBreakpointController* breakpointController = session ? session->breakpointController() : nullptr;
+    IBreakpointController* controller = breakpointController();
 
     beginRemoveRows(parent, row, row+count-1);
     for (int i=0; i < count; ++i) {
-        Breakpoint *b = m_breakpoints.at(row);
+        Breakpoint* b = m_breakpoints.at(row);
         b->m_deleted = true;
-        if (breakpointController)
-            breakpointController->breakpointAboutToBeDeleted(row);
+        if (controller)
+            controller->breakpointAboutToBeDeleted(row);
         m_breakpoints.removeAt(row);
         b->m_model = 0;
         // To be changed: the controller is currently still responsible for deleting the breakpoint
@@ -274,7 +285,7 @@ bool KDevelop::BreakpointModel::setData(const QModelIndex& index, const QVariant
 
 void BreakpointModel::updateState(int row, Breakpoint::BreakpointState state)
 {
-    Breakpoint * breakpoint = m_breakpoints.at(row);
+    Breakpoint* breakpoint = m_breakpoints.at(row);
     if (state != breakpoint->m_state) {
         breakpoint->m_state = state;
         reportChange(breakpoint, Breakpoint::StateColumn);
@@ -283,7 +294,7 @@ void BreakpointModel::updateState(int row, Breakpoint::BreakpointState state)
 
 void BreakpointModel::updateHitCount(int row, int hitCount)
 {
-    Breakpoint * breakpoint = m_breakpoints.at(row);
+    Breakpoint* breakpoint = m_breakpoints.at(row);
     if (hitCount != breakpoint->m_hitCount) {
         breakpoint->m_hitCount = hitCount;
         reportChange(breakpoint, Breakpoint::HitCountColumn);
@@ -292,7 +303,7 @@ void BreakpointModel::updateHitCount(int row, int hitCount)
 
 void BreakpointModel::updateErrorText(int row, const QString& errorText)
 {
-    Breakpoint * breakpoint = m_breakpoints.at(row);
+    Breakpoint* breakpoint = m_breakpoints.at(row);
     breakpoint->m_errorText = errorText;
     reportChange(breakpoint, Breakpoint::StateColumn);
 
@@ -392,12 +403,10 @@ void BreakpointModel::reportChange(Breakpoint* breakpoint, Breakpoint::Column co
         emit dataChanged(idx, idx);
     }
 
-    IDebugController * controller = this->debugController();
-    IDebugSession * session = controller ? controller->currentSession() : nullptr;
-    if (session) {
+    if (IBreakpointController* controller = breakpointController()) {
         int row = m_breakpoints.indexOf(breakpoint);
         Q_ASSERT(row != -1);
-        session->breakpointController()->breakpointModelChanged(row, ColumnFlags(1 << column));
+        controller->breakpointModelChanged(row, ColumnFlags(1 << column));
     }
 }
 
