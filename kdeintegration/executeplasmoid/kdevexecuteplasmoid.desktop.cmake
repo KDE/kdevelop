@@ -27,6 +27,7 @@ Comment[ru]=Позволяет испытать плазмоид
 Comment[sk]=Umožní vám vidieť plazmoid
 Comment[sl]=Vam omogoča ogled plasmoida
 Comment[sv]=Låter dig visa en Plasmoid
+Comment[tr]=Bir plazmoid görüntülemenize imkan verir
 Comment[uk]=Надає вам змогу переглядати роботу плазмоїдів
 Comment[x-test]=xxLets you view a plasmoidxx
 Comment[zh_CN]=让您查看一个 plasmoid

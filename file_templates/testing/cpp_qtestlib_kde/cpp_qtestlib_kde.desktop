@@ -55,6 +55,7 @@ Comment[ru]=Модульный тест на базе библиотеки QTest
 Comment[sk]=Unit test pomocou knižnice QTest s KDE rozšíreniami
 Comment[sl]=Preizkus enot z uporabo knjižnice QTest z razširitvami za KDE
 Comment[sv]=En enhetstest som använder QTest-biblioteket med KDE-utökningar
+Comment[tr]=QTest kitaplığını KDE eklentileriyle kullanan birim testi
 Comment[uk]=Перевірка модулів за допомогою бібліотеки QTest з розширеннями KDE
 Comment[x-test]=xxA unit test using the QTest library with KDE extensionsxx
 Comment[zh_CN]=一个使用带有 KDE 扩展的 QTest 库的单元测试
