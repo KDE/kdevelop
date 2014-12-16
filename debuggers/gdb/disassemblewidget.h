@@ -29,11 +29,10 @@
 #include <QTreeWidget>
 
 #include <QUrl>
-#include <KDialog>
 
 #include <KConfigGroup>
 
-#include "ui_selectaddress.h"
+#include "ui_selectaddressdialog.h"
 
 /***************************************************************************/
 /***************************************************************************/
@@ -50,16 +49,13 @@ namespace GDBDebugger
 
 class RegistersManager;
 
-class SelectAddrDialog: public KDialog
+class SelectAddressDialog : public QDialog
 {
     Q_OBJECT
-    
 public:
-    SelectAddrDialog(QWidget *parent = 0);
+    SelectAddressDialog(QWidget *parent = 0);
     
-    QString getAddr() const
-    { return hasValidAddress() ? m_ui.comboBox->currentText() : QString(); }
-
+    QString getAddress() const;
     void setAddress(const QString& address);
     bool hasValidAddress() const;
     void updateOkState();
@@ -69,7 +65,7 @@ private Q_SLOTS:
     void itemSelected();
     
 private:
-    Ui::SelectAddress m_ui;
+    Ui::SelectAddressDialog m_ui;
 };
 
 class DisassembleWidget;
@@ -155,7 +151,7 @@ private:
     DisassembleWindow * m_disassembleWindow;
     
     static const QIcon icon_;
-    SelectAddrDialog* m_dlg;
+    SelectAddressDialog* m_dlg;
 
     KConfigGroup m_config;
     QSplitter *m_splitter;

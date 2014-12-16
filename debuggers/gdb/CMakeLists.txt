@@ -97,7 +97,7 @@ set(kdevgdb_UI
     debuggertracingdialog.ui
     debuggerconfigwidget.ui
     selectcoredialog.ui
-    selectaddress.ui
+    selectaddressdialog.ui
     registers/registersview.ui
 )
 

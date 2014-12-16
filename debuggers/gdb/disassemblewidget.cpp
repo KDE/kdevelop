@@ -56,22 +56,24 @@ using namespace GDBMI;
 namespace GDBDebugger
 {
 
-SelectAddrDialog::SelectAddrDialog(QWidget* parent)
-    : KDialog(parent)
+SelectAddressDialog::SelectAddressDialog(QWidget* parent)
+    : QDialog(parent)
 {
-    QWidget *widget = new QWidget;
-    m_ui.setupUi(widget);
-    setMainWidget(widget);
-    setCaption(i18n("Address Selector"));
+    m_ui.setupUi(this);
+    setWindowTitle(i18n("Address Selector"));
 
     connect(m_ui.comboBox, &KHistoryComboBox::editTextChanged,
-            this, &SelectAddrDialog::validateInput );
+            this, &SelectAddressDialog::validateInput);
     connect(m_ui.comboBox, static_cast<void(KHistoryComboBox::*)()>(&KHistoryComboBox::returnPressed),
-            this, &SelectAddrDialog::itemSelected );
-    connect(this, &SelectAddrDialog::okClicked, this, &SelectAddrDialog::itemSelected );
+            this, &SelectAddressDialog::itemSelected);
 }
 
-bool SelectAddrDialog::hasValidAddress() const
+QString SelectAddressDialog::getAddress() const
+{
+    return hasValidAddress() ? m_ui.comboBox->currentText() : QString();
+}
+
+bool SelectAddressDialog::hasValidAddress() const
 {
     bool ok;
     m_ui.comboBox->currentText().toLongLong(&ok, 16);
@@ -79,17 +81,17 @@ bool SelectAddrDialog::hasValidAddress() const
     return ok;
 }
 
-void SelectAddrDialog::updateOkState()
+void SelectAddressDialog::updateOkState()
 {
-    enableButtonOk( hasValidAddress() );
+    m_ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(hasValidAddress());
 }
 
-void SelectAddrDialog::validateInput()
+void SelectAddressDialog::validateInput()
 {
     updateOkState();
 }
 
-void SelectAddrDialog::itemSelected()
+void SelectAddressDialog::itemSelected()
 {
     QString text = m_ui.comboBox->currentText();
     if( hasValidAddress() && m_ui.comboBox->findText(text) < 0 )
@@ -195,7 +197,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
 
     connect(plugin, &CppDebuggerPlugin::reset, this, &DisassembleWidget::slotDeactivate);
 
-    m_dlg = new SelectAddrDialog(this);
+    m_dlg = new SelectAddressDialog(this);
 
     // show the data if debug session is active
     KDevelop::IDebugSession* pS = pDC->currentSession();
@@ -410,15 +412,16 @@ void DisassembleWidget::slotChangeAddress()
         m_dlg->setAddress(m_disassembleWindow->selectedItems().first()->text(Address));
     }
 
-    if( m_dlg->exec() == KDialog::Rejected) return;
+    if (m_dlg->exec() == QDialog::Rejected)
+        return;
 
-    unsigned long addr = m_dlg->getAddr().toULong(&ok,16);
+    unsigned long addr = m_dlg->getAddress().toULong(&ok,16);
 
     if (addr < lower_ || addr > upper_ || !displayCurrent())
-        disassembleMemoryRegion(m_dlg->getAddr());
+        disassembleMemoryRegion(m_dlg->getAddress());
 }
 
-void SelectAddrDialog::setAddress ( const QString& address )
+void SelectAddressDialog::setAddress ( const QString& address )
 {
      m_ui.comboBox->setCurrentItem ( address, true );
 }
