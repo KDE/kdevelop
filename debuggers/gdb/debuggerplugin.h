@@ -39,7 +39,6 @@ class QLabel;
 class QMenu;
 class QDBusInterface;
 class QSignalMapper;
-class KDialog;
 class ProcessWidget;
 
 class KToolBar;

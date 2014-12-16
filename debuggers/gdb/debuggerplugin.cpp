@@ -44,7 +44,6 @@
 #include <kpluginfactory.h>
 #include <kaboutdata.h>
 #include <KToolBar>
-#include <KDialog>
 #include <KXmlGuiWindow>
 #include <KXMLGUIFactory>
 
@@ -335,7 +334,7 @@ void CppDebuggerPlugin::slotExamineCore()
     emit showMessage(this, i18n("Choose a core file to examine..."), 1000);
 
     SelectCoreDialog dlg(KDevelop::ICore::self()->uiController()->activeMainWindow());
-    if (dlg.exec() == KDialog::Rejected) {
+    if (dlg.exec() == QDialog::Rejected) {
         return;
     }
 

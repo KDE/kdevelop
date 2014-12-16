@@ -22,13 +22,14 @@
 #ifndef SELECTCOREDIALOG_H
 #define SELECTCOREDIALOG_H
 
-#include <KDialog>
-#include "ui_selectcore.h"
+#include <QDialog>
 #include <QUrl>
+
+#include "ui_selectcoredialog.h"
 
 namespace GDBDebugger {
 
-class SelectCoreDialog : public KDialog
+class SelectCoreDialog : public QDialog
 {
 public:
     SelectCoreDialog(QWidget *parent = 0);
@@ -36,7 +37,7 @@ public:
     QUrl core() const;
 
 private:
-    Ui::SelectCore m_ui;
+    Ui::SelectCoreDialog m_ui;
 };
 
 }

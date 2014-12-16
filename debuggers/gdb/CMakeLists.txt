@@ -96,7 +96,7 @@ endif(KDE4WORKSPACE_FOUND)
 set(kdevgdb_UI
     debuggertracingdialog.ui
     debuggerconfigwidget.ui
-    selectcore.ui
+    selectcoredialog.ui
     selectaddress.ui
     registers/registersview.ui
 )
