@@ -43,7 +43,7 @@ if (APPLE)
     #sets MacOSX bundle properties for all targets in this cmake file
     #make those assignments target-dependent when cmake 2.6 is useful on MacOSX
     set(MACOSX_BUNDLE_BUNDLE_NAME KDevelop)
-    set(MACOSX_BUNDLE_BUNDLE_VERSION "4.0")
+    set(MACOSX_BUNDLE_BUNDLE_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}")
     set(MACOSX_BUNDLE_COPYRIGHT "KDevelop Team")
     # We provide our own Info.plist to disable AppNap for KDevelop.
     set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in)
