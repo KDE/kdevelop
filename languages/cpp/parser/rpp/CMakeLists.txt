@@ -1,4 +1,3 @@
-
 add_subdirectory( tests )
 
 ########### next target ###############
@@ -28,17 +27,3 @@ target_link_libraries(kdevcpprpp LINK_PRIVATE
 )
 generate_export_header(kdevcpprpp EXPORT_FILE_NAME cpprppexport.h)
 install(TARGETS kdevcpprpp ${INSTALL_TARGETS_DEFAULT_ARGS} )
-
-########### install files ###############
-
-# install(FILES
-#     pp-engine.h
-#     pp-internal.h
-#     pp-macro-expander.h
-#     pp-macro.h
-#     pp-scanner.h
-#     pp-stream.h
-#     pp-environment.h
-#     preprocessor.h
-#     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/rpp
-# )

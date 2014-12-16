@@ -53,7 +53,7 @@ public:
 class pp_skip_identifier
 {
 public:
-  uint operator()(Stream& input);
+  uint operator()(Stream& input, bool multiline = false);
 };
 
 class pp_skip_number

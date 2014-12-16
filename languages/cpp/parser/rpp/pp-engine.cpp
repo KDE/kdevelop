@@ -317,7 +317,7 @@ void pp::handle_define (Stream& input)
   macro->sourceLine = input.originalInputPosition().line;
 
   skip_blanks (input, devnull());
-  macro->name = KDevelop::IndexedString::fromIndex(skip_identifier(input)); //@todo make macros utf8 too
+  macro->name = KDevelop::IndexedString::fromIndex(skip_identifier(input, true)); //@todo make macros utf8 too
 
   if (!input.atEnd() && input == '(')
   {
