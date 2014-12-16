@@ -129,7 +129,7 @@ void pp_skip_comment_or_divop::operator()(Stream& input, Stream& output, bool ou
   }
 }
 
-uint pp_skip_identifier::operator()(Stream& input)
+uint pp_skip_identifier::operator()(Stream& input, bool multiline)
 {
   KDevVarLengthArray<char, 100> identifier;
   
@@ -154,6 +154,10 @@ uint pp_skip_identifier::operator()(Stream& input)
           ret = KDevelop::IndexedString(ret.byteArray() + KDevelop::IndexedString::fromIndex(input.current()).byteArray());
         
         ++input;
+        if(multiline && input == '\\' && input.peekNextCharacter() == '\n'){
+          ++input;
+          ++input;
+        }
       }
       return ret.index();
     }

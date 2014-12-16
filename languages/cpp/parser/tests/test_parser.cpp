@@ -537,6 +537,9 @@ void TestParser::testPreprocessor() {
   
   QEXPECT_FAIL("", "No problems reported for macro-redefinition", Continue);
   QCOMPARE(preprocess("#define A B\n#define A C\n"), QString("*ERROR*"));
+  
+  QCOMPARE(preprocess("#define NEXT_\\\nLINE SUCCESS\nNEXT_LINE").replace(QRegExp("[\n\t ]+"), ""), QString("SUCCESS"));
+  QCOMPARE(preprocess("#define NEXT_LINE\\\n(x,y) fun(x,y)\nNEXT_LINE(x,y)").replace(QRegExp("[\n\t ]+"), ""), QString("fun(x,y)"));
 }
 
 void TestParser::testPreprocessorStringify() {
