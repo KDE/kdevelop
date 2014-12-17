@@ -39,7 +39,6 @@ class QLabel;
 class QMenu;
 class QDBusInterface;
 class QSignalMapper;
-class KDialog;
 class ProcessWidget;
 
 class KToolBar;
@@ -52,7 +51,6 @@ class ProcessLineMaker;
 
 namespace GDBDebugger
 {
-class FramestackWidget;
 class DisassembleWidget;
 class Breakpoint;
 class GDBOutputWidget;

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SelectAddress</class>
- <widget class="QWidget" name="SelectAddress">
+ <class>SelectAddressDialog</class>
+ <widget class="QDialog" name="SelectAddressDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
-    <height>50</height>
+    <width>291</width>
+    <height>94</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -35,8 +35,15 @@
      <property name="insertPolicy">
       <enum>QComboBox::InsertAtTop</enum>
      </property>
-     <property name="urlDropsEnabled">
+     <property name="urlDropsEnabled" stdset="0">
       <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -55,5 +62,38 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>SelectAddressDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>140</x>
+     <y>72</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>146</x>
+     <y>88</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>SelectAddressDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>245</x>
+     <y>71</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>241</x>
+     <y>88</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

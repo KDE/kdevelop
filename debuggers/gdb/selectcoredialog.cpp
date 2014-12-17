@@ -25,12 +25,11 @@
 namespace GDBDebugger {
 
 SelectCoreDialog::SelectCoreDialog(QWidget* parent)
-    : KDialog(parent)
+    : QDialog(parent)
 {
-    QWidget *widget = new QWidget;
-    m_ui.setupUi(widget);
-    setMainWidget(widget);
-    setCaption(i18n("Select Core File"));
+    m_ui.setupUi(this);
+
+    setWindowTitle(i18n("Select Core File"));
 }
 
 QUrl SelectCoreDialog::binary() const
