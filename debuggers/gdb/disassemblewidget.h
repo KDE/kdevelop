@@ -55,7 +55,7 @@ class SelectAddressDialog : public QDialog
 public:
     SelectAddressDialog(QWidget *parent = 0);
     
-    QString getAddress() const;
+    QString address() const;
     void setAddress(const QString& address);
     bool hasValidAddress() const;
     void updateOkState();

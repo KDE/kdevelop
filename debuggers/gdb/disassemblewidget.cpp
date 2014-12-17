@@ -68,7 +68,7 @@ SelectAddressDialog::SelectAddressDialog(QWidget* parent)
             this, &SelectAddressDialog::itemSelected);
 }
 
-QString SelectAddressDialog::getAddress() const
+QString SelectAddressDialog::address() const
 {
     return hasValidAddress() ? m_ui.comboBox->currentText() : QString();
 }
@@ -415,10 +415,10 @@ void DisassembleWidget::slotChangeAddress()
     if (m_dlg->exec() == QDialog::Rejected)
         return;
 
-    unsigned long addr = m_dlg->getAddress().toULong(&ok,16);
+    unsigned long addr = m_dlg->address().toULong(&ok,16);
 
     if (addr < lower_ || addr > upper_ || !displayCurrent())
-        disassembleMemoryRegion(m_dlg->getAddress());
+        disassembleMemoryRegion(m_dlg->address());
 }
 
 void SelectAddressDialog::setAddress ( const QString& address )
