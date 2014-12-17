@@ -52,11 +52,6 @@ LINK_PRIVATE
     KF5::KCMUtils
     KDev::Interfaces
 )
-if(WIN32)
-    target_include_directories(KDevPlatformUtil PUBLIC ${KDEWIN_INCLUDES})
-    target_link_libraries(KDevPlatformUtil PUBLIC ${KDEWIN_LIBRARIES})
-endif()
-
 target_include_directories(KDevPlatformUtil INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kdevplatform>")
 set_target_properties(KDevPlatformUtil PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Util)
 install(TARGETS KDevPlatformUtil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )

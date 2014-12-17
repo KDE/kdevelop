@@ -78,10 +78,6 @@ set_package_properties(Grantlee5 PROPERTIES
     PURPOSE "Grantlee templating library, needed for file templates"
     URL "http://www.grantlee.org/")
 
-if(WIN32)
-    find_package(KDEWin REQUIRED)
-endif()
-
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQT_NO_URL_CAST_FROM_STRING)
 remove_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0) # comes from KDELibs4Support
 add_definitions(-DQT_DEPRECATED_WARNINGS -DQT_DISABLE_DEPRECATED_BEFORE=0x050000)
