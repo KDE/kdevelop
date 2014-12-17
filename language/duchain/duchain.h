@@ -172,7 +172,7 @@ public:
       return 0;
 
     {
-      SpinLock<> lock(chainsByIndexLock);
+      QMutexLocker lock(&chainsByIndexLock);
 
       if(chainsByIndex.size() > index)
       {
@@ -276,7 +276,7 @@ private:
   //These two are exported here so that the extremely frequently called chainForIndex(..) can be inlined
   static bool m_deleted;
   static std::vector<TopDUContext*> chainsByIndex;
-  static SpinLockData chainsByIndexLock;
+  static QMutex chainsByIndexLock;
   
   /// Increases the reference-count for the given top-context. The result: It will not be unloaded.
   /// Do this to prevent KDevelop from unloading a top-context that you plan to use. Don't forget calling unReferenceToContext again,

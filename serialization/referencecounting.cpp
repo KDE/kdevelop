@@ -24,14 +24,13 @@
 #include <QMap>
 #include <QAtomicInt>
 #include "serialization/itemrepository.h"
-#include <util/spinlock.h>
 
 namespace KDevelop {
 
   bool doReferenceCounting = false;
 
   //Protects the reference-counting data through a spin-lock
-  SpinLockData refCountingLock;
+  QMutex refCountingLock;
 
   QMap<void*, QPair<uint, uint> >* refCountingRanges = new QMap<void*, QPair<uint, uint> >(); //ptr, <size, count>, leaked intentionally!
   bool refCountingHasAdditionalRanges = false; //Whether 'refCountingRanges' is non-empty
@@ -44,7 +43,7 @@ namespace KDevelop {
 
 void KDevelop::disableDUChainReferenceCounting(void* start)
 {
-  SpinLock<> lock(refCountingLock);
+  QMutexLocker lock(&refCountingLock);
 
   if(refCountingFirstRangeStart && ((char*)refCountingFirstRangeStart) <= (char*)start && (char*)start < ((char*)refCountingFirstRangeStart) + refCountingFirstRangeExtent.first)
   {
@@ -82,7 +81,7 @@ void KDevelop::disableDUChainReferenceCounting(void* start)
 
 void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
 {
-  SpinLock<> lock(refCountingLock);
+  QMutexLocker lock(&refCountingLock);
 
   doReferenceCounting = true;
 

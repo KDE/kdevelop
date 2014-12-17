@@ -25,11 +25,11 @@
 
 #include <QMap>
 #include <QPair>
+#include <QMutexLocker>
 
 //When this is enabled, the duchain unloading is disabled as well, and you should start
 //with a cleared ~/.kdevduchain
 // #define TEST_REFERENCE_COUNTING
-#include <util/spinlock.h>
 
 namespace KDevelop {
   
@@ -37,7 +37,7 @@ namespace KDevelop {
   ///so the reference-counting code can be inlined.
   
   KDEVPLATFORMSERIALIZATION_EXPORT extern bool doReferenceCounting;
-  KDEVPLATFORMSERIALIZATION_EXPORT  extern SpinLockData refCountingLock;
+  KDEVPLATFORMSERIALIZATION_EXPORT  extern QMutex refCountingLock;
   KDEVPLATFORMSERIALIZATION_EXPORT  extern QMap<void*, QPair<uint, uint> >* refCountingRanges;
   KDEVPLATFORMSERIALIZATION_EXPORT  extern bool refCountingHasAdditionalRanges;
   KDEVPLATFORMSERIALIZATION_EXPORT  extern void* refCountingFirstRangeStart;
@@ -63,7 +63,7 @@ namespace KDevelop {
     if(!doReferenceCounting) //Fast path, no place has been marked for reference counting, 99% of cases
       return false;
 
-    SpinLock<> lock(refCountingLock);
+    QMutexLocker lock(&refCountingLock);
 
     if(refCountingFirstRangeStart &&
        (((char*)refCountingFirstRangeStart) <= (char*)item) &&

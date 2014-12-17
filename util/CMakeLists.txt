@@ -85,7 +85,6 @@ install( FILES
     embeddedfreetree.h
     executecompositejob.h
     convenientfreelist.h
-    spinlock.h
     fileutils.h
     mimetype.h
     multilevellistview.h

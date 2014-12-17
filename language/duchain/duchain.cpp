@@ -82,7 +82,7 @@ bool DUChain::m_deleted = false;
 
 ///Must be locked through KDevelop::SpinLock before using chainsByIndex
 ///This lock should be locked only for very short times
-SpinLockData DUChain::chainsByIndexLock;
+QMutex DUChain::chainsByIndexLock;
 std::vector<TopDUContext*> DUChain::chainsByIndex;
 
 //This thing is not actually used, but it's needed for compiling
@@ -408,7 +408,7 @@ public:
 
     Q_ASSERT(hasChainForIndex(index));
 
-    SpinLock<> lock(DUChain::chainsByIndexLock);
+    QMutexLocker lock(&DUChain::chainsByIndexLock);
     DUChain::chainsByIndex[index] = 0;
   }
 
@@ -537,13 +537,13 @@ public:
 
   ///Must be called _without_ the chainsByIndex spin-lock locked
   static inline bool hasChainForIndex(uint index) {
-    SpinLock<> lock(DUChain::chainsByIndexLock);
+    QMutexLocker lock(&DUChain::chainsByIndexLock);
     return (DUChain::chainsByIndex.size() > index) && DUChain::chainsByIndex[index];
   }
 
   ///Must be called _without_ the chainsByIndex spin-lock locked. Returns the top-context if it is loaded.
   static inline TopDUContext* readChainForIndex(uint index) {
-    SpinLock<> lock(DUChain::chainsByIndexLock);
+    QMutexLocker lock(&DUChain::chainsByIndexLock);
     if(DUChain::chainsByIndex.size() > index)
       return DUChain::chainsByIndex[index];
     else
@@ -1207,7 +1207,7 @@ void DUChain::addDocumentChain( TopDUContext * chain )
   Q_ASSERT(!sdDUChainPrivate->hasChainForIndex(chain->ownIndex()));
 
   {
-    SpinLock<> lock(DUChain::chainsByIndexLock);
+    QMutexLocker lock(&DUChain::chainsByIndexLock);
     if(DUChain::chainsByIndex.size() <= chain->ownIndex())
       DUChain::chainsByIndex.resize(chain->ownIndex() + 100, 0);
 
@@ -1292,7 +1292,7 @@ TopDUContext* DUChain::loadChain(uint index)
   sdDUChainPrivate->loadChain(index, loaded);
 
   {
-    SpinLock<> lock(chainsByIndexLock);
+    QMutexLocker lock(&chainsByIndexLock);
 
     if(chainsByIndex.size() > index)
     {

@@ -39,7 +39,7 @@ UrlParseLock::UrlParseLock(const IndexedString& url)
   while(parsingUrls.contains(m_url) && parsingUrls[m_url].first != QThread::currentThread()) {
     //Wait here until no other thread is updating parsing the url
     lock.unlock();
-    sleep(1);
+    QThread::sleep(1);
     lock.relock();
   }
   if(parsingUrls.contains(m_url))
