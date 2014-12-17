@@ -21,6 +21,7 @@
 
 #include <cstdlib>
 #include <cstdio>
+#include <unistd.h>
 
 #include <tests/autotestshell.h>
 #include <language/duchain/duchain.h>
