@@ -46,6 +46,8 @@
 #include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/isourceformattercontroller.h>
+#include <interfaces/isourceformatter.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <language/interfaces/iquickopen.h>
 #include <interfaces/iplugincontroller.h>
@@ -625,7 +627,9 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const QUrl &u
     QString preprocessedBody;
     //Check whether tail contains arguments
     QString tail = found.second.trimmed(); ///@todo make this better.
-    if(tail.startsWith("(")) {
+    if(m.second->function_like) {
+     if(tail.endsWith('\\'))
+       tail.truncate(tail.length() - 1);
       //properly support macro expansions when arguments contain newlines
       int foundClosingBrace = findClose( tail, 0 );
       KDevelop::IDocument* doc = core()->documentController()->documentForUrl(url);
@@ -633,6 +637,8 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const QUrl &u
         const int lines = doc->textDocument()->lines();
         for (int lineNumber = position.line() + 1; foundClosingBrace < 0 && lineNumber < lines; lineNumber++) {
           tail += doc->textDocument()->line(lineNumber).trimmed();
+          if(tail.endsWith('\\'))
+            tail.truncate(tail.length() - 1);
           foundClosingBrace = findClose( tail, 0 );
         }
       }
@@ -649,6 +655,14 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const QUrl &u
           preprocessedBody = Cpp::preprocess(text, p, position.line()+1);
         }
       }
+    }
+
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForName("text/x-c++hdr");
+    ISourceFormatter* i = core()->sourceFormatterController()->formatterForMimeType(mime);
+    if(i){
+      SourceFormatterStyle style = core()->sourceFormatterController()->styleForMimeType(mime);
+      preprocessedBody = i->formatSourceWithStyle(style, preprocessedBody, QUrl(), mime);
     }
 
     return new Cpp::NavigationWidget(*m.second, preprocessedBody);

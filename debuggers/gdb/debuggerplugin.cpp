@@ -173,13 +173,6 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
         Q_ASSERT(type);
         type->addLauncher( new GdbLauncher( this, iface ) );
     }
-    // The output from tracepoints goes to "application" window, because
-    // we don't have any better alternative, and using yet another window
-    // is undesirable. Besides, this makes tracepoint look even more similar
-    // to printf debugging.
-// PORTING TODO broken - need intermediate signal?
-//     connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(QByteArray)),
-//              procLineMaker,         SLOT(slotReceivedStdout(QByteArray)));
 }
 
 void CppDebuggerPlugin::unload()

@@ -1928,11 +1928,11 @@ void GdbTest::testPathWithSpace()
     auto debugee = findExecutable("path with space/spacedebugee");
     TestLaunchConfiguration c(debugee, KIO::upUrl(debugee));
     KDevelop::Breakpoint* b = breakpoints()->addCodeBreakpoint("spacedebugee.cpp:30");
-    QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::NotStartedState);
+    QCOMPARE(b->state(), KDevelop::Breakpoint::NotStartedState);
     session->startProgram(&c, m_iface);
 
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QCOMPARE(session->breakpointController()->breakpointState(b), KDevelop::Breakpoint::CleanState);
+    QCOMPARE(b->state(), KDevelop::Breakpoint::CleanState);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 #endif

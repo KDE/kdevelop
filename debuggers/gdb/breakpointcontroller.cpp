@@ -57,10 +57,21 @@ QString unquoteExpression(QString expr)
 struct Handler : public GDBCommandHandler
 {
     Handler(BreakpointController *c, KDevelop::Breakpoint *b)
-        : controller(c), breakpoint(b) {}
+        : controller(c)
+        , breakpointIndex(c->breakpointModel()->breakpointIndex(b, 0))
+    {
+    }
+
+    Breakpoint * breakpoint()
+    {
+        if (breakpointIndex.isValid()) {
+            return controller->breakpointModel()->breakpoint(breakpointIndex.row());
+        }
+        return nullptr;
+    }
 
     BreakpointController *controller;
-    KDevelop::Breakpoint *breakpoint;
+    QPersistentModelIndex breakpointIndex;
 };
 
 struct UpdateHandler : public Handler
@@ -70,6 +81,10 @@ struct UpdateHandler : public Handler
 
     void handle(const GDBMI::ResultRecord &r)
     {
+        Breakpoint * breakpoint = this->breakpoint();
+        if (!breakpoint)
+            return;
+
         if (r.reason == "error") {
             controller->error(breakpoint, r["msg"].literal(), m_column);
             qWarning() << r["msg"].literal();
@@ -92,39 +107,55 @@ struct InsertedHandler : public Handler
 
     virtual void handle(const GDBMI::ResultRecord &r)
     {
-        qCDebug(DEBUGGERGDB) << controller->m_dirty[breakpoint];
+        Breakpoint * breakpoint = this->breakpoint();
 
         if (r.reason == "error") {
-            controller->error(breakpoint, r["msg"].literal(), KDevelop::Breakpoint::LocationColumn);
-            qWarning() << r["msg"].literal();
-        } else {
-            controller->m_errors[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
-            if (r.hasField("bkpt")) {
-                controller->update(breakpoint, r["bkpt"]);
-            } else if (r.hasField("wpt")) {
-                // For watchpoint creation, GDB basically does not say
-                // anything.  Just record id.
-                controller->m_ids[breakpoint] = r["wpt"]["number"].literal();
-            } else if (r.hasField("hw-rwpt")) {
-                controller->m_ids[breakpoint] = r["hw-rwpt"]["number"].literal();
-            } else if (r.hasField("hw-awpt")) {
-                controller->m_ids[breakpoint] = r["hw-awpt"]["number"].literal();
+            if (breakpoint) {
+                controller->error(breakpoint, r["msg"].literal(), KDevelop::Breakpoint::LocationColumn);
+                qWarning() << r["msg"].literal();
             }
-            Q_ASSERT(!controller->m_ids[breakpoint].isEmpty());
-            qCDebug(DEBUGGERGDB) << "breakpoint id" << breakpoint << controller->m_ids[breakpoint];
+        } else {
+            QString id;
+
+            for (auto kind : {"bkpt", "wpt", "hw-rwpt", "hw-awpt"}) {
+                if (r.hasField(kind)) {
+                    id = r[kind]["number"].literal();
+                    break;
+                }
+            }
+            Q_ASSERT(!id.isEmpty());
+
+            if (breakpoint) {
+                controller->m_errors[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
+                controller->m_ids[breakpoint] = id;
+                if (r.hasField("bkpt")) {
+                    controller->update(breakpoint, r["bkpt"]);
+                }
+                qCDebug(DEBUGGERGDB) << "breakpoint id" << breakpoint << controller->m_ids[breakpoint];
+            } else {
+                // breakpoint was deleted while insertion was in flight
+                controller->debugSession()->addCommandToFront(
+                    new GDBCommand(BreakDelete, id));
+            }
         }
-        controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
-        controller->breakpointStateChanged(breakpoint);
-        controller->sendMaybe(breakpoint);
+
+        if (breakpoint) {
+            controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
+            controller->breakpointStateChanged(breakpoint);
+            controller->sendMaybe(breakpoint);
+        }
     }
 
     virtual bool handlesError() { return true; }
 };
 
-struct DeletedHandler : public Handler
+struct DeletedHandler : public GDBCommandHandler
 {
     DeletedHandler(BreakpointController *c, KDevelop::Breakpoint *b)
-        : Handler(c, b) {}
+        : controller(c)
+        , breakpoint(b)
+    {
+    }
 
     void handle(const GDBMI::ResultRecord &r)
     {
@@ -137,6 +168,9 @@ struct DeletedHandler : public Handler
             delete breakpoint;
         }
     }
+
+    BreakpointController * controller;
+    Breakpoint * breakpoint;
 };
 
 
@@ -300,13 +334,16 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         qCDebug(DEBUGGERGDB) << "deleted";
         m_dirty.remove(breakpoint);
         m_errors.remove(breakpoint);
-        if (m_ids.contains(breakpoint)) { //if id is 0 breakpoint insertion is still pending, InsertedHandler will call sendMaybe again and delete it
+        if (m_ids.contains(breakpoint)) {
             qCDebug(DEBUGGERGDB) << "breakpoint id" << m_ids[breakpoint];
             if (!m_ids[breakpoint].isEmpty()) {
                 debugSession()->addCommandToFront(
                     new GDBCommand(BreakDelete, m_ids[breakpoint],
                                 new DeletedHandler(this, breakpoint)));
                 addedCommand = true;
+            } else {
+                qCDebug(DEBUGGERGDB) << "insertion is still in flight, just delete it";
+                delete breakpoint;
             }
         } else {
             qCDebug(DEBUGGERGDB) << "breakpoint doesn't have yet an id, just delete it";

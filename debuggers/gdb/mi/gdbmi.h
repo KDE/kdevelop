@@ -338,7 +338,6 @@ namespace GDBMI
         const Value& operator[](int index) const;
 
         QList<Result*> results;
-
     };
 
     struct Record

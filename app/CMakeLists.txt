@@ -31,13 +31,17 @@ install(FILES kdevelop! DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OW
 
 # kde4_add_app_icon(kdevelop_bin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
 
-if (Q_WS_MAC)
-	#sets MacOSX bundle properties for all targets in this cmake file
-	#make those assignments target-dependent when cmake 2.6 is useful on MacOSX
-	set(MACOSX_BUNDLE_BUNDLE_NAME KDevelop)
+if (APPLE)
+    #sets MacOSX bundle properties for all targets in this cmake file
+    #make those assignments target-dependent when cmake 2.6 is useful on MacOSX
+    set(MACOSX_BUNDLE_BUNDLE_NAME KDevelop)
     set(MACOSX_BUNDLE_BUNDLE_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}")
-	set(MACOSX_BUNDLE_COPYRIGHT "KDevelop Team")
-endif (Q_WS_MAC)
+    set(MACOSX_BUNDLE_COPYRIGHT "KDevelop Team")
+    # We provide our own Info.plist to disable AppNap for KDevelop.
+    set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in)
+    set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.KDevelop")
+    set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "The KDevelop Integrated Development Environment")
+endif (APPLE)
 
 
 ########### install files ###############
