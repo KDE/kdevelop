@@ -30,6 +30,8 @@
     <true/>
     <key>NSAppSleepDisabled</key>
     <true/>
+    <key>NSSupportsAutomaticTermination</key>
+    <false/>
     <key>NSHumanReadableCopyright</key>
     <string>${MACOSX_BUNDLE_COPYRIGHT}</string>
 </dict>

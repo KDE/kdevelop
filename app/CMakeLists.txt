@@ -48,7 +48,8 @@ if (APPLE)
     # We provide our own Info.plist to disable AppNap for KDevelop.
     set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in)
     set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.KDevelop")
-    set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "The KDevelop Integrated Development Environment")
+    set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KDevelop")
+    set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_INFO_STRING "The KDevelop Integrated Development Environment")
 endif (APPLE)
 
 
