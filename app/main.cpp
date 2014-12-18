@@ -66,6 +66,10 @@
 #include "welcomepage/welcomepageview.h"
 #include "splash.h"
 
+#ifdef Q_OS_MAC
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
 using KDevelop::Core;
 
 // Represents a file to be opened, consisting of its URL and the linenumber to jump to
@@ -179,6 +183,20 @@ static int getRunningSessionPid()
 
 int main( int argc, char *argv[] )
 {
+#ifdef Q_OS_MAC
+    CFBundleRef mainBundle = CFBundleGetMainBundle();
+    if (mainBundle) {
+        // get the application's Info Dictionary. For app bundles this would live in the bundle's Info.plist,
+        // for regular executables it is obtained in another way.
+        CFMutableDictionaryRef infoDict = (CFMutableDictionaryRef) CFBundleGetInfoDictionary(mainBundle);
+        if (infoDict) {
+            // Try to prevent App Nap on OS X. This can be tricky in practice, at least in 10.9 .
+            CFDictionarySetValue(infoDict, CFSTR("NSAppSleepDisabled"), kCFBooleanTrue);
+            CFDictionarySetValue(infoDict, CFSTR("NSSupportsAutomaticTermination"), kCFBooleanFalse);
+        }
+    }
+#endif
+
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ), QByteArray(VERSION), ki18n(description), KAboutData::License_GPL,
                           ki18n( "Copyright 1999-2014, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org/" );

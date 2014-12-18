@@ -12,7 +12,11 @@ if(KDECLARATIVE_FOUND)
     add_definitions(-DWITH_WELCOMEPAGE)
 	qt4_add_resources(kdevelop_SRCS welcomepage/welcomepage.qrc)
 endif(KDECLARATIVE_FOUND)
-kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
+if(APPLE)
+    kde4_add_app_icon(kdevelop_SRCS "${KDE4_ICON_INSTALL_DIR}/oxygen/*/apps/kdevelop.png")
+else()
+    kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
+endif(APPLE)
 
 kde4_add_executable(kdevelop ${kdevelop_SRCS} )
 
@@ -37,19 +41,26 @@ install(TARGETS kdevelop ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES kdevelop! DESTINATION bin PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ)
 
-kde4_add_app_icon(kdevelop_bin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
+if(APPLE)
+    kde4_add_app_icon(kdevelop_bin_SRCS "${KDE4_ICON_INSTALL_DIR}/oxygen/*/apps/kdevelop.png")
+else()
+    kde4_add_app_icon(kdevelop_bin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
+endif(APPLE)
 
 if (APPLE)
     #sets MacOSX bundle properties for all targets in this cmake file
     #make those assignments target-dependent when cmake 2.6 is useful on MacOSX
     set(MACOSX_BUNDLE_BUNDLE_NAME KDevelop)
+    set(MACOSX_BUNDLE_DISPLAY_NAME KDevelop)
     set(MACOSX_BUNDLE_BUNDLE_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}")
     set(MACOSX_BUNDLE_COPYRIGHT "KDevelop Team")
     # We provide our own Info.plist to disable AppNap for KDevelop.
     set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in)
     set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.KDevelop")
     set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KDevelop")
+    set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_DISPLAY_NAME "KDevelop")
     set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_INFO_STRING "The KDevelop Integrated Development Environment")
+    set_target_properties(kdevelop PROPERTIES MACOSX_BUNDLE_ICON_FILE "kdevelop_SRCS.icns")
 endif (APPLE)
 
 
