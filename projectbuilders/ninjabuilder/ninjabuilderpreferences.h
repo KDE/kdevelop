@@ -23,9 +23,10 @@
 
 #include <project/projectconfigpage.h>
 
+#include "ninjabuilderconfig.h"
+
 class QWidget;
 class QStringList;
-class NinjaBuilderSettings;
 namespace Ui { class NinjaConfig; }
 
 class NinjaBuilderPreferences : public ProjectConfigPage<NinjaBuilderSettings>

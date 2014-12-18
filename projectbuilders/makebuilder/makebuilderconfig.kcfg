@@ -4,7 +4,6 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
   <kcfgfile arg="true"/>
-  <include>makebuilderpreferences.h</include>
   <group name="MakeBuilder">
     <entry name="displayOnly" key="Display Only" type="Bool">
         <default>false</default>
