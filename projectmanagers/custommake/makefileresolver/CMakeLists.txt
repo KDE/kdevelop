@@ -10,6 +10,10 @@ target_link_libraries(kdevmakefileresolver
   Qt5::Core Qt5::Gui KDev::Language
   KDev::Tests
 )
+if(WIN32)
+    target_include_directories(kdevmakefileresolver PUBLIC ${KDEWIN_INCLUDES})
+    target_link_libraries(kdevmakefileresolver ${KDEWIN_LIBRARIES})
+endif()
 set_target_properties(kdevmakefileresolver PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 option(BUILD_kdev_makefileresolver "Build the makefile resolver debugging tool" OFF)
