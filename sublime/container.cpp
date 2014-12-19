@@ -390,7 +390,7 @@ void Container::setCurrentWidget(QWidget* w)
     d->tabBar->blockSignals(true);
     d->tabBar->setCurrentIndex(d->stack->indexOf(w));
     d->tabBar->blockSignals(false);
-    if (View *view = d->viewForWidget[w])
+    if (View* view = viewForWidget(w))
     {
         statusChanged(view);
         if (!d->tabBar->isVisible())
@@ -449,7 +449,7 @@ bool Container::hasWidget(QWidget *w)
 
 View *Container::viewForWidget(QWidget *w) const
 {
-    return d->viewForWidget[w];
+    return d->viewForWidget.value(w);
 }
 
 void Container::setTabBarHidden(bool hide)
