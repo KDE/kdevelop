@@ -44,6 +44,17 @@ public:
     IBreakpointController(IDebugSession* parent);
 
     /**
+     * Called just after a breakpoint is added in the given row.
+     * The breakpoint which was previously at the given row and all later breakpoints have
+     * been moved.
+     *
+     * Implementations may implement this function to maintain their internal data structures.
+     * Note, however, that breakpoints are typically still empty (i.e. without a useful location)
+     * when this method is called.
+     */
+    virtual void breakpointAdded(int row);
+
+    /**
      * Implementors must handle changes to the breakpoint model, which are signaled via
      * this method, by forwarding the changes to the backend debugger.
      */

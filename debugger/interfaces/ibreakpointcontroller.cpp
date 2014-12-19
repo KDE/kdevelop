@@ -103,6 +103,11 @@ void IBreakpointController::notifyHit(int row, const QString& msg)
     }
 }
 
+// Temporary: empty default implementation
+void IBreakpointController::breakpointAdded(int row)
+{
+    Q_UNUSED(row);
+}
 
 // Temporary: implement old-style behavior to ease transition through API changes
 void IBreakpointController::breakpointModelChanged(int row, BreakpointModel::ColumnFlags columns)
