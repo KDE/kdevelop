@@ -778,6 +778,12 @@ void DebugSession::processNotification(const GDBMI::AsyncRecord & async)
         setStateOn(s_programExited);
     } else if (async.reason == "library-loaded") {
         // do nothing
+    } else if (async.reason == "breakpoint-created") {
+        breakpointController()->notifyBreakpointCreated(async);
+    } else if (async.reason == "breakpoint-modified") {
+        breakpointController()->notifyBreakpointModified(async);
+    } else if (async.reason == "breakpoint-deleted") {
+        breakpointController()->notifyBreakpointDeleted(async);
     } else {
         qCDebug(DEBUGGERGDB) << "Unhandled notification: " << async.reason;
     }
