@@ -47,7 +47,7 @@ using KDevelop::IProjectBuilder;
 using KDevelop::IProject;
 using KDevelop::Path;
 
-K_PLUGIN_FACTORY(CustomBuildSystemFactory, registerPlugin<CustomBuildSystem>(); )
+K_PLUGIN_FACTORY_WITH_JSON(CustomBuildSystemFactory, "kdevcustombuildsystem.json", registerPlugin<CustomBuildSystem>(); )
 
 CustomBuildSystem::CustomBuildSystem( QObject *parent, const QVariantList & )
     : AbstractFileManagerPlugin( "kdevcustombuildsystem", parent )
