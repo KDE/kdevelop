@@ -313,8 +313,10 @@ int Breakpoint::ignoreHits() const
 
 void Breakpoint::setCondition(const QString& c)
 {
-    m_condition = c;
-    reportChange(ConditionColumn);
+    if (c != m_condition) {
+        m_condition = c;
+        reportChange(ConditionColumn);
+    }
 }
 
 QString Breakpoint::condition() const
@@ -324,8 +326,10 @@ QString Breakpoint::condition() const
 
 void Breakpoint::setExpression(const QString& e)
 {
-    m_expression = e;
-    reportChange(LocationColumn);
+    if (e != m_expression) {
+        m_expression = e;
+        reportChange(LocationColumn);
+    }
 }
 
 QString Breakpoint::expression() const
