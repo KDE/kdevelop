@@ -105,9 +105,32 @@ public:
      */
     virtual QPair<QUrl, int> convertToRemoteUrl(const QPair<QUrl, int> &localUrl) const;
 
-    IBreakpointController *breakpointController() const;
-    IVariableController *variableController() const;    
-    IFrameStackModel *frameStackModel() const; 
+    /**
+     * @return the breakpoint controller of this session
+     *
+     * @note Implementations must ensure that a breakpoint controller always exists (even if it
+     * is a dummy stub implementation that does nothing), and that it does not change during
+     * the lifetime of a session.
+     */
+    virtual IBreakpointController* breakpointController() const = 0;
+
+    /**
+     * @return the variable controller of this session
+     *
+     * @note Implementations must ensure that a variable controller always exists (even if it
+     * is a dummy stub implementation that does nothing), and that it does not change during
+     * the lifetime of a session.
+     */
+    virtual IVariableController* variableController() const = 0;
+
+    /**
+     * @return the frame stack model of this session
+     *
+     * @note Implementations must ensure that a frame stack model always exists (even if it
+     * is a dummy stub implementation that does nothing), and that it does not change during
+     * the lifetime of a session.
+     */
+    virtual IFrameStackModel* frameStackModel() const = 0;
 
 public Q_SLOTS:
     virtual void restartDebugger() = 0;
@@ -163,12 +186,6 @@ protected:
     virtual void raiseEvent(event_t e);
     friend class FrameStackModel;
     
-    virtual IFrameStackModel* createFrameStackModel() = 0;
-
-    IBreakpointController *m_breakpointController;
-    IVariableController *m_variableController;    
-    mutable IFrameStackModel *m_frameStackModel;
-
 private Q_SLOTS:
     void slotStateChanged(KDevelop::IDebugSession::DebuggerState state);
 
@@ -177,7 +194,6 @@ private: //TODO use d-pointer
     QUrl m_url;
     int m_line;
     QString m_addr;
-
 };
 
 }

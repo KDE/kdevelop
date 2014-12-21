@@ -32,7 +32,6 @@ namespace KDevelop {
 
 
 IDebugSession::IDebugSession()
-    : m_breakpointController(0), m_variableController(0), m_frameStackModel(0)
 {
     connect(this, &IDebugSession::stateChanged, this, &IDebugSession::slotStateChanged);
 }
@@ -47,34 +46,14 @@ bool IDebugSession::isRunning() const
     return (s == ActiveState || s == PausedState);
 }
 
-IBreakpointController *IDebugSession::breakpointController() const
-{
-    return m_breakpointController;
-}
-
-
-IVariableController *IDebugSession::variableController() const
-{
-    return m_variableController;
-}
-
-IFrameStackModel* IDebugSession::frameStackModel() const
-{
-    /* The delayed initialization is used so that derived
-       class can override createFrameStackModel and have
-       it called. If we tried to call virtual function
-       from a constructor, it would not work.  */
-    if (m_frameStackModel == 0) {
-        m_frameStackModel = const_cast<IDebugSession*>(this)->createFrameStackModel();
-        Q_ASSERT(m_frameStackModel);
-    }
-    return m_frameStackModel;
-}
-
 void IDebugSession::raiseEvent(event_t e)
 {
-    if (frameStackModel()) frameStackModel()->handleEvent(e);
-    if (m_variableController) m_variableController->handleEvent(e);
+    if (IFrameStackModel* model = frameStackModel()) {
+        model->handleEvent(e);
+    }
+    if (IVariableController* variables = variableController()) {
+        variables->handleEvent(e);
+    }
     // FIXME: consider if we actually need signals
     emit event(e);
 }
