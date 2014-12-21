@@ -200,21 +200,12 @@ public:
     using QObject::event;
 
 private:
-
-    /** Handles a result response from a MI command -- that is
-        all MI responses except for Stream and Prompt responses.
-        Uses currentCmd to decide what to do with response and
-        calls appropriate method.
-    */
-    void processMICommandResponse(const GDBMI::ResultRecord& r);
-
     /** Try to execute next command in the queue.  If GDB is not
         busy with previous command, and there's a command in the
         queue, sends it and returns true.
         Otherwise, returns false.  */
     bool executeCmd ();
     void destroyCmds();
-    void removeInfoRequests();
     /** Called when there are no pending commands and 'state_reload_needed'
         is true. Also can be used to immediately reload program state.
         Issues commands to completely reload all program state shown
@@ -230,11 +221,8 @@ private:
     void setState(DBGStateFlags newState);
 
     void debugStateChange(DBGStateFlags oldState, DBGStateFlags newState);
-    void commandDone();
 
     void raiseEvent(event_t e);
-
-    void maybeAnnounceWatchpointHit();
 
     bool startDebugger(KDevelop::ILaunchConfiguration* cfg);
 
