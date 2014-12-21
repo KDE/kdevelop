@@ -33,6 +33,7 @@
 
 #include <debugger/interfaces/idebugsession.h>
 
+#include "breakpointcontroller.h"
 #include "gdbglobal.h"
 #include "mi/gdbmi.h"
 
@@ -53,8 +54,6 @@ class STTY;
 class CommandQueue;
 class GDBCommand;
 class GDB;
-class BreakpointController;
-
 
 static QString gdbPathEntry = "GDB Path";
 static QString debuggerShellEntry = "Debugger Shell";
@@ -77,6 +76,10 @@ public:
     virtual DebuggerState state() const;
 
     virtual bool restartAvaliable() const;
+
+    virtual BreakpointController* breakpointController() const override;
+    virtual KDevelop::IVariableController* variableController() const override;
+    virtual KDevelop::IFrameStackModel* frameStackModel() const override;
 
     using IDebugSession::event;
 Q_SIGNALS:
@@ -129,17 +132,8 @@ private Q_SLOTS:
 private:
     void _gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
    
-    KDevelop::IFrameStackModel* createFrameStackModel();
     void setupController();
     void setSessionState(KDevelop::IDebugSession::DebuggerState state);
-
-    KDevelop::ProcessLineMaker *m_procLineMaker;
-    KDevelop::ProcessLineMaker *m_gdbLineMaker;
-    DebuggerState m_sessionState;
-    KConfigGroup m_config;
-    QPointer<GDB> m_gdb;
-    bool m_testing;
-
 
 public:
     /**
@@ -307,6 +301,17 @@ Q_SIGNALS:
 
 private:
     friend class GdbTest;
+
+    BreakpointController* m_breakpointController;
+    KDevelop::IVariableController* m_variableController;
+    KDevelop::IFrameStackModel* m_frameStackModel;
+
+    KDevelop::ProcessLineMaker *m_procLineMaker;
+    KDevelop::ProcessLineMaker *m_gdbLineMaker;
+    DebuggerState m_sessionState;
+    KConfigGroup m_config;
+    QPointer<GDB> m_gdb;
+    bool m_testing;
 
     CommandQueue*   commandQueue_;
 
