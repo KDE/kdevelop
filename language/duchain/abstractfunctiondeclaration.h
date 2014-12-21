@@ -95,8 +95,6 @@ private:
   virtual AbstractFunctionDeclarationData* dynamicData() = 0;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::AbstractFunctionDeclaration::FunctionSpecifiers)
-
 ///Use this to merge AbstractFunctionDeclaration into the class hierarchy. Base must be the base-class
 ///in the hierarchy, and Data must be the Data class of the following Declaration, and must be based on AbstractFunctionDeclarationData
 ///and BaseData.
@@ -123,5 +121,7 @@ class MergeAbstractFunctionDeclaration : public Base, public AbstractFunctionDec
 };
 
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::AbstractFunctionDeclaration::FunctionSpecifiers)
 
 #endif // KDEVPLATFORM_ABSTRACTFUNCTIONDECLARATION_H

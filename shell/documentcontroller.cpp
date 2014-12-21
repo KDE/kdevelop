@@ -1152,7 +1152,7 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
             // Simply open the document into the area index
             IDocument* doc = Core::self()->documentControllerInternal()->openDocument(QUrl::fromUserInput(urlsWithSeparators.front()),
                         KTextEditor::Cursor::invalid(),
-                        (IDocumentController::DocumentActivation) ( IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView) );
+                        IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
             Sublime::Document *sublimeDoc = dynamic_cast<Sublime::Document*>(doc);
             if (sublimeDoc) {
                 Sublime::View* view = sublimeDoc->createView();
