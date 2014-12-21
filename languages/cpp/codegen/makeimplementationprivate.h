@@ -86,8 +86,8 @@ class MakeImplementationPrivate : public CodeGenerator<ParseSession>
     //DocumentChange insertConstructorInitializations(ClassFunctionDeclaration * constructor, const QList<ClassMemberDeclaration *>)
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(MakeImplementationPrivate::Policies)
-
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::MakeImplementationPrivate::Policies)
 
 #endif // MAKEIMPLEMENTATIONPRIVATE_H
