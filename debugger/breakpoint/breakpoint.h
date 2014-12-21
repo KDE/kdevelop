@@ -57,7 +57,6 @@ public:
     Breakpoint(BreakpointModel *model, BreakpointKind kind);
     Breakpoint(BreakpointModel *model, const KConfigGroup& config);
 
-    ///Note: EnableColumn has 3, not 2(true and false) values: Qt::Unchecked, Qt:PartiallyChecked and Qt::Checked
     bool setData(int index, const QVariant& value);
     void setDeleted();
 
