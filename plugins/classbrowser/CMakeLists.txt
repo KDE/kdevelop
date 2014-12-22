@@ -25,14 +25,10 @@ set(kdevclassbrowser_PART_SRCS
     allclassesfolder.cpp
 )
 
-add_library(kdevclassbrowser MODULE ${kdevclassbrowser_PART_SRCS})
+kdevplatform_add_plugin(kdevclassbrowser JSON kdevclassbrowser.json SOURCES ${kdevclassbrowser_PART_SRCS})
+
 target_link_libraries(kdevclassbrowser KF5::TextEditor KDev::Util KDev::Language KDev::Interfaces KDev::Project)
-
-install(TARGETS kdevclassbrowser DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
-
 
 ########### install files ###############
 
-configure_file(kdevclassbrowser.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevclassbrowser.desktop)
-kcoreaddons_desktop_to_json(kdevclassbrowser ${CMAKE_CURRENT_BINARY_DIR}/kdevclassbrowser.desktop)
 install(FILES kdevclassbrowser.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclassbrowser)

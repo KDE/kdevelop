@@ -7,17 +7,9 @@ set(kdevswitchtobuddy_PART_SRCS
     switchtobuddyplugin.cpp
 )
 
-add_library(kdevswitchtobuddy MODULE ${kdevswitchtobuddy_PART_SRCS})
+kdevplatform_add_plugin(kdevswitchtobuddy JSON kdevswitchtobuddy.json SOURCES ${kdevswitchtobuddy_PART_SRCS})
 
 target_link_libraries(kdevswitchtobuddy
     KDev::Interfaces
     KDev::Language
 )
-
-install(TARGETS kdevswitchtobuddy DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-
-
-########### install files ###############
-
-configure_file(kdevswitchtobuddy.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevswitchtobuddy.desktop)
-kcoreaddons_desktop_to_json(kdevswitchtobuddy ${CMAKE_CURRENT_BINARY_DIR}/kdevswitchtobuddy.desktop)

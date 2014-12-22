@@ -13,15 +13,9 @@ set(patchreview_PART_SRCS
 
 ki18n_wrap_ui(patchreview_PART_SRCS patchreview.ui localpatchwidget.ui)
 
-
-add_library(kdevpatchreview MODULE ${patchreview_PART_SRCS})
+kdevplatform_add_plugin(kdevpatchreview JSON kdevpatchreview.json SOURCES ${patchreview_PART_SRCS})
 target_link_libraries(kdevpatchreview KF5::IconThemes KF5::TextEditor KF5::Parts KF5::KDELibs4Support KDev::Interfaces KDev::Util KDev::Language KDev::Vcs KDev::Sublime ${LIBKOMPAREDIFF2_LIBRARIES})
-
-install(TARGETS kdevpatchreview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
-
 
 ########### install files ###############
 
-configure_file(kdevpatchreview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevpatchreview.desktop)
-kcoreaddons_desktop_to_json(kdevpatchreview ${CMAKE_CURRENT_BINARY_DIR}/kdevpatchreview.desktop)
 install(FILES kdevpatchreview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevpatchreview)

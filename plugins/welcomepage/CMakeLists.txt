@@ -6,7 +6,7 @@ set(welcomepage_SRCS
 
 qt5_add_resources(welcomepage_SRCS welcomepage.qrc)
 
-add_library(kdevwelcomepage MODULE ${welcomepage_SRCS})
+kdevplatform_add_plugin(kdevwelcomepage JSON kdevwelcomepage.json SOURCES ${welcomepage_SRCS})
 
 target_link_libraries(kdevwelcomepage
     KDev::Interfaces
@@ -17,8 +17,3 @@ target_link_libraries(kdevwelcomepage
     KF5::Declarative
     KF5::KDELibs4Support
 )
-
-install(TARGETS kdevwelcomepage DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-
-configure_file(kdevwelcomepage.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevwelcomepage.desktop)
-kcoreaddons_desktop_to_json(kdevwelcomepage ${CMAKE_CURRENT_BINARY_DIR}/kdevwelcomepage.desktop)

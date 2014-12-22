@@ -6,14 +6,5 @@ set(kdevkonsoleview_PART_SRCS
     kdevkonsoleview.cpp
 )
 
-add_library(kdevkonsoleview MODULE ${kdevkonsoleview_PART_SRCS})
+kdevplatform_add_plugin(kdevkonsoleview JSON kdevkonsoleview.json SOURCES ${kdevkonsoleview_PART_SRCS})
 target_link_libraries(kdevkonsoleview KF5::Parts KDev::Interfaces)
-
-install(TARGETS kdevkonsoleview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-
-
-########### install files ###############
-
-configure_file(kdevkonsoleview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevkonsoleview.desktop)
-kcoreaddons_desktop_to_json(kdevkonsoleview ${CMAKE_CURRENT_BINARY_DIR}/kdevkonsoleview.desktop)
-

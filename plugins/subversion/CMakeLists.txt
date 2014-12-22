@@ -79,7 +79,8 @@ set(kdevsubversion_PART_UI
 )
 
 ki18n_wrap_ui(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})
-add_library(kdevsubversion MODULE ${kdevsubversion_PART_SRCS} ${kdevsubversion_JOB_SRCS} ${kdevsubversion_WRAPPER_SRCS})
+
+kdevplatform_add_plugin(kdevsubversion JSON kdevsubversion.json SOURCES ${kdevsubversion_PART_SRCS} ${kdevsubversion_JOB_SRCS} ${kdevsubversion_WRAPPER_SRCS})
 
 target_link_libraries(kdevsubversion
     ${SUBVERSION_LIBRARIES}
@@ -95,10 +96,3 @@ target_link_libraries(kdevsubversion
     # FIXME: poort away from this
     KF5::KDELibs4Support
 )
-
-install(TARGETS kdevsubversion DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-
-
-########### install files ###############
-configure_file(kdevsubversion.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevsubversion.desktop)
-kcoreaddons_desktop_to_json(kdevsubversion ${CMAKE_CURRENT_BINARY_DIR}/kdevsubversion.desktop)

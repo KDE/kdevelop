@@ -21,7 +21,9 @@ set(kdevgrepview_PART_UI
 )
 
 ki18n_wrap_ui(kdevgrepview_PART_SRCS ${kdevgrepview_PART_UI})
-add_library(kdevgrepview MODULE ${kdevgrepview_PART_SRCS})
+
+kdevplatform_add_plugin(kdevgrepview JSON kdevgrepview.json SOURCES ${kdevgrepview_PART_SRCS})
+
 target_link_libraries(kdevgrepview
     KF5::Parts
     KF5::TextEditor
@@ -35,13 +37,8 @@ target_link_libraries(kdevgrepview
     KDev::Language
 )
 
-install(TARGETS kdevgrepview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-
-
 ########### install files ###############
 
-configure_file(kdevgrepview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgrepview.desktop)
-kcoreaddons_desktop_to_json(kdevgrepview ${CMAKE_CURRENT_BINARY_DIR}/kdevgrepview.desktop)
 install( FILES kdevgrepview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevgrepview )
 
 add_subdirectory(tests)

@@ -27,7 +27,7 @@ ki18n_wrap_ui(kdevfiletemplates_PART_SRCS
     ui/testcases.ui
 )
 
-add_library(kdevfiletemplates MODULE ${kdevfiletemplates_PART_SRCS})
+kdevplatform_add_plugin(kdevfiletemplates JSON kdevfiletemplates.json SOURCES ${kdevfiletemplates_PART_SRCS})
 
 target_link_libraries(kdevfiletemplates
     KDev::Interfaces
@@ -39,13 +39,8 @@ target_link_libraries(kdevfiletemplates
     KF5::ItemModels
 )
 
-install(TARGETS kdevfiletemplates DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-
-
 ########### install files ###############
 
-configure_file(kdevfiletemplates.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevfiletemplates.desktop)
-kcoreaddons_desktop_to_json(kdevfiletemplates ${CMAKE_CURRENT_BINARY_DIR}/kdevfiletemplates.desktop)
 install( FILES kdevfiletemplates.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevfiletemplates )
 install( FILES kdevfiletemplates.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
@@ -87,7 +82,6 @@ main.cpp
 add_executable(testfiletemplates ${test_srcs})
 
 target_link_libraries(testfiletemplates
-
     KDev::Interfaces
     KDev::Language
     KDev::Project

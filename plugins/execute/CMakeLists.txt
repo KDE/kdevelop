@@ -14,7 +14,9 @@ set(kdevexecute_PART_SRCS
 )
 
 ki18n_wrap_ui( kdevexecute_PART_SRCS ${kdevexecute_PART_UIS} )
-add_library(kdevexecute MODULE ${kdevexecute_PART_SRCS})
+
+kdevplatform_add_plugin(kdevexecute JSON kdevexecute.json SOURCES ${kdevexecute_PART_SRCS})
+
 target_link_libraries(kdevexecute
     KF5::KCMUtils
     KDev::Interfaces
@@ -24,10 +26,6 @@ target_link_libraries(kdevexecute
     KDev::Shell
 )
 
-install(TARGETS kdevexecute DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
-
-
 ########### install files ###############
+
 install(FILES iexecuteplugin.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/execute COMPONENT Devel)
-configure_file(kdevexecute.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevexecute.desktop)
-kcoreaddons_desktop_to_json(kdevexecute ${CMAKE_CURRENT_BINARY_DIR}/kdevexecute.desktop)

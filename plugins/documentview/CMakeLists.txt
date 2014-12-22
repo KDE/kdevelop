@@ -12,19 +12,14 @@ set(kdevdocumentview_PART_SRCS
     kdevdocumentselection.cpp
 )
 
+kdevplatform_add_plugin(kdevdocumentview JSON kdevdocumentview.json SOURCES ${kdevdocumentview_PART_SRCS})
 
-add_library(kdevdocumentview MODULE ${kdevdocumentview_PART_SRCS})
 target_link_libraries(kdevdocumentview
     KDev::Interfaces
     KF5::TextEditor
 )
 
-install(TARGETS kdevdocumentview DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-
-
 ########### install files ###############
 
-configure_file(kdevdocumentview.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevdocumentview.desktop)
-kcoreaddons_desktop_to_json(kdevdocumentview ${CMAKE_CURRENT_BINARY_DIR}/kdevdocumentview.desktop)
 install( FILES kdevdocumentview.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevdocumentview )
 
