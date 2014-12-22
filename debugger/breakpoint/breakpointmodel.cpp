@@ -605,7 +605,11 @@ Breakpoint* BreakpointModel::addAccessWatchpoint(const QString& expression)
 void BreakpointModel::registerBreakpoint(Breakpoint* breakpoint)
 {
     Q_ASSERT(!m_breakpoints.contains(breakpoint));
+    int row = m_breakpoints.size();
     m_breakpoints << breakpoint;
+    if (IBreakpointController* controller = breakpointController()) {
+        controller->breakpointAdded(row);
+    }
 }
 
 Breakpoint* BreakpointModel::breakpoint(const QUrl& url, int line) {
