@@ -127,8 +127,6 @@ QStringList NinjaJob::privilegedExecutionCommand() const
 
 void NinjaJob::emitProjectBuilderSignal(KJob* job)
 {
-    Q_ASSERT(!m_signal.isEmpty());
-
     if (!m_plugin)
         return;
 
@@ -136,10 +134,12 @@ void NinjaJob::emitProjectBuilderSignal(KJob* job)
     if(!it)
         return;
 
-    if(job->error()==0)
+    if (job->error() == 0) {
+        Q_ASSERT(!m_signal.isEmpty());
         QMetaObject::invokeMethod(m_plugin, m_signal, Q_ARG(KDevelop::ProjectBaseItem*, it));
-    else
+    } else {
         QMetaObject::invokeMethod(m_plugin, "failed", Q_ARG(KDevelop::ProjectBaseItem*, it));
+    }
 }
 
 void NinjaJob::postProcessStderr( const QStringList& lines )
