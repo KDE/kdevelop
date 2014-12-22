@@ -138,20 +138,29 @@ struct BreakpointController::InsertedHandler : public BreakpointController::Hand
         int row = controller->breakpointRow(breakpoint);
 
         if (r.reason != "error") {
+            QString bkptKind;
             for (auto kind : {"bkpt", "wpt", "hw-rwpt", "hw-awpt"}) {
                 if (r.hasField(kind)) {
-                    breakpoint->gdbId = r[kind]["number"].toInt();
+                    bkptKind = kind;
                     break;
                 }
             }
-            Q_ASSERT(breakpoint->gdbId >= 0);
+            if (bkptKind.isEmpty()) {
+                qWarning() << "Gdb sent unknown breakpoint kind";
+                return;
+            }
+
+            const Value& miBkpt = r[bkptKind];
+
+            breakpoint->gdbId = miBkpt["number"].toInt();
 
             if (row >= 0) {
+                controller->updateFromGdb(row, miBkpt);
                 if (breakpoint->dirty != 0)
                     controller->sendUpdates(row);
             } else {
                 // breakpoint was deleted while insertion was in flight
-                controller->debugSession()->addCommandToFront(
+                controller->debugSession()->addCommand(
                     new GDBCommand(BreakDelete, breakpoint->gdbId));
             }
         }
@@ -603,7 +612,7 @@ void BreakpointController::updateFromGdb(int row, const Value& miBkpt, Breakpoin
 
     // Commands that are currently in flight will overwrite the modification we have received,
     // so do not update the corresponding data
-    lockedColumns |= breakpoint->sent;
+    lockedColumns |= breakpoint->sent | breakpoint->dirty;
 
     // TODO:
     // Gdb has a notion of "original-location", which is the "expression" or "location" used
