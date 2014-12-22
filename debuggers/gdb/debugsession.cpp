@@ -228,7 +228,7 @@ void DebugSession::examineCoreFile(const QUrl& debugee, const QUrl& coreFile)
 
     // TODO support non-local URLs
     queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, debugee.toLocalFile()));
-    queueCmd(new GDBCommand(GDBMI::NonMI, "core " + coreFile.toLocalFile(), this, &DebugSession::handleCoreFile, true));
+    queueCmd(new GDBCommand(GDBMI::NonMI, "core " + coreFile.toLocalFile(), this, &DebugSession::handleCoreFile, HandlesError));
 
     raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
@@ -270,7 +270,9 @@ void DebugSession::attachToProcess(int pid)
     // real binary name.
     queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols));
 
-    queueCmd(new GDBCommand(GDBMI::TargetAttach, pid, this, &DebugSession::handleTargetAttach, true));
+    queueCmd(new GDBCommand(GDBMI::TargetAttach, QString::number(pid), this, &DebugSession::handleTargetAttach, HandlesError));
+
+    queueCmd(new SentinelCommand(breakpointController(), &BreakpointController::initSendBreakpoints));
 
     raiseEvent(connected_to_program);
 
@@ -1089,18 +1091,24 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
         // Future: the shell script should be able to pass info (like pid)
         // to the gdb script...
 
-        qCDebug(DEBUGGERGDB) << "Running gdb script " << KShell::quoteArg(config_runGdbScript_.toLocalFile());
-        queueCmd(new GDBCommand(GDBMI::NonMI, "source " + KShell::quoteArg(config_runGdbScript_.toLocalFile())));
+        queueCmd(new SentinelCommand([this, config_runGdbScript_]() {
+            breakpointController()->initSendBreakpoints();
 
-        // Note: script could contain "run" or "continue"
-
-        raiseEvent(connected_to_program);
+            qCDebug(DEBUGGERGDB) << "Running gdb script " << KShell::quoteArg(config_runGdbScript_.toLocalFile());
+            queueCmd(new GDBCommand(GDBMI::NonMI, "source " + KShell::quoteArg(config_runGdbScript_.toLocalFile())));
+            raiseEvent(connected_to_program);
+            // Note: script could contain "run" or "continue"
+        }));
     }
     else
     {
-        queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, KShell::quoteArg(executable), this, &DebugSession::handleFileExecAndSymbols, true));
+        queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, KShell::quoteArg(executable), this, &DebugSession::handleFileExecAndSymbols, HandlesError));
         raiseEvent(connected_to_program);
-        queueCmd(new GDBCommand(GDBMI::ExecRun));
+
+        queueCmd(new SentinelCommand([this]() {
+            breakpointController()->initSendBreakpoints();
+            queueCmd(new GDBCommand(GDBMI::ExecRun));
+        }));
     }
 
     {
@@ -1164,7 +1172,7 @@ void DebugSession::runUntil(const QUrl& url, int line)
         return;
 
     if (!url.isValid())
-        queueCmd(new GDBCommand(GDBMI::ExecUntil, line));
+        queueCmd(new GDBCommand(GDBMI::ExecUntil, QString::number(line)));
     else
         queueCmd(new GDBCommand(GDBMI::ExecUntil,
                 QString("%1:%2").arg(url.toLocalFile()).arg(line)));

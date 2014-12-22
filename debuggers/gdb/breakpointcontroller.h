@@ -59,6 +59,8 @@ public:
 
     using IBreakpointController::breakpointModel;
 
+    void initSendBreakpoints();
+
     virtual void breakpointAdded(int row) override;
     virtual void breakpointModelChanged(int row, BreakpointModel::ColumnFlags columns) override;
     virtual void breakpointAboutToBeDeleted(int row) override;

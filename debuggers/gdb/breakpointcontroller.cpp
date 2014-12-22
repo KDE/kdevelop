@@ -161,7 +161,7 @@ struct BreakpointController::InsertedHandler : public BreakpointController::Hand
             } else {
                 // breakpoint was deleted while insertion was in flight
                 controller->debugSession()->addCommand(
-                    new GDBCommand(BreakDelete, breakpoint->gdbId));
+                    new GDBCommand(BreakDelete, QString::number(breakpoint->gdbId)));
             }
         }
 
@@ -215,6 +215,16 @@ DebugSession *BreakpointController::debugSession() const
 int BreakpointController::breakpointRow(const BreakpointDataPtr& breakpoint)
 {
     return m_breakpoints.indexOf(breakpoint);
+}
+
+void BreakpointController::initSendBreakpoints()
+{
+    for (int row = 0; row < m_breakpoints.size(); ++row) {
+        BreakpointDataPtr breakpoint = m_breakpoints[row];
+        if (breakpoint->gdbId < 0 && breakpoint->sent == 0) {
+            createGdbBreakpoint(row);
+        }
+    }
 }
 
 void BreakpointController::breakpointAdded(int row)
