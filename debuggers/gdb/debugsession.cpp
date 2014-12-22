@@ -66,22 +66,23 @@ using namespace KDevelop;
 namespace GDBDebugger {
 
 DebugSession::DebugSession()
-    : KDevelop::IDebugSession(),
-      m_sessionState(NotStartedState),
-      m_config(KSharedConfig::openConfig(), "GDB Debugger"),
-      m_testing(false),
-      commandQueue_(new CommandQueue),
-      m_tty(0),
-      state_(s_dbgNotStarted|s_appNotStarted),
-      state_reload_needed(false),
-      stateReloadInProgress_(false)
+    : m_breakpointController(nullptr)
+    , m_variableController(nullptr)
+    , m_frameStackModel(nullptr)
+    , m_sessionState(NotStartedState)
+    , m_config(KSharedConfig::openConfig(), "GDB Debugger")
+    , m_testing(false)
+    , commandQueue_(new CommandQueue)
+    , m_tty(0)
+    , state_(s_dbgNotStarted | s_appNotStarted)
+    , state_reload_needed(false)
+    , stateReloadInProgress_(false)
 {
     configure();
 
-    // FIXME: this poking at parent's member variable is bad.
-    // Introduce functions to set them?
     m_breakpointController = new BreakpointController(this);
     m_variableController = new VariableController(this);
+    m_frameStackModel = new GdbFrameStackModel(this);
 
     m_procLineMaker = new KDevelop::ProcessLineMaker(this);
 
@@ -119,6 +120,21 @@ KDevelop::IDebugSession::DebuggerState DebugSession::state() const {
     return m_sessionState;
 }
 
+BreakpointController* DebugSession::breakpointController() const
+{
+    return m_breakpointController;
+}
+
+IVariableController* DebugSession::variableController() const
+{
+    return m_variableController;
+}
+
+IFrameStackModel* DebugSession::frameStackModel() const
+{
+    return m_frameStackModel;
+}
+
 #define ENUM_NAME(o,e,v) (o::staticMetaObject.enumerator(o::staticMetaObject.indexOfEnumerator(#e)).valueToKey((v)))
 void DebugSession::setSessionState(DebuggerState state)
 {
@@ -127,11 +143,6 @@ void DebugSession::setSessionState(DebuggerState state)
         m_sessionState = state;
         emit stateChanged(state);
     }
-}
-
-KDevelop::IFrameStackModel* DebugSession::createFrameStackModel()
-{
-    return new GdbFrameStackModel(this);
 }
 
 void DebugSession::setupController()
