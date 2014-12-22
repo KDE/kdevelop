@@ -69,6 +69,10 @@ Q_LOGGING_CATEGORY(APP, "kdevelop.app")
 
 #include "splash.h"
 
+#ifdef Q_OS_MAC
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
 using namespace KDevelop;
 
 class KDevelopApplication: public QApplication
@@ -227,6 +231,21 @@ int main( int argc, char *argv[] )
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\n"));
     KLocalizedString::setApplicationDomain("kdevelop");
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
+
+#ifdef Q_OS_MAC
+    CFBundleRef mainBundle = CFBundleGetMainBundle();
+    if (mainBundle) {
+        // get the application's Info Dictionary. For app bundles this would live in the bundle's Info.plist,
+        // for regular executables it is obtained in another way.
+        CFMutableDictionaryRef infoDict = (CFMutableDictionaryRef) CFBundleGetInfoDictionary(mainBundle);
+        if (infoDict) {
+            // Try to prevent App Nap on OS X. This can be tricky in practice, at least in 10.9 .
+            CFDictionarySetValue(infoDict, CFSTR("NSAppSleepDisabled"), kCFBooleanTrue);
+            CFDictionarySetValue(infoDict, CFSTR("NSSupportsAutomaticTermination"), kCFBooleanFalse);
+        }
+    }
+#endif
+
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( "kdevelop", i18n( "KDevelop" ), QByteArray(VERSION), i18n(description), KAboutLicense::GPL,
                           i18n("Copyright 1999-2014, The KDevelop developers"), QString(), "http://www.kdevelop.org/");
