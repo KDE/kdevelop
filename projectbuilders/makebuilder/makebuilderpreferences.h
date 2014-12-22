@@ -23,9 +23,10 @@
 
 #include <project/projectconfigpage.h>
 
+#include "makebuilderconfig.h"
+
 class QWidget;
 class QStringList;
-class MakeBuilderSettings;
 namespace Ui { class MakeConfig; }
 
 class MakeBuilderPreferences : public ProjectConfigPage<MakeBuilderSettings>

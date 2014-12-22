@@ -59,7 +59,9 @@ target_link_libraries(kdevcpplanguagesupport
     KF5::IconThemes
     KF5::TextEditor
 )
-
+if(WIN32)
+    target_include_directories(kdevcpplanguagesupport PUBLIC ${KDEWIN_INCLUDES})
+endif()
 install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 

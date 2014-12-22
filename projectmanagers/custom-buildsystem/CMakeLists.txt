@@ -26,4 +26,6 @@ target_link_libraries(kdevcustombuildsystem
 install(TARGETS kdevcustombuildsystem DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 configure_file(kdevcustombuildsystem.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcustombuildsystem.desktop)
+kcoreaddons_desktop_to_json(kdevcustombuildsystem ${CMAKE_CURRENT_BINARY_DIR}/kdevcustombuildsystem.desktop)
+
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcustombuildsystem.desktop DESTINATION ${SERVICES_INSTALL_DIR})

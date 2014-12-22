@@ -10,3 +10,7 @@ ecm_add_test(${test_custommake_SRCS}
         KDev::Tests
         KDev::Project
 )
+if(WIN32)
+    target_include_directories(test_custommake PUBLIC ${KDEWIN_INCLUDES})
+    target_link_libraries(test_custommake ${KDEWIN_LIBRARIES})
+endif()

@@ -21,7 +21,7 @@
 
 #include <project/projectconfigpage.h>
 
-class CustomDefinesAndIncludes;
+#include "customdefinesandincludes.h"
 
 class DefinesAndIncludesConfigPage : public ProjectConfigPage<CustomDefinesAndIncludes>
 {
