@@ -181,20 +181,20 @@ public:
     TestDebugSession() : DebugSession()
     {
         setTesting(true);
+        m_frameStackModel = new TestFrameStackModel(this);
         KDevelop::ICore::self()->debugController()->addSession(this);
-    }
-
-    KDevelop::IFrameStackModel* createFrameStackModel()
-    {
-        return new TestFrameStackModel(this);
     }
 
     QUrl url() { return currentUrl(); }
     int line() { return currentLine(); }
-    TestFrameStackModel *frameStackModel() const
-    { return static_cast<TestFrameStackModel*>(DebugSession::frameStackModel()); }
 
+    virtual TestFrameStackModel* frameStackModel() const override
+    {
+        return m_frameStackModel;
+    }
 
+private:
+    TestFrameStackModel* m_frameStackModel;
 };
 
 class TestWaiter
