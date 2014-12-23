@@ -309,8 +309,19 @@ void BreakpointController::breakpointAboutToBeDeleted(int row)
     m_pendingDeleted << breakpoint;
 }
 
-void BreakpointController::debuggerStateChanged(IDebugSession::DebuggerState)
+void BreakpointController::debuggerStateChanged(IDebugSession::DebuggerState state)
 {
+    IgnoreChanges ignoreChanges(*this);
+    if (state == IDebugSession::EndedState ||
+        state == IDebugSession::NotStartedState) {
+        for (int row = 0; row < m_breakpoints.size(); ++row) {
+            updateState(row, Breakpoint::NotStartedState);
+        }
+    } else if (state == IDebugSession::StartingState) {
+        for (int row = 0; row < m_breakpoints.size(); ++row) {
+            updateState(row, Breakpoint::DirtyState);
+        }
+    }
 }
 
 void BreakpointController::createGdbBreakpoint(int row)
@@ -429,15 +440,18 @@ void BreakpointController::recalculateState(int row)
         updateErrorText(row, QString());
 
     Breakpoint::BreakpointState newState = Breakpoint::NotStartedState;
-    if (!debugSession()->stateIsOn(s_dbgNotStarted)) {
-        if (breakpoint->dirty == 0 && breakpoint->sent == 0) {
-            if (breakpoint->pending) {
-                newState = Breakpoint::PendingState;
+    if (debugSession()->state() != IDebugSession::EndedState &&
+        debugSession()->state() != IDebugSession::NotStartedState) {
+        if (!debugSession()->stateIsOn(s_dbgNotStarted)) {
+            if (breakpoint->dirty == 0 && breakpoint->sent == 0) {
+                if (breakpoint->pending) {
+                    newState = Breakpoint::PendingState;
+                } else {
+                    newState = Breakpoint::CleanState;
+                }
             } else {
-                newState = Breakpoint::CleanState;
+                newState = Breakpoint::DirtyState;
             }
-        } else {
-            newState = Breakpoint::DirtyState;
         }
     }
 
