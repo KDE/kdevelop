@@ -90,23 +90,17 @@ target_link_libraries( kdevcmakecommon
 generate_export_header(kdevcmakecommon EXPORT_FILE_NAME cmakecommonexport.h)
 
 ki18n_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
-add_library(kdevcmakemanager MODULE ${cmakemanager_SRCS} ${cmakesettings_SRCS})
+kdevplatform_add_plugin(kdevcmakemanager JSON kdevcmakemanager.json SOURCES ${cmakemanager_SRCS} ${cmakesettings_SRCS})
 target_link_libraries( kdevcmakemanager  KF5::KIOWidgets KDev::Util
                         KDev::Interfaces kdevcmakecommon kdevmakefileresolver
                         KDev::Project KDev::Language KDev::Shell
                         KDev::OutputView KF5::TextEditor KF5::KDELibs4Support Qt5::Concurrent)
 
-add_library(kdevcmakedocumentation MODULE ${cmakedoc_SRCS} )
+kdevplatform_add_plugin(kdevcmakedocumentation JSON kdevcmakedocumentation.json SOURCES ${cmakedoc_SRCS})
 target_link_libraries( kdevcmakedocumentation
                         KDev::Interfaces kdevcmakecommon
                         KDev::Project KDev::Language
                         KDev::Documentation
                         KF5::TextEditor Qt5::WebKitWidgets)
 
-install(TARGETS kdevcmakemanager DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-install(TARGETS kdevcmakedocumentation DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
 install(TARGETS kdevcmakecommon ${INSTALL_TARGETS_DEFAULT_ARGS} )
-configure_file(kdevcmakemanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakemanager.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-configure_file(kdevcmakedocumentation.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcmakedocumentation.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

@@ -82,7 +82,7 @@
 namespace GDBDebugger
 {
 
-K_PLUGIN_FACTORY(CppDebuggerFactory, registerPlugin<CppDebuggerPlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(CppDebuggerFactory, "kdevgdb.json", registerPlugin<CppDebuggerPlugin>(); )
 
 template<class T>
 class DebuggerToolFactory : public KDevelop::IToolViewFactory

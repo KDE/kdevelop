@@ -14,7 +14,7 @@ set(kdevghprovider_PART_SRCS
     ghdialog.cpp
 )
 
-add_library(kdevghprovider MODULE ${kdevghprovider_PART_SRCS})
+kdevplatform_add_plugin(kdevghprovider JSON kdevghprovider.json	SOURCES ${kdevghprovider_PART_SRCS})
 target_link_libraries(kdevghprovider
   KF5::KIOWidgets
   KF5::KDELibs4Support
@@ -24,7 +24,3 @@ target_link_libraries(kdevghprovider
   KDev::OutputView
   KDev::Util
 )
-
-install(TARGETS kdevghprovider DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
-configure_file(kdevghprovider.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevghprovider.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevghprovider.desktop DESTINATION ${SERVICES_INSTALL_DIR})

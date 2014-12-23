@@ -45,7 +45,8 @@ if(BUILD_uiblocktester)
   add_definitions(-DDEBUG_UI_LOCKUP)
 endif(BUILD_uiblocktester)
 
-add_library(kdevcpplanguagesupport MODULE ${kdevcpplanguagesupport_PART_SRCS})
+kdevplatform_add_plugin(kdevcpplanguagesupport JSON kdevcppsupport.json
+	SOURCES ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport
     kdevcpprpp
     kdevcppduchain
@@ -60,11 +61,6 @@ target_link_libraries(kdevcpplanguagesupport
     KF5::TextEditor
 )
 
-install(TARGETS kdevcpplanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
-
-
 ########### install files ###############
 
-configure_file(kdevcppsupport.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcppsupport.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcppsupport.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES kdevcppsupport.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcppsupport)

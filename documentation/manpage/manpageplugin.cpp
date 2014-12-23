@@ -45,7 +45,7 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(ManPageFactory, registerPlugin<ManPagePlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(ManPageFactory, "kdevmanpage.json", registerPlugin<ManPagePlugin>(); )
 
 ManPagePlugin::ManPagePlugin(QObject* parent, const QVariantList& args)
     : IPlugin("kdevmanpage", parent)

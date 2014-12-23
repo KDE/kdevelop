@@ -94,7 +94,7 @@ public:
 // See above.
 CustomMakeProvider::~CustomMakeProvider() Q_DECL_NOEXCEPT = default;
 
-K_PLUGIN_FACTORY(CustomMakeSupportFactory, registerPlugin<CustomMakeManager>(); )
+K_PLUGIN_FACTORY_WITH_JSON(CustomMakeSupportFactory, "kdevcustommakemanager.json", registerPlugin<CustomMakeManager>(); )
 
 CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args )
 : KDevelop::AbstractFileManagerPlugin( "kdevcustommakemanager", parent )

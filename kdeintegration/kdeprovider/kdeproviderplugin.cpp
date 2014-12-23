@@ -29,7 +29,7 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(KDevKDEProviderFactory, registerPlugin<KDEProviderPlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(KDevKDEProviderFactory, "kdevkdeprovider.json", registerPlugin<KDEProviderPlugin>(); )
 
 KDEProviderPlugin::KDEProviderPlugin ( QObject* parent, const QVariantList& ) 
     : IPlugin ( "kdevkdeprovider", parent )

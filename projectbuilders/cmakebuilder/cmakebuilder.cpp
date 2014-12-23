@@ -53,7 +53,7 @@ Q_LOGGING_CATEGORY(CMAKEBUILDER, "kdevelop.projectbuilders.cmakebuilder")
 #include "cmakeutils.h"
 #include <cmakemodelitems.h>
 
-K_PLUGIN_FACTORY(CMakeBuilderFactory, registerPlugin<CMakeBuilder>(); )
+K_PLUGIN_FACTORY_WITH_JSON(CMakeBuilderFactory, "kdevcmakebuilder.json", registerPlugin<CMakeBuilder>(); )
 
 CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin("kdevcmakebuilder", parent)

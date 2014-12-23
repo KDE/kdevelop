@@ -33,7 +33,7 @@
 #include <KConfigGroup>
 
 Q_LOGGING_CATEGORY(MAKEBUILDER, "kdevelop.projectbuilders.makebuilder")
-K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
+K_PLUGIN_FACTORY_WITH_JSON(MakeBuilderFactory, "kdevmakebuilder.json", registerPlugin<MakeBuilder>(); )
 
 MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin("kdevmakebuilder", parent)

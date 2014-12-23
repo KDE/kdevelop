@@ -84,7 +84,7 @@ void merge(Defines* target, const Defines& source)
 
 }
 
-K_PLUGIN_FACTORY(DefinesAndIncludesManagerFactory, registerPlugin<DefinesAndIncludesManager>(); )
+K_PLUGIN_FACTORY_WITH_JSON(DefinesAndIncludesManagerFactory, "kdevdefinesandincludesmanager.json", registerPlugin<DefinesAndIncludesManager>(); )
 
 DefinesAndIncludesManager::DefinesAndIncludesManager( QObject* parent, const QVariantList& )
     : IPlugin("kdevdefinesandincludesmanager", parent )

@@ -18,17 +18,10 @@ set(kdevexecuteplasmoid_PART_SRCS
 )
 
 ki18n_wrap_ui( kdevexecuteplasmoid_PART_SRCS ${kdevexecuteplasmoid_PART_UIS} )
-add_library(kdevexecuteplasmoid MODULE ${kdevexecuteplasmoid_PART_SRCS}  )
+kdevplatform_add_plugin(kdevexecuteplasmoid JSON kdevexecuteplasmoid.json SOURCES ${kdevexecuteplasmoid_PART_SRCS})
 target_link_libraries(kdevexecuteplasmoid
     KDev::Language
     KDev::Interfaces
     KDev::Util
     KDev::Project
     KDev::OutputView)
-
-install(TARGETS kdevexecuteplasmoid DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
-
-
-########### install files ###############
-configure_file(kdevexecuteplasmoid.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevexecuteplasmoid.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevexecuteplasmoid.desktop DESTINATION ${SERVICES_INSTALL_DIR})

@@ -32,7 +32,7 @@
 Q_DECLARE_LOGGING_CATEGORY(NINJABUILDER)
 
 Q_LOGGING_CATEGORY(NINJABUILDER, "kdevelop.projectbuilders.ninjabuilder")
-K_PLUGIN_FACTORY(NinjaBuilderFactory, registerPlugin<KDevNinjaBuilderPlugin>(); )
+K_PLUGIN_FACTORY_WITH_JSON(NinjaBuilderFactory, "kdevninja.json", registerPlugin<KDevNinjaBuilderPlugin>(); )
 
 KDevNinjaBuilderPlugin::KDevNinjaBuilderPlugin(QObject* parent, const QVariantList& )
     : KDevelop::IPlugin("kdevninja", parent)

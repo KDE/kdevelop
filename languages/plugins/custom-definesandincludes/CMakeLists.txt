@@ -26,8 +26,7 @@ ki18n_wrap_ui(kdevdefinesandincludesmanager_SRCS
 )
 kconfig_add_kcfg_files( kdevdefinesandincludesmanager_SRCS kcm_widget/customdefinesandincludes.kcfgc)
 
-add_library(kdevdefinesandincludesmanager MODULE
-        ${kdevdefinesandincludesmanager_SRCS} )
+kdevplatform_add_plugin(kdevdefinesandincludesmanager JSON kdevdefinesandincludesmanager.json SOURCES ${kdevdefinesandincludesmanager_SRCS})
 target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
         KF5::KDELibs4Support
         KDev::Project
@@ -46,11 +45,6 @@ if(BUILD_kdev_includepathsconverter)
     install(TARGETS kdev_includepathsconverter ${INSTALL_TARGETS_DEFAULT_ARGS} )
 endif(BUILD_kdev_includepathsconverter)
 
-install( TARGETS kdevdefinesandincludesmanager
-         DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-
-configure_file(kdevdefinesandincludesmanager.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevdefinesandincludesmanager.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevdefinesandincludesmanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 install(FILES
     idefinesandincludesmanager.h

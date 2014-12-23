@@ -146,7 +146,7 @@ Declaration* definitionForCursorDeclaration(const KTextEditor::Cursor& cursor, c
 // For unit-tests that compile cpplanguagesupport.cpp into their executable
 // don't create the factories as that means 2 instances of the factory
 #ifndef BUILD_TESTS
-K_PLUGIN_FACTORY(KDevCppSupportFactory, registerPlugin<CppLanguageSupport>(); )
+K_PLUGIN_FACTORY_WITH_JSON(KDevCppSupportFactory, "kdevcppsupport.json", registerPlugin<CppLanguageSupport>(); )
 #else
 class KDevCppSupportFactory : public KPluginFactory
 {

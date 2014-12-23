@@ -50,7 +50,7 @@ using namespace KDevelop;
 
 static QPointer<CustomScriptPlugin> indentPluginSingleton;
 
-K_PLUGIN_FACTORY(CustomScriptFactory, registerPlugin<CustomScriptPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(CustomScriptFactory, "kdevcustomscript.json", registerPlugin<CustomScriptPlugin>();)
 
 // Replaces ${KEY} in command with variables[KEY]
 static QString replaceVariables( QString command, QMap<QString, QString> variables )

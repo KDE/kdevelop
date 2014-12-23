@@ -101,7 +101,7 @@ set(kdevgdb_UI
 )
 
 ki18n_wrap_ui(kdevgdb_SRCS ${kdevgdb_UI})
-add_library(kdevgdb MODULE ${kdevgdb_SRCS})
+kdevplatform_add_plugin(kdevgdb JSON kdevgdb.json SOURCES ${kdevgdb_SRCS})
 target_link_libraries(kdevgdb
     KDev::Sublime
     KDev::Interfaces
@@ -114,8 +114,6 @@ target_link_libraries(kdevgdb
     KF5::KDELibs4Support
     ${KDE4WORKSPACE_PROCESSUI_LIBS}
 )
-
-install(TARGETS kdevgdb DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 set(test_gdb_SRCS unittests/test_gdb.cpp ${kdevgdb_SRCS})
 ecm_add_test(${test_gdb_SRCS}
@@ -141,6 +139,4 @@ endif()
 
 ########### install files ###############
 
-configure_file(kdevgdb.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevgdb.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevgdb.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES kdevgdbui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevgdb )

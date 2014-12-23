@@ -27,7 +27,7 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(KDevGHProviderFactory, registerPlugin<gh::ProviderPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(KDevGHProviderFactory, "kdevghprovider.json", registerPlugin<gh::ProviderPlugin>();)
 
 namespace gh
 {
