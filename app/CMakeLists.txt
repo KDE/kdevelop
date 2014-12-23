@@ -29,6 +29,9 @@ target_link_libraries(kdevelop
 
     Qt5::Quick
 )
+IF(APPLE)
+    target_link_libraries(kdevelop "-framework CoreFoundation")
+ENDIF()
 
 install(TARGETS kdevelop ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
