@@ -175,7 +175,9 @@ struct BreakpointController::InsertedHandler : public BreakpointController::Hand
             }
         }
 
-        controller->recalculateState(row);
+        if (row >= 0) {
+            controller->recalculateState(row);
+        }
     }
 };
 
