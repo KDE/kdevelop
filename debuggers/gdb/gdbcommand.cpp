@@ -28,7 +28,7 @@ FunctionCommandHandler::FunctionCommandHandler(const FunctionCommandHandler::Fun
 
 bool FunctionCommandHandler::handlesError()
 {
-    return _flags & HandlesError;
+    return _flags & CmdHandlesError;
 }
 
 void FunctionCommandHandler::handle(const ResultRecord& r)
@@ -37,14 +37,15 @@ void FunctionCommandHandler::handle(const ResultRecord& r)
 }
 
 
-GDBCommand::GDBCommand(GDBMI::CommandType type, const QString &command)
-: type_(type), token_(0), command_(command), commandHandler_(0),
+GDBCommand::GDBCommand(GDBMI::CommandType type, const QString& command, CommandFlags flags)
+: type_(type), flags_(flags & ~CmdHandlesError), token_(0), command_(command), commandHandler_(0),
   stateReloading_(false), m_thread(-1), m_frame(-1)
 {
 }
 
-GDBCommand::GDBCommand(CommandType type, const QString& arguments, GDBCommandHandler* handler)
-: type_(type), token_(0), command_(arguments), commandHandler_(handler),
+GDBCommand::GDBCommand(CommandType type, const QString& arguments, GDBCommandHandler* handler,
+                       CommandFlags flags)
+: type_(type), flags_(flags), token_(0), command_(arguments), commandHandler_(handler),
   stateReloading_(false), m_thread(-1), m_frame(-1)
 {
 }
@@ -52,6 +53,7 @@ GDBCommand::GDBCommand(CommandType type, const QString& arguments, GDBCommandHan
 GDBCommand::GDBCommand(CommandType type, const QString& arguments,
                        const FunctionCommandHandler::Function& callback, CommandFlags flags)
     : type_(type)
+    , flags_(flags & ~CmdHandlesError)
     , token_(0)
     , command_(arguments)
     , commandHandler_(new FunctionCommandHandler(callback, flags))
@@ -140,7 +142,7 @@ bool GDBCommand::handlesError() const
 }
 
 UserCommand::UserCommand(GDBMI::CommandType type, const QString& s)
-: GDBCommand(type, s)
+: GDBCommand(type, s, CmdMaybeStartsRunning)
 {
 }
 

@@ -18,7 +18,6 @@
 
 #include <functional>
 
-#include <QObject>
 #include <QString>
 #include <QStringList>
 #include <QPointer>
@@ -33,9 +32,33 @@ class VarItem;
 class ValueCallback;
 
 enum CommandFlag {
-    HandlesError = 1 << 0
+    /// The command handler also wishes to receive an error responses, overriding the default error handler
+    CmdHandlesError = 1 << 0,
+
+    /// The command is expected to cause the inferior to run. Controllers that display the
+    /// program's state should refrain from sending commands while a command with this flag
+    /// is currently pending; however, note that a command with this flag needn't be guaranteed
+    /// to lead to a running state.
+    CmdMaybeStartsRunning = 1 << 1,
+
+    /// The command is a temporary-run type command, meaning that it typically causes the program
+    /// to run, but only for a short time before it stops again (e.g. Step and StepInto-type
+    /// commands). When the program is running due to this type of command, a CmdImmediately
+    /// command will wait before forcing an interrupt of the debugger, and the program is _not_
+    /// automatically restarted if an interrupt was forced.
+    ///
+    /// TODO: this special handling has not actually been implemented yet
+    CmdTemporaryRun = 1 << 2,
+
+    /// This command should be executed immediately, even if the program is currently running
+    /// (e.g. breakpoint setting and modification); however, if the program is interrupted,
+    /// it should be resumed after this command has run.
+    CmdImmediately = 1 << 3,
+
+    /// This is a command that should interrupt a running program, without resuming.
+    CmdInterrupt = 1 << 4,
 };
-Q_DECLARE_FLAGS(CommandFlags, CommandFlag);
+Q_DECLARE_FLAGS(CommandFlags, CommandFlag)
 
 //base class for handlers
 class GDBCommandHandler
@@ -72,7 +95,7 @@ private:
 class GDBCommand
 {
 public:
-    GDBCommand(GDBMI::CommandType type, const QString& arguments = QString());
+    GDBCommand(GDBMI::CommandType type, const QString& arguments = QString(), CommandFlags flags = 0);
 
     template<class Handler>
     GDBCommand(GDBMI::CommandType type, const QString& arguments,
@@ -80,7 +103,8 @@ public:
                void (Handler::* handler_method)(const GDBMI::ResultRecord&),
                CommandFlags flags = 0);
 
-    GDBCommand(GDBMI::CommandType type, const QString& arguments, GDBCommandHandler* handler);
+    GDBCommand(GDBMI::CommandType type, const QString& arguments, GDBCommandHandler* handler,
+               CommandFlags flags = 0);
 
     GDBCommand(
         GDBMI::CommandType type, const QString& arguments,
@@ -91,6 +115,8 @@ public:
 
     GDBMI::CommandType type() const;
     QString gdbCommand() const;
+
+    CommandFlags flags() const {return flags_;}
 
     /**
      * Returns the MI token with which the command is sent, allowing the parser to match up
@@ -174,6 +200,7 @@ public:
 
 private:
     GDBMI::CommandType type_;
+    CommandFlags flags_;
     uint32_t token_;
     QString command_;
     GDBCommandHandler *commandHandler_;
@@ -218,8 +245,9 @@ public:
 
     template<class Handler>
     SentinelCommand(Handler* handler_this,
-                    void (Handler::* handler_method)())
-        : GDBCommand(GDBMI::NonMI, "")
+                    void (Handler::* handler_method)(),
+                    CommandFlags flags = 0)
+        : GDBCommand(GDBMI::NonMI, QString(), flags)
     {
         QPointer<Handler> guarded_this(handler_this);
         handler = [guarded_this, handler_method]() {
@@ -229,8 +257,8 @@ public:
         };
     }
 
-    SentinelCommand(const Function& handler)
-        : GDBCommand(GDBMI::NonMI, "")
+    SentinelCommand(const Function& handler, CommandFlags flags = 0)
+        : GDBCommand(GDBMI::NonMI, QString(), flags)
         , handler(handler)
     {
     }
@@ -285,6 +313,7 @@ GDBCommand::GDBCommand(
     void (Handler::* handler_method)(const GDBMI::ResultRecord&),
     CommandFlags flags)
 : type_(type),
+  flags_(flags & ~CmdHandlesError),
   command_(command),
   commandHandler_(nullptr),
   stateReloading_(false),
@@ -318,6 +347,6 @@ CliCommand::CliCommand(
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(GDBDebugger::CommandFlags);
+Q_DECLARE_OPERATORS_FOR_FLAGS(GDBDebugger::CommandFlags)
 
 #endif

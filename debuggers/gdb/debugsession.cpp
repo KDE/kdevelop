@@ -202,11 +202,6 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
         }
     }
 
-    if (changedState & s_explicitBreakInto) {
-        if (!(newState & s_explicitBreakInto))
-            message = i18n("Application interrupted");
-    }
-
     // And now? :-)
     qCDebug(DEBUGGERGDB) << "state: " << newState << message;
 
@@ -228,7 +223,7 @@ void DebugSession::examineCoreFile(const QUrl& debugee, const QUrl& coreFile)
 
     // TODO support non-local URLs
     queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, debugee.toLocalFile()));
-    queueCmd(new GDBCommand(GDBMI::NonMI, "core " + coreFile.toLocalFile(), this, &DebugSession::handleCoreFile, HandlesError));
+    queueCmd(new GDBCommand(GDBMI::NonMI, "core " + coreFile.toLocalFile(), this, &DebugSession::handleCoreFile, CmdHandlesError));
 
     raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
@@ -270,7 +265,7 @@ void DebugSession::attachToProcess(int pid)
     // real binary name.
     queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols));
 
-    queueCmd(new GDBCommand(GDBMI::TargetAttach, QString::number(pid), this, &DebugSession::handleTargetAttach, HandlesError));
+    queueCmd(new GDBCommand(GDBMI::TargetAttach, QString::number(pid), this, &DebugSession::handleTargetAttach, CmdHandlesError));
 
     queueCmd(new SentinelCommand(breakpointController(), &BreakpointController::initSendBreakpoints));
 
@@ -284,7 +279,7 @@ void DebugSession::run()
     if (stateIsOn(s_appNotStarted|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(GDBMI::ExecContinue));
+    queueCmd(new GDBCommand(GDBMI::ExecContinue, QString(), CmdMaybeStartsRunning));
 }
 
 void DebugSession::stepOut()
@@ -292,7 +287,7 @@ void DebugSession::stepOut()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(GDBMI::ExecFinish));
+    queueCmd(new GDBCommand(GDBMI::ExecFinish, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
 void DebugSession::restartDebugger()
@@ -355,9 +350,10 @@ void DebugSession::interruptDebugger()
 {
     Q_ASSERT(m_gdb);
 
-    setStateOn(s_explicitBreakInto);
-
-    m_gdb.data()->interrupt();
+    // Explicitly send the interrupt in case something went wrong with the usual
+    // ensureGdbListening logic.
+    m_gdb->interrupt();
+    queueCmd(new GDBCommand(GDBMI::ExecInterrupt, QString(), CmdInterrupt));
 }
 
 void DebugSession::runToCursor()
@@ -383,7 +379,7 @@ void DebugSession::stepOver()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(GDBMI::ExecNext));
+    queueCmd(new GDBCommand(GDBMI::ExecNext, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
 void DebugSession::stepOverInstruction()
@@ -391,7 +387,7 @@ void DebugSession::stepOverInstruction()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(GDBMI::ExecNextInstruction));
+    queueCmd(new GDBCommand(GDBMI::ExecNextInstruction, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
 void DebugSession::stepInto()
@@ -399,7 +395,7 @@ void DebugSession::stepInto()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(GDBMI::ExecStep));
+    queueCmd(new GDBCommand(GDBMI::ExecStep, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
 void DebugSession::stepIntoInstruction()
@@ -407,7 +403,7 @@ void DebugSession::stepIntoInstruction()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new GDBCommand(GDBMI::ExecStepInstruction));
+    queueCmd(new GDBCommand(GDBMI::ExecStepInstruction, QString(), CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
 void DebugSession::slotDebuggerAbnormalExit()
@@ -576,16 +572,36 @@ void DebugSession::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
     executeCmd();
 }
 
-bool DebugSession::executeCmd()
+void DebugSession::executeCmd()
 {
     Q_ASSERT(m_gdb);
 
+    if (stateIsOn(s_dbgNotListening) && commandQueue_->haveImmediateCommand()) {
+        // We may have to call this even while a command is currently executing, because
+        // Gdb can get into a state where a command such as ExecRun does not send a response
+        // while the inferior is running.
+        ensureGdbListening();
+    }
+
     if (!m_gdb.data()->isReady())
-        return false;
+        return;
 
     GDBCommand* currentCmd = commandQueue_->nextCommand();
     if (!currentCmd)
-        return false;
+        return;
+
+    if (currentCmd->flags() & (CmdMaybeStartsRunning | CmdInterrupt)) {
+        setStateOff(s_automaticContinue);
+    }
+
+    if (currentCmd->flags() & CmdMaybeStartsRunning) {
+        // GDB can be in a state where it is listening for commands while the program is running.
+        // However, when we send a command such as ExecContinue in this state, GDB may return to
+        // the non-listening state without acknowledging that the ExecContinue command has even
+        // finished, let alone sending a new notification about the program's running state.
+        // So let's be extra cautious about ensuring that we will wake GDB up again if required.
+        setStateOn(s_dbgNotListening);
+    }
 
     bool varCommandWithContext= (currentCmd->type() >= GDBMI::VarAssign
                                  && currentCmd->type() <= GDBMI::VarUpdate
@@ -627,7 +643,8 @@ bool DebugSession::executeCmd()
         }
 
         delete currentCmd;
-        return executeCmd();
+        executeCmd();
+        return;
     }
     else
     {
@@ -642,11 +659,11 @@ bool DebugSession::executeCmd()
         KMessageBox::information(qApp->activeWindow(),
                                  i18n("<b>Invalid debugger command</b><br>%1", message),
                                  i18n("Invalid debugger command"));
-        return executeCmd();
+        executeCmd();
+        return;
     }
 
     m_gdb.data()->execute(currentCmd);
-    return true;
 }
 
 // **************************************************************************
@@ -662,6 +679,7 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
     /* By default, reload all state on program stop.  */
     state_reload_needed = true;
     setStateOff(s_appRunning);
+    setStateOff(s_dbgNotListening);
 
     QString reason;
     if (r.hasField("reason")) reason = r["reason"].literal();
@@ -693,7 +711,7 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
         // watchpoinst on program exit is the right thing to
         // do.
 
-        queueCmd(new GDBCommand(GDBMI::ExecContinue));
+        queueCmd(new GDBCommand(GDBMI::ExecContinue, QString(), CmdMaybeStartsRunning));
 
         state_reload_needed = false;
         return;
@@ -707,28 +725,14 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
         QString name = r["signal-name"].literal();
         QString user_name = r["signal-meaning"].literal();
 
-        if (name == "SIGSEGV") {
-            setStateOn(s_appNotStarted|s_programExited);
-        }
-
         // SIGINT is a "break into running program".
         // We do this when the user set/mod/clears a breakpoint but the
         // application is running.
         // And the user does this to stop the program also.
         bool suppress_reporting = false;
-        if (name == "SIGINT" && stateIsOn(s_explicitBreakInto))
+        if (name == "SIGINT" && stateIsOn(s_interruptSent))
         {
             suppress_reporting = true;
-            // TODO: check that we do something reasonable on
-            // implicit break into program (for setting breakpoints,
-            // or whatever).
-
-            setStateOff(s_explicitBreakInto);
-            // Will show the source line in the code
-            // handling non-special stop kinds, below.
-
-            //If program is interrupted by breakpointcontroller reloadProgramState() won't be called, because the last command in queue'll be ExecContinue.
-            updateState = true;
         }
 
         if (!suppress_reporting)
@@ -769,6 +773,8 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
             reloadProgramState();
         }
     }
+
+    setStateOff(s_interruptSent);
 }
 
 
@@ -1095,20 +1101,21 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
             breakpointController()->initSendBreakpoints();
 
             qCDebug(DEBUGGERGDB) << "Running gdb script " << KShell::quoteArg(config_runGdbScript_.toLocalFile());
-            queueCmd(new GDBCommand(GDBMI::NonMI, "source " + KShell::quoteArg(config_runGdbScript_.toLocalFile())));
+            queueCmd(new GDBCommand(GDBMI::NonMI, "source " + KShell::quoteArg(config_runGdbScript_.toLocalFile()),
+                                    CmdMaybeStartsRunning));
             raiseEvent(connected_to_program);
             // Note: script could contain "run" or "continue"
-        }));
+        }, CmdMaybeStartsRunning));
     }
     else
     {
-        queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, KShell::quoteArg(executable), this, &DebugSession::handleFileExecAndSymbols, HandlesError));
+        queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, KShell::quoteArg(executable), this, &DebugSession::handleFileExecAndSymbols, CmdHandlesError));
         raiseEvent(connected_to_program);
 
         queueCmd(new SentinelCommand([this]() {
             breakpointController()->initSendBreakpoints();
-            queueCmd(new GDBCommand(GDBMI::ExecRun));
-        }));
+            queueCmd(new GDBCommand(GDBMI::ExecRun, QString(), CmdMaybeStartsRunning));
+        }, CmdMaybeStartsRunning));
     }
 
     {
@@ -1172,10 +1179,12 @@ void DebugSession::runUntil(const QUrl& url, int line)
         return;
 
     if (!url.isValid())
-        queueCmd(new GDBCommand(GDBMI::ExecUntil, QString::number(line)));
+        queueCmd(new GDBCommand(GDBMI::ExecUntil, QString::number(line),
+                                CmdMaybeStartsRunning | CmdTemporaryRun));
     else
         queueCmd(new GDBCommand(GDBMI::ExecUntil,
-                QString("%1:%2").arg(url.toLocalFile()).arg(line)));
+                QString("%1:%2").arg(url.toLocalFile()).arg(line),
+                CmdMaybeStartsRunning | CmdTemporaryRun));
 }
 
 void DebugSession::runUntil(QString& address){
@@ -1183,7 +1192,8 @@ void DebugSession::runUntil(QString& address){
         return;
 
     if (!address.isEmpty()) {
-        queueCmd(new GDBCommand(GDBMI::ExecUntil, QString("*%1").arg(address)));
+        queueCmd(new GDBCommand(GDBMI::ExecUntil, QString("*%1").arg(address),
+                                CmdMaybeStartsRunning | CmdTemporaryRun));
     }
 }
 // **************************************************************************
@@ -1250,14 +1260,24 @@ void DebugSession::gdbReady()
 {
     stateReloadInProgress_ = false;
 
-    if (!executeCmd())
+    executeCmd();
+    if (m_gdb->isReady())
     {
         /* We know that gdb is ready, so if executeCmd returns false
            it means there's nothing in command queue.  */
 
-        if (state_reload_needed)
+        if (stateIsOn(s_automaticContinue)) {
+            if (!stateIsOn(s_appRunning)) {
+                qCDebug(DEBUGGERGDB) << "Posting automatic continue";
+                queueCmd(new GDBCommand(GDBMI::ExecContinue, QString(), CmdMaybeStartsRunning));
+            }
+            setStateOff(s_automaticContinue);
+            return;
+        }
+
+        if (state_reload_needed && !stateIsOn(s_appRunning))
         {
-            qCDebug(DEBUGGERGDB) << "Finishing program stop\n";
+            qCDebug(DEBUGGERGDB) << "Finishing program stop";
             // Set to false right now, so that if 'actOnProgramPauseMI_part2'
             // sends some commands, we won't call it again when handling replies
             // from that commands.
@@ -1265,7 +1285,7 @@ void DebugSession::gdbReady()
             reloadProgramState();
         }
 
-        qCDebug(DEBUGGERGDB) << "No more commands\n";
+        qCDebug(DEBUGGERGDB) << "No more commands";
         setStateOff(s_dbgBusy);
         raiseEvent(debugger_ready);
     }
@@ -1281,6 +1301,16 @@ void DebugSession::gdbExited()
     setStateOn(s_appNotStarted);
     setStateOn(s_dbgNotStarted);
     setStateOff(s_shuttingDown);
+}
+
+void DebugSession::ensureGdbListening()
+{
+    Q_ASSERT(m_gdb);
+    m_gdb->interrupt();
+    setStateOn(s_interruptSent);
+    if (stateIsOn(s_appRunning))
+        setStateOn(s_automaticContinue);
+    setStateOff(s_dbgNotListening);
 }
 
 // FIXME: I don't fully remember what is the business with
@@ -1392,35 +1422,32 @@ void DebugSession::debugStateChange(DBGStateFlags oldState, DBGStateFlags newSta
     int delta = oldState ^ newState;
     if (delta)
     {
-        QString out = "STATE: ";
-        for(int i = 1; i < s_lastDbgState; i <<= 1)
-        {
-            if (delta & i)
-            {
-                if (i & newState)
-                    out += '+';
-                else
-                    out += '-';
-
-                bool found = false;
-#define STATE_CHECK(name)\
-    if (i == name) { out += #name; found = true; }
-                STATE_CHECK(s_dbgNotStarted);
-                STATE_CHECK(s_appNotStarted);
-                STATE_CHECK(s_programExited);
-                STATE_CHECK(s_attached);
-                STATE_CHECK(s_core);
-                STATE_CHECK(s_waitTimer);
-                STATE_CHECK(s_shuttingDown);
-                STATE_CHECK(s_explicitBreakInto);
-                STATE_CHECK(s_dbgBusy);
-                STATE_CHECK(s_appRunning);
+        QString out = "STATE:";
+#define STATE_CHECK(name) \
+    do { \
+        if (delta & name) { \
+            out += ((newState & name) ? " +" : " -"); \
+            out += #name; \
+            delta &= ~name; \
+        } \
+    } while (0)
+        STATE_CHECK(s_dbgNotStarted);
+        STATE_CHECK(s_appNotStarted);
+        STATE_CHECK(s_programExited);
+        STATE_CHECK(s_attached);
+        STATE_CHECK(s_core);
+        STATE_CHECK(s_shuttingDown);
+        STATE_CHECK(s_dbgBusy);
+        STATE_CHECK(s_appRunning);
+        STATE_CHECK(s_dbgNotListening);
+        STATE_CHECK(s_automaticContinue);
 #undef STATE_CHECK
 
-                if (!found)
-                    out += QString::number(i);
-                out += ' ';
-
+        for (unsigned int i = 0; delta != 0 && i < 32; ++i) {
+            if (delta & (1 << i))  {
+                delta &= ~(1 << i);
+                out += ((1 << i) & newState) ? " +" : " -";
+                out += QString::number(i);
             }
         }
         qCDebug(DEBUGGERGDB) << out;
@@ -1431,6 +1458,13 @@ void DebugSession::programRunning()
 {
     setStateOn(s_appRunning);
     raiseEvent(program_running);
+
+    if (commandQueue_->haveImmediateCommand() ||
+        (m_gdb->currentCommand() && (m_gdb->currentCommand()->flags() & (CmdImmediately | CmdInterrupt)))) {
+        ensureGdbListening();
+    } else {
+        setStateOn(s_dbgNotListening);
+    }
 }
 
 void DebugSession::handleVersion(const QStringList& s)

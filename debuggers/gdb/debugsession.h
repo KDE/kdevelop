@@ -202,10 +202,11 @@ public:
 private:
     /** Try to execute next command in the queue.  If GDB is not
         busy with previous command, and there's a command in the
-        queue, sends it and returns true.
-        Otherwise, returns false.  */
-    bool executeCmd ();
+        queue, sends it.  */
+    void executeCmd();
+    void ensureGdbListening();
     void destroyCmds();
+
     /** Called when there are no pending commands and 'state_reload_needed'
         is true. Also can be used to immediately reload program state.
         Issues commands to completely reload all program state shown

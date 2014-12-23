@@ -170,7 +170,8 @@ struct BreakpointController::InsertedHandler : public BreakpointController::Hand
             } else {
                 // breakpoint was deleted while insertion was in flight
                 controller->debugSession()->addCommand(
-                    new GDBCommand(BreakDelete, QString::number(breakpoint->gdbId)));
+                    new GDBCommand(BreakDelete, QString::number(breakpoint->gdbId),
+                                   CmdImmediately));
             }
         }
 
@@ -304,7 +305,7 @@ void BreakpointController::breakpointAboutToBeDeleted(int row)
     debugSession()->addCommand(
         new GDBCommand(
             BreakDelete, QString::number(breakpoint->gdbId),
-            new DeleteHandler(this, breakpoint)));
+            new DeleteHandler(this, breakpoint), CmdImmediately));
     m_pendingDeleted << breakpoint;
 }
 
@@ -356,7 +357,8 @@ void BreakpointController::createGdbBreakpoint(int row)
             BreakpointModel::LocationColumnFlag;
         debugSession()->addCommand(
             new GDBCommand(BreakInsert, arguments,
-                new InsertedHandler(this, breakpoint, sent)));
+                new InsertedHandler(this, breakpoint, sent),
+                CmdImmediately));
     } else {
         QString opt;
         if (modelBreakpoint->kind() == Breakpoint::ReadBreakpoint)
@@ -368,7 +370,8 @@ void BreakpointController::createGdbBreakpoint(int row)
             new GDBCommand(
                 BreakWatch,
                 opt + quoteExpression(modelBreakpoint->location()),
-                new InsertedHandler(this, breakpoint, BreakpointModel::LocationColumnFlag)));
+                new InsertedHandler(this, breakpoint, BreakpointModel::LocationColumnFlag),
+                CmdImmediately));
     }
 
     recalculateState(row);
@@ -387,7 +390,7 @@ void BreakpointController::sendUpdates(int row)
     if (breakpoint->dirty & BreakpointModel::LocationColumnFlag) {
         // Gdb considers locations as fixed, so delete and re-create the breakpoint
         debugSession()->addCommand(
-            new GDBCommand(BreakDelete, QString::number(breakpoint->gdbId)));
+            new GDBCommand(BreakDelete, QString::number(breakpoint->gdbId), CmdImmediately));
         breakpoint->gdbId = -1;
         createGdbBreakpoint(row);
         return;
@@ -397,19 +400,22 @@ void BreakpointController::sendUpdates(int row)
         debugSession()->addCommand(
             new GDBCommand(modelBreakpoint->enabled() ? BreakEnable : BreakDisable,
                 QString::number(breakpoint->gdbId),
-                new UpdateHandler(this, breakpoint, BreakpointModel::EnableColumnFlag)));
+                new UpdateHandler(this, breakpoint, BreakpointModel::EnableColumnFlag),
+                CmdImmediately));
     }
     if (breakpoint->dirty & BreakpointModel::IgnoreHitsColumnFlag) {
         debugSession()->addCommand(
             new GDBCommand(BreakAfter,
                 QString("%0 %1").arg(breakpoint->gdbId).arg(modelBreakpoint->ignoreHits()),
-                new UpdateHandler(this, breakpoint, BreakpointModel::IgnoreHitsColumnFlag)));
+                new UpdateHandler(this, breakpoint, BreakpointModel::IgnoreHitsColumnFlag),
+                CmdImmediately));
     }
     if (breakpoint->dirty & BreakpointModel::ConditionColumnFlag) {
         debugSession()->addCommand(
             new GDBCommand(BreakCondition,
                 QString("%0 %1").arg(breakpoint->gdbId).arg(modelBreakpoint->condition()),
-                new UpdateHandler(this, breakpoint, BreakpointModel::ConditionColumnFlag)));
+                new UpdateHandler(this, breakpoint, BreakpointModel::ConditionColumnFlag),
+                CmdImmediately));
     }
 
     recalculateState(row);

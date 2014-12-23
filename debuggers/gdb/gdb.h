@@ -137,9 +137,8 @@ private:
     /** The unprocessed output from gdb. Output is
         processed as soon as we see newline. */
     QByteArray buffer_;
-
-    bool isRunning_;
 };
+
 }
 
 #endif

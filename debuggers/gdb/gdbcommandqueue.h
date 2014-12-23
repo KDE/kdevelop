@@ -39,6 +39,9 @@ public:
     int count() const;
     void clear();
 
+    /// Whether the queue contains a command with CmdImmediately or CmdInterrupt flags.
+    bool haveImmediateCommand() const;
+
     /**
      * Retrieve and remove the next command from the list.
      */
@@ -49,6 +52,7 @@ private:
     void removeVariableUpdates();
   
     QList<GDBCommand*> m_commandList;
+    int m_immediatelyCounter = 0;
     uint32_t m_tokenCounter;
 };
 
