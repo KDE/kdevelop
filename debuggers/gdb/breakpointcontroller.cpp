@@ -91,7 +91,16 @@ struct BreakpointController::Handler : public GDBCommandHandler
                 qWarning() << r["msg"].literal();
             }
         } else {
-            breakpoint->errors &= ~columns;
+            if (breakpoint->errors & columns) {
+                breakpoint->errors &= ~columns;
+
+                if (breakpoint->errors) {
+                    // Since at least one error column cleared, it's possible that any remaining
+                    // error bits were collateral damage; try resending the corresponding columns
+                    // to see whether errors remain.
+                    breakpoint->dirty |= (breakpoint->errors & ~breakpoint->sent);
+                }
+            }
         }
     }
 
@@ -409,6 +418,9 @@ void BreakpointController::sendUpdates(int row)
 void BreakpointController::recalculateState(int row)
 {
     BreakpointDataPtr breakpoint = m_breakpoints.at(row);
+
+    if (breakpoint->errors == 0)
+        updateErrorText(row, QString());
 
     Breakpoint::BreakpointState newState = Breakpoint::NotStartedState;
     if (!debugSession()->stateIsOn(s_dbgNotStarted)) {
