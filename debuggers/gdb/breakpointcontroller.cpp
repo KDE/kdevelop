@@ -361,6 +361,8 @@ void BreakpointController::createGdbBreakpoint(int row)
                 opt + quoteExpression(modelBreakpoint->location()),
                 new InsertedHandler(this, breakpoint, BreakpointModel::LocationColumnFlag)));
     }
+
+    recalculateState(row);
 }
 
 void BreakpointController::sendUpdates(int row)
@@ -400,12 +402,13 @@ void BreakpointController::sendUpdates(int row)
                 QString("%0 %1").arg(breakpoint->gdbId).arg(modelBreakpoint->condition()),
                 new UpdateHandler(this, breakpoint, BreakpointModel::ConditionColumnFlag)));
     }
+
+    recalculateState(row);
 }
 
 void BreakpointController::recalculateState(int row)
 {
     BreakpointDataPtr breakpoint = m_breakpoints.at(row);
-//     Breakpoint* modelBreakpoint = breakpointModel()->breakpoint(row);
 
     Breakpoint::BreakpointState newState = Breakpoint::NotStartedState;
     if (!debugSession()->stateIsOn(s_dbgNotStarted)) {
