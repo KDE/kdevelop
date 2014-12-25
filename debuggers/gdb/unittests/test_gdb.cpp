@@ -1333,7 +1333,7 @@ void GdbTest::testSegfaultDebugee()
     QCOMPARE(session->line(), 23);
     session->run();
 
-    WAIT_FOR_STATE(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 24);
 
     session->stopDebugger();
