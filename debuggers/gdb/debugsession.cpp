@@ -719,6 +719,7 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
 
     //Indicates if program state should be reloaded immediately.
     bool updateState = false;
+    bool wasInterrupt = false;
 
     if (reason == "signal-received")
     {
@@ -729,14 +730,9 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
         // We do this when the user set/mod/clears a breakpoint but the
         // application is running.
         // And the user does this to stop the program also.
-        bool suppress_reporting = false;
-        if (name == "SIGINT" && stateIsOn(s_interruptSent))
-        {
-            suppress_reporting = true;
-        }
-
-        if (!suppress_reporting)
-        {
+        if (name == "SIGINT" && stateIsOn(s_interruptSent)) {
+            wasInterrupt = true;
+        } else {
             // Whenever we have a signal raised then tell the user, but don't
             // end the program as we want to allow the user to look at why the
             // program has a signal that's caused the prog to stop.
@@ -775,6 +771,8 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
     }
 
     setStateOff(s_interruptSent);
+    if (!wasInterrupt)
+        setStateOff(s_automaticContinue);
 }
 
 
@@ -1100,8 +1098,10 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg, IExecutePlu
         queueCmd(new SentinelCommand([this, config_runGdbScript_]() {
             breakpointController()->initSendBreakpoints();
 
+            breakpointController()->setDeleteDuplicateBreakpoints(true);
             qCDebug(DEBUGGERGDB) << "Running gdb script " << KShell::quoteArg(config_runGdbScript_.toLocalFile());
             queueCmd(new GDBCommand(GDBMI::NonMI, "source " + KShell::quoteArg(config_runGdbScript_.toLocalFile()),
+                                    [this](const GDBMI::ResultRecord&) {breakpointController()->setDeleteDuplicateBreakpoints(false);},
                                     CmdMaybeStartsRunning));
             raiseEvent(connected_to_program);
             // Note: script could contain "run" or "continue"

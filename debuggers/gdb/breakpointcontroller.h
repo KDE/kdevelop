@@ -61,6 +61,12 @@ public:
 
     void initSendBreakpoints();
 
+    /**
+     * Controls whether when duplicate breakpoints are received via async notification from GDB,
+     * one of the duplicates will be deleted.
+     */
+    void setDeleteDuplicateBreakpoints(bool enable);
+
     virtual void breakpointAdded(int row) override;
     virtual void breakpointModelChanged(int row, BreakpointModel::ColumnFlags columns) override;
     virtual void breakpointAboutToBeDeleted(int row) override;
@@ -96,7 +102,8 @@ private:
 
     QList<BreakpointDataPtr> m_breakpoints;
     QList<BreakpointDataPtr> m_pendingDeleted;
-    int m_ignoreChanges;
+    int m_ignoreChanges = 0;
+    bool m_deleteDuplicateBreakpoints = false;
 };
 
 }

@@ -208,7 +208,6 @@ struct BreakpointController::IgnoreChanges {
 
 BreakpointController::BreakpointController(DebugSession* parent)
     : IBreakpointController(parent)
-    , m_ignoreChanges(0)
 {
     Q_ASSERT(parent);
     connect(parent, &DebugSession::programStopped, this, &BreakpointController::programStopped);
@@ -227,6 +226,11 @@ DebugSession *BreakpointController::debugSession() const
 int BreakpointController::breakpointRow(const BreakpointDataPtr& breakpoint)
 {
     return m_breakpoints.indexOf(breakpoint);
+}
+
+void BreakpointController::setDeleteDuplicateBreakpoints(bool enable)
+{
+    m_deleteDuplicateBreakpoints = enable;
 }
 
 void BreakpointController::initSendBreakpoints()
@@ -523,8 +527,6 @@ void BreakpointController::notifyBreakpointDeleted(const AsyncRecord& r)
 
 void BreakpointController::createFromGdb(const Value& miBkpt)
 {
-    IgnoreChanges ignoreChanges(*this);
-
     const QString type = miBkpt["type"].literal();
     Breakpoint::BreakpointKind gdbKind;
     if (type == "breakpoint") {
@@ -543,11 +545,11 @@ void BreakpointController::createFromGdb(const Value& miBkpt)
     // During gdb startup, we want to avoid creating duplicate breakpoints when the same breakpoint
     // appears both in our model and in a .gdbinit file
     BreakpointModel* model = breakpointModel();
-    int numRows = model->rowCount();
-    int row;
-    for (row = 0; row < numRows; ++row) {
+    const int numRows = model->rowCount();
+    for (int row = 0; row < numRows; ++row) {
         BreakpointDataPtr breakpoint = m_breakpoints.at(row);
-        if (breakpoint->gdbId >= 0 || breakpoint->sent != 0)
+        const bool breakpointSent = breakpoint->gdbId >= 0 || breakpoint->sent != 0;
+        if (breakpointSent && !m_deleteDuplicateBreakpoints)
             continue;
 
         Breakpoint* modelBreakpoint = model->breakpoint(row);
@@ -603,46 +605,61 @@ void BreakpointController::createFromGdb(const Value& miBkpt)
         if (condition != modelBreakpoint->condition())
             continue;
 
-        break;
-    }
+        // Breakpoint is equivalent
+        if (!breakpointSent) {
+            breakpoint->gdbId = miBkpt["number"].toInt();
 
-    if (row < numRows) {
-        BreakpointDataPtr breakpoint = m_breakpoints.at(row);
-        Breakpoint* modelBreakpoint = model->breakpoint(row);
-        breakpoint->gdbId = miBkpt["number"].toInt();
+            // Reasonable people can probably have different opinions about what the "correct" behavior
+            // should be for the "enabled" and "ignore hits" column.
+            // Here, we let the status in KDevelop's UI take precedence, which we suspect to be
+            // marginally more useful. Dirty data will be sent during the initial sending of the
+            // breakpoint list.
+            const bool gdbEnabled = miBkpt["enabled"].literal() == "y";
+            if (gdbEnabled != modelBreakpoint->enabled())
+                breakpoint->dirty |= BreakpointModel::EnableColumnFlag;
 
-        // Reasonable people can probably have different opinions about what the "correct" behavior
-        // should be for the "enabled" and "ignore hits" column.
-        // Here, we let the status in KDevelop's UI take precedence, which we suspect to be
-        // marginally more useful. Dirty data will be sent during the initial sending of the
-        // breakpoint list.
-        const bool gdbEnabled = miBkpt["enabled"].literal() == "y";
-        if (gdbEnabled != modelBreakpoint->enabled())
-            breakpoint->dirty |= BreakpointModel::EnableColumnFlag;
+            int gdbIgnoreHits = 0;
+            if (miBkpt.hasField("ignore"))
+                gdbIgnoreHits = miBkpt["ignore"].toInt();
+            if (gdbIgnoreHits != modelBreakpoint->ignoreHits())
+                breakpoint->dirty |= BreakpointModel::IgnoreHitsColumnFlag;
 
-        int gdbIgnoreHits = 0;
-        if (miBkpt.hasField("ignore"))
-            gdbIgnoreHits = miBkpt["ignore"].toInt();
-        if (gdbIgnoreHits != modelBreakpoint->ignoreHits())
-            breakpoint->dirty |= BreakpointModel::IgnoreHitsColumnFlag;
-
-        updateFromGdb(row, miBkpt, BreakpointModel::EnableColumnFlag | BreakpointModel::IgnoreHitsColumnFlag);
-    } else {
-        switch (gdbKind) {
-        case Breakpoint::WriteBreakpoint: model->addWatchpoint(); break;
-        case Breakpoint::ReadBreakpoint: model->addReadWatchpoint(); break;
-        case Breakpoint::AccessBreakpoint: model->addAccessWatchpoint(); break;
-        case Breakpoint::CodeBreakpoint: model->addCodeBreakpoint(); break;
-        default: Q_ASSERT(false); return;
+            updateFromGdb(row, miBkpt, BreakpointModel::EnableColumnFlag | BreakpointModel::IgnoreHitsColumnFlag);
+            return;
         }
 
-        // Since we are in ignore-changes mode, we have to add the BreakpointData manually.
-        auto breakpoint = BreakpointDataPtr::create();
-        m_breakpoints << breakpoint;
-        breakpoint->gdbId = miBkpt["number"].toInt();
-
-        updateFromGdb(row, miBkpt);
+        // Breakpoint from the model has already been sent, but we want to delete duplicates
+        // It is not entirely clear _which_ breakpoint ought to be deleted, and reasonable people
+        // may have different opinions.
+        // We suspect that it is marginally more useful to delete the existing model breakpoint;
+        // after all, this only happens when a user command creates a breakpoint, and perhaps the
+        // user intends to modify the breakpoint they created manually. In any case,
+        // this situation should only happen rarely (in particular, when a user sets a breakpoint
+        // inside the remote run script).
+        model->removeRows(row, 1);
+        break; // fall through to pick up the manually created breakpoint in the model
     }
+
+    // No equivalent breakpoint found, or we have one but want to be consistent with GDB's
+    // behavior of allowing multiple equivalent breakpoint.
+    IgnoreChanges ignoreChanges(*this);
+    const int row = m_breakpoints.size();
+    Q_ASSERT(row == model->rowCount());
+
+    switch (gdbKind) {
+    case Breakpoint::WriteBreakpoint: model->addWatchpoint(); break;
+    case Breakpoint::ReadBreakpoint: model->addReadWatchpoint(); break;
+    case Breakpoint::AccessBreakpoint: model->addAccessWatchpoint(); break;
+    case Breakpoint::CodeBreakpoint: model->addCodeBreakpoint(); break;
+    default: Q_ASSERT(false); return;
+    }
+
+    // Since we are in ignore-changes mode, we have to add the BreakpointData manually.
+    auto breakpoint = BreakpointDataPtr::create();
+    m_breakpoints << breakpoint;
+    breakpoint->gdbId = miBkpt["number"].toInt();
+
+    updateFromGdb(row, miBkpt);
 }
 
 // This method is required for the legacy interface which will be removed
