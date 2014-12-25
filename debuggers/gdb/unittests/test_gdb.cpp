@@ -1451,6 +1451,27 @@ void GdbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
     QCOMPARE(b->url().fileName(), QString("debugee.cpp"));
 }
 
+void GdbTest::testPickupCatchThrowOnlyOnce()
+{
+    QTemporaryFile configScript;
+    configScript.open();
+    configScript.write("catch throw\n");
+    configScript.close();
+
+    TestLaunchConfiguration cfg;
+    KConfigGroup grp = cfg.config();
+    grp.writeEntry(GDBDebugger::remoteGdbConfigEntry, QUrl::fromLocalFile(configScript.fileName()));
+
+
+    for (int i = 0; i < 2; ++i) {
+        TestDebugSession* session = new TestDebugSession;
+        QVERIFY(session->startProgram(&cfg, m_iface));
+        WAIT_FOR_STATE(session, DebugSession::EndedState);
+    }
+
+    QCOMPARE(breakpoints()->rowCount(), 1); //one from kdevelop, one from runScript
+}
+
 void GdbTest::testRunGdbScript()
 {
     TestDebugSession *session = new TestDebugSession;
