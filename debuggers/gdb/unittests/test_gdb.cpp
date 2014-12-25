@@ -1423,32 +1423,25 @@ void GdbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
 {
     TestDebugSession *session = new TestDebugSession;
 
+    //inject here, so it behaves similar like a command from .gdbinit
+    QTemporaryFile configScript;
+    configScript.open();
+    configScript.write(QString("file %0\n").arg(findExecutable("debugee").toLocalFile()).toLocal8Bit());
+    configScript.write("break debugee.cpp:32\n");
+    configScript.close();
+
     TestLaunchConfiguration cfg;
+    KConfigGroup grp = cfg.config();
+    grp.writeEntry(GDBDebugger::remoteGdbConfigEntry, QUrl::fromLocalFile(configScript.fileName()));
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile("debugee.cpp"), 31);
-    breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile("debugee.cpp"), 21);
     QVERIFY(session->startProgram(&cfg, m_iface));
 
-    //inject here, so it behaves similar like a command from .gdbinit
-    session->addCommandToFront(new GDBCommand(GDBMI::NonMI, "break debugee.cpp:32"));
-    session->addCommandToFront(new GDBCommand(GDBMI::NonMI, "break foo"));
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    QCOMPARE(breakpoints()->breakpoints().count(), 1);
 
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-
-    session->stepInto();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QTest::qWait(1000); //wait for breakpoints update
-    QCOMPARE(breakpoints()->breakpoints().count(), 2);
-
-    KDevelop::Breakpoint *b = breakpoints()->breakpoint(0);
-    QVERIFY(b);
-    QCOMPARE(b->line(), 31); //we start with 0, gdb with 1
-    QCOMPARE(b->url().fileName(), QString("debugee.cpp"));
-
-    b = breakpoints()->breakpoint(1);
-    QVERIFY(b);
-    QCOMPARE(b->line(), 21);
-    QCOMPARE(b->url().fileName(), QString("debugee.cpp"));
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testPickupCatchThrowOnlyOnce()

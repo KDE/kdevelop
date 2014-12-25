@@ -171,29 +171,6 @@ public:
        instance from the string. */
     void addCommand(GDBMI::CommandType type, const QString& cmd = QString());
 
-    /** Adds command to the front of the commands queue. It will be executed
-        next.
-
-        This is useful to implement 'atomic' command sequences. For example,
-        if one wants to switch to each thread in turn, asking gdb where that
-        thread stand, this should never be interrupted by other command, since
-        other commands might not expect that thread magically changes.
-
-        In this specific case, first -thread-list-ids commands is issued. The
-        handler for reply will add a number of command to front, and it will
-        guarantee that no other command will get in between.
-
-        Note that if you call:
-
-            addCommandToFront(cmd1);
-            addCommandToFront(cmd2);
-
-        The execution order will be 'cmd2', then 'cmd1'.
-
-        FIXME: is not used for now, maybe remove.
-    */
-    void addCommandToFront(GDBCommand* cmd);
-
     bool stateIsOn(DBGStateFlags state) const;
     DBGStateFlags debuggerState() const;
 
@@ -248,7 +225,7 @@ private Q_SLOTS:
     void processNotification(const GDBMI::AsyncRecord& n);
 
     // All of these slots are entered in the controller's thread, as they use queued connections or are called internally
-    void queueCmd(GDBCommand *cmd, QueuePosition queue_where = QueueAtEnd);
+    void queueCmd(GDBCommand *cmd);
 
     void configure();
 

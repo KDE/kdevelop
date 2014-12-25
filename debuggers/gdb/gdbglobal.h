@@ -46,12 +46,6 @@ enum DBGStateFlag
 };
 Q_DECLARE_FLAGS(DBGStateFlags, DBGStateFlag)
 
-enum QueuePosition {
-    QueueAtEnd,
-    QueueAtFront
-};
-
-
 enum DataType { typeUnknown, typeValue, typePointer, typeReference,
             typeStruct, typeArray, typeQString, typeWhitespace,
             typeName };

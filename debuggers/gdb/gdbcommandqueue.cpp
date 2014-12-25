@@ -33,21 +33,14 @@ CommandQueue::~CommandQueue()
     qDeleteAll(m_commandList);
 }
 
-void CommandQueue::enqueue(GDBCommand* command, QueuePosition insertPosition)
+void CommandQueue::enqueue(GDBCommand* command)
 {
     ++m_tokenCounter;
     if (m_tokenCounter == 0)
         m_tokenCounter = 1;
     command->setToken(m_tokenCounter);
 
-    switch (insertPosition) {
-        case QueueAtFront:
-            m_commandList.prepend(command);
-            break;
-        case QueueAtEnd:
-            m_commandList.append(command);
-            break;
-    }
+    m_commandList.append(command);
 
     if (command->flags() & (CmdImmediately | CmdInterrupt))
         ++m_immediatelyCounter;

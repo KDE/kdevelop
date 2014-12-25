@@ -33,7 +33,7 @@ public:
     CommandQueue();
     ~CommandQueue();
 
-    void enqueue(GDBCommand* command, QueuePosition insertPosition);
+    void enqueue(GDBCommand* command);
 
     bool isEmpty() const;
     int count() const;

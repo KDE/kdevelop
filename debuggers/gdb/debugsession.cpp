@@ -520,18 +520,12 @@ void DebugSession::addCommand(GDBMI::CommandType type, const QString& str)
     queueCmd(new GDBCommand(type, str));
 }
 
-void DebugSession::addCommandToFront(GDBCommand* cmd)
-{
-    queueCmd(cmd, QueueAtFront);
-}
-
 // Fairly obvious that we'll add whatever command you give me to a queue
-// If you tell me to, I'll put it at the head of the queue so it'll run ASAP
 // Not quite so obvious though is that if we are going to run again. then any
 // information requests become redundent and must be removed.
 // We also try and run whatever command happens to be at the head of
 // the queue.
-void DebugSession::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
+void DebugSession::queueCmd(GDBCommand *cmd)
 {
     if (stateIsOn(s_dbgNotStarted))
     {
@@ -546,7 +540,7 @@ void DebugSession::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
     if (stateReloadInProgress_)
         cmd->setStateReloading(true);
 
-    commandQueue_->enqueue(cmd, queue_where);
+    commandQueue_->enqueue(cmd);
 
     qCDebug(DEBUGGERGDB) << "QUEUE: " << cmd->initialString() << (stateReloadInProgress_ ? "(state reloading)" : "");
 
