@@ -92,5 +92,5 @@
         "org.kdevelop.IBasicVersionControl",
         "org.kdevelop.IDistributedVersionControl"
     ],
-    "X-KDevelop-Mode": "GUI",
+    "X-KDevelop-Mode": "GUI"
 }

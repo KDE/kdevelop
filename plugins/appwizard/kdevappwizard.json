@@ -87,5 +87,5 @@
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Interfaces": ["org.kdevelop.ITemplateProvider"],
-    "X-KDevelop-Mode": "GUI",
+    "X-KDevelop-Mode": "GUI"
 }

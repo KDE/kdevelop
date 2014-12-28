@@ -80,5 +80,5 @@
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Interfaces": ["org.kdevelop.IExecuteScriptPlugin"],
-    "X-KDevelop-Mode": "NoGUI",
+    "X-KDevelop-Mode": "NoGUI"
 }

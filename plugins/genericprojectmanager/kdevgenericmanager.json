@@ -85,5 +85,5 @@
     "X-KDevelop-Category": "Project",
     "X-KDevelop-FileManager": "None",
     "X-KDevelop-Interfaces": ["org.kdevelop.IProjectFileManager"],
-    "X-KDevelop-Mode": "GUI",
+    "X-KDevelop-Mode": "GUI"
 }

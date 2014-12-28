@@ -72,5 +72,5 @@
     "X-KDevelop-Category": "Project",
     "X-KDevelop-Interfaces": ["org.kdevelop.IProjectFilter"],
     "X-KDevelop-LoadMode": "AlwaysOn",
-    "X-KDevelop-Mode": "GUI",
+    "X-KDevelop-Mode": "GUI"
 }

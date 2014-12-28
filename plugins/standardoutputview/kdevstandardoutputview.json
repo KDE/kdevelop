@@ -75,5 +75,5 @@
         ]
     },
     "X-KDevelop-Interfaces": ["org.kdevelop.IOutputView"],
-    "X-KDevelop-Mode": "GUI",
+    "X-KDevelop-Mode": "GUI"
 }

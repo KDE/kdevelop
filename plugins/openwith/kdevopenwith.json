@@ -83,5 +83,5 @@
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Interfaces": ["org.kdevelop.IOpenWith"],
-    "X-KDevelop-Mode": "GUI",
+    "X-KDevelop-Mode": "GUI"
 }
