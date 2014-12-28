@@ -32,7 +32,7 @@ target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
     Qt5::Core
     Qt5::Gui
     Qt5::Widgets
-    ${QT_QTSCRIPT_LIBRARY}
+    Qt5::Script
     Qt5::Network
 )
 
