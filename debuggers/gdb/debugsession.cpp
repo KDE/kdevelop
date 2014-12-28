@@ -1257,8 +1257,7 @@ void DebugSession::gdbReady()
     executeCmd();
     if (m_gdb->isReady())
     {
-        /* We know that gdb is ready, so if executeCmd returns false
-           it means there's nothing in command queue.  */
+        /* There is nothing in the command queue and no command is currently executing. */
 
         if (stateIsOn(s_automaticContinue)) {
             if (!stateIsOn(s_appRunning)) {
