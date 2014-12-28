@@ -20,10 +20,10 @@ generate_export_header(kdevqmljscompletion EXPORT_MACRO_NAME KDEVQMLJSCOMPLETION
                                            EXPORT_FILE_NAME codecompletionexport.h)
 
 target_link_libraries(kdevqmljscompletion LINK_PRIVATE
-    ${KDE4_KDECORE_LIBS}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
+    KF5::KDELibs4Support
+    KDev::Language
+    KDev::Interfaces
+    KDev::Project
     kdevqmljsduchain
     kdevqtc-qmlsupport
 )

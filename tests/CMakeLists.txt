@@ -8,7 +8,7 @@ add_executable(qml-parser
     qml-parser.cpp
 )
 target_link_libraries(qml-parser
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    KDev::Tests
     kdevqmljsduchain
 )
 
@@ -19,10 +19,10 @@ add_executable(filestest ${filestest_SRCS})
 add_test(filestest filestest)
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
 target_link_libraries(filestest
-    ${QT_QTTEST_LIBRARY}
-    ${QT_QTCORE_LIBRARY}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
-    ${KDEVPLATFORM_JSONTESTS_LIBRARIES}
+    Qt5::Test
+    Qt5::Core
+    KDev::Language
+    KDev::Tests
+    KDev::JsonTests
     kdevqmljsduchain
 )

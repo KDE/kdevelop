@@ -29,10 +29,11 @@ add_library(kdevqtc-qmlsupport SHARED
 
 set_target_properties(kdevqtc-qmlsupport PROPERTIES COMPILE_FLAGS "-DLANGUAGEUTILS_BUILD_DIR\ -DQMLJS_BUILD_DIR\ -DQTCREATOR_UTILS_LIB")
 target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Widgets
     ${QT_QTSCRIPT_LIBRARY}
-    ${QT_QTNETWORK_LIBRARY}
+    Qt5::Network
 )
 
 install(TARGETS kdevqtc-qmlsupport ${INSTALL_TARGETS_DEFAULT_ARGS})

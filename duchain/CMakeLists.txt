@@ -25,14 +25,14 @@ generate_export_header(kdevqmljsduchain EXPORT_MACRO_NAME KDEVQMLJSDUCHAIN_EXPOR
                                         EXPORT_FILE_NAME duchainexport.h)
 
 target_link_libraries(kdevqmljsduchain LINK_PRIVATE
-    ${QT_QTCORE_LIBRARY}
+    Qt5::Core
     KF5::I18n
 )
 
 target_link_libraries(kdevqmljsduchain LINK_PUBLIC
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_UTIL_LIBRARIES}
-    ${KDEVPLATFORM_PROJECT_LIBRARIES}
+    KDev::Language
+    KDev::Util
+    KDev::Project
     kdevqtc-qmlsupport
 )
 

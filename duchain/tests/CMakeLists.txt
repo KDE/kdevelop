@@ -9,10 +9,10 @@ set(testcontexts_SRCS testcontexts.cpp)
 add_executable(testcontexts ${testcontexts_SRCS})
 add_test(testcontexts testcontexts)
 target_link_libraries(testcontexts
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTTEST_LIBRARY}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    KF5::KDELibs4Support
+    Qt5::Test
+    KDev::Language
+    KDev::Tests
     kdevqmljsduchain
 )
 
@@ -23,9 +23,9 @@ set(testdeclarations_SRCS testdeclarations.cpp)
 add_executable(testdeclarations ${testdeclarations_SRCS})
 add_test(testdeclarations testdeclarations)
 target_link_libraries(testdeclarations
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTTEST_LIBRARY}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-    ${KDEVPLATFORM_TESTS_LIBRARIES}
+    KF5::KDELibs4Support
+    Qt5::Test
+    KDev::Language
+    KDev::Tests
     kdevqmljsduchain
 )
