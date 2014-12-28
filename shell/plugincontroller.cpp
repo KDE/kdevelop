@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 */
 #include "plugincontroller.h"
 
+#include <QElapsedTimer>
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
 #include <QApplication>
@@ -467,6 +468,9 @@ KPluginInfo PluginController::infoForPluginId( const QString &pluginId ) const
 
 IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
 {
+    QElapsedTimer timer;
+    timer.start();
+
     KPluginInfo info = infoForPluginId( pluginId );
     if ( !info.isValid() )
     {
@@ -536,7 +540,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         d->loadedPlugins.insert( info, plugin );
         info.setPluginEnabled( true );
 
-        qCDebug(SHELL) << "Successfully loaded plugin" << pluginId << "from" << pluginLoadPath;
+        qCDebug(SHELL) << "Successfully loaded plugin" << pluginId << "from" << pluginLoadPath << "- took:" << timer.elapsed() << "ms";
         emit pluginLoaded( plugin );
     } else {
         if( !missingInterfaces.isEmpty() ) {

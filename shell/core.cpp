@@ -127,6 +127,9 @@ CorePrivate::CorePrivate(Core *core):
 bool CorePrivate::initialize(Core::Setup mode, QString session )
 {
     m_mode=mode;
+
+    qCDebug(SHELL) << "Creating controllers";
+
     emit m_core->startupProgress(0);
     if( !sessionController )
     {
@@ -211,7 +214,9 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     }
     emit m_core->startupProgress(47);
 
-    qCDebug(SHELL) << "initializing ui controller";
+    qCDebug(SHELL) << "Done creating controllers";
+
+    qCDebug(SHELL) << "Initializing controllers";
 
     sessionController.data()->initialize( session );
     if( !sessionController.data()->activeSessionLock() ) {
@@ -240,10 +245,11 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
         tool views to a list of available tool view, and then grab
         those tool views when loading an area.  */
 
-    qCDebug(SHELL) << "loading session plugins";
+    qCDebug(SHELL) << "Initializing plugin controller (loading session plugins)";
     pluginController.data()->initialize();
     emit m_core->startupProgress(78);
 
+    qCDebug(SHELL) << "Initializing working set controller";
     if(!(mode & Core::NoUi))
     {
         workingSetController.data()->initialize();
@@ -254,6 +260,8 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
         uiController.data()->defaultMainWindow()->show();
     }
     emit m_core->startupProgress(90);
+
+    qCDebug(SHELL) << "Initializing remaining controllers";
     runController.data()->initialize();
     sourceFormatterController.data()->initialize();
     selectionController.data()->initialize();
@@ -265,6 +273,8 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
     testController.data()->initialize();
 
     installSignalHandler();
+
+    qCDebug(SHELL) << "Done initializing controllers";
 
     if (partController) {
         // check features of kate and report to user if it does not fit
