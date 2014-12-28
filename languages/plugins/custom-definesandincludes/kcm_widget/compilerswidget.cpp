@@ -97,13 +97,17 @@ void CompilersWidget::clear()
 void CompilersWidget::deleteCompiler()
 {
     definesAndIncludesDebug() << "Deleting compiler";
-    QModelIndexList selection = m_ui->compilers->selectionModel()->selectedIndexes();
-    foreach (const QModelIndex& row, selection) {
+    auto selectionModel = m_ui->compilers->selectionModel();
+    foreach (const QModelIndex& row, selectionModel->selectedIndexes()) {
         if (row.column() == 1) {
             //Don't remove the same compiler twice
             continue;
         }
-        m_compilersModel->removeRows(row.row(), 1, row.parent());
+
+        if(m_compilersModel->removeRows(row.row(), 1, row.parent())) {
+            auto selectedCompiler = selectionModel->selectedIndexes();
+            compilerSelected(selectedCompiler.isEmpty() ? QModelIndex() : selectedCompiler.first());
+        }
     }
 }
 
