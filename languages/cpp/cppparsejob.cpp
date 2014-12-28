@@ -32,8 +32,6 @@
 #include "parser/dumptree.h"
 #include "parser/memorypool.h"
 
-#include <unistd.h>
-
 #include <QFile>
 #include <QByteArray>
 #include <QReadWriteLock>
