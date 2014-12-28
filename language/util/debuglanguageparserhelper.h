@@ -1,5 +1,7 @@
 /* This file is part of KDevelop
-    Copyright 2010 Milian Wolff
+
+   Copyright 2010 Milian Wolff <mail@milianw.de>
+   Copyright 2014 Kevin Funk <kfunk@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +23,10 @@
 
 #include <cstdlib>
 #include <cstdio>
-#include <unistd.h>
+
+#ifndef Q_OS_WIN
+#include <unistd.h> // for isatty
+#endif
 
 #include <tests/autotestshell.h>
 #include <language/duchain/duchain.h>
@@ -203,10 +208,12 @@ int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
 
     foreach(const QString &fileName, files) {
         if ( fileName == "-" ) {
+#ifndef Q_OS_WIN
             if ( isatty(STDIN_FILENO) ) {
                 qerr << "no STDIN given" << endl;
                 return 255;
             }
+#endif
             parserT.parseCode( qin.readAll().toUtf8() );
         } else {
             parserT.parseFile(fileName);
