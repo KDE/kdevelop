@@ -10,12 +10,13 @@ cmake_minimum_required(VERSION 2.8.12)
 find_package (ECM 0.0.9 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
+include(GenerateExportHeader)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 
 find_package(Qt5 REQUIRED Core Declarative Widgets Test Qml QuickWidgets)
-find_package(KF5 REQUIRED COMPONENTS KDELibs4Support ThreadWeaver TextEditor Declarative I18n)
+find_package(KF5 REQUIRED COMPONENTS ItemModels ThreadWeaver TextEditor Declarative I18n)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 find_package(KDevelop REQUIRED)
 
@@ -62,7 +63,6 @@ target_link_libraries(kdevqmljslanguagesupport
     Qt5::Declarative
     Qt5::QuickWidgets
     KF5::Declarative
-    KF5::KDELibs4Support
 )
 
 install(TARGETS kdevqmljslanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})

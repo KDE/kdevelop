@@ -9,7 +9,6 @@ set(testcontexts_SRCS testcontexts.cpp)
 add_executable(testcontexts ${testcontexts_SRCS})
 add_test(testcontexts testcontexts)
 target_link_libraries(testcontexts
-    KF5::KDELibs4Support
     Qt5::Test
     KDev::Language
     KDev::Tests
@@ -23,7 +22,6 @@ set(testdeclarations_SRCS testdeclarations.cpp)
 add_executable(testdeclarations ${testdeclarations_SRCS})
 add_test(testdeclarations testdeclarations)
 target_link_libraries(testdeclarations
-    KF5::KDELibs4Support
     Qt5::Test
     KDev::Language
     KDev::Tests

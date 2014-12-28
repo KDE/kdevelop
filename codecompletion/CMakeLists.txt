@@ -20,7 +20,6 @@ generate_export_header(kdevqmljscompletion EXPORT_MACRO_NAME KDEVQMLJSCOMPLETION
                                            EXPORT_FILE_NAME codecompletionexport.h)
 
 target_link_libraries(kdevqmljscompletion LINK_PRIVATE
-    KF5::KDELibs4Support
     KDev::Language
     KDev::Interfaces
     KDev::Project

@@ -67,7 +67,7 @@ void DeclarationNavigationContext::eventuallyMakeTypeLinks(AbstractType::Ptr typ
     if (funcType) {
         // Don't let eventuallyMakeTypeLinks cast funcType to an identified type
         // and try to print it! The function most of the time has no name.
-        modifyHtml() += typeHighlight(Qt::escape(type->toString()));
+        modifyHtml() += typeHighlight(type->toString().toHtmlEscaped());
     } else {
         KDevelop::AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks(type);
     }
