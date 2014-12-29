@@ -1,6 +1,7 @@
 /* KDevelop QMake Support
  *
  * Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2014 Kevin Funk <kfunk@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +22,7 @@
 #ifndef QMAKEBUILDERPREFERENCES_H
 #define QMAKEBUILDERPREFERENCES_H
 
-#include <project/projectkcmodule.h>
+#include <project/projectconfigpage.h>
 
 class QWidget;
 class QStringList;
@@ -35,16 +36,19 @@ namespace Ui {
 /**
  * @author Andreas Pakulat <apaku@gmx.de>
  */
-class QMakeBuilderPreferences : public ProjectKCModule<QMakeBuilderSettings>
+class QMakeBuilderPreferences : public KDevelop::ConfigPage
 {
     Q_OBJECT
+
 public:
-    explicit QMakeBuilderPreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
+    explicit QMakeBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = 0);
     ~QMakeBuilderPreferences();
 
 public slots:
-    virtual void save();
-    virtual void load();
+    virtual void apply() override;
+    virtual void reset() override;
+    virtual QString name() const override;
+
     void loadOtherConfig(const QString &config);
     void addBuildConfig();
     void removeBuildConfig();
@@ -52,6 +56,8 @@ public slots:
 
 private:
     bool verifyChanges();
+
+    KDevelop::IProject* m_project;
 
     Ui::QMakeConfig* m_prefsUi;
     QMakeBuildDirChooser* m_chooserUi;

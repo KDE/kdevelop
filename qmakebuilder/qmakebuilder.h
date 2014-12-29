@@ -44,6 +44,9 @@ public:
     virtual KJob* configure(KDevelop::IProject *dom);
     virtual KJob* prune(KDevelop::IProject *dom);
 
+    virtual int perProjectConfigPages() const override;
+    virtual KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
+
 Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
     void failed(KDevelop::ProjectBaseItem*);

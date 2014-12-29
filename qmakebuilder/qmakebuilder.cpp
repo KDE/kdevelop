@@ -19,6 +19,8 @@
  */
 
 #include "qmakebuilder.h"
+
+#include "qmakebuilderpreferences.h"
 #include "make/imakebuilder.h"
 #include "../qmakeconfig.h"
 
@@ -138,5 +140,21 @@ KJob* QMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
     }
     return 0;
 }
+
+int QMakeBuilder::perProjectConfigPages() const
+{
+    return 1;
+}
+
+KDevelop::ConfigPage* QMakeBuilder::perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
+{
+    switch (number) {
+    case 0:
+        return new QMakeBuilderPreferences(this, options, parent);
+    default:
+        return nullptr;
+    }
+}
+
 
 #include "qmakebuilder.moc"
