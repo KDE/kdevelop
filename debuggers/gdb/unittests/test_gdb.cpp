@@ -181,20 +181,20 @@ public:
     TestDebugSession() : DebugSession()
     {
         setTesting(true);
+        m_frameStackModel = new TestFrameStackModel(this);
         KDevelop::ICore::self()->debugController()->addSession(this);
-    }
-
-    KDevelop::IFrameStackModel* createFrameStackModel()
-    {
-        return new TestFrameStackModel(this);
     }
 
     QUrl url() { return currentUrl(); }
     int line() { return currentLine(); }
-    TestFrameStackModel *frameStackModel() const
-    { return static_cast<TestFrameStackModel*>(DebugSession::frameStackModel()); }
 
+    virtual TestFrameStackModel* frameStackModel() const override
+    {
+        return m_frameStackModel;
+    }
 
+private:
+    TestFrameStackModel* m_frameStackModel;
 };
 
 class TestWaiter
@@ -1449,6 +1449,27 @@ void GdbTest::testPickupManuallyInsertedBreakpointOnlyOnce()
     QVERIFY(b);
     QCOMPARE(b->line(), 21);
     QCOMPARE(b->url().fileName(), QString("debugee.cpp"));
+}
+
+void GdbTest::testPickupCatchThrowOnlyOnce()
+{
+    QTemporaryFile configScript;
+    configScript.open();
+    configScript.write("catch throw\n");
+    configScript.close();
+
+    TestLaunchConfiguration cfg;
+    KConfigGroup grp = cfg.config();
+    grp.writeEntry(GDBDebugger::remoteGdbConfigEntry, QUrl::fromLocalFile(configScript.fileName()));
+
+
+    for (int i = 0; i < 2; ++i) {
+        TestDebugSession* session = new TestDebugSession;
+        QVERIFY(session->startProgram(&cfg, m_iface));
+        WAIT_FOR_STATE(session, DebugSession::EndedState);
+    }
+
+    QCOMPARE(breakpoints()->rowCount(), 1); //one from kdevelop, one from runScript
 }
 
 void GdbTest::testRunGdbScript()

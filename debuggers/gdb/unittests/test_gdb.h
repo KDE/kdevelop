@@ -77,6 +77,7 @@ private Q_SLOTS:
     void testCommandOrderFastStepping();
     void testPickupManuallyInsertedBreakpoint();
     void testPickupManuallyInsertedBreakpointOnlyOnce();
+    void testPickupCatchThrowOnlyOnce();
     void testRunGdbScript();
     void testRemoteDebug();
     void testRemoteDebugInsertBreakpoint();

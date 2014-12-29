@@ -335,6 +335,7 @@ int main( int argc, char *argv[] )
     }
 
     KDevelopApplication app(argc, argv);
+    qCDebug(APP) << "Startup";
     QCommandLineParser parser;
     KAboutData::setApplicationData(aboutData);
     parser.addVersionOption();
@@ -612,5 +613,7 @@ int main( int argc, char *argv[] )
         trySetupWelcomePageView();
     }
 #endif
+
+    qCDebug(APP) << "Done startup";
     return app.exec();
 }
