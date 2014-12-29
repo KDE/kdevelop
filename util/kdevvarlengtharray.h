@@ -70,26 +70,6 @@ public:
     ///Removes exactly one occurrence of the given value from the array. Returns false if none was found.
     inline bool removeOne(const T& value);
 
-    ///Returns last item in the array.
-    inline T& back()
-    {
-        Q_ASSERT(!Base::isEmpty());
-        return *(Base::end()-1);
-    }
-
-    ///Returns last item in the array.
-    inline const T& back() const
-    {
-        Q_ASSERT(!Base::isEmpty());
-        return *(Base::constEnd()-1);
-    }
-
-    ///Removes last item from the array but does not return it, use @c back() if required.
-    inline void pop_back()
-    {
-        Base::removeLast();
-    }
-
     /// @return QList of items in this array
     QList<T> toList() const;
 
