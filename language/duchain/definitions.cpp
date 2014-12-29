@@ -119,7 +119,7 @@ public:
     auto allDefinitions = definitions->definitions(id);
 
     qout << "Definitions for" << id.qualifiedIdentifier() << endl;
-    FOREACH_ARRAY(const IndexedDeclaration& decl, allDefinitions) {
+    for (const IndexedDeclaration& decl : allDefinitions) {
       if(decl.data()) {
         qout << " " << decl.data()->qualifiedIdentifier() << "in" << decl.data()->url().byteArray() << "at" << decl.data()->rangeInCurrentRevision() << endl;
       }

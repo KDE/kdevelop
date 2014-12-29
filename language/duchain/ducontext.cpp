@@ -751,7 +751,7 @@ QList< QualifiedIdentifier > DUContext::fullyApplyAliases(const QualifiedIdentif
   }
 
   QList<QualifiedIdentifier> ret;
-  FOREACH_ARRAY(const SearchItem::Ptr& item, identifiers)
+  for (const SearchItem::Ptr& item : identifiers)
     ret += item->toList();
 
   return ret;
@@ -870,7 +870,7 @@ QVector<DUContext*> DUContext::importers() const
   if(owner()) {
     //Add indirect importers to the list
     KDevVarLengthArray<IndexedDUContext> indirect = Importers::self().importers(owner()->id());
-    FOREACH_ARRAY(const IndexedDUContext& ctx, indirect) {
+    for (const IndexedDUContext& ctx : indirect) {
       ret << ctx.context();
     }
   }
@@ -1191,7 +1191,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
     return;
   }
 
-  FOREACH_ARRAY( const SearchItem::Ptr& identifier, baseIdentifiers ) {
+  for ( const SearchItem::Ptr& identifier : baseIdentifiers ) {
     bool addUnmodified = true;
 
     if( !identifier->isExplicitlyGlobal ) {
@@ -1199,7 +1199,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
       if( !imports.isEmpty() )
       {
         //We have namespace-imports.
-        FOREACH_ARRAY( Declaration* importDecl, imports )
+        for ( Declaration* importDecl : imports )
         {
           //Search for the identifier with the import-identifier prepended
           if(dynamic_cast<NamespaceAliasDeclaration*>(importDecl))
@@ -1220,7 +1220,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
         if(!aliases.isEmpty()) {
           //The first part of the identifier has been found as a namespace-alias.
           //In c++, we only need the first alias. However, just to be correct, follow them all for now.
-          FOREACH_ARRAY( Declaration* aliasDecl, aliases )
+          for ( Declaration* aliasDecl : aliases )
           {
             if(!dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl))
               continue;
@@ -1597,7 +1597,7 @@ void DUContext::SearchItem::addToEachNode(const SearchItem::Ptr& other) {
 
 void DUContext::SearchItem::addToEachNode(const SearchItem::PtrList& other) {
   int added = 0;
-  FOREACH_ARRAY(const SearchItem::Ptr& o, other) {
+  for (const SearchItem::Ptr& o : other) {
     if(!o->isExplicitlyGlobal) {
       next.append(o);
       ++added;

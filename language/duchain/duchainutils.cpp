@@ -485,7 +485,7 @@ QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& m
     return ret;
 
   if(decl->internalContext() && decl->internalContext()->type() == DUContext::Class)
-    FOREACH_ARRAY(const IndexedDUContext& importer, decl->internalContext()->indexedImporters()) {
+    for (const IndexedDUContext& importer : decl->internalContext()->indexedImporters()) {
 
       DUContext* imp = importer.data();
 

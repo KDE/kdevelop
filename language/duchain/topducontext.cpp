@@ -704,7 +704,7 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
   ENSURE_CAN_READ
 
 #ifdef DEBUG_SEARCH
-  FOREACH_ARRAY(const SearchItem::Ptr& idTree, identifiers)
+  for (const SearchItem::Ptr& idTree : identifiers)
       foreach(const QualifiedIdentifier &id, idTree->toList())
         qCDebug(LANGUAGE) << "searching item" << id.toString();
 #endif
@@ -820,7 +820,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
               return false;
           }else{
             //Create an identifiers where namespace-alias part is replaced with the alias target
-            FOREACH_ARRAY(const SearchItem::Ptr& item, identifier->next)
+            for (const SearchItem::Ptr& item : identifier->next)
               if(!applyAliases(importIdentifier, item, accept, position, canBeNamespace, &info, recursionDepth+1))
                 return false;
           }
@@ -834,7 +834,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
       if(!accept(id)) //We're at the end of a qualified identifier, accept it
         return false;
     } else {
-      FOREACH_ARRAY(const SearchItem::Ptr& next, identifier->next)
+      for (const SearchItem::Ptr& next : identifier->next)
         if(!applyAliases(id, next, accept, position, canBeNamespace, 0, recursionDepth+1))
           return false;
     }
@@ -905,7 +905,7 @@ void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, Accepto
 {
   QualifiedIdentifier emptyId;
 
-  FOREACH_ARRAY(const SearchItem::Ptr& item, identifiers)
+  for (const SearchItem::Ptr& item : identifiers)
     applyAliases(emptyId, item, acceptor, position, canBeNamespace, 0, 0);
 }
 
