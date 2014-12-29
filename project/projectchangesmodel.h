@@ -23,14 +23,14 @@
 #include <vcs/models/vcsfilechangesmodel.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
-#include "vcsexport.h"
+#include "projectexport.h"
 
 class KJob;
 namespace KDevelop {
 class IProject;
 class IDocument;
 
-class KDEVPLATFORMVCS_EXPORT ProjectChangesModel : public VcsFileChangesModel
+class KDEVPLATFORMPROJECT_EXPORT ProjectChangesModel : public VcsFileChangesModel
 {
     Q_OBJECT
     public:
