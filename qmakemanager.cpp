@@ -59,8 +59,6 @@
 #include <KDirWatch>
 #include <interfaces/iprojectcontroller.h>
 
-#include "version.h"
-
 using namespace KDevelop;
 
 //BEGIN Helpers

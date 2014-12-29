@@ -21,11 +21,6 @@ find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 find_package(KDevelop REQUIRED)
 find_package(KDevelop-PG-Qt REQUIRED)
 
-configure_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/version.h"
-  @ONLY
-)
 enable_testing()
 
 include_directories(${KDEVELOP_INCLUDE_DIR})
