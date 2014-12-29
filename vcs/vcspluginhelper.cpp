@@ -21,6 +21,7 @@
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
 #include <QAction>
+#include <QFileInfo>
 
 #include <ktexteditor/annotationinterface.h>
 #include <ktexteditor/view.h>
@@ -39,9 +40,7 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iproject.h>
-#include <project/projectmodel.h>
 #include <util/path.h>
-#include <language/interfaces/codecontext.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include "interfaces/idistributedversioncontrol.h"
 #include <vcs/widgets/vcscommitdialog.h>
@@ -50,11 +49,6 @@
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsdiff.h>
 #include <vcs/widgets/vcseventwidget.h>
-#include <language/duchain/duchainbase.h>
-#include <serialization/indexedstring.h>
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/duchain.h>
-#include <language/interfaces/editorcontext.h>
 
 #include <interfaces/ipatchsource.h>
 #include <QTemporaryFile>
@@ -204,32 +198,13 @@ void VcsPluginHelper::disposeEventually(KTextEditor::Document *)
 
 void VcsPluginHelper::setupFromContext(Context* context)
 {
-    d->ctxUrls.clear();
-    {
-        KDevelop::ProjectItemContext* prjctx = dynamic_cast<KDevelop::ProjectItemContext*>(context);
+    static const QVector<int> contextTypes =
+        {Context::ProjectItemContext, Context::FileContext, Context::EditorContext};
 
-        if (prjctx) {
-            foreach(KDevelop::ProjectBaseItem* item, prjctx->items()) {
-                if(!item->target())
-                    d->ctxUrls.append(item->path().toUrl());
-            }
-        }
-    }
-
-    {
-        KDevelop::EditorContext* editctx = dynamic_cast<KDevelop::EditorContext*>(context);
-
-        if (editctx) {
-            d->ctxUrls.append(editctx->url());
-        }
-    }
-
-    {
-        KDevelop::FileContext* filectx = dynamic_cast<KDevelop::FileContext*>(context);
-
-        if (filectx) {
-            d->ctxUrls = filectx->urls();
-        }
+    if (contextTypes.contains(context->type())) {
+        d->ctxUrls = context->urls();
+    } else {
+        d->ctxUrls.clear();
     }
 }
 

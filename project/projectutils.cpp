@@ -35,6 +35,18 @@
 
 namespace KDevelop {
 
+QList<QUrl> ProjectItemContextImpl::urls() const
+{
+    QList<QUrl> urls;
+    foreach (auto item, items()) {
+        const auto url = item->path().toUrl();
+        if (url.isValid()) {
+            urls << url;
+        }
+    }
+    return urls;
+}
+
 class Populator : public QObject
 {
     Q_OBJECT
@@ -54,7 +66,7 @@ public Q_SLOTS:
         QMenu* menu = new QMenu(m_text);
         connect(menu, &QMenu::aboutToHide, menu, &QMenu::deleteLater);
         menu->addAction(QIcon::fromTheme(m_item->iconName()), m_text)->setEnabled(false);
-        ProjectItemContext context(QList< ProjectBaseItem* >() << m_item);
+        ProjectItemContextImpl context({m_item});
         QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
         ContextMenuExtension::populateMenu(menu, extensions);
         menu->popup(m_pos);

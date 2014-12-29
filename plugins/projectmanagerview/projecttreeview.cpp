@@ -314,7 +314,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
     QMenu menu( this );
 
-    KDevelop::ProjectItemContext context(itemlist);
+    KDevelop::ProjectItemContextImpl context(itemlist);
     QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
 
     QList<QAction*> buildActions;

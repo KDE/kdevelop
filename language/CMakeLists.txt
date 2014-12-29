@@ -158,10 +158,7 @@ ki18n_wrap_ui(KDevPlatformLanguage_LIB_SRCS
 
 add_library(KDevPlatformLanguage ${KDevPlatformLanguage_LIB_SRCS})
 add_library(KDev::Language ALIAS KDevPlatformLanguage)
-
 generate_export_header(KDevPlatformLanguage EXPORT_FILE_NAME languageexport.h)
-target_include_directories(KDevPlatformLanguage PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/../project)
-
 target_link_libraries(KDevPlatformLanguage LINK_PUBLIC
         KF5::ThreadWeaver
         KDev::Interfaces

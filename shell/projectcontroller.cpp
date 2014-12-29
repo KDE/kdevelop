@@ -59,6 +59,7 @@ Boston, MA 02110-1301, USA.
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
+#include <project/projectchangesmodel.h>
 #include <project/projectmodel.h>
 #include <project/projectbuildsetmodel.h>
 #include <projectconfigpage.h>
@@ -83,7 +84,6 @@ Boston, MA 02110-1301, USA.
 #include "debug.h"
 #include <QDBusConnection>
 #include <QApplication>
-#include <vcs/models/projectchangesmodel.h>
 #include <vcs/widgets/vcsdiffpatchsources.h>
 #include <vcs/widgets/vcscommitdialog.h>
 #include <KConfigGroup>

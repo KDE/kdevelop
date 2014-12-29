@@ -33,7 +33,6 @@ set(KDevPlatformVcs_LIB_SRCS
     models/vcseventmodel.cpp
     models/vcsfilechangesmodel.cpp
     models/vcsitemeventmodel.cpp
-    models/projectchangesmodel.cpp
     models/brancheslistmodel.cpp
     dvcs/dvcsjob.cpp
     dvcs/dvcsplugin.cpp
@@ -60,8 +59,6 @@ LINK_PRIVATE
     KF5::KIOWidgets
     KF5::Parts
     KDev::Util
-    KDev::Project
-    KDev::Language
 )
 set_target_properties(KDevPlatformVcs PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Vcs)
 install(TARGETS KDevPlatformVcs EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
@@ -95,7 +92,6 @@ install(FILES
     models/vcseventmodel.h
     models/vcsfilechangesmodel.h
     models/vcsitemeventmodel.h
-    models/projectchangesmodel.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/models COMPONENT Devel
 )
 

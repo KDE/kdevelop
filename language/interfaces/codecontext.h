@@ -60,6 +60,8 @@ public:
     IndexedDUContext context() const;
     
     int type() const;
+
+    virtual QList<QUrl> urls() const override;
     
 protected:
     void setContext(IndexedDUContext context);

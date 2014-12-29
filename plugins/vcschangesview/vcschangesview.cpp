@@ -27,8 +27,9 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/contextmenuextension.h>
 #include <vcs/vcsstatusinfo.h>
-#include <vcs/models/projectchangesmodel.h>
+#include <project/projectchangesmodel.h>
 #include <project/projectmodel.h>
+#include <project/projectutils.h>
 
 #include <QIcon>
 
@@ -95,7 +96,7 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
         foreach(IProject* p, projects)
             items += p->projectItem();
         
-        KDevelop::ProjectItemContext context(items);
+        KDevelop::ProjectItemContextImpl context(items);
         extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
         
     }

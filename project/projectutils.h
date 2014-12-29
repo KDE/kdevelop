@@ -23,6 +23,8 @@
 
 #include "projectexport.h"
 
+#include <context.h>
+
 #include <QList>
 
 class QMenu;
@@ -31,6 +33,15 @@ namespace KDevelop {
 
 class ProjectBaseItem;
 class ProjectFileItem;
+
+// TODO: Move to own header? Rename to ProjectItemContext and remove original from context.h?
+class KDEVPLATFORMPROJECT_EXPORT ProjectItemContextImpl : public ProjectItemContext
+{
+public:
+    using ProjectItemContext::ProjectItemContext;
+
+    virtual QList<QUrl> urls() const override;
+};
 
 /**
  * Adds menu entries for all parent folders of the given item, each containing all the project

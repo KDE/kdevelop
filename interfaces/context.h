@@ -102,6 +102,13 @@ public:
     /**Implement this in the context so we can provide rtti.*/
     virtual int type() const = 0;
 
+    /**
+     * Convenience method for accessing the urls associated with this context
+     *
+     * For example, returns the selected urls in a project item context
+     */
+    virtual QList<QUrl> urls() const = 0;
+
     /**@return The type of this Context, so clients can discriminate
         between different file contexts.*/
     bool hasType( int type ) const;
@@ -132,7 +139,7 @@ public:
     virtual int type() const;
 
     /**@return A reference to the selected URLs.*/
-    QList<QUrl> urls() const;
+    virtual QList<QUrl> urls() const override;
 
 private:
     class FileContextPrivate* const d;
@@ -156,7 +163,9 @@ public:
 
     virtual int type() const;
 
-    /**@return The project model item for the selected item.*/
+    /**
+     * @return The project model items for the selected items.
+     */
     QList<ProjectBaseItem*> items() const;
 
 private:
@@ -188,7 +197,7 @@ public:
     /**
      * @return The files to open.
      */
-    QList<QUrl> urls() const;
+    virtual QList<QUrl> urls() const override;
 
     /**
      * @return The mimetype of the url to open.

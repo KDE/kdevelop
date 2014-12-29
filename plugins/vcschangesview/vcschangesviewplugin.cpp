@@ -33,6 +33,7 @@
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/vcsstatusinfo.h>
 #include <vcs/vcsjob.h>
+#include <project/projectchangesmodel.h>
 #include <project/projectmodel.h>
 #include <QAction>
 #include <QTreeView>
@@ -40,7 +41,6 @@
 #include "vcschangesview.h"
 #include <KActionCollection>
 #include <KLocalizedString>
-#include <vcs/models/projectchangesmodel.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(VcsProjectIntegrationFactory, "kdevvcschangesview.json", registerPlugin<VcsProjectIntegrationPlugin>();)
 

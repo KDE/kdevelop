@@ -26,6 +26,7 @@
 #include <QAction>
 
 #include <interfaces/context.h>
+#include <project/projectutils.h>
 
 class QAction;
 class QModelIndex;
@@ -48,7 +49,7 @@ class ProjectManagerView;
 class ProjectManagerViewPlugin;
 
 //own subclass to the current view can be passed from ProjectManagetView to ProjectManagerViewPlugin
-class ProjectManagerViewItemContext : public KDevelop::ProjectItemContext
+class ProjectManagerViewItemContext : public KDevelop::ProjectItemContextImpl
 {
 public:
     ProjectManagerViewItemContext(const QList< KDevelop::ProjectBaseItem* >& items, ProjectManagerView *view);

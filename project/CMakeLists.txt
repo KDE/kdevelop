@@ -3,6 +3,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 set(KDevPlatformProject_LIB_SRCS
     projectutils.cpp
     projectmodel.cpp
+    projectchangesmodel.cpp
     projectconfigskeleton.cpp
     importprojectjob.cpp
     builderjob.cpp
@@ -26,16 +27,14 @@ add_library(KDevPlatformProject ${KDevPlatformProject_LIB_SRCS})
 add_library(KDev::Project ALIAS KDevPlatformProject)
 
 generate_export_header(KDevPlatformProject EXPORT_FILE_NAME projectexport.h)
-# TODO: helper.cpp needs vcsexport.h and outputviewexport.h, but can't link to KDev::Vcs
-target_include_directories(KDevPlatformProject PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../vcs/")
-target_include_directories(KDevPlatformProject PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../outputview/")
-target_link_libraries(KDevPlatformProject LINK_PUBLIC
+target_link_libraries(KDevPlatformProject
+LINK_PUBLIC
     KDev::Interfaces
     KDev::Util # util/path.h
-)
-target_link_libraries(KDevPlatformProject LINK_PRIVATE
+LINK_PRIVATE
     KDev::Interfaces
     KDev::Serialization
+    KDev::Vcs
     KF5::KIOWidgets
     Qt5::Concurrent
 )
@@ -58,6 +57,7 @@ install(FILES
 install(FILES
     projectutils.h
     importprojectjob.h
+    projectchangesmodel.h
     projectconfigskeleton.h
     projectmodel.h
     projectconfigpage.h

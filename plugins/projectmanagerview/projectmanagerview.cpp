@@ -55,7 +55,7 @@
 using namespace KDevelop;
 
 ProjectManagerViewItemContext::ProjectManagerViewItemContext(const QList< ProjectBaseItem* >& items, ProjectManagerView* view)
-    : ProjectItemContext(items), m_view(view)
+    : ProjectItemContextImpl(items), m_view(view)
 {
 }
 

@@ -65,6 +65,15 @@ int DUContextContext::type() const
     return Context::CodeContext;
 }
 
+QList<QUrl> DUContextContext::urls() const
+{
+    DUChainReadLocker lock;
+    if (auto context = d->m_item.context()) {
+        return {context->url().toUrl()};
+    }
+    return {};
+}
+
 IndexedDUContext DUContextContext::context() const
 {
     return d->m_item;

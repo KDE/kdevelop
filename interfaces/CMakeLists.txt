@@ -60,8 +60,6 @@ LINK_PRIVATE
     KF5::ThreadWeaver
 )
 target_include_directories(KDevPlatformInterfaces INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}/kdevplatform>")
-# TODO: this is ugly (sort-of cyclic dependecy):
-target_include_directories(KDevPlatformInterfaces PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/../util") # for utilexport.h
 
 set_target_properties(KDevPlatformInterfaces PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION} EXPORT_NAME Interfaces)
 install(TARGETS KDevPlatformInterfaces EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
