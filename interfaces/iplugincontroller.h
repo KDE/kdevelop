@@ -121,7 +121,7 @@ public:
      * @param constraints A map of constraints on other plugin info properties.
      * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
      */
-    Q_SCRIPTABLE virtual IPlugin *pluginForExtension(const QString &extension, const QString& pluginName = {}, const QVariantMap& constraints = {} ) = 0;
+    Q_SCRIPTABLE virtual IPlugin *pluginForExtension(const QString &extension, const QString& pluginName = {}, const QVariantMap& constraints = QVariantMap()) = 0;
 
      /**
      * Retrieve a list of plugins which supports the given extension interface.
@@ -132,7 +132,7 @@ public:
      * @param constraints A map of constraints on other plugin info properties.
      * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
      */
-    virtual QList<IPlugin*> allPluginsForExtension(const QString &extension, const QVariantMap& constraints = {}) = 0;
+    virtual QList<IPlugin*> allPluginsForExtension(const QString &extension, const QVariantMap& constraints = QVariantMap()) = 0;
 
      /**
      * Retrieve the plugin which supports given extension interface and
@@ -169,7 +169,7 @@ public:
      * @param constraints A map of constraints on other plugin info properties.
      * @return The list of plugin offers.
      */
-    virtual KPluginInfo::List queryExtensionPlugins(const QString &extension, const QVariantMap& constraints = {}) const = 0;
+    virtual KPluginInfo::List queryExtensionPlugins(const QString &extension, const QVariantMap& constraints = QVariantMap()) const = 0;
 
     virtual QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const = 0;
 

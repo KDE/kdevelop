@@ -135,7 +135,7 @@ public:
     {
     }
 
-    IPlugin* pluginForExtension(const QString& extension, const QString& pluginName = {}, const QVariantMap& constraints = {}) override
+    IPlugin* pluginForExtension(const QString& extension, const QString& pluginName = {}, const QVariantMap& constraints = QVariantMap()) override
     {
         if (extension == m_fakeFileManager->extensions().first())
             return m_fakeFileManager;

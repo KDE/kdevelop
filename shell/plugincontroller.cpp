@@ -224,7 +224,7 @@ public:
      * should be continued.
      */
     template<typename F>
-    void foreachEnabledPlugin(F func, const QString &extension = {}, const QVariantMap& constraints = {}, const QString &pluginName = {})
+    void foreachEnabledPlugin(F func, const QString &extension = {}, const QVariantMap& constraints = QVariantMap(), const QString &pluginName = {})
     {
         foreach (const auto& info, plugins) {
             if ((pluginName.isEmpty() || info.pluginName() == pluginName)

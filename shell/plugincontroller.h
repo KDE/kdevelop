@@ -115,13 +115,13 @@ public:
      * @param pluginname The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
      * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
      */
-    IPlugin *pluginForExtension(const QString &extension, const QString &pluginName = {}, const QVariantMap& constraints = {}) override;
+    IPlugin *pluginForExtension(const QString &extension, const QString &pluginName = {}, const QVariantMap& constraints = QVariantMap()) override;
 
-    QList<IPlugin*> allPluginsForExtension(const QString &extension, const QVariantMap& constraints = {}) override;
+    QList<IPlugin*> allPluginsForExtension(const QString &extension, const QVariantMap& constraints = QVariantMap()) override;
 
     QStringList allPluginNames();
 
-    KPluginInfo::List queryExtensionPlugins(const QString& extension, const QVariantMap& constraints = {}) const override;
+    KPluginInfo::List queryExtensionPlugins(const QString& extension, const QVariantMap& constraints = QVariantMap()) const override;
 
     QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const;
 
