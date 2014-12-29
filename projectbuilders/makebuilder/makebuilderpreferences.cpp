@@ -90,7 +90,3 @@ QIcon MakeBuilderPreferences::icon() const
 {
     return QIcon::fromTheme("run-build");
 }
-
-
-#include "makebuilderpreferences.moc"
-
