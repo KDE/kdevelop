@@ -29,7 +29,6 @@
 #include "includesmodel.h"
 #include "debugarea.h"
 
-
 IncludesWidget::IncludesWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::IncludesWidget )
     , includesModel( new IncludesModel( this ) )
@@ -45,7 +44,8 @@ IncludesWidget::IncludesWidget( QWidget* parent )
     ui->addIncludePath->setFixedHeight( ui->includePathRequester->sizeHint().height() );
     ui->removeIncludePath->setFixedHeight( ui->includePathRequester->sizeHint().height() );
 
-    ui->errorLabel->setHidden(true);
+    ui->errorWidget->setHidden(true);
+    ui->errorWidget->setMessageType(KMessageWidget::Warning);
 
     connect( ui->addIncludePath, SIGNAL(clicked(bool)), SLOT(addIncludePath()) );
     connect( ui->removeIncludePath, SIGNAL(clicked(bool)), SLOT(deleteIncludePath()) );
@@ -150,13 +150,12 @@ void IncludesWidget::checkIfIncludePathExist()
     for (auto& include : includesModel->includes()) {
         info.setFile(include);
         if (!info.exists()) {
-            ui->errorLabel->setText(include + i18n(" doesn't exist"));
-            ui->errorLabel->setHidden(false);
+            ui->errorWidget->setText(include + i18n(" doesn't exist"));
+            ui->errorWidget->animatedShow();
             return;
         }
     }
-    ui->errorLabel->setHidden(true);
-    ui->errorLabel->clear();
+    ui->errorWidget->animatedHide();
 }
 
 #include "includeswidget.moc"
