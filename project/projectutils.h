@@ -41,6 +41,9 @@ public:
     ProjectItemContextImpl(const QList<ProjectBaseItem*>& items);
 
     virtual QList<QUrl> urls() const override;
+
+private:
+    Q_DISABLE_COPY(ProjectItemContextImpl)
 };
 
 /**

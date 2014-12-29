@@ -121,6 +121,7 @@ protected:
     virtual ~Context();
 private:
     class ContextPrivate* const d;
+    Q_DISABLE_COPY(Context)
 };
 
 /**
@@ -143,9 +144,7 @@ public:
 
 private:
     class FileContextPrivate* const d;
-
-    FileContext( const FileContext & );
-    FileContext &operator=( const FileContext & );
+    Q_DISABLE_COPY(FileContext)
 };
 
 /**
@@ -170,9 +169,7 @@ public:
 
 private:
     class ProjectItemContextPrivate* const d;
-
-    ProjectItemContext( const ProjectItemContext & );
-    ProjectItemContext &operator=( const ProjectItemContext & );
+    Q_DISABLE_COPY(ProjectItemContext)
 };
 
 /**
