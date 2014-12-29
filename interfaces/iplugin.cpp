@@ -26,6 +26,7 @@
  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  Boston, MA 02110-1301, USA.
 */
+
 #include "iplugin.h"
 
 #include <kmainwindow.h>
@@ -54,23 +55,23 @@ public:
 
     void guiClientAdded(KXMLGUIClient *client)
     {
-	if (client != q)
-	    return;
+        if (client != q)
+            return;
 
-	q->initializeGuiState();
-	updateState();
+        q->initializeGuiState();
+        updateState();
     }
 
     void updateState()
     {
-	const int projectCount =
-	    ICore::self()->projectController()->projectCount();
+        const int projectCount =
+            ICore::self()->projectController()->projectCount();
 
-	IPlugin::ReverseStateChange reverse = IPlugin::StateNoReverse;
-	if (! projectCount)
-	    reverse = IPlugin::StateReverse;
+        IPlugin::ReverseStateChange reverse = IPlugin::StateNoReverse;
+        if (! projectCount)
+            reverse = IPlugin::StateReverse;
 
-	q->stateChanged(QLatin1String("has_project"), reverse);
+        q->stateChanged(QLatin1String("has_project"), reverse);
     }
 
     IPlugin *q;
@@ -93,7 +94,9 @@ IPlugin::IPlugin( const QString &componentName, QObject *parent )
 
     setComponentName(componentName, componentName);
 
-    auto clientAdded = [=] (KXMLGUIClient* client) { d->guiClientAdded(client); };
+    auto clientAdded = [=] (KXMLGUIClient* client) {
+        d->guiClientAdded(client);
+    };
     foreach (KMainWindow* mw, KMainWindow::memberList()) {
         KXmlGuiWindow* guiWindow = qobject_cast<KXmlGuiWindow*>(mw);
         if (! guiWindow)
@@ -128,7 +131,7 @@ ICore *IPlugin::core() const
 
 QStringList KDevelop::IPlugin::extensions( ) const
 {
-  return d->m_extensions;
+    return d->m_extensions;
 }
 
 void KDevelop::IPlugin::addExtension( const QString& ext )
@@ -137,7 +140,7 @@ void KDevelop::IPlugin::addExtension( const QString& ext )
 }
 
 KDevelop::ContextMenuExtension KDevelop::IPlugin::contextMenuExtension(
-        KDevelop::Context* )
+    KDevelop::Context* )
 {
     return KDevelop::ContextMenuExtension();
 }
@@ -145,15 +148,16 @@ KDevelop::ContextMenuExtension KDevelop::IPlugin::contextMenuExtension(
 void KDevelop::IPlugin::initializeGuiState()
 { }
 
-class CustomXmlGUIClient : public KXMLGUIClient {
-    public:
-        CustomXmlGUIClient(const QString& componentName) {
-            // TODO KF5: Get rid off this
-            setComponentName(componentName, componentName);
-        }
-        void setXmlFile(QString file) {
-            KXMLGUIClient::setXMLFile(file);
-        }
+class CustomXmlGUIClient : public KXMLGUIClient
+{
+public:
+    CustomXmlGUIClient(const QString& componentName) {
+        // TODO KF5: Get rid off this
+        setComponentName(componentName, componentName);
+    }
+    void setXmlFile(QString file) {
+        KXMLGUIClient::setXMLFile(file);
+    }
 };
 
 KXMLGUIClient* KDevelop::IPlugin::createGUIForMainWindow(Sublime::MainWindow* window)
@@ -165,7 +169,7 @@ KXMLGUIClient* KDevelop::IPlugin::createGUIForMainWindow(Sublime::MainWindow* wi
     if(!ret->actionCollection()->isEmpty()) {
         Q_ASSERT(!file.isEmpty()); //A file must have been set
         ret->setXmlFile(file);
-    }else{
+    } else {
         delete ret;
         ret = 0;
     }
