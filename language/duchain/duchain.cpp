@@ -1124,7 +1124,6 @@ extern void initDeclarationRepositories();
 extern void initIdentifierRepository();
 extern void initTypeRepository();
 extern void initInstantiationInformationRepository();
-extern void initReferenceCounting();
 
 void DUChain::initialize()
 {
