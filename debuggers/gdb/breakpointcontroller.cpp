@@ -523,6 +523,7 @@ void BreakpointController::notifyBreakpointDeleted(const AsyncRecord& r)
 
     IgnoreChanges ignoreChanges(*this);
     breakpointModel()->removeRow(row);
+    m_breakpoints.removeAt(row);
 }
 
 void BreakpointController::createFromGdb(const Value& miBkpt)
@@ -694,12 +695,22 @@ void BreakpointController::updateFromGdb(int row, const Value& miBkpt, Breakpoin
         if (rx.indexIn(location) != -1) {
             modelBreakpoint->setLocation(QUrl::fromLocalFile(unquoteExpression(rx.cap(1))), rx.cap(2).toInt()-1);
         } else {
-            modelBreakpoint->setData(KDevelop::Breakpoint::LocationColumn, unquoteExpression(location));
+            modelBreakpoint->setData(Breakpoint::LocationColumn, unquoteExpression(location));
         }
     } else if (miBkpt.hasField("what")) {
         modelBreakpoint->setExpression(miBkpt["what"].literal());
     } else {
         qWarning() << "Breakpoint doesn't contain required location/expression data";
+    }
+
+    if (!(lockedColumns & BreakpointModel::EnableColumnFlag)) {
+        bool enabled = true;
+        if (miBkpt.hasField("enabled")) {
+            if (miBkpt["enabled"].literal() == "n")
+                enabled = false;
+        }
+        modelBreakpoint->setData(Breakpoint::EnableColumn, enabled ? Qt::Checked : Qt::Unchecked);
+        breakpoint->dirty &= ~BreakpointModel::EnableColumnFlag;
     }
 
     if (!(lockedColumns & BreakpointModel::ConditionColumnFlag)) {

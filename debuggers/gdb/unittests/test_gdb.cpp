@@ -695,6 +695,44 @@ void GdbTest::testInsertBreakpointFunctionName()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testManualBreakpoint()
+{
+    TestDebugSession *session = new TestDebugSession;
+    TestLaunchConfiguration cfg;
+
+    breakpoints()->addCodeBreakpoint("main");
+
+    session->startProgram(&cfg, m_iface);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 27);
+
+    breakpoints()->removeRows(0, 1);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    QCOMPARE(breakpoints()->rowCount(), 0);
+
+    session->addCommand(GDBMI::NonMI, "break debugee.cpp:23");
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    QCOMPARE(breakpoints()->rowCount(), 1);
+
+    Breakpoint* b = breakpoints()->breakpoint(0);
+    QCOMPARE(b->line(), 22);
+
+    session->addCommand(GDBMI::NonMI, "disable 2");
+    session->addCommand(GDBMI::NonMI, "condition 2 i == 1");
+    session->addCommand(GDBMI::NonMI, "ignore 2 1");
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    QCOMPARE(b->enabled(), false);
+    QCOMPARE(b->condition(), QString("i == 1"));
+    QCOMPARE(b->ignoreHits(), 1);
+
+    session->addCommand(GDBMI::NonMI, "delete 2");
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
+    QCOMPARE(breakpoints()->rowCount(), 0);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
 void GdbTest::testShowStepInSource()
 {
     TestDebugSession *session = new TestDebugSession;
