@@ -257,7 +257,7 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
   s.result.clear();
 
   //instantiate template declarations
-  FOREACH_ARRAY(Declaration* decl, tempDecls) {
+  for (Declaration* decl : tempDecls) {
 
     if(decl->isForwardDeclaration() && scopeContext && scopeContext->type() == DUContext::Class) {
       //We found a forward-declaration within a class. Resolve it with its real declaration.

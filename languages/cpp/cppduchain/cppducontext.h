@@ -280,7 +280,7 @@ class CppDUContext : public BaseContext {
         return BaseContext::findDeclarationsInternal(identifiers, position, dataType, ret, source, basicFlags, depth );
       }
 
-      FOREACH_ARRAY( const DUContext::SearchItem::Ptr& item, identifiers )
+      for ( const DUContext::SearchItem::Ptr& item : identifiers )
         foreach( const QualifiedIdentifier& id, item->toList() )
           if(!findDeclarationsInternal(id, position, dataType, ret, source, basicFlags))
             return false;
@@ -426,7 +426,7 @@ class CppDUContext : public BaseContext {
           InstantiationInformation memberInstantiationInformation;
           memberInstantiationInformation.previousInstantiationInformation = m_instantiatedWith;
 
-          FOREACH_ARRAY( Declaration* decl, decls ) {
+          for ( Declaration* decl : decls ) {
             TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(decl);
             if(!templateDecl) {
               qDebug() << "problem";
