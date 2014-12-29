@@ -38,7 +38,7 @@ class ProjectFileItem;
 class KDEVPLATFORMPROJECT_EXPORT ProjectItemContextImpl : public ProjectItemContext
 {
 public:
-    using ProjectItemContext::ProjectItemContext;
+    ProjectItemContextImpl(const QList<ProjectBaseItem*>& items);
 
     virtual QList<QUrl> urls() const override;
 };

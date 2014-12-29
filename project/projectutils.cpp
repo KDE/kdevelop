@@ -35,6 +35,11 @@
 
 namespace KDevelop {
 
+ProjectItemContextImpl::ProjectItemContextImpl(const QList<ProjectBaseItem*>& items)
+    : ProjectItemContext(items)
+{
+}
+
 QList<QUrl> ProjectItemContextImpl::urls() const
 {
     QList<QUrl> urls;
