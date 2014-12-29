@@ -90,7 +90,9 @@ target_link_libraries( kdevcmakecommon
 generate_export_header(kdevcmakecommon EXPORT_FILE_NAME cmakecommonexport.h)
 
 ki18n_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
-add_library(kdevcmakemanager MODULE ${cmakemanager_SRCS} ${cmakesettings_SRCS} ../custommake/makefileresolver/makefileresolver.cpp)
+add_library(kdevcmakemanager MODULE ${cmakemanager_SRCS} ${cmakesettings_SRCS}
+    ../custommake/makefileresolver/makefileresolver.cpp
+    ../custommake/makefileresolver/helper.cpp)
 target_link_libraries( kdevcmakemanager  KF5::KIOWidgets KDev::Util
                         KDev::Interfaces kdevcmakecommon
                         KDev::Project KDev::Language KDev::Shell

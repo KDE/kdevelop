@@ -1,5 +1,6 @@
 set(makefileresolver_SRCS
     makefileresolver.cpp
+    helper.cpp
 )
 
 add_library(kdevmakefileresolver STATIC

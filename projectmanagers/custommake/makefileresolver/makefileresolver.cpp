@@ -37,14 +37,11 @@
 
 #include "makefileresolver.h"
 
+#include "helper.h"
+
 #include <memory>
 #include <cstdio>
 #include <iostream>
-
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <time.h>
 
 #include <QDir>
 #include <QFileInfo>
@@ -102,7 +99,7 @@ namespace {
   public:
     ///@param files list of files that should be fake-modified(modtime will be set to current time)
     explicit FileModificationTimeWrapper(const QStringList& files = QStringList(), const QString& workingDirectory = QString())
-      : m_newTime(time(0))
+      : m_newTime(QDateTime::currentDateTime())
     {
       for (QStringList::const_iterator it = files.constBegin(); it != files.constEnd(); ++it) {
         ifTest(cout << "touching " << it->toUtf8().constData() << endl);
@@ -114,27 +111,19 @@ namespace {
           continue;
         }
 
-        QString filename = fileinfo.canonicalFilePath();
-        if (m_stat.find(filename) != m_stat.end()) {
+        const QString filename = fileinfo.canonicalFilePath();
+        if (m_stat.contains(filename)) {
           cout << "Duplicate file: " << filename.toUtf8().constData() << endl;
           continue;
         }
 
-        QByteArray bFileName = filename.toLocal8Bit();
-        const char* bFileNameC = bFileName.constData();
-
-        struct stat s;
-        if (stat(bFileNameC, &s) == 0) {
+        QFileInfo info(filename);
+        if (info.exists()) {
           ///Success
-          m_stat[filename] = s.st_mtime;
-          ///change the modification-time to m_newTime
-          struct timeval times[2];
-          times[0].tv_sec = m_newTime;
-          times[0].tv_usec = 0;
-          times[1].tv_sec = m_newTime;
-          times[1].tv_usec = 0;
+          m_stat[filename] = info.lastModified();
 
-          if (utimes(bFileNameC, times) != 0) {
+          ///change the modification-time to m_newTime
+          if (Helper::changeAccessAndModificationTime(filename, m_newTime, m_newTime) != 0) {
             ifTest(cout << "failed to touch " << it->toUtf8().constData() << endl);
           }
         }
@@ -144,22 +133,14 @@ namespace {
     ///Undo changed modification-times
     void unModify()
     {
-      for (QHash<QString, time_t>::const_iterator it = m_stat.constBegin(); it != m_stat.constEnd(); ++it) {
+      for (auto it = m_stat.constBegin(); it != m_stat.constEnd(); ++it) {
         ifTest(cout << "untouching " << it.key().toUtf8().constData() << endl);
 
-        QByteArray bFileName = it.key().toLocal8Bit();
-        const char* bFileNameC = bFileName.constData();
-
-        struct stat s;
-        if (stat(bFileNameC, &s) == 0) {
-          if (s.st_mtime == m_newTime) {
+        QFileInfo info(it.key());
+        if (info.exists()) {
+          if (info.lastModified() == m_newTime) {
             ///Still the modtime that we've set, change it back
-            struct timeval times[2];
-            times[0].tv_usec = 0;
-            times[0].tv_sec = s.st_atime;
-            times[1].tv_usec = 0;
-            times[1].tv_sec = *it;
-            if (utimes(bFileNameC, times) != 0) {
+            if (Helper::changeAccessAndModificationTime(it.key(), info.lastRead(), *it) != 0) {
               perror("Resetting modification time");
               ifTest(cout << "failed to untouch " << it.key().toUtf8().constData() << endl);
             }
@@ -179,8 +160,8 @@ namespace {
     }
 
   private:
-    QHash<QString, time_t>  m_stat;
-    time_t                  m_newTime;
+    QHash<QString, QDateTime>  m_stat;
+    QDateTime                  m_newTime;
   };
 
   class SourcePathInformation
