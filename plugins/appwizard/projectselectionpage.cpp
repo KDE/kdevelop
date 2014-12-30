@@ -25,11 +25,11 @@
 #include "ui_projectselectionpage.h"
 #include "projecttemplatesmodel.h"
 #include <KColorScheme>
-#include <KFileDialog>
 #include <KNS3/KNewStuffButton>
 #include <KTar>
 #include <KZip>
 #include <KLocalizedString>
+#include <QFileDialog>
 
 using namespace KDevelop;
 
@@ -313,8 +313,7 @@ bool ProjectSelectionPage::shouldContinue()
 void ProjectSelectionPage::loadFileClicked()
 {
     QString filter = "application/x-desktop application/x-bzip-compressed-tar application/zip";
-    QString fileName = KFileDialog::getOpenFileName(QUrl("kfiledialog:///kdevapptemplate"), filter, this);
-
+    const QString fileName = QFileDialog::getOpenFileName(this, i18n("Load Template From File"), QString(), filter);
     if (!fileName.isEmpty())
     {
         QString destination = m_templatesModel->loadTemplateFile(fileName);

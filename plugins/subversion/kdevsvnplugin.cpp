@@ -31,7 +31,6 @@
 #include <kfile.h>
 #include <QTemporaryFile>
 #include <kmessagebox.h>
-#include <kfiledialog.h>
 #include <KIO/Global>
 #include <KDialog>
 
