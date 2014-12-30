@@ -62,5 +62,3 @@ QIcon NinjaBuilderPreferences::icon() const
 {
     return QIcon::fromTheme("run-build");
 }
-
-#include "ninjabuilderpreferences.moc"

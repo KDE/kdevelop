@@ -10,18 +10,27 @@
     <height>298</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="KUrlRequester" name="includePathRequester">
        <property name="toolTip">
         <string>Add the currently displayed URL to the list of includes if it is not in the list yet.</string>
        </property>
-       <property name="placeholderText">
+       <property name="clickMessage" stdset="0">
         <string>A new include path/file to use for parsing files under given directory</string>
        </property>
       </widget>
@@ -64,7 +73,7 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
+   <item>
     <widget class="QListView" name="includePaths">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -77,12 +86,8 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="errorLabel">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
+   <item>
+    <widget class="KMessageWidget" name="errorWidget" native="true"/>
    </item>
   </layout>
  </widget>
@@ -95,7 +100,14 @@
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
-   <header>kurlrequester.h</header>
+   <header location="global">kurlrequester.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KMessageWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">kmessagewidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -96,5 +96,3 @@ QIcon CMakeBuilderPreferences::icon() const
 {
     return QIcon::fromTheme("cmake");
 }
-
-#include "cmakebuilderpreferences.moc"

@@ -173,7 +173,7 @@ void QtHelpConfig::reset()
 
 void QtHelpConfig::defaults()
 {
-    bool change=false;
+    bool change = false;
     if(m_configWidget->qchTable->topLevelItemCount() > 0) {
         m_configWidget->qchTable->clear();
         change = true;
@@ -182,7 +182,10 @@ void QtHelpConfig::defaults()
         m_configWidget->loadQtDocsCheckBox->setChecked(true);
         change = true;
     }
-    emit changed();
+
+    if (change) {
+        emit changed();
+    }
 }
 
 void QtHelpConfig::selectionChanged()
@@ -381,7 +384,3 @@ QIcon QtHelpConfig::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("qtlogo"));
 }
-
-
-
-#include "qthelpconfig.moc"
