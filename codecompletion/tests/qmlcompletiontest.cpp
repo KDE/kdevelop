@@ -33,8 +33,8 @@
 
 #include <QtTest/QTest>
 
-#include "codecompletion/context.h"
-#include "codecompletion/model.h"
+#include "../context.h"
+#include "../model.h"
 
 using namespace KDevelop;
 using namespace QmlJS;

@@ -35,10 +35,10 @@
 
 #include <qmljs/qmljsdocument.h>
 #include <qmljs/parser/qmljslexer_p.h>
-#include <duchain/expressionvisitor.h>
-#include <duchain/helper.h>
-#include <duchain/cache.h>
-#include <duchain/frameworks/nodejs.h>
+#include "../duchain/expressionvisitor.h"
+#include "../duchain/helper.h"
+#include "../duchain/cache.h"
+#include "../duchain/frameworks/nodejs.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QRegExp>

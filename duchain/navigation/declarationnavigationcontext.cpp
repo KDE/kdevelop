@@ -26,7 +26,7 @@
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/types/structuretype.h>
 
-#include <duchain/functiontype.h>
+#include "../duchain/functiontype.h"
 
 using namespace KDevelop;
 

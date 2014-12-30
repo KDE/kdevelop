@@ -35,7 +35,7 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 
-#include <duchain/functiontype.h>
+#include "../../duchain/functiontype.h"
 
 using namespace QmlJS;
 using namespace KDevelop;

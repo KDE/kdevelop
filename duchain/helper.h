@@ -20,7 +20,7 @@
 #define QMLJSDUCHAINHELPERS_H_
 
 #include <language/duchain/declaration.h>
-#include <libs/qmljs/parser/qmljsast_p.h>
+#include <qmljs/parser/qmljsast_p.h>
 
 #include "duchainexport.h"
 

@@ -1,5 +1,3 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
-
 qt5_wrap_ui(uifiles_SRCS
 	utils/projectintropage.ui
 	utils/filewizardpage.ui

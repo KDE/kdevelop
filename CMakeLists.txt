@@ -20,19 +20,10 @@ find_package(KF5 REQUIRED COMPONENTS ItemModels ThreadWeaver TextEditor Declarat
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
 find_package(KDevelop REQUIRED)
 
-configure_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/version.h"
-  @ONLY
-)
-
 enable_testing()
 
 include_directories(
-    ${KDEVPLATFORM_INCLUDE_DIR}
     ${KDEVELOP_INCLUDE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/libs
 )
 

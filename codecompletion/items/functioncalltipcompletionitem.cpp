@@ -21,8 +21,8 @@
  */
 #include "functioncalltipcompletionitem.h"
 
-#include <duchain/helper.h>
-#include <duchain/functiontype.h>
+#include "../../duchain/helper.h"
+#include "../../duchain/functiontype.h"
 
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/duchain/duchainutils.h>
