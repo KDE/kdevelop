@@ -143,7 +143,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context)
     return extension;
 }
 
-void SwitchToBuddyPlugin::createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions)
+void SwitchToBuddyPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/, QString& xmlFile, KActionCollection& actions)
 {
     xmlFile = this->xmlFile();
 

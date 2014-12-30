@@ -152,7 +152,7 @@ void ColorCache::generateColors()
   m_colors.append(m_foregroundColor);
 }
 
-void ColorCache::slotDocumentActivated(IDocument* doc)
+void ColorCache::slotDocumentActivated()
 {
   KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
   ifDebug(qCDebug(LANGUAGE) << "doc activated:" << doc;)
@@ -177,7 +177,6 @@ void ColorCache::updateColorsFromView(KTextEditor::View* view)
     // require a View... kill me for that mess
     return;
   }
-  KTextEditor::Document* doc = view->document();
 
   QColor foreground(QColor::Invalid);
   QColor background(QColor::Invalid);

@@ -97,7 +97,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
 
   private slots:
     /// if necessary, adapt to the colors of this document
-    void slotDocumentActivated(KDevelop::IDocument*);
+    void slotDocumentActivated();
     /// settings got changed, update to the settings of the sender
     void slotViewSettingsChanged();
 
