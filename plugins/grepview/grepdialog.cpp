@@ -22,9 +22,8 @@
 #include <QMenu>
 
 #include <kconfiggroup.h>
-#include <kfiledialog.h>
+#include <QFileDialog>
 #include <QPushButton>
-#include <kiconloader.h>
 #include <KLocalizedString>
 #include <kconfig.h>
 #include <kmessagebox.h>
@@ -186,9 +185,8 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
 void GrepDialog::selectDirectoryDialog()
 {
-    QString dirName = KFileDialog::getExistingDirectory(QUrl::fromLocalFile(searchPaths->lineEdit()->text()),
-                                                        this, tr("Select directory to search in"));
-
+    const QString dirName = QFileDialog::getExistingDirectory(this, tr("Select directory to search in"),
+                                                              searchPaths->lineEdit()->text());
     if (!dirName.isEmpty()) {
         setSearchLocations(dirName);
     }

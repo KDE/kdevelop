@@ -16,7 +16,6 @@
 #include "grepviewplugin.h"
 #include "greputil.h"
 
-#include <kglobalsettings.h>
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/document.h>
 #include <KLocalizedString>
@@ -26,6 +25,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>
+#include <QFontDatabase>
 
 
 using namespace KDevelop;
@@ -149,7 +149,7 @@ QVariant GrepOutputItem::data ( int role ) const {
         QString end   = text().right(text().length() - m_change->m_range.end().column()).toHtmlEscaped();
         return QVariant(QString(start + repl + end).trimmed());
     } else if (role == Qt::FontRole) {
-        return KGlobalSettings::fixedFont();
+        return QFontDatabase::systemFont(QFontDatabase::FixedFont);
     } else {
         return QStandardItem::data(role);
     }
