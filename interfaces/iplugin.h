@@ -19,25 +19,21 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
 #ifndef KDEVPLATFORM_IPLUGIN_H
 #define KDEVPLATFORM_IPLUGIN_H
 
 #include <QtCore/QObject>
 #include <QtCore/QList>
-#include <QtCore/QPointer>
-#include <QtCore/QPair>
 
 #include <KXMLGUIClient>
 #include <KTextEditor/Plugin>
 
-#include "interfacesexport.h"
 #include "configpage.h"
-
-class KComponentData;
-class QAction;
+#include "interfacesexport.h"
 
 namespace Sublime {
-    class MainWindow;
+class MainWindow;
 }
 
 /**
@@ -52,9 +48,11 @@ namespace KDevelop
 {
 
 class ICore;
+class ConfigPage;
 class Context;
 class ContextMenuExtension;
 struct ProjectConfigOptions;
+
 /**
  * The base class for all KDevelop plugins.
  *
@@ -266,5 +264,5 @@ private:
 };
 
 }
-#endif
 
+#endif

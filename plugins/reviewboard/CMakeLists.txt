@@ -10,4 +10,4 @@ set(kdevreviewboard_PART_SRCS
 )
 ki18n_wrap_ui(kdevreviewboard_PART_SRCS reviewpatch.ui)
 kdevplatform_add_plugin(kdevreviewboard JSON kdevreviewboard.json SOURCES ${kdevreviewboard_PART_SRCS})
-target_link_libraries(kdevreviewboard KDev::Interfaces KDev::Vcs KF5::I18n KF5::KDELibs4Support Qt5::Core)
+target_link_libraries(kdevreviewboard KDev::Interfaces KDev::Vcs KF5::I18n Qt5::Core)

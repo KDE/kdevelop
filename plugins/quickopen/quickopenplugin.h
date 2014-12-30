@@ -24,6 +24,7 @@
 
 #include <QtCore/QVariant>
 #include <QtCore/QTimer>
+#include <QPointer>
 #include <QMenu>
 #include <QTime>
 

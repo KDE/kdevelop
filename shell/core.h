@@ -25,7 +25,6 @@
 #include <interfaces/icore.h>
 
 class KAboutData;
-class KSplashScreen;
 
 namespace KDevelop {
 

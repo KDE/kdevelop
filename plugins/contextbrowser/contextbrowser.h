@@ -28,6 +28,7 @@
 #include <QMap>
 #include <QList>
 #include <QUrl>
+#include <QPointer>
 
 #include <KTextEditor/TextHintInterface>
 #include <interfaces/iplugin.h>
