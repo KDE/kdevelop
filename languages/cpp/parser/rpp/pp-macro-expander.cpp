@@ -432,7 +432,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
         //Eventually execute a function-macro
           
         IndexedString previous = IndexedString::fromIndex(indexFromCharacter(' ')); //Previous already has been expanded
-        uint stepsBack = 0;
+        int stepsBack = 0;
         while(isSpace(previous.index()) && output.peekLastOutput(stepsBack)) {
           previous = IndexedString::fromIndex(output.peekLastOutput(stepsBack));
           ++stepsBack;
