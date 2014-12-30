@@ -25,10 +25,7 @@
 #include <QDBusConnection>
 #include <QDBusMessage>
 #include <QtCore/QDebug>
-
-#include <kprocess.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
+#include <QProcess>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -40,30 +37,18 @@
 
 using namespace KDevelop;
 
-////////////////////// Fixture ///////////////////////////////////////////////
-
 void TestPluginController::initTestCase()
 {
-    // This is needed so we don't have to install our test plugin, adds kdevplatform/shell/tests and builddir/lib to the KDEDIRS variable
-    KGlobal::dirs()->addResourceDir( "module", TEST_BIN_DIR "/../../lib" );
-    KGlobal::dirs()->addResourceDir( "services", TEST_BIN_DIR);
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QString dirs = env.value("XDG_DATA_DIRS");
+    dirs.prepend(QString(TEST_BIN_DIR":"));
+    env.insert("XDG_DATA_DIRS", dirs);
 
-    qDebug() << "module dirs:" << KGlobal::dirs()->resourceDirs("module");
-    QString kdedirs = "";
-    QStringList env = QProcess::systemEnvironment();
-    for( int i = 0; i < env.count(); i++ )
-    {
-        if( env[i].startsWith("XDG_DATA_DIRS=") )
-        {
-            kdedirs = env[i].mid(14);
-            break;
-        }
-    }
-    kdedirs = QString(TEST_BIN_DIR":")+kdedirs;
-    KProcess p;
-    p.setEnv( "XDG_DATA_DIRS", kdedirs, true );
-    p.setProgram( "kbuildsycoca5" );
-    p.execute();
+    QProcess p;
+    p.setProcessEnvironment(env);
+    p.setProgram("kbuildsycoca5");
+    p.start();
+    QVERIFY(p.waitForFinished());
 
     AutoTestShell::init();
     TestCore::initialize( Core::NoUi );
