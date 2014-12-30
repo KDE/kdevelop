@@ -473,14 +473,14 @@ QPair<TopDUContextPointer, KTextEditor::Range> CppLanguageSupport::importedConte
   int pos = 0;
   for(; pos < word.size(); ++pos) {
     if(word[pos] == '"' || word[pos] == '<') {
-      wordRange.start().setColumn(++pos);
+      wordRange.start() = wordRange.start() + KTextEditor::Cursor(0, ++pos);
       break;
     }
   }
 
   for(; pos < word.size(); ++pos) {
     if(word[pos] == '"' || word[pos] == '>') {
-      wordRange.end().setColumn(pos);
+      wordRange.end() = KTextEditor::Cursor(wordRange.end().line(), pos);
       break;
     }
   }

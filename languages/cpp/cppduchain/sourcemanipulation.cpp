@@ -273,7 +273,7 @@ KTextEditor::Range SourceCodeInsertion::insertionRange(int line)
     {
       range.start() = m_context->rangeInCurrentRevision().end();
       if(range.start().column() > 0)
-        range.start().setColumn(range.start().column() - 1);
+        range.start() = range.start() - KTextEditor::Cursor(0, 1);
       range.end() = range.start();
     }
     return range;
