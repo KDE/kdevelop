@@ -142,7 +142,7 @@ class KDEVCPPRPP_EXPORT Stream
     uint popLastOutput();
     
     ///Allows peeking at the items that were added to the output recently
-    uint peekLastOutput(uint backOffset = 0) const;
+    uint peekLastOutput(int backOffset = 0) const;
 
     ///Returns the cursor that points to the current input position.
     Anchor inputPosition() const;
