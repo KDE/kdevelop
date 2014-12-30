@@ -642,13 +642,13 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
         QByteArray symbol = m_session->token_stream->symbolByteArray(token);
         if (symbol.startsWith('L')) {
           charType->setDataType(IntegralType::TypeWchar_t);
-          symbol.right(symbol.size() - 1);
+          symbol.remove(0, 1);
         } else if (symbol.startsWith('u')) {
           charType->setDataType(IntegralType::TypeChar16_t);
-          symbol.right(symbol.size() - 1);
+          symbol.remove(0, 1);
         } else if (symbol.startsWith('U')) {
           charType->setDataType(IntegralType::TypeChar32_t);
-          symbol.right(symbol.size() - 1);
+          symbol.remove(0, 1);
         }
         if (symbol.size() == 4) {
           if (symbol == "'\\t'") {
