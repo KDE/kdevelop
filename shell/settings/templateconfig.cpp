@@ -37,7 +37,7 @@ TemplateConfig::TemplateConfig(QWidget* parent)
 
     foreach (KDevelop::IPlugin* plugin, KDevelop::ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.ITemplateProvider")) {
         if (KDevelop::ITemplateProvider* provider = plugin->extension<KDevelop::ITemplateProvider>()) {
-            ui->ktabwidget->addTab(new TemplatePage(provider), provider->icon(), provider->name());
+            ui->tabWidget->addTab(new TemplatePage(provider), provider->icon(), provider->name());
         }
     }
 }
@@ -73,6 +73,3 @@ void TemplateConfig::defaults()
 void TemplateConfig::reset()
 {
 }
-
-
-#include "templateconfig.moc"

@@ -219,16 +219,6 @@
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
   </customwidget>
-  <customwidget>
-   <class>QPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QListWidget</class>
-   <extends>QListWidget</extends>
-   <header>klistwidget.h</header>
-  </customwidget>
  </customwidgets>
  <resources/>
  <connections/>
