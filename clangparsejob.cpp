@@ -145,6 +145,14 @@ ProjectFileItem* findProjectFileItem(const IndexedString& url, bool* hasBuildSys
     return file;
 }
 
+QString languageStandard(KSharedConfigPtr cfg)
+{
+    auto grp = cfg->group("Defines And Includes").group("Compiler");
+    auto standard = grp.readEntry("Standard", QStringLiteral("c++11"));
+    // QStringLiteral("c++11") shouldn't be here, but surprisingly grp.readEntry can return empty string even if the default value is set.
+    return standard.isEmpty() ? QStringLiteral("c++11") : standard;
+}
+
 ClangParsingEnvironmentFile* parsingEnvironmentFile(const TopDUContext* context)
 {
     return dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data());
@@ -175,9 +183,11 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
     if (auto file = findProjectFileItem(tuUrl, &hasBuildSystemInfo)) {
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(file));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(file));
+        m_environment.setLanguageStandard(languageStandard(file->project()->projectConfiguration()));
     } else {
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(tuUrl.str()));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(tuUrl.str()));
+        m_environment.setLanguageStandard(QStringLiteral("c++11"));
     }
     const bool isSource = ClangHelpers::isSource(tuUrl.str());
     m_environment.setQuality(

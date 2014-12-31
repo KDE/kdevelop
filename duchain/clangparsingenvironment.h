@@ -78,6 +78,10 @@ public:
     void setQuality(Quality quality);
     Quality quality() const;
 
+    void setLanguageStandard(const QString& standard);
+
+    QString languageStandard() const;
+
     /**
      * Hash all contents of this environment and return the result.
      *
@@ -100,6 +104,7 @@ private:
     KDevelop::Path m_pchInclude;
     KDevelop::IndexedString m_tuUrl;
     Quality m_quality = Unknown;
+    QString m_languageStandard;
 };
 
 #endif // CLANGPARSINGENVIRONMENT_H

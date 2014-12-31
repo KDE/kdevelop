@@ -122,6 +122,7 @@ uint ClangParsingEnvironment::hash() const
     }
 
     hash << qHash(m_pchInclude);
+    hash << qHash(m_languageStandard);
     return hash;
 }
 
@@ -131,5 +132,16 @@ bool ClangParsingEnvironment::operator==(const ClangParsingEnvironment& other) c
         && m_includes == other.m_includes
         && m_pchInclude == other.m_pchInclude
         && m_quality == other.m_quality
-        && m_tuUrl == other.m_tuUrl;
+        && m_tuUrl == other.m_tuUrl
+        && m_languageStandard == other.m_languageStandard;
+}
+
+void ClangParsingEnvironment::setLanguageStandard(const QString& standard)
+{
+    m_languageStandard = standard;
+}
+
+QString ClangParsingEnvironment::languageStandard() const
+{
+    return m_languageStandard;
 }

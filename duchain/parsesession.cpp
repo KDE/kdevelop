@@ -46,33 +46,25 @@ using namespace KDevelop;
 
 namespace {
 
-QVector<const char*> argsForSession(const QString& path, ParseSessionData::Options options)
+QVector<const char*> argsForSession(const QString& path, ParseSessionData::Options options, QByteArray& languageStandard)
 {
-    if (options & ParseSessionData::PrecompiledHeader) {
-        static const QVector<const char*> pchArgs {"-std=c++11", "-xc++-header", "-Wall", "-nostdinc", "-nostdinc++"};
-        return pchArgs;
-    }
-
-    static const std::map<QString, QVector<const char*>> mimeToArgs = {
-        {
-            QStringLiteral("text/x-csrc"), { "-std=c11", "-Wall", "-nostdinc", "-nostdinc++" }
-        },
-        {
-            QStringLiteral("text/x-c++src"), { "-std=c++11", "-xc++", "-Wall", "-nostdinc", "-nostdinc++" }
-        },
-        {
-            QStringLiteral("text/x-objcsrc"), {"-xobjective-c++"}
-        }
-    };
-
     QMimeDatabase db;
-    QString mimeType = db.mimeTypeForFile(path).name();
-    auto res = mimeToArgs.find(mimeType);
-
-    if (res != mimeToArgs.end()) {
-      return res->second;
+    if(db.mimeTypeForFile(path).name() == QStringLiteral("text/x-objcsrc")) {
+        return {"-xobjective-c++"};
     }
-    return mimeToArgs.find(QStringLiteral("text/x-c++src"))->second;
+
+    Q_ASSERT(!languageStandard.isEmpty());
+    languageStandard = "-std=" + languageStandard;
+
+    if (options & ParseSessionData::PrecompiledHeader) {
+        return {languageStandard.data(), languageStandard.contains("++") ? "-xc++-header" : "-xc-header", "-Wall", "-nostdinc", "-nostdinc++"};
+    }
+
+    if(!languageStandard.contains("++")) {
+        return { languageStandard.data(), "-Wall", "-nostdinc", "-nostdinc++" };
+    }
+
+    return { languageStandard.data(), "-xc++", "-Wall", "-nostdinc", "-nostdinc++" };
 }
 
 void addIncludes(QVector<const char*>* args, QVector<QByteArray>* otherArgs,
@@ -125,7 +117,8 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     const auto tuUrl = environment.translationUnitUrl();
     Q_ASSERT(!tuUrl.isEmpty());
 
-    QVector<const char*> args = argsForSession(tuUrl.str(), options);
+    auto languageStandard = environment.languageStandard().toLocal8Bit();
+    QVector<const char*> args = argsForSession(tuUrl.str(), options, languageStandard);
     if (!options.testFlag(DisableSpellChecking)) {
         // TODO: Check whether this slows down parsing noticably
         // also see http://lists.cs.uiuc.edu/pipermail/cfe-commits/Week-of-Mon-20100705/032025.html
