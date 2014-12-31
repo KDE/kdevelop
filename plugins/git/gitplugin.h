@@ -144,6 +144,19 @@ public:
     virtual void registerRepositoryForCurrentBranchChanges(const KUrl& repository);
 
     KDevelop::CheckInRepositoryJob* isInRepository(KTextEditor::Document* document);
+
+    // this indicates whether the diff() function will generate a diff (patch) which
+    // includes the working copy directory name or not (in which case git diff is called
+    // with --no-prefix).
+    bool usePrefix() const
+    {
+        return m_usePrefix;
+    }
+
+    void setUsePrefix(bool p)
+    {
+        m_usePrefix = p;
+    }
 protected:
   
     KUrl repositoryRoot(const KUrl& path);
@@ -202,6 +215,7 @@ private:
     QString m_errorDescription;
     KDirWatch* m_watcher;
     KUrl::List m_branchesChange;
+    bool m_usePrefix;
 };
 
 QVariant runSynchronously(KDevelop::VcsJob* job);

@@ -132,7 +132,7 @@ void HttpCall::start()
 
     connect(m_reply, SIGNAL(finished()), SLOT(finished()));
 
-    qDebug() << "starting..." << m_requrl << m_post;
+    qDebug() << "starting... requrl=" << m_requrl << "post=" << m_post;
 }
 
 QVariant HttpCall::result() const

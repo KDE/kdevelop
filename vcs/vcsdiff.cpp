@@ -36,8 +36,9 @@ public:
     QHash<VcsLocation,QString> rightTexts;
     KUrl baseDiff;
     QString diff;
-    VcsDiff::Type type;
-    VcsDiff::Content content;
+    VcsDiff::Type type = VcsDiff::DiffDontCare;
+    VcsDiff::Content content = VcsDiff::Text;
+    uint depth = 0;
 };
 
 VcsDiff::VcsDiff()
@@ -53,14 +54,7 @@ VcsDiff::~VcsDiff()
 VcsDiff::VcsDiff( const VcsDiff& rhs )
     : d(new VcsDiffPrivate)
 {
-    d->leftBinaries = rhs.d->leftBinaries;
-    d->rightBinaries = rhs.d->rightBinaries;
-    d->leftTexts = rhs.d->leftTexts;
-    d->rightTexts = rhs.d->rightTexts;
-    d->diff = rhs.d->diff;
-    d->type = rhs.d->type;
-    d->content =  rhs.d->content;
-    d->baseDiff =  rhs.d->baseDiff;
+    *d = *rhs.d;
 }
 
 bool VcsDiff::isEmpty() const
@@ -163,16 +157,9 @@ void VcsDiff::setContentType( VcsDiff::Content c )
 
 VcsDiff& VcsDiff::operator=( const VcsDiff& rhs)
 {
-    if(this == &rhs)
-        return *this;
-    d->content = rhs.d->content;
-    d->type = rhs.d->type;
-    d->leftBinaries = rhs.d->leftBinaries;
-    d->rightBinaries = rhs.d->rightBinaries;
-    d->leftTexts = rhs.d->leftTexts;
-    d->rightTexts = rhs.d->rightTexts;
-    d->diff = rhs.d->diff;
-    d->baseDiff = rhs.d->baseDiff;
+    if (this != &rhs) {
+        *d = *rhs.d;
+    }
     return *this;
 }
 
@@ -181,21 +168,19 @@ KUrl VcsDiff::baseDiff() const
     return d->baseDiff;
 }
 
+uint VcsDiff::depth() const
+{
+    return d->depth;
+}
+
 void VcsDiff::setBaseDiff(const KUrl& url) const
 {
     d->baseDiff=url;
 }
 
-void VcsDiff::clear()
+void VcsDiff::setDepth(const uint depth) const
 {
-//     d->content;
-//     d->type;
-    d->leftBinaries.clear();
-    d->rightBinaries.clear();
-    d->leftTexts.clear();
-    d->rightTexts.clear();
-    d->diff.clear();
-    d->baseDiff.clear();
+    d->depth = depth;
 }
 
 

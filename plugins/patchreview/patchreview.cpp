@@ -552,6 +552,7 @@ void PatchReviewPlugin::exporterSelected( QAction* action ) {
 
     if( exporter ) {
         qDebug() << "exporting patch" << exporter << action->text();
+        // for git projects, m_patch will be a VCSDiffPatchSource instance
         exporter->extension<IPatchExporter>()->exportPatch( patch() );
     }
 }

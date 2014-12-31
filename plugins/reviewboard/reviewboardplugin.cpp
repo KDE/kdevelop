@@ -123,6 +123,7 @@ void ReviewBoardPlugin::reviewCreated(KJob* j)
 {
     if (j->error()==0) {
         ReviewBoard::NewRequest const * job = qobject_cast<ReviewBoard::NewRequest*>(j);
+        // for git projects, m_source will be a VCSDiffPatchSource instance
         ReviewBoard::SubmitPatchRequest* submitPatchJob=new ReviewBoard::SubmitPatchRequest(job->server(), m_source->file(), m_baseDir, job->requestId());
         connect(submitPatchJob, SIGNAL(finished(KJob*)), SLOT(reviewDone(KJob*)));
         submitPatchJob->start();

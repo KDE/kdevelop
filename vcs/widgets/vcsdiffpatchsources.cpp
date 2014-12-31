@@ -164,6 +164,10 @@ QString VCSDiffPatchSource::name() const {
     return m_name;
 }
 
+uint VCSDiffPatchSource::depth() const {
+    return m_depth;
+}
+
 void VCSDiffPatchSource::updateFromDiff(VcsDiff vcsdiff)
 {
     if(!m_file.isValid())
@@ -189,7 +193,8 @@ void VCSDiffPatchSource::updateFromDiff(VcsDiff vcsdiff)
     m_name = "VCS Diff";
     m_base = vcsdiff.baseDiff();
     m_base.addPath("/");
-    
+    m_depth = vcsdiff.depth();
+
     emit patchChanged();
 }
 
