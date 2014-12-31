@@ -23,6 +23,8 @@
 
 #include "icompiler.h"
 
+#include <QDebug>
+
 using namespace KDevelop;
 
 ICompiler::ICompiler(const QString& name, const QString& path, const QString& factoryName, bool editable):
@@ -35,9 +37,8 @@ ICompiler::ICompiler(const QString& name, const QString& path, const QString& fa
 void ICompiler::setPath(const QString& path)
 {
     if (editable()) {
-        m_definesIncludes.definedMacros.clear();
-        m_definesIncludes.includePaths.clear();
         m_path = path;
+        clearCache();
     }
 }
 
@@ -66,4 +67,20 @@ bool ICompiler::editable() const
 QString ICompiler::factoryName() const
 {
     return m_factoryName;
+}
+
+bool ICompiler::setLanguageStandard(const QString& standard)
+{
+    if (supportedStandards().contains(standard)) {
+        m_standard = standard;
+        clearCache();
+        return true;
+    }
+
+    return false;
+}
+
+QString ICompiler::languageStandard() const
+{
+    return m_standard;
 }

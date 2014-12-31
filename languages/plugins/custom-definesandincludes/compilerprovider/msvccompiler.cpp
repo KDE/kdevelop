@@ -128,3 +128,12 @@ Path::List MsvcCompiler::includes() const
 MsvcCompiler::MsvcCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName):
     ICompiler(name, path, factoryName, editable)
 {}
+
+QStringList MsvcCompiler::supportedStandards() const
+{
+    //TODO: query compiler for supported standards somehow
+    return {};
+}
+
+void MsvcCompiler::clearCache()
+{}

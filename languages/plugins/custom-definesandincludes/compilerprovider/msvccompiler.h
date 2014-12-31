@@ -34,6 +34,11 @@ public:
     virtual KDevelop::Defines defines() const override;
 
     virtual KDevelop::Path::List includes() const override;
+
+    virtual QStringList supportedStandards() const override;
+
+protected:
+    virtual void clearCache() override;
 };
 
 #endif // MSVCCOMPILER_H

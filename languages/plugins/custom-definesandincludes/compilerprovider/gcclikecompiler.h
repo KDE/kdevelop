@@ -34,6 +34,22 @@ public:
     virtual KDevelop::Defines defines() const override;
 
     virtual KDevelop::Path::List includes() const override;
+
+    virtual QStringList supportedStandards() const override;
+
+    /// Helper function to retrieve compiler standards without creating a compiler
+    static QStringList supportedStandards(const QString& path);
+
+protected:
+    virtual void clearCache();
+
+private:
+    struct DefinesIncludes {
+        KDevelop::Defines definedMacros;
+        KDevelop::Path::List includePaths;
+    };
+
+    mutable DefinesIncludes m_definesIncludes;
 };
 
 #endif // GCCLIKECOMPILER_H

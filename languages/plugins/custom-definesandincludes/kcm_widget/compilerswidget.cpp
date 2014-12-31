@@ -76,6 +76,7 @@ CompilersWidget::CompilersWidget(QWidget* parent)
 
     connect(m_ui->compilerName, &QLineEdit::editingFinished, this, &CompilersWidget::compilerEdited);
     connect(m_ui->compilerPath, &QLineEdit::editingFinished, this, &CompilersWidget::compilerEdited);
+    connect(m_ui->languageStandard, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &CompilersWidget::compilerEdited);
 
     connect(m_ui->compilerSelector, &QPushButton::clicked, this, &CompilersWidget::selectCompilerPathDialog);
 
@@ -136,8 +137,12 @@ void CompilersWidget::compilerSelected(const QModelIndex& index)
 {
     auto compiler = index.data(CompilersModel::CompilerDataRole);
     if (compiler.value<CompilerPointer>()) {
+        m_ui->languageStandard->clear();
+        m_ui->languageStandard->addItems(compiler.value<CompilerPointer>()->supportedStandards());
+
         m_ui->compilerName->setText(compiler.value<CompilerPointer>()->name());
         m_ui->compilerPath->setText(compiler.value<CompilerPointer>()->path());
+        m_ui->languageStandard->setCurrentText(compiler.value<CompilerPointer>()->languageStandard());
         enableItems(true);
     } else {
         enableItems(false);
@@ -156,6 +161,7 @@ void CompilersWidget::compilerEdited()
 
     compiler.value<CompilerPointer>()->setName(m_ui->compilerName->text());
     compiler.value<CompilerPointer>()->setPath(m_ui->compilerPath->text());
+    compiler.value<CompilerPointer>()->setLanguageStandard(m_ui->languageStandard->currentText());
 
     m_compilersModel->updateCompiler(m_ui->compilers->selectionModel()->selection());
 }
@@ -174,6 +180,7 @@ void CompilersWidget::enableItems(bool enable)
 {
     m_ui->compilerName->setEnabled(enable);
     m_ui->compilerPath->setEnabled(enable);
+    m_ui->languageStandard->setEnabled(enable);
     m_ui->compilerSelector->setEnabled(enable);
 
     if(!enable) {

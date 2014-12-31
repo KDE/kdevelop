@@ -286,5 +286,3 @@ void ProjectPathsWidget::tabChanged(int idx)
         ui->compilerBox->setVisible(false);
     }
 }
-
-

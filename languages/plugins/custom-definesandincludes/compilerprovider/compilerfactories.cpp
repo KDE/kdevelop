@@ -22,14 +22,14 @@
  */
 
 #include "compilerfactories.h"
+#include "compilerprovider.h"
 
 #include "gcclikecompiler.h"
 #include "msvccompiler.h"
 
 QString ClangFactory::name() const
 {
-    // TODO KF5: use QStringLiteral
-    return "Clang";
+    return QStringLiteral("Clang");
 }
 
 CompilerPointer ClangFactory::createCompiler(const QString& name, const QString& path, bool editable ) const
@@ -37,10 +37,25 @@ CompilerPointer ClangFactory::createCompiler(const QString& name, const QString&
     return CompilerPointer(new GccLikeCompiler(name, path, editable, this->name()));
 }
 
+void ClangFactory::registerDefaultCompilers(CompilerProvider* provider) const
+{
+    const QString clang = QStringLiteral("clang");
+    if (GccLikeCompiler::supportedStandards(clang).contains("c++11")) {
+        auto compiler = createCompiler("Clang c++11", clang, false);
+        compiler->setLanguageStandard("c++11");
+        provider->registerCompiler(compiler);
+    }
+
+    if (GccLikeCompiler::supportedStandards(clang).contains("c99")) {
+        auto compiler = createCompiler("Clang c99", clang, false);
+        compiler->setLanguageStandard("c99");
+        provider->registerCompiler(compiler);
+    }
+}
+
 QString GccFactory::name() const
 {
-    // TODO KF5: use QStringLiteral
-    return "GCC";
+    return QStringLiteral("GCC");
 }
 
 CompilerPointer GccFactory::createCompiler(const QString& name, const QString& path, bool editable ) const
@@ -48,13 +63,33 @@ CompilerPointer GccFactory::createCompiler(const QString& name, const QString& p
     return CompilerPointer(new GccLikeCompiler(name, path, editable, this->name()));
 }
 
+void GccFactory::registerDefaultCompilers(CompilerProvider* provider) const
+{
+    const QString gcc = QStringLiteral("gcc");
+    if (GccLikeCompiler::supportedStandards(gcc).contains("c++11")) {
+        auto compiler = createCompiler("GCC c++11", gcc, false);
+        compiler->setLanguageStandard("c++11");
+        provider->registerCompiler(compiler);
+    }
+
+    if (GccLikeCompiler::supportedStandards(gcc).contains("c99")) {
+        auto compiler = createCompiler("GCC c99", gcc, false);
+        compiler->setLanguageStandard("c99");
+        provider->registerCompiler(compiler);
+    }
+}
+
 QString MsvcFactory::name() const
 {
-    // TODO KF5: use QStringLiteral
-    return "MSVC";
+    return QStringLiteral("MSVC");
 }
 
 CompilerPointer MsvcFactory::createCompiler(const QString& name, const QString& path, bool editable ) const
 {
    return CompilerPointer(new MsvcCompiler(name, path, editable, this->name()));
+}
+
+void MsvcFactory::registerDefaultCompilers(CompilerProvider* provider) const
+{
+    provider->registerCompiler(createCompiler("MSVC", "cl.exe", false));
 }

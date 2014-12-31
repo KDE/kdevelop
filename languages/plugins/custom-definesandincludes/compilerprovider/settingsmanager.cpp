@@ -48,6 +48,7 @@ const QString compilersGroup = QLatin1String( "Compilers" );
 const QString compilerNameKey = QLatin1String( "Name" );
 const QString compilerPathKey = QLatin1String( "Path" );
 const QString compilerTypeKey = QLatin1String( "Type" );
+const QString compilerStandardKey = QLatin1String( "Standard" );
 }
 
 namespace
@@ -232,7 +233,9 @@ CompilerPointer SettingsManager::currentCompiler( KConfig* cfg, const CompilerPo
     auto cf = m_provider.compilerFactories();
     for (auto f : cf) {
         if (f->name() == type) {
-            return f->createCompiler(name, path, true);
+            auto compiler = f->createCompiler(name, path, true);
+            compiler->setLanguageStandard(grp.readEntry(ConfigConstants::compilerStandardKey, QString()));
+            return compiler;
         }
     }
 
@@ -251,6 +254,7 @@ void SettingsManager::writeCurrentCompiler(KConfig* cfg, const CompilerPointer& 
     grp.writeEntry(ConfigConstants::compilerNameKey, compiler->name());
     grp.writeEntry(ConfigConstants::compilerPathKey, compiler->path());
     grp.writeEntry(ConfigConstants::compilerTypeKey, compiler->factoryName());
+    grp.writeEntry(ConfigConstants::compilerStandardKey, compiler->languageStandard());
 }
 
 void SettingsManager::writeUserDefinedCompilers(const QVector< CompilerPointer >& compilers)
@@ -274,6 +278,7 @@ void SettingsManager::writeUserDefinedCompilers(const QVector< CompilerPointer >
         grp.writeEntry(ConfigConstants::compilerNameKey, compiler->name());
         grp.writeEntry(ConfigConstants::compilerPathKey, compiler->path());
         grp.writeEntry(ConfigConstants::compilerTypeKey, compiler->factoryName());
+        grp.writeEntry(ConfigConstants::compilerStandardKey, compiler->languageStandard());
     }
     config.sync();
 }
@@ -294,7 +299,9 @@ QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
         auto cf = m_provider.compilerFactories();
         for (auto f : cf) {
             if (f->name() == type) {
-                compilers.append(f->createCompiler(name, path));
+                auto compiler = f->createCompiler(name, path);
+                compiler->setLanguageStandard(grp.readEntry(ConfigConstants::compilerStandardKey, QString()));
+                compilers.append(compiler);
             }
         }
     }

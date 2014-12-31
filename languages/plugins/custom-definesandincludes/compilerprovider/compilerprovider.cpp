@@ -58,6 +58,14 @@ public:
     {
         return {};
     }
+
+    virtual QStringList supportedStandards() const override
+    {
+        return {};
+    }
+
+    virtual void clearCache() override
+    {}
 };
 }
 
@@ -72,14 +80,14 @@ CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
 #endif
 
     if (!QStandardPaths::findExecutable( "gcc" ).isEmpty()) {
-        registerCompiler( m_factories[0]->createCompiler("GCC", "gcc", false) );
+        m_factories[0]->registerDefaultCompilers(this);
     }
     if (!QStandardPaths::findExecutable( "clang" ).isEmpty()) {
-        registerCompiler( m_factories[1]->createCompiler("Clang", "clang", false) );
+        m_factories[1]->registerDefaultCompilers(this);
     }
 #ifdef _WIN32
     if (!QStandardPaths::findExecutable("cl.exe").isEmpty()) {
-        registerCompiler(m_factories[2]->createCompiler("MSVC", "cl.exe", false));
+        m_factories[2]->registerDefaultCompilers(this);
     }
 #endif
 
@@ -176,7 +184,7 @@ void CompilerProvider::addProject( KDevelop::IProject* project )
     if ( compiler && ( compiler->name() != name ) ) {
         m_settings->writeCurrentCompiler(projectConfig, compiler);
     }
-    definesAndIncludesDebug() << " compiler is: " << compiler->name();
+    definesAndIncludesDebug() << "compiler is:" << compiler->name() << "standard:" << compiler->languageStandard();
 
     addPoject( project, compiler );
 }

@@ -26,6 +26,7 @@
 #include <QDir>
 #include <QProcess>
 #include <QRegExp>
+#include <QMap>
 
 #include "../debugarea.h"
 
@@ -36,6 +37,71 @@
 #endif
 
 using namespace KDevelop;
+
+enum class CompilerStandard
+{
+    C90 = 0,
+    C99,
+    C11,
+
+    CPP_98,
+    CPP_03,
+    CPP_11,
+    CPP_14,
+
+    DEFAULT = CPP_11
+};
+
+namespace
+{
+
+QMap<CompilerStandard, QString> languageStandards()
+{
+    //TODO: query compiler for supported standards instead
+    static QMap<CompilerStandard, QString> standards {
+        {CompilerStandard::C90, "c90"},
+        {CompilerStandard::C99, "c99"},
+        {CompilerStandard::C11, "c11"},
+
+        {CompilerStandard::CPP_98, "c++98"},
+        {CompilerStandard::CPP_03, "c++03"},
+        {CompilerStandard::CPP_11, "c++11"},
+        {CompilerStandard::CPP_14, "c++14"},
+    };
+
+    return standards;
+}
+
+QString compilerStandardToString(CompilerStandard standard)
+{
+    if(languageStandards().contains(standard)) {
+        return languageStandards().value(standard);
+    }
+
+    Q_ASSERT(0);
+    return "Invalid";
+}
+
+CompilerStandard stringToCompilerStandard(const QString& standard)
+{
+    return languageStandards().key(standard, CompilerStandard::DEFAULT);
+}
+
+QString languageOption(CompilerStandard standard)
+{
+    if (standard < CompilerStandard::CPP_98) {
+        return QStringLiteral("-xc");
+    }
+
+    return QStringLiteral("-xc++");
+}
+
+QString standardOption(CompilerStandard standard)
+{
+    return QStringLiteral("-std=") + compilerStandardToString(standard);
+}
+
+}
 
 Defines GccLikeCompiler::defines() const
 {
@@ -50,7 +116,9 @@ Defines GccLikeCompiler::defines() const
     QProcess proc;
     proc.setProcessChannelMode( QProcess::MergedChannels );
 
-    proc.start( path(), {"-std=c++11", "-xc++", "-dM", "-E", NULL_DEVICE} );
+    const auto standard = stringToCompilerStandard(languageStandard());
+    proc.start( path(), {standardOption(standard), languageOption(standard), "-dM", "-E", NULL_DEVICE} );
+
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
         definesAndIncludesDebug() <<  "Unable to read standard macro definitions from "<< path();
         return {};
@@ -88,7 +156,9 @@ Path::List GccLikeCompiler::includes() const
     //  /usr/lib/gcc/i486-linux-gnu/4.1.2/include
     //  /usr/include
     // End of search list.
-    proc.start( path(), {"-std=c++11", "-xc++", "-E", "-v", NULL_DEVICE} );
+    const auto standard = stringToCompilerStandard(languageStandard());
+    proc.start( path(), {standardOption(standard), languageOption(standard), "-E", "-v", NULL_DEVICE} );
+
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
         definesAndIncludesDebug() <<  "Unable to read standard include paths from " << path();
         return {};
@@ -138,5 +208,20 @@ Path::List GccLikeCompiler::includes() const
 
 GccLikeCompiler::GccLikeCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName):
     ICompiler(name, path, factoryName, editable)
+{}
+
+QStringList GccLikeCompiler::supportedStandards() const
 {
+    return languageStandards().values();
+}
+
+void GccLikeCompiler::clearCache()
+{
+    m_definesIncludes.includePaths.clear();
+    m_definesIncludes.definedMacros.clear();
+}
+
+QStringList GccLikeCompiler::supportedStandards(const QString& /*path*/)
+{
+    return languageStandards().values();
 }

@@ -64,20 +64,33 @@ public:
     /// @return name of the factory that created this compiler
     QString factoryName() const;
 
+    /**
+     * sets language standard to @p standard
+     * @return true if compiler supports given standard
+     * @sa supportedStandards
+     */
+    bool setLanguageStandard(const QString& standard);
+
+    /// @return current language standard
+    QString languageStandard() const;
+
+    /**
+     * @return list of all language standard, that current compiler supports
+     */
+    virtual QStringList supportedStandards() const = 0;
+
     virtual ~ICompiler() = default;
 
-protected:
-    struct DefinesIncludes {
-        KDevelop::Defines definedMacros;
-        KDevelop::Path::List includePaths;
-    };
-    // list of defines/includes for the compiler. Use it for caching purposes
-    mutable DefinesIncludes m_definesIncludes;
+protected :
+    /// Called when includes/defines cache must be cleared. E.g. when path to the compiler/standard changes
+    virtual void clearCache() = 0;
 
+private:
     bool m_editable;
     QString m_name;
     QString m_path;
     QString m_factoryName;
+    QString m_standard;
 };
 
 typedef QSharedPointer<ICompiler> CompilerPointer;

@@ -26,6 +26,8 @@
 
 #include "icompiler.h"
 
+class CompilerProvider;
+
 /// Interface that represents a factory for creating compilers
 class ICompilerFactory
 {
@@ -35,6 +37,12 @@ public:
     ///@return new compiler
     ///@see ICompiler
     virtual CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const = 0;
+
+    /**
+     * registers default compilers for the @p provider
+     * E.g. for gcc default compilers could be "gcc c99" and "gcc c++11"
+     */
+    virtual void registerDefaultCompilers(CompilerProvider* provider) const = 0;
 
     virtual ~ICompilerFactory() = default;
 };
