@@ -22,7 +22,6 @@
 
 #include "qmljsparsejob.h"
 #include "qmljshighlighting.h"
-#include "version.h"
 #include "codecompletion/model.h"
 #include "navigation/propertypreviewwidget.h"
 
