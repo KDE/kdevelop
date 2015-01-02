@@ -37,6 +37,7 @@
 #include "../interfaces/ipartcontroller.h"
 #include <interfaces/idebugsession.h>
 #include <interfaces/ibreakpointcontroller.h>
+#include <interfaces/isession.h>
 #include "util/debug.h"
 #include "breakpoint.h"
 #include <KConfigCore/KSharedConfig>
@@ -90,13 +91,10 @@ BreakpointModel::BreakpointModel(QObject* parent)
     connect (KDevelop::ICore::self()->documentController(),
                 &IDocumentController::documentSaved,
                 this, &BreakpointModel::documentSaved);
-    load();
 }
 
 BreakpointModel::~BreakpointModel()
 {
-    save();
-
     qDeleteAll(m_breakpoints);
 }
 
@@ -250,6 +248,7 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
     }
     endRemoveRows();
     updateMarks();
+    scheduleSave();
     return true;
 }
 
@@ -410,6 +409,8 @@ void BreakpointModel::reportChange(Breakpoint* breakpoint, Breakpoint::Column co
         Q_ASSERT(row != -1);
         controller->breakpointModelChanged(row, ColumnFlags(1 << column));
     }
+
+    scheduleSave();
 }
 
 uint BreakpointModel::breakpointType(Breakpoint *breakpoint)
@@ -498,7 +499,7 @@ void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document*
 
 void BreakpointModel::load()
 {
-    KConfigGroup breakpoints = KSharedConfig::openConfig()->group("breakpoints");
+    KConfigGroup breakpoints = ICore::self()->activeSession()->config()->group("Breakpoints");
     int count = breakpoints.readEntry("number", 0);
     if (count == 0)
         return;
@@ -514,7 +515,9 @@ void BreakpointModel::load()
 
 void BreakpointModel::save()
 {
-    KConfigGroup breakpoints = KSharedConfig::openConfig()->group("breakpoints");
+    m_dirty = false;
+
+    KConfigGroup breakpoints = ICore::self()->activeSession()->config()->group("Breakpoints");
     breakpoints.writeEntry("number", m_breakpoints.count());
     int i = 0;
     foreach (Breakpoint *b, m_breakpoints) {
@@ -523,6 +526,15 @@ void BreakpointModel::save()
         ++i;
     }
     breakpoints.sync();
+}
+
+void BreakpointModel::scheduleSave()
+{
+    if (m_dirty)
+        return;
+
+    m_dirty = true;
+    QTimer::singleShot(0, this, SLOT(save()));
 }
 
 QList<Breakpoint*> KDevelop::BreakpointModel::breakpoints() const
@@ -612,6 +624,7 @@ void BreakpointModel::registerBreakpoint(Breakpoint* breakpoint)
     if (IBreakpointController* controller = breakpointController()) {
         controller->breakpointAdded(row);
     }
+    scheduleSave();
 }
 
 Breakpoint* BreakpointModel::breakpoint(const QUrl& url, int line) {

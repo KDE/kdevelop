@@ -117,6 +117,7 @@ DebugController::DebugController(QObject *parent)
 
 void DebugController::initialize()
 {
+    m_breakpointModel->load();
 }
 
 void DebugController::initializeUi()

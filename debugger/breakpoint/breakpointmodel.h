@@ -184,11 +184,13 @@ private:
     void notifyHit(int row);
 
     void registerBreakpoint(Breakpoint* breakpoint);
+    void scheduleSave();
 
     void reportChange(Breakpoint *breakpoint, Breakpoint::Column column);
     uint breakpointType(Breakpoint *breakpoint);
     Breakpoint *breakpoint(const QUrl& url, int line);
 
+    bool m_dirty = false;
     bool m_dontUpdateMarks;
     QList<Breakpoint*> m_breakpoints;
 };
