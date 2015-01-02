@@ -711,8 +711,6 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
         return;
     }
 
-    //Indicates if program state should be reloaded immediately.
-    bool updateState = false;
     bool wasInterrupt = false;
 
     if (reason == "signal-received")
@@ -744,6 +742,9 @@ void DebugSession::slotProgramStopped(const GDBMI::AsyncRecord& r)
         // is implemented, we can't change thread id until we refresh
         // the entire list of threads -- otherwise we might set a thread
         // id that is not already in the list, and it will be upset.
+
+        //Indicates if program state should be reloaded immediately.
+        bool updateState = false;
 
         if (r.hasField("frame")) {
             const GDBMI::Value& frame = r["frame"];

@@ -38,14 +38,14 @@ void FunctionCommandHandler::handle(const ResultRecord& r)
 
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, const QString& command, CommandFlags flags)
-: type_(type), flags_(flags & ~CmdHandlesError), token_(0), command_(command), commandHandler_(0),
+: type_(type), flags_(flags & ~CmdHandlesError), command_(command), commandHandler_(0),
   stateReloading_(false), m_thread(-1), m_frame(-1)
 {
 }
 
 GDBCommand::GDBCommand(CommandType type, const QString& arguments, GDBCommandHandler* handler,
                        CommandFlags flags)
-: type_(type), flags_(flags), token_(0), command_(arguments), commandHandler_(handler),
+: type_(type), flags_(flags), command_(arguments), commandHandler_(handler),
   stateReloading_(false), m_thread(-1), m_frame(-1)
 {
 }
@@ -54,7 +54,6 @@ GDBCommand::GDBCommand(CommandType type, const QString& arguments,
                        const FunctionCommandHandler::Function& callback, CommandFlags flags)
     : type_(type)
     , flags_(flags & ~CmdHandlesError)
-    , token_(0)
     , command_(arguments)
     , commandHandler_(new FunctionCommandHandler(callback, flags))
     , stateReloading_(false)

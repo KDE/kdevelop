@@ -69,7 +69,6 @@
 #include "processselection.h"
 #endif
 #include "memviewdlg.h"
-#include "gdbparser.h"
 #include "gdboutputwidget.h"
 #include "gdbglobal.h"
 #include "debugsession.h"
@@ -269,7 +268,6 @@ void CppDebuggerPlugin::slotCloseDrKonqi()
 
 CppDebuggerPlugin::~CppDebuggerPlugin()
 {
-    GDBParser::destroy();
 }
 
 

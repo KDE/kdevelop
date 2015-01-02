@@ -201,7 +201,7 @@ public:
 private:
     GDBMI::CommandType type_;
     CommandFlags flags_;
-    uint32_t token_;
+    uint32_t token_ = 0;
     QString command_;
     GDBCommandHandler *commandHandler_;
     QStringList lines;
