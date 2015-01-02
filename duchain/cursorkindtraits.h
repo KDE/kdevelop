@@ -268,6 +268,15 @@ constexpr bool isIdentifiedType(CXCursorKind CK)
     return isClass(CK) || isAliasType(CK) || CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl;
 }
 
+constexpr const char* delayedTypeName(CXTypeKind TK)
+{
+    return TK == CXType_Int128  ? "__int128"
+         : TK == CXType_UInt128 ? "unsigned __int128"
+         : TK == CXType_ObjCId  ? "id"
+         : TK == CXType_ObjCSel ? "SEL"
+         : 0;
+}
+
 }
 
 #endif //CURSORKINDTRAITS_H
