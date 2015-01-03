@@ -160,7 +160,7 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
         }
 
         QList<KJob*> l;
-        KJob* depjob = m_execute->dependecyJob(cfg);
+        KJob* depjob = m_execute->dependencyJob(cfg);
         if( depjob )
         {
             l << depjob;
