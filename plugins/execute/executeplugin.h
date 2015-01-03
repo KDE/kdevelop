@@ -59,7 +59,7 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     QUrl executable( KDevelop::ILaunchConfiguration*, QString& err ) const;
     QStringList arguments( KDevelop::ILaunchConfiguration*, QString& err ) const;
     QUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const;
-    KJob* dependecyJob( KDevelop::ILaunchConfiguration* ) const;
+    KJob* dependencyJob( KDevelop::ILaunchConfiguration* ) const;
     QString environmentGroup( KDevelop::ILaunchConfiguration* ) const;
     bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
     QString terminal( KDevelop::ILaunchConfiguration* ) const;
