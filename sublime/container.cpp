@@ -485,11 +485,18 @@ void Container::contextMenu( const QPoint& pos )
 
     QMenu menu;
 
-    emit tabContextMenuRequested(viewForWidget(widget(currentTab)), &menu);
+    Sublime::View* view = viewForWidget(widget(currentTab));
+    emit tabContextMenuRequested(view, &menu);
 
     menu.addSeparator();
-    QAction* closeTabAction = menu.addAction( QIcon::fromTheme("document-close"), i18n( "Close File" ) );
-    QAction* closeOtherTabsAction = menu.addAction( QIcon::fromTheme("document-close"), i18n( "Close Other Files" ) );
+    QAction* closeTabAction = nullptr;
+    QAction* closeOtherTabsAction = nullptr;
+    if (view) {
+        closeTabAction = menu.addAction(QIcon::fromTheme("document-close"),
+                                        i18n("Close File"));
+        closeOtherTabsAction = menu.addAction(QIcon::fromTheme("document-close"),
+                                              i18n("Close Other Files"));
+    }
     QAction* closeAllTabsAction = menu.addAction( QIcon::fromTheme("document-close"), i18n( "Close All Files" ) );
 
     QAction* triggered = menu.exec(senderWidget->mapToGlobal(pos));

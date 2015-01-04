@@ -358,12 +358,14 @@ void MainWindowPrivate::tabContextMenuRequested(Sublime::View* view, QMenu* menu
 
     connect(action, &QAction::triggered, this, &MainWindowPrivate::contextMenuFileNew);
 
-    if ( TextDocument* doc = dynamic_cast<TextDocument*>(view->document()) ) {
-        action = menu->addAction(QIcon::fromTheme("view-refresh"), i18n("Reload"));
-        connect(action, &QAction::triggered, doc, &TextDocument::reload);
+    if (view) {
+        if (TextDocument* doc = dynamic_cast<TextDocument*>(view->document())) {
+            action = menu->addAction(QIcon::fromTheme("view-refresh"), i18n("Reload"));
+            connect(action, &QAction::triggered, doc, &TextDocument::reload);
 
-        action = menu->addAction(QIcon::fromTheme("view-refresh"), i18n("Reload All"));
-        connect(action, &QAction::triggered, this, &MainWindowPrivate::reloadAll);
+            action = menu->addAction(QIcon::fromTheme("view-refresh"), i18n("Reload All"));
+            connect(action, &QAction::triggered, this, &MainWindowPrivate::reloadAll);
+        }
     }
 }
 
