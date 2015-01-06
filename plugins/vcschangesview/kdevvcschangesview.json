@@ -48,6 +48,7 @@
         "Description[x-test]": "xxThis plugin provides integration between the projects and their VCS infrastructurexx", 
         "Description[zh_CN]": "Este 'plugin' oferece a integração entre os projectos e a sua infra-estrutura de controlo de versões", 
         "Description[zh_TW]": "Este plugin fornece a integração entre os projetos e sua infraestrutura de VCS", 
+        "Icon": "git",
         "Id": "kdevvcschangesviewplugin", 
         "License": "GPL", 
         "Name": "VCS Integration", 
