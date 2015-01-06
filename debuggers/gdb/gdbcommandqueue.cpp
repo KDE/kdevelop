@@ -33,21 +33,17 @@ CommandQueue::~CommandQueue()
     qDeleteAll(m_commandList);
 }
 
-void GDBDebugger::CommandQueue::enqueue(GDBCommand * command, QueuePosition insertPosition)
+void CommandQueue::enqueue(GDBCommand* command)
 {
     ++m_tokenCounter;
     if (m_tokenCounter == 0)
         m_tokenCounter = 1;
     command->setToken(m_tokenCounter);
 
-    switch (insertPosition) {
-        case QueueAtFront:
-            m_commandList.prepend(command);
-            break;
-        case QueueAtEnd:
-            m_commandList.append(command);
-            break;
-    }
+    m_commandList.append(command);
+
+    if (command->flags() & (CmdImmediately | CmdInterrupt))
+        ++m_immediatelyCounter;
 
     rationalizeQueue(command);
 }
@@ -59,38 +55,54 @@ void CommandQueue::rationalizeQueue(GDBCommand * command)
       removeVariableUpdates();
 }
 
-void GDBDebugger::CommandQueue::removeVariableUpdates()
+void CommandQueue::removeVariableUpdates()
 {
     QMutableListIterator<GDBCommand*> it = m_commandList;
 
     while (it.hasNext()) {
-        CommandType type = it.next()->type();
-        if ((type >= VarEvaluateExpression && type <= VarListChildren) || type == VarUpdate)
+        GDBCommand* command = it.next();
+        CommandType type = command->type();
+        if ((type >= VarEvaluateExpression && type <= VarListChildren) || type == VarUpdate) {
+            if (command->flags() & (CmdImmediately | CmdInterrupt))
+                --m_immediatelyCounter;
             it.remove();
+            delete command;
+        }
     }
 }
 
-void GDBDebugger::CommandQueue::clear()
+void CommandQueue::clear()
 {
     qDeleteAll(m_commandList);
     m_commandList.clear();
+    m_immediatelyCounter = 0;
 }
 
-int GDBDebugger::CommandQueue::count() const
+int CommandQueue::count() const
 {
     return m_commandList.count();
 }
 
-bool GDBDebugger::CommandQueue::isEmpty() const
+bool CommandQueue::isEmpty() const
 {
     return m_commandList.isEmpty();
 }
 
-GDBCommand * GDBDebugger::CommandQueue::nextCommand()
+bool CommandQueue::haveImmediateCommand() const
 {
-    if (!m_commandList.isEmpty())
-        return m_commandList.takeAt(0);
+    return m_immediatelyCounter > 0;
+}
 
-    return 0;
+GDBCommand* CommandQueue::nextCommand()
+{
+    if (m_commandList.isEmpty())
+        return nullptr;
+
+    GDBCommand* command = m_commandList.takeAt(0);
+
+    if (command->flags() & (CmdImmediately | CmdInterrupt))
+        --m_immediatelyCounter;
+
+    return command;
 }
 

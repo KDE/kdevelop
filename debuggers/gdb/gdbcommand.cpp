@@ -20,23 +20,54 @@ using namespace GDBMI;
 namespace GDBDebugger
 {
 
-GDBCommand::GDBCommand(GDBMI::CommandType type, const QString &command)
-: type_(type), token_(0), command_(command), handler_method(0), commandHandler_(0),
-  stateReloading_(false), handlesError_(false), m_thread(-1), m_frame(-1)
+FunctionCommandHandler::FunctionCommandHandler(const FunctionCommandHandler::Function& callback, CommandFlags flags)
+    : _flags(flags)
+    , _callback(callback)
 {
 }
 
-GDBCommand::GDBCommand(GDBMI::CommandType type, int index)
-: type_(type), token_(0), command_(QString::number(index)), handler_method(0), commandHandler_(0),
-  stateReloading_(false), handlesError_(false), m_thread(-1), m_frame(-1)
+bool FunctionCommandHandler::handlesError()
 {
+    return _flags & CmdHandlesError;
 }
 
-GDBCommand::GDBCommand(CommandType type, const QString& arguments, GDBCommandHandler* handler)
-: type_(type), token_(0), command_(arguments), handler_method(0), commandHandler_(handler),
+void FunctionCommandHandler::handle(const ResultRecord& r)
+{
+    _callback(r);
+}
+
+
+GDBCommand::GDBCommand(GDBMI::CommandType type, const QString& command, CommandFlags flags)
+: type_(type), flags_(flags & ~CmdHandlesError), command_(command), commandHandler_(0),
   stateReloading_(false), m_thread(-1), m_frame(-1)
 {
-    handlesError_ = handler->handlesError();
+}
+
+GDBCommand::GDBCommand(CommandType type, const QString& arguments, GDBCommandHandler* handler,
+                       CommandFlags flags)
+: type_(type), flags_(flags), command_(arguments), commandHandler_(handler),
+  stateReloading_(false), m_thread(-1), m_frame(-1)
+{
+}
+
+GDBCommand::GDBCommand(CommandType type, const QString& arguments,
+                       const FunctionCommandHandler::Function& callback, CommandFlags flags)
+    : type_(type)
+    , flags_(flags & ~CmdHandlesError)
+    , command_(arguments)
+    , commandHandler_(new FunctionCommandHandler(callback, flags))
+    , stateReloading_(false)
+    , m_thread(-1)
+    , m_frame(-1)
+{
+}
+
+GDBCommand::~GDBCommand()
+{
+    if (commandHandler_ && commandHandler_->autoDelete()) {
+        delete commandHandler_;
+    }
+    commandHandler_ = nullptr;
 }
 
 QString GDBCommand::cmdToSend()
@@ -71,13 +102,17 @@ bool GDBCommand::isUserCommand() const
     return false;
 }
 
+void GDBCommand::setHandler(GDBCommandHandler* handler)
+{
+    if (commandHandler_ && commandHandler_->autoDelete())
+        delete commandHandler_;
+    commandHandler_ = handler;
+}
+
 bool
 GDBCommand::invokeHandler(const GDBMI::ResultRecord& r)
 {
-    if (handler_this) {
-        (handler_this.data()->*handler_method)(r);
-        return true;
-    } else if (commandHandler_) {
+    if (commandHandler_) {
         bool autoDelete = commandHandler_->autoDelete(); //ask before calling handler as it might deleted itself in handler
         commandHandler_->handle(r);
         if (autoDelete) {
@@ -102,39 +137,17 @@ const QStringList& GDBCommand::allStreamOutput() const
 
 bool GDBCommand::handlesError() const
 {
-    return handlesError_;
+    return commandHandler_ ? commandHandler_->handlesError() : false;
 }
-
-GDBCommand::~GDBCommand()
-{
-}
-
 
 UserCommand::UserCommand(GDBMI::CommandType type, const QString& s)
-: GDBCommand(type, s)
+: GDBCommand(type, s, CmdMaybeStartsRunning)
 {
 }
 
 bool UserCommand::isUserCommand() const
 {
     return true;
-}
-
-
-bool CliCommand::invokeHandler(const GDBMI::ResultRecord& r)
-{
-    // On error, do nothing.
-    if (r.reason != "done")
-        return true;
-
-    if (cli_handler_this) {
-        (cli_handler_this.data()->*cli_handler_method)(allStreamOutput());
-        return true;
-    }
-    else {
-        return false;
-    }
-
 }
 
 QString GDBCommand::gdbCommand() const
@@ -598,6 +611,5 @@ bool GDBCommand::stateReloading() const
 {
     return stateReloading_;
 }
-
 
 }

@@ -54,7 +54,6 @@ set(kdevgdb_SRCS
     gdb.cpp
     gdbcommandqueue.cpp
     gdbcommand.cpp
-    gdbparser.cpp
     stty.cpp
     disassemblewidget.cpp
     gdboutputwidget.cpp

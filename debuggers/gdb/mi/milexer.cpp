@@ -131,15 +131,12 @@ TokenStream *MILexer::tokenize(const FileSymbol *fileSymbol)
 
 int MILexer::nextToken(int &pos, int &len)
 {
-    int start = 0;
-    int kind = 0;
-    char ch = 0;
-
     while (m_ptr < m_length) {
-        start = m_ptr;
+        const int start = m_ptr;
 
-        ch = m_contents[m_ptr];
+        const char ch = m_contents[m_ptr];
         Q_ASSERT(ch >= 0);
+        int kind = 0;
         (this->*s_scan_table[static_cast<uchar>(ch)])(&kind);
 
         switch (kind) {
@@ -166,9 +163,8 @@ void MILexer::scanWhiteSpaces(int *kind)
 {
     *kind = Token_whitespaces;
 
-    char ch;
     while (m_ptr < m_length) {
-        ch = m_contents[m_ptr];
+        char ch = m_contents[m_ptr];
         if (!(isspace(ch) && ch != '\n'))
             break;
 
@@ -226,9 +222,8 @@ void MILexer::scanStringLiteral(int *kind)
 
 void MILexer::scanIdentifier(int *kind)
 {
-    char ch;
     while (m_ptr < m_length) {
-        ch = m_contents[m_ptr];
+        const char ch = m_contents[m_ptr];
         if (!(isalnum(ch) || ch == '-' || ch == '_'))
             break;
 
@@ -240,9 +235,8 @@ void MILexer::scanIdentifier(int *kind)
 
 void MILexer::scanNumberLiteral(int *kind)
 {
-    char ch;
     while (m_ptr < m_length) {
-        ch = m_contents[m_ptr];
+        const char ch = m_contents[m_ptr];
         if (!(isalnum(ch) || ch == '.'))
             break;
 
@@ -260,14 +254,10 @@ void TokenStream::positionAt(int position, int *line, int *column) const
 
     int first = 0;
     int len = m_line;
-    int half;
-    int middle;
 
     while (len > 0) {
-        half = len >> 1;
-        middle = first;
-
-        middle += half;
+        const int half = len >> 1;
+        const int middle = first + half;
 
         if (m_lines[middle] < position) {
             first = middle;

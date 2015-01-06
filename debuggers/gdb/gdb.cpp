@@ -45,7 +45,7 @@ Q_LOGGING_CATEGORY(DEBUGGERGDB, "kdevelop.debuggers.gdb")
 using namespace GDBDebugger;
 
 GDB::GDB(QObject* parent)
-: QObject(parent), process_(0), currentCmd_(0), isRunning_(false)
+: QObject(parent), process_(0), currentCmd_(0)
 {
 }
 
@@ -131,8 +131,6 @@ void GDB::execute(GDBCommand* command)
     QString commandText = currentCmd_->cmdToSend();
 
     qCDebug(DEBUGGERGDB) << "SEND:" << commandText.trimmed();
-
-    isRunning_ = false;
 
     QByteArray commandUtf8 = commandText.toUtf8();
 
@@ -273,12 +271,10 @@ void GDB::processLine(const QByteArray& line)
                 // Prefix '*'; asynchronous state changes of the target
                 if (async.reason == "stopped")
                 {
-                    isRunning_ = false;
                     emit programStopped(async);
                 }
                 else if (async.reason == "running")
                 {
-                    isRunning_ = true;
                     emit programRunning();
                 }
                 else
@@ -343,7 +339,6 @@ void GDB::processLine(const QByteArray& line)
                 "The MI response is: %2", e.what(),
                 QString::fromLatin1(line)),
             i18n("Internal debugger error"));
-        isRunning_ = false;
     }
     #endif
 }

@@ -42,9 +42,10 @@ namespace GDBDebugger
 using namespace KDevelop;
 
 class DebugSession;
-struct InsertedHandler;
-struct UpdateHandler;
-struct DeletedHandler;
+struct BreakpointData;
+
+typedef QSharedPointer<BreakpointData> BreakpointDataPtr;
+
 /**
 * Handles signals from the editor that relate to breakpoints and the execution
 * point of the debugger.
@@ -53,32 +54,56 @@ struct DeletedHandler;
 class BreakpointController : public IBreakpointController
 {
     Q_OBJECT
-
 public:
     BreakpointController(DebugSession* parent);
 
     using IBreakpointController::breakpointModel;
 
+    void initSendBreakpoints();
+
+    /**
+     * Controls whether when duplicate breakpoints are received via async notification from GDB,
+     * one of the duplicates will be deleted.
+     */
+    void setDeleteDuplicateBreakpoints(bool enable);
+
+    virtual void breakpointAdded(int row) override;
+    virtual void breakpointModelChanged(int row, BreakpointModel::ColumnFlags columns) override;
+    virtual void breakpointAboutToBeDeleted(int row) override;
+    virtual void debuggerStateChanged(IDebugSession::DebuggerState) override;
+
+    void notifyBreakpointCreated(const GDBMI::AsyncRecord& r);
+    void notifyBreakpointModified(const GDBMI::AsyncRecord& r);
+    void notifyBreakpointDeleted(const GDBMI::AsyncRecord& r);
+
 private Q_SLOTS:
-    void slotEvent(IDebugSession::event_t);
     void programStopped(const GDBMI::AsyncRecord &r);
 
 private:
     DebugSession* debugSession() const;
 
+    int breakpointRow(const BreakpointDataPtr& breakpoint);
+    void createGdbBreakpoint(int row);
+    void sendUpdates(int row);
+    void recalculateState(int row);
+
     virtual void sendMaybe(KDevelop::Breakpoint *breakpoint);
 
-    void handleBreakpointListInitial(const GDBMI::ResultRecord &r);
-    void handleBreakpointList(const GDBMI::ResultRecord &r);
+    void createFromGdb(const GDBMI::Value& miBkpt);
+    void updateFromGdb(int row, const GDBMI::Value& miBkpt, BreakpointModel::ColumnFlags lockedColumns = 0);
 
-    void update(KDevelop::Breakpoint *b, const GDBMI::Value& v);
+    int rowFromGdbId(int gdbId) const;
 
-    friend struct InsertedHandler;
-    friend struct UpdateHandler;
-    friend struct DeletedHandler;
-    
-    QMap<KDevelop::Breakpoint*, QString> m_ids;
-    bool m_interrupted;
+    struct Handler;
+    struct InsertedHandler;
+    struct UpdateHandler;
+    struct DeleteHandler;
+    struct IgnoreChanges;
+
+    QList<BreakpointDataPtr> m_breakpoints;
+    QList<BreakpointDataPtr> m_pendingDeleted;
+    int m_ignoreChanges = 0;
+    bool m_deleteDuplicateBreakpoints = false;
 };
 
 }

@@ -64,7 +64,7 @@ QStringList ExecutePlasmoidPlugin::arguments(ILaunchConfiguration* config, QStri
     return PlasmoidExecutionJob::arguments(config);
 }
 
-KJob* ExecutePlasmoidPlugin::dependecyJob(ILaunchConfiguration* config) const
+KJob* ExecutePlasmoidPlugin::dependencyJob(ILaunchConfiguration* config) const
 {
     return PlasmoidLauncher::calculateDependencies(config);
 }
