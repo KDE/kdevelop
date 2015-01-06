@@ -22,6 +22,8 @@
 #include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QDebug>
+#include <QMimeType>
+#include <QMimeDatabase>
 
 #include <ktar.h>
 #include <kzip.h>
@@ -51,7 +53,6 @@
 #include <vcs/vcsjob.h>
 #include <vcs/interfaces/icentralizedversioncontrol.h>
 #include <vcs/interfaces/idistributedversioncontrol.h>
-#include <util/mimetype.h>
 
 #include "appwizarddialog.h"
 #include "projectselectionpage.h"
@@ -415,7 +416,9 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
 bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QString &dest)
 {
     qCDebug(PLUGIN_APPWIZARD) << "copy:" << source << "to" << dest;
-    if( MimeType::isBinaryData(source) )
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForFile(source);
+    if( !mime.inherits("text/plain") )
     {
         KIO::CopyJob* job = KIO::copy( QUrl::fromUserInput(source), QUrl::fromUserInput(dest), KIO::HideProgressInfo );
         if( !job->exec() )

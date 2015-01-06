@@ -18,7 +18,6 @@ set(KDevPlatformUtil_LIB_SRCS
     executecompositejob.cpp
     fileutils.cpp
     shellutils.cpp
-    mimetype.cpp
     multilevellistview.cpp
     objectlist.cpp
     placeholderitemproxymodel.cpp
@@ -81,7 +80,6 @@ install( FILES
     executecompositejob.h
     convenientfreelist.h
     fileutils.h
-    mimetype.h
     multilevellistview.h
     objectlist.h
     placeholderitemproxymodel.h
