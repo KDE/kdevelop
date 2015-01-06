@@ -179,7 +179,7 @@ QDir urlDir(const QList<QUrl>& urls) { return urlDir(urls.first()); } //TODO: co
 }
 
 GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
-    : DistributedVersionControlPlugin(parent, "kdevgit"), m_oldVersion(false)
+    : DistributedVersionControlPlugin(parent, "kdevgit"), m_oldVersion(false), m_usePrefix(true)
 {
     if (QStandardPaths::findExecutable("git").isEmpty()) {
         m_hasError = true;
@@ -359,6 +359,11 @@ VcsJob* GitPlugin::diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision
     DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this, KDevelop::OutputJob::Silent);
     job->setType(VcsJob::Diff);
     *job << "git" << "diff" << "--no-color" << "--no-ext-diff";
+    if (!usePrefix()) {
+        // KDE's ReviewBoard now requires p1 patchfiles, so `git diff --no-prefix` to generate p0 patches
+        // has become optional.
+        *job << "--no-prefix";
+    }
     if(srcRevision.revisionType()==VcsRevision::Special
         && dstRevision.revisionType()==VcsRevision::Special
         && srcRevision.specialType()==VcsRevision::Base
@@ -1076,6 +1081,7 @@ void GitPlugin::parseGitDiffOutput(DVcsJob* job)
     VcsDiff diff;
     diff.setDiff(job->output());
     diff.setBaseDiff(repositoryRoot(QUrl::fromLocalFile(job->directory().absolutePath())));
+    diff.setDepth(usePrefix()? 1 : 0);
 
     job->setResults(qVariantFromValue(diff));
 }

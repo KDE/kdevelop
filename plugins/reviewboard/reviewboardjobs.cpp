@@ -137,7 +137,7 @@ void HttpCall::start()
 
     connect(m_reply, &QNetworkReply::finished, this, &HttpCall::onFinished);
 
-    qDebug() << "starting..." << m_requrl << m_post;
+    qDebug() << "starting... requrl=" << m_requrl << "post=" << m_post;
 }
 
 QVariant HttpCall::result() const

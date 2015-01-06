@@ -42,6 +42,10 @@ VcsOverlayProxyModel::VcsOverlayProxyModel(QObject* parent): QIdentityProxyModel
                                               this, &VcsOverlayProxyModel::addProject);
     connect(ICore::self()->projectController(), &IProjectController::projectClosing,
                                               this, &VcsOverlayProxyModel::removeProject);
+
+    foreach (auto project, ICore::self()->projectController()->projects()) {
+        addProject(project);
+    }
 }
 
 QVariant VcsOverlayProxyModel::data(const QModelIndex& proxyIndex, int role) const

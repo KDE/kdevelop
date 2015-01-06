@@ -103,9 +103,17 @@ public:
     
     /** @returns the base directory of the diff. */
     QUrl baseDiff() const;
-    
+
+	/**
+	 * Depth - number of directories to left-strip from paths in the patch - see "patch -p"
+     * Defaults to 0
+	 */
+    uint depth() const;
+
     /** Sets the base directory of the diff to the @p url */
     void setBaseDiff(const QUrl& url) const;
+    /** Sets the depth of the diff to @p depth */
+    void setDepth(const uint depth) const;
 
     void setDiff( const QString& );
     void addLeftBinary( const KDevelop::VcsLocation&, const QByteArray& );
@@ -125,8 +133,6 @@ public:
     /** @returns whether there are not changes on the diff */
     bool isEmpty() const;
     
-    /** Clears the diff information and it becomes an empty patch. */
-    void clear();
 private:
     class VcsDiffPrivate* const d;
 };

@@ -77,6 +77,8 @@ class KDEVPLATFORMVCS_EXPORT VCSDiffPatchSource : public KDevelop::IPatchSource 
 
     virtual QString name() const ;
 
+    virtual uint depth() const ;
+
     virtual void update() ;
 
     virtual bool isAlreadyApplied() const { return true; }
@@ -90,6 +92,7 @@ class KDEVPLATFORMVCS_EXPORT VCSDiffPatchSource : public KDevelop::IPatchSource 
     QMap<QUrl, KDevelop::VcsStatusInfo::State> m_selectable;
     private:
     void updateFromDiff(KDevelop::VcsDiff diff);
+    uint m_depth = 0;
 };
 
 class KDEVPLATFORMVCS_EXPORT VCSCommitDiffPatchSource : public VCSDiffPatchSource {
