@@ -218,17 +218,6 @@ void OutputWidget::changeModel( int id )
     {
         OutputData* od = data->outputdata.value(id);
         views.value( id )->setModel(od->model);
-
-        if (!od->model)
-            return;
-
-        disconnect( od->model,&QAbstractItemModel::rowsInserted, this,
-                    &OutputWidget::rowsInserted );
-        if( od->behaviour & KDevelop::IOutputView::AutoScroll )
-        {
-            connect( od->model,&QAbstractItemModel::rowsInserted,
-                     this, &OutputWidget::rowsInserted );
-        }
     }
     else
     {
@@ -275,11 +264,7 @@ void OutputWidget::removeOutput( int id )
                 filters.remove( 0 );
             }
         }
-        disconnect( data->outputdata.value( id )->model,&QAbstractItemModel::rowsInserted,
-                    this, &OutputWidget::rowsInserted );
-
         views.remove( id );
-        m_scrollDelay.remove( view );
         emit outputRemoved( data->toolViewId, id );
     }
     enableActions();
@@ -446,35 +431,36 @@ void OutputWidget::activate(const QModelIndex& index)
     activateIndex(index, view, iface);
 }
 
-static QTreeView* createFocusedTreeView( QWidget* parent )
-{
-    QTreeView* listview = new KDevelop::FocusedTreeView(parent);
-    listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
-    listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
-    listview->setHeaderHidden(true);
-    listview->setUniformRowHeights(true);
-    listview->setRootIsDecorated(false);
-    listview->setSelectionMode( QAbstractItemView::ContiguousSelection );
-
-    return listview;
-}
-
 QTreeView* OutputWidget::createListView(int id)
 {
+    auto createHelper = [&]() -> QTreeView* {
+        KDevelop::FocusedTreeView* listview = new KDevelop::FocusedTreeView(this);
+        listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
+        listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
+        listview->setHeaderHidden(true);
+        listview->setUniformRowHeights(true);
+        listview->setRootIsDecorated(false);
+        listview->setSelectionMode( QAbstractItemView::ContiguousSelection );
+
+        if (data->outputdata.value(id)->behaviour & KDevelop::IOutputView::AutoScroll) {
+            listview->setAutoScrollAtEnd(true);
+        }
+
+        connect(listview, &QTreeView::activated, this, &OutputWidget::activate);
+        connect(listview, &QTreeView::clicked, this, &OutputWidget::activate);
+
+        return listview;
+    };
+
     QTreeView* listview = 0;
-    bool newView = true;
     if( !views.contains(id) )
     {
+        bool newView = true;
+
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
         {
             qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "creating listview";
-            listview = createFocusedTreeView(this);
-
-            views[id] = listview;
-            connect( listview, &QTreeView::activated,
-                     this, &OutputWidget::activate);
-            connect( listview, &QTreeView::clicked,
-                     this, &OutputWidget::activate);
+            listview = createHelper();
 
             if( data->type & KDevelop::IOutputView::MultipleView )
             {
@@ -488,32 +474,22 @@ QTreeView* OutputWidget::createListView(int id)
         {
             if( views.isEmpty() )
             {
-                listview = createFocusedTreeView(this);
+                listview = createHelper();
 
                 layout()->addWidget( listview );
-                connect( listview, &QTreeView::activated,
-                         this, &OutputWidget::activate);
-                connect( listview, &QTreeView::clicked,
-                         this, &OutputWidget::activate);
             } else
             {
                 listview = views.begin().value();
                 newView = false;
             }
-            views[id] = listview;
         }
-
-        if (newView) {
-            auto timer = new QTimer(listview);
-            timer->setSingleShot(true);
-            timer->setInterval(300);
-            timer->setProperty("view", QVariant::fromValue(listview));
-            m_scrollDelay[listview] = {timer, -1, -1};
-            connect(timer, &QTimer::timeout, this, static_cast<void(OutputWidget::*)()>(&OutputWidget::delayedScroll));
-        }
+        views[id] = listview;
 
         changeModel( id );
         changeDelegate( id );
+
+        if (newView)
+            listview->scrollToBottom();
     } else
     {
         listview = views.value(id);
@@ -573,55 +549,6 @@ void OutputWidget::enableActions()
         previousAction->setEnabled( ( stackwidget->currentIndex() > 0 ) );
         nextAction->setEnabled( ( stackwidget->currentIndex() < stackwidget->count() - 1 ) );
     }
-}
-
-void OutputWidget::rowsInserted(const QModelIndex& parent, int from, int to) {
-    if (parent.isValid()) {
-        return;
-    }
-
-    auto model = qobject_cast<QAbstractItemModel*>(sender());
-    Q_ASSERT(model);
-
-    foreach (QTreeView* view, views) {
-        if (view->model() == model) {
-            auto& data = m_scrollDelay[view];
-            if (data.from == -1) {
-                data.from = from;
-            }
-            data.to = to;
-            if (!data.timer->isActive()) {
-                data.timer->start();
-            }
-        }
-    }
-}
-
-void OutputWidget::delayedScroll()
-{
-    auto timer = qobject_cast<QTimer*>(sender());
-    Q_ASSERT(timer);
-    auto view = timer->property("view").value<QTreeView*>();
-    Q_ASSERT(view);
-    delayedScroll(view);
-}
-
-void OutputWidget::delayedScroll(QTreeView* view)
-{
-    Q_ASSERT(m_scrollDelay.contains(view));
-    auto& data = m_scrollDelay[view];
-
-    QModelIndex pre = view->model()->index(data.from - 1, 0);
-    bool scroll = !pre.isValid();
-    if (!scroll && data.to == view->model()->rowCount() - 1) {
-        auto rect = view->visualRect(pre);
-        scroll = rect.isValid() && view->viewport()->rect().intersects(rect);
-    }
-    if (scroll) {
-        view->scrollToBottom();
-    }
-
-    data.from = -1;
 }
 
 void OutputWidget::scrollToIndex( const QModelIndex& idx )

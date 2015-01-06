@@ -77,12 +77,10 @@ Q_SIGNALS:
 private slots:
     void nextOutput();
     void previousOutput();
-    void rowsInserted(const QModelIndex&, int, int);
     void copySelection();
     void selectAll();
     void outputFilter(const QString& filter);
     void updateFilter(int index);
-    void delayedScroll();
 
 private:
     enum Direction {
@@ -100,16 +98,8 @@ private:
     void activateIndex(const QModelIndex& index, QAbstractItemView* view, KDevelop::IOutputViewModel* iface);
     void eventuallyDoFocus();
     int currentOutputIndex();
-    void delayedScroll(QTreeView* view);
 
     QMap<int, QTreeView*> views;
-    struct DelayData
-    {
-        QTimer* timer;
-        int from;
-        int to;
-    };
-    QMap<QTreeView*, DelayData> m_scrollDelay;
     QMap<int, QSortFilterProxyModel*> proxyModels;
     QMap<int, QString> filters;
     QTabWidget* tabwidget;

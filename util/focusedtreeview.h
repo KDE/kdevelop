@@ -21,6 +21,7 @@
 #ifndef KDEVPLATFORM_FOCUSEDTREEVIEW_H
 #define KDEVPLATFORM_FOCUSEDTREEVIEW_H
 
+#include <memory>
 #include <QTreeView>
 #include "utilexport.h"
 
@@ -30,6 +31,9 @@ namespace KDevelop {
  * Specialized version of QTreeView, that allows efficiently managing an extremely
  * long list of items, by focusing the size of the horizontal scroll-bars only on the currently
  * visible items.
+ *
+ * In addition, this class provides optional automatic scrolling when rows are inserted at the end.
+ *
  * @warning Either the scroll-mode ScrollPerItem must be enabled, or the uniformRowHeight flag, for this to work efficiently.
  * @warning This currently only works with flat list models(todo).
  */
@@ -37,10 +41,25 @@ class KDEVPLATFORMUTIL_EXPORT FocusedTreeView : public QTreeView {
     Q_OBJECT
     public:
         FocusedTreeView(QWidget* parent) ;
+        virtual ~FocusedTreeView();
+
+        /**
+         * When enabled, automatically scroll to bottom when new rows are inserted at the end
+         * and the end was previously visible. (Default: false)
+         */
+        void setAutoScrollAtEnd(bool enable);
+
+        virtual void setModel(QAbstractItemModel* model) override;
         virtual int sizeHintForColumn(int column) const override;
-        virtual void rowsInserted(const QModelIndex& parent, int start, int end) override;
+
     private Q_SLOTS:
-        void resizeColumnsToContents();
+        void rowsAboutToBeInserted(const QModelIndex& parent, int first, int last);
+        void rowsRemoved(const QModelIndex& parent, int first, int last);
+        void delayedAutoScrollAndResize();
+
+    private:
+        struct Private;
+        std::unique_ptr<Private> d;
 };
 
 }
