@@ -73,7 +73,7 @@ void VcsOverlayProxyModel::repositoryBranchChanged(const QUrl& url)
 {
     QList<IProject*> allProjects = ICore::self()->projectController()->projects();
     foreach(IProject* project, allProjects) {
-        if( url.isParentOf(project->folder())) {
+        if( url.isParentOf(project->folder()) || url.matches(project->folder(), QUrl::StripTrailingSlash)) {
             IPlugin* v = project->versionControlPlugin();
             Q_ASSERT(v);
             IBranchingVersionControl* branching = v->extension<IBranchingVersionControl>();
