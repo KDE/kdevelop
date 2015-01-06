@@ -472,85 +472,89 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     timer.start();
 
     KPluginInfo info = infoForPluginId( pluginId );
-    if ( !info.isValid() )
-    {
+    if ( !info.isValid() ) {
         qCWarning(SHELL) << "Unable to find a plugin named '" << pluginId << "'!" ;
-        return 0L;
+        return nullptr;
     }
 
-    if ( IPlugin* plugin = d->loadedPlugins.value( info ) )
+    if ( IPlugin* plugin = d->loadedPlugins.value( info ) ) {
         return plugin;
+    }
 
-    if( !isEnabled( info ) )
-    {
+    if ( !isEnabled( info ) ) {
         // Do not load disabled plugins
-        qWarning() << "Not loading plugin named" << pluginId << "because its been disabled!";
-        return 0;
+        qWarning() << "Not loading plugin named" << pluginId << "because it has been disabled!";
+        return nullptr;
     }
 
-    if( !hasMandatoryProperties( info ) ) {
-        qWarning() << "Unable to load plugin named " << pluginId << "! Doesn't have all mandatory properties set";
-        return 0;
+    if ( !hasMandatoryProperties( info ) ) {
+        qWarning() << "Unable to load plugin named" << pluginId << "because not all mandatory properties are set.";
+        return nullptr;
     }
 
-    if( info.property(KEY_Mode) == KEY_Gui
-        && Core::self()->setupFlags() == Core::NoUi )
-    {
-        qCDebug(SHELL) << "Not loading plugin named" << pluginId << "- Running in No-Ui mode, but the plugin says it needs a GUI";
-        return 0;
+    if ( info.property(KEY_Mode) == KEY_Gui && Core::self()->setupFlags() == Core::NoUi ) {
+        qCDebug(SHELL) << "Not loading plugin named" << pluginId
+                       << "- Running in No-Ui mode, but the plugin says it needs a GUI";
+        return nullptr;
     }
 
     qCDebug(SHELL) << "Attempting to load" << pluginId << "- name:" << info.name();
 
     emit loadingPlugin( info.pluginName() );
-    IPlugin *plugin = 0;
+
+    // first, ensure all dependencies are available and not disabled
+    // this is unrelated to whether they are loaded already or not
     QStringList missingInterfaces;
-    QString pluginLoadPath;
-    if ( checkForDependencies( info, missingInterfaces ) ) {
-
-        if (!missingInterfaces.isEmpty()) {
-            qCDebug(SHELL) << "Missing dependencies:" << missingInterfaces;
-        }
-
-        QString failedDependency;
-        if( !loadDependencies( info, failedDependency ) ) {
-            qWarning() << "Could not load a required dependency:" << failedDependency;
-            return 0;
-        }
-        loadOptionalDependencies( info );
-
-        KPluginLoader loader(info.service() ? *info.service() : KPluginName(info.libraryPath()));
-        auto factory = loader.factory();
-        if (factory) {
-            plugin = factory->create<IPlugin>(d->core);
-        } else {
-            qWarning() << "Could not obtain factory to load plugin" << pluginId << loader.errorString();
-        }
-        pluginLoadPath = loader.fileName();
+    if ( !checkForDependencies( info, missingInterfaces ) ) {
+        qWarning() << "Can't load plugin" << pluginId
+                   << "some of its required dependencies could not be fulfilled:"
+                   << missingInterfaces.join(",");
+        return nullptr;
     }
 
-    if ( plugin ) {
-        if ( plugin->hasError() ) {
-            qWarning() << i18n("Plugin '%1' could not be loaded correctly and was disabled.\nReason: %2.", info.name(), plugin->errorDescription());
-            info.setPluginEnabled(false);
-            info.save(Core::self()->activeSession()->config()->group(KEY_Plugins));
-            unloadPlugin(pluginId);
-            return 0;
-        }
-        d->loadedPlugins.insert( info, plugin );
-        info.setPluginEnabled( true );
-
-        qCDebug(SHELL) << "Successfully loaded plugin" << pluginId << "from" << pluginLoadPath << "- took:" << timer.elapsed() << "ms";
-        emit pluginLoaded( plugin );
-    } else {
-        if( !missingInterfaces.isEmpty() ) {
-            qWarning() << "Can't load plugin '" << pluginId
-                    << "' some of its required dependencies could not be fulfilled:" << endl
-                    << missingInterfaces.join(",") << endl;
-        } else {
-            qWarning() << "Loading plugin '" << pluginId << "' failed.";
-        }
+    // now ensure all dependencies are loaded
+    QString failedDependency;
+    if( !loadDependencies( info, failedDependency ) ) {
+        qWarning() << "Can't load plugin" << pluginId
+                   << "because a required dependency could not be loaded:" << failedDependency;
+        return nullptr;
     }
+
+    // same for optional dependencies, but don't error out if anything fails
+    loadOptionalDependencies( info );
+
+    // now we can finally load the plugin itself
+    KPluginLoader loader(info.service() ? *info.service() : KPluginName(info.libraryPath()));
+    auto factory = loader.factory();
+    if (!factory) {
+        qWarning() << "Can't load plugin" << pluginId
+                   << "because a factory to load the plugin could not be obtained:" << loader.errorString();
+        return nullptr;
+    }
+
+    // now create it
+    auto plugin = factory->create<IPlugin>(d->core);
+    if ( !plugin ) {
+        qWarning() << "Creating plugin" << pluginId << "failed.";
+        return nullptr;
+    }
+
+    // runtime errors such as missing executables on the system or such get checked now
+    if ( plugin->hasError() ) {
+        qWarning() << "Could not load plugin" << pluginId << ", it reported the error:" << plugin->errorDescription()
+                    << "Disabling the plugin now.";
+        info.setPluginEnabled(false);
+        info.save(Core::self()->activeSession()->config()->group(KEY_Plugins));
+        unloadPlugin(pluginId);
+        return nullptr;
+    }
+
+    // yay, it all worked - the plugin is loaded
+    d->loadedPlugins.insert( info, plugin );
+    info.setPluginEnabled( true );
+
+    qCDebug(SHELL) << "Successfully loaded plugin" << pluginId << "from" << loader.fileName() << "- took:" << timer.elapsed() << "ms";
+    emit pluginLoaded( plugin );
 
     return plugin;
 }
