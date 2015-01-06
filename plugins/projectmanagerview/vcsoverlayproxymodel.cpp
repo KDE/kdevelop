@@ -43,6 +43,10 @@ VcsOverlayProxyModel::VcsOverlayProxyModel(QObject* parent): QIdentityProxyModel
                                               SLOT(addProject(KDevelop::IProject*)));
     connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
                                               SLOT(removeProject(KDevelop::IProject*)));
+
+    foreach (auto project, ICore::self()->projectController()->projects()) {
+        addProject(project);
+    }
 }
 
 QVariant VcsOverlayProxyModel::data(const QModelIndex& proxyIndex, int role) const
