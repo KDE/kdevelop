@@ -19,6 +19,9 @@
  */
 
 #include "reviewboardjobs.h"
+
+#include "debug.h"
+
 #include <QJsonDocument>
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
@@ -137,7 +140,7 @@ void HttpCall::start()
 
     connect(m_reply, &QNetworkReply::finished, this, &HttpCall::onFinished);
 
-    qDebug() << "starting... requrl=" << m_requrl << "post=" << m_post;
+    qCDebug(PLUGIN_REVIEWBOARD) << "starting... requrl=" << m_requrl << "post=" << m_post;
 }
 
 QVariant HttpCall::result() const
@@ -152,7 +155,7 @@ void HttpCall::onFinished()
     QJsonParseError error;
     QJsonDocument parser = QJsonDocument::fromJson(receivedData, &error);
 
-//     qDebug() << "parsing..." << receivedData;
+//     qCDebug(PLUGIN_REVIEWBOARD) << "parsing..." << receivedData;
     if (error.error == 0) {
         m_result = parser.toVariant();
     } else {
@@ -183,7 +186,7 @@ void NewRequest::start()
 void NewRequest::done()
 {
     if (m_newreq->error()) {
-        qDebug() << "Could not create the new request" << m_newreq->errorString();
+        qCDebug(PLUGIN_REVIEWBOARD) << "Could not create the new request" << m_newreq->errorString();
         setError(2);
         setErrorText(i18n("Could not create the new request:\n%1", m_newreq->errorString()));
     } else {
@@ -215,7 +218,7 @@ void SubmitPatchRequest::start()
 void SubmitPatchRequest::done()
 {
     if (m_uploadpatch->error()) {
-        qDebug() << "Could not upload the patch" << m_uploadpatch->errorString();
+        qCDebug(PLUGIN_REVIEWBOARD) << "Could not upload the patch" << m_uploadpatch->errorString();
         setError(3);
         setErrorText(i18n("Could not upload the patch"));
     }
@@ -304,7 +307,7 @@ void ReviewListRequest::done(KJob* job)
     // TODO error
     // TODO max iterations
     if (job->error()) {
-        qDebug() << "Could not get reviews list" << job->errorString();
+        qCDebug(PLUGIN_REVIEWBOARD) << "Could not get reviews list" << job->errorString();
         setError(3);
         setErrorText(i18n("Could not get reviews list"));
         emitResult();
