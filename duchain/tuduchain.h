@@ -371,7 +371,7 @@ private:
     }
 
     template<CXTypeKind TK, EnableIf<CursorKindTraits::delayedTypeName(TK) != 0> = dummy>
-    AbstractType *createType(CXType, CXCursor parent)
+    AbstractType *createType(CXType, CXCursor /*parent*/)
     {
         auto t = new DelayedType;
         static const IndexedTypeIdentifier id(CursorKindTraits::delayedTypeName(TK));
