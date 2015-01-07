@@ -29,7 +29,6 @@
 #include "../../interfaces/icompletionsettings.h"
 #include "../../interfaces/idocument.h"
 #include "../../interfaces/idocumentcontroller.h"
-#include "../../interfaces/ilanguage.h"
 #include "../interfaces/ilanguagesupport.h"
 #include "../duchain/duchain.h"
 #include "../duchain/duchainlock.h"
@@ -266,20 +265,16 @@ void ColorCache::updateInternal()
 
   // rehighlight open documents
   foreach (IDocument* doc, ICore::self()->documentController()->openDocuments()) {
-    foreach ( ILanguage* lang, ICore::self()->languageController()->languagesForUrl(doc->url()) ) {
+    foreach (auto lang, ICore::self()->languageController()->languagesForUrl(doc->url())) {
+      ReferencedTopDUContext top;
+      {
+        DUChainReadLocker lock;
+        top = lang->standardContext(doc->url());
+      }
 
-      if ( ILanguageSupport* langSupport = lang->languageSupport() ) {
-
-        ReferencedTopDUContext top;
-        {
-          DUChainReadLocker lock;
-          top = langSupport->standardContext(doc->url());
-        }
-
-        if(top) {
-          if ( ICodeHighlighting* highlighting = langSupport->codeHighlighting() ) {
-            highlighting->highlightDUChain(top);
-          }
+      if(top) {
+        if ( ICodeHighlighting* highlighting = lang->codeHighlighting() ) {
+          highlighting->highlightDUChain(top);
         }
       }
     }

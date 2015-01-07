@@ -45,7 +45,6 @@
 #include <kactioncollection.h>
 #include <QAction>
 
-#include <interfaces/ilanguage.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -1026,20 +1025,6 @@ void QuickOpenPlugin::quickOpenDeclaration()
   core()->documentController()->openDocument(u.toUrl(), c);
 }
 
-///Returns all languages for that url that have a language support, and prints warnings for other ones.
-QList<KDevelop::ILanguage*> languagesWithSupportForUrl(QUrl url) {
-  QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
-  QList<KDevelop::ILanguage*> ret;
-  foreach( KDevelop::ILanguage* language, languages) {
-    if(language->languageSupport()) {
-      ret << language;
-    }else{
-      qCDebug(PLUGIN_QUICKOPEN) << "got no language-support for language" << language->name();
-    }
-  }
-  return ret;
-}
-
 QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
 {
   KTextEditor::View* view = ICore::self()->documentController()->activeTextDocumentView();
@@ -1048,8 +1033,9 @@ QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
 
   QUrl url = ICore::self()->documentController()->activeDocument()->url();
 
-  foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
-    QWidget* w = language->languageSupport()->specialLanguageObjectNavigationWidget(url, KTextEditor::Cursor(view->cursorPosition()) );
+  const auto languages = ICore::self()->languageController()->languagesForUrl(url);
+  foreach (auto language, languages) {
+    QWidget* w = language->specialLanguageObjectNavigationWidget(url, KTextEditor::Cursor(view->cursorPosition()) );
     if(w)
       return w;
   }
@@ -1064,9 +1050,9 @@ QPair<QUrl, KTextEditor::Cursor> QuickOpenPlugin::specialObjectJumpPosition() co
     return qMakePair(QUrl(), KTextEditor::Cursor());
 
   QUrl url = ICore::self()->documentController()->activeDocument()->url();
-
-  foreach( KDevelop::ILanguage* language, languagesWithSupportForUrl(url) ) {
-    QPair<QUrl, KTextEditor::Cursor> pos = language->languageSupport()->specialLanguageObjectJumpCursor(url, KTextEditor::Cursor(view->cursorPosition()) );
+  const auto languages = ICore::self()->languageController()->languagesForUrl(url);
+  foreach (auto language, languages) {
+    QPair<QUrl, KTextEditor::Cursor> pos = language->specialLanguageObjectJumpCursor(url, KTextEditor::Cursor(view->cursorPosition()) );
     if(pos.second.isValid()) {
       return pos;
     }

@@ -30,7 +30,6 @@
 #include <language/interfaces/ilanguagesupport.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <interfaces/ilanguage.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/isession.h>

@@ -29,7 +29,6 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <interfaces/ilanguage.h>
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
@@ -180,14 +179,14 @@ void StaticAssistantsManager::Private::eventuallyStartAssistant()
         return;
     }
 
-    ILanguage* language = ICore::self()->languageController()->languagesForUrl(m_eventualDocument.data()->url()).value(0);
+    auto language = ICore::self()->languageController()->languagesForUrl(m_eventualDocument.data()->url()).value(0);
     if (!language) {
         return;
     }
 
     qCDebug(LANGUAGE) << "Trying to find assistants for language" << language->name();
     foreach (auto assistant, m_registeredAssistants) {
-        if (assistant->supportedLanguage() != language->languageSupport())
+        if (assistant->supportedLanguage() != language)
             continue;
 
         // notify assistant about editor changes

@@ -11,7 +11,6 @@ set(KDevPlatformInterfaces_LIB_SRCS
     iprojectcontroller.cpp
     iproject.cpp
     ilanguagecontroller.cpp
-    ilanguage.cpp
     idocumentcontroller.cpp
     istatus.cpp
     iruncontroller.cpp
@@ -76,7 +75,6 @@ install(FILES
     iprojectcontroller.h
     iproject.h
     ilanguagecontroller.h
-    ilanguage.h
     idocument.h
     idocumentcontroller.h
     isourceformatter.h

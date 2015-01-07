@@ -46,7 +46,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagesupport.h>
 #include <interfaces/isession.h>
 #include <interfaces/iproject.h>
@@ -265,17 +264,14 @@ public:
     {
         ///FIXME: use IndexedString in the other APIs as well! Esp. for createParseJob!
         QUrl qUrl = url.toUrl();
-        QList<ILanguage*> languages = m_languageController->languagesForUrl(qUrl);
-        foreach (ILanguage* language, languages) {
+        auto languages = m_languageController->languagesForUrl(qUrl);
+        foreach (auto language, languages) {
             if(!language) {
                 qCWarning(LANGUAGE) << "got zero language for" << qUrl;
                 continue;
             }
-            if(!language->languageSupport()) {
-                qCWarning(LANGUAGE) << "language has no language support assigned:" << language->name();
-                continue;
-            }
-            ParseJob* job = language->languageSupport()->createParseJob(url);
+
+            ParseJob* job = language->createParseJob(url);
             if (!job) {
                 continue; // Language part did not produce a valid ParseJob.
             }

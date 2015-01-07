@@ -27,7 +27,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include "contextbrowserview.h"
-#include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/duchain/duchainutils.h>
@@ -198,13 +197,13 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 textCursor.setColumn(textCursor.column()-1);
 
             QUrl viewUrl = view->document()->url();
-            QList<ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
+            auto languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
 
             QPair<QUrl, KTextEditor::Cursor> jumpTo;
 
             //Step 1: Look for a special language object(Macro, included header, etc.)
-            foreach( ILanguage* language, languages) {
-                jumpTo = language->languageSupport()->specialLanguageObjectJumpCursor(viewUrl, KTextEditor::Cursor(textCursor));
+            foreach (auto language, languages) {
+                jumpTo = language->specialLanguageObjectJumpCursor(viewUrl, KTextEditor::Cursor(textCursor));
                 if(jumpTo.first.isValid() && jumpTo.second.isValid())
                     break; //Found a special object to jump to
             }

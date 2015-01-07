@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2008 David Nolden  <david.nolden.kdevelop@art-master.de>    *
+ *   Copyright 2014 Kevin Funk <kfunk@kde.org>                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -23,7 +24,24 @@
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 
+#include <QReadWriteLock>
+
 namespace KDevelop {
+
+class ILanguageSupportPrivate
+{
+public:
+    mutable QReadWriteLock lock;
+};
+
+ILanguageSupport::ILanguageSupport()
+    : d(new ILanguageSupportPrivate)
+{
+}
+
+ILanguageSupport::~ILanguageSupport()
+{
+}
 
 TopDUContext* ILanguageSupport::standardContext(const QUrl& url, bool proxyContext) {
   Q_UNUSED(proxyContext)
@@ -61,11 +79,6 @@ ICreateClassHelper* ILanguageSupport::createClassHelper() const {
     return 0;
 }
 
-
-ILanguage* ILanguageSupport::language() {
-    return ICore::self()->languageController()->language(name());
-}
-
 ILanguageSupport::WhitespaceSensitivity ILanguageSupport::whitespaceSensititivy() const
 {
     return ILanguageSupport::Insensitive;
@@ -78,7 +91,12 @@ SourceFormatterItemList ILanguageSupport::sourceFormatterItems() const
 
 QString ILanguageSupport::indentationSample() const
 {
-    return "";
+    return QString();
+}
+
+QReadWriteLock* ILanguageSupport::parseLock() const
+{
+    return &d->lock;
 }
 
 }

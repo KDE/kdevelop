@@ -170,7 +170,7 @@ void TestBackgroundparser::initTestCase()
 
   const auto languages = langController->languagesForUrl(QUrl::fromLocalFile("/foo.txt"));
   QCOMPARE(languages.size(), 1);
-  QCOMPARE(languages.first(), testLang->language());
+  QCOMPARE(languages.first(), testLang);
 }
 
 void TestBackgroundparser::cleanupTestCase()

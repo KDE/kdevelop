@@ -35,8 +35,8 @@ Boston, MA 02110-1301, USA.
 #include <KConfigGroup>
 
 #include <interfaces/iplugin.h>
-#include <interfaces/ilanguage.h>
 #include <interfaces/isourceformatter.h>
+#include <language/interfaces/ilanguagesupport.h>
 #include <shell/core.h>
 #include <shell/plugincontroller.h>
 #include <shell/languagecontroller.h>
@@ -134,9 +134,9 @@ void SourceFormatterSettings::reset()
     // Sort the languages, preferring firstly active, then loaded languages
     QList<QString> sortedLanguages;
 
-    foreach( KDevelop::ILanguage* language,
+    foreach(auto language,
                 KDevelop::ICore::self()->languageController()->activeLanguages() +
-                KDevelop::ICore::self()->languageController()->loadedLanguages() )
+                KDevelop::ICore::self()->languageController()->loadedLanguages())
     {
         if( languages.contains( language->name() ) && !sortedLanguages.contains(language->name()) ) {
             sortedLanguages.push_back( language->name() );

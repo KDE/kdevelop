@@ -37,7 +37,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/context.h>
-#include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
 
 #include <language/duchain/duchainutils.h>
@@ -50,6 +49,7 @@
 #include <language/codegen/codedescription.h>
 #include <language/codegen/sourcefiletemplate.h>
 #include <language/codegen/documentchangeset.h>
+#include <language/interfaces/ilanguagesupport.h>
 #include <project/projectmodel.h>
 
 Q_LOGGING_CATEGORY(PLUGIN_CODEUTILS, "kdevplatform.plugins.codeutils")
@@ -125,7 +125,7 @@ void CodeUtilsPlugin::documentDeclaration()
 
     // TODO: Choose the template based on the language
     QString templateName = "doxygen_cpp";
-    QList<ILanguage*> languages = core()->languageController()->languagesForUrl(view->document()->url());
+    auto languages = core()->languageController()->languagesForUrl(view->document()->url());
     if (!languages.isEmpty())
     {
         QString languageName = languages.first()->name();

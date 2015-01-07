@@ -27,7 +27,8 @@
 
 namespace KDevelop {
 
-class ILanguage;
+class ILanguageSupport;
+
 class BackgroundParser;
 class ICompletionSettings;
 class StaticAssistantsManager;
@@ -40,21 +41,29 @@ class KDEVPLATFORMINTERFACES_EXPORT ILanguageController: public QObject {
 public:
     ILanguageController(QObject *parent = 0);
 
-    /** @return the currently active languages loaded for the currently active file.
-    The list is empty if the file's language is unsupported. */
-    Q_SCRIPTABLE virtual QList<ILanguage*>activeLanguages() = 0;
-    /** @return the language for given @p name. */
-    Q_SCRIPTABLE virtual ILanguage* language(const QString &name) const = 0;
-    /** @return the languages that support the MIME type of @p url.
-      * @warning If this is called from within the foreground thread,
-      *          the language support is loaded if required.
-      *          If it is called from a background thread, it can not
-      *          be loaded, and thus zero will be returned.
-      * */
-    Q_SCRIPTABLE virtual QList<ILanguage*> languagesForUrl(const QUrl &url) = 0;
+    /**
+     * @return the currently active languages loaded for the currently active file.
+     *
+     * The list is empty if the file's language is unsupported.
+     */
+    Q_SCRIPTABLE virtual QList<ILanguageSupport*> activeLanguages() = 0;
+
+    /**
+     *@return the language for given @p name.
+     */
+    Q_SCRIPTABLE virtual ILanguageSupport* language(const QString &name) const = 0;
+
+    /**
+     * @return the languages that support the MIME type of @p url.
+     * @warning If this is called from within the foreground thread,
+     *          the language support is loaded if required.
+     *          If it is called from a background thread, it can not
+     *          be loaded, and thus zero will be returned.
+     */
+    Q_SCRIPTABLE virtual QList<ILanguageSupport*> languagesForUrl(const QUrl &url) = 0;
 
     /** @return All languages currently loaded */
-    Q_SCRIPTABLE virtual QList<ILanguage*> loadedLanguages() const = 0;
+    Q_SCRIPTABLE virtual QList<ILanguageSupport*> loadedLanguages() const = 0;
 
     /** @return the background parser used to parse source files */
     Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const = 0;

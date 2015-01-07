@@ -51,7 +51,6 @@ namespace Sublime {
 
 namespace KDevelop {
   class IDocument;
-  class ILanguage;
   class ParseJob;
   class DUContext;
   class TopDUContext;

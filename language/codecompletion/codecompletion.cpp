@@ -27,7 +27,6 @@
 #include <ktexteditor/codecompletioninterface.h>
 
 #include <interfaces/icore.h>
-#include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
 
 #include "../duchain/duchain.h"
@@ -108,10 +107,10 @@ void CodeCompletion::checkDocument(Document* textDocument)
 {
   unregisterDocument(textDocument);
 
-  QList<ILanguage*> langs=ICore::self()->languageController()->languagesForUrl( textDocument->url() );
+  auto langs = ICore::self()->languageController()->languagesForUrl( textDocument->url() );
 
-  bool found=false;
-  foreach(ILanguage* lang, langs) {
+  bool found = false;
+  foreach(auto lang, langs) {
     if(m_language==lang->name()) {
       found=true;
       break;

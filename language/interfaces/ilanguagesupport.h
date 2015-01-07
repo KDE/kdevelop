@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>            *
+ *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>                   *
+ *   Copyright 2014 Kevin Funk <kfunk@kde.org>                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -16,14 +17,18 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
+
 #ifndef KDEVPLATFORM_ILANGUAGESUPPORT_H
 #define KDEVPLATFORM_ILANGUAGESUPPORT_H
 
+#include <QScopedPointer>
 #include <QUrl>
 
 #include <language/languageexport.h>
 
 #include "interfaces/isourceformatter.h"
+
+class QReadWriteLock;
 
 namespace KTextEditor {
 class Cursor;
@@ -35,21 +40,21 @@ namespace KDevelop {
 class BasicRefactoring;
 class IndexedString;
 class ParseJob;
-class ILanguage;
+class ILanguageSupportPrivate;
 class TopDUContext;
 class ICodeHighlighting;
 class ICreateClassHelper;
 
-class KDEVPLATFORMLANGUAGE_EXPORT ILanguageSupport {
+class KDEVPLATFORMLANGUAGE_EXPORT ILanguageSupport
+{
 public:
-    virtual ~ILanguageSupport() {}
+    ILanguageSupport();
+    virtual ~ILanguageSupport();
 
     /** @return the name of the language.*/
     virtual QString name() const = 0;
     /** @return the parse job that is used by background parser to parse given @p url.*/
     virtual ParseJob *createParseJob(const IndexedString &url) = 0;
-    /** @return the language for this support.*/
-    virtual ILanguage *language();
     /**
       * Only important for languages that can parse multiple different versions of a file, like C++ due to the preprocessor.
      * The default-implementation for other languages is "return DUChain::chainForDocument(url);"
@@ -84,6 +89,15 @@ public:
      * Reimplementing this method is therefore not necessary to have classes created in this language.
      * */
     virtual ICreateClassHelper* createClassHelper() const;
+
+    /**
+     * Every thread that does background-parsing should read-lock its language's parse-mutex while parsing.
+     * Any other thread may write-lock the parse-mutex in order to wait for all parsing-threads to finish the parsing.
+     * The parse-mutex only needs to be locked while working on the du-chain, not while preprocessing or reading.
+     * Tip: use QReadLocker for read-locking.
+     * The duchain must always be unlocked when you try to lock a parseLock!
+     */
+    virtual QReadWriteLock* parseLock() const;
 
     /**
      * The following functions are used to allow navigation-features, tooltips, etc. for non-duchain language objects.
@@ -139,6 +153,9 @@ public:
       * - "Sensitive" will always schedule the document for reparsing, no matter what was changed.
       */
     virtual WhitespaceSensitivity whitespaceSensititivy() const;
+
+private:
+    QScopedPointer<ILanguageSupportPrivate> const d;
 };
 
 }

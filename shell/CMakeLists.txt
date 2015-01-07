@@ -25,7 +25,6 @@ set(KDevPlatformShell_LIB_SRCS
     textdocument.cpp
     documentcontroller.cpp
     languagecontroller.cpp
-    language.cpp
     statusbar.cpp
     runcontroller.cpp
     sessioncontroller.cpp
@@ -153,7 +152,6 @@ install(FILES
     sessioncontroller.h
     sessionlock.h
     sourceformattercontroller.h
-    language.h
     selectioncontroller.h
     runcontroller.h
     launchconfiguration.h

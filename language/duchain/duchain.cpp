@@ -33,7 +33,6 @@
 
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
-#include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/isession.h>
 
@@ -698,7 +697,7 @@ public:
 
     //This is used to stop all parsing before starting to do the cleanup. This way less happens during the
     //soft cleanups, and we have a good chance that during the "hard" cleanup only few data has to be written.
-    QList<ILanguage*> lockedParseMutexes;
+    QList<ILanguageSupport*> lockedParseMutexes;
 
     QList<QReadWriteLock*> locked;
 
@@ -711,7 +710,7 @@ public:
       writeLock.unlock();
 
       //Here we wait for all parsing-threads to stop their processing
-      foreach(ILanguage* language, lockedParseMutexes) {
+      foreach(auto language, lockedParseMutexes) {
         language->parseLock()->lockForWrite();
         locked << language->parseLock();
       }
@@ -1468,7 +1467,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
   TopDUContext* standardContext = DUChainUtils::standardContextForUrl(doc->url());
   QList<TopDUContext*> chains = chainsForDocument(url);
 
-  QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(doc->url());
+  auto languages = ICore::self()->languageController()->languagesForUrl(doc->url());
 
   if(standardContext) {
     Q_ASSERT(chains.contains(standardContext)); //We have just loaded it
@@ -1492,9 +1491,11 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
         if(allImportsLoaded) {
           l.unlock();
           lock.unlock();
-          foreach( KDevelop::ILanguage* language, languages)
-            if(language->languageSupport() && language->languageSupport()->codeHighlighting())
-              language->languageSupport()->codeHighlighting()->highlightDUChain(standardContext);
+          foreach(auto language, languages) {
+            if(language->codeHighlighting()) {
+              language->codeHighlighting()->highlightDUChain(standardContext);
+            }
+          }
           qCDebug(LANGUAGE) << "highlighted" << doc->url() << "in foreground";
           return;
         }

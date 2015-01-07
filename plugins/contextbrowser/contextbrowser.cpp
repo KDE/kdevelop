@@ -47,7 +47,6 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
-#include <interfaces/ilanguage.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/contextmenuextension.h>
@@ -79,7 +78,6 @@
 
 Q_LOGGING_CATEGORY(PLUGIN_CONTEXTBROWSER, "kdevplatform.plugins.contextbrowser")
 
-using KDevelop::ILanguage;
 using KTextEditor::Attribute;
 using KTextEditor::View;
 
@@ -455,13 +453,13 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
     return; // If the context-browser view is visible, it will care about updating by itself
 
   QUrl viewUrl = view->document()->url();
-  QList<ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
+  auto languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
 
   QWidget* navigationWidget = 0;
   {
     DUChainReadLocker lock(DUChain::lock());
-    foreach( ILanguage* language, languages) {
-      auto widget = language->languageSupport()->specialLanguageObjectNavigationWidget(viewUrl, KTextEditor::Cursor(position));
+    foreach (auto language, languages) {
+      auto widget = language->specialLanguageObjectNavigationWidget(viewUrl, KTextEditor::Cursor(position));
       navigationWidget = qobject_cast<AbstractNavigationWidget*>(widget);
       if(navigationWidget)
         break;
@@ -655,7 +653,7 @@ void ContextBrowserPlugin::updateForView(View* view)
      highlightPosition = KTextEditor::Cursor(view->cursorPosition());
 
     ///Pick a language
-    ILanguage* language = 0;
+    ILanguageSupport* language = nullptr;
 
     if(ICore::self()->languageController()->languagesForUrl(url).isEmpty()) {
       qCDebug(PLUGIN_CONTEXTBROWSER) << "found no language for document" << url;
@@ -666,7 +664,7 @@ void ContextBrowserPlugin::updateForView(View* view)
 
     ///Check whether there is a special language object to highlight (for example a macro)
 
-    KTextEditor::Range specialRange = language->languageSupport()->specialLanguageObjectRange(url, highlightPosition);
+    KTextEditor::Range specialRange = language->specialLanguageObjectRange(url, highlightPosition);
     ContextBrowserView* updateBrowserView = shouldUpdateBrowser ?  browserViewForWidget(view) : 0;
 
     if(specialRange.isValid())
@@ -679,7 +677,7 @@ void ContextBrowserPlugin::updateForView(View* view)
         highlights.highlights.back()->setZDepth(highlightingZDepth);
       }
       if(updateBrowserView)
-        updateBrowserView->setSpecialNavigationWidget(language->languageSupport()->specialLanguageObjectNavigationWidget(url, highlightPosition));
+        updateBrowserView->setSpecialNavigationWidget(language->specialLanguageObjectNavigationWidget(url, highlightPosition));
     }else{
       KDevelop::DUChainReadLocker lock( DUChain::lock(), 100 );
       if(!lock.locked()) {

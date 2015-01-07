@@ -32,7 +32,6 @@
 #include <language/duchain/problem.h>
 #include <language/duchain/persistentsymboltable.h>
 
-#include <interfaces/ilanguage.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <tests/autotestshell.h>

@@ -32,7 +32,6 @@
 #include <serialization/indexedstring.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <interfaces/ilanguage.h>
 #include "backgroundparser.h"
 #include "util/debug.h"
 #include <QApplication>
@@ -71,12 +70,12 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
 
     // Check whether a language plugin is tracking the document which belongs to a
     // whitespace-sensitive language (e.g. python)
-    foreach ( KDevelop::ILanguage* lang, ICore::self()->languageController()->languagesForUrl(document->url()) ) {
-        if ( ! lang || ! lang->languageSupport() ) {
+    foreach (auto lang, ICore::self()->languageController()->languagesForUrl(document->url())) {
+        if (!lang) {
             continue;
         }
-        if ( lang->languageSupport()->whitespaceSensititivy() >= m_whitespaceSensitivity ) {
-            m_whitespaceSensitivity = lang->languageSupport()->whitespaceSensititivy();
+        if (lang->whitespaceSensititivy() >= m_whitespaceSensitivity) {
+            m_whitespaceSensitivity = lang->whitespaceSensititivy();
         }
     }
 

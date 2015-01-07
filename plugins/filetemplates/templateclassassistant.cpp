@@ -40,7 +40,6 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
-#include <interfaces/ilanguage.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
@@ -359,10 +358,10 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
 
         d->helper = 0;
         QString languageName = d->fileTemplate.languageName();
-        ILanguage* language = ICore::self()->languageController()->language(languageName);
-        if (language && language->languageSupport())
+        auto language = ICore::self()->languageController()->language(languageName);
+        if (language)
         {
-            d->helper = language->languageSupport()->createClassHelper();
+            d->helper = language->createClassHelper();
         }
 
         if (!d->helper)

@@ -22,7 +22,6 @@
 
 #include "duchainutils.h"
 
-#include <interfaces/ilanguage.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 
@@ -266,14 +265,13 @@ TopDUContext* DUChainUtils::contentContextFromProxyContext(TopDUContext* top)
 TopDUContext* DUChainUtils::standardContextForUrl(const QUrl& url, bool preferProxyContext) {
   KDevelop::TopDUContext* chosen = 0;
 
-  QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
+  auto languages = ICore::self()->languageController()->languagesForUrl(url);
 
-  foreach( KDevelop::ILanguage* language, languages)
+  foreach(auto language, languages)
   {
     if(!chosen)
     {
-      if (language->languageSupport())
-        chosen = language->languageSupport()->standardContext(url, preferProxyContext);
+      chosen = language->standardContext(url, preferProxyContext);
     }
   }
 

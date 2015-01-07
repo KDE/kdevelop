@@ -33,7 +33,6 @@
 #include <language/duchain/duchain.h>
 
 #include "core.h"
-#include "language.h"
 #include "settings/ccpreferences.h"
 #include "completionsettings.h"
 #include "debug.h"
@@ -57,10 +56,11 @@ inline uint qHash(const QMimeType& mime, uint seed = 0)
 namespace KDevelop {
 
 
-typedef QHash<QString, ILanguage*> LanguageHash;
-typedef QHash<QString, QList<ILanguage*> > LanguageCache;
+typedef QHash<QString, ILanguageSupport*> LanguageHash;
+typedef QHash<QString, QList<ILanguageSupport*> > LanguageCache;
 
-struct LanguageControllerPrivate {
+struct LanguageControllerPrivate
+{
     LanguageControllerPrivate(LanguageController *controller)
         : dataMutex(QMutex::Recursive)
         , backgroundParser(new BackgroundParser(controller))
@@ -76,74 +76,64 @@ struct LanguageControllerPrivate {
             return;
         }
 
-        foreach (ILanguage *lang, activeLanguages) {
-            lang->deactivate();
-        }
-
         activeLanguages.clear();
 
-        QList<ILanguage*> languages = m_controller->languagesForUrl(url);
-        foreach (ILanguage *lang, languages) {
-            lang->activate();
+        QList<ILanguageSupport*> languages = m_controller->languagesForUrl(url);
+        foreach (auto lang, languages) {
             activeLanguages << lang;
         }
     }
 
-    QList<ILanguage*> activeLanguages;
+    QList<ILanguageSupport*> activeLanguages;
 
     mutable QMutex dataMutex;
 
     LanguageHash languages; //Maps language-names to languages
     LanguageCache languageCache; //Maps mimetype-names to languages
-    typedef QMultiHash<QMimeType, ILanguage*> MimeTypeCache;
+    typedef QMultiHash<QMimeType, ILanguageSupport*> MimeTypeCache;
     MimeTypeCache mimeTypeCache; //Maps mimetypes to languages
     // fallback cache for file extensions not handled by any pattern
-    typedef QMap<QString, QList<ILanguage*> > FileExtensionCache;
+    typedef QMap<QString, QList<ILanguageSupport*> > FileExtensionCache;
     FileExtensionCache fileExtensionCache;
 
     BackgroundParser *backgroundParser;
     StaticAssistantsManager* staticAssistantsManager;
     bool m_cleanedUp;
 
-    ILanguage* addLanguageForSupport(ILanguageSupport* support, const QStringList& mimetypes);
-    ILanguage* addLanguageForSupport(ILanguageSupport* support);
+    void addLanguageSupport(ILanguageSupport* support, const QStringList& mimetypes);
+    void addLanguageSupport(ILanguageSupport* support);
 
 private:
     LanguageController *m_controller;
 };
 
-ILanguage* LanguageControllerPrivate::addLanguageForSupport(ILanguageSupport* languageSupport,
+void LanguageControllerPrivate::addLanguageSupport(ILanguageSupport* languageSupport,
                                                             const QStringList& mimetypes)
 {
     Q_ASSERT(!languages.contains(languageSupport->name()));
-
-    ILanguage* ret = new Language(languageSupport, m_controller);
-    languages.insert(languageSupport->name(), ret);
+    languages.insert(languageSupport->name(), languageSupport);
 
     foreach(const QString& mimeTypeName, mimetypes) {
         qCDebug(SHELL) << "adding supported mimetype:" << mimeTypeName << "language:" << languageSupport->name();
-        languageCache[mimeTypeName] << ret;
+        languageCache[mimeTypeName] << languageSupport;
         QMimeType mime = QMimeDatabase().mimeTypeForName(mimeTypeName);
         if (mime.isValid()) {
-            mimeTypeCache.insert(mime, ret);
+            mimeTypeCache.insert(mime, languageSupport);
         } else {
             qWarning() << "could not create mime-type" << mimeTypeName;
         }
     }
-
-    return ret;
 }
 
-ILanguage* LanguageControllerPrivate::addLanguageForSupport(KDevelop::ILanguageSupport* languageSupport)
+void LanguageControllerPrivate::addLanguageSupport(KDevelop::ILanguageSupport* languageSupport)
 {
-    if(languages.contains(languageSupport->name()))
-        return languages[languageSupport->name()];
+    if (languages.contains(languageSupport->name()))
+        return;
 
     Q_ASSERT(dynamic_cast<IPlugin*>(languageSupport));
 
-    QVariant mimetypes = Core::self()->pluginController()->pluginInfo(dynamic_cast<IPlugin*>(languageSupport)).property(KEY_SupportedMimeTypes);
-
-    return addLanguageForSupport(languageSupport, mimetypes.toStringList());
+    const QVariant mimetypes = Core::self()->pluginController()->pluginInfo(dynamic_cast<IPlugin*>(languageSupport)).property(KEY_SupportedMimeTypes);
+    addLanguageSupport(languageSupport, mimetypes.toStringList());
 }
 
 LanguageController::LanguageController(QObject *parent)
@@ -176,7 +166,7 @@ void LanguageController::cleanup()
     d->m_cleanedUp = true;
 }
 
-QList<ILanguage*> LanguageController::activeLanguages()
+QList<ILanguageSupport*> LanguageController::activeLanguages()
 {
     QMutexLocker lock(&d->dataMutex);
 
@@ -192,20 +182,20 @@ ICompletionSettings *LanguageController::completionSettings() const {
     return &CompletionSettings::self();
 }
 
-QList<ILanguage*> LanguageController::loadedLanguages() const
+QList<ILanguageSupport*> LanguageController::loadedLanguages() const
 {
     QMutexLocker lock(&d->dataMutex);
-    QList<ILanguage*> ret;
+    QList<ILanguageSupport*> ret;
 
     if(d->m_cleanedUp)
         return ret;
 
-    foreach(ILanguage* lang, d->languages)
+    foreach(ILanguageSupport* lang, d->languages)
         ret << lang;
     return ret;
 }
 
-ILanguage *LanguageController::language(const QString &name) const
+ILanguageSupport* LanguageController::language(const QString &name) const
 {
     QMutexLocker lock(&d->dataMutex);
 
@@ -214,18 +204,18 @@ ILanguage *LanguageController::language(const QString &name) const
 
     if(d->languages.contains(name))
         return d->languages[name];
-    else{
-        ILanguage* ret = 0;
-        QVariantMap constraints;
-        constraints.insert("X-KDevelop-Language", name);
-        QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport, constraints);
-        if(!supports.isEmpty()) {
-            ILanguageSupport *languageSupport = supports[0]->extension<ILanguageSupport>();
-            if(languageSupport)
-                ret = d->addLanguageForSupport(languageSupport);
+
+    QVariantMap constraints;
+    constraints.insert("X-KDevelop-Language", name);
+    QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport, constraints);
+    if(!supports.isEmpty()) {
+        ILanguageSupport *languageSupport = supports[0]->extension<ILanguageSupport>();
+        if(languageSupport) {
+            d->addLanguageSupport(languageSupport);
+            return languageSupport;
         }
-        return ret;
     }
+    return nullptr;
 }
 
 bool isNumeric(const QString& str)
@@ -239,11 +229,11 @@ bool isNumeric(const QString& str)
     return true;
 }
 
-QList<ILanguage*> LanguageController::languagesForUrl(const QUrl &url)
+QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
 {
     QMutexLocker lock(&d->dataMutex);
 
-    QList<ILanguage*> languages;
+    QList<ILanguageSupport*> languages;
 
     if(d->m_cleanedUp)
         return languages;
@@ -337,11 +327,11 @@ QList<ILanguage*> LanguageController::languagesForUrl(const QUrl &url)
     return languages;
 }
 
-QList<ILanguage*> LanguageController::languagesForMimetype(const QString& mimetype)
+QList<ILanguageSupport*> LanguageController::languagesForMimetype(const QString& mimetype)
 {
     QMutexLocker lock(&d->dataMutex);
 
-    QList<ILanguage*> languages;
+    QList<ILanguageSupport*> languages;
     LanguageCache::ConstIterator it = d->languageCache.constFind(mimetype);
     if (it != d->languageCache.constEnd()) {
         languages = it.value();
@@ -352,13 +342,15 @@ QList<ILanguage*> LanguageController::languagesForMimetype(const QString& mimety
 
         if (supports.isEmpty()) {
             qCDebug(SHELL) << "no languages for mimetype:" << mimetype;
-            d->languageCache.insert(mimetype, QList<ILanguage*>());
+            d->languageCache.insert(mimetype, QList<ILanguageSupport*>());
         } else {
             foreach (IPlugin *support, supports) {
                 ILanguageSupport* languageSupport = support->extension<ILanguageSupport>();
                 qCDebug(SHELL) << "language-support:" << languageSupport;
-                if(languageSupport)
-                    languages << d->addLanguageForSupport(languageSupport);
+                if(languageSupport) {
+                    d->addLanguageSupport(languageSupport);
+                    languages << languageSupport;
+                }
             }
         }
     }
@@ -371,7 +363,7 @@ QList<QString> LanguageController::mimetypesForLanguageName(const QString& langu
 
     QList<QString> mimetypes;
     for (LanguageCache::ConstIterator iter = d->languageCache.constBegin(); iter != d->languageCache.constEnd(); ++iter) {
-        foreach (ILanguage* language, iter.value()) {
+        foreach (ILanguageSupport* language, iter.value()) {
             if (language->name() == languageName) {
                 mimetypes << iter.key();
                 break;
@@ -388,7 +380,7 @@ BackgroundParser *LanguageController::backgroundParser() const
 
 void LanguageController::addLanguageSupport(ILanguageSupport* languageSupport, const QStringList& mimetypes)
 {
-    d->addLanguageForSupport(languageSupport, mimetypes);
+    d->addLanguageSupport(languageSupport, mimetypes);
 }
 
 }

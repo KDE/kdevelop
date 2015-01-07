@@ -17,6 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
+
 #ifndef KDEVPLATFORM_LANGUAGECONTROLLER_H
 #define KDEVPLATFORM_LANGUAGECONTROLLER_H
 
@@ -44,21 +45,21 @@ public:
     void cleanup();
 
     /** @copydoc ILanguageController::activeLanguages() */
-    virtual QList<ILanguage*> activeLanguages();
+    virtual QList<ILanguageSupport*> activeLanguages() override;
     /** @copydoc ILanguageController::language() */
-    virtual ILanguage *language(const QString &name) const;
+    virtual ILanguageSupport* language(const QString &name) const override;
     /** @copydoc ILanguageController::languageForUrl() */
-    virtual QList<ILanguage*> languagesForUrl(const QUrl &url);
+    virtual QList<ILanguageSupport*> languagesForUrl(const QUrl &url) override;
     /** @copydoc ILanguageController::backgroundParser() */
     Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const;
 
     virtual StaticAssistantsManager *staticAssistantsManager() const;
 
-    virtual QList<ILanguage*> loadedLanguages() const;
+    virtual QList<ILanguageSupport*> loadedLanguages() const;
 
     virtual ICompletionSettings *completionSettings() const;
 
-    QList<ILanguage*> languagesForMimetype(const QString& mime);
+    QList<ILanguageSupport*> languagesForMimetype(const QString& mime);
     QList<QString> mimetypesForLanguageName(const QString& languageName);
 
 protected:
