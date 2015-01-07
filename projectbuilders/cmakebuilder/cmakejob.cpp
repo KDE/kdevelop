@@ -98,6 +98,10 @@ QStringList CMakeJob::commandLine() const
     {
         args << QStringLiteral("-DCMAKE_BUILD_TYPE=%1").arg(buildType);
     }
+    QVariantMap cacheArgs = property("extraCMakeCacheValues").toMap();
+    for( auto it = cacheArgs.constBegin(), itEnd = cacheArgs.constEnd(); it!=itEnd; ++it) {
+        args << QStringLiteral("-D%1=%2").arg(it.key()).arg(it.value().toString());
+    }
 
     //if we are creating a new build directory, we'll want to specify the generator
     QDir builddir(CMake::currentBuildDir( m_project ).toLocalFile());

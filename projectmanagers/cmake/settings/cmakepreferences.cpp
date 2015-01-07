@@ -127,18 +127,6 @@ void CMakePreferences::apply()
         return;
     }
 
-    bool needReconfiguring = true;
-    if(m_currentModel)
-    {
-        if (!m_currentModel->writeDown()) {
-            KMessageBox::error(this, i18n("Could not write CMake settings to file '%1'.\n"
-                                          "Check that you have write access to it",
-                                          m_currentModel->filePath().pathOrUrl()));
-            needReconfiguring = false;
-        }
-        CMake::setCurrentInstallDir(m_project, KDevelop::Path(m_currentModel->value("CMAKE_INSTALL_PREFIX")));
-    }
-
     CMake::setCurrentEnvironment( m_project, m_prefsUi->environment->currentProfile() );
 
     qCDebug(CMAKE) << "writing to cmake config: using builddir " << CMake::currentBuildDirIndex(m_project);
@@ -149,9 +137,7 @@ void CMakePreferences::apply()
     qCDebug(CMAKE) << "writing to cmake config: environment " << CMake::currentEnvironment(m_project);
 
     //We run cmake on the builddir to generate it
-    if (needReconfiguring) {
-        configure();
-    }
+    configure();
 }
 
 void CMakePreferences::defaults()
@@ -338,6 +324,8 @@ void CMakePreferences::configure()
     KDevelop::IProjectBuilder *b=m_project->buildSystemManager()->builder();
     KJob* job=b->configure(m_project);
     if( m_currentModel ) {
+        QVariantMap map = m_currentModel->changedValues();
+        job->setProperty("extraCMakeCacheValues", map);
         connect(job, &KJob::finished, m_currentModel, &CMakeCacheModel::reset);
     } else {
         connect(job, &KJob::finished, this, &CMakePreferences::cacheUpdated);

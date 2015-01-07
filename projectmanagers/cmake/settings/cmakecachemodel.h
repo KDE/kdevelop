@@ -23,7 +23,7 @@
 
 #include <cmakecommonexport.h>
 #include <QStandardItemModel>
-#include <QHash>
+#include <QVariant>
 #include <QSet>
 
 #include <util/path.h>
@@ -38,7 +38,9 @@ class CMakeCacheModel : public QStandardItemModel
     public:
         CMakeCacheModel(QObject* parent, const KDevelop::Path &path);
         ~CMakeCacheModel() {}
-        bool writeDown() const { return writeBack(m_filePath); }
+
+        bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+
         int internal() const { return m_internalBegin; }
         
         QString value(const QString& name) const;
@@ -48,16 +50,16 @@ class CMakeCacheModel : public QStandardItemModel
         QList<QModelIndex> persistentIndices() const;
         KDevelop::Path filePath() const;
         void read();
+        QVariantMap changedValues() const;
         
     public slots:
         void reset();
         
     private:
-        bool writeBack(const KDevelop::Path &path) const;
-        
         KDevelop::Path m_filePath;
         int m_internalBegin;
         QSet<QString> m_internal;
+        QSet<int> m_modifiedRows;
 };
 
 #endif
