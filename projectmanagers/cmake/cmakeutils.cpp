@@ -263,9 +263,8 @@ QString currentBuildType( KDevelop::IProject* project )
 
 KDevelop::Path currentCMakeBinary( KDevelop::IProject* project )
 {
-//     return KDevelop::Path(readProjectParameter( project, Config::Specific::cmakeBinKey,
-//                                                 QStandardPaths::findExecutable( "cmake" ) ));
-    return KDevelop::Path("/opt/cmake-devel/bin/cmake");
+    return KDevelop::Path(readProjectParameter( project, Config::Specific::cmakeBinKey,
+                                                QStandardPaths::findExecutable( "cmake" ) ));
 }
 
 KDevelop::Path currentInstallDir( KDevelop::IProject* project )
