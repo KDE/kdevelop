@@ -66,6 +66,11 @@ bool CustomBuildSystem::addFilesToTarget( const QList<ProjectFileItem*>&, Projec
     return false;
 }
 
+bool CustomBuildSystem::hasIncludesOrDefines( ProjectBaseItem* ) const
+{
+    return false;
+}
+
 KJob* CustomBuildSystem::build( ProjectBaseItem* dom )
 {
     return new CustomBuildJob( this, dom, CustomBuildSystemTool::Build );

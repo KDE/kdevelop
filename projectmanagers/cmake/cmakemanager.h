@@ -87,6 +87,7 @@ public:
 
     virtual Features features() const { return Features(Folders | Targets | Files ); }
     virtual KDevelop::IProjectBuilder* builder() const;
+    virtual bool hasIncludesOrDefines(KDevelop::ProjectBaseItem*) const;
     virtual KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const;
     virtual KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem *) const;
     virtual QHash<QString, QString> defines(KDevelop::ProjectBaseItem *) const;

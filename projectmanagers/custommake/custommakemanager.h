@@ -86,6 +86,11 @@ public:
     virtual bool removeFilesFromTargets(const QList<KDevelop::ProjectFileItem*>&);
 
     /**
+     * Test if @p item has any includes or defines from this BSM
+     */
+    virtual bool hasIncludesOrDefines(KDevelop::ProjectBaseItem* item) const;
+
+    /**
      * Get the toplevel build directory for the project
      */
     virtual KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const;
