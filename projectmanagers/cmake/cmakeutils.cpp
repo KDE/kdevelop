@@ -42,6 +42,7 @@
 #include "cmakebuilddirchooser.h"
 #include "settings/cmakecachemodel.h"
 #include "debug.h"
+#include <cmakecachereader.h>
 
 namespace Config
 {
@@ -262,8 +263,9 @@ QString currentBuildType( KDevelop::IProject* project )
 
 KDevelop::Path currentCMakeBinary( KDevelop::IProject* project )
 {
-    return KDevelop::Path(readProjectParameter( project, Config::Specific::cmakeBinKey,
-                                                QStandardPaths::findExecutable( "cmake" ) ));
+//     return KDevelop::Path(readProjectParameter( project, Config::Specific::cmakeBinKey,
+//                                                 QStandardPaths::findExecutable( "cmake" ) ));
+    return KDevelop::Path("/opt/cmake-devel/bin/cmake");
 }
 
 KDevelop::Path currentInstallDir( KDevelop::IProject* project )
@@ -389,32 +391,41 @@ void removeBuildDirConfig( KDevelop::IProject* project )
     }
 }
 
-void updateConfig( KDevelop::IProject* project, int buildDirIndex, CMakeCacheModel* model )
+void updateConfig( KDevelop::IProject* project, int buildDirIndex)
 {
     if (buildDirIndex < 0)
         return;
 
     KConfigGroup buildDirGrp = buildDirGroup( project, buildDirIndex );
-    bool deleteModel = false;
-    if (!model)
+    const KDevelop::Path builddir(buildDirGrp.readEntry( Config::Specific::buildDirPathKey, QString() ));
+    const KDevelop::Path cacheFilePath( builddir, QStringLiteral("CMakeCache.txt"));
+    QFile file(cacheFilePath.toLocalFile());
+    const QMap<QString, QString> keys = {
+        { Config::Specific::cmakeBinKey, QStringLiteral("CMAKE_COMMAND") },
+        { Config::Specific::cmakeInstallDirKey, QStringLiteral("CMAKE_INSTALL_PREFIX") },
+        { Config::Specific::cmakeBuildTypeKey, QStringLiteral("CMAKE_BUILD_TYPE") }
+    };
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        KDevelop::Path cacheFilePath( buildDirGrp.readEntry( Config::Specific::buildDirPathKey, QString() ) );
-        cacheFilePath.addPath("CMakeCache.txt");
-
-        if( QFile::exists( cacheFilePath.toLocalFile() ) )
+        QTextStream in(&file);
+        while (!in.atEnd())
         {
-            model = new CMakeCacheModel( 0, cacheFilePath );
-            deleteModel = true;
-        }
-    }
-    if (!model)
-        return;
+            QString line = in.readLine().trimmed();
+            if(!line.isEmpty() && !line[0].isLetterOrNumber())
+            {
+                CacheLine c;
+                c.readLine(line);
 
-    buildDirGrp.writeEntry( Config::Specific::cmakeBinKey, model->value("CMAKE_COMMAND") );
-    buildDirGrp.writeEntry( Config::Specific::cmakeInstallDirKey, model->value("CMAKE_INSTALL_PREFIX") );
-    buildDirGrp.writeEntry( Config::Specific::cmakeBuildTypeKey, model->value("CMAKE_BUILD_TYPE") );
-    if (deleteModel)
-        delete model;
+                if(c.isCorrect()) {
+                    QString key = keys.value(c.name());
+                    if (!key.isEmpty()) {
+                        buildDirGrp.writeEntry( key, c.value() );
+                    }
+                }
+            }
+        }
+    } else
+        qCWarning(CMAKE) << "error. Could not find the file" << cacheFilePath;
 }
 
 void attemptMigrate( KDevelop::IProject* project )

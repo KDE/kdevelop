@@ -26,7 +26,6 @@ set( cmakecommon_SRCS
 #   parser/cmakeparserutils.cpp
 #   parser/cmakeduchaintypes.cpp
 #   parser/generationexpressionsolver.cpp
-  settings/cmakecachemodel.cpp
   cmakeutils.cpp
   cmakebuilddirchooser.cpp
 #   cmakemodelitems.cpp
@@ -66,6 +65,7 @@ set( cmakesettings_SRCS
   settings/cmakepreferences.cpp
   settings/cmakecachemodel.cpp
   settings/cmakecachedelegate.cpp
+  settings/cmakecachemodel.cpp
   debug.cpp
 )
 qt5_wrap_ui(cmakesettings_SRCS settings/cmakebuildsettings.ui)
