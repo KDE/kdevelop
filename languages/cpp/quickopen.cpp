@@ -53,7 +53,7 @@ TopDUContextPointer getCurrentTopDUContext() {
 
   if( doc )
   {
-    return TopDUContextPointer( ICore::self()->languageController()->language("C++")->languageSupport()->standardContext( doc->url() ) );
+    return TopDUContextPointer( ICore::self()->languageController()->language("C++")->standardContext( doc->url() ) );
   }
   return TopDUContextPointer();
 }
@@ -312,7 +312,7 @@ void IncludeFileDataProvider::reset()
 
     {
       DUChainReadLocker lock( DUChain::lock() );
-      m_duContext = TopDUContextPointer( ICore::self()->languageController()->language("C++")->languageSupport()->standardContext( doc->url() )  );
+      m_duContext = TopDUContextPointer( ICore::self()->languageController()->language("C++")->standardContext( doc->url() )  );
 
       if( m_allowImporters && m_duContext ) {
         QSet<IndexedString> importers;

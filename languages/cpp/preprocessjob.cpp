@@ -114,11 +114,11 @@ void PreprocessJob::foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedStrin
 
 void PreprocessJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread)
 {
-    if(!ICore::self()->languageController()->language("C++")->languageSupport())
+    if(!ICore::self()->languageController()->language("C++"))
       return;
 
     //If we have a parent, that parent already has locked the parse-lock
-    QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
+    QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->parseLock());
 
     //It seems like we cannot influence the actual thread priority in thread-weaver, so for now set it here.
     //It must be low so the GUI stays fluid.
@@ -624,7 +624,7 @@ bool PreprocessJob::checkAbort()
     return true;
   }
 
-  if(!ICore::self()->languageController()->language("C++") || !ICore::self()->languageController()->language("C++")->languageSupport()) {
+  if (!ICore::self()->languageController()->language("C++")) {
     qCDebug(CPP) << "Environment-manager disappeared" ;
     return true;
   }

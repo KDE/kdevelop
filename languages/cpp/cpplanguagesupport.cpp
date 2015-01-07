@@ -125,7 +125,7 @@ KDevelop::ContextMenuExtension CppLanguageSupport::contextMenuExtension(KDevelop
   ContextMenuExtension cm;
   EditorContext *ec = dynamic_cast<KDevelop::EditorContext *>(context);
 
-  if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(language())) {
+  if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(this)) {
     // It's a C++ file, let's add our context menu.
     m_refactoring->fillContextMenu(cm, context);
     fillEditIncludeDirectoriesContextMenu(cm, context);
@@ -230,12 +230,11 @@ void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*wind
 
 CppLanguageSupport::~CppLanguageSupport()
 {
-    ILanguage* lang = language();
-    if (lang) {
+    {
         TemporarilyReleaseForegroundLock release;
-        lang->parseLock()->lockForWrite();
+        parseLock()->lockForWrite();
         m_self = 0; //By locking the parse-mutexes, we make sure that parse- and preprocess-jobs get a chance to finish in a good state
-        lang->parseLock()->unlock();
+        parseLock()->unlock();
     }
 
     delete m_quickOpenDataProvider;

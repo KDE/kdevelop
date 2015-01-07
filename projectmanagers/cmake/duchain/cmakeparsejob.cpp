@@ -103,7 +103,7 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
             return;
         }
 
-        QReadLocker parseLock(languageSupport()->language()->parseLock());
+        QReadLocker parseLock(languageSupport()->parseLock());
         CMakeContentIterator it(package);
         DeclarationBuilder builder;
         context = builder.build(document(), &it, context);

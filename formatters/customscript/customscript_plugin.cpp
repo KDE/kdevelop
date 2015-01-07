@@ -221,8 +221,8 @@ QString CustomScriptPlugin::formatSource(const QString& text, const QUrl &url, c
 
 static QList<SourceFormatterStyle> stylesFromLanguagePlugins() {
 	QList<KDevelop::SourceFormatterStyle> styles;
-	for ( ILanguage* lang: ICore::self()->languageController()->loadedLanguages() ) {
-		const SourceFormatterItemList& languageStyles = lang->languageSupport()->sourceFormatterItems();
+	foreach (auto lang, ICore::self()->languageController()->loadedLanguages()) {
+		const SourceFormatterItemList& languageStyles = lang->sourceFormatterItems();
 		for ( const SourceFormatterStyleItem& item: languageStyles ) {
 			if ( item.engine == "customscript" ) {
 				styles << item.style;
@@ -399,11 +399,11 @@ QStringList CustomScriptPlugin::computeIndentationFromSample( const QUrl &url )
 {
 	QStringList ret;
 
-    QList<ILanguage*> lang = ICore::self()->languageController()->languagesForUrl( url );
-    if( lang.isEmpty() )
+    auto languages = ICore::self()->languageController()->languagesForUrl( url );
+    if (languages.isEmpty())
         return ret;
 
-    QString sample = lang[0]->languageSupport()->indentationSample();
+    QString sample = languages[0]->indentationSample();
     QString formattedSample = formatSource(sample, url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString());
 
     QStringList lines = formattedSample.split( "\n" );

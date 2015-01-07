@@ -51,7 +51,6 @@ namespace KDevelop
 {
     class IProject;
     class IProjectBuilder;
-    class ILanguage;
     class ICodeHighlighting;
     class ProjectFolderItem;
     class ProjectBaseItem;
