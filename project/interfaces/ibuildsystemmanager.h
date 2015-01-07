@@ -112,6 +112,11 @@ public:
     virtual bool removeFilesFromTargets(const QList<KDevelop::ProjectFileItem*> &files) = 0;
 
     /**
+     * Returns if the build system has information specific to @p item
+     */
+    virtual bool hasIncludesOrDefines(ProjectBaseItem* item) const = 0;
+
+    /**
      * Get the toplevel build directory for the project
      */
     virtual Path buildDirectory(ProjectBaseItem*) const = 0;
