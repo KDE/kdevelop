@@ -47,13 +47,15 @@ class DialogProviderFake : public IProjectDialogProvider
 {
 Q_OBJECT
 public:
-    DialogProviderFake() : m_reopen(true) {}
+    DialogProviderFake()
+        : m_reopen(true)
+    {}
     virtual ~DialogProviderFake() {}
     bool m_reopen;
 
 public slots:
-    virtual QUrl askProjectConfigLocation(bool fetch, const QUrl& startUrl = QUrl()) { return QUrl(); }
-    virtual bool userWantsReopen() { return m_reopen; }
+    virtual QUrl askProjectConfigLocation(bool /*fetch*/, const QUrl& /*startUrl*/ = QUrl()) override { return QUrl(); }
+    virtual bool userWantsReopen() override { return m_reopen; }
 };
 
 }
@@ -64,17 +66,22 @@ class FakeFileManager : public IPlugin, public IProjectFileManager
     Q_OBJECT
     Q_INTERFACES(KDevelop::IProjectFileManager)
 public:
-    FakeFileManager(QObject*, const QVariantList&) : IPlugin(ICore::self()->aboutData().componentName(), Core::self()) {
+    FakeFileManager(QObject*, const QVariantList&)
+        : IPlugin(ICore::self()->aboutData().componentName(), Core::self())
+    {
         KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     }
 
-    FakeFileManager() : IPlugin(ICore::self()->aboutData().componentName(), Core::self()) {
+    FakeFileManager()
+        : IPlugin(ICore::self()->aboutData().componentName(), Core::self())
+    {
         KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     }
 
     virtual ~FakeFileManager() {}
 
-    virtual Features features() const {
+    virtual Features features() const
+    {
         return IProjectFileManager::Files | IProjectFileManager::Folders;
     }
 
@@ -82,7 +89,8 @@ public:
     QMap<Path, Path::List> m_subFoldersInFolder;
 
     /*! Setup this manager such that @p folder contains @p file */
-    void addFileToFolder(Path folder, Path file) {
+    void addFileToFolder(const Path& folder, const Path& file)
+    {
         if (!m_filesInFolder.contains(folder)) {
             m_filesInFolder[folder] = Path::List();
         }
@@ -90,14 +98,16 @@ public:
     }
 
     /*! Setup this manager such that @p folder has @p subFolder */
-    void addSubFolderTo(Path folder, Path subFolder) {
+    void addSubFolderTo(const Path& folder, Path subFolder)
+    {
         if (!m_subFoldersInFolder.contains(folder)) {
             m_subFoldersInFolder[folder] = Path::List();
         }
         m_subFoldersInFolder[folder] << subFolder;
     }
 
-    virtual QList<ProjectFolderItem*> parse(ProjectFolderItem *dom) {
+    virtual QList<ProjectFolderItem*> parse(ProjectFolderItem *dom) override
+    {
         Path::List files = m_filesInFolder[dom->path()];
         foreach (const Path& file, files) {
             new ProjectFileItem(dom->project(), file, dom);
@@ -110,28 +120,28 @@ public:
         return folders;
     }
 
-    virtual ProjectFolderItem *import(IProject *project) {
+    virtual ProjectFolderItem *import(IProject *project) override
+    {
         ProjectFolderItem* it = new ProjectFolderItem(project, project->path());
         return it;
     }
 
-    virtual ProjectFolderItem* addFolder(const Path& folder, ProjectFolderItem *parent) { return 0; }
-    virtual ProjectFileItem* addFile(const Path& file, ProjectFolderItem *parent) { return 0; }
-    virtual bool removeFilesAndFolders(const QList<ProjectBaseItem*> &items) { return false; }
-    virtual bool moveFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem* newParent) { return false; }
-    virtual bool copyFilesAndFolders(const Path::List &items, KDevelop::ProjectFolderItem* newParent) { return false; }
-    virtual bool renameFile(ProjectFileItem* file, const Path& newPath) { return false; }
-    virtual bool renameFolder(ProjectFolderItem* oldFolder,
-                              const Path& newPath ) { return false; }
-    virtual bool reload(ProjectFolderItem* item) { return false; }
+    virtual ProjectFolderItem* addFolder(const Path& /*folder*/, ProjectFolderItem */*parent*/) override { return 0; }
+    virtual ProjectFileItem* addFile(const Path& /*file*/, ProjectFolderItem */*parent*/) override { return 0; }
+    virtual bool removeFilesAndFolders(const QList<ProjectBaseItem*> &/*items*/) override { return false; }
+    virtual bool moveFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &/*items*/, KDevelop::ProjectFolderItem* /*newParent*/) override { return false; }
+    virtual bool copyFilesAndFolders(const Path::List &/*items*/, KDevelop::ProjectFolderItem* /*newParent*/) override { return false; }
+    virtual bool renameFile(ProjectFileItem* /*file*/, const Path& /*newPath*/) override { return false; }
+    virtual bool renameFolder(ProjectFolderItem* /*oldFolder*/, const Path& /*newPath*/ ) override { return false; }
+    virtual bool reload(ProjectFolderItem* /*item*/) override { return false; }
 };
 
 class FakePluginController : public PluginController
 {
 public:
     FakePluginController(Core* core)
-    : PluginController(core)
-    , m_fakeFileManager(new FakeFileManager)
+        : PluginController(core)
+        , m_fakeFileManager(new FakeFileManager)
     {
     }
 
@@ -337,11 +347,10 @@ void TestProjectController::openMultiple()
 {\
     QCOMPARE(rootFolder->rowCount(), 1);\
     QCOMPARE(rootFolder->fileList().size(), 1);\
-    ProjectFileItem* fi__ = rootFolder->fileList()[0];\
-    QVERIFY(fi__);\
-    QCOMPARE(fi__->path(), path__);\
-    QCOMPARE(fi__->fileName(), QString(name));\
-    fileItem = fi__;\
+    fileItem = rootFolder->fileList()[0];\
+    QVERIFY(fileItem);\
+    QCOMPARE(fileItem->path(), path__);\
+    QCOMPARE(fileItem->fileName(), QString(name));\
 } void(0)
 
 // command
@@ -449,9 +458,9 @@ void TestProjectController::fileInSubdirectory()
     fileMng->addFileToFolder(folderPath, filePath);
 
     proj->setManagerPlugin(fileMng);
-    ProjectFolderItem* rootFolder;
-    ProjectFolderItem* sub;
-    ProjectFileItem* file;
+    ProjectFolderItem* rootFolder = nullptr;
+    ProjectFolderItem* sub = nullptr;
+    ProjectFileItem* file = nullptr;
 
     proj->reloadModel();
     QTest::qWait(100);
