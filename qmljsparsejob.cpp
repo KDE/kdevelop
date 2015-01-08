@@ -136,7 +136,7 @@ void QmlJsParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* 
     }
 
     if (session.ast()) {
-        QReadLocker parseLock(languageSupport()->language()->parseLock());
+        QReadLocker parseLock(languageSupport()->parseLock());
 
         if (abortRequested()) {
             return abortJob();

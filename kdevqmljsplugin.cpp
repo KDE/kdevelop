@@ -91,7 +91,7 @@ ContextMenuExtension KDevQmlJsPlugin::contextMenuExtension(Context* context)
     ContextMenuExtension cm;
     EditorContext *ec = dynamic_cast<KDevelop::EditorContext *>(context);
 
-    if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(language())) {
+    if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(this)) {
         // It's a QML/JS file, let's add our context menu.
         m_refactoring->fillContextMenu(cm, context);
     }
