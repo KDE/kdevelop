@@ -62,7 +62,6 @@
 #include <language/backgroundparser/urlparselock.h>
 #include <language/backgroundparser/backgroundparser.h>
 
-#include <interfaces/ilanguage.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>

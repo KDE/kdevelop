@@ -44,7 +44,6 @@ Q_LOGGING_CATEGORY(CUSTOMSCRIPT, "kdevelop.formatters.customscript")
 #include <KParts/MainWindow>
 #include <KLocalizedString>
 #include <interfaces/ilanguagecontroller.h>
-#include <interfaces/ilanguage.h>
 #include <language/interfaces/ilanguagesupport.h>
 
 using namespace KDevelop;

@@ -40,7 +40,6 @@
 
 #include <threadweaver/thread.h>
 
-#include <interfaces/ilanguage.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 

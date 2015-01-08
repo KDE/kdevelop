@@ -37,7 +37,6 @@
 #include <language/duchain/duchainutils.h>
 #include <language/codegen/coderepresentation.h>
 #include <shell/documentcontroller.h>
-#include <interfaces/ilanguage.h>
 #include <navigation/macronavigationcontext.h>
 #include <navigation/navigationwidget.h>
 
