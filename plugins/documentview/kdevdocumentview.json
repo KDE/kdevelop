@@ -14,7 +14,7 @@
         "Description[cs]": "Aquest connector mostra una visualització gràfica de tots els documents carregats actualment, separats per tipus MIME.", 
         "Description[da]": "Este plugin mostra uma vista gráfica sobre todos os documentos carregados no momento e separa-os por tipo MIME.", 
         "Description[de]": "Dieses Modul zeigt alle aktuell geladenen Dokumente getrennt nach ihren MIME-Typen an.", 
-        "Description[en_GB]": "Dieses Modul zeigt alle aktuell geladenen Dokumente getrennt nach ihren MIME-Typen an.", 
+        "Description[en_GB]": "This plugin displays a graphical view of all documents currently loaded and separates them by mimetype.", 
         "Description[es]": "Aquest connector mostra una visualització gràfica de tots els documents carregats actualment, separats per tipus MIME.", 
         "Description[et]": "Aquest connector mostra una visualització gràfica de tots els documents carregats actualment, separats per tipus MIME.", 
         "Description[fi]": "Este plugin mostra uma vista gráfica sobre todos os documentos carregados no momento e separa-os por tipo MIME.", 

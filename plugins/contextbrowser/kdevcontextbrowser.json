@@ -14,7 +14,7 @@
         "Description[cs]": "Aquest connector mostra informació quant al context del llenguatge actual en una vista lateral i ressalta les declaracions i els usos apropiats.", 
         "Description[da]": "Este plugin mostra informações sobre a linguagem utilizada no momento, numa visão lateral, e destaca declarações relevantes e seus usos.", 
         "Description[de]": "Dieses Modul zeigt Informationen über den aktuellen Sprachkontext an und hebt die wichtigen Deklarationen und Vorkommen hervor.", 
-        "Description[en_GB]": "Dieses Modul zeigt Informationen über den aktuellen Sprachkontext an und hebt die wichtigen Deklarationen und Vorkommen hervor.", 
+        "Description[en_GB]": "This plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.", 
         "Description[es]": "Aquest connector mostra informació quant al context del llenguatge actual en una vista lateral i ressalta les declaracions i els usos apropiats.", 
         "Description[et]": "Aquest connector mostra informació quant al context del llenguatge actual en una vista lateral i ressalta les declaracions i els usos apropiats.", 
         "Description[fi]": "Este plugin mostra informações sobre a linguagem utilizada no momento, numa visão lateral, e destaca declarações relevantes e seus usos.", 

@@ -9,7 +9,7 @@
         "Description[cs]": "Aquest connector proporciona al KDevelop un Konsole incrustat per accedir de manera ràpida i fàcil a la línia d'ordres.", 
         "Description[da]": "Este plugin fornece ao KDevelop um terminal embutido para acesso rápido e fácil à linha de comando.", 
         "Description[de]": "Dieses Modul stattet KDevelop mit einer eingebetteten Konsole zum einfachen Zugriff auf die Befehlszeile aus.", 
-        "Description[en_GB]": "Dieses Modul stattet KDevelop mit einer eingebetteten Konsole zum einfachen Zugriff auf die Befehlszeile aus.", 
+        "Description[en_GB]": "This plugin provides KDevelop with an embedded konsole for quick and easy command line access.", 
         "Description[es]": "Aquest connector proporciona al KDevelop un Konsole incrustat per accedir de manera ràpida i fàcil a la línia d'ordres.", 
         "Description[et]": "Aquest connector proporciona al KDevelop un Konsole incrustat per accedir de manera ràpida i fàcil a la línia d'ordres.", 
         "Description[fi]": "Este plugin fornece ao KDevelop um terminal embutido para acesso rápido e fácil à linha de comando.", 
