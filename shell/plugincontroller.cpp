@@ -503,9 +503,12 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     emit loadingPlugin( info.pluginName() );
 
     // first, ensure all dependencies are available and not disabled
-    // this is unrelated to whether they are loaded already or not
+    // this is unrelated to whether they are loaded already or not.
+    // when we depend on e.g. A and B, but B cannot be found, then we
+    // do not want to load A first and then fail on B and leave A loaded.
+    // this would happen if we'd skip this step here and directly loadDependencies.
     QStringList missingInterfaces;
-    if ( !checkForDependencies( info, missingInterfaces ) ) {
+    if ( !hasUnresolvedDependencies( info, missingInterfaces ) ) {
         qWarning() << "Can't load plugin" << pluginId
                    << "some of its required dependencies could not be fulfilled:"
                    << missingInterfaces.join(",");
@@ -569,7 +572,7 @@ IPlugin* PluginController::plugin( const QString& pluginId )
     return d->loadedPlugins.value( info );
 }
 
-bool PluginController::checkForDependencies( const KPluginInfo& info, QStringList& missing ) const
+bool PluginController::hasUnresolvedDependencies( const KPluginInfo& info, QStringList& missing ) const
 {
     QVariant prop = info.property( KEY_Required );
     if( prop.canConvert<QStringList>() ) {

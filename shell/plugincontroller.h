@@ -161,7 +161,18 @@ private:
      */
     KPluginInfo infoForPluginId( const QString &pluginId ) const;
 
-    bool checkForDependencies( const KPluginInfo& info, QStringList& missing ) const;
+    /**
+     * Check whether the plugin identified by @p info has unresolved dependencies.
+     *
+     * Assume a plugin depends on the interfaces Foo and Bar. Then, all available enabled
+     * plugins are queried to check whether any fulfills the interfaces. If any of the
+     * interfaces is not found, then it is inserted into @p missing and this method returns
+     * true. Otherwise, @p missing is empty and this method returns true, indicating that all
+     * dependencies can be fulfilled.
+     *
+     * @return true when there are unresolved dependencies, false otherwise.
+     */
+    bool hasUnresolvedDependencies( const KPluginInfo& info, QStringList& missing ) const;
 
     bool loadDependencies( const KPluginInfo&, QString& failedPlugin );
     void loadOptionalDependencies( const KPluginInfo& info );
