@@ -34,7 +34,6 @@
 #include "documentfinderhelpers.h"
 
 #include <interfaces/icore.h>
-#include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/contextmenuextension.h>

@@ -34,7 +34,6 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/isourceformattercontroller.h>
-#include <interfaces/ilanguage.h>
 
 #include <language/assistant/staticassistant.h>
 #include <language/assistant/staticassistantsmanager.h>
