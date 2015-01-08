@@ -234,12 +234,9 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
 
 ClangSupport::~ClangSupport()
 {
-    ILanguage* lang = language();
-    if (lang) {
-        lang->parseLock()->lockForWrite();
-        // By locking the parse-mutexes, we make sure that parse jobs get a chance to finish in a good state
-        lang->parseLock()->unlock();
-    }
+    parseLock()->lockForWrite();
+    // By locking the parse-mutexes, we make sure that parse jobs get a chance to finish in a good state
+    parseLock()->unlock();
 
     for(const auto& type : DocumentFinderHelpers::mimeTypesList()) {
         KDevelop::IBuddyDocumentFinder::removeFinder(type);
@@ -304,7 +301,7 @@ KDevelop::ContextMenuExtension ClangSupport::contextMenuExtension(KDevelop::Cont
     ContextMenuExtension cm;
     EditorContext *ec = dynamic_cast<KDevelop::EditorContext *>(context);
 
-    if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(language())) {
+    if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(this)) {
         // It's a C++ file, let's add our context menu.
         m_refactoring->fillContextMenu(cm, context);
     }
