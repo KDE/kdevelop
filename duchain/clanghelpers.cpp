@@ -118,7 +118,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         buildDUChain(import.file, imports, session, features, includedFiles, index);
     }
 
-    const IndexedString path(QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file)))));
+    const IndexedString path(QDir::cleanPath(ClangString(clang_getFileName(file)).toString()));
 
     const auto& environment = session.environment();
 
@@ -210,7 +210,7 @@ DeclarationPointer ClangHelpers::findDeclaration(CXType type, const IncludeFileC
 
 DeclarationPointer ClangHelpers::findForwardDeclaration(CXType type, DUContext* context, CXCursor cursor)
 {
-    auto qualifiedIdentifier = QualifiedIdentifier(QString::fromUtf8(ClangString(clang_getTypeSpelling(type))));
+    auto qualifiedIdentifier = QualifiedIdentifier(ClangString(clang_getTypeSpelling(type)).toString());
 
     DUChainReadLocker lock;
     auto decls = context->findDeclarations(qualifiedIdentifier,

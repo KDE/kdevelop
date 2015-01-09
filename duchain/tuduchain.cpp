@@ -342,7 +342,7 @@ CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXCl
 AbstractType* TUDUChain::createDelayedType(CXType type) const
 {
     auto t = new DelayedType;
-    t->setIdentifier(IndexedTypeIdentifier(QString::fromUtf8(ClangString(clang_getTypeSpelling(type)))));
+    t->setIdentifier(IndexedTypeIdentifier(ClangString(clang_getTypeSpelling(type)).toString()));
     return t;
 }
 
