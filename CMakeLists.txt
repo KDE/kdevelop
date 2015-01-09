@@ -62,11 +62,14 @@ add_subdirectory(codegen)
 add_subdirectory(util)
 add_subdirectory(tests)
 
-add_library(kdevclangsupport MODULE
+set(kdevclangsupport_SRCS
     clangparsejob.cpp
     clangsupport.cpp
     documentfinderhelpers.cpp
 )
+
+kdevplatform_add_plugin(kdevclangsupport JSON kdevclangsupport.json SOURCES ${kdevclangsupport_SRCS})
+
 target_link_libraries(kdevclangsupport
     kdevclangduchain
     kdevclangcodecompletion
@@ -78,10 +81,6 @@ target_link_libraries(kdevclangsupport
     KDev::Util
     KDev::Project
 )
-
-configure_file(kdevclangsupport.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevclangsupport.desktop)
-install( FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevclangsupport.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install(TARGETS kdevclangsupport DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 
 install(FILES kdevclangsupport.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevclangsupport)
 

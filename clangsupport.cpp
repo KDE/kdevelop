@@ -65,7 +65,7 @@
 #include <QAction>
 #include <QRegExp>
 
-K_PLUGIN_FACTORY(KDevClangSupportFactory, registerPlugin<ClangSupport>(); )
+K_PLUGIN_FACTORY_WITH_JSON(KDevClangSupportFactory, "kdevclangsupport.json", registerPlugin<ClangSupport>(); )
 
 using namespace KDevelop;
 

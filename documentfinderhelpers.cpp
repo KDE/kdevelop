@@ -209,10 +209,14 @@ QPair<QString,FileType> basePathAndTypeForUrl(const QUrl &url)
 
 QStringList DocumentFinderHelpers::mimeTypesList()
 {
-    KDesktopFile desktopFile(QStandardPaths::GenericDataLocation, QString("kservices5/kdevclangsupport.desktop"));
-    const KConfigGroup& desktopGroup = desktopFile.desktopGroup();
-    QString mimeTypesStr = desktopGroup.readEntry("X-KDevelop-SupportedMimeTypes", "");
-    return mimeTypesStr.split(QChar(','), QString::SkipEmptyParts);
+    static const QStringList mimeTypes = {
+        QStringLiteral("text/x-chdr"),
+        QStringLiteral("text/x-c++hdr"),
+        QStringLiteral("text/x-csrc"),
+        QStringLiteral("text/x-c++src"),
+        QStringLiteral("text/x-objcsrc")
+    };
+    return mimeTypes;
 }
 
 bool DocumentFinderHelpers::areBuddies(const QUrl &url1, const QUrl& url2)

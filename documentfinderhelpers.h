@@ -31,7 +31,7 @@
 class DocumentFinderHelpers
 {
 public:
-    /// @return All supported mime types defined in kdevclangsupport.desktop file.
+    /// @return All supported mime types
     static QStringList mimeTypesList();
 
     /**
