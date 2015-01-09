@@ -201,12 +201,11 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
     }
 
     const auto existingData = existingSessionData();
-    ParseSession session(existingData ? existingData : createSessionData());
-
     if (abortRequested()) {
         return;
     }
 
+    ParseSession session(existingData ? existingData : createSessionData());
     const bool update = existingData && session.environment().translationUnitUrl() == m_environment.translationUnitUrl();
     if (!update || !session.reparse(document(), contents().contents, m_environment)) {
         session.setData(createSessionData());
