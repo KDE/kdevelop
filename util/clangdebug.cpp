@@ -27,7 +27,7 @@
 #include <language/editor/documentcursor.h>
 #include <language/editor/documentrange.h>
 
-Q_LOGGING_CATEGORY(KDEV_CLANG, "kdev-clang")
+Q_LOGGING_CATEGORY(KDEV_CLANG, "kdevelop.plugins.clang")
 
 using namespace KDevelop;
 
