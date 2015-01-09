@@ -43,9 +43,8 @@ namespace {
 // This has to be a slow value, so that we don't fill our file extension cache with crap
 const int maximumCacheExtensionLength = 3;
 
-// TODO: kf5, use QStringLiteral
-const QString KEY_SupportedMimeTypes = "X-KDevelop-SupportedMimeTypes";
-const QString KEY_ILanguageSupport = "ILanguageSupport";
+const QString KEY_SupportedMimeTypes = QStringLiteral("X-KDevelop-SupportedMimeTypes");
+const QString KEY_ILanguageSupport = QStringLiteral("ILanguageSupport");
 }
 
 inline uint qHash(const QMimeType& mime, uint seed = 0)
