@@ -74,7 +74,7 @@ void TestPluginController::pluginInfo()
     IPlugin* plugin = m_pluginCtrl->loadPlugin( "kdevnonguiinterface" );
     QVERIFY(plugin);
     KPluginInfo kpi = m_pluginCtrl->pluginInfo( plugin );
-    QCOMPARE( QString( "kdevnonguiinterface" ), kpi.pluginName() );
+    QCOMPARE( QStringLiteral( "kdevnonguiinterface" ), kpi.pluginName() );
 }
 
 void TestPluginController::loadUnloadPlugin()
@@ -90,7 +90,7 @@ void TestPluginController::loadUnloadPlugin()
     QCOMPARE(spyloading.size(), 1);
 
     QList<QVariant> args = spyloading.takeFirst();
-    QCOMPARE( args.at(0).toString(), QString( "kdevnonguiinterface" ) );
+    QCOMPARE( args.at(0).toString(), QStringLiteral( "kdevnonguiinterface" ) );
 
     QSignalSpy spy2(m_pluginCtrl, SIGNAL(pluginUnloaded(KDevelop::IPlugin*)) );
     QSignalSpy spy3(m_pluginCtrl, SIGNAL(unloadingPlugin(KDevelop::IPlugin*)) );

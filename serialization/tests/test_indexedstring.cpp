@@ -50,11 +50,11 @@ void TestIndexedString::testUrl_data()
   QTest::addColumn<QUrl>("url");
   QTest::addColumn<QString>("string");
   QTest::newRow("empty") << QUrl() << QString();
-  QTest::newRow("/") << QUrl::fromLocalFile("/") << QString("/");
-  QTest::newRow("/foo/bar") << QUrl::fromLocalFile("/foo/bar") << QString("/foo/bar");
-  QTest::newRow("http://foo.com/") << QUrl("http://foo.com/") << QString("http://foo.com/");
-  QTest::newRow("http://foo.com/bar/asdf") << QUrl("http://foo.com/bar/asdf") << QString("http://foo.com/bar/asdf");
-  QTest::newRow("file:///bar/asdf") << QUrl("file:///bar/asdf") << QString("/bar/asdf");
+  QTest::newRow("/") << QUrl::fromLocalFile("/") << QStringLiteral("/");
+  QTest::newRow("/foo/bar") << QUrl::fromLocalFile("/foo/bar") << QStringLiteral("/foo/bar");
+  QTest::newRow("http://foo.com/") << QUrl("http://foo.com/") << QStringLiteral("http://foo.com/");
+  QTest::newRow("http://foo.com/bar/asdf") << QUrl("http://foo.com/bar/asdf") << QStringLiteral("http://foo.com/bar/asdf");
+  QTest::newRow("file:///bar/asdf") << QUrl("file:///bar/asdf") << QStringLiteral("/bar/asdf");
 }
 
 void TestIndexedString::testUrl()
@@ -71,7 +71,7 @@ static QVector<QString> generateData()
   static const int NUM_ITEMS = 100000;
   data.resize(NUM_ITEMS);
   for(int i = 0; i < NUM_ITEMS; ++i) {
-    data[i] = QString("/foo/%1").arg(i);
+    data[i] = QStringLiteral("/foo/%1").arg(i);
   }
   return data;
 }
@@ -226,7 +226,7 @@ void TestIndexedString::test_data()
   QTest::addColumn<QString>("data");
 
   QTest::newRow("empty") << QString();
-  QTest::newRow("char-ascii") << QString("a");
+  QTest::newRow("char-ascii") << QStringLiteral("a");
   QTest::newRow("char-utf8") << QString::fromUtf8("ä");
   QTest::newRow("string-ascii") << QString::fromLatin1("asdf()?=");
   QTest::newRow("string-utf8") << QString::fromUtf8("æſðđäöü");

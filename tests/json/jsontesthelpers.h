@@ -48,8 +48,8 @@ namespace JsonTestHelpers
 {
 
 const QString SUCCESS = QString();
-const QString INVALID_JSON_TYPE = QString("Incorrect JSON type provided for test. Actual: %1, Expected: %2");
-const QString INVALID_POINTER = QString("Null pointer passed to test.");
+const QString INVALID_JSON_TYPE = QStringLiteral("Incorrect JSON type provided for test. Actual: %1, Expected: %2");
+const QString INVALID_POINTER = QStringLiteral("Null pointer passed to test.");
 
 template <class Type>
 inline QString compareValues(Type realValue, const QVariant &value, const QString &errorDesc)
@@ -70,7 +70,7 @@ inline QString testObject(Object obj, const QVariant &value, const QString &erro
 
 inline QString rangeStr(const KDevelop::RangeInRevision &range)
 {
-  return QString("[(%1, %2), (%3, %4)]")
+  return QStringLiteral("[(%1, %2), (%3, %4)]")
     .arg(range.start.line)
     .arg(range.start.column)
     .arg(range.end.line)

@@ -1137,7 +1137,7 @@ QString ContextBrowserPlugin::actionTextFor(int historyIndex) const
         actionText = "<unnamed>";
     actionText += " @ ";
     QString fileName = entry.absoluteCursorPosition.document.toUrl().fileName();
-    actionText += QString("%1:%2").arg(fileName).arg(entry.absoluteCursorPosition.line()+1);
+    actionText += QStringLiteral("%1:%2").arg(fileName).arg(entry.absoluteCursorPosition.line()+1);
     return actionText;
 }
 

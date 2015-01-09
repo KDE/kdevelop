@@ -175,7 +175,7 @@ void TestBazaar::commitFiles()
     prepareWhoamiInformations();
     qDebug() << "Committing...";
     //we start it after addFiles, so we just have to commit
-    VcsJob* j = m_plugin->commit(QString("Test commit"), QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
+    VcsJob* j = m_plugin->commit(QStringLiteral("Test commit"), QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
 
     //test bzr-status exitCode one more time.
@@ -213,7 +213,7 @@ void TestBazaar::commitFiles()
     j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir + bazaarTest_FileName));
     VERIFYJOB(j);
 
-    j = m_plugin->commit(QString("KDevelop's Test commit2"), QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
+    j = m_plugin->commit(QStringLiteral("KDevelop's Test commit2"), QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
 }
 
@@ -248,7 +248,7 @@ void TestBazaar::testAnnotation()
     input << "An appended line";
     f.close();
 
-    VcsJob* j = m_plugin->commit(QString("KDevelop's Test commit3"), QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
+    VcsJob* j = m_plugin->commit(QStringLiteral("KDevelop's Test commit3"), QList<QUrl>() << QUrl::fromLocalFile(bazaarTest_BaseDir));
     VERIFYJOB(j);
 
     j = m_plugin->annotate(QUrl::fromLocalFile(bazaarTest_BaseDir + bazaarTest_FileName), VcsRevision::createSpecialRevision(VcsRevision::Head));
@@ -259,12 +259,12 @@ void TestBazaar::testAnnotation()
     QVERIFY(results.at(0).canConvert<VcsAnnotationLine>());
     VcsAnnotationLine annotation = results.at(0).value<VcsAnnotationLine>();
     QCOMPARE(annotation.lineNumber(), 0);
-    QCOMPARE(annotation.commitMessage(), QString("KDevelop's Test commit2"));
+    QCOMPARE(annotation.commitMessage(), QStringLiteral("KDevelop's Test commit2"));
 
     QVERIFY(results.at(1).canConvert<VcsAnnotationLine>());
     annotation = results.at(1).value<VcsAnnotationLine>();
     QCOMPARE(annotation.lineNumber(), 1);
-    QCOMPARE(annotation.commitMessage(), QString("KDevelop's Test commit3"));
+    QCOMPARE(annotation.commitMessage(), QStringLiteral("KDevelop's Test commit3"));
 }
 
 void TestBazaar::testRemoveEmptyFolder()

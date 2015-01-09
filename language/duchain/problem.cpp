@@ -212,7 +212,7 @@ QString Problem::sourceString() const
 
 QString Problem::toString() const
 {
-    return QString("%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)")
+    return QStringLiteral("%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)")
         .arg(severityString())
         .arg(description())
         .arg(url().str())
@@ -220,7 +220,7 @@ QString Problem::toString() const
         .arg(range().start.column)
         .arg(range().end.line)
         .arg(range().end.column)
-        .arg((explanation().isEmpty() ? QString("<no explanation>") : explanation()))
+        .arg((explanation().isEmpty() ? QStringLiteral("<no explanation>") : explanation()))
         .arg(sourceString());
 }
 

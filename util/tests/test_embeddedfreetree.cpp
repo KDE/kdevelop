@@ -68,7 +68,7 @@ clock_t std_insertion = 0, std_removal = 0, std_contains = 0, std_iteration = 0,
 QString toString(std::set<uint> set) {
     QString ret;
     for(std::set<uint>::const_iterator it = set.begin(); it != set.end(); ++it)
-        ret += QString("%1 ").arg(*it);
+        ret += QStringLiteral("%1 ").arg(*it);
     return ret;
 }
 

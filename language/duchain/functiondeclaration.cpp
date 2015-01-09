@@ -76,7 +76,7 @@ QString FunctionDeclaration::toString() const {
 
   TypePtr<FunctionType> function = type.cast<FunctionType>();
   if(function) {
-    return QString("%1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+    return QStringLiteral("%1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
   }else{
     return Declaration::toString();
   }

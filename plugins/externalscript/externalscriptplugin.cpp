@@ -327,7 +327,7 @@ void ExternalScriptPlugin::rowsRemoved( const QModelIndex& /*parent*/, int start
 {
   KConfigGroup config = getConfig();
   for ( int i = start; i <= end; ++i ) {
-    KConfigGroup child = config.group( QString("script %1").arg(i) );
+    KConfigGroup child = config.group( QStringLiteral("script %1").arg(i) );
     qCDebug(PLUGIN_EXTERNALSCRIPT) << "removing config group:" << child.name();
     child.deleteGroup();
   }
@@ -350,7 +350,7 @@ void ExternalScriptPlugin::saveItemForRow( int row )
   Q_ASSERT( item );
 
   qCDebug(PLUGIN_EXTERNALSCRIPT) << "save extern script:" << item << idx;
-  KConfigGroup config = getConfig().group( QString("script %1").arg( row ) );
+  KConfigGroup config = getConfig().group( QStringLiteral("script %1").arg( row ) );
   config.writeEntry( "name", item->text() );
   config.writeEntry( "command", item->command() );
   config.writeEntry( "inputMode", (uint) item->inputMode() );

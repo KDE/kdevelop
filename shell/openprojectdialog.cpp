@@ -122,7 +122,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
         // report error
         KColorScheme scheme(palette().currentColorGroup());
         const QString errorMsg = i18n("Selected URL is invalid");
-        openPage->setHeader(QString("<font color='%1'>%2</font>")
+        openPage->setHeader(QStringLiteral("<font color='%1'>%2</font>")
             .arg(scheme.foreground(KColorScheme::NegativeText).color().name())
             .arg(errorMsg)
         );

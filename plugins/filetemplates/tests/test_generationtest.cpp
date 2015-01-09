@@ -87,7 +87,7 @@ void TestGenerationTest::yamlTemplate()
     SourceFileTemplate file;
     file.addAdditionalSearchLocation(TESTS_DATA_DIR "/testgenerationtest/templates");
     file.setTemplateDescription(description, "testgenerationtest");
-    QCOMPARE(file.name(), QString("Testing YAML Template"));
+    QCOMPARE(file.name(), QStringLiteral("Testing YAML Template"));
 
     DocumentChangeSet changes = renderer->renderFileTemplate(file, baseUrl, urls(file));
     changes.applyAllChanges();
@@ -103,7 +103,7 @@ void TestGenerationTest::cppTemplate()
     file.addAdditionalSearchLocation(TESTS_DATA_DIR "/testgenerationtest/templates");
     file.setTemplateDescription(description, "testgenerationtest");
 
-    QCOMPARE(file.name(), QString("Testing C++ Template"));
+    QCOMPARE(file.name(), QStringLiteral("Testing C++ Template"));
 
     DocumentChangeSet changes = renderer->renderFileTemplate(file, baseUrl, urls(file));
     changes.applyAllChanges();

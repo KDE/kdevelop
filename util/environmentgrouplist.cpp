@@ -42,7 +42,7 @@ static const QString groupListKey = "Group List";
 
 void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 {
-    d->m_defaultGroup = cfg.readEntry( defaultEnvGroupKey, QString( "default" ) );
+    d->m_defaultGroup = cfg.readEntry( defaultEnvGroupKey, QStringLiteral( "default" ) );
     QStringList grouplist = cfg.readEntry( groupListKey, QStringList() << "default" );
     foreach( const QString &envgrpname, grouplist )
     {
@@ -50,7 +50,7 @@ void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
         QMap<QString,QString> variables;
         foreach( const QString &varname, envgrp.keyList() )
         {
-            variables[varname] = envgrp.readEntry( varname, QString("") );
+            variables[varname] = envgrp.readEntry( varname, QStringLiteral("") );
         }
         d->m_groups.insert( envgrpname, variables );
     }

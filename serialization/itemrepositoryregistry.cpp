@@ -51,7 +51,7 @@ QString repositoryPathForSession(const KDevelop::ISessionLock::Ptr& session)
 {
   QString xdgCacheDir = QProcessEnvironment::systemEnvironment().value("XDG_CACHE_HOME", QDir::homePath() + "/.cache") + "/kdevduchain";
   QString baseDir = QProcessEnvironment::systemEnvironment().value("KDEV_DUCHAIN_DIR", xdgCacheDir);
-  baseDir += QString("/%1-%2").arg(qApp->applicationName()).arg(session->id());
+  baseDir += QStringLiteral("/%1-%2").arg(qApp->applicationName()).arg(session->id());
   return baseDir;
 }
 
@@ -73,12 +73,12 @@ bool shouldClear(const QString& path)
     return true;
   }
 
-  if (!dir.exists(QString("version_%1").arg(staticItemRepositoryVersion()))) {
+  if (!dir.exists(QStringLiteral("version_%1").arg(staticItemRepositoryVersion()))) {
     qWarning() << "version-hint not found, seems to be an old version";
     return true;
   }
 
-  QFile crashesFile(dir.filePath(QString("crash_counter")));
+  QFile crashesFile(dir.filePath(QStringLiteral("crash_counter")));
   if (crashesFile.open(QIODevice::ReadOnly)) {
     int count;
     QDataStream stream(&crashesFile);
@@ -285,7 +285,7 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
 
   // Check if the repository shall be cleared
   if (shouldClear(path)) {
-    qWarning() << QString("The data-repository at %1 has to be cleared.").arg(m_path);
+    qWarning() << QStringLiteral("The data-repository at %1 has to be cleared.").arg(m_path);
     deleteDataDirectory(path);
   }
 
@@ -325,7 +325,7 @@ void ItemRepositoryRegistry::store()
     repository->store();
   }
 
-  QFile versionFile(d->m_path + QString("/version_%1").arg(staticItemRepositoryVersion()));
+  QFile versionFile(d->m_path + QStringLiteral("/version_%1").arg(staticItemRepositoryVersion()));
   if(versionFile.open(QIODevice::WriteOnly)) {
     versionFile.close();
   } else {

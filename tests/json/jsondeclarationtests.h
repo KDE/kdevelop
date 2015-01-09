@@ -71,7 +71,7 @@ namespace KDevelop
   QString TestSuite<Declaration*>::objectInformation(Declaration *decl)
   {
     VERIFY_NOT_NULL(decl);
-    return QString("(Declaration on line %1 in %2)")
+    return QStringLiteral("(Declaration on line %1 in %2)")
         .arg(decl->range().start.line + 1)
         .arg(decl->topContext()->url().str());
   }
@@ -103,7 +103,7 @@ DeclarationTest(useRanges)
   }
   const QStringList testValues = value.toStringList();
   return ranges == testValues ? SUCCESS
-    : QString("Declaration's use ranges (\"%1\") don't match test data (\"%2\").").arg(ranges.join(", ")).arg(testValues.join(", "));
+    : QStringLiteral("Declaration's use ranges (\"%1\") don't match test data (\"%2\").").arg(ranges.join(", ")).arg(testValues.join(", "));
 }
 ///JSON type: string
 ///@returns whether the declaration's identifier matches the given value

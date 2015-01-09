@@ -155,10 +155,10 @@ public:
         QString label;
         if( l->project() )
         {
-            label = QString("%1 : %2").arg( l->project()->name()).arg(l->name());
+            label = QStringLiteral("%1 : %2").arg( l->project()->name()).arg(l->name());
         } else
         {
-            label = QString("%1" ).arg(l->name());
+            label = QStringLiteral("%1" ).arg(l->name());
         }
         return label;
     }
@@ -860,7 +860,7 @@ QString makeUnique(const QString& name)
 {
     if(launcherNameExists(name)) {
         for(int i=2; ; i++) {
-            QString proposed = QString("%1 (%2)").arg(name).arg(i);
+            QString proposed = QStringLiteral("%1 (%2)").arg(name).arg(i);
             if(!launcherNameExists(proposed)) {
                 return proposed;
             }
@@ -886,11 +886,11 @@ ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigura
     QStringList configs = launchGroup.readEntry( RunController::LaunchConfigurationsListEntry, QStringList() );
     uint num = 0;
     QString baseName = "Launch Configuration";
-    while( configs.contains( QString( "%1 %2" ).arg( baseName ).arg( num ) ) )
+    while( configs.contains( QStringLiteral( "%1 %2" ).arg( baseName ).arg( num ) ) )
     {
         num++;
     }
-    QString groupName = QString( "%1 %2" ).arg( baseName ).arg( num );
+    QString groupName = QStringLiteral( "%1 %2" ).arg( baseName ).arg( num );
     KConfigGroup launchConfigGroup = launchGroup.group( groupName );
     QString cfgName = name;
     if( name.isEmpty() )

@@ -104,8 +104,8 @@ void TestIdentifier::testIdentifier_data()
   QTest::addColumn<QString>("stringId");
 
   QTest::newRow("empty") << QString();
-  QTest::newRow("foo") << QString("foo");
-  QTest::newRow("bar") << QString("bar");
+  QTest::newRow("foo") << QStringLiteral("foo");
+  QTest::newRow("bar") << QStringLiteral("bar");
   //TODO: test template identifiers
 }
 

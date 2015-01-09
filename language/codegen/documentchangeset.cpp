@@ -251,7 +251,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
     foreach(const IndexedString &file, files) {
         CodeRepresentation::Ptr repr = createCodeRepresentation(file);
         if(!repr) {
-            return ChangeResult(QString("Could not create a Representation for %1").arg(file.str()));
+            return ChangeResult(QStringLiteral("Could not create a Representation for %1").arg(file.str()));
         }
 
         codeRepresentations[file] = repr;
@@ -316,7 +316,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
             const DocumentChange& change(*sortedChangesList[pos]);
             if(!dynamic->replace(change.m_range, change.m_oldText, change.m_newText, change.m_ignoreOldText))
             {
-                QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"")
+                QString warningString = QStringLiteral("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"")
                     .arg(change.m_document.str())
                     .arg(change.m_range.start().line())
                     .arg(change.m_range.start().column())
@@ -339,7 +339,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
 
     //For files on disk
     if (!repr->setText(newText)) {
-        QString warningString = QString("Could not replace text in the document: %1")
+        QString warningString = QStringLiteral("Could not replace text in the document: %1")
             .arg(sortedChangesList.begin()->data()->m_document.str());
         if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
             qCWarning(LANGUAGE) << warningString;
@@ -441,7 +441,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                 }
             }
         }else{
-            QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5"
+            QString warningString = QStringLiteral("Inconsistent change in %1 at %2:%3 -> %4:%5"
                                             " = \"%6\"(encountered \"%7\") -> \"%8\"")
                                             .arg(file.str())
                                             .arg(change.m_range.start().line())
@@ -512,7 +512,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
                 continue;
             } else {
                 return DocumentChangeSet::ChangeResult(
-                       QString("Inconsistent change-request at %1; "
+                       QStringLiteral("Inconsistent change-request at %1; "
                                "intersecting changes: "
                                "\"%2\"->\"%3\"@%4:%5->%6:%7 & \"%8\"->\"%9\"@%10:%11->%12:%13 ")
                         .arg(file.str(), ( *previous )->m_oldText, ( *previous )->m_newText)

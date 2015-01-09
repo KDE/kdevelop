@@ -53,10 +53,10 @@ void generateChilds( ProjectBaseItem* parent, int count, int depth )
 {
     for( int i = 0; i < 10; i++ ) {
         if( depth > 0 ) {
-            ProjectFolderItem* item = new ProjectFolderItem( QString( "f%1" ).arg( i ), parent );
+            ProjectFolderItem* item = new ProjectFolderItem( QStringLiteral( "f%1" ).arg( i ), parent );
             generateChilds( item, count, depth - 1 );
         } else {
-            new ProjectFileItem( QString( "f%1" ).arg( i ), parent );
+            new ProjectFileItem( QStringLiteral( "f%1" ).arg( i ), parent );
         }
     }
 }
@@ -107,7 +107,7 @@ void ProjectModelPerformanceTest::init()
     timer.start();
 
     for( int i = 0; i < INIT_WIDTH; i++ ) {
-        ProjectFolderItem* item = new ProjectFolderItem( 0, Path( QUrl::fromLocalFile( QString( "/f%1" ).arg( i ) ) ) );
+        ProjectFolderItem* item = new ProjectFolderItem( 0, Path( QUrl::fromLocalFile( QStringLiteral( "/f%1" ).arg( i ) ) ) );
         generateChilds( item, INIT_WIDTH, INIT_DEPTH );
         model->appendRow( item );
     }
@@ -132,7 +132,7 @@ void ProjectModelPerformanceTest::addBigTree()
     QElapsedTimer timer;
     timer.start();
     for( int i = 0; i < BIG_WIDTH; i++ ) {
-        ProjectFolderItem* item = new ProjectFolderItem( 0, Path( QUrl::fromLocalFile( QString( "/f%1" ).arg( i ) ) ) );
+        ProjectFolderItem* item = new ProjectFolderItem( 0, Path( QUrl::fromLocalFile( QStringLiteral( "/f%1" ).arg( i ) ) ) );
         generateChilds( item, BIG_WIDTH, BIG_DEPTH );
         model->appendRow( item );
     }
@@ -153,9 +153,9 @@ void ProjectModelPerformanceTest::addItemDelayed()
     Path path;
     if( !currentParent.isEmpty() ) {
         parent = currentParent.top();
-        path = Path(parent->path(), QString("f%1").arg(parent->rowCount()));
+        path = Path(parent->path(), QStringLiteral("f%1").arg(parent->rowCount()));
     } else {
-        path = Path(QUrl::fromLocalFile(QString("/f%1").arg(model->rowCount())));
+        path = Path(QUrl::fromLocalFile(QStringLiteral("/f%1").arg(model->rowCount())));
     }
     ProjectBaseItem* item = 0;
     if( currentParent.size() < BIG_DEPTH ) {
@@ -187,7 +187,7 @@ void ProjectModelPerformanceTest::addSmallTree()
     QElapsedTimer timer;
     timer.start();
     for( int i = 0; i < SMALL_WIDTH; i++ ) {
-        ProjectFolderItem* item = new ProjectFolderItem( 0, Path(QUrl::fromLocalFile( QString( "/f%1" ).arg( i ) )) );
+        ProjectFolderItem* item = new ProjectFolderItem( 0, Path(QUrl::fromLocalFile( QStringLiteral( "/f%1" ).arg( i ) )) );
         generateChilds( item, SMALL_WIDTH, SMALL_DEPTH );
         model->appendRow( item );
     }

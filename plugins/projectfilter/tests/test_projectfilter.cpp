@@ -343,13 +343,13 @@ static QVector<BenchData> createBenchData(const Path& base, int folderDepth, int
 
     for(int i = 0; i < filesPerFolder; ++i) {
         if (i % 2) {
-            data << BenchData(Path(base, QString("file%1.cpp").arg(i)), false);
+            data << BenchData(Path(base, QStringLiteral("file%1.cpp").arg(i)), false);
         } else {
-            data << BenchData(Path(base, QString("file%1.h").arg(i)), true);
+            data << BenchData(Path(base, QStringLiteral("file%1.h").arg(i)), true);
         }
     }
     for(int i = 0; i < foldersPerFolder && folderDepth > 0; ++i) {
-        data += createBenchData(Path(base, QString("folder%1").arg(i)), folderDepth - 1, foldersPerFolder, filesPerFolder);
+        data += createBenchData(Path(base, QStringLiteral("folder%1").arg(i)), folderDepth - 1, foldersPerFolder, filesPerFolder);
     }
     return data;
 }

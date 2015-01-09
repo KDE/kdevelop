@@ -157,7 +157,7 @@ QString FunctionType::partToString( SignaturePart sigPart ) const {
         first = false;
       else
         args.append(", ");
-      args.append(type ? type.abstractType()->toString() : QString("<notype>"));
+      args.append(type ? type.abstractType()->toString() : QStringLiteral("<notype>"));
     }
     args += ')';
   }
@@ -165,11 +165,11 @@ QString FunctionType::partToString( SignaturePart sigPart ) const {
   if( sigPart == SignatureArguments )
     return args;
   else if( sigPart == SignatureWhole )
-    return QString("function %1 %2").arg(returnType() ? returnType()->toString() : QString("<notype>")).arg(args);
+    return QStringLiteral("function %1 %2").arg(returnType() ? returnType()->toString() : QStringLiteral("<notype>")).arg(args);
   else if( sigPart == SignatureReturn )
     return returnType() ? returnType()->toString() : QString();
 
-  return QString("ERROR");
+  return QStringLiteral("ERROR");
 }
 
 QString FunctionType::toString() const

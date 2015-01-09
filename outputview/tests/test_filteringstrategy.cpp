@@ -363,7 +363,7 @@ void TestFilteringStrategy::testCompilerFilterstrategyUrlFromAction_data()
     QTest::newRow("waf-cd")
     << QString("Waf: Entering directory `" + basepath + "/path/to/two/'") << QString( basepath + "/path/to/two");
     QTest::newRow("cmake-line7")
-    << QString("[ 50%] Building CXX object CMakeFiles/testdeque.dir/RingBuffer.cpp.o") << QString( basepath);
+    << QStringLiteral("[ 50%] Building CXX object CMakeFiles/testdeque.dir/RingBuffer.cpp.o") << QString( basepath);
 }
 
 void TestFilteringStrategy::testCompilerFilterstrategyUrlFromAction()
@@ -386,7 +386,7 @@ void TestFilteringStrategy::benchMarkCompilerFilterAction()
         ++j; ++k; ++l;
         QString tmp;
         if(m % 2 == 0) {
-            tmp = QString( "[ 26%] Building CXX object /this/is/the/path/to/the/files/%1/%2/%3/CMakeFiles/file.o").arg( j ).arg( k ).arg( l );
+            tmp = QStringLiteral( "[ 26%] Building CXX object /this/is/the/path/to/the/files/%1/%2/%3/CMakeFiles/file.o").arg( j ).arg( k ).arg( l );
         } else {
             tmp = QString( "make[4]: Entering directory '" + projecturl + "/this/is/the/path/to/the/files/%1/%2/%3/").arg( j ).arg( k ).arg( l );
         }

@@ -87,7 +87,7 @@ void TestDUChainShutdown::runTest()
     QVERIFY(top);
     QVERIFY(idxTop.isLoaded());
     QCOMPARE(top->childContexts().size(), 1);
-    QCOMPARE(top->childContexts().first()->localScopeIdentifier().toString(), QString("foo::bar::asdf"));
+    QCOMPARE(top->childContexts().first()->localScopeIdentifier().toString(), QStringLiteral("foo::bar::asdf"));
     QCOMPARE(idxCtx.data(), top->childContexts().first());
   }
   {

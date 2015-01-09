@@ -90,7 +90,7 @@ QToolBar* TestToolViewToolBar::fetchToolBarFor(Sublime::View* view)
     Q_ASSERT_X(toolWin, loc, "Tool widget's parent is not a QMainWindow.");
     QList<QToolBar*> toolBars = toolWin->findChildren<QToolBar*>();
     int barCount = toolBars.count();
-    char* failMsg = qstrdup(QString("Expected to find a toolbar but found %1").arg(barCount).toLatin1().data());
+    char* failMsg = qstrdup(QStringLiteral("Expected to find a toolbar but found %1").arg(barCount).toLatin1().data());
     Q_UNUSED(failMsg);
     Q_ASSERT_X(barCount == 1, loc, failMsg);
     return toolBars.at(0);

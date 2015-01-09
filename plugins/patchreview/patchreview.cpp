@@ -252,7 +252,7 @@ void PatchReviewPlugin::updateKompareModel() {
         } catch ( const QString & str ) {
             throw;
         } catch ( ... ) {
-            throw QString( "lib/libdiff2 crashed, memory may be corrupted. Please restart kdevelop." );
+            throw QStringLiteral( "lib/libdiff2 crashed, memory may be corrupted. Please restart kdevelop." );
         }
 
         emit patchChanged();
@@ -387,7 +387,7 @@ bool PatchReviewPlugin::setUniqueEmptyWorkingSet() {
         w->area()->setWorkingSet( "review" );
 
     while( !isWorkingSetUnique() )
-        w->area()->setWorkingSet( QString( "review_%1" ).arg( rand() % 10000 ) );
+        w->area()->setWorkingSet( QStringLiteral( "review_%1" ).arg( rand() % 10000 ) );
 
     // We've asked the user, so just clear silently
     w->area()->clearViews( true );

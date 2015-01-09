@@ -45,7 +45,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     ui->locationUrl->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     ui->locationUrl->setUrl(KDevelop::ICore::self()->projectController()->projectsBaseDirectory());
 
-    ui->locationValidLabel->setText(QString(" "));
+    ui->locationValidLabel->setText(QStringLiteral(" "));
 
     connect( ui->locationUrl->lineEdit(), &KLineEdit::textEdited,
              this, &ProjectSelectionPage::urlEdited);
@@ -135,7 +135,7 @@ void ProjectSelectionPage::itemChanged( const QModelIndex& current)
     const QVariant headerData = ui->templateType->isVisible()
                                     ? current.parent().data()
                                     : current.data();
-    ui->header->setText(QString("<h1>%1</h1>").arg(headerData.toString().trimmed()));
+    ui->header->setText(QStringLiteral("<h1>%1</h1>").arg(headerData.toString().trimmed()));
     ui->description->setText(current.data(KDevelop::TemplatesModel::CommentRole).toString());
     validateData();
 
@@ -241,7 +241,7 @@ void ProjectSelectionPage::validateData()
     QStandardItem* item = getCurrentItem();
     if( item && !item->hasChildren() )
     {
-        ui->locationValidLabel->setText( QString(" ") );
+        ui->locationValidLabel->setText( QStringLiteral(" ") );
         setForeground(ui->locationValidLabel, KColorScheme::NormalText);
         emit valid();
     } else

@@ -98,7 +98,7 @@ VcsAnnotationModel::~VcsAnnotationModel()
 static QString abbreviateLastName(const QString& author) {
     auto parts = author.split(' ');
     bool onlyOneFragment = parts.size() == 1 || ( parts.size() == 2 && parts.at(1).isEmpty() );
-    return onlyOneFragment ? parts.first() : parts.first() + QString(" %1.").arg(parts.last()[0]);
+    return onlyOneFragment ? parts.first() : parts.first() + QStringLiteral(" %1.").arg(parts.last()[0]);
 }
 
 QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
@@ -118,7 +118,7 @@ QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
         return QVariant( d->m_brushes[aline.revision()] );
     } else if( role == Qt::DisplayRole )
     {
-        return QVariant( QString("%1 ").arg(aline.date().date().year()) + abbreviateLastName(aline.author()) );
+        return QVariant( QStringLiteral("%1 ").arg(aline.date().date().year()) + abbreviateLastName(aline.author()) );
     } else if( role == Qt::UserRole ) // TODO KDE5: replace by KTextEditor::AnnotationModel::GroupIdentifierRole
     {
         return aline.revision().revisionValue();

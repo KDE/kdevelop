@@ -54,7 +54,7 @@ QString BazaarUtils::getRevisionSpec(const KDevelop::VcsRevision& revision)
         else
             return QString(); // Don't know how to handle this situation
     } else if (revision.revisionType() == KDevelop::VcsRevision::GlobalNumber)
-        return QString("-r") + QString::number(revision.revisionValue().toLongLong());
+        return QStringLiteral("-r") + QString::number(revision.revisionValue().toLongLong());
     else
         return QString(); // Don't know how to handle this situation
 }
@@ -74,7 +74,7 @@ QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& end)
             return QString(); // Don't know how to handle this situation
         }
     } else if (end.revisionType() == KDevelop::VcsRevision::GlobalNumber) {
-        return QString("-r") + QString::number(end.revisionValue().toLongLong());
+        return QStringLiteral("-r") + QString::number(end.revisionValue().toLongLong());
     }
 
     return QString();    // Don't know how to handle this situation
@@ -94,7 +94,7 @@ QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& begin,
                 else if (end.specialType() == KDevelop::VcsRevision::Start)
                     return "-r0..1";        // That's wrong revision range
             } else if (end.revisionType() == KDevelop::VcsRevision::GlobalNumber)
-                return QString("-r") +
+                return QStringLiteral("-r") +
                        QString::number(end.revisionValue().toLongLong() - 1)
                        + ".." + QString::number(end.revisionValue().toLongLong());
             else
@@ -107,9 +107,9 @@ QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& begin,
     } else if (begin.revisionType() == KDevelop::VcsRevision::GlobalNumber) {
         if (end.revisionType() == KDevelop::VcsRevision::Special) {
             // Assuming working copy
-            return QString("-r") + QString::number(begin.revisionValue().toLongLong());
+            return QStringLiteral("-r") + QString::number(begin.revisionValue().toLongLong());
         } else {
-            return QString("-r") + QString::number(begin.revisionValue().toLongLong())
+            return QStringLiteral("-r") + QString::number(begin.revisionValue().toLongLong())
                    + ".." + QString::number(end.revisionValue().toLongLong());
         }
     }
@@ -165,20 +165,20 @@ KDevelop::VcsEvent BazaarUtils::parseBzrLogPart(const QString& output)
     for (const QString &line : outputLines) {
         if (!atMessage) {
             if (line.startsWith("revno")) {
-                QString revno = line.mid(QString("revno: ").length());
+                QString revno = line.mid(QStringLiteral("revno: ").length());
                 revno = revno.left(revno.indexOf(' '));
                 KDevelop::VcsRevision revision;
                 revision.setRevisionValue(revno.toLongLong(), KDevelop::VcsRevision::GlobalNumber);
                 commitInfo.setRevision(revision);
             } else if (line.startsWith("committer: ")) {
-                QString commiter = line.mid(QString("committer: ").length());
+                QString commiter = line.mid(QStringLiteral("committer: ").length());
                 commitInfo.setAuthor(commiter);     // Author goes after commiter, but only if is different
             } else if (line.startsWith("author")) {
-                QString author = line.mid(QString("author: ").length());
+                QString author = line.mid(QStringLiteral("author: ").length());
                 commitInfo.setAuthor(author);       // It may override commiter (In fact commiter is not supported by VcsEvent)
             } else if (line.startsWith("timestamp")) {
                 const QString formatString = "yyyy-MM-dd hh:mm:ss";
-                QString timestamp = line.mid(QString("timestamp: ddd ").length(), formatString.length());
+                QString timestamp = line.mid(QStringLiteral("timestamp: ddd ").length(), formatString.length());
                 commitInfo.setDate(QDateTime::fromString(timestamp, formatString));
             } else if (line.startsWith("message")) {
                 atMessage = true;

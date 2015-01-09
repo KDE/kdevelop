@@ -117,7 +117,7 @@ QVariant CompletionTreeItem::data(const QModelIndex& index, int role, const Code
   Q_UNUSED(index)
   Q_UNUSED(model)
   if(role == Qt::DisplayRole)
-    return QString("not implemented");
+    return QStringLiteral("not implemented");
   return QVariant();
 }
 

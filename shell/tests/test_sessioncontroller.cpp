@@ -201,7 +201,7 @@ void TestSessionController::readFromConfig()
     KConfigGroup grp( s->config(), "TestGroup" );
     grp.writeEntry( "TestEntry", "Test1" );
     KConfigGroup grp2( s->config(), "TestGroup" );
-    QCOMPARE(grp.readEntry( "TestEntry", "" ), QString( "Test1" ) );
+    QCOMPARE(grp.readEntry( "TestEntry", "" ), QStringLiteral( "Test1" ) );
 }
 
 void TestSessionController::temporary()

@@ -52,11 +52,11 @@ QStandardItemModel * TestAggregateModel::newModel()
     QStandardItemModel *model = new QStandardItemModel(this);
     QStandardItem *parentItem = model->invisibleRootItem();
 
-    QStandardItem *item = new QStandardItem(QString("cool item"));
+    QStandardItem *item = new QStandardItem(QStringLiteral("cool item"));
     parentItem->appendRow(item);
 
     for (int i = 0; i < 4; ++i) {
-        QStandardItem *item = new QStandardItem(QString("item %0").arg(i));
+        QStandardItem *item = new QStandardItem(QStringLiteral("item %0").arg(i));
         parentItem->appendRow(item);
         parentItem = item;
     }

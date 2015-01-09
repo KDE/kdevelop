@@ -116,7 +116,7 @@ QAction* ExternalScriptItem::action()
   ///TODO: this is quite ugly, or is it? if someone knows how to do it better, please refactor
   if ( !m_action ) {
     static int actionCount = 0;
-    m_action = new QAction( QString("executeScript%1").arg(actionCount), ExternalScriptPlugin::self() );
+    m_action = new QAction( QStringLiteral("executeScript%1").arg(actionCount), ExternalScriptPlugin::self() );
     m_action->setData( QVariant::fromValue<ExternalScriptItem*>(this) );
     ExternalScriptPlugin::self()->connect(
       m_action, &QAction::triggered,

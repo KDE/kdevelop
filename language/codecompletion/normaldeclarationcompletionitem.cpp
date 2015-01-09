@@ -145,7 +145,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
           }
       } else if(index.column() == CodeCompletionModel::Prefix) {
           if(m_declaration->kind() == Declaration::Namespace)
-            return QString("namespace");
+            return QStringLiteral("namespace");
           if (m_declaration->abstractType()) {
             if(EnumeratorType::Ptr enumerator = m_declaration->type<EnumeratorType>()) {
               if(m_declaration->context()->owner() && m_declaration->context()->owner()->abstractType()) {
@@ -161,7 +161,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
               if (functionType->returnType()) {
                 QString ret = shortenedTypeString(m_declaration, desiredTypeLength);
                 if(shortenArgumentHintReturnValues && argumentHintDepth() && ret.length() > maximumArgumentHintReturnValueLength)
-                  return QString("...");
+                  return QStringLiteral("...");
                 else
                   return ret;
               }else if(argumentHintDepth()) {

@@ -203,10 +203,10 @@ QualifiedIdentifier DeclarationId::qualifiedIdentifier() const
     if(decl)
       return decl->qualifiedIdentifier();
 
-    return QualifiedIdentifier(QString("(unknown direct declaration)"));
+    return QualifiedIdentifier(QStringLiteral("(unknown direct declaration)"));
   }
 
-  return QualifiedIdentifier(QString("(missing)")) + indirect.m_identifier.identifier();
+  return QualifiedIdentifier(QStringLiteral("(missing)")) + indirect.m_identifier.identifier();
 }
 
 }

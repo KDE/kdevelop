@@ -91,11 +91,11 @@ QString ClassFunctionDeclaration::toString() const {
 
   TypePtr<FunctionType> function = type<FunctionType>();
   if(function) {
-    return QString("%1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+    return QStringLiteral("%1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
   } else {
-    QString type = abstractType() ? abstractType()->toString() : QString("<notype>");
+    QString type = abstractType() ? abstractType()->toString() : QStringLiteral("<notype>");
     qCDebug(LANGUAGE) << "A function has a bad type attached:" << type;
-    return QString("invalid member-function %1 type %2").arg(identifier().toString()).arg(type);
+    return QStringLiteral("invalid member-function %1 type %2").arg(identifier().toString()).arg(type);
   }
 }
 

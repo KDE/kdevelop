@@ -341,7 +341,7 @@ InsertArtificialCodeRepresentation::InsertArtificialCodeRepresentation(const Ind
         while(artificialStrings.contains(m_file))
         {
             ++idx;
-            m_file = IndexedString(CodeRepresentation::artificialPath(QString("%1_%2").arg(idx).arg(file.str())));
+            m_file = IndexedString(CodeRepresentation::artificialPath(QStringLiteral("%1_%2").arg(idx).arg(file.str())));
         }
     }
     

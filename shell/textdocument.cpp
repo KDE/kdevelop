@@ -702,13 +702,13 @@ QString KDevelop::TextView::viewState() const
     if (d->view) {
         if (d->view->selection()) {
             KTextEditor::Range selection = d->view->selectionRange();
-            return QString("Selection=%1,%2,%3,%4").arg(selection.start().line())
+            return QStringLiteral("Selection=%1,%2,%3,%4").arg(selection.start().line())
                                                    .arg(selection.start().column())
                                                    .arg(selection.end().line())
                                                    .arg(selection.end().column());
         } else {
             KTextEditor::Cursor cursor = d->view->cursorPosition();
-            return QString("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
+            return QStringLiteral("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
         }
     }
     else {

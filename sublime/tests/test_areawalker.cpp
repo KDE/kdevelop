@@ -73,7 +73,7 @@ void TestAreaWalker::viewWalkerModes()
 
     AreaViewsPrinter p;
     area->walkViews(p, area->rootIndex());
-    QCOMPARE(p.result, QString("\n\
+    QCOMPARE(p.result, QStringLiteral("\n\
 [ vertical splitter ]\n\
     [ vertical splitter ]\n\
         [ vertical splitter ]\n\
@@ -85,19 +85,19 @@ void TestAreaWalker::viewWalkerModes()
 
     AreaStopper stopper("1");
     area->walkViews(stopper, area->rootIndex());
-    QCOMPARE(stopper.list.join(" "), QString("1"));
+    QCOMPARE(stopper.list.join(" "), QStringLiteral("1"));
 
     AreaStopper stopper2("2");
     area->walkViews(stopper2, area->rootIndex());
-    QCOMPARE(stopper2.list.join(" "), QString("1 4 3 2"));
+    QCOMPARE(stopper2.list.join(" "), QStringLiteral("1 4 3 2"));
 
     AreaStopper stopper3("3");
     area->walkViews(stopper3, area->rootIndex());
-    QCOMPARE(stopper3.list.join(" "), QString("1 4 3"));
+    QCOMPARE(stopper3.list.join(" "), QStringLiteral("1 4 3"));
 
     AreaStopper noStopper("X");
     area->walkViews(noStopper, area->rootIndex());
-    QCOMPARE(noStopper.list.join(" "), QString("1 4 3 2"));
+    QCOMPARE(noStopper.list.join(" "), QStringLiteral("1 4 3 2"));
 
     delete area;
     delete doc;
@@ -121,19 +121,19 @@ void TestAreaWalker::toolViewWalkerModes()
 
     AreaStopper stopper1("1");
     area->walkToolViews(stopper1, Sublime::AllPositions);
-    QCOMPARE(stopper1.list.join(" "), QString("1"));
+    QCOMPARE(stopper1.list.join(" "), QStringLiteral("1"));
 
     AreaStopper stopper2("2");
     area->walkToolViews(stopper2, Sublime::AllPositions);
-    QCOMPARE(stopper2.list.join(" "), QString("1 2"));
+    QCOMPARE(stopper2.list.join(" "), QStringLiteral("1 2"));
 
     AreaStopper stopper3("3");
     area->walkToolViews(stopper3, Sublime::AllPositions);
-    QCOMPARE(stopper3.list.join(" "), QString("1 2 3"));
+    QCOMPARE(stopper3.list.join(" "), QStringLiteral("1 2 3"));
 
     AreaStopper noStopper("X");
     area->walkToolViews(noStopper, Sublime::AllPositions);
-    QCOMPARE(noStopper.list.join(" "), QString("1 2 3"));
+    QCOMPARE(noStopper.list.join(" "), QStringLiteral("1 2 3"));
 
     delete area;
     delete doc;

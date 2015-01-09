@@ -535,7 +535,7 @@ void UiController::saveAllAreas(KSharedConfigPtr config)
     for (int w = 0; w < wc; ++w)
     {
         KConfigGroup mainWindowConfig(&uiConfig,
-                                      QString("Main Window %1").arg(w));
+                                      QStringLiteral("Main Window %1").arg(w));
 
         foreach (Sublime::Area* defaultArea, defaultAreas())
         {
@@ -580,7 +580,7 @@ void UiController::loadAllAreas(KSharedConfigPtr config)
     for (int w = 0; w < wc; ++w)
     {
         KConfigGroup mainWindowConfig(&uiConfig,
-                                      QString("Main Window %1").arg(w));
+                                      QStringLiteral("Main Window %1").arg(w));
 
         Sublime::MainWindow *mw = mainWindows()[w];
 

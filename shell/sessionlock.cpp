@@ -43,7 +43,7 @@ QString dBusServiceNameForSession( const QString& id )
 {
     // We remove starting "{" and ending "}" from the string UUID representation
     // as D-Bus apparently doesn't allow them in service names
-    return QString( "org.kdevelop.kdevplatform-lock-" ) + QString( id ).mid( 1, id.size() - 2 );
+    return QStringLiteral( "org.kdevelop.kdevplatform-lock-" ) + QString( id ).mid( 1, id.size() - 2 );
 }
 
 /// Force-removes the lock-file.

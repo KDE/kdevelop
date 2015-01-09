@@ -108,7 +108,7 @@ void GitInitTest::repoInit()
     QVERIFY(!m_plugin->isValidDirectory(QUrl::fromLocalFile("/tmp")));
 
     //we have nothing, so output should be empty
-    DVcsJob * j2 = m_plugin->gitRevParse(gitRepo, QStringList(QString("--branches")));
+    DVcsJob * j2 = m_plugin->gitRevParse(gitRepo, QStringList(QStringLiteral("--branches")));
     QVERIFY(j2);
     QVERIFY(j2->exec());
     QString out = j2->output();
@@ -161,7 +161,7 @@ void GitInitTest::commitFiles()
 {
     qDebug() << "Committing...";
     //we start it after addFiles, so we just have to commit
-    VcsJob* j = m_plugin->commit(QString("Test commit"), QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
+    VcsJob* j = m_plugin->commit(QStringLiteral("Test commit"), QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
 
     //test git-status exitCode one more time.
@@ -204,7 +204,7 @@ void GitInitTest::commitFiles()
     j = m_plugin->add(QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir + gitTest_FileName));
     VERIFYJOB(j);
 
-    j = m_plugin->commit(QString("KDevelop's Test commit2"), QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
+    j = m_plugin->commit(QStringLiteral("KDevelop's Test commit2"), QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
 
     QString secondCommit;
@@ -258,7 +258,7 @@ void GitInitTest::testBranch(const QString& newBranch)
     // get into detached head state
     j = m_plugin->switchBranch(baseUrl, "HEAD~1");
     VERIFYJOB(j);
-    QCOMPARE(runSynchronously(m_plugin->currentBranch(baseUrl)).toString(), QString(""));
+    QCOMPARE(runSynchronously(m_plugin->currentBranch(baseUrl)).toString(), QStringLiteral(""));
 
     // switch back
     j = m_plugin->switchBranch(baseUrl, newBranch);
@@ -281,7 +281,7 @@ void GitInitTest::testBranching()
     VERIFYJOB(j);
 
     QString curBranch = runSynchronously(m_plugin->currentBranch(baseUrl)).toString();
-    QCOMPARE(curBranch, QString("master"));
+    QCOMPARE(curBranch, QStringLiteral("master"));
 
     testBranch("new");
     testBranch("averylongbranchnamejusttotestlongnames");
@@ -303,9 +303,9 @@ void GitInitTest::revHistory()
 
     QCOMPARE(commits.count(), 2);
 
-    QCOMPARE(logMessages[0], QString("KDevelop's Test commit2"));  //0 is later than 1!
+    QCOMPARE(logMessages[0], QStringLiteral("KDevelop's Test commit2"));  //0 is later than 1!
 
-    QCOMPARE(logMessages[1], QString("Test commit"));
+    QCOMPARE(logMessages[1], QStringLiteral("Test commit"));
 
     QVERIFY(commits[1].getParents().isEmpty());  //0 is later than 1!
 
@@ -327,7 +327,7 @@ void GitInitTest::testAnnotation()
     // called after commitFiles
     QVERIFY(writeFile(gitTest_BaseDir + gitTest_FileName, "An appended line", QIODevice::Append));
 
-    VcsJob* j = m_plugin->commit(QString("KDevelop's Test commit3"), QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
+    VcsJob* j = m_plugin->commit(QStringLiteral("KDevelop's Test commit3"), QList<QUrl>() << QUrl::fromLocalFile(gitTest_BaseDir));
     VERIFYJOB(j);
 
     j = m_plugin->annotate(QUrl::fromLocalFile(gitTest_BaseDir + gitTest_FileName), VcsRevision::createSpecialRevision(VcsRevision::Head));
@@ -338,12 +338,12 @@ void GitInitTest::testAnnotation()
     QVERIFY(results.at(0).canConvert<VcsAnnotationLine>());
     VcsAnnotationLine annotation = results.at(0).value<VcsAnnotationLine>();
     QCOMPARE(annotation.lineNumber(), 0);
-    QCOMPARE(annotation.commitMessage(), QString("KDevelop's Test commit2"));
+    QCOMPARE(annotation.commitMessage(), QStringLiteral("KDevelop's Test commit2"));
 
     QVERIFY(results.at(1).canConvert<VcsAnnotationLine>());
     annotation = results.at(1).value<VcsAnnotationLine>();
     QCOMPARE(annotation.lineNumber(), 1);
-    QCOMPARE(annotation.commitMessage(), QString("KDevelop's Test commit3"));
+    QCOMPARE(annotation.commitMessage(), QStringLiteral("KDevelop's Test commit3"));
 }
 
 void GitInitTest::testRemoveEmptyFolder()

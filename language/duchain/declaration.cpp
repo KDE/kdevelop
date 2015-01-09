@@ -471,7 +471,7 @@ bool Declaration::operator ==(const Declaration & other) const
 
 QString Declaration::toString() const
 {
-  return QString("%3 %4").arg(abstractType() ? abstractType()->toString() : QString("<notype>")).arg(identifier().toString());
+  return QStringLiteral("%3 %4").arg(abstractType() ? abstractType()->toString() : QStringLiteral("<notype>")).arg(identifier().toString());
 }
 
 

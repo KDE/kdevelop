@@ -147,7 +147,7 @@ QVariant ArgumentTypeFilter::doFilter (const QVariant& input, const QVariant& /*
         // Check if it's a class/struct/etc
         if(declaration->type<StructureType>())
         {
-            QString refType = QString("const %1&").arg(type);
+            QString refType = QStringLiteral("const %1&").arg(type);
             return Grantlee::SafeString(refType);
         }
     }

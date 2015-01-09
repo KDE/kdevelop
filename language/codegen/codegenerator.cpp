@@ -151,7 +151,7 @@ bool CodeGeneratorBase::execute()
         TopDUContext * documentChain = DUChain::self()->chainForDocument(document);
         if(!documentChain)
         {
-            setErrorText(QString("Could not find chain for selected document: %1").arg(document.url()));
+            setErrorText(QStringLiteral("Could not find chain for selected document: %1").arg(document.url()));
             return false;
         }
         d->context = documentChain->findContextIncluding(d->range);

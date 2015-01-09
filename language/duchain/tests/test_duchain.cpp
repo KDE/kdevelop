@@ -146,12 +146,12 @@ void TestDUChain::testStringSets() {
     if(tempSet != realSets[a]) {
       QString dbg = "created set: ";
       for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
-        dbg += QString("%1 ").arg(*it);
+        dbg += QStringLiteral("%1 ").arg(*it);
       qDebug() << dbg;
 
       dbg = "repo.   set: ";
       for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
-        dbg += QString("%1 ").arg(*it);
+        dbg += QStringLiteral("%1 ").arg(*it);
       qDebug() << dbg;
 
       qDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
@@ -186,7 +186,7 @@ void TestDUChain::testStringSets() {
             qDebug() << "SET a:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
-              dbg += QString("%1 ").arg(*it);
+              dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
             qDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
@@ -195,7 +195,7 @@ void TestDUChain::testStringSets() {
             qDebug() << "SET b:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
-              dbg += QString("%1 ").arg(*it);
+              dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
             qDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
@@ -207,12 +207,12 @@ void TestDUChain::testStringSets() {
             qDebug() << "SET difference:";
             QString dbg = "real    set: ";
             for(std::set<Index>::const_iterator it = _realDifference.begin(); it != _realDifference.end(); ++it)
-              dbg += QString("%1 ").arg(*it);
+              dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
             dbg = "repo.   set: ";
             for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
-              dbg += QString("%1 ").arg(*it);
+              dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
             qDebug() << "DOT-Graph:\n\n" << _difference.dumpDotGraph() << "\n\n";
@@ -243,7 +243,7 @@ void TestDUChain::testStringSets() {
             qDebug() << "SET a:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
-              dbg += QString("%1 ").arg(*it);
+              dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
             qDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
@@ -252,7 +252,7 @@ void TestDUChain::testStringSets() {
             qDebug() << "SET b:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
-              dbg += QString("%1 ").arg(*it);
+              dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
             qDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
@@ -264,12 +264,12 @@ void TestDUChain::testStringSets() {
             qDebug() << "SET union:";
             QString dbg = "real    set: ";
             for(std::set<Index>::const_iterator it = _realUnion.begin(); it != _realUnion.end(); ++it)
-              dbg += QString("%1 ").arg(*it);
+              dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
             dbg = "repo.   set: ";
             for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
-              dbg += QString("%1 ").arg(*it);
+              dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
             qDebug() << "DOT-Graph:\n\n" << _union.dumpDotGraph() << "\n\n";
@@ -314,7 +314,7 @@ void TestDUChain::testStringSets() {
             qDebug() << "SET a:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
-              dbg += QString("%1 ").arg(*it);
+              dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
             qDebug() << "DOT-Graph:\n\n" << sets[a].dumpDotGraph() << "\n\n";
@@ -323,7 +323,7 @@ void TestDUChain::testStringSets() {
             qDebug() << "SET b:";
             QString dbg = "";
             for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
-              dbg += QString("%1 ").arg(*it);
+              dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
             qDebug() << "DOT-Graph:\n\n" << sets[b].dumpDotGraph() << "\n\n";
@@ -335,12 +335,12 @@ void TestDUChain::testStringSets() {
             qDebug() << "SET intersection:";
             QString dbg = "real    set: ";
             for(std::set<Index>::const_iterator it = _realIntersection.begin(); it != _realIntersection.end(); ++it)
-              dbg += QString("%1 ").arg(*it);
+              dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
             dbg = "repo.   set: ";
             for(std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
-              dbg += QString("%1 ").arg(*it);
+              dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
 
             qDebug() << "DOT-Graph:\n\n" << _intersection.dumpDotGraph() << "\n\n";
@@ -401,7 +401,7 @@ struct TestContext {
     static int number = 0;
     ++number;
     DUChainWriteLocker lock(DUChain::lock());
-    m_context = new TopDUContext(IndexedString(QString("/test1/%1").arg(number)), RangeInRevision());
+    m_context = new TopDUContext(IndexedString(QStringLiteral("/test1/%1").arg(number)), RangeInRevision());
     m_normalContext = new DUContext(RangeInRevision(), m_context);
     DUChain::self()->addDocumentChain(m_context);
     Q_ASSERT(IndexedDUContext(m_context).context() == m_context);
@@ -731,10 +731,10 @@ void TestDUChain::testProblemSerialization()
     top->addProblem(parent);
     QCOMPARE(top->problems().size(), 1);
     auto p = top->problems().first();
-    QCOMPARE(p->description(), QString("parent"));
+    QCOMPARE(p->description(), QStringLiteral("parent"));
     QCOMPARE(p->diagnostics().size(), 1);
     auto c = p->diagnostics().first();
-    QCOMPARE(c->description(), QString("child"));
+    QCOMPARE(c->description(), QStringLiteral("child"));
 
     DUChain::self()->addDocumentChain(top);
     QVERIFY(DUChain::self()->chainForDocument(url));
@@ -757,29 +757,29 @@ void TestDUChain::testProblemSerialization()
     QCOMPARE(parent_deserialized->diagnostics().size(), 1);
     child_deserialized = parent_deserialized->diagnostics().first();
 
-    QCOMPARE(parent_deserialized->description(), QString("parent"));
-    QCOMPARE(child_deserialized->description(), QString("child"));
+    QCOMPARE(parent_deserialized->description(), QStringLiteral("parent"));
+    QCOMPARE(child_deserialized->description(), QStringLiteral("child"));
 
     top->clearProblems();
     QVERIFY(top->problems().isEmpty());
 
-    QCOMPARE(parent_deserialized->description(), QString("parent"));
-    QCOMPARE(child_deserialized->description(), QString("child"));
+    QCOMPARE(parent_deserialized->description(), QStringLiteral("parent"));
+    QCOMPARE(child_deserialized->description(), QStringLiteral("child"));
 
     DUChain::self()->removeDocumentChain(top);
 
-    QCOMPARE(parent_deserialized->description(), QString("parent"));
-    QCOMPARE(child_deserialized->description(), QString("child"));
+    QCOMPARE(parent_deserialized->description(), QStringLiteral("parent"));
+    QCOMPARE(child_deserialized->description(), QStringLiteral("child"));
 
     QVERIFY(!smartTop);
   }
 
   DUChain::self()->disablePersistentStorage(true);
 
-  QCOMPARE(parent->description(), QString("parent"));
-  QCOMPARE(child->description(), QString("child"));
-  QCOMPARE(parent_deserialized->description(), QString("parent"));
-  QCOMPARE(child_deserialized->description(), QString("child"));
+  QCOMPARE(parent->description(), QStringLiteral("parent"));
+  QCOMPARE(child->description(), QStringLiteral("child"));
+  QCOMPARE(parent_deserialized->description(), QStringLiteral("parent"));
+  QCOMPARE(child_deserialized->description(), QStringLiteral("child"));
 
   parent->clearDiagnostics();
   QVERIFY(parent->diagnostics().isEmpty());
@@ -812,9 +812,9 @@ void TestDUChain::testIdentifiers()
   QCOMPARE(t.at(0).templateIdentifiersCount(), 2u);
   QCOMPARE(t.at(1).templateIdentifiersCount(), 1u);
   QCOMPARE(t.at(2).templateIdentifiersCount(), 1u);
-  QCOMPARE(t.at(0).identifier().str(), QString("Area"));
-  QCOMPARE(t.at(1).identifier().str(), QString("jump"));
-  QCOMPARE(t.at(2).identifier().str(), QString("tes"));
+  QCOMPARE(t.at(0).identifier().str(), QStringLiteral("Area"));
+  QCOMPARE(t.at(1).identifier().str(), QStringLiteral("jump"));
+  QCOMPARE(t.at(2).identifier().str(), QStringLiteral("tes"));
 
   QualifiedIdentifier op1("operator<");
   QualifiedIdentifier op2("operator<=");
@@ -828,30 +828,30 @@ void TestDUChain::testIdentifiers()
   QCOMPARE(op4.count(), 1);
   QCOMPARE(op5.count(), 1);
   QCOMPARE(op6.count(), 1);
-  QCOMPARE(op4.toString(), QString("operator>="));
-  QCOMPARE(op3.toString(), QString("operator>"));
-  QCOMPARE(op1.toString(), QString("operator<"));
-  QCOMPARE(op2.toString(), QString("operator<="));
-  QCOMPARE(op5.toString(), QString("operator()"));
-  QCOMPARE(op6.toString(), QString("operator( )"));
+  QCOMPARE(op4.toString(), QStringLiteral("operator>="));
+  QCOMPARE(op3.toString(), QStringLiteral("operator>"));
+  QCOMPARE(op1.toString(), QStringLiteral("operator<"));
+  QCOMPARE(op2.toString(), QStringLiteral("operator<="));
+  QCOMPARE(op5.toString(), QStringLiteral("operator()"));
+  QCOMPARE(op6.toString(), QStringLiteral("operator( )"));
   QCOMPARE(QualifiedIdentifier("Area<A,B>::jump <F> ::tes<C>").index(), t.index());
   QCOMPARE(op4.index(), QualifiedIdentifier("operator>=").index());
 
   QualifiedIdentifier pushTest("foo");
   QCOMPARE(pushTest.count(), 1);
-  QCOMPARE(pushTest.toString(), QString("foo"));
+  QCOMPARE(pushTest.toString(), QStringLiteral("foo"));
   pushTest.push(Identifier("bar"));
   QCOMPARE(pushTest.count(), 2);
-  QCOMPARE(pushTest.toString(), QString("foo::bar"));
+  QCOMPARE(pushTest.toString(), QStringLiteral("foo::bar"));
   pushTest.push(QualifiedIdentifier("baz::asdf"));
   QCOMPARE(pushTest.count(), 4);
-  QCOMPARE(pushTest.toString(), QString("foo::bar::baz::asdf"));
+  QCOMPARE(pushTest.toString(), QStringLiteral("foo::bar::baz::asdf"));
   QualifiedIdentifier mergeTest = pushTest.merge(QualifiedIdentifier("meh::muh"));
   QCOMPARE(mergeTest.count(), 6);
-  QCOMPARE(mergeTest.toString(), QString("meh::muh::foo::bar::baz::asdf"));
+  QCOMPARE(mergeTest.toString(), QStringLiteral("meh::muh::foo::bar::baz::asdf"));
   QualifiedIdentifier plusTest = QualifiedIdentifier("la::lu") + QualifiedIdentifier("ba::bu");
   QCOMPARE(plusTest.count(), 4);
-  QCOMPARE(plusTest.toString(), QString("la::lu::ba::bu"));
+  QCOMPARE(plusTest.toString(), QStringLiteral("la::lu::ba::bu"));
   ///@todo create a big randomized test for the identifier repository(check that indices are the same)
 }
 

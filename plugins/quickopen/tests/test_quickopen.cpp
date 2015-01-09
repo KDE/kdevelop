@@ -149,60 +149,60 @@ void TestQuickOpen::testSorting_data()
     }
     {
         const QStringList filtered = QStringList() << "/bar/a.h";
-        QTest::newRow("bar1") << items << QString("bar") << filtered;
-        QTest::newRow("bar2") << items << QString("/bar") << filtered;
-        QTest::newRow("bar3") << items << QString("/bar/") << filtered;
-        QTest::newRow("bar4") << items << QString("bar/") << filtered;
-        QTest::newRow("bar5") << items << QString("ar/") << filtered;
-        QTest::newRow("bar6") << items << QString("r/") << filtered;
-        QTest::newRow("bar7") << items << QString("b/") << filtered;
-        QTest::newRow("bar8") << items << QString("b/a") << filtered;
-        QTest::newRow("bar9") << items << QString("b/a.h") << filtered;
-        QTest::newRow("bar10") << items << QString("b/a.") << filtered;
+        QTest::newRow("bar1") << items << QStringLiteral("bar") << filtered;
+        QTest::newRow("bar2") << items << QStringLiteral("/bar") << filtered;
+        QTest::newRow("bar3") << items << QStringLiteral("/bar/") << filtered;
+        QTest::newRow("bar4") << items << QStringLiteral("bar/") << filtered;
+        QTest::newRow("bar5") << items << QStringLiteral("ar/") << filtered;
+        QTest::newRow("bar6") << items << QStringLiteral("r/") << filtered;
+        QTest::newRow("bar7") << items << QStringLiteral("b/") << filtered;
+        QTest::newRow("bar8") << items << QStringLiteral("b/a") << filtered;
+        QTest::newRow("bar9") << items << QStringLiteral("b/a.h") << filtered;
+        QTest::newRow("bar10") << items << QStringLiteral("b/a.") << filtered;
     }
     {
         const QStringList filtered = QStringList() << "/foo/a.h" << "/foo/ab.h";
-        QTest::newRow("foo_a1") << items << QString("foo/a") << filtered;
-        QTest::newRow("foo_a2") << items << QString("/f/a") << filtered;
+        QTest::newRow("foo_a1") << items << QStringLiteral("foo/a") << filtered;
+        QTest::newRow("foo_a2") << items << QStringLiteral("/f/a") << filtered;
     }
     {
         // now matches ab.h too because of abbreviation matching, but should be sorted last
         const QStringList filtered = QStringList() << "/foo/a.h" << "/bar/a.h" << "/foo/ab.h";
-        QTest::newRow("a_h") << items << QString("a.h") << filtered;
+        QTest::newRow("a_h") << items << QStringLiteral("a.h") << filtered;
     }
     {
         const QStringList base = QStringList() << "/foo/a_test" << "/foo/test_b_1" << "/foo/test_b";
         const QStringList sorted = QStringList() << "/foo/test_b" << "/foo/test_b_1";
-        QTest::newRow("prefer_exact") << base << QString("test_b") << sorted;
+        QTest::newRow("prefer_exact") << base << QStringLiteral("test_b") << sorted;
     }
     {
         // from commit: 769491f06a4560a4798592ff060675ffb0d990a6
         const QString file = "/myProject/someStrangePath/anItem.cpp";
         const QStringList base = QStringList() << "/foo/a" << file;
         const QStringList filtered = QStringList() << file;
-        QTest::newRow("strange") << base << QString("strange/item") << filtered;
+        QTest::newRow("strange") << base << QStringLiteral("strange/item") << filtered;
     }
     {
         const QStringList base = QStringList() << "/foo/a_test" << "/foo/test_b_1"
                                                << "/foo/test_b" << "/foo/test/a";
         const QStringList sorted = QStringList() << "/foo/test_b_1" << "/foo/test_b"
                                                  << "/foo/a_test" << "/foo/test/a";
-        QTest::newRow("prefer_start1") << base << QString("test") << sorted;
-        QTest::newRow("prefer_start2") << base << QString("foo/test") << sorted;
+        QTest::newRow("prefer_start1") << base << QStringLiteral("test") << sorted;
+        QTest::newRow("prefer_start2") << base << QStringLiteral("foo/test") << sorted;
     }
     {
         const QStringList base = QStringList() << "/muh/kuh/asdf/foo" << "/muh/kuh/foo/asdf";
         const QStringList reverse = QStringList() << "/muh/kuh/foo/asdf" << "/muh/kuh/asdf/foo";
-        QTest::newRow("prefer_start3") << base << QString("f") << base;
-        QTest::newRow("prefer_start4") << base << QString("/fo") << base;
-        QTest::newRow("prefer_start5") << base << QString("/foo") << base;
-        QTest::newRow("prefer_start6") << base << QString("a") << reverse;
-        QTest::newRow("prefer_start7") << base << QString("/a") << reverse;
-        QTest::newRow("prefer_start8") << base << QString("uh/as") << reverse;
-        QTest::newRow("prefer_start9") << base << QString("asdf") << reverse;
+        QTest::newRow("prefer_start3") << base << QStringLiteral("f") << base;
+        QTest::newRow("prefer_start4") << base << QStringLiteral("/fo") << base;
+        QTest::newRow("prefer_start5") << base << QStringLiteral("/foo") << base;
+        QTest::newRow("prefer_start6") << base << QStringLiteral("a") << reverse;
+        QTest::newRow("prefer_start7") << base << QStringLiteral("/a") << reverse;
+        QTest::newRow("prefer_start8") << base << QStringLiteral("uh/as") << reverse;
+        QTest::newRow("prefer_start9") << base << QStringLiteral("asdf") << reverse;
     }
     {
-        QTest::newRow("duplicate") << (QStringList() << "/muh/kuh/asdf/foo") << QString("kuh/kuh") << QStringList();
+        QTest::newRow("duplicate") << (QStringList() << "/muh/kuh/asdf/foo") << QStringLiteral("kuh/kuh") << QStringList();
     }
 }
 
@@ -236,7 +236,7 @@ void TestQuickOpen::testProjectFileFilter()
     QCOMPARE(items(provider), original);
 
     QCOMPARE(provider.itemPath(provider.items().first()), aaaa->path());
-    QCOMPARE(provider.data(0)->text(), QString("aaaa"));
+    QCOMPARE(provider.data(0)->text(), QStringLiteral("aaaa"));
 
     // don't show opened file
     QVERIFY(core->documentController()->openDocument(QUrl::fromLocalFile(tmpFile.fileName())));

@@ -257,13 +257,13 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 	modeline.append("indent-mode ").append(indentationMode(mime).append("; "));
 
 	if(indentation.indentWidth) // We know something about indentation-width
-		modeline.append(QString("indent-width %1; ").arg(indentation.indentWidth));
+		modeline.append(QStringLiteral("indent-width %1; ").arg(indentation.indentWidth));
 
 	if(indentation.indentationTabWidth != 0) // We know something about tab-usage
 	{
-		modeline.append(QString("replace-tabs %1; ").arg((indentation.indentationTabWidth == -1) ? "on" : "off"));
+		modeline.append(QStringLiteral("replace-tabs %1; ").arg((indentation.indentationTabWidth == -1) ? "on" : "off"));
 		if(indentation.indentationTabWidth > 0)
-			modeline.append(QString("tab-width %1; ").arg(indentation.indentationTabWidth));
+			modeline.append(QStringLiteral("tab-width %1; ").arg(indentation.indentationTabWidth));
 	}
 
 	qCDebug(SHELL) << "created modeline: " << modeline << endl;
@@ -466,13 +466,13 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
 		} call(doc);
 
 		if( indentation.indentWidth ) // We know something about indentation-width
-			call( QString("set-indent-width %1").arg(indentation.indentWidth ) );
+			call( QStringLiteral("set-indent-width %1").arg(indentation.indentWidth ) );
 
 		if( indentation.indentationTabWidth != 0 ) // We know something about tab-usage
 		{
-			call( QString("set-replace-tabs %1").arg( (indentation.indentationTabWidth == -1) ? 1 : 0 ) );
+			call( QStringLiteral("set-replace-tabs %1").arg( (indentation.indentationTabWidth == -1) ? 1 : 0 ) );
 			if( indentation.indentationTabWidth > 0 )
-				call( QString("set-tab-width %1").arg(indentation.indentationTabWidth ) );
+				call( QStringLiteral("set-tab-width %1").arg(indentation.indentationTabWidth ) );
 		}
 	}else{
 		qCDebug(SHELL) << "found no valid indentation";

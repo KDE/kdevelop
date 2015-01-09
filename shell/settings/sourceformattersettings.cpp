@@ -219,7 +219,7 @@ void SourceFormatterSettings::apply()
 
     for ( LanguageMap::const_iterator iter = languages.constBegin(); iter != languages.constEnd(); ++iter ) {
         foreach(const QMimeType& mime, iter.value().mimetypes) {
-            grp.writeEntry(mime.name(), QString("%1||%2").arg(iter.value().selectedFormatter->formatter->name()).arg(iter.value().selectedStyle->name()));
+            grp.writeEntry(mime.name(), QStringLiteral("%1||%2").arg(iter.value().selectedFormatter->formatter->name()).arg(iter.value().selectedStyle->name()));
         }
     }
     foreach( SourceFormatter* fmt, formatters )
@@ -420,7 +420,7 @@ void SourceFormatterSettings::newStyle()
     }
     // Increase number for next style
     idx++;
-    SourceFormatterStyle* s = new SourceFormatterStyle( QString( "%1%2" ).arg( userStylePrefix ).arg( idx ) );
+    SourceFormatterStyle* s = new SourceFormatterStyle( QStringLiteral( "%1%2" ).arg( userStylePrefix ).arg( idx ) );
     if( item ) {
         SourceFormatterStyle* existstyle = fmt->styles[ item->data( STYLE_ROLE ).toString() ];
         s->setCaption( i18n( "New %1", existstyle->caption() ) );

@@ -1701,13 +1701,13 @@ class ItemRepository : public AbstractItemRepository {
 
     QString print() const {
       QString ret;
-      ret += QString("loaded buckets: %1 current bucket: %2 used memory: %3 loaded monster buckets: %4").arg(loadedBuckets).arg(currentBucket).arg(usedMemory).arg(loadedMonsterBuckets);
-      ret += QString("\nbucket hash clashed items: %1 total items: %2").arg(hashClashedItems).arg(totalItems);
-      ret += QString("\nused space for buckets: %1 free space in buckets: %2 lost space: %3").arg(usedSpaceForBuckets).arg(freeSpaceInBuckets).arg(lostSpace);
-      ret += QString("\nfree unreachable space: %1 empty buckets: %2").arg(freeUnreachableSpace).arg(emptyBuckets);
-      ret += QString("\nhash size: %1 hash slots used: %2").arg(hashSize).arg(hashUse);
-      ret += QString("\naverage in-bucket hash size: %1 average in-bucket used hash slot count: %2 average in-bucket slot chain length: %3 longest in-bucket follower chain: %4").arg(averageInBucketHashSize).arg(averageInBucketUsedSlotCount).arg(averageInBucketSlotChainLength).arg(longestInBucketChain);
-      ret += QString("\ntotal count of used next-bucket-for-hash slots: %1 average next-bucket-for-hash sequence length: %2 longest next-bucket chain: %3").arg(totalBucketFollowerSlots).arg(averageNextBucketForHashSequenceLength).arg(longestNextBucketChain);
+      ret += QStringLiteral("loaded buckets: %1 current bucket: %2 used memory: %3 loaded monster buckets: %4").arg(loadedBuckets).arg(currentBucket).arg(usedMemory).arg(loadedMonsterBuckets);
+      ret += QStringLiteral("\nbucket hash clashed items: %1 total items: %2").arg(hashClashedItems).arg(totalItems);
+      ret += QStringLiteral("\nused space for buckets: %1 free space in buckets: %2 lost space: %3").arg(usedSpaceForBuckets).arg(freeSpaceInBuckets).arg(lostSpace);
+      ret += QStringLiteral("\nfree unreachable space: %1 empty buckets: %2").arg(freeUnreachableSpace).arg(emptyBuckets);
+      ret += QStringLiteral("\nhash size: %1 hash slots used: %2").arg(hashSize).arg(hashUse);
+      ret += QStringLiteral("\naverage in-bucket hash size: %1 average in-bucket used hash slot count: %2 average in-bucket slot chain length: %3 longest in-bucket follower chain: %4").arg(averageInBucketHashSize).arg(averageInBucketUsedSlotCount).arg(averageInBucketSlotChainLength).arg(longestInBucketChain);
+      ret += QStringLiteral("\ntotal count of used next-bucket-for-hash slots: %1 average next-bucket-for-hash sequence length: %2 longest next-bucket chain: %3").arg(totalBucketFollowerSlots).arg(averageNextBucketForHashSequenceLength).arg(longestNextBucketChain);
       return ret;
     }
     operator QString() const {
@@ -2406,7 +2406,7 @@ class ItemRepository : public AbstractItemRepository {
     // nor zero buckets
     Q_ASSERT(bucket);
     Q_ASSERT_X(bucket < m_buckets.size(), Q_FUNC_INFO,
-               qPrintable(QString("index %1 gives invalid bucket number %2, current count is: %3")
+               qPrintable(QStringLiteral("index %1 gives invalid bucket number %2, current count is: %3")
                   .arg(index)
                   .arg(bucket)
                   .arg(m_buckets.size())));

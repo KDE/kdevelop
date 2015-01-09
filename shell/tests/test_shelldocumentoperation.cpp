@@ -58,7 +58,7 @@ void TestShellDocumentOperation::testOpenDocumentFromText()
 
     //test that we have this document in the list, signals are emitted and so on
     QCOMPARE(documentController->openDocuments().count(), 1);
-    QCOMPARE(documentController->openDocuments()[0]->textDocument()->text(), QString("Test1"));
+    QCOMPARE(documentController->openDocuments()[0]->textDocument()->text(), QStringLiteral("Test1"));
 
     Sublime::Area *area = Core::self()->uiControllerInternal()->activeArea();
     QCOMPARE(area->views().count(), 1);

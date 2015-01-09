@@ -145,7 +145,7 @@ void TestViewActivation::viewActivation()
     //now post events to the widgets and see if mainwindow has the right active views
     //activate view
     qApp->sendEvent(view212->widget(), new QFocusEvent(QEvent::FocusIn));
-    QString failMsg = QString("\nWas expecting %1 to be active but got %2").
+    QString failMsg = QStringLiteral("\nWas expecting %1 to be active but got %2").
                       arg(view212->objectName()).arg(mw->activeView()->objectName());
     QVERIFY2(mw->activeView() == view212, failMsg.toLatin1().data());
 

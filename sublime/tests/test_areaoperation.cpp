@@ -153,18 +153,18 @@ void TestAreaOperation::cleanup()
 void TestAreaOperation::areaConstruction()
 {
     //check if areas has proper object names
-    QCOMPARE(m_area1->objectName(), QString("Area 1"));
-    QCOMPARE(m_area2->objectName(), QString("Area 2"));
+    QCOMPARE(m_area1->objectName(), QStringLiteral("Area 1"));
+    QCOMPARE(m_area2->objectName(), QStringLiteral("Area 2"));
 
     //check that area1 contents is properly initialised
     AreaViewsPrinter viewsPrinter1;
     m_area1->walkViews(viewsPrinter1, m_area1->rootIndex());
-    QCOMPARE(viewsPrinter1.result, QString("\n\
+    QCOMPARE(viewsPrinter1.result, QStringLiteral("\n\
 [ view1.1.1 view1.2.1 view1.2.2 view1.3.1 ]\n\
 "));
     AreaToolViewsPrinter toolViewsPrinter1;
     m_area1->walkToolViews(toolViewsPrinter1, Sublime::AllPositions);
-    QCOMPARE(toolViewsPrinter1.result, QString("\n\
+    QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
 toolview1.1.1 [ left ]\n\
 toolview1.2.1 [ bottom ]\n\
 toolview1.2.2 [ bottom ]\n\
@@ -173,7 +173,7 @@ toolview1.2.2 [ bottom ]\n\
     //check that area2 contents is properly initialised
     AreaViewsPrinter viewsPrinter2;
     m_area2->walkViews(viewsPrinter2, m_area2->rootIndex());
-    QCOMPARE(viewsPrinter2.result, QString("\n\
+    QCOMPARE(viewsPrinter2.result, QStringLiteral("\n\
 [ vertical splitter ]\n\
     [ vertical splitter ]\n\
         [ view2.1.1 view2.1.2 ]\n\
@@ -184,7 +184,7 @@ toolview1.2.2 [ bottom ]\n\
 "));
     AreaToolViewsPrinter toolViewsPrinter2;
     m_area2->walkToolViews(toolViewsPrinter2, Sublime::AllPositions);
-    QCOMPARE(toolViewsPrinter2.result, QString("\n\
+    QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
 toolview2.1.1 [ bottom ]\n\
 toolview2.2.1 [ right ]\n\
 toolview2.3.1 [ top ]\n\
@@ -382,14 +382,14 @@ void TestAreaOperation::simpleViewAdditionAndDeletion()
     m_area1->addView(view);
 
     checkAreaViewsDisplay(&mw, m_area1,
-        QString("\n[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 view1.5.1 ]\n"),
+        QStringLiteral("\n[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 view1.5.1 ]\n"),
         1, 1, "Added an url view (view1.5.1)");
 
     //now remove view and check that area is valid
     delete m_area1->removeView(view);
 
     checkAreaViewsDisplay(&mw, m_area1,
-        QString("\n[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 ]\n"),
+        QStringLiteral("\n[ view1.1.1 view1.2.1 view1.2.2 view1.3.1 ]\n"),
         1, 1, "Removed the url view (view1.5.1)");
 
     //now remove all other views one by one and leave an empty container
@@ -398,7 +398,7 @@ void TestAreaOperation::simpleViewAdditionAndDeletion()
         delete m_area1->removeView(view);
 
     checkAreaViewsDisplay(&mw, m_area1,
-        QString("\n[ horizontal splitter ]\n"),
+        QStringLiteral("\n[ horizontal splitter ]\n"),
         0, 1, "Removed all views. Only horizontal splitter should remain.");
 
     //add a view again and check that mainwindow is correctly reconstructed
@@ -407,7 +407,7 @@ void TestAreaOperation::simpleViewAdditionAndDeletion()
     m_area1->addView(view);
 
     checkAreaViewsDisplay(&mw, m_area1,
-        QString("\n[ view1.5.1 ]\n"),
+        QStringLiteral("\n[ view1.5.1 ]\n"),
         1, 1, "Added a single view to previously emptied mainwindow.");
 
     {
@@ -434,7 +434,7 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
     QVERIFY(view221);
     area->addView(view, view221, Qt::Vertical);
 
-    checkAreaViewsDisplay(&mw, area, QString("\n\
+    checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
 [ vertical splitter ]\n\
     [ vertical splitter ]\n\
         [ view2.1.1 view2.1.2 ]\n\
@@ -449,7 +449,7 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
     //now delete view221
     delete area->removeView(view221);
 
-    checkAreaViewsDisplay(&mw, area, QString("\n\
+    checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
 [ vertical splitter ]\n\
     [ vertical splitter ]\n\
         [ view2.1.1 view2.1.2 ]\n\
@@ -463,7 +463,7 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
     View *view211 = findNamedView(area, "view2.1.1");
     delete m_area2->removeView(view211);
 
-    checkAreaViewsDisplay(&mw, area, QString("\n\
+    checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
 [ vertical splitter ]\n\
     [ vertical splitter ]\n\
         [ view2.1.2 ]\n\
@@ -475,7 +475,7 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
 
     //and now remove all remaining views one by one
     delete m_area2->removeView(findNamedView(area, "view2.1.2"));
-    checkAreaViewsDisplay(&mw, area, QString("\n\
+    checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
 [ vertical splitter ]\n\
     [ view2.4.1 ]\n\
     [ horizontal splitter ]\n\
@@ -484,19 +484,19 @@ void TestAreaOperation::complexViewAdditionAndDeletion()
 "), 3, 4+1);
 
     delete m_area2->removeView(findNamedView(area, "view2.4.1"));
-    checkAreaViewsDisplay(&mw, area, QString("\n\
+    checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
 [ horizontal splitter ]\n\
     [ view2.5.1 ]\n\
     [ view2.3.1 ]\n\
 "), 2, 2+1);
 
     delete m_area2->removeView(findNamedView(area, "view2.5.1"));
-    checkAreaViewsDisplay(&mw, area, QString("\n\
+    checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
 [ view2.3.1 ]\n\
 "), 1, 1);
 
     delete m_area2->removeView(findNamedView(area, "view2.3.1"));
-    checkAreaViewsDisplay(&mw, area, QString("\n\
+    checkAreaViewsDisplay(&mw, area, QStringLiteral("\n\
 [ horizontal splitter ]\n\
 "), 0, 1);
 }
@@ -515,7 +515,7 @@ void TestAreaOperation::toolViewAdditionAndDeletion()
     //check that area is in valid state
     AreaToolViewsPrinter toolViewsPrinter1;
     m_area1->walkToolViews(toolViewsPrinter1, Sublime::AllPositions);
-    QCOMPARE(toolViewsPrinter1.result, QString("\n\
+    QCOMPARE(toolViewsPrinter1.result, QStringLiteral("\n\
 toolview1.1.1 [ left ]\n\
 toolview1.2.1 [ bottom ]\n\
 toolview1.2.2 [ bottom ]\n\
@@ -533,7 +533,7 @@ toolview1.4.1 [ right ]\n\
     AreaToolViewsPrinter toolViewsPrinter2;
     //check that area doesn't have it anymore
     m_area1->walkToolViews(toolViewsPrinter2, Sublime::AllPositions);
-    QCOMPARE(toolViewsPrinter2.result, QString("\n\
+    QCOMPARE(toolViewsPrinter2.result, QStringLiteral("\n\
 toolview1.1.1 [ left ]\n\
 toolview1.2.1 [ bottom ]\n\
 toolview1.2.2 [ bottom ]\n\
@@ -691,7 +691,7 @@ void TestAreaOperation::checkAreaViewsDisplay(MainWindow *mw, Area *area,
 
     //check containers
     QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
-    QString failMsg = QString("\nFailure while checking area contents @ %1\n"
+    QString failMsg = QStringLiteral("\nFailure while checking area contents @ %1\n"
                               "Expected %2 containers in central splitter but got %3 \n").
                       arg(location).arg(containerCount).arg(containers.count());
     QVERIFY2(containers.count() == containerCount, failMsg.toLatin1().data());

@@ -59,13 +59,13 @@ QSet<IndexedString> openFiles()
 QString iconNameForUrl(const IndexedString& url)
 {
     if (url.isEmpty()) {
-        return QString("tab-duplicate");
+        return QStringLiteral("tab-duplicate");
     }
     ProjectBaseItem* item = ICore::self()->projectController()->projectModel()->itemForPath(url);
     if (item) {
         return item->iconName();
     }
-    return QString("unknown");
+    return QStringLiteral("unknown");
 }
 
 }

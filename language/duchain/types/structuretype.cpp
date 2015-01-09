@@ -85,7 +85,7 @@ QString StructureType::toString() const
 
   QString type = "class";
 
-  return QString("<%1>").arg(type) + AbstractType::toString(true);
+  return QStringLiteral("<%1>").arg(type) + AbstractType::toString(true);
 }
 
 AbstractType::WhichType StructureType::whichType() const

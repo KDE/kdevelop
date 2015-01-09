@@ -116,7 +116,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
   connect(m_label, &QLabel::linkActivated, this, &OneUseWidget::jumpTo);
 
   DUChainReadLocker lock(DUChain::lock());
-  QString text = "<a href='open'>" + i18nc("refers to a line in source code", "Line <b>%1</b>:", range.start().line()) + QString("</a>");
+  QString text = "<a href='open'>" + i18nc("refers to a line in source code", "Line <b>%1</b>:", range.start().line()) + QStringLiteral("</a>");
   if(!m_sourceLine.isEmpty() && m_sourceLine.length() > m_range->range().end().column()) {
 
     text += "&nbsp;&nbsp;" + highlightAndEscapeUseText(m_sourceLine, 0, m_range->range());
@@ -129,7 +129,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
     for(int a = start; a < end; ++a) {
       QString lineText = code.line(a).toHtmlEscaped();
       if (m_range->range().start().line() <= a && m_range->range().end().line() >= a) {
-        lineText = QString("<b>") + lineText + QString("</b>");
+        lineText = QStringLiteral("<b>") + lineText + QStringLiteral("</b>");
       }
       if(!lineText.trimmed().isEmpty()) {
         toolTipText += lineText + "<br>";
@@ -138,7 +138,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
     if ( toolTipText.endsWith("<br>") ) {
       toolTipText.remove(toolTipText.length() - 4, 4);
     }
-    setToolTip(QString("<html><body><pre>") + toolTipText + QString("</pre></body></html>"));
+    setToolTip(QStringLiteral("<html><body><pre>") + toolTipText + QStringLiteral("</pre></body></html>"));
   }
   m_label->setText(text);
 
@@ -165,13 +165,13 @@ void OneUseWidget::resizeEvent ( QResizeEvent * event ) {
   int maxCutOff = m_sourceLine.length() - (range.end().column() - range.start().column());
 
   //Reset so we also get more context while up-sizing
-  m_label->setText(QString("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
-                 + QString("</a> %2").arg(highlightAndEscapeUseText(m_sourceLine, cutOff, range)));
+  m_label->setText(QStringLiteral("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
+                 + QStringLiteral("</a> %2").arg(highlightAndEscapeUseText(m_sourceLine, cutOff, range)));
 
   while(sizeHint().width() > size.width() && cutOff < maxCutOff) {
     //We've got to save space
-    m_label->setText(QString("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
-                   + QString("</a> %2").arg(highlightAndEscapeUseText(m_sourceLine, cutOff, range)));
+    m_label->setText(QStringLiteral("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
+                   + QStringLiteral("</a> %2").arg(highlightAndEscapeUseText(m_sourceLine, cutOff, range)));
     cutOff += 5;
   }
 

@@ -88,9 +88,9 @@ void ArrayType::setElementType(AbstractType::Ptr type)
 QString ArrayType::toString() const
 {
   if (d_func()->m_dimension == 0) {
-    return QString("%1[]").arg(elementType() ? elementType()->toString() : QString("<notype>"));
+    return QStringLiteral("%1[]").arg(elementType() ? elementType()->toString() : QStringLiteral("<notype>"));
   }
-  return QString("%1[%2]").arg(elementType() ? elementType()->toString() : QString("<notype>")).arg(d_func()->m_dimension);
+  return QStringLiteral("%1[%2]").arg(elementType() ? elementType()->toString() : QStringLiteral("<notype>")).arg(d_func()->m_dimension);
 }
 
 void ArrayType::accept0 (TypeVisitor *v) const

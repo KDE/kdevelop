@@ -406,7 +406,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
            just to delete it. */
         if (var && var->isAlive() && !controller()->stateIsOn(s_dbgNotStarted)) {
             GDBCommand* cmd =  new GDBCommand(DataEvaluateExpression,
-                                                QString("&%1")
+                                                QStringLiteral("&%1")
                                                 .arg(var->gdbExpression()));
             cmd->setHandler(this, &VariableTree::handleAddressComputed, true /*handles error*/);
             cmd->setThread(var->thread());

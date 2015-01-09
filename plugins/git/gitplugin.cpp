@@ -548,7 +548,7 @@ VcsJob* GitPlugin::log(const QUrl& localLocation, const KDevelop::VcsRevision& r
     if(!revStr.isEmpty())
         *job << revStr;
     if(limit>0)
-        *job << QString("-%1").arg(limit);
+        *job << QStringLiteral("-%1").arg(limit);
 
     *job << "--" << localLocation;
     connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitLogOutput);

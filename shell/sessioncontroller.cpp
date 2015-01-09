@@ -359,7 +359,7 @@ private slots:
 
                 for(uint num = 0; ; ++num)
                 {
-                    QFile urlFile(recoverySubDir.path() + QString("/%1_url").arg(num));
+                    QFile urlFile(recoverySubDir.path() + QStringLiteral("/%1_url").arg(num));
                     if(!urlFile.exists())
                         break;
                     urlFile.open(QIODevice::ReadOnly);
@@ -388,13 +388,13 @@ private slots:
 
                         for(uint num = 0; ; ++num)
                         {
-                            QFile urlFile(recoverySubDir.path() + QString("/%1_url").arg(num));
+                            QFile urlFile(recoverySubDir.path() + QStringLiteral("/%1_url").arg(num));
                             if(!urlFile.exists())
                                 break;
                             urlFile.open(QIODevice::ReadOnly);
                             QUrl originalFile = QUrl::fromLocalFile(QString::fromUtf8(urlFile.readAll()));
 
-                            QFile f(recoverySubDir.path() + '/' + QString("/%1_text").arg(num));
+                            QFile f(recoverySubDir.path() + '/' + QStringLiteral("/%1_text").arg(num));
                             f.open(QIODevice::ReadOnly);
                             QString text = QString::fromUtf8(f.readAll());
 
@@ -482,21 +482,21 @@ private slots:
 
                         if(!text.isEmpty())
                         {
-                            QString urlFilePath = recoveryCurrentDir.path() + QString("/%1_url").arg(num);
+                            QString urlFilePath = recoveryCurrentDir.path() + QStringLiteral("/%1_url").arg(num);
                             QFile urlFile(urlFilePath);
                             urlFile.open(QIODevice::WriteOnly);
                             urlFile.write(document->url().toString().toUtf8());
                             urlFile.close();
 
-                            QString textFilePath = recoveryCurrentDir.path() + '/' + QString("/%1_text").arg(num);
+                            QString textFilePath = recoveryCurrentDir.path() + '/' + QStringLiteral("/%1_text").arg(num);
                             QFile f(textFilePath);
                             f.open(QIODevice::WriteOnly);
                             f.write(text.toUtf8());
                             f.close();
 
                             currentRecoveryFiles[document->url()] =
-                                        QStringList() <<  (recoveryDir.path() + "/current" + QString("/%1_url").arg(num))
-                                                      << (recoveryDir.path() + "/current" + QString("/%1_text").arg(num));
+                                        QStringList() <<  (recoveryDir.path() + "/current" + QStringLiteral("/%1_url").arg(num))
+                                                      << (recoveryDir.path() + "/current" + QStringLiteral("/%1_text").arg(num));
 
                             if(urlFile.error() != QFile::NoError || f.error() != QFile::NoError)
                             {

@@ -1021,7 +1021,7 @@ QStringList DocumentController::documentTypes() const
 
 static QRegExp emptyDocumentPattern()
 {
-    static const QRegExp pattern(QString("^/%1(?:\\s\\(\\d+\\))?$").arg(EMPTY_DOCUMENT_URL));
+    static const QRegExp pattern(QStringLiteral("^/%1(?:\\s\\(\\d+\\))?$").arg(EMPTY_DOCUMENT_URL));
     return pattern;
 }
 
@@ -1047,7 +1047,7 @@ QUrl DocumentController::nextEmptyDocumentUrl()
 
     QUrl url;
     if (nextEmptyDocNumber > 0)
-        url = QUrl::fromLocalFile(QString("/%1 (%2)").arg(EMPTY_DOCUMENT_URL).arg(nextEmptyDocNumber));
+        url = QUrl::fromLocalFile(QStringLiteral("/%1 (%2)").arg(EMPTY_DOCUMENT_URL).arg(nextEmptyDocNumber));
     else
         url = QUrl::fromLocalFile('/' + EMPTY_DOCUMENT_URL);
     return url;

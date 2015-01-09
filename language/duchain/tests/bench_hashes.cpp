@@ -97,9 +97,9 @@ void BenchHashes::feedData()
       data << qMakePair(IndexedString(QString::number(i)), DataT());
     }
     QCOMPARE(data.size(), size);
-    QTest::newRow(qPrintable(QString("unordered_map-%1").arg(size)))
+    QTest::newRow(qPrintable(QStringLiteral("unordered_map-%1").arg(size)))
       << true << data;
-    QTest::newRow(qPrintable(QString("qhash-%1").arg(size)))
+    QTest::newRow(qPrintable(QStringLiteral("qhash-%1").arg(size)))
       << false << data;
   }
 }

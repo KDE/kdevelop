@@ -126,7 +126,7 @@ static QVector<QString> generateData()
   static const int NUM_ITEMS = 100000;
   data.resize(NUM_ITEMS);
   for(int i = 0; i < NUM_ITEMS; ++i) {
-    data[i] = QString("/foo/%1").arg(i);
+    data[i] = QStringLiteral("/foo/%1").arg(i);
   }
   return data;
 }

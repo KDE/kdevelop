@@ -145,11 +145,11 @@ void WorkingSet::saveFromArea( Sublime::Area* a, Sublime::AreaIndex * area, KCon
                 continue;
             }
 
-            setGroup.writeEntry(QString("View %1").arg(index), docSpec);
-            setGroup.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
+            setGroup.writeEntry(QStringLiteral("View %1").arg(index), docSpec);
+            setGroup.writeEntry(QStringLiteral("View %1 Type").arg(index), view->document()->documentType());
             //The area specific config stores the working set documents in order along with their state
-            areaGroup.writeEntry(QString("View %1").arg(index), docSpec);
-            areaGroup.writeEntry(QString("View %1 State").arg(index), view->viewState());
+            areaGroup.writeEntry(QStringLiteral("View %1").arg(index), docSpec);
+            areaGroup.writeEntry(QStringLiteral("View %1 State").arg(index), view->viewState());
             ++index;
         }
     }
@@ -211,8 +211,8 @@ void loadFileList(QStringList& ret, KConfigGroup group)
 
         int viewCount = group.readEntry("View Count", 0);
         for (int i = 0; i < viewCount; ++i) {
-            QString type = group.readEntry(QString("View %1 Type").arg(i), "");
-            QString specifier = group.readEntry(QString("View %1").arg(i), "");
+            QString type = group.readEntry(QStringLiteral("View %1 Type").arg(i), "");
+            QString specifier = group.readEntry(QStringLiteral("View %1").arg(i), "");
 
             ret << specifier;
         }
@@ -315,8 +315,8 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
         int viewCount = setGroup.readEntry("View Count", 0);
         QMap<int, Sublime::View*> createdViews;
         for (int i = 0; i < viewCount; ++i) {
-            QString type = setGroup.readEntry(QString("View %1 Type").arg(i), QString());
-            QString specifier = setGroup.readEntry(QString("View %1").arg(i), QString());
+            QString type = setGroup.readEntry(QStringLiteral("View %1 Type").arg(i), QString());
+            QString specifier = setGroup.readEntry(QStringLiteral("View %1").arg(i), QString());
             if (type.isEmpty() || specifier.isEmpty()) {
                 continue;
             }
@@ -344,7 +344,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
         //Load state
         for (int i = 0; i < viewCount; ++i)
         {
-            QString state = areaGroup.readEntry(QString("View %1 State").arg(i));
+            QString state = areaGroup.readEntry(QStringLiteral("View %1 State").arg(i));
             if (state.length() && createdViews.contains(i))
                 createdViews[i]->setState(state);
         }

@@ -84,28 +84,28 @@ QString ConstantIntegralType::toString() const
       ret += "none";
       break;
     case TypeChar:
-      ret += QString("char");
+      ret += QStringLiteral("char");
       break;
     case TypeWchar_t:
-      ret += QString("wchar_t");
+      ret += QStringLiteral("wchar_t");
       break;
     case TypeChar16_t:
-      ret += QString("char16_t");
+      ret += QStringLiteral("char16_t");
       break;
     case TypeChar32_t:
-      ret += QString("char32_t");
+      ret += QStringLiteral("char32_t");
       break;
     case TypeBoolean:
       ret += d_func()->m_value ? "true" : "false";
       break;
     case TypeInt:
-      ret += (modifiers() & UnsignedModifier) ? QString("unsigned") : QString("int");
+      ret += (modifiers() & UnsignedModifier) ? QStringLiteral("unsigned") : QStringLiteral("int");
       break;
     case TypeFloat:
-      ret += QString("float");
+      ret += QStringLiteral("float");
       break;
     case TypeDouble:
-      ret += QString("double");
+      ret += QStringLiteral("double");
       break;
     case TypeVoid:
       ret += "void";

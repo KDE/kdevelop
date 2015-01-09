@@ -195,7 +195,7 @@ QVariant Breakpoint::data(int column, int role) const
             }
             //FIXME: there should be proper columns for function name and address.
             if (!m_address.isEmpty() && role == Qt::DisplayRole) {
-                ret = QString("%1 (%2)").arg(ret).arg(m_address);
+                ret = QStringLiteral("%1 (%2)").arg(ret).arg(m_address);
             }
             return ret;
         }

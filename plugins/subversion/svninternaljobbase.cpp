@@ -143,7 +143,7 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
                         || contentState == svn_wc_notify_state_unknown)
                         && (propState == svn_wc_notify_state_unchanged
                         || propState == svn_wc_notify_state_unknown)))
-                    notifyString += QString( " " ) + QString::fromUtf8( path );
+                    notifyString += QStringLiteral( " " ) + QString::fromUtf8( path );
 
             }
             break;

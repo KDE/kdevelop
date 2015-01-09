@@ -60,7 +60,7 @@ inline char* toString(const KDevelop::Identifier& id)
 template<>
 inline char* toString(const KDevelop::Declaration& dec)
 {
-    QString s = QString("Declaration %1 (%2): %3")
+    QString s = QStringLiteral("Declaration %1 (%2): %3")
         .arg(dec.identifier().toString())
         .arg(dec.qualifiedIdentifier().toString())
         .arg(reinterpret_cast<qint64>(&dec));
@@ -70,8 +70,8 @@ inline char* toString(const KDevelop::Declaration& dec)
 template<>
 inline char* toString(const KDevelop::AbstractType::Ptr& type)
 {
-    QString s = QString("Type: %1")
-        .arg(type ? type->toString() : QString("<null>"));
+    QString s = QStringLiteral("Type: %1")
+        .arg(type ? type->toString() : QStringLiteral("<null>"));
     return qstrdup(s.toLatin1().constData());
 }
 

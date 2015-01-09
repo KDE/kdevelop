@@ -215,9 +215,9 @@ void FramestackWidget::copySelection()
     Q_FOREACH( QModelIndex index, indexes) {
         IFrameStackModel::FrameItem frame = m_session->frameStackModel()->frame(index);
         if (frame.line == -1) {
-            content += QString("#%1 %2() at %3\n").arg(frame.nr).arg(frame.name).arg(frame.file.url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash));
+            content += QStringLiteral("#%1 %2() at %3\n").arg(frame.nr).arg(frame.name).arg(frame.file.url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash));
         } else {
-            content += QString("#%1 %2() at %3:%4\n").arg(frame.nr).arg(frame.name).arg(frame.file.url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash)).arg(frame.line+1);
+            content += QStringLiteral("#%1 %2() at %3:%4\n").arg(frame.nr).arg(frame.name).arg(frame.file.url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash)).arg(frame.line+1);
         }
     }
     cb->setText(content);

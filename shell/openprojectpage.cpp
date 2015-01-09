@@ -44,7 +44,7 @@ OpenProjectPage::OpenProjectPage( const QUrl& startUrl, QWidget* parent )
     QStringList filters;
     QStringList allEntry;
     allEntry << "*."+ShellExtension::getInstance()->projectFileExtension();
-    filters << QString( "%1|%2 (%1)").arg("*."+ShellExtension::getInstance()->projectFileExtension()).arg(ShellExtension::getInstance()->projectFileDescription());
+    filters << QStringLiteral( "%1|%2 (%1)").arg("*."+ShellExtension::getInstance()->projectFileExtension()).arg(ShellExtension::getInstance()->projectFileDescription());
     foreach(const KPluginInfo& info, ICore::self()->pluginController()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
     {
         QVariant filter = info.property("X-KDevelop-ProjectFilesFilter");
@@ -54,7 +54,7 @@ OpenProjectPage::OpenProjectPage( const QUrl& startUrl, QWidget* parent )
         {
             m_projectFilters.insert( info.name(), filter.toStringList() );
             allEntry += filter.toStringList();
-            filters << QString("%1|%2 (%1)").arg(filter.toStringList().join(" ")).arg(desc.toString());
+            filters << QStringLiteral("%1|%2 (%1)").arg(filter.toStringList().join(" ")).arg(desc.toString());
         }
     }
 

@@ -52,7 +52,7 @@ public:
 
     virtual QUrl source() const;
     virtual KDevelop::VcsLocation destination() const;
-    virtual QString message() const; //Is not used, it returns QString("")
+    virtual QString message() const; //Is not used, it returns QStringLiteral("")
     virtual void setSourceLocation( const KDevelop::VcsLocation& );
     virtual void setSourceLocationEditable( bool );
     virtual bool hasValidData() const;

@@ -78,7 +78,7 @@ QVector<T> generateData(const T& parent, int level)
     QVector<T> ret;
     // files per folder
     for (int i = 0; i < FILES_PER_FOLDER; ++i) {
-        const QString fileName = QString("file%1.txt").arg(i);
+        const QString fileName = QStringLiteral("file%1.txt").arg(i);
         const T file = childUrl<T>(parent, fileName);
         Q_ASSERT(!ret.contains(file));
         ret << file;
@@ -87,7 +87,7 @@ QVector<T> generateData(const T& parent, int level)
     if (level < TREE_DEPTH) {
         // folders per folder
         for (int i = 0; i < FOLDERS_PER_FOLDER; ++i) {
-            const QString folderName = QString("folder%1").arg(i);
+            const QString folderName = QStringLiteral("folder%1").arg(i);
             const T folder = childUrl<T>(parent, folderName);
             Q_ASSERT(!ret.contains(folder));
             ret << folder;
@@ -504,14 +504,14 @@ void TestPath::testHasParent_data()
     QTest::addColumn<bool>("hasParent");
 
     QTest::newRow("empty") << QString() << false;
-    QTest::newRow("/") << QString("/") << false;
-    QTest::newRow("/foo") << QString("/foo") << true;
-    QTest::newRow("/foo/bar") << QString("/foo/bar") << true;
-    QTest::newRow("//foo/bar") << QString("//foo/bar") << true;
-    QTest::newRow("http://foo.bar") << QString("http://foo.bar") << false;
-    QTest::newRow("http://foo.bar/") << QString("http://foo.bar/") << false;
-    QTest::newRow("http://foo.bar/asdf") << QString("http://foo.bar/asdf") << true;
-    QTest::newRow("http://foo.bar/asdf/asdf") << QString("http://foo.bar/asdf/asdf") << true;
+    QTest::newRow("/") << QStringLiteral("/") << false;
+    QTest::newRow("/foo") << QStringLiteral("/foo") << true;
+    QTest::newRow("/foo/bar") << QStringLiteral("/foo/bar") << true;
+    QTest::newRow("//foo/bar") << QStringLiteral("//foo/bar") << true;
+    QTest::newRow("http://foo.bar") << QStringLiteral("http://foo.bar") << false;
+    QTest::newRow("http://foo.bar/") << QStringLiteral("http://foo.bar/") << false;
+    QTest::newRow("http://foo.bar/asdf") << QStringLiteral("http://foo.bar/asdf") << true;
+    QTest::newRow("http://foo.bar/asdf/asdf") << QStringLiteral("http://foo.bar/asdf/asdf") << true;
 }
 
 void TestPath::testHasParent()

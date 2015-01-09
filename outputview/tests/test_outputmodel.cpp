@@ -54,13 +54,13 @@ QStringList generateLongLine()
     const int libPaths = 20; // -L...
     QString line = "g++ -m64 -Wl,-rpath,/home/gabo/md/qt/lib -o bin/flap_ui";
     for(int i = 0; i < objects; ++i) {
-        line += QString(" .obj/file%1.o").arg(i);
+        line += QStringLiteral(" .obj/file%1.o").arg(i);
     }
     for(int i = 0; i < libPaths; ++i) {
-        line += QString(" -Lsome/path/to/lib%1").arg(i);
+        line += QStringLiteral(" -Lsome/path/to/lib%1").arg(i);
     }
     for(int i = 0; i < libs; ++i) {
-        line += QString(" -lsomelib%1").arg(i);
+        line += QStringLiteral(" -lsomelib%1").arg(i);
     }
     return QStringList() << line;
 }

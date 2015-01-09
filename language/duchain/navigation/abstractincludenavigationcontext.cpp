@@ -110,7 +110,7 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
 
 void AbstractIncludeNavigationContext::getFileInfo(TopDUContext* duchain)
 {
-    modifyHtml() += QString("%1: %2 %3: %4").arg(labelHighlight(i18nc("Files included into this file", "Includes"))).arg(duchain->importedParentContexts().count()).arg(labelHighlight(i18nc("Count of files this file was included into", "Included by"))).arg(duchain->importers().count());
+    modifyHtml() += QStringLiteral("%1: %2 %3: %4").arg(labelHighlight(i18nc("Files included into this file", "Includes"))).arg(duchain->importedParentContexts().count()).arg(labelHighlight(i18nc("Count of files this file was included into", "Included by"))).arg(duchain->importers().count());
     modifyHtml() += "<br />";
 }
 
@@ -153,7 +153,7 @@ void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUCo
       if(!addedDeclarations.contains(id) && filterDeclaration(*declarationIterator) ) {
         //Show the declaration
         if(!first)
-          modifyHtml() += QString(", ").toHtmlEscaped();
+          modifyHtml() += QStringLiteral(", ").toHtmlEscaped();
         else
           first = false;
 

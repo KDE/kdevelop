@@ -850,7 +850,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
     importId.push(globalIndexedImportIdentifier());
 
 #ifdef DEBUG_SEARCH
-//   qCDebug(LANGUAGE) << "checking imports in" << (backPointer ? id.toString() : QString("global"));
+//   qCDebug(LANGUAGE) << "checking imports in" << (backPointer ? id.toString() : QStringLiteral("global"));
 #endif
 
     if(importId.inRepository()) {

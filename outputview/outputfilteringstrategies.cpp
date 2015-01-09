@@ -275,7 +275,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             item.type = FilteredItem::ActionItem;
             if( curActFilter.fileGroup != -1 && curActFilter.toolGroup != -1 )
             {
-                item.shortenedText = QString( "%1 %2 (%3)").arg(i18nc(curActFilter.context, curActFilter.action)).arg( regEx.cap( curActFilter.fileGroup ) ).arg( regEx.cap( curActFilter.toolGroup ) );
+                item.shortenedText = QStringLiteral( "%1 %2 (%3)").arg(i18nc(curActFilter.context, curActFilter.action)).arg( regEx.cap( curActFilter.fileGroup ) ).arg( regEx.cap( curActFilter.toolGroup ) );
             }
             if( curActFilter.action == cd )
             {

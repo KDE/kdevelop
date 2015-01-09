@@ -78,7 +78,7 @@ void TestTemplateRenderer::includeTemplates()
 
 void TestTemplateRenderer::kdevFilters()
 {
-    renderer->addVariable("activity", QString("testing"));
+    renderer->addVariable("activity", QStringLiteral("testing"));
     QString result = renderer->render("{% load kdev_filters %}I am {{ activity }} software. {{ activity|upper_first }} is a very rewarding task. ", QString());
     QString expected = "I am testing software. Testing is a very rewarding task. ";
 

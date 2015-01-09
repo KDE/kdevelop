@@ -250,7 +250,7 @@ void BuilderJob::updateJobName()
     }
     methodNames = methodNamesList.join( ", " );
 
-    QString jobName = QString( "%1: %2" ).arg( itemNames ).arg( methodNames );
+    QString jobName = QStringLiteral( "%1: %2" ).arg( itemNames ).arg( methodNames );
     setObjectName( jobName );
 }
 

@@ -169,7 +169,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
                 QStringList shortcuts;
                 shortcuts << w->shortcut().value(0).toString();
                 shortcuts << w->shortcut().value(1).toString();
-                config.writeEntry(QString("Shortcut for %1").arg(m_view->document()->title()), shortcuts);
+                config.writeEntry(QStringLiteral("Shortcut for %1").arg(m_view->document()->title()), shortcuts);
                 config.sync();
             }
             delete dialog;

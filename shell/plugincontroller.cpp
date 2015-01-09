@@ -241,7 +241,7 @@ public:
 
     bool isEnabled(const KPluginInfo& info) const
     {
-        static const QStringList disabledPlugins = QString(qgetenv("KDEV_DISABLE_PLUGINS")).split(';');
+        static const QStringList disabledPlugins = QString::fromLatin1(qgetenv("KDEV_DISABLE_PLUGINS")).split(';');
         if (disabledPlugins.contains(info.pluginName())) {
             return false;
         }
@@ -277,9 +277,9 @@ PluginController::PluginController(Core *core)
     qCDebug(SHELL) << "Found" << newPlugins.size() << " plugins using the new search method.";
     d->plugins = KPluginInfo::fromMetaData(newPlugins);
 
-    //qCDebug(SHELL) << "Fetching plugin info which matches:" << QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);
+    //qCDebug(SHELL) << "Fetching plugin info which matches:" << QStringLiteral( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);
     KPluginInfo::List oldStylePlugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QStringLiteral( "KDevelop/Plugin" ),
-        QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION) ) );
+        QStringLiteral( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION) ) );
     qCDebug(SHELL) << "Found" << oldStylePlugins.size() << " plugins using the old search method.";
     if (!oldStylePlugins.isEmpty()) {
         foreach (const KPluginInfo& info, oldStylePlugins) {

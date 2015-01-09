@@ -55,9 +55,9 @@ Declaration* AliasDeclaration::clonePrivate() const {
 
 QString AliasDeclaration::toString() const {
   if( aliasedDeclaration().isValid() )
-    return QString("Alias %1 as %2").arg(aliasedDeclaration().declaration()->qualifiedIdentifier().toString()).arg(identifier().toString());
+    return QStringLiteral("Alias %1 as %2").arg(aliasedDeclaration().declaration()->qualifiedIdentifier().toString()).arg(identifier().toString());
   else
-    return QString("Lost alias %1").arg(identifier().toString());
+    return QStringLiteral("Lost alias %1").arg(identifier().toString());
 }
 
 void AliasDeclaration::setAliasedDeclaration(const IndexedDeclaration& decl) {

@@ -301,7 +301,7 @@ void TestProjectModel::testItemSanity()
     QSignalSpy s( model, SIGNAL(dataChanged(QModelIndex,QModelIndex)) );
     parent->setPath( Path("/newtest") );
     QCOMPARE( s.count(), 1 );
-    QCOMPARE( model->data( parent->index() ).toString(), QString("newtest") );
+    QCOMPARE( model->data( parent->index() ).toString(), QStringLiteral("newtest") );
 
     parent->removeRow( child->row() );
 }
@@ -510,10 +510,10 @@ void TestProjectModel::testProjectProxyModel()
     QModelIndex proxyRoot = proxy->mapFromSource(root->index());
     QCOMPARE(model->rowCount(root->index()), 4);
     QCOMPARE(proxy->rowCount(proxyRoot), 4);
-    QCOMPARE(proxy->index(0, 0, proxy->index(0, 0)).data().toString(), QString("a1"));
-    QCOMPARE(proxy->index(1, 0, proxy->index(0, 0)).data().toString(), QString("b1"));
-    QCOMPARE(proxy->index(2, 0, proxy->index(0, 0)).data().toString(), QString("c1"));
-    QCOMPARE(proxy->index(3, 0, proxy->index(0, 0)).data().toString(), QString("d1"));
+    QCOMPARE(proxy->index(0, 0, proxy->index(0, 0)).data().toString(), QStringLiteral("a1"));
+    QCOMPARE(proxy->index(1, 0, proxy->index(0, 0)).data().toString(), QStringLiteral("b1"));
+    QCOMPARE(proxy->index(2, 0, proxy->index(0, 0)).data().toString(), QStringLiteral("c1"));
+    QCOMPARE(proxy->index(3, 0, proxy->index(0, 0)).data().toString(), QStringLiteral("d1"));
 
     model->clear();
 }

@@ -64,7 +64,7 @@ void TestTemplatesModel::descriptionParsing()
     QCOMPARE(items.size(), 1);
     QStandardItem* item = items.first();
 
-    QCOMPARE(item->data(TemplatesModel::CommentRole).toString(), QString("Describes a class using YAML syntax"));
+    QCOMPARE(item->data(TemplatesModel::CommentRole).toString(), QStringLiteral("Describes a class using YAML syntax"));
     QVERIFY(item->data(TemplatesModel::IconNameRole).toString().isEmpty());
 
     QString descriptionFile = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/kdevcodegentest/template_descriptions/test_yaml.desktop";
@@ -78,9 +78,9 @@ void TestTemplatesModel::templateIndexes()
     QModelIndexList indexes = model->templateIndexes("test_yaml.tar.bz2");
     QCOMPARE(indexes.size(), 3);
 
-    QCOMPARE(model->data(indexes[0]).toString(), QString("Testing"));
-    QCOMPARE(model->data(indexes[1]).toString(), QString("YAML"));
-    QCOMPARE(model->data(indexes[2]).toString(), QString("Testing YAML template"));
+    QCOMPARE(model->data(indexes[0]).toString(), QStringLiteral("Testing"));
+    QCOMPARE(model->data(indexes[1]).toString(), QStringLiteral("YAML"));
+    QCOMPARE(model->data(indexes[2]).toString(), QStringLiteral("Testing YAML template"));
 }
 
 

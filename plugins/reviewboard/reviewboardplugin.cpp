@@ -110,7 +110,7 @@ void ReviewBoardPlugin::reviewDone(KJob* j)
         ReviewBoard::SubmitPatchRequest const * job = qobject_cast<ReviewBoard::SubmitPatchRequest*>(j);
         QUrl url = job->server();
         url.setUserInfo(QString());
-        QString requrl = QString("%1/r/%2/").arg(url.toDisplayString(QUrl::PreferLocalFile)).arg(job->requestId());
+        QString requrl = QStringLiteral("%1/r/%2/").arg(url.toDisplayString(QUrl::PreferLocalFile)).arg(job->requestId());
 
         KMessageBox::information(0, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", requrl),
                                     QString(), QString(), KMessageBox::AllowLink);

@@ -24,15 +24,15 @@
 namespace KDevelop {
 
 QString shortLabel(KDevelop::DUContext* context) {
-  return QString("q%1").arg((quint64)context);
+  return QStringLiteral("q%1").arg((quint64)context);
 }
 
 QString shortLabel(KDevelop::Declaration* declaration) {
-  return QString("q%1").arg((quint64)declaration);
+  return QStringLiteral("q%1").arg((quint64)declaration);
 }
 
 QString rangeToString( const KTextEditor::Range& r ) {
-  return QString("%1:%2->%3:%4").arg(r.start().line()).arg(r.start().column()).arg(r.end().line()).arg(r.end().column());
+  return QStringLiteral("%1:%2->%3:%4").arg(r.start().line()).arg(r.start().column()).arg(r.end().line()).arg(r.end().column());
 }
 
 
@@ -136,7 +136,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       label = file;
 
       if( topCtx->importers().count() != 0 )
-        label += QString(" imported by %1").arg(topCtx->importers().count());
+        label += QStringLiteral(" imported by %1").arg(topCtx->importers().count());
     } else {
       label = "unknown file";
     }
@@ -147,7 +147,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
     label += ' ' + rangeToString(context->range().castToSimpleRange());
   }
 
-  //label = QString("%1 ").arg((size_t)context) + label;
+  //label = QStringLiteral("%1 ").arg((size_t)context) + label;
 
   if( isMaster && !dynamic_cast<TopDUContext*>(context) ) {
     //Also draw contexts that import this one
@@ -169,7 +169,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   }
 
   if( !context->childContexts().isEmpty() )
-    label += QString(", %1 C.").arg(context->childContexts().count());
+    label += QStringLiteral(", %1 C.").arg(context->childContexts().count());
 
   if( !shortened ) {
     foreach (DUContext* child, context->childContexts()) {
@@ -179,7 +179,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   }
 
   if( !context->localDeclarations().isEmpty() )
-    label += QString(", %1 D.").arg(context->localDeclarations().count());
+    label += QStringLiteral(", %1 D.").arg(context->localDeclarations().count());
 
   if(!shortened )
   {
@@ -191,7 +191,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
     addDeclaration(stream, context->owner());
   }
 
-  stream << shortLabel(context) << "[shape=" << shape << ",label=\"" << label << "\"" << (isMaster ? QString("color=red") : QString("color=blue")) << "];\n";
+  stream << shortLabel(context) << "[shape=" << shape << ",label=\"" << label << "\"" << (isMaster ? QStringLiteral("color=red") : QStringLiteral("color=blue")) << "];\n";
 
   if( isMaster )
     stream << "}\n";

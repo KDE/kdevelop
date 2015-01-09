@@ -298,12 +298,12 @@ void SetRepositoryAlgorithms::check(const SetNodeData* node) {
 }
 
 QString SetRepositoryAlgorithms::shortLabel(const SetNodeData& node) const {
-  return QString("n%1_%2").arg(node.start()).arg(node.end());
+  return QStringLiteral("n%1_%2").arg(node.start()).arg(node.end());
 }
 
 QString SetRepositoryAlgorithms::dumpDotGraphInternal(uint nodeIndex, bool master) const {
   if(!nodeIndex)
-    return QString("empty node");
+    return QStringLiteral("empty node");
 
   const SetNodeData& node(*repository.itemFromIndex(nodeIndex));
 
@@ -311,18 +311,18 @@ QString SetRepositoryAlgorithms::dumpDotGraphInternal(uint nodeIndex, bool maste
   if(master)
     color = "red";
 
-  QString label = QString("%1 -> %2").arg(node.start()).arg(node.end());
+  QString label = QStringLiteral("%1 -> %2").arg(node.start()).arg(node.end());
   if(!node.contiguous())
     label += ", with gaps";
 
-  QString ret = QString("%1[label=\"%2\", color=\"%3\"];\n").arg(shortLabel(node)).arg(label).arg(color);
+  QString ret = QStringLiteral("%1[label=\"%2\", color=\"%3\"];\n").arg(shortLabel(node)).arg(label).arg(color);
 
   if(node.leftNode()) {
     const SetNodeData& left(*repository.itemFromIndex(node.leftNode()));
     const SetNodeData& right(*repository.itemFromIndex(node.rightNode()));
     Q_ASSERT(node.rightNode());
-    ret += QString("%1 -> %2;\n").arg(shortLabel(node)).arg(shortLabel(left));
-    ret += QString("%1 -> %2;\n").arg(shortLabel(node)).arg(shortLabel(right));
+    ret += QStringLiteral("%1 -> %2;\n").arg(shortLabel(node)).arg(shortLabel(left));
+    ret += QStringLiteral("%1 -> %2;\n").arg(shortLabel(node)).arg(shortLabel(right));
     ret += dumpDotGraphInternal(node.leftNode());
     ret += dumpDotGraphInternal(node.rightNode());
   }

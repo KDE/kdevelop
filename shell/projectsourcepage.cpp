@@ -252,7 +252,7 @@ void ProjectSourcePage::projectChanged(const QString& name)
 void ProjectSourcePage::setStatus(const QString& message)
 {
     KColorScheme scheme(QPalette::Normal);
-    m_ui->status->setText(QString("<font color='%1'>%2</font>").arg(scheme.foreground(KColorScheme::NegativeText).color().name()).arg(message));
+    m_ui->status->setText(QStringLiteral("<font color='%1'>%2</font>").arg(scheme.foreground(KColorScheme::NegativeText).color().name()).arg(message));
 }
 
 void ProjectSourcePage::clearStatus()

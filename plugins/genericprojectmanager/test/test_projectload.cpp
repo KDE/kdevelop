@@ -110,7 +110,7 @@ TestProject makeProject()
     QStringList projectFileContents;
     projectFileContents
     << "[Project]"
-    << QString("Name=") + ret.name
+    << QStringLiteral("Name=") + ret.name
     << "Manager=KDevGenericManager";
 
     QUrl projecturl = QUrl::fromLocalFile( dir.absoluteFilePath() + "/simpleproject.kdev4" );
@@ -315,7 +315,7 @@ void TestProjectLoad::raceJob()
     QCOMPARE(root->rowCount(), 1);
     ProjectBaseItem* testItem = root->child(0);
     QVERIFY(testItem->folder());
-    QCOMPARE(testItem->baseName(), QString("test"));
+    QCOMPARE(testItem->baseName(), QStringLiteral("test"));
     QCOMPARE(testItem->rowCount(), 1001);
     ProjectBaseItem* asdfItem = testItem->children().last();
     QVERIFY(asdfItem->folder());
@@ -329,7 +329,7 @@ void TestProjectLoad::raceJob()
     QCOMPARE(root->rowCount(), 1);
     testItem = root->child(0);
     QVERIFY(testItem->folder());
-    QCOMPARE(testItem->baseName(), QString("test2"));
+    QCOMPARE(testItem->baseName(), QStringLiteral("test2"));
 }
 
 void TestProjectLoad::addDuringImport()

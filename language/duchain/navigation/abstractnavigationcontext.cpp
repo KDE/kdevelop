@@ -105,7 +105,7 @@ QString AbstractNavigationContext::createLink(const QString& name, QString targe
   if( m_linkCount == m_selectedLink )
     str = "<font style=\"background-color:#f1f1f1;\" color=\"#880088\">" + str + "</font>";
 
-  QString ret =  "<a href=\"" + targetId + "\"" + ((m_linkCount == m_selectedLink && m_currentPositionLine == -1) ? QString(" name = \"currentPosition\"") : QString()) + ">" + str + "</a>";
+  QString ret =  "<a href=\"" + targetId + "\"" + ((m_linkCount == m_selectedLink && m_currentPositionLine == -1) ? QStringLiteral(" name = \"currentPosition\"") : QString()) + ">" + str + "</a>";
 
   if( m_selectedLink == m_linkCount )
     m_selectedLinkAction = action;
@@ -441,7 +441,7 @@ void AbstractNavigationContext::addHtml(QString html) {
     if(line.indexOf(newLineRegExp) != -1) {
       ++m_currentLine;
       if(m_currentLine == m_currentPositionLine) {
-        m_currentText += "<font color=\"#880088\"> <a name = \"currentPosition\" >" + QString("<->").toHtmlEscaped() + "</a> </font>";
+        m_currentText += "<font color=\"#880088\"> <a name = \"currentPosition\" >" + QStringLiteral("<->").toHtmlEscaped() + "</a> </font>";
       }
     }
   }

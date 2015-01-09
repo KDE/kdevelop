@@ -241,7 +241,7 @@ void OpenWithPlugin::open( const QString& storageid )
                  m_mimeType, svc->name() ),
             i18n("Set as default?"),
             KStandardGuiItem::yes(), KStandardGuiItem::no(),
-            QString("OpenWith-%1").arg(m_mimeType)
+            QStringLiteral("OpenWith-%1").arg(m_mimeType)
         );
         if (setDefault == KMessageBox::Yes) {
             config.writeEntry(m_mimeType, storageid);

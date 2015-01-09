@@ -165,7 +165,7 @@ QStringList GrepFindFilesThread::parseExclude(QString excl)
     QStringList exclude;
     // Split around commas or spaces
     foreach(const QString &sub, excl.split(QRegExp(",|\\s"), QString::SkipEmptyParts))
-        exclude << QString("*%1*").arg(sub);
+        exclude << QStringLiteral("*%1*").arg(sub);
     return exclude;
 }
 

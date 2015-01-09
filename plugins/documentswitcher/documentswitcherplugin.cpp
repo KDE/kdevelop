@@ -178,10 +178,10 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
 
                 // first: project name, second: path to file in project (might be just '/' when the file is in the project root dir)
                 const QPair<QString, QString> fileInProjectInfo = (projectNameSize < 0)
-                    ? qMakePair(path, QString("/"))
+                    ? qMakePair(path, QStringLiteral("/"))
                     : qMakePair(path.left(projectNameSize), path.mid(projectNameSize));
 
-                itemText = QString("%1 (%2:%3)").arg(itemText).arg(fileInProjectInfo.first)
+                itemText = QStringLiteral("%1 (%2:%3)").arg(itemText).arg(fileInProjectInfo.first)
                                 .arg(fileInProjectInfo.second);
             } else
             {

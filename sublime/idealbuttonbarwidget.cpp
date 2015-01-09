@@ -79,7 +79,7 @@ QAction* IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *
     //restore toolview shortcut config
     KConfigGroup config = KSharedConfig::openConfig()->group("UI");
     QList<QKeySequence> shortcuts;
-    QStringList shortcutStrings = config.readEntry(QString("Shortcut for %1").arg(view->document()->title()), QStringList());
+    QStringList shortcutStrings = config.readEntry(QStringLiteral("Shortcut for %1").arg(view->document()->title()), QStringList());
     shortcuts << QKeySequence::fromString(shortcutStrings.value(0)) << QKeySequence::fromString(shortcutStrings.value(1));
     action->setShortcuts(shortcuts);
 

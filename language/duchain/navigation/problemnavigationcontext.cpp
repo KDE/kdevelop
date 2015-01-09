@@ -101,14 +101,14 @@ QString ProblemNavigationContext::html(bool shorten)
       const DocumentRange range = diagnostic->finalLocation();
       Declaration* declaration = DUChainUtils::itemUnderCursor(range.document.toUrl(), range.start());
 
-      modifyHtml() += labelHighlight(QString("%1: ").arg(diagnostic->severityString()));
+      modifyHtml() += labelHighlight(QStringLiteral("%1: ").arg(diagnostic->severityString()));
       modifyHtml() += diagnostic->description();
 
       if (declaration) {
         modifyHtml() += "<br/>";
         makeLink(declaration->toString(), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
         modifyHtml() += i18n(" in ");
-        makeLink(QString("%1 :%2").arg(declaration->url().toUrl().fileName()).arg(declaration->rangeInCurrentRevision().start().line()+1), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
+        makeLink(QStringLiteral("%1 :%2").arg(declaration->url().toUrl().fileName()).arg(declaration->rangeInCurrentRevision().start().line()+1), KDevelop::DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
       }
       modifyHtml() += "<br/>";
     }

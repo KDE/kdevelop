@@ -135,9 +135,9 @@ void TestTemplateClassGenerator::templateVariablesCpp()
     setLowercaseFileNames(generator);
 
     QVariantHash variables = generator->renderer()->variables();
-    CHECK_TEMPLATE_VARIABLE(name, QString, QString("ClassName"));
+    CHECK_TEMPLATE_VARIABLE(name, QString, QStringLiteral("ClassName"));
 
-    CHECK_TEMPLATE_VARIABLE(output_file_header, QString, QString("classname.h"));
+    CHECK_TEMPLATE_VARIABLE(output_file_header, QString, QStringLiteral("classname.h"));
     CHECK_TEMPLATE_VARIABLE(output_file_header_absolute, QString, baseUrl.resolved(QUrl("classname.h")).toLocalFile());
 }
 
@@ -147,9 +147,9 @@ void TestTemplateClassGenerator::templateVariablesYaml()
     setLowercaseFileNames(generator);
 
     QVariantHash variables = generator->renderer()->variables();
-    CHECK_TEMPLATE_VARIABLE(name, QString, QString("ClassName"));
+    CHECK_TEMPLATE_VARIABLE(name, QString, QStringLiteral("ClassName"));
 
-    CHECK_TEMPLATE_VARIABLE(output_file_description, QString, QString("classname.yaml"));
+    CHECK_TEMPLATE_VARIABLE(output_file_description, QString, QStringLiteral("classname.yaml"));
     CHECK_TEMPLATE_VARIABLE(output_file_description_absolute, QString, baseUrl.resolved(QUrl("classname.yaml")).toLocalFile());
 }
 
@@ -164,22 +164,22 @@ void TestTemplateClassGenerator::codeDescription()
     QVERIFY(variables.contains("base_classes"));
     QVariantList inheritance = variables["base_classes"].toList();
     QCOMPARE(inheritance.size(), 1);
-    QCOMPARE(inheritance.first().value<InheritanceDescription>().baseType, QString("QObject"));
-    QCOMPARE(inheritance.first().value<InheritanceDescription>().inheritanceMode, QString("public"));
+    QCOMPARE(inheritance.first().value<InheritanceDescription>().baseType, QStringLiteral("QObject"));
+    QCOMPARE(inheritance.first().value<InheritanceDescription>().inheritanceMode, QStringLiteral("public"));
 
     QVERIFY(variables.contains("members"));
     QVariantList members = variables["members"].toList();
     QCOMPARE(members.size(), 3);
-    QCOMPARE(members.first().value<VariableDescription>().type, QString("QString"));
-    QCOMPARE(members.first().value<VariableDescription>().name, QString("name"));
+    QCOMPARE(members.first().value<VariableDescription>().type, QStringLiteral("QString"));
+    QCOMPARE(members.first().value<VariableDescription>().name, QStringLiteral("name"));
 
     QVERIFY(variables.contains("functions"));
     QVariantList methods = variables["functions"].toList();
     QCOMPARE(methods.size(), 2);
-    QCOMPARE(methods.first().value<FunctionDescription>().name, QString("doSomething"));
+    QCOMPARE(methods.first().value<FunctionDescription>().name, QStringLiteral("doSomething"));
     QCOMPARE(methods.first().value<FunctionDescription>().arguments.size(), 2);
     QCOMPARE(methods.first().value<FunctionDescription>().returnArguments.size(), 0);
-    QCOMPARE(methods.last().value<FunctionDescription>().name, QString("getSomeOtherNumber"));
+    QCOMPARE(methods.last().value<FunctionDescription>().name, QStringLiteral("getSomeOtherNumber"));
     QCOMPARE(methods.last().value<FunctionDescription>().arguments.size(), 0);
     QCOMPARE(methods.last().value<FunctionDescription>().returnArguments.size(), 1);
 }
@@ -265,7 +265,7 @@ void TestTemplateClassGenerator::setLowercaseFileNames(TemplateClassGenerator* g
     for (; it != urls.constEnd(); ++it)
     {
         QString fileName = it.value().fileName().toLower();
-        QUrl base = it.value().resolved(QUrl(QString("./%1").arg(fileName)));
+        QUrl base = it.value().resolved(QUrl(QStringLiteral("./%1").arg(fileName)));
         generator->setFileUrl(it.key(), base);
     }
 }

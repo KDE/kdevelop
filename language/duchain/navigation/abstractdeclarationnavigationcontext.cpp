@@ -109,7 +109,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       if(auto integralType = m_declaration->type<ConstantIntegralType>()) {
         const QString plainValue = integralType->valueAsString();
         if (!plainValue.isEmpty()) {
-          modifyHtml() += QString(" = %1").arg(plainValue);
+          modifyHtml() += QStringLiteral(" = %1").arg(plainValue);
         }
       }
 
@@ -246,20 +246,20 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     else
       modifyHtml() += labelHighlight(i18n( "Decl.: " ));
 
-    makeLink( QString("%1 :%2").arg( m_declaration->url().toUrl().fileName() ).arg( m_declaration->rangeInCurrentRevision().start().line()+1 ), m_declaration, NavigationAction::JumpToSource );
+    makeLink( QStringLiteral("%1 :%2").arg( m_declaration->url().toUrl().fileName() ).arg( m_declaration->rangeInCurrentRevision().start().line()+1 ), m_declaration, NavigationAction::JumpToSource );
     modifyHtml() += " ";
     //modifyHtml() += "<br />";
     if(!dynamic_cast<FunctionDefinition*>(m_declaration.data())) {
       if( FunctionDefinition* definition = FunctionDefinition::definition(m_declaration.data()) ) {
         modifyHtml() += labelHighlight(i18n( " Def.: " ));
-        makeLink( QString("%1 :%2").arg( definition->url().toUrl().fileName() ).arg( definition->rangeInCurrentRevision().start().line()+1 ), DeclarationPointer(definition), NavigationAction::JumpToSource );
+        makeLink( QStringLiteral("%1 :%2").arg( definition->url().toUrl().fileName() ).arg( definition->rangeInCurrentRevision().start().line()+1 ), DeclarationPointer(definition), NavigationAction::JumpToSource );
       }
     }
 
     if( FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(m_declaration.data()) ) {
       if(definition->declaration()) {
         modifyHtml() += labelHighlight(i18n( " Decl.: " ));
-        makeLink( QString("%1 :%2").arg( definition->declaration()->url().toUrl().fileName() ).arg( definition->declaration()->rangeInCurrentRevision().start().line()+1 ), DeclarationPointer(definition->declaration()), NavigationAction::JumpToSource );
+        makeLink( QStringLiteral("%1 :%2").arg( definition->declaration()->url().toUrl().fileName() ).arg( definition->declaration()->rangeInCurrentRevision().start().line()+1 ), DeclarationPointer(definition->declaration()), NavigationAction::JumpToSource );
       }
     }
 
@@ -392,9 +392,9 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
 
     if(overridden) {
         modifyHtml() += i18n("Overrides a ");
-        makeLink(i18n("function"), QString("jump_to_overridden"), NavigationAction(DeclarationPointer(overridden), KDevelop::NavigationAction::NavigateDeclaration));
+        makeLink(i18n("function"), QStringLiteral("jump_to_overridden"), NavigationAction(DeclarationPointer(overridden), KDevelop::NavigationAction::NavigateDeclaration));
         modifyHtml() += i18n(" from ");
-        makeLink(prettyQualifiedIdentifier(DeclarationPointer(overridden->context()->owner())).toString(), QString("jump_to_overridden_container"), NavigationAction(DeclarationPointer(overridden->context()->owner()), KDevelop::NavigationAction::NavigateDeclaration));
+        makeLink(prettyQualifiedIdentifier(DeclarationPointer(overridden->context()->owner())).toString(), QStringLiteral("jump_to_overridden_container"), NavigationAction(DeclarationPointer(overridden->context()->owner()), KDevelop::NavigationAction::NavigateDeclaration));
 
         modifyHtml() += "<br />";
     }else{
@@ -407,9 +407,9 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
       uint num = 0;
       foreach(Declaration* decl, decls) {
         modifyHtml() += i18n("Hides a ");
-        makeLink(i18n("function"), QString("jump_to_hide_%1").arg(num), NavigationAction(DeclarationPointer(decl), KDevelop::NavigationAction::NavigateDeclaration));
+        makeLink(i18n("function"), QStringLiteral("jump_to_hide_%1").arg(num), NavigationAction(DeclarationPointer(decl), KDevelop::NavigationAction::NavigateDeclaration));
         modifyHtml() += i18n(" from ");
-        makeLink(prettyQualifiedIdentifier(DeclarationPointer(decl->context()->owner())).toString(), QString("jump_to_hide_container_%1").arg(num), NavigationAction(DeclarationPointer(decl->context()->owner()), KDevelop::NavigationAction::NavigateDeclaration));
+        makeLink(prettyQualifiedIdentifier(DeclarationPointer(decl->context()->owner())).toString(), QStringLiteral("jump_to_hide_container_%1").arg(num), NavigationAction(DeclarationPointer(decl->context()->owner()), KDevelop::NavigationAction::NavigateDeclaration));
 
         modifyHtml() += "<br />";
         ++num;
@@ -508,7 +508,7 @@ void AbstractDeclarationNavigationContext::htmlClass()
     eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
 
     FOREACH_FUNCTION( const KDevelop::BaseClassInstance& base, classDecl->baseClasses ) {
-      modifyHtml() += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QString("virtual") : QString()) + " ";
+      modifyHtml() += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QStringLiteral("virtual") : QString()) + " ";
       eventuallyMakeTypeLinks(base.baseClass.abstractType());
     }
   } else {
@@ -543,7 +543,7 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
         if(!id.isEmpty())
           id = id.mid(id.count()-1);
         htmlIdentifiedType(contextType, contextIdType);
-        modifyHtml() += QString("::").toHtmlEscaped();
+        modifyHtml() += QStringLiteral("::").toHtmlEscaped();
       }
     }
 
@@ -560,7 +560,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
   type = typeToShow(type);
 
   if( !type ) {
-    modifyHtml() += typeHighlight(QString("<no type>").toHtmlEscaped());
+    modifyHtml() += typeHighlight(QStringLiteral("<no type>").toHtmlEscaped());
     return;
   }
 
@@ -611,7 +611,7 @@ QString AbstractDeclarationNavigationContext::identifierHighlight(const QString&
   }
 
   if (decl->isDeprecated()) {
-    ret = QString("<i>%1</i>").arg(ret);
+    ret = QStringLiteral("<i>%1</i>").arg(ret);
   }
   return ret;
 }
