@@ -203,7 +203,7 @@ void ProjectFilterConfigPage::emitChanged()
 
 QString ProjectFilterConfigPage::fullName() const
 {
-    return i18n("Configure which files and folders inside the project folder should be included or excluded.");
+    return i18n("Configure Project Filter");
 }
 
 QIcon ProjectFilterConfigPage::icon() const
