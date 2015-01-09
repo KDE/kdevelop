@@ -95,7 +95,7 @@ QString ClassFunctionDeclaration::toString() const {
   } else {
     QString type = abstractType() ? abstractType()->toString() : QStringLiteral("<notype>");
     qCDebug(LANGUAGE) << "A function has a bad type attached:" << type;
-    return QStringLiteral("invalid member-function %1 type %2").arg(identifier().toString()).arg(type);
+    return i18n("invalid member-function %1 type %2", identifier().toString(), type);
   }
 }
 

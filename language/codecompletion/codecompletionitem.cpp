@@ -23,6 +23,8 @@
 
 #include <QModelIndex>
 
+#include <KLocalizedString>
+
 #include <ktexteditor/codecompletionmodel.h>
 #include <ktexteditor/range.h>
 #include <ktexteditor/view.h>
@@ -117,7 +119,7 @@ QVariant CompletionTreeItem::data(const QModelIndex& index, int role, const Code
   Q_UNUSED(index)
   Q_UNUSED(model)
   if(role == Qt::DisplayRole)
-    return QStringLiteral("not implemented");
+    return i18n("not implemented");
   return QVariant();
 }
 

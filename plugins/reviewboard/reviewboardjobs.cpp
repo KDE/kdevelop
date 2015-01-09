@@ -246,8 +246,8 @@ void ProjectsListRequest::requestRepositoryList(int startIndex)
     QList<QPair<QString,QString> > repositoriesParameters;
 
     // In practice, the web API will return at most 200 repos per call, so just hardcode that value here
-    repositoriesParameters << qMakePair<QString,QString>("max-results", QLatin1String("200"));
-    repositoriesParameters << qMakePair<QString,QString>("start", QStringLiteral("%1").arg(startIndex));
+    repositoriesParameters << qMakePair<QString,QString>(QStringLiteral("max-results"), QStringLiteral("200"));
+    repositoriesParameters << qMakePair<QString,QString>(QStringLiteral("start"), QString::number(startIndex));
 
     HttpCall* repositoriesCall = new HttpCall(m_server, "/api/repositories/", repositoriesParameters, "", false, this);
     connect(repositoriesCall, &HttpCall::finished, this, &ProjectsListRequest::done);
@@ -291,10 +291,10 @@ void ReviewListRequest::requestReviewList(int startIndex)
     QList<QPair<QString,QString> > reviewParameters;
 
     // In practice, the web API will return at most 200 repos per call, so just hardcode that value here
-    reviewParameters << qMakePair<QString,QString>("max-results", QLatin1String("200"));
-    reviewParameters << qMakePair<QString,QString>("start", QStringLiteral("%1").arg(startIndex));
-    reviewParameters << qMakePair<QString,QString>("from-user", m_user);
-    reviewParameters << qMakePair<QString,QString>("status", m_reviewStatus);
+    reviewParameters << qMakePair<QString,QString>(QStringLiteral("max-results"), QStringLiteral("200"));
+    reviewParameters << qMakePair<QString,QString>(QStringLiteral("start"), QString::number(startIndex));
+    reviewParameters << qMakePair<QString,QString>(QStringLiteral("from-user"), m_user);
+    reviewParameters << qMakePair<QString,QString>(QStringLiteral("status"), m_reviewStatus);
 
     HttpCall* reviewsCall = new HttpCall(m_server, "/api/review-requests/", reviewParameters, "", false, this);
     connect(reviewsCall, &HttpCall::finished, this, &ReviewListRequest::done);

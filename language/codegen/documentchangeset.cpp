@@ -316,15 +316,15 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
             const DocumentChange& change(*sortedChangesList[pos]);
             if(!dynamic->replace(change.m_range, change.m_oldText, change.m_newText, change.m_ignoreOldText))
             {
-                QString warningString = QStringLiteral("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"")
-                    .arg(change.m_document.str())
-                    .arg(change.m_range.start().line())
-                    .arg(change.m_range.start().column())
-                    .arg(change.m_range.end().line())
-                    .arg(change.m_range.end().column())
-                    .arg(change.m_oldText)
-                    .arg(dynamic->rangeText(change.m_range))
-                    .arg(change.m_newText);
+                QString warningString = i18n("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\""
+                    , change.m_document.str()
+                    , change.m_range.start().line()
+                    , change.m_range.start().column()
+                    , change.m_range.end().line()
+                    , change.m_range.end().column()
+                    , change.m_oldText
+                    , dynamic->rangeText(change.m_range)
+                    , change.m_newText);
 
                 if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
                     qCWarning(LANGUAGE) << warningString;
@@ -339,8 +339,8 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
 
     //For files on disk
     if (!repr->setText(newText)) {
-        QString warningString = QStringLiteral("Could not replace text in the document: %1")
-            .arg(sortedChangesList.begin()->data()->m_document.str());
+        QString warningString = i18n("Could not replace text in the document: %1",
+                                     sortedChangesList.begin()->data()->m_document.str());
         if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
             qCWarning(LANGUAGE) << warningString;
         }
@@ -441,16 +441,16 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                 }
             }
         }else{
-            QString warningString = QStringLiteral("Inconsistent change in %1 at %2:%3 -> %4:%5"
-                                            " = \"%6\"(encountered \"%7\") -> \"%8\"")
-                                            .arg(file.str())
-                                            .arg(change.m_range.start().line())
-                                            .arg(change.m_range.start().column())
-                                            .arg(change.m_range.end().line())
-                                            .arg(change.m_range.end().column())
-                                            .arg(change.m_oldText)
-                                            .arg(encountered)
-                                            .arg(change.m_newText);
+            QString warningString = i18n("Inconsistent change in %1 at %2:%3 -> %4:%5"
+                                            " = \"%6\"(encountered \"%7\") -> \"%8\""
+                                            , file.str()
+                                            , change.m_range.start().line()
+                                            , change.m_range.start().column()
+                                            , change.m_range.end().line()
+                                            , change.m_range.end().column()
+                                            , change.m_oldText
+                                            , encountered
+                                            , change.m_newText);
 
             if(replacePolicy == DocumentChangeSet::IgnoreFailedChange) {
                 //Just don't do the replacement
@@ -472,6 +472,14 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
     }
     output = textLines.join("\n");
     return true;
+}
+
+// need to have it as otherwise the arguments can exceed the maximum of 10
+static QString printRange(const KTextEditor::Range& r)
+{
+    return i18nc("text range line:column->line:column", "%1:%2->%3:%4",
+                 r.start().line(), r.start().column(),
+                 r.end().line(), r.end().column());
 }
 
 //Removes all duplicate changes for a single file, and then returns (via filteredChanges) the filtered duplicates
@@ -512,19 +520,16 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
                 continue;
             } else {
                 return DocumentChangeSet::ChangeResult(
-                       QStringLiteral("Inconsistent change-request at %1; "
+                       i18n("Inconsistent change-request at %1; "
                                "intersecting changes: "
-                               "\"%2\"->\"%3\"@%4:%5->%6:%7 & \"%8\"->\"%9\"@%10:%11->%12:%13 ")
-                        .arg(file.str(), ( *previous )->m_oldText, ( *previous )->m_newText)
-                        .arg(( *previous )->m_range.start().line())
-                        .arg(( *previous )->m_range.start().column())
-                        .arg(( *previous )->m_range.end().line())
-                        .arg(( *previous )->m_range.end().column())
-                        .arg((*it)->m_oldText, (*it)->m_newText)
-                        .arg((*it)->m_range.start().line())
-                        .arg((*it)->m_range.start().column())
-                        .arg((*it)->m_range.end().line())
-                        .arg((*it)->m_range.end().column()));
+                               "\"%2\"->\"%3\"@%4 & \"%5\"->\"%6\"@%7 "
+                        , file.str()
+                        , ( *previous )->m_oldText
+                        , ( *previous )->m_newText
+                        , printRange(( *previous )->m_range)
+                        , (*it)->m_oldText
+                        , (*it)->m_newText
+                        , printRange((*it)->m_range)));
             }
 
         }

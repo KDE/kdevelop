@@ -166,12 +166,12 @@ void OneUseWidget::resizeEvent ( QResizeEvent * event ) {
 
   //Reset so we also get more context while up-sizing
   m_label->setText(QStringLiteral("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
-                 + QStringLiteral("</a> %2").arg(highlightAndEscapeUseText(m_sourceLine, cutOff, range)));
+                 + QStringLiteral("</a> ") + highlightAndEscapeUseText(m_sourceLine, cutOff, range));
 
   while(sizeHint().width() > size.width() && cutOff < maxCutOff) {
     //We've got to save space
     m_label->setText(QStringLiteral("<a href='open'>") + i18nc("Refers to a line in source code", "Line <b>%1</b>", range.start().line()+1)
-                   + QStringLiteral("</a> %2").arg(highlightAndEscapeUseText(m_sourceLine, cutOff, range)));
+                   + QStringLiteral("</a> ") + highlightAndEscapeUseText(m_sourceLine, cutOff, range));
     cutOff += 5;
   }
 

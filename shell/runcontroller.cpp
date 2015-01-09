@@ -158,7 +158,7 @@ public:
             label = QStringLiteral("%1 : %2").arg( l->project()->name()).arg(l->name());
         } else
         {
-            label = QStringLiteral("%1" ).arg(l->name());
+            label = l->name();
         }
         return label;
     }

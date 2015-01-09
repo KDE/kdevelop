@@ -60,7 +60,7 @@ void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& to
 {
   if(!item.d_func()->classId) {
     //If this triggers, you have probably created an own DUChainBase based class, but haven't called setClassId(this) in the constructor.
-    qCritical() << QStringLiteral("no class-id set for data attached to a declaration of type %1").arg(typeid(item).name());
+    qCritical() << "no class-id set for data attached to a declaration of type" << typeid(item).name();
     Q_ASSERT(0);
   }
 

@@ -109,7 +109,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       if(auto integralType = m_declaration->type<ConstantIntegralType>()) {
         const QString plainValue = integralType->valueAsString();
         if (!plainValue.isEmpty()) {
-          modifyHtml() += QStringLiteral(" = %1").arg(plainValue);
+          modifyHtml() += QStringLiteral(" = ") + plainValue;
         }
       }
 
@@ -611,7 +611,7 @@ QString AbstractDeclarationNavigationContext::identifierHighlight(const QString&
   }
 
   if (decl->isDeprecated()) {
-    ret = QStringLiteral("<i>%1</i>").arg(ret);
+    ret = QStringLiteral("<i>") + ret + QStringLiteral("</i>");
   }
   return ret;
 }

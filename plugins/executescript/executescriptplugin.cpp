@@ -210,7 +210,7 @@ QString ExecuteScriptPlugin::interpreter( KDevelop::ILaunchConfiguration* cfg, Q
     }
     KConfigGroup grp = cfg->config();
 
-    interpreter = grp.readEntry( ExecuteScriptPlugin::interpreterEntry, QStringLiteral("") );
+    interpreter = grp.readEntry( ExecuteScriptPlugin::interpreterEntry, QString() );
 
     if( interpreter.isEmpty() )
     {

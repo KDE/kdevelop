@@ -441,7 +441,7 @@ void AbstractNavigationContext::addHtml(QString html) {
     if(line.indexOf(newLineRegExp) != -1) {
       ++m_currentLine;
       if(m_currentLine == m_currentPositionLine) {
-        m_currentText += "<font color=\"#880088\"> <a name = \"currentPosition\" >" + QStringLiteral("<->").toHtmlEscaped() + "</a> </font>";
+        m_currentText += QStringLiteral("<font color=\"#880088\"> <a name = \"currentPosition\" >&lt;-&gt;</a> </font>"); // >&lt;-&gt; is <->
       }
     }
   }

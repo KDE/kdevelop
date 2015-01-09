@@ -153,7 +153,7 @@ void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUCo
       if(!addedDeclarations.contains(id) && filterDeclaration(*declarationIterator) ) {
         //Show the declaration
         if(!first)
-          modifyHtml() += QStringLiteral(", ").toHtmlEscaped();
+          modifyHtml() += QStringLiteral(", ");
         else
           first = false;
 

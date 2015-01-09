@@ -212,16 +212,16 @@ QString Problem::sourceString() const
 
 QString Problem::toString() const
 {
-    return QStringLiteral("%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)")
-        .arg(severityString())
-        .arg(description())
-        .arg(url().str())
-        .arg(range().start.line)
-        .arg(range().start.column)
-        .arg(range().end.line)
-        .arg(range().end.column)
-        .arg((explanation().isEmpty() ? QStringLiteral("<no explanation>") : explanation()))
-        .arg(sourceString());
+    return i18nc("problem description", "%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)"
+        , severityString()
+        , description()
+        , url().str()
+        , range().start.line
+        , range().start.column
+        , range().end.line
+        , range().end.column
+        , (explanation().isEmpty() ? i18n("<no explanation>") : explanation())
+        , sourceString());
 }
 
 void Problem::rebuildDynamicData(DUContext* parent, uint ownIndex)

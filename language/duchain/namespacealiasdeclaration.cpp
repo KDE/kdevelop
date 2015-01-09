@@ -104,9 +104,9 @@ void NamespaceAliasDeclaration::setAbstractType(AbstractType::Ptr type) {
 QString NamespaceAliasDeclaration::toString() const {
   DUCHAIN_D(NamespaceAliasDeclaration);
   if( indexedIdentifier() != globalIndexedImportIdentifier() )
-    return QStringLiteral("Import %1 as %2").arg(d->m_importIdentifier.identifier().toString()).arg(identifier().toString());
+    return i18n("Import %1 as %2", d->m_importIdentifier.identifier().toString(), identifier().toString());
   else
-    return QStringLiteral("Import %1").arg(d->m_importIdentifier.identifier().toString());
+    return i18n("Import %1", d->m_importIdentifier.identifier().toString());
 }
 
 }

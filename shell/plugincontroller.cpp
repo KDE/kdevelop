@@ -297,7 +297,7 @@ PluginController::PluginController(Core *core)
 PluginController::~PluginController()
 {
     if ( d->cleanupMode != PluginControllerPrivate::CleanupDone ) {
-        qCWarning(SHELL) << "Destructing plugin controller without going through the shutdown process! Backtrace is: " << endl;
+        qCWarning(SHELL) << "Destructing plugin controller without going through the shutdown process!";
     }
 
     delete d;
