@@ -63,6 +63,7 @@ void VcsOverlayProxyModel::addProject(IProject* p)
     if(!plugin)
         return;
 
+    // TODO: Show revision in case we're in "detached" state
     IBranchingVersionControl* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
     if(branchingExtension) {
         const QUrl url = p->path().toUrl();
@@ -92,12 +93,15 @@ void VcsOverlayProxyModel::repositoryBranchChanged(const QUrl& url)
 
 void VcsOverlayProxyModel::branchNameReady(KDevelop::VcsJob* job)
 {
+    static const QString noBranchStr = i18nc("Version control: Currently not on a branch", "(no branch)");
+
     if(job->status()==VcsJob::JobSucceeded) {
         SafeProjectPointer p = job->property("project").value<SafeProjectPointer>();
         QModelIndex index = indexFromProject(p);
         if(index.isValid()) {
             IProject* project = p.data();
-            m_branchName[project] = job->fetchResults().toString();
+            const auto branchName =  job->fetchResults().toString();
+            m_branchName[project] = branchName.isEmpty() ? noBranchStr : branchName;
             emit dataChanged(index, index);
         }
     }
