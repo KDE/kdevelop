@@ -106,12 +106,12 @@ void DefinesAndIncludesConfigPage::apply()
 
 QString DefinesAndIncludesConfigPage::name() const
 {
-    return i18n("Custom Defines And Includes");
+    return i18n("Custom Defines and Includes");
 }
 
 QString DefinesAndIncludesConfigPage::fullName() const
 {
-    return i18n("Configure which macros and include directories/files will be added to the parser during project parsing.");
+    return i18n("Configure Custom Defines and Includes");
 }
 
 QIcon DefinesAndIncludesConfigPage::icon() const

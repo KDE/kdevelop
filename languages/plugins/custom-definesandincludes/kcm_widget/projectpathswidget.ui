@@ -65,7 +65,7 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <widget class="QTabWidget" name="languageParameters">
      <property name="enabled">
       <bool>true</bool>
@@ -147,7 +147,7 @@
      </widget>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QCheckBox" name="kcfg_reparse">
@@ -207,11 +207,18 @@
         <string>Edit multiply includes/defines at the same time.</string>
        </property>
        <property name="text">
-        <string>&amp;Batch edit...</string>
+        <string>&amp;Batch Edit...</string>
        </property>
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Configure which macros and include directories/files will be added to the parser during project parsing:</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -220,11 +227,6 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
    <class>DefinesWidget</class>
