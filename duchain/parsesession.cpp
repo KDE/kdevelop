@@ -305,8 +305,7 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         problem->setDescription(i18n("Header is not guarded against multiple inclusions"));
         problem->setExplanation(i18n("The given header is not guarded against multiple inclusions, "
             "either with the conventional #ifndef/#define/#endif macro guards or with #pragma once."));
-        //TODO: Hmm... shouldn't this be indexedPath?
-        problem->setFinalLocation({url(), KTextEditor::Range()});
+        problem->setFinalLocation({indexedPath, KTextEditor::Range()});
         problem->setSource(ProblemData::Preprocessor);
         problems << problem;
         // TODO: Easy to add an assistant here that adds the guards -- any takers?
