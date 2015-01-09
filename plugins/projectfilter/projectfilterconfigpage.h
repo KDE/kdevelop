@@ -63,6 +63,8 @@ public Q_SLOTS:
     virtual void defaults() override;
 
 private:
+    void checkFilters();
+
     FilterModel *m_model;
     ProjectFilterProvider* m_projectFilterProvider;
     QScopedPointer<Ui::ProjectFilterSettings> m_ui;

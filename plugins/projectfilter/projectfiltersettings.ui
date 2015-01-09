@@ -12,11 +12,6 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="QWidget" name="messages" native="true">
-     <layout class="QVBoxLayout" name="verticalLayout_3"/>
-    </widget>
-   </item>
-   <item>
     <widget class="QWidget" name="widget_2" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
@@ -101,11 +96,22 @@
         </item>
        </layout>
       </item>
+      <item>
+       <widget class="KMessageWidget" name="messageWidget" native="true"/>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KMessageWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">kmessagewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

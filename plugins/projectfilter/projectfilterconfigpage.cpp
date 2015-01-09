@@ -51,6 +51,9 @@ ProjectFilterConfigPage::ProjectFilterConfigPage(ProjectFilterProvider* provider
     QWidget *w = new QWidget;
 
     m_ui->setupUi(w);
+
+    m_ui->messageWidget->hide();
+
     m_ui->filters->setSelectionMode(QAbstractItemView::SingleSelection);
     m_ui->filters->setModel(m_model);
     m_ui->filters->setRootIsDecorated(false);
@@ -175,28 +178,33 @@ void ProjectFilterConfigPage::moveDown()
     m_model->moveFilterDown(m_ui->filters->currentIndex().row());
 }
 
-static void addError(const QString& message, QWidget* parent)
+void ProjectFilterConfigPage::checkFilters()
 {
-    KMessageWidget* widget = new KMessageWidget(parent);
-    widget->setMessageType(KMessageWidget::Error);
-    widget->setText(message);
-    parent->layout()->addWidget(widget);
+    // check for errors, only show one error at once
+    QString errorText;
+    foreach(const Filter& filter, m_model->filters()) {
+        const QString &pattern = filter.pattern.pattern();
+        if (pattern.isEmpty()) {
+            errorText = i18n("A filter with an empty pattern will match all items. Use <code>\"*\"</code> to make this explicit.");
+            break;
+        } else if (pattern.endsWith('/') && filter.targets == Filter::Files) {
+            errorText = i18n("A filter ending on <code>\"/\"</code> can never match a file.");
+            break;
+        }
+    }
+
+    if (!errorText.isEmpty()) {
+        m_ui->messageWidget->setMessageType(KMessageWidget::Error);
+        m_ui->messageWidget->setText(errorText);
+        m_ui->messageWidget->animatedShow();
+    } else {
+        m_ui->messageWidget->animatedHide();
+    }
 }
 
 void ProjectFilterConfigPage::emitChanged()
 {
-    qDeleteAll(m_ui->messages->findChildren<KMessageWidget*>());
-
-    foreach(const Filter& filter, m_model->filters()) {
-        const QString &pattern = filter.pattern.pattern();
-        if (pattern.isEmpty()) {
-            addError(i18n("A filter with an empty pattern will match all items. Use <code>\"*\"</code> to make this explicit."),
-                     m_ui->messages);
-        } else if (pattern.endsWith('/') && filter.targets == Filter::Files) {
-            addError(i18n("A filter ending on <code>\"/\"</code> can never match a file."),
-                     m_ui->messages);
-        }
-    }
+    checkFilters();
 
     emit changed();
 }
