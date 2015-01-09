@@ -61,12 +61,12 @@ ParseSessionData::Ptr getSession(const QUrl &url)
     DUChainReadLocker lock;
     auto top = DUChainUtils::standardContextForUrl(url);
     if (!top) {
-        qWarning() << "No context found for" << url;
+        qCWarning(KDEV_CLANG) << "No context found for" << url;
         return {};
     }
     auto session = ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(top->ast().data()));
     if (!session) {
-        qWarning() << "No parse session / AST attached to context for url" << url;
+        qCWarning(KDEV_CLANG) << "No parse session / AST attached to context for url" << url;
         return {};
     }
     return session;

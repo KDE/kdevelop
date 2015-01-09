@@ -20,6 +20,8 @@
  */
 
 #include "model.h"
+
+#include "util/clangdebug.h"
 #include "context.h"
 #include "includepathcompletioncontext.h"
 
@@ -91,7 +93,7 @@ public slots:
 
         auto top = DUChainUtils::standardContextForUrl(url);
         if (!top) {
-            qWarning() << "No context found for" << url;
+            qCWarning(KDEV_CLANG) << "No context found for" << url;
             return;
         }
 
@@ -101,7 +103,7 @@ public slots:
         const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
         if (!sessionData) {
             // TODO: trigger reparse and re-request code completion
-            qWarning() << "No parse session / AST attached to context for url" << url;
+            qCWarning(KDEV_CLANG) << "No parse session / AST attached to context for url" << url;
             return;
         }
 

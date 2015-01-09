@@ -432,7 +432,7 @@ AbstractType *TUDUChain::makeType(CXType type, CXCursor parent)
     case CXType_Invalid:
         return nullptr;
     default:
-        qWarning() << "Unhandled type:" << type.kind << ClangString(clang_getTypeSpelling(type));
+        qCWarning(KDEV_CLANG) << "Unhandled type:" << type.kind << ClangString(clang_getTypeSpelling(type));
         return nullptr;
     }
 }

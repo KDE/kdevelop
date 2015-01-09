@@ -20,6 +20,8 @@
 
 #include "duchainutils.h"
 
+#include "util/clangdebug.h"
+
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/ducontext.h>
@@ -36,7 +38,7 @@ namespace ClangIntegration {
 KTextEditor::Range DUChainUtils::functionSignatureRange(const Declaration* decl)
 {
     if (!decl->isFunctionDeclaration()) {
-        qWarning() << "Invalid declaration:" << decl;
+        qCWarning(KDEV_CLANG) << "Invalid declaration:" << decl;
         return {};
     }
 

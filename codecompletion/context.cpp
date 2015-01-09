@@ -357,7 +357,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         }
 
         if (!m_results) {
-            qWarning() << "Something went wrong during 'clang_codeCompleteAt' for file" << file.toString();
+            qCWarning(KDEV_CLANG) << "Something went wrong during 'clang_codeCompleteAt' for file" << file.toString();
         }
     }
 
