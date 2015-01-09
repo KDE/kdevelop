@@ -23,12 +23,11 @@
 #ifndef CLANGPARSINGENVIRONMENTFILE_H
 #define CLANGPARSINGENVIRONMENTFILE_H
 
-#include <language/duchain/duchainregister.h>
-#include <language/duchain/parsingenvironment.h>
+#include "clangparsingenvironment.h"
 
+#include <language/duchain/duchainregister.h>
 #include <duchain/clangduchainexport.h>
 
-class ClangParsingEnvironment;
 class ClangParsingEnvironmentFileData;
 
 class KDEVCLANGDUCHAIN_EXPORT ClangParsingEnvironmentFile : public KDevelop::ParsingEnvironmentFile
@@ -36,22 +35,20 @@ class KDEVCLANGDUCHAIN_EXPORT ClangParsingEnvironmentFile : public KDevelop::Par
 public:
     using Ptr = QExplicitlySharedDataPointer<ClangParsingEnvironmentFile>;
 
-    ClangParsingEnvironmentFile(const KDevelop::IndexedString& url, const ClangParsingEnvironment& environment,
-                                bool isSystemHeader);
+    ClangParsingEnvironmentFile(const KDevelop::IndexedString& url, const ClangParsingEnvironment& environment);
     ClangParsingEnvironmentFile(ClangParsingEnvironmentFileData& data);
     ~ClangParsingEnvironmentFile();
 
-    virtual bool needsUpdate(const KDevelop::ParsingEnvironment* environment = 0) const;
-    virtual int type() const;
+    virtual bool needsUpdate(const KDevelop::ParsingEnvironment* environment = 0) const override;
+    virtual int type() const override;
 
     virtual bool matchEnvironment(const KDevelop::ParsingEnvironment* environment) const override;
 
     void setEnvironment(const ClangParsingEnvironment& environment);
-    void setIsSystemHeader(bool isSystemHeader);
+
+    ClangParsingEnvironment::Quality environmentQuality() const;
 
     uint environmentHash() const;
-    bool inProject() const;
-    bool isSystemHeader() const;
 
     enum {
         Identity = 142

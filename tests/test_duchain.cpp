@@ -569,56 +569,61 @@ void TestDUChain::testParsingEnvironment()
         DUChainWriteLocker lock;
         auto top = file.topContext();
         QVERIFY(top);
-
-        ParseSession session(ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(top->ast().data())));
+        auto sessionData = ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(top->ast().data()));
+        lock.unlock();
+        ParseSession session(sessionData);
+        lock.lock();
         QVERIFY(session.data());
+        QVERIFY(top);
 
         auto envFile = QExplicitlySharedDataPointer<ClangParsingEnvironmentFile>(
             dynamic_cast<ClangParsingEnvironmentFile*>(file.topContext()->parsingEnvironmentFile().data()));
 
         QCOMPARE(envFile->features(), astFeatures);
         QVERIFY(envFile->featuresSatisfied(astFeatures));
-        QCOMPARE(envFile->inProject(), false);
-        QCOMPARE(envFile->isSystemHeader(), false);
+        QCOMPARE(envFile->environmentQuality(), ClangParsingEnvironment::Source);
 
         // if no environment is given, no update should be triggered
         QVERIFY(!envFile->needsUpdate());
 
         // same env should also not trigger a reparse
         ClangParsingEnvironment env = session.environment();
-        QCOMPARE(env.projectKnown(), false);
+        QCOMPARE(env.quality(), ClangParsingEnvironment::Source);
         QVERIFY(!envFile->needsUpdate(&env));
 
         // but changing the environment should trigger an update
         env.addIncludes(Path::List() << Path("/foo/bar/baz"));
         QVERIFY(envFile->needsUpdate(&env));
-
-        // now "update" the environment and ensure no update is required thereafter
         envFile->setEnvironment(env);
         QVERIFY(!envFile->needsUpdate(&env));
 
-        // just setting the project to known shouldn't require an update
-        env.setProjectKnown(true);
+        // setting the environment quality higher should require an update
+        env.setQuality(ClangParsingEnvironment::BuildSystem);
+        QVERIFY(envFile->needsUpdate(&env));
+        envFile->setEnvironment(env);
         QVERIFY(!envFile->needsUpdate(&env));
 
-        // changing it requires an update
-        env.addIncludes(Path::List() << Path("/foo/bar/baz/blub"));
+        // changing defines requires an update
+        env.addDefines(QHash<QString, QString>{ { "foo", "bar" } });
         QVERIFY(envFile->needsUpdate(&env));
 
-        // but not when it's a system include
-        envFile->setIsSystemHeader(true);
-        QCOMPARE(envFile->isSystemHeader(), true);
+        // but only when changing the defines for the envFile's TU
+        const auto barTU = IndexedString("bar.cpp");
+        const auto oldTU = env.translationUnitUrl();
+        env.setTranslationUnitUrl(barTU);
+        QCOMPARE(env.translationUnitUrl(), barTU);
         QVERIFY(!envFile->needsUpdate(&env));
-        envFile->setIsSystemHeader(false);
+        env.setTranslationUnitUrl(oldTU);
         QVERIFY(envFile->needsUpdate(&env));
 
         // update it again
         envFile->setEnvironment(env);
         QVERIFY(!envFile->needsUpdate(&env));
 
-        // now compare against an environment where the project is was not known
+        // now compare against a lower quality environment
         // in such a case, we do not want to trigger an update
-        env.setProjectKnown(false);
+        env.setQuality(ClangParsingEnvironment::Unknown);
+        env.setTranslationUnitUrl(barTU);
         QVERIFY(!envFile->needsUpdate(&env));
 
         // even when the environment changes
@@ -627,7 +632,6 @@ void TestDUChain::testParsingEnvironment()
 
         indexed = top->indexed();
         lastEnv = session.environment();
-        qDebug() << top->url();
     }
 
     DUChain::self()->storeToDisk();
@@ -796,7 +800,7 @@ void TestDUChain::testReparseChangeEnvironment()
             QVERIFY(impl.topContext());
             auto env = dynamic_cast<ClangParsingEnvironmentFile*>(impl.topContext()->parsingEnvironmentFile().data());
             QVERIFY(env);
-            QVERIFY(!env->inProject());
+            QCOMPARE(env->environmentQuality(), ClangParsingEnvironment::Source);
             hashes[i] = env->environmentHash();
             QVERIFY(hashes[i]);
 

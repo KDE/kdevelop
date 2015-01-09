@@ -44,6 +44,7 @@ protected:
 
 private:
     QExplicitlySharedDataPointer<ParseSessionData> createSessionData() const;
+    QExplicitlySharedDataPointer<ParseSessionData> existingSessionData();
 
     ClangParsingEnvironment m_environment;
 };

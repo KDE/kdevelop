@@ -22,7 +22,10 @@
 #ifndef CLANGINDEX_H
 #define CLANGINDEX_H
 
+#include "clanghelpers.h"
+
 #include <duchain/clangduchainexport.h>
+#include <serialization/indexedstring.h>
 
 #include <util/path.h>
 
@@ -49,11 +52,32 @@ public:
      */
     QSharedPointer<const ClangPCH> pch(const ClangParsingEnvironment& defines);
 
+    /**
+     * Gets the currently pinned TU for @p url
+     *
+     * If the currently pinned TU does not import @p url, @p url is returned
+     */
+    KDevelop::IndexedString translationUnitForUrl(const KDevelop::IndexedString& url);
+
+    /**
+     * Pin @p tu as the translation unit to use when parsing @p url
+     */
+    void pinTranslationUnitForUrl(const KDevelop::IndexedString& tu, const KDevelop::IndexedString& url);
+
+    /**
+     * Set the current @p imports for @p tu
+     */
+    void setTranslationUnitImports(const KDevelop::IndexedString& tu, const Imports &imports);
+
 private:
     CXIndex m_index;
 
     QReadWriteLock m_pchLock;
     QHash<KDevelop::Path, QSharedPointer<const ClangPCH>> m_pch;
+
+    QMutex m_mappingMutex;
+    QHash<KDevelop::IndexedString, KDevelop::IndexedString> m_tuForUrl;
+    QHash<KDevelop::IndexedString, QSet<KDevelop::IndexedString>> m_urlsInTU;
 };
 
 #endif //CLANGINDEX_H

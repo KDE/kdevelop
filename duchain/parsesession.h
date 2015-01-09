@@ -56,8 +56,11 @@ public:
     /**
      * Parse the given @p contents.
      *
-     * @param url The url for the document you want to parse.
-     * @param contents The contents of the document you want to parse.
+     * TODO: Pass in full list of modified files (via environment? Add to ClangSupport?)
+     * TODO: At the same time, we could share ParseSessionData between multiple hasTracker() contexts.
+     *       Only the URL is context-specific and shouldn't be needed
+     * @param url The URL for which this session is created
+     * @param sessionContents The contents of the document you want to parse
      */
     ParseSessionData(const KDevelop::IndexedString& url, const QByteArray& contents, ClangIndex* index,
                      const ClangParsingEnvironment& environment = ClangParsingEnvironment(), Options options = Options());
@@ -67,13 +70,13 @@ public:
 private:
     friend class ParseSession;
 
-    void setUnit(CXTranslationUnit unit, const char* fileName);
+    void setUnit(CXTranslationUnit unit, const char* sessionPath);
 
     QMutex m_mutex;
 
-    KDevelop::IndexedString m_url;
-    CXTranslationUnit m_unit;
+    const KDevelop::IndexedString m_url;
     CXFile m_file;
+    CXTranslationUnit m_unit;
     ClangParsingEnvironment m_environment;
 };
 
@@ -111,13 +114,16 @@ public:
      */
     KDevelop::IndexedString url() const;
 
+    /**
+     * @return the file of this session
+     */
+    CXFile file() const;
+
     QList<KDevelop::ProblemPointer> problemsForFile(CXFile file) const;
 
     CXTranslationUnit unit() const;
 
-    CXFile file() const;
-
-    bool reparse(const QByteArray& contents, const ClangParsingEnvironment& environment);
+    bool reparse(const KDevelop::IndexedString& url, const QByteArray& sessionContents, const ClangParsingEnvironment& environment);
 
     ClangParsingEnvironment environment() const;
 

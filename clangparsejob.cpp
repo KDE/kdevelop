@@ -33,6 +33,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
+#include <project/interfaces/ibuildsystemmanager.h>
 
 #include "duchain/clanghelpers.h"
 #include "duchain/clangpch.h"
@@ -102,10 +103,11 @@ Path userDefinedPchIncludeForFile(const QString& sourcefile)
     return paths.isEmpty() ? Path() : paths.first();
 }
 
-ProjectFileItem* findProjectFileItem(const IndexedString& url)
+ProjectFileItem* findProjectFileItem(const IndexedString& url, bool* hasBuildSystemInfo)
 {
     ProjectFileItem* file = nullptr;
 
+    *hasBuildSystemInfo = false;
     for (auto project: ICore::self()->projectController()->projects()) {
         auto files = project->filesForPath(url);
         if (files.isEmpty()) {
@@ -126,6 +128,11 @@ ProjectFileItem* findProjectFileItem(const IndexedString& url)
             }
         }
     }
+    if (file && file->project()) {
+        if (auto bsm = file->project()->buildSystemManager()) {
+            *hasBuildSystemInfo = bsm->hasIncludesOrDefines(file);
+        }
+    }
     return file;
 }
 
@@ -134,15 +141,21 @@ ProjectFileItem* findProjectFileItem(const IndexedString& url)
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
 : ParseJob(url, languageSupport)
 {
-    if (auto file = findProjectFileItem(url)) {
+    const auto tuUrl = clang()->index()->translationUnitForUrl(url);
+    bool hasBuildSystemInfo;
+    if (auto file = findProjectFileItem(tuUrl, &hasBuildSystemInfo)) {
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(file));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(file));
-        m_environment.setProjectKnown(true);
     } else {
-        m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(url.str()));
-        m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(url.str()));
-        m_environment.setProjectKnown(false);
+        m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(tuUrl.str()));
+        m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(tuUrl.str()));
     }
+    const bool isSource = ClangHelpers::isSource(tuUrl.str());
+    m_environment.setQuality(
+        isSource ? (hasBuildSystemInfo ? ClangParsingEnvironment::BuildSystem : ClangParsingEnvironment::Source)
+        : ClangParsingEnvironment::Unknown
+    );
+    m_environment.setTranslationUnitUrl(tuUrl);
 
     Path::List projectPaths;
     const auto& projects = ICore::self()->projectController()->projects();
@@ -166,30 +179,15 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         return;
     }
 
-    m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includesInBackground(document().str()));
-    m_environment.addDefines(IDefinesAndIncludesManager::manager()->definesInBackground(document().str()));
-
-    auto pchInclude = userDefinedPchIncludeForFile(document().str());
-    m_environment.setPchInclude(pchInclude);
-    auto pch = clang()->index()->pch(m_environment);
+    {
+        const auto tuUrlStr = m_environment.translationUnitUrl().str();
+        m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includesInBackground(tuUrlStr));
+        m_environment.addDefines(IDefinesAndIncludesManager::manager()->definesInBackground(tuUrlStr));
+        m_environment.setPchInclude(userDefinedPchIncludeForFile(tuUrlStr));
+    }
 
     if (abortRequested()) {
         return;
-    }
-
-    ParseSessionData::Ptr sessionData;
-    {
-        UrlParseLock urlLock(document());
-        if (abortRequested() || !isUpdateRequired(ParseSession::languageString())) {
-            return;
-        }
-        {
-            DUChainWriteLocker lock;
-            const auto& context = DUChainUtils::standardContextForUrl(document().toUrl());
-            if (context) {
-                sessionData = ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(context->ast().data()));
-            }
-        }
     }
 
     if (abortRequested()) {
@@ -206,19 +204,15 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         return;
     }
 
-    bool needsUpdate = true;
-    if (!sessionData) {
-        sessionData = createSessionData();
-        needsUpdate = false;
-    }
-
-    ParseSession session(sessionData);
+    const auto existingData = existingSessionData();
+    ParseSession session(existingData ? existingData : createSessionData());
 
     if (abortRequested()) {
         return;
     }
 
-    if (needsUpdate && !session.reparse(contents().contents, m_environment)) {
+    const bool update = existingData && session.environment().translationUnitUrl() == m_environment.translationUnitUrl();
+    if (!update || !session.reparse(document(), contents().contents, m_environment)) {
         session.setData(createSessionData());
     } else {
         Q_ASSERT(session.url() == document());
@@ -229,21 +223,25 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
     }
 
     Imports imports = ClangHelpers::tuImports(session.unit());
+    if (m_environment.quality() != ClangParsingEnvironment::Unknown) {
+        clang()->index()->setTranslationUnitImports(m_environment.translationUnitUrl(), imports);
+    }
 
     IncludeFileContexts includedFiles;
-    if (pch) {
+    if (auto pch = clang()->index()->pch(m_environment)) {
         auto pchFile = pch->mapFile(session.unit());
         includedFiles = pch->mapIncludes(session.unit());
         includedFiles.insert(pchFile, pch->context());
-        imports.insert(session.file(), { pchFile, CursorInRevision(0, 0) } );
+        auto tuFile = clang_getFile(session.unit(), m_environment.translationUnitUrl().byteArray());
+        imports.insert(tuFile, { pchFile, CursorInRevision(0, 0) } );
     }
 
     if (abortRequested()) {
         return;
     }
 
-    auto context = ClangHelpers::buildDUChain(session.file(), imports, session, minimumFeatures(),
-                                              includedFiles);
+    auto context = ClangHelpers::buildDUChain(session.file(), imports, session,
+                                              minimumFeatures(), includedFiles, clang()->index());
     setDuChain(context);
 
     if (abortRequested()) {
@@ -264,7 +262,6 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         Q_ASSERT(file);
         // verify that features and environment where properly set in ClangHelpers::buildDUChain
         Q_ASSERT(file->featuresSatisfied(TopDUContext::Features(minimumFeatures() & ~TopDUContext::ForceUpdateRecursive)));
-        Q_ASSERT(file->environmentHash() == m_environment.hash());
         // prefer the editor modification revision, instead of the on-disk revision
         file->setModificationRevision(contents().modification);
     }
@@ -280,6 +277,21 @@ ParseSessionData::Ptr ClangParseJob::createSessionData() const
     const bool skipFunctionBodies = (minimumFeatures() <= TopDUContext::VisibleDeclarationsAndContexts);
     return ParseSessionData::Ptr(new ParseSessionData(document(), contents().contents, clang()->index(), m_environment,
                                  (skipFunctionBodies ? ParseSessionData::SkipFunctionBodies : ParseSessionData::NoOption)));
+}
+
+ParseSessionData::Ptr ClangParseJob::existingSessionData()
+{
+    //TODO: isUpdateRequired should be const? Then this can be as well
+    UrlParseLock urlLock(document());
+    if (abortRequested() || !isUpdateRequired(ParseSession::languageString())) {
+        return {};
+    }
+    DUChainWriteLocker lock;
+    const auto& context = DUChainUtils::standardContextForUrl(document().toUrl());
+    if (context) {
+        return ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(context->ast().data()));
+    }
+    return {};
 }
 
 const ParsingEnvironment* ClangParseJob::environment() const

@@ -29,6 +29,7 @@
 #include <duchain/clangduchainexport.h>
 
 class ParseSession;
+class ClangIndex;
 
 struct Import
 {
@@ -70,7 +71,8 @@ KDEVCLANGDUCHAIN_EXPORT Imports tuImports(CXTranslationUnit tu);
  */
 KDEVCLANGDUCHAIN_EXPORT KDevelop::ReferencedTopDUContext buildDUChain(
     CXFile file, const Imports& imports, const ParseSession& session,
-    KDevelop::TopDUContext::Features features, IncludeFileContexts& includedFiles);
+    KDevelop::TopDUContext::Features features, IncludeFileContexts& includedFiles,
+    ClangIndex* index = nullptr);
 
 /**
  * @return List of possible header extensions used for definition/declaration fallback switching

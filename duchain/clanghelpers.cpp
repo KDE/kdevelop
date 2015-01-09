@@ -29,6 +29,7 @@
 #include "tuduchain.h"
 #include "parsesession.h"
 #include "clangparsingenvironmentfile.h"
+#include "clangindex.h"
 
 #include "util/clangtypes.h"
 
@@ -79,10 +80,9 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor, CXClientData data)
     return CXChildVisit_Recurse;
 }
 
-ReferencedTopDUContext createTopContext(const IndexedString& path, const ClangParsingEnvironment& environment,
-                                        const bool isSystemHeader)
+ReferencedTopDUContext createTopContext(const IndexedString& path, const ClangParsingEnvironment& environment)
 {
-    ClangParsingEnvironmentFile* file = new ClangParsingEnvironmentFile(path, environment, isSystemHeader);
+    ClangParsingEnvironmentFile* file = new ClangParsingEnvironmentFile(path, environment);
     ReferencedTopDUContext context = new ClangTopDUContext(path, RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
     DUChain::self()->addDocumentChain(context);
     return context;
@@ -103,7 +103,8 @@ Imports ClangHelpers::tuImports(CXTranslationUnit tu)
 }
 
 ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& imports, const ParseSession& session,
-                                                  TopDUContext::Features features, IncludeFileContexts& includedFiles)
+                                                  TopDUContext::Features features, IncludeFileContexts& includedFiles,
+                                                  ClangIndex* index)
 {
     if (includedFiles.contains(file)) {
         return {};
@@ -114,7 +115,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
 
     // ensure DUChain for imports are build properly
     foreach(const auto& import, imports.values(file)) {
-        buildDUChain(import.file, imports, session, features, includedFiles);
+        buildDUChain(import.file, imports, session, features, includedFiles, index);
     }
 
     const IndexedString path(QDir::cleanPath(QString::fromUtf8(ClangString(clang_getFileName(file)))));
@@ -127,13 +128,10 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
     {
         const auto problems = session.problemsForFile(file);
 
-        auto fileLocation = clang_getLocation(session.unit(), file, 1, 1);
-        const bool isSystemHeader = clang_Location_isInSystemHeader(fileLocation);
-
         DUChainWriteLocker lock;
         context = DUChain::self()->chainForDocument(path, &environment);
         if (!context) {
-            context = ::createTopContext(path, environment, isSystemHeader);
+            context = ::createTopContext(path, environment);
         } else {
             update = true;
         }
@@ -147,8 +145,11 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
             if (!envFile->needsUpdate(&environment) && envFile->featuresSatisfied(features)) {
                 return context;
             } else {
+                //TODO: don't attempt to update if this environment is worse quality than the outdated one
+                if (index && envFile->environmentQuality() < environment.quality()) {
+                    index->pinTranslationUnitForUrl(environment.translationUnitUrl(), path);
+                }
                 envFile->setEnvironment(environment);
-                envFile->setIsSystemHeader(isSystemHeader);
                 envFile->setModificationRevision(ModificationRevision::revisionForFile(context->url()));
             }
 
@@ -168,6 +169,8 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
     }
 
     TUDUChain tuduchain(session.unit(), file, includedFiles, update);
+
+    //TODO: update highlighting if hasTracker?
 
     return context;
 }

@@ -47,7 +47,10 @@ ClangPCH::ClangPCH(const ClangParsingEnvironment& environment, ClangIndex* index
     const TopDUContext::Features pchFeatures = TopDUContext::AllDeclarationsContextsUsesAndAST;
     const IndexedString doc(pchInclude.pathOrUrl());
 
-    m_session.setData(ParseSessionData::Ptr(new ParseSessionData(doc, QByteArray(), index, environment, ParseSessionData::PrecompiledHeader)));
+    ClangParsingEnvironment pchEnv;
+    pchEnv.setPchInclude(Path());
+    pchEnv.setTranslationUnitUrl(doc);
+    m_session.setData(ParseSessionData::Ptr(new ParseSessionData(doc, QByteArray(), index, pchEnv, ParseSessionData::PrecompiledHeader)));
 
     if (!m_session.unit()) {
         return;

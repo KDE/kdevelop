@@ -65,8 +65,18 @@ public:
     void setPchInclude(const KDevelop::Path& path);
     KDevelop::Path pchInclude() const;
 
-    void setProjectKnown(bool known);
-    bool projectKnown() const;
+    void setTranslationUnitUrl(const KDevelop::IndexedString& url);
+    KDevelop::IndexedString translationUnitUrl() const;
+
+    enum Quality
+    {
+        Unknown,
+        Source,
+        BuildSystem
+    };
+
+    void setQuality(Quality quality);
+    Quality quality() const;
 
     /**
      * Hash all contents of this environment and return the result.
@@ -87,7 +97,8 @@ private:
     KDevelop::Path::List m_includes;
     QHash<QString, QString> m_defines;
     KDevelop::Path m_pchInclude;
-    bool m_projectKnown = false;
+    KDevelop::IndexedString m_tuUrl;
+    Quality m_quality = Unknown;
 };
 
 #endif // CLANGPARSINGENVIRONMENT_H

@@ -85,14 +85,24 @@ Path ClangParsingEnvironment::pchInclude() const
     return m_pchInclude;
 }
 
-void ClangParsingEnvironment::setProjectKnown(bool known)
+void ClangParsingEnvironment::setTranslationUnitUrl(const IndexedString& url)
 {
-    m_projectKnown = known;
+    m_tuUrl = url;
 }
 
-bool ClangParsingEnvironment::projectKnown() const
+IndexedString ClangParsingEnvironment::translationUnitUrl() const
 {
-    return m_projectKnown;
+    return m_tuUrl;
+}
+
+void ClangParsingEnvironment::setQuality(Quality quality)
+{
+    m_quality = quality;
+}
+
+ClangParsingEnvironment::Quality ClangParsingEnvironment::quality() const
+{
+    return m_quality;
 }
 
 uint ClangParsingEnvironment::hash() const
@@ -115,5 +125,5 @@ bool ClangParsingEnvironment::operator==(const ClangParsingEnvironment& other) c
     return m_defines == other.m_defines
         && m_includes == other.m_includes
         && m_pchInclude == other.m_pchInclude
-        && m_projectKnown == other.m_projectKnown;
+        && m_quality == other.m_quality;
 }

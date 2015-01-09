@@ -111,8 +111,8 @@ void addIncludes(QVector<const char*>* args, QVector<QByteArray>* otherArgs,
 ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& contents, ClangIndex* index,
                                    const ClangParsingEnvironment& environment, Options options)
     : m_url(url)
-    , m_unit(nullptr)
     , m_file(nullptr)
+    , m_unit(nullptr)
 {
     unsigned int flags = CXTranslationUnit_CXXChainedPCH
         | CXTranslationUnit_DetailedPreprocessingRecord;
@@ -127,7 +127,8 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
               |  CXTranslationUnit_Incomplete;
     }
 
-    QVector<const char*> args = argsForSession(url.str(), options);
+    const auto tuUrl = environment.translationUnitUrl().isEmpty() ? url : environment.translationUnitUrl();
+    QVector<const char*> args = argsForSession(tuUrl.str(), options);
     if (!options.testFlag(DisableSpellChecking)) {
         // TODO: Check whether this slows down parsing noticably
         // also see http://lists.cs.uiuc.edu/pipermail/cfe-commits/Week-of-Mon-20100705/032025.html
@@ -162,14 +163,14 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
     }
 
     // TODO: track other open unsaved files and add them here
-    const auto path = url.byteArray();
-    auto file = fileForContents(path, contents);
+    const auto sessionPath = url.byteArray();
+    auto file = fileForContents(sessionPath, contents);
     //For PrecompiledHeader, we don't want unsaved contents (and contents.isEmpty())
     const auto fileCount = options.testFlag(PrecompiledHeader) ? 0 : 1;
 
 #if CINDEX_VERSION_MINOR >= 23
     const CXErrorCode code = clang_parseTranslationUnit2(
-        index->index(), file.Filename,
+        index->index(), tuUrl.byteArray(),
         args.constData(), args.size(),
         &file, fileCount,
         flags,
@@ -180,7 +181,7 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
     }
 #else
     m_unit = clang_parseTranslationUnit(
-        index->index(), file.Filename,
+        index->index(), tuUrl.byteArray(),
         args.constData(), args.size(),
         &file, fileCount,
         flags
@@ -188,14 +189,14 @@ ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& c
 #endif
 
     if (m_unit) {
-        setUnit(m_unit, file.Filename);
+        setUnit(m_unit, sessionPath);
         m_environment = environment;
 
         if (options.testFlag(PrecompiledHeader)) {
-            clang_saveTranslationUnit(m_unit, path + ".pch", CXSaveTranslationUnit_None);
+            clang_saveTranslationUnit(m_unit, sessionPath + ".pch", CXSaveTranslationUnit_None);
         }
     } else {
-        clangDebug() << "Failed to parse file:" << file.Filename;
+        clangDebug() << "Failed to parse file:" << sessionPath;
     }
 }
 
@@ -204,12 +205,12 @@ ParseSessionData::~ParseSessionData()
     clang_disposeTranslationUnit(m_unit);
 }
 
-void ParseSessionData::setUnit(CXTranslationUnit unit, const char* fileName)
+void ParseSessionData::setUnit(CXTranslationUnit unit, const char* sessionPath)
 {
     Q_ASSERT(!m_unit || unit == m_unit);
 
     m_unit = unit;
-    m_file = clang_getFile(m_unit, fileName);
+    m_file = clang_getFile(m_unit, sessionPath);
 }
 
 ParseSession::ParseSession(ParseSessionData::Ptr data)
@@ -304,6 +305,7 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         problem->setDescription(i18n("Header is not guarded against multiple inclusions"));
         problem->setExplanation(i18n("The given header is not guarded against multiple inclusions, "
             "either with the conventional #ifndef/#define/#endif macro guards or with #pragma once."));
+        //TODO: Hmm... shouldn't this be indexedPath?
         problem->setFinalLocation({url(), KTextEditor::Range()});
         problem->setSource(ProblemData::Preprocessor);
         problems << problem;
@@ -323,18 +325,18 @@ CXFile ParseSession::file() const
     return d ? d->m_file : nullptr;
 }
 
-bool ParseSession::reparse(const QByteArray& contents, const ClangParsingEnvironment& environment)
+bool ParseSession::reparse(const KDevelop::IndexedString& url, const QByteArray& sessionContents, const ClangParsingEnvironment& environment)
 {
     if (!d || environment != d->m_environment) {
         return false;
     }
 
     // TODO: track other open unsaved files and add them here
-    const auto path = d->m_url.byteArray();
-    auto file = fileForContents(path, contents);
+    const auto path = url.byteArray();
+    auto file = fileForContents(path, sessionContents);
 
     if (clang_reparseTranslationUnit(d->m_unit, 1, &file, clang_defaultReparseOptions(d->m_unit)) == 0) {
-        d->setUnit(d->m_unit, file.Filename);
+        d->setUnit(d->m_unit, d->m_url.byteArray());
         return true;
     } else {
         return false;
