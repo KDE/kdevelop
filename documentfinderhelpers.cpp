@@ -275,7 +275,7 @@ QVector< QUrl > DocumentFinderHelpers::getPotentialBuddies(const QUrl &url)
 
     // Also ask DUChain for a guess
     QUrl bestBuddy = duchainBuddyFile(url, type.second);
-    if (!bestBuddy.isEmpty()) {
+    if (!buddies.contains(bestBuddy)) {
         buddies.append(bestBuddy);
     }
 
