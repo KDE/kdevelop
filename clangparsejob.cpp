@@ -190,10 +190,6 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         return;
     }
 
-    if (abortRequested()) {
-        return;
-    }
-
     ProblemPointer p = readContents();
     if (p) {
         //TODO: associate problem with topducontext
