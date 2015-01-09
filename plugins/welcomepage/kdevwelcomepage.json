@@ -9,7 +9,7 @@
         "Description[da]": "Configura quais macros e arquivos/pastas incluídos serão adicionados ao processador durante o processamento do projeto.", 
         "Description[de]": "Einstellung der Makros und Include-Ordner/-Dateien, die für den Parser während des Einlesens des Projekts hinzugefügt werden.", 
         "Description[en_GB]": "Configure which macros and include directories/files will be added to the parser during project parsing.", 
-        "Description[es]": "Configura quines macros i directoris/fitxers s'afegiran a l'analitzador durant l'anàlisi del projecte.", 
+        "Description[es]": "Configurar las macros y los directorios/archivos a incluir que se añadirán al analizador sintáctico durante el análisis de los proyectos.", 
         "Description[et]": "Configura quines macros i directoris/fitxers s'afegiran a l'analitzador durant l'anàlisi del projecte.", 
         "Description[fi]": "Configura quais macros e arquivos/pastas incluídos serão adicionados ao processador durante o processamento do projeto.", 
         "Description[fr]": "Ustaw jakie pliki/katalogi makr i plików dołączanych będą dodawane do przetwarzania przy przetwarzaniu projektu.", 
