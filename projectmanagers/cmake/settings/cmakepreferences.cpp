@@ -154,7 +154,7 @@ void CMakePreferences::configureCacheView()
     m_prefsUi->cacheList->hideColumn(1);
     m_prefsUi->cacheList->hideColumn(3);
     m_prefsUi->cacheList->hideColumn(4);
-    m_prefsUi->cacheList->resizeColumnToContents(0);
+    m_prefsUi->cacheList->horizontalHeader()->resizeSection(0, 200);
 
     if( m_currentModel ) {
         m_prefsUi->cacheList->setEnabled( true );
