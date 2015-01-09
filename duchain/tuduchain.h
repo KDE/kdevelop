@@ -382,7 +382,6 @@ private:
     template<CXTypeKind TK, EnableIf<TK == CXType_Vector || TK == CXType_Unexposed> = dummy>
     AbstractType *createType(CXType type, CXCursor parent)
     {
-        ClangHelpers::findForwardDeclaration(type, m_parentContext->context, parent);
         return createDelayedType(type);
     }
 
