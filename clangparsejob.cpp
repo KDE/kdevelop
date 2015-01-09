@@ -190,17 +190,27 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         return;
     }
 
+    // try to find existing session data
+    ParseSessionData::Ptr existingData;
+    {
+        UrlParseLock urlLock(document());
+        if (abortRequested() || !isUpdateRequired(ParseSession::languageString())) {
+            return;
+        }
+        DUChainWriteLocker lock;
+        // TODO: share the session data / AST between all files that are pinned to a given TU
+        const auto& context = DUChainUtils::standardContextForUrl(document().toUrl());
+        if (context) {
+            existingData = ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(context->ast().data()));
+        }
+    }
+
     ProblemPointer p = readContents();
     if (p) {
         //TODO: associate problem with topducontext
         return;
     }
 
-    if (abortRequested()) {
-        return;
-    }
-
-    const auto existingData = existingSessionData();
     if (abortRequested()) {
         return;
     }
@@ -272,21 +282,6 @@ ParseSessionData::Ptr ClangParseJob::createSessionData() const
     const bool skipFunctionBodies = (minimumFeatures() <= TopDUContext::VisibleDeclarationsAndContexts);
     return ParseSessionData::Ptr(new ParseSessionData(document(), contents().contents, clang()->index(), m_environment,
                                  (skipFunctionBodies ? ParseSessionData::SkipFunctionBodies : ParseSessionData::NoOption)));
-}
-
-ParseSessionData::Ptr ClangParseJob::existingSessionData()
-{
-    //TODO: isUpdateRequired should be const? Then this can be as well
-    UrlParseLock urlLock(document());
-    if (abortRequested() || !isUpdateRequired(ParseSession::languageString())) {
-        return {};
-    }
-    DUChainWriteLocker lock;
-    const auto& context = DUChainUtils::standardContextForUrl(document().toUrl());
-    if (context) {
-        return ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(context->ast().data()));
-    }
-    return {};
 }
 
 const ParsingEnvironment* ClangParseJob::environment() const
