@@ -85,7 +85,10 @@ CMakeJsonData import(const Path& commandsFile)
         CMakeFile ret;
         ret.includes = result.paths;
         ret.defines = result.defines;
-        data.files[Path(entry["file"].toString())] = ret;
+        // NOTE: we use the canonical file path to prevent issues with symlinks in the path
+        //       leading to lookup failures
+        const auto path = Path(QFileInfo(entry["file"].toString()).canonicalFilePath());
+        data.files[path] = ret;
     }
 
     data.isValid = true;
