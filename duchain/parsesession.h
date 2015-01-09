@@ -106,7 +106,7 @@ public:
     /**
      * Unlocks the mutex of the currently set ParseSessionData, and instead acquire the lock in @p data.
      */
-    void setData(ParseSessionData::Ptr data);
+    void setData(const ParseSessionData::Ptr& data);
     ParseSessionData::Ptr data() const;
 
     /**

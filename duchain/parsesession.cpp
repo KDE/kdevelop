@@ -229,7 +229,7 @@ ParseSession::~ParseSession()
     }
 }
 
-void ParseSession::setData(ParseSessionData::Ptr data)
+void ParseSession::setData(const ParseSessionData::Ptr& data)
 {
     if (data == d) {
         return;
