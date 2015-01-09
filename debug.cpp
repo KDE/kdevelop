@@ -18,4 +18,4 @@
 
 #include "debug.h"
 
-Q_LOGGING_CATEGORY(KDEV_QMLJS, "kdev.qmljs")
+Q_LOGGING_CATEGORY(KDEV_QMLJS, "kdevelop.plugins.qmljs")
