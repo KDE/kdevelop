@@ -103,8 +103,7 @@ QList<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const IncludePa
                 continue;
             }
 
-            const auto suffix = dirIterator.fileInfo().suffix();
-            if (!suffix.isEmpty() && !ClangHelpers::headerExtensions().contains(suffix)) {
+            if (!ClangHelpers::isHeader(item.name)) {
                 continue;
             }
 

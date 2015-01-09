@@ -21,7 +21,7 @@
 
 #include "documentfinderhelpers.h"
 
-#include "duchain/clangparsingenvironment.h"
+#include "duchain/clanghelpers.h"
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
@@ -32,7 +32,6 @@
 #include <KDesktopFile>
 #include <KConfigGroup>
 
-
 #include <QSet>
 #include <QStandardPaths>
 #include <QMimeDatabase>
@@ -40,36 +39,7 @@
 
 using namespace KDevelop;
 
-/**
- * @return all extensions which match the given @p mimeType.
- */
-QSet<QString> getExtensionsByMimeType(const QString& mimeType)
-{
-    QMimeDatabase db;
-    auto mime = db.mimeTypeForName(mimeType);
-    if (!mime.isValid()) {
-        return {};
-    }
-
-    QSet<QString> extensions;
-    foreach(const auto& pattern, mime.globPatterns()) {
-        if (pattern.startsWith("*.")) {
-            extensions << pattern.mid(2);
-        }
-    }
-
-    return extensions;
-}
-
-QSet<QString> getHeaderFileExtensions()
-{
-    return getExtensionsByMimeType("text/x-c++hdr") | getExtensionsByMimeType("text/x-chdr");
-}
-
-QSet<QString> getSourceFileExtensions()
-{
-    return getExtensionsByMimeType("text/x-c++src") | getExtensionsByMimeType("text/x-csrc");
-}
+namespace {
 
 enum FileType {
     Unknown, ///< Doesn't belong to C++
@@ -194,9 +164,9 @@ QPair<QString,FileType> basePathAndTypeForUrl(const QUrl &url)
         basePath = path.left(idxDot);
         if (idxDot + 1 < path.length()) {
             QString extension = path.mid(idxDot + 1);
-            if (getHeaderFileExtensions().contains(extension)) {
+            if (ClangHelpers::isHeader(extension)) {
                 fileType = Header;
-            } else if (getSourceFileExtensions().contains(extension)) {
+            } else if (ClangHelpers::isSource(extension)) {
                 fileType = Source;
             }
         }
@@ -205,6 +175,8 @@ QPair<QString,FileType> basePathAndTypeForUrl(const QUrl &url)
     }
 
     return qMakePair(basePath, fileType);
+}
+
 }
 
 QStringList DocumentFinderHelpers::mimeTypesList()
@@ -271,10 +243,14 @@ QVector< QUrl > DocumentFinderHelpers::getPotentialBuddies(const QUrl &url)
 
     // Depending on the buddy's file type we either generate source extensions (for headers)
     // or header extensions (for sources)
-    const auto& extensions = ( type.second == Header ? getSourceFileExtensions() : getHeaderFileExtensions() );
+    const auto& extensions = ( type.second == Header ? ClangHelpers::sourceExtensions() : ClangHelpers::headerExtensions() );
     QVector< QUrl > buddies;
     for(const QString& extension : extensions) {
-        buddies.append(QUrl::fromLocalFile(type.first + '.' + extension));
+        if (!extension.contains('.')) {
+            buddies.append(QUrl::fromLocalFile(type.first + '.' + extension));
+        } else {
+            buddies.append(QUrl::fromLocalFile(type.first + extension));
+        }
     }
 
     // Also ask DUChain for a guess
