@@ -49,16 +49,16 @@ KTextEditor::View* createDocAndView(const QString& data, KTextEditor::Document**
     KTextEditor::Document* doc = ICore::self()->partController()->editorPart()->createDocument(0);
     *docPtr = doc;
     doc->setText(data);
-    doc->setMode("C++");
+    doc->setMode(QStringLiteral("C++"));
     doc->setReadWrite(false);
 
     KTextEditor::View* view = doc->createView(0);
     view->setStatusBarEnabled(false);
     if (KTextEditor::ConfigInterface* config = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
-        config->setConfigValue("icon-bar", false);
-        config->setConfigValue("folding-bar", false);
-        config->setConfigValue("line-numbers", false);
-        config->setConfigValue("dynamic-word-wrap", true);
+        config->setConfigValue(QStringLiteral("icon-bar"), false);
+        config->setConfigValue(QStringLiteral("folding-bar"), false);
+        config->setConfigValue(QStringLiteral("line-numbers"), false);
+        config->setConfigValue(QStringLiteral("dynamic-word-wrap"), true);
     }
     return view;
 }
