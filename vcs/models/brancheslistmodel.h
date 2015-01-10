@@ -25,11 +25,12 @@
 #include <QStandardItemModel>
 #include <QUrl>
 
-#include "vcsexport.h"
+#include <vcs/vcsexport.h>
 
 namespace KDevelop {
 class IBranchingVersionControl;
 class IProject;
+class BranchesListModelPrivate;
 
 class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
 {
@@ -38,34 +39,34 @@ class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
     Q_PROPERTY(QString currentBranch READ currentBranch WRITE setCurrentBranch NOTIFY currentBranchChanged)
     public:
         enum Roles { CurrentRole = Qt::UserRole+1 };
-        
+
         BranchesListModel(QObject* parent = 0);
+        ~BranchesListModel();
 
         void initialize(KDevelop::IBranchingVersionControl* dvcsplugin, const QUrl& repo);
 
         virtual QHash<int, QByteArray> roleNames() const override;
-        
+
         void createBranch(const QString& baseBranch, const QString& newBranch);
         void removeBranch(const QString& branch);
-        
-        QUrl repository() const { return repo; }
+
+        QUrl repository() const;
         KDevelop::IBranchingVersionControl* interface();
         void refresh();
         QString currentBranch() const;
         void setCurrentBranch(const QString& branch);
-        
+
         KDevelop::IProject* project() const;
         void setProject(KDevelop::IProject* p);
-        
+
     public slots:
         void resetCurrent();
-        
+
     signals:
         void currentBranchChanged();
-        
+
     private:
-        KDevelop::IBranchingVersionControl* dvcsplugin;
-        QUrl repo;
+        const QScopedPointer<BranchesListModelPrivate> d;
 };
 
 }

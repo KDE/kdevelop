@@ -30,6 +30,7 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/iruncontroller.h>
 
+#include <QScopedPointer>
 #include <QIcon>
 
 #include <KMessageBox>
@@ -37,6 +38,17 @@
 
 using namespace std;
 using namespace KDevelop;
+
+class KDevelop::BranchesListModelPrivate
+{
+    public:
+        BranchesListModelPrivate()
+        {
+        }
+
+        QScopedPointer<IBranchingVersionControl> dvcsplugin;
+        QUrl repo;
+};
 
 class BranchItem : public QStandardItem
 {
@@ -96,7 +108,11 @@ static QVariant runSynchronously(KDevelop::VcsJob* job)
 }
 
 BranchesListModel::BranchesListModel(QObject* parent)
-    : QStandardItemModel(parent), dvcsplugin(0)
+    : QStandardItemModel(parent), d(new BranchesListModelPrivate())
+{
+}
+
+BranchesListModel::~BranchesListModel()
 {
 }
 
@@ -112,7 +128,7 @@ void BranchesListModel::createBranch(const QString& baseBranch, const QString& n
     qCDebug(VCS) << "Creating " << baseBranch << " based on " << newBranch;
     KDevelop::VcsRevision rev;
     rev.setRevisionValue(baseBranch, KDevelop::VcsRevision::GlobalNumber);
-    KDevelop::VcsJob* branchJob = dvcsplugin->branch(repo, rev, newBranch);
+    KDevelop::VcsJob* branchJob = d->dvcsplugin->branch(d->repo, rev, newBranch);
 
     qCDebug(VCS) << "Adding new branch";
     if (branchJob->exec())
@@ -121,7 +137,7 @@ void BranchesListModel::createBranch(const QString& baseBranch, const QString& n
 
 void BranchesListModel::removeBranch(const QString& branch)
 {
-    KDevelop::VcsJob *branchJob = dvcsplugin->deleteBranch(repo, branch);
+    KDevelop::VcsJob *branchJob = d->dvcsplugin->deleteBranch(d->repo, branch);
 
     qCDebug(VCS) << "Removing branch:" << branch;
     if (branchJob->exec()) {
@@ -131,22 +147,27 @@ void BranchesListModel::removeBranch(const QString& branch)
     }
 }
 
+QUrl BranchesListModel::repository() const
+{
+    return d->repo;
+}
+
 KDevelop::IBranchingVersionControl* BranchesListModel::interface()
 {
-    return dvcsplugin;
+    return d->dvcsplugin.data();
 }
 
 void BranchesListModel::initialize(KDevelop::IBranchingVersionControl* branching, const QUrl& r)
 {
-    dvcsplugin = branching;
-    repo = r;
+    d->dvcsplugin.reset(branching);
+    d->repo = r;
     refresh();
 }
 
 void BranchesListModel::refresh()
 {
-    QStringList branches = runSynchronously(dvcsplugin->branches(repo)).toStringList();
-    QString curBranch = runSynchronously(dvcsplugin->currentBranch(repo)).toString();
+    QStringList branches = runSynchronously(d->dvcsplugin->branches(d->repo)).toStringList();
+    QString curBranch = runSynchronously(d->dvcsplugin->currentBranch(d->repo)).toString();
 
     foreach(const QString& branch, branches)
         appendRow(new BranchItem(branch, branch == curBranch));
@@ -160,12 +181,12 @@ void BranchesListModel::resetCurrent()
 
 QString BranchesListModel::currentBranch() const
 {
-    return runSynchronously(dvcsplugin->currentBranch(repo)).toString();
+    return runSynchronously(d->dvcsplugin->currentBranch(d->repo)).toString();
 }
 
 KDevelop::IProject* BranchesListModel::project() const
 {
-    return KDevelop::ICore::self()->projectController()->findProjectForUrl(repo);
+    return KDevelop::ICore::self()->projectController()->findProjectForUrl(d->repo);
 }
 
 void BranchesListModel::setProject(KDevelop::IProject* p)
@@ -184,7 +205,7 @@ void BranchesListModel::setProject(KDevelop::IProject* p)
 
 void BranchesListModel::setCurrentBranch(const QString& branch)
 {
-    KDevelop::VcsJob* job = dvcsplugin->switchBranch(repo, branch);
+    KDevelop::VcsJob* job = d->dvcsplugin->switchBranch(d->repo, branch);
     connect(job, &VcsJob::finished, this, &BranchesListModel::currentBranchChanged);
     KDevelop::ICore::self()->runController()->registerJob(job);
 }

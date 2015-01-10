@@ -92,6 +92,7 @@ install(FILES
     models/vcseventmodel.h
     models/vcsfilechangesmodel.h
     models/vcsitemeventmodel.h
+    models/brancheslistmodel.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/models COMPONENT Devel
 )
 
