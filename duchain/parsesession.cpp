@@ -30,6 +30,7 @@
 #include "clangparsingenvironment.h"
 #include "util/clangdebug.h"
 #include "util/clangtypes.h"
+#include "util/clangutils.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
@@ -295,7 +296,7 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
     const IndexedString indexedPath(path);
 
     // extract to-do problems
-    if (file == d->m_file) {
+    if (ClangUtils::isFileEqual(file, d->m_file)) {
         // TODO: also extract problems from included files and put them into the correct places
         // currently, this is not possible as we don't know ho
         TodoExtractor extractor(unit(), indexedPath);
