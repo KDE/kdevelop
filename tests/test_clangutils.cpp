@@ -110,6 +110,7 @@ Q_DECLARE_METATYPE(KTextEditor::Range);
 
 void TestClangUtils::initTestCase()
 {
+    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);

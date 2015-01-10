@@ -38,6 +38,7 @@
 #include <interfaces/ilanguagecontroller.h>
 
 #include <QtTest/QTest>
+#include <QLoggingCategory>
 
 
 using namespace KDevelop;
@@ -52,6 +53,7 @@ QTEST_GUILESS_MAIN(TestProblems)
 
 void TestProblems::initTestCase()
 {
+    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
