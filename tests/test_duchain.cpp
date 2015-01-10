@@ -620,6 +620,7 @@ void TestDUChain::testParsingEnvironment()
         // update it again
         envFile->setEnvironment(env);
         QVERIFY(!envFile->needsUpdate(&env));
+        lastEnv = env;
 
         // now compare against a lower quality environment
         // in such a case, we do not want to trigger an update
@@ -632,7 +633,6 @@ void TestDUChain::testParsingEnvironment()
         QVERIFY(!envFile->needsUpdate(&env));
 
         indexed = top->indexed();
-        lastEnv = session.environment();
     }
 
     DUChain::self()->storeToDisk();
@@ -646,7 +646,6 @@ void TestDUChain::testParsingEnvironment()
             dynamic_cast<ClangParsingEnvironmentFile*>(DUChain::self()->environmentFileForDocument(indexed).data()));
         QVERIFY(envFile);
 
-        qDebug() << envFile->features() << features;
         QCOMPARE(envFile->features(), features);
         QVERIFY(envFile->featuresSatisfied(features));
         QVERIFY(!envFile->needsUpdate(&lastEnv));
