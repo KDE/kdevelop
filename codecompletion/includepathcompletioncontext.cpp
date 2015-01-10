@@ -103,11 +103,16 @@ QList<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const IncludePa
                 continue;
             }
 
-            if (!ClangHelpers::isHeader(item.name)) {
+            const auto info = dirIterator.fileInfo();
+            item.isDirectory = info.isDir();
+
+            // filter files that are not a header
+            // note: system headers sometimes don't have any extension, and we still want to show those
+            if (!item.isDirectory && item.name.contains('.') && !ClangHelpers::isHeader(item.name)) {
                 continue;
             }
 
-            const QString fullPath = dirIterator.fileInfo().canonicalFilePath();
+            const QString fullPath = info.canonicalFilePath();
             if (foundIncludePaths.contains(fullPath)) {
                 continue;
             } else {
@@ -115,7 +120,6 @@ QList<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const IncludePa
             }
 
             item.basePath = searchPath.toUrl();
-            item.isDirectory = dirIterator.fileInfo().isDir();
             item.pathNumber = pathNumber;
 
             includeItems << item;
