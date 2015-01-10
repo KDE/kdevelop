@@ -41,7 +41,8 @@ Declaration *getDeclarationAtCursor(const KTextEditor::Cursor &cursor, const QUr
     ENSURE_CHAIN_READ_LOCKED
     ReferencedTopDUContext top(DUChainUtils::standardContextForUrl(documentUrl));
     if (!top) {
-        return 0;
+        clangDebug() << "no context found for document" << documentUrl;
+        return nullptr;
     }
     Declaration* functionDecl = DUChainUtils::declarationInLine(cursor, top.data());
     return functionDecl;
@@ -250,10 +251,12 @@ void AdaptSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job)
 
     Declaration *functionDecl = getDeclarationAtCursor(KTextEditor::Cursor(m_view.data()->cursorPosition()), m_document);
     if (!functionDecl || functionDecl->identifier() != m_declarationName) {
+        clangDebug() << "No function found at" << m_document << m_view.data()->cursorPosition();
         return;
     }
     DUContext *functionCtxt = DUChainUtils::getFunctionContext(functionDecl);
     if (!functionCtxt) {
+        clangDebug() << "No function context found for" << functionDecl->toString();
         return;
     }
 #if 0 // TODO: Port
