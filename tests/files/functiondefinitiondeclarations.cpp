@@ -29,7 +29,7 @@ class SomeClass
     /// }
     void someClassFunc();
     /// "definition" : { "internalContext" : { "type" : "Function", "localDeclarationCount" : 2 } }
-    void someClassFunc(int arg, char arg);
+    void someClassFunc(int arg, char arg2);
     /// "qualifiedIdentifier" : "SomeClass::anotherClassFunc"
     void anotherClassFunc();
     /// "definition" : { "null" : true }
@@ -38,5 +38,5 @@ class SomeClass
 
 
 void SomeClass::someClassFunc() { }
-void SomeClass::someClassFunc(int arg, char arg) { }
+void SomeClass::someClassFunc(int arg, char arg2) { }
 void SomeClass::anotherClassFunc() { }
