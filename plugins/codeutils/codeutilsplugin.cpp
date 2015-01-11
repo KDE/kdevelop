@@ -68,7 +68,7 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
     QAction* action = actionCollection()->addAction( "document_declaration" );
     // i18n: action name; 'Document' is a verb
     action->setText( i18n( "Document Declaration" ) );
-    action->setShortcut( i18n( "Alt+Shift+d" ) );
+    actionCollection()->setDefaultShortcut(action, i18n( "Alt+Shift+d" ));
     connect( action, SIGNAL(triggered(bool)), this, SLOT(documentDeclaration()) );
     action->setToolTip( i18n( "Add Doxygen skeleton for declaration under cursor." ) );
     // i18n: translate title same as the action name
