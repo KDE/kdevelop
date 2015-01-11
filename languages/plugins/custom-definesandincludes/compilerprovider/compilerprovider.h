@@ -68,7 +68,7 @@ private:
     void removePoject( KDevelop::IProject* project );
 
 private Q_SLOTS:
-    void projectOpened( KDevelop::IProject* );
+    void addProject( KDevelop::IProject* );
     void projectClosed( KDevelop::IProject* );
     void retrieveUserDefinedCompilers();
 
