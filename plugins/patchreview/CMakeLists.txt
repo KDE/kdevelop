@@ -1,6 +1,6 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevpatchreview\")
 find_package(LibKompareDiff2 REQUIRED)
-add_definitions( ${KDE4_ENABLE_EXCEPTIONS})
+kde_enable_exceptions()
 include_directories(${LIBKOMPAREDIFF2_INCLUDE_DIR})
 
 set(patchreview_PART_SRCS
