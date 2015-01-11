@@ -1,9 +1,23 @@
 {
     "KPlugin": {
         "Description": "C/C++ Language Support", 
+        "Description[nl]": "Ondersteuning voor de talen C/C++", 
+        "Description[pl]": "Obsługa języków C/C++", 
+        "Description[pt]": "Suporte para a Linguagem C/C++", 
+        "Description[pt_BR]": "Suporte à linguagem C/C++", 
+        "Description[sv]": "C/C++ språkstöd", 
+        "Description[uk]": "Підтримка мови C/C++", 
+        "Description[x-test]": "xxC/C++ Language Supportxx", 
         "Icon": "text-x-c++src", 
         "Id": "kdevclangsupport", 
         "Name": "C++ Support", 
+        "Name[nl]": "Ondersteuning voor C++", 
+        "Name[pl]": "Obsługa C++", 
+        "Name[pt]": "Suporte a C/C++", 
+        "Name[pt_BR]": "Suporte à C++", 
+        "Name[sv]": "C++ stöd", 
+        "Name[uk]": "Підтримка C++", 
+        "Name[x-test]": "xxC++ Supportxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
