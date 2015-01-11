@@ -94,7 +94,6 @@ ProcessLineMaker::ProcessLineMaker( QProcess* proc, QObject* parent )
     , d( new ProcessLineMakerPrivate( this ) )
 {
     d->m_proc = proc;
-    d->m_proc->setTextModeEnabled( true );
     connect(proc, &QProcess::readyReadStandardOutput,
             this, [&] { d->slotReadyReadStdout(); } );
     connect(proc, &QProcess::readyReadStandardError,

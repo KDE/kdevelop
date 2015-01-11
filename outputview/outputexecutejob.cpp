@@ -84,7 +84,6 @@ OutputExecuteJob::OutputExecuteJob( QObject* parent, OutputJob::OutputJobVerbosi
     d( new OutputExecuteJobPrivate( this ) )
 {
     d->m_process->setOutputChannelMode( KProcess::SeparateChannels );
-    d->m_process->setTextModeEnabled( true );
 
     connect( d->m_process, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
              this, &OutputExecuteJob::childProcessExited );
