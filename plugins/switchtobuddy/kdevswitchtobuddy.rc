@@ -2,7 +2,6 @@
 <kpartgui name="KDevSwitchToBuddy" version="7" translationDomain="kdevswitchtobuddy">
 <MenuBar>
   <Menu name="navigation">
-    <text context="@title:menu">Navigation</text>
     <Action name="switch_definition_declaration" group="navigation_jmp"/>
   </Menu>
 </MenuBar>
