@@ -214,4 +214,3 @@ QAbstractItemModel*  CppcheckFileModel::getQAbstractItemModel(int) {
 
 }
 
-#include "cppcheck_file_model.moc"
