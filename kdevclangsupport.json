@@ -1,6 +1,6 @@
 {
     "KPlugin": {
-        "Description": "C/C++ Language Support", 
+        "Description": "C/C++ Language Support (Clang-based)", 
         "Description[nl]": "Ondersteuning voor de talen C/C++", 
         "Description[pl]": "Obsługa języków C/C++", 
         "Description[pt]": "Suporte para a Linguagem C/C++", 
