@@ -92,5 +92,4 @@ void SvnRevertOptionDlg::insertRow( const QUrl &url, const QString &textStat, co
     item->setCheckState(0, Qt::Checked);
 }
 
-#include "svnrevertwidgets.moc"
 

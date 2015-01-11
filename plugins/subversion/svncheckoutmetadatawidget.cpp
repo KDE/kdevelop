@@ -49,5 +49,4 @@ KDevelop::IBasicVersionControl::RecursionMode SvnCheckoutMetadataWidget::recursi
     return m_ui->recurse->isChecked() ? KDevelop::IBasicVersionControl::Recursive : KDevelop::IBasicVersionControl::NonRecursive ;
 }
 
-#include "svncheckoutmetadatawidget.moc"
 

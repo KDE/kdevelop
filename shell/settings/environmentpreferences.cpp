@@ -94,5 +94,4 @@ QIcon EnvironmentPreferences::icon() const
 }
 
 }
-#include "environmentpreferences.moc"
 

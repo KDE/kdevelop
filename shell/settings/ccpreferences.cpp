@@ -99,5 +99,4 @@ QIcon CCPreferences::icon() const
 
 }
 
-#include "ccpreferences.moc"
 

@@ -93,5 +93,4 @@ QIcon BGPreferences::icon() const
 
 }
 
-#include "bgpreferences.moc"
 

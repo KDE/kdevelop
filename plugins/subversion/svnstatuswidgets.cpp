@@ -114,5 +114,4 @@ void SvnStatusDisplayWidget::setResults( const QMap< QUrl, SvnStatusHolder > &ma
 }
 
 
-#include "svnstatuswidgets.moc"
 

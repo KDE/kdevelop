@@ -76,5 +76,4 @@ QIcon ProjectPreferences::icon() const
 }
 
 }
-#include "projectpreferences.moc"
 

@@ -73,4 +73,3 @@ bool SvnImportMetadataWidget::hasValidData() const
 }
 
 
-#include "svnimportmetadatawidget.moc"

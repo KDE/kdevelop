@@ -104,4 +104,3 @@ void ProjectFileItem::configAccepted()
     reloadData();
 }
 
-#include "projectfileelement.moc"

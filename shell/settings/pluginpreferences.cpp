@@ -102,5 +102,4 @@ void PluginPreferences::reset()
 
 }
 
-#include "pluginpreferences.moc"
 

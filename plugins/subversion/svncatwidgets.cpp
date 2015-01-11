@@ -42,4 +42,3 @@ SvnRevision SvnCatOptionDlg::revision()
     return ui.revisionWidget->revision();
 }
 
-#include "svncatwidgets.moc"

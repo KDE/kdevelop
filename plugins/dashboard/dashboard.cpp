@@ -127,4 +127,3 @@ void Dashboard::showConfigure()
     m_configDialog->show();
 }
 
-#include "dashboard.moc"

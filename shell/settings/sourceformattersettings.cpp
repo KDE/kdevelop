@@ -535,4 +535,3 @@ QIcon SourceFormatterSettings::icon() const
 }
 
 
-#include "sourceformattersettings.moc"

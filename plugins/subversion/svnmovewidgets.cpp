@@ -68,4 +68,3 @@ void SvnMoveOptionDlg::srcAsPathClicked()
 }
 
 
-#include "svnmovewidgets.moc"

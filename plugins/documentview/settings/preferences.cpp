@@ -69,5 +69,4 @@ void Preferences::defaults()
 {
 }
 
-#include "preferences.moc"
 
