@@ -842,3 +842,30 @@ void TestDUChain::testMacrosRanges()
     QCOMPARE(macroDefinition->uses().size(), 1);
     QCOMPARE(macroDefinition->uses().begin()->first(), RangeInRevision(1,0,1,11));
 }
+
+void TestDUChain::testNestedImports()
+{
+    TestFile B("#pragma once\nint B();\n", "h");
+    TestFile C("#pragma once\n#include \"" + B.url().byteArray() + "\"\nint C();\n", "h");
+    TestFile A("#include \"" + B.url().byteArray() + "\"\n" + "#include \"" + C.url().byteArray() + "\"\nint A();\n", "cpp");
+
+    A.parse();
+    QVERIFY(A.waitForParsed(5000));
+
+    DUChainReadLocker lock;
+
+    auto BCtx = DUChain::self()->chainForDocument(B.url().toUrl());
+    QVERIFY(BCtx);
+    QVERIFY(BCtx->importedParentContexts().isEmpty());
+
+    auto CCtx = DUChain::self()->chainForDocument(C.url().toUrl());
+    QVERIFY(CCtx);
+    QCOMPARE(CCtx->importedParentContexts().size(), 1);
+    QVERIFY(CCtx->imports(BCtx, CursorInRevision(1, 10)));
+
+    auto ACtx = A.topContext();
+    QVERIFY(ACtx);
+    QCOMPARE(ACtx->importedParentContexts().size(), 2);
+    QVERIFY(ACtx->imports(BCtx, CursorInRevision(0, 10)));
+    QVERIFY(ACtx->imports(CCtx, CursorInRevision(1, 10)));
+}

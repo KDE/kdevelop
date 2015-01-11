@@ -61,6 +61,7 @@ private slots:
     void testReparseInclude();
     void testReparseChangeEnvironment();
     void testMacrosRanges();
+    void testNestedImports();
 
     void benchDUChainBuilder();
 
