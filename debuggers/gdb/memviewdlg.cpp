@@ -528,4 +528,3 @@ namespace GDBDebugger
 
 }
 
-#include "memviewdlg.moc"

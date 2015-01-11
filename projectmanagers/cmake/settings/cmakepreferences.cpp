@@ -357,4 +357,3 @@ QIcon CMakePreferences::icon() const
     return QIcon::fromTheme("cmake");
 }
 
-#include "cmakepreferences.moc"
