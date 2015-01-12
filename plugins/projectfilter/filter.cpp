@@ -89,7 +89,7 @@ SerializedFilters defaultFilters()
         // generated files
         << "moc_*.cpp" << "*.moc" << "ui_*.h" << "qrc_*.cpp"
         // backup files
-        << "*~" << ".*.kate-swp" << ".*.swp"
+        << "*~" << "*.orig" << ".*.kate-swp" << ".*.swp"
         // python cache and object files
         << "*.pyc" << "*.pyo";
     foreach(const QString& filePattern, filePatterns) {

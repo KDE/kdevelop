@@ -303,11 +303,15 @@ private:
     PatchReviewPlugin *m_plugin;
 };
 
-PatchReviewPlugin::~PatchReviewPlugin() {
+PatchReviewPlugin::~PatchReviewPlugin()
+{
     removeHighlighting();
+
     // Tweak to work around a crash on OS X; see https://bugs.kde.org/show_bug.cgi?id=338829
     // and http://qt-project.org/forums/viewthread/38406/#162801
-    m_patch->deleteLater();
+    if (m_patch) {
+        m_patch->deleteLater();
+    }
 }
 
 void PatchReviewPlugin::clearPatch( QObject* _patch ) {
