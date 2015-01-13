@@ -460,6 +460,11 @@ QHash< QString, QString > QMakeProjectManager::defines(ProjectBaseItem* item) co
     return d;
 }
 
+bool QMakeProjectManager::hasIncludesOrDefines(KDevelop::ProjectBaseItem* item) const
+{
+    return findQMakeFolderParent(item);
+}
+
 QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) const
 {
     if( !project->folder().isLocalFile() || !m_builder )

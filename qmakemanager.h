@@ -58,7 +58,7 @@ public:
     virtual KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const;
     virtual KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem*) const;
     virtual QHash<QString,QString> defines(KDevelop::ProjectBaseItem*) const;
-    virtual QHash<QString,QString> environment(KDevelop::ProjectBaseItem*) const { return QHash<QString,QString>(); }
+    bool hasIncludesOrDefines(KDevelop::ProjectBaseItem*) const override;
 
     virtual KDevelop::ProjectTargetItem* createTarget( const QString&,
             KDevelop::ProjectFolderItem* ) { return 0; }
