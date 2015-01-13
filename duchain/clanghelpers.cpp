@@ -68,7 +68,7 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor, CXClientData data)
     uint line, column;
     clang_getFileLocation(location, &parentFile, &line, &column, nullptr);
 
-    foreach (auto import, imports->values(parentFile)) {
+    foreach (const auto& import, imports->values(parentFile)) {
         // clang_getInclusions doesn't include the same import twice, so we shouldn't do it too.
         if (import.file == file) {
             return CXChildVisit_Continue;
