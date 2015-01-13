@@ -41,35 +41,45 @@ public:
 
     static QMakeProjectManager* self();
 
-    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
 
     //BEGIN AbstractFileManager
-    virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject* project );
-    virtual KDevelop::ProjectFolderItem* createFolderItem( KDevelop::IProject* project,
-                                                           const KDevelop::Path& path,
-                                                           KDevelop::ProjectBaseItem* parent = 0 );
-    virtual Features features() const;
-    virtual bool isValid( const KDevelop::Path& path, const bool isFolder, KDevelop::IProject* project ) const;
+    KDevelop::ProjectFolderItem* import( KDevelop::IProject* project ) override;
+    KDevelop::ProjectFolderItem* createFolderItem( KDevelop::IProject* project, const KDevelop::Path& path,
+                                                   KDevelop::ProjectBaseItem* parent = 0 ) override;
+    Features features() const override;
+    bool isValid( const KDevelop::Path& path, const bool isFolder, KDevelop::IProject* project ) const override;
     //END AbstractFileManager
 
     //BEGIN IBuildSystemManager
     //TODO
-    virtual KDevelop::IProjectBuilder*  builder() const;
-    virtual KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const;
-    virtual KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem*) const;
-    virtual QHash<QString,QString> defines(KDevelop::ProjectBaseItem*) const;
+    KDevelop::IProjectBuilder*  builder() const override;
+    KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const override;
+    KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem*) const override;
+    QHash<QString,QString> defines(KDevelop::ProjectBaseItem*) const override;
     bool hasIncludesOrDefines(KDevelop::ProjectBaseItem*) const override;
 
-    virtual KDevelop::ProjectTargetItem* createTarget( const QString&,
-            KDevelop::ProjectFolderItem* ) { return 0; }
+    KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) override
+    {
+        return nullptr;
+    }
 
-    virtual bool addFilesToTarget(const QList<KDevelop::ProjectFileItem*>&,
-                                  KDevelop::ProjectTargetItem*) { return false; }
+    bool addFilesToTarget(const QList<KDevelop::ProjectFileItem*>&, KDevelop::ProjectTargetItem*) override
+    {
+        return false;
+    }
 
-    virtual bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
-    virtual bool removeFilesFromTargets(const QList<KDevelop::ProjectFileItem*>&) { return false; }
+    bool removeTarget( KDevelop::ProjectTargetItem* ) override
+    {
+        return false;
+    }
 
-    virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
+    bool removeFilesFromTargets(const QList<KDevelop::ProjectFileItem*>&) override
+    {
+        return false;
+    }
+
+    QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const override;
     //END IBuildSystemManager
 
 private slots:
