@@ -60,7 +60,7 @@ public:
     IncludePaths includes() const;
 
     void addDefines(const QHash<QString, QString>& defines);
-    QHash<QString, QString> defines() const;
+    QMap<QString, QString> defines() const;
 
     void setPchInclude(const KDevelop::Path& path);
     KDevelop::Path pchInclude() const;
@@ -95,7 +95,8 @@ public:
 private:
     KDevelop::Path::List m_projectPaths;
     KDevelop::Path::List m_includes;
-    QHash<QString, QString> m_defines;
+    // NOTE: As elements in QHash stored in an unordered sequence, we're using QMap instead
+    QMap<QString, QString> m_defines;
     KDevelop::Path m_pchInclude;
     KDevelop::IndexedString m_tuUrl;
     Quality m_quality = Unknown;

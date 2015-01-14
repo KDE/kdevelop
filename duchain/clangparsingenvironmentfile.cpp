@@ -88,7 +88,7 @@ bool ClangParsingEnvironmentFile::needsUpdate(const ParsingEnvironment* environm
             return true;
         }
         if (env->translationUnitUrl() == d_func()->tuUrl && env->hash() != d_func()->environmentHash) {
-            clangDebug() << "TU environment changed, require update" << url();
+            clangDebug() << "TU environment changed, require update" << url() << "TU url:" << env->translationUnitUrl() << "old hash:" << d_func()->environmentHash << "new hash:" << env->hash();
             return true;
         }
     }

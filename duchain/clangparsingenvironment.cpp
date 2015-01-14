@@ -67,10 +67,12 @@ ClangParsingEnvironment::IncludePaths ClangParsingEnvironment::includes() const
 
 void ClangParsingEnvironment::addDefines(const QHash<QString, QString>& defines)
 {
-    m_defines.unite(defines);
+    for (auto it = defines.constBegin(); it != defines.constEnd(); ++it) {
+        m_defines[it.key()] = it.value();
+    }
 }
 
-QHash<QString, QString> ClangParsingEnvironment::defines() const
+QMap<QString, QString> ClangParsingEnvironment::defines() const
 {
     return m_defines;
 }
@@ -109,13 +111,16 @@ uint ClangParsingEnvironment::hash() const
 {
     KDevHash hash;
     hash << m_defines.size();
+
     for (auto it = m_defines.constBegin(); it != m_defines.constEnd(); ++it) {
         hash << qHash(it.key()) << qHash(it.value());
     }
+
     hash << m_includes.size();
     for (const auto& include : m_includes) {
         hash << qHash(include);
     }
+
     hash << qHash(m_pchInclude);
     return hash;
 }

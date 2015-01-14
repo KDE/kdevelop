@@ -66,7 +66,7 @@ public:
 
     virtual IDefinesAndIncludesManager::Type type() const
     {
-        return IDefinesAndIncludesManager::All;
+        return IDefinesAndIncludesManager::UserDefined;
     }
 
     QHash<QString, QString> defines;
@@ -868,4 +868,62 @@ void TestDUChain::testNestedImports()
     QCOMPARE(ACtx->importedParentContexts().size(), 2);
     QVERIFY(ACtx->imports(BCtx, CursorInRevision(0, 10)));
     QVERIFY(ACtx->imports(CCtx, CursorInRevision(1, 10)));
+}
+
+void TestDUChain::testEnvironmentWithDifferentOrderOfElements()
+{
+    TestFile file("int main();\n", "cpp");
+
+    m_provider->includes.clear();
+    m_provider->includes.append(Path("/path1"));
+    m_provider->includes.append(Path("/path2"));
+
+    m_provider->defines.clear();
+    m_provider->defines.insert("key1", "value1");
+    m_provider->defines.insert("key2", "value2");
+    m_provider->defines.insert("key3", "value3");
+
+    uint previousHash = 0;
+    for (int i: {0, 1, 2, 3}) {
+        file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
+
+        QVERIFY(file.waitForParsed(5000));
+
+        {
+            DUChainReadLocker lock;
+            QVERIFY(file.topContext());
+            auto env = dynamic_cast<ClangParsingEnvironmentFile*>(file.topContext()->parsingEnvironmentFile().data());
+            QVERIFY(env);
+            QCOMPARE(env->environmentQuality(), ClangParsingEnvironment::Source);
+            if (previousHash) {
+                if (i == 3) {
+                    QVERIFY(previousHash != env->environmentHash());
+                } else {
+                    QCOMPARE(previousHash, env->environmentHash());
+                }
+            }
+            previousHash = env->environmentHash();
+            QVERIFY(previousHash);
+        }
+
+        if (i == 0) {
+            //Change order of defines. Hash of the environment should stay the same.
+            m_provider->defines.clear();
+            m_provider->defines.insert("key3", "value3");
+            m_provider->defines.insert("key1", "value1");
+            m_provider->defines.insert("key2", "value2");
+        } else if (i == 1) {
+            //Add the same macros twice. Hash of the environment should stay the same.
+            m_provider->defines.clear();
+            m_provider->defines.insert("key2", "value2");
+            m_provider->defines.insert("key3", "value3");
+            m_provider->defines.insert("key3", "value3");
+            m_provider->defines.insert("key1", "value1");
+        } else if (i == 2) {
+            //OTOH order of includes should change hash of the environment.
+            m_provider->includes.clear();
+            m_provider->includes.append(Path("/path2"));
+            m_provider->includes.append(Path("/path1"));
+        }
+    }
 }
