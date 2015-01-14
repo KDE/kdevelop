@@ -63,7 +63,6 @@ public:
     QString m_jobName;
     bool m_outputStarted;
 
-#warning unused variables
     QByteArray m_processStdout;
     QByteArray m_processStderr;
 };

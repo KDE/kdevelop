@@ -691,7 +691,7 @@ void TestAreaOperation::checkAreaViewsDisplay(MainWindow *mw, Area *area,
 
     //check containers
     QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
-    QString failMsg = QStringLiteral("\nFailure while checking area contents @ %1\n"
+    QString failMsg = QString("\nFailure while checking area contents @ %1\n"
                               "Expected %2 containers in central splitter but got %3 \n").
                       arg(location).arg(containerCount).arg(containers.count());
     QVERIFY2(containers.count() == containerCount, failMsg.toLatin1().data());
