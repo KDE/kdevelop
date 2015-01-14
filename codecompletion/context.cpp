@@ -61,11 +61,10 @@ template<class Base>
 class CompletionItem : public Base
 {
 public:
-    CompletionItem(const QString& display, const QString& prefix, const QString& replacement)
+    CompletionItem(const QString& display, const QString& prefix)
         : Base()
         , m_display(display)
         , m_prefix(prefix)
-        , m_replacement(replacement)
     {
     }
 
@@ -83,15 +82,9 @@ public:
         return {};
     }
 
-    void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
-    {
-        view->document()->replaceText(word, m_replacement);
-    }
-
 protected:
     QString m_display;
     QString m_prefix;
-    QString m_replacement;
 };
 
 class OverrideItem : public CompletionItem<CompletionTreeItem>
@@ -100,9 +93,9 @@ public:
     OverrideItem(const QString& nameAndParams, const QString& returnType)
         : CompletionItem<KDevelop::CompletionTreeItem>(
               nameAndParams,
-              i18n("Override %1", returnType),
-              "virtual " + returnType + ' ' + nameAndParams
+              i18n("Override %1", returnType)
           )
+        , m_returnType(returnType)
     {
     }
 
@@ -116,6 +109,14 @@ public:
         }
         return CompletionItem<CompletionTreeItem>::data(index, role, model);
     }
+
+    void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
+    {
+        view->document()->replaceText(word, "virtual " + m_returnType + ' ' + m_display);
+    }
+
+private:
+    QString m_returnType;
 };
 
 class ImplementsItem : public CompletionItem<CompletionTreeItem>
@@ -125,9 +126,9 @@ public:
         : CompletionItem<KDevelop::CompletionTreeItem>(
               item.prototype,
               i18n("Implement %1", item.isConstructor ? "<constructor>" :
-                                   item.isDestructor ? "<destructor>" : item.returnType),
-              item.templatePrefix + (!item.isDestructor && !item.isConstructor ? item.returnType + ' ' : "") + item.prototype + "\n{\n}\n"
+                                   item.isDestructor ? "<destructor>" : item.returnType)
           )
+        , m_item(item)
     {
     }
 
@@ -141,6 +142,19 @@ public:
         }
         return CompletionItem<CompletionTreeItem>::data(index, role, model);
     }
+
+    void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
+    {
+        QString replacement = m_item.templatePrefix;
+        if (!m_item.isDestructor && !m_item.isConstructor) {
+            replacement += m_item.returnType + ' ';
+        }
+        replacement += m_item.prototype + "\n{\n}\n";
+        view->document()->replaceText(word, replacement);
+    }
+
+private:
+    FuncImplementInfo m_item;
 };
 
 /**
@@ -150,7 +164,8 @@ class DeclarationItem : public CompletionItem<NormalDeclarationCompletionItem>
 {
 public:
     DeclarationItem(Declaration* dec, const QString& display, const QString& prefix, const QString& replacement)
-        : CompletionItem<NormalDeclarationCompletionItem>(display, prefix, replacement)
+        : CompletionItem<NormalDeclarationCompletionItem>(display, prefix)
+        , m_replacement(replacement)
     {
         m_declaration = dec;
     }
@@ -212,12 +227,29 @@ public:
 
 private:
     int m_matchQuality = 0;
+    QString m_replacement;
 };
 
 /**
  * A minimalistic completion item for macros and such
  */
-using SimpleItem = CompletionItem<CompletionTreeItem>;
+class SimpleItem : public CompletionItem<CompletionTreeItem>
+{
+public:
+    SimpleItem(const QString& display, const QString& prefix, const QString& replacement)
+        : CompletionItem<CompletionTreeItem>(display, prefix)
+        , m_replacement(replacement)
+    {
+    }
+
+    void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
+    {
+        view->document()->replaceText(word, m_replacement);
+    }
+
+private:
+    QString m_replacement;
+};
 
 /**
  * Return true in case position @p position represents a cursor inside a comment
