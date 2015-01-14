@@ -214,7 +214,7 @@ void ParseSessionData::setUnit(CXTranslationUnit unit, const char* sessionPath)
     m_file = clang_getFile(m_unit, sessionPath);
 }
 
-ParseSession::ParseSession(ParseSessionData::Ptr data)
+ParseSession::ParseSession(const ParseSessionData::Ptr& data)
     : d(data)
 {
     if (d) {

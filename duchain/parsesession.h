@@ -97,7 +97,7 @@ public:
     /**
      * Initialize a parse session with the given data and, if that data is valid, lock its mutex.
      */
-    ParseSession(ParseSessionData::Ptr data);
+    ParseSession(const ParseSessionData::Ptr& data);
     /**
      * Unlocks the mutex of the currently set ParseSessionData.
      */
