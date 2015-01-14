@@ -172,8 +172,6 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
 
     TUDUChain tuduchain(session.unit(), file, includedFiles, update);
 
-    //TODO: update highlighting if hasTracker?
-
     return context;
 }
 

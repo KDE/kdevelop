@@ -22,16 +22,23 @@
 
 #include "clangparsejob.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/ilanguagecontroller.h>
+
+#include <language/interfaces/icodehighlighting.h>
+
 #include <language/backgroundparser/urlparselock.h>
+#include <language/backgroundparser/backgroundparser.h>
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>
+
 #include <custom-definesandincludes/idefinesandincludesmanager.h>
-#include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/iproject.h>
+
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
@@ -274,7 +281,12 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
     // release the data here, so we don't lock it while highlighting
     session.setData({});
 
-    highlightDUChain();
+    foreach(const auto& context, includedFiles) {
+        if (!context || !ICore::self()->languageController()->backgroundParser()->trackerForUrl(context->url())) {
+            continue;
+        }
+        languageSupport()->codeHighlighting()->highlightDUChain(context);
+    }
 }
 
 ParseSessionData::Ptr ClangParseJob::createSessionData() const
