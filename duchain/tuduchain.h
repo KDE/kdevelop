@@ -380,7 +380,7 @@ private:
     }
 
     template<CXTypeKind TK, EnableIf<TK == CXType_Vector || TK == CXType_Unexposed> = dummy>
-    AbstractType *createType(CXType type, CXCursor parent)
+    AbstractType *createType(CXType type, CXCursor /*parent*/)
     {
         return createDelayedType(type);
     }
