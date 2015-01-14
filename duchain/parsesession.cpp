@@ -43,25 +43,25 @@
 using namespace KDevelop;
 
 namespace {
-static std::map<QString, QVector<const char*>> mimeToArgs = {
-    {
-        "text/x-csrc", { "-std=c11", "-Wall", "-nostdinc", "-nostdinc++" }
-    },
-    {
-        "text/x-c++src", { "-std=c++11", "-xc++", "-Wall", "-nostdinc", "-nostdinc++" }
-    },
-    {
-        "text/x-objcsrc", {"-xobjective-c++"}
-    }
-};
-
-static QVector<const char*> pchArgs = {"-std=c++11", "-xc++-header", "-Wall", "-nostdinc", "-nostdinc++"};
 
 QVector<const char*> argsForSession(const QString& path, ParseSessionData::Options options)
 {
     if (options & ParseSessionData::PrecompiledHeader) {
+        static const QVector<const char*> pchArgs {"-std=c++11", "-xc++-header", "-Wall", "-nostdinc", "-nostdinc++"};
         return pchArgs;
     }
+
+    static const std::map<QString, QVector<const char*>> mimeToArgs = {
+        {
+            QStringLiteral("text/x-csrc"), { "-std=c11", "-Wall", "-nostdinc", "-nostdinc++" }
+        },
+        {
+            QStringLiteral("text/x-c++src"), { "-std=c++11", "-xc++", "-Wall", "-nostdinc", "-nostdinc++" }
+        },
+        {
+            QStringLiteral("text/x-objcsrc"), {"-xobjective-c++"}
+        }
+    };
 
     QMimeDatabase db;
     QString mimeType = db.mimeTypeForFile(path).name();
@@ -70,7 +70,7 @@ QVector<const char*> argsForSession(const QString& path, ParseSessionData::Optio
     if (res != mimeToArgs.end()) {
       return res->second;
     }
-    return mimeToArgs.find("text/x-c++src")->second;
+    return mimeToArgs.find(QStringLiteral("text/x-c++src"))->second;
 }
 
 CXUnsavedFile fileForContents(const QByteArray& path, const QByteArray& contents)
