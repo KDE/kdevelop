@@ -389,7 +389,7 @@ Identifier::Identifier(const QString& id, uint start, uint* takenRange)
   dd = new IdentifierPrivate<true>;
 
   ///Extract template-parameters
-  ParamIterator paramIt("<>:", id, start);
+  ParamIterator paramIt(QStringLiteral("<>:"), id, start);
   dd->m_identifier = IndexedString(paramIt.prefix().trimmed());
   while( paramIt ) {
     appendTemplateIdentifier( IndexedTypeIdentifier(IndexedQualifiedIdentifier(QualifiedIdentifier(*paramIt))) );
@@ -680,7 +680,7 @@ QualifiedIdentifier::QualifiedIdentifier(const QString& id, bool isExpression)
       push(finishedId);
     }
   }else{
-    if (id.startsWith("::")) {
+    if (id.startsWith(QStringLiteral("::"))) {
       dd->m_explicitlyGlobal = true;
       dd->splitIdentifiers(id, 2);
     } else {
@@ -792,16 +792,18 @@ QStringList QualifiedIdentifier::toStringList() const
 
 QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
 {
+  const QString doubleColon = QStringLiteral("::");
+  
   QString ret;
   if( !ignoreExplicitlyGlobal && explicitlyGlobal() )
-    ret = "::";
+    ret = doubleColon;
 
   bool first = true;
   if(m_index) {
     FOREACH_FUNCTION_STATIC(const IndexedIdentifier& index, cd->identifiers)
     {
       if( !first )
-        ret += "::";
+        ret += doubleColon;
       else
         first = false;
 
@@ -811,7 +813,7 @@ QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
     FOREACH_FUNCTION_STATIC(const IndexedIdentifier& index, dd->identifiers)
     {
       if( !first )
-        ret += "::";
+        ret += doubleColon;
       else
         first = false;
 
