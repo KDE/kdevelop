@@ -34,18 +34,17 @@ FilteredItem FilteringStrategyUtils::match(const QList<ErrorFormat>& errorFormat
 {
     FilteredItem item(line);
     foreach( const ErrorFormat& curErrFilter, errorFormats ) {
-        QRegExp regEx = curErrFilter.expression;
-        if( regEx.indexIn( line ) != -1 )
-        {
-            item.url = QUrl::fromUserInput(regEx.cap( curErrFilter.fileGroup ));
-            item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
+        const auto match = curErrFilter.expression.match(line);
+        if( match.hasMatch() ) {
+            item.url = QUrl::fromUserInput(match.captured( curErrFilter.fileGroup ));
+            item.lineNo = match.captured( curErrFilter.lineGroup ).toInt() - 1;
             if(curErrFilter.columnGroup >= 0) {
-                item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
+                item.columnNo = match.captured( curErrFilter.columnGroup ).toInt() - 1;
             } else {
                 item.columnNo = 0;
             }
 
-            QString txt = regEx.cap(curErrFilter.textGroup);
+            QString txt = match.captured(curErrFilter.textGroup);
 
             item.type = FilteredItem::ErrorItem;
 
@@ -157,7 +156,7 @@ const QVector<ErrorFormat> ERROR_FILTERS {
 // A list of filters for possible compiler, linker, and make actions
 const QVector<ActionFormat> ACTION_FILTERS {
     ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), 1, 2, "(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|"
-                     "g\\+\\+|clang|clang\\+\\+|mpicc|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|"
+                     "g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|"
                      "java|hpf|f|F|f90|F90|f95|F95))"),
     //moc and uic
     ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)"),
@@ -168,7 +167,7 @@ const QVector<ActionFormat> ACTION_FILTERS {
     ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), 1, 1, "^compiling (.*)" ),
     ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), 1, 2, "^generating (.*)" ),
     ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
-                     "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+|clang|clang\\+\\+|mpicc|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)"),
+                     "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)"),
     ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
                      "linking"), 1, 2, "^linking (.*)" ),
     //cmake
@@ -269,17 +268,17 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
     const QByteArray compiling = "compiling";
     FilteredItem item(line);
     foreach( const ActionFormat& curActFilter, ACTION_FILTERS ) {
-        QRegExp regEx = curActFilter.expression;
-        if( regEx.indexIn( line ) != -1 )
-        {
+        const auto match = curActFilter.expression.match(line);
+        if( match.hasMatch() ) {
             item.type = FilteredItem::ActionItem;
-            if( curActFilter.fileGroup != -1 && curActFilter.toolGroup != -1 )
-            {
-                item.shortenedText = QStringLiteral( "%1 %2 (%3)").arg(i18nc(curActFilter.context, curActFilter.action)).arg( regEx.cap( curActFilter.fileGroup ) ).arg( regEx.cap( curActFilter.toolGroup ) );
+            if( curActFilter.fileGroup != -1 && curActFilter.toolGroup != -1 ) {
+                item.shortenedText = QStringLiteral( "%1 %2 (%3)")
+                    .arg(i18nc(curActFilter.context, curActFilter.action))
+                    .arg(match.captured(curActFilter.fileGroup))
+                    .arg(match.captured(curActFilter.toolGroup));
             }
-            if( curActFilter.action == cd )
-            {
-                const Path path(regEx.cap(curActFilter.fileGroup));
+            if( curActFilter.action == cd ) {
+                const Path path(match.captured(curActFilter.fileGroup));
                 d->m_currentDirs.push_back( path );
                 d->m_positionInCurrentDirs.insert( path , d->m_currentDirs.size() - 1 );
             }
@@ -289,7 +288,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             // They are later searched by pathForFile to find source files corresponding to
             // compiler errors.
             if ( curActFilter.action == compiling && curActFilter.tool == "cmake") {
-                d->putDirAtEnd(Path(d->m_buildDir, regEx.cap( curActFilter.fileGroup ).mid(1)));
+                d->putDirAtEnd(Path(d->m_buildDir, match.captured(curActFilter.fileGroup).mid(1)));
             }
             break;
         }
@@ -301,24 +300,26 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 {
     FilteredItem item(line);
     foreach( const ErrorFormat& curErrFilter, ERROR_FILTERS ) {
-        QRegExp regEx = curErrFilter.expression;
-        if( regEx.indexIn( line ) != -1 && !( line.contains( "Each undeclared identifier is reported only once" ) || line.contains( "for each function it appears in." ) ) ) {
+        const auto match = curErrFilter.expression.match(line);
+        if( match.hasMatch() && !( line.contains( QLatin1String("Each undeclared identifier is reported only once") )
+                               || line.contains( QLatin1String("for each function it appears in.") ) ) )
+        {
             if(curErrFilter.fileGroup > 0) {
                 if( curErrFilter.compiler == "cmake" ) { // Unfortunately we cannot know if an error or an action comes first in cmake, and therefore we need to do this
                     if( d->m_currentDirs.empty() ) {
                         d->putDirAtEnd( d->m_buildDir.parent() );
                     }
                 }
-                item.url = d->pathForFile( regEx.cap( curErrFilter.fileGroup ) ).toUrl();
+                item.url = d->pathForFile( match.captured( curErrFilter.fileGroup ) ).toUrl();
             }
-            item.lineNo = regEx.cap( curErrFilter.lineGroup ).toInt() - 1;
+            item.lineNo = match.captured( curErrFilter.lineGroup ).toInt() - 1;
             if(curErrFilter.columnGroup >= 0) {
-                item.columnNo = regEx.cap( curErrFilter.columnGroup ).toInt() - 1;
+                item.columnNo = match.captured( curErrFilter.columnGroup ).toInt() - 1;
             } else {
                 item.columnNo = 0;
             }
 
-            QString txt = regEx.cap(curErrFilter.textGroup);
+            QString txt = match.captured(curErrFilter.textGroup);
 
             // Find the indicator which happens most early.
             int earliestIndicatorIdx = txt.length();
@@ -356,11 +357,8 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 
 // A list of filters for possible Python and PHP errors
 const QList<ErrorFormat> SCRIPT_ERROR_FILTERS = QList<ErrorFormat>()
-    //QRegExp python("^  File \"(.*)\", line (\\d*), in(.*)$");
     << ErrorFormat( "^  File \"(.*)\", line ([0-9]+)(.*$|, in(.*)$)", 1, 2, -1 )
-    //QRegExp phpstacktrace("^.*(/.*):(\\d*).*$");
     << ErrorFormat( "^.*(/.*):([0-9]+).*$", 1, 2, -1 )
-    //QRegExp phperror("^.* in (/.*) on line (\\d*).*$");
     << ErrorFormat( "^.* in (/.*) on line ([0-9]+).*$", 1, 2, -1 );
 
 

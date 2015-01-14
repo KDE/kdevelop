@@ -13,7 +13,7 @@
 #define KDEVPLATFORM_OUTPUTFORMATS_H
 
 #include <QString>
-#include <QRegExp>
+#include <QRegularExpression>
 
 namespace KDevelop
 {
@@ -25,7 +25,7 @@ struct ActionFormat
     ActionFormat( const char* context, const char* _action, int tool, int file, const QString& regExp );
     const char* context; // translation context for action
     const char* action;  // translated string
-    QRegExp expression;
+    QRegularExpression expression;
     QString tool;
     int toolGroup;
     int fileGroup;
@@ -36,7 +36,7 @@ struct ErrorFormat
     ErrorFormat() = default;
     ErrorFormat( const QString& regExp, int file, int line, int text, int column=-1 );
     ErrorFormat( const QString& regExp, int file, int line, int text, const QString& comp, int column=-1 );
-    QRegExp expression;
+    QRegularExpression expression;
     int fileGroup;
     int lineGroup, columnGroup;
     int textGroup;
