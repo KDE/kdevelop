@@ -62,9 +62,6 @@ public:
     QHash<QString, QString> m_environmentOverrides;
     QString m_jobName;
     bool m_outputStarted;
-
-    QByteArray m_processStdout;
-    QByteArray m_processStderr;
 };
 
 OutputExecuteJobPrivate::OutputExecuteJobPrivate( OutputExecuteJob* owner ) :
@@ -358,9 +355,6 @@ void OutputExecuteJob::childProcessExited( int exitCode, QProcess::ExitStatus ex
 void OutputExecuteJobPrivate::childProcessStdout()
 {
     QByteArray out = m_process->readAllStandardOutput();
-    if( m_properties.testFlag( OutputExecuteJob::AccumulateStdout ) ) {
-        m_processStdout += out;
-    }
     if( m_properties.testFlag( OutputExecuteJob::DisplayStdout ) ) {
         m_lineMaker->slotReceivedStdout( out );
     }
@@ -369,9 +363,6 @@ void OutputExecuteJobPrivate::childProcessStdout()
 void OutputExecuteJobPrivate::childProcessStderr()
 {
     QByteArray err = m_process->readAllStandardError();
-    if( m_properties.testFlag( OutputExecuteJob::AccumulateStderr ) ) {
-        m_processStderr += err;
-    }
     if( m_properties.testFlag( OutputExecuteJob::DisplayStderr ) ) {
         m_lineMaker->slotReceivedStderr( err );
     }

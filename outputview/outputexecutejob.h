@@ -60,12 +60,10 @@ public:
         CheckWorkingDirectory = 0x004, /**< Whether to check that the working directory actually exists (and not to create it if needed) */
         PortableMessages      = 0x008, /**< Whether to set LC_MESSAGES=C in the process' environment */
         DisplayStdout         = 0x010, /**< Whether to pass process' stdout to the output model */
-        AccumulateStdout      = 0x020, /**< Whether to save process' stdout to the internal byte-array buffer for further consumption */
-        DisplayStderr         = 0x040, /**< Whether to pass process' stderr to the output model */
-        AccumulateStderr      = 0x080, /**< Whether to save process' stderr to the internal byte-array buffer for further consumption */
-        NoSilentOutput        = 0x100, /**< Whether to call \ref startOutput() only if verbosity is \ref OutputJob::Verbose */
-        PostProcessOutput     = 0x200, /**< Whether to connect line maker's signals to \ref postProcessStdout() and \ref postProcessStderr() */
-        IsBuilderHint         = 0x400, /**< Whether to use builder-specific messages to talk to user (e. g. "build directory" instead of "working directory" */
+        DisplayStderr         = 0x020, /**< Whether to pass process' stderr to the output model */
+        NoSilentOutput        = 0x040, /**< Whether to call \ref startOutput() only if verbosity is \ref OutputJob::Verbose */
+        PostProcessOutput     = 0x080, /**< Whether to connect line maker's signals to \ref postProcessStdout() and \ref postProcessStderr() */
+        IsBuilderHint         = 0x100, /**< Whether to use builder-specific messages to talk to user (e. g. "build directory" instead of "working directory" */
     };
     Q_FLAGS(JobProperty JobProperties)
     Q_DECLARE_FLAGS(JobProperties, JobProperty)
