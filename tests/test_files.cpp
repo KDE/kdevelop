@@ -67,7 +67,7 @@ void TestFiles::testFiles_data()
     const QString testDirPath = TEST_FILES_DIR;
     const QStringList files = QDir(testDirPath).entryList({"*.h", "*.cpp"}, QDir::Files);
     foreach (const QString& file, files) {
-        QTest::newRow(file.toUtf8()) << (testDirPath + '/' + file);
+        QTest::newRow(file.toUtf8()) << QString(testDirPath + '/' + file);
     }
 }
 

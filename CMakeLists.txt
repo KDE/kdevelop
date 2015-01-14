@@ -17,6 +17,8 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 
+add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS -DQT_NO_URL_CAST_FROM_STRING)
+
 find_package(Qt5 REQUIRED Core Widgets Test)
 find_package(KF5 REQUIRED COMPONENTS KDELibs4Support ThreadWeaver TextEditor I18n)
 find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
