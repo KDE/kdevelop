@@ -91,107 +91,6 @@ struct CompilerFilterStrategyPrivate
     PositionMap m_positionInCurrentDirs;
 };
 
-namespace {
-// All the possible string that indicate an error if we via Regex have been able to
-// extract file and linenumber from a given outputline
-// TODO: This seems clumsy -- and requires another scan of the line.
-// Merge this information into ErrorFormat? --Kevin
-typedef QPair<QString, FilteredItem::FilteredOutputItemType> Indicator;
-const QVector<Indicator> INDICATORS {
-    // ld
-    Indicator("undefined reference", FilteredItem::ErrorItem),
-    Indicator("undefined symbol", FilteredItem::ErrorItem),
-    Indicator("ld: cannot find", FilteredItem::ErrorItem),
-    Indicator("no such file", FilteredItem::ErrorItem),
-    // gcc
-    Indicator("error", FilteredItem::ErrorItem),
-    // generic
-    Indicator("warning", FilteredItem::WarningItem),
-    Indicator("info", FilteredItem::InformationItem),
-    Indicator("note", FilteredItem::InformationItem),
-};
-
-// A list of filters for possible compiler, linker, and make errors
-const QVector<ErrorFormat> ERROR_FILTERS {
-    // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
-    ErrorFormat( "^([^:\t]+):([0-9]+):([0-9]+):([^0-9]+)", 1, 2, 4, 3 ),
-    // GCC
-    ErrorFormat( "^([^:\t]+):([0-9]+):([^0-9]+)", 1, 2, 3 ),
-    // GCC
-    ErrorFormat( "^(In file included from |[ ]+from )([^: \\t]+):([0-9]+)(:|,)(|[0-9]+)", 2, 3, 5 ),
-    // ICC
-    ErrorFormat( "^([^: \\t]+)\\(([0-9]+)\\):([^0-9]+)", 1, 2, 3, "intel" ),
-    //libtool link
-    ErrorFormat( "^(libtool):( link):( warning): ", 0, 0, 0 ),
-    // make
-    ErrorFormat( "No rule to make target", 0, 0, 0 ),
-    // cmake
-    ErrorFormat( "^([^: \\t]+):([0-9]+):", 1, 2, 0, "cmake" ),
-    // cmake
-    ErrorFormat( "CMake (Error|Warning) (|\\([a-zA-Z]+\\) )(in|at) ([^:]+):($|[0-9]+)", 4, 5, 1, "cmake" ),
-    // cmake/automoc
-    // example: AUTOMOC: error: /foo/bar.cpp The file includes (...),
-    // example: AUTOMOC: error: /foo/bar.cpp: The file includes (...)
-    // note: ':' after file name isn't always appended, see http://cmake.org/gitweb?p=cmake.git;a=commitdiff;h=317d8498aa02c9f486bf5071963bb2034777cdd6
-    // example: AUTOGEN: error: /foo/bar.cpp: The file includes (...)
-    // note: AUTOMOC got renamed to AUTOGEN at some point
-    ErrorFormat( "^(AUTOMOC|AUTOGEN): error: ([^:]+):? (The file .*)$", 2, 0, 0 ),
-    // via qt4_automoc
-    // example: automoc4: The file "/foo/bar.cpp" includes the moc file "bar1.moc", but ...
-    ErrorFormat( "^automoc4: The file \"([^\"]+)\" includes the moc file", 1, 0, 0 ),
-    // Fortran
-    ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 ),
-    // GFortran
-    ErrorFormat( "^(.*):([0-9]+)\\.([0-9]+):(.*)", 1, 2, 4, "gfortran", 3 ),
-    // Jade
-    ErrorFormat( "^[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)", 1, 2, 3 ),
-    // ifort
-    ErrorFormat( "^fortcom: (.*): (.*), line ([0-9]+):(.*)", 2, 3, 1, "intel" ),
-    // PGI
-    ErrorFormat( "PGF9(.*)-(.*)-(.*)-(.*) \\((.*): ([0-9]+)\\)", 5, 6, 4, "pgi" ),
-    // PGI (2)
-    ErrorFormat( "PGF9(.*)-(.*)-(.*)-Symbol, (.*) \\((.*)\\)", 5, 5, 4, "pgi" ),
-};
-
-// A list of filters for possible compiler, linker, and make actions
-const QVector<ActionFormat> ACTION_FILTERS {
-    ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), 1, 2, "(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|"
-                     "g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|"
-                     "java|hpf|f|F|f90|F90|f95|F95))"),
-    //moc and uic
-    ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)"),
-    //libtool linking
-    ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable", "linking"),
-                     "libtool", "/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)", 1 ),
-    //unsermake
-    ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), 1, 1, "^compiling (.*)" ),
-    ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), 1, 2, "^generating (.*)" ),
-    ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
-                     "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)"),
-    ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
-                     "linking"), 1, 2, "^linking (.*)" ),
-    //cmake
-    ActionFormat( I18N_NOOP2_NOSTRIP("", "built"), -1, 1, "\\[.+%\\] Built target (.*)" ),
-    ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), "cmake", "\\[.+%\\] Building .* object (.*)CMakeFiles/", 1 ),
-    ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), -1, 1, "\\[.+%\\] Generating (.*)" ),
-    ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
-                     "linking"), -1, 1, "^Linking (.*)" ),
-    ActionFormat( I18N_NOOP2_NOSTRIP("", "configuring"), "cmake", "(-- Configuring (done|incomplete)|-- Found|-- Adding|-- Enabling)", -1 ),
-    ActionFormat( I18N_NOOP2_NOSTRIP("", "installing"), -1, 1, "-- Installing (.*)" ),
-    //libtool install
-    ActionFormat( I18N_NOOP2_NOSTRIP("", "creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 ),
-    ActionFormat( I18N_NOOP2_NOSTRIP("", "installing"), "", "/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs"
-                     "|bin/sh\\s.*libtool.*--mode=install).*\\s([^\\s;]+)", 1 ),
-    //dcop
-    ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 ),
-    ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 ),
-    // match against Entering directory to update current build dir
-    ActionFormat( "", "cd", "", "make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'", 2),
-    // waf and scons use the same basic convention as make
-    ActionFormat( "", "cd", "", "(Waf|scons): Entering directory (\\`|\\')(.+)'", 3)
-};
-
-}
 
 CompilerFilterStrategyPrivate::CompilerFilterStrategyPrivate(const QUrl& buildDir)
     : m_buildDir(buildDir)
@@ -264,6 +163,44 @@ QVector<QString> CompilerFilterStrategy::getCurrentDirs()
 
 FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 {
+    // A list of filters for possible compiler, linker, and make actions
+    static const QVector<ActionFormat> ACTION_FILTERS {
+        ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), 1, 2, "(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|"
+                        "g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|"
+                        "java|hpf|f|F|f90|F90|f95|F95))"),
+        //moc and uic
+        ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)"),
+        //libtool linking
+        ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable", "linking"),
+                        "libtool", "/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)", 1 ),
+        //unsermake
+        ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), 1, 1, "^compiling (.*)" ),
+        ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), 1, 2, "^generating (.*)" ),
+        ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
+                        "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)"),
+        ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
+                        "linking"), 1, 2, "^linking (.*)" ),
+        //cmake
+        ActionFormat( I18N_NOOP2_NOSTRIP("", "built"), -1, 1, "\\[.+%\\] Built target (.*)" ),
+        ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), "cmake", "\\[.+%\\] Building .* object (.*)CMakeFiles/", 1 ),
+        ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), -1, 1, "\\[.+%\\] Generating (.*)" ),
+        ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
+                        "linking"), -1, 1, "^Linking (.*)" ),
+        ActionFormat( I18N_NOOP2_NOSTRIP("", "configuring"), "cmake", "(-- Configuring (done|incomplete)|-- Found|-- Adding|-- Enabling)", -1 ),
+        ActionFormat( I18N_NOOP2_NOSTRIP("", "installing"), -1, 1, "-- Installing (.*)" ),
+        //libtool install
+        ActionFormat( I18N_NOOP2_NOSTRIP("", "creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 ),
+        ActionFormat( I18N_NOOP2_NOSTRIP("", "installing"), "", "/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs"
+                        "|bin/sh\\s.*libtool.*--mode=install).*\\s([^\\s;]+)", 1 ),
+        //dcop
+        ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 ),
+        ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 ),
+        // match against Entering directory to update current build dir
+        ActionFormat( "", "cd", "", "make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'", 2),
+        // waf and scons use the same basic convention as make
+        ActionFormat( "", "cd", "", "(Waf|scons): Entering directory (\\`|\\')(.+)'", 3)
+    };
+
     const QByteArray cd = "cd";
     const QByteArray compiling = "compiling";
     FilteredItem item(line);
@@ -298,6 +235,67 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 
 FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 {
+    // All the possible string that indicate an error if we via Regex have been able to
+    // extract file and linenumber from a given outputline
+    // TODO: This seems clumsy -- and requires another scan of the line.
+    // Merge this information into ErrorFormat? --Kevin
+    using Indicator = QPair<QString, FilteredItem::FilteredOutputItemType>;
+    static const QVector<Indicator> INDICATORS {
+        // ld
+        Indicator("undefined reference", FilteredItem::ErrorItem),
+        Indicator("undefined symbol", FilteredItem::ErrorItem),
+        Indicator("ld: cannot find", FilteredItem::ErrorItem),
+        Indicator("no such file", FilteredItem::ErrorItem),
+        // gcc
+        Indicator("error", FilteredItem::ErrorItem),
+        // generic
+        Indicator("warning", FilteredItem::WarningItem),
+        Indicator("info", FilteredItem::InformationItem),
+        Indicator("note", FilteredItem::InformationItem),
+    };
+
+    // A list of filters for possible compiler, linker, and make errors
+    static const QVector<ErrorFormat> ERROR_FILTERS {
+        // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
+        ErrorFormat( "^([^:\t]+):([0-9]+):([0-9]+):([^0-9]+)", 1, 2, 4, 3 ),
+        // GCC
+        ErrorFormat( "^([^:\t]+):([0-9]+):([^0-9]+)", 1, 2, 3 ),
+        // GCC
+        ErrorFormat( "^(In file included from |[ ]+from )([^: \\t]+):([0-9]+)(:|,)(|[0-9]+)", 2, 3, 5 ),
+        // ICC
+        ErrorFormat( "^([^: \\t]+)\\(([0-9]+)\\):([^0-9]+)", 1, 2, 3, "intel" ),
+        //libtool link
+        ErrorFormat( "^(libtool):( link):( warning): ", 0, 0, 0 ),
+        // make
+        ErrorFormat( "No rule to make target", 0, 0, 0 ),
+        // cmake
+        ErrorFormat( "^([^: \\t]+):([0-9]+):", 1, 2, 0, "cmake" ),
+        // cmake
+        ErrorFormat( "CMake (Error|Warning) (|\\([a-zA-Z]+\\) )(in|at) ([^:]+):($|[0-9]+)", 4, 5, 1, "cmake" ),
+        // cmake/automoc
+        // example: AUTOMOC: error: /foo/bar.cpp The file includes (...),
+        // example: AUTOMOC: error: /foo/bar.cpp: The file includes (...)
+        // note: ':' after file name isn't always appended, see http://cmake.org/gitweb?p=cmake.git;a=commitdiff;h=317d8498aa02c9f486bf5071963bb2034777cdd6
+        // example: AUTOGEN: error: /foo/bar.cpp: The file includes (...)
+        // note: AUTOMOC got renamed to AUTOGEN at some point
+        ErrorFormat( "^(AUTOMOC|AUTOGEN): error: ([^:]+):? (The file .*)$", 2, 0, 0 ),
+        // via qt4_automoc
+        // example: automoc4: The file "/foo/bar.cpp" includes the moc file "bar1.moc", but ...
+        ErrorFormat( "^automoc4: The file \"([^\"]+)\" includes the moc file", 1, 0, 0 ),
+        // Fortran
+        ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 ),
+        // GFortran
+        ErrorFormat( "^(.*):([0-9]+)\\.([0-9]+):(.*)", 1, 2, 4, "gfortran", 3 ),
+        // Jade
+        ErrorFormat( "^[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)", 1, 2, 3 ),
+        // ifort
+        ErrorFormat( "^fortcom: (.*): (.*), line ([0-9]+):(.*)", 2, 3, 1, "intel" ),
+        // PGI
+        ErrorFormat( "PGF9(.*)-(.*)-(.*)-(.*) \\((.*): ([0-9]+)\\)", 5, 6, 4, "pgi" ),
+        // PGI (2)
+        ErrorFormat( "PGF9(.*)-(.*)-(.*)-Symbol, (.*) \\((.*)\\)", 5, 5, 4, "pgi" ),
+    };
+
     FilteredItem item(line);
     foreach( const ErrorFormat& curErrFilter, ERROR_FILTERS ) {
         const auto match = curErrFilter.expression.match(line);
@@ -355,13 +353,6 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 
 /// --- Script error filter strategy ---
 
-// A list of filters for possible Python and PHP errors
-const QList<ErrorFormat> SCRIPT_ERROR_FILTERS = QList<ErrorFormat>()
-    << ErrorFormat( "^  File \"(.*)\", line ([0-9]+)(.*$|, in(.*)$)", 1, 2, -1 )
-    << ErrorFormat( "^.*(/.*):([0-9]+).*$", 1, 2, -1 )
-    << ErrorFormat( "^.* in (/.*) on line ([0-9]+).*$", 1, 2, -1 );
-
-
 ScriptErrorFilterStrategy::ScriptErrorFilterStrategy()
 {
 }
@@ -373,29 +364,17 @@ FilteredItem ScriptErrorFilterStrategy::actionInLine(const QString& line)
 
 FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
 {
+    // A list of filters for possible Python and PHP errors
+    static const QList<ErrorFormat> SCRIPT_ERROR_FILTERS {
+        ErrorFormat( "^  File \"(.*)\", line ([0-9]+)(.*$|, in(.*)$)", 1, 2, -1 ),
+        ErrorFormat( "^.*(/.*):([0-9]+).*$", 1, 2, -1 ),
+        ErrorFormat( "^.* in (/.*) on line ([0-9]+).*$", 1, 2, -1 )
+    };
+
     return FilteringStrategyUtils::match(SCRIPT_ERROR_FILTERS, line);
 }
 
 /// --- Native application error filter strategy ---
-
-const QList<ErrorFormat> QT_APPLICATION_ERROR_FILTERS = QList<ErrorFormat>()
-    // QObject::connect related errors, also see err_method_notfound() in qobject.cpp
-    // QObject::connect: No such slot Foo::bar() in /foo/bar.cpp:313
-    << ErrorFormat("^QObject::connect: (?:No such|Parentheses expected,) (?:slot|signal) [^ ]* in (.*):([0-9]+)$", 1, 2, -1)
-    // ASSERT: "errors().isEmpty()" in file /foo/bar.cpp, line 49
-    << ErrorFormat("^ASSERT: \"(.*)\" in file (.*), line ([0-9]+)$", 2, 3, -1)
-    // QFATAL : FooTest::testBar() ASSERT: "index.isValid()" in file /foo/bar.cpp, line 32
-    << ErrorFormat("^QFATAL : (.*) ASSERT: \"(.*)\" in file (.*), line ([0-9]+)$", 3, 4, -1)
-    // Catch:
-    // FAIL!  : FooTest::testBar() Compared pointers are not the same
-    //    Actual   ...
-    //    Expected ...
-    //    Loc: [/foo/bar.cpp(33)]
-    //
-    // Do *not* catch:
-    //    ...
-    //    Loc: [Unknown file(0)]
-    << ErrorFormat("^   Loc: \\[(.*)\\(([1-9][0-9]*)\\)\\]$", 1, 2, -1);
 
 NativeAppErrorFilterStrategy::NativeAppErrorFilterStrategy()
 {
@@ -408,19 +387,30 @@ FilteredItem NativeAppErrorFilterStrategy::actionInLine(const QString& line)
 
 FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
 {
+    static const QList<ErrorFormat> QT_APPLICATION_ERROR_FILTERS {
+        // QObject::connect related errors, also see err_method_notfound() in qobject.cpp
+        // QObject::connect: No such slot Foo::bar() in /foo/bar.cpp:313
+        ErrorFormat("^QObject::connect: (?:No such|Parentheses expected,) (?:slot|signal) [^ ]* in (.*):([0-9]+)$", 1, 2, -1),
+        // ASSERT: "errors().isEmpty()" in file /foo/bar.cpp, line 49
+        ErrorFormat("^ASSERT: \"(.*)\" in file (.*), line ([0-9]+)$", 2, 3, -1),
+        // QFATAL : FooTest::testBar() ASSERT: "index.isValid()" in file /foo/bar.cpp, line 32
+        ErrorFormat("^QFATAL : (.*) ASSERT: \"(.*)\" in file (.*), line ([0-9]+)$", 3, 4, -1),
+        // Catch:
+        // FAIL!  : FooTest::testBar() Compared pointers are not the same
+        //    Actual   ...
+        //    Expected ...
+        //    Loc: [/foo/bar.cpp(33)]
+        //
+        // Do *not* catch:
+        //    ...
+        //    Loc: [Unknown file(0)]
+        ErrorFormat("^   Loc: \\[(.*)\\(([1-9][0-9]*)\\)\\]$", 1, 2, -1)
+    };
+
     return FilteringStrategyUtils::match(QT_APPLICATION_ERROR_FILTERS, line);
 }
 
 /// --- Static Analysis filter strategy ---
-
-// A list of filters for static analysis tools (krazy2, cppcheck)
-const QList<ErrorFormat> STATIC_ANALYSIS_FILTERS = QList<ErrorFormat>()
-    // CppCheck
-    << ErrorFormat( "^\\[(.*):([0-9]+)\\]:(.*)", 1, 2, 3 )
-    // krazy2
-    << ErrorFormat( "^\\t([^:]+).*line#([0-9]+).*", 1, 2, -1 )
-    // krazy2 without line info
-    << ErrorFormat( "^\\t(.*): missing license", 1, -1, -1 );
 
 StaticAnalysisFilterStrategy::StaticAnalysisFilterStrategy()
 {
@@ -433,6 +423,16 @@ FilteredItem StaticAnalysisFilterStrategy::actionInLine(const QString& line)
 
 FilteredItem StaticAnalysisFilterStrategy::errorInLine(const QString& line)
 {
+    // A list of filters for static analysis tools (krazy2, cppcheck)
+    static const QList<ErrorFormat> STATIC_ANALYSIS_FILTERS {
+        // CppCheck
+        ErrorFormat( "^\\[(.*):([0-9]+)\\]:(.*)", 1, 2, 3 ),
+        // krazy2
+        ErrorFormat( "^\\t([^:]+).*line#([0-9]+).*", 1, 2, -1 ),
+        // krazy2 without line info
+        ErrorFormat( "^\\t(.*): missing license", 1, -1, -1 )
+    };
+
     return FilteringStrategyUtils::match(STATIC_ANALYSIS_FILTERS, line);
 }
 
