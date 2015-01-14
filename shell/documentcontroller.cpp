@@ -48,7 +48,6 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iproject.h>
 #include <interfaces/iselectioncontroller.h>
 #include <interfaces/context.h>
-#include <interfaces/ilanguagecontroller.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
 
@@ -68,8 +67,6 @@ Boston, MA 02110-1301, USA.
 #include <vcs/models/vcsannotationmodel.h>
 #include <vcs/vcsjob.h>
 #include <vcs/vcspluginhelper.h>
-
-#include <language/backgroundparser/backgroundparser.h>
 
 #define EMPTY_DOCUMENT_URL i18n("Untitled")
 
@@ -532,11 +529,6 @@ struct DocumentControllerPrivate {
         if (doc != previousActiveDocument || activePosition != previousActivePosition)
             emit controller->documentJumpPerformed(doc, activePosition, previousActiveDocument, previousActivePosition);
 
-        if ( doc->textDocument() ) {
-            QObject::connect(doc->textDocument(), &KTextEditor::Document::reloaded, controller,
-                             &DocumentController::reloaded);
-        }
-
         return true;
     }
 
@@ -554,13 +546,6 @@ struct DocumentControllerPrivate {
     KRecentFilesAction* fileOpenRecent;
     KTextEditor::Document* globalTextEditorInstance;
 };
-
-void DocumentController::reloaded(KTextEditor::Document* doc)
-{
-    ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(doc->url()),
-            (TopDUContext::Features) ( TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate ),
-            BackgroundParser::BestPriority, 0);
-}
 
 DocumentController::DocumentController( QObject *parent )
         : IDocumentController( parent )

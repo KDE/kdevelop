@@ -162,8 +162,6 @@ public Q_SLOTS:
     Q_SCRIPTABLE QStringList activeDocumentPaths() const;
     void vcsAnnotateCurrentDocument();
 
-    void reloaded(KTextEditor::Document* doc);
-    
 private Q_SLOTS:
     virtual void slotOpenDocument(const QUrl &url);
     void notifyDocumentClosed(Sublime::Document* doc);

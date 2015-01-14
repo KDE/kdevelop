@@ -53,6 +53,7 @@
 #include <vcs/interfaces/icontentawareversioncontrol.h>
 
 #include <language/interfaces/editorcontext.h>
+#include <language/backgroundparser/backgroundparser.h>
 
 #include <project/projectutils.h>
 #include <project/projectmodel.h>
@@ -386,6 +387,14 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         connect(d->document.data(), &KTextEditor::Document::textChanged, this, [&] { d->slotDocumentLoaded(); });
         // Also connect to the completed signal, sometimes the first text changed signal is missed because the part loads too quickly (? TODO - confirm this is necessary)
         connect(d->document.data(), static_cast<void(KTextEditor::Document::*)()>(&KTextEditor::Document::completed), this, [&] { d->slotDocumentLoaded(); });
+
+        // force a reparse when a document gets reloaded
+        connect(d->document.data(), &KTextEditor::Document::reloaded,
+                this, [] (KTextEditor::Document* document) {
+            ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(document->url()),
+                    (TopDUContext::Features) ( TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate ),
+                    BackgroundParser::BestPriority, 0);
+        });
 
         // Set encoding passed via constructor
         // Needs to be done before openUrl, else katepart won't use the encoding
