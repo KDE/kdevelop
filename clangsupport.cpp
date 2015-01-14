@@ -251,7 +251,7 @@ ParseJob* ClangSupport::createParseJob(const IndexedString& url)
 
 QString ClangSupport::name() const
 {
-    return "clang";
+    return QStringLiteral("clang");
 }
 
 ICodeHighlighting* ClangSupport::codeHighlighting() const
