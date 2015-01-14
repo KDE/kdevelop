@@ -111,8 +111,7 @@ void addIncludes(QVector<const char*>* args, QVector<QByteArray>* otherArgs,
 
 ParseSessionData::ParseSessionData(const IndexedString& url, const QByteArray& contents, ClangIndex* index,
                                    const ClangParsingEnvironment& environment, Options options)
-    : m_url(url)
-    , m_file(nullptr)
+    : m_file(nullptr)
     , m_unit(nullptr)
 {
     unsigned int flags = CXTranslationUnit_CXXChainedPCH
@@ -259,11 +258,6 @@ IndexedString ParseSession::languageString()
     return lang;
 }
 
-IndexedString ParseSession::url() const
-{
-    return d ? d->m_url : IndexedString();
-}
-
 QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
 {
     if (!d) {
@@ -342,7 +336,7 @@ bool ParseSession::reparse(const KDevelop::IndexedString& url, const QByteArray&
     auto file = fileForContents(path, sessionContents);
 
     if (clang_reparseTranslationUnit(d->m_unit, 1, &file, clang_defaultReparseOptions(d->m_unit)) == 0) {
-        d->setUnit(d->m_unit, d->m_url.byteArray());
+        d->setUnit(d->m_unit, path.constData());
         return true;
     } else {
         return false;

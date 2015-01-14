@@ -226,8 +226,6 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
     const bool update = existingData && session.environment().translationUnitUrl() == m_environment.translationUnitUrl();
     if (!update || !session.reparse(document(), contents().contents, m_environment)) {
         session.setData(createSessionData());
-    } else {
-        Q_ASSERT(session.url() == document());
     }
 
     if (abortRequested() || !session.unit()) {

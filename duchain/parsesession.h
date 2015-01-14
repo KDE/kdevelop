@@ -74,7 +74,6 @@ private:
 
     QMutex m_mutex;
 
-    const KDevelop::IndexedString m_url;
     CXFile m_file;
     CXTranslationUnit m_unit;
     ClangParsingEnvironment m_environment;
@@ -108,11 +107,6 @@ public:
      */
     void setData(const ParseSessionData::Ptr& data);
     ParseSessionData::Ptr data() const;
-
-    /**
-     * @return the URL of this session
-     */
-    KDevelop::IndexedString url() const;
 
     /**
      * @return the file of this session
