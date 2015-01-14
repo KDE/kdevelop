@@ -358,8 +358,10 @@ void TUDUChain::setIdTypeDecl(CXCursor typeCursor, IdentifiedType* idType) const
 void TUDUChain::contextImportDecl(DUContext* context, const DeclarationPointer& decl) const
 {
     auto top = context->topContext();
-    if (auto import = decl->logicalInternalContext(top))
+    if (auto import = decl->logicalInternalContext(top)) {
         context->addImportedParentContext(import);
+        context->topContext()->updateImportsCache();
+    }
 }
 
 Identifier TUDUChain::makeId(CXCursor cursor) const

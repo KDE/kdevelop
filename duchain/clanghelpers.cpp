@@ -85,6 +85,7 @@ ReferencedTopDUContext createTopContext(const IndexedString& path, const ClangPa
     ClangParsingEnvironmentFile* file = new ClangParsingEnvironmentFile(path, environment);
     ReferencedTopDUContext context = new ClangTopDUContext(path, RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
     DUChain::self()->addDocumentChain(context);
+    context->updateImportsCache();
     return context;
 }
 
@@ -166,6 +167,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
             }
             context->addImportedParentContext(ctx, import.location);
         }
+        context->updateImportsCache();
     }
 
     TUDUChain tuduchain(session.unit(), file, includedFiles, update);
