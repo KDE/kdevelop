@@ -23,8 +23,11 @@
 #ifndef CLANGPARSEJOB_H
 #define CLANGPARSEJOB_H
 
+#include <QHash>
+
 #include <language/backgroundparser/parsejob.h>
 #include "duchain/clangparsingenvironment.h"
+#include "duchain/unsavedfile.h"
 
 class ClangSupport;
 class ParseSessionData;
@@ -46,6 +49,8 @@ private:
     QExplicitlySharedDataPointer<ParseSessionData> createSessionData() const;
 
     ClangParsingEnvironment m_environment;
+    QVector<UnsavedFile> m_unsavedFiles;
+    QHash<KDevelop::IndexedString, KDevelop::ModificationRevision> m_unsavedRevisions;
 };
 
 #endif // CLANGPARSEJOB_H

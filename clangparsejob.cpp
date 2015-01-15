@@ -26,6 +26,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include <language/interfaces/icodehighlighting.h>
 
@@ -52,6 +53,7 @@
 #include "util/clangtypes.h"
 
 #include "clangsupport.h"
+#include "documentfinderhelpers.h"
 
 #include <QFile>
 #include <QStringList>
@@ -143,10 +145,20 @@ ProjectFileItem* findProjectFileItem(const IndexedString& url, bool* hasBuildSys
     return file;
 }
 
+ClangParsingEnvironmentFile* parsingEnvironmentFile(const TopDUContext* context)
+{
+    return dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data());
+}
+
+bool hasTracker(const IndexedString& url)
+{
+    return ICore::self()->languageController()->backgroundParser()->trackerForUrl(url);
+}
+
 }
 
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
-: ParseJob(url, languageSupport)
+    : ParseJob(url, languageSupport)
 {
     const auto tuUrl = clang()->index()->translationUnitForUrl(url);
     bool hasBuildSystemInfo;
@@ -171,6 +183,18 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
         projectPaths.append(project->path());
     }
     m_environment.setProjectPaths(projectPaths);
+
+    foreach(auto document, ICore::self()->documentController()->openDocuments()) {
+        auto textDocument = document->textDocument();
+        if (!textDocument || !textDocument->isModified() || !textDocument->url().isLocalFile()
+            || !DocumentFinderHelpers::mimeTypesList().contains(textDocument->mimeType()))
+        {
+            continue;
+        }
+        m_unsavedFiles << UnsavedFile(textDocument->url().toLocalFile(), textDocument->textLines(textDocument->documentRange()));
+        const IndexedString indexedUrl(textDocument->url());
+        m_unsavedRevisions.insert(indexedUrl, ModificationRevision::revisionForFile(indexedUrl));
+    }
 }
 
 ClangSupport* ClangParseJob::clang() const
@@ -212,19 +236,13 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         }
     }
 
-    ProblemPointer p = readContents();
-    if (p) {
-        //TODO: associate problem with topducontext
-        return;
-    }
-
     if (abortRequested()) {
         return;
     }
 
     ParseSession session(existingData ? existingData : createSessionData());
     const bool update = existingData && session.environment().translationUnitUrl() == m_environment.translationUnitUrl();
-    if (!update || !session.reparse(document(), contents().contents, m_environment)) {
+    if (!update || !session.reparse(m_unsavedFiles, m_environment)) {
         session.setData(createSessionData());
     }
 
@@ -260,7 +278,7 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
 
     {
         DUChainWriteLocker lock;
-        if (hasTracker() || minimumFeatures() & TopDUContext::AST) {
+        if (::hasTracker(document()) || minimumFeatures() & TopDUContext::AST) {
             // cache the parse session and the contained translation unit for this chain
             // this then allows us to quickly reparse the document if it is changed by
             // the user
@@ -268,29 +286,40 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
             // the TU to save memory
             context->setAst(IAstContainer::Ptr(session.data()));
         }
-        auto file = dynamic_cast<ClangParsingEnvironmentFile*>(context->parsingEnvironmentFile().data());
+        auto file = parsingEnvironmentFile(context);
         Q_ASSERT(file);
         // verify that features and environment where properly set in ClangHelpers::buildDUChain
         Q_ASSERT(file->featuresSatisfied(TopDUContext::Features(minimumFeatures() & ~TopDUContext::ForceUpdateRecursive)));
-        // prefer the editor modification revision, instead of the on-disk revision
-        file->setModificationRevision(contents().modification);
+        Q_UNUSED(file);
     }
 
     // release the data here, so we don't lock it while highlighting
     session.setData({});
 
     foreach(const auto& context, includedFiles) {
-        if (!context || !ICore::self()->languageController()->backgroundParser()->trackerForUrl(context->url())) {
+        if (!context) {
             continue;
         }
-        languageSupport()->codeHighlighting()->highlightDUChain(context);
+        {
+            // prefer the editor modification revision, instead of the on-disk revision
+            auto it = m_unsavedRevisions.find(context->url());
+            if (it != m_unsavedRevisions.end()) {
+                DUChainWriteLocker lock;
+                auto file = parsingEnvironmentFile(context);
+                Q_ASSERT(file);
+                file->setModificationRevision(it.value());
+            }
+        }
+        if (::hasTracker(context->url())) {
+            languageSupport()->codeHighlighting()->highlightDUChain(context);
+        }
     }
 }
 
 ParseSessionData::Ptr ClangParseJob::createSessionData() const
 {
     const bool skipFunctionBodies = (minimumFeatures() <= TopDUContext::VisibleDeclarationsAndContexts);
-    return ParseSessionData::Ptr(new ParseSessionData(document(), contents().contents, clang()->index(), m_environment,
+    return ParseSessionData::Ptr(new ParseSessionData(m_unsavedFiles, clang()->index(), m_environment,
                                  (skipFunctionBodies ? ParseSessionData::SkipFunctionBodies : ParseSessionData::NoOption)));
 }
 

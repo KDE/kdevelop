@@ -50,7 +50,7 @@ ClangPCH::ClangPCH(const ClangParsingEnvironment& environment, ClangIndex* index
     ClangParsingEnvironment pchEnv;
     pchEnv.setPchInclude(Path());
     pchEnv.setTranslationUnitUrl(doc);
-    m_session.setData(ParseSessionData::Ptr(new ParseSessionData(doc, QByteArray(), index, pchEnv, ParseSessionData::PrecompiledHeader)));
+    m_session.setData(ParseSessionData::Ptr(new ParseSessionData({}, index, pchEnv, ParseSessionData::PrecompiledHeader)));
 
     if (!m_session.unit()) {
         return;

@@ -43,21 +43,24 @@ public:
     /// parse contents of a file
     void parseFile( const QString &fileName )
     {
-        QFile file(fileName);
-        if (!file.exists()) {
-            qerr << "file does not exist:" << file.fileName() << endl;
+        if (!QFile::exists(fileName)) {
+            qerr << "File to parse does not exist: " << fileName << endl;
             return;
         }
-
-        file.open(QIODevice::ReadOnly);
-        m_session.setData(ParseSessionData::Ptr(new ParseSessionData(IndexedString(fileName), file.readAll(), &m_index)));
+        ClangParsingEnvironment environment;
+        environment.setTranslationUnitUrl(IndexedString(fileName));
+        m_session.setData(ParseSessionData::Ptr(new ParseSessionData({}, &m_index, environment)));
         runSession();
     }
 
     /// parse code directly
     void parseCode( const QString &code )
     {
-        m_session.setData(ParseSessionData::Ptr(new ParseSessionData(IndexedString("stdin.cpp"), code.toUtf8(), &m_index)));
+        ClangParsingEnvironment environment;
+        const QString fileName = QStringLiteral("stdin.cpp");
+        environment.setTranslationUnitUrl(IndexedString(fileName));
+        m_session.setData(ParseSessionData::Ptr(new ParseSessionData({UnsavedFile(fileName, {code})},
+                                                                     &m_index, environment)));
         runSession();
     }
 

@@ -24,18 +24,21 @@
 #define PARSESESSION_H
 
 #include <QList>
+#include <QUrl>
 
 #include <clang-c/Index.h>
 
-#include <QUrl>
-
 #include <serialization/indexedstring.h>
-#include <language/duchain/problem.h>
-#include <language/interfaces/iastcontainer.h>
+
 #include <util/path.h>
 
+#include <language/duchain/problem.h>
+#include <language/interfaces/iastcontainer.h>
+
 #include <duchain/clangduchainexport.h>
+
 #include "clangparsingenvironment.h"
+#include "unsavedfile.h"
 
 class ClangIndex;
 
@@ -56,21 +59,19 @@ public:
     /**
      * Parse the given @p contents.
      *
-     * TODO: Pass in full list of modified files (via environment? Add to ClangSupport?)
      * TODO: At the same time, we could share ParseSessionData between multiple hasTracker() contexts.
      *       Only the URL is context-specific and shouldn't be needed
-     * @param url The URL for which this session is created
-     * @param sessionContents The contents of the document you want to parse
+     * @param unsavedFiles Optional unsaved document contents from the editor.
      */
-    ParseSessionData(const KDevelop::IndexedString& url, const QByteArray& contents, ClangIndex* index,
-                     const ClangParsingEnvironment& environment = ClangParsingEnvironment(), Options options = Options());
+    ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, ClangIndex* index,
+                     const ClangParsingEnvironment& environment, Options options = Options());
 
     ~ParseSessionData();
 
 private:
     friend class ParseSession;
 
-    void setUnit(CXTranslationUnit unit, const char* sessionPath);
+    void setUnit(CXTranslationUnit unit);
 
     QMutex m_mutex;
 
@@ -117,7 +118,7 @@ public:
 
     CXTranslationUnit unit() const;
 
-    bool reparse(const KDevelop::IndexedString& url, const QByteArray& sessionContents, const ClangParsingEnvironment& environment);
+    bool reparse(const QVector<UnsavedFile>& unsavedFiles, const ClangParsingEnvironment& environment);
 
     ClangParsingEnvironment environment() const;
 

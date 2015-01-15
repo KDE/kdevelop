@@ -17,6 +17,7 @@ add_library(kdevclangduchain STATIC
     macronavigationcontext.cpp
     navigationwidget.cpp
     todoextractor.cpp
+    unsavedfile.cpp
 )
 
 include_directories(

@@ -45,7 +45,7 @@ using namespace KDevelop;
 
 namespace {
 
-const QString FileName = "/tmp/stdin.cpp";
+const QString FileName = QStringLiteral("/tmp/stdin.cpp");
 
 }
 
@@ -70,8 +70,12 @@ void TestProblems::cleanupTestCase()
 QList<ProblemPointer> TestProblems::parse(const QByteArray& code)
 {
     ClangIndex index;
-    ParseSession session(ParseSessionData::Ptr(new ParseSessionData(IndexedString(FileName), code, &index)));
+    ClangParsingEnvironment environment;
+    environment.setTranslationUnitUrl(IndexedString(FileName));
+    ParseSession session(ParseSessionData::Ptr(new ParseSessionData({UnsavedFile(FileName, {code})},
+                                                                    &index, environment)));
     return session.problemsForFile(session.file());
+    return {};
 }
 
 void TestProblems::testNoProblems()
