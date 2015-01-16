@@ -298,8 +298,8 @@ QString ClangAdaptSignatureAction::toolTip() const
 ClangSignatureAssistant::ClangSignatureAssistant(ILanguageSupport* languageSupport)
     : StaticAssistant(languageSupport)
 {
-    connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
-            this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
+    connect(ICore::self()->languageController()->backgroundParser(), &BackgroundParser::parseJobFinished,
+            this, &ClangSignatureAssistant::parseJobFinished);
 }
 
 ClangSignatureAssistant::~ClangSignatureAssistant()
@@ -497,7 +497,8 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
     range.setEnd(end);
 
     IAssistantAction::Ptr action(new ClangAdaptSignatureAction(m_targetDecl, targetUrl, range, newSig, m_oldSig));
-    connect(action.data(), SIGNAL(executed(IAssistantAction*)), SLOT(reset()));
+    connect(action.data(), &IAssistantAction::executed,
+            this, &ClangSignatureAssistant::reset);
     addAction(action);
     emit actionsChanged();
 }

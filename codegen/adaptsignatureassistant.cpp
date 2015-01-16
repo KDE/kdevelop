@@ -286,7 +286,8 @@ void AdaptSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job)
     IAssistantAction::Ptr action(new AdaptSignatureAction(m_otherSideId, m_otherSideTopContext,
                                                           m_oldSignature, newSignature,
                                                           m_editingDefinition, renameActions));
-    connect(action.data(), SIGNAL(executed(IAssistantAction*)), SLOT(reset()));
+    connect(action.data(), &IAssistantAction::executed,
+            this, &AdaptSignatureAssistant::reset);
     addAction(action);
     emit actionsChanged();
 }

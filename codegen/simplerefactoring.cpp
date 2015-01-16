@@ -51,7 +51,8 @@ void SimpleRefactoring::fillContextMenu(ContextMenuExtension& extension, Context
                 QAction* action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
                 action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
                 action->setIcon(QIcon::fromTheme("edit-rename"));
-                connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
+                connect(action, &QAction::triggered,
+                        this, &SimpleRefactoring::executeRenameAction);
 
                 extension.addAction(ContextMenuExtension::RefactorGroup, action);
             }

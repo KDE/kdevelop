@@ -37,6 +37,8 @@ public:
     explicit SimpleRefactoring(QObject* parent = 0);
 
     void fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context);
+
+    using KDevelop::BasicRefactoring::executeRenameAction;
 };
 
 #endif

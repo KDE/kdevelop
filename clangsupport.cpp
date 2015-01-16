@@ -292,7 +292,8 @@ void ClangSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, 
     renameDeclarationAction->setText( i18n("Rename Declaration") );
     renameDeclarationAction->setIcon(QIcon::fromTheme("edit-rename"));
     renameDeclarationAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_R);
-    connect(renameDeclarationAction, SIGNAL(triggered(bool)), m_refactoring, SLOT(executeRenameAction()));
+    connect(renameDeclarationAction, &QAction::triggered,
+            m_refactoring, &SimpleRefactoring::executeRenameAction);
 }
 
 KDevelop::ContextMenuExtension ClangSupport::contextMenuExtension(KDevelop::Context* context)

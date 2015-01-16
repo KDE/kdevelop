@@ -160,8 +160,8 @@ ClangCodeCompletionModel::~ClangCodeCompletionModel()
 CodeCompletionWorker* ClangCodeCompletionModel::createCompletionWorker()
 {
     auto worker = new ClangCodeCompletionWorker(this);
-    connect(this, SIGNAL(requestCompletion(QUrl,KTextEditor::Cursor,QString)),
-            worker, SLOT(completionRequested(QUrl,KTextEditor::Cursor,QString)));
+    connect(this, &ClangCodeCompletionModel::requestCompletion,
+            worker, &ClangCodeCompletionWorker::completionRequested);
     return worker;
 }
 
