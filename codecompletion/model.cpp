@@ -61,13 +61,14 @@ bool includePathCompletionRequired(const QString& text)
 
 QSharedPointer<CodeCompletionContext> createCompletionContext(const KDevelop::DUContextPointer& context,
                                                               const ParseSessionData::Ptr& session,
+                                                              const QUrl& url,
                                                               const KTextEditor::Cursor& position,
                                                               const QString& text)
 {
     if (includePathCompletionRequired(text)) {
-        return QSharedPointer<IncludePathCompletionContext>(new IncludePathCompletionContext(context, session, position, text));
+        return QSharedPointer<IncludePathCompletionContext>(new IncludePathCompletionContext(context, session, url, position, text));
     } else {
-        return QSharedPointer<ClangCodeCompletionContext>(new ClangCodeCompletionContext(context, session, position, text));
+        return QSharedPointer<ClangCodeCompletionContext>(new ClangCodeCompletionContext(context, session, url, position, text));
     }
 }
 
@@ -112,7 +113,7 @@ public slots:
             return;
         }
 
-        auto completionContext = ::createCompletionContext(DUContextPointer(top), sessionData, position, text);
+        auto completionContext = ::createCompletionContext(DUContextPointer(top), sessionData, url, position, text);
 
         lock.lock();
         if (aborting()) {

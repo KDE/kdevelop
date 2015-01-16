@@ -83,7 +83,7 @@ void executeCompletionTest(const QString& code, const CompletionItemsList& expec
 
     foreach(CompletionItems items, expectedCompletionItems) {
         // TODO: We should not need to pass 'session' to the context, should just use the base class ctor
-        auto context = new ClangCodeCompletionContext(topPtr, sessionData, items.position, QString());
+        auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), items.position, QString());
         context->setFilters(filters);
 
         DUChainReadLocker lock;
@@ -109,7 +109,7 @@ void executeIncludePathCompletion(TestFile* file, const KTextEditor::Cursor& pos
 
     lock.unlock();
 
-    auto context = new IncludePathCompletionContext(topPtr, sessionData, position, file->fileContents());
+    auto context = new IncludePathCompletionContext(topPtr, sessionData, file->url().toUrl(), position, file->fileContents());
 
     lock.lock();
     auto tester = CodeCompletionItemTester<IncludePathCompletionContext>(QExplicitlySharedDataPointer<IncludePathCompletionContext>(context));

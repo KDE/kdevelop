@@ -268,7 +268,7 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         return;
     }
 
-    auto context = ClangHelpers::buildDUChain(session.file(), imports, session,
+    auto context = ClangHelpers::buildDUChain(session.mainFile(), imports, session,
                                               minimumFeatures(), includedFiles, clang()->index());
     setDuChain(context);
 

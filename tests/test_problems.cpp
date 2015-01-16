@@ -74,8 +74,7 @@ QList<ProblemPointer> TestProblems::parse(const QByteArray& code)
     environment.setTranslationUnitUrl(IndexedString(FileName));
     ParseSession session(ParseSessionData::Ptr(new ParseSessionData({UnsavedFile(FileName, {code})},
                                                                     &index, environment)));
-    return session.problemsForFile(session.file());
-    return {};
+    return session.problemsForFile(session.mainFile());
 }
 
 void TestProblems::testNoProblems()

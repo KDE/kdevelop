@@ -262,15 +262,15 @@ CompletionHelper::CompletionHelper()
 {
 }
 
-void CompletionHelper::computeCompletions(const ParseSession& session, const KTextEditor::Cursor& position)
+void CompletionHelper::computeCompletions(const ParseSession& session, CXFile file, const KTextEditor::Cursor& position)
 {
     const auto unit = session.unit();
 
-    CXSourceLocation location = clang_getLocation(unit, session.file(), position.line() + 1, position.column() + 1);
+    CXSourceLocation location = clang_getLocation(unit, file, position.line() + 1, position.column() + 1);
 
     if (clang_equalLocations(clang_getNullLocation(), location)) {
         clangDebug() << "Completion helper given invalid position " << position
-                 << " in file " << session.file();
+                 << " in file " << ClangString(clang_getFileName(file));
         return;
     }
 

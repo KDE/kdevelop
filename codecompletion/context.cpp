@@ -355,6 +355,7 @@ bool isValidSpecialCompletionIdentifier(const QualifiedIdentifier& identifier)
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
                                                        const ParseSessionData::Ptr& sessionData,
+                                                       const QUrl& url,
                                                        const KTextEditor::Cursor& position,
                                                        const QString& text
                                                       )
@@ -362,55 +363,44 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
     , m_results(nullptr, clang_disposeCodeCompleteResults)
     , m_parseSessionData(sessionData)
 {
+    const QByteArray file = url.toLocalFile().toUtf8();
+    ParseSession session(m_parseSessionData);
     {
-        ParseSession session(m_parseSessionData);
-        ClangString file(clang_getFileName(session.file()));
-
         const unsigned int completeOptions = clang_defaultCodeCompleteOptions();
 
-        if (!m_text.isEmpty()) {
-            clangDebug() << "Unsaved contents found for file" << file << "- creating CXUnsavedFile";
+        CXUnsavedFile unsaved;
+        unsaved.Filename = file.constData();
+        const QByteArray content = m_text.toUtf8();
+        unsaved.Contents = content.constData();
+        unsaved.Length = content.size() + 1; // + \0-byte
 
-            CXUnsavedFile unsaved;
-            const QByteArray content = m_text.toUtf8();
-            unsaved.Contents = content.constData();
-            unsaved.Length = content.size() + 1; // + \0-byte
-            unsaved.Filename = file.c_str();
-
-            m_results.reset(clang_codeCompleteAt(session.unit(), file.c_str(),
-                            position.line() + 1, position.column() + 1,
-                            &unsaved, 1u,
-                            completeOptions));
-        } else {
-            m_results.reset(clang_codeCompleteAt(session.unit(), file.c_str(),
-                            position.line() + 1, position.column() + 1,
-                            nullptr, 0u,
-                            completeOptions));
-        }
+        m_results.reset(clang_codeCompleteAt(session.unit(), file.constData(),
+                        position.line() + 1, position.column() + 1,
+                        content.isEmpty() ? nullptr : &unsaved, content.isEmpty() ? 0 : 1,
+                        completeOptions));
 
         if (!m_results) {
-            qCWarning(KDEV_CLANG) << "Something went wrong during 'clang_codeCompleteAt' for file" << file.toString();
+            qCWarning(KDEV_CLANG) << "Something went wrong during 'clang_codeCompleteAt' for file" << file;
         }
     }
 
     // check 'isValidPosition' after parsing the new content
-    if (!isValidPosition()) {
+    auto clangFile = session.file(file);
+    if (!isValidPosition(session.unit(), clangFile)) {
         m_valid = false;
         return;
     }
 
-    ParseSession session(m_parseSessionData);
-    m_completionHelper.computeCompletions(session, position);
+    m_completionHelper.computeCompletions(session, clangFile, position);
 }
 
 ClangCodeCompletionContext::~ClangCodeCompletionContext()
 {
 }
 
-bool ClangCodeCompletionContext::isValidPosition() const
+bool ClangCodeCompletionContext::isValidPosition(CXTranslationUnit unit, CXFile file) const
 {
-    ParseSession session(m_parseSessionData);
-    if (isInsideComment(session.unit(), session.file(), m_position.castToSimpleCursor())) {
+    if (isInsideComment(unit, file, m_position.castToSimpleCursor())) {
         clangDebug() << "Invalid completion context: Inside comment";
         return false;
     }

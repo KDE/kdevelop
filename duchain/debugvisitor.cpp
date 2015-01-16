@@ -28,6 +28,7 @@ struct ClientData
 {
     QTextStream* out;
     ParseSession* session;
+    CXFile file;
     uint depth;
 };
 
@@ -40,7 +41,7 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientDat
     uint line;
     uint column;
     clang_getFileLocation(location, &file, &line, &column, 0);
-    if (file != data->session->file()) {
+    if (file != data->file) {
         return CXChildVisit_Continue;
     }
 
@@ -79,7 +80,7 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientDat
 
     (*data->out) << endl;
 
-    ClientData childData{data->out, data->session, data->depth + 1};
+    ClientData childData{data->out, data->session, data->file, data->depth + 1};
     clang_visitChildren(cursor, &visitCursor, &childData);
 
     return CXChildVisit_Continue;
@@ -93,10 +94,10 @@ DebugVisitor::DebugVisitor(ParseSession* session)
 
 }
 
-void DebugVisitor::visit(CXTranslationUnit unit)
+void DebugVisitor::visit(CXTranslationUnit unit, CXFile file)
 {
     auto cursor = clang_getTranslationUnitCursor(unit);
     QTextStream out(stdout);
-    ClientData data {&out, m_session, 0};
+    ClientData data {&out, m_session, file, 0};
     clang_visitChildren(cursor, &visitCursor, &data);
 }

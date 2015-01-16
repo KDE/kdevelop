@@ -24,6 +24,7 @@
 
 #include <QStringList>
 #include <QVector>
+#include <clang-c/Index.h>
 
 #include <language/duchain/duchainpointer.h>
 
@@ -61,7 +62,7 @@ class CompletionHelper
 public:
     CompletionHelper();
 
-    void computeCompletions(const ParseSession& session,
+    void computeCompletions(const ParseSession& session, CXFile file,
                             const KTextEditor::Cursor& position);
 
     FunctionOverrideList overrides() const;

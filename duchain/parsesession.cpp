@@ -318,7 +318,12 @@ CXTranslationUnit ParseSession::unit() const
     return d ? d->m_unit : nullptr;
 }
 
-CXFile ParseSession::file() const
+CXFile ParseSession::file(const QByteArray& path) const
+{
+    return clang_getFile(unit(), path.constData());
+}
+
+CXFile ParseSession::mainFile() const
 {
     return d ? d->m_file : nullptr;
 }

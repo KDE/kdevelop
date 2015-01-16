@@ -91,14 +91,19 @@ private:
 
         if (!m_session.unit()) {
             qerr << "no AST tree could be generated" << endl;
-        } else {
-            qout << "AST tree successfully generated" << endl;
-            if (m_printAst) {
-                DebugVisitor visitor(&m_session);
-                visitor.visit(m_session.unit());
-            }
+            exit(255);
+            return;
         }
-        const auto problems = m_session.problemsForFile(m_session.file());
+
+        qout << "AST tree successfully generated" << endl;
+        auto file = m_session.mainFile();
+
+        if (m_printAst) {
+            DebugVisitor visitor(&m_session);
+            visitor.visit(m_session.unit(), file);
+        }
+
+        const auto problems = m_session.problemsForFile(file);
         if (!problems.isEmpty()) {
             qerr << endl << "problems encountered during parsing:" << endl;
             foreach(const ProblemPointer problem, problems) {
@@ -106,10 +111,6 @@ private:
             }
         } else {
             qout << "no problems encountered during parsing" << endl;
-        }
-
-        if (!m_session.unit()) {
-            exit(255);
         }
     }
 

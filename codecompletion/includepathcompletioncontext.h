@@ -32,6 +32,7 @@ class IncludePathCompletionContext : public KDevelop::CodeCompletionContext
 public:
     IncludePathCompletionContext(const KDevelop::DUContextPointer& context,
                                  const ParseSessionData::Ptr& sessionData,
+                                 const QUrl& url,
                                  const KTextEditor::Cursor& position,
                                  const QString& text);
 

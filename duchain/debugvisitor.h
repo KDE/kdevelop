@@ -30,7 +30,7 @@ class KDEVCLANGDUCHAIN_EXPORT DebugVisitor
 public:
     DebugVisitor(ParseSession* session);
 
-    void visit(CXTranslationUnit unit);
+    void visit(CXTranslationUnit unit, CXFile file);
 
 private:
     ParseSession* m_session;

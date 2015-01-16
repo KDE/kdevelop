@@ -330,8 +330,13 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
         return;
     }
 
+    CXFile file = session.file(fileUrl.toLocalFile().toUtf8());
+    if (!file) {
+        return;
+    }
+
     const KTextEditor::Cursor simpleCursor(invocationRange.start());
-    CXCursor cursor = getFunctionCursor(simpleCursor, session.unit(), session.file());
+    CXCursor cursor = getFunctionCursor(simpleCursor, session.unit(), file);
     if (clang_Cursor_isNull(cursor)) {
         return;
     }
@@ -381,7 +386,7 @@ void ClangSignatureAssistant::textChanged(KTextEditor::View* view, const KTextEd
         //the function could be defined in any file which includes us, but that
         //information is not available to use through clang's translation unit model. The
         //best we can do is guess at similar file names.
-        m_targetUnit = findCompanionFile(fileUrl, simpleCursor, session.file(), otherSide);
+        m_targetUnit = findCompanionFile(fileUrl, simpleCursor, file, otherSide);
 
         if (m_targetUnit.isEmpty()) {
             clangDebug() << "Could not find candidate target for " << fileUrl;
@@ -427,9 +432,11 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
     }
     clearActions();
 
+    // TODO: remove this lock?
     DUChainReadLocker lock;
     KTextEditor::Cursor c = KTextEditor::Cursor(m_view.data()->cursorPosition());
 
+    // TODO: there should be only one session
     const ParseSession sourceSession(getSession(m_view.data()->document()->url()));
     if (!sourceSession.data()) {
         reset();
@@ -448,15 +455,16 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
         targetUnit = sourceSession.unit();
     }
 
-    CXFile otherFile = clang_getFile(targetUnit, m_otherLoc.document.byteArray().constData());
-    CXCursor cursor = getFunctionCursor(c, sourceSession.unit(), sourceSession.file());
-    CXCursor otherCursor = getFunctionCursor(m_otherLoc, targetUnit, otherFile);
+    CXFile file = clang_getFile(targetUnit, qPrintable(m_view.data()->document()->url().toLocalFile()));
+    CXCursor cursor = getFunctionCursor(c, sourceSession.unit(), file);
     if (clang_Cursor_isNull(cursor)) {
-        clangDebug() << "Couldn't get source cursor " << clang_getFileName(sourceSession.file()) << ":" << c;
+        clangDebug() << "Couldn't get source cursor " << m_view.data()->document()->url() << ":" << c;
         reset();
         return;
     }
 
+    CXFile otherFile = clang_getFile(targetUnit, qPrintable(m_otherLoc.document.toUrl().toLocalFile()));
+    CXCursor otherCursor = getFunctionCursor(m_otherLoc, targetUnit, otherFile);
     if (clang_Cursor_isNull(otherCursor)) {
         clangDebug() << "Couldn't get target cursor " << clang_getFileName(otherFile) << ":" << m_otherLoc;
         reset();

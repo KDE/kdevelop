@@ -110,9 +110,14 @@ public:
     ParseSessionData::Ptr data() const;
 
     /**
-     * @return the file of this session
+     * @return find the CXFile for the given path.
      */
-    CXFile file() const;
+    CXFile file(const QByteArray& path) const;
+
+    /**
+     * @return the CXFile for the first file in this translation unit.
+     */
+    CXFile mainFile() const;
 
     QList<KDevelop::ProblemPointer> problemsForFile(CXFile file) const;
 

@@ -47,6 +47,7 @@ public:
 
     ClangCodeCompletionContext(const KDevelop::DUContextPointer& context,
                                const ParseSessionData::Ptr& sessionData,
+                               const QUrl& url,
                                const KTextEditor::Cursor& position,
                                const QString& text);
     ~ClangCodeCompletionContext();
@@ -66,7 +67,7 @@ private:
     void eventuallyAddGroup(const QString& name, int priority, const QList<KDevelop::CompletionTreeItemPointer>& items);
 
     /// Returns whether the we are at a valid completion-position
-    bool isValidPosition() const;
+    bool isValidPosition(CXTranslationUnit unit, CXFile file) const;
 
     std::unique_ptr<CXCodeCompleteResults, void(*)(CXCodeCompleteResults*)> m_results;
     QList<KDevelop::CompletionTreeElementPointer> m_ungrouped;

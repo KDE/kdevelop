@@ -164,6 +164,7 @@ public:
 
 IncludePathCompletionContext::IncludePathCompletionContext(const DUContextPointer& context,
                                                            const ParseSessionData::Ptr& sessionData,
+                                                           const QUrl& url,
                                                            const KTextEditor::Cursor& position,
                                                            const QString& text)
     : CodeCompletionContext(context, text, CursorInRevision::castFromSimpleCursor(position), 0)
