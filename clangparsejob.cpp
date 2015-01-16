@@ -240,9 +240,8 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         return;
     }
 
-    ParseSession session(existingData ? existingData : createSessionData());
-    const bool update = existingData && session.environment().translationUnitUrl() == m_environment.translationUnitUrl();
-    if (!update || !session.reparse(m_unsavedFiles, m_environment)) {
+    ParseSession session(existingData);
+    if (!session.data() || !session.reparse(m_unsavedFiles, m_environment)) {
         session.setData(createSessionData());
     }
 

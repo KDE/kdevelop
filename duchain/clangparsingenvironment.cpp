@@ -130,5 +130,6 @@ bool ClangParsingEnvironment::operator==(const ClangParsingEnvironment& other) c
     return m_defines == other.m_defines
         && m_includes == other.m_includes
         && m_pchInclude == other.m_pchInclude
-        && m_quality == other.m_quality;
+        && m_quality == other.m_quality
+        && m_tuUrl == other.m_tuUrl;
 }
