@@ -59,8 +59,6 @@ public:
     /**
      * Parse the given @p contents.
      *
-     * TODO: At the same time, we could share ParseSessionData between multiple hasTracker() contexts.
-     *       Only the URL is context-specific and shouldn't be needed
      * @param unsavedFiles Optional unsaved document contents from the editor.
      */
     ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, ClangIndex* index,

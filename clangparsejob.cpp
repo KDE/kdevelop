@@ -155,6 +155,16 @@ bool hasTracker(const IndexedString& url)
     return ICore::self()->languageController()->backgroundParser()->trackerForUrl(url);
 }
 
+ParseSessionData::Ptr findParseSession(const IndexedString &file)
+{
+    DUChainReadLocker lock;
+    const auto& context = DUChainUtils::standardContextForUrl(file.toUrl());
+    if (context) {
+        return ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(context->ast().data()));
+    }
+    return {};
+}
+
 }
 
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
@@ -221,26 +231,29 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         return;
     }
 
-    // try to find existing session data
-    ParseSessionData::Ptr existingData;
     {
         UrlParseLock urlLock(document());
         if (abortRequested() || !isUpdateRequired(ParseSession::languageString())) {
             return;
         }
-        DUChainWriteLocker lock;
-        // TODO: share the session data / AST between all files that are pinned to a given TU
-        const auto& context = DUChainUtils::standardContextForUrl(document().toUrl());
-        if (context) {
-            existingData = ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(context->ast().data()));
-        }
     }
 
+    ParseSession session(findParseSession(document()));
     if (abortRequested()) {
         return;
     }
 
-    ParseSession session(existingData);
+    if (!session.data() && document() != m_environment.translationUnitUrl()) {
+        // no cached data found for the current file, but maybe
+        // we are lucky and can grab it from the TU context
+        // this happens e.g. when originally a .cpp file is open and then one
+        // of its included files is opened in the editor.
+        session.setData(findParseSession(m_environment.translationUnitUrl()));
+        if (abortRequested()) {
+            return;
+        }
+    }
+
     if (!session.data() || !session.reparse(m_unsavedFiles, m_environment)) {
         session.setData(createSessionData());
     }
@@ -276,24 +289,18 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
     }
 
     {
-        DUChainWriteLocker lock;
-        if (::hasTracker(document()) || minimumFeatures() & TopDUContext::AST) {
-            // cache the parse session and the contained translation unit for this chain
-            // this then allows us to quickly reparse the document if it is changed by
-            // the user
-            // otherwise no editor component is open for this document and we can dispose
-            // the TU to save memory
+        if (minimumFeatures() & TopDUContext::AST) {
+            DUChainWriteLocker lock;
             context->setAst(IAstContainer::Ptr(session.data()));
         }
+#ifdef QT_DEBUG
+        DUChainReadLocker lock;
         auto file = parsingEnvironmentFile(context);
         Q_ASSERT(file);
         // verify that features and environment where properly set in ClangHelpers::buildDUChain
         Q_ASSERT(file->featuresSatisfied(TopDUContext::Features(minimumFeatures() & ~TopDUContext::ForceUpdateRecursive)));
-        Q_UNUSED(file);
+#endif
     }
-
-    // release the data here, so we don't lock it while highlighting
-    session.setData({});
 
     foreach(const auto& context, includedFiles) {
         if (!context) {
@@ -310,6 +317,16 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
             }
         }
         if (::hasTracker(context->url())) {
+            if (clang()->index()->translationUnitForUrl(context->url()) == m_environment.translationUnitUrl()) {
+                // cache the parse session and the contained translation unit for this chain
+                // this then allows us to quickly reparse the document if it is changed by
+                // the user
+                // otherwise no editor component is open for this document and we can dispose
+                // the TU to save memory
+                // share the session data with all contexts that are pinned to this TU
+                DUChainWriteLocker lock;
+                context->setAst(IAstContainer::Ptr(session.data()));
+            }
             languageSupport()->codeHighlighting()->highlightDUChain(context);
         }
     }
