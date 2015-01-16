@@ -432,8 +432,6 @@ void ClangSignatureAssistant::parseJobFinished(ParseJob* job)
     }
     clearActions();
 
-    // TODO: remove this lock?
-    DUChainReadLocker lock;
     KTextEditor::Cursor c = KTextEditor::Cursor(m_view.data()->cursorPosition());
 
     // TODO: there should be only one session
