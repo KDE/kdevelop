@@ -119,6 +119,15 @@ inline QString rangeText(const KTextEditor::Range& range, const QStringList& tex
     return ret.join("\n");
 }
 
+// need to have it as otherwise the arguments can exceed the maximum of 10
+static QString printRange(const KTextEditor::Range& r)
+{
+    return i18nc("text range line:column->line:column", "%1:%2->%3:%4",
+                 r.start().line(), r.start().column(),
+                 r.end().line(), r.end().column());
+}
+
+
 }
 
 DocumentChangeSet::DocumentChangeSet()
@@ -469,14 +478,6 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
     }
     output = textLines.join("\n");
     return true;
-}
-
-// need to have it as otherwise the arguments can exceed the maximum of 10
-static QString printRange(const KTextEditor::Range& r)
-{
-    return i18nc("text range line:column->line:column", "%1:%2->%3:%4",
-                 r.start().line(), r.start().column(),
-                 r.end().line(), r.end().column());
 }
 
 //Removes all duplicate changes for a single file, and then returns (via filteredChanges) the filtered duplicates
