@@ -212,7 +212,8 @@ QString Problem::sourceString() const
 
 QString Problem::toString() const
 {
-    return i18nc("problem description", "%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)"
+    return i18nc("<severity>: <description> in <url>:[<range>]: <explanation> (found by <source>)",
+                 "%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)"
         , severityString()
         , description()
         , url().str()

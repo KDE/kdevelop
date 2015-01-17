@@ -316,12 +316,10 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
             const DocumentChange& change(*sortedChangesList[pos]);
             if(!dynamic->replace(change.m_range, change.m_oldText, change.m_newText, change.m_ignoreOldText))
             {
-                QString warningString = i18n("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\""
+                QString warningString = i18nc("Inconsistent change in <filename> between <range>, found <oldText> (encountered <foundText>) -> <newText>",
+                                              "Inconsistent change in %1 between %2, found %3 (encountered \"%4\") -> \"%5\""
                     , change.m_document.str()
-                    , change.m_range.start().line()
-                    , change.m_range.start().column()
-                    , change.m_range.end().line()
-                    , change.m_range.end().column()
+                    , printRange(change.m_range)
                     , change.m_oldText
                     , dynamic->rangeText(change.m_range)
                     , change.m_newText);
@@ -441,13 +439,12 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                 }
             }
         }else{
-            QString warningString = i18n("Inconsistent change in %1 at %2:%3 -> %4:%5"
-                                            " = \"%6\"(encountered \"%7\") -> \"%8\""
+            QString warningString = i18nc("Inconsistent change in <document> at <range>"
+                                         " = <oldText> (encountered <encountered>) -> <newText>",
+                                         "Inconsistent change in %1 at %2"
+                                         " = \"%3\"(encountered \"%4\") -> \"%5\""
                                             , file.str()
-                                            , change.m_range.start().line()
-                                            , change.m_range.start().column()
-                                            , change.m_range.end().line()
-                                            , change.m_range.end().column()
+                                            , printRange(change.m_range)
                                             , change.m_oldText
                                             , encountered
                                             , change.m_newText);
@@ -520,7 +517,11 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
                 continue;
             } else {
                 return DocumentChangeSet::ChangeResult(
-                       i18n("Inconsistent change-request at %1; "
+                       i18nc("Inconsistent change-request at <document>:"
+                             "intersecting changes: "
+                             "<previous-oldText> -> <previous-newText> @<range> & "
+                             "<new-oldText> -> <new-newText> @<range>",
+                               "Inconsistent change-request at %1; "
                                "intersecting changes: "
                                "\"%2\"->\"%3\"@%4 & \"%5\"->\"%6\"@%7 "
                         , file.str()
