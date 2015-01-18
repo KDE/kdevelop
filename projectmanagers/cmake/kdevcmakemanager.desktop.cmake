@@ -36,6 +36,7 @@ Name[x-test]=xxCMake Project Managerxx
 Name[zh_CN]=CMake 工程管理器
 Name[zh_TW]=CMake 專案管理員
 GenericName=Project Manager
+GenericName[ar]=مدير المشاريع
 GenericName[bs]=Rukovodilac projekta
 GenericName[ca]=Gestor de projectes
 GenericName[ca@valencia]=Gestor de projectes

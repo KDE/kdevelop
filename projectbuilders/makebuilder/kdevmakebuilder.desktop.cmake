@@ -36,6 +36,7 @@ Name[x-test]=xxMake Project Builderxx
 Name[zh_CN]=Make 工程构建器
 Name[zh_TW]=Make 專案建立器
 GenericName=Project Builder
+GenericName[ar]=بنّاء المشاريع
 GenericName[bs]=Graditelj projekta
 GenericName[ca]=Constructor de projectes
 GenericName[ca@valencia]=Constructor de projectes

@@ -34,6 +34,7 @@ Name[x-test]=xxCustom Makefile Project Managerxx
 Name[zh_CN]=自定义 Makefile 工程管理器
 Name[zh_TW]=自訂 Makefile 專案管理員
 GenericName=Project Manager
+GenericName[ar]=مدير المشاريع
 GenericName[bs]=Rukovodilac projekta
 GenericName[ca]=Gestor de projectes
 GenericName[ca@valencia]=Gestor de projectes
