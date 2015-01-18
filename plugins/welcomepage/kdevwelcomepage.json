@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Configure which macros and include directories/files will be added to the parser during project parsing.", 
+        "Description[ar]": "اضبط أيّ الماكروهات والملفّات/الأدلّة المضمّنة ستُضاف إلى المحلّل أثناء تحليل المشروع.", 
         "Description[ca]": "Configura quines macros i directoris/fitxers s'afegiran a l'analitzador durant l'anàlisi del projecte.", 
         "Description[de]": "Einstellung der Makros und Include-Ordner/-Dateien, die für den Parser während des Einlesens des Projekts hinzugefügt werden.", 
         "Description[en_GB]": "Configure which macros and include directories/files will be added to the parser during project parsing.", 
@@ -11,12 +12,14 @@
         "Description[pt]": "Configura as macros e ficheiros/pastas de inclusão a adicionar ao processador, durante o processamento do projecto.", 
         "Description[pt_BR]": "Configura quais macros e arquivos/pastas incluídos serão adicionados ao processador durante o processamento do projeto.", 
         "Description[sk]": "Nastaviť, ktoré makrá a zahrnuté adresáre/súbory sa pridajú do spracovača počas spracovania projektu.", 
+        "Description[sl]": "Nastavi, kateri makri in mape/datoteke z vključitvami bodo dodane razčlenjevalniku med razčlenjevanjem projekta.", 
         "Description[sv]": "Anpassa vilka makron och filer eller kataloger att inkludera som läggs till i tolken under projekttolkning.", 
         "Description[uk]": "Налаштувати макроси і включені каталоги або файли, які буде додано під час обробки проекту.", 
         "Description[x-test]": "xxConfigure which macros and include directories/files will be added to the parser during project parsing.xx", 
         "Icon": "kdevelop", 
         "Id": "KDevWelcomePage", 
         "Name": "KDevelop Welcome Page", 
+        "Name[ar]": "صفحة ترحيب مطوّرك", 
         "Name[ca]": "Pàgina de benvinguda del KDevelop", 
         "Name[de]": "KDevelop-Startseite", 
         "Name[en_GB]": "KDevelop Welcome Page", 

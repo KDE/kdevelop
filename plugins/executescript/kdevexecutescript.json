@@ -6,6 +6,7 @@
             }
         ], 
         "Description": "This plugin allows running of scripts.", 
+        "Description[ar]": "تسمح هذه الملحقة بتنفيذ السّكرِبتات.", 
         "Description[ca]": "Aquest connector permet executar scripts.", 
         "Description[de]": "Dieses Modul ermöglicht das Ausführen von Skripten.", 
         "Description[en_GB]": "This plugin allows running of scripts.", 
@@ -16,6 +17,7 @@
         "Description[pt]": "Este 'plugin' permite a execução de programas.", 
         "Description[pt_BR]": "Este plugin permite a execução de programas.", 
         "Description[sk]": "Tento plugin povoľuje spúšťanie skriptov.", 
+        "Description[sl]": "Ta vstavek omogoča zaganjanje skript.", 
         "Description[sv]": "Insticksprogrammet gör det möjligt att köra skript.", 
         "Description[uk]": "За допомогою цього додатка можна запускати скрипти.", 
         "Description[x-test]": "xxThis plugin allows running of scripts.xx", 
@@ -23,6 +25,7 @@
         "Id": "kdevexecutescript", 
         "License": "GPL", 
         "Name": "Execute Scripts", 
+        "Name[ar]": "نفّذ سكرِبتات", 
         "Name[bg]": "Изпълнение на скриптове", 
         "Name[bs]": "Izvrši skruptu", 
         "Name[ca@valencia]": "Executa scripts", 

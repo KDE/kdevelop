@@ -17,6 +17,7 @@
         "Description[pt]": "Este 'plugin' mostra uma vista gráfica sobre todos os documentos abertos de momento e separa-os pelo seu tipo MIME.", 
         "Description[pt_BR]": "Este plugin mostra uma vista gráfica sobre todos os documentos carregados no momento e separa-os por tipo MIME.", 
         "Description[sk]": "Tento plugin zobrazí grafický pohľad všetkých dokumentov aktuálne načítaných a rozdelí ich podľa mimetype.", 
+        "Description[sl]": "Ta vstavek prikazuje vse trenutno naložene dokumente in jih ločuje glede na vrsto MIME.", 
         "Description[sv]": "Insticksprogrammet visar en grafisk vy av alla dokument som för närvarande har laddats och delar upp dem enligt Mime-typ.", 
         "Description[uk]": "Цей додаток відображає у графічному вигляді всі відкриті документи і впорядковує їх за типом MIME.", 
         "Description[x-test]": "xxThis plugin displays a graphical view of all documents currently loaded and separates them by mimetype.xx", 
