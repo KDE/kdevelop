@@ -46,7 +46,7 @@ class KDevelop::BranchesListModelPrivate
         {
         }
 
-        QScopedPointer<IBranchingVersionControl> dvcsplugin;
+        IBranchingVersionControl * dvcsplugin;
         QUrl repo;
 };
 
@@ -154,12 +154,12 @@ QUrl BranchesListModel::repository() const
 
 KDevelop::IBranchingVersionControl* BranchesListModel::interface()
 {
-    return d->dvcsplugin.data();
+    return d->dvcsplugin;
 }
 
 void BranchesListModel::initialize(KDevelop::IBranchingVersionControl* branching, const QUrl& r)
 {
-    d->dvcsplugin.reset(branching);
+    d->dvcsplugin = branching;
     d->repo = r;
     refresh();
 }
