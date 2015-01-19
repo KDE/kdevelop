@@ -23,6 +23,7 @@
 #include <QtCore/QCoreApplication>
 #include <QtDBus/QDBusConnection>
 #include <QtCore/QDebug>
+#include <QDataStream>
 
 #include <KLocalizedString>
 

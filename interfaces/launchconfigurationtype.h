@@ -22,8 +22,8 @@
 
 #include "interfacesexport.h"
 
-#include <QtCore/QList>
-#include <QtCore/QStringList>
+#include <QStringList>
+#include <QObject>
 
 class QMenu;
 class QIcon;

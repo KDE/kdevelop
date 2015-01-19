@@ -23,7 +23,8 @@
 #ifndef KDEVPLATFORM_IPROJECTFILEMANAGER_H
 #define KDEVPLATFORM_IPROJECTFILEMANAGER_H
 
-#include <QtCore/QStringList>
+#include <QObject>
+#include <QStringList>
 
 #include <project/projectexport.h>
 
