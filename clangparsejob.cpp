@@ -258,6 +258,12 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         session.setData(createSessionData());
     }
 
+    if (!session.unit()) {
+        // failed to parse file, unpin and don't try again
+        clang()->index()->unpinTranslationUnitForUrl(document());
+        return;
+    }
+
     if (!clang_getFile(session.unit(), document().byteArray())) {
         // this parse job's document does not exist in the pinned translation unit
         // so we need to unpin and re-add this document
@@ -265,10 +271,6 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         // and shouldn't be a common case
         clang()->index()->unpinTranslationUnitForUrl(document());
         ICore::self()->languageController()->backgroundParser()->addDocument(document(), minimumFeatures(), priority());
-        return;
-    }
-
-    if (abortRequested() || !session.unit()) {
         return;
     }
 
