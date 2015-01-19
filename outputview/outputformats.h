@@ -14,6 +14,7 @@
 
 #include <QString>
 #include <QRegularExpression>
+#include <KLocalizedString>
 
 namespace KDevelop
 {
@@ -21,9 +22,9 @@ namespace KDevelop
 struct ActionFormat
 {
     ActionFormat() = default;
-    ActionFormat( const QString& _action, const QString& _tool, const QString& regExp, int file );
-    ActionFormat( const QString& _action, int tool, int file, const QString& regExp );
-    QString action;  // translated string
+    ActionFormat( const KLocalizedString& label, const QString& _tool, const QString& regExp, int file );
+    ActionFormat( const KLocalizedString& label, int tool, int file, const QString& regExp );
+    KLocalizedString label;
     QRegularExpression expression;
     QString tool;
     int toolGroup;
