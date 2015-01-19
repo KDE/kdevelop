@@ -165,40 +165,40 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 {
     // A list of filters for possible compiler, linker, and make actions
     static const QVector<ActionFormat> ACTION_FILTERS {
-        ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), 1, 2, "(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|"
+        ActionFormat( i18nc("compiling a file", "compiling"), 1, 2, "(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|"
                         "g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|"
                         "java|hpf|f|F|f90|F90|f95|F95))"),
         //moc and uic
-        ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)"),
+        ActionFormat( i18nc("generating a file", "generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)"),
         //libtool linking
-        ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable", "linking"),
+        ActionFormat( i18nc("Linking object files into a library or executable", "linking"),
                         "libtool", "/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)", 1 ),
         //unsermake
-        ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), 1, 1, "^compiling (.*)" ),
-        ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), 1, 2, "^generating (.*)" ),
-        ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
+        ActionFormat( i18nc("compiling a file", "compiling"), 1, 1, "^compiling (.*)" ),
+        ActionFormat( i18nc("generating a file", "generating"), 1, 2, "^generating (.*)" ),
+        ActionFormat( i18nc("Linking object files into a library or executable",
                         "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)"),
-        ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
+        ActionFormat( i18nc("Linking object files into a library or executable",
                         "linking"), 1, 2, "^linking (.*)" ),
         //cmake
-        ActionFormat( I18N_NOOP2_NOSTRIP("", "built"), -1, 1, "\\[.+%\\] Built target (.*)" ),
-        ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), "cmake", "\\[.+%\\] Building .* object (.*)CMakeFiles/", 1 ),
-        ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), -1, 1, "\\[.+%\\] Generating (.*)" ),
-        ActionFormat( I18N_NOOP2_NOSTRIP("Linking object files into a library or executable",
+        ActionFormat( i18nc("finished building a target", "built"), -1, 1, "\\[.+%\\] Built target (.*)" ),
+        ActionFormat( i18nc("compiling a file", "compiling"), "cmake", "\\[.+%\\] Building .* object (.*)CMakeFiles/", 1 ),
+        ActionFormat( i18nc("generating a file", "generating"), -1, 1, "\\[.+%\\] Generating (.*)" ),
+        ActionFormat( i18nc("Linking object files into a library or executable",
                         "linking"), -1, 1, "^Linking (.*)" ),
-        ActionFormat( I18N_NOOP2_NOSTRIP("", "configuring"), "cmake", "(-- Configuring (done|incomplete)|-- Found|-- Adding|-- Enabling)", -1 ),
-        ActionFormat( I18N_NOOP2_NOSTRIP("", "installing"), -1, 1, "-- Installing (.*)" ),
+        ActionFormat( i18nc("configuring a project", "configuring"), "cmake", "(-- Configuring (done|incomplete)|-- Found|-- Adding|-- Enabling)", -1 ),
+        ActionFormat( i18nc("installing a file", "installing"), -1, 1, "-- Installing (.*)" ),
         //libtool install
-        ActionFormat( I18N_NOOP2_NOSTRIP("", "creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 ),
-        ActionFormat( I18N_NOOP2_NOSTRIP("", "installing"), "", "/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs"
+        ActionFormat( i18nc("creating a folder", "creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 ),
+        ActionFormat( i18nc("installing a file", "installing"), "", "/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs"
                         "|bin/sh\\s.*libtool.*--mode=install).*\\s([^\\s;]+)", 1 ),
         //dcop
-        ActionFormat( I18N_NOOP2_NOSTRIP("", "generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 ),
-        ActionFormat( I18N_NOOP2_NOSTRIP("", "compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 ),
+        ActionFormat( i18nc("generating a file", "generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 ),
+        ActionFormat( i18nc("compiling a file", "compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 ),
         // match against Entering directory to update current build dir
-        ActionFormat( "", "cd", "", "make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'", 2),
+        ActionFormat( "cd", "", "make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'", 2),
         // waf and scons use the same basic convention as make
-        ActionFormat( "", "cd", "", "(Waf|scons): Entering directory (\\`|\\')(.+)'", 3)
+        ActionFormat( "cd", "", "(Waf|scons): Entering directory (\\`|\\')(.+)'", 3)
     };
 
     const QByteArray cd = "cd";
@@ -210,7 +210,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             item.type = FilteredItem::ActionItem;
             if( curActFilter.fileGroup != -1 && curActFilter.toolGroup != -1 ) {
                 item.shortenedText = QStringLiteral( "%1 %2 (%3)")
-                    .arg(i18nc(curActFilter.context, curActFilter.action))
+                    .arg(curActFilter.action)
                     .arg(match.captured(curActFilter.fileGroup))
                     .arg(match.captured(curActFilter.toolGroup));
             }

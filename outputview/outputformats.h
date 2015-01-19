@@ -21,10 +21,9 @@ namespace KDevelop
 struct ActionFormat
 {
     ActionFormat() = default;
-    ActionFormat( const char* context, const char* _action, const QString& _tool, const QString& regExp, int file );
-    ActionFormat( const char* context, const char* _action, int tool, int file, const QString& regExp );
-    const char* context; // translation context for action
-    const char* action;  // translated string
+    ActionFormat( const QString& _action, const QString& _tool, const QString& regExp, int file );
+    ActionFormat( const QString& _action, int tool, int file, const QString& regExp );
+    QString action;  // translated string
     QRegularExpression expression;
     QString tool;
     int toolGroup;
