@@ -70,6 +70,18 @@ static ConfigEntry findConfigForItem(const QList<ConfigEntry>& paths, const KDev
     return ret;
 }
 
+void merge(Defines* target, const Defines& source)
+{
+    if (target->isEmpty()) {
+        *target = source;
+        return;
+    }
+
+    for (auto it = source.constBegin(); it != source.constEnd(); ++it) {
+        target->insert(it.key(), it.value());
+    }
+}
+
 }
 
 K_PLUGIN_FACTORY(DefinesAndIncludesManagerFactory, registerPlugin<DefinesAndIncludesManager>(); )
@@ -97,20 +109,14 @@ Defines DefinesAndIncludesManager::defines( ProjectBaseItem* item, Type type  ) 
 
     for (auto provider : m_providers) {
         if (provider->type() & type) {
-            auto result = provider->defines(item);
-            for (auto it = result.constBegin(); it != result.constEnd(); it++) {
-                defines[it.key()] = it.value();
-            }
+            merge(&defines, provider->defines(item));
         }
     }
 
     if ( type & ProjectSpecific ) {
         auto buildManager = item->project()->buildSystemManager();
         if ( buildManager ) {
-            auto def = buildManager->defines(item);
-            for ( auto it = def.constBegin(); it != def.constEnd(); it++ ) {
-                defines[it.key()] = it.value();
-            }
+            merge(&defines, buildManager->defines(item));
         }
     }
 
@@ -118,10 +124,7 @@ Defines DefinesAndIncludesManager::defines( ProjectBaseItem* item, Type type  ) 
     if (type & UserDefined) {
         auto cfg = item->project()->projectConfiguration().data();
 
-        const auto result = findConfigForItem(m_settings.readPaths(cfg), item).defines;
-        for (auto it = result.constBegin(); it != result.constEnd(); it++) {
-            defines[it.key()] = it.value();
-        }
+        merge(&defines, findConfigForItem(m_settings.readPaths(cfg), item).defines);
     }
 
     return defines;
