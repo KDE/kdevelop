@@ -4,6 +4,7 @@
         "Description[ca]": "Implementació del llenguatge C/C++ (basat en Clang)", 
         "Description[cs]": "Podpora jazyka C/C++ (založeno na Clang)", 
         "Description[de]": "Sprachunterstützung für C/C++ (Clang-basiert)", 
+        "Description[en_GB]": "C/C++ Language Support (Clang-based)", 
         "Description[es]": "Implementación del lenguaje C/C++ (basado en Clang)", 
         "Description[hu]": "C/C++ nyelvi támogatás (Clang-alapú)", 
         "Description[nl]": "Ondersteuning voor de talen C/C++", 
