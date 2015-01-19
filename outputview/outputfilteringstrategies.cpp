@@ -196,13 +196,11 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
         ActionFormat( i18nc("generating a file", "generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 ),
         ActionFormat( i18nc("compiling a file", "compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 ),
         // match against Entering directory to update current build dir
-        ActionFormat( "cd", "", "make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'", 2),
+        ActionFormat( QStringLiteral("cd"), "", "make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'", 2),
         // waf and scons use the same basic convention as make
-        ActionFormat( "cd", "", "(Waf|scons): Entering directory (\\`|\\')(.+)'", 3)
+        ActionFormat( QStringLiteral("cd"), "", "(Waf|scons): Entering directory (\\`|\\')(.+)'", 3)
     };
 
-    const QByteArray cd = "cd";
-    const QByteArray compiling = "compiling";
     FilteredItem item(line);
     foreach( const ActionFormat& curActFilter, ACTION_FILTERS ) {
         const auto match = curActFilter.expression.match(line);
@@ -214,7 +212,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
                     .arg(match.captured(curActFilter.fileGroup))
                     .arg(match.captured(curActFilter.toolGroup));
             }
-            if( curActFilter.action == cd ) {
+            if( curActFilter.action == "cd" ) {
                 const Path path(match.captured(curActFilter.fileGroup));
                 d->m_currentDirs.push_back( path );
                 d->m_positionInCurrentDirs.insert( path , d->m_currentDirs.size() - 1 );
@@ -224,7 +222,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             // and use it to find out about the build paths encountered during a build.
             // They are later searched by pathForFile to find source files corresponding to
             // compiler errors.
-            if ( curActFilter.action == compiling && curActFilter.tool == "cmake") {
+            if ( curActFilter.action == "compiling" && curActFilter.tool == "cmake") {
                 d->putDirAtEnd(Path(d->m_buildDir, match.captured(curActFilter.fileGroup).mid(1)));
             }
             break;
