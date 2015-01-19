@@ -1007,5 +1007,25 @@ void TestDUChain::benchDUChainItemFactory_copy_data()
   QTest::newRow("flip") << 2;
 }
 
+void TestDUChain::benchDeclarationQualifiedIdentifier()
+{
+  QVector<DUContext*> contexts;
+  contexts.reserve(10);
+  contexts << new TopDUContext(IndexedString("/tmp/something"), {0, 0, INT_MAX, INT_MAX});
+  for (int i = 1; i < contexts.capacity(); ++i) {
+    contexts << new DUContext({0, 0, INT_MAX, INT_MAX}, contexts.at(i-1));
+    contexts.last()->setLocalScopeIdentifier(QualifiedIdentifier(QString::number(i)));
+  }
+  auto dec = new Declaration({0, 0, 0, 1}, contexts.last());
+  dec->setIdentifier(Identifier(QStringLiteral("myDecl")));
+
+  qDebug() << "start benchmark!";
+  qint64 count = 0;
+  QBENCHMARK {
+    count += dec->qualifiedIdentifier().count();
+  }
+  QVERIFY(count > 0);
+}
+
 #include "test_duchain.moc"
 #include "moc_test_duchain.cpp"
