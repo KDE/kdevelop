@@ -692,7 +692,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
       if (QFileInfo(path).isRelative())
         path = workingDirectory + '/' + path;
 
-      ret.paths << Path(path);
+      ret.paths << internPath(path);
     }
   }
 
@@ -705,7 +705,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
       if (match.lastCapturedIndex() > 1) {
         value = unescape(match.capturedRef(match.lastCapturedIndex()));
       }
-      ret.defines[match.captured(1)] = value;
+      ret.defines[internString(match.captured(1))] = internString(value);
     }
   }
 
