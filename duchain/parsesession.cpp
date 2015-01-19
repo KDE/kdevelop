@@ -162,7 +162,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     Q_ASSERT(definesFile.isWritable());
     const auto& defines = environment.defines();
     for (auto it = defines.begin(); it != defines.end(); ++it) {
-        definesStream << "#define " << it.key() << ' ' << it.value() << '\n';
+        definesStream << QStringLiteral("#define ") << it.key() << ' ' << it.value() << '\n';
     }
     definesStream.flush();
     otherArgs << definesFile.fileName().toUtf8();
