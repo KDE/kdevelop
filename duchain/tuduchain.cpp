@@ -259,7 +259,7 @@ TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContext
     }
 }
 
-DeclarationPointer TUDUChain::findDeclaration(CXCursor cursor)
+DeclarationPointer TUDUChain::findDeclaration(CXCursor cursor) const
 {
     const auto cursorHash = clang_hashCursor(cursor);
     const auto it = m_cursorToDeclarationCache.constFind(cursorHash);
@@ -348,7 +348,7 @@ AbstractType* TUDUChain::createDelayedType(CXType type) const
 
 void TUDUChain::setIdTypeDecl(CXCursor typeCursor, IdentifiedType* idType) const
 {
-    DeclarationPointer decl = ClangHelpers::findDeclaration(typeCursor, m_includes);
+    DeclarationPointer decl = findDeclaration(typeCursor);
     DUChainReadLocker lock;
     if (decl) {
         idType->setDeclaration(decl.data());

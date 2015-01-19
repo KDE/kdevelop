@@ -651,12 +651,12 @@ private:
     const CXFile m_file;
     const IncludeFileContexts &m_includes;
 
-    DeclarationPointer findDeclaration(CXCursor cursor);
+    DeclarationPointer findDeclaration(CXCursor cursor) const;
 
     std::unordered_map<DUContext*, std::vector<CXCursor>> m_uses;
     /// At these location offsets (cf. @ref clang_getExpansionLocation) we encountered macro expansions
     QSet<unsigned int> m_macroExpansionLocations;
-    QHash<unsigned int, DeclarationPointer> m_cursorToDeclarationCache;
+    mutable QHash<unsigned int, DeclarationPointer> m_cursorToDeclarationCache;
     CurrentContext *m_parentContext;
 
     const bool m_update;
