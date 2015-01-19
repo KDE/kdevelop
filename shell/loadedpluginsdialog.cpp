@@ -131,7 +131,7 @@ public:
         delete pushButton;
     }
 
-    virtual QList<QWidget *> createItemWidgets(const QModelIndex &index) const
+    virtual QList<QWidget *> createItemWidgets(const QModelIndex &/*index*/) const
     {
         return QList<QWidget *>();
     }
