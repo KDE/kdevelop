@@ -84,6 +84,13 @@ class MakeFileResolver
                                                       const QString& makeParameters, const SourcePathInformation& source, int maxDepth );
     QString m_source;
     QString m_build;
+
+    // reuse cached instances of Paths and strings, to share memory where possible
+    mutable QHash<QString, KDevelop::Path> m_pathCache;
+    mutable QSet<QString> m_stringCache;
+
+    KDevelop::Path internPath(const QString& path) const;
+    QString internString(const QString& string) const;
 };
 
 #endif

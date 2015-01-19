@@ -727,3 +727,22 @@ void MakeFileResolver::setOutOfSourceBuildSystem(const QString& source, const QS
   m_source = QDir::cleanPath(source);
   m_build = QDir::cleanPath(m_build);
 }
+
+Path MakeFileResolver::internPath(const QString& path) const
+{
+    Path& ret = m_pathCache[path];
+    if (ret.isEmpty() != path.isEmpty()) {
+        ret = Path(path);
+    }
+    return ret;
+}
+
+QString MakeFileResolver::internString(const QString& path) const
+{
+    auto it = m_stringCache.constFind(path);
+    if (it != m_stringCache.constEnd()) {
+        return *it;
+    }
+    m_stringCache.insert(path);
+    return path;
+}
