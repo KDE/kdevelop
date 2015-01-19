@@ -689,7 +689,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
           path = path.mid(1, path.length() - 2);
         }
       }
-      if (QFileInfo(path).isRelative())
+      if (QDir::isRelativePath(path))
         path = workingDirectory + '/' + path;
 
       ret.paths << internPath(path);
