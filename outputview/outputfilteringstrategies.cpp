@@ -207,6 +207,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
         if( match.hasMatch() ) {
             item.type = FilteredItem::ActionItem;
             if( curActFilter.fileGroup != -1 && curActFilter.toolGroup != -1 ) {
+                // FIXME: this is a string puzzle which needs to be fixed
                 item.shortenedText = QStringLiteral( "%1 %2 (%3)")
                     .arg(curActFilter.action)
                     .arg(match.captured(curActFilter.fileGroup))
