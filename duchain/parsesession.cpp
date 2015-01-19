@@ -39,6 +39,7 @@
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QTemporaryFile>
 
 #include <algorithm>
 
@@ -138,11 +139,10 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     }
     const auto& includes = environment.includes();
     const auto& pchInclude = environment.pchInclude();
-    const auto& defines = environment.defines();
     // uses QByteArray as smart-pointer for const char* ownership
     QVector<QByteArray> otherArgs;
     otherArgs.reserve(includes.system.size() + includes.project.size()
-                      + defines.size() + pchInclude.isValid());
+                      + pchInclude.isValid() + 1);
     args.reserve(args.size() + otherArgs.size());
     // NOTE: the PCH include must come before all other includes!
     if (pchInclude.isValid()) {
@@ -153,11 +153,20 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     }
     addIncludes(&args, &otherArgs, includes.system, "-isystem");
     addIncludes(&args, &otherArgs, includes.project, "-I");
+
+    /// TODO: share this file for all TUs that use the same defines (probably most in a project)
+    ///       best would be a PCH, if possible
+    QTemporaryFile definesFile;
+    definesFile.open();
+    QTextStream definesStream(&definesFile);
+    Q_ASSERT(definesFile.isWritable());
+    const auto& defines = environment.defines();
     for (auto it = defines.begin(); it != defines.end(); ++it) {
-        QByteArray define = QString("-D" + it.key() + '=' + it.value()).toUtf8();
-        otherArgs << define;
-        args << define.constData();
+        definesStream << "#define " << it.key() << ' ' << it.value() << '\n';
     }
+    definesStream.flush();
+    otherArgs << definesFile.fileName().toUtf8();
+    args << "-imacros" << otherArgs.last().constData();
 
     QVector<CXUnsavedFile> unsaved;
     //For PrecompiledHeader, we don't want unsaved contents (and contents.isEmpty())
