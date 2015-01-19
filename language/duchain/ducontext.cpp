@@ -46,13 +46,10 @@
 #include "ducontextdynamicdata.h"
 #include "util/debug.h"
 
-///It is fine to use one global static mutex here
-
+// maximum depth for DUContext::findDeclarationsInternal searches
 const uint maxParentDepth = 20;
 
 using namespace KTextEditor;
-
-//Stored statically for performance-reasons
 
 #ifndef NDEBUG
 #define ENSURE_CAN_WRITE_(x) {if(x->inDUChain()) { ENSURE_CHAIN_WRITE_LOCKED }}
