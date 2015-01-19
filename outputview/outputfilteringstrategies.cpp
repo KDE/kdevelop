@@ -165,40 +165,50 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 {
     // A list of filters for possible compiler, linker, and make actions
     static const QVector<ActionFormat> ACTION_FILTERS {
-        ActionFormat( i18nc("compiling a file", "compiling"), 1, 2, "(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|"
-                        "g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|"
-                        "java|hpf|f|F|f90|F90|f95|F95))"),
+        ActionFormat( i18nc("compiling a file", "compiling"), 1, 2,
+                      QStringLiteral("(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|java|hpf|f|F|f90|F90|f95|F95))")),
         //moc and uic
-        ActionFormat( i18nc("generating a file", "generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)"),
+        ActionFormat( i18nc("generating a file", "generating"), 1, 2,
+                      QStringLiteral("/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)")),
         //libtool linking
         ActionFormat( i18nc("Linking object files into a library or executable", "linking"),
-                        "libtool", "/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)", 1 ),
+                      QStringLiteral("libtool"), QStringLiteral("/bin/sh\\s.*libtool.*--mode=link\\s.*\\s-o\\s([^\\s;]+)"), 1 ),
         //unsermake
-        ActionFormat( i18nc("compiling a file", "compiling"), 1, 1, "^compiling (.*)" ),
-        ActionFormat( i18nc("generating a file", "generating"), 1, 2, "^generating (.*)" ),
-        ActionFormat( i18nc("Linking object files into a library or executable",
-                        "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)"),
-        ActionFormat( i18nc("Linking object files into a library or executable",
-                        "linking"), 1, 2, "^linking (.*)" ),
+        ActionFormat( i18nc("compiling a file", "compiling"), 1, 1,
+                      QStringLiteral("^compiling (.*)") ),
+        ActionFormat( i18nc("generating a file", "generating"), 1, 2,
+                      QStringLiteral("^generating (.*)") ),
+        ActionFormat( i18nc("Linking object files into a library or executable", "linking"), 1, 2,
+                      QStringLiteral("(gcc|cc|c\\+\\+|g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)")),
+        ActionFormat( i18nc("Linking object files into a library or executable", "linking"), 1, 2,
+                      QStringLiteral("^linking (.*)") ),
         //cmake
-        ActionFormat( i18nc("finished building a target", "built"), -1, 1, "\\[.+%\\] Built target (.*)" ),
-        ActionFormat( i18nc("compiling a file", "compiling"), "cmake", "\\[.+%\\] Building .* object (.*)CMakeFiles/", 1 ),
-        ActionFormat( i18nc("generating a file", "generating"), -1, 1, "\\[.+%\\] Generating (.*)" ),
-        ActionFormat( i18nc("Linking object files into a library or executable",
-                        "linking"), -1, 1, "^Linking (.*)" ),
-        ActionFormat( i18nc("configuring a project", "configuring"), "cmake", "(-- Configuring (done|incomplete)|-- Found|-- Adding|-- Enabling)", -1 ),
-        ActionFormat( i18nc("installing a file", "installing"), -1, 1, "-- Installing (.*)" ),
+        ActionFormat( i18nc("finished building a target", "built"), -1, 1,
+                      QStringLiteral("\\[.+%\\] Built target (.*)") ),
+        ActionFormat( i18nc("compiling a file", "compiling"), QStringLiteral("cmake"),
+                      QStringLiteral("\\[.+%\\] Building .* object (.*)CMakeFiles/"), 1 ),
+        ActionFormat( i18nc("generating a file", "generating"), -1, 1,
+                      QStringLiteral("\\[.+%\\] Generating (.*)") ),
+        ActionFormat( i18nc("Linking object files into a library or executable", "linking"), -1, 1,
+                      QStringLiteral("^Linking (.*)") ),
+        ActionFormat( i18nc("configuring a project", "configuring"), QStringLiteral("cmake"),
+                      QStringLiteral("(-- Configuring (done|incomplete)|-- Found|-- Adding|-- Enabling)"), -1 ),
+        ActionFormat( i18nc("installing a file", "installing"), -1, 1,
+                      QStringLiteral("-- Installing (.*)") ),
         //libtool install
-        ActionFormat( i18nc("creating a folder", "creating"), "", "/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)", 1 ),
-        ActionFormat( i18nc("installing a file", "installing"), "", "/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs"
-                        "|bin/sh\\s.*libtool.*--mode=install).*\\s([^\\s;]+)", 1 ),
+        ActionFormat( i18nc("creating a folder", "creating"), {},
+                      QStringLiteral("/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)"), 1 ),
+        ActionFormat( i18nc("installing a file", "installing"), {},
+                      QStringLiteral("/(?:usr/bin/install|bin/sh\\s.*mkinstalldirs|bin/sh\\s.*libtool.*--mode=install).*\\s([^\\s;]+)"), 1 ),
         //dcop
-        ActionFormat( i18nc("generating a file", "generating"), "dcopidl", "dcopidl .* > ([^\\s;]+)", 1 ),
-        ActionFormat( i18nc("compiling a file", "compiling"), "dcopidl2cpp", "dcopidl2cpp (?:\\S* )*([^\\s;]+)", 1 ),
+        ActionFormat( i18nc("generating a file", "generating"), QStringLiteral("dcopidl"),
+                      QStringLiteral("dcopidl .* > ([^\\s;]+)"), 1 ),
+        ActionFormat( i18nc("compiling a file", "compiling"), QStringLiteral("dcopidl2cpp"),
+                      QStringLiteral("dcopidl2cpp (?:\\S* )*([^\\s;]+)"), 1 ),
         // match against Entering directory to update current build dir
-        ActionFormat( QStringLiteral("cd"), "", "make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'", 2),
+        ActionFormat( QStringLiteral("cd"), "", QStringLiteral("make\\[\\d+\\]: Entering directory (\\`|\\')(.+)'"), 2),
         // waf and scons use the same basic convention as make
-        ActionFormat( QStringLiteral("cd"), "", "(Waf|scons): Entering directory (\\`|\\')(.+)'", 3)
+        ActionFormat( QStringLiteral("cd"), "", QStringLiteral("(Waf|scons): Entering directory (\\`|\\')(.+)'"), 3)
     };
 
     FilteredItem item(line);
@@ -241,58 +251,58 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
     using Indicator = QPair<QString, FilteredItem::FilteredOutputItemType>;
     static const QVector<Indicator> INDICATORS {
         // ld
-        Indicator("undefined reference", FilteredItem::ErrorItem),
-        Indicator("undefined symbol", FilteredItem::ErrorItem),
-        Indicator("ld: cannot find", FilteredItem::ErrorItem),
-        Indicator("no such file", FilteredItem::ErrorItem),
+        Indicator(QStringLiteral("undefined reference"), FilteredItem::ErrorItem),
+        Indicator(QStringLiteral("undefined symbol"), FilteredItem::ErrorItem),
+        Indicator(QStringLiteral("ld: cannot find"), FilteredItem::ErrorItem),
+        Indicator(QStringLiteral("no such file"), FilteredItem::ErrorItem),
         // gcc
-        Indicator("error", FilteredItem::ErrorItem),
+        Indicator(QStringLiteral("error"), FilteredItem::ErrorItem),
         // generic
-        Indicator("warning", FilteredItem::WarningItem),
-        Indicator("info", FilteredItem::InformationItem),
-        Indicator("note", FilteredItem::InformationItem),
+        Indicator(QStringLiteral("warning"), FilteredItem::WarningItem),
+        Indicator(QStringLiteral("info"), FilteredItem::InformationItem),
+        Indicator(QStringLiteral("note"), FilteredItem::InformationItem),
     };
 
     // A list of filters for possible compiler, linker, and make errors
     static const QVector<ErrorFormat> ERROR_FILTERS {
         // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
-        ErrorFormat( "^([^:\t]+):([0-9]+):([0-9]+):([^0-9]+)", 1, 2, 4, 3 ),
+        ErrorFormat( QStringLiteral("^([^:\t]+):([0-9]+):([0-9]+):([^0-9]+)"), 1, 2, 4, 3 ),
         // GCC
-        ErrorFormat( "^([^:\t]+):([0-9]+):([^0-9]+)", 1, 2, 3 ),
+        ErrorFormat( QStringLiteral("^([^:\t]+):([0-9]+):([^0-9]+)"), 1, 2, 3 ),
         // GCC
-        ErrorFormat( "^(In file included from |[ ]+from )([^: \\t]+):([0-9]+)(:|,)(|[0-9]+)", 2, 3, 5 ),
+        ErrorFormat( QStringLiteral("^(In file included from |[ ]+from )([^: \\t]+):([0-9]+)(:|,)(|[0-9]+)"), 2, 3, 5 ),
         // ICC
-        ErrorFormat( "^([^: \\t]+)\\(([0-9]+)\\):([^0-9]+)", 1, 2, 3, "intel" ),
+        ErrorFormat( QStringLiteral("^([^: \\t]+)\\(([0-9]+)\\):([^0-9]+)"), 1, 2, 3, QStringLiteral("intel") ),
         //libtool link
-        ErrorFormat( "^(libtool):( link):( warning): ", 0, 0, 0 ),
+        ErrorFormat( QStringLiteral("^(libtool):( link):( warning): "), 0, 0, 0 ),
         // make
-        ErrorFormat( "No rule to make target", 0, 0, 0 ),
+        ErrorFormat( QStringLiteral("No rule to make target"), 0, 0, 0 ),
         // cmake
-        ErrorFormat( "^([^: \\t]+):([0-9]+):", 1, 2, 0, "cmake" ),
+        ErrorFormat( QStringLiteral("^([^: \\t]+):([0-9]+):"), 1, 2, 0, QStringLiteral("cmake") ),
         // cmake
-        ErrorFormat( "CMake (Error|Warning) (|\\([a-zA-Z]+\\) )(in|at) ([^:]+):($|[0-9]+)", 4, 5, 1, "cmake" ),
+        ErrorFormat( QStringLiteral("CMake (Error|Warning) (|\\([a-zA-Z]+\\) )(in|at) ([^:]+):($|[0-9]+)"), 4, 5, 1, QStringLiteral("cmake") ),
         // cmake/automoc
         // example: AUTOMOC: error: /foo/bar.cpp The file includes (...),
         // example: AUTOMOC: error: /foo/bar.cpp: The file includes (...)
         // note: ':' after file name isn't always appended, see http://cmake.org/gitweb?p=cmake.git;a=commitdiff;h=317d8498aa02c9f486bf5071963bb2034777cdd6
         // example: AUTOGEN: error: /foo/bar.cpp: The file includes (...)
         // note: AUTOMOC got renamed to AUTOGEN at some point
-        ErrorFormat( "^(AUTOMOC|AUTOGEN): error: ([^:]+):? (The file .*)$", 2, 0, 0 ),
+        ErrorFormat( QStringLiteral("^(AUTOMOC|AUTOGEN): error: ([^:]+):? (The file .*)$"), 2, 0, 0 ),
         // via qt4_automoc
         // example: automoc4: The file "/foo/bar.cpp" includes the moc file "bar1.moc", but ...
-        ErrorFormat( "^automoc4: The file \"([^\"]+)\" includes the moc file", 1, 0, 0 ),
+        ErrorFormat( QStringLiteral("^automoc4: The file \"([^\"]+)\" includes the moc file"), 1, 0, 0 ),
         // Fortran
-        ErrorFormat( "\"(.*)\", line ([0-9]+):(.*)", 1, 2, 3 ),
+        ErrorFormat( QStringLiteral("\"(.*)\", line ([0-9]+):(.*)"), 1, 2, 3 ),
         // GFortran
-        ErrorFormat( "^(.*):([0-9]+)\\.([0-9]+):(.*)", 1, 2, 4, "gfortran", 3 ),
+        ErrorFormat( QStringLiteral("^(.*):([0-9]+)\\.([0-9]+):(.*)"), 1, 2, 4, QStringLiteral("gfortran"), 3 ),
         // Jade
-        ErrorFormat( "^[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)", 1, 2, 3 ),
+        ErrorFormat( QStringLiteral("^[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)"), 1, 2, 3 ),
         // ifort
-        ErrorFormat( "^fortcom: (.*): (.*), line ([0-9]+):(.*)", 2, 3, 1, "intel" ),
+        ErrorFormat( QStringLiteral("^fortcom: (.*): (.*), line ([0-9]+):(.*)"), 2, 3, 1, QStringLiteral("intel") ),
         // PGI
-        ErrorFormat( "PGF9(.*)-(.*)-(.*)-(.*) \\((.*): ([0-9]+)\\)", 5, 6, 4, "pgi" ),
+        ErrorFormat( QStringLiteral("PGF9(.*)-(.*)-(.*)-(.*) \\((.*): ([0-9]+)\\)"), 5, 6, 4, QStringLiteral("pgi") ),
         // PGI (2)
-        ErrorFormat( "PGF9(.*)-(.*)-(.*)-Symbol, (.*) \\((.*)\\)", 5, 5, 4, "pgi" ),
+        ErrorFormat( QStringLiteral("PGF9(.*)-(.*)-(.*)-Symbol, (.*) \\((.*)\\)"), 5, 5, 4, QStringLiteral("pgi") ),
     };
 
     FilteredItem item(line);
@@ -365,9 +375,9 @@ FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
 {
     // A list of filters for possible Python and PHP errors
     static const QList<ErrorFormat> SCRIPT_ERROR_FILTERS {
-        ErrorFormat( "^  File \"(.*)\", line ([0-9]+)(.*$|, in(.*)$)", 1, 2, -1 ),
-        ErrorFormat( "^.*(/.*):([0-9]+).*$", 1, 2, -1 ),
-        ErrorFormat( "^.* in (/.*) on line ([0-9]+).*$", 1, 2, -1 )
+        ErrorFormat( QStringLiteral("^  File \"(.*)\", line ([0-9]+)(.*$|, in(.*)$)"), 1, 2, -1 ),
+        ErrorFormat( QStringLiteral("^.*(/.*):([0-9]+).*$"), 1, 2, -1 ),
+        ErrorFormat( QStringLiteral("^.* in (/.*) on line ([0-9]+).*$"), 1, 2, -1 )
     };
 
     return FilteringStrategyUtils::match(SCRIPT_ERROR_FILTERS, line);
@@ -389,11 +399,11 @@ FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
     static const QList<ErrorFormat> QT_APPLICATION_ERROR_FILTERS {
         // QObject::connect related errors, also see err_method_notfound() in qobject.cpp
         // QObject::connect: No such slot Foo::bar() in /foo/bar.cpp:313
-        ErrorFormat("^QObject::connect: (?:No such|Parentheses expected,) (?:slot|signal) [^ ]* in (.*):([0-9]+)$", 1, 2, -1),
+        ErrorFormat(QStringLiteral("^QObject::connect: (?:No such|Parentheses expected,) (?:slot|signal) [^ ]* in (.*):([0-9]+)$"), 1, 2, -1),
         // ASSERT: "errors().isEmpty()" in file /foo/bar.cpp, line 49
-        ErrorFormat("^ASSERT: \"(.*)\" in file (.*), line ([0-9]+)$", 2, 3, -1),
+        ErrorFormat(QStringLiteral("^ASSERT: \"(.*)\" in file (.*), line ([0-9]+)$"), 2, 3, -1),
         // QFATAL : FooTest::testBar() ASSERT: "index.isValid()" in file /foo/bar.cpp, line 32
-        ErrorFormat("^QFATAL : (.*) ASSERT: \"(.*)\" in file (.*), line ([0-9]+)$", 3, 4, -1),
+        ErrorFormat(QStringLiteral("^QFATAL : (.*) ASSERT: \"(.*)\" in file (.*), line ([0-9]+)$"), 3, 4, -1),
         // Catch:
         // FAIL!  : FooTest::testBar() Compared pointers are not the same
         //    Actual   ...
@@ -403,7 +413,7 @@ FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
         // Do *not* catch:
         //    ...
         //    Loc: [Unknown file(0)]
-        ErrorFormat("^   Loc: \\[(.*)\\(([1-9][0-9]*)\\)\\]$", 1, 2, -1)
+        ErrorFormat(QStringLiteral("^   Loc: \\[(.*)\\(([1-9][0-9]*)\\)\\]$"), 1, 2, -1)
     };
 
     return FilteringStrategyUtils::match(QT_APPLICATION_ERROR_FILTERS, line);
@@ -425,11 +435,11 @@ FilteredItem StaticAnalysisFilterStrategy::errorInLine(const QString& line)
     // A list of filters for static analysis tools (krazy2, cppcheck)
     static const QList<ErrorFormat> STATIC_ANALYSIS_FILTERS {
         // CppCheck
-        ErrorFormat( "^\\[(.*):([0-9]+)\\]:(.*)", 1, 2, 3 ),
+        ErrorFormat( QStringLiteral("^\\[(.*):([0-9]+)\\]:(.*)"), 1, 2, 3 ),
         // krazy2
-        ErrorFormat( "^\\t([^:]+).*line#([0-9]+).*", 1, 2, -1 ),
+        ErrorFormat( QStringLiteral("^\\t([^:]+).*line#([0-9]+).*"), 1, 2, -1 ),
         // krazy2 without line info
-        ErrorFormat( "^\\t(.*): missing license", 1, -1, -1 )
+        ErrorFormat( QStringLiteral("^\\t(.*): missing license"), 1, -1, -1 )
     };
 
     return FilteringStrategyUtils::match(STATIC_ANALYSIS_FILTERS, line);
