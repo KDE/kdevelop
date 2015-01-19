@@ -258,15 +258,21 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         session.setData(createSessionData());
     }
 
+    if (!clang_getFile(session.unit(), document().byteArray())) {
+        // this parse job's document does not exist in the pinned translation unit
+        // so we need to unpin and re-add this document
+        // Ideally we'd reset m_environment and session, but this is much simpler
+        // and shouldn't be a common case
+        clang()->index()->unpinTranslationUnitForUrl(document());
+        ICore::self()->languageController()->backgroundParser()->addDocument(document(), minimumFeatures(), priority());
+        return;
+    }
+
     if (abortRequested() || !session.unit()) {
         return;
     }
 
     Imports imports = ClangHelpers::tuImports(session.unit());
-    if (m_environment.quality() != ClangParsingEnvironment::Unknown) {
-        clang()->index()->setTranslationUnitImports(m_environment.translationUnitUrl(), imports);
-    }
-
     IncludeFileContexts includedFiles;
     if (auto pch = clang()->index()->pch(m_environment)) {
         auto pchFile = pch->mapFile(session.unit());

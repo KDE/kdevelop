@@ -80,16 +80,11 @@ IndexedString ClangIndex::translationUnitForUrl(const IndexedString& url)
     auto tu = m_tuForUrl.find(url);
     if (tu != m_tuForUrl.end()) {
         if (!QFile::exists(tu.value().str())) {
-            // TU doesn't exist, remove references
-            m_urlsInTU.remove(tu.value());
+            // TU doesn't exist, unpin
             m_tuForUrl.erase(tu);
             return url;
         }
-        if (m_urlsInTU.value(tu.value()).contains(url)) {
-            return tu.value();
-        }
-        // At this point, it's not clear that the tu should be unpinned, this might be a temporary condition
-        // If the url env quality isn't high enough it'll be repinned by another TU anyhow
+        return tu.value();
     }
     return url;
 }
@@ -100,14 +95,8 @@ void ClangIndex::pinTranslationUnitForUrl(const IndexedString& tu, const Indexed
     m_tuForUrl.insert(url, tu);
 }
 
-void ClangIndex::setTranslationUnitImports(const IndexedString& tu, const Imports& imports)
+void ClangIndex::unpinTranslationUnitForUrl(const IndexedString& url)
 {
-    QSet<IndexedString> flatImports;
-    flatImports.reserve(imports.size() + 1);
-    for (auto import: imports) {
-        flatImports.insert(IndexedString(ClangString(clang_getFileName(import.file)).c_str()));
-    }
-    flatImports.insert(tu);
     QMutexLocker lock(&m_mappingMutex);
-    m_urlsInTU[tu] = flatImports;
+    m_tuForUrl.remove(url);
 }

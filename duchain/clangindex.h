@@ -65,9 +65,9 @@ public:
     void pinTranslationUnitForUrl(const KDevelop::IndexedString& tu, const KDevelop::IndexedString& url);
 
     /**
-     * Set the current @p imports for @p tu
+     * Unpin any translation unit currently pinned for @p url
      */
-    void setTranslationUnitImports(const KDevelop::IndexedString& tu, const Imports &imports);
+    void unpinTranslationUnitForUrl(const KDevelop::IndexedString& url);
 
 private:
     CXIndex m_index;
@@ -77,7 +77,6 @@ private:
 
     QMutex m_mappingMutex;
     QHash<KDevelop::IndexedString, KDevelop::IndexedString> m_tuForUrl;
-    QHash<KDevelop::IndexedString, QSet<KDevelop::IndexedString>> m_urlsInTU;
 };
 
 #endif //CLANGINDEX_H
