@@ -190,7 +190,7 @@ void TestIdentifier::testQualifiedIdentifier_data()
 void TestIdentifier::benchIdentifierCopyConstant()
 {
   QBENCHMARK {
-    Identifier identifier("Asdf");
+    Identifier identifier(QStringLiteral("Asdf"));
     identifier.index();
     Identifier copy(identifier);
   }
@@ -199,7 +199,7 @@ void TestIdentifier::benchIdentifierCopyConstant()
 void TestIdentifier::benchIdentifierCopyDynamic()
 {
   QBENCHMARK {
-    Identifier identifier("Asdf");
+    Identifier identifier(QStringLiteral("Asdf"));
     Identifier copy(identifier);
   }
 }
@@ -207,7 +207,7 @@ void TestIdentifier::benchIdentifierCopyDynamic()
 void TestIdentifier::benchQidCopyPush()
 {
   QBENCHMARK {
-    Identifier id("foo");
+    Identifier id(QStringLiteral("foo"));
     QualifiedIdentifier base(id);
     QualifiedIdentifier copy(base);
     copy.push(id);
