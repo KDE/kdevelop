@@ -64,6 +64,7 @@ Name[x-test]=xxPlasmoid Launcherxx
 Name[zh_CN]=Plasmoid 启动器
 Name[zh_TW]=Plasmoid 啟動器
 GenericName=Plasmoid Launcher Support
+GenericName[ar]=دعم بلازمويد مُطلِق
 GenericName[bs]=Podrška za pokretač plazmoida
 GenericName[ca]=Implementació de llançadors de plasmoides
 GenericName[ca@valencia]=Implementació de llançadors de plasmoides

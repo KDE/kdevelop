@@ -76,4 +76,3 @@ void ProcessSelectionDialog::selectionChanged()
 }
 
 }
-#include "processselection.moc"

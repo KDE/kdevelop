@@ -91,12 +91,16 @@ QStringList CMakeJob::commandLine() const
     QString installDir = CMake::currentInstallDir( m_project ).toLocalFile();
     if( !installDir.isEmpty() )
     {
-        args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(installDir);
+        args << QStringLiteral("-DCMAKE_INSTALL_PREFIX=%1").arg(installDir);
     }
     QString buildType = CMake::currentBuildType( m_project );
     if( !buildType.isEmpty() )
     {
-        args << QString("-DCMAKE_BUILD_TYPE=%1").arg(buildType);
+        args << QStringLiteral("-DCMAKE_BUILD_TYPE=%1").arg(buildType);
+    }
+    QVariantMap cacheArgs = property("extraCMakeCacheValues").toMap();
+    for( auto it = cacheArgs.constBegin(), itEnd = cacheArgs.constEnd(); it!=itEnd; ++it) {
+        args << QStringLiteral("-D%1=%2").arg(it.key()).arg(it.value().toString());
     }
 
     //if we are creating a new build directory, we'll want to specify the generator

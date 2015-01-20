@@ -80,12 +80,15 @@ CMakeJsonData import(const Path& commandsFile, const Path& projectTargetsFile)
             continue;
         }
 
-        PathResolutionResult result = resolver.processOutput(entry["command"].toString(), entry["directory"].toString());
+        PathResolutionResult result = resolver.processOutput(entry[KEY_COMMAND].toString(), entry[KEY_DIRECTORY].toString());
 
         CMakeFile ret;
         ret.includes = result.paths;
         ret.defines = result.defines;
-        data.files[Path(entry["file"].toString())] = ret;
+        // NOTE: we use the canonical file path to prevent issues with symlinks in the path
+        //       leading to lookup failures
+        const auto path = Path(QFileInfo(entry[KEY_FILE].toString()).canonicalFilePath());
+        data.files[path] = ret;
     }
     data.isValid = true;
 

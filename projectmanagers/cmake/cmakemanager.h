@@ -51,7 +51,6 @@ namespace KDevelop
 {
     class IProject;
     class IProjectBuilder;
-    class ILanguage;
     class ICodeHighlighting;
     class ProjectFolderItem;
     class ProjectBaseItem;
@@ -87,6 +86,7 @@ public:
 
     virtual Features features() const { return Features(Folders | Targets | Files ); }
     virtual KDevelop::IProjectBuilder* builder() const;
+    virtual bool hasIncludesOrDefines(KDevelop::ProjectBaseItem*) const;
     virtual KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const;
     virtual KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem *) const;
     virtual QHash<QString, QString> defines(KDevelop::ProjectBaseItem *) const;

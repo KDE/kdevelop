@@ -66,7 +66,6 @@
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 #include <cpputils.h>
-#include <interfaces/ilanguage.h>
 #include <util/foregroundlock.h>
 #include <util/path.h>
 #include <interfaces/icore.h>
@@ -1248,11 +1247,9 @@ bool CodeCompletionContext::isImplementationHelperValid() const
 
 static TopDUContext* proxyContextForUrl(QUrl url)
 {
-  QList< ILanguage* > languages = ICore::self()->languageController()->languagesForUrl(url);
-  foreach(ILanguage* language, languages)
-  {
-    if(language->languageSupport())
-      return language->languageSupport()->standardContext(url, true);
+  auto languages = ICore::self()->languageController()->languagesForUrl(url);
+  foreach (auto language, languages) {
+      return language->standardContext(url, true);
   }
 
   return 0;
@@ -2106,7 +2103,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
 
   if(!CppUtils::isHeader( searchInContext->url().toUrl() )) {
     QUrl headerUrl = QUrl::fromLocalFile(CppUtils::sourceOrHeaderCandidate( searchInContext->url().str(), false ));
-    searchInContext = ICore::self()->languageController()->language("C++")->languageSupport()->standardContext(headerUrl);
+    searchInContext = ICore::self()->languageController()->language("C++")->standardContext(headerUrl);
     if(searchInContext)
       ret += getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);
   }

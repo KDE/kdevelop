@@ -157,7 +157,7 @@ namespace CMake
      *
      * @param model The CMake cache model to load data from. If NULL, the model is created based on build directory path for the given index.
      */
-    KDEVCMAKECOMMON_EXPORT void updateConfig( KDevelop::IProject* project, int buildDirectory, CMakeCacheModel* model = 0 );
+    KDEVCMAKECOMMON_EXPORT void updateConfig( KDevelop::IProject* project, int buildDirectory);
 
     /**
      * Returns the current build directory count.

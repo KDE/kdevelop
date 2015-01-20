@@ -37,7 +37,6 @@
 #include <language/duchain/duchainutils.h>
 #include <language/codegen/coderepresentation.h>
 #include <shell/documentcontroller.h>
-#include <interfaces/ilanguage.h>
 #include <navigation/macronavigationcontext.h>
 #include <navigation/navigationwidget.h>
 
@@ -411,10 +410,10 @@ void TestCppAssistants::testMacroExpansion()
   Core::self()->documentController()->openDocument(url);
   DUChain::self()->waitForUpdate(IndexedString(url), KDevelop::TopDUContext::AllDeclarationsAndContexts);
 
-  ILanguage* language = ICore::self()->languageController()->languagesForUrl(url).at(0);
+  auto language = ICore::self()->languageController()->languagesForUrl(url).at(0);
   QVERIFY(language);
 
-  QWidget *macroWidget = language->languageSupport()->specialLanguageObjectNavigationWidget(url, KTextEditor::Cursor(macroLine,0));
+  QWidget *macroWidget = language->specialLanguageObjectNavigationWidget(url, KTextEditor::Cursor(macroLine,0));
   QVERIFY(macroWidget);
   Cpp::NavigationWidget *macroNavigationWidget = dynamic_cast<Cpp::NavigationWidget*>(macroWidget);
   QVERIFY(macroNavigationWidget);

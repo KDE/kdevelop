@@ -689,10 +689,10 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
           path = path.mid(1, path.length() - 2);
         }
       }
-      if (QFileInfo(path).isRelative())
+      if (QDir::isRelativePath(path))
         path = workingDirectory + '/' + path;
 
-      ret.paths << Path(path);
+      ret.paths << internPath(path);
     }
   }
 
@@ -705,7 +705,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
       if (match.lastCapturedIndex() > 1) {
         value = unescape(match.capturedRef(match.lastCapturedIndex()));
       }
-      ret.defines[match.captured(1)] = value;
+      ret.defines[internString(match.captured(1))] = internString(value);
     }
   }
 
@@ -726,4 +726,23 @@ void MakeFileResolver::setOutOfSourceBuildSystem(const QString& source, const QS
   m_outOfSource = true;
   m_source = QDir::cleanPath(source);
   m_build = QDir::cleanPath(m_build);
+}
+
+Path MakeFileResolver::internPath(const QString& path) const
+{
+    Path& ret = m_pathCache[path];
+    if (ret.isEmpty() != path.isEmpty()) {
+        ret = Path(path);
+    }
+    return ret;
+}
+
+QString MakeFileResolver::internString(const QString& path) const
+{
+    auto it = m_stringCache.constFind(path);
+    if (it != m_stringCache.constEnd()) {
+        return *it;
+    }
+    m_stringCache.insert(path);
+    return path;
 }

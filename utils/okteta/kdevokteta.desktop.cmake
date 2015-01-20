@@ -2,6 +2,7 @@
 Type=Service
 
 Name=Okteta Integration
+Name[ar]=تكامل أُكتيتا
 Name[bs]=Okteta integracija
 Name[ca]=Integració d'Okteta
 Name[ca@valencia]=Integració d'Okteta

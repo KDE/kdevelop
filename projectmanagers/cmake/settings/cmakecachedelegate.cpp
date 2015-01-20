@@ -113,7 +113,7 @@ void CMakeCacheDelegate::setModelData(QWidget * editor, QAbstractItemModel * mod
         else if(type=="PATH" || type=="FILEPATH")
         {
             KUrlRequester *urlreq=qobject_cast<KUrlRequester*>(editor);
-            value = urlreq->url().url(QUrl::StripTrailingSlash); //CMake usually don't put it
+            value = urlreq->url().toDisplayString(QUrl::StripTrailingSlash | QUrl::PreferLocalFile); //CMake usually don't put it
         }
         else
         {

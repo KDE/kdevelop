@@ -168,6 +168,12 @@ bool CustomMakeManager::removeFilesFromTargets(const QList< ProjectFileItem* > &
     return false;
 }
 
+bool CustomMakeManager::hasIncludesOrDefines(KDevelop::ProjectBaseItem* item) const
+{
+    Q_UNUSED(item);
+    return false;
+}
+
 Path CustomMakeManager::buildDirectory(KDevelop::ProjectBaseItem* item) const
 {
     ProjectFolderItem *fi=dynamic_cast<ProjectFolderItem*>(item);

@@ -86,22 +86,11 @@ CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
     registerCompiler(CompilerPointer(new NoCompiler()));
     retrieveUserDefinedCompilers();
 
-    // NOTE: we connect to both, projectAboutToBeOpened as well as projectOpened.
-    // The former to be sure we get called as soon as possible, the latter to prevent
-    // a race condition, where this plugin gets initialized but a project just emitted that
-    // it is about to be opened, but did not open yet.
-    connect( ICore::self()->projectController(), &IProjectController::projectAboutToBeOpened,
-             this, &CompilerProvider::projectOpened );
-    connect( ICore::self()->projectController(), &IProjectController::projectOpened,
-             this, &CompilerProvider::projectOpened );
     connect( ICore::self()->projectController(), &IProjectController::projectClosed,
              this, &CompilerProvider::projectClosed);
 
     //Add a provider for files without project
     addPoject( nullptr, checkCompilerExists({}));
-    for (auto project : ICore::self()->projectController()->projects()) {
-        projectOpened( project );
-    }
 }
 
 CompilerProvider::~CompilerProvider() = default;
@@ -109,6 +98,9 @@ CompilerProvider::~CompilerProvider() = default;
 CompilerPointer CompilerProvider::compilerForItem(ProjectBaseItem* item) const
 {
     auto project = item ? item->project() : nullptr;
+    if(!m_projects.contains(project)){
+        const_cast<CompilerProvider*>(this)->addProject(item->project());
+    }
     Q_ASSERT(m_projects.contains(project));
     auto compiler = m_projects[project];
     Q_ASSERT(compiler);
@@ -172,7 +164,7 @@ void CompilerProvider::setCompiler( IProject* project, const CompilerPointer& co
     addPoject( project, c );
 }
 
-void CompilerProvider::projectOpened( KDevelop::IProject* project )
+void CompilerProvider::addProject( KDevelop::IProject* project )
 {
     definesAndIncludesDebug() << "Adding project: " << project->name();
     auto projectConfig =  project->projectConfiguration().data();
@@ -201,6 +193,9 @@ QVector< CompilerPointer > CompilerProvider::compilers() const
 
 CompilerPointer CompilerProvider::currentCompiler(IProject* project) const
 {
+    if(!m_projects.contains(project)){
+        const_cast<CompilerProvider*>(this)->addProject(project);
+    }
     Q_ASSERT(m_projects.contains(project));
     return m_projects[project];
 }

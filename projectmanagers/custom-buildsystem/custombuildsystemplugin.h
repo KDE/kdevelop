@@ -68,6 +68,7 @@ public:
 // BuildSystemManager API
 public:
     bool addFilesToTarget( const QList<KDevelop::ProjectFileItem*>& file, KDevelop::ProjectTargetItem* parent );
+    bool hasIncludesOrDefines( KDevelop::ProjectBaseItem* ) const;
     KDevelop::Path buildDirectory( KDevelop::ProjectBaseItem* ) const;
     IProjectBuilder* builder() const;
     KDevelop::ProjectTargetItem* createTarget( const QString& target, KDevelop::ProjectFolderItem* parent );

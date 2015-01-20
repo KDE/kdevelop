@@ -43,7 +43,6 @@
 #include <interfaces/iproject.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
-#include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/isourceformattercontroller.h>
@@ -125,7 +124,7 @@ KDevelop::ContextMenuExtension CppLanguageSupport::contextMenuExtension(KDevelop
   ContextMenuExtension cm;
   EditorContext *ec = dynamic_cast<KDevelop::EditorContext *>(context);
 
-  if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(language())) {
+  if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(this)) {
     // It's a C++ file, let's add our context menu.
     m_refactoring->fillContextMenu(cm, context);
     fillEditIncludeDirectoriesContextMenu(cm, context);
@@ -230,12 +229,11 @@ void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* /*wind
 
 CppLanguageSupport::~CppLanguageSupport()
 {
-    ILanguage* lang = language();
-    if (lang) {
+    {
         TemporarilyReleaseForegroundLock release;
-        lang->parseLock()->lockForWrite();
+        parseLock()->lockForWrite();
         m_self = 0; //By locking the parse-mutexes, we make sure that parse- and preprocess-jobs get a chance to finish in a good state
-        lang->parseLock()->unlock();
+        parseLock()->unlock();
     }
 
     delete m_quickOpenDataProvider;
@@ -475,14 +473,14 @@ QPair<TopDUContextPointer, KTextEditor::Range> CppLanguageSupport::importedConte
   int pos = 0;
   for(; pos < word.size(); ++pos) {
     if(word[pos] == '"' || word[pos] == '<') {
-      wordRange.start().setColumn(++pos);
+      wordRange.start() = wordRange.start() + KTextEditor::Cursor(0, ++pos);
       break;
     }
   }
 
   for(; pos < word.size(); ++pos) {
     if(word[pos] == '"' || word[pos] == '>') {
-      wordRange.end().setColumn(pos);
+      wordRange.end() = KTextEditor::Cursor(wordRange.end().line(), pos);
       break;
     }
   }

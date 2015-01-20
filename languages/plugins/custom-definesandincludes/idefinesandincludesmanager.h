@@ -168,10 +168,13 @@ public:
 
 inline IDefinesAndIncludesManager* IDefinesAndIncludesManager::manager()
 {
-    auto manager = KDevelop::ICore::self()->pluginController()->pluginForExtension( "org.kdevelop.IDefinesAndIncludesManager" );
+    static QPointer<IPlugin> manager;
+    if (!manager) {
+        manager = ICore::self()->pluginController()->pluginForExtension( QStringLiteral("org.kdevelop.IDefinesAndIncludesManager") );
+    }
     Q_ASSERT(manager);
 
-    auto extension = manager->extension<KDevelop::IDefinesAndIncludesManager>();
+    auto extension = manager->extension<IDefinesAndIncludesManager>();
     return extension;
 }
 

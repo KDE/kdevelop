@@ -29,7 +29,6 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
-#include <interfaces/ilanguage.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/duchain/problem.h>
@@ -103,7 +102,7 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thr
             return;
         }
 
-        QReadLocker parseLock(languageSupport()->language()->parseLock());
+        QReadLocker parseLock(languageSupport()->parseLock());
         CMakeContentIterator it(package);
         DeclarationBuilder builder;
         context = builder.build(document(), &it, context);

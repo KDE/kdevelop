@@ -117,6 +117,11 @@ QString CMakeManager::errorDescription() const
 CMakeManager::~CMakeManager()
 {}
 
+bool CMakeManager::hasIncludesOrDefines(ProjectBaseItem* item) const
+{
+    return m_projects[item->project()].jsonData.files.contains(item->path());
+}
+
 Path CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 {
     Path ret;

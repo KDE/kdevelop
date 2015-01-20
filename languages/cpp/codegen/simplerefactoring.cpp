@@ -155,16 +155,16 @@ QString SimpleRefactoring::moveIntoSource(const IndexedDeclaration& iDecl)
   const QString prefixText = code->rangeText(prefixRange);
   for (int i = prefixText.length() - 1; i >= 0 && prefixText.at(i).isSpace(); --i) {
     if (headerRange.start().column() == 0) {
-      headerRange.start().setLine(headerRange.start().line() - 1);
+      headerRange.start() = headerRange.start() - KTextEditor::Cursor(1, 0);
       if (headerRange.start().line() == prefixRange.start().line()) {
-        headerRange.start().setColumn(prefixRange.start().column() + i);
+        headerRange.start() = KTextEditor::Cursor(headerRange.start().line(), prefixRange.start().column() + i);
       } else {
         int lastNewline = prefixText.lastIndexOf('\n', i - 1);
-        headerRange.start().setColumn(i - lastNewline - 1);
+        headerRange.start() = KTextEditor::Cursor(headerRange.start().line(), i - lastNewline - 1);
         qCWarning(CPP) << "UNSUPPORTED" << headerRange.start().column() << lastNewline << i << prefixText;
       }
     } else {
-      headerRange.start().setColumn(headerRange.start().column() - 1);
+      headerRange.start() = headerRange.start() - KTextEditor::Cursor(0, 1);
     }
   }
   const QString body = code->rangeText(headerRange);

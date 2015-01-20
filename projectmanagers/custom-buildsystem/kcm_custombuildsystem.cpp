@@ -77,4 +77,3 @@ QIcon CustomBuildSystemKCModule::icon() const
     return QIcon::fromTheme("kdevelop");
 }
 
-#include "kcm_custombuildsystem.moc"

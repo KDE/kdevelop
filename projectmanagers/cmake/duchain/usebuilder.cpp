@@ -43,11 +43,11 @@ void UseBuilder::startVisiting(CMakeContentIterator* node)
     for(; node->hasNext(); ) {
         const CMakeFunctionDesc& func = node->next();
 
-
-        if (!s_commands->contains(func.name)) {
+        QString fname = func.name.toLower();
+        if (!s_commands->contains(fname)) {
             KDevelop::DUChainWriteLocker lock;
 
-            KDevelop::Identifier nameid(func.name);
+            KDevelop::Identifier nameid(fname);
             QList<KDevelop::Declaration*> declarations = m_ctx->findDeclarations(nameid, func.range().start);
             if (!declarations.isEmpty()) {
                 newUse(

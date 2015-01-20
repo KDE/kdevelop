@@ -62,7 +62,6 @@
 #include <language/backgroundparser/urlparselock.h>
 #include <language/backgroundparser/backgroundparser.h>
 
-#include <interfaces/ilanguage.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -423,12 +422,12 @@ void CPPInternalParseJob::highlightIfNeeded()
 void CPPInternalParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* thread)
 {
     //Happens during shutdown
-    if(ICore::self()->shuttingDown() || !ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
+    if(ICore::self()->shuttingDown() || !ICore::self()->languageController()->language("C++") || !parentJob()->cpp())
       return;
 
     //If we have a parent, the parse-mutex is already locked
-    QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
-    if(!ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
+    QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->parseLock());
+    if(!ICore::self()->languageController()->language("C++") || !parentJob()->cpp())
       return;
 
     initialize();

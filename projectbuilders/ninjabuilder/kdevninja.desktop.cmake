@@ -30,6 +30,7 @@ Name[uk]=Збирач проектів Ninja
 Name[x-test]=xxNinja Project Builderxx
 Name[zh_TW]=Ninja 專案編譯器
 GenericName=Project Builder
+GenericName[ar]=بنّاء المشاريع
 GenericName[bs]=Graditelj projekta
 GenericName[ca]=Constructor de projectes
 GenericName[ca@valencia]=Constructor de projectes
