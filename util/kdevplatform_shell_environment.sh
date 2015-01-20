@@ -371,6 +371,9 @@ function sync! {
                 fi
             fi
 
+        elif [[ "$P" == file://* ]]; then
+            P=$(echo $P | sed 's$^file://$$')
+
         elif [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
             # This session is being forwarded to another machine, but the current document is not
             # However, we won't complain, because it's possible that the machines share the same file-system
