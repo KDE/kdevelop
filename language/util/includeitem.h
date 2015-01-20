@@ -48,5 +48,6 @@ public:
 }
 
 KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(QDebug dbg, const KDevelop::IncludeItem& item);
+Q_DECLARE_TYPEINFO(KDevelop::IncludeItem, Q_MOVABLE_TYPE);
 
 #endif // KDEVPLATFORM_INCLUDEITEM_H
