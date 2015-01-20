@@ -176,7 +176,7 @@ IncludePathCompletionContext::IncludePathCompletionContext(const DUContextPointe
         return;
     }
 
-    m_includeItems = includeItemsForUrl(context->url().toUrl(), properties, properties.local ?  session.environment().includes().project : session.environment().includes().system);
+    m_includeItems = includeItemsForUrl(url, properties, properties.local ?  session.environment().includes().project : session.environment().includes().system);
 }
 
 QList< CompletionTreeItemPointer > IncludePathCompletionContext::completionItems(bool& abort, bool)
