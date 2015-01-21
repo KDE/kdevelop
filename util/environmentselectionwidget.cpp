@@ -61,6 +61,9 @@ EnvironmentSelectionWidget::EnvironmentSelectionWidget( QWidget *parent )
     layout()->setMargin( 0 );
 
     setCurrentProfile( QString() ); // select the default profile
+
+    connect(d->comboBox, &QComboBox::currentTextChanged,
+            this, &EnvironmentSelectionWidget::currentProfileChanged);
 }
 
 EnvironmentSelectionWidget::~EnvironmentSelectionWidget()
