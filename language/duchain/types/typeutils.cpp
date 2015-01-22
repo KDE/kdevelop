@@ -104,7 +104,7 @@ namespace TypeUtils {
     return base;
   }
 
-  AbstractType::Ptr resolveAliasType(const AbstractType::Ptr eventualAlias)
+  AbstractType::Ptr resolveAliasType(const AbstractType::Ptr& eventualAlias)
   {
     if ( eventualAlias && eventualAlias->whichType() == KDevelop::AbstractType::TypeAlias ) {
       return eventualAlias.cast<TypeAliasType>()->type();

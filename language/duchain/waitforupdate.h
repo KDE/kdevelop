@@ -36,7 +36,7 @@ struct WaitForUpdate : public QObject
 
   public slots:
     void updateReady(const KDevelop::IndexedString& url,
-                     const KDevelop::ReferencedTopDUContext topContext);
+                     const KDevelop::ReferencedTopDUContext& topContext);
 
   public:
     bool m_ready;

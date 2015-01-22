@@ -26,7 +26,7 @@ WaitForUpdate::WaitForUpdate()
 }
 
 void WaitForUpdate::updateReady(const KDevelop::IndexedString& /*url*/,
-                                const KDevelop::ReferencedTopDUContext topContext)
+                                const KDevelop::ReferencedTopDUContext& topContext)
 {
   m_ready = true;
   m_topContext = topContext;

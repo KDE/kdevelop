@@ -665,7 +665,7 @@ int OutputWidget::currentOutputIndex()
     return index;
 }
 
-void OutputWidget::outputFilter(const QString filter)
+void OutputWidget::outputFilter(const QString& filter)
 {
     QWidget* widget = currentWidget();
     if( !widget )

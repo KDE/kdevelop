@@ -56,7 +56,7 @@ namespace TypeUtils {
   /**
    * @brief If @p eventualAlias is an AliasType, return its aliasedType(), otherwise return @p eventualAlias.
    */
-  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr resolveAliasType(const KDevelop::AbstractType::Ptr eventualAlias);
+  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr resolveAliasType(const KDevelop::AbstractType::Ptr& eventualAlias);
 
   /**
    * @brief Check whether the passed type is a null or mixed type.
@@ -82,7 +82,7 @@ namespace TypeUtils {
   * as a template parameter.
   **/
   template <typename LanguageUnsureType=KDevelop::UnsureType>
-  KDevelop::AbstractType::Ptr mergeTypes(KDevelop::AbstractType::Ptr type, const KDevelop::AbstractType::Ptr newType) {
+  KDevelop::AbstractType::Ptr mergeTypes(KDevelop::AbstractType::Ptr type, const KDevelop::AbstractType::Ptr& newType) {
     static_assert(std::is_base_of<KDevelop::UnsureType, LanguageUnsureType>::value,
                   "LanguageUnsureType must inherit from KDevelop::UnsureType");
 

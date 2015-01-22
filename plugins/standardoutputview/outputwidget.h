@@ -77,7 +77,7 @@ private slots:
     void rowsInserted(const QModelIndex&, int, int);
     void copySelection();
     void selectAll();
-    void outputFilter(const QString filter);
+    void outputFilter(const QString& filter);
     void updateFilter(int index);
     void delayedScroll();
 
