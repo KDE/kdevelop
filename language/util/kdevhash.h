@@ -32,7 +32,7 @@ public:
   {}
 
   KDevHash(const KDevHash&) = delete;
-  KDevHash operator=(const KDevHash&) = delete;
+  KDevHash& operator=(const KDevHash&) = delete;
 
   operator unsigned int() const
   {
