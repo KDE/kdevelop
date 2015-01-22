@@ -358,9 +358,9 @@ public:
     if(!m_cleanupDisabled)
       doMoreCleanup();
 
-    QMutexLocker l(&m_chainsMutex);
-
     DUChainWriteLocker writeLock(DUChain::lock());
+
+    QMutexLocker l(&m_chainsMutex);
 
     foreach(TopDUContext* top, m_chainsByUrl.values())
       removeDocumentChainFromMemory(top);
