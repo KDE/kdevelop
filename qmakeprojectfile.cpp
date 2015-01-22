@@ -27,6 +27,7 @@
 #include <kprocess.h>
 #include <kdebug.h>
 
+#include "debug.h"
 #include "parser/ast.h"
 #include "qmakecache.h"
 #include "qmakemkspecs.h"
@@ -218,7 +219,7 @@ QStringList QMakeProjectFile::includeDirectories() const
             }
             const QFileInfoList match = incDir.entryInfoList(QStringList(pattern), QDir::Dirs);
             if (match.isEmpty()) {
-                qWarning() << "unhandled Qt module:" << module << pattern;
+                qCWarning(KDEV_QMAKE) << "unhandled Qt module:" << module << pattern;
                 continue;
             }
             QString path = match.first().canonicalFilePath();

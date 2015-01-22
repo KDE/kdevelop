@@ -45,6 +45,7 @@ include_directories(${QMakeManager_SOURCE_DIR}/parser)
 ########### next target ###############
 
 set(kdevqmakemanager_PART_SRCS
+    debug.cpp
     qmakemanager.cpp
     qmakemodelitems.cpp
     qmakeprojectfile.cpp

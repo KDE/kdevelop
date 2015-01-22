@@ -16,6 +16,8 @@
  *****************************************************************************/
 
 #include "qmakefilevisitor.h"
+
+#include "debug.h"
 #include "qmakefile.h"
 #include "qmakeincludefile.h"
 
@@ -258,7 +260,7 @@ QStringList QMakeFileVisitor::evaluateMacro(const QString& function, const QStri
 
     QHash< QString, QMake::ScopeBodyAST* >::const_iterator it = m_userMacros.find(function);
     if (it != m_userMacros.constEnd()) {
-        qDebug() << "calling user macro:" << function << arguments;
+        qCDebug(KDEV_QMAKE) << "calling user macro:" << function << arguments;
         QMakeFileVisitor visitor(this, m_baseFile);
         return visitor.visitMacro(it.value(), arguments);
     } else {
