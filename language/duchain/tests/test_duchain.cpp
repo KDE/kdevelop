@@ -1011,6 +1011,7 @@ void TestDUChain::benchDeclarationQualifiedIdentifier()
 {
   QVector<DUContext*> contexts;
   contexts.reserve(10);
+  DUChainWriteLocker lock;
   contexts << new TopDUContext(IndexedString("/tmp/something"), {0, 0, INT_MAX, INT_MAX});
   for (int i = 1; i < contexts.capacity(); ++i) {
     contexts << new DUContext({0, 0, INT_MAX, INT_MAX}, contexts.at(i-1));
