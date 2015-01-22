@@ -87,7 +87,6 @@ void QMakeFileVisitor::visitFunctionCall( QMake::FunctionCallAST* node )
         if( node->args.isEmpty() )
             return;
         QStringList arguments = getValueList( node->args );
-        Q_ASSERT(!arguments.isEmpty());
 
         ifDebug(kDebug(9024) << "found include" << node->identifier->value << arguments;)
         QString argument = arguments.join("").trimmed();
