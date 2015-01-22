@@ -31,6 +31,7 @@ class KConfig;
 
 namespace KDevelop {
 class IProject;
+class ProjectBaseItem;
 }
 
 struct ConfigEntry
@@ -38,6 +39,7 @@ struct ConfigEntry
     QString path;
     QStringList includes;
     KDevelop::Defines defines;
+    CompilerPointer compiler;
 
     ConfigEntry( const QString& path = QString() ) : path( path ) {}
 
@@ -54,15 +56,6 @@ public:
     QList<ConfigEntry> readPaths(KConfig* cfg) const;
     void writePaths(KConfig* cfg, const QList<ConfigEntry>& paths);
 
-    /**
-     * @param defaultCompiler the compiler that will be returned, if the @c CompilerProvider
-     * doesn't have a factory to create the needed type of compiler.
-     *
-     * @return stored compiler or nullptr if the project is opened for the first time.
-     */
-    CompilerPointer currentCompiler(KConfig* cfg, const CompilerPointer& defaultCompiler = {}) const;
-    void writeCurrentCompiler(KConfig* cfg, const CompilerPointer& compiler);
-
     QVector<CompilerPointer> userDefinedCompilers() const;
     void writeUserDefinedCompilers(const QVector<CompilerPointer>& compilers);
 
@@ -74,6 +67,7 @@ public:
     static SettingsManager* globalInstance();
 
 private:
+
     CompilerProvider m_provider;
     static SettingsManager* s_globalInstance;
 };

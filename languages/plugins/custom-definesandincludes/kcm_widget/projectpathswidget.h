@@ -52,14 +52,16 @@ public:
 
     void setCompilers(const QVector<CompilerPointer>& compilers, bool updateCompilersModel = true);
 
-    void setCurrentCompiler(const QString& name);
-
-    CompilerPointer currentCompiler() const;
-
     QVector<CompilerPointer> compilers() const;
 
 signals:
     void changed();
+
+private:
+    void setCurrentCompiler(const QString& name);
+
+    CompilerPointer currentCompiler() const;
+
 private slots:
     // Handling of project-path combobox, add and remove buttons
     void projectPathSelected( int index );
@@ -67,6 +69,7 @@ private slots:
     void deleteProjectPath();
     void batchEdit();
     void tabChanged(int);
+    void changeCompilerForPath();
 
     // Forward includes model changes into the pathsModel
     void includesChanged( const QStringList& includes );
@@ -74,7 +77,7 @@ private slots:
     // Forward defines model changes into the pathsModel
     void definesChanged( const KDevelop::Defines& defines );
 
-    void compilerChanged();
+    void userDefinedCompilerChanged();
 
 private:
     Ui::ProjectPathsWidget* ui;

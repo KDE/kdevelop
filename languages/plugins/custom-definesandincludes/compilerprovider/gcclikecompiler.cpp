@@ -55,10 +55,10 @@ enum class CompilerStandard
 namespace
 {
 
-QMap<CompilerStandard, QString> languageStandards()
+const QMap<CompilerStandard, QString> languageStandards()
 {
     //TODO: query compiler for supported standards instead
-    static QMap<CompilerStandard, QString> standards {
+    const static QMap<CompilerStandard, QString> standards {
         {CompilerStandard::C90, "c90"},
         {CompilerStandard::C99, "c99"},
         {CompilerStandard::C11, "c11"},
@@ -78,7 +78,7 @@ QString compilerStandardToString(CompilerStandard standard)
         return languageStandards().value(standard);
     }
 
-    Q_ASSERT(0);
+    Q_UNREACHABLE();
     return "Invalid";
 }
 

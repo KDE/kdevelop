@@ -34,6 +34,7 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/idocument.h>
 #include <serialization/indexedstring.h>
+#include <project/projectmodel.h>
 
 #include "definesandincludesconfigpage.h"
 
@@ -56,11 +57,10 @@ void DefinesAndIncludesConfigPage::loadFrom( KConfig* cfg )
     configWidget->clear();
 
     auto settings = SettingsManager::globalInstance();
-    configWidget->setPaths( settings->readPaths( cfg ) );
-
     auto provider = settings->provider();
+
     configWidget->setCompilers(provider->compilers());
-    configWidget->setCurrentCompiler(provider->currentCompiler(project())->name());
+    configWidget->setPaths( settings->readPaths( cfg ) );
 }
 
 void DefinesAndIncludesConfigPage::saveTo(KConfig* cfg, KDevelop::IProject*)
@@ -70,8 +70,6 @@ void DefinesAndIncludesConfigPage::saveTo(KConfig* cfg, KDevelop::IProject*)
 
     auto provider = settings->provider();
     settings->writeUserDefinedCompilers(configWidget->compilers());
-    settings->writeCurrentCompiler(cfg, configWidget->currentCompiler());
-    provider->setCompiler(project(), settings->currentCompiler(cfg));
 
     const auto& providerCompilers = provider->compilers();
     const auto& widgetCompilers = configWidget->compilers();

@@ -33,7 +33,6 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     void testRegisterCompiler();
-    void testSetCompiler();
     void testCompilerIncludesAndDefines();
     void testStorageBackwardsCompatible();
 };

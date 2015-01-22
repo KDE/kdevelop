@@ -27,6 +27,12 @@
 #include "gcclikecompiler.h"
 #include "msvccompiler.h"
 
+namespace
+{
+const QString cpp11 = QStringLiteral("c++11");
+const QString c99 = QStringLiteral("c99");
+}
+
 QString ClangFactory::name() const
 {
     return QStringLiteral("Clang");
@@ -40,15 +46,16 @@ CompilerPointer ClangFactory::createCompiler(const QString& name, const QString&
 void ClangFactory::registerDefaultCompilers(CompilerProvider* provider) const
 {
     const QString clang = QStringLiteral("clang");
-    if (GccLikeCompiler::supportedStandards(clang).contains("c++11")) {
-        auto compiler = createCompiler("Clang c++11", clang, false);
-        compiler->setLanguageStandard("c++11");
+    const auto standards = GccLikeCompiler::supportedStandards(clang);
+    if (standards.contains(cpp11)) {
+        auto compiler = createCompiler(QStringLiteral("Clang c++11"), clang, false);
+        compiler->setLanguageStandard(cpp11);
         provider->registerCompiler(compiler);
     }
 
-    if (GccLikeCompiler::supportedStandards(clang).contains("c99")) {
-        auto compiler = createCompiler("Clang c99", clang, false);
-        compiler->setLanguageStandard("c99");
+    if (standards.contains(c99)) {
+        auto compiler = createCompiler(QStringLiteral("Clang c99"), clang, false);
+        compiler->setLanguageStandard(c99);
         provider->registerCompiler(compiler);
     }
 }
@@ -66,15 +73,16 @@ CompilerPointer GccFactory::createCompiler(const QString& name, const QString& p
 void GccFactory::registerDefaultCompilers(CompilerProvider* provider) const
 {
     const QString gcc = QStringLiteral("gcc");
-    if (GccLikeCompiler::supportedStandards(gcc).contains("c++11")) {
-        auto compiler = createCompiler("GCC c++11", gcc, false);
-        compiler->setLanguageStandard("c++11");
+    const auto standards = GccLikeCompiler::supportedStandards(gcc);
+    if (standards.contains(cpp11)) {
+        auto compiler = createCompiler(QStringLiteral("GCC c++11"), gcc, false);
+        compiler->setLanguageStandard(cpp11);
         provider->registerCompiler(compiler);
     }
 
-    if (GccLikeCompiler::supportedStandards(gcc).contains("c99")) {
-        auto compiler = createCompiler("GCC c99", gcc, false);
-        compiler->setLanguageStandard("c99");
+    if (standards.contains(c99)) {
+        auto compiler = createCompiler(QStringLiteral("GCC c99"), gcc, false);
+        compiler->setLanguageStandard(c99);
         provider->registerCompiler(compiler);
     }
 }
@@ -91,5 +99,5 @@ CompilerPointer MsvcFactory::createCompiler(const QString& name, const QString& 
 
 void MsvcFactory::registerDefaultCompilers(CompilerProvider* provider) const
 {
-    provider->registerCompiler(createCompiler("MSVC", "cl.exe", false));
+    provider->registerCompiler(createCompiler(QStringLiteral("MSVC"), QStringLiteral("cl.exe"), false));
 }

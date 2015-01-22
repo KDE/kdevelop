@@ -67,6 +67,12 @@ public:
     virtual void clearCache() override
     {}
 };
+
+static CompilerPointer createDummyCompiler()
+{
+    static CompilerPointer compiler(new NoCompiler());
+    return compiler;
+}
 }
 
 CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
@@ -91,29 +97,11 @@ CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
     }
 #endif
 
-    registerCompiler(CompilerPointer(new NoCompiler()));
+    registerCompiler(createDummyCompiler());
     retrieveUserDefinedCompilers();
-
-    connect( ICore::self()->projectController(), &IProjectController::projectClosed,
-             this, &CompilerProvider::projectClosed);
-
-    //Add a provider for files without project
-    addPoject( nullptr, checkCompilerExists({}));
 }
 
 CompilerProvider::~CompilerProvider() = default;
-
-CompilerPointer CompilerProvider::compilerForItem(ProjectBaseItem* item) const
-{
-    auto project = item ? item->project() : nullptr;
-    if(!m_projects.contains(project)){
-        const_cast<CompilerProvider*>(this)->addProject(item->project());
-    }
-    Q_ASSERT(m_projects.contains(project));
-    auto compiler = m_projects[project];
-    Q_ASSERT(compiler);
-    return compiler;
-}
 
 QHash<QString, QString> CompilerProvider::defines( ProjectBaseItem* item ) const
 {
@@ -130,17 +118,6 @@ IDefinesAndIncludesManager::Type CompilerProvider::type() const
     return IDefinesAndIncludesManager::CompilerSpecific;
 }
 
-void CompilerProvider::addPoject( IProject* project, const CompilerPointer& compiler )
-{
-    Q_ASSERT(compiler);
-    m_projects[project] = compiler;
-}
-
-void CompilerProvider::removePoject( IProject* project )
-{
-    m_projects.remove( project );
-}
-
 CompilerPointer CompilerProvider::checkCompilerExists( const CompilerPointer& compiler ) const
 {
     //This may happen for opened for the first time projects
@@ -149,11 +126,10 @@ CompilerPointer CompilerProvider::checkCompilerExists( const CompilerPointer& co
             if ( QStandardPaths::findExecutable( compiler->path() ).isEmpty() ) {
                 continue;
             }
-            definesAndIncludesDebug() << "Selected compiler: " << compiler->name();
+
             return compiler;
         }
-        qWarning() << "No compiler found. Standard includes/defines won't be provided to the project parser!";
-    }else{
+    } else {
         for ( auto it = m_compilers.constBegin(); it != m_compilers.constEnd(); it++ ) {
             if ( (*it)->name() == compiler->name() ) {
                 return *it;
@@ -161,37 +137,7 @@ CompilerPointer CompilerProvider::checkCompilerExists( const CompilerPointer& co
         }
     }
 
-    return CompilerPointer(new NoCompiler());
-}
-
-void CompilerProvider::setCompiler( IProject* project, const CompilerPointer& compiler )
-{
-    auto c = checkCompilerExists( compiler );
-    Q_ASSERT(c);
-
-    addPoject( project, c );
-}
-
-void CompilerProvider::addProject( KDevelop::IProject* project )
-{
-    definesAndIncludesDebug() << "Adding project: " << project->name();
-    auto projectConfig =  project->projectConfiguration().data();
-
-    auto compiler = m_settings->currentCompiler( projectConfig, CompilerPointer(new NoCompiler()) );
-    auto name = compiler ? compiler->name() : QString();
-    compiler = checkCompilerExists( compiler );
-
-    if ( compiler && ( compiler->name() != name ) ) {
-        m_settings->writeCurrentCompiler(projectConfig, compiler);
-    }
-    definesAndIncludesDebug() << "compiler is:" << compiler->name() << "standard:" << compiler->languageStandard();
-
-    addPoject( project, compiler );
-}
-
-void CompilerProvider::projectClosed( KDevelop::IProject* project )
-{
-    removePoject( project );
+    return createDummyCompiler();
 }
 
 QVector< CompilerPointer > CompilerProvider::compilers() const
@@ -199,13 +145,39 @@ QVector< CompilerPointer > CompilerProvider::compilers() const
     return m_compilers;
 }
 
-CompilerPointer CompilerProvider::currentCompiler(IProject* project) const
+CompilerPointer CompilerProvider::compilerForItem( KDevelop::ProjectBaseItem* item ) const
 {
-    if(!m_projects.contains(project)){
-        const_cast<CompilerProvider*>(this)->addProject(project);
+    if (!item) {
+        return checkCompilerExists({});
     }
-    Q_ASSERT(m_projects.contains(project));
-    return m_projects[project];
+
+    const Path itemPath = item->path();
+    const Path rootDirectory = item->project()->path();
+
+    auto compilers = m_settings->readPaths(item->project()->projectConfiguration().data());
+    CompilerPointer compiler;
+    Path closestPath;
+
+    // find compiler configured to a path closest to the requested item, or fallback to the default compiler
+    for (const auto& entry : compilers) {
+        auto compilerEntry = entry.compiler;
+        Path targetDirectory = rootDirectory;
+
+        targetDirectory.addPath(entry.path);
+
+        if (targetDirectory == itemPath){
+            return compilerEntry;
+        }
+
+        if (targetDirectory.isParentOf(itemPath)) {
+            if(!compiler || targetDirectory.segments().size() > closestPath.segments().size()){
+                compiler = compilerEntry;
+                closestPath = targetDirectory;
+            }
+        }
+    }
+
+    return checkCompilerExists(compiler);
 }
 
 bool CompilerProvider::registerCompiler(const CompilerPointer& compiler)
@@ -227,13 +199,6 @@ void CompilerProvider::unregisterCompiler(const CompilerPointer& compiler)
 {
     if (!compiler->editable()) {
         return;
-    }
-
-    for (auto it = m_projects.constBegin(); it != m_projects.constEnd(); it++) {
-        if (it.value() == compiler) {
-            //Set empty compiler for opened projects that use the compiler that is being unregistered
-            setCompiler(it.key(), CompilerPointer(new NoCompiler()));
-        }
     }
 
     for (int i = 0; i < m_compilers.count(); i++) {

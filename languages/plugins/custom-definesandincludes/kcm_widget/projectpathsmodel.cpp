@@ -60,6 +60,9 @@ QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const
     case FullUrlDataRole:
         return QVariant::fromValue(QUrl::fromUserInput( sanitizePath( pathConfig.path, true, false ) ));
         break;
+    case CompilerDataRole:
+        return QVariant::fromValue(pathConfig.compiler);
+        break;
     default:
         break;
     }
@@ -111,6 +114,9 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
         break;
     case FullUrlDataRole:
         pathConfig.path = sanitizeUrl( value.value<QUrl>() );
+        break;
+    case CompilerDataRole:
+        pathConfig.compiler = value.value<CompilerPointer>();
         break;
     default:
         return false;

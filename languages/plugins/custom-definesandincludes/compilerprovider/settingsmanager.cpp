@@ -28,6 +28,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
+#include <project/projectmodel.h>
 
 #include "compilerprovider.h"
 
@@ -53,6 +54,46 @@ const QString compilerStandardKey = QLatin1String( "Standard" );
 
 namespace
 {
+CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
+{
+    auto grp = cfg.group( ConfigConstants::definesAndIncludesGroup ).group("Compiler");
+    auto name = grp.readEntry( ConfigConstants::compilerNameKey, QString() );
+    if (name.isEmpty()) {
+        return SettingsManager::globalInstance()->provider()->checkCompilerExists({});
+    }
+
+    for (auto c : SettingsManager::globalInstance()->provider()->compilers()) {
+        if (c->name() == name) {
+            return c;
+        }
+    }
+
+    auto path = grp.readEntry( ConfigConstants::compilerPathKey, QString() );
+    auto type = grp.readEntry( ConfigConstants::compilerTypeKey, QString() );
+
+    auto cf = SettingsManager::globalInstance()->provider()->compilerFactories();
+    for (auto f : cf) {
+        if (f->name() == type) {
+            auto compiler = f->createCompiler(name, path, true);
+            compiler->setLanguageStandard(grp.readEntry(ConfigConstants::compilerStandardKey, QString()));
+            return compiler;
+        }
+    }
+
+    return SettingsManager::globalInstance()->provider()->checkCompilerExists({});
+}
+
+void writeCompilerToConfig(KConfigGroup& cfg, const CompilerPointer& compiler)
+{
+    Q_ASSERT(compiler);
+
+    auto grp = cfg.group(ConfigConstants::definesAndIncludesGroup).group("Compiler");
+    grp.writeEntry(ConfigConstants::compilerNameKey, compiler->name());
+    grp.writeEntry(ConfigConstants::compilerPathKey, compiler->path());
+    grp.writeEntry(ConfigConstants::compilerTypeKey, compiler->factoryName());
+    grp.writeEntry(ConfigConstants::compilerStandardKey, compiler->languageStandard());
+}
+
 void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
 {
     int pathIndex = 0;
@@ -79,6 +120,8 @@ void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
             s << defines;
             pathgrp.writeEntry( ConfigConstants::definesKey, tmp );
         }
+
+        writeCompilerToConfig(pathgrp, path.compiler);
     }
 }
 
@@ -109,6 +152,9 @@ QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
                 s.setVersion( QDataStream::Qt_4_5 );
                 s >> path.includes;
             }
+
+            path.compiler = createCompilerFromConfig(pathgrp);
+
             if ( remove ) {
                 pathgrp.deleteGroup();
             }
@@ -213,48 +259,10 @@ QList<ConfigEntry> SettingsManager::readPaths( KConfig* cfg ) const
     return doReadSettings( grp );
 }
 
-CompilerPointer SettingsManager::currentCompiler( KConfig* cfg, const CompilerPointer& defaultCompiler ) const
-{
-    auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup ).group("Compiler");
-    auto name = grp.readEntry( ConfigConstants::compilerNameKey, QString() );
-    if (name.isEmpty()) {
-        return {};
-    }
-
-    for (auto c : m_provider.compilers()) {
-        if (c->name() == name) {
-            return c;
-        }
-    }
-
-    auto path = grp.readEntry( ConfigConstants::compilerPathKey, QString() );
-    auto type = grp.readEntry( ConfigConstants::compilerTypeKey, QString() );
-
-    auto cf = m_provider.compilerFactories();
-    for (auto f : cf) {
-        if (f->name() == type) {
-            auto compiler = f->createCompiler(name, path, true);
-            compiler->setLanguageStandard(grp.readEntry(ConfigConstants::compilerStandardKey, QString()));
-            return compiler;
-        }
-    }
-
-    return defaultCompiler;
-}
-
 bool SettingsManager::needToReparseCurrentProject( KConfig* cfg ) const
 {
     auto grp = cfg->group( ConfigConstants::definesAndIncludesGroup );
     return grp.readEntry( "reparse", true );
-}
-
-void SettingsManager::writeCurrentCompiler(KConfig* cfg, const CompilerPointer& compiler)
-{
-    auto grp = cfg->group(ConfigConstants::definesAndIncludesGroup).group("Compiler");
-    grp.writeEntry(ConfigConstants::compilerNameKey, compiler->name());
-    grp.writeEntry(ConfigConstants::compilerPathKey, compiler->path());
-    grp.writeEntry(ConfigConstants::compilerTypeKey, compiler->factoryName());
-    grp.writeEntry(ConfigConstants::compilerStandardKey, compiler->languageStandard());
 }
 
 void SettingsManager::writeUserDefinedCompilers(const QVector< CompilerPointer >& compilers)

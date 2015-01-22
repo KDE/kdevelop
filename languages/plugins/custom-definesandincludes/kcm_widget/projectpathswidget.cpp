@@ -65,6 +65,7 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     connect( pathsModel, &ProjectPathsModel::rowsInserted, this, &ProjectPathsWidget::changed );
     connect( pathsModel, &ProjectPathsModel::rowsRemoved, this, &ProjectPathsWidget::changed );
     connect( ui->compiler, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &ProjectPathsWidget::changed );
+    connect( ui->compiler, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &ProjectPathsWidget::changeCompilerForPath );
 
     connect(ui->compilersWidget, &CompilersWidget::compilerChanged, this, &ProjectPathsWidget::changed);
 
@@ -72,7 +73,7 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     connect( ui->definesWidget, static_cast<void(DefinesWidget::*)(const KDevelop::Defines&)>(&DefinesWidget::definesChanged), this, &ProjectPathsWidget::definesChanged );
 
     connect(ui->compilersWidget, &CompilersWidget::compilerChanged,
-            this, &ProjectPathsWidget::compilerChanged);
+            this, &ProjectPathsWidget::userDefinedCompilerChanged);
 
     connect(ui->languageParameters, &QTabWidget::currentChanged, this, &ProjectPathsWidget::tabChanged);
 }
@@ -126,6 +127,14 @@ void ProjectPathsWidget::projectPathSelected( int index )
     const QModelIndex midx = pathsModel->index( index, 0 );
     ui->includesWidget->setIncludes( pathsModel->data( midx, ProjectPathsModel::IncludesDataRole ).toStringList() );
     ui->definesWidget->setDefines( pathsModel->data( midx, ProjectPathsModel::DefinesDataRole ).value<Defines>() );
+
+    if (pathsModel->data(midx, ProjectPathsModel::CompilerDataRole).value<CompilerPointer>()) {
+        Q_ASSERT(!ui->compiler->currentText().isEmpty());
+        ui->compiler->setCurrentText(pathsModel->data(midx, ProjectPathsModel::CompilerDataRole).value<CompilerPointer>()->name());
+    } else {
+        //otherwise the path's been just added, so no compiler set.
+    }
+
     updateEnablements();
 }
 
@@ -269,8 +278,9 @@ QVector< CompilerPointer > ProjectPathsWidget::compilers() const
     return ui->compilersWidget->compilers();
 }
 
-void ProjectPathsWidget::compilerChanged()
+void ProjectPathsWidget::userDefinedCompilerChanged()
 {
+    //TODO: if some compiler was deleted remove it from the pathsModel too.
     auto current = currentCompiler()->name();
     setCompilers(ui->compilersWidget->compilers(), false);
     setCurrentCompiler(current);
@@ -284,5 +294,16 @@ void ProjectPathsWidget::tabChanged(int idx)
     } else {
         ui->batchEdit->setVisible(true);
         ui->compilerBox->setVisible(false);
+    }
+}
+
+void ProjectPathsWidget::changeCompilerForPath()
+{
+    for (int idx = 0; idx < pathsModel->rowCount(); idx++) {
+        const QModelIndex midx = pathsModel->index(idx, 0);
+        if (pathsModel->data(midx, Qt::DisplayRole) == ui->projectPaths->currentText()) {
+            pathsModel->setData(midx, QVariant::fromValue(currentCompiler()), ProjectPathsModel::CompilerDataRole);
+            break;
+        }
     }
 }

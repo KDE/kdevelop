@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>643</width>
+    <width>667</width>
     <height>621</height>
    </rect>
   </property>
@@ -231,15 +231,18 @@
         </property>
         <item>
          <widget class="QLabel" name="label">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select compiler/standard that will be used for parsing files under given directory&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="text">
-           <string>Current compiler</string>
+           <string>Compiler for path</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QComboBox" name="compiler">
           <property name="toolTip">
-           <string>Select a compiler that will be used to determine standart include directories and macros. </string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select compiler/standard that will be used for parsing files under given directory&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>

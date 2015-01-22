@@ -42,10 +42,8 @@ public:
     KDevelop::Path::List includes( KDevelop::ProjectBaseItem* item ) const override;
     KDevelop::IDefinesAndIncludesManager::Type type() const override;
 
-    /// @return current compiler for the @P project
-    CompilerPointer currentCompiler( KDevelop::IProject* project ) const;
-    /// Select the @p compiler that provides standard includes/defines for the @p project
-    void setCompiler( KDevelop::IProject* project, const CompilerPointer& compiler );
+    /// @return current compiler for the @p item
+    CompilerPointer compilerForItem( KDevelop::ProjectBaseItem* item ) const;
 
     /// @return list of all available compilers
     QVector<CompilerPointer> compilers() const;
@@ -60,21 +58,13 @@ public:
     /// @return All available factories
     QVector<CompilerFactoryPointer> compilerFactories() const;
 
-private:
-    CompilerPointer compilerForItem( KDevelop::ProjectBaseItem* item ) const;
+    /// Checks wheter the @p compiler exist, if so returns it. Otherwise returns default compiler
     CompilerPointer checkCompilerExists( const CompilerPointer& compiler ) const;
 
-    void addPoject( KDevelop::IProject* project, const CompilerPointer& compiler );
-    void removePoject( KDevelop::IProject* project );
-
 private Q_SLOTS:
-    void addProject( KDevelop::IProject* );
-    void projectClosed( KDevelop::IProject* );
     void retrieveUserDefinedCompilers();
 
 private:
-    //list of compilers for each projects
-    QHash<KDevelop::IProject*, CompilerPointer> m_projects;
     QVector<CompilerPointer> m_compilers;
     QVector<CompilerFactoryPointer> m_factories;
 
