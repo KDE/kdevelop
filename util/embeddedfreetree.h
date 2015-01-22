@@ -652,28 +652,6 @@ namespace KDevelop {
                }
            }
 
-           void insertBubbleSorted(const Data& data, int pos) {
-                //Since we don't know how the target is enclosed, just do naive bubble sort
-                ItemHandler::copyTo(data, m_items[pos]);
-                while(1) {
-                    int prev = pos-1;
-                    int next = pos+1;
-                    if(prev >= 0 && !ItemHandler::isFree(m_items[prev]) && m_items[pos] < m_items[prev]) {
-                        Data backup(m_items[prev]);
-                        m_items[prev] = m_items[pos];
-                        m_items[pos] = backup;
-                        pos = prev;
-                    }else if(next < m_itemCount && !ItemHandler::isFree(m_items[next]) && m_items[next] < m_items[pos]) {
-                        Data backup(m_items[next]);
-                        m_items[next] = m_items[pos];
-                        m_items[pos] = backup;
-                        pos = next;
-                    }else{
-                        break;
-                    }
-                }
-           }
-
            ///Maximum "moving" out of the way of items without forcing a complete rebuild of the list
            inline int maxMoveAround() const {
                return increaseFraction * rebuildIfInsertionMoreExpensive;

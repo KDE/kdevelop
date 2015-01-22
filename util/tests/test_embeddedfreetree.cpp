@@ -551,8 +551,6 @@ class TestEmbeddedFreeTree : public QObject {
                 }
 
 
-                std::set<uint> stdFiltered;
-
                 start = clock();
 
                 for(std::set<uint>::const_iterator it = testSet1.begin(); it != testSet1.end(); ++it) {

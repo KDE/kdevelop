@@ -1022,14 +1022,6 @@ private:
     }
   }
 
-  template<class Entry>
-  bool listContains(const Entry entry, const Entry* list, uint listSize) {
-    for(uint a = 0; a < listSize; ++a)
-      if(list[a] == entry)
-        return true;
-    return false;
-  }
-
   ///Stores the environment-information for the given url
   void storeInformationList(IndexedString url) {
 
