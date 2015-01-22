@@ -26,7 +26,7 @@
 
 namespace Ui
 {
-class CCSettings;
+class CCPreferences;
 }
 
 namespace KDevelop
@@ -48,7 +48,7 @@ public:
     void notifySettingsChanged();
 
 private:
-    Ui::CCSettings *preferencesDialog;
+    Ui::CCPreferences *preferencesDialog;
 };
 
 }

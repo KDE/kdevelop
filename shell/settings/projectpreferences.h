@@ -25,7 +25,7 @@
 
 namespace Ui
 {
-class ProjectSettings;
+class ProjectPreferences;
 }
 
 namespace KDevelop
@@ -48,7 +48,7 @@ private slots:
     void slotSettingsChanged();
 
 private:
-    Ui::ProjectSettings *preferencesDialog;
+    Ui::ProjectPreferences *preferencesDialog;
 
 };
 

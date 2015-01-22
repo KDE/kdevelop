@@ -36,7 +36,7 @@
 #include "../completionsettings.h"
 #include "../core.h"
 #include "ccconfig.h"
-#include "ui_ccsettings.h"
+#include "ui_ccpreferences.h"
 
 using namespace KTextEditor;
 
@@ -48,7 +48,7 @@ CCPreferences::CCPreferences(QWidget* parent)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
-    preferencesDialog = new Ui::CCSettings;
+    preferencesDialog = new Ui::CCPreferences;
     preferencesDialog->setupUi( w );
 
     l->addWidget( w );

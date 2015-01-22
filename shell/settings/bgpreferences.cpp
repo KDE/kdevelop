@@ -28,7 +28,7 @@
 
 #include "bgconfig.h"
 
-#include "ui_bgsettings.h"
+#include "ui_bgpreferences.h"
 
 namespace KDevelop
 {
@@ -39,7 +39,7 @@ BGPreferences::BGPreferences(QWidget* parent)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     QWidget* w = new QWidget;
-    preferencesDialog = new Ui::BGSettings;
+    preferencesDialog = new Ui::BGPreferences;
     preferencesDialog->setupUi( w );
 
     l->addWidget( w );

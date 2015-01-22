@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ProjectSettings</class>
+ <class>ProjectPreferences</class>
  <widget class="QWidget" name="ProjectSettings">
   <property name="geometry">
    <rect>

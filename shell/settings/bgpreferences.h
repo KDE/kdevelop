@@ -26,7 +26,7 @@
 
 namespace Ui
 {
-class BGSettings;
+class BGPreferences;
 }
 
 namespace KDevelop
@@ -47,7 +47,7 @@ public:
     virtual void reset() override;
 
 private:
-    Ui::BGSettings *preferencesDialog;
+    Ui::BGPreferences *preferencesDialog;
 
 };
 

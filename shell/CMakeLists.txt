@@ -88,10 +88,10 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
     settings/uiconfig.ui
     settings/editstyledialog.ui
     settings/sourceformattersettings.ui
-    settings/projectsettings.ui
+    settings/projectpreferences.ui
     settings/environmentwidget.ui
-    settings/ccsettings.ui
-    settings/bgsettings.ui
+    settings/ccpreferences.ui
+    settings/bgpreferences.ui
     settings/templateconfig.ui
     settings/templatepage.ui
 )
