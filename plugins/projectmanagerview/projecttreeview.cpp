@@ -59,46 +59,13 @@
 
 using namespace KDevelop;
 
-static const char settingsConfigGroup[] = "ProjectTreeView";
+namespace {
+const char settingsConfigGroup[] = "ProjectTreeView";
 
-ProjectTreeView::ProjectTreeView( QWidget *parent )
-        : QTreeView( parent ), m_ctxProject( 0 )
+QList<ProjectFileItem*> fileItemsWithin(const QList<ProjectBaseItem*>& items)
 {
-    header()->hide();
-
-    setEditTriggers( QAbstractItemView::EditKeyPressed );
-
-    setContextMenuPolicy( Qt::CustomContextMenu );
-    setSelectionMode( QAbstractItemView::ExtendedSelection );
-
-    setIndentation(10);
-
-    setDragEnabled(true);
-    setDragDropMode(QAbstractItemView::InternalMove);
-    setAutoScroll(true);
-    setAutoExpandDelay(300);
-    setItemDelegate(new ProjectModelItemDelegate(this));
-
-    connect( this, &ProjectTreeView::customContextMenuRequested, this, &ProjectTreeView::popupContextMenu );
-    connect( this, &ProjectTreeView::activated, this, &ProjectTreeView::slotActivated );
-
-    connect( ICore::self(), &ICore::aboutToShutdown,
-             this, &ProjectTreeView::aboutToShutdown);
-    connect( ICore::self()->projectController(), &IProjectController::projectOpened,
-             this, &ProjectTreeView::restoreState );
-    connect( ICore::self()->projectController(), &IProjectController::projectClosing,
-             this, &ProjectTreeView::saveState );
-
-    restoreState();
-}
-
-ProjectTreeView::~ProjectTreeView()
-{
-}
-
-QList<ProjectFileItem*> fileItemsWithin(const QList<ProjectBaseItem*> items)
-{
-   QList<ProjectFileItem*> fileItems;
+    QList<ProjectFileItem*> fileItems;
+    fileItems.reserve(items.size());
     foreach(ProjectBaseItem* item, items)
     {
         if (ProjectFileItem *file = item->file())
@@ -135,6 +102,50 @@ void filterDroppedItems(QList<T*> &items, ProjectBaseItem* dest)
         else if (items[i]->project() != dest->project())
             items.removeAt(i);
     }
+}
+
+//TODO test whether this could be replaced by projectbuildsetwidget.cpp::showContextMenu_appendActions
+void popupContextMenu_appendActions(QMenu& menu, const QList<QAction*>& actions)
+{
+    menu.addActions(actions);
+    menu.addSeparator();
+}
+
+}
+
+ProjectTreeView::ProjectTreeView( QWidget *parent )
+        : QTreeView( parent ), m_ctxProject( 0 )
+{
+    header()->hide();
+
+    setEditTriggers( QAbstractItemView::EditKeyPressed );
+
+    setContextMenuPolicy( Qt::CustomContextMenu );
+    setSelectionMode( QAbstractItemView::ExtendedSelection );
+
+    setIndentation(10);
+
+    setDragEnabled(true);
+    setDragDropMode(QAbstractItemView::InternalMove);
+    setAutoScroll(true);
+    setAutoExpandDelay(300);
+    setItemDelegate(new ProjectModelItemDelegate(this));
+
+    connect( this, &ProjectTreeView::customContextMenuRequested, this, &ProjectTreeView::popupContextMenu );
+    connect( this, &ProjectTreeView::activated, this, &ProjectTreeView::slotActivated );
+
+    connect( ICore::self(), &ICore::aboutToShutdown,
+             this, &ProjectTreeView::aboutToShutdown);
+    connect( ICore::self()->projectController(), &IProjectController::projectOpened,
+             this, &ProjectTreeView::restoreState );
+    connect( ICore::self()->projectController(), &IProjectController::projectClosing,
+             this, &ProjectTreeView::saveState );
+
+    restoreState();
+}
+
+ProjectTreeView::~ProjectTreeView()
+{
 }
 
 ProjectBaseItem* ProjectTreeView::itemAtPos(QPoint pos)
@@ -283,12 +294,6 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
         emit activate( item->file()->path() );
     }
 }
-//TODO test whether this could be replaced by projectbuildsetwidget.cpp::showContextMenu_appendActions
-void popupContextMenu_appendActions(QMenu& menu, const QList<QAction*>& actions)
-{
-    menu.addActions(actions);
-    menu.addSeparator();
-}
 
 void ProjectTreeView::popupContextMenu( const QPoint &pos )
 {
@@ -433,7 +438,6 @@ bool ProjectTreeView::event(QEvent* event)
     return QAbstractItemView::event(event);
 }
 
-
 void ProjectTreeView::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Return && currentIndex().isValid() && state()!=QAbstractItemView::EditingState)
@@ -444,6 +448,3 @@ void ProjectTreeView::keyPressEvent(QKeyEvent* event)
     else
         QTreeView::keyPressEvent(event);
 }
-
-
-
