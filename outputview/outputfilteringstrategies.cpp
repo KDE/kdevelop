@@ -220,12 +220,12 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
             item.type = FilteredItem::ActionItem;
             KLocalizedString shortened = curActFilter.label;
             if (curActFilter.fileGroup != -1) {
-                shortened.subs(match.captured(curActFilter.fileGroup));
+                shortened = shortened.subs(match.captured(curActFilter.fileGroup));
             }
             if (curActFilter.toolGroup != -1 ) {
-                shortened.subs(match.captured(curActFilter.toolGroup));
+                shortened = shortened.subs(match.captured(curActFilter.toolGroup));
             } else if (!curActFilter.tool.isEmpty()) {
-                shortened.subs(curActFilter.tool);
+                shortened = shortened.subs(curActFilter.tool);
             }
 
             item.shortenedText = shortened.toString();
