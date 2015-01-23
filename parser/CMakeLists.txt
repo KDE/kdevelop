@@ -27,13 +27,7 @@ if(BUILD_qmake_parser)
   install(TARGETS qmake-parser ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif(BUILD_qmake_parser)
 
-# Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
-#       Its only purpose is to support the plugin without needing to add all source files
-#       to the plugin target
-add_library( kdevqmakeparser SHARED ${parser_STAT_SRCS} ${parser_GEN_SRCS})
+add_library(kdevqmakeparser STATIC ${parser_STAT_SRCS} ${parser_GEN_SRCS})
 target_link_libraries(kdevqmakeparser LINK_PRIVATE
     KF5::KDELibs4Support
 )
-
-install(TARGETS kdevqmakeparser ${INSTALL_TARGETS_DEFAULT_ARGS})
-
