@@ -28,15 +28,24 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <project/projectmodel.h>
+
+#include <serialization/indexedstring.h>
+
+#include <algorithm>
+
 #include "../compilerprovider.h"
 #include "../settingsmanager.h"
+#include "../tests/projectsgenerator.h"
 
 using namespace KDevelop;
 
 void TestCompilerProvider::initTestCase()
 {
     AutoTestShell::init();
-    TestCore::initialize(Core::NoUi);
+    TestCore::initialize();
 }
 
 void TestCompilerProvider::cleanupTestCase()
@@ -60,7 +69,6 @@ void TestCompilerProvider::testRegisterCompiler()
 
 void TestCompilerProvider::testCompilerIncludesAndDefines()
 {
-    //TODO: add test with project items
     SettingsManager settings;
     auto provider = settings.provider();
     for (auto c : provider->compilers()) {
@@ -85,8 +93,6 @@ void TestCompilerProvider::testCompilerIncludesAndDefines()
 
 void TestCompilerProvider::testStorageBackwardsCompatible()
 {
-    //FIXME: test compiler too
-    return;
     SettingsManager settings;
     QTemporaryFile file;
     QVERIFY(file.open());
@@ -97,7 +103,8 @@ void TestCompilerProvider::testStorageBackwardsCompatible()
       "[CustomDefinesAndIncludes][ProjectPath0]\n" <<
       "Defines=\\x00\\x00\\x00\\x02\\x00\\x00\\x00\\x0c\\x00_\\x00D\\x00E\\x00B\\x00U\\x00G\\x00\\x00\\x00\\n\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x10\\x00V\\x00A\\x00R\\x00I\\x00A\\x00B\\x00L\\x00E\\x00\\x00\\x00\\n\\x00\\x00\\x00\\x00\\n\\x00V\\x00A\\x00L\\x00U\\x00E\n" <<
       "Includes=\\x00\\x00\\x00\\x01\\x00\\x00\\x00$\\x00/\\x00u\\x00s\\x00r\\x00/\\x00i\\x00n\\x00c\\x00l\\x00u\\x00d\\x00e\\x00/\\x00m\\x00y\\x00d\\x00i\\x00r\n" <<
-      "Path=/\n";
+      "Path=/\n" <<
+      "[CustomDefinesAndIncludes][ProjectPath0][Compiler]\nName=GCC c99\nPath=gcc\nStandard=c99\nType=GCC\n";
     file.close();
     KConfig config(file.fileName());
     auto entries = settings.readPaths(&config);
@@ -110,11 +117,21 @@ void TestCompilerProvider::testStorageBackwardsCompatible()
     QStringList includes = QStringList() << "/usr/include/mydir";
     QCOMPARE(entry.includes, includes);
     QCOMPARE(entry.path, QString("/"));
+    QVERIFY(entry.compiler);
+
+    auto compilers = settings.provider()->compilers();
+    Q_ASSERT(!compilers.isEmpty());
+    bool gccCompilerInstalled = std::any_of(compilers.begin(), compilers.end(), [](const CompilerPointer& compiler){return compiler->name().contains("gcc", Qt::CaseInsensitive);});
+    if (gccCompilerInstalled) {
+        QCOMPARE(entry.compiler->languageStandard(), QStringLiteral("c99"));
+        QCOMPARE(entry.compiler->name(), QStringLiteral("GCC c99"));
+    }
 
     ConfigEntry otherEntry;
     otherEntry.defines["TEST"] = "lalal";
     otherEntry.includes = QStringList() << "/foo";
     otherEntry.path = "test";
+    otherEntry.compiler = compilers.first();
     entries << otherEntry;
     settings.writePaths(&config, entries);
 
@@ -123,10 +140,60 @@ void TestCompilerProvider::testStorageBackwardsCompatible()
     QCOMPARE(readWriteEntries.at(0).path, entry.path);
     QCOMPARE(readWriteEntries.at(0).defines, entry.defines);
     QCOMPARE(readWriteEntries.at(0).includes, entry.includes);
+    QCOMPARE(readWriteEntries.at(0).compiler->name(), entry.compiler->name());
 
     QCOMPARE(readWriteEntries.at(1).path, otherEntry.path);
     QCOMPARE(readWriteEntries.at(1).defines, otherEntry.defines);
     QCOMPARE(readWriteEntries.at(1).includes, otherEntry.includes);
+    QCOMPARE(readWriteEntries.at(1).compiler->name(), otherEntry.compiler->name());
 }
 
-QTEST_GUILESS_MAIN(TestCompilerProvider)
+void TestCompilerProvider::testCompilerIncludesAndDefinesForProject()
+{
+    auto project = ProjectsGenerator::GenerateMultiPathProject();
+    Q_ASSERT(project);
+
+    SettingsManager settings;
+    auto provider = settings.provider();
+
+    Q_ASSERT(!provider->compilerFactories().isEmpty());
+    auto compiler = provider->compilerFactories().first()->createCompiler("name", "path");
+
+    QVERIFY(provider->registerCompiler(compiler));
+    QVERIFY(provider->compilers().contains(compiler));
+
+    auto projectCompiler = provider->compilerForItem(project->projectItem());
+
+    QVERIFY(projectCompiler);
+    QVERIFY(projectCompiler != compiler);
+
+    ProjectBaseItem* mainfile = nullptr;
+    for (const auto& file: project->fileSet() ) {
+        for (auto i: project->filesForPath(file)) {
+            if( i->text() == "main.cpp" ) {
+                mainfile = i;
+                break;
+            }
+        }
+    }
+    QVERIFY(mainfile);
+    auto mainCompiler = provider->compilerForItem(mainfile);
+    QVERIFY(mainCompiler);
+    QVERIFY(mainCompiler->name() == projectCompiler->name());
+
+    ConfigEntry entry;
+    entry.path = "src/main.cpp";
+    entry.compiler = compiler;
+
+    auto entries = settings.readPaths(project->projectConfiguration().data());
+    entries.append(entry);
+    settings.writePaths(project->projectConfiguration().data(), entries);
+
+    mainCompiler = provider->compilerForItem(mainfile);
+    QVERIFY(mainCompiler);
+    QVERIFY(mainCompiler->name() == compiler->name());
+
+    ICore::self()->projectController()->closeProject(project);
+}
+
+QTEST_MAIN(TestCompilerProvider)

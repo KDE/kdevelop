@@ -56,7 +56,7 @@ namespace
 {
 CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
 {
-    auto grp = cfg.group( ConfigConstants::definesAndIncludesGroup ).group("Compiler");
+    auto grp = cfg.group("Compiler");
     auto name = grp.readEntry( ConfigConstants::compilerNameKey, QString() );
     if (name.isEmpty()) {
         return SettingsManager::globalInstance()->provider()->checkCompilerExists({});
@@ -87,7 +87,7 @@ void writeCompilerToConfig(KConfigGroup& cfg, const CompilerPointer& compiler)
 {
     Q_ASSERT(compiler);
 
-    auto grp = cfg.group(ConfigConstants::definesAndIncludesGroup).group("Compiler");
+    auto grp = cfg.group("Compiler");
     grp.writeEntry(ConfigConstants::compilerNameKey, compiler->name());
     grp.writeEntry(ConfigConstants::compilerPathKey, compiler->path());
     grp.writeEntry(ConfigConstants::compilerTypeKey, compiler->factoryName());

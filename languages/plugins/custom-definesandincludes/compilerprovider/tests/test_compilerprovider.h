@@ -35,6 +35,7 @@ private slots:
     void testRegisterCompiler();
     void testCompilerIncludesAndDefines();
     void testStorageBackwardsCompatible();
+    void testCompilerIncludesAndDefinesForProject();
 };
 
 #endif
