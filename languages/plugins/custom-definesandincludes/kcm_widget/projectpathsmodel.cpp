@@ -206,8 +206,10 @@ QString ProjectPathsModel::sanitizeUrl( QUrl url, bool needRelative ) const
 {
     Q_ASSERT( project );
 
-    if( needRelative )
-        return project->path().relativePath( KDevelop::Path( url ) );
+    if (needRelative) {
+        const auto relativePath = project->path().relativePath(KDevelop::Path(url));
+        return relativePath.isEmpty() ? QStringLiteral(".") : relativePath;
+    }
     return url.adjusted(QUrl::StripTrailingSlash | QUrl::NormalizePathSegments).toString(QUrl::PreferLocalFile);
 }
 
