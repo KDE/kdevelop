@@ -145,12 +145,60 @@ ProjectFileItem* findProjectFileItem(const IndexedString& url, bool* hasBuildSys
     return file;
 }
 
-QString languageStandard(KSharedConfigPtr cfg)
+QString languageStandard(ProjectFileItem* item)
 {
-    auto grp = cfg->group("Defines And Includes").group("Compiler");
-    auto standard = grp.readEntry("Standard", QStringLiteral("c++11"));
-    // QStringLiteral("c++11") shouldn't be here, but surprisingly grp.readEntry can return empty string even if the default value is set.
-    return standard.isEmpty() ? QStringLiteral("c++11") : standard;
+    static const QString defaultLanguageStandard = QStringLiteral("c++11");
+    struct PathStandard {
+        QString path;
+        QString standard;
+    };
+    QList<PathStandard> paths;
+
+    auto cfg = item->project()->projectConfiguration();
+    auto grp = cfg->group("CustomDefinesAndIncludes");
+    for (const QString& grpName : grp.groupList()) {
+        if (grpName.startsWith("ProjectPath")) {
+            KConfigGroup pathgrp = grp.group(grpName);
+            PathStandard entry;
+            entry.path = pathgrp.readEntry("Path", "");
+
+            auto cgrp = pathgrp.group("Compiler");
+            entry.standard = cgrp.readEntry("Standard", QString());
+            if (entry.standard.isEmpty()) {
+                continue;
+            }
+            paths.append(entry);
+        }
+    }
+
+    if (paths.isEmpty()) {
+        return defaultLanguageStandard;
+    }
+
+    const Path itemPath = item->path();
+    const Path rootDirectory = item->project()->path();
+
+    Path closestPath;
+    QString standard;
+
+    for (const auto& entry : paths) {
+        Path targetDirectory = rootDirectory;
+
+        targetDirectory.addPath(entry.path);
+
+        if (targetDirectory == itemPath) {
+            return entry.standard;;
+        }
+
+        if (targetDirectory.isParentOf(itemPath)) {
+            if (closestPath.isEmpty() || targetDirectory.segments().size() > closestPath.segments().size()) {
+                closestPath = targetDirectory;
+                standard = entry.standard;
+            }
+        }
+    }
+
+    return standard.isEmpty() ? defaultLanguageStandard : standard;
 }
 
 ClangParsingEnvironmentFile* parsingEnvironmentFile(const TopDUContext* context)
@@ -183,7 +231,7 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
     if (auto file = findProjectFileItem(tuUrl, &hasBuildSystemInfo)) {
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(file));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(file));
-        m_environment.setLanguageStandard(languageStandard(file->project()->projectConfiguration()));
+        m_environment.setLanguageStandard(languageStandard(file));
     } else {
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(tuUrl.str()));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(tuUrl.str()));
