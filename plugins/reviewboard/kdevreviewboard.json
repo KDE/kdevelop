@@ -22,6 +22,7 @@
         "Description[sv]": "Integrering av Reviewboard i KDevelop", 
         "Description[uk]": "Інтеграція ReviewBoard з KDevelop", 
         "Description[x-test]": "xxReviewBoard integration for KDevelopxx", 
+        "Description[zh_CN]": "KDevelop 的 ReviewBoard 集成", 
         "Icon": "reviewboard", 
         "Id": "kdevreviewboard", 
         "License": "GPL", 

@@ -22,6 +22,7 @@
         "Description[sv]": "Programguide", 
         "Description[uk]": "Майстер створення програм", 
         "Description[x-test]": "xxApplication Wizardxx", 
+        "Description[zh_CN]": "应用程序向导", 
         "Icon": "project-development-new-template", 
         "Id": "kdevappwizard", 
         "License": "GPL", 

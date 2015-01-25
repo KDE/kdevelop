@@ -21,6 +21,7 @@
         "Description[sv]": "Insticksprogrammet gör det möjligt att köra skript.", 
         "Description[uk]": "За допомогою цього додатка можна запускати скрипти.", 
         "Description[x-test]": "xxThis plugin allows running of scripts.xx", 
+        "Description[zh_CN]": "此插件可以执行脚本.", 
         "Icon": "system-run", 
         "Id": "kdevexecutescript", 
         "License": "GPL", 

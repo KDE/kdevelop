@@ -22,6 +22,7 @@
         "Description[sv]": "Det här insticksprogrammet hjälper till att ladda upp programfixar till tjänsten Pastebin", 
         "Description[uk]": "За допомогою цього додатка ви зможете вивантажувати ваші латки до служби Pastebin", 
         "Description[x-test]": "xxThis plugin helps you upload your patches to Pastebin servicexx", 
+        "Description[zh_CN]": "此插件帮助您将补丁上传到 Pastebin 服务", 
         "Icon": "edit-paste", 
         "Id": "kdevpastebin", 
         "License": "GPL", 

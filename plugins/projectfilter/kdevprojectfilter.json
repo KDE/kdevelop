@@ -22,6 +22,7 @@
         "Description[sv]": "Anpassa vilka filer och kataloger inne i projektkatalogen som ska inkluderas eller exkluderas.", 
         "Description[uk]": "За допомогою цього модуля можна визначити, які файли і теки у теці проекту має бути включено або виключено з його складу.", 
         "Description[x-test]": "xxConfigure which files and folders inside the project folder should be included or excluded.xx", 
+        "Description[zh_CN]": "配置项目文件中哪些文件被加入或排除。", 
         "Icon": "view-filter", 
         "Id": "KDevProjectFilter", 
         "Name": "Project Filter", 
@@ -50,6 +51,7 @@
         "Name[tr]": "Proje Süzgeci", 
         "Name[uk]": "Фільтр проекту", 
         "Name[x-test]": "xxProject Filterxx", 
+        "Name[zh_CN]": "项目过滤器", 
         "Name[zh_TW]": "專案過濾器", 
         "ServiceTypes": [
             "KDevelop/Plugin"

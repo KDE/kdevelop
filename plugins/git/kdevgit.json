@@ -26,6 +26,7 @@
         "Description[sv]": "Insticksprogrammet integrerar Git i KDevelop", 
         "Description[uk]": "Цей додаток інтегрує Git із KDevelop", 
         "Description[x-test]": "xxThis plugin integrates Git to KDevelopxx", 
+        "Description[zh_CN]": "此插件对 KDevelop 整合 Git", 
         "Icon": "git", 
         "Id": "kdevgit", 
         "License": "GPL", 

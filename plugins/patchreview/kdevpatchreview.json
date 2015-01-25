@@ -22,6 +22,7 @@
         "Description[sv]": "Insticksprogrammet gör det möjligt att direkt granska programfixar i editorn.", 
         "Description[uk]": "За допомогою цього додатка ви зможете рецензувати латки безпосередньо у редакторі.", 
         "Description[x-test]": "xxThis plugin allows reviewing patches directly in the editor.xx", 
+        "Description[zh_CN]": "此插件允许在编辑器中直接审阅补丁。", 
         "Icon": "applications-engineering", 
         "Id": "kdevpatchreview", 
         "License": "GPL", 

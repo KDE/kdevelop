@@ -21,6 +21,7 @@
         "Description[sv]": "Byte till senast använda dokument för KDevelop-plattformen.", 
         "Description[uk]": "Перемикач останніх використаних документів для KDevPlatform.", 
         "Description[x-test]": "xxA most-recently-used document switcher for KDevPlatform.xx", 
+        "Description[zh_CN]": "KDevPlatform 的最近经常使用文档的切换器。", 
         "Icon": "document-open-recent", 
         "Id": "kdevdocumentswitcher", 
         "License": "GPL", 

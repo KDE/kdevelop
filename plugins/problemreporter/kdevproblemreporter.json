@@ -22,6 +22,7 @@
         "Description[sv]": "Insticksprogrammet visar fel i källkod.", 
         "Description[uk]": "За допомогою цього додатка можна переглянути повідомлення про помилки у коді.", 
         "Description[x-test]": "xxThis plugin shows errors in source code.xx", 
+        "Description[zh_CN]": "此插件显示源代码中的错误。", 
         "Icon": "emblem-important", 
         "Id": "kdevproblemreporter", 
         "License": "LGPL", 

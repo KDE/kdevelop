@@ -21,6 +21,7 @@
         "Description[sv]": "Tillåter att KDevelop hanterar generella projekt", 
         "Description[uk]": "За допомогою цього додатка можна увімкнути керування загальними проектами у KDevelop", 
         "Description[x-test]": "xxAllow KDevelop to manage generic projectsxx", 
+        "Description[zh_CN]": "允许 KDevelop 管理常规工程", 
         "Icon": "kdevelop", 
         "Id": "KDevGenericManager", 
         "Name": "Generic Project Manager", 

@@ -25,6 +25,7 @@
         "Description[sv]": "Insticksprogrammet integrerar Bazaar i KDevelop", 
         "Description[uk]": "За допомогою цього додатка можна інтегрувати Bazaar до KDevelop", 
         "Description[x-test]": "xxThis plugin integrates Bazaar to KDevelopxx", 
+        "Description[zh_CN]": "此插件将 Bazaar 整合到 KDevelop", 
         "Icon": "bazaar", 
         "Id": "kdevbazaar", 
         "License": "GPL", 

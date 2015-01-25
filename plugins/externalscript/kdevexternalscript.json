@@ -22,6 +22,7 @@
         "Description[sv]": "Kör externa skript eller program för att behandla editorns innehåll eller utför andra godtyckliga åtgärder.", 
         "Description[uk]": "Запускає зовнішні скрипти або програми для обробки текстових даних редактора або виконання інших потрібних дій.", 
         "Description[x-test]": "xxRun external scripts or applications to manipulate the editor contents or do other arbitrary actions.xx", 
+        "Description[zh_CN]": "运行外部脚本或应用程序来处理编辑器内容或者执行其它任意动作。", 
         "Icon": "system-run", 
         "Id": "kdevexternalscript", 
         "License": "GPL", 

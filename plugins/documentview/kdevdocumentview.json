@@ -21,6 +21,7 @@
         "Description[sv]": "Insticksprogrammet visar en grafisk vy av alla dokument som för närvarande har laddats och delar upp dem enligt Mime-typ.", 
         "Description[uk]": "Цей додаток відображає у графічному вигляді всі відкриті документи і впорядковує їх за типом MIME.", 
         "Description[x-test]": "xxThis plugin displays a graphical view of all documents currently loaded and separates them by mimetype.xx", 
+        "Description[zh_CN]": "此插件显示当前已装入文档的图形视图并按照 mime 类型分类。", 
         "Icon": "document-preview", 
         "Id": "kdevdocumentview", 
         "License": "LGPL", 

@@ -16,6 +16,7 @@
         "Description[sv]": "Tillåter byte mellan samhörande dokument som implementerings- och deklarationsfiler.", 
         "Description[uk]": "Надає змогу перемикатися на споріднені документи, зокрема файли з реалізацією та файли заголовків.", 
         "Description[x-test]": "xxAllows switching between buddy documents like implementation and header file.xx", 
+        "Description[zh_CN]": "允许在伙伴文件中切换，如实现与头文件", 
         "Icon": "document-multiple", 
         "Id": "kdevswitchtobuddy", 
         "Name": "Switch to Buddy", 
