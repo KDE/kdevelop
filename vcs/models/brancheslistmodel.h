@@ -47,8 +47,8 @@ class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
 
         virtual QHash<int, QByteArray> roleNames() const override;
 
-        void createBranch(const QString& baseBranch, const QString& newBranch);
-        void removeBranch(const QString& branch);
+        Q_INVOKABLE void createBranch(const QString& baseBranch, const QString& newBranch);
+        Q_INVOKABLE void removeBranch(const QString& branch);
 
         QUrl repository() const;
         KDevelop::IBranchingVersionControl* interface();
