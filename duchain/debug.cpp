@@ -18,4 +18,4 @@
 
 #include "debug.h"
 
-Q_LOGGING_CATEGORY(KDEV_QMLJS_DUCHAIN, "kdev.qmljs")
+Q_LOGGING_CATEGORY(KDEV_QMLJS_DUCHAIN, "kdevelop.plugins.qmljs.duchain")
