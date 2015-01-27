@@ -674,16 +674,17 @@ void OutputWidget::outputFilter(const QString& filter)
     if( !view )
         return;
     int index = currentOutputIndex();
-    if( !dynamic_cast<QSortFilterProxyModel*>(view->model()) )
+    auto proxyModel = dynamic_cast<QSortFilterProxyModel*>(view->model());
+    if( !proxyModel )
     {
-         QSortFilterProxyModel* _proxyModel = new QSortFilterProxyModel(view->model());
-        _proxyModel->setDynamicSortFilter(true);
-        _proxyModel->setSourceModel(view->model());
-        proxyModels.insert(index, _proxyModel);
-        view->setModel(_proxyModel);
+        proxyModel = new QSortFilterProxyModel(view->model());
+        proxyModel->setDynamicSortFilter(true);
+        proxyModel->setSourceModel(view->model());
+        proxyModels.insert(index, proxyModel);
+        view->setModel(proxyModel);
     }
-    QRegExp regExp(filter,Qt::CaseInsensitive);
-    proxyModels[index]->setFilterRegExp(regExp);
+    QRegExp regExp(filter, Qt::CaseInsensitive);
+    proxyModel->setFilterRegExp(regExp);
     filters[index] = filter;
 }
 
