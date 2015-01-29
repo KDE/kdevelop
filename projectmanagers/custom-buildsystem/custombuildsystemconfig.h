@@ -29,6 +29,8 @@
 struct CustomBuildSystemTool
 {
     enum ActionType { Build = 0, Configure, Install, Clean, Prune, Undefined };
+    static QString toolName(ActionType type);
+
     CustomBuildSystemTool() : enabled( false ), type( Undefined ) {}
     bool enabled;
     QUrl executable;

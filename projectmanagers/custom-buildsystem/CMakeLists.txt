@@ -5,6 +5,7 @@ add_subdirectory( tests )
 
 ## KDevelop Plugin
 set(custom_SRCS
+    custombuildsystemconfig.cpp
     custombuildsystemplugin.cpp
     custombuildjob.cpp
     configwidget.cpp

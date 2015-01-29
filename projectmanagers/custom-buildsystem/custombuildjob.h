@@ -56,6 +56,7 @@ private slots:
 private:
     KDevelop::OutputModel* model();
     CustomBuildSystemTool::ActionType type;
+    QString projectName;
     QString cmd;
     QString arguments;
     QString environment;

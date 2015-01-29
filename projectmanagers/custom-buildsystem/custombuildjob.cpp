@@ -24,6 +24,7 @@
 #include <KConfigGroup>
 #include <KShell>
 
+#include <interfaces/iproject.h>
 #include <outputview/outputmodel.h>
 #include <outputview/outputdelegate.h>
 #include <util/processlinemaker.h>
@@ -45,33 +46,26 @@ CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBase
 {
     setCapabilities( Killable );
     QString subgrpname;
-    QString title;
     switch( type ) {
         case CustomBuildSystemTool::Build:
-            title = i18n( "Building:" );
             subgrpname = QString( "%1Build" ).arg( ConfigConstants::toolGroupPrefix );
             break;
         case CustomBuildSystemTool::Clean:
-            title = i18n( "Cleaning:" );
             subgrpname = QString( "%1Clean" ).arg( ConfigConstants::toolGroupPrefix );
             break;
         case CustomBuildSystemTool::Install:
-            title = i18n( "Installing:" );
             subgrpname = QString( "%1Install" ).arg( ConfigConstants::toolGroupPrefix );
             break;
         case CustomBuildSystemTool::Configure:
-            title = i18n( "Configuring:" );
             subgrpname = QString( "%1Configure" ).arg( ConfigConstants::toolGroupPrefix );
             break;
         case CustomBuildSystemTool::Prune:
-            title = i18n( "Pruning:" );
             subgrpname = QString( "%1Prune" ).arg( ConfigConstants::toolGroupPrefix );
             break;
         case CustomBuildSystemTool::Undefined:
             return;
     }
-    setTitle( QString("%1 %2").arg( cmd ).arg( item->text() ) );
-    setObjectName( QString("%1 %2").arg( cmd ).arg( item->text() ) );
+    projectName = item->project()->name();
     builddir = plugin->buildDirectory( item ).toLocalFile();
     KConfigGroup g = plugin->configuration( item->project() );
     if(g.isValid()) {
@@ -81,6 +75,30 @@ CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBase
         environment = grp.readEntry( ConfigConstants::toolEnvironment, "" );
         arguments = grp.readEntry( ConfigConstants::toolArguments, "" );
     }
+
+    QString title;
+    switch (type) {
+    case CustomBuildSystemTool::Build:
+        title = i18nc("Building: <command> <project item name>", "Building: %1 %2", cmd, item->text());
+        break;
+    case CustomBuildSystemTool::Clean:
+        title = i18nc("Cleaning: <command> <project item name>", "Cleaning: %1 %2", cmd, item->text());
+        break;
+    case CustomBuildSystemTool::Install:
+        title = i18nc("Installing: <command> <project item name>", "Installing: %1 %2", cmd, item->text());
+        break;
+    case CustomBuildSystemTool::Configure:
+        title = i18nc("Configuring: <command> <project item name>", "Configuring: %1 %2", cmd, item->text());
+        break;
+    case CustomBuildSystemTool::Prune:
+        title = i18nc("Pruning: <command> <project item name>", "Pruning: %1 %2", cmd, item->text());
+        break;
+    default:
+        title = QStringLiteral("Internal Error: CustomBuildJob");
+        break;
+    }
+    setTitle(title);
+    setObjectName(title);
     setDelegate( new KDevelop::OutputDelegate );
 }
 
@@ -92,11 +110,13 @@ void CustomBuildJob::start()
         emitResult();
     } else if( cmd.isEmpty() ) {
         setError( NoCommand );
-        setErrorText( i18n( "No command given" ) );
+        setErrorText(i18n("No command given for custom %1 tool in project \"%2\".",
+            CustomBuildSystemTool::toolName(type), projectName));
         emitResult();
     } else if( !enabled ) {
         setError( ToolDisabled );
-        setErrorText( i18n( "This command is disabled" ) );
+        setErrorText(i18n("The custom %1 tool in project \"%2\" is disabled",
+            CustomBuildSystemTool::toolName(type), projectName));
         emitResult();
     } else {
         // prepend the command name to the argument string
