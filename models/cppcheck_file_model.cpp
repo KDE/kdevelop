@@ -24,7 +24,6 @@
 #include <QApplication>
 #include <QFontDatabase>
 
-#include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 

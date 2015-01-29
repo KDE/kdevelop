@@ -22,8 +22,8 @@
 
 #include <QDir>
 #include <QFont>
+#include <QPixmap>
 
-#include <kglobalsettings.h>
 #include <kiconloader.h>
 
 namespace cppcheck
