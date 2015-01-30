@@ -24,7 +24,6 @@
 #include <QApplication>
 #include <QFontDatabase>
 
-#include <kmessagebox.h>
 #include <klocale.h>
 
 #include <models/cppcheckitemsimpl.h>

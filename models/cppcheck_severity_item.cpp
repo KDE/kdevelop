@@ -22,9 +22,9 @@
 
 #include <QDir>
 #include <QFont>
+#include <QPixmap>
 #include <QUrl>
 
-#include <kglobalsettings.h>
 #include <kiconloader.h>
 #include <klocale.h>
 

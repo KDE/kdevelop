@@ -22,10 +22,7 @@
 #include "cppcheck_file_model.h"
 
 #include <QApplication>
-
-#include <kmessagebox.h>
-#include <klocale.h>
-#include <kglobalsettings.h>
+#include <QFontDatabase>
 
 #include <cppcheck_file_item.h>
 
@@ -168,7 +165,7 @@ QVariant CppcheckFileModel::data(const QModelIndex & index, int role) const
     break;
 
     case Qt::FontRole: {
-        QFont f = KGlobalSettings::generalFont();
+        QFont f = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
         if ((static_cast<CppcheckFileItem*>(index.internalPointer()))->parent() == m_rootItem)
             f.setBold(true);
         return f;
