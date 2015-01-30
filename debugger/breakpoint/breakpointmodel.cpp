@@ -504,7 +504,7 @@ void BreakpointModel::load()
     if (count == 0)
         return;
 
-    beginInsertRows(QModelIndex(), 0, count);
+    beginInsertRows(QModelIndex(), 0, count - 1);
     for (int i = 0; i < count; ++i) {
         if (!breakpoints.group(QString::number(i)).readEntry("kind", "").isEmpty()) {
             new Breakpoint(this, breakpoints.group(QString::number(i)));
