@@ -26,7 +26,7 @@
 #include <QUrl>
 
 #include <kiconloader.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 namespace cppcheck
 {

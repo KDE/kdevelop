@@ -24,7 +24,7 @@
 #include <QApplication>
 #include <QFontDatabase>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
 #include <models/cppcheckitemsimpl.h>
 #include <cppcheck_file_item.h>
