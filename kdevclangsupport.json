@@ -15,6 +15,7 @@
         "Description[sv]": "C/C++ språkstöd (baserat på Clang)", 
         "Description[uk]": "Підтримка мови C/C++ на основі Clang", 
         "Description[x-test]": "xxC/C++ Language Support (Clang-based)xx", 
+        "Description[zh_CN]": "C/C++ 语言支持 (基于 Clang)", 
         "Icon": "text-x-c++src", 
         "Id": "kdevclangsupport", 
         "Name": "C++ Support", 
