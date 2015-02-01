@@ -36,7 +36,7 @@ add_subdirectory(nodejsmodules)
 add_subdirectory(tests)
 add_subdirectory(codecompletion)
 
-add_library(kdevqmljslanguagesupport MODULE
+kdevplatform_add_plugin(kdevqmljslanguagesupport JSON kdevqmljs.json SOURCES
     qmljsparsejob.cpp
     qmljshighlighting.cpp
     kdevqmljsplugin.cpp
@@ -52,8 +52,4 @@ target_link_libraries(kdevqmljslanguagesupport
     KF5::Declarative
 )
 
-install(TARGETS kdevqmljslanguagesupport DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
 install(DIRECTORY navigation/propertywidgets DESTINATION ${DATA_INSTALL_DIR})
-
-configure_file(kdevqmljssupport.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevqmljssupport.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevqmljssupport.desktop DESTINATION ${SERVICES_INSTALL_DIR})

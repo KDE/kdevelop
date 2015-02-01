@@ -40,10 +40,7 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/contextmenuextension.h>
 
-K_PLUGIN_FACTORY(KDevQmlJsSupportFactory, registerPlugin<KDevQmlJsPlugin>(); )
-//K_EXPORT_PLUGIN(KDevQmlJsSupportFactory(
-//    KAboutData("kdevqmljssupport", 0, ki18n("QML/JS Support"), VERSION_STR,
-//    ki18n("Support for QML and JS Languages"), KAboutData::License_GPL)))
+K_PLUGIN_FACTORY_WITH_JSON(KDevQmlJsSupportFactory, "kdevqmljs.json", registerPlugin<KDevQmlJsPlugin>(); )
 
 using namespace KDevelop;
 
