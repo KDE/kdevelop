@@ -359,7 +359,7 @@ void AssistantPopup::hideAssistant()
 
 void AssistantPopup::updateLayoutType()
 {
-    if ( ! assistant() ) {
+    if ( !m_assistant || !m_view ) {
         return;
     }
     // Make a rough estimate of the width the assistant will need
@@ -378,7 +378,7 @@ void AssistantPopup::updateLayoutType()
 
 void AssistantPopup::updateState()
 {
-    if (!m_assistant || m_assistant->actions().isEmpty()) {
+    if (!m_assistant || m_assistant->actions().isEmpty() || !m_view) {
         hide();
         return;
     }
