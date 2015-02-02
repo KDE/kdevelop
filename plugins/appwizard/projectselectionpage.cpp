@@ -261,6 +261,8 @@ void ProjectSelectionPage::validateData()
         {
             ui->locationValidLabel->setText( i18n("Path already exists and contains files") );
             setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
+            emit invalid();
+            return;
         }
     }
 }
