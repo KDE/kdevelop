@@ -259,7 +259,7 @@ void ProjectSelectionPage::validateData()
     {
         if( !QDir( fi.absoluteFilePath()).entryList( QDir::NoDotAndDotDot | QDir::AllEntries ).isEmpty() )
         {
-            ui->locationValidLabel->setText( i18n("Path already exists and contains files") );
+            ui->locationValidLabel->setText( i18n("Path already exists and contains files. Open it as a project.") );
             setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
             emit invalid();
             return;
