@@ -1,37 +1,21 @@
 {
     "KPlugin": {
-        "Id": "kdevqmljs",
-        "Icon": "text-x-qml",
-        "License": "GPL",
-        "Category": "Language Support",
-        "Name": "QML Support",
-        "Name[bs]": "QML podrška",
-        "Name[ca]": "Implementació per a QML",
-        "Name[ca@valencia]": "Implementació per a QML",
-        "Name[cs]": "Podpora QML",
-        "Name[de]": "Unterstützung für QML",
-        "Name[en_GB]": "QML Support",
-        "Name[es]": "Implementación de QML",
-        "Name[et]": "QML toetus",
-        "Name[fi]": "QML-tuki",
-        "Name[fr]": "Prise en charge de QML",
-        "Name[hu]": "QML támogatás",
-        "Name[nl]": "QML-ondersteuning",
-        "Name[pl]": "Obsługa QML",
-        "Name[pt]": "Suporte para QML",
-        "Name[pt_BR]": "Suporte à QML",
-        "Name[sk]": "Podpora QML",
-        "Name[sv]": "QML-stöd",
-        "Name[tr]": "QML Desteği",
-        "Name[uk]": "Підтримка QML",
-        "Name[x-test]": "xxQML Supportxx",
-        "Name[zh_CN]": "QML 支持",
+        "Category": "Language Support", 
+        "Icon": "text-x-qml", 
+        "Id": "kdevqmljs", 
+        "License": "GPL", 
+        "Name": "QML Support", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
-    },
-    "X-KDevelop-Mode": "NoGUI",
-    "X-KDevelop-Language": "QML/JS",
-    "X-KDevelop-SupportedMimeTypes": ["text/x-qml", "application/javascript"],
-    "X-KDevelop-Interfaces": ["ILanguageSupport"]
+    }, 
+    "X-KDevelop-Interfaces": [
+        "ILanguageSupport"
+    ], 
+    "X-KDevelop-Language": "QML/JS", 
+    "X-KDevelop-Mode": "NoGUI", 
+    "X-KDevelop-SupportedMimeTypes": [
+        "text/x-qml", 
+        "application/javascript"
+    ]
 }
