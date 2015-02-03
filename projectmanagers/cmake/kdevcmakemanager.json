@@ -8,10 +8,20 @@
         ], 
         "Category": "Project Management", 
         "Description": "Allows KDevelop to manage CMake-based projects", 
+        "Description[nl]": "Staat KDevelop toe om op CMake gebaseerde projecten te beheren", 
+        "Description[pt_BR]": "Permite ao KDevelop gerenciar projetos baseados em CMake", 
+        "Description[sv]": "Låter KDevelop hantera CMake-baserade projekt", 
+        "Description[uk]": "Надає змогу KDevelop керувати заснованими на CMake проектами", 
+        "Description[x-test]": "xxAllows KDevelop to manage CMake-based projectsxx", 
         "Icon": "cmake", 
         "Id": "KDevCMakeManager", 
         "License": "GPL", 
         "Name": "CMake Project Manager", 
+        "Name[nl]": "CMake-projectbeheerder", 
+        "Name[pt_BR]": "Gerenciador de Projeto CMake", 
+        "Name[sv]": "CMake-projekthantering", 
+        "Name[uk]": "Керування проектами CMake", 
+        "Name[x-test]": "xxCMake Project Managerxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

@@ -2,9 +2,19 @@
     "KPlugin": {
         "Category": "Project Management", 
         "Description": "KDevelop Make Builder", 
+        "Description[nl]": "KDevelop Make-bouwer", 
+        "Description[pt_BR]": "Compilador do Make para o KDevelop", 
+        "Description[sv]": "KDevelop byggverktyg för Make", 
+        "Description[uk]": "Збирач Make для KDevelop", 
+        "Description[x-test]": "xxKDevelop Make Builderxx", 
         "Icon": "gear", 
         "Id": "KDevMakeBuilder", 
         "Name": "Make Project Builder", 
+        "Name[nl]": "Make-projectbouwer", 
+        "Name[pt_BR]": "Compilador de projeto do Make", 
+        "Name[sv]": "Make-projektbyggverktyg", 
+        "Name[uk]": "Інструмент збирання проектів Make", 
+        "Name[x-test]": "xxMake Project Builderxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

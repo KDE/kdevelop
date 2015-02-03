@@ -2,9 +2,19 @@
     "KPlugin": {
         "Category": "Project Management", 
         "Description": "Imports and edits custom make projects", 
+        "Description[nl]": "Importeert en bewerkt eigen make-projecten", 
+        "Description[pt_BR]": "Importa e edita projetos make personalizados", 
+        "Description[sv]": "Importerar och redigerar egna projekt som använder Make", 
+        "Description[uk]": "Імпортує і змінює проекти нетипових make", 
+        "Description[x-test]": "xxImports and edits custom make projectsxx", 
         "Icon": "gear", 
         "Id": "KDevCustomMakeManager", 
         "Name": "Custom Makefile Project Manager", 
+        "Name[nl]": "Aangepaste projectbeheerder voor makefile", 
+        "Name[pt_BR]": "Gerenciador de Projeto personalizado do Makefile", 
+        "Name[sv]": "Projekthantering av egna Make-filer", 
+        "Name[uk]": "Керування проектами з власним Makefile", 
+        "Name[x-test]": "xxCustom Makefile Project Managerxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

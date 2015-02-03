@@ -2,9 +2,19 @@
     "KPlugin": {
         "Category": "Project Management", 
         "Description": "KDevelop Ninja Builder", 
+        "Description[nl]": "KDevelop Ninja-bouwprogramma", 
+        "Description[pt_BR]": "Compilador Ninja do KDevelop", 
+        "Description[sv]": "KDevelop byggverktyg för Ninja", 
+        "Description[uk]": "Збирач Ninja для KDevelop", 
+        "Description[x-test]": "xxKDevelop Ninja Builderxx", 
         "Icon": "gear", 
         "Id": "KDevNinjaBuilder", 
         "Name": "Ninja Project Builder", 
+        "Name[nl]": "Ninja-project bouwprogramma", 
+        "Name[pt_BR]": "Compilador de projetos Ninja", 
+        "Name[sv]": "Ninja projektbyggverktyg", 
+        "Name[uk]": "Збирач проектів Ninja", 
+        "Name[x-test]": "xxNinja Project Builderxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

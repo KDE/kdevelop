@@ -7,10 +7,20 @@
         ], 
         "Category": "Utilities", 
         "Description": "This plugin helps to obtain KDE projects", 
+        "Description[nl]": "Deze plugin helpt om KDE-projects te verkrijgen", 
+        "Description[pt_BR]": "Este plugin ajuda a obter projetos do KDE", 
+        "Description[sv]": "Insticksprogrammet hjälper till att erhålla KDE-projekt", 
+        "Description[uk]": "За допомогою цього додатка можна звантажувати проекти KDE", 
+        "Description[x-test]": "xxThis plugin helps to obtain KDE projectsxx", 
         "Icon": "kde", 
         "Id": "kdevkdeprovider", 
         "License": "GPL", 
         "Name": "KDE Provider", 
+        "Name[nl]": "KDE-leverancier", 
+        "Name[pt_BR]": "Fornecedor do KDE", 
+        "Name[sv]": "KDE-leverantör", 
+        "Name[uk]": "Надавач даних KDE", 
+        "Name[x-test]": "xxKDE Providerxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

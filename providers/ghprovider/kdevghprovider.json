@@ -7,10 +7,20 @@
         ], 
         "Category": "Utilities", 
         "Description": "This plugin helps to obtain projects from Github", 
+        "Description[nl]": "Deze plug-in helpt om projecten uit Github te verkrijgen", 
+        "Description[pt_BR]": "Este plugin ajuda a obter projetos a partir do Github", 
+        "Description[sv]": "Insticksprogrammet hjälper till att erhålla projekt Github", 
+        "Description[uk]": "За допомогою цього додатка можна отримувати проекти з Github", 
+        "Description[x-test]": "xxThis plugin helps to obtain projects from Githubxx", 
         "Icon": "kdevgh", 
         "Id": "kdevghprovider", 
         "License": "GPL", 
         "Name": "Github Provider", 
+        "Name[nl]": "Github-leverancier", 
+        "Name[pt_BR]": "Fornecedor do Github", 
+        "Name[sv]": "Github-leverantör", 
+        "Name[uk]": "Надавач даних Github", 
+        "Name[x-test]": "xxGithub Providerxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

@@ -6,10 +6,20 @@
             }
         ], 
         "Description": "Lets you view a plasmoid", 
+        "Description[nl]": "Laat u een plasmoid bekijken", 
+        "Description[pt_BR]": "Permite-lhe visualizar um plasmoide", 
+        "Description[sv]": "Låter dig visa en Plasmoid", 
+        "Description[uk]": "Надає вам змогу переглядати роботу плазмоїдів", 
+        "Description[x-test]": "xxLets you view a plasmoidxx", 
         "Icon": "system-run", 
         "Id": "kdevexecuteplasmoid", 
         "License": "GPL", 
         "Name": "Plasmoid Launcher", 
+        "Name[nl]": "Programmastarter van plasmoid", 
+        "Name[pt_BR]": "Lançador de plasmoides", 
+        "Name[sv]": " Plasmoid-startprogram", 
+        "Name[uk]": "Засіб запуску плазмоїдів", 
+        "Name[x-test]": "xxPlasmoid Launcherxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

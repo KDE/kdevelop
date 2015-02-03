@@ -2,11 +2,21 @@
     "KPlugin": {
         "Category": "Documentation", 
         "Description": "This plugin provides Manual Pages integration", 
+        "Description[nl]": "Deze plugin biedt integratie met man-pagina's", 
+        "Description[pt_BR]": "Este plugin fornece integração com as páginas de manuais", 
+        "Description[sv]": "Insticksprogrammet tillhandahåller integrering av manualsidor", 
+        "Description[uk]": "За допомогою цього додатка здійснюється інтеграція з системою сторінок підручника (man)", 
+        "Description[x-test]": "xxThis plugin provides Manual Pages integrationxx", 
         "EnabledByDefault": false, 
         "Icon": "x-office-address-book", 
         "Id": "KDevManPage", 
         "License": "GPL", 
         "Name": "Man Pages", 
+        "Name[nl]": "Man-pagina's", 
+        "Name[pt_BR]": "Páginas de manuais", 
+        "Name[sv]": "Manualsidor", 
+        "Name[uk]": "Сторінки man", 
+        "Name[x-test]": "xxMan Pagesxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

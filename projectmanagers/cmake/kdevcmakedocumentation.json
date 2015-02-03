@@ -8,10 +8,20 @@
         ], 
         "Category": "Documentation", 
         "Description": "Allows KDevelop to provide CMake documentation", 
+        "Description[nl]": "Staat KDevelop toe om CMake-documentatie te leveren", 
+        "Description[pt_BR]": "Permite ao KDevelop fornecer documentação do CMake", 
+        "Description[sv]": "Låter KDevelop tillhandahålla CMake-dokumentation", 
+        "Description[uk]": "Надає змогу KDevelop показувати документацію CMake", 
+        "Description[x-test]": "xxAllows KDevelop to provide CMake documentationxx", 
         "Icon": "cmake", 
         "Id": "KDevCMakeDocumentation", 
         "License": "GPL", 
         "Name": "CMake Documentation", 
+        "Name[nl]": "CMake-documentatie", 
+        "Name[pt_BR]": "Documentação do CMake", 
+        "Name[sv]": "CMake-dokumentation", 
+        "Name[uk]": "Документація з CMake", 
+        "Name[x-test]": "xxCMake Documentationxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

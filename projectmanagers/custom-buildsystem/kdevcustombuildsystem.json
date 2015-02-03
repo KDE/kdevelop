@@ -1,9 +1,19 @@
 {
     "KPlugin": {
         "Description": "Allows to use custom buildsystems for KDevelop projects", 
+        "Description[nl]": "Staat toe eigengemaakte bouwsystemen voor projecten van KDevelop te gebruiken", 
+        "Description[pt_BR]": "Permite usar sistemas de compilação personalizados para projetos do KDevelop", 
+        "Description[sv]": "Gör det möjligt att använda egna byggsystem för projekt i KDevelop", 
+        "Description[uk]": "Надає змогу використовувати нетипові системи збирання у проектах KDevelop", 
+        "Description[x-test]": "xxAllows to use custom buildsystems for KDevelop projectsxx", 
         "Icon": "gear", 
         "Id": "KDevCustomBuildSystem", 
         "Name": "Custom BuildSystem", 
+        "Name[nl]": "Eigen bouwsysteem", 
+        "Name[pt_BR]": "Sistema de compilação personalizado", 
+        "Name[sv]": "Eget byggsystem", 
+        "Name[uk]": "Нетипова система збирання", 
+        "Name[x-test]": "xxCustom BuildSystemxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

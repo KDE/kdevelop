@@ -7,10 +7,20 @@
         ], 
         "Category": "Utilities", 
         "Description": "A plugin for formatting of sourcecode according to a specified set of rules", 
+        "Description[nl]": "Een plugin om broncode te formatteren volgens een speciale set regels", 
+        "Description[pt_BR]": "Um plugin para formatar código-fonte de acordo com um conjunto de regras", 
+        "Description[sv]": "Ett insticksprogram för formatering av källkod enligt en angiven uppsättning regler", 
+        "Description[uk]": "Додаток для форматування коду у відповідності до вказаного набору правил", 
+        "Description[x-test]": "xxA plugin for formatting of sourcecode according to a specified set of rulesxx", 
         "Icon": "kdevelop", 
         "Id": "kdevastyle", 
         "License": "LGPL", 
         "Name": "AStyle Formatter Backend", 
+        "Name[nl]": "Backend voor AStyle formatteerprogramma", 
+        "Name[pt_BR]": "Formatador AStyle ", 
+        "Name[sv]": "Astyle-formateringsgränssnitt", 
+        "Name[uk]": "Сервер форматування AStyle", 
+        "Name[x-test]": "xxAStyle Formatter Backendxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
