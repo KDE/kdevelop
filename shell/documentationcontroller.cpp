@@ -191,7 +191,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
     {
         IDocumentationProviderProvider *docProvider=p->extension<IDocumentationProviderProvider>();
         if (!docProvider) {
-            qWarning() << "plugin" << p << "does not implement ProviderProvider extension, rerun kbuildsycoca4";
+            qWarning() << "plugin" << p << "does not implement ProviderProvider extension, rerun kbuildsycoca5";
             continue;
         }
         ret.append(docProvider->providers());
@@ -201,7 +201,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
     {
         IDocumentationProvider *doc=p->extension<IDocumentationProvider>();
         if (!doc) {
-            qWarning() << "plugin" << p << "does not implement Provider extension, rerun kbuildsycoca4";
+            qWarning() << "plugin" << p << "does not implement Provider extension, rerun kbuildsycoca5";
             continue;
         }
         ret.append(doc);
