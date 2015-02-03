@@ -25,6 +25,7 @@
 
 #include <QList>
 #include <QUrl>
+#include <QTemporaryFile>
 
 #include <clang-c/Index.h>
 
@@ -76,6 +77,9 @@ private:
     CXFile m_file;
     CXTranslationUnit m_unit;
     ClangParsingEnvironment m_environment;
+    /// TODO: share this file for all TUs that use the same defines (probably most in a project)
+    ///       best would be a PCH, if possible
+    QTemporaryFile m_definesFile;
 };
 
 /**

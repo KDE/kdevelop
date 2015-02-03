@@ -39,7 +39,6 @@
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QMimeType>
-#include <QTemporaryFile>
 
 #include <algorithm>
 
@@ -154,20 +153,15 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     addIncludes(&args, &otherArgs, includes.system, "-isystem");
     addIncludes(&args, &otherArgs, includes.project, "-I");
 
-    /// TODO: share this file for all TUs that use the same defines (probably most in a project)
-    ///       best would be a PCH, if possible
-    QTemporaryFile definesFile;
-    // tmp files must stay alive, otherwise we lose defined macros on document reparsing.
-    definesFile.setAutoRemove(false);
-    definesFile.open();
-    QTextStream definesStream(&definesFile);
-    Q_ASSERT(definesFile.isWritable());
+    m_definesFile.open();
+    QTextStream definesStream(&m_definesFile);
+    Q_ASSERT(m_definesFile.isWritable());
     const auto& defines = environment.defines();
     for (auto it = defines.begin(); it != defines.end(); ++it) {
         definesStream << QStringLiteral("#define ") << it.key() << ' ' << it.value() << '\n';
     }
     definesStream.flush();
-    otherArgs << definesFile.fileName().toUtf8();
+    otherArgs << m_definesFile.fileName().toUtf8();
     args << "-imacros" << otherArgs.last().constData();
 
     QVector<CXUnsavedFile> unsaved;
