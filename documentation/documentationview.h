@@ -90,6 +90,8 @@ public slots:
     void reloadProviders();
 
 private:
+    void removeProviders(const QList<KDevelop::IDocumentationProvider*> &provider);
+
     QList<KDevelop::IDocumentationProvider*> mProviders;
 signals:
     void providersChanged();

@@ -243,7 +243,7 @@ ProvidersModel::ProvidersModel(QObject* parent)
     : QAbstractListModel(parent)
     , mProviders(ICore::self()->documentationController()->documentationProviders())
 {
-    connect(ICore::self()->pluginController(), &IPluginController::pluginUnloaded, this, &ProvidersModel::unloaded);
+    connect(ICore::self()->pluginController(), &IPluginController::unloadingPlugin, this, &ProvidersModel::unloaded);
     connect(ICore::self()->pluginController(), &IPluginController::pluginLoaded, this, &ProvidersModel::loaded);
     connect(ICore::self()->documentationController(), &IDocumentationController::providersChanged, this, &ProvidersModel::reloadProviders);
 }
@@ -258,6 +258,9 @@ void ProvidersModel::reloadProviders()
 
 QVariant ProvidersModel::data(const QModelIndex& index, int role) const
 {
+    if (index.row() >= mProviders.count() || index.row() < 0)
+        return QVariant();
+
     QVariant ret;
     switch (role)
     {
@@ -271,31 +274,32 @@ QVariant ProvidersModel::data(const QModelIndex& index, int role) const
     return ret;
 }
 
+void ProvidersModel::removeProviders(const QList<KDevelop::IDocumentationProvider*> &prov)
+{
+    if (prov.isEmpty())
+        return;
+
+    int idx = mProviders.indexOf(prov.first());
+
+    if (idx>=0) {
+        beginRemoveRows(QModelIndex(), idx, idx + prov.count()-1);
+        for(int i=0, c=prov.count(); i<c; ++i)
+            mProviders.removeAt(idx);
+        endRemoveRows();
+    }
+
+    emit providersChanged();
+}
+
 void ProvidersModel::unloaded(IPlugin* p)
 {
     IDocumentationProvider* prov=p->extension<IDocumentationProvider>();
-    int idx=-1;
     if (prov)
-        idx = mProviders.indexOf(prov);
-
-    if (idx>=0) {
-        beginRemoveRows(QModelIndex(), idx, idx);
-        mProviders.removeAt(idx);
-        endRemoveRows();
-        emit providersChanged();
-    }
+        removeProviders(QList<IDocumentationProvider*>() << prov);
 
     IDocumentationProviderProvider* provProv=p->extension<IDocumentationProviderProvider>();
     if (provProv) {
-        foreach (IDocumentationProvider* p, provProv->providers()) {
-            idx = mProviders.indexOf(p);
-            if (idx>=0) {
-                beginRemoveRows(QModelIndex(), idx, idx);
-                mProviders.removeAt(idx);
-                endRemoveRows();
-            }
-        }
-        emit providersChanged();
+        removeProviders(provProv->providers());
     }
 }
 
@@ -309,17 +313,21 @@ void ProvidersModel::loaded(IPlugin* p)
         endInsertRows();
         emit providersChanged();
     }
+
     IDocumentationProviderProvider* provProv=p->extension<IDocumentationProviderProvider>();
     if (provProv) {
-        beginInsertRows(QModelIndex(), 0, 0);
+        beginInsertRows(QModelIndex(), 0, provProv->providers().count()-1);
         mProviders.append(provProv->providers());
         endInsertRows();
         emit providersChanged();
     }
 }
 
+int ProvidersModel::rowCount(const QModelIndex& parent) const
+{
+    return parent.isValid() ? 0 : mProviders.count();
+}
+
 int ProvidersModel::rowForProvider(IDocumentationProvider* provider) { return mProviders.indexOf(provider); }
 IDocumentationProvider* ProvidersModel::provider(int pos) const { return mProviders[pos]; }
 QList< IDocumentationProvider* > ProvidersModel::providers() { return mProviders; }
-int ProvidersModel::rowCount(const QModelIndex&) const { return mProviders.count(); }
-
