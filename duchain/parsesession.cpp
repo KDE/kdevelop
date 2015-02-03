@@ -157,6 +157,8 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     /// TODO: share this file for all TUs that use the same defines (probably most in a project)
     ///       best would be a PCH, if possible
     QTemporaryFile definesFile;
+    // tmp files must stay alive, otherwise we lose defined macros on document reparsing.
+    definesFile.setAutoRemove(false);
     definesFile.open();
     QTextStream definesStream(&definesFile);
     Q_ASSERT(definesFile.isWritable());
