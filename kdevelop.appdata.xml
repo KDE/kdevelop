@@ -11,6 +11,7 @@
   <name xml:lang="en-GB">KDevelop</name>
   <name xml:lang="es">KDevelop</name>
   <name xml:lang="fi">KDevelop</name>
+  <name xml:lang="fr">KDevelop</name>
   <name xml:lang="hu">KDevelop</name>
   <name xml:lang="it">KDevelop</name>
   <name xml:lang="nl">KDevelop</name>
@@ -29,6 +30,7 @@
   <summary xml:lang="en-GB">It is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.</summary>
   <summary xml:lang="es">Es un entorno de desarrollo integrado para C/C++ y otros lenguajes de programación con múltiples funcionalidades y que se puede extender con complementos.</summary>
   <summary xml:lang="fi">Kaikkien ominaisuuksien liitännäisillä laajennettava IDE C/C++:lle ja muille ohjelmointikielille.</summary>
+  <summary xml:lang="fr">Il s'agit d'un environnement de développement complet et extensible pour le C/C++ et d'autres langages de programmation.</summary>
   <summary xml:lang="hu">Teljes, bővítményekkel bővíthető integrált fejlesztői környezet C/C++ és más programozási nyelvekhez.</summary>
   <summary xml:lang="it">È un IDE per C/C++ e altri linguaggi di programmazione completo ed estensibile.</summary>
   <summary xml:lang="nl">Het is een IDE, vol functies en uit te breiden met plug-ins voor C/C++ en andere programmeertalen.</summary>
@@ -48,6 +50,7 @@
     <p xml:lang="en-GB">Free and Open Source Integrated Development Environment for your different software projects.</p>
     <p xml:lang="es">Entorno de desarrollo integrado libre y de código abierto para sus distintos proyectos de software.</p>
     <p xml:lang="fi">Vapaan ohjelmiston ja avoimen lähdekoodin integroitu kehitysympäristö erilaisille ohjelmistoprojekteille.</p>
+    <p xml:lang="fr">Environnement de développement intégré (IDE) libre et open source pour vos différents projets logiciels.</p>
     <p xml:lang="hu">Szabad és nyílt forráskódú integrált fejlesztői környezet a különböző projektjeihez.</p>
     <p xml:lang="it">Ambiente di sviluppo integrato libero e open source per i vostri progetti software.</p>
     <p xml:lang="nl">Geïntegreerde vrije en open source ontwikkelomgeving voor uw verschillende software projecten.</p>
