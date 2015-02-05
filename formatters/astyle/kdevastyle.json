@@ -16,6 +16,7 @@
         "Description[sv]": "Ett insticksprogram för formatering av källkod enligt en angiven uppsättning regler", 
         "Description[uk]": "Додаток для форматування коду у відповідності до вказаного набору правил", 
         "Description[x-test]": "xxA plugin for formatting of sourcecode according to a specified set of rulesxx", 
+        "Description[zh_CN]": "一个根据指定规则设定格式化源代码的插件", 
         "Icon": "kdevelop", 
         "Id": "kdevastyle", 
         "License": "LGPL", 
@@ -29,6 +30,7 @@
         "Name[sv]": "Astyle-formateringsgränssnitt", 
         "Name[uk]": "Сервер форматування AStyle", 
         "Name[x-test]": "xxAStyle Formatter Backendxx", 
+        "Name[zh_CN]": "AStyle 格式化器后端", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

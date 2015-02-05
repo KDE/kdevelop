@@ -16,6 +16,7 @@
         "Description[sv]": "Insticksprogrammet hjälper till att erhålla projekt Github", 
         "Description[uk]": "За допомогою цього додатка можна отримувати проекти з Github", 
         "Description[x-test]": "xxThis plugin helps to obtain projects from Githubxx", 
+        "Description[zh_CN]": "此插件帮助您获取 Github 项目", 
         "Icon": "kdevgh", 
         "Id": "kdevghprovider", 
         "License": "GPL", 
@@ -29,6 +30,7 @@
         "Name[sv]": "Github-leverantör", 
         "Name[uk]": "Надавач даних Github", 
         "Name[x-test]": "xxGithub Providerxx", 
+        "Name[zh_CN]": "Github 提供者", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

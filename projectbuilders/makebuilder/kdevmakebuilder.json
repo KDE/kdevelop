@@ -11,6 +11,7 @@
         "Description[sv]": "KDevelop byggverktyg för Make", 
         "Description[uk]": "Збирач Make для KDevelop", 
         "Description[x-test]": "xxKDevelop Make Builderxx", 
+        "Description[zh_CN]": "KDevelop Make 构建器", 
         "Icon": "gear", 
         "Id": "KDevMakeBuilder", 
         "Name": "Make Project Builder", 
@@ -23,6 +24,7 @@
         "Name[sv]": "Make-projektbyggverktyg", 
         "Name[uk]": "Інструмент збирання проектів Make", 
         "Name[x-test]": "xxMake Project Builderxx", 
+        "Name[zh_CN]": "Make 工程构建器", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

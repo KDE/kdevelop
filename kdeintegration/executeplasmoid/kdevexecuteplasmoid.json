@@ -15,6 +15,7 @@
         "Description[sv]": "Låter dig visa en Plasmoid", 
         "Description[uk]": "Надає вам змогу переглядати роботу плазмоїдів", 
         "Description[x-test]": "xxLets you view a plasmoidxx", 
+        "Description[zh_CN]": "让您查看一个 plasmoid", 
         "Icon": "system-run", 
         "Id": "kdevexecuteplasmoid", 
         "License": "GPL", 
@@ -28,6 +29,7 @@
         "Name[sv]": " Plasmoid-startprogram", 
         "Name[uk]": "Засіб запуску плазмоїдів", 
         "Name[x-test]": "xxPlasmoid Launcherxx", 
+        "Name[zh_CN]": "Plasmoid 启动器", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

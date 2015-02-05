@@ -11,6 +11,7 @@
         "Description[sv]": "Anpassa vilka makron och filer eller kataloger att inkludera som läggs till i tolken under projekttolkning.", 
         "Description[uk]": "Налаштувати макроси і включені каталоги або файли, які буде додано під час обробки проекту.", 
         "Description[x-test]": "xxConfigure which macros and include directories/files will be added to the parser during project parsing.xx", 
+        "Description[zh_CN]": "配置在解析项目时将添加哪些宏和包含目录/文件", 
         "Icon": "kdevelop", 
         "Id": "KDevDefinesAndIncludesManager", 
         "Name": "Custom Defines And Includes Manager", 
@@ -23,6 +24,7 @@
         "Name[sv]": "Hantering av egna definitioner och inkluderingar", 
         "Name[uk]": "Керування нетиповими визначеннями і включеннями", 
         "Name[x-test]": "xxCustom Defines And Includes Managerxx", 
+        "Name[zh_CN]": "自定义定义和包含管理器", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

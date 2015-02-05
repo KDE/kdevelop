@@ -10,6 +10,7 @@
         "Description[sv]": "Gör det möjligt att använda egna byggsystem för projekt i KDevelop", 
         "Description[uk]": "Надає змогу використовувати нетипові системи збирання у проектах KDevelop", 
         "Description[x-test]": "xxAllows to use custom buildsystems for KDevelop projectsxx", 
+        "Description[zh_CN]": "允许对 KDevelop 工程使用自定义构建系统", 
         "Icon": "gear", 
         "Id": "KDevCustomBuildSystem", 
         "Name": "Custom BuildSystem", 
@@ -22,6 +23,7 @@
         "Name[sv]": "Eget byggsystem", 
         "Name[uk]": "Нетипова система збирання", 
         "Name[x-test]": "xxCustom BuildSystemxx", 
+        "Name[zh_CN]": "自定义构建系统", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

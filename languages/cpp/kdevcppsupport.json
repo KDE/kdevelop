@@ -11,6 +11,7 @@
         "Description[sv]": "C/C++ språkstöd", 
         "Description[uk]": "Підтримка мови C/C++", 
         "Description[x-test]": "xxC/C++ Language Supportxx", 
+        "Description[zh_CN]": "C/C++ 语言支持", 
         "Icon": "text-x-c++src", 
         "Id": "kdevcppsupport", 
         "Name": "C++ Support", 
@@ -23,6 +24,7 @@
         "Name[sv]": "C++ stöd", 
         "Name[uk]": "Підтримка C++", 
         "Name[x-test]": "xxC++ Supportxx", 
+        "Name[zh_CN]": "C++ 支持", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

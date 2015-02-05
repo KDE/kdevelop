@@ -11,6 +11,7 @@
         "Description[sv]": "Insticksprogrammet tillhandahåller integrering av manualsidor", 
         "Description[uk]": "За допомогою цього додатка здійснюється інтеграція з системою сторінок підручника (man)", 
         "Description[x-test]": "xxThis plugin provides Manual Pages integrationxx", 
+        "Description[zh_CN]": "此插件提供了帮助手册整合", 
         "EnabledByDefault": false, 
         "Icon": "x-office-address-book", 
         "Id": "KDevManPage", 
@@ -25,6 +26,7 @@
         "Name[sv]": "Manualsidor", 
         "Name[uk]": "Сторінки man", 
         "Name[x-test]": "xxMan Pagesxx", 
+        "Name[zh_CN]": "Man 手册", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

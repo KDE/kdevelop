@@ -17,6 +17,7 @@
         "Description[sv]": "Låter KDevelop hantera CMake-baserade projekt", 
         "Description[uk]": "Надає змогу KDevelop керувати заснованими на CMake проектами", 
         "Description[x-test]": "xxAllows KDevelop to manage CMake-based projectsxx", 
+        "Description[zh_CN]": "允许 KDevelop 管理基于 CMake 的工程", 
         "Icon": "cmake", 
         "Id": "KDevCMakeManager", 
         "License": "GPL", 
@@ -30,6 +31,7 @@
         "Name[sv]": "CMake-projekthantering", 
         "Name[uk]": "Керування проектами CMake", 
         "Name[x-test]": "xxCMake Project Managerxx", 
+        "Name[zh_CN]": "CMake 工程管理器", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

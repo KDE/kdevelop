@@ -11,6 +11,7 @@
         "Description[sv]": "Insticksprogrammet tillhandahåller ett gränssnitt till GDB, en källkodsavlusare för C, C++ med mera.", 
         "Description[uk]": "Цей додаток надає можливість користуватися клієнтським інтерфейсом GDB, зневадника вихідного коду на C, C++ тощо.", 
         "Description[x-test]": "xxThis plugin provides a frontend for GDB, a source-level debugger for C, C++ and more.xx", 
+        "Description[zh_CN]": "此插件提供了 GDB 前端，GDB 是一个源码级的 C、C++ 等多语言的调试器。", 
         "Icon": "debugger", 
         "Id": "kdevgdb", 
         "License": "GPL", 
@@ -24,6 +25,7 @@
         "Name[sv]": "GDB-stöd", 
         "Name[uk]": "Підтримка GDB", 
         "Name[x-test]": "xxGDB Supportxx", 
+        "Name[zh_CN]": "GDB 支持", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

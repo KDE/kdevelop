@@ -11,6 +11,7 @@
         "Description[sv]": "Bygger CMake-projekt", 
         "Description[uk]": "Збирає проекти CMake", 
         "Description[x-test]": "xxBuilds CMake Projectsxx", 
+        "Description[zh_CN]": "构建 CMake 工程", 
         "Icon": "cmake", 
         "Id": "KDevCMakeBuilder", 
         "Name": "CMake Project Builder", 
@@ -23,6 +24,7 @@
         "Name[sv]": "CMake-projektbyggverktyg", 
         "Name[uk]": "Інструмент збирання проектів CMake", 
         "Name[x-test]": "xxCMake Project Builderxx", 
+        "Name[zh_CN]": "CMake 工程构建器", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

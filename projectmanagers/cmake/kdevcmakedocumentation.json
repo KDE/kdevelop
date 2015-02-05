@@ -17,6 +17,7 @@
         "Description[sv]": "Låter KDevelop tillhandahålla CMake-dokumentation", 
         "Description[uk]": "Надає змогу KDevelop показувати документацію CMake", 
         "Description[x-test]": "xxAllows KDevelop to provide CMake documentationxx", 
+        "Description[zh_CN]": "允许 KDevelop 提供 CMake 文档", 
         "Icon": "cmake", 
         "Id": "KDevCMakeDocumentation", 
         "License": "GPL", 
@@ -30,6 +31,7 @@
         "Name[sv]": "CMake-dokumentation", 
         "Name[uk]": "Документація з CMake", 
         "Name[x-test]": "xxCMake Documentationxx", 
+        "Name[zh_CN]": "CMake 文档", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
