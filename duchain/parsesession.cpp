@@ -53,7 +53,12 @@ QVector<const char*> argsForSession(const QString& path, ParseSessionData::Optio
         return {"-xobjective-c++"};
     }
 
-    Q_ASSERT(!languageStandard.isEmpty());
+    //this can happen for unit tests that use the ParseSession directly
+    if (languageStandard.isEmpty()) {
+        static const QByteArray defaultLanguageStandard("c++11");
+        languageStandard = defaultLanguageStandard;
+    }
+
     languageStandard = "-std=" + languageStandard;
 
     if (options & ParseSessionData::PrecompiledHeader) {
