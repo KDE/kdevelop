@@ -73,7 +73,6 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* m)
     mActions->addSeparator();
     mActions->addAction(QIcon::fromTheme("go-home"), i18n("Home"), this, SLOT(showHome()));
     mProviders=new QComboBox(mActions);
-    mProviders->setFocusPolicy(Qt::NoFocus);
 
     mIdentifiers=new QLineEdit(mActions);
     mIdentifiers->setClearButtonEnabled(true);
@@ -85,6 +84,7 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* m)
     mIdentifiers->setSizePolicy(QSizePolicy::Expanding, mIdentifiers->sizePolicy().verticalPolicy());
     connect(mIdentifiers, &QLineEdit::returnPressed, this, &DocumentationView::changedSelection);
     connect(mIdentifiers->completer(), static_cast<void(QCompleter::*)(const QModelIndex&)>(&QCompleter::activated), this, &DocumentationView::changeProvider);
+    QWidget::setTabOrder(mProviders, mIdentifiers);
 
     mActions->addWidget(mProviders);
     mActions->addWidget(mIdentifiers);
@@ -219,6 +219,7 @@ void DocumentationView::updateView()
     mFindDoc->setEnabled(false);
     QWidget* w=(*mCurrent)->documentationWidget(mFindDoc, this);
     Q_ASSERT(w);
+    QWidget::setTabOrder(mIdentifiers, w);
 
     mFind->setEnabled(mFindDoc->isEnabled());
     if(!mFindDoc->isEnabled())
