@@ -34,9 +34,7 @@ ReviewPatchDialog::ReviewPatchDialog(const QUrl& dirUrl, QWidget* parent)
     : QDialog(parent)
 {
     m_ui = new Ui::ReviewPatch;
-
-    QWidget* w = new QWidget(this);
-    m_ui->setupUi(w);
+    m_ui->setupUi(this);
 
     connect(m_ui->buttonBox, &QDialogButtonBox::accepted, this, &ReviewPatchDialog::accept);
     connect(m_ui->buttonBox, &QDialogButtonBox::rejected, this, &ReviewPatchDialog::reject);
