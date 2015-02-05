@@ -157,7 +157,8 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             w->setShortcut(m_controller->actionForView(m_view)->shortcuts());
             QVBoxLayout* dialogLayout = new QVBoxLayout(dialog);
             dialogLayout->addWidget(w);
-            QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel , dialog);
+            QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
+            dialogLayout->addWidget(buttonBox);
             connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
             connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
 
