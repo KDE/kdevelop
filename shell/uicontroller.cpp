@@ -40,6 +40,8 @@
 #include <sublime/tooldocument.h>
 #include <sublime/holdupdates.h>
 
+#include <interfaces/itoolviewactionlistener.h>
+
 #include "core.h"
 #include "configpage.h"
 #include "configdialog.h"
@@ -148,8 +150,10 @@ public:
     Sublime::MainWindow* activeSublimeWindow;
     bool areasRestored;
 
-    //Currently shown assistant popup.
+    /// Currently shown assistant popup.
     QPointer<AssistantPopup> currentShownAssistant;
+    /// QWidget implementing IToolViewActionListener interface, or null
+    QPointer<QWidget> activeActionListener;
     QTimer m_assistantTimer;
 
 private:
@@ -352,6 +356,10 @@ void KDevelop::UiController::raiseToolView(Sublime::View * view)
     foreach( Sublime::Area* area, allAreas() ) {
         if( area->toolViews().contains( view ) )
             area->raiseToolView( view );
+    }
+
+    if (qobject_cast<IToolViewActionListener*>(view->widget())) {
+        d->activeActionListener = view->widget();
     }
 }
 
@@ -717,6 +725,11 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
 const QMap< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDocuments() const
 {
     return d->factoryDocuments;
+}
+
+QWidget* UiController::activeToolViewActionListener() const
+{
+    return d->activeActionListener;
 }
 
 }

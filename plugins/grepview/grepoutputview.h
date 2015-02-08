@@ -13,6 +13,7 @@
 #define KDEVPLATFORM_PLUGIN_GREPOUTPUTVIEW_H
 
 #include <interfaces/iuicontroller.h>
+#include <interfaces/itoolviewactionlistener.h>
 
 #include "ui_grepoutputview.h"
 
@@ -38,9 +39,10 @@ private:
     GrepViewPlugin* m_plugin;
 };
 
-class GrepOutputView : public QWidget, Ui::GrepOutputView
+class GrepOutputView : public QWidget, Ui::GrepOutputView, public KDevelop::IToolViewActionListener
 {
-  Q_OBJECT
+    Q_OBJECT
+    Q_INTERFACES(KDevelop::IToolViewActionListener)
 
 public:
     enum MessageType {
@@ -82,8 +84,8 @@ private:
     GrepViewPlugin *m_plugin;
     
 private slots:
-    void selectPreviousItem();
-    void selectNextItem();
+    void selectPreviousItem() override;
+    void selectNextItem() override;
     void collapseAllItems();
     void expandAllItems();
     void onApply();

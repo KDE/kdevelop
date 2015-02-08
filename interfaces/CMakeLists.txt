@@ -37,6 +37,7 @@ set(KDevPlatformInterfaces_LIB_SRCS
     itemplateprovider.cpp
     itestsuite.cpp
     itestcontroller.cpp
+    itoolviewactionlistener.cpp
     ilanguagecheck.cpp
     ilanguagecheckprovider.cpp
 )
@@ -103,6 +104,7 @@ install(FILES
     itemplateprovider.h
     itestsuite.h
     itestcontroller.h
+    itoolviewactionlistener.h
     ${CMAKE_CURRENT_BINARY_DIR}/interfacesexport.h
     ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel

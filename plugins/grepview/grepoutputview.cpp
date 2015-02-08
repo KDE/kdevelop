@@ -29,7 +29,6 @@
 #include <interfaces/isession.h>
 #include <QWidgetAction>
 #include <interfaces/iprojectcontroller.h>
-#include <interfaces/iplugincontroller.h>
 #include <outputview/ioutputview.h>
 
 using namespace KDevelop;
@@ -120,13 +119,6 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     connect(m_clearSearchHistory, &QAction::triggered, this, &GrepOutputView::clearSearchHistory);
     connect(resultsTreeView, &QTreeView::collapsed, this, &GrepOutputView::updateScrollArea);
     connect(resultsTreeView, &QTreeView::expanded, this, &GrepOutputView::updateScrollArea);
-
-    IPlugin *outputView = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
-    if (qobject_cast<IOutputView*>(outputView)) {
-        // can't use new signal/slot syntax here, IOutputView is not a QObject
-        connect(outputView, SIGNAL(selectPrevItem()), this, SLOT(selectPreviousItem()));
-        connect(outputView, SIGNAL(selectNextItem()), this, SLOT(selectNextItem()));
-    }
 
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );

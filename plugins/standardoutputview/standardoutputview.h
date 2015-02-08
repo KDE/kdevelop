@@ -81,8 +81,6 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void activated( const QModelIndex& );
-    void selectNextItem();
-    void selectPrevItem();
     void outputRemoved( int toolviewId, int outputId );
     void toolViewRemoved( int toolviewId );
 

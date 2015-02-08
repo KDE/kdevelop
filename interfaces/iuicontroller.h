@@ -157,7 +157,16 @@ public:
     /** @return area for currently active sublime mainwindow or 0 if
     no sublime mainwindow is active.*/
     virtual Sublime::Area *activeArea() = 0;
-        
+
+    /**
+     * Widget which is currently responsible for consuming special events in the UI
+     * (such as shortcuts)
+     *
+     * @sa IToolViewActionListener
+     * @return QWidget implementing the IToolViewActionListener interface
+     */
+    virtual QWidget* activeToolViewActionListener() const = 0;
+
 protected:
     IUiController();
 };

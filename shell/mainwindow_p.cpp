@@ -260,6 +260,18 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( i18nc( "@info:whatsthis", "Switches to the previous window." ) );
     action->setIcon(QIcon::fromTheme("go-previous"));
 
+    action = actionCollection()->addAction("next_error");
+    action->setText(i18n("Jump to Next Outputmark"));
+    actionCollection()->setDefaultShortcut( action, QKeySequence(Qt::Key_F4) );
+    action->setIcon(QIcon::fromTheme("arrow-right"));
+    connect(action, &QAction::triggered, this, &MainWindowPrivate::selectNextItem);
+
+    action = actionCollection()->addAction("prev_error");
+    action->setText(i18n("Jump to Previous Outputmark"));
+    actionCollection()->setDefaultShortcut( action, QKeySequence(Qt::SHIFT | Qt::Key_F4) );
+    action->setIcon(QIcon::fromTheme("arrow-left"));
+    connect(action, &QAction::triggered, this, &MainWindowPrivate::selectPrevItem);
+
     action = actionCollection()->addAction( "split_horizontal" );
     action->setIcon(QIcon::fromTheme( "view-split-top-bottom" ));
     action->setText( i18n( "Split View &Top/Bottom" ) );

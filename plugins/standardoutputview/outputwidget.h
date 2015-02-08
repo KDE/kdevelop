@@ -24,6 +24,8 @@
 
 #include <QWidget>
 #include <QtCore/QMap>
+
+#include <interfaces/itoolviewactionlistener.h>
 #include <outputview/ioutputviewmodel.h>
 #include <outputview/ioutputview.h>
 
@@ -46,9 +48,10 @@ class QAction;
 class QLineEdit;
 class StandardOutputViewTest;
 
-class OutputWidget : public QWidget
+class OutputWidget : public QWidget, public KDevelop::IToolViewActionListener
 {
-Q_OBJECT
+    Q_OBJECT
+    Q_INTERFACES(KDevelop::IToolViewActionListener)
 
     friend class StandardOutputViewTest;
 
@@ -62,8 +65,8 @@ public Q_SLOTS:
     void changeDelegate( int id );
     void closeActiveView();
     void closeOtherViews();
-    void selectNextItem();
-    void selectPrevItem();
+    void selectNextItem() override;
+    void selectPreviousItem() override;
     void activate(const QModelIndex&);
     void scrollToIndex( const QModelIndex& );
     void setTitle(int outputId, const QString& title);

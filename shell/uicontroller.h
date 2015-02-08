@@ -101,6 +101,8 @@ public:
 
     bool toolViewPresent(Sublime::ToolDocument* doc, Sublime::Area* area);
 
+    virtual QWidget* activeToolViewActionListener() const override;
+
 public Q_SLOTS:
     void raiseToolView(Sublime::View * view);
 

@@ -37,6 +37,8 @@ Boston, MA 02110-1301, USA.
 
 #include "mainwindow.h"
 #include "loadedpluginsdialog.h"
+
+#include <interfaces/itoolviewactionlistener.h>
 #include <interfaces/ipartcontroller.h>
 
 namespace KDevelop {
@@ -79,6 +81,24 @@ void MainWindowPrivate::gotoNextWindow()
 void MainWindowPrivate::gotoPreviousWindow()
 {
     gotoPrevNextWindow(false);
+}
+
+void MainWindowPrivate::selectPrevItem()
+{
+    auto actionListener = qobject_cast<IToolViewActionListener*>(
+        Core::self()->uiControllerInternal()->activeToolViewActionListener());
+    if (actionListener) {
+        actionListener->selectPreviousItem();
+    }
+}
+
+void MainWindowPrivate::selectNextItem()
+{
+    auto actionListener = qobject_cast<IToolViewActionListener*>(
+        Core::self()->uiControllerInternal()->activeToolViewActionListener());
+    if (actionListener) {
+        actionListener->selectNextItem();
+    }
 }
 
 void MainWindowPrivate::newToolbarConfig()

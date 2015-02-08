@@ -160,9 +160,6 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     connect( this, &OutputWidget::outputRemoved,
              data->plugin, &StandardOutputView::outputRemoved );
 
-    connect( data->plugin, &StandardOutputView::selectNextItem, this, &OutputWidget::selectNextItem );
-    connect( data->plugin, &StandardOutputView::selectPrevItem, this, &OutputWidget::selectPrevItem );
-
     foreach( int id, data->outputdata.keys() )
     {
         changeModel( id );
@@ -396,7 +393,7 @@ void OutputWidget::selectNextItem()
     selectItem(Next);
 }
 
-void OutputWidget::selectPrevItem()
+void OutputWidget::selectPreviousItem()
 {
     selectItem(Previous);
 }

@@ -71,20 +71,6 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IOutputView )
 
     setXMLFile("kdevstandardoutputview.rc");
-    // setup actions
-    QAction* action;
-
-    action = actionCollection()->addAction("next_error");
-    action->setText(i18n("Jump to Next Outputmark"));
-    actionCollection()->setDefaultShortcut( action, QKeySequence(Qt::Key_F4) );
-    action->setIcon(QIcon::fromTheme("arrow-right"));
-    connect(action, &QAction::triggered, this, &StandardOutputView::selectNextItem);
-
-    action = actionCollection()->addAction("prev_error");
-    action->setText(i18n("Jump to Previous Outputmark"));
-    actionCollection()->setDefaultShortcut( action, QKeySequence(Qt::SHIFT | Qt::Key_F4) );
-    action->setIcon(QIcon::fromTheme("arrow-left"));
-    connect(action, &QAction::triggered, this, &StandardOutputView::selectPrevItem);
 
     connect(KDevelop::ICore::self()->uiController()->controller(), &Sublime::Controller::aboutToRemoveView,
             this, &StandardOutputView::removeSublimeView);
