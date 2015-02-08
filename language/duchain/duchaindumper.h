@@ -28,6 +28,8 @@
 #include <QFlags>
 #include <QScopedPointer>
 
+class QTextStream;
+
 namespace KDevelop
 {
 class DUContext;
@@ -58,6 +60,8 @@ public:
    * @param allowedDepth How deep the dump will go into imported contexts, printing all the contents.
    */
   void dump(DUContext* context, int allowedDepth = 0);
+
+  void dump(DUContext* context, int allowedDepth, QTextStream& out);
 
 private:
   struct Private;

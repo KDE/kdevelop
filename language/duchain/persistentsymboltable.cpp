@@ -35,6 +35,10 @@
 //For now, just _always_ use the cache
 const uint MinimumCountForCache = 1;
 
+namespace {
+QDebug fromTextStream(const QTextStream& out) { if (out.device()) return {out.device()}; return {out.string()}; }
+}
+
 namespace KDevelop {
 
 Utils::BasicSetRepository* RecursiveImportCacheRepository::repository() {
@@ -354,7 +358,7 @@ struct DebugVisitor
   }
 
   bool operator() (const PersistentSymbolTableItem* item) {
-    QDebug qout(out.device());
+    QDebug qout = fromTextStream(out);
     QualifiedIdentifier id(item->id.identifier());
     if(identifiers.contains(id)) {
       qout << "identifier" << id.toString() << "appears for" << identifiers[id] << "th time";
@@ -379,7 +383,13 @@ struct DebugVisitor
       if(!decl.data() && !decl.isDummy()) {
         qout << "Item in symbol-table is invalid:" << id.toString() << "- localIndex:" << decl.localIndex() << "- url:" << url << endl;
       } else {
-        qout << "Item in symbol-table:" << id.toString() << "- localIndex:" << decl.localIndex() << "- url:" << url << "- range:" << decl.data()->range() << endl;
+        qout << "Item in symbol-table:" << id.toString() << "- localIndex:" << decl.localIndex() << "- url:" << url;
+        if (auto d = decl.data()) {
+          qout << "- range:" << d->range();
+        } else {
+          qout << "- null declaration";
+        }
+        qout << endl;
       }
     }
     return true;
@@ -395,7 +405,7 @@ void PersistentSymbolTable::dump(const QTextStream& out)
   {
     QMutexLocker lock(d->m_declarations.mutex());
     
-    QDebug qout(out.device());
+    QDebug qout = fromTextStream(out);
     DebugVisitor v(out);
     d->m_declarations.visitAllItems(v);
 

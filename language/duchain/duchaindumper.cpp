@@ -41,6 +41,8 @@ using namespace KDevelop;
 
 namespace {
 
+QDebug fromTextStream(const QTextStream& out) { if (out.device()) return {out.device()}; return {out.string()}; }
+
 QString typeToString(DUContext::ContextType type)
 {
   switch(type) {
@@ -65,8 +67,8 @@ struct DUChainDumper::Private
     : m_indent(0)
   {}
 
-  void dumpProblems(TopDUContext* top);
-  void dump(DUContext* context, int allowedDepth, bool isFromImport = false);
+  void dumpProblems(TopDUContext* top, QTextStream& out);
+  void dump(DUContext* context, int allowedDepth, bool isFromImport, QTextStream& out);
 
   int m_indent;
   Features m_features;
@@ -99,10 +101,9 @@ private:
   int m_level;
 };
 
-void DUChainDumper::Private::dumpProblems(TopDUContext* top)
+void DUChainDumper::Private::dumpProblems(TopDUContext* top, QTextStream& out)
 {
-  QTextStream globalOut(stdout);
-  QDebug qout(globalOut.device());
+  QDebug qout = fromTextStream(out);
 
   if (!top->problems().isEmpty()) {
       qout << top->problems().size() << "problems encountered:" << endl;
@@ -113,10 +114,9 @@ void DUChainDumper::Private::dumpProblems(TopDUContext* top)
   }
 }
 
-void DUChainDumper::Private::dump(DUContext * context, int allowedDepth, bool isFromImport)
+void DUChainDumper::Private::dump(DUContext * context, int allowedDepth, bool isFromImport, QTextStream& out)
 {
-  QTextStream globalOut(stdout);
-  QDebug qout(globalOut.device());
+  QDebug qout = fromTextStream(out);
 
   qout << Indent(m_indent * 2) << (isFromImport ? " ==import==>" : "")
     << (dynamic_cast<TopDUContext*>(context) ? "Top-Context" : "Context") << typeToString(context->type())
@@ -160,6 +160,7 @@ void DUChainDumper::Private::dump(DUContext * context, int allowedDepth, bool is
 
   ++m_indent;
   {
+    /*
     foreach (const DUContext::Import &parent, context->importedParentContexts()) {
       DUContext* import = parent.context(top);
       if(!import) {
@@ -167,24 +168,36 @@ void DUChainDumper::Private::dump(DUContext * context, int allowedDepth, bool is
           continue;
       }
 
-      dump(import, allowedDepth-1, true);
+      dump(import, allowedDepth-1, true, out);
     }
+    */
 
     foreach (DUContext* child, context->childContexts())
-      dump(child, allowedDepth-1);
+      dump(child, allowedDepth-1, false, out);
   }
   --m_indent;
 }
 
-void DUChainDumper::dump(DUContext* context, int allowedDepth)
+void DUChainDumper::dump(DUContext* context, int allowedDepth, QTextStream& out)
 {
   d->m_visitedContexts.clear();
 
+  if (!context) {
+    out << "Error: Null context" << endl;
+    return;
+  }
+
   auto top = context->topContext();
   if (d->m_features.testFlag(DumpProblems)) {
-    d->dumpProblems(top);
+    d->dumpProblems(top, out);
   }
   if (d->m_features.testFlag(DumpContext)) {
-    d->dump(context, allowedDepth);
+    d->dump(context, allowedDepth, false, out);
   }
+}
+
+void DUChainDumper::dump(DUContext* context, int allowedDepth)
+{
+  QTextStream out(stdout);
+  dump(context, allowedDepth, out);
 }
