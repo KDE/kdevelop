@@ -20,44 +20,27 @@
 
 import QtQuick 2.0
 import QtQuick.Layouts 1.0
-import org.kde.plasma.components 2.0
-import org.kde.plasma.extras 2.0
+import QtQuick.Controls 1.2
 
 import "plugins"
 
 StandardPage {
-    ScrollArea {
-
+    ScrollView {
         anchors.fill: parent
-        Flickable {
-            id: area
-            anchors {
-                fill: parent
-                topMargin: 10
-            }
-            contentWidth: parent.width
-            contentHeight: grid.height
+        GridView {
+            id: grid
+            width: parent.width
+            cellWidth: grid.width/2
+            cellHeight: grid.height/3
 
-            GridLayout {
-                id: grid
-                columns: 2
-                x: 50
-                width: parent.width-100
-
-                Repeater {
-                    model: [ "qrc:/qml/plugins/Branches.qml", "qrc:/qml/plugins/Projects.qml" ]
-                    delegate: Item {
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: grid.width/grid.columns
-                        Layout.preferredHeight: childrenRect.height
-
-    //                     TODO: make this the plugin
-                        Loader {
-                            width: parent.width
-                            source: modelData
-                        }
-                    }
-                }
+            model: [ "qrc:/qml/plugins/Branches.qml", "qrc:/qml/plugins/Projects.qml" ]
+//          TODO: make this the plugin
+            delegate: Loader {
+                x: 5
+                y: 5
+                width: grid.cellWidth-5
+                height: grid.cellHeight-5
+                source: modelData
             }
         }
     }
