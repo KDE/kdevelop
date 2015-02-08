@@ -24,6 +24,7 @@
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KAboutData>
+#include <KActionCollection>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -55,6 +56,10 @@ KDevWelcomePagePlugin::KDevWelcomePagePlugin( QObject* parent, const QVariantLis
 
     //FIXME: When and where to open the welcome page?
     //QTimer::singleShot(500, this, SLOT(openWelcomePage()));
+
+    QAction* action = actionCollection()->addAction("show-welcomepage");
+    action->setText("Show Welcome Page");
+    action->setIcon(QIcon::fromTheme("meeting-organizer"));
 }
 
 void KDevWelcomePagePlugin::openWelcomePage()
