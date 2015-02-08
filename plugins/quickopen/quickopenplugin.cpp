@@ -65,6 +65,7 @@
 #include "projectitemquickopen.h"
 #include "declarationlistquickopen.h"
 #include "documentationquickopenprovider.h"
+#include "actionsquickopenprovider.h"
 #include "debug.h"
 #include <language/duchain/functiondefinition.h>
 #include <qmenu.h>
@@ -751,6 +752,11 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
     actions.setDefaultShortcut( quickOpenDocumentation, Qt::CTRL | Qt::ALT | Qt::Key_D );
     connect(quickOpenDocumentation, &QAction::triggered, this, &QuickOpenPlugin::quickOpenDocumentation);
 
+    QAction* quickOpenActions = actions.addAction("quick_open_actions");
+    quickOpenActions->setText( i18n("Quick Open &Actions") );
+    actions.setDefaultShortcut( quickOpenActions, Qt::CTRL | Qt::ALT | Qt::Key_A);
+    connect(quickOpenActions, &QAction::triggered, this, &QuickOpenPlugin::quickOpenActions);
+
     m_quickOpenDeclaration = actions.addAction("quick_open_jump_declaration");
     m_quickOpenDeclaration->setText( i18n("Jump to Declaration") );
     m_quickOpenDeclaration->setIcon( QIcon::fromTheme("go-jump-declaration" ) );
@@ -826,6 +832,13 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
       items << i18n("Documentation");
       m_model->registerProvider( scopes, items, m_documentationItemData );
     }
+    {
+      m_actionsItemData = new ActionsQuickOpenProvider;
+      QStringList scopes, items;
+      scopes << i18n("Includes");
+      items << i18n("Actions");
+      m_model->registerProvider( scopes, items, m_actionsItemData );
+    }
 }
 
 QuickOpenPlugin::~QuickOpenPlugin()
@@ -837,6 +850,7 @@ QuickOpenPlugin::~QuickOpenPlugin()
   delete m_projectItemData;
   delete m_openFilesData;
   delete m_documentationItemData;
+  delete m_actionsItemData;
 }
 
 void QuickOpenPlugin::unload()
@@ -982,6 +996,11 @@ void QuickOpenPlugin::quickOpenOpenFile()
 void QuickOpenPlugin::quickOpenDocumentation()
 {
   showQuickOpenWidget(QStringList(i18n("Documentation")), QStringList(i18n("Includes")), true);
+}
+
+void QuickOpenPlugin::quickOpenActions()
+{
+  showQuickOpenWidget(QStringList(i18n("Actions")), QStringList(i18n("Includes")), true);
 }
 
 QSet<KDevelop::IndexedString> QuickOpenPlugin::fileSet() const {

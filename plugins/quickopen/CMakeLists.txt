@@ -11,6 +11,7 @@ set(kdevquickopen_PART_SRCS
     declarationlistquickopen.cpp
     projectitemquickopen.cpp
     documentationquickopenprovider.cpp
+    actionsquickopenprovider.cpp
     expandingtree/expandingdelegate.cpp
     expandingtree/expandingtree.cpp
     expandingtree/expandingwidgetmodel.cpp
