@@ -23,15 +23,11 @@
 #include <interfaces/idocument.h>
 #include <sublime/urldocument.h>
 
-namespace KDevelop {
-    class IProject;
-}
-
 class WelcomePageDocument : public Sublime::UrlDocument, public KDevelop::IDocument
 {
     Q_OBJECT
 public:
-    WelcomePageDocument(const QList<KDevelop::IProject*>& project);
+    WelcomePageDocument();
 
     virtual void activate(Sublime::View* activeView, KParts::MainWindow* mainWindow);
     virtual void setTextSelection(const KTextEditor::Range& range);
@@ -50,9 +46,6 @@ public:
     static QUrl welcomePageUrl();
 protected:
     virtual Sublime::View* newView(Document* doc);
-
-private:
-    QList<KDevelop::IProject*> m_projects;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_DASHBOARDDOCUMENT_H

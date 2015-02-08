@@ -44,7 +44,7 @@ class WelcomePageFactory : public KDevelop::IDocumentFactory
 public:
     virtual IDocument* create(const QUrl& url, ICore*)
     {
-        return new WelcomePageDocument(QList<IProject*>());
+        return new WelcomePageDocument();
     }
 };
 

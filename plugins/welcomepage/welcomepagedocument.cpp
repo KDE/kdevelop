@@ -33,9 +33,8 @@ using namespace KDevelop;
 
 Q_GLOBAL_STATIC_WITH_ARGS(QUrl, s_welcomePageUrl, (QUrl("kdev:///awesome.kdevinternal")));
 
-WelcomePageDocument::WelcomePageDocument(const QList<KDevelop::IProject*>& projects)
+WelcomePageDocument::WelcomePageDocument()
     : Sublime::UrlDocument(ICore::self()->uiController()->controller(), *s_welcomePageUrl), IDocument(ICore::self())
-    , m_projects(projects)
 {
     setTitle(i18n("Dashboard"));
 }
