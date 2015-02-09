@@ -21,6 +21,7 @@
   <name xml:lang="sk">KDevelop</name>
   <name xml:lang="sl">KDevelop</name>
   <name xml:lang="sv">KDevelop</name>
+  <name xml:lang="tr">KDevelop</name>
   <name xml:lang="uk">KDevelop</name>
   <name xml:lang="x-test">xxKDevelopxx</name>
   <name xml:lang="zh-CN">KDevelop</name>
@@ -40,6 +41,7 @@
   <summary xml:lang="sk">Je to plne funkčne, pluginmi rozšíriteľné IDE pre C/C++ a iné programovacie jazyky.</summary>
   <summary xml:lang="sl">KDevelop je zmogljivo integrirano razvojno okolje za C/C++ in druge programske jezike, ki je razširljivo z vstavki.</summary>
   <summary xml:lang="sv">Det är en funktionsrik, integrerad utvecklingsmiljö för C/C++ och andra programspråk, med utökningsmöjligheter via insticksmoduler.</summary>
+  <summary xml:lang="tr">Tam özellikli, eklenti ile geliştirilebilir C/C++ ve diğer programlama dilleri için tümleşik geliştirme ortamı.</summary>
   <summary xml:lang="uk">Це повноцінне, розширюване за допомогою додатків комплексне середовище розробки мовами C/C++ та іншими мовами програмування.</summary>
   <summary xml:lang="x-test">xxIt is a feature-full, plugin-extensible IDE for C/C++ and other programming languages.xx</summary>
   <summary xml:lang="zh-CN">全功能，可扩展的支持 C/C++ 和其他语言的集成开发环境。</summary>
@@ -60,6 +62,7 @@
     <p xml:lang="sk">Integrované vývojové prostredie pre slobodný a otvorený softvér pre vaše rôzne softvérové projekty.</p>
     <p xml:lang="sl">Prosto in odprtokodno integrirano razvojno okolje za vaše raznolike programske projekte.</p>
     <p xml:lang="sv">Fri integrerad utvecklingsmiljö med öppen källkod för olika programvaruprojekt.</p>
+    <p xml:lang="tr">Çeşitli yazılım projeleriniz için Ücretsiz ve Açık Kaynaklı Tümleşik Geliştirme Ortamı</p>
     <p xml:lang="uk">Вільне комплексне середовище розробки з відкритим кодом, призначене для ваших різноманітних проектів з розробки програмного коду.</p>
     <p xml:lang="x-test">xxFree and Open Source Integrated Development Environment for your different software projects.xx</p>
     <p xml:lang="zh-CN">可用于您的不同软件项目的自由和开源的集成开发环境</p>
