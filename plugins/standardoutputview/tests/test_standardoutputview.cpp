@@ -113,7 +113,7 @@ void StandardOutputViewTest::testActions()
     QVERIFY(outputWidget);
 
     QList<QAction*> actions = outputWidget->actions();
-    QCOMPARE(actions.size(), 7);
+    QCOMPARE(actions.size(), 8);
 
     m_stdOutputView->removeToolView(toolviewId);
     QVERIFY(!toolviewPointer(toolviewTitle));
@@ -129,7 +129,7 @@ void StandardOutputViewTest::testActions()
     QVERIFY(outputWidget);
 
     actions = outputWidget->actions();
-    QCOMPARE(actions.size(), 12);
+    QCOMPARE(actions.size(), 13);
     QCOMPARE(actions[actions.size()-2]->text(), addedActions[0]->text());
     QCOMPARE(actions[actions.size()-1]->text(), addedActions[1]->text());
 

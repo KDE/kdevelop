@@ -93,10 +93,10 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         stackwidget = new QStackedWidget( this );
         layout->addWidget( stackwidget );
 
-        previousAction = new QAction( QIcon::fromTheme( "go-previous" ), i18n("Previous"), this );
+        previousAction = new QAction( QIcon::fromTheme( "arrow-left" ), i18n("Previous Output"), this );
         connect(previousAction, &QAction::triggered, this, &OutputWidget::previousOutput);
         addAction(previousAction);
-        nextAction = new QAction( QIcon::fromTheme( "go-next" ), i18n("Next"), this );
+        nextAction = new QAction( QIcon::fromTheme( "arrow-right" ), i18n("Next Output"), this );
         connect(nextAction, &QAction::triggered, this, &OutputWidget::nextOutput);
         addAction(nextAction);
     }
@@ -116,6 +116,17 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
 
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
+    addAction(separator);
+
+    QAction* action;
+
+    action = new QAction(QIcon::fromTheme("go-previous"), i18n("Previous Item"), this);
+    connect(action, &QAction::triggered, this, &OutputWidget::selectPreviousItem);
+    addAction(action);
+
+    action = new QAction(QIcon::fromTheme("go-next"), i18n("Next Item"), this);
+    connect(action, &QAction::triggered, this, &OutputWidget::selectNextItem);
+    addAction(action);
 
     QAction* selectAllAction = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     selectAllAction->setShortcut(QKeySequence()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
@@ -128,7 +139,10 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
 
     if( data->option & KDevelop::IOutputView::AddFilterAction )
     {
+        QAction *separator = new QAction(this);
+        separator->setSeparator(true);
         addAction(separator);
+
         filterInput = new QLineEdit();
         filterInput->setMaximumWidth(150);
         filterInput->setMinimumWidth(100);
@@ -159,6 +173,9 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
 
     connect( this, &OutputWidget::outputRemoved,
              data->plugin, &StandardOutputView::outputRemoved );
+
+    connect( data->plugin, &StandardOutputView::selectNextItem, this, &OutputWidget::selectNextItem );
+    connect( data->plugin, &StandardOutputView::selectPreviousItem, this, &OutputWidget::selectPreviousItem );
 
     foreach( int id, data->outputdata.keys() )
     {
