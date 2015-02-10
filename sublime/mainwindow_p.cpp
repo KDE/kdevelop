@@ -314,6 +314,8 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
                     d->m_mainWindow, &MainWindow::tabToolTipRequested);
             connect(container, static_cast<void(Container::*)(QWidget*)>(&Container::requestClose),
                     d, &MainWindowPrivate::widgetCloseRequest, Qt::QueuedConnection);
+            connect(container, &Container::newTabRequested,
+                    d->m_mainWindow, &MainWindow::newTabRequested);
             splitter->addWidget(container);
         }
         else

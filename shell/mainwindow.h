@@ -88,6 +88,7 @@ protected Q_SLOTS:
     virtual void tabContextMenuRequested(Sublime::View* , QMenu* );
     virtual void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab);
     virtual void dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&);
+    virtual void newTabRequested() override;
 
 private Q_SLOTS:
     void updateCaption();

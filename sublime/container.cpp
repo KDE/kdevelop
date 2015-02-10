@@ -47,8 +47,11 @@ namespace Sublime {
 
 // struct ContainerPrivate
 
-class ContainerTabBar : public QTabBar {
-    public:
+class ContainerTabBar : public QTabBar
+{
+    Q_OBJECT
+
+public:
     ContainerTabBar(Container* container) : QTabBar(container), m_container(container) {
     }
     
@@ -72,7 +75,7 @@ class ContainerTabBar : public QTabBar {
     virtual void mousePressEvent(QMouseEvent* event) {
         if (event->button() == Qt::MidButton) {
             // just close on midbutton, drag can still be done with left mouse button
-            
+
             int tab = tabAt(mapFromGlobal(QCursor::pos()));
             if (tab != -1) {
                 emit tabCloseRequested(tab);
@@ -81,6 +84,11 @@ class ContainerTabBar : public QTabBar {
         }
         QTabBar::mousePressEvent(event);
     }
+
+Q_SIGNALS:
+    void newTabRequested();
+
+private:
     Container* m_container;
 };
 
@@ -236,6 +244,7 @@ Container::Container(QWidget *parent)
 
     connect(d->tabBar, &ContainerTabBar::currentChanged, this, &Container::widgetActivated);
     connect(d->tabBar, &ContainerTabBar::tabCloseRequested, this, static_cast<void(Container::*)(int)>(&Container::requestClose));
+    connect(d->tabBar, &ContainerTabBar::newTabRequested, this, &Container::newTabRequested);
     connect(d->tabBar, &ContainerTabBar::tabMoved, this, &Container::tabMoved);
     connect(d->tabBar, &ContainerTabBar::customContextMenuRequested, this, &Container::contextMenu);
     connect(d->tabBar, &ContainerTabBar::tabBarDoubleClicked, this, &Container::doubleClickTriggered);
@@ -547,7 +556,11 @@ QRect Container::tabRect(int tab) const
 
 void Container::doubleClickTriggered(int tab)
 {
-    emit tabDoubleClicked(viewForWidget(widget(tab)));
+    if (tab == -1) {
+        emit newTabRequested();
+    } else {
+        emit tabDoubleClicked(viewForWidget(widget(tab)));
+    }
 }
 
 void Container::documentListActionTriggered(QAction* action)
@@ -562,4 +575,4 @@ void Container::documentListActionTriggered(QAction* action)
 
 }
 
-
+#include "container.moc"

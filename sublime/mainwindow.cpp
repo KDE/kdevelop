@@ -399,6 +399,10 @@ void MainWindow::tabToolTipRequested(View*, Container*, int)
     // do nothing
 }
 
+void MainWindow::newTabRequested()
+{
+}
+
 void MainWindow::dockBarContextMenuRequested(Qt::DockWidgetArea , const QPoint& )
 {
     // do nothing

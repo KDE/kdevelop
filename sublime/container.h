@@ -73,6 +73,12 @@ public:
 Q_SIGNALS:
     void activateView(Sublime::View* view);
     void requestClose(QWidget *w);
+    /**
+     * This signal is emitted whenever the users double clicks on the free
+     * space next to the tab bar. Typically, a new document should be
+     * created.
+     */
+    void newTabRequested();
     void tabContextMenuRequested(Sublime::View* view, QMenu* menu);
     /**
      * @p view The view represented by the tab that was hovered

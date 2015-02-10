@@ -376,5 +376,12 @@ void MainWindow::dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoi
     d->dockBarContextMenuRequested(area, position);
 }
 
+void MainWindow::newTabRequested()
+{
+    Sublime::MainWindow::newTabRequested();
+
+    d->fileNew();
+}
+
 }
 

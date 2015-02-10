@@ -134,6 +134,7 @@ protected Q_SLOTS:
     virtual void tabDoubleClicked(Sublime::View* view);
     virtual void tabContextMenuRequested(Sublime::View*, QMenu*);
     virtual void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab);
+    virtual void newTabRequested();
     /**Called whenever the user requests a context menu on a dockwidget bar.
        You can then e.g. add actions to add dockwidgets.
        Default implementation does nothing.**/
