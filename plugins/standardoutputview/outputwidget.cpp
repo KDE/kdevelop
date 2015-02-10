@@ -174,9 +174,6 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     connect( this, &OutputWidget::outputRemoved,
              data->plugin, &StandardOutputView::outputRemoved );
 
-    connect( data->plugin, &StandardOutputView::selectNextItem, this, &OutputWidget::selectNextItem );
-    connect( data->plugin, &StandardOutputView::selectPreviousItem, this, &OutputWidget::selectPreviousItem );
-
     foreach( int id, data->outputdata.keys() )
     {
         changeModel( id );
