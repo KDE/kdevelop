@@ -57,6 +57,7 @@ Comment[sv]=Anpassa vilka makron och filer eller kataloger att inkludera som lä
 Comment[tr]=Proje ayrıştırılırken hangi makroların ve içerme dizinlerinin/dosyaların ayrıştırıcıya ekleneceğini yapılandırın.
 Comment[uk]=Налаштувати макроси і включені каталоги або файли, які буде додано під час обробки проекту.
 Comment[x-test]=xxConfigure which macros and include directories/files will be added to the parser during project parsing.xx
+Comment[zh_CN]=配置在解析项目时加入哪些宏、引用目录和文件。
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevdefinesandincludesmanager
