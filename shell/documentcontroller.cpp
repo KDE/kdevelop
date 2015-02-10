@@ -35,6 +35,7 @@ Boston, MA 02110-1301, USA.
 #include <KLocalizedString>
 #include <krecentfilesaction.h>
 #include <QTemporaryFile>
+#include <QRegularExpression>
 #include <kplugininfo.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -1004,29 +1005,30 @@ QStringList DocumentController::documentTypes() const
     return QStringList() << "Text";
 }
 
-static QRegExp emptyDocumentPattern()
+static const QRegularExpression& emptyDocumentPattern()
 {
-    static const QRegExp pattern(QStringLiteral("^/%1(?:\\s\\(\\d+\\))?$").arg(EMPTY_DOCUMENT_URL));
+    static const QRegularExpression pattern(QStringLiteral("^/%1(?:\\s\\((\\d+)\\))?$").arg(EMPTY_DOCUMENT_URL));
     return pattern;
 }
 
 bool DocumentController::isEmptyDocumentUrl(const QUrl &url)
 {
-    return emptyDocumentPattern().indexIn(url.toDisplayString(QUrl::PreferLocalFile)) != -1;
+    return emptyDocumentPattern().match(url.toDisplayString(QUrl::PreferLocalFile)).hasMatch();
 }
 
 QUrl DocumentController::nextEmptyDocumentUrl()
 {
     int nextEmptyDocNumber = 0;
-    auto pattern = emptyDocumentPattern();
-    foreach (IDocument *doc, Core::self()->documentControllerInternal()->openDocuments())
-    {
-        if (DocumentController::isEmptyDocumentUrl(doc->url()))
-        {
-            if (pattern.indexIn(doc->url().toDisplayString(QUrl::PreferLocalFile)) != -1)
-                nextEmptyDocNumber = qMax(nextEmptyDocNumber, pattern.cap(1).toInt()+1);
-            else
+    const auto& pattern = emptyDocumentPattern();
+    foreach (IDocument *doc, Core::self()->documentControllerInternal()->openDocuments()) {
+        if (DocumentController::isEmptyDocumentUrl(doc->url())) {
+            const auto match = pattern.match(doc->url().toDisplayString(QUrl::PreferLocalFile));
+            if (match.hasMatch()) {
+                const int num = match.captured(1).toInt();
+                nextEmptyDocNumber = qMax(nextEmptyDocNumber, num + 1);
+            } else {
                 nextEmptyDocNumber = qMax(nextEmptyDocNumber, 1);
+            }
         }
     }
 
