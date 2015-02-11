@@ -216,15 +216,17 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     m_toolbarWidgetLayout->setMargin(0);
 
     m_toolbarWidgetLayout->addWidget(m_previousButton);
-    m_toolbarWidgetLayout->addWidget(m_outlineLine);
-    m_outlineLine->setMaximumWidth(600);
+    if (m_outlineLine) {
+      m_toolbarWidgetLayout->addWidget(m_outlineLine);
+      m_outlineLine->setMaximumWidth(600);
+      connect(ICore::self()->documentController(), &IDocumentController::documentClosed, m_outlineLine.data(), &IQuickOpenLine::clear);
+    }
     m_toolbarWidgetLayout->addWidget(m_nextButton);
     m_toolbarWidgetLayout->addWidget(m_browseButton);
 
     if(m_toolbarWidget->children().isEmpty())
         m_toolbarWidget->setLayout(m_toolbarWidgetLayout);
 
-    connect(ICore::self()->documentController(), &IDocumentController::documentClosed, m_outlineLine.data(), &IQuickOpenLine::clear);
     connect(ICore::self()->documentController(), &IDocumentController::documentActivated,
       this, &ContextBrowserPlugin::documentActivated);
 
@@ -764,7 +766,9 @@ void ContextBrowserPlugin::textDocumentCreated( KDevelop::IDocument* document )
 
 void ContextBrowserPlugin::documentActivated( IDocument* doc )
 {
-  m_outlineLine->clear();
+  if (m_outlineLine)
+    m_outlineLine->clear();
+
   if (View* view = doc->activeTextView())
   {
     cursorPositionChanged(view, view->cursorPosition());
@@ -1079,7 +1083,7 @@ void ContextBrowserPlugin::documentJumpPerformed( KDevelop::IDocument* newDocume
             m_history.resize(m_nextHistoryIndex); // discard forward history
             m_history.append(HistoryEntry(DocumentCursor(IndexedString(newDocument->url()), KTextEditor::Cursor(newCursor))));
             ++m_nextHistoryIndex;
-            m_outlineLine->clear();
+            if (m_outlineLine) m_outlineLine->clear();
         }
     }
 }
@@ -1192,7 +1196,7 @@ void ContextBrowserPlugin::updateHistory(KDevelop::DUContext* context, const KTe
 {
     qCDebug(PLUGIN_CONTEXTBROWSER) << "updating history";
 
-    if(m_outlineLine->isVisible())
+    if(m_outlineLine && m_outlineLine->isVisible())
         updateDeclarationListBox(context);
 
     if(!context || (!context->owner() && !force)) {
@@ -1227,7 +1231,7 @@ void ContextBrowserPlugin::updateDeclarationListBox(DUContext* context) {
     if(!context || !context->owner()) {
         qCDebug(PLUGIN_CONTEXTBROWSER) << "not updating box";
         m_listUrl = IndexedString(); ///@todo Compute the context in the document here
-        m_outlineLine->clear();
+        if (m_outlineLine) m_outlineLine->clear();
         return;
     }
 
@@ -1242,7 +1246,7 @@ void ContextBrowserPlugin::updateDeclarationListBox(DUContext* context) {
     if(function)
         text += function->partToString(KDevelop::FunctionType::SignatureArguments);
 
-    if(!m_outlineLine->hasFocus())
+    if(m_outlineLine && !m_outlineLine->hasFocus())
     {
         m_outlineLine->setText(text);
         m_outlineLine->setCursorPosition(0);
