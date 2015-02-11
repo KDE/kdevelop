@@ -45,7 +45,7 @@ public:
     IncludeNavigationContext(const KDevelop::IncludeItem& item, KDevelop::TopDUContextPointer topContext);
 
 protected:
-    virtual bool filterDeclaration(KDevelop::Declaration* decl);
+    virtual bool filterDeclaration(KDevelop::Declaration* decl) override;
 };
 
 IncludeNavigationContext::IncludeNavigationContext(const IncludeItem& item, KDevelop::TopDUContextPointer topContext)

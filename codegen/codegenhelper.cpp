@@ -185,7 +185,7 @@ AbstractType::Ptr shortenTypeForViewing(AbstractType::Ptr type)
     struct ShortenAliasExchanger
         : public KDevelop::TypeExchanger
     {
-        virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
+        virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) override {
             if (!type) {
                 return type;
             }
@@ -231,7 +231,7 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx)
             Q_ASSERT(ctx);
         }
 
-        virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
+        virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) override {
             if (!type) {
                 return type;
             }

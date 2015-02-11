@@ -59,7 +59,7 @@ public:
      : mode(mode)
     {}
 
-    virtual bool accept(Declaration* decl)
+    virtual bool accept(Declaration* decl) override
     {
         if (decl->range().isEmpty())
             return false;
@@ -87,7 +87,7 @@ public:
             return false;
         }
     }
-    virtual bool accept(DUContext* ctx)
+    virtual bool accept(DUContext* ctx) override
     {
         if (ctx->type() == DUContext::Class || ctx->type() == DUContext::Namespace || ctx->type() == DUContext::Global || ctx->type() == DUContext::Other || ctx->type() == DUContext::Helper ) {
             return true;

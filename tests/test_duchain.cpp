@@ -54,17 +54,17 @@ class TestEnvironmentProvider final : public IDefinesAndIncludesManager::Backgro
 {
 public:
     virtual ~TestEnvironmentProvider() = default;
-    virtual QHash< QString, QString > definesInBackground(const QString& /*path*/) const
+    virtual QHash< QString, QString > definesInBackground(const QString& /*path*/) const override
     {
         return defines;
     }
 
-    virtual Path::List includesInBackground(const QString& /*path*/) const
+    virtual Path::List includesInBackground(const QString& /*path*/) const override
     {
         return includes;
     }
 
-    virtual IDefinesAndIncludesManager::Type type() const
+    virtual IDefinesAndIncludesManager::Type type() const override
     {
         return IDefinesAndIncludesManager::UserDefined;
     }
