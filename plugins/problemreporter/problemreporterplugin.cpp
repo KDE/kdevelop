@@ -63,7 +63,7 @@ class ProblemReporterFactory: public KDevelop::IToolViewFactory
 public:
   ProblemReporterFactory(ProblemReporterPlugin *plugin): m_plugin(plugin) {}
 
-  virtual QWidget* create(QWidget *parent = 0)
+  virtual QWidget* create(QWidget *parent = 0) override
   {
     ProblemTreeView* treeView = new ProblemTreeView(parent, m_plugin);
     ProblemModel* model = m_plugin->getModel();
@@ -71,12 +71,12 @@ public:
     return treeView;
   }
 
-  virtual Qt::DockWidgetArea defaultPosition()
+  virtual Qt::DockWidgetArea defaultPosition() override
   {
     return Qt::BottomDockWidgetArea;
   }
 
-  virtual QString id() const
+  virtual QString id() const override
   {
     return "org.kdevelop.ProblemReporterView";
   }

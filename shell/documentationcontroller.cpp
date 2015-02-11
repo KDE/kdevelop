@@ -92,13 +92,13 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
             : mProvidersModel(0)
         {}
 
-        virtual QWidget* create( QWidget *parent = 0 )
+        virtual QWidget* create( QWidget *parent = 0 ) override
         {
             return new DocumentationView( parent, providers() );
         }
 
-        virtual Qt::DockWidgetArea defaultPosition() { return Qt::RightDockWidgetArea; }
-        virtual QString id() const { return "org.kdevelop.DocumentationView"; }
+        virtual Qt::DockWidgetArea defaultPosition() override { return Qt::RightDockWidgetArea; }
+        virtual QString id() const override { return "org.kdevelop.DocumentationView"; }
 
     private:
         ProvidersModel* providers() {

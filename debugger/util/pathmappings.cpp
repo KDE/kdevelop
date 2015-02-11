@@ -81,19 +81,19 @@ class PathMappingModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override
     {
         if (parent.isValid()) return 0;
         return 2;
     }
 
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override
     {
         if (parent.isValid()) return 0;
         return m_paths.count() + 1;
     }
 
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override
     {
         if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
             if (section == 0) {
@@ -105,7 +105,7 @@ public:
         return QAbstractTableModel::headerData(section, orientation, role);
     }
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override
     {
         if (!index.isValid()) return QVariant();
         if (index.parent().isValid()) return QVariant();
@@ -122,7 +122,7 @@ public:
         return QVariant();
     }
 
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const override
     {
         if (index.parent().isValid()) return Qt::NoItemFlags;
         if (!index.isValid()) return Qt::NoItemFlags;
@@ -130,7 +130,7 @@ public:
 
     }
 
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole)
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override
     {
         if (!index.isValid()) return false;
         if (index.parent().isValid()) return false;
@@ -153,7 +153,7 @@ public:
         return false;
     }
 
-    virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex())
+    virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override
     {
         if (parent.isValid()) return false;
         if (row+count > m_paths.count()) return false;

@@ -431,7 +431,7 @@ class CopyFunction : public AbstractFunction
         CopyFunction(const QString& tocopy)
             : m_tocopy(tocopy) {}
 
-        void operator()() { QApplication::clipboard()->setText(m_tocopy); }
+        void operator()() override { QApplication::clipboard()->setText(m_tocopy); }
     private:
         QString m_tocopy;
 };
@@ -442,7 +442,7 @@ class HistoryFunction : public AbstractFunction
         HistoryFunction(VcsPluginHelper* helper, const VcsRevision& rev)
             : m_helper(helper), m_rev(rev) {}
 
-            void operator()() { m_helper->history(m_rev); }
+            void operator()() override { m_helper->history(m_rev); }
 
     private:
         VcsPluginHelper* m_helper;

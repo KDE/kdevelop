@@ -108,7 +108,7 @@ void KDevelop::ForegroundLock::relock()
 
             class ForegroundReleaser : public DoInForeground {
                 public:
-                virtual void doInternal() {
+                virtual void doInternal() override {
                     // By locking the mutex, we make sure that the requester is actually waiting for the condition
                     waitMutex.lock();
                     // Now we release the foreground lock

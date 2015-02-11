@@ -76,7 +76,7 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
       m_url = IndexedString(m_document->url());
   }
   
-  virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const {
+  virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const override {
       QVector< KTextEditor::Range > ret;
 
       if (identifier.isEmpty())
@@ -88,25 +88,25 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
       return ret;
   }
 
-  virtual KDevEditingTransaction::Ptr makeEditTransaction() {
+  virtual KDevEditingTransaction::Ptr makeEditTransaction() override {
     return KDevEditingTransaction::Ptr(new KDevEditingTransaction(m_document));
   }
   
-  QString line(int line) const {
+  QString line(int line) const override {
         if(line < 0 || line >= m_document->lines())
             return QString();
         return m_document->line(line);
   }
   
-  virtual int lines() const {
+  virtual int lines() const override {
       return m_document->lines();
   }
   
-  QString text() const {
+  QString text() const override {
     return m_document->text();
   }
   
-  bool setText(const QString& text) {
+  bool setText(const QString& text) override {
     bool ret;
     {
         KDevEditingTransaction t(m_document);
@@ -116,12 +116,12 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
     return ret;
   }
   
-  bool fileExists(){
+  bool fileExists() override{
     return QFile(m_document->url().path()).exists();
   }
   
   bool replace(const KTextEditor::Range& range, const QString& oldText,
-               const QString& newText, bool ignoreOldText) {
+               const QString& newText, bool ignoreOldText) override {
       QString old = m_document->text(range);
       if(oldText != old && !ignoreOldText) {
           return false;
@@ -138,7 +138,7 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
       return ret;
   }
   
-  virtual QString rangeText(const KTextEditor::Range& range) const {
+  virtual QString rangeText(const KTextEditor::Range& range) const override {
       return m_document->text(range);
   }
   
@@ -160,14 +160,14 @@ class FileCodeRepresentation : public CodeRepresentation {
         m_exists = file.exists();
     }
     
-    QString line(int line) const {
+    QString line(int line) const override {
         if(line < 0 || line >= lineData.size())
             return QString();
       
       return lineData.at(line);
     }
     
-    virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const {
+    virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const override {
         QVector< KTextEditor::Range > ret;
 
         if (identifier.isEmpty())
@@ -179,15 +179,15 @@ class FileCodeRepresentation : public CodeRepresentation {
         return ret;
     }
     
-    virtual int lines() const {
+    virtual int lines() const override {
         return lineData.count();
     }
     
-    QString text() const {
+    QString text() const override {
       return data;
     }
     
-    bool setText(const QString& text) {
+    bool setText(const QString& text) override {
       Q_ASSERT(!onDiskChangesForbidden);
       QString localFile(m_document.toUrl().toLocalFile());
 
@@ -205,7 +205,7 @@ class FileCodeRepresentation : public CodeRepresentation {
       return false;
     }
     
-    bool fileExists(){
+    bool fileExists() override{
       return m_exists;
     }
     
@@ -244,31 +244,31 @@ class StringCodeRepresentation : public CodeRepresentation {
       Q_ASSERT(data);
     }
     
-    QString line(int line) const {
+    QString line(int line) const override {
         if(line < 0 || line >= data->lines().size())
             return QString();
       
       return data->lines().at(line);
     }
     
-    virtual int lines() const {
+    virtual int lines() const override {
         return data->lines().count();
     }
     
-    QString text() const {
+    QString text() const override {
         return data->data();
     }
     
-    bool setText(const QString& text) {
+    bool setText(const QString& text) override {
         data->setData(text);
         return true;
     }
     
-    bool fileExists(){
+    bool fileExists() override{
         return false;
     }
     
-    virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const {
+    virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const override {
         QVector< KTextEditor::Range > ret;
 
         if (identifier.isEmpty())

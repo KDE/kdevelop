@@ -83,7 +83,7 @@ public:
         return m_plugins[index.row()];
     }
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override
     {
         KDevelop::IPlugin* plugin = pluginForIndex(index);
         if (!plugin)
@@ -101,7 +101,7 @@ public:
         };
     }
 
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override
     {
         if (!parent.isValid()) {
             return m_plugins.count();
@@ -131,12 +131,12 @@ public:
         delete pushButton;
     }
 
-    virtual QList<QWidget *> createItemWidgets(const QModelIndex &/*index*/) const
+    virtual QList<QWidget *> createItemWidgets(const QModelIndex &/*index*/) const override
     {
         return QList<QWidget *>();
     }
 
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override
     {
         int i = 5;
         int j = 1;
@@ -152,7 +152,7 @@ public:
     }
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option,
-               const QModelIndex &index) const
+               const QModelIndex &index) const override
     {
         if (!index.isValid()) {
             return;
@@ -211,7 +211,7 @@ public:
 
     void updateItemWidgets(const QList<QWidget*> widgets,
                            const QStyleOptionViewItem &option,
-                           const QPersistentModelIndex &index) const
+                           const QPersistentModelIndex &index) const override
     {
         Q_UNUSED(index);
         if ( widgets.isEmpty() ) {
@@ -278,7 +278,7 @@ public:
         delete itemDelegate();
     }
 
-    virtual QSize sizeHint() const
+    virtual QSize sizeHint() const override
     {
         QSize ret = QListView::sizeHint();
         ret.setWidth(qMax(ret.width(), sizeHintForColumn(0) + 30));

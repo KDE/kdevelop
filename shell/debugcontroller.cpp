@@ -64,22 +64,22 @@ public:
   DebuggerToolFactory(DebugController* controller, const QString &id, Qt::DockWidgetArea defaultArea)
   : m_controller(controller), m_id(id), m_defaultArea(defaultArea) {}
 
-  virtual QWidget* create(QWidget *parent = 0)
+  virtual QWidget* create(QWidget *parent = 0) override
   {
     return new T(m_controller, parent);
   }
 
-  virtual QString id() const
+  virtual QString id() const override
   {
     return m_id;
   }
 
-  virtual Qt::DockWidgetArea defaultPosition()
+  virtual Qt::DockWidgetArea defaultPosition() override
   {
     return m_defaultArea;
   }
 
-  virtual void viewCreated(Sublime::View* view)
+  virtual void viewCreated(Sublime::View* view) override
   {
       if (view->widget()->metaObject()->indexOfSignal("requestRaise()") != -1)
           QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
@@ -87,7 +87,7 @@ public:
 
   /* At present, some debugger widgets (e.g. breakpoint) contain actions so that shortcuts
      work, but they don't need any toolbar.  So, suppress toolbar action.  */
-  virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const
+  virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const override
   {
       Q_UNUSED(viewWidget);
       return QList<QAction*>();

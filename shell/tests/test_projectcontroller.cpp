@@ -80,7 +80,7 @@ public:
 
     virtual ~FakeFileManager() {}
 
-    virtual Features features() const
+    virtual Features features() const override
     {
         return IProjectFileManager::Files | IProjectFileManager::Folders;
     }

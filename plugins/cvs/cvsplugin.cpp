@@ -58,13 +58,13 @@ class KDevCvsViewFactory: public KDevelop::IToolViewFactory
 {
 public:
     KDevCvsViewFactory(CvsPlugin *plugin): m_plugin(plugin) {}
-    virtual QWidget* create(QWidget *parent = 0) {
+    virtual QWidget* create(QWidget *parent = 0) override {
         return new CvsMainView(m_plugin, parent);
     }
-    virtual Qt::DockWidgetArea defaultPosition() {
+    virtual Qt::DockWidgetArea defaultPosition() override {
         return Qt::BottomDockWidgetArea;
     }
-    virtual QString id() const {
+    virtual QString id() const override {
         return "org.kdevelop.CVSView";
     }
 

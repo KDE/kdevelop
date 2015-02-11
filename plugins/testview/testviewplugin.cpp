@@ -48,19 +48,19 @@ class TestToolViewFactory: public KDevelop::IToolViewFactory
     public:
         TestToolViewFactory( TestViewPlugin *plugin ): mplugin( plugin )
         {}
-        virtual QWidget* create( QWidget *parent = 0 )
+        virtual QWidget* create( QWidget *parent = 0 ) override
         {
             return new TestView( mplugin, parent );
         }
-        virtual Qt::DockWidgetArea defaultPosition()
+        virtual Qt::DockWidgetArea defaultPosition() override
         {
             return Qt::LeftDockWidgetArea;
         }
-        virtual QString id() const
+        virtual QString id() const override
         {
             return "org.kdevelop.TestView";
         }
-        virtual QList< QAction* > contextMenuActions(QWidget* viewWidget) const
+        virtual QList< QAction* > contextMenuActions(QWidget* viewWidget) const override
         {
             return qobject_cast<TestView*>(viewWidget)->contextMenuActions();
         }

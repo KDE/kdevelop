@@ -42,7 +42,7 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
     public:
         KDevDocumentViewPluginFactory( KDevDocumentViewPlugin *plugin ): m_plugin( plugin )
         {}
-        virtual QWidget* create( QWidget *parent = 0 )
+        virtual QWidget* create( QWidget *parent = 0 ) override
         {
             KDevDocumentView* view = new KDevDocumentView( m_plugin, parent );
             KDevelop::IDocumentController* docController = m_plugin->core()->documentController();
@@ -68,12 +68,12 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
                     view, &KDevDocumentView::documentUrlChanged );
             return view;
         }
-        virtual Qt::DockWidgetArea defaultPosition()
+        virtual Qt::DockWidgetArea defaultPosition() override
         {
             return Qt::LeftDockWidgetArea;
         }
 
-        virtual QString id() const
+        virtual QString id() const override
         {
             return "org.kdevelop.DocumentsView";
         }

@@ -39,15 +39,15 @@ public:
     , m_provider(p)
     {}
 
-    virtual QString text() const
+    virtual QString text() const override
     {
         return m_data.data().toString();
     }
-    virtual QString htmlDescription() const
+    virtual QString htmlDescription() const override
     {
         return i18n("Documentation in the %1", m_provider->name());
     }
-    virtual bool execute(QString&)
+    virtual bool execute(QString&) override
     {
         IDocumentation::Ptr docu = m_provider->documentationForIndex(m_data);
         if(docu) {
@@ -55,7 +55,7 @@ public:
         }
         return docu;
     }
-    virtual QIcon icon() const
+    virtual QIcon icon() const override
     {
         return m_provider->icon();
     }

@@ -41,7 +41,7 @@ class ExecutablePathsVisitor
     public:
         ExecutablePathsVisitor(bool exec) : m_onlyExecutables(exec) {}
         using ProjectVisitor::visit;
-        virtual void visit(ProjectExecutableTargetItem* eit) {
+        virtual void visit(ProjectExecutableTargetItem* eit) override {
             if(!m_onlyExecutables || eit->type()==ProjectTargetItem::ExecutableTarget)
                 m_paths += KDevelop::joinWithEscaping(eit->model()->pathFromIndex(eit->index()), '/', '\\');
         }

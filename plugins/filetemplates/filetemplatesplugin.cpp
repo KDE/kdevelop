@@ -38,17 +38,17 @@ public:
 
     }
 
-    virtual QWidget* create(QWidget* parent = 0)
+    virtual QWidget* create(QWidget* parent = 0) override
     {
         return new TemplatePreviewToolView(m_plugin, parent);
     }
 
-    virtual QString id() const
+    virtual QString id() const override
     {
         return "org.kdevelop.TemplateFilePreview";
     }
 
-    virtual Qt::DockWidgetArea defaultPosition()
+    virtual Qt::DockWidgetArea defaultPosition() override
     {
         return Qt::RightDockWidgetArea;
     }

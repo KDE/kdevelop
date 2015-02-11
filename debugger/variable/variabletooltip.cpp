@@ -55,7 +55,7 @@ public:
         m_parent = parent;
     }
 protected:
-    virtual void paintEvent(QPaintEvent *)
+    virtual void paintEvent(QPaintEvent *) override
     {
       QPainter painter(this);
       QStyleOptionSizeGrip opt;
@@ -64,7 +64,7 @@ protected:
       style()->drawControl(QStyle::CE_SizeGrip, &opt, &painter, this);
     }
 
-    virtual void mousePressEvent(QMouseEvent* e)
+    virtual void mousePressEvent(QMouseEvent* e) override
     {
         if (e->button() == Qt::LeftButton) {
             m_pos = e->globalPos();
@@ -72,11 +72,11 @@ protected:
             e->ignore();
         }
     }
-    virtual void mouseReleaseEvent(QMouseEvent*)
+    virtual void mouseReleaseEvent(QMouseEvent*) override
     {
         m_pos = QPoint();
     }
-    virtual void mouseMoveEvent(QMouseEvent* e)
+    virtual void mouseMoveEvent(QMouseEvent* e) override
     {
         if (!m_pos.isNull()) {
             m_parent->resize(

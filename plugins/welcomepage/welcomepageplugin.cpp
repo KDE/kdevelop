@@ -43,7 +43,7 @@ using namespace KDevelop;
 class WelcomePageFactory : public KDevelop::IDocumentFactory
 {
 public:
-    virtual IDocument* create(const QUrl& url, ICore*)
+    virtual IDocument* create(const QUrl& url, ICore*) override
     {
         return new WelcomePageDocument();
     }

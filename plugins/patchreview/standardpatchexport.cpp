@@ -43,7 +43,7 @@ public:
 
 class KIOExport : public StandardExporter
 {
-    virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) {
+    virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) override {
         QUrl dest = QFileDialog::getSaveFileUrl();
         if( !dest.isEmpty() ) { //We let KDE do the rest of the job including the notification
             KIO::CopyJob* job = KIO::copy( source->file(), dest );
@@ -51,30 +51,30 @@ class KIOExport : public StandardExporter
         }
     }
 
-    virtual QIcon icon() const { return QIcon::fromTheme( "document-save" ); }
-    virtual QString name() const { return i18n( "Save As..." ); }
+    virtual QIcon icon() const override { return QIcon::fromTheme( "document-save" ); }
+    virtual QString name() const override { return i18n( "Save As..." ); }
 };
 
 class EMailExport : public StandardExporter
 {
-    virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) {
+    virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) override {
         KToolInvocation::invokeMailer( QString(), QString(), QString(), QString(), QString(), QString(), QStringList() << source->file().toLocalFile() );
     }
 
-    virtual QIcon icon() const { return QIcon::fromTheme( "internet-mail" ); }
-    virtual QString name() const { return i18n( "Send..." ); }
+    virtual QIcon icon() const override { return QIcon::fromTheme( "internet-mail" ); }
+    virtual QString name() const override { return i18n( "Send..." ); }
 };
 
 class TelepathyExport : public StandardExporter
 {
 public:
-    virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) {
+    virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) override {
         KProcess::startDetached( QStringList() << "ktp-send-file" << source->file().toDisplayString(QUrl::PreferLocalFile) );
     }
 
     static bool isAvailable() { return !QStandardPaths::findExecutable( "ktp-send-file" ).isEmpty(); }
-    virtual QIcon icon() const { return QIcon::fromTheme( "telepathy-kde" ); }
-    virtual QString name() const { return i18n( "Send to contact..." ); }
+    virtual QIcon icon() const override { return QIcon::fromTheme( "telepathy-kde" ); }
+    virtual QString name() const override { return i18n( "Send to contact..." ); }
 };
 
 class KompareExport : public StandardExporter
@@ -82,13 +82,13 @@ class KompareExport : public StandardExporter
 public:
     KompareExport() {}
 
-    virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) {
+    virtual void exportPatch( KDevelop::IPatchSource::Ptr source ) override {
         KProcess::startDetached( QStringList("kompare") << source->baseDir().toDisplayString(QUrl::PreferLocalFile) << source->file().toDisplayString(QUrl::PreferLocalFile) );
     }
 
     static bool isAvailable() { return !QStandardPaths::findExecutable( "kompare" ).isEmpty(); }
-    virtual QIcon icon() const { return QIcon::fromTheme( "kompare" ); }
-    virtual QString name() const { return i18n( "Side view (Kompare)..." ); }
+    virtual QIcon icon() const override { return QIcon::fromTheme( "kompare" ); }
+    virtual QString name() const override { return i18n( "Side view (Kompare)..." ); }
 
 };
 

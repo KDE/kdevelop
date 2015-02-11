@@ -60,15 +60,15 @@ class ExternalScriptViewFactory: public KDevelop::IToolViewFactory
 public:
   ExternalScriptViewFactory( ExternalScriptPlugin *plugin ): m_plugin( plugin ) {}
 
-  virtual QWidget* create( QWidget *parent = 0 ) {
+  virtual QWidget* create( QWidget *parent = 0 ) override {
     return new ExternalScriptView( m_plugin, parent );
   }
 
-  virtual Qt::DockWidgetArea defaultPosition() {
+  virtual Qt::DockWidgetArea defaultPosition() override {
     return Qt::RightDockWidgetArea;
   }
 
-  virtual QString id() const {
+  virtual QString id() const override {
     return "org.kdevelop.ExternalScriptView";
   }
 

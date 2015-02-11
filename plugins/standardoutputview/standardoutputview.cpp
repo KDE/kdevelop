@@ -44,19 +44,19 @@
 class OutputViewFactory : public KDevelop::IToolViewFactory{
 public:
     OutputViewFactory(const ToolViewData* data): m_data(data) {}
-    virtual QWidget* create(QWidget *parent = 0)
+    virtual QWidget* create(QWidget *parent = 0) override
     {
         return new OutputWidget( parent, m_data );
     }
-    virtual Qt::DockWidgetArea defaultPosition()
+    virtual Qt::DockWidgetArea defaultPosition() override
     {
         return Qt::BottomDockWidgetArea;
     }
-    virtual void viewCreated( Sublime::View* view )
+    virtual void viewCreated( Sublime::View* view ) override
     {
         m_data->views << view;
     }
-    virtual QString id() const
+    virtual QString id() const override
     {
         //NOTE: id must be unique, see e.g. https://bugs.kde.org/show_bug.cgi?id=287093
         return "org.kdevelop.OutputView." + QString::number(m_data->toolViewId);

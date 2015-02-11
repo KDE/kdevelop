@@ -41,15 +41,15 @@ class KDevKonsoleViewFactory: public KDevelop::IToolViewFactory{
 public:
     KDevKonsoleViewFactory(KDevKonsoleViewPlugin *plugin):
         mplugin(plugin) {}
-    virtual QWidget* create(QWidget *parent = 0)
+    virtual QWidget* create(QWidget *parent = 0) override
     {
         return new KDevKonsoleView(mplugin, parent);
     }
-    virtual Qt::DockWidgetArea defaultPosition()
+    virtual Qt::DockWidgetArea defaultPosition() override
     {
         return Qt::BottomDockWidgetArea;
     }
-    virtual QString id() const
+    virtual QString id() const override
     {
         return "org.kdevelop.KonsoleView";
     }

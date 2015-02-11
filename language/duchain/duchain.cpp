@@ -268,7 +268,7 @@ class DUChainPrivate
       }
 
     private:
-      void run() {
+      void run() override {
         while(1) {
           for(uint s = 0; s < cleanupEverySeconds; ++s) {
             if(m_stopRunning)

@@ -51,11 +51,11 @@ public:
 class TestDocument: public Document {
 public:
     TestDocument(Controller *controller): Document("TestDocument", controller) {}
-    virtual QString documentType() const { return "Test"; }
-    virtual QString documentSpecifier() const { return QString(); }
+    virtual QString documentType() const override { return "Test"; }
+    virtual QString documentSpecifier() const override { return QString(); }
 protected:
-    virtual QWidget *createViewWidget(QWidget *parent = 0) { return new QWidget(parent); }
-    virtual View *newView(Document *doc) { return new Test(doc); }
+    virtual QWidget *createViewWidget(QWidget *parent = 0) override { return new QWidget(parent); }
+    virtual View *newView(Document *doc) override { return new Test(doc); }
 };
 
 void TestView::viewReimplementation()

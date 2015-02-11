@@ -101,7 +101,7 @@ class StandardQuickOpenWidgetCreator : public QuickOpenWidgetCreator {
     {
     }
 
-    virtual QString objectNameForLine() {
+    virtual QString objectNameForLine() override {
       return "Quickopen";
     }
 
@@ -111,7 +111,7 @@ class StandardQuickOpenWidgetCreator : public QuickOpenWidgetCreator {
       m_items = items;
     }
 
-    virtual QuickOpenWidget* createWidget() {
+    virtual QuickOpenWidget* createWidget() override {
       QStringList useItems = m_items;
       if(useItems.isEmpty())
         useItems = QuickOpenPlugin::self()->lastUsedItems;
@@ -131,7 +131,7 @@ class QuickOpenDelegate : public ExpandingDelegate {
 public:
   QuickOpenDelegate(ExpandingWidgetModel* model, QObject* parent = 0L) : ExpandingDelegate(model, parent) {
   }
-  virtual QList<QTextLayout::FormatRange> createHighlighting(const QModelIndex& index, QStyleOptionViewItem& option) const {
+  virtual QList<QTextLayout::FormatRange> createHighlighting(const QModelIndex& index, QStyleOptionViewItem& option) const override {
     QList<QVariant> highlighting = index.data(KTextEditor::CodeCompletionModel::CustomHighlight).toList();
     if(!highlighting.isEmpty())
       return highlightingFromVariantList(highlighting);
@@ -145,7 +145,7 @@ public:
   enum OutlineMode { Functions, FunctionsAndClasses };
   OutlineFilter(QList<DUChainItem>& _items, OutlineMode _mode = FunctionsAndClasses) : items(_items), mode(_mode) {
   }
-  virtual bool accept(Declaration* decl) {
+  virtual bool accept(Declaration* decl) override {
     if(decl->range().isEmpty())
       return false;
     bool collectable = mode == Functions ? decl->isFunctionDeclaration() : (decl->isFunctionDeclaration() || (decl->internalContext() && decl->internalContext()->type() == DUContext::Class));
@@ -159,7 +159,7 @@ public:
     } else
       return false;
   }
-  virtual bool accept(DUContext* ctx) {
+  virtual bool accept(DUContext* ctx) override {
     if(ctx->type() == DUContext::Class || ctx->type() == DUContext::Namespace || ctx->type() == DUContext::Global || ctx->type() == DUContext::Other || ctx->type() == DUContext::Helper )
       return true;
     else
@@ -1278,7 +1278,7 @@ class OutlineQuickopenWidgetCreator : public QuickOpenWidgetCreator {
       delete m_creator;
     }
 
-    virtual QuickOpenWidget* createWidget() {
+    virtual QuickOpenWidget* createWidget() override {
       delete m_creator;
       m_creator = new CreateOutlineDialog;
       m_creator->start();
@@ -1290,7 +1290,7 @@ class OutlineQuickopenWidgetCreator : public QuickOpenWidgetCreator {
       return m_creator->dialog->widget();
     }
 
-    virtual void widgetShown() {
+    virtual void widgetShown() override {
       if(m_creator) {
         m_creator->finish();
         delete m_creator;
@@ -1298,7 +1298,7 @@ class OutlineQuickopenWidgetCreator : public QuickOpenWidgetCreator {
       }
     }
 
-    virtual QString objectNameForLine() {
+    virtual QString objectNameForLine() override {
       return "Outline";
     }
 

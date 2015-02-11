@@ -44,7 +44,7 @@ public:
     {
         return m_display;
     }
-    virtual QString htmlDescription() const
+    virtual QString htmlDescription() const override
     {
         QString desc = m_action->toolTip();
         const QKeySequence shortcut = m_action->shortcut();
@@ -53,12 +53,12 @@ public:
         }
         return desc;
     }
-    virtual bool execute(QString&)
+    virtual bool execute(QString&) override
     {
         m_action->trigger();
         return true;
     }
-    virtual QIcon icon() const
+    virtual QIcon icon() const override
     {
         return m_action->icon();
     }

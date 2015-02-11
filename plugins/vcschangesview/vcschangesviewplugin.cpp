@@ -51,7 +51,7 @@ class VCSProjectToolViewFactory : public KDevelop::IToolViewFactory
 public:
     VCSProjectToolViewFactory(VcsProjectIntegrationPlugin *plugin): m_plugin(plugin) {}
 
-    virtual QWidget* create(QWidget *parent = 0)
+    virtual QWidget* create(QWidget *parent = 0) override
     {
         VcsChangesView* modif = new VcsChangesView(m_plugin, parent);
         modif->setModel(m_plugin->model());
@@ -61,12 +61,12 @@ public:
         return modif;
     }
 
-    virtual Qt::DockWidgetArea defaultPosition()
+    virtual Qt::DockWidgetArea defaultPosition() override
     {
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QString id() const
+    virtual QString id() const override
     {
         return "org.kdevelop.VCSProject";
     }

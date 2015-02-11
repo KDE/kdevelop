@@ -74,7 +74,7 @@ public:
      delete m_worker;
    }
 
-   virtual void run () {
+   virtual void run () override {
      //We connect directly, so we can do the pre-grouping within the background thread
      connect(m_worker, &CodeCompletionWorker::foundDeclarationsReal, m_model, &CodeCompletionModel::foundDeclarations, Qt::QueuedConnection);
 

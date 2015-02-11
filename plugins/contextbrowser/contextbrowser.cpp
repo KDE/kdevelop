@@ -135,18 +135,18 @@ class ContextBrowserViewFactory: public KDevelop::IToolViewFactory
 public:
     ContextBrowserViewFactory(ContextBrowserPlugin *plugin): m_plugin(plugin) {}
 
-    virtual QWidget* create(QWidget *parent = 0)
+    virtual QWidget* create(QWidget *parent = 0) override
     {
         ContextBrowserView* ret = new ContextBrowserView(m_plugin, parent);
         return ret;
     }
 
-    virtual Qt::DockWidgetArea defaultPosition()
+    virtual Qt::DockWidgetArea defaultPosition() override
     {
         return Qt::BottomDockWidgetArea;
     }
 
-    virtual QString id() const
+    virtual QString id() const override
     {
         return "org.kdevelop.ContextBrowser";
     }

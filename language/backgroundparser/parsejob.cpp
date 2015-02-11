@@ -342,7 +342,7 @@ struct MovingRangeTranslator : public DUChainVisitor
     MovingRangeTranslator(qint64 _source, qint64 _target, MovingInterface* _moving) : source(_source), target(_target), moving(_moving) {
     }
 
-    virtual void visit(DUContext* context) {
+    virtual void visit(DUContext* context) override {
         translateRange(context);
         ///@todo Also map import-positions
         // Translate uses
@@ -355,7 +355,7 @@ struct MovingRangeTranslator : public DUChainVisitor
         }
     }
 
-    virtual void visit(Declaration* declaration) {
+    virtual void visit(Declaration* declaration) override {
         translateRange(declaration);
     }
 

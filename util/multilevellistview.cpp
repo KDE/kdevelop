@@ -55,12 +55,12 @@ public:
     : QSortFilterProxyModel( parent )
     {
     }
-    virtual bool filterAcceptsRow( int /*source_row*/, const QModelIndex& source_parent ) const
+    virtual bool filterAcceptsRow( int /*source_row*/, const QModelIndex& source_parent ) const override
     {
         return !source_parent.isValid();
     }
     virtual QVariant headerData( int section, Qt::Orientation orientation,
-                                 int role = Qt::DisplayRole ) const
+                                 int role = Qt::DisplayRole ) const override
     {
         if (sourceModel() && section == 0 && orientation == Qt::Horizontal && role == Qt::DisplayRole) {
             return m_label;
@@ -82,7 +82,7 @@ public:
     : KSelectionProxyModel( selectionModel, parent )
     {}
     virtual QVariant headerData( int section, Qt::Orientation orientation,
-                                 int role = Qt::DisplayRole ) const
+                                 int role = Qt::DisplayRole ) const override
     {
         if (sourceModel() && section == 0 && orientation == Qt::Horizontal && role == Qt::DisplayRole) {
             return m_label;
@@ -90,7 +90,7 @@ public:
             return QVariant();
         }
     }
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const override
     {
         Qt::ItemFlags ret = KSelectionProxyModel::flags(index);
         if (filterBehavior() == KSelectionProxyModel::SubTreesWithoutRoots && hasChildren(index)) {

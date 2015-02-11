@@ -197,7 +197,7 @@ public:
         setData(data);
     }
 
-    void clicked()
+    void clicked() override
     {
         qCDebug(DEBUGGER) << "Ellipsis item clicked";
         /* FIXME: restore
@@ -205,7 +205,7 @@ public:
         parentItem->fetchMoreChildren();
     }
 
-    void fetchMoreChildren() {}
+    void fetchMoreChildren() override {}
 };
 
 void TreeItem::setHasMore(bool more)

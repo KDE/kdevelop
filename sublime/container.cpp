@@ -55,7 +55,7 @@ public:
     ContainerTabBar(Container* container) : QTabBar(container), m_container(container) {
     }
     
-    virtual bool event(QEvent* ev) {
+    virtual bool event(QEvent* ev) override {
         if(ev->type() == QEvent::ToolTip)
         {
             ev->accept();
@@ -72,7 +72,7 @@ public:
         
         return QTabBar::event(ev);
     }
-    virtual void mousePressEvent(QMouseEvent* event) {
+    virtual void mousePressEvent(QMouseEvent* event) override {
         if (event->button() == Qt::MidButton) {
             // just close on midbutton, drag can still be done with left mouse button
 
@@ -153,7 +153,7 @@ public:
     }
 
 protected:
-    virtual void paintEvent(QPaintEvent *ev)
+    virtual void paintEvent(QPaintEvent *ev) override
     {
         if (m_tabBar->isVisible() && m_tabBar->count() > 0)
         {
@@ -195,7 +195,7 @@ public:
         setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     }
 
-    virtual QSize minimumSizeHint() const
+    virtual QSize minimumSizeHint() const override
     {
         QRect rect = style()->itemTextRect(fontMetrics(), QRect(), Qt::AlignRight, true, i18n("Line: 00000 Col: 000"));
         rect.setHeight(m_tabBar->height());

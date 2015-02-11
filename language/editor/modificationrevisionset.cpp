@@ -112,7 +112,7 @@ void ModificationRevisionSet::clearCache() {
 struct FileModificationSetRepository : public Utils::BasicSetRepository {
   FileModificationSetRepository() : Utils::BasicSetRepository("file modification sets", &globalItemRepositoryRegistry(), true) {
   }
-  virtual void itemRemovedFromSets(uint index);
+  virtual void itemRemovedFromSets(uint index) override;
 };
 
 //FileModificationSetRepository fileModificationSetRepository;

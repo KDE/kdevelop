@@ -46,16 +46,16 @@ public:
     FakeTestSuite(const QString& name, IProject* project, const QStringList& cases = QStringList()) : m_name(name), m_project(project), m_cases(cases) {}
     virtual ~FakeTestSuite() {}
 
-    virtual IProject* project() const {return m_project;}
-    virtual QString name() const {return m_name;}
-    virtual QStringList cases() const {return m_cases;}
+    virtual IProject* project() const override {return m_project;}
+    virtual QString name() const override {return m_name;}
+    virtual QStringList cases() const override {return m_cases;}
 
-    virtual IndexedDeclaration declaration() const;
-    virtual IndexedDeclaration caseDeclaration(const QString& testCase) const;
+    virtual IndexedDeclaration declaration() const override;
+    virtual IndexedDeclaration caseDeclaration(const QString& testCase) const override;
 
-    virtual KJob* launchAllCases(TestJobVerbosity verbosity);
-    virtual KJob* launchCase(const QString& testCase, TestJobVerbosity verbosity);
-    virtual KJob* launchCases(const QStringList& testCases, TestJobVerbosity verbosity);
+    virtual KJob* launchAllCases(TestJobVerbosity verbosity) override;
+    virtual KJob* launchCase(const QString& testCase, TestJobVerbosity verbosity) override;
+    virtual KJob* launchCases(const QStringList& testCases, TestJobVerbosity verbosity) override;
 
 private:
     QString m_name;

@@ -47,7 +47,7 @@
 // groups files like foo.l.txt and foo.r.txt such that l is left of r
 class TestBuddyFinder : public KDevelop::IBuddyDocumentFinder
 {
-    virtual bool areBuddies(const QUrl& url1, const QUrl& url2)
+    virtual bool areBuddies(const QUrl& url1, const QUrl& url2) override
     {
         const QStringList name1 = url1.fileName().split('.');
         const QStringList name2 = url2.fileName().split('.');
@@ -69,13 +69,13 @@ class TestBuddyFinder : public KDevelop::IBuddyDocumentFinder
         qDebug() << "found buddies: " << url1 << url2;
         return true;
     }
-    virtual bool buddyOrder(const QUrl& url1, const QUrl& /*url2*/)
+    virtual bool buddyOrder(const QUrl& url1, const QUrl& /*url2*/) override
     {
         const QStringList name1 = url1.fileName().split('.');
         return name1.at(1) == "l";
     }
 
-    virtual QVector<QUrl> getPotentialBuddies(const QUrl& url) const
+    virtual QVector<QUrl> getPotentialBuddies(const QUrl& url) const override
     {
         Q_UNUSED(url);
         return QVector<QUrl>();

@@ -66,7 +66,7 @@ class BranchItem : public QStandardItem
             setIcon(QIcon::fromTheme( current ? "arrow-right" : ""));
         }
 
-        void setData(const QVariant& value, int role = Qt::UserRole + 1)
+        void setData(const QVariant& value, int role = Qt::UserRole + 1) override
         {
             if(role==Qt::EditRole && value.toString()!=text()) {
                 QString newBranch = value.toString();
