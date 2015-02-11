@@ -707,7 +707,7 @@ class VerifyExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
     VerifyExpressionVisitor(ParseSession* session) : Cpp::ExpressionVisitor(session), result(true) {
     }
-    virtual void problem(AST* /*node*/, const QString& /*str*/) {
+    virtual void problem(AST* /*node*/, const QString& /*str*/) override {
       result = false;
     }
 
@@ -728,7 +728,7 @@ public:
   bool result; //Will be true when this should be an expression, else false.
   CursorInRevision cursor;
 
-  void visitPostfixExpression(PostfixExpressionAST* node)
+  void visitPostfixExpression(PostfixExpressionAST* node) override
   {
     if( node->expression && node->expression->kind == AST::Kind_PrimaryExpression &&
         node->sub_expressions ) {
@@ -747,7 +747,7 @@ public:
     visitNodes( this, node->sub_expressions );
   }
 
-  virtual void visitName (NameAST * node)
+  virtual void visitName (NameAST * node) override
   {
     if (result) {
       QualifiedIdentifier id;

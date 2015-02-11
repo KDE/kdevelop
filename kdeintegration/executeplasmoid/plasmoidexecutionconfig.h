@@ -35,10 +35,10 @@ class PlasmoidExecutionConfig : public KDevelop::LaunchConfigurationPage, Ui::Pl
 Q_OBJECT
 public:
     PlasmoidExecutionConfig( QWidget* parent );
-    void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = 0 );
-    void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const;
-    QString title() const;
-    QIcon icon() const;
+    void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = 0 ) override;
+    void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const override;
+    QString title() const override;
+    QIcon icon() const override;
 
 private slots:
     void addDep();
@@ -53,13 +53,13 @@ class PlasmoidLauncher : public KDevelop::ILauncher
 {
 public:
     PlasmoidLauncher( ExecutePlasmoidPlugin* plugin );
-    virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const;
-    virtual QString description() const;
-    virtual QString id();
-    virtual QString name() const;
-    virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg);
+    virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
+    virtual QString description() const override;
+    virtual QString id() override;
+    virtual QString name() const override;
+    virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
     virtual KJob* dependencies(KDevelop::ILaunchConfiguration* cfg);
-    virtual QStringList supportedModes() const;
+    virtual QStringList supportedModes() const override;
     
     static KJob* calculateDependencies(KDevelop::ILaunchConfiguration* cfg);
 private:
@@ -70,7 +70,7 @@ class PlasmoidPageFactory : public KDevelop::LaunchConfigurationPageFactory
 {
 public:
     PlasmoidPageFactory();
-    virtual KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent);
+    virtual KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent) override;
 };
 
 /**
@@ -86,16 +86,16 @@ public:
     virtual ~PlasmoidExecutionConfigType();
 
     static QString typeId();
-    QString id() const { return typeId(); }
-    QString name() const;
-    QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const;  
-    QIcon icon() const;
-    virtual bool canLaunch( const QUrl &file ) const;
-    virtual bool canLaunch(KDevelop::ProjectBaseItem* item) const;
-    virtual void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const;
-    virtual void configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const;
+    QString id() const override { return typeId(); }
+    QString name() const override;
+    QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const override;  
+    QIcon icon() const override;
+    virtual bool canLaunch( const QUrl &file ) const override;
+    virtual bool canLaunch(KDevelop::ProjectBaseItem* item) const override;
+    virtual void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const override;
+    virtual void configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const override;
     
-    virtual QMenu* launcherSuggestions();
+    virtual QMenu* launcherSuggestions() override;
 
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;

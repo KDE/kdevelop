@@ -50,25 +50,25 @@ protected:
   AbstractType::Ptr typeForCurrentDeclaration();
   
   // Regular visitors
-  virtual void visitClassSpecifier(ClassSpecifierAST*);
-  virtual void visitBaseSpecifier(BaseSpecifierAST*);
-  virtual void visitEnumSpecifier(EnumSpecifierAST*);
-  virtual void visitEnumerator(EnumeratorAST*);
-  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
-  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST*);
-  virtual void visitSimpleDeclaration(SimpleDeclarationAST*);
-  virtual void visitTypedef(TypedefAST*);
-  virtual void visitFunctionDeclaration(FunctionDefinitionAST*);
-  virtual void visitPtrOperator(PtrOperatorAST*);
-  virtual void visitPtrToMember(PtrToMemberAST*);
-  virtual void visitUsing(UsingAST *);
-  virtual void visitParameterDeclaration(ParameterDeclarationAST*);
-  virtual void visitTemplateParameter(TemplateParameterAST *);
-  virtual void createTypeForDeclarator(DeclaratorAST *node);
-  virtual void closeTypeForDeclarator(DeclaratorAST *node);
-  virtual void createTypeForInitializer(InitializerAST *node);
-  virtual void createTypeForCondition(ConditionAST *node);
-  virtual void visitTrailingReturnType(TrailingReturnTypeAST *node);
+  virtual void visitClassSpecifier(ClassSpecifierAST*) override;
+  virtual void visitBaseSpecifier(BaseSpecifierAST*) override;
+  virtual void visitEnumSpecifier(EnumSpecifierAST*) override;
+  virtual void visitEnumerator(EnumeratorAST*) override;
+  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*) override;
+  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST*) override;
+  virtual void visitSimpleDeclaration(SimpleDeclarationAST*) override;
+  virtual void visitTypedef(TypedefAST*) override;
+  virtual void visitFunctionDeclaration(FunctionDefinitionAST*) override;
+  virtual void visitPtrOperator(PtrOperatorAST*) override;
+  virtual void visitPtrToMember(PtrToMemberAST*) override;
+  virtual void visitUsing(UsingAST *) override;
+  virtual void visitParameterDeclaration(ParameterDeclarationAST*) override;
+  virtual void visitTemplateParameter(TemplateParameterAST *) override;
+  virtual void createTypeForDeclarator(DeclaratorAST *node) override;
+  virtual void closeTypeForDeclarator(DeclaratorAST *node) override;
+  virtual void createTypeForInitializer(InitializerAST *node) override;
+  virtual void createTypeForCondition(ConditionAST *node) override;
+  virtual void visitTrailingReturnType(TrailingReturnTypeAST *node) override;
 
   /// Returns whether a type was opened
   /// The implementation is quite different from the generic code, so leave this implementation here for now.

@@ -32,12 +32,12 @@ class CMakeCacheDelegate : public QItemDelegate
         CMakeCacheDelegate(QObject* parent);
         virtual ~CMakeCacheDelegate();
         virtual QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option,
-                                         const QModelIndex & index ) const;
+                                         const QModelIndex & index ) const override;
         
-        virtual void setEditorData ( QWidget * editor, const QModelIndex & index ) const;
-        virtual void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const;
-        virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-        virtual QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+        virtual void setEditorData ( QWidget * editor, const QModelIndex & index ) const override;
+        virtual void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const override;
+        virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
+        virtual QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
 
     private slots:
         void closingEditor(QWidget * editor, QAbstractItemDelegate::EndEditHint hint = NoHint);

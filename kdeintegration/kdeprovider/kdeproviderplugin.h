@@ -32,8 +32,8 @@ class KDEProviderPlugin : public KDevelop::IPlugin, KDevelop::IProjectProvider
         KDEProviderPlugin ( QObject* parent, const QList<QVariant>& args  );
         virtual ~KDEProviderPlugin();
         
-        virtual QString name() const;
-        virtual KDevelop::IProjectProviderWidget* providerWidget(QWidget* parent);
+        virtual QString name() const override;
+        virtual KDevelop::IProjectProviderWidget* providerWidget(QWidget* parent) override;
         
 };
 

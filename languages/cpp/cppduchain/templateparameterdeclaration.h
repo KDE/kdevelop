@@ -70,7 +70,7 @@ public:
   };
   
 private:
-  virtual Declaration* clonePrivate() const;
+  virtual Declaration* clonePrivate() const override;
   DUCHAIN_DECLARE_DATA(TemplateParameterDeclaration)
 };
 

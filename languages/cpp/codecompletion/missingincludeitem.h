@@ -32,12 +32,12 @@ public:
                                const QString& displayTextPrefix,
                                const KDevelop::IndexedDeclaration& decl, int argumentHintDepth);
 
-  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
+  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override;
 
   virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) override;
 
-  virtual int inheritanceDepth() const;
-  virtual int argumentHintDepth() const {
+  virtual int inheritanceDepth() const override;
+  virtual int argumentHintDepth() const override {
     return m_argumentHintDepth;
   }
 
@@ -54,7 +54,7 @@ class ForwardDeclarationItem : public NormalDeclarationCompletionItem {
   public:
   ForwardDeclarationItem(KDevelop::DeclarationPointer decl);
   virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) override;
-  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
+  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override;
 };
 
 ///DUChain must be locked

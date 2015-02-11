@@ -31,8 +31,8 @@ class QtHelpProvider : public QtHelpProviderAbstract
 public:
     QtHelpProvider(QObject *parent, const QString &fileName, const QString &name, const QString &iconName, const QVariantList & args);
 
-    virtual QIcon icon() const;
-    virtual QString name() const;
+    virtual QIcon icon() const override;
+    virtual QString name() const override;
     QString fileName() const;
     QString iconName() const;
     void setName(QString name);

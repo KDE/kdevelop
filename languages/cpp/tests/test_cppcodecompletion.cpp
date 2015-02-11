@@ -3475,7 +3475,7 @@ public:
   TestPreprocessor( TestCppCodeCompletion* _cc, IncludeFileList& _included, bool _stopAfterHeaders ) : cc(_cc), included(_included), pp(0), stopAfterHeaders(_stopAfterHeaders) {
   }
 
-  rpp::Stream* sourceNeeded(QString& fileName, rpp::Preprocessor::IncludeType /*type*/, int sourceLine, bool /*skipCurrentPath*/)
+  rpp::Stream* sourceNeeded(QString& fileName, rpp::Preprocessor::IncludeType /*type*/, int sourceLine, bool /*skipCurrentPath*/) override
   {
     QMap<QString,QString>::const_iterator it = cc->fakeIncludes.constFind(fileName);
     if( it != cc->fakeIncludes.constEnd() || !pp ) {
@@ -3491,14 +3491,14 @@ public:
     pp = _pp;
   }
 
-  virtual void headerSectionEnded(rpp::Stream& stream) {
+  virtual void headerSectionEnded(rpp::Stream& stream) override {
     if( environmentFile )
       environmentFile->setContentStartLine( stream.originalInputPosition().line );
     if(stopAfterHeaders)
       stream.toEnd();
   }
 
-  virtual void foundHeaderGuard(rpp::Stream& /*stream*/, KDevelop::IndexedString guardName) {
+  virtual void foundHeaderGuard(rpp::Stream& /*stream*/, KDevelop::IndexedString guardName) override {
     environmentFile->setHeaderGuard(guardName);
   }
 };

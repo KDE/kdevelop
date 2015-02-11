@@ -48,8 +48,8 @@ public:
     };
     
     CustomBuildJob( CustomBuildSystem*, KDevelop::ProjectBaseItem*, CustomBuildSystemTool::ActionType t );
-    virtual void start();
-    virtual bool doKill();
+    virtual void start() override;
+    virtual bool doKill() override;
 private slots:
     void procFinished(int);
     void procError( QProcess::ProcessError );

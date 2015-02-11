@@ -50,11 +50,11 @@ public:
 
     virtual Variable* createVariable(TreeModel* model, TreeItem* parent, 
                                      const QString& expression,
-                                     const QString& display = "");
-    virtual QString expressionUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor);
-    virtual void addWatch(KDevelop::Variable* variable);
-    virtual void addWatchpoint(KDevelop::Variable* variable);
-    virtual void update();
+                                     const QString& display = "") override;
+    virtual QString expressionUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor) override;
+    virtual void addWatch(KDevelop::Variable* variable) override;
+    virtual void addWatchpoint(KDevelop::Variable* variable) override;
+    virtual void update() override;
 
 private slots:
     void programStopped(const GDBMI::AsyncRecord &r);
@@ -69,7 +69,7 @@ private:
     void addWatch(const GDBMI::ResultRecord& r);
     void addWatchpoint(const GDBMI::ResultRecord& r);
 
-    void handleEvent(IDebugSession::event_t event);
+    void handleEvent(IDebugSession::event_t event) override;
 };
 
 }

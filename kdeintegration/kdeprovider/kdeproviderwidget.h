@@ -33,8 +33,8 @@ class KDEProviderWidget : public KDevelop::IProjectProviderWidget
     public:
         KDEProviderWidget(QWidget* parent = 0);
         
-        virtual KDevelop::VcsJob* createWorkingCopy(const QUrl &destinationDirectory);
-        virtual bool isCorrect() const;
+        virtual KDevelop::VcsJob* createWorkingCopy(const QUrl &destinationDirectory) override;
+        virtual bool isCorrect() const override;
         
     private slots:
         void showSettings();

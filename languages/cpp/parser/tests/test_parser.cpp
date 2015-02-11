@@ -1000,7 +1000,7 @@ struct HasKindVisitor : protected DefaultVisitor
     return ast != 0;
   }
 
-  void visit(AST* node)
+  void visit(AST* node) override
   {
     if (!ast && node) {
       if (node->kind == kind && --num < 0) {

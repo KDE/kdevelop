@@ -36,10 +36,10 @@ class AStyleStringIterator : public astyle::ASSourceIterator
         AStyleStringIterator(const QString &string);
         virtual ~AStyleStringIterator();
 
-        virtual bool hasMoreLines() const;
-        virtual std::string nextLine(bool emptyLineWasDeleted = false);
-        virtual std::string peekNextLine();
-        virtual void peekReset();
+        virtual bool hasMoreLines() const override;
+        virtual std::string nextLine(bool emptyLineWasDeleted = false) override;
+        virtual std::string peekNextLine() override;
+        virtual void peekReset() override;
 
     private:
         QString m_content;

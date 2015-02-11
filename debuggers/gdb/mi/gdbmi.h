@@ -304,8 +304,8 @@ namespace GDBMI
 
     public: // Value overrides
 
-        QString literal() const;
-        int toInt(int base) const;
+        QString literal() const override;
+        int toInt(int base) const override;
      
     private:
         QString literal_;
@@ -316,10 +316,10 @@ namespace GDBMI
         TupleValue() { Value::kind = Tuple; }
         ~TupleValue();
 
-        bool hasField(const QString&) const;
+        bool hasField(const QString&) const override;
 
         using Value::operator[];
-        const Value& operator[](const QString& variable) const;
+        const Value& operator[](const QString& variable) const override;
 
         QList<Result*> results;
         QMap<QString, GDBMI::Result*> results_by_name;
@@ -330,12 +330,12 @@ namespace GDBMI
         ListValue() { Value::kind = List; }
         ~ListValue();
 
-        bool empty() const;
+        bool empty() const override;
 
-        int size() const;
+        int size() const override;
 
         using Value::operator[];
-        const Value& operator[](int index) const;
+        const Value& operator[](int index) const override;
 
         QList<Result*> results;
     };
@@ -388,7 +388,7 @@ namespace GDBMI
     {
         inline PromptRecord() { Record::kind = Prompt; }
 
-        virtual QString toString() const
+        virtual QString toString() const override
         { return "(prompt)\n"; }
     };
 

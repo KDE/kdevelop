@@ -76,7 +76,7 @@ public:
     DisassembleWindow(QWidget *parent, DisassembleWidget* widget);
 
 protected:
-   virtual void contextMenuEvent(QContextMenuEvent *e);
+   virtual void contextMenuEvent(QContextMenuEvent *e) override;
 
 private:
     QAction* m_selectAddrAction;
@@ -122,8 +122,8 @@ private Q_SLOTS:
     void currentSessionChanged(KDevelop::IDebugSession* session);
 
 protected:
-    virtual void showEvent(QShowEvent*);
-    virtual void hideEvent(QHideEvent*);
+    virtual void showEvent(QShowEvent*) override;
+    virtual void hideEvent(QHideEvent*) override;
     void enableControls(bool enabled);
 
 private:

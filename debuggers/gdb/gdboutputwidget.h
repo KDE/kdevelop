@@ -78,8 +78,8 @@ private Q_SLOTS:
     void updateColors();
 
 protected:
-    virtual void focusInEvent(QFocusEvent *e);
-    virtual void contextMenuEvent(QContextMenuEvent* e);
+    virtual void focusInEvent(QFocusEvent *e) override;
+    virtual void contextMenuEvent(QContextMenuEvent* e) override;
 
 Q_SIGNALS:
     void requestRaise();
@@ -149,7 +149,7 @@ public:
     OutputTextEdit(GDBOutputWidget* parent);
 
 protected:
-    virtual void contextMenuEvent(QContextMenuEvent* event);
+    virtual void contextMenuEvent(QContextMenuEvent* event) override;
 };
 
 }

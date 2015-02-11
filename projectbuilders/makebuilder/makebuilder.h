@@ -65,13 +65,13 @@ public:
      *
      * @TODO: Work on any project item, for fileitems you may find a target.
      */
-    virtual KJob* build(KDevelop::ProjectBaseItem *dom);
-    virtual KJob* clean(KDevelop::ProjectBaseItem *dom);
-    virtual KJob* install(KDevelop::ProjectBaseItem *dom);
+    virtual KJob* build(KDevelop::ProjectBaseItem *dom) override;
+    virtual KJob* clean(KDevelop::ProjectBaseItem *dom) override;
+    virtual KJob* install(KDevelop::ProjectBaseItem *dom) override;
 
-    virtual KJob* executeMakeTarget(KDevelop::ProjectBaseItem* item, const QString& targetname );
+    virtual KJob* executeMakeTarget(KDevelop::ProjectBaseItem* item, const QString& targetname ) override;
     virtual KJob* executeMakeTargets(KDevelop::ProjectBaseItem* item, const QStringList& targetnames,
-                                     const MakeVariables& variables = MakeVariables() );
+                                     const MakeVariables& variables = MakeVariables() ) override;
     KJob* runMake( KDevelop::ProjectBaseItem*, MakeJob::CommandType, const QStringList& = QStringList(),
                    const MakeVariables& variables = MakeVariables() );
 

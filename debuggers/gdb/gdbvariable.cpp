@@ -96,7 +96,7 @@ public:
     : m_variable(variable), m_callback(callback), m_callbackMethod(callbackMethod)
     {}
 
-    virtual void handle(const GDBMI::ResultRecord &r)
+    virtual void handle(const GDBMI::ResultRecord &r) override
     {
         if (!m_variable) return;
         bool hasValue = false;
@@ -139,7 +139,7 @@ public:
             QMetaObject::invokeMethod(m_callback, m_callbackMethod, Q_ARG(bool, hasValue));
         }
     }
-    virtual bool handlesError() { return true; }
+    virtual bool handlesError() override { return true; }
 
 private:
     QPointer<GdbVariable> m_variable;
@@ -180,7 +180,7 @@ public:
         : m_variable(variable), m_session(session), m_activeCommands(1)
     {}
 
-    virtual void handle(const GDBMI::ResultRecord &r)
+    virtual void handle(const GDBMI::ResultRecord &r) override
     {
         if (!m_variable) return;
         --m_activeCommands;
@@ -230,11 +230,11 @@ public:
             delete this;
         }
     }
-    virtual bool handlesError() {
+    virtual bool handlesError() override {
         // FIXME: handle error?
         return false;
     }
-    virtual bool autoDelete() {
+    virtual bool autoDelete() override {
         // we delete ourselve
         return false;
     }
@@ -348,7 +348,7 @@ public:
         : m_variable(var)
     {}
 
-    virtual void handle(const GDBMI::ResultRecord &r)
+    virtual void handle(const GDBMI::ResultRecord &r) override
     {
         if(r.hasField("value"))
             m_variable.data()->setValue(r["value"].literal());

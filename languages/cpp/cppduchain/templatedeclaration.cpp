@@ -216,7 +216,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger
   , searchFlags(_searchFlags)
   { }
 
-  virtual AbstractType::Ptr exchange( const AbstractType::Ptr& type )
+  virtual AbstractType::Ptr exchange( const AbstractType::Ptr& type ) override
   {
     ThreadLocalData& data = threadDataLocal();
     PushValue<uint> inc(data.delayedDepth, data.delayedDepth + 1);
@@ -1023,7 +1023,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
 
         const TopDUContext* source;
 
-        virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
+        virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) override {
 
           KDevelop::AbstractType::Ptr check = type;
 

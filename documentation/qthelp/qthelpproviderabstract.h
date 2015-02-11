@@ -52,7 +52,7 @@ public:
 public slots:
     void jumpedTo(const QUrl& newUrl) const;
 signals:
-    void addHistory(const KDevelop::IDocumentation::Ptr& doc) const;
+    void addHistory(const KDevelop::IDocumentation::Ptr& doc) const override;
 protected:
     QHelpEngine m_engine;
 };

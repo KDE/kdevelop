@@ -45,9 +45,9 @@ class AdaptSignatureAssistant : public StaticAssistant
   public:
     AdaptSignatureAssistant(ILanguageSupport* supportedLanguage);
 
-    virtual QString title() const;
-    virtual void textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange, const QString& removedText = QString());
-    virtual bool isUseful() const;
+    virtual QString title() const override;
+    virtual void textChanged(KTextEditor::View* view, const KTextEditor::Range& invocationRange, const QString& removedText = QString()) override;
+    virtual bool isUseful() const override;
 
   private:
     DUContext* findFunctionContext(const QUrl &url, const KTextEditor::Range& position) const;

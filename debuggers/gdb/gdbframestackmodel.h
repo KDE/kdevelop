@@ -40,8 +40,8 @@ namespace KDevelop {
         DebugSession* session() { return static_cast<DebugSession *>(FrameStackModel::session()); }    
         
     protected: // FrameStackModel overrides
-        void fetchThreads();
-        void fetchFrames(int threadNumber, int from, int to);
+        void fetchThreads() override;
+        void fetchFrames(int threadNumber, int from, int to) override;
         
     private:        
         void handleThreadInfo(const GDBMI::ResultRecord& r);

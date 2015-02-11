@@ -36,28 +36,28 @@ class KDEVCPPDUCHAIN_EXPORT UseDecoratorVisitor : protected DefaultVisitor
     
     void run(AST* node);
   protected:
-    virtual void visitUnqualifiedName(UnqualifiedNameAST* node);
-    virtual void visitFunctionCall(FunctionCallAST* node);
-    virtual void visitBinaryExpression(BinaryExpressionAST* node);
+    virtual void visitUnqualifiedName(UnqualifiedNameAST* node) override;
+    virtual void visitFunctionCall(FunctionCallAST* node) override;
+    virtual void visitBinaryExpression(BinaryExpressionAST* node) override;
     
 //     virtual void visitCastExpression(CastExpressionAST *) ;
-    virtual void visitClassMemberAccess(ClassMemberAccessAST *) ;
-    virtual void visitCondition(ConditionAST *) ;
-    virtual void visitConditionalExpression(ConditionalExpressionAST *) ;
+    virtual void visitClassMemberAccess(ClassMemberAccessAST *) override ;
+    virtual void visitCondition(ConditionAST *) override ;
+    virtual void visitConditionalExpression(ConditionalExpressionAST *) override ;
 //     virtual void visitCppCastExpression(CppCastExpressionAST *) ;
-    virtual void visitDeleteExpression(DeleteExpressionAST *) ;
-    virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST *) ;
-    virtual void visitIncrDecrExpression(IncrDecrExpressionAST *) ;
-    virtual void visitInitDeclarator(InitDeclaratorAST *) ;
-    virtual void visitMemInitializer(MemInitializerAST *) ;
-    virtual void visitNewExpression(NewExpressionAST *) ;
-    virtual void visitPostfixExpression(PostfixExpressionAST *) ;
-    virtual void visitReturnStatement(ReturnStatementAST* ) ;
+    virtual void visitDeleteExpression(DeleteExpressionAST *) override ;
+    virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST *) override ;
+    virtual void visitIncrDecrExpression(IncrDecrExpressionAST *) override ;
+    virtual void visitInitDeclarator(InitDeclaratorAST *) override ;
+    virtual void visitMemInitializer(MemInitializerAST *) override ;
+    virtual void visitNewExpression(NewExpressionAST *) override ;
+    virtual void visitPostfixExpression(PostfixExpressionAST *) override ;
+    virtual void visitReturnStatement(ReturnStatementAST* ) override ;
 //     virtual void visitSimpleDeclaration(SimpleDeclarationAST *) ;
 //     virtual void visitThrowExpression(ThrowExpressionAST *) ;
-    virtual void visitUnaryExpression(UnaryExpressionAST *) ;
-    virtual void visitCppCastExpression(CppCastExpressionAST* );
-    virtual void visitInitializerList(InitializerListAST* );
+    virtual void visitUnaryExpression(UnaryExpressionAST *) override ;
+    virtual void visitCppCastExpression(CppCastExpressionAST* ) override;
+    virtual void visitInitializerList(InitializerListAST* ) override;
     
   private:
     KDevelop::CursorInRevision cursorForToken(uint token);

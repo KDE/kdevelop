@@ -30,11 +30,11 @@ class HelpNetworkReply : public QNetworkReply
 	public:
 		HelpNetworkReply(const QNetworkRequest &request, const QByteArray &fileData, const QString &mimeType);
 		
-		virtual void abort() {}
-		virtual qint64 bytesAvailable() const { return data.length() + QNetworkReply::bytesAvailable(); }
+		virtual void abort() override {}
+		virtual qint64 bytesAvailable() const override { return data.length() + QNetworkReply::bytesAvailable(); }
 		
 	protected:
-		virtual qint64 readData(char *data, qint64 maxlen);
+		virtual qint64 readData(char *data, qint64 maxlen) override;
 		
 	private:
 		QByteArray data;
@@ -74,7 +74,7 @@ class HelpNetworkAccessManager : public QNetworkAccessManager
 
 	protected:
 		virtual QNetworkReply *createRequest(Operation op,
-			const QNetworkRequest &request, QIODevice *outgoingData = 0);
+			const QNetworkRequest &request, QIODevice *outgoingData = 0) override;
 
 	private:
 		QHelpEngineCore *m_helpEngine;

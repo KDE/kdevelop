@@ -42,8 +42,8 @@ class PlasmoidExecutionJob : public KDevelop::OutputJob
 Q_OBJECT
 public:
     PlasmoidExecutionJob( ExecutePlasmoidPlugin* parent, KDevelop::ILaunchConfiguration* cfg );
-    virtual void start();
-    virtual bool doKill();
+    virtual void start() override;
+    virtual bool doKill() override;
     KDevelop::OutputModel* model();
 
     static QString executable(KDevelop::ILaunchConfiguration* cfg);

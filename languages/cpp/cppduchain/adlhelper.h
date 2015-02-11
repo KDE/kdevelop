@@ -39,26 +39,26 @@ class ADLTypeVisitor : public KDevelop::TypeVisitor
   public:
     explicit ADLTypeVisitor(ADLHelper & helper);
 
-    virtual bool preVisit(const AbstractType * type);
-    virtual void postVisit(const AbstractType *);
+    virtual bool preVisit(const AbstractType * type) override;
+    virtual void postVisit(const AbstractType *) override;
 
-    virtual bool visit(const AbstractType* type);
-    virtual void visit(const KDevelop::IntegralType * type);
+    virtual bool visit(const AbstractType* type) override;
+    virtual void visit(const KDevelop::IntegralType * type) override;
 
-    virtual bool visit(const KDevelop::PointerType * type);
-    virtual void endVisit(const KDevelop::PointerType *);
+    virtual bool visit(const KDevelop::PointerType * type) override;
+    virtual void endVisit(const KDevelop::PointerType *) override;
 
-    virtual bool visit(const KDevelop::ReferenceType * type);
-    virtual void endVisit(const KDevelop::ReferenceType *);
+    virtual bool visit(const KDevelop::ReferenceType * type) override;
+    virtual void endVisit(const KDevelop::ReferenceType *) override;
 
-    virtual bool visit(const KDevelop::FunctionType * type);
-    virtual void endVisit(const KDevelop::FunctionType *);
+    virtual bool visit(const KDevelop::FunctionType * type) override;
+    virtual void endVisit(const KDevelop::FunctionType *) override;
 
-    virtual bool visit(const KDevelop::StructureType * type);
-    virtual void endVisit(const KDevelop::StructureType *);
+    virtual bool visit(const KDevelop::StructureType * type) override;
+    virtual void endVisit(const KDevelop::StructureType *) override;
 
-    virtual bool visit(const KDevelop::ArrayType * type);
-    virtual void endVisit(const KDevelop::ArrayType *);
+    virtual bool visit(const KDevelop::ArrayType * type) override;
+    virtual void endVisit(const KDevelop::ArrayType *) override;
 
   private:
     ADLHelper & m_helper;

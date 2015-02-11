@@ -143,7 +143,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
 
     virtual void usingDeclaration(AST* node,
                                   size_t start_token, size_t end_token,
-                                  const KDevelop::DeclarationPointer& decl) {
+                                  const KDevelop::DeclarationPointer& decl) override {
       RangeInRevision range = m_builder->editor()->findRange(start_token, end_token);
       m_builder->newUse(node, range, decl);
 
@@ -162,7 +162,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
       }
     }
 
-    virtual void problem(AST* node, const QString& str) {
+    virtual void problem(AST* node, const QString& str) override {
       if(m_dumpProblems)
         Cpp::ExpressionVisitor::problem(node, str);
 /*      else

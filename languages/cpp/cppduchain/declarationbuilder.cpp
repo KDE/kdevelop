@@ -191,7 +191,7 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 //Visitor that clears the ducontext from all AST nodes
 struct ClearDUContextVisitor : public DefaultVisitor {
 
-  virtual void visit(AST* node) {
+  virtual void visit(AST* node) override {
     if(node)
       node->ducontext = 0;
     DefaultVisitor::visit(node);
@@ -908,7 +908,7 @@ struct TemplateTypeExchanger : public KDevelop::TypeExchanger {
   TemplateTypeExchanger(TopDUContext* top) : m_top(top) {
   }
 
-  virtual AbstractType::Ptr exchange( const AbstractType::Ptr& type )
+  virtual AbstractType::Ptr exchange( const AbstractType::Ptr& type ) override
   {
     if(CppTemplateParameterType::Ptr templateParamType = type.cast<CppTemplateParameterType>()) {
       Declaration* decl = templateParamType->declaration(m_top);

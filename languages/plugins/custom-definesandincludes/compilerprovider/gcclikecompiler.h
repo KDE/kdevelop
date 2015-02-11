@@ -41,7 +41,7 @@ public:
     static QStringList supportedStandards(const QString& path);
 
 protected:
-    virtual void clearCache();
+    virtual void clearCache() override;
 
 private:
     struct DefinesIncludes {

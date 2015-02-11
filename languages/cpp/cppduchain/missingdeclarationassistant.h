@@ -33,7 +33,7 @@ public:
   MissingDeclarationAssistant(const MissingDeclarationProblem::Ptr& p);
   MissingDeclarationProblem::Ptr problem;
   MissingDeclarationType::Ptr type;
-  QString title() const { return m_title; }
+  QString title() const override { return m_title; }
 private:
   bool canCreateLocal(KDevelop::DUContext* searchFrom) const;
   bool canAddTo(KDevelop::Declaration* toClass, KDevelop::Declaration* fromClass) const;

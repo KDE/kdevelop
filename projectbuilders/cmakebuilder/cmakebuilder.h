@@ -50,13 +50,13 @@ public:
     explicit CMakeBuilder(QObject *parent = 0, const QVariantList &args = QVariantList());
     virtual ~CMakeBuilder();
 
-    virtual KJob* build(KDevelop::ProjectBaseItem *dom);
-    virtual KJob* install(KDevelop::ProjectBaseItem *dom);
-    virtual KJob* clean(KDevelop::ProjectBaseItem *dom);
-    virtual KJob* configure(KDevelop::IProject*);
-    virtual KJob* prune(KDevelop::IProject*);
+    virtual KJob* build(KDevelop::ProjectBaseItem *dom) override;
+    virtual KJob* install(KDevelop::ProjectBaseItem *dom) override;
+    virtual KJob* clean(KDevelop::ProjectBaseItem *dom) override;
+    virtual KJob* configure(KDevelop::IProject*) override;
+    virtual KJob* prune(KDevelop::IProject*) override;
 
-	virtual QList< KDevelop::IProjectBuilder* > additionalBuilderPlugins( KDevelop::IProject* project ) const;
+	virtual QList< KDevelop::IProjectBuilder* > additionalBuilderPlugins( KDevelop::IProject* project ) const override;
 
 //     bool updateConfig( KDevelop::IProject* project );
 

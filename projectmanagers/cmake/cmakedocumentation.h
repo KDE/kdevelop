@@ -41,27 +41,27 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
     public:
         explicit CMakeDocumentation( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
-        virtual bool hasError() const;
-        virtual QString errorDescription() const;
+        virtual bool hasError() const override;
+        virtual QString errorDescription() const override;
 
-        KDevelop::IDocumentation::Ptr description(const QString& identifier, const QUrl &file) const;
-        KDevelop::IDocumentation::Ptr documentationForDeclaration(KDevelop::Declaration* declaration) const;
+        KDevelop::IDocumentation::Ptr description(const QString& identifier, const QUrl &file) const override;
+        KDevelop::IDocumentation::Ptr documentationForDeclaration(KDevelop::Declaration* declaration) const override;
         
-        QStringList names(Type t) const;
+        QStringList names(Type t) const override;
         
-        QAbstractListModel* indexModel() const;
-        KDevelop::IDocumentation::Ptr documentationForIndex(const QModelIndex& idx) const;
+        QAbstractListModel* indexModel() const override;
+        KDevelop::IDocumentation::Ptr documentationForIndex(const QModelIndex& idx) const override;
         
-        virtual QIcon icon() const;
-        virtual QString name() const;
-        virtual KDevelop::IDocumentation::Ptr homePage() const;
+        virtual QIcon icon() const override;
+        virtual QString name() const override;
+        virtual KDevelop::IDocumentation::Ptr homePage() const override;
         
         QString descriptionForIdentifier(const QString& identifier, Type t) const;
     public slots:
         void delayedInitialization();
         
     Q_SIGNALS:
-        void addHistory(const KDevelop::IDocumentation::Ptr& doc) const;
+        void addHistory(const KDevelop::IDocumentation::Ptr& doc) const override;
     
     private:
         void initializeModel() const;

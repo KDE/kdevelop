@@ -37,7 +37,7 @@ public:
   void dump(AST *node, TokenStream* tokenStream = 0, bool forceOutput = false);
 
 protected:
-  virtual void visit(AST *node);
+  virtual void visit(AST *node) override;
 
 private:
   TokenStream* m_tokenStream;

@@ -69,22 +69,22 @@ public:
     CppDebuggerPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~CppDebuggerPlugin();
 
-    virtual void unload();
+    virtual void unload() override;
     
-    virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
+    virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* ) override;
     
     DebugSession *createSession();
 
 public:
     //BEGIN IStatus
-    virtual QString statusName() const;
+    virtual QString statusName() const override;
 
 Q_SIGNALS:
-    void clearMessage(KDevelop::IStatus*);
-    void showMessage(KDevelop::IStatus*, const QString & message, int timeout = 0);
-    void hideProgress(KDevelop::IStatus*);
-    void showProgress(KDevelop::IStatus*, int minimum, int maximum, int value);
-    void showErrorMessage(const QString&, int);
+    void clearMessage(KDevelop::IStatus*) override;
+    void showMessage(KDevelop::IStatus*, const QString & message, int timeout = 0) override;
+    void hideProgress(KDevelop::IStatus*) override;
+    void showProgress(KDevelop::IStatus*, int minimum, int maximum, int value) override;
+    void showErrorMessage(const QString&, int) override;
     //END IStatus
 
     void addWatchVariable(const QString& variable);
@@ -124,7 +124,7 @@ Q_SIGNALS:
     void jumpTo(const QUrl &url, int line);
 
 protected:
-    virtual void initializeGuiState();
+    virtual void initializeGuiState() override;
 
 private:
     KConfigGroup config() const;

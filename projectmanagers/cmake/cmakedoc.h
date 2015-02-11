@@ -29,11 +29,11 @@ class CMakeDoc : public KDevelop::IDocumentation
     public:
         CMakeDoc(const QString& name, const QString& desc) : mName(name), mDesc(desc) {}
         
-        virtual QString description() const { return mDesc; }
-        virtual QString name() const { return mName; }
-        virtual KDevelop::IDocumentationProvider* provider() const;
+        virtual QString description() const override { return mDesc; }
+        virtual QString name() const override { return mName; }
+        virtual KDevelop::IDocumentationProvider* provider() const override;
         
-        virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0);
+        virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0) override;
         
         static CMakeDocumentation* s_provider;
         

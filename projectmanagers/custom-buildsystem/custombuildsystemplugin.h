@@ -46,11 +46,11 @@ public:
     virtual ~CustomBuildSystem();
 
 // ProjectBuilder API
-    KJob* build( KDevelop::ProjectBaseItem* dom );
-    KJob* clean( KDevelop::ProjectBaseItem* dom );
-    KJob* prune( KDevelop::IProject* );
-    KJob* install( KDevelop::ProjectBaseItem* item );
-    KJob* configure( KDevelop::IProject* );
+    KJob* build( KDevelop::ProjectBaseItem* dom ) override;
+    KJob* clean( KDevelop::ProjectBaseItem* dom ) override;
+    KJob* prune( KDevelop::IProject* ) override;
+    KJob* install( KDevelop::ProjectBaseItem* item ) override;
+    KJob* configure( KDevelop::IProject* ) override;
 signals:
     void built( KDevelop::ProjectBaseItem *dom );
     void installed( KDevelop::ProjectBaseItem* );
@@ -61,22 +61,22 @@ signals:
 
 // AbstractFileManagerPlugin API
 public:
-    Features features() const;
+    Features features() const override;
     virtual KDevelop::ProjectFolderItem* createFolderItem( KDevelop::IProject* project, 
-                    const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent = 0 );
+                    const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent = 0 ) override;
 
 // BuildSystemManager API
 public:
-    bool addFilesToTarget( const QList<KDevelop::ProjectFileItem*>& file, KDevelop::ProjectTargetItem* parent );
-    bool hasIncludesOrDefines( KDevelop::ProjectBaseItem* ) const;
-    KDevelop::Path buildDirectory( KDevelop::ProjectBaseItem* ) const;
-    IProjectBuilder* builder() const;
-    KDevelop::ProjectTargetItem* createTarget( const QString& target, KDevelop::ProjectFolderItem* parent );
-    QHash<QString, QString> defines( KDevelop::ProjectBaseItem* ) const;
-    KDevelop::Path::List includeDirectories( KDevelop::ProjectBaseItem* ) const;
-    bool removeFilesFromTargets( const QList<KDevelop::ProjectFileItem*>& );
-    bool removeTarget( KDevelop::ProjectTargetItem* target );
-    QList<KDevelop::ProjectTargetItem*> targets( KDevelop::ProjectFolderItem* ) const;
+    bool addFilesToTarget( const QList<KDevelop::ProjectFileItem*>& file, KDevelop::ProjectTargetItem* parent ) override;
+    bool hasIncludesOrDefines( KDevelop::ProjectBaseItem* ) const override;
+    KDevelop::Path buildDirectory( KDevelop::ProjectBaseItem* ) const override;
+    IProjectBuilder* builder() const override;
+    KDevelop::ProjectTargetItem* createTarget( const QString& target, KDevelop::ProjectFolderItem* parent ) override;
+    QHash<QString, QString> defines( KDevelop::ProjectBaseItem* ) const override;
+    KDevelop::Path::List includeDirectories( KDevelop::ProjectBaseItem* ) const override;
+    bool removeFilesFromTargets( const QList<KDevelop::ProjectFileItem*>& ) override;
+    bool removeTarget( KDevelop::ProjectTargetItem* target ) override;
+    QList<KDevelop::ProjectTargetItem*> targets( KDevelop::ProjectFolderItem* ) const override;
     KConfigGroup configuration( KDevelop::IProject* ) const;
     KConfigGroup findMatchingPathGroup( const KConfigGroup& cfg, KDevelop::ProjectBaseItem* item ) const;
 

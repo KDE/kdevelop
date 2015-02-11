@@ -34,7 +34,7 @@ public:
   ///@param type Must not be zero!
   MissingDeclarationProblem(MissingDeclarationType::Ptr type);
 
-  virtual QExplicitlySharedDataPointer< KDevelop::IAssistant > solutionAssistant() const;
+  virtual QExplicitlySharedDataPointer< KDevelop::IAssistant > solutionAssistant() const override;
 
   MissingDeclarationType::Ptr type;
 };

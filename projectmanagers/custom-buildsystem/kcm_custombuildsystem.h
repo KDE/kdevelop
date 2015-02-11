@@ -37,9 +37,9 @@ public:
     CustomBuildSystemKCModule(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
     virtual ~CustomBuildSystemKCModule();
 
-    virtual QString name() const;
-    virtual QString fullName() const;
-    virtual QIcon icon() const;
+    virtual QString name() const override;
+    virtual QString fullName() const override;
+    virtual QIcon icon() const override;
 public Q_SLOTS:
     virtual void defaults() override;
     virtual void reset() override;

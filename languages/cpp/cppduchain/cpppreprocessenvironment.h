@@ -37,12 +37,12 @@ public:
   ///@param leaveEnvironmentFile Whether the environment-file should be left untouched
   void finishEnvironment(bool leaveEnvironmentFile = false);
 
-  virtual rpp::pp_macro* retrieveMacro( const KDevelop::IndexedString& name, bool isImportant ) const;
+  virtual rpp::pp_macro* retrieveMacro( const KDevelop::IndexedString& name, bool isImportant ) const override;
 
   void setEnvironmentFile( const QExplicitlySharedDataPointer<Cpp::EnvironmentFile>& environmentFile );
   QExplicitlySharedDataPointer<Cpp::EnvironmentFile> environmentFile() const;
 
-  void swapMacros( rpp::Environment* parentEnvironment );
+  void swapMacros( rpp::Environment* parentEnvironment ) override;
 
   /**
     * Merges the given set of macros into the environment. Does not modify m_environmentFile.
@@ -53,9 +53,9 @@ public:
   ///@param mergeEnvironments Whether the environment-files should also be merged using Cpp::EnvironmentFile::merge
   void merge( const Cpp::EnvironmentFile* file, bool mergeEnvironments = false );
 
-  virtual void setMacro(rpp::pp_macro* macro);
+  virtual void setMacro(rpp::pp_macro* macro) override;
 
-  virtual int type() const;
+  virtual int type() const override;
 
   ///Does not include the names of undef macros
   QSet<KDevelop::IndexedString> macroNameSet() const;

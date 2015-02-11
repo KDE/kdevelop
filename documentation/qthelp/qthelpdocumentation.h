@@ -41,13 +41,13 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 
         QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, const QString& key);
 
-        virtual QString name() const { return m_name; }
+        virtual QString name() const override { return m_name; }
 
-        virtual QString description() const;
+        virtual QString description() const override;
 
-        virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent);
+        virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent) override;
 
-        virtual KDevelop::IDocumentationProvider* provider() const;
+        virtual KDevelop::IDocumentationProvider* provider() const override;
         QMap<QString, QUrl> info() const { return m_info; }
 
         static QtHelpProviderAbstract* s_provider;
@@ -75,10 +75,10 @@ class HomeDocumentation : public KDevelop::IDocumentation
     Q_OBJECT
     public:
         HomeDocumentation();
-        virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0);
-        virtual QString description() const { return QString(); }
-        virtual QString name() const;
-        virtual KDevelop::IDocumentationProvider* provider() const;
+        virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0) override;
+        virtual QString description() const override { return QString(); }
+        virtual QString name() const override;
+        virtual KDevelop::IDocumentationProvider* provider() const override;
 
     public slots:
         void clicked(const QModelIndex& idx);

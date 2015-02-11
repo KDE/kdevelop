@@ -32,7 +32,7 @@ class DeclarationBuilder : public DeclarationBuilderBase
 {
 public:
 //     virtual KDevelop::ReferencedTopDUContext build(const KDevelop::IndexedString& url, CMakeFunctionDesc* node, KDevelop::ReferencedTopDUContext updateContext);
-    virtual void startVisiting(CMakeContentIterator* node);
+    virtual void startVisiting(CMakeContentIterator* node) override;
 };
 
 #endif // DECLARATIONBUILDER_H

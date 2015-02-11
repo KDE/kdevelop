@@ -55,14 +55,14 @@ class CodeCompletionModel : public KDevelop::CodeCompletionModel
     void startCompletionAfterParsing(const KDevelop::IndexedString& path);
 
   protected:
-    virtual KTextEditor::Range completionRange(KTextEditor::View* view, const KTextEditor::Cursor& position);
-    virtual KTextEditor::Range updateCompletionRange(KTextEditor::View* view, const KTextEditor::Range& range);
-    virtual void aborted(KTextEditor::View* view);
-    virtual bool shouldAbortCompletion (KTextEditor::View* view, const KTextEditor::Range& range, const QString& currentCompletion);
-    virtual bool shouldStartCompletion (KTextEditor::View*, const QString&, bool userInsertion, const KTextEditor::Cursor&);
-    virtual KDevelop::CodeCompletionWorker* createCompletionWorker();
+    virtual KTextEditor::Range completionRange(KTextEditor::View* view, const KTextEditor::Cursor& position) override;
+    virtual KTextEditor::Range updateCompletionRange(KTextEditor::View* view, const KTextEditor::Range& range) override;
+    virtual void aborted(KTextEditor::View* view) override;
+    virtual bool shouldAbortCompletion (KTextEditor::View* view, const KTextEditor::Range& range, const QString& currentCompletion) override;
+    virtual bool shouldStartCompletion (KTextEditor::View*, const QString&, bool userInsertion, const KTextEditor::Cursor&) override;
+    virtual KDevelop::CodeCompletionWorker* createCompletionWorker() override;
 
-    virtual void foundDeclarations(QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > > item, QExplicitlySharedDataPointer< KDevelop::CodeCompletionContext > completionContext);
+    virtual void foundDeclarations(QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > > item, QExplicitlySharedDataPointer< KDevelop::CodeCompletionContext > completionContext) override;
 
   private slots:
     void parseJobFinished(KDevelop::ParseJob* job);

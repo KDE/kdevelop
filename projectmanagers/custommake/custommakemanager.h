@@ -32,24 +32,24 @@ public:
 
     virtual ~CustomMakeManager();
 
-    virtual Features features() const { return Features(Folders | Targets | Files); }
-    virtual KDevelop::ProjectFolderItem* import(KDevelop::IProject* project);
+    virtual Features features() const override { return Features(Folders | Targets | Files); }
+    virtual KDevelop::ProjectFolderItem* import(KDevelop::IProject* project) override;
 
     /**
      * Provide access to the builder
      */
-    virtual KDevelop::IProjectBuilder* builder() const;
+    virtual KDevelop::IProjectBuilder* builder() const override;
 
     /**
      * Provide a list of include directories.
      */
-    virtual KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem*) const;
+    virtual KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem*) const override;
 
     /**
      * Provide a list of files that contain the preprocessor defines for the
      * project
      */
-    virtual QHash<QString,QString> defines(KDevelop::ProjectBaseItem*) const;
+    virtual QHash<QString,QString> defines(KDevelop::ProjectBaseItem*) const override;
 
     /**
      * Create a new target
@@ -58,7 +58,7 @@ public:
      * modifies the underlying build system if needed
      */
     virtual KDevelop::ProjectTargetItem* createTarget(const QString& target,
-                                            KDevelop::ProjectFolderItem *parent);
+                                            KDevelop::ProjectFolderItem *parent) override;
 
     /**
      * Add a file to a target
@@ -66,7 +66,7 @@ public:
      * Adds the file specified by @p file to the target @p parent and modifies
      * the underlying build system if needed.
      */
-    virtual bool addFilesToTarget(const QList<KDevelop::ProjectFileItem*> &files, KDevelop::ProjectTargetItem *parent);
+    virtual bool addFilesToTarget(const QList<KDevelop::ProjectFileItem*> &files, KDevelop::ProjectTargetItem *parent) override;
 
     /**
      * Remove a target
@@ -74,7 +74,7 @@ public:
      * Removes the target specified by @p target and
      * modifies the underlying build system if needed.
      */
-    virtual bool removeTarget(KDevelop::ProjectTargetItem *target);
+    virtual bool removeTarget(KDevelop::ProjectTargetItem *target) override;
 
     /**
      * Remove a file from a target
@@ -83,17 +83,17 @@ public:
      * modifies the underlying build system if needed. The file is not removed
      * from the folder it is in
      */
-    virtual bool removeFilesFromTargets(const QList<KDevelop::ProjectFileItem*>&);
+    virtual bool removeFilesFromTargets(const QList<KDevelop::ProjectFileItem*>&) override;
 
     /**
      * Test if @p item has any includes or defines from this BSM
      */
-    virtual bool hasIncludesOrDefines(KDevelop::ProjectBaseItem* item) const;
+    virtual bool hasIncludesOrDefines(KDevelop::ProjectBaseItem* item) const override;
 
     /**
      * Get the toplevel build directory for the project
      */
-    virtual KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const;
+    virtual KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const override;
 
     /**
      * Get a list of all the targets in this project
@@ -104,15 +104,15 @@ public:
      * @return The list of targets for this project
      * @todo implement
      */
-    virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
+    virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const override;
 
 protected:
     virtual KDevelop::ProjectFileItem* createFileItem(KDevelop::IProject* project,
                                                       const KDevelop::Path& path,
-                                                      KDevelop::ProjectBaseItem* parent);
+                                                      KDevelop::ProjectBaseItem* parent) override;
     virtual KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project,
                                                           const KDevelop::Path& path,
-                                                          KDevelop::ProjectBaseItem* parent = 0);
+                                                          KDevelop::ProjectBaseItem* parent = 0) override;
 
     virtual void unload() override;
 

@@ -123,8 +123,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeExecutableTargetItem
         CMakeExecutableTargetItem(KDevelop::IProject* project, const QString &name,
                                   CMakeFolderItem *parent, const QString& _outputName, const KDevelop::Path& basepath);
         
-        virtual QUrl builtUrl() const;
-        virtual QUrl installedUrl() const;
+        virtual QUrl builtUrl() const override;
+        virtual QUrl installedUrl() const override;
         
     private:
         QString outputName;

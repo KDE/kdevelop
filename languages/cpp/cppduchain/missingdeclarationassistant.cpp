@@ -94,7 +94,7 @@ public:
     : MissingDeclarationAction(problem)
     {
     }
-    virtual void execute()
+    virtual void execute() override
     {
       DUChainReadLocker lock;
       if(targetContext()) {
@@ -109,20 +109,20 @@ public:
         emit executed(this);
       }
     }
-    virtual QString description() const
+    virtual QString description() const override
     {
       return i18n("<b>local</b> variable");
     }
-    virtual QString toolTip() const
+    virtual QString toolTip() const override
     {
       return i18n("Create local declaration %1", declarationString());
     }
-    virtual QString declarationString() const
+    virtual QString declarationString() const override
     {
       return typeString(assignedType()) + " "
               + m_problem->type->identifier().toString();
     }
-    virtual DUContext* targetContext() const
+    virtual DUContext* targetContext() const override
     {
       return m_problem->type->searchStartContext.data();
     }
@@ -138,7 +138,7 @@ public:
   , m_access(access)
   {
   }
-  virtual void execute()
+  virtual void execute() override
   {
     DUChainReadLocker lock;
     DUContext* searchFrom = m_problem->type->searchStartContext.data();
@@ -199,7 +199,7 @@ public:
       emit executed(this);
     }
   }
-  virtual QString description() const
+  virtual QString description() const override
   {
     return QString("<b>%1</b>").arg(accessString());
   }
@@ -214,7 +214,7 @@ public:
       return QString();
   }
 
-  virtual QString declarationString() const
+  virtual QString declarationString() const override
   {
     DUChainReadLocker lock;
     if(targetContext())
@@ -223,13 +223,13 @@ public:
       return QString();
   }
 
-  virtual QString toolTip() const
+  virtual QString toolTip() const override
   {
     return i18nc("%1: access, %2: identifier/signature", "Declare %1 %2",
                   accessString(), declarationString());
   }
 private:
-  virtual DUContext* targetContext() const
+  virtual DUContext* targetContext() const override
   {
     DUContext* container = m_problem->type->containerContext.data();
     if(!container) {

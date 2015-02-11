@@ -59,9 +59,9 @@ namespace Cpp {
       ///Computes the full set of completion items, using the information retrieved earlier.
       ///Should only be called on the first context, parent contexts are included in the computations.
       ///@param Abort is checked regularly, and if it is false, the computation is aborted.
-      virtual QList< KDevelop::CompletionTreeItemPointer > completionItems(bool& abort, bool fullCompletion = true);
+      virtual QList< KDevelop::CompletionTreeItemPointer > completionItems(bool& abort, bool fullCompletion = true) override;
       
-      virtual QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > > ungroupedElements();
+      virtual QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > > ungroupedElements() override;
 
       typedef QExplicitlySharedDataPointer<CodeCompletionContext> Ptr;
 

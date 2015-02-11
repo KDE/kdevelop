@@ -48,8 +48,8 @@ public:
   TypeSpecifierAST* lastTypeSpecifier() const;
 
 protected:
-  virtual void visitUnqualifiedName(UnqualifiedNameAST *node);
-  virtual void visitTemplateArgument(TemplateArgumentAST *node);
+  virtual void visitUnqualifiedName(UnqualifiedNameAST *node) override;
+  virtual void visitTemplateArgument(TemplateArgumentAST *node) override;
 
   void internal_run(AST *node);
 

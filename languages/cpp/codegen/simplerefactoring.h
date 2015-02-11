@@ -36,14 +36,14 @@ class SimpleRefactoring : public KDevelop::BasicRefactoring {
 
 public:
   explicit SimpleRefactoring(QObject* parent = 0);
-  void fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context);
+  void fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context) override;
 
-  void startInteractiveRename(const KDevelop::IndexedDeclaration &decl);
+  void startInteractiveRename(const KDevelop::IndexedDeclaration &decl) override;
 
   KDevelop::DocumentChangeSet::ChangeResult applyChangesToDeclarations(const QString& oldName,
                                                                        const QString& newName,
                                                                        KDevelop::DocumentChangeSet& changes,
-                                                                       const QList<KDevelop::IndexedDeclaration>& declarations);
+                                                                       const QList<KDevelop::IndexedDeclaration>& declarations) override;
 
   virtual KDevelop::DocumentChangeSet::ChangeResult addRenameFileChanges(const QUrl &current, const QString& newName, KDevelop::DocumentChangeSet* changes) override;
 

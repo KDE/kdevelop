@@ -65,7 +65,7 @@ public:
              const MakeVariables& variables = MakeVariables() );
     virtual ~MakeJob();
 
-    virtual void start();
+    virtual void start() override;
 
     KDevelop::ProjectBaseItem* item() const;
     CommandType commandType();
@@ -73,16 +73,16 @@ public:
 
 
     // This returns the build directory for registered item.
-    virtual QUrl workingDirectory() const;
+    virtual QUrl workingDirectory() const override;
 
     // This returns the "make" command line.
-    virtual QStringList commandLine() const;
+    virtual QStringList commandLine() const override;
 
     // This returns the configured privileged execution command (if specified by user).
-    virtual QStringList privilegedExecutionCommand() const;
+    virtual QStringList privilegedExecutionCommand() const override;
 
     // This returns the configured global environment profile.
-    virtual QString environmentProfile() const;
+    virtual QString environmentProfile() const override;
 
 private:
     QPersistentModelIndex m_idx;

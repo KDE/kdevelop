@@ -40,7 +40,7 @@ public:
     ~KDevelopSessionsEngine();
 
     void init();
-    Plasma::Service *serviceForSource(const QString &source);
+    Plasma::Service *serviceForSource(const QString &source) override;
 
     private Q_SLOTS:
         void updateSessions();

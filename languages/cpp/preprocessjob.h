@@ -60,16 +60,16 @@ public:
 
     CPPParseJob* parentJob() const;
 
-    virtual rpp::Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine, bool skipCurrentPath);
+    virtual rpp::Stream* sourceNeeded(QString& fileName, IncludeType type, int sourceLine, bool skipCurrentPath) override;
 
-    virtual bool success() const;
+    virtual bool success() const override;
 
     //Must only be called for direct parsing when the job is not queued
-    virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread);
+    virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 
-    virtual void headerSectionEnded(rpp::Stream& stream);
+    virtual void headerSectionEnded(rpp::Stream& stream) override;
     
-    virtual void foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedString guardName);
+    virtual void foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedString guardName) override;
     
     /**
      * Returns the standard-environment used for parsing c++ files(all other environments are based on that one)

@@ -39,7 +39,7 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
 
         static QtHelpPlugin *self() { return s_plugin; }
 
-        virtual QList<KDevelop::IDocumentationProvider*> providers();
+        virtual QList<KDevelop::IDocumentationProvider*> providers() override;
         QList<QtHelpProvider*> qtHelpProviderLoaded();
         bool qtHelpQtDocLoaded();
 
@@ -49,7 +49,7 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
     public slots:
         void readConfig();
     signals:
-        void changedProvidersList() const;
+        void changedProvidersList() const override;
     private:
         void loadQtDocumentation(bool loadQtDoc);
         void searchHelpDirectory(QStringList& pathList, QStringList& nameList, QStringList& iconList, const QString& searchDir);

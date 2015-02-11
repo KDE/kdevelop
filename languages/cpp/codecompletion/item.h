@@ -64,9 +64,9 @@ public:
     : KDevelop::NormalDeclarationCompletionItem(decl, context, _inheritanceDepth), useAlternativeText(false), prependScopePrefix(false), listOffset(_listOffset), m_isQtSignalSlotCompletion(false), m_isTemplateCompletion(false), m_fixedMatchQuality(-1) {
   }
   
-  virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word);
+  virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) override;
 
-  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
+  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override;
   
   //Prefix that will be stripped from all identifiers(For example the namespace)
   KDevelop::QualifiedIdentifier stripPrefix() const;
@@ -92,14 +92,14 @@ public:
   //otherwise this is calculated and cached on the first read
   mutable int m_fixedMatchQuality;
   
-  virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
+  virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const override;
 
   QExplicitlySharedDataPointer<CodeCompletionContext> completionContext() const;
 
 protected:
-  virtual QWidget* createExpandingWidget(const KDevelop::CodeCompletionModel* model) const;
-  virtual bool createsExpandingWidget() const;
-  virtual QString shortenedTypeString(KDevelop::DeclarationPointer decl, int desiredTypeLength) const;
+  virtual QWidget* createExpandingWidget(const KDevelop::CodeCompletionModel* model) const override;
+  virtual bool createsExpandingWidget() const override;
+  virtual QString shortenedTypeString(KDevelop::DeclarationPointer decl, int desiredTypeLength) const override;
 private:
   
   void needCachedArgumentList() const;
@@ -146,8 +146,8 @@ public:
 class TypeConversionCompletionItem : public KDevelop::CompletionTreeItem {
   public:
     TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth, QExplicitlySharedDataPointer<Cpp::CodeCompletionContext> completionContext);
-    virtual int argumentHintDepth() const;
-    virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
+    virtual int argumentHintDepth() const override;
+    virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override;
     QList<KDevelop::IndexedType> type() const;
     void setPrefix(QString s);
     virtual void execute(KTextEditor::View*, const KTextEditor::Range& word) override;

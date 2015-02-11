@@ -39,16 +39,16 @@ class ExecutePlasmoidPlugin : public KDevelop::IPlugin, public IExecutePlugin
     public:
         ExecutePlasmoidPlugin(QObject *parent, const QVariantList & = QVariantList() );
         virtual ~ExecutePlasmoidPlugin();
-        virtual void unload();
+        virtual void unload() override;
 
-        virtual QUrl executable(KDevelop::ILaunchConfiguration* config, QString& error) const;
-        virtual QStringList arguments(KDevelop::ILaunchConfiguration* config, QString& error) const;
-        virtual KJob* dependencyJob(KDevelop::ILaunchConfiguration* config) const;
-        virtual QString environmentGroup(KDevelop::ILaunchConfiguration* config) const;
-        virtual QString nativeAppConfigTypeId() const;
-        virtual QString terminal(KDevelop::ILaunchConfiguration* config) const;
-        virtual bool useTerminal(KDevelop::ILaunchConfiguration* config) const;
-        virtual QUrl workingDirectory(KDevelop::ILaunchConfiguration* config) const;
+        virtual QUrl executable(KDevelop::ILaunchConfiguration* config, QString& error) const override;
+        virtual QStringList arguments(KDevelop::ILaunchConfiguration* config, QString& error) const override;
+        virtual KJob* dependencyJob(KDevelop::ILaunchConfiguration* config) const override;
+        virtual QString environmentGroup(KDevelop::ILaunchConfiguration* config) const override;
+        virtual QString nativeAppConfigTypeId() const override;
+        virtual QString terminal(KDevelop::ILaunchConfiguration* config) const override;
+        virtual bool useTerminal(KDevelop::ILaunchConfiguration* config) const override;
+        virtual QUrl workingDirectory(KDevelop::ILaunchConfiguration* config) const override;
 
     private:
         PlasmoidExecutionConfigType* m_configType;

@@ -82,9 +82,9 @@ Q_OBJECT
 public:
 	CustomScriptPreferences() ;
 		
-    virtual void load ( const KDevelop::SourceFormatterStyle& style ) ;
+    virtual void load ( const KDevelop::SourceFormatterStyle& style ) override ;
     
-    virtual QString save() ;
+    virtual QString save() override ;
 private:
 	QVBoxLayout* m_vLayout;
 	QLabel* m_captionLabel;

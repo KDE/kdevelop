@@ -29,13 +29,13 @@ class CMakeContentsModel : public QAbstractItemModel
     Q_OBJECT
     public:       
         CMakeContentsModel(QObject* parent) ;
-        int rowCount(const QModelIndex& parent = QModelIndex()) const;
+        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
         
-        int columnCount(const QModelIndex&) const { return 1; }
-        QModelIndex parent(const QModelIndex& child) const;
+        int columnCount(const QModelIndex&) const override { return 1; }
+        QModelIndex parent(const QModelIndex& child) const override;
         
-        QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-        QVariant data(const QModelIndex& index, int role) const;
+        QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+        QVariant data(const QModelIndex& index, int role) const override;
     public slots:
         void showItem(const QModelIndex& idx);
 };
@@ -43,11 +43,11 @@ class CMakeContentsModel : public QAbstractItemModel
 class CMakeHomeDocumentation : public KDevelop::IDocumentation
 {
     public:
-        virtual KDevelop::IDocumentationProvider* provider() const;
-        virtual QString name() const;
-        virtual QString description() const { return name(); }
+        virtual KDevelop::IDocumentationProvider* provider() const override;
+        virtual QString name() const override;
+        virtual QString description() const override { return name(); }
 
-        virtual QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 );
+        virtual QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 ) override;
 };
 
 #endif

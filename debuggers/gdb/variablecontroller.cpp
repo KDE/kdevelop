@@ -107,7 +107,7 @@ public:
         : m_localsName(localsName)
     {}
 
-    virtual void handle(const GDBMI::ResultRecord &r)
+    virtual void handle(const GDBMI::ResultRecord &r) override
     {
         if (!KDevelop::ICore::self()->debugController()) return; //happens on shutdown
 
@@ -135,7 +135,7 @@ public:
         : m_session(session)
     {}
 
-    virtual void handle(const GDBMI::ResultRecord &r)
+    virtual void handle(const GDBMI::ResultRecord &r) override
     {
         // FIXME: handle error.
 

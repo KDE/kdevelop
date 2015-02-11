@@ -35,8 +35,8 @@ public:
     CppClassHelper();
     virtual ~CppClassHelper();
 
-    virtual KDevelop::TemplateClassGenerator* createGenerator(const QUrl &baseUrl);
-    virtual QList< KDevelop::DeclarationPointer > defaultMethods(const QString& name) const;
+    virtual KDevelop::TemplateClassGenerator* createGenerator(const QUrl &baseUrl) override;
+    virtual QList< KDevelop::DeclarationPointer > defaultMethods(const QString& name) const override;
 };
 
 /**
@@ -54,7 +54,7 @@ class CppTemplateNewClass : public KDevelop::TemplateClassGenerator
     CppTemplateNewClass(const QUrl &url);
     virtual ~CppTemplateNewClass();
 
-    virtual KDevelop::DocumentChangeSet generate();
+    virtual KDevelop::DocumentChangeSet generate() override;
     /**
      * In addition to the variables provided by the base class,
      * it groups member variables and functions by access policy. 

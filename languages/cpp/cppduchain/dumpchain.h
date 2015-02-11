@@ -42,7 +42,7 @@ public:
   void dump(AST *node, ParseSession* session = 0);
 
 protected:
-  virtual void visit(AST *node);
+  virtual void visit(AST *node) override;
 
 private:
   CppEditorIntegrator* m_editor;

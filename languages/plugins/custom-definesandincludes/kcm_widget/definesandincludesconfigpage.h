@@ -30,9 +30,9 @@ public:
     DefinesAndIncludesConfigPage(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent);
     virtual ~DefinesAndIncludesConfigPage();
 
-    virtual QString name() const;
-    virtual QString fullName() const;
-    virtual QIcon icon() const;
+    virtual QString name() const override;
+    virtual QString fullName() const override;
+    virtual QIcon icon() const override;
 
     virtual void apply() override;
     virtual void reset() override;

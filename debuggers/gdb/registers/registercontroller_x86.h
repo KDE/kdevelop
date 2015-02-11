@@ -31,21 +31,21 @@ class DebugSession;
 class RegisterControllerGeneral_x86 : public IRegisterController
 {
 public:
-    QVector<GroupsName> namesOfRegisterGroups() const;
+    QVector<GroupsName> namesOfRegisterGroups() const override;
 
 public slots:
-    virtual void updateRegisters(const GroupsName& group = GroupsName());
+    virtual void updateRegisters(const GroupsName& group = GroupsName()) override;
 
 protected:
     RegisterControllerGeneral_x86(DebugSession* debugSession = 0, QObject* parent = 0);
 
-    virtual RegistersGroup registersFromGroup(const GroupsName& group) const;
+    virtual RegistersGroup registersFromGroup(const GroupsName& group) const override;
 
-    virtual QStringList registerNamesForGroup(const GroupsName& group) const;
+    virtual QStringList registerNamesForGroup(const GroupsName& group) const override;
 
-    virtual void updateValuesForRegisters(RegistersGroup* registers) const;
+    virtual void updateValuesForRegisters(RegistersGroup* registers) const override;
 
-    virtual void setRegisterValueForGroup(const GroupsName& group, const Register& reg);
+    virtual void setRegisterValueForGroup(const GroupsName& group, const Register& reg) override;
 
     enum X86RegisterGroups {General, Flags, FPU, XMM, Segment, LAST_REGISTER};
 

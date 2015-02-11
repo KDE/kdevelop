@@ -130,14 +130,14 @@ public:
   }
   
 protected:
-  QualifiedIdentifier identifierForNode(NameAST* id);
+  QualifiedIdentifier identifierForNode(NameAST* id) override;
   void identifierForNode(NameAST* id, QualifiedIdentifier& target);
-  virtual void startVisiting( AST* node );
-  virtual void setContextOnNode( AST* node, DUContext* ctx );
-  virtual DUContext* contextFromNode( AST* node );
-  virtual RangeInRevision editorFindRange( AST* fromRange, AST* toRange );
-  virtual RangeInRevision editorFindRangeForContext( AST* fromRange, AST* toRange );
-  virtual DUContext* newContext(const RangeInRevision& range);
+  virtual void startVisiting( AST* node ) override;
+  virtual void setContextOnNode( AST* node, DUContext* ctx ) override;
+  virtual DUContext* contextFromNode( AST* node ) override;
+  virtual RangeInRevision editorFindRange( AST* fromRange, AST* toRange ) override;
+  virtual RangeInRevision editorFindRangeForContext( AST* fromRange, AST* toRange ) override;
+  virtual DUContext* newContext(const RangeInRevision& range) override;
   
   /**
    * Compile an identifier for the specified NameAST \a id.
@@ -167,42 +167,42 @@ protected:
   virtual void visitFunctionDeclaration (FunctionDefinitionAST *);
   virtual void visitPostSimpleDeclaration(SimpleDeclarationAST*);
 
-  virtual void visitTemplateDeclaration(TemplateDeclarationAST *);
+  virtual void visitTemplateDeclaration(TemplateDeclarationAST *) override;
 
   // Normal overridden visitors
-  virtual void visitInitDeclarator(InitDeclaratorAST *node);
-  virtual void visitDeclarator(DeclaratorAST *node);
-  virtual void visitNamespace(NamespaceAST *);
-  virtual void visitEnumSpecifier(EnumSpecifierAST* node);
-  virtual void visitClassSpecifier(ClassSpecifierAST *);
-  virtual void visitTypedef(TypedefAST *);
-  virtual void visitFunctionDefinition(FunctionDefinitionAST *);
-  virtual void visitCompoundStatement(CompoundStatementAST *);
-  virtual void visitSimpleDeclaration(SimpleDeclarationAST *);
-  virtual void visitName(NameAST *);
-  virtual void visitUsing(UsingAST*);
-  virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST*);
-  virtual void visitForStatement(ForStatementAST*);
+  virtual void visitInitDeclarator(InitDeclaratorAST *node) override;
+  virtual void visitDeclarator(DeclaratorAST *node) override;
+  virtual void visitNamespace(NamespaceAST *) override;
+  virtual void visitEnumSpecifier(EnumSpecifierAST* node) override;
+  virtual void visitClassSpecifier(ClassSpecifierAST *) override;
+  virtual void visitTypedef(TypedefAST *) override;
+  virtual void visitFunctionDefinition(FunctionDefinitionAST *) override;
+  virtual void visitCompoundStatement(CompoundStatementAST *) override;
+  virtual void visitSimpleDeclaration(SimpleDeclarationAST *) override;
+  virtual void visitName(NameAST *) override;
+  virtual void visitUsing(UsingAST*) override;
+  virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST*) override;
+  virtual void visitForStatement(ForStatementAST*) override;
   virtual void handleRangeBasedFor(ExpressionAST* container, ForRangeDeclarationAst* iterator);
-  virtual void visitIfStatement(IfStatementAST*);
-  virtual void visitSwitchStatement(SwitchStatementAST*);
-  virtual void visitDoStatement(DoStatementAST*);
-  virtual void visitTryBlockStatement(TryBlockStatementAST*);
-  virtual void visitCatchStatement(CatchStatementAST*);
+  virtual void visitIfStatement(IfStatementAST*) override;
+  virtual void visitSwitchStatement(SwitchStatementAST*) override;
+  virtual void visitDoStatement(DoStatementAST*) override;
+  virtual void visitTryBlockStatement(TryBlockStatementAST*) override;
+  virtual void visitCatchStatement(CatchStatementAST*) override;
   virtual void createTypeForDeclarator(DeclaratorAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
   virtual void createTypeForInitializer(InitializerAST *node);
   virtual void createTypeForCondition(ConditionAST *node);
-  virtual void visitParameterDeclarationClause(ParameterDeclarationClauseAST* node);
-  virtual void visitLambdaDeclarator(LambdaDeclaratorAST* node);
-  virtual void visitCondition(ConditionAST *node);
+  virtual void visitParameterDeclarationClause(ParameterDeclarationClauseAST* node) override;
+  virtual void visitLambdaDeclarator(LambdaDeclaratorAST* node) override;
+  virtual void visitCondition(ConditionAST *node) override;
 
   void queueImportedContext(DUContext* context) {
     DUChainReadLocker lock(DUChain::lock());
     m_importedParentContexts << DUContext::Import(context, currentContext());
   }
   
-  virtual void setInSymbolTable(DUContext* context);
+  virtual void setInSymbolTable(DUContext* context) override;
   
   virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context);
   
@@ -214,7 +214,7 @@ protected:
   //Opens a context of size 0, starting at the given node
   KDevelop::DUContext* openContextEmpty(AST* range, KDevelop::DUContext::ContextType type);
 
-  KDevelop::DUContext* openContextInternal(const KDevelop::RangeInRevision& range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
+  KDevelop::DUContext* openContextInternal(const KDevelop::RangeInRevision& range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier) override;
 
   bool createContextIfNeeded(AST* node, const QVector<KDevelop::DUContext::Import>& importedParentContexts);
   bool createContextIfNeeded(AST* node, KDevelop::DUContext* importedParentContext);

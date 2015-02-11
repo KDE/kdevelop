@@ -40,19 +40,19 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
     void run(AST* node);
     
   protected:
-    virtual void visitFunctionDefinition(FunctionDefinitionAST* node);
-    virtual void visitEnumerator(EnumeratorAST* node);
+    virtual void visitFunctionDefinition(FunctionDefinitionAST* node) override;
+    virtual void visitEnumerator(EnumeratorAST* node) override;
     
-    virtual void visitIfStatement(IfStatementAST* node);
-    virtual void visitWhileStatement(WhileStatementAST* node);
-    virtual void visitForStatement(ForStatementAST* node);
-    virtual void visitConditionalExpression(ConditionalExpressionAST* node);
-    virtual void visitDoStatement(DoStatementAST* node);
+    virtual void visitIfStatement(IfStatementAST* node) override;
+    virtual void visitWhileStatement(WhileStatementAST* node) override;
+    virtual void visitForStatement(ForStatementAST* node) override;
+    virtual void visitConditionalExpression(ConditionalExpressionAST* node) override;
+    virtual void visitDoStatement(DoStatementAST* node) override;
     
-    virtual void visitReturnStatement(ReturnStatementAST* node);
-    virtual void visitJumpStatement(JumpStatementAST* node);
-    virtual void visitSwitchStatement(SwitchStatementAST* node);
-    virtual void visitLabeledStatement(LabeledStatementAST* node);
+    virtual void visitReturnStatement(ReturnStatementAST* node) override;
+    virtual void visitJumpStatement(JumpStatementAST* node) override;
+    virtual void visitSwitchStatement(SwitchStatementAST* node) override;
+    virtual void visitLabeledStatement(LabeledStatementAST* node) override;
     
   private:
     KDevelop::ControlFlowNode* createCompoundStatement(AST* node, KDevelop::ControlFlowNode* next);

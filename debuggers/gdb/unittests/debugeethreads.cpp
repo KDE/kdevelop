@@ -22,7 +22,7 @@
 class TestThread : public QThread
 {
 public:
-    void run() {
+    void run() override {
         sleep(1);
         std::cout << "Hello, world!" << std::endl;
     }

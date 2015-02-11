@@ -44,9 +44,9 @@ Q_OBJECT
 public:
     DebugJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg,
               IExecutePlugin* plugin, QObject* parent = 0 );
-    virtual void start();
+    virtual void start() override;
 protected:
-    virtual bool doKill();
+    virtual bool doKill() override;
 private slots:
     void stdoutReceived(const QStringList&);
     void stderrReceived(const QStringList&);
@@ -64,9 +64,9 @@ class KillSessionJob : public KJob
 Q_OBJECT
 public:
     KillSessionJob(DebugSession *session, QObject *parent = 0);
-    virtual void start();
+    virtual void start() override;
 protected:
-    virtual bool doKill();
+    virtual bool doKill() override;
 private:
     DebugSession* m_session;
 private slots:

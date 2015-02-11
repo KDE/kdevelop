@@ -52,7 +52,7 @@ Q_OBJECT
   class UIBlockTesterThread : public QThread {
     public:
       UIBlockTesterThread( UIBlockTester& parent );
-      void run();
+      void run() override;
       void stop();
     private:
       UIBlockTester& m_parent;
@@ -89,22 +89,22 @@ public:
     explicit CppLanguageSupport( QObject* parent, const QVariantList& args = QVariantList() );
     virtual ~CppLanguageSupport();
 
-    QString name() const;
+    QString name() const override;
 
-    KDevelop::ICodeHighlighting *codeHighlighting() const;
-    KDevelop::BasicRefactoring* refactoring() const;
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
-    KDevelop::ParseJob *createParseJob( const KDevelop::IndexedString &url );
+    KDevelop::ICodeHighlighting *codeHighlighting() const override;
+    KDevelop::BasicRefactoring* refactoring() const override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    KDevelop::ParseJob *createParseJob( const KDevelop::IndexedString &url ) override;
     //KDevelop::AstRepresentationPtr  generateAst(const KDevelop::TopDUContext & topContext);
-    KDevelop::ICreateClassHelper* createClassHelper() const;
+    KDevelop::ICreateClassHelper* createClassHelper() const override;
     
     static CppLanguageSupport* self();
 
-    virtual QString indentationSample() const {
+    virtual QString indentationSample() const override {
       return "class C{\n class D {\n void c() {\n int m;\n }\n }\n};\n";
     }
     
-    virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions);
+    virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;
 /**
  * There may be multiple differnt parsed versions of a document available in the du-chain.
  * This function helps choosing the right one, by creating a standard parsing-environment,
@@ -118,14 +118,14 @@ public:
  *
  * @warning The du-chain must be locked before calling this.
 * */
-  virtual KDevelop::TopDUContext *standardContext(const QUrl &url, bool proxyContext = false);
+  virtual KDevelop::TopDUContext *standardContext(const QUrl &url, bool proxyContext = false) override;
 
     /**
      * IBuddyDocumentFinder overrides.
      */
-    virtual bool areBuddies(const QUrl &url1, const QUrl& url2);
-    virtual bool buddyOrder(const QUrl &url1, const QUrl& url2);
-    virtual QVector<QUrl> getPotentialBuddies(const QUrl &url) const;
+    virtual bool areBuddies(const QUrl &url1, const QUrl& url2) override;
+    virtual bool buddyOrder(const QUrl &url1, const QUrl& url2) override;
+    virtual QVector<QUrl> getPotentialBuddies(const QUrl &url) const override;
 
 public slots:
     void findIncludePathsForJob(CPPParseJob* job);
@@ -140,11 +140,11 @@ private:
 
     QPair<KTextEditor::Range, const rpp::pp_macro*> usedMacroForPosition(const QUrl &url, const KTextEditor::Cursor& position);
 
-    virtual KTextEditor::Range specialLanguageObjectRange(const QUrl &url, const KTextEditor::Cursor& position);
+    virtual KTextEditor::Range specialLanguageObjectRange(const QUrl &url, const KTextEditor::Cursor& position) override;
 
-    virtual QPair<QUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const QUrl &url, const KTextEditor::Cursor& position);
+    virtual QPair<QUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const QUrl &url, const KTextEditor::Cursor& position) override;
 
-    virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position);
+    virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position) override;
 
     static CppLanguageSupport* m_self;
 

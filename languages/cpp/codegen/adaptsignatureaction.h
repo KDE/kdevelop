@@ -55,11 +55,11 @@ public:
     );
     virtual ~AdaptSignatureAction();
 
-    virtual QString description() const;
+    virtual QString description() const override;
 
-    virtual QString toolTip() const;
+    virtual QString toolTip() const override;
 
-    virtual void execute();
+    virtual void execute() override;
 private:
     DeclarationId m_otherSideId;
     ReferencedTopDUContext m_otherSideTopContext;

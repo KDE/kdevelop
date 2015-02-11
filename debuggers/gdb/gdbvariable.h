@@ -54,12 +54,12 @@ namespace KDevelop
            and Variable instances.  */
         static void markAllDead();
         
-        virtual bool canSetFormat() const { return true; }
+        virtual bool canSetFormat() const override { return true; }
 
     private: // Variable overrides
-        void attachMaybe(QObject *callback, const char *callbackMethod);
-        void fetchMoreChildren();
-        void formatChanged();
+        void attachMaybe(QObject *callback, const char *callbackMethod) override;
+        void fetchMoreChildren() override;
+        void formatChanged() override;
 
     private: // Internal
         friend class ::CreateVarobjHandler;

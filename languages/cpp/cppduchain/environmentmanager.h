@@ -112,7 +112,7 @@ namespace Cpp {
 struct MacroSetRepository : public Utils::BasicSetRepository {
   MacroSetRepository() : Utils::BasicSetRepository("macro sets") {
   }
-  virtual void itemRemovedFromSets(uint index);
+  virtual void itemRemovedFromSets(uint index) override;
 };
 
 ///@todo Make string-sets work correctly with IndexedString reference-counting
@@ -282,9 +282,9 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     void setIdentityOffset(uint offset);
     uint identityOffset() const;
     
-    virtual bool matchEnvironment(const KDevelop::ParsingEnvironment* environment) const;
+    virtual bool matchEnvironment(const KDevelop::ParsingEnvironment* environment) const override;
     
-    virtual bool needsUpdate(const KDevelop::ParsingEnvironment* environment = 0) const;
+    virtual bool needsUpdate(const KDevelop::ParsingEnvironment* environment = 0) const override;
     
     const KDevelop::ModificationRevisionSet& includePathDependencies() const;
     void  setIncludePathDependencies(const KDevelop::ModificationRevisionSet&);
@@ -295,7 +295,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     
   private:
     
-    virtual int type() const;
+    virtual int type() const override;
 
     friend class EnvironmentManager;
 

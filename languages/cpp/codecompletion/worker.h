@@ -39,9 +39,9 @@ class CodeCompletionWorker : public KDevelop::CodeCompletionWorker
     CodeCompletionModel* model() const;
 
   protected:
-    virtual void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& _contextRange, const QString& _contextText);
-    virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText, const KDevelop::CursorInRevision &position) const;
-    virtual void updateContextRange(KTextEditor::Range& contextRange, KTextEditor::View* view, KDevelop::DUContextPointer context) const;
+    virtual void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& _contextRange, const QString& _contextText) override;
+    virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText, const KDevelop::CursorInRevision &position) const override;
+    virtual void updateContextRange(KTextEditor::Range& contextRange, KTextEditor::View* view, KDevelop::DUContextPointer context) const override;
 };
 
 }

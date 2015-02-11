@@ -37,17 +37,17 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
      * */
   IncludeFileData( const KDevelop::IncludeItem& item, const KDevelop::TopDUContextPointer& includedFrom );
     
-    virtual QString text() const;
-    virtual QString htmlDescription() const;
+    virtual QString text() const override;
+    virtual QString htmlDescription() const override;
 
-    bool execute( QString& filterText );
+    bool execute( QString& filterText ) override;
 
-    virtual bool isExpandable() const;
-    virtual QWidget* expandingWidget() const;
+    virtual bool isExpandable() const override;
+    virtual QWidget* expandingWidget() const override;
 
-    virtual QList<QVariant> highlighting() const;
+    virtual QList<QVariant> highlighting() const override;
     
-    virtual QIcon icon() const;
+    virtual QIcon icon() const override;
   private:
     KDevelop::IncludeItem m_item;
     KDevelop::TopDUContextPointer m_includedFrom;
@@ -62,17 +62,17 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
 class IncludeFileDataProvider: public KDevelop::QuickOpenDataProviderBase, public KDevelop::PathFilter<KDevelop::IncludeItem, IncludeFileDataProvider>, public KDevelop::QuickOpenFileSetInterface {
   public:
     IncludeFileDataProvider();
-    virtual void setFilterText( const QString& text );
-    virtual void reset();
-    virtual uint itemCount() const;
-    virtual uint unfilteredItemCount() const;
-    virtual KDevelop::QuickOpenDataPointer data( uint row ) const;
-    virtual void enableData( const QStringList& items, const QStringList& scopes );
+    virtual void setFilterText( const QString& text ) override;
+    virtual void reset() override;
+    virtual uint itemCount() const override;
+    virtual uint unfilteredItemCount() const override;
+    virtual KDevelop::QuickOpenDataPointer data( uint row ) const override;
+    virtual void enableData( const QStringList& items, const QStringList& scopes ) override;
 
     ///Returns all scopes supported by this data-provider
     static QStringList scopes();
     
-    virtual QSet<KDevelop::IndexedString> files() const;
+    virtual QSet<KDevelop::IndexedString> files() const override;
 
     //For PathFilter<..>
     //FIXME: port this properly

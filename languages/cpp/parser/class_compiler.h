@@ -39,8 +39,8 @@ public:
   void run(ClassSpecifierAST *node);
 
 protected:
-  virtual void visitClassSpecifier(ClassSpecifierAST *node);
-  virtual void visitBaseSpecifier(BaseSpecifierAST *node);
+  virtual void visitClassSpecifier(ClassSpecifierAST *node) override;
+  virtual void visitBaseSpecifier(BaseSpecifierAST *node) override;
 
 private:
   QString _M_name;

@@ -81,7 +81,7 @@ struct CollectorVisitor : public DefaultVisitor
 {
     CollectorVisitor(int kind) : m_kind(kind) {}
     
-    virtual void visit(AST * node)
+    virtual void visit(AST * node) override
     {
         if(node && node->kind == m_kind)
             m_nodes.push_back(node);

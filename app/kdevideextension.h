@@ -26,12 +26,12 @@ class KDevIDEExtension : public KDevelop::ShellExtension {
 public:
     static void init();
 
-    virtual QString xmlFile();
-    virtual QString binaryPath();
-    virtual KDevelop::AreaParams defaultArea();
-    virtual QString projectFileExtension();
-    virtual QString projectFileDescription();
-    virtual QStringList defaultPlugins();
+    virtual QString xmlFile() override;
+    virtual QString binaryPath() override;
+    virtual KDevelop::AreaParams defaultArea() override;
+    virtual QString projectFileExtension() override;
+    virtual QString projectFileDescription() override;
+    virtual QStringList defaultPlugins() override;
 
 protected:
     KDevIDEExtension();

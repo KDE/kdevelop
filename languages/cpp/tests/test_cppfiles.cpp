@@ -46,11 +46,11 @@ QTEST_MAIN(TestCppFiles)
 class CppDeclarationValidator : public DeclarationValidator
 {
 public:
-  void visit(DUContext* context)
+  void visit(DUContext* context) override
   {
       KDevelop::DeclarationValidator::visit(context);
   }
-  void visit(Declaration* declaration)
+  void visit(Declaration* declaration) override
   {
     TemplateDeclaration *templateDecl = dynamic_cast<TemplateDeclaration*>(declaration);
     if (templateDecl && (templateDecl->instantiatedFrom() && !templateDecl->specializedFrom().isValid()))

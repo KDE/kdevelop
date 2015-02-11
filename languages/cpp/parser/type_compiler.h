@@ -46,12 +46,12 @@ public:
   void run(TypeSpecifierAST *node);
 
 protected:
-  virtual void visitClassSpecifier(ClassSpecifierAST *node);
-  virtual void visitEnumSpecifier(EnumSpecifierAST *node);
-  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node);
-  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node);
+  virtual void visitClassSpecifier(ClassSpecifierAST *node) override;
+  virtual void visitEnumSpecifier(EnumSpecifierAST *node) override;
+  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node) override;
+  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node) override;
 
-  virtual void visitName(NameAST *node);
+  virtual void visitName(NameAST *node) override;
 
 private:
   ParseSession* m_session;

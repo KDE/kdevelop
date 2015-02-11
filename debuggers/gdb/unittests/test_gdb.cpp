@@ -142,11 +142,11 @@ public:
     ~TestLaunchConfiguration() {
         delete c;
     }
-    virtual const KConfigGroup config() const { return cfg; }
-    virtual KConfigGroup config() { return cfg; };
-    virtual QString name() const { return QString("Test-Launch"); }
-    virtual KDevelop::IProject* project() const { return 0; }
-    virtual KDevelop::LaunchConfigurationType* type() const { return 0; }
+    virtual const KConfigGroup config() const override { return cfg; }
+    virtual KConfigGroup config() override { return cfg; };
+    virtual QString name() const override { return QString("Test-Launch"); }
+    virtual KDevelop::IProject* project() const override { return 0; }
+    virtual KDevelop::LaunchConfigurationType* type() const override { return 0; }
 private:
     KConfigGroup cfg;
     KConfig *c;
@@ -161,13 +161,13 @@ public:
 
     int fetchFramesCalled;
     int fetchThreadsCalled;
-    virtual void fetchFrames(int threadNumber, int from, int to)
+    virtual void fetchFrames(int threadNumber, int from, int to) override
     {
         fetchFramesCalled++;
         GdbFrameStackModel::fetchFrames(threadNumber, from, to);
     }
 
-    virtual void fetchThreads()
+    virtual void fetchThreads() override
     {
         fetchThreadsCalled++;
         GdbFrameStackModel::fetchThreads();

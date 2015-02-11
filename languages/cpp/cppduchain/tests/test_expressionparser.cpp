@@ -58,7 +58,7 @@ class MyExpressionVisitor : public Cpp::ExpressionVisitor {
   MyExpressionVisitor( ParseSession* session ) : ExpressionVisitor(session)  {
   }
   protected:
-  virtual void expressionType( AST* node, const AbstractType::Ptr& type, Instance /*instance */) {
+  virtual void expressionType( AST* node, const AbstractType::Ptr& type, Instance /*instance */) override {
     Cpp::DumpChain d;
     qDebug() << "expression-result for";
     DUChainReadLocker lock( DUChain::lock() );

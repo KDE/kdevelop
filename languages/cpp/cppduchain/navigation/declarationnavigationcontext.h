@@ -29,10 +29,10 @@ class DeclarationNavigationContext : public KDevelop::AbstractDeclarationNavigat
     DeclarationNavigationContext( KDevelop::DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, KDevelop::AbstractNavigationContext* previousContext = 0 );
 
   protected:
-    virtual KDevelop::QualifiedIdentifier prettyQualifiedIdentifier(KDevelop::DeclarationPointer decl) const;
-    virtual KDevelop::AbstractType::Ptr typeToShow(KDevelop::AbstractType::Ptr type);
-    virtual void setPreviousContext(AbstractNavigationContext* previous);
-    virtual void htmlIdentifiedType(KDevelop::AbstractType::Ptr type, const KDevelop::IdentifiedType* idType);
+    virtual KDevelop::QualifiedIdentifier prettyQualifiedIdentifier(KDevelop::DeclarationPointer decl) const override;
+    virtual KDevelop::AbstractType::Ptr typeToShow(KDevelop::AbstractType::Ptr type) override;
+    virtual void setPreviousContext(AbstractNavigationContext* previous) override;
+    virtual void htmlIdentifiedType(KDevelop::AbstractType::Ptr type, const KDevelop::IdentifiedType* idType) override;
 };
 
 }

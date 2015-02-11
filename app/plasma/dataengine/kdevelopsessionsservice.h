@@ -31,7 +31,7 @@ public:
     KDevelopSessionsService(QObject* parent, const QString& sessionName);
 
 protected:
-    Plasma::ServiceJob* createJob(const QString& operation, QMap<QString,QVariant>& parameters);
+    Plasma::ServiceJob* createJob(const QString& operation, QMap<QString,QVariant>& parameters) override;
 };
 
 class SessionJob : public Plasma::ServiceJob
@@ -40,7 +40,7 @@ class SessionJob : public Plasma::ServiceJob
 
 public:
     SessionJob(KDevelopSessionsService *service, const QString& operation, const QMap<QString, QVariant> &parameters);
-    void start();
+    void start() override;
 };
 
 #endif

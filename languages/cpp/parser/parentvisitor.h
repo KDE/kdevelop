@@ -30,7 +30,7 @@ class ParentVisitor : public DefaultVisitor
 {
   public:
     ParentVisitor(ParseSession* session);
-    virtual void visit(AST* node);
+    virtual void visit(AST* node) override;
 
   private:
     AST *m_currentParent;

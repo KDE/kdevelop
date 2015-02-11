@@ -44,11 +44,11 @@ public:
      * You can use @p DeclarationRole to get the Declaration for a given index.
      * NOTE: If you use that, don't forget to lock the DUChain if you access the declaration!
      */
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex& = QModelIndex()) const { return 1; }
-    virtual QModelIndex parent(const QModelIndex& child = QModelIndex()) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    virtual int columnCount(const QModelIndex& = QModelIndex()) const override { return 1; }
+    virtual QModelIndex parent(const QModelIndex& child = QModelIndex()) const override;
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 
     QStringListModel* indexList();
     bool containsIdentifier(QString identifier);

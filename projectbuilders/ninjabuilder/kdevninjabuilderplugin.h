@@ -33,11 +33,11 @@ class KDevNinjaBuilderPlugin : public KDevelop::IPlugin, KDevelop::IProjectBuild
     Q_INTERFACES( KDevelop::IProjectBuilder )
     public:
         KDevNinjaBuilderPlugin(QObject* parent = 0, const QVariantList& args = QVariantList());
-        virtual bool hasError() const;
+        virtual bool hasError() const override;
         
-        virtual KJob* build(KDevelop::ProjectBaseItem* item);
-        virtual KJob* clean(KDevelop::ProjectBaseItem* item);
-        virtual KJob* install(KDevelop::ProjectBaseItem* item);
+        virtual KJob* build(KDevelop::ProjectBaseItem* item) override;
+        virtual KJob* clean(KDevelop::ProjectBaseItem* item) override;
+        virtual KJob* install(KDevelop::ProjectBaseItem* item) override;
         
         NinjaJob* runNinja(KDevelop::ProjectBaseItem* item, const QStringList& args, const QByteArray& signal);
 

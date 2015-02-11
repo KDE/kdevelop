@@ -51,7 +51,7 @@ public slots:
 
 protected:
     ///Allows to choose register formates/modes.
-    virtual void contextMenuEvent(QContextMenuEvent* e);
+    virtual void contextMenuEvent(QContextMenuEvent* e) override;
 
 private:
     ///Returns list of active views.

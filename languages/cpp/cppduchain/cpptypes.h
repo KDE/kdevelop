@@ -82,11 +82,11 @@ public:
 
   CppClassType();
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
-  virtual KDevelop::AbstractType* clone() const;
+  virtual KDevelop::AbstractType* clone() const override;
 
-  virtual uint hash() const;
+  virtual uint hash() const override;
 
   // equals function does not need to be reimplemented
 
@@ -131,14 +131,14 @@ public:
 
   TemplateParameterDeclaration* declaration(const KDevelop::TopDUContext* top) const;
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 //   virtual QString mangled() const;
 
-  virtual KDevelop::AbstractType* clone() const;
+  virtual KDevelop::AbstractType* clone() const override;
 
-  virtual bool equals(const KDevelop::AbstractType* rhs) const;
+  virtual bool equals(const KDevelop::AbstractType* rhs) const override;
 
-  virtual uint hash() const;
+  virtual uint hash() const override;
 
   enum {
     Identity = 23
@@ -147,7 +147,7 @@ public:
   typedef CppTemplateParameterTypeData Data;
 
   protected:
-  virtual void accept0 (KDevelop::TypeVisitor *v) const;
+  virtual void accept0 (KDevelop::TypeVisitor *v) const override;
   TYPE_DECLARE_DATA(CppTemplateParameterType);
 };
 

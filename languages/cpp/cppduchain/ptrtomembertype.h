@@ -50,17 +50,17 @@ class KDEVCPPDUCHAIN_EXPORT PtrToMemberType : public KDevelop::PointerType
 
     AbstractType::Ptr classType () const;
 
-    virtual QString toString() const;
+    virtual QString toString() const override;
 
-    virtual uint hash() const;
+    virtual uint hash() const override;
 
-    virtual WhichType whichType() const;
+    virtual WhichType whichType() const override;
 
-    virtual AbstractType* clone() const;
+    virtual AbstractType* clone() const override;
 
-    virtual bool equals(const AbstractType* rhs) const;
+    virtual bool equals(const AbstractType* rhs) const override;
 
-    virtual void exchangeTypes( KDevelop::TypeExchanger* exchanger );
+    virtual void exchangeTypes( KDevelop::TypeExchanger* exchanger ) override;
 
     enum {
         Identity = 42
@@ -69,7 +69,7 @@ class KDEVCPPDUCHAIN_EXPORT PtrToMemberType : public KDevelop::PointerType
       typedef PtrToMemberTypeData Data;
 
     protected:
-      virtual void accept0 (KDevelop::TypeVisitor *v) const;
+      virtual void accept0 (KDevelop::TypeVisitor *v) const override;
 
       TYPE_DECLARE_DATA(PtrToMemberType)
 

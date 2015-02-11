@@ -97,7 +97,7 @@ namespace GDBDebugger
         void slotEnableOrDisable();
 
     private: // QWidget overrides
-        void contextMenuEvent(QContextMenuEvent* e);
+        void contextMenuEvent(QContextMenuEvent* e) override;
 
     private:
         void initWidget();

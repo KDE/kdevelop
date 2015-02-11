@@ -55,39 +55,39 @@ public:
   using UseBuilderBase::newUse;
 
 protected:
-  virtual void visitPrimaryExpression (PrimaryExpressionAST*);
-  virtual void visitMemInitializer(MemInitializerAST *);
+  virtual void visitPrimaryExpression (PrimaryExpressionAST*) override;
+  virtual void visitMemInitializer(MemInitializerAST *) override;
 
-  virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST *) ;
-  virtual void visitExpressionStatement(ExpressionStatementAST *) ;
+  virtual void visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST *) override ;
+  virtual void visitExpressionStatement(ExpressionStatementAST *) override ;
 
-  virtual void visitBinaryExpression(BinaryExpressionAST *) ;
-  virtual void visitCastExpression(CastExpressionAST *) ;
-  virtual void visitConditionalExpression(ConditionalExpressionAST *) ;
-  virtual void visitCppCastExpression(CppCastExpressionAST *) ;
+  virtual void visitBinaryExpression(BinaryExpressionAST *) override ;
+  virtual void visitCastExpression(CastExpressionAST *) override ;
+  virtual void visitConditionalExpression(ConditionalExpressionAST *) override ;
+  virtual void visitCppCastExpression(CppCastExpressionAST *) override ;
   //virtual void visitDeleteExpression(DeleteExpressionAST *) ;
   //virtual void visitIncrDecrExpression(IncrDecrExpressionAST *) ;
-  virtual void visitNewExpression(NewExpressionAST *) ;
-  virtual void visitPostfixExpression(PostfixExpressionAST *) ;
-  virtual void visitSizeofExpression(SizeofExpressionAST *) ;
-  virtual void visitSubscriptExpression(SubscriptExpressionAST *) ;
+  virtual void visitNewExpression(NewExpressionAST *) override ;
+  virtual void visitPostfixExpression(PostfixExpressionAST *) override ;
+  virtual void visitSizeofExpression(SizeofExpressionAST *) override ;
+  virtual void visitSubscriptExpression(SubscriptExpressionAST *) override ;
   //virtual void visitThrowExpression(ThrowExpressionAST *) ;
-  virtual void visitUnaryExpression(UnaryExpressionAST *) ;
-  virtual void visitBaseSpecifier(BaseSpecifierAST *);
+  virtual void visitUnaryExpression(UnaryExpressionAST *) override ;
+  virtual void visitBaseSpecifier(BaseSpecifierAST *) override;
 
 //   virtual void visitBaseSpecifier(BaseSpecifierAST* node);
-  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *);
-  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node);
-  virtual void visitSimpleDeclaration(SimpleDeclarationAST* );  
-  virtual void visitCondition(ConditionAST *node);
-  virtual void visitDeclarator(DeclaratorAST* node);
-  virtual void visitUsing(UsingAST *);
-  void visitTypeId(TypeIdAST* type_id);
-  virtual void visitClassSpecifier(ClassSpecifierAST* node);
-  virtual void visitUsingDirective(UsingDirectiveAST* node);
-  virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node);
-  virtual void visitTypeIDOperator(TypeIDOperatorAST* node);
-  virtual void visitQPropertyDeclaration(QPropertyDeclarationAST* );
+  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *) override;
+  virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node) override;
+  virtual void visitSimpleDeclaration(SimpleDeclarationAST* ) override;  
+  virtual void visitCondition(ConditionAST *node) override;
+  virtual void visitDeclarator(DeclaratorAST* node) override;
+  virtual void visitUsing(UsingAST *) override;
+  void visitTypeId(TypeIdAST* type_id) override;
+  virtual void visitClassSpecifier(ClassSpecifierAST* node) override;
+  virtual void visitUsingDirective(UsingDirectiveAST* node) override;
+  virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node) override;
+  virtual void visitTypeIDOperator(TypeIDOperatorAST* node) override;
+  virtual void visitQPropertyDeclaration(QPropertyDeclarationAST* ) override;
 
 private:
   void buildUsesForName(NameAST* name);

@@ -41,7 +41,7 @@ public:
   };
   ImplementationHelperItem(HelperType type, KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), QExplicitlySharedDataPointer<Cpp::CodeCompletionContext> context=QExplicitlySharedDataPointer<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0);
   
-  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
+  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override;
   virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) override;
   //Arguments + "const"
   QString signaturePart(bool includeDefaultParams);
@@ -50,7 +50,7 @@ public:
   ///Returns the text that this item would yield if it was executed
   QString insertionText(QUrl currentDocumentUrl = QUrl(), KTextEditor::Cursor currentDocumentCursor = KTextEditor::Cursor(), QualifiedIdentifier forceParentScope = QualifiedIdentifier());
   
-  virtual bool dataChangedWithInput() const;
+  virtual bool dataChangedWithInput() const override;
 
   private:
   ///DUChain must be read-locked

@@ -89,7 +89,7 @@ struct FrameListHandler : public GDBCommandHandler
     FrameListHandler(GdbFrameStackModel* frames, int thread, int to)
         : m_frames(frames), m_thread(thread) , m_to(to) {}
 
-    virtual void handle(const GDBMI::ResultRecord &r)
+    virtual void handle(const GDBMI::ResultRecord &r) override
     {
         const GDBMI::Value& stack = r["stack"];
         int first = stack[0]["level"].toInt();

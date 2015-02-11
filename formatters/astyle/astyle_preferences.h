@@ -37,8 +37,8 @@ class AStylePreferences : public KDevelop::SettingsWidget, public Ui::AStylePref
         AStylePreferences(Language lang=CPP, QWidget *parent=0);
         virtual ~AStylePreferences();
 
-        virtual void load(const KDevelop::SourceFormatterStyle &style);
-        virtual QString save();
+        virtual void load(const KDevelop::SourceFormatterStyle &style) override;
+        virtual QString save() override;
 
     protected:
         void init();

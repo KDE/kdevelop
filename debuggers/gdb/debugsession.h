@@ -73,9 +73,9 @@ public:
     DebugSession();
     ~DebugSession();
 
-    virtual DebuggerState state() const;
+    virtual DebuggerState state() const override;
 
-    virtual bool restartAvaliable() const;
+    virtual bool restartAvaliable() const override;
 
     virtual BreakpointController* breakpointController() const override;
     virtual KDevelop::IVariableController* variableController() const override;
@@ -94,17 +94,17 @@ public Q_SLOTS:
      * Start the debugger, and execute the program specified by \a run.
      */
     bool startProgram(KDevelop::ILaunchConfiguration* run, IExecutePlugin* execute);
-    virtual void restartDebugger();
-    virtual void stopDebugger();
-    virtual void interruptDebugger();
-    virtual void run();
-    virtual void runToCursor();
-    virtual void jumpToCursor();
-    virtual void stepOver();
-    virtual void stepIntoInstruction();
-    virtual void stepInto();
-    virtual void stepOverInstruction();
-    virtual void stepOut();
+    virtual void restartDebugger() override;
+    virtual void stopDebugger() override;
+    virtual void interruptDebugger() override;
+    virtual void run() override;
+    virtual void runToCursor() override;
+    virtual void jumpToCursor() override;
+    virtual void stepOver() override;
+    virtual void stepIntoInstruction() override;
+    virtual void stepInto() override;
+    virtual void stepOverInstruction() override;
+    virtual void stepOut() override;
 
     /**
      * Start the debugger and examine the core file given by \a coreFile.
@@ -200,7 +200,7 @@ private:
 
     void debugStateChange(DBGStateFlags oldState, DBGStateFlags newState);
 
-    void raiseEvent(event_t e);
+    void raiseEvent(event_t e) override;
 
     bool startDebugger(KDevelop::ILaunchConfiguration* cfg);
 

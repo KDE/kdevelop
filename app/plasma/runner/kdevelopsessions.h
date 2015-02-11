@@ -39,8 +39,8 @@ class KDevelopSessions : public Plasma::AbstractRunner {
         KDevelopSessions( QObject *parent, const QVariantList& args );
         ~KDevelopSessions();
 
-        void match(Plasma::RunnerContext &context);
-        void run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match);
+        void match(Plasma::RunnerContext &context) override;
+        void run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match) override;
 
     private Q_SLOTS:
         void loadSessions();

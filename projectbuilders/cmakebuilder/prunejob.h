@@ -29,8 +29,8 @@ class PruneJob : public KDevelop::OutputJob
     Q_OBJECT
     public:
         PruneJob(KDevelop::IProject* project);
-        virtual void start();
-        virtual bool doKill();
+        virtual void start() override;
+        virtual bool doKill() override;
 
     private slots:
         void jobFinished(KJob* job);

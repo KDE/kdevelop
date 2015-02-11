@@ -217,7 +217,7 @@ class UserCommand : public GDBCommand
 public:
     UserCommand(GDBMI::CommandType type, const QString& s);
 
-    bool isUserCommand() const;
+    bool isUserCommand() const override;
 };
 
 /** This is a class for raw CLI commands. Instead of invoking
@@ -269,7 +269,7 @@ public:
         handler();
     }
 
-    QString cmdToSend()
+    QString cmdToSend() override
     {
         return "";
     }

@@ -73,7 +73,7 @@ public:
       : KDevelop::Problem(data)
     {}
 
-    virtual QExplicitlySharedDataPointer<KDevelop::IAssistant> solutionAssistant() const;
+    virtual QExplicitlySharedDataPointer<KDevelop::IAssistant> solutionAssistant() const override;
 
     void setSolutionAssistant(const QExplicitlySharedDataPointer<KDevelop::IAssistant>& assistant);
 

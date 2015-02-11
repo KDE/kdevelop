@@ -29,7 +29,7 @@ class CMakeParseJob : public KDevelop::ParseJob
     public:
         explicit CMakeParseJob(const KDevelop::IndexedString& url, KDevelop::ILanguageSupport* languageSupport);
 
-        virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread);
+        virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 };
 
 #endif // CMAKEPARSEJOB_H

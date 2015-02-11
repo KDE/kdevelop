@@ -43,7 +43,7 @@ public:
   };
   
 private:
-  virtual KDevelop::Declaration* clonePrivate () const;
+  virtual KDevelop::Declaration* clonePrivate () const override;
   DUCHAIN_DECLARE_DATA(QtFunctionDeclaration)
 };
 

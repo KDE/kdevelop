@@ -78,29 +78,29 @@ public:
   bool changeWasSignificant() const;
 
 protected:
-  virtual void visitDeclarator (DeclaratorAST*);
-  virtual void visitNamespace(NamespaceAST* );
-  virtual void visitClassSpecifier(ClassSpecifierAST*);
-  virtual void visitBaseSpecifier(BaseSpecifierAST *node);
-  virtual void visitAccessSpecifier(AccessSpecifierAST*);
-  virtual void visitFunctionDeclaration(FunctionDefinitionAST*);
-  virtual void visitSimpleDeclaration(SimpleDeclarationAST*);
-  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*);
-  virtual void visitParameterDeclaration(ParameterDeclarationAST* node);
-  virtual void visitTypedef(TypedefAST *);
-  virtual void visitTemplateParameter(TemplateParameterAST *);
-  virtual void visitUsingDirective(UsingDirectiveAST *);
-  virtual void visitUsing(UsingAST *);
-  virtual void visitEnumSpecifier(EnumSpecifierAST*);
-  virtual void visitEnumerator(EnumeratorAST* node);
-  virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST*);
-  virtual void visitTypeId(TypeIdAST *);
-  virtual void visitInitDeclarator(InitDeclaratorAST *node);
-  virtual void handleRangeBasedFor(ExpressionAST* container, ForRangeDeclarationAst* iterator);
-  virtual void visitAliasDeclaration(AliasDeclarationAST* );
+  virtual void visitDeclarator (DeclaratorAST*) override;
+  virtual void visitNamespace(NamespaceAST* ) override;
+  virtual void visitClassSpecifier(ClassSpecifierAST*) override;
+  virtual void visitBaseSpecifier(BaseSpecifierAST *node) override;
+  virtual void visitAccessSpecifier(AccessSpecifierAST*) override;
+  virtual void visitFunctionDeclaration(FunctionDefinitionAST*) override;
+  virtual void visitSimpleDeclaration(SimpleDeclarationAST*) override;
+  virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST*) override;
+  virtual void visitParameterDeclaration(ParameterDeclarationAST* node) override;
+  virtual void visitTypedef(TypedefAST *) override;
+  virtual void visitTemplateParameter(TemplateParameterAST *) override;
+  virtual void visitUsingDirective(UsingDirectiveAST *) override;
+  virtual void visitUsing(UsingAST *) override;
+  virtual void visitEnumSpecifier(EnumSpecifierAST*) override;
+  virtual void visitEnumerator(EnumeratorAST* node) override;
+  virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST*) override;
+  virtual void visitTypeId(TypeIdAST *) override;
+  virtual void visitInitDeclarator(InitDeclaratorAST *node) override;
+  virtual void handleRangeBasedFor(ExpressionAST* container, ForRangeDeclarationAst* iterator) override;
+  virtual void visitAliasDeclaration(AliasDeclarationAST* ) override;
 
-  virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
-  virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context);
+  virtual void classTypeOpened(KDevelop::AbstractType::Ptr) override;
+  virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context) override;
 
 private:
   //Returns true if the given parameter declaration clause is really a parameter declaration clause, depending on the given parameters.

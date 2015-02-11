@@ -37,9 +37,9 @@ public:
   ~MacroNavigationContext();
 
   QString body() const;
-  virtual QWidget* widget() const;
-  virtual QString html(bool shorten);
-  virtual QString name() const;
+  virtual QWidget* widget() const override;
+  virtual QString html(bool shorten) override;
+  virtual QString name() const override;
 
 private:
   rpp::pp_macro* m_macro;

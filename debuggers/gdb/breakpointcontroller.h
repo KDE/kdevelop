@@ -87,7 +87,7 @@ private:
     void sendUpdates(int row);
     void recalculateState(int row);
 
-    virtual void sendMaybe(KDevelop::Breakpoint *breakpoint);
+    virtual void sendMaybe(KDevelop::Breakpoint *breakpoint) override;
 
     void createFromGdb(const GDBMI::Value& miBkpt);
     void updateFromGdb(int row, const GDBMI::Value& miBkpt, BreakpointModel::ColumnFlags lockedColumns = 0);

@@ -49,7 +49,7 @@ class SourceItem : public QStandardItem
 {
     public:
         SourceItem(const Source& s);
-        virtual QVariant data(int role = Qt::UserRole + 1) const;
+        virtual QVariant data(int role = Qt::UserRole + 1) const override;
         
     private:
         Source m_s;

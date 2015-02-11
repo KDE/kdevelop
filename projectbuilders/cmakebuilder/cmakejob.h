@@ -49,16 +49,16 @@ public:
     
     void setProject(KDevelop::IProject* project);
 
-    virtual void start();
+    virtual void start() override;
 
     // This returns the build directory for registered item.
-    virtual QUrl workingDirectory() const;
+    virtual QUrl workingDirectory() const override;
 
     // This returns the "cmake" command line.
-    virtual QStringList commandLine() const;
+    virtual QStringList commandLine() const override;
 
     // This returns the configured global environment profile.
-    virtual QString environmentProfile() const;
+    virtual QString environmentProfile() const override;
 
 private:
     QStringList cmakeArguments( KDevelop::IProject* project );

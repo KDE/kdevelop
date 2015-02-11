@@ -75,8 +75,8 @@ public:
   ///This NameASTVisitor will be in an invalid state after this is called, so don't continue using it!
   Cpp::ExpressionEvaluationResult processTemplateArgument(TemplateArgumentAST *node);
 protected:
-  virtual void visitUnqualifiedName(UnqualifiedNameAST *node);
-  void visitTemplateArgument(TemplateArgumentAST *node);
+  virtual void visitUnqualifiedName(UnqualifiedNameAST *node) override;
+  void visitTemplateArgument(TemplateArgumentAST *node) override;
   
 private:
   ParseSession* m_session;

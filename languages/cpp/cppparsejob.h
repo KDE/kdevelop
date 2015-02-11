@@ -180,8 +180,8 @@ public:
     
     KDevelop::ModificationRevisionSet includePathDependencies() const ;
     
-    virtual ControlFlowGraph* controlFlowGraph();
-    virtual DataAccessRepository* dataAccessInformation();
+    virtual ControlFlowGraph* controlFlowGraph() override;
+    virtual DataAccessRepository* dataAccessInformation() override;
 private:
 
     QList<LineJobPair> m_delayedImports;
@@ -233,11 +233,11 @@ public:
 
     CPPParseJob* parentJob() const;
 
-    virtual int   priority () const;
+    virtual int   priority () const override;
     void setPriority(int priority);
 
     //Must only be called for direct parsing when the job is not queued
-    virtual void run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* thread);
+    virtual void run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* thread) override;
 
     //Called as soon as the first updated context has been set
     void initialize();

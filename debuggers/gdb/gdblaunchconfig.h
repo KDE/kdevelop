@@ -48,7 +48,7 @@ class DebugSession;
 class GdbConfigPageFactory : public KDevelop::LaunchConfigurationPageFactory
 {
 public:
-    virtual KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent);
+    virtual KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent) override;
 };
 
 class GdbConfigPage : public KDevelop::LaunchConfigurationPage
@@ -57,10 +57,10 @@ Q_OBJECT
 public:
     GdbConfigPage( QWidget* parent = 0 );
     virtual ~GdbConfigPage();
-    virtual QIcon icon() const;
-    virtual void loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* = 0);
-    virtual void saveToConfiguration(KConfigGroup, KDevelop::IProject* = 0 ) const;
-    virtual QString title() const;
+    virtual QIcon icon() const override;
+    virtual void loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* = 0) override;
+    virtual void saveToConfiguration(KConfigGroup, KDevelop::IProject* = 0 ) const override;
+    virtual QString title() const override;
 private:
     Ui::DebuggerConfigWidget* ui;
 };
@@ -69,12 +69,12 @@ class GdbLauncher : public KDevelop::ILauncher
 {
 public:
     GdbLauncher( GDBDebugger::CppDebuggerPlugin* plugin, IExecutePlugin* execute );
-    virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const;
-    virtual QString description() const;
-    virtual QString id();
-    virtual QString name() const;
-    virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg);
-    virtual QStringList supportedModes() const;
+    virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
+    virtual QString description() const override;
+    virtual QString id() override;
+    virtual QString name() const override;
+    virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
+    virtual QStringList supportedModes() const override;
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
     GDBDebugger::CppDebuggerPlugin* m_plugin;

@@ -36,7 +36,7 @@ class KDEVCPPDUCHAIN_EXPORT MissingDeclarationType : public KDevelop::DelayedTyp
     MissingDeclarationType();
     typedef TypePtr<MissingDeclarationType> Ptr;
     
-    virtual QString toString() const;
+    virtual QString toString() const override;
 
     //Context where the search for the item was started.
     KDevelop::IndexedDUContext searchStartContext;
