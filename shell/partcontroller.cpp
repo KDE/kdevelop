@@ -1,6 +1,7 @@
 /***************************************************************************
- *   Copyright 2006 Adam Treat  <treat@kde.org>                     *
- *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>            *
+ *   Copyright 2006 Adam Treat  <treat@kde.org>                            *
+ *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>                   *
+ *   Copyright 2015 Kevin Funk <kfunk@kde.org>                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -20,6 +21,7 @@
 
 #include "partcontroller.h"
 
+#include <QAction>
 #include <QFile>
 #include <QTimer>
 #include <QMutexLocker>
@@ -28,7 +30,9 @@
 #include <QApplication>
 #include <QDebug>
 
+#include <KActionCollection>
 #include <KLocalizedString>
+#include <KToggleAction>
 #include <kmimetypetrader.h>
 #include <KMessageBox>
 
@@ -43,6 +47,8 @@
 #include "core.h"
 #include "textdocument.h"
 #include "debug.h"
+#include "uicontroller.h"
+#include "mainwindow.h"
 #include <interfaces/isession.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -56,6 +62,7 @@ class PartControllerPrivate
 public:
     PartControllerPrivate() {}
 
+    bool m_showTextEditorStatusBar = false;
     QString m_editor;
     QStringList m_textTypes;
 
@@ -76,11 +83,43 @@ PartController::PartController(Core *core, QWidget *toplevel)
     //
     //     config ->setGroup( "Editor" );
     //     d->m_editor = config->readPathEntry( "EmbeddedKTextEditor", QString() );
+
+    // required early because some actions are checkable and need to be initialized
+    loadSettings(false);
+
+    if (!(Core::self()->setupFlags() & Core::NoUi))
+        setupActions();
 }
 
 PartController::~PartController()
 {
     delete d;
+}
+
+bool PartController::showTextEditorStatusBar() const
+{
+    return d->m_showTextEditorStatusBar;
+}
+
+void PartController::setShowTextEditorStatusBar(bool show)
+{
+    if (d->m_showTextEditorStatusBar == show)
+        return;
+
+    d->m_showTextEditorStatusBar = show;
+
+    // update
+    foreach (Sublime::Area* area, Core::self()->uiControllerInternal()->allAreas()) {
+        foreach (Sublime::View* view, area->views()) {
+            if (!view->hasWidget())
+                continue;
+
+            auto textView = qobject_cast<KTextEditor::View*>(view->widget());
+            if (textView) {
+                textView->setStatusBarEnabled(show);
+            }
+        }
+    }
 }
 
 //MOVE BACK TO DOCUMENTCONTROLLER OR MULTIBUFFER EVENTUALLY
@@ -201,18 +240,39 @@ KParts::ReadWritePart* PartController::readWrite( KParts::Part * part ) const
 void PartController::loadSettings( bool projectIsLoaded )
 {
     Q_UNUSED( projectIsLoaded );
+
+    KConfigGroup cg(KSharedConfig::openConfig(), "UiSettings");
+    d->m_showTextEditorStatusBar = cg.readEntry("ShowTextEditorStatusBar", false);
 }
 
 void PartController::saveSettings( bool projectIsLoaded )
 {
     Q_UNUSED( projectIsLoaded );
+
+    KConfigGroup cg(KSharedConfig::openConfig(), "UiSettings");
+    cg.writeEntry("ShowTextEditorStatusBar", d->m_showTextEditorStatusBar);
 }
 
 void PartController::initialize()
-{}
+{
+}
 
 void PartController::cleanup()
-{}
+{
+    saveSettings(false);
+}
+
+void PartController::setupActions()
+{
+    KActionCollection* actionCollection =
+        d->m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
+
+    QAction* action;
+
+    action = KStandardAction::showStatusbar(this, SLOT(setShowTextEditorStatusBar(bool)), actionCollection);
+    action->setWhatsThis(i18n("Use this command to show or hide the view's statusbar"));
+    action->setChecked(showTextEditorStatusBar());
+}
 
 //BEGIN KTextEditor::MdiContainer
 void PartController::setActiveView(KTextEditor::View *view)

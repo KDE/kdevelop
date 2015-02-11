@@ -442,6 +442,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
     }
 
     view = d->document->createView(parent);
+    view->setStatusBarEnabled(Core::self()->partControllerInternal()->showTextEditorStatusBar());
 
     if (view) {
         connect(view, &KTextEditor::View::contextMenuAboutToShow, this, [&] (KTextEditor::View* v, QMenu* menu) { d->populateContextMenu(v, menu); });

@@ -231,6 +231,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
 
     if(!(mode & Core::NoUi)) uiController.data()->initialize();
     languageController.data()->initialize();
+    partController.data()->initialize();
     projectController.data()->initialize();
     documentController.data()->initialize();
 
@@ -413,7 +414,7 @@ void Core::cleanup()
         // Closes all documents (discards, as already saved if the user wished earlier)
         d->documentController.data()->cleanup();
         d->runController.data()->cleanup();
-
+        d->partController->cleanup();
         d->projectController.data()->cleanup();
         d->sourceFormatterController.data()->cleanup();
         d->pluginController.data()->cleanup();

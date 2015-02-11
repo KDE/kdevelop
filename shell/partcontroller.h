@@ -1,6 +1,7 @@
 /***************************************************************************
- *   Copyright 2006 Adam Treat  <treat@kde.org>                     *
- *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>            *
+ *   Copyright 2006 Adam Treat  <treat@kde.org>                            *
+ *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>                   *
+ *   Copyright 2015 Kevin Funk <kfunk@kde.org>                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -56,12 +57,15 @@ namespace KDevelop
 
 class KDEVPLATFORMSHELL_EXPORT PartController : public IPartController
 {
+    friend class Core;
     friend class CorePrivate;
     Q_OBJECT
 
 public:
     PartController(Core *core, QWidget *toplevel);
     virtual ~PartController();
+
+    bool showTextEditorStatusBar() const;
 
     KTextEditor::Document* createTextPart( const QString &encoding = QString() );
     virtual KTextEditor::Editor* editorPart() const;
@@ -83,13 +87,15 @@ public:
 
     bool isTextType(const QMimeType& mimeType);
 
-
     virtual void setActiveView( KTextEditor::View * view );
     virtual KTextEditor::View * activeView();
     virtual KTextEditor::Document * createDocument();
     virtual bool closeDocument( KTextEditor::Document * doc );
     virtual KTextEditor::View * createView( KTextEditor::Document * doc );
     virtual bool closeView( KTextEditor::View * view );
+
+public Q_SLOTS:
+    void setShowTextEditorStatusBar(bool show);
 
 protected:
     virtual void loadSettings( bool projectIsLoaded );
@@ -98,6 +104,8 @@ protected:
     virtual void cleanup();
 
 private:
+    void setupActions();
+
     class PartControllerPrivate* const d;
 };
 
