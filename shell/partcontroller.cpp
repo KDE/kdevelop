@@ -120,6 +120,12 @@ void PartController::setShowTextEditorStatusBar(bool show)
             }
         }
     }
+
+    // also notify active view that it should update the "view status"
+    TextView* textView = qobject_cast<TextView*>(Core::self()->uiControllerInternal()->activeSublimeWindow()->activeView());
+    if (textView) {
+        emit textView->statusChanged(textView);
+    }
 }
 
 //MOVE BACK TO DOCUMENTCONTROLLER OR MULTIBUFFER EVENTUALLY

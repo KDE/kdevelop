@@ -777,6 +777,12 @@ KTextEditor::View *KDevelop::TextView::textView() const
 
 QString KDevelop::TextView::viewStatus() const
 {
+    // only show status when KTextEditor's own status bar isn't already enabled
+    const bool showStatus = !Core::self()->partControllerInternal()->showTextEditorStatusBar();
+    if (!showStatus) {
+        return QString();
+    }
+
     const KTextEditor::Cursor pos = d->view ? d->view->cursorPosition() : KTextEditor::Cursor::invalid();
     return i18n(" Line: %1 Col: %2 ", pos.line() + 1, pos.column() + 1);
 }
