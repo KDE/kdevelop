@@ -57,15 +57,15 @@ QSize IdealToolButton::sizeHint() const
     const int charWidth = fm.width(QLatin1Char('x'));
 
     QSize textSize;
-    // No text size if we're having icon-only button
-    if (toolButtonStyle() != Qt::ToolButtonIconOnly) {
+    // Use text size only if we request text
+    if (toolButtonStyle() != Qt::ToolButtonIconOnly || opt.icon.isNull()) {
         textSize = fm.size(Qt::TextShowMnemonic, opt.text);
         textSize.rwidth() += 2 * charWidth;
     }
 
     int iconwidth = 0, iconheight = 0;
-    // No icon size if we're drawing text only
-    if (toolButtonStyle() != Qt::ToolButtonTextOnly) {
+    // Use icon size only if it's requested and the icon is valid
+    if (toolButtonStyle() != Qt::ToolButtonTextOnly && !opt.icon.isNull()) {
         if (_area == Qt::TopDockWidgetArea || _area == Qt::BottomDockWidgetArea) {
             iconwidth = opt.iconSize.width();
             iconheight = opt.iconSize.height();
