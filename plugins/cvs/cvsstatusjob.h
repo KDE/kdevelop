@@ -25,7 +25,7 @@ public:
     virtual ~CvsStatusJob();
 
     // Begin:  KDevelop::VcsJob
-    virtual QVariant fetchResults();
+    virtual QVariant fetchResults() override;
     // End:  KDevelop::VcsJob
 
 private:

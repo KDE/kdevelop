@@ -59,9 +59,9 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT NoFilterStrategy : public IFilterStrategy
 public:
     NoFilterStrategy();
 
-    virtual FilteredItem errorInLine(QString const& line);
+    virtual FilteredItem errorInLine(QString const& line) override;
 
-    virtual FilteredItem actionInLine(QString const& line);
+    virtual FilteredItem actionInLine(QString const& line) override;
 
 };
 
@@ -76,9 +76,9 @@ public:
     CompilerFilterStrategy(QUrl const& buildDir);
     virtual ~CompilerFilterStrategy();
 
-    virtual FilteredItem errorInLine(QString const& line);
+    virtual FilteredItem errorInLine(QString const& line) override;
 
-    virtual FilteredItem actionInLine(QString const& line);
+    virtual FilteredItem actionInLine(QString const& line) override;
 
     QVector<QString> getCurrentDirs();
 
@@ -95,9 +95,9 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT ScriptErrorFilterStrategy : public IFilterSt
 public:
     ScriptErrorFilterStrategy();
 
-    virtual FilteredItem errorInLine(QString const& line);
+    virtual FilteredItem errorInLine(QString const& line) override;
 
-    virtual FilteredItem actionInLine(QString const& line);
+    virtual FilteredItem actionInLine(QString const& line) override;
 
 };
 
@@ -112,8 +112,8 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT NativeAppErrorFilterStrategy : public IFilte
 public:
     NativeAppErrorFilterStrategy();
 
-    virtual FilteredItem errorInLine(const QString& line);
-    virtual FilteredItem actionInLine(const QString& line);
+    virtual FilteredItem errorInLine(const QString& line) override;
+    virtual FilteredItem actionInLine(const QString& line) override;
 };
 
 /**
@@ -125,9 +125,9 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT StaticAnalysisFilterStrategy : public IFilte
 public:
     StaticAnalysisFilterStrategy();
 
-    virtual FilteredItem errorInLine(QString const& line);
+    virtual FilteredItem errorInLine(QString const& line) override;
 
-    virtual FilteredItem actionInLine(QString const& line);
+    virtual FilteredItem actionInLine(QString const& line) override;
 
 };
 

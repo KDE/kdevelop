@@ -109,7 +109,7 @@ public:
     /**
      * Starts this job
      */
-    void start();
+    void start() override;
 
 private:
     class BuilderJobPrivate* const d;

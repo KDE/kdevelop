@@ -38,8 +38,8 @@ class SvnBlameJob : public SvnJobBaseImpl<SvnInternalBlameJob>
     Q_OBJECT
 public:
     SvnBlameJob( KDevSvnPlugin* parent );
-    QVariant fetchResults();
-    void start();
+    QVariant fetchResults() override;
+    void start() override;
     void setLocation( const QUrl &location );
     void setEndRevision( const KDevelop::VcsRevision& rev );
     void setStartRevision( const KDevelop::VcsRevision& rev );

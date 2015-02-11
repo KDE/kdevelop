@@ -48,9 +48,9 @@ public:
   static bool populatingClassBrowserContextMenu();
   
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent* e);
+  virtual void contextMenuEvent(QContextMenuEvent* e) override;
   ClassModel* model();
-  virtual bool event(QEvent* event);
+  virtual bool event(QEvent* event) override;
 
 private Q_SLOTS:
   void itemActivated(const QModelIndex& index);

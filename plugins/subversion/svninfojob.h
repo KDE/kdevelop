@@ -72,8 +72,8 @@ public:
         RepoUrlOnly
     };
     SvnInfoJob( KDevSvnPlugin* parent );
-    QVariant fetchResults();
-    void start();
+    QVariant fetchResults() override;
+    void start() override;
     void setLocation( const QUrl &location );
     void setProvideInformation( ProvideInformationType );
     void setProvideRevisionType( KDevelop::VcsRevision::RevisionType );

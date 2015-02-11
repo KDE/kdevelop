@@ -50,18 +50,18 @@ class KDEVPLATFORMTESTS_EXPORT AutoTestShell : public KDevelop::ShellExtension
 public:
     AutoTestShell(const QStringList& plugins);
 
-    QString xmlFile() { return QString(); }
-    virtual QString binaryPath() { return QString(); };
+    QString xmlFile() override { return QString(); }
+    virtual QString binaryPath() override { return QString(); };
     QString defaultProfile() { return "kdevtest"; }
-    KDevelop::AreaParams defaultArea() {
+    KDevelop::AreaParams defaultArea() override {
         KDevelop::AreaParams params;
         params.name = "test";
         params.title = "Test";
         return params;
     }
-    QString projectFileExtension() { return QString(); }
-    QString projectFileDescription() { return QString(); }
-    QStringList defaultPlugins() { return m_plugins; }
+    QString projectFileExtension() override { return QString(); }
+    QString projectFileDescription() override { return QString(); }
+    QStringList defaultPlugins() override { return m_plugins; }
 
     /**
      * Initialize the AutoTestShell and set the global instance.

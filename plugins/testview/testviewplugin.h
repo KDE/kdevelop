@@ -32,7 +32,7 @@ public:
     TestViewPlugin(QObject* parent, const QVariantList& args = QVariantList());
     virtual ~TestViewPlugin();
 
-    virtual void unload();
+    virtual void unload() override;
 
 private:
     TestToolViewFactory* m_viewFactory;

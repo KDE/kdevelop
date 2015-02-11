@@ -69,32 +69,32 @@ public:
     /**Call this before a call to @ref editDocument to set the encoding of the
     document to be opened.
     @param encoding The encoding to open as.*/
-    virtual void setEncoding( const QString &encoding );
-    virtual QString encoding() const;
+    virtual void setEncoding( const QString &encoding ) override;
+    virtual QString encoding() const override;
 
     /**Finds the first document object corresponding to a given url.
     @param url The Url of the document.
     @return The corresponding document, or null if not found.*/
-    virtual IDocument* documentForUrl( const QUrl & url ) const;
+    virtual IDocument* documentForUrl( const QUrl & url ) const override;
 
     /**@return The list of open documents*/
-    virtual QList<IDocument*> openDocuments() const;
+    virtual QList<IDocument*> openDocuments() const override;
 
     /**Refers to the document currently active or focused.
     @return The active document.*/
-    virtual IDocument* activeDocument() const;
+    virtual IDocument* activeDocument() const override;
 
-    virtual KTextEditor::View* activeTextDocumentView() const;
+    virtual KTextEditor::View* activeTextDocumentView() const override;
     
-    virtual void activateDocument( IDocument * document, const KTextEditor::Range& range = KTextEditor::Range::invalid() );
+    virtual void activateDocument( IDocument * document, const KTextEditor::Range& range = KTextEditor::Range::invalid() ) override;
 
-    virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* );
+    virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* ) override;
 
     /// Request the document controller to save all documents.
     /// If the \a mode is not IDocument::Silent, ask the user which documents to save.
     /// Returns false if the user cancels the save dialog.
-    virtual bool saveAllDocuments(IDocument::DocumentSaveMode mode);
-    bool saveAllDocumentsForWindow(KParts::MainWindow* mw, IDocument::DocumentSaveMode mode, bool currentAreaOnly = false);
+    virtual bool saveAllDocuments(IDocument::DocumentSaveMode mode) override;
+    bool saveAllDocumentsForWindow(KParts::MainWindow* mw, IDocument::DocumentSaveMode mode, bool currentAreaOnly = false) override;
 
     void initialize();
 
@@ -110,15 +110,15 @@ public:
     static bool isEmptyDocumentUrl(const QUrl &url);
     static QUrl nextEmptyDocumentUrl();
     
-    virtual IDocumentFactory* factory(const QString& mime) const;
+    virtual IDocumentFactory* factory(const QString& mime) const override;
 
     
     virtual bool openDocument(IDocument* doc,
                               const KTextEditor::Range& range = KTextEditor::Range::invalid(),
                               DocumentActivationParams activationParams = 0,
-                              IDocument* buddy = 0);
+                              IDocument* buddy = 0) override;
 
-    virtual KTextEditor::Document* globalTextEditorInstance();
+    virtual KTextEditor::Document* globalTextEditorInstance() override;
     
 public Q_SLOTS:
     /**Opens a new or existing document.
@@ -132,16 +132,16 @@ public Q_SLOTS:
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0,
             const QString& encoding = "",
-            IDocument* buddy = 0 );
+            IDocument* buddy = 0 ) override;
 
-    virtual Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data );
+    virtual Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data ) override;
     
-    virtual KDevelop::IDocument* openDocument( const QUrl &url, const QString& prefname );
+    virtual KDevelop::IDocument* openDocument( const QUrl &url, const QString& prefname ) override;
 
     virtual void closeDocument( const QUrl &url );
     void fileClose();
     void slotSaveAllDocuments();
-    virtual void closeAllDocuments();
+    virtual void closeAllDocuments() override;
     void closeAllOtherDocuments();
     void reloadAllDocuments();
 
@@ -172,7 +172,7 @@ private:
     QList<IDocument*> documentsExclusivelyInWindow(MainWindow* mw, bool currentAreaOnly = false) const;
     QList<IDocument*> modifiedDocuments(const QList<IDocument*>& list) const;
 
-    bool saveSomeDocuments(const QList<IDocument*>& list, IDocument::DocumentSaveMode mode);
+    bool saveSomeDocuments(const QList<IDocument*>& list, IDocument::DocumentSaveMode mode) override;
 
     void setupActions();
     Q_PRIVATE_SLOT(d, void removeDocument(Sublime::Document*))

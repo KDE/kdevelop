@@ -59,16 +59,16 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBuildSetModel : public QAbstractTableMod
     Q_OBJECT
 public:
     ProjectBuildSetModel( QObject* parent );
-    QVariant data( const QModelIndex&, int role = Qt::DisplayRole ) const;
-    QVariant headerData( int, Qt::Orientation, int role = Qt::DisplayRole ) const;
-    int rowCount( const QModelIndex& = QModelIndex() ) const;
-    int columnCount( const QModelIndex&  = QModelIndex() ) const;
+    QVariant data( const QModelIndex&, int role = Qt::DisplayRole ) const override;
+    QVariant headerData( int, Qt::Orientation, int role = Qt::DisplayRole ) const override;
+    int rowCount( const QModelIndex& = QModelIndex() ) const override;
+    int columnCount( const QModelIndex&  = QModelIndex() ) const override;
 
     void loadFromSession( ISession* session );
     void storeToSession( ISession* session );
 
     void addProjectItem( KDevelop::ProjectBaseItem* );
-    bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
+    bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() ) override;
     void moveRowsUp( int row, int count );
     void moveRowsDown( int row, int count );
     void moveRowsToTop( int row, int count );

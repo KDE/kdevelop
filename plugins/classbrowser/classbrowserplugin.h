@@ -46,8 +46,8 @@ public:
   void setActiveClassTree(ClassTree* a_classTree) { m_activeClassTree = a_classTree; }
 
 public: // KDevelop::Plugin overrides
-  virtual void unload();
-  virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
+  virtual void unload() override;
+  virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* ) override;
 
   // The duchain must not be locked when this is called!
   void showDefinition(KDevelop::DeclarationPointer declaration);

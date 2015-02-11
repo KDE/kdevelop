@@ -49,7 +49,7 @@ public:
     static QStringList parseExclude(QString excl);
     
 protected:
-    void run();
+    void run() override;
 private:
     QList<QUrl> m_startDirs;
     QString m_patString;

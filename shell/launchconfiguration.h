@@ -62,22 +62,22 @@ public:
     /**
      * @copydoc KDevelop::ILaunchConfiguration::config()
      */
-    virtual const KConfigGroup config() const;
+    virtual const KConfigGroup config() const override;
     
     /**
      * @copydoc KDevelop::ILaunchConfiguration::type()
      */
-    virtual LaunchConfigurationType* type() const;
+    virtual LaunchConfigurationType* type() const override;
     
     /**
      * @copydoc KDevelop::ILaunchConfiguration::name()
      */
-    virtual QString name() const;
+    virtual QString name() const override;
     
     /**
      * @copydoc KDevelop::ILaunchConfiguration::project()
      */
-    virtual IProject* project() const;
+    virtual IProject* project() const override;
     void save();
     
     QString configGroupName() const;
@@ -85,7 +85,7 @@ public:
     QString launcherForMode( const QString& mode ) const;
     void setLauncherForMode( const QString& mode, const QString& id );
     
-    KConfigGroup config();
+    KConfigGroup config() override;
     
 signals:
     void nameChanged( LaunchConfiguration* );

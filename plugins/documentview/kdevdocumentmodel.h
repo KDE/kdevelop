@@ -70,7 +70,7 @@ public:
     explicit KDevCategoryItem( const QString &name );
     virtual ~KDevCategoryItem();
 
-    virtual KDevCategoryItem *categoryItem() const
+    virtual KDevCategoryItem *categoryItem() const override
     {
         return const_cast<KDevCategoryItem*>( this );
     }
@@ -85,7 +85,7 @@ public:
     explicit KDevFileItem( const QUrl &url );
     virtual ~KDevFileItem();
 
-    virtual KDevFileItem *fileItem() const
+    virtual KDevFileItem *fileItem() const override
     {
         return const_cast<KDevFileItem*>( this );
     }

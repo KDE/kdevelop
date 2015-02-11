@@ -41,9 +41,9 @@ public:
      */
     void setProject(IProject* project);
 
-    virtual QModelIndex indexFromConfigString(const QAbstractItemModel *model, const QString &key) const;
+    virtual QModelIndex indexFromConfigString(const QAbstractItemModel *model, const QString &key) const override;
 
-    virtual QString indexToConfigString(const QModelIndex &index) const;
+    virtual QString indexToConfigString(const QModelIndex &index) const override;
 
 private:
     IProject* m_project;

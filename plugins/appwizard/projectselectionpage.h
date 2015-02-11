@@ -36,7 +36,7 @@ public:
     explicit ProjectSelectionPage(ProjectTemplatesModel *templatesModel, AppWizardDialog *wizardDialog);
     ~ProjectSelectionPage();
 
-    bool shouldContinue();
+    bool shouldContinue() override;
 
     QString selectedTemplate();
     QString appName();

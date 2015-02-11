@@ -146,7 +146,7 @@ public: // FIXME?
     virtual void saveSettings();
 
     /**Reimplemented to save settings.*/
-    virtual bool queryClose();
+    virtual bool queryClose() override;
     /** Allow connecting to activateView without the need for a lambda for the default parameter */
     void activateViewAndFocus(Sublime::View *view) { activateView(view, true); }
 
@@ -168,7 +168,7 @@ private:
     /**Sets the active toolview and focuses it.*/
     void setActiveToolView(View *view);
 
-    void resizeEvent(QResizeEvent* event);
+    void resizeEvent(QResizeEvent* event) override;
 
     void saveGeometry(KConfigGroup &config);
     void loadGeometry(const KConfigGroup &config);

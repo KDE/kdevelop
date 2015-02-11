@@ -42,7 +42,7 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationFindWidget : public QWidget
         explicit DocumentationFindWidget(QWidget* parent = 0);
         virtual ~DocumentationFindWidget();
         
-        virtual void showEvent ( QShowEvent* );
+        virtual void showEvent ( QShowEvent* ) override;
         
     private Q_SLOTS:
         void searchNext();

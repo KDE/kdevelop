@@ -28,9 +28,9 @@ class SessionsModel : public QAbstractListModel
     public:
         enum Roles { Uuid = Qt::UserRole+1, Projects, ProjectNames, VisibleIdentifier };
         explicit SessionsModel(QObject* parent = 0);
-        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-        virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-        virtual QHash< int, QByteArray > roleNames() const;
+        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+        virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+        virtual QHash< int, QByteArray > roleNames() const override;
 
         Q_SCRIPTABLE void loadSession(const QString& nameOrId) const;
     private:

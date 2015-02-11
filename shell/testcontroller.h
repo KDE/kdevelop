@@ -37,15 +37,15 @@ public:
     void initialize();
     void cleanup();
 
-    virtual void removeTestSuite(KDevelop::ITestSuite* suite);
-    virtual void addTestSuite(KDevelop::ITestSuite* suite);
+    virtual void removeTestSuite(KDevelop::ITestSuite* suite) override;
+    virtual void addTestSuite(KDevelop::ITestSuite* suite) override;
 
-    virtual QList< KDevelop::ITestSuite* > testSuites() const;
-    virtual KDevelop::ITestSuite* findTestSuite(KDevelop::IProject* project, const QString& name) const;
-    virtual QList< KDevelop::ITestSuite* > testSuitesForProject(KDevelop::IProject* project) const;
+    virtual QList< KDevelop::ITestSuite* > testSuites() const override;
+    virtual KDevelop::ITestSuite* findTestSuite(KDevelop::IProject* project, const QString& name) const override;
+    virtual QList< KDevelop::ITestSuite* > testSuitesForProject(KDevelop::IProject* project) const override;
 
-    virtual void notifyTestRunFinished(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result);
-    virtual void notifyTestRunStarted(KDevelop::ITestSuite* suite, const QStringList& test_cases);
+    virtual void notifyTestRunFinished(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result) override;
+    virtual void notifyTestRunStarted(KDevelop::ITestSuite* suite, const QStringList& test_cases) override;
 
 private:
     class TestControllerPrivate;

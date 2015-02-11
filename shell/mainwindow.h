@@ -62,32 +62,32 @@ public Q_SLOTS:
         return Sublime::MainWindow::windowTitle();
     }
 
-    virtual void setVisible( bool visible );
+    virtual void setVisible( bool visible ) override;
     void configureShortcuts();
-    virtual void loadSettings();
-    virtual void saveSettings();
+    virtual void loadSettings() override;
+    virtual void saveSettings() override;
 
 Q_SIGNALS:
     void finishedLoading();
 
 protected:
     //FIXME DOCUMENT!!!  queryClose() must call all of the Core cleanup() methods!
-    virtual bool queryClose();
+    virtual bool queryClose() override;
     //reimplemented from KXMLGUIBuilder to support visible menubar separators
-    QAction *createCustomElement(QWidget *parent, int index, const QDomElement &element);
+    QAction *createCustomElement(QWidget *parent, int index, const QDomElement &element) override;
 
     virtual void initialize();
     virtual void cleanup();
-    virtual void initializeStatusBar();
-    void dragEnterEvent( QDragEnterEvent* );
-    void dropEvent( QDropEvent* );
+    virtual void initializeStatusBar() override;
+    void dragEnterEvent( QDragEnterEvent* ) override;
+    void dropEvent( QDropEvent* ) override;
     void applyMainWindowSettings(const KConfigGroup& config) Q_DECL_OVERRIDE;
 
 
 protected Q_SLOTS:
-    virtual void tabContextMenuRequested(Sublime::View* , QMenu* );
-    virtual void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab);
-    virtual void dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&);
+    virtual void tabContextMenuRequested(Sublime::View* , QMenu* ) override;
+    virtual void tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab) override;
+    virtual void dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&) override;
     virtual void newTabRequested() override;
 
 private Q_SLOTS:

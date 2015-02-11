@@ -35,8 +35,8 @@ class SvnCommitJob : public SvnJobBaseImpl<SvnInternalCommitJob>
     Q_OBJECT
 public:
     explicit SvnCommitJob( KDevSvnPlugin* parent );
-    QVariant fetchResults();
-    void start();
+    QVariant fetchResults() override;
+    void start() override;
     void setCommitMessage( const QString& msg );
     void setKeepLock( bool );
     void setUrls( const QList<QUrl>& urls );

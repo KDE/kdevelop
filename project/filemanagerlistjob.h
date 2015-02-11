@@ -46,7 +46,7 @@ public:
     void removeSubDir(ProjectFolderItem* item);
 
     void abort();
-    virtual void start();
+    virtual void start() override;
 
 signals:
     void entries(FileManagerListJob* job, ProjectFolderItem* baseItem,
@@ -55,7 +55,7 @@ signals:
 
 private slots:
     void slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn );
-    void slotResult(KJob* job);
+    void slotResult(KJob* job) override;
     void startNextJob();
 
 private:

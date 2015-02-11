@@ -63,11 +63,11 @@ public:
     void setCaseSensitive(bool caseSensitive);
     void setProjectFilesFlag(bool projectFilesFlag);
 
-    virtual void start();
+    virtual void start() override;
 
-    virtual QString statusName() const;
+    virtual QString statusName() const override;
 protected:
-    virtual bool doKill();
+    virtual bool doKill() override;
 
 //    GrepOutputModel* model() const;
 
@@ -76,11 +76,11 @@ private Q_SLOTS:
     void testFinishState(KJob *job);
 
 Q_SIGNALS:
-    void clearMessage( KDevelop::IStatus* );
-    void showMessage( KDevelop::IStatus*, const QString & message, int timeout = 0);
-    void showErrorMessage(const QString & message, int timeout = 0);
-    void hideProgress( KDevelop::IStatus* );
-    void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value);
+    void clearMessage( KDevelop::IStatus* ) override;
+    void showMessage( KDevelop::IStatus*, const QString & message, int timeout = 0) override;
+    void showErrorMessage(const QString & message, int timeout = 0) override;
+    void hideProgress( KDevelop::IStatus* ) override;
+    void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value) override;
     void foundMatches( const QString& filename, const GrepOutputItem::List& matches);
 
 private:

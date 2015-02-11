@@ -33,10 +33,10 @@ class ArchiveTemplateLoader : public Grantlee::AbstractTemplateLoader
 public:
     static ArchiveTemplateLoader* self();
     virtual ~ArchiveTemplateLoader();
-    virtual bool canLoadTemplate(const QString& name) const;
-    virtual Grantlee::Template loadByName(const QString& name, const Grantlee::Engine* engine) const;
+    virtual bool canLoadTemplate(const QString& name) const override;
+    virtual Grantlee::Template loadByName(const QString& name, const Grantlee::Engine* engine) const override;
 
-    virtual QPair<QString, QString> getMediaUri(const QString& fileName) const;
+    virtual QPair<QString, QString> getMediaUri(const QString& fileName) const override;
 
 protected:
     friend class ArchiveTemplateLocation;

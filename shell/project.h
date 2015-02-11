@@ -63,9 +63,9 @@ public:
     /// Destructor.
     virtual ~Project();
 
-    virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString& path) const;
-    virtual QList< ProjectFileItem* > filesForPath(const IndexedString& file) const;
-    virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString& folder) const;
+    virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString& path) const override;
+    virtual QList< ProjectFileItem* > filesForPath(const IndexedString& file) const override;
+    virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString& folder) const override;
 
     KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectBaseItem*> itemsForUrl(const QUrl &url) const;
     KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectFileItem*> filesForUrl( const QUrl& ) const;
@@ -74,27 +74,27 @@ public:
     QString projectTempFile() const;
     QString developerTempFile() const;
     Path developerFile() const;
-    virtual void reloadModel();
-    virtual KDEVPLATFORMSHELL_DEPRECATED QUrl projectFileUrl() const;
-    virtual Path projectFile() const;
-    virtual KSharedConfigPtr projectConfiguration() const;
+    virtual void reloadModel() override;
+    virtual KDEVPLATFORMSHELL_DEPRECATED QUrl projectFileUrl() const override;
+    virtual Path projectFile() const override;
+    virtual KSharedConfigPtr projectConfiguration() const override;
 
-    virtual void addToFileSet( ProjectFileItem* file );
-    virtual void removeFromFileSet( ProjectFileItem* file );
-    virtual QSet<IndexedString> fileSet() const;
+    virtual void addToFileSet( ProjectFileItem* file ) override;
+    virtual void removeFromFileSet( ProjectFileItem* file ) override;
+    virtual QSet<IndexedString> fileSet() const override;
 
-    virtual bool isReady() const;
+    virtual bool isReady() const override;
 
     /**
      * @brief Get the project folder
      * @return The canonical absolute directory of the project.
      */
-    virtual KDEVPLATFORMSHELL_DEPRECATED const QUrl folder() const;
+    virtual KDEVPLATFORMSHELL_DEPRECATED const QUrl folder() const override;
 
-    virtual Path path() const;
+    virtual Path path() const override;
 
     /** Returns the name of the project. */
-    virtual Q_SCRIPTABLE QString name() const;
+    virtual Q_SCRIPTABLE QString name() const override;
 
 public Q_SLOTS:
     /**
@@ -119,22 +119,22 @@ public Q_SLOTS:
      *
      * @return the file manager for the project, if one exists; otherwise null
      */
-    IProjectFileManager* projectFileManager() const;
+    IProjectFileManager* projectFileManager() const override;
 
     /**
      * Get the build system manager for the project
      *
      * @return the build system manager for the project, if one exists; otherwise null
      */
-    IBuildSystemManager* buildSystemManager() const;
+    IBuildSystemManager* buildSystemManager() const override;
 
-    IPlugin* versionControlPlugin() const;
+    IPlugin* versionControlPlugin() const override;
 
     /**
      * Get the plugin that manages the project
      * This can be used to get other interfaces like IBuildSystemManager
      */
-    IPlugin* managerPlugin() const;
+    IPlugin* managerPlugin() const override;
 
     /**
      * Set the manager plugin for the project.
@@ -144,7 +144,7 @@ public Q_SLOTS:
     /**
      * With this the top-level project item can be retrieved
      */
-    ProjectFolderItem* projectItem() const;
+    ProjectFolderItem* projectItem() const override;
 
     /**
      * Check if the url specified by @a url is part of the project.
@@ -155,9 +155,9 @@ public Q_SLOTS:
      *
      * @return true if the url @a url is a part of the project.
      */
-    bool inProject(const IndexedString &url) const;
+    bool inProject(const IndexedString &url) const override;
 
-    virtual void setReloadJob(KJob* job);
+    virtual void setReloadJob(KJob* job) override;
 
 signals:
     /**

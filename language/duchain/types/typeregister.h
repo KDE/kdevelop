@@ -78,7 +78,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeFactory {
 template<class T, class Data>
 class TypeFactory : public AbstractTypeFactory {
   public:
-  AbstractType* create(AbstractTypeData* data) const {
+  AbstractType* create(AbstractTypeData* data) const override {
 /*    if(!m_reUseTypes.isEmpty()) {
       return new (m_reUseTypes.pop()) T(*static_cast<typename T::Data*>(data));
     }else{*/
@@ -86,7 +86,7 @@ class TypeFactory : public AbstractTypeFactory {
 //     }
   }
   
-  void copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const {
+  void copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const override {
     Q_ASSERT(from.typeClassId == T::Identity);
 
     if((bool)from.m_dynamic == (bool)!constant) {
@@ -107,12 +107,12 @@ class TypeFactory : public AbstractTypeFactory {
     delete[] (char*)data;
   }
   
-  void callDestructor(AbstractTypeData* data) const {
+  void callDestructor(AbstractTypeData* data) const override {
     Q_ASSERT(data->typeClassId == T::Identity);
     static_cast<Data*>(data)->~Data();
   }
 
-  uint dynamicSize(const AbstractTypeData& data) const {
+  uint dynamicSize(const AbstractTypeData& data) const override {
     Q_ASSERT(data.typeClassId == T::Identity);
     return static_cast<const Data&>(data).dynamicSize();
   }

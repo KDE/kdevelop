@@ -30,7 +30,7 @@ public:
     explicit KDevDocumentViewDelegate( QObject *parent = 0 );
     virtual ~KDevDocumentViewDelegate();
 
-    virtual void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+    virtual void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const override;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_KDEVCLASSVIEWDELEGATE_H

@@ -34,10 +34,10 @@ class NativeAppConfigPage : public KDevelop::LaunchConfigurationPage, Ui::Native
 Q_OBJECT
 public:
     NativeAppConfigPage( QWidget* parent );
-    void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = 0 );
-    void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const;
-    QString title() const;
-    QIcon icon() const;
+    void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = 0 ) override;
+    void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const override;
+    QString title() const override;
+    QIcon icon() const override;
 private slots:
     void addDep();
     void removeDep();
@@ -53,19 +53,19 @@ class NativeAppLauncher : public KDevelop::ILauncher
 {
 public:
     NativeAppLauncher();
-    virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const;
-    virtual QString description() const;
-    virtual QString id();
-    virtual QString name() const;
-    virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg);
-    virtual QStringList supportedModes() const;
+    virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
+    virtual QString description() const override;
+    virtual QString id() override;
+    virtual QString name() const override;
+    virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
+    virtual QStringList supportedModes() const override;
 };
 
 class NativeAppPageFactory : public KDevelop::LaunchConfigurationPageFactory
 {
 public:
     NativeAppPageFactory();
-    virtual KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent);
+    virtual KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent) override;
 };
 
 /**
@@ -80,17 +80,17 @@ public:
     NativeAppConfigType();
     virtual ~NativeAppConfigType();
 
-    QString id() const;
-    QString name() const;
-    QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const;  
-    QIcon icon() const;
-    bool canLaunch( KDevelop::ProjectBaseItem* item ) const;
-    bool canLaunch( const QUrl& file ) const;
+    QString id() const override;
+    QString name() const override;
+    QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const override;  
+    QIcon icon() const override;
+    bool canLaunch( KDevelop::ProjectBaseItem* item ) const override;
+    bool canLaunch( const QUrl& file ) const override;
     void configureLaunchFromItem ( KConfigGroup cfg, 
-                                   KDevelop::ProjectBaseItem* item ) const;
+                                   KDevelop::ProjectBaseItem* item ) const override;
     void configureLaunchFromCmdLineArguments ( KConfigGroup cfg,
-                                               const QStringList& args ) const;
-    QMenu* launcherSuggestions();
+                                               const QStringList& args ) const override;
+    QMenu* launcherSuggestions() override;
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
 

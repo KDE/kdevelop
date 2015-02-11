@@ -56,28 +56,28 @@ public:
     static QString LaunchConfigurationsGroup;
     static QString LaunchConfigurationsListEntry;
 
-    virtual void registerJob(KJob *job);
-    virtual void unregisterJob(KJob *job);
-    virtual QList<KJob*> currentJobs() const;
+    virtual void registerJob(KJob *job) override;
+    virtual void unregisterJob(KJob *job) override;
+    virtual QList<KJob*> currentJobs() const override;
 
-    KJob* execute(const QString& launchMode, ILaunchConfiguration* launch);
+    KJob* execute(const QString& launchMode, ILaunchConfiguration* launch) override;
     LaunchConfiguration* defaultLaunch() const;
-    QList<ILaunchMode*> launchModes() const;
+    QList<ILaunchMode*> launchModes() const override;
     
     /**
      * @copydoc IRunController::addLaunchMode
      */
-    virtual void addLaunchMode( ILaunchMode* mode );
+    virtual void addLaunchMode( ILaunchMode* mode ) override;
     
     /**
      * @copydoc IRunController::removeLaunchMode
      */
-    virtual void removeLaunchMode( ILaunchMode* mode );
+    virtual void removeLaunchMode( ILaunchMode* mode ) override;
 
     /**
      * @copydoc IRunController::launchModeForId()
      */
-    virtual KDevelop::ILaunchMode* launchModeForId(const QString& id) const;
+    virtual KDevelop::ILaunchMode* launchModeForId(const QString& id) const override;
 
     void initialize();
     void cleanup();
@@ -88,46 +88,46 @@ public:
     void removeLaunchConfiguration( LaunchConfiguration* l );
     
     QList<LaunchConfiguration*> launchConfigurationsInternal() const;
-    virtual QList<ILaunchConfiguration*> launchConfigurations() const;
+    virtual QList<ILaunchConfiguration*> launchConfigurations() const override;
     /**
      * @copydoc IRunController::launchConfigurationTypes()
      */
-    virtual QList<LaunchConfigurationType*> launchConfigurationTypes() const;
+    virtual QList<LaunchConfigurationType*> launchConfigurationTypes() const override;
 
     /**
      * @copydoc IRunController::addConfigurationType()
      */
-    virtual void addConfigurationType( LaunchConfigurationType* type );
+    virtual void addConfigurationType( LaunchConfigurationType* type ) override;
 
     /**
      * @copydoc IRunController::removeConfigurationType()
      */
-    virtual void removeConfigurationType( LaunchConfigurationType* type );
+    virtual void removeConfigurationType( LaunchConfigurationType* type ) override;
 
     /**
      * Find the launch configuration type for the given @p id.
      * @returns the launch configuration type having the id, or 0 if no such type is known
      */
-    LaunchConfigurationType* launchConfigurationTypeForId( const QString& );
+    LaunchConfigurationType* launchConfigurationTypeForId( const QString& ) override;
 
     virtual ILaunchConfiguration* createLaunchConfiguration ( LaunchConfigurationType* type,
                                                               const QPair<QString,QString>& launcher, 
                                                               IProject* project = 0,
-                                                              const QString& name = QString() );
+                                                              const QString& name = QString() ) override;
     
-    virtual void executeDefaultLaunch(const QString& runMode);
+    virtual void executeDefaultLaunch(const QString& runMode) override;
 
     void setDefaultLaunch(ILaunchConfiguration* l);
     
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
 public Q_SLOTS:
-    virtual void stopAllProcesses();
+    virtual void stopAllProcesses() override;
 
 protected Q_SLOTS:
-    virtual void finished(KJob *job);
-    virtual void suspended(KJob *job);
-    virtual void resumed(KJob *job);
+    virtual void finished(KJob *job) override;
+    virtual void suspended(KJob *job) override;
+    virtual void resumed(KJob *job) override;
 
 private Q_SLOTS:
     void slotRefreshProject(KDevelop::IProject* project);
@@ -156,7 +156,7 @@ class RunDelegate : public QItemDelegate
     Q_OBJECT
 public:
     RunDelegate( QObject* = 0 );
-    void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
+    void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const override;
 private:
     KStatefulBrush runProviderBrush;
     KStatefulBrush errorBrush;

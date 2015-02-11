@@ -159,7 +159,7 @@ public Q_SLOTS:
     void areaReleased(Sublime::Area *area);
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *ev);
+    bool eventFilter(QObject *obj, QEvent *ev) override;
     void showAreaInternal(Area* area, MainWindow *mainWindow);
 
 private Q_SLOTS:

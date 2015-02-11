@@ -47,19 +47,19 @@ public:
   KDevelop::AbstractType::Ptr type() const;
   void setType(KDevelop::AbstractType::Ptr type);
 
-  virtual uint hash() const;
+  virtual uint hash() const override;
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
 //   virtual QString mangled() const;
 
-  virtual void exchangeTypes(KDevelop::TypeExchanger* exchanger);
+  virtual void exchangeTypes(KDevelop::TypeExchanger* exchanger) override;
 
-  virtual KDevelop::AbstractType* clone() const;
+  virtual KDevelop::AbstractType* clone() const override;
 
-  virtual bool equals(const KDevelop::AbstractType* rhs) const;
+  virtual bool equals(const KDevelop::AbstractType* rhs) const override;
 
-  virtual KDevelop::AbstractType::WhichType whichType() const;
+  virtual KDevelop::AbstractType::WhichType whichType() const override;
   
   enum {
     Identity = 9
@@ -70,7 +70,7 @@ public:
 protected:
   TYPE_DECLARE_DATA(TypeAliasType);
 
-  virtual void accept0 (KDevelop::TypeVisitor *v) const;
+  virtual void accept0 (KDevelop::TypeVisitor *v) const override;
 };
 
 template<>

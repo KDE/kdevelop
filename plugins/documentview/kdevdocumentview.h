@@ -72,8 +72,8 @@ private slots:
     void closeUnselected();
 
 protected:
-    virtual void mousePressEvent( QMouseEvent * event );
-    virtual void contextMenuEvent( QContextMenuEvent * event );
+    virtual void mousePressEvent( QMouseEvent * event ) override;
+    virtual void contextMenuEvent( QContextMenuEvent * event ) override;
 
 private:
     template<typename F> void visitItems(F, bool selectedItems);

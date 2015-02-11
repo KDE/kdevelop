@@ -31,15 +31,15 @@ class AppWizardPlugin: public KDevelop::IPlugin, public KDevelop::ITemplateProvi
 public:
     AppWizardPlugin(QObject *parent, const QVariantList & = QVariantList());
     ~AppWizardPlugin();
-    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
 
-    virtual QAbstractItemModel* templatesModel();
-    virtual QString knsConfigurationFile() const;
-    virtual QStringList supportedMimeTypes() const;
-    virtual QString name() const;
-    virtual QIcon icon() const;
-    virtual void loadTemplate(const QString& fileName);
-    virtual void reload();
+    virtual QAbstractItemModel* templatesModel() override;
+    virtual QString knsConfigurationFile() const override;
+    virtual QStringList supportedMimeTypes() const override;
+    virtual QString name() const override;
+    virtual QIcon icon() const override;
+    virtual void loadTemplate(const QString& fileName) override;
+    virtual void reload() override;
 
 private slots:
     void slotNewProject();

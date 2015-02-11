@@ -39,13 +39,13 @@ class StashPatchSource : public KDevelop::IPatchSource
 public:
     StashPatchSource(const QString & stashName, GitPlugin * patch, const QDir & baseDir);
     virtual ~StashPatchSource();
-    virtual QUrl baseDir() const;
-    virtual QUrl file() const;
-    virtual void update();
-    virtual bool isAlreadyApplied() const;
-    virtual QString name() const;
-    virtual bool canSelectFiles() const { return true; };
-    virtual uint depth() const { return 1; }
+    virtual QUrl baseDir() const override;
+    virtual QUrl file() const override;
+    virtual void update() override;
+    virtual bool isAlreadyApplied() const override;
+    virtual QString name() const override;
+    virtual bool canSelectFiles() const override { return true; };
+    virtual uint depth() const override { return 1; }
 
 private slots:
     void updatePatchFile(KDevelop::VcsJob* job);

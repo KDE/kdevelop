@@ -52,7 +52,7 @@ public:
     SwitchToBuddyPlugin( QObject *parent, const QVariantList & = QVariantList());
     ~SwitchToBuddyPlugin();
 
-    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
     virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;
 
 private slots:

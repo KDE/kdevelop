@@ -69,7 +69,7 @@ public:
     BackgroundParser(ILanguageController *languageController);
     ~BackgroundParser();
 
-    virtual QString statusName() const;
+    virtual QString statusName() const override;
 
     enum {
         BestPriority = -10000,  ///Best possible job-priority. No jobs should actually have this.
@@ -128,11 +128,11 @@ Q_SIGNALS:
     void parseJobFinished(KDevelop::ParseJob* job);
 
     // Implementations of IStatus signals
-    void clearMessage( KDevelop::IStatus* );
-    void showMessage( KDevelop::IStatus*, const QString & message, int timeout = 0);
-    void hideProgress( KDevelop::IStatus* );
-    void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value);
-    void showErrorMessage( const QString&, int );
+    void clearMessage( KDevelop::IStatus* ) override;
+    void showMessage( KDevelop::IStatus*, const QString & message, int timeout = 0) override;
+    void hideProgress( KDevelop::IStatus* ) override;
+    void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value) override;
+    void showErrorMessage( const QString&, int ) override;
 
 public Q_SLOTS:
 

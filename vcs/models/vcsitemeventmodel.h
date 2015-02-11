@@ -39,7 +39,7 @@ public:
     VcsItemEventModel( QObject* parent );
     ~VcsItemEventModel();
     
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     void addItemEvents( const QList<KDevelop::VcsItemEvent>& );
     KDevelop::VcsItemEvent itemEventForIndex( const QModelIndex& ) const;
 };

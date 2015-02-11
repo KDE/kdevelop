@@ -51,23 +51,23 @@ public:
 
     inline Qt::Orientation orientation() const;
 
-    virtual Qt::Orientations expandingDirections() const;
+    virtual Qt::Orientations expandingDirections() const override;
 
-    virtual QSize minimumSize() const;
+    virtual QSize minimumSize() const override;
 
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const override;
 
-    virtual void setGeometry(const QRect &rect);
+    virtual void setGeometry(const QRect &rect) override;
 
-    virtual void addItem(QLayoutItem *item);
+    virtual void addItem(QLayoutItem *item) override;
 
-    virtual QLayoutItem* itemAt(int index) const;
+    virtual QLayoutItem* itemAt(int index) const override;
 
-    virtual QLayoutItem* takeAt(int index);
+    virtual QLayoutItem* takeAt(int index) override;
 
-    virtual int count() const;
+    virtual int count() const override;
 
-    virtual void invalidate();
+    virtual void invalidate() override;
 
 protected:
     int doVerticalLayout(const QRect &rect, bool updateGeometry = true) const;

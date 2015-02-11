@@ -52,9 +52,9 @@ public:
     virtual ~ProjectManagerViewPlugin();
 
     // Plugin methods
-    virtual void unload();
+    virtual void unload() override;
 
-    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
+    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* ) override;
 
     void removeItems(const QList<KDevelop::ProjectBaseItem*>& items);
     void renameItems(const QList< KDevelop::ProjectBaseItem* >& items);

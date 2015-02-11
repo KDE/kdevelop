@@ -48,16 +48,16 @@ class DUChainItemData : public KDevelop::QuickOpenDataBase
   public:
     DUChainItemData( const DUChainItem& item, bool openDefinition = false );
 
-    virtual QString text() const;
-    virtual QString htmlDescription() const;
-    virtual QList<QVariant> highlighting() const;
+    virtual QString text() const override;
+    virtual QString htmlDescription() const override;
+    virtual QList<QVariant> highlighting() const override;
 
-    bool execute( QString& filterText );
+    bool execute( QString& filterText ) override;
 
-    virtual bool isExpandable() const;
-    virtual QWidget* expandingWidget() const;
+    virtual bool isExpandable() const override;
+    virtual QWidget* expandingWidget() const override;
 
-    virtual QIcon icon() const;
+    virtual QIcon icon() const override;
 
 private:
     DUChainItem m_item;
@@ -77,19 +77,19 @@ public:
 
     /// When openDefinitions is true, the definitions will be opened if available on execute().
     DUChainItemDataProvider( KDevelop::IQuickOpen* quickopen, bool openDefinitions = false );
-    virtual void setFilterText( const QString& text );
-    virtual uint itemCount() const;
-    virtual uint unfilteredItemCount() const;
-    virtual KDevelop::QuickOpenDataPointer data( uint row ) const;
+    virtual void setFilterText( const QString& text ) override;
+    virtual uint itemCount() const override;
+    virtual uint unfilteredItemCount() const override;
+    virtual KDevelop::QuickOpenDataPointer data( uint row ) const override;
 
-    virtual void reset();
+    virtual void reset() override;
 
 protected:
     //Override to create own DUChainItemData derived classes
     DUChainItemData* createData( const DUChainItem& item ) const;
 
     //Reimplemented from Base<..>
-    virtual QString itemText( const DUChainItem& data ) const;
+    virtual QString itemText( const DUChainItem& data ) const override;
 
     KDevelop::IQuickOpen* m_quickopen;
 

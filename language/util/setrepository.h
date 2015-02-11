@@ -472,8 +472,8 @@ class LazySet : public Conversion {
   ///Persistent repository that manages string-sets, also correctly increasing the string reference-counts as needed
   struct KDEVPLATFORMLANGUAGE_EXPORT StringSetRepository : public Utils::BasicSetRepository {
     StringSetRepository(QString name);
-    virtual void itemRemovedFromSets(uint index);
-    virtual void itemAddedToSets(uint index);
+    virtual void itemRemovedFromSets(uint index) override;
+    virtual void itemAddedToSets(uint index) override;
   };
   
 }

@@ -45,32 +45,32 @@ public:
     PartDocument(const QUrl &url, ICore* core, const QString& preferredPart = QString() );
     virtual ~PartDocument();
 
-    virtual QUrl url() const;
+    virtual QUrl url() const override;
     void setUrl(const QUrl& newUrl);
 
-    virtual QWidget *createViewWidget(QWidget *parent = 0);
-    virtual KParts::Part *partForView(QWidget *view) const;
+    virtual QWidget *createViewWidget(QWidget *parent = 0) override;
+    virtual KParts::Part *partForView(QWidget *view) const override;
 
     virtual QMimeType mimeType() const override;
-    virtual KTextEditor::Document* textDocument() const;
-    virtual bool save(DocumentSaveMode mode = Default);
-    virtual void reload();
+    virtual KTextEditor::Document* textDocument() const override;
+    virtual bool save(DocumentSaveMode mode = Default) override;
+    virtual void reload() override;
     ///Closes and deletes the document. Asks the user before if needed.
-    virtual bool close(DocumentSaveMode mode = Default);
-    virtual bool isActive() const;
-    virtual DocumentState state() const;
+    virtual bool close(DocumentSaveMode mode = Default) override;
+    virtual bool isActive() const override;
+    virtual DocumentState state() const override;
 
-    virtual void setPrettyName(QString name);
+    virtual void setPrettyName(QString name) override;
     
-    virtual void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow);
+    virtual void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow) override;
 
-    virtual KTextEditor::Cursor cursorPosition() const;
-    virtual void setCursorPosition(const KTextEditor::Cursor &cursor);
-    virtual void setTextSelection(const KTextEditor::Range &range);
+    virtual KTextEditor::Cursor cursorPosition() const override;
+    virtual void setCursorPosition(const KTextEditor::Cursor &cursor) override;
+    virtual void setTextSelection(const KTextEditor::Range &range) override;
 
     //Overridden from Sublime::Document
-    virtual bool closeDocument(bool silent);
-    virtual bool askForCloseFeedback();
+    virtual bool closeDocument(bool silent) override;
+    virtual bool askForCloseFeedback() override;
 protected:
     /** Gives us access to the KParts */
     QMap<QWidget*, KParts::Part*> partForView() const;

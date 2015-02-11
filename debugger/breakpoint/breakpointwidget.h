@@ -46,8 +46,8 @@ public:
     BreakpointWidget(IDebugController *controller, QWidget *parent);
  
 protected:
-    void contextMenuEvent(QContextMenuEvent* event);
-    void showEvent(QShowEvent * event);
+    void contextMenuEvent(QContextMenuEvent* event) override;
+    void showEvent(QShowEvent * event) override;
 
 private:
     void setupPopupMenu();

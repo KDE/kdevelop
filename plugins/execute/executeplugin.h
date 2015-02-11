@@ -54,16 +54,16 @@ class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
     static QString dependencyActionEntry;
     static QString projectTargetEntry;
     
-    virtual void unload();
+    virtual void unload() override;
     
-    QUrl executable( KDevelop::ILaunchConfiguration*, QString& err ) const;
-    QStringList arguments( KDevelop::ILaunchConfiguration*, QString& err ) const;
-    QUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const;
-    KJob* dependencyJob( KDevelop::ILaunchConfiguration* ) const;
-    QString environmentGroup( KDevelop::ILaunchConfiguration* ) const;
-    bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
-    QString terminal( KDevelop::ILaunchConfiguration* ) const;
-    QString nativeAppConfigTypeId() const;
+    QUrl executable( KDevelop::ILaunchConfiguration*, QString& err ) const override;
+    QStringList arguments( KDevelop::ILaunchConfiguration*, QString& err ) const override;
+    QUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const override;
+    KJob* dependencyJob( KDevelop::ILaunchConfiguration* ) const override;
+    QString environmentGroup( KDevelop::ILaunchConfiguration* ) const override;
+    bool useTerminal( KDevelop::ILaunchConfiguration* ) const override;
+    QString terminal( KDevelop::ILaunchConfiguration* ) const override;
+    QString nativeAppConfigTypeId() const override;
 
     NativeAppConfigType* m_configType;
 };

@@ -51,7 +51,7 @@ public:
      * @note Default communication mode is KProcess::AllOutput.
      * @see Use setCommunicationMode() to override the default communication mode.
      */
-    virtual void start();
+    virtual void start() override;
 
 private:
     class CvsJobPrivate* const d;

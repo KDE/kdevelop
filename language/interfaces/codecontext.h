@@ -59,7 +59,7 @@ public:
     ///Returns the represented DUContext
     IndexedDUContext context() const;
     
-    int type() const;
+    int type() const override;
 
     virtual QList<QUrl> urls() const override;
     
@@ -92,7 +92,7 @@ public:
     virtual ~DeclarationContext();
 
     /// Returns the type of this context.
-    virtual int type() const;
+    virtual int type() const override;
 
     ///The referenced declaration
     IndexedDeclaration declaration() const;

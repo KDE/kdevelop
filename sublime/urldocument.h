@@ -35,19 +35,19 @@ public:
     UrlDocument(Controller *controller, const QUrl &url);
     ~UrlDocument();
 
-    virtual QString documentType() const;
+    virtual QString documentType() const override;
 
-    virtual QString documentSpecifier() const;
+    virtual QString documentSpecifier() const override;
 
     QUrl url() const;
 
     /**
      * @return the icon for the mimetype of the document url.
      */
-    QIcon defaultIcon() const;
+    QIcon defaultIcon() const override;
 
 protected:
-    virtual QWidget *createViewWidget(QWidget *parent = 0);
+    virtual QWidget *createViewWidget(QWidget *parent = 0) override;
     void setUrl(const QUrl& newUrl);
 
 private:

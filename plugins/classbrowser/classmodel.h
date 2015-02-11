@@ -98,11 +98,11 @@ public Q_SLOTS:
   void addProjectNode(KDevelop::IProject* project);
 
 private: // NodesModelInterface overrides
-  virtual void nodesLayoutAboutToBeChanged(ClassModelNodes::Node* a_parent);
-  virtual void nodesLayoutChanged(ClassModelNodes::Node* a_parent);
-  virtual void nodesRemoved(ClassModelNodes::Node* a_parent, int a_first, int a_last);
-  virtual void nodesAboutToBeAdded(ClassModelNodes::Node* a_parent, int a_pos, int a_size);
-  virtual void nodesAdded(ClassModelNodes::Node* a_parent);
+  virtual void nodesLayoutAboutToBeChanged(ClassModelNodes::Node* a_parent) override;
+  virtual void nodesLayoutChanged(ClassModelNodes::Node* a_parent) override;
+  virtual void nodesRemoved(ClassModelNodes::Node* a_parent, int a_first, int a_last) override;
+  virtual void nodesAboutToBeAdded(ClassModelNodes::Node* a_parent, int a_pos, int a_size) override;
+  virtual void nodesAdded(ClassModelNodes::Node* a_parent) override;
 
 private:
   /// Main level node - it's usually invisible.
@@ -117,16 +117,16 @@ public Q_SLOTS:
   void expanded(const QModelIndex& index);
 
 public: // QAbstractItemModel overrides
-  virtual QFlags< Qt::ItemFlag > flags(const QModelIndex&) const;
-  virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-  virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-  virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-  virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+  virtual QFlags< Qt::ItemFlag > flags(const QModelIndex&) const override;
+  virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+  virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+  virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+  virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
-  virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
+  virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
 
-  virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-  virtual QModelIndex parent(const QModelIndex& child) const;
+  virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+  virtual QModelIndex parent(const QModelIndex& child) const override;
 };
 
 

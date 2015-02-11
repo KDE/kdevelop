@@ -35,12 +35,12 @@ public:
     ImportMetadataWidget(QWidget* parent=0);
     virtual ~ImportMetadataWidget();
 
-    virtual QUrl source() const;
-    virtual KDevelop::VcsLocation destination() const;
-    virtual QString message() const;
-    virtual void setSourceLocation( const KDevelop::VcsLocation& );
-    virtual void setSourceLocationEditable( bool );
-    virtual bool hasValidData() const;
+    virtual QUrl source() const override;
+    virtual KDevelop::VcsLocation destination() const override;
+    virtual QString message() const override;
+    virtual void setSourceLocation( const KDevelop::VcsLocation& ) override;
+    virtual void setSourceLocationEditable( bool ) override;
+    virtual bool hasValidData() const override;
 
 private:
     Ui::ImportMetadataWidget* m_ui;

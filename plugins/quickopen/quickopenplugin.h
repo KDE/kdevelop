@@ -57,9 +57,9 @@ public:
     static QuickOpenPlugin* self();
     
     // KDevelop::Plugin methods
-    virtual void unload();
+    virtual void unload() override;
 
-    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
 
     enum ModelTypes {
       Files = 1,
@@ -74,22 +74,22 @@ public:
      * @param modes A combination of ModelTypes
      * */
     void showQuickOpen( ModelTypes modes = All );
-    void showQuickOpen( const QStringList &items );
+    void showQuickOpen( const QStringList &items ) override;
 
-    virtual void registerProvider( const QStringList& scope, const QStringList& type, KDevelop::QuickOpenDataProviderBase* provider );
+    virtual void registerProvider( const QStringList& scope, const QStringList& type, KDevelop::QuickOpenDataProviderBase* provider ) override;
 
-    virtual bool removeProvider( KDevelop::QuickOpenDataProviderBase* provider );
+    virtual bool removeProvider( KDevelop::QuickOpenDataProviderBase* provider ) override;
 
-    virtual QSet<KDevelop::IndexedString> fileSet() const;
+    virtual QSet<KDevelop::IndexedString> fileSet() const override;
 
     //Frees the model by closing active quickopen dialoags, and retuns whether successful.
     bool freeModel();
     
-    virtual void createActionsForMainWindow( Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions );
+    virtual void createActionsForMainWindow( Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions ) override;
 
     QuickOpenLineEdit* createQuickOpenLineWidget();
     
-    virtual KDevelop::IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& type, QuickOpenType kind);
+    virtual KDevelop::IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& type, QuickOpenType kind) override;
 public slots:
     void quickOpen();
     void quickOpenFile();
@@ -176,9 +176,9 @@ class QuickOpenWidget : public QMenu {
   void applyFilter();
 
   private:
-  virtual void showEvent(QShowEvent *);
+  virtual void showEvent(QShowEvent *) override;
   
-  virtual bool eventFilter ( QObject * watched, QEvent * event );
+  virtual bool eventFilter ( QObject * watched, QEvent * event ) override;
 
   QuickOpenModel* m_model;
   bool m_expandedTemporary, m_hadNoCommandSinceAlt;
@@ -220,7 +220,7 @@ class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
     bool insideThis(QObject* object);
     void showWithWidget(QuickOpenWidget* widget);
     
-    virtual void setDefaultText(const QString& text) {
+    virtual void setDefaultText(const QString& text) override {
       m_defaultText = text;
       setPlaceholderText(m_defaultText);
     }
@@ -230,9 +230,9 @@ class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
     void checkFocus();
     void widgetDestroyed(QObject*);
   private:
-    virtual void focusInEvent(QFocusEvent* ev) ;
-    virtual bool eventFilter(QObject* obj, QEvent* e) ;
-    virtual void hideEvent(QHideEvent* );
+    virtual void focusInEvent(QFocusEvent* ev) override ;
+    virtual bool eventFilter(QObject* obj, QEvent* e) override ;
+    virtual void hideEvent(QHideEvent* ) override;
     
     QPointer<QuickOpenWidget> m_widget;
     bool m_forceUpdate;

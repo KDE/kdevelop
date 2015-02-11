@@ -151,7 +151,7 @@ public:
   /**
    * Find the top context.
    */
-  virtual TopDUContext* topContext() const;
+  virtual TopDUContext* topContext() const override;
 
   /**
    * Visits all duchain objects in the whole duchain.
@@ -867,7 +867,7 @@ protected:
   virtual bool shouldSearchInParent(SearchFlags flags) const;
 
 private:
-  void rebuildDynamicData(DUContext* parent, uint ownIndex);
+  void rebuildDynamicData(DUContext* parent, uint ownIndex) override;
 
   friend class TopDUContext;
   friend class IndexedDUContext;

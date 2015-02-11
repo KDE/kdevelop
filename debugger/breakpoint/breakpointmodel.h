@@ -103,16 +103,16 @@ public:
     BreakpointModel(QObject* parent);
     virtual ~BreakpointModel();
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
     QModelIndex breakpointIndex(Breakpoint *b, int column);
-    virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
      ///Note: to retrieve the full path use Breakpoint::LocationRole, Qt::DisplayRole returns only a file's name
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
  
     void toggleBreakpoint(const QUrl &url, const KTextEditor::Cursor& cursor);
 

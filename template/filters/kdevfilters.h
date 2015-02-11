@@ -33,7 +33,7 @@ class CamelCaseFilter : public Grantlee::Filter
 public:
     virtual QVariant doFilter(const QVariant& input,
                               const QVariant& argument = QVariant(),
-                              bool autoescape = false) const;
+                              bool autoescape = false) const override;
 };
 
 class LowerCamelCaseFilter : public Grantlee::Filter
@@ -41,7 +41,7 @@ class LowerCamelCaseFilter : public Grantlee::Filter
 public:
     virtual QVariant doFilter(const QVariant& input,
                               const QVariant& argument = QVariant(),
-                              bool autoescape = false) const;
+                              bool autoescape = false) const override;
 };
 
 class UnderscoreFilter : public Grantlee::Filter
@@ -49,7 +49,7 @@ class UnderscoreFilter : public Grantlee::Filter
 public:
     virtual QVariant doFilter(const QVariant& input,
                               const QVariant& argument = QVariant(),
-                              bool autoescape = false) const;
+                              bool autoescape = false) const override;
 };
 
 class UpperFirstFilter : public Grantlee::Filter
@@ -57,7 +57,7 @@ class UpperFirstFilter : public Grantlee::Filter
 public:
     virtual QVariant doFilter(const QVariant& input,
                               const QVariant& argument = QVariant(),
-                              bool autoescape = false) const;
+                              bool autoescape = false) const override;
 };
 
 class SplitLinesFilter : public Grantlee::Filter
@@ -65,7 +65,7 @@ class SplitLinesFilter : public Grantlee::Filter
 public:
     virtual QVariant doFilter(const QVariant& input,
                               const QVariant& argument = QVariant(),
-                              bool autoescape = false) const;
+                              bool autoescape = false) const override;
 };
 
 class ArgumentTypeFilter : public Grantlee::Filter
@@ -73,7 +73,7 @@ class ArgumentTypeFilter : public Grantlee::Filter
 public:
     virtual QVariant doFilter(const QVariant& input,
                               const QVariant& argument = QVariant(),
-                              bool autoescape = false) const;
+                              bool autoescape = false) const override;
 };
 
 class KDevFilters : public QObject, public Grantlee::TagLibraryInterface
@@ -86,7 +86,7 @@ public:
     explicit KDevFilters(QObject* parent = 0, const QVariantList &args = QVariantList());
     virtual ~KDevFilters();
 
-    virtual QHash< QString, Grantlee::Filter* > filters(const QString& name = QString());
+    virtual QHash< QString, Grantlee::Filter* > filters(const QString& name = QString()) override;
 };
 
 }

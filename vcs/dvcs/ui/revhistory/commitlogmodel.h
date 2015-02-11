@@ -41,13 +41,13 @@ public:
     CommitLogModel(KDevelop::DistributedVersionControlPlugin* plugin, const QString& repo, QObject* parent = 0);
     ~CommitLogModel() {};
 
-    QVariant data(const QModelIndex &index, int role) const;
-    Qt::ItemFlags flags(const QModelIndex& index) const;
-    QVariant headerData(int s, Qt::Orientation o, int role = Qt::DisplayRole) const;
-    QModelIndex index(int r, int c, const QModelIndex& par = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex& index) const;
-    int rowCount(const QModelIndex& par = QModelIndex()) const;
-    int columnCount(const QModelIndex&) const;
+    QVariant data(const QModelIndex &index, int role) const override;
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
+    QVariant headerData(int s, Qt::Orientation o, int role = Qt::DisplayRole) const override;
+    QModelIndex index(int r, int c, const QModelIndex& par = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex& index) const override;
+    int rowCount(const QModelIndex& par = QModelIndex()) const override;
+    int columnCount(const QModelIndex&) const override;
     int branchCount(const int) const {return branchCnt;}
     QList<int> getProperties(const int i) const {return revs[i].getProperties();}
     

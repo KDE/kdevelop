@@ -85,15 +85,15 @@ public:
     /**
      * @return the label contents.
      */
-    virtual QString description() const;
+    virtual QString description() const override;
     /**
      * The label cannot be executed.
      */
-    virtual void execute();
+    virtual void execute() override;
     /**
      * No action is returned.
      */
-    virtual QAction* toKAction() const;
+    virtual QAction* toKAction() const override;
 
 private:
     QString m_description;

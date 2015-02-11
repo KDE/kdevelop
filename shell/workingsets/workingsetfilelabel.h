@@ -30,7 +30,7 @@ class WorkingSetFileLabel : public QLabel {
 
 public:
     WorkingSetFileLabel();
-    virtual void mouseReleaseEvent(QMouseEvent* ev);
+    virtual void mouseReleaseEvent(QMouseEvent* ev) override;
     void setIsActiveFile(bool active);
 
     bool isActive() const;

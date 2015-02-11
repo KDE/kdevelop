@@ -42,10 +42,10 @@ class OpenWithPlugin : public KDevelop::IPlugin, public KDevelop::IOpenWith
 public:
     OpenWithPlugin( QObject* parent, const QVariantList& args );
     virtual ~OpenWithPlugin();
-    virtual KDevelop::ContextMenuExtension contextMenuExtension ( KDevelop::Context* context );
+    virtual KDevelop::ContextMenuExtension contextMenuExtension ( KDevelop::Context* context ) override;
 
 protected:
-    virtual void openFilesInternal( const QList<QUrl>& files );
+    virtual void openFilesInternal( const QList<QUrl>& files ) override;
 
 private slots:
     void open( const QString& );

@@ -57,7 +57,7 @@ private slots:
 
 protected:
   /// insert snippet on double click
-  virtual bool eventFilter( QObject* obj, QEvent* event );
+  virtual bool eventFilter( QObject* obj, QEvent* event ) override;
 
 private:
   ExternalScriptPlugin* m_plugin;

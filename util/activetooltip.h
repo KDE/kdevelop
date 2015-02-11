@@ -63,17 +63,17 @@ public:
     ///@param uniqueId If this is nonempty, ActiveTooltip will make sure that only one tooltip with the given id is shown at a time
     static void showToolTip(ActiveToolTip* tooltip, float priority = 100, QString uniqueId = QString());
     
-    bool eventFilter(QObject *object, QEvent *e);
+    bool eventFilter(QObject *object, QEvent *e) override;
     
     bool insideThis(QObject* object);
 
-    void showEvent(QShowEvent*);
+    void showEvent(QShowEvent*) override;
 
-    void resizeEvent(QResizeEvent*);
+    void resizeEvent(QResizeEvent*) override;
     
-    void moveEvent(QMoveEvent*);
+    void moveEvent(QMoveEvent*) override;
 
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent*) override;
 
     void adjustRect();
     
@@ -92,7 +92,7 @@ Q_SIGNALS:
     // Emitted whenever mouse-activity is noticed outside of the tooltip area
     void mouseOut();
 private:
-    virtual void closeEvent(QCloseEvent* );
+    virtual void closeEvent(QCloseEvent* ) override;
     void updateMouseDistance();
     
     class ActiveToolTipPrivate* const d;

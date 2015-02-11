@@ -59,7 +59,7 @@ Q_SIGNALS:
     void configSaved(ConfigPage* page);
 
 protected:
-    virtual void closeEvent(QCloseEvent* event);
+    virtual void closeEvent(QCloseEvent* event) override;
 
 private:
     KPageWidgetItem* itemForPage(ConfigPage* page) const;

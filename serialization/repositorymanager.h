@@ -54,7 +54,7 @@ public:
     return static_cast<ItemRepositoryType*>(m_repository);
   }
 
-  QMutex* repositoryMutex() const {
+  QMutex* repositoryMutex() const override {
     return (*this)->mutex();
   }
 

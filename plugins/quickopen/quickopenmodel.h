@@ -59,13 +59,13 @@ class QuickOpenModel : public ExpandingWidgetModel {
     ///Reset all providers, unexpand everything, empty caches.
     void restart(bool keepFilterText = false);
 
-    QModelIndex index( int, int, const QModelIndex& parent ) const;
-    QModelIndex parent( const QModelIndex& ) const;
-    int rowCount( const QModelIndex& ) const;
+    QModelIndex index( int, int, const QModelIndex& parent ) const override;
+    QModelIndex parent( const QModelIndex& ) const override;
+    int rowCount( const QModelIndex& ) const override;
     int unfilteredRowCount() const;
     int columnCount() const;
-    int columnCount( const QModelIndex& ) const;
-    QVariant data( const QModelIndex&, int ) const;
+    int columnCount( const QModelIndex& ) const override;
+    QVariant data( const QModelIndex&, int ) const override;
 
     /**
      * Tries to execute the item currently selected.
@@ -81,7 +81,7 @@ class QuickOpenModel : public ExpandingWidgetModel {
     //The expandingwidgetmodel needs access to the tree-view
     void setTreeView( QTreeView* view );
     
-    virtual QTreeView* treeView() const;
+    virtual QTreeView* treeView() const override;
 
     virtual QSet<KDevelop::IndexedString> fileSet() const;
 
@@ -96,9 +96,9 @@ class QuickOpenModel : public ExpandingWidgetModel {
     void restart_internal( bool keepFilterText );
   
   private:
-    virtual bool indexIsItem(const QModelIndex& index) const;
+    virtual bool indexIsItem(const QModelIndex& index) const override;
     
-    virtual int contextMatchQuality(const QModelIndex & index) const;
+    virtual int contextMatchQuality(const QModelIndex & index) const override;
 
     KDevelop::QuickOpenDataPointer getItem( int row, bool noReset = false ) const;
     

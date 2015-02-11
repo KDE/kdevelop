@@ -48,13 +48,13 @@ template <class Widget>
 class SimpleToolWidgetFactory: public ToolFactory {
 public:
     SimpleToolWidgetFactory(const QString &id): ToolFactory(), m_id(id) {}
-    virtual QWidget* create(ToolDocument * /*doc*/, QWidget *parent = 0)
+    virtual QWidget* create(ToolDocument * /*doc*/, QWidget *parent = 0) override
     {
         return new Widget(parent);
     }
-    virtual QList<QAction*> toolBarActions( QWidget* ) const { return QList<QAction*>(); }
-    virtual QList< QAction* > contextMenuActions(QWidget* /*viewWidget*/) const { return QList<QAction*>(); }
-    virtual QString id() const { return m_id; }
+    virtual QList<QAction*> toolBarActions( QWidget* ) const override { return QList<QAction*>(); }
+    virtual QList< QAction* > contextMenuActions(QWidget* /*viewWidget*/) const override { return QList<QAction*>(); }
+    virtual QString id() const override { return m_id; }
     virtual bool viewsWantProgressIndicator() const { return false; }
 private:
     QString m_id;
@@ -70,12 +70,12 @@ public:
     ToolDocument(const QString &title, Controller *controller, ToolFactory *factory);
     ~ToolDocument();
 
-    virtual QString documentType() const;
+    virtual QString documentType() const override;
 
-    virtual QString documentSpecifier() const;
+    virtual QString documentSpecifier() const override;
 
 protected:
-    virtual QWidget *createViewWidget(QWidget *parent = 0);
+    virtual QWidget *createViewWidget(QWidget *parent = 0) override;
     ToolFactory *factory() const;
 
 private:

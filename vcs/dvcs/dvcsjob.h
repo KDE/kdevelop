@@ -132,7 +132,7 @@ public:
      * @note Default communication mode is KProcess::AllOutput.
      * @see Use setCommunicationMode() to override the default communication mode.
      */
-    virtual void start();
+    virtual void start() override;
 
     /**
      * In some cases it's needed to specify the communication mode between the
@@ -183,18 +183,18 @@ public:
      * Mostly used in vcscommitdialog.
      * @see setResults(const QVariant &res)
      */
-    virtual QVariant fetchResults();
+    virtual QVariant fetchResults() override;
 
     /**
      * Returns JobStatus
      * @see KDevelop::VcsJob::JobStatus
      */
-    virtual KDevelop::VcsJob::JobStatus status() const;
+    virtual KDevelop::VcsJob::JobStatus status() const override;
 
     /**
      * Returns pointer to IPlugin (which was used to create a job).
      */
-    virtual KDevelop::IPlugin* vcsPlugin() const;
+    virtual KDevelop::IPlugin* vcsPlugin() const override;
     // End:  KDevelop::VcsJob
     
     KProcess *process();
@@ -218,7 +218,7 @@ private Q_SLOTS:
     void slotReceivedStdout();
 
 protected:
-    virtual bool doKill();
+    virtual bool doKill() override;
 
 private:
     void jobIsReady();

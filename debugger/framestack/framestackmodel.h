@@ -63,33 +63,33 @@ public:
     void setFrames(int threadNumber, QList<FrameItem> frames);
     void insertFrames(int threadNumber, const QList<FrameItem> &frames);
     void setHasMoreFrames(int threadNumber, bool hasMoreFrames);
-    FrameItem frame(const QModelIndex &index);
+    FrameItem frame(const QModelIndex &index) override;
     QList<FrameItem> frames(int threadNumber) const;
 
     //ItemModel implementation
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex& child) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    virtual QModelIndex parent(const QModelIndex& child) const override;
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-    void setCurrentThread(int threadNumber);
-    void setCurrentThread(const QModelIndex &index);
-    int currentThread() const;
-    QModelIndex currentThreadIndex() const;
+    void setCurrentThread(int threadNumber) override;
+    void setCurrentThread(const QModelIndex &index) override;
+    int currentThread() const override;
+    QModelIndex currentThreadIndex() const override;
 
-    int currentFrame() const;
-    QModelIndex currentFrameIndex() const;
-    void setCurrentFrame(int frame);
+    int currentFrame() const override;
+    QModelIndex currentFrameIndex() const override;
+    void setCurrentFrame(int frame) override;
     
-    void fetchMoreFrames();
+    void fetchMoreFrames() override;
 
 private Q_SLOTS:
     void stateChanged(KDevelop::IDebugSession::DebuggerState state);
 
 private:
-    virtual void handleEvent(IDebugSession::event_t event);
+    virtual void handleEvent(IDebugSession::event_t event) override;
 
     void update();
     QModelIndex indexForThreadNumber(int threadNumber);

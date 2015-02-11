@@ -135,9 +135,9 @@ public:
   void performPopulateNode(bool a_forceRepopulate = false);
 
 public: // Node overrides.
-  virtual void collapse();
-  virtual void expand();
-  virtual bool hasChildren() const;
+  virtual void collapse() override;
+  virtual void expand() override;
+  virtual bool hasChildren() const override;
 
 protected: // overridables
   /// Called by the framework when the node is about to be expanded
@@ -169,7 +169,7 @@ public:
   const KDevelop::IndexedQualifiedIdentifier& getIdentifier() const { return m_identifier; }
 
 public: // Node overrides
-  virtual bool getIcon(QIcon& a_resultIcon);
+  virtual bool getIcon(QIcon& a_resultIcon) override;
 
 public: // Overridables
   /// Return the associated declaration
@@ -192,9 +192,9 @@ public:
   EnumNode(KDevelop::Declaration* a_decl, NodesModelInterface* a_model);
 
 public: // Node overrides
-  virtual int getScore() const { return 102; }
-  virtual bool getIcon(QIcon& a_resultIcon);
-  virtual void populateNode();
+  virtual int getScore() const override { return 102; }
+  virtual bool getIcon(QIcon& a_resultIcon) override;
+  virtual void populateNode() override;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -212,13 +212,13 @@ public:
   ClassNode* findSubClass(const KDevelop::IndexedQualifiedIdentifier& a_id);
 
 public: // Node overrides
-  virtual int getScore() const { return 300; }
-  virtual void populateNode();
-  virtual void nodeCleared();
-  virtual bool hasChildren() const { return true; }
+  virtual int getScore() const override { return 300; }
+  virtual void populateNode() override;
+  virtual void nodeCleared() override;
+  virtual bool hasChildren() const override { return true; }
 
 protected: // ClassModelNodeDocumentChangedInterface overrides
-  virtual void documentChanged(const KDevelop::IndexedString& a_file);
+  virtual void documentChanged(const KDevelop::IndexedString& a_file) override;
 
 private:
   typedef QMap< uint, Node* > SubIdentifiersMap;
@@ -248,8 +248,8 @@ public:
   FunctionNode(KDevelop::Declaration* a_decl, NodesModelInterface* a_model);
 
 public: // Node overrides
-  virtual int getScore() const { return 400; }
-  virtual QString getSortableString() const { return m_sortableString; }
+  virtual int getScore() const override { return 400; }
+  virtual QString getSortableString() const override { return m_sortableString; }
 
 private:
   QString m_sortableString;
@@ -265,8 +265,8 @@ public:
   ClassMemberNode(KDevelop::ClassMemberDeclaration* a_decl, NodesModelInterface* a_model);
 
 public: // Node overrides
-  virtual int getScore() const { return 500; }
-  virtual bool getIcon(QIcon& a_resultIcon);
+  virtual int getScore() const override { return 500; }
+  virtual bool getIcon(QIcon& a_resultIcon) override;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -279,8 +279,8 @@ public:
   FolderNode(const QString& a_displayName, NodesModelInterface* a_model);
 
 public: // Node overrides
-  virtual bool getIcon(QIcon& a_resultIcon);
-  virtual int getScore() const { return 100; }
+  virtual bool getIcon(QIcon& a_resultIcon) override;
+  virtual int getScore() const override { return 100; }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -293,8 +293,8 @@ public:
   DynamicFolderNode(const QString& a_displayName, NodesModelInterface* a_model);
 
 public: // Node overrides
-  virtual bool getIcon(QIcon& a_resultIcon);
-  virtual int getScore() const { return 100; }
+  virtual bool getIcon(QIcon& a_resultIcon) override;
+  virtual int getScore() const override { return 100; }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -308,7 +308,7 @@ public:
   BaseClassesFolderNode(NodesModelInterface* a_model);
 
 public: // Node overrides
-  virtual void populateNode();
+  virtual void populateNode() override;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -322,7 +322,7 @@ public:
   DerivedClassesFolderNode(NodesModelInterface* a_model);
 
 public: // Node overrides
-  virtual void populateNode();
+  virtual void populateNode() override;
 };
 
 } // namespace classModelNodes

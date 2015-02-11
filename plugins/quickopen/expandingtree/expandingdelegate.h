@@ -49,7 +49,7 @@ class ExpandingDelegate : public QItemDelegate
 
 
     // Overridden to create highlighting for current index
-    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
 
     // Returns the basic size-hint as reported by QItemDelegate
     QSize basicSizeHint( const QModelIndex& index ) const;
@@ -58,11 +58,11 @@ class ExpandingDelegate : public QItemDelegate
   protected:
     //Called right before paint to allow last-minute changes to the style
     virtual void adjustStyle( const QModelIndex& index, QStyleOptionViewItem & option ) const;
-    virtual void drawDisplay ( QPainter * painter, const QStyleOptionViewItem & option, const QRect & rect, const QString & text ) const;
-    virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual bool editorEvent ( QEvent * event, QAbstractItemModel * model, const QStyleOptionViewItem & option, const QModelIndex & index );
+    virtual void drawDisplay ( QPainter * painter, const QStyleOptionViewItem & option, const QRect & rect, const QString & text ) const override;
+    virtual QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
+    virtual bool editorEvent ( QEvent * event, QAbstractItemModel * model, const QStyleOptionViewItem & option, const QModelIndex & index ) override;
     virtual void drawBackground ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual void drawDecoration(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QPixmap& pixmap) const;
+    virtual void drawDecoration(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QPixmap& pixmap) const override;
     //option can be changed
     virtual QList<QTextLayout::FormatRange> createHighlighting(const QModelIndex& index, QStyleOptionViewItem& option) const;
 

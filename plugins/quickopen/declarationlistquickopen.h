@@ -32,7 +32,7 @@ public:
                                const QList<DUChainItem>& items,
                                bool openDefinitions = false );
 
-  virtual void reset();
+  virtual void reset() override;
 
 private:
   QList<DUChainItem> m_items;

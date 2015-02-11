@@ -50,8 +50,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractIncludeNavigationContext : public Abst
 public:
   AbstractIncludeNavigationContext(const IncludeItem& item, TopDUContextPointer topContext, 
                                    const ParsingEnvironmentType& type);
-  virtual QString html(bool shorten);
-  virtual QString name() const;
+  virtual QString html(bool shorten) override;
+  virtual QString name() const override;
 
 protected:
   /// Overwrite this to add language dependent information for a given file.

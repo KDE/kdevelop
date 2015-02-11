@@ -65,19 +65,19 @@ public:
     /**
      * Get the plugin info for a loaded plugin
      */
-    KPluginInfo pluginInfo( const IPlugin* ) const;
+    KPluginInfo pluginInfo( const IPlugin* ) const override;
 
     /**
      * Get a list of currently loaded plugins
      */
-    QList<IPlugin*> loadedPlugins() const;
+    QList<IPlugin*> loadedPlugins() const override;
 
     /**
      * Returns a uniquely specified plugin. If it isn't already loaded, it will be.
      * @param pluginName the name of the plugin, as given in the X-KDE-PluginInfo-Name property
      * @returns a pointer to the plugin instance or 0
      */
-    IPlugin * loadPlugin( const QString & pluginName );
+    IPlugin * loadPlugin( const QString & pluginName ) override;
 
     /**
      * @brief Unloads the plugin specified by @p plugin
@@ -85,7 +85,7 @@ public:
      * @param plugin The name of the plugin as specified by the
      * X-KDE-PluginInfo-Name key of the .desktop file for the plugin
      */
-    bool unloadPlugin( const QString & plugin );
+    bool unloadPlugin( const QString & plugin ) override;
 
     enum PluginDeletion {
         Now,
@@ -123,7 +123,7 @@ public:
 
     KPluginInfo::List queryExtensionPlugins(const QString& extension, const QVariantMap& constraints = QVariantMap()) const override;
 
-    QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const;
+    QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const override;
 
     QStringList projectPlugins();
 

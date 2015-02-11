@@ -50,7 +50,7 @@ public:
 private slots:
     void pageInValid( QWidget* w );
     void pageValid( QWidget* w );
-    void next();
+    void next() override;
 private:
     QMap<QWidget*, KPageWidgetItem*> m_pageItems;
     QSignalMapper* m_invalidMapper;

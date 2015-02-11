@@ -44,7 +44,7 @@ class ProjectVcsPage : public AppWizardPageWidget
 public:
     ProjectVcsPage( KDevelop::IPluginController*, QWidget* parent = 0 );
     ~ProjectVcsPage();
-    bool shouldContinue();
+    bool shouldContinue() override;
 signals:
     void valid();
     void invalid();

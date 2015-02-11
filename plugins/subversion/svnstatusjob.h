@@ -34,8 +34,8 @@ class SvnStatusJob : public SvnJobBaseImpl<SvnInternalStatusJob>
 public:
 
     explicit SvnStatusJob( KDevSvnPlugin* parent );
-    QVariant fetchResults();
-    void start();
+    QVariant fetchResults() override;
+    void start() override;
 
     void setLocations( const QList<QUrl>& locations );
     void setRecursive( bool );

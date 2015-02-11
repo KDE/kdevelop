@@ -34,8 +34,8 @@ class SvnRemoveJob : public SvnJobBaseImpl<SvnInternalRemoveJob>
     Q_OBJECT
 public:
     SvnRemoveJob( KDevSvnPlugin* parent );
-    QVariant fetchResults();
-    void start();
+    QVariant fetchResults() override;
+    void start() override;
     void setLocations( const QList<QUrl>& locations );
     void setForce( bool force );
 };

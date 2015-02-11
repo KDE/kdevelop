@@ -71,7 +71,7 @@ public:
     void expandItem(KDevelop::ProjectBaseItem *item);
 
 protected:
-    virtual bool eventFilter(QObject* obj, QEvent* event);
+    virtual bool eventFilter(QObject* obj, QEvent* event) override;
 
 private slots:
     void selectionChanged();

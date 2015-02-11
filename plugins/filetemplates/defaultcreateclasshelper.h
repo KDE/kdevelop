@@ -36,11 +36,11 @@ public:
     /**
      * @return a new @c TemplateClassGenerator.
      */
-    virtual KDevelop::TemplateClassGenerator* createGenerator(const QUrl& baseUrl);
+    virtual KDevelop::TemplateClassGenerator* createGenerator(const QUrl& baseUrl) override;
     /**
      * @return an empty list of methods.
      */
-    virtual QList< KDevelop::DeclarationPointer > defaultMethods(const QString& name) const;
+    virtual QList< KDevelop::DeclarationPointer > defaultMethods(const QString& name) const override;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_DEFAULTCREATECLASSHELPER_H

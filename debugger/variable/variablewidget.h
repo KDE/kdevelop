@@ -52,8 +52,8 @@ public Q_SLOTS:
     void slotAddWatch(const QString &ident);
 
 protected:
-    virtual void showEvent(QShowEvent* e);
-    virtual void hideEvent(QHideEvent* e);
+    virtual void showEvent(QShowEvent* e) override;
+    virtual void hideEvent(QHideEvent* e) override;
 
 private:
     VariableTree *varTree_;
@@ -76,7 +76,7 @@ public:
 
 private:
     void setupActions();
-    virtual void contextMenuEvent(QContextMenuEvent* event);
+    virtual void contextMenuEvent(QContextMenuEvent* event) override;
     Variable *selectedVariable() const;
 
 private slots:

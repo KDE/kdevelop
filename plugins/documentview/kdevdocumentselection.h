@@ -31,9 +31,9 @@ public:
 
 public slots:
     virtual void select( const QModelIndex & index,
-                         QItemSelectionModel::SelectionFlags command );
+                         QItemSelectionModel::SelectionFlags command ) override;
     virtual void select( const QItemSelection & selection,
-                         QItemSelectionModel::SelectionFlags command );
+                         QItemSelectionModel::SelectionFlags command ) override;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_KDEVDOCUMENTSELECTION_H

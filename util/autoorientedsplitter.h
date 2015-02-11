@@ -44,7 +44,7 @@ public:
     explicit AutoOrientedSplitter(Qt::Orientation orientation, QWidget* parent = 0);
 
 protected:
-    virtual void resizeEvent(QResizeEvent*);
+    virtual void resizeEvent(QResizeEvent*) override;
 };
 
 }

@@ -51,7 +51,7 @@ namespace KDevelop {
       private slots:
         void jumpTo();
       private:
-        virtual void resizeEvent ( QResizeEvent * event );
+        virtual void resizeEvent ( QResizeEvent * event ) override;
         
         PersistentMovingRange::Ptr m_range;
         IndexedDeclaration m_declaration;
@@ -135,12 +135,12 @@ namespace KDevelop {
               public:
               void setWidget(UsesWidget* widget );
               UsesWidgetCollector(IndexedDeclaration decl);
-              virtual void processUses(KDevelop::ReferencedTopDUContext topContext);
-              virtual void maximumProgress(uint max);
-              virtual void progress(uint processed, uint total);
+              virtual void processUses(KDevelop::ReferencedTopDUContext topContext) override;
+              virtual void maximumProgress(uint max) override;
+              virtual void progress(uint processed, uint total) override;
               UsesWidget* m_widget;
             };
-            virtual QSize sizeHint () const;
+            virtual QSize sizeHint () const override;
             ///@param customCollector allows specifying an own subclass of UsesWidgetCollector.
             UsesWidget(const IndexedDeclaration& declaration, QSharedPointer<UsesWidgetCollector> customCollector = {});
             ~UsesWidget();

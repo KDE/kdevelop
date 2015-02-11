@@ -137,7 +137,7 @@ public:
     /**Destructor.*/
     virtual ~FileContext();
 
-    virtual int type() const;
+    virtual int type() const override;
 
     /**@return A reference to the selected URLs.*/
     virtual QList<QUrl> urls() const override;
@@ -160,7 +160,7 @@ public:
     /**Destructor.*/
     virtual ~ProjectItemContext();
 
-    virtual int type() const;
+    virtual int type() const override;
 
     /**
      * @return The project model items for the selected items.
@@ -189,7 +189,7 @@ public:
     /**
      * @return Context::OpenWithContext
      */
-    virtual int type() const;
+    virtual int type() const override;
 
     /**
      * @return The files to open.

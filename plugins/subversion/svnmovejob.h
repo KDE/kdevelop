@@ -33,8 +33,8 @@ class SvnMoveJob : public SvnJobBaseImpl<SvnInternalMoveJob>
     Q_OBJECT
 public:
     SvnMoveJob( KDevSvnPlugin* parent );
-    QVariant fetchResults();
-    void start();
+    QVariant fetchResults() override;
+    void start() override;
     void setSourceLocation( const QUrl &location );
     void setDestinationLocation( const QUrl &location );
     void setForce( bool );

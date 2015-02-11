@@ -78,9 +78,9 @@ public:
     void templateChosen(const QString& templateDescription);
 
 public Q_SLOTS:
-    virtual void next();
-    virtual void back();
-    virtual void accept();
+    virtual void next() override;
+    virtual void back() override;
+    virtual void accept() override;
 
     /**
      * Sets whether the current page is valid or not.

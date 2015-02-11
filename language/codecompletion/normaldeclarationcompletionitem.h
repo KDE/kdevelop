@@ -31,11 +31,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT NormalDeclarationCompletionItem : public Compl
 {
 public:
   NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), QExplicitlySharedDataPointer<CodeCompletionContext> context=QExplicitlySharedDataPointer<CodeCompletionContext>(), int inheritanceDepth = 0);
-  virtual KDevelop::DeclarationPointer declaration() const;
+  virtual KDevelop::DeclarationPointer declaration() const override;
   QExplicitlySharedDataPointer<CodeCompletionContext> completionContext() const;
-  virtual int inheritanceDepth() const;
-  virtual int argumentHintDepth() const;
-  QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
+  virtual int inheritanceDepth() const override;
+  virtual int argumentHintDepth() const override;
+  QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override;
 
   void execute(KTextEditor::View* document, const KTextEditor::Range& word) override;
 

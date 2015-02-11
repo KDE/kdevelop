@@ -34,7 +34,7 @@ signals:
     void accepted();
 
 protected:
-    virtual void showEvent(QShowEvent*);
+    virtual void showEvent(QShowEvent*) override;
 
 private slots:
     void highlightFile(const QUrl&);

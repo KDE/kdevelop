@@ -74,36 +74,36 @@ public:
     ProjectController( Core* core );
     virtual ~ProjectController();
 
-    virtual IProject* projectAt( int ) const;
-    virtual int projectCount() const;
-    virtual QList<IProject*> projects() const;
+    virtual IProject* projectAt( int ) const override;
+    virtual int projectCount() const override;
+    virtual QList<IProject*> projects() const override;
 
-    virtual ProjectBuildSetModel* buildSetModel();
-    virtual ProjectModel* projectModel();
-    virtual ProjectChangesModel* changesModel();
+    virtual ProjectBuildSetModel* buildSetModel() override;
+    virtual ProjectModel* projectModel() override;
+    virtual ProjectChangesModel* changesModel() override;
     virtual QItemSelectionModel* projectSelectionModel();
-    virtual IProject* findProjectByName( const QString& name );
-    IProject* findProjectForUrl( const QUrl& ) const;
+    virtual IProject* findProjectByName( const QString& name ) override;
+    IProject* findProjectForUrl( const QUrl& ) const override;
     void addProject(IProject*);
 //     IProject* currentProject() const;
 
-    virtual bool isProjectNameUsed( const QString& name ) const;
+    virtual bool isProjectNameUsed( const QString& name ) const override;
     void setDialogProvider(IProjectDialogProvider*);
 
-    QUrl projectsBaseDirectory() const;
+    QUrl projectsBaseDirectory() const override;
     QString prettyFileName(const QUrl& url, FormattingOptions format = FormatHtml) const override;
     QString prettyFilePath(const QUrl& url, FormattingOptions format = FormatHtml) const override;
 
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
 public Q_SLOTS:
-    virtual void openProjectForUrl( const QUrl &sourceUrl );
+    virtual void openProjectForUrl( const QUrl &sourceUrl ) override;
     virtual void fetchProject();
-    virtual void openProject( const QUrl &KDev4ProjectFile = QUrl() );
+    virtual void openProject( const QUrl &KDev4ProjectFile = QUrl() ) override;
     virtual void abortOpeningProject( IProject* );
     void projectImportingFinished( IProject* );
-    virtual void closeProject( IProject* );
-    virtual void configureProject( IProject* );
+    virtual void closeProject( IProject* ) override;
+    virtual void configureProject( IProject* ) override;
 
     virtual void reparseProject( IProject* project, bool forceUpdate = false  ) override;
 
@@ -157,8 +157,8 @@ public:
     ProjectControllerPrivate* const d;
 
 public Q_SLOTS:
-    virtual QUrl askProjectConfigLocation(bool fetch, const QUrl& sta);
-    virtual bool userWantsReopen();
+    virtual QUrl askProjectConfigLocation(bool fetch, const QUrl& sta) override;
+    virtual bool userWantsReopen() override;
 };
 
 

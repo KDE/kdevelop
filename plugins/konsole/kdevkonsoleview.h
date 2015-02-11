@@ -29,7 +29,7 @@ public slots:
     void setDirectory( const QUrl &dirUrl );
 
 protected:
-    virtual bool eventFilter( QObject *obj, QEvent *e );
+    virtual bool eventFilter( QObject *obj, QEvent *e ) override;
 
 private :
     class KDevKonsoleViewPrivate* const d;

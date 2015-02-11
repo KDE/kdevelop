@@ -48,7 +48,7 @@ class CommitViewDelegate : public QItemDelegate {
 public:
     CommitViewDelegate(CommitView* _view, QObject* parent);
 
-    void paint(QPainter* p, const QStyleOptionViewItem& o, const QModelIndex &i) const;
+    void paint(QPainter* p, const QStyleOptionViewItem& o, const QModelIndex &i) const override;
 
 private:
     void paintGraph(QPainter* p, const QStyleOptionViewItem& o, const QModelIndex &i) const;

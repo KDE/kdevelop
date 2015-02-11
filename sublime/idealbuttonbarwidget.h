@@ -67,7 +67,7 @@ signals:
     void emptyChanged();
 
 protected:
-    virtual void actionEvent(QActionEvent *event);
+    virtual void actionEvent(QActionEvent *event) override;
 
 private:
     Sublime::MainWindow* parentWidget() const;

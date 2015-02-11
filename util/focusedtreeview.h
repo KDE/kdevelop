@@ -37,8 +37,8 @@ class KDEVPLATFORMUTIL_EXPORT FocusedTreeView : public QTreeView {
     Q_OBJECT
     public:
         FocusedTreeView(QWidget* parent) ;
-        virtual int sizeHintForColumn(int column) const;
-        virtual void rowsInserted(const QModelIndex& parent, int start, int end);
+        virtual int sizeHintForColumn(int column) const override;
+        virtual void rowsInserted(const QModelIndex& parent, int start, int end) override;
     private Q_SLOTS:
         void resizeColumnsToContents();
 };

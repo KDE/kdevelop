@@ -69,17 +69,17 @@ class ProjectFileData : public KDevelop::QuickOpenDataBase
 public:
     ProjectFileData( const ProjectFile& file );
 
-    virtual QString text() const;
-    virtual QString htmlDescription() const;
+    virtual QString text() const override;
+    virtual QString htmlDescription() const override;
 
-    bool execute( QString& filterText );
+    bool execute( QString& filterText ) override;
 
-    virtual bool isExpandable() const;
-    virtual QWidget* expandingWidget() const;
+    virtual bool isExpandable() const override;
+    virtual QWidget* expandingWidget() const override;
 
-    virtual QIcon icon() const;
+    virtual QIcon icon() const override;
 
-    QList<QVariant> highlighting() const;
+    QList<QVariant> highlighting() const override;
 
     QString project() const;
 
@@ -92,10 +92,10 @@ class BaseFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public 
     Q_OBJECT
 public:
     BaseFileDataProvider();
-    virtual void setFilterText( const QString& text );
-    virtual uint itemCount() const;
-    virtual uint unfilteredItemCount() const;
-    virtual KDevelop::QuickOpenDataPointer data( uint row ) const;
+    virtual void setFilterText( const QString& text ) override;
+    virtual uint itemCount() const override;
+    virtual uint unfilteredItemCount() const override;
+    virtual KDevelop::QuickOpenDataPointer data( uint row ) const override;
 
     inline KDevelop::Path itemPath( const ProjectFile& data ) const
     {
@@ -113,8 +113,8 @@ class ProjectFileDataProvider : public BaseFileDataProvider
     Q_OBJECT
 public:
     ProjectFileDataProvider();
-    virtual void reset();
-    virtual QSet<KDevelop::IndexedString> files() const;
+    virtual void reset() override;
+    virtual QSet<KDevelop::IndexedString> files() const override;
 
 private slots:
     void projectClosing( KDevelop::IProject* );
@@ -136,8 +136,8 @@ class OpenFilesDataProvider : public BaseFileDataProvider
 {
     Q_OBJECT
 public:
-    virtual void reset();
-    virtual QSet<KDevelop::IndexedString> files() const;
+    virtual void reset() override;
+    virtual QSet<KDevelop::IndexedString> files() const override;
 };
 
 #endif

@@ -1715,7 +1715,7 @@ class ItemRepository : public AbstractItemRepository {
     }
   };
 
-  QString printStatistics() const {
+  QString printStatistics() const override {
     return statistics().print();
   }
 
@@ -1877,7 +1877,7 @@ class ItemRepository : public AbstractItemRepository {
 
   ///Synchronizes the state on disk to the one in memory, and does some memory-management.
   ///Should be called on a regular basis. Can be called centrally from the global item repository registry.
-  virtual void store() {
+  virtual void store() override {
     QMutexLocker lock(m_mutex);
     if(m_file) {
 
@@ -1949,7 +1949,7 @@ class ItemRepository : public AbstractItemRepository {
     m_mutex = mutex;
   }
 
-  virtual QString repositoryName() const {
+  virtual QString repositoryName() const override {
     return m_repositoryName;
   }
 
@@ -2065,7 +2065,7 @@ class ItemRepository : public AbstractItemRepository {
     return bucketPtr;
   }
 
-  virtual bool open(const QString& path) {
+  virtual bool open(const QString& path) override {
     QMutexLocker lock(m_mutex);
 
     close();
@@ -2178,7 +2178,7 @@ class ItemRepository : public AbstractItemRepository {
   }
 
   ///@warning by default, this does not store the current state to disk.
-  virtual void close(bool doStore = false) {
+  virtual void close(bool doStore = false) override {
     m_currentOpenPath.clear();
 
     if(doStore)
@@ -2259,7 +2259,7 @@ class ItemRepository : public AbstractItemRepository {
     }
   };
 
-  virtual int finalCleanup() {
+  virtual int finalCleanup() override {
     ThisLocker lock(m_mutex);
 
     int changed = 0;

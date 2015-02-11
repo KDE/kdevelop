@@ -34,10 +34,10 @@ public:
 
     Qt::Orientation orientation() const;
 
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const override;
 
 protected:
-    virtual void paintEvent(QPaintEvent *event);
+    virtual void paintEvent(QPaintEvent *event) override;
 
 private:
     Qt::DockWidgetArea _area;

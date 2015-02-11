@@ -44,13 +44,13 @@ public:
   ProblemModel* model() const;
   virtual void setModel(QAbstractItemModel* model) override;
 
-  virtual void contextMenuEvent(QContextMenuEvent* );
+  virtual void contextMenuEvent(QContextMenuEvent* ) override;
   virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight,
                            const QVector<int>& roles = QVector<int>()) override;
-  virtual void reset();
+  virtual void reset() override;
   
 protected:
-  virtual void showEvent(QShowEvent* event);
+  virtual void showEvent(QShowEvent* event) override;
 
 private Q_SLOTS:
   void itemActivated(const QModelIndex& index);

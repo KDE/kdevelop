@@ -47,38 +47,38 @@ public:
      */
     TestProject(const Path& url = Path(), QObject* parent = 0);
     virtual ~TestProject();
-    IProjectFileManager* projectFileManager() const { return 0; }
-    IBuildSystemManager* buildSystemManager() const { return 0; }
-    IPlugin* managerPlugin() const { return 0; }
-    IPlugin* versionControlPlugin() const { return 0; }
-    ProjectFolderItem* projectItem() const;
+    IProjectFileManager* projectFileManager() const override { return 0; }
+    IBuildSystemManager* buildSystemManager() const override { return 0; }
+    IPlugin* managerPlugin() const override { return 0; }
+    IPlugin* versionControlPlugin() const override { return 0; }
+    ProjectFolderItem* projectItem() const override;
     void setProjectItem(ProjectFolderItem* item);
     int fileCount() const { return 0; }
     ProjectFileItem* fileAt( int ) const { return 0; }
     QList<ProjectFileItem*> files() const;
-    virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString&) const { return QList< ProjectBaseItem* >(); }
-    virtual QList< ProjectBaseItem* > itemsForUrl(const QUrl&) const { return QList< ProjectBaseItem* >(); }
-    virtual QList< ProjectFileItem* > filesForPath(const IndexedString&) const { return QList<ProjectFileItem*>(); }
+    virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString&) const override { return QList< ProjectBaseItem* >(); }
+    virtual QList< ProjectBaseItem* > itemsForUrl(const QUrl&) const override { return QList< ProjectBaseItem* >(); }
+    virtual QList< ProjectFileItem* > filesForPath(const IndexedString&) const override { return QList<ProjectFileItem*>(); }
     KDEVPLATFORMTESTS_DEPRECATED QList<ProjectFileItem*> filesForUrl( const QUrl& ) const { return QList<ProjectFileItem*>(); }
-    virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString&) const { return QList<ProjectFolderItem*>(); }
+    virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString&) const override { return QList<ProjectFolderItem*>(); }
     KDEVPLATFORMTESTS_DEPRECATED QList<ProjectFolderItem*> foldersForUrl( const QUrl& ) const { return QList<ProjectFolderItem*>(); }
-    void reloadModel() { }
-    Path projectFile() const;
+    void reloadModel() override { }
+    Path projectFile() const override;
     KDEVPLATFORMTESTS_DEPRECATED QUrl projectFileUrl() const;
-    KSharedConfigPtr projectConfiguration() const { return m_projectConfiguration; }
-    void addToFileSet( ProjectFileItem* file);
-    void removeFromFileSet( ProjectFileItem* file);
-    QSet<IndexedString> fileSet() const { return m_fileSet; }
-    bool isReady() const { return true; }
+    KSharedConfigPtr projectConfiguration() const override { return m_projectConfiguration; }
+    void addToFileSet( ProjectFileItem* file) override;
+    void removeFromFileSet( ProjectFileItem* file) override;
+    QSet<IndexedString> fileSet() const override { return m_fileSet; }
+    bool isReady() const override { return true; }
 
     KDEVPLATFORMTESTS_DEPRECATED void setProjectUrl(const QUrl &url);
     void setPath(const Path& path);
 
     KDEVPLATFORMTESTS_DEPRECATED const QUrl folder() const;
-    Path path() const;
-    QString name() const { return "Test Project"; }
-    virtual bool inProject(const IndexedString& path) const;
-    virtual void setReloadJob(KJob* ) {}
+    Path path() const override;
+    QString name() const override { return "Test Project"; }
+    virtual bool inProject(const IndexedString& path) const override;
+    virtual void setReloadJob(KJob* ) override {}
 private:
     QSet<IndexedString> m_fileSet;
     Path m_path;
@@ -94,16 +94,16 @@ class KDEVPLATFORMTESTS_EXPORT TestProjectController : public ProjectController
     Q_OBJECT
 public:
     TestProjectController(Core* core) : ProjectController(core) {}
-    IProject* projectAt( int i ) const { return m_projects.at(i); }
-    int projectCount() const { return m_projects.count(); }
-    QList<IProject*> projects() const { return m_projects; }
+    IProject* projectAt( int i ) const override { return m_projects.at(i); }
+    int projectCount() const override { return m_projects.count(); }
+    QList<IProject*> projects() const override { return m_projects; }
 public:
     void addProject(IProject* p);
     void takeProject(IProject* p);
     void clearProjects();
-    virtual void closeProject(IProject* p);
+    virtual void closeProject(IProject* p) override;
 
-    virtual void initialize();
+    virtual void initialize() override;
 private:
     QList<IProject*> m_projects;
 };

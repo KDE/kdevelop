@@ -37,8 +37,8 @@ public:
     virtual ~ImportProjectJob();
 
 public:
-    void start();
-    virtual bool doKill();
+    void start() override;
+    virtual bool doKill() override;
 
 private Q_SLOTS:
     void importDone();

@@ -58,15 +58,15 @@ public:
     void cleanup();
 
     /// Must be called by debugger plugin that needs debugger actions and toolviews.
-    virtual void initializeUi();
+    virtual void initializeUi() override;
 
-    virtual void addSession(IDebugSession* session);
-    virtual IDebugSession* currentSession();
+    virtual void addSession(IDebugSession* session) override;
+    virtual IDebugSession* currentSession() override;
 
     ContextMenuExtension contextMenuExtension( Context* context );
 
-    virtual BreakpointModel* breakpointModel();
-    virtual VariableCollection* variableCollection();
+    virtual BreakpointModel* breakpointModel() override;
+    virtual VariableCollection* variableCollection() override;
 
 private Q_SLOTS:
     //void restartDebugger();

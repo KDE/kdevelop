@@ -88,7 +88,7 @@ public:
   /// Uses the given data
   Declaration( DeclarationData & dd );
 
-  virtual TopDUContext* topContext() const;
+  virtual TopDUContext* topContext() const override;
 
   /**
    * Determine whether this declaration is a forward declaration.
@@ -555,7 +555,7 @@ private:
 
   void updateCodeModel();
 
-  void rebuildDynamicData(DUContext* parent, uint ownIndex);
+  void rebuildDynamicData(DUContext* parent, uint ownIndex) override;
 
   friend class DUContext;
   friend class IndexedDeclaration;

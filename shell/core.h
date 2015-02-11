@@ -73,48 +73,48 @@ public:
     virtual ~Core();
 
     /** @copydoc ICore::uiController() */
-    virtual IUiController *uiController();
+    virtual IUiController *uiController() override;
 
     /** @copydoc ICore::pluginController() */
-    virtual IPluginController *pluginController();
+    virtual IPluginController *pluginController() override;
 
     /** @copydoc ICore::projectController() */
-    virtual IProjectController *projectController();
+    virtual IProjectController *projectController() override;
 
     /** @copydoc ICore::languageController() */
-    virtual ILanguageController *languageController();
+    virtual ILanguageController *languageController() override;
 
     /** @copydoc ICore::partController() */
-    virtual IPartController *partController();
+    virtual IPartController *partController() override;
 
     /** @copydoc ICore::documentController() */
-    virtual IDocumentController *documentController();
+    virtual IDocumentController *documentController() override;
 
     /** @copydoc ICore::runController() */
-    virtual IRunController *runController();
+    virtual IRunController *runController() override;
 
     /** @copydoc ICore::sourceFormatterController() */
-    virtual ISourceFormatterController* sourceFormatterController();
+    virtual ISourceFormatterController* sourceFormatterController() override;
 
     /** @copydoc ICore::selectionController() */
-    virtual ISelectionController* selectionController();
+    virtual ISelectionController* selectionController() override;
 
     /** @copydoc ICore::documentationController() */
-    virtual IDocumentationController* documentationController();
+    virtual IDocumentationController* documentationController() override;
 
     /** @copydoc ICore::debugController() */
-    virtual IDebugController* debugController();
+    virtual IDebugController* debugController() override;
 
     /** @copydoc ICore::testController() */
-    virtual ITestController* testController();
+    virtual ITestController* testController() override;
 
     /** @copydoc ICore::activeSession() */
-    virtual ISession *activeSession();
+    virtual ISession *activeSession() override;
 
     /** @copydoc ICore::activeSessionLock() */
-    virtual ISessionLock::Ptr activeSessionLock();
+    virtual ISessionLock::Ptr activeSessionLock() override;
 
-    virtual KAboutData aboutData() const;
+    virtual KAboutData aboutData() const override;
 
     /// The following methods may only be used within the shell.
 
@@ -167,7 +167,7 @@ public:
 
     void cleanup();
 
-    virtual bool shuttingDown() const;
+    virtual bool shuttingDown() const override;
 
     Core::Setup setupFlags() const;
 

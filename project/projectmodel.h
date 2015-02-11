@@ -281,12 +281,12 @@ public:
 
     virtual ~ProjectFolderItem();
 
-    virtual void setPath(const Path& );
+    virtual void setPath(const Path& ) override;
 
-    virtual ProjectFolderItem *folder() const;
+    virtual ProjectFolderItem *folder() const override;
 
     ///Reimplemented from QStandardItem
-    virtual int type() const;
+    virtual int type() const override;
 
     /**
      * Get the folder name, equal to path().fileName() or text().
@@ -296,8 +296,8 @@ public:
     /** @returns Returns whether this folder directly contains the specified file or folder. */
     bool hasFileOrFolder(const QString& name) const;
     
-    virtual QString iconName() const;
-    virtual RenameStatus rename(const QString& newname);
+    virtual QString iconName() const override;
+    virtual RenameStatus rename(const QString& newname) override;
 
 private:
     void propagateRename( const Path& newBase ) const;
@@ -323,8 +323,8 @@ public:
     ProjectBuildFolderItem( const QString &name, ProjectBaseItem *parent );
 
     ///Reimplemented from QStandardItem
-    virtual int type() const;
-    virtual QString iconName() const;
+    virtual int type() const override;
+    virtual QString iconName() const override;
 };
 
 /**
@@ -338,11 +338,11 @@ public:
     ProjectTargetItem( IProject*, const QString &name, ProjectBaseItem *parent = 0 );
 
     ///Reimplemented from QStandardItem
-    virtual int type() const;
+    virtual int type() const override;
 
-    virtual ProjectTargetItem *target() const;
-    virtual QString iconName() const;
-    virtual void setPath(const Path& path );
+    virtual ProjectTargetItem *target() const override;
+    virtual QString iconName() const override;
+    virtual void setPath(const Path& path ) override;
 };
 
 /**
@@ -355,8 +355,8 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectExecutableTargetItem: public ProjectTarg
     public:
         ProjectExecutableTargetItem( IProject*, const QString &name, ProjectBaseItem *parent = 0 );
 
-        virtual ProjectExecutableTargetItem *executable() const;
-        virtual int type() const;
+        virtual ProjectExecutableTargetItem *executable() const override;
+        virtual int type() const override;
         virtual QUrl builtUrl() const=0;
         virtual QUrl installedUrl() const=0;
 };
@@ -372,7 +372,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectLibraryTargetItem: public ProjectTargetI
     public:
         ProjectLibraryTargetItem(IProject* project, const QString &name, ProjectBaseItem *parent = 0 );
 
-        virtual int type() const;
+        virtual int type() const override;
 };
 
 /**
@@ -396,18 +396,18 @@ public:
     ~ProjectFileItem();
 
     ///Reimplemented from QStandardItem
-    virtual int type() const;
+    virtual int type() const override;
 
-    virtual ProjectFileItem *file() const;
+    virtual ProjectFileItem *file() const override;
 
     /**
      * @returns the file name, equal to path().fileName() or text()
      */
     QString fileName() const;
 
-    virtual void setPath( const Path& );
-    virtual QString iconName() const;
-    virtual RenameStatus rename(const QString& newname);
+    virtual void setPath( const Path& ) override;
+    virtual QString iconName() const override;
+    virtual RenameStatus rename(const QString& newname) override;
 
     /**
      * @return the items indexed path, which is often required for performant
@@ -449,18 +449,18 @@ public:
     QModelIndex indexFromItem( const ProjectBaseItem* item ) const;
     ProjectBaseItem* itemFromIndex( const QModelIndex& ) const;
 
-    virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-    virtual QModelIndex parent( const QModelIndex& child ) const;
-    virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
+    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
+    virtual QModelIndex parent( const QModelIndex& child ) const override;
+    virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const override;
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
-    virtual bool insertColumns(int column, int count, const QModelIndex& parent = QModelIndex());
-    virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+    virtual bool insertColumns(int column, int count, const QModelIndex& parent = QModelIndex()) override;
+    virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual Qt::DropActions supportedDropActions() const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
+    virtual Qt::DropActions supportedDropActions() const override;
 
     /**
      * @return all items for the given indexed path.

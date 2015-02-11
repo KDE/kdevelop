@@ -45,11 +45,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseFactory {
 template<class T, class Data>
 class DUChainItemFactory : public DUChainBaseFactory {
   public:
-  DUChainBase* create(DUChainBaseData* data) const {
+  DUChainBase* create(DUChainBaseData* data) const override {
     return new T(*static_cast<Data*>(data));
   }
   
-  void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const {
+  void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const override {
     Q_ASSERT(from.classId == T::Identity);
 
     bool& isConstant = DUChainBaseData::shouldCreateConstantData();
@@ -65,22 +65,22 @@ class DUChainItemFactory : public DUChainBaseFactory {
     }
   }
   
-  void callDestructor(DUChainBaseData* data) const {
+  void callDestructor(DUChainBaseData* data) const override {
     Q_ASSERT(data->classId == T::Identity);
     static_cast<Data*>(data)->~Data();
   }
 
-  void freeDynamicData(DUChainBaseData* data) const {
+  void freeDynamicData(DUChainBaseData* data) const override {
     Q_ASSERT(data->classId == T::Identity);
     static_cast<Data*>(data)->freeDynamicData();
   }
 
-  uint dynamicSize(const DUChainBaseData& data) const {
+  uint dynamicSize(const DUChainBaseData& data) const override {
     Q_ASSERT(data.classId == T::Identity);
     return static_cast<const Data&>(data).dynamicSize();
   }
   
-   DUChainBaseData* cloneData(const DUChainBaseData& data) const {
+   DUChainBaseData* cloneData(const DUChainBaseData& data) const override {
      Q_ASSERT(data.classId == T::Identity);
      return new Data(static_cast<const Data&>(data));
    }

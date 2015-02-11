@@ -44,11 +44,11 @@ class AreaDisplay : public QWidget
 public:
     explicit AreaDisplay(KDevelop::MainWindow* parent);
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    virtual QSize sizeHint() const override;
+    virtual QSize minimumSizeHint() const override;
 
 protected:
-    virtual bool eventFilter(QObject* obj, QEvent* event);
+    virtual bool eventFilter(QObject* obj, QEvent* event) override;
 
 private slots:
     void newArea(Sublime::Area* area);

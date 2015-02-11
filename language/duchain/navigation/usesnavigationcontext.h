@@ -30,9 +30,9 @@ namespace KDevelop {
       
       ~UsesNavigationContext();
       
-      virtual QString name() const;
-      virtual QWidget* widget() const;
-      virtual QString html(bool shorten);
+      virtual QString name() const override;
+      virtual QWidget* widget() const override;
+      virtual QString html(bool shorten) override;
     private:
       KDevelop::IndexedDeclaration m_declaration;
       UsesWidget* m_widget;

@@ -93,7 +93,7 @@ public:
     /**
      * Start this job.
      **/
-    virtual void start();
+    virtual void start() override;
 
     /**
      * @brief The result of this job
@@ -106,7 +106,7 @@ public:
     ProjectTestResult testResult();
 
 protected:
-    virtual bool doKill();
+    virtual bool doKill() override;
 
 private:
     struct Private;

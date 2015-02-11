@@ -120,11 +120,11 @@ public:
     /**
      * @brief Formats this type (base type and content type) in a string.
      */
-    virtual QString toString() const;
+    virtual QString toString() const override;
 
-    virtual AbstractType* clone() const;
-    virtual uint hash() const;
-    virtual bool equals(const AbstractType* rhs) const;
+    virtual AbstractType* clone() const override;
+    virtual uint hash() const override;
+    virtual bool equals(const AbstractType* rhs) const override;
 
     enum { Identity = 58 };
 
@@ -191,11 +191,11 @@ public:
     /**
      * @brief Formats this type (base type and key+content type) in a string.
      */
-    virtual QString toString() const;
+    virtual QString toString() const override;
 
-    virtual AbstractType* clone() const;
-    virtual uint hash() const;
-    virtual bool equals(const AbstractType* rhs) const;
+    virtual AbstractType* clone() const override;
+    virtual uint hash() const override;
+    virtual bool equals(const AbstractType* rhs) const override;
 
     enum { Identity = 57 };
 

@@ -44,8 +44,8 @@ public:
     void setAlignWidget( QWidget * alignWidget );
 
 protected:
-    void resizeEvent( QResizeEvent* ev );
-    bool eventFilter( QObject* o, QEvent* e);
+    void resizeEvent( QResizeEvent* ev ) override;
+    bool eventFilter( QObject* o, QEvent* e) override;
 
 private:
     void reposition();

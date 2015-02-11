@@ -53,21 +53,21 @@ public:
 
   ProjectItemDataProvider( KDevelop::IQuickOpen* quickopen );
 
-  virtual void enableData( const QStringList& items, const QStringList& scopes );
+  virtual void enableData( const QStringList& items, const QStringList& scopes ) override;
 
-  virtual void setFilterText( const QString& text );
+  virtual void setFilterText( const QString& text ) override;
 
   virtual QList<KDevelop::QuickOpenDataPointer> data( uint start, uint end ) const;
 
-  virtual void reset();
+  virtual void reset() override;
 
-  virtual uint itemCount() const;
-  virtual uint unfilteredItemCount() const;
+  virtual uint itemCount() const override;
+  virtual uint unfilteredItemCount() const override;
 
   static QStringList supportedItemTypes();
 
 private:
-  KDevelop::QuickOpenDataPointer data( uint pos ) const;
+  KDevelop::QuickOpenDataPointer data( uint pos ) const override;
 
   ItemTypes m_itemTypes;
   KDevelop::IQuickOpen* m_quickopen;

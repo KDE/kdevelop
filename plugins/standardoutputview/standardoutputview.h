@@ -52,29 +52,29 @@ public:
     explicit StandardOutputView(QObject *parent = 0, const QVariantList &args = QVariantList());
     virtual ~StandardOutputView();
 
-    int standardToolView( KDevelop::IOutputView::StandardToolView view );
+    int standardToolView( KDevelop::IOutputView::StandardToolView view ) override;
     int registerToolView( const QString& title,
                           KDevelop::IOutputView::ViewType type = KDevelop::IOutputView::OneView,
                           const QIcon& icon = QIcon(),
                           KDevelop::IOutputView::Options option = ShowItemsButton,
-                          const QList<QAction*>& actionList = QList<QAction*>());
+                          const QList<QAction*>& actionList = QList<QAction*>()) override;
 
     int registerOutputInToolView( int toolviewId, const QString& title,
                                   KDevelop::IOutputView::Behaviours behaviour
-                                    = KDevelop::IOutputView::AllowUserClose );
+                                    = KDevelop::IOutputView::AllowUserClose ) override;
 
-    void raiseOutput( int id );
+    void raiseOutput( int id ) override;
 
-    void setModel( int outputId, QAbstractItemModel* model );
-    void setDelegate( int outputId, QAbstractItemDelegate* delegate );
+    void setModel( int outputId, QAbstractItemModel* model ) override;
+    void setDelegate( int outputId, QAbstractItemDelegate* delegate ) override;
 
     OutputWidget* outputWidgetForId( int outputId ) const;
 
-    virtual void removeToolView( int toolviewId );
-    virtual void removeOutput( int outputId );
+    virtual void removeToolView( int toolviewId ) override;
+    virtual void removeOutput( int outputId ) override;
 
-    virtual void scrollOutputTo( int outputId, const QModelIndex& idx );
-    virtual void setTitle(int outputId, const QString& title);
+    virtual void scrollOutputTo( int outputId, const QModelIndex& idx ) override;
+    virtual void setTitle(int outputId, const QString& title) override;
 
 public Q_SLOTS:
     void removeSublimeView( Sublime::View* );

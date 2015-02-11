@@ -36,8 +36,8 @@ class SvnCheckoutJob : public SvnJobBaseImpl<SvnInternalCheckoutJob>
     Q_OBJECT
 public:
     SvnCheckoutJob( KDevSvnPlugin* parent );
-    QVariant fetchResults();
-    void start();
+    QVariant fetchResults() override;
+    void start() override;
     void setMapping( const KDevelop::VcsLocation & sourceRepository, const QUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
 };
 

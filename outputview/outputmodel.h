@@ -58,14 +58,14 @@ public:
     virtual ~OutputModel();
 
     /// IOutputViewModel interfaces
-    void activate( const QModelIndex& index );
-    QModelIndex nextHighlightIndex( const QModelIndex &current );
-    QModelIndex previousHighlightIndex( const QModelIndex &current );
+    void activate( const QModelIndex& index ) override;
+    QModelIndex nextHighlightIndex( const QModelIndex &current ) override;
+    QModelIndex previousHighlightIndex( const QModelIndex &current ) override;
 
     /// QAbstractItemModel interfaces
-    QVariant data( const QModelIndex&, int = Qt::DisplayRole ) const;
-    int rowCount( const QModelIndex& = QModelIndex() ) const;
-    QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const;
+    QVariant data( const QModelIndex&, int = Qt::DisplayRole ) const override;
+    int rowCount( const QModelIndex& = QModelIndex() ) const override;
+    QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const override;
 
     void setFilteringStrategy(const OutputFilterStrategy& currentStrategy);
 

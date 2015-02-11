@@ -48,14 +48,14 @@ public:
 
     VcsEventModel( KDevelop::IBasicVersionControl* iface, const KDevelop::VcsRevision& rev, const QUrl& url, QObject* parent );
     ~VcsEventModel();
-    int rowCount( const QModelIndex& = QModelIndex() ) const;
-    int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-    QVariant data( const QModelIndex&, int role = Qt::DisplayRole ) const;
-    QVariant headerData( int, Qt::Orientation, int role = Qt::DisplayRole ) const;
+    int rowCount( const QModelIndex& = QModelIndex() ) const override;
+    int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
+    QVariant data( const QModelIndex&, int role = Qt::DisplayRole ) const override;
+    QVariant headerData( int, Qt::Orientation, int role = Qt::DisplayRole ) const override;
     KDevelop::VcsEvent eventForIndex( const QModelIndex& ) const;
 
-    virtual void fetchMore(const QModelIndex& parent);
-    virtual bool canFetchMore(const QModelIndex& parent) const;
+    virtual void fetchMore(const QModelIndex& parent) override;
+    virtual bool canFetchMore(const QModelIndex& parent) const override;
 
 private slots:
     void jobReceivedResults( KJob* job );

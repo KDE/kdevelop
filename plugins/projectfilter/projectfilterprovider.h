@@ -39,9 +39,9 @@ class ProjectFilterProvider: public IPlugin, public IProjectFilterProvider
 public:
     explicit ProjectFilterProvider( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
-    virtual QSharedPointer<IProjectFilter> createFilter(IProject* project) const;
+    virtual QSharedPointer<IProjectFilter> createFilter(IProject* project) const override;
 
-    virtual ContextMenuExtension contextMenuExtension(Context* context);
+    virtual ContextMenuExtension contextMenuExtension(Context* context) override;
 
     virtual int perProjectConfigPages() const override;
     virtual ConfigPage* perProjectConfigPage(int number, const ProjectConfigOptions& options, QWidget* parent) override;

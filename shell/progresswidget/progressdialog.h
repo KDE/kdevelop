@@ -49,14 +49,14 @@ public:
     virtual ~TransactionItemView() {}
     TransactionItem *addTransactionItem( ProgressItem *item, bool first );
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
 public Q_SLOTS:
     void slotLayoutFirstItem();
 
 protected:
-    virtual void resizeEvent ( QResizeEvent *event );
+    virtual void resizeEvent ( QResizeEvent *event ) override;
 
 private:
     QWidget *mBigBox;
@@ -107,7 +107,7 @@ class ProgressDialog : public OverlayWidget
 public:
     ProgressDialog( QWidget *alignWidget, QWidget *parent, const char *name = 0 );
     ~ProgressDialog();
-    void setVisible( bool b );
+    void setVisible( bool b ) override;
 
 public Q_SLOTS:
     void slotToggleVisibility();
@@ -129,7 +129,7 @@ Q_SIGNALS:
     void visibilityChanged( bool );
 
 protected:
-    virtual void closeEvent( QCloseEvent * );
+    virtual void closeEvent( QCloseEvent * ) override;
 
     TransactionItemView *mScrollView;
     QMap<const ProgressItem *, TransactionItem *> mTransactionsToListviewItems;

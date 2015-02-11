@@ -50,7 +50,7 @@ public:
      **/
     QString selectedTemplate() const;
 
-    virtual QSize minimumSizeHint() const;
+    virtual QSize minimumSizeHint() const override;
 
 public Q_SLOTS:
     /**

@@ -39,7 +39,7 @@ class PastebinPlugin : public KDevelop::IPlugin, KDevelop::IPatchExporter
         PastebinPlugin ( QObject* parent, const QList<QVariant>& args  );
         virtual ~PastebinPlugin();
 
-        virtual void exportPatch(KDevelop::IPatchSource::Ptr source);
+        virtual void exportPatch(KDevelop::IPatchSource::Ptr source) override;
 
     public slots:
         void data(KIO::Job* job, const QByteArray &data);

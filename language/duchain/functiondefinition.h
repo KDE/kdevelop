@@ -66,7 +66,7 @@ namespace KDevelop {
   protected:
     FunctionDefinition (const FunctionDefinition& rhs);
   private:
-    virtual Declaration* clonePrivate() const;
+    virtual Declaration* clonePrivate() const override;
     DUCHAIN_DECLARE_DATA(FunctionDefinition)
   };
 }

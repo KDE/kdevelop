@@ -49,8 +49,8 @@ public:
     void setProjectTempFile( const QString& );
     void setProjectFile( const Path& );
     void setDeveloperFile( const Path& );
-    void setDefaults();
-    bool useDefaults( bool b );
+    void setDefaults() override;
+    bool useDefaults( bool b ) override;
     bool writeConfig();
 
     Path projectFile() const;

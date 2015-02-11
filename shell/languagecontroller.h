@@ -51,13 +51,13 @@ public:
     /** @copydoc ILanguageController::languageForUrl() */
     virtual QList<ILanguageSupport*> languagesForUrl(const QUrl &url) override;
     /** @copydoc ILanguageController::backgroundParser() */
-    Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const;
+    Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const override;
 
-    virtual StaticAssistantsManager *staticAssistantsManager() const;
+    virtual StaticAssistantsManager *staticAssistantsManager() const override;
 
-    virtual QList<ILanguageSupport*> loadedLanguages() const;
+    virtual QList<ILanguageSupport*> loadedLanguages() const override;
 
-    virtual ICompletionSettings *completionSettings() const;
+    virtual ICompletionSettings *completionSettings() const override;
 
     QList<ILanguageSupport*> languagesForMimetype(const QString& mime);
     QList<QString> mimetypesForLanguageName(const QString& languageName);

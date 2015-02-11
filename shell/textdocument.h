@@ -47,36 +47,36 @@ public:
     TextDocument(const QUrl &url, ICore*, const QString& encoding );
     virtual ~TextDocument();
 
-    virtual QWidget *createViewWidget(QWidget *parent = 0);
-    virtual KParts::Part *partForView(QWidget *view) const;
-    virtual bool close(DocumentSaveMode mode = Default);
+    virtual QWidget *createViewWidget(QWidget *parent = 0) override;
+    virtual KParts::Part *partForView(QWidget *view) const override;
+    virtual bool close(DocumentSaveMode mode = Default) override;
 
-    virtual bool save(DocumentSaveMode mode = Default);
-    virtual DocumentState state() const;
+    virtual bool save(DocumentSaveMode mode = Default) override;
+    virtual DocumentState state() const override;
 
     virtual KTextEditor::Cursor cursorPosition() const override;
-    virtual void setCursorPosition(const KTextEditor::Cursor &cursor);
+    virtual void setCursorPosition(const KTextEditor::Cursor &cursor) override;
 
-    virtual KTextEditor::Range textSelection() const;
-    virtual void setTextSelection(const KTextEditor::Range &range);
+    virtual KTextEditor::Range textSelection() const override;
+    virtual void setTextSelection(const KTextEditor::Range &range) override;
 
-    virtual QString textLine() const;
-    virtual QString textWord() const;
+    virtual QString textLine() const override;
+    virtual QString textWord() const override;
 
-    virtual bool isTextDocument() const;
-    virtual KTextEditor::Document* textDocument() const;
+    virtual bool isTextDocument() const override;
+    virtual KTextEditor::Document* textDocument() const override;
 
-    virtual QString documentType() const;
+    virtual QString documentType() const override;
 
-    virtual QIcon defaultIcon() const;
+    virtual QIcon defaultIcon() const override;
 
     virtual KTextEditor::View* activeTextView() const override;
 
 public Q_SLOTS:
-    virtual void reload();
+    virtual void reload() override;
 
 protected:
-    virtual Sublime::View *newView(Sublime::Document *doc);
+    virtual Sublime::View *newView(Sublime::Document *doc) override;
 
 private:
     Q_PRIVATE_SLOT(d, void newDocumentStatus(KTextEditor::Document*))
@@ -100,13 +100,13 @@ public:
     TextView(TextDocument* doc);
     virtual ~TextView();
 
-    QWidget *createWidget(QWidget *parent = 0);
+    QWidget *createWidget(QWidget *parent = 0) override;
 
     KTextEditor::View *textView() const;
 
-    virtual QString viewStatus() const;
-    virtual QString viewState() const;
-    virtual void setState(const QString& state);
+    virtual QString viewStatus() const override;
+    virtual QString viewState() const override;
+    virtual void setState(const QString& state) override;
 
     void setInitialRange(const KTextEditor::Range& range);
     KTextEditor::Range initialRange() const;

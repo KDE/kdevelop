@@ -29,22 +29,22 @@ public:
     LocalPatchSource();
     virtual ~LocalPatchSource();
 
-    virtual QString name() const;
+    virtual QString name() const override;
 
-    virtual QUrl baseDir() const {
+    virtual QUrl baseDir() const override {
         return m_baseDir;
     }
 
-    virtual QUrl file() const {
+    virtual QUrl file() const override {
         return m_filename;
     }
 
-    virtual uint depth() const {
+    virtual uint depth() const override {
         return m_depth;
     }
 
-    virtual void update();
-    virtual QIcon icon() const;
+    virtual void update() override;
+    virtual QIcon icon() const override;
 
     void setFilename(const QUrl& filename) { m_filename = filename; }
     void setBaseDir(const QUrl& dir) { m_baseDir = dir; }
@@ -52,11 +52,11 @@ public:
 
     QString command() const { return m_command; }
     
-    virtual bool isAlreadyApplied() const { return m_applied; }
+    virtual bool isAlreadyApplied() const override { return m_applied; }
 
     void setAlreadyApplied( bool applied ) { m_applied = applied; }
 
-    virtual QWidget* customWidget() const;
+    virtual QWidget* customWidget() const override;
 
 private:
     QUrl m_filename;

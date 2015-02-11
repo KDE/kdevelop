@@ -41,8 +41,8 @@ public:
   AllClassesFolder(NodesModelInterface* a_model);
 
 public: // Node overrides
-  virtual void nodeCleared();
-  virtual void populateNode();
+  virtual void nodeCleared() override;
+  virtual void populateNode() override;
 
 private Q_SLOTS:
   // Project watching
@@ -62,7 +62,7 @@ public: // Operations.
   void updateFilterString(QString a_newFilterString);
 
 private: // DocumentClassesFolder overrides
-  virtual bool isClassFiltered(const KDevelop::QualifiedIdentifier& a_id);
+  virtual bool isClassFiltered(const KDevelop::QualifiedIdentifier& a_id) override;
 
 private:
   /// We'll use this string to display only classes that match this string.

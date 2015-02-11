@@ -41,11 +41,11 @@ class SessionModel : public QAbstractListModel
     Q_OBJECT
 public:
     SessionModel( QObject* parent = 0 );
-    int rowCount( const QModelIndex& = QModelIndex() ) const;
-    QVariant data( const QModelIndex&, int = Qt::DisplayRole ) const;
-    QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const;
-    bool setData( const QModelIndex&, const QVariant&, int = Qt::DisplayRole );
-    Qt::ItemFlags flags( const QModelIndex& ) const;
+    int rowCount( const QModelIndex& = QModelIndex() ) const override;
+    QVariant data( const QModelIndex&, int = Qt::DisplayRole ) const override;
+    QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const override;
+    bool setData( const QModelIndex&, const QVariant&, int = Qt::DisplayRole ) override;
+    Qt::ItemFlags flags( const QModelIndex& ) const override;
     void deleteSessions( const QList<QModelIndex>& );
     void activateSession( const QModelIndex& );
     void addSession();

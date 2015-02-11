@@ -45,7 +45,7 @@ public:
     /// Check children to determine current state
     void refreshState() ;
 
-    virtual QVariant data ( int role = Qt::UserRole + 1 ) const;
+    virtual QVariant data ( int role = Qt::UserRole + 1 ) const override;
 
 private:
     KDevelop::DocumentChangePointer m_change;

@@ -66,7 +66,7 @@ private slots:
     void fileItemChanged( QStandardItem* item );
 
 private:
-    virtual void resizeEvent(QResizeEvent*);
+    virtual void resizeEvent(QResizeEvent*) override;
 
     void activate( const QUrl& url, KDevelop::IDocument* buddy = 0 ) const;
     

@@ -26,13 +26,13 @@ public:
     SvnImportMetadataWidget( QWidget *parent );
     virtual ~SvnImportMetadataWidget();
 
-    virtual void setSourceLocation( const KDevelop::VcsLocation& );
-    virtual void setSourceLocationEditable( bool );
-    virtual QUrl source() const;
-    virtual KDevelop::VcsLocation destination() const;
-    virtual QString message() const;
-    virtual void setUseSourceDirForDestination( bool );
-    virtual bool hasValidData() const;
+    virtual void setSourceLocation( const KDevelop::VcsLocation& ) override;
+    virtual void setSourceLocationEditable( bool ) override;
+    virtual QUrl source() const override;
+    virtual KDevelop::VcsLocation destination() const override;
+    virtual QString message() const override;
+    virtual void setUseSourceDirForDestination( bool ) override;
+    virtual bool hasValidData() const override;
 private:
     Ui::SvnImportMetadataWidget *m_ui;
     bool useSourceDirForDestination;

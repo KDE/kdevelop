@@ -47,7 +47,7 @@ public:
     DocumentSwitcherPlugin( QObject *parent, const QVariantList &args = QVariantList() );
     ~DocumentSwitcherPlugin();
 
-    virtual void unload();
+    virtual void unload() override;
 public slots:
     void itemActivated( const QModelIndex& );
     void switchToClicked(const QModelIndex& );
@@ -61,7 +61,7 @@ private slots:
     void walkForward();
     void walkBackward();
 protected:
-    bool eventFilter( QObject*, QEvent* );
+    bool eventFilter( QObject*, QEvent* ) override;
 private:
     void setViewGeometry(Sublime::MainWindow* window);
     void storeAreaViewList( Sublime::MainWindow* mainwindow, Sublime::Area* area );

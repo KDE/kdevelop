@@ -98,7 +98,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		/** \return The formatter corresponding to the language
 		* of the document corresponding to the \arg url.
 		*/
-		ISourceFormatter* formatterForUrl(const QUrl &url);
+		ISourceFormatter* formatterForUrl(const QUrl &url) override;
 		/** Loads and returns a source formatter for this mime type.
 		* The language is then activated and the style is loaded.
 		* The source formatter is then ready to use on a file.
@@ -129,8 +129,8 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 
 		void settingsChanged();
 		
-		virtual void disableSourceFormatting(bool disable);
-		virtual bool sourceFormattingEnabled();
+		virtual void disableSourceFormatting(bool disable) override;
+		virtual bool sourceFormattingEnabled() override;
 
 	private Q_SLOTS:
 		void activeDocumentChanged(KDevelop::IDocument *doc);

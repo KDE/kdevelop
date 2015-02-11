@@ -47,7 +47,7 @@ public:
     /**Destructor.*/
     virtual ~EditorContext();
 
-    virtual int type() const;
+    virtual int type() const override;
 
     /**@return The url for the file which this context was invoked for.*/
     QUrl url() const;

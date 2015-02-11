@@ -110,7 +110,7 @@ public:
    * */
   bool isPublicBaseClass( ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels  = 0 ) const;
 
-  QString toString() const;
+  QString toString() const override;
 
   void setClassType(ClassDeclarationData::ClassType type);
   
@@ -125,7 +125,7 @@ public:
   };
 
 private:
-  virtual KDevelop::Declaration* clonePrivate() const;
+  virtual KDevelop::Declaration* clonePrivate() const override;
   DUCHAIN_DECLARE_DATA(ClassDeclaration)
 };
 

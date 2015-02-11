@@ -53,8 +53,8 @@ public slots:
     void showTooltip();
 
 private:
-    virtual void contextMenuEvent(QContextMenuEvent* ev);
-    virtual bool event(QEvent* e);
+    virtual void contextMenuEvent(QContextMenuEvent* ev) override;
+    virtual bool event(QEvent* e) override;
     WorkingSet* m_set;
     bool m_toolTipEnabled;
 };

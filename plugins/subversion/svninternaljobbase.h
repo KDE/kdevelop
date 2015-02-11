@@ -53,23 +53,23 @@ public:
     SvnInternalJobBase( SvnJobBase* parent = 0 );
     virtual ~SvnInternalJobBase();
 
-    virtual bool success() const;
+    virtual bool success() const override;
 
     bool contextGetLogin( const std::string& realm,
                           std::string& username, std::string& password,
-                          bool& maySave );
+                          bool& maySave ) override;
     void contextNotify( const char* path, svn_wc_notify_action_t action,
                         svn_node_kind_t kind, const char* mimetype,
                         svn_wc_notify_state_t contentState,
-                        svn_wc_notify_state_t propState, svn_revnum_t rev );
-    bool contextCancel();
-    bool contextGetLogMessage( std::string& msg );
+                        svn_wc_notify_state_t propState, svn_revnum_t rev ) override;
+    bool contextCancel() override;
+    bool contextGetLogMessage( std::string& msg ) override;
     svn::ContextListener::SslServerTrustAnswer contextSslServerTrustPrompt(
             const svn::ContextListener::SslServerTrustData& data,
-            apr_uint32_t& acceptedFailures );
-    bool contextSslClientCertPrompt( std::string& cert );
+            apr_uint32_t& acceptedFailures ) override;
+    bool contextSslClientCertPrompt( std::string& cert ) override;
     bool contextSslClientCertPwPrompt( std::string& pw, const std::string& realm,
-                                       bool& maySave );
+                                       bool& maySave ) override;
 
     void initBeforeRun();
     

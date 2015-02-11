@@ -41,12 +41,12 @@ public:
     };
 
     EnvironmentGroupModel();
-    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
-    int columnCount( const QModelIndex &parent = QModelIndex()  ) const;
-    Qt::ItemFlags flags( const QModelIndex& idx ) const;
-    QVariant data( const QModelIndex& idx, int role = Qt::DisplayRole) const;
-    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    bool setData( const QModelIndex& idx, const QVariant&, int role = Qt::EditRole);
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const override;
+    int columnCount( const QModelIndex &parent = QModelIndex()  ) const override;
+    Qt::ItemFlags flags( const QModelIndex& idx ) const override;
+    QVariant data( const QModelIndex& idx, int role = Qt::DisplayRole) const override;
+    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    bool setData( const QModelIndex& idx, const QVariant&, int role = Qt::EditRole) override;
     void setCurrentGroup( const QString& group );
     void loadFromConfig( KConfig* );
     void saveToConfig( KConfig* );

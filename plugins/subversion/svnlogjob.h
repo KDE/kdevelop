@@ -37,8 +37,8 @@ class SvnLogJob : public SvnJobBaseImpl<SvnInternalLogJob>
     Q_OBJECT
 public:
     SvnLogJob( KDevSvnPlugin* parent );
-    QVariant fetchResults();
-    void start();
+    QVariant fetchResults() override;
+    void start() override;
     void setLocation( const QUrl &location );
     void setLimit( int limit );
     void setEndRevision( const KDevelop::VcsRevision& rev );

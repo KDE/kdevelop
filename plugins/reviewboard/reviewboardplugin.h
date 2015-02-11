@@ -37,7 +37,7 @@ class ReviewBoardPlugin : public KDevelop::IPlugin, KDevelop::IPatchExporter
         ReviewBoardPlugin(QObject* parent, const QList<QVariant>& args);
         virtual ~ReviewBoardPlugin();
 
-        virtual void exportPatch(KDevelop::IPatchSource::Ptr source);
+        virtual void exportPatch(KDevelop::IPatchSource::Ptr source) override;
 
     public slots:
         void reviewDone(KJob* j);

@@ -42,8 +42,8 @@ public:
     SvnJobBase( KDevSvnPlugin*, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose );
     virtual ~SvnJobBase();
     virtual SvnInternalJobBase* internalJob() const = 0;
-    KDevelop::VcsJob::JobStatus status() const;
-    KDevelop::IPlugin* vcsPlugin() const;
+    KDevelop::VcsJob::JobStatus status() const override;
+    KDevelop::IPlugin* vcsPlugin() const override;
 
 public slots:
     void askForLogin( const QString& );
@@ -62,7 +62,7 @@ protected slots:
 
 protected:
     void startInternalJob();
-    virtual bool doKill();
+    virtual bool doKill() override;
     KDevSvnPlugin* m_part;
 private:
     void outputMessage(const QString &message);

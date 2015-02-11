@@ -31,7 +31,7 @@ public:
     virtual ~GitMessageHighlighter();
 
 protected:
-    virtual void highlightBlock(const QString& text);
+    virtual void highlightBlock(const QString& text) override;
 
 private:
     void applyErrorFormat(GitMessageHighlighter* text, bool warning, const QString& tooltip, int startPos, int endPos);

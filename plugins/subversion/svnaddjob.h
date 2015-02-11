@@ -34,8 +34,8 @@ class SvnAddJob : public SvnJobBaseImpl<SvnInternalAddJob>
     Q_OBJECT
 public:
     SvnAddJob( KDevSvnPlugin* parent );
-    QVariant fetchResults();
-    void start();
+    QVariant fetchResults() override;
+    void start() override;
 
     void setLocations( const QList<QUrl>& locations );
     void setRecursive( bool );

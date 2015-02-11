@@ -152,7 +152,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
 
     /// This function is thread-safe
     /// @warning The duchain must not be locked when this is called (->possible deadlock)
-    void highlightDUChain(ReferencedTopDUContext context);
+    void highlightDUChain(ReferencedTopDUContext context) override;
 
     //color should be zero when undecided
     KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context, const QColor &color) const;
@@ -160,7 +160,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
 
     /// This function is thread-safe
     /// Returns whether a highlighting is already given for the given url
-    bool hasHighlighting(IndexedString url) const;
+    bool hasHighlighting(IndexedString url) const override;
 
   private:
     //Returns whether the given attribute was set by the code highlighting, and not by something else

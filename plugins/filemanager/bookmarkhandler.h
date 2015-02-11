@@ -39,14 +39,14 @@ public:
     ~BookmarkHandler();
 
     // KBookmarkOwner interface:
-    virtual QUrl currentUrl() const;
-    virtual QString currentTitle() const;
+    virtual QUrl currentUrl() const override;
+    virtual QString currentTitle() const override;
 
     QMenu *menu() const
     {
       return m_menu;
     }
-    virtual void openBookmark( const KBookmark &, Qt::MouseButtons, Qt::KeyboardModifiers );
+    virtual void openBookmark( const KBookmark &, Qt::MouseButtons, Qt::KeyboardModifiers ) override;
 
 Q_SIGNALS:
     void openUrl( const QUrl& url );

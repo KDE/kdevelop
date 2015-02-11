@@ -144,14 +144,14 @@ public:
     Q_SCRIPTABLE virtual ReferencedTopDUContext duChain() const;
 
     /// Overridden to allow jobs to determine if they've been requested to abort
-    Q_SCRIPTABLE virtual void requestAbort();
+    Q_SCRIPTABLE virtual void requestAbort() override;
     /// Determine if the job has been requested to abort
     Q_SCRIPTABLE bool abortRequested() const;
     /// Sets success to false, causing failed() to be emitted
     Q_SCRIPTABLE void abortJob();
 
     /// Overridden to convey whether the job succeeded or not.
-    Q_SCRIPTABLE virtual bool success() const;
+    Q_SCRIPTABLE virtual bool success() const override;
 
     /// Set the minimum features the resulting top-context should have
     Q_SCRIPTABLE void setMinimumFeatures(TopDUContext::Features features);

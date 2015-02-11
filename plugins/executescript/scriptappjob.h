@@ -40,8 +40,8 @@ class ScriptAppJob : public KDevelop::OutputJob
 Q_OBJECT
 public:
     ScriptAppJob( ExecuteScriptPlugin* parent, KDevelop::ILaunchConfiguration* cfg );
-    virtual void start();
-    virtual bool doKill();
+    virtual void start() override;
+    virtual bool doKill() override;
     KDevelop::OutputModel* model();
 private slots:
     void processError(QProcess::ProcessError);

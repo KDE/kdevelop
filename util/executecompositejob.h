@@ -34,14 +34,14 @@ public:
     ExecuteCompositeJob(QObject* parent = 0, const QList<KJob*>& jobs = {});
     ~ExecuteCompositeJob();
 
-    virtual void start();
+    virtual void start() override;
     void setAbortOnError(bool abort);
 
 public Q_SLOTS:
-    virtual void slotResult(KJob* job);
+    virtual void slotResult(KJob* job) override;
 
 protected:
-    virtual bool doKill();
+    virtual bool doKill() override;
 
 private:
     class ExecuteCompositeJobPrivate* const d;

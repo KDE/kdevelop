@@ -32,7 +32,7 @@ public:
     virtual ~CheckoutDialog();
 
 public slots:
-    virtual void accept();
+    virtual void accept() override;
     void jobFinished(KJob* job);
 
 private:

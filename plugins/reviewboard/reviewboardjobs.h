@@ -43,7 +43,7 @@ namespace ReviewBoard
         public:
             HttpCall(const QUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, const QByteArray& post, bool multipart, QObject* parent);
 
-            virtual void start();
+            virtual void start() override;
 
             QVariant result() const;
 
@@ -80,7 +80,7 @@ namespace ReviewBoard
         Q_OBJECT
         public:
             NewRequest(const QUrl& server, const QString& project, QObject* parent = 0);
-            virtual void start();
+            virtual void start() override;
 
         private slots:
             void done();
@@ -95,7 +95,7 @@ namespace ReviewBoard
         Q_OBJECT
         public:
             SubmitPatchRequest(const QUrl &server, const QUrl& patch, const QString& basedir, const QString& id, QObject* parent = 0);
-            virtual void start();
+            virtual void start() override;
 
         private slots:
             void done();
@@ -111,7 +111,7 @@ namespace ReviewBoard
         Q_OBJECT
         public:
             ProjectsListRequest(const QUrl &server, QObject* parent = 0);
-            virtual void start();
+            virtual void start() override;
             QVariantList repositories() const;
 
         private slots:
@@ -128,7 +128,7 @@ namespace ReviewBoard
         Q_OBJECT
         public:
             ReviewListRequest(const QUrl& server, const QString& user, const QString& reviewStatus, QObject* parent = 0);
-            virtual void start();
+            virtual void start() override;
             QVariantList reviews() const;
 
         private slots:

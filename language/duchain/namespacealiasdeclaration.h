@@ -57,7 +57,7 @@ public:
 
   virtual ~NamespaceAliasDeclaration();
   ///A NamespaceAliasDeclaration cannot have a type, so setAbstractType does nothing here.
-  virtual void setAbstractType(AbstractType::Ptr type);
+  virtual void setAbstractType(AbstractType::Ptr type) override;
 
   /**The identifier that was imported.*/
   QualifiedIdentifier importIdentifier() const;
@@ -67,7 +67,7 @@ public:
     */
   void setImportIdentifier(const QualifiedIdentifier& id);
 
-  virtual void setInSymbolTable(bool inSymbolTable);  
+  virtual void setInSymbolTable(bool inSymbolTable) override;  
   
   enum {
     Identity = 13
@@ -75,11 +75,11 @@ public:
   
   typedef Declaration BaseClass;
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 private:
   void unregisterAliasIdentifier();
   void registerAliasIdentifier();
-  virtual Declaration* clonePrivate() const;
+  virtual Declaration* clonePrivate() const override;
   DUCHAIN_DECLARE_DATA(NamespaceAliasDeclaration)
 };
 }

@@ -40,7 +40,7 @@ public:
   ProjectFolder(NodesModelInterface* a_model, KDevelop::IProject* project);
   ProjectFolder(NodesModelInterface* a_model);
 
-  virtual void populateNode();
+  virtual void populateNode() override;
 
 protected:
   KDevelop::IProject* m_project;
@@ -59,7 +59,7 @@ public: // Operations.
   void updateFilterString(QString a_newFilterString);
 
 private: // DocumentClassesFolder overrides
-  virtual bool isClassFiltered(const KDevelop::QualifiedIdentifier& a_id);
+  virtual bool isClassFiltered(const KDevelop::QualifiedIdentifier& a_id) override;
 
 private:
   /// We'll use this string to display only classes that match this string.

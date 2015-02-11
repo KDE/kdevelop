@@ -89,14 +89,14 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     ContextBrowserPlugin(QObject *parent, const QVariantList & = QVariantList() );
     virtual ~ContextBrowserPlugin();
 
-    virtual void unload();
+    virtual void unload() override;
 
     void registerToolView(ContextBrowserView* view);
     void unRegisterToolView(ContextBrowserView* view);
     
-    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context*);
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context*) override;
 
-    virtual KXMLGUIClient* createGUIForMainWindow( Sublime::MainWindow* window );
+    virtual KXMLGUIClient* createGUIForMainWindow( Sublime::MainWindow* window ) override;
 
     ///duchain must be locked
     ///@param force When this is true, the history-entry is added, no matter whether the context is "interesting" or not
@@ -106,7 +106,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void updateDeclarationListBox(KDevelop::DUContext* context);
     void setAllowBrowsing(bool allow);
 
-    virtual void showUses(const KDevelop::DeclarationPointer& declaration);
+    virtual void showUses(const KDevelop::DeclarationPointer& declaration) override;
 
   public Q_SLOTS:
     void showUsesDelayed(const KDevelop::DeclarationPointer& declaration);
@@ -159,7 +159,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
   private:
     QWidget* toolbarWidgetForMainWindow(Sublime::MainWindow* window);
     virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile,
-                                            KActionCollection& actions);
+                                            KActionCollection& actions) override;
     void switchUse(bool forward);
     void clearMouseHover();
 

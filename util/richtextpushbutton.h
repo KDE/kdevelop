@@ -37,13 +37,13 @@ public:
     void setText(const QString &text);
     QString text() const;
 
-    virtual QSize sizeHint() const;    
+    virtual QSize sizeHint() const override;    
 signals:
  
 public slots:
  
 protected:
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
  
 private:
     QString htmlText;

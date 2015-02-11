@@ -29,23 +29,23 @@ class WelcomePageDocument : public Sublime::UrlDocument, public KDevelop::IDocum
 public:
     WelcomePageDocument();
 
-    virtual void activate(Sublime::View* activeView, KParts::MainWindow* mainWindow);
-    virtual void setTextSelection(const KTextEditor::Range& range);
-    virtual void setCursorPosition(const KTextEditor::Cursor& cursor);
-    virtual KTextEditor::Cursor cursorPosition() const;
-    virtual KDevelop::IDocument::DocumentState state() const;
-    virtual bool isActive() const;
-    virtual bool close(KDevelop::IDocument::DocumentSaveMode mode = Default);
-    virtual void reload();
-    virtual bool save(KDevelop::IDocument::DocumentSaveMode mode = Default);
-    virtual KTextEditor::Document* textDocument() const;
-    virtual KParts::Part* partForView(QWidget* view) const;
+    virtual void activate(Sublime::View* activeView, KParts::MainWindow* mainWindow) override;
+    virtual void setTextSelection(const KTextEditor::Range& range) override;
+    virtual void setCursorPosition(const KTextEditor::Cursor& cursor) override;
+    virtual KTextEditor::Cursor cursorPosition() const override;
+    virtual KDevelop::IDocument::DocumentState state() const override;
+    virtual bool isActive() const override;
+    virtual bool close(KDevelop::IDocument::DocumentSaveMode mode = Default) override;
+    virtual void reload() override;
+    virtual bool save(KDevelop::IDocument::DocumentSaveMode mode = Default) override;
+    virtual KTextEditor::Document* textDocument() const override;
+    virtual KParts::Part* partForView(QWidget* view) const override;
     virtual QMimeType mimeType() const override;
-    virtual QUrl url() const;
+    virtual QUrl url() const override;
 
     static QUrl welcomePageUrl();
 protected:
-    virtual Sublime::View* newView(Document* doc);
+    virtual Sublime::View* newView(Document* doc) override;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_DASHBOARDDOCUMENT_H

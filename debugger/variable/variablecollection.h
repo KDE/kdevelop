@@ -109,7 +109,7 @@ protected:
 
 private: // TreeItem overrides
 
-    QVariant data(int column, int role) const;
+    QVariant data(int column, int role) const override;
 
 private:
 
@@ -134,7 +134,7 @@ public:
         appendChild(var);
     }
 
-    void fetchMoreChildren() {}
+    void fetchMoreChildren() override {}
 };
 
 class KDEVPLATFORMDEBUGGER_EXPORT Watches : public TreeItem
@@ -155,9 +155,9 @@ public:
     friend class IVariableController;
 private:
 
-    QVariant data(int column, int role) const;
+    QVariant data(int column, int role) const override;
 
-    void fetchMoreChildren() {}
+    void fetchMoreChildren() override {}
 
     Variable* finishResult_;
 };
@@ -176,7 +176,7 @@ public:
     friend class IVariableController;
     
 private:
-    void fetchMoreChildren() {}
+    void fetchMoreChildren() override {}
 };
 
 class KDEVPLATFORMDEBUGGER_EXPORT VariablesRoot : public TreeItem
@@ -188,7 +188,7 @@ public:
     Locals *locals(const QString &name = "Locals");
     QHash<QString, Locals*> allLocals() const;
 
-    void fetchMoreChildren() {}
+    void fetchMoreChildren() override {}
 
     void resetChanged();
 

@@ -68,8 +68,8 @@ class CurrentDocumentSet : public WatchedDocumentSet
     Q_OBJECT
 public:
     explicit CurrentDocumentSet(const KDevelop::IndexedString& document, ProblemModel * parent);
-    virtual void setCurrentDocument(const KDevelop::IndexedString& url);
-    virtual ProblemModel::Scope getScope() const;
+    virtual void setCurrentDocument(const KDevelop::IndexedString& url) override;
+    virtual ProblemModel::Scope getScope() const override;
 };
 
 /**
@@ -80,7 +80,7 @@ class OpenDocumentSet : public WatchedDocumentSet
     Q_OBJECT
 public:
     explicit OpenDocumentSet(ProblemModel* parent);
-    virtual ProblemModel::Scope getScope() const;
+    virtual ProblemModel::Scope getScope() const override;
 
 private slots:
     void documentClosed(KDevelop::IDocument* doc);
@@ -114,8 +114,8 @@ class CurrentProjectSet : public ProjectSet
     Q_OBJECT
 public:
     explicit CurrentProjectSet(const KDevelop::IndexedString& document, ProblemModel* parent);
-    virtual void setCurrentDocument(const KDevelop::IndexedString& url);
-    virtual ProblemModel::Scope getScope() const;
+    virtual void setCurrentDocument(const KDevelop::IndexedString& url) override;
+    virtual ProblemModel::Scope getScope() const override;
 
 private:
     void setCurrentDocumentInternal(const KDevelop::IndexedString& url); // to avoid virtual in constructor
@@ -127,7 +127,7 @@ class AllProjectSet : public ProjectSet
     Q_OBJECT
 public:
     explicit AllProjectSet(ProblemModel* parent);
-    virtual ProblemModel::Scope getScope() const;
+    virtual ProblemModel::Scope getScope() const override;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_WATCHEDDOCUMENTSET_H

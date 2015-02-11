@@ -133,11 +133,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     virtual bool matchEnvironment(const ParsingEnvironment* environment) const;
 
     ///Convenience-function that returns the top-context
-    TopDUContext* topContext() const;
+    TopDUContext* topContext() const override;
     
     KDevelop::IndexedTopDUContext indexedTopContext() const;
     
-    KDevelop::IndexedString url() const;
+    KDevelop::IndexedString url() const override;
     
     ///Can additionally use language-specific information to decide whether the top-context that has this data attached needs to be reparsed.
     ///The standard-implementation checks the modification-time of this file stored using setModificationRevision, and all other modification-times

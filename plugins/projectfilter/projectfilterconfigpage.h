@@ -47,7 +47,7 @@ public:
     virtual QString fullName() const override;
 
 protected:
-    virtual bool eventFilter(QObject* object, QEvent* event);
+    virtual bool eventFilter(QObject* object, QEvent* event) override;
 
 private slots:
     void add();

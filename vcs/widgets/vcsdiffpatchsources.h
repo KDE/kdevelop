@@ -55,9 +55,9 @@ class KDEVPLATFORMVCS_EXPORT VCSStandardDiffUpdater : public VCSDiffUpdater {
 public:
     VCSStandardDiffUpdater(KDevelop::IBasicVersionControl* vcs, QUrl url);
     virtual ~VCSStandardDiffUpdater();
-    virtual KDevelop::VcsDiff update() const;
-    virtual KDevelop::IBasicVersionControl* vcs() const { return m_vcs; }
-    virtual QUrl url() const { return m_url; }
+    virtual KDevelop::VcsDiff update() const override;
+    virtual KDevelop::IBasicVersionControl* vcs() const override { return m_vcs; }
+    virtual QUrl url() const override { return m_url; }
 private:
     KDevelop::IBasicVersionControl* m_vcs;
     QUrl m_url;
@@ -71,19 +71,19 @@ class KDEVPLATFORMVCS_EXPORT VCSDiffPatchSource : public KDevelop::IPatchSource 
     VCSDiffPatchSource(const KDevelop::VcsDiff& diff);
     virtual ~VCSDiffPatchSource();
 
-    virtual QUrl baseDir() const ;
+    virtual QUrl baseDir() const override ;
 
-    virtual QUrl file() const ;
+    virtual QUrl file() const override ;
 
-    virtual QString name() const ;
+    virtual QString name() const override ;
 
-    virtual uint depth() const ;
+    virtual uint depth() const override ;
 
-    virtual void update() ;
+    virtual void update() override ;
 
-    virtual bool isAlreadyApplied() const { return true; }
+    virtual bool isAlreadyApplied() const override { return true; }
 
-    QMap<QUrl, KDevelop::VcsStatusInfo::State> additionalSelectableFiles() const ;
+    QMap<QUrl, KDevelop::VcsStatusInfo::State> additionalSelectableFiles() const override ;
 
     QUrl m_base, m_file;
     QString m_name;
@@ -104,17 +104,17 @@ class KDEVPLATFORMVCS_EXPORT VCSCommitDiffPatchSource : public VCSDiffPatchSourc
 
     QStringList oldMessages() const;
 
-    virtual bool canSelectFiles() const ;
+    virtual bool canSelectFiles() const override ;
 
-    virtual QWidget* customWidget() const ;
+    virtual QWidget* customWidget() const override ;
 
-    virtual QString finishReviewCustomText() const ;
+    virtual QString finishReviewCustomText() const override ;
 
-    virtual bool canCancel() const;
+    virtual bool canCancel() const override;
 
-    virtual void cancelReview();
+    virtual void cancelReview() override;
 
-    virtual bool finishReview(QList< QUrl > selection) ;
+    virtual bool finishReview(QList< QUrl > selection) override ;
     QList<KDevelop::VcsStatusInfo> infos() const { return m_infos; }
 Q_SIGNALS:
     void reviewFinished(QString message, QList<QUrl> selection);

@@ -53,20 +53,20 @@ public:
 //
 // IProjectFileManager interface
 //
-    virtual Features features() const;
+    virtual Features features() const override;
 
-    virtual ProjectFolderItem* addFolder( const Path& folder, ProjectFolderItem *parent );
-    virtual ProjectFileItem* addFile( const Path& file, ProjectFolderItem *parent );
-    virtual bool removeFilesAndFolders( const QList<ProjectBaseItem*> &items );
-    virtual bool moveFilesAndFolders(const QList< ProjectBaseItem* >& items, ProjectFolderItem* newParent);
-    virtual bool copyFilesAndFolders(const Path::List& items, ProjectFolderItem* newParent);
-    virtual bool renameFolder(ProjectFolderItem* folder, const Path& newPath);
-    virtual bool renameFile(ProjectFileItem* file, const Path& newPath);
+    virtual ProjectFolderItem* addFolder( const Path& folder, ProjectFolderItem *parent ) override;
+    virtual ProjectFileItem* addFile( const Path& file, ProjectFolderItem *parent ) override;
+    virtual bool removeFilesAndFolders( const QList<ProjectBaseItem*> &items ) override;
+    virtual bool moveFilesAndFolders(const QList< ProjectBaseItem* >& items, ProjectFolderItem* newParent) override;
+    virtual bool copyFilesAndFolders(const Path::List& items, ProjectFolderItem* newParent) override;
+    virtual bool renameFolder(ProjectFolderItem* folder, const Path& newPath) override;
+    virtual bool renameFile(ProjectFileItem* file, const Path& newPath) override;
 
-    virtual QList<ProjectFolderItem*> parse( ProjectFolderItem *item );
-    virtual ProjectFolderItem *import( IProject *project );
-    virtual bool reload(ProjectFolderItem* item);
-    virtual KJob* createImportJob(ProjectFolderItem* item);
+    virtual QList<ProjectFolderItem*> parse( ProjectFolderItem *item ) override;
+    virtual ProjectFolderItem *import( IProject *project ) override;
+    virtual bool reload(ProjectFolderItem* item) override;
+    virtual KJob* createImportJob(ProjectFolderItem* item) override;
 
 protected:
 //

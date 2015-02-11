@@ -30,25 +30,25 @@ namespace KDevelop
 class CompletionSettings : public KDevelop::ICompletionSettings
 {
 public:
-    virtual CompletionLevel completionLevel() const;
+    virtual CompletionLevel completionLevel() const override;
 
-    virtual bool automaticCompletionEnabled() const;
+    virtual bool automaticCompletionEnabled() const override;
 
     void emitChanged() { emit settingsChanged(this); }
 
-    virtual int localColorizationLevel() const;
+    virtual int localColorizationLevel() const override;
 
-    virtual int globalColorizationLevel() const;
+    virtual int globalColorizationLevel() const override;
 
-    virtual bool highlightSemanticProblems() const;
+    virtual bool highlightSemanticProblems() const override;
 
-    virtual bool highlightProblematicLines() const;
+    virtual bool highlightProblematicLines() const override;
 
-    virtual bool showMultiLineSelectionInformation() const;
+    virtual bool showMultiLineSelectionInformation() const override;
 
-    virtual int minFilesForSimplifiedParsing() const;
+    virtual int minFilesForSimplifiedParsing() const override;
 
-    virtual QStringList todoMarkerWords() const;
+    virtual QStringList todoMarkerWords() const override;
 
     static CompletionSettings& self();
 

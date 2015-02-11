@@ -117,8 +117,8 @@ private slots:
     void hideAssistant();
 
 protected:
-    virtual bool eventFilter(QObject* object, QEvent* event);
-    virtual bool viewportEvent(QEvent *event);
+    virtual bool eventFilter(QObject* object, QEvent* event) override;
+    virtual bool viewportEvent(QEvent *event) override;
 
 private:
     void setView(KTextEditor::View* view);

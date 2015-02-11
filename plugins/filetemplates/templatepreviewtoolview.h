@@ -60,7 +60,7 @@ private slots:
     void sourceTextChanged(const QString& text);
 
 protected:
-    virtual void showEvent(QShowEvent*);
+    virtual void showEvent(QShowEvent*) override;
 
 public slots:
     void documentActivated(KDevelop::IDocument* document);

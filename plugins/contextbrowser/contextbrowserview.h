@@ -84,11 +84,11 @@ class ContextBrowserView : public QWidget {
         void navigationContextChanged(bool wasInitial, bool isInitial);
 
     private:
-        virtual void showEvent(QShowEvent* event);
-        virtual bool event(QEvent* event);
+        virtual void showEvent(QShowEvent* event) override;
+        virtual bool event(QEvent* event) override;
         
-        virtual void focusInEvent(QFocusEvent* event);
-        virtual void focusOutEvent(QFocusEvent* event);
+        virtual void focusInEvent(QFocusEvent* event) override;
+        virtual void focusOutEvent(QFocusEvent* event) override;
         void resetWidget();
 
     private:

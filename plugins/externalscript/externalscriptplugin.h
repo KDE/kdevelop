@@ -42,8 +42,8 @@ public:
   ExternalScriptPlugin( QObject *parent, const QVariantList &args = QVariantList() );
 
   virtual ~ExternalScriptPlugin();
-  virtual void unload();
-  virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+  virtual void unload() override;
+  virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
 
   static ExternalScriptPlugin* self();
 

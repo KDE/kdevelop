@@ -84,7 +84,7 @@ class BrowseManager : public QObject {
         class Watcher : public EditorViewWatcher {
             public:
                 Watcher(BrowseManager* manager);
-                virtual void viewAdded(KTextEditor::View*);
+                virtual void viewAdded(KTextEditor::View*) override;
             private:
                 BrowseManager* m_manager;
         };
@@ -94,7 +94,7 @@ class BrowseManager : public QObject {
         
         //Installs/uninstalls the event-filter
         void applyEventFilter(QWidget* object, bool install);
-        virtual bool eventFilter(QObject * watched, QEvent * event) ;
+        virtual bool eventFilter(QObject * watched, QEvent * event) override ;
         ContextBrowserPlugin* m_plugin;
         bool m_browsing;
         int m_browsingByKey; //Whether the browsing was started because of a key

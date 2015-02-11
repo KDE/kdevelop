@@ -52,21 +52,21 @@ public:
     Session( const QString& id, QObject * parent = 0 );
     virtual ~Session();
 
-    virtual QUrl pluginDataArea( const IPlugin* );
-    virtual KSharedConfigPtr config();
+    virtual QUrl pluginDataArea( const IPlugin* ) override;
+    virtual KSharedConfigPtr config() override;
 
-    virtual QList<QUrl> containedProjects() const;
-    virtual void setContainedProjects( const QList<QUrl>& projects );
+    virtual QList<QUrl> containedProjects() const override;
+    virtual void setContainedProjects( const QList<QUrl>& projects ) override;
 
-    virtual QString name() const;
+    virtual QString name() const override;
     void setName( const QString& );
 
-    virtual QUuid id() const;
+    virtual QUuid id() const override;
 
-    virtual QString description() const;
+    virtual QString description() const override;
 
-    virtual bool isTemporary() const;
-    virtual void setTemporary(bool temp);
+    virtual bool isTemporary() const override;
+    virtual void setTemporary(bool temp) override;
 
     QString path() const;
 

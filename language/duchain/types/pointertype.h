@@ -61,17 +61,17 @@ public:
    */
   AbstractType::Ptr baseType () const;
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
-  virtual uint hash() const;
+  virtual uint hash() const override;
 
-  virtual WhichType whichType() const;
+  virtual WhichType whichType() const override;
 
-  virtual AbstractType* clone() const;
+  virtual AbstractType* clone() const override;
 
-  virtual bool equals(const AbstractType* rhs) const;
+  virtual bool equals(const AbstractType* rhs) const override;
 
-  virtual void exchangeTypes( TypeExchanger* exchanger );
+  virtual void exchangeTypes( TypeExchanger* exchanger ) override;
 
   enum {
     Identity = 3
@@ -80,7 +80,7 @@ public:
   typedef PointerTypeData Data;
 
 protected:
-  virtual void accept0 (TypeVisitor *v) const;
+  virtual void accept0 (TypeVisitor *v) const override;
 
   TYPE_DECLARE_DATA(PointerType)
 };

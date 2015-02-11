@@ -57,12 +57,12 @@ public:
   UnsureType();
   UnsureType(UnsureTypeData& data);
   
-  virtual KDevelop::AbstractType* clone() const;
-  virtual QString toString() const;
-  virtual bool equals(const KDevelop::AbstractType* rhs) const;
-  virtual uint hash() const;
-  virtual KDevelop::AbstractType::WhichType whichType() const;
-  virtual void exchangeTypes(KDevelop::TypeExchanger* exchanger);
+  virtual KDevelop::AbstractType* clone() const override;
+  virtual QString toString() const override;
+  virtual bool equals(const KDevelop::AbstractType* rhs) const override;
+  virtual uint hash() const override;
+  virtual KDevelop::AbstractType::WhichType whichType() const override;
+  virtual void exchangeTypes(KDevelop::TypeExchanger* exchanger) override;
   
   void addType(IndexedType type);
   void removeType(IndexedType type);
@@ -82,7 +82,7 @@ public:
   
 protected:
   TYPE_DECLARE_DATA(UnsureType)
-  virtual void accept0(KDevelop::TypeVisitor* v) const;
+  virtual void accept0(KDevelop::TypeVisitor* v) const override;
 };
 
 }

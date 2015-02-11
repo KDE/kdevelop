@@ -65,18 +65,18 @@ public:
   FunctionDeclaration(FunctionDeclarationData& data, const KDevelop::RangeInRevision&);
   virtual ~FunctionDeclaration();
 
-  virtual void setAbstractType(AbstractType::Ptr type);
+  virtual void setAbstractType(AbstractType::Ptr type) override;
 
-  virtual QString toString() const;
+  virtual QString toString() const override;
 
-  virtual bool isFunctionDeclaration() const;
+  virtual bool isFunctionDeclaration() const override;
   
-  virtual uint additionalIdentity() const;
+  virtual uint additionalIdentity() const override;
   
-  virtual const IndexedString* defaultParameters() const;
-  virtual unsigned int defaultParametersSize() const;
-  virtual void addDefaultParameter(const IndexedString& str);
-  virtual void clearDefaultParameters();
+  virtual const IndexedString* defaultParameters() const override;
+  virtual unsigned int defaultParametersSize() const override;
+  virtual void addDefaultParameter(const IndexedString& str) override;
+  virtual void clearDefaultParameters() override;
   
   enum {
     Identity = 12
@@ -85,7 +85,7 @@ public:
   typedef Declaration Base;
 
 private:
-  virtual Declaration* clonePrivate() const;
+  virtual Declaration* clonePrivate() const override;
   DUCHAIN_DECLARE_DATA(FunctionDeclaration)
 };
 }

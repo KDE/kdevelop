@@ -51,7 +51,7 @@ class ProjectTreeView: public QTreeView
 
         static QModelIndex mapFromSource(const QAbstractProxyModel* proxy, const QModelIndex& sourceIdx);
 
-        virtual bool event(QEvent* event);
+        virtual bool event(QEvent* event) override;
 
     Q_SIGNALS:
         void activate( const KDevelop::Path &url );
@@ -65,8 +65,8 @@ class ProjectTreeView: public QTreeView
         void aboutToShutdown();
 
     protected:
-        virtual void keyPressEvent(QKeyEvent *event);
-        virtual void dropEvent(QDropEvent* event);
+        virtual void keyPressEvent(QKeyEvent *event) override;
+        virtual void dropEvent(QDropEvent* event) override;
 
     private:
         QModelIndex mapFromItem(const KDevelop::ProjectBaseItem* item);

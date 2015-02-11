@@ -35,22 +35,22 @@ class ScriptAppConfigPage : public KDevelop::LaunchConfigurationPage, Ui::Script
 Q_OBJECT
 public:
     ScriptAppConfigPage( QWidget* parent );
-    void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = 0 );
-    void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const;
-    QString title() const;
-    QIcon icon() const;
+    void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = 0 ) override;
+    void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const override;
+    QString title() const override;
+    QIcon icon() const override;
 };
 
 class ScriptAppLauncher : public KDevelop::ILauncher
 {
 public:
     ScriptAppLauncher( ExecuteScriptPlugin* );
-    virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const;
-    virtual QString description() const;
-    virtual QString id();
-    virtual QString name() const;
-    virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg);
-    virtual QStringList supportedModes() const;
+    virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const override;
+    virtual QString description() const override;
+    virtual QString id() override;
+    virtual QString name() const override;
+    virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg) override;
+    virtual QStringList supportedModes() const override;
 private:
     ExecuteScriptPlugin* m_plugin;
 };
@@ -59,7 +59,7 @@ class ScriptAppPageFactory : public KDevelop::LaunchConfigurationPageFactory
 {
 public:
     ScriptAppPageFactory();
-    virtual KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent);
+    virtual KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent) override;
 };
 
 /**
@@ -73,14 +73,14 @@ public:
     ScriptAppConfigType();
     virtual ~ScriptAppConfigType();
 
-    QString id() const;
-    QString name() const;
-    QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const;
-    QIcon icon() const;
-    virtual bool canLaunch( const QUrl& file ) const;
-    virtual bool canLaunch(KDevelop::ProjectBaseItem* item) const;
-    virtual void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const;
-    virtual void configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const;
+    QString id() const override;
+    QString name() const override;
+    QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const override;
+    QIcon icon() const override;
+    virtual bool canLaunch( const QUrl& file ) const override;
+    virtual bool canLaunch(KDevelop::ProjectBaseItem* item) const override;
+    virtual void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const override;
+    virtual void configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const override;
 
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;

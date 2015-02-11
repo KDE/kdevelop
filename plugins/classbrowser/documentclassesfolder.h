@@ -61,9 +61,9 @@ protected: // Overridables
   virtual bool isClassFiltered(const KDevelop::QualifiedIdentifier&) { return false; }
   
 public: // Node overrides
-  virtual void nodeCleared();
-  virtual void populateNode();
-  virtual bool hasChildren() const { return true; }
+  virtual void nodeCleared() override;
+  virtual void populateNode() override;
+  virtual bool hasChildren() const override { return true; }
 
 private Q_SLOTS:
   // Files update.

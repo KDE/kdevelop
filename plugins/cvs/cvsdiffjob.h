@@ -26,12 +26,12 @@ public:
     virtual ~CvsDiffJob();
 
     // Begin:  KDevelop::VcsJob
-    virtual QVariant fetchResults();
+    virtual QVariant fetchResults() override;
     // End:  KDevelop::VcsJob
 
 private:
     // Begin: KDevelop::DVcsJob
-    virtual void slotProcessError(QProcess::ProcessError error);
+    virtual void slotProcessError(QProcess::ProcessError error) override;
     // End: KDevelop::DVcsJob
 };
 

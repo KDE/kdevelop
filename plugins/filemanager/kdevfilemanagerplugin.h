@@ -30,7 +30,7 @@ public:
     KDevFileManagerPlugin(QObject *parent, const QVariantList &args = QVariantList() );
     ~KDevFileManagerPlugin();
 
-    virtual void unload();
+    virtual void unload() override;
 private slots:
     void init();
 

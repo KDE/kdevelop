@@ -46,17 +46,17 @@ namespace KDevelop {
 
       void setContext(NavigationContextPointer context, int initBrowser = 400);
       
-      QSize sizeHint() const;
+      QSize sizeHint() const override;
       
     public slots:
       ///Keyboard-action "next"
-      virtual void next();
+      virtual void next() override;
       ///Keyboard-action "previous"
-      virtual void previous();
+      virtual void previous() override;
       ///Keyboard-action "accept"
-      virtual void accept();
-      virtual void up();
-      virtual void down();
+      virtual void accept() override;
+      virtual void up() override;
+      virtual void down() override;
       virtual void back();
 
       ///These are temporarily for gettings these events directly from kate
@@ -82,7 +82,7 @@ namespace KDevelop {
     private slots:
       void anchorClicked(const QUrl&);
     protected:
-      virtual void wheelEvent(QWheelEvent* );
+      virtual void wheelEvent(QWheelEvent* ) override;
       void updateIdealSize() const;
 
       void initBrowser(int height);

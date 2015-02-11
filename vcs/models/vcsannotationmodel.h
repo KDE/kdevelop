@@ -48,7 +48,7 @@ public:
 
     VcsRevision revisionForLine(int line) const;
 
-    QVariant data( int line, Qt::ItemDataRole role = Qt::DisplayRole ) const;
+    QVariant data( int line, Qt::ItemDataRole role = Qt::DisplayRole ) const override;
 
 private:
     Q_PRIVATE_SLOT( d, void addLines( KDevelop::VcsJob*) )

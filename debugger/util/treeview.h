@@ -36,7 +36,7 @@ class TreeModel;
     public:
         AsyncTreeView(TreeModel* model, QWidget *parent);
 
-        virtual QSize sizeHint() const;
+        virtual QSize sizeHint() const override;
         void resizeColumns();
 
         // Well, I really, really, need this.

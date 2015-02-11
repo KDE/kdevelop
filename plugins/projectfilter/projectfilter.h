@@ -40,7 +40,7 @@ public:
     ProjectFilter(const IProject* const project, const Filters& filters);
     virtual ~ProjectFilter();
 
-    virtual bool isValid(const Path& path, bool isFolder) const;
+    virtual bool isValid(const Path& path, bool isFolder) const override;
 
 private:
     QString makeRelative(const Path& path) const;

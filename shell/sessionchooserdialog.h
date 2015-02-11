@@ -40,7 +40,7 @@ class SessionChooserDialog : public QDialog
 public:
     SessionChooserDialog(QListView* view, QAbstractItemModel* model, QLineEdit* filter);
 
-    bool eventFilter(QObject* object, QEvent* event);
+    bool eventFilter(QObject* object, QEvent* event) override;
 
     QWidget* mainWidget() const;
 
