@@ -19,6 +19,7 @@
         "Id": "KDevNinjaBuilder", 
         "Name": "Ninja Project Builder", 
         "Name[ca]": "Constructor de projectes Ninja", 
+        "Name[cs]": "Překladač projektů Ninja", 
         "Name[en_GB]": "Ninja Project Builder", 
         "Name[es]": "Compilador de proyectos Ninja", 
         "Name[fi]": "Ninja-projektikäännin", 

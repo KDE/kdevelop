@@ -20,6 +20,7 @@
         "License": "GPL", 
         "Name": "GDB Support", 
         "Name[ca]": "Implementació del GDB", 
+        "Name[cs]": "Podpora GDB", 
         "Name[en_GB]": "GDB Support", 
         "Name[es]": "Implementación de GDB", 
         "Name[fi]": "GDB-tuki", 

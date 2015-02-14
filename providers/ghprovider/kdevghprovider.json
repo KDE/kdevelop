@@ -25,6 +25,7 @@
         "License": "GPL", 
         "Name": "Github Provider", 
         "Name[ca]": "Proveïdor de Github", 
+        "Name[cs]": "Poskytovatel GitHubu", 
         "Name[en_GB]": "Github Provider", 
         "Name[es]": "Proveedor de Github", 
         "Name[fi]": "Github-tarjoaja", 

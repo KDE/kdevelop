@@ -19,6 +19,7 @@
         "Id": "KDevMakeBuilder", 
         "Name": "Make Project Builder", 
         "Name[ca]": "Constructor de projecte Make", 
+        "Name[cs]": "Překladač projektů Make", 
         "Name[en_GB]": "Make Project Builder", 
         "Name[es]": "Compilador de proyectos Make", 
         "Name[fi]": "Make-projektikäännin", 
