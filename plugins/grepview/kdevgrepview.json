@@ -15,6 +15,7 @@
         "Description[sk]": "Umožní rýchle hľadanie viacerých súborov pomocou vzorov alebo regulárnych výrazov a umožní ich nahradiť.", 
         "Description[sl]": "Omogoča hitro iskanje po več datotekah z uporabo vzorcev ali regularnih izrazov. Omogoča tudi zamenjave.", 
         "Description[sv]": "Tillåter snabb sökning i flera filer med mönster eller reguljära uttryck, och tillåter dessutom ersättning.", 
+        "Description[tr]": "Kalıplar veya düzenli ifadeler kullanarak birden çok dosyada hızlı aramaya izin verir. Yer değiştirmeye de izin verir.", 
         "Description[uk]": "Надає можливості швидкого пошуку та заміни у декількох файлів на основі шаблонів або формальних виразів.", 
         "Description[x-test]": "xxAllows fast searching of multiple files using patterns or regular expressions. And allow to replace it too.xx", 
         "Description[zh_CN]": "可以用模式或正则表达式快速搜索多个文件，还可以替换。", 

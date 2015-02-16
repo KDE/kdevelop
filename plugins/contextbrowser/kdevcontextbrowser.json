@@ -19,6 +19,7 @@
         "Description[sk]": "Tento plugin zobrazuje informácie o aktuálnom jazykovom kontexte v božnom pohľade, a zvýrazní relevantné deklarácie a použitia.", 
         "Description[sl]": "Vstavek prikazuje podatke o trenutnem kontekstu jezika in poudari pomembne deklaracije in uporabe.", 
         "Description[sv]": "Insticksprogrammet visar information om nuvarande språksammanhang i en sidovy, och markerar relevanta deklarationer och användningar.", 
+        "Description[tr]": "Bu eklenti yan görünümde mevcut dil bağlamıyla ilgili bilgi gösterir, ve ilgili tanımlamaları ve kullanımları vurgular.", 
         "Description[uk]": "За допомогою цього додатка можна переглянути у перегляді на бічній панелі відомості про поточний контекст мови, а також підсвітити пов’язані оголошення і випадки використання.", 
         "Description[x-test]": "xxThis plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.xx", 
         "Description[zh_CN]": "此插件在侧边视图中显示关于当前语言上下文的信息，并加亮突出相关的声明和调用。", 

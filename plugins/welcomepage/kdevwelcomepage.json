@@ -14,6 +14,7 @@
         "Description[sk]": "Nastaviť, ktoré makrá a zahrnuté adresáre/súbory sa pridajú do spracovača počas spracovania projektu.", 
         "Description[sl]": "Nastavi, kateri makri in mape/datoteke z vključitvami bodo dodane razčlenjevalniku med razčlenjevanjem projekta.", 
         "Description[sv]": "Anpassa vilka makron och filer eller kataloger att inkludera som läggs till i tolken under projekttolkning.", 
+        "Description[tr]": "Proje ayrıştırma süresinde hangi makroların ve include dizinlerinin/dosyalarının ayrıştırıcıya ekleneceğini ayarla.", 
         "Description[uk]": "Налаштувати макроси і включені каталоги або файли, які буде додано під час обробки проекту.", 
         "Description[x-test]": "xxConfigure which macros and include directories/files will be added to the parser during project parsing.xx", 
         "Description[zh_CN]": "配置在解析项目时加入哪些宏、引用目录和文件。", 

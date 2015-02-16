@@ -20,6 +20,7 @@
         "Description[sk]": "Spravuje šablóny pre zdrojové súbory", 
         "Description[sl]": "Upravlja predloge za datoteke z izvorno kodo", 
         "Description[sv]": "Hanterar mallar för källkodsfiler", 
+        "Description[tr]": "Kaynak dosyaları için şablonları yönetir", 
         "Description[uk]": "Керування шаблонами для початкових файлів коду", 
         "Description[x-test]": "xxManages templates for source filesxx", 
         "Description[zh_CN]": "管理源文件的模板", 

@@ -20,6 +20,7 @@
         "Description[sk]": "Spustí externé skripty alebo aplikácie na manipuláciu s obsahom editora alebo robí iné ľubovoľné akcie.", 
         "Description[sl]": "Zaganjajte zunanje skripte ali programe, ki upravljajo z vsebino urejevalnika ali pa opravljajo druga poljubna dejanja.", 
         "Description[sv]": "Kör externa skript eller program för att behandla editorns innehåll eller utför andra godtyckliga åtgärder.", 
+        "Description[tr]": "Düzenleyici içeriğini değiştirmek veya diğer keyfi eylemler için dış betikler veya uygulamalar çalıştır.", 
         "Description[uk]": "Запускає зовнішні скрипти або програми для обробки текстових даних редактора або виконання інших потрібних дій.", 
         "Description[x-test]": "xxRun external scripts or applications to manipulate the editor contents or do other arbitrary actions.xx", 
         "Description[zh_CN]": "运行外部脚本或应用程序来处理编辑器内容或者执行其它任意动作。", 

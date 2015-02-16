@@ -19,6 +19,7 @@
         "Description[sk]": "Prepínač posledných použitých dokumentov pre KDevPlatform.", 
         "Description[sl]": "Vstavek za preklapljanje med nazadnje uporabljenimi dokumenti.", 
         "Description[sv]": "Byte till senast använda dokument för KDevelop-plattformen.", 
+        "Description[tr]": "KDevPlatform için en-son-kullanılan belge seçici bir eklenti.", 
         "Description[uk]": "Перемикач останніх використаних документів для KDevPlatform.", 
         "Description[x-test]": "xxA most-recently-used document switcher for KDevPlatform.xx", 
         "Description[zh_CN]": "KDevPlatform 的最近经常使用文档的切换器。", 

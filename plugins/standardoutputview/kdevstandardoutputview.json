@@ -14,6 +14,7 @@
         "Description[sk]": "Poskytuje textový výstup pohľadu nástrojov pre iné pluginy na použitie, na zobrazenie napríklad správy prekladača.", 
         "Description[sl]": "Drugim vstavkom ponuja okno za prikaz besedilnega izhoda, na primer za sporočila izgrajevalnika.", 
         "Description[sv]": "Tillhandahåller en verktygsvy för textutmatning som andra insticksprogram kan använda för att visa saker som kompilatormeddelanden.", 
+        "Description[tr]": "Diğer eklentilerin derleyici iletileri gibi şeyleri göstermesi için metin çıktı araç görünümü sağlar.", 
         "Description[uk]": "Забезпечує роботу панелі показу текстових даних інших додатків, зокрема попереджень компілятора.", 
         "Description[x-test]": "xxProvides a text output toolview for other plugins to use, to show things like compiler messages.xx", 
         "Description[zh_CN]": "提供让其它插件使用的文本输出工具视图，以便显示诸如编译器消息的信息。", 

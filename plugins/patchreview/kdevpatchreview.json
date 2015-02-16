@@ -20,6 +20,7 @@
         "Description[sk]": "Tento plugin umožňuje zhodnotenie záplat priamo v editore.", 
         "Description[sl]": "Vstavek omogoča pregled popravkov neposredno v urejevalniku.", 
         "Description[sv]": "Insticksprogrammet gör det möjligt att direkt granska programfixar i editorn.", 
+        "Description[tr]": "Bu eklenti yamaların doğrudan düzenleyici içerisinde gözden geçirilmesini sağlar.", 
         "Description[uk]": "За допомогою цього додатка ви зможете рецензувати латки безпосередньо у редакторі.", 
         "Description[x-test]": "xxThis plugin allows reviewing patches directly in the editor.xx", 
         "Description[zh_CN]": "此插件允许在编辑器中直接审阅补丁。", 

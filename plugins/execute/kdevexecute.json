@@ -19,6 +19,7 @@
         "Description[sk]": "Tento plugin umožňuje spustenie programov bez inštrumentora, teda natívne aktuálnym hostiteľom.", 
         "Description[sl]": "Vstavek omogoča zaganjanje programov, za katere v KDevelop ni posebnega grafičnega vmesnika.", 
         "Description[sv]": "Insticksprogrammet tillåter att program utan instrumentering körs, dvs. direkt av nuvarande värddator.", 
+        "Description[tr]": "Bu eklenti programların ek araç olmadan çalıştırılabilmesini sağlar, örn. mevcut istemci ile doğal olarak.", 
         "Description[uk]": "За допомогою цього додатка можна запускати програми безпосередньо на поточному вузлі.", 
         "Description[x-test]": "xxThis plugin allows running of programs with no instrumentor, ie. natively by the current host.xx", 
         "Description[zh_CN]": "此插件允许以无操作者方式运行程序，例如，当前主机的原生方式。", 

@@ -21,6 +21,7 @@
         "Description[sk]": "Tento plugin poskytuje integráciu medzi projektami a ich VCS infraštruktúrou", 
         "Description[sl]": "Ta vstavek ponuja most med projekti in njihovo infrastrukturo nadzora različic", 
         "Description[sv]": "Det här insticksprogrammet tillhandahåller integrering mellan projekten och deras VCS infrastruktur", 
+        "Description[tr]": "Bu eklenti projeler ile VCS altyapıları arasında bütünleşme sağlar", 
         "Description[uk]": "За допомогою цього додатка забезпечується інтеграція між проектами та інфраструктурою системи керування версіями (VCS)", 
         "Description[x-test]": "xxThis plugin provides integration between the projects and their VCS infrastructurexx", 
         "Description[zh_CN]": "此插件提供工程和它们的代码管理系统的集成", 

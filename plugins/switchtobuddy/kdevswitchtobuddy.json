@@ -14,6 +14,7 @@
         "Description[sk]": "Umožňuje prepínanie medzi dokumentmi priateľov ako súbor implementácie a hlavičky.", 
         "Description[sl]": "Omogoča preklapljanje med prijateljskimi dokumenti kot na primer izvedbo in datoteko glave.", 
         "Description[sv]": "Tillåter byte mellan samhörande dokument som implementerings- och deklarationsfiler.", 
+        "Description[tr]": "Uygulama ve başlık dosyası gibi ilişkili belgeler arasında geçişe izin verir.", 
         "Description[uk]": "Надає змогу перемикатися на споріднені документи, зокрема файли з реалізацією та файли заголовків.", 
         "Description[x-test]": "xxAllows switching between buddy documents like implementation and header file.xx", 
         "Description[zh_CN]": "允许在伙伴文件中切换，如实现与头文件", 

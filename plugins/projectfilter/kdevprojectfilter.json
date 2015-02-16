@@ -20,6 +20,7 @@
         "Description[sk]": "Nastaviť, ktoré súbory a priečinky v priečinku projektu majú byť zahrnuté alebo vylúčené.", 
         "Description[sl]": "Nastavi katere datoteke in mape znotraj mape projekta naj bodo vključene ali izključene.", 
         "Description[sv]": "Anpassa vilka filer och kataloger inne i projektkatalogen som ska inkluderas eller exkluderas.", 
+        "Description[tr]": "Proje klasörü içerisindeki hangi dosya ve klasörlerin dahil edilip edilmeyeceğini yapılandır.", 
         "Description[uk]": "За допомогою цього модуля можна визначити, які файли і теки у теці проекту має бути включено або виключено з його складу.", 
         "Description[x-test]": "xxConfigure which files and folders inside the project folder should be included or excluded.xx", 
         "Description[zh_CN]": "配置项目文件中哪些文件被加入或排除。", 

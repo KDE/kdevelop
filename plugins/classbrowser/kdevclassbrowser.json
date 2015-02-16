@@ -20,6 +20,7 @@
         "Description[sk]": "Tento plugin poskytuje prehliadateľný model aktuálne analyzovanej triedy a iných položiek.", 
         "Description[sl]": "Vstavek vgradi model trenutno razčlenjenih razredov in drugih predmetov, po katerih je mogoče brskati.", 
         "Description[sv]": "Insticksprogrammet tillhandahåller en bläddringsbar modell av klasser och andra objekt som för närvarande har tolkats.", 
+        "Description[tr]": "Bu eklenti mevcut ayrıştırılmış sınıfların ve diğer öğelerin taranabilir bir modelini sağlar.", 
         "Description[uk]": "За допомогою цього додатка можна створити придатну для перегляду модель класів та інших елементів, над якими ви працюєте.", 
         "Description[x-test]": "xxThis plugin provides a browsable model of the currently parsed classes and other items.xx", 
         "Description[zh_CN]": "此插件提供了一个当前已分析类和其它项目的可浏览化视窗模型。", 

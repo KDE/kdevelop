@@ -20,6 +20,7 @@
         "Description[sk]": "Tento plugin ukáže chyby v zdrojovom kóde.", 
         "Description[sl]": "Vstavek prikazuje napake v izvorni kodi.", 
         "Description[sv]": "Insticksprogrammet visar fel i källkod.", 
+        "Description[tr]": "Bu eklenti kaynak koddaki hataları gösterir.", 
         "Description[uk]": "За допомогою цього додатка можна переглянути повідомлення про помилки у коді.", 
         "Description[x-test]": "xxThis plugin shows errors in source code.xx", 
         "Description[zh_CN]": "此插件显示源代码中的错误。", 

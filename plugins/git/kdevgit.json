@@ -24,6 +24,7 @@
         "Description[sk]": "Tento plugin integruje GIT do KDevelop.", 
         "Description[sl]": "Vstavek v KDevelop vgradi Git", 
         "Description[sv]": "Insticksprogrammet integrerar Git i KDevelop", 
+        "Description[tr]": "Bu eklenti Git'i KDevelop'a bütünleştirir", 
         "Description[uk]": "Цей додаток інтегрує Git із KDevelop", 
         "Description[x-test]": "xxThis plugin integrates Git to KDevelopxx", 
         "Description[zh_CN]": "此插件对 KDevelop 整合 Git", 
