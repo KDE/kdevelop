@@ -54,7 +54,7 @@ macro(kdevplatform_create_template_archive _templateName)
     else(WIN32)
         add_custom_command(OUTPUT ${_template}
             COMMAND tar ARGS -c -C ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
-                --exclude .kdev_ignore --exclude .svn
+                --exclude .kdev_ignore --exclude .svn --owner=root --group=root --numeric-owner
                 -j -f ${_template} .
             DEPENDS ${_deps}
         )
