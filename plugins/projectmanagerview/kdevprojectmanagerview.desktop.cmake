@@ -2,7 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=Lets you manage the project contents.
-Comment[bs]=Omogućava vam upravljanje sadržajem projekta
+Comment[bs]=Omogućava vam upravljanje sadržajem projekta.
 Comment[ca]=Us permet gestionar els continguts del projecte.
 Comment[ca@valencia]=Vos permet gestionar els continguts del projecte.
 Comment[da]=Lader dig håndtere projektets indhold.

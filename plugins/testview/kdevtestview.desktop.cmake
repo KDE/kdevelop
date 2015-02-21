@@ -2,7 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=Lets you see and run unit tests.
-Comment[bs]=Omogućava da vidite i iztvršite testove jedinica
+Comment[bs]=Omogućava da vidite i iztvršite testove jedinica.
 Comment[ca]=Us permet veure i executar proves unitàries.
 Comment[ca@valencia]=Vos permet veure i executar proves unitàries.
 Comment[da]=Lader dig se og køre enhedstester.
