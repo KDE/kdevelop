@@ -37,6 +37,7 @@ Comment[et]=QMake'i projektide import ja muutmine.
 Comment[fi]=Tuo ja muokkaa QMake-projekteja
 Comment[fr]=Importe et modifie des projets QMake
 Comment[ga]=Iompórtáil tionscadail qmake agus cuir in eagar iad
+Comment[gl]=Permite importar e editar proxectos de QMake.
 Comment[hu]=QMake projektek importálása és szerkesztése
 Comment[nl]=Importeert en bewerkt QMake-projecten
 Comment[pl]=Importuje i edytuje projekty QMake
