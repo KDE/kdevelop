@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Custom Defines And Includes Manager
+Name[bs]=Menadžer vlastitih definicija i uključivanja
 Name[ca]=Gestor per personalitzar les definicions i inclusions
 Name[de]=Verwaltung eigener Definitionen und Includes
 Name[en_GB]=Custom Defines And Includes Manager
@@ -20,6 +21,7 @@ Name[tr]=Özel Tanımlama ve İçerme Yöneticisi
 Name[uk]=Керування нетиповими визначеннями і включеннями
 Name[x-test]=xxCustom Defines And Includes Managerxx
 GenericName=Custom Defines And Includes Manager
+GenericName[bs]=Menadžer vlastitih definicija i uključivanja
 GenericName[ca]=Gestor per personalitzar les definicions i inclusions
 GenericName[de]=Verwaltung eigener Definitionen und Includes
 GenericName[en_GB]=Custom Defines And Includes Manager
@@ -39,6 +41,7 @@ GenericName[tr]=Özel Tanımlama ve İçerme Yöneticisi
 GenericName[uk]=Керування нетиповими визначеннями і включеннями
 GenericName[x-test]=xxCustom Defines And Includes Managerxx
 Comment=Configure which macros and include directories/files will be added to the parser during project parsing.
+Comment[bs]=Konfiguriše koji makroi i direktoriji/uključivanja će se dodati parseru tokom parsiranja projekta.
 Comment[ca]=Configura quines macros i directoris/fitxers s'afegiran a l'analitzador durant l'anàlisi del projecte.
 Comment[de]=Einstellung der Makros und Include-Ordner/-Dateien, die zum für den Parser während des Einlesens des Projekts hinzugefügt werden.
 Comment[en_GB]=Configure which macros and include directories/files will be added to the parser during project parsing.
