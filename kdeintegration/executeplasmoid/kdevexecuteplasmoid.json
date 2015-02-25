@@ -6,6 +6,7 @@
             }
         ], 
         "Description": "Lets you view a plasmoid", 
+        "Description[bs]": "Omogućava da vidite plazmoid", 
         "Description[ca]": "Us permet veure un plasmoide", 
         "Description[en_GB]": "Lets you view a plasmoid", 
         "Description[es]": "Le permite ver un plasmoide", 
@@ -24,6 +25,7 @@
         "Id": "kdevexecuteplasmoid", 
         "License": "GPL", 
         "Name": "Plasmoid Launcher", 
+        "Name[bs]": "Pokretač plazmoida", 
         "Name[ca]": "Llançador de plasmoide", 
         "Name[en_GB]": "Plasmoid Launcher", 
         "Name[es]": "Lanzador de plasmoides", 

@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Language Support", 
         "Description": "C/C++ Language Support", 
+        "Description[bs]": "C/C++  Jezička podrška", 
         "Description[ca]": "Implementació del llenguatge C/C++", 
         "Description[cs]": "Podpora jazyka C/C++", 
         "Description[en_GB]": "C/C++ Language Support", 
@@ -20,6 +21,7 @@
         "Icon": "text-x-c++src", 
         "Id": "kdevcppsupport", 
         "Name": "C++ Support", 
+        "Name[bs]": "C++ Podrška", 
         "Name[ca]": "Implementació del C++", 
         "Name[cs]": "Podpora C++", 
         "Name[en_GB]": "C++ Support", 

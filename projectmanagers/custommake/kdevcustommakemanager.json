@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management", 
         "Description": "Imports and edits custom make projects", 
+        "Description[bs]": "Uvozi i uređuje korisnički prilagođene projekte", 
         "Description[ca]": "Importa i edita projectes personalitzats de Make", 
         "Description[cs]": "Importuje a upravuje vlastní projekty make", 
         "Description[en_GB]": "Imports and edits custom make projects", 
@@ -20,6 +21,7 @@
         "Icon": "gear", 
         "Id": "KDevCustomMakeManager", 
         "Name": "Custom Makefile Project Manager", 
+        "Name[bs]": "Korisnički Makefile menadžer projekta", 
         "Name[ca]": "Gestor de projecte personalitzat Makefile", 
         "Name[en_GB]": "Custom Makefile Project Manager", 
         "Name[es]": "Gestor de proyectos Makefile personalizados", 

@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Allows to use custom buildsystems for KDevelop projects", 
+        "Description[bs]": "DOpušta korištene vlastitih sistema za gradnju KDevelop projekata", 
         "Description[ca]": "Permet utilitzar sistemes de construcció personalitzats per a projectes del KDevelop", 
         "Description[en_GB]": "Allows to use custom buildsystems for KDevelop projects", 
         "Description[es]": "Permite el uso de sistemas de compilación personalizados en proyectos de KDevelop", 
@@ -18,6 +19,7 @@
         "Icon": "gear", 
         "Id": "KDevCustomBuildSystem", 
         "Name": "Custom BuildSystem", 
+        "Name[bs]": "Vlasititi sistem gradnje", 
         "Name[ca]": "BuildSystem personalitzat", 
         "Name[cs]": "Vlastní systém pro sestavení", 
         "Name[en_GB]": "Custom BuildSystem", 
