@@ -157,7 +157,6 @@ private:
     MainWindow *m_mainWindow;
     // uses QPointer to make already-deleted splitters detectable
     QMap<AreaIndex*, QPointer<QSplitter> > m_indexSplitters;
-    friend class AreaSelectionAction;
 
     QMap<Area*, QAction*> m_areaActions;
     QMap<QAction*, Area*> m_actionAreas;

@@ -361,8 +361,8 @@ void MainWindowPrivate::reconstructViews(QList<View*> topViews)
 void MainWindowPrivate::reconstruct()
 {
     if(m_leftTabbarCornerWidget) {
-        m_leftTabbarCornerWidget.data()->hide();
-        m_leftTabbarCornerWidget.data()->setParent(0);
+        m_leftTabbarCornerWidget->hide();
+        m_leftTabbarCornerWidget->setParent(0);
     }
 
     idealController->setWidthForArea(Qt::LeftDockWidgetArea, area->thickness(Sublime::Left));
@@ -395,7 +395,7 @@ void MainWindowPrivate::reconstruct()
 void MainWindowPrivate::clearArea()
 {
     if(m_leftTabbarCornerWidget)
-        m_leftTabbarCornerWidget.data()->setParent(0);
+        m_leftTabbarCornerWidget->setParent(0);
 
     //reparent toolview widgets to 0 to prevent their deletion together with dockwidgets
     foreach (View *view, area->toolViews())
@@ -470,8 +470,8 @@ void MainWindowPrivate::viewRemovedInternal(AreaIndex* index, View* view)
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view)
 {
     if(m_leftTabbarCornerWidget) {
-        m_leftTabbarCornerWidget.data()->hide();
-        m_leftTabbarCornerWidget.data()->setParent(0);
+        m_leftTabbarCornerWidget->hide();
+        m_leftTabbarCornerWidget->setParent(0);
     }
 
     {
@@ -556,8 +556,8 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     else
     {
         if(m_leftTabbarCornerWidget) {
-            m_leftTabbarCornerWidget.data()->hide();
-            m_leftTabbarCornerWidget.data()->setParent(0);
+            m_leftTabbarCornerWidget->hide();
+            m_leftTabbarCornerWidget->setParent(0);
         }
 
         // We've about to remove the last view of this container.  It will
@@ -683,19 +683,21 @@ Qt::DockWidgetArea MainWindowPrivate::positionToDockArea(Position position)
 void MainWindowPrivate::switchToArea(QAction *action)
 {
     qCDebug(SUBLIME) << "for" << action;
-    controller->showArea(m_actionAreas[action], m_mainWindow);
+    controller->showArea(m_actionAreas.value(action), m_mainWindow);
 }
 
 void MainWindowPrivate::updateAreaSwitcher(Sublime::Area *area)
 {
-    if (m_areaActions.contains(area))
-        m_areaActions[area]->setChecked(true);
+    QAction* action = m_areaActions.value(area);
+    if (action)
+        action->setChecked(true);
 }
 
 void MainWindowPrivate::activateFirstVisibleView()
 {
-    if (area->views().count() > 0)
-        m_mainWindow->activateView(area->views().first());
+    QList<Sublime::View*> views = area->views();
+    if (views.count() > 0)
+        m_mainWindow->activateView(views.first());
 }
 
 void MainWindowPrivate::widgetResized(Qt::DockWidgetArea /*dockArea*/, int /*thickness*/)
@@ -705,9 +707,8 @@ void MainWindowPrivate::widgetResized(Qt::DockWidgetArea /*dockArea*/, int /*thi
 
 void MainWindowPrivate::widgetCloseRequest(QWidget* widget)
 {
-    if (widgetToView.contains(widget))
+    if (View *view = widgetToView.value(widget))
     {
-        View *view = widgetToView[widget];
         area->closeView(view);
     }
 }
