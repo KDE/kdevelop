@@ -67,6 +67,11 @@ bool CompletionSettings::highlightSemanticProblems() const
     return m_languageGroup.readEntry("highlightSemanticProblems", m_highlightSemanticProblems);
 }
 
+bool CompletionSettings::boldDeclarations() const
+{
+    return m_languageGroup.readEntry("boldDeclarations", m_boldDeclarations);
+}
+
 int CompletionSettings::globalColorizationLevel() const
 {
     return m_languageGroup.readEntry("globalColorization", m_globalColorizationLevel);
@@ -97,7 +102,7 @@ ICompletionSettings::CompletionLevel CompletionSettings::completionLevel() const
 CompletionSettings::CompletionSettings()
     : m_level(MinimalWhenAutomatic), m_automatic(true),
       m_highlightSemanticProblems(true), m_highlightProblematicLines(false), m_showMultiLineInformation(false),
-      m_localColorizationLevel(170), m_globalColorizationLevel(255), m_minFilesForSimplifiedParsing(100000),
-      m_todoMarkerWords("TODO FIXME"),
+      m_boldDeclarations(true), m_localColorizationLevel(170), m_globalColorizationLevel(255),
+      m_minFilesForSimplifiedParsing(100000), m_todoMarkerWords("TODO FIXME"),
       m_languageGroup(KSharedConfig::openConfig(), "Language Support"){}
 }

@@ -50,6 +50,7 @@ public:
 
     Q_SCRIPTABLE virtual bool highlightSemanticProblems() const = 0;
     Q_SCRIPTABLE virtual bool highlightProblematicLines() const = 0;
+    Q_SCRIPTABLE virtual bool boldDeclarations() const = 0;
 
     Q_SCRIPTABLE virtual bool showMultiLineSelectionInformation() const = 0;
 

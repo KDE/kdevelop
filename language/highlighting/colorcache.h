@@ -153,6 +153,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
     uchar m_globalColorRatio;
 
+    /// Whether declarations have to be rendered with a bold style or not.
+    bool m_boldDeclarations;
+
     /// The view we are listening to for setting changes.
     QPointer<KTextEditor::View> m_view;
 };

@@ -110,7 +110,9 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Cont
     a = KTextEditor::Attribute::Ptr(new KTextEditor::Attribute(*ColorCache::self()->defaultColors()->getAttribute(type)));
 
     if ( context == DefinitionContext || context == DeclarationContext ) {
-      a->setFontBold();
+      if (ICore::self()->languageController()->completionSettings()->boldDeclarations()) {
+        a->setFontBold();
+      }
     }
 
     if( color.isValid() ) {

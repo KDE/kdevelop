@@ -139,6 +139,41 @@
         </property>
        </widget>
       </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="globalColorizationLabel">
+        <property name="toolTip">
+         <string>&lt;p&gt;This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.&lt;/p&gt;</string>
+        </property>
+        <property name="text">
+         <string>Global colorization intensity:</string>
+        </property>
+        <property name="buddy">
+         <cstring>kcfg_localColorization</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QSlider" name="kcfg_globalColorization">
+        <property name="toolTip">
+         <string>&lt;p&gt;This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.&lt;/p&gt;</string>
+        </property>
+        <property name="maximum">
+         <number>255</number>
+        </property>
+        <property name="singleStep">
+         <number>3</number>
+        </property>
+        <property name="pageStep">
+         <number>25</number>
+        </property>
+        <property name="value">
+         <number>255</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
       <item row="9" column="0">
        <widget class="QLabel" name="label_4">
         <property name="toolTip">
@@ -199,40 +234,18 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="1">
-       <widget class="QSlider" name="kcfg_globalColorization">
+      <item row="12" column="0">
+       <widget class="QLabel" name="boldDeclarationsLabel">
         <property name="toolTip">
-         <string>&lt;p&gt;This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.&lt;/p&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use bold font for declarations such as classes, functions, local variables, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
-        <property name="maximum">
-         <number>255</number>
-        </property>
-        <property name="singleStep">
-         <number>3</number>
-        </property>
-        <property name="pageStep">
-         <number>25</number>
-        </property>
-        <property name="value">
-         <number>255</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+        <property name="text">
+         <string>Bold font for declarations:</string>
         </property>
        </widget>
       </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="globalColorizationLabel">
-        <property name="toolTip">
-         <string>&lt;p&gt;This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.&lt;/p&gt;</string>
-        </property>
-        <property name="text">
-         <string>Global colorization intensity:</string>
-        </property>
-        <property name="buddy">
-         <cstring>kcfg_localColorization</cstring>
-        </property>
-       </widget>
+      <item row="12" column="1">
+       <widget class="QCheckBox" name="kcfg_boldDeclarations"/>
       </item>
      </layout>
      <zorder>kcfg_localColorization</zorder>
@@ -245,6 +258,8 @@
      <zorder>kcfg_globalColorization</zorder>
      <zorder>globalColorizationLabel</zorder>
      <zorder>localColorizationLabel</zorder>
+     <zorder>boldDeclarationsLabel</zorder>
+     <zorder>kcfg_boldDeclarations</zorder>
     </widget>
    </item>
    <item>

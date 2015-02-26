@@ -14,6 +14,9 @@
     <entry name="highlightProblematicLines" key="highlightProblematicLines" type="Bool">
     <default>false</default>
     </entry>
+    <entry name="boldDeclarations" key="boldDeclarations" type="Bool">
+    <default>true</default>
+    </entry>
     <entry name="showMultiLineSelectionInformation" key="showMultiLineSelectionInformation" type="Bool">
     <default>false</default>
     </entry>

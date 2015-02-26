@@ -80,7 +80,7 @@ ColorCache* ColorCache::m_self = 0;
 
 ColorCache::ColorCache(QObject* parent)
   : QObject(parent), m_defaultColors(0), m_validColorCount(0), m_colorOffset(0),
-    m_localColorRatio(0), m_globalColorRatio(0)
+    m_localColorRatio(0), m_globalColorRatio(0), m_boldDeclarations(true)
 {
   Q_ASSERT(m_self == 0);
 
@@ -232,10 +232,15 @@ void ColorCache::updateColorsFromSettings()
 {
   int localRatio = ICore::self()->languageController()->completionSettings()->localColorizationLevel();
   int globalRatio = ICore::self()->languageController()->completionSettings()->globalColorizationLevel();
+  bool boldDeclartions = ICore::self()->languageController()->completionSettings()->boldDeclarations();
 
   if ( localRatio != m_localColorRatio || globalRatio != m_globalColorRatio ) {
     m_localColorRatio = localRatio;
     m_globalColorRatio = globalRatio;
+    update();
+  }
+  if (boldDeclartions != m_boldDeclarations) {
+    m_boldDeclarations = boldDeclartions;
     update();
   }
 }

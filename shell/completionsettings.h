@@ -44,6 +44,8 @@ public:
 
     virtual bool highlightProblematicLines() const override;
 
+    virtual bool boldDeclarations() const override;
+
     virtual bool showMultiLineSelectionInformation() const override;
 
     virtual int minFilesForSimplifiedParsing() const override;
@@ -56,7 +58,11 @@ private:
     CompletionSettings();
 
     const CompletionLevel m_level;
-    const bool m_automatic, m_highlightSemanticProblems, m_highlightProblematicLines, m_showMultiLineInformation;
+    const bool m_automatic;
+    const bool m_highlightSemanticProblems;
+    const bool m_highlightProblematicLines;
+    const bool m_showMultiLineInformation;
+    const bool m_boldDeclarations;
     const int m_localColorizationLevel;
     const int m_globalColorizationLevel;
     const int m_minFilesForSimplifiedParsing;
