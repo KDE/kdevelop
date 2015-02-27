@@ -21,6 +21,7 @@
         "Icon": "text-x-c++src", 
         "Id": "kdevcppsupport", 
         "Name": "C++ Support", 
+        "Name[ast]": "Sofitu C++", 
         "Name[bs]": "C++ Podrška", 
         "Name[ca]": "Implementació del C++", 
         "Name[cs]": "Podpora C++", 
