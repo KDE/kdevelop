@@ -25,6 +25,7 @@
 #include <QList>
 #include <QStringList>
 #include <QUrl>
+#include <QMetaType>
 
 struct CustomBuildSystemTool
 {
