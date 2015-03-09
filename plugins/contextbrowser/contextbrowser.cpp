@@ -994,7 +994,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
                 }
                 QUrl u = decl->url().toUrl();
                 KTextEditor::Range range = decl->rangeInCurrentRevision();
-                range.end() = range.start();
+                range.setEnd(range.start());
                 lock.unlock();
                 core()->documentController()->openDocument(u, range);
                 return;
@@ -1008,7 +1008,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
 
                 if(!nextTopUses.isEmpty()) {
                   KTextEditor::Range range =  chosen->transformFromLocalRevision(forward ? nextTopUses.front() : nextTopUses.back());
-                  range.end() = range.start();
+                  range.setEnd(range.start());
                   lock.unlock();
                   core()->documentController()->openDocument(u, range);
                 }
@@ -1020,7 +1020,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
           }else{
               QUrl url = chosen->url().toUrl();
               KTextEditor::Range range = chosen->transformFromLocalRevision(localUses[nextUse]);
-              range.end() = range.start();
+              range.setEnd(range.start());
               lock.unlock();
               core()->documentController()->openDocument(url, range);
               return;
