@@ -286,9 +286,14 @@ void OutputModel::activate( const QModelIndex& index )
         KTextEditor::Cursor range( item.lineNo, item.columnNo );
         KDevelop::IDocumentController *docCtrl = KDevelop::ICore::self()->documentController();
         QUrl url = item.url;
+        if (item.url.isEmpty()) {
+            qWarning() << "trying to open empty url";
+            return;
+        }
         if(url.isRelative()) {
             url = d->m_buildDir.resolved(url);
         }
+        Q_ASSERT(!url.isRelative());
         docCtrl->openDocument( url, range );
     } else {
         qCDebug(OUTPUTVIEW) << "not an activateable item";
