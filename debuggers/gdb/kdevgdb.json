@@ -4,6 +4,7 @@
         "Description": "This plugin provides a frontend for GDB, a source-level debugger for C, C++ and more.", 
         "Description[bs]": "Ovaj dodatak pruža link za GDB, ispravljač grešaka izvornog nivoa za C, C++ i druge.", 
         "Description[ca]": "Aquest connector proveeix d'un frontal per GDB, un depurador a nivell de codi per C, C++ i més llenguatges.", 
+        "Description[de]": "Dieses Modul stellt eine Oberfläche für GDB zur Verfügung. GDB ist ein Debugger für C, C++ und weitere Sprachen.", 
         "Description[en_GB]": "This plugin provides a frontend for GDB, a source-level debugger for C, C++ and more.", 
         "Description[es]": "Este complemento proporciona una interfaz para GDB, un depurador de código fuente para C, C++ y otros lenguajes.", 
         "Description[fi]": "Tämä liitännäinen tarjoaa GDB-käyttöliittymän, lähdekooditason virheenjäljittimen C-, C++-kielille ja paljon muuta", 
