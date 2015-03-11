@@ -22,7 +22,7 @@
 #define KDEVPLATFORM_VCSDIFFWIDGET_H
 
 #include <QWidget>
-#include "vcsexport.h"
+#include <vcs/vcsexport.h>
 
 namespace KDevelop
 {

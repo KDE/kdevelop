@@ -23,7 +23,7 @@
 
 #include <QtCore/QAbstractTableModel>
 
-#include "vcsexport.h"
+#include <vcs/vcsexport.h>
 
 class QUrl;
 class KJob;

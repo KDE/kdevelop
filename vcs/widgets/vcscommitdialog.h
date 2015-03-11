@@ -14,7 +14,7 @@
 
 #include <QDialog>
 
-#include "vcsexport.h"
+#include <vcs/vcsexport.h>
 
 namespace KDevelop
 {

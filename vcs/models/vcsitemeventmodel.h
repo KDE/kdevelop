@@ -23,7 +23,7 @@
 
 
 #include <QStandardItemModel>
-#include "vcsexport.h"
+#include <vcs/vcsexport.h>
 
 template <typename T> class QList;
 

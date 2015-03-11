@@ -27,7 +27,7 @@
 
 #include <vcs/vcsstatusinfo.h>
 
-#include "vcsexport.h"
+#include <vcs/vcsexport.h>
 
 class QUrl;
 

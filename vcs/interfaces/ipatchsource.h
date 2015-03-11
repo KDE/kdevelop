@@ -22,7 +22,7 @@
 #include <QUrl>
 
 #include <qpointer.h>
-#include "vcsexport.h"
+#include <vcs/vcsexport.h>
 #include <vcs/vcsstatusinfo.h>
 
 namespace KDevelop {

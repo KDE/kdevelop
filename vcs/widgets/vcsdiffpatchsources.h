@@ -31,7 +31,7 @@
 #include "vcs/vcsstatusinfo.h"
 #include "vcs/vcsjob.h"
 
-#include "vcsexport.h"
+#include <vcs/vcsexport.h>
 
 class KTextEdit;
 class KComboBox;

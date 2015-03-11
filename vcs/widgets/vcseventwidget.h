@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_VCSEVENTWIDGET_H
 
 #include <QWidget>
-#include "vcsexport.h"
+#include <vcs/vcsexport.h>
 
 class QPoint;
 class QModelIndex;

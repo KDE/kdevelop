@@ -22,7 +22,7 @@
 #define KDEVPLATFORM_STANDARDVCSLOCATIONWIDGET_H
 
 #include <vcs/widgets/vcslocationwidget.h>
-#include "vcsexport.h"
+#include <vcs/vcsexport.h>
 
 class QUrl;
 class KUrlRequester;

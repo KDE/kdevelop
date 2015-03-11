@@ -21,7 +21,7 @@
 #ifndef KDEVPLATFORM_IPATCHEXPORTER_H
 #define KDEVPLATFORM_IPATCHEXPORTER_H
 
-#include "vcsexport.h"
+#include <vcs/vcsexport.h>
 #include "ipatchsource.h"
 
 class QWidget;
