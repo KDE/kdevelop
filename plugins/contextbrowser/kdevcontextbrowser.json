@@ -12,6 +12,7 @@
         "Description[en_GB]": "This plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.", 
         "Description[es]": "Este complemento muestra información de contexto sobre el lenguaje actual en una vista lateral, resaltando declaraciones relevantes y sus usos.", 
         "Description[fi]": "Tämä liitännäinen näyttää tietoja nykyisestä kielikontekstista sivunäkymässä ja korostaa olennaisia esittelyjä ja käyttöjä.", 
+        "Description[gl]": "Este complemento mostra información acerca do contexto da linguaxe actual nunha vista lateral, e realza as declaracións e utilizacións relevantes.", 
         "Description[nl]": "Deze plugin toont informatie over de huidige taalcontext in een zijvak en accentueert relevante declaraties en gebruik.", 
         "Description[pl]": "Ta wtyczka pokazuje informacje dotyczące kontekstu bieżącego języka w widoku bocznym, podświetla deklaracja i ich użycia.", 
         "Description[pt]": "Este 'plugin' mostra informações sobre o contexto da linguagem actual numa vista lateral, assim como realça as declarações e utilizações relevantes.", 

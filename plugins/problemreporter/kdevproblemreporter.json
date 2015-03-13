@@ -13,6 +13,7 @@
         "Description[en_GB]": "This plugin shows errors in source code.", 
         "Description[es]": "Este complemento muestra errores en el código fuente.", 
         "Description[fi]": "Tämä liitännäinen näyttää virheet lähdekoodissa.", 
+        "Description[gl]": "Esta extensión mostra erros no código fonte.", 
         "Description[nl]": "Deze plugin toont fouten in broncode", 
         "Description[pl]": "Ta wtyczka pokazuje błędy w kodzie źródłowym.", 
         "Description[pt]": "Este 'plugin' mostra os erros no código-fonte.", 

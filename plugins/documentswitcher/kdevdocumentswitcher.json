@@ -12,6 +12,7 @@
         "Description[en_GB]": "A most-recently-used document switcher for KDevPlatform.", 
         "Description[es]": "Un cambiador de documentos recientemente usados para KDevPlatform.", 
         "Description[fi]": "Vaihtaa tiedostoja niiden käyttöjärjestyksen perusteella", 
+        "Description[gl]": "Un selector entre documentos empregados recentemente para KDevPlatform.", 
         "Description[nl]": "De meest-recent-gebruikte documentwisselaar voor KDevPlatform.", 
         "Description[pl]": "Przełączanie między ostatnio używanymi dokumentacji w KDevPlatform.", 
         "Description[pt]": "Um selector dos documentos usados mais recentemente para o KDevPlatform.", 

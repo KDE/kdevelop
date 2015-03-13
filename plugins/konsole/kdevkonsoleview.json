@@ -8,6 +8,7 @@
         "Description[en_GB]": "This plugin provides KDevelop with an embedded konsole for quick and easy command line access.", 
         "Description[es]": "Este complemento proporciona una consola integrada a KDevelop para acceder a la línea de órdenes de forma rápida y fácil.", 
         "Description[fi]": "Tämä liitännäinen tarjoaa KDevelop-ohjelmalle upotetun pääteikkunan nopeaan ja helppoon komentorivityöskentelyyn.", 
+        "Description[gl]": "Este complemento fornécelle a KDevelop un konsole integrado para dispor de acceso rápido e sinxelo á liña de ordes.", 
         "Description[nl]": "Deze plugin biedt KDevelop een ingebed konsole voor snelle en gemakkelijke toegang tot commandoregels.", 
         "Description[pl]": "Ta wtyczka dodaje do KDevelopa wbudowaną konsolę umożliwiając szybki i łatwy dostęp do wiersza poleceń.", 
         "Description[pt]": "Este 'plugin' oferece ao KDevelop um Konsole incorporado para aceder rápida e facilmente à linha de comandos.", 

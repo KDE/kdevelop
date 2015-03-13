@@ -13,6 +13,7 @@
         "Description[en_GB]": "Configure which files and folders inside the project folder should be included or excluded.", 
         "Description[es]": "Configurar los archivos y carpetas que pertenecen a la carpeta del proyecto y que deben ser incluidos o excluidos.", 
         "Description[fi]": "Valitse, mitkä projektikansiossa olevat tiedostot ja kansiot pitäisi ottaa mukaan ja mitkä pitäisi jättää pois.", 
+        "Description[gl]": "Configurar cales ficheiros e cartafoles dentro do cartafol do proxecto deben incluírse ou excluírse.", 
         "Description[nl]": "Stel in welke bestanden en mappen in de projectmap meegenomen of uitgesloten moeten worden.", 
         "Description[pl]": "Ustaw jakie pliki i katalogi wewnątrz katalogu projektu mają być uwzględniane albo wykluczane.", 
         "Description[pt]": "Configurar os ficheiros ou pastas, dentro da pasta do projecto, que deverão ser incluídos ou excluídos.", 

@@ -14,6 +14,7 @@
         "Description[en_GB]": "This plugin provides integration between the projects and their VCS infrastructure", 
         "Description[es]": "Este complemento proporciona integración entre los proyectos y su infraestructura VCS", 
         "Description[fi]": "Tämä liitännäinen tarjoaa projektien ja niiden versionhallintajärjestelmien välisen integraation", 
+        "Description[gl]": "Este complemento fornece integración entre os proxectos e a súa infraestrutura VCS", 
         "Description[nl]": "Deze plugin geeft integratie tussen de projecten en hun VCS-infrastructuur", 
         "Description[pl]": "Wtyczka ta zapewnia integracje pomiędzy projektami i ich infrastrukturą systemu kontroli wersji (VCS)", 
         "Description[pt]": "Este 'plugin' oferece a integração entre os projectos e a sua infra-estrutura de controlo de versões", 
