@@ -474,11 +474,10 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
         m_leftTabbarCornerWidget->setParent(0);
     }
 
+    // Remove container objects in the hierarchy from the parents,
+    // because they are not needed anymore, and might lead to broken splitter hierarchy and crashes.
+    for(Sublime::AreaIndex* current = index; current; current = current->parent())
     {
-         // Remove container objects in the hierarchy from the parents,
-         // because they are not needed anymore, and might lead to broken splitter hierarchy and crashes.
-        for(Sublime::AreaIndex* current = index; current; current = current->parent())
-        {
         QSplitter *splitter = m_indexSplitters[current];
         if (current->isSplit() && splitter)
         {
@@ -500,7 +499,6 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
                     delete container;
                 }
             }
-        }
         }
     }
 
@@ -545,13 +543,13 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     {
         //container is not empty or this is a root index
         //just remove a widget
-		if( view->widget() ) {
-			container->removeWidget(view->widget());
-			view->widget()->setParent(0);
-			//activate what is visible currently in the container if the removed view was active
-			if (wasActive)
-				return m_mainWindow->setActiveView(container->viewForWidget(container->currentWidget()));
-		}
+        if( view->widget() ) {
+            container->removeWidget(view->widget());
+            view->widget()->setParent(0);
+            //activate what is visible currently in the container if the removed view was active
+            if (wasActive)
+                return m_mainWindow->setActiveView(container->viewForWidget(container->currentWidget()));
+        }
     }
     else
     {
