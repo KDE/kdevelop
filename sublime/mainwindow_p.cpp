@@ -518,10 +518,10 @@ void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)
 
 void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view)
 {
-    if (!m_indexSplitters[index])
+    QSplitter *splitter = m_indexSplitters[index];
+    if (!splitter)
         return;
 
-    QSplitter *splitter = m_indexSplitters[index];
     qCDebug(SUBLIME) << "index " << index << " root " << area->rootIndex();
     qCDebug(SUBLIME) << "splitter " << splitter << " container " << splitter->widget(0);
     qCDebug(SUBLIME) << "structure: " << index->print() << " whole structure: " << area->rootIndex()->print();
