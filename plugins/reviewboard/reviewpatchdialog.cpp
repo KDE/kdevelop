@@ -250,5 +250,14 @@ void ReviewPatchDialog::initializeFromRC(const QString& filePath)
         setServer(QUrl(values["REVIEWBOARD_URL"]));
     if(values.contains("REPOSITORY"))
         setRepository(values["REPOSITORY"]);
+    addExtraData(QStringLiteral("target_groups"), values["TARGET_GROUPS"]);
+    addExtraData(QStringLiteral("target_people"), values["TARGET_PEOPLE"]);
+    addExtraData(QStringLiteral("branch"), values["BRANCH"]);
     qCDebug(PLUGIN_REVIEWBOARD) << "found:" << values;
+}
+
+void ReviewPatchDialog::addExtraData(const QString& key, const QVariant &value)
+{
+    if (value.isValid())
+        m_extraData.insert(key, value);
 }

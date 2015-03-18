@@ -45,6 +45,9 @@
 
 using namespace KDevelop;
 
+typedef QPair<QString, QVariant> VariantPair;
+Q_DECLARE_METATYPE(QList<VariantPair>);
+
 K_PLUGIN_FACTORY_WITH_JSON(KDevReviewBoardFactory, "kdevreviewboard.json", registerPlugin<ReviewBoardPlugin>(); )
 
 ReviewBoardPlugin::ReviewBoardPlugin ( QObject* parent, const QVariantList& )
@@ -123,6 +126,13 @@ void ReviewBoardPlugin::reviewCreated(KJob* j)
 {
     if (j->error()==0) {
         ReviewBoard::NewRequest const * job = qobject_cast<ReviewBoard::NewRequest*>(j);
+
+        //This will provide things like groups and users for review from .reviewboardrc
+        QVariantMap extraData = job->property("extraData").toMap();
+        if (!extraData.isEmpty()) {
+            KJob* updateJob = new ReviewBoard::UpdateRequest(job->server(), job->requestId(), extraData);
+            updateJob->start();
+        }
         // for git projects, m_source will be a VCSDiffPatchSource instance
         ReviewBoard::SubmitPatchRequest* submitPatchJob=new ReviewBoard::SubmitPatchRequest(job->server(), m_source->file(), m_baseDir, job->requestId());
         connect(submitPatchJob, &ReviewBoard::SubmitPatchRequest::finished, this, &ReviewBoardPlugin::reviewDone);

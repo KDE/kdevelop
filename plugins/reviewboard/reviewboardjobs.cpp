@@ -23,6 +23,7 @@
 #include "debug.h"
 
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <KLocalizedString>
@@ -61,9 +62,8 @@ static const QByteArray m_boundary = "----------" + KRandom::randomString( 42 + 
 
 QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
 {
-    typedef QPair<QString, QVariant> StrVar;
     QByteArray form_data;
-    foreach(const StrVar& val, values)
+    foreach(const auto& val, values)
     {
         QByteArray hstr("--");
         hstr += m_boundary;
@@ -101,13 +101,23 @@ QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
     return form_data;
 }
 
+QByteArray multipartFormData(const QVariantMap& values)
+{
+    QList<QPair<QString, QVariant> > vals;
+    for(QVariantMap::const_iterator it = values.constBegin(), itEnd = values.constEnd(); it!=itEnd; ++it) {
+        vals += qMakePair<QString, QVariant>(it.key(), it.value());
+    }
+    return multipartFormData(vals);
 }
 
-HttpCall::HttpCall(const QUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, const QByteArray& post, bool multipart, QObject* parent)
+}
+
+HttpCall::HttpCall(const QUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, Method method, const QByteArray& post, bool multipart, QObject* parent)
     : KJob(parent)
     , m_reply(nullptr)
     , m_post(post)
     , m_multipart(multipart)
+    , m_method(method)
 {
     m_requrl=s;
     m_requrl.setPath(m_requrl.path() + '/' + apiPath);
@@ -133,14 +143,20 @@ void HttpCall::start()
         r.setRawHeader( "Content-Type", "multipart/form-data; boundary=" + m_boundary );
     }
 
-    if(m_post.isEmpty())
-        m_reply=m_manager.get(r);
-    else
-        m_reply=m_manager.post(r, m_post);
-
+    switch(m_method) {
+        case Get:
+            m_reply=m_manager.get(r);
+            break;
+        case Post:
+            m_reply=m_manager.post(r, m_post);
+            break;
+        case Put:
+            m_reply=m_manager.put(r, m_post);
+            break;
+    }
     connect(m_reply, &QNetworkReply::finished, this, &HttpCall::onFinished);
 
-    qCDebug(PLUGIN_REVIEWBOARD) << "starting... requrl=" << m_requrl << "post=" << m_post;
+//     qCDebug(PLUGIN_REVIEWBOARD) << "starting... requrl=" << m_requrl << "post=" << m_post;
 }
 
 QVariant HttpCall::result() const
@@ -151,30 +167,37 @@ QVariant HttpCall::result() const
 
 void HttpCall::onFinished()
 {
+    if (m_reply->error()) {
+        setError(55);
+        setErrorText(i18n("Error %1 while accessing %2", m_reply->error(), m_reply->request().url().toDisplayString()));
+        emitResult();
+        return;
+    }
     QByteArray receivedData = m_reply->readAll();
     QJsonParseError error;
     QJsonDocument parser = QJsonDocument::fromJson(receivedData, &error);
+    const QVariant output = parser.toVariant();
 
-//     qCDebug(PLUGIN_REVIEWBOARD) << "parsing..." << receivedData;
     if (error.error == 0) {
-        m_result = parser.toVariant();
+        m_result = output;
     } else {
         setError(1);
-        setErrorText(i18n("JSON error: %1: %2", error.errorString()));
+        setErrorText(i18n("JSON error: %1", error.errorString()));
     }
 
-    if (m_result.toMap().value("stat").toString()!="ok") {
+    if (output.toMap().value("stat").toString()!="ok") {
         setError(2);
-        setErrorText(i18n("Request Error: %1", m_result.toMap().value("err").toMap().value("msg").toString()));
+        setErrorText(i18n("Request Error: %1", output.toMap().value("err").toMap().value("msg").toString()));
     }
 
+    qCDebug(PLUGIN_REVIEWBOARD) << "parsing..." << receivedData;
     emitResult();
 }
 
 NewRequest::NewRequest(const QUrl& server, const QString& projectPath, QObject* parent)
     : ReviewRequest(server, 0, parent), m_project(projectPath)
 {
-    m_newreq = new HttpCall(this->server(), "/api/review-requests/", QList<QPair<QString,QString> >(), "repository="+projectPath.toLatin1(), false, this);
+    m_newreq = new HttpCall(this->server(), "/api/review-requests/", {}, HttpCall::Post, "repository="+projectPath.toLatin1(), false, this);
     connect(m_newreq, &HttpCall::finished, this, &NewRequest::done);
 }
 
@@ -206,7 +229,7 @@ SubmitPatchRequest::SubmitPatchRequest(const QUrl& server, const QUrl& patch, co
     vals += QPair<QString, QVariant>("basedir", m_basedir);
     vals += QPair<QString, QVariant>("path", qVariantFromValue<QUrl>(m_patch));
 
-    m_uploadpatch = new HttpCall(this->server(), "/api/review-requests/"+requestId()+"/diffs/", QList<QPair<QString,QString> >(), multipartFormData(vals), true, this);
+    m_uploadpatch = new HttpCall(this->server(), "/api/review-requests/"+requestId()+"/diffs/", {}, HttpCall::Post, multipartFormData(vals), true, this);
     connect(m_uploadpatch, &HttpCall::finished, this, &SubmitPatchRequest::done);
 }
 
@@ -249,7 +272,7 @@ void ProjectsListRequest::requestRepositoryList(int startIndex)
     repositoriesParameters << qMakePair<QString,QString>(QStringLiteral("max-results"), QStringLiteral("200"));
     repositoriesParameters << qMakePair<QString,QString>(QStringLiteral("start"), QString::number(startIndex));
 
-    HttpCall* repositoriesCall = new HttpCall(m_server, "/api/repositories/", repositoriesParameters, "", false, this);
+    HttpCall* repositoriesCall = new HttpCall(m_server, "/api/repositories/", repositoriesParameters, HttpCall::Get, "", false, this);
     connect(repositoriesCall, &HttpCall::finished, this, &ProjectsListRequest::done);
 
     repositoriesCall->start();
@@ -296,7 +319,7 @@ void ReviewListRequest::requestReviewList(int startIndex)
     reviewParameters << qMakePair<QString,QString>(QStringLiteral("from-user"), m_user);
     reviewParameters << qMakePair<QString,QString>(QStringLiteral("status"), m_reviewStatus);
 
-    HttpCall* reviewsCall = new HttpCall(m_server, "/api/review-requests/", reviewParameters, "", false, this);
+    HttpCall* reviewsCall = new HttpCall(m_server, "/api/review-requests/", reviewParameters, HttpCall::Get, "", false, this);
     connect(reviewsCall, &HttpCall::finished, this, &ReviewListRequest::done);
 
     reviewsCall->start();
@@ -325,3 +348,28 @@ void ReviewListRequest::done(KJob* job)
         emitResult();
     }
 }
+
+UpdateRequest::UpdateRequest(const QUrl& server, const QString& id, const QVariantMap& newValues, QObject* parent)
+    : ReviewRequest(server, id, parent)
+{
+    m_req = new HttpCall(this->server(), "/api/review-requests/"+id+"/draft/", {}, HttpCall::Put, multipartFormData(newValues), true, this);
+    connect(m_req, &HttpCall::finished, this, &UpdateRequest::done);
+}
+
+void UpdateRequest::start()
+{
+    m_req->start();
+}
+
+void UpdateRequest::done()
+{
+    if (m_req->error()) {
+        qCWarning(PLUGIN_REVIEWBOARD) << "Could not set all metadata to the review" << m_req->errorString() << m_req->property("result");
+        setError(3);
+        setErrorText(i18n("Could not set metadata"));
+    }
+
+    emitResult();
+}
+
+#include "reviewboardjobs.moc"

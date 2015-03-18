@@ -40,8 +40,11 @@ namespace ReviewBoard
     class HttpCall : public KJob
     {
         Q_OBJECT
+        Q_PROPERTY(QVariant result READ result);
         public:
-            HttpCall(const QUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, const QByteArray& post, bool multipart, QObject* parent);
+            enum Method { Get, Put, Post };
+
+            HttpCall(const QUrl& s, const QString& apiPath, const QList<QPair<QString,QString> >& queryParameters, Method m, const QByteArray& post, bool multipart, QObject* parent);
 
             virtual void start() override;
 
@@ -58,6 +61,7 @@ namespace ReviewBoard
 
             QNetworkAccessManager m_manager;
             bool m_multipart;
+            Method m_method;
     };
 
     class ReviewRequest : public KJob
@@ -87,6 +91,21 @@ namespace ReviewBoard
 
         private:
             HttpCall* m_newreq;
+            QString m_project;
+    };
+
+    class UpdateRequest : public ReviewRequest
+    {
+        Q_OBJECT
+        public:
+            UpdateRequest(const QUrl& server, const QString& id, const QVariantMap& newValues, QObject* parent = nullptr);
+            virtual void start() override;
+
+        private slots:
+            void done();
+
+        private:
+            HttpCall* m_req;
             QString m_project;
     };
 

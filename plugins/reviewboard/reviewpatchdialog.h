@@ -23,6 +23,7 @@
 
 #include <QDialog>
 #include <QUrl>
+#include <QVariantMap>
 
 class QItemSelection;
 class QModelIndex;
@@ -58,23 +59,25 @@ class ReviewPatchDialog : public QDialog
 
         bool isUpdateReview();
 
+        QVariantMap extraData() const { return m_extraData; }
+
     private slots:
         void serverChanged();
         void receivedProjects(KJob* job);
-
-    private:
-        void initializeFromRC(const QString& filePath);
-
-        Ui::ReviewPatch* m_ui;
-        QString m_preferredRepository;
-        QMultiHash<QString, QPair<QString, QVariant> > m_reviews;
-
-    private slots:
         void repositoryChanged(int index);
         void receivedReviews(KJob* job);
         void reviewCheckboxChanged(int status);
         void updateReviews();
         void updateReviewsList();
+
+    private:
+        void addExtraData(const QString& key, const QVariant& value);
+        void initializeFromRC(const QString& filePath);
+
+        Ui::ReviewPatch* m_ui;
+        QString m_preferredRepository;
+        QMultiHash<QString, QPair<QString, QVariant> > m_reviews;
+        QVariantMap m_extraData;
 };
 
 #endif
