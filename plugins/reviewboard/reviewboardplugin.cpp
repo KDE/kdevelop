@@ -83,10 +83,11 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
             job=new ReviewBoard::SubmitPatchRequest(d.server(), source->file(), d.baseDir(), d.review());
             connect(job, &KJob::finished, this, &ReviewBoardPlugin::reviewDone);
         } else {
-            m_baseDir = d.baseDir();
             job=new ReviewBoard::NewRequest(d.server(), d.repository());
+            job->setProperty("extraData", d.extraData());
             connect(job, &KJob::finished, this, &ReviewBoardPlugin::reviewCreated);
         }
+        job->setProperty("baseDir", d.baseDir());
 
         job->start();
 
@@ -133,8 +134,9 @@ void ReviewBoardPlugin::reviewCreated(KJob* j)
             KJob* updateJob = new ReviewBoard::UpdateRequest(job->server(), job->requestId(), extraData);
             updateJob->start();
         }
+
         // for git projects, m_source will be a VCSDiffPatchSource instance
-        ReviewBoard::SubmitPatchRequest* submitPatchJob=new ReviewBoard::SubmitPatchRequest(job->server(), m_source->file(), m_baseDir, job->requestId());
+        ReviewBoard::SubmitPatchRequest* submitPatchJob=new ReviewBoard::SubmitPatchRequest(job->server(), m_source->file(), j->property("baseDir").toString(), job->requestId());
         connect(submitPatchJob, &ReviewBoard::SubmitPatchRequest::finished, this, &ReviewBoardPlugin::reviewDone);
         submitPatchJob->start();
     } else {

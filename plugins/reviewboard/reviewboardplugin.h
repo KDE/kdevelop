@@ -45,7 +45,6 @@ class ReviewBoardPlugin : public KDevelop::IPlugin, KDevelop::IPatchExporter
 
     private:
         KDevelop::IPatchSource::Ptr m_source;
-        QString m_baseDir;
 };
 
 #endif
