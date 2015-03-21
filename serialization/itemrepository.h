@@ -96,7 +96,8 @@ namespace KDevelop {
  */
 
 enum {
-  ItemRepositoryBucketSize = 1<<16
+  ItemRepositoryBucketSize = 1<<16,
+  ItemRepositoryBucketLimit = 1<<16
 };
 
 /**
@@ -1298,6 +1299,7 @@ class ItemRepository : public AbstractItemRepository {
 
           convertMonsterBucket(useBucket, needMonsterExtent);
           m_currentBucket += 1 + needMonsterExtent;
+          Q_ASSERT(m_currentBucket < ItemRepositoryBucketLimit);
           Q_ASSERT(m_buckets[m_currentBucket - 1 - needMonsterExtent] && m_buckets[m_currentBucket - 1 - needMonsterExtent]->monsterBucketExtent() == needMonsterExtent);
         }
         Q_ASSERT(useBucket);
@@ -1389,6 +1391,7 @@ class ItemRepository : public AbstractItemRepository {
           putIntoFreeList(useBucket, bucketPtr);
 
         ++m_currentBucket;
+        Q_ASSERT(m_currentBucket < ItemRepositoryBucketLimit);
         useBucket = m_currentBucket;
       }
     }
