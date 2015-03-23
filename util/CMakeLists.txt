@@ -16,7 +16,6 @@ set(KDevPlatformUtil_LIB_SRCS
     environmentgrouplist.cpp
     activetooltip.cpp
     executecompositejob.cpp
-    fileutils.cpp
     shellutils.cpp
     multilevellistview.cpp
     objectlist.cpp
@@ -79,7 +78,6 @@ install( FILES
     embeddedfreetree.h
     executecompositejob.h
     convenientfreelist.h
-    fileutils.h
     multilevellistview.h
     objectlist.h
     placeholderitemproxymodel.h

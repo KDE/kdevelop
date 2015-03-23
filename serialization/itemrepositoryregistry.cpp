@@ -27,7 +27,6 @@
 
 #include <KLocalizedString>
 
-#include <util/fileutils.h>
 #include <util/shellutils.h>
 
 #include "abstractitemrepository.h"
@@ -183,7 +182,7 @@ void ItemRepositoryRegistry::deleteRepositoryFromDisk(const ISessionLock::Ptr& s
   } else {
     // Otherwise, given session is not ours.
     // remove its item-repository directory directly.
-    removeDirectory(repositoryPath);
+    QDir(repositoryPath).removeRecursively();
   }
 }
 
@@ -268,7 +267,7 @@ void ItemRepositoryRegistryPrivate::deleteDataDirectory(const QString& path, boo
   //Instead, the other instance will try to delete the directory as well.
   lockForWriting();
 
-  bool result = removeDirectory(path);
+  bool result = QDir(path).removeRecursively();
   Q_ASSERT(result);
   Q_UNUSED(result);
   // Just recreate the directory then; leave old path (as it is dependent on appname and session only).

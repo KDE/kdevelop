@@ -23,8 +23,8 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QDir>
 #include <QUrl>
 
-#include <kparts/mainwindow.h>
-#include <kstringhandler.h>
+#include <KParts/MainWindow>
+#include <KStringHandler>
 
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
@@ -33,7 +33,6 @@ Boston, MA 02110-1301, USA.
 #include "sessioncontroller.h"
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
-#include <util/fileutils.h>
 #include <serialization/itemrepository.h>
 
 namespace KDevelop

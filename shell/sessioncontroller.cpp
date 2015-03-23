@@ -20,16 +20,30 @@ Boston, MA 02110-1301, USA.
 
 #include "sessioncontroller.h"
 
-#include <QtCore/QHash>
 #include <QtCore/QDir>
+#include <QtCore/QHash>
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
-
-#include <kconfiggroup.h>
-#include <KLocalizedString>
-#include <kparts/mainwindow.h>
-#include <kactioncollection.h>
+#include <QAction>
+#include <QApplication>
+#include <QDBusConnectionInterface>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QListView>
+#include <QSortFilterProxyModel>
+#include <QStandardItemModel>
 #include <QPushButton>
+#include <QVBoxLayout>
+
+#include <KActionCollection>
+#include <KConfigGroup>
+#include <KIO/CopyJob>
+#include <KJobWidgets>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KProcess>
+#include <KStringHandler>
 
 #include "session.h"
 #include "core.h"
@@ -40,30 +54,11 @@ Boston, MA 02110-1301, USA.
 #include "sessionchooserdialog.h"
 #include "debug.h"
 #include <interfaces/iprojectcontroller.h>
-#include <util/fileutils.h>
-#include <qapplication.h>
-#include <kprocess.h>
 #include <sublime/mainwindow.h>
-#include <QLineEdit>
-#include <KMessageBox>
-#include <KAboutData>
-#include <QLineEdit>
-#include <KStringHandler>
-#include <QGroupBox>
-#include <QBoxLayout>
-#include <QStandardItemModel>
-#include <QListView>
-#include <QHeaderView>
 #include <interfaces/idocumentcontroller.h>
 #include <serialization/itemrepositoryregistry.h>
-#include <kio/copyjob.h>
 #include <ktexteditor/document.h>
-#include <KJobWidgets>
-#include <QLabel>
-#include <QAction>
-#include <QSortFilterProxyModel>
-#include <QDBusConnectionInterface>
-#include <KConfigGroup>
+
 
 const int recoveryStorageInterval = 10; ///@todo Make this configurable
 
@@ -308,7 +303,7 @@ public:
 
     void clearRecoveryDirectory()
     {
-        removeDirectory(ownSessionDirectory() + "/recovery");
+        QDir(ownSessionDirectory() + "/recovery").removeRecursively();
     }
 
 public slots:
@@ -453,7 +448,7 @@ private slots:
 
         if (recoveryDir.exists("backup")) {
             // Clear the old backup recovery directory, as we will create a new one
-            if (!removeDirectory(recoveryDir.absoluteFilePath("backup"))) {
+            if (!QDir(recoveryDir.absoluteFilePath("backup")).removeRecursively()) {
                 qWarning() << "RECOVERY ERROR: Removing the old recovery backup directory failed in " << recoveryDir;
                 return;
             }
@@ -701,7 +696,7 @@ void SessionController::deleteSession( const ISessionLock::Ptr& lock )
 
 void SessionController::deleteSessionFromDisk( const ISessionLock::Ptr& lock )
 {
-    removeDirectory( sessionDirectory(lock->id()) );
+    QDir(sessionDirectory(lock->id())).removeRecursively();
     ItemRepositoryRegistry::deleteRepositoryFromDisk( lock );
 }
 
