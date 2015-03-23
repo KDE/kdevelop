@@ -232,7 +232,7 @@ void PatchReviewPlugin::updateKompareModel() {
         if( m_patch->file().isLocalFile() )
             patchFile = m_patch->file().toLocalFile();
         else if( m_patch->file().isValid() && !m_patch->file().isEmpty() ) {
-            bool ret = KIO::NetAccess::download( m_patch->file(), patchFile, ICore::self()->uiController()->activeMainWindow() );
+            bool ret = KIO::copy( m_patch->file(), QUrl::fromLocalFile(patchFile) )->exec();
             if( !ret )
                 qWarning() << "Problem while downloading: " << m_patch->file();
         }

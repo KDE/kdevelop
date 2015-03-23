@@ -137,7 +137,7 @@ void vcsError(const QString &errorMsg, QTemporaryDir &tmpdir, const QUrl &dest, 
         displayDetails = i18n("Please see the Version Control toolview");
     }
     KMessageBox::detailedError(0, errorMsg, displayDetails, i18n("Version Control System Error"));
-    KIO::NetAccess::del(dest, 0);
+    KIO::del(dest)->exec();
     tmpdir.remove();
 }
 
@@ -444,9 +444,10 @@ bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QStri
                 output << KMacroExpander::expandMacros(line, m_variables) << "\n";
             }
             // Preserve file mode...
-            KDE_struct_stat fmode;
-            KDE_fstat(inputFile.handle(), &fmode);
-            ::fchmod(outputFile.handle(), fmode.st_mode);
+            QT_STATBUF statBuf;
+            QT_FSTAT(inputFile.handle(), &statBuf);
+            // Unix only, won't work in Windows, maybe KIO::chmod could be used
+            ::fchmod(outputFile.handle(), statBuf.st_mode);
             return true;
         }
         else
