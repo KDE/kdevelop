@@ -24,7 +24,6 @@ Boston, MA 02110-1301, USA.
 #include <QStringList>
 #include <QRegExp>
 #include <QMimeDatabase>
-#include <KPluginInfo>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
@@ -142,7 +141,6 @@ ISourceFormatter* SourceFormatterController::findFirstFormatterForMimeType(const
 		return knownFormatters[mime.name()];
 
 	foreach( IPlugin* p, Core::self()->pluginController()->allPluginsForExtension( "org.kdevelop.ISourceFormatter" ) ) {
-		KPluginInfo info = Core::self()->pluginController()->pluginInfo( p );
 		ISourceFormatter *iformatter = p->extension<ISourceFormatter>();
 		QSharedPointer<SourceFormatter> formatter(createFormatterForPlugin(iformatter));
 		if( formatter->supportedMimeTypes().contains(mime.name()) ) {

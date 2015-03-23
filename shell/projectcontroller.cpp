@@ -38,7 +38,6 @@ Boston, MA 02110-1301, USA.
 #include <kconfig.h>
 #include <KLocalizedString>
 #include <kpassivepopup.h>
-#include <kservice.h>
 #include <kstandardaction.h>
 #include <kmessagebox.h>
 #include <kxmlguiwindow.h>
@@ -206,7 +205,7 @@ public:
         }
 
         for(auto plugin : plugins) {
-            const KPluginInfo info = m_core->pluginController()->pluginInfo( plugin );
+            auto info = m_core->pluginController()->pluginInfo(plugin);
             IProjectFileManager* manager = plugin->extension<KDevelop::IProjectFileManager>();
             if( manager && manager != project->projectFileManager() )
             {
@@ -218,7 +217,7 @@ public:
             {
                 continue;
             }
-            qCDebug(SHELL) << "Using plugin" << info.pluginName() << "for project" << project->name();
+            qCDebug(SHELL) << "Using plugin" << info.pluginId() << "for project" << project->name();
             projectPlugins << plugin;
         }
 
@@ -864,10 +863,10 @@ void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
     QSet<IPlugin*> tobeRemoved = pluginsForProjSet.subtract( otherPrjPluginsSet );
     Q_FOREACH( IPlugin* _plugin, tobeRemoved )
     {
-        KPluginInfo _plugInfo = Core::self()->pluginController()->pluginInfo( _plugin );
+        KPluginMetaData _plugInfo = Core::self()->pluginController()->pluginInfo( _plugin );
         if( _plugInfo.isValid() )
         {
-            QString _plugName = _plugInfo.pluginName();
+            QString _plugName = _plugInfo.pluginId();
             qCDebug(SHELL) << "about to unloading :" << _plugName;
             Core::self()->pluginController()->unloadPlugin( _plugName );
         }

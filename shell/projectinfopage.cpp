@@ -11,8 +11,6 @@
 #include "projectinfopage.h"
 #include "ui_projectinfopage.h"
 
-#include <kplugininfo.h>
-
 #include "core.h"
 #include "plugincontroller.h"
 
@@ -28,9 +26,8 @@ ProjectInfoPage::ProjectInfoPage( QWidget* parent )
              this, &ProjectInfoPage::projectNameChanged );
     connect( page_ui->managerCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
              this, &ProjectInfoPage::changeProjectManager );
-    foreach( const KPluginInfo& info, Core::self()->pluginControllerInternal()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
-    {
-        page_ui->managerCombo->addItem( QIcon::fromTheme(info.icon()), info.name(), info.pluginName() );
+    for (auto&& info : Core::self()->pluginControllerInternal()->queryExtensionPlugins("org.kdevelop.IProjectFileManager")) {
+        page_ui->managerCombo->addItem(QIcon::fromTheme(info.iconName()), info.name(), info.pluginId());
     }
 }
 

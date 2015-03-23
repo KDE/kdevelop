@@ -29,6 +29,7 @@
 #include <QLayout>
 #include <QMimeDatabase>
 #include <QDebug>
+#include <QCoreApplication>
 
 #include <KLocalizedString>
 #include <kmessagebox.h>

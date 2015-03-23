@@ -34,6 +34,7 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KParts/MainWindow>
+#include <KPluginFactory>
 #include <KSharedConfig>
 #include <KTar>
 #include <KZip>
@@ -341,14 +342,11 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         QString manager = "KDevGenericManager";
 
         QDir d( dest.toLocalFile() );
-        foreach(const KPluginInfo& info, ICore::self()->pluginController()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
-        {
-            QVariant filter = info.property("X-KDevelop-ProjectFilesFilter");
-            if( filter.isValid() )
-            {
-                if( !d.entryList( filter.toStringList() ).isEmpty() )
-                {
-                    manager = info.pluginName();
+        foreach(const KPluginMetaData& info, ICore::self()->pluginController()->queryExtensionPlugins("org.kdevelop.IProjectFileManager")) {
+            QStringList filter = KPluginMetaData::readStringList(info.rawData(), "X-KDevelop-ProjectFilesFilter");
+            if (!filter.isEmpty()) {
+                if (!d.entryList(filter).isEmpty()) {
+                    manager = info.pluginId();
                     break;
                 }
             }

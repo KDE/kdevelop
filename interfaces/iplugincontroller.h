@@ -27,8 +27,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QObject>
 #include <QtCore/QList>
 
-#include <kplugininfo.h>
-#include <kservice.h>
+#include <KPluginMetaData>
 
 #include "iplugin.h"
 #include "interfacesexport.h"
@@ -82,7 +81,7 @@ public:
     /**
      * Get the plugin info for a loaded plugin
      */
-    virtual KPluginInfo pluginInfo( const IPlugin* ) const = 0;
+    virtual KPluginMetaData pluginInfo(const IPlugin*) const = 0;
 
     /**
      * Get a list of currently loaded plugins
@@ -169,7 +168,7 @@ public:
      * @param constraints A map of constraints on other plugin info properties.
      * @return The list of plugin offers.
      */
-    virtual KPluginInfo::List queryExtensionPlugins(const QString &extension, const QVariantMap& constraints = QVariantMap()) const = 0;
+    virtual QVector<KPluginMetaData> queryExtensionPlugins(const QString &extension, const QVariantMap& constraints = QVariantMap()) const = 0;
 
     virtual QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const = 0;
 

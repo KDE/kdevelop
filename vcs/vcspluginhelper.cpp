@@ -136,9 +136,8 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
                 break;
         }
 
-        QMenu* menu=new QMenu(vcs->name());
-        menu->setIcon(QIcon::fromTheme(ICore::self()->pluginController()->pluginInfo(plugin).icon()));
-
+        QMenu* menu = new QMenu(vcs->name());
+        menu->setIcon(QIcon::fromTheme(ICore::self()->pluginController()->pluginInfo(plugin).iconName()));
         menu->addAction(commitAction);
         if(plugin->extension<IDistributedVersionControl>()) {
             menu->addAction(pushAction);

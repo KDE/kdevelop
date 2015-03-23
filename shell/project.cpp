@@ -379,7 +379,7 @@ public:
                 if( iface && iface->isVersionControlled( topItem->path().toUrl() ) )
                 {
                     vcsPlugin = p;
-                    projectGroup.writeEntry("VersionControlSupport", pluginManager->pluginInfo( p ).pluginName() );
+                    projectGroup.writeEntry("VersionControlSupport", pluginManager->pluginInfo(p).pluginId());
                     projectGroup.sync();
                 }
             }

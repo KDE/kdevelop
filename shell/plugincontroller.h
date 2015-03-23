@@ -26,7 +26,6 @@ Boston, MA 02110-1301, USA.
 
 
 #include <QtCore/QHash>
-#include <KPluginInfo>
 
 #include <interfaces/iplugincontroller.h>
 
@@ -65,7 +64,7 @@ public:
     /**
      * Get the plugin info for a loaded plugin
      */
-    KPluginInfo pluginInfo( const IPlugin* ) const override;
+    KPluginMetaData pluginInfo( const IPlugin* ) const override;
 
     /**
      * Get a list of currently loaded plugins
@@ -95,7 +94,7 @@ public:
     /**
      * retrieve all plugin infos
      */
-    QList<KPluginInfo> allPluginInfos() const;
+    QVector<KPluginMetaData> allPluginInfos() const;
 
     /**
      * loads not-yet-loaded plugins and unloads plugins
@@ -121,7 +120,7 @@ public:
 
     QStringList allPluginNames();
 
-    KPluginInfo::List queryExtensionPlugins(const QString& extension, const QVariantMap& constraints = QVariantMap()) const override;
+    QVector<KPluginMetaData> queryExtensionPlugins(const QString& extension, const QVariantMap& constraints = QVariantMap()) const override;
 
     QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const override;
 
@@ -155,11 +154,11 @@ private:
     /**
      * @internal
      *
-     * Find the KPluginInfo structure by key. Reduces some code duplication.
+     * Find the KPluginMetaData structure by key. Reduces some code duplication.
      *
      * Returns a null pointer when no plugin info is found.
      */
-    KPluginInfo infoForPluginId( const QString &pluginId ) const;
+    KPluginMetaData infoForPluginId(const QString &pluginId) const;
 
     /**
      * Check whether the plugin identified by @p info has unresolved dependencies.
@@ -172,15 +171,15 @@ private:
      *
      * @return true when there are unresolved dependencies, false otherwise.
      */
-    bool hasUnresolvedDependencies( const KPluginInfo& info, QStringList& missing ) const;
+    bool hasUnresolvedDependencies( const KPluginMetaData& info, QStringList& missing ) const;
 
-    bool loadDependencies( const KPluginInfo&, QString& failedPlugin );
-    void loadOptionalDependencies( const KPluginInfo& info );
+    bool loadDependencies(const KPluginMetaData&, QString& failedPlugin);
+    void loadOptionalDependencies(const KPluginMetaData& info);
 
     void cleanup();
     virtual void initialize();
 
-    bool isEnabled( const KPluginInfo& info );
+    bool isEnabled(const KPluginMetaData& info);
 
 private:
     class PluginControllerPrivate* const d;

@@ -18,6 +18,7 @@
 
 #include <KActionCollection>
 #include <KLocalizedString>
+#include <KPluginFactory>
 #include <KMessageBox>
 #include <KIO/CopyJob>
 

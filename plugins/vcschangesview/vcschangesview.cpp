@@ -32,9 +32,10 @@
 #include <project/projectutils.h>
 
 #include <QIcon>
+#include <QMenu>
+#include <QPointer>
 
 #include <KActionCollection>
-#include <QMenu>
 #include <KLocalizedString>
 
 #include "vcschangesviewplugin.h"

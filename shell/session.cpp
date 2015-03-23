@@ -52,7 +52,7 @@ public:
 
     QUrl pluginArea( const IPlugin* plugin )
     {
-        QString name = Core::self()->pluginController()->pluginInfo( plugin ).pluginName();
+        QString name = Core::self()->pluginController()->pluginInfo(plugin).pluginId();
         QUrl url = QUrl::fromLocalFile( info.path + '/' + name );
         if( !QFile::exists( url.toLocalFile() ) ) {
             QDir( info.path ).mkdir( name );

@@ -19,7 +19,6 @@
 
 #include "projectchangesmodel.h"
 
-#include <KPluginInfo>
 #include <KLocalizedString>
 
 #include <vcs/interfaces/ibasicversioncontrol.h>
@@ -73,12 +72,12 @@ void ProjectChangesModel::addProject(IProject* p)
     if(plugin) {
         IBasicVersionControl* vcs = plugin->extension<IBasicVersionControl>();
 
-        KPluginInfo info = ICore::self()->pluginController()->pluginInfo(plugin);
-        
-        it->setIcon(QIcon::fromTheme(info.icon()));
+        auto info = ICore::self()->pluginController()->pluginInfo(plugin);
+
+        it->setIcon(QIcon::fromTheme(info.iconName()));
         it->setToolTip(vcs->name());
         reload(QList<IProject*>() << p);
-        
+
         IBranchingVersionControl* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
         if(branchingExtension) {
             const auto pathUrl = p->path().toUrl();

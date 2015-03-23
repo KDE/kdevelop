@@ -32,7 +32,6 @@ Boston, MA 02110-1301, USA.
 
 #include <kxmlguiclient.h>
 #include <KConfigGroup>
-#include <KPluginInfo>
 
 #include "shellexport.h"
 

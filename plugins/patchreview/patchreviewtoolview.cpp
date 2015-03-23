@@ -207,8 +207,8 @@ void PatchReviewToolView::showEditDialog() {
     IPluginController* pluginManager = ICore::self()->pluginController();
     foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IPatchExporter" ) )
     {
-        KPluginInfo info = pluginManager->pluginInfo( p );
-        QAction* action = exportMenu->addAction( QIcon::fromTheme( info.icon() ), info.name() );
+        KPluginMetaData info = pluginManager->pluginInfo( p );
+        QAction* action = exportMenu->addAction( QIcon::fromTheme( info.iconName() ), info.name() );
         action->setData( qVariantFromValue<QObject*>( p ) );
     }
 

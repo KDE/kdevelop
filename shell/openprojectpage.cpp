@@ -21,7 +21,6 @@
 #include <kurlpixmapprovider.h>
 #include <kfileitem.h>
 #include <ksharedconfig.h>
-#include <kplugininfo.h>
 #include <kfilewidget.h>
 #include <KLocalizedString>
 
@@ -45,16 +44,15 @@ OpenProjectPage::OpenProjectPage( const QUrl& startUrl, QWidget* parent )
     QStringList allEntry;
     allEntry << "*."+ShellExtension::getInstance()->projectFileExtension();
     filters << QStringLiteral( "%1|%2 (%1)").arg("*."+ShellExtension::getInstance()->projectFileExtension()).arg(ShellExtension::getInstance()->projectFileDescription());
-    foreach(const KPluginInfo& info, ICore::self()->pluginController()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
+    foreach(const KPluginMetaData& info, ICore::self()->pluginController()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
     {
-        QVariant filter = info.property("X-KDevelop-ProjectFilesFilter");
-	    QVariant desc = info.property("X-KDevelop-ProjectFilesFilterDescription");
+        QStringList filter = KPluginMetaData::readStringList(info.rawData(), "X-KDevelop-ProjectFilesFilter");
+	    QString desc = info.value("X-KDevelop-ProjectFilesFilterDescription");
         QString filterline;
-        if( filter.isValid() && desc.isValid() )
-        {
-            m_projectFilters.insert( info.name(), filter.toStringList() );
-            allEntry += filter.toStringList();
-            filters << QStringLiteral("%1|%2 (%1)").arg(filter.toStringList().join(" ")).arg(desc.toString());
+        if(!filter.isEmpty() && !desc.isEmpty()) {
+            m_projectFilters.insert(info.name(), filter);
+            allEntry += filter;
+            filters << QStringLiteral("%1|%2 (%1)").arg(filter.join(" ")).arg(desc);
         }
     }
 

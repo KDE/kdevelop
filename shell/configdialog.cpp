@@ -20,9 +20,10 @@
  */
 #include "configdialog.h"
 
-#include <QPushButton>
 #include <QCloseEvent>
 #include <QDebug>
+#include <QPushButton>
+#include <QPointer>
 
 #include <KMessageBox>
 #include <KLocalizedString>

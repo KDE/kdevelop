@@ -24,6 +24,7 @@
 #include <QVBoxLayout>
 
 #include <KPluginSelector>
+#include <KPluginInfo>
 
 #include <interfaces/isession.h>
 
@@ -41,7 +42,7 @@ PluginPreferences::PluginPreferences(QWidget* parent)
     QVBoxLayout* lay = new QVBoxLayout(this );
     selector = new KPluginSelector( this );
     lay->addWidget( selector );
-    QMap<QString, QList<KPluginInfo> > plugins;
+    QMap<QString, QVector<KPluginMetaData>> plugins;
     QMap<QString, QString> categories;
     categories["Core"] = i18nc("@title:group", "Core");
     categories["Project Management"] = i18nc("@title:group", "Project Management");
@@ -52,10 +53,9 @@ PluginPreferences::PluginPreferences(QWidget* parent)
     categories["Debugging"] = i18nc("@title:group", "Debugging");
     categories["Testing"] = i18nc("@title:group", "Testing");
     categories["Other"] = i18nc("@title:group", "Other");
-    foreach( const KPluginInfo& info, Core::self()->pluginControllerInternal()->allPluginInfos() )
-    {
-        QString loadMode = info.property("X-KDevelop-LoadMode").toString();
-        if( info.property("X-KDevelop-Category") == "Global"
+    foreach (const KPluginMetaData& info, Core::self()->pluginControllerInternal()->allPluginInfos()) {
+        QString loadMode = info.value("X-KDevelop-LoadMode");
+        if( info.value("X-KDevelop-Category") == "Global"
             && ( loadMode.isEmpty() || loadMode == "UserSelectable") )
         {
             QString category = info.category();
@@ -68,13 +68,11 @@ PluginPreferences::PluginPreferences(QWidget* parent)
             plugins[category] << info;
         }
     }
-    QMap< QString, QList<KPluginInfo> >::const_iterator it = plugins.constBegin();
-    QMap< QString, QList<KPluginInfo> >::const_iterator end = plugins.constEnd();
-    while(it != end) {
-        selector->addPlugins( it.value(), KPluginSelector::ReadConfigFile,
+
+    for (auto it = plugins.constBegin(), end = plugins.constEnd(); it != end; ++it) {
+        selector->addPlugins(KPluginInfo::fromMetaData(it.value()), KPluginSelector::ReadConfigFile,
                               categories.value(it.key()), it.key(),
                               Core::self()->activeSession()->config() );
-        ++it;
     }
     connect(selector, &KPluginSelector::changed, this, &PluginPreferences::changed);
     selector->load();

@@ -55,7 +55,7 @@ IPlugin* TestPluginController::pluginForExtension(const QString& extension, cons
     return 0;
 }
 
-KPluginInfo::List TestPluginController::queryExtensionPlugins(const QString& extension, const QVariantMap& constraints) const
+QVector<KPluginMetaData> TestPluginController::queryExtensionPlugins(const QString& extension, const QVariantMap& constraints) const
 {
     Q_UNUSED(extension);
     Q_UNUSED(constraints);
@@ -68,9 +68,9 @@ IPlugin* TestPluginController::loadPlugin(const QString& pluginName)
     return 0;
 }
 
-KPluginInfo TestPluginController::pluginInfo(const IPlugin*) const
+KPluginMetaData TestPluginController::pluginInfo(const IPlugin*) const
 {
-    return KPluginInfo();
+    return KPluginMetaData();
 }
 
 QList< ContextMenuExtension > TestPluginController::queryPluginsForContextMenuExtensions(Context* context) const

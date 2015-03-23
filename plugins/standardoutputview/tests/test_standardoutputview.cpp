@@ -66,7 +66,7 @@ void StandardOutputViewTest::initTestCase()
 
     QList<KDevelop::IPlugin*> plugins = plugin_controller->loadedPlugins();
     foreach(KDevelop::IPlugin* plugin, plugins) {
-        if(plugin_controller->pluginInfo(plugin).pluginName() == "KDevStandardOutputView") {
+        if(plugin_controller->pluginInfo(plugin).pluginId() == "KDevStandardOutputView") {
            m_stdOutputView =  dynamic_cast<KDevelop::IOutputView*>(plugin);
            break;
         }

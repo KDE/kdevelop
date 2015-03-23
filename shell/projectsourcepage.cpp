@@ -44,13 +44,13 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, QWidget* parent)
     foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IBasicVersionControl" ) )
     {
         m_plugins.append(p);
-        m_ui->sources->addItem(QIcon::fromTheme(pluginManager->pluginInfo(p).icon()), p->extension<IBasicVersionControl>()->name());
+        m_ui->sources->addItem(QIcon::fromTheme(pluginManager->pluginInfo(p).iconName()), p->extension<IBasicVersionControl>()->name());
     }
     
     foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IProjectProvider" ) )
     {
         m_plugins.append(p);
-        m_ui->sources->addItem(QIcon::fromTheme(pluginManager->pluginInfo(p).icon()), p->extension<IProjectProvider>()->name());
+        m_ui->sources->addItem(QIcon::fromTheme(pluginManager->pluginInfo(p).iconName()), p->extension<IProjectProvider>()->name());
     }
     
     connect(m_ui->workingDir, &KUrlRequester::textChanged, this, &ProjectSourcePage::reevaluateCorrection);

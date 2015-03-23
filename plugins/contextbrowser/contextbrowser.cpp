@@ -39,6 +39,7 @@
 #include <KLocalizedString>
 #include <KActionCollection>
 #include <KAboutData>
+#include <KPluginFactory>
 
 #include <KTextEditor/View>
 #include <KTextEditor/Document>

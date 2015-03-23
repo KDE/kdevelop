@@ -43,7 +43,7 @@
 
 namespace {
 
-KPluginInfo pluginInfo(KDevelop::IPlugin* plugin)
+KPluginMetaData pluginInfo(KDevelop::IPlugin* plugin)
 {
     return KDevelop::Core::self()->pluginControllerInternal()->pluginInfo(plugin);
 };
@@ -65,7 +65,7 @@ class PluginsModel : public QAbstractListModel
 {
 public:
     enum ExtraRoles {
-        CommentRole = Qt::UserRole+1
+        DescriptionRole = Qt::UserRole+1
     };
     PluginsModel(QObject* parent = 0)
         : QAbstractListModel(parent)
@@ -92,10 +92,10 @@ public:
         switch (role) {
         case Qt::DisplayRole:
             return displayName(plugin);
-        case CommentRole:
-            return pluginInfo(plugin).comment();
+        case DescriptionRole:
+            return pluginInfo(plugin).description();
         case Qt::DecorationRole:
-            return pluginInfo(plugin).icon();
+            return pluginInfo(plugin).iconName();
         default:
             return QVariant();
         };
@@ -145,7 +145,7 @@ public:
         QFontMetrics fmTitle(font);
 
         return QSize(qMax(fmTitle.width(index.model()->data(index, Qt::DisplayRole).toString()),
-                        option.fontMetrics.width(index.model()->data(index, PluginsModel::CommentRole).toString())) +
+                        option.fontMetrics.width(index.model()->data(index, PluginsModel::DescriptionRole).toString())) +
                         KIconLoader::SizeMedium + MARGIN * i + pushButton->sizeHint().width() * j,
                     qMax(KIconLoader::SizeMedium + MARGIN * 2, fmTitle.height() + option.fontMetrics.height() + MARGIN * 2));
 
@@ -191,7 +191,7 @@ public:
         painter->drawText(contentsRect, Qt::AlignLeft | Qt::AlignTop, fmTitle.elidedText(index.model()->data(index, Qt::DisplayRole).toString(), Qt::ElideRight, contentsRect.width()));
         painter->restore();
 
-        painter->drawText(contentsRect, Qt::AlignLeft | Qt::AlignBottom, option.fontMetrics.elidedText(index.model()->data(index, PluginsModel::CommentRole).toString(), Qt::ElideRight, contentsRect.width()));
+        painter->drawText(contentsRect, Qt::AlignLeft | Qt::AlignBottom, option.fontMetrics.elidedText(index.model()->data(index, PluginsModel::DescriptionRole).toString(), Qt::ElideRight, contentsRect.width()));
 
         painter->restore();
         painter->restore();

@@ -36,7 +36,6 @@ Boston, MA 02110-1301, USA.
 #include <krecentfilesaction.h>
 #include <QTemporaryFile>
 #include <QRegularExpression>
-#include <kplugininfo.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/annotationinterface.h>

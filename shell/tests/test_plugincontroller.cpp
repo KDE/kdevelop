@@ -70,8 +70,8 @@ void TestPluginController::pluginInfo()
 {
     IPlugin* plugin = m_pluginCtrl->loadPlugin( "kdevnonguiinterface" );
     QVERIFY(plugin);
-    KPluginInfo kpi = m_pluginCtrl->pluginInfo( plugin );
-    QCOMPARE( QStringLiteral( "kdevnonguiinterface" ), kpi.pluginName() );
+    KPluginMetaData pluginInfo = m_pluginCtrl->pluginInfo(plugin);
+    QCOMPARE(pluginInfo.pluginId(), QStringLiteral("kdevnonguiinterface"));
 }
 
 void TestPluginController::loadUnloadPlugin()

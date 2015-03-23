@@ -107,7 +107,7 @@ void SourceFormatterSettings::reset()
     foreach( KDevelop::IPlugin* plugin, KDevelop::ICore::self()->pluginController()->allPluginsForExtension( "org.kdevelop.ISourceFormatter" ) )
     {
         KDevelop::ISourceFormatter* ifmt = plugin->extension<ISourceFormatter>();
-        KPluginInfo info = KDevelop::Core::self()->pluginControllerInternal()->pluginInfo( plugin );
+        auto info = KDevelop::Core::self()->pluginControllerInternal()->pluginInfo( plugin );
         KDevelop::SourceFormatter* formatter;
         FormatterMap::const_iterator iter = formatters.constFind(ifmt->name());
         if (iter == formatters.constEnd()) {
