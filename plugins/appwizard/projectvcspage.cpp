@@ -23,9 +23,8 @@
 
 #include <QStackedWidget>
 
-#include <kcombobox.h>
-#include <KI18n/KLocalizedString>
-#include <kplugininfo.h>
+#include <KComboBox>
+#include <KLocalizedString>
 
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iplugin.h>
@@ -148,7 +147,7 @@ bool ProjectVcsPage::shouldContinue()
         return true;
 
     KDevelop::VcsImportMetadataWidget* widget = importWidgets[idx];
-    
+
     return widget->hasValidData();
 }
 

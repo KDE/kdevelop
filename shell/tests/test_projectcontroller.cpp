@@ -20,11 +20,11 @@
 #include "test_projectcontroller.h"
 
 #include <QFile>
-#include <QSignalSpy>
-#include <kaboutdata.h>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
+#include <QtTest/QSignalSpy>
 #include <QtTest/QTest>
+
+#include <KAboutData>
+
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -302,7 +302,7 @@ void TestProjectController::openMultiple()
     QCOMPARE(m_projCtrl->projectCount(), 2);
     IProject *proj1, *proj2;
     assertProjectOpened(m_projName, proj1);
-    assertProjectOpened(secondProj, proj2); 
+    assertProjectOpened(secondProj, proj2);
 
     QVERIFY(m_projCtrl->isProjectNameUsed(m_projName));
     QVERIFY(m_projCtrl->isProjectNameUsed("bar"));

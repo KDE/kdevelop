@@ -18,28 +18,30 @@
 
 #include "patchreview.h"
 #include "debug.h"
-#include <language/highlighting/colorcache.h>
-#include <interfaces/idocument.h>
-#include <util/activetooltip.h>
-#include <KLocalizedString>
-#include <QTextBrowser>
-#include <KParts/MainWindow>
-#include <KIconEffect>
+
 #include <KColorScheme>
+#include <KIconEffect>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KParts/MainWindow>
 #include <KTextEditor/View>
 #include <KTextEditor/Cursor>
-#include <KMessageBox>
+
 #include <ktexteditor/movinginterface.h>
 #include <ktexteditor/markinterface.h>
+
 #include <interfaces/icore.h>
+#include <interfaces/idocument.h>
 #include <interfaces/iuicontroller.h>
+#include <language/highlighting/colorcache.h>
+#include <util/activetooltip.h>
 
 #include <QApplication>
-#include <QTextCharFormat>
-#include <QWidget>
-#include <QTextDocument>
 #include <QPointer>
+#include <QTextBrowser>
+#include <QTextDocument>
 #include <QVBoxLayout>
+#include <QWidget>
 
 using namespace KDevelop;
 

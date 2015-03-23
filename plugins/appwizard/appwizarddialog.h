@@ -10,9 +10,10 @@
 #ifndef _APPWIZARDDIALOG_H_
 #define _APPWIZARDDIALOG_H_
 
-#include <kassistantdialog.h>
 #include <QMap>
 #include <QUrl>
+
+#include <KAssistantDialog>
 
 #include <vcs/interfaces/ibasicversioncontrol.h>
 

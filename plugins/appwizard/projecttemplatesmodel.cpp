@@ -8,14 +8,6 @@
  *                                                                         *
  ***************************************************************************/
 #include "projecttemplatesmodel.h"
-
-#include <QFileInfo>
-#include <QDir>
-
-#include <kconfiggroup.h>
-#include <KLocalizedString>
-#include <kcomponentdata.h>
-
 #include "appwizardplugin.h"
 
 ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPlugin *parent)

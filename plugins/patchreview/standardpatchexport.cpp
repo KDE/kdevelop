@@ -21,18 +21,19 @@
 #include "standardpatchexport.h"
 
 #include <QFileDialog>
+#include <QIcon>
+#include <QMenu>
+#include <QStandardPaths>
+
 #include <KIO/CopyJob>
 #include <KLocalizedString>
+#include <KProcess>
 #include <KToolInvocation>
-#include <KMessageBox>
+
 #include <interfaces/icore.h>
 #include <interfaces/ipatchexporter.h>
 #include <interfaces/iruncontroller.h>
-#include <QMenu>
 #include "patchreview.h"
-#include <QStandardPaths>
-#include <KProcess>
-#include <QIcon>
 
 class StandardExporter : public KDevelop::IPatchExporter
 {

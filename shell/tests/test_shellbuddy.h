@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QTemporaryDir>
+
 #include <sublime/view.h>
 #include "../documentcontroller.h"
 #include "../uicontroller.h"

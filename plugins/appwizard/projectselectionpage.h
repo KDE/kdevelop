@@ -12,9 +12,8 @@
 
 #include "appwizardpagewidget.h"
 #include "appwizarddialog.h"
-#include <knewstuff3/entry.h>
-#include <kconfiggroup.h>
-#include <QRegExpValidator>
+
+#include <KNS3/Entry>
 
 namespace KDevelop
 {

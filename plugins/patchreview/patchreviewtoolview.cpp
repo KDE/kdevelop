@@ -34,12 +34,13 @@
 #include <sublime/view.h>
 #include <sublime/document.h>
 #include <sublime/mainwindow.h>
-#include <QLineEdit>
-#include <KTextEditor/Document>
-#include <KTextEditor/View>
+
 #include <QFileInfo>
 #include <QMenu>
+
 #include <KLocalizedString>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 using namespace KDevelop;
 

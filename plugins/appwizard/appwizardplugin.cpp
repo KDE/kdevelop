@@ -13,34 +13,31 @@
  ***************************************************************************/
 #include "appwizardplugin.h"
 
+#include <QAction>
+#include <QDebug>
 #include <QDir>
+#include <QDirIterator>
 #include <QFile>
 #include <QFileInfo>
-#include <QTextCodec>
-#include <QTextStream>
-#include <QDirIterator>
-#include <QStandardPaths>
-#include <QTemporaryDir>
-#include <QDebug>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QStandardPaths>
+#include <QTemporaryDir>
+#include <QTextCodec>
+#include <QTextStream>
+#include <qplatformdefs.h>
 
-#include <ktar.h>
-#include <kzip.h>
+#include <KActionCollection>
+#include <KConfigGroup>
+#include <KIO/CopyJob>
+#include <KIO/DeleteJob>
 #include <KLocalizedString>
-#include <QAction>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
-#include <kmessagebox.h>
+#include <KMessageBox>
+#include <KParts/MainWindow>
+#include <KSharedConfig>
+#include <KTar>
+#include <KZip>
 #include <kmacroexpander.h>
-#include <kpluginfactory.h>
-#include <kaboutdata.h>
-#include <kpluginloader.h>
-#include <kactioncollection.h>
-#include <kparts/mainwindow.h>
-#include <kio/copyjob.h>
-#include <kio/netaccess.h>
-#include <kde_file.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>

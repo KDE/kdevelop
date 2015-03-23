@@ -17,6 +17,7 @@
 #include <QWidget>
 #include <QPointer>
 #include <QTime>
+
 #include <ui_patchreview.h>
 #include <interfaces/ipatchsource.h>
 
@@ -43,7 +44,7 @@ signals:
 private slots:
 
     void startingNewReview();
-    
+
     void fileDoubleClicked( const QModelIndex& i );
 
     void nextHunk();
@@ -62,14 +63,14 @@ private slots:
 
     void selectAll();
     void deselectAll();
-    
+
     void fileItemChanged( QStandardItem* item );
 
 private:
     virtual void resizeEvent(QResizeEvent*) override;
 
     void activate( const QUrl& url, KDevelop::IDocument* buddy = 0 ) const;
-    
+
     void kompareModelChanged();
 
     void showEditDialog();
@@ -93,7 +94,7 @@ private:
     QPointer< QWidget > m_customWidget;
     QAction* m_selectAllAction;
     QAction* m_deselectAllAction;
-    
+
     class PatchFilesModel* m_fileModel;
 public slots:
     void documentActivated( KDevelop::IDocument* );

@@ -13,9 +13,13 @@
 
 #include "patchreview.h"
 
-#include <QTabWidget>
-#include <QTimer>
 #include <QFileInfo>
+#include <QTimer>
+
+#include <KActionCollection>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KIO/CopyJob>
 
 #include <interfaces/idocument.h>
 #include <interfaces/icore.h>
@@ -24,16 +28,13 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iuicontroller.h>
 
-#include <kparts/part.h>
-#include <kparts/factory.h>
-#include <KLocalizedString>
-
 #include <libkomparediff2/komparemodellist.h>
 #include <libkomparediff2/kompare.h>
 #include <libkomparediff2/diffsettings.h>
 
-#include <kmessagebox.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/modificationinterface.h>
+#include <ktexteditor/movingrange.h>
 #include <ktexteditor/view.h>
 
 ///Whether arbitrary exceptions that occurred while diff-parsing within the library should be caught
@@ -51,10 +52,7 @@
 #include "patchreviewtoolview.h"
 #include "localpatchsource.h"
 #include "debug.h"
-#include <ktexteditor/modificationinterface.h>
-#include <ktexteditor/movingrange.h>
-#include <KIO/NetAccess>
-#include <KActionCollection>
+
 
 Q_LOGGING_CATEGORY(PLUGIN_PATCHREVIEW, "kdevplatform.plugins.patchreview")
 

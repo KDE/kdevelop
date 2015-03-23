@@ -21,8 +21,9 @@
 #ifndef KDEVPLATFORM_PLUGIN_PROJECTVCSPAGE_H
 #define KDEVPLATFORM_PLUGIN_PROJECTVCSPAGE_H
 
-#include "appwizardpagewidget.h"
 #include <QMap>
+
+#include "appwizardpagewidget.h"
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
 namespace Ui

@@ -22,18 +22,17 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <kio/netaccess.h>
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include "../core.h"
 #include "../sessioncontroller.h"
 #include "../session.h"
 #include "../uicontroller.h"
+#include <QDebug>
 #include <QFileInfo>
+#include <QtTest/QSignalSpy>
 #include <QtTest/QTest>
-#include <QSignalSpy>
-#include <QtCore/QDebug>
 
 using namespace KDevelop;
 

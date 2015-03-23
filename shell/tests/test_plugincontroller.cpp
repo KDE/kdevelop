@@ -21,11 +21,8 @@
 
 #include <QtCore/QProcess>
 #include <QtCore/QStringList>
-#include <QtTest>
-#include <QDBusConnection>
-#include <QDBusMessage>
-#include <QtCore/QDebug>
-#include <QProcess>
+#include <QtTest/QSignalSpy>
+#include <QtTest/QTest>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>

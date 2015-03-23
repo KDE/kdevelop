@@ -12,10 +12,14 @@
 #include "debug.h"
 
 #include <QDir>
+#include <QFileDialog>
 
+#include <KColorScheme>
+#include <KConfigGroup>
 #include <KLineEdit>
-#include <kcomponentdata.h>
-#include <kmessagebox.h>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KNS3/KNewStuffButton>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -24,12 +28,6 @@
 
 #include "ui_projectselectionpage.h"
 #include "projecttemplatesmodel.h"
-#include <KColorScheme>
-#include <KNS3/KNewStuffButton>
-#include <KTar>
-#include <KZip>
-#include <KLocalizedString>
-#include <QFileDialog>
 
 using namespace KDevelop;
 

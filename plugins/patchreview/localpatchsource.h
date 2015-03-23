@@ -17,6 +17,7 @@
 #include <QString>
 #include <QWidget>
 #include <QUrl>
+
 #include <interfaces/ipatchsource.h>
 
 namespace Ui { class LocalPatchWidget; }
@@ -51,7 +52,7 @@ public:
     void setCommand(const QString& cmd) { m_command = cmd; }
 
     QString command() const { return m_command; }
-    
+
     virtual bool isAlreadyApplied() const override { return m_applied; }
 
     void setAlreadyApplied( bool applied ) { m_applied = applied; }

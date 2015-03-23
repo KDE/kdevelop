@@ -21,6 +21,7 @@
 #define KDEVPLATFORM_TEST_TESTCONTROLLER_H
 
 #include <QObject>
+
 #include <itestcontroller.h>
 
 namespace KDevelop {

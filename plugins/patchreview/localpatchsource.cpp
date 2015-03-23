@@ -14,13 +14,14 @@
 #include "localpatchsource.h"
 
 #include <QIcon>
-
 #include <QTemporaryFile>
-#include <KLocalizedString>
-#include <kprocess.h>
-#include <KLineEdit>
-#include <kshell.h>
 #include <QWidget>
+
+#include <KLineEdit>
+#include <KLocalizedString>
+#include <KProcess>
+#include <KShell>
+
 
 #include "ui_localpatchwidget.h"
 #include "debug.h"
