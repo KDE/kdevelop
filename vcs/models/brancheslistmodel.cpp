@@ -29,6 +29,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/iruncontroller.h>
+#include "util/path.h"
 
 #include <QScopedPointer>
 #include <QIcon>
@@ -198,7 +199,7 @@ void BranchesListModel::setProject(KDevelop::IProject* p)
 
     KDevelop::IBranchingVersionControl* branching = p->versionControlPlugin()->extension<KDevelop::IBranchingVersionControl>();
     if(branching) {
-        initialize(branching, p->folder());
+        initialize(branching, p->path().toUrl());
     } else
         qCDebug(VCS) << "not a branching vcs project" << p->name();
 }

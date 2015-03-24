@@ -50,7 +50,7 @@ namespace {
 
 QString allOpenFilesString = i18n("All Open Files");
 QString allOpenProjectsString = i18n("All Open Projects");
-    
+
 const QStringList template_desc = QStringList()
     << "verbatim"
     << "word"
@@ -124,7 +124,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
     patternCombo->addItems( cg.readEntry("LastSearchItems", QStringList()) );
     patternCombo->setInsertPolicy(QComboBox::InsertAtTop);
-    
+
     templateTypeCombo->addItems(template_desc);
     templateTypeCombo->setCurrentIndex( cg.readEntry("LastUsedTemplateIndex", 0) );
     templateEdit->addItems( cg.readEntry("LastUsedTemplateString", template_str) );
@@ -141,7 +141,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     connect(replacementTemplateEdit, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::returnPressed), comp, static_cast<void(KCompletion::*)(const QString&)>(&KCompletion::addItem));
     for(int i=0; i<replacementTemplateEdit->count(); i++)
         comp->addItem(replacementTemplateEdit->itemText(i));
-    
+
     regexCheck->setChecked(cg.readEntry("regexp", false ));
 
     caseSensitiveCheck->setChecked(cg.readEntry("case_sens", true));
@@ -169,7 +169,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
             this, &GrepDialog::patternComboEditTextChanged);
     patternComboEditTextChanged( patternCombo->currentText() );
     patternCombo->setFocus();
-    
+
     connect(searchPaths, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::activated), this, &GrepDialog::setSearchLocations);
 
     directorySelector->setIcon(QIcon::fromTheme("document-open"));
@@ -233,14 +233,14 @@ QMenu* GrepDialog::createSyncButtonMenu()
             url = url.parent();
         }
     }
-    
+
     foreach(IProject* project, m_plugin->core()->projectController()->projects())
     {
         if (!hadUrls.contains(project->path())) {
             addUrlToMenu(ret, project->path().toUrl());
         }
     }
-    
+
     addStringToMenu(ret, allOpenFilesString);
     addStringToMenu(ret, allOpenProjectsString);
     return ret;
@@ -253,16 +253,16 @@ void GrepDialog::directoryChanged(const QString& dir)
         setEnableProjectBox(false);
         return;
     }
-    
+
     bool projectAvailable = true;
 
     foreach(QUrl url, getDirectoryChoice())
     {
         IProject *proj = ICore::self()->projectController()->findProjectForUrl( currentUrl );
-        if( !proj || !proj->folder().isLocalFile() )
+        if( !proj || !proj->path().toUrl().isLocalFile() )
             projectAvailable = false;
     }
-    
+
     setEnableProjectBox(projectAvailable);
 }
 
@@ -386,7 +386,7 @@ QList< QUrl > GrepDialog::getDirectoryChoice() const
     }else if(text == allOpenProjectsString)
     {
         foreach(IProject* project, ICore::self()->projectController()->projects())
-            ret << project->folder();
+            ret << project->path().toUrl();
     }else{
         QStringList semicolonSeparatedFileList = text.split(pathsSeparator);
         if(!semicolonSeparatedFileList.isEmpty() && QFileInfo(semicolonSeparatedFileList[0]).exists())
@@ -472,9 +472,9 @@ void GrepDialog::startSearch()
     job->setCaseSensitive( caseSensitiveFlag() );
 
     ICore::self()->runController()->registerJob(job);
-    
+
     m_plugin->rememberSearchDirectory(descriptionOrUrl);
-    
+
     close();
 }
 

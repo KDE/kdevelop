@@ -57,24 +57,18 @@ public:
     ProjectFileItem* fileAt( int ) const { return 0; }
     QList<ProjectFileItem*> files() const;
     virtual QList< ProjectBaseItem* > itemsForPath(const IndexedString&) const override { return QList< ProjectBaseItem* >(); }
-    virtual QList< ProjectBaseItem* > itemsForUrl(const QUrl&) const override { return QList< ProjectBaseItem* >(); }
     virtual QList< ProjectFileItem* > filesForPath(const IndexedString&) const override { return QList<ProjectFileItem*>(); }
-    KDEVPLATFORMTESTS_DEPRECATED QList<ProjectFileItem*> filesForUrl( const QUrl& ) const { return QList<ProjectFileItem*>(); }
     virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString&) const override { return QList<ProjectFolderItem*>(); }
-    KDEVPLATFORMTESTS_DEPRECATED QList<ProjectFolderItem*> foldersForUrl( const QUrl& ) const { return QList<ProjectFolderItem*>(); }
     void reloadModel() override { }
     Path projectFile() const override;
-    KDEVPLATFORMTESTS_DEPRECATED QUrl projectFileUrl() const;
     KSharedConfigPtr projectConfiguration() const override { return m_projectConfiguration; }
     void addToFileSet( ProjectFileItem* file) override;
     void removeFromFileSet( ProjectFileItem* file) override;
     QSet<IndexedString> fileSet() const override { return m_fileSet; }
     bool isReady() const override { return true; }
 
-    KDEVPLATFORMTESTS_DEPRECATED void setProjectUrl(const QUrl &url);
     void setPath(const Path& path);
 
-    KDEVPLATFORMTESTS_DEPRECATED const QUrl folder() const;
     Path path() const override;
     QString name() const override { return "Test Project"; }
     virtual bool inProject(const IndexedString& path) const override;

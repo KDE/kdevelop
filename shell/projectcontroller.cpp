@@ -282,7 +282,7 @@ public:
 
         foreach( IProject* project, m_projects )
         {
-            if ( url == project->projectFileUrl() )
+            if ( url == project->projectFile().toUrl() )
             {
                 if ( dialog->userWantsReopen() )
                 { // close first, then open again by falling through
@@ -825,7 +825,7 @@ void ProjectController::projectImportingFinished( IProject* project )
 
     if (Core::self()->setupFlags() != Core::NoUi)
     {
-        d->m_recentAction->addUrl( project->projectFileUrl() );
+        d->m_recentAction->addUrl( project->projectFile().toUrl() );
         KSharedConfig * config = KSharedConfig::openConfig().data();
         KConfigGroup recentGroup = config->group("RecentProjects");
         d->m_recentAction->saveEntries( recentGroup );
@@ -833,8 +833,8 @@ void ProjectController::projectImportingFinished( IProject* project )
         config->sync();
     }
 
-    Q_ASSERT(d->m_currentlyOpening.contains(project->projectFileUrl()));
-    d->m_currentlyOpening.removeAll(project->projectFileUrl());
+    Q_ASSERT(d->m_currentlyOpening.contains(project->projectFile().toUrl()));
+    d->m_currentlyOpening.removeAll(project->projectFile().toUrl());
     emit projectOpened( project );
 
     reparseProject(project);
@@ -895,7 +895,7 @@ void ProjectController::closeProject(IProject* proj_)
     }
 
     // loading might have failed
-    d->m_currentlyOpening.removeAll(proj_->projectFileUrl());
+    d->m_currentlyOpening.removeAll(proj_->projectFile().toUrl());
 
     Project* proj = dynamic_cast<KDevelop::Project*>( proj_ );
     if( !proj )
@@ -926,7 +926,7 @@ void ProjectController::closeProject(IProject* proj_)
 
 void ProjectController::abortOpeningProject(IProject* proj)
 {
-    d->m_currentlyOpening.removeAll(proj->projectFileUrl());
+    d->m_currentlyOpening.removeAll(proj->projectFile().toUrl());
     emit projectOpeningAborted(proj);
 }
 
@@ -1003,7 +1003,7 @@ QString ProjectController::prettyFilePath(const QUrl& url, FormattingOptions for
         // Find a project with the correct base directory at least
         foreach(IProject* candidateProject, Core::self()->projectController()->projects())
         {
-            if(candidateProject->folder().isParentOf(url))
+            if(candidateProject->path().toUrl().isParentOf(url))
             {
                 project = candidateProject;
                 break;

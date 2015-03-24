@@ -73,9 +73,9 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     bool b = blockSignals( true );
     if( project )
     {
-        executablePath->setStartDir( project->folder() );
+        executablePath->setStartDir( project->path().toUrl() );
     }
-    
+
     auto doc = KDevelop::ICore::self()->documentController()->activeDocument();
     interpreter->lineEdit()->setText( cfg.readEntry( ExecuteScriptPlugin::interpreterEntry,
                                                      doc ? interpreterForUrl(doc->url()) : "" ) );

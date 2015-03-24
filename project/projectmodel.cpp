@@ -445,17 +445,6 @@ void ProjectBaseItem::appendRow( ProjectBaseItem* item )
     }
 }
 
-QUrl ProjectBaseItem::url( ) const
-{
-    Q_D(const ProjectBaseItem);
-    QUrl url = d->m_path.toUrl();
-    if (folder()) {
-        // FIXME: is this required?
-//         url.adjustPath(QUrl::AddTrailingSlash);
-    }
-    return url;
-}
-
 Path ProjectBaseItem::path() const
 {
     Q_D(const ProjectBaseItem);

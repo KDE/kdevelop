@@ -45,6 +45,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
+#include <serialization/indexedstring.h>
 #include <util/path.h>
 
 using namespace KDevelop;
@@ -128,7 +129,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
 
     KDevelop::ProjectFolderItem* folder = 0;
     if ( KDevelop::ICore::self()->projectController()->findProjectForUrl( url ) ) {
-      QList<KDevelop::ProjectFolderItem*> folders = KDevelop::ICore::self()->projectController()->findProjectForUrl(url)->foldersForUrl(url);
+      QList<KDevelop::ProjectFolderItem*> folders = KDevelop::ICore::self()->projectController()->findProjectForUrl(url)->foldersForPath(KDevelop::IndexedString(url));
       if ( !folders.isEmpty() ) {
         folder = folders.first();
       }

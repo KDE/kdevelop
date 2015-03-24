@@ -38,6 +38,7 @@
 #include <interfaces/iproject.h>
 #include <project/projectproxymodel.h>
 #include <project/projectmodel.h>
+#include <serialization/indexedstring.h>
 #include <util/path.h>
 
 #include "../openwith/iopenwith.h"
@@ -226,7 +227,7 @@ void ProjectManagerView::locateCurrentDocument()
 
     QModelIndex bestMatch;
     foreach (IProject* proj, ICore::self()->projectController()->projects()) {
-        foreach (KDevelop::ProjectFileItem* item, proj->filesForUrl(doc->url())) {
+        foreach (KDevelop::ProjectFileItem* item, proj->filesForPath(IndexedString(doc->url()))) {
             QModelIndex index = indexToView(item->index());
             if (index.isValid()) {
                 if (!bestMatch.isValid()) {

@@ -67,15 +67,10 @@ public:
     virtual QList< ProjectFileItem* > filesForPath(const IndexedString& file) const override;
     virtual QList< ProjectFolderItem* > foldersForPath(const IndexedString& folder) const override;
 
-    KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectBaseItem*> itemsForUrl(const QUrl &url) const;
-    KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectFileItem*> filesForUrl( const QUrl& ) const;
-    KDEVPLATFORMSHELL_DEPRECATED virtual QList<ProjectFolderItem*> foldersForUrl(const QUrl& ) const;
-
     QString projectTempFile() const;
     QString developerTempFile() const;
     Path developerFile() const;
     virtual void reloadModel() override;
-    virtual KDEVPLATFORMSHELL_DEPRECATED QUrl projectFileUrl() const override;
     virtual Path projectFile() const override;
     virtual KSharedConfigPtr projectConfiguration() const override;
 
@@ -86,11 +81,9 @@ public:
     virtual bool isReady() const override;
 
     /**
-     * @brief Get the project folder
+     * @brief Get the project path
      * @return The canonical absolute directory of the project.
      */
-    virtual KDEVPLATFORMSHELL_DEPRECATED const QUrl folder() const override;
-
     virtual Path path() const override;
 
     /** Returns the name of the project. */

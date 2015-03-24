@@ -154,7 +154,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
         return;
     }
 
-    QList<ProjectBaseItem*> items = project->itemsForUrl(url);
+    QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(url));
     if (items.isEmpty())
     {
         qCDebug(PLUGIN_FILETEMPLATES) << "No suitable project items found";
@@ -250,7 +250,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
     QList<ProjectFileItem*> fileItems;
     foreach (const QUrl &fileUrl, fileUrls)
     {
-        foreach (ProjectBaseItem* item, project->itemsForUrl(KIO::upUrl(fileUrl)))
+        foreach (ProjectBaseItem* item, project->itemsForPath(IndexedString(KIO::upUrl(fileUrl))))
         {
             if (ProjectFolderItem* folder = item->folder())
             {

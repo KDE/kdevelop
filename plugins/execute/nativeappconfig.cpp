@@ -74,11 +74,11 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
 
     QUrl exe = cfg.readEntry( ExecutePlugin::executableEntry, QUrl());
     if( !exe.isEmpty() || project ){
-        executablePath->setUrl( !exe.isEmpty() ? exe : project->folder() );
+        executablePath->setUrl( !exe.isEmpty() ? exe : project->path().toUrl() );
     }else{
         KDevelop::IProjectController* pc = KDevelop::ICore::self()->projectController();
         if( pc ){
-            executablePath->setUrl( pc->projects().count() ? pc->projects().first()->folder() : QUrl() );
+            executablePath->setUrl( pc->projects().count() ? pc->projects().first()->path().toUrl() : QUrl() );
         }
     }
 

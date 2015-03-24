@@ -443,14 +443,6 @@ KSharedConfigPtr Project::projectConfiguration() const
     return d->m_cfg;
 }
 
-const QUrl Project::folder() const
-{
-    QUrl url = d->projectPath.toUrl();
-    // FIXME: is something like this required here?
-//     url.adjustPath(QUrl::AddTrailingSlash);
-    return url;
-}
-
 Path Project::path() const
 {
     return d->projectPath;
@@ -556,19 +548,9 @@ bool Project::inProject( const IndexedString& path ) const
     return !d->itemsForPath( path ).isEmpty();
 }
 
-QList< ProjectBaseItem* > Project::itemsForUrl(const QUrl &url) const
-{
-    return d->itemsForPath(IndexedString(url));
-}
-
 QList< ProjectBaseItem* > Project::itemsForPath(const IndexedString& path) const
 {
     return d->itemsForPath(path);
-}
-
-QList<ProjectFileItem*> Project::filesForUrl(const QUrl &url) const
-{
-    return filesForPath(IndexedString(url));
 }
 
 QList< ProjectFileItem* > Project::filesForPath(const IndexedString& file) const
@@ -580,11 +562,6 @@ QList< ProjectFileItem* > Project::filesForPath(const IndexedString& file) const
             items << dynamic_cast<ProjectFileItem*>( item );
     }
     return items;
-}
-
-QList< ProjectFolderItem* > Project::foldersForUrl(const QUrl &url) const
-{
-    return foldersForPath(IndexedString(url));
 }
 
 QList<ProjectFolderItem*> Project::foldersForPath(const IndexedString& folder) const
@@ -621,11 +598,6 @@ void Project::setManagerPlugin( IPlugin* manager )
 Path Project::projectFile() const
 {
     return d->projectFile;
-}
-
-QUrl Project::projectFileUrl() const
-{
-    return d->projectFile.toUrl();
 }
 
 Path Project::developerFile() const

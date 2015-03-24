@@ -175,17 +175,17 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
          * Adds a new child item to this item.
          */
         void appendRow( ProjectBaseItem* item );
-        
+
         /**
          * Removes and deletes the item at the given @p row if there is one.
          */
         void removeRow( int row );
-        
+
         /**
          * Removes and deletes the @p count items after the given @p row if there is one.
          */
         void removeRows( int row, int count );
-        
+
         /**
          * Returns and removes the item at the given @p row if there is one.
          */
@@ -196,9 +196,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
 
         /** @returns a string to pass to QIcon::fromTheme() as icon-name suitable to represent this item. */
         virtual QString iconName() const;
-
-        /** Get the path of this item (if any) converted to a url */
-        KDEVPLATFORMPROJECT_DEPRECATED QUrl url() const;
 
         /**
          * Set the path of this item.
@@ -225,16 +222,16 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
          * @returns status information whether the renaming succeeded.
          */
         virtual RenameStatus rename( const QString& newname );
-        
+
         bool isProjectRoot() const;
-        
+
          /**
          * Default flags: Qt::ItemIsEnabled | Qt::ItemIsSelectable
-         * 
+         *
          * @returns the flags supported by the item
          */
         virtual Qt::ItemFlags flags();
-        
+
         /**
          * Sets what flags should be returned by ::flags() method.
          */
@@ -295,7 +292,7 @@ public:
 
     /** @returns Returns whether this folder directly contains the specified file or folder. */
     bool hasFileOrFolder(const QString& name) const;
-    
+
     virtual QString iconName() const override;
     virtual RenameStatus rename(const QString& newname) override;
 
@@ -458,7 +455,7 @@ public:
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
     virtual bool insertColumns(int column, int count, const QModelIndex& parent = QModelIndex()) override;
     virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
-    
+
     virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
     virtual Qt::DropActions supportedDropActions() const override;
 
