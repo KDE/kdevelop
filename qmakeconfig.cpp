@@ -75,7 +75,7 @@ QString QMakeConfig::qmakeBinary(const IProject* project)
             exe = group.readEntry(QMAKE_BINARY, QString() );
             QFileInfo info(exe);
             if (!info.exists() || !info.isExecutable()) {
-                kWarning() << "bad QMake configured for project " << project->folder() << ":" << exe;
+                qWarning() << "bad QMake configured for project " << project->path().toUrl() << ":" << exe;
                 exe.clear();
             }
         }
@@ -101,7 +101,7 @@ QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeBinary)
     p << qmakeBinary << "-query";
     int execed = p.execute();
     if (execed != 0) {
-        kWarning() << "failed to execute qmake query " << p.program().join(" ") << "return code was:" << execed;
+        qWarning() << "failed to execute qmake query " << p.program().join(" ") << "return code was:" << execed;
         return QHash<QString,QString>();
     }
 

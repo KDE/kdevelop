@@ -30,9 +30,10 @@
 #include <outputview/outputmodel.h>
 #include <project/projectmodel.h>
 #include <util/commandexecutor.h>
+#include <util/path.h>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <QDebug>
+#include <KLocalizedString>
 
 QMakeJob::QMakeJob(QObject *parent)
     : OutputJob(parent)
@@ -60,7 +61,7 @@ void QMakeJob::start()
             model(), SLOT(appendLines(const QStringList&) ) );
     connect(m_cmd, SIGNAL(receivedStandardOutput(const QStringList&)),
             model(), SLOT(appendLines(const QStringList&) ) );
-    m_cmd->setWorkingDirectory( m_project->folder().toLocalFile() );
+    m_cmd->setWorkingDirectory( m_project->path().toUrl().toLocalFile() );
     connect( m_cmd, SIGNAL( failed(QProcess::ProcessError) ),
              this, SLOT( slotFailed(QProcess::ProcessError) ) );
     connect( m_cmd, SIGNAL( completed(int) ), this, SLOT( slotCompleted(int) ) );
@@ -70,14 +71,14 @@ void QMakeJob::start()
 void QMakeJob::setProject(KDevelop::IProject* project)
 {
     m_project = project;
-    
+
     if (m_project)
         setObjectName(i18n("QMake: %1", m_project->name()));
 }
 
 void QMakeJob::slotFailed(QProcess::ProcessError error)
 {
-    kDebug() << error;
+    qDebug() << error;
 
     if (!m_killed) {
         setError(ConfigureError);

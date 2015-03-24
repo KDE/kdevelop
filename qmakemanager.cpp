@@ -20,12 +20,13 @@
 
 #include "qmakemanager.h"
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QDir>
-#include <QtCore/QHash>
-#include <QtCore/QList>
-
 #include <QAction>
+#include <QDebug>
+#include <QDir>
+#include <QFileInfo>
+#include <QHash>
+#include <QList>
+
 
 #include <KUrl>
 #include <KIO//Job>
@@ -136,8 +137,8 @@ Path QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
         } else {
             // build sub-item
             foreach ( QMakeProjectFile* pro, qmakeItem->projectFiles() ) {
-                if ( QDir(pro->absoluteDir()) == QFileInfo(qmakeItem->url().toLocalFile()).absoluteDir() ||
-                    pro->hasSubProject( qmakeItem->url().toLocalFile() ) ) {
+                if ( QDir(pro->absoluteDir()) == QFileInfo(qmakeItem->path().toUrl().toLocalFile()).absoluteDir() ||
+                    pro->hasSubProject( qmakeItem->path().toUrl().toLocalFile() ) ) {
                     // get path from project root and it to buildDir
                     dir = QMakeConfig::buildDirFromSrc( qmakeItem->project(), Path(pro->absoluteDir()) );
                     break;
@@ -323,7 +324,7 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
     while (projectNeedsConfiguration(project)) {
         QMakeBuildDirChooserDialog chooser(project);
         if(chooser.exec() == QDialog::Rejected) {
-            kDebug() << "User stopped project import";
+            qDebug() << "User stopped project import";
             //TODO: return 0 has no effect.
             return 0;
         }
@@ -362,19 +363,19 @@ void QMakeProjectManager::slotDirty(const QString& path)
     }
 
     bool finished = false;
-    foreach(ProjectFolderItem* folder, project->foldersForUrl(url.upUrl())) {
+    foreach(ProjectFolderItem* folder, project->foldersForPath(IndexedString(url.upUrl()))) {
         if (QMakeFolderItem* qmakeFolder = dynamic_cast<QMakeFolderItem*>( folder )) {
             foreach(QMakeProjectFile* pro, qmakeFolder->projectFiles()) {
                 if (pro->absoluteFile() == path) {
                     //TODO: children
                     //TODO: cache added
-                    kDebug() << "reloading" << pro << path;
+                    qDebug() << "reloading" << pro << path;
                     pro->read();
                 }
             }
             finished = true;
         } else if (ProjectFolderItem* newFolder = buildFolderItem(project, folder->path(), folder->parent())) {
-            kDebug() << "changing from normal folder to qmake project folder:" << folder->url();
+            qDebug() << "changing from normal folder to qmake project folder:" << folder->path().toUrl();
             // .pro / .pri file did not exist before
             while(folder->rowCount()) {
                 newFolder->appendRow(folder->takeRow(0));
@@ -467,7 +468,7 @@ bool QMakeProjectManager::hasIncludesOrDefines(KDevelop::ProjectBaseItem* item) 
 
 QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) const
 {
-    if( !project->folder().isLocalFile() || !m_builder )
+    if( !project->path().toUrl().isLocalFile() || !m_builder )
         return QHash<QString,QString>();
 
     return QMakeConfig::queryQMake(QMakeConfig::qmakeBinary( project ));
@@ -479,12 +480,12 @@ QMakeCache* QMakeProjectManager::findQMakeCache( IProject* project, const Path& 
     curdir.makeAbsolute();
     while( !curdir.exists(".qmake.cache") && !curdir.isRoot() && curdir.cdUp() )
     {
-        kDebug() << curdir;
+        qDebug() << curdir;
     }
 
     if( curdir.exists(".qmake.cache") )
     {
-        kDebug() << "Found QMake cache in " << curdir.absolutePath();
+        qDebug() << "Found QMake cache in " << curdir.absolutePath();
         return new QMakeCache( curdir.canonicalPath()+"/.qmake.cache" );
     }
     return 0;
