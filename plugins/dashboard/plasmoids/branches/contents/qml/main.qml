@@ -51,7 +51,5 @@ ListView
 	Component.onCompleted: {
 		var d = dataSource.data[plasmoid.currentActivity];
 		var p = core.self.projectController().findProjectByName(d["projectName"])
-		for(var v in p)
-			console.log("fuck .qml:", v, p[v])
 	}
 }

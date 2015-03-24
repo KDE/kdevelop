@@ -125,7 +125,7 @@ void ReviewPatchDialog::receivedProjects(KJob* job)
         if(!idxs.isEmpty()) {
             m_ui->repositories->setCurrentIndex(idxs.first().row());
         } else
-            qDebug() << "couldn't fucking find it" << m_preferredRepository;
+            qWarning() << "couldn't find the repository" << m_preferredRepository;
     }
     m_ui->repositoriesBox->setEnabled(job->error()==0);
 }
