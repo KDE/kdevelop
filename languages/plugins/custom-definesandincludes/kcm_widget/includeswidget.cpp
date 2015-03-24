@@ -24,6 +24,7 @@
 #include <QFileInfo>
 
 #include <interfaces/iproject.h>
+#include <util/path.h>
 
 #include "../ui_includeswidget.h"
 #include "includesmodel.h"
@@ -126,7 +127,7 @@ void IncludesWidget::includePathUrlSelected(const QUrl &url)
 
 void IncludesWidget::setProject(KDevelop::IProject* w_project)
 {
-    ui->includePathRequester->setStartDir( w_project->folder() );
+    ui->includePathRequester->setStartDir( w_project->path().toUrl() );
 }
 
 void IncludesWidget::updateEnablements() {

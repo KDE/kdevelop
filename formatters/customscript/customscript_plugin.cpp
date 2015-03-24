@@ -45,6 +45,7 @@ Q_LOGGING_CATEGORY(CUSTOMSCRIPT, "kdevelop.formatters.customscript")
 #include <KLocalizedString>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/interfaces/ilanguagesupport.h>
+#include <util/path.h>
 
 using namespace KDevelop;
 
@@ -130,7 +131,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
 
 	QMap<QString, QString> projectVariables;
 	foreach(IProject* project, ICore::self()->projectController()->projects())
-		projectVariables[project->name()] = project->folder().toLocalFile();
+		projectVariables[project->name()] = project->path().toUrl().toLocalFile();
 
 	QString command = style.content();
 

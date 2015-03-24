@@ -308,7 +308,7 @@ bool PlasmoidExecutionConfigType::canLaunch(KDevelop::ProjectBaseItem* item) con
 
 void PlasmoidExecutionConfigType::configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const
 {
-    config.writeEntry("PlasmoidIdentifier", item->url().toLocalFile());
+    config.writeEntry("PlasmoidIdentifier", item->path().toUrl().toLocalFile());
 }
 
 void PlasmoidExecutionConfigType::configureLaunchFromCmdLineArguments(KConfigGroup /*config*/, const QStringList &/*args*/) const
