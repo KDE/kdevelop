@@ -26,6 +26,7 @@
 #include <QMimeDatabase>
 #include <interfaces/iproject.h>
 #include <KGlobalSettings>
+#include <KPluginFactory>
 #include <documentation/standarddocumentationview.h>
 #include <language/duchain/declaration.h>
 #include <interfaces/iplugincontroller.h>

@@ -23,6 +23,7 @@
 #define IDEFINESANDINCLUDES_H
 
 #include <QHash>
+#include <QPointer>
 #include <QString>
 #include <QStringList>
 
