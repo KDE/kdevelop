@@ -61,6 +61,7 @@
 #include <language/editor/documentcursor.h>
 
 #include <KActionCollection>
+#include <KPluginFactory>
 
 #include <QAction>
 #include <QRegExp>
