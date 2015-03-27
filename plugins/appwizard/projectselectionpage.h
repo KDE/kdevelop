@@ -13,8 +13,6 @@
 #include "appwizardpagewidget.h"
 #include "appwizarddialog.h"
 
-#include <KNS3/Entry>
-
 namespace KDevelop
 {
 class MultiLevelListView;
@@ -53,7 +51,7 @@ private slots:
     void templateChanged(int);
 
     void loadFileClicked();
-    void templatesDownloaded (const KNS3::Entry::List& entries);
+    void moreTemplatesClicked();
 
 
 private:
@@ -68,4 +66,3 @@ private:
 };
 
 #endif
-

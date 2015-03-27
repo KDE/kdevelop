@@ -36,11 +36,13 @@
 
 #include "ui_templateselection.h"
 
-#include <kns3/button.h>
-#include <KLocalizedString>
 #include <QFileDialog>
-#include <KConfigGroup>
+#include <QPushButton>
 #include <QTemporaryDir>
+
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KNS3/DownloadDialog>
 #include <KTextEditor/Document>
 
 using namespace KDevelop;
@@ -137,6 +139,7 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
 
 void TemplateSelectionPagePrivate::getMoreClicked()
 {
+    KNS3::DownloadDialog("kdevfiletemplates.knsrc", ui->view).exec();
     model->refresh();
 }
 
@@ -222,8 +225,9 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent, Qt:
 
     d->ui->view->setCurrentIndex(templateIndex);
 
-    KNS3::Button* getMoreButton = new KNS3::Button(i18n("Get More Templates..."), "kdevfiletemplates.knsrc", d->ui->view);
-    connect (getMoreButton, &KNS3::Button::dialogFinished, this, [&] { d->getMoreClicked(); });
+    QPushButton* getMoreButton = new QPushButton(i18n("Get More Templates..."), d->ui->view);
+    getMoreButton->setIcon(QIcon::fromTheme("get-hot-new-stuff"));
+    connect (getMoreButton, &QPushButton::clicked, this, [&] { d->getMoreClicked(); });
     d->ui->view->addWidget(0, getMoreButton);
 
     QPushButton* loadButton = new QPushButton(QIcon::fromTheme("application-x-archive"), i18n("Load Template From File"), d->ui->view);

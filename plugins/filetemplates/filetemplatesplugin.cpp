@@ -13,11 +13,9 @@
 #include <project/projectmodel.h>
 #include <util/path.h>
 
+#include <KActionCollection>
 #include <KLocalizedString>
 #include <KPluginFactory>
-#include <KAboutData>
-#include <KActionCollection>
-#include <KConfigGroup>
 
 #include <QAction>
 #include <QApplication>

@@ -47,18 +47,16 @@
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
-#include <KLocalizedString>
-#include <KConfig>
-#include <QVBoxLayout>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <QLabel>
 #include <QListWidget>
 #include <QPointer>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 #include <KIO/Global>
-#include <KConfigGroup>
-#include <QDialog>
-#include <QDialogButtonBox>
-#include <QPushButton>
+#include <KLocalizedString>
 
 #define REMOVE_PAGE(name)       \
 if (d->name##Page)              \
