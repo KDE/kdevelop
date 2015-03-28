@@ -22,17 +22,13 @@
 #include "projecttreeview.h"
 
 
-#include <QHeaderView>
-#include <QMouseEvent>
-#include <QApplication>
-#include <QAbstractProxyModel>
-#include <QItemDelegate>
-#include <QMenu>
-
-#include <kxmlguiwindow.h>
-#include <kglobalsettings.h>
 #include <QAction>
-#include <kurl.h>
+#include <QAbstractProxyModel>
+#include <QApplication>
+#include <QHeaderView>
+#include <QMenu>
+#include <QMouseEvent>
+
 #include <KLocalizedString>
 
 #include <project/projectmodel.h>

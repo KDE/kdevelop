@@ -18,21 +18,14 @@
  ***************************************************************************/
 #include "mainwindow_p.h"
 
-#include <QMenu>
 #include <QLayout>
 #include <QSplitter>
-#include <QDockWidget>
-#include <QWidgetAction>
-#include <QComboBox>
-#include <QHBoxLayout>
-#include <QToolButton>
-#include <QCommonStyle>
 #include <QTimer>
+#include <QToolBar>
 
+#include <KActionMenu>
+#include <KActionCollection>
 #include <KLocalizedString>
-#include <kactionmenu.h>
-#include <kacceleratormanager.h>
-#include <kactioncollection.h>
 
 #include "area.h"
 #include "view.h"
@@ -45,9 +38,6 @@
 #include "holdupdates.h"
 #include "idealbuttonbarwidget.h"
 #include "sublimedebug.h"
-#include <KToolBar>
-#include <KSelectAction>
-#include <ktoggleaction.h>
 
 class IdealToolBar : public QToolBar
 {

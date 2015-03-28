@@ -19,7 +19,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_ENVIRONMENTSELECTIONWIDGET_H
 #define KDEVPLATFORM_ENVIRONMENTSELECTIONWIDGET_H
 
-#include <kcombobox.h>
+#include <QWidget>
 
 #include "utilexport.h"
 #include "environmentgrouplist.h"

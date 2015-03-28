@@ -11,16 +11,8 @@
 
 #include "vcscommitdialog.h"
 
-#include <QtCore/QHash>
-#include <QBrush>
-#include <QtCore/QRegExp>
-
-#include <KTextEdit>
-#include <KComboBox>
-#include <KLocalizedString>
-#include <KColorScheme>
-#include <KMessageBox>
-#include <kparts/mainwindow.h>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -38,10 +30,6 @@
 
 #include "ui_vcscommitdialog.h"
 #include <vcspluginhelper.h>
-#include <KConfigGroup>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QVBoxLayout>
 
 namespace KDevelop
 {

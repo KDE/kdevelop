@@ -19,12 +19,12 @@
 */
 #include "scriptappconfig.h"
 
+#include <KLineEdit>
 #include <KLocalizedString>
-#include <QIcon>
+#include <KShell>
 
 #include <QIcon>
 #include <QMimeDatabase>
-#include <QMimeType>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -37,12 +37,8 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/builderjob.h>
-#include <kmessagebox.h>
 #include <interfaces/iuicontroller.h>
 #include <util/executecompositejob.h>
-#include <kparts/mainwindow.h>
-#include <KLineEdit>
-#include <KShell>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentcontroller.h>
 

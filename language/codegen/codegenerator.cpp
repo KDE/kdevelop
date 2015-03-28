@@ -22,6 +22,7 @@
 #include "documentchangeset.h"
 #include "duchainchangeset.h"
 
+#include <QTimer>
 #include <KLocalizedString>
 
 #include <interfaces/icore.h>
@@ -29,7 +30,6 @@
 
 #include <language/duchain/duchainlock.h>
 
-#include <qtimer.h>
 #include "applychangeswidget.h"
 #include "util/debug.h"
 

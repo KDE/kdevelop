@@ -18,28 +18,27 @@
  ***************************************************************************/
 #include "container.h"
 
-#include <QtCore/QMap>
 #include <QBoxLayout>
+#include <QEvent>
 #include <QLabel>
-#include <QStylePainter>
+#include <QMap>
+#include <QMenu>
+#include <QMouseEvent>
+#include <QPointer>
 #include <QStackedWidget>
 #include <QStyleOptionTabBarBase>
-#include <QToolButton>
-#include <QStyle>
-#include <QPointer>
+#include <QStylePainter>
 #include <QTabBar>
-#include <QMenu>
+#include <QToolButton>
 
+#include <KAcceleratorManager>
+#include <KConfig>
+#include <KConfigGroup>
 #include <KLocalizedString>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
-#include <kacceleratormanager.h>
+#include <KSharedConfig>
 
 #include "view.h"
 #include "document.h"
-#include <QEvent>
-#include <QKeyEvent>
 #include "urldocument.h"
 #include <ksqueezedtextlabel.h>
 
@@ -54,22 +53,22 @@ class ContainerTabBar : public QTabBar
 public:
     ContainerTabBar(Container* container) : QTabBar(container), m_container(container) {
     }
-    
+
     virtual bool event(QEvent* ev) override {
         if(ev->type() == QEvent::ToolTip)
         {
             ev->accept();
-            
+
             int tab = tabAt(mapFromGlobal(QCursor::pos()));
-            
+
             if(tab != -1)
             {
                 m_container->showTooltipForTab(tab);
             }
-            
+
             return true;
         }
-        
+
         return QTabBar::event(ev);
     }
     virtual void mousePressEvent(QMouseEvent* event) override {
@@ -128,7 +127,7 @@ struct ContainerPrivate {
         QVector<View*> views;
         views.reserve(viewForWidget.size());
 
-        foreach(View* view, viewForWidget){ 
+        foreach(View* view, viewForWidget){
             views << view;
         }
 
@@ -167,7 +166,7 @@ protected:
             QStyleOptionTab tabOverlap;
             tabOverlap.shape = m_tabBar->shape();
             int overlap = style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &tabOverlap, m_tabBar);
-            if( overlap > 0 ) 
+            if( overlap > 0 )
             {
                 QRect rect;
                 rect.setRect(0, height()-overlap, width(), overlap);

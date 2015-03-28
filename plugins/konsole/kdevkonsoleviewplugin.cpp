@@ -11,12 +11,12 @@
 
 #include "kdevkonsoleviewplugin.h"
 
-#include <kaboutdata.h>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
+#include <KService>
 
 #include <interfaces/iuicontroller.h>
 #include <interfaces/icore.h>
-#include <kservice.h>
+
 #include "kdevkonsoleview.h"
 #include "debug.h"
 

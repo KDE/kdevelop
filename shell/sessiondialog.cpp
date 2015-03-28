@@ -20,13 +20,11 @@ Boston, MA 02110-1301, USA.
 #include "sessiondialog.h"
 #include "ui_sessiondialog.h"
 
+#include <KColorScheme>
 #include <KLocalizedString>
-#include <kcolorscheme.h>
-#include <KConfigGroup>
-#include <QDialogButtonBox>
+
 #include <QFontDatabase>
 #include <QPushButton>
-#include <QVBoxLayout>
 
 #include "core.h"
 #include "sessioncontroller.h"
@@ -56,7 +54,7 @@ QVariant SessionModel::headerData( int, Qt::Orientation, int ) const
 
 QVariant SessionModel::data( const QModelIndex& idx, int role ) const
 {
-    if( !idx.isValid() || idx.row() < 0 || idx.row() >= rowCount() 
+    if( !idx.isValid() || idx.row() < 0 || idx.row() >= rowCount()
         || ( role != Qt::DisplayRole && role != Qt::BackgroundRole && role != Qt::EditRole && role != Qt::FontRole ) )
     {
         return QVariant();
@@ -76,7 +74,7 @@ QVariant SessionModel::data( const QModelIndex& idx, int role ) const
             f.setBold( true );
         }
         return QVariant::fromValue( f );
-    } else 
+    } else
     {
         if( Core::self()->activeSession()->name() == s->name() )
         {
@@ -173,7 +171,7 @@ void SessionModel::cloneSession( const QModelIndex& idx )
 {
     if( !idx.isValid() || idx.row() < 0 || idx.row() >= rowCount() )
     {
-        return; 
+        return;
     }
 
     beginInsertRows( QModelIndex(), rowCount(), rowCount() );
@@ -195,7 +193,7 @@ SessionDialog::SessionDialog( QWidget* parent )
     connect( m_ui->deleteButton, &QPushButton::clicked, this, &SessionDialog::deleteSession );
     connect( m_ui->activateButton, &QPushButton::clicked, this, &SessionDialog::activateSession );
     connect( m_ui->cloneButton, &QPushButton::clicked, this, &SessionDialog::cloneSession );
-    connect( m_ui->sessionList->selectionModel(), &QItemSelectionModel::selectionChanged, 
+    connect( m_ui->sessionList->selectionModel(), &QItemSelectionModel::selectionChanged,
              this, static_cast<void(SessionDialog::*)(const QItemSelection&,const QItemSelection&)>(&SessionDialog::enableButtons) );
     connect( m_ui->sessionList->selectionModel(), &QItemSelectionModel::currentChanged,
              this, static_cast<void(SessionDialog::*)(const QModelIndex&,const QModelIndex&)>(&SessionDialog::enableButtons) );
@@ -223,7 +221,7 @@ void SessionDialog::enableButtons( const QModelIndex& current, const QModelIndex
     {
         m_ui->activateButton->setEnabled( false );
         m_ui->deleteButton->setEnabled( false );
-    } else 
+    } else
     {
         m_ui->activateButton->setEnabled( true );
         m_ui->deleteButton->setEnabled( true );

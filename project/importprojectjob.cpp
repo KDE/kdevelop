@@ -24,13 +24,13 @@
 #include <QtConcurrentRun>
 #include <QFuture>
 #include <QFutureWatcher>
-
+#include <QPointer>
 
 #include <interfaces/iprojectfilemanager.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
-#include <QPointer>
+
 #include <KLocalizedString>
 
 namespace KDevelop

@@ -12,20 +12,13 @@
 #include "openprojectpage.h"
 #include "projectinfopage.h"
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QDir>
+#include <QFileInfo>
 
-#include <kpagewidgetmodel.h>
-#include <kmessagebox.h>
-#include <KLocalizedString>
 #include <KColorScheme>
-
-#include <kio/udsentry.h>
-#include <kio/job.h>
-#include <kio/jobuidelegate.h>
-#include <KJobWidgets/KJobWidgets>
-
-#include <QDialog>
+#include <KIO/StatJob>
+#include <KIO/ListJob>
+#include <KJobWidgets>
+#include <KLocalizedString>
 
 #include "core.h"
 #include "uicontroller.h"
@@ -33,7 +26,6 @@
 #include "shellextension.h"
 #include "projectsourcepage.h"
 #include <interfaces/iprojectcontroller.h>
-#include <KConfigGroup>
 
 namespace KDevelop
 {
@@ -45,7 +37,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget*
     , projectInfoPage(nullptr)
 {
     resize(QSize(700, 500));
-    
+
     QUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
     start = start.adjusted(QUrl::NormalizePathSegments);
     KPageWidgetItem* currentPage = 0;
@@ -56,13 +48,13 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget*
         sourcePage = addPage( sourcePageWidget, i18n("Select Source") );
         currentPage = sourcePage;
     }
-    
+
     openPageWidget = new OpenProjectPage( start, this );
     connect( openPageWidget, &OpenProjectPage::urlSelected, this, &OpenProjectDialog::validateOpenUrl );
     connect( openPageWidget, &OpenProjectPage::accepted, this, &OpenProjectDialog::openPageAccepted );
     openPage = addPage( openPageWidget, i18n("Select a build system setup file, existing KDevelop project, "
                                              "or any folder to open as a project") );
-    
+
     if( !fetch ) {
         currentPage = openPage;
     }
@@ -71,7 +63,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const QUrl& startUrl, QWidget*
     connect( page, &ProjectInfoPage::projectNameChanged, this, &OpenProjectDialog::validateProjectName );
     connect( page, &ProjectInfoPage::projectManagerChanged, this, &OpenProjectDialog::validateProjectManager );
     projectInfoPage = addPage( page, i18n("Project Information") );
-    
+
     setValid( sourcePage, false );
     setValid( openPage, false );
     setValid( projectInfoPage, false);
@@ -132,7 +124,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
         return;
     }
 
-    if( isDir || extension != ShellExtension::getInstance()->projectFileExtension() ) 
+    if( isDir || extension != ShellExtension::getInstance()->projectFileExtension() )
     {
         setAppropriate( projectInfoPage, true );
         m_url = url;
@@ -154,7 +146,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
                 if( isDir ) {
                     // If a dir was selected fetch all files in it
                     KIO::ListJob* job = KIO::listDir( m_url );
-                    connect( job, &KIO::ListJob::entries, 
+                    connect( job, &KIO::ListJob::entries,
                                   this, &OpenProjectDialog::storeFileList);
                     KJobWidgets::setWindow(job, Core::self()->uiController()->activeMainWindow());
                     job->exec();
@@ -168,7 +160,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
                 {
                     foreach( const QString& filterexp, page2->projectFilters()[manager] )
                     {
-                        if( !m_fileList.filter( QRegExp( filterexp, Qt::CaseSensitive, QRegExp::Wildcard ) ).isEmpty() ) 
+                        if( !m_fileList.filter( QRegExp( filterexp, Qt::CaseSensitive, QRegExp::Wildcard ) ).isEmpty() )
                         {
                             managerFound = true;
                             break;

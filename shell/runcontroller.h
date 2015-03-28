@@ -20,14 +20,12 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_RUNCONTROLLER_H
 #define KDEVPLATFORM_RUNCONTROLLER_H
 
-#include <QtCore/QPointer>
 #include <QItemDelegate>
 
-#include <kcolorscheme.h>
-
-#include <interfaces/iruncontroller.h>
+#include <KColorScheme>
 
 #include <interfaces/ilaunchconfiguration.h>
+#include <interfaces/iruncontroller.h>
 
 #include "shellexport.h"
 
@@ -52,7 +50,7 @@ class KDEVPLATFORMSHELL_EXPORT RunController : public IRunController
 public:
     RunController(QObject *parent);
     ~RunController();
-    
+
     static QString LaunchConfigurationsGroup;
     static QString LaunchConfigurationsListEntry;
 
@@ -63,12 +61,12 @@ public:
     KJob* execute(const QString& launchMode, ILaunchConfiguration* launch) override;
     LaunchConfiguration* defaultLaunch() const;
     QList<ILaunchMode*> launchModes() const override;
-    
+
     /**
      * @copydoc IRunController::addLaunchMode
      */
     virtual void addLaunchMode( ILaunchMode* mode ) override;
-    
+
     /**
      * @copydoc IRunController::removeLaunchMode
      */
@@ -83,10 +81,10 @@ public:
     void cleanup();
 
     QItemDelegate* delegate() const;
-    
+
     void addLaunchConfiguration( LaunchConfiguration* l );
     void removeLaunchConfiguration( LaunchConfiguration* l );
-    
+
     QList<LaunchConfiguration*> launchConfigurationsInternal() const;
     virtual QList<ILaunchConfiguration*> launchConfigurations() const override;
     /**
@@ -111,14 +109,14 @@ public:
     LaunchConfigurationType* launchConfigurationTypeForId( const QString& ) override;
 
     virtual ILaunchConfiguration* createLaunchConfiguration ( LaunchConfigurationType* type,
-                                                              const QPair<QString,QString>& launcher, 
+                                                              const QPair<QString,QString>& launcher,
                                                               IProject* project = 0,
                                                               const QString& name = QString() ) override;
-    
+
     virtual void executeDefaultLaunch(const QString& runMode) override;
 
     void setDefaultLaunch(ILaunchConfiguration* l);
-    
+
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
 public Q_SLOTS:

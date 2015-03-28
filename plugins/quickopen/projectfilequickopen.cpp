@@ -18,10 +18,11 @@
 
 #include "projectfilequickopen.h"
 
+#include <QApplication>
 #include <QIcon>
 #include <QTextBrowser>
-#include <QApplication>
 
+#include <KIconLoader>
 #include <KLocalizedString>
 
 #include <interfaces/iprojectcontroller.h>
@@ -39,7 +40,6 @@
 #include <project/projectutils.h>
 
 #include "../openwith/iopenwith.h"
-#include <KIconThemes/KIconLoader>
 
 using namespace KDevelop;
 

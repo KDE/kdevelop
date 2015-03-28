@@ -18,20 +18,20 @@
  ***************************************************************************/
 
 #include "projectmodelperformancetest.h"
-#include <QSortFilterProxyModel>
-#include <QTreeView>
-#include <QPushButton>
-#include <QGridLayout>
+
 #include <QApplication>
 #include <QDebug>
+#include <QElapsedTimer>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QTimer>
+#include <QTreeView>
 
 #include <projectmodel.h>
 #include <path.h>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 #include <tests/testplugincontroller.h>
-#include <QTimer>
-#include <QElapsedTimer>
 
 // Knobs to increase/decrease the amount of items being generated
 #define SMALL_DEPTH 2

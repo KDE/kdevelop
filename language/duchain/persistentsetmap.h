@@ -41,7 +41,7 @@ struct HashHasher {
 
 // #define DEFINE_PERSISTENT_SET_MAP(key, data, hasher, ) \
 //     typedef TemporaryDataManager<KDevVarLengthArray<type, 10> > temporaryHash ## container ## member ## Type; \
-//     K_GLOBAL_STATIC_WITH_ARGS(temporaryHash ## container ## member ## Type, temporaryHash ## container ## member ## Static, ( #container "::" #member )) \
+//     Q_GLOBAL_STATIC_WITH_ARGS(temporaryHash ## container ## member ## Type, temporaryHash ## container ## member ## Static, ( #container "::" #member )) \
 //     temporaryHash ## container ## member ## Type& temporaryHash ## container ## member() { \
 //         return *temporaryHash ## container ## member ## Static; \
 //     }

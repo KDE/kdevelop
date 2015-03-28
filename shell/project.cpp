@@ -26,23 +26,19 @@
 
 #include "project.h"
 
+#include <QDBusConnection>
+#include <QDebug>
 #include <QSet>
-#include <QtGlobal>
-#include <QFileInfo>
-#include <QtDBus/QtDBus>
-#include <QStandardItemModel>
-#include <QtCore/QDebug>
-
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <KLocalizedString>
-#include <KJobWidgets>
-#include <kio/job.h>
-#include <kio/global.h>
-#include <kmessagebox.h>
-#include <kio/jobclasses.h>
-#include <kio/copyjob.h>
 #include <QTemporaryFile>
+#include <QTimer>
+
+#include <KConfigGroup>
+#include <KIO/FileCopyJob>
+#include <KIO/MkdirJob>
+#include <KIO/StatJob>
+#include <KJobWidgets>
+#include <KLocalizedString>
+#include <KMessageBox>
 
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>

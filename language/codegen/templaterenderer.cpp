@@ -31,11 +31,12 @@
 
 #include <grantlee/context.h>
 
-#include <QUrl>
-#include <KArchive>
 #include <QDebug>
-#include <QFile>
 #include <QDir>
+#include <QFile>
+#include <QUrl>
+
+#include <KArchive>
 
 using namespace Grantlee;
 

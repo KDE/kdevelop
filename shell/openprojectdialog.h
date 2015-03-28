@@ -13,8 +13,8 @@
 
 #include <QUrl>
 
-#include <kassistantdialog.h>
-#include <kio/udsentry.h>
+#include <KAssistantDialog>
+#include <KIO/UDSEntry>
 
 class KPageWidgetItem;
 namespace KIO

@@ -20,8 +20,9 @@
 #include "languagecontroller.h"
 
 #include <QHash>
-#include <QMutexLocker>
 #include <QMimeDatabase>
+#include <QMutexLocker>
+#include <QThread>
 
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
@@ -36,7 +37,6 @@
 #include "settings/ccpreferences.h"
 #include "completionsettings.h"
 #include "debug.h"
-#include <QThread>
 
 namespace {
 // Maximum length of a string to still consider it as a file extension which we cache

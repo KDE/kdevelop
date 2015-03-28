@@ -23,12 +23,12 @@
 #include <QtCore/QObject>
 #include <QtCore/QPointer>
 #include <QWidget>
+#include <QWheelEvent>
 
 #include "../../interfaces/quickopendataprovider.h"
 #include <language/languageexport.h>
 #include "abstractnavigationcontext.h"
 
-class QWidget;
 class QTextBrowser;
 
 namespace KDevelop {
@@ -45,9 +45,9 @@ namespace KDevelop {
       virtual ~AbstractNavigationWidget();
 
       void setContext(NavigationContextPointer context, int initBrowser = 400);
-      
+
       QSize sizeHint() const override;
-      
+
     public slots:
       ///Keyboard-action "next"
       virtual void next() override;
@@ -68,7 +68,7 @@ namespace KDevelop {
       void embeddedWidgetAccept();
       void embeddedWidgetUp();
       void embeddedWidgetDown();
-      
+
       NavigationContextPointer context();
 
     Q_SIGNALS:

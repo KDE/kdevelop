@@ -22,17 +22,15 @@
 
 #include "problemtreeview.h"
 
-#include <QMenu>
-#include <QCursor>
-#include <QContextMenuEvent>
-#include <QSignalMapper>
-#include <QHeaderView>
-
 #include <QAction>
-#include <kactionmenu.h>
-#include <KLocalizedString>
+#include <QContextMenuEvent>
+#include <QHeaderView>
 #include <QIcon>
 #include <QMenu>
+#include <QSignalMapper>
+
+#include <KActionMenu>
+#include <KLocalizedString>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>

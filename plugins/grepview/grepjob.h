@@ -16,11 +16,10 @@
 #ifndef KDEVPLATFORM_PLUGIN_GREPJOB_H
 #define KDEVPLATFORM_PLUGIN_GREPJOB_H
 
-#include <QDir>
 #include <QPointer>
 #include <QUrl>
 
-#include <kjob.h>
+#include <KJob>
 
 #include <interfaces/istatus.h>
 
@@ -41,14 +40,14 @@ class GrepJob : public KJob, public KDevelop::IStatus
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IStatus )
-    
+
     friend class GrepViewPlugin;
     friend class FindReplaceTest;
 
 private:
     ///Job can only be instanciated by plugin
     GrepJob( QObject *parent = 0 );
-    
+
 public:
 
     void setOutputModel(GrepOutputModel * model);

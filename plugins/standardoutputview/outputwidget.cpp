@@ -22,27 +22,25 @@
 #include "outputwidget.h"
 
 #include "standardoutputview.h"
-#include <QtCore/QTimer>
-#include <QtCore/QRegExp>
-#include <QAbstractItemDelegate>
-#include <QItemSelectionModel>
-#include <QTreeView>
-#include <QToolButton>
-#include <QScrollBar>
-#include <QVBoxLayout>
-#include <QStackedWidget>
+
+#include <QAction>
 #include <QApplication>
 #include <QClipboard>
-#include <QWidgetAction>
-#include <QSortFilterProxyModel>
-#include <QAction>
-#include <ktoggleaction.h>
-#include <KLocalizedString>
 #include <QIcon>
-#include <QTabWidget>
-#include <kstandardaction.h>
 #include <QLineEdit>
-#include <kactioncollection.h>
+#include <QRegExp>
+#include <QSortFilterProxyModel>
+#include <QStackedWidget>
+#include <QTabWidget>
+#include <QToolButton>
+#include <QTreeView>
+#include <QVBoxLayout>
+#include <QWidgetAction>
+
+#include <KActionCollection>
+#include <KLocalizedString>
+#include <KStandardAction>
+#include <KToggleAction>
 
 #include <outputview/ioutputviewmodel.h>
 #include <util/focusedtreeview.h>

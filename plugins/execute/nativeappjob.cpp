@@ -19,14 +19,13 @@
 
 #include "nativeappjob.h"
 
-#include <QFileInfo>
 #include <QDebug>
+#include <QFileInfo>
 
-#include <kprocess.h>
 #include <KLocalizedString>
-#include <kmessagebox.h>
-#include <kconfiggroup.h>
-#include <kparts/mainwindow.h>
+#include <KProcess>
+#include <KShell>
+#include <KSharedConfig>
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <outputview/outputmodel.h>
@@ -34,7 +33,6 @@
 #include <util/processlinemaker.h>
 #include <util/environmentgrouplist.h>
 
-#include <kshell.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
@@ -42,7 +40,6 @@
 
 #include "iexecuteplugin.h"
 #include "debug.h"
-#include <KConfigCore/ksharedconfig.h>
 
 using namespace KDevelop;
 

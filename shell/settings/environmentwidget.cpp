@@ -21,21 +21,14 @@ Boston, MA 02110-1301, USA.
 
 #include "environmentwidget.h"
 
-#include <QLabel>
-#include <QSortFilterProxyModel>
-#include <QVBoxLayout>
-#include <QHeaderView>
-#include <QMap>
-#include <QProcess>
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QHeaderView>
 #include <QPushButton>
-#include <QLineEdit>
+#include <QSortFilterProxyModel>
 #include <QTextEdit>
+#include <QVBoxLayout>
 
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
-#include <kconfigdialogmanager.h>
 #include <KLocalizedString>
 
 #include "environmentgroupmodel.h"

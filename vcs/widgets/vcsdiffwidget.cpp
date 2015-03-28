@@ -20,10 +20,7 @@
 
 #include "vcsdiffwidget.h"
 
-#include <QLabel>
-
 #include <KLocalizedString>
-#include <ktextedit.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>

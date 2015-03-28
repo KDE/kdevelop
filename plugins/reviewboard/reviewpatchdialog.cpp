@@ -22,10 +22,9 @@
 
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <QStandardItemModel>
-#include <QSortFilterProxyModel>
+
 #include <KLocalizedString>
-#include <KConfigGroup>
+
 #include "ui_reviewpatch.h"
 #include "reviewboardjobs.h"
 #include "debug.h"

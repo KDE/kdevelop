@@ -18,18 +18,19 @@
 */
 
 #include "launchconfigurationdialog.h"
-#include <QSplitter>
-#include <QTreeView>
-#include <QStackedWidget>
-#include <QGridLayout>
-#include <QToolButton>
 
-#include <KLocalizedString>
-#include <QLineEdit>
-#include <kcombobox.h>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QMenu>
 #include <QPushButton>
 #include <QTabWidget>
-#include <kmessagebox.h>
+#include <QToolButton>
+#include <QTreeView>
+#include <QVBoxLayout>
+
+#include <KComboBox>
+#include <KLocalizedString>
+#include <KMessageBox>
 
 #include <interfaces/launchconfigurationpage.h>
 #include <interfaces/iproject.h>
@@ -44,12 +45,6 @@
 #include <interfaces/ilauncher.h>
 #include <interfaces/ilaunchmode.h>
 #include <interfaces/launchconfigurationtype.h>
-#include <QLayout>
-#include <QMenu>
-#include <QLabel>
-#include <KConfigGroup>
-#include <QDialogButtonBox>
-#include <QVBoxLayout>
 
 namespace KDevelop
 {

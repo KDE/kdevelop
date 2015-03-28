@@ -19,14 +19,16 @@
 #include "ipartcontroller.h"
 
 #include <QFile>
-#include <kservice.h>
-#include <kmimetypetrader.h>
-#include <kparts/part.h>
-#include <kparts/readonlypart.h>
+
+#include <KMimeTypeTrader>
+#include <KParts/Part>
+#include <KParts/ReadOnlyPart>
+#include <KService>
+
 
 namespace KDevelop {
-    
-IPartController::IPartController( QWidget* toplevel ) 
+
+IPartController::IPartController( QWidget* toplevel )
     : KParts::PartManager( toplevel, 0 )
 {
 }
@@ -62,7 +64,7 @@ KPluginFactory* IPartController::findPartFactory ( const QString& mimetype, cons
         KPluginLoader loader( QFile::encodeName( ptr->library() ) );
         return loader.factory();
     }
-                                                                                                  
+
     return 0;
 }
 

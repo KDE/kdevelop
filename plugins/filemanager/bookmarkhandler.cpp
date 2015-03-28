@@ -27,7 +27,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
 
-#include <kdiroperator.h>
 #include <KActionCollection>
 
 

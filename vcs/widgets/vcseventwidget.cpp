@@ -22,34 +22,31 @@
 #include "vcseventwidget.h"
 
 #include <QAction>
+#include <QClipboard>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <QHeaderView>
 #include <QMenu>
-#include <QAction>
-#include <QClipboard>
-
-#include <KLocalizedString>
-#include <QDialog>
-
-#include <interfaces/iplugin.h>
-#include <interfaces/icore.h>
-#include <interfaces/iruncontroller.h>
-#include <KConfigGroup>
-#include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>
+
+#include <KLocalizedString>
+
+#include <interfaces/icore.h>
+#include <interfaces/iplugin.h>
+#include <interfaces/iruncontroller.h>
 
 #include "ui_vcseventwidget.h"
 #include "vcsdiffwidget.h"
 
-#include "../vcsjob.h"
 #include "../interfaces/ibasicversioncontrol.h"
-#include "../vcsrevision.h"
-#include "../vcsevent.h"
-#include "../vcslocation.h"
-#include "../debug.h"
-
-#include "../models/vcsitemeventmodel.h"
 #include "../models/vcseventmodel.h"
+#include "../models/vcsitemeventmodel.h"
+#include "../debug.h"
+#include "../vcsevent.h"
+#include "../vcsjob.h"
+#include "../vcslocation.h"
+#include "../vcsrevision.h"
 
 
 namespace KDevelop

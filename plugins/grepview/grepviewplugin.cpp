@@ -19,22 +19,17 @@
 #include "grepoutputview.h"
 #include "debug.h"
 
-#include <QWhatsThis>
+#include <QAction>
 #include <QDBusConnection>
 #include <QKeySequence>
 #include <QMimeDatabase>
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kaboutdata.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <KLocalizedString>
-#include <kmessagebox.h>
-#include <QAction>
-#include <ktexteditor/document.h>
-#include <ktexteditor/cursor.h>
-#include <ktexteditor/view.h>
-#include <kparts/mainwindow.h>
+#include <KParts/MainWindow>
+#include <KTextEditor/Document>
+#include <KTextEditor/Cursor>
+#include <KTextEditor/View>
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>

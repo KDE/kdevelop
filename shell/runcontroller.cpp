@@ -20,19 +20,17 @@ Boston, MA 02110-1301, USA.
 
 #include "runcontroller.h"
 
-#include <QApplication>
-#include <QMenu>
-#include <QStandardItemModel>
-#include <QPalette>
 #include <QDebug>
+#include <QPalette>
+#include <QSignalMapper>
 
-#include <KSelectAction>
-#include <KActionMenu>
 #include <KActionCollection>
+#include <KActionMenu>
+#include <KColorScheme>
+#include <KDialogJobUiDelegate>
 #include <KMessageBox>
 #include <KLocalizedString>
-#include <KColorScheme>
-#include <kdialogjobuidelegate.h>
+#include <KSelectAction>
 
 #include <interfaces/iproject.h>
 #include <interfaces/idocumentcontroller.h>
@@ -54,7 +52,7 @@ Boston, MA 02110-1301, USA.
 #include "launchconfigurationdialog.h"
 #include "debug.h"
 #include <interfaces/isession.h>
-#include <QSignalMapper>
+
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <sublime/area.h>

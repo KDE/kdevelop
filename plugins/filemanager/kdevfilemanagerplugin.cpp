@@ -22,10 +22,7 @@
 #include <QTimer>
 
 #include <KLocalizedString>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kactioncollection.h>
-#include <kaboutdata.h>
+#include <KPluginFactory>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>

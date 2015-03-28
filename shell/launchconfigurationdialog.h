@@ -20,23 +20,15 @@
 #ifndef KDEVPLATFORM_LAUNCHCONFIGURATIONDIALOG_H
 #define KDEVPLATFORM_LAUNCHCONFIGURATIONDIALOG_H
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QMap>
-#include <QtCore/QList>
-#include <QItemEditorCreatorBase>
-
+#include <QAbstractItemModel>
 #include <QDialog>
-#include <kcombobox.h>
-#include <qitemeditorfactory.h>
-
-#include "ui_launchconfigurationdialog.h"
+#include <QList>
+#include <QMap>
 #include <QStyledItemDelegate>
 
-class QTreeView;
-class QStackedWidget;
-class QToolButton;
+#include "ui_launchconfigurationdialog.h"
+
 class QItemSelection;
-class QTabWidget;
 
 namespace Ui
 {
@@ -85,7 +77,7 @@ public:
     QModelIndex indexForConfig( LaunchConfiguration* ) const;
     void addConfiguration(KDevelop::ILaunchConfiguration* launch, const QModelIndex& idx);
     KDevelop::IProject* projectForIndex(const QModelIndex& idx);
-    
+
 private:
     class TreeItem
     {
@@ -119,7 +111,7 @@ private:
     void addItemForLaunchConfig( LaunchConfiguration* l );
     void addLaunchModeItemsForLaunchConfig ( KDevelop::LaunchConfigurationsModel::LaunchItem* l );
     QList<TreeItem*> topItems;
-    
+
 public:
     ProjectItem* findItemForProject( IProject* );
 };

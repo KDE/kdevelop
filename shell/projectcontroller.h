@@ -22,8 +22,10 @@ Boston, MA 02110-1301, USA.
 #define KDEVPLATFORM_PROJECTCONTROLLER_H
 
 #include <interfaces/iprojectcontroller.h>
-#include <kio/udsentry.h>
+
 #include <QUrl>
+
+#include <KIO/UDSEntry>
 
 #include "shellexport.h"
 
@@ -54,7 +56,7 @@ public:
 public Q_SLOTS:
     /**
      * Displays some UI to ask the user for the project location.
-     * 
+     *
      * @param fetch will tell the UI that the user might want to fetch the project first
      * @param startUrl tells where to look first
      */

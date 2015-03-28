@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iproject.h>
 #include <util/path.h>
 
-#include <kio/copyjob.h>
+#include <KIO/CopyJob>
 
 using namespace KDevelop;
 
@@ -112,11 +112,11 @@ bool ProjectConfigSkeleton::useDefaults( bool b )
             {
                 qCDebug(PROJECT) << "reading";
                 KConfigGroup grp = cfg.group( item->group() );
-		if( grp.hasKey( item->key() ) )
+                if( grp.hasKey( item->key() ) )
                     item->setProperty( grp.readEntry( item->key(), item->property() ) );
             }
         }
-    }else
+    } else
     {
         KConfig cfg( d->m_developerTempFile );
         KConfig defCfg( d->m_projectTempFile );
@@ -125,14 +125,14 @@ bool ProjectConfigSkeleton::useDefaults( bool b )
             if( cfg.hasGroup( item->group() ) )
             {
                 KConfigGroup grp = cfg.group( item->group() );
-		if( grp.hasKey( item->key() ) )
+                if( grp.hasKey( item->key() ) )
                     item->setProperty( grp.readEntry( item->key(), item->property() ) );
-		else
-		{
+                else
+                {
                     KConfigGroup grp = defCfg.group( item->group() );
                     item->setProperty( grp.readEntry( item->key(), item->property() ) );
-		}
-            }else
+                }
+            } else
             {
                 KConfigGroup grp = defCfg.group( item->group() );
                 item->setProperty( grp.readEntry( item->key(), item->property() ) );

@@ -22,27 +22,21 @@
 #include "partcontroller.h"
 
 #include <QAction>
-#include <QFile>
-#include <QTimer>
-#include <QMutexLocker>
-#include <QMimeType>
-#include <QMimeDatabase>
-#include <QApplication>
 #include <QDebug>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <KActionCollection>
 #include <KLocalizedString>
+#include <KMimeTypeTrader>
 #include <KToggleAction>
-#include <kmimetypetrader.h>
-#include <KMessageBox>
 
-#include <kparts/part.h>
-#include <kparts/partmanager.h>
-#include <kparts/browserextension.h>
+#include <KParts/Part>
+#include <KParts/BrowserExtension>
 
-#include <ktexteditor/view.h>
-#include <ktexteditor/editor.h>
-#include <ktexteditor/document.h>
+#include <KTextEditor/View>
+#include <KTextEditor/Editor>
+#include <KTextEditor/Document>
 
 #include "core.h"
 #include "textdocument.h"

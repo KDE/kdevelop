@@ -18,9 +18,11 @@
 */
 
 #include "foregroundlock.h"
+
+#include <QApplication>
 #include <QMutex>
 #include <QThread>
-#include <QApplication>
+
 
 using namespace KDevelop;
 

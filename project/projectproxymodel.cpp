@@ -19,9 +19,6 @@
 
 #include "projectproxymodel.h"
 #include <project/projectmodel.h>
-#include <KLocalizedString>
-#include <qfileinfo.h>
-#include <QIcon>
 
 ProjectProxyModel::ProjectProxyModel(QObject * parent)
     : QSortFilterProxyModel(parent)

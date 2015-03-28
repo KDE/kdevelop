@@ -22,17 +22,12 @@
 
 #include "gitplugin.h"
 
-#include <KPluginFactory>
-#include <KPluginLoader>
-#include <KLocalizedString>
-#include <KAboutData>
-#include <QFileInfo>
-#include <QDir>
 #include <QDateTime>
-#include <QFileSystemWatcher>
-#include <QTimer>
-#include <QTextCodec>
 #include <QDebug>
+#include <QDir>
+#include <QFileInfo>
+#include <QMenu>
+#include <QTimer>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -48,14 +43,16 @@
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include "gitclonejob.h"
 #include <interfaces/contextmenuextension.h>
-#include <QMenu>
 #include <interfaces/iruncontroller.h>
 #include "stashmanagerdialog.h"
+
+#include <KDirWatch>
+#include <KIO/CopyJob>
+#include <KLocalizedString>
 #include <KMessageBox>
 #include <KTextEdit>
-#include <KDirWatch>
 #include <KTextEditor/Document>
-#include <kio/copyjob.h>
+
 #include "gitjob.h"
 #include "gitmessagehighlighter.h"
 #include "gitplugincheckinrepositoryjob.h"

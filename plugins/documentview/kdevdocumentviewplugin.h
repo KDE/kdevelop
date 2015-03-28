@@ -20,9 +20,6 @@
 #ifndef KDEVPLATFORM_PLUGIN_KDEVDOCUMENTVIEW_PART_H
 #define KDEVPLATFORM_PLUGIN_KDEVDOCUMENTVIEW_PART_H
 
-#include <QtCore/QHash>
-#include <QtCore/QPointer>
-
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentcontroller.h>
 

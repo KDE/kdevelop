@@ -24,15 +24,14 @@
 #include "externalscriptitem.h"
 #include "editexternalscript.h"
 
-#include <KLocalizedString>
-
 #include <QAction>
-#include <QStandardItemModel>
-#include <QSortFilterProxyModel>
-#include <QMouseEvent>
-#include <KMessageBox>
 #include <QMenu>
-#include <KConfigGroup>
+#include <QMouseEvent>
+#include <QSortFilterProxyModel>
+
+#include <KLocalizedString>
+#include <KMessageBox>
+
 
 ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* parent )
     : QWidget( parent ), m_plugin( plugin )
@@ -148,7 +147,7 @@ void ExternalScriptView::removeScript()
     return;
   }
 
-  int ret = KMessageBox::questionYesNo( this, 
+  int ret = KMessageBox::questionYesNo( this,
     i18n("<p>Do you really want to remove the external script configuration for <i>%1</i>?</p>"
          "<p><i>Note:</i> The script itself will not be removed.</p>", item->text()),
     i18n("Confirm External Script Removal")

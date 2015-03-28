@@ -17,10 +17,13 @@
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/widgets/vcslocationwidget.h>
 #include <vcs/vcsjob.h>
+
 #include <QVBoxLayout>
-#include <KMessageBox>
+
 #include <KColorScheme>
 #include <KLocalizedString>
+#include <KMessageBox>
+
 #include <interfaces/iprojectprovider.h>
 
 using namespace KDevelop;
@@ -32,35 +35,35 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, QWidget* parent)
 {
     m_ui = new Ui::ProjectSourcePage;
     m_ui->setupUi(this);
-    
+
     m_ui->workingDir->setUrl(initial);
     m_ui->workingDir->setMode(KFile::Directory);
     m_ui->remoteWidget->setLayout(new QVBoxLayout(m_ui->remoteWidget));
-    
+
     m_ui->sources->addItem(QIcon::fromTheme("folder"), i18n("From File System"));
     m_plugins.append(0);
-    
+
     IPluginController* pluginManager = ICore::self()->pluginController();
     foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IBasicVersionControl" ) )
     {
         m_plugins.append(p);
         m_ui->sources->addItem(QIcon::fromTheme(pluginManager->pluginInfo(p).iconName()), p->extension<IBasicVersionControl>()->name());
     }
-    
+
     foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IProjectProvider" ) )
     {
         m_plugins.append(p);
         m_ui->sources->addItem(QIcon::fromTheme(pluginManager->pluginInfo(p).iconName()), p->extension<IProjectProvider>()->name());
     }
-    
+
     connect(m_ui->workingDir, &KUrlRequester::textChanged, this, &ProjectSourcePage::reevaluateCorrection);
     connect(m_ui->sources, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ProjectSourcePage::setSourceIndex);
     connect(m_ui->get, &QPushButton::clicked, this, &ProjectSourcePage::checkoutVcsProject);
-    
+
     emit isCorrect(false);
 
     setSourceIndex(FROM_FILESYSTEM_SOURCE_INDEX);
-    
+
     if(!m_plugins.isEmpty())
         m_ui->sources->setCurrentIndex(1);
 }
@@ -80,7 +83,7 @@ void ProjectSourcePage::setSourceIndex(int index)
         delete child->widget();
         delete child;
     }
-    
+
     IBasicVersionControl* vcIface = vcsPerIndex(index);
     IProjectProvider* providerIface;
     bool found=false;
@@ -88,7 +91,7 @@ void ProjectSourcePage::setSourceIndex(int index)
         found=true;
         m_locationWidget=vcIface->vcsLocation(m_ui->sourceBox);
         connect(m_locationWidget, &VcsLocationWidget::changed, this, &ProjectSourcePage::locationChanged);
-        
+
         remoteWidgetLayout->addWidget(m_locationWidget);
     } else {
         providerIface = providerPerIndex(index);
@@ -96,12 +99,12 @@ void ProjectSourcePage::setSourceIndex(int index)
             found=true;
             m_providerWidget=providerIface->providerWidget(m_ui->sourceBox);
             connect(m_providerWidget, &IProjectProviderWidget::changed, this, &ProjectSourcePage::projectChanged);
-            
-            remoteWidgetLayout->addWidget(m_providerWidget);   
+
+            remoteWidgetLayout->addWidget(m_providerWidget);
         }
     }
     reevaluateCorrection();
-    
+
     m_ui->sourceBox->setVisible(found);
 }
 
@@ -128,7 +131,7 @@ VcsJob* ProjectSourcePage::jobPerCurrent()
     QUrl url=m_ui->workingDir->url();
     IPlugin* p=m_plugins[m_ui->sources->currentIndex()];
     VcsJob* job=0;
-    
+
     if(IBasicVersionControl* iface=p->extension<IBasicVersionControl>()) {
         Q_ASSERT(iface && m_locationWidget);
         job=iface->createWorkingCopy(m_locationWidget->location(), url);
@@ -149,12 +152,12 @@ void ProjectSourcePage::checkoutVcsProject()
             return;
         }
     }
-    
+
     VcsJob* job=jobPerCurrent();
     if (!job) {
         return;
     }
-    
+
     m_ui->sources->setEnabled(false);
     m_ui->sourceBox->setEnabled(false);
     m_ui->workingDir->setEnabled(false);
@@ -213,10 +216,10 @@ void ProjectSourcePage::reevaluateCorrection()
     if (validToCheckout && cwd.isLocalFile() && dir.exists()) {
         validToCheckout = dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).isEmpty();
     }
-    
+
     m_ui->get->setEnabled(validToCheckout);
     m_ui->creationProgress->setEnabled(validToCheckout);
-    
+
     if(!correct)
         setStatus(i18n("You need to specify a valid or nonexistent directory to check out a project"));
     else if(!m_ui->get->isEnabled() && m_ui->workingDir->isEnabled())
@@ -231,7 +234,7 @@ void ProjectSourcePage::locationChanged()
     if(m_locationWidget->isCorrect()) {
         QString currentUrl = m_ui->workingDir->text();
         currentUrl = currentUrl.left(currentUrl.lastIndexOf('/')+1);
-        
+
         QUrl current = QUrl::fromUserInput(currentUrl + "/" + m_locationWidget->projectName());
         m_ui->workingDir->setUrl(current);
     }
@@ -244,7 +247,7 @@ void ProjectSourcePage::projectChanged(const QString& name)
     Q_ASSERT(m_providerWidget);
     QString currentUrl = m_ui->workingDir->text();
     currentUrl = currentUrl.left(currentUrl.lastIndexOf('/')+1);
-    
+
     QUrl current = QUrl::fromUserInput(currentUrl + "/" + name);
     m_ui->workingDir->setUrl(current);
 }

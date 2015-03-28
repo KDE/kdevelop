@@ -21,14 +21,13 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QStatusBar>
 #include <QMenuBar>
+#include <QStatusBar>
 
-#include <KConfig>
-#include <KSharedConfig>
 #include <KConfigGroup>
-#include <KToolBar>
 #include <KLocalizedString>
+#include <KSharedConfig>
+#include <KToolBar>
 
 #include "area.h"
 #include "view.h"

@@ -27,8 +27,6 @@
 
 #include "dvcsimportmetadatawidget.h"
 
-#include <KMessageBox>
-
 #include <vcslocation.h>
 #include "ui_dvcsimportmetadatawidget.h"
 

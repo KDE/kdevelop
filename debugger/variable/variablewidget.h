@@ -16,11 +16,9 @@
 #ifndef KDEVPLATFORM_VARIABLEWIDGET_H
 #define KDEVPLATFORM_VARIABLEWIDGET_H
 
-#include <QTreeView>
 #include <QAction>
 #include <QSignalMapper>
-
-#include <KComboBox>
+#include <QTreeView>
 
 #include <debugger/debuggerexport.h>
 #include "../util/treeview.h"

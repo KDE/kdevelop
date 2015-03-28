@@ -19,8 +19,10 @@
 #ifndef KDEVPLATFORM_SUBLIMEMAINWINDOW_H
 #define KDEVPLATFORM_SUBLIMEMAINWINDOW_H
 
-#include <QtCore/QList>
-#include <kparts/mainwindow.h>
+#include <QList>
+#include <QMenu>
+
+#include <KParts/MainWindow>
 
 #include "sublimeexport.h"
 
@@ -64,7 +66,7 @@ public:
     /**@return active toolview inside this mainwindow.*/
     View *activeToolView();
 
-    /**Enable saving of per-area UI settings (like toolbar properties 
+    /**Enable saving of per-area UI settings (like toolbar properties
        and position) whenever area is changed.  This should be
        called after all areas are restored, and main window area is
        set, to prevent saving a half-broken state.  */
@@ -73,35 +75,35 @@ public:
     /** Allows setting an additional widget that will be inserted left to the document tab-bar.
       *  The ownership goes to the target.  */
     void setTabBarLeftCornerWidget(QWidget* widget);
-    
+
     /**Sets the area of main window and fills it with views.
       *The contents is reconstructed, even if the area equals the currently set area. */
     void setArea(Area *area);
-    
+
     /**
      * Reconstruct the view structure. This is required after significant untracked changes to the
      * area-index structure.
      * Views listed in topViews will be on top of their view stacks.
      * */
     void reconstructViews(QList<View*> topViews = QList<View*>());
-    
+
     /**Returns a list of all views which are on top of their corresponding view stacks*/
     QList<View*> getTopViews() const;
-    
+
     /**Returns the view that is closest to the given global position, or zero.*/
     View* viewForPosition(QPoint globalPos) const;
-    
+
     /**Returns true if this main-window contains this view*/
     bool containsView(View* view) const;
-    
+
     /**Returns all areas that belong to this main-window*/
     QList<Area*> areas() const;
-    
+
     /** Sets a @p w widget that will be shown when there are no opened documents.
      * This method takes the ownership of @p w.
      */
     void setBackgroundCentralWidget(QWidget* w);
-    
+
 public Q_SLOTS:
     /**Shows the @p view and makes it active, focusing it by default).*/
     void activateView(Sublime::View *view, bool focus = true);
@@ -120,7 +122,7 @@ Q_SIGNALS:
     void activeToolViewChanged(Sublime::View*);
     /**Emitted when the user interface settings have changed.*/
     void settingsLoaded();
-    
+
     /**Emitted when a new view is added to the mainwindow.*/
     void viewAdded(Sublime::View*);
     /**Emitted when a view is going to be removed from the mainwindow.*/
@@ -151,7 +153,7 @@ public: // FIXME?
     void activateViewAndFocus(Sublime::View *view) { activateView(view, true); }
 
 private:
-    
+
     Q_PRIVATE_SLOT(d, void viewAdded(Sublime::AreaIndex*, Sublime::View*))
     Q_PRIVATE_SLOT(d, void viewRemovedInternal(Sublime::AreaIndex*, Sublime::View*))
     Q_PRIVATE_SLOT(d, void aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*))

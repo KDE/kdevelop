@@ -16,23 +16,13 @@
 #include "variablewidget.h"
 
 #include <QApplication>
-#include <QLabel>
-#include <QLayout>
-#include <QPainter>
-#include <QPushButton>
-#include <QRegExp>
 #include <QCursor>
-#include <QHBoxLayout>
-#include <QKeyEvent>
-#include <QFocusEvent>
-#include <QVBoxLayout>
-#include <QMenu>
-#include <QPoint>
 #include <QClipboard>
+#include <QKeyEvent>
+#include <QMenu>
+#include <QVBoxLayout>
 
-#include <kmessagebox.h>
-#include <khistorycombobox.h>
-#include <QLineEdit>
+#include <KHistoryComboBox>
 #include <KLocalizedString>
 
 #include "../../interfaces/icore.h"

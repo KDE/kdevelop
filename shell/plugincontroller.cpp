@@ -23,25 +23,17 @@ Boston, MA 02110-1301, USA.
 */
 #include "plugincontroller.h"
 
+#include <QDebug>
 #include <QElapsedTimer>
-#include <QtCore/QFile>
-#include <QtCore/QTimer>
-#include <QApplication>
 #include <QMap>
-#include <QtCore/QDebug>
 
-#include <kservice.h>
-#include <kservicetypetrader.h>
-#include <kmessagebox.h>
-#include <kconfig.h>
-#include <KLocalizedString>
-#include <kxmlguiwindow.h>
-#include <assert.h>
-#include <kxmlguifactory.h>
-#include <kpluginloader.h>
-#include <KPluginInfo> // TODO: remove once we no longer support old style plugins
 #include <KConfigGroup>
+#include <KLocalizedString>
+#include <KPluginInfo> // TODO: remove once we no longer support old style plugins
+#include <KPluginLoader>
+#include <KServiceTypeTrader>
 
+#include <assert.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/isession.h>

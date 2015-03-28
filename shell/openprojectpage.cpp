@@ -10,25 +10,17 @@
 
 #include "openprojectpage.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QModelIndex>
-#include <QVBoxLayout>
-#include <QHeaderView>
+#include <QHBoxLayout>
 
-#include <kconfiggroup.h>
-#include <kurlcompletion.h>
-#include <kurlcombobox.h>
-#include <kurlpixmapprovider.h>
-#include <kfileitem.h>
-#include <ksharedconfig.h>
-#include <kfilewidget.h>
+#include <KDirOperator>
+#include <KFileItem>
+#include <KFileWidget>
 #include <KLocalizedString>
+#include <KUrlComboBox>
 
 #include "shellextension.h"
 #include "core.h"
 #include "plugincontroller.h"
-#include <kdiroperator.h>
-#include <kactioncollection.h>
 
 namespace KDevelop
 {

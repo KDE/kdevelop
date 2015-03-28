@@ -17,8 +17,10 @@
 */
 
 #include "coderepresentation.h"
-#include <QtCore/qfile.h>
+
+#include <QFile>
 #include <KTextEditor/Document>
+
 #include <serialization/indexedstring.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
@@ -27,23 +29,23 @@
 #include <ktexteditor/configinterface.h>
 
 namespace KDevelop {
-    
+
 static bool onDiskChangesForbidden = false;
 
 QString CodeRepresentation::rangeText(const KTextEditor::Range& range) const
 {
     Q_ASSERT(range.end().line() < lines());
-    
+
     //Easier for single line ranges which should happen most of the time
     if(range.onSingleLine())
         return QString( line( range.start().line() ).mid( range.start().column(), range.columnWidth() ) );
-    
+
     //Add up al the requested lines
     QString rangedText = line(range.start().line()).mid(range.start().column());
-    
+
     for(int i = range.start().line() + 1; i <= range.end().line(); ++i)
         rangedText += '\n' + ((i == range.end().line()) ? line(i).left(range.end().column()) : line(i));
-    
+
     return rangedText;
 }
 
@@ -61,7 +63,7 @@ static void grepLine(const QString& identifier, const QString& lineText, int lin
         int start = pos;
         pos += identifier.length();
         int end = pos;
-        
+
         if(!surroundedByBoundary || ( (end == lineText.length() || !lineText[end].isLetterOrNumber() || lineText[end] != '_')
                                         && (start-1 < 0 || !lineText[start-1].isLetterOrNumber() || lineText[start-1] != '_')) )
         {
@@ -75,7 +77,7 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
   EditorCodeRepresentation(KTextEditor::Document* document) : m_document(document) {
       m_url = IndexedString(m_document->url());
   }
-  
+
   virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const override {
       QVector< KTextEditor::Range > ret;
 
@@ -91,21 +93,21 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
   virtual KDevEditingTransaction::Ptr makeEditTransaction() override {
     return KDevEditingTransaction::Ptr(new KDevEditingTransaction(m_document));
   }
-  
+
   QString line(int line) const override {
         if(line < 0 || line >= m_document->lines())
             return QString();
         return m_document->line(line);
   }
-  
+
   virtual int lines() const override {
       return m_document->lines();
   }
-  
+
   QString text() const override {
     return m_document->text();
   }
-  
+
   bool setText(const QString& text) override {
     bool ret;
     {
@@ -115,11 +117,11 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
     ModificationRevision::clearModificationCache(m_url);
     return ret;
   }
-  
+
   bool fileExists() override{
     return QFile(m_document->url().path()).exists();
   }
-  
+
   bool replace(const KTextEditor::Range& range, const QString& oldText,
                const QString& newText, bool ignoreOldText) override {
       QString old = m_document->text(range);
@@ -137,11 +139,11 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
 
       return ret;
   }
-  
+
   virtual QString rangeText(const KTextEditor::Range& range) const override {
       return m_document->text(range);
   }
-  
+
   private:
     KTextEditor::Document* m_document;
     IndexedString m_url;
@@ -151,7 +153,7 @@ class FileCodeRepresentation : public CodeRepresentation {
   public:
     FileCodeRepresentation(const IndexedString& document) : m_document(document) {
         QString localFile(document.toUrl().toLocalFile());
-  
+
         QFile file( localFile );
         if ( file.open(QIODevice::ReadOnly) ) {
             data = QString::fromLocal8Bit(file.readAll());
@@ -159,14 +161,14 @@ class FileCodeRepresentation : public CodeRepresentation {
         }
         m_exists = file.exists();
     }
-    
+
     QString line(int line) const override {
         if(line < 0 || line >= lineData.size())
             return QString();
-      
+
       return lineData.at(line);
     }
-    
+
     virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const override {
         QVector< KTextEditor::Range > ret;
 
@@ -178,15 +180,15 @@ class FileCodeRepresentation : public CodeRepresentation {
 
         return ret;
     }
-    
+
     virtual int lines() const override {
         return lineData.count();
     }
-    
+
     QString text() const override {
       return data;
     }
-    
+
     bool setText(const QString& text) override {
       Q_ASSERT(!onDiskChangesForbidden);
       QString localFile(m_document.toUrl().toLocalFile());
@@ -195,7 +197,7 @@ class FileCodeRepresentation : public CodeRepresentation {
       if ( file.open(QIODevice::WriteOnly) )
       {
           QByteArray data = text.toLocal8Bit();
-          
+
           if(file.write(data) == data.size())
           {
               ModificationRevision::clearModificationCache(m_document);
@@ -204,11 +206,11 @@ class FileCodeRepresentation : public CodeRepresentation {
       }
       return false;
     }
-    
+
     bool fileExists() override{
       return m_exists;
     }
-    
+
   private:
     //We use QByteArray, because the column-numbers are measured in utf-8
     IndexedString m_document;
@@ -232,7 +234,7 @@ class ArtificialStringData : public QSharedData {
     const QStringList& lines() const {
         return m_lineData;
     }
-    
+
     private:
     QString m_data;
     QStringList m_lineData;
@@ -243,31 +245,31 @@ class StringCodeRepresentation : public CodeRepresentation {
     StringCodeRepresentation(QExplicitlySharedDataPointer<ArtificialStringData> _data) : data(_data) {
       Q_ASSERT(data);
     }
-    
+
     QString line(int line) const override {
         if(line < 0 || line >= data->lines().size())
             return QString();
-      
+
       return data->lines().at(line);
     }
-    
+
     virtual int lines() const override {
         return data->lines().count();
     }
-    
+
     QString text() const override {
         return data->data();
     }
-    
+
     bool setText(const QString& text) override {
         data->setData(text);
         return true;
     }
-    
+
     bool fileExists() override{
         return false;
     }
-    
+
     virtual QVector< KTextEditor::Range > grep ( const QString& identifier, bool surroundedByBoundary ) const override {
         QVector< KTextEditor::Range > ret;
 
@@ -279,7 +281,7 @@ class StringCodeRepresentation : public CodeRepresentation {
 
         return ret;
     }
-    
+
   private:
     QExplicitlySharedDataPointer<ArtificialStringData> data;
 };
@@ -336,7 +338,7 @@ InsertArtificialCodeRepresentation::InsertArtificialCodeRepresentation(const Ind
     if(QUrl(m_file.str()).isRelative())
     {
         m_file = IndexedString(CodeRepresentation::artificialPath(file.str()));
-        
+
         int idx = 0;
         while(artificialStrings.contains(m_file))
         {
@@ -344,7 +346,7 @@ InsertArtificialCodeRepresentation::InsertArtificialCodeRepresentation(const Ind
             m_file = IndexedString(CodeRepresentation::artificialPath(QStringLiteral("%1_%2").arg(idx).arg(file.str())));
         }
     }
-    
+
     Q_ASSERT(!artificialStrings.contains(m_file));
 
     artificialStrings.insert(m_file, QExplicitlySharedDataPointer<ArtificialStringData>(new ArtificialStringData(text)));

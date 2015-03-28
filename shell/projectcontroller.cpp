@@ -21,33 +21,33 @@ Boston, MA 02110-1301, USA.
 
 #include "projectcontroller.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QSignalMapper>
 #include <QAction>
-#include <QtCore/QSet>
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QItemSelectionModel>
+#include <QApplication>
+#include <QDBusConnection>
+#include <QDir>
 #include <QGroupBox>
-#include <QRadioButton>
-#include <QBoxLayout>
+#include <QItemSelectionModel>
 #include <QLabel>
+#include <QList>
+#include <QMap>
 #include <QPushButton>
-
-#include <QAction>
-#include <kconfig.h>
-#include <KLocalizedString>
-#include <kpassivepopup.h>
-#include <kstandardaction.h>
-#include <kmessagebox.h>
-#include <kxmlguiwindow.h>
-#include <kactioncollection.h>
+#include <QRadioButton>
+#include <QSet>
 #include <QTemporaryFile>
-#include <kservicetypetrader.h>
-#include <krecentfilesaction.h>
-#include <kactionmenu.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
+#include <QVBoxLayout>
+
+#include <KActionCollection>
+#include <KConfigGroup>
+#include <KIO/FileCopyJob>
+#include <KIO/ListJob>
+#include <KIO/StatJob>
+#include <KJobWidgets>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KPassivePopup>
+#include <KRecentFilesAction>
+#include <KSharedConfig>
+#include <KStandardAction>
 
 #include <sublime/area.h>
 #include <interfaces/iplugin.h>
@@ -64,6 +64,10 @@ Boston, MA 02110-1301, USA.
 #include <projectconfigpage.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
+#include <language/backgroundparser/parseprojectjob.h>
+#include <interfaces/iruncontroller.h>
+#include <vcs/widgets/vcsdiffpatchsources.h>
+#include <vcs/widgets/vcscommitdialog.h>
 
 #include "core.h"
 #include "project.h"
@@ -74,18 +78,9 @@ Boston, MA 02110-1301, USA.
 #include "uicontroller.h"
 #include "documentcontroller.h"
 #include "openprojectdialog.h"
-#include <interfaces/iruncontroller.h>
-#include <language/backgroundparser/parseprojectjob.h>
-#include <kio/job.h>
-#include <KJobWidgets>
 #include "sessioncontroller.h"
 #include "session.h"
 #include "debug.h"
-#include <QDBusConnection>
-#include <QApplication>
-#include <vcs/widgets/vcsdiffpatchsources.h>
-#include <vcs/widgets/vcscommitdialog.h>
-#include <KConfigGroup>
 
 namespace KDevelop
 {

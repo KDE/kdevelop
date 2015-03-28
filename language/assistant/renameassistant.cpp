@@ -37,7 +37,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 using namespace KDevelop;
 

@@ -22,16 +22,10 @@
 
 #include "executescriptplugin.h"
 
-#include <QApplication>
-
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 #include <KLocalizedString>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kjob.h>
-#include <kparts/mainwindow.h>
-#include <kmessagebox.h>
-#include <kaboutdata.h>
+#include <KPluginFactory>
+#include <KShell>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
@@ -39,12 +33,10 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <util/environmentgrouplist.h>
-
 #include "scriptappconfig.h"
 #include "debug.h"
 #include <project/projectmodel.h>
 #include <project/builderjob.h>
-#include <kshell.h>
 #include <util/kdevstringhandler.h>
 
 QString ExecuteScriptPlugin::_scriptAppConfigTypeId = "Script Application";

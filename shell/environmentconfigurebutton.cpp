@@ -24,18 +24,13 @@
 #include <util/environmentgrouplist.h>
 #include "settings/environmentpreferences.h"
 
-#include <KLocalizedString>
-#include <QDialog>
-#include <KCModuleProxy>
-#include <KCModuleInfo>
-
 #include <QApplication>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QIcon>
 #include <QVBoxLayout>
 
-#include <KConfigGroup>
+#include <KLocalizedString>
 
 namespace KDevelop {
 

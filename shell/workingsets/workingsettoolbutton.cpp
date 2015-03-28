@@ -18,11 +18,8 @@
 
 #include "workingsettoolbutton.h"
 
-#include <QMenu>
 #include <QContextMenuEvent>
-
-#include <KLocalizedString>
-#include <KColorUtils>
+#include <QMenu>
 
 #include <sublime/mainwindow.h>
 #include <sublime/area.h>
@@ -138,7 +135,7 @@ bool WorkingSetToolButton::event(QEvent* e)
         e->accept();
         return true;
     }
-    
+
     return QToolButton::event(e);
 }
 

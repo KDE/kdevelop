@@ -18,22 +18,17 @@
  ***************************************************************************/
 #include "uicontroller.h"
 
-#include <QMap>
 #include <QAction>
+#include <QApplication>
+#include <QDialog>
+#include <QListWidget>
+#include <QMap>
 #include <QPointer>
 #include <QTimer>
-#include <QApplication>
-#include <QListWidget>
-#include <QToolBar>
-#include <QMenuBar>
-#include <QDialog>
 #include <QVBoxLayout>
-#include <QPushButton>
 
-#include <KAboutData>
 #include <KLocalizedString>
-#include <kxmlguifactory.h>
-#include <kxmlguiclient.h>
+#include <KXMLGUIClient>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -55,7 +50,6 @@
 #include "textdocument.h"
 #include "documentcontroller.h"
 #include "assistantpopup.h"
-#include <kactioncollection.h>
 #include <ktexteditor/view.h>
 #include "workingsetcontroller.h"
 #include "workingsets/workingset.h"

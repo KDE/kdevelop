@@ -19,10 +19,10 @@
 
 #include "abstractnavigationwidget.h"
 
-#include <QtCore/QMap>
-#include <QtCore/QMetaObject>
+#include <QApplication>
+#include <QVBoxLayout>
+#include <QMetaObject>
 #include <QScrollBar>
-#include <QBoxLayout>
 #include <QTextBrowser>
 
 #include <KLocalizedString>
@@ -32,8 +32,6 @@
 #include "../duchain.h"
 #include "../duchainlock.h"
 #include "util/debug.h"
-#include <qapplication.h>
-#include <qevent.h>
 
 namespace KDevelop {
 

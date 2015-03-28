@@ -24,8 +24,10 @@ Boston, MA 02110-1301, USA.
 
 #include <QObject>
 #include <QPointer>
-#include <qwidget.h>
-#include <kxmlguiclient.h>
+#include <QWidget>
+
+#include <KXMLGUIClient>
+
 #include <language/util/navigationtooltip.h>
 
 class KActionCollection;
@@ -134,9 +136,9 @@ private:
     StatusBar* m_statusBar;
     QWidget* lastXMLGUIClientView;
     QPointer<QWidget> m_workingSetCornerWidget;
-    
+
     QMap<IPlugin*, KXMLGUIClient*> m_pluginCustomClients;
-    
+
     static bool s_quitRequested;
     bool m_changingActiveView;
     /// the view of the tab that got it's context menu connected

@@ -24,17 +24,13 @@
 #include "backgroundparser.h"
 
 #include <QList>
-#include <QFile>
-#include <QTimer>
 #include <QMutex>
-#include <QWaitCondition>
 #include <QMutexLocker>
-#include <QThread>
 #include <QPointer>
-#include <QCoreApplication>
+#include <QTimer>
 
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
+#include <KConfigGroup>
+#include <KSharedConfig>
 #include <KLocalizedString>
 
 #include <ktexteditor/document.h>

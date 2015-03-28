@@ -15,23 +15,17 @@
 
 #include <QDialogButtonBox>
 #include <QDir>
-#include <QLabel>
-#include <QRegExp>
-#include <QBoxLayout>
-#include <QStringList>
-#include <QMenu>
-
-#include <kconfiggroup.h>
 #include <QFileDialog>
-#include <QPushButton>
-#include <KLocalizedString>
-#include <kconfig.h>
-#include <kmessagebox.h>
-#include <kcombobox.h>
-#include <kurlcompletion.h>
-#include <kurlcompletion.h>
 #include <QLineEdit>
-#include <KCompletion/kcompletion.h>
+#include <QMenu>
+#include <QPushButton>
+#include <QStringList>
+
+#include <KComboBox>
+#include <KCompletion>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KUrlCompletion>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>

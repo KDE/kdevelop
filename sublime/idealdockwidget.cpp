@@ -26,17 +26,16 @@
 #include "document.h"
 #include "view.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
-#include <QDialog>
-#include <KShortcutWidget>
 #include <KSharedConfig>
+#include <KShortcutWidget>
 
 #include <QAbstractButton>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <QToolBar>
 #include <QVBoxLayout>
-#include <qdialogbuttonbox.h>
-#include <QMenu>
-#include <KConfigGroup>
 
 using namespace Sublime;
 

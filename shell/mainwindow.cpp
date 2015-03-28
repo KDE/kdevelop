@@ -22,26 +22,22 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "mainwindow_p.h"
 
-#include <QtCore/QHash>
-#include <QDockWidget>
-#include <QDragEnterEvent>
+#include <QDBusConnection>
 #include <QDomDocument>
+#include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QMenu>
 #include <QMenuBar>
-#include <QUrl>
-#include <QtDBus/QDBusConnection>
 #include <QMimeData>
-#include <QTemporaryFile>
+#include <QUrl>
 
 #include <KActionCollection>
 #include <KLocalizedString>
-#include <kactioncollection.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
-#include <kshortcutsdialog.h>
-#include <kxmlguifactory.h>
-#include <ktoggleaction.h>
+#include <KShortcutsDialog>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 #include <KWindowSystem>
+#include <KXMLGUIFactory>
 
 #include <sublime/area.h>
 #include "shellextension.h"

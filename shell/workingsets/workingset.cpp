@@ -22,11 +22,11 @@
 #include <sublime/area.h>
 #include <sublime/mainwindow.h>
 
-#include <KTextEditor/Document>
-#include <KColorUtils>
-#include <KProtocolInfo>
-
 #include <QApplication>
+#include <QPainter>
+
+#include <KProtocolInfo>
+#include <KTextEditor/Document>
 
 #include <textdocument.h>
 #include <core.h>

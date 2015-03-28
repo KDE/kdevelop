@@ -24,11 +24,9 @@
 
 #include "overlaywidget.h"
 
-#include <QVBoxLayout>
-
-#include <QScrollArea>
 #include <QMap>
-#include <QVBoxLayout>
+#include <QScrollArea>
+#include <QWidget>
 
 class QProgressBar;
 class QFrame;

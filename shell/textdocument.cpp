@@ -18,31 +18,25 @@
  ***************************************************************************/
 #include "textdocument.h"
 
-#include <QFile>
-#include <QPointer>
-#include <QTextCodec>
-#include <QMenu>
 #include <QAction>
-#include <QVBoxLayout>
-#include <QWidget>
-#include <QLabel>
-#include <QLayout>
-#include <QMimeDatabase>
-#include <QDebug>
 #include <QCoreApplication>
+#include <QDebug>
+#include <QFile>
+#include <QMenu>
+#include <QMimeDatabase>
+#include <QPointer>
+#include <QWidget>
 
+#include <KConfigGroup>
 #include <KLocalizedString>
-#include <kmessagebox.h>
-#include <kconfiggroup.h>
-#include <kxmlguifactory.h>
-
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/modificationinterface.h>
-#include <ktexteditor/codecompletioninterface.h>
-#include <ktexteditor/markinterface.h>
-#include <ktexteditor/configinterface.h>
-#include <ktexteditor/sessionconfiginterface.h>
+#include <KMessageBox>
+#include <KTextEditor/View>
+#include <KTextEditor/Document>
+#include <KTextEditor/ModificationInterface>
+#include <KTextEditor/CodeCompletionInterface>
+#include <KTextEditor/MarkInterface>
+#include <KTextEditor/ConfigInterface>
+#include <KTextEditor/SessionConfigInterface>
 
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>

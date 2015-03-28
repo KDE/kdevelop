@@ -19,20 +19,19 @@
 */
 #include "projectmanagerviewplugin.h"
 
-#include <QtCore/QList>
-#include <QMimeData>
-#include <QInputDialog>
 #include <QApplication>
+#include <QAction>
 #include <QClipboard>
+#include <QInputDialog>
+#include <QList>
+#include <QMimeData>
 #include <QUrl>
 
-#include <QAction>
-#include <kactioncollection.h>
-#include <kaboutdata.h>
+#include <KActionCollection>
 #include <KLocalizedString>
-#include <kmessagebox.h>
-#include <kparts/mainwindow.h>
-#include <kpluginfactory.h>
+#include <KMessageBox>
+#include <KParts/MainWindow>
+#include <KPluginFactory>
 
 #include <project/projectmodel.h>
 #include <project/projectbuildsetmodel.h>

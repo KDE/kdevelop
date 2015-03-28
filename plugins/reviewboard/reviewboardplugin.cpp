@@ -19,18 +19,16 @@
  */
 
 #include "reviewboardplugin.h"
-#include <QVariantList>
-#include <QUrl>
 
-#include <KPluginFactory>
-#include <KPluginLoader>
-#include <KAboutData>
-#include <KLocalizedString>
 #include <QDialog>
+#include <QUrl>
+#include <QVariantList>
+
+#include <KConfigGroup>
+#include <KLocalizedString>
 #include <KMessageBox>
-#include <KIO/Job>
-#include <QFile>
-#include <QDir>
+#include <KPluginFactory>
+
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iprojectcontroller.h>
@@ -38,7 +36,7 @@
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/interfaces/ipatchsource.h>
 #include <vcs/vcsjob.h>
-#include <KConfigGroup>
+
 #include "reviewpatchdialog.h"
 #include "reviewboardjobs.h"
 #include "debug.h"

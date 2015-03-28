@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_IMPORTPROJECTJOB_H
 #define KDEVPLATFORM_IMPORTPROJECTJOB_H
 
-#include <kjob.h>
+#include <KJob>
 
 #include "projectexport.h"
 

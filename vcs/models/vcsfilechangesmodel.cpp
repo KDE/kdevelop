@@ -23,9 +23,9 @@
 #include "vcsfilechangesmodel.h"
 
 #include <QIcon>
+#include <QMimeDatabase>
 
 #include <KLocalizedString>
-#include <QMimeDatabase>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>

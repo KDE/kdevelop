@@ -19,8 +19,8 @@
 #ifndef KDEVPLATFORM_CONVENIENTFREELIST_H
 #define KDEVPLATFORM_CONVENIENTFREELIST_H
 
-#include <QtCore/QVector>
-#include <QtCore/QPair>
+#include <QPair>
+#include <QVector>
 
 #include "embeddedfreetree.h"
 #include "kdevvarlengtharray.h"

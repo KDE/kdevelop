@@ -21,26 +21,19 @@
 
 #include "projectmodel.h"
 
-#include <QApplication>
-#include <QPalette>
-#include <QBrush>
-#include <QMimeDatabase>
-#include <QColor>
-#include <QFileInfo>
 #include <QDebug>
+#include <QIcon>
+#include <QMimeDatabase>
+#include <QMimeType>
+
+#include <KIO/StatJob>
+#include <KLocalizedString>
 
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include "interfaces/iprojectfilemanager.h"
 #include <serialization/indexedstring.h>
-#include <KLocalizedString>
-#include <KMessageBox>
-#include <kio/udsentry.h>
-#include <kio/statjob.h>
-#include <KJobWidgets>
-#include <QMetaClassInfo>
-#include <QThread>
 
 #include "path.h"
 
@@ -148,7 +141,6 @@ public:
         Path newPath = item->path();
         newPath.setLastPathSegment(newName);
 
-        KIO::UDSEntry entry;
         auto job = KIO::stat(newPath.toUrl(), KIO::StatJob::SourceSide, 0);
         if (job->exec()) {
             // file/folder exists already

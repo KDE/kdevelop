@@ -21,8 +21,6 @@
 
 #include <QVBoxLayout>
 
-#include <kgenericfactory.h>
-
 #include "ui_settingswidget.h"
 #include <config.h>
 

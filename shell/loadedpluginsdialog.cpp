@@ -21,20 +21,19 @@
 #include "loadedpluginsdialog.h"
 
 #include <QApplication>
-#include <QListView>
-#include <QVBoxLayout>
-#include <QPainter>
 #include <QDebug>
-
-#include <KLocalizedString>
-#include <ktitlewidget.h>
-#include <kaboutdata.h>
-#include <KWidgetItemDelegate>
-#include <QPushButton>
-#include <KIconLoader>
-#include <kaboutapplicationdialog.h>
-#include <KConfigGroup>
 #include <QDialogButtonBox>
+#include <QListView>
+#include <QPainter>
+#include <QPushButton>
+#include <QVBoxLayout>
+
+#include <KAboutData>
+#include <KAboutApplicationDialog>
+#include <KIconLoader>
+#include <KLocalizedString>
+#include <KTitleWidget>
+#include <KWidgetItemDelegate>
 
 #include "core.h"
 #include "plugincontroller.h"

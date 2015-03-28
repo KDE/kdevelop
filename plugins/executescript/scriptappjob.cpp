@@ -21,15 +21,13 @@
 #include "scriptappjob.h"
 #include "executescriptplugin.h"
 
-#include <QFileInfo>
 #include <QDebug>
+#include <QFileInfo>
 
-#include <kprocess.h>
 #include <KLocalizedString>
-#include <kmessagebox.h>
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
-#include <kparts/mainwindow.h>
+#include <KProcess>
+#include <KSharedConfig>
+#include <KShell>
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <outputview/outputmodel.h>
@@ -37,7 +35,6 @@
 #include <util/processlinemaker.h>
 #include <util/environmentgrouplist.h>
 
-#include <kshell.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>

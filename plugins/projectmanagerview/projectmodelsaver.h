@@ -20,14 +20,14 @@
 #ifndef KDEVPLATFORM_PLUGIN_PROJECTMODELSAVER_H
 #define KDEVPLATFORM_PLUGIN_PROJECTMODELSAVER_H
 
-#include <kviewstatesaver.h>
+#include <KConfigViewStateSaver>
 
 namespace KDevelop
 {
 
 class IProject;
 
-class ProjectModelSaver: public KViewStateSaver
+class ProjectModelSaver: public KConfigViewStateSaver
 {
     Q_OBJECT
 public:

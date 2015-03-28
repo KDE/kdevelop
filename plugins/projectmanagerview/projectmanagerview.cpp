@@ -25,9 +25,8 @@
 #include <QKeyEvent>
 #include <QUrl>
 
+#include <KActionCollection>
 #include <KLocalizedString>
-#include <kactioncollection.h>
-#include <QLineEdit>
 
 #include <interfaces/iselectioncontroller.h>
 #include <interfaces/context.h>

@@ -19,22 +19,24 @@
 #include "useswidget.h"
 #include "util/debug.h"
 
+#include <QIcon>
+#include <QLabel>
+#include <QProgressBar>
+#include <QResizeEvent>
+#include <QToolButton>
+#include <QVBoxLayout>
+
+#include <KLocalizedString>
+
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/uses.h>
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QProgressBar>
-#include <klocalizedstring.h>
-#include <QToolButton>
 #include <language/duchain/declaration.h>
 #include <language/duchain/use.h>
-#include <QIcon>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>
-#include <qtextdocument.h>
-#include <QResizeEvent>
+
 #include <language/duchain/duchainutils.h>
 #include <language/codegen/coderepresentation.h>
 #include <interfaces/iproject.h>

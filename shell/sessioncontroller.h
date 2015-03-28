@@ -26,9 +26,9 @@ Boston, MA 02110-1301, USA.
 #include "session.h"
 #include <interfaces/isessionlock.h>
 
-#include <QtCore/QObject>
+#include <QObject>
 
-#include <kxmlguiclient.h>
+#include <KXMLGUIClient>
 
 namespace KDevelop
 {
@@ -106,13 +106,13 @@ public:
     ISessionLock::Ptr activeSessionLock() const;
     QList<QString> sessionNames() const;
     Session* createSession( const QString& name );
-    
+
     QList<const Session*> sessions() const;
-    
+
     void loadDefaultSession( const QString& session );
 
     void startNewSession();
-    
+
     void loadSession( const QString& nameOrId );
     void deleteSession( const ISessionLock::Ptr& lock );
     static void deleteSessionFromDisk( const ISessionLock::Ptr& lock );
@@ -125,7 +125,7 @@ public:
     static QString cfgActiveSessionEntry();
 
     static QList< SessionInfo > availableSessionInfo();
-    
+
     /**
      * Shows a dialog where the user can choose the session
      * @param headerText an additional text that will be shown at the top in a label
@@ -147,12 +147,12 @@ public:
     static QString handleLockedSession( const QString& sessionName, const QString& currentSessionId, const SessionRunInfo& runInfo );
 
     void plugActions();
-    
+
     void emitQuitSession()
     {
         emit quitSession();
     }
-    
+
 public Q_SLOTS:
     // Returns the pretty name of the currently active session (used in the shell integration)
     virtual Q_SCRIPTABLE QString sessionName();

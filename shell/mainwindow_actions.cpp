@@ -20,11 +20,13 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#include <kconfiggroup.h>
-#include <kaboutdata.h>
-#include <kaboutapplicationdialog.h>
-#include <knotifyconfigwidget.h>
-#include <ktogglefullscreenaction.h>
+#include <QApplication>
+
+#include <KAboutData>
+#include <KAboutApplicationDialog>
+#include <KConfigGroup>
+#include <KNotifyConfigWidget>
+#include <KToggleFullScreenAction>
 
 #include <sublime/area.h>
 #include <sublime/view.h>

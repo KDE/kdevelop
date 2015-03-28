@@ -20,39 +20,38 @@ Boston, MA 02110-1301, USA.
 
 #include "sourceformattercontroller.h"
 
-#include <QVariant>
-#include <QStringList>
-#include <QRegExp>
+#include <QAction>
 #include <QMimeDatabase>
+#include <QRegExp>
+#include <QStringList>
 
-#include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
-#include <interfaces/ilanguagecontroller.h>
-#include <language/interfaces/ilanguagesupport.h>
-#include <language/codegen/coderepresentation.h>
-#include <interfaces/isourceformatter.h>
-#include "core.h"
-#include "debug.h"
-#include <ktexteditor/view.h>
-#include <project/projectmodel.h>
-#include <util/path.h>
-#include <kmessagebox.h>
-#include <qfile.h>
+#include <KActionCollection>
+#include <KIO/StoredTransferJob>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KTextEditor/Command>
+#include <KTextEditor/ConfigInterface>
+#include <KTextEditor/Document>
+#include <KTextEditor/Editor>
+#include <KTextEditor/View>
+
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
-
-#include <kactioncollection.h>
-#include <QAction>
-#include <KLocalizedString>
-#include <KIOCore/KIO/StoredTransferJob>
+#include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
-#include <ktexteditor/command.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/editor.h>
-#include <ktexteditor/configinterface.h>
-#include "plugincontroller.h"
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/iplugincontroller.h>
 #include <interfaces/isession.h>
+#include <interfaces/isourceformatter.h>
+#include <language/codegen/coderepresentation.h>
+#include <language/interfaces/ilanguagesupport.h>
+#include <project/projectmodel.h>
+#include <util/path.h>
+
+#include "core.h"
+#include "debug.h"
+#include "plugincontroller.h"
 
 namespace KDevelop
 {

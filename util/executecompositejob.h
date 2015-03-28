@@ -19,7 +19,8 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_EXECUTECOMPOSITEJOB_H
 #define KDEVPLATFORM_EXECUTECOMPOSITEJOB_H
 
-#include <kcompositejob.h>
+#include <KCompositeJob>
+
 #include "utilexport.h"
 
 template <typename T> class QList;

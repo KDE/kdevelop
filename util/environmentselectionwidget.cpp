@@ -19,10 +19,12 @@ Boston, MA 02110-1301, USA.
 #include "environmentselectionwidget.h"
 #include "environmentgrouplist.h"
 #include "environmentselectionmodel.h"
+
+#include <QHBoxLayout>
+
+#include <KComboBox>
+
 #include <interfaces/icore.h>
-#include <QBoxLayout>
-#include <QLayout>
-#include <KLocalizedString>
 
 namespace KDevelop
 {

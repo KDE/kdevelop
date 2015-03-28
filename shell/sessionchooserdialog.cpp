@@ -24,15 +24,15 @@
 #include "sessioncontroller.h"
 #include "core.h"
 
+#include <QDialogButtonBox>
+#include <QKeyEvent>
 #include <QLineEdit>
+#include <QListView>
 #include <QPushButton>
+#include <QVBoxLayout>
+
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <QListView>
-#include <QKeyEvent>
-#include <KConfigGroup>
-#include <QDialogButtonBox>
-#include <QVBoxLayout>
 
 using namespace KDevelop;
 

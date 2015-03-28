@@ -24,14 +24,12 @@
 #include "toolviewdata.h"
 #include "debug.h"
 
-#include <QtCore/QList>
-#include <QtCore/QAbstractItemModel>
-#include <QAction>
 #include <QAbstractItemDelegate>
+#include <QAbstractItemModel>
+#include <QAction>
+#include <QList>
 
 #include <KLocalizedString>
-#include <kactioncollection.h>
-#include <QAction>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>

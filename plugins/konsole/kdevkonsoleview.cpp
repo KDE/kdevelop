@@ -12,21 +12,16 @@
 #include "kdevkonsoleview.h"
 #include "debug.h"
 
-#include <QDir>
-#include <QLabel>
 #include <QFrame>
-#include <QLayout>
-#include <QVBoxLayout>
-#include <QKeyEvent>
-#include <QApplication>
-#include <QUuid>
-
 #include <QIcon>
-#include <KLocalizedString>
+#include <QKeyEvent>
+#include <QUuid>
+#include <QVBoxLayout>
+
 #include <kde_terminal_interface.h>
-#include <kparts/part.h>
-#include <kparts/readonlypart.h>
-#include <kpluginfactory.h>
+#include <KLocalizedString>
+#include <KPluginFactory>
+#include <KParts/ReadOnlyPart>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>

@@ -19,18 +19,17 @@
  */
 
 #include "pastebinplugin.h"
+
+#include <QFile>
 #include <QVariantList>
 
 #include <vcs/interfaces/ipatchsource.h>
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kaboutdata.h>
+#include <KIO/TransferJob>
+#include <KJobTrackerInterface>
 #include <KLocalizedString>
-#include <kjobtrackerinterface.h>
-#include <KIO/Job>
 #include <KMessageBox>
-#include <QFile>
+#include <KPluginFactory>
 
 using namespace KDevelop;
 

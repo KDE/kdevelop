@@ -23,11 +23,8 @@
 
 #include <interfaces/ipartcontroller.h>
 
-#include <QtCore/QMap>
-#include <QtCore/QHash>
-#include <QWidget>
-#include <QtCore/QPointer>
 #include <QUrl>
+#include <QWidget>
 
 #include <KSharedConfig>
 

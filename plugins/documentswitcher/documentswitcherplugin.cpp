@@ -19,14 +19,16 @@
  ***************************************************************************/
 #include "documentswitcherplugin.h"
 
+#include <QApplication>
+#include <QDebug>
+#include <QDir>
 #include <QListView>
-#include <QStringListModel>
+#include <QStandardItemModel>
+#include <QScrollBar>
 
+#include <KActionCollection>
 #include <KLocalizedString>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kactioncollection.h>
-#include <kaboutdata.h>
+#include <KPluginFactory>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
@@ -37,16 +39,8 @@
 #include <sublime/document.h>
 
 #include "documentswitchertreeview.h"
-#include <QStandardItemModel>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/idocument.h>
-
-#include <QAction>
-#include <QScrollBar>
-#include <QApplication>
-#include <QDir>
-#include <QDebug>
-#include <QAction>
 
 #include <algorithm>
 

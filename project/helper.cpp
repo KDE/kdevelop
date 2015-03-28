@@ -20,18 +20,20 @@
 #include "helper.h"
 #include "path.h"
 
-#include <QTemporaryFile>
-#include <kio/job.h>
-#include <kio/copyjob.h>
-#include <kio/deletejob.h>
-#include <KMessageBox>
-#include <KLocalizedString>
-#include <KTextEditor/Document>
-#include <kparts/mainwindow.h>
-#include <KJobWidgets>
-
 #include <QApplication>
 #include <QFileInfo>
+
+#include <KIO/CopyJob>
+#include <KIO/DeleteJob>
+#include <KIO/StatJob>
+#include <KIO/StoredTransferJob>
+#include <KIO/MkdirJob>
+#include <KJobWidgets>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KParts/MainWindow>
+#include <KTextEditor/Document>
+
 #include <interfaces/iproject.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <interfaces/iplugin.h>

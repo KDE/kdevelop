@@ -23,10 +23,6 @@
 #ifndef KDEVPLATFORM_VCSDIFFPATCHSOURCES_H
 #define KDEVPLATFORM_VCSDIFFPATCHSOURCES_H
 
-#include <QTemporaryFile>
-#include <qtextstream.h>
-#include <QSharedPointer>
-
 #include <interfaces/ipatchsource.h>
 #include "vcs/vcsstatusinfo.h"
 #include "vcs/vcsjob.h"

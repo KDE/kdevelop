@@ -21,21 +21,16 @@
 
 #include "contextbrowserview.h"
 
-///TODO: cleanup includes
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QToolButton>
-#include <QShowEvent>
-#include <QAction>
-#include <QMenu>
+#include <QBoxLayout>
 #include <QIcon>
-
+#include <QMenu>
+#include <QShowEvent>
 #include <QTextBrowser>
+#include <QToolButton>
+
 #include <KLocalizedString>
-#include <KComboBox>
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/topducontext.h>
@@ -54,8 +49,6 @@
 #include <language/duchain/specializationstore.h>
 #include "browsemanager.h"
 #include <language/duchain/navigation/abstractnavigationwidget.h>
-#include <kparts/part.h>
-#include <qapplication.h>
 #include <language/interfaces/codecontext.h>
 #include <language/duchain/navigation/abstractdeclarationnavigationcontext.h>
 #include <language/duchain/navigation/useswidget.h>

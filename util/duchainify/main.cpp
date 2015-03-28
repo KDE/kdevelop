@@ -37,18 +37,19 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QStringList>
-#include <QtCore/QFile>
-#include <QtCore/QTimer>
-#include <QtCore/QDirIterator>
-
-#include <stdio.h>
 #include <QApplication>
-#include <KAboutData>
-#include <KLocalizedString>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
+#include <QDebug>
+#include <QDirIterator>
+#include <QStringList>
+#include <QTimer>
+
+#include <stdio.h>
+
+#include <KAboutData>
+#include <KLocalizedString>
+
 
 bool verbose=false, warnings=false;
 

@@ -1,6 +1,6 @@
 /*
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -18,16 +18,16 @@
 
 #include "problemnavigationcontext.h"
 
-#include <klocalizedstring.h>
+#include <QHBoxLayout>
+#include <QMenu>
+
+#include <KLocalizedString>
+
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/problem.h>
-#include <qtextdocument.h>
-#include <qboxlayout.h>
 #include <interfaces/iassistant.h>
-#include <QMenu>
-#include <QAction>
 #include <util/richtextpushbutton.h>
 
 using namespace KDevelop;

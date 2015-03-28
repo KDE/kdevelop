@@ -18,12 +18,13 @@
 */
 
 #include "vcschangesviewplugin.h"
-#include <QPalette>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <KAboutData>
-#include <KColorScheme>
-#include <KDirWatch>
+
+#include <QAction>
+
+#include <KActionCollection>
+#include <KLocalizedString>
+#include <KPluginFactory>
+
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
@@ -35,12 +36,8 @@
 #include <vcs/vcsjob.h>
 #include <project/projectchangesmodel.h>
 #include <project/projectmodel.h>
-#include <QAction>
-#include <QTreeView>
 #include <interfaces/iplugincontroller.h>
 #include "vcschangesview.h"
-#include <KActionCollection>
-#include <KLocalizedString>
 
 K_PLUGIN_FACTORY_WITH_JSON(VcsProjectIntegrationFactory, "kdevvcschangesview.json", registerPlugin<VcsProjectIntegrationPlugin>();)
 
@@ -80,12 +77,12 @@ VcsProjectIntegrationPlugin::VcsProjectIntegrationPlugin(QObject* parent, const 
     , m_model(0)
 {
     ICore::self()->uiController()->addToolView(i18n("VCS Changes"), new VCSProjectToolViewFactory(this));
-    
+
     QAction* synaction = actionCollection()->addAction( "locate_document" );
     synaction->setText(i18n("Locate Current Document"));
     synaction->setIcon(QIcon::fromTheme("dirsync"));
     synaction->setToolTip(i18n("Locates the current document and selects it."));
-    
+
     QAction* reloadaction = actionCollection()->addAction( "reload_view" );
     reloadaction->setText(i18n("Reload View"));
     reloadaction->setIcon(QIcon::fromTheme("view-refresh"));
@@ -103,7 +100,7 @@ ProjectChangesModel* VcsProjectIntegrationPlugin::model()
         m_model = ICore::self()->projectController()->changesModel();
         connect(actionCollection()->action("reload_view"), &QAction::triggered, m_model, &ProjectChangesModel::reloadAll);
     }
-    
+
     return m_model;
 }
 

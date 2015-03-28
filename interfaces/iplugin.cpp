@@ -29,10 +29,11 @@
 
 #include "iplugin.h"
 
-#include <kmainwindow.h>
-#include <kxmlguiwindow.h>
-#include <kxmlguifactory.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
+#include <KMainWindow>
+#include <KXmlGuiWindow>
+#include <KXMLGUIFactory>
+
 #include "icore.h"
 #include "iplugincontroller.h"
 #include "iprojectcontroller.h"

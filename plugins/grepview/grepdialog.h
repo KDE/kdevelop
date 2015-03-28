@@ -21,7 +21,6 @@
 
 class KConfig;
 class KUrlRequester;
-class QPushButton;
 class GrepViewPlugin;
 class QLineEdit;
 

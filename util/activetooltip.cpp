@@ -21,17 +21,18 @@
 #include "activetooltip.h"
 #include "debug.h"
 
-#include <QPoint>
-#include <QPalette>
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QEvent>
+#include <QMenu>
 #include <QMouseEvent>
+#include <QPalette>
+#include <QPoint>
 #include <QPointer>
+#include <QStyleOption>
+#include <QStylePainter>
+
 #include <limits>
-#include <qdesktopwidget.h>
-#include <qmenu.h>
-#include <qstylepainter.h>
-#include <qstyleoption.h>
 
 namespace KDevelop
 {

@@ -12,63 +12,50 @@
 #include "vcspluginhelper.h"
 
 #include <QAction>
-#include <QVariant>
-#include <QMenu>
-
-#include <kaboutdata.h>
-#include <KLocalizedString>
-#include <kconfig.h>
-#include <kmessagebox.h>
-#include <kconfiggroup.h>
-#include <QAction>
+#include <QApplication>
+#include <QClipboard>
+#include <QDialogButtonBox>
 #include <QFileInfo>
+#include <QMenu>
+#include <QTimer>
+#include <QVBoxLayout>
+#include <QVariant>
 
-#include <ktexteditor/annotationinterface.h>
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
-
-#include <kparts/mainwindow.h>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KParts/MainWindow>
+#include <KTextEditor/AnnotationInterface>
+#include <KTextEditor/Document>
+#include <KTextEditor/ModificationInterface>
+#include <KTextEditor/View>
 
 #include <interfaces/context.h>
+#include <interfaces/contextmenuextension.h>
 #include <interfaces/icore.h>
-#include <interfaces/iplugin.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/ipatchsource.h>
+#include <interfaces/iplugin.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iruncontroller.h>
-#include <interfaces/contextmenuextension.h>
-#include <interfaces/iproject.h>
+#include <interfaces/isession.h>
+#include <interfaces/iuicontroller.h>
 #include <util/path.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
-#include "interfaces/idistributedversioncontrol.h"
-#include <vcs/widgets/vcscommitdialog.h>
 #include <vcs/models/vcsannotationmodel.h>
+#include <vcs/widgets/vcseventwidget.h>
+#include <vcs/widgets/vcscommitdialog.h>
 #include <vcs/vcsjob.h>
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsdiff.h>
-#include <vcs/widgets/vcseventwidget.h>
 
-#include <interfaces/ipatchsource.h>
-#include <QTemporaryFile>
-#include <qtextedit.h>
+#include "interfaces/idistributedversioncontrol.h"
 #include "vcsstatusinfo.h"
-#include <qboxlayout.h>
-#include <qlabel.h>
+#include "vcsevent.h"
 #include "widgets/vcsdiffpatchsources.h"
 #include "widgets/flexibleaction.h"
-#include <interfaces/isession.h>
-#include "vcsevent.h"
-#include <KCompositeJob>
-#include <QClipboard>
-#include <QApplication>
-#include <ktexteditor/modificationinterface.h>
-#include <QTimer>
-#include <KConfigGroup>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QVBoxLayout>
 
 namespace KDevelop
 {

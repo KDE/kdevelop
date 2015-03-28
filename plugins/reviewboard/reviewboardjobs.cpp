@@ -19,23 +19,21 @@
  */
 
 #include "reviewboardjobs.h"
-
 #include "debug.h"
 
-#include <QJsonDocument>
-#include <QJsonObject>
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
-#include <KLocalizedString>
-#include <KIO/Job>
-#include <KRandom>
-#include <QMimeType>
-#include <QMimeDatabase>
+
 #include <QFile>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
+#include <QJsonDocument>
+#include <QMimeDatabase>
+#include <QMimeType>
 #include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QUrlQuery>
+
+#include <KLocalizedString>
+#include <KRandom>
 
 using namespace ReviewBoard;
 

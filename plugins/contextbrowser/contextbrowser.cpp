@@ -28,23 +28,21 @@
 #include <cstdlib>
 
 #include <QAction>
-#include <QWidgetAction>
-#include <QTimer>
-#include <QToolButton>
+#include <QDebug>
 #include <QLayout>
 #include <QMenu>
-#include <QDebug>
-#include <qalgorithms.h>
+#include <QTimer>
+#include <QToolButton>
+#include <QWidgetAction>
 
-#include <KLocalizedString>
 #include <KActionCollection>
-#include <KAboutData>
+#include <KLocalizedString>
 #include <KPluginFactory>
 
-#include <KTextEditor/View>
+#include <KTextEditor/CodeCompletionInterface>
 #include <KTextEditor/Document>
 #include <KTextEditor/TextHintInterface>
-#include <KTextEditor/CodeCompletionInterface>
+#include <KTextEditor/View>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>

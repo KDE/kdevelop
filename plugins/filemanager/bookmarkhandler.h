@@ -23,8 +23,8 @@
 #ifndef KDEVPLATFORM_PLUGIN_BOOKMARKHANDLER_H
 #define KDEVPLATFORM_PLUGIN_BOOKMARKHANDLER_H
 
-#include <kbookmarkmanager.h>
-#include <kbookmarkmenu.h>
+#include <KBookmarkManager>
+#include <KBookmarkMenu>
 
 #include <QObject>
 

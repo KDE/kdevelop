@@ -22,16 +22,13 @@
 
 #include "idealcontroller.h"
 
-#include <QApplication>
-#include <QIcon>
 #include <QMainWindow>
-#include <QStylePainter>
 #include <QToolBar>
 
+#include <KAcceleratorManager>
+#include <KActionMenu>
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <KActionMenu>
-#include <KAcceleratorManager>
 
 #include "area.h"
 #include "view.h"
@@ -41,8 +38,6 @@
 #include "idealtoolbutton.h"
 #include "idealdockwidget.h"
 #include "idealbuttonbarwidget.h"
-#include <QVBoxLayout>
-#include <QLabel>
 
 using namespace Sublime;
 
@@ -156,7 +151,7 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
             dock->hide();
         }
 
-        return; 
+        return;
     }
 
     if (IdealButtonBarWidget* bar = barForDockArea(dock->dockWidgetArea()))
@@ -232,7 +227,7 @@ void IdealController::raiseView(View* view, RaiseMode mode)
     ///       The problem is that views are identified purely by their factory-id, which is equal
     ///       for toolviews of the same type.
     mode = HideOtherViews;
-   
+
     QAction* action = m_view_to_action.value(view);
     Q_ASSERT(action);
 

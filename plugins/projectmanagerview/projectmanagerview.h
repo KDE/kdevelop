@@ -21,14 +21,12 @@
 #ifndef KDEVPLATFORM_PLUGIN_PROJECTMANAGERVIEW_H
 #define KDEVPLATFORM_PLUGIN_PROJECTMANAGERVIEW_H
 
-#include <QWidget>
-
 #include <QAction>
+#include <QWidget>
 
 #include <interfaces/context.h>
 #include <project/projectutils.h>
 
-class QAction;
 class QModelIndex;
 
 namespace Ui

@@ -22,20 +22,17 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow_p.h"
 
 #include <QApplication>
-#include <QBoxLayout>
-#include <QLabel>
+#include <QLayout>
 #include <QMenu>
 
-#include <kxmlguiclient.h>
-#include <kxmlguifactory.h>
-#include <kstandardaction.h>
-#include <ktogglefullscreenaction.h>
-#include <kactioncollection.h>
-
-#include <kparts/part.h>
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/editor.h>
+#include <KActionCollection>
+#include <KStandardAction>
+#include <KTextEditor/Document>
+#include <KTextEditor/Editor>
+#include <KTextEditor/View>
+#include <KToggleFullScreenAction>
+#include <KXMLGUIClient>
+#include <KXMLGUIFactory>
 
 #include <sublime/area.h>
 #include <sublime/view.h>

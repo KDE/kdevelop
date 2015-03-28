@@ -23,10 +23,11 @@
 #include <QAction>
 
 // KDE / KDevelop
+#include <KMessageBox>
 #include <KParts/MainWindow>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
-#include <kmessagebox.h>
+
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <interfaces/iuicontroller.h>

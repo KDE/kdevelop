@@ -20,10 +20,13 @@
  */
 
 #include "browsemanager.h"
+
+#include <QApplication>
 #include <QMouseEvent>
-#include <QToolButton>
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
+#include <QTimer>
+
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include "contextbrowserview.h"
@@ -36,8 +39,6 @@
 #include <ktexteditor/codecompletioninterface.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/forwarddeclaration.h>
-#include <qtimer.h>
-#include <qapplication.h>
 
 #include "contextbrowser.h"
 #include "debug.h"

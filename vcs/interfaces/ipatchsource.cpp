@@ -17,7 +17,8 @@
 */
 
 #include "ipatchsource.h"
-#include <qicon.h>
+
+#include <QIcon>
 
 using namespace KDevelop;
 

@@ -23,7 +23,8 @@
 
 #include <interfaces/iplugin.h>
 #include <QVariantList>
-#include <kservice.h>
+
+#include <KService>
 
 #include "iopenwith.h"
 

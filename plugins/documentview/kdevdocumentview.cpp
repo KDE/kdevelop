@@ -22,16 +22,15 @@ Boston, MA 02110-1301, USA.
 #include "kdevdocumentviewplugin.h"
 #include "kdevdocumentmodel.h"
 
-#include <QDir>
+#include <QAction>
+#include <QContextMenuEvent>
+#include <QFileInfo>
 #include <QHeaderView>
 #include <QMenu>
-#include <QContextMenuEvent>
 #include <QSortFilterProxyModel>
 
-#include <QAction>
 #include <KLocalizedString>
-#include <kstandardaction.h>
-#include <klocalizedstring.h>
+#include <KStandardAction>
 
 #include "kdevdocumentselection.h"
 #include "kdevdocumentviewdelegate.h"
@@ -121,7 +120,7 @@ template<typename F> void KDevDocumentView::visitItems(F f, bool selectedItems)
 {
     KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
     QList<QUrl> docs = selectedItems ? m_selectedDocs : m_unselectedDocs;
-    
+
     foreach(const QUrl& url, docs) {
        KDevelop::IDocument* doc = dc->documentForUrl(url);
        if (doc) f(doc);
@@ -193,24 +192,24 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
             editActions += ext.actions(KDevelop::ContextMenuExtension::EditGroup);
             extensionActions += ext.actions(KDevelop::ContextMenuExtension::ExtensionGroup);
         }
-        
+
         appendActions(ctxMenu, fileActions);
-        
+
         QAction* save = KStandardAction::save(this, SLOT(saveSelected()), ctxMenu);
         save->setEnabled(selectedDocHasChanges());
         ctxMenu->addAction(save);
         ctxMenu->addAction(QIcon::fromTheme("view-refresh"), i18n( "Reload" ), this, SLOT(reloadSelected()));
-        
+
         appendActions(ctxMenu, editActions);
-        
+
         ctxMenu->addAction(KStandardAction::close(this, SLOT(closeSelected()), ctxMenu));
         QAction* closeUnselected = ctxMenu->addAction(QIcon::fromTheme("document-close"), i18n( "Close Other Files" ), this, SLOT(closeUnselected()));
         closeUnselected->setEnabled(!m_unselectedDocs.isEmpty());
 
         appendActions(ctxMenu, vcsActions);
-        
+
         appendActions(ctxMenu, extensionActions);
-        
+
         connect(ctxMenu, &QMenu::aboutToHide, ctxMenu, &QMenu::deleteLater);
         ctxMenu->popup( event->globalPos() );
     }

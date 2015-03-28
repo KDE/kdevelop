@@ -25,14 +25,14 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iplugincontroller.h>
-#include <KMessageBox>
-#include <QInputDialog>
 #include <vcs/dvcs/dvcsjob.h>
-#include <KLocalizedString>
-#include <KConfigGroup>
+
 #include <QDialogButtonBox>
+#include <QInputDialog>
 #include <QPushButton>
-#include <QVBoxLayout>
+
+#include <KLocalizedString>
+#include <KMessageBox>
 
 using namespace KDevelop;
 
@@ -44,17 +44,17 @@ StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, Q
     m_mainWidget = new QWidget(this);
     m_ui = new Ui::StashManager;
     m_ui->setupUi(m_mainWidget);
-    
+
     StashModel* m = new StashModel(stashed, plugin, this);
     m_ui->stashView->setModel(m);
-    
+
     connect(m_ui->show,   &QPushButton::clicked, this, &StashManagerDialog::showStash);
     connect(m_ui->apply,  &QPushButton::clicked, this, &StashManagerDialog::applyClicked);
     connect(m_ui->branch, &QPushButton::clicked, this, &StashManagerDialog::branchClicked);
     connect(m_ui->pop,    &QPushButton::clicked, this, &StashManagerDialog::popClicked);
     connect(m_ui->drop,   &QPushButton::clicked, this, &StashManagerDialog::dropClicked);
     connect(m, &StashModel::rowsInserted, this, &StashManagerDialog::stashesFound);
-    
+
     connect(m_ui->buttonBox, &QDialogButtonBox::rejected, this, &StashManagerDialog::reject);
 
     m_mainWidget->setEnabled(false); //we won't enable it until we have the model with data and selection
@@ -83,9 +83,9 @@ void StashManagerDialog::runStash(const QStringList& arguments)
 {
     VcsJob* job = m_plugin->gitStash(m_dir, arguments, OutputJob::Verbose);
     connect(job, &VcsJob::result, this, &StashManagerDialog::accept);
-    
+
     m_mainWidget->setEnabled(false);
-    
+
     ICore::self()->runController()->registerJob(job);
 }
 
@@ -112,7 +112,7 @@ void StashManagerDialog::dropClicked()
 {
     QString sel = selection();
     int ret = KMessageBox::questionYesNo(this, i18n("Are you sure you want to drop the stash '%1'?", sel));
-    
+
     if(ret == KMessageBox::Yes)
         runStash(QStringList("drop") << sel);
 }
@@ -120,7 +120,7 @@ void StashManagerDialog::dropClicked()
 void StashManagerDialog::branchClicked()
 {
     QString branchName = QInputDialog::getText(this, i18n("KDevelop - Git Stash"), i18n("Select a name for the new branch:"));
-    
+
     if(!branchName.isEmpty())
         runStash(QStringList("branch") << branchName << selection());
 }
@@ -132,7 +132,7 @@ StashModel::StashModel(const QDir& dir, GitPlugin* git, QObject* parent)
 {
     VcsJob* job=git->gitStash(dir, QStringList("list"), OutputJob::Silent);
     connect(job, &VcsJob::finished, this, &StashModel::stashListReady);
-    
+
     ICore::self()->runController()->registerJob(job);
 }
 
@@ -140,14 +140,14 @@ void StashModel::stashListReady(KJob* _job)
 {
     DVcsJob* job = qobject_cast<DVcsJob*>(_job);
     QList< QByteArray > output = job->rawOutput().split('\n');
-    
+
     foreach(const QByteArray& line, output) {
         QList< QByteArray > fields = line.split(':');
-        
+
         QList<QStandardItem*> elements;
         foreach(const QByteArray& field, fields)
             elements += new QStandardItem(QString(field.trimmed()));
-        
+
         appendRow(elements);
     }
 }

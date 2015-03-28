@@ -22,27 +22,23 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 
-#include <kparts/part.h>
-
-#include <QDir>
-#include <QTabWidget>
 #include <KMimeTypeTrader>
+
+#include <QAction>
+#include <QDialogButtonBox>
+#include <QDir>
+#include <QLabel>
 #include <QMimeType>
 #include <QMimeDatabase>
-#include <QBoxLayout>
-#include <QLayout>
-#include <QSplitter>
-#include <QLabel>
 #include <QPushButton>
+#include <QSplitter>
+#include <QTemporaryFile>
+#include <QTabWidget>
+#include <QVBoxLayout>
+
 #include "coderepresentation.h"
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
-#include <QTemporaryFile>
-#include <KActionCollection>
-#include <QAction>
-#include <KConfigGroup>
-#include <QDialogButtonBox>
-#include <QVBoxLayout>
 
 namespace KDevelop
 {

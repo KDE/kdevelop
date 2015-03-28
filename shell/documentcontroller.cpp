@@ -26,19 +26,24 @@ Boston, MA 02110-1301, USA.
 */
 #include "documentcontroller.h"
 
-#include <QFileInfo>
-#include <QtDBus/QtDBus>
 #include <QApplication>
-
-#include <kencodingfiledialog.h>
-#include <kactioncollection.h>
-#include <KLocalizedString>
-#include <krecentfilesaction.h>
-#include <QTemporaryFile>
+#include <QDBusConnection>
+#include <QFileInfo>
+#include <QMimeDatabase>
 #include <QRegularExpression>
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
-#include <ktexteditor/annotationinterface.h>
+#include <QTemporaryFile>
+
+#include <KActionCollection>
+#include <KEncodingFileDialog>
+#include <KIO/StatJob>
+#include <KJobWidgets>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KProtocolInfo>
+#include <KRecentFilesAction>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+#include <KTextEditor/AnnotationInterface>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -58,10 +63,7 @@ Boston, MA 02110-1301, USA.
 #include "partcontroller.h"
 #include "savedialog.h"
 #include "debug.h"
-#include <kmessagebox.h>
-#include <KIO/Job>
-#include <KProtocolInfo>
-#include <KJobWidgets>
+
 #include "workingsetcontroller.h"
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/models/vcsannotationmodel.h>

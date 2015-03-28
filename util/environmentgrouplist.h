@@ -21,7 +21,8 @@ Boston, MA 02110-1301, USA.
 #define KDEVPLATFORM_ENVIRONMENTGROUPLIST_H
 
 #include "utilexport.h"
-#include <ksharedconfig.h>
+
+#include <KSharedConfig>
 
 class KConfig;
 template <typename T1, typename T2> class QMap;

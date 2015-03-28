@@ -19,12 +19,11 @@ Boston, MA 02110-1301, USA.
 
 #include "environmentgrouplist.h"
 
-#include <QtCore/QMap>
-#include <QtCore/QStringList>
-#include <QtCore/QString>
+#include <QMap>
+#include <QStringList>
+#include <QString>
 
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 namespace KDevelop
 {
@@ -60,9 +59,9 @@ void encode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 {
     cfg.writeEntry( defaultEnvGroupKey, d->m_defaultGroup );
     cfg.writeEntry( groupListKey, d->m_groups.keys() );
-    foreach( const QString &group, cfg.groupList() ) 
+    foreach( const QString &group, cfg.groupList() )
     {
-        if( !d->m_groups.keys().contains( group ) ) 
+        if( !d->m_groups.keys().contains( group ) )
         {
             cfg.deleteGroup( group );
         }

@@ -38,17 +38,17 @@
 #include <language/duchain/declaration.h>
 
 #include <KActionCollection>
-#include <KLocalizedString>
-#include <KJob>
-#include <KRecursiveFilterProxyModel>
-#include <QLineEdit>
 #include <KConfigGroup>
+#include <KJob>
+#include <KLocalizedString>
+#include <KRecursiveFilterProxyModel>
 
 #include <QAction>
-#include <QIcon>
-#include <QStandardItemModel>
-#include <QStandardItem>
 #include <QHeaderView>
+#include <QIcon>
+#include <QLineEdit>
+#include <QStandardItem>
+#include <QStandardItemModel>
 #include <QVBoxLayout>
 
 using namespace KDevelop;

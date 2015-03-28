@@ -22,31 +22,27 @@
 #ifndef KDEVPLATFORM_PLUGIN_OUTPUTWIDGET_H
 #define KDEVPLATFORM_PLUGIN_OUTPUTWIDGET_H
 
+#include <QMap>
 #include <QWidget>
-#include <QtCore/QMap>
 
 #include <interfaces/itoolviewactionlistener.h>
 #include <outputview/ioutputviewmodel.h>
 #include <outputview/ioutputview.h>
 
-class QAbstractProxyModel;
-class QAbstractItemView;
-class QString;
-class StandardOutputView;
-class QSignalMapper;
-class QStackedWidget;
-class QTreeView;
-class QToolButton;
-class QWidgetAction;
-class QSortFilterProxyModel;
-class QModelIndex;
-class ToolViewData;
-class QTabWidget;
 class KToggleAction;
-class QAction;
-class QAction;
-class QLineEdit;
 class StandardOutputViewTest;
+class QAction;
+class QAbstractItemView;
+class QLineEdit;
+class QModelIndex;
+class QSortFilterProxyModel;
+class QStackedWidget;
+class QString;
+class QTabWidget;
+class QToolButton;
+class QTreeView;
+class QWidgetAction;
+class ToolViewData;
 
 class OutputWidget : public QWidget, public KDevelop::IToolViewActionListener
 {

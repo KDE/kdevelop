@@ -19,9 +19,6 @@
 */
 #include "nativeappconfig.h"
 
-#include <KLocalizedString>
-#include <QIcon>
-
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
@@ -34,10 +31,9 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/builderjob.h>
-#include <kmessagebox.h>
 #include <interfaces/iuicontroller.h>
 #include <util/executecompositejob.h>
-#include <kparts/mainwindow.h>
+
 #include <interfaces/iplugincontroller.h>
 
 #include "executeplugin.h"
@@ -46,12 +42,15 @@
 #include <util/environmentgrouplist.h>
 #include <project/projectitemlineedit.h>
 #include "projecttargetscombobox.h"
-#include <QMenu>
-#include <QDebug>
 
-#include <KConfigDialog>
+#include <QDebug>
+#include <QIcon>
+#include <QMenu>
+
 #include <KLineEdit>
+#include <KLocalizedString>
 #include <KShell>
+
 
 using namespace KDevelop;
 

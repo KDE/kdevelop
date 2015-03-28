@@ -28,8 +28,12 @@
 #include <interfaces/iuicontroller.h>
 #include <shell/core.h>
 
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
+#include <QAction>
+
+#include <KActionCollection>
+#include <KParts/MainWindow>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/idocumentcontroller.h>
@@ -41,9 +45,6 @@
 #include <language/duchain/types/identifiedtype.h>
 #include <language/duchain/types/typeutils.h>
 #include <documentation/documentationview.h>
-#include <KParts/MainWindow>
-#include <KActionCollection>
-#include <QAction>
 
 using namespace KDevelop;
 

@@ -21,7 +21,7 @@
 #include "builderjob.h"
 #include "debug.h"
 
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <interfaces/iproject.h>

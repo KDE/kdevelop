@@ -19,28 +19,26 @@
 
 #include "projectitemlineedit.h"
 
+#include <QAction>
 #include <QCompleter>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QHeaderView>
+#include <QLabel>
+#include <QMenu>
+#include <QPushButton>
+#include <QTreeView>
+#include <QValidator>
+#include <QVBoxLayout>
+
+#include <KLocalizedString>
+
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
 #include <util/kdevstringhandler.h>
-#include <kcolorscheme.h>
-#include <QValidator>
 #include <interfaces/iproject.h>
-#include <KLocalizedString>
-#include <QAction>
-#include <QMenu>
-#include <QDialog>
-#include <QTreeView>
 #include "projectproxymodel.h"
-#include <QBoxLayout>
-#include <QLayout>
-#include <QLabel>
-#include <QHeaderView>
-#include <KConfigGroup>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QVBoxLayout>
 
 static const QChar sep = '/';
 static const QChar escape = '\\';
@@ -51,13 +49,13 @@ class ProjectItemCompleter : public QCompleter
     Q_OBJECT
 public:
     ProjectItemCompleter(QObject* parent=0);
-    
+
     QString separator() const { return sep; }
     QStringList splitPath(const QString &path) const override;
     QString pathFromIndex(const QModelIndex& index) const override;
-    
+
     void setBaseItem( KDevelop::ProjectBaseItem* item ) { mBase = item; }
-    
+
 private:
     KDevelop::ProjectModel* mModel;
     KDevelop::ProjectBaseItem* mBase;
@@ -69,9 +67,9 @@ class ProjectItemValidator : public QValidator
 public:
     ProjectItemValidator(QObject* parent = 0 );
     QValidator::State validate( QString& input, int& pos ) const override;
-    
+
     void setBaseItem( KDevelop::ProjectBaseItem* item ) { mBase = item; }
-    
+
 private:
     KDevelop::ProjectBaseItem* mBase;
 };
@@ -86,7 +84,7 @@ ProjectItemCompleter::ProjectItemCompleter(QObject* parent)
 
 QStringList ProjectItemCompleter::splitPath(const QString& path) const
 {
-    return joinProjectBasePath( KDevelop::splitWithEscaping( path, sep, escape ), mBase ); 
+    return joinProjectBasePath( KDevelop::splitWithEscaping( path, sep, escape ), mBase );
 }
 
 QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
@@ -147,18 +145,18 @@ QValidator::State ProjectItemValidator::validate(QString& input, int& pos) const
 
 ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     : QLineEdit(parent),
-      m_base(0), 
-      m_completer( new ProjectItemCompleter( this ) ), 
+      m_base(0),
+      m_completer( new ProjectItemCompleter( this ) ),
       m_validator( new ProjectItemValidator( this ) )
 {
     setCompleter( m_completer );
     setValidator( m_validator );
     setPlaceholderText( i18n("Enter the path to an item from the projects tree" ) );
-    
+
     QAction* selectItemAction = new QAction(QIcon::fromTheme("folder-document"), i18n("Select..."), this);
     connect(selectItemAction, &QAction::triggered, this, &ProjectItemLineEdit::selectItemDialog);
     addAction(selectItemAction);
-    
+
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, &ProjectItemLineEdit::customContextMenuRequested, this, &ProjectItemLineEdit::showCtxMenu);
 }
@@ -173,7 +171,7 @@ void ProjectItemLineEdit::showCtxMenu(const QPoint& p)
 bool ProjectItemLineEdit::selectItemDialog()
 {
     KDevelop::ProjectModel* model=KDevelop::ICore::self()->projectController()->projectModel();
-    
+
     QWidget* w=new QWidget;
     w->setLayout(new QVBoxLayout(w));
     QTreeView* view = new QTreeView(w);
@@ -184,7 +182,7 @@ bool ProjectItemLineEdit::selectItemDialog()
     view->setSelectionMode(QAbstractItemView::SingleSelection);
     w->layout()->addWidget(new QLabel(i18n("Select the item you want to get the path from.")));
     w->layout()->addWidget(view);
-    
+
     QDialog dialog;
     dialog.setWindowTitle(i18n("Select an item..."));
 
@@ -200,10 +198,10 @@ bool ProjectItemLineEdit::selectItemDialog()
     mainLayout->addWidget(buttonBox);
 
     int res = dialog.exec();
-    
+
     if(res==QDialog::Accepted && view->selectionModel()->hasSelection()) {
         QModelIndex idx=proxymodel->mapToSource(view->selectionModel()->selectedIndexes().first());
-        
+
         setText(KDevelop::joinWithEscaping(model->pathFromIndex(idx), sep, escape));
         selectAll();
         return true;
@@ -213,7 +211,7 @@ bool ProjectItemLineEdit::selectItemDialog()
 
 void ProjectItemLineEdit::setItemPath(const QStringList& list)
 {
-    setText( KDevelop::joinWithEscaping( removeProjectBasePath( list, m_base ), sep, escape ) ); 
+    setText( KDevelop::joinWithEscaping( removeProjectBasePath( list, m_base ), sep, escape ) );
 }
 
 QStringList ProjectItemLineEdit::itemPath() const

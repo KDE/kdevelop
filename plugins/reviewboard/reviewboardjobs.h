@@ -21,11 +21,12 @@
 #ifndef KDEVPLATFORM_PLUGIN_REVIEWBOARDJOBS_H
 #define KDEVPLATFORM_PLUGIN_REVIEWBOARDJOBS_H
 
-#include <QUrl>
-#include <KJob>
 #include <QList>
-#include <QPair>
 #include <QNetworkAccessManager>
+#include <QPair>
+#include <QUrl>
+
+#include <KJob>
 
 class QNetworkReply;
 

@@ -24,15 +24,13 @@
 
 #include "debugcontroller.h"
 
-#include <QtCore/QMetaEnum>
-
-#include <KLocalizedString>
-#include <KActionCollection>
 #include <QAction>
-#include <KParts/Part>
-#include <KParts/PartManager>
+
+#include <KActionCollection>
+#include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <KTextEditor/MarkInterface>
+#include <KXMLGUIFactory>
 
 #include "../interfaces/idocument.h"
 #include "../interfaces/icore.h"
@@ -44,15 +42,14 @@
 #include "../sublime/view.h"
 #include "../sublime/mainwindow.h"
 #include "../sublime/area.h"
-#include "core.h"
-#include "uicontroller.h"
 #include "../debugger/breakpoint/breakpointmodel.h"
 #include "../debugger/breakpoint/breakpointwidget.h"
 #include "../debugger/variable/variablewidget.h"
 #include "../debugger/framestack/framestackmodel.h"
 #include "../debugger/framestack/framestackwidget.h"
+#include "core.h"
 #include "debug.h"
-#include <KXMLGUIFactory>
+#include "uicontroller.h"
 
 
 namespace KDevelop {

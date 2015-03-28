@@ -21,17 +21,15 @@
 
 #include "executeplugin.h"
 
-#include <QApplication>
 #include <QDebug>
 
+#include <KConfigGroup>
+#include <KJob>
 #include <KLocalizedString>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <KConfigCore/KConfigGroup>
-#include <kjob.h>
-#include <kparts/mainwindow.h>
-#include <kmessagebox.h>
-#include <kaboutdata.h>
+#include <KMessageBox>
+#include <KParts/MainWindow>
+#include <KPluginFactory>
+#include <KShell>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
@@ -44,7 +42,6 @@
 #include "debug.h"
 #include <project/projectmodel.h>
 #include <project/builderjob.h>
-#include <kshell.h>
 #include <util/kdevstringhandler.h>
 
 QString ExecutePlugin::_nativeAppConfigTypeId = "Native Application";

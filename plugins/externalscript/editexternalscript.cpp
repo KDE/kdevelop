@@ -23,14 +23,11 @@
 
 #include "externalscriptitem.h"
 
-#include <KLocalizedString>
-#include <QPushButton>
-#include <KShell>
-
-#include <QAction>
-#include <KConfigGroup>
 #include <QDialogButtonBox>
-#include <QVBoxLayout>
+#include <QPushButton>
+
+#include <KLocalizedString>
+#include <KShell>
 
 EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* parent, Qt::WindowFlags flags )
     : QDialog( parent, flags ), m_item( item )

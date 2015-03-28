@@ -18,24 +18,27 @@
 
 #include "vcsdiffpatchsources.h"
 
-#include <qboxlayout.h>
-#include <qlabel.h>
-#include <QFontDatabase>
-#include <klocalizedstring.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/icore.h>
-#include <kmessagebox.h>
-#include <interfaces/iruncontroller.h>
-#include "vcsjob.h"
-#include "vcsdiff.h"
-#include "../debug.h"
-#include <interfaces/iplugincontroller.h>
-#include <KComboBox>
-#include <KTextEdit>
-#include <interfaces/isession.h>
-#include <interfaces/ibasicversioncontrol.h>
-
+#include <QBoxLayout>
 #include <QDir>
+#include <QFontDatabase>
+#include <QLabel>
+#include <QTemporaryFile>
+
+#include <KComboBox>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KTextEdit>
+
+#include <interfaces/ibasicversioncontrol.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/iruncontroller.h>
+#include <interfaces/isession.h>
+#include "vcsdiff.h"
+#include "vcsjob.h"
+#include "../debug.h"
+
 
 using namespace KDevelop;
 

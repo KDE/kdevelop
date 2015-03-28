@@ -32,7 +32,6 @@
 #include "progressdialog.h"
 #include "progressmanager.h"
 
-#include <QHBoxLayout>
 #include <KLocalizedString>
 #include <KStandardGuiItem>
 
@@ -40,6 +39,7 @@
 #include <QCloseEvent>
 #include <QEvent>
 #include <QFrame>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QLayout>
 #include <QObject>

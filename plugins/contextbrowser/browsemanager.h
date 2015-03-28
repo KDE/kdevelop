@@ -22,12 +22,12 @@
 #ifndef KDEVPLATFORM_PLUGIN_BROWSEMANAGER_H
 #define KDEVPLATFORM_PLUGIN_BROWSEMANAGER_H
 
-#include <QObject>
 #include <QCursor>
+#include <QEvent>
 #include <QMap>
+#include <QObject>
 #include <QPointer>
-#include <qevent.h>
-#include <ktexteditor/cursor.h>
+#include <KTextEditor/Cursor>
 
 
 class QWidget;
@@ -50,7 +50,7 @@ public:
 private:
     ///Called for every added view. Reimplement this to catch them.
     virtual void viewAdded(KTextEditor::View*);
-    
+
 private slots:
     void viewDestroyed(QObject* view);
     void viewCreated(KTextEditor::Document*, KTextEditor::View*);
@@ -88,10 +88,10 @@ class BrowseManager : public QObject {
             private:
                 BrowseManager* m_manager;
         };
-        
+
         void resetChangedCursor();
         void setHandCursor(QWidget* widget);
-        
+
         //Installs/uninstalls the event-filter
         void applyEventFilter(QWidget* object, bool install);
         virtual bool eventFilter(QObject * watched, QEvent * event) override ;

@@ -19,9 +19,9 @@
 #ifndef KDEVPLATFORM_ITEMREPOSITORY_H
 #define KDEVPLATFORM_ITEMREPOSITORY_H
 
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QDebug>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -2298,7 +2298,6 @@ class ItemRepository : public AbstractItemRepository {
 //         qDebug() << "loading bucket mmap:" << bucketNumber;
         m_buckets[bucketNumber]->initializeFromMap(reinterpret_cast<char*>(m_fileMap + offset));
       } else if(m_file) {
-        //Either memory-mapping is disabled, or the item is not in the existing memory-map,
         //Either memory-mapping is disabled, or the item is not in the existing memory-map,
         //so we have to load it the classical way.
         bool res = m_file->open( QFile::ReadOnly );

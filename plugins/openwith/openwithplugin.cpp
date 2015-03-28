@@ -20,33 +20,32 @@
 
 #include "openwithplugin.h"
 
-#include <QVariantList>
-#include <QMimeDatabase>
-#include <QMimeType>
+#include <QAction>
 #include <QApplication>
 #include <QMenu>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QSignalMapper>
+#include <QVariantList>
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kaboutdata.h>
+#include <KConfigGroup>
 #include <KLocalizedString>
-#include <QAction>
+#include <KMessageBox>
+#include <KMimeTypeTrader>
+#include <KParts/MainWindow>
+#include <KPluginFactory>
+#include <KRun>
+#include <KService>
+
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
-#include <kservice.h>
-#include <kservicetypetrader.h>
-#include <kmimetypetrader.h>
-#include <QSignalMapper>
-#include <krun.h>
+
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
-#include <kparts/mainwindow.h>
-#include <KMessageBox>
-#include <KConfigGroup>
 
 using namespace KDevelop;
 
