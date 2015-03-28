@@ -21,18 +21,17 @@
 #include "svncheckoutjob.h"
 #include "svncheckoutjob_p.h"
 
+#include <QFileInfo>
 #include <QMutexLocker>
 
-#include <KLocalizedString>
 #include <KIO/Global>
+#include <KLocalizedString>
 
 #include "kdevsvncpp/client.hpp"
 #include "kdevsvncpp/path.hpp"
 
 #include <vcs/vcslocation.h>
 #include <util/path.h>
-
-#include <QFileInfo>
 
 SvnInternalCheckoutJob::SvnInternalCheckoutJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )

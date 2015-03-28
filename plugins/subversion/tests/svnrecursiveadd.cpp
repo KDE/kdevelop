@@ -19,11 +19,13 @@
 ***************************************************************************/
 
 #include "svnrecursiveadd.h"
-#include <QtTest/QtTest>
-#include <QTemporaryDir>
-#include <KProcess>
-#include <kparts/part.h>
+
 #include <QDebug>
+#include <QTemporaryDir>
+#include <QtTest>
+
+#include <KProcess>
+
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>

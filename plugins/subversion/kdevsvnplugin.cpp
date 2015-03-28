@@ -12,29 +12,20 @@
 #include "kdevsvnplugin.h"
 
 #include <QAction>
-#include <QVariant>
-#include <QTextStream>
+#include <QDialog>
 #include <QMenu>
+#include <QVBoxLayout>
+#include <QVariant>
 
-#include <kparts/part.h>
-#include <kparts/partmanager.h>
-#include <kparts/mainwindow.h>
-#include <kaboutdata.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/markinterface.h>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <KLocalizedString>
-#include <kurlrequester.h>
-#include <QAction>
-#include <kurlrequesterdialog.h>
-#include <kfile.h>
-#include <QTemporaryFile>
-#include <kmessagebox.h>
+#include <KFile>
 #include <KIO/Global>
-#include <KDialog>
-
-#include <ThreadWeaver/Queue>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KPluginFactory>
+#include <KTextEditor/Document>
+#include <KTextEditor/MarkInterface>
+#include <KUrlRequester>
+#include <KUrlRequesterDialog>
 
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -440,7 +431,6 @@ void KDevSvnPlugin::ctxMove()
 
         KUrlRequesterDialog dlg(dir, i18n("Destination file/directory"), 0);
 
-        dlg.fileDialog()->setAcceptMode(QFileDialog::AcceptSave);
         if (isFile) {
             dlg.urlRequester()->setMode(KFile::File | KFile::Directory | KFile::LocalOnly);
         } else {
@@ -483,13 +473,19 @@ void KDevSvnPlugin::ctxImport()
         return;
     }
 
-    KDialog dlg;
+    QDialog dlg;
 
-    dlg.setCaption(i18n("Import into Subversion repository"));
+    dlg.setWindowTitle(i18n("Import into Subversion repository"));
     SvnImportMetadataWidget* widget = new SvnImportMetadataWidget(&dlg);
     widget->setSourceLocation(KDevelop::VcsLocation(ctxUrlList.first()));
     widget->setSourceLocationEditable(false);
-    dlg.setMainWidget(widget);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    auto layout = new QVBoxLayout();
+    dlg.setLayout(layout);
+    layout->addWidget(widget);
+    layout->addWidget(buttonBox);
+    connect(buttonBox, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
 
     if (dlg.exec() == QDialog::Accepted) {
         KDevelop::ICore::self()->runController()->registerJob(import(widget->message(), widget->source(), widget->destination()));
@@ -504,13 +500,19 @@ void KDevSvnPlugin::ctxCheckout()
         return;
     }
 
-    KDialog dlg;
+    QDialog dlg;
 
-    dlg.setCaption(i18n("Checkout from Subversion repository"));
+    dlg.setWindowTitle(i18n("Checkout from Subversion repository"));
     SvnCheckoutMetadataWidget* widget = new SvnCheckoutMetadataWidget(&dlg);
     QUrl tmp = KIO::upUrl(ctxUrlList.first());
     widget->setDestinationLocation(tmp);
-    dlg.setMainWidget(widget);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    auto layout = new QVBoxLayout();
+    dlg.setLayout(layout);
+    layout->addWidget(widget);
+    layout->addWidget(buttonBox);
+    connect(buttonBox, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
 
     if (dlg.exec() == QDialog::Accepted) {
         KDevelop::ICore::self()->runController()->registerJob(createWorkingCopy(widget->source(), widget->destination(), widget->recursionMode()));

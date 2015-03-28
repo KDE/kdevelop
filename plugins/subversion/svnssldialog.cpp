@@ -9,7 +9,10 @@
  ***************************************************************************/
 
 #include "svnssldialog.h"
+
+#include <QPushButton>
 #include <QTreeWidgetItem>
+
 #include <KLocalizedString>
 
 #include "ui_ssltrustdialog.h"
@@ -22,17 +25,18 @@ public:
 };
 
 SvnSSLTrustDialog::SvnSSLTrustDialog( QWidget *parent )
-    : KDialog( parent ), d( new SvnSSLTrustDialogPrivate )
+    : QDialog( parent ), d( new SvnSSLTrustDialogPrivate )
 {
-    d->ui.setupUi( mainWidget() );
+    d->ui.setupUi( this );
     d->temporarily = true;
-    setCaption( i18n( "Ssl Server Certificate" ) );
-    setButtons( KDialog::User1 | KDialog::User2 | KDialog::Cancel );
-    setDefaultButton( KDialog::User2 );
-    setButtonText( KDialog::User2, i18n("Trust Temporarily") );
-    setButtonText( KDialog::User1, i18n("Trust Permanently") );
-    connect( this, SIGNAL(user1Clicked()), this, SLOT(permanentlyClicked()) );
-    connect( this, SIGNAL(user2Clicked()), this, SLOT(temporarilyClicked()) );
+    setWindowTitle( i18n( "Ssl Server Certificate" ) );
+    buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel);
+    buttonBox->addButton(i18n("Trust Permanently"), QDialogButtonBox::YesRole);
+    buttonBox->addButton(i18n("Trust Temporarily"), QDialogButtonBox::AcceptRole)->setDefault(true);
+    auto layout = new QVBoxLayout();
+    setLayout(layout);
+    layout->addWidget(buttonBox);
+    connect(buttonBox, &QDialogButtonBox::clicked, this, &SvnSSLTrustDialog::buttonClicked);
 }
 SvnSSLTrustDialog::~SvnSSLTrustDialog()
 {
@@ -59,7 +63,7 @@ void SvnSSLTrustDialog::setCertInfos( const QString& hostname,
     d->ui.validUntil->setText( validuntil );
     d->ui.validFrom->setText( validfrom );
     d->ui.issuer->setText( issuerName );
-    setCaption( i18n( "Ssl Server Certificate: %1", realm ) );
+    setWindowTitle( i18n( "Ssl Server Certificate: %1", realm ) );
 
 }
 
@@ -68,16 +72,14 @@ bool SvnSSLTrustDialog::useTemporarily()
     return d->temporarily;
 }
 
-void SvnSSLTrustDialog::temporarilyClicked()
+void SvnSSLTrustDialog::buttonClicked(QAbstractButton *button)
 {
-    d->temporarily = true;
+    if (buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole)
+    {
+        d->temporarily = true;
+    } else
+    {
+        d->temporarily = false;
+    }
     accept();
 }
-
-void SvnSSLTrustDialog::permanentlyClicked()
-{
-    d->temporarily = false;
-    accept();
-}
-
-

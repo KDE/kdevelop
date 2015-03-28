@@ -11,9 +11,10 @@
 #ifndef KDEVPLATFORM_PLUGIN_SVN_SSLDIALOG_H
 #define KDEVPLATFORM_PLUGIN_SVN_SSLDIALOG_H
 
-#include <kdialog.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 
-class SvnSSLTrustDialog: public KDialog
+class SvnSSLTrustDialog: public QDialog
 {
     Q_OBJECT
 public:
@@ -26,10 +27,10 @@ public:
                        const QStringList& failures );
     bool useTemporarily();
 private slots:
-    void temporarilyClicked();
-    void permanentlyClicked();
+    void buttonClicked(QAbstractButton *button);
 private:
     class SvnSSLTrustDialogPrivate *d;
+    QDialogButtonBox *buttonBox;
 };
 
 #endif

@@ -93,6 +93,4 @@ target_link_libraries(kdevsubversion
     KDev::OutputView
     KDev::Project
     KDev::Language
-    # FIXME: poort away from this
-    KF5::KDELibs4Support
 )
