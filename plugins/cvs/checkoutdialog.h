@@ -11,8 +11,8 @@
 #ifndef KDEVPLATFORM_PLUGIN_CHECKOUTDIALOG_H
 #define KDEVPLATFORM_PLUGIN_CHECKOUTDIALOG_H
 
+#include <QDialog>
 #include <QUrl>
-#include <QtWidgets/QDialog>
 
 #include <KJob>
 
@@ -24,7 +24,7 @@ class CvsPlugin;
  * Allows the user to define from where to checkout
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class CheckoutDialog : public KDialog, private Ui::CheckoutDialogBase
+class CheckoutDialog : public QDialog, private Ui::CheckoutDialogBase
 {
     Q_OBJECT
 public:

@@ -10,8 +10,8 @@
 
 #include "checkoutdialog.h"
 
+#include <KLocalizedString>
 #include <KMessageBox>
-#include <KI18n/KLocalizedString>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
@@ -22,7 +22,7 @@
 #include "debug.h"
 
 CheckoutDialog::CheckoutDialog(CvsPlugin* plugin, QWidget *parent)
-    : KDialog(parent), Ui::CheckoutDialogBase(), m_plugin(plugin)
+    : QDialog(parent), Ui::CheckoutDialogBase(), m_plugin(plugin)
 {
     Ui::CheckoutDialogBase::setupUi(this);
 
@@ -80,7 +80,7 @@ void CheckoutDialog::jobFinished(KJob * job)
             i18n("Some errors occurred while checking out into %1", localWorkingDir->url().toLocalFile()),
             i18n("Checkout Error"));
     } else {
-        KDialog::accept();
+        QDialog::accept();
     }
 }
 

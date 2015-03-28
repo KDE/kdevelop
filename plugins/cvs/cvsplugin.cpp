@@ -17,7 +17,7 @@
 
 #include <KParts/PartManager>
 #include <KParts/Part>
-#include <kparts/readonlypart.h>
+#include <KParts/ReadOnlyPart>
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KActionCollection>

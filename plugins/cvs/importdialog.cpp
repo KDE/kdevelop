@@ -10,8 +10,8 @@
 
 #include "importdialog.h"
 
+#include <KLocalizedString>
 #include <KMessageBox>
-#include <KI18n/KLocalizedString>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
@@ -26,12 +26,18 @@
 #include "importmetadatawidget.h"
 
 ImportDialog::ImportDialog(CvsPlugin* plugin, const QUrl &url, QWidget *parent)
-    : KDialog(parent), m_url(url), m_plugin(plugin)
+    : QDialog(parent), m_url(url), m_plugin(plugin)
 {
     m_widget = new ImportMetadataWidget(this);
     m_widget->setSourceLocation( KDevelop::VcsLocation(m_url) );
     m_widget->setSourceLocationEditable( true );
-    setMainWidget(m_widget);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    auto layout = new QVBoxLayout();
+    setLayout(layout);
+    layout->addWidget(m_widget);
+    layout->addWidget(buttonBox);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &ImportDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &ImportDialog::reject);
 }
 
 ImportDialog::~ImportDialog()
@@ -84,7 +90,7 @@ void ImportDialog::jobFinished(KJob * job)
             i18n("Some errors occurred while importing %1", m_url.toLocalFile()),
             i18n("Import Error"));
     } else {
-        KDialog::accept();
+        QDialog::accept();
     }
 }
 

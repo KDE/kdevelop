@@ -11,7 +11,7 @@
 #ifndef KDEVPLATFORM_PLUGIN_IMPORTDIALOG_H
 #define KDEVPLATFORM_PLUGIN_IMPORTDIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 #include <QUrl>
 #include <KJob>
 
@@ -24,7 +24,7 @@ class CvsPlugin;
  * a CVS repository
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class ImportDialog : public KDialog
+class ImportDialog : public QDialog
 {
     Q_OBJECT
 public:

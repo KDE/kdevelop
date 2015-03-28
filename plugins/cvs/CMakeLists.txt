@@ -37,7 +37,6 @@ kdevplatform_add_plugin(kdevcvs JSON kdevcvs.json SOURCES ${kdevcvs_PART_SRCS})
 target_link_libraries(kdevcvs
     KF5::KIOWidgets
     KF5::Parts
-    KF5::KDELibs4Support
     KDev::Util
     KDev::Interfaces
     KDev::Vcs
