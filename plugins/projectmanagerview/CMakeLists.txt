@@ -18,7 +18,6 @@ kdevplatform_add_plugin(kdevprojectmanagerview JSON kdevprojectmanagerview.json 
 target_link_libraries(kdevprojectmanagerview
     KF5::TextEditor
     KF5::ThreadWeaver
-    KF5::KDELibs4Support
     KDev::Interfaces KDev::Project KDev::Language KDev::Util KDev::Vcs KDev::Sublime )
 
 ########### install files ###############

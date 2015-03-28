@@ -14,7 +14,7 @@ set(patchreview_PART_SRCS
 ki18n_wrap_ui(patchreview_PART_SRCS patchreview.ui localpatchwidget.ui)
 
 kdevplatform_add_plugin(kdevpatchreview JSON kdevpatchreview.json SOURCES ${patchreview_PART_SRCS})
-target_link_libraries(kdevpatchreview KF5::IconThemes KF5::TextEditor KF5::Parts KF5::KDELibs4Support KDev::Interfaces KDev::Util KDev::Language KDev::Vcs KDev::Sublime ${LIBKOMPAREDIFF2_LIBRARIES})
+target_link_libraries(kdevpatchreview KF5::IconThemes KF5::TextEditor KF5::Parts KDev::Interfaces KDev::Util KDev::Language KDev::Vcs KDev::Sublime ${LIBKOMPAREDIFF2_LIBRARIES})
 
 ########### install files ###############
 

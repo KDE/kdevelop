@@ -15,5 +15,4 @@ target_link_libraries(kdevwelcomepage
     KDev::Project
     Qt5::QuickWidgets
     KF5::Declarative
-    KF5::KDELibs4Support
 )

@@ -52,6 +52,7 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Config
   GuiAddons
   WidgetsAddons
+  IconThemes
   I18n
   ItemModels
   ItemViews
@@ -59,6 +60,7 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   KCMUtils
   KIO
   NewStuff
+  Notifications
   NotifyConfig
   Parts
   Service
@@ -68,9 +70,6 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   WindowSystem
   Declarative
   XmlGui
-
-  # TODO KF5: Port away from this
-  KDELibs4Support
 )
 
 find_package(Grantlee5 REQUIRED)
