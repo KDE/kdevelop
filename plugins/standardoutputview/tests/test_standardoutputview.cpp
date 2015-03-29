@@ -64,14 +64,13 @@ void StandardOutputViewTest::initTestCase()
     m_stdOutputView = 0;
     KDevelop::IPluginController* plugin_controller = m_testCore->pluginController();
 
+
     QList<KDevelop::IPlugin*> plugins = plugin_controller->loadedPlugins();
-    foreach(KDevelop::IPlugin* plugin, plugins) {
-        if(plugin_controller->pluginInfo(plugin).pluginId() == "KDevStandardOutputView") {
-           m_stdOutputView =  dynamic_cast<KDevelop::IOutputView*>(plugin);
-           break;
-        }
-    }
-    Q_ASSERT(m_stdOutputView);
+    // make sure KDevStandardOutputView is loaded
+    KDevelop::IPlugin* plugin = plugin_controller->loadPlugin("KDevStandardOutputView");
+    QVERIFY(plugin);
+    m_stdOutputView =  dynamic_cast<KDevelop::IOutputView*>(plugin);
+    QVERIFY(m_stdOutputView);
 }
 
 void StandardOutputViewTest::cleanupTestCase()
