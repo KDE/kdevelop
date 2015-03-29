@@ -254,8 +254,10 @@ PluginController::PluginController(Core *core)
     setObjectName("PluginController");
     d->core = core;
 
-    auto newPlugins = KPluginLoader::findPlugins("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION), [](const KPluginMetaData& meta) {
+    QSet<QString> foundPlugins;
+    auto newPlugins = KPluginLoader::findPlugins("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION), [&](const KPluginMetaData& meta) {
         if (meta.serviceTypes().contains(QStringLiteral("KDevelop/Plugin"))) {
+            foundPlugins.insert(meta.pluginId());
             return true;
         } else {
             qWarning() << "Plugin" << meta.fileName() << "is installed into the kdevplatform plugin directory, but does not have"
@@ -263,7 +265,7 @@ PluginController::PluginController(Core *core)
             return false;
         }
     });
-    qCDebug(SHELL) << "Found" << newPlugins.size() << " plugins using the new search method.";
+    qCDebug(SHELL) << "Found" << newPlugins.size() << " plugins using the new search method:" << foundPlugins;
     d->plugins = newPlugins;
 
     //qCDebug(SHELL) << "Fetching plugin info which matches:" << QStringLiteral( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);
@@ -272,6 +274,10 @@ PluginController::PluginController(Core *core)
     qCDebug(SHELL) << "Found" << oldStylePlugins.size() << " plugins using the old search method.";
     if (!oldStylePlugins.isEmpty()) {
         foreach (const KPluginInfo& info, oldStylePlugins) {
+            if (foundPlugins.contains(info.pluginName())) {
+                qWarning() << "Plugin" << info.pluginName() << "has already been found using the new plugin search method."
+                    "The .desktop file" << info.entryPath() << "should no longer be installed.";
+            }
             qWarning() << "Plugin" << info.pluginName() << "still uses the old .desktop file based metadata."
                 " It must be ported to JSON metadata or it will no longer work with future kdevplatform versions.";
             d->plugins.append(info.toMetaData());
