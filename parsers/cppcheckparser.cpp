@@ -20,6 +20,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
+#include <util/path.h>
 
 #include <QDir>
 
@@ -79,7 +80,7 @@ bool CppcheckParser::startElement()
             ProjectPath = "";
             for (int i = 0; i < KDevelop::ICore::self()->projectController()->projects().count(); i++) {
                 if (KDevelop::ICore::self()->projectController()->findProjectForUrl(QUrl::fromLocalFile(ErrorFile)) != 0) {
-                    ProjectPath = KDevelop::ICore::self()->projectController()->projects().at(i)->folder().toLocalFile();
+                    ProjectPath = KDevelop::ICore::self()->projectController()->projects().at(i)->path().toUrl().toLocalFile();
                 }
             }
             ErrorFile.remove(ProjectPath);
@@ -99,7 +100,7 @@ bool CppcheckParser::startElement()
         if (attributes().hasAttribute("severity"))
             Severity = attributes().value("severity").toString();
 
-        
+
         if (dynamic_cast<cppcheck::CppcheckModel *>(m_model))
             emit newElement(cppcheck::CppcheckModel::startError);
 //         if (dynamic_cast<cppcheck::CppcheckFileModel *>(m_model))

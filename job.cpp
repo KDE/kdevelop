@@ -36,9 +36,6 @@
 #include <KMessageBox>
 #include <KShell>
 
-#include <util/processlinemaker.h>
-#include <outputview/outputmodel.h>
-#include <util/environmentgrouplist.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
@@ -46,6 +43,10 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <outputview/outputmodel.h>
+#include <util/environmentgrouplist.h>
+#include <util/path.h>
+#include <util/processlinemaker.h>
 
 #include <execute/iexecuteplugin.h>
 #include <assert.h>
@@ -253,7 +254,7 @@ QStringList Job::buildCommandLine() const
         qCDebug(KDEV_CPPCHECK) << "checking all files";
         // project path
         for (int i = 0; i < KDevelop::ICore::self()->projectController()->projects().count(); i++) {
-            args.append(KDevelop::ICore::self()->projectController()->projects().at(i)->folder().toLocalFile());
+            args.append(KDevelop::ICore::self()->projectController()->projects().at(i)->path().toUrl().toLocalFile());
         }
     }
 
