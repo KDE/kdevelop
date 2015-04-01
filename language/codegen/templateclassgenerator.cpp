@@ -104,7 +104,7 @@ void TemplateClassGeneratorPrivate::fetchSuperClasses(const DeclarationPointer& 
 TemplateClassGenerator::TemplateClassGenerator(const QUrl& baseUrl)
  : d(new TemplateClassGeneratorPrivate)
 {
-    Q_ASSERT(baseUrl.path().endsWith('/')); // assume folder
+    Q_ASSERT(QFileInfo(baseUrl.toLocalFile()).isDir()); // assume folder
 
     d->baseUrl = baseUrl;
     d->renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
