@@ -55,8 +55,7 @@ QUrl UrlDocument::url() const
 
 void UrlDocument::setUrl(const QUrl& newUrl)
 {
-    //deep copy
-    d->url = QUrl::fromEncoded(newUrl.url().toLatin1());
+    d->url = newUrl;
     setTitle(newUrl.fileName());
     setToolTip(newUrl.toDisplayString(QUrl::PreferLocalFile));
 }
