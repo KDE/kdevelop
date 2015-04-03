@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatformproject,kdevcppcheck
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Cppcheck
+Name[ast]=Cppcheck
 Name[bs]=Cppcheck
 Name[ca]=Cppcheck
 Name[ca@valencia]=Cppcheck
