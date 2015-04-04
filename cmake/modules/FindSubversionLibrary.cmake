@@ -7,7 +7,7 @@
 #  APU_CONFIG_PATH - path where apu-config or apu-1-config are located
 #
 #  The variables set by this macro are:
-#  SUBVERSION_FOUND - system has subversion libraries
+#  SubversionLibrary_FOUND - system has subversion libraries
 #  SUBVERSION_INCLUDE_DIRS - the include directories to link to subversion
 #  SUBVERSION_LIBRARIES - The libraries needed to link to subversion
 #  Copyright (c) 2009      Lambert CLARA <lambert.clara@yahoo.fr>
@@ -74,7 +74,7 @@ IF (NOT WIN32)
 
     IF(NOT APR_CONFIG)
         MESSAGE(STATUS "no apr-config found, subversion support will be disabled")
-        SET(SUBVERSION_FOUND false)
+        SET(SubversionLibrary_FOUND false)
     ELSE(NOT APR_CONFIG)
         EXEC_PROGRAM(${APR_CONFIG} ARGS "--includedir" OUTPUT_VARIABLE APR_INCLUDE_DIR)
         STRING(REPLACE "-I" "" APR_INCLUDE_DIR ${APR_INCLUDE_DIR})
@@ -100,7 +100,7 @@ IF (NOT WIN32)
     
     IF(NOT APU_CONFIG)
         MESSAGE(STATUS "no apu-config found, subversion support will be disabled")
-        SET(SUBVERSION_FOUND false)
+        SET(SubversionLibrary_FOUND false)
     ELSE(NOT APU_CONFIG)
         EXEC_PROGRAM(${APU_CONFIG} ARGS "--includedir" OUTPUT_VARIABLE APU_INCLUDE_DIR)
         STRING(REPLACE "-I" "" APU_INCLUDE_DIR ${APU_INCLUDE_DIR})
@@ -330,12 +330,12 @@ ENDIF (NOT WIN32)
 
 IF(NOT SUBVERSION_INCLUDE_DIR)
   MESSAGE(STATUS "No subversion includes found, subversion support will be disabled")
-  SET(SUBVERSION_FOUND false)
+  SET(SubversionLibrary_FOUND false)
 ELSE(NOT SUBVERSION_INCLUDE_DIR)
   IF(NOT Subversion_FIND_QUIETLY)
     MESSAGE(STATUS "Found subversion include: ${SUBVERSION_INCLUDE_DIR}")
   ENDIF(NOT Subversion_FIND_QUIETLY)
-  SET(SUBVERSION_FOUND true)
+  SET(SubversionLibrary_FOUND true)
   SET(SUBVERSION_INCLUDE_DIRS ${SUBVERSION_INCLUDE_DIR})
 ENDIF(NOT SUBVERSION_INCLUDE_DIR)
 
@@ -361,7 +361,7 @@ ENDIF(NOT APU_INCLUDE_DIR)
 
 IF (NOT SUBVERSION_CLIENTLIB)
   MESSAGE(STATUS "No subversion client libs found, subversion support will be disabled")
-  SET(SUBVERSION_FOUND false)
+  SET(SubversionLibrary_FOUND false)
 ELSE (NOT SUBVERSION_CLIENTLIB)
   IF(NOT Subversion_FIND_QUIETLY)
     MESSAGE(STATUS "Found subversion client lib: ${SUBVERSION_CLIENTLIB}")
@@ -371,7 +371,7 @@ ENDIF(NOT SUBVERSION_CLIENTLIB)
 
 IF (NOT SUBVERSION_REPOSITORYLIB)
   MESSAGE(STATUS "No subversion repository lib found, subversion support will be disabled")
-  SET(SUBVERSION_FOUND false)
+  SET(SubversionLibrary_FOUND false)
 ELSE (NOT SUBVERSION_REPOSITORYLIB)
   IF(NOT Subversion_FIND_QUIETLY)
     MESSAGE(STATUS "Found subversion repository lib: ${SUBVERSION_REPOSITORYLIB}")
@@ -381,7 +381,7 @@ ENDIF(NOT SUBVERSION_REPOSITORYLIB)
 
 IF (NOT SUBVERSION_FSLIB)
   MESSAGE(STATUS "No subversion fs lib found, subversion support will be disabled")
-  SET(SUBVERSION_FOUND false)
+  SET(SubversionLibrary_FOUND false)
 ELSE (NOT SUBVERSION_FSLIB)
   IF(NOT Subversion_FIND_QUIETLY)
     MESSAGE(STATUS "Found subversion fs lib: ${SUBVERSION_FSLIB}")
@@ -391,7 +391,7 @@ ENDIF(NOT SUBVERSION_FSLIB)
 
 IF (NOT SUBVERSION_SUBRLIB)
   MESSAGE(STATUS "No subversion subr lib found, subversion support will be disabled")
-  SET(SUBVERSION_FOUND false)
+  SET(SubversionLibrary_FOUND false)
 ELSE (NOT SUBVERSION_SUBRLIB)
   IF(NOT Subversion_FIND_QUIETLY)
     MESSAGE(STATUS "Found subversion subr lib: ${SUBVERSION_SUBRLIB}")
@@ -401,7 +401,7 @@ ENDIF(NOT SUBVERSION_SUBRLIB)
 
 IF (NOT SUBVERSION_WCLIB)
   MESSAGE(STATUS "No subversion wc lib found, subversion support will be disabled")
-  SET(SUBVERSION_FOUND false)
+  SET(SubversionLibrary_FOUND false)
 ELSE (NOT SUBVERSION_WCLIB)
   IF(NOT Subversion_FIND_QUIETLY)
     MESSAGE(STATUS "Found subversion wc lib: ${SUBVERSION_WCLIB}")
@@ -411,7 +411,7 @@ ENDIF(NOT SUBVERSION_WCLIB)
 
 IF (NOT SUBVERSION_RALIB)
   MESSAGE(STATUS "No subversion ra lib found, subversion support will be disabled")
-  SET(SUBVERSION_FOUND false)
+  SET(SubversionLibrary_FOUND false)
 ELSE (NOT SUBVERSION_RALIB)
   IF(NOT Subversion_FIND_QUIETLY)
     MESSAGE(STATUS "Found subversion ra lib: ${SUBVERSION_RALIB}")
@@ -421,7 +421,7 @@ ENDIF(NOT SUBVERSION_RALIB)
 
 IF (NOT APR_LIBRARY)
   MESSAGE(STATUS "No apr lib found, subversion support will be disabled")
-  SET(SUBVERSION_FOUND false)
+  SET(SubversionLibrary_FOUND false)
 ELSE (NOT APR_LIBRARY)
   IF(NOT Subversion_FIND_QUIETLY)
     MESSAGE(STATUS "Found apr lib: ${APR_LIBRARY}")
@@ -431,7 +431,7 @@ ENDIF(NOT APR_LIBRARY)
 
 IF (NOT APU_LIBRARY)
   MESSAGE(STATUS "No apu lib found, subversion support will be disabled")
-  SET(SUBVERSION_FOUND false)
+  SET(SubversionLibrary_FOUND false)
 ELSE (NOT APU_LIBRARY)
   IF(NOT Subversion_FIND_QUIETLY)
     MESSAGE(STATUS "Found apu lib: ${APU_LIBRARY}")
@@ -458,6 +458,5 @@ MARK_AS_ADVANCED(
   APU_INCLUDE_DIR
   APU_LIBRARY
 )
-
 
 #kate: space-indent on; indent-width 2; tab-width: 2; replace-tabs on; auto-insert-doxygen on
