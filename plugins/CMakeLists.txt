@@ -49,7 +49,7 @@ set_package_properties(Subversion PROPERTIES
     URL "http://subversion.tigris.org"
     TYPE OPTIONAL)
 
-if(SUBVERSION_FOUND)
+if(SubversionLibrary_FOUND)
     ecm_optional_add_subdirectory(subversion)
 endif()
 
