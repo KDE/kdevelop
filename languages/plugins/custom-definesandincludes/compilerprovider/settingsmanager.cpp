@@ -338,3 +338,8 @@ QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
     }
     return compilers;
 }
+
+ConfigEntry::ConfigEntry(const QString& path)
+    : path(path)
+    , compiler(SettingsManager::globalInstance()->provider()->checkCompilerExists({}))
+{}

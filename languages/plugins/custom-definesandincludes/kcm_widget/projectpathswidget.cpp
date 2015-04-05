@@ -128,12 +128,9 @@ void ProjectPathsWidget::projectPathSelected( int index )
     ui->includesWidget->setIncludes( pathsModel->data( midx, ProjectPathsModel::IncludesDataRole ).toStringList() );
     ui->definesWidget->setDefines( pathsModel->data( midx, ProjectPathsModel::DefinesDataRole ).value<Defines>() );
 
-    if (pathsModel->data(midx, ProjectPathsModel::CompilerDataRole).value<CompilerPointer>()) {
-        Q_ASSERT(!ui->compiler->currentText().isEmpty());
-        ui->compiler->setCurrentText(pathsModel->data(midx, ProjectPathsModel::CompilerDataRole).value<CompilerPointer>()->name());
-    } else {
-        //otherwise the path's been just added, so no compiler set.
-    }
+    Q_ASSERT(pathsModel->data(midx, ProjectPathsModel::CompilerDataRole).value<CompilerPointer>());
+
+    ui->compiler->setCurrentText(pathsModel->data(midx, ProjectPathsModel::CompilerDataRole).value<CompilerPointer>()->name());
 
     updateEnablements();
 }
