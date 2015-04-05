@@ -42,6 +42,46 @@
 
 using namespace KDevelop;
 
+namespace
+{
+void testCompilerEntry(SettingsManager& settings, KConfig* config){
+    auto entries = settings.readPaths(config);
+    auto entry = entries.first();
+    auto compilers = settings.provider()->compilers();
+    Q_ASSERT(!compilers.isEmpty());
+    bool gccCompilerInstalled = std::any_of(compilers.begin(), compilers.end(), [](const CompilerPointer& compiler){return compiler->name().contains("gcc", Qt::CaseInsensitive);});
+    if (gccCompilerInstalled) {
+        QCOMPARE(entry.compiler->languageStandard(), QStringLiteral("c99"));
+        QCOMPARE(entry.compiler->name(), QStringLiteral("GCC c99"));
+    }
+}
+
+void testAddingEntry(SettingsManager& settings, KConfig* config){
+    auto entries = settings.readPaths(config);
+    auto entry = entries.first();
+    auto compilers = settings.provider()->compilers();
+    ConfigEntry otherEntry;
+    otherEntry.defines["TEST"] = "lalal";
+    otherEntry.includes = QStringList() << "/foo";
+    otherEntry.path = "test";
+    otherEntry.compiler = compilers.first();
+    entries << otherEntry;
+    settings.writePaths(config, entries);
+
+    auto readWriteEntries = settings.readPaths(config);
+    QCOMPARE(readWriteEntries.size(), 2);
+    QCOMPARE(readWriteEntries.at(0).path, entry.path);
+    QCOMPARE(readWriteEntries.at(0).defines, entry.defines);
+    QCOMPARE(readWriteEntries.at(0).includes, entry.includes);
+    QCOMPARE(readWriteEntries.at(0).compiler->name(), entry.compiler->name());
+
+    QCOMPARE(readWriteEntries.at(1).path, otherEntry.path);
+    QCOMPARE(readWriteEntries.at(1).defines, otherEntry.defines);
+    QCOMPARE(readWriteEntries.at(1).includes, otherEntry.includes);
+    QCOMPARE(readWriteEntries.at(1).compiler->name(), otherEntry.compiler->name());
+}
+}
+
 void TestCompilerProvider::initTestCase()
 {
     AutoTestShell::init();
@@ -119,33 +159,49 @@ void TestCompilerProvider::testStorageBackwardsCompatible()
     QCOMPARE(entry.path, QString("/"));
     QVERIFY(entry.compiler);
 
-    auto compilers = settings.provider()->compilers();
-    Q_ASSERT(!compilers.isEmpty());
-    bool gccCompilerInstalled = std::any_of(compilers.begin(), compilers.end(), [](const CompilerPointer& compiler){return compiler->name().contains("gcc", Qt::CaseInsensitive);});
-    if (gccCompilerInstalled) {
-        QCOMPARE(entry.compiler->languageStandard(), QStringLiteral("c99"));
-        QCOMPARE(entry.compiler->name(), QStringLiteral("GCC c99"));
+    testCompilerEntry(settings, &config);
+    testAddingEntry(settings, &config);
+}
+
+void TestCompilerProvider::testStorageNewSystem()
+{
+    SettingsManager settings;
+    QTemporaryFile file;
+    QVERIFY(file.open());
+    QTextStream stream(&file);
+    stream << "[Buildset]\n" <<
+      "BuildItems=@Variant(\\x00\\x00\\x00\\t\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x0b\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x1a\\x00S\\x00i\\x00m\\x00p\\x00l\\x00e\\x00P\\x00r\\x00o\\x00j\\x00e\\x00c\\x00t)\n\n" <<
+      "[CustomBuildSystem]\n" << "CurrentConfiguration=BuildConfig0\n\n" <<
+      "[CustomDefinesAndIncludes][ProjectPath0]\n" << "Path=/\n\n" <<
+      "[CustomDefinesAndIncludes][ProjectPath0][Defines]\n" <<
+      "_DEBUG=\n" <<
+      "VARIABLE=VALUE\n" <<
+      "[CustomDefinesAndIncludes][ProjectPath0][Includes]\n" <<
+      "1=/usr/include/mydir\n" <<
+      "2=/usr/local/include/mydir\n" <<
+      "[CustomDefinesAndIncludes][ProjectPath0][Compiler]\nName=GCC c99\nPath=gcc\nStandard=c99\nType=GCC\n";
+    file.close();
+    KConfig config(file.fileName());
+    auto entries = settings.readPaths(&config);
+    QCOMPARE(entries.size(), 1);
+    auto entry = entries.first();
+    QCOMPARE(entry.path, QString("/"));
+    Defines defines;
+    defines["VARIABLE"] = "VALUE";
+    defines["_DEBUG"] = QString();
+    QCOMPARE(entry.defines, defines);
+    QMap<QString, QString> includeMap;
+    includeMap["1"] = "/usr/include/mydir";
+    includeMap["2"] = "/usr/local/include/mydir";
+
+    int i = 0;
+    for(auto it = includeMap.begin(); it != includeMap.end(); it++)
+    {
+        QCOMPARE(entry.includes.at(i++), it.value());
     }
 
-    ConfigEntry otherEntry;
-    otherEntry.defines["TEST"] = "lalal";
-    otherEntry.includes = QStringList() << "/foo";
-    otherEntry.path = "test";
-    otherEntry.compiler = compilers.first();
-    entries << otherEntry;
-    settings.writePaths(&config, entries);
-
-    auto readWriteEntries = settings.readPaths(&config);
-    QCOMPARE(readWriteEntries.size(), 2);
-    QCOMPARE(readWriteEntries.at(0).path, entry.path);
-    QCOMPARE(readWriteEntries.at(0).defines, entry.defines);
-    QCOMPARE(readWriteEntries.at(0).includes, entry.includes);
-    QCOMPARE(readWriteEntries.at(0).compiler->name(), entry.compiler->name());
-
-    QCOMPARE(readWriteEntries.at(1).path, otherEntry.path);
-    QCOMPARE(readWriteEntries.at(1).defines, otherEntry.defines);
-    QCOMPARE(readWriteEntries.at(1).includes, otherEntry.includes);
-    QCOMPARE(readWriteEntries.at(1).compiler->name(), otherEntry.compiler->name());
+    testCompilerEntry(settings, &config);
+    testAddingEntry(settings, &config);
 }
 
 void TestCompilerProvider::testCompilerIncludesAndDefinesForProject()

@@ -101,26 +101,19 @@ void doWriteSettings( KConfigGroup grp, const QList<ConfigEntry>& paths )
         KConfigGroup pathgrp = grp.group( ConfigConstants::projectPathPrefix + QString::number( pathIndex++ ) );
         pathgrp.writeEntry( ConfigConstants::projectPathKey, path.path );
         {
-            QByteArray tmp;
-            QDataStream s( &tmp, QIODevice::WriteOnly );
-            s.setVersion( QDataStream::Qt_4_5 );
-            s << path.includes;
-            pathgrp.writeEntry( ConfigConstants::includesKey, tmp );
+            int index = 0;
+            KConfigGroup includes(pathgrp.group(ConfigConstants::includesKey));
+            for( auto it = path.includes.begin() ; it != path.includes.end(); ++it){
+                includes.writeEntry(QString::number(++index), *it);
+            }
+
         }
         {
-            QByteArray tmp;
-            QDataStream s( &tmp, QIODevice::WriteOnly );
-            s.setVersion( QDataStream::Qt_4_5 );
-            // backwards compatible writing
-            QHash<QString, QVariant> defines;
-            defines.reserve(path.defines.size());
+            KConfigGroup defines(pathgrp.group(ConfigConstants::definesKey));
             for (auto it = path.defines.begin(); it != path.defines.end(); ++it) {
-                defines[it.key()] = it.value();
+                defines.writeEntry(it.key(), it.value());
             }
-            s << defines;
-            pathgrp.writeEntry( ConfigConstants::definesKey, tmp );
         }
-
         writeCompilerToConfig(pathgrp, path.compiler);
     }
 }
@@ -137,20 +130,50 @@ QList<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
             path.path = pathgrp.readEntry( ConfigConstants::projectPathKey, "" );
 
             {
-                QByteArray tmp = pathgrp.readEntry( ConfigConstants::definesKey, QByteArray() );
-                QDataStream s( tmp );
-                s.setVersion( QDataStream::Qt_4_5 );
-                // backwards compatible reading
-                QHash<QString, QVariant> defines;
-                s >> defines;
-                path.setDefines(defines);
+                // Backwards compatibility with old config style
+                if(pathgrp.hasKey(ConfigConstants::definesKey)) {
+                    QByteArray tmp = pathgrp.readEntry( ConfigConstants::definesKey, QByteArray() );
+                    QDataStream s( tmp );
+                    s.setVersion( QDataStream::Qt_4_5 );
+                    // backwards compatible reading
+                    QHash<QString, QVariant> defines;
+                    s >> defines;
+                    path.setDefines(defines);
+                } else {
+                    KConfigGroup defines(pathgrp.group(ConfigConstants::definesKey));
+                    QMap<QString, QString> defMap = defines.entryMap();
+                    path.defines.reserve(defMap.size());
+                    for(auto it = defMap.constBegin(); it != defMap.constEnd(); ++it) {
+                        QString key = it.key();
+                        if(key.isEmpty()) {
+                            // Toss out the invalid key and value since a valid
+                            // value needs a valid key
+                            continue;
+                        } else {
+                             path.defines.insert(key, it.value());
+                        }
+                    }
+                }
             }
 
             {
-                QByteArray tmp = pathgrp.readEntry( ConfigConstants::includesKey, QByteArray() );
-                QDataStream s( tmp );
-                s.setVersion( QDataStream::Qt_4_5 );
-                s >> path.includes;
+                // Backwards compatibility with old config style
+                if(pathgrp.hasKey(ConfigConstants::includesKey)){
+                    QByteArray tmp = pathgrp.readEntry( ConfigConstants::includesKey, QByteArray() );
+                    QDataStream s( tmp );
+                    s.setVersion( QDataStream::Qt_4_5 );
+                    s >> path.includes;
+                } else {
+                    KConfigGroup includes(pathgrp.group(ConfigConstants::includesKey));
+                    QMap<QString, QString> incMap = includes.entryMap();
+                    for(auto it = incMap.begin(); it != incMap.end(); ++it){
+                        QString value = it.value();
+                        if(value.isEmpty()){
+                            continue;
+                        }
+                        path.includes += value;
+                    }
+                }
             }
 
             path.compiler = createCompilerFromConfig(pathgrp);
