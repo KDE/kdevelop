@@ -4,12 +4,9 @@ project(KDevSubversionPlugin)
 add_subdirectory(tests)
 add_subdirectory(icons)
 
-include_directories( ${KDevSubversionPlugin_SOURCE_DIR}
-                     ${KDevPlatform_SOURCE_DIR}/interfaces
-                     ${SUBVERSION_INCLUDE_DIRS}
-                     ${KDevSubversionPlugin_BINARY_DIR}
+include_directories(
+    ${SUBVERSION_INCLUDE_DIRS}
 )
-
 
 kde_enable_exceptions()
 
