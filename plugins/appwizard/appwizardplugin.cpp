@@ -438,11 +438,13 @@ bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QStri
                 QString line = input.readLine();
                 output << KMacroExpander::expandMacros(line, m_variables) << "\n";
             }
+#ifndef Q_OS_WIN
             // Preserve file mode...
             QT_STATBUF statBuf;
             QT_FSTAT(inputFile.handle(), &statBuf);
             // Unix only, won't work in Windows, maybe KIO::chmod could be used
             ::fchmod(outputFile.handle(), statBuf.st_mode);
+#endif
             return true;
         }
         else
