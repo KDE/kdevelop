@@ -44,7 +44,7 @@ if(Boost_FOUND)
 endif()
 
 find_package(SubversionLibrary)
-set_package_properties(Subversion PROPERTIES
+set_package_properties(SubversionLibrary PROPERTIES
     PURPOSE "Support for Subversion integration"
     URL "http://subversion.tigris.org"
     TYPE OPTIONAL)
