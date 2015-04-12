@@ -58,6 +58,7 @@ struct CMakeProjectData
     CMakeProperties properties;
     CacheValues cache;
     CMakeJsonData jsonData;
+    QHash<KDevelop::Path, QStringList> targets;
     QSharedPointer<QFileSystemWatcher> watcher;
 };
 

@@ -31,6 +31,7 @@
 #include "cmakecodecompletionmodel.h"
 #include "cmakenavigationwidget.h"
 #include "icmakedocumentation.h"
+#include "cmakemodelitems.h"
 
 #include <QDir>
 #include <QThread>
@@ -95,6 +96,7 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     new CodeCompletion(this, new CMakeCodeCompletionModel(this), name());
 
     connect(ICore::self()->projectController(), &IProjectController::projectClosing, this, &CMakeManager::projectClosing);
+    connect(this, &KDevelop::AbstractFileManagerPlugin::folderAdded, this, &CMakeManager::folderAdded);
 
 //     m_fileSystemChangeTimer = new QTimer(this);
 //     m_fileSystemChangeTimer->setSingleShot(true);
@@ -218,6 +220,27 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
     return true;
 }
 
+static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Path, QStringList>& targets)
+{
+    QStringList dirTargets = targets[folder->path()];
+
+    foreach (ProjectTargetItem* item, folder->targetList()) {
+        if(!dirTargets.contains(item->text())) {
+            delete item;
+        } else {
+            dirTargets.removeAll(item->text());
+        }
+    }
+
+    foreach (const QString& name, dirTargets) {
+        new CMakeTargetItem(folder, name);
+    }
+
+    foreach (ProjectFolderItem* children, folder->folderList()) {
+        populateTargets(children, targets);
+    }
+}
+
 void CMakeManager::importFinished(KJob* j)
 {
     CMakeImportJob* job = qobject_cast<CMakeImportJob*>(j);
@@ -234,9 +257,12 @@ void CMakeManager::importFinished(KJob* j)
     CMakeProjectData data;
     data.watcher->addPath(CMake::currentBuildDir(project).toLocalFile());
     data.jsonData = job->jsonData();
+    data.targets = job->targets();
     connect(data.watcher.data(), &QFileSystemWatcher::fileChanged, this, &CMakeManager::dirtyFile);
     connect(data.watcher.data(), &QFileSystemWatcher::directoryChanged, this, &CMakeManager::dirtyFile);
     m_projects[job->project()] = data;
+
+    populateTargets(job->project()->projectItem(), job->targets());
 }
 
 // void CMakeManager::deletedWatchedDirectory(IProject* p, const QUrl &dir)
@@ -776,6 +802,11 @@ void CMakeManager::dirtyFile(const QString& path)
             break;
         }
     }
+}
+
+void CMakeManager::folderAdded(KDevelop::ProjectFolderItem* folder)
+{
+    populateTargets(folder, m_projects[folder->project()].targets);
 }
 
 ProjectFolderItem* CMakeManager::createFolderItem(IProject* project, const Path& path, ProjectBaseItem* parent)

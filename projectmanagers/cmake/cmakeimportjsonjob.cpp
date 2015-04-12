@@ -35,6 +35,7 @@
 #include <QJsonArray>
 #include <QtConcurrentRun>
 #include <QFutureWatcher>
+#include <QRegularExpression>
 
 using namespace KDevelop;
 
@@ -132,8 +133,30 @@ void CMakeImportJob::importFinished()
     }
 
     m_data = data;
-
     qCDebug(CMAKE) << "Done importing, found" << m_data.files.count() << "entries for" << project()->path();
+
+    //TODO: move into thread as well?
+    m_targets.clear();
+    const Path currentBuildDir = CMake::currentBuildDir(m_project);
+    if (!currentBuildDir.isEmpty()) {
+        const QString buildPath = currentBuildDir.toLocalFile();
+        const Path targetsFilePath = KDevelop::Path(currentBuildDir, QStringLiteral("CMakeFiles/TargetDirectories.txt"));
+        QFile targetsFile(targetsFilePath.toLocalFile());
+        if (!targetsFile.open(QIODevice::ReadOnly)) {
+            qCDebug(CMAKE) << "Couldn't find the Targets file in" << targetsFile.fileName();
+        }
+        const QRegularExpression rx(QStringLiteral("^(.*)/CMakeFiles/(.*).dir$"));
+        const QString sourceDir = m_project->path().toLocalFile();
+        for(; !targetsFile.atEnd(); ) {
+            const QByteArray line = targetsFile.readLine();
+            auto match = rx.match(QString::fromUtf8(line));
+            if (!match.isValid())
+                qCDebug(CMAKE) << "invalid match for" << line;
+            const QString sourcePath = match.captured(1).replace(buildPath, sourceDir);
+            m_targets[KDevelop::Path(sourcePath)].append(match.captured(2));
+        }
+    }
+
     emitResult();
 }
 

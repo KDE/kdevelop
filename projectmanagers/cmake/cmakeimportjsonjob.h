@@ -22,6 +22,7 @@
 #define CMAKEIMPORTJSONJOB_H
 
 #include "cmakeprojectdata.h"
+#include <util/path.h>
 
 #include <KJob>
 
@@ -56,6 +57,7 @@ public:
      * @note Only call after the job has finished!
      */
     CMakeJsonData jsonData() const;
+    QHash<KDevelop::Path, QStringList> targets() const { return m_targets; }
 
 private Q_SLOTS:
     void importFinished();
@@ -65,6 +67,7 @@ private:
     QFutureWatcher<CMakeJsonData>* m_futureWatcher;
 
     CMakeJsonData m_data;
+    QHash<KDevelop::Path, QStringList> m_targets;
 };
 
 #endif // CMAKEIMPORTJSONJOB_H

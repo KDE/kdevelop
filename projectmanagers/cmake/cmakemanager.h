@@ -156,6 +156,8 @@ private slots:
     void importFinished(KJob* job);
 
 private:
+    void folderAdded(KDevelop::ProjectFolderItem* folder);
+
     QHash<KDevelop::IProject*, CMakeProjectData> m_projects;
     KDevelop::ProjectFilterManager* m_filter;
     KDevelop::ICodeHighlighting* m_highlight;

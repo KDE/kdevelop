@@ -28,7 +28,6 @@ set( cmakecommon_SRCS
 #   parser/generationexpressionsolver.cpp
   cmakeutils.cpp
   cmakebuilddirchooser.cpp
-#   cmakemodelitems.cpp
   debug.cpp
 
  )
@@ -46,6 +45,7 @@ set( cmakemanager_SRCS
   cmakeimportjsonjob.cpp
   cmakenavigationwidget.cpp
   cmakemanager.cpp
+  cmakemodelitems.cpp
   duchain/cmakeparsejob.cpp
   duchain/usebuilder.cpp
   duchain/declarationbuilder.cpp
