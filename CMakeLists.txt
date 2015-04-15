@@ -66,7 +66,7 @@ set(kdevcppcheck_PART_UI
 
 ki18n_wrap_ui(kdevcppcheck_PART_SRCS  ${kdevcppcheck_PART_UI})
 
-add_library(kdevcppcheck MODULE ${kdevcppcheck_PART_SRCS} ${kdevcppcheck_CONFIG_SRCS})
+kdevplatform_add_plugin(kdevcppcheck JSON kdevcppcheck.json SOURCES ${kdevcppcheck_PART_SRCS} ${kdevcppcheck_CONFIG_SRCS})
 
 target_link_libraries(kdevcppcheck
     KDev::Interfaces
@@ -84,8 +84,6 @@ target_link_libraries(kdevcppcheck
 install(TARGETS kdevcppcheck DESTINATION ${PLUGIN_INSTALL_DIR} )
 ########### install files ###############
 
-configure_file(kdevcppcheck.desktop.cmake ${CMAKE_CURRENT_BINARY_DIR}/kdevcppcheck.desktop)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kdevcppcheck.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES kdevcppcheck.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcppcheck)
 
 #preferences-plugin
@@ -95,7 +93,7 @@ set(cppcheckpreferences_PART_SRCS
 )
 ki18n_wrap_ui(cppcheckpreferences_PART_SRCS config/ui/genericconfig.ui)
 
-add_library(kcm_kdev_cppcheck MODULE ${cppcheckpreferences_PART_SRCS})
+kdevplatform_add_plugin(kcm_kdev_cppcheck JSON kcm_kdev_cppcheck.json SOURCES ${cppcheckpreferences_PART_SRCS} )
 
 target_link_libraries(kcm_kdev_cppcheck
     KDev::Interfaces
@@ -103,5 +101,4 @@ target_link_libraries(kcm_kdev_cppcheck
 )
 
 install(TARGETS kcm_kdev_cppcheck  DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES  kcm_kdev_cppcheck.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

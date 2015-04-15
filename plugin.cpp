@@ -58,7 +58,7 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(CppcheckFactory, registerPlugin<cppcheck::Plugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(CppcheckFactory, "kdevcppcheck.json", registerPlugin<cppcheck::Plugin>();)
 
 namespace cppcheck
 {

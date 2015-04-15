@@ -20,7 +20,6 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
-#include <util/path.h>
 
 #include <QDir>
 
@@ -29,6 +28,8 @@
 
 #include "debug.h"
 #include "cppcheckparser.h"
+
+#include <util/path.h>
 
 namespace cppcheck {
 
@@ -100,7 +101,7 @@ bool CppcheckParser::startElement()
         if (attributes().hasAttribute("severity"))
             Severity = attributes().value("severity").toString();
 
-
+        
         if (dynamic_cast<cppcheck::CppcheckModel *>(m_model))
             emit newElement(cppcheck::CppcheckModel::startError);
 //         if (dynamic_cast<cppcheck::CppcheckFileModel *>(m_model))

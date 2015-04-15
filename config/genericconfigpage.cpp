@@ -29,7 +29,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 
-K_PLUGIN_FACTORY(CppcheckPreferencesFactory, registerPlugin<cppcheck::GenericConfigPage>();)
+K_PLUGIN_FACTORY_WITH_JSON(CppcheckPreferencesFactory, "kcm_kdev_cppcheck.json", registerPlugin<cppcheck::GenericConfigPage>();)
 
 namespace cppcheck
 {
