@@ -1,8 +1,30 @@
 {
     "KPlugin": {
         "Description": "Configure Cppcheck", 
+        "Description[nl]": "Cppcheck instellen", 
+        "Description[pt_BR]": "Configurar o Cppcheck", 
+        "Description[sv]": "Anpassa Cppcheck", 
+        "Description[uk]": "Налаштовування Cppcheck", 
+        "Description[x-test]": "xxConfigure Cppcheckxx", 
         "Icon": "go-up", 
         "Name": "Cppcheck", 
+        "Name[ast]": "Cppcheck", 
+        "Name[bs]": "Cppcheck", 
+        "Name[ca@valencia]": "Cppcheck", 
+        "Name[ca]": "Cppcheck", 
+        "Name[cs]": "Cppcheck", 
+        "Name[de]": "Cppcheck", 
+        "Name[es]": "Cppcheck", 
+        "Name[fr]": "Cppcheck", 
+        "Name[hu]": "Cppcheck", 
+        "Name[nl]": "Cppcheck", 
+        "Name[pl]": "Cppcheck", 
+        "Name[pt]": "Cppcheck", 
+        "Name[pt_BR]": "Cppcheck", 
+        "Name[sk]": "Cppcheck", 
+        "Name[sv]": "Cppcheck", 
+        "Name[uk]": "Cppcheck", 
+        "Name[x-test]": "xxCppcheckxx", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
