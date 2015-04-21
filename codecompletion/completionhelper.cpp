@@ -170,6 +170,14 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
     CXCursorKind kind = clang_getCursorKind(cursor);
     struct ImplementsInfo* data = static_cast<struct ImplementsInfo*>(d);
 
+    auto location = clang_getCursorLocation(cursor);
+    if (clang_Location_isInSystemHeader(location)) {
+        // never offer implementation items for system headers
+        // TODO: also filter out non-system files unrelated to the current file
+        //       e.g. based on the path or similar
+        return CXChildVisit_Continue;
+    }
+
     //Recurse into cursors which could contain a function declaration
     if (canContainFunctionDecls(kind)) {
 
