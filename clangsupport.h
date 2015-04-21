@@ -44,34 +44,31 @@ public:
     virtual ~ClangSupport();
 
     /** Name Of the Language */
-    virtual QString name() const;
+    QString name() const override;
 
     /** Parsejob used by background parser to parse given url */
-    virtual KDevelop::ParseJob *createParseJob(const KDevelop::IndexedString &url);
+    KDevelop::ParseJob *createParseJob(const KDevelop::IndexedString &url) override;
 
     /** the code highlighter */
-    virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
-    virtual KDevelop::BasicRefactoring* refactoring() const override;
+    KDevelop::ICodeHighlighting* codeHighlighting() const override;
+    KDevelop::BasicRefactoring* refactoring() const override;
 
-    virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions);
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+    void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
 
-    virtual KTextEditor::Range specialLanguageObjectRange(const QUrl &url,
-                                                             const KTextEditor::Cursor& position) override;
-    virtual QPair<QUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const QUrl &url,
-                                                                                const KTextEditor::Cursor& position) override;
-    virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl &url,
-                                                           const KTextEditor::Cursor& position) override;
+    KTextEditor::Range specialLanguageObjectRange(const QUrl &url, const KTextEditor::Cursor& position) override;
+    QPair<QUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const QUrl &url, const KTextEditor::Cursor& position) override;
+    QWidget* specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position) override;
 
     ClangIndex* index();
 
-    virtual KDevelop::TopDUContext* standardContext(const QUrl &url, bool proxyContext = false) override;
+    KDevelop::TopDUContext* standardContext(const QUrl &url, bool proxyContext = false) override;
 
     //BEGIN IBuddyDocumentFinder
 
-    virtual bool areBuddies(const QUrl &url1, const QUrl& url2) override;
-    virtual bool buddyOrder(const QUrl &url1, const QUrl& url2) override;
-    virtual QVector< QUrl > getPotentialBuddies(const QUrl &url) const override;
+    bool areBuddies(const QUrl &url1, const QUrl& url2) override;
+    bool buddyOrder(const QUrl &url1, const QUrl& url2) override;
+    QVector< QUrl > getPotentialBuddies(const QUrl &url) const override;
 
     //END IBuddyDocumentFinder
 
