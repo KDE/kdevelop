@@ -111,6 +111,16 @@ struct CodeCompletionItemTester
 
     return items[itemNumber]->data(fakeModel().index(0, column), role, 0);
   }
+
+  Item findItem(const QString& itemName) const
+  {
+    const auto idx = names.indexOf(itemName);
+    if (idx < 0) {
+      return {};
+    }
+    return items[idx];
+  }
+
   private:
     void init()
     {
