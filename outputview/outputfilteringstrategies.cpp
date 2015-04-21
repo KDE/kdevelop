@@ -164,7 +164,7 @@ QVector<QString> CompilerFilterStrategy::getCurrentDirs()
 FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 {
     // A list of filters for possible compiler, linker, and make actions
-    static const QVector<ActionFormat> ACTION_FILTERS {
+    static const ActionFormat ACTION_FILTERS[] = {
         ActionFormat( ki18nc("compiling a file: %1 file %2 compiler", "compiling %1 (%2)"), 1, 2,
                       QStringLiteral("(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+|clang(?:\\+\\+)|mpicc|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|java|hpf|f|F|f90|F90|f95|F95))")),
         //moc and uic
@@ -214,7 +214,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
     };
 
     FilteredItem item(line);
-    foreach( const ActionFormat& curActFilter, ACTION_FILTERS ) {
+    for (const auto& curActFilter : ACTION_FILTERS) {
         const auto match = curActFilter.expression.match(line);
         if( match.hasMatch() ) {
             item.type = FilteredItem::ActionItem;
@@ -256,7 +256,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
     // TODO: This seems clumsy -- and requires another scan of the line.
     // Merge this information into ErrorFormat? --Kevin
     using Indicator = QPair<QString, FilteredItem::FilteredOutputItemType>;
-    static const QVector<Indicator> INDICATORS {
+    static const Indicator INDICATORS[] = {
         // ld
         Indicator(QStringLiteral("undefined reference"), FilteredItem::ErrorItem),
         Indicator(QStringLiteral("undefined symbol"), FilteredItem::ErrorItem),
@@ -271,7 +271,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
     };
 
     // A list of filters for possible compiler, linker, and make errors
-    static const QVector<ErrorFormat> ERROR_FILTERS {
+    static const ErrorFormat ERROR_FILTERS[] = {
         // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
         ErrorFormat( QStringLiteral("^([^:\t]+):([0-9]+):([0-9]+):([^0-9]+)"), 1, 2, 4, 3 ),
         // GCC
@@ -313,7 +313,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
     };
 
     FilteredItem item(line);
-    foreach( const ErrorFormat& curErrFilter, ERROR_FILTERS ) {
+    for (const auto& curErrFilter : ERROR_FILTERS) {
         const auto match = curErrFilter.expression.match(line);
         if( match.hasMatch() && !( line.contains( QLatin1String("Each undeclared identifier is reported only once") )
                                || line.contains( QLatin1String("for each function it appears in.") ) ) )
@@ -337,7 +337,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 
             // Find the indicator which happens most early.
             int earliestIndicatorIdx = txt.length();
-            foreach( const Indicator& curIndicator, INDICATORS ) {
+            for (const auto& curIndicator : INDICATORS) {
                 int curIndicatorIdx = txt.indexOf(curIndicator.first, 0, Qt::CaseInsensitive);
                 if((curIndicatorIdx >= 0) && (earliestIndicatorIdx > curIndicatorIdx)) {
                     earliestIndicatorIdx = curIndicatorIdx;
