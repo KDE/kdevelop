@@ -36,46 +36,44 @@ using namespace KTextEditor;
 
 using namespace KDevelop;
 
-
-QStandardItemModel& fakeModel() {
-  static QStandardItemModel model;
-  model.setColumnCount(10);
-  model.setRowCount(10);
-  return model;
-}
-
 /**
   * Helper-class for testing completion-items
   * Just initialize it with the context and the text, and then use the members, for simple cases only "names"
   * the template parameter is your language specific CodeCompletionContext
   */
 template <class T>
-struct CodeCompletionItemTester {
-
-  typedef QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > Element;
-
-  //Creates a CodeCompletionItemTester for the parent context
-  CodeCompletionItemTester parent() {
-    QExplicitlySharedDataPointer<T> parent = QExplicitlySharedDataPointer<T>(dynamic_cast<T*>(completionContext->parentContext()));
-    Q_ASSERT(parent);
-    return CodeCompletionItemTester(parent);
-  }
+struct CodeCompletionItemTester
+{
+  using Element = QExplicitlySharedDataPointer<KDevelop::CompletionTreeElement>;
+  using Item = QExplicitlySharedDataPointer<KDevelop::CompletionTreeItem>;
+  using Context = QExplicitlySharedDataPointer<T>;
 
   //Standard constructor
-  CodeCompletionItemTester(DUContext* context, QString text = "; ", QString followingText = "", CursorInRevision position = CursorInRevision::invalid()) {
-    completionContext = new  T(DUContextPointer(context), text, followingText, position.isValid() ? position : context->range().end);
-
+  CodeCompletionItemTester(DUContext* context, const QString& text = "; ", const QString& followingText = QString(),
+                           const CursorInRevision& position = CursorInRevision::invalid())
+    : completionContext(new T(DUContextPointer(context), text, followingText,
+                              position.isValid() ? position : context->range().end))
+  {
     init();
   }
 
   //Can be used if you already have the completion context
-  CodeCompletionItemTester(QExplicitlySharedDataPointer<T> context) {
-    completionContext = context;
-
+  CodeCompletionItemTester(const Context& context)
+    : completionContext(context)
+  {
     init();
   }
 
-  void addElements(QList<Element> elements) {
+  //Creates a CodeCompletionItemTester for the parent context
+  CodeCompletionItemTester parent() const
+  {
+    Context parent = Context(dynamic_cast<T*>(completionContext->parentContext()));
+    Q_ASSERT(parent);
+    return CodeCompletionItemTester(parent);
+  }
+
+  void addElements(const QList<Element>& elements)
+  {
     foreach(Element element, elements) {
       Item item(dynamic_cast<CompletionTreeItem*>(element.data()));
       if(item)
@@ -86,7 +84,8 @@ struct CodeCompletionItemTester {
     }
   }
 
-  bool containsDeclaration(Declaration* dec) const {
+  bool containsDeclaration(Declaration* dec) const
+  {
     foreach(Item item, items) {
         if (item->declaration().data() == dec) {
             return true;
@@ -95,25 +94,26 @@ struct CodeCompletionItemTester {
     return false;
   }
 
-  QStringList names; //Names of all completion-items, not sorted
-  typedef QExplicitlySharedDataPointer <KDevelop::CompletionTreeItem > Item;
-  QList <Item > items; //All items retrieved, sorted by name
-
-  QExplicitlySharedDataPointer <T> completionContext;
+  QList<Item> items; // All items retrieved
+  QStringList names; // Names of all completion-items
+  Context completionContext;
 
   //Convenience-function to retrieve data from completion-items by name
-  QVariant itemData(QString itemName, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) {
+  QVariant itemData(QString itemName, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) const
+  {
     return itemData(names.indexOf(itemName), column, role);
   }
 
-  QVariant itemData(int itemNumber, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) {
+  QVariant itemData(int itemNumber, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) const
+  {
     if(itemNumber < 0 || itemNumber >= items.size())
       return QVariant();
 
     return items[itemNumber]->data(fakeModel().index(0, column), role, 0);
   }
   private:
-    void init() {
+    void init()
+    {
       if ( !completionContext->isValid() ) {
         qDebug() << "invalid completion context";
         return;
@@ -122,11 +122,19 @@ struct CodeCompletionItemTester {
       bool abort = false;
       items = completionContext->completionItems(abort);
 
-
       addElements(completionContext->ungroupedElements());
 
-      foreach(Item i, items)
+      foreach(Item i, items) {
         names << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+      }
+    }
+
+    static QStandardItemModel& fakeModel()
+    {
+      static QStandardItemModel model;
+      model.setColumnCount(10);
+      model.setRowCount(10);
+      return model;
     }
 };
 
