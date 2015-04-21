@@ -277,6 +277,7 @@ PluginController::PluginController(Core *core)
             if (foundPlugins.contains(info.pluginName())) {
                 qWarning() << "Plugin" << info.pluginName() << "has already been found using the new plugin search method."
                     "The .desktop file" << info.entryPath() << "should no longer be installed.";
+                continue;
             }
             qWarning() << "Plugin" << info.pluginName() << "still uses the old .desktop file based metadata."
                 " It must be ported to JSON metadata or it will no longer work with future kdevplatform versions.";
