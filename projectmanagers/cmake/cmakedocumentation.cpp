@@ -47,6 +47,7 @@ KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider
 CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin( "kdevcmakedocumentation", parent )
     , mCMakeCmd(QStandardPaths::findExecutable("cmake"))
+    , m_index(nullptr)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
     KDEV_USE_EXTENSION_INTERFACE( ICMakeDocumentation )
