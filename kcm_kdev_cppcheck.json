@@ -1,7 +1,9 @@
 {
     "KPlugin": {
         "Description": "Configure Cppcheck", 
+        "Description[ca]": "Configura Cppcheck", 
         "Description[nl]": "Cppcheck instellen", 
+        "Description[pt]": "Configurar o CppCheck", 
         "Description[pt_BR]": "Configurar o Cppcheck", 
         "Description[sv]": "Anpassa Cppcheck", 
         "Description[uk]": "Налаштовування Cppcheck", 
