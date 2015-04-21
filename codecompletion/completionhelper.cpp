@@ -284,12 +284,12 @@ void CompletionHelper::computeCompletions(const ParseSession& session, CXFile fi
 
     //TODO This finds functions which aren't yet in scope in the current file
     if (clang_getCursorKind(currentCursor) == CXCursor_Namespace ||
-       clang_equalCursors(topCursor,currentCursor)) {
+       clang_equalCursors(topCursor, currentCursor)) {
 
         QVector<CXCursor> scopes;
-        if (!clang_equalCursors(topCursor,currentCursor)) {
+        if (!clang_equalCursors(topCursor, currentCursor)) {
             CXCursor search = currentCursor;
-            while (!clang_equalCursors(search,topCursor)) {
+            while (!clang_equalCursors(search, topCursor)) {
                 scopes.append(clang_getCanonicalCursor(search));
                 search = clang_getCursorSemanticParent(search);
             }
