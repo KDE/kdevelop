@@ -65,7 +65,6 @@ add_subdirectory(tests)
 set(kdevclangsupport_SRCS
     clangparsejob.cpp
     clangsupport.cpp
-    documentfinderhelpers.cpp
 )
 
 kdevplatform_add_plugin(kdevclangsupport JSON kdevclangsupport.json SOURCES ${kdevclangsupport_SRCS})

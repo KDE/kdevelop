@@ -18,6 +18,7 @@ add_library(kdevclangduchain STATIC
     navigationwidget.cpp
     todoextractor.cpp
     unsavedfile.cpp
+    documentfinderhelpers.cpp
 )
 
 include_directories(

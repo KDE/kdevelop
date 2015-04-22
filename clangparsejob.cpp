@@ -66,6 +66,10 @@ using namespace KDevelop;
 
 namespace {
 
+enum CustomFeatures {
+    Rescheduled = (KDevelop::TopDUContext::LastFeature << 1)
+};
+
 QString findConfigFile(const QString& forFile, const QString& configFileName)
 {
     QDir dir = QFileInfo(forFile).dir();
@@ -328,7 +332,10 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread 
         // Ideally we'd reset m_environment and session, but this is much simpler
         // and shouldn't be a common case
         clang()->index()->unpinTranslationUnitForUrl(document());
-        ICore::self()->languageController()->backgroundParser()->addDocument(document(), minimumFeatures(), priority());
+        if (!(minimumFeatures() & Rescheduled)) {
+            auto features = static_cast<TopDUContext::Features>(minimumFeatures() | Rescheduled);
+            ICore::self()->languageController()->backgroundParser()->addDocument(document(), features, priority());
+        }
         return;
     }
 

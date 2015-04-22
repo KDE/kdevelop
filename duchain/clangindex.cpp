@@ -23,6 +23,7 @@
 
 #include "clangpch.h"
 #include "clangparsingenvironment.h"
+#include "documentfinderhelpers.h"
 
 #include <util/path.h>
 #include <util/clangtypes.h>
@@ -76,15 +77,26 @@ ClangIndex::~ClangIndex()
 
 IndexedString ClangIndex::translationUnitForUrl(const IndexedString& url)
 {
-    QMutexLocker lock(&m_mappingMutex);
-    auto tu = m_tuForUrl.find(url);
-    if (tu != m_tuForUrl.end()) {
-        if (!QFile::exists(tu.value().str())) {
-            // TU doesn't exist, unpin
-            m_tuForUrl.erase(tu);
-            return url;
+    { // try explicit pin data first
+        QMutexLocker lock(&m_mappingMutex);
+        auto tu = m_tuForUrl.find(url);
+        if (tu != m_tuForUrl.end()) {
+            if (!QFile::exists(tu.value().str())) {
+                // TU doesn't exist, unpin
+                m_tuForUrl.erase(tu);
+                return url;
+            }
+            return tu.value();
         }
-        return tu.value();
+    }
+    // otherwise, fallback to a simple buddy search for headers
+    if (ClangHelpers::isHeader(url.str())) {
+        foreach(const QUrl& buddy, DocumentFinderHelpers::getPotentialBuddies(url.toUrl())) {
+            const QString buddyPath = buddy.toLocalFile();
+            if (QFile::exists(buddyPath)) {
+                return IndexedString(buddyPath);
+            }
+        }
     }
     return url;
 }

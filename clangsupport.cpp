@@ -31,7 +31,6 @@
 
 #include "codecompletion/model.h"
 
-#include "documentfinderhelpers.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -42,6 +41,7 @@
 
 #include "codegen/simplerefactoring.h"
 #include "codegen/adaptsignatureassistant.h"
+#include "duchain/documentfinderhelpers.h"
 #include "duchain/clangindex.h"
 #include "duchain/navigationwidget.h"
 #include "duchain/macrodefinition.h"
