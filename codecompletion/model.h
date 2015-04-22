@@ -44,6 +44,4 @@ protected:
                                    InvocationType invocationType, const QUrl &url) override;
 };
 
-Q_DECLARE_METATYPE(KTextEditor::Cursor)
-
 #endif // CLANGCODECOMPLETIONMODEL_H

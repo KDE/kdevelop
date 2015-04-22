@@ -34,8 +34,6 @@ using namespace KDevelop;
 
 QTEST_GUILESS_MAIN(TestDUChainUtils);
 
-Q_DECLARE_METATYPE(KTextEditor::Range);
-
 void TestDUChainUtils::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));

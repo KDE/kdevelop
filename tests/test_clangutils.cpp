@@ -106,8 +106,6 @@ void runVisitor(const QByteArray& code, CXCursorVisitor visitor, CXClientData da
 
 }
 
-Q_DECLARE_METATYPE(KTextEditor::Range);
-
 void TestClangUtils::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
