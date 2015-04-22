@@ -147,8 +147,6 @@ bool ApplyChangesWidget::applyAllChanges()
 
 }
 
-Q_DECLARE_METATYPE(KTextEditor::Range)
-
 namespace KDevelop
 {
 
