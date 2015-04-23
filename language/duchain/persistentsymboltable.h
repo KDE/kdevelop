@@ -28,12 +28,12 @@
 
 namespace KDevelop {
 
-  class Declaration;
-  class IndexedDeclaration;
-  class IndexedDUContext;
-  class DeclarationId;
-  class TopDUContext;
-  class IndexedQualifiedIdentifier;
+class Declaration;
+class IndexedDeclaration;
+class IndexedDUContext;
+class DeclarationId;
+class TopDUContext;
+class IndexedQualifiedIdentifier;
 
 ///@todo move into own header
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclarationHandler {
@@ -69,37 +69,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclarationHandler {
     }
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContextHandler {
-    public:
-    inline static int leftChild(const IndexedDUContext& m_data) {
-        return ((int)(m_data.dummyData().first))-1;
-    }
-    inline static void setLeftChild(IndexedDUContext& m_data, int child) {
-        m_data.setDummyData(qMakePair((uint)(child+1), m_data.dummyData().second));
-    }
-    inline static int rightChild(const IndexedDUContext& m_data) {
-        return ((int)m_data.dummyData().second)-1;
-    }
-    inline static void setRightChild(IndexedDUContext& m_data, int child) {
-        m_data.setDummyData(qMakePair(m_data.dummyData().first, (uint)(child+1)));
-    }
-    inline static void createFreeItem(IndexedDUContext& data) {
-        data = IndexedDUContext();
-        data.setIsDummy(true);
-        data.setDummyData(qMakePair(0u, 0u)); //Since we subtract 1, this equals children -1, -1
-    }
-    //Copies this item into the given one
-    inline static void copyTo(const IndexedDUContext& m_data, IndexedDUContext& data) {
-        data = m_data;
-    }
-    inline static bool isFree(const IndexedDUContext& m_data) {
-        return m_data.isDummy();
-    }
-
-    inline static bool equals(const IndexedDUContext& m_data, const IndexedDUContext& rhs) {
-      return m_data == rhs;
-    }
-};
 
 struct DeclarationTopContextExtractor {
   inline static IndexedTopDUContext extract(const IndexedDeclaration& decl) {
