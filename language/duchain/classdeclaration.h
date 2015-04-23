@@ -1,7 +1,7 @@
 /* This file is part of KDevelop
     Copyright 2008 David Nolden <david.nolden@kdevelop.org>
     Copyright 2009 Lior Mualem <lior.m.kde@gmail.com>
-    
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -51,28 +51,33 @@ public:
     Interface,
     Trait
   };
-  
+
   enum ClassModifier {
     Final,
     Abstract,
     None
   };
-  
-  ClassDeclarationData() : m_classType(Class), m_classModifier(None) {
+
+  ClassDeclarationData()
+    : m_classType(Class), m_classModifier(None)
+  {
     initializeAppendedLists();
   }
 
-  ~ClassDeclarationData() {
+  ~ClassDeclarationData()
+  {
     freeAppendedLists();
   }
 
-  ClassDeclarationData(const ClassDeclarationData& rhs) : KDevelop::ClassMemberDeclarationData(rhs) {
+  ClassDeclarationData(const ClassDeclarationData& rhs)
+    : KDevelop::ClassMemberDeclarationData(rhs)
+  {
     initializeAppendedLists();
     copyListsFrom(rhs);
     m_classType = rhs.m_classType;
     m_classModifier = rhs.m_classModifier;
   }
-  
+
   /// Type of the class (struct, class, etc.)
   ClassType m_classType;
   /// Modifier of the class (final, abstract, etc.)
@@ -89,7 +94,6 @@ public:
 class KDEVPLATFORMLANGUAGE_EXPORT ClassDeclaration : public KDevelop::ClassMemberDeclaration
 {
 public:
-  
   ClassDeclaration(const ClassDeclaration& rhs);
   ClassDeclaration(ClassDeclarationData& data);
   ClassDeclaration(const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
@@ -101,9 +105,9 @@ public:
   uint baseClassesSize() const;
   ///The types this class is based on
   const BaseClassInstance* baseClasses() const;
-  void addBaseClass(BaseClassInstance klass);
+  void addBaseClass(const BaseClassInstance& klass);
   //Replaces the n'th base-class with the given one. The replaced base-class must have existed.
-  void replaceBaseClass(uint n, BaseClassInstance klass);
+  void replaceBaseClass(uint n, const BaseClassInstance& klass);
 
   /**Returns whether base is a public base-class of this class
    * @param baseConversionLevels If nonzero, this will count the distance of the classes.
@@ -113,13 +117,13 @@ public:
   QString toString() const override;
 
   void setClassType(ClassDeclarationData::ClassType type);
-  
+
   ClassDeclarationData::ClassType classType() const;
-  
+
   void setClassModifier(ClassDeclarationData::ClassModifier modifier);
-  
+
   ClassDeclarationData::ClassModifier classModifier() const;
-  
+
   enum {
     Identity = 17
   };

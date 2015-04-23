@@ -55,20 +55,22 @@ void ClassDeclaration::clearBaseClasses()
   d_func_dynamic()->baseClassesList().clear();
 }
 
-uint ClassDeclaration::baseClassesSize() const {
+uint ClassDeclaration::baseClassesSize() const
+{
   return d_func()->baseClassesSize();
 }
 
-const BaseClassInstance* ClassDeclaration::baseClasses() const {
+const BaseClassInstance* ClassDeclaration::baseClasses() const
+{
   return d_func()->baseClasses();
 }
 
-void ClassDeclaration::addBaseClass(BaseClassInstance klass)
+void ClassDeclaration::addBaseClass(const BaseClassInstance& klass)
 {
   d_func_dynamic()->baseClassesList().append(klass);
 }
 
-void ClassDeclaration::replaceBaseClass(uint n, BaseClassInstance klass)
+void ClassDeclaration::replaceBaseClass(uint n, const BaseClassInstance& klass)
 {
   Q_ASSERT(n <= d_func()->baseClassesSize());
   d_func_dynamic()->baseClassesList()[n] = klass;
@@ -78,7 +80,9 @@ ClassDeclaration::~ClassDeclaration()
 {
 }
 
-ClassDeclaration::ClassDeclaration(const ClassDeclaration& rhs) : ClassMemberDeclaration(*new ClassDeclarationData(*rhs.d_func())) {
+ClassDeclaration::ClassDeclaration(const ClassDeclaration& rhs)
+  : ClassMemberDeclaration(*new ClassDeclarationData(*rhs.d_func()))
+{
   d_func_dynamic()->setClassId(this);
 }
 
@@ -86,7 +90,10 @@ Declaration* ClassDeclaration::clonePrivate() const {
   return new ClassDeclaration(*this);
 }
 
-bool isPublicBaseClassInternal( const ClassDeclaration* self, ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels, int depth, QSet<const ClassDeclaration*>* checked ) {
+namespace {
+bool isPublicBaseClassInternal( const ClassDeclaration* self, ClassDeclaration* base, const KDevelop::TopDUContext* topContext,
+                                int* baseConversionLevels, int depth, QSet<const ClassDeclaration*>* checked )
+{
 
   if(checked) {
     if(checked->contains(self))
@@ -127,12 +134,15 @@ bool isPublicBaseClassInternal( const ClassDeclaration* self, ClassDeclaration* 
   }
   return false;
 }
+}
 
-bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels ) const {
+bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels ) const
+{
   return isPublicBaseClassInternal( this, base, topContext, baseConversionLevels, 0, 0 );
 }
 
-QString ClassDeclaration::toString() const {
+QString ClassDeclaration::toString() const
+{
   QString ret;
   switch ( classModifier() ) {
     case ClassDeclarationData::None:
@@ -165,19 +175,23 @@ QString ClassDeclaration::toString() const {
   return ret + identifier().toString();
 }
 
-ClassDeclarationData::ClassType ClassDeclaration::classType() const {
+ClassDeclarationData::ClassType ClassDeclaration::classType() const
+{
   return d_func()->m_classType;
 }
 
-void ClassDeclaration::setClassType(ClassDeclarationData::ClassType type) {
+void ClassDeclaration::setClassType(ClassDeclarationData::ClassType type)
+{
   d_func_dynamic()->m_classType = type;
 }
 
-ClassDeclarationData::ClassModifier ClassDeclaration::classModifier() const {
+ClassDeclarationData::ClassModifier ClassDeclaration::classModifier() const
+{
   return d_func()->m_classModifier;
 }
 
-void ClassDeclaration::setClassModifier(ClassDeclarationData::ClassModifier modifier) {
+void ClassDeclaration::setClassModifier(ClassDeclarationData::ClassModifier modifier)
+{
   d_func_dynamic()->m_classModifier = modifier;
 }
 
