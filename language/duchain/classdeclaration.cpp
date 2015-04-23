@@ -51,6 +51,7 @@ ClassDeclaration::ClassDeclaration(ClassDeclarationData& data)
 REGISTER_DUCHAIN_ITEM(ClassDeclaration);
 
 void ClassDeclaration::clearBaseClasses() {
+  // FIXME: don't abuse setInSymbolTable in kdev-php, then remove this overhead from here
   bool wasInSymbolTable = inSymbolTable();
   setInSymbolTable(false);
   d_func_dynamic()->baseClassesList().clear();

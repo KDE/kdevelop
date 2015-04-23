@@ -305,13 +305,19 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 {
   Q_ASSERT(!context || context->topContext());
 
+  DUCHAIN_D_DYNAMIC(Declaration);
+
+  if (context == m_context && anonymous == d->m_anonymousInContext) {
+    // skip costly operations below when the same context is set
+    // this happens often when updating a TopDUContext from the cache
+    return;
+  }
+
   setInSymbolTable(false);
 
   //We don't need to clear, because it's not allowed to move from one top-context into another
 //   clearOwnIndex();
 
-
-  DUCHAIN_D_DYNAMIC(Declaration);
   if (m_context && context) {
     Q_ASSERT(m_context->topContext() == context->topContext());
   }
