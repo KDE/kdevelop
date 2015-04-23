@@ -109,7 +109,12 @@ struct CodeCompletionItemTester
     if(itemNumber < 0 || itemNumber >= items.size())
       return QVariant();
 
-    return items[itemNumber]->data(fakeModel().index(0, column), role, 0);
+    return itemData(items[itemNumber], column, role);
+  }
+
+  QVariant itemData(Item item, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) const
+  {
+    return item->data(fakeModel().index(0, column), role, 0);
   }
 
   Item findItem(const QString& itemName) const
