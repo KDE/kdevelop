@@ -36,7 +36,7 @@
 #include <KLocalizedString>
 
 QMakeJob::QMakeJob(QObject *parent)
-    : OutputJob(parent)
+    : OutputExecuteJob(parent)
     , m_killed(false)
 {
     setCapabilities(Killable);

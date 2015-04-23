@@ -22,7 +22,7 @@
 #ifndef QMAKEJOB_H
 #define QMAKEJOB_H
 
-#include <outputview/outputjob.h>
+#include <outputview/outputexecutejob.h>
 
 #include <QProcess>
 
@@ -36,7 +36,7 @@ namespace KDevelop{
 @author Andreas Pakulat
 @author Hamish Rodda (KJob porting)
 */
-class QMakeJob : public KDevelop::OutputJob
+class QMakeJob : public KDevelop::OutputExecuteJob
 {
     Q_OBJECT
 
