@@ -16,6 +16,7 @@
         "Description[es]": "Permite que KDevelop gestione proyectos basados en CMake", 
         "Description[fi]": "Sallii KDevelop-ohjelman hallinnoida CMake-perustaisia projekteja", 
         "Description[gl]": "Permítelle a KDevelop xestionar proxectos baseados en CMake.", 
+        "Description[it]": "Permette a KDevelop di gestire i progetti basati su CMake", 
         "Description[nl]": "Staat KDevelop toe om op CMake gebaseerde projecten te beheren", 
         "Description[pl]": "Pozwala KDevelop na zarządzanie projektami opartymi na CMake", 
         "Description[pt]": "Permite ao KDevelop gerir projectos baseados no CMake", 

@@ -10,6 +10,7 @@
         "Description[es]": "Compila proyectos de CMake", 
         "Description[fi]": "Kääntää CMake-projekteja", 
         "Description[gl]": "Constrúe proxectos CMake.", 
+        "Description[it]": "Compila i progetti CMake", 
         "Description[nl]": "Bouwt CMake-projecten", 
         "Description[pl]": "Buduje projekty za pomocą CMake", 
         "Description[pt]": "Construtor de Projectos CMake no KDevelop", 

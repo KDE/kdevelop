@@ -8,6 +8,7 @@
         "Description[es]": "Configurar las macros y los directorios/archivos a incluir que se añadirán al analizador sintáctico durante el análisis de los proyectos.", 
         "Description[fi]": "Määritä, mitkä makrot ja include-hakemistot/tiedostot lisätään jäsentimelle projektin jäsentämisen aikana.", 
         "Description[gl]": "Configure que macros e ficheiros ou cartafoles de inclusión se engaden ao analizador do proxecto.", 
+        "Description[it]": "Configura quali macro e cartelle/file di inclusione saranno aggiunti all'analizzatore durante l'analisi del progetto.", 
         "Description[nl]": "Stel in welke macro's en ingevoegde mappen/bestanden toegevoegd zullen worden aan de parser bij het ontleden van het project.", 
         "Description[pl]": "Ustawia jakie makra oraz katalogi/pliki dołączane zostaną dodane do programu przetwarzającego przy przetwarzaniu projektu.", 
         "Description[pt]": "Configura as macros e ficheiros/pastas de inclusão a adicionar ao processador, durante o processamento do projecto.", 
