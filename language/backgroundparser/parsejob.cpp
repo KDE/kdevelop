@@ -322,12 +322,6 @@ KDevelop::ProblemPointer ParseJob::readContents()
         file.close();
     }
 
-    // To make the parsing more robust, we add some zeroes to the end of the buffer.
-    d->contents.contents.push_back((char)0);
-    d->contents.contents.push_back((char)0);
-    d->contents.contents.push_back((char)0);
-    d->contents.contents.push_back((char)0);
-
     return KDevelop::ProblemPointer();
 }
 
