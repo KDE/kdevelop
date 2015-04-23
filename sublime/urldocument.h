@@ -30,7 +30,9 @@ namespace Sublime {
 /**
 @short Basic document that has an URL.
 */
-class KDEVPLATFORMSUBLIME_EXPORT UrlDocument: public Document {
+class KDEVPLATFORMSUBLIME_EXPORT UrlDocument: public Document
+{
+    Q_OBJECT
 public:
     UrlDocument(Controller *controller, const QUrl &url);
     ~UrlDocument();
