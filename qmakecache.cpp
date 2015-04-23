@@ -25,7 +25,7 @@
 #include "qmakemkspecs.h"
 
 QMakeCache::QMakeCache( const QString& cachefile )
-    : QMakeFile( cachefile ), m_mkspecs(0)
+    : QMakeFile( cachefile ), m_mkspecs(nullptr)
 {
 }
 

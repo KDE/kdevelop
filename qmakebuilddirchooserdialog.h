@@ -34,13 +34,13 @@ class QMakeBuildDirChooserDialog : public KDialog, public QMakeBuildDirChooser
     Q_OBJECT
     
 public:
-    explicit QMakeBuildDirChooserDialog(KDevelop::IProject* project, QWidget *parent = 0);
+    explicit QMakeBuildDirChooserDialog(KDevelop::IProject* project, QWidget *parent = nullptr);
     virtual ~QMakeBuildDirChooserDialog();
 
-    virtual void saveConfig();
+    virtual void saveConfig() override;
 
 protected slots:
-    virtual void slotButtonClicked(int button);
+    virtual void slotButtonClicked(int button) override;
     void validate();
 };
 

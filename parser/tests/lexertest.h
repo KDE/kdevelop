@@ -30,7 +30,7 @@ class LexerTest : public QObject
 {
         Q_OBJECT
     public:
-        LexerTest( QObject* parent = 0 );
+        LexerTest( QObject* parent = nullptr );
         ~LexerTest();
     private slots:
         void init();

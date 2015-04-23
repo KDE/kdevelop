@@ -46,7 +46,7 @@ const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
         << "INTERFACES" << "FORMS" ;
 
 QMakeProjectFile::QMakeProjectFile( const QString& projectfile )
-    : QMakeFile( projectfile ), m_mkspecs(0), m_cache(0)
+    : QMakeFile( projectfile ), m_mkspecs(nullptr), m_cache(nullptr)
 {
 }
 

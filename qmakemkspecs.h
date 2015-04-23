@@ -28,7 +28,7 @@
 class QMakeMkSpecs : public QMakeFile
 {
 public:
-    QMakeMkSpecs( const QString& basicmkspec, const QHash<QString, QString>& variables );
+    QMakeMkSpecs( const QString& basicmkspec, QHash<QString, QString>  variables );
 
     QString qmakeInternalVariable( const QString& ) const;
     bool isQMakeInternalVariable( const QString& ) const;

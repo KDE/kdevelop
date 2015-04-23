@@ -41,7 +41,7 @@ class QMakeBuilderPreferences : public KDevelop::ConfigPage
     Q_OBJECT
 
 public:
-    explicit QMakeBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = 0);
+    explicit QMakeBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = nullptr);
     ~QMakeBuilderPreferences();
 
 public slots:

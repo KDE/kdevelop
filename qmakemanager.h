@@ -35,7 +35,7 @@ class QMakeProjectManager : public KDevelop::AbstractFileManagerPlugin, public K
     Q_INTERFACES( KDevelop::IBuildSystemManager )
 
 public:
-    explicit QMakeProjectManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
+    explicit QMakeProjectManager( QObject* parent = nullptr, const QVariantList& args = QVariantList() );
 
     virtual ~QMakeProjectManager();
 
@@ -46,7 +46,7 @@ public:
     //BEGIN AbstractFileManager
     KDevelop::ProjectFolderItem* import( KDevelop::IProject* project ) override;
     KDevelop::ProjectFolderItem* createFolderItem( KDevelop::IProject* project, const KDevelop::Path& path,
-                                                   KDevelop::ProjectBaseItem* parent = 0 ) override;
+                                                   KDevelop::ProjectBaseItem* parent = nullptr ) override;
     Features features() const override;
     bool isValid( const KDevelop::Path& path, const bool isFolder, KDevelop::IProject* project ) const override;
     //END AbstractFileManager

@@ -44,8 +44,8 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(KDevelop::IPlugin* plugin,
     : KDevelop::ConfigPage(plugin, nullptr, parent)
     , m_project(options.project)
 {
-    QVBoxLayout* l = new QVBoxLayout( this );
-    QWidget* w = new QWidget;
+    auto  l = new QVBoxLayout( this );
+    auto  w = new QWidget;
 
     m_prefsUi = new Ui::QMakeConfig;
     m_prefsUi->setupUi( w );
@@ -126,7 +126,7 @@ void QMakeBuilderPreferences::apply()
     else
     {
         // invalid data: message box
-        KMessageBox::error(0, errormsg, "Data is invalid!");
+        KMessageBox::error(nullptr, errormsg, "Data is invalid!");
         //FIXME dialog behaves like if save really happend (dialog closes if user click ok) even if changed signal is emitted
     }
 }
@@ -169,7 +169,7 @@ void QMakeBuilderPreferences::addBuildConfig()
     }
     kDebug() << "Adding a new config.";
     // for more simpicity, just launch regular dialog
-    QMakeBuildDirChooserDialog *dlg = new QMakeBuildDirChooserDialog(m_project);
+    auto dlg = new QMakeBuildDirChooserDialog(m_project);
     if(dlg->exec() == QDialog::Accepted) {
         m_prefsUi->buildDirCombo->setCurrentItem(dlg->buildDir(), true);
         m_prefsUi->removeButton->setEnabled(m_prefsUi->buildDirCombo->count() > 1);

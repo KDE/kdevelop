@@ -84,8 +84,8 @@ QStringList resolveShellGlobbingInternal( const QString& pattern, const QString&
     return resolveShellGlobbingInternal(pattern.split(QLatin1Char('/'), QString::SkipEmptyParts), dir_);
 }
 
-QMakeFile::QMakeFile( const QString& file )
-    : m_ast(0), m_projectFile(file), m_project(0)
+QMakeFile::QMakeFile( QString  file )
+    : m_ast(nullptr), m_projectFile(std::move(file)), m_project(nullptr)
 {
     Q_ASSERT(!m_projectFile.isEmpty());
 }
@@ -118,7 +118,7 @@ bool QMakeFile::read()
     {
         kWarning( 9024 ) << "Couldn't parse project:" << m_projectFile;
         delete m_ast;
-        m_ast = 0;
+        m_ast = nullptr;
         m_projectFile = QString();
         return false;
     }else
@@ -136,7 +136,7 @@ bool QMakeFile::read()
 QMakeFile::~QMakeFile()
 {
     delete m_ast;
-    m_ast = 0;
+    m_ast = nullptr;
 }
 
 QString QMakeFile::absoluteDir() const

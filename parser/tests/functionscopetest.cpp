@@ -26,7 +26,7 @@
 QTEST_MAIN( FunctionScopeTest )
 
 FunctionScopeTest::FunctionScopeTest( QObject* parent )
-    : QObject( parent ), ast(0)
+    : QObject( parent ), ast(nullptr)
 {}
 
 FunctionScopeTest::~FunctionScopeTest()
@@ -35,20 +35,20 @@ FunctionScopeTest::~FunctionScopeTest()
 void FunctionScopeTest::init()
 {
     ast = new QMake::ProjectAST();
-    QVERIFY( ast != 0 );
+    QVERIFY( ast != nullptr );
 }
 
 void FunctionScopeTest::cleanup()
 {
     delete ast;
-    ast = 0;
-    QVERIFY( ast == 0 );
+    ast = nullptr;
+    QVERIFY( ast == nullptr );
 }
 
 BEGINTESTFUNCIMPL( FunctionScopeTest, execBasicFunc, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements.first() );
 TESTFUNCNAME( scope, "foobar" )
-    QVERIFY( scope->body == 0 );
+    QVERIFY( scope->body == nullptr );
 ENDTESTFUNCIMPL
 
 DATAFUNCIMPL( FunctionScopeTest, execBasicFunc, "foobar()\n")
@@ -57,7 +57,7 @@ DATAFUNCIMPL( FunctionScopeTest, execBasicFunc, "foobar()\n")
 BEGINTESTFUNCIMPL( FunctionScopeTest, execSimpleFunc, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements.first() );
     TESTFUNCNAME( scope, "foobar" )
-    QVERIFY( scope->body == 0 );
+    QVERIFY( scope->body == nullptr );
 
 ENDTESTFUNCIMPL
 
@@ -67,7 +67,7 @@ DATAFUNCIMPL( FunctionScopeTest, execSimpleFunc, "foobar( arg1, arg2 )\n")
 BEGINTESTFUNCIMPL( FunctionScopeTest, argWithEqual, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements.first() );
     TESTFUNCNAME( scope, "foobar" )
-    QVERIFY( scope->body == 0 );
+    QVERIFY( scope->body == nullptr );
 
 ENDTESTFUNCIMPL
 
@@ -77,7 +77,7 @@ DATAFUNCIMPL( FunctionScopeTest, argWithEqual, "foobar( arg1 = arg2 )\n")
 BEGINTESTFUNCIMPL( FunctionScopeTest, evalQMakeSyntax, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements.first() );
     TESTFUNCNAME( scope, "eval" )
-    QVERIFY( scope->body == 0 );
+    QVERIFY( scope->body == nullptr );
 
 ENDTESTFUNCIMPL
 
@@ -88,7 +88,7 @@ DATAFUNCIMPL( FunctionScopeTest, evalQMakeSyntax,
 BEGINTESTFUNCIMPL( FunctionScopeTest, simpleVarArg, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements.first() );
     TESTFUNCNAME( scope, "eval" )
-    QVERIFY( scope->body == 0 );
+    QVERIFY( scope->body == nullptr );
 
 ENDTESTFUNCIMPL
 
@@ -99,7 +99,7 @@ DATAFUNCIMPL( FunctionScopeTest, simpleVarArg,
 BEGINTESTFUNCIMPL( FunctionScopeTest, partlyQuotedArg, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements.first() );
     TESTFUNCNAME( scope, "eval" )
-    QVERIFY( scope->body == 0 );
+    QVERIFY( scope->body == nullptr );
 
 ENDTESTFUNCIMPL
 
@@ -110,7 +110,7 @@ DATAFUNCIMPL( FunctionScopeTest, partlyQuotedArg,
 BEGINTESTFUNCIMPL( FunctionScopeTest, slashArg, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements.first() );
     TESTFUNCNAME( scope, "eval" )
-    QVERIFY( scope->body == 0 );
+    QVERIFY( scope->body == nullptr );
 
 ENDTESTFUNCIMPL
 
@@ -120,7 +120,7 @@ DATAFUNCIMPL( FunctionScopeTest, slashArg,
 BEGINTESTFUNCIMPL( FunctionScopeTest, nestedFunccalls, 1 )
     QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>( ast->statements.first() );
     TESTFUNCNAME( scope, "eval" )
-    QVERIFY( scope->body == 0 );
+    QVERIFY( scope->body == nullptr );
 
 ENDTESTFUNCIMPL
 
@@ -133,8 +133,8 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, oneStatementScope, 1 )
     TESTFUNCNAME( scope, "contains" )
 
     QList<QMake::StatementAST*> teststmts;
-    QMake::AssignmentAST* tst = new QMake::AssignmentAST(scope->body);
-    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    auto  tst = new QMake::AssignmentAST(scope->body);
+    auto  val = new QMake::ValueAST(tst);
     val->value = "VARIABLE";
     tst->identifier = val;
     val = new QMake::ValueAST(tst);
@@ -159,15 +159,15 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, oneStatementSubScope, 1 )
     TESTFUNCNAME( scope, "contains" )
 
     QList<QMake::StatementAST*> teststmts;
-    QMake::FunctionCallAST* call = new QMake::FunctionCallAST(scope->body);
-    QMake::ValueAST* val = new QMake::ValueAST(call);
+    auto  call = new QMake::FunctionCallAST(scope->body);
+    auto  val = new QMake::ValueAST(call);
     val->value = "contains";
     call->identifier = val;
     val = new QMake::ValueAST(call);
     val->value = "foobar";
     call->args.insert( 0, val );
-    QMake::ScopeBodyAST* body = new QMake::ScopeBodyAST(call);
-    QMake::AssignmentAST* tst = new QMake::AssignmentAST(body);
+    auto  body = new QMake::ScopeBodyAST(call);
+    auto  tst = new QMake::AssignmentAST(body);
     val = new QMake::ValueAST(tst);
     val->value = "VARIABLE";
     tst->identifier =  val ;
@@ -195,8 +195,8 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, multiLineScope, 1 )
     TESTFUNCNAME( scope, "contains" )
 
     QList<QMake::StatementAST*> teststmts;
-    QMake::AssignmentAST* tst = new QMake::AssignmentAST(scope->body);
-    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    auto  tst = new QMake::AssignmentAST(scope->body);
+    auto  val = new QMake::ValueAST(tst);
     val->value = "VARIABLE";
     tst->identifier =  val ;
     val = new QMake::ValueAST(tst);
@@ -232,8 +232,8 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, multiLineScopeFuncCall, 1 )
     TESTFUNCNAME( scope, "contains" )
 
     QList<QMake::StatementAST*> teststmts;
-    QMake::AssignmentAST* tst = new QMake::AssignmentAST(scope->body);
-    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    auto  tst = new QMake::AssignmentAST(scope->body);
+    auto  val = new QMake::ValueAST(tst);
     val->value = "VARIABLE";
     tst->identifier =  val ;
     val = new QMake::ValueAST(tst);
@@ -277,8 +277,8 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, notFunc, 1 )
     TESTFUNCNAME( scope, "!contains" )
 
     QList<QMake::StatementAST*> teststmts;
-    QMake::AssignmentAST* tst = new QMake::AssignmentAST(scope->body);
-    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    auto  tst = new QMake::AssignmentAST(scope->body);
+    auto  val = new QMake::ValueAST(tst);
     val->value = "VARIABLE";
     tst->identifier =  val ;
     val = new QMake::ValueAST(tst);
@@ -304,8 +304,8 @@ BEGINTESTFUNCIMPL( FunctionScopeTest, orOperator, 1 )
     TESTOROP( orop, funcs )
 
     QList<QMake::StatementAST*> teststmts;
-    QMake::AssignmentAST* tst = new QMake::AssignmentAST(orop->body);
-    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    auto  tst = new QMake::AssignmentAST(orop->body);
+    auto  val = new QMake::ValueAST(tst);
     val->value = "VARIABLE";
     tst->identifier =  val ;
     val = new QMake::ValueAST(tst);

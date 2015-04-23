@@ -33,7 +33,7 @@ class ParseTest : public QObject
 {
         Q_OBJECT
     public:
-        ParseTest( QObject* parent = 0 );
+        ParseTest( QObject* parent = nullptr );
         ~ParseTest();
     private slots:
         void init();

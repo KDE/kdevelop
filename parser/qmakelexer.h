@@ -35,7 +35,7 @@ class Parser;
 
 class KDEVQMAKEPARSER_EXPORT Lexer {
 public:
-    Lexer(Parser* _parser, const QString& contents);
+    Lexer(Parser* _parser, QString  contents);
 
     int nextTokenKind();
     qint64 tokenBegin() const;

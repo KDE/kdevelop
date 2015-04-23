@@ -30,13 +30,13 @@ namespace QMake
     {
     public:
         virtual ~ASTDefaultVisitor();
-        virtual void visitProject( ProjectAST* node );
-        virtual void visitAssignment( AssignmentAST* node );
-        virtual void visitValue( ValueAST* node );
-        virtual void visitFunctionCall( FunctionCallAST* node );
-        virtual void visitScopeBody( ScopeBodyAST* node );
-        virtual void visitOr( OrAST* node );
-        virtual void visitSimpleScope( SimpleScopeAST* node );
+        virtual void visitProject( ProjectAST* node ) override;
+        virtual void visitAssignment( AssignmentAST* node ) override;
+        virtual void visitValue( ValueAST* node ) override;
+        virtual void visitFunctionCall( FunctionCallAST* node ) override;
+        virtual void visitScopeBody( ScopeBodyAST* node ) override;
+        virtual void visitOr( OrAST* node ) override;
+        virtual void visitSimpleScope( SimpleScopeAST* node ) override;
     };
 }
 

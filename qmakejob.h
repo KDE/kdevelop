@@ -36,8 +36,8 @@ class QMakeJob : public KDevelop::OutputJob
     Q_OBJECT
 
 public:
-    QMakeJob( const QString& srcDir, const QString &buildDir, QObject* parent = 0 );
-    virtual void start();
+    QMakeJob( QString  srcDir, QString buildDir, QObject* parent = nullptr );
+    virtual void start() override;
     virtual ~QMakeJob();
     void setQMakePath(const QString& path);
     void setInstallPrefix(const QString& prefix);
@@ -45,10 +45,10 @@ public:
     void setExtraArguments(const QString& args);
     
 
-    virtual QString errorString() const;
+    virtual QString errorString() const override;
 
 protected:
-    virtual bool doKill();
+    virtual bool doKill() override;
 
 private slots:
   void processError( QProcess::ProcessError error );

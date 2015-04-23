@@ -48,13 +48,13 @@ StatementAST::~StatementAST( )
 
 
 AssignmentAST::AssignmentAST( AST* parent )
-        : StatementAST( parent, AST::Assignment ), identifier(0)
+        : StatementAST( parent, AST::Assignment ), identifier(nullptr)
 {}
 
 AssignmentAST::~AssignmentAST()
 {
     delete identifier;
-    identifier = 0;
+    identifier = nullptr;
     qDeleteAll( values );
     values.clear();
     delete op;
@@ -72,14 +72,14 @@ ScopeBodyAST::~ScopeBodyAST()
 
 
 FunctionCallAST::FunctionCallAST( AST* parent )
-        : ScopeAST( parent, AST::FunctionCall ), identifier(0)
+        : ScopeAST( parent, AST::FunctionCall ), identifier(nullptr)
 {}
 
 
 FunctionCallAST::~FunctionCallAST()
 {
     delete identifier;
-    identifier = 0;
+    identifier = nullptr;
     qDeleteAll( args );
     args.clear();
 }
@@ -95,7 +95,7 @@ OrAST::~OrAST()
 }
 
 ProjectAST::ProjectAST()
-        : ScopeBodyAST( 0, AST::Project )
+        : ScopeBodyAST( nullptr, AST::Project )
 {}
 
 ProjectAST::~ProjectAST()
@@ -103,23 +103,23 @@ ProjectAST::~ProjectAST()
 }
 
 ScopeAST::ScopeAST( AST* parent, AST::Type type )
-        : StatementAST( parent, type ), body( 0 )
+        : StatementAST( parent, type ), body( nullptr )
 {}
 
 ScopeAST::~ScopeAST()
 {
     delete body;
-    body = 0;
+    body = nullptr;
 }
 
 SimpleScopeAST::SimpleScopeAST( AST* parent )
-        : ScopeAST( parent, AST::SimpleScope ), identifier(0)
+        : ScopeAST( parent, AST::SimpleScope ), identifier(nullptr)
 {}
 
 SimpleScopeAST::~SimpleScopeAST()
 {
     delete identifier;
-    identifier = 0;
+    identifier = nullptr;
 }
 
 }

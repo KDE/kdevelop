@@ -26,7 +26,7 @@
 QTEST_MAIN( ScopeTest )
 
 ScopeTest::ScopeTest( QObject* parent )
-    : QObject( parent ), ast(0)
+    : QObject( parent ), ast(nullptr)
 {}
 
 ScopeTest::~ScopeTest()
@@ -35,22 +35,22 @@ ScopeTest::~ScopeTest()
 void ScopeTest::init()
 {
     ast = new QMake::ProjectAST();
-    QVERIFY( ast != 0 );
+    QVERIFY( ast != nullptr );
 }
 
 void ScopeTest::cleanup()
 {
     delete ast;
-    ast = 0;
-    QVERIFY( ast == 0 );
+    ast = nullptr;
+    QVERIFY( ast == nullptr );
 }
 
 BEGINTESTFUNCIMPL( ScopeTest, basicScope, 1 )
     QMake::SimpleScopeAST* scope = dynamic_cast<QMake::SimpleScopeAST*>( ast->statements.first() );
 TESTSCOPENAME( scope, "foobar" )
     QList<QMake::StatementAST*> testlist;
-    QMake::AssignmentAST* tst = new QMake::AssignmentAST(scope->body);
-    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    auto  tst = new QMake::AssignmentAST(scope->body);
+    auto  val = new QMake::ValueAST(tst);
     val->value =  "VARIABLE" ;
     tst->identifier =  val ;
     val = new QMake::ValueAST(tst);
@@ -69,8 +69,8 @@ BEGINTESTFUNCIMPL( ScopeTest, basicScopeBrace, 1 )
     QMake::SimpleScopeAST* scope = dynamic_cast<QMake::SimpleScopeAST*>( ast->statements.first() );
 TESTSCOPENAME( scope, "foobar" )
     QList<QMake::StatementAST*> testlist;
-    QMake::AssignmentAST* tst = new QMake::AssignmentAST(scope->body);
-    QMake::ValueAST* val = new QMake::ValueAST(tst);
+    auto  tst = new QMake::AssignmentAST(scope->body);
+    auto  val = new QMake::ValueAST(tst);
     val->value =  "VARIABLE" ;
     tst->identifier =  val ;
     val = new QMake::ValueAST(tst);
@@ -89,13 +89,13 @@ BEGINTESTFUNCIMPL( ScopeTest, nestedScope, 1 )
     QMake::SimpleScopeAST* scope = dynamic_cast<QMake::SimpleScopeAST*>( ast->statements.first() );
 TESTSCOPENAME( scope, "foobar" )
     QList<QMake::StatementAST*> testlist;
-    QMake::SimpleScopeAST* simple = new QMake::SimpleScopeAST(scope->body);
-    QMake::ValueAST* val = new QMake::ValueAST(simple);
+    auto  simple = new QMake::SimpleScopeAST(scope->body);
+    auto  val = new QMake::ValueAST(simple);
     val->value =  "barfoo" ;
     simple->identifier = val;
-    QMake::ScopeBodyAST* body = new QMake::ScopeBodyAST(simple);
+    auto  body = new QMake::ScopeBodyAST(simple);
     QList<QMake::StatementAST*> sublist;
-    QMake::AssignmentAST* tst = new QMake::AssignmentAST(body);
+    auto  tst = new QMake::AssignmentAST(body);
     val = new QMake::ValueAST(tst);
     val->value =  "VARIABLE" ;
     tst->identifier =  val ;

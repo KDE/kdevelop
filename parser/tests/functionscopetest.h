@@ -37,7 +37,7 @@ class FunctionScopeTest : public QObject
 {
         Q_OBJECT
     public:
-        FunctionScopeTest( QObject* parent = 0 );
+        FunctionScopeTest( QObject* parent = nullptr );
         ~FunctionScopeTest();
     private slots:
         void init();

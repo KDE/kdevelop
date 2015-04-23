@@ -49,7 +49,7 @@ TestQMakeProject::TestQMakeProject(QObject* parent): QObject(parent)
     QTest::kWaitForSignal(job, SIGNAL(result(KJob*)), 10000);
 
     AutoTestShell::init();
-    Core::initialize(0, Core::Default);
+    Core::initialize(nullptr, Core::Default);
     QTest::qWait(500); //wait for previously loaded projects
 }
 

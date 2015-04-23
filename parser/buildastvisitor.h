@@ -39,18 +39,18 @@ class BuildASTVisitor : public DefaultVisitor
 public:
     BuildASTVisitor(Parser* parser, ProjectAST* project);
     virtual ~BuildASTVisitor();
-    virtual void visitArgumentList( ArgumentListAst *node );
-    virtual void visitFunctionArguments( FunctionArgumentsAst *node );
-    virtual void visitOrOperator( OrOperatorAst *node );
-    virtual void visitItem( ItemAst *node );
-    virtual void visitScope( ScopeAst *node );
-    virtual void visitOp( OpAst *node );
-    virtual void visitProject( ProjectAst *node );
-    virtual void visitScopeBody( ScopeBodyAst *node );
-    virtual void visitStatement( StatementAst *node );
-    virtual void visitValue( ValueAst *node );
-    virtual void visitValueList( ValueListAst *node );
-    virtual void visitVariableAssignment( VariableAssignmentAst *node );
+    virtual void visitArgumentList( ArgumentListAst *node ) override;
+    virtual void visitFunctionArguments( FunctionArgumentsAst *node ) override;
+    virtual void visitOrOperator( OrOperatorAst *node ) override;
+    virtual void visitItem( ItemAst *node ) override;
+    virtual void visitScope( ScopeAst *node ) override;
+    virtual void visitOp( OpAst *node ) override;
+    virtual void visitProject( ProjectAst *node ) override;
+    virtual void visitScopeBody( ScopeBodyAst *node ) override;
+    virtual void visitStatement( StatementAst *node ) override;
+    virtual void visitValue( ValueAst *node ) override;
+    virtual void visitValueList( ValueListAst *node ) override;
+    virtual void visitVariableAssignment( VariableAssignmentAst *node ) override;
 
 private:
     QString getTokenString(qint64 idx);

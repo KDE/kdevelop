@@ -43,7 +43,7 @@ class QMakeMkSpecs;
 class QMakeFile : public QMakeVariableResolver
 {
 public:
-    QMakeFile( const QString& file );
+    QMakeFile( QString  file );
     virtual ~QMakeFile();
     virtual bool read();
     QString absoluteDir() const;
@@ -56,7 +56,7 @@ public:
 
     bool containsVariable( const QString& ) const;
 
-    virtual QStringList resolveVariable( const QString& variable, VariableInfo::VariableType type) const;
+    virtual QStringList resolveVariable( const QString& variable, VariableInfo::VariableType type) const override;
 
     /// required for proper build-dir resolution
     void setProject(KDevelop::IProject* project);

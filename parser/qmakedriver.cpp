@@ -75,7 +75,7 @@ bool Driver::parse( ProjectAST** qmast )
     qmakeparser.setDebug( m_debug );
 
     qmakeparser.tokenize(m_content);
-    ProjectAst* ast = 0;
+    ProjectAst* ast = nullptr;
     bool matched = qmakeparser.parseProject(&ast);
     if( matched )
     {
@@ -91,7 +91,7 @@ bool Driver::parse( ProjectAST** qmast )
         ifDebug(kDebug(9024) << "Found" << (*qmast)->statements.count() << "Statements";)
     }else
     {
-        ast = 0;
+        ast = nullptr;
         kDebug(9024) << "Couldn't parse content";
     }
     return matched;

@@ -85,7 +85,7 @@ KJob* QMakeBuilder::prune( KDevelop::IProject* project )
             return builder->executeMakeTarget(project->projectItem(), "distclean");
         }
     }
-    return 0;
+    return nullptr;
 }
 
 KJob* QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
@@ -100,12 +100,12 @@ KJob* QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             return builder->build(dom);
         }
     }
-    return 0;
+    return nullptr;
 }
 
 KJob* QMakeBuilder::configure( KDevelop::IProject* project )
 {
-    QMakeJob* job = new QMakeJob(this);
+    auto  job = new QMakeJob(this);
     job->setProject(project);
     return job;
 }
@@ -123,7 +123,7 @@ KJob* QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
             return builder->clean(dom);
         }
     }
-    return 0;
+    return nullptr;
 }
 
 KJob* QMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
@@ -138,7 +138,7 @@ KJob* QMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
             return builder->install(dom);
         }
     }
-    return 0;
+    return nullptr;
 }
 
 int QMakeBuilder::perProjectConfigPages() const

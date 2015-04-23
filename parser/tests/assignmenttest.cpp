@@ -28,7 +28,7 @@
 QTEST_MAIN( AssignmentTest )
 
 AssignmentTest::AssignmentTest( QObject* parent )
-    : QObject( parent ), ast(0)
+    : QObject( parent ), ast(nullptr)
 {}
 
 AssignmentTest::~AssignmentTest()
@@ -264,12 +264,12 @@ DATAFUNCIMPL( AssignmentTest, noDashEndVar, "VAR- += value\n" )
 void AssignmentTest::init()
 {
     ast = new QMake::ProjectAST();
-    QVERIFY( ast != 0 );
+    QVERIFY( ast != nullptr );
 }
 
 void AssignmentTest::cleanup()
 {
     delete ast;
-    ast = 0;
-    QVERIFY( ast == 0 );
+    ast = nullptr;
+    QVERIFY( ast == nullptr );
 }

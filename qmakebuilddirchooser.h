@@ -46,7 +46,7 @@ public:
      * If provided, message is filled with error message, if any.
      * Error message is displayed in dialog anyway.
      */
-    bool isValid(QString *message=0);
+    bool isValid(QString *message=nullptr);
 
     /**
      * Saves current data to this build dir's config group (not to current values).

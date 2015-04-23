@@ -41,7 +41,7 @@ class QMakeJob : public KDevelop::OutputJob
     Q_OBJECT
 
 public:
-    QMakeJob(QObject *parent = 0);
+    QMakeJob(QObject *parent = nullptr);
 
     enum ErrorTypes {
         NoProjectError = UserDefinedError,
@@ -50,10 +50,10 @@ public:
 
     void setProject(KDevelop::IProject* project);
     
-    virtual void start();
+    virtual void start() override;
 
 protected:
-    bool doKill();
+    bool doKill() override;
 
 private Q_SLOTS:
     void slotFailed(QProcess::ProcessError);

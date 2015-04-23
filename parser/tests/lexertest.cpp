@@ -45,7 +45,7 @@ void LexerTest::varAssignment()
     QFETCH( QList<QVariant>, expectedtokens );
     QFETCH( QList<QVariant>, expectedbegins );
     QFETCH( QList<QVariant>, expectedends );
-    QMake::Lexer l(0, project);
+    QMake::Lexer l(nullptr, project);
     QList<QVariant> tokens;
     QList<QVariant> begins;
     QList<QVariant> ends;
@@ -220,7 +220,7 @@ void LexerTest::functions()
     QFETCH( QList<QVariant>, expectedtokens );
     QFETCH( QList<QVariant>, expectedbegins );
     QFETCH( QList<QVariant>, expectedends );
-    QMake::Lexer l(0, project);
+    QMake::Lexer l(nullptr, project);
     QList<QVariant> tokens;
     QList<QVariant> begins;
     QList<QVariant> ends;
@@ -331,7 +331,7 @@ void LexerTest::operators()
     QFETCH( QList<QVariant>, expectedtokens );
     QFETCH( QList<QVariant>, expectedbegins );
     QFETCH( QList<QVariant>, expectedends );
-    QMake::Lexer l(0, project);
+    QMake::Lexer l(nullptr, project);
     QList<QVariant> tokens;
     QList<QVariant> begins;
     QList<QVariant> ends;
@@ -424,7 +424,7 @@ void LexerTest::scope()
     QFETCH( QList<QVariant>, expectedtokens );
     QFETCH( QList<QVariant>, expectedbegins );
     QFETCH( QList<QVariant>, expectedends );
-    QMake::Lexer l(0, project);
+    QMake::Lexer l(nullptr, project);
     QList<QVariant> tokens;
     QList<QVariant> begins;
     QList<QVariant> ends;

@@ -86,8 +86,8 @@ bool isCont( QChar* c )
 }
 
 
-Lexer::Lexer( Parser* _parser, const QString& content ):
-        m_content( content ), m_parser( _parser ),
+Lexer::Lexer( Parser* _parser, QString  content ):
+        m_content(std::move( content )), m_parser( _parser ),
         m_curpos( 0 ), m_contentSize( m_content.size() ),
         m_tokenBegin( 0 ), m_tokenEnd( 0 )
 {
@@ -291,7 +291,7 @@ int Lexer::nextTokenKind()
                 else
                 {
                     //Now the stuff that will generate a proper token
-                    QChar* c2 = m_curpos < m_contentSize ? it + 1 : 0 ;
+                    QChar* c2 = m_curpos < m_contentSize ? it + 1 : nullptr ;
                     switch ( it->unicode() )
                     {
                         case '|':

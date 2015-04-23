@@ -46,11 +46,11 @@ public:
 
 protected:
     QMakeEditorIntegrator* editor() const;
-    virtual void startVisiting( QMake::AST* node );
-    virtual void setContextOnNode( QMake::AST* node, KDevelop::DUContext* ctx );
-    virtual KDevelop::DUContext* contextFromNode( QMake::AST* node );
-    virtual KDevelop::RangeInRevision editorFindRange( QMake::AST* fromRange, QMake::AST* toRange );
-    virtual KDevelop::QualifiedIdentifier identifierForNode( QMake::AST* );
+    virtual void startVisiting( QMake::AST* node ) override;
+    virtual void setContextOnNode( QMake::AST* node, KDevelop::DUContext* ctx ) override;
+    virtual KDevelop::DUContext* contextFromNode( QMake::AST* node ) override;
+    virtual KDevelop::RangeInRevision editorFindRange( QMake::AST* fromRange, QMake::AST* toRange ) override;
+    virtual KDevelop::QualifiedIdentifier identifierForNode( QMake::AST* ) override;
 
 private:
     QMakeEditorIntegrator* m_editor;

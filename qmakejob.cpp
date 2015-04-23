@@ -33,14 +33,14 @@
 
 using namespace KDevelop;
 
-QMakeJob::QMakeJob( const QString& srcDir, const QString &buildDir, QObject* parent )
+QMakeJob::QMakeJob( QString  srcDir, QString buildDir, QObject* parent )
     : OutputJob( parent ),
-      m_srcDir(srcDir),
-      m_buildDir(buildDir),
+      m_srcDir(std::move(srcDir)),
+      m_buildDir(std::move(buildDir)),
       m_qmakePath("qmake"),
       m_buildType(0),
-      m_process(0),
-      m_model(0)
+      m_process(nullptr),
+      m_model(nullptr)
 
 {
   setCapabilities( Killable );
@@ -118,7 +118,7 @@ void QMakeJob::start()
     m_process->setWorkingDirectory(m_buildDir);
     m_process->setProgram(args);
     m_process->setOutputChannelMode( KProcess::MergedChannels );
-    ProcessLineMaker* lineMaker = new KDevelop::ProcessLineMaker( m_process, this );
+    auto  lineMaker = new KDevelop::ProcessLineMaker( m_process, this );
 
     connect( lineMaker, SIGNAL( receivedStdoutLines(QStringList) ),
             m_model, SLOT( appendLines(QStringList)) );

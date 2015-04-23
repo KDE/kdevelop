@@ -53,7 +53,7 @@ BuildASTVisitor::BuildASTVisitor(Parser* parser, ProjectAST* project)
 BuildASTVisitor::~BuildASTVisitor()
 {
     aststack.clear();
-    m_parser = 0;
+    m_parser = nullptr;
 }
 
 void BuildASTVisitor::visitArgumentList( ArgumentListAst *node )
@@ -228,9 +228,9 @@ template <typename T> T* BuildASTVisitor::createAst( AstNode* node, AST* parent 
 {
     if( !node )
     {
-        return 0;
+        return nullptr;
     }
-    T* ast = new T( parent );
+    auto  ast = new T( parent );
     setPositionForAst( node, ast );
     return ast;
 }

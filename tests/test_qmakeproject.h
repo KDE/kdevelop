@@ -31,7 +31,7 @@
 class TestQMakeProject : public QObject {
     Q_OBJECT
 public:
-    TestQMakeProject(QObject* parent = 0);
+    TestQMakeProject(QObject* parent = nullptr);
     virtual ~TestQMakeProject();
 private slots:
     void testBuildDirectory_data();

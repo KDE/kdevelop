@@ -65,7 +65,7 @@ using namespace KDevelop;
 //BEGIN Helpers
 
 QMakeFolderItem* findQMakeFolderParent(ProjectBaseItem* item) {
-    QMakeFolderItem* p = 0;
+    QMakeFolderItem* p = nullptr;
     while (!p && item) {
         p = dynamic_cast<QMakeFolderItem*>( item );
         item = item->parent();
@@ -77,7 +77,7 @@ QMakeFolderItem* findQMakeFolderParent(ProjectBaseItem* item) {
 
 K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
 
-QMakeProjectManager* QMakeProjectManager::m_self = 0;
+QMakeProjectManager* QMakeProjectManager::m_self = nullptr;
 
 QMakeProjectManager* QMakeProjectManager::self()
 {
@@ -87,8 +87,8 @@ QMakeProjectManager* QMakeProjectManager::self()
 QMakeProjectManager::QMakeProjectManager( QObject* parent, const QVariantList& )
         : AbstractFileManagerPlugin("kdevqmakemanager", parent),
           IBuildSystemManager(),
-          m_builder(0),
-          m_runQmake(0)
+          m_builder(nullptr),
+          m_runQmake(nullptr)
 {
     Q_ASSERT(!m_self);
     m_self = this;
@@ -109,7 +109,7 @@ QMakeProjectManager::QMakeProjectManager( QObject* parent, const QVariantList& )
 
 QMakeProjectManager::~QMakeProjectManager()
 {
-    m_self = 0;
+    m_self = nullptr;
 }
 
 IProjectFileManager::Features QMakeProjectManager::features() const
@@ -203,7 +203,7 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
     }
     scope->read();
     kDebug(9024) << "top-level scope with variables:" << scope->variables();
-    QMakeFolderItem* item = new QMakeFolderItem( project, path );
+    auto  item = new QMakeFolderItem( project, path );
     item->addProjectFile(scope);
     return item;
 }
@@ -215,23 +215,23 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, cons
     QDir dir(path.toLocalFile());
     QStringList projectFiles = dir.entryList(QStringList() << "*.pro" << "*.pri", QDir::Files);
     if ( projectFiles.isEmpty() ) {
-        return 0;
+        return nullptr;
     }
 
-    QMakeFolderItem* folderItem = new QMakeFolderItem(project, path, parent);
+    auto  folderItem = new QMakeFolderItem(project, path, parent);
 
     //TODO: included by not-parent file (in a nother file-tree-branch).
     QMakeFolderItem* qmakeParent = findQMakeFolderParent(parent);
     if (!qmakeParent) {
         // happens for bad qmake configurations
-        return 0;
+        return nullptr;
     }
 
     foreach( const QString& file, projectFiles ) {
         const QString absFile = dir.absoluteFilePath(file);
 
         //TODO: multiple includes by different .pro's
-        QMakeProjectFile* parentPro = 0;
+        QMakeProjectFile* parentPro = nullptr;
         foreach( QMakeProjectFile* p, qmakeParent->projectFiles() ) {
             if (p->hasSubProject(absFile)) {
                 parentPro = p;
@@ -248,7 +248,7 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, cons
             kDebug(9024) << "no parent, assume project root";
         }
 
-        QMakeProjectFile* qmscope = new QMakeProjectFile( absFile );
+        auto  qmscope = new QMakeProjectFile( absFile );
         qmscope->setProject( project );
 
         const QFileInfo info( absFile );
@@ -280,7 +280,7 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, cons
             folderItem->addProjectFile( qmscope );
         } else {
             delete qmscope;
-            return 0;
+            return nullptr;
         }
     }
 
@@ -302,7 +302,7 @@ void QMakeProjectManager::slotFolderAdded( ProjectFolderItem* folder )
             }
             kDebug(9024) << "adding target:" << s;
             Q_ASSERT(!s.isEmpty());
-            QMakeTargetItem* target = new QMakeTargetItem( pro, folder->project(), s, folder );
+            auto  target = new QMakeTargetItem( pro, folder->project(), s, folder );
             foreach( const QString& path, pro->filesForTarget(s) ) {
                 new ProjectFileItem( folder->project(), Path(path), target );
                 ///TODO: signal?
@@ -318,7 +318,7 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
     {
         //FIXME turn this into a real warning
         kWarning(9025) << "not a local file. QMake support doesn't handle remote projects";
-        return 0;
+        return nullptr;
     }
 
     while (projectNeedsConfiguration(project)) {
@@ -326,7 +326,7 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
         if(chooser.exec() == QDialog::Rejected) {
             qDebug() << "User stopped project import";
             //TODO: return 0 has no effect.
-            return 0;
+            return nullptr;
         }
     }
 
@@ -351,7 +351,7 @@ void QMakeProjectManager::slotDirty(const QString& path)
 
     ///FIXME: use Path
     const KUrl url(path);
-    if (!isValid(Path(url), false, 0)) {
+    if (!isValid(Path(url), false, nullptr)) {
         return;
     }
 
@@ -488,7 +488,7 @@ QMakeCache* QMakeProjectManager::findQMakeCache( IProject* project, const Path& 
         qDebug() << "Found QMake cache in " << curdir.absolutePath();
         return new QMakeCache( curdir.canonicalPath()+"/.qmake.cache" );
     }
-    return 0;
+    return nullptr;
 }
 
 ContextMenuExtension QMakeProjectManager::contextMenuExtension( Context* context )

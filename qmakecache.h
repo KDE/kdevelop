@@ -30,7 +30,7 @@ class QMakeCache : public QMakeFile
 public:
     QMakeCache( const QString& cachefile );
     void setMkSpecs( QMakeMkSpecs* specs );
-    bool read();
+    bool read() override;
 private:
     QMakeMkSpecs* m_mkspecs;
 };

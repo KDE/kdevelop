@@ -48,7 +48,7 @@ scopename:  (no statement, is accepted by qmake)
 QTEST_MAIN( ParseTest )
 
 ParseTest::ParseTest( QObject* parent )
-    : QObject( parent ), ast(0)
+    : QObject( parent ), ast(nullptr)
 {}
 
 ParseTest::~ParseTest()
@@ -101,12 +101,12 @@ DATAFUNCIMPL(ParseTest, failFullProject, "#Comment\n"
 void ParseTest::init()
 {
     ast = new QMake::ProjectAST();
-    QVERIFY( ast != 0 );
+    QVERIFY( ast != nullptr );
 }
 
 void ParseTest::cleanup()
 {
     delete ast;
-    ast = 0;
-    QVERIFY( ast == 0 );
+    ast = nullptr;
+    QVERIFY( ast == nullptr );
 }

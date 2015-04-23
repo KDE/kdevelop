@@ -28,7 +28,7 @@ class QMakeProjectFile;
 class QMakeFolderItem : public KDevelop::ProjectBuildFolderItem
 {
 public:
-    QMakeFolderItem( KDevelop::IProject*,const KDevelop::Path&, KDevelop::ProjectBaseItem* parent = 0 );
+    QMakeFolderItem( KDevelop::IProject*,const KDevelop::Path&, KDevelop::ProjectBaseItem* parent = nullptr );
     virtual ~QMakeFolderItem();
 
     void addProjectFile(QMakeProjectFile* file);
@@ -45,8 +45,8 @@ public:
                      const QString& s, KDevelop::ProjectBaseItem* parent );
     ~QMakeTargetItem();
 
-    virtual QUrl builtUrl() const;
-    virtual QUrl installedUrl() const;
+    virtual QUrl builtUrl() const override;
+    virtual QUrl installedUrl() const override;
 
 private:
     QMakeProjectFile *m_pro;
