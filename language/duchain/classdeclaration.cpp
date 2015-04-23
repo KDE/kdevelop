@@ -50,12 +50,9 @@ ClassDeclaration::ClassDeclaration(ClassDeclarationData& data)
 
 REGISTER_DUCHAIN_ITEM(ClassDeclaration);
 
-void ClassDeclaration::clearBaseClasses() {
-  // FIXME: don't abuse setInSymbolTable in kdev-php, then remove this overhead from here
-  bool wasInSymbolTable = inSymbolTable();
-  setInSymbolTable(false);
+void ClassDeclaration::clearBaseClasses()
+{
   d_func_dynamic()->baseClassesList().clear();
-  setInSymbolTable(wasInSymbolTable);
 }
 
 uint ClassDeclaration::baseClassesSize() const {
@@ -66,19 +63,15 @@ const BaseClassInstance* ClassDeclaration::baseClasses() const {
   return d_func()->baseClasses();
 }
 
-void ClassDeclaration::addBaseClass(BaseClassInstance klass) {
-  bool wasInSymbolTable = inSymbolTable();
-  setInSymbolTable(false);
+void ClassDeclaration::addBaseClass(BaseClassInstance klass)
+{
   d_func_dynamic()->baseClassesList().append(klass);
-  setInSymbolTable(wasInSymbolTable);
 }
 
-void ClassDeclaration::replaceBaseClass(uint n, BaseClassInstance klass) {
+void ClassDeclaration::replaceBaseClass(uint n, BaseClassInstance klass)
+{
   Q_ASSERT(n <= d_func()->baseClassesSize());
-  bool wasInSymbolTable = inSymbolTable();
-  setInSymbolTable(false);
   d_func_dynamic()->baseClassesList()[n] = klass;
-  setInSymbolTable(wasInSymbolTable);
 }
 
 ClassDeclaration::~ClassDeclaration()
