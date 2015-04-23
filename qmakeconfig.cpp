@@ -39,6 +39,19 @@ const char *QMakeConfig::EXTRA_ARGUMENTS = "Extra_Arguments";
 const char *QMakeConfig::BUILD_TYPE = "Build_Type";
 const char *QMakeConfig::ALL_BUILDS = "All_Builds";
 
+namespace {
+
+QChar pathListSeparator()
+{
+#ifdef Q_OS_WIN
+    return QLatin1Char(';');
+#else
+    return QLatin1Char(':');
+#endif
+}
+
+}
+
 using namespace KDevelop;
 
 ///NOTE: KConfig is not thread safe
@@ -120,11 +133,14 @@ QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeBinary)
 
 QString QMakeConfig::findBasicMkSpec( const QHash<QString,QString>& qmakeVars )
 {
-    QString path;
+    QStringList paths;
     if (qmakeVars.contains("QMAKE_MKSPECS")) {
         // qt4
-        path = qmakeVars["QMAKE_MKSPECS"] + "/default";
+        foreach (const QString& dir, qmakeVars["QMAKE_MKSPECS"].split(pathListSeparator())) {
+            paths << dir + "/default/qmake.conf";
+        }
     } else if (!qmakeVars.contains("QMAKE_MKSPECS") && qmakeVars.contains("QMAKE_SPEC")) {
+        QString path;
         // qt5 doesn't have the MKSPECS nor default anymore
         // let's try to look up the mkspec path ourselves,
         // see QMakeEvaluator::updateMkspecPaths() in QMake source code as reference
@@ -141,13 +157,15 @@ QString QMakeConfig::findBasicMkSpec( const QHash<QString,QString>& qmakeVars )
             Q_ASSERT(qmakeVars.contains("QT_INSTALL_PREFIX"));
             path = qmakeVars["QT_INSTALL_PREFIX"];
         }
-        path += "/mkspecs/" + qmakeVars["QMAKE_SPEC"];
+        path += "/mkspecs/" + qmakeVars["QMAKE_SPEC"] + "/qmake.conf";
+        paths << path;
     }
-    path += "/qmake.conf";
 
-    QFileInfo fi( path );
-    if( !fi.exists() )
-        return QString();
+    foreach (const QString& path, paths) {
+        QFileInfo fi(path);
+        if (fi.exists())
+            return fi.absoluteFilePath();
+    }
 
-    return fi.absoluteFilePath();
+    return QString();
 }
