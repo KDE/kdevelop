@@ -2025,7 +2025,6 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
       Cpp::NormalDeclarationCompletionItem* decItem  = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(i.data());
       QVERIFY(decItem);
       qDebug() << decItem->declaration()->toString();
-      qDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
     }
 
     //Have been filtered out, because only types are shown from the global scope
@@ -2041,7 +2040,6 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
       Cpp::NormalDeclarationCompletionItem* decItem  = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(i.data());
       QVERIFY(decItem);
       qDebug() << decItem->declaration()->toString();
-      qDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
     }
 
     QCOMPARE(items.count(), 3); //b, a, and test
