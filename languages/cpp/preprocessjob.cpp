@@ -658,6 +658,12 @@ bool PreprocessJob::readContents()
 
   m_contents = parentJob()->contents().contents;
 
+    // To make the parsing more robust, we add some zeroes to the end of the buffer.
+    m_contents.push_back((char)0);
+    m_contents.push_back((char)0);
+    m_contents.push_back((char)0);
+    m_contents.push_back((char)0);
+
     ifDebug( qCDebug(CPP) << "===-- PREPROCESSING --===> "
     << parentJob()->document().str()
     << endl; )
