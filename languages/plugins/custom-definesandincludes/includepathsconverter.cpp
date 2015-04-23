@@ -67,7 +67,7 @@ QString findProject(const QString& subdirectory)
 }
 
 IncludePathsConverter::IncludePathsConverter()
-: m_settings(new SettingsManager())
+: m_settings(new SettingsManager(true))
 {
 }
 
