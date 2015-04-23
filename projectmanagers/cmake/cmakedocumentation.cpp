@@ -116,7 +116,7 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
 KDevelop::IDocumentation::Ptr CMakeDocumentation::description(const QString& identifier, const QUrl &file) const
 {
     initializeModel(); //make it not queued
-    if (!QMimeDatabase().mimeTypeForUrl(file).inherits("text/x-cmake")) {
+    if (!file.isEmpty() && !QMimeDatabase().mimeTypeForUrl(file).inherits("text/x-cmake")) {
         return KDevelop::IDocumentation::Ptr();
     }
 
@@ -157,7 +157,7 @@ KDevelop::IDocumentation::Ptr CMakeDocumentation::documentationForDeclaration(KD
 
 KDevelop::IDocumentation::Ptr CMakeDocumentation::documentationForIndex(const QModelIndex& idx) const
 {
-    return description(idx.data().toString(), QUrl("CMakeLists.txt"));
+    return description(idx.data().toString(), QUrl());
 }
 
 QAbstractListModel* CMakeDocumentation::indexModel() const
