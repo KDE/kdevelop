@@ -45,7 +45,7 @@ public:
     static bool buddyOrder(const QUrl &url1, const QUrl& url2);
 
     /// @see KDevelop::IBuddyDocumentFinder
-    static QVector< QUrl > getPotentialBuddies(const QUrl &url);
+    static QVector< QUrl > getPotentialBuddies(const QUrl &url, bool checkDUChain = true);
 };
 
 #endif // DOCUMENTFINDERHELPERS_H

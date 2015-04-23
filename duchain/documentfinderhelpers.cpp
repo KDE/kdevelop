@@ -233,7 +233,7 @@ bool DocumentFinderHelpers::buddyOrder(const QUrl &url1, const QUrl& url2)
     return(type1.second == Header && type2.second == Source);
 }
 
-QVector< QUrl > DocumentFinderHelpers::getPotentialBuddies(const QUrl &url)
+QVector< QUrl > DocumentFinderHelpers::getPotentialBuddies(const QUrl &url, bool checkDUChain)
 {
     auto type = basePathAndTypeForUrl(url);
     // Don't do anything for types we don't know
@@ -253,10 +253,12 @@ QVector< QUrl > DocumentFinderHelpers::getPotentialBuddies(const QUrl &url)
         }
     }
 
-    // Also ask DUChain for a guess
-    QUrl bestBuddy = duchainBuddyFile(url, type.second);
-    if (!buddies.contains(bestBuddy)) {
-        buddies.append(bestBuddy);
+    if (checkDUChain) {
+        // Also ask DUChain for a guess
+        QUrl bestBuddy = duchainBuddyFile(url, type.second);
+        if (!buddies.contains(bestBuddy)) {
+            buddies.append(bestBuddy);
+        }
     }
 
     return buddies;

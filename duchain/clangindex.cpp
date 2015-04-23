@@ -91,7 +91,7 @@ IndexedString ClangIndex::translationUnitForUrl(const IndexedString& url)
     }
     // otherwise, fallback to a simple buddy search for headers
     if (ClangHelpers::isHeader(url.str())) {
-        foreach(const QUrl& buddy, DocumentFinderHelpers::getPotentialBuddies(url.toUrl())) {
+        foreach(const QUrl& buddy, DocumentFinderHelpers::getPotentialBuddies(url.toUrl(), false)) {
             const QString buddyPath = buddy.toLocalFile();
             if (QFile::exists(buddyPath)) {
                 return IndexedString(buddyPath);
