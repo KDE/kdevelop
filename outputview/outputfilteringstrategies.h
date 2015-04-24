@@ -46,7 +46,7 @@ namespace KDevelop
  * This filter strategy is for not applying any filtering at all. Implementation of the
  * interface methods are basically noops
  **/
-class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT NoFilterStrategy : public IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT NoFilterStrategy final : public IFilterStrategy
 {
 
 public:
@@ -62,7 +62,7 @@ public:
  * This filter stategy checks if a given line contains output
  * that is defined as an error (or an action) from a compiler.
  **/
-class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT CompilerFilterStrategy : public IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT CompilerFilterStrategy final : public IFilterStrategy
 {
 
 public:
@@ -89,7 +89,7 @@ private:
 /**
  * This filter stategy filters out errors (no actions) from Python and PHP scripts.
  **/
-class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT ScriptErrorFilterStrategy : public IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT ScriptErrorFilterStrategy final : public IFilterStrategy
 {
 
 public:
@@ -107,7 +107,7 @@ public:
  * This is especially useful for runtime output of Qt applications, for example lines such as:
  * "ASSERT: "errors().isEmpty()" in file /tmp/foo/bar.cpp", line 49"
  */
-class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT NativeAppErrorFilterStrategy : public IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT NativeAppErrorFilterStrategy final : public IFilterStrategy
 {
 public:
     NativeAppErrorFilterStrategy();
@@ -119,7 +119,7 @@ public:
 /**
  * This filter stategy filters out errors (no actions) from Static code analysis tools (Cppcheck,)
  **/
-class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT StaticAnalysisFilterStrategy : public IFilterStrategy
+class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT StaticAnalysisFilterStrategy final : public IFilterStrategy
 {
 
 public:
