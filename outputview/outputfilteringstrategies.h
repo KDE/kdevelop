@@ -52,9 +52,9 @@ class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT NoFilterStrategy : public IFilterStrate
 public:
     NoFilterStrategy();
 
-    virtual FilteredItem errorInLine(QString const& line) override;
+    virtual FilteredItem errorInLine(const QString& line) override;
 
-    virtual FilteredItem actionInLine(QString const& line) override;
+    virtual FilteredItem actionInLine(const QString& line) override;
 
 };
 
@@ -66,11 +66,11 @@ class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT CompilerFilterStrategy : public IFilter
 {
 
 public:
-    CompilerFilterStrategy(QUrl const& buildDir);
+    CompilerFilterStrategy(const QUrl& buildDir);
 
-    virtual FilteredItem errorInLine(QString const& line) override;
+    virtual FilteredItem errorInLine(const QString& line) override;
 
-    virtual FilteredItem actionInLine(QString const& line) override;
+    virtual FilteredItem actionInLine(const QString& line) override;
 
     QVector<QString> getCurrentDirs();
 
@@ -95,9 +95,9 @@ class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT ScriptErrorFilterStrategy : public IFil
 public:
     ScriptErrorFilterStrategy();
 
-    virtual FilteredItem errorInLine(QString const& line) override;
+    virtual FilteredItem errorInLine(const QString& line) override;
 
-    virtual FilteredItem actionInLine(QString const& line) override;
+    virtual FilteredItem actionInLine(const QString& line) override;
 
 };
 
@@ -125,9 +125,9 @@ class KDEVPLATFORMOUTPUTVIEW_TEST_EXPORT StaticAnalysisFilterStrategy : public I
 public:
     StaticAnalysisFilterStrategy();
 
-    virtual FilteredItem errorInLine(QString const& line) override;
+    virtual FilteredItem errorInLine(const QString& line) override;
 
-    virtual FilteredItem actionInLine(QString const& line) override;
+    virtual FilteredItem actionInLine(const QString& line) override;
 
 };
 
