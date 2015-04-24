@@ -30,10 +30,11 @@
 using namespace KDevelop;
 
 namespace {
-FilteredItem match(const QList<ErrorFormat>& errorFormats, const QString& line)
+template<typename ErrorFormats>
+FilteredItem match(const ErrorFormats& errorFormats, const QString& line)
 {
     FilteredItem item(line);
-    foreach( const ErrorFormat& curErrFilter, errorFormats ) {
+    for( const ErrorFormat& curErrFilter : errorFormats ) {
         const auto match = curErrFilter.expression.match(line);
         if( match.hasMatch() ) {
             item.url = QUrl::fromUserInput(match.captured( curErrFilter.fileGroup ));
@@ -356,7 +357,7 @@ FilteredItem ScriptErrorFilterStrategy::actionInLine(const QString& line)
 FilteredItem ScriptErrorFilterStrategy::errorInLine(const QString& line)
 {
     // A list of filters for possible Python and PHP errors
-    static const QList<ErrorFormat> SCRIPT_ERROR_FILTERS {
+    static const ErrorFormat SCRIPT_ERROR_FILTERS[] = {
         ErrorFormat( QStringLiteral("^  File \"(.*)\", line ([0-9]+)(.*$|, in(.*)$)"), 1, 2, -1 ),
         ErrorFormat( QStringLiteral("^.*(/.*):([0-9]+).*$"), 1, 2, -1 ),
         ErrorFormat( QStringLiteral("^.* in (/.*) on line ([0-9]+).*$"), 1, 2, -1 )
@@ -378,7 +379,7 @@ FilteredItem NativeAppErrorFilterStrategy::actionInLine(const QString& line)
 
 FilteredItem NativeAppErrorFilterStrategy::errorInLine(const QString& line)
 {
-    static const QList<ErrorFormat> QT_APPLICATION_ERROR_FILTERS {
+    static const ErrorFormat QT_APPLICATION_ERROR_FILTERS[] = {
         // QObject::connect related errors, also see err_method_notfound() in qobject.cpp
         // QObject::connect: No such slot Foo::bar() in /foo/bar.cpp:313
         ErrorFormat(QStringLiteral("^QObject::connect: (?:No such|Parentheses expected,) (?:slot|signal) [^ ]* in (.*):([0-9]+)$"), 1, 2, -1),
@@ -415,7 +416,7 @@ FilteredItem StaticAnalysisFilterStrategy::actionInLine(const QString& line)
 FilteredItem StaticAnalysisFilterStrategy::errorInLine(const QString& line)
 {
     // A list of filters for static analysis tools (krazy2, cppcheck)
-    static const QList<ErrorFormat> STATIC_ANALYSIS_FILTERS {
+    static const ErrorFormat STATIC_ANALYSIS_FILTERS[] = {
         // CppCheck
         ErrorFormat( QStringLiteral("^\\[(.*):([0-9]+)\\]:(.*)"), 1, 2, 3 ),
         // krazy2
