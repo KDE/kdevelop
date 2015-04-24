@@ -47,10 +47,12 @@ const QString KEY_SupportedMimeTypes = QStringLiteral("X-KDevelop-SupportedMimeT
 const QString KEY_ILanguageSupport = QStringLiteral("ILanguageSupport");
 }
 
+#if QT_VERSION < 0x050600
 inline uint qHash(const QMimeType& mime, uint seed = 0)
 {
     return qHash(mime.name(), seed);
 }
+#endif
 
 namespace KDevelop {
 
