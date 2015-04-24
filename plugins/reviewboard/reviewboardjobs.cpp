@@ -370,4 +370,3 @@ void UpdateRequest::done()
     emitResult();
 }
 
-#include "reviewboardjobs.moc"
