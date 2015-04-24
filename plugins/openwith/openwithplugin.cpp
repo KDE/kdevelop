@@ -51,6 +51,41 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevOpenWithFactory, "kdevopenwith.json", registerPlugin<OpenWithPlugin>();)
 
+namespace {
+
+bool sortActions(QAction* left, QAction* right)
+{
+    return left->text() < right->text();
+}
+
+bool isTextEditor(const KService::Ptr& service)
+{
+    return service->serviceTypes().contains( "KTextEditor/Document" );
+}
+
+QString defaultForMimeType(const QString& mimeType)
+{
+    KConfigGroup config = KSharedConfig::openConfig()->group("Open With Defaults");
+    if (config.hasKey(mimeType)) {
+        QString storageId = config.readEntry(mimeType, QString());
+        if (!storageId.isEmpty() && KService::serviceByStorageId(storageId)) {
+            return storageId;
+        }
+    }
+    return QString();
+}
+
+bool canOpenDefault(const QString& mimeType)
+{
+    if (defaultForMimeType(mimeType).isEmpty() && mimeType == "inode/directory") {
+        // potentially happens in non-kde environments apparently, see https://git.reviewboard.kde.org/r/122373
+        return KMimeTypeTrader::self()->preferredService(mimeType);
+    } else {
+        return true;
+    }
+}
+}
+
 OpenWithPlugin::OpenWithPlugin ( QObject* parent, const QVariantList& )
     : IPlugin ( "kdevopenwith", parent ),
     m_actionMap( 0 )
@@ -124,40 +159,21 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
         menu->addActions( appActions );
     }
 
-    QAction* openAction = new QAction( i18n( "Open" ), this );
-    openAction->setIcon( QIcon::fromTheme( "document-open" ) );
-    connect( openAction, &QAction::triggered, this, &OpenWithPlugin::openDefault );
-
     KDevelop::ContextMenuExtension ext;
-    ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
+
+    if (canOpenDefault(m_mimeType)) {
+        QAction* openAction = new QAction( i18n( "Open" ), this );
+        openAction->setIcon( QIcon::fromTheme( "document-open" ) );
+        connect( openAction, SIGNAL(triggered()), SLOT(openDefault()) );
+        ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
+    }
+
     if (!menu->isEmpty()) {
         ext.addAction(KDevelop::ContextMenuExtension::FileGroup, menu->menuAction());
     } else {
         delete menu;
     }
     return ext;
-}
-
-bool sortActions(QAction* left, QAction* right)
-{
-    return left->text() < right->text();
-}
-
-bool isTextEditor(const KService::Ptr& service)
-{
-    return service->serviceTypes().contains( "KTextEditor/Document" );
-}
-
-QString defaultForMimeType(const QString& mimeType)
-{
-    KConfigGroup config = KSharedConfig::openConfig()->group("Open With Defaults");
-    if (config.hasKey(mimeType)) {
-        QString storageId = config.readEntry(mimeType, QString());
-        if (!storageId.isEmpty() && KService::serviceByStorageId(storageId)) {
-            return storageId;
-        }
-    }
-    return QString();
 }
 
 QList<QAction*> OpenWithPlugin::actionsForServiceType( const QString& serviceType )
