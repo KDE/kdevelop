@@ -3,6 +3,7 @@
         "Description": "Configure Cppcheck", 
         "Description[ca]": "Configura Cppcheck", 
         "Description[nl]": "Cppcheck instellen", 
+        "Description[pl]": "Ustawienia Cppcheck", 
         "Description[pt]": "Configurar o CppCheck", 
         "Description[pt_BR]": "Configurar o Cppcheck", 
         "Description[sk]": "Nastaviť CPPCheck", 
