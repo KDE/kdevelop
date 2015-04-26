@@ -155,6 +155,8 @@ void OutlineModel::onDocumentSaved(IDocument* doc)
 
 void OutlineModel::rebuildOutline(IDocument* doc)
 {
+    // FIXME: we should only do the rebuilding once the parsing has completed
+    // otherwise we get strange inbetween AST states...
     emit beginResetModel();
     qDeleteAll(m_topLevelItems);
     m_topLevelItems.clear();

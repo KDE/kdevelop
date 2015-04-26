@@ -63,8 +63,7 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
         switch (typeEnum) {
         case AbstractType::TypeFunction: {
             FunctionType::Ptr func = type.cast<FunctionType>();
-
-            // how is DUChainUtils::getFunctionContext() better than decl->internalContext()?
+            // func->partToString() does not add the argument names -> do it manually
             if (DUContext* fCtx = DUChainUtils::getFunctionContext(decl)) {
                 m_cachedText += '(';
                 bool first = true;
@@ -97,6 +96,8 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
             break;
         case AbstractType::TypeEnumerator:
             //no need to append the fully qualified type
+            Q_ASSERT(decl->type<EnumeratorType>());
+            m_cachedText += " = " + decl->type<EnumeratorType>()->valueAsString();
             break;
         case AbstractType::TypeStructure: {
             //this seems to be the way it has to be done (after grepping through source code)
