@@ -33,7 +33,7 @@ public:
     virtual ~OutlineViewPlugin();
 
 public: // KDevelop::Plugin overrides
-    virtual void unload();
+    void unload() override;
 
 private:
     class OutlineViewFactory* m_factory;

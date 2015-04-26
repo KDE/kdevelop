@@ -21,6 +21,8 @@
 #include <QString>
 #include <QIcon>
 
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainpointer.h>
 
 namespace KDevelop {
@@ -90,5 +92,6 @@ inline QString OutlineNode::text() const
 
 inline const KDevelop::Declaration* OutlineNode::declaration() const
 {
+    Q_ASSERT(KDevelop::DUChain::lock()->currentThreadHasReadLock());
     return m_decl.data();
 }

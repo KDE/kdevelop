@@ -25,7 +25,7 @@ class OutlineProxyModel : public QSortFilterProxyModel {
 public:
     explicit OutlineProxyModel(QObject* parent = 0);
     virtual ~OutlineProxyModel();
-    virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
+    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 private:
     Q_DISABLE_COPY(OutlineProxyModel)
 };
