@@ -41,6 +41,7 @@ OutlineNode::OutlineNode(const QString& text, OutlineNode* parent)
 OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
     : m_decl(decl), m_parent(parent)
 {
+    // qCDebug(PLUGIN_OUTLINE) << "Adding:" << decl->qualifiedIdentifier().toString() << ": " <<typeid(*decl).name();
 
     m_cachedIcon = DUChainUtils::iconForDeclaration(decl);
     m_cachedText = decl->identifier().toString();
@@ -48,12 +49,10 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
         //e.g. C++ using namespace statement
         m_cachedText = alias->importIdentifier().toString();
     }
-
-    if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(decl)) {
+    else if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(decl)) {
         if (member->isFriend())
             m_cachedText = "friend " + m_cachedText;
     }
-
     if (AbstractType::Ptr type = decl->abstractType()) {
         //add the (function return) type at the end (after a colon - like UML)
         //so that the first thing seen is the name of the function/variable
@@ -63,12 +62,35 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
         case AbstractType::TypeFunction: {
             //need explicit scope, otherwise we get a crosses initialization error
             FunctionType::Ptr func = type.cast<FunctionType>();
-            m_cachedText += func->partToString(FunctionType::SignatureArguments);
+
+            // how is DUChainUtils::getFunctionContext() better than decl->internalContext()?
+            if (DUContext* fCtx = DUChainUtils::getFunctionContext(decl)) {
+                m_cachedText += '(';
+                bool first = true;
+                foreach (Declaration* childDecl, fCtx->localDeclarations(decl->topContext())) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        m_cachedText += QStringLiteral(", ");
+                    }
+                    m_cachedText += childDecl->abstractType()->toString();
+                    auto ident = childDecl->identifier();
+                    if (!ident.isEmpty()) {
+                        m_cachedText += ' ' +  ident.toString();
+                    }
+
+                }
+                m_cachedText += ')';
+            } else {
+                qCWarning(PLUGIN_OUTLINE) << "Missing function context:" << decl->qualifiedIdentifier().toString();
+                m_cachedText += func->partToString(FunctionType::SignatureArguments);
+            }
             //constructors/destructors have no return type, a trailing semicolon looks stupid
-            if (func->returnType())
+            if (func->returnType()) {
                 m_cachedText += " : " + func->partToString(FunctionType::SignatureReturn);
+            }
+            return; // don't append any children here!
         }
-        break;
         case AbstractType::TypeEnumeration:
             //no need to append the fully qualified type
             break;
@@ -76,10 +98,6 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
             //no need to append the fully qualified type
             break;
         case AbstractType::TypeStructure: {
-
-            //don't append the type, the icon has enough information
-            //unless it is a friend declaration:
-
             //this seems to be the way it has to be done (after grepping through source code)
             //TODO shouldn't there be some kind of isFriend() functionality?
             static IndexedIdentifier friendIdentifier(Identifier("friend"));
@@ -113,16 +131,6 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
     }
     if (decl->isAnonymous()) {
         m_cachedText = "<anonymous>" + m_cachedText;
-    }
-
-    if (decl->isDefinition()) {
-        if (AbstractFunctionDeclaration* afd = dynamic_cast<AbstractFunctionDeclaration*>(decl)) {
-            //function definitions don't have the parameters as internal context
-            //instead they have the top level local variables
-            if (DUContext* fCtx = afd->internalFunctionContext()) {
-                appendContext(fCtx, decl->topContext());
-            }
-        }
     }
 
     if (DUContext* ctx = decl->internalContext()) {
