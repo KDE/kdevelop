@@ -33,13 +33,17 @@
 
 using namespace KDevelop;
 
-OutlineModel::OutlineModel(QObject* parent) : QAbstractItemModel(parent),
-    m_lastDoc(0) {
-    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
-            this, SLOT(rebuildOutline(KDevelop::IDocument*)));
-    connect(ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)),
-            this, SLOT(onDocumentSaved(KDevelop::IDocument*)));
-    rebuildOutline(ICore::self()->documentController()->activeDocument());
+OutlineModel::OutlineModel(QObject* parent) : QAbstractItemModel(parent), m_lastDoc(nullptr)
+{
+    auto docController = ICore::self()->documentController();
+    connect(docController, &IDocumentController::documentActivated,
+            this, &OutlineModel::rebuildOutline);
+    connect(docController, &IDocumentController::documentSaved,
+            this, &OutlineModel::onDocumentSaved);
+    rebuildOutline(docController->activeDocument());
+
+    // TODO: void BackgroudParser::parseJobFinished(KDevelop::ParseJob* job)??
+
 }
 
 OutlineModel::~OutlineModel() {

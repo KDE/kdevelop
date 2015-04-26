@@ -67,6 +67,8 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
     vbox->addLayout(filterLayout);
     vbox->addWidget(m_tree);
     setLayout(vbox);
+    expandFirstLevel();
+    connect(m_model, &QAbstractItemModel::modelReset, this, &OutlineWidget::expandFirstLevel);
 }
 
 void OutlineWidget::activated(QModelIndex index)
@@ -77,4 +79,11 @@ void OutlineWidget::activated(QModelIndex index)
 
 OutlineWidget::~OutlineWidget()
 {
+}
+
+void OutlineWidget::expandFirstLevel()
+{
+    for (int i = 0; i < m_proxy->rowCount(); i++) {
+        m_tree->expand(m_proxy->index(i, 0));
+    }
 }

@@ -24,6 +24,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/functiondefinition.h>
 #include <language/duchain/types/alltypes.h>
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/classdeclaration.h>
@@ -43,8 +44,9 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
 {
     // qCDebug(PLUGIN_OUTLINE) << "Adding:" << decl->qualifiedIdentifier().toString() << ": " <<typeid(*decl).name();
 
-    m_cachedIcon = DUChainUtils::iconForDeclaration(decl);
+    // TODO: properly qualified identifier for out of line function definitions
     m_cachedText = decl->identifier().toString();
+    m_cachedIcon = DUChainUtils::iconForDeclaration(decl);
     if (NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl)) {
         //e.g. C++ using namespace statement
         m_cachedText = alias->importIdentifier().toString();
@@ -60,7 +62,6 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
         AbstractType::WhichType typeEnum = type->whichType();
         switch (typeEnum) {
         case AbstractType::TypeFunction: {
-            //need explicit scope, otherwise we get a crosses initialization error
             FunctionType::Ptr func = type.cast<FunctionType>();
 
             // how is DUChainUtils::getFunctionContext() better than decl->internalContext()?
@@ -85,7 +86,7 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
                 qCWarning(PLUGIN_OUTLINE) << "Missing function context:" << decl->qualifiedIdentifier().toString();
                 m_cachedText += func->partToString(FunctionType::SignatureArguments);
             }
-            //constructors/destructors have no return type, a trailing semicolon looks stupid
+            //constructors/destructors have no return type, a trailing semicolon would look stupid
             if (func->returnType()) {
                 m_cachedText += " : " + func->partToString(FunctionType::SignatureReturn);
             }

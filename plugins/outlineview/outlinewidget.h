@@ -44,4 +44,5 @@ private:
     Q_DISABLE_COPY(OutlineWidget)
 public Q_SLOTS:
     void activated(QModelIndex);
+    void expandFirstLevel();
 };
