@@ -32,6 +32,7 @@ add_subdirectory(projectfilter)
 if (Qt5QuickWidgets_FOUND)
     add_subdirectory(welcomepage)
 endif()
+add_subdirectory(outlineview)
 
 set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
 find_package(Boost 1.35.0)

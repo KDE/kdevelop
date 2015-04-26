@@ -1,0 +1,21 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Alex Richardson",
+                "Email": "arichardson.kde@gmail.com"
+            }
+        ], 
+        "Category": "Core",
+        "Description": "This plugin provides a view to show the outline of the currently open document.",
+        "Icon": "code-class",
+        "Id": "KDevOutlineView",
+        "License": "LGPL",
+        "Name": "Outline",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    }, 
+    "X-KDevelop-Category": "Global", 
+    "X-KDevelop-Mode": "GUI"
+}
