@@ -362,7 +362,7 @@ void ProjectBaseItem::setText( const QString& text )
     d->text = text;
     if( d->model ) {
         QModelIndex idx = index();
-        QMetaObject::invokeMethod( d->model, "dataChanged", Qt::DirectConnection, Q_ARG(QModelIndex, idx), Q_ARG(QModelIndex, idx) );
+        emit d->model->dataChanged(idx, idx);
     }
 }
 
