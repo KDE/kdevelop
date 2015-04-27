@@ -2,6 +2,7 @@
     "KPlugin": {
         "Description": "Configure Cppcheck", 
         "Description[ca]": "Configura Cppcheck", 
+        "Description[gl]": "Configurar Cppcheck", 
         "Description[nl]": "Cppcheck instellen", 
         "Description[pl]": "Ustawienia Cppcheck", 
         "Description[pt]": "Configurar o CppCheck", 
@@ -12,7 +13,6 @@
         "Description[x-test]": "xxConfigure Cppcheckxx", 
         "Icon": "go-up", 
         "Name": "Cppcheck", 
-        "Name[ast]": "Cppcheck", 
         "Name[bs]": "Cppcheck", 
         "Name[ca@valencia]": "Cppcheck", 
         "Name[ca]": "Cppcheck", 
@@ -20,6 +20,7 @@
         "Name[de]": "Cppcheck", 
         "Name[es]": "Cppcheck", 
         "Name[fr]": "Cppcheck", 
+        "Name[gl]": "Cppcheck", 
         "Name[hu]": "Cppcheck", 
         "Name[nl]": "Cppcheck", 
         "Name[pl]": "Cppcheck", 
