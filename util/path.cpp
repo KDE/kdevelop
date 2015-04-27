@@ -329,13 +329,31 @@ static void cleanPath(QVector<QString>* data, const bool isRemote)
     }
 }
 
+// Optimized QString::split code for the specific Path use-case
+static QVarLengthArray<QString, 16> splitPath(const QString &source)
+{
+    QVarLengthArray<QString, 16> list;
+    int start = 0;
+    int end = 0;
+    while ((end = source.indexOf(QLatin1Char('/'), start)) != -1) {
+        if (start != end) {
+            list.append(source.mid(start, end - start));
+        }
+        start = end + 1;
+    }
+    if (start != source.size()) {
+        list.append(source.mid(start, -1));
+    }
+    return list;
+}
+
 void Path::addPath(const QString& path)
 {
     if (path.isEmpty()) {
         return;
     }
 
-    QStringList newData = path.split('/', QString::SkipEmptyParts);
+    const auto& newData = splitPath(path);
     if (newData.isEmpty()) {
         if (m_data.size() == (isRemote() ? 1 : 0)) {
             // this represents the root path, we just turned an invalid path into it
@@ -344,13 +362,14 @@ void Path::addPath(const QString& path)
         return;
     }
 
+    auto it = newData.begin();
     if (!m_data.isEmpty() && m_data.last().isEmpty()) {
         // the root item is empty, set its contents and continue appending
-        m_data.last() = newData.takeFirst();
+        m_data.last() = *it;
+        ++it;
     }
 
-    m_data += newData.toVector();
-
+    std::copy(it, newData.end(), std::back_inserter(m_data));
     cleanPath(&m_data, isRemote());
 }
 
