@@ -66,11 +66,6 @@ void Path::init(QUrl url)
         return;
     }
 
-    // remove /../ parts
-    url.setPath(QDir::cleanPath(url.path()));
-    // get the path as segmented list
-    QStringList path = url.path().split('/', QString::SkipEmptyParts);
-
     if (!url.isLocalFile()) {
         // handle remote urls
         QString urlPrefix;
@@ -85,10 +80,10 @@ void Path::init(QUrl url)
         if (url.port() != -1) {
             urlPrefix += ':' + QString::number(url.port());
         }
-        path.prepend(urlPrefix);
+        m_data << urlPrefix;
     }
 
-    m_data = path.toVector();
+    addPath(url.path());
 
     // support for root paths, they are valid but don't really contain any data
     if (m_data.isEmpty() || (isRemote() && m_data.size() == 1)) {
