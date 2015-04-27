@@ -581,6 +581,7 @@ protected:
         const QVector<DUContext*>& childContexts = currentContext()->childContexts();
 
         int currentIndex = nextContextIndex();
+        const auto indexedIdentifier = IndexedQualifiedIdentifier(identifier);
 
         for ( ; currentIndex < childContexts.count(); ++currentIndex )
         {
@@ -593,8 +594,8 @@ protected:
           // We cannot update a contexts local scope identifier, that will break many other parts, like e.g.
           // the CodeModel of child contexts or declarations.
           // For unnamed child-ranges, we still do range-comparison, because we cannot distinguish them in other ways
-          if ((!identifier.isEmpty() && child->localScopeIdentifier() == identifier)
-              || (identifier.isEmpty() && child->localScopeIdentifier().isEmpty() && !childRange.isEmpty() && childRange == range))
+          if ((!identifier.isEmpty() && child->indexedLocalScopeIdentifier() == indexedIdentifier)
+              || (identifier.isEmpty() && child->indexedLocalScopeIdentifier().isEmpty() && !childRange.isEmpty() && childRange == range))
           {
             // Match
             ret = child;
