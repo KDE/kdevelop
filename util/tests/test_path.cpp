@@ -146,6 +146,13 @@ void TestPath::bench_fromLocalPath()
                 Q_UNUSED(path);
             }
         }
+    } else if (variant == 2) {
+        QBENCHMARK {
+            for(int i = 0; i < repeat; ++i) {
+                Path path = Path(input);
+                Q_UNUSED(path);
+            }
+        }
     } else {
         QFAIL("unexpected variant");
     }
@@ -156,6 +163,7 @@ void TestPath::bench_fromLocalPath_data()
     QTest::addColumn<int>("variant");
 
     QTest::newRow("QUrl::fromLocalFile") << 1;
+    QTest::newRow("QString") << 2;
 }
 
 void TestPath::bench_hash()
