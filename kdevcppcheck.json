@@ -33,6 +33,7 @@
         "Description[sv]": "Cppcheck är ett verktyg som hjälper till att hitta syntaxproblem i program. http://cppcheck.sf.net/", 
         "Description[uk]": "Cppcheck — це інструмент, що допомагатиме вам знаходити проблеми з синтаксичними конструкціями, що виникають у програмах. http://cppcheck.sf.net/", 
         "Description[x-test]": "xxCppcheck is a tool that helps you find syntax problems in programs. http://cppcheck.sf.net/xx", 
+        "Description[zh_CN]": "Cppcheck 是帮助您找到程序中语法问题的工具。http://cppcheck.sf.net/", 
         "Icon": "kdevelop", 
         "Id": "kdevcppcheck", 
         "License": "GPL", 
@@ -54,6 +55,7 @@
         "Name[sv]": "Stöd för Cppcheck", 
         "Name[uk]": "Підтримка Cppcheck", 
         "Name[x-test]": "xxCppcheck Supportxx", 
+        "Name[zh_CN]": "Cppcheck 支持", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

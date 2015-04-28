@@ -11,6 +11,7 @@
         "Description[sv]": "Anpassa Cppcheck", 
         "Description[uk]": "Налаштовування Cppcheck", 
         "Description[x-test]": "xxConfigure Cppcheckxx", 
+        "Description[zh_CN]": "配置 Cppcheck", 
         "Icon": "go-up", 
         "Name": "Cppcheck", 
         "Name[bs]": "Cppcheck", 
@@ -30,6 +31,7 @@
         "Name[sv]": "Cppcheck", 
         "Name[uk]": "Cppcheck", 
         "Name[x-test]": "xxCppcheckxx", 
+        "Name[zh_CN]": "Cppcheck", 
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
