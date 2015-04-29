@@ -27,19 +27,22 @@
 #include <QIcon>
 
 #include <KLocalizedString>
+#include <KRecursiveFilterProxyModel>
 
 #include <interfaces/idocumentcontroller.h>
 
 #include "outlineviewplugin.h"
 #include "outlinemodel.h"
-#include "outlineproxymodel.h"
 
 using namespace KDevelop;
 
 OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
-    : QWidget(parent), m_plugin(plugin), m_model(new OutlineModel(this)),
-      m_tree(new QTreeView(this)), m_proxy(new OutlineProxyModel(this)),
-      m_filter(new QLineEdit(this))
+    : QWidget(parent)
+    , m_plugin(plugin)
+    , m_model(new OutlineModel(this))
+    , m_tree(new QTreeView(this))
+    , m_proxy(new KRecursiveFilterProxyModel(this))
+    , m_filter(new QLineEdit(this))
 {
     setObjectName("Outline View");
     setWindowTitle(i18n("Outline"));
@@ -53,8 +56,8 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
     m_tree->setHeaderHidden(true);
 
     //filter
-    connect(m_filter, SIGNAL(textChanged(QString)), m_proxy, SLOT(setFilterFixedString(QString)));
-    connect(m_tree, SIGNAL(activated(QModelIndex)), this, SLOT(activated(QModelIndex)));
+    connect(m_filter, &QLineEdit::textChanged, m_proxy, &KRecursiveFilterProxyModel::setFilterFixedString);
+    connect(m_tree, &QTreeView::activated, this, &OutlineWidget::activated);
 
     QHBoxLayout* filterLayout = new QHBoxLayout();
 

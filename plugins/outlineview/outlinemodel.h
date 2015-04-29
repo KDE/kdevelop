@@ -50,7 +50,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
 public slots:
-    void activate(QModelIndex realIndex);
+    void activate(const QModelIndex& realIndex);
 private slots:
     void onParseJobFinished(KDevelop::ParseJob* job);
     void rebuildOutline(KDevelop::IDocument* doc);

@@ -208,27 +208,25 @@ void OutlineModel::rebuildOutline(IDocument* doc)
     emit endResetModel();
 }
 
-void OutlineModel::activate(QModelIndex realIndex)
+void OutlineModel::activate(const QModelIndex& realIndex)
 {
     if (!realIndex.isValid()) {
         qCDebug(PLUGIN_OUTLINE) << "attempting to activate invalid item!";
         return;
     }
     OutlineNode* node = static_cast<OutlineNode*>(realIndex.internalPointer());
-    DUChainReadLocker lock(DUChain::lock());
-    const Declaration* decl = node->declaration();
-    if (!decl) {
-        qCDebug(PLUGIN_OUTLINE) << "Declaration for node no longer exists:" << node->text();
-        return;
+    KTextEditor::Range range;
+    {
+        DUChainReadLocker lock;
+        const Declaration* decl = node->declaration();
+        if (!decl) {
+            qCDebug(PLUGIN_OUTLINE) << "Declaration for node no longer exists:" << node->text();
+            return;
+        }
+        //foreground thread == GUI thread? if so then we are fine
+        range = decl->rangeInCurrentRevision();
+        //outline view should ALWAYS correspond to currently active document
+        Q_ASSERT(decl->url().toUrl() == ICore::self()->documentController()->activeDocument()->url());
     }
-    //foreground thread == GUI thread? if so then we are fine
-    KTextEditor::Range range = decl->rangeInCurrentRevision();
-    lock.unlock();
-    //outline view should ALWAYS correspond to currently active document
-#ifndef QT_NO_DEBUG
-    QUrl url = decl->url().toUrl();
-    Q_ASSERT(url == ICore::self()->documentController()->activeDocument()->url());
-#endif
-    ICore::self()->documentController()->activateDocument(
-        ICore::self()->documentController()->activeDocument(), range);
+    ICore::self()->documentController()->activateDocument(m_lastDoc, range);
 }

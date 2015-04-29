@@ -35,12 +35,14 @@
 using namespace KDevelop;
 
 OutlineNode::OutlineNode(const QString& text, OutlineNode* parent)
-    : m_cachedText(text), m_parent(parent)
+    : m_cachedText(text)
+    , m_parent(parent)
 {
 }
 
 OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
-    : m_decl(decl), m_parent(parent)
+    : m_decl(decl)
+    , m_parent(parent)
 {
     // qCDebug(PLUGIN_OUTLINE) << "Adding:" << decl->qualifiedIdentifier().toString() << ": " <<typeid(*decl).name();
 
@@ -52,8 +54,9 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
         m_cachedText = alias->importIdentifier().toString();
     }
     else if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(decl)) {
-        if (member->isFriend())
+        if (member->isFriend()) {
             m_cachedText = "friend " + m_cachedText;
+        }
     }
     if (AbstractType::Ptr type = decl->abstractType()) {
         //add the (function return) type at the end (after a colon - like UML)
@@ -166,8 +169,7 @@ void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
         OutlineNode* childNode = 0;
         if (childContext->type() == DUContext::Template || ctxName.isEmpty()) {
             childNode = this;
-        }
-        else {
+        } else {
             m_children.emplace_back(ctxName, this);
         }
         //append all subcontexts recursively

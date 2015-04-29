@@ -21,7 +21,7 @@
 #include <QWidget>
 #include <QModelIndex>
 
-class OutlineProxyModel;
+class KRecursiveFilterProxyModel;
 class QTreeView;
 class QLineEdit;
 class OutlineModel;
@@ -39,7 +39,7 @@ private:
     OutlineViewPlugin* m_plugin;
     OutlineModel* m_model;
     QTreeView* m_tree;
-    OutlineProxyModel* m_proxy;
+    KRecursiveFilterProxyModel* m_proxy;
     QLineEdit* m_filter;
 
     Q_DISABLE_COPY(OutlineWidget)
