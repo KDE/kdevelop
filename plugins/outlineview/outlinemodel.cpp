@@ -24,9 +24,11 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/declaration.h>
+#include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/ilanguagecontroller.h>
 
 #include "debug_outline.h"
 #include "outlinenode.h"
@@ -35,17 +37,23 @@ using namespace KDevelop;
 
 OutlineModel::OutlineModel(QObject* parent)
     : QAbstractItemModel(parent)
-    , m_lastDoc(nullptr)
 {
     auto docController = ICore::self()->documentController();
     connect(docController, &IDocumentController::documentActivated,
             this, &OutlineModel::rebuildOutline);
-    connect(docController, &IDocumentController::documentSaved,
-            this, &OutlineModel::onDocumentSaved);
+    m_lastDoc = ICore::self()->documentController()->activeDocument();
+    m_lastUrl = IndexedString(m_lastDoc->url());
+    connect(ICore::self()->documentController(), &IDocumentController::documentUrlChanged,
+            this, [this](IDocument* doc) {
+        if (doc == m_lastDoc) {
+            m_lastUrl = IndexedString(doc->url());
+        }
+    });
+    auto parser = ICore::self()->languageController()->backgroundParser();
+    connect(parser, &BackgroundParser::parseJobFinished,
+            this, &OutlineModel::onParseJobFinished);
+    // build the initial outline now
     rebuildOutline(docController->activeDocument());
-
-    // TODO: void BackgroudParser::parseJobFinished(KDevelop::ParseJob* job)??
-
 }
 
 OutlineModel::~OutlineModel()
@@ -162,11 +170,11 @@ QModelIndex OutlineModel::parent(const QModelIndex& index) const
     return createIndex(row, 0, const_cast<OutlineNode*>(parentNode));
 }
 
-void OutlineModel::onDocumentSaved(IDocument* doc)
+void OutlineModel::onParseJobFinished(KDevelop::ParseJob* job)
 {
-    //rebuild outline whenever current document is saved (on every change is probably too expensive)
-    if (m_lastDoc == doc) {
-        rebuildOutline(doc);
+    // TODO: add some kind of timeout to prevent frequent updates?
+    if (job->document() == m_lastUrl) {
+        rebuildOutline(m_lastDoc);
     }
 }
 
@@ -193,7 +201,10 @@ void OutlineModel::rebuildOutline(IDocument* doc)
         }
         // ! m_topLevelItems mustn't be modified anywhere other than this function
     } // DUChain should not be locked anymore when signal is emitted
-    m_lastDoc = doc;
+    if (doc != m_lastDoc) {
+        m_lastDoc = doc;
+        m_lastUrl = IndexedString(doc->url());
+    }
     emit endResetModel();
 }
 

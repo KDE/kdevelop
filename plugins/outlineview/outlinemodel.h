@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <serialization/indexedstring.h>
+
 #include <QAbstractItemModel>
 #include <vector>
 
@@ -28,6 +30,7 @@ class IDocument;
 class DUContext;
 class TopDUContext;
 class Declaration;
+class ParseJob;
 }
 
 class OutlineModel : public QAbstractItemModel
@@ -49,9 +52,10 @@ public:
 public slots:
     void activate(QModelIndex realIndex);
 private slots:
-    void onDocumentSaved(KDevelop::IDocument* doc);
+    void onParseJobFinished(KDevelop::ParseJob* job);
     void rebuildOutline(KDevelop::IDocument* doc);
 private:
     std::vector<OutlineNode> m_topLevelItems;
     KDevelop::IDocument* m_lastDoc;
+    KDevelop::IndexedString m_lastUrl;
 };
