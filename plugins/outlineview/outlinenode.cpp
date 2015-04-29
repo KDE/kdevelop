@@ -147,7 +147,7 @@ void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
 {
     foreach (Declaration* childDecl, ctx->localDeclarations(top)) {
         if (childDecl) {
-            m_children.append(new OutlineNode(childDecl, this));
+            m_children.emplace_back(childDecl, this);
         }
     }
     if (ctx->type() != DUContext::Template) {
@@ -168,8 +168,7 @@ void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
             childNode = this;
         }
         else {
-            childNode = new OutlineNode(ctxName, this);
-            m_children.append(childNode);
+            m_children.emplace_back(ctxName, this);
         }
         //append all subcontexts recursively
         childNode->appendContext(childContext, top);
@@ -179,12 +178,4 @@ void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
 
 OutlineNode::~OutlineNode()
 {
-    qDeleteAll(m_children);
 }
-
-void OutlineNode::reload()
-{
-    //TODO
-
-}
-

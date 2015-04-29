@@ -50,7 +50,6 @@ OutlineModel::OutlineModel(QObject* parent)
 
 OutlineModel::~OutlineModel()
 {
-    qDeleteAll(m_topLevelItems);
 }
 
 Qt::ItemFlags OutlineModel::flags(const QModelIndex& index) const
@@ -111,7 +110,7 @@ int OutlineModel::rowCount(const QModelIndex& parent) const
         return 0;
     }
 
-    OutlineNode* node = static_cast<OutlineNode*>(parent.internalPointer());
+    const OutlineNode* node = static_cast<const OutlineNode*>(parent.internalPointer());
     return node->childCount();
 }
 
@@ -122,18 +121,19 @@ QModelIndex OutlineModel::index(int row, int column, const QModelIndex &parent) 
     }
     if (!parent.isValid()) {
         // topLevelItem
-        if(row < m_topLevelItems.size()) {
-            return createIndex(row, column, m_topLevelItems.at(row));
+        if ((size_t)row < m_topLevelItems.size()) {
+            // ! using the address is only safe since we never modify the vector once it has been created
+            return createIndex(row, column, const_cast<OutlineNode*>(&m_topLevelItems.at(row)));
         }
         return QModelIndex();
     } else {
         if (parent.column() != 0) {
             return QModelIndex(); //only column 0 should have children
         }
-
         OutlineNode* node = static_cast<OutlineNode*>(parent.internalPointer());
         if (row < node->childCount()) {
-            return createIndex(row, column, node->childAt(row));
+            // ! using the address is only safe since we never modify the vector once it has been created
+            return createIndex(row, column, const_cast<OutlineNode*>(node->childAt(row)));
         }
         return QModelIndex(); // out of range
     }
@@ -146,18 +146,20 @@ QModelIndex OutlineModel::parent(const QModelIndex& index) const
         return QModelIndex();
     }
 
-    OutlineNode* node = static_cast<OutlineNode*>(index.internalPointer());
+    const OutlineNode* node = static_cast<const OutlineNode*>(index.internalPointer());
 
-    OutlineNode* parentNode = node->parent();
+    const OutlineNode* parentNode = node->parent();
 
-    if(!parentNode)
+    if (!parentNode) {
         return QModelIndex(); //node is a top level item
+    }
 
-    OutlineNode* parentParentNode = parentNode->parent();
+    const OutlineNode* parentParentNode = parentNode->parent();
     //find the correct row if parents parent is null then we have to find the index in the top level items,
     //otherwise query the parents parent for an index
-    const int row = parentParentNode ? parentParentNode->indexOf(parentNode) : m_topLevelItems.indexOf(parentNode);
-    return createIndex(row, 0, parentNode);
+    const int row = parentParentNode ? parentParentNode->indexOf(parentNode) : OutlineNode::findNode(m_topLevelItems, parentNode);
+    // ! using the address is only safe since we never modify the vector once it has been created
+    return createIndex(row, 0, const_cast<OutlineNode*>(parentNode));
 }
 
 void OutlineModel::onDocumentSaved(IDocument* doc)
@@ -171,25 +173,26 @@ void OutlineModel::onDocumentSaved(IDocument* doc)
 void OutlineModel::rebuildOutline(IDocument* doc)
 {
     // FIXME: we should only do the rebuilding once the parsing has completed
-    // otherwise we get strange inbetween AST states...
+    // otherwise we get strange trees...
     emit beginResetModel();
-    qDeleteAll(m_topLevelItems);
     m_topLevelItems.clear();
     if (!doc) {
         return;
     }
 
-    DUChainReadLocker lock(DUChain::lock());
-    TopDUContext* topContext = DUChainUtils::standardContextForUrl(doc->url());
-    if (!topContext) {
-        return;
-    }
-    foreach(Declaration* decl, topContext->localDeclarations()) {
-        if (decl) {
-            m_topLevelItems.append(new OutlineNode(decl, 0));
+    {
+        DUChainReadLocker lock;
+        TopDUContext* topContext = DUChainUtils::standardContextForUrl(doc->url());
+        if (!topContext) {
+            return;
         }
-    }
-    lock.unlock(); //should not be locked anymore when signal is emitted
+        foreach (Declaration* decl, topContext->localDeclarations()) {
+            if (decl) {
+                m_topLevelItems.emplace_back(decl, nullptr);
+            }
+        }
+        // ! m_topLevelItems mustn't be modified anywhere other than this function
+    } // DUChain should not be locked anymore when signal is emitted
     m_lastDoc = doc;
     emit endResetModel();
 }

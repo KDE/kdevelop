@@ -19,6 +19,7 @@
 #pragma once
 
 #include <QAbstractItemModel>
+#include <vector>
 
 class OutlineNode;
 
@@ -32,6 +33,7 @@ class Declaration;
 class OutlineModel : public QAbstractItemModel
 {
     Q_OBJECT
+    Q_DISABLE_COPY(OutlineModel)
 public:
     explicit OutlineModel(QObject* parent = 0);
     virtual ~OutlineModel();
@@ -50,7 +52,6 @@ private slots:
     void onDocumentSaved(KDevelop::IDocument* doc);
     void rebuildOutline(KDevelop::IDocument* doc);
 private:
-    QList<OutlineNode*> m_topLevelItems;
+    std::vector<OutlineNode> m_topLevelItems;
     KDevelop::IDocument* m_lastDoc;
-    Q_DISABLE_COPY(OutlineModel)
 };
