@@ -67,7 +67,8 @@ public:
     NamespaceAlias/**< This is a namespace-alias. You can safely cast this object to NamespaceAliasDeclaration. */,
     Alias, /**<This is an alias-declaration. You can safely cast this object to AliasDeclaration. */
     Namespace, /**< Declaration of a namespace. */
-    Import /**< Declaration marks the Import of a file. */
+    Import, /**< Declaration marks the Import of a file. */
+    Macro /**< Declaration of a macro such as "#define FOO 1". */
   };
 
   /**

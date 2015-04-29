@@ -304,6 +304,9 @@ DeclarationTest(kind)
     case KDevelop::Declaration::Type:
       kind = "Type";
       break;
+    case KDevelop::Declaration::Macro:
+      kind = "Macro";
+      break;
   }
   return compareValues(kind, value, "Declaration's kind");
 }
