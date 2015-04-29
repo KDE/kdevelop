@@ -29,7 +29,8 @@ class TopDUContext;
 class Declaration;
 }
 
-class OutlineModel : public QAbstractItemModel {
+class OutlineModel : public QAbstractItemModel
+{
     Q_OBJECT
 public:
     explicit OutlineModel(QObject* parent = 0);
@@ -43,9 +44,9 @@ public:
     bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-public Q_SLOTS:
+public slots:
     void activate(QModelIndex realIndex);
-private Q_SLOTS:
+private slots:
     void onDocumentSaved(KDevelop::IDocument* doc);
     void rebuildOutline(KDevelop::IDocument* doc);
 private:

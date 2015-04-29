@@ -145,7 +145,7 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
 
 void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
 {
-    Q_FOREACH (Declaration* childDecl, ctx->localDeclarations(top)) {
+    foreach (Declaration* childDecl, ctx->localDeclarations(top)) {
         if (childDecl) {
             m_children.append(new OutlineNode(childDecl, this));
         }
@@ -153,7 +153,7 @@ void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
     if (ctx->type() != DUContext::Template) {
         return; //no need to list these subcontexts
     }
-    Q_FOREACH(DUContext* childContext, ctx->childContexts()) {
+    foreach (DUContext* childContext, ctx->childContexts()) {
         if (!childContext)
             continue;
         QVector<Declaration*> decls = childContext->localDeclarations(top);

@@ -27,7 +27,8 @@ class QLineEdit;
 class OutlineModel;
 class OutlineViewPlugin;
 
-class OutlineWidget : public QWidget {
+class OutlineWidget : public QWidget
+{
     Q_OBJECT
 
 public:
@@ -42,7 +43,7 @@ private:
     QLineEdit* m_filter;
 
     Q_DISABLE_COPY(OutlineWidget)
-public Q_SLOTS:
+public slots:
     void activated(QModelIndex);
     void expandFirstLevel();
 };

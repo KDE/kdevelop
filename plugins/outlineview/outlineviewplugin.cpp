@@ -62,7 +62,6 @@ OutlineViewPlugin::OutlineViewPlugin(QObject *parent, const QVariantList&)
         , m_factory(new OutlineViewFactory(this))
 {
     core()->uiController()->addToolView(i18n("Outline"), m_factory);
-    // setXMLFile("kdevoutlineview.rc");
 }
 
 OutlineViewPlugin::~OutlineViewPlugin()

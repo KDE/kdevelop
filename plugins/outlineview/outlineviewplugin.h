@@ -25,7 +25,8 @@ namespace KDevelop {
 class Declaration;
 }
 
-class OutlineViewPlugin : public KDevelop::IPlugin {
+class OutlineViewPlugin : public KDevelop::IPlugin
+{
     Q_OBJECT
 
 public:

@@ -33,7 +33,9 @@
 
 using namespace KDevelop;
 
-OutlineModel::OutlineModel(QObject* parent) : QAbstractItemModel(parent), m_lastDoc(nullptr)
+OutlineModel::OutlineModel(QObject* parent)
+    : QAbstractItemModel(parent)
+    , m_lastDoc(nullptr)
 {
     auto docController = ICore::self()->documentController();
     connect(docController, &IDocumentController::documentActivated,
@@ -46,79 +48,91 @@ OutlineModel::OutlineModel(QObject* parent) : QAbstractItemModel(parent), m_last
 
 }
 
-OutlineModel::~OutlineModel() {
+OutlineModel::~OutlineModel()
+{
     qDeleteAll(m_topLevelItems);
 }
 
-Qt::ItemFlags OutlineModel::flags(const QModelIndex& index) const {
-    if(!index.isValid())
+Qt::ItemFlags OutlineModel::flags(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
         return Qt::NoItemFlags;
-    else
+    } else {
         return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    }
 }
 
-int OutlineModel::columnCount(const QModelIndex& parent) const {
+int OutlineModel::columnCount(const QModelIndex& parent) const
+{
     Q_UNUSED(parent)
     return 1;
 }
 
-QVariant OutlineModel::data(const QModelIndex& index, int role) const {
-    if(!index.isValid())
+QVariant OutlineModel::data(const QModelIndex& index, int role) const
+{
+    if (!index.isValid()) {
         return QVariant();
-    if(index.column() != 0)
+    }
+    if (index.column() != 0) {
         return QVariant();
+    }
 
     OutlineNode* node = static_cast<OutlineNode*>(index.internalPointer());
     Q_CHECK_PTR(node);
-    if(role == Qt::DecorationRole) {
+    if (role == Qt::DecorationRole) {
         return node->icon();
     }
-    if(role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole) {
         return node->text();
     }
     return QVariant();
 }
 
-bool OutlineModel::hasChildren(const QModelIndex& parent) const {
-    if(!parent.isValid())
+bool OutlineModel::hasChildren(const QModelIndex& parent) const
+{
+    if (!parent.isValid()) {
         return m_topLevelItems.size() > 0;
-
-    if(parent.column() != 0)
+    }
+    if (parent.column() != 0) {
         return false;
+    }
 
     OutlineNode* node = static_cast<OutlineNode*>(parent.internalPointer());
     return node->childCount() > 0;
 }
 
-int OutlineModel::rowCount(const QModelIndex& parent) const {
-    if(!parent.isValid())
+int OutlineModel::rowCount(const QModelIndex& parent) const
+{
+    if (!parent.isValid()) {
         return m_topLevelItems.size();
+    }
 
-    if(parent.column() != 0)
+    if (parent.column() != 0) {
         return 0;
+    }
 
     OutlineNode* node = static_cast<OutlineNode*>(parent.internalPointer());
     return node->childCount();
 }
 
-QModelIndex OutlineModel::index(int row, int column, const QModelIndex &parent) const {
-    if(!hasIndex(row, column, parent)) {
+QModelIndex OutlineModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if (!hasIndex(row, column, parent)) {
         return QModelIndex();
     }
-    if(!parent.isValid()) {
-        //topLevelItem
+    if (!parent.isValid()) {
+        // topLevelItem
         if(row < m_topLevelItems.size()) {
             return createIndex(row, column, m_topLevelItems.at(row));
         }
         return QModelIndex();
-    }
-    else {
-        if(parent.column() != 0) {
+    } else {
+        if (parent.column() != 0) {
             return QModelIndex(); //only column 0 should have children
         }
 
         OutlineNode* node = static_cast<OutlineNode*>(parent.internalPointer());
-        if(row < node->childCount()) {
+        if (row < node->childCount()) {
             return createIndex(row, column, node->childAt(row));
         }
         return QModelIndex(); // out of range
@@ -128,7 +142,7 @@ QModelIndex OutlineModel::index(int row, int column, const QModelIndex &parent) 
 
 QModelIndex OutlineModel::parent(const QModelIndex& index) const
 {
-    if(!index.isValid()) {
+    if (!index.isValid()) {
         return QModelIndex();
     }
 
@@ -149,8 +163,9 @@ QModelIndex OutlineModel::parent(const QModelIndex& index) const
 void OutlineModel::onDocumentSaved(IDocument* doc)
 {
     //rebuild outline whenever current document is saved (on every change is probably too expensive)
-    if(m_lastDoc == doc)
+    if (m_lastDoc == doc) {
         rebuildOutline(doc);
+    }
 }
 
 void OutlineModel::rebuildOutline(IDocument* doc)

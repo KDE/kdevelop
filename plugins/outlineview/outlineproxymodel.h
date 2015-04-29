@@ -20,7 +20,8 @@
 
 #include <QSortFilterProxyModel>
 
-class OutlineProxyModel : public QSortFilterProxyModel {
+class OutlineProxyModel : public QSortFilterProxyModel
+{
     Q_OBJECT
 public:
     explicit OutlineProxyModel(QObject* parent = 0);
