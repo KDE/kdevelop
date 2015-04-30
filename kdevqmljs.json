@@ -5,6 +5,7 @@
         "Id": "kdevqmljs", 
         "License": "GPL", 
         "Name": "QML Support", 
+        "Name[ast]": "Sofitu QML", 
         "Name[bs]": "QML podrška", 
         "Name[ca]": "Implementació del QML", 
         "Name[cs]": "Podpora QML", 
