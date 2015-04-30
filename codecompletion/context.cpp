@@ -236,9 +236,10 @@ private:
 class SimpleItem : public CompletionItem<CompletionTreeItem>
 {
 public:
-    SimpleItem(const QString& display, const QString& prefix, const QString& replacement)
+    SimpleItem(const QString& display, const QString& prefix, const QString& replacement, const QIcon& icon = QIcon())
         : CompletionItem<CompletionTreeItem>(display, prefix)
         , m_replacement(replacement)
+        , m_icon(icon)
     {
     }
 
@@ -247,8 +248,17 @@ public:
         view->document()->replaceText(word, m_replacement);
     }
 
+    QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override
+    {
+        if (role == Qt::DecorationRole && index.column() == KTextEditor::CodeCompletionModel::Icon) {
+            return m_icon;
+        }
+        return CompletionItem<CompletionTreeItem>::data(index, role, model);
+    }
+
 private:
     QString m_replacement;
+    QIcon m_icon;
 };
 
 /**
@@ -583,11 +593,13 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             continue;
         }
 
-        auto item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement));
         if (result.CursorKind == CXCursor_MacroDefinition) {
             // TODO: grouping of macros and built-in stuff
+            static const QIcon icon = QIcon::fromTheme("code-macro");
+            auto item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement, icon));
             macros.append(item);
         } else if (result.CursorKind == CXCursor_NotImplemented) {
+            auto item = CompletionTreeItemPointer(new SimpleItem(display, resultType, replacement));
             builtin.append(item);
         }
     }
