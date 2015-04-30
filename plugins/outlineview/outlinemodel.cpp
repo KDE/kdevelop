@@ -39,19 +39,21 @@ OutlineModel::OutlineModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
     auto docController = ICore::self()->documentController();
+    m_lastDoc = docController->activeDocument();
+    if (m_lastDoc) {
+        m_lastUrl = IndexedString(m_lastDoc->url());
+    }
+    // we want to rebuild the outline whenever the current document has been reparsed
+    connect(ICore::self()->languageController()->backgroundParser(),
+            &BackgroundParser::parseJobFinished, this, &OutlineModel::onParseJobFinished);
+    // and also when we switch the current document
     connect(docController, &IDocumentController::documentActivated,
             this, &OutlineModel::rebuildOutline);
-    m_lastDoc = ICore::self()->documentController()->activeDocument();
-    m_lastUrl = IndexedString(m_lastDoc->url());
-    connect(ICore::self()->documentController(), &IDocumentController::documentUrlChanged,
-            this, [this](IDocument* doc) {
+    connect(docController, &IDocumentController::documentUrlChanged, this, [this](IDocument* doc) {
         if (doc == m_lastDoc) {
             m_lastUrl = IndexedString(doc->url());
         }
     });
-    auto parser = ICore::self()->languageController()->backgroundParser();
-    connect(parser, &BackgroundParser::parseJobFinished,
-            this, &OutlineModel::onParseJobFinished);
     // build the initial outline now
     rebuildOutline(docController->activeDocument());
 }
@@ -172,7 +174,6 @@ QModelIndex OutlineModel::parent(const QModelIndex& index) const
 
 void OutlineModel::onParseJobFinished(KDevelop::ParseJob* job)
 {
-    // TODO: add some kind of timeout to prevent frequent updates?
     if (job->document() == m_lastUrl) {
         rebuildOutline(m_lastDoc);
     }
@@ -180,8 +181,6 @@ void OutlineModel::onParseJobFinished(KDevelop::ParseJob* job)
 
 void OutlineModel::rebuildOutline(IDocument* doc)
 {
-    // FIXME: we should only do the rebuilding once the parsing has completed
-    // otherwise we get strange trees...
     emit beginResetModel();
     m_topLevelItems.clear();
     if (!doc) {
