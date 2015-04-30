@@ -23,7 +23,9 @@
             }
         ], 
         "Description": "Cppcheck is a tool that helps you find syntax problems in programs. http://cppcheck.sf.net/", 
+        "Description[ast]": "Cppcheck ye una ferramienta que t'ayuda a alcontrar problemes de sintaxis en programes. http://cppcheck.sf.net/", 
         "Description[ca]": "Cppcheck és una eina que us ajuda a trobar problemes de sintaxi en els programes. http://cppcheck.sf.net/", 
+        "Description[es]": "Cppcheck es una herramienta que le ayuda a encontrar problemas de sintaxis en los programas. http://cppcheck.sf.net/", 
         "Description[gl]": "Cppcheck é unha ferramenta que lle axuda a atopar problemas de sintaxe en programas. http://cppcheck.sf.net/", 
         "Description[nl]": "Cppcheck is een hulpmiddel dat helpt u bij het vinden van problemen in de syntaxis in programma's. http://cppcheck.sf.net/", 
         "Description[pl]": "Cppcheck jest narzędziem, które pomaga znaleźć problemy w składni twoich programów. http://cppcheck.sf.net/", 
@@ -38,6 +40,7 @@
         "Id": "kdevcppcheck", 
         "License": "GPL", 
         "Name": "Cppcheck Support", 
+        "Name[ast]": "Sofitu Cppcheck", 
         "Name[bs]": "Cppcheck podrška", 
         "Name[ca@valencia]": "Implementació del Cppcheck", 
         "Name[ca]": "Implementació del Cppcheck", 
