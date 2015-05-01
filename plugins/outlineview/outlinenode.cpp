@@ -30,6 +30,8 @@
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/forwarddeclaration.h>
 
+#include <KTextEditor/CodeCompletionModel>
+
 #include "debug_outline.h"
 
 using namespace KDevelop;
@@ -39,6 +41,35 @@ OutlineNode::OutlineNode(const QString& text, OutlineNode* parent)
     , m_parent(parent)
 {
 }
+
+OutlineNode::OutlineNode(DUContext* ctx, const QString& name, OutlineNode* parent)
+    : m_cachedText(name)
+    , m_parent(parent)
+{
+    KTextEditor::CodeCompletionModel::CompletionProperties prop;
+    switch (ctx->type()) {
+        case KDevelop::DUContext::Class:
+            prop |= KTextEditor::CodeCompletionModel::Class;
+            break;
+        case KDevelop::DUContext::Enum:
+            prop |= KTextEditor::CodeCompletionModel::Enum;
+            break;
+        case KDevelop::DUContext::Function:
+            prop |= KTextEditor::CodeCompletionModel::Function;
+            break;
+        case KDevelop::DUContext::Namespace:
+            prop |= KTextEditor::CodeCompletionModel::Namespace;
+            break;
+        case KDevelop::DUContext::Template:
+            prop |= KTextEditor::CodeCompletionModel::Template;
+            break;
+        default:
+            break;
+    }
+    m_cachedIcon = DUChainUtils::iconForProperties(prop);
+    appendContext(ctx, ctx->topContext());
+}
+
 
 OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
     : m_decl(decl)
@@ -160,17 +191,18 @@ std::unique_ptr<OutlineNode> OutlineNode::fromTopContext(TopDUContext* ctx)
 
 void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
 {
-    qDebug() << ctx->scopeIdentifier().toString() << "context type=" << ctx->type();
+    // qDebug() << ctx->scopeIdentifier().toString() << "context type=" << ctx->type();
     foreach (Declaration* childDecl, ctx->localDeclarations(top)) {
         if (childDecl) {
             m_children.emplace_back(childDecl, this);
         }
     }
     foreach (DUContext* childContext, ctx->childContexts()) {
-        Declaration* owner = childContext->owner();
-        if (owner) {
+        if (childContext->owner()) {
+            // if there is a onwner, this will already have been handled by the loop above
+            // TODO: is this always true? With my testing so far it seems to be
             // qDebug() << childContext->scopeIdentifier(true).toString()
-            //        << " has an owner declaration: " << owner->toString() << "-> skip";
+            //        << " has an owner declaration: " << childContext->owner()->toString() << "-> skip";
             continue;
         }
         QVector<Declaration*> decls = childContext->localDeclarations(top);
@@ -189,10 +221,7 @@ void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
             // namespace Foo { class Bar; }
             // class Foo::Bar { ... };
             // TODO: icon and location for the namespace
-            m_children.emplace_back(ctxName, this);
-            foreach (DUContext* d, childContext->childContexts()) {
-                m_children.back().appendContext(d, top);
-            }
+            m_children.emplace_back(childContext, ctxName, this);
         }
     }
 }

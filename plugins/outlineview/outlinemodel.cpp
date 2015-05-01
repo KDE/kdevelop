@@ -202,7 +202,7 @@ void OutlineModel::activate(const QModelIndex& realIndex)
         DUChainReadLocker lock;
         const Declaration* decl = node->declaration();
         if (!decl) {
-            qCDebug(PLUGIN_OUTLINE) << "Declaration for node no longer exists:" << node->text();
+            qCDebug(PLUGIN_OUTLINE) << "No declaration exists for node:" << node->text();
             return;
         }
         //foreground thread == GUI thread? if so then we are fine

@@ -19,4 +19,5 @@ target_link_libraries(kdevoutlineview
     KF5::CoreAddons
     KF5::I18n
     KF5::ItemModels
+    KF5::TextEditor
 )

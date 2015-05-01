@@ -28,6 +28,7 @@
 
 namespace KDevelop {
 class Declaration;
+class DUContext;
 }
 
 class OutlineNode
@@ -38,6 +39,7 @@ public:
     OutlineNode(const QString& text, OutlineNode* parent);
     OutlineNode(OutlineNode&& other) noexcept;
     OutlineNode(KDevelop::Declaration* decl, OutlineNode* parent);
+    OutlineNode(KDevelop::DUContext* ctx, const QString& name, OutlineNode* parent);
     virtual ~OutlineNode();
     QIcon icon() const;
     QString text() const;
