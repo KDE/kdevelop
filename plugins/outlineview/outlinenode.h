@@ -130,6 +130,9 @@ inline OutlineNode::OutlineNode(OutlineNode&& other) noexcept
 
 inline OutlineNode& OutlineNode::operator=(OutlineNode&& other) noexcept
 {
+    if (this == &other) {
+        return *this;
+    }
     m_cachedText = std::move(other.m_cachedText);
     m_cachedIcon = std::move(other.m_cachedIcon);
     m_declOrContext = std::move(other.m_declOrContext);
