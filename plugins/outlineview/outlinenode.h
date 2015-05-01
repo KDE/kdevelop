@@ -23,6 +23,7 @@
 #include <memory>
 
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchainbase.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainpointer.h>
 
@@ -35,9 +36,11 @@ class OutlineNode
 {
     Q_DISABLE_COPY(OutlineNode)
     void appendContext(KDevelop::DUContext* ctx, KDevelop::TopDUContext* top);
+    void sortByLocation(bool requiresSorting);
 public:
     OutlineNode(const QString& text, OutlineNode* parent);
     OutlineNode(OutlineNode&& other) noexcept;
+    OutlineNode& operator=(OutlineNode&& other) noexcept;
     OutlineNode(KDevelop::Declaration* decl, OutlineNode* parent);
     OutlineNode(KDevelop::DUContext* ctx, const QString& name, OutlineNode* parent);
     virtual ~OutlineNode();
@@ -48,14 +51,14 @@ public:
     int childCount() const;
     const OutlineNode* childAt(int index) const;
     int indexOf(const OutlineNode* child) const;
-    /** DUChain must be read-locked */
-    const KDevelop::Declaration* declaration() const;
     static std::unique_ptr<OutlineNode> fromTopContext(KDevelop::TopDUContext* ctx);
-    static inline std::unique_ptr<OutlineNode> dummyNode();
+    static std::unique_ptr<OutlineNode> dummyNode();
+    KDevelop::DUChainBase* duChainObject();
+    friend void swap(OutlineNode& n1, OutlineNode& n2);
 private:
     QString m_cachedText;
     QIcon m_cachedIcon;
-    KDevelop::DeclarationPointer m_decl;
+    KDevelop::DUChainBasePointer m_declOrContext;
     OutlineNode* m_parent;
     std::vector<OutlineNode> m_children;
 };
@@ -102,22 +105,54 @@ inline QString OutlineNode::text() const
     return m_cachedText;
 }
 
-inline const KDevelop::Declaration* OutlineNode::declaration() const
+inline KDevelop::DUChainBase* OutlineNode::duChainObject()
 {
     Q_ASSERT(KDevelop::DUChain::lock()->currentThreadHasReadLock());
-    return m_decl.data();
+    return m_declOrContext.data();
 }
 
+
 inline OutlineNode::OutlineNode(OutlineNode&& other) noexcept
-    : m_parent(other.m_parent)
+    : m_cachedText(std::move(other.m_cachedText))
+    , m_cachedIcon(std::move(other.m_cachedIcon))
+    , m_declOrContext(std::move(other.m_declOrContext))
+    , m_parent(std::move(other.m_parent))
+    , m_children(std::move(other.m_children))
 {
-    std::swap(m_children, other.m_children);
-    std::swap(m_cachedIcon, other.m_cachedIcon);
-    std::swap(m_cachedText, other.m_cachedText);
-    std::swap(m_decl, other.m_decl);
+    // qDebug("Move ctor %p -> %p", &other, this);
     other.m_parent = nullptr;
+    other.m_declOrContext = nullptr;
     for (OutlineNode& child : m_children) {
-        // when we are moved the parent pointer has to change as well
+        // when we are moved the parent pointer has to be updated for the children!
         child.m_parent = this;
     }
+}
+
+inline OutlineNode& OutlineNode::operator=(OutlineNode&& other) noexcept
+{
+    m_cachedText = std::move(other.m_cachedText);
+    m_cachedIcon = std::move(other.m_cachedIcon);
+    m_declOrContext = std::move(other.m_declOrContext);
+    m_parent = std::move(other.m_parent);
+    m_children = std::move(other.m_children);
+    // qDebug("Move assignment %p -> %p", &other, this);
+    other.m_parent = nullptr;
+    other.m_declOrContext = nullptr;
+    for (OutlineNode& child : m_children) {
+        // when we are moved the parent pointer has to be updated for the children!
+        child.m_parent = this;
+    }
+    return *this;
+}
+
+inline void swap(OutlineNode& n1, OutlineNode& n2)
+{
+    // For some reason std::sort only sometimes calls swap and mostly uses move ctor + assign.
+    // Probably it uses different algorithms for different sequence sizes
+    // qDebug("Swapping %p and %p", &n1, &n2);
+    std::swap(n1.m_cachedText, n2.m_cachedText);
+    std::swap(n1.m_cachedIcon, n2.m_cachedIcon);
+    std::swap(n1.m_declOrContext, n2.m_declOrContext);
+    std::swap(n1.m_parent, n2.m_parent);
+    std::swap(n1.m_children, n2.m_children);
 }

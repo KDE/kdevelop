@@ -200,15 +200,16 @@ void OutlineModel::activate(const QModelIndex& realIndex)
     KTextEditor::Range range;
     {
         DUChainReadLocker lock;
-        const Declaration* decl = node->declaration();
-        if (!decl) {
+        const DUChainBase* dcb = node->duChainObject();
+        if (!dcb) {
             qCDebug(PLUGIN_OUTLINE) << "No declaration exists for node:" << node->text();
             return;
         }
         //foreground thread == GUI thread? if so then we are fine
-        range = decl->rangeInCurrentRevision();
+        range = dcb->rangeInCurrentRevision();
         //outline view should ALWAYS correspond to currently active document
-        Q_ASSERT(decl->url().toUrl() == ICore::self()->documentController()->activeDocument()->url());
+        Q_ASSERT(dcb->url().toUrl() == ICore::self()->documentController()->activeDocument()->url());
+        // lock should be released before activating the document
     }
     ICore::self()->documentController()->activateDocument(m_lastDoc, range);
 }

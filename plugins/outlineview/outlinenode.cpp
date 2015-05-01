@@ -44,6 +44,7 @@ OutlineNode::OutlineNode(const QString& text, OutlineNode* parent)
 
 OutlineNode::OutlineNode(DUContext* ctx, const QString& name, OutlineNode* parent)
     : m_cachedText(name)
+    , m_declOrContext(ctx)
     , m_parent(parent)
 {
     KTextEditor::CodeCompletionModel::CompletionProperties prop;
@@ -72,7 +73,7 @@ OutlineNode::OutlineNode(DUContext* ctx, const QString& name, OutlineNode* paren
 
 
 OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
-    : m_decl(decl)
+    : m_declOrContext(decl)
     , m_parent(parent)
 {
     // qCDebug(PLUGIN_OUTLINE) << "Adding:" << decl->qualifiedIdentifier().toString() << ": " <<typeid(*decl).name();
@@ -197,6 +198,7 @@ void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
             m_children.emplace_back(childDecl, this);
         }
     }
+    bool certainlyRequiresSorting = false;
     foreach (DUContext* childContext, ctx->childContexts()) {
         if (childContext->owner()) {
             // if there is a onwner, this will already have been handled by the loop above
@@ -209,6 +211,8 @@ void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
         if (decls.isEmpty()) {
             continue;
         }
+        // we now know that we will have o sort since we appended a node in the wrong order
+        certainlyRequiresSorting = true;
         QString ctxName = childContext->scopeIdentifier(true).toString();
         // if child context is a template context or if name is empty append to current list,
         // otherwise create a new context node
@@ -224,8 +228,44 @@ void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
             m_children.emplace_back(childContext, ctxName, this);
         }
     }
+    // we now need to sort since sometimes the elements from ctx->localDeclarations(top)
+    // are not in the order they appear in the source. Additionally, if we had any child
+    // contexts that were added, they will be at the end of the list
+    // and need to be moved to the correct location. In that case certainlyRequiresSorting
+    // will be true and we can pass it to sortByLocation() to skip the std::is_sorted() call
+    sortByLocation(certainlyRequiresSorting);
 }
 
+void OutlineNode::sortByLocation(bool requiresSorting)
+{
+
+    if (m_children.size() <= 1) {
+        return;
+    }
+    // TODO: does it make sense to cache m_declOrContext->range().start?
+    // adds 8 bytes to each node, but save a lot of pointer lookups when sorting
+    // qDebug("sorting children of %s (%p) by location", qPrintable(m_cachedText), this);
+    auto compare = [](const OutlineNode& n1, const OutlineNode& n2) -> bool {
+        // nodes without decl always go at the end
+        if (!n1.m_declOrContext) {
+            return false;
+        } else if (!n2.m_declOrContext) {
+            return true;
+        }
+        return n1.m_declOrContext->range().start < n2.m_declOrContext->range().start;
+    };
+    // since most nodes will be correctly sorted we check that before calling std::sort().
+    // This saves a lot of move ctor/assingnment calls in the common case.
+    // If we appended a context without a Declaration* we know that it will be unsorted
+    // so we can pass requiresSorting = true to skip the useless std::is_sorted() call.
+    // uncomment the following qDebug() lines to see whether this optimization really makes sense
+    if (requiresSorting || !std::is_sorted(m_children.begin(), m_children.end(), compare)) {
+        // qDebug("Need to sort node %s(%p)", qPrintable(m_cachedText), this);
+        std::sort(m_children.begin(), m_children.end(), compare);
+    } else {
+        // qDebug("Node %s(%p) was sorted!", qPrintable(m_cachedText), this);
+    }
+}
 
 OutlineNode::~OutlineNode()
 {
