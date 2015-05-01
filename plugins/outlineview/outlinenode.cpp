@@ -166,12 +166,13 @@ void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
             m_children.emplace_back(childDecl, this);
         }
     }
-    if (ctx->type() != DUContext::Template) {
-        return; //no need to list these subcontexts
-    }
     foreach (DUContext* childContext, ctx->childContexts()) {
-        if (!childContext)
+        Declaration* owner = childContext->owner();
+        if (owner) {
+            // qDebug() << childContext->scopeIdentifier(true).toString()
+            //        << " has an owner declaration: " << owner->toString() << "-> skip";
             continue;
+        }
         QVector<Declaration*> decls = childContext->localDeclarations(top);
         if (decls.isEmpty()) {
             continue;
@@ -179,14 +180,20 @@ void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
         QString ctxName = childContext->scopeIdentifier(true).toString();
         // if child context is a template context or if name is empty append to current list,
         // otherwise create a new context node
-        OutlineNode* childNode = 0;
         if (childContext->type() == DUContext::Template || ctxName.isEmpty()) {
-            childNode = this;
+            //append all subcontexts to this node
+            appendContext(childContext, top);
         } else {
+            // context without matching declaration, for example the definition of
+            // "class Foo::Bar if it was forward declared in a namespace before:
+            // namespace Foo { class Bar; }
+            // class Foo::Bar { ... };
+            // TODO: icon and location for the namespace
             m_children.emplace_back(ctxName, this);
+            foreach (DUContext* d, childContext->childContexts()) {
+                m_children.back().appendContext(d, top);
+            }
         }
-        //append all subcontexts recursively
-        childNode->appendContext(childContext, top);
     }
 }
 
