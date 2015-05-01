@@ -22,6 +22,7 @@
 
 #include <QAbstractItemModel>
 #include <vector>
+#include <memory>
 
 class OutlineNode;
 
@@ -55,7 +56,7 @@ private slots:
     void onParseJobFinished(KDevelop::ParseJob* job);
     void rebuildOutline(KDevelop::IDocument* doc);
 private:
-    std::vector<OutlineNode> m_topLevelItems;
+    std::unique_ptr<OutlineNode> m_rootNode;
     KDevelop::IDocument* m_lastDoc;
     KDevelop::IndexedString m_lastUrl;
 };

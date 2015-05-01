@@ -146,8 +146,21 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
     }
 }
 
+inline std::unique_ptr<OutlineNode> OutlineNode::dummyNode()
+{
+    return std::unique_ptr<OutlineNode>(new OutlineNode(QStringLiteral("<dummy node>"), nullptr));
+}
+
+std::unique_ptr<OutlineNode> OutlineNode::fromTopContext(TopDUContext* ctx)
+{
+    auto result = dummyNode();
+    result->appendContext(ctx, ctx);
+    return result;
+}
+
 void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
 {
+    qDebug() << ctx->scopeIdentifier().toString() << "context type=" << ctx->type();
     foreach (Declaration* childDecl, ctx->localDeclarations(top)) {
         if (childDecl) {
             m_children.emplace_back(childDecl, this);

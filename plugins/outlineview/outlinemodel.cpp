@@ -36,13 +36,14 @@
 using namespace KDevelop;
 
 OutlineModel::OutlineModel(QObject* parent)
-    : QAbstractItemModel(parent)
+    : QAbstractItemModel(parent), m_lastDoc(nullptr)
 {
     auto docController = ICore::self()->documentController();
-    m_lastDoc = docController->activeDocument();
-    if (m_lastDoc) {
-        m_lastUrl = IndexedString(m_lastDoc->url());
-    }
+    // build the initial outline now
+    rebuildOutline(docController->activeDocument());
+    // we must always have a valid root node
+    Q_ASSERT(m_rootNode);
+
     // we want to rebuild the outline whenever the current document has been reparsed
     connect(ICore::self()->languageController()->backgroundParser(),
             &BackgroundParser::parseJobFinished, this, &OutlineModel::onParseJobFinished);
@@ -54,8 +55,7 @@ OutlineModel::OutlineModel(QObject* parent)
             m_lastUrl = IndexedString(doc->url());
         }
     });
-    // build the initial outline now
-    rebuildOutline(docController->activeDocument());
+
 }
 
 OutlineModel::~OutlineModel()
@@ -87,7 +87,7 @@ QVariant OutlineModel::data(const QModelIndex& index, int role) const
     }
 
     OutlineNode* node = static_cast<OutlineNode*>(index.internalPointer());
-    Q_CHECK_PTR(node);
+    Q_ASSERT(node);
     if (role == Qt::DecorationRole) {
         return node->icon();
     }
@@ -99,29 +99,20 @@ QVariant OutlineModel::data(const QModelIndex& index, int role) const
 
 bool OutlineModel::hasChildren(const QModelIndex& parent) const
 {
-    if (!parent.isValid()) {
-        return m_topLevelItems.size() > 0;
-    }
-    if (parent.column() != 0) {
-        return false;
-    }
-
-    OutlineNode* node = static_cast<OutlineNode*>(parent.internalPointer());
-    return node->childCount() > 0;
+    return rowCount(parent) > 0;
 }
 
 int OutlineModel::rowCount(const QModelIndex& parent) const
 {
     if (!parent.isValid()) {
-        return m_topLevelItems.size();
-    }
-
-    if (parent.column() != 0) {
+        Q_ASSERT(m_rootNode);
+        return m_rootNode->childCount();
+    } else if (parent.column() != 0) {
         return 0;
+    } else {
+        const OutlineNode* node = static_cast<const OutlineNode*>(parent.internalPointer());
+        return node->childCount();
     }
-
-    const OutlineNode* node = static_cast<const OutlineNode*>(parent.internalPointer());
-    return node->childCount();
 }
 
 QModelIndex OutlineModel::index(int row, int column, const QModelIndex &parent) const
@@ -131,9 +122,8 @@ QModelIndex OutlineModel::index(int row, int column, const QModelIndex &parent) 
     }
     if (!parent.isValid()) {
         // topLevelItem
-        if ((size_t)row < m_topLevelItems.size()) {
-            // ! using the address is only safe since we never modify the vector once it has been created
-            return createIndex(row, column, const_cast<OutlineNode*>(&m_topLevelItems.at(row)));
+        if (row < m_rootNode->childCount()) {
+            return createIndex(row, column, const_cast<OutlineNode*>(m_rootNode->childAt(row)));
         }
         return QModelIndex();
     } else {
@@ -142,7 +132,6 @@ QModelIndex OutlineModel::index(int row, int column, const QModelIndex &parent) 
         }
         OutlineNode* node = static_cast<OutlineNode*>(parent.internalPointer());
         if (row < node->childCount()) {
-            // ! using the address is only safe since we never modify the vector once it has been created
             return createIndex(row, column, const_cast<OutlineNode*>(node->childAt(row)));
         }
         return QModelIndex(); // out of range
@@ -159,16 +148,15 @@ QModelIndex OutlineModel::parent(const QModelIndex& index) const
     const OutlineNode* node = static_cast<const OutlineNode*>(index.internalPointer());
 
     const OutlineNode* parentNode = node->parent();
-
-    if (!parentNode) {
+    Q_ASSERT(parentNode);
+    if (parentNode == m_rootNode.get()) {
         return QModelIndex(); //node is a top level item
     }
 
+    // parent node was not m_rootNode -> parent() must be valid
     const OutlineNode* parentParentNode = parentNode->parent();
-    //find the correct row if parents parent is null then we have to find the index in the top level items,
-    //otherwise query the parents parent for an index
-    const int row = parentParentNode ? parentParentNode->indexOf(parentNode) : OutlineNode::findNode(m_topLevelItems, parentNode);
-    // ! using the address is only safe since we never modify the vector once it has been created
+    Q_ASSERT(parentNode);
+    const int row = parentParentNode->indexOf(parentNode);
     return createIndex(row, 0, const_cast<OutlineNode*>(parentNode));
 }
 
@@ -182,27 +170,22 @@ void OutlineModel::onParseJobFinished(KDevelop::ParseJob* job)
 void OutlineModel::rebuildOutline(IDocument* doc)
 {
     emit beginResetModel();
-    m_topLevelItems.clear();
     if (!doc) {
-        return;
-    }
-
-    {
+        m_rootNode = OutlineNode::dummyNode();
+    } else {
+        // TODO: do this in a separate thread? Might take a while for large documents
+        // and we really shouldn't be blocking the GUI thread!
         DUChainReadLocker lock;
         TopDUContext* topContext = DUChainUtils::standardContextForUrl(doc->url());
-        if (!topContext) {
-            return;
+        if (topContext) {
+            m_rootNode = OutlineNode::fromTopContext(topContext);
+        } else {
+            m_rootNode = OutlineNode::dummyNode();
         }
-        foreach (Declaration* decl, topContext->localDeclarations()) {
-            if (decl) {
-                m_topLevelItems.emplace_back(decl, nullptr);
-            }
-        }
-        // ! m_topLevelItems mustn't be modified anywhere other than this function
-    } // DUChain should not be locked anymore when signal is emitted
+    }
     if (doc != m_lastDoc) {
+        m_lastUrl = doc ? IndexedString(doc->url()) : IndexedString();
         m_lastDoc = doc;
-        m_lastUrl = IndexedString(doc->url());
     }
     emit endResetModel();
 }
@@ -210,7 +193,7 @@ void OutlineModel::rebuildOutline(IDocument* doc)
 void OutlineModel::activate(const QModelIndex& realIndex)
 {
     if (!realIndex.isValid()) {
-        qCDebug(PLUGIN_OUTLINE) << "attempting to activate invalid item!";
+        qCWarning(PLUGIN_OUTLINE) << "attempting to activate invalid item!";
         return;
     }
     OutlineNode* node = static_cast<OutlineNode*>(realIndex.internalPointer());

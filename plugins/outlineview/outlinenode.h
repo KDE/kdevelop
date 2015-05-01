@@ -20,6 +20,7 @@
 
 #include <QString>
 #include <QIcon>
+#include <memory>
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
@@ -35,7 +36,7 @@ class OutlineNode
     void appendContext(KDevelop::DUContext* ctx, KDevelop::TopDUContext* top);
 public:
     OutlineNode(const QString& text, OutlineNode* parent);
-    explicit OutlineNode(OutlineNode&& other) noexcept;
+    OutlineNode(OutlineNode&& other) noexcept;
     OutlineNode(KDevelop::Declaration* decl, OutlineNode* parent);
     virtual ~OutlineNode();
     QIcon icon() const;
@@ -47,7 +48,8 @@ public:
     int indexOf(const OutlineNode* child) const;
     /** DUChain must be read-locked */
     const KDevelop::Declaration* declaration() const;
-    static int findNode(const std::vector<OutlineNode>& vec, const OutlineNode* n);
+    static std::unique_ptr<OutlineNode> fromTopContext(KDevelop::TopDUContext* ctx);
+    static inline std::unique_ptr<OutlineNode> dummyNode();
 private:
     QString m_cachedText;
     QIcon m_cachedIcon;
@@ -78,7 +80,14 @@ inline const OutlineNode* OutlineNode::parent() const
 
 inline int OutlineNode::indexOf(const OutlineNode* child) const
 {
-    return findNode(m_children, child);
+    const auto max = m_children.size();
+    // Comparing the address here is only fine since we never modify the vector after initial creation
+    for (size_t i = 0; i < max; i++) {
+        if (child== &m_children[i]) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 inline QIcon OutlineNode::icon() const
@@ -95,17 +104,6 @@ inline const KDevelop::Declaration* OutlineNode::declaration() const
 {
     Q_ASSERT(KDevelop::DUChain::lock()->currentThreadHasReadLock());
     return m_decl.data();
-}
-
-inline int OutlineNode::findNode(const std::vector< OutlineNode >& vec, const OutlineNode* n)
-{
-    const auto max = vec.size();
-    for (size_t i = 0; i < max; i++) {
-        if (n == &vec[i]) {
-            return (int)i;
-        }
-    }
-    return -1;
 }
 
 inline OutlineNode::OutlineNode(OutlineNode&& other) noexcept
