@@ -23,6 +23,7 @@
 
 class KRecursiveFilterProxyModel;
 class QTreeView;
+class QPushButton;
 class QLineEdit;
 class OutlineModel;
 class OutlineViewPlugin;
@@ -41,6 +42,7 @@ private:
     QTreeView* m_tree;
     KRecursiveFilterProxyModel* m_proxy;
     QLineEdit* m_filter;
+    QPushButton* m_sortAlphabetically;
 
     Q_DISABLE_COPY(OutlineWidget)
 public slots:

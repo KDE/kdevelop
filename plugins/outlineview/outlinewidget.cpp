@@ -24,6 +24,7 @@
 #include <QHeaderView>
 #include <QTreeView>
 #include <QLineEdit>
+#include <QPushButton>
 #include <QIcon>
 
 #include <KLocalizedString>
@@ -51,6 +52,8 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
 
     m_proxy->setSourceModel(m_model);
     m_proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    m_proxy->setSortCaseSensitivity(Qt::CaseInsensitive);
+    m_proxy->setDynamicSortFilter(false);
 
     m_tree->setModel(m_proxy);
     m_tree->setHeaderHidden(true);
@@ -62,6 +65,17 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
     QHBoxLayout* filterLayout = new QHBoxLayout();
 
     m_filter->setPlaceholderText(i18n("Filter..."));
+    m_sortAlphabetically = new QPushButton(QIcon::fromTheme("view-sort-ascending"), QString(), this);
+    m_sortAlphabetically->setToolTip(i18n("Sort alphabetically"));
+    m_sortAlphabetically->setCheckable(true);
+    connect(m_sortAlphabetically, &QPushButton::toggled, this, [this](bool sort) {
+        qDebug("Set sorting: %d", sort);
+        // calling sort with -1 will restore the original order
+        m_proxy->sort(sort ? 0 : -1, Qt::AscendingOrder);
+        m_sortAlphabetically->setChecked(sort);
+    });
+
+    filterLayout->addWidget(m_sortAlphabetically);
     filterLayout->addWidget(m_filter);
     setFocusProxy(m_filter);
 
