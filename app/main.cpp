@@ -149,7 +149,7 @@ static int openFilesInRunningInstance(const QVector<File>& files, int pid)
     QStringList urls;
     bool errors_occured = false;
     foreach ( const File& file, files ) {
-        QDBusReply<bool> result = iface.call("openDocumentSimple", file.first.toString());
+        QDBusReply<bool> result = iface.call("openDocumentSimple", file.first.toString(), file.second);
         if ( ! result.value() ) {
             QTextStream err(stderr);
             err << i18n("Could not open file %1.", file.first.toDisplayString(QUrl::PreferLocalFile)) << "\n";
