@@ -1,5 +1,5 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevpatchreview\")
-find_package(LibKompareDiff2 REQUIRED)
+find_package(LibKompareDiff2 5.0 REQUIRED)
 kde_enable_exceptions()
 include_directories(${LIBKOMPAREDIFF2_INCLUDE_DIR})
 
