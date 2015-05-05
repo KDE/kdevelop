@@ -416,13 +416,12 @@ void PatchReviewPlugin::updateReview() {
         documents[doc->url()] = doc;
     }
 
-    IDocument* futureActiveDoc = 0;
+    IDocument* futureActiveDoc = documents.take( m_patch->file() );
     //Open the diff itself
-    if ( !documents.contains( m_patch->file() ) ) {
+    if ( !futureActiveDoc ) {
         futureActiveDoc = ICore::self()->documentController()->openDocument( m_patch->file() );
-    } else {
-        futureActiveDoc = documents.take( m_patch->file() );
     }
+
     if ( !futureActiveDoc || !futureActiveDoc->textDocument() ) {
         // might happen if e.g. openDocument dialog was cancelled by user
         // or under the theoretic possibility of a non-text document getting opened
