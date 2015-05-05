@@ -275,13 +275,13 @@ IncludePathCompletionContext::IncludePathCompletionContext(const DUContextPointe
                                                            const QString& text)
     : CodeCompletionContext(context, text, CursorInRevision::castFromSimpleCursor(position), 0)
 {
-    ParseSession session(sessionData);
     const IncludePathProperties properties = includePathProperties(text);
 
     if (!properties.valid) {
         return;
     }
 
+    ParseSession session(sessionData);
     m_includeItems = includeItemsForUrl(url, properties, properties.local ?  session.environment().includes().project : session.environment().includes().system);
 }
 
