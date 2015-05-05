@@ -1,6 +1,7 @@
 /*
  * Copyright 2014  David Stevens <dgedstevens@gmail.com>
  * Copyright 2014  Kevin Funk <kfunk@kde.org>
+ * Copyright 2015 Milian Wolff <mail@milianw.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -34,7 +35,11 @@
 #include "codecompletion/context.h"
 #include "codecompletion/includepathcompletioncontext.h"
 
-QTEST_GUILESS_MAIN(TestCodeCompletion);
+#include <KTextEditor/Editor>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+
+QTEST_MAIN(TestCodeCompletion);
 
 using namespace KDevelop;
 
@@ -94,27 +99,42 @@ void executeCompletionTest(const QString& code, const CompletionItemsList& expec
     }
 }
 
-void executeIncludePathCompletion(TestFile* file, const KTextEditor::Cursor& position, QStringList* completionItems)
+using IncludeTester = CodeCompletionItemTester<IncludePathCompletionContext>;
+
+QExplicitlySharedDataPointer<IncludePathCompletionContext> executeIncludePathCompletion(TestFile* file, const KTextEditor::Cursor& position)
 {
-    completionItems->clear();
-    QVERIFY(file->parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+    if (!file->parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST)) {
+        QTest::qFail("Failed to parse source file.", __FILE__, __LINE__);
+        return {};
+    }
 
     DUChainReadLocker lock;
     auto top = file->topContext();
-    QVERIFY(top);
+    if (!top) {
+        QTest::qFail("Failed to parse source file.", __FILE__, __LINE__);
+        return {};
+    }
     const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
-    QVERIFY(sessionData);
+    if (!sessionData) {
+        QTest::qFail("Failed to acquire parse session data.", __FILE__, __LINE__);
+        return {};
+    }
 
     DUContextPointer topPtr(top);
 
     lock.unlock();
 
-    auto context = new IncludePathCompletionContext(topPtr, sessionData, file->url().toUrl(), position, file->fileContents());
-
-    lock.lock();
-    auto tester = CodeCompletionItemTester<IncludePathCompletionContext>(QExplicitlySharedDataPointer<IncludePathCompletionContext>(context));
-
-    *completionItems = tester.names;
+    auto text = file->fileContents();
+    int textLength = -1;
+    if (position.isValid()) {
+        textLength = 0;
+        for (int i = 0; i < position.line(); ++i) {
+            textLength = text.indexOf('\n', textLength) + 1;
+        }
+        textLength += position.column();
+    }
+    auto context = new IncludePathCompletionContext(topPtr, sessionData, file->url().toUrl(), position, text.mid(0, textLength));
+    return QExplicitlySharedDataPointer<IncludePathCompletionContext>{context};
 }
 
 }
@@ -368,22 +388,101 @@ void TestCodeCompletion::testInvalidCompletions_data()
         << CompletionItemsList{{{2, 0}, {}}};
 }
 
+void TestCodeCompletion::testIncludePathCompletion_data()
+{
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<KTextEditor::Cursor>("cursor");
+    QTest::addColumn<QString>("itemId");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("global-1") << QString("#include ") << KTextEditor::Cursor(0, 9)
+                              << QString("iostream") << QString("#include <iostream>");
+    QTest::newRow("global-2") << QString("#include <") << KTextEditor::Cursor(0, 9)
+                              << QString("iostream") << QString("#include <iostream>");
+    QTest::newRow("global-3") << QString("#include <") << KTextEditor::Cursor(0, 10)
+                              << QString("iostream") << QString("#include <iostream>");
+    QTest::newRow("global-4") << QString("#  include <") << KTextEditor::Cursor(0, 12)
+                              << QString("iostream") << QString("#  include <iostream>");
+    QTest::newRow("global-5") << QString("#  include   <") << KTextEditor::Cursor(0, 14)
+                              << QString("iostream") << QString("#  include   <iostream>");
+    QTest::newRow("global-6") << QString("#  include   <> /* 1 */") << KTextEditor::Cursor(0, 14)
+                              << QString("iostream") << QString("#  include   <iostream> /* 1 */");
+    QTest::newRow("global-7") << QString("#  include /* 1 */ <> /* 1 */") << KTextEditor::Cursor(0, 21)
+                              << QString("iostream") << QString("#  include /* 1 */ <iostream> /* 1 */");
+    QTest::newRow("global-8") << QString("# /* 1 */ include /* 1 */ <> /* 1 */") << KTextEditor::Cursor(0, 28)
+                              << QString("iostream") << QString("# /* 1 */ include /* 1 */ <iostream> /* 1 */");
+    QTest::newRow("global-9") << QString("#include <cstdint>") << KTextEditor::Cursor(0, 10)
+                              << QString("iostream") << QString("#include <iostream>");
+    QTest::newRow("global-10") << QString("#include <cstdint>") << KTextEditor::Cursor(0, 14)
+                              << QString("cstdint") << QString("#include <cstdint>");
+    QTest::newRow("global-11") << QString("#include <cstdint>") << KTextEditor::Cursor(0, 17)
+                              << QString("cstdint") << QString("#include <cstdint>");
+    QTest::newRow("local-0") << QString("#include \"") << KTextEditor::Cursor(0, 10)
+                              << QString("foo/") << QString("#include \"foo/\"");
+    QTest::newRow("local-1") << QString("#include \"foo/\"") << KTextEditor::Cursor(0, 14)
+                              << QString("bar/") << QString("#include \"foo/bar/\"");
+    QTest::newRow("local-2") << QString("#include \"foo/") << KTextEditor::Cursor(0, 14)
+                              << QString("bar/") << QString("#include \"foo/bar/\"");
+    QTest::newRow("local-3") << QString("# /* 1 */ include /* 1 */ \"\" /* 1 */") << KTextEditor::Cursor(0, 28)
+                              << QString("foo/") << QString("# /* 1 */ include /* 1 */ \"foo/\" /* 1 */");
+    QTest::newRow("local-4") << QString("# /* 1 */ include /* 1 */ \"foo/\" /* 1 */") << KTextEditor::Cursor(0, 31)
+                              << QString("bar/") << QString("# /* 1 */ include /* 1 */ \"foo/bar/\" /* 1 */");
+    QTest::newRow("local-5") << QString("#include \"foo/\"") << KTextEditor::Cursor(0, 10)
+                              << QString("foo/") << QString("#include \"foo/\"");
+    QTest::newRow("local-6") << QString("#include \"foo/asdf\"") << KTextEditor::Cursor(0, 10)
+                              << QString("foo/") << QString("#include \"foo/\"");
+    QTest::newRow("local-7") << QString("#include \"foo/asdf\"") << KTextEditor::Cursor(0, 14)
+                              << QString("bar/") << QString("#include \"foo/bar/\"");
+}
+
 void TestCodeCompletion::testIncludePathCompletion()
 {
-    QStringList items;
+    QFETCH(QString, code);
+    QFETCH(KTextEditor::Cursor, cursor);
+    QFETCH(QString, itemId);
+    QFETCH(QString, result);
 
-    TestFile file1("#include <", "cpp");
-    executeIncludePathCompletion(&file1, {0, 9}, &items);
-    QVERIFY(items.contains("iostream"));
+    QTemporaryDir tempDir;
+    QDir dir(tempDir.path());
+    QVERIFY(dir.mkpath("foo/bar/asdf"));
+    TestFile file(code, "cpp", 0, tempDir.path());
+    IncludeTester tester(executeIncludePathCompletion(&file, cursor));
+    QVERIFY(tester.completionContext);
+    QVERIFY(tester.completionContext->isValid());
 
-    TestFile file2("#include \"", "cpp");
-    executeIncludePathCompletion(&file2, {0, 9}, &items);
-    QVERIFY(!items.contains("iostream"));
+    auto item = tester.findItem(itemId);
+    QVERIFY(item);
 
+    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
+    QVERIFY(editor);
+
+    auto doc = std::unique_ptr<KTextEditor::Document>(editor->createDocument(this));
+    QVERIFY(doc.get());
+    QVERIFY(doc->openUrl(file.url().toUrl()));
+
+    QWidget parent;
+    auto view = doc->createView(&parent);
+    item->execute(view, KTextEditor::Range(cursor, cursor));
+    QCOMPARE(doc->text(), result);
+
+    const auto newCursor = view->cursorPosition();
+    QCOMPARE(newCursor.line(), cursor.line());
+    if (!itemId.endsWith('/')) {
+        // file inserted, cursor should be at end of line
+        QCOMPARE(newCursor.column(), doc->lineLength(cursor.line()));
+    } else {
+        // directory inserted, cursor should be before the " or >
+        const auto cursorChar = doc->characterAt(newCursor);
+        QVERIFY(cursorChar == '"' || cursorChar == '>');
+    }
+}
+
+void TestCodeCompletion::testIncludePathCompletionLocal()
+{
     TestFile header("int foo() { return 42; }\n", "h");
     TestFile impl("#include \"", "cpp", &header);
 
-    executeIncludePathCompletion(&impl, {0, 9}, &items);
-    QVERIFY(items.contains(header.url().toUrl().fileName()));
-    QVERIFY(!items.contains("iostream"));
+    IncludeTester tester(executeIncludePathCompletion(&impl, {0, 10}));
+    QVERIFY(tester.names.contains(header.url().toUrl().fileName()));
+    QVERIFY(!tester.names.contains("iostream"));
 }

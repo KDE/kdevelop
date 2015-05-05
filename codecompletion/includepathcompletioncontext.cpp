@@ -1,6 +1,7 @@
 /*
  * This file is part of KDevelop
  * Copyright 2014 Sergey Kalinichev <kalinichev.so.0@gmail.com>
+ * Copyright 2015 Milian Wolff <mail@milianw.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -40,35 +41,119 @@ namespace
 
 struct IncludePathProperties
 {
+    // potentially already existing path to a directory
     QString prefixPath;
+    // whether we look at a i.e. #include "local"
+    // or a #include <global> include line
     bool local = false;
+    // whether the line actually includes an #include
     bool valid = false;
+    // start offset into @p text where to insert the new item
+    int inputFrom = -1;
+    // end offset into @p text where to insert the new item
+    int inputTo = -1;
 };
 
-IncludePathProperties includePathProperties(const QString& text)
+/**
+ * Parse the last line of @p text and extract information about any existing include path from it.
+ */
+IncludePathProperties includePathProperties(const QString& text, int rightBoundary = -1)
 {
     IncludePathProperties properties;
 
-    QString line;
-    const int idx = text.lastIndexOf('\n');
-    if (idx != -1) {
-        line = text.mid(idx + 1).trimmed();
-    } else {
-        line = text.trimmed();
+    int idx = text.lastIndexOf('\n');
+    if (idx == -1) {
+        idx = 0;
+    }
+    if (rightBoundary == -1) {
+        rightBoundary = text.length();
     }
 
-    const static QRegularExpression includeRegexp("^\\s*#\\s*include\\s*(<|\")(.*)");
-    auto math = includeRegexp.match(line);
-    if(!math.hasMatch()){
+    // what follows is a relatively simple parser for include lines that may contain comments, i.e.:
+    // /*comment*/ #include /*comment*/ "path.h" /*comment*/
+    enum FindState {
+        FindBang,
+        FindInclude,
+        FindType,
+        FindTypeEnd
+    };
+    FindState state = FindBang;
+    char expectedEnd = '>';
+    for (; idx < text.size(); ++idx) {
+        const auto c = text.at(idx);
+        if (c.isSpace()) {
+            continue;
+        }
+        if (c == '/' && state != FindTypeEnd) {
+            // skip comments
+            if (idx >= text.length() - 1 || text.at(idx + 1) != '*') {
+                properties.valid = false;
+                return properties;
+            }
+            idx += 2;
+            while (idx < text.length() - 1 && (text.at(idx) != '*' || text.at(idx + 1) != '/')) {
+                ++idx;
+            }
+            if (idx >= text.length() - 1 || text.at(idx) != '*' || text.at(idx + 1) != '/') {
+                properties.valid = false;
+                return properties;
+            }
+            ++idx;
+            continue;
+        }
+        switch (state) {
+            case FindBang:
+                if (c != '#') {
+                    return properties;
+                }
+                state = FindInclude;
+                break;
+            case FindInclude:
+                if (text.midRef(idx, 7) != "include") {
+                    return properties;
+                }
+                idx += 6;
+                state = FindType;
+                properties.valid = true;
+                break;
+            case FindType:
+                properties.inputFrom = idx + 1;
+                if (c == '"') {
+                    expectedEnd = '"';
+                    properties.local = true;
+                } else if (c != '<') {
+                    properties.valid = false;
+                    return properties;
+                }
+                state = FindTypeEnd;
+                break;
+            case FindTypeEnd:
+                if (c == expectedEnd) {
+                    properties.inputTo = idx;
+                    // stop iteration
+                    idx = text.size();
+                }
+                break;
+        }
+    }
+
+    if (!properties.valid) {
         return properties;
     }
 
-    properties.valid = true;
-    properties.local = math.captured(1) == "\"";
-
-    const int slashIdx = math.captured(2).lastIndexOf('/');
-    if (slashIdx != -1) {
-        properties.prefixPath = math.captured(2).left(slashIdx);
+    // properly append to existing paths without overriding it
+    // i.e.: #include <foo/> should become #include <foo/bar.h>
+    // or: #include <header.h> should again become #include <header.h>
+    // see unit tests for more examples
+    if (properties.inputFrom != -1) {
+        int end = properties.inputTo;
+        if (end >= rightBoundary || end == -1) {
+            end = text.lastIndexOf('/', rightBoundary - 1) + 1;
+        }
+        if (end > 0) {
+            properties.prefixPath = text.mid(properties.inputFrom, end - properties.inputFrom);
+            properties.inputFrom += properties.prefixPath.length();
+        }
     }
 
     return properties;
@@ -141,24 +226,45 @@ public:
     virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
     {
         auto document = view->document();
-        QString newText = includeItem.isDirectory ? includeItem.name + '/' : includeItem.name;
-
-        if (!includeItem.isDirectory) {
-            auto line = document->line(word.start().line());
-            //check whether closing '"' or '>' already inserted
-            if (line.size() <= word.end().column() || (line[word.end().column()] != '\"' && line[word.end().column()] != '>')) {
-                const static QRegularExpression includeRegexp("^\\s*#\\s*include\\s*(<|\")(.*)");
-                QString lineText = document->text( {{word.start().line(), 0}, word.end()});
-                auto match = includeRegexp.match(lineText);
-                if (match.captured(1) == "\"") {
-                    newText += '\"';
-                } else if (match.captured(1) == "<") {
-                    newText += '>';
-                }
-            }
+        auto range = word;
+        const int lineNumber = word.end().line();
+        const QString line = document->line(lineNumber);
+        const auto properties = includePathProperties(line, word.end().column());
+        if (!properties.valid) {
+            return;
         }
 
-        document->replaceText(word, newText);
+        QString newText = includeItem.isDirectory ? includeItem.name + '/' : includeItem.name;
+
+        if (properties.inputFrom == -1) {
+            newText.prepend('<');
+        } else {
+            range.setStart({lineNumber, properties.inputFrom});
+        }
+        if (properties.inputTo == -1) {
+            // Add suffix
+            if (properties.local) {
+                newText += '"';
+            } else {
+                newText += '>';
+            }
+
+            // replace the whole line
+            range.setEnd({lineNumber, line.size()});
+        } else {
+            range.setEnd({lineNumber, properties.inputTo});
+        }
+
+        document->replaceText(range, newText);
+
+        if (includeItem.isDirectory) {
+            // ensure we can continue to add files/paths when we just added a directory
+            int offset = (properties.inputTo == -1) ? 1 : 0;
+            view->setCursorPosition(range.start() + KTextEditor::Cursor(0, newText.length() - offset));
+        } else {
+            // place cursor at end of line
+            view->setCursorPosition({lineNumber, document->lineLength(lineNumber)});
+        }
     }
 };
 

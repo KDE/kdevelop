@@ -32,7 +32,9 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
+    void testIncludePathCompletion_data();
     void testIncludePathCompletion();
+    void testIncludePathCompletionLocal();
 
     void testClangCodeCompletion();
     void testClangCodeCompletion_data();
