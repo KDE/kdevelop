@@ -55,6 +55,7 @@ private slots:
     void documentDestroyed();
     void aboutToDeleteMovingInterfaceContent( KTextEditor::Document* );
 private:
+    void highlightFromScratch(KTextEditor::Document* doc);
 
     void addLineMarker( KTextEditor::MovingRange* arg1, Diff2::Difference* arg2 );
     void removeLineMarker( KTextEditor::MovingRange* range );
