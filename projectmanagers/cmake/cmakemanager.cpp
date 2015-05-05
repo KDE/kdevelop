@@ -233,7 +233,8 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
     }
 
     foreach (const QString& name, dirTargets) {
-        new CMakeTargetItem(folder, name);
+        if (!name.endsWith("_automoc"))
+            new CMakeTargetItem(folder, name);
     }
 
     foreach (ProjectFolderItem* children, folder->folderList()) {
