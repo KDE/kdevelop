@@ -426,7 +426,7 @@ void setDeclData(CXCursor cursor, Declaration *decl, bool setComment = true) con
     }
     if (CK == CXCursor_Namespace)
         decl->setKind(Declaration::Namespace);
-    if (CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl || CursorKindTraits::isClass(CK))
+    if (CK == CXCursor_EnumDecl || CK == CXCursor_EnumConstantDecl || CursorKindTraits::isClass(CK) || CursorKindTraits::isAliasType(CK))
         decl->setKind(Declaration::Type);
 
     int isAlwaysDeprecated;

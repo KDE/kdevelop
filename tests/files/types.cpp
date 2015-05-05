@@ -16,11 +16,13 @@ enum myEnum {
 };
 
 /// "type" : { "toString" : "myTypedef" },
-/// "unaliasedType" : { "toString" : "int"}
+/// "unaliasedType" : { "toString" : "int"},
+/// "kind" : "Type"
 typedef int myTypedef;
 
 /// "type" : { "toString" : "myTypeAlias" },
-/// "unaliasedType" : { "toString" : "int"}
+/// "unaliasedType" : { "toString" : "int"},
+/// "kind" : "Type"
 using myTypeAlias = int;
 
 // Test for CXType_DependentSizedArray
