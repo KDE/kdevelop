@@ -256,7 +256,8 @@ void CMakeManager::importFinished(KJob* j)
     qCDebug(CMAKE) << "Successfully imported project" << project->name();
 
     CMakeProjectData data;
-    data.watcher->addPath(CMake::currentBuildDir(project).toLocalFile());
+    data.watcher->addPath(CMake::commandsFile(project).toLocalFile());
+    data.watcher->addPath(CMake::targetDirectoriesFile(project).toLocalFile());
     data.jsonData = job->jsonData();
     data.targets = job->targets();
     connect(data.watcher.data(), &QFileSystemWatcher::fileChanged, this, &CMakeManager::dirtyFile);

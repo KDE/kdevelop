@@ -58,6 +58,11 @@ namespace CMake
      * or an empty url if none has been set by the user.
      */
     KDEVCMAKECOMMON_EXPORT KDevelop::Path commandsFile( KDevelop::IProject* project );
+    /**
+     * @returns the path to the 'CMakeFiles/TargetDirectories.txt' file in the current builddir for the given project
+     * or an empty url if none has been set by the user.
+     */
+    KDEVCMAKECOMMON_EXPORT KDevelop::Path targetDirectoriesFile( KDevelop::IProject* project );
 
     /**
      * @returns the current build type for the given project or "Release" as default value.

@@ -256,6 +256,16 @@ KDevelop::Path commandsFile(KDevelop::IProject* project)
     return KDevelop::Path(currentBuildDir, QStringLiteral("compile_commands.json"));
 }
 
+KDevelop::Path targetDirectoriesFile(KDevelop::IProject* project)
+{
+    auto currentBuildDir = CMake::currentBuildDir(project);
+    if (currentBuildDir.isEmpty()) {
+        return {};
+    }
+
+    return KDevelop::Path(currentBuildDir, QStringLiteral("CMakeFiles/TargetDirectories.txt"));
+}
+
 QString currentBuildType( KDevelop::IProject* project )
 {
     return readProjectParameter( project, Config::Specific::cmakeBuildTypeKey, "Release" );

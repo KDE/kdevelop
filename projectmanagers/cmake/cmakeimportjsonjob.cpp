@@ -140,7 +140,7 @@ void CMakeImportJob::importFinished()
     const Path currentBuildDir = CMake::currentBuildDir(m_project);
     if (!currentBuildDir.isEmpty()) {
         const QString buildPath = currentBuildDir.toLocalFile();
-        const Path targetsFilePath = KDevelop::Path(currentBuildDir, QStringLiteral("CMakeFiles/TargetDirectories.txt"));
+        const Path targetsFilePath = CMake::targetDirectoriesFile(m_project);
         QFile targetsFile(targetsFilePath.toLocalFile());
         if (!targetsFile.open(QIODevice::ReadOnly)) {
             qCDebug(CMAKE) << "Couldn't find the Targets file in" << targetsFile.fileName();
