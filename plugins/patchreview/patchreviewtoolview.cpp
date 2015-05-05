@@ -363,7 +363,10 @@ void PatchReviewToolView::activate( const QUrl& url, IDocument* buddy ) const
 void PatchReviewToolView::fileItemChanged( QStandardItem* item )
 {
     QUrl url = m_fileModel->statusInfo(item).url();
-    if(item->checkState() != Qt::Checked)
+    if (url.isEmpty())
+        return;
+
+    if(m_fileModel->isCheckable() && item->checkState() != Qt::Checked)
     {
         // Eventually close the document
         if(KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(url)) {

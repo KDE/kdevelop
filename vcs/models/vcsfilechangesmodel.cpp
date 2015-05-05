@@ -219,4 +219,9 @@ void VcsFileChangesModel::setIsCheckbable(bool checkable)
     d->allowSelection = checkable;
 }
 
+bool VcsFileChangesModel::isCheckable() const
+{
+    return d->allowSelection;
+}
+
 }

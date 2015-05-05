@@ -112,6 +112,8 @@ public:
     static QStandardItem* fileItemForUrl(QStandardItem *parent, const QUrl &url);
 
     void setIsCheckbable(bool checkable);
+    bool isCheckable() const;
+
 public slots:
     /**
      * Used to post update of status of some file. Any status except UpToDate
