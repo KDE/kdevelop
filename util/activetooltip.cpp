@@ -85,9 +85,9 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
             return false;
         } else {
             QPoint globalPos = static_cast<QMouseEvent*>(e)->globalPos();
-            int distance = (d->rect_.center() - globalPos).manhattanLength();
+            uint distance = (d->rect_.center() - globalPos).manhattanLength();
 
-            if(distance > (int)d->previousDistance_) {
+            if(distance > d->previousDistance_) {
                 // Close if the widget under the mouse is not a child widget of the tool-tip
                 qCDebug(UTIL) << "closing because of mouse move outside the widget";
                 close();
