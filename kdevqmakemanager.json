@@ -1,0 +1,73 @@
+{
+    "KPlugin": {
+        "Category": "Project Management",
+        "Description": "Imports and edits QMake projects",
+        "Description[ast]": "Importa y edita proyeutos QMake",
+        "Description[bs]": "Uvozi i uređuje QMake projekte",
+        "Description[ca@valencia]": "Importa i edita projectes de QMake",
+        "Description[ca]": "Importa i edita projectes de QMake",
+        "Description[de]": "Importiert und bearbeitet QMake-Projekte",
+        "Description[en_GB]": "Imports and edits QMake projects",
+        "Description[es]": "Importa y edita proyectos de QMake",
+        "Description[et]": "QMake'i projektide import ja muutmine.",
+        "Description[fi]": "Tuo ja muokkaa QMake-projekteja",
+        "Description[fr]": "Importe et modifie des projets QMake",
+        "Description[ga]": "Iompórtáil tionscadail qmake agus cuir in eagar iad",
+        "Description[gl]": "Permite importar e editar proxectos de QMake.",
+        "Description[hu]": "QMake projektek importálása és szerkesztése",
+        "Description[nl]": "Importeert en bewerkt QMake-projecten",
+        "Description[pl]": "Importuje i edytuje projekty QMake",
+        "Description[pt]": "Importa e edita os projectos do QMake",
+        "Description[pt_BR]": "Importa e edita os projetos do QMake",
+        "Description[sk]": "Importuje a upravuje projekty QMake",
+        "Description[sv]": "Importerar och redigerar QMake-projekt",
+        "Description[tr]": "QMake projelerini içeriye aktarır ve düzenler",
+        "Description[uk]": "Імпортує і змінює проекти QMake",
+        "Description[x-test]": "xxImports and edits QMake projectsxx",
+        "Description[zh_CN]": "导入并编辑 QMake 工程",
+        "Icon": "qtlogo",
+        "Id": "KDevQMakeManager",
+        "Name": "QMake Project Manager",
+        "Name[ast]": "Xestor de proyeutos QMake",
+        "Name[bs]": "QMake projekt menadžer",
+        "Name[ca@valencia]": "Gestor de projectes QMake",
+        "Name[ca]": "Gestor de projectes QMake",
+        "Name[de]": "QMake-Projektverwaltung",
+        "Name[en_GB]": "QMake Project Manager",
+        "Name[es]": "Gestor de proyectos QMake",
+        "Name[et]": "QMake'i projekti haldur",
+        "Name[fi]": "QMake-projektinhallinta",
+        "Name[fr]": "Gestionnaire de projets QMake",
+        "Name[ga]": "Bainisteoir Tionscadail QMake",
+        "Name[gl]": "Xestor de proxectos que usen QMake",
+        "Name[hu]": "QMake projektkezelő",
+        "Name[it]": "Gestore progetti QMake",
+        "Name[nds]": "QMake-Projektpleger",
+        "Name[nl]": "QMake-projectmanager",
+        "Name[pa]": "QMake ਪਰੋਜੈਕਟ ਮੈਨੇਜਰ",
+        "Name[pl]": "Menadżer projektu QMake",
+        "Name[pt]": "Gestor de Projectos do QMake",
+        "Name[pt_BR]": "Gerenciador de projetos do QMake",
+        "Name[sk]": "Správca projektov QMake",
+        "Name[sv]": "QMake-projekthantering",
+        "Name[tr]": "QMake Proje Yöneticisi",
+        "Name[uk]": "Керування проектами QMake",
+        "Name[x-test]": "xxQMake Project Managerxx",
+        "Name[zh_CN]": "QMake 工程管理器",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    },
+    "X-KDevelop-FileManager": "QMake",
+    "X-KDevelop-IRequired": [
+	"org.kdevelop.IQMakeBuilder"
+	],
+    "X-KDevelop-Interfaces": [
+	"org.kdevelop.IBuildSystemManager","org.kdevelop.IProjectFileManager"
+	],
+    "X-KDevelop-Mode": "NoGUI",
+    "X-KDevelop-ProjectFilesFilter": [
+	"*.pro"
+	],
+    "X-KDevelop-ProjectFilesFilterDescription": "QMake Project Files"
+}

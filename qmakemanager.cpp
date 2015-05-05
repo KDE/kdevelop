@@ -75,7 +75,7 @@ QMakeFolderItem* findQMakeFolderParent(ProjectBaseItem* item) {
 
 //END Helpers
 
-K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
+K_PLUGIN_FACTORY_WITH_JSON(QMakeSupportFactory, "kdevqmakemanager.json", registerPlugin<QMakeProjectManager>(); )
 
 QMakeProjectManager* QMakeProjectManager::m_self = nullptr;
 

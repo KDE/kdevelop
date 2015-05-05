@@ -67,7 +67,7 @@ set(kdevqmakemanager_PART_UI
 
 ki18n_wrap_ui( kdevqmakemanager_PART_SRCS ${kdevqmakemanager_PART_UI} )
 
-add_library(kdevqmakemanager MODULE ${kdevqmakemanager_PART_SRCS})
+kdevplatform_add_plugin(kdevqmakemanager JSON kdevqmakemanager.json SOURCES ${kdevqmakemanager_PART_SRCS})
 target_link_libraries( kdevqmakemanager
     KF5::KDELibs4Support
     KDev::Interfaces
@@ -77,12 +77,6 @@ target_link_libraries( kdevqmakemanager
     KDev::OutputView
     KDev::Serialization
     kdevqmakeparser)
-
-########### install files ###############
-
-configure_file(kdevqmakemanager.desktop.cmake ${CMAKE_BINARY_DIR}/kdevqmakemanager.desktop)
-install( FILES ${CMAKE_BINARY_DIR}/kdevqmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install(TARGETS kdevqmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### cdash / unit tests ###############
 
