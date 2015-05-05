@@ -64,7 +64,7 @@ QSharedPointer<const ClangPCH> ClangIndex::pch(const ClangParsingEnvironment& en
         }
     }
 
-    QSharedPointer<const ClangPCH> pch(new ClangPCH(environment, this));
+    auto pch = QSharedPointer<ClangPCH>::create(environment, this);
     QWriteLocker lock(&m_pchLock);
     m_pch.insert(pchInclude, pch);
     return pch;

@@ -66,9 +66,9 @@ QSharedPointer<CodeCompletionContext> createCompletionContext(const KDevelop::DU
                                                               const QString& text)
 {
     if (includePathCompletionRequired(text)) {
-        return QSharedPointer<IncludePathCompletionContext>(new IncludePathCompletionContext(context, session, url, position, text));
+        return QSharedPointer<IncludePathCompletionContext>::create(context, session, url, position, text);
     } else {
-        return QSharedPointer<ClangCodeCompletionContext>(new ClangCodeCompletionContext(context, session, url, position, text));
+        return QSharedPointer<ClangCodeCompletionContext>::create(context, session, url, position, text);
     }
 }
 
