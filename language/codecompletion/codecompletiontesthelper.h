@@ -130,7 +130,7 @@ struct CodeCompletionItemTester
     void init()
     {
       if ( !completionContext || !completionContext->isValid() ) {
-        qDebug() << "invalid completion context";
+        qWarning() << "invalid completion context";
         return;
       }
 
