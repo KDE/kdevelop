@@ -30,7 +30,7 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevOutlineViewFactory, "kdevoutlineview.json", registerPlugin<OutlineViewPlugin>();)
 
-Q_LOGGING_CATEGORY(PLUGIN_OUTLINE, "kdevplatform.plugins.outline", QtDebugMsg);
+Q_LOGGING_CATEGORY(PLUGIN_OUTLINE, "kdevplatform.plugins.outline");
 
 using namespace KDevelop;
 
