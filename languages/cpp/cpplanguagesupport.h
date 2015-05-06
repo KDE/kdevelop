@@ -146,6 +146,8 @@ private:
 
     virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position) override;
 
+    bool isFunctionLike(const rpp::pp_macro* pm, const QUrl& url);
+
     static CppLanguageSupport* m_self;
 
     CppHighlighting *m_highlights;
