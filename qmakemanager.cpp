@@ -33,7 +33,7 @@
 #include <KProcess>
 #include <KDebug>
 #include <KDirWatch>
-#include <KIcon>
+#include <QIcon>
 #include <KPluginFactory>
 #include <KAboutData>
 #include <KPluginLoader>
@@ -102,7 +102,7 @@ QMakeProjectManager::QMakeProjectManager( QObject* parent, const QVariantList& )
     connect(this, SIGNAL(folderAdded(KDevelop::ProjectFolderItem*)),
             this, SLOT(slotFolderAdded(KDevelop::ProjectFolderItem*)));
 
-    m_runQmake = new QAction(KIcon("qtlogo"), i18n("Run QMake"), this);
+    m_runQmake = new QAction(QIcon::fromTheme("qtlogo"), i18n("Run QMake"), this);
     connect(m_runQmake, SIGNAL(triggered(bool)),
             this, SLOT(slotRunQMake()));
 }
