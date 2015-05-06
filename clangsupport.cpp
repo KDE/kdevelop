@@ -31,6 +31,7 @@
 
 #include "codecompletion/model.h"
 
+#include "clanghighlighting.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -218,7 +219,7 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
 
     ClangIntegration::DUChainUtils::registerDUChainItems();
 
-    m_highlighting = new KDevelop::CodeHighlighting(this);
+    m_highlighting = new ClangHighlighting(this);
     m_refactoring = new SimpleRefactoring(this);
     m_index.reset(new ClangIndex);
 
