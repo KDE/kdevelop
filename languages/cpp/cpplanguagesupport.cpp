@@ -76,6 +76,7 @@
 
 #include "preprocessjob.h"
 #include "rpp/preprocessor.h"
+#include "rpp/chartools.h"
 #include "ast.h"
 #include "parsesession.h"
 #include "cpphighlighting.h"
@@ -824,7 +825,7 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
     QString preprocessedBody;
     //Check whether tail contains arguments
     QString tail = found.second.trimmed(); ///@todo make this better.
-    if(m.second->function_like) {
+    if(isFunctionLike(m.second, url)) {
      if(tail.endsWith('\\'))
        tail.truncate(tail.length() - 1);
       //properly support macro expansions when arguments contain newlines
@@ -862,6 +863,58 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
     }
 
     return new Cpp::NavigationWidget(*m.second, preprocessedBody);
+}
+
+bool CppLanguageSupport::isFunctionLike(const rpp::pp_macro* pm, const KUrl& url)
+{
+  if(pm->function_like)
+    return true;
+
+  DUChainReadLocker lock(DUChain::lock(), 100);
+  if(!lock.locked()) {
+    kDebug(9007) << "Failed to lock the du-chain in time";
+    return false;
+  }
+
+  TopDUContext* ctx = standardContext(url, true);
+  if(!ctx || !ctx->parsingEnvironmentFile())
+    return false;
+
+  Cpp::EnvironmentFilePointer p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
+
+  Q_ASSERT(p);
+  QByteArray strdef = stringFromContents((uint*)pm->definition(), pm->definitionSize()).trimmed();
+
+  Cpp::ReferenceCountedMacroSet::Iterator it = p->usedMacros().iterator();
+
+  while(!strdef.isEmpty()) {
+    IndexedString preName(strdef);
+
+    if(!p->usedMacroNames().contains(preName) && !p->definedMacroNames().contains(preName))
+      return false;
+
+    while(it) {
+      if(it.ref().name.byteArray() == strdef) {
+        if(it.ref().function_like)
+          return true;
+        strdef = stringFromContents((uint*)it.ref().definition(), it.ref().definitionSize());
+      }
+      ++it;
+    }
+
+    it = p->definedMacros().iterator();
+
+    while(it) {
+      if(it.ref().name.byteArray() == strdef) {
+        if(it.ref().function_like)
+          return true;
+        strdef = stringFromContents((uint*)it.ref().definition(), it.ref().definitionSize());
+      }
+      ++it;
+    }
+  };
+
+  return false;
 }
 
 UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ), m_stop(false) {

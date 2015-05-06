@@ -158,6 +158,8 @@ private:
 
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
 
+    bool isFunctionLike(const rpp::pp_macro* pm, const KUrl& url);
+
     static CppLanguageSupport* m_self;
 
     CppHighlighting *m_highlights;
