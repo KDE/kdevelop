@@ -20,7 +20,6 @@
 
 #include "qmakedriver.h"
 
-#include <QtGlobal>
 #include <QtCore/QString>
 
 #include <kdebug.h>

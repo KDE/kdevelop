@@ -31,7 +31,6 @@
 #include <QProcessEnvironment>
 #include <QDebug>
 #include <KTemporaryFile>
-#include <KProcess>
 #include <QFileInfo>
 #include <QDir>
 #include <KTempDir>

@@ -42,7 +42,6 @@ scopename:  (no statement, is accepted by qmake)
 #include "parsetest.h"
 #include "qmakedriver.h"
 #include "ast.h"
-#include <QDebug>
 #include "testhelpers.h"
 
 QTEST_MAIN( ParseTest )

@@ -23,7 +23,6 @@
 #include <QtCore/QHash>
 #include <QtCore/QPair>
 #include <QtCore/QList>
-#include <QStandardItem>
 
 #include "qmakeprojectfile.h"
 

@@ -20,8 +20,6 @@
 
 #include "qmakemkspecs.h"
 
-#include <QStringList>
-#include <QDebug>
 
 QMakeMkSpecs::QMakeMkSpecs( const QString& basicmkspecs, QHash<QString,QString>  variables )
     : QMakeFile( basicmkspecs ), m_qmakeInternalVariables(std::move( variables ))

@@ -24,7 +24,6 @@
 #include <QtCore/QDir>
 #include <KProcess>
 #include <KLocalizedString>
-#include <KUrl>
 #include <KShell>
 #include <KDebug>
 #include <util/processlinemaker.h>

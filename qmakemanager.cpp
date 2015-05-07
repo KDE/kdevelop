@@ -30,12 +30,10 @@
 
 #include <KUrl>
 #include <KIO//Job>
-#include <KProcess>
 #include <KDebug>
 #include <KDirWatch>
 #include <QIcon>
 #include <KPluginFactory>
-#include <KAboutData>
 #include <KPluginLoader>
 
 #include <interfaces/icore.h>
