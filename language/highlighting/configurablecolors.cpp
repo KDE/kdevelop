@@ -80,6 +80,8 @@ CodeHighlightingColors::CodeHighlightingColors(ColorCache* cache) : Configurable
   ADD_COLOR(NamespaceType, 0x6B2840) //Dark rose
   ADD_COLOR(ErrorVariableType, 0x8b0019) //Pure red
   ADD_COLOR(ForwardDeclarationType, 0x5C5C5C) //Gray
+  ADD_COLOR(MacroType, 0xA41239)
+  ADD_COLOR(MacroFunctionLikeType, 0x008080)
 
 /*      case ScopeType:
     case TemplateType:

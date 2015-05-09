@@ -61,6 +61,8 @@ enum Types {
   EnumType,
   EnumeratorType,
   TypeAliasType,
+  MacroType,  /// Declaration of a macro such as "#define FOO"
+  MacroFunctionLikeType, /// Declaration of a function like macro such as "#define FOO()"
 
   //If none of the above match:
   MemberVariableType,

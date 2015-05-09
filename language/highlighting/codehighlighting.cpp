@@ -375,6 +375,10 @@ CodeHighlightingInstance::Types CodeHighlightingInstance::typeForDeclaration(Dec
   if(dec->kind() == Declaration::Namespace)
     return NamespaceType;
 
+  if(dec->kind() == Declaration::Macro){
+    return MacroType;
+  }
+
   if (context && dec->context() && dec->context()->type() == DUContext::Class) {
     //It is a use.
     //Determine the class we're in
