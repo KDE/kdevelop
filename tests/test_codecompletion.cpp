@@ -39,6 +39,11 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
+#include <ktexteditor_version.h>
+#if KTEXTEDITOR_VERSION < QT_VERSION_CHECK(5, 10, 0)
+Q_DECLARE_METATYPE(KTextEditor::Cursor);
+#endif
+
 QTEST_MAIN(TestCodeCompletion);
 
 using namespace KDevelop;
