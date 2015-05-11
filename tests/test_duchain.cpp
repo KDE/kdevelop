@@ -440,6 +440,10 @@ void TestDUChain::testBaseClasses()
 
     QVERIFY(inheritedDecl);
     QCOMPARE(inheritedDecl->baseClassesSize(), 1u);
+
+    QCOMPARE(baseDecl->uses().count(), 1);
+    QCOMPARE(baseDecl->uses().first().count(), 1);
+    QCOMPARE(baseDecl->uses().first().first(), RangeInRevision(0, 40, 0, 44));
 }
 
 void TestDUChain::testReparseBaseClasses()

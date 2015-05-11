@@ -667,8 +667,9 @@ private:
 };
 
 template<>
-CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor cursor);
-template<>
 CXChildVisitResult TUDUChain::buildUse<CXCursor_MacroExpansion>(CXCursor cursor);
+
+template<>
+CXChildVisitResult TUDUChain::dispatchCursor<CXCursor_CXXBaseSpecifier>(CXCursor cursor);
 
 #endif //TUDUCHAIN_H

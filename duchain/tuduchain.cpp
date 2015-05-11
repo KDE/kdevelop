@@ -440,10 +440,9 @@ AbstractType *TUDUChain::makeType(CXType type, CXCursor parent)
 }
 
 template<>
-CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor cursor)
+CXChildVisitResult TUDUChain::dispatchCursor<CXCursor_CXXBaseSpecifier>(CXCursor cursor)
 {
     auto currentContext = m_parentContext->context;
-    m_uses[currentContext].push_back(cursor);
 
     bool virtualInherited = clang_isVirtualBase(cursor);
     Declaration::AccessPolicy access = CursorKindTraits::kdevAccessPolicy(clang_getCXXAccessSpecifier(cursor));
@@ -453,7 +452,7 @@ CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor curso
     if (!decl) {
         // this happens for templates with template-dependent base classes e.g. - dunno whether we can/should do more here
         clangDebug() << "failed to find declaration for base specifier:" << ClangString(clang_getCursorDisplayName(cursor));
-        return CXChildVisit_Continue;
+        return CXChildVisit_Recurse;
     }
 
     DUChainWriteLocker lock;
@@ -462,7 +461,7 @@ CXChildVisitResult TUDUChain::buildUse<CXCursor_CXXBaseSpecifier>(CXCursor curso
     Q_ASSERT(classDecl);
 
     classDecl->addBaseClass({decl->indexedType(), access, virtualInherited});
-    return CXChildVisit_Continue;
+    return CXChildVisit_Recurse;
 }
 
 template<>
