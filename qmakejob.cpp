@@ -22,13 +22,14 @@
 #include "qmakejob.h"
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
+#include <QDebug>
 #include <KProcess>
 #include <KLocalizedString>
 #include <KShell>
-#include <KDebug>
 #include <util/processlinemaker.h>
 #include <outputview/outputmodel.h>
 #include <outputview/ioutputview.h>
+#include "debug.h"
 
 using namespace KDevelop;
 
@@ -96,11 +97,11 @@ void QMakeJob::start()
         if( err == KShell::NoError ) {
             args += tmp;
         } else {
-            kWarning() << "Ignoring qmake Extra arguments";
+            qCWarning(KDEV_QMAKE) << "Ignoring qmake Extra arguments";
             if( err == KShell::BadQuoting ) {
-                kWarning() << "QMake arguments badly quoted:" << m_extraArguments;
+                qCWarning(KDEV_QMAKE) << "QMake arguments badly quoted:" << m_extraArguments;
             } else {
-                kWarning() << "QMake arguments had meta character:" << m_extraArguments;
+                qCWarning(KDEV_QMAKE) << "QMake arguments had meta character:" << m_extraArguments;
             }
         }
     }

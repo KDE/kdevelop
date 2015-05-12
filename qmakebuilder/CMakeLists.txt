@@ -8,6 +8,8 @@ set(qmakebuilder_SRCS
     ../qmakeconfig.cpp
     qmakejob.cpp
     ../qmakeconfig.cpp
+    ../debug.cpp
+    qmakebuilderdebug.cpp
 )
 set(qmakebuilder_UI
     qmakeconfig.ui

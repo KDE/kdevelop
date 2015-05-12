@@ -23,11 +23,11 @@
 #include "qmakeconfig.h"
 
 
-#include <KDebug>
 #include <KLocalizedString>
 #include <KMessageWidget>
 
 #include <QUrl>
+#include <QDebug>
 
 #include <util/path.h>
 
@@ -37,6 +37,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
+#include "debug.h"
 
 using namespace KDevelop;
 
@@ -68,7 +69,7 @@ void QMakeBuildDirChooser::saveConfig()
 
 void QMakeBuildDirChooser::saveConfig(KConfigGroup& config)
 {
-    kDebug() << "Writing config for" << buildDir() << "to config" << config.name();
+    qCDebug(KDEV_QMAKE) << "Writing config for" << buildDir() << "to config" << config.name();
 
     config.writeEntry(QMakeConfig::QMAKE_BINARY, qmakeBin());
     config.writeEntry(QMakeConfig::INSTALL_PREFIX, installPrefix());
@@ -144,7 +145,7 @@ bool QMakeBuildDirChooser::isValid(QString *message)
         status->setText(msg);
         status->animatedShow();
     }
-    kDebug() << "VALID == " << valid;
+    qCDebug(KDEV_QMAKE) << "VALID == " << valid;
     return valid;
 }
 

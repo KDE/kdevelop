@@ -25,8 +25,9 @@
 #include "ast.h"
 
 #include <QtCore/QPair>
+#include <QDebug>
 
-#include <kdebug.h>
+#include "debug.h"
 
 namespace QMake
 {
@@ -239,15 +240,15 @@ template <typename T> T* BuildASTVisitor::stackTop()
 {
     if( aststack.isEmpty() )
     {
-        kDebug(9024) << kBacktrace();
-        kFatal(9024) << "ERROR: AST stack is empty, this should never happen";
+        qCDebug(KDEV_QMAKE);
+        qCCritical(KDEV_QMAKE) << "ERROR: AST stack is empty, this should never happen";
         exit(255);
     }
     T* ast = dynamic_cast<T*>(aststack.top());
     if( !ast )
     {
-        kDebug(9024) << kBacktrace();
-        kFatal(9024) << "ERROR: AST stack is screwed, doing a hard exit" << aststack.top()->type;
+        qCDebug(KDEV_QMAKE);
+        qCCritical(KDEV_QMAKE) << "ERROR: AST stack is screwed, doing a hard exit" << aststack.top()->type;
         exit(255);
     }
     return ast;
@@ -257,16 +258,16 @@ template <typename T> T* BuildASTVisitor::stackPop()
 {
     if( aststack.isEmpty() )
     {
-        kDebug(9024) << kBacktrace();
-        kFatal(9024) << "ERROR: AST stack is empty, this should never happen";
+        qCDebug(KDEV_QMAKE);
+        qCCritical(KDEV_QMAKE) << "ERROR: AST stack is empty, this should never happen";
         exit(255);
     }
     AST* tmp = aststack.pop();
     T* ast = dynamic_cast<T*>(tmp);
     if( !ast )
     {
-        kDebug(9024) << kBacktrace();
-        kFatal(9024) << "ERROR: AST stack is screwed, doing a hard exit" << tmp->type;
+        qCDebug(KDEV_QMAKE);
+        qCCritical(KDEV_QMAKE) << "ERROR: AST stack is screwed, doing a hard exit" << tmp->type;
         exit(255);
     }
     return ast;

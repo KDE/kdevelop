@@ -22,7 +22,6 @@
 
 #include <QtCore/QString>
 
-#include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kurl.h>
 #include <klocale.h>

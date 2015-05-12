@@ -24,11 +24,11 @@
 #include <QStandardPaths>
 
 #include <KConfigGroup>
-#include <KDebug>
 #include <KProcess>
 
 #include <interfaces/iproject.h>
 #include <util/path.h>
+#include "debug.h"
 
 const char *QMakeConfig::CONFIG_GROUP = "QMake_Builder";
 
@@ -127,7 +127,7 @@ QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeBinary)
         const QByteArray value = line.mid(colon + 1);
         hash.insert(key, value);
     }
-    kDebug(9024) << "Ran qmake (" << p.program().join(" ") << "), found:" << hash;
+    qCDebug(KDEV_QMAKE) << "Ran qmake (" << p.program().join(" ") << "), found:" << hash;
     return hash;
 }
 

@@ -147,8 +147,9 @@ namespace QMake
 
 [:
 #include "qmakelexer.h"
-#include <kdebug.h>
+#include <QDebug>
 #include <QtCore/QString>
+#include "debug.h"
 
 namespace QMake
 {
@@ -180,7 +181,7 @@ void Parser::tokenize( const QString& contents )
 
         if( m_debug )
         {
-            kDebug(9024) << kind << "(" << t.begin << "," << t.end << ")::" << tokenText(t.begin, t.end);
+            qCDebug(KDEV_QMAKE) << kind << "(" << t.begin << "," << t.end << ")::" << tokenText(t.begin, t.end);
         }
 
     }
@@ -197,11 +198,11 @@ QString Parser::tokenText( qint64 begin, qint64 end ) const
 void Parser::reportProblem( Parser::ProblemType type, const QString& message )
 {
     if (type == Error)
-        kDebug(9024) << "** ERROR:" << message;
+        qCDebug(KDEV_QMAKE) << "** ERROR:" << message;
     else if (type == Warning)
-        kDebug(9024) << "** WARNING:" << message;
+        qCDebug(KDEV_QMAKE) << "** WARNING:" << message;
     else if (type == Info)
-        kDebug(9024) << "** Info:" << message;
+        qCDebug(KDEV_QMAKE) << "** Info:" << message;
 }
 
 
@@ -219,8 +220,8 @@ void Parser::expectedSymbol(int /*expected_symbol*/, const QString& name)
     qint64 col;
     size_t index = tokenStream->index()-1;
     Token &token = tokenStream->at(index);
-    kDebug(9024) << "token starts at:" << token.begin;
-    kDebug(9024) << "index is:" << index;
+    qCDebug(KDEV_QMAKE) << "token starts at:" << token.begin;
+    qCDebug(KDEV_QMAKE) << "index is:" << index;
     tokenStream->startPosition(index, &line, &col);
     QString tokenValue = tokenText(token.begin, token.end);
     reportProblem(

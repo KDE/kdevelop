@@ -21,10 +21,11 @@
 
 #include "qmakebuilddirchooserdialog.h"
 
-#include <KDebug>
+#include <QDebug>
 #include <KLocalizedString>
 
 #include "qmakeconfig.h"
+#include "debug.h"
 
 #include <interfaces/iproject.h>
 
@@ -77,12 +78,12 @@ void QMakeBuildDirChooserDialog::slotButtonClicked(int button)
         }
         else
         {
-            kDebug() << "OK-button not accepted, input invalid";
+            qCDebug(KDEV_QMAKE) << "OK-button not accepted, input invalid";
         }
     }
     else
     {
-        kDebug() << "button != OK";
+        qCDebug(KDEV_QMAKE) << "button != OK";
         KDialog::slotButtonClicked(button);
     }
 }

@@ -23,9 +23,9 @@
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtCore/QProcessEnvironment>
+#include <QDebug>
 
-#include <kdebug.h>
-
+#include "debug.h"
 #include "parser/ast.h"
 #include "qmakedriver.h"
 
@@ -94,7 +94,7 @@ bool QMakeFile::read()
 {
     Q_ASSERT(!m_projectFile.isEmpty());
     QFileInfo fi( m_projectFile );
-    ifDebug(kDebug(9024) << "Is" << m_projectFile << "a dir?" << fi.isDir() ;)
+    ifDebug(qCDebug(KDEV_QMAKE) << "Is" << m_projectFile << "a dir?" << fi.isDir() ;)
     if( fi.isDir() )
     {
         QDir dir( m_projectFile );
@@ -116,19 +116,19 @@ bool QMakeFile::read()
 
     if( !d.parse( &m_ast ) )
     {
-        kWarning( 9024 ) << "Couldn't parse project:" << m_projectFile;
+        qCWarning(KDEV_QMAKE) << "Couldn't parse project:" << m_projectFile;
         delete m_ast;
         m_ast = nullptr;
         m_projectFile = QString();
         return false;
     }else
     {
-        ifDebug(kDebug(9024) << "found ast:" << m_ast->statements.count() ;)
+        ifDebug(qCDebug(KDEV_QMAKE) << "found ast:" << m_ast->statements.count() ;)
         QMakeFileVisitor visitor(this, this);
         ///TODO: cleanup, re-use m_variableValues directly in the visitor
         visitor.setVariables(m_variableValues);
         m_variableValues = visitor.visitFile(m_ast);
-        ifDebug(kDebug(9024) << "Variables found:" << m_variableValues ;)
+        ifDebug(qCDebug(KDEV_QMAKE) << "Variables found:" << m_variableValues ;)
     }
     return true;
 }
@@ -179,7 +179,7 @@ QStringList QMakeFile::resolveVariable(const QString& variable, VariableInfo::Va
     if (type == VariableInfo::QMakeVariable && m_variableValues.contains(variable)) {
         return m_variableValues.value(variable);
     } else {
-        kWarning(9024) << "unresolved variable:" << variable << "type:" << type;
+        qCWarning(KDEV_QMAKE) << "unresolved variable:" << variable << "type:" << type;
         return QStringList();
     }
 }

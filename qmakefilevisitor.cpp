@@ -17,7 +17,6 @@
 
 #include "qmakefilevisitor.h"
 
-#include "debug.h"
 #include "qmakefile.h"
 #include "qmakeincludefile.h"
 
@@ -25,10 +24,10 @@
 
 #include <QtCore/QStringList>
 #include <QtCore/QDir>
-
-#include <KDebug>
+#include <QDebug>
 #include <QProcessEnvironment>
 
+#include "debug.h"
 #define ifDebug(x)
 
 //BEGIN QMakeFileVisitor
@@ -90,23 +89,23 @@ void QMakeFileVisitor::visitFunctionCall( QMake::FunctionCallAST* node )
             return;
         QStringList arguments = getValueList( node->args );
 
-        ifDebug(kDebug(9024) << "found include" << node->identifier->value << arguments;)
+        ifDebug(qCDebug(KDEV_QMAKE) << "found include" << node->identifier->value << arguments;)
         QString argument = arguments.join("").trimmed();
         if(!argument.isEmpty() && QFileInfo( argument ).isRelative() )
         {
             argument = QFileInfo( m_baseFile->absoluteDir() + '/' + argument ).canonicalFilePath();
         }
         if (argument.isEmpty()) {
-            kWarning() << "empty include file detected in line" << node->startLine;
+            qCWarning(KDEV_QMAKE) << "empty include file detected in line" << node->startLine;
             if( node->identifier->value.startsWith('!') ) {
                 visitNode( node->body );
             }
             return;
         }
-        ifDebug(kDebug(9024) << "Reading Include file:" << argument;)
+        ifDebug(qCDebug(KDEV_QMAKE) << "Reading Include file:" << argument;)
         QMakeIncludeFile includefile( argument, m_baseFile, m_variableValues );
         bool read = includefile.read();
-        ifDebug(kDebug(9024) << "successfully read:" << read;)
+        ifDebug(qCDebug(KDEV_QMAKE) << "successfully read:" << read;)
         if( read )
         {
             //TODO: optimize by using variableMap and iterator, don't compare values
@@ -136,7 +135,7 @@ void QMakeFileVisitor::visitFunctionCall( QMake::FunctionCallAST* node )
         m_lastReturn = getValueList(node->args);
     }else
     { // TODO: only visit when test function returned true?
-        kWarning() << "unhandled function call" << node->identifier->value;
+        qCWarning(KDEV_QMAKE) << "unhandled function call" << node->identifier->value;
         visitNode( node->body );
     }
 }
@@ -194,7 +193,7 @@ QStringList QMakeFileVisitor::resolveVariables( const QString& var ) const
     VariableReferenceParser parser;
     parser.setContent( var );
     if( !parser.parse() ) {
-        kWarning(9024) << "Couldn't parse" << var << "to replace variables in it";
+        qCWarning(KDEV_QMAKE) << "Couldn't parse" << var << "to replace variables in it";
         return QStringList() << var;
     }
     if (parser.variableReferences().isEmpty()) {
@@ -213,7 +212,7 @@ QStringList QMakeFileVisitor::resolveVariables( const QString& var ) const
                     if (arg > 0 && arg <= m_arguments.size()) {
                         varValue = m_arguments.at(arg - 1);
                     } else {
-                        kWarning(9024) << "undefined macro argument:" << variable;
+                        qCWarning(KDEV_QMAKE) << "undefined macro argument:" << variable;
                     }
                 } else {
                     varValue = resolveVariable(variable, vi.type).join(" ");
@@ -238,7 +237,7 @@ QStringList QMakeFileVisitor::resolveVariables( const QString& var ) const
                 varValue = evaluateMacro(variable, arguments).join(" ");
                 break;
             } case VariableInfo::Invalid:
-                kWarning(9024) << "invalid qmake variable:" << variable;
+                qCWarning(KDEV_QMAKE) << "invalid qmake variable:" << variable;
                 continue;
         }
 
@@ -248,7 +247,7 @@ QStringList QMakeFileVisitor::resolveVariables( const QString& var ) const
     }
 
     QStringList ret = value.split(" ", QString::SkipEmptyParts);
-    ifDebug(kDebug(9024) << "resolved variable" << var << "to" << ret;)
+    ifDebug(qCDebug(KDEV_QMAKE) << "resolved variable" << var << "to" << ret;)
     return ret;
 }
 
@@ -264,7 +263,7 @@ QStringList QMakeFileVisitor::evaluateMacro(const QString& function, const QStri
         QMakeFileVisitor visitor(this, m_baseFile);
         return visitor.visitMacro(it.value(), arguments);
     } else {
-        kWarning() << "unhandled macro call:" << function << arguments;
+        qCWarning(KDEV_QMAKE) << "unhandled macro call:" << function << arguments;
     }
     return QStringList();
 }

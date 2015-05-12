@@ -23,7 +23,9 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QTextCodec>
 #include <QtCore/QFile>
-#include <kdebug.h>
+#include <QDebug>
+
+#include "debug.h"
 #include "qmakeparser.h"
 #include "qmakeast.h"
 
@@ -47,7 +49,7 @@ bool Driver::readFile( const QString& filename, const char* codec )
     QFile f(filename);
     if( !f.open(QIODevice::ReadOnly) )
     {
-        kWarning(9024) << "Couldn't open project file:" << filename;
+        qCWarning(KDEV_QMAKE) << "Couldn't open project file:" << filename;
         return false;
     }
     QTextStream s(&f);
@@ -79,7 +81,7 @@ bool Driver::parse( ProjectAST** qmast )
     bool matched = qmakeparser.parseProject(&ast);
     if( matched )
     {
-        ifDebug(kDebug(9024) << "Successfully parsed";)
+        ifDebug(qCDebug(KDEV_QMAKE) << "Successfully parsed";)
         if( m_debug )
         {
             DebugVisitor d(&qmakeparser);
@@ -88,11 +90,11 @@ bool Driver::parse( ProjectAST** qmast )
         *qmast = new ProjectAST();
         BuildASTVisitor d( &qmakeparser, *qmast );
         d.visitProject(ast);
-        ifDebug(kDebug(9024) << "Found" << (*qmast)->statements.count() << "Statements";)
+        ifDebug(qCDebug(KDEV_QMAKE) << "Found" << (*qmast)->statements.count() << "Statements";)
     }else
     {
         ast = nullptr;
-        kDebug(9024) << "Couldn't parse content";
+        qCDebug(KDEV_QMAKE) << "Couldn't parse content";
     }
     return matched;
 }

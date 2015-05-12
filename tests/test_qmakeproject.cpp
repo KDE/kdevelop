@@ -35,7 +35,6 @@
 #include <qtest_kde.h>
 #include <KUrl>
 #include <KConfigGroup>
-#include <KDebug>
 #include <kio/deletejob.h>
 
 QTEST_MAIN(TestQMakeProject);

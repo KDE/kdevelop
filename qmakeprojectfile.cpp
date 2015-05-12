@@ -25,7 +25,6 @@
 #include <QtCore/QDir>
 
 #include <kprocess.h>
-#include <kdebug.h>
 
 #include "debug.h"
 #include "parser/ast.h"
@@ -103,11 +102,11 @@ bool QMakeProjectFile::read()
         qtInc.setOutputChannelMode( KProcess::OnlyStdoutChannel );
         qtInc.start();
         if ( !qtInc.waitForFinished() ) {
-            kWarning() << "Failed to query Qt header path using qmake, is qmake installed?";
+            qCWarning(KDEV_QMAKE) << "Failed to query Qt header path using qmake, is qmake installed?";
         } else {
             const QStringList result = QString::fromLocal8Bit(qtInc.readAll()).split(QRegExp("[:\n]"), QString::SkipEmptyParts);
             if (result.size() != 4) {
-                kWarning() << "Failed to query qmake - bad qmake binary configured?" << binary;
+                qCWarning(KDEV_QMAKE) << "Failed to query qmake - bad qmake binary configured?" << binary;
                 m_qmakeQueryCache[binary] = qMakePair(QString(), QString());
             } else {
                 m_qmakeQueryCache[binary] = qMakePair(result.at(1).trimmed(), result.at(3).trimmed());
@@ -122,12 +121,12 @@ bool QMakeProjectFile::read()
 
 QStringList QMakeProjectFile::subProjects() const
 {
-    ifDebug(kDebug(9024) << "Fetching subprojects";)
+    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching subprojects";)
     QStringList list;
     foreach(  QString subdir, variableValues( "SUBDIRS" ) )
     {
         QString fileOrPath;
-        ifDebug(kDebug(9024) << "Found value:" << subdir;)
+        ifDebug(qCDebug(KDEV_QMAKE) << "Found value:" << subdir;)
         if ( containsVariable( subdir+".file" ) && !variableValues( subdir+".file" ).isEmpty() )
         {
             subdir = variableValues( subdir+".file" ).first();
@@ -143,13 +142,13 @@ QStringList QMakeProjectFile::subProjects() const
             fileOrPath = resolveToSingleFileName( subdir.trimmed() );
         }
         if (fileOrPath.isEmpty()) {
-            kWarning() << "could not resolve subdir" << subdir << "to file or path, skipping";
+            qCWarning(KDEV_QMAKE) << "could not resolve subdir" << subdir << "to file or path, skipping";
             continue;
         }
         list << fileOrPath;
     }
 
-    ifDebug(kDebug(9024) << "found" << list.size() << "subprojects";)
+    ifDebug(qCDebug(KDEV_QMAKE) << "found" << list.size() << "subprojects";)
     return list;
 }
 
@@ -168,7 +167,7 @@ bool QMakeProjectFile::hasSubProject(const QString& file) const
 void QMakeProjectFile::addPathsForVariable(const QString& variable, QStringList* list) const
 {
     const QStringList values = variableValues(variable);
-    ifDebug(kDebug(9024) << variable << values;)
+    ifDebug(qCDebug(KDEV_QMAKE) << variable << values;)
     foreach( const QString& val, values ) {
         QString path = resolveToSingleFileName(val);
         if( !path.isEmpty() && !list->contains(val) ) {
@@ -179,8 +178,8 @@ void QMakeProjectFile::addPathsForVariable(const QString& variable, QStringList*
 
 QStringList QMakeProjectFile::includeDirectories() const
 {
-    ifDebug(kDebug(9024) << "Fetching include dirs" << m_qtIncludeDir;)
-    ifDebug(kDebug(9024) << "CONFIG" << variableValues("CONFIG");)
+    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching include dirs" << m_qtIncludeDir;)
+    ifDebug(qCDebug(KDEV_QMAKE) << "CONFIG" << variableValues("CONFIG");)
 
     QStringList list;
     addPathsForVariable("INCLUDEPATH", &list);
@@ -245,13 +244,13 @@ QStringList QMakeProjectFile::includeDirectories() const
     addPathsForVariable("OBJECTS_DIR", &list);
     addPathsForVariable("UI_DIR", &list);
 
-    ifDebug(kDebug(9024) << "final list:" << list;)
+    ifDebug(qCDebug(KDEV_QMAKE) << "final list:" << list;)
     return list;
 }
 
 QStringList QMakeProjectFile::files() const
 {
-    ifDebug(kDebug(9024) << "Fetching files";)
+    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching files";)
 
     QStringList list;
     foreach( const QString& variable, QMakeProjectFile::FileVariables )
@@ -261,13 +260,13 @@ QStringList QMakeProjectFile::files() const
             list += resolveFileName( value );
         }
     }
-    ifDebug(kDebug(9024) << "found" << list.size() << "files";)
+    ifDebug(qCDebug(KDEV_QMAKE) << "found" << list.size() << "files";)
     return list;
 }
 
 QStringList QMakeProjectFile::filesForTarget( const QString& s ) const
 {
-    ifDebug(kDebug(9024) << "Fetching files";)
+    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching files";)
 
     QStringList list;
     if( variableValues("INSTALLS").contains(s) )
@@ -291,7 +290,7 @@ QStringList QMakeProjectFile::filesForTarget( const QString& s ) const
             }
         }
     }
-    ifDebug(kDebug(9024) << "found" << list.size() << "files";)
+    ifDebug(qCDebug(KDEV_QMAKE) << "found" << list.size() << "files";)
     return list;
 }
 
@@ -307,7 +306,7 @@ QString QMakeProjectFile::getTemplate() const
 
 QStringList QMakeProjectFile::targets() const
 {
-    ifDebug(kDebug(9024) << "Fetching targets";)
+    ifDebug(qCDebug(KDEV_QMAKE) << "Fetching targets";)
 
     QStringList list;
 
@@ -325,10 +324,10 @@ QStringList QMakeProjectFile::targets() const
 
     if (list.removeAll(QString())) {
         // remove empty targets - which is probably a bug...
-        kWarning(9024) << "got empty entry in TARGET of file" << absoluteFile();
+        qCWarning(KDEV_QMAKE) << "got empty entry in TARGET of file" << absoluteFile();
     }
 
-    ifDebug(kDebug(9024) << "found" << list.size() << "targets";)
+    ifDebug(qCDebug(KDEV_QMAKE) << "found" << list.size() << "targets";)
     return list;
 }
 
@@ -343,7 +342,7 @@ QStringList QMakeProjectFile::resolveVariable(const QString& variable, VariableI
         if (m_mkspecs->isQMakeInternalVariable(variable)) {
             return QStringList() << m_mkspecs->qmakeInternalVariable(variable);
         } else {
-            kWarning(9024) << "unknown QtConfig Variable:" << variable;
+            qCWarning(KDEV_QMAKE) << "unknown QtConfig Variable:" << variable;
             return QStringList();
         }
     }

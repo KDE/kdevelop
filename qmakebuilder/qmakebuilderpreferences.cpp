@@ -23,10 +23,10 @@
 
 #include <QIcon>
 #include <QVBoxLayout>
+#include <QDebug>
 
 #include <KIO/NetAccess>
 #include <kaboutdata.h>
-#include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kurlrequester.h>
 #include <KMessageBox>
@@ -36,6 +36,7 @@
 #include "../qmakebuilddirchooserdialog.h"
 #include "../qmakeconfig.h"
 #include "qmakebuilderconfig.h"
+#include "qmakebuilderdebug.h"
 
 #include <interfaces/iproject.h>
 
@@ -85,7 +86,7 @@ QMakeBuilderPreferences::~QMakeBuilderPreferences()
 
 void QMakeBuilderPreferences::reset()
 {
-    kDebug() << "loading data";
+    qCDebug(KDEV_QMAKEBUILDER) << "loading data";
     // refresh combobox
     KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
     const QString buildPath = cg.readEntry(QMakeConfig::BUILD_FOLDER, QString());
@@ -98,7 +99,7 @@ void QMakeBuilderPreferences::reset()
         m_prefsUi->buildDirCombo->setCurrentItem(buildPath);
         m_chooserUi->loadConfig(buildPath);
     }
-    kDebug() << "Loaded" << cg.groupList() << buildPath;
+    qCDebug(KDEV_QMAKEBUILDER) << "Loaded" << cg.groupList() << buildPath;
     m_prefsUi->removeButton->setEnabled(m_prefsUi->buildDirCombo->count() > 1);
     connect(m_prefsUi->buildDirCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(loadOtherConfig(QString)));
 
@@ -112,7 +113,7 @@ QString QMakeBuilderPreferences::name() const
 
 void QMakeBuilderPreferences::apply()
 {
-    kDebug() << "Saving data";
+    qCDebug(KDEV_QMAKEBUILDER) << "Saving data";
     QString errormsg;
 
     if(m_chooserUi->isValid(&errormsg))
@@ -138,7 +139,7 @@ void QMakeBuilderPreferences::validate()
 
 void QMakeBuilderPreferences::loadOtherConfig(const QString& config)
 {
-    kDebug() << "Loading config "<< config;
+    qCDebug(KDEV_QMAKEBUILDER) << "Loading config "<< config;
     if (!verifyChanges()) {
         return;
     }
@@ -167,7 +168,7 @@ void QMakeBuilderPreferences::addBuildConfig()
     if (!verifyChanges()) {
         return;
     }
-    kDebug() << "Adding a new config.";
+    qCDebug(KDEV_QMAKEBUILDER) << "Adding a new config.";
     // for more simpicity, just launch regular dialog
     auto dlg = new QMakeBuildDirChooserDialog(m_project);
     if(dlg->exec() == QDialog::Accepted) {
@@ -179,7 +180,7 @@ void QMakeBuilderPreferences::addBuildConfig()
 
 void QMakeBuilderPreferences::removeBuildConfig()
 {
-    kDebug() << "Removing config" << m_prefsUi->buildDirCombo->currentText();
+    qCDebug(KDEV_QMAKEBUILDER) << "Removing config" << m_prefsUi->buildDirCombo->currentText();
     QString removed = m_prefsUi->buildDirCombo->currentText();
     KConfigGroup cg(m_project->projectConfiguration(), QMakeConfig::CONFIG_GROUP);
 

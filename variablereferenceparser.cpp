@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "variablereferenceparser.h"
-#include <kdebug.h>
 
 bool isVarNameChar( QChar* c )
 {

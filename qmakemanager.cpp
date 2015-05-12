@@ -30,7 +30,6 @@
 
 #include <KUrl>
 #include <KIO//Job>
-#include <KDebug>
 #include <KDirWatch>
 #include <QIcon>
 #include <KPluginFactory>
@@ -57,6 +56,7 @@
 #include "qmakeconfig.h"
 #include <KDirWatch>
 #include <interfaces/iprojectcontroller.h>
+#include "debug.h"
 
 using namespace KDevelop;
 
@@ -145,7 +145,7 @@ Path QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
         }
     }
 
-    kDebug(9204) << "build dir for" << item->text() << item->path() << "is:" << dir;
+    qCDebug(KDEV_QMAKE) << "build dir for" << item->text() << item->path() << "is:" << dir;
     return dir;
 }
 
@@ -200,7 +200,7 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
         scope->setQMakeCache( cache );
     }
     scope->read();
-    kDebug(9024) << "top-level scope with variables:" << scope->variables();
+    qCDebug(KDEV_QMAKE) << "top-level scope with variables:" << scope->variables();
     auto  item = new QMakeFolderItem( project, path );
     item->addProjectFile(scope);
     return item;
@@ -239,11 +239,11 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, cons
         if (!parentPro && file.endsWith(".pri")) {
             continue;
         }
-        kDebug(9024) << "add project file:" << absFile;
+        qCDebug(KDEV_QMAKE) << "add project file:" << absFile;
         if (parentPro) {
-            kDebug(9024) << "parent:" << parentPro->absoluteFile();
+            qCDebug(KDEV_QMAKE) << "parent:" << parentPro->absoluteFile();
         } else {
-            kDebug(9024) << "no parent, assume project root";
+            qCDebug(KDEV_QMAKE) << "no parent, assume project root";
         }
 
         auto  qmscope = new QMakeProjectFile( absFile );
@@ -292,13 +292,13 @@ void QMakeProjectManager::slotFolderAdded( ProjectFolderItem* folder )
         return;
     }
 
-    kDebug(9024) << "adding targets for" << folder->path();
+    qCDebug(KDEV_QMAKE) << "adding targets for" << folder->path();
     foreach( QMakeProjectFile* pro, qmakeParent->projectFiles() ) {
         foreach( const QString& s, pro->targets() ) {
             if (!isValid(Path(folder->path(), s), false, folder->project())) {
                 continue;
             }
-            kDebug(9024) << "adding target:" << s;
+            qCDebug(KDEV_QMAKE) << "adding target:" << s;
             Q_ASSERT(!s.isEmpty());
             auto  target = new QMakeTargetItem( pro, folder->project(), s, folder );
             foreach( const QString& path, pro->filesForTarget(s) ) {
@@ -315,7 +315,7 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
     if( dirName.isRemote() )
     {
         //FIXME turn this into a real warning
-        kWarning(9025) << "not a local file. QMake support doesn't handle remote projects";
+        qCWarning(KDEV_QMAKE) << "not a local file. QMake support doesn't handle remote projects";
         return nullptr;
     }
 
@@ -438,7 +438,7 @@ Path::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
         if (!list.contains(folder->path())) {
             list << folder->path();
         }
-//         kDebug(9024) << "include dirs for" << item->path() << ":" << list;
+//         qCDebug(KDEV_QMAKE) << "include dirs for" << item->path() << ":" << list;
     }
     return list;
 }

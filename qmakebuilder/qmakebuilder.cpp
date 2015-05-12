@@ -25,7 +25,7 @@
 #include "../qmakeconfig.h"
 
 #include <QtCore/QStringList>
-
+#include <QDebug>
 #include <project/projectmodel.h>
 
 #include <interfaces/iproject.h>
@@ -37,9 +37,9 @@
 #include <kpluginfactory.h>
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 #include "qmakejob.h"
+#include "qmakebuilderdebug.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(QMakeBuilderFactory, "kdevqmakebuilder.json", registerPlugin<QMakeBuilder>(); )
 
@@ -75,13 +75,13 @@ QMakeBuilder::~QMakeBuilder()
 
 KJob* QMakeBuilder::prune( KDevelop::IProject* project )
 {
-    kDebug(9039) << "Distcleaning";
+    qCDebug(KDEV_QMAKEBUILDER) << "Distcleaning";
     if( m_makeBuilder )
     {
         IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
         if( builder )
         {
-            kDebug(9039) << "Distcleaning with make";
+            qCDebug(KDEV_QMAKEBUILDER) << "Distcleaning with make";
             return builder->executeMakeTarget(project->projectItem(), "distclean");
         }
     }
@@ -90,13 +90,13 @@ KJob* QMakeBuilder::prune( KDevelop::IProject* project )
 
 KJob* QMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
-    kDebug(9039) << "Building";
+    qCDebug(KDEV_QMAKEBUILDER) << "Building";
     if( m_makeBuilder )
     {
         IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
         if( builder )
         {
-            kDebug(9039) << "Building with make";
+            qCDebug(KDEV_QMAKEBUILDER) << "Building with make";
             return builder->build(dom);
         }
     }
@@ -113,13 +113,13 @@ KJob* QMakeBuilder::configure( KDevelop::IProject* project )
 
 KJob* QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
 {
-    kDebug(9039) << "Cleaning";
+    qCDebug(KDEV_QMAKEBUILDER) << "Cleaning";
     if( m_makeBuilder )
     {
         IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
         if( builder )
         {
-            kDebug(9039) << "Cleaning with make";
+            qCDebug(KDEV_QMAKEBUILDER) << "Cleaning with make";
             return builder->clean(dom);
         }
     }
@@ -128,13 +128,13 @@ KJob* QMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
 
 KJob* QMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
 {
-    kDebug(9039) << "Installing";
+    qCDebug(KDEV_QMAKEBUILDER) << "Installing";
     if( m_makeBuilder )
     {
         IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
         if( builder )
         {
-            kDebug(9039) << "Installing with make";
+            qCDebug(KDEV_QMAKEBUILDER) << "Installing with make";
             return builder->install(dom);
         }
     }
