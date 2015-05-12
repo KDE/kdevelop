@@ -41,39 +41,6 @@
 
 #define ifDebug(x)
 
-// ######### start interpolation
-
-static const uint totalColorInterpolationStepCount = 6;
-static const uint interpolationWaypoints[] = {0xff0000, 0xff9900, 0x00ff00, 0x00aaff, 0x0000ff, 0xaa00ff};
-//Do less steps when interpolating to/from green: Green is very dominant, and different mixed green tones are hard to distinguish(and always seem green).
-static const uint interpolationLengths[] = {0xff, 0xff, 0xbb, 0xbb, 0xbb, 0xff};
-
-static const uint totalGeneratedColors = 10;
-
-uint totalColorInterpolationSteps()
-{
-  uint ret = 0;
-  for(uint a = 0; a < totalColorInterpolationStepCount; ++a)
-    ret += interpolationLengths[a];
-  return ret;
-}
-
-///Generates a color from the color wheel. @param step Step-number, one of totalColorInterpolationSteps
-QColor interpolate(uint step)
-{
-  uint waypoint = 0;
-  while(step > interpolationLengths[waypoint]) {
-    step -= interpolationLengths[waypoint];
-    ++waypoint;
-  }
-
-  uint nextWaypoint = (waypoint + 1) % totalColorInterpolationStepCount;
-
-  return KColorUtils::mix( QColor(interpolationWaypoints[waypoint]), QColor(interpolationWaypoints[nextWaypoint]),
-                           float(step) / float(interpolationLengths[waypoint]) );
-}
-
-// ######### end interpolation
 namespace KDevelop {
 
 ColorCache* ColorCache::m_self = 0;
@@ -138,15 +105,50 @@ void ColorCache::generateColors()
 
   m_defaultColors = new CodeHighlightingColors(this);
 
+  const static QList<QColor> colors = {
+    {"#00FF00"},
+    {"#0000FF"},
+    {"#FF0000"},
+    {"#01FFFE"},
+    {"#A80041"},
+    {"#007DB5"},
+    {"#0076FF"},
+    {"#CCF400"},
+    {"#FF029D"},
+    {"#FE8900"},
+    {"#C673D3"},
+    {"#7E2DD2"},
+    {"#65CA00"},
+    {"#FF0056"},
+    {"#D92F00"},
+    {"#00B917"},
+    {"#9E008E"},
+    {"#002884"},
+    {"#FF74A3"},
+    {"#01D0FF"},
+    {"#E56FFE"},
+    {"#0E4CA1"},
+    {"#968AE8"},
+    {"#AC0071"},
+    {"#00FFC6"},
+    {"#E4CE00"},
+    {"#00A5B4"},
+    {"#7544B1"},
+    {"#B500FF"},
+    {"#00FF78"},
+    {"#FF6E41"},
+    {"#008F56"},
+    {"#48E300"},
+    {"#009BFF"},
+    {"#E85EBE"}
+  };
+
   m_colors.clear();
-  uint step = totalColorInterpolationSteps() / totalGeneratedColors;
-  uint currentPos = m_colorOffset;
-  ifDebug(qCDebug(LANGUAGE) << "text color:" << m_foregroundColor;)
-  for(uint a = 0; a < totalGeneratedColors; ++a) {
-    m_colors.append( blendLocalColor( interpolate( currentPos ) ) );
-    ifDebug(qCDebug(LANGUAGE) << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps() << ":" << (void*) m_colors.last().rgb();)
-    currentPos += step;
+
+  for(const auto& color: colors){
+    m_colors.append(blendLocalColor(color));
   }
+
   m_validColorCount = m_colors.count();
   m_colors.append(m_foregroundColor);
 }
