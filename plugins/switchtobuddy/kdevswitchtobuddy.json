@@ -2,7 +2,7 @@
     "KPlugin": {
         "Category": "Utilities", 
         "Description": "Allows switching between buddy documents like implementation and header file.", 
-        "Description[ca]": "Permet commutar entre document associats com fitxers d'implementacions i de capçaleres.", 
+        "Description[ca]": "Permet commutar entre documents associats com fitxers d'implementacions i de capçaleres.", 
         "Description[de]": "Ermöglicht das Umschalten zwischen verwandten Dokumenten wie Implementations- und Header-Dateien.", 
         "Description[en_GB]": "Allows switching between buddy documents like implementation and header file.", 
         "Description[es]": "Permite cambiar entre documentos complementarios, como la implementación y el archivo de cabecera.", 
