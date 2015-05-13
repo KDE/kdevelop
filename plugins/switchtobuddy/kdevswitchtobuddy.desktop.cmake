@@ -2,7 +2,7 @@
 Type=Service
 Comment=Allows switching between buddy documents like implementation and header file.
 Comment[bs]=Dopušta prebacivanje između prijatelj-dokumenata, poput datoteke zaglavlja i implementacije.
-Comment[ca]=Permet commutar entre document associats com fitxers d'implementacions i de capçaleres.
+Comment[ca]=Permet commutar entre documents associats com fitxers d'implementacions i de capçaleres.
 Comment[ca@valencia]=Permet commutar entre document associats com fitxers d'implementacions i de capçaleres.
 Comment[da]=Muliggør skift mellem buddy-dokumenter såsom implementations- og headerfil.
 Comment[de]=Ermöglicht das Umschalten zwischen verwandten Dokumenten wie Implementations- und Header-Dateien.
