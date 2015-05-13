@@ -52,13 +52,26 @@ macro(kdevplatform_create_template_archive _templateName)
             DEPENDS ${_deps}
         )
     else(WIN32)
-        add_custom_command(OUTPUT ${_template}
-            COMMAND tar ARGS -c -C ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
-                --exclude .kdev_ignore --exclude .svn --owner=root --group=root --numeric-owner
-                -j -f ${_template} .
-            DEPENDS ${_deps}
-        )
+
+        if(APPLE)
+            add_custom_command(OUTPUT ${_template}
+                COMMAND tar ARGS -c -C ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
+                    --exclude .kdev_ignore --exclude .svn --numeric-owner
+                    -j -f ${_template} .
+                DEPENDS ${_deps}
+            )
+        else(APPLE)
+            add_custom_command(OUTPUT ${_template}
+                COMMAND tar ARGS -c -C ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
+                    --exclude .kdev_ignore --exclude .svn --owner=root --group=root --numeric-owner
+                    -j -f ${_template} .
+                DEPENDS ${_deps}
+            )
+        endif(APPLE)
+
     endif(WIN32)
+
+
 endmacro(kdevplatform_create_template_archive _templateName)
 
 # package and install the given directory as a template archive
