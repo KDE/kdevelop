@@ -18,7 +18,6 @@ add_subdirectory(documentswitcher)
 add_subdirectory(patchreview)
 add_subdirectory(openwith)
 add_subdirectory(grepview)
-add_subdirectory(pastebin)
 add_subdirectory(codeutils)
 add_subdirectory(git)
 add_subdirectory(bazaar)
@@ -53,5 +52,3 @@ set_package_properties(SubversionLibrary PROPERTIES
 if(SubversionLibrary_FOUND)
     ecm_optional_add_subdirectory(subversion)
 endif()
-
-ecm_optional_add_subdirectory(reviewboard)

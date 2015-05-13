@@ -43,7 +43,6 @@ set(KDevPlatformVcs_LIB_SRCS
     interfaces/ibasicversioncontrol.cpp
     interfaces/icontentawareversioncontrol.cpp
     interfaces/ipatchdocument.cpp
-    interfaces/ipatchexporter.cpp
     interfaces/ipatchsource.cpp
 )
 
@@ -104,7 +103,6 @@ install(FILES
     interfaces/ibrowsableversioncontrol.h
     interfaces/irepositoryversioncontrol.h
     interfaces/ipatchdocument.h
-    interfaces/ipatchexporter.h
     interfaces/ipatchsource.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/interfaces COMPONENT Devel
 )

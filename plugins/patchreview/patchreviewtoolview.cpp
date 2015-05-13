@@ -14,7 +14,6 @@
 #include "patchreviewtoolview.h"
 #include "localpatchsource.h"
 #include "patchreview.h"
-#include "standardpatchexport.h"
 #include "debug.h"
 #include <libkomparediff2/diffmodellist.h>
 #include <libkomparediff2/komparemodellist.h>
@@ -37,10 +36,15 @@
 
 #include <QFileInfo>
 #include <QMenu>
+#include <QJsonObject>
+#include <QJsonArray>
 
+#include <KMessageBox>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
+#include <Purpose/AlternativesModel>
+#include <PurposeWidgets/Menu>
 
 using namespace KDevelop;
 
@@ -118,6 +122,14 @@ void PatchReviewToolView::startingNewReview()
 void PatchReviewToolView::patchChanged() {
     fillEditFromPatch();
     kompareModelChanged();
+
+    auto p = m_plugin->patch();
+#ifdef WITH_PURPOSE
+    m_exportMenu->model()->setInputData(QJsonObject {
+        { QStringLiteral("urls"), QJsonArray { p->file().toString() } },
+        { QStringLiteral("mimeType"), { QStringLiteral("text/x-patch") } },
+    });
+#endif
 }
 
 PatchReviewToolView::~PatchReviewToolView()
@@ -199,20 +211,21 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.testsButton->setIcon( QIcon::fromTheme( "preflight-verifier" ) );
     m_editPatch.finishReview->setDefaultAction(m_plugin->finishReviewAction());
 
-    QMenu* exportMenu = new QMenu( m_editPatch.exportReview );
-    StandardPatchExport* stdactions = new StandardPatchExport( m_plugin, this );
-    stdactions->addActions( exportMenu );
-    connect(exportMenu, &QMenu::triggered, m_plugin, &PatchReviewPlugin::exporterSelected);
-
-    IPluginController* pluginManager = ICore::self()->pluginController();
-    foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IPatchExporter" ) )
-    {
-        KPluginMetaData info = pluginManager->pluginInfo( p );
-        QAction* action = exportMenu->addAction( QIcon::fromTheme( info.iconName() ), info.name() );
-        action->setData( qVariantFromValue<QObject*>( p ) );
-    }
-
-    m_editPatch.exportReview->setMenu( exportMenu );
+#ifdef WITH_PURPOSE
+    m_exportMenu = new Purpose::Menu(this);
+    connect(m_exportMenu, &Purpose::Menu::finished, this, [](const QJsonObject &output, int error, const QString &message) {
+        if (error==0) {
+            KMessageBox::information(0, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", output["url"].toString()),
+                                    QString(), QString(), KMessageBox::AllowLink);
+        } else {
+            QMessageBox::warning(nullptr, i18n("Error exporting"), i18n("Couldn't export the patch.\n%1", message));
+        }
+    });
+    m_exportMenu->model()->setPluginType("Export");
+    m_editPatch.exportReview->setMenu( m_exportMenu );
+#else
+    m_editPatch.exportReview->setEnabled(false);
+#endif
 
     connect( m_editPatch.previousHunk, &QToolButton::clicked, this, &PatchReviewToolView::prevHunk );
     connect( m_editPatch.nextHunk, &QToolButton::clicked, this, &PatchReviewToolView::nextHunk );

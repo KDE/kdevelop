@@ -24,6 +24,7 @@
 namespace Sublime { class Area; }
 namespace KDevelop { class IDocument; }
 namespace KParts { class Part; }
+namespace Purpose { class Menu; }
 
 class QStandardItem;
 class KJob;
@@ -94,6 +95,7 @@ private:
     QPointer< QWidget > m_customWidget;
     QAction* m_selectAllAction;
     QAction* m_deselectAllAction;
+    Purpose::Menu* m_exportMenu;
 
     class PatchFilesModel* m_fileModel;
 public slots:

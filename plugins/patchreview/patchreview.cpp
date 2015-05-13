@@ -25,7 +25,6 @@
 #include <interfaces/idocument.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
-#include <interfaces/ipatchexporter.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iuicontroller.h>
 
@@ -329,12 +328,11 @@ void PatchReviewPlugin::closeReview()
         removeHighlighting();
         m_modelList.reset( 0 );
 
-        emit patchChanged();
-
         if( !dynamic_cast<LocalPatchSource*>( m_patch.data() ) ) {
             // make sure "show" button still openes the file dialog to open a custom patch file
             setPatch( new LocalPatchSource );
-        }
+        } else
+            emit patchChanged();
 
         Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
         if( w->area()->objectName() == "review" ) {
@@ -551,16 +549,6 @@ void PatchReviewPlugin::unload() {
 
 QWidget* PatchReviewPlugin::createToolView( QWidget* parent ) {
     return new PatchReviewToolView( parent, this );
-}
-
-void PatchReviewPlugin::exporterSelected( QAction* action ) {
-    IPlugin* exporter = qobject_cast<IPlugin*>( action->data().value<QObject*>() );
-
-    if( exporter ) {
-        qCDebug(PLUGIN_PATCHREVIEW) << "exporting patch" << exporter << action->text();
-        // for git projects, m_patch will be a VCSDiffPatchSource instance
-        exporter->extension<IPatchExporter>()->exportPatch( patch() );
-    }
 }
 
 void PatchReviewPlugin::areaChanged(Sublime::Area* area)
