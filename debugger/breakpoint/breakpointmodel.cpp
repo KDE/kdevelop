@@ -148,7 +148,7 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
 
     Breakpoint *b = breakpoint(document->url(), mark.line);
     if (!b) {
-        QMessageBox::critical(nullptr, i18n("Breakpoint not found"), i18n("Couldn't find breakpoing at %1:%2", document->url().toString(), mark.line));
+        QMessageBox::critical(nullptr, i18n("Breakpoint not found"), i18n("Couldn't find breakpoint at %1:%2", document->url().toString(), mark.line));
         return;
     }
 

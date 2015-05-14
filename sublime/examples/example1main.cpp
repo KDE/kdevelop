@@ -27,8 +27,6 @@
 #include <QUrl>
 #include <QDebug>
 
-#include <QMenuBar>
-
 #include <sublime/view.h>
 #include <sublime/area.h>
 #include <sublime/sublimedefs.h>

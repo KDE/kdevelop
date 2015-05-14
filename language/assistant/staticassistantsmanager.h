@@ -45,7 +45,7 @@ class TopDUContext;
 /**
  * @brief Class managing instances of StaticAssistant
  *
- * Invokes the appropiate methods on registered StaticAssistant instances, such as StaticAssistant::textChanged
+ * Invokes the appropriate methods on registered StaticAssistant instances, such as StaticAssistant::textChanged
  *
  * @sa StaticAssistant::textChanged
  */

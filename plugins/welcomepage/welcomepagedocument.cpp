@@ -25,7 +25,6 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/isession.h>
-#include "welcomepagedocument.h"
 #include "welcomepageview.h"
 #include <KLocalizedString>
 

@@ -26,7 +26,6 @@
 #include <QExplicitlySharedDataPointer>
 #include <QPointer>
 #include <QPair>
-#include <QPointer>
 #include <ktexteditor/movingrange.h>
 #include <language/editor/rangeinrevision.h>
 #include <serialization/indexedstring.h>

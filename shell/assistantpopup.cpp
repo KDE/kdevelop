@@ -29,7 +29,6 @@
 #include <QDebug>
 #include <QEvent>
 #include <QTimer>
-#include <QDebug>
 #include <QStandardPaths>
 
 #include <KLocalizedString>

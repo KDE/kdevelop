@@ -27,7 +27,7 @@
 namespace KDevelop {
 
 /**
- * This class makes all the KTextEditor config pages avaible for use
+ * This class makes all the KTextEditor config pages available for use
  * as a single KDevelop::ConfigPage
  */
 class EditorConfigPage : public ConfigPage

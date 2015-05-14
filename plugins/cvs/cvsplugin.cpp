@@ -22,7 +22,6 @@
 #include <KPluginLoader>
 #include <KActionCollection>
 #include <KMessageBox>
-#include <QAction>
 #include <KAboutData>
 #include <KLocalizedString>
 

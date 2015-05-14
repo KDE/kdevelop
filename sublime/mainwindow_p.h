@@ -26,7 +26,6 @@
 #include <QTabBar>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QPointer>
 
 #include "area.h"
 #include "sublimedefs.h"

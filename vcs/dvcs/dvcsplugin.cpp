@@ -32,7 +32,6 @@
 #include <QVBoxLayout>
 #include <QtCore/QFileInfo>
 #include <QtCore/QString>
-#include <QVBoxLayout>
 
 #include <KMessageBox>
 #include <KLocalizedString>

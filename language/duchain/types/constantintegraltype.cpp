@@ -27,8 +27,6 @@
 #include "typesystemdata.h"
 #include "typeregister.h"
 
-#include <QDebug>
-
 namespace KDevelop {
 
 REGISTER_TYPE(ConstantIntegralType);

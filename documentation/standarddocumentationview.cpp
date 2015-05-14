@@ -61,5 +61,5 @@ void StandardDocumentationView::update()
     if(m_doc)
         setHtml(m_doc->description());
     else
-        qCDebug(DOCUMENTATION) << "calling StandardDocumentationView::update() on an unitialized view";
+        qCDebug(DOCUMENTATION) << "calling StandardDocumentationView::update() on an uninitialized view";
 }

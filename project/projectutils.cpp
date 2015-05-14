@@ -26,7 +26,6 @@
 
 #include <KLocalizedString>
 
-#include <project/projectmodel.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/context.h>

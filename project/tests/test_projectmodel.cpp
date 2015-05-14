@@ -24,7 +24,6 @@
 #include <QtCore/QThread>
 #include <QMimeType>
 #include <QMimeDatabase>
-#include <QtTest/QTest>
 #include <QSignalSpy>
 
 #include <projectmodel.h>

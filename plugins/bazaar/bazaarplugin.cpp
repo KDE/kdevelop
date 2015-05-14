@@ -194,7 +194,7 @@ VcsJob* BazaarPlugin::move(const QUrl& localLocationSrc, const QUrl& localLocati
 VcsJob* BazaarPlugin::pull(const VcsLocation& localOrRepoLocationSrc, const QUrl& localRepositoryLocation)
 {
     // API describes hg pull which is git fetch equivalent
-    // bzr has pull, but it succeds only if fast-forward is possible
+    // bzr has pull, but it succeeds only if fast-forward is possible
     // in other cases bzr merge should be used instead (bzr pull would fail)
     // Information about repository must be provided at least once.
     DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localRepositoryLocation), this);
