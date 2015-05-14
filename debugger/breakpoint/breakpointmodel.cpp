@@ -44,6 +44,7 @@
 #include <KConfigGroup>
 #include <QAction>
 #include <QMenu>
+#include <QMessageBox>
 
 #define IF_DEBUG(x)
 
@@ -146,8 +147,10 @@ void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, co
     if (!(type & AllBreakpointMarks)) return;
 
     Breakpoint *b = breakpoint(document->url(), mark.line);
-    Q_ASSERT(b);
-    if (!b) return;
+    if (!b) {
+        QMessageBox::critical(nullptr, i18n("Breakpoint not found"), i18n("Couldn't find breakpoing at %1:%2", document->url().toString(), mark.line));
+        return;
+    }
 
     QMenu menu;
     QAction deleteAction(QIcon::fromTheme("edit-delete"), i18n("&Delete Breakpoint"), 0);
