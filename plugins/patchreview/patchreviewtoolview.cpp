@@ -43,8 +43,11 @@
 #include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
+
+#ifdef WITH_PURPOSE
 #include <Purpose/AlternativesModel>
 #include <PurposeWidgets/Menu>
+#endif
 
 using namespace KDevelop;
 
