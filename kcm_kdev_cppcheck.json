@@ -4,6 +4,7 @@
         "Description[ast]": "Cppcheck", 
         "Description[ca]": "Configura Cppcheck", 
         "Description[cs]": "Nastavit Cppcheck", 
+        "Description[de]": "Cppcheck einrichten", 
         "Description[es]": "Configurar Cppcheck", 
         "Description[gl]": "Configurar Cppcheck", 
         "Description[nl]": "Cppcheck instellen", 
