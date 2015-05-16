@@ -361,6 +361,54 @@ bool isValidSpecialCompletionIdentifier(const QualifiedIdentifier& identifier)
     return false;
 }
 
+void addEnumItems(Declaration* declaration, QHash<QualifiedIdentifier, Declaration*>& declarationsCache);
+
+/// Add declarations from namespace into @p declarationsCache
+void addNamespaceItems(Declaration* declaration, QHash<QualifiedIdentifier, Declaration*>& declarationsCache)
+{
+    if (declaration->kind() != Declaration::Namespace || !declaration->internalContext()) {
+        return;
+    }
+
+    const auto namespaceDeclarations = declaration->internalContext()->localDeclarations();
+    for (const auto& nd : namespaceDeclarations) {
+        declarationsCache.insert(nd->qualifiedIdentifier(), nd);
+        addEnumItems(nd, declarationsCache);
+    }
+}
+
+/// Add enumerators into @p declarationsCache
+void addEnumItems(Declaration* declaration, QHash<QualifiedIdentifier, Declaration*>& declarationsCache)
+{
+    if (declaration->kind() != Declaration::Type || !declaration->internalContext()) {
+        return;
+    }
+
+    const auto ictx = declaration->internalContext();
+    if (ictx->type() == DUContext::Enum) {
+        for (const auto enumerator : ictx->localDeclarations()) {
+            declarationsCache.insert(enumerator->qualifiedIdentifier(), enumerator);
+        }
+    }
+}
+
+QHash<QualifiedIdentifier, Declaration*> generateCache(const DUContextPointer& ctx, const CursorInRevision& position)
+{
+    const auto allDeclarationsList = ctx->allDeclarations(position, ctx->topContext());
+    QHash<QualifiedIdentifier, Declaration*> declarationsHash;
+
+    for (const auto& declaration : allDeclarationsList) {
+        // We store function-local declarations with qid like: "function::declaration", but completion items provided by Clang have qid like: "declaration", so we use id here instead.
+        declarationsHash.insert(declaration.second ? declaration.first->qualifiedIdentifier() : QualifiedIdentifier(declaration.first->identifier()), declaration.first);
+
+        // Intentionally not recurse into nested namespaces and inner class contexts as the findDeclarations call is much cheaper.
+        addNamespaceItems(declaration.first, declarationsHash);
+        addEnumItems(declaration.first, declarationsHash);
+    }
+
+    return declarationsHash;
+}
+
 }
 
 ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& context,
@@ -422,6 +470,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
     if (!m_valid || !m_duContext || !m_results) {
         return {};
     }
+
+    const auto ctx = DUContextPointer(m_duContext->findContextAt(m_position));
+    const auto declarationsCache = generateCache(ctx, m_position);
 
     /// Normal completion items, such as 'void Foo::foo()'
     QList<CompletionTreeItemPointer> items;
@@ -551,17 +602,17 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 continue;
             }
 
-            DUChainReadLocker lock;
-
             // TODO: This easily breaks if there are multiple function overloads
             // e.g. void foo(), void foo(int) => only the first is selected
-            DUContext* ctx = m_duContext->findContextAt(m_position);
-            Declaration* found = 0;
-            foreach(Declaration* dec, ctx->findDeclarations(qid, m_position)) {
-                if (!handled.contains(dec)) {
-                    found = dec;
-                    handled.insert(dec);
-                    break;
+            auto found = declarationsCache.value(qid);
+
+            if (!found) {
+                for (auto d : ctx->findDeclarations(qid, m_position)) {
+                    if (!handled.contains(d)) {
+                        found = d;
+                        handled.insert(d);
+                        break;
+                    }
                 }
             }
 

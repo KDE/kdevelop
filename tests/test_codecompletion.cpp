@@ -73,6 +73,7 @@ void TestCodeCompletion::cleanupTestCase()
 
 namespace {
 
+//TODO: the test should be extended to check whether the completion item is a DeclarationItem or just a SimpleItem
 void executeCompletionTest(const QString& code, const CompletionItemsList& expectedCompletionItems,
                            const ClangCodeCompletionContext::ContextFilters& filters = ClangCodeCompletionContext::ContextFilters(
                                 ClangCodeCompletionContext::NoBuiltins |
