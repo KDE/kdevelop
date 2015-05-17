@@ -243,7 +243,7 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
       continue;
     }
     //Initially pick a color using the hash, so the chances are good that the same identifier gets the same color always.
-    uint colorNum = dec->identifier().hash() % ColorCache::self()->validColorCount();
+    uint colorNum = dec->identifier().hash() % ColorCache::self()->primaryColorCount();
 
     if( declarationsForColors[colorNum] ) {
       takeFreeColors << dec; //Use one of the colors that stays free
@@ -256,25 +256,42 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
     highlightDeclaration(dec, ColorCache::self()->generatedColor(colorNum));
   }
 
-  foreach( Declaration* dec, takeFreeColors ) {
-    uint colorNum = dec->identifier().hash() % ColorCache::self()->validColorCount();
-    uint oldColorNum = colorNum;
-    while( declarationsForColors[colorNum] ) {
-      colorNum = (colorNum+1) % ColorCache::self()->validColorCount();
-      if( colorNum == oldColorNum ) {
-        colorNum = ColorCache::self()->validColorCount();
-        break;
-      }
+    foreach (Declaration* dec, takeFreeColors) {
+        uint colorNum = dec->identifier().hash() % ColorCache::self()->primaryColorCount();
+        uint oldColorNum = colorNum;
+        while (declarationsForColors[colorNum]) {
+            colorNum = (colorNum + 1) % ColorCache::self()->primaryColorCount();
+            if (colorNum == oldColorNum) {
+                colorNum = ColorCache::self()->primaryColorCount();
+                break;
+            }
+        }
+
+        if (colorNum < ColorCache::self()->primaryColorCount()) {
+           // Use primary color
+            colorsForDeclarations[dec] = colorNum;
+            declarationsForColors[colorNum] = dec;
+            highlightDeclaration(dec, ColorCache::self()->generatedColor(colorNum));
+        } else {
+            // Try to use supplementary color
+            colorNum = ColorCache::self()->primaryColorCount();
+            while (declarationsForColors[colorNum]) {
+                colorNum++;
+                if (colorNum == ColorCache::self()->validColorCount()) {
+                    //If no color could be found, use default color
+                    highlightDeclaration(dec, QColor(QColor::Invalid));
+                    break;
+                }
+            }
+            if (colorNum < ColorCache::self()->validColorCount()) {
+                // Use supplementary color
+                colorsForDeclarations[dec] = colorNum;
+                declarationsForColors[colorNum] = dec;
+                highlightDeclaration(dec, ColorCache::self()->generatedColor(colorNum));
+            }
+
+        }
     }
-    if(colorNum != ColorCache::self()->validColorCount()) {
-      //If no color could be found, use default color,, not black
-      colorsForDeclarations[dec] = colorNum;
-      declarationsForColors[colorNum] = dec;
-      highlightDeclaration(dec, ColorCache::self()->generatedColor(colorNum));
-    }else{
-      highlightDeclaration(dec, QColor(QColor::Invalid));
-    }
-  }
 
   for(int a = 0; a < context->usesCount(); ++a) {
     Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[a].m_declarationIndex);

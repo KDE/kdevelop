@@ -79,13 +79,27 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// access the default colors
     CodeHighlightingColors* defaultColors() const;
 
-    /// access the generated colors
-    /// @see validColorCount()
+    /**
+     * @returns a primary color if @p num less primaryColorCount and a supplementary color if @p num >= primaryColorCount and < validColorCount
+     * @see validColorCount()
+     * @see primaryColorCount()
+     */
     QColor generatedColor(uint num) const;
 
-    /// returns the number of valid generated colors
-    /// @see generatedColor()
+    /**
+      * @returns the number of primary and supplementary colors
+      *
+      * @see generatedColor()
+      * @see primaryColorCount()
+      */
     uint validColorCount() const;
+
+    /**
+     * @returns number of primary colors
+     *
+     * When you run out of primary colors use supplementary colors
+     */
+    uint primaryColorCount() const;
 
     /// access the foreground color
     QColor foregroundColor() const;
@@ -133,8 +147,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// the generated colors
     QList<QColor> m_colors;
 
-    /// Must always be m_colors.count()-1, because the last color must be the fallback text color
     uint m_validColorCount;
+
+    uint m_primaryColorCount;
 
     /// Maybe make this configurable: An offset where to start stepping through the color wheel
     uint m_colorOffset;
