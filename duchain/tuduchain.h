@@ -47,6 +47,10 @@
 #include <language/duchain/types/enumeratortype.h>
 #include <language/duchain/types/typealiastype.h>
 
+#if CINDEX_VERSION_MINOR >= 25
+#include <clang-c/Documentation.h>
+#endif
+
 #include <unordered_map>
 #include <typeinfo>
 
