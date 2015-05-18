@@ -74,7 +74,7 @@ public:
 class pp_macro_expander
 {
 public:
-  explicit pp_macro_expander(pp* engine, pp_frame* frame = 0, bool inHeaderSection = false);
+  explicit pp_macro_expander(pp* engine, pp_frame* frame = 0, bool inHeaderSection = false, bool has_if=false);
 
   pp_actual resolve_formal(const KDevelop::IndexedString& name, rpp::Stream& input);
 
@@ -117,6 +117,8 @@ private:
 
   bool m_in_header_section;
   bool m_search_significant_content, m_found_significant_content;
+  bool m_has_if;
+  bool m_has_defined;
 };
 
 }

@@ -125,12 +125,14 @@ pp_actual pp_macro_expander::resolve_formal(const IndexedString& name, Stream& i
 #define RETURN_IF_INPUT_BROKEN    if(input.atEnd()) { kDebug() << "too early end while expanding" << macro->name.str(); return; }
 
 
-pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame, bool inHeaderSection)
+pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame, bool inHeaderSection, bool has_if)
   : m_engine(engine)
   , m_frame(frame)
   , m_in_header_section(inHeaderSection)
   , m_search_significant_content(false)
   , m_found_significant_content(false)
+  , m_has_if(has_if)
+  , m_has_defined(false)
 {
   if(m_in_header_section)
     m_search_significant_content = true; //Find the end of the header section
@@ -359,21 +361,33 @@ void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitut
         }
 
         // TODO handle inbuilt "defined" etc functions
+        static const IndexedString definedIndex = IndexedString("defined");
+
+        if (name == definedIndex && m_has_if && !m_has_defined){
+          m_has_defined = true;
+          continue;
+        }
+        if(m_has_if && m_has_defined){
+          pp_macro* macro = m_engine->environment()->retrieveMacro(name, true);
+          unsigned int value = 0;
+          if(macro && macro->defined)
+            value = 1;
+          output.appendString(inputPosition, convertFromByteArray(QByteArray::number(value)));
+          m_has_defined = false;
+          continue;
+        }
 
         pp_macro* macro = m_engine->environment()->retrieveMacro(name, false);
-        
+
         if (!macro || !macro->defined || macro->hidden || macro->function_like || m_engine->hideNextMacro())
         {
-          static const IndexedString definedIndex = IndexedString("defined");
-          m_engine->setHideNextMacro(name == definedIndex);
+          static const IndexedString lineIndex = IndexedString("__LINE__");
+          static const IndexedString fileIndex = IndexedString("__FILE__");
+          static const IndexedString dateIndex = IndexedString("__DATE__");
+          static const IndexedString timeIndex = IndexedString("__TIME__");
 
-
-        static const IndexedString lineIndex = IndexedString("__LINE__");
-        static const IndexedString fileIndex = IndexedString("__FILE__");
-        static const IndexedString dateIndex = IndexedString("__DATE__");
-        static const IndexedString timeIndex = IndexedString("__TIME__");
           if (name == lineIndex)
-            output.appendString(inputPosition, convertFromByteArray(QString::number(input.inputPosition().line).toUtf8()));
+            output.appendString(inputPosition, convertFromByteArray(QByteArray::number(input.inputPosition().line)));
           else if (name == fileIndex)
             output.appendString(inputPosition, convertFromByteArray(QString("\"%1\"").arg(m_engine->currentFileNameString()).toUtf8()));
           else if (name == dateIndex)
