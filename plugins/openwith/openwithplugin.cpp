@@ -222,7 +222,7 @@ void OpenWithPlugin::openDefault()
     // default handlers
     if (m_mimeType == "inode/directory") {
         KService::Ptr service = KMimeTypeTrader::self()->preferredService(m_mimeType);
-        KRun::run(*service, m_urls, ICore::self()->uiController()->activeMainWindow());
+        KRun::runService(*service, m_urls, ICore::self()->uiController()->activeMainWindow());
     } else {
         foreach( const QUrl& u, m_urls ) {
             ICore::self()->documentController()->openDocument( u );
@@ -234,7 +234,7 @@ void OpenWithPlugin::open( const QString& storageid )
 {
     KService::Ptr svc = KService::serviceByStorageId( storageid );
     if( svc->isApplication() ) {
-        KRun::run( *svc, m_urls, ICore::self()->uiController()->activeMainWindow() );
+        KRun::runService( *svc, m_urls, ICore::self()->uiController()->activeMainWindow() );
     } else {
         QString prefName = svc->desktopEntryName();
         if ( isTextEditor(svc) ) {

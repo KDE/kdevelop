@@ -126,7 +126,7 @@ void FrameStackModel::setHasMoreFrames(int threadNumber, bool hasMoreFrames)
 FrameStackModel::FrameItem FrameStackModel::frame(const QModelIndex& index)
 {
     Q_ASSERT(index.internalId());
-    Q_ASSERT(m_threads.count() >= index.internalId());
+    Q_ASSERT(static_cast<quintptr>(m_threads.count()) >= index.internalId());
     const ThreadItem &thread = m_threads.at(index.internalId()-1);
     return m_frames[thread.nr].at(index.row());
 }
@@ -149,7 +149,7 @@ QVariant FrameStackModel::data(const QModelIndex& index, int role) const
         }
     } else {
         //frame
-        if (m_threads.count() < index.internalId()) return QVariant();
+        if (static_cast<quintptr>(m_threads.count()) < index.internalId()) return QVariant();
         const ThreadItem &thread = m_threads.at(index.internalId()-1);
         if (m_frames[thread.nr].count() <= index.row()) return QVariant();
         const FrameItem &frame = m_frames[thread.nr].at(index.row());

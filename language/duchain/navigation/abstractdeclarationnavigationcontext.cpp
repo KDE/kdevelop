@@ -42,7 +42,6 @@
 #include <duchain/types/typealiastype.h>
 #include <duchain/types/structuretype.h>
 #include <duchain/classdeclaration.h>
-#include <typeinfo>
 
 namespace KDevelop {
 AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
@@ -567,7 +566,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
   AbstractType::Ptr target = TypeUtils::targetTypeKeepAliases( type, m_topContext.data() );
   const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target.data() );
 
-  qCDebug(LANGUAGE) << "making type-links for" << type->toString() << typeid(*type).name();
+  qCDebug(LANGUAGE) << "making type-links for" << type->toString();
 
   if( idType && idType->declaration(m_topContext.data()) ) {
     ///@todo This is C++ specific, move into subclass

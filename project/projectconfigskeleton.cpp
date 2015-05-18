@@ -58,7 +58,7 @@ void ProjectConfigSkeleton::setProjectTempFile( const QString& cfg )
 {
     d->m_projectTempFile = cfg;
     config()->addConfigSources( QStringList() << cfg );
-    readConfig();
+    load();
 }
 
 void ProjectConfigSkeleton::setProjectFile( const Path& cfg )
@@ -154,7 +154,7 @@ bool ProjectConfigSkeleton::writeConfig()
 
     config()->sync();
 
-    readConfig();
+    load();
 
     auto copyJob = KIO::copy(QUrl::fromLocalFile(d->m_developerTempFile), d->m_developerFile.toUrl());
     copyJob ->exec();

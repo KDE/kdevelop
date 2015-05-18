@@ -74,8 +74,9 @@ public:
 class KDEVPLATFORMLANGUAGE_EXPORT SimpleTypeVisitor : public TypeVisitor
 {
 public:
-  ///When using SimpleTypeVisitor, this is the only function you must override to collect all types.
-  virtual bool visit(const AbstractType*) = 0;
+  /// When using SimpleTypeVisitor, the visit taking an AbstractType is the only function
+  /// you must override to collect all types.
+  using TypeVisitor::visit;
 
   virtual bool preVisit (const AbstractType *) override ;
   virtual void postVisit (const AbstractType *) override ;

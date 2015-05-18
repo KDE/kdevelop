@@ -120,12 +120,12 @@ void VariableWidget::slotAddWatch(const QString &expression)
         qCDebug(DEBUGGER) << "Trying to add watch\n";
         Variable* v = variablesRoot_->watches()->add(expression);
         if (v) {
-            QModelIndex index = variableCollection()->indexForItem(v, 0);
             /* For watches on structures, we really do want them to be shown
             expanded.  Except maybe for structure with custom pretty printing,
             but will handle that later.
             FIXME: it does not actually works now.
             */
+            //QModelIndex index = variableCollection()->indexForItem(v, 0);
             //varTree_->setExpanded(index, true);
         }
         watchVarEditor_->clearEditText();
