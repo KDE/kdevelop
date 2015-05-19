@@ -24,7 +24,6 @@
 
 #include <kcmdlineargs.h>
 #include <kurl.h>
-#include <klocale.h>
 
 int main( int argc, char* argv[] )
 {
