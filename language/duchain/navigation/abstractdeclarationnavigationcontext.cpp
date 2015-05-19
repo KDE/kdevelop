@@ -119,6 +119,8 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       }
       if ( m_declaration->kind() == Declaration::Namespace ) {
         modifyHtml() += i18n("namespace %1 ", identifierHighlight(m_declaration->qualifiedIdentifier().toString().toHtmlEscaped(), m_declaration));
+      } else if ( m_declaration->kind() == Declaration::NamespaceAlias ) {
+        modifyHtml() += identifierHighlight(declarationName(m_declaration).toHtmlEscaped(), m_declaration);
       }
 
       if(m_declaration->type<EnumerationType>()) {
