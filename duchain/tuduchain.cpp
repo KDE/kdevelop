@@ -187,6 +187,22 @@ void TUDUChain::setTypeModifiers(CXType type, AbstractType* kdevType) const
 }
 //END CreateType
 
+//BEGIN setDeclData
+
+template<CXCursorKind CK>
+void TUDUChain::setDeclData(CXCursor cursor, NamespaceAliasDeclaration *decl) const
+{
+    setDeclData<CK>(cursor, static_cast<Declaration*>(decl));
+    clang_visitChildren(cursor, [] (CXCursor cursor, CXCursor /*parent*/, CXClientData data) -> CXChildVisitResult {
+        Q_ASSERT(clang_getCursorKind(cursor) == CXCursor_NamespaceRef);
+        const auto id = QualifiedIdentifier(ClangString(clang_getCursorSpelling(cursor)).toString());
+        reinterpret_cast<NamespaceAliasDeclaration*>(data)->setImportIdentifier(id);
+        return CXChildVisit_Break;
+    }, decl);
+}
+
+//END setDeclData
+
 TUDUChain::TUDUChain(CXTranslationUnit tu, CXFile file, const IncludeFileContexts& includes, const bool update)
 : m_file(file)
 , m_includes(includes)
@@ -302,6 +318,7 @@ CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXCl
     UseCursorKind(CXCursor_TypedefDecl, cursor, parent);
     UseCursorKind(CXCursor_CXXMethod, cursor, parent);
     UseCursorKind(CXCursor_Namespace, cursor, parent);
+    UseCursorKind(CXCursor_NamespaceAlias, cursor, parent);
     UseCursorKind(CXCursor_Constructor, cursor, parent);
     UseCursorKind(CXCursor_Destructor, cursor, parent);
     UseCursorKind(CXCursor_ConversionFunction, cursor, parent);

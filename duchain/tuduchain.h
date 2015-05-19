@@ -565,6 +565,9 @@ void setDeclData(CXCursor cursor, FunctionDefinition *decl) const
     setDeclData<CK>(cursor, static_cast<FunctionDeclaration*>(decl), setComment);
 }
 
+    template<CXCursorKind CK>
+    void setDeclData(CXCursor cursor, NamespaceAliasDeclaration *decl) const;
+
 //END setDeclData
 
 //BEGIN setDeclInCtxtData
