@@ -294,15 +294,19 @@ CXChildVisitResult TUDUChain::visitCursor(CXCursor cursor, CXCursor parent, CXCl
 {
     TUDUChain *thisPtr = static_cast<TUDUChain*>(data);
 
+    const auto kind = clang_getCursorKind(cursor);
+
     auto location = clang_getCursorLocation(cursor);
     CXFile file;
     clang_getFileLocation(location, &file, nullptr, nullptr, nullptr);
-    if (!ClangUtils::isFileEqual(file, thisPtr->m_file)) {
+    // don't skip MemberRefExpr with invalid location, see also:
+    // http://lists.cs.uiuc.edu/pipermail/cfe-dev/2015-May/043114.html
+    if (!ClangUtils::isFileEqual(file, thisPtr->m_file) && (file || kind != CXCursor_MemberRefExpr)) {
         return CXChildVisit_Continue;
     }
 
 #define UseCursorKind(CursorKind, ...) case CursorKind: return thisPtr->dispatchCursor<CursorKind>(__VA_ARGS__);
-    switch (clang_getCursorKind(cursor))
+    switch (kind)
     {
     UseCursorKind(CXCursor_UnexposedDecl, cursor, parent);
     UseCursorKind(CXCursor_StructDecl, cursor, parent);

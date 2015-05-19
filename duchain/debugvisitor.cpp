@@ -21,6 +21,7 @@
 
 #include "debugvisitor.h"
 #include "util/clangtypes.h"
+#include "util/clangutils.h"
 
 namespace {
 
@@ -36,18 +37,19 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientDat
 {
     auto data = static_cast<ClientData*>(d);
 
-    auto location = clang_getCursorLocation(cursor);
+    const auto kind = clang_getCursorKind(cursor);
+
+    const auto location = clang_getCursorLocation(cursor);
     CXFile file;
-    uint line;
-    uint column;
-    clang_getFileLocation(location, &file, &line, &column, 0);
-    if (file != data->file) {
+    clang_getFileLocation(location, &file, nullptr, nullptr, nullptr);
+    // don't skip MemberRefExpr with invalid location, see also:
+    // http://lists.cs.uiuc.edu/pipermail/cfe-dev/2015-May/043114.html
+    if (!ClangUtils::isFileEqual(file, data->file) && (file || kind != CXCursor_MemberRefExpr)) {
         return CXChildVisit_Continue;
     }
 
     (*data->out) << QByteArray(data->depth * 2, ' ');
 
-    const auto kind = clang_getCursorKind(cursor);
     ClangString kindName(clang_getCursorKindSpelling(kind));
     (*data->out) << kindName << " (" << kind << ") ";
 

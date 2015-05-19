@@ -82,3 +82,23 @@ namespace UsingTest
 }
 
 using UsingTest::usingtest;
+
+struct Foo
+{
+    /// "useCount" : 1
+    operator int()
+    {
+        return 1;
+    }
+};
+
+struct Bar
+{
+    /// "useCount" : 1
+    Foo member;
+};
+
+void castUse(Bar bar)
+{
+    static_cast<int>(bar.member);
+}
