@@ -212,6 +212,10 @@ DeclarationPointer ClangHelpers::findDeclaration(CXType type, const IncludeFileC
 
 DeclarationPointer ClangHelpers::findForwardDeclaration(CXType type, DUContext* context, CXCursor cursor)
 {
+    if(type.kind != CXType_Record && type.kind != CXType_ObjCInterface && type.kind != CXType_ObjCClass){
+        return {};
+    }
+
     auto qualifiedIdentifier = QualifiedIdentifier(ClangString(clang_getTypeSpelling(type)).toString());
 
     DUChainReadLocker lock;
