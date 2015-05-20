@@ -20,11 +20,41 @@
  *    Boston, MA 02110-1301, USA.
  */
 
-#include "tuduchain.h"
+#include "builder.h"
 
 #include "util/clangdebug.h"
 
+#include "templatehelpers.h"
+#include "cursorkindtraits.h"
+#include "clangducontext.h"
+#include "macrodefinition.h"
+#include "util/clangdebug.h"
+#include "util/clangutils.h"
+#include "util/clangtypes.h"
+
+#include <util/pushvalue.h>
+
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/classdeclaration.h>
+#include <language/duchain/stringhelpers.h>
+
+#include <language/duchain/types/pointertype.h>
+#include <language/duchain/types/arraytype.h>
+#include <language/duchain/types/referencetype.h>
+#include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/structuretype.h>
+#include <language/duchain/types/enumerationtype.h>
+#include <language/duchain/types/enumeratortype.h>
+#include <language/duchain/types/typealiastype.h>
 #include <language/duchain/types/indexedtype.h>
+
+#if CINDEX_VERSION_MINOR >= 25
+#include <clang-c/Documentation.h>
+#endif
+
+#include <unordered_map>
+#include <typeinfo>
+
 
 /// Turn on for debugging the declaration building
 #define IF_DEBUG(x)
@@ -1169,7 +1199,7 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
 
 }
 
-namespace TUDUChain {
+namespace Builder {
 
 void visit(CXTranslationUnit tu, CXFile file, const IncludeFileContexts& includes, const bool update)
 {

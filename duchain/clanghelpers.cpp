@@ -21,15 +21,17 @@
 
 #include "clanghelpers.h"
 
+#include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/backgroundparser/urlparselock.h>
 
-#include "tuduchain.h"
+#include "builder.h"
 #include "parsesession.h"
 #include "clangparsingenvironmentfile.h"
 #include "clangindex.h"
+#include "clangducontext.h"
 
 #include "util/clangtypes.h"
 
@@ -170,7 +172,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         context->updateImportsCache();
     }
 
-    TUDUChain::visit(session.unit(), file, includedFiles, update);
+    Builder::visit(session.unit(), file, includedFiles, update);
 
     return context;
 }

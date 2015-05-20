@@ -45,7 +45,6 @@
 
 #include "duchain/clanghelpers.h"
 #include "duchain/clangpch.h"
-#include "duchain/tuduchain.h"
 #include "duchain/parsesession.h"
 #include "duchain/clangindex.h"
 #include "duchain/clangparsingenvironmentfile.h"

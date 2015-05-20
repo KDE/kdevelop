@@ -8,7 +8,7 @@ add_library(kdevclangduchain STATIC
     clangproblem.cpp
     debugvisitor.cpp
     duchainutils.cpp
-    tuduchain.cpp
+    builder.cpp
     clangpch.cpp
     clanghelpers.cpp
     unknowndeclarationproblem.cpp

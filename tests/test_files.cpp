@@ -19,7 +19,7 @@
 
 #include "test_files.h"
 
-#include "duchain/tuduchain.h"
+#include "duchain/builder.h"
 
 #include <language/duchain/duchain.h>
 #include <language/codegen/coderepresentation.h>
@@ -45,7 +45,7 @@ QTEST_MAIN(TestFiles)
 
 void TestFiles::initTestCase()
 {
-    TUDUChain::enableJSONTestRun();
+    Builder::enableJSONTestRun();
 
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
     QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
