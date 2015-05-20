@@ -170,7 +170,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         context->updateImportsCache();
     }
 
-    TUDUChain tuduchain(session.unit(), file, includedFiles, update);
+    TUDUChain::visit(session.unit(), file, includedFiles, update);
 
     return context;
 }
